@@ -1,3 +1,5 @@
+capital = 1 
+
 ####### Characters
 
 
@@ -18,3 +20,4 @@ set_popularities = {
 set_stability = 0.85
 
 set_research_slots = 1
+recruit_character = STP_maksim_shabrat

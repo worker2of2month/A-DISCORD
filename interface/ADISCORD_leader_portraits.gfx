@@ -1,0 +1,8 @@
+spriteTypes = {
+
+###STP
+  	spriteType = {
+	  	name = "GFX_portrait_STP_maksim_shabrat"
+	  	texturefile = "gfx/leaders/STP/portrait_STP_Maksim_Shabrat.dds"
+	}
+}

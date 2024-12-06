@@ -9,4 +9,17 @@ state={
 	local_supplies=0.000
         manpower=1
         state_category = town
+
+	history={
+		owner = STP
+		victory_points = { 55 5 }
+		buildings = {
+			infrastructure = 2
+		}
+		add_core_of = STP
+	}
+
+
+        manpower=1
+        state_category = town
 }
