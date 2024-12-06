@@ -180,13 +180,8 @@ guiTypes = {
 		name ="mainmenu_panel_bottom"
 		position = { x=0 y =-32}
 		size = { width = 1100 height = 800 }
-		Orientation = CENTER_DOWN
 		Origo = center	
-
-		positionType = {
-			name = "subscription_size"
-			position = { x = 320 y = 563 }
-		}
+		Orientation = CENTER_DOWN
 
 		iconType = {
 			name ="GFX_frontend_pictures"
@@ -299,44 +294,6 @@ guiTypes = {
 			text = "FE_EXIT"			
 			clicksound = click_default
 			oversound = ui_menu_over
-			
-		}
-
-		iconType = {
-			name = "subscription_divider"
-			position = { x = 4 y = 336 }
-			spriteType = "GFX_main_lobby_divider"
-		}
-
-		containerWindowType = {
-			name = "subscription_widget"
-			position = { x = 16 y = 352 }
-			size = { width = 288 height = 108 }
-
-			ButtonType = {
-				name = "show_subscription"
-				position = { x = 0 y = 0 }
-				quadTextureSprite ="GFX_subscription_widget"
-				buttonText = "SUBSCRIPTION_WIDGET"
-				buttonFont = "hoi_24header"
-				multiline = yes
-			}
-		}
-
-		containerWindowType = {
-			name = "subscription_widget_subscribed"
-			position = { x = 16 y = 352 }
-			size = { width = 288 height = 108 }
-
-			ButtonType = {
-				name = "show_subscription"
-				position = { x = 0 y = 0 }
-				quadTextureSprite ="GFX_subscription_widget_active"
-				frame = 1
-				buttonText = "SUBSCRIPTION_WIDGET_SUBSCRIBED"
-				buttonFont = "hoi_24header"
-				multiline = yes
-			}
 		}
 	}
 	
@@ -409,7 +366,7 @@ guiTypes = {
 		
 		ButtonType = {
 			name = "discord_button"
-			position = { x=600 y=490 }
+			position = { x=600 y=420 }
 			quadTextureSprite ="discord"
 			#clicksound = click_default
 			pdx_tooltip = "MENU_DISCORD"
