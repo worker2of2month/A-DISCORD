@@ -8,6 +8,4 @@ state={
 	local_supplies=0.000
         manpower=1
         state_category = town
-        manpower=1
-        state_category = town
 }

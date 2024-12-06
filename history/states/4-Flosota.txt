@@ -5,8 +5,8 @@ state={
 		29 60 68 70 82 145 
 	}
 	buildings_max_level_factor=1.000
-        manpower=1
-        state_category = town
+    manpower=1
+    state_category = town
         
     history={
 		owner = STP
@@ -15,6 +15,4 @@ state={
 		}
 		add_core_of = STP
 	}
-        manpower=1
-        state_category = town
 }
