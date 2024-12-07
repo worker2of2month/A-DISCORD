@@ -24,36 +24,27 @@ guiTypes = {
 	### MAIN MENU PANEL (upperleft)
 	containerWindowType = {
 		name  ="mainmenu_panel_upperleft"
-		position = { x=0 y =-900 }
-		show_position = { x=0 y =-1 }
+		position = { x=0 y =-500 }
+		show_position = { x=0 y =340 }
 		show_animation_type = decelerated
 		hide_animation_type = decelerated
 		animation_time = 3000
-		size = { width = 1788 height = 899}
+		size = { 
+			width = 1341 
+			height = 674 
+			min = { width = 50% height = 50% }
+			preserve_aspect_ratio = yes
+		}
+		Orientation = CENTER_UP
+		Origo = center
 		
-		iconType =
-		{
+		iconType = {
 			name ="frontend_game_logo"
 			spriteType = "GFX_frontend_game_logo"
-			position = { x= 385 y = 0 }
+			position = { x= 0 y = 0 }
+			Origo = center
 		}
 	}
-
-	#containerWindowType = {
-	#	name  ="frontend_alpha_stamp"
-	#	position = { x=100 y =-100  }
-	#	size = { width = 131 height = 132}
-	#	orientation = lower_left
-	#	origo = lower_left
-	#	
-	#	iconType =
-	#	{
-	#		name ="frontend_alpha_stamp"
-	#		spriteType = "GFX_alpha_stamp"
-	#		position = { x= 0 y = 20 }
-	#	}		
-	#	
-	#}	
 	
 	### MAIN MENU PANEL (upperright)
 	containerWindowType = {

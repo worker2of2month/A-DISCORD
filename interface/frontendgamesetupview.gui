@@ -580,11 +580,17 @@ guiTypes = {
 
 	containerWindowType = {
 		name ="gamesetup_interesting_countries_window"
-		size = { width=1225 height=717 }
+		size = { 
+		width=1225 
+		height=717 
+		min = { width = 50% height = 50% }
+		preserve_aspect_ratio = yes
+		}
 		Orientation = center
 		origo = center
 		clipping = no
 		moveable = yes
+		position = { x = -200 y = -60 }
 
 		instantTextBoxType = {
 			name = "title"
