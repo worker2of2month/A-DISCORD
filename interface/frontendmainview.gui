@@ -32,7 +32,7 @@ guiTypes = {
 		size = { 
 			width = 1341 
 			height = 674 
-			min = { width = 50% height = 50% }
+			min = { width = 25% height = 15% }
 			preserve_aspect_ratio = yes
 		}
 		Orientation = CENTER_UP
