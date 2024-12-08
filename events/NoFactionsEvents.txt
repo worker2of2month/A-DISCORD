@@ -1,0 +1,189 @@
+﻿# Initiate namespace
+add_namespace = nofactions
+
+country_event = {
+	id = nofactions.1
+	title = nofactions.1.title
+	desc = nofactions.1.desc
+	picture = GFX_NoFactions_event
+	
+	is_triggered_only = yes 
+
+	# Option 1a: Disable factions
+	option = {
+		#Button name if factions are ENABLED
+		name = nofactions.1.a1
+		trigger = { 
+			OR = {
+				NOT = { has_global_flag = nofactions_yes }
+				has_global_flag = nofactions_aionly
+
+			}
+		}
+
+		set_global_flag = nofactions_yes
+		clr_global_flag = nofactions_aionly
+
+		# Retrigger the dialogue
+		hidden_effect = { country_event = { id = nofactions.1 } }
+	}
+	
+	# Option 1b: Disable factions
+	option = {
+		#Button name if factions are DISABLED
+		name = nofactions.1.a2
+		trigger = { 
+			AND = {
+				has_global_flag = nofactions_yes
+				NOT = { has_global_flag = nofactions_aionly }
+			}
+		}
+		
+set_variable = {
+	var = ai_get_ally_desire_factor
+	value = 0.5
+}
+		clr_global_flag = nofactions_yes
+		clr_global_flag = nofactions_aionly
+
+		# Retrigger the dialogue
+		hidden_effect = { country_event = { id = nofactions.1 } }
+	}
+	
+	# Option 2a: Disable AI-led factions
+	option = {
+		#Button name if AI factions are ENABLED
+		name = nofactions.1.b1
+		trigger = { NOT = { has_global_flag = nofactions_aionly } }
+
+		set_global_flag = nofactions_aionly
+		set_global_flag = nofactions_yes
+
+		# Retrigger the dialogue
+		hidden_effect = { country_event = { id = nofactions.1 } }
+	}
+
+	# Option 2b: Disable AI-led factions
+	option = {
+		#Button name if AI factions are DISABLED
+		name = nofactions.1.b2
+		trigger = { has_global_flag = nofactions_aionly }
+
+		clr_global_flag = nofactions_aionly
+		clr_global_flag = nofactions_yes
+
+		# Retrigger the dialogue
+		hidden_effect = { country_event = { id = nofactions.1 } }
+	}
+
+	# Option 3: Trigger dialogues to dismantle factions
+	option = {
+		name = nofactions.1.c
+		
+		# Trigger the ping-back event for all faction leaders
+		every_country = {
+			limit = { is_faction_leader = yes }
+				country_event = { id = nofactions.3 }
+		}
+
+		# Retrigger the dialogue
+		hidden_effect = { country_event = { id = nofactions.1 } }
+	}
+
+	# Option 4: Don't do anything
+	option = { name = nofactions.1.d }
+}
+
+# Faction Dismantling Event.
+country_event = {
+	id = nofactions.2
+	title = nofactions.2.title
+	desc = nofactions.2.desc
+	picture = GFX_NoFactions_event
+	
+	# Event popup is mainly for debugging so hidden by default
+	hidden = yes
+	
+	trigger = { has_global_flag = nofactions_yes }
+	
+	# Every time the event triggers loop through countries and on faction leaders dismantle faction
+	immediate = {
+	
+		# Only AI factions are disabled
+		if = {
+            limit = { has_global_flag = nofactions_aionly }
+                every_country = {
+                    if = {
+                        limit = { is_ai = yes }
+                            # Disable faction creation but allow joining to (human-lead) factions
+                            set_rule = { can_create_factions = no }
+                        }  
+                                        if = {
+                            limit = { is_faction_leader = yes }
+                                dismantle_faction = yes
+                    }
+                }
+        }
+
+        # All factions are disabled
+        if = {
+            limit = { not = { has_global_flag = nofactions_aionly } }
+                every_country = {
+                    set_rule = { 
+                        can_join_factions = no 
+                        can_create_factions = no
+                    }
+					set_variable = {
+	var = ai_get_ally_desire_factor
+	value = -10000
+}
+                        }
+                        if = {
+                    limit = { is_faction_leader = yes }
+                        dismantle_faction = yes
+                }
+        }
+		}
+		 
+
+	option = { name = OK }
+
+}
+# Ping-back event
+country_event = {
+	id = nofactions.3
+	title = nofactions.3.title
+	desc = nofactions.3.desc
+	picture = GFX_NoFactions_event
+
+	is_triggered_only = yes
+	hidden = yes
+
+	immediate = {
+		#FROM is the source of the ping, i.e. player's country
+		FROM = { 
+			country_event = { id = nofactions.4 } 
+		}
+	}
+	option = { name = OK }
+}
+
+# Dismantling dialogue
+country_event = {
+	id = nofactions.4
+	title = nofactions.4.title
+	desc = nofactions.4.desc
+	picture = GFX_NoFactions_event
+
+	is_triggered_only = yes
+
+	option = {
+		name = nofactions.4.yes
+		# FROM is the source of the ping, i.e. each faction leader country
+		FROM = { dismantle_faction = yes } 
+	}
+
+	option = {
+		name = nofactions.4.no
+	}
+}

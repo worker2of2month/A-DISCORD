@@ -1,0 +1,33 @@
+political_actions = {
+	Disable_Factions  = {
+
+		icon = generic_form_nation
+
+		allowed = {
+			always = yes
+		}
+		available = {
+			always = yes
+		}
+		visible = {
+			is_in_faction = no
+		}
+
+		cost = 0
+		fire_only_once = no
+		ai_will_do = {
+			factor = 0
+		}
+		complete_effect = {
+		every_country = {
+					every_country = {
+				limit = { is_ai = no }
+					country_event = nofactions.1
+			}
+
+		
+		
+		}
+	}
+}	
+}	

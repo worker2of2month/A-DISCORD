@@ -1,0 +1,37 @@
+governments_in_exile = {
+
+	request_reinstatement = {
+
+		icon = generic_independence
+
+		days_re_enable = 120 # Prevent event spam
+
+		cost = 10
+
+		available = {
+			all_owned_state = {
+				is_controlled_by = ROOT
+			}
+		}
+
+		visible = {
+			FROM = { is_hosting_exile = ROOT }
+			any_owned_state = {
+				is_controlled_by = ROOT
+			}
+		}
+		targets = { host }
+
+		target_trigger = { FROM = { is_hosting_exile = ROOT } }
+		
+		complete_effect = {
+			FROM = {
+				country_event = { id = mtg_exile_government.2 }
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	}

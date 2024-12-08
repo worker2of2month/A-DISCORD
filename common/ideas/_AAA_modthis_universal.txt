@@ -1,0 +1,667 @@
+##############################################################################################
+##These ministers are applied to every country. When adding more advisors, modify this file.##
+##############################################################################################
+
+
+ideas = {
+	
+	political_advisor = {
+		fortification_engineer_advisor = {
+		
+		picture = generic_political_advisor_south_america_2
+			
+			traits = { fortification_engineer }
+		}
+		
+		armaments_organizer_advisor = {
+		
+		picture = generic_political_advisor_europe_4
+			
+			traits = { armaments_organizer }
+		}
+		
+		captain_of_industry_advisor = {
+		
+		picture = generic_political_advisor_europe_2
+		
+			traits = { captain_of_industry }
+		}
+		
+		war_industrialist_advisor = {
+		
+		picture = generic_political_advisor_europe_1
+		
+			traits = { war_industrialist }
+		}
+
+		communist_revolutionary_advisor = {
+		
+		picture = generic_political_advisor_asia_1
+			
+			traits = { communist_revolutionary }
+
+			do_effect = {
+				NOT = {
+					has_government = communism
+				}
+			}
+		}	
+			
+		democratic_reformer_advisor = {
+		
+		picture = generic_political_advisor_europe_2
+			
+			traits = { democratic_reformer }
+
+			do_effect = {
+				NOT = {
+					has_government = democratic
+				}
+			}
+		}
+		
+		fascist_demagogue_advisor = {
+		
+		picture = generic_political_advisor_europe_3
+			
+			traits = { fascist_demagogue}
+			
+			do_effect = {
+				NOT = {
+					has_government = fascism
+				}
+			}
+		}
+		generic_head_of_intelligence = {
+			allowed = { 
+				has_dlc = "La Resistance"
+				# china gets a special one via focus
+				
+			}
+			visible = {
+				OR = {
+					has_idea = generic_head_of_intelligence
+					NOT = {
+						OR = {
+							# ignore if a (historical) minister already available
+							has_allowed_idea_with_traits = { 
+								idea = head_of_intelligence 
+								limit = 1
+								ignore = generic_head_of_intelligence
+							}
+							# ignore if the other one is already taken
+							has_idea_with_trait = head_of_intelligence
+						}
+					}
+				}
+			}
+			
+			available = {
+				has_intelligence_agency = yes
+			}
+			traits = { head_of_intelligence }
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					has_intelligence_agency = no
+					factor = 0
+				}
+				}
+				}
+				
+		
+		silent_workhorse_advisor = {
+		
+		picture = generic_political_advisor_europe_3
+			
+			traits = { silent_workhorse }
+		}
+		
+		prince_of_terror_advisor = {
+		
+		picture = generic_political_advisor_europe_6
+			
+			traits = { prince_of_terror }
+		}
+		
+		silent_workhorse2_advisor = {
+		
+		picture = generic_political_advisor_europe_1
+			
+			traits = { silent_workhorse }
+		}
+		
+		backroom_backstabber_advisor = {
+		
+		picture = generic_political_advisor_asia_2
+			
+			traits = { backroom_backstabber }
+		}
+		
+		smooth_talking_charmer_advisor = {
+		
+		picture = generic_political_advisor_europe_5
+			
+			traits = { smooth_talking_charmer }
+		}
+	}
+
+	
+	# TECHNOLOGY
+	tank_manufacturer = { 
+		
+		designer = yes
+		
+		heavy_tank_manufacturer = {
+		
+		picture = generic_tank_manufacturer_1
+			
+			research_bonus = {
+				armor = 0.10
+			}
+			
+			traits = { heavy_tank_manufacturer }
+
+		}
+		
+		fast_tank_manufacturer = {
+		
+		picture = generic_tank_manufacturer_2
+			
+			research_bonus = {
+				armor = 0.10
+			}
+			
+			traits = { fast_tank_manufacturer }
+		}
+		
+		medium_tank_manufacturer = {
+		
+		picture = generic_tank_manufacturer_3
+			
+			research_bonus = {
+				armor = 0.10
+			}
+			
+			traits = { medium_tank_manufacturer }
+		}
+	}
+	
+	naval_manufacturer = { 
+		
+		designer = yes
+		
+		atlantic_fleet_naval_manufacturer = {
+		
+		picture = generic_navy_europe_2
+			
+			research_bonus = {
+				naval_equipment = 0.10
+			}
+			
+			equipment_bonus = {
+				
+			}
+			
+			traits = { atlantic_fleet_naval_manufacturer }
+			
+		}
+		
+		raiding_fleet_naval_manufacturer = {
+		
+		picture = generic_navy_europe_1	
+			
+			research_bonus = {
+				naval_equipment = 0.10
+			}
+			
+			traits = { raiding_fleet_naval_manufacturer }
+			
+		}	
+	}
+	
+	aircraft_manufacturer = { 
+
+			
+		designer = yes
+		
+		light_aircraft_manufacturer = {
+			
+		picture = generic_air_manufacturer_1
+			
+			research_bonus = {
+				air_equipment = 0.10
+			}
+			
+			traits = { light_aircraft_manufacturer }
+		}
+		
+		CAS_manufacturer = { 
+				
+		picture = generic_air_manufacturer_2
+						
+			research_bonus = {
+				air_equipment = 0.10
+			}
+			
+			traits = { CAS_manufacturer }
+			
+			equipment_bonus = {
+				
+			}
+		}	
+		
+
+		medium_aircraft_manufacturer = { 
+				
+		picture = generic_air_manufacturer_3
+		
+			research_bonus = {
+				air_equipment = 0.10
+			}
+			
+			traits = { medium_aircraft_manufacturer }
+		}
+		
+		heavy_aircraft_manufacturer = {
+			
+		picture = generic_air_manufacturer_3	
+			
+			
+			research_bonus = {
+				air_equipment = 0.10
+			}
+			
+			traits = { heavy_aircraft_manufacturer }
+		}
+		
+		naval_aircraft_manufacturer = {
+		
+		picture = generic_air_manufacturer_3
+			
+						
+			research_bonus = {
+				air_equipment = 0.10
+			}
+			
+			traits = { naval_aircraft_manufacturer }
+		}	
+
+
+	}
+	
+	industrial_concern = {
+		
+		refinery_concern = {
+		
+		picture = generic_refining_concern_1
+			
+			research_bonus = {
+				industry = 0.05
+				synth_resources = 0.1
+			}
+			
+			traits = { refinery_concern }
+		}
+		
+		industrial_concern = {
+		
+		picture = generic_industrial_concern_1
+			
+			research_bonus = {
+				industry = 0.10
+				
+			}
+			
+			traits = { industrial_concern }
+		}
+
+		electronics_concern = {
+		
+		picture = generic_electronics_concern_1
+			
+			research_bonus = {
+				electronics = 0.10
+			}
+			
+			traits = { electronics_concern }
+		}		
+	}
+	
+	materiel_manufacturer = {
+		
+		designer = yes
+		
+		artillery_manufacturer = {
+		
+		picture = generic_artillery_manufacturer_1
+			
+			research_bonus = {
+				artillery = 0.10
+			}
+			
+			traits = { artillery_manufacturer }
+			
+			modifier = {
+				# +10% arty/at/aa research speed
+			}
+		}
+		
+		infantry_equipment_manufacturer = {
+		
+		picture = generic_infantry_equipment_manufacturer_1
+			
+			research_bonus = {
+				infantry_weapons = 0.10
+			}
+			
+			traits = { infantry_equipment_manufacturer }
+		}
+		
+		
+
+		
+		motorized_equipment_manufacturer = {
+		
+		picture = generic_motorized_equipment_manufacturer_1
+			
+			research_bonus = {
+				motorized_equipment = 0.10
+			}
+			
+			traits = { motorized_equipment_manufacturer }
+		}
+	}
+	
+	theorist = {
+		rocket_scientist_advisor = {
+		
+		picture = generic_political_advisor_arab_3
+			
+			research_bonus = {
+				rocketry = 0.10
+			}
+			
+			traits = { rocket_scientist }
+		}
+		
+		nuclear_scientist_advisor = {
+		
+		picture = generic_political_advisor_europe_2
+		
+			research_bonus = {
+				nuclear = 0.10
+			}
+			
+			traits = { nuclear_scientist }
+		}
+		
+		grand_battle_plan_expert_advisor = {
+		
+		picture = charles_de_gaulle
+		
+			cost = 250
+			
+			research_bonus = {
+				cat_grand_battle_plan = 0.10
+			}
+			
+			
+			traits = { grand_battle_plan_expert }
+		}
+		
+		mobile_warfare_expert_advisor = {
+		
+		picture = erich_bey
+			
+			cost = 250
+			
+			research_bonus = {
+				cat_mobile_warfare = 0.10
+			}
+			
+
+			traits = { mobile_warfare_expert }
+		}
+		
+		mass_assault_expert_advisor = {
+		
+		picture = georgy_zhukov
+			
+			cost = 250
+			
+			research_bonus = {
+				cat_mass_assault = 0.10
+			}
+			
+
+			traits = { mass_assault_expert }
+		}
+		
+		superior_firepower_expert_advisor = {
+		
+		picture = omar_bradley
+			
+			cost = 250
+			
+			research_bonus = {
+				cat_superior_firepower = 0.10
+			}
+			
+
+			traits = { superior_firepower_expert }
+		}
+		
+		close_air_support_proponent_advisor = {
+		
+		picture = generic_political_advisor_europe_3
+			
+			cost = 250
+			
+			research_bonus = {
+				cat_battlefield_support = 0.10
+			}
+			
+			traits = { close_air_support_proponent }
+		}
+		
+		air_warfare_theorist_advisor = {
+		
+		picture = generic_political_advisor_europe_4
+			
+			research_bonus = {
+				air_doctrine = 0.07
+			}
+			
+			traits = { air_warfare_theorist }
+		}
+		
+		dive_bomber_advisor = {
+			
+		picture = generic_political_advisor_asia_2
+			
+			research_bonus = {
+				air_doctrine = 0.07
+			}
+			
+			traits = { dive_bomber }
+		}
+		
+		submarine_specialist_advisor = {
+		
+		picture = generic_political_advisor_europe_2
+			
+			cost = 250
+			
+			research_bonus = {
+				cat_trade_interdiction = 0.20
+			}
+			
+			traits = { submarine_specialist }
+		}
+		
+		naval_theorist_advisor = {
+		
+		picture = generic_political_advisor_arab_3
+			
+			research_bonus = {
+				naval_doctrine = 0.07
+			}
+			
+			traits = { naval_theorist }
+		}
+	}	
+		
+	# MILITARY
+	army_chief = {
+
+		army_chief_organizational_2_advisor = {
+		
+		picture = generic_political_advisor_europe_1
+			
+			traits = { army_chief_organizational_2 }			
+		}
+
+		army_chief_drill_2_advisor  = {
+		
+		picture = generic_political_advisor_europe_2
+						
+			traits = { army_chief_drill_2 }
+			
+			ai_will_do = {
+				factor = 1
+			}
+		}
+	
+		army_chief_offensive_2_advisor = {
+		
+		picture = generic_political_advisor_europe_3
+						
+			traits = { army_chief_offensive_2 }
+		}
+	
+		army_chief_maneuver = {
+		
+		picture = generic_political_advisor_europe_4
+
+					
+			traits = { army_chief_maneuver_2 }
+		}
+	}
+	
+	air_chief = {
+		
+		air_chief_ground_support_2_advisor = {
+		
+		picture = generic_political_advisor_europe_5
+						
+			traits = { air_chief_ground_support_2 }
+		}
+		
+		air_chief_all_weather_2_advisor = {
+		
+		picture = generic_political_advisor_europe_6
+						
+			traits = { air_chief_all_weather_2 }
+		}
+		
+		air_chief_reform_2_advisor = {
+		
+		picture = generic_political_advisor_arab_2
+						
+			traits = { air_chief_reform_2 }
+		}
+	}
+	
+	navy_chief = { #CHIEF OF NAVY
+		
+		navy_chief_decisive_battle_2_advisor = {
+		
+		picture = generic_political_advisor_arab_2
+						
+			traits = { navy_chief_decisive_battle_2 }
+		}
+		
+		navy_chief_commerce_raiding_3_advisor = {
+		
+		picture = generic_political_advisor_europe_2
+						
+			traits = { navy_chief_commerce_raiding_3 }
+		}
+	}
+
+	high_command = {
+
+		army_infantry_2_advisor = {
+		
+		picture = generic_political_advisor_europe_1
+			
+			traits = { army_infantry_2 }
+		}
+		
+		tank_expert_advisor = {
+		
+		picture = generic_political_advisor_europe_3
+			
+			traits = { army_armored_3 }
+		}
+		
+		army_regrouping_2_advisor = {
+		
+		picture = generic_political_advisor_south_america_1
+
+			traits = { army_regrouping_2 }
+		}
+		
+		army_logistics_2_advisor = {
+		
+		picture = generic_political_advisor_europe_3
+			
+			traits = { army_logistics_2 }
+		}
+		
+		air_close_air_support_2_advisor = {
+		
+		picture = generic_political_advisor_arab_3
+			
+			traits = { air_close_air_support_2 }
+		}
+		
+		air_bomber_interception_2_advisor = {
+		
+		picture = generic_political_advisor_europe_1
+			
+			traits = { air_bomber_interception_2 }
+		}
+		
+		air_airborne_2_advisor = {
+		
+		picture = generic_political_advisor_europe_6
+			
+			traits = { air_airborne_2 }
+		}	
+		
+		navy_naval_air_defense_2_advisor = {
+		
+		picture = generic_political_advisor_arab_1
+			
+			traits = { navy_naval_air_defense_2 }
+		}
+		
+		navy_fleet_logistics_2_advisor = {
+		
+		picture = generic_political_advisor_europe_1
+			
+			traits = { navy_fleet_logistics_2 }
+		}
+		 
+		navy_anti_submarine_1_advisor = {
+		
+		picture = generic_political_advisor_europe_5
+			
+			traits = { navy_anti_submarine_1 }
+		}
+	}
+
+}

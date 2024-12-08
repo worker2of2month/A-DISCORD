@@ -1,0 +1,30 @@
+﻿l_russian:
+ FACTION_LEADER: "Лидер альянса: §Y$COUNTRY$§!"
+ FACTION_MEMBER: "Участник альянса: §Y$COUNTRY$§!"
+ FACTION_CREATED_UNDER_MASTER_TITLE: "Вступление в альянс метрополии"
+ FACTION_CREATED_UNDER_MASTER_MESSAGE: "Мы вступили в альянс $FACTION|H$ вместе с нашей метрополией"
+
+ FACTION_NAME_HUMANISM_1: "Ассоциация Мира"
+ FACTION_NAME_HUMANISM_2: "Федерация Защиты Человечности"
+ FACTION_NAME_HUMANISM_3: "Союз Гуманитарного Прогресса"
+ FACTION_NAME_HUMANISM_4: "Консорциум Человеческого Достоинства"
+ FACTION_NAME_HUMANISM_5: "Коалиция Мира и Справедливости"
+ FACTION_NAME_HUMANISM_6: "Альянс Мировых Ценностей"
+
+ FACTION_NAME_UTILITARISM_1: "Союз Умного Выбора"
+ FACTION_NAME_UTILITARISM_2: "Консорциум Эффективного Развития"
+ FACTION_NAME_UTILITARISM_3: "Союз Утилитаристического Взаимодействия"
+ FACTION_NAME_UTILITARISM_4: "Союз Устойчивого Прогресса"
+ FACTION_NAME_UTILITARISM_5: "Союз Процветающего Развития"
+
+ FACTION_NAME_CHAUVINISM_1: "Альянс Славы Нации"
+ FACTION_NAME_CHAUVINISM_2: "Федерация Объединённых Гордостей"
+ FACTION_NAME_CHAUVINISM_3: "Коалиция Национальной Идентичности"
+ FACTION_NAME_CHAUVINISM_4: "Союз Традиционных Ценностей"
+ FACTION_NAME_CHAUVINISM_5: "оюз Национального Превосходства"
+
+ FACTION_NAME_PRAGMATISM_1: "Союз Практического Разума"
+ FACTION_NAME_PRAGMATISM_2: "Коалиция Разумного Сотрудничества"
+ FACTION_NAME_PRAGMATISM_3: "Альянс Реальных Решений"
+ FACTION_NAME_PRAGMATISM_4: "Коалиция Плодотворного Сотрудничеств"
+ FACTION_NAME_PRAGMATISM_5: "Федерация Реальных Действий"

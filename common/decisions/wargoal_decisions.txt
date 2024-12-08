@@ -1,0 +1,85 @@
+fabricate_claim = {
+
+	fabricate_claim = {
+	
+		icon = generic_operation
+		
+		available = {
+			has_war = no
+			any_neighbor_country = {
+				NOT = {
+					is_in_faction_with = ROOT
+					is_subject_of = ROOT
+					is_puppet_of = ROOT
+				}
+				any_owned_state = {
+					any_neighbor_state = { is_core_of = ROOT }
+					NOT = {
+						is_claimed_by = ROOT
+						is_core_of = ROOT
+					}
+				}
+			}
+		}
+
+		allowed = {
+			#has_war = no
+			#any_neighbor_country = { exists = yes }
+			always = yes
+		}
+		
+		visible = {
+			always = yes
+		}
+
+		fire_only_once = no
+		
+		days_remove = 60
+		days_re_enable = 30
+		cost = 100
+
+		complete_effect = {
+		
+		}
+
+		remove_effect = {
+			add_war_support = 0.1
+			random_neighbor_country = { 
+				limit = { 
+					NOT = {
+						is_in_faction_with = ROOT
+						is_subject_of = ROOT
+						is_puppet_of = ROOT
+					}
+					any_owned_state = { any_neighbor_state = { is_core_of = ROOT } }
+				}
+				random_owned_state = {
+					limit = {
+						any_neighbor_state = { is_core_of = ROOT }
+						NOT = {
+							is_claimed_by = ROOT
+							is_core_of = ROOT
+						}
+					}
+					add_claim_by = ROOT
+				}
+			}			
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				threat > 0.5
+				factor = 10
+			}
+			modifier = {
+				threat = 1
+				factor = 10
+			}
+			modifier = {
+				date < 1939.1.1
+				factor = 0.2
+			}
+		}
+	}
+}
