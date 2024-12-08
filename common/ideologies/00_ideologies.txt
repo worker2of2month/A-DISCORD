@@ -3,10 +3,7 @@ ideologies = {
 	humanism = { 
 
 		types = {
-			liberalism = {
-			}
-
-			socialism = {
+			humanism_ideology = {
 			}
 		}
 

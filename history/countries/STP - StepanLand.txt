@@ -7,15 +7,17 @@ recruit_character = STP_maksim_shabrat
 ####### Basic shit
 
 set_politics = {
-	ruling_party = democratic
+	ruling_party = hedonism
 	last_election = "1935.10.27"
-	election_frequency = 48
-	elections_allowed = yes
+	elections_allowed = no
 }
 set_popularities = {
-	democratic = 96
-	fascism = 2
-	communism = 2
+	humanism = 2
+	utilitarism = 1
+	etatism = 13
+	chauvinism = 34
+	anarchism = 10
+	hedonism = 40
 }
 
 set_stability = 0.85
