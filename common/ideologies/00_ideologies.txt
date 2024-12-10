@@ -183,7 +183,7 @@ ideologies = {
 			"FACTION_NAME_PRAGMATISM_5"
 		}
 
-		color = { 49 29 59 }
+		color = {118 174 225}
 
 
 		war_impact_on_world_tension = 0.15
@@ -344,7 +344,7 @@ ideologies = {
 			"FACTION_NAME_ETATISM_5"
 		}
 
-		color = {32 38 71}
+		color = {66 66 66}
 
 
 		war_impact_on_world_tension = 0.15
@@ -393,7 +393,7 @@ ideologies = {
 			"FACTION_NAME_HEDONISM_5"
 		}
 
-		color = {32 38 71}
+		color = {55 38 71}
 
 
 		war_impact_on_world_tension = 0.15

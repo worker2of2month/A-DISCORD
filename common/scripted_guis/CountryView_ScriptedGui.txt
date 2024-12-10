@@ -1,0 +1,7 @@
+scripted_gui = {
+	CountryIdeology = {
+		context_type = player_context
+		parent_window_token = politics_tab
+		window_name = "CountryIdeology"
+	}
+}

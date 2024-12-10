@@ -53,7 +53,7 @@ guiTypes = {
 
 		containerWindowType = {
 			name = "chart_explanation"
-			position = { x = 18 y = 116 }
+			position = { x = 18 y = 55 }
 			size = { width = 330 height = 70 }
 			clipping = no
 			

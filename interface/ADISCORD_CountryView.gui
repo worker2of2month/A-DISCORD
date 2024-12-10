@@ -1,0 +1,21 @@
+guiTypes = {
+	containerWindowType = {
+		name = "CountryIdeology"
+
+		containerWindowType = {
+			name = "ruling_party_info"
+			position = { x = 88 y = 305 }
+			size = { width = 255 height = 60 }
+			clipping = no
+					
+			instantTextboxType = {
+				name = "ideology"
+				position = { x = 9 y = -1 }
+				font = "hoi_18mbs"
+				text = [GetRullingPartyLoc]
+				maxWidth = 155
+				maxHeight = 20
+			}
+		}
+	}
+}
