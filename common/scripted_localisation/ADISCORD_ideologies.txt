@@ -30,6 +30,6 @@ defined_text = {
 defined_text = {
 	name = GetPartyLocHedonism
 	text = {
-		localization_key = [ROOT.GetTag]_hedonism_party_long
+		localization_key = [ROOT.GetTag]_hedonism_party
 	}
 }

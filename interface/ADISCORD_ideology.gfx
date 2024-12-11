@@ -60,7 +60,7 @@ spriteTypes = {
 		name = "GFX_ideology_hedonism_group"
 		texturefile = "gfx/interface/ideologies/hedonism_group.dds"
 		size = {
-            x = 66
-            y = 68
+            x = 70
+            y = 70
         }
 	}
