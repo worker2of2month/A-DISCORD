@@ -10,12 +10,28 @@ guiTypes = {
 					
 			instantTextboxType = {
 				name = "ideology"
-				position = { x = 365 y = -15 }
+				position = { x = 150 y = 12 }
 				font = "hoi_18mbs"
 				text = [GetRullingPartyLoc]
 				maxWidth = 155
 				maxHeight = 20
 			}
+		}
+	}
+
+	containerWindowType = {
+		name = "CountryLeadingPartyPopularity"
+		position = { x = 120 y = 305 }
+		size = { width = 255 height = 60 }
+		clipping = no
+					
+		instantTextboxType = {
+			name = "party_popularity_number"
+			position = { x = 250 y = 200 }
+			font = "hoi_18mbs"
+			text = PartyPopularityLoc
+			maxWidth = 260
+			maxHeight = 20
 		}
 	}
 

@@ -3,57 +3,57 @@ spriteTypes = {
    	corneredTileSpriteType = {
 		name = "GFX_ideology_humanism_group"
 		texturefile = "gfx/interface/ideologies/humanism_group.dds"
-	 size = {
-            x = 66
-            y = 68
+	 	size = {
+            x = 125
+            y = 125
         }
 	}
 	corneredTileSpriteType = {
 		name = "GFX_ideology_utilitarism_group"
 		texturefile = "gfx/interface/ideologies/utilitarism_group.dds"
 		size = {
-            x = 66
-            y = 68
+            x = 125
+            y = 125
         }
 	}
 	corneredTileSpriteType = {
 		name = "GFX_ideology_chauvinism_group"
 		texturefile = "gfx/interface/ideologies/chauvinism_group.dds"
 		size = {
-            x = 66
-            y = 68
+            x = 125
+            y = 125
         }
 	}
 	corneredTileSpriteType = {
 		name = "GFX_ideology_pragmatism_group"
 		texturefile = "gfx/interface/ideologies/pragmatism_group.dds"
 		size = {
-            x = 66
-            y = 68
+            x = 125
+            y = 125
         }
 	}
 	corneredTileSpriteType = {
 		name = "GFX_ideology_anarchism_group"
 		texturefile = "gfx/interface/ideologies/anarchism_group.dds"
 		size = {
-            x = 66
-            y = 68
+            x = 125
+            y = 125
         }
 	}
 	corneredTileSpriteType = {
 		name = "GFX_ideology_technocracy_group"
 		texturefile = "gfx/interface/ideologies/technocracy_group.dds"
 		size = {
-            x = 66
-            y = 68
+            x = 125
+            y = 135
         }
 	}
 	corneredTileSpriteType = {
 		name = "GFX_ideology_etatism_group"
 		texturefile = "gfx/interface/ideologies/etatism_group.dds"
 		size = {
-            x = 66
-            y = 68
+            x = 125
+            y = 125
         }
 	}
 	corneredTileSpriteType = {
@@ -64,3 +64,12 @@ spriteTypes = {
             y = 70
         }
 	}
+	corneredTileSpriteType = {
+		name = "GFX_ideology_hedonism_countryview_group"
+		texturefile = "gfx/interface/ideologies/hedonism_group.dds"
+		size = {
+            x = 125
+            y = 125
+        }
+	}
+}

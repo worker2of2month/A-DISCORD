@@ -538,10 +538,14 @@ spriteTypes = {
 		alwaystransparent = yes			
 	}	
 
-	spriteType = {
+	corneredTileSpriteType = {
 		name = "GFX_pol_piechart_overlay_63x63"
 		textureFile = "gfx//interface//pol_piechart_overlay_63x63.dds"
-		alwaystransparent = yes			
+		alwaystransparent = yes		
+		size = {
+            x = 150
+            y = 150
+        }	
 	}
 	
 	spriteType = {
