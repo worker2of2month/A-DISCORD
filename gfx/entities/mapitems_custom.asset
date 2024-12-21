@@ -1,0 +1,22 @@
+
+entity = {
+	name = "ADISCORD_FACTORY_entity"
+	pdxmesh = "ADISCORD_FACTORY_mesh"
+
+	locator = { name = "sandstorm_particle_1"	position = { 1.0 155.0 -0.1 }}
+
+	default_state = "idle"
+	state = { name = "idle"
+	event = { time = 0.0 node="sandstorm_particle_1"   particle = "sandstorm_particle" }
+	}
+}
+
+entity = {
+	name = "ADISCORD_FACTORY_1_entity"
+	pdxmesh = "ADISCORD_FACTORY_1_mesh"
+
+	default_state = "idle"
+	state = { name = "idle"
+
+	}
+}

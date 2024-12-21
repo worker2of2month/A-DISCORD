@@ -1,0 +1,8 @@
+objectTypes = {
+
+	pdxparticle = {
+		name = "sandstorm_particle_1"
+		type = "sandstorm_file"
+		scale = 1
+	}
+}

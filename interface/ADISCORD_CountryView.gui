@@ -21,7 +21,7 @@ guiTypes = {
 
 	containerWindowType = {
 		name = "CountryLeadingPartyPopularity"
-		position = { x = 120 y = 305 }
+		position = { x = 110 y = 305 }
 		size = { width = 255 height = 60 }
 		clipping = no
 					

@@ -1,5 +1,5 @@
 ﻿l_russian:
- PartyPopularityLoc: "Популярность [ROOT.GetRulingParty]: [ROOT.GetPartySupport]%"
+ PartyPopularityLoc: "Популярность идеологии: [ROOT.GetPartySupport]%"
  #POLITICS_SUBGOAL_HEADER: "$NAME$ ($COLOR$$PROGRESS|%0$§!):"
  POLITICS_SUBGOAL: "Задача #$NUMBER$"
  DRIFT_DIM_RETURN: "Инертность партии: §R-$VAL$§!\n"

@@ -1,0 +1,887 @@
+particle={
+	name="orodruin_smoke_file"
+	subsystem={
+		name=""
+		max_amount=30
+		slave_particles=0
+		emitter_type="point"
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		texture={
+			file="gfx/particles/orodruin_smoke.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=150.000
+			y=150.000
+			z=150.000
+			alpha=75.000,smoke_fade
+		}
+		position={
+			x=0.000
+			y=0.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		emitter_yaw={ 0.000 0.000 }
+		emitter_pitch={ 0.000 0.000 }
+		velocity_pitch={ 90.000 0.000 }
+		velocity_yaw={ 0.000 0.000 }
+		velocity={ 0.400 0.100 }
+		life={ 24.000 6.000 }
+		emission=2.000
+		size={ 20.000,smoke_spread 3.000 }
+		rotation={ 0.000 180.000 }
+		force=chaos,wind
+	}
+	subsystem={
+		name="wind"
+		max_amount=0
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 24 23 }
+		sphere_emitter_yaw={ 0 180 }
+		sphere_emitter_pitch={ 0 0 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/rain_smoke.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=220
+			y=220
+			z=255
+			alpha=10,smoke_fade
+		}
+		position={
+			x=0
+			y=25
+			z=6
+		}
+		start=0
+		duration=-1
+		emitter_yaw={ 0 0 }
+		emitter_pitch={ 0 0 }
+		velocity_pitch={ -10 0 }
+		velocity_yaw={ 90 0 }
+		velocity={ 10 3 }
+		life={ 1 0.100 }
+		emission=5
+		size={ 60.500 20 }
+		rotation={ 0 0 }
+		force=chaos
+	}
+	animation={
+		name="smoke_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.100 0.100 1.000 0.600 1.000 0.797 0.219 1.000 0.000 
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="smoke_spread"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.100 0.191 0.383 0.800 1.000 1.000 1.000 
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="turbulence"
+		name="chaos"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 1.000 0.000
+		}
+		local_force=yes
+		yaw=0.000
+		division=16
+		amount=0.100
+	}
+	force={
+		type="planar"
+		name="wind"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 0.700 0.000
+		}
+		local_force=yes
+		yaw=0.000
+		division=16
+		amount=0.100
+	}
+}
+particle={
+	name="orodruin_smoke_file_2"
+	subsystem={
+		name=""
+		max_amount=30
+		slave_particles=0
+		emitter_type="point"
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		texture={
+			file="gfx/particles/orodruin_smoke.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=150.000
+			y=150.000
+			z=150.000
+			alpha=75.000,smoke_fade
+		}
+		position={
+			x=0.000
+			y=0.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		emitter_yaw={ 0.000 0.000 }
+		emitter_pitch={ 0.000 0.000 }
+		velocity_pitch={ 90.000 0.000 }
+		velocity_yaw={ 0.000 0.000 }
+		velocity={ 0.400 0.100 }
+		life={ 24.000 6.000 }
+		emission=2.000
+		size={ 20.000,smoke_spread 3.000 }
+		rotation={ 0.000 180.000 }
+		force=chaos,wind
+	}
+	subsystem={
+		name="wind"
+		max_amount=0
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 24 23 }
+		sphere_emitter_yaw={ 0 180 }
+		sphere_emitter_pitch={ 0 0 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/rain_smoke.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=220
+			y=220
+			z=255
+			alpha=10,smoke_fade
+		}
+		position={
+			x=0
+			y=25
+			z=6
+		}
+		start=0
+		duration=-1
+		emitter_yaw={ 0 0 }
+		emitter_pitch={ 0 0 }
+		velocity_pitch={ -10 0 }
+		velocity_yaw={ 90 0 }
+		velocity={ 10 3 }
+		life={ 1 0.100 }
+		emission=5
+		size={ 60.500 20 }
+		rotation={ 0 0 }
+		force=chaos
+	}
+	animation={
+		name="smoke_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.100 0.100 1.000 0.600 1.000 0.797 0.219 1.000 0.000 
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="smoke_spread"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.100 0.191 0.383 0.800 1.000 1.000 1.000 
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="turbulence"
+		name="chaos"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 1.000 0.000
+		}
+		local_force=yes
+		yaw=0.000
+		division=16
+		amount=0.100
+	}
+	force={
+		type="planar"
+		name="wind"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 0.700 0.000
+		}
+		local_force=yes
+		yaw=0.000
+		division=16
+		amount=0.100
+	}
+}
+particle={
+	name="orodruin_smoke_file_3"
+	subsystem={
+		name=""
+		max_amount=30
+		slave_particles=0
+		emitter_type="point"
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		texture={
+			file="gfx/particles/orodruin_smoke.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=150.000
+			y=150.000
+			z=150.000
+			alpha=75.000,smoke_fade
+		}
+		position={
+			x=0.000
+			y=0.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		emitter_yaw={ 0.000 0.000 }
+		emitter_pitch={ 0.000 0.000 }
+		velocity_pitch={ 90.000 0.000 }
+		velocity_yaw={ 0.000 0.000 }
+		velocity={ 0.400 0.100 }
+		life={ 24.000 6.000 }
+		emission=2.000
+		size={ 20.000,smoke_spread 3.000 }
+		rotation={ 0.000 180.000 }
+		force=chaos,wind
+	}
+	subsystem={
+		name="wind"
+		max_amount=0
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 24 23 }
+		sphere_emitter_yaw={ 0 180 }
+		sphere_emitter_pitch={ 0 0 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/rain_smoke.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=220
+			y=220
+			z=255
+			alpha=10,smoke_fade
+		}
+		position={
+			x=0
+			y=25
+			z=6
+		}
+		start=0
+		duration=-1
+		emitter_yaw={ 0 0 }
+		emitter_pitch={ 0 0 }
+		velocity_pitch={ -10 0 }
+		velocity_yaw={ 90 0 }
+		velocity={ 10 3 }
+		life={ 1 0.100 }
+		emission=5
+		size={ 60.500 20 }
+		rotation={ 0 0 }
+		force=chaos
+	}
+	animation={
+		name="smoke_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.100 0.100 1.000 0.600 1.000 0.797 0.219 1.000 0.000 
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="smoke_spread"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.100 0.191 0.383 0.800 1.000 1.000 1.000 
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="turbulence"
+		name="chaos"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 1.000 0.000
+		}
+		local_force=yes
+		yaw=0.000
+		division=16
+		amount=0.100
+	}
+	force={
+		type="planar"
+		name="wind"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 0.700 0.000
+		}
+		local_force=yes
+		yaw=0.000
+		division=16
+		amount=0.100
+	}
+}
+particle={
+	name="orodruin_smoke_file_4"
+	subsystem={
+		name=""
+		max_amount=30
+		slave_particles=0
+		emitter_type="point"
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		texture={
+			file="gfx/particles/orodruin_smoke.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=150.000
+			y=150.000
+			z=150.000
+			alpha=75.000,smoke_fade
+		}
+		position={
+			x=0.000
+			y=0.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		emitter_yaw={ 0.000 0.000 }
+		emitter_pitch={ 0.000 0.000 }
+		velocity_pitch={ 90.000 0.000 }
+		velocity_yaw={ 0.000 0.000 }
+		velocity={ 0.400 0.100 }
+		life={ 24.000 6.000 }
+		emission=2.000
+		size={ 20.000,smoke_spread 3.000 }
+		rotation={ 0.000 180.000 }
+		force=chaos,wind
+	}
+	subsystem={
+		name="wind"
+		max_amount=0
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 24 23 }
+		sphere_emitter_yaw={ 0 180 }
+		sphere_emitter_pitch={ 0 0 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/rain_smoke.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=220
+			y=220
+			z=255
+			alpha=10,smoke_fade
+		}
+		position={
+			x=0
+			y=25
+			z=6
+		}
+		start=0
+		duration=-1
+		emitter_yaw={ 0 0 }
+		emitter_pitch={ 0 0 }
+		velocity_pitch={ -10 0 }
+		velocity_yaw={ 90 0 }
+		velocity={ 10 3 }
+		life={ 1 0.100 }
+		emission=5
+		size={ 60.500 20 }
+		rotation={ 0 0 }
+		force=chaos
+	}
+	animation={
+		name="smoke_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.100 0.100 1.000 0.600 1.000 0.797 0.219 1.000 0.000 
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="smoke_spread"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.100 0.191 0.383 0.800 1.000 1.000 1.000 
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="turbulence"
+		name="chaos"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 1.000 0.000
+		}
+		local_force=yes
+		yaw=0.000
+		division=16
+		amount=0.100
+	}
+	force={
+		type="planar"
+		name="wind"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 0.700 0.000
+		}
+		local_force=yes
+		yaw=0.000
+		division=16
+		amount=0.100
+	}
+}
+particle={
+	name="orodruin_fire_file"
+	subsystem={
+		name="fire"
+		max_amount=10
+		slave_particles=0
+		emitter_type="point"
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/fire03_des.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=255.000
+			y=150.000
+			z=100.000
+			alpha=255.000,smoke_fade
+		}
+		position={
+			x=0.000
+			y=0.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		emitter_yaw={ 0.000 0.000 }
+		emitter_pitch={ 0.000 0.000 }
+		velocity_pitch={ 90.000 0.000 }
+		velocity_yaw={ 0.000 0.000 }
+		velocity={ 0.400 0.100 }
+		life={ 1.000 0.500 }
+		emission=5.000
+		size={ 5.000,fire_size 0.250 }
+		rotation={ 0.000 180.000 }
+	}
+	subsystem={
+		name="wind"
+		max_amount=0
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 24 23 }
+		sphere_emitter_yaw={ 0 180 }
+		sphere_emitter_pitch={ 0 0 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/rain_smoke.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=220
+			y=220
+			z=255
+			alpha=10,smoke_fade
+		}
+		position={
+			x=0
+			y=25
+			z=6
+		}
+		start=0
+		duration=-1
+		emitter_yaw={ 0 0 }
+		emitter_pitch={ 0 0 }
+		velocity_pitch={ -10 0 }
+		velocity_yaw={ 90 0 }
+		velocity={ 10 3 }
+		life={ 1 0.100 }
+		emission=5
+		size={ 60.500 20 }
+		rotation={ 0 0 }
+	}
+	animation={
+		name="smoke_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.100 0.100 1.000 0.600 1.000 0.797 0.219 1.000 0.000 
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="smoke_spread"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.100 0.191 0.383 0.800 1.000 1.000 1.000 
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="fire_size"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.133 0.244 0.641 1.000 1.000 
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="R"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 1.000 1.000 1.000 
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="G"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.508 0.738 1.000 1.000 1.000 
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="B"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.219 0.735 1.000 1.000 1.000 
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="planar"
+		name="wind"
+		position={
+			0.000 0.000 0.000 
+		}
+		direction={
+			1.000 0.000 0.000 
+		}
+		local_force=yes
+		yaw=0.000
+		division=16
+		amount=0.100
+	}
+}
+particle={
+	name="orodruin_clouds_file"
+	subsystem={
+		name=""
+		max_amount=220
+		slave_particles=0
+		sort="depth"
+		emitter_type="sphere"
+		sphere_emitter_radius={ 30.000 29.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		texture={
+			file="gfx/particles/orodruin_clouds.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=120.000
+			y=120.000
+			z=120.000
+			alpha=20.000,cloud_fade
+		}
+		position={
+			x=0.000
+			y=25.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		emitter_yaw={ 0.000 10.000 }
+		emitter_pitch={ 0.000 10.000 }
+		velocity_pitch={ 0.000 0.000 }
+		velocity_yaw={ 0.000 0.000 }
+		velocity={ 0.000 0.000 }
+		life={ 10.000 2.500 }
+		emission=20.000
+		size={ 60.500,smoke_spread 15.500 }
+		rotation={ 0.000 180.000 }
+	}
+	subsystem={
+		name="lightning_flash"
+		max_amount=10
+		slave_particles=0
+		sort="depth"
+		emitter_type="sphere"
+		sphere_emitter_radius={ 30 29 }
+		sphere_emitter_yaw={ 0 180 }
+		sphere_emitter_pitch={ 0 0 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/cloud.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=200
+			y=200
+			z=255
+			alpha=100,flashing
+		}
+		position={
+			x=0
+			y=25
+			z=30
+		}
+		start={ 0 4.700 }
+		duration=-1
+		emitter_yaw={ 0 10 }
+		emitter_pitch={ 0 10 }
+		velocity_pitch={ 0 0 }
+		velocity_yaw={ 0 0 }
+		velocity={ 0 0 }
+		life={ 0.350 0.350 }
+		emission=0.400
+		size={ 60.500 15.500 }
+		rotation={ 0 180 }
+	}
+	animation={
+		name="flashing"
+		start=0
+		duration=1
+		repeat=no
+		minValue=0
+		maxValue=1
+		curve={
+			0 0.100 0.100 1 0.200 0 0.400 1 0.800 1 1 0 
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="planar"
+		name="sidewind"
+		position={
+			0 0 0 
+		}
+		direction={
+			-1 0 0 
+		}
+		local_force=yes
+		yaw=0
+		division=16
+		amount=70.500
+	}
+	animation={
+		name="cloud_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.100 0.100 1.000 0.800 1.000 1.000 0.000 
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="smoke_spread"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.100 0.191 0.383 0.800 1.000 1.000 1.000 
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="turbulence"
+		name="chaos"
+		position={
+			0.000 0.000 0.000 
+		}
+		direction={
+			0.000 1.000 0.000 
+		}
+		local_force=yes
+		yaw=0.000
+		division=16
+		amount=5.000
+	}
+}

@@ -25,11 +25,30 @@ defined_text = {
 		trigger = { has_government = hedonism }
 		localization_key = "[GetPartyLocHedonism]"
 	}
+	text = {
+		trigger = { has_government = humanism }
+		localization_key = "[GetPartyLocHumanism]"
+	}
+	text = {
+		trigger = { has_government = technocracy }
+		localization_key = "[GetPartyLocHedonism]"
+	}
+	text = {
+		trigger = { has_government = pragmatism }
+		localization_key = "[GetPartyLocHedonism]"
+	}
 }
 
 defined_text = {
 	name = GetPartyLocHedonism
 	text = {
 		localization_key = [ROOT.GetTag]_hedonism_party
+	}
+}
+
+defined_text = {
+	name = GetPartyLocHumanism
+	text = {
+		localization_key = [ROOT.GetTag]_humanism_party
 	}
 }

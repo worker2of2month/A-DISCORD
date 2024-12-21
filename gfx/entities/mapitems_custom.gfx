@@ -1,0 +1,26 @@
+
+objectTypes = {
+	pdxmesh = {
+		name = "ADISCORD_FACTORY_mesh"
+		file = "gfx/models/weaponry.mesh"
+		scale = 2000.0
+		cull_distance = 99999.0
+
+		meshsettings = {
+            shader = "PdxMeshAdvanced"
+        }
+	}
+}
+
+objectTypes = {
+	pdxmesh = {
+		name = "ADISCORD_FACTORY_1_mesh"
+		file = "gfx/models/ADISCORD_FACTORY.mesh"
+		scale = 2.0
+		cull_distance = 99999.0
+
+		meshsettings = {
+            shader = "PdxMeshAdvanced"
+        }
+	}
+}
