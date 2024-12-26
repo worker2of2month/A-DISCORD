@@ -1,0 +1,21 @@
+capital = 24
+
+####### Characters
+
+recruit_character = VAL_Valera_Solgalov
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = etatism
+	last_election = "1935.10.27"
+	elections_allowed = no
+}
+set_popularities = {
+	etatism = 78
+	chauvinism = 22
+}
+
+set_stability = 0.44
+
+set_research_slots = 3

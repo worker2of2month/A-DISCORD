@@ -1,1 +1,2 @@
 STP	= "countries/StepanLand.txt"
+VAL = "countries/ValeraLand.txt"
