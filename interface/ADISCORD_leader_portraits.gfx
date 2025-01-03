@@ -1,5 +1,10 @@
 spriteTypes = {
 
+###WRK
+  	spriteType = {
+	  	name = "GFX_portrait_WRK_Nikita_Worcker"
+	  	texturefile = "gfx/leaders/WRK/portrait_WRK_Nikita_Worcker.png"
+	}
 ###STP
   	spriteType = {
 	  	name = "GFX_portrait_STP_maksim_shabrat"

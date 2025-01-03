@@ -8,7 +8,7 @@ recruit_character = VAL_Valera_Solgalov
 
 set_politics = {
 	ruling_party = etatism
-	last_election = "1935.10.27"
+	last_election = "1937.12.01"
 	elections_allowed = no
 }
 set_popularities = {

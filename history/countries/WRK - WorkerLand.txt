@@ -1,0 +1,26 @@
+capital = 27
+
+####### Characters
+
+recruit_character = WRK_Nikita_Worcker
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = pragmatism
+	last_election = "1935.10.27"
+	elections_allowed = no
+}
+set_popularities = {
+	etatism = 1
+	chauvinism = 6
+	humanism = 3
+	utilitarism = 8
+	chauvinism = 12
+	pragmatism = 43
+	technocracy = 27
+}
+
+set_stability = 0.27
+
+set_research_slots = 5
