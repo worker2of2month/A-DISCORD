@@ -23,7 +23,7 @@ particle={
 			x=255.000
 			y=200.000
 			z=100.000
-			alpha={ 250.000,smoke_fade 55.000 }
+			alpha={ 250.000,smoke_fade 1.000 }
 		}
 		position={
 			x=0.000

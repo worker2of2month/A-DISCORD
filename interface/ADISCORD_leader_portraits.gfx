@@ -5,10 +5,19 @@ spriteTypes = {
 	  	name = "GFX_portrait_STP_maksim_shabrat"
 	  	texturefile = "gfx/leaders/STP/portrait_STP_Maksim_Shabrat.png"
 	}
-
+###IVN
+	spriteType = {
+	  	name = "GFX_portrait_IVN_Vadim_Ivanchik"
+	  	texturefile = "gfx/leaders/IVN/portrait_IVN_Vadim_Ivanchik.png"
+	}
 ###VAL
 	spriteType = {
 	  	name = "GFX_portrait_VAL_Valera_Solgalov"
 	  	texturefile = "gfx/leaders/VAL/portrait_VAL_Valera_Solgalov.png"
+	}
+###WIT
+	spriteType = {
+	  	name = "GFX_portrait_WIT_Wito_Sovi"
+	  	texturefile = "gfx/leaders/WIT/portrait_WIT_Wito_Sovi.png"
 	}
 }

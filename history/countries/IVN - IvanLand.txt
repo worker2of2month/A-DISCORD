@@ -1,0 +1,27 @@
+capital = 25
+
+####### Characters
+
+recruit_character = IVN_Vadim_Ivanchik
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = humanism
+	last_election = "1935.10.27"
+	elections_allowed = yes
+}
+set_popularities = {
+	etatism = 23
+	chauvinism = 17
+	utilitarism = 1
+	pragmatism = 11
+	anarchism = 9
+	technocracy = 1
+	hedonism = 8
+	humanism = 30
+}
+
+set_stability = 0.25
+
+set_research_slots = 4

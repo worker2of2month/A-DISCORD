@@ -1,0 +1,19 @@
+state={
+	id=26
+	name="STATE_26"
+	provinces={
+		7239 12342 
+	}
+	manpower=0
+	buildings_max_level_factor=1.000
+	local_supplies=0.000
+
+	history={
+		owner = WIT
+		victory_points = { 7239 25 }
+		buildings = {
+			infrastructure = 6
+		}
+		add_core_of = WIT
+	}
+}

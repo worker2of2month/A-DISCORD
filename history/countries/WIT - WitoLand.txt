@@ -1,0 +1,24 @@
+capital = 26
+
+####### Characters
+
+recruit_character = WIT_Wito_Sovi
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = hedonism
+	last_election = "1935.10.27"
+	elections_allowed = yes
+}
+set_popularities = {
+	etatism = 26
+	hedonism = 54
+	pragmatism = 14
+	chauvinism = 1
+	humanism = 5
+}
+
+set_stability = 0.87
+
+set_research_slots = 2

@@ -1,2 +1,4 @@
 STP	= "countries/StepanLand.txt"
 VAL = "countries/ValeraLand.txt"
+IVN = "countries/IvanLand.txt"
+WIT = "countries/WitoLand.txt"
