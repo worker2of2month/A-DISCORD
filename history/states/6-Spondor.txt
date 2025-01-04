@@ -2,13 +2,14 @@ state={
 	id=6
 	name="STATE_6"
 	provinces={
-		53 57 69 89 4518 4687 5736 
+		53 57 69 89 
 	}
+	manpower=1
 	buildings_max_level_factor=1.000
-        manpower=1
-        state_category = town
+	state_category=town
+	local_supplies=0.000
 
-    history={
+	history={
 		owner = STP
 		buildings = {
 			infrastructure = 2

@@ -2,7 +2,7 @@ state={
 	id=26
 	name="STATE_26"
 	provinces={
-		7239 12342 
+		7239 16355 16361 16367 16370 16376 16379 16385 
 	}
 	manpower=0
 	buildings_max_level_factor=1.000
@@ -10,9 +10,8 @@ state={
 
 	history={
 		owner = WIT
-		victory_points = { 7239 25 }
 		buildings = {
-			infrastructure = 6
+			infrastructure = 2
 		}
 		add_core_of = WIT
 	}
