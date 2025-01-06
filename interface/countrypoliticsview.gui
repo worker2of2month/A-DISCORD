@@ -2,7 +2,7 @@ guiTypes = {
 
 	containerWindowType = {
 		name = "ideology_icon_countrypoliticsview_container"
-		position = { x = 199 y = 320 }
+		position = { x = 34 y = 315 }
 		size = { width = 333 height = 333 }
 		clipping = yes
 		
@@ -10,7 +10,49 @@ guiTypes = {
 			name = "ideology_icon_hedonism"
 			position = { x = 0 y = 0 }
 			spriteType = "GFX_ideology_hedonism_countryview_group"
+			pdx_tooltip = "hedonism_ideology_desc"
+		}
+		iconType = {
+			name = "ideology_icon_humanism"
+			position = { x = 5 y = -8 }
+			spriteType = "GFX_ideology_humanism_countryview_group"
+			pdx_tooltip = "humanism_ideology_desc"
+		}
+		iconType = {
+			name = "ideology_icon_utilitarism"
+			position = { x = 5 y = -3 }
+			spriteType = "GFX_ideology_utilitarism_countryview_group"
+			pdx_tooltip = "utilitarism_ideology_desc"
+		}
+		iconType = {
+			name = "ideology_icon_technocracy"
+			position = { x = 5 y = -3 }
+			spriteType = "GFX_ideology_technocracy_countryview_group"
+			pdx_tooltip = "technocracy_ideology_desc"
+		}
+		iconType = {
+			name = "ideology_icon_chauvinism"
+			position = { x = 5 y = -3 }
+			spriteType = "GFX_ideology_chauvinism_countryview_group"
 			pdx_tooltip = "chauvinism_ideology_desc"
+		}
+		iconType = {
+			name = "ideology_icon_etatism"
+			position = { x = 5 y = -3 }
+			spriteType = "GFX_ideology_etatism_countryview_group"
+			pdx_tooltip = "etatism_ideology_desc"
+		}
+		iconType = {
+			name = "ideology_icon_pragmatism"
+			position = { x = 7 y = -3 }
+			spriteType = "GFX_ideology_pragmatism_countryview_group"
+			pdx_tooltip = "pragmatism_ideology_desc"
+		}
+		iconType = {
+			name = "ideology_icon_anarchism"
+			position = { x = 7 y = -3 }
+			spriteType = "GFX_ideology_anarchism_countryview_group"
+			pdx_tooltip = "anarchism_ideology_desc"
 		}
 	}
 
@@ -21,10 +63,10 @@ guiTypes = {
 		show_animation_type = decelerated
 		hide_animation_type = accelerated
 		animation_time = 300	
-		size = { width=600 height=100%% }
+		size = { width=594 height=100%% }
 		
-		#hide_sound = menu_close_window
-		show_sound = menu_open_window
+		hide_sound = ADISCORD_pol_menu_close_sound
+		show_sound = ADISCORD_pol_menu_open_sound
 		
 		background = {
 			name = "Background"		
@@ -33,7 +75,7 @@ guiTypes = {
 
 		iconType ={
 			name ="production_header_bg"
-			spriteType = "GFX_header_bg"
+			spriteType = "GFX_pol_header_bg"
 			position = { x= 10 y = 7 }
 			Orientation = "UPPER_LEFT"
 		}	
@@ -497,7 +539,7 @@ guiTypes = {
 		
 		buttonType = {
 			name = "close_button"
-			position = { x = -60 y = 9 }
+			position = { x = -51 y = 10 }
 			quadTextureSprite ="GFX_closebutton"
 			buttonFont = "Main_14_black"
 			shortcut = "ESCAPE"
@@ -518,7 +560,7 @@ guiTypes = {
 		iconType = {
 			name = "rules"
 			spriteType = "GFX_rules_sum_icon"
-			position = { x = 455 y = 7 }
+			position = { x = 500 y = 7 }
 		}
 
 		buttonType = {

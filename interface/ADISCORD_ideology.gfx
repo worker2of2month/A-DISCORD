@@ -4,56 +4,56 @@ spriteTypes = {
 		name = "GFX_ideology_humanism_group"
 		texturefile = "gfx/interface/ideologies/humanism_group.dds"
 	 	size = {
-            x = 125
-            y = 125
+            x = 70
+            y = 70
         }
 	}
 	corneredTileSpriteType = {
 		name = "GFX_ideology_utilitarism_group"
 		texturefile = "gfx/interface/ideologies/utilitarism_group.dds"
 		size = {
-            x = 125
-            y = 125
+            x = 70
+            y = 70
         }
 	}
 	corneredTileSpriteType = {
 		name = "GFX_ideology_chauvinism_group"
 		texturefile = "gfx/interface/ideologies/chauvinism_group.dds"
 		size = {
-            x = 125
-            y = 125
+            x = 70
+            y = 70
         }
 	}
 	corneredTileSpriteType = {
 		name = "GFX_ideology_pragmatism_group"
 		texturefile = "gfx/interface/ideologies/pragmatism_group.dds"
 		size = {
-            x = 125
-            y = 125
+            x = 70
+            y = 70
         }
 	}
 	corneredTileSpriteType = {
 		name = "GFX_ideology_anarchism_group"
 		texturefile = "gfx/interface/ideologies/anarchism_group.dds"
 		size = {
-            x = 125
-            y = 125
+            x = 70
+            y = 70
         }
 	}
 	corneredTileSpriteType = {
 		name = "GFX_ideology_technocracy_group"
 		texturefile = "gfx/interface/ideologies/technocracy_group.dds"
 		size = {
-            x = 125
-            y = 135
+            x = 70
+            y = 70
         }
 	}
 	corneredTileSpriteType = {
 		name = "GFX_ideology_etatism_group"
 		texturefile = "gfx/interface/ideologies/etatism_group.dds"
 		size = {
-            x = 125
-            y = 125
+            x = 75
+            y = 75
         }
 	}
 	corneredTileSpriteType = {
@@ -70,6 +70,62 @@ spriteTypes = {
 		size = {
             x = 125
             y = 125
+        }
+	}
+	corneredTileSpriteType = {
+		name = "GFX_ideology_humanism_countryview_group"
+		texturefile = "gfx/interface/ideologies/humanism_group.dds"
+		size = {
+            x = 125
+            y = 125
+        }
+	}
+	corneredTileSpriteType = {
+		name = "GFX_ideology_utilitarism_countryview_group"
+		texturefile = "gfx/interface/ideologies/utilitarism_group.dds"
+		size = {
+            x = 125
+            y = 125
+        }
+	}
+	corneredTileSpriteType = {
+		name = "GFX_ideology_technocracy_countryview_group"
+		texturefile = "gfx/interface/ideologies/technocracy_group.dds"
+		size = {
+            x = 125
+            y = 125
+        }
+	}
+	corneredTileSpriteType = {
+		name = "GFX_ideology_chauvinism_countryview_group"
+		texturefile = "gfx/interface/ideologies/chauvinism_group.dds"
+		size = {
+            x = 125
+            y = 125
+        }
+	}
+	corneredTileSpriteType = {
+		name = "GFX_ideology_etatism_countryview_group"
+		texturefile = "gfx/interface/ideologies/etatism_group.dds"
+		size = {
+            x = 125
+            y = 125
+        }
+	}
+	corneredTileSpriteType = {
+		name = "GFX_ideology_pragmatism_countryview_group"
+		texturefile = "gfx/interface/ideologies/pragmatism_group.dds"
+		size = {
+            x = 115
+            y = 115
+        }
+	}
+	corneredTileSpriteType = {
+		name = "GFX_ideology_anarchism_countryview_group"
+		texturefile = "gfx/interface/ideologies/anarchism_group.dds"
+		size = {
+            x = 115
+            y = 115
         }
 	}
 }

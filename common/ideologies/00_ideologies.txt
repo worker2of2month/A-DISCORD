@@ -16,7 +16,7 @@ ideologies = {
 			"FACTION_NAME_HUMANISM_6"
 		}
 
-		color = { 217 181 0 }
+		color = {118 174 225} 
 
 		rules = {
 			can_create_collaboration_government = no
@@ -183,7 +183,7 @@ ideologies = {
 			"FACTION_NAME_PRAGMATISM_5"
 		}
 
-		color = {118 174 225}
+		color = { 217 181 0 }
 
 
 		war_impact_on_world_tension = 0.15

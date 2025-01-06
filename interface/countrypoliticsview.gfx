@@ -478,31 +478,6 @@ spriteTypes = {
 		name = "GFX_icon_occupied_territories"
 		texturefile = "gfx/interface/icon_occupied_territories.dds"
 	}
-
-	spriteType = {
-		name = "GFX_ideology_neutrality_group"
-		texturefile = "gfx/interface/ideologies/neutrality_group.dds"
-	}	
-	
-	spriteType = {
-		name = "GFX_ideology_communism_group"
-		texturefile = "gfx/interface/ideologies/communism_group.dds"
-	}
-	
-	spriteType = {
-		name = "GFX_ideology_fascism_group"
-		texturefile = "gfx/interface/ideologies/fascism_group.dds"
-	}
-	
-	spriteType = {
-		name = "GFX_ideology_democratic_group"
-		texturefile = "gfx/interface/ideologies/democratic_group.dds"
-	}
-
-	spriteType = {
-		name = "GFX_ideology_anarchism"
-		texturefile = "gfx/interface/ideologies/anarchism.dds"
-	}
 	
 	spriteType = {
 		name = "GFX_ideology_unknown"
@@ -693,5 +668,10 @@ spriteTypes = {
 		alwaystransparent = yes
 		effectFile = "gfx/FX/buttonstate_blendframes.lua"
 	}
+
+	spriteType = {
+		name = "GFX_pol_header_bg"
+		textureFile = "gfx/interface/pol_header_bg.dds"
+	}	
 	
 }

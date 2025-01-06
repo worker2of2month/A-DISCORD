@@ -1,0 +1,14 @@
+soundeffect = {
+	name = ADISCORD_pol_menu_open_sound
+	volume = 1
+	sounds = {
+		sound = ADISCORD_pol_menu_open_sound
+	}
+}
+soundeffect = {
+	name = ADISCORD_pol_menu_close_sound
+	volume = 1
+	sounds = {
+		sound = ADISCORD_pol_menu_close_sound
+	}
+}
