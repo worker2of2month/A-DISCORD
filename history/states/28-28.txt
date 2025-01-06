@@ -4,15 +4,37 @@ state={
 	provinces={
 		16351 16366 16368 16374 16377 16386 
 	}
-	manpower=0
+	manpower=1901578
 	buildings_max_level_factor=1.000
 	local_supplies=0.000
 
 	history={
 		owner = STP
 		buildings = {
-			infrastructure = 2
+			infrastructure = 6
+			arms_factory = 5
+			industrial_complex  = 8
+
+			16368 = {
+        		bunker = 3
+        		coastal_bunker = 5
+   			}
+   			16366 = {
+        		coastal_bunker = 1
+        		naval_base = 5
+   			}
 		}
 		add_core_of = STP
+
+		victory_points = { 16351 10 }
+		victory_points = { 16366 10 }
+		victory_points = { 16368 25 }
+		victory_points = { 16374 10 }
+		victory_points = { 16377 20 }
+		victory_points = { 16386 10 }
+
 	}
+	state_category = large_city
+
+	local_supplies=12.0 
 }

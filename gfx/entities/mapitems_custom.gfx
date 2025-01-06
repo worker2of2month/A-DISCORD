@@ -24,3 +24,16 @@ objectTypes = {
         }
 	}
 }
+
+objectTypes = {
+	pdxmesh = {
+		name = "ADISCORD_vorkerland_pyramid_mesh"
+		file = "gfx/models/buildings/vorkerland_special/ADISCORD_vorkerland_pyramid.mesh"
+		scale = 1
+		cull_distance = 99999.0
+
+		meshsettings = {
+            shader = "PdxMeshAdvanced"
+        }
+	}
+}

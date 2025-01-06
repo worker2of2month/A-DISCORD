@@ -20,3 +20,13 @@ entity = {
 
 	}
 }
+
+entity = {
+	name = "ADISCORD_vorkerland_pyramid_entity"
+	pdxmesh = "ADISCORD_vorkerland_pyramid_mesh"
+
+	default_state = "idle"
+	state = { name = "idle"
+
+	}
+}
