@@ -5,4 +5,10 @@ objectTypes = {
 		type = "sandstorm_file"
 		scale = 1
 	}
+
+	pdxparticle = {
+		name = "smog_particle"
+		type = "smog_file"
+		scale = 1
+	}
 }

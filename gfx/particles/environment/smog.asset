@@ -1,0 +1,87 @@
+particle={
+	name="smog_file"
+	subsystem={
+		name="smog"
+		max_amount=200
+		slave_particles=0
+		sort="distance"
+		emitter_type="sphere"
+		sphere_emitter_radius={ 15.000 300.000 }
+		sphere_emitter_yaw={ 15.000 300.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/cloud_2.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=100.000
+			y=100.000
+			z=100.000
+			alpha={ 100.000,smoke_fade 255.000 }
+		}
+		position={
+			x=0.000
+			y=0.000
+			z=-2.000
+		}
+		start=0.000
+		duration=-1.000
+		emitter_yaw={ 0.000 0.000 }
+		emitter_pitch={ 0.000 0.000 }
+		velocity_pitch={ 45.000 0.000 }
+		velocity_yaw={ 0.000 45.000 }
+		velocity={ 0.000 0.000 }
+		life={ 2.500 1.100 }
+		emission=555.000
+		size={ 11.500 33.500 }
+		rotation={ 0.000 180.000 }
+		force=chaos,sidewind
+	}
+	animation={
+		name="smoke_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.115 0.172 0.344 0.461 0.685 0.398 1.000 0.000 
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="rotate"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 1.000 1.000 
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="turbulence"
+		name="chaos"
+		position={
+			0.000 0.000 0.000 
+		}
+		direction={
+			0.000 0.000 1.000 
+		}
+		local_force=yes
+		yaw=0.000
+		division=16
+		amount=2.000
+	}
+}
