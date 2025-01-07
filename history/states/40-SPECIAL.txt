@@ -1,0 +1,23 @@
+state={
+	id=40
+	name="STATE_40"
+	provinces={
+		16428 
+	}
+
+	history = {
+        owner = WRK
+        add_core_of = WRK
+        victory_points = { 16428 150 }
+	}
+
+
+
+	manpower=0
+	buildings_max_level_factor=0
+	local_supplies=0.000
+
+	state_category = wasteland
+
+	impassable = yes
+}

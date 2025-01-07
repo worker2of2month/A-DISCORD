@@ -1,0 +1,27 @@
+state={
+	id=36
+	name="STATE_36"
+	provinces={
+		5907 7464 8071 12227 16392 16394 16395 16417 16423 
+	}
+	manpower=4157901
+	buildings_max_level_factor=1.000
+	local_supplies=10.000
+
+	state_category = megalopolis
+
+	history = {
+        owner = WRK
+        add_core_of = WRK
+        buildings = {
+            infrastructure = 5
+            industrial_complex = 4
+            nuclear_reactor = 1
+
+            7464 = {
+                land_facility = 1
+            }
+        }
+	victory_points = { 12227 25 }
+	}
+}

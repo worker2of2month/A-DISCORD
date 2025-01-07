@@ -1,0 +1,22 @@
+state={
+	id=38
+	name="STATE_38"
+	provinces={
+		5444 6790 9958 16387 16398 16402 16425 
+	}
+	manpower=1634643
+	buildings_max_level_factor=1.000
+	local_supplies=0.000
+	local_supplies=10
+
+	state_category = megalopolis
+
+	history = {
+        owner = WRK
+        add_core_of = WRK
+        buildings = {
+            infrastructure = 5
+            industrial_complex = 6
+        }
+	}
+}
