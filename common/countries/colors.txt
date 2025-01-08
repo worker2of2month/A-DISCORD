@@ -1,0 +1,6 @@
+#reload countrycolors
+
+STP = {
+	color = rgb{15 118 124}
+	color_ui = rgb{15 118 124}
+}
