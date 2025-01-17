@@ -1,0 +1,19 @@
+state={
+	id=50
+	name="STATE_50"
+	provinces={
+		1250 1316 3088 8432 8774 9395 11419 11692 12488 
+	}
+	manpower=0
+	buildings_max_level_factor=1.000
+	local_supplies=0.000
+
+	state_category = wasteland
+
+	impassable = yes
+
+	history={
+		owner = RUS
+		add_core_of = RUS
+	}
+}

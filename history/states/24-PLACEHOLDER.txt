@@ -2,17 +2,18 @@ state={
 	id=24
 	name="STATE_24"
 	provinces={
-		95 101 111 114 115 125 556 728 3790 4214 4356 4369 4827 6670 6675 9126 9617 10254 10360 10455 10598 10691 11646 16296 16297 16298 
+		114 125 556 728 779 1142 3790 4214 4356 4369 4712 4827 6519 6670 9126 9333 10360 10455 10598 10691 10917 11646 16296 16297 16298 16472 16477 16478 16493 16501 16510 16511 16555 
 	}
 	manpower=0
 	buildings_max_level_factor=1.000
 	local_supplies=0.000
+
 	history={
 		owner = VAL
-		victory_points = { 16296 10 }
 		buildings = {
-			infrastructure = 6
+			infrastructure = 2
 		}
 		add_core_of = VAL
+
 	}
 }

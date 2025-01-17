@@ -25,4 +25,14 @@ spriteTypes = {
 	  	name = "GFX_portrait_WIT_Wito_Sovi"
 	  	texturefile = "gfx/leaders/WIT/portrait_WIT_Wito_Sovi.png"
 	}
+###PIV
+	spriteType = {
+	  	name = "GFX_portrait_PIV_Oleg_Pivovarov"
+	  	texturefile = "gfx/leaders/PIV/portrait_PIV_Oleg_Pivovarov.png"
+	}
+###RUS
+	spriteType = {
+	  	name = "GFX_portrait_RUS_Mark_Rustan"
+	  	texturefile = "gfx/leaders/RUS/portrait_RUS_Mark_Rustan.png"
+	}
 }

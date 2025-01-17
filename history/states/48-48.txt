@@ -1,0 +1,19 @@
+state={
+	id=48
+	name="STATE_48"
+	provinces={
+		16514 16515 16519 16521 16530 16535 
+	}
+	manpower=0
+	buildings_max_level_factor=1.000
+	local_supplies=0.000
+
+	history={
+		owner = VAL
+		buildings = {
+			infrastructure = 2
+		}
+		add_core_of = VAL
+
+	}
+}

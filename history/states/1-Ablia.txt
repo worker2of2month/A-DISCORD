@@ -2,9 +2,9 @@ state={
 	id=1
 	name="STATE_1"
 	provinces={
-		43 44 55 153 154 16344 16349 16350 16382 16383 
+		43 44 55 153 154 10254 16344 16349 16350 16382 16383 16440 16460 
 	}
-	manpower=129000
+	manpower=748142
 	buildings_max_level_factor=1.000
 	state_category=town
 	local_supplies=0.000
@@ -15,5 +15,6 @@ state={
 			infrastructure = 2
 		}
 		add_core_of = STP
+
 	}
 }

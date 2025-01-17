@@ -1,0 +1,25 @@
+capital = 52
+
+####### Characters
+
+recruit_character = PIV_Oleg_Pivovarov
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = hedonism
+	last_election = "2055.12.01"
+	elections_allowed = yes
+}
+set_popularities = {
+	etatism = 1
+	chauvinism = 1
+	humanism = 19
+	pragmatism = 20
+	anarchism = 7
+	hedonism = 52
+}
+
+set_stability = 0.76
+
+set_research_slots = 2

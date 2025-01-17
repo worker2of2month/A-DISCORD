@@ -1,0 +1,24 @@
+capital = 49
+
+####### Characters
+
+recruit_character = RUS_Mark_Rustan
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = anarchism
+	last_election = "2010.12.01"
+	elections_allowed = no
+}
+set_popularities = {
+	etatism = 27
+	chauvinism = 33
+	anarchism = 37
+	pragmatism = 1
+	utilitarism = 2
+}
+
+set_stability = -0.15
+
+set_research_slots = 1

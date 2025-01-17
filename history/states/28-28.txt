@@ -2,18 +2,17 @@ state={
 	id=28
 	name="STATE_28"
 	provinces={
-		16351 16366 16368 16374 16377 16386 
+		145 16351 16366 16368 16374 16377 16386 
 	}
 	manpower=1901578
 	buildings_max_level_factor=1.000
-	local_supplies=0.000
 
 	history={
 		owner = STP
 		buildings = {
 			infrastructure = 3
-			arms_factory = 5
-			industrial_complex  = 8
+			arms_factory = 3
+			industrial_complex  = 2
 
 			16368 = {
         		bunker = 3
@@ -35,6 +34,5 @@ state={
 
 	}
 	state_category = large_city
-
 	local_supplies=12.0 
 }

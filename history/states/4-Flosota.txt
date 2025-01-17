@@ -2,18 +2,10 @@ state={
 	id=4
 	name="STATE_4"
 	provinces={
-		29 60 68 70 82 145 16364 16371 
+		49 82 7111 16371 16470 16491 16496 16505 
 	}
-	manpower=1
+	manpower=432615
 	buildings_max_level_factor=1.000
 	state_category=town
 	local_supplies=0.000
-
-	history={
-		owner = STP
-		buildings = {
-			infrastructure = 2
-		}
-		add_core_of = STP
-	}
 }
