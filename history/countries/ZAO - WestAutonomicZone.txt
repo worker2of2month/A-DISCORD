@@ -1,0 +1,27 @@
+capital = 72
+
+####### Characters
+
+recruit_character = WRK_Bassam_Zogby
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = pragmatism
+	last_election = "1935.10.27"
+	elections_allowed = yes
+}
+set_popularities = {
+	etatism = 23
+	chauvinism = 1
+	utilitarism = 1
+	pragmatism = 27
+	anarchism = 3
+	technocracy = 7
+	hedonism = 16
+	humanism = 22
+}
+
+set_stability = -0.25
+
+set_research_slots = 4

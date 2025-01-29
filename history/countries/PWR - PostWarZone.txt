@@ -1,0 +1,24 @@
+capital = 71
+
+####### Characters
+
+recruit_character = WRK_Zack_Wither
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = pragmatism
+	last_election = "1935.10.27"
+	elections_allowed = yes
+}
+set_popularities = {
+	pragmatism = 42
+	anarchism = 4
+	technocracy = 10
+	hedonism = 36
+	humanism = 8
+}
+
+set_stability = -0.89
+
+set_research_slots = 2

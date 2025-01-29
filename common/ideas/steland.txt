@@ -1,0 +1,27 @@
+ideas = {
+
+	country = {
+
+		STP_hedonism_with_no_bondaries = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = great_depression
+
+			modifier = {
+				monthly_population = -0.7
+				research_speed_factor = -0.55
+				stability_factor = -0.3
+			}
+		}
+	}
+
+}

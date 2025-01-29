@@ -1,10 +1,25 @@
 capital = 40
 
+oob = "WRK"
+
 ####### Characters
 
 recruit_character = WRK_Nikita_Worcker
 
-####### Basic shit
+####### Faction
+
+create_faction = faction_vorkerland_confederation
+add_to_faction = NAM
+add_to_faction = DAN
+add_to_faction = VAD
+add_to_faction = ZAO
+add_to_faction = PWR
+add_to_faction = VLA
+add_to_faction = ROM
+add_to_faction = SOL
+add_to_faction = TRU
+
+####### Politics
 
 set_politics = {
 	ruling_party = pragmatism
@@ -24,3 +39,42 @@ set_popularities = {
 set_stability = 0.27
 
 set_research_slots = 5
+
+####### Diplomacy
+
+set_autonomy = {
+	target = NAM
+	autonomous_state = autonomy_colony
+}
+set_autonomy = {
+	target = DAN
+	autonomous_state = autonomy_colony
+}
+set_autonomy = {
+	target = VAD
+	autonomous_state = autonomy_district_in_Vorkerland
+}
+set_autonomy = {
+	target = ZAO
+	autonomous_state = autonomy_district_in_Vorkerland
+}
+set_autonomy = {
+	target = PWR
+	autonomous_state = autonomy_district_in_Vorkerland
+}
+set_autonomy = {
+	target = VLA
+	autonomous_state = autonomy_district_in_Vorkerland
+}
+set_autonomy = {
+	target = ROM
+	autonomous_state = autonomy_republic_in_Vorkerland
+}
+set_autonomy = {
+	target = SOL
+	autonomous_state = autonomy_republic_in_Vorkerland
+}
+set_autonomy = {
+	target = TRU
+	autonomous_state = autonomy_republic_in_Vorkerland
+}

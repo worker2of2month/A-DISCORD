@@ -1,0 +1,15 @@
+state={
+	id=78
+	name="STATE_78"
+	provinces={
+		569 1013 4242 5160 5453 6081 6336 6526 7274 7455 7493 9975 10190 10704 10774 11636 12821 
+	}
+	manpower=0
+	buildings_max_level_factor=1.000
+	local_supplies=0.000
+
+	history = {
+        owner = DAN
+        add_core_of = DAN
+	}
+}

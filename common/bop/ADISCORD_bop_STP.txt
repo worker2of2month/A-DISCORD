@@ -1,0 +1,85 @@
+STP_inner_party_opinions_bop = {
+	initial_value = 0
+	left_side = STP_more_hedonism
+	right_side = STP_less_hedonism
+	decision_category = STP_balance_of_power_category
+
+	### Collective ruling (civilwar, lol) 
+	range = {
+		id = STP_collective_ruling
+		min = -0.05
+		max = 0.05
+		modifier = {
+		}
+		on_activate = {
+		}
+		on_deactivate = {
+		}
+	}
+
+	### Mr. Shabrat's literally 1933 government
+
+	side = {
+		id = STP_less_hedonism	
+		icon = "GFX_bop_USB_biden_bad_side"
+
+		range = {
+			id = STP_less_hedonism_placeholder_amount
+			min = -0.05
+			max = -1
+			modifier = {
+				if = {
+					limit = {
+						STP_sided_with_Maksim_trigger = yes
+					}
+				stability_factor = 0.05
+				political_power_gain = 0.1
+				}
+				elseif = {
+					limit = {
+						STP_sided_with_Hedersett_trigger = yes
+					}
+				stability_factor = -0.05
+				political_power_gain = -0.1
+				}
+			}
+			on_activate = {
+			}
+			on_deactivate = {
+			}
+		}
+	}
+
+	### Hedersett's literally 1984 [Biden's edition] goverment
+
+	side = {
+		id = STP_more_hedonism	
+		icon = "GFX_bop_USB_biden_bad_side"
+
+		range = {
+			id = STP_more_hedonism_placeholder_amount
+			min = 0.05
+			max = 1
+			modifier = {
+				if = {
+					limit = {
+						STP_sided_with_Maksim_trigger = yes
+					}
+				stability_factor = -0.05
+				political_power_gain = -0.1
+				}
+				elseif = {
+					limit = {
+						STP_sided_with_Hedersett_trigger = yes
+					}
+				stability_factor = 0.05
+				political_power_gain = 0.1
+				}
+			}
+			on_activate = {
+			}
+			on_deactivate = {
+			}
+		}
+	}
+}

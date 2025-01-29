@@ -1,0 +1,20 @@
+capital = 72
+
+####### Characters
+
+recruit_character = DAN_Dania_Komun
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = etatism
+	last_election = "2110.10.27"
+	elections_allowed = no
+}
+set_popularities = {
+	etatism = 100
+}
+
+set_stability = -0.64
+
+set_research_slots = 2

@@ -11,6 +11,16 @@
 
   WRK_Nikita_Worcker: "Никита Уоркер"
 
+  WRK_Vlad_Petrichev: "Влад Петрищев"
+
+  WRK_Richard_Gordon: "Ричард Гордон"
+
+  WRK_Reginald_Silver: "Регниталд Силвер"
+
+  WRK_Bassam_Zogby: "Бассам Зогби"
+
+  WRK_Zack_Wither: "Зак Витер"
+
   ###IVN
 
   IVN_Vadim_Ivanchik: "Вадим Иванчик"
@@ -26,3 +36,19 @@
   ###RUS
 
   RUS_Mark_Rustan: "Марк Рустан"
+
+  ###NAM
+
+  NAM_Egor_Rom: "Егор Ром"
+
+  ###ROM
+
+  ROM_Erwin_Von_Romanovskiy: "Ервин Вон Романовский"
+
+  ###TRU
+
+  TRU_Nikita_Truman: "Никита Трумен"
+
+  ###DAN
+
+  DAN_Dania_Komun: "Данил Комун"

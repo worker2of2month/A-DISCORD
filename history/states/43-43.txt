@@ -2,7 +2,7 @@ state={
 	id=43
 	name="STATE_43"
 	provinces={
-		101 16429 16450 16455 
+		95 101 16432 16450 16455 
 	}
 	manpower=96284
 	buildings_max_level_factor=1.000
@@ -15,6 +15,5 @@ state={
 			infrastructure = 2
 		}
 		add_core_of = STP
-
 	}
 }

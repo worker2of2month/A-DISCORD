@@ -12,8 +12,11 @@ set_politics = {
 	elections_allowed = no
 }
 set_popularities = {
-	etatism = 78
-	chauvinism = 22
+	etatism = 56
+	chauvinism = 19
+	humanism = 1
+	utilitarism = 3
+	pragmatism = 21
 }
 
 set_stability = 0.44

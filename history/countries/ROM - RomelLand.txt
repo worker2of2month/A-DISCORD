@@ -1,0 +1,24 @@
+capital = 73
+
+####### Characters
+
+recruit_character = ROM_Erwin_Von_Romanovskiy
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = pragmatism
+	last_election = "2010.12.01"
+	elections_allowed = no
+}
+set_popularities = {
+	etatism = 24
+	chauvinism = 26
+	humanism = 4
+	utilitarism = 6
+	pragmatism = 40
+}
+
+set_stability = 0.31
+
+set_research_slots = 2

@@ -2,14 +2,14 @@ bookmarks = {
 	bookmark = {
 		name = "GATHERING_STORM_NAME"
 		desc = "GATHERING_STORM_DESC"
-		date = 1936.1.1.12
+		date = 2163.1.1.12
 		picture = "GFX_select_date_1936"
 		default_country = "STP"
 		default = yes
 		
 		"STP"={
 			history = "FRA_GATHERING_STORM_DESC"
-			ideology = democratic
+			ideology = hedonism
 			ideas = {
 
 			}

@@ -1,0 +1,15 @@
+state={
+	id=74
+	name="STATE_74"
+	provinces={
+		1386 2131 2197 2402 2474 2516 2583 3492 5408 5666 5799 6341 6543 6560 6839 7406 8497 8704 9688 10016 10251 12316 12541 12923 12947 
+	}
+	manpower=0
+	buildings_max_level_factor=1.000
+	local_supplies=0.000
+
+	history = {
+        owner = VLA
+        add_core_of = VLA
+	}
+}

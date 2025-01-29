@@ -1,7 +1,7 @@
 	--took some settings from tfr. Hope they don't mind
 
-	NDefines.NGame.START_DATE = "2063.1.1.1";
-	NDefines.NGame.END_DATE = "2083.1.1.1";
+	NDefines.NGame.START_DATE = "2163.1.1.1";
+	NDefines.NGame.END_DATE = "2183.1.1.1";
 	
 	NDefines.NDiplomacy.WARGOAL_JUSTIFY_TENSION_FROM_PRODUCTION = 20.0;
 	NDefines.NDiplomacy.VOLUNTEERS_DIVISIONS_REQUIRED = 3; -- This many divisons are required for the country to be able to send volunteers.

@@ -1,0 +1,5 @@
+STP_balance_of_power_category = {
+	allowed = {
+		tag = STP
+	}
+}

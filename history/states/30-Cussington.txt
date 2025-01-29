@@ -1,0 +1,18 @@
+state={
+	id=30
+	name="STATE_30"
+	provinces={
+		12434 16346 16363 16369 16441 16442 16444 
+	}
+	manpower=0
+	buildings_max_level_factor=1.000
+	local_supplies=0.000
+
+	history={
+		owner = NOD
+		buildings = {
+			infrastructure = 2
+		}
+		add_core_of = NOD
+	}
+}

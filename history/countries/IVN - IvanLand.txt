@@ -4,6 +4,21 @@ capital = 25
 
 recruit_character = IVN_Vadim_Ivanchik
 
+
+####### Politics
+
+diplomatic_relation = {
+    country = WIT
+    relation = guarantee
+    active = yes
+}
+
+diplomatic_relation = {
+    country = WRK
+    relation = embargo
+    active = yes
+}
+
 ####### Basic shit
 
 set_politics = {

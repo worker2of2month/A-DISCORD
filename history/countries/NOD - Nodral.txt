@@ -1,0 +1,32 @@
+capital = 30
+
+####### Characters
+
+recruit_character = NOD_Tobis_Bentlix
+
+####### Faction
+
+create_faction = faction_stp_nod
+add_to_faction = STP
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = hedonism
+	last_election = "2071.4.08"
+	elections_allowed = yes
+}
+set_popularities = {
+	etatism = 8
+	hedonism = 42
+	technocracy = 10
+	humanism = 7
+	utilitarism = 3
+	pragmatism = 20
+	anarchism = 9
+	chauvinism = 1
+}
+
+set_stability = 0.63
+
+set_research_slots = 2

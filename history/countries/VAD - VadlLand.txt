@@ -1,0 +1,25 @@
+capital = 67
+
+####### Characters
+
+recruit_character = WRK_Vlad_Petrichev
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = pragmatism
+	last_election = "2010.12.01"
+	elections_allowed = no
+}
+set_popularities = {
+	etatism = 19
+	chauvinism = 6
+	humanism = 3
+	utilitarism = 20
+	pragmatism = 43
+	technocracy = 9
+}
+
+set_stability = 0.31
+
+set_research_slots = 2

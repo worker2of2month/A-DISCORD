@@ -1,0 +1,23 @@
+capital = 76
+
+####### Characters
+
+recruit_character = WRK_Richard_Gordon
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = pragmatism
+	last_election = "2010.12.01"
+	elections_allowed = no
+}
+set_popularities = {
+	etatism = 25
+	humanism = 32
+	utilitarism = 4
+	pragmatism = 39
+}
+
+set_stability = 0.54
+
+set_research_slots = 2

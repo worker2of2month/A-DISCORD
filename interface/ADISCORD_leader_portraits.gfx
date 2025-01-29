@@ -5,6 +5,34 @@ spriteTypes = {
 	  	name = "GFX_portrait_WRK_Nikita_Worcker"
 	  	texturefile = "gfx/leaders/WRK/portrait_WRK_Nikita_Worcker.png"
 	}
+	spriteType = {
+	  	name = "GFX_portrait_WRK_Vlad_Petrichev"
+	  	texturefile = "gfx/leaders/WRK/portrait_WRK_Vlad_Petrichev.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_WRK_Vlad_Mecra"
+	  	texturefile = "gfx/leaders/WRK/portrait_WRK_Vlad_Mecra.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_WRK_Dorian_Worx"
+	  	texturefile = "gfx/leaders/WRK/portrait_WRK_Dorian_Worx.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_WRK_Richard_Gordon"
+	  	texturefile = "gfx/leaders/WRK/portrait_WRK_Richard_Gordon.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_WRK_Zack_Wither"
+	  	texturefile = "gfx/leaders/WRK/portrait_WRK_Zack_Wither.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_WRK_Bassam_Zogby"
+	  	texturefile = "gfx/leaders/WRK/portrait_WRK_Bassam_Zogby.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_WRK_Reginald_Silver"
+	  	texturefile = "gfx/leaders/WRK/portrait_WRK_Reginald_Silver.png"
+	}
 ###STP
   	spriteType = {
 	  	name = "GFX_portrait_STP_maksim_shabrat"
@@ -34,5 +62,35 @@ spriteTypes = {
 	spriteType = {
 	  	name = "GFX_portrait_RUS_Mark_Rustan"
 	  	texturefile = "gfx/leaders/RUS/portrait_RUS_Mark_Rustan.png"
+	}
+###NAM
+	spriteType = {
+	  	name = "GFX_portrait_NAM_Egor_Rom"
+	  	texturefile = "gfx/leaders/NAM/portrait_NAM_Egor_Rom.png"
+	}
+###ROM
+	spriteType = {
+	  	name = "GFX_portrait_ROM_Erwin_Von_Romanovskiy"
+	  	texturefile = "gfx/leaders/ROM/portrait_ROM_Erwin_Von_Romanovskiy.png"
+	}
+###TRU
+	spriteType = {
+	  	name = "GFX_portrait_TRU_Nikita_Truman"
+	  	texturefile = "gfx/leaders/ROM/portrait_ROM_Erwin_Von_Romanovskiy.png"
+	}
+###DAN
+	spriteType = {
+	  	name = "GFX_portrait_DAN_Dania_Komun"
+	  	texturefile = "gfx/leaders/DAN/portrait_DAN_Dania_Komun.png"
+	}
+###NOD
+	spriteType = {
+	  	name = "GFX_portrait_NOD_Tobis_Bentlix"
+	  	texturefile = "gfx/leaders/NOD/portrait_NOD_Tobis_Bentlix.png"
+	}
+###PLACEHOLDER or default shit
+	spriteType = {
+	  	name = "GFX_portrait_PLACEHOLDER"
+	  	texturefile = "gfx/leaders/portrait_PLACEHOLDER.png"
 	}
 }

@@ -1,0 +1,18 @@
+state={
+	id=54
+	name="STATE_54"
+	provinces={
+		728 4369 4827 16296 16297 16298 16478 16501 16510 16555 
+	}
+	manpower=0
+	buildings_max_level_factor=1.000
+	local_supplies=0.000
+
+	history={
+		owner = VAL
+		buildings = {
+			infrastructure = 2
+		}
+		add_core_of = VAL
+	}
+}

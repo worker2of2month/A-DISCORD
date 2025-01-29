@@ -22,4 +22,69 @@ characters = {
 			id = -1
 		}
 	}
+	WRK_Vlad_Petrichev = {
+		name = WRK_Vlad_Petrichev
+		portraits = {
+			civilian = {
+				large = GFX_portrait_WRK_Vlad_Petrichev
+			}
+		}
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "1965.1.1.1"
+			id = -1
+		}
+	}
+	WRK_Richard_Gordon = {
+		name = WRK_Richard_Gordon
+		portraits = {
+			civilian = {
+				large = GFX_portrait_WRK_Richard_Gordon
+			}
+		}
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "1965.1.1.1"
+			id = -1
+		}
+	}
+	WRK_Zack_Wither = {
+		name = WRK_Zack_Wither
+		portraits = {
+			civilian = {
+				large = GFX_portrait_WRK_Zack_Wither
+			}
+		}
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "1965.1.1.1"
+			id = -1
+		}
+	}
+	WRK_Bassam_Zogby = {
+		name = WRK_Bassam_Zogby
+		portraits = {
+			civilian = {
+				large = GFX_portrait_WRK_Bassam_Zogby
+			}
+		}
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "1965.1.1.1"
+			id = -1
+		}
+	}
+	WRK_Reginald_Silver = {
+		name = WRK_Reginald_Silver
+		portraits = {
+			civilian = {
+				large = GFX_portrait_WRK_Reginald_Silver
+			}
+		}
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "1965.1.1.1"
+			id = -1
+		}
+	}
 }
