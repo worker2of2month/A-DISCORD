@@ -1,0 +1,22 @@
+spriteTypes = {
+
+  	spriteType = {
+	  	name = "GFX_STP_bop_less_hedonism_Shabrat"
+	  	texturefile = "gfx/interface/bop/STP_bop_less_hedonism_Shabrat.png"
+	}
+
+	spriteType = {
+	  	name = "GFX_STP_bop_less_hedonism_Sotnikov"
+	  	texturefile = "gfx/interface/bop/STP_bop_less_hedonism_Sotnikov.png"
+	}
+
+	spriteType = {
+	  	name = "GFX_STP_bop_more_hedonism_Hedersett"
+	  	texturefile = "gfx/interface/bop/STP_bop_more_hedonism_Hedersett.png"
+	}
+
+	spriteType = {
+	  	name = "GFX_STP_bop_more_hedonism_Rober"
+	  	texturefile = "gfx/interface/bop/STP_bop_more_hedonism_Rober.png"
+	}
+}

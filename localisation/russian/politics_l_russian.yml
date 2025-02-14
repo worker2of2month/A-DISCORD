@@ -9,7 +9,7 @@
  POLITICS_NEXTELECTION: "Следующие выборы"
  POLITICS_ELECTION_FREQUENCY: "Выборы через каждые $MONTHS|H$ г."
  POLITICS_HOLD_ELECTION: "Провести выборы в государстве $COUNTRY$"
- POLITICS_NEXT_ELECTION: "Следующие выборы: $DATE$"
+ POLITICS_NEXT_ELECTION: "След. выборы: $DATE$"
  POLITICS_ACTIVE_GOAL: "Текущая цель"
  POLITICS_PARTY_NAME: "§H$KEY$ ($VAL$%)§!"
  POLITICS_IDEOLOGY: "§TИдеология партии: $IDEOLOGY|H$§!"

@@ -6,11 +6,13 @@ recruit_character = STP_maksim_shabrat
 
 ####### Basic shit
 
-set_politics = {
+set_politics = {	
 	ruling_party = hedonism
-	last_election = "1935.10.27"
-	elections_allowed = no
+	last_election = "2060.3.18"
+	election_frequency = 120
+	elections_allowed = yes
 }
+
 set_popularities = {
 	humanism = 2
 	utilitarism = 1
@@ -25,6 +27,13 @@ set_stability = 0.85
 set_research_slots = 1
 
 ####### Ideas
+
 add_ideas = {
 	STP_hedonism_with_no_bondaries
+}
+
+###### BOP
+
+set_power_balance = {
+    id = STP_inner_party_opinions_bop
 }

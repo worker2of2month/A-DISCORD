@@ -166,10 +166,10 @@ guiTypes = {
 
 			instantTextboxType = {
 				name = "elections"
-				position = { x = 330 y = 180 }
+				position = { x = 265 y = 180 }
 				font = "hoi_18mbs"
 				text = "elections"
-				maxWidth = 140
+				maxWidth = 400
 				maxHeight = 20
 			}
 			
@@ -190,22 +190,27 @@ guiTypes = {
 				quadTextureSprite = "GFX_dismantle_faction_button"
 				#buttonFont = "hoi_16mbs"
 				#buttonText = "DIPLOMACY_DISMANTLE_FACTION_TITLE"
+
+				hide = yes
 			}		
 
 			containerWindowType = {
 				name = "power_balance_button"
-				position = { x = 320 y = -62 }
+				position = { x = -40 y = 125 }
 				clipping = no
 
 				buttonType = {
 					name = "show_power_balance"
-					position = { x = 0 y = 0 }
+					position = { x = 5 y = 0 }
 					quadTextureSprite = "GFX_show_power_balance_button"
+
+					maxWidth = 100				
+					maxHeight = 20
 				}
 				
 				iconType = {
 					name = "show_power_balance_glow"
-					position = { x = 0 y = 0 }
+					position = { x = -600 y = 0 }
 					quadTextureSprite = "GFX_bop_glow_effect"
 					alwaystransparent = yes
 				}
@@ -213,7 +218,7 @@ guiTypes = {
 				instantTextboxType = {
 					name = "power_balance_percentage"
 					format = center
-					position = { x = 40 y = 10 }
+					position = { x = 0 y = 90 }
 					font = "hoi_16mbs"
 					text = "90%"
 					fixedsize = yes
@@ -232,6 +237,8 @@ guiTypes = {
 					maxWidth = 100				
 					maxHeight = 20
 					alwaystransparent = yes
+
+					hide = yes
 				}	
 				
 				iconType = {
@@ -239,7 +246,7 @@ guiTypes = {
 					position = { x = 12 y = 4 }
 					quadTextureSprite = "GFX_placeholder_bordered"
 					alwaystransparent = yes				
-					scale = 0.55
+					scale = 1
 				}
 			}			
 		}

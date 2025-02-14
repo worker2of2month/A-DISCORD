@@ -1,0 +1,38 @@
+STP_balance_of_power_category = {
+	STP_add_left_bop_debug_decision = {
+		allowed = {
+			original_tag = STP
+		}
+		visible = {
+			is_debug = yes
+			is_ai = no
+			has_power_balance = {
+				id = STP_inner_party_opinions_bop
+			}
+		}
+		complete_effect = {
+			add_power_balance_value = {
+				id = STP_inner_party_opinions_bop
+				value = -0.35
+			}
+		}
+	}
+	STP_add_right_bop_debug_decision = {
+		allowed = {
+			original_tag = STP
+		}
+		visible = {
+			is_debug = yes
+			is_ai = no
+			has_power_balance = {
+				id = STP_inner_party_opinions_bop
+			}
+		}
+		complete_effect = {
+			add_power_balance_value = {
+				id = STP_inner_party_opinions_bop
+				value = 0.35
+			}
+		}
+	}
+}
