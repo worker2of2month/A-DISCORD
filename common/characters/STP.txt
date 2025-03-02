@@ -13,7 +13,21 @@ characters = {
 		name = STP_maksim_shabrat
 		portraits = {
 			civilian = {
-				large = GFX_portrait_STP_maksim_shabrat
+				large = GFX_portrait_STP_Maksim_Shabrat
+			}
+		}
+		country_leader = {
+			ideology = hedonism_ideology
+			expire = "1965.1.1.1"
+			id = -1
+		}
+	}
+
+	STP_Petr_Ivanov = {
+		name = STP_Petr_Ivanov
+		portraits = {
+			civilian = {
+				large = GFX_portrait_STP_Petr_Ivanov
 			}
 		}
 		country_leader = {

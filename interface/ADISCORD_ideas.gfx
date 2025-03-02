@@ -1,0 +1,8 @@
+spriteTypes = {
+
+###STP
+  	spriteType = {
+	  	name = "GFX_idea_STP_hedonism_with_no_bondaries"
+	  	texturefile = "gfx/interface/ideas/STP/idea_STP_hedonism_with_no_bondaries.png"
+	}
+}

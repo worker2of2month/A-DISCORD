@@ -183,3 +183,4 @@
  TOPBAR_OFFICER_CORP_DESC: "Управление советниками и теоретиками, выбор духов для армии, флота и ВВС, а также разблокировка доктрин."
  IDEA_COST_NAVY_XP: "Стоимость (£navy_experience): $VALUE|-0$"
  IDEA_COST_COMPACT_NAVY_XP: "£navy_experience $VALUE|0$"
+ Balance_of_Power: "Баланс сил"

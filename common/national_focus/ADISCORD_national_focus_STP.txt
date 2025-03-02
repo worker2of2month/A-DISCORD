@@ -1,10 +1,311 @@
 ﻿focus_tree = {
-
-	id = generic_focus
-	
+	id = STP_focus
 	country = {
-		factor = 1
+		factor = 0
+		modifier = {
+			add = 20
+			original_tag = STP
+		}
 	}
-	
-	default = yes
-} 
+
+	focus = {
+		id = STP_Nectar_of_the_Gods
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		x = 0
+		y = 0
+		cost = 5
+		allow_branch = {
+		}
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = {
+			base = 1
+		}
+		available = {
+			has_country_leader = {
+				character = STP_Petr_Ivanov
+				ruling_only = yes
+			}
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: focus USA_state_of_the_union completion_reward"
+
+			country_event = {
+				id = stp.1
+			}
+			hidden_effect = {
+				scoped_play_song = "21st"
+			}
+		}
+	}
+
+###Maksim's attempt
+
+	focus = {
+		id = STP_Side_With_Maksim
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_Nectar_of_the_Gods
+		x = 4
+		y = 1
+		allow_branch = {
+			NOT = {has_country_flag = STP_sided_with_the_party_flag}
+		}
+		offset = {
+			x = -4
+			y = 0
+			trigger = {
+				has_country_flag = STP_sided_with_Maksim_flag
+			}
+		}
+		cost = 5
+		prerequisite = {
+			focus = STP_Nectar_of_the_Gods
+		}
+		mutually_exclusive = {
+			focus = STP_Side_With_The_Party
+		}
+		ai_will_do = {
+			base = 1
+		}
+		available = {
+			is_completed_by_event = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: focus STP_Side_With_Maksim completion_reward"
+			hidden_effect = {
+				set_country_flag = STP_sided_with_Maksim_flag
+				focus_unlock = yes
+			}
+		}
+	}
+
+###Try to play passively
+
+	focus = {
+		id = STP_Fair_Play
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_Side_With_Maksim
+		x = 1
+		y = 1
+		cost = 5
+		prerequisite = {
+			focus = STP_Side_With_Maksim
+		}
+		mutually_exclusive = {
+			focus = STP_We_Dont_Need_Masks
+		}
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
+
+###A way to a civilwar
+
+	focus = {
+		id = STP_We_Dont_Need_Masks
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_Side_With_Maksim
+		x = 4
+		y = 1
+		cost = 5
+		prerequisite = {
+			focus = STP_Side_With_Maksim
+		}
+		mutually_exclusive = {
+			focus = STP_Fair_Play
+		}
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
+
+###This part of the focus tree activates if you get suspicion from the party or don't get the victory on the elections
+
+	focus = {
+		id = STP_Going_Backstage
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_Side_With_Maksim
+		x = -2
+		y = 1
+		cost = 5
+		prerequisite = {
+			focus = STP_Side_With_Maksim
+		}
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = STP_A_Party_Against_Hedonism ###If both Shabrat and Sotnikov lost
+		icon = GFX_focus_STP_A_Party_Against_Hedonism
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_Going_Backstage
+		x = -2
+		y = 1
+		cost = 5
+		prerequisite = {
+			focus = STP_Going_Backstage
+		}
+		mutually_exclusive = {
+			focus = STP_A_Deal_With_Sotnikov
+		}
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = STP_Get_Weapons
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_A_Party_Against_Hedonism
+		x = 1
+		y = 1
+		cost = 5
+		prerequisite = {
+			focus = STP_A_Party_Against_Hedonism
+		}
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = STP_Prepare_Sleaping_Agents
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_A_Party_Against_Hedonism
+		x = -1
+		y = 1
+		cost = 5
+		prerequisite = {
+			focus = STP_A_Party_Against_Hedonism
+		}
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = STP_Operation_Last_Banquette
+		icon = GFX_focus_STP_Operation_Last_Banquette
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_A_Party_Against_Hedonism
+		x = 0
+		y = 2
+		cost = 5
+		prerequisite = {
+			focus = STP_Prepare_Sleaping_Agents
+		}
+		prerequisite = {
+			focus = STP_Get_Weapons
+		}
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = STP_A_Deal_With_Sotnikov ###If Sotnikov won
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_Going_Backstage
+		x = 2
+		y = 1
+		cost = 5
+		prerequisite = {
+			focus = STP_Going_Backstage
+		}
+		mutually_exclusive = {
+			focus = STP_A_Party_Against_Hedonism
+		}
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
+
+###The party's gaming society
+
+	focus = {
+		id = STP_Side_With_The_Party
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_Nectar_of_the_Gods
+		x = -4
+		y = 1
+		allow_branch = {
+			NOT = {has_country_flag = STP_sided_with_Maksim_flag}
+		}
+		offset = {
+			x = 4
+			y = 0
+			trigger = {
+				has_country_flag = STP_sided_with_the_party_flag
+			}
+		}
+		cost = 5
+		prerequisite = {
+			focus = STP_Nectar_of_the_Gods
+		}
+		mutually_exclusive = {
+			focus = STP_Side_With_Maksim
+		}
+		ai_will_do = {
+			base = 1
+		}
+		available = {
+			is_completed_by_event = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: focus STP_Side_With_The_Party completion_reward"
+			hidden_effect = {
+				set_country_flag = STP_sided_with_the_party_flag
+				focus_unlock = yes
+			}
+		}
+	}
+}

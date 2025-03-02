@@ -35,8 +35,16 @@ spriteTypes = {
 	}
 ###STP
   	spriteType = {
-	  	name = "GFX_portrait_STP_maksim_shabrat"
+	  	name = "GFX_portrait_STP_Maksim_Shabrat"
 	  	texturefile = "gfx/leaders/STP/portrait_STP_Maksim_Shabrat.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_STP_Maksim_Shabrat_hedonism"
+	  	texturefile = "gfx/leaders/STP/portrait_STP_Maksim_Shabrat_hedonism.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_STP_Petr_Ivanov"
+	  	texturefile = "gfx/leaders/STP/portrait_STP_Petr_Ivanov.png"
 	}
 ###IVN
 	spriteType = {

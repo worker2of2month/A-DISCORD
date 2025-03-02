@@ -62,7 +62,7 @@ guiTypes = {
 		
 		iconType ={
 			name ="power_balance_header_bg"
-			spriteType = "GFX_header_bg"
+			spriteType = "GFX_header_bg" 
 			position = { x= 7 y = 5 }
 			Orientation = "UPPER_LEFT"
 		}	
@@ -82,7 +82,7 @@ guiTypes = {
 			name = "title"
 			position = { x = 37 y = 5 }
 			font = "hoi_36header"
-			text = "Balance of Power"
+			text = "Balance_of_Power"
 			maxWidth = 300
 			maxHeight = 20
 		}	

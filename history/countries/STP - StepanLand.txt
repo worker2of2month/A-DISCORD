@@ -2,7 +2,7 @@ capital = 28
 
 ####### Characters
 
-recruit_character = STP_maksim_shabrat
+recruit_character = STP_Petr_Ivanov
 
 ####### Basic shit
 

@@ -1,0 +1,30 @@
+add_namespace = stp
+
+#State of the Union
+country_event = {
+	id = stp.1
+	title = stp.1.t
+	desc = stp.1.d
+	picture = GFX_report_USA_donald_trump
+	fire_only_once = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = STP
+	}
+	immediate = {
+	}
+	option = {
+		name = stp.1.a
+		ai_chance = {
+			base = 1
+		}
+		complete_national_focus = STP_Side_With_Maksim
+	}
+	option = {
+		name = stp.1.b
+		ai_chance = {
+			base = 1
+		}
+		complete_national_focus = STP_Side_With_The_Party
+	}
+}
