@@ -1,0 +1,6 @@
+is_completed_by_event = {
+	custom_trigger_tooltip = {
+		tooltip = completed_by_event_tooltip
+		always = no
+	}
+}

@@ -51,13 +51,13 @@
 			FOCUS_FILTER_POLITICAL
 		}
 		relative_position_id = STP_Nectar_of_the_Gods
-		x = 4
+		x = 5
 		y = 1
 		allow_branch = {
 			NOT = {has_country_flag = STP_sided_with_the_party_flag}
 		}
 		offset = {
-			x = -4
+			x = -5
 			y = 0
 			trigger = {
 				has_country_flag = STP_sided_with_Maksim_flag
@@ -85,36 +85,11 @@
 		}
 	}
 
-###Try to play passively
+####
 
 	focus = {
-		id = STP_Fair_Play
-		icon = GFX_focus_STP_Side_With_Maksim
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_Side_With_Maksim
-		x = 1
-		y = 1
-		cost = 5
-		prerequisite = {
-			focus = STP_Side_With_Maksim
-		}
-		mutually_exclusive = {
-			focus = STP_We_Dont_Need_Masks
-		}
-		ai_will_do = {
-			base = 1
-		}
-		completion_reward = {
-		}
-	}
-
-###A way to a civilwar
-
-	focus = {
-		id = STP_We_Dont_Need_Masks
-		icon = GFX_focus_STP_Side_With_Maksim
+		id = STP_Prepare_For_The_Upcoming_BOP
+		icon = GFX_focus_STP_Prepare_For_The_Upcoming_BOP
 		search_filters = {
 			FOCUS_FILTER_POLITICAL
 		}
@@ -125,8 +100,25 @@
 		prerequisite = {
 			focus = STP_Side_With_Maksim
 		}
-		mutually_exclusive = {
-			focus = STP_Fair_Play
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = STP_Open_Their_Eyes
+		icon = GFX_focus_STP_Open_Their_Eyes
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_Prepare_For_The_Upcoming_BOP
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = {
+			focus = STP_Prepare_For_The_Upcoming_BOP
 		}
 		ai_will_do = {
 			base = 1
@@ -135,16 +127,99 @@
 		}
 	}
 
-###This part of the focus tree activates if you get suspicion from the party or don't get the victory on the elections
+	focus = {
+		id = STP_Secure_Swing_Votes
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_Open_Their_Eyes
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = {
+			focus = STP_Open_Their_Eyes
+		}
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
 
 	focus = {
-		id = STP_Going_Backstage
+		id = STP_A_Deal_With_Sotnikov
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_Secure_Swing_Votes
+		x = -1
+		y = 1
+		cost = 5
+		prerequisite = {
+			focus = STP_Secure_Swing_Votes
+		}
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = STP_Seek_International_Help
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_Secure_Swing_Votes
+		x = 1
+		y = 1
+		cost = 5
+		prerequisite = {
+			focus = STP_Secure_Swing_Votes
+		}
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = STP_All_In
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_Seek_International_Help
+		x = -1
+		y = 1
+		cost = 5
+		prerequisite = {
+			focus = STP_Seek_International_Help
+		}
+		prerequisite = {
+			focus = STP_A_Deal_With_Sotnikov
+		}
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
+
+####
+
+	focus = {
+		id = STP_Deal_With_Stepan_Shabrat
 		icon = GFX_focus_STP_Side_With_Maksim
 		search_filters = {
 			FOCUS_FILTER_POLITICAL
 		}
 		relative_position_id = STP_Side_With_Maksim
-		x = -2
+		x = 0
 		y = 1
 		cost = 5
 		prerequisite = {
@@ -157,61 +232,20 @@
 		}
 	}
 
-	focus = {
-		id = STP_A_Party_Against_Hedonism ###If both Shabrat and Sotnikov lost
-		icon = GFX_focus_STP_A_Party_Against_Hedonism
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_Going_Backstage
-		x = -2
-		y = 1
-		cost = 5
-		prerequisite = {
-			focus = STP_Going_Backstage
-		}
-		mutually_exclusive = {
-			focus = STP_A_Deal_With_Sotnikov
-		}
-		ai_will_do = {
-			base = 1
-		}
-		completion_reward = {
-		}
-	}
+####
 
 	focus = {
-		id = STP_Get_Weapons
-		icon = GFX_focus_STP_Side_With_Maksim
+		id = STP_Open_Wounds_Of_The_System
+		icon = GFX_focus_STP_Open_Wounds_Of_The_System
 		search_filters = {
 			FOCUS_FILTER_POLITICAL
 		}
-		relative_position_id = STP_A_Party_Against_Hedonism
-		x = 1
-		y = 1
-		cost = 5
-		prerequisite = {
-			focus = STP_A_Party_Against_Hedonism
-		}
-		ai_will_do = {
-			base = 1
-		}
-		completion_reward = {
-		}
-	}
-
-	focus = {
-		id = STP_Prepare_Sleaping_Agents
-		icon = GFX_focus_STP_Side_With_Maksim
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_A_Party_Against_Hedonism
+		relative_position_id = STP_Deal_With_Stepan_Shabrat
 		x = -1
 		y = 1
 		cost = 5
 		prerequisite = {
-			focus = STP_A_Party_Against_Hedonism
+			focus = STP_Deal_With_Stepan_Shabrat
 		}
 		ai_will_do = {
 			base = 1
@@ -219,6 +253,199 @@
 		completion_reward = {
 		}
 	}
+
+	focus = {
+		id = STP_Policy_Of_Shadow_Terror
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_Open_Wounds_Of_The_System
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = {
+			focus = STP_Open_Wounds_Of_The_System
+		}
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = STP_The_Only_Solution
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_Policy_Of_Shadow_Terror
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = {
+			focus = STP_Policy_Of_Shadow_Terror
+		}
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
+
+####
+
+	focus = {
+		id = STP_A_Spirit_Of_Reforms
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_Deal_With_Stepan_Shabrat
+		x = 1
+		y = 1
+		cost = 5
+		prerequisite = {
+			focus = STP_Deal_With_Stepan_Shabrat
+		}
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = STP_Swing_Needed_Politicians
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_A_Spirit_Of_Reforms
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = {
+			focus = STP_A_Spirit_Of_Reforms
+		}
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = STP_Now_Is_Time_To_Act
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_Swing_Needed_Politicians
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = {
+			focus = STP_Swing_Needed_Politicians
+		}
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
+
+####
+
+	focus = {
+		id = STP_Deal_With_Solgalov
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_Now_Is_Time_To_Act
+		x = 1
+		y = 1
+		cost = 5
+		prerequisite = {
+			focus = STP_Now_Is_Time_To_Act 
+		}
+		prerequisite = {
+			focus = STP_The_Only_Solution
+		}
+		mutually_exclusive = {
+			focus = STP_No_Deals_With_Bandits
+		}
+		mutually_exclusive = {
+			focus = STP_Ruin_Their_Deal
+		}
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
+	
+	focus = {
+		id = STP_No_Deals_With_Bandits
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_The_Only_Solution
+		x = -1
+		y = 1
+		cost = 5
+		prerequisite = {
+			focus = STP_Now_Is_Time_To_Act
+		}
+		prerequisite = {
+			focus = STP_The_Only_Solution
+		}
+		mutually_exclusive = {
+			focus = STP_Deal_With_Solgalov
+		}
+		mutually_exclusive = {
+			focus = STP_Ruin_Their_Deal
+		}
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = STP_Ruin_Their_Deal
+		icon = GFX_focus_STP_Ruin_Their_Deal
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_The_Only_Solution
+		x = 1
+		y = 1
+		cost = 5
+		prerequisite = {
+			focus = STP_Now_Is_Time_To_Act
+		}
+		prerequisite = {
+			focus = STP_The_Only_Solution
+		}
+		mutually_exclusive = {
+			focus = STP_Deal_With_Solgalov
+		}
+		mutually_exclusive = {
+			focus = STP_No_Deals_With_Bandits
+		}
+		ai_will_do = {
+			base = 1
+		}
+		completion_reward = {
+		}
+	}
+
+### A little spoiler for gamers
 
 	focus = {
 		id = STP_Operation_Last_Banquette
@@ -226,41 +453,73 @@
 		search_filters = {
 			FOCUS_FILTER_POLITICAL
 		}
-		relative_position_id = STP_A_Party_Against_Hedonism
-		x = 0
-		y = 2
+		relative_position_id = STP_All_In
+		x = -1
+		y = 1
+		allow_branch = {
+			AND = {
+				NOT = {has_country_flag = STP_sided_with_the_party_flag}
+				NOT = {has_country_flag = STP_sided_with_Maksim_flag}
+			}
+		}
 		cost = 5
-		prerequisite = {
-			focus = STP_Prepare_Sleaping_Agents
-		}
-		prerequisite = {
-			focus = STP_Get_Weapons
-		}
 		ai_will_do = {
 			base = 1
+		}
+		available = {
+			is_completed_by_event = yes
 		}
 		completion_reward = {
 		}
 	}
 
 	focus = {
-		id = STP_A_Deal_With_Sotnikov ###If Sotnikov won
-		icon = GFX_focus_STP_Side_With_Maksim
+		id = STP_It_Has_Only_Begun
+		icon = GFX_focus_STP_It_Has_Only_Begun
 		search_filters = {
 			FOCUS_FILTER_POLITICAL
 		}
-		relative_position_id = STP_Going_Backstage
-		x = 2
+		relative_position_id = STP_All_In
+		x = -3
 		y = 1
+		allow_branch = {
+			AND = {
+				NOT = {has_country_flag = STP_sided_with_the_party_flag}
+				NOT = {has_country_flag = STP_sided_with_Maksim_flag}
+			}
+		}
 		cost = 5
-		prerequisite = {
-			focus = STP_Going_Backstage
-		}
-		mutually_exclusive = {
-			focus = STP_A_Party_Against_Hedonism
-		}
 		ai_will_do = {
 			base = 1
+		}
+		available = {
+			is_completed_by_event = yes
+		}
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = STP_Triumph_Of_Common_Sense
+		icon = GFX_focus_STP_Triumph_Of_Common_Sense
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+		}
+		relative_position_id = STP_All_In
+		x = -5
+		y = 1
+		allow_branch = {
+			AND = {
+				NOT = {has_country_flag = STP_sided_with_the_party_flag}
+				NOT = {has_country_flag = STP_sided_with_Maksim_flag}
+			}
+		}
+		cost = 5
+		ai_will_do = {
+			base = 1
+		}
+		available = {
+			is_completed_by_event = yes
 		}
 		completion_reward = {
 		}
@@ -275,13 +534,13 @@
 			FOCUS_FILTER_POLITICAL
 		}
 		relative_position_id = STP_Nectar_of_the_Gods
-		x = -4
+		x = -5
 		y = 1
 		allow_branch = {
 			NOT = {has_country_flag = STP_sided_with_Maksim_flag}
 		}
 		offset = {
-			x = 4
+			x = 5
 			y = 0
 			trigger = {
 				has_country_flag = STP_sided_with_the_party_flag

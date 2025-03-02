@@ -14,11 +14,31 @@ spriteTypes = {
 	  	texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Side_With_The_Party.png"
 	}
 	spriteType = {
-	  	name = "GFX_focus_STP_A_Party_Against_Hedonism"
-	  	texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_A_Party_Against_Hedonism.png"
+	  	name = "GFX_focus_STP_Triumph_Of_Common_Sense"
+	  	texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Triumph_Of_Common_Sense.png"
 	}
 	spriteType = {
 	  	name = "GFX_focus_STP_Operation_Last_Banquette"
 	  	texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Operation_Last_Banquette.png"
+	}
+	spriteType = {
+	  	name = "GFX_focus_STP_Open_Wounds_Of_The_System"
+	  	texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Open_Wounds_Of_The_System.png"
+	}
+	spriteType = {
+	  	name = "GFX_focus_STP_Prepare_For_The_Upcoming_BOP"
+	  	texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Prepare_For_The_Upcoming_BOP.png"
+	}
+	spriteType = {
+	  	name = "GFX_focus_STP_Ruin_Their_Deal"
+	  	texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Ruin_Their_Deal.png"
+	}
+	spriteType = {
+	  	name = "GFX_focus_STP_It_Has_Only_Begun"
+	  	texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_It_Has_Only_Begun.png"
+	}
+	spriteType = {
+	  	name = "GFX_focus_STP_Open_Their_Eyes"
+	  	texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Open_Their_Eyes.png"
 	}
 }

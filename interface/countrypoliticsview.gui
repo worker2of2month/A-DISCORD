@@ -383,13 +383,6 @@ guiTypes = {
 				format = left			
 				alwaystransparent = yes
 			}
-
-			iconType = {
-				name = "continuous_glow"
-				position = { x = -16 y = -6 }
-				quadTextureSprite = "GFX_ongoing_focus_goal_polview"
-				scale = 0.9
-			}
 			
 			iconType = {
 				name = "goal_icon"
@@ -397,22 +390,7 @@ guiTypes = {
 				centerposition = yes			
 				spriteType = "GFX_goal_unknown"
 			}
-
-			iconType = {
-				name = "continuous_small_glow"
-				position = { x = 104 y = 12 }
-				quadTextureSprite = "GFX_ongoing_focus_goal_icon"
-				alwaystransparent = yes
-			}
 			
-			buttonType = {
-				name = "drop_continuous_focus_button"
-				position = { x = 327 y = 12 }
-				spriteType = "GFX_nf_close_button"
-				scale = 0.9
-				clicksound = click_default
-			}
-
 			buttonType = {
 				name = "drop_focus_button"
 				position = { x = 340 y = 12 }

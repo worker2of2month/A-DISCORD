@@ -1,7 +1,7 @@
 	--took some settings from tfr. Hope they don't mind
 
 	NDefines.NGame.START_DATE = "2163.1.1.1";
-	NDefines.NGame.END_DATE = "2183.1.1.1";
+	NDefines.NGame.END_DATE = "2193.1.1.1";
 	
 	NDefines.NDiplomacy.WARGOAL_JUSTIFY_TENSION_FROM_PRODUCTION = 20.0;
 	NDefines.NDiplomacy.VOLUNTEERS_DIVISIONS_REQUIRED = 3; -- This many divisons are required for the country to be able to send volunteers.
@@ -54,7 +54,7 @@
 	NDefines.NMilitary.NON_CORE_SUPPLY_AIR_SPEED = -0.125 -- -0.25
 	NDefines.NMilitary.OUT_OF_SUPPLY_MORALE = -0.15 -- -0.30
 	NDefines.NMilitary.AIR_SUPPORT_BASE = 0.3 -- 0.25
-	NDefines.NMilitary.REINFORCE_CHANCE = 0.25 -- 0.02	
+	NDefines.NMilitary.REINFORCE_CHANCE = 0.05 -- 0.02	
 	NDefines.NMilitary.ENCIRCLED_DISBAND_MANPOWER_FACTOR = 0.25 -- 0.20
 	NDefines.NMilitary.ORG_LOSS_FACTOR_ON_CONQUER = 0.3 -- 0.2	
 	NDefines.NMilitary.MAX_ARMY_EXPERIENCE = 1000 -- 500
@@ -156,7 +156,7 @@
 	NDefines.NAir.BASE_STRATEGIC_BOMBING_HIT_PLANE_DAMAGE_FACTOR = 50 -- 0.2
 	NDefines.NAir.AIR_COMBAT_FINAL_DAMAGE_SCALE = 0.025 -- 0.015
 	NDefines.NAir.ANTI_AIR_PLANE_DAMAGE_FACTOR = 0.02 -- 0.1
-	NDefines.NAir.ANTI_AIR_PLANE_DAMAGE_CHANCE = 0.04 -- 0.1
+	NDefines.NAir.ANTI_AIR_PLANE_DAMAGE_CHANCE = 0.03 -- 0.1
 	NDefines.NAir.AIR_DEPLOYMENT_DAYS = 1 -- 2
 	NDefines.NAir.ANTI_AIR_ATTACK_TO_DAMAGE_REDUCTION_FACTOR = 0.10 -- 1.0
 	NDefines.NAir.NAVAL_COMBAT_EXTERNAL_PLANES_JOIN_RATIO = 0.02
