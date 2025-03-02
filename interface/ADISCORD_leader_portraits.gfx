@@ -46,6 +46,14 @@ spriteTypes = {
 	  	name = "GFX_portrait_STP_Petr_Ivanov"
 	  	texturefile = "gfx/leaders/STP/portrait_STP_Petr_Ivanov.png"
 	}
+	frameAnimatedSpriteType  = {
+	  	name = "GFX_portrait_STP_Petr_Ivanov_animated"
+	  	texturefile = "gfx/leaders/STP/portrait_STP_Petr_Ivanov_death_animated.png"
+	  	noOfFrames = 102
+        animation_rate_fps = 30
+        looping = yes
+        play_on_show = yes
+	}
 ###IVN
 	spriteType = {
 	  	name = "GFX_portrait_IVN_Vadim_Ivanchik"

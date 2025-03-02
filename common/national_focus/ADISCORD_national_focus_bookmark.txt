@@ -1,0 +1,49 @@
+﻿focus_tree = {
+	id = Bookmark_focus
+	country = {
+		factor = 0
+		modifier = {
+			add = 20
+			original_tag = NOPE
+		}
+	}
+
+	focus = {
+		id = STP_Side_With_Maksim_bm
+		icon = STP_bookmark_maksim
+		x = -5
+		y = 1
+		cost = 5
+		available = {
+			is_completed_by_event = yes
+		}
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = STP_Operation_Last_Banquette_bm
+		icon = STP_bookmark_operation
+		x = -5
+		y = 1
+		cost = 5
+		available = {
+			is_completed_by_event = yes
+		}
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = STP_Side_With_The_Party_bm
+		icon = STP_bookmark_party
+		x = -5
+		y = 1
+		cost = 5
+		available = {
+			is_completed_by_event = yes
+		}
+		completion_reward = {
+		}
+	}
+}

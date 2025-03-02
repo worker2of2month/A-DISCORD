@@ -24,4 +24,67 @@ ideas = {
 		}
 	}
 
+	country = {
+
+		STP_hidden_slaves_trade = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_STP_hidden_slaves_trade
+
+			modifier = {
+			}
+		}
+	}
+
+	country = {
+
+		STP_legalize = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_STP_legalize
+
+			modifier = {
+			}
+		}
+	}
+
+	country = {
+
+		STP_worldwide_famous_tourist_destination = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_STP_worldwide_famous_tourist_destination
+
+			modifier = {
+			}
+		}
+	}
+
 }

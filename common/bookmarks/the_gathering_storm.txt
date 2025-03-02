@@ -8,13 +8,17 @@ bookmarks = {
 		default = yes
 		
 		"STP"={
-			history = "FRA_GATHERING_STORM_DESC"
+			history = "STP_BOOKMARK_DESC"
 			ideology = hedonism
 			ideas = {
-
+				STP_hedonism_with_no_bondaries
+				STP_legalize
+				STP_worldwide_famous_tourist_destination
 			}
 			focuses = {
-
+				STP_Side_With_Maksim_bm
+				STP_Operation_Last_Banquette_bm
+				STP_Side_With_The_Party_bm
 			}
 		}
 

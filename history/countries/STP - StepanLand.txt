@@ -22,7 +22,8 @@ set_popularities = {
 	hedonism = 40
 }
 
-set_stability = 0.85
+set_stability = 0.33
+set_war_support = 0.15
 
 set_research_slots = 1
 
@@ -30,6 +31,9 @@ set_research_slots = 1
 
 add_ideas = {
 	STP_hedonism_with_no_bondaries
+	STP_hidden_slaves_trade
+	STP_legalize
+	STP_worldwide_famous_tourist_destination
 }
 
 ###### BOP

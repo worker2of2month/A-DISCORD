@@ -41,4 +41,19 @@ spriteTypes = {
 	  	name = "GFX_focus_STP_Open_Their_Eyes"
 	  	texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Open_Their_Eyes.png"
 	}
+
+###STP BOOKMARK
+
+	spriteType = {
+	  	name = "STP_bookmark_maksim"
+	  	texturefile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_maksim.png"
+	}
+	spriteType = {
+	  	name = "STP_bookmark_party"
+	  	texturefile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_party.png"
+	}
+	spriteType = {
+	  	name = "STP_bookmark_operation"
+	  	texturefile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_operation.png"
+	}
 }

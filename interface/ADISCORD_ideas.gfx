@@ -5,4 +5,16 @@ spriteTypes = {
 	  	name = "GFX_idea_STP_hedonism_with_no_bondaries"
 	  	texturefile = "gfx/interface/ideas/STP/idea_STP_hedonism_with_no_bondaries.png"
 	}
+	spriteType = {
+	  	name = "GFX_idea_STP_hidden_slaves_trade"
+	  	texturefile = "gfx/interface/ideas/STP/idea_STP_hidden_slaves_trade.png"
+	}
+	spriteType = {
+	  	name = "GFX_idea_STP_legalize"
+	  	texturefile = "gfx/interface/ideas/STP/idea_STP_legalize.png"
+	}
+	spriteType = {
+	  	name = "GFX_idea_STP_worldwide_famous_tourist_destination"
+	  	texturefile = "gfx/interface/ideas/STP/idea_STP_worldwide_famous_tourist_destination.png"
+	}
 }
