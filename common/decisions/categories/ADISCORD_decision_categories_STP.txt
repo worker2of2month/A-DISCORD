@@ -3,3 +3,16 @@ STP_balance_of_power_category = {
 		tag = STP
 	}
 }
+
+STP_elections_in_the_party = {
+
+	picture = GFX_STP_decision_election_in_the_party
+
+	allowed = {
+		tag = STP
+	}
+
+	priority = 1
+
+	visible_when_empty = yes
+}

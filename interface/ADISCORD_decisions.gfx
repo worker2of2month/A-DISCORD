@@ -1,0 +1,9 @@
+spriteTypes = {
+
+###STP
+  	spriteType = {
+	  	name = "GFX_STP_decision_election_in_the_party"
+	  	texturefile = "gfx/interface/decisions/STP/stp_election.png"
+	}
+
+}

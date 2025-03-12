@@ -1,0 +1,63 @@
+##Party elections
+
+defined_text = {
+	name = WhoTFDoWeSupportText
+	text = {
+		trigger = {
+			original_tag = STP
+			OR = {
+				has_country_flag = STP_sided_with_the_party_loc
+				has_country_flag = STP_sided_with_Maksim_flag
+			}
+		}
+		localization_key = STP_WhoTFDoWeSupportText_loc
+	}
+}
+
+defined_text = { 
+	name = WhoTFDoWeSupportLeader
+	text = {
+		trigger = {
+			original_tag = STP
+			has_country_flag = STP_sided_with_Maksim_flag
+		}
+		localization_key = STP_sided_with_Maksim_loc
+	}
+	text = {
+		trigger = {
+			original_tag = STP
+			has_country_flag = STP_sided_with_the_party_flag
+		}
+		localization_key = STP_sided_with_the_party_loc
+	}
+}
+
+defined_text = { 
+	name = PeterHealth
+	text = {
+		trigger = {
+			original_tag = STP
+			NOT = {
+				OR = {
+					has_country_flag = STP_Peter_Is_Not_Okay
+					has_country_flag = STP_Peter_Is_Dead
+				}
+			}
+		}
+		localization_key = STP_Peter_Is_Okay_loc
+	}
+	text = {
+		trigger = {
+			original_tag = STP
+			has_country_flag = STP_Peter_Is_Not_Okay
+		}
+		localization_key = STP_Peter_Is_Not_Okay_loc
+	}
+	text = {
+		trigger = {
+			original_tag = STP
+			has_country_flag = STP_Peter_Is_Dead
+		}
+		localization_key = STP_Peter_Is_Dead_loc
+	}
+}

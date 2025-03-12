@@ -429,18 +429,7 @@ guiTypes = {
 			position = { x = 85 y = 160 }
 			size = { width = 360 height = 50 }
 			clipping = no
-						
-			instantTextboxType = {
-				name = "title"
-				position = { x = 120 y = 0 }
-				font = "hoi_18mbs"
-				text = "POLITICS_NATIONAL_SPIRIT"
-				maxWidth = 200
-				maxHeight = 20
-				alwaystransparent = yes
-			}
-			
-			
+
 			containerWindowType = {
 				name = "national_spirit_container"
 				position = { x = 110 y = 20 }
