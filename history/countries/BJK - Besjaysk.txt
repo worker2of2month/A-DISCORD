@@ -7,7 +7,7 @@ recruit_character = BJK_Graison
 ####### Basic shit
 
 set_politics = {
-	ruling_party = etatism
+	ruling_party = adiscord_chauvinism
 	last_election = "2010.12.01"
 	elections_allowed = no
 }
