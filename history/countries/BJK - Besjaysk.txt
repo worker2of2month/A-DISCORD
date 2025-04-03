@@ -1,0 +1,23 @@
+capital = 31
+
+####### Characters
+
+recruit_character = BJK_Graison
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = etatism
+	last_election = "2010.12.01"
+	elections_allowed = no
+}
+set_popularities = {
+	etatism = 21
+	chauvinism = 37
+	anarchism = 14
+	hedonism = 28
+}
+
+set_stability = 0.67
+
+set_research_slots = 2
