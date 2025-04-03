@@ -2,20 +2,23 @@ capital = 68
 
 ####### Characters
 
-recruit_character = EFL_Alexander_Lapin
+recruit_character = EFL_Dextung
 
 ####### Basic shit
 
 set_politics = {
-	ruling_party = Humanism
+	ruling_party = adiscord_chauvinism
 	last_election = "2010.12.01"
 	elections_allowed = no
 }
 set_popularities = {
-	etatism = 68
-	adiscord_chauvinism = 32
+	etatism = 21
+	adiscord_chauvinism = 59
+	anarchism = 11
+	hedonism = 6
+	utilitarism = 3
 }
 
-set_stability = 0.11
+set_stability = 0.37
 
 set_research_slots = 2

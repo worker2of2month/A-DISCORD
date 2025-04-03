@@ -104,6 +104,11 @@ spriteTypes = {
 	  	name = "GFX_portrait_NOD_Tobis_Bentlix"
 	  	texturefile = "gfx/leaders/NOD/portrait_NOD_Tobis_Bentlix.png"
 	}
+###COF
+	spriteType = {
+	  	name = "GFX_portrait_COF_Older_One_Lishai"
+	  	texturefile = "gfx/leaders/COF/portrait_COF_Older_One_Lishai.png"
+	}
 ###PLACEHOLDER or default shit
 	spriteType = {
 	  	name = "GFX_portrait_PLACEHOLDER"

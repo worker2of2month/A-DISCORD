@@ -9,18 +9,18 @@ characters = {
 ##    ## ##     ## ##     ## ##   ###    ##    ##    ##     ##       ##       ##       ##     ## ##     ## ##       ##    ##  ##    ## 
  ######   #######   #######  ##    ##    ##    ##     ##    ##       ######## ######## ##     ## ########  ######## ##     ##  ######  
 
-	EFL_Dextung = {
-		name = EFL_Dextung
+	COF_Older_One_Lishai = {
+		name = COF_Older_One_Lishai
 		portraits = {
 			civilian = {
-				large = GFX_portrait_PLACEHOLDER
+				large = GFX_portrait_COF_Older_One_Lishai
 			}
 		}
 		country_leader = {
-			ideology = etatism_ideology
-			expire = "1965.1.1.1"
+			ideology = anarchism_ideology
+			expire = "2100.1.1.1"
 			id = -1
-			traits = { iron_hand }
+			traits = { cof_older_one }
 		}
 	}
 }

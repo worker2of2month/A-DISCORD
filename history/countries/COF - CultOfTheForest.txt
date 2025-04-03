@@ -1,0 +1,20 @@
+capital = 14
+
+####### Characters
+
+recruit_character = COF_Older_One_Lishai
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = anarchism
+	elections_allowed = no
+}
+set_popularities = {
+	anarchism = 79
+	hedonism = 21
+}
+
+set_stability = -0.42
+
+set_research_slots = 1
