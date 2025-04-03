@@ -27,17 +27,17 @@ idea_categories = {
 		#slot = mobilization_laws
 		#slot = trade_laws
 		#slot = economy
-		character_slot = political_advisor_head_of_state
-		character_slot = political_advisor_minister_of_defense
-		character_slot = political_advisor_minister_of_economy
-		character_slot = political_advisor_minister_of_health
-		character_slot = political_advisor_minister_of_education
-		character_slot = political_advisor_chief_of_intelligence
+		slot = political_advisor_head_of_state
+		slot = political_advisor_minister_of_defense
+		slot = political_advisor_minister_of_economy
+		slot = political_advisor_minister_of_health
+		slot = political_advisor_minister_of_education
+		slot = political_advisor_chief_of_intelligence
 		
 		ledger = civilian
 		
 		cost = 75
-		removal_cost = 0
+		removal_cost = -1
 	}
 	
 	research_production = {

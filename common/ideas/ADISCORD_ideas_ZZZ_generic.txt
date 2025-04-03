@@ -1,0 +1,109 @@
+ideas = {
+	political_advisor_head_of_state = {
+		political_advisor_head_of_state_vacant = {
+			picture = generic_vacant
+			name = vacant
+			default = yes
+			cost = 0
+			allowed = {
+				always = yes
+			}
+			visible = {
+			}
+			allowed_to_remove = {
+			}
+			traits = {
+			}
+		}
+	}
+
+	political_advisor_minister_of_defense = {
+		political_advisor_minister_of_defense_vacant = {
+			picture = generic_vacant
+			name = vacant
+			default = yes
+			cost = 0
+			allowed = {
+				always = yes
+			}
+			visible = {
+			}
+			allowed_to_remove = {
+			}
+			traits = {
+			}
+		}
+	}
+
+	political_advisor_minister_of_economy = {
+		political_advisor_minister_of_economy_vacant = {
+			picture = generic_vacant
+			name = vacant
+			default = yes
+			cost = 0
+			allowed = {
+				always = yes
+			}
+			visible = {
+			}
+			allowed_to_remove = {
+			}
+			traits = {
+			}
+		}
+	}
+
+	political_advisor_minister_of_health = {
+		political_advisor_minister_of_health_vacant = {
+			picture = generic_vacant
+			name = vacant
+			default = yes
+			cost = 0
+			allowed = {
+				always = yes
+			}
+			visible = {
+			}
+			allowed_to_remove = {
+			}
+			traits = {
+			}
+		}
+	}
+
+	political_advisor_minister_of_education = {
+		political_advisor_minister_of_education_vacant = {
+			picture = generic_vacant
+			name = vacant
+			default = yes
+			cost = 0
+			allowed = {
+				always = yes
+			}
+			visible = {
+			}
+			allowed_to_remove = {
+			}
+			traits = {
+			}
+		}
+	}
+
+	political_advisor_chief_of_intelligence = {
+		political_advisor_chief_of_intelligence_vacant = {
+			picture = generic_vacant
+			name = vacant
+			default = yes
+			cost = 0
+			allowed = {
+				always = yes
+			}
+			visible = {
+			}
+			allowed_to_remove = {
+			}
+			traits = {
+			}
+		}
+	}
+}
