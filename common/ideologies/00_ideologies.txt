@@ -146,11 +146,11 @@ ideologies = {
 
 		modifiers = {
 			justify_war_goal_when_in_major_war_time = -0.80
-                        offensive_war_stability_factor = 0.1
-                        surrender_limit = 0.4
-                        local_non_core_manpower = -0.9
-                        recruitable_population_factor = 0.05
-                        root_out_resistance_effectiveness_factor = 0.25
+            offensive_war_stability_factor = 0.1
+            surrender_limit = 0.4
+            local_non_core_manpower = -0.9
+            recruitable_population_factor = 0.05
+            root_out_resistance_effectiveness_factor = 0.25
 			civilian_intel_to_others = 15.0
 			army_intel_to_others = 10.0
 			navy_intel_to_others = 10.0
@@ -197,7 +197,7 @@ ideologies = {
 
 		modifiers = {
 			generate_wargoal_tension = 0.5
-                        stability_factor = 0.15
+            stability_factor = 0.15
 			join_faction_tension = 0.4
 			lend_lease_tension = 0.6
 			send_volunteers_tension = 0.4
@@ -207,7 +207,7 @@ ideologies = {
 			army_intel_to_others = 5.0
 			navy_intel_to_others = 10.0
 			airforce_intel_to_others = 5.0
-                        line_change_production_efficiency_factor = 0.10
+            line_change_production_efficiency_factor = 0.10
 		}
 
 		faction_modifiers = {
@@ -251,12 +251,12 @@ ideologies = {
 
 		modifiers = {
 			generate_wargoal_tension = 0.3
-                        resistance_target_on_our_occupied_states = 0.06
-                        resistance_damage_to_garrison_on_our_occupied_states = 0.06
-                        resistance_growth_on_our_occupied_states = 0.06
-                        army_core_attack_factor = 0.01
-                        army_core_defence_factor = 0.02
-                        stability_factor = -0.2
+            resistance_target_on_our_occupied_states = 0.06
+            resistance_damage_to_garrison_on_our_occupied_states = 0.06
+            resistance_growth_on_our_occupied_states = 0.06
+            army_core_attack_factor = 0.01
+            army_core_defence_factor = 0.02
+            stability_factor = -0.2
 			lend_lease_tension = 0.6
 			send_volunteers_tension = -0.15
 			guarantee_tension = -0.25
@@ -304,12 +304,12 @@ ideologies = {
 
 		modifiers = {
 			generate_wargoal_tension = -0.3
-                        monthly_population = -0.05
-                        supply_factor = -0.05
-                        consumer_goods_factor = 0.1 
-                        production_factory_max_efficiency_factor = 0.03
-                        stability_factor = -0.15
-                        research_speed_factor = 0.05
+            monthly_population = -0.05
+            supply_factor = -0.05
+            consumer_goods_factor = 0.1 
+            production_factory_max_efficiency_factor = 0.03
+            stability_factor = -0.15
+            research_speed_factor = 0.05
 			join_faction_tension = -0.1
 			lend_lease_tension = -0.6
 			send_volunteers_tension = 0.3
@@ -358,7 +358,7 @@ ideologies = {
 
 		modifiers = {
 			generate_wargoal_tension = -0.5
-                        recruitable_population_factor = 0.03
+            recruitable_population_factor = 0.03
 			join_faction_tension = -0.4
 			lend_lease_tension = 0.6
 			send_volunteers_tension = -0.4
@@ -406,10 +406,10 @@ ideologies = {
 		}
 
 		modifiers = {
-                        stability_factor = 0.2
-                        consumer_goods_factor = 0.15
+            stability_factor = 0.2
+            consumer_goods_factor = 0.15
 			generate_wargoal_tension = 0.8
-                        monthly_population = 0.05
+            monthly_population = 0.05
 			join_faction_tension = 0.4
 			lend_lease_tension = 0.6
 			send_volunteers_tension = 0.4
