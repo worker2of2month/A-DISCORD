@@ -28,9 +28,8 @@ set_politics = {
 }
 set_popularities = {
 	etatism = 1
-	chauvinism = 6
+	chauvinism = 14
 	humanism = 3
-	utilitarism = 8
 	chauvinism = 12
 	pragmatism = 43
 	technocracy = 27
