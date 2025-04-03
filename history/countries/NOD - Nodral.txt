@@ -24,7 +24,7 @@ set_popularities = {
 	utilitarism = 3
 	pragmatism = 20
 	anarchism = 9
-	chauvinism = 1
+	adiscord_chauvinism = 1
 }
 
 set_stability = 0.63

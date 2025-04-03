@@ -587,8 +587,8 @@ add_ruling_to_humanism = { ##TO DO!!!!!!!!!!!!
 			value = party_popularity_100@utilitarism
 		}
 		set_variable = {
-			var = chauvinism_support_var
-			value = party_popularity_100@chauvinism
+			var = adiscord_chauvinism_support_var
+			value = party_popularity_100@adiscord_chauvinism
 		}
 		set_variable = {
 			var = pragmatism_support_var
@@ -627,7 +627,7 @@ add_ruling_to_humanism = { ##TO DO!!!!!!!!!!!!
 		set_popularities = {
 			humanism = humanism_support_var
 			utilitarism = utilitarism_support_var
-			chauvinism = chauvinism_support_var
+			adiscord_chauvinism = adiscord_chauvinism_support_var
 			pragmatism = pragmatism_support_var
 			anarchism = anarchism_support_var
 			technocracy = technocracy_support_var

@@ -1,5 +1,14 @@
 spriteTypes = {
 	
+	corneredTileSpriteType = {
+		name = "GFX_tiled_plain_bg_adiscord"
+		texturefile = "gfx/interface/tiled_plain_bg_adiscord.png"
+		size = { x=192 y=192 }
+		borderSize = { x=33 y=33 }
+		tilingCenter = no
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+
 	#Government in Exile
 
 	spriteType = {

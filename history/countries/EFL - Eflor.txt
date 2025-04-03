@@ -13,7 +13,7 @@ set_politics = {
 }
 set_popularities = {
 	etatism = 68
-	chauvinism = 32
+	adiscord_chauvinism = 32
 }
 
 set_stability = 0.11

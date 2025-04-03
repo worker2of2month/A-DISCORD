@@ -115,19 +115,19 @@ ideologies = {
 		ai_give_core_state_control_threshold = 10
 	}
 
-	chauvinism = {
+	adiscord_chauvinism = {
 
 		types = {
-			сhauvinism_ideology = {
+			adiscord_chauvinism_ideology = {
 			}
 		}
 
 		dynamic_faction_names = {
-			"FACTION_NAME_CHAUVINISM_1"
-			"FACTION_NAME_CHAUVINISM_2"
-			"FACTION_NAME_CHAUVINISM_3"
-			"FACTION_NAME_CHAUVINISM_4"
-			"FACTION_NAME_CHAUVINISM_5"
+			"FACTION_NAME_adiscord_chauvinism_1"
+			"FACTION_NAME_adiscord_chauvinism_2"
+			"FACTION_NAME_adiscord_chauvinism_3"
+			"FACTION_NAME_adiscord_chauvinism_4"
+			"FACTION_NAME_adiscord_chauvinism_5"
 		}
 
 		color = {31 81 6}
@@ -139,7 +139,7 @@ ideologies = {
 			can_force_government = yes
 			can_send_volunteers = no
 			can_puppet = yes
-                        can_join_opposite_factions = no
+            can_join_opposite_factions = no
 		}
 
 		can_collaborate = yes
@@ -161,7 +161,9 @@ ideologies = {
 			opinion_gain_monthly_same_ideology_factor = -0.25
 		}
 
-		ai_fascist = yes # uses the fascist AI behaviour
+		faction_modifiers = {
+		}
+
 		ai_ideology_wanted_units_factor = 1.65
 		
 		ai_give_core_state_control_threshold = 10000

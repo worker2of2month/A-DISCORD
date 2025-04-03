@@ -17,7 +17,7 @@ set_popularities = {
 	humanism = 2
 	utilitarism = 1
 	etatism = 13
-	chauvinism = 34
+	adiscord_chauvinism = 34
 	anarchism = 10
 	hedonism = 40
 }

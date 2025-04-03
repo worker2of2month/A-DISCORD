@@ -17,8 +17,8 @@ spriteTypes = {
         }
 	}
 	corneredTileSpriteType = {
-		name = "GFX_ideology_chauvinism_group"
-		texturefile = "gfx/interface/ideologies/chauvinism_group.dds"
+		name = "GFX_ideology_adiscord_chauvinism_group"
+		texturefile = "gfx/interface/ideologies/adiscord_chauvinism_group.dds"
 		size = {
             x = 70
             y = 70
@@ -97,8 +97,8 @@ spriteTypes = {
         }
 	}
 	corneredTileSpriteType = {
-		name = "GFX_ideology_chauvinism_countryview_group"
-		texturefile = "gfx/interface/ideologies/chauvinism_group.dds"
+		name = "GFX_ideology_adiscord_chauvinism_countryview_group"
+		texturefile = "gfx/interface/ideologies/adiscord_chauvinism_group.dds"
 		size = {
             x = 125
             y = 125

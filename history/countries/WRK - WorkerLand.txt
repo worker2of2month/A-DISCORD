@@ -28,9 +28,8 @@ set_politics = {
 }
 set_popularities = {
 	etatism = 1
-	chauvinism = 14
+	adiscord_chauvinism = 26
 	humanism = 3
-	chauvinism = 12
 	pragmatism = 43
 	technocracy = 27
 }

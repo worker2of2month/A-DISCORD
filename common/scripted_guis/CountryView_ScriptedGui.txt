@@ -28,8 +28,8 @@ scripted_gui = {
             ideology_icon_technocracy_visible = {
                 has_government = technocracy
             }
-            ideology_icon_chauvinism_visible = {
-                has_government = chauvinism
+            ideology_icon_adiscord_chauvinism_visible = {
+                has_government = adiscord_chauvinism
             }
             ideology_icon_etatism_visible = {
                 has_government = etatism
