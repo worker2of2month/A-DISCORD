@@ -17,7 +17,7 @@ characters = {
 			}
 		}
 		country_leader = {
-			ideology = etatism_ideology
+			ideology = adiscord_chauvinism_ideology
 			expire = "2200.1.1.1"
 			id = -1
 		}
