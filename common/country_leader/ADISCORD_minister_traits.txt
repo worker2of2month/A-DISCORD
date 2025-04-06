@@ -1,0 +1,12 @@
+#Head of state
+leader_traits = {
+	hos_minister_master_of_Destinies = {
+		random = no
+		stability_factor = 0.03
+		political_power_gain = 0.05
+		
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}

@@ -31,7 +31,7 @@ guiTypes = {
 			pdx_tooltip = "technocracy_ideology_desc"
 		}
 		iconType = {
-			name = "ideology_icon_adiscord_chauvinism"
+			name = "ideology_icon_adiscord_chauvinism" #had to name this way due to hoi iv code
 			position = { x = 5 y = -3 }
 			spriteType = "GFX_ideology_adiscord_chauvinism_countryview_group"
 			pdx_tooltip = "adiscord_chauvinism_ideology_desc"
@@ -603,9 +603,9 @@ guiTypes = {
 		
 		gridboxtype = {
 			name = "ideas_grid"
-			position = { x = 17 y = 46 }
+			position = { x = 40 y = 46 }
 			size = { width = 100%% height = 100%% }
-			slotsize = { width = 80 height = 64 }
+			slotsize = { width = 85 height = 64 }
 			max_slots = { x = 7 y = 1 }
 			format = "UPPER_LEFT"
 		}

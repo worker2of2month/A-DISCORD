@@ -5,7 +5,7 @@ scripted_gui = {
 		window_name = "CountryIdeology"
 	}
 
-    PartyPopularityScript = {
+    PartyPopularityScript = { ##party popularity
         context_type = player_context
         parent_window_token = politics_tab
         window_name = "CountryLeadingPartyPopularity"
@@ -43,47 +43,15 @@ scripted_gui = {
         }
     }
 
+###country development
 
-    #ChartExplanation_button = {
-    #    window_name = "ChartExplanation_window"
-    #    parent_window_token = politics_tab
-    #    context_type = player_context
-	#
-    #    visible = {
-    #        always = yes
-    #    }
-	#
-    #    effects = {
-    # 		ChartExplanation_button_click = {
-    #            if = {
-    #               limit = {
-    #                    has_global_flag = example_gui
-    #                }
-    #                clr_global_flag = example_gui
-    #            }
-    #            else = {
-    #                set_global_flag = example_gui
-    #            }
-	#			update_position = yes
-    #        }
-    #    }
-	#
-    #    ai_enabled = {
-    #        always = no
-    #    }
-	#
-    #   ai_test_interval = 290  # The higher, the long it takes the ai to do actions
-    #    ai_test_variance = 0.5
-    #}
+    CountryDevelopmentScript = {
+        context_type = player_context
+        parent_window_name = "countrypoliticsview"
+        window_name = "ADISCORD_development_category_society_type"
 
- 	#ChartExplanation_view = {
-	#
-	#	context_type = player_context
-    #    parent_window_token = politics_tab
-	#	window_name = "ChartExplanation_view"
-	#
-	#	visible = {
-	#		has_global_flag = example_gui
-	#	}
-	#}
+        properties = {
+            ADISCORD_development_category_society_type_progress_bar = { frame = 25 }
+        }
+    }
 }

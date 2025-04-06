@@ -1,0 +1,23 @@
+spriteTypes = {
+	progressbartype = {
+		name = "GFX_tno_politics_circular_progress_bar"
+		textureFile2 = "gfx/interface/CountryDevelopment/CountryDevelopment_slider_bad.png"
+		textureFile1 = "gfx/interface/CountryDevelopment/CountryDevelopment_slider_good.png"
+		color = { 0.0 0.0 0.0 }
+		colortwo = { 0.0 0.0 0.0 }
+		size = {
+			x = 162
+			y = 11
+		}
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = yes
+	}
+	spriteType = {
+		name = "GFX_CountryDevelopment_slider_bg"
+		texturefile = "gfx/interface/CountryDevelopment/CountryDevelopment_slider_bg.png"
+	}
+	spriteType = {
+		name = "GFX_CountryDevelopment_Category"
+		texturefile = "gfx/interface/CountryDevelopment/CountryDevelopment_Category.png"
+	}
+}

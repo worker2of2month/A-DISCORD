@@ -35,60 +35,55 @@ guiTypes = {
 		}
 	}
 
-	#containerWindowType = {
-	#	name = "ChartExplanation_window"
-	#	position = { x = 88 y = 305 }
-	#	size = { width = 255 height = 60 }
-	#	clipping = no
-	#				
-	#	buttonType = {
-	#		name = "ChartExplanation_button"
-	#		position = { x = 430 y = 144 }
-	#		spriteType = "GFX_edit_list_icon" 
-	#		oversound = ui_menu_over	
-	#	}
-	#}
+####Country Development
 
-	#containerWindowType = {
-	#	name = "ChartExplanation_view"
-	#	position = { x = 0 y = 0 }
-	#	size = { width = 333 height = 100%% }
-	#	moveable = no
-	#
-	#	show_sound = menu_open_window
-	#
-	#	background = {
-	#		name = "Background"
-	#		quadTextureSprite = "GFX_tiled_bg"
-	#	}
-	#
-	#	containerWindowType = {
-	#		name = "chart_explanation"
-	#		position = { x = 18 y = 116 }
-	#		size = { width = 330 height = 70 }
-	#		clipping = no
-	#		
-	#		background = {
-	#			name = "Background"		
-	#			spriteType ="GFX_pol_piechart_bg"
-	#		}
-	#		
-	#		gridBoxType = {
-	#			name = "parties_grid"
-	#			position = { x = 260 y = 184 }
-	#			size = { width = 100%% height = 100%% }
-	#			slotsize = { width = 230 height = 16 }
-	#			format = "UPPER_LEFT"
-	#		}
-	#	}
-	#
-	#	buttonType = {
-	#		name = "close_button"
-	#		position = { x = 507 y = 9 }
-	#		quadTextureSprite = "GFX_closebutton"
-	#		pdx_tooltip = "CLOSE"
-	#		clicksound = click_close
-	#		shortcut = "ESCAPE"
-	#	}
-	#}
+	containerWindowType = {
+		name = "ADISCORD_development_category_society_type"
+		position = { x = 0 y = 1000 }
+		size = { width=594 height= 600 }
+		clipping = yes
+
+		iconType ={
+			name ="category_header"
+			spriteType = "GFX_category_header"
+			position = { x=10 y=0 }
+			Orientation = "UPPER_LEFT"
+		}
+		iconType = {
+			name = "ADISCORD_development_category_society_type_frame"
+			spriteType = "GFX_CountryDevelopment_Category"
+			position = { x = 44 y = 55 }
+		}
+		#iconType = {
+		#	name = "ADISCORD_development_category_society_type_frame_2"
+		#	spriteType = "GFX_CountryDevelopment_Category"
+		#	position = { x = 305 y = 55 }
+		#}
+		iconType = {
+			name = "ADISCORD_development_category_society_type_progress_bar_bg"
+			spriteType = "GFX_CountryDevelopment_slider_bg"
+			position = { x = 120 y = 100 }
+		}
+		iconType = {
+			name = "ADISCORD_development_category_society_type_progress_bar"
+			spriteType = "GFX_tno_politics_circular_progress_bar"
+			position = { x = 122 y = 100 }
+		}
+		instantTextboxType = {
+			name = "ADISCORD_development_category_society_type_name"
+			position = { x = 120 y = 55 }
+			font = "hoi_18mbs"
+			text = SocietyTypeLoc
+			maxWidth = 260
+			maxHeight = 20
+		}
+		instantTextboxType = {
+			name = "ADISCORD_development_category_society_number"
+			position = { x = 120 y = 75 }
+			font = "hoi_18mbs"
+			text = SocietyDevelopmentPerMonthDisplay
+			maxWidth = 260
+			maxHeight = 20
+		}
+	}
 }
