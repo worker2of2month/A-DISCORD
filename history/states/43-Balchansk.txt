@@ -1,11 +1,12 @@
 state={
-	id=45
-	name="STATE_45"
+	id=43
+	name="STATE_43"
 	provinces={
-		111 6675 16458 16459 16461 16529 
+		95 101 16432 16450 16455 
 	}
-	manpower=0
+	manpower=96284
 	buildings_max_level_factor=1.000
+	state_category=town
 	local_supplies=0.000
 
 	history={
@@ -14,5 +15,6 @@ state={
 			infrastructure = 2
 		}
 		add_core_of = STP
+		victory_points = { 16450 10 }
 	}
 }
