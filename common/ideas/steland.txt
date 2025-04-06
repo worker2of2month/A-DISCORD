@@ -1,3 +1,5 @@
+#ideas
+
 ideas = {
 
 	country = {
@@ -86,5 +88,26 @@ ideas = {
 			}
 		}
 	}
+}
 
+#ministers
+
+ideas = {
+	political_advisor_head_of_state = {
+		minister_STP_Ernest_Derlich = {
+			name = minister_STP_Ernest_Derlich
+			default = no
+			cost = 75
+			allowed = {
+				always = yes
+			}
+			visible = {
+			}
+			allowed_to_remove = {
+			}
+			traits = {
+				hos_minister_master_of_Destinies
+			}
+		}
+	}
 }

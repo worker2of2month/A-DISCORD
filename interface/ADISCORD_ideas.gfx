@@ -1,6 +1,34 @@
 spriteTypes = {
 
+###General
+
+	spriteType = {
+	  	name = "GFX_idea_political_advisor_head_of_state_vacant"
+	  	texturefile = "gfx/interface/ideas/general_vacant.png"
+	}
+	spriteType = {
+	  	name = "GFX_idea_political_advisor_minister_of_defense_vacant"
+	  	texturefile = "gfx/interface/ideas/general_vacant.png"
+	}
+	spriteType = {
+	  	name = "GFX_idea_political_advisor_minister_of_economy_vacant"
+	  	texturefile = "gfx/interface/ideas/general_vacant.png"
+	}
+	spriteType = {
+	  	name = "GFX_idea_political_advisor_minister_of_health_vacant"
+	  	texturefile = "gfx/interface/ideas/general_vacant.png"
+	}
+	spriteType = {
+	  	name = "GFX_idea_political_advisor_minister_of_education_vacant"
+	  	texturefile = "gfx/interface/ideas/general_vacant.png"
+	}
+	spriteType = {
+	  	name = "GFX_idea_political_advisor_chief_of_intelligence_vacant"
+	  	texturefile = "gfx/interface/ideas/general_vacant.png"
+	}
+ 
 ###STP
+#ideas
   	spriteType = {
 	  	name = "GFX_idea_STP_hedonism_with_no_bondaries"
 	  	texturefile = "gfx/interface/ideas/STP/idea_STP_hedonism_with_no_bondaries.png"
@@ -16,5 +44,10 @@ spriteTypes = {
 	spriteType = {
 	  	name = "GFX_idea_STP_worldwide_famous_tourist_destination"
 	  	texturefile = "gfx/interface/ideas/STP/idea_STP_worldwide_famous_tourist_destination.png"
+	}
+#ministers
+	spriteType = {
+	  	name = "GFX_idea_minister_STP_Ernest_Derlich"
+	  	texturefile = "gfx/interface/ideas/STP/Ministers/minister_STP_portrait_STP_Ernest_Derlich.png"
 	}
 }

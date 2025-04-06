@@ -34,6 +34,9 @@ add_ideas = {
 	STP_hidden_slaves_trade
 	STP_legalize
 	STP_worldwide_famous_tourist_destination
+
+	#ministers
+	minister_STP_Ernest_Derlich
 }
 
 ###### BOP
