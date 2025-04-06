@@ -4,7 +4,12 @@ state={
 	provinces={
 		18 24 31 52 76 79 97 102 105 107 
 	}
-	manpower=0
+	manpower=17200
 	buildings_max_level_factor=1.000
 	local_supplies=0.000
+
+	history = {
+		owner = TFF
+		add_core_of = TFF
+	}
 }
