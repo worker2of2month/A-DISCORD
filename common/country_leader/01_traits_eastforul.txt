@@ -14,5 +14,12 @@ leader_traits = {
         army_core_defence_factor = -0.05
         army_attack_factor = 0.05
     }
+    bjk_despot_king = {
+        random = no
+        sprite = 1
+        political_power_gain = 0.1
+        political_advisor_cost_factor = 0.5
+    }
+
         
 }

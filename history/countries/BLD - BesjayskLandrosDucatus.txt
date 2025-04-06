@@ -1,0 +1,23 @@
+capital = 41
+
+####### Characters
+
+recruit_character = BLD_Duke_Vincent
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = adiscord_chauvinism
+	last_election = "2010.12.01"
+	elections_allowed = no
+}
+set_popularities = {
+	etatism = 24
+	adiscord_chauvinism = 44
+	anarchism = 11
+	hedonism = 21
+}
+
+set_stability = 0.51
+
+set_research_slots = 2
