@@ -31,7 +31,7 @@ guiTypes = {
 			pdx_tooltip = "technocracy_ideology_desc"
 		}
 		iconType = {
-			name = "ideology_icon_adiscord_chauvinism"
+			name = "ideology_icon_adiscord_chauvinism" #had to name this way due to hoi iv code
 			position = { x = 5 y = -3 }
 			spriteType = "GFX_ideology_adiscord_chauvinism_countryview_group"
 			pdx_tooltip = "adiscord_chauvinism_ideology_desc"

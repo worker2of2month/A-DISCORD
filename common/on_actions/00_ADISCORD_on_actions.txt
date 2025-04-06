@@ -1,0 +1,17 @@
+####Country Development
+
+on_actions = {
+	on_startup = {
+		effect = {
+			every_country = {
+			}
+			STP = {
+				
+			}
+		}
+	}
+	on_monthly = {
+		effect = {
+		}
+	}
+}

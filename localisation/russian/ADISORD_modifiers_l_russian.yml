@@ -1,4 +1,5 @@
 ﻿l_russian:
+#ideology stuff
  adiscord_chauvinism_drift: "Ежедневная поддержка шовинизма"
  adiscord_chauvinism_drift_tt: " $adiscord_chauvinism_drift$: $RIGHT|+=2$"
  hedonism_drift: "Ежедневная поддержка гедонизма"
@@ -15,3 +16,6 @@
  anarchism_drift_tt: " $anarchism_drift$: $RIGHT|+=2$"
  technocracy_drift: "Ежедневная поддержка технократии"
  technocracy_drift_tt: " $technocracy_drift$: $RIGHT|+=2$"
+
+#society development
+ SocietyDevelopmentPerMonthDisplay: "Прирост в месяц: [?modifier@SocietyDevelopmentPerMonth|.1%%+]"

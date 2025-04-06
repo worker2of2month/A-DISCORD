@@ -1,0 +1,18 @@
+
+defined_text = { 
+	name = WhoTFDoWeSupportLeader
+	text = {
+		trigger = {
+			original_tag = STP
+			has_country_flag = STP_sided_with_Maksim_flag
+		}
+		localization_key = STP_sided_with_Maksim_loc
+	}
+	text = {
+		trigger = {
+			original_tag = STP
+			has_country_flag = STP_sided_with_the_party_flag
+		}
+		localization_key = STP_sided_with_the_party_loc
+	}
+}
