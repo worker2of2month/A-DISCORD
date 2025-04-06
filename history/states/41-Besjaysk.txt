@@ -9,7 +9,7 @@ state={
 	local_supplies=0.000
 
 	history = {
-		owner = BLD
-		add_core_of = BLD
+		owner = BJK
+		add_core_of = BJK
 	}
 }

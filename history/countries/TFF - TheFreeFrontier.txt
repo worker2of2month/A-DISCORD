@@ -1,0 +1,20 @@
+capital = 84
+
+####### Characters
+
+recruit_character = The_Absent_Government
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = anarchism
+	last_election = "2010.12.01"
+	elections_allowed = no
+}
+set_popularities = {
+	anarchism = 100
+}
+
+set_stability = -1.0
+
+set_research_slots = 1

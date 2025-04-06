@@ -1,0 +1,19 @@
+state={
+	id=31
+	name="STATE_31"
+	provinces={
+		5736 16354 16378 16452 
+	}
+	manpower=16371
+	buildings_max_level_factor=1.000
+
+	history = {
+		owner = BLD
+		add_core_of = BLD
+
+		victory_points = { 16452 25 }
+	}
+
+	state_category = city
+	local_supplies=0.0 
+}

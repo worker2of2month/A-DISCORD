@@ -1,4 +1,4 @@
-capital = 31
+capital = 41
 
 ####### Characters
 
@@ -8,6 +8,9 @@ recruit_character = BJK_Graison
 
 create_faction = faction_besjaysk_kingdom
 add_to_faction = BLD
+add_to_faction = BHD
+add_to_faction = BGT
+add_to_faction = BBV
 
 ####### Basic shit
 
@@ -31,5 +34,17 @@ set_research_slots = 2
 
 set_autonomy = {
 	target = BLD
+	autonomous_state = autonomy_ducatis_in_bezhaisk
+}
+set_autonomy = {
+	target = BHG
+	autonomous_state = autonomy_ducatis_in_bezhaisk
+}
+set_autonomy = {
+	target = BGT
+	autonomous_state = autonomy_ducatis_in_bezhaisk
+}
+set_autonomy = {
+	target = BBV
 	autonomous_state = autonomy_ducatis_in_bezhaisk
 }

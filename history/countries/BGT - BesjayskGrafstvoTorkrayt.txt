@@ -1,8 +1,8 @@
-capital = 31
+capital = 4
 
 ####### Characters
 
-recruit_character = BLD_Duke_Vincent
+recruit_character = BGT_Graf_Johan
 
 ####### Basic shit
 
@@ -12,12 +12,12 @@ set_politics = {
 	elections_allowed = no
 }
 set_popularities = {
-	etatism = 24
-	adiscord_chauvinism = 44
-	anarchism = 11
-	hedonism = 21
+	etatism = 28
+	adiscord_chauvinism = 41
+	anarchism = 10
+	hedonism = 31
 }
 
-set_stability = 0.51
+set_stability = 0.38
 
 set_research_slots = 2

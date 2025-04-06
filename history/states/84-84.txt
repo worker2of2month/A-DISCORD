@@ -4,7 +4,14 @@ state={
 	provinces={
 		4887 4925 9463 12721 16471 16495 16502 16503 16533 
 	}
-	manpower=0
+	manpower=222542
 	buildings_max_level_factor=1.000
 	local_supplies=0.000
+
+	history = {
+		owner = TFF
+		add_core_of = TFF
+
+		victory_points = { 16533 25 }
+	}
 }
