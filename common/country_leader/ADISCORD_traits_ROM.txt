@@ -1,0 +1,15 @@
+leader_traits = {
+
+    Veteran_Of_War = {
+        random = no
+        sprite = 1
+        political_power_gain = 0.1
+        drift_defence_factor = 0.5
+        stability_factor = -0.15
+        experience_gain_army_factor = 0.25
+        max_command_power_mult = 0.2
+        land_doctrine_cost_factor = -0.25
+        war_stability_factor = 0.24
+    }
+
+}

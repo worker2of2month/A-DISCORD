@@ -12,8 +12,10 @@
   ###WRK
 
   WRK_Nikita_Worcker: "Никита Уоркер"
+  WRK_Nikita_Worcker_desc: "Воркерландский Калигула"
 
   WRK_Vlad_Petrichev: "Влад Петрищев"
+  WRK_Vlad_Petrichev_desc: "Паркетный Генерал"
 
   WRK_Richard_Gordon: "Ричард Гордон"
 
@@ -46,7 +48,7 @@
   ###ROM
 
   ROM_Erwin_Von_Romanovskiy: "Ервин Вон Романовский"
-
+  ROM_Erwin_Von_Romanovskiy_desc: "Пустынный Орёл"
   ###TRU
 
   TRU_Nikita_Truman: "Никита Трумен"
@@ -66,4 +68,5 @@
   ###BJK
 
   BJK_Graison: "Король Грайсон"
+
   BLD_Duke_Vincent: "Герцог Винсент"

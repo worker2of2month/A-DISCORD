@@ -20,6 +20,8 @@ characters = {
 			ideology = pragmatism_ideology
 			expire = "1965.1.1.1"
 			id = -1
+			traits = { Emergency_Powers }
+			desc = WRK_Nikita_Worcker_desc
 		}
 	}
 	WRK_Vlad_Petrichev = {
@@ -33,6 +35,8 @@ characters = {
 			ideology = pragmatism_ideology
 			expire = "1965.1.1.1"
 			id = -1
+			traits = { High_Political_Aspirations Marshal_Of_War }
+			desc = WRK_Vlad_Petrichev_desc
 		}
 	}
 	WRK_Richard_Gordon = {
@@ -72,6 +76,7 @@ characters = {
 			ideology = pragmatism_ideology
 			expire = "1965.1.1.1"
 			id = -1
+			traits = { An_Ordinary_Bureaucrat }
 		}
 	}
 	WRK_Reginald_Silver = {

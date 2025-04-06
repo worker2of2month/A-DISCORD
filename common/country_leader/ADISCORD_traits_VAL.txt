@@ -1,0 +1,14 @@
+leader_traits = {
+
+    The_Weaponry_Baron = {
+        random = no
+        sprite = 1
+        war_support_factor = 0.3
+        political_advisor_cost_factor = 0.5
+        army_advisor_cost_factor = -0.25
+        equipment_capture_factor = 0.1
+        command_power_gain = 0.2
+        army_org_factor = 0.05
+    }
+
+}

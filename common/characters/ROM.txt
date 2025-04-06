@@ -20,6 +20,8 @@ characters = {
 			ideology = pragmatism_ideology
 			expire = "1965.1.1.1"
 			id = -1
+			traits = { Veteran_Of_War }
+			desc = ROM_Erwin_Von_Romanovskiy_desc
 		}
 	}
 }
