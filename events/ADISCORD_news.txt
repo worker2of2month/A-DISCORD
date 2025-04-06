@@ -1,6 +1,6 @@
 add_namespace = news
 
-country_event = { #vorkerland civilwar
+news_event = { #vorkerland civilwar
 	id = news.0
 	title = news.0.t
 	desc = news.0.d
@@ -10,6 +10,18 @@ country_event = { #vorkerland civilwar
 	fire_only_once = no
 
 	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			every_country = {
+				goto_province = 6713
+				launch_nuke = {
+					province = 16428
+					use_nuke = no
+				}
+			}
+		}
+	}
 	
 	option = {
 		name = news.0.a

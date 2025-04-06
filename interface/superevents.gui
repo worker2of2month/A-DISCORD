@@ -53,7 +53,7 @@ guiTypes = {
 			borderSize = {x = 0 y = 0}
 			text = "[GetSupereventQuote]"
 			maxWidth = 800
-			maxHeight = 500
+			maxHeight = 111
 			fixedsize = yes
 		}
 
@@ -73,7 +73,7 @@ guiTypes = {
 			borderSize = {x = 0 y = 355}
 			text = "[GetSupereventComment]"
 			maxWidth = 500
-			maxHeight = 500
+			maxHeight = 111
 			fixedsize = yes
 		}
 	}
