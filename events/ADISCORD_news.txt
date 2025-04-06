@@ -1,0 +1,28 @@
+add_namespace = news
+
+country_event = { #vorkerland civilwar
+	id = news.0
+	title = news.0.t
+	desc = news.0.d
+
+	hidden = yes
+	
+	fire_only_once = no
+
+	is_triggered_only = yes
+	
+	option = {
+		name = news.0.a
+		hidden_effect = {
+			if = {
+				limit = {
+					is_ai = no
+				}
+				set_country_flag = superevent_vorkerland_civilwar
+				set_country_flag = activate_superevent
+				scoped_sound_effect = superevent_vorkerland_civilwar_sound_e
+				scoped_play_song = "one_minute_of_silence"
+			}
+		}
+	}
+}

@@ -1,0 +1,23 @@
+scripted_gui = {
+
+	new_scripted_gui = {
+    window_name = "superevents"
+    context_type = player_context
+
+    visible = {
+			has_country_flag = activate_superevent
+    }
+
+    effects = {
+			superevents_button_click = {
+				clr_country_flag = activate_superevent
+				#superevents
+				clr_country_flag = superevent_vorkerland_civilwar
+			}
+    }
+		#superevents
+		superevent_vorkerland_civilwar_visible = {
+			has_country_flag = superevent_vorkerland_civilwar
+		}
+  }
+}

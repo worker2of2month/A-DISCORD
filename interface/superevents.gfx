@@ -1,0 +1,23 @@
+spriteTypes = {
+
+	spriteType = {
+		name = "GFX_supereventframe"
+		textureFile = "gfx/interface/superevents/supereventframe.png"
+	}
+	spriteType = {
+		name = "GFX_supereventquote"
+		textureFile = "gfx/interface/superevents/supereventquote.png"
+	}
+	spriteType = {
+		name = "GFX_supereventbutton"
+		textureFile = "gfx/interface/superevents/supereventbutton.png"
+	}
+	
+	
+#superevents themselves
+
+	spriteType = {
+		name = "GFX_superevent_vorkerland_civilwar"
+		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_civilwar.png"
+	}
+}

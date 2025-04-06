@@ -1,0 +1,30 @@
+##quote
+defined_text = {
+	name = GetSupereventQuote
+	text = {
+		trigger = {
+			has_country_flag = superevent_vorkerland_civilwar
+		}
+		localization_key = superevent_vorkerland_civilwar_quote
+	}
+}
+##title
+defined_text = {
+	name = GetSupereventTitle
+	text = {
+		trigger = {
+			has_country_flag = superevent_vorkerland_civilwar
+		}
+		localization_key = superevent_vorkerland_civilwar_title
+	}
+}
+##comment
+defined_text = {
+	name = GetSupereventComment
+	text = {
+		trigger = {
+			has_country_flag = superevent_vorkerland_civilwar
+		}
+		localization_key = superevent_vorkerland_civilwar_comment
+	}
+}

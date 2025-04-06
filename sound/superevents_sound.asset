@@ -1,0 +1,4 @@
+sound = {
+	name = "superevent_vorkerland_civilwar_sound"
+	file = "superevents/superevent_vorkerland_civilwar_sound.wav"
+}
