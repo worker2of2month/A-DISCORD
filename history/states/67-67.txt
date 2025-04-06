@@ -12,4 +12,9 @@ state={
         owner = NAM
         add_core_of = NAM
 	}
+
+    resources = {
+        oil = 164
+        chromium = 15
+    }
 }
