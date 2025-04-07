@@ -19,6 +19,30 @@ news_event = { #vorkerland civilwar
 					province = 16428
 					use_nuke = no
 				}
+				32 = {
+					damage_building = {
+						type = infrastructure
+						damage = 5
+					}
+				}
+				38 = {
+					damage_building = {
+						type = infrastructure
+						damage = 1
+					}
+				}
+				37 = {
+					damage_building = {
+						type = infrastructure
+						damage = 1
+					}
+				}
+				36 = {
+					damage_building = {
+						type = infrastructure
+						damage = 1
+					}
+				}
 			}
 		}
 	}
