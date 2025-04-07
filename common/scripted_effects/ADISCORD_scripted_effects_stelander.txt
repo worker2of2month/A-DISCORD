@@ -1,0 +1,28 @@
+STP_change_party_suspicion_rate = {
+	#custom_effect_tooltip = 
+	add_to_variable = {
+		var = STP_party_suspicion
+		value = STP_party_suspicion_temp
+	}
+	clamp_variable = {
+		var = STP_party_suspicion
+		min = 0
+		max = 1
+	}
+	set_temp_variable = {
+		var = STP_party_suspicion_temp
+		value = STP_party_suspicion
+	}
+	add_to_temp_variable = {
+		var = STP_party_suspicion_temp
+		value = -0.5
+	}
+	set_variable = {
+		var = STP_party_suspicion_political_power_gain_dynamic_var
+		value = STP_party_suspicion_temp
+	}
+	multiply_variable = {
+		var = STP_party_suspicion_political_power_gain_dynamic_var
+		value = -0.75
+	}
+}

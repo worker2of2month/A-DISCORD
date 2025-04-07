@@ -1,0 +1,19 @@
+stp_support_of_a_party = {
+	enable = { 
+		tag = STP
+	}
+	
+	#icon = GFX_modifiers_sabotaged_resource
+	
+	political_power_gain = STP_support_of_a_party_political_power_gain_dynamic_var
+}
+
+stp_party_suspicion = {
+	enable = { 
+		tag = STP
+	}
+	
+	#icon = GFX_modifiers_sabotaged_resource
+	
+	political_power_gain = STP_party_suspicion_political_power_gain_dynamic_var
+}

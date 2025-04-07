@@ -1,0 +1,9 @@
+spriteTypes = {
+
+###STP
+  	spriteType = {
+	  	name = "GFX_STP_suspicion"
+	  	texturefile = "gfx/texticons/adiscord/STP_suspicion.png"
+	  	legacy_lazy_load = no
+	}
+}

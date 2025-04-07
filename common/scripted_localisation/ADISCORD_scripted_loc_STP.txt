@@ -61,3 +61,43 @@ defined_text = {
 		localization_key = STP_Peter_Is_Dead_loc
 	}
 }
+
+defined_text = {
+	name = STP_display_party_suspicion
+	text = {
+		trigger = {
+			original_tag = STP
+			OR = {
+				has_country_flag = STP_sided_with_the_party_loc
+				has_country_flag = STP_sided_with_Maksim_flag
+			}
+		}
+		localization_key = STP_display_party_suspicion_loc
+	}
+}
+
+defined_text = { 
+	name = stp_party_suspicion_loc
+	text = {
+		trigger = {
+			original_tag = STP
+			check_variable = {
+			    var = STP_party_suspicion
+			    value = 50
+			    compare = greater_than_or_equals
+			}
+		}
+		localization_key = stp_party_suspicion_loc_bad
+	}
+	text = {
+		trigger = {
+			original_tag = STP
+			check_variable = {
+			    var = STP_party_suspicion
+			    value = 50
+			    compare = less_than
+			}
+		}
+		localization_key = stp_party_suspicion_loc_good
+	}
+}

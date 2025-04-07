@@ -20,7 +20,7 @@ ideas = {
 
 			modifier = {
 				monthly_population = -0.7
-				research_speed_factor = -0.55
+				research_speed_factor = -0.15
 				stability_factor = -0.3
 			}
 		}
@@ -43,6 +43,8 @@ ideas = {
 			picture = GFX_idea_STP_hidden_slaves_trade
 
 			modifier = {
+				political_power_gain = -0.25
+				monthly_population = -0.15
 			}
 		}
 	}
@@ -64,6 +66,7 @@ ideas = {
 			picture = GFX_idea_STP_legalize
 
 			modifier = {
+				monthly_population = -0.3
 			}
 		}
 	}
@@ -85,6 +88,7 @@ ideas = {
 			picture = GFX_idea_STP_worldwide_famous_tourist_destination
 
 			modifier = {
+				monthly_population = +0.2
 			}
 		}
 	}

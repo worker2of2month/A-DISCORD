@@ -1,5 +1,11 @@
 ﻿l_russian:
 
   STP_WhoTFDoWeSupportText_loc: "\n\n На данный момент мы поддерживаем [WhoTFDoWeSupportLeader]"
-  STP_sided_with_Maksim_loc: "§RМаксима Шабрата§!"
-  STP_Peter_Is_Okay_loc: "Пётр Иванов §Gздоров§!"
+  STP_sided_with_Maksim_loc: "§YМаксима Шабрата§!"
+
+  STP_Peter_Is_Okay_loc: "\n\n Пётр Иванов §Gздоров§!. \n В настоящий момент он пребывает в добром здравии, однако это положение может вскоре измениться, что приведет к напряженной борьбе за власть."
+
+  stp_party_suspicion: "[stp_party_suspicion_loc]"
+  STP_display_party_suspicion_loc: "\n\n Показатель подозрения спец. служб £STP_suspicion [?STP_party_suspicion|R1%] (£political_power_texticon [?STP_party_suspicion_political_power_gain_dynamic_var|=+1%]) \n Показатель подозрения является крайне важным аспектом. Если он достигнет §R100%§!, Максим Шабрат будет §Rарестован§!. При достижении §Y50%§! партия начнёт вводить §Yсанкции§! против деятельности антигедонистического движения. Следует прилагать все усилия, чтобы держать этот показатель как можно ниже."
+  stp_party_suspicion_loc_bad: "Высокий уровень подозрения спец службами"
+  stp_party_suspicion_loc_good: "Низкий уровень подозрения спец службами"

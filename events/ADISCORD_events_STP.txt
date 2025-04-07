@@ -5,7 +5,7 @@ country_event = {
 	id = stp.1
 	title = stp.1.t
 	desc = stp.1.d
-	picture = GFX_report_USA_donald_trump
+	picture = 
 	fire_only_once = yes
 	is_triggered_only = yes
 	trigger = {
@@ -19,6 +19,14 @@ country_event = {
 			base = 1
 		}
 		complete_national_focus = STP_Side_With_Maksim
+		add_to_variable = {
+			var = STP_party_suspicion
+			value = 0
+		}
+
+		STP_change_party_suspicion_rate = yes
+
+		add_dynamic_modifier = { modifier = stp_party_suspicion }
 	}
 	option = {
 		name = stp.1.b
