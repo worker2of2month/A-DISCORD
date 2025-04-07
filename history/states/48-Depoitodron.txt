@@ -1,0 +1,24 @@
+state={
+	id=48
+	name="STATE_48"
+	provinces={
+		16514 16515 16519 16521 16530 16535 
+	}
+	manpower=3526685
+	buildings_max_level_factor=1.000
+	local_supplies=1.000
+	state_category = large_city
+
+	history={
+		owner = VAL
+		buildings = {
+			infrastructure = 4
+			arms_factory = 8
+		}
+		add_core_of = VAL
+
+		victory_points = { 16521 25 }
+		victory_points = { 16519 10 }
+		victory_points = { 16515 10 }
+	}
+}

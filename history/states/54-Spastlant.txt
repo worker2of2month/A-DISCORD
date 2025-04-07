@@ -4,15 +4,23 @@ state={
 	provinces={
 		728 4369 4827 16296 16297 16298 16478 16501 16510 16555 
 	}
-	manpower=0
+	manpower=952675
 	buildings_max_level_factor=1.000
 	local_supplies=0.000
+	state_category = city
 
 	history={
 		owner = VAL
 		buildings = {
-			infrastructure = 2
+			infrastructure = 3
+			arms_factory = 2
+			industrial_complex = 4
 		}
 		add_core_of = VAL
+
+		victory_points = { 16510 15 }
 	}
+	resources = {
+        steel = 11
+    }
 }

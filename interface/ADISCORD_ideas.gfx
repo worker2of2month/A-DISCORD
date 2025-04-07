@@ -28,7 +28,7 @@ spriteTypes = {
 	}
  
 ###STP
-#ideas
+ #ideas
   	spriteType = {
 	  	name = "GFX_idea_STP_hedonism_with_no_bondaries"
 	  	texturefile = "gfx/interface/ideas/STP/idea_STP_hedonism_with_no_bondaries.png"
@@ -45,9 +45,19 @@ spriteTypes = {
 	  	name = "GFX_idea_STP_worldwide_famous_tourist_destination"
 	  	texturefile = "gfx/interface/ideas/STP/idea_STP_worldwide_famous_tourist_destination.png"
 	}
-#ministers
+ #ministers
 	spriteType = {
 	  	name = "GFX_idea_minister_STP_Ernest_Derlich"
 	  	texturefile = "gfx/interface/ideas/STP/Ministers/minister_STP_portrait_STP_Ernest_Derlich.png"
+	}
+###VAL
+ #ideas
+ 	spriteType = {
+	  	name = "GFX_idea_VAL_mercenary_state"
+	  	texturefile = "gfx/interface/ideas/VAL/idea_VAL_mercenary_state.png"
+	}
+	spriteType = {
+	  	name = "GFX_idea_VAL_worldwide_famous_weponry"
+	  	texturefile = "gfx/interface/ideas/VAL/idea_VAL_worldwide_famous_weponry.png"
 	}
 }

@@ -1,17 +1,18 @@
 state={
-	id=48
-	name="STATE_48"
+	id=42
+	name="STATE_42"
 	provinces={
-		16514 16515 16519 16521 16530 16535 
+		125 16431 16436 16437 16438 
 	}
-	manpower=0
+	manpower=15742
 	buildings_max_level_factor=1.000
+	state_category=pastoral
 	local_supplies=0.000
 
 	history={
 		owner = VAL
 		buildings = {
-			infrastructure = 2
+			infrastructure = 1
 		}
 		add_core_of = VAL
 	}

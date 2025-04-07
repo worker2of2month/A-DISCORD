@@ -4,15 +4,21 @@ state={
 	provinces={
 		3790 4214 4356 9126 10360 10455 10598 10691 
 	}
-	manpower=0
+	manpower=63431
 	buildings_max_level_factor=1.000
 	local_supplies=0.000
+	state_category = rural
 
 	history={
 		owner = VAL
 		buildings = {
-			infrastructure = 2
+			infrastructure = 1
 		}
 		add_core_of = VAL
+
+		victory_points = { 4214 1 }
 	}
+	resources = {
+        oil = 17
+    }
 }

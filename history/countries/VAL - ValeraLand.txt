@@ -1,4 +1,4 @@
-capital = 24
+capital = 48
 
 ####### Characters
 
@@ -17,6 +17,11 @@ set_popularities = {
 	humanism = 1
 	utilitarism = 3
 	pragmatism = 21
+}
+
+add_ideas = {
+	VAL_mercenary_state
+	VAL_worldwide_famous_weponry
 }
 
 set_stability = 0.44

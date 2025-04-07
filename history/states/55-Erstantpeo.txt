@@ -4,14 +4,15 @@ state={
 	provinces={
 		114 9617 16435 
 	}
-	manpower=0
+	manpower=13215
 	buildings_max_level_factor=1.000
+	state_category=pastoral
 	local_supplies=0.000
 
 	history={
 		owner = VAL
 		buildings = {
-			infrastructure = 2
+			infrastructure = 1
 		}
 		add_core_of = VAL
 	}
