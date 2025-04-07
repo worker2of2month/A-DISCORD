@@ -99,9 +99,10 @@ ideas = {
 			default = no
 			cost = 75
 			allowed = {
-				always = yes
+				tag = STP
 			}
 			visible = {
+				tag = STP
 			}
 			allowed_to_remove = {
 			}
