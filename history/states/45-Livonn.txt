@@ -4,16 +4,22 @@ state={
 	provinces={
 		111 6675 16458 16459 16461 16529 
 	}
-	manpower=0
+	manpower=125634
 	buildings_max_level_factor=1.000
 	local_supplies=0.000
+	state_category = town
 
 	history={
 		owner = STP
 		buildings = {
-			infrastructure = 2
+			infrastructure = 3
+			industrial_complex = 3
 		}
 		add_core_of = STP
 		victory_points = { 16529 5 }
 	}
+	resources = {
+        steel = 39
+        aluminium = 9
+    }
 }

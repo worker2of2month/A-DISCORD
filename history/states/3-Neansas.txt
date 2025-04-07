@@ -12,8 +12,17 @@ state={
 	history={
 		owner = STP
 		buildings = {
-			infrastructure = 2
+			infrastructure = 3
+			synthetic_refinery = 2
 		}
 		add_core_of = STP
+
+		victory_points = { 45 1 }
+		victory_points = { 16457 1 }
+        victory_points = { 16462 3 }
 	}
+	resources = {
+        steel = 22
+        oil = 2
+    }
 }

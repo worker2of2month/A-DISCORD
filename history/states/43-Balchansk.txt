@@ -4,7 +4,7 @@ state={
 	provinces={
 		95 101 16432 16450 16455 
 	}
-	manpower=96284
+	manpower=196284
 	buildings_max_level_factor=1.000
 	state_category=town
 	local_supplies=0.000
@@ -13,6 +13,8 @@ state={
 		owner = STP
 		buildings = {
 			infrastructure = 2
+			industrial_complex = 2
+			synthetic_refinery = 1
 		}
 		add_core_of = STP
 		victory_points = { 16450 10 }

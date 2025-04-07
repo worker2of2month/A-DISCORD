@@ -1,0 +1,27 @@
+state={
+	id=46
+	name="STATE_46"
+	provinces={
+		98 100 153 3250 9376 10254 16349 16456 
+	}
+	manpower=163414
+	buildings_max_level_factor=1.000
+	local_supplies=0.000
+	state_category = rural
+
+	history={
+		owner = STP
+		buildings = {
+			infrastructure = 2
+			dockyard = 1
+			industrial_complex = 1
+			 16349 = {
+                coastal_bunker = 1
+                naval_base = 6
+            }
+		}
+		add_core_of = STP
+
+		victory_points = { 16349 10 }
+	}
+}

@@ -1,0 +1,28 @@
+state={
+	id=88
+	name="STATE_88"
+	provinces={
+		110 16429 
+	}
+	manpower=35163
+	buildings_max_level_factor=1.000
+	local_supplies=0.000
+	state_category=town
+
+	history={
+		owner = STP
+		buildings = {
+			infrastructure = 4
+			industrial_complex  = 3
+		}
+		add_core_of = STP
+
+		victory_points = { 110 3 }
+	}
+
+	resources = {
+        tungsten = 12
+        chromium = 8
+        steel = 31
+    }
+}
