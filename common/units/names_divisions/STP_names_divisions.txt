@@ -1,1 +1,45 @@
-﻿
+﻿STP_INF_01 = 
+{
+	name = "Infantry Division"
+
+	for_countries = { STP }
+
+	can_use = { always = yes }
+
+	division_types = { "infantry" }
+
+	# Number reservation system will tie to another group.
+	#link_numbering_with = { STP_INF_01 }
+
+	fallback_name = "%d Infantry Division"
+
+	# Names with numbers (only one number per entry). 
+	# It's okay to have gaps in numbering.
+	ordered = {
+		1  = { "%dst 'Great Steland' Division" }
+		2  = { "%dnd 'Indianhead' Division" }
+		3  = { "%dvl 'Valiant Peaks' Division" }
+		4  = { "%dcr 'Crimson Valley' Division" }
+		5  = { "%dwr 'Warden's Watch' Division" }
+		6  = { "%dsg 'Silvergate' Division" }
+		7  = { "%dpt 'Pinefort' Division" }
+		8  = { "%dhr 'Horizon Ridge' Division" }
+		9  = { "%dfl 'Falcon's Nest' Division" }
+		10 = { "%dcm 'Cobalt Marsh' Division" }
+		11 = { "%dbr 'Bronze Fall' Division" }
+		12 = { "%drl 'Ruby Lake' Division" }
+		13 = { "%dgk 'Gale Keep' Division" }
+		14 = { "%dsp 'Storm Peak' Division" }
+		15 = { "%dch 'Chillwind' Division" }
+		16 = { "%dgl 'Glinting Grove' Division" }
+		17 = { "%dww 'Wraithwood' Division" }
+		18 = { "%dtl 'Twilight Hollow' Division" }
+		19 = { "%dbv 'Dawn's Break' Division" }
+		20 = { "%dmr 'Mistral River' Division" }
+		21 = { "%dqt 'Quartz Heights' Division" }
+		22 = { "%dyv 'Yew Vale' Division" }
+		23 = { "%dhs 'Hallowed Springs' Division" }
+		24 = { "%dsc 'Scarlet Canyon' Division" }
+		25 = { "%dmt 'Moonlit Trail' Division" }
+	}
+}

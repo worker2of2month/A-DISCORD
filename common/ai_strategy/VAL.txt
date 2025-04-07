@@ -17,7 +17,7 @@ VAL_Wants_To_Sell_Stuff = {
 		type = diplo_action_desire
 		id = WRK
 		target = market_access_rights
-		value = 70
+		value = 90
 	}
 	ai_strategy = {
 		type = diplo_action_desire

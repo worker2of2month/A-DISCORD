@@ -1,0 +1,128 @@
+﻿division_template = {
+	name = "Police division"	
+	division_names_group = STP_INF_01
+
+	regiments = {
+		infantry = { x = 0 y = 0 }
+		infantry = { x = 0 y = 1 }
+		infantry = { x = 1 y = 0 }
+	}
+}
+
+division_template = {
+	name = "Regular army"	
+	division_names_group = STP_INF_01
+
+	regiments = {
+		infantry = { x = 0 y = 0 }
+		infantry = { x = 0 y = 1 }
+		infantry = { x = 0 y = 2 }
+        infantry = { x = 1 y = 0 }
+		infantry = { x = 1 y = 1 }
+		infantry = { x = 1 y = 2 }
+        infantry = { x = 2 y = 0 }
+		infantry = { x = 2 y = 1 }
+		infantry = { x = 2 y = 2 }
+	}
+	
+	support = {
+        engineer = { x = 0 y = 0 }
+        artillery = { x = 0 y = 1 }
+	}
+}
+
+units = {
+	division= {
+		division_name = {
+				is_name_ordered = yes
+				name_order = 1
+		}
+		location = 101
+		division_template = "Regular army"
+		start_experience_factor = 0.8
+		start_equipment_factor = 0.3
+	}
+	division= {
+		division_name = {
+				is_name_ordered = yes
+				name_order = 2
+		}
+		location = 16432
+		division_template = "Regular army"
+		start_experience_factor = 0.1
+		start_equipment_factor = 0.1
+	}
+	division= {
+		division_name = {
+				is_name_ordered = yes
+				name_order = 3
+		}
+		location = 6675
+		division_template = "Regular army"
+		start_experience_factor = 0.1
+		start_equipment_factor = 0.1
+	}
+	division= {
+		division_name = {
+				is_name_ordered = yes
+				name_order = 4
+		}
+		location = 16450
+		division_template = "Regular army"
+		start_experience_factor = 0.1
+		start_equipment_factor = 0.1
+	}
+	division= {
+		division_name = {
+				is_name_ordered = yes
+				name_order = 5
+		}
+		location = 16368
+		division_template = "Regular army"
+		start_experience_factor = 0.1
+		start_equipment_factor = 0.1
+	}
+	division= {
+		division_name = {
+				is_name_ordered = yes
+				name_order = 6
+		}
+		location = 45
+		division_template = "Regular army"
+		start_experience_factor = 0.1
+		start_equipment_factor = 0.1
+	}
+}
+
+##### No notable air forces #####
+
+instant_effect = {
+	add_equipment_production = {
+		equipment = {
+			type = infantry_equipment_0
+			creator = "STP"
+		}
+		requested_factories = 5
+		progress = 0.89
+		efficiency = 100
+	}
+	add_equipment_production = {
+		equipment = {
+			type = support_equipment_1
+			creator = STP
+		}
+		requested_factories = 1
+		progress = 0.3
+		efficiency = 50
+	}
+
+	add_equipment_production = {
+		equipment = {
+			type = artillery_equipment_1
+			creator = STP 
+		}
+		requested_factories = 1
+		progress = 0.3
+		efficiency = 50
+	}
+}
