@@ -33,18 +33,6 @@ news_event = { #vorkerland civilwar
 						damage = 0.1
 					}
 				}
-				35 = {
-					damage_building = {
-						type = infrastructure
-						damage = 0.1
-					}
-				}
-				36 = {
-					damage_building = {
-						type = infrastructure
-						damage = 0.1
-					}
-				}
 			}
 		}
 	}
