@@ -177,6 +177,141 @@ type={
 	object={
 		name="cityblock_entity"
 		position={
+			3145.280 -0.200 723.510 
+		}
+		rotation={
+			50.000 0.000 0.000 
+		}
+	}
+	object={
+		name="cityblock_entity"
+		position={
+			3133.390 -0.200 739.580 
+		}
+		rotation={
+			50.000 0.000 0.000 
+		}
+	}
+	object={
+		name="cityblock_entity"
+		position={
+			3129.450 -0.200 744.350 
+		}
+		rotation={
+			50.000 0.000 0.000 
+		}
+	}
+	object={
+		name="cityblock_entity"
+		position={
+			3168.230 -0.200 697.300 
+		}
+		rotation={
+			50.000 0.000 0.000 
+		}
+	}
+	object={
+		name="cityblock_entity"
+		position={
+			3184.100 -0.400 698.640 
+		}
+		rotation={
+			50.000 0.000 0.000 
+		}
+	}
+	object={
+		name="cityblock_entity"
+		position={
+			3195.260 -0.400 704.300 
+		}
+		rotation={
+			50.000 0.000 0.000 
+		}
+	}
+	object={
+		name="cityblock_entity"
+		position={
+			3150.810 -0.200 702.590 
+		}
+		rotation={
+			50.000 0.000 0.000 
+		}
+	}
+	object={
+		name="cityblock_entity"
+		position={
+			3178.210 -0.200 735.300 
+		}
+		rotation={
+			50.000 0.000 0.000 
+		}
+	}
+	object={
+		name="cityblock_entity"
+		position={
+			3158.460 -0.200 751.290 
+		}
+		rotation={
+			50.000 0.000 0.000 
+		}
+	}
+	object={
+		name="cityblock_entity"
+		position={
+			3155.340 -0.200 740.350 
+		}
+		rotation={
+			50.000 0.000 0.000 
+		}
+	}
+	object={
+		name="cityblock_entity"
+		position={
+			3144.990 -0.200 738.640 
+		}
+		rotation={
+			50.000 0.000 0.000 
+		}
+	}
+	object={
+		name="cityblock_entity"
+		position={
+			3143.990 -0.200 728.350 
+		}
+		rotation={
+			50.000 0.000 0.000 
+		}
+	}
+	object={
+		name="cityblock_entity"
+		position={
+			3142.920 -0.200 710.390 
+		}
+		rotation={
+			50.000 0.000 0.000 
+		}
+	}
+	object={
+		name="cityblock_entity"
+		position={
+			3142.390 -0.200 690.480 
+		}
+		rotation={
+			50.000 0.000 0.000 
+		}
+	}
+	object={
+		name="cityblock_entity"
+		position={
+			2120.530 -0.500 498.600 
+		}
+		rotation={
+			0.000 0.000 0.000 
+		}
+	}
+	object={
+		name="cityblock_entity"
+		position={
 			3142.210 -0.200 725.570 
 		}
 		rotation={
@@ -226,15 +361,6 @@ type={
 		}
 		rotation={
 			50.000 0.000 0.000 
-		}
-	}
-	object={
-		name="cityblock_entity"
-		position={
-			2120.530 -0.500 498.600 
-		}
-		rotation={
-			0.000 0.000 0.000 
 		}
 	}
 	object={
@@ -326,7 +452,7 @@ type={
 	object={
 		name="skyscraper3_entity"
 		position={
-			3153.620 -0.100 739.710 
+			3151.190 -0.100 740.580 
 		}
 		rotation={
 			0.000 0.000 0.000 
@@ -353,7 +479,7 @@ type={
 	object={
 		name="skyscraper3_entity"
 		position={
-			3142.830 0.000 727.640 
+			3146.660 0.000 735.490 
 		}
 		rotation={
 			0.000 0.000 0.000 
@@ -389,7 +515,7 @@ type={
 	object={
 		name="skyscraper3_entity"
 		position={
-			3156.590 -0.600 750.580 
+			3160.700 -0.600 749.590 
 		}
 		rotation={
 			0.000 0.000 0.000 
@@ -398,7 +524,7 @@ type={
 	object={
 		name="skyscraper3_entity"
 		position={
-			3182.450 0.200 698.720 
+			3181.510 0.200 700.420 
 		}
 		rotation={
 			0.000 0.000 0.000 
@@ -430,7 +556,7 @@ type={
 	object={
 		name="skyscraper1_entity"
 		position={
-			3151.020 1.400 702.600 
+			3148.830 1.400 703.530 
 		}
 		rotation={
 			50.000 0.000 -20.000 
@@ -439,7 +565,7 @@ type={
 	object={
 		name="skyscraper1_entity"
 		position={
-			3194.760 1.700 703.940 
+			3193.380 1.700 704.550 
 		}
 		rotation={
 			50.000 0.000 -20.000 
@@ -612,6 +738,70 @@ type={
 		name="french_city1_entity"
 		position={
 			3177.060 0.000 742.640 
+		}
+		rotation={
+			0.000 0.000 0.000 
+		}
+	}
+}
+type={
+	type="cityblock3_entity"
+	use_animation=no
+	scale=1.600000
+	object={
+		name="cityblock3_entity"
+		position={
+			3148.660 -0.100 719.420 
+		}
+		rotation={
+			0.000 0.000 0.000 
+		}
+	}
+	object={
+		name="cityblock3_entity"
+		position={
+			3163.000 -0.100 718.730 
+		}
+		rotation={
+			0.000 0.000 0.000 
+		}
+	}
+	object={
+		name="cityblock3_entity"
+		position={
+			3166.590 -0.100 721.650 
+		}
+		rotation={
+			0.000 0.000 0.000 
+		}
+	}
+	object={
+		name="cityblock3_entity"
+		position={
+			3171.470 -0.100 727.580 
+		}
+		rotation={
+			0.000 0.000 0.000 
+		}
+	}
+	object={
+		name="cityblock3_entity"
+		position={
+			3141.840 -0.100 719.650 
+		}
+		rotation={
+			0.000 0.000 0.000 
+		}
+	}
+}
+type={
+	type="cityblock4_entity"
+	use_animation=no
+	scale=1.600000
+	object={
+		name="cityblock4_entity"
+		position={
+			3186.480 -0.100 741.670 
 		}
 		rotation={
 			0.000 0.000 0.000 
