@@ -22,25 +22,27 @@ news_event = { #vorkerland civilwar
 				32 = {
 					damage_building = {
 						type = infrastructure
-						damage = 5
+						damage = 0.1
+					}
+					damage_building = {
+						type = rail_way
+						damage = 0.1
+					}
+					damage_building = {
+						type = anti_air_building
+						damage = 0.1
 					}
 				}
-				38 = {
+				35 = {
 					damage_building = {
 						type = infrastructure
-						damage = 1
-					}
-				}
-				37 = {
-					damage_building = {
-						type = infrastructure
-						damage = 1
+						damage = 0.1
 					}
 				}
 				36 = {
 					damage_building = {
 						type = infrastructure
-						damage = 1
+						damage = 0.1
 					}
 				}
 			}
