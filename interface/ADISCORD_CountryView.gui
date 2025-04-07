@@ -39,7 +39,7 @@ guiTypes = {
 
 	containerWindowType = {
 		name = "ADISCORD_development_category_society_type"
-		position = { x = 0 y = 1000 }
+		position = { x = 0 y = 1100 }
 		size = { width=594 height= 600 }
 		clipping = yes
 
