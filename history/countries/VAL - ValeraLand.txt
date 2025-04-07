@@ -27,3 +27,45 @@ add_ideas = {
 set_stability = 0.44
 
 set_research_slots = 3
+
+add_equipment_to_stockpile = {
+	type = infantry_equipment
+	amount = 1500
+	producer = STP
+}
+add_equipment_to_stockpile = {
+	type = infantry_equipment
+	amount = 15000
+	producer = VAL
+}
+
+###diplomacy
+
+WRK = 
+{
+		add_opinion_modifier = { target = VAL modifier = VAL_trading_partners }
+}
+NAM = 
+{
+		add_opinion_modifier = { target = VAL modifier = VAL_trading_partners }
+}
+IVN = 
+{
+		add_opinion_modifier = { target = VAL modifier = VAL_trading_partners }
+}
+WIT = 
+{
+		add_opinion_modifier = { target = VAL modifier = VAL_trading_partners }
+}
+TFF = 
+{
+		add_opinion_modifier = { target = VAL modifier = VAL_different_views_on_freedom }
+}
+STP = 
+{
+		add_opinion_modifier = { target = VAL modifier = VAL_october_of_2060 }
+}
+
+give_market_access = WRK
+give_market_access = IVN
+give_market_access = WIT

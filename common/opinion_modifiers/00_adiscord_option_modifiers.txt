@@ -1,0 +1,13 @@
+opinion_modifiers = {
+	
+	VAL_trading_partners = {
+		trade = yes
+		value = 75
+	}
+	VAL_october_of_2060 = {
+		value = -50
+	}
+	VAL_different_views_on_freedom = {
+		value = -25
+	}
+}

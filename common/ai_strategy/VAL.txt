@@ -1,0 +1,33 @@
+VAL_Wants_To_Sell_Stuff = {
+	allowed = {
+		original_tag = VAL
+	}
+	enable = {
+		has_war = no
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = diplo_action_desire
+		id = IVN
+		target = market_access_rights
+		value = 70
+	}
+	ai_strategy = {
+		type = diplo_action_desire
+		id = WRK
+		target = market_access_rights
+		value = 70
+	}
+	ai_strategy = {
+		type = diplo_action_desire
+		id = WIT
+		target = market_access_rights
+		value = 50
+	}
+	ai_strategy = {
+		type = equipment_market_for_sale_factor
+		id = infantry
+		value = 50  # put less rifles up for sale
+	}
+}

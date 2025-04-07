@@ -15,5 +15,11 @@ state={
 			infrastructure = 1
 		}
 		add_core_of = VAL
+		add_claim_by = STP
 	}
+
+	resources = {
+        oil = 2
+        chromium = 10
+    }
 }
