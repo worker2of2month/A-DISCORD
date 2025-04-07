@@ -24,6 +24,8 @@ add_ideas = {
 	VAL_worldwide_famous_weponry
 }
 
+set_convoys = 300
+
 set_stability = 0.44
 
 set_research_slots = 3

@@ -76,3 +76,5 @@ set_autonomy = {
 	target = TRU
 	autonomous_state = autonomy_republic_in_Vorkerland
 }
+
+set_convoys = 533
