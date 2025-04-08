@@ -84,30 +84,7 @@ type={
 		}
 	}
 }
-type={
-	type="ADISCORD_FACTORY_entity"
-	use_animation=no
-	scale=0.020000
-	always_visible=yes
-	object={
-		name="ADISCORD_FACTORY_entity"
-		position={
-			3594.050 -100.000 768.430 
-		}
-		rotation={
-			0.000 0.000 0.000 
-		}
-	}
-	object={
-		name="ADISCORD_FACTORY_entity"
-		position={
-			3497.200 -100.000 993.030 
-		}
-		rotation={
-			0.000 0.000 0.000 
-		}
-	}
-}
+
 type={
 	type="ambient_wind_entity"
 	use_animation=no

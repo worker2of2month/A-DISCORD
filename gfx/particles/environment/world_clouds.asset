@@ -1,12 +1,12 @@
 particle={
-	name="polution_file"
+	name="world_clouds_file"
 	subsystem={
 		name="cloud_2"
-		max_amount=125
+		max_amount=300
 		slave_particles=0
 		emitter_type="sphere"
-		sphere_emitter_radius={ 5000.000 5000.000 }
-		sphere_emitter_yaw={ 5555.000 5555.000 }
+		sphere_emitter_radius={ 40000.000 40000.000 }
+		sphere_emitter_yaw={ 55555.000 5555.000 }
 		sphere_emitter_pitch={ 0.000 0.000 }
 		invert=no
 		trail=no
@@ -20,10 +20,10 @@ particle={
 			shader="ParticleAlphaBlend"
 		}
 		color={
-			x=255.000
-			y=200.000
-			z=100.000
-			alpha={ 250.000,smoke_fade 1.000 }
+			x=244.000
+			y=244.000
+			z=244.000
+			alpha={ 200.000,smoke_fade 1.000 }
 		}
 		position={
 			x=0.000
@@ -37,9 +37,9 @@ particle={
 		velocity_pitch={ 45.000 0.000 }
 		velocity_yaw={ -90.000 45.000 }
 		velocity={ 6.000 1.000 }
-		life={ 6.500 1.100 }
+		life={ 300.500 70.100 }
 		emission=30.000
-		size={ 105.500 105.500 }
+		size={ 255.500 255.500 }
 		rotation={ 0.000 180.000 }
 		force=chaos,sidewind
 	}

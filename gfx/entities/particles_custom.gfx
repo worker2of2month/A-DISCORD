@@ -1,8 +1,14 @@
 objectTypes = {
 
 	pdxparticle = {
-		name = "sandstorm_particle_1"
-		type = "sandstorm_file"
+		name = "polution_particle"
+		type = "polution_file"
+		scale = 1
+	}
+
+	pdxparticle = {
+		name = "world_clouds_particle"
+		type = "world_clouds_file"
 		scale = 1
 	}
 

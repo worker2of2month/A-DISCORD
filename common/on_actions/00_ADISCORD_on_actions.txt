@@ -3,6 +3,45 @@
 on_actions = {
 	on_startup = {
 		effect = {
+			create_entity = { ##poluted zone
+			    entity = ADISCORD_global_entity
+			    id = 1
+			    x = 42
+			    y = 21
+			    z = -100.000
+			    province = 16531
+			    state = 42
+			    rotation = 1.2
+			    scale = 0.03
+			    min_zoom = 5555.0
+			    #visible = scripted_trigger_name
+			}
+			create_entity = {
+			    entity = ADISCORD_global_entity
+			    id = 2
+			    x = 42
+			    y = 21
+			    z = -100.000
+			    province = 12863
+			    state = 42
+			    rotation = 1.2
+			    scale = 0.02
+			    min_zoom = 5555.0
+			    #visible = scripted_trigger_name
+			}
+			#create_entity = { ##clouds
+			#    entity = ADISCORD_global_entity_2
+			#    id = 2
+			#    x = 42
+			#    y = 21
+			#    z = -100.000
+			#    province = 6713
+			#    state = 42
+			#    rotation = 1.2
+			#    scale = 1.02
+			#    min_zoom = 5555.0
+			#    #visible = scripted_trigger_name
+			#}
 			every_country = {
 			}
 			STP = {

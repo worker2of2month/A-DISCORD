@@ -1,10 +1,10 @@
 
 objectTypes = {
 	pdxmesh = {
-		name = "ADISCORD_FACTORY_mesh"
-		file = "gfx/models/weaponry.mesh"
-		scale = 2000.0
-		cull_distance = 2000.0
+		name = "ADISCORD_global_mesh"
+		file = "gfx/models/empty.mesh"
+		scale = 5555.0
+		cull_distance = 5555.0
 
 		meshsettings = {
             shader = "PdxMeshAdvanced"

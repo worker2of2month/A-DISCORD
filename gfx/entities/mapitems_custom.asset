@@ -1,15 +1,30 @@
 
 entity = {
-	name = "ADISCORD_FACTORY_entity"
-	pdxmesh = "ADISCORD_FACTORY_mesh"
+	name = "ADISCORD_global_entity"
+	pdxmesh = "ADISCORD_global_mesh"
 
-	locator = { name = "sandstorm_particle_1"	position = { 1.0 155.0 -0.1 }}
+	locator = { name = "polution_particle_1"	position = { 1.0 155.0 -0.1 }}
 
 	default_state = "idle"
 	state = { name = "idle"
 		event = { 
-			time = 0.0 node="sandstorm_particle_1"   
-			particle = "sandstorm_particle"
+			time = 0.0 node="polution_particle_1"   
+			particle = "polution_particle"
+		}
+	}
+}
+
+entity = {
+	name = "ADISCORD_global_entity_2"
+	pdxmesh = "ADISCORD_global_mesh"
+
+	locator = { name = "world_clouds_particle_1"	position = { 1.0 155.0 -0.1 }}
+
+	default_state = "idle"
+	state = { name = "idle"
+		event = { 
+			time = 0.0 node="world_clouds_particle_1"   
+			particle = "world_clouds_particle"
 		}
 	}
 }
