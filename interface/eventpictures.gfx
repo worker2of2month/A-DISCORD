@@ -1,0 +1,16 @@
+spriteTypes = {
+	
+
+#news 
+
+	spriteType = {
+		name = "GFX_event_doctor_work"
+		texturefile = "gfx/event_pictures/event_doctor_work.png"
+	}
+
+	spriteType = {
+		name = "GFX_event_vorkerland_explosion"
+		texturefile = "gfx/event_pictures/event_vorkerland_explosion.png"
+	}
+
+}

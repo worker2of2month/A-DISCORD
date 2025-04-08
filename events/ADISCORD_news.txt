@@ -11,6 +11,8 @@ news_event = { #vorkerland civilwar
 
 	is_triggered_only = yes
 
+	picture = GFX_event_vorkerland_explosion
+
 	immediate = {
 		hidden_effect = {
 			every_country = {
