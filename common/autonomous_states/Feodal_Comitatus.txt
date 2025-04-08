@@ -1,5 +1,5 @@
 autonomy_state = {
-	id = autonomy_ducatis_in_bezhaisk
+	id = autonomy_feodal_comitatus
 	
 	default = no
 	is_puppet = yes
@@ -32,7 +32,7 @@ autonomy_state = {
 	allowed_levels_filter = {
 		autonomy_integrated_puppet
 		autonomy_puppet
-		autonomy_colony
+		autonomy_feodal_comitatus
 		autonomy_ducatis_in_bezhaisk
 	}
 

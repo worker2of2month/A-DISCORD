@@ -22,4 +22,74 @@ characters = {
 			id = -1
 		}
 	}
+
+	BLD_Duke_Vincent = {
+		name = BLD_Duke_Vincent
+		portraits = {
+			civilian = {
+				large = GFX_portrait_PLACEHOLDER
+			}
+		}
+		country_leader = {
+			ideology = adiscord_chauvinism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+		}
+	}
+
+	BHG_Graf_Marcus = {
+		name = BHG_Graf_Marcus
+		portraits = {
+			civilian = {
+				large = GFX_portrait_PLACEHOLDER
+			}
+		}
+		country_leader = {
+			ideology = adiscord_chauvinism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+		}
+	}
+
+	BGT_Graf_Johan = {
+		name = BGT_Graf_Johan
+		portraits = {
+			civilian = {
+				large = GFX_portrait_PLACEHOLDER
+			}
+		}
+		country_leader = {
+			ideology = adiscord_chauvinism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+		}
+	}
+
+	BCM_Graf_Josef = {
+		name = BCM_Graf_Josef
+		portraits = {
+			civilian = {
+				large = GFX_portrait_PLACEHOLDER
+			}
+		}
+		country_leader = {
+			ideology = adiscord_chauvinism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+		}
+	}
+
+	BBV_Baron_Karl = {
+		name = BBV_Baron_Karl
+		portraits = {
+			civilian = {
+				large = GFX_portrait_PLACEHOLDER
+			}
+		}
+		country_leader = {
+			ideology = adiscord_chauvinism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+		}
+	}
 }

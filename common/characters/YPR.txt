@@ -9,15 +9,15 @@ characters = {
 ##    ## ##     ## ##     ## ##   ###    ##    ##    ##     ##       ##       ##       ##     ## ##     ## ##       ##    ##  ##    ## 
  ######   #######   #######  ##    ##    ##    ##     ##    ##       ######## ######## ##     ## ########  ######## ##     ##  ######  
 
-	BLD_Duke_Vincent = {
-		name = BLD_Duke_Vincent
+	YPR_The_Ruling_Council = {
+		name = YPR_The_Ruling_Council
 		portraits = {
 			civilian = {
 				large = GFX_portrait_PLACEHOLDER
 			}
 		}
 		country_leader = {
-			ideology = adiscord_chauvinism_ideology
+			ideology = utilitarism_ideology
 			expire = "2200.1.1.1"
 			id = -1
 		}

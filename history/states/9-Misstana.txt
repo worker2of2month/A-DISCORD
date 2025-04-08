@@ -9,4 +9,9 @@ state={
 	state_category=town
 	local_supplies=0.000
 
+		history = {
+		owner = BCM
+		add_core_of = BCM
+	}
+
 }

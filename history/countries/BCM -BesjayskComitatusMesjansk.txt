@@ -1,0 +1,23 @@
+capital = 9
+
+####### Characters
+
+recruit_character = BCM_Graf_Josef
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = adiscord_chauvinism
+	last_election = "2010.12.01"
+	elections_allowed = no
+}
+set_popularities = {
+	etatism = 24
+	adiscord_chauvinism = 44
+	anarchism = 11
+	hedonism = 21
+}
+
+set_stability = 0.47
+
+set_research_slots = 2

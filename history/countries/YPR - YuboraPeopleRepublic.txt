@@ -1,0 +1,22 @@
+capital = 20
+
+####### Characters
+
+recruit_character = YPR_The_Ruling_Council
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = utilitarism
+	last_election = "2162.12.01"
+	elections_allowed = yes
+	election_frequency = 36
+}
+
+set_popularities = {
+	utilitarism = 100
+}
+
+set_stability = 0.34
+
+set_research_slots = 2
