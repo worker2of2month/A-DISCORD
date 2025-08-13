@@ -1,4 +1,4 @@
-vcapital = 32
+capital = 32
 
 oob = "WRK"
 
