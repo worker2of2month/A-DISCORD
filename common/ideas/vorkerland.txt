@@ -1,0 +1,79 @@
+#ideas
+
+ideas = {
+
+	country = {
+
+		WRK_ashes_of_the_crown = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_WRK_ashes_of_the_crown
+
+			modifier = {
+				send_volunteer_size = 0
+				army_defence_factor = -0.2
+				army_attack_factor = -0.15
+				army_org_factor = -0.25
+				recon_factor = -0.2
+				planning_speed = -0.2
+				equipment_capture_factor = -0.4
+				war_support_factor = -0.5
+				war_stability_factor = -0.7
+				command_power_gain_mult = -0.3
+				non_core_manpower = -0.9
+				conscription_factor = -0.7
+				cannot_use_abilities = 1
+				no_compliance_gain = 1
+			}
+		}
+
+		WRK_hourglass_of_discord = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_WRK_hourglass_of_discord
+
+			modifier = {
+				political_power_gain = -0.2
+				consumer_goods_factor = 0.1
+				drift_defence_factor = -0.6
+			}
+		}
+
+		WRK_constitution_of_the_republic = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_WRK_constitution_of_the_republic
+
+			modifier = {
+				stability_factor = 0.25
+			}
+		}
+	}
+}

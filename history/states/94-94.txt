@@ -1,0 +1,14 @@
+state={
+	id=94
+	name="STATE_94"
+	provinces={
+		1979 3227 4166 4425 4659 5247 5819 7804 11321 12669 12738 
+	}
+	manpower=0
+	buildings_max_level_factor=1.000
+	local_supplies=0.000
+	history = {
+        owner = PWR
+        add_core_of = PWR
+	}
+}

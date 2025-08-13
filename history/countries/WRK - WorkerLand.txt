@@ -1,4 +1,4 @@
-capital = 32
+vcapital = 32
 
 oob = "WRK"
 
@@ -20,6 +20,12 @@ add_to_faction = SOL
 add_to_faction = TRU
 
 ####### Politics
+
+add_ideas = {
+	WRK_ashes_of_the_crown
+	WRK_hourglass_of_discord
+	WRK_constitution_of_the_republic
+}
 
 set_politics = {
 	ruling_party = pragmatism

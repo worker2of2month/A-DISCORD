@@ -1,0 +1,15 @@
+state={
+	id=98
+	name="STATE_98"
+	provinces={
+		2448 3938 5892 6695 9174 9606 11047 11554 11918 12715 
+	}
+	manpower=0
+	buildings_max_level_factor=1.000
+	local_supplies=0.000
+
+	history = {
+        owner = IVN
+        add_core_of = IVN
+	}
+}

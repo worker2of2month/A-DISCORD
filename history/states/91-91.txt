@@ -1,0 +1,16 @@
+state={
+	id=91
+	name="STATE_91"
+	provinces={
+		1175 2149 4007 4210 4952 5075 5500 10400 
+	}
+	manpower=0
+	buildings_max_level_factor=1.000
+	local_supplies=0.000
+	
+	history = {
+        owner = PWR
+        add_core_of = PWR
+        set_demilitarized_zone = yes
+	}
+}

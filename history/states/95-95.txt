@@ -1,0 +1,15 @@
+state={
+	id=95
+	name="STATE_95"
+	provinces={
+		3318 4103 4260 4302 4576 4913 6020 6771 7917 8130 9320 11985 12346 
+	}
+	manpower=0
+	buildings_max_level_factor=1.000
+	local_supplies=0.000
+
+	history = {
+        owner = IVN
+        add_core_of = IVN
+	}
+}
