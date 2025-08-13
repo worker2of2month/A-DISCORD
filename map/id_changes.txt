@@ -1,3 +1,42 @@
-ID Changes 2025-01-17 01:42:10
-- Assigned ID 16555 to new province
-- Created IDs 16555 through 16555
+ID Changes 2025-08-14 01:48:22
+- Assigned ID 16595 to new province
+- Assigned ID 16594 to new province
+- Assigned ID 16593 to new province
+- Assigned ID 16592 to new province
+- Assigned ID 16591 to new province
+- Assigned ID 16590 to new province
+- Assigned ID 16589 to new province
+- Assigned ID 16588 to new province
+- Assigned ID 16587 to new province
+- Assigned ID 16586 to new province
+- Assigned ID 16585 to new province
+- Assigned ID 16584 to new province
+- Assigned ID 16583 to new province
+- Assigned ID 16582 to new province
+- Assigned ID 16581 to new province
+- Assigned ID 16580 to new province
+- Assigned ID 16579 to new province
+- Assigned ID 16578 to new province
+- Assigned ID 16577 to new province
+- Assigned ID 16576 to new province
+- Assigned ID 16575 to new province
+- Assigned ID 16574 to new province
+- Assigned ID 16573 to new province
+- Assigned ID 16572 to new province
+- Assigned ID 16571 to new province
+- Assigned ID 16570 to new province
+- Assigned ID 16569 to new province
+- Assigned ID 16568 to new province
+- Assigned ID 16567 to new province
+- Assigned ID 16566 to new province
+- Assigned ID 16565 to new province
+- Assigned ID 16564 to new province
+- Assigned ID 16563 to new province
+- Assigned ID 16562 to new province
+- Assigned ID 16561 to new province
+- Assigned ID 16560 to new province
+- Assigned ID 16559 to new province
+- Assigned ID 16558 to new province
+- Assigned ID 16557 to new province
+- Assigned ID 16556 to new province
+- Created IDs 16556 through 16595

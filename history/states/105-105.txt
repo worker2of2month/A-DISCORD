@@ -1,0 +1,18 @@
+state={
+	id=105
+	name="STATE_105"
+	provinces={
+		16565 16573 16577 16581 16589 
+	}
+	manpower=0
+	buildings_max_level_factor=1.000
+	local_supplies=0.000
+
+	history={
+		owner = WRK
+		buildings = {
+			infrastructure = 2
+		}
+		add_core_of = WRK
+	}
+}
