@@ -1,0 +1,36 @@
+state={
+	id=75
+	name="STATE_75"
+	provinces={
+		361 4081 4988 6192 6728 6774 8243 8877 9337 9664 11120 11209 11443 12296 12955 16593 
+	}
+	manpower=7432721
+	buildings_max_level_factor=1.000
+	local_supplies=0.000
+	state_category = large_city
+
+
+    resources = {
+        oil = 21
+        chromium = 11
+    }
+
+	history={
+		owner = VAD
+		add_core_of = VAD
+
+		victory_points = { 16593 10 }
+        victory_points = { 6192 15 }
+        victory_points = { 8243 10 }
+
+		buildings = {
+	        infrastructure = 8
+	        industrial_complex = 2
+	        arms_factory = 5
+	        dockyard = 1
+	        8243 = {
+	            naval_base = 10
+	        }
+	    }
+	}
+}

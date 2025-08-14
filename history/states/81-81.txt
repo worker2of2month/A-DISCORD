@@ -4,15 +4,22 @@ state={
 	provinces={
 		592 3848 4143 4603 4911 5978 8315 8565 9012 9225 9460 9948 10261 10926 11051 12763 12971 16579 16587 
 	}
-	manpower=0
+	manpower=1352351
 	buildings_max_level_factor=1.000
 	local_supplies=0.000
+	state_category = town
 
 	history={
 		owner = VAD
-		buildings = {
-			infrastructure = 2
-		}
 		add_core_of = VAD
+
+		victory_points = { 16587 5 }
+		victory_points = { 16579 2 }
+
+		buildings = {
+	        infrastructure = 6
+	        industrial_complex = 2
+	        arms_factory = 1
+	    }
 	}
 }

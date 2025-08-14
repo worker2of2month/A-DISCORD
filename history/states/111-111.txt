@@ -1,0 +1,23 @@
+state={
+	id=111
+	name="STATE_111"
+	provinces={
+		1173 1688 5872 8913 10479 11274 11392 13024 
+	}
+	manpower=643413
+	buildings_max_level_factor=1.000
+	local_supplies=0.000
+	state_category = town
+
+	history={
+		owner = VAD
+		add_core_of = VAD
+
+		victory_points = { 11274 5 }
+
+		buildings = {
+	        infrastructure = 5
+	        industrial_complex = 3
+	    }
+	}
+}

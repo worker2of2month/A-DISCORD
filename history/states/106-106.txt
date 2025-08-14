@@ -1,0 +1,29 @@
+state={
+	id=106
+	name="STATE_106"
+	provinces={
+		782 1270 1615 1831 2902 2949 3145 4091 5636 7731 9315 10372 11944 
+	}
+	manpower=2532612
+	buildings_max_level_factor=1.000
+	local_supplies=0.000
+	state_category = large_town
+
+	history={
+		owner = VAD
+		add_core_of = VAD
+
+		victory_points = { 11944 10 }
+		victory_points = { 5636 1 }
+
+		buildings = {
+	        infrastructure = 6
+	        industrial_complex = 1
+	        arms_factory = 2
+	        dockyard = 2
+	        11944 = {
+	            naval_base = 10
+	        }
+	    }
+	}
+}
