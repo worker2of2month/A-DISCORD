@@ -11,8 +11,8 @@ set_politics = {
 	elections_allowed = no
 }
 set_popularities = {
-	anarchism = 79
-	hedonism = 21
+	anarchism = 66
+	hedonism = 34
 }
 
 set_stability = -0.42

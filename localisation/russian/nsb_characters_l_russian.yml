@@ -57,6 +57,10 @@
 
   DAN_Dania_Komun: "Данил Комун"
 
+  ###NOD
+
+  NOD_Tobis_Bentlix: "Тобис Бентликс"
+
   ###COF
 
   COF_Older_One_Lishai: "Дед Лишай"
@@ -70,3 +74,19 @@
   BJK_Graison: "Король Грайсон"
 
   BLD_Duke_Vincent: "Герцог Винсент"
+
+  BCM_Graf_Josef: "Граф Йозеф"
+
+  BGT_Graf_Johan: "Граф Йохан"
+
+  BHG_Graf_Marcus: "Граф Маркус"
+
+  BBV_Baron_Karl: "Барон Карл"
+
+  ###TFF
+
+  The_Absent_Government: "Отсутствующее правительство"
+
+  ###UPR
+
+  YPR_The_Ruling_Council: "Правящий совет"

@@ -23,7 +23,7 @@ diplomatic_relation = {
 
 set_politics = {
 	ruling_party = humanism
-	last_election = "1935.10.27"
+	last_election = "2154.04.17"
 	elections_allowed = yes
 }
 set_popularities = {

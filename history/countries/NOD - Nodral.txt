@@ -13,7 +13,8 @@ add_to_faction = STP
 
 set_politics = {
 	ruling_party = hedonism
-	last_election = "2071.4.08"
+	last_election = "2154.3.18"
+	election_frequency = 120
 	elections_allowed = yes
 }
 set_popularities = {

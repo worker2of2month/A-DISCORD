@@ -6,6 +6,10 @@ recruit_character = ROM_Erwin_Von_Romanovskiy
 
 ####### Basic shit
 
+add_ideas = {
+	WRK_hourglass_of_discord
+}
+
 set_politics = {
 	ruling_party = pragmatism
 	last_election = "2010.12.01"

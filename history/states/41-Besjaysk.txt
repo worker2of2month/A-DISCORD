@@ -4,15 +4,15 @@ state={
 	provinces={
 		16439 16443 16446 16449 16451 
 	}
-	manpower=0
+	manpower=70213
 	buildings_max_level_factor=1.000
-	local_supplies=0.000
+	state_category = large_town
 
 	history = {
 		owner = BJK
 		add_core_of = BJK
 
-		victory_points = { 16451 25 }
+		victory_points = { 16451 15 }
+		victory_points = { 16439 25 }
 	}
-	
 }

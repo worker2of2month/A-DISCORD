@@ -4,9 +4,8 @@ state={
 	provinces={
 		12434 16346 16363 16369 16441 16442 16444 
 	}
-	manpower=0
+	manpower=7243512
 	buildings_max_level_factor=1.000
-	local_supplies=0.000
 
 	history={
 		owner = NOD
@@ -17,4 +16,6 @@ state={
 
 		victory_points = { 16441 25 }
 	}
+	state_category = large_city
+	local_supplies=12.0 
 }

@@ -6,9 +6,13 @@ recruit_character = WRK_Bassam_Zogby
 
 ####### Basic shit
 
+add_ideas = {
+	WRK_hourglass_of_discord
+}
+
 set_politics = {
 	ruling_party = pragmatism
-	last_election = "1935.10.27"
+	last_election = "2160.01.21"
 	elections_allowed = yes
 }
 set_popularities = {

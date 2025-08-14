@@ -8,7 +8,7 @@ recruit_character = STP_Petr_Ivanov
 
 set_politics = {	
 	ruling_party = hedonism
-	last_election = "2060.3.18"
+	last_election = "2154.3.18"
 	election_frequency = 120
 	elections_allowed = yes
 }

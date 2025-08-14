@@ -6,6 +6,12 @@ recruit_character = WRK_Vlad_Petrichev
 
 ####### Basic shit
 
+add_ideas = {
+	WRK_ashes_of_the_crown
+	WRK_hourglass_of_discord
+	WRK_constitution_of_the_republic
+}
+
 set_politics = {
 	ruling_party = pragmatism
 	last_election = "2010.12.01"
