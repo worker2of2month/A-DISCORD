@@ -75,5 +75,24 @@ ideas = {
 				stability_factor = 0.25
 			}
 		}
+		WRK_separatism = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_WRK_constitution_of_the_republic
+
+			modifier = {
+				stability_factor = -0.25
+				political_power_gain = -0.15
+			}
+		}
 	}
 }
