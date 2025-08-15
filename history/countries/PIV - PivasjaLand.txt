@@ -8,7 +8,8 @@ recruit_character = PIV_Oleg_Pivovarov
 
 set_politics = {
 	ruling_party = hedonism
-	last_election = "2055.12.01"
+	last_election = "2162.12.25"
+	election_frequency = 36
 	elections_allowed = yes
 }
 set_popularities = {

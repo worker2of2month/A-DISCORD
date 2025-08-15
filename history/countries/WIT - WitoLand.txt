@@ -8,7 +8,8 @@ recruit_character = WIT_Wito_Sovi
 
 set_politics = {
 	ruling_party = hedonism
-	last_election = "1935.10.27"
+	last_election = "2151.10.27"
+	election_frequency = 120
 	elections_allowed = yes
 }
 set_popularities = {

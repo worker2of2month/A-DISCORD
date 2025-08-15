@@ -6,10 +6,14 @@ recruit_character = WRK_Zack_Wither
 
 ####### Basic shit
 
+add_ideas = {
+	WRK_hourglass_of_discord
+}
+
 set_politics = {
 	ruling_party = pragmatism
-	last_election = "1935.10.27"
-	elections_allowed = yes
+	last_election = "2159.07.06"
+	elections_allowed = no
 }
 set_popularities = {
 	pragmatism = 42
