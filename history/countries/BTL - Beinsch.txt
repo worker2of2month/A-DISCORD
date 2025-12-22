@@ -1,0 +1,26 @@
+capital = 116
+
+####### Characters
+
+recruit_character = BTL_Paul_Dorini
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = etatism
+	last_election = "2151.01.27"
+	elections_allowed = no
+}
+set_popularities = {
+	etatism = 82
+	chauvinism = 4
+	utilitarism = 3
+	pragmatism = 1
+	anarchism = 5
+	hedonism = 4
+	humanism = 1
+}
+
+set_stability = 0.43
+
+set_research_slots = 2

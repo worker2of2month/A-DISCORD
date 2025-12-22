@@ -1,0 +1,18 @@
+state={
+	id=112
+	name="STATE_112"
+	provinces={
+		332 1823 2075 2850 3314 3332 4179 4465 4987 5059 5159 5850 7715 8417 8603 8906 9107 9449 9526 9594 9872 9990 10238 10615 10786 11198 11326 12325 12483 12827 
+	}
+	manpower=1532612
+	buildings_max_level_factor=1
+	local_supplies=0
+
+	history={
+		owner = BTL
+		buildings = {
+			infrastructure = 2
+		}
+		add_core_of = BTL
+	}
+}

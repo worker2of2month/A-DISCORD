@@ -1,0 +1,18 @@
+state={
+	id=114
+	name="STATE_114"
+	provinces={
+		1164 1441 5991 7716 7920 12740 
+	}
+	manpower=432215
+	buildings_max_level_factor=1
+	local_supplies=0
+
+	history={
+		owner = PIV
+		buildings = {
+			infrastructure = 2
+		}
+		add_core_of = PIV
+	}
+}
