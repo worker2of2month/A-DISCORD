@@ -2,3 +2,7 @@ sound = {
 	name = "superevent_vorkerland_civilwar_sound"
 	file = "superevents/superevent_vorkerland_civilwar_sound.wav"
 }
+sound = {
+	name = "superevent_stelander_empire_sound"
+	file = "superevents/superevent_stelander_empire_sound.wav"
+}

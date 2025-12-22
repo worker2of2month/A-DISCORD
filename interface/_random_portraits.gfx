@@ -5,8 +5,8 @@ spriteTypes = {
 		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_Anarhism.dds"
 	}
 	spriteType = {
-		name = "GFX_Portrait_Forul_Generic_adiscord_chauvinism"
-		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_adiscord_chauvinism.dds"
+		name = "GFX_Portrait_Forul_Generic_chauvinism"
+		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_chauvinism.dds"
 	}
 	spriteType = {
 		name = "GFX_Portrait_Forul_Generic_Etatism"

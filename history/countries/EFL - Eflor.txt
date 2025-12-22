@@ -7,13 +7,13 @@ recruit_character = EFL_Dextung
 ####### Basic shit
 
 set_politics = {
-	ruling_party = adiscord_chauvinism
+	ruling_party = chauvinism
 	last_election = "2010.12.01"
 	elections_allowed = no
 }
 set_popularities = {
 	etatism = 21
-	adiscord_chauvinism = 59
+	chauvinism = 59
 	anarchism = 11
 	hedonism = 6
 	utilitarism = 3

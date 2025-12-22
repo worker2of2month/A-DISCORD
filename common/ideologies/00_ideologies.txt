@@ -115,19 +115,19 @@ ideologies = {
 		ai_give_core_state_control_threshold = 10
 	}
 
-	adiscord_chauvinism = {
+	chauvinism = {
 
 		types = {
-			adiscord_chauvinism_ideology = {
+			chauvinism_ideology = {
 			}
 		}
 
 		dynamic_faction_names = {
-			"FACTION_NAME_adiscord_chauvinism_1"
-			"FACTION_NAME_adiscord_chauvinism_2"
-			"FACTION_NAME_adiscord_chauvinism_3"
-			"FACTION_NAME_adiscord_chauvinism_4"
-			"FACTION_NAME_adiscord_chauvinism_5"
+			"FACTION_NAME_chauvinism_1"
+			"FACTION_NAME_chauvinism_2"
+			"FACTION_NAME_chauvinism_3"
+			"FACTION_NAME_chauvinism_4"
+			"FACTION_NAME_chauvinism_5"
 		}
 
 		color = {31 81 6}

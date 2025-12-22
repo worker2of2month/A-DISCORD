@@ -7,13 +7,13 @@ recruit_character = BBV_Baron_Karl
 ####### Basic shit
 
 set_politics = {
-	ruling_party = adiscord_chauvinism
+	ruling_party = chauvinism
 	last_election = "2010.12.01"
 	elections_allowed = no
 }
 set_popularities = {
 	etatism = 9
-	adiscord_chauvinism = 28
+	chauvinism = 28
 	anarchism = 29
 	hedonism = 34
 }

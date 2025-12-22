@@ -47,8 +47,97 @@ news_event = { #vorkerland civilwar
 					is_ai = no
 				}
 				set_country_flag = superevent_vorkerland_civilwar
-				set_country_flag = activate_superevent
 				scoped_sound_effect = superevent_vorkerland_civilwar_sound_e
+				scoped_play_song = "one_minute_of_silence"
+			}
+		}
+	}
+}
+
+news_event = { #stelander empire
+	id = news.1
+	title = news.1.t
+	desc = news.1.d
+
+	hidden = yes
+	
+	fire_only_once = no
+
+	is_triggered_only = yes
+
+	picture = GFX_event_vorkerland_explosion
+
+	immediate = {
+		hidden_effect = {
+			STP = {
+				set_cosmetic_tag = STP_empire
+
+				set_politics = {
+				    ruling_party = chauvinism
+				    elections_allowed = no
+				    last_election = "2163.12.17"
+				    election_frequency = 48
+				    long_name = STP_empire_faction_party_long
+				    name = STP_empire_faction_party
+				}
+
+				add_country_leader_role = {
+				    character = STP_maksim_shabrat
+				    promote_leader = yes
+				    country_leader = {
+				        ideology = chauvinism_ideology
+				        expire = "2190.1.1.1"
+				        traits = { }
+				    }
+				}
+
+				set_country_leader_portrait = {
+					ideology = chauvinism
+					portrait = GFX_portrait_STP_Maksim_Shabrat_dictator
+				}
+
+				transfer_state  = 5
+				transfer_state  = 4
+				transfer_state  = 9
+				transfer_state  = 41
+				transfer_state  = 6
+				transfer_state  = 22
+				transfer_state  = 7
+				transfer_state  = 10
+				transfer_state  = 11
+				transfer_state  = 30
+				transfer_state  = 12
+				transfer_state  = 54
+				transfer_state  = 31
+				transfer_state  = 18
+				transfer_state  = 15
+				transfer_state  = 8
+				transfer_state  = 17
+				transfer_state  = 14
+				transfer_state  = 16
+				transfer_state  = 13
+				transfer_state  = 20
+				transfer_state  = 19
+				transfer_state  = 21
+				transfer_state  = 42
+				transfer_state  = 55
+				transfer_state  = 24
+				transfer_state  = 48
+				transfer_state  = 57
+				transfer_state  = 56
+			}
+		}
+	}
+	
+	option = {
+		name = news.1.a
+		hidden_effect = {
+			if = {
+				limit = {
+					is_ai = no
+				}
+				set_country_flag = superevent_stelander_empire
+				scoped_sound_effect = superevent_stelander_empire_sound_e
 				scoped_play_song = "one_minute_of_silence"
 			}
 		}

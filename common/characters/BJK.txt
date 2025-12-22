@@ -17,7 +17,7 @@ characters = {
 			}
 		}
 		country_leader = {
-			ideology = adiscord_chauvinism_ideology
+			ideology = chauvinism_ideology
 			expire = "2200.1.1.1"
 			id = -1
 		}
@@ -31,7 +31,7 @@ characters = {
 			}
 		}
 		country_leader = {
-			ideology = adiscord_chauvinism_ideology
+			ideology = chauvinism_ideology
 			expire = "2200.1.1.1"
 			id = -1
 		}
@@ -45,7 +45,7 @@ characters = {
 			}
 		}
 		country_leader = {
-			ideology = adiscord_chauvinism_ideology
+			ideology = chauvinism_ideology
 			expire = "2200.1.1.1"
 			id = -1
 		}
@@ -59,7 +59,7 @@ characters = {
 			}
 		}
 		country_leader = {
-			ideology = adiscord_chauvinism_ideology
+			ideology = chauvinism_ideology
 			expire = "2200.1.1.1"
 			id = -1
 		}
@@ -73,7 +73,7 @@ characters = {
 			}
 		}
 		country_leader = {
-			ideology = adiscord_chauvinism_ideology
+			ideology = chauvinism_ideology
 			expire = "2200.1.1.1"
 			id = -1
 		}
@@ -87,7 +87,7 @@ characters = {
 			}
 		}
 		country_leader = {
-			ideology = adiscord_chauvinism_ideology
+			ideology = chauvinism_ideology
 			expire = "2200.1.1.1"
 			id = -1
 		}

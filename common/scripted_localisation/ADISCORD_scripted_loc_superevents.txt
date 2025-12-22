@@ -2,6 +2,12 @@
 defined_text = {
 	name = GetSupereventQuote
 	text = {
+	trigger = {
+			has_country_flag = superevent_stelander_empire
+		}
+		localization_key = superevent_stelander_empire_quote
+	}
+	text = {
 		trigger = {
 			has_country_flag = superevent_vorkerland_civilwar
 		}
@@ -17,6 +23,12 @@ defined_text = {
 		}
 		localization_key = superevent_vorkerland_civilwar_title
 	}
+	text = {
+		trigger = {
+			has_country_flag = superevent_stelander_empire
+		}
+		localization_key = superevent_stelander_empire_title
+	}
 }
 ##comment
 defined_text = {
@@ -26,5 +38,11 @@ defined_text = {
 			has_country_flag = superevent_vorkerland_civilwar
 		}
 		localization_key = superevent_vorkerland_civilwar_comment
+	}
+	text = {
+		trigger = {
+			has_country_flag = superevent_stelander_empire
+		}
+		localization_key = superevent_stelander_empire_comment
 	}
 }

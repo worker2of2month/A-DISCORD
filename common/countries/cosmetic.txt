@@ -1,0 +1,5 @@
+STP_empire = {
+	color = rgb { 54 0 74 }
+	color_ui = rgb { 115 115 115 }
+}
+ 

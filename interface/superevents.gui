@@ -1,7 +1,7 @@
 guiTypes = {
 
 	containerWindowType = {
-		name = "superevents"
+		name = "superevent_vorkerland_civilwar"
 		position = { x = 0 y = 0}	
 		size = { width = 1000 height= 500 }
 		orientation = center
@@ -15,6 +15,83 @@ guiTypes = {
 		iconType = {
 			name = "superevent_vorkerland_civilwar"
 			quadTextureSprite ="GFX_superevent_vorkerland_civilwar"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"		
+			quadTextureSprite ="GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"		
+			quadTextureSprite ="GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"		
+			quadTextureSprite ="GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = {x = 0 y = 0}
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = {x = 0 y = 0}
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+
+		buttonType = {
+			name ="superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = {x = 0 y = 355}
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+	containerWindowType = {
+		name = "superevent_stelander_empire"
+		position = { x = 0 y = 0}	
+		size = { width = 1000 height= 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		
+		iconType = {
+			name = "superevent_stelander_empire"
+			quadTextureSprite ="GFX_superevent_stelander_empire"
 			position = { x = 0 y = 0 }
 			alwaystransparent = yes
 		}

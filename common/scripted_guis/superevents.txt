@@ -1,23 +1,32 @@
 scripted_gui = {
 
-	new_scripted_gui = {
-    window_name = "superevents"
-    context_type = player_context
+	superevent_vorkerland_civilwar = {
+	    window_name = "superevent_vorkerland_civilwar"
+	    context_type = player_context
 
-    visible = {
-			has_country_flag = activate_superevent
-    }
+	    visible = {
+			has_country_flag = superevent_vorkerland_civilwar
+	    }
 
-    effects = {
+	    effects = {
 			superevents_button_click = {
-				clr_country_flag = activate_superevent
-				#superevents
 				clr_country_flag = superevent_vorkerland_civilwar
 			}
+    	}
     }
-		#superevents
-		superevent_vorkerland_civilwar_visible = {
-			has_country_flag = superevent_vorkerland_civilwar
-		}
-  }
+
+    superevent_stelander_empire = {
+	    window_name = "superevent_stelander_empire"
+	    context_type = player_context
+
+	    visible = {
+			has_country_flag = superevent_stelander_empire
+	    }
+
+	    effects = {
+			superevents_button_click = {
+				clr_country_flag = superevent_stelander_empire
+			}
+	    }
+	}
 }

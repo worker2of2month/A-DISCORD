@@ -14,7 +14,7 @@ set_politics = {
 }
 set_popularities = {
 	etatism = 1
-	adiscord_chauvinism = 1
+	chauvinism = 1
 	humanism = 19
 	pragmatism = 20
 	anarchism = 7

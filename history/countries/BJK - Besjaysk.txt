@@ -16,13 +16,13 @@ add_to_faction = BCM
 ####### Basic shit
 
 set_politics = {
-	ruling_party = adiscord_chauvinism
+	ruling_party = chauvinism
 	last_election = "2010.12.01"
 	elections_allowed = no
 }
 set_popularities = {
 	etatism = 21
-	adiscord_chauvinism = 37
+	chauvinism = 37
 	anarchism = 14
 	hedonism = 28
 }

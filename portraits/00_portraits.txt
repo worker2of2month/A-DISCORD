@@ -62,9 +62,9 @@ continent = {
 				"GFX_Portrait_Forul_Generic_Utilitarism"
 			}
 		}
-		adiscord_chauvinism = {
+		chauvinism = {
 			male = { 
-				"GFX_Portrait_Forul_Generic_adiscord_chauvinism"
+				"GFX_Portrait_Forul_Generic_chauvinism"
 			}
 		}
 		pragmatism = {

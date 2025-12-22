@@ -16,11 +16,6 @@ characters = {
 				large = GFX_portrait_STP_Maksim_Shabrat
 			}
 		}
-		country_leader = {
-			ideology = hedonism_ideology
-			expire = "1965.1.1.1"
-			id = -1
-		}
 	}
 
 	STP_Petr_Ivanov = {
@@ -32,7 +27,7 @@ characters = {
 		}
 		country_leader = {
 			ideology = hedonism_ideology
-			expire = "1965.1.1.1"
+			expire = "2180.1.1.1"
 			id = -1
 		}
 	}

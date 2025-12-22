@@ -7,13 +7,13 @@ recruit_character = BHG_Graf_Marcus
 ####### Basic shit
 
 set_politics = {
-	ruling_party = adiscord_chauvinism
+	ruling_party = chauvinism
 	last_election = "2010.12.01"
 	elections_allowed = no
 }
 set_popularities = {
 	etatism = 16
-	adiscord_chauvinism = 31
+	chauvinism = 31
 	anarchism = 26
 	hedonism = 27
 }

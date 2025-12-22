@@ -20,4 +20,8 @@ spriteTypes = {
 		name = "GFX_superevent_vorkerland_civilwar"
 		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_civilwar.png"
 	}
+	spriteType = {
+		name = "GFX_superevent_stelander_empire"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_empire.png"
+	}
 }

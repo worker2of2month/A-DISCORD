@@ -3,6 +3,7 @@ capital = 28
 ####### Characters
 
 recruit_character = STP_Petr_Ivanov
+recruit_character = STP_maksim_shabrat
 
 ####### Basic shit
 
@@ -17,7 +18,7 @@ set_popularities = {
 	humanism = 2
 	utilitarism = 1
 	etatism = 13
-	adiscord_chauvinism = 34
+	chauvinism = 34
 	anarchism = 10
 	hedonism = 40
 }
