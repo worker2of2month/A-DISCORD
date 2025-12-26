@@ -1,0 +1,32 @@
+#ideas
+
+ideas = {
+
+	country = {
+
+		NOD_home_of_hedonist_revolution = {
+			picture = GFX_idea_NOD_home_of_hedonist_revolution
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			modifier = {
+			  stability_factor = 0.08
+			  political_power_gain = 0.10
+			  factory_output = 0.05
+			  industrial_complex_construction_speed_factor = 0.10
+			  consumer_goods_factor = 0.08
+			  war_support_factor = -0.12
+			  conscription_factor = -0.05
+			  army_org_regain = -0.05
+			}
+		}
+	}
+}

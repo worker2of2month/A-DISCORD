@@ -14,7 +14,7 @@ state={
 		buildings = {
 			infrastructure = 1
 			hidden_dam = 1
-			16438 = { dam = 1 }
+			16436 = { dam = 1 }
 		}
 		add_core_of = VAL
 		add_claim_by = STP
