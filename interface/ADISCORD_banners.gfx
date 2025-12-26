@@ -1,0 +1,10 @@
+spriteTypes = {
+
+###WRK
+ #ideas
+ 	spriteType = {
+		name = "GFX_VAL_harvest_of_ash_banner"
+		texturefile = "gfx/texticons/adiscord/banners/VAL_harvest_of_ash_banner.png"
+		legacy_lazy_load = no
+	}
+}

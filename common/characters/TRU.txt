@@ -13,7 +13,7 @@ characters = {
 		name = TRU_Nikita_Truman
 		portraits = {
 			civilian = {
-				large = GFX_portrait_PLACEHOLDER
+				large = GFX_portrait_TRU_Nikita_Truman
 			}
 		}
 		country_leader = {

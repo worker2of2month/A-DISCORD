@@ -60,6 +60,10 @@ spriteTypes = {
 	  	name = "GFX_idea_VAL_worldwide_famous_weponry"
 	  	texturefile = "gfx/interface/ideas/VAL/idea_VAL_worldwide_famous_weponry.png"
 	}
+	spriteType = {
+	  	name = "GFX_idea_VAL_harvest_of_ash"
+	  	texturefile = "gfx/interface/ideas/VAL/idea_VAL_harvest_of_ash.png"
+	}
 ###WRK
  #ideas
  	spriteType = {

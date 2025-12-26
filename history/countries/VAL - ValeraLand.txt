@@ -22,6 +22,7 @@ set_popularities = {
 add_ideas = {
 	VAL_mercenary_state
 	VAL_worldwide_famous_weponry
+	VAL_harvest_of_ash
 }
 
 set_convoys = 300

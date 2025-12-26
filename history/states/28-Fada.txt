@@ -12,6 +12,7 @@ state={
 		buildings = {
 			infrastructure = 4
 			arms_factory = 3
+			hidden_dam = 1
 			industrial_complex  = 2
 
 			16368 = {
@@ -22,6 +23,7 @@ state={
         		coastal_bunker = 1
         		naval_base = 5
    			}
+   			145 = { dam = 1 }
 		}
 		add_core_of = STP
 
@@ -33,6 +35,8 @@ state={
 		victory_points = { 16386 10 }
 
 	}
+	resources = {
+    }
 	state_category = large_city
 	local_supplies=12.0 
 }

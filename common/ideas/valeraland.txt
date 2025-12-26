@@ -5,6 +5,7 @@ ideas = {
 	country = {
 
 		VAL_mercenary_state = {
+			picture = GFX_idea_VAL_mercenary_state
 
 			allowed = {
 				always = no
@@ -15,8 +16,6 @@ ideas = {
 			}
 
 			removal_cost = -1
-
-			picture = GFX_idea_VAL_mercenary_state
 
 			modifier = {
 				send_volunteer_size = 10
@@ -33,11 +32,8 @@ ideas = {
 				consumer_goods_factor = -0.1
 			}
 		}
-	}
-
-	country = {
-
 		VAL_worldwide_famous_weponry = {
+			picture = GFX_idea_VAL_worldwide_famous_weponry
 
 			allowed = {
 				always = no
@@ -49,13 +45,32 @@ ideas = {
 
 			removal_cost = -1
 
-			picture = GFX_idea_VAL_worldwide_famous_weponry
-
 			modifier = {
 				production_lack_of_resource_penalty_factor = -0.7
 				production_factory_max_efficiency_factor = 0.5 
 				production_speed_industrial_complex_factor = -0.5
 				industrial_capacity_factory = 0.3
+			}
+		}
+		VAL_harvest_of_ash = {
+			picture = GFX_idea_VAL_harvest_of_ash
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			modifier = {
+				conscription_factor = -0.15
+      			army_org_regain = -0.10
+      			stability_factor = -0.3
+      			consumer_goods_factor = 0.05
+     		    army_core_defence_factor = -0.05
 			}
 		}
 	}

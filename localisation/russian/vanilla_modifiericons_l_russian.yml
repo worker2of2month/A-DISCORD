@@ -149,6 +149,7 @@
  MODIFIER_AIR_ACCIDENTS_FACTOR:0 "£air_accidents_texticon  Вероятность летных происшествий"
  MODIFIER_LOCAL_ORG_REGAIN:0 "£organization_gain_texticon  Восстановление организации"
  MODIFIER_ARMY_ORG_REGAIN:0 "£organization_gain_texticon  Восстановление организации армии"
+ MODIFIER_LOCAL_FACTORY_ENERGY_CONSUMPTION:0 "£energy_consumption_texticon Энергопотребление местных фабрик"
  occupation_policy_1:0 "Самая мягкая"
  occupation_policy_2:0 "Мягкая"
  occupation_policy_3:0 "Жесткая"
