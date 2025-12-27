@@ -11,6 +11,11 @@ autonomy_state = {
 		can_not_declare_war = yes
 		can_decline_call_to_war = yes
 	}
+
+	allowed_levels_filter = {
+		autonomy_district_in_Vorkerland
+		autonomy_republic_in_Vorkerland
+	}
 	
 	modifier = {
 		autonomy_manpower_share = 0.9

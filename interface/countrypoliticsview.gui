@@ -256,11 +256,6 @@ guiTypes = {
 			position = { x = 170 y = 242 }
 			size = { width = 245 height = 55 }
 			clipping = no
-
-			background = {
-				name = "Background"		
-				quadTextureSprite ="GFX_mini_bg"
-			}
 			
 			instantTextboxType = {
 				name = "current_autonomy_name"
