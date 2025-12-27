@@ -22,6 +22,7 @@ set_popularities = {
 add_ideas = {
 	VAL_mercenary_state
 	VAL_worldwide_famous_weponry
+	VAL_harvest_of_ash
 }
 
 set_convoys = 300
@@ -37,7 +38,7 @@ add_equipment_to_stockpile = {
 }
 add_equipment_to_stockpile = {
 	type = infantry_equipment
-	amount = 15000
+	amount = 55000
 	producer = VAL
 }
 

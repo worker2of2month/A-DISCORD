@@ -87,12 +87,12 @@ spriteTypes = {
 ###ROM
 	spriteType = {
 	  	name = "GFX_portrait_ROM_Erwin_Von_Romanovskiy"
-	  	texturefile = "gfx/leaders/ROM/portrait_ROM_Erwin_Von_Romanovskiy.png"
+	  	texturefile = "gfx/leaders/ROM/portrait_ROM_Erwin_Von_Romanovskiy.png" 
 	}
 ###TRU
 	spriteType = {
 	  	name = "GFX_portrait_TRU_Nikita_Truman"
-	  	texturefile = "gfx/leaders/ROM/portrait_ROM_Erwin_Von_Romanovskiy.png"
+	  	texturefile = "gfx/leaders/TRU/portrait_TRU_Nikita_Truman.png"
 	}
 ###DAN
 	spriteType = {

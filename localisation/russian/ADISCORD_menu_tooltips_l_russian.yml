@@ -3,3 +3,4 @@
   A_DISCORD_menu_tooltip_1: "Мысль летит, а слова идут шагом. В этом вся драма писателя."
   focus_unlock_tooltip: "Это §GРазблокирует§! §YНовые Фокусы§!"
   completed_by_event_tooltip: "Этот фокус разблокируется только по §Yивенту§!"
+  dam_add_energy_tt: "£GFX_energy_consumption_texticon добавляет 10 энергии по дефолту"

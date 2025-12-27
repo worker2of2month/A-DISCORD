@@ -1,6 +1,11 @@
 spriteTypes = {	
 
 	spriteType = {
+		name = "GFX_energy_consumption_texticon"
+		texturefile = "gfx/texticons/energy_consumption_texticon.dds"
+	}
+
+	spriteType = {
 		name = "GFX_no_order_texticon"
 		texturefile = "gfx/interface/mapicons/mapicon_unit_no_orders.dds"
 	}

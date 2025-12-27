@@ -60,6 +60,10 @@ spriteTypes = {
 	  	name = "GFX_idea_VAL_worldwide_famous_weponry"
 	  	texturefile = "gfx/interface/ideas/VAL/idea_VAL_worldwide_famous_weponry.png"
 	}
+	spriteType = {
+	  	name = "GFX_idea_VAL_harvest_of_ash"
+	  	texturefile = "gfx/interface/ideas/VAL/idea_VAL_harvest_of_ash.png"
+	}
 ###WRK
  #ideas
  	spriteType = {
@@ -73,5 +77,11 @@ spriteTypes = {
 	spriteType = {
 	  	name = "GFX_idea_WRK_constitution_of_the_republic"
 	  	texturefile = "gfx/interface/ideas/WRK/idea_WRK_constitution_of_the_republic.png"
+	}
+###NOD
+ #ideas
+ 	spriteType = {
+	  	name = "GFX_idea_NOD_home_of_hedonist_revolution"
+	  	texturefile = "gfx/interface/ideas/NOD/idea_NOD_home_of_hedonist_revolution.png"
 	}
 }

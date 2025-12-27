@@ -28,6 +28,13 @@ set_popularities = {
 	chauvinism = 1
 }
 
+add_ideas = {
+	NOD_home_of_hedonist_revolution
+	STP_hedonism_with_no_bondaries
+	STP_hidden_slaves_trade
+}
+
+
 set_stability = 0.63
 
 set_research_slots = 2
