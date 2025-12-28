@@ -302,13 +302,11 @@ objectTypes = {
 	###default shit from hoi iv###
 	pdxmesh = {
 		name = "ENG_infantry_weapon_rifle_mesh"
-		#file = "gfx/models/units/ENG_weapon_rifle.mesh"
-		file = "gfx/models/units/default_ak47s.mesh"
+		file = "gfx/models/units/ENG_weapon_rifle.mesh"
 	}
 	
 	pdxmesh = {
 		name = "ENG_infantry_weapon_mg_mesh"
-		#file = "gfx/models/units/ENG_infantry_weapon_sten_mg.mesh"
-		file = "gfx/models/units/default_rk95.mesh"
+		file = "gfx/models/units/ENG_infantry_weapon_sten_mg.mesh"
 	}
 }
