@@ -309,4 +309,9 @@ objectTypes = {
 		name = "ENG_infantry_weapon_mg_mesh"
 		file = "gfx/models/units/ENG_infantry_weapon_sten_mg.mesh"
 	}
+
+	pdxmesh = {
+		name = "USA_infantry_weapon_mg_mesh"
+		file = "gfx/models/units/USA_infantry_weapon_mg.mesh"
+	}
 }
