@@ -13,6 +13,12 @@ guiTypes = {
 			pdx_tooltip = "hedonism_ideology_desc"
 		}
 		iconType = {
+			name = "ideology_icon_aristocratic_hedonism"
+			position = { x = 0 y = 0 }
+			spriteType = "GFX_ideology_aristocratic_hedonism_countryview"
+			pdx_tooltip = "hedonism_ideology_desc"
+		}
+		iconType = {
 			name = "ideology_icon_humanism"
 			position = { x = 5 y = -8 }
 			spriteType = "GFX_ideology_humanism_countryview_group"
@@ -157,7 +163,7 @@ guiTypes = {
 			
 			instantTextboxType = {
 				name = "ideology"
-				position = { x = 100 y = 170 }
+				position = { x = -10000 y = 200 }
 				font = "hoi_18mbs"
 				text = "ideology"
 				maxWidth = 155
