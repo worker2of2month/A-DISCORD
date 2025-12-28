@@ -68,13 +68,13 @@
   STP_etatism_party_long: "Партия возрождения"
 
   STP_hedonism_party: "£GFX_STP_hedonist_party_texticon Палата Высших Домов"
-  STP_hedonism_party_long: "Палата Высших Домов и Привилегированных Гильдий Стеланда"
+  STP_hedonism_party_long: "£GFX_STP_hedonist_party_texticon Палата Высших Домов и Привилегированных Гильдий Стеланда"
 
   STP_empire_faction_party: "ИНФ"
   STP_empire_faction_party_long: "Имперский национальный фронт"
   #NOD
   NOD_hedonism_party: "£GFX_STP_hedonist_party_texticon Палата Высших Домов"
-  NOD_hedonism_party_long: "Палата Высших Домов и Привилегированных Гильдий"
+  NOD_hedonism_party_long: "£GFX_STP_hedonist_party_texticon Палата Высших Домов и Привилегированных Гильдий"
   #VAL
   VAL_humanism_party: "Гражданская партия Кефрейта"
   VAL_humanism_party_long: "Гражданская партия Кефрейта"
@@ -95,7 +95,7 @@
   VAL_technocracy_party_long: "Партия науки и управления Кефрейта"
 
   VAL_etatism_party: "£GFX_VAL_etatist_party_texticon Государственная партия Кефрейта"
-  VAL_etatism_party_long: "Государственная партия Кефрейта"
+  VAL_etatism_party_long: "£GFX_VAL_etatist_party_texticon Государственная партия Кефрейта"
 
   VAL_hedonism_party: "Совет домов Кефрейта"
   VAL_hedonism_party_long: "Совет домов и лицензированных гильдий Кефрейта"
