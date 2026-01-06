@@ -1,0 +1,20 @@
+spriteTypes = {	
+	spriteType = {
+		name = "GFX_unknown_party_texticon"
+		texturefile = "gfx/texticons/adiscord/parties/unknown_party.png"
+		legacy_lazy_load = no
+	}
+	##STP
+	spriteType = {
+		name = "GFX_STP_hedonist_party_texticon"
+		texturefile = "gfx/texticons/adiscord/parties/STP/STP_hedonist_party.png"
+		legacy_lazy_load = no
+	}
+	##VAL
+	spriteType = {
+		name = "GFX_VAL_etatist_party_texticon"
+		texturefile = "gfx/texticons/adiscord/parties/VAL/VAL_etatist_party.png"
+		legacy_lazy_load = no
+	}
+
+} 

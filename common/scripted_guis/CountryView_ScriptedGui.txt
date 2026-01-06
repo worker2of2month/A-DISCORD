@@ -19,8 +19,11 @@ scripted_gui = {
             ideology_icon_humanism_visible = {
                 has_government = humanism
             }
+            ideology_icon_aristocratic_hedonism_visible = {
+                has_country_leader_ideology = aristocratic_hedonism
+            }
             ideology_icon_hedonism_visible = {
-                has_government = hedonism
+                has_country_leader_ideology = hedonism_ideology
             }
             ideology_icon_utilitarism_visible = {
                 has_government = utilitarism
