@@ -6,6 +6,8 @@ recruit_character = VAL_Valera_Solgalov
 
 ####### Basic shit
 
+oob = "VAL"
+
 set_politics = {
 	ruling_party = etatism
 	last_election = "1937.12.01"
@@ -44,28 +46,22 @@ add_equipment_to_stockpile = {
 
 ###diplomacy
 
-WRK = 
-{
+WRK = {
 		add_opinion_modifier = { target = VAL modifier = VAL_trading_partners }
 }
-NAM = 
-{
+NAM = {
 		add_opinion_modifier = { target = VAL modifier = VAL_trading_partners }
 }
-IVN = 
-{
+IVN = {
 		add_opinion_modifier = { target = VAL modifier = VAL_trading_partners }
 }
-WIT = 
-{
+WIT = {
 		add_opinion_modifier = { target = VAL modifier = VAL_trading_partners }
 }
-TFF = 
-{
+TFF = {
 		add_opinion_modifier = { target = VAL modifier = VAL_different_views_on_freedom }
 }
-STP = 
-{
+STP = {
 		add_opinion_modifier = { target = VAL modifier = VAL_october_of_2060 }
 }
 

@@ -17,7 +17,7 @@ characters = {
 			}
 		}
 		country_leader = {
-			ideology = hedonism_ideology
+			ideology = aristocratic_hedonism
 			expire = "1965.1.1.1"
 			id = -1
 		}
