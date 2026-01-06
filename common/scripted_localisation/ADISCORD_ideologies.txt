@@ -1,177 +1,54 @@
-# =========================================================
-# Sub-ideology (display) router
-# Call with: [GetSubIdeologyLoc]
-# =========================================================
-
 defined_text = {
 	name = GetSubIdeologyLoc
-	text = {
-		trigger = { has_government = humanism }
-		localization_key = "[GetSubIdeologyHumanism]"
-	}
-	text = {
-		trigger = { has_government = utilitarism }
-		localization_key = "[GetSubIdeologyUtilitarism]"
-	}
-	text = {
-		trigger = { has_government = chauvinism }
-		localization_key = "[GetSubIdeologyChauvinism]"
-	}
-	text = {
-		trigger = { has_government = pragmatism }
-		localization_key = "[GetSubIdeologyPragmatism]"
-	}
-	text = {
-		trigger = { has_government = anarchism }
-		localization_key = "[GetSubIdeologyAnarchism]"
-	}
-	text = {
-		trigger = { has_government = technocracy }
-		localization_key = "[GetSubIdeologyTechnocracy]"
-	}
-	text = {
-		trigger = { has_government = etatism }
-		localization_key = "[GetSubIdeologyEtatism]"
-	}
 	text = {
 		trigger = { has_government = hedonism }
 		localization_key = "[GetSubIdeologyHedonism]"
 	}
 }
 
-# =========================================================
-# Sub-ideology resolvers (place subtypes here)
-# Each one falls back to main ideology loc key.
-# =========================================================
-
-defined_text = {
-	name = GetSubIdeologyHumanism
-	text = { localization_key = humanism_ideology }
-}
-
-defined_text = {
-	name = GetSubIdeologyUtilitarism
-	text = { localization_key = utilitarism_ideology }
-}
-
-defined_text = {
-	name = GetSubIdeologyChauvinism
-	text = { localization_key = chauvinism_ideology }
-}
-
-defined_text = {
-	name = GetSubIdeologyPragmatism
-	text = { localization_key = pragmatism_ideology }
-}
-
-defined_text = {
-	name = GetSubIdeologyAnarchism
-	text = { localization_key = anarchism_ideology }
-}
-
-defined_text = {
-	name = GetSubIdeologyTechnocracy
-	text = { localization_key = technocracy_ideology }
-}
-
-defined_text = {
-	name = GetSubIdeologyEtatism
-	text = { localization_key = etatism_ideology }
-}
-
 defined_text = {
 	name = GetSubIdeologyHedonism
 	text = {
-		trigger = { has_country_leader_ideology = aristocratic_hedonism }  ### сюда добавляй другие сабтипы гедонизма
-		localization_key = aristocratic_hedonism
+		trigger = {
+			has_country_leader_ideology = hedonism_ideology_subtype ###здесь нужно будет размещать субтипы
+		}
+		localization_key = hedonism_subtype
 	}
-	# text = {
-	# 	trigger = { has_country_leader_ideology = neuro_eudaimonism }
-	# 	localization_key = neuro_eudaimonism
-	# }
-	# text = {
-	# 	trigger = { has_country_leader_ideology = corporate_hedonism }
-	# 	localization_key = corporate_hedonism
-	# }
-	text = { localization_key = hedonism_ideology }
+	text = {
+		localization_key = hedonism
+	}
 }
-
-# =========================================================
-# Ruling party (display) router
-# Call with: [GetRullingPartyLoc]
-# =========================================================
 
 defined_text = {
 	name = GetRullingPartyLoc
+	text = {
+		trigger = { has_government = hedonism }
+		localization_key = "[GetPartyLocHedonism]"
+	}
 	text = {
 		trigger = { has_government = humanism }
 		localization_key = "[GetPartyLocHumanism]"
 	}
 	text = {
-		trigger = { has_government = utilitarism }
-		localization_key = "[GetPartyLocUtilitarism]"
-	}
-	text = {
-		trigger = { has_government = chauvinism }
-		localization_key = "[GetPartyLocChauvinism]"
+		trigger = { has_government = technocracy }
+		localization_key = "[GetPartyLocHedonism]"
 	}
 	text = {
 		trigger = { has_government = pragmatism }
-		localization_key = "[GetPartyLocPragmatism]"
-	}
-	text = {
-		trigger = { has_government = anarchism }
-		localization_key = "[GetPartyLocAnarchism]"
-	}
-	text = {
-		trigger = { has_government = technocracy }
-		localization_key = "[GetPartyLocTechnocracy]"
-	}
-	text = {
-		trigger = { has_government = etatism }
-		localization_key = "[GetPartyLocEtatism]"
-	}
-	text = {
-		trigger = { has_government = hedonism }
 		localization_key = "[GetPartyLocHedonism]"
 	}
 }
 
-# =========================================================
-# Party key resolvers (dynamic tag-based keys)
-# Make sure you have these loc keys defined per tag:
-# TAG_humanism_party, TAG_utilitarism_party, ...
-# =========================================================
+defined_text = {
+	name = GetPartyLocHedonism
+	text = {
+		localization_key = [ROOT.GetTag]_hedonism_party
+	}
+}
 
 defined_text = {
 	name = GetPartyLocHumanism
-	text = { localization_key = "[ROOT.GetTag]_humanism_party" }
-}
-defined_text = {
-	name = GetPartyLocUtilitarism
-	text = { localization_key = "[ROOT.GetTag]_utilitarism_party" }
-}
-defined_text = {
-	name = GetPartyLocChauvinism
-	text = { localization_key = "[ROOT.GetTag]_chauvinism_party" }
-}
-defined_text = {
-	name = GetPartyLocPragmatism
-	text = { localization_key = "[ROOT.GetTag]_pragmatism_party" }
-}
-defined_text = {
-	name = GetPartyLocAnarchism
-	text = { localization_key = "[ROOT.GetTag]_anarchism_party" }
-}
-defined_text = {
-	name = GetPartyLocTechnocracy
-	text = { localization_key = "[ROOT.GetTag]_technocracy_party" }
-}
-defined_text = {
-	name = GetPartyLocEtatism
-	text = { localization_key = "[ROOT.GetTag]_etatism_party" }
-}
-defined_text = {
-	name = GetPartyLocHedonism
-	text = { localization_key = "[ROOT.GetTag]_hedonism_party" }
+	text = {
+		localization_key = [ROOT.GetTag]_humanism_party
+	}
 }

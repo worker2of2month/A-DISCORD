@@ -57,14 +57,6 @@ spriteTypes = {
         }
 	}
 	corneredTileSpriteType = {
-		name = "GFX_ideology_aristocratic_hedonism"
-		texturefile = "gfx/interface/ideologies/aristocratic_hedonism_group.png"
-		size = {
-            x = 70 
-            y = 70
-        }
-	}
-	corneredTileSpriteType = {
 		name = "GFX_ideology_hedonism_group"
 		texturefile = "gfx/interface/ideologies/hedonism_group.dds"
 		size = {
@@ -77,14 +69,6 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideologies/hedonism_group.dds"
 		size = {
             x = 125
-            y = 125
-        }
-	}
-	corneredTileSpriteType = {
-		name = "GFX_ideology_aristocratic_hedonism_countryview"
-		texturefile = "gfx/interface/ideologies/aristocratic_hedonism_group.png"
-		size = {
-            x = 125 
             y = 125
         }
 	}

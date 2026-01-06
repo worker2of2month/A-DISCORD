@@ -4,7 +4,6 @@ tags={
 }
 name="A-Discord"
 supported_version="1.15.2"
-replace_path="gfx/loadingscreens"
 replace_path="events"
 replace_path="history/states"
 replace_path="history/countries"

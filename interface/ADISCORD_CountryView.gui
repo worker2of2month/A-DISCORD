@@ -9,18 +9,10 @@ guiTypes = {
 			clipping = no
 					
 			instantTextboxType = {
-				name = "party"
-				position = { x = 100 y = 152 }
-				font = "hoi_16mbs"
-				text = [GetRullingPartyLoc]
-				maxWidth = 155
-				maxHeight = 20
-			}
-			instantTextboxType = {
 				name = "ideology"
-				position = { x = 100 y = 190 }
-				font = "hoi_16mbs"
-				text = "[GetSubIdeologyLoc]"
+				position = { x = 100 y = 150 }
+				font = "hoi_18mbs"
+				text = [GetRullingPartyLoc]
 				maxWidth = 155
 				maxHeight = 20
 			}
