@@ -13,7 +13,7 @@ characters = {
 		name = EFL_Dextung
 		portraits = {
 			civilian = {
-				large = GFX_portrait_PLACEHOLDER
+				large = GFX_portrait_EFL_Dextung
 			}
 		}
 		country_leader = {

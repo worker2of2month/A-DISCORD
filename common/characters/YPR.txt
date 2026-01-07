@@ -13,7 +13,7 @@ characters = {
 		name = YPR_The_Ruling_Council
 		portraits = {
 			civilian = {
-				large = GFX_portrait_PLACEHOLDER
+				large = GFX_portrait_YPR_The_Ruling_Council
 			}
 		}
 		country_leader = {

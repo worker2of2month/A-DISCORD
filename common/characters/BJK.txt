@@ -13,7 +13,7 @@ characters = {
 		name = BJK_Graison
 		portraits = {
 			civilian = {
-				large = GFX_portrait_PLACEHOLDER
+				large = GFX_portrait_BJK_Graison
 			}
 		}
 		country_leader = {

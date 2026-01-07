@@ -38,3 +38,10 @@ add_ideas = {
 set_stability = 0.63
 
 set_research_slots = 2
+
+####### Diplomacy
+
+set_autonomy = {
+	target = STP
+	autonomous_state = autonomy_shadow_state
+}

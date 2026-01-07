@@ -114,6 +114,27 @@ spriteTypes = {
 	  	name = "GFX_portrait_BTL_Paul_Dorini"
 	  	texturefile = "gfx/leaders/BTL/portrait_BTL_Paul_Dorin.png"
 	}
+###YPR
+	spriteType = {
+	  	name = "GFX_portrait_YPR_The_Ruling_Council"
+	  	texturefile = "gfx/leaders/YPR/portrait_YPR_rulling_parlament.png"
+	}
+###EFL
+	spriteType = {
+	  	name = "GFX_portrait_EFL_Dextung"
+	  	texturefile = "gfx/leaders/EFL/portrait_EFL_Dextung.png"
+	}
+###TFF
+	spriteType = {
+	  	name = "GFX_portrait_TFF_absent_government"
+	  	texturefile = "gfx/leaders/TFF/portrait_TFF_absent_government.png"
+	}
+###BJK
+	spriteType = {
+	  	name = "GFX_portrait_BJK_Graison"
+	  	texturefile = "gfx/leaders/BJK/portrait_BJK_Graison.png"
+	}
+
 ###PLACEHOLDER or default shit
 	spriteType = {
 	  	name = "GFX_portrait_PLACEHOLDER"

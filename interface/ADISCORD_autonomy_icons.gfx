@@ -1,0 +1,32 @@
+spriteTypes = {
+
+	spriteType = {
+		name = "GFX_autonomy_district_in_Vorkerland_icon"
+		textureFile = "gfx/interface/autonomy/autonomy_district_in_Vorkerland_icon.dds"
+	}
+
+	spriteType = {
+		name = "GFX_autonomy_republic_in_Vorkerland_icon"
+		textureFile = "gfx/interface/autonomy/autonomy_republic_in_Vorkerland_icon.dds"
+	}
+
+	spriteType = {
+		name = "GFX_autonomy_shadow_state_icon"
+		textureFile = "gfx/interface/autonomy/autonomy_shadow_state_icon.png"
+	}
+
+	spriteType = {
+		name = "GFX_autonomy_feodal_ducatus_icon"
+		textureFile = "gfx/interface/autonomy/autonomy_feodal_baronage_icon.png"
+	}
+
+	spriteType = {
+		name = "GFX_autonomy_feodal_comitatus_icon"
+		textureFile = "gfx/interface/autonomy/autonomy_feodal_baronage_icon.png"
+	}
+
+	spriteType = {
+		name = "GFX_autonomy_feodal_baronage_icon"
+		textureFile = "gfx/interface/autonomy/autonomy_feodal_baronage_icon.png"
+	}
+} 

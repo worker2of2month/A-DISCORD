@@ -4,7 +4,7 @@ autonomy_state = {
 	default = no
 	is_puppet = yes
 	
-	min_freedom_level = 0.20
+	min_freedom_level = 0.80
 
 	use_overlord_color = yes
 	
@@ -30,7 +30,6 @@ autonomy_state = {
 	}
 
 	allowed_levels_filter = {
-		autonomy_integrated_puppet
 		autonomy_puppet
 		autonomy_feodal_comitatus
 		autonomy_feodal_ducatus
