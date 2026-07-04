@@ -1,5 +1,5 @@
 adjacency_rule = {
-	name = "STRUGENT_CANAL"
+	name = "strugent_canal"
 
 	contested =
 	{

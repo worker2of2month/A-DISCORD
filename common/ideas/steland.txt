@@ -102,6 +102,7 @@ ideas = {
 			name = minister_STP_Ernest_Derlich
 			default = no
 			cost = 75
+			picture = minister_STP_Ernest_Derlich
 			allowed = {
 				tag = STP
 			}
@@ -111,7 +112,7 @@ ideas = {
 			allowed_to_remove = {
 			}
 			traits = {
-				hos_minister_master_of_Destinies
+				minister_trait_STP_hos_master_of_destinies
 			}
 		}
 	}

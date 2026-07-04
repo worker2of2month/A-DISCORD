@@ -1,0 +1,403 @@
+focus_tree = {
+	id = VAL_focus
+	country = {
+		factor = 0
+		modifier = {
+			add = 20
+			original_tag = VAL
+		}
+	}
+
+#############################################
+### VAL: KEFREITE CONTRACT STATE
+### Placeholder structural tree: no gameplay effects, events, flags, or balance payloads yet.
+###
+### Lore base:
+### - Kefreite state power is built around contracts, arms factories, and mercenary discipline.
+### - The country is rich in weapons and poor in living land.
+### - Solgalov's rule rests on brokers, captains, field surgeons, ballistics schools, and contract spies.
+### - Foreign policy follows market access, arms exports, and the memory of October 2160.
+#############################################
+
+#############################################
+### CENTRAL SPINE: THE CONTRACT THRONE
+#############################################
+
+	focus = {
+		id = VAL_The_Contract_State
+		icon = GFX_goal_generic_political_pressure
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 0
+		y = 0
+		cost = 5
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = VAL_The_Weaponry_Baron
+		icon = GFX_goal_generic_political_pressure
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = VAL_The_Contract_State
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_The_Contract_State }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = VAL_Price_Of_Loyalty
+		icon = GFX_goal_generic_demand_territory
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = VAL_The_Weaponry_Baron
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_The_Weaponry_Baron }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = VAL_Count_The_Captains
+		icon = GFX_goal_generic_allies_build_infantry
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY }
+		relative_position_id = VAL_Price_Of_Loyalty
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_Price_Of_Loyalty }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = VAL_One_Ledger_One_Banner
+		icon = GFX_goal_generic_national_unity
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = VAL_Count_The_Captains
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_Count_The_Captains }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+#############################################
+### WEST: THE ARSENAL CATHEDRALS
+#############################################
+
+	focus = {
+		id = VAL_Factories_Like_Cathedrals
+		icon = GFX_goal_generic_construct_mil_factory
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		relative_position_id = VAL_The_Contract_State
+		x = -4
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_The_Contract_State }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = VAL_Keep_The_Lines_Hot
+		icon = GFX_goal_generic_production
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		relative_position_id = VAL_Factories_Like_Cathedrals
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_Factories_Like_Cathedrals }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = VAL_Ballistics_Schools
+		icon = GFX_goal_generic_scientific_exchange
+		search_filters = { FOCUS_FILTER_RESEARCH FOCUS_FILTER_INDUSTRY }
+		relative_position_id = VAL_Keep_The_Lines_Hot
+		x = -1
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_Keep_The_Lines_Hot }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = VAL_Brokered_Steel
+		icon = GFX_goal_generic_trade
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		relative_position_id = VAL_Keep_The_Lines_Hot
+		x = 1
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_Keep_The_Lines_Hot }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = VAL_Export_Rifles_Not_Promises
+		icon = GFX_goal_generic_production2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		relative_position_id = VAL_Keep_The_Lines_Hot
+		x = 0
+		y = 2
+		cost = 5
+		prerequisite = { focus = VAL_Ballistics_Schools }
+		prerequisite = { focus = VAL_Brokered_Steel }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+#############################################
+### EAST: THE MERCENARY LEDGER
+#############################################
+
+	focus = {
+		id = VAL_The_Mercenary_State
+		icon = GFX_goal_generic_military_sphere
+		search_filters = { FOCUS_FILTER_ARMY }
+		relative_position_id = VAL_The_Contract_State
+		x = 4
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_The_Contract_State }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = VAL_Hire_Out_War
+		icon = GFX_goal_generic_more_territorial_claims
+		search_filters = { FOCUS_FILTER_ARMY }
+		relative_position_id = VAL_The_Mercenary_State
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_The_Mercenary_State }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = VAL_Vorons_Companies
+		icon = GFX_goal_generic_special_forces
+		search_filters = { FOCUS_FILTER_ARMY }
+		relative_position_id = VAL_Hire_Out_War
+		x = -2
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_Hire_Out_War }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = VAL_Stahls_Schedules
+		icon = GFX_goal_generic_army_doctrines
+		search_filters = { FOCUS_FILTER_ARMY }
+		relative_position_id = VAL_Hire_Out_War
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_Hire_Out_War }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = VAL_Gromovs_Assault_Tables
+		icon = GFX_goal_generic_attack_allies
+		search_filters = { FOCUS_FILTER_ARMY }
+		relative_position_id = VAL_Hire_Out_War
+		x = 2
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_Hire_Out_War }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = VAL_Morns_Supply_Trains
+		icon = GFX_goal_generic_construct_infrastructure
+		search_filters = { FOCUS_FILTER_ARMY FOCUS_FILTER_INDUSTRY }
+		relative_position_id = VAL_Stahls_Schedules
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_Vorons_Companies }
+		prerequisite = { focus = VAL_Stahls_Schedules }
+		prerequisite = { focus = VAL_Gromovs_Assault_Tables }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+#############################################
+### SOUTH: THE HARVEST OF ASH
+#############################################
+
+	focus = {
+		id = VAL_The_Harvest_Of_Ash
+		icon = GFX_goal_generic_consumer_goods
+		search_filters = { FOCUS_FILTER_STABILITY }
+		relative_position_id = VAL_One_Ledger_One_Banner
+		x = -2
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_One_Ledger_One_Banner }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = VAL_Field_Surgeons
+		icon = GFX_goal_generic_national_unity
+		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_ARMY }
+		relative_position_id = VAL_The_Harvest_Of_Ash
+		x = -1
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_The_Harvest_Of_Ash }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = VAL_Bread_From_Barracks
+		icon = GFX_goal_generic_construct_civ_factory
+		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_INDUSTRY }
+		relative_position_id = VAL_The_Harvest_Of_Ash
+		x = 1
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_The_Harvest_Of_Ash }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = VAL_Dead_Villages_Still_Count
+		icon = GFX_goal_generic_national_unity
+		search_filters = { FOCUS_FILTER_STABILITY }
+		relative_position_id = VAL_The_Harvest_Of_Ash
+		x = 0
+		y = 2
+		cost = 5
+		prerequisite = { focus = VAL_Field_Surgeons }
+		prerequisite = { focus = VAL_Bread_From_Barracks }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+#############################################
+### NORTH: MARKETS AND FOREIGN HANDS
+#############################################
+
+	focus = {
+		id = VAL_Market_Roads_North
+		icon = GFX_goal_generic_trade
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		relative_position_id = VAL_One_Ledger_One_Banner
+		x = 2
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_One_Ledger_One_Banner }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = VAL_Trading_Partners
+		icon = GFX_goal_generic_positive_trade_relations
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		relative_position_id = VAL_Market_Roads_North
+		x = -1
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_Market_Roads_North }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = VAL_October_Of_2160
+		icon = GFX_goal_generic_dangerous_deal
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = VAL_Market_Roads_North
+		x = 1
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_Market_Roads_North }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = VAL_Different_Views_On_Freedom
+		icon = GFX_goal_generic_propaganda
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = VAL_Market_Roads_North
+		x = 0
+		y = 2
+		cost = 5
+		prerequisite = { focus = VAL_Trading_Partners }
+		prerequisite = { focus = VAL_October_Of_2160 }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+#############################################
+### FINAL PLACEHOLDER JOIN
+#############################################
+
+	focus = {
+		id = VAL_Contracts_Outlive_Kings
+		icon = GFX_goal_generic_major_war
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = VAL_One_Ledger_One_Banner
+		x = 0
+		y = 5
+		cost = 5
+		prerequisite = { focus = VAL_Export_Rifles_Not_Promises }
+		prerequisite = { focus = VAL_Morns_Supply_Trains }
+		prerequisite = { focus = VAL_Dead_Villages_Still_Count }
+		prerequisite = { focus = VAL_Different_Views_On_Freedom }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+}

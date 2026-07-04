@@ -1,0 +1,2 @@
+# Intentionally empty for A-Discord total conversion.
+# Vanilla country groups reference tags that do not exist in this world.

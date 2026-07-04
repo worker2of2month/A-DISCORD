@@ -142,7 +142,7 @@ civil_war_anti_exploiter_punitive_action = {
 		division_template = {
 			name = "Anti-Exploit Punitive Brigade"
 			priority = 1
-			division_names_group = ENG_MAR_01
+			division_names_group = ADISCORD_INF_01
 			is_locked = yes
 			regiments = {
 				infantry = { x = 0 y = 0 }
@@ -297,20 +297,36 @@ clear_sabotaged_resources_if_necesary = {
 
 remove_from_allowed_party = {
 	if = {
-		limit = { has_government = democratic }
-		set_temp_variable = { allowed_party_democratic = 0 }
+		limit = { has_government = humanism }
+		set_temp_variable = { allowed_party_humanism = 0 }
 	}
 	else_if = {
-		limit = { has_government = fascism }
-		set_temp_variable = { allowed_party_fascism = 0 }
+		limit = { has_government = utilitarism }
+		set_temp_variable = { allowed_party_utilitarism = 0 }
 	}
 	else_if = {
-		limit = { has_government = communism }
-		set_temp_variable = { allowed_party_communism = 0 }
+		limit = { has_government = chauvinism }
+		set_temp_variable = { allowed_party_chauvinism = 0 }
 	}
 	else_if = {
-		limit = { has_government = neutrality }
-		set_temp_variable = { allowed_party_neutrality = 0 }
+		limit = { has_government = pragmatism }
+		set_temp_variable = { allowed_party_pragmatism = 0 }
+	}
+	else_if = {
+		limit = { has_government = anarchism }
+		set_temp_variable = { allowed_party_anarchism = 0 }
+	}
+	else_if = {
+		limit = { has_government = technocracy }
+		set_temp_variable = { allowed_party_technocracy = 0 }
+	}
+	else_if = {
+		limit = { has_government = etatism }
+		set_temp_variable = { allowed_party_etatism = 0 }
+	}
+	else_if = {
+		limit = { has_government = hedonism }
+		set_temp_variable = { allowed_party_hedonism = 0 }
 	}
 }
 
@@ -404,171 +420,6 @@ gain_random_agency_upgrade = { #Gives a random agency upgrade or grants a free a
 				has_intelligence_agency = no
 			}
 			create_intelligence_agency = yes
-		}
-		else = {
-			random_list = {
-				1 = {
-					upgrade_intelligence_agency = upgrade_economy_civilian
-					modifier = {
-						factor = 0
-						has_done_agency_upgrade = upgrade_economy_civilian
-					}
-				}
-				1 = {
-					upgrade_intelligence_agency = upgrade_army_department
-					modifier = {
-						factor = 0
-						has_done_agency_upgrade = upgrade_army_department
-					}
-				}
-				1 = {
-					upgrade_intelligence_agency = upgrade_naval_department
-					modifier = {
-						factor = 0
-						has_done_agency_upgrade = upgrade_naval_department
-					}
-				}
-				1 = {
-					upgrade_intelligence_agency = upgrade_airforce_department
-					modifier = {
-						factor = 0
-						has_done_agency_upgrade = upgrade_airforce_department
-					}
-				}
-				1 = {
-					upgrade_intelligence_agency = upgrade_passive_defense
-					modifier = {
-						factor = 0
-						has_done_agency_upgrade = upgrade_passive_defense
-					}
-				}
-				1 = {
-					upgrade_intelligence_agency = upgrade_anti_partisan
-					modifier = {
-						factor = 0
-						has_done_agency_upgrade = upgrade_anti_partisan
-					}
-				}
-				1 = {
-					upgrade_intelligence_agency = upgrade_blueprint_stealing
-					modifier = {
-						factor = 0
-						has_done_agency_upgrade = upgrade_blueprint_stealing
-					}
-				}
-				1 = {
-					upgrade_intelligence_agency = upgrade_portable_radios
-					modifier = {
-						factor = 0
-						has_done_agency_upgrade = upgrade_portable_radios
-					}
-				}
-				1 = {
-					upgrade_intelligence_agency = upgrade_invisible_ink
-					modifier = {
-						factor = 0
-						has_done_agency_upgrade = upgrade_invisible_ink
-					}
-				}
-				1 = {
-					upgrade_intelligence_agency = upgrade_plastic_explosives
-					modifier = {
-						factor = 0
-						has_done_agency_upgrade = upgrade_plastic_explosives
-					}
-				}
-				1 = {
-					upgrade_intelligence_agency = upgrade_suicide_pills
-					modifier = {
-						factor = 0
-						has_done_agency_upgrade = upgrade_suicide_pills
-					}
-				}
-				1 = {
-					upgrade_intelligence_agency = upgrade_training_centers
-					modifier = {
-						factor = 0
-						has_done_agency_upgrade = upgrade_training_centers
-					}
-				}
-				1 = {
-					upgrade_intelligence_agency = upgrade_commando_training
-					modifier = {
-						factor = 0
-						has_done_agency_upgrade = upgrade_commando_training
-					}
-				}
-				1 = {
-					upgrade_intelligence_agency = upgrade_interrogation_techniques
-					modifier = {
-						factor = 0
-						has_done_agency_upgrade = upgrade_interrogation_techniques
-					}
-				}
-				1 = {
-					upgrade_intelligence_agency = upgrade_diplo_training
-					modifier = {
-						factor = 0
-						has_done_agency_upgrade = upgrade_diplo_training
-					}
-				}
-				1 = {
-					upgrade_intelligence_agency = upgrade_psycho_warfare
-					modifier = {
-						factor = 0
-						has_done_agency_upgrade = upgrade_psycho_warfare
-					}
-				}
-				1 = {
-					upgrade_intelligence_agency = upgrade_form_department
-					modifier = {
-						factor = 0
-						has_done_agency_upgrade = upgrade_form_department
-					}
-				}
-				1 = {
-					upgrade_intelligence_agency = upgrade_decryption_boost
-					modifier = {
-						factor = 0
-						OR = {
-							has_done_agency_upgrade = upgrade_decryption_boost
-							NOT = { has_done_agency_upgrade = upgrade_form_department }
-						}
-					}
-				}
-				1 = {
-					upgrade_intelligence_agency = upgrade_decryption_boost_2
-					modifier = {
-						factor = 0
-						OR = {
-							has_done_agency_upgrade = upgrade_decryption_boost_2
-							NOT = { has_done_agency_upgrade = upgrade_form_department }
-							NOT = { has_done_agency_upgrade = upgrade_decryption_boost }
-						}
-					}
-				}
-				1 = {
-					upgrade_intelligence_agency = upgrade_crypto_strength
-					modifier = {
-						factor = 0
-						OR = {
-							has_done_agency_upgrade = upgrade_crypto_strength
-							NOT = { has_done_agency_upgrade = upgrade_form_department }
-						}
-					}
-				}
-				1 = {
-					upgrade_intelligence_agency = upgrade_crypto_strength_2
-					modifier = {
-						factor = 0
-						OR = {
-							has_done_agency_upgrade = upgrade_crypto_strength_2
-							NOT = { has_done_agency_upgrade = upgrade_form_department }
-							NOT = { has_done_agency_upgrade = upgrade_crypto_strength }
-						}
-					}
-				}
-			}
 		}
 	}
 }
@@ -863,7 +714,7 @@ SF_PARA_sabotage_effect = { #When changing this, update the research tooltip
 
 SF_PARA_combat_effect = { #When changing this, update the research tooltip
 	every_state_division = {
-		limit = { 
+		limit = {
 			OWNER = { has_war_with = FROM }
 		}
 		set_unit_organization = 0.50
@@ -910,13 +761,13 @@ SF_marine_demoliton_effect = { #When changing this, update the research tooltip
 ###########################################################################################
 ###########################################################################################
 
-							########    ###       ###    ######## 
-							   ##      ## ##     ## ##      ##    
-							   ##     ##   ##   ##   ##     ##    
-							   ##    ##     ## ##     ##    ##    
-							   ##    ######### #########    ##    
-							   ##    ##     ## ##     ##    ##    
-							   ##    ##     ## ##     ##    ##    
+							########    ###       ###    ########
+							   ##      ## ##     ## ##      ##
+							   ##     ##   ##   ##   ##     ##
+							   ##    ##     ## ##     ##    ##
+							   ##    ######### #########    ##
+							   ##    ##     ## ##     ##    ##
+							   ##    ##     ## ##     ##    ##
 
 ###########################################################################################
 ###########################################################################################
@@ -929,11 +780,11 @@ SF_marine_demoliton_effect = { #When changing this, update the research tooltip
 #		var = platonic_local_dangerous_fascist
 #		scorer = local_fascist_country
 #	}
-}#
+#}
 
 
-# The idea is that you can use these effects to store the party popularities (and, if desired, the ruling party) when puppeting or possibly when starting civil wars, and then use the "restore" effects to reset it after the puppeting has happened, so that you 
-#don't have to use the overlord's ideology if you don't want to. 
+# The idea is that you can use these effects to store the party popularities (and, if desired, the ruling party) when puppeting or possibly when starting civil wars, and then use the "restore" effects to reset it after the puppeting has happened, so that you
+#don't have to use the overlord's ideology if you don't want to.
 
 #get_current_ideology_popularities = {
 #	set_variable = { ROOT.communist_support_before_change = ROOT.party_popularity_100@communism }
@@ -946,7 +797,7 @@ SF_marine_demoliton_effect = { #When changing this, update the research tooltip
 #}
 #restore_ideology_popularities = {
 #	hidden_effect = {
-#		# Reset popluarities to what they were before puppeting 
+#		# Reset popluarities to what they were before puppeting
 #		set_popularities = {
 #			communism = ROOT.communist_support_before_change
 #			democratic = ROOT.democratic_support_before_change
@@ -1051,7 +902,7 @@ increase_state_category = {
 	else_if = {
 		limit = {
 			has_state_category = metropolis
-		} 
+		}
 		set_state_category = megalopolis
 		effect_tooltip = {
 			add_extra_state_shared_building_slots = 2

@@ -46,13 +46,9 @@ spriteTypes = {
 	  	name = "GFX_portrait_STP_Petr_Ivanov"
 	  	texturefile = "gfx/leaders/STP/portrait_STP_Petr_Ivanov.png"
 	}
-	frameAnimatedSpriteType  = {
+	spriteType = {
 	  	name = "GFX_portrait_STP_Petr_Ivanov_animated"
-	  	texturefile = "gfx/leaders/STP/portrait_STP_Petr_Ivanov_death_animated.png"
-	  	noOfFrames = 102
-        animation_rate_fps = 30
-        looping = yes
-        play_on_show = yes
+	  	texturefile = "gfx/leaders/STP/portrait_STP_Petr_Ivanov.png"
 	}
 ###IVN
 	spriteType = {
@@ -63,6 +59,22 @@ spriteTypes = {
 	spriteType = {
 	  	name = "GFX_portrait_VAL_Valera_Solgalov"
 	  	texturefile = "gfx/leaders/VAL/portrait_VAL_Valera_Solgalov.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_VAL_Kirill_Voron"
+	  	texturefile = "gfx/leaders/VAL/portrait_VAL_Kirill_Voron.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_VAL_Erika_Stahl"
+	  	texturefile = "gfx/leaders/VAL/portrait_VAL_Erika_Stahl.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_VAL_Boris_Gromov"
+	  	texturefile = "gfx/leaders/VAL/portrait_VAL_Boris_Gromov.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_VAL_Renata_Morn"
+	  	texturefile = "gfx/leaders/VAL/portrait_VAL_Renata_Morn.png"
 	}
 ###WIT
 	spriteType = {

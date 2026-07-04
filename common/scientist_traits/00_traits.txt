@@ -1,0 +1,1 @@
+# A-Discord total-conversion override: vanilla scientist traits require disabled special project tags.

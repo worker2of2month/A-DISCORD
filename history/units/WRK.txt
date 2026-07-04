@@ -1,6 +1,6 @@
-﻿division_template = {
-	name = "División de Infanteria"	
-	division_names_group = SPAN_INF_01
+division_template = {
+	name = "Division de Infanteria"
+	division_names_group = WRK_INF_01
 
 	regiments = {
 		infantry = { x = 0 y = 0 }
@@ -12,8 +12,8 @@
 	}
 }
 division_template = {
-	name = "División de Caballería"  
-	division_names_group = SPAN_CAV_01
+	name = "Division de Caballeria"
+	division_names_group = WRK_CAV_01
 
 	regiments = {
 		cavalry = { x = 0 y = 0 }
@@ -24,22 +24,22 @@ division_template = {
 }
 
 units = {
-	##### Alto Mando de Venezuela #####
-	division= {	# "1a División 'Eduardo Blanco'"
+	##### Workerland High Command #####
+	division= {	# "1st Workerland Infantry"
 		division_name = {
 				is_name_ordered = yes
 				name_order = 1
 		}
-		location = 6713 # Caracas
-		division_template = "División de Infanteria"
+		location = 6713
+		division_template = "Division de Infanteria"
 		start_experience_factor = 0.1
 		start_equipment_factor = 0.3
 
 	}
-	division= {	
-		name = "Los Caballos de Venezuela"
-		location = 6713 # Caracas
-		division_template = "División de Caballería"
+	division= {
+		name = "Workerland Cavalry Detachment"
+		location = 6713
+		division_template = "Division de Caballeria"
 		start_experience_factor = 0.1
 		start_equipment_factor = 0.3
 
@@ -54,7 +54,7 @@ instant_effect = {
 	add_equipment_production = {
 		equipment = {
 			type = infantry_equipment_0
-			creator = "VEN"
+			creator = "WRK"
 		}
 		requested_factories = 1
 		progress = 0.89

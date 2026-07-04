@@ -38,7 +38,7 @@ spriteTypes = {
 	  	texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_It_Has_Only_Begun.png"
 	}
 	spriteType = {
-	  	name = "GFX_focus_STP_Open_Their_Eyes"
+	  	name = "GFX_focus_STP_Open_Their_Eyes" 
 	  	texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Open_Their_Eyes.png"
 	}
 

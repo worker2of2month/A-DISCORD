@@ -2,9 +2,11 @@ state={
 	id=93
 	name="STATE_93"
 	provinces={
-		1296 3729 4706 4858 6245 8611 
+		1296 3729 4706 4858 6245 8611
 	}
 	manpower=0
+
+	state_category = wasteland
 	buildings_max_level_factor=1.000
 	local_supplies=0.000
 	history = {

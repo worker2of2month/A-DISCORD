@@ -20,7 +20,7 @@ operative_mission_no_mission_scorer = {
 		#target_array = global.majors
 		#target_array = global.countries
 		#target_array = neighbors
-		targets = { "GER" }
+		targets = { }
 
 		# the country initiating the mission has to pass this trigger
 		target_root_trigger = { always = no }
@@ -35,7 +35,7 @@ operative_mission_no_mission_scorer = {
 			base = 100
 			modifier = {
 				has_capitulated = yes
-				factor = 0 
+				factor = 0
 			}
 		}
 	}
@@ -52,7 +52,7 @@ operative_mission_build_intel_network_scorer = {
 			base = 100
 			modifier = {
 				has_capitulated = yes
-				factor = 0 
+				factor = 0
 			}
 			modifier = {
 				has_wargoal_against = FROM

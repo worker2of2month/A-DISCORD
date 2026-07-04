@@ -1,0 +1,10 @@
+# Debug category for testing the generic society development mechanic.
+
+ADISCORD_society_development_debug_category = {
+	allowed = {
+		is_debug = yes
+	}
+
+	priority = 100
+	visible_when_empty = yes
+}

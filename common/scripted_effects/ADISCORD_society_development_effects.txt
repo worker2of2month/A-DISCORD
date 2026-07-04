@@ -1,0 +1,784 @@
+# Generic society development effects.
+# Use variables for levels and ideas for visible national spirit effects.
+
+ADISCORD_apply_society_development_level = {
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_society_development_level } }
+		set_variable = { var = ADISCORD_society_development_level value = 1 }
+	}
+	if = {
+		limit = { ADISCORD_society_development_at_most_1 = yes }
+		ADISCORD_set_society_development_1 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_society_development_exact_2 = yes }
+		ADISCORD_set_society_development_2 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_society_development_exact_3 = yes }
+		ADISCORD_set_society_development_3 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_society_development_exact_4 = yes }
+		ADISCORD_set_society_development_4 = yes
+	}
+	else = {
+		ADISCORD_set_society_development_5 = yes
+	}
+}
+
+ADISCORD_set_society_development_1 = {
+	set_variable = { var = ADISCORD_society_development_level value = 1 }
+	set_variable = { var = ADISCORD_society_development_progress value = 0 }
+	remove_ideas = ADISCORD_society_development_1
+	remove_ideas = ADISCORD_society_development_2
+	remove_ideas = ADISCORD_society_development_3
+	remove_ideas = ADISCORD_society_development_4
+	remove_ideas = ADISCORD_society_development_5
+	add_ideas = ADISCORD_society_development_1
+}
+
+ADISCORD_set_society_development_2 = {
+	set_variable = { var = ADISCORD_society_development_level value = 2 }
+	set_variable = { var = ADISCORD_society_development_progress value = 0 }
+	remove_ideas = ADISCORD_society_development_1
+	remove_ideas = ADISCORD_society_development_2
+	remove_ideas = ADISCORD_society_development_3
+	remove_ideas = ADISCORD_society_development_4
+	remove_ideas = ADISCORD_society_development_5
+	add_ideas = ADISCORD_society_development_2
+}
+
+ADISCORD_set_society_development_3 = {
+	set_variable = { var = ADISCORD_society_development_level value = 3 }
+	set_variable = { var = ADISCORD_society_development_progress value = 0 }
+	remove_ideas = ADISCORD_society_development_1
+	remove_ideas = ADISCORD_society_development_2
+	remove_ideas = ADISCORD_society_development_3
+	remove_ideas = ADISCORD_society_development_4
+	remove_ideas = ADISCORD_society_development_5
+	add_ideas = ADISCORD_society_development_3
+}
+
+ADISCORD_set_society_development_4 = {
+	set_variable = { var = ADISCORD_society_development_level value = 4 }
+	set_variable = { var = ADISCORD_society_development_progress value = 0 }
+	remove_ideas = ADISCORD_society_development_1
+	remove_ideas = ADISCORD_society_development_2
+	remove_ideas = ADISCORD_society_development_3
+	remove_ideas = ADISCORD_society_development_4
+	remove_ideas = ADISCORD_society_development_5
+	add_ideas = ADISCORD_society_development_4
+}
+
+ADISCORD_set_society_development_5 = {
+	set_variable = { var = ADISCORD_society_development_level value = 5 }
+	set_variable = { var = ADISCORD_society_development_progress value = 0 }
+	remove_ideas = ADISCORD_society_development_1
+	remove_ideas = ADISCORD_society_development_2
+	remove_ideas = ADISCORD_society_development_3
+	remove_ideas = ADISCORD_society_development_4
+	remove_ideas = ADISCORD_society_development_5
+	add_ideas = ADISCORD_society_development_5
+}
+
+ADISCORD_increase_society_development = {
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_society_development_level } }
+		set_variable = { var = ADISCORD_society_development_level value = 1 }
+	}
+	add_to_variable = { var = ADISCORD_society_development_level value = 1 }
+	clamp_variable = { var = ADISCORD_society_development_level min = 1 max = 5 }
+	ADISCORD_apply_society_development_level = yes
+}
+
+ADISCORD_decrease_society_development = {
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_society_development_level } }
+		set_variable = { var = ADISCORD_society_development_level value = 1 }
+	}
+	add_to_variable = { var = ADISCORD_society_development_level value = -1 }
+	clamp_variable = { var = ADISCORD_society_development_level min = 1 max = 5 }
+	ADISCORD_apply_society_development_level = yes
+}
+
+ADISCORD_apply_social_system_development_level = {
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_social_system_development_level } }
+		set_variable = { var = ADISCORD_social_system_development_level value = 1 }
+	}
+	if = {
+		limit = { ADISCORD_social_system_development_at_most_1 = yes }
+		ADISCORD_set_social_system_development_1 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_social_system_development_exact_2 = yes }
+		ADISCORD_set_social_system_development_2 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_social_system_development_exact_3 = yes }
+		ADISCORD_set_social_system_development_3 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_social_system_development_exact_4 = yes }
+		ADISCORD_set_social_system_development_4 = yes
+	}
+	else = {
+		ADISCORD_set_social_system_development_5 = yes
+	}
+}
+
+ADISCORD_set_social_system_development_1 = {
+	set_variable = { var = ADISCORD_social_system_development_level value = 1 }
+	set_variable = { var = ADISCORD_social_system_development_progress value = 0 }
+	remove_ideas = ADISCORD_social_system_development_1
+	remove_ideas = ADISCORD_social_system_development_2
+	remove_ideas = ADISCORD_social_system_development_3
+	remove_ideas = ADISCORD_social_system_development_4
+	remove_ideas = ADISCORD_social_system_development_5
+	add_ideas = ADISCORD_social_system_development_1
+}
+
+ADISCORD_set_social_system_development_2 = {
+	set_variable = { var = ADISCORD_social_system_development_level value = 2 }
+	set_variable = { var = ADISCORD_social_system_development_progress value = 0 }
+	remove_ideas = ADISCORD_social_system_development_1
+	remove_ideas = ADISCORD_social_system_development_2
+	remove_ideas = ADISCORD_social_system_development_3
+	remove_ideas = ADISCORD_social_system_development_4
+	remove_ideas = ADISCORD_social_system_development_5
+	add_ideas = ADISCORD_social_system_development_2
+}
+
+ADISCORD_set_social_system_development_3 = {
+	set_variable = { var = ADISCORD_social_system_development_level value = 3 }
+	set_variable = { var = ADISCORD_social_system_development_progress value = 0 }
+	remove_ideas = ADISCORD_social_system_development_1
+	remove_ideas = ADISCORD_social_system_development_2
+	remove_ideas = ADISCORD_social_system_development_3
+	remove_ideas = ADISCORD_social_system_development_4
+	remove_ideas = ADISCORD_social_system_development_5
+	add_ideas = ADISCORD_social_system_development_3
+}
+
+ADISCORD_set_social_system_development_4 = {
+	set_variable = { var = ADISCORD_social_system_development_level value = 4 }
+	set_variable = { var = ADISCORD_social_system_development_progress value = 0 }
+	remove_ideas = ADISCORD_social_system_development_1
+	remove_ideas = ADISCORD_social_system_development_2
+	remove_ideas = ADISCORD_social_system_development_3
+	remove_ideas = ADISCORD_social_system_development_4
+	remove_ideas = ADISCORD_social_system_development_5
+	add_ideas = ADISCORD_social_system_development_4
+}
+
+ADISCORD_set_social_system_development_5 = {
+	set_variable = { var = ADISCORD_social_system_development_level value = 5 }
+	set_variable = { var = ADISCORD_social_system_development_progress value = 0 }
+	remove_ideas = ADISCORD_social_system_development_1
+	remove_ideas = ADISCORD_social_system_development_2
+	remove_ideas = ADISCORD_social_system_development_3
+	remove_ideas = ADISCORD_social_system_development_4
+	remove_ideas = ADISCORD_social_system_development_5
+	add_ideas = ADISCORD_social_system_development_5
+}
+
+ADISCORD_increase_social_system_development = {
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_social_system_development_level } }
+		set_variable = { var = ADISCORD_social_system_development_level value = 1 }
+	}
+	add_to_variable = { var = ADISCORD_social_system_development_level value = 1 }
+	clamp_variable = { var = ADISCORD_social_system_development_level min = 1 max = 5 }
+	ADISCORD_apply_social_system_development_level = yes
+}
+
+ADISCORD_decrease_social_system_development = {
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_social_system_development_level } }
+		set_variable = { var = ADISCORD_social_system_development_level value = 1 }
+	}
+	add_to_variable = { var = ADISCORD_social_system_development_level value = -1 }
+	clamp_variable = { var = ADISCORD_social_system_development_level min = 1 max = 5 }
+	ADISCORD_apply_social_system_development_level = yes
+}
+
+ADISCORD_apply_army_development_level = {
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_army_development_level } }
+		set_variable = { var = ADISCORD_army_development_level value = 1 }
+	}
+	if = {
+		limit = { ADISCORD_army_development_at_most_1 = yes }
+		ADISCORD_set_army_development_1 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_army_development_exact_2 = yes }
+		ADISCORD_set_army_development_2 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_army_development_exact_3 = yes }
+		ADISCORD_set_army_development_3 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_army_development_exact_4 = yes }
+		ADISCORD_set_army_development_4 = yes
+	}
+	else = {
+		ADISCORD_set_army_development_5 = yes
+	}
+}
+
+ADISCORD_set_army_development_1 = {
+	set_variable = { var = ADISCORD_army_development_level value = 1 }
+	set_variable = { var = ADISCORD_army_development_progress value = 0 }
+	remove_ideas = ADISCORD_army_development_1
+	remove_ideas = ADISCORD_army_development_2
+	remove_ideas = ADISCORD_army_development_3
+	remove_ideas = ADISCORD_army_development_4
+	remove_ideas = ADISCORD_army_development_5
+	add_ideas = ADISCORD_army_development_1
+}
+
+ADISCORD_set_army_development_2 = {
+	set_variable = { var = ADISCORD_army_development_level value = 2 }
+	set_variable = { var = ADISCORD_army_development_progress value = 0 }
+	remove_ideas = ADISCORD_army_development_1
+	remove_ideas = ADISCORD_army_development_2
+	remove_ideas = ADISCORD_army_development_3
+	remove_ideas = ADISCORD_army_development_4
+	remove_ideas = ADISCORD_army_development_5
+	add_ideas = ADISCORD_army_development_2
+}
+
+ADISCORD_set_army_development_3 = {
+	set_variable = { var = ADISCORD_army_development_level value = 3 }
+	set_variable = { var = ADISCORD_army_development_progress value = 0 }
+	remove_ideas = ADISCORD_army_development_1
+	remove_ideas = ADISCORD_army_development_2
+	remove_ideas = ADISCORD_army_development_3
+	remove_ideas = ADISCORD_army_development_4
+	remove_ideas = ADISCORD_army_development_5
+	add_ideas = ADISCORD_army_development_3
+}
+
+ADISCORD_set_army_development_4 = {
+	set_variable = { var = ADISCORD_army_development_level value = 4 }
+	set_variable = { var = ADISCORD_army_development_progress value = 0 }
+	remove_ideas = ADISCORD_army_development_1
+	remove_ideas = ADISCORD_army_development_2
+	remove_ideas = ADISCORD_army_development_3
+	remove_ideas = ADISCORD_army_development_4
+	remove_ideas = ADISCORD_army_development_5
+	add_ideas = ADISCORD_army_development_4
+}
+
+ADISCORD_set_army_development_5 = {
+	set_variable = { var = ADISCORD_army_development_level value = 5 }
+	set_variable = { var = ADISCORD_army_development_progress value = 0 }
+	remove_ideas = ADISCORD_army_development_1
+	remove_ideas = ADISCORD_army_development_2
+	remove_ideas = ADISCORD_army_development_3
+	remove_ideas = ADISCORD_army_development_4
+	remove_ideas = ADISCORD_army_development_5
+	add_ideas = ADISCORD_army_development_5
+}
+
+ADISCORD_increase_army_development = {
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_army_development_level } }
+		set_variable = { var = ADISCORD_army_development_level value = 1 }
+	}
+	add_to_variable = { var = ADISCORD_army_development_level value = 1 }
+	clamp_variable = { var = ADISCORD_army_development_level min = 1 max = 5 }
+	ADISCORD_apply_army_development_level = yes
+}
+
+ADISCORD_decrease_army_development = {
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_army_development_level } }
+		set_variable = { var = ADISCORD_army_development_level value = 1 }
+	}
+	add_to_variable = { var = ADISCORD_army_development_level value = -1 }
+	clamp_variable = { var = ADISCORD_army_development_level min = 1 max = 5 }
+	ADISCORD_apply_army_development_level = yes
+}
+
+ADISCORD_apply_cultural_development_level = {
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_cultural_development_level } }
+		set_variable = { var = ADISCORD_cultural_development_level value = 1 }
+	}
+	if = {
+		limit = { ADISCORD_cultural_development_at_most_1 = yes }
+		ADISCORD_set_cultural_development_1 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_cultural_development_exact_2 = yes }
+		ADISCORD_set_cultural_development_2 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_cultural_development_exact_3 = yes }
+		ADISCORD_set_cultural_development_3 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_cultural_development_exact_4 = yes }
+		ADISCORD_set_cultural_development_4 = yes
+	}
+	else = {
+		ADISCORD_set_cultural_development_5 = yes
+	}
+}
+
+ADISCORD_set_cultural_development_1 = {
+	set_variable = { var = ADISCORD_cultural_development_level value = 1 }
+	set_variable = { var = ADISCORD_cultural_development_progress value = 0 }
+	remove_ideas = ADISCORD_cultural_development_1
+	remove_ideas = ADISCORD_cultural_development_2
+	remove_ideas = ADISCORD_cultural_development_3
+	remove_ideas = ADISCORD_cultural_development_4
+	remove_ideas = ADISCORD_cultural_development_5
+	add_ideas = ADISCORD_cultural_development_1
+}
+
+ADISCORD_set_cultural_development_2 = {
+	set_variable = { var = ADISCORD_cultural_development_level value = 2 }
+	set_variable = { var = ADISCORD_cultural_development_progress value = 0 }
+	remove_ideas = ADISCORD_cultural_development_1
+	remove_ideas = ADISCORD_cultural_development_2
+	remove_ideas = ADISCORD_cultural_development_3
+	remove_ideas = ADISCORD_cultural_development_4
+	remove_ideas = ADISCORD_cultural_development_5
+	add_ideas = ADISCORD_cultural_development_2
+}
+
+ADISCORD_set_cultural_development_3 = {
+	set_variable = { var = ADISCORD_cultural_development_level value = 3 }
+	set_variable = { var = ADISCORD_cultural_development_progress value = 0 }
+	remove_ideas = ADISCORD_cultural_development_1
+	remove_ideas = ADISCORD_cultural_development_2
+	remove_ideas = ADISCORD_cultural_development_3
+	remove_ideas = ADISCORD_cultural_development_4
+	remove_ideas = ADISCORD_cultural_development_5
+	add_ideas = ADISCORD_cultural_development_3
+}
+
+ADISCORD_set_cultural_development_4 = {
+	set_variable = { var = ADISCORD_cultural_development_level value = 4 }
+	set_variable = { var = ADISCORD_cultural_development_progress value = 0 }
+	remove_ideas = ADISCORD_cultural_development_1
+	remove_ideas = ADISCORD_cultural_development_2
+	remove_ideas = ADISCORD_cultural_development_3
+	remove_ideas = ADISCORD_cultural_development_4
+	remove_ideas = ADISCORD_cultural_development_5
+	add_ideas = ADISCORD_cultural_development_4
+}
+
+ADISCORD_set_cultural_development_5 = {
+	set_variable = { var = ADISCORD_cultural_development_level value = 5 }
+	set_variable = { var = ADISCORD_cultural_development_progress value = 0 }
+	remove_ideas = ADISCORD_cultural_development_1
+	remove_ideas = ADISCORD_cultural_development_2
+	remove_ideas = ADISCORD_cultural_development_3
+	remove_ideas = ADISCORD_cultural_development_4
+	remove_ideas = ADISCORD_cultural_development_5
+	add_ideas = ADISCORD_cultural_development_5
+}
+
+ADISCORD_increase_cultural_development = {
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_cultural_development_level } }
+		set_variable = { var = ADISCORD_cultural_development_level value = 1 }
+	}
+	add_to_variable = { var = ADISCORD_cultural_development_level value = 1 }
+	clamp_variable = { var = ADISCORD_cultural_development_level min = 1 max = 5 }
+	ADISCORD_apply_cultural_development_level = yes
+}
+
+ADISCORD_decrease_cultural_development = {
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_cultural_development_level } }
+		set_variable = { var = ADISCORD_cultural_development_level value = 1 }
+	}
+	add_to_variable = { var = ADISCORD_cultural_development_level value = -1 }
+	clamp_variable = { var = ADISCORD_cultural_development_level min = 1 max = 5 }
+	ADISCORD_apply_cultural_development_level = yes
+}
+
+ADISCORD_apply_state_development_level = {
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_state_development_level } }
+		set_variable = { var = ADISCORD_state_development_level value = 1 }
+	}
+	if = {
+		limit = { ADISCORD_state_development_at_most_1 = yes }
+		ADISCORD_set_state_development_1 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_state_development_exact_2 = yes }
+		ADISCORD_set_state_development_2 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_state_development_exact_3 = yes }
+		ADISCORD_set_state_development_3 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_state_development_exact_4 = yes }
+		ADISCORD_set_state_development_4 = yes
+	}
+	else = {
+		ADISCORD_set_state_development_5 = yes
+	}
+}
+
+ADISCORD_set_state_development_1 = {
+	set_variable = { var = ADISCORD_state_development_level value = 1 }
+	set_variable = { var = ADISCORD_state_development_progress value = 0 }
+	remove_ideas = ADISCORD_state_development_1
+	remove_ideas = ADISCORD_state_development_2
+	remove_ideas = ADISCORD_state_development_3
+	remove_ideas = ADISCORD_state_development_4
+	remove_ideas = ADISCORD_state_development_5
+	add_ideas = ADISCORD_state_development_1
+}
+
+ADISCORD_set_state_development_2 = {
+	set_variable = { var = ADISCORD_state_development_level value = 2 }
+	set_variable = { var = ADISCORD_state_development_progress value = 0 }
+	remove_ideas = ADISCORD_state_development_1
+	remove_ideas = ADISCORD_state_development_2
+	remove_ideas = ADISCORD_state_development_3
+	remove_ideas = ADISCORD_state_development_4
+	remove_ideas = ADISCORD_state_development_5
+	add_ideas = ADISCORD_state_development_2
+}
+
+ADISCORD_set_state_development_3 = {
+	set_variable = { var = ADISCORD_state_development_level value = 3 }
+	set_variable = { var = ADISCORD_state_development_progress value = 0 }
+	remove_ideas = ADISCORD_state_development_1
+	remove_ideas = ADISCORD_state_development_2
+	remove_ideas = ADISCORD_state_development_3
+	remove_ideas = ADISCORD_state_development_4
+	remove_ideas = ADISCORD_state_development_5
+	add_ideas = ADISCORD_state_development_3
+}
+
+ADISCORD_set_state_development_4 = {
+	set_variable = { var = ADISCORD_state_development_level value = 4 }
+	set_variable = { var = ADISCORD_state_development_progress value = 0 }
+	remove_ideas = ADISCORD_state_development_1
+	remove_ideas = ADISCORD_state_development_2
+	remove_ideas = ADISCORD_state_development_3
+	remove_ideas = ADISCORD_state_development_4
+	remove_ideas = ADISCORD_state_development_5
+	add_ideas = ADISCORD_state_development_4
+}
+
+ADISCORD_set_state_development_5 = {
+	set_variable = { var = ADISCORD_state_development_level value = 5 }
+	set_variable = { var = ADISCORD_state_development_progress value = 0 }
+	remove_ideas = ADISCORD_state_development_1
+	remove_ideas = ADISCORD_state_development_2
+	remove_ideas = ADISCORD_state_development_3
+	remove_ideas = ADISCORD_state_development_4
+	remove_ideas = ADISCORD_state_development_5
+	add_ideas = ADISCORD_state_development_5
+}
+
+ADISCORD_increase_state_development = {
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_state_development_level } }
+		set_variable = { var = ADISCORD_state_development_level value = 1 }
+	}
+	add_to_variable = { var = ADISCORD_state_development_level value = 1 }
+	clamp_variable = { var = ADISCORD_state_development_level min = 1 max = 5 }
+	ADISCORD_apply_state_development_level = yes
+}
+
+ADISCORD_decrease_state_development = {
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_state_development_level } }
+		set_variable = { var = ADISCORD_state_development_level value = 1 }
+	}
+	add_to_variable = { var = ADISCORD_state_development_level value = -1 }
+	clamp_variable = { var = ADISCORD_state_development_level min = 1 max = 5 }
+	ADISCORD_apply_state_development_level = yes
+}
+
+ADISCORD_apply_economic_development_level = {
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_economic_development_level } }
+		set_variable = { var = ADISCORD_economic_development_level value = 1 }
+	}
+	if = {
+		limit = { ADISCORD_economic_development_at_most_1 = yes }
+		ADISCORD_set_economic_development_1 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_economic_development_exact_2 = yes }
+		ADISCORD_set_economic_development_2 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_economic_development_exact_3 = yes }
+		ADISCORD_set_economic_development_3 = yes
+	}
+	else_if = {
+		limit = { ADISCORD_economic_development_exact_4 = yes }
+		ADISCORD_set_economic_development_4 = yes
+	}
+	else = {
+		ADISCORD_set_economic_development_5 = yes
+	}
+}
+
+ADISCORD_set_economic_development_1 = {
+	set_variable = { var = ADISCORD_economic_development_level value = 1 }
+	set_variable = { var = ADISCORD_economic_development_progress value = 0 }
+	remove_ideas = ADISCORD_economic_development_1
+	remove_ideas = ADISCORD_economic_development_2
+	remove_ideas = ADISCORD_economic_development_3
+	remove_ideas = ADISCORD_economic_development_4
+	remove_ideas = ADISCORD_economic_development_5
+	add_ideas = ADISCORD_economic_development_1
+}
+
+ADISCORD_set_economic_development_2 = {
+	set_variable = { var = ADISCORD_economic_development_level value = 2 }
+	set_variable = { var = ADISCORD_economic_development_progress value = 0 }
+	remove_ideas = ADISCORD_economic_development_1
+	remove_ideas = ADISCORD_economic_development_2
+	remove_ideas = ADISCORD_economic_development_3
+	remove_ideas = ADISCORD_economic_development_4
+	remove_ideas = ADISCORD_economic_development_5
+	add_ideas = ADISCORD_economic_development_2
+}
+
+ADISCORD_set_economic_development_3 = {
+	set_variable = { var = ADISCORD_economic_development_level value = 3 }
+	set_variable = { var = ADISCORD_economic_development_progress value = 0 }
+	remove_ideas = ADISCORD_economic_development_1
+	remove_ideas = ADISCORD_economic_development_2
+	remove_ideas = ADISCORD_economic_development_3
+	remove_ideas = ADISCORD_economic_development_4
+	remove_ideas = ADISCORD_economic_development_5
+	add_ideas = ADISCORD_economic_development_3
+}
+
+ADISCORD_set_economic_development_4 = {
+	set_variable = { var = ADISCORD_economic_development_level value = 4 }
+	set_variable = { var = ADISCORD_economic_development_progress value = 0 }
+	remove_ideas = ADISCORD_economic_development_1
+	remove_ideas = ADISCORD_economic_development_2
+	remove_ideas = ADISCORD_economic_development_3
+	remove_ideas = ADISCORD_economic_development_4
+	remove_ideas = ADISCORD_economic_development_5
+	add_ideas = ADISCORD_economic_development_4
+}
+
+ADISCORD_set_economic_development_5 = {
+	set_variable = { var = ADISCORD_economic_development_level value = 5 }
+	set_variable = { var = ADISCORD_economic_development_progress value = 0 }
+	remove_ideas = ADISCORD_economic_development_1
+	remove_ideas = ADISCORD_economic_development_2
+	remove_ideas = ADISCORD_economic_development_3
+	remove_ideas = ADISCORD_economic_development_4
+	remove_ideas = ADISCORD_economic_development_5
+	add_ideas = ADISCORD_economic_development_5
+}
+
+ADISCORD_increase_economic_development = {
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_economic_development_level } }
+		set_variable = { var = ADISCORD_economic_development_level value = 1 }
+	}
+	add_to_variable = { var = ADISCORD_economic_development_level value = 1 }
+	clamp_variable = { var = ADISCORD_economic_development_level min = 1 max = 5 }
+	ADISCORD_apply_economic_development_level = yes
+}
+
+ADISCORD_decrease_economic_development = {
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_economic_development_level } }
+		set_variable = { var = ADISCORD_economic_development_level value = 1 }
+	}
+	add_to_variable = { var = ADISCORD_economic_development_level value = -1 }
+	clamp_variable = { var = ADISCORD_economic_development_level min = 1 max = 5 }
+	ADISCORD_apply_economic_development_level = yes
+}
+
+ADISCORD_initialize_society_development_variables = {
+	# Monthly growth is stored as progress points per month. 100 points changes a level.
+	if = { limit = { NOT = { has_variable = ADISCORD_society_development_progress } } set_variable = { var = ADISCORD_society_development_progress value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_society_development_monthly_growth } } set_variable = { var = ADISCORD_society_development_monthly_growth value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_social_system_development_progress } } set_variable = { var = ADISCORD_social_system_development_progress value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_social_system_development_monthly_growth } } set_variable = { var = ADISCORD_social_system_development_monthly_growth value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_army_development_progress } } set_variable = { var = ADISCORD_army_development_progress value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_army_development_monthly_growth } } set_variable = { var = ADISCORD_army_development_monthly_growth value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_cultural_development_progress } } set_variable = { var = ADISCORD_cultural_development_progress value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_cultural_development_monthly_growth } } set_variable = { var = ADISCORD_cultural_development_monthly_growth value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_state_development_progress } } set_variable = { var = ADISCORD_state_development_progress value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_state_development_monthly_growth } } set_variable = { var = ADISCORD_state_development_monthly_growth value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economic_development_progress } } set_variable = { var = ADISCORD_economic_development_progress value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economic_development_monthly_growth } } set_variable = { var = ADISCORD_economic_development_monthly_growth value = 0 } }
+}
+
+ADISCORD_tick_all_society_development_monthly = {
+	ADISCORD_initialize_society_development_variables = yes
+	ADISCORD_tick_society_development_monthly = yes
+	ADISCORD_tick_social_system_development_monthly = yes
+	ADISCORD_tick_army_development_monthly = yes
+	ADISCORD_tick_cultural_development_monthly = yes
+	ADISCORD_tick_state_development_monthly = yes
+	ADISCORD_tick_economic_development_monthly = yes
+}
+
+ADISCORD_tick_society_development_monthly = {
+	add_to_variable = { var = ADISCORD_society_development_progress value = ADISCORD_society_development_monthly_growth }
+	if = {
+		limit = { check_variable = { var = ADISCORD_society_development_progress value = 100 compare = greater_than_or_equals } }
+		if = { limit = { ADISCORD_society_development_at_least_5 = yes } set_variable = { var = ADISCORD_society_development_progress value = 0 } }
+		else = { set_variable = { var = ADISCORD_society_development_progress value = 0 } ADISCORD_increase_society_development = yes }
+	}
+	if = {
+		limit = { check_variable = { var = ADISCORD_society_development_progress value = -100 compare = less_than_or_equals } }
+		if = { limit = { ADISCORD_society_development_at_most_1 = yes } set_variable = { var = ADISCORD_society_development_progress value = 0 } }
+		else = { set_variable = { var = ADISCORD_society_development_progress value = 0 } ADISCORD_decrease_society_development = yes }
+	}
+	clamp_variable = { var = ADISCORD_society_development_progress min = -99 max = 99 }
+}
+
+ADISCORD_tick_social_system_development_monthly = {
+	add_to_variable = { var = ADISCORD_social_system_development_progress value = ADISCORD_social_system_development_monthly_growth }
+	if = {
+		limit = { check_variable = { var = ADISCORD_social_system_development_progress value = 100 compare = greater_than_or_equals } }
+		if = { limit = { ADISCORD_social_system_development_at_least_5 = yes } set_variable = { var = ADISCORD_social_system_development_progress value = 0 } }
+		else = { set_variable = { var = ADISCORD_social_system_development_progress value = 0 } ADISCORD_increase_social_system_development = yes }
+	}
+	if = {
+		limit = { check_variable = { var = ADISCORD_social_system_development_progress value = -100 compare = less_than_or_equals } }
+		if = { limit = { ADISCORD_social_system_development_at_most_1 = yes } set_variable = { var = ADISCORD_social_system_development_progress value = 0 } }
+		else = { set_variable = { var = ADISCORD_social_system_development_progress value = 0 } ADISCORD_decrease_social_system_development = yes }
+	}
+	clamp_variable = { var = ADISCORD_social_system_development_progress min = -99 max = 99 }
+}
+
+ADISCORD_tick_army_development_monthly = {
+	add_to_variable = { var = ADISCORD_army_development_progress value = ADISCORD_army_development_monthly_growth }
+	if = {
+		limit = { check_variable = { var = ADISCORD_army_development_progress value = 100 compare = greater_than_or_equals } }
+		if = { limit = { ADISCORD_army_development_at_least_5 = yes } set_variable = { var = ADISCORD_army_development_progress value = 0 } }
+		else = { set_variable = { var = ADISCORD_army_development_progress value = 0 } ADISCORD_increase_army_development = yes }
+	}
+	if = {
+		limit = { check_variable = { var = ADISCORD_army_development_progress value = -100 compare = less_than_or_equals } }
+		if = { limit = { ADISCORD_army_development_at_most_1 = yes } set_variable = { var = ADISCORD_army_development_progress value = 0 } }
+		else = { set_variable = { var = ADISCORD_army_development_progress value = 0 } ADISCORD_decrease_army_development = yes }
+	}
+	clamp_variable = { var = ADISCORD_army_development_progress min = -99 max = 99 }
+}
+
+ADISCORD_tick_cultural_development_monthly = {
+	add_to_variable = { var = ADISCORD_cultural_development_progress value = ADISCORD_cultural_development_monthly_growth }
+	if = {
+		limit = { check_variable = { var = ADISCORD_cultural_development_progress value = 100 compare = greater_than_or_equals } }
+		if = { limit = { ADISCORD_cultural_development_at_least_5 = yes } set_variable = { var = ADISCORD_cultural_development_progress value = 0 } }
+		else = { set_variable = { var = ADISCORD_cultural_development_progress value = 0 } ADISCORD_increase_cultural_development = yes }
+	}
+	if = {
+		limit = { check_variable = { var = ADISCORD_cultural_development_progress value = -100 compare = less_than_or_equals } }
+		if = { limit = { ADISCORD_cultural_development_at_most_1 = yes } set_variable = { var = ADISCORD_cultural_development_progress value = 0 } }
+		else = { set_variable = { var = ADISCORD_cultural_development_progress value = 0 } ADISCORD_decrease_cultural_development = yes }
+	}
+	clamp_variable = { var = ADISCORD_cultural_development_progress min = -99 max = 99 }
+}
+
+ADISCORD_tick_state_development_monthly = {
+	add_to_variable = { var = ADISCORD_state_development_progress value = ADISCORD_state_development_monthly_growth }
+	if = {
+		limit = { check_variable = { var = ADISCORD_state_development_progress value = 100 compare = greater_than_or_equals } }
+		if = { limit = { ADISCORD_state_development_at_least_5 = yes } set_variable = { var = ADISCORD_state_development_progress value = 0 } }
+		else = { set_variable = { var = ADISCORD_state_development_progress value = 0 } ADISCORD_increase_state_development = yes }
+	}
+	if = {
+		limit = { check_variable = { var = ADISCORD_state_development_progress value = -100 compare = less_than_or_equals } }
+		if = { limit = { ADISCORD_state_development_at_most_1 = yes } set_variable = { var = ADISCORD_state_development_progress value = 0 } }
+		else = { set_variable = { var = ADISCORD_state_development_progress value = 0 } ADISCORD_decrease_state_development = yes }
+	}
+	clamp_variable = { var = ADISCORD_state_development_progress min = -99 max = 99 }
+}
+
+ADISCORD_tick_economic_development_monthly = {
+	add_to_variable = { var = ADISCORD_economic_development_progress value = ADISCORD_economic_development_monthly_growth }
+	if = {
+		limit = { check_variable = { var = ADISCORD_economic_development_progress value = 100 compare = greater_than_or_equals } }
+		if = { limit = { ADISCORD_economic_development_at_least_5 = yes } set_variable = { var = ADISCORD_economic_development_progress value = 0 } }
+		else = { set_variable = { var = ADISCORD_economic_development_progress value = 0 } ADISCORD_increase_economic_development = yes }
+	}
+	if = {
+		limit = { check_variable = { var = ADISCORD_economic_development_progress value = -100 compare = less_than_or_equals } }
+		if = { limit = { ADISCORD_economic_development_at_most_1 = yes } set_variable = { var = ADISCORD_economic_development_progress value = 0 } }
+		else = { set_variable = { var = ADISCORD_economic_development_progress value = 0 } ADISCORD_decrease_economic_development = yes }
+	}
+	clamp_variable = { var = ADISCORD_economic_development_progress min = -99 max = 99 }
+}
+
+ADISCORD_increase_society_development_monthly_growth = {
+	add_to_variable = { var = ADISCORD_society_development_monthly_growth value = 1 }
+	clamp_variable = { var = ADISCORD_society_development_monthly_growth min = -20 max = 20 }
+}
+
+ADISCORD_decrease_society_development_monthly_growth = {
+	add_to_variable = { var = ADISCORD_society_development_monthly_growth value = -1 }
+	clamp_variable = { var = ADISCORD_society_development_monthly_growth min = -20 max = 20 }
+}
+
+ADISCORD_increase_social_system_development_monthly_growth = {
+	add_to_variable = { var = ADISCORD_social_system_development_monthly_growth value = 1 }
+	clamp_variable = { var = ADISCORD_social_system_development_monthly_growth min = -20 max = 20 }
+}
+
+ADISCORD_decrease_social_system_development_monthly_growth = {
+	add_to_variable = { var = ADISCORD_social_system_development_monthly_growth value = -1 }
+	clamp_variable = { var = ADISCORD_social_system_development_monthly_growth min = -20 max = 20 }
+}
+
+ADISCORD_increase_army_development_monthly_growth = {
+	add_to_variable = { var = ADISCORD_army_development_monthly_growth value = 1 }
+	clamp_variable = { var = ADISCORD_army_development_monthly_growth min = -20 max = 20 }
+}
+
+ADISCORD_decrease_army_development_monthly_growth = {
+	add_to_variable = { var = ADISCORD_army_development_monthly_growth value = -1 }
+	clamp_variable = { var = ADISCORD_army_development_monthly_growth min = -20 max = 20 }
+}
+
+ADISCORD_increase_cultural_development_monthly_growth = {
+	add_to_variable = { var = ADISCORD_cultural_development_monthly_growth value = 1 }
+	clamp_variable = { var = ADISCORD_cultural_development_monthly_growth min = -20 max = 20 }
+}
+
+ADISCORD_decrease_cultural_development_monthly_growth = {
+	add_to_variable = { var = ADISCORD_cultural_development_monthly_growth value = -1 }
+	clamp_variable = { var = ADISCORD_cultural_development_monthly_growth min = -20 max = 20 }
+}
+
+ADISCORD_increase_state_development_monthly_growth = {
+	add_to_variable = { var = ADISCORD_state_development_monthly_growth value = 1 }
+	clamp_variable = { var = ADISCORD_state_development_monthly_growth min = -20 max = 20 }
+}
+
+ADISCORD_decrease_state_development_monthly_growth = {
+	add_to_variable = { var = ADISCORD_state_development_monthly_growth value = -1 }
+	clamp_variable = { var = ADISCORD_state_development_monthly_growth min = -20 max = 20 }
+}
+
+ADISCORD_increase_economic_development_monthly_growth = {
+	add_to_variable = { var = ADISCORD_economic_development_monthly_growth value = 1 }
+	clamp_variable = { var = ADISCORD_economic_development_monthly_growth min = -20 max = 20 }
+}
+
+ADISCORD_decrease_economic_development_monthly_growth = {
+	add_to_variable = { var = ADISCORD_economic_development_monthly_growth value = -1 }
+	clamp_variable = { var = ADISCORD_economic_development_monthly_growth min = -20 max = 20 }
+}

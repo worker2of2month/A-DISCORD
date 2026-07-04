@@ -2,9 +2,11 @@ state={
 	id=114
 	name="STATE_114"
 	provinces={
-		1164 1441 5991 7716 7920 12740 
+		1164 1441 5991 7716 7920 12740
 	}
 	manpower=432215
+
+	state_category = rural
 	buildings_max_level_factor=1
 	local_supplies=0
 

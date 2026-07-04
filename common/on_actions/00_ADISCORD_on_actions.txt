@@ -45,12 +45,32 @@ on_actions = {
 			every_country = {
 			}
 			STP = {
-				
+				# Starting society development levels for StepanLand.
+				ADISCORD_set_society_development_2 = yes
+				ADISCORD_set_social_system_development_2 = yes
+				ADISCORD_set_army_development_2 = yes
+				ADISCORD_set_cultural_development_1 = yes
+				ADISCORD_set_state_development_2 = yes
+				ADISCORD_set_economic_development_3 = yes
+				ADISCORD_initialize_society_development_variables = yes
 			}
 		}
 	}
 	on_monthly = {
 		effect = {
+			every_country = {
+				limit = {
+					OR = {
+						has_variable = ADISCORD_society_development_level
+						has_variable = ADISCORD_social_system_development_level
+						has_variable = ADISCORD_army_development_level
+						has_variable = ADISCORD_cultural_development_level
+						has_variable = ADISCORD_state_development_level
+						has_variable = ADISCORD_economic_development_level
+					}
+				}
+				ADISCORD_tick_all_society_development_monthly = yes
+			}
 		}
 	}
 }

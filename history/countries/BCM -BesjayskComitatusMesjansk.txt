@@ -8,7 +8,7 @@ recruit_character = BCM_Graf_Josef
 
 set_politics = {
 	ruling_party = chauvinism
-	last_election = "2010.12.01"
+	last_election = "2110.12.01"
 	elections_allowed = no
 }
 set_popularities = {
@@ -19,5 +19,14 @@ set_popularities = {
 }
 
 set_stability = 0.47
+
+add_ideas = {
+	minister_BCM_Emil_Mes
+	minister_BCM_Bruno_Cross
+	minister_BCM_Oskar_Fen
+	minister_BCM_Livia_Grun
+	minister_BCM_Felix_Cod
+	minister_BCM_Irma_Mask
+}
 
 set_research_slots = 2

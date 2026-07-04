@@ -24,4 +24,13 @@ set_convoys = 300
 
 set_stability = 0.87
 
+add_ideas = {
+	minister_WIT_Otto_Veyn
+	minister_WIT_Marta_Lisk
+	minister_WIT_Bruno_Hel
+	minister_WIT_Nika_Voren
+	minister_WIT_Pavel_Kord
+	minister_WIT_Rina_Mist
+}
+
 set_research_slots = 2

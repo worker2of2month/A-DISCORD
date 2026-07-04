@@ -1,0 +1,359 @@
+# Generic society development hidden ideas.
+# Country variables store durable level state; hidden ideas apply the active modifiers.
+
+ideas = {
+	hidden_ideas = {
+		ADISCORD_society_development_1 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_democratic_drift_bonus
+			modifier = {
+				stability_factor = -0.06
+				political_power_gain = -0.05
+			}
+		}
+
+		ADISCORD_society_development_2 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_democratic_drift_bonus
+			modifier = {
+				stability_factor = -0.03
+			}
+		}
+
+		ADISCORD_society_development_3 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_democratic_drift_bonus
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		ADISCORD_society_development_4 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_democratic_drift_bonus
+			modifier = {
+				stability_factor = 0.05
+				political_power_gain = 0.03
+			}
+		}
+
+		ADISCORD_society_development_5 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_democratic_drift_bonus
+			modifier = {
+				stability_factor = 0.08
+				war_support_factor = 0.04
+				political_power_gain = 0.05
+				consumer_goods_factor = 0.02
+			}
+		}
+
+		ADISCORD_social_system_development_1 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_democratic_drift_bonus
+			modifier = {
+				research_speed_factor = -0.05
+				stability_factor = -0.02
+				production_speed_buildings_factor = -0.03
+			}
+		}
+
+		ADISCORD_social_system_development_2 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_democratic_drift_bonus
+			modifier = {
+				research_speed_factor = -0.02
+			}
+		}
+
+		ADISCORD_social_system_development_3 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_democratic_drift_bonus
+			modifier = {
+				research_speed_factor = 0.01
+				stability_factor = 0.01
+			}
+		}
+
+		ADISCORD_social_system_development_4 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_democratic_drift_bonus
+			modifier = {
+				research_speed_factor = 0.04
+				production_speed_buildings_factor = 0.03
+				stability_factor = 0.02
+			}
+		}
+
+		ADISCORD_social_system_development_5 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_democratic_drift_bonus
+			modifier = {
+				research_speed_factor = 0.06
+				stability_factor = 0.03
+				production_speed_buildings_factor = 0.04
+				consumer_goods_factor = 0.03
+			}
+		}
+
+		ADISCORD_army_development_1 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_fascism_drift_bonus
+			modifier = {
+				army_org_factor = -0.08
+				army_morale_factor = -0.08
+				training_time_factor = 0.12
+				command_power_gain = -0.05
+			}
+		}
+
+		ADISCORD_army_development_2 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_fascism_drift_bonus
+			modifier = {
+				army_org_factor = -0.04
+				army_morale_factor = -0.04
+				training_time_factor = 0.06
+			}
+		}
+
+		ADISCORD_army_development_3 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_fascism_drift_bonus
+			modifier = {
+				army_org_factor = 0.02
+				army_morale_factor = 0.02
+			}
+		}
+
+		ADISCORD_army_development_4 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_fascism_drift_bonus
+			modifier = {
+				army_org_factor = 0.05
+				army_morale_factor = 0.05
+				training_time_factor = -0.04
+				command_power_gain = 0.05
+			}
+		}
+
+		ADISCORD_army_development_5 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_fascism_drift_bonus
+			modifier = {
+				army_org_factor = 0.08
+				army_morale_factor = 0.08
+				training_time_factor = -0.06
+				command_power_gain = 0.10
+				consumer_goods_factor = 0.02
+			}
+		}
+
+		ADISCORD_cultural_development_1 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_communism_drift_bonus
+			modifier = {
+				stability_factor = -0.05
+				drift_defence_factor = -0.10
+				political_power_gain = -0.03
+			}
+		}
+
+		ADISCORD_cultural_development_2 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_communism_drift_bonus
+			modifier = {
+				stability_factor = -0.02
+				war_support_factor = -0.02
+			}
+		}
+
+		ADISCORD_cultural_development_3 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_communism_drift_bonus
+			modifier = {
+				stability_factor = 0.02
+				drift_defence_factor = 0.05
+			}
+		}
+
+		ADISCORD_cultural_development_4 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_communism_drift_bonus
+			modifier = {
+				stability_factor = 0.04
+				drift_defence_factor = 0.10
+				political_power_gain = 0.03
+			}
+		}
+
+		ADISCORD_cultural_development_5 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_communism_drift_bonus
+			modifier = {
+				stability_factor = 0.06
+				war_support_factor = 0.04
+				drift_defence_factor = 0.15
+				research_speed_factor = -0.01
+			}
+		}
+
+		ADISCORD_state_development_1 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_intel_bonus
+			modifier = {
+				political_power_gain = -0.10
+				consumer_goods_factor = 0.04
+				production_speed_buildings_factor = -0.05
+			}
+		}
+
+		ADISCORD_state_development_2 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_intel_bonus
+			modifier = {
+				political_power_gain = -0.05
+				consumer_goods_factor = 0.02
+			}
+		}
+
+		ADISCORD_state_development_3 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_intel_bonus
+			modifier = {
+				political_power_gain = 0.02
+				production_speed_buildings_factor = 0.02
+			}
+		}
+
+		ADISCORD_state_development_4 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_intel_bonus
+			modifier = {
+				political_power_gain = 0.06
+				consumer_goods_factor = -0.02
+				production_speed_buildings_factor = 0.04
+			}
+		}
+
+		ADISCORD_state_development_5 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_intel_bonus
+			modifier = {
+				political_power_gain = 0.10
+				consumer_goods_factor = -0.03
+				production_speed_buildings_factor = 0.06
+				stability_factor = -0.01
+			}
+		}
+
+		ADISCORD_economic_development_1 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_production_bonus
+			modifier = {
+				consumer_goods_factor = 0.05
+				production_speed_buildings_factor = -0.08
+				industrial_capacity_factory = -0.05
+			}
+		}
+
+		ADISCORD_economic_development_2 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_production_bonus
+			modifier = {
+				consumer_goods_factor = 0.02
+				production_speed_buildings_factor = -0.03
+			}
+		}
+
+		ADISCORD_economic_development_3 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_production_bonus
+			modifier = {
+				production_speed_buildings_factor = 0.02
+				industrial_capacity_factory = 0.02
+			}
+		}
+
+		ADISCORD_economic_development_4 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_production_bonus
+			modifier = {
+				consumer_goods_factor = -0.01
+				production_speed_buildings_factor = 0.04
+				industrial_capacity_factory = 0.04
+			}
+		}
+
+		ADISCORD_economic_development_5 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_production_bonus
+			modifier = {
+				consumer_goods_factor = -0.02
+				production_speed_buildings_factor = 0.06
+				industrial_capacity_factory = 0.06
+				research_speed_factor = 0.02
+			}
+		}
+	}
+}

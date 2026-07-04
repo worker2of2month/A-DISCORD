@@ -8,7 +8,7 @@ recruit_character = EFL_Dextung
 
 set_politics = {
 	ruling_party = chauvinism
-	last_election = "2010.12.01"
+	last_election = "2110.12.01"
 	elections_allowed = no
 }
 set_popularities = {
@@ -20,5 +20,14 @@ set_popularities = {
 }
 
 set_stability = 0.37
+
+add_ideas = {
+	minister_EFL_Eldar_Fenn
+	minister_EFL_Mira_Leto
+	minister_EFL_Ulf_Rann
+	minister_EFL_Tavia_El
+	minister_EFL_Gleb_Ruun
+	minister_EFL_Nera_Flux
+}
 
 set_research_slots = 2

@@ -1,4 +1,4 @@
-capital = 49
+capital = 66
 
 ####### Characters
 
@@ -20,5 +20,14 @@ set_popularities = {
 }
 
 set_stability = -0.15
+
+add_ideas = {
+	minister_RUS_Arkady_Sever
+	minister_RUS_Varlam_Oskol
+	minister_RUS_Pelageya_Niva
+	minister_RUS_Efim_Bogor
+	minister_RUS_Dima_Rask
+	minister_RUS_Lera_Ton
+}
 
 set_research_slots = 1

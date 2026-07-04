@@ -32,6 +32,14 @@ add_ideas = {
 	NOD_home_of_hedonist_revolution
 	STP_hedonism_with_no_bondaries
 	STP_hidden_slaves_trade
+
+	#ministers
+	minister_NOD_Avren_Lusk
+	minister_NOD_Reto_Bane
+	minister_NOD_Selma_Korr
+	minister_NOD_Nestor_Vale
+	minister_NOD_Iris_Noll
+	minister_NOD_Kain_Voss
 }
 
 

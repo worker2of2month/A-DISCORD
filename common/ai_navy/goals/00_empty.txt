@@ -1,0 +1,1 @@
+# Total conversion: intentionally replaces vanilla AI naval goals.

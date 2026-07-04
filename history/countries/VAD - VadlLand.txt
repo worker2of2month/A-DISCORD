@@ -1,4 +1,4 @@
-capital = 67
+capital = 102
 
 ####### Characters
 
@@ -10,11 +10,19 @@ add_ideas = {
 	WRK_ashes_of_the_crown
 	WRK_hourglass_of_discord
 	WRK_constitution_of_the_republic
+
+	#ministers
+	minister_VAD_Pavel_Strazh
+	minister_VAD_Ruslan_Pike
+	minister_VAD_Yulia_Mera
+	minister_VAD_Roman_Zhiv
+	minister_VAD_Lidia_Takt
+	minister_VAD_Orest_Nox
 }
 
 set_politics = {
 	ruling_party = pragmatism
-	last_election = "2010.12.01"
+	last_election = "2110.12.01"
 	elections_allowed = no
 }
 set_popularities = {

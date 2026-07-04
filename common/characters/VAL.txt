@@ -9,8 +9,8 @@ characters = {
 ##    ## ##     ## ##     ## ##   ###    ##    ##    ##     ##       ##       ##       ##     ## ##     ## ##       ##    ##  ##    ## 
  ######   #######   #######  ##    ##    ##    ##     ##    ##       ######## ######## ##     ## ########  ######## ##     ##  ######  
 
-	VAL_valera_solgalov = {
-		name = VAL_valera_solgalov
+	VAL_Valera_Solgalov = {
+		name = VAL_Valera_Solgalov
 		portraits = {
 			civilian = {
 				large = GFX_portrait_VAL_Valera_Solgalov
@@ -18,9 +18,81 @@ characters = {
 		}
 		country_leader = {
 			ideology = etatism_ideology
-			expire = "1965.1.1.1"
+			expire = "2200.1.1.1"
 			id = -1
 			traits = { The_Weaponry_Baron }
+		}
+	}
+
+	VAL_Kirill_Voron = {
+		name = VAL_Kirill_Voron
+		portraits = {
+			army = {
+				large = GFX_portrait_VAL_Kirill_Voron
+			}
+		}
+		corps_commander = {
+			traits = { commando }
+			skill = 3
+			attack_skill = 4
+			defense_skill = 2
+			planning_skill = 3
+			logistics_skill = 2
+			legacy_id = -1
+		}
+	}
+
+	VAL_Erika_Stahl = {
+		name = VAL_Erika_Stahl
+		portraits = {
+			army = {
+				large = GFX_portrait_VAL_Erika_Stahl
+			}
+		}
+		corps_commander = {
+			traits = { organizer }
+			skill = 3
+			attack_skill = 2
+			defense_skill = 3
+			planning_skill = 4
+			logistics_skill = 3
+			legacy_id = -1
+		}
+	}
+
+	VAL_Boris_Gromov = {
+		name = VAL_Boris_Gromov
+		portraits = {
+			army = {
+				large = GFX_portrait_VAL_Boris_Gromov
+			}
+		}
+		corps_commander = {
+			traits = { offensive_doctrine }
+			skill = 3
+			attack_skill = 4
+			defense_skill = 3
+			planning_skill = 2
+			logistics_skill = 2
+			legacy_id = -1
+		}
+	}
+
+	VAL_Renata_Morn = {
+		name = VAL_Renata_Morn
+		portraits = {
+			army = {
+				large = GFX_portrait_VAL_Renata_Morn
+			}
+		}
+		corps_commander = {
+			traits = { logistics_wizard }
+			skill = 3
+			attack_skill = 2
+			defense_skill = 3
+			planning_skill = 3
+			logistics_skill = 4
+			legacy_id = -1
 		}
 	}
 }

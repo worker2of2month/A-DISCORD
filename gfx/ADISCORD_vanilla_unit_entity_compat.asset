@@ -1,0 +1,447 @@
+# Compatibility entity aliases for vanilla unit model selectors still used by the engine.
+# They prevent missing-entity crashes when selecting/moving armies in the TC map.
+
+entity = {
+	name = "BEL_infantry_weapon_mg_2_left_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "BEL_infantry_weapon_mg_2_long_idle_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "BEL_infantry_weapon_mg_2_right_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "BEL_infantry_weapon_mg_left_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "BEL_infantry_weapon_mg_long_idle_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "BEL_infantry_weapon_mg_right_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "BEL_infantry_weapon_rifle_left_entity"
+	pdxmesh = "ENG_infantry_weapon_rifle_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "BEL_infantry_weapon_rifle_long_idle_entity"
+	pdxmesh = "ENG_infantry_weapon_rifle_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "BEL_infantry_weapon_rifle_right_entity"
+	pdxmesh = "ENG_infantry_weapon_rifle_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "commonwealth_gfx_infantry_entity"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "FIN_infantry_alt_0_entity"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "FIN_infantry_alt_0_entity_desert"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "FIN_infantry_alt_0_entity_snow"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "FIN_infantry_alt_1_entity"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "FIN_infantry_alt_1_entity_desert"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "FIN_infantry_alt_1_entity_snow"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "FIN_infantry_alt_2_entity_desert"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "FIN_infantry_alt_2_entity_snow"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "FIN_infantry_entity"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "FIN_infantry_entity_desert"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "FIN_infantry_entity_snow"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "FIN_marine_entity"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "FIN_snowman_entity"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "FRA_infantry_entity"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "FRA_infantry_weapon_mg_left_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "FRA_infantry_weapon_mg_right_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "FRA_infantry_weapon_rifle_left_entity"
+	pdxmesh = "ENG_infantry_weapon_rifle_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "FRA_infantry_weapon_rifle_long_idle_entity"
+	pdxmesh = "ENG_infantry_weapon_rifle_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "FRA_infantry_weapon_rifle_right_entity"
+	pdxmesh = "ENG_infantry_weapon_rifle_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_infantry_alt_0_entity"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_infantry_alt_0_entity_desert"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_infantry_alt_0_entity_snow"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_infantry_alt_1_entity"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_infantry_alt_2_entity"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_infantry_alt_3_entity"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_infantry_entity"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_infantry_entity_desert"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_infantry_entity_snow"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_infantry_weapon_mg_2_left_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_infantry_weapon_mg_2_long_idle_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_infantry_weapon_mg_2_right_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_infantry_weapon_mg_left_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_infantry_weapon_mg_long_idle_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_infantry_weapon_mg_right_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_infantry_weapon_rifle_left_entity"
+	pdxmesh = "ENG_infantry_weapon_rifle_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_infantry_weapon_rifle_long_idle_entity"
+	pdxmesh = "ENG_infantry_weapon_rifle_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_infantry_weapon_rifle_right_entity"
+	pdxmesh = "ENG_infantry_weapon_rifle_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_militia_entity"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_militia_entity_desert"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "GER_militia_entity_snow"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "ITA_infantry_entity"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "ITA_infantry_weapon_mg_left_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "ITA_infantry_weapon_mg_long_idle_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "ITA_infantry_weapon_mg_right_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "ITA_infantry_weapon_rifle_left_entity"
+	pdxmesh = "ENG_infantry_weapon_rifle_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "ITA_infantry_weapon_rifle_long_idle_entity"
+	pdxmesh = "ENG_infantry_weapon_rifle_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "ITA_infantry_weapon_rifle_right_entity"
+	pdxmesh = "ENG_infantry_weapon_rifle_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "JAP_infantry_entity"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "JAP_infantry_entity_desert"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "JAP_infantry_entity_snow"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "JAP_infantry_weapon_mg_left_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "JAP_infantry_weapon_mg_long_idle_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "JAP_infantry_weapon_mg_right_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "JAP_infantry_weapon_rifle_left_entity"
+	pdxmesh = "ENG_infantry_weapon_rifle_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "JAP_infantry_weapon_rifle_long_idle_entity"
+	pdxmesh = "ENG_infantry_weapon_rifle_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "JAP_infantry_weapon_rifle_right_entity"
+	pdxmesh = "ENG_infantry_weapon_rifle_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "SOV_infantry_entity"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "SOV_infantry_weapon_mg_left_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "SOV_infantry_weapon_mg_long_idle_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "SOV_infantry_weapon_mg_right_entity"
+	pdxmesh = "ENG_infantry_weapon_mg_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "SOV_infantry_weapon_rifle_left_entity"
+	pdxmesh = "ENG_infantry_weapon_rifle_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "SOV_infantry_weapon_rifle_long_idle_entity"
+	pdxmesh = "ENG_infantry_weapon_rifle_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "SOV_infantry_weapon_rifle_right_entity"
+	pdxmesh = "ENG_infantry_weapon_rifle_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "USA_infantry_entity"
+	pdxmesh = "STP_infantry_mesh"
+	scale = 1.0
+}
+

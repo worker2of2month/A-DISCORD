@@ -1,4 +1,4 @@
-capital = 72
+capital = 78
 
 ####### Characters
 
@@ -16,5 +16,14 @@ set_popularities = {
 }
 
 set_stability = -0.64
+
+add_ideas = {
+	minister_DAN_Yan_Krass
+	minister_DAN_Vera_Toch
+	minister_DAN_Makar_Holm
+	minister_DAN_Liza_Fen
+	minister_DAN_Osip_Prav
+	minister_DAN_Runa_Sled
+}
 
 set_research_slots = 2

@@ -2,13 +2,11 @@ state={
 	id=50
 	name="STATE_50"
 	provinces={
-		1250 1316 3088 8432 8774 9395 11419 11692 12488 
+		3088 9395 11419 16631
 	}
 	manpower=0
-	buildings_max_level_factor=1.000
-	local_supplies=0.000
-
-	state_category = wasteland
-
 	impassable = yes
+	buildings_max_level_factor=1
+	state_category=wasteland
+	local_supplies=0
 }

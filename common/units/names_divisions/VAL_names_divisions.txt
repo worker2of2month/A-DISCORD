@@ -1,0 +1,19 @@
+VAL_INF_01 = {
+	name = "Kefreyt Infantry"
+
+	for_countries = { VAL }
+
+	can_use = { always = yes }
+
+	division_types = { infantry }
+
+	fallback_name = "%d Kefreyt Division"
+
+	ordered = {
+		1 = { "1st Kefreyt Line Brigade" }
+		2 = { "2nd Kefreyt Contract Infantry" }
+		3 = { "3rd Kefreyt Security Detachment" }
+		4 = { "4th Kefreyt Contract Infantry" }
+		5 = { "5th Kefreyt Security Detachment" }
+	}
+}

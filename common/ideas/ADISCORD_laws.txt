@@ -1,0 +1,1797 @@
+ideas = {
+	ADISCORD_civic_order_laws = {
+		law = yes
+
+		ADISCORD_civic_order_loose_communes = {
+			picture = ADISCORD_law_civic_loose_communes
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				stability_factor = -0.04
+				political_power_gain = 0.04
+				consumer_goods_factor = -0.01
+			}
+
+			cancel_if_invalid = no
+		}
+
+		ADISCORD_civic_order_local_councils = {
+			picture = ADISCORD_law_civic_local_councils
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				stability_factor = 0.02
+				political_power_gain = -0.01
+				consumer_goods_factor = -0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 2
+					has_government = humanism
+				}
+			}
+		}
+
+		ADISCORD_civic_order_central_registers = {
+			picture = ADISCORD_law_civic_central_registers
+			cost = 75
+			removal_cost = -1
+			default = yes
+
+			modifier = {
+				stability_factor = 0.03
+				political_power_gain = 0.02
+				consumer_goods_factor = 0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 3
+			}
+		}
+
+		ADISCORD_civic_order_emergency_committees = {
+			picture = ADISCORD_law_civic_emergency_committees
+			cost = 75
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_war = yes
+					has_war_support > 0.35
+				}
+			}
+
+			modifier = {
+				stability_factor = -0.02
+				war_support_factor = 0.05
+				political_power_gain = 0.03
+				mobilization_speed = 0.10
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 4
+					has_war = yes
+				}
+			}
+		}
+
+		ADISCORD_civic_order_internal_directorate = {
+			picture = ADISCORD_law_civic_internal_directorate
+			cost = 75
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_government = chauvinism
+					has_government = utilitarism
+					has_government = etatism
+					has_war_support > 0.50
+				}
+			}
+
+			modifier = {
+				stability_factor = 0.06
+				drift_defence_factor = 0.20
+				political_power_gain = -0.05
+				consumer_goods_factor = 0.03
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					OR = {
+						has_government = chauvinism
+						has_government = utilitarism
+						has_government = etatism
+					}
+				}
+			}
+		}
+	}
+
+	ADISCORD_information_laws = {
+		law = yes
+
+		ADISCORD_information_open_press = {
+			picture = ADISCORD_law_information_open_press
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				research_speed_factor = 0.02
+				stability_factor = -0.03
+				drift_defence_factor = -0.10
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 2
+					has_government = humanism
+				}
+			}
+		}
+
+		ADISCORD_information_licensed_press = {
+			picture = ADISCORD_law_information_licensed_press
+			cost = 75
+			removal_cost = -1
+			default = yes
+
+			modifier = {
+				stability_factor = 0.02
+				political_power_gain = 0.02
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 3
+			}
+		}
+
+		ADISCORD_information_state_bulletins = {
+			picture = ADISCORD_law_information_state_bulletins
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				political_power_gain = 0.04
+				war_support_factor = 0.02
+				research_speed_factor = -0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 2
+					has_government = etatism
+				}
+			}
+		}
+
+		ADISCORD_information_wartime_censorship = {
+			picture = ADISCORD_law_information_wartime_censorship
+			cost = 75
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_war = yes
+					has_war_support > 0.35
+				}
+			}
+
+			modifier = {
+				stability_factor = 0.02
+				war_support_factor = 0.05
+				political_power_gain = -0.03
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 5
+					has_war = yes
+				}
+			}
+		}
+
+		ADISCORD_information_sealed_networks = {
+			picture = ADISCORD_law_information_sealed_networks
+			cost = 75
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_government = chauvinism
+					has_government = utilitarism
+					has_government = technocracy
+					has_government = etatism
+					has_war = yes
+				}
+			}
+
+			modifier = {
+				stability_factor = 0.05
+				drift_defence_factor = 0.20
+				political_power_gain = -0.05
+				research_speed_factor = -0.03
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 2
+					has_government = technocracy
+				}
+			}
+		}
+	}
+
+	ADISCORD_taxation_laws = {
+		law = yes
+
+		ADISCORD_taxation_light_dues = {
+			picture = ADISCORD_law_taxation_light_dues
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				consumer_goods_factor = -0.01
+				production_speed_industrial_complex_factor = 0.03
+				political_power_gain = -0.04
+			}
+
+			cancel_if_invalid = no
+		}
+
+		ADISCORD_taxation_balanced_register = {
+			picture = ADISCORD_law_taxation_balanced_register
+			cost = 150
+			removal_cost = -1
+			default = yes
+
+			modifier = {
+				stability_factor = 0.01
+				political_power_gain = 0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 3
+			}
+		}
+
+		ADISCORD_taxation_progressive_brackets = {
+			picture = ADISCORD_law_taxation_progressive_brackets
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				stability_factor = 0.04
+				monthly_population = 0.02
+				consumer_goods_factor = 0.02
+				political_power_gain = -0.02
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 2
+					has_government = humanism
+				}
+			}
+		}
+
+		ADISCORD_taxation_industrial_tariffs = {
+			picture = ADISCORD_law_taxation_industrial_tariffs
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				production_speed_industrial_complex_factor = 0.03
+				production_speed_arms_factory_factor = 0.05
+				consumer_goods_factor = 0.02
+				research_speed_factor = -0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 2
+					has_government = technocracy
+				}
+			}
+		}
+
+		ADISCORD_taxation_extraction_quotas = {
+			picture = ADISCORD_law_taxation_extraction_quotas
+			cost = 150
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_war = yes
+					has_war_support > 0.25
+				}
+			}
+
+			modifier = {
+				consumer_goods_factor = -0.04
+				industrial_capacity_factory = 0.04
+				political_power_gain = 0.03
+				stability_factor = -0.06
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 4
+					has_war = yes
+				}
+			}
+		}
+	}
+
+	ADISCORD_military_organization_laws = {
+		law = yes
+
+		ADISCORD_military_organization_militia_autonomy = {
+			picture = ADISCORD_law_military_militia_autonomy
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				conscription = 0.01
+				army_org_factor = -0.03
+				training_time_factor = -0.05
+				stability_factor = 0.02
+			}
+
+			cancel_if_invalid = no
+		}
+
+		ADISCORD_military_organization_cadre_army = {
+			picture = ADISCORD_law_military_cadre_army
+			cost = 150
+			removal_cost = -1
+			default = yes
+
+			modifier = {
+				army_org_factor = 0.02
+				training_time_factor = 0.02
+				conscription = -0.002
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 3
+			}
+		}
+
+		ADISCORD_military_organization_contract_brigades = {
+			picture = ADISCORD_law_military_contract_brigades
+			cost = 150
+			removal_cost = -1
+
+			available = {
+				has_war_support > 0.15
+			}
+
+			modifier = {
+				army_org_factor = 0.04
+				training_time_factor = -0.03
+				political_power_gain = -0.03
+				consumer_goods_factor = 0.01
+			}
+
+			cancel_if_invalid = no
+		}
+
+		ADISCORD_military_organization_general_staff = {
+			picture = ADISCORD_law_military_general_staff
+			cost = 150
+			removal_cost = -1
+
+			available = {
+				has_war_support > 0.25
+			}
+
+			modifier = {
+				army_org_factor = 0.03
+				planning_speed = 0.08
+				mobilization_speed = 0.10
+				training_time_factor = 0.05
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					is_major = yes
+				}
+			}
+		}
+
+		ADISCORD_military_organization_total_defense_grid = {
+			picture = ADISCORD_law_military_total_defense_grid
+			cost = 150
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_war = yes
+					has_war_support > 0.50
+				}
+			}
+
+			modifier = {
+				conscription = 0.02
+				mobilization_speed = 0.20
+				army_core_defence_factor = 0.05
+				production_speed_buildings_factor = -0.05
+				stability_factor = -0.03
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 5
+					has_war = yes
+				}
+			}
+		}
+	}
+
+	ADISCORD_welfare_laws = {
+		law = yes
+
+		ADISCORD_welfare_charity_relief = {
+			picture = ADISCORD_law_welfare_charity_relief
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				stability_factor = -0.01
+				monthly_population = -0.005
+				consumer_goods_factor = -0.01
+				political_power_gain = 0.02
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 2
+					has_government = utilitarism
+				}
+			}
+		}
+
+		ADISCORD_welfare_basic_services = {
+			picture = ADISCORD_law_welfare_basic_services
+			cost = 75
+			removal_cost = -1
+			default = yes
+
+			modifier = {
+				stability_factor = 0.01
+				monthly_population = 0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 3
+			}
+		}
+
+		ADISCORD_welfare_social_insurance = {
+			picture = ADISCORD_law_welfare_social_insurance
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				stability_factor = 0.03
+				monthly_population = 0.02
+				consumer_goods_factor = 0.01
+				political_power_gain = -0.02
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 2
+					has_government = humanism
+				}
+			}
+		}
+
+		ADISCORD_welfare_universal_provision = {
+			picture = ADISCORD_law_welfare_universal_provision
+			cost = 75
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_government = humanism
+					has_government = etatism
+				}
+			}
+
+			modifier = {
+				stability_factor = 0.05
+				monthly_population = 0.03
+				research_speed_factor = 0.01
+				consumer_goods_factor = 0.04
+				political_power_gain = -0.04
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					has_government = humanism
+				}
+			}
+		}
+
+		ADISCORD_welfare_rationed_support = {
+			picture = ADISCORD_law_welfare_rationed_support
+			cost = 75
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_war = yes
+					has_war_support > 0.35
+				}
+			}
+
+			modifier = {
+				stability_factor = -0.02
+				monthly_population = -0.01
+				consumer_goods_factor = -0.02
+				war_support_factor = 0.04
+				political_power_gain = 0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 4
+					has_war = yes
+				}
+			}
+		}
+	}
+
+	ADISCORD_education_laws = {
+		law = yes
+
+		ADISCORD_education_informal_instruction = {
+			picture = ADISCORD_law_education_informal_instruction
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				research_speed_factor = 0.005
+				stability_factor = -0.01
+				consumer_goods_factor = -0.01
+				political_power_gain = 0.01
+			}
+
+			cancel_if_invalid = no
+		}
+
+		ADISCORD_education_basic_schools = {
+			picture = ADISCORD_law_education_basic_schools
+			cost = 75
+			removal_cost = -1
+			default = yes
+
+			modifier = {
+				research_speed_factor = 0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 3
+			}
+		}
+
+		ADISCORD_education_civic_curriculum = {
+			picture = ADISCORD_law_education_civic_curriculum
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				research_speed_factor = 0.015
+				stability_factor = 0.02
+				drift_defence_factor = 0.05
+				political_power_gain = -0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 2
+					has_government = humanism
+				}
+			}
+		}
+
+		ADISCORD_education_technical_institutes = {
+			picture = ADISCORD_law_education_technical_institutes
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				research_speed_factor = 0.03
+				industrial_capacity_factory = 0.02
+				consumer_goods_factor = 0.01
+				stability_factor = -0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					has_government = technocracy
+				}
+			}
+		}
+
+		ADISCORD_education_elite_academies = {
+			picture = ADISCORD_law_education_elite_academies
+			cost = 75
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_government = technocracy
+					has_government = etatism
+					has_government = chauvinism
+				}
+			}
+
+			modifier = {
+				research_speed_factor = 0.04
+				command_power_gain = 0.01
+				consumer_goods_factor = 0.02
+				stability_factor = -0.02
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					has_government = technocracy
+				}
+			}
+		}
+	}
+
+	ADISCORD_healthcare_laws = {
+		law = yes
+
+		ADISCORD_healthcare_private_care = {
+			picture = ADISCORD_law_healthcare_private_care
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				monthly_population = 0.005
+				stability_factor = -0.01
+				consumer_goods_factor = -0.01
+				political_power_gain = 0.01
+			}
+
+			cancel_if_invalid = no
+		}
+
+		ADISCORD_healthcare_basic_clinics = {
+			picture = ADISCORD_law_healthcare_basic_clinics
+			cost = 75
+			removal_cost = -1
+			default = yes
+
+			modifier = {
+				monthly_population = 0.01
+				stability_factor = 0.005
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 3
+			}
+		}
+
+		ADISCORD_healthcare_public_hospitals = {
+			picture = ADISCORD_law_healthcare_public_hospitals
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				monthly_population = 0.02
+				stability_factor = 0.02
+				consumer_goods_factor = 0.01
+				political_power_gain = -0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 2
+					has_government = humanism
+				}
+			}
+		}
+
+		ADISCORD_healthcare_preventive_medicine = {
+			picture = ADISCORD_law_healthcare_preventive_medicine
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				monthly_population = 0.025
+				research_speed_factor = 0.01
+				stability_factor = 0.01
+				consumer_goods_factor = 0.02
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 2
+					has_government = technocracy
+				}
+			}
+		}
+
+		ADISCORD_healthcare_military_medical_service = {
+			picture = ADISCORD_law_healthcare_military_medical_service
+			cost = 75
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_war = yes
+					has_war_support > 0.35
+				}
+			}
+
+			modifier = {
+				monthly_population = 0.01
+				war_support_factor = 0.03
+				supply_consumption_factor = 0.01
+				consumer_goods_factor = 0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 4
+					has_war = yes
+				}
+			}
+		}
+	}
+
+	ADISCORD_cultural_policy_laws = {
+		law = yes
+
+		ADISCORD_cultural_policy_tolerated_subcultures = {
+			picture = ADISCORD_law_cultural_policy_tolerated_subcultures
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				research_speed_factor = 0.01
+				stability_factor = -0.015
+				drift_defence_factor = -0.04
+				political_power_gain = 0.02
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 2
+					has_government = humanism
+				}
+			}
+		}
+
+		ADISCORD_cultural_policy_public_entertainment = {
+			picture = ADISCORD_law_cultural_policy_public_entertainment
+			cost = 75
+			removal_cost = -1
+			default = yes
+
+			modifier = {
+				stability_factor = 0.01
+				drift_defence_factor = -0.02
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 3
+			}
+		}
+
+		ADISCORD_cultural_policy_civic_festivals = {
+			picture = ADISCORD_law_cultural_policy_civic_festivals
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				stability_factor = 0.025
+				war_support_factor = 0.01
+				consumer_goods_factor = 0.005
+				political_power_gain = -0.01
+			}
+
+			cancel_if_invalid = no
+		}
+
+		ADISCORD_cultural_policy_avant_garde_patronage = {
+			picture = ADISCORD_law_cultural_policy_avant_garde_patronage
+			cost = 75
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_government = humanism
+					has_government = technocracy
+				}
+			}
+
+			modifier = {
+				research_speed_factor = 0.02
+				stability_factor = -0.01
+				drift_defence_factor = -0.05
+				consumer_goods_factor = 0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 2
+					has_government = humanism
+				}
+			}
+		}
+
+		ADISCORD_cultural_policy_national_mythmaking = {
+			picture = ADISCORD_law_cultural_policy_national_mythmaking
+			cost = 75
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_government = chauvinism
+					has_government = etatism
+				}
+			}
+
+			modifier = {
+				stability_factor = 0.01
+				war_support_factor = 0.04
+				drift_defence_factor = 0.08
+				research_speed_factor = -0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					OR = {
+						has_government = chauvinism
+						has_government = etatism
+					}
+				}
+			}
+		}
+	}
+
+	ADISCORD_industrial_policy_laws = {
+		law = yes
+
+		ADISCORD_industrial_policy_artisan_markets = {
+			picture = ADISCORD_law_industrial_policy_artisan_markets
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				consumer_goods_factor = -0.015
+				stability_factor = 0.01
+				industrial_capacity_factory = -0.01
+			}
+
+			cancel_if_invalid = no
+		}
+
+		ADISCORD_industrial_policy_balanced_workshops = {
+			picture = ADISCORD_law_industrial_policy_balanced_workshops
+			cost = 150
+			removal_cost = -1
+			default = yes
+
+			modifier = {
+				industrial_capacity_factory = 0.01
+				production_speed_buildings_factor = 0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 3
+			}
+		}
+
+		ADISCORD_industrial_policy_civilian_expansion = {
+			picture = ADISCORD_law_industrial_policy_civilian_expansion
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				production_speed_industrial_complex_factor = 0.05
+				production_speed_buildings_factor = 0.02
+				production_speed_arms_factory_factor = -0.01
+				consumer_goods_factor = 0.02
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 2
+					has_government = humanism
+				}
+			}
+		}
+
+		ADISCORD_industrial_policy_military_prioritization = {
+			picture = ADISCORD_law_industrial_policy_military_prioritization
+			cost = 150
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_war = yes
+					has_war_support > 0.25
+				}
+			}
+
+			modifier = {
+				production_speed_arms_factory_factor = 0.07
+				industrial_capacity_factory = 0.03
+				consumer_goods_factor = 0.03
+				stability_factor = -0.02
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 4
+					has_war = yes
+				}
+			}
+		}
+
+		ADISCORD_industrial_policy_state_planning_boards = {
+			picture = ADISCORD_law_industrial_policy_state_planning_boards
+			cost = 150
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_government = etatism
+					has_government = technocracy
+					has_government = utilitarism
+				}
+			}
+
+			modifier = {
+				production_speed_buildings_factor = 0.03
+				industrial_capacity_factory = 0.03
+				consumer_goods_factor = 0.02
+				political_power_gain = -0.03
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					OR = {
+						has_government = etatism
+						has_government = technocracy
+					}
+				}
+			}
+		}
+	}
+
+	ADISCORD_labor_policy_laws = {
+		law = yes
+
+		ADISCORD_labor_policy_loose_contracts = {
+			picture = ADISCORD_law_labor_policy_loose_contracts
+			cost = 150
+			removal_cost = -1
+			default = yes
+
+			modifier = {
+				industrial_capacity_factory = 0.01
+				stability_factor = -0.005
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 3
+			}
+		}
+
+		ADISCORD_labor_policy_guild_protections = {
+			picture = ADISCORD_law_labor_policy_guild_protections
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				stability_factor = 0.03
+				industrial_capacity_factory = -0.02
+				consumer_goods_factor = 0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 2
+					has_government = humanism
+				}
+			}
+		}
+
+		ADISCORD_labor_policy_regulated_shifts = {
+			picture = ADISCORD_law_labor_policy_regulated_shifts
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				stability_factor = 0.02
+				monthly_population = 0.01
+				industrial_capacity_factory = -0.01
+				consumer_goods_factor = 0.01
+			}
+
+			cancel_if_invalid = no
+		}
+
+		ADISCORD_labor_policy_technocratic_work_norms = {
+			picture = ADISCORD_law_labor_policy_technocratic_work_norms
+			cost = 150
+			removal_cost = -1
+
+			available = {
+				has_government = technocracy
+			}
+
+			modifier = {
+				industrial_capacity_factory = 0.03
+				production_speed_buildings_factor = 0.02
+				stability_factor = -0.01
+				political_power_gain = -0.02
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 4
+					has_government = technocracy
+				}
+			}
+		}
+
+		ADISCORD_labor_policy_mobilized_labor = {
+			picture = ADISCORD_law_labor_policy_mobilized_labor
+			cost = 150
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_war = yes
+					has_war_support > 0.35
+				}
+			}
+
+			modifier = {
+				production_speed_buildings_factor = 0.06
+				industrial_capacity_factory = 0.03
+				consumer_goods_factor = -0.02
+				stability_factor = -0.04
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 4
+					has_war = yes
+				}
+			}
+		}
+	}
+
+	ADISCORD_infrastructure_laws = {
+		law = yes
+
+		ADISCORD_infrastructure_patchwork_roads = {
+			picture = ADISCORD_law_infrastructure_patchwork_roads
+			cost = 150
+			removal_cost = -1
+			default = yes
+
+			modifier = {
+				production_speed_buildings_factor = 0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 3
+			}
+		}
+
+		ADISCORD_infrastructure_regional_roadworks = {
+			picture = ADISCORD_law_infrastructure_regional_roadworks
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				production_speed_infrastructure_factor = 0.05
+				production_speed_buildings_factor = 0.01
+				consumer_goods_factor = 0.01
+			}
+
+			cancel_if_invalid = no
+		}
+
+		ADISCORD_infrastructure_rail_corridors = {
+			picture = ADISCORD_law_infrastructure_rail_corridors
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				supply_consumption_factor = -0.02
+				mobilization_speed = 0.05
+				production_speed_infrastructure_factor = 0.03
+				consumer_goods_factor = 0.015
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 2
+					is_major = yes
+				}
+			}
+		}
+
+		ADISCORD_infrastructure_strategic_highways = {
+			picture = ADISCORD_law_infrastructure_strategic_highways
+			cost = 150
+			removal_cost = -1
+
+			available = {
+				has_war_support > 0.25
+			}
+
+			modifier = {
+				mobilization_speed = 0.10
+				planning_speed = 0.05
+				production_speed_buildings_factor = 0.02
+				consumer_goods_factor = 0.02
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					has_war_support > 0.35
+				}
+			}
+		}
+
+		ADISCORD_infrastructure_military_depots = {
+			picture = ADISCORD_law_infrastructure_military_depots
+			cost = 150
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_war = yes
+					has_war_support > 0.45
+				}
+			}
+
+			modifier = {
+				supply_consumption_factor = -0.04
+				army_org_factor = 0.01
+				consumer_goods_factor = 0.02
+				stability_factor = -0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 4
+					has_war = yes
+				}
+			}
+		}
+	}
+
+	ADISCORD_officer_corps_laws = {
+		law = yes
+
+		ADISCORD_officer_corps_local_seniority = {
+			picture = ADISCORD_law_officer_corps_local_seniority
+			cost = 150
+			removal_cost = -1
+			default = yes
+
+			modifier = {
+				command_power_gain = 0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 3
+			}
+		}
+
+		ADISCORD_officer_corps_merit_commissions = {
+			picture = ADISCORD_law_officer_corps_merit_commissions
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				army_org_factor = 0.02
+				training_time_factor = 0.02
+				command_power_gain = 0.015
+				stability_factor = -0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 2
+					has_government = technocracy
+				}
+			}
+		}
+
+		ADISCORD_officer_corps_political_commissars = {
+			picture = ADISCORD_law_officer_corps_political_commissars
+			cost = 150
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_government = etatism
+					has_government = chauvinism
+					has_government = utilitarism
+				}
+			}
+
+			modifier = {
+				stability_factor = 0.02
+				war_support_factor = 0.02
+				army_org_factor = -0.01
+				command_power_gain = -0.005
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					has_government = etatism
+				}
+			}
+		}
+
+		ADISCORD_officer_corps_general_staff_academy = {
+			picture = ADISCORD_law_officer_corps_general_staff_academy
+			cost = 150
+			removal_cost = -1
+
+			available = {
+				has_war_support > 0.25
+			}
+
+			modifier = {
+				planning_speed = 0.10
+				army_org_factor = 0.03
+				command_power_gain = 0.02
+				consumer_goods_factor = 0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					is_major = yes
+				}
+			}
+		}
+
+		ADISCORD_officer_corps_emergency_promotions = {
+			picture = ADISCORD_law_officer_corps_emergency_promotions
+			cost = 150
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_war = yes
+					has_war_support > 0.45
+				}
+			}
+
+			modifier = {
+				mobilization_speed = 0.15
+				training_time_factor = -0.05
+				army_org_factor = -0.03
+				war_support_factor = 0.02
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 5
+					has_war = yes
+				}
+			}
+		}
+	}
+
+	ADISCORD_logistics_laws = {
+		law = yes
+
+		ADISCORD_logistics_local_foraging = {
+			picture = ADISCORD_law_logistics_local_foraging
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				supply_consumption_factor = -0.03
+				stability_factor = -0.015
+				army_org_factor = -0.01
+				consumer_goods_factor = -0.005
+			}
+
+			cancel_if_invalid = no
+		}
+
+		ADISCORD_logistics_civilian_contracts = {
+			picture = ADISCORD_law_logistics_civilian_contracts
+			cost = 150
+			removal_cost = -1
+			default = yes
+
+			modifier = {
+				supply_consumption_factor = -0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 3
+			}
+		}
+
+		ADISCORD_logistics_centralized_depots = {
+			picture = ADISCORD_law_logistics_centralized_depots
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				supply_consumption_factor = -0.04
+				mobilization_speed = 0.05
+				consumer_goods_factor = 0.015
+				political_power_gain = -0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 2
+					is_major = yes
+				}
+			}
+		}
+
+		ADISCORD_logistics_motorized_supply = {
+			picture = ADISCORD_law_logistics_motorized_supply
+			cost = 150
+			removal_cost = -1
+
+			available = {
+				has_war_support > 0.25
+			}
+
+			modifier = {
+				supply_consumption_factor = -0.05
+				army_org_factor = 0.02
+				industrial_capacity_factory = -0.01
+				consumer_goods_factor = 0.02
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					has_war_support > 0.35
+				}
+			}
+		}
+
+		ADISCORD_logistics_emergency_requisitioning = {
+			picture = ADISCORD_law_logistics_emergency_requisitioning
+			cost = 150
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_war = yes
+					has_war_support > 0.50
+				}
+			}
+
+			modifier = {
+				supply_consumption_factor = -0.06
+				war_support_factor = 0.02
+				stability_factor = -0.04
+				political_power_gain = 0.02
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 5
+					has_war = yes
+				}
+			}
+		}
+	}
+
+	ADISCORD_training_laws = {
+		law = yes
+
+		ADISCORD_training_irregular_exercises = {
+			picture = ADISCORD_law_training_irregular_exercises
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				training_time_factor = -0.07
+				army_org_factor = -0.02
+				stability_factor = 0.01
+				conscription = 0.005
+			}
+
+			cancel_if_invalid = no
+		}
+
+		ADISCORD_training_basic_drills = {
+			picture = ADISCORD_law_training_basic_drills
+			cost = 150
+			removal_cost = -1
+			default = yes
+
+			modifier = {
+				army_org_factor = 0.01
+				training_time_factor = 0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 3
+			}
+		}
+
+		ADISCORD_training_standardized_program = {
+			picture = ADISCORD_law_training_standardized_program
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				army_org_factor = 0.025
+				training_time_factor = 0.01
+				command_power_gain = 0.005
+				consumer_goods_factor = 0.005
+			}
+
+			cancel_if_invalid = no
+		}
+
+		ADISCORD_training_officer_led_wargames = {
+			picture = ADISCORD_law_training_officer_led_wargames
+			cost = 150
+			removal_cost = -1
+
+			available = {
+				has_war_support > 0.25
+			}
+
+			modifier = {
+				planning_speed = 0.08
+				army_org_factor = 0.03
+				training_time_factor = 0.04
+				consumer_goods_factor = 0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 2
+					is_major = yes
+				}
+			}
+		}
+
+		ADISCORD_training_accelerated_bootcamps = {
+			picture = ADISCORD_law_training_accelerated_bootcamps
+			cost = 150
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_war = yes
+					has_war_support > 0.35
+				}
+			}
+
+			modifier = {
+				training_time_factor = -0.12
+				mobilization_speed = 0.10
+				army_org_factor = -0.025
+				war_support_factor = 0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 5
+					has_war = yes
+				}
+			}
+		}
+	}
+
+	ADISCORD_internal_security_laws = {
+		law = yes
+
+		ADISCORD_internal_security_neighborhood_watch = {
+			picture = ADISCORD_law_internal_security_neighborhood_watch
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				stability_factor = 0.005
+				drift_defence_factor = 0.02
+				army_org_factor = -0.01
+				political_power_gain = 0.01
+			}
+
+			cancel_if_invalid = no
+		}
+
+		ADISCORD_internal_security_local_garrisons = {
+			picture = ADISCORD_law_internal_security_local_garrisons
+			cost = 150
+			removal_cost = -1
+			default = yes
+
+			modifier = {
+				stability_factor = 0.01
+				army_org_factor = -0.005
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 3
+			}
+		}
+
+		ADISCORD_internal_security_investigative_bureaus = {
+			picture = ADISCORD_law_internal_security_investigative_bureaus
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				stability_factor = 0.02
+				drift_defence_factor = 0.10
+				political_power_gain = -0.02
+				consumer_goods_factor = 0.01
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 2
+					has_government = etatism
+				}
+			}
+		}
+
+		ADISCORD_internal_security_emergency_patrols = {
+			picture = ADISCORD_law_internal_security_emergency_patrols
+			cost = 150
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_war = yes
+					has_war_support > 0.35
+				}
+			}
+
+			modifier = {
+				stability_factor = 0.03
+				war_support_factor = 0.02
+				army_org_factor = -0.02
+				consumer_goods_factor = 0.015
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 4
+					has_war = yes
+				}
+			}
+		}
+
+		ADISCORD_internal_security_internal_directorate = {
+			picture = ADISCORD_law_internal_security_internal_directorate
+			cost = 150
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_government = chauvinism
+					has_government = utilitarism
+					has_government = etatism
+					has_war_support > 0.50
+				}
+			}
+
+			modifier = {
+				stability_factor = 0.05
+				drift_defence_factor = 0.20
+				political_power_gain = -0.04
+				consumer_goods_factor = 0.03
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					OR = {
+						has_government = chauvinism
+						has_government = utilitarism
+						has_government = etatism
+					}
+				}
+			}
+		}
+	}
+}

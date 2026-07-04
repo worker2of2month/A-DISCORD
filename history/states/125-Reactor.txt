@@ -1,0 +1,12 @@
+state={
+	id=125
+	name="STATE_125"
+	provinces={
+		1466 1805 2748 2964 2974 3100 4068 4324 5029 5165 5200 5228 5383 6273 6530 6950 7026 7844 10514 11805 11912 11937 
+	}
+	manpower=0
+	impassable = yes
+	buildings_max_level_factor=1
+	local_supplies=0
+	state_category = wasteland
+}

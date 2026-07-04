@@ -4,3 +4,19 @@ is_completed_by_event = {
 		always = no
 	}
 }
+
+STP_sided_with_Maksim_trigger = {
+	OR = {
+		has_country_flag = STP_sided_with_Maksim_flag
+		has_completed_focus = STP_Cut_The_Silk_Leash
+		has_completed_focus = STP_Side_With_Maksim_bm
+	}
+}
+
+STP_sided_with_Hedersett_trigger = {
+	OR = {
+		has_country_flag = STP_sided_with_the_party_flag
+		has_completed_focus = STP_Renew_The_Cultural_Mandate
+		has_completed_focus = STP_Side_With_The_Party_bm
+	}
+}

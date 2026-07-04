@@ -8,7 +8,7 @@ recruit_character = BHG_Graf_Marcus
 
 set_politics = {
 	ruling_party = chauvinism
-	last_election = "2010.12.01"
+	last_election = "2110.12.01"
 	elections_allowed = no
 }
 set_popularities = {
@@ -19,5 +19,14 @@ set_popularities = {
 }
 
 set_stability = 0.34
+
+add_ideas = {
+	minister_BHG_Otmar_Rill
+	minister_BHG_Theodor_Brant
+	minister_BHG_Oswin_Kell
+	minister_BHG_Helga_Morn
+	minister_BHG_Lutz_Pater
+	minister_BHG_Ines_Spyr
+}
 
 set_research_slots = 2

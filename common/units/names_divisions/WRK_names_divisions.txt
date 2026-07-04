@@ -1,0 +1,34 @@
+WRK_INF_01 = {
+	name = "Infantry Divisions"
+
+	for_countries = { WRK }
+
+	can_use = { always = yes }
+
+	division_types = { infantry }
+
+	fallback_name = "%da Division de Infanteria"
+
+	ordered = {
+		1 = { "1a Division de Infanteria" }
+		2 = { "2a Division de Infanteria" }
+		3 = { "3a Division de Infanteria" }
+	}
+}
+
+WRK_CAV_01 = {
+	name = "Cavalry Divisions"
+
+	for_countries = { WRK }
+
+	can_use = { always = yes }
+
+	division_types = { cavalry }
+
+	fallback_name = "%da Division de Caballeria"
+
+	ordered = {
+		1 = { "1a Division de Caballeria" }
+		2 = { "2a Division de Caballeria" }
+	}
+}

@@ -6,7 +6,7 @@ defined_text = {
 		trigger = {
 			original_tag = STP
 			OR = {
-				has_country_flag = STP_sided_with_the_party_loc
+				has_country_flag = STP_sided_with_the_party_flag
 				has_country_flag = STP_sided_with_Maksim_flag
 			}
 		}
@@ -68,7 +68,7 @@ defined_text = {
 		trigger = {
 			original_tag = STP
 			OR = {
-				has_country_flag = STP_sided_with_the_party_loc
+				has_country_flag = STP_sided_with_the_party_flag
 				has_country_flag = STP_sided_with_Maksim_flag
 			}
 		}

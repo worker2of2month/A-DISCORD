@@ -8,563 +8,885 @@
 		}
 	}
 
+#############################################
+### STP ACT I: THE LAST FEAST OF PEACE
+### Final structural file: no gameplay effects, score logic, flags, or event payloads yet.
+###
+### Layout philosophy:
+### - Central spine: Ivanov's final days and the collapse of the old peace.
+### - West: Nodrul ideological and institutional leverage over the Party.
+### - East: Kefreite mercenary pressure on highland resources.
+### - Inner board: highlands, ports, palace, street, and garrisons.
+### - Bridge outcomes are hidden and should be auto-completed by event.
+###
+### Layout note:
+### - This version uses vertical layers to prevent sector collisions.
+### - Foreign actors sit above the inner political board.
+### - Ports, highlands, and palace occupy the middle layer.
+### - Street and garrisons occupy the lower layer.
+### - Bridge outcomes remain hidden and are meant to be completed by event.
+#############################################
+
+#############################################
+### CENTRAL SPINE: IVANOV'S LAST DAYS
+#############################################
+
+	# Nectar of the Gods
 	focus = {
 		id = STP_Nectar_of_the_Gods
 		icon = GFX_focus_STP_Nectar_of_the_Gods
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 0
 		y = 0
 		cost = 5
-		allow_branch = {
-		}
 		available_if_capitulated = yes
 		cancelable = no
-		ai_will_do = {
-			base = 1
-		}
 		available = {
 			has_country_leader = {
 				character = STP_Petr_Ivanov
 				ruling_only = yes
 			}
 		}
+		ai_will_do = { base = 1 }
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: focus USA_state_of_the_union completion_reward"
-
-			country_event = {
-				id = stp.1
-			}
-			hidden_effect = {
-				scoped_play_song = "21st"
-			}
+			country_event = { id = stp_lore.1 }
 		}
 	}
 
-###Maksim's attempt
-
+	# The Man Who Bought the Sky
 	focus = {
-		id = STP_Side_With_Maksim
-		icon = GFX_focus_STP_Side_With_Maksim
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
+		id = STP_The_Man_Who_Bought_The_Sky
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
 		relative_position_id = STP_Nectar_of_the_Gods
-		x = 5
-		y = 1
-		allow_branch = {
-			NOT = {has_country_flag = STP_sided_with_the_party_flag}
-		}
-		offset = {
-			x = -5
-			y = 0
-			trigger = {
-				has_country_flag = STP_sided_with_Maksim_flag
-			}
-		}
-		cost = 5
-		prerequisite = {
-			focus = STP_Nectar_of_the_Gods
-		}
-		mutually_exclusive = {
-			focus = STP_Side_With_The_Party
-		}
-		ai_will_do = {
-			base = 1
-		}
-		available = {
-			is_completed_by_event = yes
-		}
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: focus STP_Side_With_Maksim completion_reward"
-			hidden_effect = {
-				set_country_flag = STP_sided_with_Maksim_flag
-				focus_unlock = yes
-			}
-		}
-	}
-
-####
-
-	focus = {
-		id = STP_Prepare_For_The_Upcoming_BOP
-		icon = GFX_focus_STP_Prepare_For_The_Upcoming_BOP
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_Side_With_Maksim
-		x = 4
-		y = 1
-		cost = 5
-		prerequisite = {
-			focus = STP_Side_With_Maksim
-		}
-		ai_will_do = {
-			base = 1
-		}
-		completion_reward = {
-		}
-	}
-
-	focus = {
-		id = STP_Open_Their_Eyes
-		icon = GFX_focus_STP_Open_Their_Eyes
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_Prepare_For_The_Upcoming_BOP
 		x = 0
 		y = 1
 		cost = 5
-		prerequisite = {
-			focus = STP_Prepare_For_The_Upcoming_BOP
-		}
-		ai_will_do = {
-			base = 1
-		}
+		prerequisite = { focus = STP_Nectar_of_the_Gods }
+		ai_will_do = { base = 1 }
 		completion_reward = {
+			country_event = { id = stp_lore.2 }
 		}
 	}
 
+	# When the Guarantee Died
 	focus = {
-		id = STP_Secure_Swing_Votes
-		icon = GFX_focus_STP_Side_With_Maksim
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_Open_Their_Eyes
+		id = STP_When_The_Guarantee_Died
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Man_Who_Bought_The_Sky
 		x = 0
 		y = 1
 		cost = 5
-		prerequisite = {
-			focus = STP_Open_Their_Eyes
-		}
-		ai_will_do = {
-			base = 1
-		}
+		prerequisite = { focus = STP_The_Man_Who_Bought_The_Sky }
+		ai_will_do = { base = 1 }
 		completion_reward = {
+			country_event = { id = stp_lore.3 }
 		}
 	}
 
+	# The Dying Feast
 	focus = {
-		id = STP_A_Deal_With_Sotnikov
-		icon = GFX_focus_STP_Side_With_Maksim
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_Secure_Swing_Votes
-		x = -1
-		y = 1
-		cost = 5
-		prerequisite = {
-			focus = STP_Secure_Swing_Votes
-		}
-		ai_will_do = {
-			base = 1
-		}
-		completion_reward = {
-		}
-	}
-
-	focus = {
-		id = STP_Seek_International_Help
-		icon = GFX_focus_STP_Side_With_Maksim
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_Secure_Swing_Votes
-		x = 1
-		y = 1
-		cost = 5
-		prerequisite = {
-			focus = STP_Secure_Swing_Votes
-		}
-		ai_will_do = {
-			base = 1
-		}
-		completion_reward = {
-		}
-	}
-
-	focus = {
-		id = STP_All_In
-		icon = GFX_focus_STP_Side_With_Maksim
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_Seek_International_Help
-		x = -1
-		y = 1
-		cost = 5
-		prerequisite = {
-			focus = STP_Seek_International_Help
-		}
-		prerequisite = {
-			focus = STP_A_Deal_With_Sotnikov
-		}
-		ai_will_do = {
-			base = 1
-		}
-		completion_reward = {
-		}
-	}
-
-####
-
-	focus = {
-		id = STP_Deal_With_Stepan_Shabrat
-		icon = GFX_focus_STP_Side_With_Maksim
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_Side_With_Maksim
+		id = STP_The_Dying_Feast
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_When_The_Guarantee_Died
 		x = 0
-		y = 1
+		y = 5
 		cost = 5
-		prerequisite = {
-			focus = STP_Side_With_Maksim
-		}
-		ai_will_do = {
-			base = 1
-		}
+		prerequisite = { focus = STP_When_The_Guarantee_Died }
+		ai_will_do = { base = 1 }
 		completion_reward = {
+			country_event = { id = stp_lore.7 }
 		}
 	}
 
-####
-
+	# The Doctors Lie
 	focus = {
-		id = STP_Open_Wounds_Of_The_System
-		icon = GFX_focus_STP_Open_Wounds_Of_The_System
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_Deal_With_Stepan_Shabrat
-		x = -1
-		y = 1
-		cost = 5
-		prerequisite = {
-			focus = STP_Deal_With_Stepan_Shabrat
-		}
-		ai_will_do = {
-			base = 1
-		}
-		completion_reward = {
-		}
-	}
-
-	focus = {
-		id = STP_Policy_Of_Shadow_Terror
-		icon = GFX_focus_STP_Side_With_Maksim
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_Open_Wounds_Of_The_System
+		id = STP_The_Doctors_Lie
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Dying_Feast
 		x = 0
-		y = 1
+		y = 5
 		cost = 5
-		prerequisite = {
-			focus = STP_Open_Wounds_Of_The_System
-		}
-		ai_will_do = {
-			base = 1
-		}
+		prerequisite = { focus = STP_The_Dying_Feast }
+		ai_will_do = { base = 1 }
 		completion_reward = {
+			country_event = { id = stp_lore.11 }
 		}
 	}
 
+	# The Last Signature
 	focus = {
-		id = STP_The_Only_Solution
-		icon = GFX_focus_STP_Side_With_Maksim
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_Policy_Of_Shadow_Terror
+		id = STP_The_Last_Signature
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Doctors_Lie
 		x = 0
-		y = 1
+		y = 2
 		cost = 5
-		prerequisite = {
-			focus = STP_Policy_Of_Shadow_Terror
-		}
-		ai_will_do = {
-			base = 1
-		}
+		prerequisite = { focus = STP_The_Doctors_Lie }
+		ai_will_do = { base = 1 }
 		completion_reward = {
 		}
 	}
 
-####
-
+	# Cancel the Morning Address
 	focus = {
-		id = STP_A_Spirit_Of_Reforms
-		icon = GFX_focus_STP_Side_With_Maksim
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_Deal_With_Stepan_Shabrat
-		x = 1
-		y = 1
-		cost = 5
-		prerequisite = {
-			focus = STP_Deal_With_Stepan_Shabrat
-		}
-		ai_will_do = {
-			base = 1
-		}
-		completion_reward = {
-		}
-	}
-
-	focus = {
-		id = STP_Swing_Needed_Politicians
-		icon = GFX_focus_STP_Side_With_Maksim
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_A_Spirit_Of_Reforms
-		x = 0
-		y = 1
-		cost = 5
-		prerequisite = {
-			focus = STP_A_Spirit_Of_Reforms
-		}
-		ai_will_do = {
-			base = 1
-		}
-		completion_reward = {
-		}
-	}
-
-	focus = {
-		id = STP_Now_Is_Time_To_Act
-		icon = GFX_focus_STP_Side_With_Maksim
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_Swing_Needed_Politicians
-		x = 0
-		y = 1
-		cost = 5
-		prerequisite = {
-			focus = STP_Swing_Needed_Politicians
-		}
-		ai_will_do = {
-			base = 1
-		}
-		completion_reward = {
-		}
-	}
-
-####
-
-	focus = {
-		id = STP_Deal_With_Solgalov
-		icon = GFX_focus_STP_Side_With_Maksim
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_Now_Is_Time_To_Act
-		x = 1
-		y = 1
-		cost = 5
-		prerequisite = {
-			focus = STP_Now_Is_Time_To_Act 
-		}
-		prerequisite = {
-			focus = STP_The_Only_Solution
-		}
-		mutually_exclusive = {
-			focus = STP_No_Deals_With_Bandits
-		}
-		mutually_exclusive = {
-			focus = STP_Ruin_Their_Deal
-		}
-		ai_will_do = {
-			base = 1
-		}
-		completion_reward = {
-		}
-	}
-	
-	focus = {
-		id = STP_No_Deals_With_Bandits
-		icon = GFX_focus_STP_Side_With_Maksim
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_The_Only_Solution
-		x = -1
-		y = 1
-		cost = 5
-		prerequisite = {
-			focus = STP_Now_Is_Time_To_Act
-		}
-		prerequisite = {
-			focus = STP_The_Only_Solution
-		}
-		mutually_exclusive = {
-			focus = STP_Deal_With_Solgalov
-		}
-		mutually_exclusive = {
-			focus = STP_Ruin_Their_Deal
-		}
-		ai_will_do = {
-			base = 1
-		}
-		completion_reward = {
-		}
-	}
-
-	focus = {
-		id = STP_Ruin_Their_Deal
-		icon = GFX_focus_STP_Ruin_Their_Deal
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_The_Only_Solution
-		x = 1
-		y = 1
-		cost = 5
-		prerequisite = {
-			focus = STP_Now_Is_Time_To_Act
-		}
-		prerequisite = {
-			focus = STP_The_Only_Solution
-		}
-		mutually_exclusive = {
-			focus = STP_Deal_With_Solgalov
-		}
-		mutually_exclusive = {
-			focus = STP_No_Deals_With_Bandits
-		}
-		ai_will_do = {
-			base = 1
-		}
-		completion_reward = {
-		}
-	}
-
-### A little spoiler for gamers
-
-	focus = {
-		id = STP_Operation_Last_Banquette
+		id = STP_Cancel_The_Morning_Address
 		icon = GFX_focus_STP_Operation_Last_Banquette
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_All_In
-		x = -1
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Last_Signature
+		x = 0
 		y = 1
-		allow_branch = {
-			AND = {
-				NOT = {has_country_flag = STP_sided_with_the_party_flag}
-				NOT = {has_country_flag = STP_sided_with_Maksim_flag}
-			}
-		}
 		cost = 5
-		ai_will_do = {
-			base = 1
-		}
-		available = {
-			is_completed_by_event = yes
-		}
+		prerequisite = { focus = STP_The_Last_Signature }
+		ai_will_do = { base = 1 }
 		completion_reward = {
 		}
 	}
 
+	# A Glass Raised Too High
 	focus = {
-		id = STP_It_Has_Only_Begun
-		icon = GFX_focus_STP_It_Has_Only_Begun
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_All_In
-		x = -3
+		id = STP_A_Glass_Raised_Too_High
+		icon = GFX_focus_STP_Operation_Last_Banquette
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Cancel_The_Morning_Address
+		x = 0
 		y = 1
-		allow_branch = {
-			AND = {
-				NOT = {has_country_flag = STP_sided_with_the_party_flag}
-				NOT = {has_country_flag = STP_sided_with_Maksim_flag}
-			}
-		}
 		cost = 5
-		ai_will_do = {
-			base = 1
-		}
-		available = {
-			is_completed_by_event = yes
-		}
+		prerequisite = { focus = STP_Cancel_The_Morning_Address }
+		ai_will_do = { base = 1 }
 		completion_reward = {
 		}
 	}
 
+	# The Father of Peace Is Gone
 	focus = {
-		id = STP_Triumph_Of_Common_Sense
-		icon = GFX_focus_STP_Triumph_Of_Common_Sense
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_All_In
-		x = -5
+		id = STP_The_Father_Of_Peace_Is_Gone
+		icon = GFX_focus_STP_Operation_Last_Banquette
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_A_Glass_Raised_Too_High
+		x = 0
 		y = 1
-		allow_branch = {
-			AND = {
-				NOT = {has_country_flag = STP_sided_with_the_party_flag}
-				NOT = {has_country_flag = STP_sided_with_Maksim_flag}
-			}
-		}
 		cost = 5
-		ai_will_do = {
-			base = 1
-		}
-		available = {
-			is_completed_by_event = yes
-		}
+		prerequisite = { focus = STP_A_Glass_Raised_Too_High }
+		ai_will_do = { base = 1 }
 		completion_reward = {
+			country_event = { id = stp_lore.12 }
 		}
 	}
 
-###The party's gaming society
+#############################################
+### OUTER BOARD: FOREIGN HANDS AT THE BANQUET
+#############################################
 
+	# Foreign Guests at the Banquet
 	focus = {
-		id = STP_Side_With_The_Party
+		id = STP_Foreign_Guests_At_The_Banquet
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_When_The_Guarantee_Died
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_When_The_Guarantee_Died }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+			country_event = { id = stp_lore.4 }
+		}
+	}
+
+#############################################
+### WEST: NODRUL IDEOLOGICAL LEVERAGE
+#############################################
+
+	# The Nodrul Advisers
+	focus = {
+		id = STP_The_Valirian_Advisers
 		icon = GFX_focus_STP_Side_With_The_Party
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-		}
-		relative_position_id = STP_Nectar_of_the_Gods
-		x = -5
-		y = 1
-		allow_branch = {
-			NOT = {has_country_flag = STP_sided_with_Maksim_flag}
-		}
-		offset = {
-			x = 5
-			y = 0
-			trigger = {
-				has_country_flag = STP_sided_with_the_party_flag
-			}
-		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Foreign_Guests_At_The_Banquet
+		x = -7
+		y = 0
 		cost = 5
-		prerequisite = {
-			focus = STP_Nectar_of_the_Gods
+		prerequisite = { focus = STP_Foreign_Guests_At_The_Banquet }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+			country_event = { id = stp_lore.5 }
 		}
-		mutually_exclusive = {
-			focus = STP_Side_With_Maksim
+	}
+
+	# The Party Was Not Born Here
+	focus = {
+		id = STP_The_Party_Was_Not_Born_Here
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Valirian_Advisers
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_The_Valirian_Advisers }
+		ai_will_do = { base = 1 }
+		completion_reward = {
 		}
-		ai_will_do = {
-			base = 1
+	}
+
+	# Imported Freedom
+	focus = {
+		id = STP_Imported_Freedom
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Party_Was_Not_Born_Here
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_The_Party_Was_Not_Born_Here }
+		ai_will_do = { base = 1 }
+		completion_reward = {
 		}
+	}
+
+	# Cut the Silk Leash
+	focus = {
+		id = STP_Cut_The_Silk_Leash
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Imported_Freedom
+		x = -2
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_Imported_Freedom }
+		mutually_exclusive = { focus = STP_Renew_The_Cultural_Mandate }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# Renew the Cultural Mandate
+	focus = {
+		id = STP_Renew_The_Cultural_Mandate
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Imported_Freedom
+		x = 2
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_Imported_Freedom }
+		mutually_exclusive = { focus = STP_Cut_The_Silk_Leash }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+#############################################
+### EAST: KEFREITE MERCENARY PRESSURE
+#############################################
+
+	# The Kefreite Security Offer
+	focus = {
+		id = STP_Kefreite_Security_Offer
+		icon = GFX_focus_STP_Ruin_Their_Deal
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Foreign_Guests_At_The_Banquet
+		x = 7
+		y = 0
+		cost = 5
+		prerequisite = { focus = STP_Foreign_Guests_At_The_Banquet }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+			country_event = { id = stp_lore.6 }
+		}
+	}
+
+	# Contractors in the Passes
+	focus = {
+		id = STP_Contractors_In_The_Passes
+		icon = GFX_focus_STP_Ruin_Their_Deal
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Kefreite_Security_Offer
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_Kefreite_Security_Offer }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# The Desert Watches the Snow
+	focus = {
+		id = STP_The_Desert_Watches_The_Snow
+		icon = GFX_focus_STP_Ruin_Their_Deal
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Contractors_In_The_Passes
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_Contractors_In_The_Passes }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# No Mercenaries in Our Mountains
+	focus = {
+		id = STP_No_Mercenaries_In_Our_Mountains
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Desert_Watches_The_Snow
+		x = -2
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_The_Desert_Watches_The_Snow }
+		mutually_exclusive = { focus = STP_Sell_The_Highland_Concessions }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# Sell the Highland Concessions
+	focus = {
+		id = STP_Sell_The_Highland_Concessions
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Desert_Watches_The_Snow
+		x = 2
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_The_Desert_Watches_The_Snow }
+		mutually_exclusive = { focus = STP_No_Mercenaries_In_Our_Mountains }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+#############################################
+### INNER NORTH-EAST: THE HIGHLAND UNDERGROUND
+#############################################
+
+	# Rumours in the Highlands
+	focus = {
+		id = STP_Rumours_In_The_Highlands
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Dying_Feast
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_The_Dying_Feast }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+			country_event = { id = stp_lore.8 }
+		}
+	}
+
+	# The Mountain Printing House
+	focus = {
+		id = STP_The_Mountain_Printing_House
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Rumours_In_The_Highlands
+		x = -2
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_Rumours_In_The_Highlands }
+		mutually_exclusive = { focus = STP_Hunt_The_Mountain_Cells }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# Hunt the Mountain Cells
+	focus = {
+		id = STP_Hunt_The_Mountain_Cells
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Rumours_In_The_Highlands
+		x = 2
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_Rumours_In_The_Highlands }
+		mutually_exclusive = { focus = STP_The_Mountain_Printing_House }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# A Name on the Walls
+	focus = {
+		id = STP_A_Name_On_The_Walls
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Mountain_Printing_House
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_The_Mountain_Printing_House }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# Erase His Name
+	focus = {
+		id = STP_Erase_His_Name
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Hunt_The_Mountain_Cells
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_Hunt_The_Mountain_Cells }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+#############################################
+### INNER WEST: PORTS AND THE LOWER MARKET
+#############################################
+
+	# The Lower Market
+	focus = {
+		id = STP_The_Lower_Market
+		icon = GFX_focus_STP_Open_Wounds_Of_The_System
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Dying_Feast
+		x = -7
+		y = 2
+		cost = 5
+		prerequisite = { focus = STP_The_Dying_Feast }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+			country_event = { id = stp_lore.9 }
+		}
+	}
+
+	# Steal the Black Ledger
+	focus = {
+		id = STP_Steal_The_Black_Ledger
+		icon = GFX_focus_STP_Open_Wounds_Of_The_System
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Lower_Market
+		x = -2
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_The_Lower_Market }
+		mutually_exclusive = { focus = STP_Burn_The_Client_Archives }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# Burn the Client Archives
+	focus = {
+		id = STP_Burn_The_Client_Archives
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Lower_Market
+		x = 2
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_The_Lower_Market }
+		mutually_exclusive = { focus = STP_Steal_The_Black_Ledger }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# The First Witness
+	focus = {
+		id = STP_The_First_Witness
+		icon = GFX_focus_STP_Open_Wounds_Of_The_System
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Steal_The_Black_Ledger
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_Steal_The_Black_Ledger }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# Silence the First Witness
+	focus = {
+		id = STP_Silence_The_First_Witness
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Burn_The_Client_Archives
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_Burn_The_Client_Archives }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# Lower Market Dossiers
+	focus = {
+		id = STP_Lower_Market_Dossiers
+		icon = GFX_focus_STP_Open_Wounds_Of_The_System
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_First_Witness
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_The_First_Witness }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# The Port Must Smile
+	focus = {
+		id = STP_The_Port_Must_Smile
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Silence_The_First_Witness
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_Silence_The_First_Witness }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+#############################################
+### INNER EAST: THE PALACE AND IVANOV'S BODY
+#############################################
+
+	# The Old Man on the Balcony
+	focus = {
+		id = STP_The_Old_Man_On_The_Balcony
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Dying_Feast
+		x = 7
+		y = 2
+		cost = 5
+		prerequisite = { focus = STP_The_Dying_Feast }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+			country_event = { id = stp_lore.10 }
+		}
+	}
+
+	# Show Him the Truth
+	focus = {
+		id = STP_Show_Him_The_Truth
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Old_Man_On_The_Balcony
+		x = -2
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_The_Old_Man_On_The_Balcony }
+		mutually_exclusive = { focus = STP_Govern_In_His_Name }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# Govern in His Name
+	focus = {
+		id = STP_Govern_In_His_Name
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Old_Man_On_The_Balcony
+		x = 2
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_The_Old_Man_On_The_Balcony }
+		mutually_exclusive = { focus = STP_Show_Him_The_Truth }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# The Last Confession
+	focus = {
+		id = STP_The_Last_Confession
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Show_Him_The_Truth
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_Show_Him_The_Truth }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# The Hand That Still Signs
+	focus = {
+		id = STP_The_Hand_That_Still_Signs
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Govern_In_His_Name
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_Govern_In_His_Name }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# Call for Shabrat
+	focus = {
+		id = STP_Call_For_Shabrat
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Last_Confession
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_The_Last_Confession }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# Seal the Western Wing
+	focus = {
+		id = STP_Seal_The_Western_Wing
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Hand_That_Still_Signs
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_The_Hand_That_Still_Signs }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+#############################################
+### LOWER WEST: THE STREET
+#############################################
+
+	# The City Still Dances
+	focus = {
+		id = STP_The_City_Still_Dances
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Doctors_Lie
+		x = -6
+		y = 2
+		cost = 5
+		prerequisite = { focus = STP_The_Doctors_Lie }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# The Silent Mountain March
+	focus = {
+		id = STP_The_Silent_Mountain_March
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_City_Still_Dances
+		x = -2
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_The_City_Still_Dances }
+		mutually_exclusive = { focus = STP_One_Last_National_Festival }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# One Last National Festival
+	focus = {
+		id = STP_One_Last_National_Festival
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_City_Still_Dances
+		x = 2
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_The_City_Still_Dances }
+		mutually_exclusive = { focus = STP_The_Silent_Mountain_March }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# The People Stop Singing
+	focus = {
+		id = STP_The_People_Stop_Singing
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Silent_Mountain_March
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_The_Silent_Mountain_March }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# Drown the Rumours in Music
+	focus = {
+		id = STP_Drown_The_Rumours_In_Music
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_One_Last_National_Festival
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_One_Last_National_Festival }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+#############################################
+### LOWER EAST: GARRISONS AND FESTIVAL POLICE
+#############################################
+
+	# Count the Loyalists
+	focus = {
+		id = STP_Count_The_Loyalists
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Doctors_Lie
+		x = 6
+		y = 2
+		cost = 5
+		prerequisite = { focus = STP_The_Doctors_Lie }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# Turn the Young Officers
+	focus = {
+		id = STP_Turn_The_Young_Officers
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Count_The_Loyalists
+		x = -2
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_Count_The_Loyalists }
+		mutually_exclusive = { focus = STP_Feed_The_Festival_Police }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# Feed the Festival Police
+	focus = {
+		id = STP_Feed_The_Festival_Police
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Count_The_Loyalists
+		x = 2
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_Count_The_Loyalists }
+		mutually_exclusive = { focus = STP_Turn_The_Young_Officers }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# The Garrisons Hesitate
+	focus = {
+		id = STP_Garrisons_Hesitate
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Turn_The_Young_Officers
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_Turn_The_Young_Officers }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# The Garrisons Swear Loyalty
+	focus = {
+		id = STP_Garrisons_Swear_Loyalty
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Feed_The_Festival_Police
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_Feed_The_Festival_Police }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+#############################################
+### BRIDGE OUTCOMES: AUTO-COMPLETED BY EVENT AFTER IVANOV'S DEATH
+### Structural only for now: no country flags, no hidden branch gates, no offset logic. Red mutual-exclusion links are used only on first-choice split focuses. Future event logic should complete exactly one bridge focus.
+#############################################
+
+	# The Mountain Window
+	focus = {
+		id = STP_The_Mountain_Window
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Father_Of_Peace_Is_Gone
+		x = -4
+		y = 2
+		cost = 5
+		prerequisite = { focus = STP_The_Father_Of_Peace_Is_Gone }
 		available = {
 			is_completed_by_event = yes
 		}
+		ai_will_do = { base = 1 }
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: focus STP_Side_With_The_Party completion_reward"
-			hidden_effect = {
-				set_country_flag = STP_sided_with_the_party_flag
-				focus_unlock = yes
-			}
 		}
 	}
+
+	# No One Controls the Transition
+	focus = {
+		id = STP_No_One_Controls_The_Transition
+		icon = GFX_focus_STP_It_Has_Only_Begun
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Father_Of_Peace_Is_Gone
+		x = 0
+		y = 2
+		cost = 5
+		prerequisite = { focus = STP_The_Father_Of_Peace_Is_Gone }
+		available = {
+			is_completed_by_event = yes
+		}
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# The Party Closes Ranks
+	focus = {
+		id = STP_The_Party_Closes_Ranks
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Father_Of_Peace_Is_Gone
+		x = 4
+		y = 2
+		cost = 5
+		prerequisite = { focus = STP_The_Father_Of_Peace_Is_Gone }
+		available = {
+			is_completed_by_event = yes
+		}
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
 }

@@ -1,0 +1,5 @@
+ADISCORD_RAILWAY_GUN_NAMES = {
+	can_use = { always = yes }
+	type = railway_gun
+	fallback_name = "%d Railway Gun"
+}

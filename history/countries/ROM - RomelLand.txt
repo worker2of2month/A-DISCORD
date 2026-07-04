@@ -8,11 +8,19 @@ recruit_character = ROM_Erwin_Von_Romanovskiy
 
 add_ideas = {
 	WRK_hourglass_of_discord
+
+	#ministers
+	minister_ROM_Karl_Rosen
+	minister_ROM_Maks_Abel
+	minister_ROM_Greta_Feld
+	minister_ROM_Ilon_Mertz
+	minister_ROM_Stefan_Lektor
+	minister_ROM_Nora_Veil
 }
 
 set_politics = {
 	ruling_party = pragmatism
-	last_election = "2010.12.01"
+	last_election = "2110.12.01"
 	elections_allowed = no
 }
 set_popularities = {

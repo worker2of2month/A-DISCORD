@@ -1,4 +1,4 @@
-﻿division_template = {
+division_template = {
 	name = "Kefreyt Security Detachment"
 	division_names_group = VAL_INF_01
 
@@ -130,13 +130,13 @@ instant_effect = {
 		efficiency = 95
 	}
 	add_equipment_production = {
-		equipment = { type = support_equipment_1 creator = "VAL" }
+		equipment = { type = support_equipment_1 }
 		requested_factories = 1
 		progress = 0.30
 		efficiency = 55
 	}
 	add_equipment_production = {
-		equipment = { type = artillery_equipment_1 creator = "VAL" }
+		equipment = { type = artillery_equipment_1 }
 		requested_factories = 1
 		progress = 0.25
 		efficiency = 55

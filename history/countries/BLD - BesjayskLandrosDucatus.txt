@@ -8,7 +8,7 @@ recruit_character = BLD_Duke_Vincent
 
 set_politics = {
 	ruling_party = chauvinism
-	last_election = "2010.12.01"
+	last_election = "2110.12.01"
 	elections_allowed = no
 }
 set_popularities = {
@@ -19,5 +19,14 @@ set_popularities = {
 }
 
 set_stability = 0.51
+
+add_ideas = {
+	minister_BLD_Arno_Veyr
+	minister_BLD_Bret_Havel
+	minister_BLD_Clovis_Ren
+	minister_BLD_Elain_Moor
+	minister_BLD_Fedor_Lane
+	minister_BLD_Junn_Sable
+}
 
 set_research_slots = 2

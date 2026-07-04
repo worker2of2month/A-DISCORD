@@ -1,0 +1,172 @@
+# Debug decisions for testing society development levels.
+# They are visible only in debug mode for human players.
+
+ADISCORD_society_development_debug_category = {
+	ADISCORD_debug_increase_society_development = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_increase_society_development = yes }
+	}
+
+	ADISCORD_debug_decrease_society_development = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_decrease_society_development = yes }
+	}
+
+	ADISCORD_debug_increase_society_development_growth = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_increase_society_development_monthly_growth = yes }
+	}
+
+	ADISCORD_debug_decrease_society_development_growth = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_decrease_society_development_monthly_growth = yes }
+	}
+
+	ADISCORD_debug_increase_social_system_development = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_increase_social_system_development = yes }
+	}
+
+	ADISCORD_debug_decrease_social_system_development = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_decrease_social_system_development = yes }
+	}
+
+	ADISCORD_debug_increase_social_system_development_growth = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_increase_social_system_development_monthly_growth = yes }
+	}
+
+	ADISCORD_debug_decrease_social_system_development_growth = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_decrease_social_system_development_monthly_growth = yes }
+	}
+
+	ADISCORD_debug_increase_army_development = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_increase_army_development = yes }
+	}
+
+	ADISCORD_debug_decrease_army_development = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_decrease_army_development = yes }
+	}
+
+	ADISCORD_debug_increase_army_development_growth = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_increase_army_development_monthly_growth = yes }
+	}
+
+	ADISCORD_debug_decrease_army_development_growth = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_decrease_army_development_monthly_growth = yes }
+	}
+
+	ADISCORD_debug_increase_cultural_development = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_increase_cultural_development = yes }
+	}
+
+	ADISCORD_debug_decrease_cultural_development = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_decrease_cultural_development = yes }
+	}
+
+	ADISCORD_debug_increase_cultural_development_growth = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_increase_cultural_development_monthly_growth = yes }
+	}
+
+	ADISCORD_debug_decrease_cultural_development_growth = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_decrease_cultural_development_monthly_growth = yes }
+	}
+
+	ADISCORD_debug_increase_state_development = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_increase_state_development = yes }
+	}
+
+	ADISCORD_debug_decrease_state_development = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_decrease_state_development = yes }
+	}
+
+	ADISCORD_debug_increase_state_development_growth = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_increase_state_development_monthly_growth = yes }
+	}
+
+	ADISCORD_debug_decrease_state_development_growth = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_decrease_state_development_monthly_growth = yes }
+	}
+
+	ADISCORD_debug_increase_economic_development = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_increase_economic_development = yes }
+	}
+
+	ADISCORD_debug_decrease_economic_development = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_decrease_economic_development = yes }
+	}
+
+	ADISCORD_debug_increase_economic_development_growth = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_increase_economic_development_monthly_growth = yes }
+	}
+
+	ADISCORD_debug_decrease_economic_development_growth = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_decrease_economic_development_monthly_growth = yes }
+	}
+}

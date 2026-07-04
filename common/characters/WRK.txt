@@ -18,7 +18,7 @@ characters = {
 		}
 		country_leader = {
 			ideology = pragmatism_ideology
-			expire = "1965.1.1.1"
+			expire = "2200.1.1.1"
 			id = -1
 			traits = { Emergency_Powers }
 			desc = WRK_Nikita_Worcker_desc
@@ -33,7 +33,7 @@ characters = {
 		}
 		country_leader = {
 			ideology = pragmatism_ideology
-			expire = "1965.1.1.1"
+			expire = "2200.1.1.1"
 			id = -1
 			traits = { High_Political_Aspirations Marshal_Of_War }
 			desc = WRK_Vlad_Petrichev_desc
@@ -48,7 +48,7 @@ characters = {
 		}
 		country_leader = {
 			ideology = pragmatism_ideology
-			expire = "1965.1.1.1"
+			expire = "2200.1.1.1"
 			id = -1
 		}
 	}
@@ -61,7 +61,7 @@ characters = {
 		}
 		country_leader = {
 			ideology = pragmatism_ideology
-			expire = "1965.1.1.1"
+			expire = "2200.1.1.1"
 			id = -1
 		}
 	}
@@ -74,7 +74,7 @@ characters = {
 		}
 		country_leader = {
 			ideology = pragmatism_ideology
-			expire = "1965.1.1.1"
+			expire = "2200.1.1.1"
 			id = -1
 			traits = { An_Ordinary_Bureaucrat }
 		}
@@ -88,7 +88,7 @@ characters = {
 		}
 		country_leader = {
 			ideology = pragmatism_ideology
-			expire = "1965.1.1.1"
+			expire = "2200.1.1.1"
 			id = -1
 		}
 	}

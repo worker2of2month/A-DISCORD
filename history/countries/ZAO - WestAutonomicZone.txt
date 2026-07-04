@@ -8,6 +8,14 @@ recruit_character = WRK_Bassam_Zogby
 
 add_ideas = {
 	WRK_hourglass_of_discord
+
+	#ministers
+	minister_ZAO_Hassan_Rauf
+	minister_ZAO_Karim_Dol
+	minister_ZAO_Samira_Kett
+	minister_ZAO_Yara_Vin
+	minister_ZAO_Edem_Kov
+	minister_ZAO_Nabil_Shade
 }
 
 set_politics = {

@@ -1,9 +1,9 @@
-version="1.15.1"
+version="1.19.2"
 tags={
 	"Alternative History"
 }
 name="A-Discord"
-supported_version="1.15.2"
+supported_version="1.19.*"
 replace_path="gfx/loadingscreens"
 replace_path="events"
 replace_path="history/states"

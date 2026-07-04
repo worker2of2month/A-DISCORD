@@ -78,6 +78,24 @@ guiTypes = {
 			name = "Background"		
 			quadTextureSprite ="GFX_tiled_plain_bg_adiscord"
 		}
+		containerWindowType = {
+			name = "ADISCORD_119_hidden_politics_compat"
+			position = { x = -10000 y = -10000 }
+			size = { width = 1 height = 1 }
+			clipping = no
+
+			buttonType = { name = "view_factions_button" quadTextureSprite = "GFX_tiled_window_transparent" alwaystransparent = yes }
+			buttonType = { name = "open_faction_button" quadTextureSprite = "GFX_tiled_window_transparent" alwaystransparent = yes }
+			buttonType = { name = "manage_exiled_collaborations_governments" quadTextureSprite = "GFX_tiled_window_transparent" alwaystransparent = yes }
+			iconType = { name = "icon_manage_subjects" quadTextureSprite = "GFX_tiled_window_transparent" alwaystransparent = yes }
+			iconType = { name = "view_faction_icon" quadTextureSprite = "GFX_tiled_window_transparent" alwaystransparent = yes }
+			iconType = { name = "icon_exiled_collaborations_governments" quadTextureSprite = "GFX_tiled_window_transparent" alwaystransparent = yes }
+			iconType = { name = "icon_occupied_territories" quadTextureSprite = "GFX_tiled_window_transparent" alwaystransparent = yes }
+			instantTextboxType = { name = "faction" font = "hoi_18mbs" text = "" maxWidth = 1 maxHeight = 1 alwaystransparent = yes }
+			instantTextboxType = { name = "no_faction" font = "hoi_18mbs" text = "" maxWidth = 1 maxHeight = 1 alwaystransparent = yes }
+			instantTextboxType = { name = "in_faction" font = "hoi_18mbs" text = "" maxWidth = 1 maxHeight = 1 alwaystransparent = yes }
+			instantTextboxType = { name = "original_in_faction" font = "hoi_18mbs" text = "" maxWidth = 1 maxHeight = 1 alwaystransparent = yes }
+		}
 
 		iconType ={
 			name ="production_header_bg"
@@ -189,6 +207,23 @@ guiTypes = {
 				multiline = no
 				format = left
 			}
+
+			instantTextboxType = {
+				name = "original_in_faction"
+				position = { x = -10000 y = -10000 }
+				font = "hoi_18mbs"
+				text = ""
+				maxWidth = 1
+				maxHeight = 1
+				alwaystransparent = yes
+			}
+
+			buttonType = {
+				name = "new_faction_button"
+				position = { x = -10000 y = -10000 }
+				quadTextureSprite = "GFX_tiled_window_transparent"
+				alwaystransparent = yes
+			}
 			
 			buttonType = {
 				name = "dismantle_faction"
@@ -209,9 +244,6 @@ guiTypes = {
 					name = "show_power_balance"
 					position = { x = 5 y = 0 }
 					quadTextureSprite = "GFX_show_power_balance_button"
-
-					maxWidth = 100				
-					maxHeight = 20
 				}
 				
 				iconType = {
@@ -399,6 +431,13 @@ guiTypes = {
 				scale = 0.9
 				clicksound = click_default
 			}
+
+			buttonType = {
+				name = "drop_continuous_focus_button"
+				position = { x = -10000 y = -10000 }
+				quadTextureSprite = "GFX_tiled_window_transparent"
+				alwaystransparent = yes
+			}
 			
 			instantTextboxType = {
 				name = "title"
@@ -489,12 +528,15 @@ guiTypes = {
 		
 		containerWindowType = {
 			name = "ideas"
-			position = { x = 0 y = 530 }
-			size = { width=100%% height=100%% }
+			# ADISCORD fix: move the whole scrollable list up, but keep this shit inside its own viewport.
+			# Without explicit height + clipping the lower custom development block draws over the law categories.
+			position = { x = 0 y = 490 }
+			size = { width=570 height=590 }
+			clipping = yes
 			verticalScrollbar = "right_vertical_slider"
 			scroll_wheel_factor = 40
 			smooth_scrolling = yes
-			margin = { top = 14 bottom = 13}
+			margin = { top = 0 bottom = 13}
 		
 			background = {
 				name = "Background"
@@ -506,7 +548,7 @@ guiTypes = {
 				name = "idea_categories_grid"
 				position = { x = 17 y = 0 }
 				size = { width = 100%% height = 100%% }
-				slotsize = { width = 64 height = 106 }
+				slotsize = { width = 64 height = 104 }
 				max_slots_horizontal = 1
 				format = "UPPER_LEFT"
 			}
@@ -576,7 +618,7 @@ guiTypes = {
 	containerWindowType = {
 		name = "country_politics_idea_category_entry"
 		position = { x = 0 y = 0 }
-		size = { width=550 height= 100 }
+		size = { width=550 height= 104 }
 		clipping = no
 		
 		iconType ={
@@ -604,7 +646,7 @@ guiTypes = {
 		
 		gridboxtype = {
 			name = "ideas_grid"
-			position = { x = 40 y = 46 }
+			position = { x = 40 y = 43 }
 			size = { width = 100%% height = 100%% }
 			slotsize = { width = 85 height = 64 }
 			max_slots = { x = 7 y = 1 }

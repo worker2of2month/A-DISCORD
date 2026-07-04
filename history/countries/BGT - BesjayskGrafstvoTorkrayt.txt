@@ -8,16 +8,25 @@ recruit_character = BGT_Graf_Johan
 
 set_politics = {
 	ruling_party = chauvinism
-	last_election = "2010.12.01"
+	last_election = "2110.12.01"
 	elections_allowed = no
 }
 set_popularities = {
 	etatism = 28
 	chauvinism = 41
 	anarchism = 10
-	hedonism = 31
+	hedonism = 21
 }
 
 set_stability = 0.38
+
+add_ideas = {
+	minister_BGT_Albrecht_Dorn
+	minister_BGT_Kaspar_Krieg
+	minister_BGT_Ulrich_Mint
+	minister_BGT_Bruna_Hesh
+	minister_BGT_Konrad_Vell
+	minister_BGT_Silke_Rook
+}
 
 set_research_slots = 2

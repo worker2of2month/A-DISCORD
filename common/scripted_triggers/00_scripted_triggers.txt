@@ -1,18 +1,3 @@
-#	Example:
-# 
-#	example_trigger = {
-#		tag = GER
-#		is_ai = no
-#	}
-#
-#
-#	In a script file:
-#
-#	trigger = {
-#		exampel_trigger = yes
-#	}
-#
-
 can_ROOT_get_wargoal_on_THIS = {
 	exists = yes
 	NOT = { is_in_faction_with = ROOT }
@@ -98,46 +83,22 @@ is_controlled_by_ROOT_or_ally = {
 
 
 ai_air_doctrine_tier_1_trigger = {
-	OR = {
-		has_tech = naval_strike_tactics
-		has_tech = direct_ground_support
-		has_tech = low_echelon_support
-	}
+	always = no
 }
 
 ai_air_doctrine_tier_2_trigger = {
-	OR = {
-		has_tech = multialtitude_flying
-		has_tech = hunt_and_destroy
-		has_tech = operational_destruction
-	}
+	always = no
 }
 ai_air_doctrine_tier_3_trigger = {
-	OR = {
-		has_tech = flying_fortress
-		has_tech = naval_strike_torpedo_tactics
-		has_tech = infiltration_bombing
-	}
+	always = no
 }
 
 ai_land_doctrine_tier_1_trigger = {
-	OR = {
-		has_tech = elastic_defence
-		has_tech = mobile_defence
-		has_tech = grand_assault
-		has_tech = defence_in_depth
-	}
+	always = no
 }
 
 ai_land_doctrine_tier_2_trigger = {
-	OR = {
-		has_tech = kampfgruppe
-		has_tech = mechanised_offensive
-		has_tech = branch_interoperation
-		has_tech = infiltration_assault
-		has_tech = vast_offensives
-		has_tech = large_front_offensive
-	}
+	always = no
 }
 
 anti_submarine_strategy_required_trigger = {
@@ -163,90 +124,7 @@ anti_submarine_strategy_required_trigger = {
 
 
 enemy_has_equal_or_better_radar_tech_trigger = {
-	custom_trigger_tooltip = {
-		tooltip = enemy_has_equal_or_better_radar_tech_trigger_tt
-		if = {
-			limit = {
-				ROOT = { 
-					has_tech = radio_detection 
-					NOT = {
-						has_tech = decimetric_radar
-					}
-				} 
-			}
-			FROM = { 
-				OR = {
-					has_tech = radio_detection 
-					has_tech = decimetric_radar
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				ROOT = { 
-					has_tech = decimetric_radar 
-					NOT = {
-						has_tech = improved_decimetric_radar
-					}
-				} 
-			}
-			FROM = { 
-				OR = {
-					has_tech = decimetric_radar 
-					has_tech = improved_decimetric_radar
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				ROOT = { 
-					has_tech = improved_decimetric_radar 
-					NOT = {
-						has_tech = centimetric_radar
-					}
-				} 
-			}
-			FROM = { 
-				OR = {
-					has_tech = improved_decimetric_radar 
-					has_tech = centimetric_radar
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				ROOT = { 
-					has_tech = centimetric_radar 
-					NOT = {
-						has_tech = improved_centimetric_radar
-					}
-				} 
-			}
-			FROM = { 
-				OR = {
-					has_tech = centimetric_radar 
-					has_tech = improved_centimetric_radar
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				ROOT = { 
-					has_tech = improved_centimetric_radar 
-					NOT = {
-						has_tech = advanced_centimetric_radar
-					}
-				} 
-			}
-			FROM = { 
-				OR = {
-					has_tech = improved_centimetric_radar 
-					has_tech = advanced_centimetric_radar
-				}
-			}
-		}
-		#no more steps needed because end of research tree is reached
-	}
+	always = no
 }
 
 is_available_to_collaboration_government = { # occupied_countries.1 should be updated along with this
@@ -319,48 +197,43 @@ has_same_ideology = {
 		tooltip = has_same_ideology_tt
 		OR = {
 			AND = {
-				has_government = democratic
-				ROOT = { has_government = democratic }
+				has_government = humanism
+				ROOT = { has_government = humanism }
 			}
 			AND = {
-				has_government = fascism
-				ROOT = { has_government = fascism }
+				has_government = utilitarism
+				ROOT = { has_government = utilitarism }
 			}
 			AND = {
-				has_government = communism
-				ROOT = { has_government = communism }
+				has_government = chauvinism
+				ROOT = { has_government = chauvinism }
 			}
 			AND = {
-				has_government = neutrality
-				ROOT = { has_government = neutrality }
+				has_government = pragmatism
+				ROOT = { has_government = pragmatism }
+			}
+			AND = {
+				has_government = anarchism
+				ROOT = { has_government = anarchism }
+			}
+			AND = {
+				has_government = technocracy
+				ROOT = { has_government = technocracy }
+			}
+			AND = {
+				has_government = etatism
+				ROOT = { has_government = etatism }
+			}
+			AND = {
+				has_government = hedonism
+				ROOT = { has_government = hedonism }
 			}
 		}
 	}
 }
 
 is_latin_american_country = {
-	OR = {
-		original_tag = CUB
-		original_tag = ARG
-		original_tag = BRA
-		original_tag = URG
-		original_tag = PAR
-		original_tag = CHL
-		original_tag = BOL
-		original_tag = PRU
-		original_tag = ECU
-		original_tag = COL
-		original_tag = VEN
-		original_tag = PAN
-		original_tag = COS
-		original_tag = NIC
-		original_tag = HON
-		original_tag = ELS
-		original_tag = GUA
-		original_tag = MEX
-		original_tag = HAI
-		original_tag = DOM
-	}
+	always = no
 }
 
 has_specialist_level_trigger = {

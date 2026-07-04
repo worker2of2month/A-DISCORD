@@ -25,8 +25,8 @@ idea_categories = {
 	
 	government = {
 		#slot = mobilization_laws
-		#slot = trade_laws
-		#slot = economy
+		slot = trade_laws
+		slot = economy
 		slot = political_advisor_head_of_state
 		slot = political_advisor_minister_of_defense
 		slot = political_advisor_minister_of_economy
@@ -41,6 +41,12 @@ idea_categories = {
 	}
 
 	social_laws = {
+		slot = ADISCORD_civic_order_laws
+		slot = ADISCORD_information_laws
+		slot = ADISCORD_welfare_laws
+		slot = ADISCORD_education_laws
+		slot = ADISCORD_healthcare_laws
+		slot = ADISCORD_cultural_policy_laws
 		
 		ledger = civilian
 		
@@ -49,8 +55,10 @@ idea_categories = {
 	}
 
 	economic_laws = {
-		slot = trade_laws
-		slot = economy
+		slot = ADISCORD_taxation_laws
+		slot = ADISCORD_industrial_policy_laws
+		slot = ADISCORD_labor_policy_laws
+		slot = ADISCORD_infrastructure_laws
 		
 		ledger = civilian
 		
@@ -60,6 +68,11 @@ idea_categories = {
 
 	army_laws = {
 		slot = mobilization_laws
+		slot = ADISCORD_military_organization_laws
+		slot = ADISCORD_officer_corps_laws
+		slot = ADISCORD_logistics_laws
+		slot = ADISCORD_training_laws
+		slot = ADISCORD_internal_security_laws
 		
 		ledger = civilian
 		
@@ -220,4 +233,19 @@ slot_ledgers = {
 	
 	
 	mobilization_laws = civilian
+	ADISCORD_civic_order_laws = civilian
+	ADISCORD_information_laws = civilian
+	ADISCORD_welfare_laws = civilian
+	ADISCORD_education_laws = civilian
+	ADISCORD_healthcare_laws = civilian
+	ADISCORD_cultural_policy_laws = civilian
+	ADISCORD_taxation_laws = civilian
+	ADISCORD_industrial_policy_laws = civilian
+	ADISCORD_labor_policy_laws = civilian
+	ADISCORD_infrastructure_laws = civilian
+	ADISCORD_military_organization_laws = civilian
+	ADISCORD_officer_corps_laws = civilian
+	ADISCORD_logistics_laws = civilian
+	ADISCORD_training_laws = civilian
+	ADISCORD_internal_security_laws = civilian
 }

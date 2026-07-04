@@ -2,22 +2,21 @@ state={
 	id=81
 	name="STATE_81"
 	provinces={
-		592 3848 4143 4603 4911 5978 8315 8565 9012 9225 9460 9948 10261 10926 11051 12763 12971 16579 16587 
+		4603 5978 8565 9012 10261 10926 11051 12971 16587 16597 16600 16616 16620
 	}
 	manpower=1352351
-	buildings_max_level_factor=1.000
-	local_supplies=0.000
-	state_category = town
+	buildings_max_level_factor=1
+	state_category=town
+	local_supplies=0
 
 	history={
 		owner = VAD
 		add_core_of = VAD
 
 		victory_points = { 16587 5 }
-		victory_points = { 16579 2 }
 
 		buildings = {
-	        infrastructure = 6
+	        infrastructure = 5
 	        industrial_complex = 2
 	        arms_factory = 1
 	    }

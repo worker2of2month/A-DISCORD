@@ -17,4 +17,13 @@ set_popularities = {
 
 set_stability = -0.42
 
+add_ideas = {
+	minister_COF_Silvan_Root
+	minister_COF_Morven_Bark
+	minister_COF_Elya_Moss
+	minister_COF_Tera_Bloom
+	minister_COF_Oren_Rune
+	minister_COF_Nyx_Hollow
+}
+
 set_research_slots = 1

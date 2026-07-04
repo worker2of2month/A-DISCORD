@@ -8,6 +8,14 @@ recruit_character = WRK_Zack_Wither
 
 add_ideas = {
 	WRK_hourglass_of_discord
+
+	#ministers
+	minister_PWR_Orson_Wight
+	minister_PWR_Marta_Cinder
+	minister_PWR_Grig_Ash
+	minister_PWR_Daria_Fen
+	minister_PWR_Lev_Crag
+	minister_PWR_Nika_Pale
 }
 
 set_politics = {

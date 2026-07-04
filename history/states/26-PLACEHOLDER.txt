@@ -2,9 +2,11 @@ state={
 	id=26
 	name="STATE_26"
 	provinces={
-		7239 16355 16361 16367 16370 16376 16379 16385 
+		7239 16355 16361 16367 16370 16376 16379 16385
 	}
-	manpower=0
+	manpower=220000
+
+	state_category = town
 	buildings_max_level_factor=1.000
 	local_supplies=0.000
 
@@ -12,7 +14,10 @@ state={
 		owner = WIT
 		buildings = {
 			infrastructure = 2
+			industrial_complex = 1
+			arms_factory = 1
 		}
 		add_core_of = WIT
+		victory_points = { 16355 5 }
 	}
 }

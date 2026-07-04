@@ -39,4 +39,13 @@ set_popularities = {
 
 set_stability = 0.25
 
+add_ideas = {
+	minister_IVN_Mikhail_Bron
+	minister_IVN_Darya_Koval
+	minister_IVN_Saveli_Ankor
+	minister_IVN_Inna_Rot
+	minister_IVN_Yaroslav_Metr
+	minister_IVN_Alina_Sek
+}
+
 set_research_slots = 4

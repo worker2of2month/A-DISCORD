@@ -1,0 +1,9 @@
+ADISCORD_INF_01 = {
+	name = "Generic Infantry"
+
+	can_use = { always = yes }
+
+	division_types = { infantry }
+
+	fallback_name = "%d Infantry Brigade"
+}

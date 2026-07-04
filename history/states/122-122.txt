@@ -1,0 +1,22 @@
+state={
+	id=122
+	name="STATE_122"
+	provinces={
+		560 6754 16562 16569 
+	}
+	manpower=986422
+	buildings_max_level_factor=1
+	local_supplies=0
+	state_category = rural
+
+	history={
+		owner = VAD
+		add_core_of = VAD
+
+		victory_points = { 16569 5 }
+
+		buildings = {
+	        infrastructure = 3
+	    }
+	}
+}

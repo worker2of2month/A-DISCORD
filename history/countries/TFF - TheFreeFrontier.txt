@@ -8,7 +8,7 @@ recruit_character = The_Absent_Government
 
 set_politics = {
 	ruling_party = anarchism
-	last_election = "2010.12.01"
+	last_election = "2110.12.01"
 	elections_allowed = no
 }
 set_popularities = {
@@ -16,5 +16,14 @@ set_popularities = {
 }
 
 set_stability = -1.0
+
+add_ideas = {
+	minister_TFF_Mara_Free
+	minister_TFF_Colt_Ardent
+	minister_TFF_Sella_Pike
+	minister_TFF_Nora_Fallow
+	minister_TFF_Jules_Ember
+	minister_TFF_Trace_Gray
+}
 
 set_research_slots = 1

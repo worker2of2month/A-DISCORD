@@ -2,16 +2,23 @@ state={
 	id=84
 	name="STATE_84"
 	provinces={
-		4887 4925 9463 12721 16471 16495 16502 16503 16533 
+		4887 4925 9463 12721 16471 16495 16502 16503 16533
 	}
 	manpower=222542
+
+	state_category = town
 	buildings_max_level_factor=1.000
 	local_supplies=0.000
 
 	history = {
 		owner = TFF
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+			arms_factory = 1
+		}
 		add_core_of = TFF
 
-		victory_points = { 16533 25 }
+		victory_points = { 16533 10 }
 	}
 }

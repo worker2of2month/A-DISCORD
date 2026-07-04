@@ -1,0 +1,145 @@
+add_namespace = stp_lore
+
+country_event = {
+	id = stp_lore.1
+	title = stp_lore.1.t
+	desc = stp_lore.1.d
+	picture = GFX_report_event_political
+	is_triggered_only = yes
+
+	option = {
+		name = stp_lore.1.a
+	}
+}
+
+country_event = {
+	id = stp_lore.2
+	title = stp_lore.2.t
+	desc = stp_lore.2.d
+	picture = GFX_report_event_political
+	is_triggered_only = yes
+
+	option = {
+		name = stp_lore.2.a
+	}
+}
+
+country_event = {
+	id = stp_lore.3
+	title = stp_lore.3.t
+	desc = stp_lore.3.d
+	picture = GFX_report_event_political
+	is_triggered_only = yes
+
+	option = {
+		name = stp_lore.3.a
+	}
+}
+
+country_event = {
+	id = stp_lore.4
+	title = stp_lore.4.t
+	desc = stp_lore.4.d
+	picture = GFX_report_event_political
+	is_triggered_only = yes
+
+	option = {
+		name = stp_lore.4.a
+	}
+}
+
+country_event = {
+	id = stp_lore.5
+	title = stp_lore.5.t
+	desc = stp_lore.5.d
+	picture = GFX_report_event_political
+	is_triggered_only = yes
+
+	option = {
+		name = stp_lore.5.a
+	}
+}
+
+country_event = {
+	id = stp_lore.6
+	title = stp_lore.6.t
+	desc = stp_lore.6.d
+	picture = GFX_report_event_political
+	is_triggered_only = yes
+
+	option = {
+		name = stp_lore.6.a
+	}
+}
+
+country_event = {
+	id = stp_lore.7
+	title = stp_lore.7.t
+	desc = stp_lore.7.d
+	picture = GFX_report_event_political
+	is_triggered_only = yes
+
+	option = {
+		name = stp_lore.7.a
+	}
+}
+
+country_event = {
+	id = stp_lore.8
+	title = stp_lore.8.t
+	desc = stp_lore.8.d
+	picture = GFX_report_event_political
+	is_triggered_only = yes
+
+	option = {
+		name = stp_lore.8.a
+	}
+}
+
+country_event = {
+	id = stp_lore.9
+	title = stp_lore.9.t
+	desc = stp_lore.9.d
+	picture = GFX_report_event_political
+	is_triggered_only = yes
+
+	option = {
+		name = stp_lore.9.a
+	}
+}
+
+country_event = {
+	id = stp_lore.10
+	title = stp_lore.10.t
+	desc = stp_lore.10.d
+	picture = GFX_report_event_political
+	is_triggered_only = yes
+
+	option = {
+		name = stp_lore.10.a
+	}
+}
+
+country_event = {
+	id = stp_lore.11
+	title = stp_lore.11.t
+	desc = stp_lore.11.d
+	picture = GFX_report_event_political
+	is_triggered_only = yes
+
+	option = {
+		name = stp_lore.11.a
+	}
+}
+
+country_event = {
+	id = stp_lore.12
+	title = stp_lore.12.t
+	desc = stp_lore.12.d
+	picture = GFX_report_event_political
+	is_triggered_only = yes
+
+	option = {
+		name = stp_lore.12.a
+	}
+}

@@ -5,6 +5,11 @@ bookmarks = {
 		date = 2183.8.14.12
 		picture = "GFX_select_date_1939"
 		default_country = "STP"
+
+		"STP" = {
+			history = "STP_BOOKMARK_DESC"
+			ideology = hedonism
+		}
 		
 		effect = {
 			randomize_weather = 12345 # <- Obligatory in every bookmark !
@@ -12,4 +17,3 @@ bookmarks = {
 		}
 	}
 }
-	

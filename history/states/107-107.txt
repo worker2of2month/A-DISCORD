@@ -2,7 +2,7 @@ state={
 	id=107
 	name="STATE_107"
 	provinces={
-		560 2114 2539 3296 3321 3823 5245 5626 5973 6433 7085 7676 7742 8064 9159 12250 12848 16560 16563 16576 
+		2114 2539 3296 3321 5626 5973 6433 7085 7676 7742 8064 8432 8774 9159 11692 12250 12488 12848 16563 16628 16629 16635 16640
 	}
 	manpower=325169
 	buildings_max_level_factor=1.000
@@ -12,9 +12,6 @@ state={
 	history={
 		owner = VAD
 		add_core_of = VAD
-
-		victory_points = { 16576 5 }
-
 		buildings = {
 	        infrastructure = 2
 	        industrial_complex = 1

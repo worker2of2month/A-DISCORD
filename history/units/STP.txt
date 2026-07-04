@@ -109,7 +109,6 @@ instant_effect = {
 	add_equipment_production = {
 		equipment = {
 			type = support_equipment_1
-			creator = STP
 		}
 		requested_factories = 1
 		progress = 0.3
@@ -119,7 +118,6 @@ instant_effect = {
 	add_equipment_production = {
 		equipment = {
 			type = artillery_equipment_1
-			creator = STP 
 		}
 		requested_factories = 1
 		progress = 0.3

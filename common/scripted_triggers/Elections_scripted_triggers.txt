@@ -1,17 +1,3 @@
-#	Example:
-# 
-#	example_trigger = {
-#		tag = GER
-#		is_ai = no
-#	}
-#
-#
-#	In a script file:
-#
-#	trigger = {
-#		exampel_trigger = yes
-#	}
-#
 can_lose_unity = {
 	has_stability > 60
 	OR = {
@@ -24,7 +10,8 @@ can_lose_unity = {
 }
 
 can_lose_democracy_support = {
-	communism < 0.18
-	fascism < 0.18
-	democratic > 0.65
+	humanism > 0.65
+	utilitarism < 0.18
+	chauvinism < 0.18
+	etatism < 0.18
 }

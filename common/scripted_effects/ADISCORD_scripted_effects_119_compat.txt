@@ -1,0 +1,98 @@
+# Compatibility shims for vanilla 1.19 systems that are still loaded outside this total conversion.
+# The corresponding vanilla countries are not present in A-Discord, so these effects intentionally do nothing.
+
+GER_amerika_bomber_focke_wulf_completion_SP_effects = {
+}
+
+GER_amerika_bomber_focke_wulf_completion_MIO_effects = {
+}
+
+ITA_add_basic_light_flamethrower_template = {
+}
+
+indonesia_increase_escalation_1_effect = {
+}
+
+ITA_add_improved_light_tank_templates = {
+}
+
+ITA_add_improved_medium_tank_templates = {
+}
+
+ITA_add_advanced_medium_tank_templates = {
+}
+
+ITA_add_improved_heavy_tank_templates = {
+}
+
+ITA_add_advanced_heavy_tank_templates = {
+}
+
+ITA_add_il_duce_sh_tank_template_and_production = {
+}
+
+ITA_add_modern_musculus_sh_tank_template_and_production = {
+}
+
+ITA_add_hand_of_god_sh_tank_template_and_production = {
+}
+
+play_warning_to_japan_effect = {
+}
+
+FIN_nokia_tires_after_tech_effect = {
+}
+
+SP_create_variant_based_on_country_armored_engineer = {
+}
+
+SP_create_variant_based_on_country_armored_maintenance = {
+}
+
+SP_create_variant_based_on_country_armored_signal = {
+}
+
+AST_votes_change_effect = {
+}
+
+CZE_show_current_skoda_prioty_idea_stats_no_focus = {
+}
+
+CZE_show_current_skoda_prioty_idea_stats_infantry_focus = {
+}
+
+CZE_show_current_skoda_prioty_idea_stats_tank_focus = {
+}
+
+CZE_show_current_skoda_prioty_idea_stats_plane_focus = {
+}
+
+CZE_show_current_skoda_prioty_idea_stats_naval_focus = {
+}
+
+CZE_update_skoda_tier = {
+}
+
+JAP_big_army_faction_gain = {
+}
+
+JAP_big_army_faction_loss = {
+}
+
+JAP_big_naval_faction_gain = {
+}
+
+JAP_big_naval_faction_loss = {
+}
+
+JAP_big_zaibatsu_faction_gain = {
+}
+
+JAP_big_zaibatsu_faction_loss = {
+}
+
+JAP_big_government_faction_gain = {
+}
+
+JAP_big_government_faction_loss = {
+}

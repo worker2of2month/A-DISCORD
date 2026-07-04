@@ -82,22 +82,26 @@ STP_inner_party_opinions_bop = {
 			min = -1
 			max = -0.5
 			modifier = {
+			}
+			on_activate = {
+				remove_dynamic_modifier = { modifier = stp_bop_less_hedonism_radical_maksim }
+				remove_dynamic_modifier = { modifier = stp_bop_less_hedonism_radical_hedersett }
+				remove_dynamic_modifier = { modifier = stp_bop_more_hedonism_radical_maksim }
+				remove_dynamic_modifier = { modifier = stp_bop_more_hedonism_radical_hedersett }
+
 				if = {
 					limit = {
 						STP_sided_with_Maksim_trigger = yes
 					}
-				stability_factor = 0.05
-				political_power_gain = 0.1
+					add_dynamic_modifier = { modifier = stp_bop_less_hedonism_radical_maksim }
 				}
-				elseif = {
+				else_if = {
 					limit = {
 						STP_sided_with_Hedersett_trigger = yes
 					}
-				stability_factor = -0.05
-				political_power_gain = -0.1
+					add_dynamic_modifier = { modifier = stp_bop_less_hedonism_radical_hedersett }
 				}
-			}
-			on_activate = {
+
 				set_power_balance_gfx = {
 				    id = STP_inner_party_opinions_bop
 				    side = STP_less_hedonism
@@ -110,6 +114,8 @@ STP_inner_party_opinions_bop = {
 				}
 			}
 			on_deactivate = {
+				remove_dynamic_modifier = { modifier = stp_bop_less_hedonism_radical_maksim }
+				remove_dynamic_modifier = { modifier = stp_bop_less_hedonism_radical_hedersett }
 			}
 		}
 	}
@@ -125,22 +131,26 @@ STP_inner_party_opinions_bop = {
 			min = 0.5
 			max = 1
 			modifier = {
+			}
+			on_activate = {
+				remove_dynamic_modifier = { modifier = stp_bop_less_hedonism_radical_maksim }
+				remove_dynamic_modifier = { modifier = stp_bop_less_hedonism_radical_hedersett }
+				remove_dynamic_modifier = { modifier = stp_bop_more_hedonism_radical_maksim }
+				remove_dynamic_modifier = { modifier = stp_bop_more_hedonism_radical_hedersett }
+
 				if = {
 					limit = {
 						STP_sided_with_Maksim_trigger = yes
 					}
-				stability_factor = -0.05
-				political_power_gain = -0.1
+					add_dynamic_modifier = { modifier = stp_bop_more_hedonism_radical_maksim }
 				}
-				elseif = {
+				else_if = {
 					limit = {
 						STP_sided_with_Hedersett_trigger = yes
 					}
-				stability_factor = 0.05
-				political_power_gain = 0.1
+					add_dynamic_modifier = { modifier = stp_bop_more_hedonism_radical_hedersett }
 				}
-			}
-			on_activate = {
+
 				set_power_balance_gfx = {
 				    id = STP_inner_party_opinions_bop
 				    side = STP_less_hedonism
@@ -153,6 +163,8 @@ STP_inner_party_opinions_bop = {
 				}
 			}
 			on_deactivate = {
+				remove_dynamic_modifier = { modifier = stp_bop_more_hedonism_radical_maksim }
+				remove_dynamic_modifier = { modifier = stp_bop_more_hedonism_radical_hedersett }
 			}
 		}
 	}

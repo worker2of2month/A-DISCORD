@@ -17,3 +17,31 @@ stp_party_suspicion = {
 	
 	political_power_gain = STP_party_suspicion_political_power_gain_dynamic_var
 }
+
+stp_bop_less_hedonism_radical_maksim = {
+	enable = { tag = STP }
+
+	stability_factor = 0.05
+	political_power_gain = 0.1
+}
+
+stp_bop_less_hedonism_radical_hedersett = {
+	enable = { tag = STP }
+
+	stability_factor = -0.05
+	political_power_gain = -0.1
+}
+
+stp_bop_more_hedonism_radical_maksim = {
+	enable = { tag = STP }
+
+	stability_factor = -0.05
+	political_power_gain = -0.1
+}
+
+stp_bop_more_hedonism_radical_hedersett = {
+	enable = { tag = STP }
+
+	stability_factor = 0.05
+	political_power_gain = 0.1
+}

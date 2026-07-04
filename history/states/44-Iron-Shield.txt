@@ -2,7 +2,7 @@ state={
 	id=44
 	name="STATE_44"
 	provinces={
-		16433 16448 
+		16433 16448
 	}
 	manpower=346284
 	buildings_max_level_factor=1.000
@@ -16,14 +16,11 @@ state={
 			hidden_dam = 1
 			industrial_complex  = 1
 			dockyard = 2
-
 			16448 = {
-        		bunker = 2
-   			}
-   			16448 = {
-        		naval_base = 5
-   			}
-   			16448 = { dam = 1 }
+				bunker = 2
+				naval_base = 5
+				dam = 1
+			}
 		}
 		add_core_of = STP
 

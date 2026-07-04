@@ -1,32 +1,60 @@
-
 is_enemy_ideology = {
 	OR = {
+		has_government = humanism
+		has_government = utilitarism
+		has_government = chauvinism
+		has_government = pragmatism
+		has_government = anarchism
+		has_government = technocracy
+		has_government = etatism
+		has_government = hedonism
+	}
+	ROOT = {
+		OR = {
+		has_government = humanism
+		has_government = utilitarism
+		has_government = chauvinism
+		has_government = pragmatism
+		has_government = anarchism
+		has_government = technocracy
+		has_government = etatism
+		has_government = hedonism
+		}
+	}
+	NOT = {
+		OR = {
 		AND = {
-			has_government = communism
-			ROOT = {
-				OR = {
-					has_government = fascism
-					has_government = democratic
-				}
-			}
+			has_government = humanism
+			ROOT = { has_government = humanism }
 		}
 		AND = {
-			has_government = democratic
-			ROOT = {
-				OR = {
-					has_government = communism
-					has_government = fascism
-				}
-			}
+			has_government = utilitarism
+			ROOT = { has_government = utilitarism }
 		}
 		AND = {
-			has_government = fascism
-			ROOT = {
-				OR = {
-					has_government = democratic
-					has_government = communism
-				}
-			}
+			has_government = chauvinism
+			ROOT = { has_government = chauvinism }
+		}
+		AND = {
+			has_government = pragmatism
+			ROOT = { has_government = pragmatism }
+		}
+		AND = {
+			has_government = anarchism
+			ROOT = { has_government = anarchism }
+		}
+		AND = {
+			has_government = technocracy
+			ROOT = { has_government = technocracy }
+		}
+		AND = {
+			has_government = etatism
+			ROOT = { has_government = etatism }
+		}
+		AND = {
+			has_government = hedonism
+			ROOT = { has_government = hedonism }
+		}
 		}
 	}
 }

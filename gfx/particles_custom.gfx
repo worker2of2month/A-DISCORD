@@ -1,0 +1,20 @@
+objectTypes = {
+
+	pdxparticle = {
+		name = "polution_particle"
+		type = "polution_file"
+		scale = 1
+	}
+
+	pdxparticle = {
+		name = "world_clouds_particle"
+		type = "world_clouds_file"
+		scale = 1
+	}
+
+	pdxparticle = {
+		name = "smog_particle"
+		type = "smog_file"
+		scale = 1
+	}
+}

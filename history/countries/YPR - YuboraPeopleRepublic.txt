@@ -19,4 +19,13 @@ set_popularities = {
 
 set_stability = 0.34
 
+add_ideas = {
+	minister_YPR_Amel_Sur
+	minister_YPR_Loran_Vek
+	minister_YPR_Seta_Vorn
+	minister_YPR_Min_Carel
+	minister_YPR_Vora_Pell
+	minister_YPR_Qadir_Noll
+}
+
 set_research_slots = 2

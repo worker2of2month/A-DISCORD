@@ -8,11 +8,19 @@ recruit_character = WRK_Richard_Gordon
 
 add_ideas = {
 	WRK_hourglass_of_discord
+
+	#ministers
+	minister_SOL_Helio_Marr
+	minister_SOL_Diego_Sol
+	minister_SOL_Alba_Rios
+	minister_SOL_Rada_Klin
+	minister_SOL_Teo_Sagan
+	minister_SOL_Mira_Shad
 }
 
 set_politics = {
 	ruling_party = pragmatism
-	last_election = "2010.12.01"
+	last_election = "2110.12.01"
 	elections_allowed = no
 }
 set_popularities = {

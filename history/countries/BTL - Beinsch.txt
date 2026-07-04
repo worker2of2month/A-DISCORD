@@ -23,4 +23,13 @@ set_popularities = {
 
 set_stability = 0.43
 
+add_ideas = {
+	minister_BTL_Victor_Nesh
+	minister_BTL_Dario_Platt
+	minister_BTL_Elsa_Rein
+	minister_BTL_Mina_Kurel
+	minister_BTL_Aron_Beck
+	minister_BTL_Soren_Ilt
+}
+
 set_research_slots = 2

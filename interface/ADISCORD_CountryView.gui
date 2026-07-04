@@ -47,8 +47,10 @@ guiTypes = {
 
 	containerWindowType = {
 		name = "ADISCORD_development_category_society_type"
-		position = { x = 0 y = 1100 }
-		size = { width=594 height= 600 }
+		# ADISCORD fix: keep development as a separate fixed block below the scrollable law list.
+		# The law categories are country-dependent, so this block must not sit too close to their viewport.
+		position = { x = 0 y = 1070 }
+		size = { width=594 height=315 }
 		clipping = yes
 
 		iconType ={
@@ -57,40 +59,283 @@ guiTypes = {
 			position = { x=10 y=0 }
 			Orientation = "UPPER_LEFT"
 		}
+
+		instantTextboxType = {
+			name = "ADISCORD_development_category_title"
+			position = { x = 35 y = 5 }
+			font = "hoi_20b"
+			text = ADISCORD_society_development_interface_header
+			maxWidth = 430
+			maxHeight = 20
+		}
+
 		iconType = {
-			name = "ADISCORD_development_category_society_type_frame"
+			name = "ADISCORD_development_society_frame"
 			spriteType = "GFX_CountryDevelopment_Category"
 			position = { x = 44 y = 55 }
 		}
-		#iconType = {
-		#	name = "ADISCORD_development_category_society_type_frame_2"
-		#	spriteType = "GFX_CountryDevelopment_Category"
-		#	position = { x = 305 y = 55 }
-		#}
+		iconType = { name = "ADISCORD_development_society_icon_1" spriteType = "GFX_ADISCORD_development_society_icon_1" position = { x = 58 y = 60 } scale = 0.75 pdx_tooltip = "ADISCORD_society_development_1_tt" }
+		iconType = { name = "ADISCORD_development_society_icon_2" spriteType = "GFX_ADISCORD_development_society_icon_2" position = { x = 58 y = 60 } scale = 0.75 pdx_tooltip = "ADISCORD_society_development_2_tt" }
+		iconType = { name = "ADISCORD_development_society_icon_3" spriteType = "GFX_ADISCORD_development_society_icon_3" position = { x = 58 y = 60 } scale = 0.75 pdx_tooltip = "ADISCORD_society_development_3_tt" }
+		iconType = { name = "ADISCORD_development_society_icon_4" spriteType = "GFX_ADISCORD_development_society_icon_4" position = { x = 58 y = 60 } scale = 0.75 pdx_tooltip = "ADISCORD_society_development_4_tt" }
+		iconType = { name = "ADISCORD_development_society_icon_5" spriteType = "GFX_ADISCORD_development_society_icon_5" position = { x = 58 y = 60 } scale = 0.75 pdx_tooltip = "ADISCORD_society_development_5_tt" }
 		iconType = {
-			name = "ADISCORD_development_category_society_type_progress_bar_bg"
+			name = "ADISCORD_development_society_progress_bar_bg"
 			spriteType = "GFX_CountryDevelopment_slider_bg"
 			position = { x = 120 y = 100 }
 		}
-		iconType = {
-			name = "ADISCORD_development_category_society_type_progress_bar"
-			spriteType = "GFX_tno_politics_circular_progress_bar"
-			position = { x = 122 y = 100 }
-		}
+		iconType = { name = "ADISCORD_development_society_progress_bar_1" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 122 y = 100 } frame = 0 }
+		iconType = { name = "ADISCORD_development_society_progress_bar_2" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 122 y = 100 } frame = 25 }
+		iconType = { name = "ADISCORD_development_society_progress_bar_3" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 122 y = 100 } frame = 50 }
+		iconType = { name = "ADISCORD_development_society_progress_bar_4" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 122 y = 100 } frame = 75 }
+		iconType = { name = "ADISCORD_development_society_progress_bar_5" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 122 y = 100 } frame = 100 }
 		instantTextboxType = {
-			name = "ADISCORD_development_category_society_type_name"
+			name = "ADISCORD_development_society_name"
 			position = { x = 120 y = 55 }
 			font = "hoi_18mbs"
-			text = SocietyTypeLoc
-			maxWidth = 260
+			text = ADISCORD_society_development_interface_name
+			maxWidth = 180
 			maxHeight = 20
 		}
 		instantTextboxType = {
-			name = "ADISCORD_development_category_society_number"
-			position = { x = 120 y = 75 }
+			name = "ADISCORD_development_society_level"
+			position = { x = 120 y = 74 }
+			font = "hoi_16mbs"
+			text = ADISCORD_society_development_interface_level
+			maxWidth = 92
+			maxHeight = 20
+		}
+		instantTextboxType = {
+			name = "ADISCORD_development_society_growth"
+			position = { x = 205 y = 74 }
+			font = "hoi_16mbs"
+			text = ADISCORD_society_development_interface_growth
+			maxWidth = 100
+			maxHeight = 20
+		}
+
+		iconType = {
+			name = "ADISCORD_development_social_system_frame"
+			spriteType = "GFX_CountryDevelopment_Category"
+			position = { x = 305 y = 55 }
+		}
+		iconType = { name = "ADISCORD_development_social_system_icon_1" spriteType = "GFX_ADISCORD_development_social_system_icon_1" position = { x = 319 y = 60 } scale = 0.75 pdx_tooltip = "ADISCORD_social_system_development_1_tt" }
+		iconType = { name = "ADISCORD_development_social_system_icon_2" spriteType = "GFX_ADISCORD_development_social_system_icon_2" position = { x = 319 y = 60 } scale = 0.75 pdx_tooltip = "ADISCORD_social_system_development_2_tt" }
+		iconType = { name = "ADISCORD_development_social_system_icon_3" spriteType = "GFX_ADISCORD_development_social_system_icon_3" position = { x = 319 y = 60 } scale = 0.75 pdx_tooltip = "ADISCORD_social_system_development_3_tt" }
+		iconType = { name = "ADISCORD_development_social_system_icon_4" spriteType = "GFX_ADISCORD_development_social_system_icon_4" position = { x = 319 y = 60 } scale = 0.75 pdx_tooltip = "ADISCORD_social_system_development_4_tt" }
+		iconType = { name = "ADISCORD_development_social_system_icon_5" spriteType = "GFX_ADISCORD_development_social_system_icon_5" position = { x = 319 y = 60 } scale = 0.75 pdx_tooltip = "ADISCORD_social_system_development_5_tt" }
+		iconType = {
+			name = "ADISCORD_development_social_system_progress_bar_bg"
+			spriteType = "GFX_CountryDevelopment_slider_bg"
+			position = { x = 381 y = 100 }
+		}
+		iconType = { name = "ADISCORD_development_social_system_progress_bar_1" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 383 y = 100 } frame = 0 }
+		iconType = { name = "ADISCORD_development_social_system_progress_bar_2" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 383 y = 100 } frame = 25 }
+		iconType = { name = "ADISCORD_development_social_system_progress_bar_3" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 383 y = 100 } frame = 50 }
+		iconType = { name = "ADISCORD_development_social_system_progress_bar_4" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 383 y = 100 } frame = 75 }
+		iconType = { name = "ADISCORD_development_social_system_progress_bar_5" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 383 y = 100 } frame = 100 }
+		instantTextboxType = {
+			name = "ADISCORD_development_social_system_name"
+			position = { x = 381 y = 55 }
 			font = "hoi_18mbs"
-			text = SocietyDevelopmentPerMonthDisplay
-			maxWidth = 260
+			text = ADISCORD_social_system_development_interface_name
+			maxWidth = 180
+			maxHeight = 20
+		}
+		instantTextboxType = {
+			name = "ADISCORD_development_social_system_level"
+			position = { x = 381 y = 74 }
+			font = "hoi_16mbs"
+			text = ADISCORD_social_system_development_interface_level
+			maxWidth = 92
+			maxHeight = 20
+		}
+		instantTextboxType = {
+			name = "ADISCORD_development_social_system_growth"
+			position = { x = 460 y = 74 }
+			font = "hoi_16mbs"
+			text = ADISCORD_social_system_development_interface_growth
+			maxWidth = 100
+			maxHeight = 20
+		}
+
+		iconType = {
+			name = "ADISCORD_development_army_frame"
+			spriteType = "GFX_CountryDevelopment_Category"
+			position = { x = 44 y = 135 }
+		}
+		iconType = { name = "ADISCORD_development_army_icon_1" spriteType = "GFX_ADISCORD_development_army_icon_1" position = { x = 58 y = 146 } scale = 0.75 pdx_tooltip = "ADISCORD_army_development_1_tt" }
+		iconType = { name = "ADISCORD_development_army_icon_2" spriteType = "GFX_ADISCORD_development_army_icon_2" position = { x = 58 y = 146 } scale = 0.75 pdx_tooltip = "ADISCORD_army_development_2_tt" }
+		iconType = { name = "ADISCORD_development_army_icon_3" spriteType = "GFX_ADISCORD_development_army_icon_3" position = { x = 58 y = 146 } scale = 0.75 pdx_tooltip = "ADISCORD_army_development_3_tt" }
+		iconType = { name = "ADISCORD_development_army_icon_4" spriteType = "GFX_ADISCORD_development_army_icon_4" position = { x = 58 y = 146 } scale = 0.75 pdx_tooltip = "ADISCORD_army_development_4_tt" }
+		iconType = { name = "ADISCORD_development_army_icon_5" spriteType = "GFX_ADISCORD_development_army_icon_5" position = { x = 58 y = 146 } scale = 0.75 pdx_tooltip = "ADISCORD_army_development_5_tt" }
+		iconType = {
+			name = "ADISCORD_development_army_progress_bar_bg"
+			spriteType = "GFX_CountryDevelopment_slider_bg"
+			position = { x = 120 y = 180 }
+		}
+		iconType = { name = "ADISCORD_development_army_progress_bar_1" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 122 y = 180 } frame = 0 }
+		iconType = { name = "ADISCORD_development_army_progress_bar_2" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 122 y = 180 } frame = 25 }
+		iconType = { name = "ADISCORD_development_army_progress_bar_3" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 122 y = 180 } frame = 50 }
+		iconType = { name = "ADISCORD_development_army_progress_bar_4" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 122 y = 180 } frame = 75 }
+		iconType = { name = "ADISCORD_development_army_progress_bar_5" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 122 y = 180 } frame = 100 }
+		instantTextboxType = {
+			name = "ADISCORD_development_army_name"
+			position = { x = 120 y = 135 }
+			font = "hoi_18mbs"
+			text = ADISCORD_army_development_interface_name
+			maxWidth = 180
+			maxHeight = 20
+		}
+		instantTextboxType = {
+			name = "ADISCORD_development_army_level"
+			position = { x = 120 y = 154 }
+			font = "hoi_16mbs"
+			text = ADISCORD_army_development_interface_level
+			maxWidth = 92
+			maxHeight = 20
+		}
+		instantTextboxType = {
+			name = "ADISCORD_development_army_growth"
+			position = { x = 205 y = 154 }
+			font = "hoi_16mbs"
+			text = ADISCORD_army_development_interface_growth
+			maxWidth = 100
+			maxHeight = 20
+		}
+
+		iconType = {
+			name = "ADISCORD_development_cultural_frame"
+			spriteType = "GFX_CountryDevelopment_Category"
+			position = { x = 305 y = 135 }
+		}
+		iconType = { name = "ADISCORD_development_cultural_icon_1" spriteType = "GFX_ADISCORD_development_cultural_icon_1" position = { x = 319 y = 146 } scale = 0.75 pdx_tooltip = "ADISCORD_cultural_development_1_tt" }
+		iconType = { name = "ADISCORD_development_cultural_icon_2" spriteType = "GFX_ADISCORD_development_cultural_icon_2" position = { x = 319 y = 146 } scale = 0.75 pdx_tooltip = "ADISCORD_cultural_development_2_tt" }
+		iconType = { name = "ADISCORD_development_cultural_icon_3" spriteType = "GFX_ADISCORD_development_cultural_icon_3" position = { x = 319 y = 146 } scale = 0.75 pdx_tooltip = "ADISCORD_cultural_development_3_tt" }
+		iconType = { name = "ADISCORD_development_cultural_icon_4" spriteType = "GFX_ADISCORD_development_cultural_icon_4" position = { x = 319 y = 146 } scale = 0.75 pdx_tooltip = "ADISCORD_cultural_development_4_tt" }
+		iconType = { name = "ADISCORD_development_cultural_icon_5" spriteType = "GFX_ADISCORD_development_cultural_icon_5" position = { x = 319 y = 146 } scale = 0.75 pdx_tooltip = "ADISCORD_cultural_development_5_tt" }
+		iconType = {
+			name = "ADISCORD_development_cultural_progress_bar_bg"
+			spriteType = "GFX_CountryDevelopment_slider_bg"
+			position = { x = 381 y = 180 }
+		}
+		iconType = { name = "ADISCORD_development_cultural_progress_bar_1" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 383 y = 180 } frame = 0 }
+		iconType = { name = "ADISCORD_development_cultural_progress_bar_2" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 383 y = 180 } frame = 25 }
+		iconType = { name = "ADISCORD_development_cultural_progress_bar_3" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 383 y = 180 } frame = 50 }
+		iconType = { name = "ADISCORD_development_cultural_progress_bar_4" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 383 y = 180 } frame = 75 }
+		iconType = { name = "ADISCORD_development_cultural_progress_bar_5" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 383 y = 180 } frame = 100 }
+		instantTextboxType = {
+			name = "ADISCORD_development_cultural_name"
+			position = { x = 381 y = 135 }
+			font = "hoi_18mbs"
+			text = ADISCORD_cultural_development_interface_name
+			maxWidth = 180
+			maxHeight = 20
+		}
+		instantTextboxType = {
+			name = "ADISCORD_development_cultural_level"
+			position = { x = 381 y = 154 }
+			font = "hoi_16mbs"
+			text = ADISCORD_cultural_development_interface_level
+			maxWidth = 92
+			maxHeight = 20
+		}
+		instantTextboxType = {
+			name = "ADISCORD_development_cultural_growth"
+			position = { x = 460 y = 154 }
+			font = "hoi_16mbs"
+			text = ADISCORD_cultural_development_interface_growth
+			maxWidth = 100
+			maxHeight = 20
+		}
+
+		iconType = {
+			name = "ADISCORD_development_state_frame"
+			spriteType = "GFX_CountryDevelopment_Category"
+			position = { x = 44 y = 215 }
+		}
+		iconType = { name = "ADISCORD_development_state_icon_1" spriteType = "GFX_ADISCORD_development_state_icon_1" position = { x = 58 y = 226 } scale = 0.75 pdx_tooltip = "ADISCORD_state_development_1_tt" }
+		iconType = { name = "ADISCORD_development_state_icon_2" spriteType = "GFX_ADISCORD_development_state_icon_2" position = { x = 58 y = 226 } scale = 0.75 pdx_tooltip = "ADISCORD_state_development_2_tt" }
+		iconType = { name = "ADISCORD_development_state_icon_3" spriteType = "GFX_ADISCORD_development_state_icon_3" position = { x = 58 y = 226 } scale = 0.75 pdx_tooltip = "ADISCORD_state_development_3_tt" }
+		iconType = { name = "ADISCORD_development_state_icon_4" spriteType = "GFX_ADISCORD_development_state_icon_4" position = { x = 58 y = 226 } scale = 0.75 pdx_tooltip = "ADISCORD_state_development_4_tt" }
+		iconType = { name = "ADISCORD_development_state_icon_5" spriteType = "GFX_ADISCORD_development_state_icon_5" position = { x = 58 y = 226 } scale = 0.75 pdx_tooltip = "ADISCORD_state_development_5_tt" }
+		iconType = {
+			name = "ADISCORD_development_state_progress_bar_bg"
+			spriteType = "GFX_CountryDevelopment_slider_bg"
+			position = { x = 120 y = 260 }
+		}
+		iconType = { name = "ADISCORD_development_state_progress_bar_1" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 122 y = 260 } frame = 0 }
+		iconType = { name = "ADISCORD_development_state_progress_bar_2" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 122 y = 260 } frame = 25 }
+		iconType = { name = "ADISCORD_development_state_progress_bar_3" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 122 y = 260 } frame = 50 }
+		iconType = { name = "ADISCORD_development_state_progress_bar_4" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 122 y = 260 } frame = 75 }
+		iconType = { name = "ADISCORD_development_state_progress_bar_5" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 122 y = 260 } frame = 100 }
+		instantTextboxType = {
+			name = "ADISCORD_development_state_name"
+			position = { x = 120 y = 215 }
+			font = "hoi_18mbs"
+			text = ADISCORD_state_development_interface_name
+			maxWidth = 180
+			maxHeight = 20
+		}
+		instantTextboxType = {
+			name = "ADISCORD_development_state_level"
+			position = { x = 120 y = 234 }
+			font = "hoi_16mbs"
+			text = ADISCORD_state_development_interface_level
+			maxWidth = 92
+			maxHeight = 20
+		}
+		instantTextboxType = {
+			name = "ADISCORD_development_state_growth"
+			position = { x = 205 y = 234 }
+			font = "hoi_16mbs"
+			text = ADISCORD_state_development_interface_growth
+			maxWidth = 100
+			maxHeight = 20
+		}
+
+		iconType = {
+			name = "ADISCORD_development_economic_frame"
+			spriteType = "GFX_CountryDevelopment_Category"
+			position = { x = 305 y = 215 }
+		}
+		iconType = { name = "ADISCORD_development_economic_icon_1" spriteType = "GFX_ADISCORD_development_economic_icon_1" position = { x = 319 y = 226 } scale = 0.75 pdx_tooltip = "ADISCORD_economic_development_1_tt" }
+		iconType = { name = "ADISCORD_development_economic_icon_2" spriteType = "GFX_ADISCORD_development_economic_icon_2" position = { x = 319 y = 226 } scale = 0.75 pdx_tooltip = "ADISCORD_economic_development_2_tt" }
+		iconType = { name = "ADISCORD_development_economic_icon_3" spriteType = "GFX_ADISCORD_development_economic_icon_3" position = { x = 319 y = 226 } scale = 0.75 pdx_tooltip = "ADISCORD_economic_development_3_tt" }
+		iconType = { name = "ADISCORD_development_economic_icon_4" spriteType = "GFX_ADISCORD_development_economic_icon_4" position = { x = 319 y = 226 } scale = 0.75 pdx_tooltip = "ADISCORD_economic_development_4_tt" }
+		iconType = { name = "ADISCORD_development_economic_icon_5" spriteType = "GFX_ADISCORD_development_economic_icon_5" position = { x = 319 y = 226 } scale = 0.75 pdx_tooltip = "ADISCORD_economic_development_5_tt" }
+		iconType = {
+			name = "ADISCORD_development_economic_progress_bar_bg"
+			spriteType = "GFX_CountryDevelopment_slider_bg"
+			position = { x = 381 y = 260 }
+		}
+		iconType = { name = "ADISCORD_development_economic_progress_bar_1" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 383 y = 260 } frame = 0 }
+		iconType = { name = "ADISCORD_development_economic_progress_bar_2" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 383 y = 260 } frame = 25 }
+		iconType = { name = "ADISCORD_development_economic_progress_bar_3" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 383 y = 260 } frame = 50 }
+		iconType = { name = "ADISCORD_development_economic_progress_bar_4" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 383 y = 260 } frame = 75 }
+		iconType = { name = "ADISCORD_development_economic_progress_bar_5" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 383 y = 260 } frame = 100 }
+		instantTextboxType = {
+			name = "ADISCORD_development_economic_name"
+			position = { x = 381 y = 215 }
+			font = "hoi_18mbs"
+			text = ADISCORD_economic_development_interface_name
+			maxWidth = 180
+			maxHeight = 20
+		}
+		instantTextboxType = {
+			name = "ADISCORD_development_economic_level"
+			position = { x = 381 y = 234 }
+			font = "hoi_16mbs"
+			text = ADISCORD_economic_development_interface_level
+			maxWidth = 92
+			maxHeight = 20
+		}
+		instantTextboxType = {
+			name = "ADISCORD_development_economic_growth"
+			position = { x = 460 y = 234 }
+			font = "hoi_16mbs"
+			text = ADISCORD_economic_development_interface_growth
+			maxWidth = 100
 			maxHeight = 20
 		}
 	}

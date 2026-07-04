@@ -264,15 +264,22 @@ spriteTypes = {
 	
 	spriteType = {
 		name = "GFX_country_selection_entry"
-		texturefile = "gfx/interface/country_selection_entry.tga"
+		texturefile = "gfx/interface/country_selection_entry.dds"
 		noOfFrames = 2		
 		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"		
 	}
 	
 	spriteType = {
 		name = "GFX_country_selection_bg"
-		texturefile = "gfx/interface/country_selection_bg.tga"
+		texturefile = "gfx/interface/country_selection_bg.dds"
 		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"				
+	}
+
+	spriteType = {
+		name = "GFX_country_filter_entry"
+		texturefile = "gfx/interface/country_selection_entry.dds"
+		noOfFrames = 2
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
 	}
 	
 	spriteType = {
@@ -306,4 +313,9 @@ spriteTypes = {
         name = "GFX_missing_dlc_warning_sign"
         texturefile = "gfx/interface/unsafe_savegame_icon.dds"
     }
+
+	spriteType = {
+		name = "GFX_unplayed_content_notification"
+		texturefile = "gfx/interface/unsafe_savegame_icon.dds"
+	}
 }

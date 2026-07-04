@@ -8,7 +8,7 @@ recruit_character = BBV_Baron_Karl
 
 set_politics = {
 	ruling_party = chauvinism
-	last_election = "2010.12.01"
+	last_election = "2110.12.01"
 	elections_allowed = no
 }
 set_popularities = {
@@ -19,5 +19,14 @@ set_popularities = {
 }
 
 set_stability = 0.34
+
+add_ideas = {
+	minister_BBV_Dieter_Bann
+	minister_BBV_Rolf_Stahl
+	minister_BBV_Marta_Vash
+	minister_BBV_Elise_Noon
+	minister_BBV_Hartwig_Lern
+	minister_BBV_Senta_Nacht
+}
 
 set_research_slots = 2

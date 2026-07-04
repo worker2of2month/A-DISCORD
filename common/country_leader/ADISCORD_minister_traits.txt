@@ -1,12 +1,176 @@
-#Head of state
 leader_traits = {
-	hos_minister_master_of_Destinies = {
-		random = no
-		stability_factor = 0.03
-		political_power_gain = 0.05
-		
-		ai_will_do = {
-			factor = 1
-		}
-	}
+	minister_trait_STP_hos_master_of_destinies = { random = no stability_factor = 0.03 political_power_gain = 0.05 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+
+	minister_trait_VAL_hos_contract_throne = { random = no political_power_gain = 0.04 war_support_factor = 0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_IVN_hos_locked_cabinet = { random = no stability_factor = 0.04 drift_defence_factor = 0.10 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_WIT_hos_quick_compromises = { random = no political_power_gain = 0.06 research_speed_factor = 0.01 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_WRK_hos_emergency_bureau = { random = no political_power_gain = 0.08 drift_defence_factor = 0.15 consumer_goods_factor = 0.03 ai_will_do = { factor = 1 } }
+	minister_trait_PIV_hos_foamy_populist = { random = no stability_factor = 0.05 monthly_population = 0.03 production_speed_arms_factory_factor = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_RUS_hos_border_patriarch = { random = no war_support_factor = 0.05 stability_factor = 0.02 consumer_goods_factor = 0.03 ai_will_do = { factor = 1 } }
+	minister_trait_NAM_hos_appointed_viceroy = { random = no political_power_gain = 0.05 compliance_growth = 0.02 stability_factor = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_VAD_hos_frontier_guardian = { random = no war_support_factor = 0.04 army_org_factor = 0.02 political_power_gain = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_ROM_hos_old_staff = { random = no political_power_gain = 0.04 drift_defence_factor = 0.20 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_SOL_hos_solar_pact = { random = no stability_factor = 0.04 production_speed_industrial_complex_factor = 0.05 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_TRU_hos_plain_speaker = { random = no political_power_gain = 0.05 war_support_factor = 0.02 research_speed_factor = -0.01 ai_will_do = { factor = 1 } }
+	minister_trait_ZAO_hos_zone_commissar = { random = no stability_factor = 0.03 compliance_growth = 0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_VLA_hos_arsenal_mayor = { random = no political_power_gain = 0.03 production_speed_arms_factory_factor = 0.04 war_support_factor = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_PWR_hos_ruin_marshal = { random = no war_support_factor = 0.06 monthly_population = -0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_DAN_hos_collective_voice = { random = no stability_factor = 0.05 political_power_gain = 0.03 production_speed_industrial_complex_factor = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_NOD_hos_hedonist_tribune = { random = no political_power_gain = 0.06 stability_factor = 0.02 war_support_factor = -0.04 ai_will_do = { factor = 1 } }
+	minister_trait_EFL_hos_glass_mediator = { random = no research_speed_factor = 0.02 political_power_gain = 0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_COF_hos_green_oracle = { random = no stability_factor = 0.06 monthly_population = 0.02 research_speed_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BJK_hos_crown_regent = { random = no war_support_factor = 0.04 stability_factor = 0.03 consumer_goods_factor = 0.03 ai_will_do = { factor = 1 } }
+	minister_trait_BLD_hos_ducal_chancellor = { random = no political_power_gain = 0.04 production_speed_bunker_factor = 0.04 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BHG_hos_counting_house = { random = no stability_factor = 0.03 local_resources_factor = 0.04 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_TFF_hos_open_assembly = { random = no political_power_gain = 0.05 consumer_goods_factor = -0.01 drift_defence_factor = -0.10 ai_will_do = { factor = 1 } }
+	minister_trait_BGT_hos_border_count = { random = no war_support_factor = 0.04 production_speed_arms_factory_factor = 0.03 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BBV_hos_baronial_table = { random = no stability_factor = 0.04 political_power_gain = 0.02 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BCM_hos_mesjan_broker = { random = no political_power_gain = 0.03 compliance_growth = 0.02 war_support_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_YPR_hos_council_speaker = { random = no stability_factor = 0.06 research_speed_factor = 0.01 political_power_gain = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_BTL_hos_orderly_notary = { random = no political_power_gain = 0.04 production_speed_industrial_complex_factor = 0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+
+	minister_trait_STP_def_banquet_guard = { random = no army_org_factor = 0.04 planning_speed = 0.08 political_power_gain = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_VAL_def_contract_captain = { random = no army_attack_factor = 0.05 training_time_army_factor = -0.04 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_IVN_def_bunker_doctrine = { random = no army_defence_factor = 0.05 land_reinforce_rate = 0.01 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_WIT_def_lean_columns = { random = no supply_consumption_factor = -0.04 army_org_regain = 0.04 war_support_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_WRK_def_red_alarmist = { random = no army_attack_factor = 0.04 army_defence_factor = 0.04 political_power_gain = -0.04 ai_will_do = { factor = 1 } }
+	minister_trait_PIV_def_cellar_recruiter = { random = no training_time_army_factor = -0.06 conscription_factor = 0.03 research_speed_factor = -0.01 ai_will_do = { factor = 1 } }
+	minister_trait_RUS_def_frozen_line = { random = no army_core_defence_factor = 0.05 attrition = -0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_NAM_def_quota_battalions = { random = no land_reinforce_rate = 0.02 army_org_factor = 0.03 stability_factor = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_VAD_def_forward_bayonets = { random = no army_attack_factor = 0.06 army_org_factor = 0.02 political_power_gain = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_ROM_def_drill_square = { random = no army_defence_factor = 0.04 planning_speed = 0.10 war_support_factor = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_SOL_def_sun_supply = { random = no supply_consumption_factor = -0.05 army_org_regain = 0.04 training_time_army_factor = 0.03 ai_will_do = { factor = 1 } }
+	minister_trait_TRU_def_square_sergeant = { random = no army_org_factor = 0.03 experience_gain_army = 0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_ZAO_def_zone_militias = { random = no army_core_attack_factor = 0.03 army_core_defence_factor = 0.03 political_power_gain = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_VLA_def_mobile_stocks = { random = no army_attack_factor = 0.03 supply_consumption_factor = -0.03 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_PWR_def_ash_guard = { random = no war_support_factor = 0.05 army_org_regain = 0.03 monthly_population = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_DAN_def_people_drill = { random = no army_defence_factor = 0.05 training_time_army_factor = -0.03 production_speed_arms_factory_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_NOD_def_festival_raids = { random = no army_attack_factor = 0.04 land_reinforce_rate = 0.01 stability_factor = -0.04 ai_will_do = { factor = 1 } }
+	minister_trait_EFL_def_swift_orders = { random = no planning_speed = 0.12 army_org_factor = 0.02 war_support_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_COF_def_forest_paths = { random = no attrition = -0.04 supply_consumption_factor = -0.02 political_power_gain = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_BJK_def_knightly_host = { random = no army_attack_factor = 0.05 war_support_factor = 0.03 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BLD_def_stone_wardens = { random = no army_defence_factor = 0.05 production_speed_bunker_factor = 0.05 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BHG_def_county_reserve = { random = no army_core_defence_factor = 0.04 land_reinforce_rate = 0.01 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_TFF_def_free_rifles = { random = no training_time_army_factor = -0.08 war_support_factor = 0.03 army_org_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BGT_def_torkrayt_lancers = { random = no army_attack_factor = 0.04 planning_speed = 0.07 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BBV_def_baronial_shields = { random = no army_defence_factor = 0.03 attrition = -0.03 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BCM_def_crossroad_posts = { random = no supply_consumption_factor = -0.04 army_core_attack_factor = 0.03 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_YPR_def_council_guard = { random = no army_org_regain = 0.05 training_time_army_factor = 0.04 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BTL_def_ordered_barracks = { random = no army_defence_factor = 0.04 army_attack_factor = 0.02 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+
+	minister_trait_STP_eco_silk_ledgers = { random = no consumer_goods_factor = -0.02 production_speed_industrial_complex_factor = 0.05 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_VAL_eco_weapon_broker = { random = no industrial_capacity_factory = 0.05 production_lack_of_resource_penalty_factor = -0.10 political_power_gain = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_IVN_eco_forge_accountant = { random = no production_speed_arms_factory_factor = 0.05 industrial_capacity_factory = 0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_WIT_eco_thrifty_foundries = { random = no production_speed_industrial_complex_factor = 0.06 local_resources_factor = 0.03 war_support_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_WRK_eco_smokestack_planner = { random = no industrial_capacity_factory = 0.04 production_factory_efficiency_gain_factor = 0.05 stability_factor = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_PIV_eco_brewery_cartel = { random = no consumer_goods_factor = -0.03 production_speed_industrial_complex_factor = 0.05 research_speed_factor = -0.01 ai_will_do = { factor = 1 } }
+	minister_trait_RUS_eco_grain_and_steel = { random = no local_resources_factor = 0.05 production_speed_arms_factory_factor = 0.04 consumer_goods_factor = 0.03 ai_will_do = { factor = 1 } }
+	minister_trait_NAM_eco_quota_keeper = { random = no production_speed_industrial_complex_factor = 0.04 compliance_growth = 0.03 industrial_capacity_factory = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_VAD_eco_front_workshops = { random = no production_speed_arms_factory_factor = 0.06 consumer_goods_factor = 0.02 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_ROM_eco_ordered_procurement = { random = no production_factory_efficiency_gain_factor = 0.06 production_lack_of_resource_penalty_factor = -0.08 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_SOL_eco_sun_roads = { random = no production_speed_industrial_complex_factor = 0.08 consumer_goods_factor = -0.01 army_org_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_TRU_eco_plain_books = { random = no industrial_capacity_factory = 0.03 production_speed_industrial_complex_factor = 0.04 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_ZAO_eco_border_markets = { random = no local_resources_factor = 0.04 consumer_goods_factor = -0.02 war_support_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_VLA_eco_arms_quarter = { random = no production_speed_arms_factory_factor = 0.05 production_factory_max_efficiency_factor = 0.04 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_PWR_eco_salvage_boards = { random = no production_speed_industrial_complex_factor = 0.06 consumer_goods_factor = -0.02 industrial_capacity_factory = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_DAN_eco_communal_rations = { random = no consumer_goods_factor = -0.02 production_speed_industrial_complex_factor = 0.03 political_power_gain = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_NOD_eco_pleasure_market = { random = no industrial_capacity_factory = 0.04 consumer_goods_factor = -0.01 war_support_factor = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_EFL_eco_clear_invoices = { random = no production_factory_efficiency_gain_factor = 0.04 research_speed_factor = 0.01 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_COF_eco_wild_harvest = { random = no local_resources_factor = 0.06 production_speed_industrial_complex_factor = 0.04 industrial_capacity_factory = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BJK_eco_royal_tithe = { random = no consumer_goods_factor = -0.03 production_speed_bunker_factor = 0.04 research_speed_factor = -0.01 ai_will_do = { factor = 1 } }
+	minister_trait_BLD_eco_ducal_steward = { random = no industrial_capacity_factory = 0.03 production_speed_coastal_bunker_factor = 0.05 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BHG_eco_county_mines = { random = no local_resources_factor = 0.05 production_speed_industrial_complex_factor = 0.03 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_TFF_eco_open_caravans = { random = no production_speed_industrial_complex_factor = 0.07 consumer_goods_factor = -0.02 stability_factor = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_BGT_eco_border_mints = { random = no production_speed_arms_factory_factor = 0.05 production_lack_of_resource_penalty_factor = -0.06 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BBV_eco_baronial_levies = { random = no industrial_capacity_factory = 0.04 consumer_goods_factor = -0.01 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BCM_eco_mesjan_tolls = { random = no production_factory_efficiency_gain_factor = 0.05 production_speed_industrial_complex_factor = 0.03 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_YPR_eco_shared_budget = { random = no stability_factor = 0.04 consumer_goods_factor = -0.04 production_speed_industrial_complex_factor = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_BTL_eco_clean_ledgers = { random = no industrial_capacity_factory = 0.03 production_speed_arms_factory_factor = 0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+
+	minister_trait_STP_hea_private_clinics = { random = no monthly_population = 0.05 stability_factor = 0.02 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_VAL_hea_field_surgeons = { random = no conscription_factor = 0.04 monthly_population = 0.03 industrial_capacity_factory = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_IVN_hea_quiet_hospitals = { random = no stability_factor = 0.03 attrition = -0.02 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_WIT_hea_fast_aid = { random = no monthly_population = 0.04 training_time_army_factor = -0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_WRK_hea_triage_boards = { random = no war_support_factor = 0.02 attrition = -0.03 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_PIV_hea_warm_cellars = { random = no monthly_population = 0.06 consumer_goods_factor = 0.03 research_speed_factor = -0.01 ai_will_do = { factor = 1 } }
+	minister_trait_RUS_hea_rural_doctors = { random = no conscription_factor = 0.03 stability_factor = 0.03 production_speed_industrial_complex_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_NAM_hea_registry_care = { random = no compliance_growth = 0.04 monthly_population = 0.03 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_VAD_hea_march_medicine = { random = no attrition = -0.04 conscription_factor = 0.02 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_ROM_hea_orderly_wards = { random = no monthly_population = 0.03 stability_factor = 0.04 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_SOL_hea_sun_sanatoriums = { random = no monthly_population = 0.05 attrition = -0.02 war_support_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_TRU_hea_plain_clinics = { random = no stability_factor = 0.03 training_time_army_factor = -0.04 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_ZAO_hea_border_hospices = { random = no monthly_population = 0.04 compliance_growth = 0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_VLA_hea_garrison_doctors = { random = no conscription_factor = 0.03 attrition = -0.03 industrial_capacity_factory = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_PWR_hea_ash_shelters = { random = no stability_factor = 0.05 war_support_factor = 0.03 monthly_population = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_DAN_hea_public_tables = { random = no monthly_population = 0.03 stability_factor = 0.02 production_speed_arms_factory_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_NOD_hea_pleasure_doctor = { random = no monthly_population = 0.05 political_power_gain = 0.02 consumer_goods_factor = 0.03 ai_will_do = { factor = 1 } }
+	minister_trait_EFL_hea_clear_water = { random = no stability_factor = 0.03 research_speed_factor = 0.01 conscription_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_COF_hea_herbal_circles = { random = no monthly_population = 0.06 stability_factor = 0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BJK_hea_noble_infirmary = { random = no conscription_factor = 0.04 stability_factor = 0.02 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BLD_hea_ducal_physician = { random = no monthly_population = 0.03 attrition = -0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BHG_hea_county_midwives = { random = no stability_factor = 0.04 monthly_population = 0.02 research_speed_factor = -0.01 ai_will_do = { factor = 1 } }
+	minister_trait_TFF_hea_trail_menders = { random = no monthly_population = 0.04 conscription_factor = 0.02 stability_factor = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_BGT_hea_lancer_aid = { random = no attrition = -0.03 stability_factor = 0.03 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BBV_hea_baroness_care = { random = no monthly_population = 0.03 consumer_goods_factor = 0.02 army_org_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BCM_hea_market_clinics = { random = no compliance_growth = 0.03 stability_factor = 0.03 industrial_capacity_factory = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_YPR_hea_collective_care = { random = no monthly_population = 0.04 stability_factor = 0.04 consumer_goods_factor = 0.03 ai_will_do = { factor = 1 } }
+	minister_trait_BTL_hea_orderly_care = { random = no conscription_factor = 0.03 monthly_population = 0.02 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+
+	minister_trait_STP_edu_salon_academies = { random = no research_speed_factor = 0.03 political_power_gain = 0.02 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_VAL_edu_ballistics_schools = { random = no research_speed_factor = 0.02 production_factory_efficiency_gain_factor = 0.03 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_IVN_edu_closed_lyceums = { random = no research_speed_factor = 0.04 drift_defence_factor = 0.08 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_WIT_edu_practical_lessons = { random = no research_speed_factor = 0.03 political_power_gain = 0.03 war_support_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_WRK_edu_factory_schools = { random = no research_speed_factor = 0.02 training_time_army_factor = -0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_PIV_edu_loud_lectures = { random = no research_speed_factor = 0.04 political_power_gain = 0.02 monthly_population = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_RUS_edu_border_institutes = { random = no research_speed_factor = 0.03 stability_factor = 0.02 consumer_goods_factor = 0.03 ai_will_do = { factor = 1 } }
+	minister_trait_NAM_edu_registry_schools = { random = no research_speed_factor = 0.02 compliance_growth = 0.02 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_VAD_edu_cadet_lectures = { random = no research_speed_factor = 0.03 army_org_factor = 0.02 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_ROM_edu_staff_college = { random = no research_speed_factor = 0.04 drift_defence_factor = 0.12 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_SOL_edu_observatories = { random = no research_speed_factor = 0.03 production_speed_industrial_complex_factor = 0.03 war_support_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_TRU_edu_plain_curriculum = { random = no research_speed_factor = 0.02 political_power_gain = 0.04 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_ZAO_edu_zone_schools = { random = no research_speed_factor = 0.03 compliance_growth = 0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_VLA_edu_workshop_classes = { random = no research_speed_factor = 0.02 production_speed_arms_factory_factor = 0.03 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_PWR_edu_ruin_tutors = { random = no war_support_factor = 0.04 production_speed_arms_factory_factor = 0.04 research_speed_factor = -0.01 ai_will_do = { factor = 1 } }
+	minister_trait_DAN_edu_public_reading = { random = no research_speed_factor = 0.03 stability_factor = 0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_NOD_edu_revelry_schools = { random = no research_speed_factor = 0.04 political_power_gain = 0.03 drift_defence_factor = -0.08 ai_will_do = { factor = 1 } }
+	minister_trait_EFL_edu_clean_labs = { random = no research_speed_factor = 0.05 stability_factor = 0.01 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_COF_edu_old_chants = { random = no research_speed_factor = 0.02 monthly_population = 0.02 production_speed_industrial_complex_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BJK_edu_court_tutors = { random = no research_speed_factor = 0.02 war_support_factor = 0.03 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BLD_edu_ducal_archives = { random = no research_speed_factor = 0.03 production_speed_bunker_factor = 0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BHG_edu_county_scribes = { random = no research_speed_factor = 0.03 local_resources_factor = 0.02 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_TFF_edu_open_prints = { random = no research_speed_factor = 0.04 consumer_goods_factor = 0.01 drift_defence_factor = -0.05 ai_will_do = { factor = 1 } }
+	minister_trait_BGT_edu_lancer_maps = { random = no research_speed_factor = 0.02 army_attack_factor = 0.02 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BBV_edu_baronial_lessons = { random = no research_speed_factor = 0.03 political_power_gain = 0.02 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BCM_edu_tollhouse_records = { random = no research_speed_factor = 0.03 compliance_growth = 0.02 war_support_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_YPR_edu_council_archives = { random = no research_speed_factor = 0.05 consumer_goods_factor = -0.01 political_power_gain = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_BTL_edu_exact_syllabi = { random = no research_speed_factor = 0.02 production_factory_efficiency_gain_factor = 0.03 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+
+	minister_trait_STP_int_court_whispers = { random = no intel_network_gain_factor = 0.20 operative_slot = 1 stability_factor = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_VAL_int_contract_spies = { random = no intel_network_gain_factor = 0.15 resistance_growth = -0.03 political_power_gain = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_IVN_int_locked_files = { random = no intel_network_gain_factor = 0.18 compliance_growth = 0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_WIT_int_border_runners = { random = no operative_slot = 1 intel_network_gain_factor = 0.10 war_support_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_WRK_int_internal_watch = { random = no intel_network_gain_factor = 0.20 drift_defence_factor = 0.10 stability_factor = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_PIV_int_cellar_informants = { random = no resistance_growth = -0.04 compliance_growth = 0.02 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_RUS_int_frost_ciphers = { random = no intel_network_gain_factor = 0.16 drift_defence_factor = 0.15 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_NAM_int_registry_spider = { random = no operative_slot = 1 compliance_growth = 0.03 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_VAD_int_forward_cells = { random = no intel_network_gain_factor = 0.18 resistance_growth = -0.02 political_power_gain = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_ROM_int_archive_eyes = { random = no drift_defence_factor = 0.20 intel_network_gain_factor = 0.12 war_support_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_SOL_int_sunlit_network = { random = no intel_network_gain_factor = 0.15 resistance_growth = -0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_TRU_int_plainclothes = { random = no operative_slot = 1 intel_network_gain_factor = 0.08 stability_factor = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_ZAO_int_checkpoint_web = { random = no compliance_growth = 0.04 resistance_growth = -0.02 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_VLA_int_factory_listeners = { random = no intel_network_gain_factor = 0.14 drift_defence_factor = 0.10 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_PWR_int_ruin_scavengers = { random = no resistance_growth = -0.05 war_support_factor = 0.03 stability_factor = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_DAN_int_collective_watch = { random = no intel_network_gain_factor = 0.12 compliance_growth = 0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_NOD_int_masked_revelers = { random = no operative_slot = 1 political_power_gain = 0.03 drift_defence_factor = -0.10 ai_will_do = { factor = 1 } }
+	minister_trait_EFL_int_clear_signals = { random = no intel_network_gain_factor = 0.18 research_speed_factor = 0.01 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_COF_int_root_network = { random = no resistance_growth = -0.04 intel_network_gain_factor = 0.10 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BJK_int_court_shadows = { random = no intel_network_gain_factor = 0.15 drift_defence_factor = 0.08 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BLD_int_ducal_whispers = { random = no operative_slot = 1 stability_factor = 0.02 resistance_growth = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BHG_int_county_informers = { random = no intel_network_gain_factor = 0.12 compliance_growth = 0.02 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_TFF_int_free_agents = { random = no operative_slot = 1 resistance_growth = -0.03 drift_defence_factor = -0.10 ai_will_do = { factor = 1 } }
+	minister_trait_BGT_int_lancer_scouts = { random = no intel_network_gain_factor = 0.14 army_attack_factor = 0.02 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BBV_int_baronial_informers = { random = no resistance_growth = -0.03 compliance_growth = 0.02 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_BCM_int_toll_spies = { random = no intel_network_gain_factor = 0.16 drift_defence_factor = 0.06 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_YPR_int_council_listeners = { random = no operative_slot = 1 compliance_growth = 0.04 political_power_gain = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_BTL_int_orderly_files = { random = no intel_network_gain_factor = 0.12 resistance_growth = -0.02 stability_factor = -0.02 ai_will_do = { factor = 1 } }
 }

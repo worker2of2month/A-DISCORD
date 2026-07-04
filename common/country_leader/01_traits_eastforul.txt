@@ -18,7 +18,6 @@ leader_traits = {
         random = no
         sprite = 1
         political_power_gain = 0.1
-        political_advisor_cost_factor = 0.5
     }
 
         

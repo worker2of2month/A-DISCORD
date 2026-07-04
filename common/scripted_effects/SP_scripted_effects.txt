@@ -1,0 +1,11 @@
+# Compatibility shims for vanilla 1.19 special-project scripts.
+# A-Discord does not ship the vanilla country MIOs, models, or focus trees these effects normally use.
+
+SP_create_variant_based_on_country_assault_engineer = {
+}
+
+SP_create_variant_based_on_country_improved_small_airframe_rocket_engine = {
+}
+
+SP_create_variant_of_habakkuk_for_production_line = {
+}
