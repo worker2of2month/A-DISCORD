@@ -24,9 +24,6 @@ idea_categories = {
 	}
 	
 	government = {
-		#slot = mobilization_laws
-		slot = trade_laws
-		slot = economy
 		slot = political_advisor_head_of_state
 		slot = political_advisor_minister_of_defense
 		slot = political_advisor_minister_of_economy
@@ -55,6 +52,8 @@ idea_categories = {
 	}
 
 	economic_laws = {
+		slot = trade_laws
+		slot = economy
 		slot = ADISCORD_taxation_laws
 		slot = ADISCORD_industrial_policy_laws
 		slot = ADISCORD_labor_policy_laws
