@@ -1,0 +1,85 @@
+defined_text = {
+	name = STPGetStateFaceStageName
+
+	text = {
+		trigger = { 
+			original_tag = STP
+			check_variable = { STP_state_face_stage = 5 } 
+		}
+		localization_key = STP_STATE_FACE_STAGE_5_loc
+	}
+
+	text = {
+		trigger = { 
+			original_tag = STP
+			check_variable = { STP_state_face_stage = 4 } 
+		}
+		localization_key = STP_STATE_FACE_STAGE_4_loc
+	}
+
+	text = {
+		trigger = { 
+			original_tag = STP
+			check_variable = { STP_state_face_stage = 3 } 
+		}
+		localization_key = STP_STATE_FACE_STAGE_3_loc
+	}
+
+	text = {
+		trigger = { 
+			original_tag = STP
+			check_variable = { STP_state_face_stage = 2 } 
+		}
+		localization_key = STP_STATE_FACE_STAGE_2_loc
+	}
+
+	text = {
+		trigger = { 
+			original_tag = STP
+		}
+		localization_key = STP_STATE_FACE_STAGE_1_loc
+	}
+}
+
+defined_text = {
+	name = STPGetStateFaceTooltip
+
+	text = {
+		trigger = { 
+			original_tag = STP
+			check_variable = { STP_state_face_stage = 5 } 
+		}
+		localization_key = STP_STATE_FACE_STAGE_5_TOOLTIP
+	}
+
+	text = {
+		trigger = { 
+			original_tag = STP
+			check_variable = { STP_state_face_stage = 4 } 
+		}
+		localization_key = STP_STATE_FACE_STAGE_4_TOOLTIP
+	}
+
+	text = {
+		trigger = { 
+			original_tag = STP
+			check_variable = { STP_state_face_stage = 3 } 
+		}
+		localization_key = STP_STATE_FACE_STAGE_3_TOOLTIP
+	}
+
+	text = {
+		trigger = { 
+			original_tag = STP
+			check_variable = { STP_state_face_stage = 2 } 
+		}
+		localization_key = STP_STATE_FACE_STAGE_2_TOOLTIP
+	}
+
+	text = {
+		trigger = { 
+			original_tag = STP
+		}
+		localization_key = STP_STATE_FACE_STAGE_1_TOOLTIP
+	}
+}

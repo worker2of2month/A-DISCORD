@@ -1,0 +1,36 @@
+spriteTypes = {
+	spriteType = {
+		name = "GFX_STP_state_face_background"
+		texturefile = "gfx/interface/state_face/stp_state_face_background.png"
+	}
+
+	spriteType = {
+		name = "GFX_STP_state_face_frame"
+		texturefile = "gfx/interface/state_face/stp_state_face_frame.png"
+	}
+
+	spriteType = {
+		name = "GFX_STP_state_face_stage_1"
+		texturefile = "gfx/interface/state_face/stp_state_face_stage_1.png"
+	}
+
+	spriteType = {
+		name = "GFX_STP_state_face_stage_2"
+		texturefile = "gfx/interface/state_face/stp_state_face_stage_2.png"
+	}
+
+	spriteType = {
+		name = "GFX_STP_state_face_stage_3"
+		texturefile = "gfx/interface/state_face/stp_state_face_stage_3.png"
+	}
+
+	spriteType = {
+		name = "GFX_STP_state_face_stage_4"
+		texturefile = "gfx/interface/state_face/stp_state_face_stage_4.png"
+	}
+
+	spriteType = {
+		name = "GFX_STP_state_face_stage_5"
+		texturefile = "gfx/interface/state_face/stp_state_face_stage_5.png"
+	}
+}

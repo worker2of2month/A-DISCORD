@@ -1,0 +1,12 @@
+﻿l_russian:
+ STP_elections_in_the_party: "Выборы в партии"
+ STP_elections_in_the_party_desc: "Давным-давно §YПётр Иванов§! подарил нам надежду, вселил желание идти в будущее без страха, предложив политику гедонизма после долгих лет, полных крови, пота и разрушительных идеологий, не устающих бороться с непреодолимым злом — §Rимперией Воркерланда§!. Но те времена остались позади, и §YПётр Иванов§! уже не так молод, как прежде. Будущее, кажется, предельно туманно: вопрос о том, что делать с возможным уходом Иванова, остается актуальным и сложным. [PeterHealth] [WhoTFDoWeSupportText] [STP_display_party_suspicion]"
+
+ STP_WhoTFDoWeSupportText_loc: "\n\nНа данный момент мы поддерживаем [WhoTFDoWeSupportLeader]."
+ STP_sided_with_Maksim_loc: "§YМаксима Шабрата§!"
+ STP_sided_with_the_party_loc: "§Yпартийный аппарат§!"
+
+ stp_party_suspicion: "[stp_party_suspicion_loc]"
+ STP_display_party_suspicion_loc: "\n\nПоказатель подозрения спецслужб £STP_suspicion [?STP_party_suspicion|R1%] (£political_power_texticon [?STP_party_suspicion_political_power_gain_dynamic_var|=+1%]).\nПодозрение спецслужб является критически важным параметром. Если оно достигнет §R100%§!, Максим Шабрат будет §Rарестован§!. При достижении §Y50%§! партия начнёт вводить §Yсанкции§! против деятельности антигедонистического движения. Следует прилагать все усилия, чтобы удерживать этот показатель как можно ниже."
+ stp_party_suspicion_loc_bad: "Высокий уровень подозрения спецслужб"
+ stp_party_suspicion_loc_good: "Низкий уровень подозрения спецслужб"

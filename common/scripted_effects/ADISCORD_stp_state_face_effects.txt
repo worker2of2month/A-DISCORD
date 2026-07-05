@@ -1,0 +1,48 @@
+# ADISCORD / STP State Face
+# Germany-style state storage: one numeric country variable instead of five country flags.
+# Use STP_set_state_face_stage_X = yes in focus completion_reward, events, or decisions.
+
+STP_set_state_face_stage_1_silent = {
+	set_variable = { STP_state_face_stage = 1 }
+}
+
+STP_set_state_face_stage_2_silent = {
+	set_variable = { STP_state_face_stage = 2 }
+}
+
+STP_set_state_face_stage_3_silent = {
+	set_variable = { STP_state_face_stage = 3 }
+}
+
+STP_set_state_face_stage_4_silent = {
+	set_variable = { STP_state_face_stage = 4 }
+}
+
+STP_set_state_face_stage_5_silent = {
+	set_variable = { STP_state_face_stage = 5 }
+}
+
+STP_set_state_face_stage_1 = {
+	custom_effect_tooltip = STP_state_face_stage_1_tt
+	hidden_effect = { STP_set_state_face_stage_1_silent = yes }
+}
+
+STP_set_state_face_stage_2 = {
+	custom_effect_tooltip = STP_state_face_stage_2_tt
+	hidden_effect = { STP_set_state_face_stage_2_silent = yes }
+}
+
+STP_set_state_face_stage_3 = {
+	custom_effect_tooltip = STP_state_face_stage_3_tt
+	hidden_effect = { STP_set_state_face_stage_3_silent = yes }
+}
+
+STP_set_state_face_stage_4 = {
+	custom_effect_tooltip = STP_state_face_stage_4_tt
+	hidden_effect = { STP_set_state_face_stage_4_silent = yes }
+}
+
+STP_set_state_face_stage_5 = {
+	custom_effect_tooltip = STP_state_face_stage_5_tt
+	hidden_effect = { STP_set_state_face_stage_5_silent = yes }
+}

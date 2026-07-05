@@ -1,4 +1,4 @@
-##Party elections
+## Party elections / support side
 
 defined_text = {
 	name = WhoTFDoWeSupportText
@@ -14,7 +14,7 @@ defined_text = {
 	}
 }
 
-defined_text = { 
+defined_text = {
 	name = WhoTFDoWeSupportLeader
 	text = {
 		trigger = {
@@ -32,36 +32,6 @@ defined_text = {
 	}
 }
 
-defined_text = { 
-	name = PeterHealth
-	text = {
-		trigger = {
-			original_tag = STP
-			NOT = {
-				OR = {
-					has_country_flag = STP_Peter_Is_Not_Okay
-					has_country_flag = STP_Peter_Is_Dead
-				}
-			}
-		}
-		localization_key = STP_Peter_Is_Okay_loc
-	}
-	text = {
-		trigger = {
-			original_tag = STP
-			has_country_flag = STP_Peter_Is_Not_Okay
-		}
-		localization_key = STP_Peter_Is_Not_Okay_loc
-	}
-	text = {
-		trigger = {
-			original_tag = STP
-			has_country_flag = STP_Peter_Is_Dead
-		}
-		localization_key = STP_Peter_Is_Dead_loc
-	}
-}
-
 defined_text = {
 	name = STP_display_party_suspicion
 	text = {
@@ -76,15 +46,15 @@ defined_text = {
 	}
 }
 
-defined_text = { 
+defined_text = {
 	name = stp_party_suspicion_loc
 	text = {
 		trigger = {
 			original_tag = STP
 			check_variable = {
-			    var = STP_party_suspicion
-			    value = 50
-			    compare = greater_than_or_equals
+				var = STP_party_suspicion
+				value = 50
+				compare = greater_than_or_equals
 			}
 		}
 		localization_key = stp_party_suspicion_loc_bad
@@ -93,9 +63,9 @@ defined_text = {
 		trigger = {
 			original_tag = STP
 			check_variable = {
-			    var = STP_party_suspicion
-			    value = 50
-			    compare = less_than
+				var = STP_party_suspicion
+				value = 50
+				compare = less_than
 			}
 		}
 		localization_key = stp_party_suspicion_loc_good

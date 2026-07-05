@@ -1,0 +1,98 @@
+defined_text = {
+	name = PeterHealth
+
+	text = {
+		trigger = {
+			original_tag = STP
+			check_variable = { STP_leader_health_stage = 5 }
+		}
+		localization_key = STP_PETER_HEALTH_STAGE_5_DESC
+	}
+
+	text = {
+		trigger = {
+			original_tag = STP
+			check_variable = { STP_leader_health_stage = 4 }
+		}
+		localization_key = STP_PETER_HEALTH_STAGE_4_DESC
+	}
+
+	text = {
+		trigger = {
+			original_tag = STP
+			check_variable = { STP_leader_health_stage = 3 }
+		}
+		localization_key = STP_PETER_HEALTH_STAGE_3_DESC
+	}
+
+	text = {
+		trigger = {
+			original_tag = STP
+			check_variable = { STP_leader_health_stage = 2 }
+		}
+		localization_key = STP_PETER_HEALTH_STAGE_2_DESC
+	}
+
+	text = {
+		trigger = { always = yes }
+		localization_key = STP_PETER_HEALTH_STAGE_1_DESC
+	}
+}
+
+defined_text = {
+	name = STPGetLeaderHealthStageName
+
+	text = {
+		trigger = { check_variable = { STP_leader_health_stage = 5 } }
+		localization_key = STP_LEADER_HEALTH_STAGE_5
+	}
+
+	text = {
+		trigger = { check_variable = { STP_leader_health_stage = 4 } }
+		localization_key = STP_LEADER_HEALTH_STAGE_4
+	}
+
+	text = {
+		trigger = { check_variable = { STP_leader_health_stage = 3 } }
+		localization_key = STP_LEADER_HEALTH_STAGE_3
+	}
+
+	text = {
+		trigger = { check_variable = { STP_leader_health_stage = 2 } }
+		localization_key = STP_LEADER_HEALTH_STAGE_2
+	}
+
+	text = {
+		trigger = { always = yes }
+		localization_key = STP_LEADER_HEALTH_STAGE_1
+	}
+}
+
+defined_text = {
+	name = STPGetLeaderHealthTooltip
+
+	text = {
+		trigger = { check_variable = { STP_leader_health_stage = 5 } }
+		localization_key = STP_LEADER_HEALTH_STAGE_5_TOOLTIP
+	}
+
+	text = {
+		trigger = { check_variable = { STP_leader_health_stage = 4 } }
+		localization_key = STP_LEADER_HEALTH_STAGE_4_TOOLTIP
+	}
+
+	text = {
+		trigger = { check_variable = { STP_leader_health_stage = 3 } }
+		localization_key = STP_LEADER_HEALTH_STAGE_3_TOOLTIP
+	}
+
+	text = {
+		trigger = { check_variable = { STP_leader_health_stage = 2 } }
+		localization_key = STP_LEADER_HEALTH_STAGE_2_TOOLTIP
+	}
+
+	text = {
+		trigger = { always = yes }
+		localization_key = STP_LEADER_HEALTH_STAGE_1_TOOLTIP
+	}
+}

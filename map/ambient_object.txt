@@ -139,7 +139,7 @@ type={
 	object={
 		name="ADISCORD_vorkerland_pyramid_entity"
 		position={
-			3159.92992 12.9 725.68 
+			3159.92992 16.4 725.68 
 		}
 		rotation={
 			0 310 0 
@@ -153,19 +153,19 @@ type={
 	object={
 		name="cityblock_entity"
 		position={
-			3730.78016 -0.2 932.69 
+			2120.53008 -0.5 498.6 
 		}
 		rotation={
-			50 0 0 
+			0 0 0 
 		}
 	}
 	object={
 		name="cityblock_entity"
 		position={
-			2120.53008 -0.5 498.6 
+			3730.78016 -0.2 932.69 
 		}
 		rotation={
-			0 0 0 
+			50 0 0 
 		}
 	}
 	object={

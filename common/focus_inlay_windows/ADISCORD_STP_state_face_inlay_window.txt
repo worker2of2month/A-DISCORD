@@ -1,0 +1,29 @@
+STP_state_face_inlay_window = {
+	window_name = STP_state_face_ui_window
+	internal = yes
+
+	visible = {
+		OR = {
+			tag = STP
+			original_tag = STP
+		}
+	}
+
+	scripted_images = {
+		STP_state_face_portrait = {
+			GFX_STP_state_face_stage_5 = {
+				check_variable = { STP_state_face_stage = 5 }
+			}
+			GFX_STP_state_face_stage_4 = {
+				check_variable = { STP_state_face_stage = 4 }
+			}
+			GFX_STP_state_face_stage_3 = {
+				check_variable = { STP_state_face_stage = 3 }
+			}
+			GFX_STP_state_face_stage_2 = {
+				check_variable = { STP_state_face_stage = 2 }
+			}
+			GFX_STP_state_face_stage_1 = yes
+		}
+	}
+}

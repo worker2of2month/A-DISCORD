@@ -8,6 +8,11 @@
 		}
 	}
 
+	inlay_window = {
+		id = STP_state_face_inlay_window
+		position = { x = 560 y = 0 }
+	}
+
 #############################################
 ### STP ACT I: THE LAST FEAST OF PEACE
 ### Final structural file: no gameplay effects, score logic, flags, or event payloads yet.
