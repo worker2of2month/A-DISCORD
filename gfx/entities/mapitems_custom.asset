@@ -55,6 +55,15 @@ entity = {
 }
 
 entity = {
+	name = "ADISCORD_congress_entity"
+	pdxmesh = "ADISCORD_congress_mesh"
+
+	default_state = "idle"
+	state = { name = "idle"
+	}
+}
+
+entity = {
 	name = "skyscraper1_entity"
 	pdxmesh = "skyscraper1_mesh"
 }

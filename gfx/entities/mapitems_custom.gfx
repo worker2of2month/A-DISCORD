@@ -40,6 +40,19 @@ objectTypes = {
 
 objectTypes = {
 	pdxmesh = {
+		name = "ADISCORD_congress_mesh"
+		file = "gfx/models/buildings/stelander_special/ADISCORD_congress.mesh"
+		scale = 1
+		cull_distance = 400.0
+
+		meshsettings = {
+            shader = "PdxMeshAdvanced"
+        }
+	}
+}
+
+objectTypes = {
+	pdxmesh = {
 		name = "skyscraper1_mesh"
 		file = "gfx/models/buildings/skyscraper1.mesh"		
 		scale = 1.0
