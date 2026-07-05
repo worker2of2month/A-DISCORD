@@ -40,6 +40,16 @@ entity = {
 }
 
 entity = {
+	name = "ADISCORD_reactor_2_entity"
+	pdxmesh = "ADISCORD_reactor_2_mesh"
+
+	default_state = "idle"
+	state = { name = "idle"
+
+	}
+}
+
+entity = {
 	name = "ADISCORD_factory_entity"
 	pdxmesh = "ADISCORD_factory_mesh"
 

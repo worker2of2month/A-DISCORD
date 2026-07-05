@@ -16,7 +16,7 @@ objectTypes = {
 	pdxmesh = {
 		name = "ADISCORD_factory_mesh"
 		file = "gfx/models/buildings/wasterland_special/ADISCORD_factory.mesh"
-		scale = 1.0
+		scale = 2.0
 		cull_distance = 400.0
 
 		meshsettings = {
@@ -37,6 +37,20 @@ objectTypes = {
         }
 	}
 }
+
+objectTypes = {
+	pdxmesh = {
+		name = "ADISCORD_reactor_2_mesh"
+		file = "gfx/models/buildings/wasterland_special/ADISCORD_reactor_2.mesh"
+		scale = 2.0
+		cull_distance = 400.0
+
+		meshsettings = {
+            shader = "PdxMeshAdvanced"
+        }
+	}
+}
+
 
 objectTypes = {
 	pdxmesh = {

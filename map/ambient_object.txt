@@ -852,10 +852,34 @@ type={
 	object={
 		name="ADISCORD_reactor_entity"
 		position={
-			3545.06016 11.8 901.59 
+			3526.11008 13.6 905.46 
+		}
+		rotation={
+			0 90 0 
+		}
+	}
+	object={
+		name="ADISCORD_reactor_entity"
+		position={
+			3545.19008 11.8 903.32 
 		}
 		rotation={
 			0 370 0 
+		}
+	}
+}
+type={
+	type="ADISCORD_reactor_2_entity"
+	use_animation=no
+	scale=5.000000
+	always_visible=yes
+	object={
+		name="ADISCORD_reactor_2_entity"
+		position={
+			3535.20992 14.6 904.51 
+		}
+		rotation={
+			90 270 90 
 		}
 	}
 }
