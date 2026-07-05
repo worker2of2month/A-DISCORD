@@ -30,8 +30,18 @@ entity = {
 }
 
 entity = {
-	name = "ADISCORD_FACTORY_1_entity"
-	pdxmesh = "ADISCORD_FACTORY_1_mesh"
+	name = "ADISCORD_reactor_entity"
+	pdxmesh = "ADISCORD_reactor_mesh"
+
+	default_state = "idle"
+	state = { name = "idle"
+
+	}
+}
+
+entity = {
+	name = "ADISCORD_factory_entity"
+	pdxmesh = "ADISCORD_factory_mesh"
 
 	default_state = "idle"
 	state = { name = "idle"
