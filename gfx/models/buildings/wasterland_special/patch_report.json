@@ -1,0 +1,42 @@
+{
+  "patched_meshes": [
+    {
+      "mesh": "ADISCORD_factory.mesh",
+      "replacements": {
+        "no_spec.dds": 1,
+        "no_normal.dds": 1
+      },
+      "sha256_prefix": "24de1a88e402c283"
+    },
+    {
+      "mesh": "ADISCORD_reactor.mesh",
+      "replacements": {
+        "flat_nm.dds": 1,
+        "dark_spec.dds": 1
+      },
+      "sha256_prefix": "ad74dd63d4cf5cf8"
+    },
+    {
+      "mesh": "ADISCORD_reactor_2.mesh",
+      "replacements": {
+        "flat_nm.dds": 1,
+        "dark_spec.dds": 1
+      },
+      "sha256_prefix": "e1cb530316ddee9e"
+    }
+  ],
+  "service_textures": {
+    "factory": {
+      "nrm": "fac_nrm.dds",
+      "spec": "fac_matte.dds"
+    },
+    "reactor": {
+      "nrm": "rct_nrm.dds",
+      "spec": "rct_matte.dds"
+    },
+    "reactor_2": {
+      "nrm": "r2x_nrm.dds",
+      "spec": "r2x_matte.dds"
+    }
+  }
+}
