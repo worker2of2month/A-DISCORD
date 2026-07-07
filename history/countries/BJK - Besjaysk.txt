@@ -1,5 +1,6 @@
 capital = 41
 
+oob = "BJK"
 ####### Characters
 
 recruit_character = BJK_Graison

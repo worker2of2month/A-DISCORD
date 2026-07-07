@@ -1,5 +1,6 @@
 capital = 78
 
+oob = "DAN"
 ####### Characters
 
 recruit_character = DAN_Dania_Komun

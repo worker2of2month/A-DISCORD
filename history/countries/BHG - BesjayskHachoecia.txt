@@ -1,5 +1,6 @@
 capital = 5
 
+oob = "BHG"
 ####### Characters
 
 recruit_character = BHG_Graf_Marcus

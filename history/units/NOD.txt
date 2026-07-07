@@ -1,0 +1,135 @@
+division_template = {
+	name = "Cussington Security"
+	division_names_group = ADISCORD_INF_01
+	regiments = {
+		infantry = { x = 0 y = 0 }
+		infantry = { x = 0 y = 1 }
+		infantry = { x = 1 y = 0 }
+	}
+}
+
+division_template = {
+	name = "Nodral Line Infantry"
+	division_names_group = ADISCORD_INF_01
+	regiments = {
+		infantry = { x = 0 y = 0 }
+		infantry = { x = 0 y = 1 }
+		infantry = { x = 0 y = 2 }
+		infantry = { x = 1 y = 0 }
+		infantry = { x = 1 y = 1 }
+		infantry = { x = 1 y = 2 }
+	}
+	support = {
+		engineer = { x = 0 y = 0 }
+	}
+}
+
+division_template = {
+	name = "Cussington Guard"
+	division_names_group = ADISCORD_INF_01
+	regiments = {
+		infantry = { x = 0 y = 0 }
+		infantry = { x = 0 y = 1 }
+		infantry = { x = 0 y = 2 }
+		infantry = { x = 1 y = 0 }
+		infantry = { x = 1 y = 1 }
+		infantry = { x = 1 y = 2 }
+		infantry = { x = 2 y = 0 }
+		infantry = { x = 2 y = 1 }
+		infantry = { x = 2 y = 2 }
+	}
+	support = {
+		engineer = { x = 0 y = 0 }
+		artillery = { x = 0 y = 1 }
+	}
+}
+
+units = {
+	division = {
+		division_name = { is_name_ordered = yes name_order = 1 }
+		location = 16441
+		division_template = "Cussington Guard"
+		start_experience_factor = 0.28
+		start_equipment_factor = 0.45
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 2 }
+		location = 12434
+		division_template = "Nodral Line Infantry"
+		start_experience_factor = 0.20
+		start_equipment_factor = 0.37
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 3 }
+		location = 16369
+		division_template = "Nodral Line Infantry"
+		start_experience_factor = 0.20
+		start_equipment_factor = 0.37
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 4 }
+		location = 16444
+		division_template = "Cussington Security"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.30
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 5 }
+		location = 16363
+		division_template = "Nodral Line Infantry"
+		start_experience_factor = 0.20
+		start_equipment_factor = 0.37
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 6 }
+		location = 16356
+		division_template = "Nodral Line Infantry"
+		start_experience_factor = 0.20
+		start_equipment_factor = 0.37
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 7 }
+		location = 12
+		division_template = "Nodral Line Infantry"
+		start_experience_factor = 0.20
+		start_equipment_factor = 0.37
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 8 }
+		location = 22
+		division_template = "Cussington Security"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.30
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 9 }
+		location = 80
+		division_template = "Nodral Line Infantry"
+		start_experience_factor = 0.20
+		start_equipment_factor = 0.37
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 10 }
+		location = 121
+		division_template = "Nodral Line Infantry"
+		start_experience_factor = 0.20
+		start_equipment_factor = 0.37
+	}
+}
+
+##### No notable air forces #####
+
+instant_effect = {
+	add_equipment_production = {
+		equipment = { type = infantry_equipment_0 creator = "NOD" }
+		requested_factories = 2
+		progress = 0.60
+		efficiency = 70
+	}
+	add_equipment_production = {
+		equipment = { type = support_equipment_1 }
+		requested_factories = 1
+		progress = 0.30
+		efficiency = 50
+	}
+}

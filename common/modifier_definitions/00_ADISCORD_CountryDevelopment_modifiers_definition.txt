@@ -1,7 +1,7 @@
 
 SocietyDevelopmentPerMonth = {
 	color_type = good
-	value_type = percentage
+	value_type = number
 	precision = 1
 	category = country
 }

@@ -1,5 +1,6 @@
 capital = 80
 
+oob = "TRU"
 ####### Characters
 
 recruit_character = TRU_Nikita_Truman

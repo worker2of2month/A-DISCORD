@@ -1,5 +1,6 @@
 capital = 72
 
+oob = "ZAO"
 ####### Characters
 
 recruit_character = WRK_Bassam_Zogby

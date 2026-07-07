@@ -1,0 +1,87 @@
+division_template = {
+	name = "Local Security Detachment"
+	division_names_group = ADISCORD_INF_01
+	regiments = {
+		infantry = { x = 0 y = 0 }
+		infantry = { x = 0 y = 1 }
+		infantry = { x = 1 y = 0 }
+	}
+}
+
+division_template = {
+	name = "Line Infantry Brigade"
+	division_names_group = ADISCORD_INF_01
+	regiments = {
+		infantry = { x = 0 y = 0 }
+		infantry = { x = 0 y = 1 }
+		infantry = { x = 0 y = 2 }
+		infantry = { x = 1 y = 0 }
+		infantry = { x = 1 y = 1 }
+		infantry = { x = 1 y = 2 }
+	}
+	support = {
+		engineer = { x = 0 y = 0 }
+	}
+}
+
+division_template = {
+	name = "Capital Guard"
+	division_names_group = ADISCORD_INF_01
+	regiments = {
+		infantry = { x = 0 y = 0 }
+		infantry = { x = 0 y = 1 }
+		infantry = { x = 0 y = 2 }
+		infantry = { x = 1 y = 0 }
+		infantry = { x = 1 y = 1 }
+		infantry = { x = 1 y = 2 }
+		infantry = { x = 2 y = 0 }
+		infantry = { x = 2 y = 1 }
+		infantry = { x = 2 y = 2 }
+	}
+	support = {
+		engineer = { x = 0 y = 0 }
+		artillery = { x = 0 y = 1 }
+	}
+}
+
+units = {
+	division = {
+		division_name = { is_name_ordered = yes name_order = 1 }
+		location = 16372
+		division_template = "Capital Guard"
+		start_experience_factor = 0.26
+		start_equipment_factor = 0.40
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 2 }
+		location = 9
+		division_template = "Line Infantry Brigade"
+		start_experience_factor = 0.17
+		start_equipment_factor = 0.32
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 3 }
+		location = 17
+		division_template = "Line Infantry Brigade"
+		start_experience_factor = 0.17
+		start_equipment_factor = 0.32
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 4 }
+		location = 11
+		division_template = "Local Security Detachment"
+		start_experience_factor = 0.12
+		start_equipment_factor = 0.25
+	}
+}
+
+##### No notable air forces #####
+
+instant_effect = {
+	add_equipment_production = {
+		equipment = { type = infantry_equipment_0 creator = "YPR" }
+		requested_factories = 1
+		progress = 0.60
+		efficiency = 70
+	}
+}

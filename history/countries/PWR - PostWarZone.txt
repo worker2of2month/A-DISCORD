@@ -1,5 +1,6 @@
 capital = 71
 
+oob = "PWR"
 ####### Characters
 
 recruit_character = WRK_Zack_Wither

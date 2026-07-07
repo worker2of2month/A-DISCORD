@@ -1,5 +1,6 @@
 capital = 116
 
+oob = "BTL"
 ####### Characters
 
 recruit_character = BTL_Paul_Dorini

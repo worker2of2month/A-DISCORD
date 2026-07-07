@@ -1,5 +1,6 @@
 capital = 76
 
+oob = "SOL"
 ####### Characters
 
 recruit_character = WRK_Richard_Gordon

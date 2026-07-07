@@ -1,5 +1,6 @@
 capital = 74
 
+oob = "VLA"
 ####### Characters
 
 recruit_character = WRK_Reginald_Silver

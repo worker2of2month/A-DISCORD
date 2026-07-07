@@ -26,4 +26,4 @@
  technocracy_acceptance: "£ai_acceptance_texticon  Технократия: согласие с дипломатическими действиями"
 
 #society development
- SocietyDevelopmentPerMonthDisplay: "Прирост в месяц: [?modifier@SocietyDevelopmentPerMonth|.1%%+]"
+ SocietyDevelopmentPerMonthDisplay: "Прирост в месяц: [?modifier@SocietyDevelopmentPerMonth|.1+] очк."

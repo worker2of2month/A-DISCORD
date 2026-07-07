@@ -1,5 +1,6 @@
 capital = 73
 
+oob = "ROM"
 ####### Characters
 
 recruit_character = ROM_Erwin_Von_Romanovskiy

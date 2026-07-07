@@ -1,5 +1,6 @@
 capital = 14
 
+oob = "COF"
 ####### Characters
 
 recruit_character = COF_Older_One_Lishai

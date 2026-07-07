@@ -1,5 +1,6 @@
 capital = 102
 
+oob = "VAD"
 ####### Characters
 
 recruit_character = WRK_Vlad_Petrichev

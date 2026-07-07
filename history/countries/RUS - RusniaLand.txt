@@ -1,5 +1,6 @@
 capital = 66
 
+oob = "RUS"
 ####### Characters
 
 recruit_character = RUS_Mark_Rustan

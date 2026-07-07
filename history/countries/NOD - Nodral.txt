@@ -1,5 +1,6 @@
 capital = 30
 
+oob = "NOD"
 ####### Characters
 
 recruit_character = NOD_Tobis_Bentlix

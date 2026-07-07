@@ -1,7 +1,6 @@
 division_template = {
 	name = "Kefreyt Security Detachment"
 	division_names_group = VAL_INF_01
-
 	regiments = {
 		infantry = { x = 0 y = 0 }
 		infantry = { x = 0 y = 1 }
@@ -12,7 +11,6 @@ division_template = {
 division_template = {
 	name = "Kefreyt Contract Infantry"
 	division_names_group = VAL_INF_01
-
 	regiments = {
 		infantry = { x = 0 y = 0 }
 		infantry = { x = 0 y = 1 }
@@ -21,7 +19,6 @@ division_template = {
 		infantry = { x = 1 y = 1 }
 		infantry = { x = 1 y = 2 }
 	}
-
 	support = {
 		engineer = { x = 0 y = 0 }
 	}
@@ -30,7 +27,6 @@ division_template = {
 division_template = {
 	name = "Kefreyt Line Brigade"
 	division_names_group = VAL_INF_01
-
 	regiments = {
 		infantry = { x = 0 y = 0 }
 		infantry = { x = 0 y = 1 }
@@ -42,7 +38,6 @@ division_template = {
 		infantry = { x = 2 y = 1 }
 		infantry = { x = 2 y = 2 }
 	}
-
 	support = {
 		engineer = { x = 0 y = 0 }
 		artillery = { x = 0 y = 1 }
@@ -50,73 +45,103 @@ division_template = {
 }
 
 units = {
-	# STATE_54 (city) — main hub (VP in 16510)
-	division= {
+	division = {
 		division_name = { is_name_ordered = yes name_order = 1 }
-		location = 16510
+		location = 16521
 		division_template = "Kefreyt Line Brigade"
-		start_experience_factor = 0.65
-		start_equipment_factor = 0.55
+		start_experience_factor = 0.61
+		start_equipment_factor = 0.75
 	}
-	division= {
+	division = {
 		division_name = { is_name_ordered = yes name_order = 2 }
-		location = 16296
+		location = 16519
 		division_template = "Kefreyt Contract Infantry"
-		start_experience_factor = 0.45
-		start_equipment_factor = 0.45
+		start_experience_factor = 0.53
+		start_equipment_factor = 0.70
 	}
-	division= {
+	division = {
 		division_name = { is_name_ordered = yes name_order = 3 }
-		location = 16555
+		location = 16515
 		division_template = "Kefreyt Contract Infantry"
-		start_experience_factor = 0.35
-		start_equipment_factor = 0.40
+		start_experience_factor = 0.53
+		start_equipment_factor = 0.70
 	}
-	division= {
+	division = {
 		division_name = { is_name_ordered = yes name_order = 4 }
-		location = 4369
+		location = 16510
 		division_template = "Kefreyt Security Detachment"
-		start_experience_factor = 0.20
-		start_equipment_factor = 0.35
+		start_experience_factor = 0.48
+		start_equipment_factor = 0.63
 	}
-
-	# STATE_42 (border, dam at 16436)
-	division= {
+	division = {
 		division_name = { is_name_ordered = yes name_order = 5 }
-		location = 16436
-		division_template = "Kefreyt Security Detachment"
-		start_experience_factor = 0.25
-		start_equipment_factor = 0.35
+		location = 16511
+		division_template = "Kefreyt Contract Infantry"
+		start_experience_factor = 0.53
+		start_equipment_factor = 0.70
 	}
-	division= {
+	division = {
 		division_name = { is_name_ordered = yes name_order = 6 }
+		location = 16472
+		division_template = "Kefreyt Contract Infantry"
+		start_experience_factor = 0.53
+		start_equipment_factor = 0.70
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 7 }
+		location = 4214
+		division_template = "Kefreyt Contract Infantry"
+		start_experience_factor = 0.53
+		start_equipment_factor = 0.70
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 8 }
+		location = 125
+		division_template = "Kefreyt Security Detachment"
+		start_experience_factor = 0.48
+		start_equipment_factor = 0.63
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 9 }
 		location = 16431
 		division_template = "Kefreyt Contract Infantry"
-		start_experience_factor = 0.40
-		start_equipment_factor = 0.40
+		start_experience_factor = 0.53
+		start_equipment_factor = 0.70
 	}
-	division= {
-		division_name = { is_name_ordered = yes name_order = 7 }
-		location = 16438
-		division_template = "Kefreyt Contract Infantry"
-		start_experience_factor = 0.35
-		start_equipment_factor = 0.40
-	}
-
-	# STATE_55 (border, small garrison)
-	division= {
-		division_name = { is_name_ordered = yes name_order = 8 }
-		location = 16435
-		division_template = "Kefreyt Security Detachment"
-		start_experience_factor = 0.20
-		start_equipment_factor = 0.30
-	}
-	division= {
-		division_name = { is_name_ordered = yes name_order = 9 }
+	division = {
+		division_name = { is_name_ordered = yes name_order = 10 }
 		location = 114
+		division_template = "Kefreyt Contract Infantry"
+		start_experience_factor = 0.53
+		start_equipment_factor = 0.70
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 11 }
+		location = 9617
+		division_template = "Kefreyt Contract Infantry"
+		start_experience_factor = 0.53
+		start_equipment_factor = 0.70
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 12 }
+		location = 16521
 		division_template = "Kefreyt Security Detachment"
-		start_experience_factor = 0.20
-		start_equipment_factor = 0.30
+		start_experience_factor = 0.48
+		start_equipment_factor = 0.63
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 13 }
+		location = 16519
+		division_template = "Kefreyt Contract Infantry"
+		start_experience_factor = 0.53
+		start_equipment_factor = 0.70
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 14 }
+		location = 16515
+		division_template = "Kefreyt Contract Infantry"
+		start_experience_factor = 0.53
+		start_equipment_factor = 0.70
 	}
 }
 
@@ -125,20 +150,20 @@ units = {
 instant_effect = {
 	add_equipment_production = {
 		equipment = { type = infantry_equipment_0 creator = "VAL" }
-		requested_factories = 4
-		progress = 0.85
-		efficiency = 95
+		requested_factories = 8
+		progress = 0.60
+		efficiency = 70
 	}
 	add_equipment_production = {
 		equipment = { type = support_equipment_1 }
 		requested_factories = 1
 		progress = 0.30
-		efficiency = 55
+		efficiency = 50
 	}
 	add_equipment_production = {
 		equipment = { type = artillery_equipment_1 }
 		requested_factories = 1
 		progress = 0.25
-		efficiency = 55
+		efficiency = 45
 	}
 }

@@ -43,6 +43,8 @@ on_actions = {
 			#    #visible = scripted_trigger_name
 			#}
 			every_country = {
+				limit = { OR = { ADISCORD_is_playable_development_country = yes is_ai = no } }
+				ADISCORD_initialize_default_country_development = yes
 			}
 			STP = {
 				# Starting society development levels for StepanLand.
@@ -50,26 +52,42 @@ on_actions = {
 				ADISCORD_set_social_system_development_2 = yes
 				ADISCORD_set_army_development_2 = yes
 				ADISCORD_set_cultural_development_1 = yes
-				ADISCORD_set_state_development_2 = yes
-				ADISCORD_set_economic_development_3 = yes
+				ADISCORD_set_state_development_3 = yes
+				ADISCORD_set_economic_development_4 = yes
 				ADISCORD_initialize_society_development_variables = yes
+				ADISCORD_update_total_country_development = yes
+			}
+			VAL = {
+				# Starting society development levels for ValeraLand.
+				# Contract state: strong mercenary army, strong arms economy,
+				# weak social base, harsh culture, decent but not excellent state apparatus.
+				ADISCORD_set_society_development_2 = yes
+				ADISCORD_set_social_system_development_1 = yes
+				ADISCORD_set_army_development_4 = yes
+				ADISCORD_set_cultural_development_2 = yes
+				ADISCORD_set_state_development_2 = yes
+				ADISCORD_set_economic_development_4 = yes
+				ADISCORD_initialize_society_development_variables = yes
+				ADISCORD_update_total_country_development = yes
 			}
 		}
 	}
 	on_monthly = {
 		effect = {
 			every_country = {
-				limit = {
-					OR = {
-						has_variable = ADISCORD_society_development_level
-						has_variable = ADISCORD_social_system_development_level
-						has_variable = ADISCORD_army_development_level
-						has_variable = ADISCORD_cultural_development_level
-						has_variable = ADISCORD_state_development_level
-						has_variable = ADISCORD_economic_development_level
-					}
-				}
+				limit = { OR = { ADISCORD_is_playable_development_country = yes is_ai = no } }
 				ADISCORD_tick_all_society_development_monthly = yes
+			}
+		}
+	}
+	on_yearly = {
+		effect = {
+			every_country = {
+				limit = {
+					ADISCORD_is_secondary_development_country = yes
+					is_ai = yes
+				}
+				ADISCORD_tick_all_society_development_yearly = yes
 			}
 		}
 	}

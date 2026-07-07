@@ -1,5 +1,6 @@
 capital = 4
 
+oob = "BGT"
 ####### Characters
 
 recruit_character = BGT_Graf_Johan

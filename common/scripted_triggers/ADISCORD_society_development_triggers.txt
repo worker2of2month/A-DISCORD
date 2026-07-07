@@ -186,3 +186,485 @@ ADISCORD_economic_development_at_most_2 = { check_variable = { var = ADISCORD_ec
 ADISCORD_economic_development_at_most_3 = { check_variable = { var = ADISCORD_economic_development_level value = 3 compare = less_than_or_equals } }
 ADISCORD_economic_development_at_most_4 = { check_variable = { var = ADISCORD_economic_development_level value = 4 compare = less_than_or_equals } }
 ADISCORD_economic_development_at_most_5 = { check_variable = { var = ADISCORD_economic_development_level value = 5 compare = less_than_or_equals } }
+
+# 5-point progress bar buckets. Progress uses 0-100 points; each bucket now maps to the same visual frame value.
+ADISCORD_society_development_progress_bar_1 = { check_variable = { var = ADISCORD_society_development_progress value = 5 compare = less_than } }
+ADISCORD_society_development_progress_bar_2 = {
+	check_variable = { var = ADISCORD_society_development_progress value = 5 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_society_development_progress value = 10 compare = less_than }
+}
+ADISCORD_society_development_progress_bar_3 = {
+	check_variable = { var = ADISCORD_society_development_progress value = 10 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_society_development_progress value = 15 compare = less_than }
+}
+ADISCORD_society_development_progress_bar_4 = {
+	check_variable = { var = ADISCORD_society_development_progress value = 15 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_society_development_progress value = 20 compare = less_than }
+}
+ADISCORD_society_development_progress_bar_5 = {
+	check_variable = { var = ADISCORD_society_development_progress value = 20 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_society_development_progress value = 25 compare = less_than }
+}
+ADISCORD_society_development_progress_bar_6 = {
+	check_variable = { var = ADISCORD_society_development_progress value = 25 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_society_development_progress value = 30 compare = less_than }
+}
+ADISCORD_society_development_progress_bar_7 = {
+	check_variable = { var = ADISCORD_society_development_progress value = 30 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_society_development_progress value = 35 compare = less_than }
+}
+ADISCORD_society_development_progress_bar_8 = {
+	check_variable = { var = ADISCORD_society_development_progress value = 35 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_society_development_progress value = 40 compare = less_than }
+}
+ADISCORD_society_development_progress_bar_9 = {
+	check_variable = { var = ADISCORD_society_development_progress value = 40 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_society_development_progress value = 45 compare = less_than }
+}
+ADISCORD_society_development_progress_bar_10 = {
+	check_variable = { var = ADISCORD_society_development_progress value = 45 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_society_development_progress value = 50 compare = less_than }
+}
+ADISCORD_society_development_progress_bar_11 = {
+	check_variable = { var = ADISCORD_society_development_progress value = 50 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_society_development_progress value = 55 compare = less_than }
+}
+ADISCORD_society_development_progress_bar_12 = {
+	check_variable = { var = ADISCORD_society_development_progress value = 55 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_society_development_progress value = 60 compare = less_than }
+}
+ADISCORD_society_development_progress_bar_13 = {
+	check_variable = { var = ADISCORD_society_development_progress value = 60 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_society_development_progress value = 65 compare = less_than }
+}
+ADISCORD_society_development_progress_bar_14 = {
+	check_variable = { var = ADISCORD_society_development_progress value = 65 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_society_development_progress value = 70 compare = less_than }
+}
+ADISCORD_society_development_progress_bar_15 = {
+	check_variable = { var = ADISCORD_society_development_progress value = 70 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_society_development_progress value = 75 compare = less_than }
+}
+ADISCORD_society_development_progress_bar_16 = {
+	check_variable = { var = ADISCORD_society_development_progress value = 75 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_society_development_progress value = 80 compare = less_than }
+}
+ADISCORD_society_development_progress_bar_17 = {
+	check_variable = { var = ADISCORD_society_development_progress value = 80 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_society_development_progress value = 85 compare = less_than }
+}
+ADISCORD_society_development_progress_bar_18 = {
+	check_variable = { var = ADISCORD_society_development_progress value = 85 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_society_development_progress value = 90 compare = less_than }
+}
+ADISCORD_society_development_progress_bar_19 = {
+	check_variable = { var = ADISCORD_society_development_progress value = 90 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_society_development_progress value = 95 compare = less_than }
+}
+ADISCORD_society_development_progress_bar_20 = { check_variable = { var = ADISCORD_society_development_progress value = 95 compare = greater_than_or_equals } }
+
+ADISCORD_social_system_development_progress_bar_1 = { check_variable = { var = ADISCORD_social_system_development_progress value = 5 compare = less_than } }
+ADISCORD_social_system_development_progress_bar_2 = {
+	check_variable = { var = ADISCORD_social_system_development_progress value = 5 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_social_system_development_progress value = 10 compare = less_than }
+}
+ADISCORD_social_system_development_progress_bar_3 = {
+	check_variable = { var = ADISCORD_social_system_development_progress value = 10 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_social_system_development_progress value = 15 compare = less_than }
+}
+ADISCORD_social_system_development_progress_bar_4 = {
+	check_variable = { var = ADISCORD_social_system_development_progress value = 15 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_social_system_development_progress value = 20 compare = less_than }
+}
+ADISCORD_social_system_development_progress_bar_5 = {
+	check_variable = { var = ADISCORD_social_system_development_progress value = 20 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_social_system_development_progress value = 25 compare = less_than }
+}
+ADISCORD_social_system_development_progress_bar_6 = {
+	check_variable = { var = ADISCORD_social_system_development_progress value = 25 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_social_system_development_progress value = 30 compare = less_than }
+}
+ADISCORD_social_system_development_progress_bar_7 = {
+	check_variable = { var = ADISCORD_social_system_development_progress value = 30 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_social_system_development_progress value = 35 compare = less_than }
+}
+ADISCORD_social_system_development_progress_bar_8 = {
+	check_variable = { var = ADISCORD_social_system_development_progress value = 35 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_social_system_development_progress value = 40 compare = less_than }
+}
+ADISCORD_social_system_development_progress_bar_9 = {
+	check_variable = { var = ADISCORD_social_system_development_progress value = 40 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_social_system_development_progress value = 45 compare = less_than }
+}
+ADISCORD_social_system_development_progress_bar_10 = {
+	check_variable = { var = ADISCORD_social_system_development_progress value = 45 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_social_system_development_progress value = 50 compare = less_than }
+}
+ADISCORD_social_system_development_progress_bar_11 = {
+	check_variable = { var = ADISCORD_social_system_development_progress value = 50 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_social_system_development_progress value = 55 compare = less_than }
+}
+ADISCORD_social_system_development_progress_bar_12 = {
+	check_variable = { var = ADISCORD_social_system_development_progress value = 55 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_social_system_development_progress value = 60 compare = less_than }
+}
+ADISCORD_social_system_development_progress_bar_13 = {
+	check_variable = { var = ADISCORD_social_system_development_progress value = 60 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_social_system_development_progress value = 65 compare = less_than }
+}
+ADISCORD_social_system_development_progress_bar_14 = {
+	check_variable = { var = ADISCORD_social_system_development_progress value = 65 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_social_system_development_progress value = 70 compare = less_than }
+}
+ADISCORD_social_system_development_progress_bar_15 = {
+	check_variable = { var = ADISCORD_social_system_development_progress value = 70 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_social_system_development_progress value = 75 compare = less_than }
+}
+ADISCORD_social_system_development_progress_bar_16 = {
+	check_variable = { var = ADISCORD_social_system_development_progress value = 75 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_social_system_development_progress value = 80 compare = less_than }
+}
+ADISCORD_social_system_development_progress_bar_17 = {
+	check_variable = { var = ADISCORD_social_system_development_progress value = 80 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_social_system_development_progress value = 85 compare = less_than }
+}
+ADISCORD_social_system_development_progress_bar_18 = {
+	check_variable = { var = ADISCORD_social_system_development_progress value = 85 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_social_system_development_progress value = 90 compare = less_than }
+}
+ADISCORD_social_system_development_progress_bar_19 = {
+	check_variable = { var = ADISCORD_social_system_development_progress value = 90 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_social_system_development_progress value = 95 compare = less_than }
+}
+ADISCORD_social_system_development_progress_bar_20 = { check_variable = { var = ADISCORD_social_system_development_progress value = 95 compare = greater_than_or_equals } }
+
+ADISCORD_army_development_progress_bar_1 = { check_variable = { var = ADISCORD_army_development_progress value = 5 compare = less_than } }
+ADISCORD_army_development_progress_bar_2 = {
+	check_variable = { var = ADISCORD_army_development_progress value = 5 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_army_development_progress value = 10 compare = less_than }
+}
+ADISCORD_army_development_progress_bar_3 = {
+	check_variable = { var = ADISCORD_army_development_progress value = 10 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_army_development_progress value = 15 compare = less_than }
+}
+ADISCORD_army_development_progress_bar_4 = {
+	check_variable = { var = ADISCORD_army_development_progress value = 15 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_army_development_progress value = 20 compare = less_than }
+}
+ADISCORD_army_development_progress_bar_5 = {
+	check_variable = { var = ADISCORD_army_development_progress value = 20 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_army_development_progress value = 25 compare = less_than }
+}
+ADISCORD_army_development_progress_bar_6 = {
+	check_variable = { var = ADISCORD_army_development_progress value = 25 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_army_development_progress value = 30 compare = less_than }
+}
+ADISCORD_army_development_progress_bar_7 = {
+	check_variable = { var = ADISCORD_army_development_progress value = 30 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_army_development_progress value = 35 compare = less_than }
+}
+ADISCORD_army_development_progress_bar_8 = {
+	check_variable = { var = ADISCORD_army_development_progress value = 35 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_army_development_progress value = 40 compare = less_than }
+}
+ADISCORD_army_development_progress_bar_9 = {
+	check_variable = { var = ADISCORD_army_development_progress value = 40 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_army_development_progress value = 45 compare = less_than }
+}
+ADISCORD_army_development_progress_bar_10 = {
+	check_variable = { var = ADISCORD_army_development_progress value = 45 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_army_development_progress value = 50 compare = less_than }
+}
+ADISCORD_army_development_progress_bar_11 = {
+	check_variable = { var = ADISCORD_army_development_progress value = 50 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_army_development_progress value = 55 compare = less_than }
+}
+ADISCORD_army_development_progress_bar_12 = {
+	check_variable = { var = ADISCORD_army_development_progress value = 55 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_army_development_progress value = 60 compare = less_than }
+}
+ADISCORD_army_development_progress_bar_13 = {
+	check_variable = { var = ADISCORD_army_development_progress value = 60 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_army_development_progress value = 65 compare = less_than }
+}
+ADISCORD_army_development_progress_bar_14 = {
+	check_variable = { var = ADISCORD_army_development_progress value = 65 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_army_development_progress value = 70 compare = less_than }
+}
+ADISCORD_army_development_progress_bar_15 = {
+	check_variable = { var = ADISCORD_army_development_progress value = 70 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_army_development_progress value = 75 compare = less_than }
+}
+ADISCORD_army_development_progress_bar_16 = {
+	check_variable = { var = ADISCORD_army_development_progress value = 75 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_army_development_progress value = 80 compare = less_than }
+}
+ADISCORD_army_development_progress_bar_17 = {
+	check_variable = { var = ADISCORD_army_development_progress value = 80 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_army_development_progress value = 85 compare = less_than }
+}
+ADISCORD_army_development_progress_bar_18 = {
+	check_variable = { var = ADISCORD_army_development_progress value = 85 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_army_development_progress value = 90 compare = less_than }
+}
+ADISCORD_army_development_progress_bar_19 = {
+	check_variable = { var = ADISCORD_army_development_progress value = 90 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_army_development_progress value = 95 compare = less_than }
+}
+ADISCORD_army_development_progress_bar_20 = { check_variable = { var = ADISCORD_army_development_progress value = 95 compare = greater_than_or_equals } }
+
+ADISCORD_cultural_development_progress_bar_1 = { check_variable = { var = ADISCORD_cultural_development_progress value = 5 compare = less_than } }
+ADISCORD_cultural_development_progress_bar_2 = {
+	check_variable = { var = ADISCORD_cultural_development_progress value = 5 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_cultural_development_progress value = 10 compare = less_than }
+}
+ADISCORD_cultural_development_progress_bar_3 = {
+	check_variable = { var = ADISCORD_cultural_development_progress value = 10 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_cultural_development_progress value = 15 compare = less_than }
+}
+ADISCORD_cultural_development_progress_bar_4 = {
+	check_variable = { var = ADISCORD_cultural_development_progress value = 15 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_cultural_development_progress value = 20 compare = less_than }
+}
+ADISCORD_cultural_development_progress_bar_5 = {
+	check_variable = { var = ADISCORD_cultural_development_progress value = 20 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_cultural_development_progress value = 25 compare = less_than }
+}
+ADISCORD_cultural_development_progress_bar_6 = {
+	check_variable = { var = ADISCORD_cultural_development_progress value = 25 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_cultural_development_progress value = 30 compare = less_than }
+}
+ADISCORD_cultural_development_progress_bar_7 = {
+	check_variable = { var = ADISCORD_cultural_development_progress value = 30 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_cultural_development_progress value = 35 compare = less_than }
+}
+ADISCORD_cultural_development_progress_bar_8 = {
+	check_variable = { var = ADISCORD_cultural_development_progress value = 35 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_cultural_development_progress value = 40 compare = less_than }
+}
+ADISCORD_cultural_development_progress_bar_9 = {
+	check_variable = { var = ADISCORD_cultural_development_progress value = 40 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_cultural_development_progress value = 45 compare = less_than }
+}
+ADISCORD_cultural_development_progress_bar_10 = {
+	check_variable = { var = ADISCORD_cultural_development_progress value = 45 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_cultural_development_progress value = 50 compare = less_than }
+}
+ADISCORD_cultural_development_progress_bar_11 = {
+	check_variable = { var = ADISCORD_cultural_development_progress value = 50 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_cultural_development_progress value = 55 compare = less_than }
+}
+ADISCORD_cultural_development_progress_bar_12 = {
+	check_variable = { var = ADISCORD_cultural_development_progress value = 55 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_cultural_development_progress value = 60 compare = less_than }
+}
+ADISCORD_cultural_development_progress_bar_13 = {
+	check_variable = { var = ADISCORD_cultural_development_progress value = 60 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_cultural_development_progress value = 65 compare = less_than }
+}
+ADISCORD_cultural_development_progress_bar_14 = {
+	check_variable = { var = ADISCORD_cultural_development_progress value = 65 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_cultural_development_progress value = 70 compare = less_than }
+}
+ADISCORD_cultural_development_progress_bar_15 = {
+	check_variable = { var = ADISCORD_cultural_development_progress value = 70 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_cultural_development_progress value = 75 compare = less_than }
+}
+ADISCORD_cultural_development_progress_bar_16 = {
+	check_variable = { var = ADISCORD_cultural_development_progress value = 75 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_cultural_development_progress value = 80 compare = less_than }
+}
+ADISCORD_cultural_development_progress_bar_17 = {
+	check_variable = { var = ADISCORD_cultural_development_progress value = 80 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_cultural_development_progress value = 85 compare = less_than }
+}
+ADISCORD_cultural_development_progress_bar_18 = {
+	check_variable = { var = ADISCORD_cultural_development_progress value = 85 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_cultural_development_progress value = 90 compare = less_than }
+}
+ADISCORD_cultural_development_progress_bar_19 = {
+	check_variable = { var = ADISCORD_cultural_development_progress value = 90 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_cultural_development_progress value = 95 compare = less_than }
+}
+ADISCORD_cultural_development_progress_bar_20 = { check_variable = { var = ADISCORD_cultural_development_progress value = 95 compare = greater_than_or_equals } }
+
+ADISCORD_state_development_progress_bar_1 = { check_variable = { var = ADISCORD_state_development_progress value = 5 compare = less_than } }
+ADISCORD_state_development_progress_bar_2 = {
+	check_variable = { var = ADISCORD_state_development_progress value = 5 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_state_development_progress value = 10 compare = less_than }
+}
+ADISCORD_state_development_progress_bar_3 = {
+	check_variable = { var = ADISCORD_state_development_progress value = 10 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_state_development_progress value = 15 compare = less_than }
+}
+ADISCORD_state_development_progress_bar_4 = {
+	check_variable = { var = ADISCORD_state_development_progress value = 15 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_state_development_progress value = 20 compare = less_than }
+}
+ADISCORD_state_development_progress_bar_5 = {
+	check_variable = { var = ADISCORD_state_development_progress value = 20 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_state_development_progress value = 25 compare = less_than }
+}
+ADISCORD_state_development_progress_bar_6 = {
+	check_variable = { var = ADISCORD_state_development_progress value = 25 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_state_development_progress value = 30 compare = less_than }
+}
+ADISCORD_state_development_progress_bar_7 = {
+	check_variable = { var = ADISCORD_state_development_progress value = 30 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_state_development_progress value = 35 compare = less_than }
+}
+ADISCORD_state_development_progress_bar_8 = {
+	check_variable = { var = ADISCORD_state_development_progress value = 35 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_state_development_progress value = 40 compare = less_than }
+}
+ADISCORD_state_development_progress_bar_9 = {
+	check_variable = { var = ADISCORD_state_development_progress value = 40 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_state_development_progress value = 45 compare = less_than }
+}
+ADISCORD_state_development_progress_bar_10 = {
+	check_variable = { var = ADISCORD_state_development_progress value = 45 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_state_development_progress value = 50 compare = less_than }
+}
+ADISCORD_state_development_progress_bar_11 = {
+	check_variable = { var = ADISCORD_state_development_progress value = 50 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_state_development_progress value = 55 compare = less_than }
+}
+ADISCORD_state_development_progress_bar_12 = {
+	check_variable = { var = ADISCORD_state_development_progress value = 55 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_state_development_progress value = 60 compare = less_than }
+}
+ADISCORD_state_development_progress_bar_13 = {
+	check_variable = { var = ADISCORD_state_development_progress value = 60 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_state_development_progress value = 65 compare = less_than }
+}
+ADISCORD_state_development_progress_bar_14 = {
+	check_variable = { var = ADISCORD_state_development_progress value = 65 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_state_development_progress value = 70 compare = less_than }
+}
+ADISCORD_state_development_progress_bar_15 = {
+	check_variable = { var = ADISCORD_state_development_progress value = 70 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_state_development_progress value = 75 compare = less_than }
+}
+ADISCORD_state_development_progress_bar_16 = {
+	check_variable = { var = ADISCORD_state_development_progress value = 75 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_state_development_progress value = 80 compare = less_than }
+}
+ADISCORD_state_development_progress_bar_17 = {
+	check_variable = { var = ADISCORD_state_development_progress value = 80 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_state_development_progress value = 85 compare = less_than }
+}
+ADISCORD_state_development_progress_bar_18 = {
+	check_variable = { var = ADISCORD_state_development_progress value = 85 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_state_development_progress value = 90 compare = less_than }
+}
+ADISCORD_state_development_progress_bar_19 = {
+	check_variable = { var = ADISCORD_state_development_progress value = 90 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_state_development_progress value = 95 compare = less_than }
+}
+ADISCORD_state_development_progress_bar_20 = { check_variable = { var = ADISCORD_state_development_progress value = 95 compare = greater_than_or_equals } }
+
+ADISCORD_economic_development_progress_bar_1 = { check_variable = { var = ADISCORD_economic_development_progress value = 5 compare = less_than } }
+ADISCORD_economic_development_progress_bar_2 = {
+	check_variable = { var = ADISCORD_economic_development_progress value = 5 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economic_development_progress value = 10 compare = less_than }
+}
+ADISCORD_economic_development_progress_bar_3 = {
+	check_variable = { var = ADISCORD_economic_development_progress value = 10 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economic_development_progress value = 15 compare = less_than }
+}
+ADISCORD_economic_development_progress_bar_4 = {
+	check_variable = { var = ADISCORD_economic_development_progress value = 15 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economic_development_progress value = 20 compare = less_than }
+}
+ADISCORD_economic_development_progress_bar_5 = {
+	check_variable = { var = ADISCORD_economic_development_progress value = 20 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economic_development_progress value = 25 compare = less_than }
+}
+ADISCORD_economic_development_progress_bar_6 = {
+	check_variable = { var = ADISCORD_economic_development_progress value = 25 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economic_development_progress value = 30 compare = less_than }
+}
+ADISCORD_economic_development_progress_bar_7 = {
+	check_variable = { var = ADISCORD_economic_development_progress value = 30 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economic_development_progress value = 35 compare = less_than }
+}
+ADISCORD_economic_development_progress_bar_8 = {
+	check_variable = { var = ADISCORD_economic_development_progress value = 35 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economic_development_progress value = 40 compare = less_than }
+}
+ADISCORD_economic_development_progress_bar_9 = {
+	check_variable = { var = ADISCORD_economic_development_progress value = 40 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economic_development_progress value = 45 compare = less_than }
+}
+ADISCORD_economic_development_progress_bar_10 = {
+	check_variable = { var = ADISCORD_economic_development_progress value = 45 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economic_development_progress value = 50 compare = less_than }
+}
+ADISCORD_economic_development_progress_bar_11 = {
+	check_variable = { var = ADISCORD_economic_development_progress value = 50 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economic_development_progress value = 55 compare = less_than }
+}
+ADISCORD_economic_development_progress_bar_12 = {
+	check_variable = { var = ADISCORD_economic_development_progress value = 55 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economic_development_progress value = 60 compare = less_than }
+}
+ADISCORD_economic_development_progress_bar_13 = {
+	check_variable = { var = ADISCORD_economic_development_progress value = 60 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economic_development_progress value = 65 compare = less_than }
+}
+ADISCORD_economic_development_progress_bar_14 = {
+	check_variable = { var = ADISCORD_economic_development_progress value = 65 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economic_development_progress value = 70 compare = less_than }
+}
+ADISCORD_economic_development_progress_bar_15 = {
+	check_variable = { var = ADISCORD_economic_development_progress value = 70 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economic_development_progress value = 75 compare = less_than }
+}
+ADISCORD_economic_development_progress_bar_16 = {
+	check_variable = { var = ADISCORD_economic_development_progress value = 75 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economic_development_progress value = 80 compare = less_than }
+}
+ADISCORD_economic_development_progress_bar_17 = {
+	check_variable = { var = ADISCORD_economic_development_progress value = 80 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economic_development_progress value = 85 compare = less_than }
+}
+ADISCORD_economic_development_progress_bar_18 = {
+	check_variable = { var = ADISCORD_economic_development_progress value = 85 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economic_development_progress value = 90 compare = less_than }
+}
+ADISCORD_economic_development_progress_bar_19 = {
+	check_variable = { var = ADISCORD_economic_development_progress value = 90 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economic_development_progress value = 95 compare = less_than }
+}
+ADISCORD_economic_development_progress_bar_20 = { check_variable = { var = ADISCORD_economic_development_progress value = 95 compare = greater_than_or_equals } }
+
+ADISCORD_country_development_exact_1 = {
+	check_variable = { var = ADISCORD_total_development_level value = 1 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_total_development_level value = 1 compare = less_than_or_equals }
+}
+ADISCORD_country_development_exact_2 = {
+	check_variable = { var = ADISCORD_total_development_level value = 2 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_total_development_level value = 2 compare = less_than_or_equals }
+}
+ADISCORD_country_development_exact_3 = {
+	check_variable = { var = ADISCORD_total_development_level value = 3 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_total_development_level value = 3 compare = less_than_or_equals }
+}
+ADISCORD_country_development_exact_4 = {
+	check_variable = { var = ADISCORD_total_development_level value = 4 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_total_development_level value = 4 compare = less_than_or_equals }
+}
+ADISCORD_country_development_exact_5 = {
+	check_variable = { var = ADISCORD_total_development_level value = 5 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_total_development_level value = 5 compare = less_than_or_equals }
+}
+ADISCORD_country_development_at_least_1 = { check_variable = { var = ADISCORD_total_development_level value = 1 compare = greater_than_or_equals } }
+ADISCORD_country_development_at_least_2 = { check_variable = { var = ADISCORD_total_development_level value = 2 compare = greater_than_or_equals } }
+ADISCORD_country_development_at_least_3 = { check_variable = { var = ADISCORD_total_development_level value = 3 compare = greater_than_or_equals } }
+ADISCORD_country_development_at_least_4 = { check_variable = { var = ADISCORD_total_development_level value = 4 compare = greater_than_or_equals } }
+ADISCORD_country_development_at_least_5 = { check_variable = { var = ADISCORD_total_development_level value = 5 compare = greater_than_or_equals } }
+ADISCORD_country_development_at_most_1 = { check_variable = { var = ADISCORD_total_development_level value = 1 compare = less_than_or_equals } }
+ADISCORD_country_development_at_most_2 = { check_variable = { var = ADISCORD_total_development_level value = 2 compare = less_than_or_equals } }
+ADISCORD_country_development_at_most_3 = { check_variable = { var = ADISCORD_total_development_level value = 3 compare = less_than_or_equals } }
+ADISCORD_country_development_at_most_4 = { check_variable = { var = ADISCORD_total_development_level value = 4 compare = less_than_or_equals } }
+ADISCORD_country_development_at_most_5 = { check_variable = { var = ADISCORD_total_development_level value = 5 compare = less_than_or_equals } }

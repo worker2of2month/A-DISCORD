@@ -1,5 +1,6 @@
 capital = 7
 
+oob = "BBV"
 ####### Characters
 
 recruit_character = BBV_Baron_Karl

@@ -1,5 +1,6 @@
 capital = 25
 
+oob = "IVN"
 ####### Characters
 
 recruit_character = IVN_Vadim_Ivanchik

@@ -1,5 +1,6 @@
 capital = 26
 
+oob = "WIT"
 ####### Characters
 
 recruit_character = WIT_Wito_Sovi

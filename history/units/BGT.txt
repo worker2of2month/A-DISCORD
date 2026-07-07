@@ -1,0 +1,56 @@
+division_template = {
+	name = "Border Levy"
+	division_names_group = ADISCORD_INF_01
+	regiments = {
+		infantry = { x = 0 y = 0 }
+		infantry = { x = 0 y = 1 }
+	}
+}
+
+division_template = {
+	name = "Feudal Retinue"
+	division_names_group = ADISCORD_INF_01
+	regiments = {
+		infantry = { x = 0 y = 0 }
+		infantry = { x = 0 y = 1 }
+		infantry = { x = 1 y = 0 }
+		infantry = { x = 1 y = 1 }
+	}
+}
+
+division_template = {
+	name = "Noble Guard"
+	division_names_group = ADISCORD_INF_01
+	regiments = {
+		infantry = { x = 0 y = 0 }
+		infantry = { x = 0 y = 1 }
+		infantry = { x = 0 y = 2 }
+		infantry = { x = 1 y = 0 }
+		infantry = { x = 1 y = 1 }
+		infantry = { x = 1 y = 2 }
+	}
+	support = {
+		engineer = { x = 0 y = 0 }
+	}
+}
+
+units = {
+	division = {
+		division_name = { is_name_ordered = yes name_order = 1 }
+		location = 16496
+		division_template = "Feudal Retinue"
+		start_experience_factor = 0.21
+		start_equipment_factor = 0.28
+	}
+}
+
+##### No notable air forces #####
+
+instant_effect = {
+	add_equipment_production = {
+		equipment = { type = infantry_equipment_0 creator = "BGT" }
+		requested_factories = 1
+		progress = 0.60
+		efficiency = 45
+	}
+}

@@ -1,0 +1,39 @@
+# Country lists used by the development system.
+
+ADISCORD_is_playable_development_country = {
+	OR = {
+		original_tag = VAL
+		original_tag = STP
+		original_tag = WRK
+	}
+}
+
+ADISCORD_is_secondary_development_country = {
+	OR = {
+		original_tag = IVN
+		original_tag = WIT
+		original_tag = PIV
+		original_tag = RUS
+		original_tag = NAM
+		original_tag = VAD
+		original_tag = ROM
+		original_tag = SOL
+		original_tag = TRU
+		original_tag = ZAO
+		original_tag = VLA
+		original_tag = PWR
+		original_tag = DAN
+		original_tag = NOD
+		original_tag = EFL
+		original_tag = COF
+		original_tag = BJK
+		original_tag = BLD
+		original_tag = BHG
+		original_tag = TFF
+		original_tag = BGT
+		original_tag = BBV
+		original_tag = BCM
+		original_tag = YPR
+		original_tag = BTL
+	}
+}

@@ -1,5 +1,6 @@
 capital = 9
 
+oob = "BCM"
 ####### Characters
 
 recruit_character = BCM_Graf_Josef

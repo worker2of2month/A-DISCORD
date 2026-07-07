@@ -1,5 +1,6 @@
 capital = 20
 
+oob = "YPR"
 ####### Characters
 
 recruit_character = YPR_The_Ruling_Council

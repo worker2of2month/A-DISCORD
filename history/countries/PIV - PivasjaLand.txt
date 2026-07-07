@@ -1,5 +1,6 @@
 capital = 52
 
+oob = "PIV"
 ####### Characters
 
 recruit_character = PIV_Oleg_Pivovarov

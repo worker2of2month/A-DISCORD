@@ -1,5 +1,6 @@
 capital = 67
 
+oob = "NAM"
 ####### Characters
 
 recruit_character = NAM_Egor_Rom

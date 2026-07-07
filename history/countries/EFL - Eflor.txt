@@ -1,5 +1,6 @@
 capital = 68
 
+oob = "EFL"
 ####### Characters
 
 recruit_character = EFL_Dextung
