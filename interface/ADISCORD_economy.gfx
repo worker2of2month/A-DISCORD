@@ -1,0 +1,28 @@
+spriteTypes = {
+	spriteType = {
+		name = "GFX_ADISCORD_economy_header_bg"
+		texturefile = "gfx/interface/ADISCORD_economy_gui/economy_header_bg.dds"
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_economy_income_bg"
+		texturefile = "gfx/interface/ADISCORD_economy_gui/economy_income_bg.dds"
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_economy_expenses_bg"
+		texturefile = "gfx/interface/ADISCORD_economy_gui/economy_expenses_bg.dds"
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_economy_loans_bg"
+		texturefile = "gfx/interface/ADISCORD_economy_gui/economy_loans_bg.dds"
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_economy_button"
+		texturefile = "gfx/interface/ADISCORD_economy_gui/economy_button.dds"
+		noOfFrames = 2
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_economy_slider_button"
+		texturefile = "gfx/interface/ADISCORD_economy_gui/economy_slider_button.dds"
+		noOfFrames = 2
+	}
+}

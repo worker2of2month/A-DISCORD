@@ -38,7 +38,7 @@ idea_categories = {
 	}
 
 	social_laws = {
-		slot = ADISCORD_civic_order_laws
+		slot = ADISCORD_society_type_laws
 		slot = ADISCORD_information_laws
 		slot = ADISCORD_welfare_laws
 		slot = ADISCORD_education_laws
@@ -54,6 +54,7 @@ idea_categories = {
 	economic_laws = {
 		slot = trade_laws
 		slot = economy
+		slot = ADISCORD_economic_system_laws
 		slot = ADISCORD_taxation_laws
 		slot = ADISCORD_industrial_policy_laws
 		slot = ADISCORD_labor_policy_laws
@@ -232,12 +233,13 @@ slot_ledgers = {
 	
 	
 	mobilization_laws = civilian
-	ADISCORD_civic_order_laws = civilian
+	ADISCORD_society_type_laws = civilian
 	ADISCORD_information_laws = civilian
 	ADISCORD_welfare_laws = civilian
 	ADISCORD_education_laws = civilian
 	ADISCORD_healthcare_laws = civilian
 	ADISCORD_cultural_policy_laws = civilian
+	ADISCORD_economic_system_laws = civilian
 	ADISCORD_taxation_laws = civilian
 	ADISCORD_industrial_policy_laws = civilian
 	ADISCORD_labor_policy_laws = civilian
