@@ -13,7 +13,18 @@ on_capitulation = {
 		effect = {
 		}
 	}
-	on_declare_war = {}
+on_declare_war = {
+		effect = {
+			ROOT = {
+				ADISCORD_economy_initialize_country = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+			FROM = {
+				ADISCORD_economy_initialize_country = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+	}
 	on_join_faction = {}
 	on_offer_join_faction = {}
 	on_create_faction = {}

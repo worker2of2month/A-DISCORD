@@ -1,0 +1,92 @@
+scripted_gui = {
+	ADISCORD_economy_topbar_script = {
+		context_type = player_context
+		window_name = "ADISCORD_economy_topbar_window"
+		parent_window_token = top_bar
+		dirty = ADISCORD_economy_gui_update_var
+
+		visible = {
+			ADISCORD_economy_should_show_player_ui = yes
+		}
+
+		effects = {
+			ADISCORD_economy_topbar_button_click = {
+				ADISCORD_economy_open_window = yes
+			}
+		}
+	}
+
+	ADISCORD_economy_dashboard_script = {
+		context_type = player_context
+		window_name = "ADISCORD_economy_dashboard_window"
+		parent_window_token = top_bar
+		dirty = ADISCORD_economy_gui_update_var
+
+		visible = {
+			ADISCORD_economy_window_is_open = yes
+		}
+
+		effects = {
+			ADISCORD_economy_dashboard_close_click = {
+				ADISCORD_economy_close_window = yes
+			}
+			ADISCORD_economy_dashboard_army_down_click = {
+				ADISCORD_economy_decrease_army_spending = yes
+			}
+			ADISCORD_economy_dashboard_army_up_click = {
+				ADISCORD_economy_increase_army_spending = yes
+			}
+			ADISCORD_economy_dashboard_construction_down_click = {
+				ADISCORD_economy_decrease_construction_spending = yes
+			}
+			ADISCORD_economy_dashboard_construction_up_click = {
+				ADISCORD_economy_increase_construction_spending = yes
+			}
+			ADISCORD_economy_tax_burden_1_click = {
+				ADISCORD_economy_set_tax_burden_1 = yes
+			}
+			ADISCORD_economy_tax_burden_2_click = {
+				ADISCORD_economy_set_tax_burden_2 = yes
+			}
+			ADISCORD_economy_tax_burden_3_click = {
+				ADISCORD_economy_set_tax_burden_3 = yes
+			}
+			ADISCORD_economy_tax_burden_4_click = {
+				ADISCORD_economy_set_tax_burden_4 = yes
+			}
+			ADISCORD_economy_tax_burden_5_click = {
+				ADISCORD_economy_set_tax_burden_5 = yes
+			}
+			ADISCORD_economy_army_budget_1_click = {
+				ADISCORD_economy_set_army_spending_1 = yes
+			}
+			ADISCORD_economy_army_budget_2_click = {
+				ADISCORD_economy_set_army_spending_2 = yes
+			}
+			ADISCORD_economy_army_budget_3_click = {
+				ADISCORD_economy_set_army_spending_3 = yes
+			}
+			ADISCORD_economy_army_budget_4_click = {
+				ADISCORD_economy_set_army_spending_4 = yes
+			}
+			ADISCORD_economy_army_budget_5_click = {
+				ADISCORD_economy_set_army_spending_5 = yes
+			}
+			ADISCORD_economy_construction_budget_1_click = {
+				ADISCORD_economy_set_construction_spending_1 = yes
+			}
+			ADISCORD_economy_construction_budget_2_click = {
+				ADISCORD_economy_set_construction_spending_2 = yes
+			}
+			ADISCORD_economy_construction_budget_3_click = {
+				ADISCORD_economy_set_construction_spending_3 = yes
+			}
+			ADISCORD_economy_construction_budget_4_click = {
+				ADISCORD_economy_set_construction_spending_4 = yes
+			}
+			ADISCORD_economy_construction_budget_5_click = {
+				ADISCORD_economy_set_construction_spending_5 = yes
+			}
+		}
+	}
+}

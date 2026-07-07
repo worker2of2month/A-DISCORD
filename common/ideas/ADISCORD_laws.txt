@@ -1,30 +1,22 @@
 ideas = {
-	ADISCORD_civic_order_laws = {
+	ADISCORD_society_type_laws = {
 		law = yes
+		use_list_view = yes
 
-		ADISCORD_civic_order_loose_communes = {
-			picture = ADISCORD_law_civic_loose_communes
+		ADISCORD_society_type_traditional = {
+			picture = ADISCORD_society_type_traditional
 			cost = 75
 			removal_cost = -1
 
 			modifier = {
-				stability_factor = -0.04
-				political_power_gain = 0.04
-				consumer_goods_factor = -0.01
-			}
-
-			cancel_if_invalid = no
-		}
-
-		ADISCORD_civic_order_local_councils = {
-			picture = ADISCORD_law_civic_local_councils
-			cost = 75
-			removal_cost = -1
-
-			modifier = {
-				stability_factor = 0.02
-				political_power_gain = -0.01
-				consumer_goods_factor = -0.01
+				stability_factor = 0.03
+				political_power_gain = 0.02
+				monthly_population = 0.01
+				research_speed_factor = -0.04
+				industrial_capacity_factory = -0.04
+				production_speed_industrial_complex_factor = -0.04
+				mobilization_speed = -0.05
+				factory_energy_consumption = -0.10
 			}
 
 			cancel_if_invalid = no
@@ -33,21 +25,45 @@ ideas = {
 				factor = 1
 				modifier = {
 					factor = 2
-					has_government = humanism
+					NOT = { is_major = yes }
+					has_war = no
 				}
 			}
 		}
 
-		ADISCORD_civic_order_central_registers = {
-			picture = ADISCORD_law_civic_central_registers
+		ADISCORD_society_type_agrarian = {
+			picture = ADISCORD_society_type_agrarian
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				monthly_population = 0.03
+				stability_factor = 0.01
+				local_resources_factor = 0.04
+				industrial_capacity_factory = -0.03
+				industrial_capacity_dockyard = -0.02
+				production_speed_industrial_complex_factor = -0.02
+				research_speed_factor = -0.02
+				factory_energy_consumption = -0.05
+			}
+
+			cancel_if_invalid = no
+		}
+
+		ADISCORD_society_type_industrial = {
+			picture = ADISCORD_society_type_industrial
 			cost = 75
 			removal_cost = -1
 			default = yes
 
 			modifier = {
-				stability_factor = 0.03
-				political_power_gain = 0.02
-				consumer_goods_factor = 0.01
+				industrial_capacity_factory = 0.03
+				industrial_capacity_dockyard = 0.02
+				production_speed_industrial_complex_factor = 0.03
+				production_speed_arms_factory_factor = 0.02
+				production_factory_max_efficiency_factor = 0.02
+				stability_factor = -0.005
+				factory_energy_consumption = 0.05
 			}
 
 			cancel_if_invalid = no
@@ -57,55 +73,28 @@ ideas = {
 			}
 		}
 
-		ADISCORD_civic_order_emergency_committees = {
-			picture = ADISCORD_law_civic_emergency_committees
+		ADISCORD_society_type_post_industrial = {
+			picture = ADISCORD_society_type_post_industrial
 			cost = 75
 			removal_cost = -1
 
 			available = {
 				OR = {
-					has_war = yes
-					has_war_support > 0.35
+					has_government = technocracy
+					has_government = humanism
+					ADISCORD_economic_development_at_least_3 = yes
+					ADISCORD_society_development_at_least_3 = yes
 				}
 			}
 
 			modifier = {
-				stability_factor = -0.02
-				war_support_factor = 0.05
-				political_power_gain = 0.03
-				mobilization_speed = 0.10
-			}
-
-			cancel_if_invalid = no
-
-			ai_will_do = {
-				factor = 1
-				modifier = {
-					factor = 4
-					has_war = yes
-				}
-			}
-		}
-
-		ADISCORD_civic_order_internal_directorate = {
-			picture = ADISCORD_law_civic_internal_directorate
-			cost = 75
-			removal_cost = -1
-
-			available = {
-				OR = {
-					has_government = chauvinism
-					has_government = utilitarism
-					has_government = etatism
-					has_war_support > 0.50
-				}
-			}
-
-			modifier = {
-				stability_factor = 0.06
-				drift_defence_factor = 0.20
-				political_power_gain = -0.05
-				consumer_goods_factor = 0.03
+				research_speed_factor = 0.035
+				production_factory_efficiency_gain_factor = 0.03
+				line_change_production_efficiency_factor = 0.03
+				production_speed_buildings_factor = 0.02
+				political_power_gain = -0.02
+				industrial_capacity_factory = -0.01
+				stability_factor = 0.01
 			}
 
 			cancel_if_invalid = no
@@ -115,14 +104,54 @@ ideas = {
 				modifier = {
 					factor = 3
 					OR = {
-						has_government = chauvinism
-						has_government = utilitarism
-						has_government = etatism
+						has_government = technocracy
+						has_government = humanism
 					}
 				}
 			}
 		}
+
+		ADISCORD_society_type_information = {
+			picture = ADISCORD_society_type_information
+			cost = 75
+			removal_cost = -1
+
+			available = {
+				OR = {
+					has_government = technocracy
+					ADISCORD_country_development_at_least_4 = yes
+					AND = {
+						ADISCORD_economic_development_at_least_4 = yes
+						ADISCORD_society_development_at_least_4 = yes
+					}
+				}
+			}
+
+			modifier = {
+				research_speed_factor = 0.06
+				production_factory_efficiency_gain_factor = 0.05
+				line_change_production_efficiency_factor = 0.05
+				production_factory_max_efficiency_factor = 0.04
+				production_speed_buildings_factor = 0.03
+				political_power_gain = -0.04
+				industrial_capacity_factory = -0.015
+				stability_factor = -0.01
+				factory_energy_consumption = 0.10
+			}
+
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 4
+					has_government = technocracy
+				}
+			}
+		}
 	}
+
+
 
 	ADISCORD_information_laws = {
 		law = yes
@@ -261,7 +290,6 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				consumer_goods_factor = -0.01
 				production_speed_industrial_complex_factor = 0.03
 				political_power_gain = -0.04
 			}
@@ -295,7 +323,6 @@ ideas = {
 			modifier = {
 				stability_factor = 0.04
 				monthly_population = 0.02
-				consumer_goods_factor = 0.02
 				political_power_gain = -0.02
 			}
 
@@ -318,7 +345,6 @@ ideas = {
 			modifier = {
 				production_speed_industrial_complex_factor = 0.03
 				production_speed_arms_factory_factor = 0.05
-				consumer_goods_factor = 0.02
 				research_speed_factor = -0.01
 			}
 
@@ -342,11 +368,12 @@ ideas = {
 				OR = {
 					has_war = yes
 					has_war_support > 0.25
+					ADISCORD_economy_model_allows_emergency_extraction = yes
 				}
 			}
 
 			modifier = {
-				consumer_goods_factor = -0.04
+				consumer_goods_factor = -0.02
 				industrial_capacity_factory = 0.04
 				political_power_gain = 0.03
 				stability_factor = -0.06
@@ -1025,6 +1052,7 @@ ideas = {
 				OR = {
 					has_war = yes
 					has_war_support > 0.25
+					ADISCORD_economy_model_allows_mobilization_economy = yes
 				}
 			}
 
@@ -1056,6 +1084,7 @@ ideas = {
 					has_government = etatism
 					has_government = technocracy
 					has_government = utilitarism
+					ADISCORD_economy_model_allows_state_planning = yes
 				}
 			}
 
@@ -1145,7 +1174,10 @@ ideas = {
 			removal_cost = -1
 
 			available = {
-				has_government = technocracy
+				OR = {
+					has_government = technocracy
+					ADISCORD_economy_model_allows_technocratic_programs = yes
+				}
 			}
 
 			modifier = {

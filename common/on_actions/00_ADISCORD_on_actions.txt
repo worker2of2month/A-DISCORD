@@ -70,18 +70,44 @@ on_actions = {
 				ADISCORD_initialize_society_development_variables = yes
 				ADISCORD_update_total_country_development = yes
 			}
+			every_country = {
+				limit = {
+					OR = {
+						ADISCORD_economy_should_monthly_update = yes
+						ADISCORD_economy_should_yearly_update = yes
+					}
+				}
+				ADISCORD_economy_initialize_country = yes
+			}
 		}
 	}
 	on_monthly = {
 		effect = {
+			every_country = {
+				limit = { ADISCORD_economy_should_monthly_update = yes }
+				ADISCORD_economy_monthly_update = yes
+			}
 			every_country = {
 				limit = { OR = { ADISCORD_is_playable_development_country = yes is_ai = no } }
 				ADISCORD_tick_all_society_development_monthly = yes
 			}
 		}
 	}
+	on_weekly = {
+		effect = {
+			every_country = {
+				limit = { is_ai = no }
+				ADISCORD_economy_weekly_player_refresh = yes
+			}
+		}
+	}
+
 	on_yearly = {
 		effect = {
+			every_country = {
+				limit = { ADISCORD_economy_should_yearly_update = yes }
+				ADISCORD_economy_yearly_update = yes
+			}
 			every_country = {
 				limit = {
 					ADISCORD_is_secondary_development_country = yes

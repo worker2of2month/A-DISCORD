@@ -19,9 +19,14 @@ ideas = {
 			picture = GFX_idea_STP_hedonism_with_no_bondaries
 
 			modifier = {
-				monthly_population = -0.7
-				research_speed_factor = -0.15
-				stability_factor = -0.3
+				monthly_population = -0.25
+				research_speed_factor = -0.08
+				stability_factor = -0.15
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_civilian_factory_income_factor = 0.05
+				ADISCORD_economy_social_expense_factor = 0.10
+				ADISCORD_economy_state_overload_gain_factor = 0.05
+				ADISCORD_country_development_society_growth_factor = -0.05
 			}
 		}
 	}
@@ -43,8 +48,13 @@ ideas = {
 			picture = GFX_idea_STP_hidden_slaves_trade
 
 			modifier = {
-				political_power_gain = -0.25
-				monthly_population = -0.15
+				political_power_gain = -0.20
+				monthly_population = -0.08
+				ADISCORD_economy_trade_income_factor = 0.10
+				ADISCORD_economy_tax_collection_factor = -0.10
+				ADISCORD_economy_state_overload_gain_factor = 0.10
+				ADISCORD_economy_demographic_fatigue_gain_factor = 0.10
+				ADISCORD_country_development_society_growth_factor = -0.05
 			}
 		}
 	}
@@ -66,7 +76,12 @@ ideas = {
 			picture = GFX_idea_STP_legalize
 
 			modifier = {
-				monthly_population = -0.3
+				monthly_population = -0.06
+				stability_factor = 0.02
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_population_tax_income_factor = 0.05
+				ADISCORD_economy_social_expense_factor = 0.05
+				ADISCORD_country_development_society_growth_factor = -0.05
 			}
 		}
 	}
@@ -88,7 +103,13 @@ ideas = {
 			picture = GFX_idea_STP_worldwide_famous_tourist_destination
 
 			modifier = {
-				monthly_population = +0.2
+				monthly_population = 0.08
+				stability_factor = 0.03
+				production_speed_industrial_complex_factor = 0.03
+				ADISCORD_economy_trade_income_factor = 0.15
+				ADISCORD_economy_civilian_factory_income_factor = 0.10
+				ADISCORD_economy_building_income_factor = 0.05
+				ADISCORD_country_development_economic_growth_factor = 0.05
 			}
 		}
 	}

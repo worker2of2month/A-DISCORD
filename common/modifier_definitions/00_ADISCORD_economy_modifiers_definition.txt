@@ -1,0 +1,291 @@
+# A-DISCORD visible custom economy modifiers.
+# These modifiers are real displayable country modifiers and are read by the economy calculation via modifier@<key>.
+# Use them in idea modifier blocks when the effect should be visible in the normal national-spirit modifier list.
+
+ADISCORD_economy_tax_collection_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_population_tax_income_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_trade_income_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_civilian_factory_income_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_military_industry_income_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_resource_rent_income_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_building_income_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_overall_income_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_army_expense_factor = {
+	color_type = bad
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_airforce_expense_factor = {
+	color_type = bad
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_navy_expense_factor = {
+	color_type = bad
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_military_factory_expense_factor = {
+	color_type = bad
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_construction_expense_factor = {
+	color_type = bad
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_social_expense_factor = {
+	color_type = bad
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_research_expense_factor = {
+	color_type = bad
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_admin_expense_factor = {
+	color_type = bad
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_debt_service_factor = {
+	color_type = bad
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_overall_expense_factor = {
+	color_type = bad
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_inflation_pressure_factor = {
+	color_type = bad
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_state_overload_gain_factor = {
+	color_type = bad
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_war_fatigue_gain_factor = {
+	color_type = bad
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_demographic_fatigue_gain_factor = {
+	color_type = bad
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_demobilization_pressure_gain_factor = {
+	color_type = bad
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_bombing_disruption_resistance_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_overload_resistance_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_country_development_global_growth_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_country_development_society_growth_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_country_development_social_system_growth_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_country_development_army_growth_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_country_development_cultural_growth_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_country_development_state_growth_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_country_development_economic_growth_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}

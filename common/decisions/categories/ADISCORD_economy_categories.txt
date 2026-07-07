@@ -1,0 +1,11 @@
+ADISCORD_economy_management = {
+	allowed = {
+		OR = {
+			is_ai = no
+			ADISCORD_economy_should_monthly_update = yes
+		}
+	}
+
+	priority = 95
+	visible_when_empty = yes
+}

@@ -29,9 +29,15 @@ ideas = {
 				equipment_capture_factor = 0.1
 				war_stability_factor = 0.3
 				political_power_gain = -0.2
-				consumer_goods_factor = -0.1
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_military_industry_income_factor = 0.05
+				ADISCORD_economy_army_expense_factor = -0.05
+				ADISCORD_economy_war_fatigue_gain_factor = -0.05
+				ADISCORD_economy_state_overload_gain_factor = 0.05
+				ADISCORD_country_development_army_growth_factor = 0.05
 			}
 		}
+
 		VAL_worldwide_famous_weponry = {
 			picture = GFX_idea_VAL_worldwide_famous_weponry
 
@@ -46,12 +52,17 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				production_lack_of_resource_penalty_factor = -0.7
-				production_factory_max_efficiency_factor = 0.5 
-				production_speed_industrial_complex_factor = -0.5
-				industrial_capacity_factory = 0.3
+				production_lack_of_resource_penalty_factor = -0.35
+				production_factory_max_efficiency_factor = 0.20
+				production_speed_industrial_complex_factor = -0.20
+				industrial_capacity_factory = 0.18
+				ADISCORD_economy_military_industry_income_factor = 0.15
+				ADISCORD_economy_resource_rent_income_factor = 0.05
+				ADISCORD_country_development_economic_growth_factor = 0.05
+				ADISCORD_country_development_army_growth_factor = 0.05
 			}
 		}
+
 		VAL_harvest_of_ash = {
 			picture = GFX_idea_VAL_harvest_of_ash
 
@@ -67,10 +78,15 @@ ideas = {
 
 			modifier = {
 				conscription_factor = -0.15
-      			army_org_regain = -0.10
-      			stability_factor = -0.3
-      			consumer_goods_factor = 0.05
-     		    army_core_defence_factor = -0.05
+				army_org_regain = -0.10
+				stability_factor = -0.3
+				army_core_defence_factor = -0.05
+				ADISCORD_economy_population_tax_income_factor = -0.15
+				ADISCORD_economy_resource_rent_income_factor = -0.10
+				ADISCORD_economy_social_expense_factor = 0.10
+				ADISCORD_economy_state_overload_gain_factor = 0.10
+				ADISCORD_economy_demographic_fatigue_gain_factor = 0.10
+				ADISCORD_country_development_economic_growth_factor = -0.10
 			}
 		}
 	}

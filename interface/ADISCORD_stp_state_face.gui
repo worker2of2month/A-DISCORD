@@ -23,10 +23,10 @@ guiTypes = {
 		instantTextBoxType = {
 			name = "STP_state_face_title"
 			position = { x = 45 y = 596 }
-			size = { width = 200 height = 18 }
 			text = "STP_STATE_FACE_TITLE"
 			font = "hoi_18mbs"
 			maxWidth = 250
+			maxHeight = 18
 			fixedsize = yes
 			format = center
 			context_aware_tooltip = [STPGetStateFaceTooltip]
@@ -36,10 +36,10 @@ guiTypes = {
 		instantTextBoxType = {
 			name = "STP_state_face_stage_text"
 			position = { x = 60 y = 615 }
-			size = { width = 220 height = 16 }
 			context_aware_text = [STPGetStateFaceStageName]
 			font = "hoi_18mbs"
 			maxWidth = 220
+			maxHeight = 16
 			fixedsize = yes
 			format = center
 			context_aware_tooltip = [STPGetStateFaceTooltip]

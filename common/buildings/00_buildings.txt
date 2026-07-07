@@ -725,6 +725,74 @@ buildings = {
 			local_resource_gain_efficiency_per_infrastructure = 0.10
 		}
 	}
+
+	#### A-DISCORD economy buildings
+
+	ADISCORD_commercial_office = {
+		show_on_map = 0
+		base_cost = 6000
+		icon_frame = 1
+		value = 2
+		infrastructure_construction_effect = yes
+		level_cap = {
+			shares_slots = yes
+			state_max = 3
+		}
+	}
+
+	ADISCORD_fiscal_administration = {
+		show_on_map = 0
+		base_cost = 5500
+		icon_frame = 1
+		value = 2
+		infrastructure_construction_effect = yes
+		level_cap = {
+			shares_slots = yes
+			state_max = 2
+		}
+		state_modifiers = {
+			local_resources_factor = -0.01
+		}
+	}
+
+	ADISCORD_industrial_cluster = {
+		show_on_map = 0
+		base_cost = 8500
+		icon_frame = 2
+		value = 3
+		infrastructure_construction_effect = yes
+		level_cap = {
+			shares_slots = yes
+			state_max = 3
+		}
+	}
+
+	ADISCORD_logistics_hub = {
+		show_on_map = 0
+		base_cost = 7000
+		icon_frame = 15
+		value = 2
+		infrastructure_construction_effect = yes
+		level_cap = {
+			shares_slots = yes
+			state_max = 2
+		}
+		state_modifiers = {
+			local_supplies = 0.05
+		}
+	}
+
+	ADISCORD_technical_institute = {
+		show_on_map = 0
+		base_cost = 7500
+		icon_frame = 1
+		value = 2
+		infrastructure_construction_effect = yes
+		level_cap = {
+			shares_slots = yes
+			state_max = 2
+		}
+	}
 }
 
 spawn_points = {

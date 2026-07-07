@@ -1,0 +1,395 @@
+# A-DISCORD economy scripted triggers.
+# These reuse the existing development country lists instead of creating a parallel playable-country system.
+
+ADISCORD_economy_is_player_tier_country = {
+	is_ai = no
+}
+
+ADISCORD_economy_is_primary_tier_country = {
+	OR = {
+		ADISCORD_is_playable_development_country = yes
+		is_major = yes
+		is_faction_leader = yes
+		has_country_flag = ADISCORD_economy_important_country
+		any_enemy_country = { is_ai = no }
+	}
+}
+
+ADISCORD_economy_is_secondary_tier_country = {
+	is_ai = yes
+	OR = {
+		ADISCORD_is_secondary_development_country = yes
+		has_country_flag = ADISCORD_economy_secondary_country
+	}
+	NOT = { ADISCORD_economy_is_primary_tier_country = yes }
+}
+
+ADISCORD_economy_is_dormant_tier_country = {
+	is_ai = yes
+	NOT = {
+		OR = {
+			ADISCORD_economy_is_primary_tier_country = yes
+			ADISCORD_economy_is_secondary_tier_country = yes
+		}
+	}
+}
+
+ADISCORD_economy_is_dormant = {
+	ADISCORD_economy_is_dormant_tier_country = yes
+}
+
+ADISCORD_economy_should_monthly_update = {
+	OR = {
+		ADISCORD_economy_is_player_tier_country = yes
+		ADISCORD_economy_is_primary_tier_country = yes
+	}
+}
+
+ADISCORD_economy_should_yearly_update = {
+	ADISCORD_economy_is_secondary_tier_country = yes
+	NOT = { ADISCORD_economy_should_monthly_update = yes }
+}
+
+ADISCORD_economy_should_show_player_ui = {
+	is_ai = no
+}
+
+ADISCORD_economy_window_is_open = {
+	check_variable = { var = ADISCORD_economy_show_window value = 1 compare = greater_than_or_equals }
+}
+
+ADISCORD_economy_model_is_fragmented = {
+	check_variable = { var = ADISCORD_economy_model value = 0 compare = less_than_or_equals }
+}
+
+ADISCORD_economy_model_is_decentralized_market = {
+	check_variable = { var = ADISCORD_economy_model value = 1 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_model value = 2 compare = less_than }
+}
+
+ADISCORD_economy_model_is_mixed = {
+	check_variable = { var = ADISCORD_economy_model value = 2 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_model value = 3 compare = less_than }
+}
+
+ADISCORD_economy_model_is_state_coordinated = {
+	check_variable = { var = ADISCORD_economy_model value = 3 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_model value = 4 compare = less_than }
+}
+
+ADISCORD_economy_model_is_planned_bureaucratic = {
+	check_variable = { var = ADISCORD_economy_model value = 4 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_model value = 5 compare = less_than }
+}
+
+ADISCORD_economy_model_is_mobilization = {
+	check_variable = { var = ADISCORD_economy_model value = 5 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_model value = 6 compare = less_than }
+}
+
+ADISCORD_economy_model_is_oligarchic_clan = {
+	check_variable = { var = ADISCORD_economy_model value = 6 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_model value = 7 compare = less_than }
+}
+
+ADISCORD_economy_model_is_technocratic = {
+	check_variable = { var = ADISCORD_economy_model value = 7 compare = greater_than_or_equals }
+}
+
+ADISCORD_economy_model_allows_advanced_taxation = {
+	OR = {
+		ADISCORD_economy_model_is_mixed = yes
+		ADISCORD_economy_model_is_state_coordinated = yes
+		ADISCORD_economy_model_is_planned_bureaucratic = yes
+		ADISCORD_economy_model_is_mobilization = yes
+		ADISCORD_economy_model_is_technocratic = yes
+	}
+}
+
+ADISCORD_economy_model_allows_state_planning = {
+	OR = {
+		ADISCORD_economy_model_is_state_coordinated = yes
+		ADISCORD_economy_model_is_planned_bureaucratic = yes
+		ADISCORD_economy_model_is_technocratic = yes
+	}
+}
+
+ADISCORD_economy_model_allows_market_expansion = {
+	OR = {
+		ADISCORD_economy_model_is_decentralized_market = yes
+		ADISCORD_economy_model_is_mixed = yes
+		ADISCORD_economy_model_is_oligarchic_clan = yes
+		ADISCORD_economy_model_is_technocratic = yes
+	}
+}
+
+ADISCORD_economy_model_allows_mobilization_economy = {
+	OR = {
+		ADISCORD_economy_model_is_state_coordinated = yes
+		ADISCORD_economy_model_is_planned_bureaucratic = yes
+		ADISCORD_economy_model_is_mobilization = yes
+	}
+}
+
+ADISCORD_economy_model_allows_technocratic_programs = {
+	OR = {
+		ADISCORD_economy_model_is_technocratic = yes
+		has_government = technocracy
+		AND = {
+			ADISCORD_economy_model_is_state_coordinated = yes
+			ADISCORD_economy_has_education_technical_institutes = yes
+		}
+		AND = {
+			ADISCORD_economy_model_is_mixed = yes
+			ADISCORD_economy_has_education_technical_institutes = yes
+			ADISCORD_state_development_at_least_3 = yes
+		}
+	}
+}
+
+ADISCORD_economy_model_allows_emergency_extraction = {
+	OR = {
+		has_war = yes
+		ADISCORD_economy_model_is_state_coordinated = yes
+		ADISCORD_economy_model_is_planned_bureaucratic = yes
+		ADISCORD_economy_model_is_mobilization = yes
+	}
+}
+
+ADISCORD_economy_model_allows_oligarchic_deals = {
+	OR = {
+		ADISCORD_economy_model_is_oligarchic_clan = yes
+		AND = {
+			ADISCORD_economy_model_is_decentralized_market = yes
+			ADISCORD_state_development_at_most_2 = yes
+		}
+	}
+}
+
+ADISCORD_economy_has_treasury_25 = { check_variable = { var = ADISCORD_economy_treasury value = 25 compare = greater_than_or_equals } }
+ADISCORD_economy_has_treasury_50 = { check_variable = { var = ADISCORD_economy_treasury value = 50 compare = greater_than_or_equals } }
+ADISCORD_economy_has_treasury_100 = { check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals } }
+ADISCORD_economy_has_treasury_150 = { check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals } }
+ADISCORD_economy_has_low_treasury = { check_variable = { var = ADISCORD_economy_treasury value = 50 compare = less_than } }
+ADISCORD_economy_has_large_reserve = { check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals } }
+
+ADISCORD_economy_has_debt = { check_variable = { var = ADISCORD_economy_debt value = 1 compare = greater_than_or_equals } }
+ADISCORD_economy_has_high_debt = { check_variable = { var = ADISCORD_economy_debt value = 300 compare = greater_than_or_equals } }
+ADISCORD_economy_has_high_inflation = { check_variable = { var = ADISCORD_economy_inflation value = 25 compare = greater_than_or_equals } }
+
+ADISCORD_economy_has_high_war_fatigue = { check_variable = { var = ADISCORD_economy_war_fatigue_level value = 2 compare = greater_than_or_equals } }
+ADISCORD_economy_has_high_stretched = { check_variable = { var = ADISCORD_economy_stretched_level value = 2 compare = greater_than_or_equals } }
+ADISCORD_economy_is_overstretched = { check_variable = { var = ADISCORD_economy_stretched_level value = 3 compare = greater_than_or_equals } }
+ADISCORD_economy_can_increase_army_spending = {
+	check_variable = { var = ADISCORD_economy_army_spending_mode value = 5 compare = less_than }
+}
+ADISCORD_economy_can_decrease_army_spending = {
+	check_variable = { var = ADISCORD_economy_army_spending_mode value = 1 compare = greater_than }
+}
+ADISCORD_economy_can_increase_construction_spending = {
+	check_variable = { var = ADISCORD_economy_construction_spending_mode value = 5 compare = less_than }
+}
+ADISCORD_economy_can_decrease_construction_spending = {
+	check_variable = { var = ADISCORD_economy_construction_spending_mode value = 1 compare = greater_than }
+}
+ADISCORD_economy_can_increase_tax_burden = {
+	check_variable = { var = ADISCORD_economy_tax_burden_mode value = 5 compare = less_than }
+}
+ADISCORD_economy_can_decrease_tax_burden = {
+	check_variable = { var = ADISCORD_economy_tax_burden_mode value = 1 compare = greater_than }
+}
+
+ADISCORD_economy_tax_burden_mode_1 = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 1 compare = less_than_or_equals } }
+ADISCORD_economy_tax_burden_mode_2 = {
+	check_variable = { var = ADISCORD_economy_tax_burden_mode value = 2 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_tax_burden_mode value = 3 compare = less_than }
+}
+ADISCORD_economy_tax_burden_mode_3 = {
+	check_variable = { var = ADISCORD_economy_tax_burden_mode value = 3 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_tax_burden_mode value = 4 compare = less_than }
+}
+ADISCORD_economy_tax_burden_mode_4 = {
+	check_variable = { var = ADISCORD_economy_tax_burden_mode value = 4 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_tax_burden_mode value = 5 compare = less_than }
+}
+ADISCORD_economy_tax_burden_mode_5 = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 5 compare = greater_than_or_equals } }
+
+ADISCORD_economy_army_spending_mode_1 = { check_variable = { var = ADISCORD_economy_army_spending_mode value = 1 compare = less_than_or_equals } }
+ADISCORD_economy_army_spending_mode_2 = {
+	check_variable = { var = ADISCORD_economy_army_spending_mode value = 2 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_army_spending_mode value = 3 compare = less_than }
+}
+ADISCORD_economy_army_spending_mode_3 = {
+	check_variable = { var = ADISCORD_economy_army_spending_mode value = 3 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_army_spending_mode value = 4 compare = less_than }
+}
+ADISCORD_economy_army_spending_mode_4 = {
+	check_variable = { var = ADISCORD_economy_army_spending_mode value = 4 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_army_spending_mode value = 5 compare = less_than }
+}
+ADISCORD_economy_army_spending_mode_5 = { check_variable = { var = ADISCORD_economy_army_spending_mode value = 5 compare = greater_than_or_equals } }
+
+ADISCORD_economy_construction_spending_mode_1 = { check_variable = { var = ADISCORD_economy_construction_spending_mode value = 1 compare = less_than_or_equals } }
+ADISCORD_economy_construction_spending_mode_2 = {
+	check_variable = { var = ADISCORD_economy_construction_spending_mode value = 2 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_construction_spending_mode value = 3 compare = less_than }
+}
+ADISCORD_economy_construction_spending_mode_3 = {
+	check_variable = { var = ADISCORD_economy_construction_spending_mode value = 3 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_construction_spending_mode value = 4 compare = less_than }
+}
+ADISCORD_economy_construction_spending_mode_4 = {
+	check_variable = { var = ADISCORD_economy_construction_spending_mode value = 4 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_construction_spending_mode value = 5 compare = less_than }
+}
+ADISCORD_economy_construction_spending_mode_5 = { check_variable = { var = ADISCORD_economy_construction_spending_mode value = 5 compare = greater_than_or_equals } }
+
+ADISCORD_economy_can_invest_reserves = {
+	ADISCORD_economy_has_treasury_50 = yes
+	check_variable = { var = ADISCORD_economy_recent_investment value = 1 compare = less_than }
+	OR = {
+		ADISCORD_economy_model_allows_market_expansion = yes
+		ADISCORD_economy_model_allows_state_planning = yes
+		ADISCORD_economy_model_allows_technocratic_programs = yes
+		ADISCORD_economy_model_allows_oligarchic_deals = yes
+	}
+}
+
+ADISCORD_economy_can_take_debt = {
+	OR = {
+		NOT = { ADISCORD_economy_model_is_fragmented = yes }
+		ADISCORD_economy_model_allows_oligarchic_deals = yes
+	}
+	check_variable = { var = ADISCORD_economy_debt value = 900 compare = less_than }
+	check_variable = { var = ADISCORD_economy_recent_debt value = 1 compare = less_than }
+}
+
+ADISCORD_economy_can_print_money = {
+	check_variable = { var = ADISCORD_economy_recent_money_printing value = 1 compare = less_than }
+	NOT = { ADISCORD_economy_is_overstretched = yes }
+}
+
+ADISCORD_economy_can_use_war_taxes = {
+	check_variable = { var = ADISCORD_economy_recent_war_financing value = 1 compare = less_than }
+	ADISCORD_economy_model_allows_emergency_extraction = yes
+}
+
+ADISCORD_economy_can_use_military_investment = {
+	ADISCORD_economy_has_treasury_50 = yes
+	check_variable = { var = ADISCORD_economy_recent_war_financing value = 1 compare = less_than }
+	ADISCORD_economy_model_allows_mobilization_economy = yes
+}
+
+ADISCORD_economy_can_build_commercial_office = {
+	ADISCORD_economy_has_treasury_50 = yes
+	OR = {
+		ADISCORD_economy_model_allows_market_expansion = yes
+		ADISCORD_economy_model_allows_oligarchic_deals = yes
+	}
+}
+
+ADISCORD_economy_can_build_fiscal_administration = {
+	ADISCORD_economy_has_treasury_50 = yes
+	OR = {
+		ADISCORD_economy_model_allows_advanced_taxation = yes
+		ADISCORD_economy_model_allows_state_planning = yes
+	}
+}
+
+ADISCORD_economy_can_build_industrial_cluster = {
+	ADISCORD_economy_has_treasury_50 = yes
+	OR = {
+		ADISCORD_economy_model_allows_state_planning = yes
+		ADISCORD_economy_model_allows_mobilization_economy = yes
+		ADISCORD_economy_model_allows_technocratic_programs = yes
+	}
+}
+
+ADISCORD_economy_can_build_logistics_hub = {
+	ADISCORD_economy_has_treasury_50 = yes
+	OR = {
+		ADISCORD_economy_model_is_mixed = yes
+		ADISCORD_economy_model_allows_state_planning = yes
+		ADISCORD_economy_model_allows_mobilization_economy = yes
+	}
+}
+
+ADISCORD_economy_can_build_technical_institute = {
+	ADISCORD_economy_has_treasury_50 = yes
+	ADISCORD_economy_model_allows_technocratic_programs = yes
+}
+
+ADISCORD_economy_has_development_progress_ready = {
+	check_variable = { var = ADISCORD_economic_development_progress value = 100 compare = greater_than_or_equals }
+}
+
+ADISCORD_economy_can_upgrade_economic_development = {
+	NOT = { ADISCORD_economic_development_at_least_5 = yes }
+	check_variable = { var = ADISCORD_economy_stretched_level value = 3 compare = less_than }
+	check_variable = { var = ADISCORD_economy_debt_pressure value = 60 compare = less_than }
+	check_variable = { var = ADISCORD_economy_inflation value = 40 compare = less_than }
+	check_variable = { var = ADISCORD_economy_treasury value = 25 compare = greater_than_or_equals }
+	OR = {
+		NOT = { ADISCORD_economic_development_at_least_4 = yes }
+		ADISCORD_state_development_at_least_3 = yes
+	}
+	OR = {
+		NOT = { ADISCORD_economic_development_at_least_4 = yes }
+		ADISCORD_state_development_at_least_4 = yes
+	}
+}
+
+# Taxation laws.
+ADISCORD_economy_has_taxation_light_dues = { has_idea = ADISCORD_taxation_light_dues }
+ADISCORD_economy_has_taxation_balanced_register = { has_idea = ADISCORD_taxation_balanced_register }
+ADISCORD_economy_has_taxation_progressive_brackets = { has_idea = ADISCORD_taxation_progressive_brackets }
+ADISCORD_economy_has_taxation_industrial_tariffs = { has_idea = ADISCORD_taxation_industrial_tariffs }
+ADISCORD_economy_has_taxation_extraction_quotas = { has_idea = ADISCORD_taxation_extraction_quotas }
+
+# Industrial policy laws.
+ADISCORD_economy_has_industrial_artisan_markets = { has_idea = ADISCORD_industrial_policy_artisan_markets }
+ADISCORD_economy_has_industrial_balanced_workshops = { has_idea = ADISCORD_industrial_policy_balanced_workshops }
+ADISCORD_economy_has_industrial_civilian_expansion = { has_idea = ADISCORD_industrial_policy_civilian_expansion }
+ADISCORD_economy_has_industrial_military_prioritization = { has_idea = ADISCORD_industrial_policy_military_prioritization }
+ADISCORD_economy_has_industrial_state_planning = { has_idea = ADISCORD_industrial_policy_state_planning_boards }
+
+# Labor, welfare, education, military, infrastructure and logistics laws.
+ADISCORD_economy_has_labor_loose_contracts = { has_idea = ADISCORD_labor_policy_loose_contracts }
+ADISCORD_economy_has_labor_technocratic_work_norms = { has_idea = ADISCORD_labor_policy_technocratic_work_norms }
+ADISCORD_economy_has_labor_mobilized_labor = { has_idea = ADISCORD_labor_policy_mobilized_labor }
+ADISCORD_economy_has_welfare_basic_services = { has_idea = ADISCORD_welfare_basic_services }
+ADISCORD_economy_has_welfare_social_insurance = { has_idea = ADISCORD_welfare_social_insurance }
+ADISCORD_economy_has_welfare_universal_provision = { has_idea = ADISCORD_welfare_universal_provision }
+ADISCORD_economy_has_welfare_rationed_support = { has_idea = ADISCORD_welfare_rationed_support }
+ADISCORD_economy_has_education_technical_institutes = { has_idea = ADISCORD_education_technical_institutes }
+ADISCORD_economy_has_education_elite_academies = { has_idea = ADISCORD_education_elite_academies }
+ADISCORD_economy_has_military_total_defense_grid = { has_idea = ADISCORD_military_organization_total_defense_grid }
+ADISCORD_economy_has_infrastructure_strategic_highways = { has_idea = ADISCORD_infrastructure_strategic_highways }
+ADISCORD_economy_has_logistics_emergency_requisitioning = { has_idea = ADISCORD_logistics_emergency_requisitioning }
+
+# Existing development checks are wrapped for economy scripts and tooltips.
+ADISCORD_economy_has_economic_development_1 = { ADISCORD_economic_development_exact_1 = yes }
+ADISCORD_economy_has_economic_development_2 = { ADISCORD_economic_development_exact_2 = yes }
+ADISCORD_economy_has_economic_development_3 = { ADISCORD_economic_development_exact_3 = yes }
+ADISCORD_economy_has_economic_development_4 = { ADISCORD_economic_development_exact_4 = yes }
+ADISCORD_economy_has_economic_development_5 = { ADISCORD_economic_development_exact_5 = yes }
+ADISCORD_economy_has_state_development_1 = { ADISCORD_state_development_exact_1 = yes }
+ADISCORD_economy_has_state_development_2 = { ADISCORD_state_development_exact_2 = yes }
+ADISCORD_economy_has_state_development_3 = { ADISCORD_state_development_exact_3 = yes }
+ADISCORD_economy_has_state_development_4 = { ADISCORD_state_development_exact_4 = yes }
+ADISCORD_economy_has_state_development_5 = { ADISCORD_state_development_exact_5 = yes }
+ADISCORD_economy_has_social_system_development_1 = { ADISCORD_social_system_development_exact_1 = yes }
+ADISCORD_economy_has_social_system_development_2 = { ADISCORD_social_system_development_exact_2 = yes }
+ADISCORD_economy_has_social_system_development_3 = { ADISCORD_social_system_development_exact_3 = yes }
+ADISCORD_economy_has_social_system_development_4 = { ADISCORD_social_system_development_exact_4 = yes }
+ADISCORD_economy_has_social_system_development_5 = { ADISCORD_social_system_development_exact_5 = yes }
+ADISCORD_economy_has_army_development_1 = { ADISCORD_army_development_exact_1 = yes }
+ADISCORD_economy_has_army_development_2 = { ADISCORD_army_development_exact_2 = yes }
+ADISCORD_economy_has_army_development_3 = { ADISCORD_army_development_exact_3 = yes }
+ADISCORD_economy_has_army_development_4 = { ADISCORD_army_development_exact_4 = yes }
+ADISCORD_economy_has_army_development_5 = { ADISCORD_army_development_exact_5 = yes }
+ADISCORD_economy_has_culture_development_1 = { ADISCORD_cultural_development_exact_1 = yes }
+ADISCORD_economy_has_culture_development_2 = { ADISCORD_cultural_development_exact_2 = yes }
+ADISCORD_economy_has_culture_development_3 = { ADISCORD_cultural_development_exact_3 = yes }
+ADISCORD_economy_has_culture_development_4 = { ADISCORD_cultural_development_exact_4 = yes }
+ADISCORD_economy_has_culture_development_5 = { ADISCORD_cultural_development_exact_5 = yes }

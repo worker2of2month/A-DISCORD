@@ -675,6 +675,7 @@ ADISCORD_update_total_country_development = {
 
 ADISCORD_tick_all_society_development_monthly = {
 	ADISCORD_initialize_society_development_variables = yes
+	ADISCORD_economy_recalculate_policy_modifiers = yes
 	ADISCORD_tick_all_society_development_progress = yes
 	ADISCORD_update_total_country_development = yes
 }
@@ -690,6 +691,7 @@ ADISCORD_tick_all_society_development_progress = {
 
 ADISCORD_tick_all_society_development_yearly = {
 	ADISCORD_initialize_society_development_variables = yes
+	ADISCORD_economy_recalculate_policy_modifiers = yes
 	ADISCORD_tick_all_society_development_progress = yes
 	ADISCORD_tick_all_society_development_progress = yes
 	ADISCORD_tick_all_society_development_progress = yes
@@ -717,7 +719,12 @@ ADISCORD_initialize_default_country_development = {
 }
 
 ADISCORD_tick_society_development_monthly = {
-	add_to_variable = { var = ADISCORD_society_development_progress value = ADISCORD_society_development_monthly_growth }
+	set_variable = { var = ADISCORD_country_development_growth_temp value = ADISCORD_society_development_monthly_growth }
+	multiply_variable = { var = ADISCORD_country_development_growth_temp value = ADISCORD_country_development_final_global_growth_factor_bp }
+	divide_variable = { var = ADISCORD_country_development_growth_temp value = 100 }
+	multiply_variable = { var = ADISCORD_country_development_growth_temp value = ADISCORD_country_development_final_society_growth_factor_bp }
+	divide_variable = { var = ADISCORD_country_development_growth_temp value = 100 }
+	add_to_variable = { var = ADISCORD_society_development_progress value = ADISCORD_country_development_growth_temp }
 	if = {
 		limit = { check_variable = { var = ADISCORD_society_development_progress value = 100 compare = greater_than_or_equals } }
 		if = { limit = { ADISCORD_society_development_at_least_5 = yes } set_variable = { var = ADISCORD_society_development_progress value = 0 } }
@@ -732,7 +739,12 @@ ADISCORD_tick_society_development_monthly = {
 }
 
 ADISCORD_tick_social_system_development_monthly = {
-	add_to_variable = { var = ADISCORD_social_system_development_progress value = ADISCORD_social_system_development_monthly_growth }
+	set_variable = { var = ADISCORD_country_development_growth_temp value = ADISCORD_social_system_development_monthly_growth }
+	multiply_variable = { var = ADISCORD_country_development_growth_temp value = ADISCORD_country_development_final_global_growth_factor_bp }
+	divide_variable = { var = ADISCORD_country_development_growth_temp value = 100 }
+	multiply_variable = { var = ADISCORD_country_development_growth_temp value = ADISCORD_country_development_final_social_system_growth_factor_bp }
+	divide_variable = { var = ADISCORD_country_development_growth_temp value = 100 }
+	add_to_variable = { var = ADISCORD_social_system_development_progress value = ADISCORD_country_development_growth_temp }
 	if = {
 		limit = { check_variable = { var = ADISCORD_social_system_development_progress value = 100 compare = greater_than_or_equals } }
 		if = { limit = { ADISCORD_social_system_development_at_least_5 = yes } set_variable = { var = ADISCORD_social_system_development_progress value = 0 } }
@@ -747,7 +759,12 @@ ADISCORD_tick_social_system_development_monthly = {
 }
 
 ADISCORD_tick_army_development_monthly = {
-	add_to_variable = { var = ADISCORD_army_development_progress value = ADISCORD_army_development_monthly_growth }
+	set_variable = { var = ADISCORD_country_development_growth_temp value = ADISCORD_army_development_monthly_growth }
+	multiply_variable = { var = ADISCORD_country_development_growth_temp value = ADISCORD_country_development_final_global_growth_factor_bp }
+	divide_variable = { var = ADISCORD_country_development_growth_temp value = 100 }
+	multiply_variable = { var = ADISCORD_country_development_growth_temp value = ADISCORD_country_development_final_army_growth_factor_bp }
+	divide_variable = { var = ADISCORD_country_development_growth_temp value = 100 }
+	add_to_variable = { var = ADISCORD_army_development_progress value = ADISCORD_country_development_growth_temp }
 	if = {
 		limit = { check_variable = { var = ADISCORD_army_development_progress value = 100 compare = greater_than_or_equals } }
 		if = { limit = { ADISCORD_army_development_at_least_5 = yes } set_variable = { var = ADISCORD_army_development_progress value = 0 } }
@@ -762,7 +779,12 @@ ADISCORD_tick_army_development_monthly = {
 }
 
 ADISCORD_tick_cultural_development_monthly = {
-	add_to_variable = { var = ADISCORD_cultural_development_progress value = ADISCORD_cultural_development_monthly_growth }
+	set_variable = { var = ADISCORD_country_development_growth_temp value = ADISCORD_cultural_development_monthly_growth }
+	multiply_variable = { var = ADISCORD_country_development_growth_temp value = ADISCORD_country_development_final_global_growth_factor_bp }
+	divide_variable = { var = ADISCORD_country_development_growth_temp value = 100 }
+	multiply_variable = { var = ADISCORD_country_development_growth_temp value = ADISCORD_country_development_final_cultural_growth_factor_bp }
+	divide_variable = { var = ADISCORD_country_development_growth_temp value = 100 }
+	add_to_variable = { var = ADISCORD_cultural_development_progress value = ADISCORD_country_development_growth_temp }
 	if = {
 		limit = { check_variable = { var = ADISCORD_cultural_development_progress value = 100 compare = greater_than_or_equals } }
 		if = { limit = { ADISCORD_cultural_development_at_least_5 = yes } set_variable = { var = ADISCORD_cultural_development_progress value = 0 } }
@@ -777,7 +799,12 @@ ADISCORD_tick_cultural_development_monthly = {
 }
 
 ADISCORD_tick_state_development_monthly = {
-	add_to_variable = { var = ADISCORD_state_development_progress value = ADISCORD_state_development_monthly_growth }
+	set_variable = { var = ADISCORD_country_development_growth_temp value = ADISCORD_state_development_monthly_growth }
+	multiply_variable = { var = ADISCORD_country_development_growth_temp value = ADISCORD_country_development_final_global_growth_factor_bp }
+	divide_variable = { var = ADISCORD_country_development_growth_temp value = 100 }
+	multiply_variable = { var = ADISCORD_country_development_growth_temp value = ADISCORD_country_development_final_state_growth_factor_bp }
+	divide_variable = { var = ADISCORD_country_development_growth_temp value = 100 }
+	add_to_variable = { var = ADISCORD_state_development_progress value = ADISCORD_country_development_growth_temp }
 	if = {
 		limit = { check_variable = { var = ADISCORD_state_development_progress value = 100 compare = greater_than_or_equals } }
 		if = { limit = { ADISCORD_state_development_at_least_5 = yes } set_variable = { var = ADISCORD_state_development_progress value = 0 } }
@@ -790,9 +817,19 @@ ADISCORD_tick_state_development_monthly = {
 	}
 	clamp_variable = { var = ADISCORD_state_development_progress min = -99 max = 99 }
 }
-
 ADISCORD_tick_economic_development_monthly = {
-	add_to_variable = { var = ADISCORD_economic_development_progress value = ADISCORD_economic_development_monthly_growth }
+	if = {
+		limit = { has_variable = ADISCORD_economy_monthly_development_gain }
+		add_to_variable = { var = ADISCORD_economic_development_progress value = ADISCORD_economy_monthly_development_gain }
+	}
+	else = {
+		set_variable = { var = ADISCORD_country_development_growth_temp value = ADISCORD_economic_development_monthly_growth }
+		multiply_variable = { var = ADISCORD_country_development_growth_temp value = ADISCORD_country_development_final_global_growth_factor_bp }
+		divide_variable = { var = ADISCORD_country_development_growth_temp value = 100 }
+		multiply_variable = { var = ADISCORD_country_development_growth_temp value = ADISCORD_country_development_final_economic_growth_factor_bp }
+		divide_variable = { var = ADISCORD_country_development_growth_temp value = 100 }
+		add_to_variable = { var = ADISCORD_economic_development_progress value = ADISCORD_country_development_growth_temp }
+	}
 	if = {
 		limit = { check_variable = { var = ADISCORD_economic_development_progress value = 100 compare = greater_than_or_equals } }
 		if = { limit = { ADISCORD_economic_development_at_least_5 = yes } set_variable = { var = ADISCORD_economic_development_progress value = 0 } }
@@ -876,4 +913,17 @@ ADISCORD_decrease_economic_development_monthly_growth = {
 	ADISCORD_initialize_society_development_variables = yes
 	add_to_variable = { var = ADISCORD_economic_development_monthly_growth value = -1 }
 	clamp_variable = { var = ADISCORD_economic_development_monthly_growth min = -20 max = 20 }
+}
+
+# Compatibility wrappers for clearer future naming. Existing content can keep using the old effect names.
+ADISCORD_country_development_initialize = {
+	ADISCORD_initialize_society_development_variables = yes
+}
+
+ADISCORD_country_development_monthly_tick = {
+	ADISCORD_tick_all_society_development_monthly = yes
+}
+
+ADISCORD_country_development_update_total = {
+	ADISCORD_update_total_country_development = yes
 }
