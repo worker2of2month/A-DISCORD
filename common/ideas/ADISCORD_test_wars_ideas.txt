@@ -1,0 +1,26 @@
+ideas = {
+	country = {
+		ADISCORD_test_capitulation_resistance = {
+			picture = generic_war_preparation
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			modifier = {
+				surrender_limit = 1.0
+				conscription_factor = 0.5
+			}
+
+			ai_will_do = {
+				factor = 0
+			}
+		}
+	}
+}

@@ -1,0 +1,11 @@
+add_namespace = ADISCORD_test_wars
+
+country_event = {
+	id = ADISCORD_test_wars.1
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = ADISCORD_aph_osf_test_war_decision_unlocked
+	}
+}

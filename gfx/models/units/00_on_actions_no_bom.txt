@@ -13,75 +13,123 @@ on_actions = {
 		effect = {
 			# VAL scripted test war: CIN / OSF / APH defeat handling.
 			# ROOT = capitulated country, FROM = winner.
-				if = {
-					limit = {
-						ROOT = {
-							OR = {
-								original_tag = CIN
-								original_tag = OSF
-								original_tag = APH
-							}
-						}
-
-						FROM = { 
-							original_tag = VAL 
+			if = {
+				limit = {
+					ROOT = {
+						OR = {
+							original_tag = CIN
+							original_tag = OSF
+							original_tag = APH
 						}
 					}
 
-					VAL = {
-						transfer_state = 59
-						transfer_state = 61
-
-						if = {
-							limit = { has_war_with = CIN }
-							white_peace = CIN
-						}
-						if = {
-							limit = { has_war_with = OSF }
-							white_peace = OSF
-						}
-						if = {
-							limit = { has_war_with = APH }
-							white_peace = APH
-						}
+					FROM = { 
+						original_tag = VAL 
 					}
-
-					CIN = {
-						remove_ideas = ADISCORD_test_capitulation_resistance
-
-						if = {
-							limit = { is_faction_leader = yes }
-							dismantle_faction = yes
-						}
-					}
-
-					OSF = {
-						remove_ideas = ADISCORD_test_capitulation_resistance
-
-						if = {
-							limit = { is_in_faction_with = CIN }
-							leave_faction = yes
-						}
-					}
-
-					APH = {
-						remove_ideas = ADISCORD_test_capitulation_resistance
-
-						if = {
-							limit = { is_in_faction_with = CIN }
-							leave_faction = yes
-						}
-
-						country_event = {
-							id = ADISCORD_test_wars.1
-							days = 30
-						}
-					}
-					set_global_flag = skip_default_capitulation
 				}
-				clr_global_flag = skip_default_capitulation
+
+				VAL = {
+					transfer_state = 59
+					transfer_state = 61
+
+					if = {
+						limit = { has_war_with = CIN }
+						white_peace = CIN
+					}
+					if = {
+						limit = { has_war_with = OSF }
+						white_peace = OSF
+					}
+					if = {
+						limit = { has_war_with = APH }
+						white_peace = APH
+					}
+				}
+
+				CIN = {
+					remove_ideas = ADISCORD_test_capitulation_resistance
+
+					if = {
+						limit = { is_faction_leader = yes }
+						dismantle_faction = yes
+					}
+				}
+
+				OSF = {
+					remove_ideas = ADISCORD_test_capitulation_resistance
+
+					if = {
+						limit = { is_in_faction_with = CIN }
+						leave_faction = yes
+					}
+				}
+
+				APH = {
+					remove_ideas = ADISCORD_test_capitulation_resistance
+
+					if = {
+						limit = { is_in_faction_with = CIN }
+						leave_faction = yes
+					}
+
+					country_event = {
+						id = ADISCORD_test_wars.1
+						days = 30
+					}
+				}
+				set_global_flag = skip_default_capitulation
 			}
+
+			# APH loses the APH / OSF scripted test war.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_aph_osf_test_war_active
+					NOT = { has_global_flag = ADISCORD_aph_osf_test_war_finished }
+					ROOT = { original_tag = APH }
+				}
+
+				clr_global_flag = ADISCORD_aph_osf_test_war_active
+				set_global_flag = ADISCORD_aph_osf_test_war_finished
+				set_global_flag = skip_default_capitulation
+
+				APH = {
+					if = {
+						limit = { has_war_with = OSF }
+						white_peace = OSF
+					}
+				}
+			}
+
+			# APH wins the APH / OSF scripted test war.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_aph_osf_test_war_active
+					NOT = { has_global_flag = ADISCORD_aph_osf_test_war_finished }
+
+					FROM = { original_tag = APH }
+					ROOT = { original_tag = OSF }
+
+					APH = { NOT = { has_capitulated = yes } }
+					OSF = { has_capitulated = yes }
+				}
+
+				clr_global_flag = ADISCORD_aph_osf_test_war_active
+				set_global_flag = ADISCORD_aph_osf_test_war_finished
+				set_global_flag = skip_default_capitulation
+
+				APH = {
+					white_peace = OSF
+
+					annex_country = {
+						target = OSF
+						transfer_troops = no
+					}
+				}
+			}
+
+			clr_global_flag = skip_default_capitulation
 		}
+	}
 
 	on_declare_war = {
 		effect = {
@@ -260,4 +308,4 @@ on_actions = {
 			}
 		}
 	}
-} 
+}

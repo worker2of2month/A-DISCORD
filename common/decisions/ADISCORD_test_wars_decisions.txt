@@ -1,0 +1,95 @@
+ADISCORD_test_wars_category = {
+
+	VAL_start_test_war_with_STP = {
+		visible = {
+			tag = VAL
+			is_ai = no
+		}
+
+		cost = 0
+
+		fire_only_once = yes
+
+		complete_effect = {
+			declare_war_on = { target = STP type = annex_everything }
+		}
+
+		ai_will_do = { factor = 1 }
+	}
+
+	VAL_start_test_war_with_CIN = {
+		visible = {
+			tag = VAL
+			is_ai = no
+		}
+
+		available = {
+			CIN = { NOT = { is_in_faction = yes } }
+			OSF = { NOT = { is_in_faction = yes } }
+			APH = { NOT = { is_in_faction = yes } }
+			NOT = { has_war_with = CIN }
+			NOT = { has_war_with = OSF }
+			NOT = { has_war_with = APH }
+		}
+
+		cost = 0
+
+		fire_only_once = yes
+
+		complete_effect = {
+			CIN = {
+				add_ideas = ADISCORD_test_capitulation_resistance
+				create_faction = ADISCORD_test_cin_war_faction
+				add_to_faction = OSF
+				add_to_faction = APH
+			}
+
+			OSF = {
+				add_ideas = ADISCORD_test_capitulation_resistance
+			}
+
+			APH = {
+				add_ideas = ADISCORD_test_capitulation_resistance
+			}
+
+			declare_war_on = { target = CIN type = annex_everything }
+			declare_war_on = { target = OSF type = annex_everything }
+			declare_war_on = { target = APH type = annex_everything }
+		}
+
+		ai_will_do = { factor = 1 }
+	}
+
+	APH_start_test_war_with_OSF = {
+		visible = {
+			tag = APH
+			has_country_flag = ADISCORD_aph_osf_test_war_decision_unlocked
+			NOT = { has_global_flag = ADISCORD_aph_osf_test_war_active }
+			NOT = { has_global_flag = ADISCORD_aph_osf_test_war_finished }
+		}
+
+		available = {
+			OSF = { exists = yes }
+			NOT = { has_capitulated = yes }
+			OSF = { NOT = { has_capitulated = yes } }
+			NOT = { is_in_faction_with = OSF }
+			NOT = { has_war_with = OSF }
+		}
+
+		cost = 0
+
+		complete_effect = {
+			set_global_flag = ADISCORD_aph_osf_test_war_active
+			clr_global_flag = ADISCORD_aph_osf_test_war_finished
+			clr_country_flag = ADISCORD_aph_osf_test_war_decision_unlocked
+
+			OSF = {
+				if = { limit = { is_in_faction_with = APH } leave_faction = yes }
+			}
+
+			declare_war_on = { target = OSF type = annex_everything }
+		}
+
+		ai_will_do = { factor = 1 }
+	}
+}

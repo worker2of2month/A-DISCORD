@@ -12,4 +12,31 @@ characters = {
 			id = -1
 		}
 	}
+
+	APH_Gorak_Bonecleaver = {
+		name = APH_Gorak_Bonecleaver
+		portraits = {
+			army = {
+				large = GFX_portrait_APH_Gorak_Bonecleaver
+			}
+		}
+		corps_commander = {
+			traits = {
+				brilliant_strategist
+				organizer
+				infantry_leader
+				commando
+				trickster
+				adaptable
+				scavenger
+				aggressive_assaulter
+			}
+			skill = 9
+			attack_skill = 9
+			defense_skill = 8
+			planning_skill = 8
+			logistics_skill = 7
+			legacy_id = -1
+		}
+	}
 }

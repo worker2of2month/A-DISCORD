@@ -1,0 +1,10 @@
+﻿l_russian:
+ ADISCORD_test_wars_category: "Тестовые войны"
+ ADISCORD_test_wars_category_desc: "Тестовые решения для проверки региональных конфликтов."
+ VAL_start_test_war_with_CIN: "Тест: война с CIN"
+ VAL_start_test_war_with_CIN_desc: "Начать тестовую войну VAL против CIN. OSF и APH вступят во временный альянс с CIN и будут втянуты в конфликт."
+ APH_start_test_war_with_OSF: "Тест: война с OSF"
+ APH_start_test_war_with_OSF_desc: "Начать последующий тестовый конфликт APH против OSF. При победе APH аннексирует OSF; при поражении границы не изменятся."
+ ADISCORD_test_capitulation_resistance: "Тестовая стойкость режима"
+ ADISCORD_test_capitulation_resistance_desc: "Временный тестовый модификатор: страна капитулирует заметно позже обычного."
+ ADISCORD_test_cin_war_faction: "Тестовая коалиция CIN"

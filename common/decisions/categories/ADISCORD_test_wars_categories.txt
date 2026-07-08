@@ -1,0 +1,10 @@
+ADISCORD_test_wars_category = {
+	allowed = {
+		OR = {
+			tag = VAL
+			tag = APH
+		}
+	}
+
+	visible_when_empty = yes
+}

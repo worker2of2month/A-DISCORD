@@ -2,6 +2,7 @@ capital = 64
 oob = "APH"
 
 recruit_character = APH_Urgan_Bloodtooth
+recruit_character = APH_Gorak_Bonecleaver
 
 set_politics = {
 	ruling_party = chauvinism

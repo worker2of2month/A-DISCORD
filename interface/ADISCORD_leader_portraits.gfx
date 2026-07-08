@@ -177,7 +177,11 @@ spriteTypes = {
 ###APH
 	spriteType = {
 	  	name = "GFX_portrait_APH_Urgan_Bloodtooth"
-	  	texturefile = "gfx/leaders/APH/portrait.png"
+	  	texturefile = "gfx/leaders/APH/portrait_APH_Urgan_Bloodtooth.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_APH_Gorak_Bonecleaver"
+	  	texturefile = "gfx/leaders/APH/portrait_APH_Gorak_Bonecleaver.png"
 	}
 
 ###PLACEHOLDER or default shit
