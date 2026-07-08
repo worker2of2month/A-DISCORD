@@ -1,5 +1,6 @@
 soundeffect = {
 	name = ADISCORD_pol_menu_open_sound
+	category = "UI"
 	volume = 1
 	sounds = {
 		sound = ADISCORD_pol_menu_open_sound
@@ -7,6 +8,7 @@ soundeffect = {
 }
 soundeffect = {
 	name = ADISCORD_pol_menu_close_sound
+	category = "UI"
 	volume = 1
 	sounds = {
 		sound = ADISCORD_pol_menu_close_sound

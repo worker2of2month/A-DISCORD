@@ -1,7 +1,0 @@
-guiTypes = {
-	containerWindowType = {
-		name = "one_minute_stations_entry"
-		size = { width = 0 height = 0 }
-		clipping = no
-	}
-}

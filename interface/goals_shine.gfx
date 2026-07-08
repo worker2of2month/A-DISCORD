@@ -91,4 +91,197 @@ spriteTypes = {
 		legacy_lazy_load = no
 	}
 
+	SpriteType = {
+		name = "GFX_focus_STP_Side_With_Maksim_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Side_With_Maksim.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Side_With_Maksim.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_STP_Side_With_The_Party_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Side_With_The_Party.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Side_With_The_Party.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_STP_Operation_Last_Banquette_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Operation_Last_Banquette.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Operation_Last_Banquette.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_STP_Open_Wounds_Of_The_System_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Open_Wounds_Of_The_System.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Open_Wounds_Of_The_System.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_STP_Ruin_Their_Deal_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Ruin_Their_Deal.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Ruin_Their_Deal.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_STP_It_Has_Only_Begun_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_It_Has_Only_Begun.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_It_Has_Only_Begun.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "STP_bookmark_maksim_shine"
+		texturefile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_maksim.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_maksim.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "STP_bookmark_party_shine"
+		texturefile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_party.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_party.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "STP_bookmark_operation_shine"
+		texturefile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_operation.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_operation.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = { name = "GFX_goal_generic_allies_build_infantry_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_army_doctrines_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_attack_allies_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_construct_civ_factory_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_construct_infrastructure_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_construct_mil_factory_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_consumer_goods_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_dangerous_deal_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_demand_territory_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_major_war_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_military_sphere_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_more_territorial_claims_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_national_unity_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_political_pressure_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_positive_trade_relations_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_production_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_production2_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_propaganda_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_scientific_exchange_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_special_forces_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_trade_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+
 }

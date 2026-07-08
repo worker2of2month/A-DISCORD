@@ -423,6 +423,20 @@ guiTypes = {
 				name = "Background"		
 				spriteType ="GFX_pol_goal_bg"
 			}
+
+			iconType = {
+				name = "continuous_glow"
+				position = { x = -10000 y = -10000 }
+				quadTextureSprite = "GFX_tiled_window_transparent"
+				alwaystransparent = yes
+			}
+
+			iconType = {
+				name = "continuous_small_glow"
+				position = { x = -10000 y = -10000 }
+				quadTextureSprite = "GFX_tiled_window_transparent"
+				alwaystransparent = yes
+			}
 			
 			buttonType = {
 				name = "add_national_goal_button"

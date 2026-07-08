@@ -424,8 +424,6 @@ def check_gfx_root_entity_mirrors(limit):
         "ADISCORD_vanilla_unit_entity_compat.asset",
         "buildings.asset",
         "infantry.gfx",
-        "mapitems_custom.asset",
-        "mapitems_custom.gfx",
         "particle_entities.asset",
         "particles.gfx",
         "particles_custom.gfx",

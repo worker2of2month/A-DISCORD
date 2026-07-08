@@ -1,105 +1,220 @@
 # common/scripted_effects/ADISCORD_building_distribution.txt
 
-# Reusable state placement helper.
-# Usage:
-#   ADISCORD_place_starting_building = { BUILDING = ADISCORD_commercial_office LEVEL = 1 }
-ADISCORD_place_starting_building = {
-	random_owned_controlled_state = {
-		limit = {
-			is_core_of = ROOT
-			free_building_slots = {
-				building = $BUILDING$
-				size > 0
-				include_locked = yes
-			}
-		}
-		add_building_construction = {
-			type = $BUILDING$
-			level = $LEVEL$
-			instant_build = yes
-		}
-	}
-}
-
-ADISCORD_place_starting_building_capital = {
-	capital_scope = {
-		if = {
-			limit = {
-				free_building_slots = {
-					building = $BUILDING$
-					size > 0
-					include_locked = yes
-				}
-			}
-			add_building_construction = {
-				type = $BUILDING$
-				level = $LEVEL$
-				instant_build = yes
-			}
-		}
-	}
-}
-
-# One-shot distribution. Call from the startup event.
 ADISCORD_distribute_starting_buildings_by_country = {
 	if = {
-		limit = { has_country_flag = ADISCORD_starting_buildings_distributed }
-		return = yes
-	}
+		limit = { NOT = { has_country_flag = ADISCORD_starting_buildings_distributed } }
 
-	# STP: developed/service-heavy start.
-	if = {
-		limit = { tag = STP }
-		ADISCORD_place_starting_building_capital = { BUILDING = ADISCORD_fiscal_administration LEVEL = 1 }
-		ADISCORD_place_starting_building_capital = { BUILDING = ADISCORD_commercial_office LEVEL = 1 }
-		ADISCORD_place_starting_building = { BUILDING = ADISCORD_commercial_office LEVEL = 1 }
-		ADISCORD_place_starting_building = { BUILDING = ADISCORD_logistics_hub LEVEL = 1 }
-		ADISCORD_place_starting_building = { BUILDING = ADISCORD_technical_institute LEVEL = 1 }
-	}
-
-	# WRK: industrial base.
-	if = {
-		limit = { tag = WRK }
-		ADISCORD_place_starting_building_capital = { BUILDING = ADISCORD_fiscal_administration LEVEL = 1 }
-		ADISCORD_place_starting_building = { BUILDING = ADISCORD_industrial_cluster LEVEL = 1 }
-		ADISCORD_place_starting_building = { BUILDING = ADISCORD_industrial_cluster LEVEL = 1 }
-		ADISCORD_place_starting_building = { BUILDING = ADISCORD_logistics_hub LEVEL = 1 }
-	}
-
-	# VAL: mixed industry / logistics / commerce.
-	if = {
-		limit = { tag = VAL }
-		ADISCORD_place_starting_building = { BUILDING = ADISCORD_industrial_cluster LEVEL = 1 }
-		ADISCORD_place_starting_building = { BUILDING = ADISCORD_industrial_cluster LEVEL = 1 }
-		ADISCORD_place_starting_building = { BUILDING = ADISCORD_logistics_hub LEVEL = 1 }
-		ADISCORD_place_starting_building = { BUILDING = ADISCORD_commercial_office LEVEL = 1 }
-	}
-
-	# Secondary developed countries: replace TODO_TAG_* with actual tags.
-	if = {
-		limit = {
-			OR = {
-				tag = TODO_TAG_DEVELOPED_1
-				tag = TODO_TAG_DEVELOPED_2
-				tag = TODO_TAG_DEVELOPED_3
+		# STP: developed/service-heavy start.
+		if = {
+			limit = { tag = STP }
+			capital_scope = {
+				if = {
+					limit = {
+						free_building_slots = {
+							building = ADISCORD_fiscal_administration
+							size > 0
+							include_locked = yes
+						}
+					}
+					add_building_construction = {
+						type = ADISCORD_fiscal_administration
+						level = 1
+						instant_build = yes
+					}
+				}
+				if = {
+					limit = {
+						free_building_slots = {
+							building = ADISCORD_commercial_office
+							size > 0
+							include_locked = yes
+						}
+					}
+					add_building_construction = {
+						type = ADISCORD_commercial_office
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = ADISCORD_commercial_office
+						size > 0
+						include_locked = yes
+					}
+				}
+				add_building_construction = {
+					type = ADISCORD_commercial_office
+					level = 1
+					instant_build = yes
+				}
+			}
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = ADISCORD_logistics_hub
+						size > 0
+						include_locked = yes
+					}
+				}
+				add_building_construction = {
+					type = ADISCORD_logistics_hub
+					level = 1
+					instant_build = yes
+				}
+			}
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = ADISCORD_technical_institute
+						size > 0
+						include_locked = yes
+					}
+				}
+				add_building_construction = {
+					type = ADISCORD_technical_institute
+					level = 1
+					instant_build = yes
+				}
 			}
 		}
-		ADISCORD_place_starting_building_capital = { BUILDING = ADISCORD_fiscal_administration LEVEL = 1 }
-		ADISCORD_place_starting_building = { BUILDING = ADISCORD_commercial_office LEVEL = 1 }
-		ADISCORD_place_starting_building = { BUILDING = ADISCORD_technical_institute LEVEL = 1 }
-	}
 
-	# Peripheral countries: 0-1 building; fiscal/admin is safer than heavy industry.
-	if = {
-		limit = {
-			OR = {
-				tag = TODO_TAG_PERIPHERY_1
-				tag = TODO_TAG_PERIPHERY_2
-				tag = TODO_TAG_PERIPHERY_3
+		# WRK: industrial base.
+		if = {
+			limit = { tag = WRK }
+			capital_scope = {
+				if = {
+					limit = {
+						free_building_slots = {
+							building = ADISCORD_fiscal_administration
+							size > 0
+							include_locked = yes
+						}
+					}
+					add_building_construction = {
+						type = ADISCORD_fiscal_administration
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = ADISCORD_industrial_cluster
+						size > 0
+						include_locked = yes
+					}
+				}
+				add_building_construction = {
+					type = ADISCORD_industrial_cluster
+					level = 1
+					instant_build = yes
+				}
+			}
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = ADISCORD_industrial_cluster
+						size > 0
+						include_locked = yes
+					}
+				}
+				add_building_construction = {
+					type = ADISCORD_industrial_cluster
+					level = 1
+					instant_build = yes
+				}
+			}
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = ADISCORD_logistics_hub
+						size > 0
+						include_locked = yes
+					}
+				}
+				add_building_construction = {
+					type = ADISCORD_logistics_hub
+					level = 1
+					instant_build = yes
+				}
 			}
 		}
-		ADISCORD_place_starting_building_capital = { BUILDING = ADISCORD_fiscal_administration LEVEL = 1 }
-	}
 
-	set_country_flag = ADISCORD_starting_buildings_distributed
+		# VAL: mixed industry / logistics / commerce.
+		if = {
+			limit = { tag = VAL }
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = ADISCORD_industrial_cluster
+						size > 0
+						include_locked = yes
+					}
+				}
+				add_building_construction = {
+					type = ADISCORD_industrial_cluster
+					level = 1
+					instant_build = yes
+				}
+			}
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = ADISCORD_industrial_cluster
+						size > 0
+						include_locked = yes
+					}
+				}
+				add_building_construction = {
+					type = ADISCORD_industrial_cluster
+					level = 1
+					instant_build = yes
+				}
+			}
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = ADISCORD_logistics_hub
+						size > 0
+						include_locked = yes
+					}
+				}
+				add_building_construction = {
+					type = ADISCORD_logistics_hub
+					level = 1
+					instant_build = yes
+				}
+			}
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					free_building_slots = {
+						building = ADISCORD_commercial_office
+						size > 0
+						include_locked = yes
+					}
+				}
+				add_building_construction = {
+					type = ADISCORD_commercial_office
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+
+		set_country_flag = ADISCORD_starting_buildings_distributed
+	}
 }
