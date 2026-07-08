@@ -1,0 +1,15 @@
+characters = {
+	APH_Urgan_Bloodtooth = {
+		name = APH_Urgan_Bloodtooth
+		portraits = {
+			civilian = {
+				large = GFX_portrait_APH_Urgan_Bloodtooth
+			}
+		}
+		country_leader = {
+			ideology = chauvinism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+		}
+	}
+}

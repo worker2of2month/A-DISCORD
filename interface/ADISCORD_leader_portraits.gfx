@@ -50,6 +50,34 @@ spriteTypes = {
 	  	name = "GFX_portrait_STP_Petr_Ivanov_animated"
 	  	texturefile = "gfx/leaders/STP/portrait_STP_Petr_Ivanov.png"
 	}
+	spriteType = {
+	  	name = "GFX_portrait_STP_general_1"
+	  	texturefile = "gfx/leaders/STP/general 1.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_STP_general_2"
+	  	texturefile = "gfx/leaders/STP/general 2.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_STP_general_3"
+	  	texturefile = "gfx/leaders/STP/general 3.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_STP_general_4"
+	  	texturefile = "gfx/leaders/STP/general 4.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_STP_general_5"
+	  	texturefile = "gfx/leaders/STP/general 5.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_STP_field_marshal_1"
+	  	texturefile = "gfx/leaders/STP/field marshal.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_STP_field_marshal_2"
+	  	texturefile = "gfx/leaders/STP/field marshal 2.png"
+	}
 ###IVN
 	spriteType = {
 	  	name = "GFX_portrait_IVN_Vadim_Ivanchik"
@@ -145,6 +173,11 @@ spriteTypes = {
 	spriteType = {
 	  	name = "GFX_portrait_BJK_Graison"
 	  	texturefile = "gfx/leaders/BJK/portrait_BJK_Graison.png"
+	}
+###APH
+	spriteType = {
+	  	name = "GFX_portrait_APH_Urgan_Bloodtooth"
+	  	texturefile = "gfx/leaders/APH/portrait.png"
 	}
 
 ###PLACEHOLDER or default shit

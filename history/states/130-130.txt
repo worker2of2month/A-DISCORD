@@ -1,0 +1,16 @@
+state={
+	id=130
+	name="STATE_130"
+	provinces={
+		3447 3598 8536 9657 9790 9862 11613 12284 
+	}
+	manpower=40000
+	state_category = rural
+	buildings_max_level_factor=1
+	local_supplies=0
+
+	history={
+		owner = IVN
+		add_core_of = IVN
+	}
+}

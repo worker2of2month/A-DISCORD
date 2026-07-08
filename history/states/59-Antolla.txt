@@ -4,9 +4,18 @@ state={
 	provinces={
 		3595 6206 6885 9285 10404
 	}
-	manpower=0
+	manpower=32000
 
-	state_category = wasteland
+	state_category = rural
 	buildings_max_level_factor=1.000
 	local_supplies=0.000
+
+	history = {
+		owner = CIN
+		buildings = {
+			infrastructure = 1
+		}
+		add_core_of = CIN
+		victory_points = { 10404 1 }
+	}
 }

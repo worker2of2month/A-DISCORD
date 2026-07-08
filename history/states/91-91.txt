@@ -11,8 +11,8 @@ state={
 	local_supplies=0.000
 
 	history = {
-        owner = PWR
-        add_core_of = PWR
-        set_demilitarized_zone = yes
+		owner = PWR
+		add_core_of = PWR
+		set_demilitarized_zone = yes
 	}
 }

@@ -1,0 +1,11 @@
+add_namespace = ADISCORD_building_distribution
+
+country_event = {
+	id = ADISCORD_building_distribution.1
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_distribute_starting_buildings_by_country = yes
+	}
+}

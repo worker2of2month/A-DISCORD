@@ -4,6 +4,13 @@ capital = 28
 
 recruit_character = STP_Petr_Ivanov
 recruit_character = STP_maksim_shabrat
+recruit_character = STP_Roland_Keitel
+recruit_character = STP_Maurice_Dallon
+recruit_character = STP_Leonid_Barchel
+recruit_character = STP_Edmund_Ravel
+recruit_character = STP_Viktor_Marent
+recruit_character = STP_Severin_Drake
+recruit_character = STP_August_Veil
 
 ####### Basic shit
 

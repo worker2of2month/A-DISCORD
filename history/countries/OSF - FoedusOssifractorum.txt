@@ -1,0 +1,42 @@
+capital = 62
+oob = "OSF"
+
+recruit_character = OSF_Tiber_Marrowkeeper
+
+set_politics = {
+	ruling_party = chauvinism
+	last_election = "2141.9.9"
+	elections_allowed = no
+}
+
+set_popularities = {
+	chauvinism = 58
+	anarchism = 31
+	pragmatism = 11
+}
+
+set_stability = 0.22
+set_war_support = 0.35
+set_research_slots = 1
+
+add_ideas = {
+	ADISCORD_society_type_traditional
+	ADISCORD_economic_system_agrarian
+	ADISCORD_taxation_light_dues
+	ADISCORD_welfare_charity_relief
+	ADISCORD_education_informal_instruction
+	ADISCORD_industrial_policy_artisan_markets
+	volunteer_only
+	limited_exports
+	civilian_economy
+}
+
+set_technology = {
+	infantry_weapons = 1
+}
+
+add_equipment_to_stockpile = {
+	type = infantry_equipment
+	amount = 700
+	producer = OSF
+}

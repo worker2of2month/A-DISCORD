@@ -1,0 +1,11 @@
+state={
+	id=152
+	name="STATE_152"
+	provinces={
+		607 1709 1842 2273 2826 2990 3137 3335 3482 3971 4147 5241 5792 7217 7414 7944 8042 8621 9071 9393 9475 9477 9768 9806 10787 11065 12727 12864 
+	}
+	manpower=140000
+	state_category = rural
+	buildings_max_level_factor=1
+	local_supplies=0
+}

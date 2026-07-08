@@ -1,0 +1,117 @@
+division_template = {
+	name = "Blood Kin Warband"
+	division_names_group = ADISCORD_INF_01
+	regiments = {
+		infantry = { x = 0 y = 0 }
+		infantry = { x = 0 y = 1 }
+	}
+}
+
+division_template = {
+	name = "Anthropophagic Raiders"
+	division_names_group = ADISCORD_INF_01
+	regiments = {
+		infantry = { x = 0 y = 0 }
+		infantry = { x = 0 y = 1 }
+		infantry = { x = 1 y = 0 }
+	}
+}
+
+division_template = {
+	name = "Red Maw Guard"
+	division_names_group = ADISCORD_INF_01
+	regiments = {
+		infantry = { x = 0 y = 0 }
+		infantry = { x = 0 y = 1 }
+		infantry = { x = 1 y = 0 }
+		infantry = { x = 1 y = 1 }
+	}
+}
+
+division_template = {
+	name = "Devourer Chosen"
+	division_names_group = ADISCORD_INF_01
+	regiments = {
+		mountaineers = { x = 0 y = 0 }
+		mountaineers = { x = 0 y = 1 }
+		mountaineers = { x = 0 y = 2 }
+		mountaineers = { x = 1 y = 0 }
+		mountaineers = { x = 1 y = 1 }
+		mountaineers = { x = 1 y = 2 }
+		mountaineers = { x = 2 y = 0 }
+		mountaineers = { x = 2 y = 1 }
+		mountaineers = { x = 2 y = 2 }
+	}
+	support = {
+		engineer = { x = 0 y = 0 }
+		artillery = { x = 0 y = 1 }
+	}
+}
+
+units = {
+	division = {
+		division_name = { is_name_ordered = yes name_order = 1 }
+		location = 16499
+		division_template = "Devourer Chosen"
+		start_experience_factor = 1.00
+		start_equipment_factor = 1.00
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 2 }
+		location = 16338
+		division_template = "Devourer Chosen"
+		start_experience_factor = 1.00
+		start_equipment_factor = 1.00
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 3 }
+		location = 16319
+		division_template = "Blood Kin Warband"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.35
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 4 }
+		location = 16465
+		division_template = "Blood Kin Warband"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.35
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 5 }
+		location = 16319
+		division_template = "Anthropophagic Raiders"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.42
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 6 }
+		location = 16465
+		division_template = "Red Maw Guard"
+		start_experience_factor = 0.20
+		start_equipment_factor = 0.50
+	}
+}
+
+##### No notable air forces #####
+
+instant_effect = {
+	add_equipment_production = {
+		equipment = { type = infantry_equipment_0 creator = "APH" }
+		requested_factories = 3
+		progress = 0.75
+		efficiency = 75
+	}
+	add_equipment_production = {
+		equipment = { type = support_equipment_1 }
+		requested_factories = 1
+		progress = 0.55
+		efficiency = 55
+	}
+	add_equipment_production = {
+		equipment = { type = artillery_equipment_1 }
+		requested_factories = 1
+		progress = 0.55
+		efficiency = 55
+	}
+}

@@ -1,0 +1,16 @@
+state={
+	id=145
+	name="STATE_145"
+	provinces={
+		765 2168 3448 3887 5282 6729 6749 10605 11658 
+	}
+	manpower=45000
+	state_category = rural
+	buildings_max_level_factor=1
+	local_supplies=0
+
+	history={
+		owner = ROM
+		add_core_of = ROM
+	}
+}

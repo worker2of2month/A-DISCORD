@@ -31,4 +31,130 @@ characters = {
 			id = -1
 		}
 	}
+
+	STP_Roland_Keitel = {
+		name = STP_Roland_Keitel
+		portraits = {
+			army = {
+				large = GFX_portrait_STP_general_1
+			}
+		}
+		corps_commander = {
+			traits = { old_guard }
+			skill = 1
+			attack_skill = 1
+			defense_skill = 2
+			planning_skill = 1
+			logistics_skill = 2
+			legacy_id = -1
+		}
+	}
+
+	STP_Maurice_Dallon = {
+		name = STP_Maurice_Dallon
+		portraits = {
+			army = {
+				large = GFX_portrait_STP_general_2
+			}
+		}
+		corps_commander = {
+			traits = { organizer }
+			skill = 2
+			attack_skill = 2
+			defense_skill = 2
+			planning_skill = 3
+			logistics_skill = 2
+			legacy_id = -1
+		}
+	}
+
+	STP_Leonid_Barchel = {
+		name = STP_Leonid_Barchel
+		portraits = {
+			army = {
+				large = GFX_portrait_STP_general_3
+			}
+		}
+		corps_commander = {
+			traits = { commando }
+			skill = 3
+			attack_skill = 4
+			defense_skill = 2
+			planning_skill = 2
+			logistics_skill = 2
+			legacy_id = -1
+		}
+	}
+
+	STP_Edmund_Ravel = {
+		name = STP_Edmund_Ravel
+		portraits = {
+			army = {
+				large = GFX_portrait_STP_general_4
+			}
+		}
+		corps_commander = {
+			traits = { infantry_leader }
+			skill = 3
+			attack_skill = 2
+			defense_skill = 4
+			planning_skill = 3
+			logistics_skill = 3
+			legacy_id = -1
+		}
+	}
+
+	STP_Viktor_Marent = {
+		name = STP_Viktor_Marent
+		portraits = {
+			army = {
+				large = GFX_portrait_STP_general_5
+			}
+		}
+		corps_commander = {
+			traits = { brilliant_strategist }
+			skill = 4
+			attack_skill = 4
+			defense_skill = 3
+			planning_skill = 4
+			logistics_skill = 3
+			legacy_id = -1
+		}
+	}
+
+	STP_Severin_Drake = {
+		name = STP_Severin_Drake
+		portraits = {
+			army = {
+				large = GFX_portrait_STP_field_marshal_1
+			}
+		}
+		field_marshal = {
+			traits = { offensive_doctrine logistics_wizard }
+			skill = 5
+			attack_skill = 5
+			defense_skill = 4
+			planning_skill = 5
+			logistics_skill = 5
+			legacy_id = -1
+		}
+	}
+
+	STP_August_Veil = {
+		name = STP_August_Veil
+		portraits = {
+			army = {
+				large = GFX_portrait_STP_field_marshal_2
+			}
+		}
+		field_marshal = {
+			traits = { defensive_doctrine }
+			skill = 6
+			attack_skill = 5
+			defense_skill = 6
+			planning_skill = 6
+			logistics_skill = 5
+			legacy_id = -1
+		}
+	}
 }

@@ -1,0 +1,15 @@
+# common/on_actions/ADISCORD_building_distribution_on_actions.txt
+# Merge this into an existing ADISCORD on_actions file if you already have one.
+
+on_actions = {
+	on_startup = {
+		effect = {
+			every_country = {
+				limit = {
+					NOT = { has_country_flag = ADISCORD_starting_buildings_distributed }
+				}
+				country_event = { id = ADISCORD_building_distribution.1 days = 1 }
+			}
+		}
+	}
+}
