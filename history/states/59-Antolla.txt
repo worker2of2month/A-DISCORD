@@ -18,4 +18,9 @@ state={
 		add_core_of = CIN
 		victory_points = { 10404 1 }
 	}
+	resources = {
+        tungsten = 1
+        aluminium = 4
+        steel = 8
+    }
 }

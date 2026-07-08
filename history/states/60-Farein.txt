@@ -19,4 +19,7 @@ state={
 		add_core_of = CIN
 		victory_points = { 16340 2 }
 	}
+	resources = {
+        steel = 11
+    }
 }
