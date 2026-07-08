@@ -78,16 +78,19 @@ on_actions = {
 					}
 				}
 				ADISCORD_economy_initialize_country = yes
+				# V19 TDA-core: disabled hidden startup economic pseudo-building distribution.
+				# ADISCORD_distribute_starting_buildings_by_country = yes
 			}
 		}
 	}
 	on_monthly = {
 		effect = {
-			every_country = {
+			# HOI4 monthly pulse is already country-scoped. Do not every_country here.
+			if = {
 				limit = { ADISCORD_economy_should_monthly_update = yes }
 				ADISCORD_economy_monthly_update = yes
 			}
-			every_country = {
+			if = {
 				limit = { OR = { ADISCORD_is_playable_development_country = yes is_ai = no } }
 				ADISCORD_tick_all_society_development_monthly = yes
 			}
@@ -95,7 +98,8 @@ on_actions = {
 	}
 	on_weekly = {
 		effect = {
-			every_country = {
+			# Country-scoped weekly GUI refresh, TDA-style.
+			if = {
 				limit = { is_ai = no }
 				ADISCORD_economy_weekly_player_refresh = yes
 			}
@@ -104,11 +108,12 @@ on_actions = {
 
 	on_yearly = {
 		effect = {
-			every_country = {
+			# Country-scoped yearly update. The trigger decides whether this country is secondary-tier.
+			if = {
 				limit = { ADISCORD_economy_should_yearly_update = yes }
 				ADISCORD_economy_yearly_update = yes
 			}
-			every_country = {
+			if = {
 				limit = {
 					ADISCORD_is_secondary_development_country = yes
 					is_ai = yes

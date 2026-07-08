@@ -1,4 +1,4 @@
-﻿focus_tree = {
+focus_tree = {
 	id = STP_focus
 	country = {
 		factor = 0

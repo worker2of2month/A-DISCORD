@@ -22,10 +22,16 @@ ideas = {
 			  political_power_gain = 0.10
 			  industrial_capacity_factory = 0.05
 			  production_speed_industrial_complex_factor = 0.10
-			  consumer_goods_factor = 0.08
+			  consumer_goods_factor = 0.03
 			  war_support_factor = -0.12
 			  conscription_factor = -0.05
 			  army_org_regain = -0.05
+			  ADISCORD_economy_trade_income_factor = 0.15
+			  ADISCORD_economy_civilian_factory_income_factor = 0.10
+			  ADISCORD_economy_building_income_factor = 0.05
+			  ADISCORD_economy_social_expense_factor = 0.10
+			  ADISCORD_economy_state_overload_gain_factor = 0.05
+			  ADISCORD_country_development_society_growth_factor = -0.05
 			}
 		}
 	}

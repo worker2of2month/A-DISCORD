@@ -17,7 +17,9 @@ defined_text = {
 	text = { trigger = { check_variable = { var = ADISCORD_economy_cycle_phase value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_cycle_2 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_cycle_phase value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_cycle_3 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_cycle_phase value = 4 compare = less_than_or_equals } } localization_key = ADISCORD_economy_cycle_4 }
-	text = { localization_key = ADISCORD_economy_cycle_5 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_cycle_phase value = 5 compare = less_than_or_equals } } localization_key = ADISCORD_economy_cycle_5 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_cycle_phase value = 6 compare = less_than_or_equals } } localization_key = ADISCORD_economy_cycle_6 }
+	text = { localization_key = ADISCORD_economy_cycle_7 }
 }
 
 defined_text = {
@@ -69,4 +71,14 @@ defined_text = {
 	text = { trigger = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_tax_burden_mode_3 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 4 compare = less_than_or_equals } } localization_key = ADISCORD_economy_tax_burden_mode_4 }
 	text = { localization_key = ADISCORD_economy_tax_burden_mode_5 }
+}
+
+defined_text = {
+	name = GetADISCORDEmissionLevelLoc
+	text = { trigger = { check_variable = { var = ADISCORD_economy_money_printing_level value = 0 compare = less_than_or_equals } } localization_key = ADISCORD_economy_emission_level_0 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_money_printing_level value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_emission_level_1 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_money_printing_level value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_emission_level_2 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_money_printing_level value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_emission_level_3 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_money_printing_level value = 4 compare = less_than_or_equals } } localization_key = ADISCORD_economy_emission_level_4 }
+	text = { localization_key = ADISCORD_economy_emission_level_5 }
 }

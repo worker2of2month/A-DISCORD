@@ -174,8 +174,15 @@ ADISCORD_economy_has_low_treasury = { check_variable = { var = ADISCORD_economy_
 ADISCORD_economy_has_large_reserve = { check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals } }
 
 ADISCORD_economy_has_debt = { check_variable = { var = ADISCORD_economy_debt value = 1 compare = greater_than_or_equals } }
-ADISCORD_economy_has_high_debt = { check_variable = { var = ADISCORD_economy_debt value = 300 compare = greater_than_or_equals } }
+ADISCORD_economy_has_high_debt = {
+	OR = {
+		check_variable = { var = ADISCORD_economy_debt value = 300 compare = greater_than_or_equals }
+		check_variable = { var = ADISCORD_economy_debt_ratio value = 60 compare = greater_than_or_equals }
+	}
+}
 ADISCORD_economy_has_high_inflation = { check_variable = { var = ADISCORD_economy_inflation value = 25 compare = greater_than_or_equals } }
+ADISCORD_economy_has_fiscal_stress = { check_variable = { var = ADISCORD_economy_fiscal_stress value = 35 compare = greater_than_or_equals } }
+ADISCORD_economy_has_debt_crisis = { check_variable = { var = ADISCORD_economy_debt_crisis_level value = 2 compare = greater_than_or_equals } }
 
 ADISCORD_economy_has_high_war_fatigue = { check_variable = { var = ADISCORD_economy_war_fatigue_level value = 2 compare = greater_than_or_equals } }
 ADISCORD_economy_has_high_stretched = { check_variable = { var = ADISCORD_economy_stretched_level value = 2 compare = greater_than_or_equals } }
@@ -260,13 +267,57 @@ ADISCORD_economy_can_take_debt = {
 		NOT = { ADISCORD_economy_model_is_fragmented = yes }
 		ADISCORD_economy_model_allows_oligarchic_deals = yes
 	}
-	check_variable = { var = ADISCORD_economy_debt value = 900 compare = less_than }
+	check_variable = { var = ADISCORD_economy_debt_ratio value = 100 compare = less_than }
 	check_variable = { var = ADISCORD_economy_recent_debt value = 1 compare = less_than }
+}
+
+ADISCORD_economy_can_issue_internal_bonds = {
+	ADISCORD_economy_can_take_debt = yes
+}
+
+ADISCORD_economy_can_take_external_loan = {
+	ADISCORD_economy_can_take_debt = yes
+	check_variable = { var = ADISCORD_economy_creditworthiness value = 35 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_debt_crisis_level value = 4 compare = less_than }
 }
 
 ADISCORD_economy_can_print_money = {
 	check_variable = { var = ADISCORD_economy_recent_money_printing value = 1 compare = less_than }
+	check_variable = { var = ADISCORD_economy_money_printing_level value = 5 compare = less_than }
 	NOT = { ADISCORD_economy_is_overstretched = yes }
+}
+
+ADISCORD_economy_can_expand_money_emission = {
+	ADISCORD_economy_can_print_money = yes
+	check_variable = { var = ADISCORD_economy_fiscal_stress value = 85 compare = less_than }
+}
+
+ADISCORD_economy_can_reduce_money_emission = {
+	check_variable = { var = ADISCORD_economy_money_printing_level value = 0 compare = greater_than }
+}
+
+ADISCORD_economy_can_stabilize_macro = {
+	ADISCORD_economy_has_treasury_100 = yes
+	OR = {
+		check_variable = { var = ADISCORD_economy_inflation value = 15 compare = greater_than_or_equals }
+		check_variable = { var = ADISCORD_economy_fiscal_stress value = 25 compare = greater_than_or_equals }
+		check_variable = { var = ADISCORD_economy_deficit_pressure value = 25 compare = greater_than_or_equals }
+		check_variable = { var = ADISCORD_economy_price_shock value = 10 compare = greater_than_or_equals }
+	}
+}
+
+ADISCORD_economy_can_restructure_debt = {
+	ADISCORD_economy_has_debt = yes
+	check_variable = { var = ADISCORD_economy_debt value = 100 compare = greater_than_or_equals }
+	OR = {
+		check_variable = { var = ADISCORD_economy_debt_ratio value = 80 compare = greater_than_or_equals }
+		ADISCORD_economy_has_debt_crisis = yes
+	}
+}
+
+ADISCORD_economy_can_early_repay_debt = {
+	ADISCORD_economy_has_treasury_100 = yes
+	check_variable = { var = ADISCORD_economy_debt value = 100 compare = greater_than_or_equals }
 }
 
 ADISCORD_economy_can_use_war_taxes = {

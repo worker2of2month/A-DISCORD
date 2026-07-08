@@ -155,6 +155,33 @@ ADISCORD_economy_debt_service_factor = {
 	category = politics
 }
 
+ADISCORD_economy_debt_capacity_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_interest_rate_factor = {
+	color_type = bad
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_creditworthiness_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
 ADISCORD_economy_overall_expense_factor = {
 	color_type = bad
 	value_type = percentage
@@ -166,6 +193,78 @@ ADISCORD_economy_overall_expense_factor = {
 
 ADISCORD_economy_inflation_pressure_factor = {
 	color_type = bad
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_money_printing_efficiency_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_price_stability_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_deficit_pressure_factor = {
+	color_type = bad
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_fiscal_stress_gain_factor = {
+	color_type = bad
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_fiscal_stress_resistance_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_investment_confidence_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_treasury_capacity_factor = {
+	color_type = good
+	value_type = percentage
+	precision = 1
+	postfix = none
+	category = country
+	category = politics
+}
+
+ADISCORD_economy_reserve_growth_factor = {
+	color_type = good
 	value_type = percentage
 	precision = 1
 	postfix = none

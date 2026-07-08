@@ -85,6 +85,14 @@ ideas = {
 				max_fuel_factor = -0.25
 				fuel_gain_factor = -0.35
 				factory_energy_consumption = -0.25
+				ADISCORD_economy_civilian_factory_income_factor = 0.10
+				ADISCORD_economy_military_industry_income_factor = -0.10
+				ADISCORD_economy_army_expense_factor = -0.10
+				ADISCORD_economy_inflation_pressure_factor = -0.05
+				ADISCORD_economy_price_stability_factor = 0.05
+				ADISCORD_economy_creditworthiness_factor = 0.03
+				ADISCORD_economy_state_overload_gain_factor = -0.05
+				ADISCORD_country_development_economic_growth_factor = 0.03
 			}
 
 			default = yes
@@ -114,6 +122,10 @@ ideas = {
 				production_factory_max_efficiency_factor = -0.03
 				fuel_gain_factor = -0.20
 				factory_energy_consumption = -0.10
+				ADISCORD_economy_civilian_factory_income_factor = 0.05
+				ADISCORD_economy_military_industry_income_factor = 0.03
+				ADISCORD_economy_inflation_pressure_factor = -0.03
+				ADISCORD_economy_state_overload_gain_factor = -0.02
 			}
 
 			cancel_if_invalid = no
@@ -149,6 +161,13 @@ ideas = {
 				conversion_cost_mil_to_civ_factor = -0.10
 				fuel_gain_factor = -0.08
 				factory_energy_consumption = 0.05
+				ADISCORD_economy_military_industry_income_factor = 0.08
+				ADISCORD_economy_construction_expense_factor = 0.05
+				ADISCORD_economy_inflation_pressure_factor = 0.03
+				ADISCORD_economy_debt_capacity_factor = 0.05
+				ADISCORD_economy_deficit_pressure_factor = 0.03
+				ADISCORD_economy_state_overload_gain_factor = 0.05
+				ADISCORD_economy_war_fatigue_gain_factor = 0.03
 			}
 
 			cancel_if_invalid = no
@@ -195,6 +214,16 @@ ideas = {
 				conversion_cost_civ_to_mil_factor = -0.20
 				conversion_cost_mil_to_civ_factor = -0.20
 				factory_energy_consumption = 0.20
+				ADISCORD_economy_civilian_factory_income_factor = -0.05
+				ADISCORD_economy_military_industry_income_factor = 0.15
+				ADISCORD_economy_army_expense_factor = 0.10
+				ADISCORD_economy_construction_expense_factor = 0.10
+				ADISCORD_economy_inflation_pressure_factor = 0.08
+				ADISCORD_economy_debt_capacity_factor = 0.10
+				ADISCORD_economy_deficit_pressure_factor = 0.08
+				ADISCORD_economy_fiscal_stress_gain_factor = 0.05
+				ADISCORD_economy_state_overload_gain_factor = 0.10
+				ADISCORD_economy_war_fatigue_gain_factor = 0.05
 			}
 
 			cancel_if_invalid = no
@@ -235,6 +264,19 @@ ideas = {
 				conversion_cost_mil_to_civ_factor = -0.30
 				fuel_gain_factor = 0.05
 				factory_energy_consumption = 0.40
+				ADISCORD_economy_civilian_factory_income_factor = -0.15
+				ADISCORD_economy_military_industry_income_factor = 0.25
+				ADISCORD_economy_army_expense_factor = 0.20
+				ADISCORD_economy_construction_expense_factor = 0.15
+				ADISCORD_economy_inflation_pressure_factor = 0.15
+				ADISCORD_economy_debt_capacity_factor = 0.15
+				ADISCORD_economy_deficit_pressure_factor = 0.12
+				ADISCORD_economy_fiscal_stress_gain_factor = 0.10
+				ADISCORD_economy_investment_confidence_factor = -0.10
+				ADISCORD_economy_state_overload_gain_factor = 0.20
+				ADISCORD_economy_war_fatigue_gain_factor = 0.15
+				ADISCORD_economy_demobilization_pressure_gain_factor = 0.15
+				ADISCORD_country_development_economic_growth_factor = -0.10
 			}
 
 			cancel_if_invalid = no
@@ -270,6 +312,10 @@ ideas = {
 				research_speed_factor = 0.08
 				civilian_intel_to_others = 35.0
 				navy_intel_to_others = 20.0
+				ADISCORD_economy_trade_income_factor = 0.15
+				ADISCORD_economy_resource_rent_income_factor = -0.05
+				ADISCORD_economy_admin_expense_factor = -0.03
+				ADISCORD_country_development_economic_growth_factor = 0.05
 			}
 
 			cancel_if_invalid = no
@@ -294,6 +340,8 @@ ideas = {
 				research_speed_factor = 0.04
 				civilian_intel_to_others = 20.0
 				navy_intel_to_others = 10.0
+				ADISCORD_economy_trade_income_factor = 0.10
+				ADISCORD_economy_resource_rent_income_factor = 0.05
 			}
 
 			default = yes
@@ -333,6 +381,9 @@ ideas = {
 				civilian_intel_to_others = 10.0
 				navy_intel_to_others = 5.0
 				lend_lease_tension = 0.20
+				ADISCORD_economy_trade_income_factor = 0.03
+				ADISCORD_economy_resource_rent_income_factor = 0.08
+				ADISCORD_economy_admin_expense_factor = 0.03
 			}
 
 			cancel_if_invalid = no
@@ -370,6 +421,10 @@ ideas = {
 			modifier = {
 				min_export = 0
 				lend_lease_tension = 0.35
+				ADISCORD_economy_trade_income_factor = -0.15
+				ADISCORD_economy_resource_rent_income_factor = 0.10
+				ADISCORD_economy_admin_expense_factor = 0.05
+				ADISCORD_economy_state_overload_gain_factor = 0.05
 			}
 
 			on_add = { custom_effect_tooltip = closed_economy_TT }
@@ -406,6 +461,13 @@ ideas = {
 				research_speed_factor = -0.18
 				monthly_population = 0.10
 				factory_energy_consumption = -0.25
+				ADISCORD_economy_population_tax_income_factor = -0.05
+				ADISCORD_economy_resource_rent_income_factor = 0.10
+				ADISCORD_economy_civilian_factory_income_factor = -0.05
+				ADISCORD_economy_military_industry_income_factor = -0.10
+				ADISCORD_economy_debt_capacity_factor = -0.05
+				ADISCORD_economy_creditworthiness_factor = -0.05
+				ADISCORD_country_development_economic_growth_factor = -0.05
 			}
 
 			cancel_if_invalid = no
@@ -429,6 +491,12 @@ ideas = {
 				production_factory_efficiency_gain_factor = 0.06
 				research_speed_factor = -0.06
 				factory_energy_consumption = -0.08
+				ADISCORD_economy_civilian_factory_income_factor = 0.10
+				ADISCORD_economy_construction_expense_factor = 0.05
+				ADISCORD_economy_debt_capacity_factor = 0.05
+				ADISCORD_economy_investment_confidence_factor = 0.03
+				ADISCORD_economy_state_overload_gain_factor = 0.05
+				ADISCORD_country_development_economic_growth_factor = 0.05
 			}
 
 			cancel_if_invalid = no
@@ -461,6 +529,17 @@ ideas = {
 				research_speed_factor = 0.03
 				stability_factor = -0.02
 				war_support_factor = -0.05
+				ADISCORD_economy_tax_collection_factor = -0.05
+				ADISCORD_economy_trade_income_factor = 0.15
+				ADISCORD_economy_civilian_factory_income_factor = 0.10
+				ADISCORD_economy_admin_expense_factor = -0.05
+				ADISCORD_economy_debt_capacity_factor = 0.05
+				ADISCORD_economy_interest_rate_factor = -0.05
+				ADISCORD_economy_creditworthiness_factor = 0.10
+				ADISCORD_economy_price_stability_factor = 0.05
+				ADISCORD_economy_investment_confidence_factor = 0.10
+				ADISCORD_economy_state_overload_gain_factor = 0.05
+				ADISCORD_economy_overload_resistance_factor = -0.05
 			}
 
 			cancel_if_invalid = no
@@ -482,6 +561,15 @@ ideas = {
 				production_factory_efficiency_gain_factor = 0.03
 				production_speed_buildings_factor = 0.04
 				stability_factor = 0.03
+				ADISCORD_economy_tax_collection_factor = 0.03
+				ADISCORD_economy_trade_income_factor = 0.03
+				ADISCORD_economy_civilian_factory_income_factor = 0.03
+				ADISCORD_economy_resource_rent_income_factor = 0.03
+				ADISCORD_economy_building_income_factor = 0.03
+				ADISCORD_economy_creditworthiness_factor = 0.03
+				ADISCORD_economy_price_stability_factor = 0.03
+				ADISCORD_economy_investment_confidence_factor = 0.03
+				ADISCORD_country_development_economic_growth_factor = 0.03
 			}
 
 			default = yes
@@ -513,6 +601,12 @@ ideas = {
 				production_speed_buildings_factor = 0.08
 				political_power_gain = -0.03
 				stability_factor = 0.02
+				ADISCORD_economy_building_income_factor = 0.10
+				ADISCORD_economy_construction_expense_factor = -0.05
+				ADISCORD_economy_admin_expense_factor = 0.10
+				ADISCORD_economy_debt_capacity_factor = 0.10
+				ADISCORD_economy_fiscal_stress_resistance_factor = 0.05
+				ADISCORD_economy_treasury_capacity_factor = 0.05
 			}
 
 			cancel_if_invalid = no
@@ -546,6 +640,16 @@ ideas = {
 				production_speed_buildings_factor = 0.06
 				political_power_gain = -0.05
 				factory_energy_consumption = 0.12
+				ADISCORD_economy_trade_income_factor = -0.10
+				ADISCORD_economy_military_industry_income_factor = 0.10
+				ADISCORD_economy_construction_expense_factor = -0.05
+				ADISCORD_economy_admin_expense_factor = 0.15
+				ADISCORD_economy_debt_capacity_factor = 0.10
+				ADISCORD_economy_inflation_pressure_factor = 0.05
+				ADISCORD_economy_deficit_pressure_factor = 0.05
+				ADISCORD_economy_fiscal_stress_gain_factor = 0.05
+				ADISCORD_economy_investment_confidence_factor = -0.05
+				ADISCORD_economy_state_overload_gain_factor = 0.05
 			}
 
 			cancel_if_invalid = no
@@ -579,6 +683,18 @@ ideas = {
 				conversion_cost_civ_to_mil_factor = -0.20
 				line_change_production_efficiency_factor = -0.08
 				factory_energy_consumption = 0.25
+				ADISCORD_economy_trade_income_factor = -0.10
+				ADISCORD_economy_civilian_factory_income_factor = -0.10
+				ADISCORD_economy_military_industry_income_factor = 0.15
+				ADISCORD_economy_army_expense_factor = 0.10
+				ADISCORD_economy_debt_capacity_factor = 0.15
+				ADISCORD_economy_inflation_pressure_factor = 0.10
+				ADISCORD_economy_deficit_pressure_factor = 0.10
+				ADISCORD_economy_fiscal_stress_gain_factor = 0.10
+				ADISCORD_economy_investment_confidence_factor = -0.10
+				ADISCORD_economy_state_overload_gain_factor = 0.15
+				ADISCORD_economy_war_fatigue_gain_factor = 0.10
+				ADISCORD_economy_demobilization_pressure_gain_factor = 0.10
 			}
 
 			cancel_if_invalid = no
@@ -610,6 +726,16 @@ ideas = {
 				political_power_gain = 0.03
 				stability_factor = -0.05
 				war_support_factor = 0.03
+				ADISCORD_economy_tax_collection_factor = -0.15
+				ADISCORD_economy_trade_income_factor = 0.10
+				ADISCORD_economy_resource_rent_income_factor = 0.10
+				ADISCORD_economy_building_income_factor = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.05
+				ADISCORD_economy_creditworthiness_factor = -0.10
+				ADISCORD_economy_deficit_pressure_factor = 0.05
+				ADISCORD_economy_fiscal_stress_gain_factor = 0.10
+				ADISCORD_economy_investment_confidence_factor = -0.05
+				ADISCORD_economy_state_overload_gain_factor = 0.10
 			}
 
 			cancel_if_invalid = no
@@ -641,6 +767,16 @@ ideas = {
 				political_power_gain = -0.06
 				stability_factor = -0.03
 				factory_energy_consumption = 0.10
+				ADISCORD_economy_overall_income_factor = 0.05
+				ADISCORD_economy_research_expense_factor = 0.10
+				ADISCORD_economy_admin_expense_factor = 0.05
+				ADISCORD_economy_interest_rate_factor = -0.05
+				ADISCORD_economy_creditworthiness_factor = 0.10
+				ADISCORD_economy_price_stability_factor = 0.10
+				ADISCORD_economy_fiscal_stress_resistance_factor = 0.10
+				ADISCORD_economy_investment_confidence_factor = 0.10
+				ADISCORD_economy_overload_resistance_factor = 0.05
+				ADISCORD_country_development_economic_growth_factor = 0.15
 			}
 
 			cancel_if_invalid = no

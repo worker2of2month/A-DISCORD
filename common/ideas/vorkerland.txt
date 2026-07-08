@@ -33,6 +33,13 @@ ideas = {
 				conscription_factor = -0.7
 				cannot_use_abilities = 1
 				no_compliance_gain = 1
+				ADISCORD_economy_tax_collection_factor = -0.15
+				ADISCORD_economy_population_tax_income_factor = -0.10
+				ADISCORD_economy_civilian_factory_income_factor = -0.10
+				ADISCORD_economy_admin_expense_factor = 0.10
+				ADISCORD_economy_state_overload_gain_factor = 0.15
+				ADISCORD_country_development_state_growth_factor = -0.10
+				ADISCORD_country_development_economic_growth_factor = -0.10
 			}
 		}
 
@@ -52,8 +59,13 @@ ideas = {
 
 			modifier = {
 				political_power_gain = -0.2
-				consumer_goods_factor = 0.1
 				drift_defence_factor = -0.6
+				ADISCORD_economy_overall_expense_factor = 0.15
+				ADISCORD_economy_social_expense_factor = 0.10
+				ADISCORD_economy_inflation_pressure_factor = 0.10
+				ADISCORD_economy_state_overload_gain_factor = 0.15
+				ADISCORD_economy_demographic_fatigue_gain_factor = 0.10
+				ADISCORD_country_development_economic_growth_factor = -0.15
 			}
 		}
 

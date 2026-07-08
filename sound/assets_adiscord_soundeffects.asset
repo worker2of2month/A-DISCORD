@@ -1,16 +1,1 @@
-soundeffect = {
-	name = ADISCORD_pol_menu_open_sound
-	category = "UI"
-	volume = 1
-	sounds = {
-		sound = ADISCORD_pol_menu_open_sound
-	}
-}
-soundeffect = {
-	name = ADISCORD_pol_menu_close_sound
-	category = "UI"
-	volume = 1
-	sounds = {
-		sound = ADISCORD_pol_menu_close_sound
-	}
-}
+# V19: intentionally empty; overrides malformed live asset that used unsupported top-level category tokens.
