@@ -153,13 +153,13 @@ characters = {
 				large = GFX_portrait_VAL_Dmitri_Karsov
 			}
 		}
-		corps_commander = {
+		field_marshal = {
 			traits = { panzer_leader }
 			skill = 5
 			attack_skill = 6
-			defense_skill = 2
-			planning_skill = 3
-			logistics_skill = 2
+			defense_skill = 4
+			planning_skill = 5
+			logistics_skill = 3
 			legacy_id = -1
 		}
 	}
@@ -171,13 +171,13 @@ characters = {
 				large = GFX_portrait_VAL_Leonid_Vargan
 			}
 		}
-		corps_commander = {
+		field_marshal = {
 			traits = { winter_expert }
-			skill = 5
-			attack_skill = 3
+			skill = 6
+			attack_skill = 4
 			defense_skill = 6
-			planning_skill = 4
-			logistics_skill = 3
+			planning_skill = 5
+			logistics_skill = 4
 			legacy_id = -1
 		}
 	}
