@@ -168,6 +168,10 @@ ADISCORD_economy_model_allows_oligarchic_deals = {
 
 ADISCORD_economy_has_treasury_25 = { check_variable = { var = ADISCORD_economy_treasury value = 25 compare = greater_than_or_equals } }
 ADISCORD_economy_has_treasury_50 = { check_variable = { var = ADISCORD_economy_treasury value = 50 compare = greater_than_or_equals } }
+ADISCORD_economy_has_treasury_60 = { check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals } }
+ADISCORD_economy_has_treasury_70 = { check_variable = { var = ADISCORD_economy_treasury value = 70 compare = greater_than_or_equals } }
+ADISCORD_economy_has_treasury_80 = { check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals } }
+ADISCORD_economy_has_treasury_90 = { check_variable = { var = ADISCORD_economy_treasury value = 90 compare = greater_than_or_equals } }
 ADISCORD_economy_has_treasury_100 = { check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals } }
 ADISCORD_economy_has_treasury_150 = { check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals } }
 ADISCORD_economy_has_low_treasury = { check_variable = { var = ADISCORD_economy_treasury value = 50 compare = less_than } }
@@ -252,6 +256,7 @@ ADISCORD_economy_construction_spending_mode_4 = {
 ADISCORD_economy_construction_spending_mode_5 = { check_variable = { var = ADISCORD_economy_construction_spending_mode value = 5 compare = greater_than_or_equals } }
 
 ADISCORD_economy_can_invest_reserves = {
+	has_tech = ADISCORD_tech_reserve_management
 	ADISCORD_economy_has_treasury_50 = yes
 	check_variable = { var = ADISCORD_economy_recent_investment value = 1 compare = less_than }
 	OR = {
@@ -272,10 +277,12 @@ ADISCORD_economy_can_take_debt = {
 }
 
 ADISCORD_economy_can_issue_internal_bonds = {
+	has_tech = ADISCORD_tech_state_debt_instruments
 	ADISCORD_economy_can_take_debt = yes
 }
 
 ADISCORD_economy_can_take_external_loan = {
+	has_tech = ADISCORD_tech_state_debt_instruments
 	ADISCORD_economy_can_take_debt = yes
 	check_variable = { var = ADISCORD_economy_creditworthiness value = 35 compare = greater_than_or_equals }
 	check_variable = { var = ADISCORD_economy_debt_crisis_level value = 4 compare = less_than }
@@ -307,6 +314,7 @@ ADISCORD_economy_can_stabilize_macro = {
 }
 
 ADISCORD_economy_can_restructure_debt = {
+	has_tech = ADISCORD_tech_fiscal_administration_2
 	ADISCORD_economy_has_debt = yes
 	check_variable = { var = ADISCORD_economy_debt value = 100 compare = greater_than_or_equals }
 	OR = {
@@ -316,6 +324,7 @@ ADISCORD_economy_can_restructure_debt = {
 }
 
 ADISCORD_economy_can_early_repay_debt = {
+	has_tech = ADISCORD_tech_reserve_management
 	ADISCORD_economy_has_treasury_100 = yes
 	check_variable = { var = ADISCORD_economy_debt value = 100 compare = greater_than_or_equals }
 }
@@ -326,48 +335,10 @@ ADISCORD_economy_can_use_war_taxes = {
 }
 
 ADISCORD_economy_can_use_military_investment = {
+	has_tech = ADISCORD_tech_postwar_weapon_standardization
 	ADISCORD_economy_has_treasury_50 = yes
 	check_variable = { var = ADISCORD_economy_recent_war_financing value = 1 compare = less_than }
 	ADISCORD_economy_model_allows_mobilization_economy = yes
-}
-
-ADISCORD_economy_can_build_commercial_office = {
-	ADISCORD_economy_has_treasury_50 = yes
-	OR = {
-		ADISCORD_economy_model_allows_market_expansion = yes
-		ADISCORD_economy_model_allows_oligarchic_deals = yes
-	}
-}
-
-ADISCORD_economy_can_build_fiscal_administration = {
-	ADISCORD_economy_has_treasury_50 = yes
-	OR = {
-		ADISCORD_economy_model_allows_advanced_taxation = yes
-		ADISCORD_economy_model_allows_state_planning = yes
-	}
-}
-
-ADISCORD_economy_can_build_industrial_cluster = {
-	ADISCORD_economy_has_treasury_50 = yes
-	OR = {
-		ADISCORD_economy_model_allows_state_planning = yes
-		ADISCORD_economy_model_allows_mobilization_economy = yes
-		ADISCORD_economy_model_allows_technocratic_programs = yes
-	}
-}
-
-ADISCORD_economy_can_build_logistics_hub = {
-	ADISCORD_economy_has_treasury_50 = yes
-	OR = {
-		ADISCORD_economy_model_is_mixed = yes
-		ADISCORD_economy_model_allows_state_planning = yes
-		ADISCORD_economy_model_allows_mobilization_economy = yes
-	}
-}
-
-ADISCORD_economy_can_build_technical_institute = {
-	ADISCORD_economy_has_treasury_50 = yes
-	ADISCORD_economy_model_allows_technocratic_programs = yes
 }
 
 ADISCORD_economy_has_development_progress_ready = {

@@ -53,6 +53,26 @@ ADISCORD_economy_initialize_variables = {
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_austerity_level } } set_variable = { var = ADISCORD_economy_austerity_level value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_auto_borrowing } } set_variable = { var = ADISCORD_economy_last_auto_borrowing value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_uncovered_deficit } } set_variable = { var = ADISCORD_economy_last_uncovered_deficit value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_auto_loan_enabled } } set_variable = { var = ADISCORD_economy_auto_loan_enabled value = 1 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_accounting_period_treasury_start } } set_variable = { var = ADISCORD_economy_accounting_period_treasury_start value = ADISCORD_economy_treasury } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_month_treasury_before } } set_variable = { var = ADISCORD_economy_last_month_treasury_before value = ADISCORD_economy_treasury } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_month_income } } set_variable = { var = ADISCORD_economy_last_month_income value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_month_expenses } } set_variable = { var = ADISCORD_economy_last_month_expenses value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_month_balance } } set_variable = { var = ADISCORD_economy_last_month_balance value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_month_treasury_after } } set_variable = { var = ADISCORD_economy_last_month_treasury_after value = ADISCORD_economy_treasury } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_month_debt_added } } set_variable = { var = ADISCORD_economy_last_month_debt_added value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_month_debt_paid } } set_variable = { var = ADISCORD_economy_last_month_debt_paid value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_month_action_costs } } set_variable = { var = ADISCORD_economy_last_month_action_costs value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_month_building_costs } } set_variable = { var = ADISCORD_economy_last_month_building_costs value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_month_unexplained_delta } } set_variable = { var = ADISCORD_economy_last_month_unexplained_delta value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_current_month_debt_added } } set_variable = { var = ADISCORD_economy_current_month_debt_added value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_current_month_debt_paid } } set_variable = { var = ADISCORD_economy_current_month_debt_paid value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_current_month_action_costs } } set_variable = { var = ADISCORD_economy_current_month_action_costs value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_current_month_building_costs } } set_variable = { var = ADISCORD_economy_current_month_building_costs value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_recent_building_project } } set_variable = { var = ADISCORD_economy_recent_building_project value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_business_center_count } } set_variable = { var = ADISCORD_business_center_count value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_science_center_count } } set_variable = { var = ADISCORD_science_center_count value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_industrial_cluster_count } } set_variable = { var = ADISCORD_industrial_cluster_count value = 0 } }
 	ADISCORD_economy_initialize_modifier_variables = yes
 	ADISCORD_economy_clamp_all_variables = yes
 }
@@ -107,6 +127,7 @@ ADISCORD_economy_set_default_values = {
 	set_variable = { var = ADISCORD_economy_austerity_level value = 0 }
 	set_variable = { var = ADISCORD_economy_last_auto_borrowing value = 0 }
 	set_variable = { var = ADISCORD_economy_last_uncovered_deficit value = 0 }
+	set_variable = { var = ADISCORD_economy_auto_loan_enabled value = 1 }
 	set_variable = { var = ADISCORD_economy_war_fatigue_score value = 0 }
 	set_variable = { var = ADISCORD_economy_war_fatigue_level value = 0 }
 	set_variable = { var = ADISCORD_economy_demographic_fatigue_score value = 0 }
@@ -116,11 +137,9 @@ ADISCORD_economy_set_default_values = {
 	set_variable = { var = ADISCORD_economy_stretched_level value = 0 }
 	set_variable = { var = ADISCORD_economy_model value = 2 }
 	set_variable = { var = ADISCORD_economy_cycle_phase value = 1 }
-	set_variable = { var = ADISCORD_commercial_office_count value = 0 }
-	set_variable = { var = ADISCORD_fiscal_administration_count value = 0 }
+	set_variable = { var = ADISCORD_business_center_count value = 0 }
+	set_variable = { var = ADISCORD_science_center_count value = 0 }
 	set_variable = { var = ADISCORD_industrial_cluster_count value = 0 }
-	set_variable = { var = ADISCORD_logistics_hub_count value = 0 }
-	set_variable = { var = ADISCORD_technical_institute_count value = 0 }
 	set_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 }
 	set_variable = { var = ADISCORD_economy_gui_update_var value = 0 }
 	set_variable = { var = ADISCORD_economy_show_window value = 0 }
@@ -128,10 +147,26 @@ ADISCORD_economy_set_default_values = {
 	set_variable = { var = ADISCORD_economy_recent_money_printing value = 0 }
 	set_variable = { var = ADISCORD_economy_recent_investment value = 0 }
 	set_variable = { var = ADISCORD_economy_recent_war_financing value = 0 }
+	set_variable = { var = ADISCORD_economy_recent_building_project value = 0 }
 	set_variable = { var = ADISCORD_economy_treasury_before_tick value = 0 }
 	set_variable = { var = ADISCORD_economy_treasury_after_tick value = 0 }
 	set_variable = { var = ADISCORD_economy_actual_treasury_delta value = 0 }
 	set_variable = { var = ADISCORD_economy_last_monthly_balance_applied value = 0 }
+	set_variable = { var = ADISCORD_economy_accounting_period_treasury_start value = ADISCORD_economy_treasury }
+	set_variable = { var = ADISCORD_economy_last_month_treasury_before value = ADISCORD_economy_treasury }
+	set_variable = { var = ADISCORD_economy_last_month_income value = 0 }
+	set_variable = { var = ADISCORD_economy_last_month_expenses value = 0 }
+	set_variable = { var = ADISCORD_economy_last_month_balance value = 0 }
+	set_variable = { var = ADISCORD_economy_last_month_treasury_after value = ADISCORD_economy_treasury }
+	set_variable = { var = ADISCORD_economy_last_month_debt_added value = 0 }
+	set_variable = { var = ADISCORD_economy_last_month_debt_paid value = 0 }
+	set_variable = { var = ADISCORD_economy_last_month_action_costs value = 0 }
+	set_variable = { var = ADISCORD_economy_last_month_building_costs value = 0 }
+	set_variable = { var = ADISCORD_economy_last_month_unexplained_delta value = 0 }
+	set_variable = { var = ADISCORD_economy_current_month_debt_added value = 0 }
+	set_variable = { var = ADISCORD_economy_current_month_debt_paid value = 0 }
+	set_variable = { var = ADISCORD_economy_current_month_action_costs value = 0 }
+	set_variable = { var = ADISCORD_economy_current_month_building_costs value = 0 }
 	set_variable = { var = ADISCORD_economy_tax_burden_mode value = 3 }
 	set_variable = { var = ADISCORD_economy_army_spending_mode value = 3 }
 	set_variable = { var = ADISCORD_economy_construction_spending_mode value = 3 }
@@ -156,12 +191,13 @@ ADISCORD_economy_set_simulation_tier = {
 ADISCORD_economy_monthly_update = {
 	ADISCORD_economy_initialize_country = yes
 	ADISCORD_economy_clear_one_month_action_ideas = yes
-	ADISCORD_economy_full_refresh_if_needed = yes
+	ADISCORD_economy_full_refresh = yes
 	ADISCORD_economy_update_model_and_cycle = yes
 	ADISCORD_economy_recalculate_policy_modifiers = yes
 	ADISCORD_economy_calculate_income = yes
 	ADISCORD_economy_calculate_expenses = yes
 	ADISCORD_economy_calculate_monthly_balance = yes
+	if = { limit = { is_ai = yes } ADISCORD_economy_ai_monthly_policy = yes }
 	ADISCORD_economy_apply_monthly_balance = yes
 	ADISCORD_economy_apply_tax_burden_side_effects = yes
 	ADISCORD_economy_update_fiscal_stress = yes
@@ -185,10 +221,11 @@ ADISCORD_economy_monthly_update = {
 ADISCORD_economy_yearly_update = {
 	ADISCORD_economy_initialize_country = yes
 	ADISCORD_economy_set_simulation_tier = yes
-	ADISCORD_economy_full_refresh_if_needed = yes
+	ADISCORD_economy_full_refresh = yes
 	ADISCORD_economy_update_model_and_cycle = yes
 	ADISCORD_economy_recalculate_policy_modifiers = yes
 	ADISCORD_economy_light_update = yes
+	if = { limit = { is_ai = yes } ADISCORD_economy_ai_yearly_policy = yes }
 	set_temp_variable = { var = ADISCORD_economy_yearly_balance_temp value = ADISCORD_economy_monthly_balance }
 	multiply_temp_variable = { var = ADISCORD_economy_yearly_balance_temp value = 12 }
 	add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_yearly_balance_temp }
@@ -200,7 +237,7 @@ ADISCORD_economy_yearly_update = {
 }
 
 ADISCORD_economy_full_refresh = {
-	ADISCORD_economy_count_buildings = yes
+	ADISCORD_economy_recount_economic_buildings = yes
 	ADISCORD_economy_clear_dirty = yes
 }
 
@@ -272,11 +309,13 @@ ADISCORD_economy_calculate_business_income = {
 	# Business/taxable services. Stronger than ordinary taxes, weaker than resource rents.
 	set_variable = { var = ADISCORD_economy_business_income value = num_of_civilian_factories }
 	multiply_variable = { var = ADISCORD_economy_business_income value = 0.075 }
-	set_temp_variable = { var = ADISCORD_economy_business_building_temp value = ADISCORD_commercial_office_count }
-	multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 0.75 }
-	add_to_variable = { var = ADISCORD_economy_business_income value = ADISCORD_economy_business_building_temp }
-	set_temp_variable = { var = ADISCORD_economy_business_building_temp value = ADISCORD_fiscal_administration_count }
-	multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 0.15 }
+	set_temp_variable = { var = ADISCORD_economy_business_building_temp value = ADISCORD_business_center_count }
+	multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 0.85 }
+	if = { limit = { ADISCORD_economy_model_is_decentralized_market = yes } multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 1.20 } }
+	if = { limit = { ADISCORD_economy_model_is_mixed = yes } multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 1.10 } }
+	if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes } multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 0.70 } }
+	if = { limit = { ADISCORD_economy_model_is_mobilization = yes } multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 0.75 } }
+	if = { limit = { ADISCORD_economy_model_is_oligarchic_clan = yes } multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 1.10 } }
 	add_to_variable = { var = ADISCORD_economy_business_income value = ADISCORD_economy_business_building_temp }
 	if = { limit = { ADISCORD_economy_has_industrial_civilian_expansion = yes } add_to_variable = { var = ADISCORD_economy_business_income value = 0.5 } }
 	if = { limit = { ADISCORD_economy_has_industrial_artisan_markets = yes } multiply_variable = { var = ADISCORD_economy_business_income value = 0.95 } }
@@ -295,7 +334,10 @@ ADISCORD_economy_calculate_consumer_goods_income = {
 	multiply_variable = { var = ADISCORD_economy_consumer_goods_income value = 0.035 }
 	# Industrial clusters mainly support civilian taxable output. They are not a default money printer for military factories.
 	set_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = ADISCORD_industrial_cluster_count }
-	multiply_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = 0.25 }
+	multiply_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = 0.18 }
+	if = { limit = { ADISCORD_economy_model_is_state_coordinated = yes } multiply_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = 1.15 } }
+	if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes ADISCORD_state_development_at_least_4 = yes } multiply_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = 1.25 } }
+	if = { limit = { ADISCORD_economy_model_is_mobilization = yes } multiply_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = 0.70 } }
 	add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = ADISCORD_economy_consumer_goods_cluster_temp }
 	if = { limit = { ADISCORD_economy_has_industrial_civilian_expansion = yes } add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = 0.6 } }
 	if = { limit = { ADISCORD_economy_has_industrial_state_planning = yes } add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = 0.3 } }
@@ -342,7 +384,7 @@ ADISCORD_economy_calculate_factory_income = {
 			}
 		}
 		set_temp_variable = { var = ADISCORD_economy_factory_income_temp value = ADISCORD_industrial_cluster_count }
-		multiply_temp_variable = { var = ADISCORD_economy_factory_income_temp value = 0.08 }
+		multiply_temp_variable = { var = ADISCORD_economy_factory_income_temp value = 0.05 }
 		add_to_variable = { var = ADISCORD_economy_factory_income value = ADISCORD_economy_factory_income_temp }
 	}
 	# Mobilization economy converts arms output into war capacity, not normal treasury profit.
@@ -370,14 +412,14 @@ ADISCORD_economy_calculate_resource_income = {
 ADISCORD_economy_calculate_building_income = {
 	# Direct building income is small; buildings mostly improve the specific buckets below and development/pressure.
 	set_variable = { var = ADISCORD_economy_building_income value = 0 }
-	set_temp_variable = { var = ADISCORD_economy_building_income_temp value = ADISCORD_commercial_office_count }
-	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.20 }
+	set_temp_variable = { var = ADISCORD_economy_building_income_temp value = ADISCORD_business_center_count }
+	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.15 }
 	add_to_variable = { var = ADISCORD_economy_building_income value = ADISCORD_economy_building_income_temp }
-	set_temp_variable = { var = ADISCORD_economy_building_income_temp value = ADISCORD_fiscal_administration_count }
-	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.10 }
+	set_temp_variable = { var = ADISCORD_economy_building_income_temp value = ADISCORD_science_center_count }
+	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.02 }
 	add_to_variable = { var = ADISCORD_economy_building_income value = ADISCORD_economy_building_income_temp }
 	set_temp_variable = { var = ADISCORD_economy_building_income_temp value = ADISCORD_industrial_cluster_count }
-	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.05 }
+	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.04 }
 	add_to_variable = { var = ADISCORD_economy_building_income value = ADISCORD_economy_building_income_temp }
 	if = { limit = { ADISCORD_economy_model_is_fragmented = yes } multiply_variable = { var = ADISCORD_economy_building_income value = 0.70 } }
 	clamp_variable = { var = ADISCORD_economy_building_income min = 0 max = 50 }
@@ -479,7 +521,7 @@ ADISCORD_economy_calculate_expenses = {
 	clamp_variable = { var = ADISCORD_economy_monthly_expenses min = 0 max = 10000 }
 }
 ADISCORD_economy_calculate_army_expenses = {
-	# Stable fallback formula. Do not use num_battalions until the exact dynamic value syntax is proven safe in this build.
+	# Stable fallback formula until the exact dynamic army-size syntax is proven safe in this build.
 	set_variable = { var = ADISCORD_economy_army_expenses value = 1 }
 	if = { limit = { ADISCORD_army_development_at_least_2 = yes } add_to_variable = { var = ADISCORD_economy_army_expenses value = 0.5 } }
 	if = { limit = { ADISCORD_army_development_at_least_3 = yes } add_to_variable = { var = ADISCORD_economy_army_expenses value = 0.5 } }
@@ -521,6 +563,9 @@ ADISCORD_economy_calculate_military_factory_expenses = {
 	multiply_temp_variable = { var = ADISCORD_economy_dockyard_expenses_temp value = 0.20 }
 	add_to_variable = { var = ADISCORD_economy_military_factory_expenses value = ADISCORD_economy_dockyard_expenses_temp }
 	if = { limit = { ADISCORD_economy_has_industrial_military_prioritization = yes } add_to_variable = { var = ADISCORD_economy_military_factory_expenses value = 1.0 } }
+	set_temp_variable = { var = ADISCORD_economy_industrial_cluster_upkeep_temp value = ADISCORD_industrial_cluster_count }
+	multiply_temp_variable = { var = ADISCORD_economy_industrial_cluster_upkeep_temp value = 0.25 }
+	add_to_variable = { var = ADISCORD_economy_military_factory_expenses value = ADISCORD_economy_industrial_cluster_upkeep_temp }
 	if = { limit = { ADISCORD_economy_model_is_mobilization = yes } multiply_variable = { var = ADISCORD_economy_military_factory_expenses value = 1.15 } }
 	clamp_variable = { var = ADISCORD_economy_military_factory_expenses min = 0 max = 5000 }
 }
@@ -544,8 +589,8 @@ ADISCORD_economy_calculate_research_expenses = {
 	if = { limit = { ADISCORD_social_system_development_at_least_4 = yes } add_to_variable = { var = ADISCORD_economy_research_expenses value = 1.0 } }
 	if = { limit = { ADISCORD_economy_has_education_technical_institutes = yes } add_to_variable = { var = ADISCORD_economy_research_expenses value = 1.5 } }
 	if = { limit = { ADISCORD_economy_has_education_elite_academies = yes } add_to_variable = { var = ADISCORD_economy_research_expenses value = 2.5 } }
-	set_temp_variable = { var = ADISCORD_economy_research_building_temp value = ADISCORD_technical_institute_count }
-	multiply_temp_variable = { var = ADISCORD_economy_research_building_temp value = 0.6 }
+	set_temp_variable = { var = ADISCORD_economy_research_building_temp value = ADISCORD_science_center_count }
+	multiply_temp_variable = { var = ADISCORD_economy_research_building_temp value = 0.65 }
 	add_to_variable = { var = ADISCORD_economy_research_expenses value = ADISCORD_economy_research_building_temp }
 	if = { limit = { ADISCORD_economy_model_is_technocratic = yes } add_to_variable = { var = ADISCORD_economy_research_expenses value = 1.5 } }
 	if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 4 compare = greater_than_or_equals } } multiply_variable = { var = ADISCORD_economy_research_expenses value = 1.20 } }
@@ -572,8 +617,14 @@ ADISCORD_economy_calculate_construction_expenses = {
 ADISCORD_economy_calculate_admin_expenses = {
 	set_variable = { var = ADISCORD_economy_admin_expenses value = ADISCORD_state_development_level }
 	multiply_variable = { var = ADISCORD_economy_admin_expenses value = 1.25 }
-	set_temp_variable = { var = ADISCORD_economy_admin_building_temp value = ADISCORD_fiscal_administration_count }
-	multiply_temp_variable = { var = ADISCORD_economy_admin_building_temp value = 0.5 }
+	set_temp_variable = { var = ADISCORD_economy_admin_building_temp value = ADISCORD_business_center_count }
+	multiply_temp_variable = { var = ADISCORD_economy_admin_building_temp value = 0.15 }
+	add_to_variable = { var = ADISCORD_economy_admin_expenses value = ADISCORD_economy_admin_building_temp }
+	set_temp_variable = { var = ADISCORD_economy_admin_building_temp value = ADISCORD_science_center_count }
+	multiply_temp_variable = { var = ADISCORD_economy_admin_building_temp value = 0.25 }
+	add_to_variable = { var = ADISCORD_economy_admin_expenses value = ADISCORD_economy_admin_building_temp }
+	set_temp_variable = { var = ADISCORD_economy_admin_building_temp value = ADISCORD_industrial_cluster_count }
+	multiply_temp_variable = { var = ADISCORD_economy_admin_building_temp value = 0.20 }
 	add_to_variable = { var = ADISCORD_economy_admin_expenses value = ADISCORD_economy_admin_building_temp }
 	if = { limit = { check_variable = { var = ADISCORD_economy_admin_spending_mode value = 1 compare = less_than_or_equals } } multiply_variable = { var = ADISCORD_economy_admin_expenses value = 0.75 } }
 	if = { limit = { check_variable = { var = ADISCORD_economy_admin_spending_mode value = 4 compare = greater_than_or_equals } } multiply_variable = { var = ADISCORD_economy_admin_expenses value = 1.15 } }
@@ -614,8 +665,14 @@ ADISCORD_economy_calculate_debt_capacity = {
 	set_variable = { var = ADISCORD_economy_capacity_temp value = ADISCORD_economic_development_level }
 	multiply_variable = { var = ADISCORD_economy_capacity_temp value = 35 }
 	add_to_variable = { var = ADISCORD_economy_debt_capacity value = ADISCORD_economy_capacity_temp }
-	set_variable = { var = ADISCORD_economy_capacity_temp value = ADISCORD_fiscal_administration_count }
-	multiply_variable = { var = ADISCORD_economy_capacity_temp value = 25 }
+	set_variable = { var = ADISCORD_economy_capacity_temp value = ADISCORD_business_center_count }
+	multiply_variable = { var = ADISCORD_economy_capacity_temp value = 12 }
+	add_to_variable = { var = ADISCORD_economy_debt_capacity value = ADISCORD_economy_capacity_temp }
+	set_variable = { var = ADISCORD_economy_capacity_temp value = ADISCORD_science_center_count }
+	multiply_variable = { var = ADISCORD_economy_capacity_temp value = 8 }
+	add_to_variable = { var = ADISCORD_economy_debt_capacity value = ADISCORD_economy_capacity_temp }
+	set_variable = { var = ADISCORD_economy_capacity_temp value = ADISCORD_industrial_cluster_count }
+	multiply_variable = { var = ADISCORD_economy_capacity_temp value = 6 }
 	add_to_variable = { var = ADISCORD_economy_debt_capacity value = ADISCORD_economy_capacity_temp }
 	set_variable = { var = ADISCORD_economy_capacity_factor_temp value = 100 }
 	set_variable = { var = ADISCORD_economy_capacity_temp value = ADISCORD_economy_creditworthiness }
@@ -735,11 +792,19 @@ ADISCORD_economy_calculate_monthly_balance = {
 
 ADISCORD_economy_apply_monthly_balance = {
 	# V19 TDA-core: one country, one month, one applied balance.
-	# If the balance pushes the treasury below zero, the uncovered part becomes automatic debt.
+	# If the balance pushes the treasury below zero, auto-loan only covers the uncovered part.
 	set_variable = { var = ADISCORD_economy_last_auto_borrowing value = 0 }
 	set_variable = { var = ADISCORD_economy_last_uncovered_deficit value = 0 }
 	set_variable = { var = ADISCORD_economy_last_monthly_balance_applied value = ADISCORD_economy_monthly_balance }
 	set_variable = { var = ADISCORD_economy_treasury_before_tick value = ADISCORD_economy_treasury }
+	set_variable = { var = ADISCORD_economy_last_month_treasury_before value = ADISCORD_economy_accounting_period_treasury_start }
+	set_variable = { var = ADISCORD_economy_last_month_income value = ADISCORD_economy_monthly_income }
+	set_variable = { var = ADISCORD_economy_last_month_expenses value = ADISCORD_economy_monthly_expenses }
+	set_variable = { var = ADISCORD_economy_last_month_balance value = ADISCORD_economy_monthly_balance }
+	set_variable = { var = ADISCORD_economy_last_month_debt_added value = ADISCORD_economy_current_month_debt_added }
+	set_variable = { var = ADISCORD_economy_last_month_debt_paid value = ADISCORD_economy_current_month_debt_paid }
+	set_variable = { var = ADISCORD_economy_last_month_action_costs value = ADISCORD_economy_current_month_action_costs }
+	set_variable = { var = ADISCORD_economy_last_month_building_costs value = ADISCORD_economy_current_month_building_costs }
 
 	if = {
 		limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = greater_than_or_equals } }
@@ -763,16 +828,70 @@ ADISCORD_economy_apply_monthly_balance = {
 			set_variable = { var = ADISCORD_economy_uncovered_deficit_temp value = 0 }
 			subtract_from_variable = { var = ADISCORD_economy_uncovered_deficit_temp value = ADISCORD_economy_treasury }
 			set_variable = { var = ADISCORD_economy_last_uncovered_deficit value = ADISCORD_economy_uncovered_deficit_temp }
-			add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_uncovered_deficit_temp }
-			set_variable = { var = ADISCORD_economy_last_auto_borrowing value = ADISCORD_economy_uncovered_deficit_temp }
+			if = {
+				limit = {
+					check_variable = { var = ADISCORD_economy_auto_loan_enabled value = 1 compare = greater_than_or_equals }
+				}
+				set_variable = { var = ADISCORD_economy_debt_capacity_room_temp value = ADISCORD_economy_debt_capacity }
+				subtract_from_variable = { var = ADISCORD_economy_debt_capacity_room_temp value = ADISCORD_economy_debt }
+				clamp_variable = { var = ADISCORD_economy_debt_capacity_room_temp min = 0 max = 5000 }
+				set_variable = { var = ADISCORD_economy_auto_borrow_temp value = ADISCORD_economy_uncovered_deficit_temp }
+				set_temp_variable = { var = ADISCORD_economy_auto_borrow_over_cap_temp value = ADISCORD_economy_auto_borrow_temp }
+				subtract_from_variable = { var = ADISCORD_economy_auto_borrow_over_cap_temp value = ADISCORD_economy_debt_capacity_room_temp }
+				if = {
+					limit = {
+						check_variable = { var = ADISCORD_economy_auto_borrow_over_cap_temp value = 0 compare = greater_than }
+					}
+					subtract_from_variable = { var = ADISCORD_economy_auto_borrow_temp value = ADISCORD_economy_auto_borrow_over_cap_temp }
+				}
+				clamp_variable = { var = ADISCORD_economy_auto_borrow_temp min = 0 max = 5000 }
+				if = {
+					limit = { check_variable = { var = ADISCORD_economy_auto_borrow_temp value = 0.1 compare = greater_than } }
+					add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp }
+					set_variable = { var = ADISCORD_economy_last_auto_borrowing value = ADISCORD_economy_auto_borrow_temp }
+					add_to_variable = { var = ADISCORD_economy_last_month_debt_added value = ADISCORD_economy_auto_borrow_temp }
+				}
+			}
 			set_variable = { var = ADISCORD_economy_treasury value = 0 }
 			add_to_variable = { var = ADISCORD_economy_fiscal_stress value = 0.25 }
+			if = {
+				limit = {
+					check_variable = { var = ADISCORD_economy_auto_loan_enabled value = 1 compare = less_than }
+				}
+				add_to_variable = { var = ADISCORD_economy_deficit_pressure value = 1.5 }
+				add_to_variable = { var = ADISCORD_economy_fiscal_stress value = 0.75 }
+			}
+			set_temp_variable = { var = ADISCORD_economy_uncovered_after_auto_borrow_temp value = ADISCORD_economy_last_uncovered_deficit }
+			subtract_from_variable = { var = ADISCORD_economy_uncovered_after_auto_borrow_temp value = ADISCORD_economy_last_auto_borrowing }
+			if = {
+				limit = {
+					check_variable = { var = ADISCORD_economy_auto_loan_enabled value = 1 compare = greater_than_or_equals }
+					check_variable = { var = ADISCORD_economy_uncovered_after_auto_borrow_temp value = 0.1 compare = greater_than }
+				}
+				add_to_variable = { var = ADISCORD_economy_deficit_pressure value = 1.5 }
+				add_to_variable = { var = ADISCORD_economy_fiscal_stress value = 0.75 }
+			}
 		}
 	}
 
 	set_variable = { var = ADISCORD_economy_treasury_after_tick value = ADISCORD_economy_treasury }
 	set_variable = { var = ADISCORD_economy_actual_treasury_delta value = ADISCORD_economy_treasury_after_tick }
 	subtract_from_variable = { var = ADISCORD_economy_actual_treasury_delta value = ADISCORD_economy_treasury_before_tick }
+	set_variable = { var = ADISCORD_economy_last_month_treasury_after value = ADISCORD_economy_treasury_after_tick }
+	set_variable = { var = ADISCORD_economy_accounting_expected_treasury_after_temp value = ADISCORD_economy_last_month_treasury_before }
+	add_to_variable = { var = ADISCORD_economy_accounting_expected_treasury_after_temp value = ADISCORD_economy_last_month_income }
+	subtract_from_variable = { var = ADISCORD_economy_accounting_expected_treasury_after_temp value = ADISCORD_economy_last_month_expenses }
+	subtract_from_variable = { var = ADISCORD_economy_accounting_expected_treasury_after_temp value = ADISCORD_economy_last_month_action_costs }
+	subtract_from_variable = { var = ADISCORD_economy_accounting_expected_treasury_after_temp value = ADISCORD_economy_last_month_building_costs }
+	add_to_variable = { var = ADISCORD_economy_accounting_expected_treasury_after_temp value = ADISCORD_economy_last_month_debt_added }
+	subtract_from_variable = { var = ADISCORD_economy_accounting_expected_treasury_after_temp value = ADISCORD_economy_last_month_debt_paid }
+	set_variable = { var = ADISCORD_economy_last_month_unexplained_delta value = ADISCORD_economy_last_month_treasury_after }
+	subtract_from_variable = { var = ADISCORD_economy_last_month_unexplained_delta value = ADISCORD_economy_accounting_expected_treasury_after_temp }
+	set_variable = { var = ADISCORD_economy_accounting_period_treasury_start value = ADISCORD_economy_last_month_treasury_after }
+	set_variable = { var = ADISCORD_economy_current_month_debt_added value = 0 }
+	set_variable = { var = ADISCORD_economy_current_month_debt_paid value = 0 }
+	set_variable = { var = ADISCORD_economy_current_month_action_costs value = 0 }
+	set_variable = { var = ADISCORD_economy_current_month_building_costs value = 0 }
 
 	clamp_variable = { var = ADISCORD_economy_deficit_streak min = 0 max = 24 }
 	clamp_variable = { var = ADISCORD_economy_surplus_streak min = 0 max = 24 }
@@ -875,8 +994,11 @@ ADISCORD_economy_update_macro_confidence = {
 	set_variable = { var = ADISCORD_economy_control_temp value = ADISCORD_state_development_level }
 	multiply_variable = { var = ADISCORD_economy_control_temp value = 8 }
 	add_to_variable = { var = ADISCORD_economy_state_financial_control value = ADISCORD_economy_control_temp }
-	set_variable = { var = ADISCORD_economy_control_temp value = ADISCORD_fiscal_administration_count }
-	multiply_variable = { var = ADISCORD_economy_control_temp value = 4 }
+	set_variable = { var = ADISCORD_economy_control_temp value = ADISCORD_business_center_count }
+	multiply_variable = { var = ADISCORD_economy_control_temp value = 1 }
+	add_to_variable = { var = ADISCORD_economy_state_financial_control value = ADISCORD_economy_control_temp }
+	set_variable = { var = ADISCORD_economy_control_temp value = ADISCORD_science_center_count }
+	multiply_variable = { var = ADISCORD_economy_control_temp value = 2 }
 	add_to_variable = { var = ADISCORD_economy_state_financial_control value = ADISCORD_economy_control_temp }
 	subtract_from_variable = { var = ADISCORD_economy_state_financial_control value = ADISCORD_economy_fiscal_stress }
 	set_variable = { var = ADISCORD_economy_control_temp value = ADISCORD_economy_stretched_level }
@@ -928,9 +1050,23 @@ ADISCORD_economy_calculate_development_multiplier = {
 	if = { limit = { ADISCORD_economy_model_is_mobilization = yes has_war = yes } add_to_variable = { var = ADISCORD_economy_monthly_development_multiplier value = -8 } }
 	if = { limit = { ADISCORD_economy_model_is_technocratic = yes } add_to_variable = { var = ADISCORD_economy_monthly_development_multiplier value = 15 } }
 	if = { limit = { ADISCORD_economy_model_is_oligarchic_clan = yes } add_to_variable = { var = ADISCORD_economy_monthly_development_multiplier value = -5 } }
-	add_to_variable = { var = ADISCORD_economy_monthly_development_multiplier value = ADISCORD_commercial_office_count }
-	add_to_variable = { var = ADISCORD_economy_monthly_development_multiplier value = ADISCORD_industrial_cluster_count }
-	add_to_variable = { var = ADISCORD_economy_monthly_development_multiplier value = ADISCORD_technical_institute_count }
+	set_temp_variable = { var = ADISCORD_economy_development_building_temp value = ADISCORD_business_center_count }
+	multiply_temp_variable = { var = ADISCORD_economy_development_building_temp value = 0.5 }
+	if = { limit = { ADISCORD_economy_model_is_decentralized_market = yes } multiply_temp_variable = { var = ADISCORD_economy_development_building_temp value = 1.20 } }
+	if = { limit = { ADISCORD_economy_model_is_oligarchic_clan = yes } multiply_temp_variable = { var = ADISCORD_economy_development_building_temp value = 0.80 } }
+	add_to_variable = { var = ADISCORD_economy_monthly_development_multiplier value = ADISCORD_economy_development_building_temp }
+	set_temp_variable = { var = ADISCORD_economy_development_building_temp value = ADISCORD_science_center_count }
+	multiply_temp_variable = { var = ADISCORD_economy_development_building_temp value = 2.0 }
+	if = { limit = { ADISCORD_economy_model_is_mixed = yes } multiply_temp_variable = { var = ADISCORD_economy_development_building_temp value = 1.10 } }
+	if = { limit = { ADISCORD_economy_model_is_state_coordinated = yes } multiply_temp_variable = { var = ADISCORD_economy_development_building_temp value = 1.20 } }
+	if = { limit = { ADISCORD_economy_model_is_technocratic = yes } multiply_temp_variable = { var = ADISCORD_economy_development_building_temp value = 1.50 } }
+	add_to_variable = { var = ADISCORD_economy_monthly_development_multiplier value = ADISCORD_economy_development_building_temp }
+	set_temp_variable = { var = ADISCORD_economy_development_building_temp value = ADISCORD_industrial_cluster_count }
+	multiply_temp_variable = { var = ADISCORD_economy_development_building_temp value = 1.0 }
+	if = { limit = { ADISCORD_economy_model_is_state_coordinated = yes } multiply_temp_variable = { var = ADISCORD_economy_development_building_temp value = 1.25 } }
+	if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes ADISCORD_state_development_at_least_4 = yes } multiply_temp_variable = { var = ADISCORD_economy_development_building_temp value = 1.30 } }
+	if = { limit = { ADISCORD_economy_model_is_mobilization = yes has_war = yes } multiply_temp_variable = { var = ADISCORD_economy_development_building_temp value = 0.70 } }
+	add_to_variable = { var = ADISCORD_economy_monthly_development_multiplier value = ADISCORD_economy_development_building_temp }
 	if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = greater_than_or_equals } } add_to_variable = { var = ADISCORD_economy_monthly_development_multiplier value = 8 } }
 	if = { limit = { ADISCORD_economy_has_large_reserve = yes } add_to_variable = { var = ADISCORD_economy_monthly_development_multiplier value = 8 } }
 	if = { limit = { ADISCORD_economy_has_low_treasury = yes } add_to_variable = { var = ADISCORD_economy_monthly_development_multiplier value = -10 } }
@@ -1107,7 +1243,8 @@ ADISCORD_economy_take_debt = {
 	if = {
 		limit = { ADISCORD_economy_can_take_debt = yes }
 		add_to_variable = { var = ADISCORD_economy_treasury value = 100 }
-		add_to_variable = { var = ADISCORD_economy_debt value = 125 }
+		add_to_variable = { var = ADISCORD_economy_debt value = 115 }
+		add_to_variable = { var = ADISCORD_economy_current_month_debt_added value = 100 }
 		add_to_variable = { var = ADISCORD_economy_deficit_pressure value = -5 }
 		add_to_variable = { var = ADISCORD_economy_fiscal_stress value = 2 }
 		add_to_variable = { var = ADISCORD_economy_stretched_score value = 5 }
@@ -1127,6 +1264,7 @@ ADISCORD_economy_repay_debt = {
 		limit = { ADISCORD_economy_has_treasury_50 = yes ADISCORD_economy_has_debt = yes }
 		add_to_variable = { var = ADISCORD_economy_treasury value = -50 }
 		add_to_variable = { var = ADISCORD_economy_debt value = -60 }
+		add_to_variable = { var = ADISCORD_economy_current_month_debt_paid value = 50 }
 		add_to_variable = { var = ADISCORD_economy_stretched_score value = -5 }
 		add_to_variable = { var = ADISCORD_economy_fiscal_stress value = -3 }
 		ADISCORD_economy_calculate_macro_indicators = yes
@@ -1135,27 +1273,7 @@ ADISCORD_economy_repay_debt = {
 }
 
 ADISCORD_economy_print_money = {
-	ADISCORD_economy_initialize_country = yes
-	if = {
-		limit = { ADISCORD_economy_can_print_money = yes }
-		set_variable = { var = ADISCORD_economy_emission_gain_temp value = 65 }
-		multiply_variable = { var = ADISCORD_economy_emission_gain_temp value = ADISCORD_economy_final_money_printing_efficiency_factor_bp }
-		divide_variable = { var = ADISCORD_economy_emission_gain_temp value = 100 }
-		add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_emission_gain_temp }
-		add_to_variable = { var = ADISCORD_economy_money_printing_level value = 1 }
-		add_to_variable = { var = ADISCORD_economy_price_shock value = 4 }
-		add_to_variable = { var = ADISCORD_economy_stretched_score value = 7 }
-		add_to_variable = { var = ADISCORD_economic_development_progress value = 5 }
-		if = { limit = { ADISCORD_economy_model_is_decentralized_market = yes } add_to_variable = { var = ADISCORD_economy_price_shock value = 3 } add_to_variable = { var = ADISCORD_economy_stretched_score value = 5 } }
-		if = { limit = { ADISCORD_economy_model_is_oligarchic_clan = yes } add_to_variable = { var = ADISCORD_economy_price_shock value = 3 } add_to_variable = { var = ADISCORD_economy_stretched_score value = 8 } }
-		if = { limit = { ADISCORD_economy_model_is_state_coordinated = yes } add_to_variable = { var = ADISCORD_economy_price_shock value = -1 } }
-		if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes } add_to_variable = { var = ADISCORD_economy_price_shock value = -2 } }
-		if = { limit = { ADISCORD_economy_model_is_mobilization = yes } add_to_variable = { var = ADISCORD_economy_treasury value = 25 } add_to_variable = { var = ADISCORD_economy_stretched_score value = 5 } }
-		set_variable = { var = ADISCORD_economy_recent_money_printing value = 1 }
-		add_ideas = ADISCORD_economy_money_printing
-		ADISCORD_economy_calculate_macro_indicators = yes
-		ADISCORD_economy_mark_dirty = yes
-	}
+	ADISCORD_economy_expand_money_emission = yes
 }
 
 ADISCORD_economy_issue_internal_bonds = {
@@ -1168,6 +1286,7 @@ ADISCORD_economy_take_external_loan = {
 		limit = { ADISCORD_economy_can_take_external_loan = yes }
 		add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
 		add_to_variable = { var = ADISCORD_economy_debt value = 190 }
+		add_to_variable = { var = ADISCORD_economy_current_month_debt_added value = 150 }
 		add_to_variable = { var = ADISCORD_economy_fiscal_stress value = 4 }
 		add_to_variable = { var = ADISCORD_economy_price_shock value = 1 }
 		set_variable = { var = ADISCORD_economy_recent_debt value = 1 }
@@ -1184,10 +1303,7 @@ ADISCORD_economy_expand_money_emission = {
 	ADISCORD_economy_initialize_country = yes
 	if = {
 		limit = { ADISCORD_economy_can_expand_money_emission = yes }
-		set_variable = { var = ADISCORD_economy_emission_gain_temp value = 45 }
-		multiply_variable = { var = ADISCORD_economy_emission_gain_temp value = ADISCORD_economy_final_money_printing_efficiency_factor_bp }
-		divide_variable = { var = ADISCORD_economy_emission_gain_temp value = 100 }
-		add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_emission_gain_temp }
+		# Enabling emission changes future pressure; it does not create an instant treasury package.
 		add_to_variable = { var = ADISCORD_economy_money_printing_level value = 1 }
 		add_to_variable = { var = ADISCORD_economy_price_shock value = 2 }
 		add_to_variable = { var = ADISCORD_economy_deficit_pressure value = -2 }
@@ -1216,6 +1332,7 @@ ADISCORD_economy_stabilization_package = {
 	if = {
 		limit = { ADISCORD_economy_can_stabilize_macro = yes }
 		add_to_variable = { var = ADISCORD_economy_treasury value = -100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
 		add_to_variable = { var = ADISCORD_economy_inflation value = -8 }
 		add_to_variable = { var = ADISCORD_economy_fiscal_stress value = -10 }
 		add_to_variable = { var = ADISCORD_economy_deficit_pressure value = -15 }
@@ -1247,6 +1364,7 @@ ADISCORD_economy_early_repay_debt = {
 		limit = { ADISCORD_economy_can_early_repay_debt = yes }
 		add_to_variable = { var = ADISCORD_economy_treasury value = -100 }
 		add_to_variable = { var = ADISCORD_economy_debt value = -125 }
+		add_to_variable = { var = ADISCORD_economy_current_month_debt_paid value = 100 }
 		add_to_variable = { var = ADISCORD_economy_fiscal_stress value = -6 }
 		add_to_variable = { var = ADISCORD_economy_deficit_pressure value = -6 }
 		ADISCORD_economy_calculate_macro_indicators = yes
@@ -1297,60 +1415,58 @@ ADISCORD_economy_recover_starting_building_counters = {
 	# V19: disabled. Hardcoded STP/WRK/VAL recovery was the source of fake global-looking counts.
 }
 
-ADISCORD_economy_count_buildings = {
-	# V19: count actual economic buildings in owned, controlled states. No hardcoded country profiles.
-	set_variable = { var = ADISCORD_commercial_office_count value = 0 }
-	set_variable = { var = ADISCORD_fiscal_administration_count value = 0 }
+ADISCORD_economy_recount_economic_buildings = {
+	# V21: count actual economic buildings in owned states only. No global counters, capital placement or construction side effects.
+	set_variable = { var = ADISCORD_business_center_count value = 0 }
+	set_variable = { var = ADISCORD_science_center_count value = 0 }
 	set_variable = { var = ADISCORD_industrial_cluster_count value = 0 }
-	set_variable = { var = ADISCORD_logistics_hub_count value = 0 }
-	set_variable = { var = ADISCORD_technical_institute_count value = 0 }
 
 	every_owned_state = {
-		limit = { is_fully_controlled_by = ROOT }
+		# Threshold checks mirror building state_max caps. Update these checks if the caps change.
 		if = {
 			limit = {
 				non_damaged_building_level = {
-					building = ADISCORD_commercial_office
+					building = ADISCORD_business_center
 					level > 0
 				}
 			}
-			ROOT = { add_to_variable = { var = ADISCORD_commercial_office_count value = 1 } }
+			ROOT = { add_to_variable = { var = ADISCORD_business_center_count value = 1 } }
 		}
 		if = {
 			limit = {
 				non_damaged_building_level = {
-					building = ADISCORD_commercial_office
+					building = ADISCORD_business_center
 					level > 1
 				}
 			}
-			ROOT = { add_to_variable = { var = ADISCORD_commercial_office_count value = 1 } }
+			ROOT = { add_to_variable = { var = ADISCORD_business_center_count value = 1 } }
 		}
 		if = {
 			limit = {
 				non_damaged_building_level = {
-					building = ADISCORD_commercial_office
+					building = ADISCORD_business_center
 					level > 2
 				}
 			}
-			ROOT = { add_to_variable = { var = ADISCORD_commercial_office_count value = 1 } }
+			ROOT = { add_to_variable = { var = ADISCORD_business_center_count value = 1 } }
 		}
 		if = {
 			limit = {
 				non_damaged_building_level = {
-					building = ADISCORD_fiscal_administration
+					building = ADISCORD_science_center
 					level > 0
 				}
 			}
-			ROOT = { add_to_variable = { var = ADISCORD_fiscal_administration_count value = 1 } }
+			ROOT = { add_to_variable = { var = ADISCORD_science_center_count value = 1 } }
 		}
 		if = {
 			limit = {
 				non_damaged_building_level = {
-					building = ADISCORD_fiscal_administration
+					building = ADISCORD_science_center
 					level > 1
 				}
 			}
-			ROOT = { add_to_variable = { var = ADISCORD_fiscal_administration_count value = 1 } }
+			ROOT = { add_to_variable = { var = ADISCORD_science_center_count value = 1 } }
 		}
 		if = {
 			limit = {
@@ -1378,127 +1494,16 @@ ADISCORD_economy_count_buildings = {
 				}
 			}
 			ROOT = { add_to_variable = { var = ADISCORD_industrial_cluster_count value = 1 } }
-		}
-		if = {
-			limit = {
-				non_damaged_building_level = {
-					building = ADISCORD_logistics_hub
-					level > 0
-				}
-			}
-			ROOT = { add_to_variable = { var = ADISCORD_logistics_hub_count value = 1 } }
-		}
-		if = {
-			limit = {
-				non_damaged_building_level = {
-					building = ADISCORD_logistics_hub
-					level > 1
-				}
-			}
-			ROOT = { add_to_variable = { var = ADISCORD_logistics_hub_count value = 1 } }
-		}
-		if = {
-			limit = {
-				non_damaged_building_level = {
-					building = ADISCORD_technical_institute
-					level > 0
-				}
-			}
-			ROOT = { add_to_variable = { var = ADISCORD_technical_institute_count value = 1 } }
-		}
-		if = {
-			limit = {
-				non_damaged_building_level = {
-					building = ADISCORD_technical_institute
-					level > 1
-				}
-			}
-			ROOT = { add_to_variable = { var = ADISCORD_technical_institute_count value = 1 } }
 		}
 	}
 
-	clamp_variable = { var = ADISCORD_commercial_office_count min = 0 max = 999 }
-	clamp_variable = { var = ADISCORD_fiscal_administration_count min = 0 max = 999 }
+	clamp_variable = { var = ADISCORD_business_center_count min = 0 max = 999 }
+	clamp_variable = { var = ADISCORD_science_center_count min = 0 max = 999 }
 	clamp_variable = { var = ADISCORD_industrial_cluster_count min = 0 max = 999 }
-	clamp_variable = { var = ADISCORD_logistics_hub_count min = 0 max = 999 }
-	clamp_variable = { var = ADISCORD_technical_institute_count min = 0 max = 999 }
 }
 
-ADISCORD_economy_build_commercial_office = {
-	if = {
-		limit = { ADISCORD_economy_can_build_commercial_office = yes }
-		ADISCORD_economy_spend_for_building = yes
-		random_owned_controlled_state = { limit = { is_fully_controlled_by = ROOT } add_building_construction = { type = ADISCORD_commercial_office level = 1 instant_build = yes } }
-		if = { limit = { ADISCORD_economy_model_is_decentralized_market = yes } add_to_variable = { var = ADISCORD_economic_development_progress value = 5 } }
-		if = { limit = { ADISCORD_economy_model_is_mixed = yes } add_to_variable = { var = ADISCORD_economic_development_progress value = 3 } }
-		if = { limit = { ADISCORD_economy_model_is_oligarchic_clan = yes } add_to_variable = { var = ADISCORD_economic_development_progress value = 3 } add_to_variable = { var = ADISCORD_economy_stretched_score value = 3 } }
-		add_to_variable = { var = ADISCORD_commercial_office_count value = 1 }
-		ADISCORD_economy_count_buildings = yes
-		ADISCORD_economy_light_update = yes
-		ADISCORD_economy_mark_dirty = yes
-	}
-}
-
-ADISCORD_economy_build_fiscal_administration = {
-	if = {
-		limit = { ADISCORD_economy_can_build_fiscal_administration = yes }
-		ADISCORD_economy_spend_for_building = yes
-		random_owned_controlled_state = { limit = { is_fully_controlled_by = ROOT } add_building_construction = { type = ADISCORD_fiscal_administration level = 1 instant_build = yes } }
-		if = { limit = { ADISCORD_economy_model_is_state_coordinated = yes } add_to_variable = { var = ADISCORD_economy_treasury_cap value = 15 } }
-		if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes } add_to_variable = { var = ADISCORD_economy_treasury_cap value = 25 } }
-		if = { limit = { ADISCORD_economy_model_is_technocratic = yes } add_to_variable = { var = ADISCORD_economy_treasury_cap value = 15 } }
-		add_to_variable = { var = ADISCORD_fiscal_administration_count value = 1 }
-		ADISCORD_economy_count_buildings = yes
-		ADISCORD_economy_light_update = yes
-		ADISCORD_economy_mark_dirty = yes
-	}
-}
-
-ADISCORD_economy_build_industrial_cluster = {
-	if = {
-		limit = { ADISCORD_economy_can_build_industrial_cluster = yes }
-		ADISCORD_economy_spend_for_building = yes
-		random_owned_controlled_state = { limit = { is_fully_controlled_by = ROOT } add_building_construction = { type = ADISCORD_industrial_cluster level = 1 instant_build = yes } }
-		if = { limit = { ADISCORD_economy_model_is_state_coordinated = yes } add_to_variable = { var = ADISCORD_economic_development_progress value = 4 } }
-		if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes } add_to_variable = { var = ADISCORD_economic_development_progress value = 6 } }
-		if = { limit = { ADISCORD_economy_model_is_mobilization = yes } add_to_variable = { var = ADISCORD_army_development_progress value = 4 } add_to_variable = { var = ADISCORD_economy_stretched_score value = 3 } }
-		if = { limit = { ADISCORD_economy_model_is_technocratic = yes } add_to_variable = { var = ADISCORD_economic_development_progress value = 6 } }
-		add_to_variable = { var = ADISCORD_industrial_cluster_count value = 1 }
-		ADISCORD_economy_count_buildings = yes
-		ADISCORD_economy_light_update = yes
-		ADISCORD_economy_mark_dirty = yes
-	}
-}
-
-ADISCORD_economy_build_logistics_hub = {
-	if = {
-		limit = { ADISCORD_economy_can_build_logistics_hub = yes }
-		ADISCORD_economy_spend_for_building = yes
-		random_owned_controlled_state = { limit = { is_fully_controlled_by = ROOT } add_building_construction = { type = ADISCORD_logistics_hub level = 1 instant_build = yes } }
-		add_to_variable = { var = ADISCORD_economy_stretched_score value = -4 }
-		add_to_variable = { var = ADISCORD_logistics_hub_count value = 1 }
-		ADISCORD_economy_count_buildings = yes
-		ADISCORD_economy_light_update = yes
-		ADISCORD_economy_mark_dirty = yes
-	}
-}
-
-ADISCORD_economy_build_technical_institute = {
-	if = {
-		limit = { ADISCORD_economy_can_build_technical_institute = yes }
-		ADISCORD_economy_spend_for_building = yes
-		random_owned_controlled_state = { limit = { is_fully_controlled_by = ROOT } add_building_construction = { type = ADISCORD_technical_institute level = 1 instant_build = yes } }
-		add_to_variable = { var = ADISCORD_economic_development_progress value = 4 }
-		if = { limit = { ADISCORD_economy_model_is_technocratic = yes } add_to_variable = { var = ADISCORD_economic_development_progress value = 6 } }
-		add_to_variable = { var = ADISCORD_technical_institute_count value = 1 }
-		ADISCORD_economy_count_buildings = yes
-		ADISCORD_economy_light_update = yes
-		ADISCORD_economy_mark_dirty = yes
-	}
-}
-
-ADISCORD_economy_spend_for_building = {
-	if = { limit = { ADISCORD_economy_has_treasury_50 = yes } add_to_variable = { var = ADISCORD_economy_treasury value = -50 } }
+ADISCORD_economy_count_buildings = {
+	ADISCORD_economy_recount_economic_buildings = yes
 }
 
 ADISCORD_economy_update_gui = {
@@ -1529,6 +1534,115 @@ ADISCORD_economy_clear_dirty = {
 	set_variable = { var = ADISCORD_economy_needs_full_refresh value = 0 }
 }
 
+ADISCORD_economy_gui_try_issue_internal_bonds = {
+	ADISCORD_economy_initialize_country = yes
+	if = {
+		limit = { ADISCORD_economy_can_issue_internal_bonds = yes }
+		ADISCORD_economy_issue_internal_bonds = yes
+		ADISCORD_economy_light_update = yes
+		ADISCORD_economy_update_gui = yes
+	}
+}
+
+ADISCORD_economy_gui_try_take_external_loan = {
+	ADISCORD_economy_initialize_country = yes
+	if = {
+		limit = { ADISCORD_economy_can_take_external_loan = yes }
+		ADISCORD_economy_take_external_loan = yes
+		ADISCORD_economy_light_update = yes
+		ADISCORD_economy_update_gui = yes
+	}
+}
+
+ADISCORD_economy_gui_try_repay_debt = {
+	ADISCORD_economy_initialize_country = yes
+	if = {
+		limit = {
+			ADISCORD_economy_has_treasury_50 = yes
+			ADISCORD_economy_has_debt = yes
+		}
+		ADISCORD_economy_repay_debt = yes
+		ADISCORD_economy_light_update = yes
+		ADISCORD_economy_update_gui = yes
+	}
+}
+
+ADISCORD_economy_gui_try_restructure_debt = {
+	ADISCORD_economy_initialize_country = yes
+	if = {
+		limit = { ADISCORD_economy_can_restructure_debt = yes }
+		ADISCORD_economy_restructure_debt = yes
+		ADISCORD_economy_light_update = yes
+		ADISCORD_economy_update_gui = yes
+	}
+}
+
+ADISCORD_economy_gui_try_expand_emission = {
+	ADISCORD_economy_initialize_country = yes
+	if = {
+		limit = { ADISCORD_economy_can_expand_money_emission = yes }
+		ADISCORD_economy_start_limited_emission = yes
+		ADISCORD_economy_light_update = yes
+		ADISCORD_economy_update_gui = yes
+	}
+}
+
+ADISCORD_economy_gui_try_reduce_emission = {
+	ADISCORD_economy_initialize_country = yes
+	if = {
+		limit = { ADISCORD_economy_can_reduce_money_emission = yes }
+		ADISCORD_economy_reduce_money_emission = yes
+		ADISCORD_economy_light_update = yes
+		ADISCORD_economy_update_gui = yes
+	}
+}
+
+ADISCORD_economy_gui_try_stabilization_package = {
+	ADISCORD_economy_initialize_country = yes
+	if = {
+		limit = { ADISCORD_economy_can_stabilize_macro = yes }
+		ADISCORD_economy_stabilization_package = yes
+		ADISCORD_economy_light_update = yes
+		ADISCORD_economy_update_gui = yes
+	}
+}
+
+ADISCORD_economy_gui_try_toggle_auto_loan = {
+	ADISCORD_economy_initialize_country = yes
+	ADISCORD_economy_toggle_auto_loan = yes
+	ADISCORD_economy_update_gui = yes
+}
+
+ADISCORD_economy_gui_try_invest_reserves = {
+	ADISCORD_economy_initialize_country = yes
+	if = {
+		limit = { ADISCORD_economy_can_invest_reserves = yes }
+		ADISCORD_economy_invest_reserves = yes
+		ADISCORD_economy_light_update = yes
+		ADISCORD_economy_update_gui = yes
+	}
+}
+
+ADISCORD_economy_gui_try_civilian_investment = {
+	ADISCORD_economy_initialize_country = yes
+	if = {
+		limit = { ADISCORD_economy_can_invest_reserves = yes }
+		ADISCORD_economy_civilian_investment_action = yes
+		ADISCORD_economy_light_update = yes
+		ADISCORD_economy_update_gui = yes
+	}
+}
+
+ADISCORD_economy_gui_try_military_investment = {
+	ADISCORD_economy_initialize_country = yes
+	if = {
+		limit = { ADISCORD_economy_can_use_military_investment = yes }
+		ADISCORD_economy_military_investment_action = yes
+		ADISCORD_economy_light_update = yes
+		ADISCORD_economy_update_gui = yes
+	}
+}
+
 ADISCORD_economy_clamp_all_variables = {
 	clamp_variable = { var = ADISCORD_economy_treasury min = 0 max = 2000 }
 	clamp_variable = { var = ADISCORD_economy_treasury_cap min = 100 max = 2000 }
@@ -1554,6 +1668,16 @@ ADISCORD_economy_clamp_all_variables = {
 	clamp_variable = { var = ADISCORD_economy_austerity_level min = 0 max = 4 }
 	clamp_variable = { var = ADISCORD_economy_last_auto_borrowing min = 0 max = 5000 }
 	clamp_variable = { var = ADISCORD_economy_last_uncovered_deficit min = 0 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_auto_loan_enabled min = 0 max = 1 }
+	clamp_variable = { var = ADISCORD_economy_last_month_debt_added min = 0 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_last_month_debt_paid min = 0 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_last_month_action_costs min = 0 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_last_month_building_costs min = 0 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_current_month_debt_added min = 0 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_current_month_debt_paid min = 0 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_current_month_action_costs min = 0 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_current_month_building_costs min = 0 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_recent_building_project min = 0 max = 1 }
 	clamp_variable = { var = ADISCORD_economy_war_fatigue_score min = 0 max = 100 }
 	clamp_variable = { var = ADISCORD_economy_war_fatigue_level min = 0 max = 4 }
 	clamp_variable = { var = ADISCORD_economy_demographic_fatigue_score min = 0 max = 100 }
@@ -1579,8 +1703,11 @@ ADISCORD_economy_recalculate_treasury_cap = {
 	set_temp_variable = { var = ADISCORD_economy_cap_temp value = ADISCORD_economic_development_level }
 	multiply_temp_variable = { var = ADISCORD_economy_cap_temp value = 35 }
 	add_to_variable = { var = ADISCORD_economy_treasury_cap value = ADISCORD_economy_cap_temp }
-	set_temp_variable = { var = ADISCORD_economy_cap_temp value = ADISCORD_fiscal_administration_count }
-	multiply_temp_variable = { var = ADISCORD_economy_cap_temp value = 25 }
+	set_temp_variable = { var = ADISCORD_economy_cap_temp value = ADISCORD_business_center_count }
+	multiply_temp_variable = { var = ADISCORD_economy_cap_temp value = 12 }
+	add_to_variable = { var = ADISCORD_economy_treasury_cap value = ADISCORD_economy_cap_temp }
+	set_temp_variable = { var = ADISCORD_economy_cap_temp value = ADISCORD_science_center_count }
+	multiply_temp_variable = { var = ADISCORD_economy_cap_temp value = 8 }
 	add_to_variable = { var = ADISCORD_economy_treasury_cap value = ADISCORD_economy_cap_temp }
 	multiply_variable = { var = ADISCORD_economy_treasury_cap value = ADISCORD_economy_final_treasury_capacity_factor_bp }
 	divide_variable = { var = ADISCORD_economy_treasury_cap value = 100 }
@@ -1630,6 +1757,7 @@ ADISCORD_economy_clear_recent_action_flags = {
 	set_variable = { var = ADISCORD_economy_recent_money_printing value = 0 }
 	set_variable = { var = ADISCORD_economy_recent_investment value = 0 }
 	set_variable = { var = ADISCORD_economy_recent_war_financing value = 0 }
+	set_variable = { var = ADISCORD_economy_recent_building_project value = 0 }
 	set_variable = { var = ADISCORD_economy_treasury_before_tick value = 0 }
 	set_variable = { var = ADISCORD_economy_treasury_after_tick value = 0 }
 	set_variable = { var = ADISCORD_economy_actual_treasury_delta value = 0 }
@@ -1759,6 +1887,7 @@ ADISCORD_economy_invest_reserves = {
 	if = {
 		limit = { ADISCORD_economy_can_invest_reserves = yes }
 		add_to_variable = { var = ADISCORD_economy_treasury value = -50 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 50 }
 		add_to_variable = { var = ADISCORD_economic_development_progress value = 12 }
 		add_to_variable = { var = ADISCORD_economy_monthly_development_multiplier value = 10 }
 		if = { limit = { ADISCORD_economy_model_is_decentralized_market = yes } add_to_variable = { var = ADISCORD_economic_development_progress value = 8 } }
@@ -1773,7 +1902,22 @@ ADISCORD_economy_invest_reserves = {
 }
 
 ADISCORD_economy_civilian_investment_action = {
-	ADISCORD_economy_invest_reserves = yes
+	ADISCORD_economy_initialize_country = yes
+	if = {
+		limit = { ADISCORD_economy_can_invest_reserves = yes }
+		add_to_variable = { var = ADISCORD_economy_treasury value = -50 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 50 }
+		add_to_variable = { var = ADISCORD_economic_development_progress value = 12 }
+		add_to_variable = { var = ADISCORD_economy_monthly_development_multiplier value = 10 }
+		if = { limit = { ADISCORD_economy_model_is_decentralized_market = yes } add_to_variable = { var = ADISCORD_economic_development_progress value = 8 } }
+		if = { limit = { ADISCORD_economy_model_is_mixed = yes } add_to_variable = { var = ADISCORD_economic_development_progress value = 5 } }
+		if = { limit = { ADISCORD_economy_model_is_technocratic = yes } add_to_variable = { var = ADISCORD_economic_development_progress value = 10 } }
+		if = { limit = { ADISCORD_economy_model_is_oligarchic_clan = yes } add_to_variable = { var = ADISCORD_economic_development_progress value = 5 } add_to_variable = { var = ADISCORD_economy_stretched_score value = 4 } }
+		set_variable = { var = ADISCORD_economy_recent_investment value = 1 }
+		add_ideas = ADISCORD_economy_civilian_investment
+		ADISCORD_economy_check_economic_development_upgrade = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
 }
 
 ADISCORD_economy_military_investment_action = {
@@ -1781,6 +1925,7 @@ ADISCORD_economy_military_investment_action = {
 	if = {
 		limit = { ADISCORD_economy_can_use_military_investment = yes }
 		add_to_variable = { var = ADISCORD_economy_treasury value = -50 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 50 }
 		add_to_variable = { var = ADISCORD_army_development_progress value = 10 }
 		add_to_variable = { var = ADISCORD_economy_stretched_score value = 8 }
 		if = { limit = { ADISCORD_economy_model_is_state_coordinated = yes } add_to_variable = { var = ADISCORD_army_development_progress value = 4 } }
@@ -1807,6 +1952,58 @@ ADISCORD_economy_war_taxes_action = {
 		add_ideas = ADISCORD_economy_war_taxes
 		ADISCORD_economy_mark_dirty = yes
 	}
+}
+
+ADISCORD_economy_toggle_auto_loan = {
+	ADISCORD_economy_initialize_country = yes
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_auto_loan_enabled value = 1 compare = greater_than_or_equals } }
+		set_variable = { var = ADISCORD_economy_auto_loan_enabled value = 0 }
+	}
+	else = {
+		set_variable = { var = ADISCORD_economy_auto_loan_enabled value = 1 }
+	}
+	ADISCORD_economy_update_gui = yes
+}
+
+ADISCORD_economy_debug_rebuild_building_counters = {
+	ADISCORD_economy_initialize_country = yes
+	ADISCORD_economy_recount_economic_buildings = yes
+	ADISCORD_economy_light_update = yes
+	ADISCORD_economy_calculate_development_multiplier = yes
+	ADISCORD_economy_update_gui = yes
+}
+
+ADISCORD_economy_ai_monthly_policy = {
+	# AI policy is country-scoped and uses current aggregate variables only.
+	if = {
+		limit = {
+			check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than }
+			check_variable = { var = ADISCORD_economy_treasury value = 50 compare = less_than }
+			check_variable = { var = ADISCORD_economy_debt_ratio value = 85 compare = less_than }
+		}
+		ADISCORD_economy_issue_internal_bonds = yes
+	}
+	if = {
+		limit = {
+			OR = {
+				check_variable = { var = ADISCORD_economy_debt_ratio value = 85 compare = greater_than_or_equals }
+				check_variable = { var = ADISCORD_economy_fiscal_stress value = 55 compare = greater_than_or_equals }
+			}
+		}
+		if = { limit = { ADISCORD_economy_can_decrease_army_spending = yes } ADISCORD_economy_decrease_army_spending = yes }
+		if = { limit = { ADISCORD_economy_can_decrease_construction_spending = yes } ADISCORD_economy_decrease_construction_spending = yes }
+	}
+	if = {
+		limit = { ADISCORD_economy_can_stabilize_macro = yes }
+		ADISCORD_economy_stabilization_package = yes
+	}
+	ADISCORD_economy_light_update = yes
+}
+
+ADISCORD_economy_ai_yearly_policy = {
+	# V21: AI no longer spawns economic buildings through scripts. It may use the normal construction system.
+	ADISCORD_economy_light_update = yes
 }
 
 ADISCORD_economy_update_model_and_cycle = {

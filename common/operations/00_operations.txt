@@ -71,7 +71,7 @@ operation_rescue_operative = { ### 0 1/35
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -105,7 +105,7 @@ operation_rescue_operative = { ### 0 1/35
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -116,7 +116,6 @@ operation_rescue_operative = { ### 0 1/35
 		exfiltration_submarine_pickup = { base = 25 }
 	}
 }
-
 operation_rescue_general= { ### 0 1/35
 	icon = GFX_operations_rescue_captured_operative # TODO_JACK: new art req
 	map_icon = GFX_operations_rescue_captured_operative_map
@@ -169,7 +168,7 @@ operation_rescue_general= { ### 0 1/35
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -187,7 +186,7 @@ operation_rescue_general= { ### 0 1/35
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -295,7 +294,7 @@ operation_infiltrate_civilian = { ### 1 1/35
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -329,7 +328,7 @@ operation_infiltrate_civilian = { ### 1 1/35
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -497,7 +496,7 @@ operation_capture_cipher = { ### 3 1/55
 			target = FROM
 			value > 25
 		}
-		has_tech = mechanical_computing
+		has_tech = ADISCORD_tech_encryption_rebuild
 		has_done_agency_upgrade = upgrade_form_department
 		NOT = {
 			ROOT = { is_fully_decrypted = FROM }
@@ -581,7 +580,7 @@ operation_capture_cipher = { ### 3 1/55
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -618,7 +617,7 @@ operation_capture_cipher = { ### 3 1/55
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -726,7 +725,7 @@ operation_infiltrate_armed_forces_army = { ### 4 1/55
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -767,7 +766,7 @@ operation_infiltrate_armed_forces_army = { ### 4 1/55
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -884,7 +883,7 @@ operation_infiltrate_armed_forces_navy = { ### 5 1/55
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -925,7 +924,7 @@ operation_infiltrate_armed_forces_navy = { ### 5 1/55
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -1035,7 +1034,7 @@ operation_infiltrate_armed_forces_airforce = { ### 6 1/55
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -1076,7 +1075,7 @@ operation_infiltrate_armed_forces_airforce = { ### 6 1/55
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -1327,7 +1326,7 @@ operation_coup_government = { ### 7 1/70
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -1654,7 +1653,7 @@ operation_make_resistance_contacts = { ### 9 2/40
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -1672,7 +1671,7 @@ operation_make_resistance_contacts = { ### 9 2/40
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -1761,7 +1760,7 @@ operation_collaboration_government = { ### 10 2/55
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -1789,7 +1788,7 @@ operation_collaboration_government = { ### 10 2/55
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -1870,7 +1869,7 @@ operation_coordinated_strike = { ### 11 2/70
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -2029,7 +2028,7 @@ operation_steal_tech_civilian = { ### 12 3/35
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -2063,7 +2062,7 @@ operation_steal_tech_civilian = { ### 12 3/35
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -2164,7 +2163,7 @@ operation_targeted_sabotage_industry = { ### 13 3/35
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -2197,7 +2196,7 @@ operation_targeted_sabotage_industry = { ### 13 3/35
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -2293,7 +2292,7 @@ operation_targeted_sabotage_infrastructure = { ### 14 3/35
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -2328,7 +2327,7 @@ operation_targeted_sabotage_infrastructure = { ### 14 3/35
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -2425,7 +2424,7 @@ operation_targeted_sabotage_resources = { ### 15 3/35
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -2458,7 +2457,7 @@ operation_targeted_sabotage_resources = { ### 15 3/35
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -2537,7 +2536,7 @@ operation_steal_tech_army = { ### 16 3/55
 		else = {
 			ROOT = {
 				steal_random_tech_bonus = {
-					folder = nsb_armour_folder
+					folder = armour_folder
 					folder = artillery_folder
 					folder = infantry_folder
 					folder = support_folder
@@ -2584,7 +2583,7 @@ operation_steal_tech_army = { ### 16 3/55
 				else = {
 					ROOT = {
 						steal_random_tech_bonus = {
-							folder = nsb_armour_folder
+							folder = armour_folder
 							folder = artillery_folder
 							folder = infantry_folder
 							folder = support_folder
@@ -2625,7 +2624,7 @@ operation_steal_tech_army = { ### 16 3/55
 				else = {
 					ROOT = {
 						steal_random_tech_bonus = {
-							folder = nsb_armour_folder
+							folder = armour_folder
 							folder = artillery_folder
 							folder = infantry_folder
 							folder = support_folder
@@ -2665,7 +2664,7 @@ operation_steal_tech_army = { ### 16 3/55
 		else = {
 			ROOT = {
 				steal_random_tech_bonus = {
-					folder = nsb_armour_folder
+					folder = armour_folder
 					folder = artillery_folder
 					folder = infantry_folder
 					folder = support_folder
@@ -2690,7 +2689,7 @@ operation_steal_tech_army = { ### 16 3/55
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -2723,7 +2722,7 @@ operation_steal_tech_army = { ### 16 3/55
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -2779,7 +2778,7 @@ operation_steal_tech_navy = { ### 17 3/55
   			limit = { has_dlc = "Man the Guns"} 
   			ROOT = {
 				steal_random_tech_bonus = {
-					folder = mtgnavalfolder
+					folder = electronics_folder
 
 					bonus = 3.0
 					dynamic = yes
@@ -2797,7 +2796,7 @@ operation_steal_tech_navy = { ### 17 3/55
   		else = {
 	  		ROOT = {
 				steal_random_tech_bonus = {
-					folder = naval_folder
+					folder = support_folder
 
 					bonus = 3.0
 					dynamic = yes
@@ -2823,7 +2822,7 @@ operation_steal_tech_navy = { ### 17 3/55
 
   					ROOT = {
 						steal_random_tech_bonus = {
-							folder = mtgnavalfolder
+							folder = electronics_folder
 
 							bonus = 3.0
 							ahead_reduction = 2
@@ -2838,7 +2837,7 @@ operation_steal_tech_navy = { ### 17 3/55
   				else = {
 					ROOT = {
 						steal_random_tech_bonus = {
-							folder = naval_folder
+							folder = support_folder
 
 							bonus = 3.0
 							ahead_reduction = 2
@@ -2857,7 +2856,7 @@ operation_steal_tech_navy = { ### 17 3/55
 
 					ROOT = {
 						steal_random_tech_bonus = {
-							folder = mtgnavalfolder
+							folder = electronics_folder
 
 							bonus = 3.0
 							ahead_reduction = 1
@@ -2872,7 +2871,7 @@ operation_steal_tech_navy = { ### 17 3/55
 				else = {
 					ROOT = {
 						steal_random_tech_bonus = {
-							folder = naval_folder
+							folder = support_folder
 
 							bonus = 3.0
 							ahead_reduction = 1
@@ -2890,8 +2889,8 @@ operation_steal_tech_navy = { ### 17 3/55
 	outcome_potential = {
 		ROOT = {
 			steal_random_tech_bonus = {
-				folder = naval_folder
-				folder = mtgnavalfolder
+				folder = support_folder
+				folder = electronics_folder
 
 				bonus = 3.0
 				dynamic = yes
@@ -2911,7 +2910,7 @@ operation_steal_tech_navy = { ### 17 3/55
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -2945,7 +2944,7 @@ operation_steal_tech_navy = { ### 17 3/55
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -3002,7 +3001,7 @@ operation_steal_tech_airforce = { ### 18 3/55
 					has_dlc = "By Blood Alone"
 				}
 				steal_random_tech_bonus = {
-					folder = bba_air_techs_folder
+					folder = air_techs_folder
 					bonus = 3.0
 					dynamic = yes
 					instant = yes
@@ -3039,7 +3038,7 @@ operation_steal_tech_airforce = { ### 18 3/55
 							has_dlc = "By Blood Alone"
 						}
 						steal_random_tech_bonus = {
-							folder = bba_air_techs_folder
+							folder = air_techs_folder
 							bonus = 3.0
 							ahead_reduction = 2
 							dynamic = yes
@@ -3072,7 +3071,7 @@ operation_steal_tech_airforce = { ### 18 3/55
 
 					ROOT = {
 						steal_random_tech_bonus = {
-							folder = bba_air_techs_folder
+							folder = air_techs_folder
 							bonus = 3.0
 							ahead_reduction = 1
 							dynamic = yes
@@ -3109,7 +3108,7 @@ operation_steal_tech_airforce = { ### 18 3/55
 					has_dlc = "By Blood Alone"
 				}
 				steal_random_tech_bonus = {
-					folder = bba_air_techs_folder
+					folder = air_techs_folder
 					bonus = 3.0
 					dynamic = yes
 					instant = yes
@@ -3141,7 +3140,7 @@ operation_steal_tech_airforce = { ### 18 3/55
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0
@@ -3175,7 +3174,7 @@ operation_steal_tech_airforce = { ### 18 3/55
 			modifier = {
 				ROOT = { 
 					has_equipment = {
-						transport_plane_equipment < 1
+						ADISCORD_rocket_strike_archetype < 1
 					}
 				}
 				factor = 0

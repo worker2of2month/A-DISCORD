@@ -1,0 +1,143 @@
+ADISCORD_garrison_templates = {
+	role = garrison
+
+	upgrade_prio = {
+		base = 1
+		modifier = {
+			factor = 15
+			NOT = { ai_has_role_template = garrison }
+		}
+	}
+
+	ADISCORD_garrison_levy = {
+		reinforce_prio = 0
+		custom_icon = 7
+		upgrade_prio = { base = 2 }
+		target_template = {
+			regiments = {
+				ADISCORD_militia = 4
+			}
+		}
+	}
+}
+
+ADISCORD_infantry_templates = {
+	role = infantry
+
+	upgrade_prio = {
+		base = 5
+	}
+
+	ADISCORD_line_brigade = {
+		upgrade_prio = { base = 2 }
+		target_template = {
+			support = {
+				engineer = 1
+				artillery = 1
+				maintenance_company = 1
+				signal_company = 1
+			}
+			regiments = {
+				infantry = 6
+			}
+		}
+	}
+
+	ADISCORD_assault_brigade = {
+		upgrade_prio = {
+			base = 0
+			modifier = {
+				add = 5
+				has_tech = ADISCORD_tech_remote_weapon_tripods
+				num_of_military_factories > 8
+			}
+		}
+		target_template = {
+			support = {
+				engineer = 1
+				artillery = 1
+				maintenance_company = 1
+				signal_company = 1
+			}
+			regiments = {
+				infantry = 6
+				ADISCORD_assault_infantry = 3
+			}
+		}
+	}
+}
+
+ADISCORD_mountaineer_templates = {
+	role = mountaineers
+	upgrade_prio = { base = 2 }
+
+	ADISCORD_mountaineer_brigade = {
+		upgrade_prio = { base = 1 }
+		target_template = {
+			support = {
+				engineer = 1
+				artillery = 1
+			}
+			regiments = {
+				mountaineers = 6
+			}
+		}
+	}
+}
+
+ADISCORD_platform_templates = {
+	role = armor
+
+	upgrade_prio = {
+		base = 0
+		modifier = {
+			add = 8
+			has_tech = ADISCORD_tech_semi_autonomous_combat_modules
+			num_of_military_factories > 7
+		}
+	}
+
+	ADISCORD_platform_battlegroup = {
+		reinforce_prio = 2
+		upgrade_prio = {
+			base = 0
+			modifier = {
+				add = 8
+				has_tech = ADISCORD_tech_semi_autonomous_combat_modules
+			}
+		}
+		target_template = {
+			support = {
+				engineer = 1
+				ADISCORD_recon_platform = 1
+				maintenance_company = 1
+			}
+			regiments = {
+				infantry = 4
+				ADISCORD_combat_platform = 4
+			}
+		}
+	}
+
+	ADISCORD_heavy_battlegroup = {
+		reinforce_prio = 1
+		upgrade_prio = {
+			base = 0
+			modifier = {
+				add = 6
+				has_tech = ADISCORD_tech_heavy_platform_cores
+				num_of_military_factories > 14
+			}
+		}
+		target_template = {
+			support = {
+				engineer = 1
+				maintenance_company = 1
+			}
+			regiments = {
+				infantry = 5
+				ADISCORD_heavy_platform = 3
+			}
+		}
+	}
+}

@@ -1,5 +1,5 @@
-NDefines.NGame.START_DATE = "2163.1.1.1";
-	NDefines.NGame.END_DATE = "2193.1.1.1";
+NDefines.NGame.START_DATE = "2160.1.1.1";
+	NDefines.NGame.END_DATE = "2205.1.1.1";
 
 	NDefines.NDiplomacy.WARGOAL_JUSTIFY_TENSION_FROM_PRODUCTION = 20.0;
 	NDefines.NDiplomacy.VOLUNTEERS_DIVISIONS_REQUIRED = 3;

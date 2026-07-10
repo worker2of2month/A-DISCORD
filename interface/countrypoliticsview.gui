@@ -71,8 +71,8 @@ guiTypes = {
 		animation_time = 300	
 		size = { width=594 height=100%% }
 		
-		hide_sound = ADISCORD_pol_menu_close_sound
-		show_sound = ADISCORD_pol_menu_open_sound
+		hide_sound = click_close
+		show_sound = click_default
 		
 		background = {
 			name = "Background"		

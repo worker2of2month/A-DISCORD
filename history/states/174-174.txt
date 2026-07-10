@@ -1,0 +1,15 @@
+state={
+	id=174
+	name="STATE_174"
+	provinces={
+		158 191 3367 4013 4792 5261 5869 6266 6325 7243 8134 8479 8972 10636 10727 11140 
+	}
+	manpower=0
+	buildings_max_level_factor=1
+	local_supplies=0
+
+	history = {
+		owner = EFL
+		add_core_of = EFL
+	}
+}

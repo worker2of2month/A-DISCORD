@@ -349,7 +349,7 @@ bba_air_prod_1 = {
 
 	ai_strategy = {
 		type = equipment_variant_production_factor
-		id = large_plane_airframe
+		id = ADISCORD_rocket_strike_archetype
 		value = 0
 	}
 
@@ -532,10 +532,7 @@ default_paratroopers_production = {
 default_major_SF_para = {
 	enable = {
 		is_major = yes
-		OR = {
-				has_doctrine = paratroopers_1
-				has_doctrine = paratroopers_2
-		}
+		has_tech = ADISCORD_tech_vtol_assault_frames
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = {
@@ -548,10 +545,7 @@ default_major_SF_para = {
 default_major_SF_marines = {
 	enable = {
 		is_major = yes
-		OR = {
-				has_doctrine = marines_1
-				has_doctrine = marines_2
-		}
+		has_tech = ADISCORD_tech_exoskeleton_load_frames
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = {
@@ -612,7 +606,7 @@ default_mountaineers_production = {
 default_mobile_production = {
 	enable = {
 		ai_wants_divisions > 11
-		has_tech = motorised_infantry
+		has_tech = ADISCORD_tech_logistics_hub_networks
 	}
 	abort = {
 		ai_wants_divisions < 12
@@ -1215,8 +1209,8 @@ put_garrisons_on_high_prio = {
 default_spyplanes_production = {
 	enable = {
 		OR = {
-			has_tech = scout_plane1
-			has_tech = photo_reconnaisance
+			has_tech = ADISCORD_tech_drone_recon_swarms
+			has_tech = ADISCORD_tech_battlefield_analytics
 		}
 		is_major = yes
 		#OR = {
@@ -1254,8 +1248,8 @@ default_spyplanes_production = {
 minors_dont_spy = {
 	enable = {
 		OR = {
-			has_tech = scout_plane1
-			has_tech = photo_reconnaisance
+			has_tech = ADISCORD_tech_drone_recon_swarms
+			has_tech = ADISCORD_tech_battlefield_analytics
 		}
 		is_major = no
 	}
@@ -1272,7 +1266,7 @@ minors_dont_spy = {
 ### SPECIAL PROJECT STRATEGIES
 default_build_a_nl_facility = {
 	enable = {
-		has_tech = atomic_research
+		has_tech = ADISCORD_tech_microreactor_blocks
 		num_of_civilian_factories > 25
 		num_of_military_factories > 25 # Even if we have the base tech, let's wait until we have some kind of capacity
 		nuclear_facility < 1  # one is enough
@@ -1317,9 +1311,9 @@ default_build_a_lw_facility = {
 		num_of_civilian_factories > 40
 		num_of_military_factories > 40
 		OR = { # Don't start until we can build decent tanks of some kind
-			has_tech = improved_light_tank_chassis
-			has_tech = basic_medium_tank_chassis
-			has_tech = improved_heavy_tank_chassis
+			has_tech = ADISCORD_tech_restored_armored_chassis
+			has_tech = ADISCORD_tech_remote_weapon_stations
+			has_tech = ADISCORD_tech_heavy_platform_cores
 		}
 		land_facility < 1 # one is enough
 	}
@@ -1339,9 +1333,9 @@ default_build_an_air_facility = {
 		num_of_military_factories > 40 # We should first build up our military industry
 
 		OR = { # Don't start until we can build decent aircraft
-			has_tech = basic_small_airframe
-			has_tech = basic_medium_airframe
-			has_tech = basic_large_airframe
+			has_tech = ADISCORD_tech_reclaimed_jet_platforms
+			has_tech = ADISCORD_tech_guided_munitions
+			has_tech = ADISCORD_tech_drone_air_wings
 		}
 		air_facility < 1 # one is enough
 	}
@@ -1367,15 +1361,40 @@ default_become_spymaster = {
 default_produce_some_trucks_for_buffer = {
 	enable = {
 		num_of_military_factories > 12
-		has_tech = tech_trucks
-		has_equipment = { motorized_equipment < 3000 }
+		has_tech = ADISCORD_tech_logistics_hub_networks
+		has_equipment = { support_equipment < 3000 }
 	}
 	abort_when_not_enabled = yes
 
 	ai_strategy = {
 		type = equipment_production_min_factories_archetype
-		id = motorized_equipment
+		id = support_equipment
 		value = 1
+	}
+}
+
+ADISCORD_produce_squad_weapons_for_buffer = {
+	enable = {
+		num_of_military_factories > 6
+		has_equipment = { ADISCORD_squad_weapons_equipment < 750 }
+	}
+	abort = {
+		OR = {
+			num_of_military_factories < 7
+			has_equipment = { ADISCORD_squad_weapons_equipment > 1500 }
+		}
+	}
+
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = ADISCORD_squad_weapons_equipment
+		value = 1
+	}
+	
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = ADISCORD_squad_weapons_equipment
+		value = 20
 	}
 }
 

@@ -1,0 +1,249 @@
+script_enum_operative_mission_type = {
+	build_intel_network
+	counter_intelligence
+	quiet_network
+	root_out_resistance
+	control_trade
+}
+
+script_enum_advisor_slot_type = {
+	theorist
+	high_command
+	army_chief
+	navy_chief
+	air_chief
+	political_advisor
+}
+
+script_enum_equipment_stat = {	
+								#Viktors note for modders and future CDs: If you want to use a stat in the MIOs it has to be in the equipment category itself, not on the battalion level. So stuff like defense works because its contained within the equipment, but stuff like recon will not work because its owned by the battalion. Adding stuff like recon will not throw an error, but it will _not_ work. Moving stats to the equipment level from the bat-level might fix this if you are brave enough, but it is very risk and might break other stuff. Ive commented what is currently on the battalion level below and should not be used with MIOs.
+
+	default_morale 					#Cannot be used with MIOS
+	defense
+	breakthrough
+	hardness
+	soft_attack
+	hard_attack
+	recon 							#Cannot be used with MIOS
+	entrenchment					# ONLY works for tanks with dozer blades, NOT infantry
+	initiative 						#Cannot be used with MIOS
+	casualty_trickleback 			#Cannot be used with MIOS
+	supply_consumption_factor 		#Cannot be used with MIOS
+	supply_consumption 				#Cannot be used with MIOS
+	suppression 					#Cannot be used with MIOS
+	suppression_factor 				#Cannot be used with MIOS
+	experience_loss_factor 			#Cannot be used with MIOS
+	equipment_capture_factor 		#Cannot be used with MIOS
+	recovery
+	additional_collateral_damage
+	fuel_capacity
+	surface_detection
+	sub_detection
+	surface_visibility
+	sub_visibility
+	lg_attack
+	lg_armor_piercing
+	hg_attack
+	hg_armor_piercing
+	torpedo_attack
+	sub_attack
+	anti_air_attack
+	amphibious_defense
+	naval_speed
+	naval_range
+	mines_planting
+	mines_sweeping
+	naval_light_gun_hit_chance_factor
+	naval_heavy_gun_hit_chance_factor
+	naval_torpedo_hit_chance_factor
+	naval_torpedo_damage_reduction_factor
+	naval_torpedo_enemy_critical_chance_factor
+	convoy_raiding_coordination
+	patrol_coordination
+	search_and_destroy_coordination
+	air_range
+	air_defence
+	air_attack
+	air_agility
+	air_bombing
+	air_superiority
+	naval_strike_attack
+	naval_strike_targetting
+	air_ground_attack
+	air_visibility_factor
+	railway_gun_attack 			#Cannot be used with MIOS
+	railway_gun_attack_range_index_in_define # This cannot be used with MIOs or equipment_bonus - only in equipment definition
+	railway_gun_annex_ratio
+	railway_gun_hours_between_redistribution
+	max_organisation			#Cannot be used with MIOS
+	max_strength				##Cannot be used with MIOS
+	maximum_speed	
+	armor_value
+	ap_attack
+	reliability
+	reliability_factor
+	weight
+	thrust 						#DLC Only be careful and avoid unless needed
+	fuel_consumption
+	fuel_consumption_factor
+	strategic_attack
+	carrier_size
+	submarine_carrier_size
+	carrier_surface_detection
+	carrier_sub_detection
+	acclimatization_hot_climate_gain_factor			#Cannot be used with MIOS
+	acclimatization_cold_climate_gain_factor		#Cannot be used with MIOS
+	night_penalty				#Cannot be used with MIOS
+	build_cost_ic
+	naval_weather_penalty_factor
+}
+
+script_enum_production_stat = {
+	production_cost_factor
+	production_capacity_factor
+	production_efficiency_cap_factor
+	production_efficiency_gain_factor
+	production_resource_need_factor
+	production_resource_penalty_factor
+	production_conversion_speed_factor
+}
+
+script_enum_equipment_category = {
+	convoy
+	train
+	floating_harbor
+	railway_gun
+	armor
+	motorized
+	mechanized
+	infantry
+	capital_ship
+	submarine
+	screen_ship
+	fighter
+	heavy_fighter
+	interceptor
+	tactical_bomber
+	strategic_bomber
+	cas
+	naval_bomber
+	missile
+	emplacement_gun_ammo
+	ballistic_missile
+	nuclear_missile
+	sam_missile
+	support_ship
+	suicide
+	scout_plane
+	maritime_patrol_plane
+	air_transport
+	carrier
+	missile_launcher
+	support
+	amphibious
+	anti_air
+	artillery
+	anti_tank
+	rocket
+	flame
+	land_cruiser
+}
+
+script_enum_equipment_bonus_type = {
+	convoy
+	convoy_1
+	train
+	floating_harbor
+	railway_gun
+	armor
+	motorized
+	mechanized
+	infantry
+	capital_ship
+	submarine
+	screen_ship
+	fighter
+	heavy_fighter
+	interceptor
+	tactical_bomber
+	strategic_bomber
+	cas
+	naval_bomber
+	missile
+	emplacement_gun_ammo
+	ballistic_missile
+	nuclear_missile
+	sam_missile
+	support_ship
+	suicide
+	scout_plane
+	maritime_patrol_plane
+	air_transport
+	carrier
+	missile_launcher
+	support
+	amphibious
+	anti_air
+	artillery
+	anti_tank
+	rocket
+	flame
+	land_cruiser
+
+	ADISCORD_fighter_archetype
+	ADISCORD_fighter_airframe_2163
+	ADISCORD_interceptor_airframe_2183
+	ADISCORD_cas_archetype
+	ADISCORD_cas_airframe_2170
+	ADISCORD_vtol_airframe_2170
+	ADISCORD_drone_airframe_2183
+	ADISCORD_rocket_strike_archetype
+	ADISCORD_rocket_strike_platform_2183
+	ADISCORD_orbital_tracking_platform_2200
+	ADISCORD_deep_strike_airframe_2200
+	ADISCORD_recon_platform_archetype
+	ADISCORD_combat_platform_archetype
+	ADISCORD_heavy_platform_archetype
+	ADISCORD_recovery_platform_archetype
+	ADISCORD_light_combat_platform_2163
+	ADISCORD_combat_platform_2170
+	ADISCORD_recon_drone_carrier_2170
+	ADISCORD_combat_platform_2183
+	ADISCORD_repair_platform_2183
+	ADISCORD_heavy_combat_platform_2183
+	ADISCORD_combat_platform_2200
+	ADISCORD_heavy_combat_platform_2200
+	artillery_equipment
+	artillery_equipment_1
+	ADISCORD_artillery_equipment_2170
+	ADISCORD_artillery_equipment_2183
+	anti_tank_equipment
+	ADISCORD_anti_tank_equipment_2163
+	ADISCORD_anti_tank_equipment_2183
+	anti_air_equipment
+	ADISCORD_anti_air_equipment_2163
+	ADISCORD_anti_air_equipment_2183
+	infantry_equipment
+	infantry_equipment_0
+	ADISCORD_infantry_equipment_2170
+	ADISCORD_infantry_equipment_2183
+	ADISCORD_infantry_equipment_2200
+	ADISCORD_squad_weapons_equipment
+	ADISCORD_squad_weapons_equipment_0
+	ADISCORD_squad_weapons_equipment_2170
+	ADISCORD_squad_weapons_equipment_2183
+	ADISCORD_squad_weapons_equipment_2200
+	railway_gun_equipment
+	railway_gun_equipment_1
+	ADISCORD_railway_gun_equipment_2200
+	support_equipment
+	support_equipment_1
+	ADISCORD_support_equipment_2170
+	ADISCORD_support_equipment_2183
+	ADISCORD_support_equipment_2200
+	train_equipment
+	train_equipment_1
+	armored_train_equipment_1
+	ADISCORD_autonomous_train_equipment_2183
+	ADISCORD_hardened_train_equipment_2183
+}

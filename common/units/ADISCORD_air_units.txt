@@ -1,0 +1,43 @@
+sub_units = {
+	fighter = {
+		sprite = light_plane
+		priority = 1
+		active = yes
+		type = { fighter }
+		need = {
+			ADISCORD_fighter_archetype = 1
+		}
+		categories = {
+			category_fighter
+		}
+		land_air_wing_size = 100
+	}
+
+	cas = {
+		sprite = light_plane
+		priority = 1
+		active = yes
+		type = { cas }
+		need = {
+			ADISCORD_cas_archetype = 1
+		}
+		categories = {
+			category_cas
+		}
+		land_air_wing_size = 100
+	}
+
+	tac_bomber = {
+		sprite = medium_plane
+		priority = 1
+		active = yes
+		type = { tactical_bomber }
+		need = {
+			ADISCORD_rocket_strike_archetype = 1
+		}
+		categories = {
+			category_tac_bomber
+		}
+		land_air_wing_size = 100
+	}
+}

@@ -96,6 +96,39 @@ spriteTypes = {
 	  	name = "GFX_idea_NOD_home_of_hedonist_revolution"
 	  	texturefile = "gfx/interface/ideas/NOD/idea_NOD_home_of_hedonist_revolution.png"
 	}
+###Country unique ideas
+	spriteType = {
+		name = "GFX_idea_RUS_national_spirit"
+		texturefile = "gfx/interface/ideas/idea_generic_agrarian_society.dds"
+	}
+	spriteType = {
+		name = "GFX_idea_VLA_national_spirit"
+		texturefile = "gfx/interface/ideas/idea_generic_political_reform.dds"
+	}
+	spriteType = {
+		name = "GFX_idea_NAM_national_spirit"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_national_spirit.png"
+	}
+	spriteType = {
+		name = "GFX_idea_DAN_national_spirit"
+		texturefile = "gfx/interface/ideas/DAN/idea_DAN_national_spirit.png"
+	}
+	spriteType = {
+		name = "GFX_idea_PIV_national_spirit"
+		texturefile = "gfx/interface/ideas/PIV/idea_PIV_national_spirit.png"
+	}
+	spriteType = {
+		name = "GFX_idea_IVN_national_spirit"
+		texturefile = "gfx/interface/ideas/IVN/idea_IVN_national_spirit.png"
+	}
+	spriteType = {
+		name = "GFX_idea_APH_national_spirit"
+		texturefile = "gfx/interface/ideas/APH/idea_APH_national_spirit.png"
+	}
+	spriteType = {
+		name = "GFX_idea_WIT_national_spirit"
+		texturefile = "gfx/interface/ideas/joining_rule_all_the_world.dds"
+	}
 ###Laws
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_civic_loose_communes"

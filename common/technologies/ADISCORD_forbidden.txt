@@ -1,0 +1,162 @@
+technologies = {
+	ADISCORD_tech_old_generator_fragments = {
+		allow = {
+			ADISCORD_has_forbidden_legacy_access = yes
+		}
+		nuclear_production_factor = 0.04
+		stability_factor = -0.005
+		path = { leads_to_tech = ADISCORD_tech_dead_reactor_salvage research_cost_coeff = 1 }
+		research_cost = 1.8
+		start_year = 2100
+		folder = {
+			name = electronics_folder
+			position = { x = 2 y = 0 }
+		}
+		ai_will_do = { factor = 1 }
+		categories = { electronics nuclear }
+	}
+
+	ADISCORD_tech_dead_reactor_salvage = {
+		allow = {
+			ADISCORD_has_forbidden_legacy_access = yes
+		}
+		nuclear_production_factor = 0.06
+		stability_factor = -0.008
+		path = { leads_to_tech = ADISCORD_tech_legacy_reactor_compactification research_cost_coeff = 1 }
+		research_cost = 1.8
+		start_year = 2120
+		folder = {
+			name = electronics_folder
+			position = { x = 2 y = 2 }
+		}
+		ai_will_do = { factor = 1 }
+		categories = { electronics nuclear }
+	}
+
+	ADISCORD_tech_legacy_reactor_compactification = {
+		allow = {
+			ADISCORD_has_forbidden_legacy_access = yes
+		}
+		nuclear_production_factor = 0.08
+		stability_factor = -0.011
+		path = { leads_to_tech = ADISCORD_tech_dirty_energy_munitions research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_singularity_cooling_systems research_cost_coeff = 1 }
+		research_cost = 1.8
+		start_year = 2140
+		folder = {
+			name = electronics_folder
+			position = { x = 2 y = 4 }
+		}
+		ai_will_do = { factor = 1 }
+		categories = { electronics nuclear }
+	}
+
+	ADISCORD_tech_dirty_energy_munitions = {
+		allow = {
+			ADISCORD_has_forbidden_legacy_access = yes
+			ADISCORD_has_radiation_mapping_tech = yes
+		}
+		nuclear_production_factor = 0.1
+		stability_factor = -0.014
+		path = { leads_to_tech = ADISCORD_tech_black_grid_protocols research_cost_coeff = 1 }
+		research_cost = 2.15
+		start_year = 2160
+		folder = {
+			name = electronics_folder
+			position = { x = 0 y = 8 }
+		}
+		ai_will_do = { factor = 1 }
+		categories = { electronics nuclear }
+	}
+
+	ADISCORD_tech_singularity_cooling_systems = {
+		allow = {
+			ADISCORD_has_forbidden_legacy_access = yes
+		}
+		nuclear_production_factor = 0.12
+		stability_factor = -0.017
+		path = { leads_to_tech = ADISCORD_tech_black_grid_protocols research_cost_coeff = 1 }
+		research_cost = 2.465
+		start_year = 2182
+		folder = {
+			name = electronics_folder
+			position = { x = 4 y = 26 }
+		}
+		ai_will_do = { factor = 1 }
+		categories = { electronics nuclear }
+	}
+
+	ADISCORD_tech_black_grid_protocols = {
+		allow = {
+			ADISCORD_has_black_grid_access = yes
+		}
+		nuclear_production_factor = 0.14
+		stability_factor = -0.02
+		dependencies = {
+			ADISCORD_tech_dirty_energy_munitions = 1
+			ADISCORD_tech_singularity_cooling_systems = 1
+		}
+		research_cost = 3.6
+		start_year = 2200
+		folder = {
+			name = electronics_folder
+			position = { x = 2 y = 38 }
+		}
+		ai_will_do = { factor = 1 }
+		categories = { electronics nuclear }
+	}
+
+	ADISCORD_tech_self_repairing_industrial_swarms = {
+		allow = {
+			ADISCORD_has_forbidden_legacy_access = yes
+			has_tech = ADISCORD_tech_autonomous_factory_cells
+		}
+		production_factory_max_efficiency_factor = 0.02
+		stability_factor = -0.01
+		path = { leads_to_tech = ADISCORD_tech_neural_command_cores research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_forbidden_automation_doctrine research_cost_coeff = 1 }
+		research_cost = 2.375
+		start_year = 2170
+		folder = {
+			name = electronics_folder
+			position = { x = 2 y = 18 }
+		}
+		ai_will_do = { factor = 1 }
+		categories = { electronics computing_tech industry }
+	}
+
+	ADISCORD_tech_neural_command_cores = {
+		allow = {
+			ADISCORD_has_forbidden_legacy_access = yes
+			has_tech = ADISCORD_tech_operational_ai_assistants
+		}
+		production_factory_max_efficiency_factor = 0.03
+		stability_factor = -0.015
+		research_cost = 2.465
+		start_year = 2182
+		folder = {
+			name = electronics_folder
+			position = { x = 0 y = 26 }
+		}
+		ai_will_do = { factor = 1 }
+		categories = { electronics computing_tech industry }
+	}
+
+	ADISCORD_tech_forbidden_automation_doctrine = {
+		allow = {
+			ADISCORD_has_black_grid_access = yes
+			has_tech = ADISCORD_tech_neural_command_cores
+			has_tech = ADISCORD_tech_self_repairing_industrial_swarms
+		}
+		production_factory_max_efficiency_factor = 0.04
+		stability_factor = -0.02
+		research_cost = 3.45
+		start_year = 2200
+		folder = {
+			name = electronics_folder
+			position = { x = 4 y = 38 }
+		}
+		ai_will_do = { factor = 1 }
+		categories = { electronics computing_tech industry }
+	}
+}

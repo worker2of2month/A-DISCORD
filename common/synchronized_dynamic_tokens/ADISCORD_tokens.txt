@@ -6,11 +6,9 @@ anarchism
 technocracy
 etatism
 hedonism
-ADISCORD_commercial_office
-ADISCORD_fiscal_administration
+ADISCORD_business_center
+ADISCORD_science_center
 ADISCORD_industrial_cluster
-ADISCORD_logistics_hub
-ADISCORD_technical_institute
 ADISCORD_economy_tax_collection_factor
 ADISCORD_economy_population_tax_income_factor
 ADISCORD_economy_trade_income_factor

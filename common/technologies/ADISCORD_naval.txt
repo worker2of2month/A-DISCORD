@@ -1,0 +1,1127 @@
+technologies = {
+	ADISCORD_tech_restored_dockyards = {
+		convoy_escort_efficiency = 0.02
+		naval_detection = 0.012
+		path = { leads_to_tech = ADISCORD_tech_coastal_patrols research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2100
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 0 }
+		}
+		folder = {
+			name = mtgnavalsupportfolder
+			position = { x = 2 y = 0 }
+		}
+		ai_will_do = { factor = 36 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_coastal_patrols = {
+		convoy_escort_efficiency = 0.021
+		naval_detection = 0.012
+		path = { leads_to_tech = ADISCORD_tech_convoy_routing research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2120
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 2 }
+		}
+		folder = {
+			name = mtgnavalsupportfolder
+			position = { x = 2 y = 2 }
+		}
+		ai_will_do = { factor = 35 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_convoy_routing = {
+		convoy_escort_efficiency = 0.021
+		naval_detection = 0.013
+		path = { leads_to_tech = ADISCORD_tech_modular_escort_combat_systems research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2140
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 4 }
+		}
+		folder = {
+			name = mtgnavalsupportfolder
+			position = { x = 2 y = 4 }
+		}
+		ai_will_do = { factor = 33 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_modular_escort_combat_systems = {
+		convoy_escort_efficiency = 0.022
+		naval_detection = 0.013
+		path = { leads_to_tech = ADISCORD_tech_escort_datalinks research_cost_coeff = 1 }
+		research_cost = 0.7
+		start_year = 2150
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 6 }
+		}
+		folder = {
+			name = mtgnavalsupportfolder
+			position = { x = 2 y = 6 }
+		}
+		ai_will_do = { factor = 32 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_escort_datalinks = {
+		convoy_escort_efficiency = 0.023
+		naval_detection = 0.013
+		path = { leads_to_tech = ADISCORD_tech_towed_array_sonar research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_variable_depth_sonar research_cost_coeff = 1 }
+		research_cost = 0.9
+		start_year = 2160
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 8 }
+		}
+		folder = {
+			name = mtgnavalsupportfolder
+			position = { x = 2 y = 8 }
+		}
+		ai_will_do = { factor = 31 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_towed_array_sonar = {
+		convoy_escort_efficiency = 0.023
+		naval_coordination = 0.014
+		path = { leads_to_tech = ADISCORD_tech_escort_integrated_electric_propulsion research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_variable_depth_sonar
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 10 }
+		}
+		folder = {
+			name = mtgnavalsupportfolder
+			position = { x = 2 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_variable_depth_sonar = {
+		naval_detection = 0.024
+		naval_mines_effect_reduction = 0.014
+		path = { leads_to_tech = ADISCORD_tech_containerized_escort_missile_cells research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_towed_array_sonar
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 10 }
+		}
+		folder = {
+			name = mtgnavalsupportfolder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_containerized_escort_missile_cells = {
+		convoy_escort_efficiency = 0.024
+		naval_detection = 0.014
+		path = { leads_to_tech = ADISCORD_tech_escort_integrated_electric_propulsion research_cost_coeff = 1 }
+		research_cost = 1.08
+		start_year = 2164
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 12 }
+		}
+		folder = {
+			name = mtgnavalsupportfolder
+			position = { x = 0 y = 12 }
+		}
+		ai_will_do = { factor = 28 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_escort_integrated_electric_propulsion = {
+		convoy_escort_efficiency = 0.025
+		naval_detection = 0.015
+		path = { leads_to_tech = ADISCORD_tech_drone_pickets research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_cooperative_convoy_tracking research_cost_coeff = 1 }
+		research_cost = 1.095
+		start_year = 2166
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 14 }
+		}
+		folder = {
+			name = mtgnavalsupportfolder
+			position = { x = 2 y = 14 }
+		}
+		ai_will_do = { factor = 27 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_drone_pickets = {
+		convoy_escort_efficiency = 0.026
+		naval_coordination = 0.015
+		path = { leads_to_tech = ADISCORD_tech_over_horizon_escort_radar research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_cooperative_convoy_tracking
+		}
+		research_cost = 1.5
+		start_year = 2168
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 16 }
+		}
+		folder = {
+			name = mtgnavalsupportfolder
+			position = { x = 2 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_cooperative_convoy_tracking = {
+		naval_detection = 0.026
+		naval_mines_effect_reduction = 0.015
+		path = { leads_to_tech = ADISCORD_tech_unmanned_mine_countermeasure_boats research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_drone_pickets
+		}
+		research_cost = 1.5
+		start_year = 2168
+		folder = {
+			name = naval_folder
+			position = { x = 4 y = 16 }
+		}
+		folder = {
+			name = mtgnavalsupportfolder
+			position = { x = 4 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_unmanned_mine_countermeasure_boats = {
+		convoy_escort_efficiency = 0.027
+		naval_detection = 0.015
+		path = { leads_to_tech = ADISCORD_tech_over_horizon_escort_radar research_cost_coeff = 1 }
+		research_cost = 1.125
+		start_year = 2170
+		folder = {
+			name = naval_folder
+			position = { x = 4 y = 18 }
+		}
+		folder = {
+			name = mtgnavalsupportfolder
+			position = { x = 4 y = 18 }
+		}
+		ai_will_do = { factor = 25 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_over_horizon_escort_radar = {
+		convoy_escort_efficiency = 0.028
+		naval_detection = 0.016
+		path = { leads_to_tech = ADISCORD_tech_autonomous_escorts research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_autonomous_replenishment_craft research_cost_coeff = 1 }
+		research_cost = 1.147
+		start_year = 2173
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 20 }
+		}
+		folder = {
+			name = mtgnavalsupportfolder
+			position = { x = 2 y = 20 }
+		}
+		ai_will_do = { factor = 23 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_autonomous_escorts = {
+		convoy_escort_efficiency = 0.028
+		naval_coordination = 0.016
+		path = { leads_to_tech = ADISCORD_tech_distributed_acoustic_pickets research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_autonomous_replenishment_craft
+		}
+		research_cost = 1.5
+		start_year = 2176
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 22 }
+		}
+		folder = {
+			name = mtgnavalsupportfolder
+			position = { x = 2 y = 22 }
+		}
+		ai_will_do = { factor = 22 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_autonomous_replenishment_craft = {
+		naval_detection = 0.029
+		naval_mines_effect_reduction = 0.016
+		path = { leads_to_tech = ADISCORD_tech_directed_energy_point_defense research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_autonomous_escorts
+		}
+		research_cost = 1.5
+		start_year = 2176
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 22 }
+		}
+		folder = {
+			name = mtgnavalsupportfolder
+			position = { x = 0 y = 22 }
+		}
+		ai_will_do = { factor = 22 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_directed_energy_point_defense = {
+		convoy_escort_efficiency = 0.029
+		naval_detection = 0.017
+		path = { leads_to_tech = ADISCORD_tech_distributed_acoustic_pickets research_cost_coeff = 1 }
+		research_cost = 1.193
+		start_year = 2179
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 24 }
+		}
+		folder = {
+			name = mtgnavalsupportfolder
+			position = { x = 0 y = 24 }
+		}
+		ai_will_do = { factor = 21 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_distributed_acoustic_pickets = {
+		convoy_escort_efficiency = 0.03
+		naval_detection = 0.017
+		path = { leads_to_tech = ADISCORD_tech_self_repairing_escort_hulls research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_predictive_convoy_defense_network research_cost_coeff = 1 }
+		research_cost = 1.215
+		start_year = 2182
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 26 }
+		}
+		folder = {
+			name = mtgnavalsupportfolder
+			position = { x = 2 y = 26 }
+		}
+		ai_will_do = { factor = 20 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_self_repairing_escort_hulls = {
+		convoy_escort_efficiency = 0.031
+		naval_coordination = 0.017
+		path = { leads_to_tech = ADISCORD_tech_distributed_sea_control research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_predictive_convoy_defense_network
+		}
+		research_cost = 1.5
+		start_year = 2188
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 30 }
+		}
+		folder = {
+			name = mtgnavalsupportfolder
+			position = { x = 2 y = 30 }
+		}
+		ai_will_do = { factor = 17 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_predictive_convoy_defense_network = {
+		naval_detection = 0.031
+		naval_mines_effect_reduction = 0.018
+		path = { leads_to_tech = ADISCORD_tech_distributed_sea_control research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_self_repairing_escort_hulls
+		}
+		research_cost = 1.5
+		start_year = 2188
+		folder = {
+			name = naval_folder
+			position = { x = 4 y = 30 }
+		}
+		folder = {
+			name = mtgnavalsupportfolder
+			position = { x = 4 y = 30 }
+		}
+		ai_will_do = { factor = 17 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_distributed_sea_control = {
+		convoy_escort_efficiency = 0.046
+		naval_detection = 0.026
+		research_cost = 2.2
+		start_year = 2200
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 38 }
+		}
+		folder = {
+			name = mtgnavalsupportfolder
+			position = { x = 2 y = 38 }
+		}
+		ai_will_do = { factor = 12 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_recovered_fire_control = {
+		naval_hit_chance = 0.012
+		naval_coordination = 0.012
+		path = { leads_to_tech = ADISCORD_tech_modular_hull_standards research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2100
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 0 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 2 y = 0 }
+		}
+		ai_will_do = { factor = 36 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_modular_hull_standards = {
+		naval_hit_chance = 0.012
+		naval_coordination = 0.012
+		path = { leads_to_tech = ADISCORD_tech_radar_gunnery research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2120
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 2 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 2 y = 2 }
+		}
+		ai_will_do = { factor = 35 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_radar_gunnery = {
+		naval_hit_chance = 0.013
+		naval_coordination = 0.013
+		path = { leads_to_tech = ADISCORD_tech_stabilized_naval_gun_directors research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2140
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 4 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 2 y = 4 }
+		}
+		ai_will_do = { factor = 33 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_stabilized_naval_gun_directors = {
+		naval_hit_chance = 0.013
+		naval_coordination = 0.013
+		path = { leads_to_tech = ADISCORD_tech_missile_batteries research_cost_coeff = 1 }
+		research_cost = 0.7
+		start_year = 2150
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 6 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 2 y = 6 }
+		}
+		ai_will_do = { factor = 32 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_missile_batteries = {
+		naval_hit_chance = 0.013
+		naval_coordination = 0.013
+		path = { leads_to_tech = ADISCORD_tech_phased_array_mast_complexes research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_modular_vertical_launch_cells research_cost_coeff = 1 }
+		research_cost = 0.9
+		start_year = 2160
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 8 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 2 y = 8 }
+		}
+		ai_will_do = { factor = 31 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_phased_array_mast_complexes = {
+		naval_hit_chance = 0.023
+		naval_coordination = 0.014
+		path = { leads_to_tech = ADISCORD_tech_capital_ship_integrated_electric_drive research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_modular_vertical_launch_cells
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 10 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_modular_vertical_launch_cells = {
+		naval_detection = 0.024
+		convoy_escort_efficiency = 0.014
+		path = { leads_to_tech = ADISCORD_tech_composite_armor_belts research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_phased_array_mast_complexes
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = naval_folder
+			position = { x = 4 y = 10 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 4 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_capital_ship_integrated_electric_drive = {
+		naval_hit_chance = 0.024
+		naval_coordination = 0.014
+		path = { leads_to_tech = ADISCORD_tech_networked_task_groups research_cost_coeff = 1 }
+		research_cost = 1.11
+		start_year = 2168
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 16 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_composite_armor_belts = {
+		naval_detection = 0.025
+		convoy_escort_efficiency = 0.015
+		path = { leads_to_tech = ADISCORD_tech_cooperative_fleet_missile_defense research_cost_coeff = 1 }
+		research_cost = 1.11
+		start_year = 2168
+		folder = {
+			name = naval_folder
+			position = { x = 4 y = 16 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 4 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_networked_task_groups = {
+		naval_hit_chance = 0.026
+		naval_coordination = 0.015
+		path = { leads_to_tech = ADISCORD_tech_unmanned_damage_control_decks research_cost_coeff = 1 }
+		research_cost = 1.147
+		start_year = 2173
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 20 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 20 }
+		}
+		ai_will_do = { factor = 23 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_cooperative_fleet_missile_defense = {
+		naval_detection = 0.026
+		convoy_escort_efficiency = 0.015
+		path = { leads_to_tech = ADISCORD_tech_long_range_railgun_fire_control research_cost_coeff = 1 }
+		research_cost = 1.147
+		start_year = 2173
+		folder = {
+			name = naval_folder
+			position = { x = 4 y = 20 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 4 y = 20 }
+		}
+		ai_will_do = { factor = 23 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_unmanned_damage_control_decks = {
+		naval_hit_chance = 0.027
+		naval_coordination = 0.015
+		path = { leads_to_tech = ADISCORD_tech_railgun_batteries research_cost_coeff = 1 }
+		research_cost = 1.193
+		start_year = 2179
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 24 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 24 }
+		}
+		ai_will_do = { factor = 21 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_long_range_railgun_fire_control = {
+		naval_detection = 0.028
+		convoy_escort_efficiency = 0.016
+		path = { leads_to_tech = ADISCORD_tech_superconducting_railgun_turrets research_cost_coeff = 1 }
+		research_cost = 1.193
+		start_year = 2179
+		folder = {
+			name = naval_folder
+			position = { x = 4 y = 24 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 4 y = 24 }
+		}
+		ai_will_do = { factor = 21 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_railgun_batteries = {
+		naval_hit_chance = 0.028
+		naval_coordination = 0.016
+		path = { leads_to_tech = ADISCORD_tech_drone_carrier_deck_systems research_cost_coeff = 1 }
+		research_cost = 1.238
+		start_year = 2185
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 28 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 28 }
+		}
+		ai_will_do = { factor = 18 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_superconducting_railgun_turrets = {
+		naval_detection = 0.029
+		convoy_escort_efficiency = 0.016
+		path = { leads_to_tech = ADISCORD_tech_directed_energy_broadside_defense research_cost_coeff = 1 }
+		research_cost = 1.238
+		start_year = 2185
+		folder = {
+			name = naval_folder
+			position = { x = 4 y = 28 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 4 y = 28 }
+		}
+		ai_will_do = { factor = 18 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_drone_carrier_deck_systems = {
+		naval_hit_chance = 0.029
+		naval_coordination = 0.017
+		path = { leads_to_tech = ADISCORD_tech_autonomous_capital_ship_cores research_cost_coeff = 1 }
+		research_cost = 1.282
+		start_year = 2191
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 32 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 32 }
+		}
+		ai_will_do = { factor = 16 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_directed_energy_broadside_defense = {
+		naval_detection = 0.03
+		convoy_escort_efficiency = 0.017
+		path = { leads_to_tech = ADISCORD_tech_distributed_horizon_targeting research_cost_coeff = 1 }
+		research_cost = 1.282
+		start_year = 2191
+		folder = {
+			name = naval_folder
+			position = { x = 4 y = 32 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 4 y = 32 }
+		}
+		ai_will_do = { factor = 16 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_autonomous_capital_ship_cores = {
+		naval_hit_chance = 0.031
+		naval_coordination = 0.017
+		path = { leads_to_tech = ADISCORD_tech_horizon_fleet_command research_cost_coeff = 1 }
+		research_cost = 1.328
+		start_year = 2197
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 36 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 36 }
+		}
+		ai_will_do = { factor = 13 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_distributed_horizon_targeting = {
+		naval_detection = 0.031
+		convoy_escort_efficiency = 0.018
+		path = { leads_to_tech = ADISCORD_tech_horizon_fleet_command research_cost_coeff = 1 }
+		research_cost = 1.328
+		start_year = 2197
+		folder = {
+			name = naval_folder
+			position = { x = 4 y = 36 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 4 y = 36 }
+		}
+		ai_will_do = { factor = 13 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_horizon_fleet_command = {
+		naval_hit_chance = 0.026
+		naval_coordination = 0.026
+		research_cost = 2.2
+		start_year = 2200
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 38 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 2 y = 38 }
+		}
+		ai_will_do = { factor = 12 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_sonar_archives = {
+		naval_detection = 0.012
+		naval_mines_effect_reduction = 0.02
+		path = { leads_to_tech = ADISCORD_tech_quiet_propulsion research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2100
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 0 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 2 y = 0 }
+		}
+		ai_will_do = { factor = 36 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_quiet_propulsion = {
+		naval_detection = 0.012
+		naval_mines_effect_reduction = 0.021
+		path = { leads_to_tech = ADISCORD_tech_homing_torpedoes research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2120
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 2 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 2 y = 2 }
+		}
+		ai_will_do = { factor = 35 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_homing_torpedoes = {
+		naval_detection = 0.013
+		naval_mines_effect_reduction = 0.021
+		path = { leads_to_tech = ADISCORD_tech_anechoic_tile_bonding research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2140
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 4 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 2 y = 4 }
+		}
+		ai_will_do = { factor = 33 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_anechoic_tile_bonding = {
+		naval_detection = 0.013
+		naval_mines_effect_reduction = 0.022
+		path = { leads_to_tech = ADISCORD_tech_air_independent_cells research_cost_coeff = 1 }
+		research_cost = 0.7
+		start_year = 2150
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 6 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 2 y = 6 }
+		}
+		ai_will_do = { factor = 32 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_air_independent_cells = {
+		naval_detection = 0.013
+		naval_mines_effect_reduction = 0.023
+		path = { leads_to_tech = ADISCORD_tech_pumpjet_propulsors research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_wake_homing_torpedo_seekers research_cost_coeff = 1 }
+		research_cost = 0.9
+		start_year = 2160
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 8 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 2 y = 8 }
+		}
+		ai_will_do = { factor = 31 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_pumpjet_propulsors = {
+		naval_detection = 0.023
+		naval_coordination = 0.014
+		path = { leads_to_tech = ADISCORD_tech_conformal_flank_sonars research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_wake_homing_torpedo_seekers
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 10 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_wake_homing_torpedo_seekers = {
+		naval_mines_effect_reduction = 0.024
+		naval_detection = 0.014
+		path = { leads_to_tech = ADISCORD_tech_pressure_tolerant_lithium_cells research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_pumpjet_propulsors
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = naval_folder
+			position = { x = 4 y = 10 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 4 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_conformal_flank_sonars = {
+		naval_detection = 0.014
+		naval_mines_effect_reduction = 0.024
+		path = { leads_to_tech = ADISCORD_tech_seabed_sensor_webs research_cost_coeff = 1 }
+		research_cost = 1.08
+		start_year = 2164
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 12 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 12 }
+		}
+		ai_will_do = { factor = 28 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_pressure_tolerant_lithium_cells = {
+		naval_detection = 0.015
+		naval_mines_effect_reduction = 0.025
+		path = { leads_to_tech = ADISCORD_tech_seabed_terrain_navigation research_cost_coeff = 1 }
+		research_cost = 1.08
+		start_year = 2164
+		folder = {
+			name = naval_folder
+			position = { x = 4 y = 12 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 4 y = 12 }
+		}
+		ai_will_do = { factor = 28 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_seabed_sensor_webs = {
+		naval_detection = 0.015
+		naval_mines_effect_reduction = 0.026
+		path = { leads_to_tech = ADISCORD_tech_fiber_optic_torpedo_control research_cost_coeff = 1 }
+		research_cost = 1.095
+		start_year = 2166
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 14 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 14 }
+		}
+		ai_will_do = { factor = 27 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_seabed_terrain_navigation = {
+		naval_detection = 0.015
+		naval_mines_effect_reduction = 0.026
+		path = { leads_to_tech = ADISCORD_tech_fiber_optic_torpedo_control research_cost_coeff = 1 }
+		research_cost = 1.095
+		start_year = 2166
+		folder = {
+			name = naval_folder
+			position = { x = 4 y = 14 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 4 y = 14 }
+		}
+		ai_will_do = { factor = 27 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_fiber_optic_torpedo_control = {
+		naval_detection = 0.015
+		naval_mines_effect_reduction = 0.027
+		path = { leads_to_tech = ADISCORD_tech_underwater_vehicle_deployment_bays research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_autonomous_submarines research_cost_coeff = 1 }
+		research_cost = 1.11
+		start_year = 2168
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 16 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 2 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_underwater_vehicle_deployment_bays = {
+		naval_detection = 0.028
+		naval_coordination = 0.016
+		path = { leads_to_tech = ADISCORD_tech_magnetohydrodynamic_silent_drive research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_autonomous_submarines
+		}
+		research_cost = 1.5
+		start_year = 2173
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 20 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 20 }
+		}
+		ai_will_do = { factor = 23 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_autonomous_submarines = {
+		naval_mines_effect_reduction = 0.028
+		naval_detection = 0.016
+		path = { leads_to_tech = ADISCORD_tech_supercavitating_interceptor_torpedoes research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_underwater_vehicle_deployment_bays
+		}
+		research_cost = 1.5
+		start_year = 2173
+		folder = {
+			name = naval_folder
+			position = { x = 4 y = 20 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 4 y = 20 }
+		}
+		ai_will_do = { factor = 23 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_magnetohydrodynamic_silent_drive = {
+		naval_detection = 0.016
+		naval_mines_effect_reduction = 0.029
+		path = { leads_to_tech = ADISCORD_tech_quantum_magnetometer_arrays research_cost_coeff = 1 }
+		research_cost = 1.193
+		start_year = 2179
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 24 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 24 }
+		}
+		ai_will_do = { factor = 21 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_supercavitating_interceptor_torpedoes = {
+		naval_detection = 0.017
+		naval_mines_effect_reduction = 0.029
+		path = { leads_to_tech = ADISCORD_tech_distributed_abyssal_comm_relays research_cost_coeff = 1 }
+		research_cost = 1.193
+		start_year = 2179
+		folder = {
+			name = naval_folder
+			position = { x = 4 y = 24 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 4 y = 24 }
+		}
+		ai_will_do = { factor = 21 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_quantum_magnetometer_arrays = {
+		naval_detection = 0.017
+		naval_mines_effect_reduction = 0.03
+		path = { leads_to_tech = ADISCORD_tech_self_repairing_pressure_hulls research_cost_coeff = 1 }
+		research_cost = 1.238
+		start_year = 2185
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 28 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 28 }
+		}
+		ai_will_do = { factor = 18 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_distributed_abyssal_comm_relays = {
+		naval_detection = 0.017
+		naval_mines_effect_reduction = 0.031
+		path = { leads_to_tech = ADISCORD_tech_self_repairing_pressure_hulls research_cost_coeff = 1 }
+		research_cost = 1.238
+		start_year = 2185
+		folder = {
+			name = naval_folder
+			position = { x = 4 y = 28 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 4 y = 28 }
+		}
+		ai_will_do = { factor = 18 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_self_repairing_pressure_hulls = {
+		naval_detection = 0.018
+		naval_mines_effect_reduction = 0.031
+		path = { leads_to_tech = ADISCORD_tech_deep_ocean_denial research_cost_coeff = 1 }
+		research_cost = 1.305
+		start_year = 2194
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 34 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 2 y = 34 }
+		}
+		ai_will_do = { factor = 15 }
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_deep_ocean_denial = {
+		naval_detection = 0.026
+		naval_mines_effect_reduction = 0.046
+		research_cost = 2.2
+		start_year = 2200
+		folder = {
+			name = naval_folder
+			position = { x = 2 y = 38 }
+		}
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 2 y = 38 }
+		}
+		ai_will_do = { factor = 12 }
+		categories = { naval_equipment electronics }
+	}
+}

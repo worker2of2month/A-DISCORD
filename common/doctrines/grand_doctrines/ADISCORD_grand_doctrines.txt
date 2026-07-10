@@ -1,0 +1,99 @@
+ADISCORD_doctrine_restoration_general_staff = {
+	folder = land
+	name = ADISCORD_doctrine_restoration_general_staff
+	description = ADISCORD_doctrine_restoration_general_staff_desc
+	icon = GFX_doctrine_grand_battleplan_medium
+	available = { always = yes }
+	xp_cost = 75
+	xp_type = army
+	ai_will_do = {
+		base = 2
+		modifier = { factor = 1.5 has_war = yes }
+	}
+	tracks = {
+		ADISCORD_land_mass_restoration
+		ADISCORD_land_platform_centric
+		ADISCORD_land_networked_operations
+		ADISCORD_land_fortress_state
+	}
+	planning_speed = 0.05
+	land_reinforce_rate = 0.01
+	milestones = {
+		{
+			category_all_infantry = { max_organisation = 5 }
+			land_reinforce_rate = 0.01
+		}
+		{
+			category_all_armor = { breakthrough = 0.05 }
+			coordination_bonus = 0.01
+		}
+		{
+			coordination_bonus = 0.02
+			planning_speed = 0.05
+		}
+		{
+			category_support_battalions = { defense = 0.05 }
+			dig_in_speed_factor = 0.05
+		}
+	}
+}
+
+ADISCORD_air_doctrine_restored_air_command = {
+	folder = air
+	name = ADISCORD_air_doctrine_restored_air_command
+	description = ADISCORD_air_doctrine_restored_air_command_desc
+	icon = GFX_doctrine_direct_ground_support_medium
+	available = { always = yes }
+	xp_cost = 75
+	xp_type = air
+	ai_will_do = {
+		base = 2
+		modifier = { factor = 1.5 has_tech = ADISCORD_tech_reclaimed_jet_platforms }
+	}
+	tracks = {
+		ADISCORD_air_drone_swarm
+		ADISCORD_air_vtol_deep_strike
+		ADISCORD_air_strategic_denial
+	}
+	air_mission_efficiency = 0.03
+	air_accidents_factor = -0.05
+	milestones = {
+		{
+			category_fighter = { air_agility = 0.05 }
+			air_superiority_efficiency = 0.05
+		}
+		{
+			category_cas = { air_ground_attack = 0.05 }
+			air_cas_efficiency = 0.05
+		}
+		{
+			air_intercept_efficiency = 0.05
+			air_interception_detect_factor = 0.05
+		}
+	}
+}
+
+ADISCORD_naval_doctrine_littoral_command = {
+	folder = naval
+	name = ADISCORD_naval_doctrine_littoral_command
+	description = ADISCORD_naval_doctrine_littoral_command_desc
+	icon = GFX_doctrine_trade_interdiction_medium
+	available = { always = yes }
+	xp_cost = 50
+	xp_type = navy
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 2 has_war = yes }
+	}
+	tracks = {
+		ADISCORD_naval_littoral_security
+	}
+	convoy_escort_efficiency = 0.05
+	naval_mine_hit_chance = 0.05
+	milestones = {
+		{
+			convoy_raiding_efficiency_factor = 0.05
+			convoy_escort_efficiency = 0.05
+		}
+	}
+}

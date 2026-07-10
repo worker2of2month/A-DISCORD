@@ -1,0 +1,2 @@
+# Vanilla raid categories are replaced for A-Discord. Add custom categories
+# here only after their ADISCORD_ technology gates exist.

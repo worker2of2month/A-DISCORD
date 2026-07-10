@@ -1,0 +1,176 @@
+ADISCORD_ai_reconstruction_research_baseline = {
+	enable = { always = yes }
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_production_factor
+		id = infantry
+		value = 10
+	}
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = ADISCORD_squad_weapons_equipment
+		value = 18
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = artillery
+		value = 5
+	}
+}
+
+ADISCORD_ai_standardized_ground_forces = {
+	enable = { ADISCORD_has_military_standardization_tech = yes }
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = role_ratio
+		id = infantry
+		value = 10
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = infantry
+		value = 10
+	}
+}
+
+ADISCORD_ai_basic_support_buffer = {
+	enable = {
+		num_of_military_factories > 4
+		has_equipment = { support_equipment < 600 }
+	}
+	abort = {
+		OR = {
+			num_of_military_factories < 5
+			has_equipment = { support_equipment > 1200 }
+		}
+	}
+
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = support_equipment
+		value = 1
+	}
+}
+
+ADISCORD_ai_platform_battlegroups = {
+	enable = { has_tech = ADISCORD_tech_semi_autonomous_combat_modules }
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = role_ratio
+		id = armor
+		value = 4
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = armor
+		value = 10
+	}
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = ADISCORD_combat_platform_archetype
+		value = 14
+	}
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = ADISCORD_recon_platform_archetype
+		value = 4
+	}
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = ADISCORD_recovery_platform_archetype
+		value = 3
+	}
+}
+
+ADISCORD_ai_heavy_platforms = {
+	enable = { has_tech = ADISCORD_tech_heavy_platform_cores }
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = ADISCORD_heavy_platform_archetype
+		value = 6
+	}
+}
+
+ADISCORD_ai_networked_operations = {
+	enable = { ADISCORD_has_cyber_command_tech = yes }
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_production_factor
+		id = support
+		value = 10
+	}
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = ADISCORD_squad_weapons_equipment
+		value = 8
+	}
+}
+
+ADISCORD_ai_restored_air_command = {
+	enable = { has_tech = ADISCORD_tech_reclaimed_jet_platforms }
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = unit_ratio
+		id = fighter
+		value = 20
+	}
+	ai_strategy = {
+		type = unit_ratio
+		id = cas
+		value = 15
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = fighter
+		value = 10
+	}
+}
+
+ADISCORD_ai_drone_air_wings = {
+	enable = { has_tech = ADISCORD_tech_drone_air_wings }
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = unit_ratio
+		id = cas
+		value = 20
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = cas
+		value = 10
+	}
+}
+
+ADISCORD_ai_littoral_security = {
+	enable = {
+		OR = {
+			has_war = yes
+			has_tech = ADISCORD_tech_drone_air_wings
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = unit_ratio
+		id = convoy
+		value = 10
+	}
+	ai_strategy = {
+		type = unit_ratio
+		id = submarine
+		value = 5
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = convoy
+		value = 10
+	}
+}

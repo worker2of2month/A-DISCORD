@@ -1,0 +1,2 @@
+# A-Discord disables vanilla raids until custom ADISCORD_ raid categories
+# and requirements exist.

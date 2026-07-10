@@ -43,6 +43,11 @@ on_actions = {
 			#    #visible = scripted_trigger_name
 			#}
 			every_country = {
+				# The scenario starts in 2160.  Old recovered knowledge should not
+				# consume the first decades of every country's research queue.
+				ADISCORD_grant_2150_technology_baseline = yes
+			}
+			every_country = {
 				limit = { OR = { ADISCORD_is_playable_development_country = yes is_ai = no } }
 				ADISCORD_initialize_default_country_development = yes
 			}

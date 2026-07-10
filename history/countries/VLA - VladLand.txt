@@ -9,6 +9,7 @@ recruit_character = WRK_Reginald_Silver
 
 add_ideas = {
 	WRK_hourglass_of_discord
+	VLA_national_spirit
 
 	#ministers
 	minister_VLA_Vera_Krantz

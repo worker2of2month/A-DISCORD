@@ -1,0 +1,140 @@
+ADISCORD_doctrine_mass_recruitment_bureaus = {
+	track = ADISCORD_land_mass_restoration
+	name = ADISCORD_doctrine_mass_recruitment_bureaus
+	description = ADISCORD_doctrine_mass_recruitment_bureaus_desc
+	icon = GFX_doctrine_mass_assault_medium
+	xp_cost = 75
+	xp_type = army
+	available = { ADISCORD_has_military_standardization_tech = yes }
+	ai_will_do = {
+		base = 2
+		modifier = { factor = 1.5 has_manpower > 50000 }
+	}
+	category_all_infantry = { max_organisation = 3 }
+	rewards = {
+		ADISCORD_doctrine_salvage_line_infantry = {
+			category_all_infantry = { soft_attack = 0.05 }
+		}
+		ADISCORD_doctrine_distributed_militias = {
+			category_all_infantry = { defense = 0.05 }
+			land_reinforce_rate = 0.01
+		}
+		ADISCORD_doctrine_emergency_replacement_system = {
+			category_all_infantry = { default_morale = 0.05 }
+		}
+		ADISCORD_doctrine_total_restoration_front = {
+			land_reinforce_rate = 0.02
+			planning_speed = 0.05
+		}
+		ADISCORD_doctrine_people_and_scrap = {
+			category_all_infantry = { max_organisation = 5 defense = 0.05 }
+		}
+	}
+}
+
+ADISCORD_doctrine_platform_battlegroups = {
+	track = ADISCORD_land_platform_centric
+	name = ADISCORD_doctrine_platform_battlegroups
+	description = ADISCORD_doctrine_platform_battlegroups_desc
+	icon = GFX_doctrine_armored_spearhead_medium
+	xp_cost = 75
+	xp_type = army
+	available = { has_tech = ADISCORD_tech_restored_armored_chassis }
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 2 has_tech = ADISCORD_tech_restored_armored_chassis }
+		modifier = { factor = 2 has_tech = ADISCORD_tech_remote_weapon_stations }
+	}
+	category_all_armor = { max_organisation = 2 }
+	rewards = {
+		ADISCORD_doctrine_remote_weapon_coordination = {
+			category_all_armor = { soft_attack = 0.05 }
+		}
+		ADISCORD_doctrine_heavy_breakthrough_columns = {
+			category_tanks = { breakthrough = 0.10 }
+		}
+		ADISCORD_doctrine_drone_screened_advance = {
+			category_all_armor = { defense = 0.05 }
+			coordination_bonus = 0.01
+		}
+		ADISCORD_doctrine_autonomous_repair_cycles = {
+			category_all_armor = { default_morale = 0.05 }
+			repair_speed_factor = 0.05
+		}
+		ADISCORD_doctrine_armored_decision_warfare = {
+			category_all_armor = { breakthrough = 0.10 max_organisation = 3 }
+		}
+	}
+}
+
+ADISCORD_doctrine_mesh_battlefield_command = {
+	track = ADISCORD_land_networked_operations
+	name = ADISCORD_doctrine_mesh_battlefield_command
+	description = ADISCORD_doctrine_mesh_battlefield_command_desc
+	icon = GFX_doctrine_mission_type_tactics_medium
+	xp_cost = 75
+	xp_type = army
+	available = { ADISCORD_has_cyber_command_tech = yes }
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 2 has_tech = ADISCORD_tech_mesh_command_networks }
+		modifier = { factor = 2 has_tech = ADISCORD_tech_battlefield_analytics }
+	}
+	coordination_bonus = 0.02
+	rewards = {
+		ADISCORD_doctrine_reconnaissance_saturation = {
+			category_recon = { recon = 1 }
+		}
+		ADISCORD_doctrine_predictive_operational_planning = {
+			planning_speed = 0.10
+			max_planning = 0.05
+		}
+		ADISCORD_doctrine_integrated_fire_control = {
+			coordination_bonus = 0.02
+			category_support_battalions = { soft_attack = 0.05 }
+		}
+		ADISCORD_doctrine_distributed_command_cells = {
+			land_reinforce_rate = 0.02
+		}
+		ADISCORD_doctrine_algorithmic_campaigning = {
+			coordination_bonus = 0.03
+			planning_speed = 0.10
+		}
+	}
+}
+
+ADISCORD_doctrine_fortress_state_command = {
+	track = ADISCORD_land_fortress_state
+	name = ADISCORD_doctrine_fortress_state_command
+	description = ADISCORD_doctrine_fortress_state_command_desc
+	icon = GFX_doctrine_defensive_postures_medium
+	xp_cost = 75
+	xp_type = army
+	available = { ADISCORD_has_civil_resilience_tech = yes }
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 2 has_war = yes }
+		modifier = { factor = 2 has_tech = ADISCORD_tech_civil_defense_networks }
+	}
+	dig_in_speed_factor = 0.05
+	category_all_infantry = { defense = 0.05 }
+	rewards = {
+		ADISCORD_doctrine_urban_defense_grids = {
+			category_all_infantry = { entrenchment = 0.10 }
+		}
+		ADISCORD_doctrine_hardened_logistics = {
+			supply_consumption_factor = -0.03
+		}
+		ADISCORD_doctrine_radiation_zone_operations = {
+			attrition = -0.05
+		}
+		ADISCORD_doctrine_counteroffensive_reserves = {
+			land_reinforce_rate = 0.02
+			category_all_infantry = { breakthrough = 0.05 }
+		}
+		ADISCORD_doctrine_national_redoubt_protocols = {
+			category_all_infantry = { defense = 0.10 max_organisation = 5 }
+			dig_in_speed_factor = 0.10
+		}
+	}
+}

@@ -95,4 +95,108 @@ characters = {
 			legacy_id = -1
 		}
 	}
+
+	VAL_Aleksei_Veyr = {
+		name = VAL_Aleksei_Veyr
+		portraits = {
+			army = {
+				large = GFX_portrait_VAL_Aleksei_Veyr
+			}
+		}
+		corps_commander = {
+			traits = { trickster }
+			skill = 4
+			attack_skill = 5
+			defense_skill = 2
+			planning_skill = 4
+			logistics_skill = 1
+			legacy_id = -1
+		}
+	}
+
+	VAL_Maksim_Korvin = {
+		name = VAL_Maksim_Korvin
+		portraits = {
+			army = {
+				large = GFX_portrait_VAL_Maksim_Korvin
+			}
+		}
+		corps_commander = {
+			traits = { aggressive_assaulter }
+			skill = 4
+			attack_skill = 3
+			defense_skill = 5
+			planning_skill = 2
+			logistics_skill = 4
+			legacy_id = -1
+		}
+	}
+
+	VAL_Artem_Rask = {
+		name = VAL_Artem_Rask
+		portraits = {
+			civilian = {
+				large = GFX_portrait_VAL_Artem_Rask
+			}
+		}
+		country_leader = {
+			ideology = hedonism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+		}
+	}
+
+	VAL_Dmitri_Karsov = {
+		name = VAL_Dmitri_Karsov
+		portraits = {
+			army = {
+				large = GFX_portrait_VAL_Dmitri_Karsov
+			}
+		}
+		corps_commander = {
+			traits = { panzer_leader }
+			skill = 5
+			attack_skill = 6
+			defense_skill = 2
+			planning_skill = 3
+			logistics_skill = 2
+			legacy_id = -1
+		}
+	}
+
+	VAL_Leonid_Vargan = {
+		name = VAL_Leonid_Vargan
+		portraits = {
+			army = {
+				large = GFX_portrait_VAL_Leonid_Vargan
+			}
+		}
+		corps_commander = {
+			traits = { winter_expert }
+			skill = 5
+			attack_skill = 3
+			defense_skill = 6
+			planning_skill = 4
+			logistics_skill = 3
+			legacy_id = -1
+		}
+	}
+
+	VAL_Sergei_Volkov = {
+		name = VAL_Sergei_Volkov
+		portraits = {
+			army = {
+				large = GFX_portrait_VAL_Sergei_Volkov
+			}
+		}
+		field_marshal = {
+			traits = { offensive_doctrine logistics_wizard }
+			skill = 8
+			attack_skill = 8
+			defense_skill = 8
+			planning_skill = 8
+			logistics_skill = 8
+			legacy_id = -1
+		}
+	}
 }

@@ -134,14 +134,25 @@ def check_braces(limit: int):
 
 def parse_country_tags():
     tags = {}
+    dynamic_tags = set()
     tag_dir = ROOT / "common" / "country_tags"
     if not tag_dir.exists():
-        return tags
-    pattern = re.compile(r"^\s*([A-Z][A-Z0-9]{2,3})\s*=\s*\"([^\"]+)\"", re.M)
+        return tags, dynamic_tags
+    pattern = re.compile(r"^\s*([A-Z][A-Z0-9]{2,3})\s*=\s*\"([^\"]+)\"")
     for path in tag_dir.rglob("*.txt"):
-        for tag, country_file in pattern.findall(strip_comments(read_text(path))):
+        dynamic_mode = False
+        for line in strip_comments(read_text(path)).splitlines():
+            if re.match(r"^\s*dynamic_tags\s*=\s*yes\b", line):
+                dynamic_mode = True
+                continue
+            match = pattern.match(line)
+            if not match:
+                continue
+            tag, country_file = match.groups()
             tags[tag] = country_file.replace("\\", "/")
-    return tags
+            if dynamic_mode:
+                dynamic_tags.add(tag)
+    return tags, dynamic_tags
 
 
 def parse_ideologies():
@@ -248,7 +259,7 @@ def parse_states():
     return states
 
 
-def check_countries(tags, ideology_groups, ideology_types, limit):
+def check_countries(tags, dynamic_tags, ideology_groups, ideology_types, limit):
     issues = []
     tag_to_history = {}
     hist_dir = ROOT / "history" / "countries"
@@ -258,7 +269,7 @@ def check_countries(tags, ideology_groups, ideology_types, limit):
             if m:
                 tag_to_history[m.group(1)] = path
     for tag in sorted(tags):
-        if tag not in tag_to_history:
+        if tag not in dynamic_tags and tag not in tag_to_history:
             issues.append(f"missing history/countries for tag {tag}")
     for tag, path in sorted(tag_to_history.items()):
         if tag not in tags:
@@ -427,7 +438,6 @@ def check_gfx_root_entity_mirrors(limit):
         "particle_entities.asset",
         "particles.gfx",
         "particles_custom.gfx",
-        "units_infantry.asset",
     ]
     for name in expected:
         source = entity_dir / name
@@ -492,6 +502,85 @@ def scan_vanilla_leftovers(tags, ideology_groups, limit):
     return token_hits, examples
 
 
+def find_named_block(text: str, name: str) -> str:
+    match = re.search(rf"\b{re.escape(name)}\s*=\s*\{{", text)
+    if not match:
+        return ""
+    return extract_block(text, match.start())
+
+
+def parse_localisation_keys():
+    keys = set()
+    loc_dir = ROOT / "localisation"
+    if not loc_dir.exists():
+        return keys
+    for path in loc_dir.rglob("*.yml"):
+        text = read_text(path)
+        for line in text.splitlines():
+            match = re.match(r"\s*([A-Za-z0-9_.:-]+)\s*:", line)
+            if match and not match.group(1).startswith("l_"):
+                keys.add(match.group(1))
+    return keys
+
+
+def check_economy_guardrails(limit):
+    issues = []
+
+    placeholder = ROOT / "localisation" / "russian" / "ADISCORD_technical_placeholders_l_russian.yml"
+    if placeholder.exists():
+        issues.append(f"{rel(placeholder)} must not be recreated")
+
+    forbidden_patterns = {
+        "money_income_factor": "fake TDA/DH money modifier",
+        "tax_efficiency_factor": "fake TDA/DH tax modifier",
+        "num_battalions": "unproven dynamic unit count in economy pass",
+        "max_manpower": "unproven manpower shortcut in economy pass",
+    }
+    for path in iter_files("common", "interface", "localisation"):
+        text = strip_comments(read_text(path))
+        for lineno, line in enumerate(text.splitlines(), 1):
+            for token, reason in forbidden_patterns.items():
+                if re.search(rf"\b{re.escape(token)}\b", line):
+                    issues.append(f"{rel(path)}:{lineno}: {token} ({reason})")
+
+    on_actions = ROOT / "common" / "on_actions" / "00_ADISCORD_on_actions.txt"
+    if on_actions.exists():
+        text = strip_comments(read_text(on_actions))
+        for pulse in ("on_monthly", "on_weekly", "on_yearly"):
+            block = find_named_block(text, pulse)
+            if re.search(r"\bevery_country\s*=", block):
+                issues.append(f"{rel(on_actions)}: {pulse} contains every_country; keep economy pulse country-scoped")
+        weekly = find_named_block(text, "on_weekly")
+        if re.search(r"\bevery_owned_state\s*=", weekly):
+            issues.append(f"{rel(on_actions)}: on_weekly contains every_owned_state; keep state scans out of weekly refresh")
+
+    consumer_files = [
+        ROOT / "common" / "ideas" / "ADISCORD_laws.txt",
+        ROOT / "common" / "ideas" / "ADISCORD_society_development.txt",
+        ROOT / "common" / "ideas" / "_economic.txt",
+    ]
+    for path in consumer_files:
+        if not path.exists():
+            continue
+        text = strip_comments(read_text(path))
+        for lineno, line in enumerate(text.splitlines(), 1):
+            if re.search(r"\bconsumer_goods_factor\b", line):
+                issues.append(f"{rel(path)}:{lineno}: consumer_goods_factor in audited economy law/development file")
+
+    loc_keys = parse_localisation_keys()
+    gui = ROOT / "interface" / "ADISCORD_economy.gui"
+    if gui.exists():
+        text = strip_comments(read_text(gui))
+        key_re = re.compile(r'\b(?:buttonText|text|pdx_tooltip|pdx_tooltip_delayed)\s*=\s*"([^"]+)"')
+        for match in key_re.finditer(text):
+            key = match.group(1)
+            if key.startswith("ADISCORD_") and key not in loc_keys:
+                lineno = text[: match.start()].count("\n") + 1
+                issues.append(f"{rel(gui)}:{lineno}: missing localisation key {key}")
+
+    return issues[:limit], len(issues)
+
+
 def print_section(title: str, issues, total: int | None = None):
     total_text = len(issues) if total is None else total
     print(f"\n== {title}: {total_text} ==")
@@ -507,7 +596,7 @@ def main():
     parser.add_argument("--limit", type=int, default=40, help="examples per section")
     args = parser.parse_args()
 
-    tags = parse_country_tags()
+    tags, dynamic_tags = parse_country_tags()
     ideology_groups, ideology_types = parse_ideologies()
     provinces = parse_definition()
 
@@ -521,7 +610,9 @@ def main():
     brace_issues, brace_total = check_braces(args.limit)
     print_section("Brace balance", brace_issues, brace_total)
 
-    country_issues, country_total = check_countries(tags, ideology_groups, ideology_types, args.limit)
+    country_issues, country_total = check_countries(
+        tags, dynamic_tags, ideology_groups, ideology_types, args.limit
+    )
     print_section("Countries and ideologies", country_issues, country_total)
 
     state_issues, state_total = check_states(tags, provinces, args.limit)
@@ -547,6 +638,9 @@ def main():
 
     filename_issues, filename_total = check_vanilla_filename_leftovers(tags, args.limit)
     print_section("Vanilla filename leftovers", filename_issues, filename_total)
+
+    economy_issues, economy_total = check_economy_guardrails(args.limit)
+    print_section("Economy guardrails", economy_issues, economy_total)
 
     token_hits, examples = scan_vanilla_leftovers(tags, ideology_groups, min(args.limit, 8))
     print(f"\n== Vanilla leftovers: {sum(token_hits.values())} hits in {len(token_hits)} tokens ==")

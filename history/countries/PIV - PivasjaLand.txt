@@ -25,6 +25,7 @@ set_popularities = {
 set_stability = 0.76
 
 add_ideas = {
+	PIV_national_spirit
 	minister_PIV_Grigor_Pivovar
 	minister_PIV_Lena_Solod
 	minister_PIV_Timofey_Brin

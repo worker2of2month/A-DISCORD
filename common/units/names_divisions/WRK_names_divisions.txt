@@ -23,7 +23,7 @@ WRK_CAV_01 = {
 
 	can_use = { always = yes }
 
-	division_types = { cavalry }
+	division_types = { infantry }
 
 	fallback_name = "%da Division de Caballeria"
 

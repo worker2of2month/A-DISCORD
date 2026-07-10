@@ -30,18 +30,6 @@ scripted_gui = {
 			ADISCORD_economy_dashboard_close_click = {
 				ADISCORD_economy_close_window = yes
 			}
-			ADISCORD_economy_dashboard_army_down_click = {
-				ADISCORD_economy_decrease_army_spending = yes
-			}
-			ADISCORD_economy_dashboard_army_up_click = {
-				ADISCORD_economy_increase_army_spending = yes
-			}
-			ADISCORD_economy_dashboard_construction_down_click = {
-				ADISCORD_economy_decrease_construction_spending = yes
-			}
-			ADISCORD_economy_dashboard_construction_up_click = {
-				ADISCORD_economy_increase_construction_spending = yes
-			}
 			ADISCORD_economy_tax_burden_1_click = {
 				ADISCORD_economy_set_tax_burden_1 = yes
 			}
@@ -86,6 +74,39 @@ scripted_gui = {
 			}
 			ADISCORD_economy_construction_budget_5_click = {
 				ADISCORD_economy_set_construction_spending_5 = yes
+			}
+			ADISCORD_economy_action_internal_bonds_click = {
+				ADISCORD_economy_gui_try_issue_internal_bonds = yes
+			}
+			ADISCORD_economy_action_external_loan_click = {
+				ADISCORD_economy_gui_try_take_external_loan = yes
+			}
+			ADISCORD_economy_action_repay_debt_click = {
+				ADISCORD_economy_gui_try_repay_debt = yes
+			}
+			ADISCORD_economy_action_restructure_debt_click = {
+				ADISCORD_economy_gui_try_restructure_debt = yes
+			}
+			ADISCORD_economy_action_expand_emission_click = {
+				ADISCORD_economy_gui_try_expand_emission = yes
+			}
+			ADISCORD_economy_action_reduce_emission_click = {
+				ADISCORD_economy_gui_try_reduce_emission = yes
+			}
+			ADISCORD_economy_action_stabilization_click = {
+				ADISCORD_economy_gui_try_stabilization_package = yes
+			}
+			ADISCORD_economy_action_toggle_auto_loan_click = {
+				ADISCORD_economy_gui_try_toggle_auto_loan = yes
+			}
+			ADISCORD_economy_action_invest_reserves_click = {
+				ADISCORD_economy_gui_try_invest_reserves = yes
+			}
+			ADISCORD_economy_action_civilian_investment_click = {
+				ADISCORD_economy_gui_try_civilian_investment = yes
+			}
+			ADISCORD_economy_action_military_investment_click = {
+				ADISCORD_economy_gui_try_military_investment = yes
 			}
 		}
 	}

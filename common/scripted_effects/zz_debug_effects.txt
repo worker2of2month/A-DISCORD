@@ -28,11 +28,11 @@ d_retire_country_leader = {
 }
 
 d_clear_tech = {
-	set_technology = { improved_infantry_weapons = 0 popup = no }
-	log = "tech reset: improved_infantry_weapons"
+	set_technology = { ADISCORD_tech_postwar_weapon_standardization = 0 popup = no }
+	log = "tech reset: ADISCORD_tech_postwar_weapon_standardization"
 }
 
 d_add_tech = {
-	set_technology = { improved_infantry_weapons = 1 popup = no }
-	log = "tech researched: improved_infantry_weapons"
+	set_technology = { ADISCORD_tech_postwar_weapon_standardization = 1 popup = no }
+	log = "tech researched: ADISCORD_tech_postwar_weapon_standardization"
 }

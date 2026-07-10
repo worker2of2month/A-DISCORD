@@ -92,10 +92,7 @@ leader_traits = {
 	light_aircraft_manufacturer = {
 		random = no
 		equipment_bonus = {
-			small_plane_airframe = {
-				air_agility = 0.1 maximum_speed = 0.1
-			}
-			cv_small_plane_airframe = {
+			fighter = {
 				air_agility = 0.1 maximum_speed = 0.1
 			}
 		}
@@ -109,10 +106,7 @@ leader_traits = {
 	CAS_manufacturer = {
 		random = no
 		equipment_bonus = {
-			small_plane_cas_airframe = {
-				air_ground_attack = 0.1 reliability = 0.1
-			}
-			cv_small_plane_cas_airframe = {
+			cas = {
 				air_ground_attack = 0.1 reliability = 0.1
 			}
 		}
@@ -125,13 +119,7 @@ leader_traits = {
 	medium_aircraft_manufacturer = {
 		random = no
 		equipment_bonus = {
-			medium_plane_fighter_airframe = {
-				reliability = 0.2
-			}
-			medium_plane_airframe = {
-				reliability = 0.2
-			}
-			medium_plane_scout_plane_airframe = {
+			tactical_bomber = {
 				reliability = 0.2
 			}
 		}
@@ -145,7 +133,7 @@ leader_traits = {
 		random = no
 		equipment_bonus = {
 
-			large_plane_airframe = {
+			tactical_bomber = {
 				air_bombing = 0.1
 			}
 		}
@@ -158,16 +146,10 @@ leader_traits = {
 	naval_aircraft_manufacturer = {
 		random = no
 		equipment_bonus = {
-			small_plane_naval_bomber_airframe = {
-				air_range = 0.1 naval_strike_attack = 0.1
-			}
-			cv_small_plane_naval_bomber_airframe = {
-				air_range = 0.1 naval_strike_attack = 0.1
-			}
-			cv_small_plane_airframe = {
+			fighter = {
 				air_range = 0.1 air_agility = 0.1
 			}
-			cv_small_plane_cas_airframe = {
+			cas = {
 				air_range = 0.1 naval_strike_attack = 0.1
 			}
 		}
@@ -248,7 +230,7 @@ leader_traits = {
 
 	grand_battle_plan_expert = {
 		sprite = 14
-		grand_battleplan_mastery_gain_factor = 0.15
+		ADISCORD_land_fortress_state_track_mastery_gain_factor = 0.15
 
 		ai_will_do = {
 			factor = 1
@@ -257,7 +239,7 @@ leader_traits = {
 
 	mobile_warfare_expert = {
 		sprite = 14
-		new_mobile_warfare_mastery_gain_factor = 0.15
+		ADISCORD_land_platform_centric_track_mastery_gain_factor = 0.15
 
 		ai_will_do = {
 			factor = 1
@@ -266,7 +248,7 @@ leader_traits = {
 
 	mass_assault_expert = {
 		sprite = 14
-		mass_assault_mastery_gain_factor = 0.15
+		ADISCORD_land_mass_restoration_track_mastery_gain_factor = 0.15
 
 		ai_will_do = {
 			factor = 1
@@ -275,7 +257,7 @@ leader_traits = {
 
 	superior_firepower_expert = {
 		sprite = 14
-		superior_firepower_mastery_gain_factor = 0.15
+		ADISCORD_land_networked_operations_track_mastery_gain_factor = 0.15
 
 		ai_will_do = {
 			factor = 1
@@ -284,7 +266,7 @@ leader_traits = {
 
 	close_air_support_proponent = {
 		sprite = 14
-		new_battlefield_support_mastery_gain_factor = 0.15
+		ADISCORD_air_vtol_deep_strike_track_mastery_gain_factor = 0.15
 
 		ai_will_do = {
 			factor = 1
@@ -304,7 +286,7 @@ leader_traits = {
 		sprite = 14
 
 		equipment_bonus = {
-			small_plane_cas_airframe = {
+			cas = {
 				instant = yes
 				air_ground_attack = 0.1
 			}
@@ -319,7 +301,7 @@ leader_traits = {
 
 	submarine_specialist = {
 		sprite = 14
-		new_convoy_raiding_mastery_gain_factor = 0.15
+		ADISCORD_naval_littoral_security_track_mastery_gain_factor = 0.15
 
 		ai_will_do = {
 			factor = 1

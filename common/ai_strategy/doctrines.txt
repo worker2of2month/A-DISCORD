@@ -34,7 +34,7 @@ DOCTRINE_stop_making_horsies = {
 # No cav if we have motor inf
 DOCTRINE_no_cavalry = {
 	enable = {
-		has_tech = motorised_infantry
+		has_tech = ADISCORD_tech_logistics_hub_networks
 	}
 	abort = {
 		always = no
@@ -52,7 +52,7 @@ DOCTRINE_no_cavalry = {
 
 DOCTRINE_MW_mobile_warfare_ratios = {
 	enable = {
-		has_doctrine = new_mobile_warfare
+		has_doctrine = ADISCORD_doctrine_restoration_general_staff
 	}
 	abort = {
 		always = no
@@ -76,7 +76,7 @@ DOCTRINE_MW_mobile_warfare_ratios = {
 
 DOCTRINE_MW_aifc_mobile_warfare = {
 	enable = {
-		has_doctrine = new_mobile_warfare
+		has_doctrine = ADISCORD_doctrine_restoration_general_staff
 	}
 	abort_when_not_enabled = yes
 
@@ -88,7 +88,7 @@ DOCTRINE_MW_aifc_mobile_warfare = {
 
 DOCTRINE_MW_aifc_mobile_infantry_or_armored_spearhead = {
 	enable = {
-		has_completed_track = infantry
+		has_completed_track = ADISCORD_land_mass_restoration
 	}
 	abort_when_not_enabled = yes
 
@@ -100,7 +100,7 @@ DOCTRINE_MW_aifc_mobile_infantry_or_armored_spearhead = {
 
 DOCTRINE_MW_aifc_mechanised_offensive_or_blitzkrieg = {
 	enable = {
-		has_completed_track = armor
+		has_completed_track = ADISCORD_land_platform_centric
 	}
 	abort_when_not_enabled = yes
 
@@ -112,7 +112,7 @@ DOCTRINE_MW_aifc_mechanised_offensive_or_blitzkrieg = {
 
 DOCTRINE_MW_aifc_modern_blitzkrieg = {
 	enable = {
-		has_completed_track = operations
+		has_completed_track = ADISCORD_land_networked_operations
 	}
 	abort_when_not_enabled = yes
 
@@ -127,7 +127,7 @@ DOCTRINE_MW_aifc_modern_blitzkrieg = {
 
 DOCTRINE_SF_superior_firepower_ratios = {
 	enable = {
-		has_doctrine = superior_firepower
+		has_doctrine = ADISCORD_doctrine_restoration_general_staff
 	}
 	abort = {
 		#has_tech = concentrated_fire_plans
@@ -149,7 +149,7 @@ DOCTRINE_SF_superior_firepower_ratios = {
 
 DOCTRINE_SF_concentrated_fire_plans_ratios = {
 	enable = {
-		has_completed_subdoctrine = fire_concentration
+		has_completed_subdoctrine = ADISCORD_doctrine_mesh_battlefield_command
 	}
 	abort = {
 		always = no
@@ -179,7 +179,7 @@ DOCTRINE_SF_concentrated_fire_plans_ratios = {
 
 DOCTRINE_SF_aifc_superior_firepower = {
 	enable = {
-		has_doctrine = superior_firepower
+		has_doctrine = ADISCORD_doctrine_restoration_general_staff
 	}
 	abort_when_not_enabled = yes
 
@@ -191,7 +191,7 @@ DOCTRINE_SF_aifc_superior_firepower = {
 
 DOCTRINE_SF_aifc_mechanized_offensive = {
 	enable = {
-		has_completed_track = armor
+		has_completed_track = ADISCORD_land_platform_centric
 	}
 	abort_when_not_enabled = yes
 
@@ -203,7 +203,7 @@ DOCTRINE_SF_aifc_mechanized_offensive = {
 
 DOCTRINE_SF_aifc_shock_and_awe = {
 	enable = {
-		has_completed_track = operations
+		has_completed_track = ADISCORD_land_networked_operations
 	}
 	abort_when_not_enabled = yes
 
@@ -218,7 +218,7 @@ DOCTRINE_SF_aifc_shock_and_awe = {
 
 DOCTRINE_GB_grand_battle_plan_ratios = {
 	enable = {
-		has_doctrine = grand_battleplan
+		has_doctrine = ADISCORD_doctrine_restoration_general_staff
 	}
 	abort = {
 		always = no
@@ -242,7 +242,7 @@ DOCTRINE_GB_grand_battle_plan_ratios = {
 
 DOCTRINE_GB_aifc_grand_assault = {
 	enable = {
-		has_doctrine = grand_battleplan
+		has_doctrine = ADISCORD_doctrine_restoration_general_staff
 	}
 	abort_when_not_enabled = yes
 
@@ -254,7 +254,7 @@ DOCTRINE_GB_aifc_grand_assault = {
 
 DOCTRINE_GB_aifc_mechanized_offensive = {
 	enable = {
-		has_completed_track = armor
+		has_completed_track = ADISCORD_land_platform_centric
 	}
 	abort_when_not_enabled = yes
 
@@ -266,7 +266,7 @@ DOCTRINE_GB_aifc_mechanized_offensive = {
 
 DOCTRINE_GB_aifc_assault_concentration = {
 	enable = {
-		has_doctrine = grand_assault
+		has_completed_subdoctrine = ADISCORD_doctrine_fortress_state_command
 	}
 	abort_when_not_enabled = yes
 
@@ -278,7 +278,7 @@ DOCTRINE_GB_aifc_assault_concentration = {
 
 DOCTRINE_GB_aifc_assault_breakthrough = {
 	enable = {
-		has_completed_subdoctrine = grand_assault
+		has_completed_subdoctrine = ADISCORD_doctrine_fortress_state_command
 	}
 	abort_when_not_enabled = yes
 
@@ -290,7 +290,7 @@ DOCTRINE_GB_aifc_assault_breakthrough = {
 
 DOCTRINE_GB_aifc_armored_operations = {
 	enable = {
-		has_doctrine = infiltration_tactics
+		has_completed_subdoctrine = ADISCORD_doctrine_mesh_battlefield_command
 	}
 	abort_when_not_enabled = yes
 
@@ -302,7 +302,7 @@ DOCTRINE_GB_aifc_armored_operations = {
 
 DOCTRINE_GB_aifc_infiltration_in_depth = {
 	enable = {
-		has_completed_subdoctrine = infiltration_tactics
+		has_completed_subdoctrine = ADISCORD_doctrine_mesh_battlefield_command
 	}
 	abort_when_not_enabled = yes
 
@@ -317,7 +317,7 @@ DOCTRINE_GB_aifc_infiltration_in_depth = {
 
 DOCTRINE_MA_mass_assault_ratios = {
 	enable = {
-		has_doctrine = deep_battle
+		has_completed_subdoctrine = ADISCORD_doctrine_platform_battlegroups
 	}
 	abort = {
 		always = no
@@ -338,7 +338,7 @@ DOCTRINE_MA_mass_assault_ratios = {
 
 DOCTRINE_MA_large_front_operations_ratios = {
 	enable = {
-		has_completed_subdoctrine = deep_battle
+		has_completed_subdoctrine = ADISCORD_doctrine_platform_battlegroups
 	}
 	abort = {
 		always = no
@@ -362,7 +362,7 @@ DOCTRINE_MA_large_front_operations_ratios = {
 
 DOCTRINE_MA_aifc_mass_assault = {
 	enable = {
-		has_doctrine = mass_assault
+		has_doctrine = ADISCORD_doctrine_restoration_general_staff
 	}
 	abort_when_not_enabled = yes
 
@@ -374,7 +374,7 @@ DOCTRINE_MA_aifc_mass_assault = {
 
 DOCTRINE_MA_aifc_operational_concentration = {
 	enable = {
-		has_completed_track = armor
+		has_completed_track = ADISCORD_land_platform_centric
 	}
 	abort_when_not_enabled = yes
 
@@ -386,7 +386,7 @@ DOCTRINE_MA_aifc_operational_concentration = {
 
 DOCTRINE_MA_aifc_breakthrough_priority = {
 	enable = {
-		has_completed_track = operations
+		has_completed_track = ADISCORD_land_networked_operations
 	}
 	abort_when_not_enabled = yes
 
@@ -398,7 +398,7 @@ DOCTRINE_MA_aifc_breakthrough_priority = {
 
 DOCTRINE_MA_aifc_human_infantry_offensive = {
 	enable = {
-		has_completed_track = infantry
+		has_completed_track = ADISCORD_land_mass_restoration
 	}
 	abort_when_not_enabled = yes
 
@@ -422,7 +422,7 @@ DOCTRINE_MA_aifc_human_infantry_offensive = {
 #Fleet in being tree
 DOCTRINE_fleet_in_being_ratios = {
 	enable = {
-		has_doctrine = new_fleet_in_being
+		has_doctrine = ADISCORD_naval_doctrine_littoral_command
 	}
 	abort = {
 		always = no
@@ -438,7 +438,7 @@ DOCTRINE_fleet_in_being_ratios = {
 #Trade Interdiction tree
 DOCTRINE_trade_interdiction_ratios = {
 	enable = {
-		has_doctrine = new_convoy_raiding
+		has_doctrine = ADISCORD_naval_doctrine_littoral_command
 	}
 	abort = {
 		always = no
@@ -455,7 +455,7 @@ DOCTRINE_trade_interdiction_ratios = {
 #Base Strike tree
 DOCTRINE_base_strike_ratios = {
 	enable = {
-		has_doctrine = new_base_strike
+		has_doctrine = ADISCORD_naval_doctrine_littoral_command
 	}
 	abort = {
 		always = no
@@ -488,7 +488,7 @@ DOCTRINE_base_strike_ratios = {
 #Strategic Destruction tree
 DOCTRINE_air_superiority_ratios = {
 	enable = {
-		has_doctrine = new_strategic_destruction
+		has_doctrine = ADISCORD_air_doctrine_restored_air_command
 	}
 	abort = {
 		always = no
@@ -503,7 +503,7 @@ DOCTRINE_air_superiority_ratios = {
 
 DOCTRINE_air_night_day_bombing_ratios = {
 	enable = {
-		has_doctrine = new_strategic_destruction
+		has_doctrine = ADISCORD_air_doctrine_restored_air_command
 	}
 	abort = {
 		always = no
@@ -519,7 +519,7 @@ DOCTRINE_air_night_day_bombing_ratios = {
 #Battlefield Support tree
 DOCTRINE_formation_flying = {
 	enable = {
-		has_doctrine = new_battlefield_support
+		has_doctrine = ADISCORD_air_doctrine_restored_air_command
 	}
 	abort = {
 		always = no
@@ -541,7 +541,7 @@ DOCTRINE_formation_flying = {
 #Operational Integrity tree
 DOCTRINE_force_rotation = {
 	enable = {
-		has_doctrine = new_operational_integrity
+		has_doctrine = ADISCORD_air_doctrine_restored_air_command
 	}
 	abort = {
 		always = no

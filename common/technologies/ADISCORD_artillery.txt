@@ -1,0 +1,854 @@
+technologies = {
+	ADISCORD_tech_restored_field_artillery = {
+		artillery = { soft_attack = 0.02 reliability = 0.006 }
+		path = { leads_to_tech = ADISCORD_tech_recoil_recovery research_cost_coeff = 1 }
+		enable_equipments = { artillery_equipment_1 }
+		research_cost = 1.75
+		start_year = 2100
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 0 }
+		}
+		ai_will_do = { factor = 36 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_recoil_recovery = {
+		artillery = { soft_attack = 0.021 reliability = 0.006 }
+		path = { leads_to_tech = ADISCORD_tech_modular_gun_carriages research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2120
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 2 }
+		}
+		ai_will_do = { factor = 35 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_modular_gun_carriages = {
+		artillery = { soft_attack = 0.021 reliability = 0.006 }
+		path = { leads_to_tech = ADISCORD_tech_electrohydraulic_gun_laying research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2140
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 4 }
+		}
+		ai_will_do = { factor = 33 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_electrohydraulic_gun_laying = {
+		artillery = { soft_attack = 0.022 reliability = 0.006 }
+		path = { leads_to_tech = ADISCORD_tech_smart_fire_control research_cost_coeff = 1 }
+		research_cost = 0.7
+		start_year = 2150
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 6 }
+		}
+		ai_will_do = { factor = 32 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_smart_fire_control = {
+		artillery = { soft_attack = 0.023 reliability = 0.007 }
+		path = { leads_to_tech = ADISCORD_tech_solid_state_ballistic_computers research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_counterbattery_radar_links research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_modular_propellant_charges research_cost_coeff = 1 }
+		research_cost = 0.9
+		start_year = 2160
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 8 }
+		}
+		ai_will_do = { factor = 31 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_solid_state_ballistic_computers = {
+		artillery = { soft_attack = 0.023 reliability = 0.014 }
+		path = { leads_to_tech = ADISCORD_tech_inertial_battery_survey research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_counterbattery_radar_links
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = artillery_folder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_counterbattery_radar_links = {
+		artillery = { hard_attack = 0.024 ap_attack = 0.024 }
+		path = { leads_to_tech = ADISCORD_tech_assisted_projectiles research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_solid_state_ballistic_computers
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_modular_propellant_charges = {
+		artillery = { soft_attack = 0.024 breakthrough = 0.014 }
+		path = { leads_to_tech = ADISCORD_tech_course_correcting_fuzes research_cost_coeff = 1 }
+		research_cost = 1.065
+		start_year = 2162
+		folder = {
+			name = artillery_folder
+			position = { x = 4 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_inertial_battery_survey = {
+		artillery = { soft_attack = 0.025 reliability = 0.015 }
+		path = { leads_to_tech = ADISCORD_tech_multispectral_spotter_drones research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_artillery_equipment_2170 }
+		research_cost = 1.75
+		start_year = 2170
+		folder = {
+			name = artillery_folder
+			position = { x = 0 y = 18 }
+		}
+		ai_will_do = { factor = 25 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_assisted_projectiles = {
+		artillery = { hard_attack = 0.026 ap_attack = 0.026 }
+		path = { leads_to_tech = ADISCORD_tech_robotic_shell_handling research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_artillery_equipment_2170 }
+		research_cost = 1.75
+		start_year = 2170
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 18 }
+		}
+		ai_will_do = { factor = 25 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_course_correcting_fuzes = {
+		artillery = { soft_attack = 0.026 breakthrough = 0.015 }
+		path = { leads_to_tech = ADISCORD_tech_drone_spotted_batteries research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_artillery_equipment_2170 }
+		research_cost = 1.75
+		start_year = 2170
+		folder = {
+			name = artillery_folder
+			position = { x = 4 y = 18 }
+		}
+		ai_will_do = { factor = 25 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_multispectral_spotter_drones = {
+		artillery = { soft_attack = 0.027 reliability = 0.015 }
+		path = { leads_to_tech = ADISCORD_tech_distributed_counterbattery_mesh research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_artillery_equipment_2183 }
+		research_cost = 1.75
+		start_year = 2182
+		folder = {
+			name = artillery_folder
+			position = { x = 0 y = 26 }
+		}
+		ai_will_do = { factor = 20 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_robotic_shell_handling = {
+		artillery = { hard_attack = 0.028 ap_attack = 0.028 }
+		path = { leads_to_tech = ADISCORD_tech_loitering_artillery_observers research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_artillery_equipment_2183 }
+		research_cost = 1.75
+		start_year = 2182
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 26 }
+		}
+		ai_will_do = { factor = 20 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_drone_spotted_batteries = {
+		artillery = { soft_attack = 0.028 breakthrough = 0.016 }
+		path = { leads_to_tech = ADISCORD_tech_electromagnetic_recoil_brakes research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_artillery_equipment_2183 }
+		research_cost = 1.75
+		start_year = 2182
+		folder = {
+			name = artillery_folder
+			position = { x = 4 y = 26 }
+		}
+		ai_will_do = { factor = 20 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_distributed_counterbattery_mesh = {
+		artillery = { soft_attack = 0.029 reliability = 0.016 }
+		path = { leads_to_tech = ADISCORD_tech_predictive_fire_mission_control research_cost_coeff = 1 }
+		research_cost = 1.282
+		start_year = 2191
+		folder = {
+			name = artillery_folder
+			position = { x = 0 y = 32 }
+		}
+		ai_will_do = { factor = 16 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_loitering_artillery_observers = {
+		artillery = { hard_attack = 0.029 ap_attack = 0.029 }
+		path = { leads_to_tech = ADISCORD_tech_uncrewed_howitzer_sections research_cost_coeff = 1 }
+		research_cost = 1.282
+		start_year = 2191
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 32 }
+		}
+		ai_will_do = { factor = 16 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_electromagnetic_recoil_brakes = {
+		artillery = { soft_attack = 0.03 breakthrough = 0.017 }
+		path = { leads_to_tech = ADISCORD_tech_autonomous_battery_network research_cost_coeff = 1 }
+		research_cost = 1.282
+		start_year = 2191
+		folder = {
+			name = artillery_folder
+			position = { x = 4 y = 32 }
+		}
+		ai_will_do = { factor = 16 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_predictive_fire_mission_control = {
+		artillery = { soft_attack = 0.031 reliability = 0.017 }
+		research_cost = 1.35
+		start_year = 2200
+		folder = {
+			name = artillery_folder
+			position = { x = 0 y = 38 }
+		}
+		ai_will_do = { factor = 12 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_uncrewed_howitzer_sections = {
+		artillery = { hard_attack = 0.031 ap_attack = 0.031 }
+		research_cost = 1.35
+		start_year = 2200
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 38 }
+		}
+		ai_will_do = { factor = 12 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_autonomous_battery_network = {
+		artillery = { soft_attack = 0.046 breakthrough = 0.026 }
+		research_cost = 2.2
+		start_year = 2200
+		folder = {
+			name = artillery_folder
+			position = { x = 4 y = 38 }
+		}
+		ai_will_do = { factor = 12 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_salvaged_at_guns = {
+		category_anti_tank = { hard_attack = 0.02 ap_attack = 0.02 }
+		path = { leads_to_tech = ADISCORD_tech_shaped_charges research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2100
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 0 }
+		}
+		ai_will_do = { factor = 36 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_shaped_charges = {
+		category_anti_tank = { hard_attack = 0.021 ap_attack = 0.021 }
+		path = { leads_to_tech = ADISCORD_tech_tandem_warheads research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2120
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 2 }
+		}
+		ai_will_do = { factor = 35 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_tandem_warheads = {
+		category_anti_tank = { hard_attack = 0.021 ap_attack = 0.021 }
+		path = { leads_to_tech = ADISCORD_tech_active_protection_defeat_probes research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2140
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 4 }
+		}
+		ai_will_do = { factor = 33 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_active_protection_defeat_probes = {
+		category_anti_tank = { hard_attack = 0.022 ap_attack = 0.022 }
+		path = { leads_to_tech = ADISCORD_tech_scrap_at_launchers research_cost_coeff = 1 }
+		research_cost = 0.7
+		start_year = 2150
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 6 }
+		}
+		ai_will_do = { factor = 32 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_scrap_at_launchers = {
+		category_anti_tank = { hard_attack = 0.023 ap_attack = 0.023 }
+		path = { leads_to_tech = ADISCORD_tech_stabilized_missile_launchers research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_imaging_infrared_seekers research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_anti_tank_equipment_2163 }
+		research_cost = 1.75
+		start_year = 2160
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 8 }
+		}
+		ai_will_do = { factor = 31 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_stabilized_missile_launchers = {
+		category_anti_tank = { hard_attack = 0.023 ap_attack = 0.023 }
+		path = { leads_to_tech = ADISCORD_tech_overflight_attack_sensors research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_imaging_infrared_seekers
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = artillery_folder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_imaging_infrared_seekers = {
+		category_anti_tank = { reliability = 0.024 defense = 0.014 }
+		path = { leads_to_tech = ADISCORD_tech_hunter_killer_team_datalinks research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_stabilized_missile_launchers
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = artillery_folder
+			position = { x = 4 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_overflight_attack_sensors = {
+		category_anti_tank = { hard_attack = 0.024 ap_attack = 0.024 }
+		path = { leads_to_tech = ADISCORD_tech_top_attack_munitions research_cost_coeff = 1 }
+		research_cost = 1.08
+		start_year = 2164
+		folder = {
+			name = artillery_folder
+			position = { x = 0 y = 12 }
+		}
+		ai_will_do = { factor = 28 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_hunter_killer_team_datalinks = {
+		category_anti_tank = { hard_attack = 0.025 ap_attack = 0.025 }
+		path = { leads_to_tech = ADISCORD_tech_multispectral_armor_classifiers research_cost_coeff = 1 }
+		research_cost = 1.08
+		start_year = 2164
+		folder = {
+			name = artillery_folder
+			position = { x = 4 y = 12 }
+		}
+		ai_will_do = { factor = 28 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_top_attack_munitions = {
+		category_anti_tank = { hard_attack = 0.026 ap_attack = 0.026 }
+		path = { leads_to_tech = ADISCORD_tech_loitering_anti_armor_munitions research_cost_coeff = 1 }
+		research_cost = 1.095
+		start_year = 2166
+		folder = {
+			name = artillery_folder
+			position = { x = 0 y = 14 }
+		}
+		ai_will_do = { factor = 27 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_multispectral_armor_classifiers = {
+		category_anti_tank = { hard_attack = 0.026 ap_attack = 0.026 }
+		path = { leads_to_tech = ADISCORD_tech_loitering_anti_armor_munitions research_cost_coeff = 1 }
+		research_cost = 1.095
+		start_year = 2166
+		folder = {
+			name = artillery_folder
+			position = { x = 4 y = 14 }
+		}
+		ai_will_do = { factor = 27 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_loitering_anti_armor_munitions = {
+		category_anti_tank = { hard_attack = 0.027 ap_attack = 0.027 }
+		path = { leads_to_tech = ADISCORD_tech_distributed_missile_ambush_nodes research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_coil_at_systems research_cost_coeff = 1 }
+		research_cost = 1.11
+		start_year = 2168
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_distributed_missile_ambush_nodes = {
+		category_anti_tank = { hard_attack = 0.028 ap_attack = 0.028 }
+		path = { leads_to_tech = ADISCORD_tech_superconducting_coil_barrels research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_coil_at_systems
+		}
+		research_cost = 1.5
+		start_year = 2173
+		folder = {
+			name = artillery_folder
+			position = { x = 0 y = 20 }
+		}
+		ai_will_do = { factor = 23 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_coil_at_systems = {
+		category_anti_tank = { reliability = 0.028 defense = 0.016 }
+		path = { leads_to_tech = ADISCORD_tech_guided_hypervelocity_penetrators research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_distributed_missile_ambush_nodes
+		}
+		research_cost = 1.5
+		start_year = 2173
+		folder = {
+			name = artillery_folder
+			position = { x = 4 y = 20 }
+		}
+		ai_will_do = { factor = 23 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_superconducting_coil_barrels = {
+		category_anti_tank = { hard_attack = 0.029 ap_attack = 0.029 }
+		path = { leads_to_tech = ADISCORD_tech_camouflage_defeat_radar research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_anti_tank_equipment_2183 }
+		research_cost = 1.75
+		start_year = 2179
+		folder = {
+			name = artillery_folder
+			position = { x = 0 y = 24 }
+		}
+		ai_will_do = { factor = 21 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_guided_hypervelocity_penetrators = {
+		category_anti_tank = { hard_attack = 0.029 ap_attack = 0.029 }
+		path = { leads_to_tech = ADISCORD_tech_autonomous_anti_armor_sentries research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_anti_tank_equipment_2183 }
+		research_cost = 1.75
+		start_year = 2179
+		folder = {
+			name = artillery_folder
+			position = { x = 4 y = 24 }
+		}
+		ai_will_do = { factor = 21 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_camouflage_defeat_radar = {
+		category_anti_tank = { hard_attack = 0.03 ap_attack = 0.03 }
+		path = { leads_to_tech = ADISCORD_tech_predictive_armor_route_interdiction research_cost_coeff = 1 }
+		research_cost = 1.238
+		start_year = 2185
+		folder = {
+			name = artillery_folder
+			position = { x = 0 y = 28 }
+		}
+		ai_will_do = { factor = 18 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_autonomous_anti_armor_sentries = {
+		category_anti_tank = { hard_attack = 0.031 ap_attack = 0.031 }
+		path = { leads_to_tech = ADISCORD_tech_predictive_armor_route_interdiction research_cost_coeff = 1 }
+		research_cost = 1.238
+		start_year = 2185
+		folder = {
+			name = artillery_folder
+			position = { x = 4 y = 28 }
+		}
+		ai_will_do = { factor = 18 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_predictive_armor_route_interdiction = {
+		category_anti_tank = { hard_attack = 0.031 ap_attack = 0.031 }
+		path = { leads_to_tech = ADISCORD_tech_hypervelocity_at_networks research_cost_coeff = 1 }
+		research_cost = 1.305
+		start_year = 2194
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 34 }
+		}
+		ai_will_do = { factor = 15 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_hypervelocity_at_networks = {
+		category_anti_tank = { hard_attack = 0.046 ap_attack = 0.046 }
+		research_cost = 2.2
+		start_year = 2200
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 38 }
+		}
+		ai_will_do = { factor = 12 }
+		categories = { artillery }
+	}
+
+	ADISCORD_tech_improvised_air_defense = {
+		anti_air = { air_attack = 0.02 reliability = 0.006 }
+		path = { leads_to_tech = ADISCORD_tech_radar_laying research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2100
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 0 }
+		}
+		ai_will_do = { factor = 36 }
+		categories = { artillery electronics }
+	}
+
+	ADISCORD_tech_radar_laying = {
+		anti_air = { air_attack = 0.021 reliability = 0.006 }
+		path = { leads_to_tech = ADISCORD_tech_proximity_fuzes research_cost_coeff = 1 }
+		enable_building = {
+			building = anti_air_building
+			level = 1
+		}
+		research_cost = 1.75
+		start_year = 2120
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 2 }
+		}
+		ai_will_do = { factor = 35 }
+		categories = { artillery electronics }
+	}
+
+	ADISCORD_tech_proximity_fuzes = {
+		anti_air = { air_attack = 0.021 reliability = 0.006 }
+		path = { leads_to_tech = ADISCORD_tech_stabilized_autocannon_mounts research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2140
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 4 }
+		}
+		ai_will_do = { factor = 33 }
+		categories = { artillery electronics }
+	}
+
+	ADISCORD_tech_stabilized_autocannon_mounts = {
+		anti_air = { air_attack = 0.022 reliability = 0.006 }
+		path = { leads_to_tech = ADISCORD_tech_point_defense_aa research_cost_coeff = 1 }
+		research_cost = 0.7
+		start_year = 2150
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 6 }
+		}
+		ai_will_do = { factor = 32 }
+		categories = { artillery electronics }
+	}
+
+	ADISCORD_tech_point_defense_aa = {
+		anti_air = { air_attack = 0.023 reliability = 0.007 }
+		path = { leads_to_tech = ADISCORD_tech_solid_state_air_search_radar research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_programmable_airburst_shells research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_anti_air_equipment_2163 }
+		enable_building = {
+			building = anti_air_building
+			level = 3
+		}
+		research_cost = 1.75
+		start_year = 2160
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 8 }
+		}
+		ai_will_do = { factor = 31 }
+		categories = { artillery electronics }
+	}
+
+	ADISCORD_tech_solid_state_air_search_radar = {
+		anti_air = { air_attack = 0.023 reliability = 0.014 }
+		path = { leads_to_tech = ADISCORD_tech_integrated_short_range_missile_cells research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_programmable_airburst_shells
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { artillery electronics }
+	}
+
+	ADISCORD_tech_programmable_airburst_shells = {
+		anti_air = { defense = 0.024 soft_attack = 0.014 }
+		path = { leads_to_tech = ADISCORD_tech_infrared_search_track_arrays research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_solid_state_air_search_radar
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = artillery_folder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { artillery electronics }
+	}
+
+	ADISCORD_tech_infrared_search_track_arrays = {
+		anti_air = { air_attack = 0.024 reliability = 0.007 }
+		path = { leads_to_tech = ADISCORD_tech_integrated_short_range_missile_cells research_cost_coeff = 1 }
+		research_cost = 1.08
+		start_year = 2164
+		folder = {
+			name = artillery_folder
+			position = { x = 0 y = 12 }
+		}
+		ai_will_do = { factor = 28 }
+		categories = { artillery electronics }
+	}
+
+	ADISCORD_tech_integrated_short_range_missile_cells = {
+		anti_air = { air_attack = 0.025 reliability = 0.007 }
+		path = { leads_to_tech = ADISCORD_tech_networked_air_defense research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_multispectral_drone_classifiers research_cost_coeff = 1 }
+		research_cost = 1.095
+		start_year = 2166
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 14 }
+		}
+		ai_will_do = { factor = 27 }
+		categories = { artillery electronics }
+	}
+
+	ADISCORD_tech_networked_air_defense = {
+		anti_air = { air_attack = 0.026 reliability = 0.015 }
+		path = { leads_to_tech = ADISCORD_tech_cooperative_engagement_links research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_multispectral_drone_classifiers
+		}
+		enable_building = {
+			building = anti_air_building
+			level = 4
+		}
+		research_cost = 1.75
+		start_year = 2168
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { artillery electronics }
+	}
+
+	ADISCORD_tech_multispectral_drone_classifiers = {
+		anti_air = { defense = 0.026 soft_attack = 0.015 }
+		path = { leads_to_tech = ADISCORD_tech_counter_uas_microwave_emitters research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_networked_air_defense
+		}
+		research_cost = 1.5
+		start_year = 2168
+		folder = {
+			name = artillery_folder
+			position = { x = 4 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { artillery electronics }
+	}
+
+	ADISCORD_tech_counter_uas_microwave_emitters = {
+		anti_air = { air_attack = 0.027 reliability = 0.008 }
+		path = { leads_to_tech = ADISCORD_tech_cooperative_engagement_links research_cost_coeff = 1 }
+		research_cost = 1.125
+		start_year = 2170
+		folder = {
+			name = artillery_folder
+			position = { x = 4 y = 18 }
+		}
+		ai_will_do = { factor = 25 }
+		categories = { artillery electronics }
+	}
+
+	ADISCORD_tech_cooperative_engagement_links = {
+		anti_air = { air_attack = 0.028 reliability = 0.008 }
+		path = { leads_to_tech = ADISCORD_tech_rail_assisted_aa research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_rail_accelerated_interceptors research_cost_coeff = 1 }
+		research_cost = 1.147
+		start_year = 2173
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 20 }
+		}
+		ai_will_do = { factor = 23 }
+		categories = { artillery electronics }
+	}
+
+	ADISCORD_tech_rail_assisted_aa = {
+		anti_air = { air_attack = 0.028 reliability = 0.016 }
+		path = { leads_to_tech = ADISCORD_tech_high_energy_laser_turrets research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_rail_accelerated_interceptors
+		}
+		research_cost = 1.5
+		start_year = 2176
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 22 }
+		}
+		ai_will_do = { factor = 22 }
+		categories = { artillery electronics }
+	}
+
+	ADISCORD_tech_rail_accelerated_interceptors = {
+		anti_air = { defense = 0.029 soft_attack = 0.016 }
+		path = { leads_to_tech = ADISCORD_tech_adaptive_laser_beam_directors research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_rail_assisted_aa
+		}
+		research_cost = 1.5
+		start_year = 2176
+		folder = {
+			name = artillery_folder
+			position = { x = 0 y = 22 }
+		}
+		ai_will_do = { factor = 22 }
+		categories = { artillery electronics }
+	}
+
+	ADISCORD_tech_adaptive_laser_beam_directors = {
+		anti_air = { air_attack = 0.029 reliability = 0.008 }
+		path = { leads_to_tech = ADISCORD_tech_high_energy_laser_turrets research_cost_coeff = 1 }
+		research_cost = 1.193
+		start_year = 2179
+		folder = {
+			name = artillery_folder
+			position = { x = 0 y = 24 }
+		}
+		ai_will_do = { factor = 21 }
+		categories = { artillery electronics }
+	}
+
+	ADISCORD_tech_high_energy_laser_turrets = {
+		anti_air = { air_attack = 0.03 reliability = 0.009 }
+		path = { leads_to_tech = ADISCORD_tech_autonomous_interceptor_swarms research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_predictive_airspace_denial_grid research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_anti_air_equipment_2183 }
+		research_cost = 1.75
+		start_year = 2182
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 26 }
+		}
+		ai_will_do = { factor = 20 }
+		categories = { artillery electronics }
+	}
+
+	ADISCORD_tech_autonomous_interceptor_swarms = {
+		anti_air = { air_attack = 0.031 reliability = 0.017 }
+		path = { leads_to_tech = ADISCORD_tech_directed_energy_air_defense research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_predictive_airspace_denial_grid
+		}
+		research_cost = 1.5
+		start_year = 2188
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 30 }
+		}
+		ai_will_do = { factor = 17 }
+		categories = { artillery electronics }
+	}
+
+	ADISCORD_tech_predictive_airspace_denial_grid = {
+		anti_air = { defense = 0.031 soft_attack = 0.018 }
+		path = { leads_to_tech = ADISCORD_tech_directed_energy_air_defense research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_autonomous_interceptor_swarms
+		}
+		research_cost = 1.5
+		start_year = 2188
+		folder = {
+			name = artillery_folder
+			position = { x = 4 y = 30 }
+		}
+		ai_will_do = { factor = 17 }
+		categories = { artillery electronics }
+	}
+
+	ADISCORD_tech_directed_energy_air_defense = {
+		anti_air = { air_attack = 0.046 reliability = 0.013 }
+		enable_building = {
+			building = anti_air_building
+			level = 5
+		}
+		research_cost = 2.2
+		start_year = 2200
+		folder = {
+			name = artillery_folder
+			position = { x = 2 y = 38 }
+		}
+		ai_will_do = { factor = 12 }
+		categories = { artillery electronics }
+	}
+}

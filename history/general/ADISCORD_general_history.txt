@@ -1,0 +1,5 @@
+# Keep the replaced history/general database non-empty without importing
+# vanilla shared advisors or country-specific history.
+if = {
+	limit = { always = no }
+}

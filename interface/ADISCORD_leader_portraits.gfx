@@ -104,6 +104,30 @@ spriteTypes = {
 	  	name = "GFX_portrait_VAL_Renata_Morn"
 	  	texturefile = "gfx/leaders/VAL/portrait_VAL_Renata_Morn.png"
 	}
+	spriteType = {
+	  	name = "GFX_portrait_VAL_Aleksei_Veyr"
+	  	texturefile = "gfx/leaders/VAL/portrait_VAL_Aleksei_Veyr.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_VAL_Maksim_Korvin"
+	  	texturefile = "gfx/leaders/VAL/portrait_VAL_Maksim_Korvin.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_VAL_Artem_Rask"
+	  	texturefile = "gfx/leaders/VAL/portrait_VAL_Artem_Rask.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_VAL_Dmitri_Karsov"
+	  	texturefile = "gfx/leaders/VAL/portrait_VAL_Dmitri_Karsov.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_VAL_Leonid_Vargan"
+	  	texturefile = "gfx/leaders/VAL/portrait_VAL_Leonid_Vargan.png"
+	}
+	spriteType = {
+	  	name = "GFX_portrait_VAL_Sergei_Volkov"
+	  	texturefile = "gfx/leaders/VAL/portrait_VAL_Sergei_Volkov.png"
+	}
 ###WIT
 	spriteType = {
 	  	name = "GFX_portrait_WIT_Wito_Sovi"

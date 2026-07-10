@@ -26,6 +26,7 @@ set_convoys = 300
 set_stability = 0.87
 
 add_ideas = {
+	WIT_national_spirit
 	minister_WIT_Otto_Veyn
 	minister_WIT_Marta_Lisk
 	minister_WIT_Bruno_Hel

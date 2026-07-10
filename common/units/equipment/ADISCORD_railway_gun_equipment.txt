@@ -1,0 +1,42 @@
+equipments = {
+	railway_gun_equipment = {
+		year = 2163
+		is_archetype = yes
+		picture = archetype_artillery_equipment
+		type = railway_gun
+		group_by = archetype
+		interface_category = interface_category_land
+		active = yes
+		reliability = 0.75
+		maximum_speed = 5
+		railway_gun_attack = 25
+		railway_gun_attack_range_index_in_define = 0
+		railway_gun_annex_ratio = 0.5
+		railway_gun_hours_between_redistribution = 24
+		manpower = 1000
+		lend_lease_cost = 30
+	}
+
+	railway_gun_equipment_1 = {
+		year = 2163
+		archetype = railway_gun_equipment
+		priority = 50
+		visual_level = 0
+		active = no
+		build_cost_ic = 760
+		resources = { steel = 4 tungsten = 2 chromium = 2 }
+	}
+
+	ADISCORD_railway_gun_equipment_2200 = {
+		year = 2200
+		archetype = railway_gun_equipment
+		parent = railway_gun_equipment_1
+		priority = 70
+		visual_level = 1
+		active = no
+		railway_gun_attack = 34
+		railway_gun_attack_range_index_in_define = 1
+		build_cost_ic = 980
+		resources = { steel = 5 tungsten = 3 chromium = 2 aluminium = 1 }
+	}
+}

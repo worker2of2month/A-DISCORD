@@ -1,0 +1,1143 @@
+technologies = {
+	ADISCORD_tech_reclaimed_jet_platforms = {
+		air_mission_efficiency = 0.012
+		air_accidents_factor = -0.012
+		path = { leads_to_tech = ADISCORD_tech_standardized_airframes research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_fighter_airframe_2163 }
+		research_cost = 1.75
+		start_year = 2100
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 0 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 0 }
+		}
+		ai_will_do = { factor = 36 }
+		categories = { air_equipment electronics }
+	}
+
+	ADISCORD_tech_standardized_airframes = {
+		air_mission_efficiency = 0.012
+		air_accidents_factor = -0.012
+		path = { leads_to_tech = ADISCORD_tech_pulse_doppler_radar research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2120
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 2 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 2 }
+		}
+		ai_will_do = { factor = 35 }
+		categories = { air_equipment electronics }
+	}
+
+	ADISCORD_tech_pulse_doppler_radar = {
+		air_mission_efficiency = 0.013
+		air_accidents_factor = -0.013
+		path = { leads_to_tech = ADISCORD_tech_composite_wing_spars research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2140
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 4 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 4 }
+		}
+		ai_will_do = { factor = 33 }
+		categories = { air_equipment electronics }
+	}
+
+	ADISCORD_tech_composite_wing_spars = {
+		air_mission_efficiency = 0.013
+		air_accidents_factor = -0.013
+		path = { leads_to_tech = ADISCORD_tech_high_altitude_interceptors research_cost_coeff = 1 }
+		research_cost = 0.7
+		start_year = 2150
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 6 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 6 }
+		}
+		ai_will_do = { factor = 32 }
+		categories = { air_equipment electronics }
+	}
+
+	ADISCORD_tech_high_altitude_interceptors = {
+		air_mission_efficiency = 0.013
+		air_accidents_factor = -0.013
+		path = { leads_to_tech = ADISCORD_tech_digital_flight_controls research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_electronically_scanned_fighter_radar research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_helmet_cued_targeting research_cost_coeff = 1 }
+		research_cost = 0.9
+		start_year = 2160
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 8 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 8 }
+		}
+		ai_will_do = { factor = 31 }
+		categories = { air_equipment electronics }
+	}
+
+	ADISCORD_tech_digital_flight_controls = {
+		air_mission_efficiency = 0.023
+		air_accidents_factor = -0.014
+		path = { leads_to_tech = ADISCORD_tech_fighter_infrared_search_track research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_electronically_scanned_fighter_radar
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = air_techs_folder
+			position = { x = 0 y = 10 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { air_equipment electronics }
+	}
+
+	ADISCORD_tech_electronically_scanned_fighter_radar = {
+		air_intercept_efficiency = 0.024
+		air_mission_efficiency = 0.014
+		path = { leads_to_tech = ADISCORD_tech_thrust_vectoring research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_digital_flight_controls
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 10 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { air_equipment electronics }
+	}
+
+	ADISCORD_tech_helmet_cued_targeting = {
+		air_mission_efficiency = 0.024
+		air_accidents_factor = -0.024
+		path = { leads_to_tech = ADISCORD_tech_supercruise_turbofans research_cost_coeff = 1 }
+		research_cost = 1.065
+		start_year = 2162
+		folder = {
+			name = air_techs_folder
+			position = { x = 4 y = 10 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 4 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { air_equipment electronics }
+	}
+
+	ADISCORD_tech_fighter_infrared_search_track = {
+		air_mission_efficiency = 0.025
+		air_accidents_factor = -0.015
+		path = { leads_to_tech = ADISCORD_tech_low_observable_inlet_geometry research_cost_coeff = 1 }
+		research_cost = 1.125
+		start_year = 2170
+		folder = {
+			name = air_techs_folder
+			position = { x = 0 y = 18 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 0 y = 18 }
+		}
+		ai_will_do = { factor = 25 }
+		categories = { air_equipment electronics }
+	}
+
+	ADISCORD_tech_thrust_vectoring = {
+		air_intercept_efficiency = 0.026
+		air_mission_efficiency = 0.015
+		path = { leads_to_tech = ADISCORD_tech_cooperative_fighter_sensor_fusion research_cost_coeff = 1 }
+		research_cost = 1.125
+		start_year = 2170
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 18 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 18 }
+		}
+		ai_will_do = { factor = 25 }
+		categories = { air_equipment electronics }
+	}
+
+	ADISCORD_tech_supercruise_turbofans = {
+		air_mission_efficiency = 0.026
+		air_accidents_factor = -0.026
+		path = { leads_to_tech = ADISCORD_tech_loyal_wingmen research_cost_coeff = 1 }
+		research_cost = 1.125
+		start_year = 2170
+		folder = {
+			name = air_techs_folder
+			position = { x = 4 y = 18 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 4 y = 18 }
+		}
+		ai_will_do = { factor = 25 }
+		categories = { air_equipment electronics }
+	}
+
+	ADISCORD_tech_low_observable_inlet_geometry = {
+		air_mission_efficiency = 0.027
+		air_accidents_factor = -0.015
+		path = { leads_to_tech = ADISCORD_tech_adaptive_cycle_engines research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_interceptor_airframe_2183 }
+		research_cost = 1.75
+		start_year = 2182
+		folder = {
+			name = air_techs_folder
+			position = { x = 0 y = 26 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 0 y = 26 }
+		}
+		ai_will_do = { factor = 20 }
+		categories = { air_equipment electronics }
+	}
+
+	ADISCORD_tech_cooperative_fighter_sensor_fusion = {
+		air_intercept_efficiency = 0.028
+		air_mission_efficiency = 0.016
+		path = { leads_to_tech = ADISCORD_tech_directed_energy_defensive_suites research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_interceptor_airframe_2183 }
+		research_cost = 1.75
+		start_year = 2182
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 26 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 26 }
+		}
+		ai_will_do = { factor = 20 }
+		categories = { air_equipment electronics }
+	}
+
+	ADISCORD_tech_loyal_wingmen = {
+		air_mission_efficiency = 0.028
+		air_accidents_factor = -0.028
+		path = { leads_to_tech = ADISCORD_tech_autonomous_dogfight_controller research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_interceptor_airframe_2183 }
+		research_cost = 1.75
+		start_year = 2182
+		folder = {
+			name = air_techs_folder
+			position = { x = 4 y = 26 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 4 y = 26 }
+		}
+		ai_will_do = { factor = 20 }
+		categories = { air_equipment electronics }
+	}
+
+	ADISCORD_tech_adaptive_cycle_engines = {
+		air_mission_efficiency = 0.029
+		air_accidents_factor = -0.016
+		path = { leads_to_tech = ADISCORD_tech_exoatmospheric_boost_stages research_cost_coeff = 1 }
+		research_cost = 1.282
+		start_year = 2191
+		folder = {
+			name = air_techs_folder
+			position = { x = 0 y = 32 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 0 y = 32 }
+		}
+		ai_will_do = { factor = 16 }
+		categories = { air_equipment electronics }
+	}
+
+	ADISCORD_tech_directed_energy_defensive_suites = {
+		air_intercept_efficiency = 0.029
+		air_mission_efficiency = 0.017
+		path = { leads_to_tech = ADISCORD_tech_distributed_interceptor_swarms research_cost_coeff = 1 }
+		research_cost = 1.282
+		start_year = 2191
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 32 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 32 }
+		}
+		ai_will_do = { factor = 16 }
+		categories = { air_equipment electronics }
+	}
+
+	ADISCORD_tech_autonomous_dogfight_controller = {
+		air_mission_efficiency = 0.03
+		air_accidents_factor = -0.03
+		path = { leads_to_tech = ADISCORD_tech_aerospace_interceptors research_cost_coeff = 1 }
+		research_cost = 1.282
+		start_year = 2191
+		folder = {
+			name = air_techs_folder
+			position = { x = 4 y = 32 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 4 y = 32 }
+		}
+		ai_will_do = { factor = 16 }
+		categories = { air_equipment electronics }
+	}
+
+	ADISCORD_tech_exoatmospheric_boost_stages = {
+		air_mission_efficiency = 0.031
+		air_accidents_factor = -0.017
+		research_cost = 1.35
+		start_year = 2200
+		folder = {
+			name = air_techs_folder
+			position = { x = 0 y = 38 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 0 y = 38 }
+		}
+		ai_will_do = { factor = 12 }
+		categories = { air_equipment electronics }
+	}
+
+	ADISCORD_tech_distributed_interceptor_swarms = {
+		air_intercept_efficiency = 0.031
+		air_mission_efficiency = 0.018
+		research_cost = 1.35
+		start_year = 2200
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 38 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 38 }
+		}
+		ai_will_do = { factor = 12 }
+		categories = { air_equipment electronics }
+	}
+
+	ADISCORD_tech_aerospace_interceptors = {
+		air_mission_efficiency = 0.046
+		air_accidents_factor = -0.046
+		research_cost = 2.2
+		start_year = 2200
+		folder = {
+			name = air_techs_folder
+			position = { x = 4 y = 38 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 4 y = 38 }
+		}
+		ai_will_do = { factor = 12 }
+		categories = { air_equipment electronics }
+	}
+
+	ADISCORD_tech_battlefield_attack_aircraft = {
+		air_mission_efficiency = 0.012
+		ground_attack_factor = 0.02
+		path = { leads_to_tech = ADISCORD_tech_guided_munitions research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_cas_airframe_2170 }
+		research_cost = 1.75
+		start_year = 2100
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 0 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 0 }
+		}
+		ai_will_do = { factor = 36 }
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_guided_munitions = {
+		air_mission_efficiency = 0.012
+		ground_attack_factor = 0.021
+		path = { leads_to_tech = ADISCORD_tech_armored_cockpits research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2120
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 2 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 2 }
+		}
+		ai_will_do = { factor = 35 }
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_armored_cockpits = {
+		air_mission_efficiency = 0.013
+		ground_attack_factor = 0.021
+		path = { leads_to_tech = ADISCORD_tech_ruggedized_targeting_pods research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2140
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 4 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 4 }
+		}
+		ai_will_do = { factor = 33 }
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_ruggedized_targeting_pods = {
+		air_mission_efficiency = 0.013
+		ground_attack_factor = 0.022
+		path = { leads_to_tech = ADISCORD_tech_vtol_assault_frames research_cost_coeff = 1 }
+		research_cost = 0.7
+		start_year = 2150
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 6 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 6 }
+		}
+		ai_will_do = { factor = 32 }
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_vtol_assault_frames = {
+		air_mission_efficiency = 0.013
+		ground_attack_factor = 0.023
+		path = { leads_to_tech = ADISCORD_tech_millimeter_wave_ground_radar research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_precision_glide_bomb_kits research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_vtol_airframe_2170 }
+		research_cost = 1.75
+		start_year = 2160
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 8 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 8 }
+		}
+		ai_will_do = { factor = 31 }
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_millimeter_wave_ground_radar = {
+		ground_attack_factor = 0.023
+		air_mission_efficiency = 0.014
+		path = { leads_to_tech = ADISCORD_tech_modular_airframe_armor_pods research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_precision_glide_bomb_kits
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 10 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_precision_glide_bomb_kits = {
+		air_mission_efficiency = 0.024
+		air_accidents_factor = -0.014
+		path = { leads_to_tech = ADISCORD_tech_terrain_following_attack_controls research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_millimeter_wave_ground_radar
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = air_techs_folder
+			position = { x = 0 y = 10 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_terrain_following_attack_controls = {
+		air_mission_efficiency = 0.014
+		ground_attack_factor = 0.024
+		path = { leads_to_tech = ADISCORD_tech_modular_airframe_armor_pods research_cost_coeff = 1 }
+		research_cost = 1.08
+		start_year = 2164
+		folder = {
+			name = air_techs_folder
+			position = { x = 0 y = 12 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 0 y = 12 }
+		}
+		ai_will_do = { factor = 28 }
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_modular_airframe_armor_pods = {
+		air_mission_efficiency = 0.015
+		ground_attack_factor = 0.025
+		path = { leads_to_tech = ADISCORD_tech_drone_air_wings research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_tiltrotor_assault_propulsion research_cost_coeff = 1 }
+		research_cost = 1.095
+		start_year = 2166
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 14 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 14 }
+		}
+		ai_will_do = { factor = 27 }
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_drone_air_wings = {
+		ground_attack_factor = 0.026
+		air_mission_efficiency = 0.015
+		path = { leads_to_tech = ADISCORD_tech_cooperative_close_air_control_links research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_tiltrotor_assault_propulsion
+		}
+		research_cost = 1.5
+		start_year = 2168
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 16 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_tiltrotor_assault_propulsion = {
+		air_mission_efficiency = 0.026
+		air_accidents_factor = -0.015
+		path = { leads_to_tech = ADISCORD_tech_loitering_strike_drones research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_drone_air_wings
+		}
+		research_cost = 1.5
+		start_year = 2168
+		folder = {
+			name = air_techs_folder
+			position = { x = 4 y = 16 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 4 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_loitering_strike_drones = {
+		air_mission_efficiency = 0.015
+		ground_attack_factor = 0.027
+		path = { leads_to_tech = ADISCORD_tech_cooperative_close_air_control_links research_cost_coeff = 1 }
+		research_cost = 1.125
+		start_year = 2170
+		folder = {
+			name = air_techs_folder
+			position = { x = 4 y = 18 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 4 y = 18 }
+		}
+		ai_will_do = { factor = 25 }
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_cooperative_close_air_control_links = {
+		air_mission_efficiency = 0.016
+		ground_attack_factor = 0.028
+		path = { leads_to_tech = ADISCORD_tech_autonomous_strike_wings research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_autonomous_target_discrimination research_cost_coeff = 1 }
+		research_cost = 1.147
+		start_year = 2173
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 20 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 20 }
+		}
+		ai_will_do = { factor = 23 }
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_autonomous_strike_wings = {
+		ground_attack_factor = 0.028
+		air_mission_efficiency = 0.016
+		path = { leads_to_tech = ADISCORD_tech_electromagnetic_cannon_pods research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_autonomous_target_discrimination
+		}
+		research_cost = 1.5
+		start_year = 2176
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 22 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 22 }
+		}
+		ai_will_do = { factor = 22 }
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_autonomous_target_discrimination = {
+		air_mission_efficiency = 0.029
+		air_accidents_factor = -0.016
+		path = { leads_to_tech = ADISCORD_tech_directed_energy_countermeasures research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_autonomous_strike_wings
+		}
+		research_cost = 1.5
+		start_year = 2176
+		folder = {
+			name = air_techs_folder
+			position = { x = 0 y = 22 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 0 y = 22 }
+		}
+		ai_will_do = { factor = 22 }
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_directed_energy_countermeasures = {
+		air_mission_efficiency = 0.017
+		ground_attack_factor = 0.029
+		path = { leads_to_tech = ADISCORD_tech_electromagnetic_cannon_pods research_cost_coeff = 1 }
+		research_cost = 1.193
+		start_year = 2179
+		folder = {
+			name = air_techs_folder
+			position = { x = 0 y = 24 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 0 y = 24 }
+		}
+		ai_will_do = { factor = 21 }
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_electromagnetic_cannon_pods = {
+		air_mission_efficiency = 0.017
+		ground_attack_factor = 0.03
+		path = { leads_to_tech = ADISCORD_tech_unmanned_forward_air_controllers research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_persistent_sensor_strike_loops research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_drone_airframe_2183 }
+		research_cost = 1.75
+		start_year = 2182
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 26 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 26 }
+		}
+		ai_will_do = { factor = 20 }
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_unmanned_forward_air_controllers = {
+		ground_attack_factor = 0.031
+		air_mission_efficiency = 0.017
+		path = { leads_to_tech = ADISCORD_tech_persistent_air_support research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_persistent_sensor_strike_loops
+		}
+		research_cost = 1.5
+		start_year = 2188
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 30 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 30 }
+		}
+		ai_will_do = { factor = 17 }
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_persistent_sensor_strike_loops = {
+		air_mission_efficiency = 0.031
+		air_accidents_factor = -0.018
+		path = { leads_to_tech = ADISCORD_tech_persistent_air_support research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_unmanned_forward_air_controllers
+		}
+		research_cost = 1.5
+		start_year = 2188
+		folder = {
+			name = air_techs_folder
+			position = { x = 4 y = 30 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 4 y = 30 }
+		}
+		ai_will_do = { factor = 17 }
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_persistent_air_support = {
+		air_mission_efficiency = 0.026
+		ground_attack_factor = 0.046
+		research_cost = 2.2
+		start_year = 2200
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 38 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 38 }
+		}
+		ai_will_do = { factor = 12 }
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_rocket_test_stands = {
+		air_mission_efficiency = 0.012
+		strategic_bomb_visibility = -0.012
+		path = { leads_to_tech = ADISCORD_tech_inertial_guidance research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2100
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 0 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 0 }
+		}
+		ai_will_do = { factor = 36 }
+		categories = { air_equipment rocketry electronics }
+	}
+
+	ADISCORD_tech_inertial_guidance = {
+		air_mission_efficiency = 0.012
+		strategic_bomb_visibility = -0.012
+		path = { leads_to_tech = ADISCORD_tech_cruise_missiles research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2120
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 2 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 2 }
+		}
+		ai_will_do = { factor = 35 }
+		categories = { air_equipment rocketry electronics }
+	}
+
+	ADISCORD_tech_cruise_missiles = {
+		air_mission_efficiency = 0.013
+		strategic_bomb_visibility = -0.013
+		path = { leads_to_tech = ADISCORD_tech_storable_liquid_propellants research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2140
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 4 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 4 }
+		}
+		ai_will_do = { factor = 33 }
+		categories = { air_equipment rocketry electronics }
+	}
+
+	ADISCORD_tech_storable_liquid_propellants = {
+		air_mission_efficiency = 0.013
+		strategic_bomb_visibility = -0.013
+		path = { leads_to_tech = ADISCORD_tech_strategic_rocket_architecture research_cost_coeff = 1 }
+		research_cost = 0.7
+		start_year = 2150
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 6 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 6 }
+		}
+		ai_will_do = { factor = 32 }
+		categories = { air_equipment rocketry electronics }
+	}
+
+	ADISCORD_tech_strategic_rocket_architecture = {
+		air_mission_efficiency = 0.013
+		strategic_bomb_visibility = -0.013
+		path = { leads_to_tech = ADISCORD_tech_ring_laser_gyroscopes research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_terrain_contour_matching research_cost_coeff = 1 }
+		enable_building = {
+			building = rocket_site
+			level = 1
+		}
+		research_cost = 1.75
+		start_year = 2160
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 8 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 8 }
+		}
+		ai_will_do = { factor = 31 }
+		categories = { air_equipment rocketry electronics }
+	}
+
+	ADISCORD_tech_ring_laser_gyroscopes = {
+		ground_attack_factor = 0.023
+		air_mission_efficiency = 0.014
+		path = { leads_to_tech = ADISCORD_tech_hardened_mobile_launchers research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_terrain_contour_matching
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = air_techs_folder
+			position = { x = 0 y = 10 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { air_equipment rocketry electronics }
+	}
+
+	ADISCORD_tech_terrain_contour_matching = {
+		strategic_bomb_visibility = -0.024
+		air_accidents_factor = -0.014
+		path = { leads_to_tech = ADISCORD_tech_digital_warhead_buses research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_ring_laser_gyroscopes
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = air_techs_folder
+			position = { x = 4 y = 10 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 4 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { air_equipment rocketry electronics }
+	}
+
+	ADISCORD_tech_hardened_mobile_launchers = {
+		ground_attack_factor = 0.024
+		air_mission_efficiency = 0.014
+		path = { leads_to_tech = ADISCORD_tech_orbital_tracking_relics research_cost_coeff = 1 }
+		research_cost = 1.11
+		start_year = 2168
+		folder = {
+			name = air_techs_folder
+			position = { x = 0 y = 16 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 0 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { air_equipment rocketry electronics }
+	}
+
+	ADISCORD_tech_digital_warhead_buses = {
+		strategic_bomb_visibility = -0.025
+		air_accidents_factor = -0.015
+		path = { leads_to_tech = ADISCORD_tech_low_observable_cruise_missile_skins research_cost_coeff = 1 }
+		research_cost = 1.11
+		start_year = 2168
+		folder = {
+			name = air_techs_folder
+			position = { x = 4 y = 16 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 4 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { air_equipment rocketry electronics }
+	}
+
+	ADISCORD_tech_orbital_tracking_relics = {
+		ground_attack_factor = 0.026
+		air_mission_efficiency = 0.015
+		path = { leads_to_tech = ADISCORD_tech_hypersonic_glide_vehicles research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_rocket_strike_platform_2183 }
+		research_cost = 1.75
+		start_year = 2173
+		folder = {
+			name = air_techs_folder
+			position = { x = 0 y = 20 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 0 y = 20 }
+		}
+		ai_will_do = { factor = 23 }
+		categories = { air_equipment rocketry electronics }
+	}
+
+	ADISCORD_tech_low_observable_cruise_missile_skins = {
+		strategic_bomb_visibility = -0.026
+		air_accidents_factor = -0.015
+		path = { leads_to_tech = ADISCORD_tech_astro_inertial_navigation research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_rocket_strike_platform_2183 }
+		research_cost = 1.75
+		start_year = 2173
+		folder = {
+			name = air_techs_folder
+			position = { x = 4 y = 20 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 4 y = 20 }
+		}
+		ai_will_do = { factor = 23 }
+		categories = { air_equipment rocketry electronics }
+	}
+
+	ADISCORD_tech_hypersonic_glide_vehicles = {
+		ground_attack_factor = 0.027
+		air_mission_efficiency = 0.015
+		path = { leads_to_tech = ADISCORD_tech_deep_strike_targeting research_cost_coeff = 1 }
+		research_cost = 1.193
+		start_year = 2179
+		folder = {
+			name = air_techs_folder
+			position = { x = 0 y = 24 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 0 y = 24 }
+		}
+		ai_will_do = { factor = 21 }
+		categories = { air_equipment rocketry electronics }
+	}
+
+	ADISCORD_tech_astro_inertial_navigation = {
+		strategic_bomb_visibility = -0.028
+		air_accidents_factor = -0.016
+		path = { leads_to_tech = ADISCORD_tech_reusable_boost_stages research_cost_coeff = 1 }
+		research_cost = 1.193
+		start_year = 2179
+		folder = {
+			name = air_techs_folder
+			position = { x = 4 y = 24 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 4 y = 24 }
+		}
+		ai_will_do = { factor = 21 }
+		categories = { air_equipment rocketry electronics }
+	}
+
+	ADISCORD_tech_deep_strike_targeting = {
+		ground_attack_factor = 0.028
+		air_mission_efficiency = 0.016
+		path = { leads_to_tech = ADISCORD_tech_maneuvering_reentry_vehicles research_cost_coeff = 1 }
+		enable_building = {
+			building = rocket_site
+			level = 2
+		}
+		research_cost = 1.75
+		start_year = 2185
+		folder = {
+			name = air_techs_folder
+			position = { x = 0 y = 28 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 0 y = 28 }
+		}
+		ai_will_do = { factor = 18 }
+		categories = { air_equipment rocketry electronics }
+	}
+
+	ADISCORD_tech_reusable_boost_stages = {
+		strategic_bomb_visibility = -0.029
+		air_accidents_factor = -0.016
+		path = { leads_to_tech = ADISCORD_tech_orbital_relay_targeting research_cost_coeff = 1 }
+		research_cost = 1.238
+		start_year = 2185
+		folder = {
+			name = air_techs_folder
+			position = { x = 4 y = 28 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 4 y = 28 }
+		}
+		ai_will_do = { factor = 18 }
+		categories = { air_equipment rocketry electronics }
+	}
+
+	ADISCORD_tech_maneuvering_reentry_vehicles = {
+		ground_attack_factor = 0.029
+		air_mission_efficiency = 0.017
+		path = { leads_to_tech = ADISCORD_tech_suborbital_skip_glide_guidance research_cost_coeff = 1 }
+		research_cost = 1.282
+		start_year = 2191
+		folder = {
+			name = air_techs_folder
+			position = { x = 0 y = 32 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 0 y = 32 }
+		}
+		ai_will_do = { factor = 16 }
+		categories = { air_equipment rocketry electronics }
+	}
+
+	ADISCORD_tech_orbital_relay_targeting = {
+		strategic_bomb_visibility = -0.03
+		air_accidents_factor = -0.017
+		path = { leads_to_tech = ADISCORD_tech_autonomous_strategic_strike_planning research_cost_coeff = 1 }
+		research_cost = 1.282
+		start_year = 2191
+		folder = {
+			name = air_techs_folder
+			position = { x = 4 y = 32 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 4 y = 32 }
+		}
+		ai_will_do = { factor = 16 }
+		categories = { air_equipment rocketry electronics }
+	}
+
+	ADISCORD_tech_suborbital_skip_glide_guidance = {
+		ground_attack_factor = 0.031
+		air_mission_efficiency = 0.017
+		path = { leads_to_tech = ADISCORD_tech_suborbital_strike_systems research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_deep_strike_airframe_2200 }
+		research_cost = 1.75
+		start_year = 2197
+		folder = {
+			name = air_techs_folder
+			position = { x = 0 y = 36 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 0 y = 36 }
+		}
+		ai_will_do = { factor = 13 }
+		categories = { air_equipment rocketry electronics }
+	}
+
+	ADISCORD_tech_autonomous_strategic_strike_planning = {
+		strategic_bomb_visibility = -0.031
+		air_accidents_factor = -0.018
+		path = { leads_to_tech = ADISCORD_tech_suborbital_strike_systems research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_deep_strike_airframe_2200 }
+		research_cost = 1.75
+		start_year = 2197
+		folder = {
+			name = air_techs_folder
+			position = { x = 4 y = 36 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 4 y = 36 }
+		}
+		ai_will_do = { factor = 13 }
+		categories = { air_equipment rocketry electronics }
+	}
+
+	ADISCORD_tech_suborbital_strike_systems = {
+		air_mission_efficiency = 0.026
+		strategic_bomb_visibility = -0.026
+		enable_equipments = { ADISCORD_orbital_tracking_platform_2200 }
+		enable_building = {
+			building = rocket_site
+			level = 3
+		}
+		research_cost = 2.2
+		start_year = 2200
+		folder = {
+			name = air_techs_folder
+			position = { x = 2 y = 38 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 2 y = 38 }
+		}
+		ai_will_do = { factor = 12 }
+		categories = { air_equipment rocketry electronics }
+	}
+}

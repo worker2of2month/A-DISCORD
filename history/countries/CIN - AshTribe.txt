@@ -32,7 +32,8 @@ add_ideas = {
 }
 
 set_technology = {
-	infantry_weapons = 1
+	ADISCORD_tech_salvage_standards = 1
+	ADISCORD_tech_postwar_weapon_standardization = 1
 }
 
 add_equipment_to_stockpile = {

@@ -1,0 +1,1083 @@
+technologies = {
+	ADISCORD_tech_restored_armored_chassis = {
+		category_all_armor = { maximum_speed = 0.012 reliability = 0.012 }
+		path = { leads_to_tech = ADISCORD_tech_light_suspension research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2100
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 0 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 0 }
+		}
+		ai_will_do = { factor = 36 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_light_suspension = {
+		category_all_armor = { maximum_speed = 0.012 reliability = 0.012 }
+		path = { leads_to_tech = ADISCORD_tech_modular_recon_chassis research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2120
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 2 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 2 }
+		}
+		ai_will_do = { factor = 35 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_modular_recon_chassis = {
+		category_all_armor = { maximum_speed = 0.013 reliability = 0.013 }
+		path = { leads_to_tech = ADISCORD_tech_sealed_electric_scout_drives research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2140
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 4 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 4 }
+		}
+		ai_will_do = { factor = 33 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_sealed_electric_scout_drives = {
+		category_all_armor = { maximum_speed = 0.013 reliability = 0.013 }
+		path = { leads_to_tech = ADISCORD_tech_drone_recon_swarms research_cost_coeff = 1 }
+		research_cost = 0.7
+		start_year = 2150
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 6 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 6 }
+		}
+		ai_will_do = { factor = 32 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_drone_recon_swarms = {
+		category_all_armor = { maximum_speed = 0.013 reliability = 0.013 }
+		path = { leads_to_tech = ADISCORD_tech_retractable_sensor_masts research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_hybrid_silent_running research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_light_combat_platform_2163 }
+		enable_subunits = { ADISCORD_recon_platform }
+		research_cost = 1.75
+		start_year = 2160
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 8 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 8 }
+		}
+		ai_will_do = { factor = 31 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_retractable_sensor_masts = {
+		category_all_armor = { maximum_speed = 0.023 reliability = 0.014 }
+		path = { leads_to_tech = ADISCORD_tech_multispectral_recon_suites research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_hybrid_silent_running
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = armour_folder
+			position = { x = 0 y = 10 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_hybrid_silent_running = {
+		category_all_armor = { defense = 0.024 breakthrough = 0.014 }
+		path = { leads_to_tech = ADISCORD_tech_terrain_mapping_suspension research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_retractable_sensor_masts
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = armour_folder
+			position = { x = 4 y = 10 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 4 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_multispectral_recon_suites = {
+		category_all_armor = { maximum_speed = 0.014 reliability = 0.014 }
+		path = { leads_to_tech = ADISCORD_tech_active_scouting_suites research_cost_coeff = 1 }
+		research_cost = 1.08
+		start_year = 2164
+		folder = {
+			name = armour_folder
+			position = { x = 0 y = 12 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 0 y = 12 }
+		}
+		ai_will_do = { factor = 28 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_terrain_mapping_suspension = {
+		category_all_armor = { maximum_speed = 0.015 reliability = 0.015 }
+		path = { leads_to_tech = ADISCORD_tech_deployable_microdrone_racks research_cost_coeff = 1 }
+		research_cost = 1.08
+		start_year = 2164
+		folder = {
+			name = armour_folder
+			position = { x = 4 y = 12 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 4 y = 12 }
+		}
+		ai_will_do = { factor = 28 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_active_scouting_suites = {
+		category_all_armor = { maximum_speed = 0.015 reliability = 0.015 }
+		path = { leads_to_tech = ADISCORD_tech_terrain_following_autopilots research_cost_coeff = 1 }
+		research_cost = 1.095
+		start_year = 2166
+		folder = {
+			name = armour_folder
+			position = { x = 0 y = 14 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 0 y = 14 }
+		}
+		ai_will_do = { factor = 27 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_deployable_microdrone_racks = {
+		category_all_armor = { maximum_speed = 0.015 reliability = 0.015 }
+		path = { leads_to_tech = ADISCORD_tech_terrain_following_autopilots research_cost_coeff = 1 }
+		research_cost = 1.095
+		start_year = 2166
+		folder = {
+			name = armour_folder
+			position = { x = 4 y = 14 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 4 y = 14 }
+		}
+		ai_will_do = { factor = 27 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_terrain_following_autopilots = {
+		category_all_armor = { maximum_speed = 0.015 reliability = 0.015 }
+		path = { leads_to_tech = ADISCORD_tech_signature_management_skins research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_unmanned_recon_vehicles research_cost_coeff = 1 }
+		research_cost = 1.11
+		start_year = 2168
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 16 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_signature_management_skins = {
+		category_all_armor = { maximum_speed = 0.028 reliability = 0.016 }
+		path = { leads_to_tech = ADISCORD_tech_unmanned_scout_turrets research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_unmanned_recon_vehicles
+		}
+		enable_equipments = { ADISCORD_recon_drone_carrier_2170 }
+		research_cost = 1.75
+		start_year = 2173
+		folder = {
+			name = armour_folder
+			position = { x = 0 y = 20 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 0 y = 20 }
+		}
+		ai_will_do = { factor = 23 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_unmanned_recon_vehicles = {
+		category_all_armor = { defense = 0.028 breakthrough = 0.016 }
+		path = { leads_to_tech = ADISCORD_tech_cooperative_mapping_relays research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_signature_management_skins
+		}
+		enable_equipments = { ADISCORD_recon_drone_carrier_2170 }
+		research_cost = 1.75
+		start_year = 2173
+		folder = {
+			name = armour_folder
+			position = { x = 4 y = 20 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 4 y = 20 }
+		}
+		ai_will_do = { factor = 23 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_unmanned_scout_turrets = {
+		category_all_armor = { maximum_speed = 0.016 reliability = 0.016 }
+		path = { leads_to_tech = ADISCORD_tech_expendable_sensor_carriers research_cost_coeff = 1 }
+		research_cost = 1.193
+		start_year = 2179
+		folder = {
+			name = armour_folder
+			position = { x = 0 y = 24 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 0 y = 24 }
+		}
+		ai_will_do = { factor = 21 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_cooperative_mapping_relays = {
+		category_all_armor = { maximum_speed = 0.017 reliability = 0.017 }
+		path = { leads_to_tech = ADISCORD_tech_autonomous_route_clearance_scouts research_cost_coeff = 1 }
+		research_cost = 1.193
+		start_year = 2179
+		folder = {
+			name = armour_folder
+			position = { x = 4 y = 24 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 4 y = 24 }
+		}
+		ai_will_do = { factor = 21 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_expendable_sensor_carriers = {
+		category_all_armor = { maximum_speed = 0.017 reliability = 0.017 }
+		path = { leads_to_tech = ADISCORD_tech_self_organizing_scout_formations research_cost_coeff = 1 }
+		research_cost = 1.238
+		start_year = 2185
+		folder = {
+			name = armour_folder
+			position = { x = 0 y = 28 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 0 y = 28 }
+		}
+		ai_will_do = { factor = 18 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_autonomous_route_clearance_scouts = {
+		category_all_armor = { maximum_speed = 0.017 reliability = 0.017 }
+		path = { leads_to_tech = ADISCORD_tech_self_organizing_scout_formations research_cost_coeff = 1 }
+		research_cost = 1.238
+		start_year = 2185
+		folder = {
+			name = armour_folder
+			position = { x = 4 y = 28 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 4 y = 28 }
+		}
+		ai_will_do = { factor = 18 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_self_organizing_scout_formations = {
+		category_all_armor = { maximum_speed = 0.018 reliability = 0.018 }
+		path = { leads_to_tech = ADISCORD_tech_autonomous_recon_screen research_cost_coeff = 1 }
+		research_cost = 1.305
+		start_year = 2194
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 34 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 34 }
+		}
+		ai_will_do = { factor = 15 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_autonomous_recon_screen = {
+		category_all_armor = { maximum_speed = 0.026 reliability = 0.026 }
+		research_cost = 2.2
+		start_year = 2200
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 38 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 38 }
+		}
+		ai_will_do = { factor = 12 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_recovered_medium_chassis = {
+		category_all_armor = { breakthrough = 0.02 hard_attack = 0.012 }
+		path = { leads_to_tech = ADISCORD_tech_remote_weapon_stations research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2100
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 0 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 0 }
+		}
+		ai_will_do = { factor = 36 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_remote_weapon_stations = {
+		category_all_armor = { breakthrough = 0.021 hard_attack = 0.012 }
+		path = { leads_to_tech = ADISCORD_tech_composite_armor_arrays research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2120
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 2 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 2 }
+		}
+		ai_will_do = { factor = 35 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_composite_armor_arrays = {
+		category_all_armor = { breakthrough = 0.021 hard_attack = 0.013 }
+		path = { leads_to_tech = ADISCORD_tech_electric_turret_drives research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2140
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 4 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 4 }
+		}
+		ai_will_do = { factor = 33 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_electric_turret_drives = {
+		category_all_armor = { breakthrough = 0.022 hard_attack = 0.013 }
+		path = { leads_to_tech = ADISCORD_tech_semi_autonomous_combat_modules research_cost_coeff = 1 }
+		research_cost = 0.7
+		start_year = 2150
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 6 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 6 }
+		}
+		ai_will_do = { factor = 32 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_semi_autonomous_combat_modules = {
+		category_all_armor = { breakthrough = 0.023 hard_attack = 0.013 }
+		path = { leads_to_tech = ADISCORD_tech_digital_fire_control_buses research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_hard_kill_protection_arrays research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_combat_platform_2170 }
+		enable_subunits = { ADISCORD_combat_platform }
+		research_cost = 1.75
+		start_year = 2160
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 8 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 8 }
+		}
+		ai_will_do = { factor = 31 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_digital_fire_control_buses = {
+		category_all_armor = { breakthrough = 0.023 hard_attack = 0.023 }
+		path = { leads_to_tech = ADISCORD_tech_modular_ceramic_armor_blocks research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_hard_kill_protection_arrays
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = armour_folder
+			position = { x = 0 y = 10 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_hard_kill_protection_arrays = {
+		category_all_armor = { armor_value = 0.024 defense = 0.024 reliability = 0.014 }
+		path = { leads_to_tech = ADISCORD_tech_distributed_crew_stations research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_digital_fire_control_buses
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = armour_folder
+			position = { x = 4 y = 10 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 4 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_modular_ceramic_armor_blocks = {
+		category_all_armor = { breakthrough = 0.024 hard_attack = 0.024 }
+		path = { leads_to_tech = ADISCORD_tech_adaptive_fire_control research_cost_coeff = 1 }
+		research_cost = 1.11
+		start_year = 2168
+		folder = {
+			name = armour_folder
+			position = { x = 0 y = 16 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 0 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_distributed_crew_stations = {
+		category_all_armor = { armor_value = 0.025 defense = 0.025 reliability = 0.015 }
+		path = { leads_to_tech = ADISCORD_tech_multispectral_gunner_sights research_cost_coeff = 1 }
+		research_cost = 1.11
+		start_year = 2168
+		folder = {
+			name = armour_folder
+			position = { x = 4 y = 16 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 4 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_adaptive_fire_control = {
+		category_all_armor = { breakthrough = 0.026 hard_attack = 0.026 }
+		path = { leads_to_tech = ADISCORD_tech_unmanned_turret_capsules research_cost_coeff = 1 }
+		research_cost = 1.147
+		start_year = 2173
+		folder = {
+			name = armour_folder
+			position = { x = 0 y = 20 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 0 y = 20 }
+		}
+		ai_will_do = { factor = 23 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_multispectral_gunner_sights = {
+		category_all_armor = { armor_value = 0.026 defense = 0.026 reliability = 0.015 }
+		path = { leads_to_tech = ADISCORD_tech_armored_platoon_target_handoff research_cost_coeff = 1 }
+		research_cost = 1.147
+		start_year = 2173
+		folder = {
+			name = armour_folder
+			position = { x = 4 y = 20 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 4 y = 20 }
+		}
+		ai_will_do = { factor = 23 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_unmanned_turret_capsules = {
+		category_all_armor = { breakthrough = 0.027 hard_attack = 0.027 }
+		path = { leads_to_tech = ADISCORD_tech_limited_battle_ai research_cost_coeff = 1 }
+		research_cost = 1.193
+		start_year = 2179
+		folder = {
+			name = armour_folder
+			position = { x = 0 y = 24 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 0 y = 24 }
+		}
+		ai_will_do = { factor = 21 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_armored_platoon_target_handoff = {
+		category_all_armor = { armor_value = 0.028 defense = 0.028 reliability = 0.016 }
+		path = { leads_to_tech = ADISCORD_tech_adaptive_suspension_control research_cost_coeff = 1 }
+		research_cost = 1.193
+		start_year = 2179
+		folder = {
+			name = armour_folder
+			position = { x = 4 y = 24 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 4 y = 24 }
+		}
+		ai_will_do = { factor = 21 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_limited_battle_ai = {
+		category_all_armor = { breakthrough = 0.028 hard_attack = 0.028 }
+		path = { leads_to_tech = ADISCORD_tech_electromagnetic_main_guns research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_combat_platform_2183 }
+		research_cost = 1.75
+		start_year = 2185
+		folder = {
+			name = armour_folder
+			position = { x = 0 y = 28 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 0 y = 28 }
+		}
+		ai_will_do = { factor = 18 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_adaptive_suspension_control = {
+		category_all_armor = { armor_value = 0.029 defense = 0.029 reliability = 0.016 }
+		path = { leads_to_tech = ADISCORD_tech_self_healing_armor_matrices research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_combat_platform_2183 }
+		research_cost = 1.75
+		start_year = 2185
+		folder = {
+			name = armour_folder
+			position = { x = 4 y = 28 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 4 y = 28 }
+		}
+		ai_will_do = { factor = 18 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_electromagnetic_main_guns = {
+		category_all_armor = { breakthrough = 0.029 hard_attack = 0.029 }
+		path = { leads_to_tech = ADISCORD_tech_autonomous_platoon_control research_cost_coeff = 1 }
+		research_cost = 1.282
+		start_year = 2191
+		folder = {
+			name = armour_folder
+			position = { x = 0 y = 32 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 0 y = 32 }
+		}
+		ai_will_do = { factor = 16 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_self_healing_armor_matrices = {
+		category_all_armor = { armor_value = 0.03 defense = 0.03 reliability = 0.017 }
+		path = { leads_to_tech = ADISCORD_tech_resilient_combat_cloud_nodes research_cost_coeff = 1 }
+		research_cost = 1.282
+		start_year = 2191
+		folder = {
+			name = armour_folder
+			position = { x = 4 y = 32 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 4 y = 32 }
+		}
+		ai_will_do = { factor = 16 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_autonomous_platoon_control = {
+		category_all_armor = { breakthrough = 0.031 hard_attack = 0.031 }
+		path = { leads_to_tech = ADISCORD_tech_distributed_battlegroup research_cost_coeff = 1 }
+		research_cost = 1.328
+		start_year = 2197
+		folder = {
+			name = armour_folder
+			position = { x = 0 y = 36 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 0 y = 36 }
+		}
+		ai_will_do = { factor = 13 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_resilient_combat_cloud_nodes = {
+		category_all_armor = { armor_value = 0.031 defense = 0.031 reliability = 0.018 }
+		path = { leads_to_tech = ADISCORD_tech_distributed_battlegroup research_cost_coeff = 1 }
+		research_cost = 1.328
+		start_year = 2197
+		folder = {
+			name = armour_folder
+			position = { x = 4 y = 36 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 4 y = 36 }
+		}
+		ai_will_do = { factor = 13 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_distributed_battlegroup = {
+		category_all_armor = { breakthrough = 0.046 hard_attack = 0.026 }
+		enable_equipments = { ADISCORD_combat_platform_2200 }
+		research_cost = 2.2
+		start_year = 2200
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 38 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 38 }
+		}
+		ai_will_do = { factor = 12 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_heavy_recovery_frames = {
+		category_all_armor = { armor_value = 0.02 defense = 0.012 }
+		path = { leads_to_tech = ADISCORD_tech_reinforced_powertrains research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2100
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 0 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 0 }
+		}
+		ai_will_do = { factor = 36 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_reinforced_powertrains = {
+		category_all_armor = { armor_value = 0.021 defense = 0.012 }
+		path = { leads_to_tech = ADISCORD_tech_heavy_composite_cores research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2120
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 2 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 2 }
+		}
+		ai_will_do = { factor = 35 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_heavy_composite_cores = {
+		category_all_armor = { armor_value = 0.021 defense = 0.013 }
+		path = { leads_to_tech = ADISCORD_tech_hydropneumatic_load_equalizers research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2140
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 4 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 4 }
+		}
+		ai_will_do = { factor = 33 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_hydropneumatic_load_equalizers = {
+		category_all_armor = { armor_value = 0.022 defense = 0.013 }
+		path = { leads_to_tech = ADISCORD_tech_remote_repair_sections research_cost_coeff = 1 }
+		research_cost = 0.7
+		start_year = 2150
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 6 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 6 }
+		}
+		ai_will_do = { factor = 32 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_remote_repair_sections = {
+		category_all_armor = { armor_value = 0.023 defense = 0.013 }
+		path = { leads_to_tech = ADISCORD_tech_compact_turbine_powerpacks research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_spall_isolated_crew_citadels research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_repair_platform_2183 }
+		enable_subunits = { ADISCORD_recovery_platform }
+		research_cost = 1.75
+		start_year = 2160
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 8 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 8 }
+		}
+		ai_will_do = { factor = 31 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_compact_turbine_powerpacks = {
+		category_all_armor = { breakthrough = 0.023 hard_attack = 0.023 }
+		path = { leads_to_tech = ADISCORD_tech_robotic_recovery_booms research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_spall_isolated_crew_citadels
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 10 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_spall_isolated_crew_citadels = {
+		category_all_armor = { armor_value = 0.024 defense = 0.024 }
+		path = { leads_to_tech = ADISCORD_tech_modular_heavy_armor_cassettes research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_compact_turbine_powerpacks
+		}
+		research_cost = 1.5
+		start_year = 2162
+		folder = {
+			name = armour_folder
+			position = { x = 0 y = 10 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_modular_heavy_armor_cassettes = {
+		category_all_armor = { armor_value = 0.024 defense = 0.014 }
+		path = { leads_to_tech = ADISCORD_tech_robotic_recovery_booms research_cost_coeff = 1 }
+		research_cost = 1.08
+		start_year = 2164
+		folder = {
+			name = armour_folder
+			position = { x = 0 y = 12 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 0 y = 12 }
+		}
+		ai_will_do = { factor = 28 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_robotic_recovery_booms = {
+		category_all_armor = { armor_value = 0.025 defense = 0.015 }
+		path = { leads_to_tech = ADISCORD_tech_heavy_platform_cores research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_active_mass_balancing_suspension research_cost_coeff = 1 }
+		research_cost = 1.095
+		start_year = 2166
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 14 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 14 }
+		}
+		ai_will_do = { factor = 27 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_heavy_platform_cores = {
+		category_all_armor = { breakthrough = 0.026 hard_attack = 0.026 }
+		path = { leads_to_tech = ADISCORD_tech_distributed_hull_power_buses research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_active_mass_balancing_suspension
+		}
+		enable_equipments = { ADISCORD_heavy_combat_platform_2183 }
+		enable_subunits = { ADISCORD_heavy_platform }
+		research_cost = 1.75
+		start_year = 2168
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 16 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_active_mass_balancing_suspension = {
+		category_all_armor = { armor_value = 0.026 defense = 0.026 }
+		path = { leads_to_tech = ADISCORD_tech_remote_breaching_manipulators research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_heavy_platform_cores
+		}
+		enable_equipments = { ADISCORD_heavy_combat_platform_2183 }
+		enable_subunits = { ADISCORD_heavy_platform }
+		research_cost = 1.75
+		start_year = 2168
+		folder = {
+			name = armour_folder
+			position = { x = 4 y = 16 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 4 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_remote_breaching_manipulators = {
+		category_all_armor = { armor_value = 0.027 defense = 0.015 }
+		path = { leads_to_tech = ADISCORD_tech_distributed_hull_power_buses research_cost_coeff = 1 }
+		research_cost = 1.125
+		start_year = 2170
+		folder = {
+			name = armour_folder
+			position = { x = 4 y = 18 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 4 y = 18 }
+		}
+		ai_will_do = { factor = 25 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_distributed_hull_power_buses = {
+		category_all_armor = { armor_value = 0.028 defense = 0.016 }
+		path = { leads_to_tech = ADISCORD_tech_autonomous_breakthrough_platforms research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_hybrid_siege_powerplants research_cost_coeff = 1 }
+		research_cost = 1.147
+		start_year = 2173
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 20 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 20 }
+		}
+		ai_will_do = { factor = 23 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_autonomous_breakthrough_platforms = {
+		category_all_armor = { breakthrough = 0.028 hard_attack = 0.028 }
+		path = { leads_to_tech = ADISCORD_tech_autonomous_obstacle_reduction research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_hybrid_siege_powerplants
+		}
+		research_cost = 1.5
+		start_year = 2176
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 22 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 22 }
+		}
+		ai_will_do = { factor = 22 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_hybrid_siege_powerplants = {
+		category_all_armor = { armor_value = 0.029 defense = 0.029 }
+		path = { leads_to_tech = ADISCORD_tech_electromagnetic_siege_mortars research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_autonomous_breakthrough_platforms
+		}
+		research_cost = 1.5
+		start_year = 2176
+		folder = {
+			name = armour_folder
+			position = { x = 0 y = 22 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 0 y = 22 }
+		}
+		ai_will_do = { factor = 22 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_electromagnetic_siege_mortars = {
+		category_all_armor = { armor_value = 0.029 defense = 0.017 }
+		path = { leads_to_tech = ADISCORD_tech_autonomous_obstacle_reduction research_cost_coeff = 1 }
+		research_cost = 1.193
+		start_year = 2179
+		folder = {
+			name = armour_folder
+			position = { x = 0 y = 24 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 0 y = 24 }
+		}
+		ai_will_do = { factor = 21 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_autonomous_obstacle_reduction = {
+		category_all_armor = { armor_value = 0.03 defense = 0.017 }
+		path = { leads_to_tech = ADISCORD_tech_self_repairing_track_assemblies research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_networked_siege_coordination_cores research_cost_coeff = 1 }
+		research_cost = 1.215
+		start_year = 2182
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 26 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 26 }
+		}
+		ai_will_do = { factor = 20 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_self_repairing_track_assemblies = {
+		category_all_armor = { breakthrough = 0.031 hard_attack = 0.031 }
+		path = { leads_to_tech = ADISCORD_tech_siege_platform_networks research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_networked_siege_coordination_cores
+		}
+		research_cost = 1.5
+		start_year = 2188
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 30 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 30 }
+		}
+		ai_will_do = { factor = 17 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_networked_siege_coordination_cores = {
+		category_all_armor = { armor_value = 0.031 defense = 0.031 }
+		path = { leads_to_tech = ADISCORD_tech_siege_platform_networks research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_self_repairing_track_assemblies
+		}
+		research_cost = 1.5
+		start_year = 2188
+		folder = {
+			name = armour_folder
+			position = { x = 4 y = 30 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 4 y = 30 }
+		}
+		ai_will_do = { factor = 17 }
+		categories = { armor }
+	}
+
+	ADISCORD_tech_siege_platform_networks = {
+		category_all_armor = { armor_value = 0.046 defense = 0.026 }
+		enable_equipments = { ADISCORD_heavy_combat_platform_2200 }
+		research_cost = 2.2
+		start_year = 2200
+		folder = {
+			name = armour_folder
+			position = { x = 2 y = 38 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 2 y = 38 }
+		}
+		ai_will_do = { factor = 12 }
+		categories = { armor }
+	}
+}

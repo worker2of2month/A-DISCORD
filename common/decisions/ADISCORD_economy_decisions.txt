@@ -8,7 +8,7 @@ ADISCORD_economy_management = {
 	}
 
 	ADISCORD_economy_take_state_debt = {
-		visible = { is_ai = no }
+		visible = { is_debug = yes is_ai = no }
 		available = { ADISCORD_economy_can_take_debt = yes }
 		cost = 25
 		complete_effect = { ADISCORD_economy_take_debt = yes }
@@ -16,7 +16,7 @@ ADISCORD_economy_management = {
 	}
 
 	ADISCORD_economy_repay_state_debt = {
-		visible = { is_ai = no ADISCORD_economy_has_debt = yes }
+		visible = { is_debug = yes is_ai = no ADISCORD_economy_has_debt = yes }
 		available = { ADISCORD_economy_has_treasury_50 = yes }
 		cost = 15
 		complete_effect = { ADISCORD_economy_repay_debt = yes }
@@ -24,7 +24,7 @@ ADISCORD_economy_management = {
 	}
 
 	ADISCORD_economy_expand_money_supply = {
-		visible = { is_ai = no }
+		visible = { is_debug = yes is_ai = no }
 		available = { ADISCORD_economy_can_print_money = yes }
 		cost = 35
 		complete_effect = { ADISCORD_economy_print_money = yes }
@@ -32,7 +32,7 @@ ADISCORD_economy_management = {
 	}
 
 	ADISCORD_economy_issue_internal_bonds = {
-		visible = { is_ai = no }
+		visible = { is_debug = yes is_ai = no }
 		available = { ADISCORD_economy_can_issue_internal_bonds = yes }
 		cost = 20
 		complete_effect = { ADISCORD_economy_issue_internal_bonds = yes }
@@ -40,7 +40,7 @@ ADISCORD_economy_management = {
 	}
 
 	ADISCORD_economy_take_external_loan = {
-		visible = { is_ai = no }
+		visible = { is_debug = yes is_ai = no }
 		available = { ADISCORD_economy_can_take_external_loan = yes }
 		cost = 30
 		complete_effect = { ADISCORD_economy_take_external_loan = yes }
@@ -48,7 +48,7 @@ ADISCORD_economy_management = {
 	}
 
 	ADISCORD_economy_start_limited_emission = {
-		visible = { is_ai = no }
+		visible = { is_debug = yes is_ai = no }
 		available = { ADISCORD_economy_can_expand_money_emission = yes }
 		cost = 25
 		complete_effect = { ADISCORD_economy_start_limited_emission = yes }
@@ -56,7 +56,7 @@ ADISCORD_economy_management = {
 	}
 
 	ADISCORD_economy_reduce_emission = {
-		visible = { is_ai = no }
+		visible = { is_debug = yes is_ai = no }
 		available = { ADISCORD_economy_can_reduce_money_emission = yes }
 		cost = 15
 		complete_effect = { ADISCORD_economy_reduce_money_emission = yes }
@@ -64,7 +64,7 @@ ADISCORD_economy_management = {
 	}
 
 	ADISCORD_economy_stabilization_package = {
-		visible = { is_ai = no }
+		visible = { is_debug = yes is_ai = no }
 		available = { ADISCORD_economy_can_stabilize_macro = yes }
 		cost = 35
 		complete_effect = { ADISCORD_economy_stabilization_package = yes }
@@ -72,7 +72,7 @@ ADISCORD_economy_management = {
 	}
 
 	ADISCORD_economy_restructure_debt = {
-		visible = { is_ai = no ADISCORD_economy_has_debt = yes }
+		visible = { is_debug = yes is_ai = no ADISCORD_economy_has_debt = yes }
 		available = { ADISCORD_economy_can_restructure_debt = yes }
 		cost = 35
 		complete_effect = { ADISCORD_economy_restructure_debt = yes }
@@ -80,7 +80,7 @@ ADISCORD_economy_management = {
 	}
 
 	ADISCORD_economy_early_repay_debt = {
-		visible = { is_ai = no ADISCORD_economy_has_debt = yes }
+		visible = { is_debug = yes is_ai = no ADISCORD_economy_has_debt = yes }
 		available = { ADISCORD_economy_can_early_repay_debt = yes }
 		cost = 20
 		complete_effect = { ADISCORD_economy_early_repay_debt = yes }
@@ -88,7 +88,7 @@ ADISCORD_economy_management = {
 	}
 
 	ADISCORD_economy_invest_reserves = {
-		visible = { is_ai = no }
+		visible = { is_debug = yes is_ai = no }
 		available = { ADISCORD_economy_can_invest_reserves = yes }
 		cost = 15
 		complete_effect = { ADISCORD_economy_invest_reserves = yes }
@@ -96,7 +96,7 @@ ADISCORD_economy_management = {
 	}
 
 	ADISCORD_economy_war_taxes = {
-		visible = { is_ai = no ADISCORD_economy_model_allows_emergency_extraction = yes }
+		visible = { is_debug = yes is_ai = no ADISCORD_economy_model_allows_emergency_extraction = yes }
 		available = { ADISCORD_economy_can_use_war_taxes = yes }
 		cost = 25
 		complete_effect = { ADISCORD_economy_war_taxes_action = yes }
@@ -104,7 +104,7 @@ ADISCORD_economy_management = {
 	}
 
 	ADISCORD_economy_civilian_investments = {
-		visible = { is_ai = no }
+		visible = { is_debug = yes is_ai = no }
 		available = { ADISCORD_economy_can_invest_reserves = yes }
 		cost = 20
 		complete_effect = { ADISCORD_economy_civilian_investment_action = yes }
@@ -112,7 +112,7 @@ ADISCORD_economy_management = {
 	}
 
 	ADISCORD_economy_military_investments = {
-		visible = { is_ai = no }
+		visible = { is_debug = yes is_ai = no }
 		available = { ADISCORD_economy_can_use_military_investment = yes }
 		cost = 20
 		complete_effect = { ADISCORD_economy_military_investment_action = yes }
@@ -148,46 +148,6 @@ ADISCORD_economy_management = {
 		available = { ADISCORD_economy_can_decrease_construction_spending = yes }
 		cost = 5
 		complete_effect = { ADISCORD_economy_decrease_construction_spending = yes }
-		ai_will_do = { factor = 0 }
-	}
-
-	ADISCORD_economy_build_commercial_office_decision = {
-		visible = { is_debug = yes is_ai = no }
-		available = { ADISCORD_economy_can_build_commercial_office = yes }
-		cost = 10
-		complete_effect = { ADISCORD_economy_build_commercial_office = yes }
-		ai_will_do = { factor = 0 }
-	}
-
-	ADISCORD_economy_build_fiscal_administration_decision = {
-		visible = { is_debug = yes is_ai = no }
-		available = { ADISCORD_economy_can_build_fiscal_administration = yes }
-		cost = 10
-		complete_effect = { ADISCORD_economy_build_fiscal_administration = yes }
-		ai_will_do = { factor = 0 }
-	}
-
-	ADISCORD_economy_build_industrial_cluster_decision = {
-		visible = { is_debug = yes is_ai = no }
-		available = { ADISCORD_economy_can_build_industrial_cluster = yes }
-		cost = 10
-		complete_effect = { ADISCORD_economy_build_industrial_cluster = yes }
-		ai_will_do = { factor = 0 }
-	}
-
-	ADISCORD_economy_build_logistics_hub_decision = {
-		visible = { is_debug = yes is_ai = no }
-		available = { ADISCORD_economy_can_build_logistics_hub = yes }
-		cost = 10
-		complete_effect = { ADISCORD_economy_build_logistics_hub = yes }
-		ai_will_do = { factor = 0 }
-	}
-
-	ADISCORD_economy_build_technical_institute_decision = {
-		visible = { is_debug = yes is_ai = no }
-		available = { ADISCORD_economy_can_build_technical_institute = yes }
-		cost = 10
-		complete_effect = { ADISCORD_economy_build_technical_institute = yes }
 		ai_will_do = { factor = 0 }
 	}
 
@@ -241,6 +201,14 @@ ADISCORD_economy_management = {
 		available = { always = yes }
 		cost = 0
 		complete_effect = { ADISCORD_economy_mark_dirty = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_economy_rebuild_building_counters = {
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		complete_effect = { ADISCORD_economy_debug_rebuild_building_counters = yes }
 		ai_will_do = { factor = 0 }
 	}
 

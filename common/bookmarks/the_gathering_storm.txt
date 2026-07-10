@@ -2,7 +2,7 @@ bookmarks = {
 	bookmark = {
 		name = "GATHERING_STORM_NAME"
 		desc = "GATHERING_STORM_DESC"
-		date = 2163.1.1.12
+		date = 2160.1.1.12
 		picture = "GFX_select_date_1936"
 		default_country = "STP"
 		default = yes
@@ -22,15 +22,15 @@ bookmarks = {
 			}
 		}
 
-		"---"={
-			history = "OTHER_GATHERING_STORM_DESC"
+		"VAL"={
+			history = "VAL_BOOKMARK_DESC"
+			ideology = pragmatism
+			ideas = {
+				VAL_mercenary_state
+				VAL_worldwide_famous_weponry
+				VAL_harvest_of_ash
+			}
 		}
-
-
-		# minors ####
-
-
-		####
 
 		effect = {
 			randomize_weather = 22345 # <- Obligatory in every bookmark !

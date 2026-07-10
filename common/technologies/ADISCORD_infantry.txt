@@ -1,0 +1,1091 @@
+technologies = {
+	ADISCORD_tech_postwar_weapon_standardization = {
+		category_all_infantry = { soft_attack = 0.02 breakthrough = 0.012 }
+		path = { leads_to_tech = ADISCORD_tech_refurbished_receivers research_cost_coeff = 1 }
+		enable_equipments = { infantry_equipment_0 }
+		research_cost = 1.75
+		start_year = 2100
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 0 }
+		}
+		ai_will_do = { factor = 36 }
+		categories = { infantry_weapons }
+	}
+
+	ADISCORD_tech_refurbished_receivers = {
+		category_all_infantry = { soft_attack = 0.021 breakthrough = 0.012 }
+		path = { leads_to_tech = ADISCORD_tech_standardized_cartridges research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2120
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 2 }
+		}
+		ai_will_do = { factor = 35 }
+		categories = { infantry_weapons }
+	}
+
+	ADISCORD_tech_standardized_cartridges = {
+		category_all_infantry = { soft_attack = 0.021 breakthrough = 0.013 }
+		path = { leads_to_tech = ADISCORD_tech_caseless_ammunition_trials research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_smart_optics research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_sealed_receiver_assemblies research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2140
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 4 }
+		}
+		ai_will_do = { factor = 33 }
+		categories = { infantry_weapons }
+	}
+
+	ADISCORD_tech_caseless_ammunition_trials = {
+		category_all_infantry = { soft_attack = 0.022 breakthrough = 0.013 }
+		path = { leads_to_tech = ADISCORD_tech_electrothermal_ignition research_cost_coeff = 1 }
+		research_cost = 0.7
+		start_year = 2150
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 6 }
+		}
+		ai_will_do = { factor = 32 }
+		categories = { infantry_weapons }
+	}
+
+	ADISCORD_tech_smart_optics = {
+		category_all_infantry = { soft_attack = 0.023 breakthrough = 0.013 }
+		path = { leads_to_tech = ADISCORD_tech_networked_weapon_sights research_cost_coeff = 1 }
+		research_cost = 0.9
+		start_year = 2160
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 8 }
+		}
+		ai_will_do = { factor = 31 }
+		categories = { infantry_weapons }
+	}
+
+	ADISCORD_tech_sealed_receiver_assemblies = {
+		category_all_infantry = { soft_attack = 0.023 breakthrough = 0.014 }
+		path = { leads_to_tech = ADISCORD_tech_smart_recoil_compensators research_cost_coeff = 1 }
+		research_cost = 1.065
+		start_year = 2162
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { infantry_weapons }
+	}
+
+	ADISCORD_tech_electrothermal_ignition = {
+		category_all_infantry = { soft_attack = 0.024 breakthrough = 0.014 }
+		path = { leads_to_tech = ADISCORD_tech_variable_velocity_ammunition research_cost_coeff = 1 }
+		research_cost = 1.08
+		start_year = 2164
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 12 }
+		}
+		ai_will_do = { factor = 28 }
+		categories = { infantry_weapons }
+	}
+
+	ADISCORD_tech_smart_recoil_compensators = {
+		category_all_infantry = { soft_attack = 0.024 breakthrough = 0.014 }
+		path = { leads_to_tech = ADISCORD_tech_modular_rifle_kits research_cost_coeff = 1 }
+		research_cost = 1.095
+		start_year = 2166
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 14 }
+		}
+		ai_will_do = { factor = 27 }
+		categories = { infantry_weapons }
+	}
+
+	ADISCORD_tech_networked_weapon_sights = {
+		category_all_infantry = { soft_attack = 0.025 breakthrough = 0.015 }
+		path = { leads_to_tech = ADISCORD_tech_integrated_target_designation research_cost_coeff = 1 }
+		research_cost = 1.11
+		start_year = 2168
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { infantry_weapons }
+	}
+
+	ADISCORD_tech_modular_rifle_kits = {
+		category_all_infantry = { soft_attack = 0.026 breakthrough = 0.015 }
+		path = { leads_to_tech = ADISCORD_tech_biometric_trigger_locks research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_infantry_equipment_2170 }
+		research_cost = 1.75
+		start_year = 2170
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 18 }
+		}
+		ai_will_do = { factor = 25 }
+		categories = { infantry_weapons }
+	}
+
+	ADISCORD_tech_biometric_trigger_locks = {
+		category_all_infantry = { soft_attack = 0.026 breakthrough = 0.015 }
+		path = { leads_to_tech = ADISCORD_tech_coil_assisted_service_rifles research_cost_coeff = 1 }
+		research_cost = 1.147
+		start_year = 2173
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 20 }
+		}
+		ai_will_do = { factor = 23 }
+		categories = { infantry_weapons }
+	}
+
+	ADISCORD_tech_variable_velocity_ammunition = {
+		category_all_infantry = { soft_attack = 0.027 breakthrough = 0.015 }
+		path = { leads_to_tech = ADISCORD_tech_programmable_ammunition research_cost_coeff = 1 }
+		research_cost = 1.17
+		start_year = 2176
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 22 }
+		}
+		ai_will_do = { factor = 22 }
+		categories = { infantry_weapons }
+	}
+
+	ADISCORD_tech_integrated_target_designation = {
+		category_all_infantry = { soft_attack = 0.028 breakthrough = 0.016 }
+		path = { leads_to_tech = ADISCORD_tech_squad_fire_control_optics research_cost_coeff = 1 }
+		research_cost = 1.193
+		start_year = 2179
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 24 }
+		}
+		ai_will_do = { factor = 21 }
+		categories = { infantry_weapons }
+	}
+
+	ADISCORD_tech_programmable_ammunition = {
+		category_all_infantry = { soft_attack = 0.028 breakthrough = 0.016 }
+		path = { leads_to_tech = ADISCORD_tech_powered_ammunition_carriers research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_infantry_equipment_2183 }
+		research_cost = 1.75
+		start_year = 2182
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 26 }
+		}
+		ai_will_do = { factor = 20 }
+		categories = { infantry_weapons }
+	}
+
+	ADISCORD_tech_powered_ammunition_carriers = {
+		category_all_infantry = { soft_attack = 0.029 breakthrough = 0.016 }
+		path = { leads_to_tech = ADISCORD_tech_adaptive_projectile_fuzing research_cost_coeff = 1 }
+		research_cost = 1.238
+		start_year = 2185
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 28 }
+		}
+		ai_will_do = { factor = 18 }
+		categories = { infantry_weapons }
+	}
+
+	ADISCORD_tech_coil_assisted_service_rifles = {
+		category_all_infantry = { soft_attack = 0.029 breakthrough = 0.017 }
+		path = { leads_to_tech = ADISCORD_tech_hybrid_kinetic_energy_carbines research_cost_coeff = 1 }
+		research_cost = 1.26
+		start_year = 2188
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 30 }
+		}
+		ai_will_do = { factor = 17 }
+		categories = { infantry_weapons }
+	}
+
+	ADISCORD_tech_adaptive_projectile_fuzing = {
+		category_all_infantry = { soft_attack = 0.03 breakthrough = 0.017 }
+		path = { leads_to_tech = ADISCORD_tech_networked_service_rifles research_cost_coeff = 1 }
+		research_cost = 1.282
+		start_year = 2191
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 32 }
+		}
+		ai_will_do = { factor = 16 }
+		categories = { infantry_weapons }
+	}
+
+	ADISCORD_tech_squad_fire_control_optics = {
+		category_all_infantry = { soft_attack = 0.031 breakthrough = 0.017 }
+		path = { leads_to_tech = ADISCORD_tech_networked_service_rifles research_cost_coeff = 1 }
+		research_cost = 1.305
+		start_year = 2194
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 34 }
+		}
+		ai_will_do = { factor = 15 }
+		categories = { infantry_weapons }
+	}
+
+	ADISCORD_tech_hybrid_kinetic_energy_carbines = {
+		category_all_infantry = { soft_attack = 0.031 breakthrough = 0.018 }
+		path = { leads_to_tech = ADISCORD_tech_networked_service_rifles research_cost_coeff = 1 }
+		research_cost = 1.328
+		start_year = 2197
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 36 }
+		}
+		ai_will_do = { factor = 13 }
+		categories = { infantry_weapons }
+	}
+
+	ADISCORD_tech_networked_service_rifles = {
+		category_all_infantry = { soft_attack = 0.046 breakthrough = 0.026 }
+		dependencies = {
+			ADISCORD_tech_adaptive_projectile_fuzing = 1
+			ADISCORD_tech_squad_fire_control_optics = 1
+			ADISCORD_tech_hybrid_kinetic_energy_carbines = 1
+		}
+		enable_equipments = { ADISCORD_infantry_equipment_2200 }
+		research_cost = 2.35
+		start_year = 2200
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 38 }
+		}
+		ai_will_do = { factor = 12 }
+		categories = { infantry_weapons }
+	}
+
+	ADISCORD_tech_belt_fed_recovery = {
+		category_all_infantry = { soft_attack = 0.012 defense = 0.02 }
+		path = { leads_to_tech = ADISCORD_tech_squad_grenade_launchers research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_field_ew_units research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_distributed_ammunition_carriers research_cost_coeff = 1 }
+		enable_equipments = { ADISCORD_squad_weapons_equipment_0 }
+		research_cost = 1.75
+		start_year = 2100
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 0 }
+		}
+		ai_will_do = { factor = 36 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_squad_grenade_launchers = {
+		category_all_infantry = { soft_attack = 0.012 defense = 0.021 }
+		path = { leads_to_tech = ADISCORD_tech_portable_at_cells research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2120
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 2 }
+		}
+		ai_will_do = { factor = 35 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_portable_at_cells = {
+		category_all_infantry = { soft_attack = 0.013 defense = 0.021 }
+		path = { leads_to_tech = ADISCORD_tech_recoilless_squad_launchers research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2140
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 4 }
+		}
+		ai_will_do = { factor = 33 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_recoilless_squad_launchers = {
+		category_all_infantry = { soft_attack = 0.013 defense = 0.022 }
+		path = { leads_to_tech = ADISCORD_tech_programmable_grenade_fuzes research_cost_coeff = 1 }
+		research_cost = 0.7
+		start_year = 2150
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 6 }
+		}
+		ai_will_do = { factor = 32 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_field_ew_units = {
+		category_all_infantry = { soft_attack = 0.013 defense = 0.023 }
+		path = { leads_to_tech = ADISCORD_tech_man_portable_sensor_masts research_cost_coeff = 1 }
+		research_cost = 0.9
+		start_year = 2160
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 8 }
+		}
+		ai_will_do = { factor = 31 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_programmable_grenade_fuzes = {
+		category_all_infantry = { soft_attack = 0.014 defense = 0.023 }
+		path = { leads_to_tech = ADISCORD_tech_loitering_munition_teams research_cost_coeff = 1 }
+		research_cost = 1.065
+		start_year = 2162
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_man_portable_sensor_masts = {
+		category_all_infantry = { soft_attack = 0.014 defense = 0.024 }
+		path = { leads_to_tech = ADISCORD_tech_drone_guided_support_fire research_cost_coeff = 1 }
+		research_cost = 1.08
+		start_year = 2164
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 12 }
+		}
+		ai_will_do = { factor = 28 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_distributed_ammunition_carriers = {
+		category_all_infantry = { soft_attack = 0.014 defense = 0.024 }
+		path = { leads_to_tech = ADISCORD_tech_remote_weapon_tripods research_cost_coeff = 1 }
+		research_cost = 1.095
+		start_year = 2166
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 14 }
+		}
+		ai_will_do = { factor = 27 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_drone_guided_support_fire = {
+		category_all_infantry = { soft_attack = 0.015 defense = 0.025 }
+		path = { leads_to_tech = ADISCORD_tech_networked_command_terminals research_cost_coeff = 1 }
+		research_cost = 1.11
+		start_year = 2168
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_networked_command_terminals = {
+		category_all_infantry = { soft_attack = 0.015 defense = 0.026 }
+		path = { leads_to_tech = ADISCORD_tech_cooperative_target_handoff research_cost_coeff = 1 }
+		research_cost = 1.125
+		start_year = 2170
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 18 }
+		}
+		ai_will_do = { factor = 25 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_remote_weapon_tripods = {
+		category_all_infantry = { soft_attack = 0.015 defense = 0.026 }
+		path = { leads_to_tech = ADISCORD_tech_autonomous_support_weapons research_cost_coeff = 1 }
+		dependencies = {
+			ADISCORD_tech_distributed_ammunition_carriers = 1
+			ADISCORD_tech_modular_rifle_kits = 1
+		}
+		enable_equipments = { ADISCORD_squad_weapons_equipment_2170 }
+		enable_subunits = { ADISCORD_assault_infantry }
+		research_cost = 2.35
+		start_year = 2173
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 20 }
+		}
+		ai_will_do = { factor = 23 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_loitering_munition_teams = {
+		category_all_infantry = { soft_attack = 0.015 defense = 0.027 }
+		path = { leads_to_tech = ADISCORD_tech_electromagnetic_anti_armor_launchers research_cost_coeff = 1 }
+		research_cost = 1.17
+		start_year = 2176
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 22 }
+		}
+		ai_will_do = { factor = 22 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_cooperative_target_handoff = {
+		category_all_infantry = { soft_attack = 0.016 defense = 0.028 }
+		path = { leads_to_tech = ADISCORD_tech_autonomous_support_weapons research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_microdrone_suppression_nets research_cost_coeff = 1 }
+		research_cost = 1.193
+		start_year = 2179
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 24 }
+		}
+		ai_will_do = { factor = 21 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_autonomous_support_weapons = {
+		category_all_infantry = { soft_attack = 0.016 defense = 0.028 }
+		path = { leads_to_tech = ADISCORD_tech_autonomous_mortar_sections research_cost_coeff = 1 }
+		dependencies = {
+			ADISCORD_tech_remote_weapon_tripods = 1
+			ADISCORD_tech_cooperative_target_handoff = 1
+			ADISCORD_tech_programmable_ammunition = 1
+		}
+		enable_equipments = { ADISCORD_squad_weapons_equipment_2183 }
+		research_cost = 2.35
+		start_year = 2182
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 26 }
+		}
+		ai_will_do = { factor = 20 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_autonomous_mortar_sections = {
+		category_all_infantry = { soft_attack = 0.016 defense = 0.029 }
+		path = { leads_to_tech = ADISCORD_tech_robotic_heavy_weapon_teams research_cost_coeff = 1 }
+		research_cost = 1.238
+		start_year = 2185
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 28 }
+		}
+		ai_will_do = { factor = 18 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_microdrone_suppression_nets = {
+		category_all_infantry = { soft_attack = 0.017 defense = 0.029 }
+		path = { leads_to_tech = ADISCORD_tech_swarm_coordinated_fire_support research_cost_coeff = 1 }
+		research_cost = 1.26
+		start_year = 2188
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 30 }
+		}
+		ai_will_do = { factor = 17 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_electromagnetic_anti_armor_launchers = {
+		category_all_infantry = { soft_attack = 0.017 defense = 0.03 }
+		path = { leads_to_tech = ADISCORD_tech_swarm_coordinated_fire_support research_cost_coeff = 1 }
+		research_cost = 1.282
+		start_year = 2191
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 32 }
+		}
+		ai_will_do = { factor = 16 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_robotic_heavy_weapon_teams = {
+		category_all_infantry = { soft_attack = 0.017 defense = 0.031 }
+		path = { leads_to_tech = ADISCORD_tech_swarm_coordinated_fire_support research_cost_coeff = 1 }
+		research_cost = 1.305
+		start_year = 2194
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 34 }
+		}
+		ai_will_do = { factor = 15 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_swarm_coordinated_fire_support = {
+		category_all_infantry = { soft_attack = 0.018 defense = 0.031 }
+		path = { leads_to_tech = ADISCORD_tech_swarm_fireteams research_cost_coeff = 1 }
+		dependencies = {
+			ADISCORD_tech_microdrone_suppression_nets = 1
+			ADISCORD_tech_electromagnetic_anti_armor_launchers = 1
+			ADISCORD_tech_robotic_heavy_weapon_teams = 1
+		}
+		research_cost = 2.35
+		start_year = 2197
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 36 }
+		}
+		ai_will_do = { factor = 13 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_swarm_fireteams = {
+		category_all_infantry = { soft_attack = 0.026 defense = 0.046 }
+		dependencies = {
+			ADISCORD_tech_swarm_coordinated_fire_support = 1
+			ADISCORD_tech_networked_service_rifles = 1
+		}
+		enable_equipments = { ADISCORD_squad_weapons_equipment_2200 }
+		research_cost = 2.35
+		start_year = 2200
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 38 }
+		}
+		ai_will_do = { factor = 12 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_composite_protection_kits = {
+		category_all_infantry = { defense = 0.02 max_organisation = 0.75 }
+		path = { leads_to_tech = ADISCORD_tech_trauma_plates research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_sealed_combat_suits research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_battlefield_medical_drones research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2100
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 0 }
+		}
+		ai_will_do = { factor = 36 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_trauma_plates = {
+		category_all_infantry = { defense = 0.021 max_organisation = 0.788 }
+		path = { leads_to_tech = ADISCORD_tech_ceramic_trauma_inserts research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2120
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 2 }
+		}
+		ai_will_do = { factor = 35 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_sealed_combat_suits = {
+		category_all_infantry = { defense = 0.021 max_organisation = 0.826 }
+		path = { leads_to_tech = ADISCORD_tech_sealed_respirator_interfaces research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2140
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 4 }
+		}
+		ai_will_do = { factor = 33 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_ceramic_trauma_inserts = {
+		category_all_infantry = { defense = 0.022 max_organisation = 0.864 }
+		path = { leads_to_tech = ADISCORD_tech_active_hearing_protection research_cost_coeff = 1 }
+		research_cost = 0.7
+		start_year = 2150
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = { factor = 32 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_battlefield_medical_drones = {
+		category_all_infantry = { defense = 0.023 max_organisation = 0.902 }
+		path = { leads_to_tech = ADISCORD_tech_smart_tourniquet_systems research_cost_coeff = 1 }
+		research_cost = 0.9
+		start_year = 2160
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 8 }
+		}
+		ai_will_do = { factor = 31 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_sealed_respirator_interfaces = {
+		category_all_infantry = { defense = 0.023 max_organisation = 0.939 }
+		path = { leads_to_tech = ADISCORD_tech_thermal_signature_liners research_cost_coeff = 1 }
+		research_cost = 1.065
+		start_year = 2162
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_active_hearing_protection = {
+		category_all_infantry = { defense = 0.024 max_organisation = 0.977 }
+		path = { leads_to_tech = ADISCORD_tech_powered_load_bearing_harnesses research_cost_coeff = 1 }
+		research_cost = 1.08
+		start_year = 2164
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 12 }
+		}
+		ai_will_do = { factor = 28 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_thermal_signature_liners = {
+		category_all_infantry = { defense = 0.024 max_organisation = 1.015 }
+		path = { leads_to_tech = ADISCORD_tech_reactive_camouflage_textiles research_cost_coeff = 1 }
+		research_cost = 1.095
+		start_year = 2166
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 14 }
+		}
+		ai_will_do = { factor = 27 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_powered_load_bearing_harnesses = {
+		category_all_infantry = { defense = 0.025 max_organisation = 1.053 }
+		path = { leads_to_tech = ADISCORD_tech_exoskeleton_load_frames research_cost_coeff = 1 }
+		research_cost = 1.11
+		start_year = 2168
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_exoskeleton_load_frames = {
+		category_all_infantry = { defense = 0.026 max_organisation = 1.091 }
+		path = { leads_to_tech = ADISCORD_tech_exosuit_joint_actuators research_cost_coeff = 1 }
+		research_cost = 1.125
+		start_year = 2170
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 18 }
+		}
+		ai_will_do = { factor = 25 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_smart_tourniquet_systems = {
+		category_all_infantry = { defense = 0.026 max_organisation = 1.129 }
+		path = { leads_to_tech = ADISCORD_tech_autonomous_casualty_monitors research_cost_coeff = 1 }
+		research_cost = 1.147
+		start_year = 2173
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 20 }
+		}
+		ai_will_do = { factor = 23 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_autonomous_casualty_monitors = {
+		category_all_infantry = { defense = 0.027 max_organisation = 1.167 }
+		path = { leads_to_tech = ADISCORD_tech_nanofiber_wound_dressings research_cost_coeff = 1 }
+		research_cost = 1.17
+		start_year = 2176
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 22 }
+		}
+		ai_will_do = { factor = 22 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_reactive_camouflage_textiles = {
+		category_all_infantry = { defense = 0.028 max_organisation = 1.205 }
+		path = { leads_to_tech = ADISCORD_tech_adaptive_camouflage research_cost_coeff = 1 }
+		research_cost = 1.193
+		start_year = 2179
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 24 }
+		}
+		ai_will_do = { factor = 21 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_adaptive_camouflage = {
+		category_all_infantry = { defense = 0.028 max_organisation = 1.243 }
+		path = { leads_to_tech = ADISCORD_tech_adaptive_radiation_shielding research_cost_coeff = 1 }
+		research_cost = 1.215
+		start_year = 2182
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 26 }
+		}
+		ai_will_do = { factor = 20 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_exosuit_joint_actuators = {
+		category_all_infantry = { defense = 0.029 max_organisation = 1.281 }
+		path = { leads_to_tech = ADISCORD_tech_self_sealing_combat_skins research_cost_coeff = 1 }
+		research_cost = 1.238
+		start_year = 2185
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 28 }
+		}
+		ai_will_do = { factor = 18 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_nanofiber_wound_dressings = {
+		category_all_infantry = { defense = 0.029 max_organisation = 1.318 }
+		path = { leads_to_tech = ADISCORD_tech_closed_loop_combat_life_support research_cost_coeff = 1 }
+		research_cost = 1.26
+		start_year = 2188
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 30 }
+		}
+		ai_will_do = { factor = 17 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_adaptive_radiation_shielding = {
+		category_all_infantry = { defense = 0.03 max_organisation = 1.356 }
+		path = { leads_to_tech = ADISCORD_tech_closed_loop_combat_life_support research_cost_coeff = 1 }
+		research_cost = 1.282
+		start_year = 2191
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 32 }
+		}
+		ai_will_do = { factor = 16 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_closed_loop_combat_life_support = {
+		category_all_infantry = { defense = 0.031 max_organisation = 1.394 }
+		path = { leads_to_tech = ADISCORD_tech_self_sealing_combat_skins research_cost_coeff = 1 }
+		dependencies = {
+			ADISCORD_tech_nanofiber_wound_dressings = 1
+			ADISCORD_tech_adaptive_radiation_shielding = 1
+		}
+		research_cost = 2.35
+		start_year = 2194
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 34 }
+		}
+		ai_will_do = { factor = 15 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_self_sealing_combat_skins = {
+		category_all_infantry = { defense = 0.031 max_organisation = 1.432 }
+		path = { leads_to_tech = ADISCORD_tech_assault_sapper_kits research_cost_coeff = 1 }
+		dependencies = {
+			ADISCORD_tech_exosuit_joint_actuators = 1
+			ADISCORD_tech_closed_loop_combat_life_support = 1
+		}
+		research_cost = 2.35
+		start_year = 2197
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 36 }
+		}
+		ai_will_do = { factor = 13 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_assault_sapper_kits = {
+		category_all_infantry = { defense = 0.046 max_organisation = 2.131 }
+		research_cost = 2.2
+		start_year = 2200
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 38 }
+		}
+		ai_will_do = { factor = 12 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_fieldcraft_manuals = {
+		category_special_forces = { breakthrough = 0.02 maximum_speed = 0.006 }
+		path = { leads_to_tech = ADISCORD_tech_urban_breaching research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_radiation_patrols research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_vertical_assault_training research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2100
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 0 }
+		}
+		ai_will_do = { factor = 36 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_urban_breaching = {
+		category_special_forces = { breakthrough = 0.021 maximum_speed = 0.006 }
+		path = { leads_to_tech = ADISCORD_tech_subterranean_route_reconnaissance research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2120
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 2 }
+		}
+		ai_will_do = { factor = 35 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_radiation_patrols = {
+		category_special_forces = { breakthrough = 0.021 maximum_speed = 0.006 }
+		path = { leads_to_tech = ADISCORD_tech_combat_recon_drones research_cost_coeff = 1 }
+		research_cost = 0.55
+		start_year = 2140
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 4 }
+		}
+		ai_will_do = { factor = 33 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_subterranean_route_reconnaissance = {
+		category_special_forces = { breakthrough = 0.022 maximum_speed = 0.006 }
+		path = { leads_to_tech = ADISCORD_tech_urban_vertical_access_rigs research_cost_coeff = 1 }
+		research_cost = 0.7
+		start_year = 2150
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = { factor = 32 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_combat_recon_drones = {
+		category_special_forces = { breakthrough = 0.023 maximum_speed = 0.007 }
+		path = { leads_to_tech = ADISCORD_tech_low_observable_infiltration_suits research_cost_coeff = 1 }
+		research_cost = 0.9
+		start_year = 2160
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 8 }
+		}
+		ai_will_do = { factor = 31 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_urban_vertical_access_rigs = {
+		category_special_forces = { breakthrough = 0.023 maximum_speed = 0.007 }
+		path = { leads_to_tech = ADISCORD_tech_robotic_breaching_companions research_cost_coeff = 1 }
+		research_cost = 1.065
+		start_year = 2162
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = { factor = 30 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_low_observable_infiltration_suits = {
+		category_special_forces = { breakthrough = 0.024 maximum_speed = 0.007 }
+		path = { leads_to_tech = ADISCORD_tech_autonomous_scout_microdrones research_cost_coeff = 1 }
+		research_cost = 1.08
+		start_year = 2164
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 12 }
+		}
+		ai_will_do = { factor = 28 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_autonomous_scout_microdrones = {
+		category_special_forces = { breakthrough = 0.024 maximum_speed = 0.007 }
+		path = { leads_to_tech = ADISCORD_tech_contested_zone_navigation research_cost_coeff = 1 }
+		research_cost = 1.095
+		start_year = 2166
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 14 }
+		}
+		ai_will_do = { factor = 27 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_contested_zone_navigation = {
+		category_special_forces = { breakthrough = 0.025 maximum_speed = 0.007 }
+		path = { leads_to_tech = ADISCORD_tech_multispectral_concealment_discipline research_cost_coeff = 1 }
+		research_cost = 1.11
+		start_year = 2168
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 16 }
+		}
+		ai_will_do = { factor = 26 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_vertical_assault_training = {
+		category_special_forces = { breakthrough = 0.026 maximum_speed = 0.007 }
+		path = { leads_to_tech = ADISCORD_tech_high_altitude_insertion_capsules research_cost_coeff = 1 }
+		research_cost = 1.125
+		start_year = 2170
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 18 }
+		}
+		ai_will_do = { factor = 25 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_high_altitude_insertion_capsules = {
+		category_special_forces = { breakthrough = 0.026 maximum_speed = 0.008 }
+		path = { leads_to_tech = ADISCORD_tech_remote_beacon_extraction research_cost_coeff = 1 }
+		research_cost = 1.147
+		start_year = 2173
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 20 }
+		}
+		ai_will_do = { factor = 23 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_multispectral_concealment_discipline = {
+		category_special_forces = { breakthrough = 0.027 maximum_speed = 0.008 }
+		path = { leads_to_tech = ADISCORD_tech_deep_recon_cells research_cost_coeff = 1 }
+		research_cost = 1.17
+		start_year = 2176
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 22 }
+		}
+		ai_will_do = { factor = 22 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_remote_beacon_extraction = {
+		category_special_forces = { breakthrough = 0.028 maximum_speed = 0.008 }
+		path = { leads_to_tech = ADISCORD_tech_deep_area_sustainment_pods research_cost_coeff = 1 }
+		research_cost = 1.193
+		start_year = 2179
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 24 }
+		}
+		ai_will_do = { factor = 21 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_deep_recon_cells = {
+		category_special_forces = { breakthrough = 0.028 maximum_speed = 0.008 }
+		path = { leads_to_tech = ADISCORD_tech_predictive_patrol_evasion research_cost_coeff = 1 }
+		research_cost = 1.215
+		start_year = 2182
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 26 }
+		}
+		ai_will_do = { factor = 20 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_predictive_patrol_evasion = {
+		category_special_forces = { breakthrough = 0.029 maximum_speed = 0.008 }
+		path = { leads_to_tech = ADISCORD_tech_distributed_recon_sensor_caches research_cost_coeff = 1 }
+		research_cost = 1.238
+		start_year = 2185
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 28 }
+		}
+		ai_will_do = { factor = 18 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_distributed_recon_sensor_caches = {
+		category_special_forces = { breakthrough = 0.029 maximum_speed = 0.008 }
+		path = { leads_to_tech = ADISCORD_tech_augmented_mission_rehearsal research_cost_coeff = 1 }
+		research_cost = 1.26
+		start_year = 2188
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 30 }
+		}
+		ai_will_do = { factor = 17 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_robotic_breaching_companions = {
+		category_special_forces = { breakthrough = 0.03 maximum_speed = 0.009 }
+		path = { leads_to_tech = ADISCORD_tech_augmented_mission_rehearsal research_cost_coeff = 1 }
+		research_cost = 1.282
+		start_year = 2191
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 32 }
+		}
+		ai_will_do = { factor = 16 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_deep_area_sustainment_pods = {
+		category_special_forces = { breakthrough = 0.031 maximum_speed = 0.009 }
+		path = { leads_to_tech = ADISCORD_tech_augmented_mission_rehearsal research_cost_coeff = 1 }
+		research_cost = 1.305
+		start_year = 2194
+		folder = {
+			name = infantry_folder
+			position = { x = 4 y = 34 }
+		}
+		ai_will_do = { factor = 15 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_augmented_mission_rehearsal = {
+		category_special_forces = { breakthrough = 0.031 maximum_speed = 0.009 }
+		path = { leads_to_tech = ADISCORD_tech_augmented_special_forces research_cost_coeff = 1 }
+		dependencies = {
+			ADISCORD_tech_distributed_recon_sensor_caches = 1
+			ADISCORD_tech_robotic_breaching_companions = 1
+			ADISCORD_tech_deep_area_sustainment_pods = 1
+		}
+		research_cost = 2.35
+		start_year = 2197
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 36 }
+		}
+		ai_will_do = { factor = 13 }
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_augmented_special_forces = {
+		category_special_forces = { breakthrough = 0.046 maximum_speed = 0.013 }
+		research_cost = 2.2
+		start_year = 2200
+		folder = {
+			name = infantry_folder
+			position = { x = 2 y = 38 }
+		}
+		ai_will_do = { factor = 12 }
+		categories = { infantry_weapons support_tech }
+	}
+}

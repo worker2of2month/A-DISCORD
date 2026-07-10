@@ -726,71 +726,162 @@ buildings = {
 		}
 	}
 
-	#### A-DISCORD economy buildings
+	#### A-DISCORD V21 economy buildings
+	#### Built through the normal construction interface. Treasury effects are monthly formula effects only.
 
-	ADISCORD_commercial_office = {
+	ADISCORD_business_center = {
 		show_on_map = 0
-		base_cost = 6000
-		icon_frame = 1
+		base_cost = 6500
+		icon_frame = 10
 		value = 2
+		show_modifier = yes
 		infrastructure_construction_effect = yes
 		level_cap = {
 			shares_slots = yes
 			state_max = 3
 		}
+		state_modifiers = {
+			state_production_speed_buildings_factor = 0.02
+			local_building_slots_factor = 0.02
+		}
 	}
 
-	ADISCORD_fiscal_administration = {
+	ADISCORD_science_center = {
 		show_on_map = 0
-		base_cost = 5500
-		icon_frame = 1
+		base_cost = 8000
+		icon_frame = 11
 		value = 2
+		show_modifier = yes
 		infrastructure_construction_effect = yes
 		level_cap = {
 			shares_slots = yes
 			state_max = 2
 		}
 		state_modifiers = {
-			local_resources_factor = -0.01
+			state_production_speed_buildings_factor = 0.03
+			local_building_slots_factor = 0.03
 		}
 	}
 
 	ADISCORD_industrial_cluster = {
 		show_on_map = 0
-		base_cost = 8500
+		base_cost = 9000
 		icon_frame = 2
 		value = 3
+		show_modifier = yes
 		infrastructure_construction_effect = yes
 		level_cap = {
 			shares_slots = yes
 			state_max = 3
 		}
+		state_modifiers = {
+			state_production_speed_buildings_factor = 0.05
+			local_building_slots_factor = 0.05
+			local_factory_energy_consumption = 0.25
+		}
 	}
 
-	ADISCORD_logistics_hub = {
+	#### A-DISCORD strategic resource complexes
+	#### These are deliberately much more expensive than ordinary extraction.
+	#### Only one heavy resource complex may be built in a state, and every
+	#### complex consumes a slot while imposing a visible regional burden.
+
+	ADISCORD_metallurgical_complex = {
 		show_on_map = 0
-		base_cost = 7000
-		icon_frame = 15
-		value = 2
+		hide_if_missing_tech = yes
+		base_cost = 28000
+		per_controlled_building_extra_cost = 6000
+		icon_frame = 20
+		local_resources_steel = 8
+		refinery = yes
+		value = 5
 		infrastructure_construction_effect = yes
+		repair_speed_factor = 0.60
+		show_modifier = yes
 		level_cap = {
 			shares_slots = yes
-			state_max = 2
+			state_max = 1
+			group_by = ADISCORD_resource_complexes
 		}
 		state_modifiers = {
-			local_supplies = 0.05
+			state_production_speed_buildings_factor = -0.05
+			local_building_slots_factor = -0.05
+			local_factory_energy_consumption = 0.20
 		}
 	}
 
-	ADISCORD_technical_institute = {
+	ADISCORD_electrolysis_complex = {
 		show_on_map = 0
-		base_cost = 7500
-		icon_frame = 1
-		value = 2
+		hide_if_missing_tech = yes
+		base_cost = 30000
+		per_controlled_building_extra_cost = 7000
+		icon_frame = 31
+		local_resources_aluminium = 6
+		refinery = yes
+		value = 5
 		infrastructure_construction_effect = yes
+		repair_speed_factor = 0.55
+		show_modifier = yes
 		level_cap = {
 			shares_slots = yes
-			state_max = 2
+			state_max = 1
+			group_by = ADISCORD_resource_complexes
+		}
+		state_modifiers = {
+			state_production_speed_buildings_factor = -0.06
+			local_building_slots_factor = -0.05
+			local_factory_energy_consumption = 0.30
+		}
+	}
+
+	ADISCORD_strategic_mining_complex = {
+		show_on_map = 0
+		hide_if_missing_tech = yes
+		base_cost = 34000
+		per_controlled_building_extra_cost = 8000
+		icon_frame = 19
+		local_resources_tungsten = 4
+		refinery = yes
+		value = 6
+		infrastructure_construction_effect = yes
+		repair_speed_factor = 0.50
+		show_modifier = yes
+		level_cap = {
+			shares_slots = yes
+			state_max = 1
+			group_by = ADISCORD_resource_complexes
+		}
+		state_modifiers = {
+			state_production_speed_buildings_factor = -0.08
+			local_building_slots_factor = -0.06
+			local_factory_energy_consumption = 0.25
+			local_manpower = -0.03
+		}
+	}
+
+	ADISCORD_thermal_power_complex = {
+		show_on_map = 0
+		hide_if_missing_tech = yes
+		base_cost = 24000
+		per_controlled_building_extra_cost = 5000
+		icon_frame = 30
+		local_resources_coal = 8
+		refinery = yes
+		affects_energy = yes
+		value = 5
+		infrastructure_construction_effect = yes
+		repair_speed_factor = 0.55
+		show_modifier = yes
+		level_cap = {
+			shares_slots = yes
+			state_max = 1
+			group_by = ADISCORD_resource_complexes
+		}
+		state_modifiers = {
+			state_production_speed_buildings_factor = -0.05
+			local_building_slots_factor = -0.04
+			local_factory_energy_consumption = -0.10
+			local_manpower = -0.03
 		}
 	}
 }

@@ -2617,7 +2617,7 @@ leader_traits = {
 			factor = @navy_command_factor_3
 			modifier = {
 				factor = 0
-				has_navy_size = { unit = carrier size < 1 }
+					always = no
 			}
 			modifier = {
 				factor = 0
@@ -2655,12 +2655,12 @@ leader_traits = {
 	cockatoo_trait = { #at end for save compat
 		random = no
 		equipment_bonus = {
-			ship_hull_cruiser = { #CLs & CAs
+			capital_ship = {
 				naval_range = 0.3 
 				sub_detection = 0.1 
 				naval_speed = 0.1
 			}
-			ship_hull_light = { #DDs
+			screen_ship = {
 				naval_range = 0.3 
 				sub_detection = 0.1 
 				naval_speed = 0.1

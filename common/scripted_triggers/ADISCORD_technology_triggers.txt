@@ -1,0 +1,71 @@
+ADISCORD_has_grid_economy_tech = {
+	has_tech = ADISCORD_tech_local_grid_restoration
+}
+
+ADISCORD_has_radiation_mapping_tech = {
+	has_tech = ADISCORD_tech_radiation_mapping
+}
+
+ADISCORD_has_reactor_safety_tech = {
+	has_tech = ADISCORD_tech_reactor_safety_protocols
+}
+
+ADISCORD_has_microreactor_tech = {
+	has_tech = ADISCORD_tech_microreactor_blocks
+}
+
+ADISCORD_has_industrial_automation_tech = {
+	OR = {
+		has_tech = ADISCORD_tech_automated_assembly
+		has_tech = ADISCORD_tech_autonomous_factory_cells
+	}
+}
+
+ADISCORD_has_logistics_network_tech = {
+	OR = {
+		has_tech = ADISCORD_tech_logistics_hub_networks
+		has_tech = ADISCORD_tech_predictive_logistics
+	}
+}
+
+ADISCORD_has_military_standardization_tech = {
+	has_tech = ADISCORD_tech_postwar_weapon_standardization
+}
+
+ADISCORD_has_autonomous_platform_tech = {
+	OR = {
+		has_tech = ADISCORD_tech_limited_battle_ai
+		has_tech = ADISCORD_tech_autonomous_breakthrough_platforms
+	}
+}
+
+ADISCORD_has_cyber_command_tech = {
+	OR = {
+		has_tech = ADISCORD_tech_mesh_command_networks
+		has_tech = ADISCORD_tech_operational_ai_assistants
+	}
+}
+
+ADISCORD_has_civil_resilience_tech = {
+	OR = {
+		has_tech = ADISCORD_tech_population_resilience_planning
+		has_tech = ADISCORD_tech_civil_defense_networks
+	}
+}
+
+ADISCORD_has_forbidden_legacy_access = {
+	OR = {
+		has_country_flag = ADISCORD_forbidden_legacy_access
+		has_country_flag = ADISCORD_legacy_research_authorized
+		any_owned_state = { has_state_flag = ADISCORD_legacy_site_secured }
+		any_owned_state = { has_state_flag = ADISCORD_forbidden_relic_complex }
+	}
+}
+
+ADISCORD_has_black_grid_access = {
+	ADISCORD_has_forbidden_legacy_access = yes
+	OR = {
+		has_country_flag = ADISCORD_black_grid_protocols_authorized
+		any_owned_state = { has_state_flag = ADISCORD_black_grid_node }
+	}
+}

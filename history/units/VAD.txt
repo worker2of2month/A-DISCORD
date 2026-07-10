@@ -2,9 +2,9 @@ division_template = {
 	name = "Armi Security Detachment"
 	division_names_group = ADISCORD_INF_01
 	regiments = {
-		infantry = { x = 0 y = 0 }
-		infantry = { x = 0 y = 1 }
-		infantry = { x = 1 y = 0 }
+		ADISCORD_militia = { x = 0 y = 0 }
+		ADISCORD_militia = { x = 0 y = 1 }
+		ADISCORD_militia = { x = 1 y = 0 }
 	}
 }
 
@@ -153,6 +153,12 @@ instant_effect = {
 		requested_factories = 8
 		progress = 0.60
 		efficiency = 70
+	}
+	add_equipment_production = {
+		equipment = { type = ADISCORD_squad_weapons_equipment_0 creator = "VAD" }
+		requested_factories = 1
+		progress = 0.45
+		efficiency = 55
 	}
 	add_equipment_production = {
 		equipment = { type = support_equipment_1 }

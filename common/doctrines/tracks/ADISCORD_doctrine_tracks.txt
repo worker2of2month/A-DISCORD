@@ -1,0 +1,116 @@
+ADISCORD_land_mass_restoration = {
+	name = ADISCORD_land_mass_restoration
+	background = "GFX_grand_battleplan_bg"
+	icon = "GFX_doctrine_milestone_infantry_land"
+	icon_frame = "GFX_doctrine_decor_land"
+	mastery = {
+		multiplier = 1.0
+		categories = {
+			category_all_infantry
+		}
+	}
+}
+
+ADISCORD_land_platform_centric = {
+	name = ADISCORD_land_platform_centric
+	background = "GFX_mob_warfare_bg"
+	icon = "GFX_doctrine_milestone_armored_land"
+	icon_frame = "GFX_doctrine_decor_land"
+	mastery = {
+		multiplier = 8.0
+		categories = {
+			category_tanks
+			category_all_armor
+		}
+	}
+}
+
+ADISCORD_land_networked_operations = {
+	name = ADISCORD_land_networked_operations
+	background = "GFX_tac_operation_bg"
+	icon = "GFX_doctrine_milestone_operations_land"
+	icon_frame = "GFX_doctrine_decor_land"
+	mastery = {
+		multiplier = 0.7
+		categories = {
+			category_all_infantry
+			category_support_battalions
+			category_tanks
+			category_all_armor
+		}
+	}
+}
+
+ADISCORD_land_fortress_state = {
+	name = ADISCORD_land_fortress_state
+	background = "GFX_sup_firepower_bg"
+	icon = "GFX_doctrine_milestone_artillery_land"
+	icon_frame = "GFX_doctrine_decor_land"
+	mastery = {
+		multiplier = 1.0
+		categories = {
+			category_all_infantry
+			category_support_battalions
+		}
+	}
+}
+
+ADISCORD_air_drone_swarm = {
+	name = ADISCORD_air_drone_swarm
+	background = "GFX_air_superiority_bg"
+	icon = "GFX_doctrine_milestone_fighter_air"
+	icon_frame = "GFX_doctrine_decor_air"
+	mastery = {
+		multiplier = 8.0
+		equipment = {
+			fighter
+			cas
+			naval_bomber
+		}
+	}
+}
+
+ADISCORD_air_vtol_deep_strike = {
+	name = ADISCORD_air_vtol_deep_strike
+	background = "GFX_battlefield_destruction_bg"
+	icon = "GFX_doctrine_milestone_striker_air"
+	icon_frame = "GFX_doctrine_decor_air"
+	mastery = {
+		multiplier = 8.0
+		equipment = {
+			cas
+			tactical_bomber
+			heavy_fighter
+		}
+	}
+}
+
+ADISCORD_air_strategic_denial = {
+	name = ADISCORD_air_strategic_denial
+	background = "GFX_strategic_destruction_bg"
+	icon = "GFX_doctrine_milestone_heavy_air"
+	icon_frame = "GFX_doctrine_decor_air"
+	mastery = {
+		multiplier = 8.0
+		equipment = {
+			fighter
+			interceptor
+			strategic_bomber
+		}
+	}
+}
+
+ADISCORD_naval_littoral_security = {
+	name = ADISCORD_naval_littoral_security
+	background = "GFX_trade_interdiction_bg"
+	icon = "GFX_doctrine_milestone_submarine_naval"
+	icon_frame = "GFX_doctrine_decor_naval"
+	mastery = {
+		multiplier = 4.0
+		equipment = {
+			screen_ship
+			submarine
+			carrier
+		}
+	}
+}

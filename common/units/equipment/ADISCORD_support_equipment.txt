@@ -1,0 +1,56 @@
+equipments = {
+	support_equipment = {
+		year = 2100
+		is_archetype = yes
+		picture = archetype_support_equipment
+		is_buildable = no
+		type = { infantry motorized support }
+		group_by = archetype
+		interface_category = interface_category_land
+		reliability = 0.8
+		lend_lease_cost = 1
+		build_cost_ic = 4
+		resources = { aluminium = 1 steel = 2 }
+	}
+
+	support_equipment_1 = {
+		year = 2140
+		archetype = support_equipment
+		active = yes
+		priority = 20
+		visual_level = 0
+	}
+
+	ADISCORD_support_equipment_2170 = {
+		year = 2170
+		archetype = support_equipment
+		parent = support_equipment_1
+		priority = 30
+		visual_level = 1
+		reliability = 0.86
+		build_cost_ic = 4.8
+		resources = { aluminium = 2 steel = 2 }
+	}
+
+	ADISCORD_support_equipment_2183 = {
+		year = 2183
+		archetype = support_equipment
+		parent = ADISCORD_support_equipment_2170
+		priority = 40
+		visual_level = 2
+		reliability = 0.9
+		build_cost_ic = 5.6
+		resources = { aluminium = 2 steel = 2 tungsten = 1 }
+	}
+
+	ADISCORD_support_equipment_2200 = {
+		year = 2200
+		archetype = support_equipment
+		parent = ADISCORD_support_equipment_2183
+		priority = 50
+		visual_level = 3
+		reliability = 0.82
+		build_cost_ic = 6.4
+		resources = { aluminium = 3 steel = 2 tungsten = 1 }
+	}
+}
