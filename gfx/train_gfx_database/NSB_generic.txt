@@ -1,0 +1,157 @@
+wagon_data = {
+	entity = train_locomotive_equipment_1_entity
+	scale = 0.5
+	rotation = 90
+	shift = { 0.0 0.6 0.0 }
+	length = 2.0
+}
+
+wagon_data = {
+	entity = train_locomotive_1_equipment_2_entity
+	scale = 0.45
+	rotation = 90
+	shift = { 0.0 0.6 0.0 }
+	length = 2.0
+}
+
+wagon_data = {
+	entity = train_locomotive_2_equipment_2_entity
+	scale = 0.6
+	rotation = 90
+	shift = { 0.0 0.6 0.0 }
+	length = 2.8
+}
+
+wagon_data = {
+	entity = train_locomotive_equipment_3_entity
+	scale = 0.45
+	rotation = 90
+	shift = { 0.0 0.6 0.0 }
+	length = 1.8
+}
+
+wagon_data = {
+	entity = train_coal_equipment_1_entity
+	scale = 0.35
+	rotation = 90
+	shift = { 0.0 0.6 0.0 }
+	length = 1.2
+}
+
+wagon_data = {
+	entity = train_coal_equipment_2_entity
+	scale = 0.5
+	rotation = 90
+	shift = { 0.0 0.6 0.0 }
+	length = 1.6
+}
+
+wagon_data = {
+	entity = train_coal_equipment_3_entity
+	scale = 0.45
+	rotation = 90
+	shift = { 0.0 0.6 0.0 }
+	length = 1.1
+}
+
+wagon_data = {
+	entity = wagon_1_entity
+	scale = 0.35
+	rotation = 90
+	shift = { 0.0 0.6 0.0 }
+	length = 1.8
+}
+
+wagon_data = {
+	entity = wagon_2_entity
+	scale = 0.45
+	rotation = 90
+	shift = { 0.0 0.6 0.0 }
+	length = 2.18
+}
+
+wagon_data = {
+	entity = flat_wagon_entity
+	scale = 0.55
+	rotation = 90
+	shift = { 0.0 0.6 0.0 }
+	length = 3.15
+}
+
+wagon_data = {
+	entity = tank_wagon_entity
+	scale = 0.4
+	rotation = 90
+	shift = { 0.0 0.6 0.0 }
+	length = 1.95
+}
+
+wagon_data = {
+	entity = tank_wagon_2_entity
+	scale = 0.4
+	rotation = 90
+	shift = { 0.0 0.6 0.0 }
+	length = 1.95
+}
+
+default = {
+	train_equipment_1 = {
+		wagon_0 = train_locomotive_equipment_1_entity
+		wagon_1 = train_coal_equipment_1_entity
+		wagon_2 = flat_wagon_entity
+		wagon_last = wagon_2_entity
+
+		wagons = {
+			wagon_1_entity
+			wagon_2_entity
+			flat_wagon_entity
+			tank_wagon_entity
+			tank_wagon_2_entity
+		}
+	}
+
+	armored_train_equipment_1 = {
+		wagon_0 = train_locomotive_equipment_3_entity
+		wagon_1 = train_coal_equipment_3_entity
+		wagon_2 = flat_wagon_entity
+		wagon_last = wagon_2_entity
+
+		wagons = {
+			wagon_1_entity
+			wagon_2_entity
+			flat_wagon_entity
+			tank_wagon_entity
+			tank_wagon_2_entity
+		}
+	}
+
+	ADISCORD_autonomous_train_equipment_2183 = {
+		wagon_0 = train_locomotive_1_equipment_2_entity
+		wagon_1 = train_locomotive_2_equipment_2_entity
+		wagon_2 = train_coal_equipment_2_entity
+		wagon_last = wagon_2_entity
+
+		wagons = {
+			wagon_1_entity
+			wagon_2_entity
+			flat_wagon_entity
+			tank_wagon_entity
+			tank_wagon_2_entity
+		}
+	}
+
+	ADISCORD_hardened_train_equipment_2183 = {
+		wagon_0 = train_locomotive_equipment_3_entity
+		wagon_1 = train_coal_equipment_3_entity
+		wagon_2 = flat_wagon_entity
+		wagon_last = wagon_2_entity
+
+		wagons = {
+			wagon_1_entity
+			wagon_2_entity
+			flat_wagon_entity
+			tank_wagon_entity
+			tank_wagon_2_entity
+		}
+	}
+}
