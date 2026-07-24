@@ -1,0 +1,97 @@
+STP_crisis_operations = {
+	STP_health_stage_1_to_2 = {
+		is_good = no
+		selectable_mission = no
+		days_mission_timeout = 70
+
+		allowed = {
+			tag = STP
+		}
+
+		visible = {
+			tag = STP
+			has_country_flag = STP_main_campaign_side
+			NOT = { has_country_flag = STP_ivanov_dead }
+		}
+
+		activation = {
+			always = no
+		}
+
+		timeout_effect = {
+			country_event = { id = stp_crisis.1 }
+		}
+	}
+
+	STP_health_stage_2_to_3 = {
+		is_good = no
+		selectable_mission = no
+		days_mission_timeout = 70
+
+		allowed = {
+			tag = STP
+		}
+
+		visible = {
+			tag = STP
+			has_country_flag = STP_main_campaign_side
+			NOT = { has_country_flag = STP_ivanov_dead }
+		}
+
+		activation = {
+			always = no
+		}
+
+		timeout_effect = {
+			country_event = { id = stp_crisis.2 }
+		}
+	}
+
+	STP_health_stage_3_to_4 = {
+		is_good = no
+		selectable_mission = no
+		days_mission_timeout = 63
+
+		allowed = {
+			tag = STP
+		}
+
+		visible = {
+			tag = STP
+			has_country_flag = STP_main_campaign_side
+			NOT = { has_country_flag = STP_ivanov_dead }
+		}
+
+		activation = {
+			always = no
+		}
+
+		timeout_effect = {
+			country_event = { id = stp_crisis.3 }
+		}
+	}
+
+	STP_health_stage_4_to_death = {
+		is_good = no
+		selectable_mission = no
+		days_mission_timeout = 63
+
+		allowed = {
+			tag = STP
+		}
+
+		visible = {
+			tag = STP
+			has_country_flag = STP_main_campaign_side
+			NOT = { has_country_flag = STP_ivanov_dead }
+		}
+
+		activation = {
+			always = no
+		}
+
+		timeout_effect = {
+			country_event = { id = stp_crisis.4 }
+		}
+	}
+}

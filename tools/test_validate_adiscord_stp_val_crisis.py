@@ -8,6 +8,7 @@ from tools.stp_val_crisis_manifest import (
     CIVIL_WAR_STATE_MAP,
     DECISION_CATEGORIES,
     DEATH_CAMPAIGN_DAY,
+    HEALTH_MISSIONS,
     HEALTH_STAGE_DAYS,
     LEADERS,
     NOD_LIMITED_TARGET_STATES,
@@ -15,6 +16,13 @@ from tools.stp_val_crisis_manifest import (
     NODE_LIMITS,
     POSTWAR_FOCUS_IDS,
     RESOURCE_STATES,
+    RESISTANCE_POSTURES,
+    SECURITY_POSTURES,
+    STP_CRISIS_FOCUS_REWARDS,
+    STP_CRISIS_FOCUS_STAGES,
+    STP_PARTY_FOCUSES,
+    STP_SHABRAT_FOCUSES,
+    STP_SPINE_FOCUS_STAGES,
     VAL_AUTHORITY_FOCUS_REWARDS,
     VAL_CONTRACT_BANDS,
     VAL_STP_INTEL_STATES,
@@ -51,6 +59,23 @@ class CrisisManifestTests(unittest.TestCase):
         self.assertEqual(NOD_LIMITED_TARGET_STATES["YPR"], (15, 19))
         self.assertEqual(WAR_COUNTDOWN_MISSIONS[-1], "STP_VAL_war_countdown_breached")
         self.assertEqual(set().union(*CIVIL_WAR_STATE_MAP.values()), {1, 2, 3, 28, 29, 43, 44, 45, 46, 53, 88})
+
+    def test_task_three_manifest_is_exact_and_non_overlapping(self):
+        self.assertEqual(
+            HEALTH_MISSIONS,
+            {
+                "STP_health_stage_1_to_2": (70, "stp_crisis.1"),
+                "STP_health_stage_2_to_3": (70, "stp_crisis.2"),
+                "STP_health_stage_3_to_4": (63, "stp_crisis.3"),
+                "STP_health_stage_4_to_death": (63, "stp_crisis.4"),
+            },
+        )
+        self.assertEqual(len(STP_CRISIS_FOCUS_STAGES), 40)
+        self.assertEqual(set(STP_CRISIS_FOCUS_STAGES), set(STP_CRISIS_FOCUS_REWARDS))
+        self.assertFalse(set(STP_SHABRAT_FOCUSES) & set(STP_PARTY_FOCUSES))
+        self.assertEqual(set(STP_SPINE_FOCUS_STAGES), {1, 2, 3, 4, 5})
+        self.assertEqual(set(SECURITY_POSTURES), {1, 2, 3, 4, 5})
+        self.assertEqual(set(RESISTANCE_POSTURES), {1, 2, 3, 4})
 
     def test_val_authority_focus_rewards_are_complete(self):
         self.assertEqual(
@@ -100,10 +125,46 @@ from tools import validate_adiscord_stp_val_crisis as validator
 
 class CrisisValidatorTests(unittest.TestCase):
     def _block_with_assignment(self, text: str, block_name: str, assignment: str) -> str:
-        return next(
-            (block for block in validator._iter_named_blocks(text, block_name) if assignment in block),
-            "",
+        masked_text = validator._mask_non_code(text)
+        pattern = re.compile(rf"\b{re.escape(block_name)}\b\s*=\s*\{{")
+        parsed_assignment = re.fullmatch(
+            r"([A-Za-z0-9_]+)\s*=\s*(.+)", assignment
         )
+        if parsed_assignment is None:
+            self.fail(f"unsupported assignment lookup: {assignment}")
+        key, value = parsed_assignment.groups()
+        value_boundary = "" if value.startswith('"') else r"(?![A-Za-z0-9_.])"
+        assignment_pattern = re.compile(
+            rf"(?<![A-Za-z0-9_]){re.escape(key)}\s*=\s*"
+            rf"{re.escape(value)}{value_boundary}"
+        )
+        matches = []
+        for match in pattern.finditer(masked_text):
+            opening_brace = masked_text.index("{", match.start())
+            depth = 0
+            closing_brace = None
+            for index in range(opening_brace, len(masked_text)):
+                if masked_text[index] == "{":
+                    depth += 1
+                elif masked_text[index] == "}":
+                    depth -= 1
+                    if depth == 0:
+                        closing_brace = index
+                        break
+            if closing_brace is None:
+                continue
+            block = text[opening_brace : closing_brace + 1]
+            masked = validator._mask_non_code(block)
+            for assignment_match in assignment_pattern.finditer(block):
+                index = assignment_match.start()
+                if masked[:index].count("{") - masked[:index].count("}") == 1:
+                    outer_depth = (
+                        masked_text[: match.start()].count("{")
+                        - masked_text[: match.start()].count("}")
+                    )
+                    matches.append((outer_depth, -len(block), block))
+                    break
+        return min(matches, default=(0, 0, ""))[2]
 
     def _assert_stp_modifier_contract(self, refresh: str) -> None:
         def direct_blocks(text: str, identifier: str) -> list[str]:
@@ -456,6 +517,60 @@ class CrisisValidatorTests(unittest.TestCase):
         self.assertEqual(len(issues), len(set(issues)))
         self.assertEqual(sum("on_daily is forbidden" in issue for issue in issues), 1)
 
+    def test_stp_validator_rejects_calendar_and_focus_window_mutations(self):
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for relative in (
+                "common/decisions/categories/ADISCORD_STP_VAL_crisis_categories.txt",
+                "common/decisions/ADISCORD_STP_crisis_decisions.txt",
+                "events/ADISCORD_STP_crisis_events.txt",
+                "common/national_focus/ADISCORD_national_focus_STP.txt",
+                "common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt",
+                "common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt",
+                "common/focus_inlay_windows/ADISCORD_STP_state_face_inlay_window.txt",
+                "common/scripted_localisation/ADISCORD_STP_leader_health_scripted_loc.txt",
+                "common/scripted_localisation/ADISCORD_STP_state_face_scripted_loc.txt",
+                "common/scripted_localisation/ADISCORD_STP_party_elections_scripted_loc.txt",
+                "localisation/russian/ADISCORD_stp_state_face_l_russian.yml",
+                "localisation/russian/ADISCORD_STP_party_elections_l_russian.yml",
+            ):
+                source = validator.ROOT / relative
+                target = root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(source.read_bytes())
+
+            decisions = root / "common/decisions/ADISCORD_STP_crisis_decisions.txt"
+            decisions.write_text(
+                decisions.read_text(encoding="utf-8-sig").replace(
+                    "days_mission_timeout = 70", "days_mission_timeout = 71", 1
+                ),
+                encoding="utf-8-sig",
+            )
+            focuses = root / "common/national_focus/ADISCORD_national_focus_STP.txt"
+            focus_text = focuses.read_text(encoding="utf-8-sig")
+            focus_block = self._block_with_assignment(
+                focus_text,
+                "focus",
+                "id = STP_Foreign_Guests_At_The_Banquet",
+            )
+            mutated_focus_block = focus_block.replace(
+                "cancelable = no", "cancelable = yes", 1
+            )
+            self.assertNotEqual(focus_block, mutated_focus_block)
+            focuses.write_text(
+                focus_text.replace(focus_block, mutated_focus_block, 1),
+                encoding="utf-8-sig",
+            )
+            issues = validator.validate(root, "stp")
+
+        self.assertTrue(
+            any("STP_health_stage_1_to_2 must last 70 days" in issue for issue in issues)
+        )
+        self.assertTrue(
+            any("playable focus STP_Foreign_Guests_At_The_Banquet must be noncancelable" in issue
+                for issue in issues)
+        )
+
     def test_core_schema_owns_all_mutations(self):
         core = validator.read(
             validator.ROOT / "common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt"
@@ -585,7 +700,347 @@ class CrisisValidatorTests(unittest.TestCase):
             "complete_national_focus = STP_Nectar_of_the_Gods",
             "activate_mission = STP_health_stage_1_to_2",
         ):
-            self.assertNotIn(task_3_token, startup)
+            self.assertIn(task_3_token, startup)
+        self.assertRegex(
+            startup,
+            r"(?s)NOT\s*=\s*\{\s*has_country_flag\s*=\s*STP_health_calendar_started\s*\}"
+            r".*?set_country_flag\s*=\s*STP_health_calendar_started"
+            r".*?complete_national_focus\s*=\s*STP_Nectar_of_the_Gods"
+            r".*?activate_mission\s*=\s*STP_health_stage_1_to_2",
+        )
+
+    def test_four_canonical_health_missions_are_defined(self):
+        decisions = validator.read(
+            validator.ROOT / "common/decisions/ADISCORD_STP_crisis_decisions.txt"
+        ) or ""
+        events = validator.read(
+            validator.ROOT / "events/ADISCORD_STP_crisis_events.txt"
+        ) or ""
+        expected = {
+            "STP_health_stage_1_to_2": 70,
+            "STP_health_stage_2_to_3": 70,
+            "STP_health_stage_3_to_4": 63,
+            "STP_health_stage_4_to_death": 63,
+        }
+        self.assertTrue(decisions, "Task 3 STP decisions file is missing")
+        self.assertTrue(events, "Task 3 STP events file is missing")
+        actual = {}
+        for mission, days in expected.items():
+            block = validator.extract_named_block(decisions, mission) or ""
+            self.assertTrue(block, mission)
+            self.assertRegex(block, rf"\bdays_mission_timeout\s*=\s*{days}\b")
+            self.assertNotIn("cancel_effect", validator._mask_non_code(block))
+            self.assertIn("selectable_mission = no", block)
+            self.assertIn("activation = {\n\t\t\talways = no\n\t\t}", block)
+            self.assertIn("has_country_flag = STP_main_campaign_side", block)
+            actual[mission] = days
+        self.assertEqual(actual, expected)
+
+    def test_all_five_crisis_decision_categories_are_role_gated(self):
+        categories = validator.read(
+            validator.ROOT
+            / "common/decisions/categories/ADISCORD_STP_VAL_crisis_categories.txt"
+        ) or ""
+        self.assertTrue(categories, "Task 3 decision categories file is missing")
+        for category in DECISION_CATEGORIES:
+            self.assertEqual(
+                len(re.findall(rf"\b{re.escape(category)}\s*=\s*\{{", categories)),
+                1,
+                category,
+            )
+        stp = validator.extract_named_block(categories, "STP_crisis_operations") or ""
+        self.assertIn("tag = STP", validator.extract_named_block(stp, "allowed") or "")
+        self.assertIn("has_country_flag = STP_main_campaign_side", stp)
+        val = validator.extract_named_block(categories, "VAL_contract_campaign") or ""
+        self.assertIn("tag = VAL", validator.extract_named_block(val, "allowed") or "")
+        self.assertIn("has_completed_focus = VAL_One_Ledger_One_Banner", val)
+        nod = validator.extract_named_block(categories, "NOD_crisis_posture") or ""
+        self.assertIn("tag = NOD", validator.extract_named_block(nod, "allowed") or "")
+        self.assertIn("STP_main_campaign_side", nod)
+        north = validator.extract_named_block(categories, "VAL_northern_campaign") or ""
+        self.assertIn("tag = VAL", validator.extract_named_block(north, "allowed") or "")
+        self.assertIn("has_completed_focus = VAL_Different_Views_On_Freedom", north)
+        countdown = (
+            validator.extract_named_block(categories, "STP_VAL_war_countdown_category")
+            or ""
+        )
+        allowed = validator.extract_named_block(countdown, "allowed") or ""
+        self.assertIn("tag = VAL", allowed)
+        self.assertIn("STP_is_postwar_country = yes", allowed)
+        for mission in WAR_COUNTDOWN_MISSIONS:
+            self.assertIn(f"has_active_mission = {mission}", countdown)
+
+    def test_health_events_chain_stages_and_use_the_day_140_probe(self):
+        events = validator.read(
+            validator.ROOT / "events/ADISCORD_STP_crisis_events.txt"
+        ) or ""
+        expected = (
+            ("stp_crisis.1", 2, STP_SPINE_FOCUS_STAGES[2], "STP_health_stage_2_to_3"),
+            ("stp_crisis.2", 3, STP_SPINE_FOCUS_STAGES[3], "STP_health_stage_3_to_4"),
+            ("stp_crisis.3", 4, STP_SPINE_FOCUS_STAGES[4], "STP_health_stage_4_to_death"),
+        )
+        for event_id, stage, spine, next_mission in expected:
+            block = self._block_with_assignment(
+                events, "country_event", f"id = {event_id}"
+            )
+            self.assertIn("hidden = yes", block)
+            self.assertIn(f"STP_set_health_stage = {{ value = {stage} }}", block)
+            for focus in spine:
+                self.assertIn(f"complete_national_focus = {focus}", block)
+            self.assertIn(f"activate_mission = {next_mission}", block)
+        stage_two = self._block_with_assignment(
+            events, "country_event", "id = stp_crisis.1"
+        )
+        self.assertRegex(
+            stage_two,
+            r"(?s)country_event\s*=\s*\{\s*id\s*=\s*stp_crisis\.5\s+days\s*=\s*69\s*\}",
+        )
+        probe = self._block_with_assignment(
+            events, "country_event", "id = stp_crisis.5"
+        )
+        self.assertIn("hidden = yes", probe)
+        self.assertRegex(
+            probe,
+            r"check_variable\s*=\s*\{\s*var\s*=\s*STP_side_commitment"
+            r"\s+value\s*=\s*0\s+compare\s*=\s*equals\s*\}",
+        )
+        self.assertIn("country_event = { id = stp_crisis.6 }", probe)
+        self.assertNotIn("on_daily", events)
+
+    def test_death_event_is_terminal_and_completes_the_spine(self):
+        events = validator.read(
+            validator.ROOT / "events/ADISCORD_STP_crisis_events.txt"
+        ) or ""
+        death = self._block_with_assignment(
+            events, "country_event", "id = stp_crisis.4"
+        )
+        self.assertIn("set_country_flag = STP_ivanov_dead", death)
+        self.assertIn("STP_set_health_stage = { value = 5 }", death)
+        self.assertIn(
+            "complete_national_focus = STP_The_Father_Of_Peace_Is_Gone", death
+        )
+        self.assertIn("STP_set_crisis_phase = { value = 2 }", death)
+        self.assertIn("retire_character = STP_Petr_Ivanov", death)
+        self.assertNotIn("activate_mission = STP_health_stage_", death)
+        for focus in STP_CRISIS_FOCUS_STAGES:
+            self.assertIn(f"clr_country_flag = STP_focus_active_{focus}", death)
+
+    def test_commitment_apis_are_one_way_and_schedule_one_posture_choice(self):
+        core = validator.read(
+            validator.ROOT
+            / "common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt"
+        ) or ""
+        contracts = {
+            "STP_commit_to_shabrat": (
+                1,
+                "STP_sided_with_Maksim_flag",
+                "STP_sided_with_the_party_flag",
+                "stp_crisis.10",
+            ),
+            "STP_commit_to_party": (
+                2,
+                "STP_sided_with_the_party_flag",
+                "STP_sided_with_Maksim_flag",
+                "stp_crisis.11",
+            ),
+        }
+        for effect, (value, own_flag, opposite_flag, event_id) in contracts.items():
+            block = validator.extract_named_block(core, effect) or ""
+            self.assertTrue(block, effect)
+            self.assertRegex(
+                block,
+                r"check_variable\s*=\s*\{\s*var\s*=\s*STP_side_commitment"
+                r"\s+value\s*=\s*0\s+compare\s*=\s*equals\s*\}",
+            )
+            self.assertEqual(
+                len(
+                    re.findall(
+                        rf"set_variable\s*=\s*\{{\s*var\s*=\s*STP_side_commitment"
+                        rf"\s+value\s*=\s*{value}\s*\}}",
+                        block,
+                    )
+                ),
+                1,
+            )
+            self.assertIn(f"set_country_flag = {own_flag}", block)
+            self.assertIn(f"clr_country_flag = {opposite_flag}", block)
+            self.assertIn(f"country_event = {{ id = {event_id} days = 1 }}", block)
+
+    def test_posture_selection_is_zero_guarded_and_never_rerolled(self):
+        events = validator.read(
+            validator.ROOT / "events/ADISCORD_STP_crisis_events.txt"
+        ) or ""
+        contracts = {
+            "stp_crisis.10": ("STP_security_posture", set(SECURITY_POSTURES)),
+            "stp_crisis.11": ("STP_resistance_posture", set(RESISTANCE_POSTURES)),
+        }
+        for event_id, (variable, expected_values) in contracts.items():
+            block = self._block_with_assignment(events, "country_event", f"id = {event_id}")
+            self.assertIn("hidden = yes", block)
+            self.assertRegex(
+                block,
+                rf"check_variable\s*=\s*\{{\s*var\s*=\s*{variable}"
+                r"\s+value\s*=\s*0\s+compare\s*=\s*equals\s*\}",
+            )
+            values = {
+                int(match)
+                for match in re.findall(
+                    rf"set_variable\s*=\s*\{{\s*var\s*=\s*{variable}"
+                    r"\s+value\s*=\s*(\d+)\s*\}",
+                    block,
+                )
+            }
+            self.assertEqual(values, expected_values)
+            self.assertNotIn(f"var = {variable} value = 0", block)
+        for token in (
+            "hedonism",
+            "is_subject_of = NOD",
+            "has_stability",
+            "has_equipment",
+            "STP_focus_nodrul_observed",
+            "STP_focus_kefreyt_observed",
+            "STP_focus_palace_observed",
+            "STP_focus_street_observed",
+            "STP_focus_garrisons_observed",
+            "STP_focus_mountains_open",
+            "STP_focus_market_open",
+            "STP_focus_val_supply_open",
+            "STP_resistance_escrow_infantry",
+        ):
+            self.assertIn(token, events)
+
+    def test_forced_choice_uses_normal_commit_without_focus_reward(self):
+        events = validator.read(
+            validator.ROOT / "events/ADISCORD_STP_crisis_events.txt"
+        ) or ""
+        forced = self._block_with_assignment(
+            events, "country_event", "id = stp_crisis.6"
+        )
+        self.assertNotIn("hidden = yes", forced)
+        for effect, focus, penalty in (
+            ("STP_commit_to_shabrat", "STP_Show_Him_The_Truth", "STP_change_suspicion"),
+            ("STP_commit_to_party", "STP_Govern_In_His_Name", "STP_change_readiness"),
+        ):
+            self.assertIn(f"{effect} = yes", forced)
+            self.assertRegex(
+                forced,
+                rf"(?s)set_country_flag\s*=\s*STP_forced_commit_no_reward"
+                rf".*?complete_national_focus\s*=\s*{re.escape(focus)}"
+                rf".*?clr_country_flag\s*=\s*STP_forced_commit_no_reward",
+            )
+            self.assertIn(f"{penalty} = {{ value = 10 }}", forced)
+        self.assertEqual(forced.count("add_political_power = -50"), 2)
+        self.assertEqual(forced.count("flag = STP_crisis_late_choice_lock"), 2)
+        self.assertEqual(forced.count("days = 35"), 2)
+
+    def test_playable_crisis_focus_windows_are_exact_and_sticky(self):
+        tree = validator.read(
+            validator.ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt"
+        ) or ""
+        sticky_flags = set()
+        for focus, stage in STP_CRISIS_FOCUS_STAGES.items():
+            block = self._block_with_assignment(tree, "focus", f"id = {focus}")
+            self.assertTrue(block, focus)
+            masked = validator._mask_non_code(block)
+            self.assertRegex(masked, r"\bcost\s*=\s*5\b")
+            self.assertRegex(masked, r"\bcancelable\s*=\s*no\b")
+            self.assertRegex(masked, r"\bcancel_if_invalid\s*=\s*yes\b")
+            self.assertRegex(masked, r"\bcontinue_if_invalid\s*=\s*no\b")
+            self.assertNotIn("cancel_effect", masked)
+            sticky = f"STP_focus_active_{focus}"
+            sticky_flags.add(sticky)
+            select = validator.extract_named_block(block, "select_effect") or ""
+            self.assertIn(f"set_country_flag = {sticky}", select)
+            available = validator.extract_named_block(block, "available") or ""
+            self.assertIn("NOT = { has_country_flag = STP_ivanov_dead }", available)
+            self.assertIn(
+                "NOT = { has_country_flag = STP_crisis_late_choice_lock }", available
+            )
+            self.assertRegex(
+                available,
+                rf"check_variable\s*=\s*\{{\s*var\s*=\s*STP_leader_health_stage"
+                rf"\s+value\s*=\s*{stage}\s+compare\s*=\s*equals\s*\}}",
+            )
+            self.assertIn(f"has_country_flag = {sticky}", available)
+            reward = validator.extract_named_block(block, "completion_reward") or ""
+            self.assertIn(f"clr_country_flag = {sticky}", reward)
+            interface = STP_CRISIS_FOCUS_REWARDS[focus]
+            if interface.startswith("STP_commit_to_"):
+                self.assertIn(f"{interface} = yes", reward)
+                self.assertIn("STP_forced_commit_no_reward", reward)
+            else:
+                self.assertIn(f"set_country_flag = {interface}", reward)
+            if focus in STP_SHABRAT_FOCUSES:
+                self.assertRegex(
+                    available,
+                    r"check_variable\s*=\s*\{\s*var\s*=\s*STP_side_commitment"
+                    r"\s+value\s*=\s*1\s+compare\s*=\s*equals\s*\}",
+                )
+            elif focus in STP_PARTY_FOCUSES:
+                self.assertRegex(
+                    available,
+                    r"check_variable\s*=\s*\{\s*var\s*=\s*STP_side_commitment"
+                    r"\s+value\s*=\s*2\s+compare\s*=\s*equals\s*\}",
+                )
+        self.assertEqual(len(sticky_flags), len(STP_CRISIS_FOCUS_STAGES))
+
+    def test_focus_prerequisite_deadlocks_are_repaired_without_new_ids(self):
+        tree = validator.read(
+            validator.ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt"
+        ) or ""
+        prerequisites = {
+            "STP_Foreign_Guests_At_The_Banquet": "STP_Nectar_of_the_Gods",
+            "STP_Kefreite_Security_Offer": "STP_Foreign_Guests_At_The_Banquet",
+            "STP_The_Old_Man_On_The_Balcony": "STP_Nectar_of_the_Gods",
+            "STP_The_City_Still_Dances": "STP_Nectar_of_the_Gods",
+            "STP_Count_The_Loyalists": "STP_Nectar_of_the_Gods",
+            "STP_Show_Him_The_Truth": "STP_The_Old_Man_On_The_Balcony",
+            "STP_Govern_In_His_Name": "STP_The_Old_Man_On_The_Balcony",
+            "STP_The_Valirian_Advisers": "STP_Foreign_Guests_At_The_Banquet",
+            "STP_Contractors_In_The_Passes": "STP_Kefreite_Security_Offer",
+            "STP_Rumours_In_The_Highlands": "STP_Kefreite_Security_Offer",
+            "STP_The_Lower_Market": "STP_The_City_Still_Dances",
+            "STP_Renew_The_Cultural_Mandate": "STP_The_Valirian_Advisers",
+        }
+        for focus, prerequisite in prerequisites.items():
+            block = self._block_with_assignment(tree, "focus", f"id = {focus}")
+            prereq = validator.extract_named_block(block, "prerequisite") or ""
+            self.assertRegex(prereq, rf"\bfocus\s*=\s*{re.escape(prerequisite)}\b")
+        focus_ids = re.findall(r"\bid\s*=\s*(STP_[A-Za-z0-9_]+)", tree)
+        self.assertEqual(len(focus_ids), len(set(focus_ids)))
+
+    def test_state_face_and_party_suspicion_use_canonical_whole_values(self):
+        root = validator.ROOT
+        paths = (
+            "common/focus_inlay_windows/ADISCORD_STP_state_face_inlay_window.txt",
+            "common/scripted_localisation/ADISCORD_STP_leader_health_scripted_loc.txt",
+            "common/scripted_localisation/ADISCORD_STP_state_face_scripted_loc.txt",
+            "common/scripted_localisation/ADISCORD_STP_party_elections_scripted_loc.txt",
+        )
+        for relative in paths:
+            text = validator.read(root / relative) or ""
+            self.assertNotIn("original_tag = STP", text, relative)
+            self.assertNotRegex(
+                validator._mask_non_code(text),
+                r"\bvar\s*=\s*STP_state_face_stage\b"
+                r"|\bSTP_state_face_stage\s*(?:=|>|<)",
+                relative,
+            )
+            self.assertIn("tag = STP", text, relative)
+            self.assertIn("has_country_flag = STP_main_campaign_side", text, relative)
+        for relative in (
+            "localisation/russian/ADISCORD_stp_state_face_l_russian.yml",
+            "localisation/russian/ADISCORD_STP_party_elections_l_russian.yml",
+        ):
+            self.assertTrue((root / relative).read_bytes().startswith(b"\xef\xbb\xbf"))
+        party_loc = validator.read(
+            root / "localisation/russian/ADISCORD_STP_party_elections_l_russian.yml"
+        ) or ""
+        self.assertIn("[?STP_party_suspicion|R0]%", party_loc)
+        self.assertNotIn("[?STP_party_suspicion|R1%]", party_loc)
+        self.assertNotIn(
+            "STP_party_suspicion_political_power_gain_dynamic_var", party_loc
+        )
 
     def test_legacy_stp_and_val_migration_paths_are_idempotent(self):
         core = validator.read(

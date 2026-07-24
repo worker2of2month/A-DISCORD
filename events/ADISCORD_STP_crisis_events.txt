@@ -1,0 +1,332 @@
+add_namespace = stp_crisis
+
+# Day 71: Ivanov's condition visibly worsens and the side-choice deadline probe starts.
+country_event = {
+	id = stp_crisis.1
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag = STP
+		has_country_flag = STP_main_campaign_side
+		NOT = { has_country_flag = STP_ivanov_dead }
+	}
+
+	immediate = {
+		STP_set_health_stage = { value = 2 }
+		complete_national_focus = STP_The_Man_Who_Bought_The_Sky
+		complete_national_focus = STP_When_The_Guarantee_Died
+		activate_mission = STP_health_stage_2_to_3
+		country_event = { id = stp_crisis.5 days = 69 }
+	}
+}
+
+# Day 141: the second 70-day mission, independently of the day-140 side deadline.
+country_event = {
+	id = stp_crisis.2
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag = STP
+		has_country_flag = STP_main_campaign_side
+		NOT = { has_country_flag = STP_ivanov_dead }
+	}
+
+	immediate = {
+		STP_set_health_stage = { value = 3 }
+		complete_national_focus = STP_The_Dying_Feast
+		complete_national_focus = STP_The_Doctors_Lie
+		activate_mission = STP_health_stage_3_to_4
+	}
+}
+
+# Day 204: the final live stage.
+country_event = {
+	id = stp_crisis.3
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag = STP
+		has_country_flag = STP_main_campaign_side
+		NOT = { has_country_flag = STP_ivanov_dead }
+	}
+
+	immediate = {
+		STP_set_health_stage = { value = 4 }
+		complete_national_focus = STP_The_Last_Signature
+		complete_national_focus = STP_Cancel_The_Morning_Address
+		complete_national_focus = STP_A_Glass_Raised_Too_High
+		activate_mission = STP_health_stage_4_to_death
+	}
+}
+
+# Day 267: terminal health transition. Task 5 consumes the pending outcome.
+country_event = {
+	id = stp_crisis.4
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag = STP
+		has_country_flag = STP_main_campaign_side
+		NOT = { has_country_flag = STP_ivanov_dead }
+	}
+
+	immediate = {
+		set_country_flag = STP_ivanov_dead
+		STP_set_health_stage = { value = 5 }
+		complete_national_focus = STP_The_Father_Of_Peace_Is_Gone
+		retire_character = STP_Petr_Ivanov
+
+		clr_country_flag = STP_focus_active_STP_Foreign_Guests_At_The_Banquet
+		clr_country_flag = STP_focus_active_STP_Kefreite_Security_Offer
+		clr_country_flag = STP_focus_active_STP_The_Old_Man_On_The_Balcony
+		clr_country_flag = STP_focus_active_STP_The_City_Still_Dances
+		clr_country_flag = STP_focus_active_STP_Count_The_Loyalists
+		clr_country_flag = STP_focus_active_STP_Show_Him_The_Truth
+		clr_country_flag = STP_focus_active_STP_Govern_In_His_Name
+		clr_country_flag = STP_focus_active_STP_The_Valirian_Advisers
+		clr_country_flag = STP_focus_active_STP_Contractors_In_The_Passes
+		clr_country_flag = STP_focus_active_STP_Rumours_In_The_Highlands
+		clr_country_flag = STP_focus_active_STP_The_Lower_Market
+		clr_country_flag = STP_focus_active_STP_The_Party_Was_Not_Born_Here
+		clr_country_flag = STP_focus_active_STP_The_Desert_Watches_The_Snow
+		clr_country_flag = STP_focus_active_STP_The_Mountain_Printing_House
+		clr_country_flag = STP_focus_active_STP_Hunt_The_Mountain_Cells
+		clr_country_flag = STP_focus_active_STP_Steal_The_Black_Ledger
+		clr_country_flag = STP_focus_active_STP_Burn_The_Client_Archives
+		clr_country_flag = STP_focus_active_STP_The_Silent_Mountain_March
+		clr_country_flag = STP_focus_active_STP_One_Last_National_Festival
+		clr_country_flag = STP_focus_active_STP_Turn_The_Young_Officers
+		clr_country_flag = STP_focus_active_STP_Feed_The_Festival_Police
+		clr_country_flag = STP_focus_active_STP_The_Last_Confession
+		clr_country_flag = STP_focus_active_STP_The_Hand_That_Still_Signs
+		clr_country_flag = STP_focus_active_STP_Imported_Freedom
+		clr_country_flag = STP_focus_active_STP_Cut_The_Silk_Leash
+		clr_country_flag = STP_focus_active_STP_Renew_The_Cultural_Mandate
+		clr_country_flag = STP_focus_active_STP_No_Mercenaries_In_Our_Mountains
+		clr_country_flag = STP_focus_active_STP_Sell_The_Highland_Concessions
+		clr_country_flag = STP_focus_active_STP_A_Name_On_The_Walls
+		clr_country_flag = STP_focus_active_STP_Erase_His_Name
+		clr_country_flag = STP_focus_active_STP_The_First_Witness
+		clr_country_flag = STP_focus_active_STP_Silence_The_First_Witness
+		clr_country_flag = STP_focus_active_STP_Lower_Market_Dossiers
+		clr_country_flag = STP_focus_active_STP_The_Port_Must_Smile
+		clr_country_flag = STP_focus_active_STP_Call_For_Shabrat
+		clr_country_flag = STP_focus_active_STP_Seal_The_Western_Wing
+		clr_country_flag = STP_focus_active_STP_The_People_Stop_Singing
+		clr_country_flag = STP_focus_active_STP_Drown_The_Rumours_In_Music
+		clr_country_flag = STP_focus_active_STP_Garrisons_Hesitate
+		clr_country_flag = STP_focus_active_STP_Garrisons_Swear_Loyalty
+
+		STP_set_crisis_phase = { value = 2 }
+		set_country_flag = STP_internal_outcome_pending
+	}
+}
+
+# Scheduled from the day-71 transition; it fires exactly on campaign day 140.
+country_event = {
+	id = stp_crisis.5
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag = STP
+		has_country_flag = STP_main_campaign_side
+		NOT = { has_country_flag = STP_ivanov_dead }
+		check_variable = {
+			var = STP_side_commitment
+			value = 0
+			compare = equals
+		}
+	}
+
+	immediate = {
+		country_event = { id = stp_crisis.6 }
+	}
+}
+
+# Mandatory fallback when no normal stage-2 commitment finished by day 140.
+country_event = {
+	id = stp_crisis.6
+	title = stp_crisis.6.t
+	desc = stp_crisis.6.d
+	is_triggered_only = yes
+
+	trigger = {
+		tag = STP
+		has_country_flag = STP_main_campaign_side
+		NOT = { has_country_flag = STP_ivanov_dead }
+		check_variable = {
+			var = STP_side_commitment
+			value = 0
+			compare = equals
+		}
+	}
+
+	option = {
+		name = stp_crisis.6.a
+		ai_chance = {
+			base = 50
+			modifier = { factor = 2 hedonism < 0.40 }
+			modifier = { factor = 2 NOT = { is_subject_of = NOD } }
+			modifier = { factor = 2 has_stability < 0.45 }
+			modifier = { factor = 2 num_divisions < 12 }
+		}
+		STP_commit_to_shabrat = yes
+		set_country_flag = STP_forced_commit_no_reward
+		complete_national_focus = STP_Show_Him_The_Truth
+		clr_country_flag = STP_forced_commit_no_reward
+		add_political_power = -50
+		STP_change_suspicion = { value = 10 }
+		set_country_flag = {
+			flag = STP_crisis_late_choice_lock
+			days = 35
+			value = 1
+		}
+	}
+
+	option = {
+		name = stp_crisis.6.b
+		ai_chance = {
+			base = 50
+			modifier = { factor = 2 hedonism > 0.40 }
+			modifier = { factor = 2 is_subject_of = NOD }
+			modifier = { factor = 2 has_stability > 0.45 }
+			modifier = { factor = 2 num_divisions > 11 }
+		}
+		STP_commit_to_party = yes
+		set_country_flag = STP_forced_commit_no_reward
+		complete_national_focus = STP_Govern_In_His_Name
+		clr_country_flag = STP_forced_commit_no_reward
+		add_political_power = -50
+		STP_change_readiness = { value = 10 }
+		set_country_flag = {
+			flag = STP_crisis_late_choice_lock
+			days = 35
+			value = 1
+		}
+	}
+}
+
+# The party apparatus fixes one security doctrine after Shabrat is chosen.
+country_event = {
+	id = stp_crisis.10
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		check_variable = {
+			var = STP_side_commitment
+			value = 1
+			compare = equals
+		}
+		check_variable = {
+			var = STP_security_posture
+			value = 0
+			compare = equals
+		}
+	}
+
+	immediate = {
+		random_list = {
+			20 = {
+				modifier = { factor = 2 hedonism > 0.40 }
+				modifier = { factor = 2 has_country_flag = STP_focus_street_observed }
+				modifier = { factor = 2 has_country_flag = STP_focus_palace_observed }
+				set_variable = { var = STP_security_posture value = 1 }
+			}
+			20 = {
+				modifier = { factor = 2 has_stability < 0.50 }
+				modifier = { factor = 2 has_country_flag = STP_focus_palace_observed }
+				modifier = { factor = 2 has_country_flag = STP_focus_mountains_open }
+				set_variable = { var = STP_security_posture value = 2 }
+			}
+			20 = {
+				modifier = {
+					factor = 2
+					has_equipment = { ADISCORD_squad_weapons_equipment > 1000 }
+				}
+				modifier = { factor = 2 has_country_flag = STP_focus_garrisons_observed }
+				modifier = { factor = 2 has_country_flag = STP_focus_market_open }
+				set_variable = { var = STP_security_posture value = 3 }
+			}
+			20 = {
+				modifier = {
+					factor = 2
+					has_equipment = { ADISCORD_squad_weapons_equipment > 1500 }
+				}
+				modifier = { factor = 2 has_country_flag = STP_focus_mountains_open }
+				modifier = { factor = 2 has_country_flag = STP_focus_street_observed }
+				set_variable = { var = STP_security_posture value = 4 }
+			}
+			20 = {
+				modifier = { factor = 2 is_subject_of = NOD }
+				modifier = { factor = 2 has_country_flag = STP_focus_nodrul_observed }
+				modifier = { factor = 2 has_country_flag = STP_focus_kefreyt_observed }
+				set_variable = { var = STP_security_posture value = 5 }
+			}
+		}
+	}
+}
+
+# The underground fixes one resistance doctrine after the party is chosen.
+country_event = {
+	id = stp_crisis.11
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		check_variable = {
+			var = STP_side_commitment
+			value = 2
+			compare = equals
+		}
+		check_variable = {
+			var = STP_resistance_posture
+			value = 0
+			compare = equals
+		}
+	}
+
+	immediate = {
+		random_list = {
+			25 = {
+				modifier = { factor = 3 has_country_flag = STP_focus_palace_observed }
+				set_variable = { var = STP_resistance_posture value = 1 }
+			}
+			25 = {
+				modifier = { factor = 3 has_country_flag = STP_focus_garrisons_observed }
+				modifier = {
+					factor = 2
+					check_variable = {
+						var = STP_resistance_escrow_infantry
+						value = 400
+						compare = greater_than_or_equals
+					}
+				}
+				set_variable = { var = STP_resistance_posture value = 2 }
+			}
+			25 = {
+				modifier = { factor = 2 has_country_flag = STP_focus_mountains_open }
+				modifier = { factor = 2 has_country_flag = STP_focus_street_observed }
+				set_variable = { var = STP_resistance_posture value = 3 }
+			}
+			25 = {
+				modifier = { factor = 3 has_country_flag = STP_focus_val_supply_open }
+				modifier = { factor = 2 has_country_flag = STP_focus_kefreyt_observed }
+				modifier = {
+					factor = 2
+					check_variable = {
+						var = STP_resistance_escrow_infantry
+						value = 800
+						compare = greater_than_or_equals
+					}
+				}
+				set_variable = { var = STP_resistance_posture value = 4 }
+			}
+		}
+	}
+}

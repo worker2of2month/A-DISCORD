@@ -44,14 +44,11 @@ focus_tree = {
 		x = 0
 		y = 0
 		cost = 5
+		available = {
+			is_completed_by_event = yes
+		}
 		available_if_capitulated = yes
 		cancelable = no
-		available = {
-			has_country_leader = {
-				character = STP_Petr_Ivanov
-				ruling_only = yes
-			}
-		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
 			country_event = { id = stp_lore.1 }
@@ -68,6 +65,9 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_Nectar_of_the_Gods }
+		available = {
+			is_completed_by_event = yes
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
 			country_event = { id = stp_lore.2 }
@@ -84,6 +84,9 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_The_Man_Who_Bought_The_Sky }
+		available = {
+			is_completed_by_event = yes
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
 			country_event = { id = stp_lore.3 }
@@ -100,6 +103,9 @@ focus_tree = {
 		y = 5
 		cost = 5
 		prerequisite = { focus = STP_When_The_Guarantee_Died }
+		available = {
+			is_completed_by_event = yes
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
 			country_event = { id = stp_lore.7 }
@@ -116,6 +122,9 @@ focus_tree = {
 		y = 5
 		cost = 5
 		prerequisite = { focus = STP_The_Dying_Feast }
+		available = {
+			is_completed_by_event = yes
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
 			country_event = { id = stp_lore.11 }
@@ -132,6 +141,9 @@ focus_tree = {
 		y = 2
 		cost = 5
 		prerequisite = { focus = STP_The_Doctors_Lie }
+		available = {
+			is_completed_by_event = yes
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
 		}
@@ -147,6 +159,9 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_The_Last_Signature }
+		available = {
+			is_completed_by_event = yes
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
 		}
@@ -162,6 +177,9 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_Cancel_The_Morning_Address }
+		available = {
+			is_completed_by_event = yes
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
 		}
@@ -177,6 +195,9 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_A_Glass_Raised_Too_High }
+		available = {
+			is_completed_by_event = yes
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
 			country_event = { id = stp_lore.12 }
@@ -196,10 +217,23 @@ focus_tree = {
 		x = 0
 		y = 1
 		cost = 5
-		prerequisite = { focus = STP_When_The_Guarantee_Died }
+		prerequisite = { focus = STP_Nectar_of_the_Gods }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Foreign_Guests_At_The_Banquet }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 1 compare = equals }
+				has_country_flag = STP_focus_active_STP_Foreign_Guests_At_The_Banquet
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
-			country_event = { id = stp_lore.4 }
+			clr_country_flag = STP_focus_active_STP_Foreign_Guests_At_The_Banquet
+			set_country_flag = STP_focus_nodrul_observed
 		}
 	}
 
@@ -217,9 +251,22 @@ focus_tree = {
 		y = 0
 		cost = 5
 		prerequisite = { focus = STP_Foreign_Guests_At_The_Banquet }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_The_Valirian_Advisers }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 2 compare = equals }
+				has_country_flag = STP_focus_active_STP_The_Valirian_Advisers
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
-			country_event = { id = stp_lore.5 }
+			clr_country_flag = STP_focus_active_STP_The_Valirian_Advisers
+			set_country_flag = STP_focus_nodrul_advisers_open
 		}
 	}
 
@@ -233,8 +280,23 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_The_Valirian_Advisers }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_The_Party_Was_Not_Born_Here }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 1 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
+				has_country_flag = STP_focus_active_STP_The_Party_Was_Not_Born_Here
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_The_Party_Was_Not_Born_Here
+			set_country_flag = STP_focus_nodrul_disinformation_open
 		}
 	}
 
@@ -248,8 +310,23 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_The_Party_Was_Not_Born_Here }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Imported_Freedom }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 1 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
+				has_country_flag = STP_focus_active_STP_Imported_Freedom
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Imported_Freedom
+			set_country_flag = STP_focus_nodrul_mandate_exposed
 		}
 	}
 
@@ -264,8 +341,23 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = STP_Imported_Freedom }
 		mutually_exclusive = { focus = STP_Renew_The_Cultural_Mandate }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Cut_The_Silk_Leash }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 1 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
+				has_country_flag = STP_focus_active_STP_Cut_The_Silk_Leash
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Cut_The_Silk_Leash
+			set_country_flag = STP_focus_break_mandate_ready
 		}
 	}
 
@@ -278,10 +370,25 @@ focus_tree = {
 		x = 2
 		y = 1
 		cost = 5
-		prerequisite = { focus = STP_Imported_Freedom }
+		prerequisite = { focus = STP_The_Valirian_Advisers }
 		mutually_exclusive = { focus = STP_Cut_The_Silk_Leash }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Renew_The_Cultural_Mandate }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 2 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
+				has_country_flag = STP_focus_active_STP_Renew_The_Cultural_Mandate
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Renew_The_Cultural_Mandate
+			set_country_flag = STP_focus_renew_mandate_ready
 		}
 	}
 
@@ -299,9 +406,22 @@ focus_tree = {
 		y = 0
 		cost = 5
 		prerequisite = { focus = STP_Foreign_Guests_At_The_Banquet }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Kefreite_Security_Offer }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 1 compare = equals }
+				has_country_flag = STP_focus_active_STP_Kefreite_Security_Offer
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
-			country_event = { id = stp_lore.6 }
+			clr_country_flag = STP_focus_active_STP_Kefreite_Security_Offer
+			set_country_flag = STP_focus_kefreyt_observed
 		}
 	}
 
@@ -315,8 +435,22 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_Kefreite_Security_Offer }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Contractors_In_The_Passes }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 2 compare = equals }
+				has_country_flag = STP_focus_active_STP_Contractors_In_The_Passes
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Contractors_In_The_Passes
+			set_country_flag = STP_focus_val_supply_open
 		}
 	}
 
@@ -330,8 +464,22 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_Contractors_In_The_Passes }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_The_Desert_Watches_The_Snow }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
+				has_country_flag = STP_focus_active_STP_The_Desert_Watches_The_Snow
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_The_Desert_Watches_The_Snow
+			set_country_flag = STP_focus_val_red_line_known
 		}
 	}
 
@@ -346,8 +494,23 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = STP_The_Desert_Watches_The_Snow }
 		mutually_exclusive = { focus = STP_Sell_The_Highland_Concessions }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_No_Mercenaries_In_Our_Mountains }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 2 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
+				has_country_flag = STP_focus_active_STP_No_Mercenaries_In_Our_Mountains
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_No_Mercenaries_In_Our_Mountains
+			set_country_flag = STP_focus_val_channel_countered
 		}
 	}
 
@@ -362,8 +525,23 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = STP_The_Desert_Watches_The_Snow }
 		mutually_exclusive = { focus = STP_No_Mercenaries_In_Our_Mountains }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Sell_The_Highland_Concessions }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 1 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
+				has_country_flag = STP_focus_active_STP_Sell_The_Highland_Concessions
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Sell_The_Highland_Concessions
+			set_country_flag = STP_focus_val_concession_ready
 		}
 	}
 
@@ -380,10 +558,23 @@ focus_tree = {
 		x = 0
 		y = 1
 		cost = 5
-		prerequisite = { focus = STP_The_Dying_Feast }
+		prerequisite = { focus = STP_Kefreite_Security_Offer }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Rumours_In_The_Highlands }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 2 compare = equals }
+				has_country_flag = STP_focus_active_STP_Rumours_In_The_Highlands
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
-			country_event = { id = stp_lore.8 }
+			clr_country_flag = STP_focus_active_STP_Rumours_In_The_Highlands
+			set_country_flag = STP_focus_mountains_open
 		}
 	}
 
@@ -398,8 +589,23 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = STP_Rumours_In_The_Highlands }
 		mutually_exclusive = { focus = STP_Hunt_The_Mountain_Cells }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_The_Mountain_Printing_House }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 1 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
+				has_country_flag = STP_focus_active_STP_The_Mountain_Printing_House
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_The_Mountain_Printing_House
+			set_country_flag = STP_focus_mountain_caches_improved
 		}
 	}
 
@@ -414,8 +620,23 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = STP_Rumours_In_The_Highlands }
 		mutually_exclusive = { focus = STP_The_Mountain_Printing_House }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Hunt_The_Mountain_Cells }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 2 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
+				has_country_flag = STP_focus_active_STP_Hunt_The_Mountain_Cells
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Hunt_The_Mountain_Cells
+			set_country_flag = STP_focus_mountain_raids_improved
 		}
 	}
 
@@ -429,8 +650,23 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_The_Mountain_Printing_House }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_A_Name_On_The_Walls }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 1 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
+				has_country_flag = STP_focus_active_STP_A_Name_On_The_Walls
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_A_Name_On_The_Walls
+			set_country_flag = STP_focus_mountain_final_open
 		}
 	}
 
@@ -444,8 +680,23 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_Hunt_The_Mountain_Cells }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Erase_His_Name }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 2 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
+				has_country_flag = STP_focus_active_STP_Erase_His_Name
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Erase_His_Name
+			set_country_flag = STP_focus_mountain_purge_open
 		}
 	}
 
@@ -462,10 +713,23 @@ focus_tree = {
 		x = -7
 		y = 2
 		cost = 5
-		prerequisite = { focus = STP_The_Dying_Feast }
+		prerequisite = { focus = STP_The_City_Still_Dances }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_The_Lower_Market }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 2 compare = equals }
+				has_country_flag = STP_focus_active_STP_The_Lower_Market
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
-			country_event = { id = stp_lore.9 }
+			clr_country_flag = STP_focus_active_STP_The_Lower_Market
+			set_country_flag = STP_focus_market_open
 		}
 	}
 
@@ -480,8 +744,23 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = STP_The_Lower_Market }
 		mutually_exclusive = { focus = STP_Burn_The_Client_Archives }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Steal_The_Black_Ledger }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 1 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
+				has_country_flag = STP_focus_active_STP_Steal_The_Black_Ledger
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Steal_The_Black_Ledger
+			set_country_flag = STP_focus_black_ledger_open
 		}
 	}
 
@@ -496,8 +775,23 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = STP_The_Lower_Market }
 		mutually_exclusive = { focus = STP_Steal_The_Black_Ledger }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Burn_The_Client_Archives }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 2 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
+				has_country_flag = STP_focus_active_STP_Burn_The_Client_Archives
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Burn_The_Client_Archives
+			set_country_flag = STP_focus_archive_burning_open
 		}
 	}
 
@@ -511,8 +805,23 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_Steal_The_Black_Ledger }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_The_First_Witness }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 1 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
+				has_country_flag = STP_focus_active_STP_The_First_Witness
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_The_First_Witness
+			set_country_flag = STP_focus_first_witness_open
 		}
 	}
 
@@ -526,8 +835,23 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_Burn_The_Client_Archives }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Silence_The_First_Witness }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 2 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
+				has_country_flag = STP_focus_active_STP_Silence_The_First_Witness
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Silence_The_First_Witness
+			set_country_flag = STP_focus_silence_witness_open
 		}
 	}
 
@@ -541,8 +865,23 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_The_First_Witness }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Lower_Market_Dossiers }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 1 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
+				has_country_flag = STP_focus_active_STP_Lower_Market_Dossiers
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Lower_Market_Dossiers
+			set_country_flag = STP_focus_dossiers_protected
 		}
 	}
 
@@ -556,8 +895,23 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_Silence_The_First_Witness }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_The_Port_Must_Smile }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 2 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
+				has_country_flag = STP_focus_active_STP_The_Port_Must_Smile
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_The_Port_Must_Smile
+			set_country_flag = STP_focus_market_censorship_ready
 		}
 	}
 
@@ -574,10 +928,23 @@ focus_tree = {
 		x = 7
 		y = 2
 		cost = 5
-		prerequisite = { focus = STP_The_Dying_Feast }
+		prerequisite = { focus = STP_Nectar_of_the_Gods }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_The_Old_Man_On_The_Balcony }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 1 compare = equals }
+				has_country_flag = STP_focus_active_STP_The_Old_Man_On_The_Balcony
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
-			country_event = { id = stp_lore.10 }
+			clr_country_flag = STP_focus_active_STP_The_Old_Man_On_The_Balcony
+			set_country_flag = STP_focus_palace_observed
 		}
 	}
 
@@ -592,8 +959,27 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = STP_The_Old_Man_On_The_Balcony }
 		mutually_exclusive = { focus = STP_Govern_In_His_Name }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Show_Him_The_Truth }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 2 compare = equals }
+				has_country_flag = STP_focus_active_STP_Show_Him_The_Truth
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Show_Him_The_Truth
+			if = {
+				limit = {
+					NOT = { has_country_flag = STP_forced_commit_no_reward }
+				}
+				STP_commit_to_shabrat = yes
+			}
 		}
 	}
 
@@ -608,8 +994,27 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = STP_The_Old_Man_On_The_Balcony }
 		mutually_exclusive = { focus = STP_Show_Him_The_Truth }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Govern_In_His_Name }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 2 compare = equals }
+				has_country_flag = STP_focus_active_STP_Govern_In_His_Name
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Govern_In_His_Name
+			if = {
+				limit = {
+					NOT = { has_country_flag = STP_forced_commit_no_reward }
+				}
+				STP_commit_to_party = yes
+			}
 		}
 	}
 
@@ -623,8 +1028,23 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_Show_Him_The_Truth }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_The_Last_Confession }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 1 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
+				has_country_flag = STP_focus_active_STP_The_Last_Confession
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_The_Last_Confession
+			set_country_flag = STP_focus_palace_channel_improved
 		}
 	}
 
@@ -638,8 +1058,23 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_Govern_In_His_Name }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_The_Hand_That_Still_Signs }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 2 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
+				has_country_flag = STP_focus_active_STP_The_Hand_That_Still_Signs
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_The_Hand_That_Still_Signs
+			set_country_flag = STP_focus_seal_palace_improved
 		}
 	}
 
@@ -653,8 +1088,23 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_The_Last_Confession }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Call_For_Shabrat }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 1 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
+				has_country_flag = STP_focus_active_STP_Call_For_Shabrat
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Call_For_Shabrat
+			set_country_flag = STP_focus_final_palace_move_open
 		}
 	}
 
@@ -668,8 +1118,23 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_The_Hand_That_Still_Signs }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Seal_The_Western_Wing }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 2 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
+				has_country_flag = STP_focus_active_STP_Seal_The_Western_Wing
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Seal_The_Western_Wing
+			set_country_flag = STP_focus_final_palace_lock_open
 		}
 	}
 
@@ -686,9 +1151,23 @@ focus_tree = {
 		x = -6
 		y = 2
 		cost = 5
-		prerequisite = { focus = STP_The_Doctors_Lie }
+		prerequisite = { focus = STP_Nectar_of_the_Gods }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_The_City_Still_Dances }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 1 compare = equals }
+				has_country_flag = STP_focus_active_STP_The_City_Still_Dances
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_The_City_Still_Dances
+			set_country_flag = STP_focus_street_observed
 		}
 	}
 
@@ -703,8 +1182,23 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = STP_The_City_Still_Dances }
 		mutually_exclusive = { focus = STP_One_Last_National_Festival }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_The_Silent_Mountain_March }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 1 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
+				has_country_flag = STP_focus_active_STP_The_Silent_Mountain_March
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_The_Silent_Mountain_March
+			set_country_flag = STP_focus_silent_march_open
 		}
 	}
 
@@ -719,8 +1213,23 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = STP_The_City_Still_Dances }
 		mutually_exclusive = { focus = STP_The_Silent_Mountain_March }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_One_Last_National_Festival }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 2 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
+				has_country_flag = STP_focus_active_STP_One_Last_National_Festival
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_One_Last_National_Festival
+			set_country_flag = STP_focus_festival_police_open
 		}
 	}
 
@@ -734,8 +1243,23 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_The_Silent_Mountain_March }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_The_People_Stop_Singing }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 1 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
+				has_country_flag = STP_focus_active_STP_The_People_Stop_Singing
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_The_People_Stop_Singing
+			set_country_flag = STP_focus_final_street_move_open
 		}
 	}
 
@@ -749,8 +1273,23 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_One_Last_National_Festival }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Drown_The_Rumours_In_Music }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 2 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
+				has_country_flag = STP_focus_active_STP_Drown_The_Rumours_In_Music
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Drown_The_Rumours_In_Music
+			set_country_flag = STP_focus_final_street_lock_open
 		}
 	}
 
@@ -767,9 +1306,23 @@ focus_tree = {
 		x = 6
 		y = 2
 		cost = 5
-		prerequisite = { focus = STP_The_Doctors_Lie }
+		prerequisite = { focus = STP_Nectar_of_the_Gods }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Count_The_Loyalists }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 1 compare = equals }
+				has_country_flag = STP_focus_active_STP_Count_The_Loyalists
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Count_The_Loyalists
+			set_country_flag = STP_focus_garrisons_observed
 		}
 	}
 
@@ -784,8 +1337,23 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = STP_Count_The_Loyalists }
 		mutually_exclusive = { focus = STP_Feed_The_Festival_Police }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Turn_The_Young_Officers }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 1 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
+				has_country_flag = STP_focus_active_STP_Turn_The_Young_Officers
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Turn_The_Young_Officers
+			set_country_flag = STP_focus_young_officers_open
 		}
 	}
 
@@ -800,8 +1368,23 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = STP_Count_The_Loyalists }
 		mutually_exclusive = { focus = STP_Turn_The_Young_Officers }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Feed_The_Festival_Police }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 2 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
+				has_country_flag = STP_focus_active_STP_Feed_The_Festival_Police
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Feed_The_Festival_Police
+			set_country_flag = STP_focus_garrison_rotation_open
 		}
 	}
 
@@ -815,8 +1398,23 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_Turn_The_Young_Officers }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Garrisons_Hesitate }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 1 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
+				has_country_flag = STP_focus_active_STP_Garrisons_Hesitate
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Garrisons_Hesitate
+			set_country_flag = STP_focus_final_garrison_move_open
 		}
 	}
 
@@ -830,8 +1428,23 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = STP_Feed_The_Festival_Police }
+		cancelable = no
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		select_effect = { set_country_flag = STP_focus_active_STP_Garrisons_Swear_Loyalty }
+		available = {
+			NOT = { has_country_flag = STP_ivanov_dead }
+			NOT = { has_country_flag = STP_crisis_late_choice_lock }
+			check_variable = { var = STP_side_commitment value = 2 compare = equals }
+			OR = {
+				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
+				has_country_flag = STP_focus_active_STP_Garrisons_Swear_Loyalty
+			}
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			clr_country_flag = STP_focus_active_STP_Garrisons_Swear_Loyalty
+			set_country_flag = STP_focus_final_garrison_lock_open
 		}
 	}
 

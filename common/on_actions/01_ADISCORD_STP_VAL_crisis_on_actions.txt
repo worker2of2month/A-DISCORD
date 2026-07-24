@@ -7,6 +7,17 @@ on_actions = {
 
 				if = {
 					limit = {
+						has_country_flag = STP_main_campaign_side
+						NOT = { has_country_flag = STP_health_calendar_started }
+						NOT = { has_country_flag = STP_ivanov_dead }
+					}
+					set_country_flag = STP_health_calendar_started
+					complete_national_focus = STP_Nectar_of_the_Gods
+					activate_mission = STP_health_stage_1_to_2
+				}
+
+				if = {
+					limit = {
 						has_power_balance = { id = STP_inner_party_opinions_bop }
 					}
 					remove_power_balance = { id = STP_inner_party_opinions_bop }
