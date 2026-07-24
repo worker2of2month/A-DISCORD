@@ -1,0 +1,20 @@
+state={
+	id=198
+	name=STATE_198
+	provinces={
+		513 741 3183 4185 6510 6764 8323 8570 9104 9193 9466 11282 11411 11659 12232 12564 12584
+	}
+	manpower=75000
+	state_category=rural
+	buildings_max_level_factor=1
+	local_supplies=0
+	history={
+		owner=SOL
+		buildings={
+			infrastructure=1
+			industrial_complex=1
+		}
+		add_core_of=SOL
+		victory_points={ 9104 3 }
+	}
+}

@@ -1,0 +1,20 @@
+state={
+	id=194
+	name=STATE_194
+	provinces={
+		773 1128 1375 1611 1685 1888 1906 1968 2192 2202 2339 2363 2571 2740 3757 3972 4381 4415 5080 5170 5469 5689 6461 6631 6921 7869 7989 8238 8300 8679 8869 8881 8926 9269 9453 9492 9509 9698 9725 9908 9935 10250 10345 11082 11505 12023 12103 12302 12441
+	}
+	manpower=42500
+	state_category=rural
+	buildings_max_level_factor=1
+	local_supplies=0
+	history={
+		owner=PWR
+		buildings={
+			infrastructure=1
+			arms_factory=1
+		}
+		add_core_of=PWR
+		victory_points={ 2339 3 }
+	}
+}

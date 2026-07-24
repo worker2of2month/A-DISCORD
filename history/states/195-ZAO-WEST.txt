@@ -1,0 +1,19 @@
+state={
+	id=195
+	name=STATE_195
+	provinces={
+		647 806 1100 1111 2896 3534 4528 4634 7090 7230 8032 9075 9149 9158 9727 10606 11635 11717 12025 12995
+	}
+	manpower=43333
+	state_category=rural
+	buildings_max_level_factor=1
+	local_supplies=0
+	history={
+		owner=ZAO
+		buildings={
+			infrastructure=1
+		}
+		add_core_of=ZAO
+		victory_points={ 8032 3 }
+	}
+}

@@ -1,0 +1,19 @@
+state={
+	id=196
+	name=STATE_196
+	provinces={
+		236 1569 1711 3069 3151 3928 4224 4331 5207 5409 6253 6799 7129 7341 7443 7827 7934 8051 10171 10864
+	}
+	manpower=43333
+	state_category=rural
+	buildings_max_level_factor=1
+	local_supplies=0
+	history={
+		owner=ZAO
+		buildings={
+			infrastructure=1
+		}
+		add_core_of=ZAO
+		victory_points={ 7129 3 }
+	}
+}
