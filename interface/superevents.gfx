@@ -21,6 +21,26 @@ spriteTypes = {
 		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_civilwar.png"
 	}
 	spriteType = {
+		name = "GFX_superevent_vorkerland_dirty_opening"
+		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_civilwar.png"
+	}
+	spriteType = {
+		name = "GFX_superevent_vorkerland_worker_victory"
+		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_civilwar.png"
+	}
+	spriteType = {
+		name = "GFX_superevent_vorkerland_vlad_victory"
+		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_civilwar.png"
+	}
+	spriteType = {
+		name = "GFX_superevent_vorkerland_dorian_victory"
+		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_civilwar_doctor_won.png"
+	}
+	spriteType = {
+		name = "GFX_superevent_vorkerland_fragmented"
+		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_civilwar.png"
+	}
+	spriteType = {
 		name = "GFX_superevent_stelander_empire"
 		textureFile = "gfx/interface/superevents/STP/superevent_stelander_empire.png"
 	}

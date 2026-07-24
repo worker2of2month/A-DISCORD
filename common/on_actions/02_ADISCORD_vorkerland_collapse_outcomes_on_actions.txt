@@ -1,0 +1,24 @@
+on_actions = {
+	on_weekly = {
+		effect = {
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+				}
+				if = {
+					limit = { tag = WRK }
+					ADISCORD_vorkerland_update_worker_victory_timer = yes
+				}
+				else_if = {
+					limit = { tag = VAD }
+					ADISCORD_vorkerland_update_vlad_victory_timer = yes
+				}
+				else_if = {
+					limit = { tag = TVA }
+					ADISCORD_vorkerland_update_dorian_victory_timer = yes
+				}
+			}
+		}
+	}
+}

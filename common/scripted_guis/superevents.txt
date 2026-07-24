@@ -29,4 +29,39 @@ scripted_gui = {
 			}
 	    }
 	}
+
+	superevent_vorkerland_dirty_opening = {
+		window_name = "superevent_vorkerland_dirty_opening"
+		context_type = player_context
+		visible = { has_country_flag = superevent_vorkerland_dirty_opening }
+		effects = { superevents_button_click = { clr_country_flag = superevent_vorkerland_dirty_opening } }
+	}
+
+	superevent_vorkerland_worker_victory = {
+		window_name = "superevent_vorkerland_worker_victory"
+		context_type = player_context
+		visible = { has_country_flag = superevent_vorkerland_worker_victory }
+		effects = { superevents_button_click = { clr_country_flag = superevent_vorkerland_worker_victory } }
+	}
+
+	superevent_vorkerland_vlad_victory = {
+		window_name = "superevent_vorkerland_vlad_victory"
+		context_type = player_context
+		visible = { has_country_flag = superevent_vorkerland_vlad_victory }
+		effects = { superevents_button_click = { clr_country_flag = superevent_vorkerland_vlad_victory } }
+	}
+
+	superevent_vorkerland_dorian_victory = {
+		window_name = "superevent_vorkerland_dorian_victory"
+		context_type = player_context
+		visible = { has_country_flag = superevent_vorkerland_dorian_victory }
+		effects = { superevents_button_click = { clr_country_flag = superevent_vorkerland_dorian_victory } }
+	}
+
+	superevent_vorkerland_fragmented = {
+		window_name = "superevent_vorkerland_fragmented"
+		context_type = player_context
+		visible = { has_country_flag = superevent_vorkerland_fragmented }
+		effects = { superevents_button_click = { clr_country_flag = superevent_vorkerland_fragmented } }
+	}
 }

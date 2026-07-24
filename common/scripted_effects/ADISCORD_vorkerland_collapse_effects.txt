@@ -209,3 +209,67 @@ ADISCORD_vorkerland_apply_initial_map = {
 	ADISCORD_vorkerland_setup_sra = yes
 	ADISCORD_vorkerland_setup_zta = yes
 }
+
+ADISCORD_vorkerland_update_ai_phase = {
+	clr_country_flag = ADISCORD_vorkerland_phase_consolidate
+	clr_country_flag = ADISCORD_vorkerland_phase_regional
+	clr_country_flag = ADISCORD_vorkerland_phase_endgame
+	clr_country_flag = ADISCORD_vorkerland_phase_finished
+	if = {
+		limit = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		set_country_flag = ADISCORD_vorkerland_phase_finished
+	}
+	else_if = {
+		limit = { has_global_flag = ADISCORD_vorkerland_ai_consolidation_window }
+		set_country_flag = ADISCORD_vorkerland_phase_consolidate
+	}
+	else_if = {
+		limit = { has_global_flag = ADISCORD_vorkerland_ai_regional_window }
+		set_country_flag = ADISCORD_vorkerland_phase_regional
+	}
+	else = {
+		set_country_flag = ADISCORD_vorkerland_phase_endgame
+	}
+}
+
+ADISCORD_vorkerland_update_worker_victory_timer = {
+	if = {
+		limit = { ADISCORD_vorkerland_worker_victory_candidate = yes }
+		add_to_variable = { var = ADISCORD_vorkerland_victory_timer value = 7 }
+		if = {
+			limit = { check_variable = { var = ADISCORD_vorkerland_victory_timer value = 98 compare = greater_than_or_equals } }
+			country_event = { id = ADISCORD_vorkerland_collapse.20 hours = 1 }
+		}
+	}
+	else = {
+		set_variable = { var = ADISCORD_vorkerland_victory_timer value = 0 }
+	}
+}
+
+ADISCORD_vorkerland_update_vlad_victory_timer = {
+	if = {
+		limit = { ADISCORD_vorkerland_vlad_victory_candidate = yes }
+		add_to_variable = { var = ADISCORD_vorkerland_victory_timer value = 7 }
+		if = {
+			limit = { check_variable = { var = ADISCORD_vorkerland_victory_timer value = 98 compare = greater_than_or_equals } }
+			country_event = { id = ADISCORD_vorkerland_collapse.21 hours = 1 }
+		}
+	}
+	else = {
+		set_variable = { var = ADISCORD_vorkerland_victory_timer value = 0 }
+	}
+}
+
+ADISCORD_vorkerland_update_dorian_victory_timer = {
+	if = {
+		limit = { ADISCORD_vorkerland_dorian_victory_candidate = yes }
+		add_to_variable = { var = ADISCORD_vorkerland_victory_timer value = 7 }
+		if = {
+			limit = { check_variable = { var = ADISCORD_vorkerland_victory_timer value = 98 compare = greater_than_or_equals } }
+			country_event = { id = ADISCORD_vorkerland_collapse.22 hours = 1 }
+		}
+	}
+	else = {
+		set_variable = { var = ADISCORD_vorkerland_victory_timer value = 0 }
+	}
+}

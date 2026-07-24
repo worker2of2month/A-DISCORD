@@ -1,0 +1,749 @@
+ADISCORD_vorkerland_combat_consolidate = {
+	allowed = {
+		OR = {
+			tag = WRK
+			tag = TVA
+			tag = VAD
+			tag = EYR
+			tag = EGC
+			tag = ZAO
+			tag = WPA
+			tag = WPS
+			tag = PWR
+			tag = PSD
+			tag = VLA
+			tag = EBA
+			tag = ROM
+			tag = DVA
+			tag = SOL
+			tag = SRA
+			tag = TRU
+			tag = ZTA
+		}
+	}
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		has_country_flag = ADISCORD_vorkerland_phase_consolidate
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = ai_wanted_divisions_factor value = 10 }
+	ai_strategy = { type = equipment_production_factor id = infantry value = 35 }
+	ai_strategy = { type = equipment_production_factor id = support value = 10 }
+	ai_strategy = { type = force_concentration_factor value = -5 }
+}
+
+ADISCORD_vorkerland_combat_regional = {
+	allowed = {
+		OR = {
+			tag = WRK
+			tag = TVA
+			tag = VAD
+			tag = EYR
+			tag = EGC
+			tag = ZAO
+			tag = WPA
+			tag = WPS
+			tag = PWR
+			tag = PSD
+			tag = VLA
+			tag = EBA
+			tag = ROM
+			tag = DVA
+			tag = SOL
+			tag = SRA
+			tag = TRU
+			tag = ZTA
+		}
+	}
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		has_country_flag = ADISCORD_vorkerland_phase_regional
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = ai_wanted_divisions_factor value = 20 }
+	ai_strategy = { type = equipment_production_factor id = infantry value = 40 }
+	ai_strategy = { type = equipment_production_factor id = support value = 15 }
+	ai_strategy = { type = force_concentration_factor value = 10 }
+}
+
+ADISCORD_vorkerland_combat_endgame = {
+	allowed = {
+		OR = {
+			tag = WRK
+			tag = TVA
+			tag = VAD
+			tag = EYR
+			tag = EGC
+			tag = ZAO
+			tag = WPA
+			tag = WPS
+			tag = PWR
+			tag = PSD
+			tag = VLA
+			tag = EBA
+			tag = ROM
+			tag = DVA
+			tag = SOL
+			tag = SRA
+			tag = TRU
+			tag = ZTA
+		}
+	}
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		has_country_flag = ADISCORD_vorkerland_phase_endgame
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = ai_wanted_divisions_factor value = 30 }
+	ai_strategy = { type = equipment_production_factor id = infantry value = 45 }
+	ai_strategy = { type = equipment_production_factor id = support value = 20 }
+	ai_strategy = { type = force_concentration_factor value = 25 }
+}
+
+ADISCORD_vorkerland_sla_dirty_defense = {
+	allowed = { tag = SLA }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = equipment_production_factor id = infantry value = 45 }
+	ai_strategy = { type = equipment_production_factor id = support value = 10 }
+	ai_strategy = { type = ai_wanted_divisions_factor value = 10 }
+}
+
+ADISCORD_vorkerland_rza_dirty_defense = {
+	allowed = { tag = RZA }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = equipment_production_factor id = infantry value = 45 }
+	ai_strategy = { type = equipment_production_factor id = support value = 10 }
+	ai_strategy = { type = ai_wanted_divisions_factor value = 10 }
+}
+
+ADISCORD_vorkerland_mlr_dirty_defense = {
+	allowed = { tag = MLR }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = equipment_production_factor id = infantry value = 45 }
+	ai_strategy = { type = equipment_production_factor id = support value = 10 }
+	ai_strategy = { type = ai_wanted_divisions_factor value = 10 }
+}
+
+ADISCORD_vorkerland_ert_dirty_defense = {
+	allowed = { tag = ERT }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = equipment_production_factor id = infantry value = 45 }
+	ai_strategy = { type = equipment_production_factor id = support value = 10 }
+	ai_strategy = { type = ai_wanted_divisions_factor value = 10 }
+}
+
+ADISCORD_vorkerland_irt_dirty_defense = {
+	allowed = { tag = IRT }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = equipment_production_factor id = infantry value = 45 }
+	ai_strategy = { type = equipment_production_factor id = support value = 10 }
+	ai_strategy = { type = ai_wanted_divisions_factor value = 10 }
+}
+
+ADISCORD_vorkerland_sca_dirty_defense = {
+	allowed = { tag = SCA }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = equipment_production_factor id = infantry value = 45 }
+	ai_strategy = { type = equipment_production_factor id = support value = 10 }
+	ai_strategy = { type = ai_wanted_divisions_factor value = 10 }
+}
+
+# Front blocks are target-guarded and never create wars on their own.
+ADISCORD_vorkerland_front_wrk_tva = {
+	allowed = { tag = WRK }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = TVA
+		has_war_with = TVA
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = TVA ratio = 0.55 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_wrk_vad = {
+	allowed = { tag = WRK }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = VAD
+		has_war_with = VAD
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = VAD ratio = 0.45 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_tva_wrk = {
+	allowed = { tag = TVA }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = WRK
+		has_war_with = WRK
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = WRK ratio = 0.55 priority = 105 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_tva_vad = {
+	allowed = { tag = TVA }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = VAD
+		has_war_with = VAD
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = VAD ratio = 0.45 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_vad_wrk = {
+	allowed = { tag = VAD }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = WRK
+		has_war_with = WRK
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = WRK ratio = 0.35 priority = 110 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_vad_tva = {
+	allowed = { tag = VAD }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = TVA
+		has_war_with = TVA
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = TVA ratio = 0.25 priority = 105 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_vad_eyr = {
+	allowed = { tag = VAD }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = EYR
+		has_war_with = EYR
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = EYR ratio = 0.20 priority = 95 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_vad_egc = {
+	allowed = { tag = VAD }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = EGC
+		has_war_with = EGC
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = EGC ratio = 0.20 priority = 95 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_eyr_vad = {
+	allowed = { tag = EYR }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = VAD
+		has_war_with = VAD
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = VAD ratio = 0.55 priority = 105 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_eyr_egc = {
+	allowed = { tag = EYR }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = EGC
+		has_war_with = EGC
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = EGC ratio = 0.45 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_egc_vad = {
+	allowed = { tag = EGC }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = VAD
+		has_war_with = VAD
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = VAD ratio = 0.55 priority = 105 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_egc_eyr = {
+	allowed = { tag = EGC }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = EYR
+		has_war_with = EYR
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = EYR ratio = 0.45 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_zao_wpa = {
+	allowed = { tag = ZAO }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = WPA
+		has_war_with = WPA
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = WPA ratio = 0.50 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_zao_wps = {
+	allowed = { tag = ZAO }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = WPS
+		has_war_with = WPS
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = WPS ratio = 0.50 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_wpa_zao = {
+	allowed = { tag = WPA }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = ZAO
+		has_war_with = ZAO
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = ZAO ratio = 0.50 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_wpa_wps = {
+	allowed = { tag = WPA }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = WPS
+		has_war_with = WPS
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = WPS ratio = 0.50 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_wps_zao = {
+	allowed = { tag = WPS }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = ZAO
+		has_war_with = ZAO
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = ZAO ratio = 0.50 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_wps_wpa = {
+	allowed = { tag = WPS }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = WPA
+		has_war_with = WPA
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = WPA ratio = 0.50 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_pwr_psd = {
+	allowed = { tag = PWR }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = PSD
+		has_war_with = PSD
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = PSD ratio = 1.00 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_psd_pwr = {
+	allowed = { tag = PSD }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = PWR
+		has_war_with = PWR
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = PWR ratio = 1.00 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_vla_eba = {
+	allowed = { tag = VLA }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = EBA
+		has_war_with = EBA
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = EBA ratio = 1.00 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_eba_vla = {
+	allowed = { tag = EBA }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = VLA
+		has_war_with = VLA
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = VLA ratio = 1.00 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_rom_dva = {
+	allowed = { tag = ROM }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = DVA
+		has_war_with = DVA
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = DVA ratio = 1.00 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_dva_rom = {
+	allowed = { tag = DVA }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = ROM
+		has_war_with = ROM
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = ROM ratio = 1.00 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_sol_sra = {
+	allowed = { tag = SOL }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = SRA
+		has_war_with = SRA
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = SRA ratio = 1.00 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_sra_sol = {
+	allowed = { tag = SRA }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = SOL
+		has_war_with = SOL
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = SOL ratio = 1.00 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_tru_zta = {
+	allowed = { tag = TRU }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = ZTA
+		has_war_with = ZTA
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = ZTA ratio = 1.00 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+ADISCORD_vorkerland_front_zta_tru = {
+	allowed = { tag = ZTA }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = TRU
+		has_war_with = TRU
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = TRU ratio = 1.00 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+}
+
+# The main claimants become more decisive only when already fighting a weaker neighbor.
+ADISCORD_vorkerland_wrk_press_tva = {
+	allowed = { tag = WRK }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = TVA
+		has_war_with = TVA
+		fighting_army_strength_ratio = { tag = TVA ratio > 1.15 }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = consider_weak id = TVA value = 75 }
+	ai_strategy = { type = conquer id = TVA value = 100 }
+}
+
+ADISCORD_vorkerland_wrk_press_vad = {
+	allowed = { tag = WRK }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = VAD
+		has_war_with = VAD
+		fighting_army_strength_ratio = { tag = VAD ratio > 1.15 }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = consider_weak id = VAD value = 75 }
+	ai_strategy = { type = conquer id = VAD value = 100 }
+}
+
+ADISCORD_vorkerland_tva_press_wrk = {
+	allowed = { tag = TVA }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = WRK
+		has_war_with = WRK
+		fighting_army_strength_ratio = { tag = WRK ratio > 1.15 }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = consider_weak id = WRK value = 75 }
+	ai_strategy = { type = conquer id = WRK value = 100 }
+}
+
+ADISCORD_vorkerland_tva_press_vad = {
+	allowed = { tag = TVA }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = VAD
+		has_war_with = VAD
+		fighting_army_strength_ratio = { tag = VAD ratio > 1.15 }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = consider_weak id = VAD value = 75 }
+	ai_strategy = { type = conquer id = VAD value = 100 }
+}
+
+ADISCORD_vorkerland_vad_press_wrk = {
+	allowed = { tag = VAD }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = WRK
+		has_war_with = WRK
+		fighting_army_strength_ratio = { tag = WRK ratio > 1.10 }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = consider_weak id = WRK value = 100 }
+	ai_strategy = { type = conquer id = WRK value = 125 }
+}
+
+ADISCORD_vorkerland_vad_press_tva = {
+	allowed = { tag = VAD }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+		country_exists = TVA
+		has_war_with = TVA
+		fighting_army_strength_ratio = { tag = TVA ratio > 1.10 }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = consider_weak id = TVA value = 100 }
+	ai_strategy = { type = conquer id = TVA value = 125 }
+}

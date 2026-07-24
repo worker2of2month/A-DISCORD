@@ -5,4 +5,24 @@
 
   superevent_stelander_empire_title: "Провозглашение стеландского имперского союза!"
   superevent_stelander_empire_quote: "Когда у человека не остаётся ничего, чем можно гордиться, он начинает гордиться своей этнической принадлежностью. \n\n- Артур Шопенгауэр "
-  superevent_stelander_empire_comment: "Стеландер снова поднимает голову" 
+ superevent_stelander_empire_comment: "Стеландер снова поднимает голову"
+
+  superevent_vorkerland_dirty_opening_title: "Открытие Грязной зоны"
+  superevent_vorkerland_dirty_opening_quote: "Связь восстановилась раньше, чем исчез страх. За периметром снова появились власти, границы и приказы."
+  superevent_vorkerland_dirty_opening_comment: "Зона молчания раскололась на новые территории"
+
+  superevent_vorkerland_worker_victory_title: "Восстановление Конфедерации"
+  superevent_vorkerland_worker_victory_quote: "Единство вернулось не как прежний порядок, а как соглашение тех, кто пережил его распад."
+  superevent_vorkerland_worker_victory_comment: "Уоркер сохранил федеративный Воркерланд"
+
+  superevent_vorkerland_vlad_victory_title: "Военное восстановление Воркерланда"
+  superevent_vorkerland_vlad_victory_quote: "Когда учреждения исчезли, армия объявила себя единственным оставшимся учреждением."
+  superevent_vorkerland_vlad_victory_comment: "Влад Петричев установил имперский порядок"
+
+  superevent_vorkerland_dorian_victory_title: "Техническая реконструкция Воркерланда"
+  superevent_vorkerland_dorian_victory_quote: "Руины были описаны, измерены и включены в новый план управления."
+  superevent_vorkerland_dorian_victory_comment: "Дориан Воркс передал страну администрациям специалистов"
+
+  superevent_vorkerland_fragmented_title: "Конец единого Воркерланда"
+  superevent_vorkerland_fragmented_quote: "Ни одна сторона не победила. Линии фронта постепенно стали государственными границами."
+  superevent_vorkerland_fragmented_comment: "Распад оказался сильнее всех претендентов"

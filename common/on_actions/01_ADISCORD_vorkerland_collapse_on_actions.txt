@@ -20,4 +20,40 @@ on_actions = {
 			}
 		}
 	}
+	on_monthly = {
+		effect = {
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+					OR = {
+						tag = WRK
+						tag = TVA
+						tag = VAD
+						tag = EYR
+						tag = EGC
+						tag = ZAO
+						tag = WPA
+						tag = WPS
+						tag = PWR
+						tag = PSD
+						tag = VLA
+						tag = EBA
+						tag = ROM
+						tag = DVA
+						tag = SOL
+						tag = SRA
+						tag = TRU
+						tag = ZTA
+						tag = SLA
+						tag = RZA
+						tag = MLR
+						tag = ERT
+						tag = IRT
+						tag = SCA
+					}
+				}
+				ADISCORD_vorkerland_update_ai_phase = yes
+			}
+		}
+	}
 }

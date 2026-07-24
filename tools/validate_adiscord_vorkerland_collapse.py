@@ -164,12 +164,24 @@ def validate_events(root: Path, issues: list[str]) -> None:
 
 def validate_ai(root: Path, issues: list[str]) -> None:
     ai = require_file(issues, root / "common" / "ai_strategy" / "ADISCORD_vorkerland_collapse_ai.txt", "collapse AI strategy file")
+    effects = require_file(issues, root / "common" / "scripted_effects" / "ADISCORD_vorkerland_collapse_effects.txt", "collapse phase effects")
+    on_actions = require_file(issues, root / "common" / "on_actions" / "01_ADISCORD_vorkerland_collapse_on_actions.txt", "collapse phase on-actions")
     if ai:
         if "abort_when_not_enabled = yes" not in ai:
             issues.append("collapse AI strategies must abort when disabled")
-        for tag in TAGS:
+        for tag in ("WRK", "VAD", "ZAO", "PWR", "VLA", "ROM", "SOL", "TRU", *TAGS):
             if tag not in ai:
                 issues.append(f"collapse AI has no coverage for {tag}")
+        for target in ("TVA", "VAD", "WRK", "EYR", "EGC", "WPA", "WPS", "ZAO", "PSD", "PWR", "EBA", "VLA", "DVA", "ROM", "SRA", "SOL", "ZTA", "TRU"):
+            if f"has_war_with = {target}" not in ai:
+                issues.append(f"collapse AI lacks a guarded front against {target}")
+    if effects and "ADISCORD_vorkerland_update_ai_phase" not in effects:
+        issues.append("collapse AI phase updater is missing")
+    if on_actions:
+        if "ADISCORD_vorkerland_update_ai_phase = yes" not in on_actions:
+            issues.append("collapse monthly phase update is missing")
+        if "every_country" in on_actions:
+            issues.append("collapse monthly phase update must remain country-scoped")
 
 
 def validate_outcomes(root: Path, issues: list[str]) -> None:
@@ -182,19 +194,35 @@ def validate_outcomes(root: Path, issues: list[str]) -> None:
         for name in ("worker", "vlad", "dorian", "fragmented"):
             if f"ADISCORD_vorkerland_apply_{name}_map" not in maps:
                 issues.append(f"missing {name} outcome map effect")
+        if "remove_dynamic_modifier" in maps or "transfer_state = 23" in maps:
+            issues.append("outcome maps must not clean or transfer contaminated state 23")
+    triggers = require_file(issues, root / "common" / "scripted_triggers" / "ADISCORD_vorkerland_collapse_triggers.txt", "collapse outcome triggers")
+    weekly = require_file(issues, root / "common" / "on_actions" / "02_ADISCORD_vorkerland_collapse_outcomes_on_actions.txt", "collapse outcome weekly pulse")
+    events = require_file(issues, root / "events" / "ADISCORD_vorkerland_collapse_events.txt", "collapse outcome events")
+    if triggers:
+        for name in ("worker", "vlad", "dorian"):
+            if f"ADISCORD_vorkerland_{name}_victory_candidate" not in triggers:
+                issues.append(f"missing {name} victory candidate trigger")
+    if weekly and "on_weekly" not in weekly:
+        issues.append("collapse outcome confirmation must use the weekly pulse")
+    if events and "days = 1080" not in events:
+        issues.append("collapse fragmentation fallback is missing")
 
 
 def validate_superevents(root: Path, issues: list[str]) -> None:
     files = (
         (root / "interface" / "superevents.gfx", "superevent GFX"),
+        (root / "interface" / "superevents.gui", "superevent windows"),
         (root / "common" / "scripted_guis" / "superevents.txt", "superevent GUI"),
         (root / "common" / "scripted_localisation" / "ADISCORD_scripted_loc_superevents.txt", "superevent localisation script"),
         (root / "localisation" / "russian" / "ADISCORD_superevents_l_russian.yml", "Russian superevent localisation"),
     )
     for path, label in files:
         text = require_file(issues, path, label)
-        if text and FEATURE not in text:
-            issues.append(f"{label} has no Vorkerland collapse bindings")
+        if text:
+            for name in ("dirty_opening", "worker_victory", "vlad_victory", "dorian_victory", "fragmented"):
+                if f"superevent_vorkerland_{name}" not in text:
+                    issues.append(f"{label} has no Vorkerland {name} binding")
 
 
 CHECKS = {

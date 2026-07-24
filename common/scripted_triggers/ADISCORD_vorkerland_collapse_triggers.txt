@@ -5,3 +5,35 @@ ADISCORD_vorkerland_collapse_not_started = {
 ADISCORD_vorkerland_collapse_wars_not_started = {
 	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
 }
+
+ADISCORD_vorkerland_worker_victory_candidate = {
+	tag = WRK
+	NOT = { has_capitulated = yes }
+	controls_state = 27
+	controls_state = 32
+	controls_state = 33
+	controls_state = 34
+	controls_state = 35
+	controls_state = 40
+	controls_state = 79
+	controls_state = 82
+	controls_state = 105
+}
+
+ADISCORD_vorkerland_vlad_victory_candidate = {
+	tag = VAD
+	NOT = { has_capitulated = yes }
+	controls_state = 32
+	controls_state = 75
+	controls_state = 81
+}
+
+ADISCORD_vorkerland_dorian_victory_candidate = {
+	tag = TVA
+	NOT = { has_capitulated = yes }
+	controls_state = 32
+	controls_state = 36
+	controls_state = 37
+	controls_state = 38
+	controls_state = 39
+}
