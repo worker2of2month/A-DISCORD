@@ -1,0 +1,211 @@
+ADISCORD_vorkerland_teardown_confederation = {
+	if = { limit = { NAM = { is_subject_of = WRK } } WRK = { end_puppet = NAM } }
+	if = { limit = { DAN = { is_subject_of = WRK } } WRK = { end_puppet = DAN } }
+	if = { limit = { VAD = { is_subject_of = WRK } } WRK = { end_puppet = VAD } }
+	if = { limit = { ZAO = { is_subject_of = WRK } } WRK = { end_puppet = ZAO } }
+	if = { limit = { PWR = { is_subject_of = WRK } } WRK = { end_puppet = PWR } }
+	if = { limit = { VLA = { is_subject_of = WRK } } WRK = { end_puppet = VLA } }
+	if = { limit = { ROM = { is_subject_of = WRK } } WRK = { end_puppet = ROM } }
+	if = { limit = { SOL = { is_subject_of = WRK } } WRK = { end_puppet = SOL } }
+	if = { limit = { TRU = { is_subject_of = WRK } } WRK = { end_puppet = TRU } }
+	if = { limit = { WRK = { is_faction_leader = yes } } WRK = { dismantle_faction = yes } }
+}
+
+ADISCORD_vorkerland_setup_tva = {
+	TVA = {
+		transfer_state = 36
+		transfer_state = 37
+		transfer_state = 38
+		transfer_state = 39
+	}
+	36 = { add_core_of = TVA set_state_controller_to = TVA }
+	37 = { add_core_of = TVA set_state_controller_to = TVA }
+	38 = { add_core_of = TVA set_state_controller_to = TVA }
+	39 = { add_core_of = TVA set_state_controller_to = TVA }
+	TVA = {
+		set_capital = { state = 36 }
+		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_economy_initialize_country = yes
+		load_oob = "TVA_vorkerland_collapse"
+	}
+}
+
+ADISCORD_vorkerland_setup_eyr = {
+	EYR = {
+		transfer_state = 102
+		transfer_state = 108
+		transfer_state = 109
+		transfer_state = 111
+		transfer_state = 122
+	}
+	102 = { add_core_of = EYR set_state_controller_to = EYR }
+	108 = { add_core_of = EYR set_state_controller_to = EYR }
+	109 = { add_core_of = EYR set_state_controller_to = EYR }
+	111 = { add_core_of = EYR set_state_controller_to = EYR }
+	122 = { add_core_of = EYR set_state_controller_to = EYR }
+	EYR = {
+		set_capital = { state = 102 }
+		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_economy_initialize_country = yes
+		load_oob = "EYR_vorkerland_collapse"
+	}
+}
+
+ADISCORD_vorkerland_setup_egc = {
+	EGC = {
+		transfer_state = 81
+		transfer_state = 104
+		transfer_state = 110
+		transfer_state = 124
+	}
+	81 = { add_core_of = EGC set_state_controller_to = EGC }
+	104 = { add_core_of = EGC set_state_controller_to = EGC }
+	110 = { add_core_of = EGC set_state_controller_to = EGC }
+	124 = { add_core_of = EGC set_state_controller_to = EGC }
+	EGC = {
+		set_capital = { state = 81 }
+		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_economy_initialize_country = yes
+		load_oob = "EGC_vorkerland_collapse"
+	}
+}
+
+ADISCORD_vorkerland_setup_wpa = {
+	WPA = {
+		transfer_state = 195
+	}
+	195 = { add_core_of = WPA set_state_controller_to = WPA }
+	WPA = {
+		set_capital = { state = 195 }
+		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_economy_initialize_country = yes
+		load_oob = "WPA_vorkerland_collapse"
+	}
+}
+
+ADISCORD_vorkerland_setup_wps = {
+	WPS = {
+		transfer_state = 196
+	}
+	196 = { add_core_of = WPS set_state_controller_to = WPS }
+	WPS = {
+		set_capital = { state = 196 }
+		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_economy_initialize_country = yes
+		load_oob = "WPS_vorkerland_collapse"
+	}
+}
+
+ADISCORD_vorkerland_setup_psd = {
+	PSD = {
+		transfer_state = 194
+		transfer_state = 93
+		transfer_state = 94
+	}
+	194 = { add_core_of = PSD set_state_controller_to = PSD }
+	93 = { add_core_of = PSD set_state_controller_to = PSD }
+	94 = { add_core_of = PSD set_state_controller_to = PSD }
+	PSD = {
+		set_capital = { state = 194 }
+		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_economy_initialize_country = yes
+		load_oob = "PSD_vorkerland_collapse"
+	}
+}
+
+ADISCORD_vorkerland_setup_eba = {
+	EBA = {
+		transfer_state = 197
+	}
+	197 = { add_core_of = EBA set_state_controller_to = EBA }
+	EBA = {
+		set_capital = { state = 197 }
+		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_economy_initialize_country = yes
+		load_oob = "EBA_vorkerland_collapse"
+	}
+}
+
+ADISCORD_vorkerland_setup_dva = {
+	DVA = {
+		transfer_state = 144
+		transfer_state = 145
+	}
+	144 = { add_core_of = DVA set_state_controller_to = DVA }
+	145 = { add_core_of = DVA set_state_controller_to = DVA }
+	DVA = {
+		set_capital = { state = 145 }
+		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_economy_initialize_country = yes
+		load_oob = "DVA_vorkerland_collapse"
+	}
+}
+
+ADISCORD_vorkerland_setup_sra = {
+	SRA = {
+		transfer_state = 198
+	}
+	198 = { add_core_of = SRA set_state_controller_to = SRA }
+	SRA = {
+		set_capital = { state = 198 }
+		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_economy_initialize_country = yes
+		load_oob = "SRA_vorkerland_collapse"
+	}
+}
+
+ADISCORD_vorkerland_setup_zta = {
+	ZTA = {
+		transfer_state = 199
+	}
+	199 = { add_core_of = ZTA set_state_controller_to = ZTA }
+	ZTA = {
+		set_capital = { state = 199 }
+		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_economy_initialize_country = yes
+		load_oob = "ZTA_vorkerland_collapse"
+	}
+}
+
+ADISCORD_vorkerland_apply_initial_map = {
+	WRK = {
+		transfer_state = 27
+		transfer_state = 32
+		transfer_state = 33
+		transfer_state = 34
+		transfer_state = 35
+		transfer_state = 40
+		transfer_state = 79
+		transfer_state = 82
+		transfer_state = 105
+	}
+	VAD = {
+		transfer_state = 75
+		transfer_state = 106
+		transfer_state = 107
+		transfer_state = 121
+		transfer_state = 123
+		set_capital = { state = 75 }
+	}
+	ZAO = { transfer_state = 72 }
+	PWR = {
+		transfer_state = 71
+		transfer_state = 90
+		transfer_state = 91
+	}
+	VLA = { transfer_state = 74 }
+	ROM = { transfer_state = 73 }
+	SOL = { transfer_state = 76 }
+	TRU = { transfer_state = 80 }
+
+	ADISCORD_vorkerland_setup_tva = yes
+	ADISCORD_vorkerland_setup_eyr = yes
+	ADISCORD_vorkerland_setup_egc = yes
+	ADISCORD_vorkerland_setup_wpa = yes
+	ADISCORD_vorkerland_setup_wps = yes
+	ADISCORD_vorkerland_setup_psd = yes
+	ADISCORD_vorkerland_setup_eba = yes
+	ADISCORD_vorkerland_setup_dva = yes
+	ADISCORD_vorkerland_setup_sra = yes
+	ADISCORD_vorkerland_setup_zta = yes
+}

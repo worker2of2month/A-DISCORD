@@ -1,0 +1,7 @@
+ADISCORD_vorkerland_collapse_not_started = {
+	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_started }
+}
+
+ADISCORD_vorkerland_collapse_wars_not_started = {
+	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
+}

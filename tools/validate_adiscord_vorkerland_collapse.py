@@ -150,9 +150,16 @@ def validate_events(root: Path, issues: list[str]) -> None:
     effects = require_file(issues, root / "common" / "scripted_effects" / "ADISCORD_vorkerland_collapse_effects.txt", "collapse effects")
     triggers = require_file(issues, root / "common" / "scripted_triggers" / "ADISCORD_vorkerland_collapse_triggers.txt", "collapse triggers")
     on_actions = require_file(issues, root / "common" / "on_actions" / "01_ADISCORD_vorkerland_collapse_on_actions.txt", "collapse on-actions")
-    for text, label in ((events, "events"), (effects, "effects"), (triggers, "triggers"), (on_actions, "on-actions")):
+    for text, label in ((events, "events"), (triggers, "triggers"), (on_actions, "on-actions")):
         if text and FEATURE not in text:
             issues.append(f"collapse {label} do not contain the feature namespace")
+    if effects:
+        for helper in (
+            "ADISCORD_vorkerland_teardown_confederation",
+            "ADISCORD_vorkerland_apply_initial_map",
+        ):
+            if helper not in effects:
+                issues.append(f"collapse effects are missing {helper}")
 
 
 def validate_ai(root: Path, issues: list[str]) -> None:

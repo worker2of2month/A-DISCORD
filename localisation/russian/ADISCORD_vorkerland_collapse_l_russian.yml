@@ -1,6 +1,8 @@
 ﻿l_russian:
  ADISCORD_vorkerland_dirty_state: 'Загрязнённая территория'
  ADISCORD_vorkerland_dirty_state_desc: 'Территория загрязнена и требует постоянных ограничений на использование населения, ресурсов, строительства и снабжения.'
+ ADISCORD_vorkerland_collapse_started: 'Взрыв в Башне Единства'
+ ADISCORD_vorkerland_collapse_wars_started: 'Каскадные войны Воркерланда'
  TVA: "Техническая администрация Воркерланда"
  TVA_DEF: "Техническая администрация Воркерланда"
  TVA_ADJ: "Воркерландск."

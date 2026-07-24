@@ -201,3 +201,139 @@ class DirtyStateTests(unittest.TestCase):
             self.assertRegex(text, r'\blocal_supplies\s*=\s*0\.5\b')
             self.assertRegex(text, r'\binfrastructure\s*=\s*1\b')
             self.assertRegex(text, rf'\b{building}\s*=\s*1\b')
+
+
+class EventOrchestrationTests(unittest.TestCase):
+    """The collapse is a single delayed cascade; presentation never changes the map."""
+
+    ROOT = validator.ROOT
+    EVENT_PATH = ROOT / 'events' / 'ADISCORD_vorkerland_collapse_events.txt'
+    EFFECTS_PATH = ROOT / 'common' / 'scripted_effects' / 'ADISCORD_vorkerland_collapse_effects.txt'
+    TRIGGERS_PATH = ROOT / 'common' / 'scripted_triggers' / 'ADISCORD_vorkerland_collapse_triggers.txt'
+    ON_ACTIONS_PATH = ROOT / 'common' / 'on_actions' / '01_ADISCORD_vorkerland_collapse_on_actions.txt'
+
+    INITIAL_MAP = {
+        'WRK': (27, 32, 33, 34, 35, 40, 79, 82, 105),
+        'TVA': (36, 37, 38, 39), 'VAD': (75, 106, 107, 121, 123),
+        'EYR': (102, 108, 109, 111, 122), 'EGC': (81, 104, 110, 124),
+        'ZAO': (72,), 'WPA': (195,), 'WPS': (196,), 'PWR': (71, 90, 91),
+        'PSD': (194, 93, 94), 'VLA': (74,), 'EBA': (197,), 'ROM': (73,),
+        'DVA': (144, 145), 'SOL': (76,), 'SRA': (198,), 'TRU': (80,), 'ZTA': (199,),
+    }
+    NEW_TAGS = ('TVA', 'EYR', 'EGC', 'WPA', 'WPS', 'PSD', 'EBA', 'DVA', 'SRA', 'ZTA')
+    CAPITALS = {'TVA': 36, 'EYR': 102, 'EGC': 81, 'WPA': 195, 'WPS': 196,
+                'PSD': 194, 'EBA': 197, 'DVA': 145, 'SRA': 198, 'ZTA': 199}
+    WARS = (('WRK', 'TVA'), ('WRK', 'VAD'), ('TVA', 'VAD'), ('VAD', 'EYR'),
+            ('VAD', 'EGC'), ('EYR', 'EGC'), ('ZAO', 'WPA'), ('WPA', 'WPS'),
+            ('WPS', 'ZAO'), ('PWR', 'PSD'), ('VLA', 'EBA'), ('ROM', 'DVA'),
+            ('SOL', 'SRA'), ('TRU', 'ZTA'))
+
+    @staticmethod
+    def named_block(text, identifier):
+        match = re.search(rf'(?m)^\s*{re.escape(identifier)}\s*=\s*\{{', text)
+        if match is None:
+            raise AssertionError(f'missing block {identifier}')
+        depth = 0
+        for index in range(match.end() - 1, len(text)):
+            if text[index] == '{':
+                depth += 1
+            elif text[index] == '}':
+                depth -= 1
+                if depth == 0:
+                    return text[match.start():index + 1]
+        raise AssertionError(f'unbalanced block {identifier}')
+
+    def assert_dotall(self, text, pattern):
+        self.assertIsNotNone(re.search(pattern, text, re.DOTALL), f'pattern not found: {pattern}')
+
+    def test_collapse_event_layers_exist_with_hidden_one_shot_namespace(self):
+        for path in (self.EVENT_PATH, self.EFFECTS_PATH, self.TRIGGERS_PATH, self.ON_ACTIONS_PATH):
+            self.assertTrue(path.exists(), f'missing Task 5 layer: {path.relative_to(self.ROOT)}')
+        events = self.EVENT_PATH.read_text(encoding='utf-8-sig')
+        self.assertRegex(events, r'(?m)^\s*add_namespace\s*=\s*ADISCORD_vorkerland_collapse\s*$')
+        self.assertEqual(len(re.findall(r'(?m)^country_event\s*=\s*\{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.1\s*$', events)), 1)
+        self.assertEqual(len(re.findall(r'(?m)^country_event\s*=\s*\{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.2\s*$', events)), 1)
+        self.assertEqual(events.count('fire_only_once = yes'), 2)
+        self.assertEqual(events.count('is_triggered_only = yes'), 2)
+        self.assertEqual(events.count('hidden = yes'), 2)
+
+    def test_startup_schedules_once_and_applies_dirty_modifiers(self):
+        self.assertTrue(self.ON_ACTIONS_PATH.exists())
+        startup = self.named_block(self.ON_ACTIONS_PATH.read_text(encoding='utf-8-sig'), 'on_startup')
+        self.assertRegex(startup, r'NOT\s*=\s*\{\s*has_global_flag\s*=\s*ADISCORD_vorkerland_collapse_scheduled\s*\}')
+        self.assertIn('set_global_flag = ADISCORD_vorkerland_collapse_scheduled', startup)
+        self.assertIn('ADISCORD_vorkerland_apply_dirty_modifiers = yes', startup)
+        self.assert_dotall(startup, r'WRK\s*=\s*\{.*?country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.1\s+days\s*=\s*120\s+random_days\s*=\s*60\s*\}')
+
+    def test_news_zero_is_presentation_only_and_one_shot(self):
+        news = (self.ROOT / 'events' / 'ADISCORD_news.txt').read_text(encoding='utf-8-sig')
+        event = self.named_block(news, 'news_event')
+        self.assertIn('id = news.0', event)
+        self.assertIn('fire_only_once = yes', event)
+        for forbidden in ('every_country', 'launch_nuke', 'damage_building', 'transfer_state'):
+            self.assertNotIn(forbidden, event)
+
+    def test_first_event_explodes_once_then_calls_teardown_and_initial_map(self):
+        self.assertTrue(self.EVENT_PATH.exists())
+        events = self.EVENT_PATH.read_text(encoding='utf-8-sig')
+        event = self.named_block(events, 'country_event')
+        self.assertIn('id = ADISCORD_vorkerland_collapse.1', event)
+        trigger = self.named_block(
+            self.TRIGGERS_PATH.read_text(encoding='utf-8-sig'),
+            'ADISCORD_vorkerland_collapse_not_started',
+        )
+        self.assertRegex(trigger, r'NOT\s*=\s*\{\s*has_global_flag\s*=\s*ADISCORD_vorkerland_collapse_started\s*\}')
+        self.assertIn('set_global_flag = ADISCORD_vorkerland_collapse_started', event)
+        self.assertEqual(len(re.findall(r'launch_nuke\s*=\s*\{\s*province\s*=\s*16428\s+use_nuke\s*=\s*no\s*\}', event)), 1)
+        self.assertEqual(event.count('damage_building = {'), 3)
+        self.assert_dotall(event, r'32\s*=\s*\{\s*.*?damage_building')
+        self.assertIn('ADISCORD_vorkerland_teardown_confederation = yes', event)
+        self.assertIn('ADISCORD_vorkerland_apply_initial_map = yes', event)
+        self.assertLess(event.index('ADISCORD_vorkerland_teardown_confederation = yes'), event.index('ADISCORD_vorkerland_apply_initial_map = yes'))
+        self.assertRegex(event, r'country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.2\s+days\s*=\s*1\s*\}')
+        self.assertRegex(event, r'news_event\s*=\s*\{\s*id\s*=\s*news\.0\s+hours\s*=\s*1\s*\}')
+        self.assertNotIn('start_civil_war', event)
+
+    def test_teardown_precedes_faction_dismantling_and_setups_precede_oobs(self):
+        self.assertTrue(self.EFFECTS_PATH.exists())
+        effects = self.EFFECTS_PATH.read_text(encoding='utf-8-sig')
+        teardown = self.named_block(effects, 'ADISCORD_vorkerland_teardown_confederation')
+        for tag in ('NAM', 'DAN', 'VAD', 'ZAO', 'PWR', 'VLA', 'ROM', 'SOL', 'TRU'):
+            self.assertRegex(teardown, rf'WRK\s*=\s*\{{\s*end_puppet\s*=\s*{tag}\s*\}}')
+        self.assertLess(teardown.rindex('end_puppet ='), teardown.index('dismantle_faction = yes'))
+        initial_map = self.named_block(effects, 'ADISCORD_vorkerland_apply_initial_map')
+        for tag, states in self.INITIAL_MAP.items():
+            if tag in self.NEW_TAGS:
+                continue
+            for state_id in states:
+                self.assert_dotall(initial_map, rf'{tag}\s*=\s*\{{.*?transfer_state\s*=\s*{state_id}')
+        self.assert_dotall(initial_map, r'WRK\s*=\s*\{.*?transfer_state\s*=\s*32.*?transfer_state\s*=\s*40')
+        for tag in self.NEW_TAGS:
+            setup = self.named_block(effects, f'ADISCORD_vorkerland_setup_{tag.lower()}')
+            for state_id in self.INITIAL_MAP[tag]:
+                self.assert_dotall(setup, rf'{tag}\s*=\s*\{{.*?transfer_state\s*=\s*{state_id}')
+                self.assertRegex(setup, rf'{state_id}\s*=\s*\{{\s*add_core_of\s*=\s*{tag}\s+set_state_controller_to\s*=\s*{tag}\s*\}}')
+            self.assertRegex(setup, rf'set_capital\s*=\s*\{{\s*state\s*=\s*{self.CAPITALS[tag]}\s*\}}')
+            self.assertIn('ADISCORD_grant_2150_technology_baseline = yes', setup)
+            self.assertIn('ADISCORD_economy_initialize_country = yes', setup)
+            self.assertIn(f'load_oob = "{tag}_vorkerland_collapse"', setup)
+            self.assertLess(setup.index('ADISCORD_economy_initialize_country = yes'), setup.index('load_oob ='))
+
+    def test_second_event_alone_starts_every_guarded_war(self):
+        self.assertTrue(self.EVENT_PATH.exists())
+        events = self.EVENT_PATH.read_text(encoding='utf-8-sig')
+        definition = re.search(
+            r'(?m)^country_event\s*=\s*\{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.2\s*$',
+            events,
+        )
+        self.assertIsNotNone(definition)
+        second_start = definition.start()
+        second = self.named_block(events[second_start:], 'country_event')
+        first = events[:second_start]
+        self.assertIn('set_global_flag = ADISCORD_vorkerland_collapse_wars_started', second)
+        self.assertNotIn('declare_war_on', first)
+        self.assertNotRegex(second, r'\bexists\s*=\s*[A-Z]{3}\b')
+        self.assertEqual(second.count('declare_war_on = {'), len(self.WARS))
+        for attacker, target in self.WARS:
+            self.assert_dotall(second, rf'{attacker}\s*=\s*\{{.*?country_exists\s*=\s*{target}.*?NOT\s*=\s*\{{\s*has_war_with\s*=\s*{target}\s*\}}.*?declare_war_on\s*=\s*\{{\s*target\s*=\s*{target}\s+type\s*=\s*annex_everything\s*\}}')
+        self.assertNotIn('start_civil_war', second)

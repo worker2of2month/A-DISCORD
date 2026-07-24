@@ -1,0 +1,23 @@
+on_actions = {
+	on_startup = {
+		effect = {
+			if = {
+				limit = {
+					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_scheduled }
+				}
+				set_global_flag = ADISCORD_vorkerland_collapse_scheduled
+				ADISCORD_vorkerland_apply_dirty_modifiers = yes
+				if = {
+					limit = { WRK = { exists = yes } }
+					WRK = {
+						country_event = {
+							id = ADISCORD_vorkerland_collapse.1
+							days = 120
+							random_days = 60
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,104 @@
+add_namespace = ADISCORD_vorkerland_collapse
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.1
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		tag = WRK
+		ADISCORD_vorkerland_collapse_not_started = yes
+	}
+
+	immediate = {
+		set_global_flag = ADISCORD_vorkerland_collapse_started
+		goto_province = 16428
+		launch_nuke = {
+			province = 16428
+			use_nuke = no
+		}
+		32 = {
+			damage_building = {
+				type = infrastructure
+				damage = 0.1
+			}
+			damage_building = {
+				type = rail_way
+				damage = 0.1
+			}
+			damage_building = {
+				type = anti_air_building
+				damage = 0.1
+			}
+		}
+		random_list = {
+			60 = { set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad }
+			30 = { set_global_flag = ADISCORD_vorkerland_worker_missing }
+			10 = { set_global_flag = ADISCORD_vorkerland_worker_killed }
+		}
+		ADISCORD_vorkerland_teardown_confederation = yes
+		ADISCORD_vorkerland_apply_initial_map = yes
+		country_event = {
+			id = ADISCORD_vorkerland_collapse.2
+			days = 1
+		}
+		news_event = {
+			id = news.0
+			hours = 1
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.2
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		ADISCORD_vorkerland_collapse_wars_not_started = yes
+	}
+
+	immediate = {
+		set_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		WRK = {
+			if = { limit = { country_exists = TVA NOT = { has_war_with = TVA } } declare_war_on = { target = TVA type = annex_everything } }
+			if = { limit = { country_exists = VAD NOT = { has_war_with = VAD } } declare_war_on = { target = VAD type = annex_everything } }
+		}
+		TVA = {
+			if = { limit = { country_exists = VAD NOT = { has_war_with = VAD } } declare_war_on = { target = VAD type = annex_everything } }
+		}
+		VAD = {
+			if = { limit = { country_exists = EYR NOT = { has_war_with = EYR } } declare_war_on = { target = EYR type = annex_everything } }
+			if = { limit = { country_exists = EGC NOT = { has_war_with = EGC } } declare_war_on = { target = EGC type = annex_everything } }
+		}
+		EYR = {
+			if = { limit = { country_exists = EGC NOT = { has_war_with = EGC } } declare_war_on = { target = EGC type = annex_everything } }
+		}
+		ZAO = {
+			if = { limit = { country_exists = WPA NOT = { has_war_with = WPA } } declare_war_on = { target = WPA type = annex_everything } }
+		}
+		WPA = {
+			if = { limit = { country_exists = WPS NOT = { has_war_with = WPS } } declare_war_on = { target = WPS type = annex_everything } }
+		}
+		WPS = {
+			if = { limit = { country_exists = ZAO NOT = { has_war_with = ZAO } } declare_war_on = { target = ZAO type = annex_everything } }
+		}
+		PWR = {
+			if = { limit = { country_exists = PSD NOT = { has_war_with = PSD } } declare_war_on = { target = PSD type = annex_everything } }
+		}
+		VLA = {
+			if = { limit = { country_exists = EBA NOT = { has_war_with = EBA } } declare_war_on = { target = EBA type = annex_everything } }
+		}
+		ROM = {
+			if = { limit = { country_exists = DVA NOT = { has_war_with = DVA } } declare_war_on = { target = DVA type = annex_everything } }
+		}
+		SOL = {
+			if = { limit = { country_exists = SRA NOT = { has_war_with = SRA } } declare_war_on = { target = SRA type = annex_everything } }
+		}
+		TRU = {
+			if = { limit = { country_exists = ZTA NOT = { has_war_with = ZTA } } declare_war_on = { target = ZTA type = annex_everything } }
+		}
+	}
+}
