@@ -141,13 +141,30 @@ def _iter_named_blocks(text: str, identifier: str):
                     break
 
 
+def _has_direct_child_block(block: str, identifier: str) -> bool:
+    masked = _mask_non_code(block)
+    opening_brace = masked.find("{")
+    if opening_brace == -1:
+        return False
+    pattern = re.compile(rf"\b{re.escape(identifier)}\b\s*=\s*\{{")
+    depth = 1
+    for index in range(opening_brace + 1, len(masked)):
+        if masked[index] == "{":
+            depth += 1
+        elif masked[index] == "}":
+            depth -= 1
+        elif depth == 1 and pattern.match(masked, index):
+            return True
+    return False
+
+
 def _validate_file(relative_path: str, text: str, issues: list[str]) -> None:
     if not _has_balanced_braces(text):
         issues.append(f"{relative_path}: unbalanced braces")
     masked = _mask_non_code(text)
-    if re.search(r"\bon_daily\b", masked):
+    if re.search(r"\bon_daily\s*=\s*\{", masked):
         issues.append(f"{relative_path}: on_daily is forbidden in crisis feature files")
-    if any(re.search(r"\blimit\s*=\s*\{", _mask_non_code(block)) is None for block in _iter_named_blocks(text, "every_country")):
+    if any(not _has_direct_child_block(block, "limit") for block in _iter_named_blocks(text, "every_country")):
         issues.append(f"{relative_path}: unrestricted every_country is forbidden in crisis feature files")
 
 
@@ -177,7 +194,7 @@ def validate(root: Path, section: str | None = None) -> list[str]:
             _validate_performance(root, issues)
         else:
             _validate_section(root, name, issues)
-    return issues
+    return list(dict.fromkeys(issues))
 
 
 def main() -> int:

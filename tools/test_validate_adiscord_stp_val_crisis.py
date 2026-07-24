@@ -97,6 +97,13 @@ from tools import validate_adiscord_stp_val_crisis as validator
 
 
 class CrisisValidatorTests(unittest.TestCase):
+    def _write_required_files(self, root: Path, text: str = "feature = { }") -> None:
+        for files in validator.REQUIRED_FILES.values():
+            for relative_path, _ in files:
+                path = root / relative_path
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(text, encoding="utf-8-sig")
+
     def test_empty_root_reports_each_feature_layer(self):
         with TemporaryDirectory() as tmp:
             issues = validator.validate(Path(tmp))
@@ -130,6 +137,42 @@ class CrisisValidatorTests(unittest.TestCase):
     def test_extract_named_block_ignores_braces_in_comments(self):
         text = "target = { value = { } # }\n }\nother = { }"
         self.assertEqual(validator.extract_named_block(text, "target"), "{ value = { } # }\n }")
+
+    def test_every_country_requires_a_direct_limit_block(self):
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._write_required_files(root)
+            core = root / validator.REQUIRED_FILES["core"][0][0]
+
+            core.write_text("every_country = { limit = { tag = STP } }", encoding="utf-8-sig")
+            direct_limit_issues = validator.validate(root, "core")
+
+            core.write_text("every_country = { if = { limit = { tag = STP } } }", encoding="utf-8-sig")
+            nested_limit_issues = validator.validate(root, "core")
+
+        self.assertFalse(any("unrestricted every_country" in issue for issue in direct_limit_issues))
+        self.assertTrue(any("unrestricted every_country" in issue for issue in nested_limit_issues))
+
+    def test_on_daily_identifier_in_an_event_id_is_allowed(self):
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._write_required_files(root)
+            core = root / validator.REQUIRED_FILES["core"][0][0]
+            core.write_text("country_event = { id = on_daily.1 }", encoding="utf-8-sig")
+            issues = validator.validate(root, "core")
+
+        self.assertFalse(any("on_daily is forbidden" in issue for issue in issues))
+
+    def test_full_validation_deduplicates_performance_findings(self):
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._write_required_files(root)
+            core = root / validator.REQUIRED_FILES["core"][0][0]
+            core.write_text("on_daily = { }", encoding="utf-8-sig")
+            issues = validator.validate(root)
+
+        self.assertEqual(len(issues), len(set(issues)))
+        self.assertEqual(sum("on_daily is forbidden" in issue for issue in issues), 1)
 
 
 if __name__ == "__main__":
