@@ -211,6 +211,109 @@ SECURITY_POSTURES = {
     4: ("mass_purge", "mountains", "street"),
     5: ("false_tolerance", "market", "officers"),
 }
+STP_ADAPTATION_FAMILIES = (
+    "palace",
+    "officers",
+    "mountains",
+    "market",
+    "street",
+    "foreign",
+)
+RESISTANCE_POSTURE_COUNTERS = {
+    1: ("street", ("palace",)),
+    2: ("palace", ("officers",)),
+    3: ("officers", ("mountains", "street")),
+    4: ("market", ("foreign",)),
+}
+STP_OPERATION_SPECS = {
+    "STP_operation_palace_channel": (
+        "shabrat", "aux", "palace", 28, 40, 10, {}, 0, "stp_crisis.20",
+    ),
+    "STP_operation_recruit_young_officers": (
+        "shabrat",
+        "major",
+        "officers",
+        35,
+        35,
+        20,
+        {"infantry_equipment": 400, "support_equipment": 50},
+        0,
+        "stp_crisis.21",
+    ),
+    "STP_operation_mountain_caches": (
+        "shabrat",
+        "major",
+        "mountains",
+        35,
+        25,
+        0,
+        {"infantry_equipment": 600, "support_equipment": 50},
+        0,
+        "stp_crisis.22",
+    ),
+    "STP_operation_steal_black_ledger": (
+        "shabrat", "major", "market", 28, 45, 0, {}, 2, "stp_crisis.23",
+    ),
+    "STP_operation_silent_march": (
+        "shabrat", "aux", "street", 21, 30, 0, {}, 1, "stp_crisis.24",
+    ),
+    "STP_operation_nodrul_disinformation": (
+        "shabrat",
+        "major",
+        "foreign",
+        35,
+        50,
+        0,
+        {"infantry_equipment": 250},
+        0,
+        "stp_crisis.25",
+    ),
+    "STP_operation_val_secret_channel": (
+        "shabrat", "aux", "foreign", 28, 35, 0, {}, 1, "stp_crisis.26",
+    ),
+    "STP_operation_seal_palace": (
+        "party", "aux", "palace", 28, 35, 10, {}, 0, "stp_crisis.27",
+    ),
+    "STP_operation_rotate_garrisons": (
+        "party", "major", "officers", 28, 30, 25, {}, 0, "stp_crisis.28",
+    ),
+    "STP_operation_targeted_raid": (
+        "party", "major", "project", 28, 40, 15, {}, 0, "stp_crisis.29",
+    ),
+    "STP_operation_burn_client_archives": (
+        "party", "major", "market", 28, 35, 0, {}, 2, "stp_crisis.30",
+    ),
+    "STP_operation_arm_festival_police": (
+        "party",
+        "aux",
+        "street",
+        21,
+        30,
+        0,
+        {"infantry_equipment": 300},
+        0,
+        "stp_crisis.31",
+    ),
+    "STP_operation_request_nodrul_advisers": (
+        "party", "major", "foreign", 35, 50, 0, {}, 0, "stp_crisis.32",
+    ),
+    "STP_operation_false_val_channel": (
+        "party", "aux", "foreign", 28, 35, 0, {}, 1, "stp_crisis.33",
+    ),
+}
+STP_OPERATION_VARIANTS = {
+    "STP_operation_nodrul_disinformation_convoys": (
+        "STP_operation_nodrul_disinformation",
+        {"convoy": 25},
+    ),
+}
+STP_RESISTANCE_PROJECTS = {
+    "STP_resistance_project_palace": "palace",
+    "STP_resistance_project_garrison_theft": "officers",
+    "STP_resistance_project_mountain_smuggling": "mountains",
+    "STP_resistance_project_street_agitation": "street",
+    "STP_resistance_project_external_contract": "foreign",
+}
 VAL_NEGOTIATION_POSTURES = {
     1: "cautious_broker",
     2: "predatory_concessionaire",

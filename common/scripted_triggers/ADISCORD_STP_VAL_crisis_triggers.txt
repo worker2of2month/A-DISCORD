@@ -16,3 +16,40 @@ STP_is_crisis_resistance_side = {
 STP_is_postwar_country = {
 	has_country_flag = STP_postwar_campaign_side
 }
+
+STP_can_attempt_bloodless_coup = {
+	check_variable = { var = STP_side_commitment value = 1 compare = equals }
+	has_country_flag = STP_shabrat_available
+	check_variable = { var = STP_node_palace value = 2 compare = equals }
+	has_country_flag = STP_capital_guard_loyal_to_resistance
+	check_variable = { var = STP_node_officers value = 2 compare = greater_than_or_equals }
+	check_variable = { var = STP_node_market value = 2 compare = equals }
+	check_variable = { var = STP_resistance_readiness value = 85 compare = greater_than_or_equals }
+	check_variable = { var = STP_party_suspicion value = 20 compare = less_than_or_equals }
+	NOD_can_directly_defend_stp = no
+}
+
+STP_resistance_network_is_viable = {
+	check_variable = { var = STP_resistance_readiness value = 40 compare = greater_than_or_equals }
+	count_triggers = {
+		amount = 2
+		check_variable = { var = STP_node_palace value = 0 compare = greater_than }
+		check_variable = { var = STP_node_officers value = 0 compare = greater_than }
+		check_variable = { var = STP_node_mountains value = 0 compare = greater_than }
+		check_variable = { var = STP_node_market value = 0 compare = greater_than }
+		check_variable = { var = STP_node_street value = 0 compare = greater_than }
+	}
+	OR = {
+		check_variable = { var = STP_resistance_escrow_infantry value = 800 compare = greater_than_or_equals }
+		check_variable = { var = STP_node_officers value = 2 compare = greater_than_or_equals }
+	}
+}
+
+STP_sotnikov_network_is_viable = {
+	has_country_flag = STP_shabrat_lost
+	NOT = { has_country_flag = STP_shabrat_available }
+	check_variable = { var = STP_resistance_readiness value = 45 compare = greater_than_or_equals }
+	check_variable = { var = STP_node_officers value = 2 compare = greater_than_or_equals }
+	check_variable = { var = STP_node_mountains value = 1 compare = greater_than_or_equals }
+	check_variable = { var = STP_resistance_escrow_infantry value = 1000 compare = greater_than_or_equals }
+}

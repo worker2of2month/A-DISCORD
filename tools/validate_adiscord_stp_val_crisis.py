@@ -15,9 +15,13 @@ try:
         OWNED_FEATURE_FILES,
         RESISTANCE_POSTURES,
         SECURITY_POSTURES,
+        STP_ADAPTATION_FAMILIES,
         STP_CRISIS_FOCUS_REWARDS,
         STP_CRISIS_FOCUS_STAGES,
+        STP_OPERATION_SPECS,
+        STP_OPERATION_VARIANTS,
         STP_PARTY_FOCUSES,
+        STP_RESISTANCE_PROJECTS,
         STP_SHABRAT_FOCUSES,
         STP_SPINE_FOCUS_STAGES,
     )
@@ -28,9 +32,13 @@ except ModuleNotFoundError:
         OWNED_FEATURE_FILES,
         RESISTANCE_POSTURES,
         SECURITY_POSTURES,
+        STP_ADAPTATION_FAMILIES,
         STP_CRISIS_FOCUS_REWARDS,
         STP_CRISIS_FOCUS_STAGES,
+        STP_OPERATION_SPECS,
+        STP_OPERATION_VARIANTS,
         STP_PARTY_FOCUSES,
+        STP_RESISTANCE_PROJECTS,
         STP_SHABRAT_FOCUSES,
         STP_SPINE_FOCUS_STAGES,
     )
@@ -305,6 +313,9 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
     )
     core = read(
         root / "common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt"
+    )
+    triggers = read(
+        root / "common/scripted_triggers/ADISCORD_STP_VAL_crisis_triggers.txt"
     )
 
     if categories is not None:

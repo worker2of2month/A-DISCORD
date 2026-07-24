@@ -4,6 +4,7 @@ import struct
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
+from tools import stp_val_crisis_manifest as crisis_manifest
 from tools.stp_val_crisis_manifest import (
     CIVIL_WAR_STATE_MAP,
     DECISION_CATEGORIES,
@@ -31,6 +32,63 @@ from tools.stp_val_crisis_manifest import (
 
 
 class CrisisManifestTests(unittest.TestCase):
+    TASK_FOUR_OPERATION_SPECS = {
+        "STP_operation_palace_channel": ("shabrat", "aux", "palace", 28, 40, 10, {}, 0, "stp_crisis.20"),
+        "STP_operation_recruit_young_officers": (
+            "shabrat",
+            "major",
+            "officers",
+            35,
+            35,
+            20,
+            {"infantry_equipment": 400, "support_equipment": 50},
+            0,
+            "stp_crisis.21",
+        ),
+        "STP_operation_mountain_caches": (
+            "shabrat",
+            "major",
+            "mountains",
+            35,
+            25,
+            0,
+            {"infantry_equipment": 600, "support_equipment": 50},
+            0,
+            "stp_crisis.22",
+        ),
+        "STP_operation_steal_black_ledger": ("shabrat", "major", "market", 28, 45, 0, {}, 2, "stp_crisis.23"),
+        "STP_operation_silent_march": ("shabrat", "aux", "street", 21, 30, 0, {}, 1, "stp_crisis.24"),
+        "STP_operation_nodrul_disinformation": (
+            "shabrat",
+            "major",
+            "foreign",
+            35,
+            50,
+            0,
+            {"infantry_equipment": 250},
+            0,
+            "stp_crisis.25",
+        ),
+        "STP_operation_val_secret_channel": ("shabrat", "aux", "foreign", 28, 35, 0, {}, 1, "stp_crisis.26"),
+        "STP_operation_seal_palace": ("party", "aux", "palace", 28, 35, 10, {}, 0, "stp_crisis.27"),
+        "STP_operation_rotate_garrisons": ("party", "major", "officers", 28, 30, 25, {}, 0, "stp_crisis.28"),
+        "STP_operation_targeted_raid": ("party", "major", "project", 28, 40, 15, {}, 0, "stp_crisis.29"),
+        "STP_operation_burn_client_archives": ("party", "major", "market", 28, 35, 0, {}, 2, "stp_crisis.30"),
+        "STP_operation_arm_festival_police": (
+            "party",
+            "aux",
+            "street",
+            21,
+            30,
+            0,
+            {"infantry_equipment": 300},
+            0,
+            "stp_crisis.31",
+        ),
+        "STP_operation_request_nodrul_advisers": ("party", "major", "foreign", 35, 50, 0, {}, 0, "stp_crisis.32"),
+        "STP_operation_false_val_channel": ("party", "aux", "foreign", 28, 35, 0, {}, 1, "stp_crisis.33"),
+    }
+
     def test_health_calendar_reaches_day_267(self):
         self.assertEqual(HEALTH_STAGE_DAYS, (70, 70, 63, 63))
         self.assertEqual(DEATH_CAMPAIGN_DAY, 267)
@@ -76,6 +134,47 @@ class CrisisManifestTests(unittest.TestCase):
         self.assertEqual(set(STP_SPINE_FOCUS_STAGES), {1, 2, 3, 4, 5})
         self.assertEqual(set(SECURITY_POSTURES), {1, 2, 3, 4, 5})
         self.assertEqual(set(RESISTANCE_POSTURES), {1, 2, 3, 4})
+
+    def test_task_four_manifest_is_exact_and_keeps_convoys_as_one_variant(self):
+        self.assertEqual(
+            getattr(crisis_manifest, "STP_OPERATION_SPECS", {}),
+            self.TASK_FOUR_OPERATION_SPECS,
+        )
+        self.assertEqual(
+            getattr(crisis_manifest, "STP_OPERATION_VARIANTS", {}),
+            {
+                "STP_operation_nodrul_disinformation_convoys": (
+                    "STP_operation_nodrul_disinformation",
+                    {"convoy": 25},
+                )
+            },
+        )
+        specs = getattr(crisis_manifest, "STP_OPERATION_SPECS", {})
+        self.assertEqual(sum(spec[0] == "shabrat" for spec in specs.values()), 7)
+        self.assertEqual(sum(spec[0] == "party" for spec in specs.values()), 7)
+        self.assertEqual(
+            getattr(crisis_manifest, "STP_ADAPTATION_FAMILIES", ()),
+            ("palace", "officers", "mountains", "market", "street", "foreign"),
+        )
+        self.assertEqual(
+            getattr(crisis_manifest, "RESISTANCE_POSTURE_COUNTERS", {}),
+            {
+                1: ("street", ("palace",)),
+                2: ("palace", ("officers",)),
+                3: ("officers", ("mountains", "street")),
+                4: ("market", ("foreign",)),
+            },
+        )
+        self.assertEqual(
+            set(getattr(crisis_manifest, "STP_RESISTANCE_PROJECTS", {})),
+            {
+                "STP_resistance_project_palace",
+                "STP_resistance_project_garrison_theft",
+                "STP_resistance_project_mountain_smuggling",
+                "STP_resistance_project_street_agitation",
+                "STP_resistance_project_external_contract",
+            },
+        )
 
     def test_val_authority_focus_rewards_are_complete(self):
         self.assertEqual(
@@ -1041,6 +1140,365 @@ class CrisisValidatorTests(unittest.TestCase):
         self.assertNotIn(
             "STP_party_suspicion_political_power_gain_dynamic_var", party_loc
         )
+
+    def test_task_four_operations_have_exact_slots_prices_and_delays(self):
+        decisions = validator.read(
+            validator.ROOT / "common/decisions/ADISCORD_STP_crisis_decisions.txt"
+        ) or ""
+        specs = CrisisManifestTests.TASK_FOUR_OPERATION_SPECS
+        for operation, (
+            side,
+            slot,
+            family,
+            days,
+            political,
+            command,
+            equipment,
+            factories,
+            resolver,
+        ) in specs.items():
+            block = validator.extract_named_block(decisions, operation) or ""
+            self.assertTrue(block, operation)
+            masked = validator._mask_non_code(block)
+            self.assertEqual(validator._direct_scalar_values(block, "days_remove"), [str(days)])
+            self.assertEqual(validator._direct_scalar_values(block, "cost"), [str(political)])
+            self.assertNotIn("consumer_goods", masked, operation)
+            modifier = validator.extract_named_block(block, "modifier") or ""
+            if factories:
+                self.assertRegex(
+                    validator._mask_non_code(modifier),
+                    rf"\bcivilian_factory_use\s*=\s*{factories}\b",
+                    operation,
+                )
+            else:
+                self.assertNotIn("civilian_factory_use", modifier, operation)
+            available = validator.extract_named_block(block, "available") or ""
+            self.assertIn(
+                "NOT = { has_country_flag = STP_crisis_late_choice_lock }",
+                available,
+                operation,
+            )
+            self.assertRegex(
+                available,
+                r"check_variable\s*=\s*\{\s*var\s*=\s*STP_side_commitment"
+                rf"\s+value\s*=\s*{1 if side == 'shabrat' else 2}"
+                r"\s+compare\s*=\s*equals\s*\}",
+                operation,
+            )
+            slot_flag = f"STP_{slot}_operation_active"
+            other_slot = "STP_aux_operation_active" if slot == "major" else "STP_major_operation_active"
+            self.assertIn(f"NOT = {{ has_country_flag = {slot_flag} }}", available)
+            complete = validator.extract_named_block(block, "complete_effect") or ""
+            self.assertEqual(complete.count(f"set_country_flag = {slot_flag}"), 1)
+            self.assertNotIn(f"set_country_flag = {other_slot}", complete)
+            token = f"STP_operation_token_{operation.removeprefix('STP_operation_')}"
+            self.assertEqual(complete.count(f"set_country_flag = {token}"), 1)
+            self.assertRegex(
+                complete,
+                rf"country_event\s*=\s*\{{\s*id\s*=\s*{re.escape(resolver)}"
+                rf"\s+days\s*=\s*{days}\s*\}}",
+                operation,
+            )
+            slot_index = complete.index(f"set_country_flag = {slot_flag}")
+            if command:
+                command_token = f"add_command_power = -{command}"
+                self.assertIn(command_token, complete)
+                self.assertLess(complete.index(command_token), slot_index)
+            for equipment_type, amount in equipment.items():
+                self.assertIn(f"num_equipment@{equipment_type}", available)
+                removal = re.search(
+                    rf"type\s*=\s*{re.escape(equipment_type)}\s+"
+                    rf"amount\s*=\s*-{amount}\b",
+                    complete,
+                )
+                self.assertIsNotNone(removal, operation)
+                self.assertLess(removal.start(), slot_index)
+            if family != "project":
+                self.assertIn(f"STP_security_adaptation_{family}", available)
+                for scope in (available, complete):
+                    self.assertRegex(
+                        scope,
+                        rf"var\s*=\s*STP_security_adaptation_{family}\s+"
+                        r"value\s*=\s*2\s+compare\s*=\s*greater_than_or_equals",
+                        operation,
+                    )
+                surcharge = political * 0.25
+                surcharge_text = str(int(surcharge)) if surcharge.is_integer() else str(surcharge)
+                self.assertIn(f"add_political_power = -{surcharge_text}", complete)
+
+        convoy = validator.extract_named_block(
+            decisions, "STP_operation_nodrul_disinformation_convoys"
+        ) or ""
+        self.assertTrue(convoy)
+        self.assertEqual(validator._direct_scalar_values(convoy, "days_remove"), ["35"])
+        self.assertEqual(validator._direct_scalar_values(convoy, "cost"), ["50"])
+        self.assertIn("num_equipment@convoy", convoy)
+        self.assertRegex(convoy, r"type\s*=\s*convoy\s+amount\s*=\s*-25\b")
+        self.assertIn(
+            "set_country_flag = STP_operation_token_nodrul_disinformation", convoy
+        )
+        self.assertIn("country_event = { id = stp_crisis.25 days = 35 }", convoy)
+        for escrow in (
+            "STP_change_resistance_escrow_infantry",
+            "STP_change_resistance_escrow_support",
+        ):
+            self.assertNotIn(escrow, convoy)
+
+        targeted = validator.extract_named_block(
+            decisions, "STP_operation_targeted_raid"
+        ) or ""
+        targeted_available = validator.extract_named_block(targeted, "available") or ""
+        targeted_complete = validator.extract_named_block(targeted, "complete_effect") or ""
+        for family in ("palace", "officers", "mountains", "street", "foreign"):
+            pattern = (
+                rf"var\s*=\s*STP_security_adaptation_{family}\s+"
+                r"value\s*=\s*2\s+compare\s*=\s*greater_than_or_equals"
+            )
+            self.assertRegex(targeted_available, pattern)
+            self.assertRegex(targeted_complete, pattern)
+
+    def test_task_four_adaptation_escrow_and_cleanup_are_core_owned(self):
+        core_path = (
+            validator.ROOT
+            / "common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt"
+        )
+        core = validator.read(core_path) or ""
+        families = ("palace", "officers", "mountains", "market", "street", "foreign")
+        for family in families:
+            effect = f"STP_change_security_adaptation_{family}"
+            block = validator.extract_named_block(core, effect) or ""
+            self.assertTrue(block, effect)
+            self.assertIn(
+                f"add_to_variable = {{ var = STP_security_adaptation_{family} value = $value$ }}",
+                block,
+            )
+            self.assertIn(
+                f"clamp_variable = {{ var = STP_security_adaptation_{family} min = 0 max = 3 }}",
+                block,
+            )
+            self.assertIn(f"flag = STP_security_family_block_{family}", block)
+            self.assertIn("days = 35", block)
+
+        for equipment in ("infantry", "support"):
+            effect = f"STP_change_resistance_escrow_{equipment}"
+            block = validator.extract_named_block(core, effect) or ""
+            self.assertTrue(block, effect)
+            self.assertIn(
+                f"add_to_variable = {{ var = STP_resistance_escrow_{equipment} value = $value$ }}",
+                block,
+            )
+            self.assertIn(
+                f"clamp_variable = {{ var = STP_resistance_escrow_{equipment} min = 0 }}",
+                block,
+            )
+        self.assertNotIn("STP_resistance_escrow_trucks", core)
+
+        raid = validator.extract_named_block(core, "STP_resolve_targeted_raid_escrow") or ""
+        self.assertIn(
+            "NOT = { has_country_flag = STP_targeted_raid_resolved }", raid
+        )
+        self.assertIn("set_country_flag = STP_targeted_raid_resolved", raid)
+        self.assertEqual(raid.count("subtract_from_variable = { var = STP_raid_"), 8)
+        self.assertEqual(raid.count("value = 0.49"), 4)
+        self.assertEqual(raid.count("round_variable = STP_raid_"), 4)
+        self.assertIn("amount = STP_raid_infantry_returned", raid)
+        self.assertIn("amount = STP_raid_support_returned", raid)
+        self.assertIn("STP_raid_destroyed_infantry", raid)
+        self.assertIn("STP_raid_destroyed_support", raid)
+
+        cleanup = validator.extract_named_block(core, "STP_clear_operation_slot") or ""
+        for operation in CrisisManifestTests.TASK_FOUR_OPERATION_SPECS:
+            self.assertIn(f"remove_decision = {operation}", cleanup)
+            token = f"STP_operation_token_{operation.removeprefix('STP_operation_')}"
+            self.assertIn(f"clr_country_flag = {token}", cleanup)
+        self.assertIn(
+            "remove_decision = STP_operation_nodrul_disinformation_convoys", cleanup
+        )
+        self.assertIn("clr_country_flag = STP_major_operation_active", cleanup)
+        self.assertIn("clr_country_flag = STP_aux_operation_active", cleanup)
+
+        forbidden = tuple(
+            f"STP_security_adaptation_{family}" for family in families
+        ) + (
+            "STP_resistance_escrow_infantry",
+            "STP_resistance_escrow_support",
+        )
+        for relative in (
+            "common/decisions/ADISCORD_STP_crisis_decisions.txt",
+            "events/ADISCORD_STP_crisis_events.txt",
+            "common/scripted_triggers/ADISCORD_STP_VAL_crisis_triggers.txt",
+        ):
+            text = validator.read(validator.ROOT / relative) or ""
+            masked = validator._mask_non_code(text)
+            for variable in forbidden:
+                self.assertNotRegex(
+                    masked,
+                    rf"\b(?:set_variable|add_to_variable|subtract_from_variable|multiply_variable)"
+                    rf"\s*=\s*\{{\s*var\s*=\s*{variable}\b",
+                    f"{relative}: {variable}",
+                )
+
+    def test_task_four_resolvers_use_saved_postures_and_reachable_loyalty(self):
+        events = validator.read(
+            validator.ROOT / "events/ADISCORD_STP_crisis_events.txt"
+        ) or ""
+        specs = CrisisManifestTests.TASK_FOUR_OPERATION_SPECS
+        for operation, spec in specs.items():
+            side, _, family, _, _, _, _, _, resolver = spec
+            block = self._block_with_assignment(
+                events, "country_event", f"id = {resolver}"
+            )
+            self.assertTrue(block, resolver)
+            self.assertIn("hidden = yes", block)
+            token = f"STP_operation_token_{operation.removeprefix('STP_operation_')}"
+            self.assertIn(f"has_country_flag = {token}", block)
+            posture = (
+                "STP_security_posture"
+                if side == "shabrat"
+                else "STP_resistance_posture"
+            )
+            self.assertIn(posture, block)
+            if side == "party":
+                self.assertNotIn("var = STP_security_posture", block)
+            if family == "project":
+                for dynamic_family in ("palace", "officers", "mountains", "street", "foreign"):
+                    self.assertIn(
+                        f"STP_change_security_adaptation_{dynamic_family}", block
+                    )
+            else:
+                self.assertEqual(
+                    block.count(f"STP_change_security_adaptation_{family}"), 1
+                )
+            self.assertEqual(block.count("STP_clear_operation_slot = yes"), 1)
+            self.assertIn("STP_change_node_", block)
+        self.assertIn("STP_change_suspicion = { value = 10 }", events)
+
+        for flag in (
+            "STP_capital_guard_loyal_to_resistance",
+            "STP_garrison_88_loyal_to_resistance",
+        ):
+            self.assertIn(f"set_country_flag = {flag}", events)
+            self.assertIn(f"clr_country_flag = {flag}", events)
+        for token in (
+            "STP_focus_final_palace_move_open",
+            "STP_focus_final_palace_lock_open",
+            "STP_focus_final_garrison_move_open",
+            "STP_focus_final_garrison_lock_open",
+            "value = 35",
+            "value = 75",
+            "value = 90",
+            "STP_lose_shabrat = yes",
+        ):
+            self.assertIn(token, events)
+
+        core = validator.read(
+            validator.ROOT
+            / "common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt"
+        ) or ""
+        lose = validator.extract_named_block(core, "STP_lose_shabrat") or ""
+        self.assertIn("has_country_flag = STP_shabrat_available", lose)
+        self.assertIn("clr_country_flag = STP_shabrat_available", lose)
+        self.assertIn("set_country_flag = STP_shabrat_lost", lose)
+        self.assertIn("retire_character = STP_maksim_shabrat", lose)
+        self.assertNotIn("STP_sotnikov", lose.lower())
+
+    def test_task_four_resistance_projects_form_one_guarded_28_day_chain(self):
+        events = validator.read(
+            validator.ROOT / "events/ADISCORD_STP_crisis_events.txt"
+        ) or ""
+        core = validator.read(
+            validator.ROOT
+            / "common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt"
+        ) or ""
+        commit = validator.extract_named_block(core, "STP_commit_to_party") or ""
+        self.assertIn("country_event = { id = stp_crisis.40 days = 28 }", commit)
+        selector = self._block_with_assignment(
+            events, "country_event", "id = stp_crisis.40"
+        )
+        signal = self._block_with_assignment(
+            events, "country_event", "id = stp_crisis.41"
+        )
+        resolver = self._block_with_assignment(
+            events, "country_event", "id = stp_crisis.42"
+        )
+        self.assertIn("hidden = yes", selector)
+        self.assertNotIn("hidden = yes", signal)
+        self.assertIn("country_event = { id = stp_crisis.42 days = 28 }", signal)
+        self.assertIn("hidden = yes", resolver)
+        projects = {
+            "STP_resistance_project_palace",
+            "STP_resistance_project_garrison_theft",
+            "STP_resistance_project_mountain_smuggling",
+            "STP_resistance_project_street_agitation",
+            "STP_resistance_project_external_contract",
+        }
+        for project in projects:
+            self.assertEqual(selector.count(f"set_country_flag = {project}"), 1)
+            self.assertIn(f"has_country_flag = {project}", resolver)
+            self.assertIn(f"clr_country_flag = {project}", resolver)
+        self.assertIn("STP_resistance_posture", selector)
+        project_chain = "\n".join((selector, signal, resolver))
+        self.assertNotRegex(
+            validator._mask_non_code(project_chain),
+            r"\bset_variable\s*=\s*\{\s*var\s*=\s*STP_resistance_posture\b",
+        )
+        self.assertIn("STP_resistance_project_countered", resolver)
+        self.assertIn("country_event = { id = stp_crisis.40 }", resolver)
+        self.assertIn("num_equipment@infantry_equipment", resolver)
+        self.assertIn("num_equipment@support_equipment", resolver)
+        for cap in ("value = 0.2", "value = 300", "value = 30", "value = 400"):
+            self.assertIn(cap, resolver)
+        self.assertIn("VAL = {", resolver)
+        self.assertNotIn("on_daily", events)
+        self.assertNotIn("every_country", events)
+
+    def test_task_four_viability_triggers_are_exact(self):
+        triggers = validator.read(
+            validator.ROOT
+            / "common/scripted_triggers/ADISCORD_STP_VAL_crisis_triggers.txt"
+        ) or ""
+        bloodless = validator.extract_named_block(
+            triggers, "STP_can_attempt_bloodless_coup"
+        ) or ""
+        for token in (
+            "var = STP_side_commitment",
+            "value = 1",
+            "has_country_flag = STP_shabrat_available",
+            "var = STP_node_palace",
+            "value = 2",
+            "has_country_flag = STP_capital_guard_loyal_to_resistance",
+            "var = STP_node_officers",
+            "var = STP_node_market",
+            "var = STP_resistance_readiness",
+            "value = 85",
+            "var = STP_party_suspicion",
+            "value = 20",
+            "NOD_can_directly_defend_stp = no",
+        ):
+            self.assertIn(token, bloodless)
+        network = validator.extract_named_block(
+            triggers, "STP_resistance_network_is_viable"
+        ) or ""
+        self.assertIn("value = 40", network)
+        self.assertIn("amount = 2", network)
+        self.assertIn("var = STP_resistance_escrow_infantry", network)
+        self.assertIn("value = 800", network)
+        sotnikov = validator.extract_named_block(
+            triggers, "STP_sotnikov_network_is_viable"
+        ) or ""
+        for token in (
+            "has_country_flag = STP_shabrat_lost",
+            "NOT = { has_country_flag = STP_shabrat_available }",
+            "var = STP_resistance_readiness",
+            "value = 45",
+            "var = STP_node_officers",
+            "value = 2",
+            "var = STP_node_mountains",
+            "value = 1",
+            "var = STP_resistance_escrow_infantry",
+            "value = 1000",
+        ):
+            self.assertIn(token, sotnikov)
 
     def test_legacy_stp_and_val_migration_paths_are_idempotent(self):
         core = validator.read(
