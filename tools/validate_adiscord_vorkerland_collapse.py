@@ -45,6 +45,7 @@ def state_file(root: Path, state_id: int) -> Path | None:
 
 
 def provinces(text: str) -> set[int]:
+    text = re.sub(r'(?m)#.*$', '', text)
     match = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", text, re.DOTALL)
     return {int(value) for value in re.findall(r"\d+", match.group(1))} if match else set()
 
@@ -58,12 +59,16 @@ def require_file(issues: list[str], path: Path, label: str) -> str:
 
 
 def validate_manifest(issues: list[str]) -> None:
+    dirty_sequence = tuple(state for group in DIRTY_GROUPS.values() for state in group)
     dirty_states = set().union(*(set(group) for group in DIRTY_GROUPS.values()))
     if len(TAGS) != 16 or len(TAGS) != len(set(TAGS)):
         issues.append("manifest must define 16 unique fixed tags")
     if len(CONTAMINATED_STATES) != 37:
         issues.append("manifest must define 37 contaminated states")
-    if dirty_states != CONTAMINATED_STATES - {23, 24, 57, 59, 60}:
+    if (
+        dirty_states != CONTAMINATED_STATES - {23, 24, 57, 59, 60}
+        or len(dirty_sequence) != len(dirty_states)
+    ):
         issues.append("dirty groups must cover every transferable contaminated state exactly once")
     if set(CAPITALS) != set(TAGS):
         issues.append("capital keys must equal fixed tags")
