@@ -15,7 +15,7 @@
 - Не изменять уже dirty-файлы `common/on_actions/00_ADISCORD_on_actions.txt`, `common/ai_strategy/default.txt`, `common/ai_strategy/VAL.txt` и `tools/validate_tc.py`; использовать отдельные файлы и отдельный валидатор.
 - Не использовать `start_civil_war` и dynamic tags `D01`–`D50`.
 - Использовать fixed tags: `TVA EYR EGC WPA WPS PSD EBA DVA SRA ZTA SLA RZA MLR ERT IRT SCA`.
-- Каноническая Башня Единства: state `40`, province `16428`; её scripted custody следует за state `32`.
+- Каноническая Башня Единства: state `32`, province `6713`; state `40` остаётся вместе с метрополией.
 - Взрыв запускается через 120–180 дней от старта кампании; Грязная зона открывается ещё через 60–90 дней.
 - State `23` получает загрязнённый modifier, но никогда не передаётся новой стране.
 - States `24/57` остаются VAL, states `59/60` остаются CIN.
@@ -457,7 +457,7 @@ days and forces it after 180 days.
 Event `.1`:
 
 1. sets one-shot guard;
-2. launches the nuke at `16428` and damages state 32 once;
+2. launches the nuke at `6713` and damages state 32 once;
 3. resolves Worker fate with weights `60/30/10`;
 4. ends subject status, then dismantles the faction;
 5. deletes/distributes obsolete starting divisions;
@@ -714,7 +714,7 @@ Verify:
 Start a new campaign in debug/observer mode and run at least two game years.
 Check:
 
-1. one Tower explosion at province 16428;
+1. one Tower explosion at province 6713;
 2. three central claimants and all regional splits appear;
 3. OOBs spawn inside owned capitals;
 4. local wars start after the one-day settle window;

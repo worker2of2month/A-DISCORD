@@ -13,9 +13,9 @@ country_event = {
 
 	immediate = {
 		set_global_flag = ADISCORD_vorkerland_collapse_started
-		goto_province = 16428
+		goto_province = 6713
 		launch_nuke = {
-			province = 16428
+			province = 6713
 			use_nuke = no
 		}
 		32 = {
