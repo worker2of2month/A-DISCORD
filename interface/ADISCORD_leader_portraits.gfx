@@ -39,6 +39,14 @@ spriteTypes = {
 	  	texturefile = "gfx/leaders/STP/portrait_STP_Maksim_Shabrat.png"
 	}
 	spriteType = {
+		name = "GFX_portrait_STP_Grigory_Sotnikov"
+		texturefile = "gfx/leaders/STP/portrait_STP_Grigory_Sotnikov.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_STP_Rufus_Hedersett"
+		texturefile = "gfx/leaders/STP/portrait_STP_Rufus_Hedersett.png"
+	}
+	spriteType = {
 	  	name = "GFX_portrait_STP_Maksim_Shabrat_dictator"
 	  	texturefile = "gfx/leaders/STP/portrait_STP_Maksim_Shabrat_dictator.png"
 	}

@@ -27,6 +27,9 @@ division_template = {
 division_template = {
 	name = "Capital Guard"
 	division_names_group = STP_INF_01
+	is_locked = yes
+	force_allow_recruiting = no
+	division_cap = 1
 	regiments = {
 		infantry = { x = 0 y = 0 }
 		infantry = { x = 0 y = 1 }

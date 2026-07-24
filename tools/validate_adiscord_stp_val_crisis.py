@@ -20,7 +20,12 @@ REQUIRED_FILES = {
     "core": (
         ("common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt", "core scripted effects"),
         ("common/scripted_triggers/ADISCORD_STP_VAL_crisis_triggers.txt", "crisis scripted triggers"),
+        (
+            "common/dynamic_modifiers/ADISCORD_STP_VAL_crisis_dynamic_modifiers.txt",
+            "crisis dynamic modifiers",
+        ),
         ("common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt", "crisis on-actions"),
+        ("interface/ADISCORD_STP_VAL_crisis.gfx", "crisis sprite aliases"),
     ),
     "stp": (
         ("common/decisions/ADISCORD_STP_crisis_decisions.txt", "STP crisis decisions"),

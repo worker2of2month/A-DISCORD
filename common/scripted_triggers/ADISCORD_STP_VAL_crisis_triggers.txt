@@ -1,0 +1,18 @@
+# Stable role triggers. Later crisis layers extend this file with eligibility triggers.
+
+STP_is_main_crisis_country = {
+	tag = STP
+	has_country_flag = STP_main_campaign_side
+}
+
+STP_is_crisis_party_side = {
+	has_country_flag = STP_crisis_party_side
+}
+
+STP_is_crisis_resistance_side = {
+	has_country_flag = STP_crisis_resistance_side
+}
+
+STP_is_postwar_country = {
+	has_country_flag = STP_postwar_campaign_side
+}

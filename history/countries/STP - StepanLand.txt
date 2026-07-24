@@ -1,5 +1,8 @@
 capital = 28 
 
+set_country_flag = STP_main_campaign_side
+set_country_flag = STP_shabrat_available
+
 ####### Characters
 
 recruit_character = STP_Petr_Ivanov
@@ -50,12 +53,6 @@ add_ideas = {
 	minister_STP_Lorian_Vell
 	minister_STP_Vesper_Monray
 	minister_STP_Cyan_Crowe
-}
-
-###### BOP
-
-set_power_balance = {
-    id = STP_inner_party_opinions_bop
 }
 
 ###### Army and production

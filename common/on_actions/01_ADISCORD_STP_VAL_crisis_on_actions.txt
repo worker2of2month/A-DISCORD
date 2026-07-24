@@ -1,0 +1,40 @@
+on_actions = {
+	on_startup = {
+		effect = {
+			STP = {
+				ADISCORD_STP_VAL_initialize_schema = yes
+				STP_refresh_crisis_modifier = yes
+
+				if = {
+					limit = {
+						has_power_balance = { id = STP_inner_party_opinions_bop }
+					}
+					remove_power_balance = { id = STP_inner_party_opinions_bop }
+				}
+
+				# One-shot forward activation for the stage-1 calendar defined by Task 3.
+				if = {
+					limit = {
+						has_country_flag = STP_main_campaign_side
+						NOT = { has_country_flag = STP_ivanov_dead }
+						NOT = { has_country_flag = STP_internal_war_started }
+						NOT = { has_country_flag = STP_internal_outcome_finalized }
+						check_variable = { var = STP_leader_health_stage value = 1 }
+						NOT = { has_country_flag = STP_health_calendar_started }
+					}
+					set_country_flag = STP_health_calendar_started
+					complete_national_focus = STP_Nectar_of_the_Gods
+					activate_mission = STP_health_stage_1_to_2
+				}
+			}
+			VAL = {
+				ADISCORD_STP_VAL_initialize_schema = yes
+				remove_ideas = VAL_mercenary_state
+				VAL_refresh_contract_modifier = yes
+			}
+			NOD = {
+				ADISCORD_STP_VAL_initialize_schema = yes
+			}
+		}
+	}
+}

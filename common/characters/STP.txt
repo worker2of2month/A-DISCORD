@@ -16,6 +16,39 @@ characters = {
 				large = GFX_portrait_STP_Maksim_Shabrat
 			}
 		}
+		country_leader = {
+			ideology = chauvinism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+		}
+	}
+
+	STP_grigory_sotnikov = {
+		name = STP_grigory_sotnikov
+		portraits = {
+			civilian = {
+				large = GFX_portrait_STP_Grigory_Sotnikov
+			}
+		}
+		country_leader = {
+			ideology = etatism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+		}
+	}
+
+	STP_rufus_hedersett = {
+		name = STP_rufus_hedersett
+		portraits = {
+			civilian = {
+				large = GFX_portrait_STP_Rufus_Hedersett
+			}
+		}
+		country_leader = {
+			ideology = aristocratic_hedonism
+			expire = "2200.1.1.1"
+			id = -1
+		}
 	}
 
 	STP_Petr_Ivanov = {

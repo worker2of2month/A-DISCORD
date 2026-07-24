@@ -1,0 +1,18 @@
+spriteTypes = {
+	spriteType = {
+		name = "GFX_idea_STP_fading_father"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_deadman_rulling_the_country.png"
+	}
+	spriteType = {
+		name = "GFX_idea_STP_underground_network"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_National_Strikes.png"
+	}
+	spriteType = {
+		name = "GFX_idea_STP_security_pressure"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_hidden_slaves_trade.png"
+	}
+	spriteType = {
+		name = "GFX_idea_VAL_contract_state"
+		texturefile = "gfx/interface/ideas/VAL/idea_VAL_mercenary_state.png"
+	}
+}
