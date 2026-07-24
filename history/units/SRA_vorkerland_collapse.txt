@@ -6,6 +6,18 @@ division_template = {
 	}
 }
 units = {
-	division = { division_name = "SRA Plain Militia 1" location = 9104 division_template = "SRA Collapse Militia" start_experience_factor = 0.10 start_equipment_factor = 0.25 }
-	division = { division_name = "SRA Plain Militia 2" location = 9104 division_template = "SRA Collapse Militia" start_experience_factor = 0.10 start_equipment_factor = 0.25 }
+	division = {
+		division_name = { is_name_ordered = yes name_order = 1 }
+		location = 9104
+		division_template = "SRA Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.25
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 2 }
+		location = 9104
+		division_template = "SRA Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.25
+	}
 }

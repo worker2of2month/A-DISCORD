@@ -197,16 +197,22 @@ def validate_outcomes(root: Path, issues: list[str]) -> None:
         if "remove_dynamic_modifier" in maps or "transfer_state = 23" in maps:
             issues.append("outcome maps must not clean or transfer contaminated state 23")
     triggers = require_file(issues, root / "common" / "scripted_triggers" / "ADISCORD_vorkerland_collapse_triggers.txt", "collapse outcome triggers")
-    weekly = require_file(issues, root / "common" / "on_actions" / "02_ADISCORD_vorkerland_collapse_outcomes_on_actions.txt", "collapse outcome weekly pulse")
+    legacy_weekly = root / "common" / "on_actions" / "02_ADISCORD_vorkerland_collapse_outcomes_on_actions.txt"
     events = require_file(issues, root / "events" / "ADISCORD_vorkerland_collapse_events.txt", "collapse outcome events")
     if triggers:
         for name in ("worker", "vlad", "dorian"):
             if f"ADISCORD_vorkerland_{name}_victory_candidate" not in triggers:
                 issues.append(f"missing {name} victory candidate trigger")
-    if weekly and "on_weekly" not in weekly:
-        issues.append("collapse outcome confirmation must use the weekly pulse")
-    if events and "days = 1080" not in events:
-        issues.append("collapse fragmentation fallback is missing")
+    if legacy_weekly.exists():
+        issues.append("legacy collapse outcome weekly pulse must be removed")
+    if events:
+        if "id = ADISCORD_vorkerland_collapse.24" not in events or "days = 14" not in events:
+            issues.append("collapse outcome confirmation must use the 14-day RUS monitor")
+        for name in ("worker", "vlad", "dorian"):
+            if f"ADISCORD_vorkerland_update_{name}_victory_timer = yes" not in events:
+                issues.append(f"collapse outcome monitor does not update {name}")
+        if "days = 1080" not in events:
+            issues.append("collapse fragmentation fallback is missing")
 
 
 def validate_superevents(root: Path, issues: list[str]) -> None:

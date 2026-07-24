@@ -6,7 +6,10 @@ on_actions = {
 					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_scheduled }
 				}
 				set_global_flag = ADISCORD_vorkerland_collapse_scheduled
-				ADISCORD_vorkerland_apply_dirty_modifiers = yes
+				if = {
+					limit = { RUS = { exists = yes } }
+					RUS = { ADISCORD_vorkerland_apply_dirty_modifiers = yes }
+				}
 				if = {
 					limit = { WRK = { exists = yes } }
 					WRK = {

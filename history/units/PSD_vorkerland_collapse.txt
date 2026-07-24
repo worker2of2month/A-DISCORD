@@ -6,6 +6,18 @@ division_template = {
 	}
 }
 units = {
-	division = { division_name = "PSD Sector Militia 1" location = 2339 division_template = "PSD Collapse Militia" start_experience_factor = 0.10 start_equipment_factor = 0.25 }
-	division = { division_name = "PSD Sector Militia 2" location = 2339 division_template = "PSD Collapse Militia" start_experience_factor = 0.10 start_equipment_factor = 0.25 }
+	division = {
+		division_name = { is_name_ordered = yes name_order = 1 }
+		location = 2339
+		division_template = "PSD Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.25
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 2 }
+		location = 2339
+		division_template = "PSD Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.25
+	}
 }

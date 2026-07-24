@@ -6,6 +6,18 @@ division_template = {
 	}
 }
 units = {
-	division = { division_name = "EYR District Militia 1" location = 16594 division_template = "EYR Collapse Militia" start_experience_factor = 0.10 start_equipment_factor = 0.25 }
-	division = { division_name = "EYR District Militia 2" location = 16594 division_template = "EYR Collapse Militia" start_experience_factor = 0.10 start_equipment_factor = 0.25 }
+	division = {
+		division_name = { is_name_ordered = yes name_order = 1 }
+		location = 16594
+		division_template = "EYR Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.25
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 2 }
+		location = 16594
+		division_template = "EYR Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.25
+	}
 }

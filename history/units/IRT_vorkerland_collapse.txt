@@ -6,5 +6,11 @@ division_template = {
 	}
 }
 units = {
-	division = { division_name = "IRT Republican Militia" location = 2226 division_template = "IRT Collapse Militia" start_experience_factor = 0.10 start_equipment_factor = 0.22 }
+	division = {
+		division_name = { is_name_ordered = yes name_order = 1 }
+		location = 2226
+		division_template = "IRT Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.22
+	}
 }

@@ -234,42 +234,42 @@ ADISCORD_vorkerland_update_ai_phase = {
 
 ADISCORD_vorkerland_update_worker_victory_timer = {
 	if = {
-		limit = { ADISCORD_vorkerland_worker_victory_candidate = yes }
-		add_to_variable = { var = ADISCORD_vorkerland_victory_timer value = 7 }
+		limit = { WRK = { exists = yes ADISCORD_vorkerland_worker_victory_candidate = yes } }
+		add_to_variable = { var = ADISCORD_vorkerland_worker_victory_samples value = 1 }
 		if = {
-			limit = { check_variable = { var = ADISCORD_vorkerland_victory_timer value = 98 compare = greater_than_or_equals } }
-			country_event = { id = ADISCORD_vorkerland_collapse.20 hours = 1 }
+			limit = { check_variable = { var = ADISCORD_vorkerland_worker_victory_samples value = 7 compare = greater_than_or_equals } }
+			WRK = { country_event = { id = ADISCORD_vorkerland_collapse.20 hours = 1 } }
 		}
 	}
 	else = {
-		set_variable = { var = ADISCORD_vorkerland_victory_timer value = 0 }
+		set_variable = { var = ADISCORD_vorkerland_worker_victory_samples value = 0 }
 	}
 }
 
 ADISCORD_vorkerland_update_vlad_victory_timer = {
 	if = {
-		limit = { ADISCORD_vorkerland_vlad_victory_candidate = yes }
-		add_to_variable = { var = ADISCORD_vorkerland_victory_timer value = 7 }
+		limit = { VAD = { exists = yes ADISCORD_vorkerland_vlad_victory_candidate = yes } }
+		add_to_variable = { var = ADISCORD_vorkerland_vlad_victory_samples value = 1 }
 		if = {
-			limit = { check_variable = { var = ADISCORD_vorkerland_victory_timer value = 98 compare = greater_than_or_equals } }
-			country_event = { id = ADISCORD_vorkerland_collapse.21 hours = 1 }
+			limit = { check_variable = { var = ADISCORD_vorkerland_vlad_victory_samples value = 7 compare = greater_than_or_equals } }
+			VAD = { country_event = { id = ADISCORD_vorkerland_collapse.21 hours = 1 } }
 		}
 	}
 	else = {
-		set_variable = { var = ADISCORD_vorkerland_victory_timer value = 0 }
+		set_variable = { var = ADISCORD_vorkerland_vlad_victory_samples value = 0 }
 	}
 }
 
 ADISCORD_vorkerland_update_dorian_victory_timer = {
 	if = {
-		limit = { ADISCORD_vorkerland_dorian_victory_candidate = yes }
-		add_to_variable = { var = ADISCORD_vorkerland_victory_timer value = 7 }
+		limit = { TVA = { exists = yes ADISCORD_vorkerland_dorian_victory_candidate = yes } }
+		add_to_variable = { var = ADISCORD_vorkerland_dorian_victory_samples value = 1 }
 		if = {
-			limit = { check_variable = { var = ADISCORD_vorkerland_victory_timer value = 98 compare = greater_than_or_equals } }
-			country_event = { id = ADISCORD_vorkerland_collapse.22 hours = 1 }
+			limit = { check_variable = { var = ADISCORD_vorkerland_dorian_victory_samples value = 7 compare = greater_than_or_equals } }
+			TVA = { country_event = { id = ADISCORD_vorkerland_collapse.22 hours = 1 } }
 		}
 	}
 	else = {
-		set_variable = { var = ADISCORD_vorkerland_victory_timer value = 0 }
+		set_variable = { var = ADISCORD_vorkerland_dorian_victory_samples value = 0 }
 	}
 }

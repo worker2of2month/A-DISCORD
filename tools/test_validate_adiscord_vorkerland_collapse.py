@@ -1,5 +1,5 @@
-import unittest
 import re
+import unittest
 from pathlib import Path
 from unittest.mock import patch
 
@@ -136,6 +136,34 @@ class CountryRosterTests(unittest.TestCase):
             self.assertIn('ADISCORD_militia = { x = 0 y = 1 }', oob)
 
 
+    def test_new_localisation_uses_parser_safe_double_quotes(self):
+        root = validator.ROOT / 'localisation' / 'russian'
+        for name in (
+            'ADISCORD_vorkerland_collapse_l_russian.yml',
+            'ADISCORD_vorkerland_collapse_states_l_russian.yml',
+        ):
+            path = root / name
+            raw = path.read_bytes()
+            self.assertTrue(raw.startswith(b'\xef\xbb\xbf'), f'{name} must keep its UTF-8 BOM')
+            text = raw.decode('utf-8-sig')
+            self.assertNotRegex(text, r"(?m)^\s+[A-Za-z0-9_.-]+:\s*'")
+            for line in text.splitlines()[1:]:
+                if line.strip():
+                    self.assertRegex(line, r'^\s+[A-Za-z0-9_.-]+:\s*".*"\s*$')
+
+    def test_collapse_oobs_use_ordered_division_name_blocks(self):
+        root = validator.ROOT / 'history' / 'units'
+        for tag in TAGS:
+            text = (root / f'{tag}_vorkerland_collapse.txt').read_text(encoding='utf-8-sig')
+            division_count = len(re.findall(r'(?m)^\s*division\s*=\s*\{', text))
+            ordered_names = re.findall(
+                r'division_name\s*=\s*\{\s*is_name_ordered\s*=\s*yes\s+name_order\s*=\s*(\d+)\s*\}',
+                text,
+            )
+            self.assertNotRegex(text, r'division_name\s*=\s*"')
+            self.assertEqual(len(ordered_names), division_count, tag)
+            self.assertEqual([int(value) for value in ordered_names], list(range(1, division_count + 1)), tag)
+
 class DirtyStateTests(unittest.TestCase):
     SPAWN_STATES = set().union(*map(set, DIRTY_GROUPS.values()))
     CAPITALS = {
@@ -270,6 +298,10 @@ class EventOrchestrationTests(unittest.TestCase):
         self.assertRegex(startup, r'NOT\s*=\s*\{\s*has_global_flag\s*=\s*ADISCORD_vorkerland_collapse_scheduled\s*\}')
         self.assertIn('set_global_flag = ADISCORD_vorkerland_collapse_scheduled', startup)
         self.assertIn('ADISCORD_vorkerland_apply_dirty_modifiers = yes', startup)
+        self.assert_dotall(
+            startup,
+            r'RUS\s*=\s*\{\s*ADISCORD_vorkerland_apply_dirty_modifiers\s*=\s*yes\s*\}',
+        )
         self.assert_dotall(startup, r'WRK\s*=\s*\{.*?country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.1\s+days\s*=\s*120\s+random_days\s*=\s*60\s*\}')
 
     def test_news_zero_is_presentation_only_and_one_shot(self):
@@ -534,19 +566,53 @@ class OutcomeTests(unittest.TestCase):
         for state_id in (36, 37, 38, 39):
             self.assertIn(f'controls_state = {state_id}', dorian)
 
-    def test_weekly_timer_requires_fourteen_continuous_weeks(self):
-        text = self.OUTCOMES_ON_ACTION.read_text(encoding='utf-8-sig')
-        self.assertIn('on_weekly = {', text)
-        self.assertNotIn('every_country', text)
-        for tag in ('WRK', 'VAD', 'TVA'):
-            self.assertIn(f'tag = {tag}', text)
+    def test_single_rus_monitor_requires_seven_continuous_fortnights(self):
+        self.assertFalse(self.OUTCOMES_ON_ACTION.exists())
+        on_actions = '\n'.join(
+            path.read_text(encoding='utf-8-sig')
+            for path in (self.ROOT / 'common' / 'on_actions').glob('*.txt')
+        )
+        self.assertNotRegex(on_actions, r'(?s)on_weekly\s*=\s*\{.*?ADISCORD_vorkerland_update_(?:worker|vlad|dorian)_victory_timer')
+        events = self.EVENTS.read_text(encoding='utf-8-sig')
+        war_definition = re.search(
+            r'(?m)^country_event\s*=\s*\{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.2\s*$',
+            events,
+        )
+        self.assertIsNotNone(war_definition)
+        war_start = self.named_block(events[war_definition.start():], 'country_event')
+        self.assertIsNotNone(re.search(
+            r'RUS\s*=\s*\{.*?country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.24\s+days\s*=\s*14\s*\}',
+            war_start,
+            re.DOTALL,
+        ))
+        monitor_definition = re.search(
+            r'(?m)^country_event\s*=\s*\{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.24\s*$',
+            events,
+        )
+        self.assertIsNotNone(monitor_definition)
+        monitor = self.named_block(events[monitor_definition.start():], 'country_event')
+        self.assertIn('tag = RUS', monitor)
+        self.assertIn('ADISCORD_vorkerland_update_worker_victory_timer = yes', monitor)
+        self.assertIn('ADISCORD_vorkerland_update_vlad_victory_timer = yes', monitor)
+        self.assertIn('ADISCORD_vorkerland_update_dorian_victory_timer = yes', monitor)
+        self.assertRegex(
+            monitor,
+            r'country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.24\s+days\s*=\s*14\s*\}',
+        )
         effects = (self.ROOT / 'common' / 'scripted_effects' / 'ADISCORD_vorkerland_collapse_effects.txt').read_text(encoding='utf-8-sig')
-        for candidate in ('worker', 'vlad', 'dorian'):
+        for candidate, tag, event_id in (('worker', 'WRK', 20), ('vlad', 'VAD', 21), ('dorian', 'TVA', 22)):
             block = self.named_block(effects, f'ADISCORD_vorkerland_update_{candidate}_victory_timer')
+            self.assertIsNotNone(re.search(rf'{tag}\s*=\s*\{{.*?ADISCORD_vorkerland_{candidate}_victory_candidate\s*=\s*yes', block, re.DOTALL))
+            self.assertIn('value = 1', block)
             self.assertIn('value = 7', block)
-            self.assertIn('value = 98', block)
             self.assertIn('compare = greater_than_or_equals', block)
-            self.assertRegex(block, r'else\s*=\s*\{\s*set_variable\s*=\s*\{.*?value\s*=\s*0', re.DOTALL)
+            self.assertRegex(block, rf'{tag}\s*=\s*\{{\s*country_event\s*=\s*\{{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.{event_id}')
+            self.assertIsNotNone(re.search(r'else\s*=\s*\{\s*set_variable\s*=\s*\{.*?value\s*=\s*0', block, re.DOTALL))
+
+    def test_feature_validator_accepts_the_fortnight_monitor(self):
+        issues = []
+        validator.validate_outcomes(self.ROOT, issues)
+        self.assertEqual(issues, [])
 
     def test_each_final_map_covers_only_the_forty_five_war_states(self):
         maps = self.MAPS.read_text(encoding='utf-8-sig')

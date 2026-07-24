@@ -6,5 +6,11 @@ division_template = {
 	}
 }
 units = {
-	division = { division_name = "ERT Restoration Militia" location = 10693 division_template = "ERT Collapse Militia" start_experience_factor = 0.10 start_equipment_factor = 0.22 }
+	division = {
+		division_name = { is_name_ordered = yes name_order = 1 }
+		location = 10693
+		division_template = "ERT Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.22
+	}
 }
