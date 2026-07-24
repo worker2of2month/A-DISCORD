@@ -1,5 +1,5 @@
 characters = {
-	TVA_Dorian_Worx = { name = TVA_Dorian_Worx portraits = { civilian = { large = GFX_portrait_WRK_Dorian_Worx } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 desc = TVA_Dorian_Worx_desc } }
+	TVA_Dorian_Worx = { name = TVA_Dorian_Worx portraits = { civilian = { large = GFX_portrait_WRK_Dorian_Worx } } country_leader = { ideology = technocracy_ideology expire = "2200.1.1.1" id = -1 desc = TVA_Dorian_Worx_desc } }
 	EYR_Irina_Koval = { name = EYR_Irina_Koval portraits = { civilian = { large = GFX_portrait_PLACEHOLDER } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 desc = EYR_Irina_Koval_desc } }
 	EGC_Ruslan_Pike = { name = EGC_Ruslan_Pike portraits = { civilian = { large = GFX_portrait_PLACEHOLDER } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 desc = EGC_Ruslan_Pike_desc } }
 	WPA_Samira_Kett = { name = WPA_Samira_Kett portraits = { civilian = { large = GFX_portrait_PLACEHOLDER } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 desc = WPA_Samira_Kett_desc } }

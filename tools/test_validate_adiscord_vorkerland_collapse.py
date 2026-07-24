@@ -113,8 +113,16 @@ class CountryRosterTests(unittest.TestCase):
             self.assertNotRegex(history, r'(?m)^\s*(oob|add_state_core|transfer_state|create_faction|add_to_faction|set_autonomy)\s*=')
 
             self.assertRegex(characters, rf'(?m)^\s*{tag}_[A-Za-z0-9_]+\s*=\s*\{{')
-            for key in (tag, f'{tag}_DEF', f'{tag}_ADJ', f'{tag}_pragmatism', f'{tag}_pragmatism_party'):
+            ruling_party = 'technocracy' if tag == 'TVA' else 'pragmatism'
+            for key in (tag, f'{tag}_DEF', f'{tag}_ADJ', f'{tag}_{ruling_party}', f'{tag}_{ruling_party}_party'):
                 self.assertRegex(localisation, rf'(?m)^\s*{re.escape(key)}:\s*".+"')
+
+            self.assertRegex(history, rf'\bruling_party\s*=\s*{ruling_party}\b')
+            if tag == 'TVA':
+                self.assertRegex(
+                    characters,
+                    r'TVA_Dorian_Worx\s*=\s*\{.*?country_leader\s*=\s*\{\s*ideology\s*=\s*technocracy_ideology',
+                )
 
             for size in ('', 'medium', 'small'):
                 flag = root / 'gfx' / 'flags' / size / f'{tag}.tga' if size else root / 'gfx' / 'flags' / f'{tag}.tga'
