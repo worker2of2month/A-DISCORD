@@ -1,0 +1,5 @@
+capital = 194
+set_politics = { ruling_party = pragmatism elections_allowed = no }
+set_popularities = { etatism = 0 chauvinism = 0 humanism = 0 pragmatism = 100 technocracy = 0 }
+recruit_character = PSD_Marta_Cinder
+set_research_slots = 2

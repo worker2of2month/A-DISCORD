@@ -1,0 +1,5 @@
+capital = 49
+set_politics = { ruling_party = pragmatism elections_allowed = no }
+set_popularities = { etatism = 0 chauvinism = 0 humanism = 0 pragmatism = 100 technocracy = 0 }
+recruit_character = SLA_Starolesye_District_Board
+set_research_slots = 1

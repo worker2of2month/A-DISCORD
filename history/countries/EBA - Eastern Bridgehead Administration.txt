@@ -1,0 +1,5 @@
+capital = 197
+set_politics = { ruling_party = pragmatism elections_allowed = no }
+set_popularities = { etatism = 0 chauvinism = 0 humanism = 0 pragmatism = 100 technocracy = 0 }
+recruit_character = EBA_Vera_Kranz
+set_research_slots = 2

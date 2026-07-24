@@ -1,4 +1,5 @@
 import unittest
+import re
 from pathlib import Path
 from unittest.mock import patch
 
@@ -81,3 +82,47 @@ class StatePartitionTests(unittest.TestCase):
         for state_id, capital in expected_capitals.items():
             state_path = validator.state_file(validator.ROOT, state_id)
             self.assertIn(capital, validator.provinces(Path(state_path).read_text(encoding='utf-8-sig')))
+
+
+class CountryRosterTests(unittest.TestCase):
+    """The fixed country roster remains dormant until collapse events activate it."""
+
+    def test_fixed_roster_has_dormant_countries_leaders_flags_and_oobs(self):
+        root = validator.ROOT
+        tag_text = (root / 'common' / 'country_tags' / '01_ADISCORD_vorkerland_collapse_tags.txt').read_text(
+            encoding='utf-8-sig'
+        )
+        characters = (root / 'common' / 'characters' / 'ADISCORD_vorkerland_collapse_characters.txt').read_text(
+            encoding='utf-8-sig'
+        )
+        localisation = (root / 'localisation' / 'russian' / 'ADISCORD_vorkerland_collapse_l_russian.yml').read_text(
+            encoding='utf-8-sig'
+        )
+
+        for tag, (state_id, capital) in CAPITALS.items():
+            self.assertRegex(tag_text, rf'(?m)^\s*{tag}\s*=\s*"countries/{tag}\.txt"\s*$')
+
+            country = (root / 'common' / 'countries' / f'{tag}.txt').read_text(encoding='utf-8-sig')
+            self.assertIn('graphical_culture = western_european_gfx', country)
+            self.assertIn('graphical_culture_2d = western_european_2d', country)
+
+            histories = list((root / 'history' / 'countries').glob(f'{tag} - *.txt'))
+            self.assertEqual(len(histories), 1, f'{tag} must have one dormant history')
+            history = histories[0].read_text(encoding='utf-8-sig')
+            self.assertRegex(history, rf'(?m)^\s*capital\s*=\s*{state_id}\s*$')
+            self.assertNotRegex(history, r'(?m)^\s*(oob|add_state_core|transfer_state|create_faction|add_to_faction|set_autonomy)\s*=')
+
+            self.assertRegex(characters, rf'(?m)^\s*{tag}_[A-Za-z0-9_]+\s*=\s*\{{')
+            for key in (tag, f'{tag}_DEF', f'{tag}_ADJ', f'{tag}_pragmatism', f'{tag}_pragmatism_party'):
+                self.assertRegex(localisation, rf'(?m)^\s*{re.escape(key)}:\s*".+"')
+
+            for size in ('', 'medium', 'small'):
+                flag = root / 'gfx' / 'flags' / size / f'{tag}.tga' if size else root / 'gfx' / 'flags' / f'{tag}.tga'
+                self.assertTrue(flag.exists(), f'missing {size or "large"} flag for {tag}')
+
+            oob = (root / 'history' / 'units' / f'{tag}_vorkerland_collapse.txt').read_text(encoding='utf-8-sig')
+            locations = re.findall(r'\blocation\s*=\s*(\d+)', oob)
+            self.assertEqual(len(locations), 2 if tag in TAGS[:10] else 1, f'unexpected division count for {tag}')
+            self.assertEqual({int(location) for location in locations}, {capital})
+            self.assertIn('ADISCORD_militia = { x = 0 y = 0 }', oob)
+            self.assertIn('ADISCORD_militia = { x = 0 y = 1 }', oob)

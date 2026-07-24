@@ -1,0 +1,5 @@
+capital = 173
+set_politics = { ruling_party = pragmatism elections_allowed = no }
+set_popularities = { etatism = 0 chauvinism = 0 humanism = 0 pragmatism = 100 technocracy = 0 }
+recruit_character = SCA_Southern_Corridor_Administration
+set_research_slots = 1

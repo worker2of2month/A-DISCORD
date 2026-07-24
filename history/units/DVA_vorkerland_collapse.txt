@@ -1,0 +1,11 @@
+division_template = {
+	name = "DVA Collapse Militia"
+	regiments = {
+		ADISCORD_militia = { x = 0 y = 0 }
+		ADISCORD_militia = { x = 0 y = 1 }
+	}
+}
+units = {
+	division = { division_name = "DVA Valley Militia 1" location = 6729 division_template = "DVA Collapse Militia" start_experience_factor = 0.10 start_equipment_factor = 0.25 }
+	division = { division_name = "DVA Valley Militia 2" location = 6729 division_template = "DVA Collapse Militia" start_experience_factor = 0.10 start_equipment_factor = 0.25 }
+}
