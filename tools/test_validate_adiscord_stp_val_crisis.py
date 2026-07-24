@@ -105,6 +105,280 @@ class CrisisValidatorTests(unittest.TestCase):
             "",
         )
 
+    def _assert_stp_modifier_contract(self, refresh: str) -> None:
+        def direct_blocks(text: str, identifier: str) -> list[str]:
+            masked = validator._mask_non_code(text)
+            pattern = re.compile(rf"\b{re.escape(identifier)}\b\s*=\s*\{{")
+            blocks = []
+            for match in pattern.finditer(masked):
+                prefix = masked[: match.start()]
+                if prefix.count("{") - prefix.count("}") != 1:
+                    continue
+                opening = masked.index("{", match.start())
+                depth = 0
+                for index in range(opening, len(masked)):
+                    if masked[index] == "{":
+                        depth += 1
+                    elif masked[index] == "}":
+                        depth -= 1
+                        if depth == 0:
+                            blocks.append(text[opening : index + 1])
+                            break
+            return blocks
+
+        def assignments(block: str, direct_only: bool = False) -> dict[str, float]:
+            source = (
+                direct_blocks(block, "set_variable")
+                if direct_only
+                else list(validator._iter_named_blocks(block, "set_variable"))
+            )
+            parsed = {}
+            for assignment in source:
+                masked = validator._mask_non_code(assignment)
+                variable = re.search(r"\bvar\s*=\s*([A-Za-z0-9_]+)", masked)
+                value = re.search(r"\bvalue\s*=\s*(-?\d+(?:\.\d+)?)", masked)
+                if variable and value:
+                    parsed[variable.group(1)] = float(value.group(1))
+            return parsed
+
+        def checks(block: str, driver: str) -> set[tuple[float, str]]:
+            parsed = set()
+            for check in validator._iter_named_blocks(block, "check_variable"):
+                masked = validator._mask_non_code(check)
+                variable = re.search(r"\bvar\s*=\s*([A-Za-z0-9_]+)", masked)
+                value = re.search(r"\bvalue\s*=\s*(-?\d+(?:\.\d+)?)", masked)
+                compare = re.search(r"\bcompare\s*=\s*([A-Za-z_]+)", masked)
+                if variable and value and variable.group(1) == driver:
+                    parsed.add(
+                        (
+                            float(value.group(1)),
+                            compare.group(1) if compare else "equals",
+                        )
+                    )
+            return parsed
+
+        threshold_branches = direct_blocks(refresh, "if") + direct_blocks(refresh, "else_if")
+
+        def branch_for(driver: str, expected_checks: set[tuple[float, str]]) -> str:
+            matches = [
+                branch
+                for branch in threshold_branches
+                if checks(branch, driver) == expected_checks
+            ]
+            self.assertEqual(
+                len(matches),
+                1,
+                f"{driver} branch {sorted(expected_checks)} must exist exactly once",
+            )
+            return matches[0]
+
+        baseline = assignments(refresh, direct_only=True)
+        expected_baseline = {
+            "STP_fading_pp_factor": 0.0,
+            "STP_fading_stability_factor": 0.0,
+            "STP_fading_command_power_factor": 0.0,
+            "STP_fading_planning_factor": 0.0,
+            "STP_fading_org_factor": 0.0,
+            "STP_network_stability_factor": 0.0,
+            "STP_network_consumer_goods_factor": 0.0,
+            "STP_pressure_stability_factor": 0.0,
+            "STP_pressure_pp_factor": 0.0,
+            "STP_pressure_factory_output_factor": 0.0,
+        }
+        self.assertEqual(baseline, expected_baseline)
+
+        table_contracts = (
+            (
+                "STP_leader_health_stage",
+                {
+                    frozenset({(2.0, "equals")}): {
+                        "STP_fading_pp_factor": -0.05,
+                        "STP_fading_stability_factor": -0.02,
+                        "STP_fading_command_power_factor": -0.05,
+                    },
+                    frozenset({(3.0, "equals")}): {
+                        "STP_fading_pp_factor": -0.10,
+                        "STP_fading_stability_factor": -0.05,
+                        "STP_fading_command_power_factor": -0.10,
+                        "STP_fading_planning_factor": -0.05,
+                    },
+                    frozenset({(4.0, "greater_than_or_equals")}): {
+                        "STP_fading_pp_factor": -0.20,
+                        "STP_fading_stability_factor": -0.10,
+                        "STP_fading_command_power_factor": -0.20,
+                        "STP_fading_planning_factor": -0.10,
+                        "STP_fading_org_factor": -0.05,
+                    },
+                },
+            ),
+            (
+                "STP_resistance_readiness",
+                {
+                    frozenset(
+                        {(25.0, "greater_than_or_equals"), (50.0, "less_than")}
+                    ): {
+                        "STP_network_stability_factor": -0.02,
+                        "STP_network_consumer_goods_factor": 0.01,
+                    },
+                    frozenset(
+                        {(50.0, "greater_than_or_equals"), (75.0, "less_than")}
+                    ): {
+                        "STP_network_stability_factor": -0.04,
+                        "STP_network_consumer_goods_factor": 0.02,
+                    },
+                    frozenset(
+                        {(75.0, "greater_than_or_equals"), (90.0, "less_than")}
+                    ): {
+                        "STP_network_stability_factor": -0.07,
+                        "STP_network_consumer_goods_factor": 0.03,
+                    },
+                    frozenset({(90.0, "greater_than_or_equals")}): {
+                        "STP_network_stability_factor": -0.10,
+                        "STP_network_consumer_goods_factor": 0.04,
+                    },
+                },
+            ),
+            (
+                "STP_party_suspicion",
+                {
+                    frozenset(
+                        {(25.0, "greater_than_or_equals"), (50.0, "less_than")}
+                    ): {
+                        "STP_pressure_stability_factor": -0.02,
+                        "STP_pressure_pp_factor": -0.05,
+                    },
+                    frozenset(
+                        {(50.0, "greater_than_or_equals"), (75.0, "less_than")}
+                    ): {
+                        "STP_pressure_stability_factor": -0.05,
+                        "STP_pressure_pp_factor": -0.10,
+                        "STP_pressure_factory_output_factor": -0.03,
+                    },
+                    frozenset(
+                        {(75.0, "greater_than_or_equals"), (90.0, "less_than")}
+                    ): {
+                        "STP_pressure_stability_factor": -0.10,
+                        "STP_pressure_pp_factor": -0.15,
+                        "STP_pressure_factory_output_factor": -0.05,
+                    },
+                    frozenset({(90.0, "greater_than_or_equals")}): {
+                        "STP_pressure_stability_factor": -0.15,
+                        "STP_pressure_pp_factor": -0.20,
+                        "STP_pressure_factory_output_factor": -0.10,
+                    },
+                },
+            ),
+        )
+        for driver, branches in table_contracts:
+            for expected_checks, expected_assignments in branches.items():
+                branch = branch_for(driver, set(expected_checks))
+                self.assertEqual(assignments(branch), expected_assignments)
+
+        lifecycle_contract = {
+            "STP_fading_father": (
+                "STP_main_campaign_side",
+                "STP_ivanov_dead",
+            ),
+            "STP_underground_network": (
+                "STP_main_campaign_side",
+                "STP_internal_war_started",
+            ),
+            "STP_security_pressure": (
+                "STP_main_campaign_side",
+                "STP_internal_outcome_finalized",
+            ),
+        }
+        top_level_if = direct_blocks(refresh, "if")
+        top_level_else = direct_blocks(refresh, "else")
+        dynamic = validator.read(
+            validator.ROOT
+            / "common/dynamic_modifiers/ADISCORD_STP_VAL_crisis_dynamic_modifiers.txt"
+        ) or ""
+        for modifier, (positive_flag, negative_flag) in lifecycle_contract.items():
+            add_branches = [
+                block
+                for block in top_level_if
+                if any(
+                    re.search(
+                        rf"\bmodifier\s*=\s*{re.escape(modifier)}\b",
+                        validator._mask_non_code(operation),
+                    )
+                    for operation in validator._iter_named_blocks(
+                        block, "add_dynamic_modifier"
+                    )
+                )
+            ]
+            self.assertEqual(len(add_branches), 1, f"{modifier} add lifecycle")
+            add_branch = add_branches[0]
+            limit = validator.extract_named_block(add_branch, "limit") or ""
+            masked_limit = validator._mask_non_code(limit)
+            self.assertEqual(
+                set(re.findall(r"\bhas_country_flag\s*=\s*([A-Za-z0-9_]+)", masked_limit)),
+                {positive_flag, negative_flag},
+            )
+            negative_blocks = list(validator._iter_named_blocks(limit, "NOT"))
+            self.assertTrue(
+                any(
+                    re.search(
+                        rf"\bhas_country_flag\s*=\s*{re.escape(negative_flag)}\b",
+                        validator._mask_non_code(block),
+                    )
+                    for block in negative_blocks
+                ),
+                f"{modifier} must negate {negative_flag}",
+            )
+            self.assertFalse(
+                any(
+                    re.search(
+                        rf"\bhas_country_flag\s*=\s*{re.escape(positive_flag)}\b",
+                        validator._mask_non_code(block),
+                    )
+                    for block in negative_blocks
+                ),
+                f"{modifier} must require {positive_flag}",
+            )
+            self.assertTrue(
+                any(
+                    re.search(
+                        rf"\bmodifier\s*=\s*{re.escape(modifier)}\b",
+                        validator._mask_non_code(block),
+                    )
+                    for block in validator._iter_named_blocks(
+                        add_branch, "has_dynamic_modifier"
+                    )
+                ),
+                f"{modifier} add must be idempotently guarded",
+            )
+
+            remove_branches = [
+                block
+                for block in top_level_else
+                if any(
+                    re.search(
+                        rf"\bmodifier\s*=\s*{re.escape(modifier)}\b",
+                        validator._mask_non_code(operation),
+                    )
+                    for operation in validator._iter_named_blocks(
+                        block, "remove_dynamic_modifier"
+                    )
+                )
+            ]
+            self.assertEqual(len(remove_branches), 1, f"{modifier} remove lifecycle")
+
+            definition = validator.extract_named_block(dynamic, modifier) or ""
+            enable = validator.extract_named_block(definition, "enable") or ""
+            masked_enable = validator._mask_non_code(enable)
+            self.assertEqual(
+                set(re.findall(r"\bhas_country_flag\s*=\s*([A-Za-z0-9_]+)", masked_enable)),
+                {positive_flag, negative_flag},
+            )
+            enable_not = list(validator._iter_named_blocks(enable, "NOT"))
+            self.assertEqual(len(enable_not), 1)
+            self.assertRegex(
+                validator._mask_non_code(enable_not[0]),
+                rf"\bhas_country_flag\s*=\s*{re.escape(negative_flag)}\b",
+            )
+
     def _write_required_files(self, root: Path, text: str = "feature = { }") -> None:
         for files in validator.REQUIRED_FILES.values():
             for relative_path, _ in files:
@@ -306,18 +580,12 @@ class CrisisValidatorTests(unittest.TestCase):
         self.assertIn("remove_power_balance", startup)
         self.assertIn("STP_inner_party_opinions_bop", startup)
         self.assertIn("remove_ideas = VAL_mercenary_state", startup)
-        stp_scope = self._block_with_assignment(
-            startup, "STP", "ADISCORD_STP_VAL_initialize_schema = yes"
-        )
-        for guard in (
-            "has_country_flag = STP_main_campaign_side",
-            "check_variable = { var = STP_leader_health_stage value = 1",
-            "NOT = { has_country_flag = STP_health_calendar_started }",
-            "set_country_flag = STP_health_calendar_started",
+        for task_3_token in (
+            "STP_health_calendar_started",
             "complete_national_focus = STP_Nectar_of_the_Gods",
             "activate_mission = STP_health_stage_1_to_2",
         ):
-            self.assertIn(guard, stp_scope)
+            self.assertNotIn(task_3_token, startup)
 
     def test_legacy_stp_and_val_migration_paths_are_idempotent(self):
         core = validator.read(
@@ -452,26 +720,37 @@ class CrisisValidatorTests(unittest.TestCase):
             validator.ROOT / "common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt"
         ) or ""
         refresh = validator.extract_named_block(core, "STP_refresh_crisis_modifier") or ""
-        for marker in (
-            "# Fading father stage 1: 0 0 0 0 0",
-            "# Fading father stage 2: -0.05 -0.02 -0.05 0 0",
-            "# Fading father stage 3: -0.10 -0.05 -0.10 -0.05 0",
-            "# Fading father stage 4: -0.20 -0.10 -0.20 -0.10 -0.05",
-            "# Underground network 0-24: 0 0",
-            "# Underground network 25-49: -0.02 0.01",
-            "# Underground network 50-74: -0.04 0.02",
-            "# Underground network 75-89: -0.07 0.03",
-            "# Underground network 90-100: -0.10 0.04",
-            "# Security pressure 0-24: 0 0 0",
-            "# Security pressure 25-49: -0.02 -0.05 0",
-            "# Security pressure 50-74: -0.05 -0.10 -0.03",
-            "# Security pressure 75-89: -0.10 -0.15 -0.05",
-            "# Security pressure 90-100: -0.15 -0.20 -0.10",
-        ):
-            self.assertIn(marker, refresh)
-        for modifier in ("STP_fading_father", "STP_underground_network", "STP_security_pressure"):
-            self.assertIn(f"add_dynamic_modifier = {{ modifier = {modifier} }}", refresh)
-            self.assertIn(f"remove_dynamic_modifier = {{ modifier = {modifier} }}", refresh)
+        self._assert_stp_modifier_contract(refresh)
+
+    def test_stp_modifier_contract_rejects_behavioral_mutations(self):
+        core = validator.read(
+            validator.ROOT / "common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt"
+        ) or ""
+        refresh = validator.extract_named_block(core, "STP_refresh_crisis_modifier") or ""
+        mutations = {
+            "backing assignment": (
+                "set_variable = { var = STP_network_stability_factor value = -0.07 }",
+                "set_variable = { var = STP_network_stability_factor value = -0.06 }",
+            ),
+            "threshold bound": (
+                "STP_resistance_readiness value = 75 compare = greater_than_or_equals",
+                "STP_resistance_readiness value = 76 compare = greater_than_or_equals",
+            ),
+            "lifecycle flag": (
+                "NOT = { has_country_flag = STP_internal_war_started }",
+                "NOT = { has_country_flag = STP_internal_war_finished }",
+            ),
+            "remove operation": (
+                "remove_dynamic_modifier = { modifier = STP_security_pressure }",
+                "remove_dynamic_modifier = { modifier = STP_security_pressure_mutated }",
+            ),
+        }
+        for name, (before, after) in mutations.items():
+            with self.subTest(name=name):
+                mutated = refresh.replace(before, after, 1)
+                self.assertNotEqual(mutated, refresh)
+                with self.assertRaises(AssertionError):
+                    self._assert_stp_modifier_contract(mutated)
 
     def test_successors_portraits_guard_and_history_bootstrap_are_exact(self):
         root = validator.ROOT
