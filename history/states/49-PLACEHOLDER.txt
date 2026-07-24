@@ -4,8 +4,15 @@ state={
 	provinces={
 		2298 2434 2558 4486 4870 4944 6317 9880 10315 10563 10590 11010 16512 16523 16538 16544 16545 16546 16639 
 	}
-	manpower=0
+	manpower=20000
 	buildings_max_level_factor=1
-	state_category=wasteland
-	local_supplies=0
+	state_category=town
+	local_supplies=0.5
+	history={
+		buildings={
+			infrastructure=1
+			industrial_complex=1
+		}
+		victory_points={ 16639 3 }
+	}
 }

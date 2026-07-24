@@ -1,0 +1,9 @@
+ADISCORD_vorkerland_dirty_state = {
+    enable = { always = yes }
+    icon = GFX_modifiers_sabotaged_resource
+    local_manpower = -0.75
+    state_resources_factor = -0.60
+    local_building_slots_factor = -0.40
+    state_production_speed_buildings_factor = -0.50
+    local_supply_impact_factor = 0.35
+}

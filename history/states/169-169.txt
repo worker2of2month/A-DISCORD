@@ -4,7 +4,15 @@ state={
 	provinces={
 		973 2306 2965 4707 5849 10693 10985 11394 11913 16464 16476 
 	}
-	manpower=0
+	manpower=18000
 	buildings_max_level_factor=1
-	local_supplies=0
+	state_category=town
+	local_supplies=0.5
+	history={
+		buildings={
+			infrastructure=1
+			arms_factory=1
+		}
+		victory_points={ 10693 3 }
+	}
 }

@@ -134,3 +134,56 @@ class CountryRosterTests(unittest.TestCase):
             self.assertEqual({int(location) for location in locations}, {capital})
             self.assertIn('ADISCORD_militia = { x = 0 y = 0 }', oob)
             self.assertIn('ADISCORD_militia = { x = 0 y = 1 }', oob)
+
+
+class DirtyStateTests(unittest.TestCase):
+    SPAWN_STATES = set().union(*map(set, DIRTY_GROUPS.values()))
+    CAPITALS = {
+        49: (16639, 3, 'industrial_complex'),
+        152: (9806, 3, 'industrial_complex'),
+        169: (10693, 3, 'arms_factory'),
+        173: (6015, 3, 'arms_factory'),
+        177: (2952, 3, 'arms_factory'),
+        181: (2226, 3, 'industrial_complex'),
+    }
+
+    def test_apply_effect_enumerates_every_contaminated_state_once(self):
+        effects_path = validator.ROOT / 'common' / 'scripted_effects' / 'ADISCORD_vorkerland_collapse_dirty_effects.txt'
+        effects = effects_path.read_text(encoding='utf-8-sig')
+        apply_text = effects.split('ADISCORD_vorkerland_apply_dirty_modifiers = {', 1)[1]
+        apply_text = apply_text.split('\n\nADISCORD_vorkerland_apply_dirty_state_modifier = {', 1)[0]
+        state_ids = re.findall(r'\bstate\s*=\s*\{\s*id\s*=\s*(\d+)', apply_text)
+        self.assertEqual([int(state_id) for state_id in state_ids], sorted(CONTAMINATED_STATES))
+
+    def test_dirty_modifier_is_permanent_and_never_removed(self):
+        modifier_path = validator.ROOT / 'common' / 'dynamic_modifiers' / 'ADISCORD_vorkerland_collapse_dynamic_modifiers.txt'
+        modifier = modifier_path.read_text(encoding='utf-8-sig')
+        self.assertIn('ADISCORD_vorkerland_dirty_state', modifier)
+        self.assertNotIn('remove_trigger', modifier)
+
+        removals = []
+        for path in validator.ROOT.rglob('*.txt'):
+            text = path.read_text(encoding='utf-8-sig')
+            if re.search(r'remove_dynamic_modifier\s*=\s*\{[^}]*ADISCORD_vorkerland_dirty_state', text, re.DOTALL):
+                removals.append(path.relative_to(validator.ROOT).as_posix())
+        self.assertEqual(removals, [])
+
+    def test_spawn_states_are_playable_and_ownerless(self):
+        for state_id in self.SPAWN_STATES:
+            path = validator.state_file(validator.ROOT, state_id)
+            self.assertIsNotNone(path, f'missing spawn state {state_id}')
+            text = Path(path).read_text(encoding='utf-8-sig')
+            self.assertRegex(text, r'\bmanpower\s*=\s*[1-9]\d*\b', f'state {state_id} needs positive manpower')
+            self.assertRegex(text, r'\bstate_category\s*=\s*\w+', f'state {state_id} needs a category')
+            self.assertRegex(text, r'\blocal_supplies\s*=\s*0\.[0-9]*[1-9]\d*', f'state {state_id} needs local supplies')
+            self.assertNotRegex(text, r'(?m)^\s*(owner|add_core_of|add_state_core|controller)\s*=', f'state {state_id} must stay ownerless')
+
+    def test_capital_states_have_exact_vp_and_buildings(self):
+        for state_id, (province, vp, building) in self.CAPITALS.items():
+            path = validator.state_file(validator.ROOT, state_id)
+            text = Path(path).read_text(encoding='utf-8-sig')
+            self.assertRegex(text, rf'victory_points\s*=\s*\{{\s*{province}\s+{vp}\s*\}}')
+            self.assertRegex(text, r'\bstate_category\s*=\s*town\b')
+            self.assertRegex(text, r'\blocal_supplies\s*=\s*0\.5\b')
+            self.assertRegex(text, r'\binfrastructure\s*=\s*1\b')
+            self.assertRegex(text, rf'\b{building}\s*=\s*1\b')
