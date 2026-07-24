@@ -1,0 +1,1304 @@
+# Stelander succession split, conservation, and single postwar finalization.
+
+STP_snapshot_internal_split = {
+	save_global_event_target_as = STP_crisis_main_side
+
+	clr_country_flag = STP_prewar_owned_state_1
+	clr_country_flag = STP_prewar_owned_state_2
+	clr_country_flag = STP_prewar_owned_state_3
+	clr_country_flag = STP_prewar_owned_state_28
+	clr_country_flag = STP_prewar_owned_state_29
+	clr_country_flag = STP_prewar_owned_state_43
+	clr_country_flag = STP_prewar_owned_state_44
+	clr_country_flag = STP_prewar_owned_state_45
+	clr_country_flag = STP_prewar_owned_state_46
+	clr_country_flag = STP_prewar_owned_state_53
+	clr_country_flag = STP_prewar_owned_state_88
+
+	set_variable = { var = STP_pre_guard_divisions value = num_divisions }
+	delete_units = {
+		division_template = "Capital Guard"
+		disband = yes
+	}
+	set_variable = { var = STP_post_guard_divisions value = num_divisions }
+	if = {
+		limit = {
+			check_variable = {
+				var = STP_post_guard_divisions
+				value = var:STP_pre_guard_divisions
+				compare = less_than
+			}
+		}
+		set_country_flag = STP_capital_guard_existed
+	}
+	else = {
+		clr_country_flag = STP_capital_guard_existed
+	}
+
+	# Snapshot the free stockpile only after the exact guard disband refunds equipment.
+	set_variable = {
+		var = STP_prewar_stockpile_infantry
+		value = num_equipment@infantry_equipment
+	}
+	set_variable = {
+		var = STP_prewar_stockpile_support
+		value = num_equipment@support_equipment
+	}
+	set_variable = {
+		var = STP_prewar_resistance_escrow_infantry
+		value = var:STP_resistance_escrow_infantry
+	}
+	set_variable = {
+		var = STP_prewar_resistance_escrow_support
+		value = var:STP_resistance_escrow_support
+	}
+
+	if = { limit = { owns_state = 1 } set_country_flag = STP_prewar_owned_state_1 }
+	if = { limit = { owns_state = 2 } set_country_flag = STP_prewar_owned_state_2 }
+	if = { limit = { owns_state = 3 } set_country_flag = STP_prewar_owned_state_3 }
+	if = { limit = { owns_state = 28 } set_country_flag = STP_prewar_owned_state_28 }
+	if = { limit = { owns_state = 29 } set_country_flag = STP_prewar_owned_state_29 }
+	if = { limit = { owns_state = 43 } set_country_flag = STP_prewar_owned_state_43 }
+	if = { limit = { owns_state = 44 } set_country_flag = STP_prewar_owned_state_44 }
+	if = { limit = { owns_state = 45 } set_country_flag = STP_prewar_owned_state_45 }
+	if = { limit = { owns_state = 46 } set_country_flag = STP_prewar_owned_state_46 }
+	if = { limit = { owns_state = 53 } set_country_flag = STP_prewar_owned_state_53 }
+	if = { limit = { owns_state = 88 } set_country_flag = STP_prewar_owned_state_88 }
+
+	# Civil-war countries must be outside all external factions. The finalizer
+	# consumes this flag before deciding whether NOD can restore the mandate.
+	if = {
+		limit = { is_subject_of = NOD }
+		set_country_flag = STP_nodrul_mandate_pending
+		NOD = {
+			set_autonomy = {
+				target = ROOT
+				autonomy_state = autonomy_free
+			}
+		}
+	}
+	if = {
+		limit = { is_in_faction = yes }
+		leave_faction = yes
+	}
+}
+
+STP_clear_internal_starter_state_flags = {
+	1 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+	2 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+	3 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+	28 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+	29 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+	43 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+	44 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+	45 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+	46 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+	53 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+	88 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+}
+
+STP_select_resistance_starter_states = {
+	STP_clear_internal_starter_state_flags = yes
+	clr_country_flag = STP_civil_war_starter_selected
+	43 = {
+		if = {
+			limit = { is_owned_by = ROOT }
+			set_state_flag = STP_resistance_starter_state
+			ROOT = {
+				set_country_flag = STP_civil_war_starter_selected
+				set_variable = { var = STP_civil_war_starter_capital value = 43 }
+			}
+		}
+	}
+	if = {
+		limit = { NOT = { has_country_flag = STP_civil_war_starter_selected } owns_state = 1 }
+		1 = { set_state_flag = STP_resistance_starter_state }
+		set_country_flag = STP_civil_war_starter_selected
+		set_variable = { var = STP_civil_war_starter_capital value = 1 }
+	}
+	else_if = {
+		limit = { NOT = { has_country_flag = STP_civil_war_starter_selected } owns_state = 2 }
+		2 = { set_state_flag = STP_resistance_starter_state }
+		set_country_flag = STP_civil_war_starter_selected
+		set_variable = { var = STP_civil_war_starter_capital value = 2 }
+	}
+	else_if = {
+		limit = { NOT = { has_country_flag = STP_civil_war_starter_selected } owns_state = 3 }
+		3 = { set_state_flag = STP_resistance_starter_state }
+		set_country_flag = STP_civil_war_starter_selected
+		set_variable = { var = STP_civil_war_starter_capital value = 3 }
+	}
+	else_if = {
+		limit = { NOT = { has_country_flag = STP_civil_war_starter_selected } owns_state = 28 }
+		28 = { set_state_flag = STP_resistance_starter_state }
+		set_country_flag = STP_civil_war_starter_selected
+		set_variable = { var = STP_civil_war_starter_capital value = 28 }
+	}
+	else_if = {
+		limit = { NOT = { has_country_flag = STP_civil_war_starter_selected } owns_state = 29 }
+		29 = { set_state_flag = STP_resistance_starter_state }
+		set_country_flag = STP_civil_war_starter_selected
+		set_variable = { var = STP_civil_war_starter_capital value = 29 }
+	}
+	else_if = {
+		limit = { NOT = { has_country_flag = STP_civil_war_starter_selected } owns_state = 44 }
+		44 = { set_state_flag = STP_resistance_starter_state }
+		set_country_flag = STP_civil_war_starter_selected
+		set_variable = { var = STP_civil_war_starter_capital value = 44 }
+	}
+	else_if = {
+		limit = { NOT = { has_country_flag = STP_civil_war_starter_selected } owns_state = 45 }
+		45 = { set_state_flag = STP_resistance_starter_state }
+		set_country_flag = STP_civil_war_starter_selected
+		set_variable = { var = STP_civil_war_starter_capital value = 45 }
+	}
+	else_if = {
+		limit = { NOT = { has_country_flag = STP_civil_war_starter_selected } owns_state = 46 }
+		46 = { set_state_flag = STP_resistance_starter_state }
+		set_country_flag = STP_civil_war_starter_selected
+		set_variable = { var = STP_civil_war_starter_capital value = 46 }
+	}
+	else_if = {
+		limit = { NOT = { has_country_flag = STP_civil_war_starter_selected } owns_state = 53 }
+		53 = { set_state_flag = STP_resistance_starter_state }
+		set_country_flag = STP_civil_war_starter_selected
+		set_variable = { var = STP_civil_war_starter_capital value = 53 }
+	}
+	else_if = {
+		limit = { NOT = { has_country_flag = STP_civil_war_starter_selected } owns_state = 88 }
+		88 = { set_state_flag = STP_resistance_starter_state }
+		set_country_flag = STP_civil_war_starter_selected
+		set_variable = { var = STP_civil_war_starter_capital value = 88 }
+	}
+}
+
+STP_select_party_starter_states = {
+	STP_clear_internal_starter_state_flags = yes
+	clr_country_flag = STP_civil_war_starter_selected
+	if = {
+		limit = { owns_state = 1 }
+		1 = { set_state_flag = STP_party_starter_state }
+		set_country_flag = STP_civil_war_starter_selected
+		set_variable = { var = STP_civil_war_starter_capital value = 1 }
+	}
+	if = {
+		limit = { owns_state = 2 }
+		2 = { set_state_flag = STP_party_starter_state }
+		set_country_flag = STP_civil_war_starter_selected
+		if = {
+			limit = { NOT = { owns_state = 1 } }
+			set_variable = { var = STP_civil_war_starter_capital value = 2 }
+		}
+	}
+	if = {
+		limit = { owns_state = 3 }
+		3 = { set_state_flag = STP_party_starter_state }
+		set_country_flag = STP_civil_war_starter_selected
+		if = {
+			limit = { NOT = { owns_state = 1 } NOT = { owns_state = 2 } }
+			set_variable = { var = STP_civil_war_starter_capital value = 3 }
+		}
+	}
+	if = {
+		limit = { owns_state = 28 }
+		28 = { set_state_flag = STP_party_starter_state }
+		set_country_flag = STP_civil_war_starter_selected
+		set_variable = { var = STP_civil_war_starter_capital value = 28 }
+	}
+	if = {
+		limit = { NOT = { has_country_flag = STP_civil_war_starter_selected } }
+		STP_select_resistance_starter_states = yes
+		if = {
+			limit = { has_country_flag = STP_civil_war_starter_selected }
+			1 = { clr_state_flag = STP_resistance_starter_state }
+			2 = { clr_state_flag = STP_resistance_starter_state }
+			3 = { clr_state_flag = STP_resistance_starter_state }
+			28 = { clr_state_flag = STP_resistance_starter_state }
+			29 = { clr_state_flag = STP_resistance_starter_state }
+			43 = { clr_state_flag = STP_resistance_starter_state }
+			44 = { clr_state_flag = STP_resistance_starter_state }
+			45 = { clr_state_flag = STP_resistance_starter_state }
+			46 = { clr_state_flag = STP_resistance_starter_state }
+			53 = { clr_state_flag = STP_resistance_starter_state }
+			88 = { clr_state_flag = STP_resistance_starter_state }
+			if = { limit = { owns_state = 1 } 1 = { set_state_flag = STP_party_starter_state } }
+			else_if = { limit = { owns_state = 2 } 2 = { set_state_flag = STP_party_starter_state } }
+			else_if = { limit = { owns_state = 3 } 3 = { set_state_flag = STP_party_starter_state } }
+			else_if = { limit = { owns_state = 28 } 28 = { set_state_flag = STP_party_starter_state } }
+			else_if = { limit = { owns_state = 29 } 29 = { set_state_flag = STP_party_starter_state } }
+			else_if = { limit = { owns_state = 43 } 43 = { set_state_flag = STP_party_starter_state } }
+			else_if = { limit = { owns_state = 44 } 44 = { set_state_flag = STP_party_starter_state } }
+			else_if = { limit = { owns_state = 45 } 45 = { set_state_flag = STP_party_starter_state } }
+			else_if = { limit = { owns_state = 46 } 46 = { set_state_flag = STP_party_starter_state } }
+			else_if = { limit = { owns_state = 53 } 53 = { set_state_flag = STP_party_starter_state } }
+			else_if = { limit = { owns_state = 88 } 88 = { set_state_flag = STP_party_starter_state } }
+		}
+	}
+}
+
+STP_prepare_new_internal_country = {
+	clr_country_flag = STP_main_campaign_side
+	clr_country_flag = STP_health_calendar_started
+	clr_country_flag = STP_internal_outcome_pending
+	clr_country_flag = STP_civil_war_starter_selected
+	clr_country_flag = STP_resistance_isolated_fallback
+	if = { limit = { is_in_faction = yes } leave_faction = yes }
+	load_focus_tree = {
+		tree = ADISCORD_STP_crisis_war_focus
+		keep_completed = no
+	}
+}
+
+STP_prepare_resistance_revolter = {
+	STP_prepare_new_internal_country = yes
+	set_country_flag = STP_internal_war_started
+	set_country_flag = STP_crisis_resistance_side
+	save_global_event_target_as = STP_crisis_resistance_side
+}
+
+STP_prepare_party_revolter = {
+	STP_prepare_new_internal_country = yes
+	set_country_flag = STP_internal_war_started
+	set_country_flag = STP_crisis_party_side
+	save_global_event_target_as = STP_crisis_party_side
+}
+
+STP_start_resistance_revolt = {
+	STP_snapshot_internal_split = yes
+	clear_global_event_target = STP_crisis_party_side
+	clear_global_event_target = STP_crisis_resistance_side
+	clr_country_flag = STP_crisis_resistance_side
+	set_country_flag = STP_internal_war_started
+	set_country_flag = STP_crisis_party_side
+	save_global_event_target_as = STP_crisis_party_side
+	set_politics = { ruling_party = hedonism elections_allowed = no }
+	STP_select_resistance_starter_states = yes
+
+	if = {
+		limit = { check_variable = { var = STP_node_officers value = 0 compare = equals } }
+		start_civil_war = {
+			ideology = $ideology$
+			ruling_party = hedonism
+			size = 0
+			army_ratio = 0
+			keep_all_characters = yes
+			capital = var:STP_civil_war_starter_capital
+			states = all
+			states_filter = { has_state_flag = STP_resistance_starter_state }
+			STP_prepare_resistance_revolter = yes
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = STP_node_officers value = 1 compare = equals } }
+		start_civil_war = {
+			ideology = $ideology$
+			ruling_party = hedonism
+			size = 0
+			army_ratio = 0.2
+			keep_all_characters = yes
+			capital = var:STP_civil_war_starter_capital
+			states = all
+			states_filter = { has_state_flag = STP_resistance_starter_state }
+			STP_prepare_resistance_revolter = yes
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = STP_node_officers value = 2 compare = equals } }
+		start_civil_war = {
+			ideology = $ideology$
+			ruling_party = hedonism
+			size = 0
+			army_ratio = 0.35
+			keep_all_characters = yes
+			capital = var:STP_civil_war_starter_capital
+			states = all
+			states_filter = { has_state_flag = STP_resistance_starter_state }
+			STP_prepare_resistance_revolter = yes
+		}
+	}
+	else = {
+		start_civil_war = {
+			ideology = $ideology$
+			ruling_party = hedonism
+			size = 0
+			army_ratio = 0.5
+			keep_all_characters = yes
+			capital = var:STP_civil_war_starter_capital
+			states = all
+			states_filter = { has_state_flag = STP_resistance_starter_state }
+			STP_prepare_resistance_revolter = yes
+		}
+	}
+
+	every_country = {
+		limit = {
+			original_tag = STP
+			has_war_with = ROOT
+			NOT = { has_country_flag = STP_main_campaign_side }
+			has_country_flag = STP_crisis_resistance_side
+		}
+		save_global_event_target_as = STP_crisis_resistance_side
+	}
+	STP_apply_civil_war_state_map = yes
+	STP_reconcile_internal_stockpiles = yes
+	STP_transfer_resistance_escrow = yes
+	STP_materialize_resistance_packages = yes
+	STP_assign_internal_characters = yes
+	if = {
+		limit = {
+			has_event_target = STP_crisis_party_side
+			country_exists = event_target:STP_crisis_party_side
+			has_event_target = STP_crisis_resistance_side
+			country_exists = event_target:STP_crisis_resistance_side
+		}
+		event_target:STP_crisis_party_side = {
+			country_event = { id = stp_crisis.51 days = 3 }
+		}
+		event_target:STP_crisis_resistance_side = {
+			country_event = { id = stp_crisis.51 days = 3 }
+		}
+	}
+}
+
+STP_start_party_revolt = {
+	STP_snapshot_internal_split = yes
+	clear_global_event_target = STP_crisis_party_side
+	clear_global_event_target = STP_crisis_resistance_side
+	clr_country_flag = STP_crisis_party_side
+	set_country_flag = STP_internal_war_started
+	set_country_flag = STP_crisis_resistance_side
+	save_global_event_target_as = STP_crisis_resistance_side
+	if = {
+		limit = { has_country_flag = STP_resistance_leader_sotnikov }
+		set_politics = { ruling_party = etatism elections_allowed = no }
+	}
+	else = {
+		set_politics = { ruling_party = chauvinism elections_allowed = no }
+	}
+	STP_select_party_starter_states = yes
+
+	if = {
+		limit = { check_variable = { var = STP_node_officers value = 0 compare = equals } }
+		start_civil_war = {
+			ideology = hedonism
+			ruling_party = ROOT
+			size = 0
+			army_ratio = 1
+			keep_all_characters = yes
+			capital = var:STP_civil_war_starter_capital
+			states = all
+			states_filter = { has_state_flag = STP_party_starter_state }
+			STP_prepare_party_revolter = yes
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = STP_node_officers value = 1 compare = equals } }
+		start_civil_war = {
+			ideology = hedonism
+			ruling_party = ROOT
+			size = 0
+			army_ratio = 0.8
+			keep_all_characters = yes
+			capital = var:STP_civil_war_starter_capital
+			states = all
+			states_filter = { has_state_flag = STP_party_starter_state }
+			STP_prepare_party_revolter = yes
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = STP_node_officers value = 2 compare = equals } }
+		start_civil_war = {
+			ideology = hedonism
+			ruling_party = ROOT
+			size = 0
+			army_ratio = 0.65
+			keep_all_characters = yes
+			capital = var:STP_civil_war_starter_capital
+			states = all
+			states_filter = { has_state_flag = STP_party_starter_state }
+			STP_prepare_party_revolter = yes
+		}
+	}
+	else = {
+		start_civil_war = {
+			ideology = hedonism
+			ruling_party = ROOT
+			size = 0
+			army_ratio = 0.5
+			keep_all_characters = yes
+			capital = var:STP_civil_war_starter_capital
+			states = all
+			states_filter = { has_state_flag = STP_party_starter_state }
+			STP_prepare_party_revolter = yes
+		}
+	}
+
+	every_country = {
+		limit = {
+			original_tag = STP
+			has_war_with = ROOT
+			NOT = { has_country_flag = STP_main_campaign_side }
+			has_country_flag = STP_crisis_party_side
+		}
+		save_global_event_target_as = STP_crisis_party_side
+	}
+	STP_apply_civil_war_state_map = yes
+	STP_reconcile_internal_stockpiles = yes
+	STP_transfer_resistance_escrow = yes
+	STP_materialize_resistance_packages = yes
+	STP_assign_internal_characters = yes
+	if = {
+		limit = {
+			has_event_target = STP_crisis_party_side
+			country_exists = event_target:STP_crisis_party_side
+			has_event_target = STP_crisis_resistance_side
+			country_exists = event_target:STP_crisis_resistance_side
+		}
+		event_target:STP_crisis_party_side = {
+			country_event = { id = stp_crisis.51 days = 3 }
+		}
+		event_target:STP_crisis_resistance_side = {
+			country_event = { id = stp_crisis.51 days = 3 }
+		}
+	}
+}
+
+STP_apply_civil_war_state_map = {
+	if = {
+		limit = {
+			has_event_target = STP_crisis_party_side
+			country_exists = event_target:STP_crisis_party_side
+			has_event_target = STP_crisis_resistance_side
+			country_exists = event_target:STP_crisis_resistance_side
+		}
+		set_variable = { var = STP_resistance_mapped_states value = 0 }
+
+		# The three party-base states are never earned by a resistance node.
+		if = {
+			limit = { has_country_flag = STP_prewar_owned_state_1 }
+			event_target:STP_crisis_party_side = { transfer_state = 1 }
+		}
+		if = {
+			limit = { has_country_flag = STP_prewar_owned_state_2 }
+			event_target:STP_crisis_party_side = { transfer_state = 2 }
+		}
+		if = {
+			limit = { has_country_flag = STP_prewar_owned_state_3 }
+			event_target:STP_crisis_party_side = { transfer_state = 3 }
+		}
+
+		if = {
+			limit = {
+				has_country_flag = STP_prewar_owned_state_28
+				check_variable = { var = STP_node_palace value = 2 compare = equals }
+				has_country_flag = STP_capital_guard_loyal_to_resistance
+			}
+			event_target:STP_crisis_resistance_side = { transfer_state = 28 }
+			add_to_variable = { var = STP_resistance_mapped_states value = 1 }
+		}
+		else_if = {
+			limit = { has_country_flag = STP_prewar_owned_state_28 }
+			event_target:STP_crisis_party_side = { transfer_state = 28 }
+		}
+
+		if = {
+			limit = {
+				has_country_flag = STP_prewar_owned_state_29
+				check_variable = { var = STP_node_officers value = 1 compare = greater_than_or_equals }
+			}
+			event_target:STP_crisis_resistance_side = { transfer_state = 29 }
+			add_to_variable = { var = STP_resistance_mapped_states value = 1 }
+		}
+		else_if = {
+			limit = { has_country_flag = STP_prewar_owned_state_29 }
+			event_target:STP_crisis_party_side = { transfer_state = 29 }
+		}
+
+		if = {
+			limit = {
+				has_country_flag = STP_prewar_owned_state_43
+				check_variable = { var = STP_node_mountains value = 1 compare = greater_than_or_equals }
+			}
+			event_target:STP_crisis_resistance_side = { transfer_state = 43 }
+			add_to_variable = { var = STP_resistance_mapped_states value = 1 }
+		}
+		else_if = {
+			limit = { has_country_flag = STP_prewar_owned_state_43 }
+			event_target:STP_crisis_party_side = { transfer_state = 43 }
+		}
+
+		if = {
+			limit = {
+				has_country_flag = STP_prewar_owned_state_44
+				check_variable = { var = STP_node_mountains value = 2 compare = greater_than_or_equals }
+			}
+			event_target:STP_crisis_resistance_side = { transfer_state = 44 }
+			add_to_variable = { var = STP_resistance_mapped_states value = 1 }
+		}
+		else_if = {
+			limit = { has_country_flag = STP_prewar_owned_state_44 }
+			event_target:STP_crisis_party_side = { transfer_state = 44 }
+		}
+
+		if = {
+			limit = {
+				has_country_flag = STP_prewar_owned_state_45
+				check_variable = { var = STP_node_market value = 2 compare = equals }
+			}
+			event_target:STP_crisis_resistance_side = { transfer_state = 45 }
+			add_to_variable = { var = STP_resistance_mapped_states value = 1 }
+		}
+		else_if = {
+			limit = { has_country_flag = STP_prewar_owned_state_45 }
+			event_target:STP_crisis_party_side = { transfer_state = 45 }
+		}
+
+		if = {
+			limit = {
+				has_country_flag = STP_prewar_owned_state_46
+				check_variable = { var = STP_node_street value = 1 compare = greater_than_or_equals }
+			}
+			event_target:STP_crisis_resistance_side = { transfer_state = 46 }
+			add_to_variable = { var = STP_resistance_mapped_states value = 1 }
+		}
+		else_if = {
+			limit = { has_country_flag = STP_prewar_owned_state_46 }
+			event_target:STP_crisis_party_side = { transfer_state = 46 }
+		}
+
+		if = {
+			limit = {
+				has_country_flag = STP_prewar_owned_state_53
+				check_variable = { var = STP_node_mountains value = 3 compare = equals }
+			}
+			event_target:STP_crisis_resistance_side = { transfer_state = 53 }
+			add_to_variable = { var = STP_resistance_mapped_states value = 1 }
+		}
+		else_if = {
+			limit = { has_country_flag = STP_prewar_owned_state_53 }
+			event_target:STP_crisis_party_side = { transfer_state = 53 }
+		}
+
+		if = {
+			limit = {
+				has_country_flag = STP_prewar_owned_state_88
+				has_country_flag = STP_garrison_88_loyal_to_resistance
+			}
+			event_target:STP_crisis_resistance_side = { transfer_state = 88 }
+			add_to_variable = { var = STP_resistance_mapped_states value = 1 }
+		}
+		else_if = {
+			limit = { has_country_flag = STP_prewar_owned_state_88 }
+			event_target:STP_crisis_party_side = { transfer_state = 88 }
+		}
+
+		# A zero-node resistance still receives one manifest state, never a random state.
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_resistance_mapped_states
+					value = 0
+					compare = equals
+				}
+			}
+			if = {
+				limit = { has_country_flag = STP_prewar_owned_state_43 }
+				event_target:STP_crisis_resistance_side = {
+					transfer_state = 43
+					set_country_flag = STP_resistance_isolated_fallback
+				}
+			}
+		}
+
+		event_target:STP_crisis_party_side = {
+			if = { limit = { owns_state = 28 } set_capital = 28 }
+			else = { set_capital = 1 }
+		}
+		event_target:STP_crisis_resistance_side = {
+			if = { limit = { owns_state = 28 } set_capital = 28 }
+			else_if = { limit = { owns_state = 29 } set_capital = 29 }
+			else_if = { limit = { owns_state = 43 } set_capital = 43 }
+			else_if = { limit = { owns_state = 44 } set_capital = 44 }
+			else_if = { limit = { owns_state = 45 } set_capital = 45 }
+			else_if = { limit = { owns_state = 46 } set_capital = 46 }
+			else_if = { limit = { owns_state = 53 } set_capital = 53 }
+			else_if = { limit = { owns_state = 88 } set_capital = 88 }
+			else_if = { limit = { owns_state = 1 } set_capital = 1 }
+			else_if = { limit = { owns_state = 2 } set_capital = 2 }
+			else_if = { limit = { owns_state = 3 } set_capital = 3 }
+		}
+	}
+
+	1 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+	2 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+	3 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+	28 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+	29 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+	43 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+	44 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+	45 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+	46 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+	53 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+	88 = { clr_state_flag = STP_party_starter_state clr_state_flag = STP_resistance_starter_state }
+}
+
+STP_reconcile_internal_stockpiles = {
+	if = {
+		limit = {
+			has_event_target = STP_crisis_party_side
+			country_exists = event_target:STP_crisis_party_side
+			has_event_target = STP_crisis_resistance_side
+			country_exists = event_target:STP_crisis_resistance_side
+		}
+		event_target:STP_crisis_party_side = {
+			set_variable = {
+				var = STP_split_stockpile_infantry
+				value = num_equipment@infantry_equipment
+			}
+			set_variable = {
+				var = STP_split_stockpile_support
+				value = num_equipment@support_equipment
+			}
+			ROOT = {
+				set_variable = {
+					var = STP_split_total_infantry
+					value = PREV.STP_split_stockpile_infantry
+				}
+				set_variable = {
+					var = STP_split_total_support
+					value = PREV.STP_split_stockpile_support
+				}
+			}
+		}
+		event_target:STP_crisis_resistance_side = {
+			set_variable = {
+				var = STP_split_stockpile_infantry
+				value = num_equipment@infantry_equipment
+			}
+			set_variable = {
+				var = STP_split_stockpile_support
+				value = num_equipment@support_equipment
+			}
+			ROOT = {
+				add_to_variable = {
+					var = STP_split_total_infantry
+					value = PREV.STP_split_stockpile_infantry
+				}
+				add_to_variable = {
+					var = STP_split_total_support
+					value = PREV.STP_split_stockpile_support
+				}
+			}
+		}
+		set_variable = {
+			var = STP_split_delta_infantry
+			value = var:STP_prewar_stockpile_infantry
+		}
+		subtract_from_variable = {
+			var = STP_split_delta_infantry
+			value = var:STP_split_total_infantry
+		}
+		set_variable = {
+			var = STP_split_delta_support
+			value = var:STP_prewar_stockpile_support
+		}
+		subtract_from_variable = {
+			var = STP_split_delta_support
+			value = var:STP_split_total_support
+		}
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = var:STP_split_delta_infantry
+		}
+		add_equipment_to_stockpile = {
+			type = support_equipment
+			amount = var:STP_split_delta_support
+		}
+	}
+}
+
+STP_transfer_resistance_escrow = {
+	if = {
+		limit = {
+			has_event_target = STP_crisis_party_side
+			country_exists = event_target:STP_crisis_party_side
+			has_event_target = STP_crisis_resistance_side
+			country_exists = event_target:STP_crisis_resistance_side
+		}
+		set_variable = {
+			var = STP_militia_budget_infantry
+			value = var:STP_prewar_resistance_escrow_infantry
+		}
+		event_target:STP_crisis_resistance_side = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = ROOT.STP_prewar_resistance_escrow_infantry
+				producer = ROOT
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = ROOT.STP_prewar_resistance_escrow_support
+				producer = ROOT
+			}
+		}
+		# Clear every copied source only after the one real-stock transfer above.
+		event_target:STP_crisis_party_side = {
+			set_variable = { var = STP_resistance_escrow_infantry value = 0 }
+			set_variable = { var = STP_resistance_escrow_support value = 0 }
+		}
+		event_target:STP_crisis_resistance_side = {
+			set_variable = { var = STP_resistance_escrow_infantry value = 0 }
+			set_variable = { var = STP_resistance_escrow_support value = 0 }
+		}
+		set_variable = { var = STP_resistance_escrow_infantry value = 0 }
+		set_variable = { var = STP_resistance_escrow_support value = 0 }
+	}
+}
+
+STP_create_empty_mountain_militia = {
+	capital_scope = {
+		create_unit = {
+			division = "division_template = \"STP Mountain Resistance Militia\" start_experience_factor = 0 start_manpower_factor = 0 start_equipment_factor = 0"
+			owner = PREV
+			count = 1
+		}
+	}
+}
+
+STP_create_empty_urban_militia = {
+	capital_scope = {
+		create_unit = {
+			division = "division_template = \"STP Urban Resistance Militia\" start_experience_factor = 0 start_manpower_factor = 0 start_equipment_factor = 0"
+			owner = PREV
+			count = 1
+		}
+	}
+}
+
+STP_create_empty_capital_guard = {
+	capital_scope = {
+		create_unit = {
+			division = "division_template = \"Capital Guard\" start_experience_factor = 0 start_manpower_factor = 0 start_equipment_factor = 0"
+			owner = PREV
+			count = 1
+		}
+	}
+}
+
+STP_materialize_resistance_packages = {
+	if = {
+		limit = {
+			has_event_target = STP_crisis_party_side
+			country_exists = event_target:STP_crisis_party_side
+			has_event_target = STP_crisis_resistance_side
+			country_exists = event_target:STP_crisis_resistance_side
+		}
+		# Mountains spend the eligibility budget before the street network.
+		if = {
+			limit = {
+				check_variable = { var = STP_node_mountains value = 1 compare = greater_than_or_equals }
+				check_variable = { var = STP_militia_budget_infantry value = 600 compare = greater_than_or_equals }
+			}
+			subtract_from_variable = { var = STP_militia_budget_infantry value = 600 }
+			event_target:STP_crisis_resistance_side = {
+				STP_create_empty_mountain_militia = yes
+			}
+		}
+		if = {
+			limit = {
+				check_variable = { var = STP_node_mountains value = 2 compare = greater_than_or_equals }
+				check_variable = { var = STP_militia_budget_infantry value = 600 compare = greater_than_or_equals }
+			}
+			subtract_from_variable = { var = STP_militia_budget_infantry value = 600 }
+			event_target:STP_crisis_resistance_side = {
+				STP_create_empty_mountain_militia = yes
+			}
+		}
+		if = {
+			limit = {
+				check_variable = { var = STP_node_mountains value = 3 compare = equals }
+				check_variable = { var = STP_militia_budget_infantry value = 600 compare = greater_than_or_equals }
+			}
+			subtract_from_variable = { var = STP_militia_budget_infantry value = 600 }
+			event_target:STP_crisis_resistance_side = {
+				STP_create_empty_mountain_militia = yes
+			}
+		}
+		if = {
+			limit = {
+				check_variable = { var = STP_node_street value = 1 compare = greater_than_or_equals }
+				check_variable = { var = STP_militia_budget_infantry value = 400 compare = greater_than_or_equals }
+			}
+			subtract_from_variable = { var = STP_militia_budget_infantry value = 400 }
+			event_target:STP_crisis_resistance_side = {
+				STP_create_empty_urban_militia = yes
+			}
+		}
+		if = {
+			limit = {
+				check_variable = { var = STP_node_street value = 2 compare = equals }
+				check_variable = { var = STP_militia_budget_infantry value = 400 compare = greater_than_or_equals }
+			}
+			subtract_from_variable = { var = STP_militia_budget_infantry value = 400 }
+			event_target:STP_crisis_resistance_side = {
+				STP_create_empty_urban_militia = yes
+			}
+		}
+
+		# The original guard is recreated once, empty, on its chosen loyalty side.
+		if = {
+			limit = {
+				has_country_flag = STP_capital_guard_existed
+				has_country_flag = STP_capital_guard_loyal_to_resistance
+			}
+			event_target:STP_crisis_resistance_side = {
+				STP_create_empty_capital_guard = yes
+			}
+		}
+		else_if = {
+			limit = { has_country_flag = STP_capital_guard_existed }
+			event_target:STP_crisis_party_side = {
+				STP_create_empty_capital_guard = yes
+			}
+		}
+
+		# Officer preparation is fixed by tier and never randomized.
+		if = {
+			limit = { check_variable = { var = STP_node_officers value = 1 compare = equals } }
+			event_target:STP_crisis_resistance_side = {
+				add_command_power = 10
+				add_timed_idea = { idea = STP_officer_preparation_1 days = 30 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_node_officers value = 2 compare = equals } }
+			event_target:STP_crisis_resistance_side = {
+				add_command_power = 20
+				add_timed_idea = { idea = STP_officer_preparation_2 days = 60 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_node_officers value = 3 compare = equals } }
+			event_target:STP_crisis_resistance_side = {
+				add_command_power = 30
+				add_timed_idea = { idea = STP_officer_preparation_3 days = 90 }
+			}
+		}
+
+		if = {
+			limit = { check_variable = { var = STP_node_market value = 1 compare = greater_than_or_equals } }
+			event_target:STP_crisis_party_side = {
+				activate_mission = STP_party_market_sabotage
+			}
+		}
+		if = {
+			limit = { check_variable = { var = STP_node_market value = 2 compare = equals } }
+			event_target:STP_crisis_party_side = {
+				set_variable = {
+					var = STP_market_transfer_infantry
+					value = num_equipment@infantry_equipment
+				}
+				clamp_variable = {
+					var = STP_market_transfer_infantry
+					min = 0
+					max = 200
+				}
+				set_variable = {
+					var = STP_market_transfer_support
+					value = num_equipment@support_equipment
+				}
+				clamp_variable = {
+					var = STP_market_transfer_support
+					min = 0
+					max = 50
+				}
+				set_variable = {
+					var = STP_market_transfer_infantry_negative
+					value = var:STP_market_transfer_infantry
+				}
+				multiply_variable = {
+					var = STP_market_transfer_infantry_negative
+					value = -1
+				}
+				set_variable = {
+					var = STP_market_transfer_support_negative
+					value = var:STP_market_transfer_support
+				}
+				multiply_variable = {
+					var = STP_market_transfer_support_negative
+					value = -1
+				}
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = var:STP_market_transfer_infantry_negative
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = var:STP_market_transfer_support_negative
+				}
+				event_target:STP_crisis_resistance_side = {
+					add_equipment_to_stockpile = {
+						type = infantry_equipment
+						amount = PREV.STP_market_transfer_infantry
+						producer = ROOT
+					}
+					add_equipment_to_stockpile = {
+						type = support_equipment
+						amount = PREV.STP_market_transfer_support
+						producer = ROOT
+					}
+				}
+			}
+		}
+	}
+}
+
+STP_assign_internal_characters = {
+	if = {
+		limit = {
+			has_event_target = STP_crisis_party_side
+			country_exists = event_target:STP_crisis_party_side
+			has_event_target = STP_crisis_resistance_side
+			country_exists = event_target:STP_crisis_resistance_side
+		}
+		STP_Roland_Keitel = { set_nationality = event_target:STP_crisis_party_side }
+		STP_Edmund_Ravel = { set_nationality = event_target:STP_crisis_party_side }
+		STP_August_Veil = { set_nationality = event_target:STP_crisis_party_side }
+		STP_rufus_hedersett = { set_nationality = event_target:STP_crisis_party_side }
+
+		if = {
+			limit = { check_variable = { var = STP_node_officers value = 1 compare = greater_than_or_equals } }
+			STP_Maurice_Dallon = { set_nationality = event_target:STP_crisis_resistance_side }
+		}
+		if = {
+			limit = { check_variable = { var = STP_node_officers value = 2 compare = greater_than_or_equals } }
+			STP_Leonid_Barchel = { set_nationality = event_target:STP_crisis_resistance_side }
+		}
+		if = {
+			limit = { check_variable = { var = STP_node_officers value = 3 compare = equals } }
+			STP_Viktor_Marent = { set_nationality = event_target:STP_crisis_resistance_side }
+			STP_Severin_Drake = { set_nationality = event_target:STP_crisis_resistance_side }
+		}
+		STP_maksim_shabrat = { set_nationality = event_target:STP_crisis_resistance_side }
+		STP_grigory_sotnikov = { set_nationality = event_target:STP_crisis_resistance_side }
+
+		event_target:STP_crisis_party_side = {
+			set_politics = { ruling_party = hedonism elections_allowed = no }
+			promote_character = {
+				character = STP_rufus_hedersett
+				ideology = aristocratic_hedonism
+			}
+		}
+		if = {
+			limit = { has_country_flag = STP_resistance_leader_sotnikov }
+			event_target:STP_crisis_resistance_side = {
+				set_politics = { ruling_party = etatism elections_allowed = no }
+				promote_character = {
+					character = STP_grigory_sotnikov
+					ideology = etatism_ideology
+				}
+			}
+		}
+		else = {
+			event_target:STP_crisis_resistance_side = {
+				set_politics = { ruling_party = chauvinism elections_allowed = no }
+				promote_character = {
+					character = STP_maksim_shabrat
+					ideology = chauvinism_ideology
+				}
+			}
+		}
+	}
+}
+
+STP_clear_external_crisis_participants = {
+	clr_country_flag = STP_external_crisis_participant
+	clr_country_flag = STP_direct_external_intervention
+}
+
+VAL_STP_start_war_countdown = {
+	clr_country_flag = VAL_STP_countdown_120
+	clr_country_flag = VAL_STP_countdown_180
+	clr_country_flag = VAL_STP_countdown_300
+	clr_country_flag = VAL_STP_countdown_450
+	set_variable = { var = VAL_STP_countdown_type value = $type$ }
+	if = {
+		limit = { check_variable = { var = VAL_STP_countdown_type value = 120 compare = equals } }
+		set_country_flag = VAL_STP_countdown_120
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_STP_countdown_type value = 180 compare = equals } }
+		set_country_flag = VAL_STP_countdown_180
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_STP_countdown_type value = 300 compare = equals } }
+		set_country_flag = VAL_STP_countdown_300
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_STP_countdown_type value = 450 compare = equals } }
+		set_country_flag = VAL_STP_countdown_450
+	}
+	else = {
+		set_country_flag = VAL_STP_countdown_120
+		set_variable = { var = VAL_STP_countdown_type value = 120 }
+	}
+	set_country_flag = VAL_STP_countdown_pending
+}
+
+VAL_STP_trigger_breach = {
+	set_country_flag = VAL_STP_breach_pending
+}
+
+STP_assign_postwar_leader = {
+	if = {
+		limit = { has_country_flag = STP_winner_shabrat }
+		set_politics = { ruling_party = chauvinism elections_allowed = no }
+		STP_maksim_shabrat = { set_nationality = ROOT }
+		if = {
+			limit = { NOT = { has_character = STP_maksim_shabrat } }
+			recruit_character = STP_maksim_shabrat
+		}
+		promote_character = {
+			character = STP_maksim_shabrat
+			ideology = chauvinism_ideology
+		}
+		complete_national_focus = STP_The_Mountain_Window
+	}
+	else_if = {
+		limit = { has_country_flag = STP_winner_sotnikov }
+		set_politics = { ruling_party = etatism elections_allowed = no }
+		STP_grigory_sotnikov = { set_nationality = ROOT }
+		if = {
+			limit = { NOT = { has_character = STP_grigory_sotnikov } }
+			recruit_character = STP_grigory_sotnikov
+		}
+		promote_character = {
+			character = STP_grigory_sotnikov
+			ideology = etatism_ideology
+		}
+		complete_national_focus = STP_No_One_Controls_The_Transition
+	}
+	else = {
+		set_country_flag = STP_winner_hedersett
+		set_politics = { ruling_party = hedonism elections_allowed = no }
+		STP_rufus_hedersett = { set_nationality = ROOT }
+		if = {
+			limit = { NOT = { has_character = STP_rufus_hedersett } }
+			recruit_character = STP_rufus_hedersett
+		}
+		promote_character = {
+			character = STP_rufus_hedersett
+			ideology = aristocratic_hedonism
+		}
+		complete_national_focus = STP_The_Party_Closes_Ranks
+	}
+}
+
+STP_resolve_postwar_nodrul_mandate = {
+	if = {
+		limit = {
+			OR = {
+				has_country_flag = STP_winner_shabrat
+				has_country_flag = STP_winner_sotnikov
+			}
+		}
+		if = {
+			limit = { country_exists = NOD }
+			NOD = {
+				set_autonomy = {
+					target = event_target:STP_postwar_country
+					autonomy_state = autonomy_free
+				}
+			}
+		}
+		if = { limit = { is_in_faction = yes } leave_faction = yes }
+		set_country_flag = STP_nodrul_mandate_broken
+	}
+	else_if = {
+		limit = {
+			has_country_flag = STP_winner_hedersett
+			has_country_flag = STP_nodrul_mandate_pending
+			country_exists = NOD
+			NOD = {
+				NOT = { has_capitulated = yes }
+				controls_state = 10
+				controls_state = 11
+			}
+		}
+		NOD = {
+			set_autonomy = {
+				target = event_target:STP_postwar_country
+				autonomy_state = autonomy_shadow_state
+			}
+			if = {
+				limit = { is_in_faction = yes }
+				add_to_faction = event_target:STP_postwar_country
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			has_country_flag = STP_winner_hedersett
+			has_country_flag = STP_nodrul_mandate_pending
+		}
+		if = {
+			limit = { country_exists = NOD }
+			NOD = {
+				set_autonomy = {
+					target = event_target:STP_postwar_country
+					autonomy_state = autonomy_free
+				}
+			}
+		}
+		if = { limit = { is_in_faction = yes } leave_faction = yes }
+		set_country_flag = STP_nodrul_mandate_broken
+	}
+	clr_country_flag = STP_nodrul_mandate_pending
+}
+
+STP_finalize_internal_outcome = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = STP_internal_outcome_finalizing }
+			NOT = { has_country_flag = STP_internal_outcome_finalized }
+		}
+		set_country_flag = STP_internal_outcome_finalizing
+		save_global_event_target_as = STP_postwar_country
+		set_country_flag = STP_postwar_campaign_side
+		STP_set_crisis_phase = { value = 3 }
+
+		# Consume the saved mandate state while all role targets still exist.
+		STP_resolve_postwar_nodrul_mandate = yes
+
+		clr_country_flag = STP_main_campaign_side
+		clr_country_flag = STP_crisis_party_side
+		clr_country_flag = STP_crisis_resistance_side
+		clr_country_flag = STP_health_calendar_started
+
+		if = {
+			limit = {
+				has_event_target = STP_crisis_main_side
+				country_exists = event_target:STP_crisis_main_side
+			}
+			event_target:STP_crisis_main_side = {
+				clr_country_flag = STP_main_campaign_side
+				clr_country_flag = STP_crisis_party_side
+				clr_country_flag = STP_crisis_resistance_side
+			}
+		}
+		if = {
+			limit = {
+				has_event_target = STP_crisis_party_side
+				country_exists = event_target:STP_crisis_party_side
+			}
+			event_target:STP_crisis_party_side = {
+				clr_country_flag = STP_main_campaign_side
+				clr_country_flag = STP_crisis_party_side
+				clr_country_flag = STP_crisis_resistance_side
+			}
+		}
+		if = {
+			limit = {
+				has_event_target = STP_crisis_resistance_side
+				country_exists = event_target:STP_crisis_resistance_side
+			}
+			event_target:STP_crisis_resistance_side = {
+				clr_country_flag = STP_main_campaign_side
+				clr_country_flag = STP_crisis_party_side
+				clr_country_flag = STP_crisis_resistance_side
+			}
+		}
+
+		STP_assign_postwar_leader = yes
+		load_focus_tree = {
+			tree = ADISCORD_STP_postwar_focus
+			keep_completed = no
+		}
+		STP_clear_external_crisis_participants = yes
+
+		if = {
+			limit = { has_country_flag = STP_no_war_outcome }
+			set_country_flag = {
+				flag = VAL_STP_deferred_invoice_window
+				days = 60
+				value = 1
+			}
+		}
+		VAL_STP_start_war_countdown = { type = 120 }
+
+		set_country_flag = STP_internal_outcome_finalized
+		clr_country_flag = STP_internal_outcome_finalizing
+		clr_country_flag = STP_internal_outcome_pending
+
+		clear_global_event_target = STP_crisis_main_side
+		clear_global_event_target = STP_crisis_party_side
+		clear_global_event_target = STP_crisis_resistance_side
+	}
+}
+
+STP_try_finalize_internal_war = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = STP_internal_outcome_finalizing }
+			NOT = { has_country_flag = STP_internal_outcome_finalized }
+			has_event_target = STP_crisis_party_side
+			has_event_target = STP_crisis_resistance_side
+		}
+		clr_country_flag = STP_party_role_still_viable
+		clr_country_flag = STP_resistance_role_still_viable
+
+		if = {
+			limit = { country_exists = event_target:STP_crisis_party_side }
+			event_target:STP_crisis_party_side = {
+				if = {
+					limit = {
+						NOT = { has_capitulated = yes }
+						STP_controls_any_internal_manifest_state = yes
+					}
+					ROOT = { set_country_flag = STP_party_role_still_viable }
+				}
+			}
+		}
+		if = {
+			limit = { country_exists = event_target:STP_crisis_resistance_side }
+			event_target:STP_crisis_resistance_side = {
+				if = {
+					limit = {
+						NOT = { has_capitulated = yes }
+						STP_controls_any_internal_manifest_state = yes
+					}
+					ROOT = { set_country_flag = STP_resistance_role_still_viable }
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				has_country_flag = STP_party_role_still_viable
+				NOT = { has_country_flag = STP_resistance_role_still_viable }
+				country_exists = event_target:STP_crisis_party_side
+			}
+			event_target:STP_crisis_party_side = {
+				set_country_flag = STP_winner_hedersett
+				STP_finalize_internal_outcome = yes
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = STP_resistance_role_still_viable
+				NOT = { has_country_flag = STP_party_role_still_viable }
+				country_exists = event_target:STP_crisis_resistance_side
+			}
+			event_target:STP_crisis_resistance_side = {
+				if = {
+					limit = { has_country_flag = STP_resistance_leader_sotnikov }
+					set_country_flag = STP_winner_sotnikov
+				}
+				else = {
+					set_country_flag = STP_winner_shabrat
+				}
+				STP_finalize_internal_outcome = yes
+			}
+		}
+	}
+}

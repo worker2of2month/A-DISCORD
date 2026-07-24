@@ -1,0 +1,83 @@
+focus_tree = {
+	id = ADISCORD_STP_crisis_war_focus
+	country = {
+		factor = 0
+		modifier = {
+			add = 20
+			original_tag = STP
+		}
+	}
+	default = no
+
+	focus = {
+		id = STP_Crisis_Rally_The_Provinces
+		icon = GFX_focus_STP_Side_With_Maksim
+		x = -2
+		y = 0
+		cost = 5
+		available = {
+			has_country_flag = STP_crisis_resistance_side
+		}
+		ai_will_do = { base = 1 }
+		completion_reward = {
+			add_command_power = 5
+			add_army_experience = 3
+		}
+	}
+
+	focus = {
+		id = STP_Crisis_Secure_The_Depots
+		icon = GFX_focus_STP_Side_With_Maksim
+		x = -2
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_Crisis_Rally_The_Provinces }
+		available = {
+			has_country_flag = STP_crisis_resistance_side
+		}
+		ai_will_do = { base = 1 }
+		completion_reward = {
+			add_command_power = 5
+			add_timed_idea = {
+				idea = STP_crisis_war_logistics
+				days = 60
+			}
+		}
+	}
+
+	focus = {
+		id = STP_Crisis_Hold_The_Capital_Road
+		icon = GFX_focus_STP_Side_With_The_Party
+		x = 2
+		y = 0
+		cost = 5
+		available = {
+			has_country_flag = STP_crisis_party_side
+		}
+		ai_will_do = { base = 1 }
+		completion_reward = {
+			add_command_power = 5
+			add_army_experience = 3
+		}
+	}
+
+	focus = {
+		id = STP_Crisis_Request_External_Supplies
+		icon = GFX_focus_STP_Side_With_The_Party
+		x = 2
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_Crisis_Hold_The_Capital_Road }
+		available = {
+			has_country_flag = STP_crisis_party_side
+		}
+		ai_will_do = { base = 1 }
+		completion_reward = {
+			add_command_power = 5
+			add_timed_idea = {
+				idea = STP_crisis_war_logistics
+				days = 60
+			}
+		}
+	}
+}

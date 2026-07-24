@@ -13,9 +13,13 @@ try:
         DECISION_CATEGORIES,
         HEALTH_MISSIONS,
         OWNED_FEATURE_FILES,
+        POSTWAR_FOCUS_IDS,
         RESISTANCE_POSTURES,
         SECURITY_POSTURES,
         STP_ADAPTATION_FAMILIES,
+        STP_CIVIL_WAR_ARMY_RATIOS,
+        STP_CIVIL_WAR_FOCUS_IDS,
+        STP_CIVIL_WAR_STATES,
         STP_CRISIS_FOCUS_REWARDS,
         STP_CRISIS_FOCUS_STAGES,
         STP_OPERATION_SPECS,
@@ -30,9 +34,13 @@ except ModuleNotFoundError:
         DECISION_CATEGORIES,
         HEALTH_MISSIONS,
         OWNED_FEATURE_FILES,
+        POSTWAR_FOCUS_IDS,
         RESISTANCE_POSTURES,
         SECURITY_POSTURES,
         STP_ADAPTATION_FAMILIES,
+        STP_CIVIL_WAR_ARMY_RATIOS,
+        STP_CIVIL_WAR_FOCUS_IDS,
+        STP_CIVIL_WAR_STATES,
         STP_CRISIS_FOCUS_REWARDS,
         STP_CRISIS_FOCUS_STAGES,
         STP_OPERATION_SPECS,
@@ -597,6 +605,249 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
             issues.append(f"{relative}: Russian localisation must retain UTF-8 BOM")
 
 
+def _validate_civil_war_contract(root: Path, issues: list[str]) -> None:
+    war = read(
+        root / "common/scripted_effects/ADISCORD_STP_VAL_crisis_war_effects.txt"
+    )
+    events = read(root / "events/ADISCORD_STP_crisis_events.txt")
+    on_actions = read(
+        root / "common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt"
+    )
+    war_tree = read(
+        root / "common/national_focus/ADISCORD_national_focus_STP_crisis_war.txt"
+    )
+    postwar_tree = read(
+        root / "common/national_focus/ADISCORD_national_focus_STP_postwar.txt"
+    )
+    ideas = read(root / "common/ideas/ADISCORD_STP_VAL_crisis_ideas.txt")
+    decisions = read(root / "common/decisions/ADISCORD_STP_crisis_decisions.txt")
+    units = read(root / "history/units/STP.txt")
+
+    if war is not None:
+        for effect, expected in (
+            (
+                "STP_start_resistance_revolt",
+                tuple(str(value) for value in STP_CIVIL_WAR_ARMY_RATIOS["resistance_revolter"]),
+            ),
+            (
+                "STP_start_party_revolt",
+                tuple(str(value) for value in STP_CIVIL_WAR_ARMY_RATIOS["party_revolter"]),
+            ),
+        ):
+            block = extract_named_block(war, effect) or ""
+            starts = list(_iter_named_blocks(block, "start_civil_war"))
+            if len(starts) != 4:
+                issues.append(f"{effect} must contain exactly four literal start_civil_war branches")
+                continue
+            ratios = tuple(
+                values[0] if len(values) == 1 else ""
+                for values in (
+                    _direct_scalar_values(start, "army_ratio") for start in starts
+                )
+            )
+            if ratios != expected:
+                issues.append(f"{effect} has a noncanonical or computed army_ratio table")
+            for start in starts:
+                if _direct_scalar_values(start, "size") != ["0"]:
+                    issues.append(f"{effect} must use size = 0 in every split branch")
+                    break
+                if _direct_scalar_values(start, "keep_all_characters") != ["yes"]:
+                    issues.append(f"{effect} must retain characters for deterministic reassignment")
+                    break
+
+        masked_war = _mask_non_code(war)
+        if "delete_unit_template_and_units" in masked_war:
+            issues.append("civil-war split must not delete division templates or arbitrary units")
+        delete_blocks = list(_iter_named_blocks(war, "delete_units"))
+        if len(delete_blocks) != 1 or any(
+            'division_template = "Capital Guard"' not in block
+            or _direct_scalar_values(block, "disband") != ["yes"]
+            for block in delete_blocks
+        ):
+            issues.append("civil-war split may disband only the deployed Capital Guard")
+        for token in (
+            "save_global_event_target_as = STP_crisis_main_side",
+            "save_global_event_target_as = STP_crisis_party_side",
+            "save_global_event_target_as = STP_crisis_resistance_side",
+            "original_tag = STP",
+            "has_war_with = ROOT",
+            "NOT = { has_country_flag = STP_main_campaign_side }",
+            "tree = ADISCORD_STP_crisis_war_focus",
+            "keep_completed = no",
+        ):
+            if token not in war:
+                issues.append(f"guarded civil-war split is missing {token}")
+
+        state_map = extract_named_block(war, "STP_apply_civil_war_state_map") or ""
+        transferred = {
+            int(value)
+            for value in re.findall(
+                r"\btransfer_state\s*=\s*(\d+)\b", _mask_non_code(state_map)
+            )
+        }
+        if transferred != set(STP_CIVIL_WAR_STATES):
+            issues.append("civil-war state mapping must transfer only all eleven manifest states")
+        for state in STP_CIVIL_WAR_STATES:
+            if f"STP_prewar_owned_state_{state}" not in war:
+                issues.append(f"civil-war split does not snapshot state {state}")
+
+        escrow = extract_named_block(war, "STP_transfer_resistance_escrow") or ""
+        for equipment in ("infantry", "support"):
+            source = f"STP_resistance_escrow_{equipment}"
+            snapshot = f"STP_prewar_resistance_escrow_{equipment}"
+            transfer_index = escrow.find(f"amount = ROOT.{snapshot}")
+            zero_index = escrow.find(f"set_variable = {{ var = {source} value = 0 }}")
+            if transfer_index == -1 or zero_index == -1 or zero_index < transfer_index:
+                issues.append(f"{source} must transfer once before every copied source is zeroed")
+
+        finalizer = extract_named_block(war, "STP_finalize_internal_outcome") or ""
+        leader = extract_named_block(war, "STP_assign_postwar_leader") or ""
+        for token in (
+            "STP_internal_outcome_finalizing",
+            "STP_internal_outcome_finalized",
+            "save_global_event_target_as = STP_postwar_country",
+            "set_country_flag = STP_postwar_campaign_side",
+            "STP_set_crisis_phase = { value = 3 }",
+            "STP_assign_postwar_leader = yes",
+            "tree = ADISCORD_STP_postwar_focus",
+            "STP_clear_external_crisis_participants = yes",
+            "VAL_STP_start_war_countdown = { type = 120 }",
+        ):
+            if token not in finalizer:
+                issues.append(f"single internal finalizer is missing {token}")
+        if (
+            "STP_assign_postwar_leader = yes" in finalizer
+            and "tree = ADISCORD_STP_postwar_focus" in finalizer
+            and finalizer.index("STP_assign_postwar_leader = yes")
+            > finalizer.index("tree = ADISCORD_STP_postwar_focus")
+        ):
+            issues.append("bridge focus must complete before the postwar tree is loaded")
+        for bridge in (
+            "STP_The_Mountain_Window",
+            "STP_No_One_Controls_The_Transition",
+            "STP_The_Party_Closes_Ranks",
+        ):
+            if leader.count(bridge) != 1:
+                issues.append(f"postwar leader assignment must complete {bridge} exactly once")
+        countdown = extract_named_block(war, "VAL_STP_start_war_countdown") or ""
+        for flag in (120, 180, 300, 450):
+            if f"VAL_STP_countdown_{flag}" not in countdown:
+                issues.append(f"countdown forward interface is missing literal type {flag}")
+        if "activate_mission" in countdown:
+            issues.append("Task 5 countdown forward interface must not activate undefined missions")
+
+    if events is not None:
+        death = _block_with_direct_assignment(events, "country_event", "id", "stp_crisis.4") or ""
+        router = _block_with_direct_assignment(events, "country_event", "id", "stp_crisis.50") or ""
+        if "country_event = { id = stp_crisis.50 }" not in death:
+            issues.append("Ivanov death event must invoke the Task 5 outcome router")
+        expected_outcomes = {
+            "STP_outcome_shabrat_bloodless",
+            "STP_outcome_shabrat_main_war",
+            "STP_outcome_sotnikov_main_war",
+            "STP_outcome_hedersett_fail_state",
+            "STP_outcome_hedersett_consolidation",
+            "STP_outcome_hedersett_vs_shabrat",
+            "STP_outcome_hedersett_vs_sotnikov",
+        }
+        actual_outcomes = set(
+            re.findall(
+                r"\bset_country_flag\s*=\s*(STP_outcome_[A-Za-z0-9_]+)",
+                _mask_non_code(router),
+            )
+        )
+        if actual_outcomes != expected_outcomes:
+            issues.append("Ivanov death router must expose exactly seven canonical outcomes")
+        if router.count("STP_finalize_internal_outcome = yes") != 3:
+            issues.append("all three no-war outcomes must use the single finalizer")
+        fallback = _block_with_direct_assignment(
+            events, "country_event", "id", "stp_crisis.51"
+        ) or ""
+        for token in (
+            "STP_try_finalize_internal_war = yes",
+            "country_event = { id = stp_crisis.51 days = 3 }",
+            "STP_internal_outcome_finalizing",
+            "STP_internal_outcome_finalized",
+        ):
+            if token not in fallback:
+                issues.append(f"three-day civil-war fallback is missing {token}")
+
+    if on_actions is not None:
+        for hook in ("on_peace", "on_capitulation"):
+            block = extract_named_block(on_actions, hook) or ""
+            for token in (
+                "STP_try_finalize_internal_war = yes",
+                "STP_internal_outcome_finalizing",
+                "STP_internal_outcome_finalized",
+            ):
+                if token not in block:
+                    issues.append(f"{hook} is missing guarded internal-war completion")
+                    break
+            if re.search(r"\bFROM\b", _mask_non_code(block)):
+                issues.append(f"{hook} must not infer the internal winner from FROM")
+
+    for tree, expected, label in (
+        (war_tree, set(STP_CIVIL_WAR_FOCUS_IDS), "civil-war"),
+        (postwar_tree, set(POSTWAR_FOCUS_IDS), "postwar"),
+    ):
+        if tree is None:
+            continue
+        ids = set(
+            re.findall(r"\bid\s*=\s*(STP_[A-Za-z0-9_]+)", _mask_non_code(tree))
+        )
+        if ids != expected:
+            issues.append(f"{label} focus tree must define exactly its manifest focus IDs")
+        for focus_id in expected:
+            block = _block_with_direct_assignment(tree, "focus", "id", focus_id) or ""
+            if _direct_scalar_values(block, "cost") != ["5"]:
+                issues.append(f"{label} focus {focus_id} must cost 5")
+
+    if ideas is None:
+        issues.append("missing Task 5 officer preparation ideas")
+    else:
+        for idea, planning in (
+            ("STP_officer_preparation_1", "0.05"),
+            ("STP_officer_preparation_2", "0.075"),
+            ("STP_officer_preparation_3", "0.10"),
+        ):
+            block = extract_named_block(ideas, idea) or ""
+            if _direct_scalar_values(
+                extract_named_block(block, "modifier") or "", "max_planning_factor"
+            ) != [planning]:
+                issues.append(f"{idea} must have its exact planning bonus")
+
+    if decisions is not None:
+        sabotage = extract_named_block(decisions, "STP_party_market_sabotage") or ""
+        if _direct_scalar_values(sabotage, "days_mission_timeout") != ["90"]:
+            issues.append("party market sabotage must last exactly 90 days")
+        modifier = extract_named_block(sabotage, "modifier") or ""
+        if _direct_scalar_values(modifier, "civilian_factory_use") != ["1"]:
+            issues.append("party market sabotage must reserve exactly one civilian factory")
+
+    if units is not None:
+        for template in (
+            "STP Mountain Resistance Militia",
+            "STP Urban Resistance Militia",
+        ):
+            block = next(
+                (
+                    candidate
+                    for candidate in _iter_named_blocks(units, "division_template")
+                    if re.search(
+                        rf'\bname\s*=\s*"{re.escape(template)}"', candidate
+                    )
+                ),
+                None,
+            )
+            if block is None or "ADISCORD_militia" not in block:
+                issues.append(f"missing locked militia template {template}")
+            elif (
+                _direct_scalar_values(block, "is_locked") != ["yes"]
+                or _direct_scalar_values(block, "force_allow_recruiting") != ["no"]
+            ):
+                issues.append(f"militia template {template} must remain locked")
+
+
 def _validate_performance(root: Path, issues: list[str]) -> None:
     for relative_path in OWNED_FEATURE_FILES:
         text = read(root / relative_path)
@@ -616,6 +867,8 @@ def validate(root: Path, section: str | None = None) -> list[str]:
             _validate_section(root, name, issues)
             if name == "stp":
                 _validate_stp_contract(root, issues)
+            elif name == "civil_war":
+                _validate_civil_war_contract(root, issues)
     return list(dict.fromkeys(issues))
 
 

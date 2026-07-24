@@ -33,4 +33,78 @@ on_actions = {
 			}
 		}
 	}
+
+	on_peace = {
+		effect = {
+			if = {
+				limit = {
+					has_event_target = STP_crisis_party_side
+					country_exists = event_target:STP_crisis_party_side
+				}
+				event_target:STP_crisis_party_side = {
+					if = {
+						limit = {
+							has_country_flag = STP_crisis_party_side
+							NOT = { has_country_flag = STP_internal_outcome_finalizing }
+							NOT = { has_country_flag = STP_internal_outcome_finalized }
+						}
+						STP_try_finalize_internal_war = yes
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_event_target = STP_crisis_resistance_side
+					country_exists = event_target:STP_crisis_resistance_side
+				}
+				event_target:STP_crisis_resistance_side = {
+					if = {
+						limit = {
+							has_country_flag = STP_crisis_resistance_side
+							NOT = { has_country_flag = STP_internal_outcome_finalizing }
+							NOT = { has_country_flag = STP_internal_outcome_finalized }
+						}
+						STP_try_finalize_internal_war = yes
+					}
+				}
+			}
+		}
+	}
+
+	on_capitulation = {
+		effect = {
+			if = {
+				limit = {
+					has_event_target = STP_crisis_party_side
+					country_exists = event_target:STP_crisis_party_side
+				}
+				event_target:STP_crisis_party_side = {
+					if = {
+						limit = {
+							has_country_flag = STP_crisis_party_side
+							NOT = { has_country_flag = STP_internal_outcome_finalizing }
+							NOT = { has_country_flag = STP_internal_outcome_finalized }
+						}
+						STP_try_finalize_internal_war = yes
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_event_target = STP_crisis_resistance_side
+					country_exists = event_target:STP_crisis_resistance_side
+				}
+				event_target:STP_crisis_resistance_side = {
+					if = {
+						limit = {
+							has_country_flag = STP_crisis_resistance_side
+							NOT = { has_country_flag = STP_internal_outcome_finalizing }
+							NOT = { has_country_flag = STP_internal_outcome_finalized }
+						}
+						STP_try_finalize_internal_war = yes
+					}
+				}
+			}
+		}
+	}
 }

@@ -123,6 +123,7 @@ country_event = {
 
 		STP_set_crisis_phase = { value = 2 }
 		set_country_flag = STP_internal_outcome_pending
+		country_event = { id = stp_crisis.50 }
 	}
 }
 
@@ -1302,5 +1303,185 @@ country_event = {
 			}
 			country_event = { id = stp_crisis.40 }
 		}
+	}
+}
+
+# Ivanov's death resolves once, in the approved seven-outcome order.
+country_event = {
+	id = stp_crisis.50
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag = STP
+		has_country_flag = STP_main_campaign_side
+		has_country_flag = STP_ivanov_dead
+		has_country_flag = STP_internal_outcome_pending
+		NOT = { has_country_flag = STP_internal_outcome_finalizing }
+		NOT = { has_country_flag = STP_internal_outcome_finalized }
+	}
+
+	immediate = {
+		clr_country_flag = STP_outcome_shabrat_bloodless
+		clr_country_flag = STP_outcome_shabrat_main_war
+		clr_country_flag = STP_outcome_sotnikov_main_war
+		clr_country_flag = STP_outcome_hedersett_fail_state
+		clr_country_flag = STP_outcome_hedersett_consolidation
+		clr_country_flag = STP_outcome_hedersett_vs_shabrat
+		clr_country_flag = STP_outcome_hedersett_vs_sotnikov
+		clr_country_flag = STP_winner_shabrat
+		clr_country_flag = STP_winner_sotnikov
+		clr_country_flag = STP_winner_hedersett
+		clr_country_flag = STP_no_war_outcome
+		clr_country_flag = STP_resistance_leader_shabrat
+		clr_country_flag = STP_resistance_leader_sotnikov
+
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_side_commitment
+					value = 1
+					compare = equals
+				}
+			}
+			if = {
+				limit = { STP_can_attempt_bloodless_coup = yes }
+				set_country_flag = STP_outcome_shabrat_bloodless
+				set_country_flag = STP_winner_shabrat
+				set_country_flag = STP_no_war_outcome
+				STP_finalize_internal_outcome = yes
+			}
+			else_if = {
+				limit = {
+					has_country_flag = STP_shabrat_available
+					STP_resistance_network_is_viable = yes
+				}
+				set_country_flag = STP_outcome_shabrat_main_war
+				set_country_flag = STP_resistance_leader_shabrat
+				STP_start_party_revolt = yes
+			}
+			else_if = {
+				limit = { STP_sotnikov_network_is_viable = yes }
+				set_country_flag = STP_outcome_sotnikov_main_war
+				set_country_flag = STP_resistance_leader_sotnikov
+				STP_start_party_revolt = yes
+			}
+			else = {
+				set_country_flag = STP_outcome_hedersett_fail_state
+				set_country_flag = STP_underground_crushed_fail_state
+				set_country_flag = STP_winner_hedersett
+				set_country_flag = STP_no_war_outcome
+				add_stability = -0.1
+				set_variable = { var = STP_node_officers value = 0 }
+				STP_finalize_internal_outcome = yes
+			}
+		}
+		else = {
+			if = {
+				limit = {
+					NOT = {
+						OR = {
+							AND = {
+								has_country_flag = STP_shabrat_available
+								STP_resistance_network_is_viable = yes
+							}
+							STP_sotnikov_network_is_viable = yes
+						}
+					}
+				}
+				set_country_flag = STP_outcome_hedersett_consolidation
+				set_country_flag = STP_winner_hedersett
+				set_country_flag = STP_no_war_outcome
+				set_country_flag = STP_preserve_active_nodrul_mandate
+				STP_finalize_internal_outcome = yes
+			}
+			else_if = {
+				limit = {
+					has_country_flag = STP_shabrat_available
+					STP_resistance_network_is_viable = yes
+				}
+				set_country_flag = STP_outcome_hedersett_vs_shabrat
+				set_country_flag = STP_resistance_leader_shabrat
+				STP_start_resistance_revolt = { ideology = chauvinism }
+			}
+			else = {
+				set_country_flag = STP_outcome_hedersett_vs_sotnikov
+				set_country_flag = STP_resistance_leader_sotnikov
+				STP_start_resistance_revolt = { ideology = etatism }
+			}
+		}
+	}
+}
+
+# Both internal roles carry this guarded three-day poll. The surviving role
+# keeps polling after the other country's delayed event disappears.
+country_event = {
+	id = stp_crisis.51
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		original_tag = STP
+		OR = {
+			has_country_flag = STP_crisis_party_side
+			has_country_flag = STP_crisis_resistance_side
+		}
+		NOT = { has_country_flag = STP_internal_outcome_finalizing }
+		NOT = { has_country_flag = STP_internal_outcome_finalized }
+		has_event_target = STP_crisis_party_side
+		has_event_target = STP_crisis_resistance_side
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_country_flag = STP_internal_outcome_finalizing }
+				NOT = { has_country_flag = STP_internal_outcome_finalized }
+				has_event_target = STP_crisis_party_side
+				has_event_target = STP_crisis_resistance_side
+			}
+			STP_try_finalize_internal_war = yes
+		}
+		if = {
+			limit = {
+				has_event_target = STP_crisis_party_side
+				has_event_target = STP_crisis_resistance_side
+				NOT = { has_country_flag = STP_internal_outcome_finalizing }
+				NOT = { has_country_flag = STP_internal_outcome_finalized }
+			}
+			country_event = { id = stp_crisis.51 days = 3 }
+		}
+	}
+}
+
+# Sotnikov's single focus opens one explicit, mutually exclusive primary plan.
+country_event = {
+	id = stp_crisis.52
+	title = stp_crisis.52.t
+	desc = stp_crisis.52.d
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = STP_postwar_campaign_side
+		has_country_flag = STP_winner_sotnikov
+		NOT = {
+			OR = {
+				has_country_flag = STP_sotnikov_primary_plan_val
+				has_country_flag = STP_sotnikov_primary_plan_nod
+			}
+		}
+	}
+
+	option = {
+		name = stp_crisis.52.a
+		ai_chance = { base = 60 }
+		set_country_flag = STP_sotnikov_primary_plan_val
+		clr_country_flag = STP_sotnikov_primary_plan_nod
+	}
+	option = {
+		name = stp_crisis.52.b
+		ai_chance = { base = 40 }
+		set_country_flag = STP_sotnikov_primary_plan_nod
+		clr_country_flag = STP_sotnikov_primary_plan_val
 	}
 }

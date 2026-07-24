@@ -176,6 +176,74 @@ class CrisisManifestTests(unittest.TestCase):
             },
         )
 
+    def test_task_five_outcome_ratios_and_character_packages_are_exact(self):
+        self.assertEqual(
+            crisis_manifest.STP_CIVIL_WAR_ARMY_RATIOS,
+            {
+                "resistance_revolter": (0, 0.2, 0.35, 0.5),
+                "party_revolter": (1, 0.8, 0.65, 0.5),
+            },
+        )
+        self.assertEqual(
+            crisis_manifest.STP_CIVIL_WAR_STATES,
+            (1, 2, 3, 28, 29, 43, 44, 45, 46, 53, 88),
+        )
+        self.assertEqual(len(crisis_manifest.STP_INTERNAL_OUTCOMES), 7)
+        self.assertEqual(
+            crisis_manifest.STP_INTERNAL_OUTCOMES,
+            {
+                "shabrat_bloodless": ("shabrat", "no_war", None),
+                "shabrat_main_war": (
+                    "shabrat",
+                    "resistance_main",
+                    "hedersett",
+                ),
+                "sotnikov_main_war": (
+                    "sotnikov",
+                    "resistance_main",
+                    "hedersett",
+                ),
+                "hedersett_fail_state": ("hedersett", "no_war", None),
+                "hedersett_consolidation": ("hedersett", "no_war", None),
+                "hedersett_vs_shabrat": (
+                    "hedersett",
+                    "party_main",
+                    "shabrat",
+                ),
+                "hedersett_vs_sotnikov": (
+                    "hedersett",
+                    "party_main",
+                    "sotnikov",
+                ),
+            },
+        )
+        self.assertEqual(
+            crisis_manifest.STP_CIVIL_WAR_FOCUS_IDS,
+            (
+                "STP_Crisis_Rally_The_Provinces",
+                "STP_Crisis_Secure_The_Depots",
+                "STP_Crisis_Hold_The_Capital_Road",
+                "STP_Crisis_Request_External_Supplies",
+            ),
+        )
+        self.assertEqual(
+            crisis_manifest.STP_OFFICER_PACKAGES,
+            {
+                1: ("STP_Maurice_Dallon",),
+                2: ("STP_Maurice_Dallon", "STP_Leonid_Barchel"),
+                3: (
+                    "STP_Maurice_Dallon",
+                    "STP_Leonid_Barchel",
+                    "STP_Viktor_Marent",
+                    "STP_Severin_Drake",
+                ),
+            },
+        )
+        self.assertEqual(
+            crisis_manifest.STP_PARTY_CHARACTER_PACKAGE,
+            ("STP_Roland_Keitel", "STP_Edmund_Ravel", "STP_August_Veil"),
+        )
+
     def test_val_authority_focus_rewards_are_complete(self):
         self.assertEqual(
             VAL_AUTHORITY_FOCUS_REWARDS,
@@ -1499,6 +1567,304 @@ class CrisisValidatorTests(unittest.TestCase):
             "value = 1000",
         ):
             self.assertIn(token, sotnikov)
+
+    def test_task_five_split_ratios_and_state_map_are_literal_and_bounded(self):
+        war = validator.read(
+            validator.ROOT
+            / "common/scripted_effects/ADISCORD_STP_VAL_crisis_war_effects.txt"
+        ) or ""
+        self.assertTrue(war)
+        for effect, expected in (
+            ("STP_start_resistance_revolt", ("0", "0.2", "0.35", "0.5")),
+            ("STP_start_party_revolt", ("1", "0.8", "0.65", "0.5")),
+        ):
+            block = validator.extract_named_block(war, effect) or ""
+            wars = list(validator._iter_named_blocks(block, "start_civil_war"))
+            self.assertEqual(len(wars), 4, effect)
+            self.assertEqual(
+                tuple(
+                    validator._direct_scalar_values(candidate, "army_ratio")[0]
+                    for candidate in wars
+                ),
+                expected,
+            )
+            for candidate in wars:
+                self.assertEqual(
+                    validator._direct_scalar_values(candidate, "size"), ["0"]
+                )
+                self.assertNotRegex(
+                    validator._mask_non_code(candidate),
+                    r"\barmy_ratio\s*=\s*(?:var:|[A-Za-z_])",
+                )
+        for token in (
+            "save_global_event_target_as = STP_crisis_main_side",
+            "save_global_event_target_as = STP_crisis_party_side",
+            "save_global_event_target_as = STP_crisis_resistance_side",
+            "original_tag = STP",
+            "has_war_with = ROOT",
+            "NOT = { has_country_flag = STP_main_campaign_side }",
+            "tree = ADISCORD_STP_crisis_war_focus",
+            "keep_completed = no",
+            'division_template = "Capital Guard"',
+            "disband = yes",
+        ):
+            self.assertIn(token, war)
+        self.assertNotIn("delete_unit_template_and_units", war)
+
+        state_map = (
+            validator.extract_named_block(war, "STP_apply_civil_war_state_map")
+            or ""
+        )
+        transferred = {
+            int(value)
+            for value in re.findall(
+                r"\btransfer_state\s*=\s*(\d+)\b",
+                validator._mask_non_code(state_map),
+            )
+        }
+        self.assertEqual(transferred, set(crisis_manifest.STP_CIVIL_WAR_STATES))
+        for state in crisis_manifest.STP_CIVIL_WAR_STATES:
+            self.assertIn(f"STP_prewar_owned_state_{state}", war)
+        for token in (
+            "STP_resistance_isolated_fallback",
+            "has_country_flag = STP_capital_guard_loyal_to_resistance",
+            "has_country_flag = STP_garrison_88_loyal_to_resistance",
+            "set_capital = 28",
+            "set_capital = 1",
+        ):
+            self.assertIn(token, state_map)
+
+    def test_task_five_death_router_and_single_finalizer_cover_all_outcomes(self):
+        events = validator.read(
+            validator.ROOT / "events/ADISCORD_STP_crisis_events.txt"
+        ) or ""
+        death = self._block_with_assignment(
+            events, "country_event", "id = stp_crisis.4"
+        )
+        router = self._block_with_assignment(
+            events, "country_event", "id = stp_crisis.50"
+        )
+        self.assertIn("country_event = { id = stp_crisis.50 }", death)
+        self.assertIn("hidden = yes", router)
+        outcome_flags = {
+            "STP_outcome_shabrat_bloodless",
+            "STP_outcome_shabrat_main_war",
+            "STP_outcome_sotnikov_main_war",
+            "STP_outcome_hedersett_fail_state",
+            "STP_outcome_hedersett_consolidation",
+            "STP_outcome_hedersett_vs_shabrat",
+            "STP_outcome_hedersett_vs_sotnikov",
+        }
+        self.assertEqual(
+            set(
+                re.findall(
+                    r"\bset_country_flag\s*=\s*(STP_outcome_[A-Za-z0-9_]+)",
+                    validator._mask_non_code(router),
+                )
+            ),
+            outcome_flags,
+        )
+        for token in (
+            "STP_can_attempt_bloodless_coup = yes",
+            "STP_resistance_network_is_viable = yes",
+            "STP_sotnikov_network_is_viable = yes",
+            "STP_start_resistance_revolt = {",
+            "STP_start_party_revolt = yes",
+            "STP_underground_crushed_fail_state",
+            "add_stability = -0.1",
+            "set_variable = { var = STP_node_officers value = 0 }",
+        ):
+            self.assertIn(token, router)
+        self.assertEqual(router.count("STP_finalize_internal_outcome = yes"), 3)
+
+        war = validator.read(
+            validator.ROOT
+            / "common/scripted_effects/ADISCORD_STP_VAL_crisis_war_effects.txt"
+        ) or ""
+        finalizer = (
+            validator.extract_named_block(war, "STP_finalize_internal_outcome")
+            or ""
+        )
+        leader_assignment = (
+            validator.extract_named_block(war, "STP_assign_postwar_leader")
+            or ""
+        )
+        finalizer_bundle = finalizer + leader_assignment
+        for token in (
+            "STP_internal_outcome_finalizing",
+            "STP_internal_outcome_finalized",
+            "save_global_event_target_as = STP_postwar_country",
+            "set_country_flag = STP_postwar_campaign_side",
+            "STP_set_crisis_phase = { value = 3 }",
+            "tree = ADISCORD_STP_postwar_focus",
+            "STP_The_Mountain_Window",
+            "STP_No_One_Controls_The_Transition",
+            "STP_The_Party_Closes_Ranks",
+            "STP_clear_external_crisis_participants = yes",
+            "VAL_STP_start_war_countdown = { type = 120 }",
+            "clear_global_event_target = STP_crisis_main_side",
+            "clear_global_event_target = STP_crisis_party_side",
+            "clear_global_event_target = STP_crisis_resistance_side",
+        ):
+            self.assertIn(token, finalizer_bundle)
+        for bridge in (
+            "STP_The_Mountain_Window",
+            "STP_No_One_Controls_The_Transition",
+            "STP_The_Party_Closes_Ranks",
+        ):
+            self.assertEqual(leader_assignment.count(bridge), 1)
+        self.assertLess(
+            finalizer.index("STP_assign_postwar_leader = yes"),
+            finalizer.index("tree = ADISCORD_STP_postwar_focus"),
+        )
+        self.assertIn("days = 60", finalizer)
+        countdown = (
+            validator.extract_named_block(war, "VAL_STP_start_war_countdown")
+            or ""
+        )
+        self.assertIn("set_country_flag = VAL_STP_countdown_pending", countdown)
+        self.assertNotIn("activate_mission", countdown)
+
+        on_actions = validator.read(
+            validator.ROOT
+            / "common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt"
+        ) or ""
+        for hook in ("on_peace", "on_capitulation"):
+            block = validator.extract_named_block(on_actions, hook) or ""
+            self.assertIn("STP_try_finalize_internal_war = yes", block)
+            self.assertIn("STP_internal_outcome_finalizing", block)
+            self.assertIn("STP_internal_outcome_finalized", block)
+            self.assertNotIn("FROM", validator._mask_non_code(block))
+
+    def test_task_five_role_and_postwar_focus_trees_have_exact_ids(self):
+        war_tree = validator.read(
+            validator.ROOT
+            / "common/national_focus/ADISCORD_national_focus_STP_crisis_war.txt"
+        ) or ""
+        postwar_tree = validator.read(
+            validator.ROOT
+            / "common/national_focus/ADISCORD_national_focus_STP_postwar.txt"
+        ) or ""
+        for text, expected in (
+            (war_tree, set(crisis_manifest.STP_CIVIL_WAR_FOCUS_IDS)),
+            (postwar_tree, set(POSTWAR_FOCUS_IDS)),
+        ):
+            ids = set(
+                re.findall(
+                    r"\bid\s*=\s*(STP_[A-Za-z0-9_]+)",
+                    validator._mask_non_code(text),
+                )
+            )
+            self.assertEqual(ids, expected)
+            for focus_id in expected:
+                block = self._block_with_assignment(
+                    text, "focus", f"id = {focus_id}"
+                )
+                self.assertEqual(
+                    validator._direct_scalar_values(block, "cost"), ["5"]
+                )
+        self.assertIn("STP_crisis_party_side", war_tree)
+        self.assertIn("STP_crisis_resistance_side", war_tree)
+        self.assertNotIn("STP_health_stage_", war_tree)
+        self.assertNotIn("add_equipment_to_stockpile", war_tree)
+        self.assertEqual(war_tree.count("idea = STP_crisis_war_logistics"), 2)
+        self.assertEqual(war_tree.count("days = 60"), 2)
+        for flag in (
+            "STP_winner_shabrat",
+            "STP_winner_sotnikov",
+            "STP_winner_hedersett",
+        ):
+            self.assertIn(flag, postwar_tree)
+        for unloaded_bridge in (
+            "STP_The_Mountain_Window",
+            "STP_No_One_Controls_The_Transition",
+            "STP_The_Party_Closes_Ranks",
+        ):
+            self.assertNotIn(unloaded_bridge, postwar_tree)
+        for state in (43, 45, 88):
+            self.assertIn(f"state = {state}", postwar_tree)
+        for token in (
+            "STP_underground_crushed_fail_state",
+            "mutually_exclusive",
+            "country_event = { id = stp_crisis.52 }",
+        ):
+            self.assertIn(token, postwar_tree)
+
+        def prerequisite_alternatives(focus_id: str) -> set[frozenset[str]]:
+            block = self._block_with_assignment(
+                postwar_tree, "focus", f"id = {focus_id}"
+            )
+            return {
+                frozenset(
+                    re.findall(
+                        r"\bfocus\s*=\s*(STP_[A-Za-z0-9_]+)",
+                        validator._mask_non_code(prerequisite),
+                    )
+                )
+                for prerequisite in validator._iter_named_blocks(
+                    block, "prerequisite"
+                )
+            }
+
+        for focus_id, alternatives in (
+            (
+                "STP_Shabrat_Fortify_The_Resource_Road",
+                {
+                    "STP_Shabrat_Break_The_Mandate",
+                    "STP_Shabrat_Buy_The_Desert_Season",
+                },
+            ),
+            (
+                "STP_Hedersett_Renew_The_Nodrul_Mandate",
+                {
+                    "STP_Hedersett_End_The_Lists",
+                    "STP_Hedersett_One_Last_Purge",
+                },
+            ),
+            (
+                "STP_Hedersett_Pay_The_Deferred_Invoice",
+                {
+                    "STP_Hedersett_End_The_Lists",
+                    "STP_Hedersett_One_Last_Purge",
+                },
+            ),
+            (
+                "STP_Hedersett_Rebuild_The_Festival_Army",
+                {
+                    "STP_Hedersett_Renew_The_Nodrul_Mandate",
+                    "STP_Hedersett_Pay_The_Deferred_Invoice",
+                },
+            ),
+        ):
+            self.assertEqual(
+                prerequisite_alternatives(focus_id),
+                {frozenset({alternative}) for alternative in alternatives},
+                focus_id,
+            )
+
+        fortify = self._block_with_assignment(
+            postwar_tree,
+            "focus",
+            "id = STP_Shabrat_Fortify_The_Resource_Road",
+        )
+        self.assertEqual(fortify.count("type = infrastructure"), 3)
+        staff = self._block_with_assignment(
+            postwar_tree,
+            "focus",
+            "id = STP_Sotnikov_Rebuild_The_General_Staff",
+        )
+        self.assertIn("add_ideas = STP_sotnikov_rebuilt_general_staff", staff)
+        lists = self._block_with_assignment(
+            postwar_tree, "focus", "id = STP_Hedersett_End_The_Lists"
+        )
+        self.assertIn("idea = STP_hedersett_lists_production", lists)
+        self.assertNotIn("amount = 100", lists)
+        purge = self._block_with_assignment(
+            postwar_tree, "focus", "id = STP_Hedersett_One_Last_Purge"
+        )
+        self.assertIn("value = num_equipment@infantry_equipment", purge)
+        self.assertIn("max = 100", purge)
+        self.assertIn("value = -1", purge)
 
     def test_legacy_stp_and_val_migration_paths_are_idempotent(self):
         core = validator.read(

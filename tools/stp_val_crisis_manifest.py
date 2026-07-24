@@ -198,6 +198,41 @@ CIVIL_WAR_STATE_MAP = {
     "street": (46,),
     "resource_garrison": (88,),
 }
+STP_CIVIL_WAR_STATES = (1, 2, 3, 28, 29, 43, 44, 45, 46, 53, 88)
+STP_CIVIL_WAR_ARMY_RATIOS = {
+    "resistance_revolter": (0, 0.2, 0.35, 0.5),
+    "party_revolter": (1, 0.8, 0.65, 0.5),
+}
+STP_INTERNAL_OUTCOMES = {
+    "shabrat_bloodless": ("shabrat", "no_war", None),
+    "shabrat_main_war": ("shabrat", "resistance_main", "hedersett"),
+    "sotnikov_main_war": ("sotnikov", "resistance_main", "hedersett"),
+    "hedersett_fail_state": ("hedersett", "no_war", None),
+    "hedersett_consolidation": ("hedersett", "no_war", None),
+    "hedersett_vs_shabrat": ("hedersett", "party_main", "shabrat"),
+    "hedersett_vs_sotnikov": ("hedersett", "party_main", "sotnikov"),
+}
+STP_CIVIL_WAR_FOCUS_IDS = (
+    "STP_Crisis_Rally_The_Provinces",
+    "STP_Crisis_Secure_The_Depots",
+    "STP_Crisis_Hold_The_Capital_Road",
+    "STP_Crisis_Request_External_Supplies",
+)
+STP_OFFICER_PACKAGES = {
+    1: ("STP_Maurice_Dallon",),
+    2: ("STP_Maurice_Dallon", "STP_Leonid_Barchel"),
+    3: (
+        "STP_Maurice_Dallon",
+        "STP_Leonid_Barchel",
+        "STP_Viktor_Marent",
+        "STP_Severin_Drake",
+    ),
+}
+STP_PARTY_CHARACTER_PACKAGE = (
+    "STP_Roland_Keitel",
+    "STP_Edmund_Ravel",
+    "STP_August_Veil",
+)
 RESISTANCE_POSTURES = {
     1: "quiet_palace_conspiracy",
     2: "officer_network",
@@ -378,6 +413,7 @@ OWNED_FEATURE_FILES = (
     "common/scripted_effects/ADISCORD_STP_VAL_crisis_war_effects.txt",
     "common/national_focus/ADISCORD_national_focus_STP_crisis_war.txt",
     "common/national_focus/ADISCORD_national_focus_STP_postwar.txt",
+    "common/ideas/ADISCORD_STP_VAL_crisis_ideas.txt",
     "common/decisions/ADISCORD_VAL_contract_decisions.txt",
     "events/ADISCORD_VAL_contract_events.txt",
     "common/decisions/ADISCORD_NOD_crisis_decisions.txt",

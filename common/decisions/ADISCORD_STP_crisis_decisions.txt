@@ -663,4 +663,30 @@ STP_crisis_operations = {
 			country_event = { id = stp_crisis.33 days = 28 }
 		}
 	}
+
+	STP_party_market_sabotage = {
+		is_good = no
+		selectable_mission = no
+		days_mission_timeout = 90
+
+		allowed = {
+			original_tag = STP
+		}
+
+		visible = {
+			has_country_flag = STP_crisis_party_side
+			NOT = { has_country_flag = STP_internal_outcome_finalized }
+		}
+
+		activation = {
+			always = no
+		}
+
+		modifier = {
+			civilian_factory_use = 1
+		}
+
+		timeout_effect = {
+		}
+	}
 }

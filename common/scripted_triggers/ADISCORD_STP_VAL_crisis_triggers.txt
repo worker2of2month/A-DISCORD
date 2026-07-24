@@ -53,3 +53,24 @@ STP_sotnikov_network_is_viable = {
 	check_variable = { var = STP_node_mountains value = 1 compare = greater_than_or_equals }
 	check_variable = { var = STP_resistance_escrow_infantry value = 1000 compare = greater_than_or_equals }
 }
+
+STP_controls_any_internal_manifest_state = {
+	OR = {
+		controls_state = 1
+		controls_state = 2
+		controls_state = 3
+		controls_state = 28
+		controls_state = 29
+		controls_state = 43
+		controls_state = 44
+		controls_state = 45
+		controls_state = 46
+		controls_state = 53
+		controls_state = 88
+	}
+}
+
+# Task 6 replaces this safe forward body with NOD's live corridor/posture check.
+NOD_can_directly_defend_stp = {
+	always = no
+}
