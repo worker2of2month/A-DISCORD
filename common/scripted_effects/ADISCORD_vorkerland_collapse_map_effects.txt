@@ -16,40 +16,37 @@ ADISCORD_vorkerland_end_internal_wars = {
 }
 
 ADISCORD_vorkerland_clear_superevent_flags = {
-	every_country = {
-		limit = { is_ai = no }
-		clr_country_flag = superevent_vorkerland_civilwar
-		clr_country_flag = superevent_vorkerland_dirty_opening
-		clr_country_flag = superevent_vorkerland_worker_victory
-		clr_country_flag = superevent_vorkerland_vlad_victory
-		clr_country_flag = superevent_vorkerland_dorian_victory
-		clr_country_flag = superevent_vorkerland_fragmented
-	}
+	clr_global_flag = superevent_vorkerland_civilwar
+	clr_global_flag = superevent_vorkerland_dirty_opening
+	clr_global_flag = superevent_vorkerland_worker_victory
+	clr_global_flag = superevent_vorkerland_vlad_victory
+	clr_global_flag = superevent_vorkerland_dorian_victory
+	clr_global_flag = superevent_vorkerland_fragmented
 }
 
 ADISCORD_vorkerland_show_dirty_opening_superevent = {
 	ADISCORD_vorkerland_clear_superevent_flags = yes
-	every_country = { limit = { is_ai = no } set_country_flag = superevent_vorkerland_dirty_opening }
+	set_global_flag = superevent_vorkerland_dirty_opening
 }
 
 ADISCORD_vorkerland_show_worker_victory_superevent = {
 	ADISCORD_vorkerland_clear_superevent_flags = yes
-	every_country = { limit = { is_ai = no } set_country_flag = superevent_vorkerland_worker_victory }
+	set_global_flag = superevent_vorkerland_worker_victory
 }
 
 ADISCORD_vorkerland_show_vlad_victory_superevent = {
 	ADISCORD_vorkerland_clear_superevent_flags = yes
-	every_country = { limit = { is_ai = no } set_country_flag = superevent_vorkerland_vlad_victory }
+	set_global_flag = superevent_vorkerland_vlad_victory
 }
 
 ADISCORD_vorkerland_show_dorian_victory_superevent = {
 	ADISCORD_vorkerland_clear_superevent_flags = yes
-	every_country = { limit = { is_ai = no } set_country_flag = superevent_vorkerland_dorian_victory }
+	set_global_flag = superevent_vorkerland_dorian_victory
 }
 
 ADISCORD_vorkerland_show_fragmented_superevent = {
 	ADISCORD_vorkerland_clear_superevent_flags = yes
-	every_country = { limit = { is_ai = no } set_country_flag = superevent_vorkerland_fragmented }
+	set_global_flag = superevent_vorkerland_fragmented
 }
 
 ADISCORD_vorkerland_apply_worker_map = {

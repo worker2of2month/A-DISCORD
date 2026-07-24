@@ -649,3 +649,36 @@ class OutcomeTests(unittest.TestCase):
             self.assertIn(key, script_loc)
             for suffix in ('title', 'quote', 'comment'):
                 self.assertIn(f'{key}_{suffix}:', loc)
+
+    def test_superevents_use_observer_safe_global_flags(self):
+        gui = (self.ROOT / 'common' / 'scripted_guis' / 'superevents.txt').read_text(encoding='utf-8-sig')
+        script_loc = (self.ROOT / 'common' / 'scripted_localisation' / 'ADISCORD_scripted_loc_superevents.txt').read_text(encoding='utf-8-sig')
+        news = (self.ROOT / 'events' / 'ADISCORD_news.txt').read_text(encoding='utf-8-sig')
+        maps = self.MAPS.read_text(encoding='utf-8-sig')
+        flags = (
+            'superevent_vorkerland_civilwar',
+            'superevent_stelander_empire',
+            'superevent_vorkerland_dirty_opening',
+            'superevent_vorkerland_worker_victory',
+            'superevent_vorkerland_vlad_victory',
+            'superevent_vorkerland_dorian_victory',
+            'superevent_vorkerland_fragmented',
+        )
+
+        for flag in flags:
+            block = self.named_block(gui, flag)
+            self.assertIn(f'has_global_flag = {flag}', block)
+            self.assertIn(f'clr_global_flag = {flag}', block)
+            self.assertNotIn(f'has_country_flag = {flag}', block)
+            self.assertNotIn(f'clr_country_flag = {flag}', block)
+            self.assertIn(f'has_global_flag = {flag}', script_loc)
+            self.assertNotIn(f'has_country_flag = {flag}', script_loc)
+
+        for flag in flags[:2]:
+            self.assertIn(f'set_global_flag = {flag}', news)
+            self.assertNotIn(f'set_country_flag = {flag}', news)
+        for flag in flags[2:]:
+            self.assertIn(f'set_global_flag = {flag}', maps)
+            self.assertIn(f'clr_global_flag = {flag}', maps)
+            self.assertNotIn(f'set_country_flag = {flag}', maps)
+            self.assertNotIn(f'clr_country_flag = {flag}', maps)
