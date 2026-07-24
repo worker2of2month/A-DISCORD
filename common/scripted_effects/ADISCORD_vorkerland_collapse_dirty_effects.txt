@@ -1,46 +1,48 @@
 ADISCORD_vorkerland_apply_dirty_modifiers = {
-    state = { id = 23 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 24 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 49 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 51 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 57 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 59 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 60 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 125 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 152 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 153 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 154 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 155 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 160 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 165 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 166 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 167 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 168 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 169 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 171 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 172 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 173 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 176 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 177 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 178 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 180 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 181 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 182 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 183 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 184 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 185 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 187 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 188 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 189 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 190 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 191 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 192 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    state = { id = 193 ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    23 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    24 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    49 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    51 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    57 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    59 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    60 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    125 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    152 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    153 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    154 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    155 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    160 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    165 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    166 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    167 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    168 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    169 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    171 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    172 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    173 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    176 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    177 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    178 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    180 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    181 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    182 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    183 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    184 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    185 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    187 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    188 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    189 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    190 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    191 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    192 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    193 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
 }
 
 ADISCORD_vorkerland_apply_dirty_state_modifier = {
     if = {
-        limit = { NOT = { has_dynamic_modifier = ADISCORD_vorkerland_dirty_state } }
-        add_dynamic_modifier = ADISCORD_vorkerland_dirty_state
+        limit = {
+            NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } }
+        }
+        add_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
     }
 }

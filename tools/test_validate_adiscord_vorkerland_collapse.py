@@ -152,8 +152,22 @@ class DirtyStateTests(unittest.TestCase):
         effects = effects_path.read_text(encoding='utf-8-sig')
         apply_text = effects.split('ADISCORD_vorkerland_apply_dirty_modifiers = {', 1)[1]
         apply_text = apply_text.split('\n\nADISCORD_vorkerland_apply_dirty_state_modifier = {', 1)[0]
-        state_ids = re.findall(r'\bstate\s*=\s*\{\s*id\s*=\s*(\d+)', apply_text)
+        state_ids = re.findall(
+            r'(?m)^\s*(\d+)\s*=\s*\{\s*ADISCORD_vorkerland_apply_dirty_state_modifier\s*=\s*yes\s*\}',
+            apply_text,
+        )
         self.assertEqual([int(state_id) for state_id in state_ids], sorted(CONTAMINATED_STATES))
+        self.assertNotRegex(apply_text, r'(?m)^\s*state\s*=')
+
+        helper = effects.split('ADISCORD_vorkerland_apply_dirty_state_modifier = {', 1)[1]
+        self.assertRegex(
+            helper,
+            r'has_dynamic_modifier\s*=\s*\{\s*modifier\s*=\s*ADISCORD_vorkerland_dirty_state\s*\}',
+        )
+        self.assertRegex(
+            helper,
+            r'add_dynamic_modifier\s*=\s*\{\s*modifier\s*=\s*ADISCORD_vorkerland_dirty_state\s*\}',
+        )
 
     def test_dirty_modifier_is_permanent_and_never_removed(self):
         modifier_path = validator.ROOT / 'common' / 'dynamic_modifiers' / 'ADISCORD_vorkerland_collapse_dynamic_modifiers.txt'
