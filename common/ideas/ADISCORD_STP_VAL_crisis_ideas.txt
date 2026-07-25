@@ -154,5 +154,15 @@ ideas = {
 				ADISCORD_economy_trade_income_factor = -0.05
 			}
 		}
+
+		VAL_northern_two_front_overstretch = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				supply_consumption_factor = 0.15
+				planning_speed = -0.10
+			}
+		}
 	}
 }

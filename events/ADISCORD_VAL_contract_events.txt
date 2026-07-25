@@ -360,3 +360,115 @@ country_event = {
 		NOD_send_early_stp_material = yes
 	}
 }
+
+# Northern 30-day control tokens deliberately have no event trigger: the
+# resolver always clears its finite token, then rechecks every campaign guard.
+country_event = {
+	id = val_contract.400
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { VAL = { VAL_resolve_northern_control_59 = yes } }
+}
+country_event = {
+	id = val_contract.401
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { VAL = { VAL_resolve_northern_control_61 = yes } }
+}
+
+country_event = {
+	id = val_contract.410
+	title = val_contract.410.t
+	desc = val_contract.410.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = {
+		name = val_contract.410.a
+		ai_chance = {
+			base = 2
+			modifier = { factor = 2 surrender_progress > 0.45 }
+			modifier = { factor = 1.5 num_equipment@infantry_equipment < 600 }
+		}
+		VAL = { VAL_accept_northern_59_concession = yes }
+	}
+	option = {
+		name = val_contract.410.b
+		ai_chance = {
+			base = 3
+			modifier = { factor = 1.5 surrender_progress < 0.25 }
+		}
+		VAL = { set_country_flag = VAL_northern_target_59_refused }
+	}
+}
+
+country_event = {
+	id = val_contract.411
+	title = val_contract.411.t
+	desc = val_contract.411.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = {
+		name = val_contract.411.a
+		ai_chance = {
+			base = 2
+			modifier = { factor = 2 surrender_progress > 0.45 }
+			modifier = { factor = 1.5 num_equipment@infantry_equipment < 600 }
+		}
+		VAL = { VAL_accept_northern_61_concession = yes }
+	}
+	option = {
+		name = val_contract.411.b
+		ai_chance = {
+			base = 3
+			modifier = { factor = 1.5 surrender_progress < 0.25 }
+		}
+		VAL = { set_country_flag = VAL_northern_target_61_refused }
+	}
+}
+
+country_event = {
+	id = val_contract.420
+	title = val_contract.420.t
+	desc = val_contract.420.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = {
+		name = val_contract.420.a
+		ai_chance = {
+			base = 2
+			modifier = { factor = 2 has_war = yes }
+			modifier = { factor = 2 num_equipment@infantry_equipment < 700 }
+		}
+		set_country_flag = APH_VAL_northern_accommodation
+		VAL = {
+			VAL_change_contract_authority = { value = 5 }
+			add_political_power = 35
+		}
+	}
+	option = {
+		name = val_contract.420.b
+		ai_chance = { base = 3 }
+		set_country_flag = APH_VAL_northern_refusal
+	}
+}
+
+country_event = {
+	id = val_contract.430
+	title = val_contract.430.t
+	desc = val_contract.430.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	trigger = { tag = VAL has_country_flag = VAL_northern_timer_collision_pending }
+	option = {
+		name = val_contract.430.a
+		ai_chance = { base = 3 }
+		set_country_flag = VAL_northern_timer_collision_resolved
+		clr_country_flag = VAL_northern_timer_collision_pending
+		VAL_resolve_northern_campaign_timeout = yes
+	}
+	option = {
+		name = val_contract.430.b
+		ai_chance = { base = 1 }
+		VAL_continue_northern_two_front_war = yes
+	}
+}

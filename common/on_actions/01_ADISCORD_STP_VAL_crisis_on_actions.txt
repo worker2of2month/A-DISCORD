@@ -60,6 +60,22 @@ on_actions = {
 					NOD_handle_early_val_aggression = yes
 				}
 			}
+			if = {
+				limit = {
+					VAL = { has_country_flag = VAL_northern_campaign_active }
+					OR = {
+						ROOT = { has_country_flag = VAL_northern_campaign_participant }
+						FROM = { has_country_flag = VAL_northern_campaign_participant }
+					}
+					NOT = {
+						AND = {
+							ROOT = { has_country_flag = VAL_northern_campaign_participant }
+							FROM = { has_country_flag = VAL_northern_campaign_participant }
+						}
+					}
+				}
+				VAL = { VAL_mark_northern_campaign_contaminated = yes }
+			}
 			NOD = {
 				clr_country_flag = NOD_crisis_posture_lock
 				NOD_check_limited_war_integrity = yes
@@ -101,6 +117,7 @@ on_actions = {
 						activate_mission = VAL_STP_adviser_factory_obligation
 					}
 				}
+				VAL_check_northern_campaign_integrity = yes
 			}
 			if = {
 				limit = {
@@ -139,6 +156,20 @@ on_actions = {
 
 	on_capitulation = {
 		effect = {
+			if = {
+				limit = {
+					VAL = { has_country_flag = VAL_northern_campaign_active }
+					ROOT = { has_country_flag = VAL_northern_campaign_participant }
+				}
+				set_global_flag = skip_default_capitulation
+				set_global_flag = STP_VAL_skip_capitulation_claimed
+				ROOT = { save_global_event_target_as = VAL_northern_capitulated_country }
+				if = {
+					limit = { FROM = { OR = { tag = VAL has_war_together_with = VAL } } }
+					VAL = { set_country_flag = VAL_northern_capitulation_by_val_side }
+				}
+				VAL = { VAL_handle_northern_campaign_capitulation = yes }
+			}
 			# Final VAL-STP war: suppress the conference only for the exact
 			# saved participants, then resolve borders and dependency by script.
 			if = {
@@ -183,6 +214,7 @@ on_actions = {
 					}
 					VAL_finish_stp_operation = yes
 				}
+				VAL_check_northern_campaign_integrity = yes
 			}
 			if = {
 				limit = {
@@ -263,6 +295,7 @@ on_actions = {
 				NOD_check_limited_war_integrity = yes
 			}
 			VAL = { VAL_check_resource_corridor_control = yes }
+			VAL = { VAL_check_northern_campaign_control = yes }
 		}
 	}
 }

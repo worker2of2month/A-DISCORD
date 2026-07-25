@@ -258,3 +258,136 @@ VAL_STP_partner_is_viable = {
 		}
 	}
 }
+
+# Northern campaign gates are repeated again in the start effect immediately
+# before war declaration. The trigger layer only controls player/AI access.
+VAL_northern_cin_is_eligible = {
+	country_exists = CIN
+	check_variable = { var = VAL_CIN_influence value = 2 compare = greater_than_or_equals }
+	CIN = {
+		is_subject = no
+		has_capitulated = no
+		has_war = no
+		is_in_faction = no
+		owns_state = 59
+		controls_state = 59
+	}
+	NOT = { any_country = { has_guaranteed = CIN } }
+}
+
+VAL_northern_osf_is_eligible = {
+	country_exists = OSF
+	check_variable = { var = VAL_OSF_influence value = 2 compare = greater_than_or_equals }
+	OSF = {
+		is_subject = no
+		has_capitulated = no
+		has_war = no
+		is_in_faction = no
+		owns_state = 61
+		controls_state = 61
+	}
+	NOT = { any_country = { has_guaranteed = OSF } }
+}
+
+VAL_northern_full_mode_is_eligible = {
+	VAL_northern_cin_is_eligible = yes
+	VAL_northern_osf_is_eligible = yes
+}
+
+VAL_northern_partial_cin_is_eligible = {
+	VAL_northern_cin_is_eligible = yes
+	VAL_northern_osf_is_eligible = no
+}
+
+VAL_northern_partial_osf_is_eligible = {
+	VAL_northern_cin_is_eligible = no
+	VAL_northern_osf_is_eligible = yes
+}
+
+VAL_northern_balanced_civil_war_human = {
+	VAL_has_active_stp_civil_war = yes
+	event_target:STP_crisis_party_side = {
+		surrender_progress < 0.50
+		count_triggers = {
+			amount = 2
+			controls_state = 1
+			controls_state = 2
+			controls_state = 3
+			controls_state = 28
+			controls_state = 29
+			controls_state = 43
+			controls_state = 44
+			controls_state = 45
+			controls_state = 46
+			controls_state = 53
+			controls_state = 88
+		}
+	}
+	event_target:STP_crisis_resistance_side = {
+		surrender_progress < 0.50
+		count_triggers = {
+			amount = 2
+			controls_state = 1
+			controls_state = 2
+			controls_state = 3
+			controls_state = 28
+			controls_state = 29
+			controls_state = 43
+			controls_state = 44
+			controls_state = 45
+			controls_state = 46
+			controls_state = 53
+			controls_state = 88
+		}
+	}
+}
+
+VAL_northern_balanced_civil_war_ai = {
+	VAL_has_active_stp_civil_war = yes
+	event_target:STP_crisis_party_side = { surrender_progress < 0.35 }
+	event_target:STP_crisis_resistance_side = { surrender_progress < 0.35 }
+	num_divisions > 5
+	num_equipment@infantry_equipment > 1499
+	num_equipment@support_equipment > 149
+	NOT = { strength_ratio = { tag = CIN ratio < 1.20 } }
+	NOT = { strength_ratio = { tag = OSF ratio < 1.20 } }
+}
+
+VAL_northern_fresh_long_deal = {
+	has_country_flag = VAL_northern_long_deal_fresh_window
+	OR = {
+		has_country_flag = VAL_STP_countdown_300
+		has_country_flag = VAL_STP_countdown_450
+	}
+}
+
+VAL_can_start_northern_campaign = {
+	tag = VAL
+	NOT = { has_country_flag = VAL_northern_campaign_attempted }
+	NOT = { has_country_flag = VAL_northern_campaign_active }
+	NOT = { has_country_flag = VAL_STP_final_warning_active }
+	NOT = { has_country_flag = VAL_STP_final_war_active }
+	OR = {
+		VAL_northern_full_mode_is_eligible = yes
+		VAL_northern_partial_cin_is_eligible = yes
+		VAL_northern_partial_osf_is_eligible = yes
+	}
+	OR = {
+		AND = {
+			is_ai = no
+			OR = {
+				VAL_northern_balanced_civil_war_human = yes
+				VAL_northern_fresh_long_deal = yes
+			}
+		}
+		AND = {
+			is_ai = yes
+			NOT = { has_country_flag = VAL_STP_countdown_120 }
+			NOT = { has_country_flag = VAL_STP_countdown_180 }
+			OR = {
+				VAL_northern_balanced_civil_war_ai = yes
+				VAL_northern_fresh_long_deal = yes
+			}
+		}
+	}
+}

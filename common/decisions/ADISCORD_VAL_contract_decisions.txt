@@ -270,3 +270,36 @@ STP_VAL_war_countdown_category = {
 		}
 	}
 }
+
+VAL_northern_campaign = {
+	VAL_launch_northern_campaign = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = {
+			has_country_flag = VAL_northern_operations_unlocked
+			NOT = { has_country_flag = VAL_northern_campaign_attempted }
+		}
+		available = { VAL_can_start_northern_campaign = yes }
+		cost = 75
+		days_remove = 14
+		complete_effect = { VAL_start_guarded_northern_campaign = yes }
+		ai_will_do = {
+			base = 1
+			modifier = { factor = 2 check_variable = { var = VAL_contract_authority value = 70 compare = greater_than_or_equals } }
+			modifier = { factor = 2 has_country_flag = VAL_northern_campaign_full }
+			modifier = { factor = 0.25 num_equipment@infantry_equipment < 2000 }
+		}
+	}
+
+	VAL_northern_campaign_timeout_210 = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_northern_campaign_active }
+		activation = { always = no }
+		available = { always = no }
+		selectable_mission = no
+		cancelable = no
+		days_mission_timeout = 210
+		timeout_effect = { VAL_resolve_northern_campaign_timeout = yes }
+	}
+}

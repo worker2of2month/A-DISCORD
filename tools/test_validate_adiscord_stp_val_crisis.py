@@ -18,6 +18,9 @@ from tools.stp_val_crisis_manifest import (
     NOD_LIMITED_TIMEOUT_DAYS,
     NOD_POSTURES,
     NOD_SUPPORT_LEVELS,
+    NORTHERN_MODES,
+    NORTHERN_STATES,
+    NORTHERN_TARGET_LOCKS,
     NODE_LIMITS,
     POSTWAR_FOCUS_IDS,
     RESOURCE_STATES,
@@ -2342,6 +2345,115 @@ class CrisisValidatorTests(unittest.TestCase):
                 "white_peace", validator.extract_named_block(effects, outcome) or ""
             )
         self.assertEqual(validator.validate(validator.ROOT, "val"), [])
+
+    def test_task_ten_guarded_northern_campaign_and_scripted_peace(self):
+        self.assertEqual(NORTHERN_STATES, {"CIN": 59, "OSF": 61})
+        self.assertEqual(
+            set(NORTHERN_MODES),
+            {
+                "VAL_northern_campaign_full",
+                "VAL_northern_campaign_partial_cin",
+                "VAL_northern_campaign_partial_osf",
+            },
+        )
+        self.assertEqual(
+            set(NORTHERN_TARGET_LOCKS),
+            {"VAL_northern_target_59_resolved", "VAL_northern_target_61_resolved"},
+        )
+
+        triggers = validator.read(
+            validator.ROOT
+            / "common/scripted_triggers/ADISCORD_STP_VAL_crisis_triggers.txt"
+        ) or ""
+        effects = validator.read(
+            validator.ROOT
+            / "common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt"
+        ) or ""
+        decisions = validator.read(
+            validator.ROOT / "common/decisions/ADISCORD_VAL_contract_decisions.txt"
+        ) or ""
+        on_actions = validator.read(
+            validator.ROOT
+            / "common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt"
+        ) or ""
+
+        for target, state in NORTHERN_STATES.items():
+            block = (
+                validator.extract_named_block(
+                    triggers, f"VAL_northern_{target.lower()}_is_eligible"
+                )
+                or ""
+            )
+            for token in (
+                "is_subject = no",
+                "has_capitulated = no",
+                "has_war = no",
+                "is_in_faction = no",
+                f"owns_state = {state}",
+                f"controls_state = {state}",
+                f"has_guaranteed = {target}",
+            ):
+                self.assertIn(token, block)
+
+        mission = (
+            validator.extract_named_block(decisions, "VAL_northern_campaign_timeout_210")
+            or ""
+        )
+        self.assertEqual(
+            validator._direct_scalar_values(mission, "days_mission_timeout"), ["210"]
+        )
+        start = (
+            validator.extract_named_block(effects, "VAL_start_guarded_northern_campaign")
+            or ""
+        )
+        self.assertLess(
+            start.index("set_country_flag = VAL_northern_campaign_attempted"),
+            start.index("declare_war_on"),
+        )
+        self.assertNotIn("target = APH", start)
+        self.assertNotIn("create_faction", start)
+
+        for state, lock in zip((59, 61), NORTHERN_TARGET_LOCKS):
+            accept = (
+                validator.extract_named_block(
+                    effects, f"VAL_accept_northern_{state}_concession"
+                )
+                or ""
+            )
+            for token in (
+                f"VAL_northern_owner_{state}",
+                "VAL_northern_campaign_participant",
+                "VAL_northern_campaign_contaminated",
+                f"controls_state = {state}",
+                f"transfer_state = {state}",
+                f"set_country_flag = {lock}",
+                "white_peace",
+            ):
+                self.assertIn(token, accept)
+
+        war_hook = validator.extract_named_block(on_actions, "on_war_relation_added") or ""
+        self.assertIn("VAL_mark_northern_campaign_contaminated = yes", war_hook)
+        capitulation = validator.extract_named_block(on_actions, "on_capitulation") or ""
+        self.assertIn("set_global_flag = skip_default_capitulation", capitulation)
+        self.assertIn("VAL_handle_northern_campaign_capitulation = yes", capitulation)
+
+        old_on_actions = validator.read(
+            validator.ROOT / "common/on_actions/00_on_actions.txt"
+        ) or ""
+        self.assertNotIn("VAL scripted test war", old_on_actions)
+        test_decisions = validator.read(
+            validator.ROOT / "common/decisions/ADISCORD_test_wars_decisions.txt"
+        ) or ""
+        self.assertNotIn("VAL_start_test_war_with_STP", test_decisions)
+        self.assertNotIn("VAL_start_test_war_with_CIN", test_decisions)
+        self.assertIn("APH_start_test_war_with_OSF", test_decisions)
+
+        localisation = (
+            validator.ROOT / "localisation/russian/ADISCORD_test_wars_l_russian.yml"
+        ).read_bytes()
+        self.assertTrue(localisation.startswith(b"\xef\xbb\xbf"))
+        self.assertEqual(localisation.decode("utf-8-sig").count("l_russian:"), 1)
+        self.assertEqual(validator.validate(validator.ROOT, "north"), [])
 
     def test_legacy_stp_and_val_migration_paths_are_idempotent(self):
         core = validator.read(

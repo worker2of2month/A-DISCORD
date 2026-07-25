@@ -9,80 +9,6 @@ on_actions = {
 
 	on_government_change = { }
 
-	on_capitulation = {
-		effect = {
-			# VAL scripted test war: CIN / OSF / APH defeat handling.
-			# ROOT = capitulated country, FROM = winner.
-				if = {
-					limit = {
-						ROOT = {
-							OR = {
-								original_tag = CIN
-								original_tag = OSF
-								original_tag = APH
-							}
-						}
-
-						FROM = { 
-							original_tag = VAL 
-						}
-					}
-
-					VAL = {
-						transfer_state = 59
-						transfer_state = 61
-
-						if = {
-							limit = { has_war_with = CIN }
-							white_peace = CIN
-						}
-						if = {
-							limit = { has_war_with = OSF }
-							white_peace = OSF
-						}
-						if = {
-							limit = { has_war_with = APH }
-							white_peace = APH
-						}
-					}
-
-					CIN = {
-						remove_ideas = ADISCORD_test_capitulation_resistance
-
-						if = {
-							limit = { is_faction_leader = yes }
-							dismantle_faction = yes
-						}
-					}
-
-					OSF = {
-						remove_ideas = ADISCORD_test_capitulation_resistance
-
-						if = {
-							limit = { is_in_faction_with = CIN }
-							leave_faction = yes
-						}
-					}
-
-					APH = {
-						remove_ideas = ADISCORD_test_capitulation_resistance
-
-						if = {
-							limit = { is_in_faction_with = CIN }
-							leave_faction = yes
-						}
-
-						country_event = {
-							id = ADISCORD_test_wars.1
-							days = 30
-						}
-					}
-					set_global_flag = skip_default_capitulation
-				}
-				clr_global_flag = skip_default_capitulation
-			}
-		}
-
 	on_declare_war = {
 		effect = {
 			ROOT = {
@@ -260,4 +186,4 @@ on_actions = {
 			}
 		}
 	}
-} 
+}

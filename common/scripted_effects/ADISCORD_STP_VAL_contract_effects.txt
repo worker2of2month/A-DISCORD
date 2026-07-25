@@ -742,6 +742,7 @@ STP_VAL_clear_countdown = {
 	clr_country_flag = VAL_STP_diplomatic_protection_removed
 	clr_country_flag = VAL_STP_countdown_owner_postwar
 	clr_country_flag = VAL_STP_countdown_owner_val
+	clr_country_flag = VAL_northern_long_deal_fresh_window
 	set_variable = { var = VAL_STP_countdown_type value = 0 }
 	clear_global_event_target = STP_VAL_countdown_owner
 }
@@ -812,6 +813,7 @@ STP_VAL_start_canonical_countdown = {
 			set_variable = { var = VAL_STP_countdown_type value = 300 }
 			set_country_flag = VAL_STP_countdown_300
 			set_country_flag = VAL_STP_countdown_generation_300
+			set_country_flag = { flag = VAL_northern_long_deal_fresh_window days = 30 value = 1 }
 			event_target:STP_VAL_countdown_owner = {
 				activate_mission = STP_VAL_war_countdown_300
 				country_event = { id = val_contract.62 days = 286 }
@@ -823,6 +825,7 @@ STP_VAL_start_canonical_countdown = {
 			set_variable = { var = VAL_STP_countdown_type value = 450 }
 			set_country_flag = VAL_STP_countdown_450
 			set_country_flag = VAL_STP_countdown_generation_450
+			set_country_flag = { flag = VAL_northern_long_deal_fresh_window days = 30 value = 1 }
 			event_target:STP_VAL_countdown_owner = {
 				activate_mission = STP_VAL_war_countdown_450
 				country_event = { id = val_contract.63 days = 436 }
@@ -870,6 +873,7 @@ STP_VAL_apply_final_warning = {
 		limit = { NOT = { has_country_flag = VAL_STP_final_warning_active } }
 		set_country_flag = VAL_STP_final_warning_active
 		STP_VAL_expire_countdown_concessions = yes
+		STP_VAL_handle_northern_timer_collision = yes
 		if = {
 			limit = {
 				has_country_flag = VAL_STP_countdown_owner_val
@@ -1171,4 +1175,464 @@ NOD_handle_early_val_aggression = {
 		else = { NOD_join_early_stp_defense = yes }
 	}
 	else = { NOD_clear_early_val_aggression_targets = yes }
+}
+
+# Guarded northern campaign. All participants and original owners are saved
+# before war creation; no faction or automatic APH war is used.
+VAL_clear_active_northern_campaign = {
+	remove_decision = VAL_northern_campaign_timeout_210
+	remove_ideas = VAL_northern_two_front_overstretch
+	clr_country_flag = VAL_northern_campaign_active
+	clr_country_flag = VAL_northern_campaign_full
+	clr_country_flag = VAL_northern_campaign_partial_cin
+	clr_country_flag = VAL_northern_campaign_partial_osf
+	clr_country_flag = VAL_northern_campaign_participant
+	clr_country_flag = VAL_northern_control_59_generation
+	clr_country_flag = VAL_northern_control_61_generation
+	clr_country_flag = VAL_northern_timer_collision_pending
+	clr_country_flag = VAL_northern_timer_collision_resolved
+	clr_country_flag = VAL_northern_two_front_chosen
+	if = {
+		limit = { has_event_target = VAL_northern_cin_participant country_exists = event_target:VAL_northern_cin_participant }
+		event_target:VAL_northern_cin_participant = { clr_country_flag = VAL_northern_campaign_participant }
+	}
+	if = {
+		limit = { has_event_target = VAL_northern_osf_participant country_exists = event_target:VAL_northern_osf_participant }
+		event_target:VAL_northern_osf_participant = { clr_country_flag = VAL_northern_campaign_participant }
+	}
+	clear_global_event_target = VAL_northern_cin_participant
+	clear_global_event_target = VAL_northern_osf_participant
+	clear_global_event_target = VAL_northern_owner_59
+	clear_global_event_target = VAL_northern_owner_61
+}
+
+VAL_address_northern_white_peace = {
+	if = {
+		limit = {
+			has_event_target = VAL_northern_cin_participant
+			country_exists = event_target:VAL_northern_cin_participant
+			has_war_with = event_target:VAL_northern_cin_participant
+		}
+		white_peace = { tag = event_target:VAL_northern_cin_participant }
+	}
+	if = {
+		limit = {
+			has_event_target = VAL_northern_osf_participant
+			country_exists = event_target:VAL_northern_osf_participant
+			has_war_with = event_target:VAL_northern_osf_participant
+		}
+		white_peace = { tag = event_target:VAL_northern_osf_participant }
+	}
+}
+
+VAL_start_guarded_northern_campaign = {
+	if = {
+		limit = { VAL_can_start_northern_campaign = yes }
+		set_country_flag = VAL_northern_campaign_attempted
+		set_country_flag = VAL_northern_campaign_active
+		set_country_flag = VAL_northern_campaign_participant
+		set_variable = { var = VAL_APH_saved_northern_posture value = VAL_APH_contract_posture }
+		if = {
+			limit = { VAL_northern_full_mode_is_eligible = yes }
+			set_country_flag = VAL_northern_campaign_full
+			59 = { owner = { save_global_event_target_as = VAL_northern_owner_59 } }
+			61 = { owner = { save_global_event_target_as = VAL_northern_owner_61 } }
+			CIN = {
+				set_country_flag = VAL_northern_campaign_participant
+				save_global_event_target_as = VAL_northern_cin_participant
+			}
+			OSF = {
+				set_country_flag = VAL_northern_campaign_participant
+				save_global_event_target_as = VAL_northern_osf_participant
+			}
+			activate_mission = VAL_northern_campaign_timeout_210
+			# Recheck every external-state guard after the 14-day decision cost.
+			if = {
+				limit = { VAL_northern_full_mode_is_eligible = yes }
+				declare_war_on = { target = CIN type = take_state_focus generator = { 59 } }
+				OSF = {
+					add_to_war = {
+						targeted_alliance = CIN
+						enemy = VAL
+						hostility_reason = asked_to_join
+						single_target_only = yes
+					}
+				}
+			}
+			else = { VAL_clear_active_northern_campaign = yes }
+		}
+		else_if = {
+			limit = { VAL_northern_partial_cin_is_eligible = yes }
+			set_country_flag = VAL_northern_campaign_partial_cin
+			59 = { owner = { save_global_event_target_as = VAL_northern_owner_59 } }
+			CIN = {
+				set_country_flag = VAL_northern_campaign_participant
+				save_global_event_target_as = VAL_northern_cin_participant
+			}
+			activate_mission = VAL_northern_campaign_timeout_210
+			if = {
+				limit = { VAL_northern_partial_cin_is_eligible = yes }
+				declare_war_on = { target = CIN type = take_state_focus generator = { 59 } }
+			}
+			else = { VAL_clear_active_northern_campaign = yes }
+		}
+		else_if = {
+			limit = { VAL_northern_partial_osf_is_eligible = yes }
+			set_country_flag = VAL_northern_campaign_partial_osf
+			61 = { owner = { save_global_event_target_as = VAL_northern_owner_61 } }
+			OSF = {
+				set_country_flag = VAL_northern_campaign_participant
+				save_global_event_target_as = VAL_northern_osf_participant
+			}
+			activate_mission = VAL_northern_campaign_timeout_210
+			if = {
+				limit = { VAL_northern_partial_osf_is_eligible = yes }
+				declare_war_on = { target = OSF type = take_state_focus generator = { 61 } }
+			}
+			else = { VAL_clear_active_northern_campaign = yes }
+		}
+		else = { VAL_clear_active_northern_campaign = yes }
+	}
+}
+
+VAL_check_northern_campaign_control = {
+	if = {
+		limit = {
+			has_country_flag = VAL_northern_campaign_active
+			NOT = { has_country_flag = VAL_northern_campaign_contaminated }
+			OR = { has_country_flag = VAL_northern_campaign_full has_country_flag = VAL_northern_campaign_partial_cin }
+			controls_state = 59
+			NOT = { has_country_flag = VAL_northern_target_59_resolved }
+			NOT = { has_country_flag = VAL_northern_control_59_generation }
+		}
+		set_country_flag = VAL_northern_control_59_generation
+		country_event = { id = val_contract.400 days = 30 }
+	}
+	if = {
+		limit = {
+			has_country_flag = VAL_northern_campaign_active
+			NOT = { has_country_flag = VAL_northern_campaign_contaminated }
+			OR = { has_country_flag = VAL_northern_campaign_full has_country_flag = VAL_northern_campaign_partial_osf }
+			controls_state = 61
+			NOT = { has_country_flag = VAL_northern_target_61_resolved }
+			NOT = { has_country_flag = VAL_northern_control_61_generation }
+		}
+		set_country_flag = VAL_northern_control_61_generation
+		country_event = { id = val_contract.401 days = 30 }
+	}
+}
+
+VAL_resolve_northern_control_59 = {
+	clr_country_flag = VAL_northern_control_59_generation
+	if = {
+		limit = {
+			has_country_flag = VAL_northern_campaign_active
+			has_country_flag = VAL_northern_campaign_participant
+			NOT = { has_country_flag = VAL_northern_campaign_contaminated }
+			OR = { has_country_flag = VAL_northern_campaign_full has_country_flag = VAL_northern_campaign_partial_cin }
+			controls_state = 59
+			NOT = { has_country_flag = VAL_northern_target_59_resolved }
+			has_event_target = VAL_northern_owner_59
+			country_exists = event_target:VAL_northern_owner_59
+			event_target:VAL_northern_owner_59 = {
+				has_country_flag = VAL_northern_campaign_participant
+				owns_state = 59
+			}
+		}
+		event_target:VAL_northern_owner_59 = { country_event = { id = val_contract.410 } }
+	}
+}
+
+VAL_resolve_northern_control_61 = {
+	clr_country_flag = VAL_northern_control_61_generation
+	if = {
+		limit = {
+			has_country_flag = VAL_northern_campaign_active
+			has_country_flag = VAL_northern_campaign_participant
+			NOT = { has_country_flag = VAL_northern_campaign_contaminated }
+			OR = { has_country_flag = VAL_northern_campaign_full has_country_flag = VAL_northern_campaign_partial_osf }
+			controls_state = 61
+			NOT = { has_country_flag = VAL_northern_target_61_resolved }
+			has_event_target = VAL_northern_owner_61
+			country_exists = event_target:VAL_northern_owner_61
+			event_target:VAL_northern_owner_61 = {
+				has_country_flag = VAL_northern_campaign_participant
+				owns_state = 61
+			}
+		}
+		event_target:VAL_northern_owner_61 = { country_event = { id = val_contract.411 } }
+	}
+}
+
+VAL_accept_northern_59_concession = {
+	if = {
+		limit = {
+			has_country_flag = VAL_northern_campaign_active
+			has_country_flag = VAL_northern_campaign_participant
+			NOT = { has_country_flag = VAL_northern_campaign_contaminated }
+			OR = { has_country_flag = VAL_northern_campaign_full has_country_flag = VAL_northern_campaign_partial_cin }
+			controls_state = 59
+			NOT = { has_country_flag = VAL_northern_target_59_resolved }
+			has_event_target = VAL_northern_owner_59
+			country_exists = event_target:VAL_northern_owner_59
+			event_target:VAL_northern_owner_59 = {
+				has_country_flag = VAL_northern_campaign_participant
+				owns_state = 59
+			}
+		}
+		transfer_state = 59
+		set_country_flag = VAL_northern_target_59_resolved
+		set_country_flag = VAL_northern_target_59_conceded
+		if = {
+			limit = { has_war_with = event_target:VAL_northern_owner_59 }
+			white_peace = { tag = event_target:VAL_northern_owner_59 }
+		}
+		VAL_check_northern_campaign_completion = yes
+	}
+}
+
+VAL_accept_northern_61_concession = {
+	if = {
+		limit = {
+			has_country_flag = VAL_northern_campaign_active
+			has_country_flag = VAL_northern_campaign_participant
+			NOT = { has_country_flag = VAL_northern_campaign_contaminated }
+			OR = { has_country_flag = VAL_northern_campaign_full has_country_flag = VAL_northern_campaign_partial_osf }
+			controls_state = 61
+			NOT = { has_country_flag = VAL_northern_target_61_resolved }
+			has_event_target = VAL_northern_owner_61
+			country_exists = event_target:VAL_northern_owner_61
+			event_target:VAL_northern_owner_61 = {
+				has_country_flag = VAL_northern_campaign_participant
+				owns_state = 61
+			}
+		}
+		transfer_state = 61
+		set_country_flag = VAL_northern_target_61_resolved
+		set_country_flag = VAL_northern_target_61_conceded
+		if = {
+			limit = { has_war_with = event_target:VAL_northern_owner_61 }
+			white_peace = { tag = event_target:VAL_northern_owner_61 }
+		}
+		VAL_check_northern_campaign_completion = yes
+	}
+}
+
+VAL_check_northern_campaign_completion = {
+	if = {
+		limit = {
+			has_country_flag = VAL_northern_campaign_full
+			has_country_flag = VAL_northern_target_59_resolved
+			has_country_flag = VAL_northern_target_61_resolved
+		}
+		VAL_address_northern_white_peace = yes
+		if = {
+			limit = { country_exists = APH }
+			APH = { country_event = { id = val_contract.420 } }
+		}
+		set_country_flag = VAL_northern_campaign_success
+		VAL_clear_active_northern_campaign = yes
+	}
+	else_if = {
+		limit = { has_country_flag = VAL_northern_campaign_partial_cin has_country_flag = VAL_northern_target_59_resolved }
+		VAL_address_northern_white_peace = yes
+		set_country_flag = VAL_northern_campaign_success
+		VAL_clear_active_northern_campaign = yes
+	}
+	else_if = {
+		limit = { has_country_flag = VAL_northern_campaign_partial_osf has_country_flag = VAL_northern_target_61_resolved }
+		VAL_address_northern_white_peace = yes
+		set_country_flag = VAL_northern_campaign_success
+		VAL_clear_active_northern_campaign = yes
+	}
+}
+
+VAL_resolve_northern_campaign_timeout = {
+	if = {
+		limit = { has_country_flag = VAL_northern_campaign_active }
+		VAL_address_northern_white_peace = yes
+		set_country_flag = VAL_northern_campaign_timed_out
+		VAL_clear_active_northern_campaign = yes
+	}
+}
+
+VAL_mark_northern_campaign_contaminated = {
+	if = {
+		limit = {
+			has_country_flag = VAL_northern_campaign_active
+			NOT = { has_country_flag = VAL_northern_campaign_contaminated }
+		}
+		set_country_flag = VAL_northern_campaign_contaminated
+		clr_country_flag = VAL_northern_control_59_generation
+		clr_country_flag = VAL_northern_control_61_generation
+	}
+}
+
+VAL_continue_northern_two_front_war = {
+	set_country_flag = VAL_northern_two_front_chosen
+	set_country_flag = VAL_northern_timer_collision_resolved
+	clr_country_flag = VAL_northern_timer_collision_pending
+	add_timed_idea = { idea = VAL_northern_two_front_overstretch days = 210 }
+}
+
+STP_VAL_handle_northern_timer_collision = {
+	if = {
+		limit = {
+			has_country_flag = VAL_northern_campaign_active
+			NOT = { has_country_flag = VAL_northern_timer_collision_resolved }
+		}
+		if = {
+			limit = { is_ai = no }
+			set_country_flag = VAL_northern_timer_collision_pending
+			country_event = { id = val_contract.430 }
+		}
+		else = {
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							has_country_flag = VAL_northern_campaign_full
+							OR = { controls_state = 59 controls_state = 61 }
+							NOT = { strength_ratio = { tag = CIN ratio < 1.5 } }
+							NOT = { strength_ratio = { tag = OSF ratio < 1.5 } }
+						}
+						AND = {
+							has_country_flag = VAL_northern_campaign_partial_cin
+							controls_state = 59
+							NOT = { strength_ratio = { tag = CIN ratio < 1.5 } }
+						}
+						AND = {
+							has_country_flag = VAL_northern_campaign_partial_osf
+							controls_state = 61
+							NOT = { strength_ratio = { tag = OSF ratio < 1.5 } }
+						}
+					}
+				}
+				VAL_continue_northern_two_front_war = yes
+			}
+			else = {
+				set_country_flag = VAL_northern_timer_collision_resolved
+				VAL_resolve_northern_campaign_timeout = yes
+			}
+		}
+	}
+}
+
+VAL_check_northern_campaign_exhausted = {
+	if = {
+		limit = {
+			has_country_flag = VAL_northern_campaign_full
+			OR = { has_country_flag = VAL_northern_target_59_resolved has_country_flag = VAL_northern_target_59_failed }
+			OR = { has_country_flag = VAL_northern_target_61_resolved has_country_flag = VAL_northern_target_61_failed }
+		}
+		VAL_address_northern_white_peace = yes
+		VAL_clear_active_northern_campaign = yes
+	}
+	else_if = {
+		limit = { has_country_flag = VAL_northern_campaign_partial_cin has_country_flag = VAL_northern_target_59_failed }
+		VAL_address_northern_white_peace = yes
+		VAL_clear_active_northern_campaign = yes
+	}
+	else_if = {
+		limit = { has_country_flag = VAL_northern_campaign_partial_osf has_country_flag = VAL_northern_target_61_failed }
+		VAL_address_northern_white_peace = yes
+		VAL_clear_active_northern_campaign = yes
+	}
+}
+
+VAL_handle_northern_campaign_capitulation = {
+	if = {
+		limit = {
+			has_country_flag = VAL_northern_campaign_active
+			has_event_target = VAL_northern_capitulated_country
+			event_target:VAL_northern_capitulated_country = { tag = VAL }
+		}
+		VAL_address_northern_white_peace = yes
+		set_country_flag = VAL_northern_campaign_defeat
+		VAL_clear_active_northern_campaign = yes
+	}
+	else_if = {
+		limit = {
+			has_country_flag = VAL_northern_campaign_active
+			has_event_target = VAL_northern_capitulated_country
+			has_event_target = VAL_northern_owner_59
+			event_target:VAL_northern_capitulated_country = { tag = event_target:VAL_northern_owner_59 }
+		}
+		if = {
+			limit = {
+				has_country_flag = VAL_northern_capitulation_by_val_side
+				NOT = { has_country_flag = VAL_northern_campaign_contaminated }
+				controls_state = 59
+				NOT = { has_country_flag = VAL_northern_target_59_resolved }
+			}
+			VAL_accept_northern_59_concession = yes
+		}
+		else = {
+			if = { limit = { has_war_with = event_target:VAL_northern_capitulated_country } white_peace = { tag = event_target:VAL_northern_capitulated_country } }
+			set_country_flag = VAL_northern_target_59_failed
+			VAL_check_northern_campaign_exhausted = yes
+		}
+	}
+	else_if = {
+		limit = {
+			has_country_flag = VAL_northern_campaign_active
+			has_event_target = VAL_northern_capitulated_country
+			has_event_target = VAL_northern_owner_61
+			event_target:VAL_northern_capitulated_country = { tag = event_target:VAL_northern_owner_61 }
+		}
+		if = {
+			limit = {
+				has_country_flag = VAL_northern_capitulation_by_val_side
+				NOT = { has_country_flag = VAL_northern_campaign_contaminated }
+				controls_state = 61
+				NOT = { has_country_flag = VAL_northern_target_61_resolved }
+			}
+			VAL_accept_northern_61_concession = yes
+		}
+		else = {
+			if = { limit = { has_war_with = event_target:VAL_northern_capitulated_country } white_peace = { tag = event_target:VAL_northern_capitulated_country } }
+			set_country_flag = VAL_northern_target_61_failed
+			VAL_check_northern_campaign_exhausted = yes
+		}
+	}
+	clr_country_flag = VAL_northern_capitulation_by_val_side
+	clear_global_event_target = VAL_northern_capitulated_country
+}
+
+VAL_check_northern_campaign_integrity = {
+	if = {
+		limit = { has_country_flag = VAL_northern_campaign_active }
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						has_country_flag = VAL_northern_campaign_full
+						NOT = {
+							OR = {
+								AND = { has_event_target = VAL_northern_cin_participant country_exists = event_target:VAL_northern_cin_participant has_war_with = event_target:VAL_northern_cin_participant }
+								AND = { has_event_target = VAL_northern_osf_participant country_exists = event_target:VAL_northern_osf_participant has_war_with = event_target:VAL_northern_osf_participant }
+							}
+						}
+					}
+					AND = {
+						has_country_flag = VAL_northern_campaign_partial_cin
+						OR = {
+							NOT = { has_event_target = VAL_northern_cin_participant }
+							NOT = { country_exists = event_target:VAL_northern_cin_participant }
+							NOT = { has_war_with = event_target:VAL_northern_cin_participant }
+						}
+					}
+					AND = {
+						has_country_flag = VAL_northern_campaign_partial_osf
+						OR = {
+							NOT = { has_event_target = VAL_northern_osf_participant }
+							NOT = { country_exists = event_target:VAL_northern_osf_participant }
+							NOT = { has_war_with = event_target:VAL_northern_osf_participant }
+						}
+					}
+				}
+			}
+			VAL_clear_active_northern_campaign = yes
+		}
+	}
 }

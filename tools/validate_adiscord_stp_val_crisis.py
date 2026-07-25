@@ -18,6 +18,9 @@ try:
         NOD_LIMITED_TIMEOUT_DAYS,
         NOD_POSTURES,
         NOD_SUPPORT_LEVELS,
+        NORTHERN_MODES,
+        NORTHERN_STATES,
+        NORTHERN_TARGET_LOCKS,
         OWNED_FEATURE_FILES,
         POSTWAR_FOCUS_IDS,
         RESISTANCE_POSTURES,
@@ -57,6 +60,9 @@ except ModuleNotFoundError:
         NOD_LIMITED_TIMEOUT_DAYS,
         NOD_POSTURES,
         NOD_SUPPORT_LEVELS,
+        NORTHERN_MODES,
+        NORTHERN_STATES,
+        NORTHERN_TARGET_LOCKS,
         OWNED_FEATURE_FILES,
         POSTWAR_FOCUS_IDS,
         RESISTANCE_POSTURES,
@@ -163,6 +169,10 @@ REQUIRED_FILES = {
     ),
     "north": (
         ("common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt", "contract and northern effects"),
+        ("common/scripted_triggers/ADISCORD_STP_VAL_crisis_triggers.txt", "northern eligibility triggers"),
+        ("common/decisions/ADISCORD_VAL_contract_decisions.txt", "northern decisions"),
+        ("events/ADISCORD_VAL_contract_events.txt", "northern events"),
+        ("common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt", "northern on-actions"),
     ),
     "ai": (
         ("common/ai_strategy/ADISCORD_STP_VAL_crisis_ai.txt", "crisis AI strategies"),
@@ -1462,6 +1472,185 @@ def _validate_nod_contract(root: Path, issues: list[str]) -> None:
             issues.append("STP disinformation must only bias NOD posture selection")
 
 
+def _validate_northern_campaign(root: Path, issues: list[str]) -> None:
+    triggers = read(root / "common/scripted_triggers/ADISCORD_STP_VAL_crisis_triggers.txt") or ""
+    effects = read(root / "common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt") or ""
+    decisions = read(root / "common/decisions/ADISCORD_VAL_contract_decisions.txt") or ""
+    events = read(root / "events/ADISCORD_VAL_contract_events.txt") or ""
+    on_actions = read(root / "common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt") or ""
+    old_on_actions = read(root / "common/on_actions/00_on_actions.txt") or ""
+    test_decisions = read(root / "common/decisions/ADISCORD_test_wars_decisions.txt") or ""
+    test_categories = read(root / "common/decisions/categories/ADISCORD_test_wars_categories.txt") or ""
+    ideas = read(root / "common/ideas/ADISCORD_STP_VAL_crisis_ideas.txt") or ""
+
+    for trigger_id, target, state in (
+        ("VAL_northern_cin_is_eligible", "CIN", NORTHERN_STATES["CIN"]),
+        ("VAL_northern_osf_is_eligible", "OSF", NORTHERN_STATES["OSF"]),
+    ):
+        block = extract_named_block(triggers, trigger_id) or ""
+        for token in (
+            f"country_exists = {target}",
+            "is_subject = no",
+            "has_capitulated = no",
+            "has_war = no",
+            "is_in_faction = no",
+            f"owns_state = {state}",
+            f"controls_state = {state}",
+            f"has_guaranteed = {target}",
+            f"VAL_{target}_influence value = 2",
+        ):
+            if token not in block:
+                issues.append(f"{trigger_id} is missing start guard {token}")
+
+    for trigger_id in (
+        "VAL_northern_full_mode_is_eligible",
+        "VAL_northern_partial_cin_is_eligible",
+        "VAL_northern_partial_osf_is_eligible",
+    ):
+        if not extract_named_block(triggers, trigger_id):
+            issues.append(f"missing northern mode trigger {trigger_id}")
+    partial_cin = extract_named_block(triggers, "VAL_northern_partial_cin_is_eligible") or ""
+    partial_osf = extract_named_block(triggers, "VAL_northern_partial_osf_is_eligible") or ""
+    if "VAL_northern_osf_is_eligible = no" not in partial_cin:
+        issues.append("partial CIN mode must require OSF to be ineligible")
+    if "VAL_northern_cin_is_eligible = no" not in partial_osf:
+        issues.append("partial OSF mode must require CIN to be ineligible")
+
+    window = extract_named_block(triggers, "VAL_can_start_northern_campaign") or ""
+    for token in (
+        "VAL_northern_campaign_attempted",
+        "VAL_STP_final_warning_active",
+        "VAL_northern_balanced_civil_war_human = yes",
+        "VAL_northern_balanced_civil_war_ai = yes",
+        "VAL_northern_fresh_long_deal = yes",
+        "VAL_STP_countdown_120",
+        "VAL_STP_countdown_180",
+    ):
+        if token not in window:
+            issues.append(f"northern start window is missing {token}")
+    for trigger_id, surrender in (
+        ("VAL_northern_balanced_civil_war_human", "surrender_progress < 0.50"),
+        ("VAL_northern_balanced_civil_war_ai", "surrender_progress < 0.35"),
+    ):
+        block = extract_named_block(triggers, trigger_id) or ""
+        if surrender not in block:
+            issues.append(f"{trigger_id} is missing exact surrender threshold")
+    ai_window = extract_named_block(triggers, "VAL_northern_balanced_civil_war_ai") or ""
+    for token in ("num_divisions > 5", "num_equipment@infantry_equipment", "num_equipment@support_equipment"):
+        if token not in ai_window:
+            issues.append(f"northern AI reserve gate is missing {token}")
+
+    mission = extract_named_block(decisions, "VAL_northern_campaign_timeout_210") or ""
+    if _direct_scalar_values(mission, "days_mission_timeout") != ["210"]:
+        issues.append("northern campaign must use one 210-day mission")
+    start_decision = extract_named_block(decisions, "VAL_launch_northern_campaign") or ""
+    for token in ("VAL_can_start_northern_campaign = yes", "VAL_start_guarded_northern_campaign = yes"):
+        if token not in start_decision:
+            issues.append(f"northern start decision is missing {token}")
+
+    start = extract_named_block(effects, "VAL_start_guarded_northern_campaign") or ""
+    attempted_index = start.find("set_country_flag = VAL_northern_campaign_attempted")
+    declaration_index = start.find("declare_war_on")
+    if attempted_index == -1 or declaration_index == -1 or attempted_index > declaration_index:
+        issues.append("northern attempted flag must be permanent and set before declaration")
+    for mode in NORTHERN_MODES:
+        if mode not in start:
+            issues.append(f"northern start effect cannot reach mode {mode}")
+    for token in (
+        "VAL_northern_owner_59",
+        "VAL_northern_owner_61",
+        "VAL_northern_cin_participant",
+        "VAL_northern_osf_participant",
+        "generator = { 59 }",
+        "generator = { 61 }",
+        "activate_mission = VAL_northern_campaign_timeout_210",
+    ):
+        if token not in start:
+            issues.append(f"northern start effect is missing {token}")
+    if re.search(r"declare_war_on\s*=\s*\{[^}]*target\s*=\s*APH", _mask_non_code(start), re.DOTALL):
+        issues.append("APH must never enter the northern war automatically")
+    if "create_faction" in _mask_non_code(start):
+        issues.append("northern campaign must not create a permanent faction")
+
+    scheduler = extract_named_block(effects, "VAL_check_northern_campaign_control") or ""
+    for event_id, state in (("val_contract.400", 59), ("val_contract.401", 61)):
+        if f"controls_state = {state}" not in scheduler or f"id = {event_id} days = 30" not in scheduler:
+            issues.append(f"state {state} lacks its finite 30-day control token")
+    for event_id, resolver in (
+        ("val_contract.400", "VAL_resolve_northern_control_59 = yes"),
+        ("val_contract.401", "VAL_resolve_northern_control_61 = yes"),
+    ):
+        block = _block_with_direct_assignment(events, "country_event", "id", event_id) or ""
+        if resolver not in block:
+            issues.append(f"northern control event {event_id} is missing {resolver}")
+
+    for state, lock in zip((59, 61), NORTHERN_TARGET_LOCKS):
+        accept = extract_named_block(effects, f"VAL_accept_northern_{state}_concession") or ""
+        for token in (
+            f"VAL_northern_owner_{state}",
+            "VAL_northern_campaign_participant",
+            "VAL_northern_campaign_contaminated",
+            f"controls_state = {state}",
+            f"NOT = {{ has_country_flag = {lock} }}",
+            f"transfer_state = {state}",
+            f"set_country_flag = {lock}",
+            "white_peace",
+        ):
+            if token not in accept:
+                issues.append(f"guarded northern transfer {state} is missing {token}")
+
+    timeout = extract_named_block(effects, "VAL_resolve_northern_campaign_timeout") or ""
+    cleanup = extract_named_block(effects, "VAL_clear_active_northern_campaign") or ""
+    for token in ("VAL_address_northern_white_peace = yes", "VAL_clear_active_northern_campaign = yes"):
+        if token not in timeout:
+            issues.append(f"northern timeout is missing {token}")
+    if "clr_country_flag = VAL_northern_campaign_attempted" in cleanup:
+        issues.append("northern cleanup must preserve the permanent attempted flag")
+
+    war_hook = extract_named_block(on_actions, "on_war_relation_added") or ""
+    for token in ("VAL_northern_campaign_participant", "VAL_mark_northern_campaign_contaminated = yes"):
+        if token not in war_hook:
+            issues.append(f"northern contamination hook is missing {token}")
+    capitulation = extract_named_block(on_actions, "on_capitulation") or ""
+    for token in (
+        "VAL_northern_capitulated_country",
+        "set_global_flag = skip_default_capitulation",
+        "VAL_handle_northern_campaign_capitulation = yes",
+    ):
+        if token not in capitulation:
+            issues.append(f"northern scripted capitulation is missing {token}")
+
+    collision = extract_named_block(effects, "STP_VAL_handle_northern_timer_collision") or ""
+    for token in ("is_ai = no", "val_contract.430", "ratio < 1.5", "VAL_continue_northern_two_front_war"):
+        if token not in collision:
+            issues.append(f"northern timer collision is missing {token}")
+    idea = extract_named_block(ideas, "VAL_northern_two_front_overstretch") or ""
+    for token in ("supply_consumption_factor = 0.15", "planning_speed = -0.10"):
+        if token not in idea:
+            issues.append(f"northern overstretch idea is missing {token}")
+
+    for forbidden in (
+        "VAL scripted test war",
+        "transfer_state = 59",
+        "transfer_state = 61",
+        "ADISCORD_test_capitulation_resistance",
+    ):
+        if forbidden in old_on_actions:
+            issues.append(f"old unsafe northern capitulation handler remains: {forbidden}")
+    for forbidden in ("VAL_start_test_war_with_STP", "VAL_start_test_war_with_CIN"):
+        if forbidden in test_decisions + test_categories:
+            issues.append(f"superseded VAL test-war decision remains: {forbidden}")
+
+    localisation_path = root / "localisation/russian/ADISCORD_test_wars_l_russian.yml"
+    if localisation_path.exists():
+        raw = localisation_path.read_bytes()
+        if not raw.startswith(b"\xef\xbb\xbf"):
+            issues.append("ADISCORD_test_wars_l_russian.yml must retain its UTF-8 BOM")
+        text = raw.decode("utf-8-sig")
+        if text.count("l_russian:") != 1:
+            issues.append("ADISCORD_test_wars_l_russian.yml must have exactly one header")
+
+
 def _validate_performance(root: Path, issues: list[str]) -> None:
     for relative_path in OWNED_FEATURE_FILES:
         text = read(root / relative_path)
@@ -1487,6 +1676,8 @@ def validate(root: Path, section: str | None = None) -> list[str]:
                 _validate_val_contract_campaign(root, issues)
             elif name == "nod":
                 _validate_nod_contract(root, issues)
+            elif name == "north":
+                _validate_northern_campaign(root, issues)
     return list(dict.fromkeys(issues))
 
 
