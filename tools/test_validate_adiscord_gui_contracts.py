@@ -73,6 +73,7 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
                 ('countrypoliticsview',),
             ),
             ('iconType', 'icon_occupied_territories', ('countrypoliticsview',)),
+            ('iconType', 'icon_manage_subjects', ('countrypoliticsview',)),
         }
 
         self.assertEqual(required - nodes, set())
@@ -88,6 +89,18 @@ class NationalFocusGuiContractTests(unittest.TestCase):
         self.assertIn(
             ('iconType', 'overlay', ('national_focus_item',)),
             nodes,
+        )
+
+
+class RuntimePulseTests(unittest.TestCase):
+    def test_economy_has_no_weekly_full_player_refresh(self):
+        text = (ROOT / 'common' / 'on_actions' / '00_ADISCORD_on_actions.txt').read_text(
+            encoding='utf-8-sig'
+        )
+
+        self.assertNotRegex(
+            text,
+            r'(?s)\bon_weekly\s*=\s*\{.*?ADISCORD_economy_weekly_player_refresh\s*=\s*yes',
         )
 
 

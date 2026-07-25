@@ -101,16 +101,6 @@ on_actions = {
 			}
 		}
 	}
-	on_weekly = {
-		effect = {
-			# Country-scoped weekly GUI refresh, TDA-style.
-			if = {
-				limit = { is_ai = no }
-				ADISCORD_economy_weekly_player_refresh = yes
-			}
-		}
-	}
-
 	on_yearly = {
 		effect = {
 			# Country-scoped yearly update. The trigger decides whether this country is secondary-tier.

@@ -111,6 +111,13 @@ guiTypes = {
 			alwaystransparent = yes
 		}
 
+		iconType = {
+			name = "icon_manage_subjects"
+			position = { x = -10000 y = -10000 }
+			quadTextureSprite = "GFX_tiled_window_transparent"
+			alwaystransparent = yes
+		}
+
 		iconType ={
 			name ="production_header_bg"
 			spriteType = "GFX_pol_header_bg"
