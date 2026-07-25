@@ -3,5 +3,5 @@ STP_change_party_suspicion_rate = {
 		var = STP_party_suspicion_temp
 		value = 100
 	}
-	STP_change_suspicion = { value = STP_party_suspicion_temp }
+	set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = STP_party_suspicion_temp } STP_change_suspicion = yes
 }

@@ -147,8 +147,8 @@ STP_crisis_operations = {
 				has_political_power > 43.74
 			}
 			command_power > 19.9
-			num_equipment@infantry_equipment > 399
-			num_equipment@support_equipment > 49
+			has_equipment = { infantry_equipment > 399 }
+			has_equipment = { support_equipment > 49 }
 		}
 		complete_effect = {
 			add_command_power = -20
@@ -161,13 +161,13 @@ STP_crisis_operations = {
 				amount = -400
 				producer = ROOT
 			}
-			STP_change_resistance_escrow_infantry = { value = 400 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 400 } STP_change_resistance_escrow_infantry = yes
 			add_equipment_to_stockpile = {
 				type = support_equipment
 				amount = -50
 				producer = ROOT
 			}
-			STP_change_resistance_escrow_support = { value = 50 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 50 } STP_change_resistance_escrow_support = yes
 			set_country_flag = STP_operation_token_recruit_young_officers
 			set_country_flag = STP_major_operation_active
 			country_event = { id = stp_crisis.21 days = 35 }
@@ -193,8 +193,8 @@ STP_crisis_operations = {
 				NOT = { check_variable = { var = STP_security_adaptation_mountains value = 2 compare = greater_than_or_equals } }
 				has_political_power > 31.24
 			}
-			num_equipment@infantry_equipment > 599
-			num_equipment@support_equipment > 49
+			has_equipment = { infantry_equipment > 599 }
+			has_equipment = { support_equipment > 49 }
 		}
 		complete_effect = {
 			if = {
@@ -206,13 +206,13 @@ STP_crisis_operations = {
 				amount = -600
 				producer = ROOT
 			}
-			STP_change_resistance_escrow_infantry = { value = 600 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 600 } STP_change_resistance_escrow_infantry = yes
 			add_equipment_to_stockpile = {
 				type = support_equipment
 				amount = -50
 				producer = ROOT
 			}
-			STP_change_resistance_escrow_support = { value = 50 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 50 } STP_change_resistance_escrow_support = yes
 			set_country_flag = STP_operation_token_mountain_caches
 			set_country_flag = STP_major_operation_active
 			country_event = { id = stp_crisis.22 days = 35 }
@@ -306,7 +306,7 @@ STP_crisis_operations = {
 				NOT = { check_variable = { var = STP_security_adaptation_foreign value = 2 compare = greater_than_or_equals } }
 				has_political_power > 62.49
 			}
-			num_equipment@infantry_equipment > 249
+			has_equipment = { infantry_equipment > 249 }
 		}
 		complete_effect = {
 			if = {
@@ -318,7 +318,7 @@ STP_crisis_operations = {
 				amount = -250
 				producer = ROOT
 			}
-			STP_change_resistance_escrow_infantry = { value = 250 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 250 } STP_change_resistance_escrow_infantry = yes
 			clr_country_flag = STP_operation_paid_with_convoys
 			set_country_flag = STP_operation_token_nodrul_disinformation
 			set_country_flag = STP_major_operation_active
@@ -345,7 +345,7 @@ STP_crisis_operations = {
 				NOT = { check_variable = { var = STP_security_adaptation_foreign value = 2 compare = greater_than_or_equals } }
 				has_political_power > 62.49
 			}
-			num_equipment@convoy > 24
+			has_equipment = { convoy > 24 }
 		}
 		complete_effect = {
 			if = {
@@ -595,7 +595,7 @@ STP_crisis_operations = {
 				NOT = { check_variable = { var = STP_security_adaptation_street value = 2 compare = greater_than_or_equals } }
 				has_political_power > 37.49
 			}
-			num_equipment@infantry_equipment > 299
+			has_equipment = { infantry_equipment > 299 }
 		}
 		complete_effect = {
 			if = {

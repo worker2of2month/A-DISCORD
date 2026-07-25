@@ -23,11 +23,11 @@ country_event = {
 				25 = {
 					modifier = { factor = 0 VAL_has_active_stp_civil_war = no }
 					modifier = { factor = 2 has_country_flag = VAL_doctrine_resource_raider }
-					modifier = { factor = 2 num_equipment@infantry_equipment > 1499 }
+					modifier = { factor = 2 has_equipment = { infantry_equipment > 1499 } }
 					set_country_flag = VAL_ai_course_resource_raider
 				}
 				25 = {
-					modifier = { factor = 2 num_equipment@infantry_equipment > 1999 }
+					modifier = { factor = 2 has_equipment = { infantry_equipment > 1999 } }
 					modifier = { factor = 2 has_country_flag = VAL_supply_preparation }
 					set_country_flag = VAL_ai_course_patient_invader
 				}
@@ -61,7 +61,7 @@ country_event = {
 			base = 3
 			modifier = { factor = 1.5 surrender_progress > 0.20 }
 			modifier = { factor = 1.5 count_triggers = { amount = 2 check_variable = { var = STP_node_palace value = 0 compare = greater_than } check_variable = { var = STP_node_officers value = 0 compare = greater_than } check_variable = { var = STP_node_mountains value = 0 compare = greater_than } check_variable = { var = STP_node_market value = 0 compare = greater_than } check_variable = { var = STP_node_street value = 0 compare = greater_than } } }
-			modifier = { factor = 1.5 VAL = { has_country_flag = VAL_ai_course_contract_broker num_equipment@infantry_equipment > 1499 } }
+			modifier = { factor = 1.5 VAL = { has_country_flag = VAL_ai_course_contract_broker has_equipment = { infantry_equipment > 1499 } } }
 			modifier = { factor = 0.5 NOD = { has_country_flag = NOD_crisis_posture_guardian is_subject = no } }
 		}
 		VAL = { VAL_advance_mountain_contract_viability = yes }
@@ -140,8 +140,8 @@ country_event = {
 				has_event_target = STP_postwar_country
 				country_exists = event_target:STP_postwar_country
 				event_target:STP_postwar_country = {
-					num_equipment@infantry_equipment > 399
-					num_equipment@support_equipment > 49
+					has_equipment = { infantry_equipment > 399 }
+					has_equipment = { support_equipment > 49 }
 				}
 			}
 			event_target:STP_postwar_country = {
@@ -153,7 +153,7 @@ country_event = {
 		}
 		else = {
 			add_to_variable = { var = VAL_STP_missed_debt_payments value = 1 }
-			VAL_change_stp_leverage = { value = 10 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } VAL_change_stp_leverage = yes
 			if = { limit = { check_variable = { var = VAL_STP_missed_debt_payments value = 2 compare = greater_than_or_equals } } VAL_STP_trigger_breach = yes }
 		}
 	}
@@ -238,7 +238,7 @@ country_event = {
 	desc = val_contract.300.d
 	picture = GFX_report_event_generic_diplomacy
 	is_triggered_only = yes
-	option = { name = val_contract.300.a ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } modifier = { factor = 1.5 num_equipment@infantry_equipment < 500 } } VAL = { VAL_resolve_active_cin_operation = yes } }
+	option = { name = val_contract.300.a ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } modifier = { factor = 1.5 has_equipment = { infantry_equipment < 500 } } } VAL = { VAL_resolve_active_cin_operation = yes } }
 	option = { name = val_contract.300.b ai_chance = { base = 2 } VAL = { set_country_flag = { flag = VAL_CIN_target_cooldown days = 70 value = 1 } VAL_clear_foreign_operation = yes } }
 }
 country_event = {
@@ -247,7 +247,7 @@ country_event = {
 	desc = val_contract.301.d
 	picture = GFX_report_event_generic_diplomacy
 	is_triggered_only = yes
-	option = { name = val_contract.301.a ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } modifier = { factor = 1.5 num_equipment@infantry_equipment < 500 } } VAL = { VAL_resolve_active_osf_operation = yes } }
+	option = { name = val_contract.301.a ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } modifier = { factor = 1.5 has_equipment = { infantry_equipment < 500 } } } VAL = { VAL_resolve_active_osf_operation = yes } }
 	option = { name = val_contract.301.b ai_chance = { base = 2 } VAL = { set_country_flag = { flag = VAL_OSF_target_cooldown days = 70 value = 1 } VAL_clear_foreign_operation = yes } }
 }
 country_event = {
@@ -256,7 +256,7 @@ country_event = {
 	desc = val_contract.302.d
 	picture = GFX_report_event_generic_diplomacy
 	is_triggered_only = yes
-	option = { name = val_contract.302.a ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } modifier = { factor = 1.5 num_equipment@infantry_equipment < 500 } } VAL = { VAL_resolve_active_aph_operation = yes } }
+	option = { name = val_contract.302.a ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } modifier = { factor = 1.5 has_equipment = { infantry_equipment < 500 } } } VAL = { VAL_resolve_active_aph_operation = yes } }
 	option = { name = val_contract.302.b ai_chance = { base = 2 } VAL = { set_country_flag = { flag = VAL_APH_target_cooldown days = 70 value = 1 } VAL_clear_foreign_operation = yes } }
 }
 
@@ -416,9 +416,9 @@ country_event = {
 	option = {
 		name = val_contract.90.b
 		trigger = {
-			num_equipment@infantry_equipment > 499
-			num_equipment@support_equipment > 49
-			political_power > 34
+			has_equipment = { infantry_equipment > 499 }
+			has_equipment = { support_equipment > 49 }
+			has_political_power > 34
 		}
 		ai_chance = {
 			base = 2
@@ -455,7 +455,7 @@ country_event = {
 		ai_chance = {
 			base = 2
 			modifier = { factor = 2 surrender_progress > 0.45 }
-			modifier = { factor = 1.5 num_equipment@infantry_equipment < 600 }
+			modifier = { factor = 1.5 has_equipment = { infantry_equipment < 600 } }
 		}
 		VAL = { VAL_accept_northern_59_concession = yes }
 	}
@@ -480,7 +480,7 @@ country_event = {
 		ai_chance = {
 			base = 2
 			modifier = { factor = 2 surrender_progress > 0.45 }
-			modifier = { factor = 1.5 num_equipment@infantry_equipment < 600 }
+			modifier = { factor = 1.5 has_equipment = { infantry_equipment < 600 } }
 		}
 		VAL = { VAL_accept_northern_61_concession = yes }
 	}
@@ -505,11 +505,11 @@ country_event = {
 		ai_chance = {
 			base = 2
 			modifier = { factor = 2 has_war = yes }
-			modifier = { factor = 2 num_equipment@infantry_equipment < 700 }
+			modifier = { factor = 2 has_equipment = { infantry_equipment < 700 } }
 		}
 		set_country_flag = APH_VAL_northern_accommodation
 		VAL = {
-			VAL_change_contract_authority = { value = 5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } VAL_change_contract_authority = yes
 			add_political_power = 35
 		}
 	}

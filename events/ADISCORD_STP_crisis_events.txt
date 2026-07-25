@@ -13,7 +13,7 @@ country_event = {
 	}
 
 	immediate = {
-		STP_set_health_stage = { value = 2 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 } STP_set_health_stage = yes
 		clr_country_flag = STP_ai_course_lock
 		country_event = { id = stp_crisis.900 }
 		NOD = {
@@ -83,7 +83,7 @@ country_event = {
 						}
 						35 = {
 							modifier = { factor = 2 check_variable = { var = STP_node_officers value = 2 compare = less_than } }
-							modifier = { factor = 2 num_equipment@infantry_equipment > 999 }
+							modifier = { factor = 2 has_equipment = { infantry_equipment > 999 } }
 							set_country_flag = STP_ai_course_military_infiltration
 						}
 						30 = {
@@ -126,7 +126,7 @@ country_event = {
 	}
 
 	immediate = {
-		STP_set_health_stage = { value = 3 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 3 } STP_set_health_stage = yes
 		clr_country_flag = STP_ai_course_lock
 		country_event = { id = stp_crisis.900 }
 		NOD = {
@@ -152,7 +152,7 @@ country_event = {
 	}
 
 	immediate = {
-		STP_set_health_stage = { value = 4 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 4 } STP_set_health_stage = yes
 		clr_country_flag = STP_ai_course_lock
 		country_event = { id = stp_crisis.900 }
 		NOD = {
@@ -180,7 +180,7 @@ country_event = {
 
 	immediate = {
 		set_country_flag = STP_ivanov_dead
-		STP_set_health_stage = { value = 5 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_set_health_stage = yes
 		NOD = {
 			clr_country_flag = NOD_crisis_posture_lock
 			NOD_select_crisis_posture = yes
@@ -229,7 +229,7 @@ country_event = {
 		clr_country_flag = STP_focus_active_STP_Garrisons_Hesitate
 		clr_country_flag = STP_focus_active_STP_Garrisons_Swear_Loyalty
 
-		STP_set_crisis_phase = { value = 2 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 } STP_set_crisis_phase = yes
 		set_country_flag = STP_internal_outcome_pending
 		country_event = { id = stp_crisis.50 }
 	}
@@ -289,7 +289,7 @@ country_event = {
 		complete_national_focus = STP_Show_Him_The_Truth
 		clr_country_flag = STP_forced_commit_no_reward
 		add_political_power = -50
-		STP_change_suspicion = { value = 10 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
 		set_country_flag = {
 			flag = STP_crisis_late_choice_lock
 			days = 35
@@ -311,7 +311,7 @@ country_event = {
 		complete_national_focus = STP_Govern_In_His_Name
 		clr_country_flag = STP_forced_commit_no_reward
 		add_political_power = -50
-		STP_change_readiness = { value = 10 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_readiness = yes
 		set_country_flag = {
 			flag = STP_crisis_late_choice_lock
 			days = 35
@@ -467,26 +467,26 @@ country_event = {
 
 		if = {
 			limit = { check_variable = { var = STP_security_adaptation_palace value = 1 compare = equals } }
-			STP_change_suspicion = { value = 5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
 		}
 		if = {
 			limit = { check_variable = { var = STP_operation_result value = 2 compare = greater_than_or_equals } }
-			STP_change_node_palace = { value = 2 }
-			STP_change_readiness = { value = 8 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 } STP_change_node_palace = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 8 } STP_change_readiness = yes
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_operation_result value = 1 compare = greater_than_or_equals } }
-			STP_change_node_palace = { value = 1 }
-			STP_change_readiness = { value = 5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_palace = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals } }
-			STP_change_node_palace = { value = 1 }
-			STP_change_suspicion = { value = 10 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_palace = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
 		}
 		else = {
-			STP_change_suspicion = { value = 12 }
-			STP_change_readiness = { value = -5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 12 } STP_change_suspicion = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
 		}
 
 		if = {
@@ -505,7 +505,7 @@ country_event = {
 			}
 			STP_lose_shabrat = yes
 		}
-		STP_change_security_adaptation_palace = { value = 1 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_palace = yes
 		set_temp_variable = { var = STP_operation_cleanup_code value = 20 }
 		STP_clear_operation_slot = yes
 	}
@@ -536,26 +536,26 @@ country_event = {
 
 		if = {
 			limit = { check_variable = { var = STP_security_adaptation_officers value = 1 compare = equals } }
-			STP_change_suspicion = { value = 5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
 		}
 		if = {
 			limit = { check_variable = { var = STP_operation_result value = 2 compare = greater_than_or_equals } }
-			STP_change_node_officers = { value = 2 }
-			STP_change_readiness = { value = 8 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 } STP_change_node_officers = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 8 } STP_change_readiness = yes
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_operation_result value = 1 compare = greater_than_or_equals } }
-			STP_change_node_officers = { value = 1 }
-			STP_change_readiness = { value = 5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_officers = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals } }
-			STP_change_node_officers = { value = 1 }
-			STP_change_suspicion = { value = 10 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_officers = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
 		}
 		else = {
-			STP_change_suspicion = { value = 10 }
-			STP_change_readiness = { value = -5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
 		}
 
 		if = {
@@ -566,7 +566,7 @@ country_event = {
 			}
 			set_country_flag = STP_garrison_88_loyal_to_resistance
 		}
-		STP_change_security_adaptation_officers = { value = 1 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_officers = yes
 		set_temp_variable = { var = STP_operation_cleanup_code value = 21 }
 		STP_clear_operation_slot = yes
 	}
@@ -597,28 +597,28 @@ country_event = {
 
 		if = {
 			limit = { check_variable = { var = STP_security_adaptation_mountains value = 1 compare = equals } }
-			STP_change_suspicion = { value = 5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
 		}
 		if = {
 			limit = { check_variable = { var = STP_operation_result value = 2 compare = greater_than_or_equals } }
-			STP_change_node_mountains = { value = 2 }
-			STP_change_readiness = { value = 8 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 } STP_change_node_mountains = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 8 } STP_change_readiness = yes
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_operation_result value = 1 compare = greater_than_or_equals } }
-			STP_change_node_mountains = { value = 1 }
-			STP_change_readiness = { value = 5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_mountains = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals } }
-			STP_change_node_mountains = { value = 1 }
-			STP_change_suspicion = { value = 10 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_mountains = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
 		}
 		else = {
-			STP_change_suspicion = { value = 10 }
-			STP_change_readiness = { value = -5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
 		}
-		STP_change_security_adaptation_mountains = { value = 1 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_mountains = yes
 		set_temp_variable = { var = STP_operation_cleanup_code value = 22 }
 		STP_clear_operation_slot = yes
 	}
@@ -649,28 +649,28 @@ country_event = {
 
 		if = {
 			limit = { check_variable = { var = STP_security_adaptation_market value = 1 compare = equals } }
-			STP_change_suspicion = { value = 5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
 		}
 		if = {
 			limit = { check_variable = { var = STP_operation_result value = 2 compare = greater_than_or_equals } }
-			STP_change_node_market = { value = 2 }
-			STP_change_readiness = { value = 8 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 } STP_change_node_market = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 8 } STP_change_readiness = yes
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_operation_result value = 1 compare = greater_than_or_equals } }
-			STP_change_node_market = { value = 1 }
-			STP_change_readiness = { value = 5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_market = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals } }
-			STP_change_node_market = { value = 1 }
-			STP_change_suspicion = { value = 10 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_market = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
 		}
 		else = {
-			STP_change_suspicion = { value = 15 }
-			STP_change_readiness = { value = -5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 15 } STP_change_suspicion = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
 		}
-		STP_change_security_adaptation_market = { value = 1 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_market = yes
 		set_temp_variable = { var = STP_operation_cleanup_code value = 23 }
 		STP_clear_operation_slot = yes
 	}
@@ -701,28 +701,28 @@ country_event = {
 
 		if = {
 			limit = { check_variable = { var = STP_security_adaptation_street value = 1 compare = equals } }
-			STP_change_suspicion = { value = 5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
 		}
 		if = {
 			limit = { check_variable = { var = STP_operation_result value = 2 compare = greater_than_or_equals } }
-			STP_change_node_street = { value = 2 }
-			STP_change_readiness = { value = 8 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 } STP_change_node_street = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 8 } STP_change_readiness = yes
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_operation_result value = 1 compare = greater_than_or_equals } }
-			STP_change_node_street = { value = 1 }
-			STP_change_readiness = { value = 5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_street = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals } }
-			STP_change_node_street = { value = 1 }
-			STP_change_suspicion = { value = 10 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_street = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
 		}
 		else = {
-			STP_change_suspicion = { value = 12 }
-			STP_change_readiness = { value = -5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 12 } STP_change_suspicion = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
 		}
-		STP_change_security_adaptation_street = { value = 1 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_street = yes
 		set_temp_variable = { var = STP_operation_cleanup_code value = 24 }
 		STP_clear_operation_slot = yes
 	}
@@ -742,12 +742,12 @@ country_event = {
 		add_to_variable = { var = STP_nodrul_disinformation_bias value = 1 }
 		if = {
 			limit = { check_variable = { var = STP_security_adaptation_foreign value = 1 compare = equals } }
-			STP_change_suspicion = { value = 5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
 			set_country_flag = STP_nodrul_shabrat_activity_discovered
 		}
-		STP_change_node_val_channel = { value = 1 }
-		STP_change_readiness = { value = 5 }
-		STP_change_security_adaptation_foreign = { value = 1 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_val_channel = yes
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_foreign = yes
 		NOD = { NOD_select_crisis_posture = yes }
 		clr_country_flag = STP_operation_paid_with_convoys
 		set_temp_variable = { var = STP_operation_cleanup_code value = 25 }
@@ -768,11 +768,11 @@ country_event = {
 		set_temp_variable = { var = STP_operation_result value = 1 }
 		if = {
 			limit = { check_variable = { var = STP_security_adaptation_foreign value = 1 compare = equals } }
-			STP_change_suspicion = { value = 5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
 		}
-		STP_change_node_val_channel = { value = 1 }
-		STP_change_readiness = { value = 5 }
-		STP_change_security_adaptation_foreign = { value = 1 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_val_channel = yes
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_foreign = yes
 		set_temp_variable = { var = STP_operation_cleanup_code value = 26 }
 		STP_clear_operation_slot = yes
 	}
@@ -803,25 +803,25 @@ country_event = {
 
 		if = {
 			limit = { check_variable = { var = STP_security_adaptation_palace value = 1 compare = equals } }
-			STP_change_suspicion = { value = 5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
 		}
 		if = {
 			limit = { check_variable = { var = STP_operation_result value = 2 compare = greater_than_or_equals } }
-			STP_change_node_palace = { value = -2 }
-			STP_change_readiness = { value = -8 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 } STP_change_node_palace = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -8 } STP_change_readiness = yes
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_operation_result value = 1 compare = greater_than_or_equals } }
-			STP_change_node_palace = { value = -1 }
-			STP_change_readiness = { value = -5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_palace = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals } }
-			STP_change_node_palace = { value = -1 }
-			STP_change_suspicion = { value = 10 }
-			STP_change_readiness = { value = -2 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_palace = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 } STP_change_readiness = yes
 		}
-		else = { STP_change_readiness = { value = 5 } }
+		else = { set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes }
 
 		if = {
 			limit = {
@@ -830,7 +830,7 @@ country_event = {
 			}
 			clr_country_flag = STP_capital_guard_loyal_to_resistance
 		}
-		STP_change_security_adaptation_palace = { value = 1 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_palace = yes
 		set_temp_variable = { var = STP_operation_cleanup_code value = 27 }
 		STP_clear_operation_slot = yes
 	}
@@ -861,25 +861,25 @@ country_event = {
 
 		if = {
 			limit = { check_variable = { var = STP_security_adaptation_officers value = 1 compare = equals } }
-			STP_change_suspicion = { value = 5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
 		}
 		if = {
 			limit = { check_variable = { var = STP_operation_result value = 2 compare = greater_than_or_equals } }
-			STP_change_node_officers = { value = -2 }
-			STP_change_readiness = { value = -8 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 } STP_change_node_officers = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -8 } STP_change_readiness = yes
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_operation_result value = 1 compare = greater_than_or_equals } }
-			STP_change_node_officers = { value = -1 }
-			STP_change_readiness = { value = -5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_officers = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals } }
-			STP_change_node_officers = { value = -1 }
-			STP_change_suspicion = { value = 10 }
-			STP_change_readiness = { value = -2 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_officers = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 } STP_change_readiness = yes
 		}
-		else = { STP_change_readiness = { value = 5 } }
+		else = { set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes }
 
 		if = {
 			limit = {
@@ -888,7 +888,7 @@ country_event = {
 			}
 			clr_country_flag = STP_garrison_88_loyal_to_resistance
 		}
-		STP_change_security_adaptation_officers = { value = 1 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_officers = yes
 		set_temp_variable = { var = STP_operation_cleanup_code value = 28 }
 		STP_clear_operation_slot = yes
 	}
@@ -906,9 +906,9 @@ country_event = {
 		set_temp_variable = { var = STP_operation_enemy_posture value = STP_resistance_posture }
 		if = {
 			limit = { has_country_flag = STP_targeted_raid_family_palace }
-			STP_change_node_palace = { value = -1 }
-			STP_change_readiness = { value = -6 }
-			STP_change_security_adaptation_palace = { value = 1 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_palace = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -6 } STP_change_readiness = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_palace = yes
 			if = {
 				limit = { check_variable = { var = STP_party_suspicion value = 75 compare = greater_than_or_equals } }
 				STP_lose_shabrat = yes
@@ -916,28 +916,28 @@ country_event = {
 		}
 		else_if = {
 			limit = { has_country_flag = STP_targeted_raid_family_officers }
-			STP_change_node_officers = { value = -1 }
-			STP_change_readiness = { value = -6 }
-			STP_change_security_adaptation_officers = { value = 1 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_officers = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -6 } STP_change_readiness = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_officers = yes
 		}
 		else_if = {
 			limit = { has_country_flag = STP_targeted_raid_family_mountains }
-			STP_change_node_mountains = { value = -1 }
-			STP_change_readiness = { value = -6 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_mountains = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -6 } STP_change_readiness = yes
 			STP_resolve_targeted_raid_escrow = yes
-			STP_change_security_adaptation_mountains = { value = 1 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_mountains = yes
 		}
 		else_if = {
 			limit = { has_country_flag = STP_targeted_raid_family_street }
-			STP_change_node_street = { value = -1 }
-			STP_change_readiness = { value = -6 }
-			STP_change_security_adaptation_street = { value = 1 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_street = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -6 } STP_change_readiness = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_street = yes
 		}
 		else_if = {
 			limit = { has_country_flag = STP_targeted_raid_family_foreign }
-			STP_change_node_val_channel = { value = -1 }
-			STP_change_readiness = { value = -6 }
-			STP_change_security_adaptation_foreign = { value = 1 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_val_channel = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -6 } STP_change_readiness = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_foreign = yes
 		}
 		clr_country_flag = STP_targeted_raid_family_palace
 		clr_country_flag = STP_targeted_raid_family_officers
@@ -970,21 +970,21 @@ country_event = {
 
 		if = {
 			limit = { check_variable = { var = STP_security_adaptation_market value = 1 compare = equals } }
-			STP_change_suspicion = { value = 5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
 		}
 		if = {
 			limit = { check_variable = { var = STP_operation_result value = 1 compare = greater_than_or_equals } }
-			STP_change_node_market = { value = -1 }
-			STP_change_readiness = { value = -5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_market = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals } }
-			STP_change_node_market = { value = -1 }
-			STP_change_suspicion = { value = 10 }
-			STP_change_readiness = { value = -2 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_market = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 } STP_change_readiness = yes
 		}
-		else = { STP_change_readiness = { value = 5 } }
-		STP_change_security_adaptation_market = { value = 1 }
+		else = { set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_market = yes
 		set_temp_variable = { var = STP_operation_cleanup_code value = 30 }
 		STP_clear_operation_slot = yes
 	}
@@ -1015,26 +1015,26 @@ country_event = {
 
 		if = {
 			limit = { check_variable = { var = STP_security_adaptation_street value = 1 compare = equals } }
-			STP_change_suspicion = { value = 5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
 		}
 		if = {
 			limit = { check_variable = { var = STP_operation_result value = 2 compare = greater_than_or_equals } }
-			STP_change_node_street = { value = -2 }
-			STP_change_readiness = { value = -8 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 } STP_change_node_street = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -8 } STP_change_readiness = yes
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_operation_result value = 1 compare = greater_than_or_equals } }
-			STP_change_node_street = { value = -1 }
-			STP_change_readiness = { value = -5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_street = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals } }
-			STP_change_node_street = { value = -1 }
-			STP_change_suspicion = { value = 10 }
-			STP_change_readiness = { value = -2 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_street = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 } STP_change_readiness = yes
 		}
-		else = { STP_change_readiness = { value = 5 } }
-		STP_change_security_adaptation_street = { value = 1 }
+		else = { set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_street = yes
 		set_temp_variable = { var = STP_operation_cleanup_code value = 31 }
 		STP_clear_operation_slot = yes
 	}
@@ -1056,18 +1056,18 @@ country_event = {
 		}
 		if = {
 			limit = { check_variable = { var = STP_security_adaptation_foreign value = 1 compare = equals } }
-			STP_change_suspicion = { value = 5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
 		}
 		if = {
 			limit = { check_variable = { var = STP_operation_result value = 2 compare = greater_than_or_equals } }
-			STP_change_node_val_channel = { value = -2 }
-			STP_change_readiness = { value = -8 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 } STP_change_node_val_channel = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -8 } STP_change_readiness = yes
 		}
 		else = {
-			STP_change_node_val_channel = { value = -1 }
-			STP_change_readiness = { value = -5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_val_channel = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
 		}
-		STP_change_security_adaptation_foreign = { value = 1 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_foreign = yes
 		set_temp_variable = { var = STP_operation_cleanup_code value = 32 }
 		STP_clear_operation_slot = yes
 	}
@@ -1089,18 +1089,18 @@ country_event = {
 		}
 		if = {
 			limit = { check_variable = { var = STP_security_adaptation_foreign value = 1 compare = equals } }
-			STP_change_suspicion = { value = 5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
 		}
 		if = {
 			limit = { check_variable = { var = STP_operation_result value = 2 compare = greater_than_or_equals } }
-			STP_change_node_val_channel = { value = -2 }
-			STP_change_readiness = { value = -8 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 } STP_change_node_val_channel = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -8 } STP_change_readiness = yes
 		}
 		else = {
-			STP_change_node_val_channel = { value = -1 }
-			STP_change_readiness = { value = -5 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_val_channel = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
 		}
-		STP_change_security_adaptation_foreign = { value = 1 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_foreign = yes
 		set_temp_variable = { var = STP_operation_cleanup_code value = 33 }
 		STP_clear_operation_slot = yes
 	}
@@ -1257,19 +1257,19 @@ country_event = {
 	immediate = {
 		if = {
 			limit = { has_country_flag = STP_resistance_project_countered }
-			STP_change_readiness = { value = -3 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -3 } STP_change_readiness = yes
 		}
 		else = {
 			if = {
 				limit = { has_country_flag = STP_resistance_project_palace }
-				STP_change_node_palace = { value = 1 }
-				STP_change_readiness = { value = 5 }
+				set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_palace = yes
+				set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
 			}
 			else_if = {
 				limit = { has_country_flag = STP_resistance_project_garrison_theft }
 				set_temp_variable = { var = STP_project_theft_infantry value = 0 }
 				if = {
-					limit = { num_equipment@infantry_equipment > 0 }
+					limit = { has_equipment = { infantry_equipment > 0 } }
 					set_temp_variable = {
 						var = STP_project_theft_infantry
 						value = num_equipment@infantry_equipment
@@ -1290,13 +1290,13 @@ country_event = {
 							amount = STP_project_theft_infantry_debit
 							producer = ROOT
 						}
-						STP_change_resistance_escrow_infantry = { value = STP_project_theft_infantry }
+						set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = STP_project_theft_infantry } STP_change_resistance_escrow_infantry = yes
 					}
 				}
 
 				set_temp_variable = { var = STP_project_theft_support value = 0 }
 				if = {
-					limit = { num_equipment@support_equipment > 0 }
+					limit = { has_equipment = { support_equipment > 0 } }
 					set_temp_variable = {
 						var = STP_project_theft_support
 						value = num_equipment@support_equipment
@@ -1317,19 +1317,19 @@ country_event = {
 							amount = STP_project_theft_support_debit
 							producer = ROOT
 						}
-						STP_change_resistance_escrow_support = { value = STP_project_theft_support }
+						set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = STP_project_theft_support } STP_change_resistance_escrow_support = yes
 					}
 				}
-				STP_change_node_officers = { value = 1 }
-				STP_change_readiness = { value = 5 }
+				set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_officers = yes
+				set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
 			}
 			else_if = {
 				limit = { has_country_flag = STP_resistance_project_mountain_smuggling }
 				set_temp_variable = { var = STP_project_smuggling_paid value = 0 }
 				if = {
 					limit = {
-						num_equipment@infantry_equipment > 399
-						num_equipment@support_equipment > 29
+						has_equipment = { infantry_equipment > 399 }
+						has_equipment = { support_equipment > 29 }
 					}
 					add_equipment_to_stockpile = {
 						type = infantry_equipment
@@ -1341,8 +1341,8 @@ country_event = {
 						amount = -30
 						producer = ROOT
 					}
-					STP_change_resistance_escrow_infantry = { value = 400 }
-					STP_change_resistance_escrow_support = { value = 30 }
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 400 } STP_change_resistance_escrow_infantry = yes
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 30 } STP_change_resistance_escrow_support = yes
 					set_temp_variable = { var = STP_project_smuggling_paid value = 1 }
 				}
 				else_if = {
@@ -1350,8 +1350,8 @@ country_event = {
 						has_country_flag = STP_focus_val_supply_open
 						VAL = {
 							exists = yes
-							num_equipment@infantry_equipment > 399
-							num_equipment@support_equipment > 29
+							has_equipment = { infantry_equipment > 399 }
+							has_equipment = { support_equipment > 29 }
 						}
 					}
 					VAL = {
@@ -1366,24 +1366,24 @@ country_event = {
 							producer = VAL
 						}
 					}
-					STP_change_resistance_escrow_infantry = { value = 400 }
-					STP_change_resistance_escrow_support = { value = 30 }
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 400 } STP_change_resistance_escrow_infantry = yes
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 30 } STP_change_resistance_escrow_support = yes
 					set_temp_variable = { var = STP_project_smuggling_paid value = 1 }
 				}
 				if = {
 					limit = { check_variable = { var = STP_project_smuggling_paid value = 1 compare = equals } }
-					STP_change_node_mountains = { value = 1 }
-					STP_change_readiness = { value = 5 }
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_mountains = yes
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
 				}
 				else = {
-					STP_change_node_street = { value = 1 }
-					STP_change_readiness = { value = 3 }
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_street = yes
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 3 } STP_change_readiness = yes
 				}
 			}
 			else_if = {
 				limit = { has_country_flag = STP_resistance_project_street_agitation }
-				STP_change_node_street = { value = 1 }
-				STP_change_readiness = { value = 5 }
+				set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_street = yes
+				set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
 			}
 			else_if = {
 				limit = { has_country_flag = STP_resistance_project_external_contract }
@@ -1392,12 +1392,12 @@ country_event = {
 						has_country_flag = STP_focus_val_supply_open
 						VAL = { exists = yes }
 					}
-					STP_change_node_val_channel = { value = 1 }
-					STP_change_readiness = { value = 5 }
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_val_channel = yes
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
 				}
 				else = {
-					STP_change_node_street = { value = 1 }
-					STP_change_readiness = { value = 3 }
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_street = yes
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 3 } STP_change_readiness = yes
 				}
 			}
 		}
@@ -1515,12 +1515,12 @@ country_event = {
 				}
 				set_country_flag = STP_outcome_hedersett_vs_shabrat
 				set_country_flag = STP_resistance_leader_shabrat
-				STP_start_resistance_revolt = { ideology = chauvinism }
+				STP_start_resistance_revolt_chauvinism = yes
 			}
 			else = {
 				set_country_flag = STP_outcome_hedersett_vs_sotnikov
 				set_country_flag = STP_resistance_leader_sotnikov
-				STP_start_resistance_revolt = { ideology = etatism }
+				STP_start_resistance_revolt_etatism = yes
 			}
 		}
 	}

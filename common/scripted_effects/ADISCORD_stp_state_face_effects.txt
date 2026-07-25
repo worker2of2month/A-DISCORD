@@ -3,23 +3,23 @@
 # Use STP_set_state_face_stage_X = yes in focus completion_reward, events, or decisions.
 
 STP_set_state_face_stage_1_silent = {
-	STP_set_health_stage = { value = 1 }
+	set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_set_health_stage = yes
 }
 
 STP_set_state_face_stage_2_silent = {
-	STP_set_health_stage = { value = 2 }
+	set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 } STP_set_health_stage = yes
 }
 
 STP_set_state_face_stage_3_silent = {
-	STP_set_health_stage = { value = 3 }
+	set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 3 } STP_set_health_stage = yes
 }
 
 STP_set_state_face_stage_4_silent = {
-	STP_set_health_stage = { value = 4 }
+	set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 4 } STP_set_health_stage = yes
 }
 
 STP_set_state_face_stage_5_silent = {
-	STP_set_health_stage = { value = 5 }
+	set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_set_health_stage = yes
 }
 
 STP_set_state_face_stage_1 = {

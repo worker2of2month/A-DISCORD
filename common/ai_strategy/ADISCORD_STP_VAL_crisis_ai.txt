@@ -176,7 +176,7 @@ NOD_AI_LIMITED_WAR_YPR = {
 	enable = { has_country_flag = NOD_limited_war_ypr has_event_target = NOD_limited_war_target_country }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = conquer id = YPR value = 300 }
-	ai_strategy = { type = diplo_action_desire id = event_target:NOD_limited_war_target_country target = call_allies value = -9999 }
+	ai_strategy = { type = diplo_action_desire id = YPR target = call_allies value = -9999 }
 }
 
 NOD_AI_LIMITED_WAR_COF = {
@@ -184,7 +184,7 @@ NOD_AI_LIMITED_WAR_COF = {
 	enable = { has_country_flag = NOD_limited_war_cof has_event_target = NOD_limited_war_target_country }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = conquer id = COF value = 300 }
-	ai_strategy = { type = diplo_action_desire id = event_target:NOD_limited_war_target_country target = call_allies value = -9999 }
+	ai_strategy = { type = diplo_action_desire id = COF target = call_allies value = -9999 }
 }
 
 NOD_AI_LIMITED_WAR_BHG = {
@@ -192,7 +192,7 @@ NOD_AI_LIMITED_WAR_BHG = {
 	enable = { has_country_flag = NOD_limited_war_bhg has_event_target = NOD_limited_war_target_country }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = conquer id = BHG value = 300 }
-	ai_strategy = { type = diplo_action_desire id = event_target:NOD_limited_war_target_country target = call_allies value = -9999 }
+	ai_strategy = { type = diplo_action_desire id = BHG target = call_allies value = -9999 }
 }
 
 NOD_AI_LIMITED_WAR_BBV = {
@@ -200,5 +200,5 @@ NOD_AI_LIMITED_WAR_BBV = {
 	enable = { has_country_flag = NOD_limited_war_bbv has_event_target = NOD_limited_war_target_country }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = conquer id = BBV value = 300 }
-	ai_strategy = { type = diplo_action_desire id = event_target:NOD_limited_war_target_country target = call_allies value = -9999 }
+	ai_strategy = { type = diplo_action_desire id = BBV target = call_allies value = -9999 }
 }

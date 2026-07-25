@@ -27,7 +27,7 @@ VAL_contract_campaign = {
 			NOT = { has_country_flag = VAL_foreign_operation_active }
 			NOT = { has_country_flag = VAL_STP_target_cooldown }
 			NOT = { has_country_flag = VAL_STP_block_supply }
-			num_equipment@infantry_equipment > 299
+			has_equipment = { infantry_equipment > 299 }
 		}
 		cost = 35
 		days_remove = 35
@@ -68,7 +68,7 @@ VAL_contract_campaign = {
 			NOT = { has_country_flag = VAL_STP_target_cooldown }
 			NOT = { has_country_flag = VAL_STP_block_garrison }
 			command_power > 19
-			num_equipment@support_equipment > 99
+			has_equipment = { support_equipment > 99 }
 		}
 		cost = 45
 		days_remove = 35
@@ -145,7 +145,6 @@ VAL_contract_campaign = {
 		visible = { has_country_flag = VAL_corridor_control_generation }
 		available = { always = no }
 		selectable_mission = no
-		cancelable = no
 		days_mission_timeout = 30
 		cancel_trigger = {
 			OR = {
@@ -167,7 +166,6 @@ VAL_contract_campaign = {
 		visible = { has_country_flag = VAL_STP_concession_advisers }
 		available = { always = no }
 		selectable_mission = no
-		cancelable = no
 		days_mission_timeout = 180
 		modifier = { civilian_factory_use = 1 }
 		timeout_effect = { remove_decision = VAL_STP_adviser_factory_obligation }
@@ -178,25 +176,25 @@ VAL_contract_campaign = {
 	VAL_STP_arms_debt_day_150 = { allowed = { tag = VAL } visible = { has_country_flag = VAL_STP_concession_arms_debt } available = { always = no } selectable_mission = no days_mission_timeout = 150 timeout_effect = { country_event = { id = val_contract.30 } } }
 
 	# CIN operations
-	VAL_CIN_study_market = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = CIN NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_CIN_target_cooldown } NOT = { has_country_flag = VAL_CIN_block_market } } cost = 30 days_remove = 28 complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } VAL_start_northern_operation = { operation_flag = VAL_operation_CIN_study_market event_id = val_contract.200 days = 28 } } }
-	VAL_CIN_arms_brokerage = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = CIN NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_CIN_target_cooldown } NOT = { has_country_flag = VAL_CIN_block_arms } num_equipment@infantry_equipment > 399 } cost = 25 days_remove = 35 complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } add_equipment_to_stockpile = { type = infantry_equipment amount = -400 producer = VAL } VAL_start_northern_operation = { operation_flag = VAL_operation_CIN_arms_brokerage event_id = val_contract.201 days = 35 } } }
-	VAL_CIN_infrastructure_concession = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = CIN NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_CIN_target_cooldown } NOT = { has_country_flag = VAL_CIN_block_infrastructure } } cost = 45 days_remove = 35 modifier = { civilian_factory_use = 2 } complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } VAL_start_northern_operation = { operation_flag = VAL_operation_CIN_infrastructure_concession event_id = val_contract.202 days = 35 } } }
-	VAL_CIN_hire_local_captain = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = CIN NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_CIN_target_cooldown } NOT = { has_country_flag = VAL_CIN_block_captain } command_power > 14 num_equipment@support_equipment > 79 } cost = 35 days_remove = 28 complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } add_command_power = -15 add_equipment_to_stockpile = { type = support_equipment amount = -80 producer = VAL } VAL_start_northern_operation = { operation_flag = VAL_operation_CIN_hire_local_captain event_id = val_contract.203 days = 28 } } }
-	VAL_CIN_prepare_separate_terms = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = CIN NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_CIN_target_cooldown } NOT = { has_country_flag = VAL_CIN_block_terms } check_variable = { var = VAL_CIN_influence value = 2 compare = greater_than_or_equals } count_triggers = { amount = 2 has_country_flag = VAL_CIN_success_arms has_country_flag = VAL_CIN_success_infrastructure has_country_flag = VAL_CIN_success_captain } } cost = 50 days_remove = 35 modifier = { civilian_factory_use = 1 } complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } VAL_start_northern_operation = { operation_flag = VAL_operation_CIN_prepare_separate_terms event_id = val_contract.204 days = 35 } } }
+	VAL_CIN_study_market = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = CIN NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_CIN_target_cooldown } NOT = { has_country_flag = VAL_CIN_block_market } } cost = 30 days_remove = 28 complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } set_country_flag = VAL_foreign_operation_active set_country_flag = VAL_operation_CIN_study_market country_event = { id = val_contract.200 days = 28 } } }
+	VAL_CIN_arms_brokerage = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = CIN NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_CIN_target_cooldown } NOT = { has_country_flag = VAL_CIN_block_arms } has_equipment = { infantry_equipment > 399 } } cost = 25 days_remove = 35 complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } add_equipment_to_stockpile = { type = infantry_equipment amount = -400 producer = VAL } set_country_flag = VAL_foreign_operation_active set_country_flag = VAL_operation_CIN_arms_brokerage country_event = { id = val_contract.201 days = 35 } } }
+	VAL_CIN_infrastructure_concession = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = CIN NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_CIN_target_cooldown } NOT = { has_country_flag = VAL_CIN_block_infrastructure } } cost = 45 days_remove = 35 modifier = { civilian_factory_use = 2 } complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } set_country_flag = VAL_foreign_operation_active set_country_flag = VAL_operation_CIN_infrastructure_concession country_event = { id = val_contract.202 days = 35 } } }
+	VAL_CIN_hire_local_captain = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = CIN NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_CIN_target_cooldown } NOT = { has_country_flag = VAL_CIN_block_captain } command_power > 14 has_equipment = { support_equipment > 79 } } cost = 35 days_remove = 28 complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } add_command_power = -15 add_equipment_to_stockpile = { type = support_equipment amount = -80 producer = VAL } set_country_flag = VAL_foreign_operation_active set_country_flag = VAL_operation_CIN_hire_local_captain country_event = { id = val_contract.203 days = 28 } } }
+	VAL_CIN_prepare_separate_terms = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = CIN NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_CIN_target_cooldown } NOT = { has_country_flag = VAL_CIN_block_terms } check_variable = { var = VAL_CIN_influence value = 2 compare = greater_than_or_equals } count_triggers = { amount = 2 has_country_flag = VAL_CIN_success_arms has_country_flag = VAL_CIN_success_infrastructure has_country_flag = VAL_CIN_success_captain } } cost = 50 days_remove = 35 modifier = { civilian_factory_use = 1 } complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } set_country_flag = VAL_foreign_operation_active set_country_flag = VAL_operation_CIN_prepare_separate_terms country_event = { id = val_contract.204 days = 35 } } }
 
 	# OSF operations
-	VAL_OSF_study_market = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = OSF NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_OSF_target_cooldown } NOT = { has_country_flag = VAL_OSF_block_market } } cost = 30 days_remove = 28 complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } VAL_start_northern_operation = { operation_flag = VAL_operation_OSF_study_market event_id = val_contract.210 days = 28 } } }
-	VAL_OSF_arms_brokerage = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = OSF NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_OSF_target_cooldown } NOT = { has_country_flag = VAL_OSF_block_arms } num_equipment@infantry_equipment > 399 } cost = 25 days_remove = 35 complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } add_equipment_to_stockpile = { type = infantry_equipment amount = -400 producer = VAL } VAL_start_northern_operation = { operation_flag = VAL_operation_OSF_arms_brokerage event_id = val_contract.211 days = 35 } } }
-	VAL_OSF_infrastructure_concession = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = OSF NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_OSF_target_cooldown } NOT = { has_country_flag = VAL_OSF_block_infrastructure } } cost = 45 days_remove = 35 modifier = { civilian_factory_use = 2 } complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } VAL_start_northern_operation = { operation_flag = VAL_operation_OSF_infrastructure_concession event_id = val_contract.212 days = 35 } } }
-	VAL_OSF_hire_local_captain = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = OSF NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_OSF_target_cooldown } NOT = { has_country_flag = VAL_OSF_block_captain } command_power > 14 num_equipment@support_equipment > 79 } cost = 35 days_remove = 28 complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } add_command_power = -15 add_equipment_to_stockpile = { type = support_equipment amount = -80 producer = VAL } VAL_start_northern_operation = { operation_flag = VAL_operation_OSF_hire_local_captain event_id = val_contract.213 days = 28 } } }
-	VAL_OSF_prepare_separate_terms = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = OSF NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_OSF_target_cooldown } NOT = { has_country_flag = VAL_OSF_block_terms } check_variable = { var = VAL_OSF_influence value = 2 compare = greater_than_or_equals } count_triggers = { amount = 2 has_country_flag = VAL_OSF_success_arms has_country_flag = VAL_OSF_success_infrastructure has_country_flag = VAL_OSF_success_captain } } cost = 50 days_remove = 35 modifier = { civilian_factory_use = 1 } complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } VAL_start_northern_operation = { operation_flag = VAL_operation_OSF_prepare_separate_terms event_id = val_contract.214 days = 35 } } }
+	VAL_OSF_study_market = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = OSF NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_OSF_target_cooldown } NOT = { has_country_flag = VAL_OSF_block_market } } cost = 30 days_remove = 28 complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } set_country_flag = VAL_foreign_operation_active set_country_flag = VAL_operation_OSF_study_market country_event = { id = val_contract.210 days = 28 } } }
+	VAL_OSF_arms_brokerage = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = OSF NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_OSF_target_cooldown } NOT = { has_country_flag = VAL_OSF_block_arms } has_equipment = { infantry_equipment > 399 } } cost = 25 days_remove = 35 complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } add_equipment_to_stockpile = { type = infantry_equipment amount = -400 producer = VAL } set_country_flag = VAL_foreign_operation_active set_country_flag = VAL_operation_OSF_arms_brokerage country_event = { id = val_contract.211 days = 35 } } }
+	VAL_OSF_infrastructure_concession = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = OSF NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_OSF_target_cooldown } NOT = { has_country_flag = VAL_OSF_block_infrastructure } } cost = 45 days_remove = 35 modifier = { civilian_factory_use = 2 } complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } set_country_flag = VAL_foreign_operation_active set_country_flag = VAL_operation_OSF_infrastructure_concession country_event = { id = val_contract.212 days = 35 } } }
+	VAL_OSF_hire_local_captain = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = OSF NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_OSF_target_cooldown } NOT = { has_country_flag = VAL_OSF_block_captain } command_power > 14 has_equipment = { support_equipment > 79 } } cost = 35 days_remove = 28 complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } add_command_power = -15 add_equipment_to_stockpile = { type = support_equipment amount = -80 producer = VAL } set_country_flag = VAL_foreign_operation_active set_country_flag = VAL_operation_OSF_hire_local_captain country_event = { id = val_contract.213 days = 28 } } }
+	VAL_OSF_prepare_separate_terms = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = OSF NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_OSF_target_cooldown } NOT = { has_country_flag = VAL_OSF_block_terms } check_variable = { var = VAL_OSF_influence value = 2 compare = greater_than_or_equals } count_triggers = { amount = 2 has_country_flag = VAL_OSF_success_arms has_country_flag = VAL_OSF_success_infrastructure has_country_flag = VAL_OSF_success_captain } } cost = 50 days_remove = 35 modifier = { civilian_factory_use = 1 } complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } set_country_flag = VAL_foreign_operation_active set_country_flag = VAL_operation_OSF_prepare_separate_terms country_event = { id = val_contract.214 days = 35 } } }
 
 	# APH operations
-	VAL_APH_study_market = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = APH NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_APH_target_cooldown } NOT = { has_country_flag = VAL_APH_block_market } } cost = 30 days_remove = 28 complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } VAL_start_northern_operation = { operation_flag = VAL_operation_APH_study_market event_id = val_contract.220 days = 28 } } }
-	VAL_APH_arms_brokerage = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = APH NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_APH_target_cooldown } NOT = { has_country_flag = VAL_APH_block_arms } num_equipment@infantry_equipment > 399 } cost = 25 days_remove = 35 complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } add_equipment_to_stockpile = { type = infantry_equipment amount = -400 producer = VAL } VAL_start_northern_operation = { operation_flag = VAL_operation_APH_arms_brokerage event_id = val_contract.221 days = 35 } } }
-	VAL_APH_infrastructure_concession = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = APH NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_APH_target_cooldown } NOT = { has_country_flag = VAL_APH_block_infrastructure } } cost = 45 days_remove = 35 modifier = { civilian_factory_use = 2 } complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } VAL_start_northern_operation = { operation_flag = VAL_operation_APH_infrastructure_concession event_id = val_contract.222 days = 35 } } }
-	VAL_APH_hire_local_captain = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = APH NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_APH_target_cooldown } NOT = { has_country_flag = VAL_APH_block_captain } command_power > 14 num_equipment@support_equipment > 79 } cost = 35 days_remove = 28 complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } add_command_power = -15 add_equipment_to_stockpile = { type = support_equipment amount = -80 producer = VAL } VAL_start_northern_operation = { operation_flag = VAL_operation_APH_hire_local_captain event_id = val_contract.223 days = 28 } } }
-	VAL_APH_prepare_separate_terms = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = APH NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_APH_target_cooldown } NOT = { has_country_flag = VAL_APH_block_terms } check_variable = { var = VAL_APH_influence value = 2 compare = greater_than_or_equals } count_triggers = { amount = 2 has_country_flag = VAL_APH_success_arms has_country_flag = VAL_APH_success_infrastructure has_country_flag = VAL_APH_success_captain } } cost = 50 days_remove = 35 modifier = { civilian_factory_use = 1 } complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } VAL_start_northern_operation = { operation_flag = VAL_operation_APH_prepare_separate_terms event_id = val_contract.224 days = 35 } } }
+	VAL_APH_study_market = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = APH NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_APH_target_cooldown } NOT = { has_country_flag = VAL_APH_block_market } } cost = 30 days_remove = 28 complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } set_country_flag = VAL_foreign_operation_active set_country_flag = VAL_operation_APH_study_market country_event = { id = val_contract.220 days = 28 } } }
+	VAL_APH_arms_brokerage = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = APH NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_APH_target_cooldown } NOT = { has_country_flag = VAL_APH_block_arms } has_equipment = { infantry_equipment > 399 } } cost = 25 days_remove = 35 complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } add_equipment_to_stockpile = { type = infantry_equipment amount = -400 producer = VAL } set_country_flag = VAL_foreign_operation_active set_country_flag = VAL_operation_APH_arms_brokerage country_event = { id = val_contract.221 days = 35 } } }
+	VAL_APH_infrastructure_concession = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = APH NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_APH_target_cooldown } NOT = { has_country_flag = VAL_APH_block_infrastructure } } cost = 45 days_remove = 35 modifier = { civilian_factory_use = 2 } complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } set_country_flag = VAL_foreign_operation_active set_country_flag = VAL_operation_APH_infrastructure_concession country_event = { id = val_contract.222 days = 35 } } }
+	VAL_APH_hire_local_captain = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = APH NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_APH_target_cooldown } NOT = { has_country_flag = VAL_APH_block_captain } command_power > 14 has_equipment = { support_equipment > 79 } } cost = 35 days_remove = 28 complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } add_command_power = -15 add_equipment_to_stockpile = { type = support_equipment amount = -80 producer = VAL } set_country_flag = VAL_foreign_operation_active set_country_flag = VAL_operation_APH_hire_local_captain country_event = { id = val_contract.223 days = 28 } } }
+	VAL_APH_prepare_separate_terms = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = APH NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_APH_target_cooldown } NOT = { has_country_flag = VAL_APH_block_terms } check_variable = { var = VAL_APH_influence value = 2 compare = greater_than_or_equals } count_triggers = { amount = 2 has_country_flag = VAL_APH_success_arms has_country_flag = VAL_APH_success_infrastructure has_country_flag = VAL_APH_success_captain } } cost = 50 days_remove = 35 modifier = { civilian_factory_use = 1 } complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } set_country_flag = VAL_foreign_operation_active set_country_flag = VAL_operation_APH_prepare_separate_terms country_event = { id = val_contract.224 days = 35 } } }
 }
 
 # The mission is activated on one canonical country: a human postwar Stelander,
@@ -210,11 +208,10 @@ STP_VAL_war_countdown_category = {
 		activation = { always = no }
 		available = { always = no }
 		selectable_mission = no
-		cancelable = no
 		days_mission_timeout = 120
 		timeout_effect = {
-			if = { limit = { tag = VAL } STP_VAL_resolve_countdown_timeout = { token_flag = VAL_STP_countdown_generation_120 } }
-			else = { VAL = { STP_VAL_resolve_countdown_timeout = { token_flag = VAL_STP_countdown_generation_120 } } }
+			if = { limit = { tag = VAL } set_temp_variable = { var = ADISCORD_STP_VAL_timeout_type value = 120 } STP_VAL_resolve_countdown_timeout = yes }
+			else = { VAL = { set_temp_variable = { var = ADISCORD_STP_VAL_timeout_type value = 120 } STP_VAL_resolve_countdown_timeout = yes } }
 		}
 	}
 
@@ -225,11 +222,10 @@ STP_VAL_war_countdown_category = {
 		activation = { always = no }
 		available = { always = no }
 		selectable_mission = no
-		cancelable = no
 		days_mission_timeout = 180
 		timeout_effect = {
-			if = { limit = { tag = VAL } STP_VAL_resolve_countdown_timeout = { token_flag = VAL_STP_countdown_generation_180 } }
-			else = { VAL = { STP_VAL_resolve_countdown_timeout = { token_flag = VAL_STP_countdown_generation_180 } } }
+			if = { limit = { tag = VAL } set_temp_variable = { var = ADISCORD_STP_VAL_timeout_type value = 180 } STP_VAL_resolve_countdown_timeout = yes }
+			else = { VAL = { set_temp_variable = { var = ADISCORD_STP_VAL_timeout_type value = 180 } STP_VAL_resolve_countdown_timeout = yes } }
 		}
 	}
 
@@ -240,11 +236,10 @@ STP_VAL_war_countdown_category = {
 		activation = { always = no }
 		available = { always = no }
 		selectable_mission = no
-		cancelable = no
 		days_mission_timeout = 300
 		timeout_effect = {
-			if = { limit = { tag = VAL } STP_VAL_resolve_countdown_timeout = { token_flag = VAL_STP_countdown_generation_300 } }
-			else = { VAL = { STP_VAL_resolve_countdown_timeout = { token_flag = VAL_STP_countdown_generation_300 } } }
+			if = { limit = { tag = VAL } set_temp_variable = { var = ADISCORD_STP_VAL_timeout_type value = 300 } STP_VAL_resolve_countdown_timeout = yes }
+			else = { VAL = { set_temp_variable = { var = ADISCORD_STP_VAL_timeout_type value = 300 } STP_VAL_resolve_countdown_timeout = yes } }
 		}
 	}
 
@@ -255,11 +250,10 @@ STP_VAL_war_countdown_category = {
 		activation = { always = no }
 		available = { always = no }
 		selectable_mission = no
-		cancelable = no
 		days_mission_timeout = 450
 		timeout_effect = {
-			if = { limit = { tag = VAL } STP_VAL_resolve_countdown_timeout = { token_flag = VAL_STP_countdown_generation_450 } }
-			else = { VAL = { STP_VAL_resolve_countdown_timeout = { token_flag = VAL_STP_countdown_generation_450 } } }
+			if = { limit = { tag = VAL } set_temp_variable = { var = ADISCORD_STP_VAL_timeout_type value = 450 } STP_VAL_resolve_countdown_timeout = yes }
+			else = { VAL = { set_temp_variable = { var = ADISCORD_STP_VAL_timeout_type value = 450 } STP_VAL_resolve_countdown_timeout = yes } }
 		}
 	}
 
@@ -270,11 +264,10 @@ STP_VAL_war_countdown_category = {
 		activation = { always = no }
 		available = { always = no }
 		selectable_mission = no
-		cancelable = no
 		days_mission_timeout = 14
 		timeout_effect = {
-			if = { limit = { tag = VAL } STP_VAL_resolve_countdown_timeout = { token_flag = VAL_STP_countdown_generation_breached } }
-			else = { VAL = { STP_VAL_resolve_countdown_timeout = { token_flag = VAL_STP_countdown_generation_breached } } }
+			if = { limit = { tag = VAL } set_temp_variable = { var = ADISCORD_STP_VAL_timeout_type value = 14 } STP_VAL_resolve_countdown_timeout = yes }
+			else = { VAL = { set_temp_variable = { var = ADISCORD_STP_VAL_timeout_type value = 14 } STP_VAL_resolve_countdown_timeout = yes } }
 		}
 	}
 }
@@ -298,7 +291,7 @@ VAL_northern_campaign = {
 			modifier = { factor = 6 has_country_flag = VAL_ai_course_northern_broker }
 			modifier = { factor = 2 check_variable = { var = VAL_contract_authority value = 70 compare = greater_than_or_equals } }
 			modifier = { factor = 2 has_country_flag = VAL_northern_campaign_full }
-			modifier = { factor = 0.25 num_equipment@infantry_equipment < 2000 }
+			modifier = { factor = 0.25 has_equipment = { infantry_equipment < 2000 } }
 		}
 	}
 
@@ -309,7 +302,6 @@ VAL_northern_campaign = {
 		activation = { always = no }
 		available = { always = no }
 		selectable_mission = no
-		cancelable = no
 		days_mission_timeout = 210
 		timeout_effect = { VAL_resolve_northern_campaign_timeout = yes }
 	}

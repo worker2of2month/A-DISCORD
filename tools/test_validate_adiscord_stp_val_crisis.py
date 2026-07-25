@@ -370,6 +370,16 @@ class CrisisValidatorTests(unittest.TestCase):
                     break
         return min(matches, default=(0, 0, ""))[2]
 
+    def _assert_engine_safe_effect_call(
+        self, block: str, effect: str, value: int | str
+    ) -> None:
+        self.assertIn(f"ADISCORD_STP_VAL_effect_value value = {value}", block)
+        self.assertIn(f"{effect} = yes", block)
+        self.assertNotRegex(
+            validator._mask_non_code(block),
+            rf"\b{re.escape(effect)}\s*=\s*\{{",
+        )
+
     def _assert_stp_modifier_contract(self, refresh: str) -> None:
         def direct_blocks(text: str, identifier: str) -> list[str]:
             masked = validator._mask_non_code(text)
@@ -988,7 +998,7 @@ class CrisisValidatorTests(unittest.TestCase):
                 events, "country_event", f"id = {event_id}"
             )
             self.assertIn("hidden = yes", block)
-            self.assertIn(f"STP_set_health_stage = {{ value = {stage} }}", block)
+            self._assert_engine_safe_effect_call(block, "STP_set_health_stage", stage)
             for focus in spine:
                 self.assertIn(f"complete_national_focus = {focus}", block)
             self.assertIn(f"activate_mission = {next_mission}", block)
@@ -1019,11 +1029,11 @@ class CrisisValidatorTests(unittest.TestCase):
             events, "country_event", "id = stp_crisis.4"
         )
         self.assertIn("set_country_flag = STP_ivanov_dead", death)
-        self.assertIn("STP_set_health_stage = { value = 5 }", death)
+        self._assert_engine_safe_effect_call(death, "STP_set_health_stage", 5)
         self.assertIn(
             "complete_national_focus = STP_The_Father_Of_Peace_Is_Gone", death
         )
-        self.assertIn("STP_set_crisis_phase = { value = 2 }", death)
+        self._assert_engine_safe_effect_call(death, "STP_set_crisis_phase", 2)
         self.assertIn("retire_character = STP_Petr_Ivanov", death)
         self.assertNotIn("activate_mission = STP_health_stage_", death)
         for focus in STP_CRISIS_FOCUS_STAGES:
@@ -1132,7 +1142,7 @@ class CrisisValidatorTests(unittest.TestCase):
                 rf".*?complete_national_focus\s*=\s*{re.escape(focus)}"
                 rf".*?clr_country_flag\s*=\s*STP_forced_commit_no_reward",
             )
-            self.assertIn(f"{penalty} = {{ value = 10 }}", forced)
+            self._assert_engine_safe_effect_call(forced, penalty, 10)
         self.assertEqual(forced.count("add_political_power = -50"), 2)
         self.assertEqual(forced.count("flag = STP_crisis_late_choice_lock"), 2)
         self.assertEqual(forced.count("days = 35"), 2)
@@ -1310,7 +1320,10 @@ class CrisisValidatorTests(unittest.TestCase):
                 self.assertIn(command_token, complete)
                 self.assertLess(complete.index(command_token), slot_index)
             for equipment_type, amount in equipment.items():
-                self.assertIn(f"num_equipment@{equipment_type}", available)
+                self.assertIn(
+                    f"has_equipment = {{ {equipment_type} > {amount - 1} }}",
+                    available,
+                )
                 removal = re.search(
                     rf"type\s*=\s*{re.escape(equipment_type)}\s+"
                     rf"amount\s*=\s*-{amount}\b",
@@ -1337,7 +1350,7 @@ class CrisisValidatorTests(unittest.TestCase):
         self.assertTrue(convoy)
         self.assertEqual(validator._direct_scalar_values(convoy, "days_remove"), ["35"])
         self.assertEqual(validator._direct_scalar_values(convoy, "cost"), ["50"])
-        self.assertIn("num_equipment@convoy", convoy)
+        self.assertIn("has_equipment = { convoy > 24 }", convoy)
         self.assertRegex(convoy, r"type\s*=\s*convoy\s+amount\s*=\s*-25\b")
         self.assertIn(
             "set_country_flag = STP_operation_token_nodrul_disinformation", convoy
@@ -1374,7 +1387,7 @@ class CrisisValidatorTests(unittest.TestCase):
             block = validator.extract_named_block(core, effect) or ""
             self.assertTrue(block, effect)
             self.assertIn(
-                f"add_to_variable = {{ var = STP_security_adaptation_{family} value = $value$ }}",
+                f"add_to_variable = {{ var = STP_security_adaptation_{family} value = ADISCORD_STP_VAL_effect_value }}",
                 block,
             )
             self.assertIn(
@@ -1389,7 +1402,7 @@ class CrisisValidatorTests(unittest.TestCase):
             block = validator.extract_named_block(core, effect) or ""
             self.assertTrue(block, effect)
             self.assertIn(
-                f"add_to_variable = {{ var = STP_resistance_escrow_{equipment} value = $value$ }}",
+                f"add_to_variable = {{ var = STP_resistance_escrow_{equipment} value = ADISCORD_STP_VAL_effect_value }}",
                 block,
             )
             self.assertIn(
@@ -1476,7 +1489,7 @@ class CrisisValidatorTests(unittest.TestCase):
                 )
             self.assertEqual(block.count("STP_clear_operation_slot = yes"), 1)
             self.assertIn("STP_change_node_", block)
-        self.assertIn("STP_change_suspicion = { value = 10 }", events)
+        self._assert_engine_safe_effect_call(events, "STP_change_suspicion", 10)
 
         for flag in (
             "STP_capital_guard_loyal_to_resistance",
@@ -1612,7 +1625,8 @@ class CrisisValidatorTests(unittest.TestCase):
         ) or ""
         self.assertTrue(war)
         for effect, expected in (
-            ("STP_start_resistance_revolt", ("0", "0.2", "0.35", "0.5")),
+            ("STP_start_resistance_revolt_chauvinism", ("0", "0.2", "0.35", "0.5")),
+            ("STP_start_resistance_revolt_etatism", ("0", "0.2", "0.35", "0.5")),
             ("STP_start_party_revolt", ("1", "0.8", "0.65", "0.5")),
         ):
             block = validator.extract_named_block(war, effect) or ""
@@ -1666,8 +1680,8 @@ class CrisisValidatorTests(unittest.TestCase):
             "STP_resistance_isolated_fallback",
             "has_country_flag = STP_capital_guard_loyal_to_resistance",
             "has_country_flag = STP_garrison_88_loyal_to_resistance",
-            "set_capital = 28",
-            "set_capital = 1",
+            "set_capital = { state = 28 }",
+            "set_capital = { state = 1 }",
         ):
             self.assertIn(token, state_map)
 
@@ -1705,7 +1719,8 @@ class CrisisValidatorTests(unittest.TestCase):
             "STP_can_attempt_bloodless_coup = yes",
             "STP_resistance_network_is_viable = yes",
             "STP_sotnikov_network_is_viable = yes",
-            "STP_start_resistance_revolt = {",
+            "STP_start_resistance_revolt_chauvinism = yes",
+            "STP_start_resistance_revolt_etatism = yes",
             "STP_start_party_revolt = yes",
             "STP_underground_crushed_fail_state",
             "add_stability = -0.1",
@@ -1732,13 +1747,14 @@ class CrisisValidatorTests(unittest.TestCase):
             "STP_internal_outcome_finalized",
             "save_global_event_target_as = STP_postwar_country",
             "set_country_flag = STP_postwar_campaign_side",
-            "STP_set_crisis_phase = { value = 3 }",
+            "ADISCORD_STP_VAL_effect_value value = 3",
+            "STP_set_crisis_phase = yes",
             "tree = ADISCORD_STP_postwar_focus",
             "STP_The_Mountain_Window",
             "STP_No_One_Controls_The_Transition",
             "STP_The_Party_Closes_Ranks",
             "STP_clear_external_crisis_participants = yes",
-            "VAL_STP_start_war_countdown = { type = 120 }",
+            "VAL_STP_start_war_countdown_120 = yes",
             "clear_global_event_target = STP_crisis_main_side",
             "clear_global_event_target = STP_crisis_party_side",
             "clear_global_event_target = STP_crisis_resistance_side",
@@ -1755,12 +1771,18 @@ class CrisisValidatorTests(unittest.TestCase):
             finalizer.index("tree = ADISCORD_STP_postwar_focus"),
         )
         self.assertIn("days = 60", finalizer)
-        countdown = (
-            validator.extract_named_block(war, "VAL_STP_start_war_countdown")
-            or ""
-        )
-        self.assertIn("set_country_flag = VAL_STP_countdown_pending", countdown)
-        self.assertNotIn("activate_mission", countdown)
+        for days in (120, 180, 300, 450):
+            countdown = (
+                validator.extract_named_block(
+                    war, f"VAL_STP_start_war_countdown_{days}"
+                )
+                or ""
+            )
+            self.assertIn("set_country_flag = VAL_STP_countdown_pending", countdown)
+            self.assertIn(
+                f"STP_VAL_start_canonical_countdown_{days} = yes", countdown
+            )
+            self.assertNotIn("activate_mission", countdown)
 
         on_actions = validator.read(
             validator.ROOT
@@ -1927,7 +1949,7 @@ class CrisisValidatorTests(unittest.TestCase):
         for driver in (
             "has_war",
             "strength_ratio",
-            "num_equipment@infantry_equipment",
+            "has_equipment = { infantry_equipment > 1499 }",
             "is_subject_of = NOD",
             "STP_nodrul_shabrat_activity_discovered",
             "STP_nodrul_disinformation_bias",
@@ -2325,7 +2347,8 @@ class CrisisValidatorTests(unittest.TestCase):
             "VAL_clear_foreign_operation = yes",
             "STP_VAL_clear_countdown = yes",
             "remove_wargoal =",
-            "STP_set_crisis_phase = { value = 4 }",
+            "ADISCORD_STP_VAL_effect_value value = 4",
+            "STP_set_crisis_phase = yes",
         ):
             self.assertLess(final_war.index(token), declaration)
         self.assertNotIn("VAL_Present_The_Final_Invoice", final_war)
@@ -2521,9 +2544,10 @@ class CrisisValidatorTests(unittest.TestCase):
             r"\btype\s*=\s*(?:conquer|prepare_for_war)\b",
         )
         self.assertEqual(strategy.count("target = call_allies"), 4)
-        self.assertEqual(
-            strategy.count("id = event_target:NOD_limited_war_target_country"), 4
-        )
+        for target in ("YPR", "COF", "BHG", "BBV"):
+            self.assertIn(
+                f"id = {target} target = call_allies value = -9999", strategy
+            )
         self.assertNotIn("call_allies = -9999", strategy)
 
         triggers = validator.read(
@@ -2536,7 +2560,12 @@ class CrisisValidatorTests(unittest.TestCase):
             "NOD_ai_has_current_course_reserve",
         ):
             self.assertTrue(validator.extract_named_block(triggers, reserve), reserve)
-        self.assertIn("ratio < 1.25", triggers)
+        self.assertIn(
+            "event_target:STP_crisis_party_side = { num_divisions > 2 }", triggers
+        )
+        self.assertIn(
+            "event_target:STP_crisis_resistance_side = { num_divisions > 2 }", triggers
+        )
         self.assertIn("STP_ai_army_equipment_above_70", triggers)
 
         stp_events = validator.read(
@@ -2788,7 +2817,7 @@ class CrisisValidatorTests(unittest.TestCase):
             block = validator.extract_named_block(
                 state_face, f"STP_set_state_face_stage_{stage}_silent"
             ) or ""
-            self.assertIn(f"STP_set_health_stage = {{ value = {stage} }}", block)
+            self._assert_engine_safe_effect_call(block, "STP_set_health_stage", stage)
             self.assertNotIn("set_variable", block)
 
         old_effect = validator.read(
@@ -2796,7 +2825,9 @@ class CrisisValidatorTests(unittest.TestCase):
         ) or ""
         suspicion = validator.extract_named_block(old_effect, "STP_change_party_suspicion_rate") or ""
         self.assertIn("value = 100", suspicion)
-        self.assertIn("STP_change_suspicion = { value = STP_party_suspicion_temp }", suspicion)
+        self._assert_engine_safe_effect_call(
+            suspicion, "STP_change_suspicion", "STP_party_suspicion_temp"
+        )
         self.assertNotIn("STP_party_suspicion_political_power_gain_dynamic_var", suspicion)
 
         old_dynamic = validator.read(

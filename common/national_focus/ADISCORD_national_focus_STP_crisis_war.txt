@@ -21,7 +21,7 @@ focus_tree = {
 		ai_will_do = { base = 1 }
 		completion_reward = {
 			add_command_power = 5
-			add_army_experience = 3
+			army_experience = 3
 		}
 	}
 
@@ -57,7 +57,7 @@ focus_tree = {
 		ai_will_do = { base = 1 }
 		completion_reward = {
 			add_command_power = 5
-			add_army_experience = 3
+			army_experience = 3
 		}
 	}
 

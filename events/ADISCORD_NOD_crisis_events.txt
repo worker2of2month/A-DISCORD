@@ -30,7 +30,7 @@ country_event = {
 		ai_chance = {
 			base = 2
 			modifier = { factor = 2 surrender_progress > 0.35 }
-			modifier = { factor = 1.5 num_equipment@infantry_equipment < 700 }
+			modifier = { factor = 1.5 has_equipment = { infantry_equipment < 700 } }
 			modifier = { factor = 0.5 NOD = { NOD_ai_has_current_course_reserve = yes } }
 		}
 		set_country_flag = NOD_limited_concession_accepted
@@ -62,7 +62,7 @@ country_event = {
 		ai_chance = {
 			base = 2
 			modifier = { factor = 2 surrender_progress > 0.35 }
-			modifier = { factor = 1.5 num_equipment@infantry_equipment < 700 }
+			modifier = { factor = 1.5 has_equipment = { infantry_equipment < 700 } }
 			modifier = { factor = 0.5 NOD = { NOD_ai_has_current_course_reserve = yes } }
 		}
 		set_country_flag = NOD_limited_concession_accepted
@@ -96,7 +96,7 @@ country_event = {
 
 immediate = {
 		set_country_flag = NOD_limited_stalemate_recorded
-		NOD_change_crisis_attention = { value = -10 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -10 } NOD_change_crisis_attention = yes
 	}
 }
 

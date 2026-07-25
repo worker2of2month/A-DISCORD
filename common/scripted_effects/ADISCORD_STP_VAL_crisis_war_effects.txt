@@ -263,7 +263,7 @@ STP_prepare_party_revolter = {
 	save_global_event_target_as = STP_crisis_party_side
 }
 
-STP_start_resistance_revolt = {
+STP_start_resistance_revolt_chauvinism = {
 	STP_snapshot_internal_split = yes
 	clear_global_event_target = STP_crisis_party_side
 	clear_global_event_target = STP_crisis_resistance_side
@@ -277,7 +277,7 @@ STP_start_resistance_revolt = {
 	if = {
 		limit = { check_variable = { var = STP_node_officers value = 0 compare = equals } }
 		start_civil_war = {
-			ideology = $ideology$
+			ideology = chauvinism
 			ruling_party = hedonism
 			size = 0
 			army_ratio = 0
@@ -291,7 +291,7 @@ STP_start_resistance_revolt = {
 	else_if = {
 		limit = { check_variable = { var = STP_node_officers value = 1 compare = equals } }
 		start_civil_war = {
-			ideology = $ideology$
+			ideology = chauvinism
 			ruling_party = hedonism
 			size = 0
 			army_ratio = 0.2
@@ -305,7 +305,7 @@ STP_start_resistance_revolt = {
 	else_if = {
 		limit = { check_variable = { var = STP_node_officers value = 2 compare = equals } }
 		start_civil_war = {
-			ideology = $ideology$
+			ideology = chauvinism
 			ruling_party = hedonism
 			size = 0
 			army_ratio = 0.35
@@ -318,7 +318,104 @@ STP_start_resistance_revolt = {
 	}
 	else = {
 		start_civil_war = {
-			ideology = $ideology$
+			ideology = chauvinism
+			ruling_party = hedonism
+			size = 0
+			army_ratio = 0.5
+			keep_all_characters = yes
+			capital = var:STP_civil_war_starter_capital
+			states = all
+			states_filter = { has_state_flag = STP_resistance_starter_state }
+			STP_prepare_resistance_revolter = yes
+		}
+	}
+
+	every_country = {
+		limit = {
+			original_tag = STP
+			has_war_with = ROOT
+			NOT = { has_country_flag = STP_main_campaign_side }
+			has_country_flag = STP_crisis_resistance_side
+		}
+		save_global_event_target_as = STP_crisis_resistance_side
+	}
+	STP_apply_civil_war_state_map = yes
+	STP_reconcile_internal_stockpiles = yes
+	STP_transfer_resistance_escrow = yes
+	STP_materialize_resistance_packages = yes
+	STP_assign_internal_characters = yes
+	if = {
+		limit = {
+			has_event_target = STP_crisis_party_side
+			country_exists = event_target:STP_crisis_party_side
+			has_event_target = STP_crisis_resistance_side
+			country_exists = event_target:STP_crisis_resistance_side
+		}
+		event_target:STP_crisis_party_side = {
+			country_event = { id = stp_crisis.51 days = 3 }
+		}
+		event_target:STP_crisis_resistance_side = {
+			country_event = { id = stp_crisis.51 days = 3 }
+		}
+	}
+}
+
+STP_start_resistance_revolt_etatism = {
+	STP_snapshot_internal_split = yes
+	clear_global_event_target = STP_crisis_party_side
+	clear_global_event_target = STP_crisis_resistance_side
+	clr_country_flag = STP_crisis_resistance_side
+	set_country_flag = STP_internal_war_started
+	set_country_flag = STP_crisis_party_side
+	save_global_event_target_as = STP_crisis_party_side
+	set_politics = { ruling_party = hedonism elections_allowed = no }
+	STP_select_resistance_starter_states = yes
+
+	if = {
+		limit = { check_variable = { var = STP_node_officers value = 0 compare = equals } }
+		start_civil_war = {
+			ideology = etatism
+			ruling_party = hedonism
+			size = 0
+			army_ratio = 0
+			keep_all_characters = yes
+			capital = var:STP_civil_war_starter_capital
+			states = all
+			states_filter = { has_state_flag = STP_resistance_starter_state }
+			STP_prepare_resistance_revolter = yes
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = STP_node_officers value = 1 compare = equals } }
+		start_civil_war = {
+			ideology = etatism
+			ruling_party = hedonism
+			size = 0
+			army_ratio = 0.2
+			keep_all_characters = yes
+			capital = var:STP_civil_war_starter_capital
+			states = all
+			states_filter = { has_state_flag = STP_resistance_starter_state }
+			STP_prepare_resistance_revolter = yes
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = STP_node_officers value = 2 compare = equals } }
+		start_civil_war = {
+			ideology = etatism
+			ruling_party = hedonism
+			size = 0
+			army_ratio = 0.35
+			keep_all_characters = yes
+			capital = var:STP_civil_war_starter_capital
+			states = all
+			states_filter = { has_state_flag = STP_resistance_starter_state }
+			STP_prepare_resistance_revolter = yes
+		}
+	}
+	else = {
+		start_civil_war = {
+			ideology = etatism
 			ruling_party = hedonism
 			size = 0
 			army_ratio = 0.5
@@ -611,21 +708,21 @@ STP_apply_civil_war_state_map = {
 		}
 
 		event_target:STP_crisis_party_side = {
-			if = { limit = { owns_state = 28 } set_capital = 28 }
-			else = { set_capital = 1 }
+			if = { limit = { owns_state = 28 } set_capital = { state = 28 } }
+			else = { set_capital = { state = 1 } }
 		}
 		event_target:STP_crisis_resistance_side = {
-			if = { limit = { owns_state = 28 } set_capital = 28 }
-			else_if = { limit = { owns_state = 29 } set_capital = 29 }
-			else_if = { limit = { owns_state = 43 } set_capital = 43 }
-			else_if = { limit = { owns_state = 44 } set_capital = 44 }
-			else_if = { limit = { owns_state = 45 } set_capital = 45 }
-			else_if = { limit = { owns_state = 46 } set_capital = 46 }
-			else_if = { limit = { owns_state = 53 } set_capital = 53 }
-			else_if = { limit = { owns_state = 88 } set_capital = 88 }
-			else_if = { limit = { owns_state = 1 } set_capital = 1 }
-			else_if = { limit = { owns_state = 2 } set_capital = 2 }
-			else_if = { limit = { owns_state = 3 } set_capital = 3 }
+			if = { limit = { owns_state = 28 } set_capital = { state = 28 } }
+			else_if = { limit = { owns_state = 29 } set_capital = { state = 29 } }
+			else_if = { limit = { owns_state = 43 } set_capital = { state = 43 } }
+			else_if = { limit = { owns_state = 44 } set_capital = { state = 44 } }
+			else_if = { limit = { owns_state = 45 } set_capital = { state = 45 } }
+			else_if = { limit = { owns_state = 46 } set_capital = { state = 46 } }
+			else_if = { limit = { owns_state = 53 } set_capital = { state = 53 } }
+			else_if = { limit = { owns_state = 88 } set_capital = { state = 88 } }
+			else_if = { limit = { owns_state = 1 } set_capital = { state = 1 } }
+			else_if = { limit = { owns_state = 2 } set_capital = { state = 2 } }
+			else_if = { limit = { owns_state = 3 } set_capital = { state = 3 } }
 		}
 	}
 
@@ -1031,18 +1128,33 @@ STP_clear_external_crisis_participants = {
 	}
 }
 
-VAL_STP_start_war_countdown = {
+VAL_STP_start_war_countdown_120 = {
 	if = {
 		limit = { tag = VAL }
 		set_country_flag = VAL_STP_countdown_pending
-		STP_VAL_start_canonical_countdown = { type = $type$ }
+		STP_VAL_start_canonical_countdown_120 = yes
 	}
 	else = {
 		VAL = {
 			set_country_flag = VAL_STP_countdown_pending
-			STP_VAL_start_canonical_countdown = { type = $type$ }
+			STP_VAL_start_canonical_countdown_120 = yes
 		}
 	}
+}
+
+VAL_STP_start_war_countdown_180 = {
+	if = { limit = { tag = VAL } set_country_flag = VAL_STP_countdown_pending STP_VAL_start_canonical_countdown_180 = yes }
+	else = { VAL = { set_country_flag = VAL_STP_countdown_pending STP_VAL_start_canonical_countdown_180 = yes } }
+}
+
+VAL_STP_start_war_countdown_300 = {
+	if = { limit = { tag = VAL } set_country_flag = VAL_STP_countdown_pending STP_VAL_start_canonical_countdown_300 = yes }
+	else = { VAL = { set_country_flag = VAL_STP_countdown_pending STP_VAL_start_canonical_countdown_300 = yes } }
+}
+
+VAL_STP_start_war_countdown_450 = {
+	if = { limit = { tag = VAL } set_country_flag = VAL_STP_countdown_pending STP_VAL_start_canonical_countdown_450 = yes }
+	else = { VAL = { set_country_flag = VAL_STP_countdown_pending STP_VAL_start_canonical_countdown_450 = yes } }
 }
 
 VAL_STP_trigger_breach = {
@@ -1064,10 +1176,6 @@ STP_assign_postwar_leader = {
 		limit = { has_country_flag = STP_winner_shabrat }
 		set_politics = { ruling_party = chauvinism elections_allowed = no }
 		STP_maksim_shabrat = { set_nationality = ROOT }
-		if = {
-			limit = { NOT = { has_character = STP_maksim_shabrat } }
-			recruit_character = STP_maksim_shabrat
-		}
 		promote_character = {
 			character = STP_maksim_shabrat
 			ideology = chauvinism_ideology
@@ -1078,10 +1186,6 @@ STP_assign_postwar_leader = {
 		limit = { has_country_flag = STP_winner_sotnikov }
 		set_politics = { ruling_party = etatism elections_allowed = no }
 		STP_grigory_sotnikov = { set_nationality = ROOT }
-		if = {
-			limit = { NOT = { has_character = STP_grigory_sotnikov } }
-			recruit_character = STP_grigory_sotnikov
-		}
 		promote_character = {
 			character = STP_grigory_sotnikov
 			ideology = etatism_ideology
@@ -1092,10 +1196,6 @@ STP_assign_postwar_leader = {
 		set_country_flag = STP_winner_hedersett
 		set_politics = { ruling_party = hedonism elections_allowed = no }
 		STP_rufus_hedersett = { set_nationality = ROOT }
-		if = {
-			limit = { NOT = { has_character = STP_rufus_hedersett } }
-			recruit_character = STP_rufus_hedersett
-		}
 		promote_character = {
 			character = STP_rufus_hedersett
 			ideology = aristocratic_hedonism
@@ -1209,7 +1309,7 @@ STP_finalize_internal_outcome = {
 		set_country_flag = STP_internal_outcome_finalizing
 		save_global_event_target_as = STP_postwar_country
 		set_country_flag = STP_postwar_campaign_side
-		STP_set_crisis_phase = { value = 3 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 3 } STP_set_crisis_phase = yes
 
 		# Consume the saved mandate state while all role targets still exist.
 		STP_resolve_postwar_nodrul_mandate = yes
@@ -1268,7 +1368,7 @@ STP_finalize_internal_outcome = {
 				value = 1
 			}
 		}
-		VAL_STP_start_war_countdown = { type = 120 }
+		VAL_STP_start_war_countdown_120 = yes
 
 		set_country_flag = STP_internal_outcome_finalized
 		clr_country_flag = STP_internal_outcome_finalizing
@@ -1514,7 +1614,7 @@ NOD_select_crisis_posture = {
 			20 = {
 				modifier = {
 					factor = 2
-					num_equipment@infantry_equipment > 1499
+					has_equipment = { infantry_equipment > 1499 }
 				}
 				modifier = {
 					factor = 0.5
@@ -1551,7 +1651,7 @@ NOD_select_crisis_posture = {
 					OR = {
 						has_war = yes
 						has_capitulated = yes
-						num_equipment@infantry_equipment < 500
+						has_equipment = { infantry_equipment < 500 }
 					}
 				}
 				set_country_flag = NOD_crisis_posture_wait
@@ -1694,7 +1794,7 @@ NOD_attempt_limited_war_bbv = {
 }
 
 NOD_change_crisis_attention = {
-	add_to_variable = { var = NOD_crisis_attention value = $value$ }
+	add_to_variable = { var = NOD_crisis_attention value = ADISCORD_STP_VAL_effect_value }
 	clamp_variable = { var = NOD_crisis_attention min = 0 max = 100 }
 }
 
@@ -1762,14 +1862,14 @@ NOD_evaluate_limited_war_losses = {
 			has_country_flag = NOD_limited_resolution_victory
 			NOT = { has_country_flag = NOD_limited_war_pyrrhic }
 		}
-		NOD_change_crisis_attention = { value = 10 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } NOD_change_crisis_attention = yes
 	}
 	else_if = {
 		limit = {
 			has_country_flag = NOD_limited_resolution_victory
 			has_country_flag = NOD_limited_war_pyrrhic
 		}
-		NOD_change_crisis_attention = { value = -5 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } NOD_change_crisis_attention = yes
 	}
 }
 
@@ -1834,7 +1934,7 @@ NOD_emergency_limited_white_peace = {
 	if = {
 		limit = { has_country_flag = NOD_limited_war_active }
 		NOD_evaluate_limited_war_losses = yes
-		NOD_change_crisis_attention = { value = -10 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -10 } NOD_change_crisis_attention = yes
 		if = {
 			limit = {
 				has_event_target = NOD_limited_war_nod
@@ -1860,7 +1960,7 @@ NOD_resolve_limited_timeout = {
 	if = {
 		limit = { has_country_flag = NOD_limited_war_active }
 		NOD_evaluate_limited_war_losses = yes
-		NOD_change_crisis_attention = { value = -10 }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -10 } NOD_change_crisis_attention = yes
 		NOD_addressed_limited_white_peace = yes
 		NOD_clear_limited_conflict_state = yes
 		NOD_select_crisis_posture = yes
@@ -2068,7 +2168,7 @@ NOD_check_limited_war_integrity = {
 					}
 				}
 			}
-			NOD_change_crisis_attention = { value = -15 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -15 } NOD_change_crisis_attention = yes
 			NOD_clear_limited_conflict_state = yes
 			NOD_select_crisis_posture = yes
 		}
@@ -2078,7 +2178,7 @@ NOD_check_limited_war_integrity = {
 					has_war_with = event_target:NOD_limited_war_target_country
 				}
 			}
-			NOD_change_crisis_attention = { value = -10 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -10 } NOD_change_crisis_attention = yes
 			NOD_clear_limited_conflict_state = yes
 			NOD_select_crisis_posture = yes
 		}
@@ -2105,8 +2205,8 @@ NOD_send_stp_material_support = {
 		limit = {
 			has_event_target = STP_crisis_party_side
 			country_exists = event_target:STP_crisis_party_side
-			num_equipment@infantry_equipment > 249
-			num_equipment@support_equipment > 24
+			has_equipment = { infantry_equipment > 249 }
+			has_equipment = { support_equipment > 24 }
 		}
 		add_equipment_to_stockpile = {
 			type = infantry_equipment
@@ -2140,8 +2240,8 @@ NOD_send_stp_limited_support = {
 		limit = {
 			has_event_target = STP_crisis_party_side
 			country_exists = event_target:STP_crisis_party_side
-			num_equipment@infantry_equipment > 499
-			num_equipment@support_equipment > 49
+			has_equipment = { infantry_equipment > 499 }
+			has_equipment = { support_equipment > 49 }
 		}
 		add_equipment_to_stockpile = {
 			type = infantry_equipment
@@ -2183,8 +2283,8 @@ NOD_send_stp_full_support = {
 			country_exists = event_target:STP_crisis_resistance_side
 			has_war = no
 			has_capitulated = no
-			num_equipment@infantry_equipment > 999
-			num_equipment@support_equipment > 99
+			has_equipment = { infantry_equipment > 999 }
+			has_equipment = { support_equipment > 99 }
 		}
 		add_equipment_to_stockpile = {
 			type = infantry_equipment

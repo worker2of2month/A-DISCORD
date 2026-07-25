@@ -380,6 +380,22 @@ def _validate_file(relative_path: str, text: str, issues: list[str]) -> None:
         issues.append(f"{relative_path}: on_daily is forbidden in crisis feature files")
     if any(not _has_direct_child_block(block, "limit") for block in _iter_named_blocks(text, "every_country")):
         issues.append(f"{relative_path}: unrestricted every_country is forbidden in crisis feature files")
+    engine_unsafe = {
+        r"\bcheck_temp_variable\b": "uses unsupported check_temp_variable",
+        r"\$[A-Za-z_][A-Za-z0-9_]*\$": "uses unsupported scripted-effect parameters",
+        r"\badd_army_experience\b": "uses obsolete add_army_experience",
+        r"\bset_capital\s*=\s*\d+\b": "uses unbraced set_capital",
+        r"(?<!has_)\bstability\s*[<>]": "uses invalid stability trigger",
+        r"(?<!has_)\bpolitical_power\s*[<>]": "uses invalid political-power trigger",
+        r"(?m)^\s*num_equipment(?:_in_armies)?@[A-Za-z0-9_]+\s*[<>]": "uses equipment variable as a direct trigger",
+    }
+    for pattern, message in engine_unsafe.items():
+        if re.search(pattern, masked):
+            issues.append(f"{relative_path}: {message}")
+    if relative_path.startswith("common/decisions/") and re.search(
+        r"\bcancelable\s*=\s*no\b", masked
+    ):
+        issues.append(f"{relative_path}: decisions use unsupported cancelable = no")
 
 
 def _validate_section(root: Path, section: str, issues: list[str]) -> None:
@@ -469,7 +485,8 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
                 continue
             for token in (
                 "hidden = yes",
-                f"STP_set_health_stage = {{ value = {stage} }}",
+                f"ADISCORD_STP_VAL_effect_value value = {stage}",
+                "STP_set_health_stage = yes",
                 f"activate_mission = {next_mission}",
                 *(f"complete_national_focus = {focus}" for focus in spine),
             ):
@@ -496,10 +513,12 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
         else:
             for token in (
                 "set_country_flag = STP_ivanov_dead",
-                "STP_set_health_stage = { value = 5 }",
+                "ADISCORD_STP_VAL_effect_value value = 5",
+                "STP_set_health_stage = yes",
                 "complete_national_focus = STP_The_Father_Of_Peace_Is_Gone",
                 "retire_character = STP_Petr_Ivanov",
-                "STP_set_crisis_phase = { value = 2 }",
+                "ADISCORD_STP_VAL_effect_value value = 2",
+                "STP_set_crisis_phase = yes",
             ):
                 if token not in death:
                     issues.append(f"stp_crisis.4 is missing terminal action {token}")
@@ -708,7 +727,11 @@ def _validate_civil_war_contract(root: Path, issues: list[str]) -> None:
     if war is not None:
         for effect, expected in (
             (
-                "STP_start_resistance_revolt",
+                "STP_start_resistance_revolt_chauvinism",
+                tuple(str(value) for value in STP_CIVIL_WAR_ARMY_RATIOS["resistance_revolter"]),
+            ),
+            (
+                "STP_start_resistance_revolt_etatism",
                 tuple(str(value) for value in STP_CIVIL_WAR_ARMY_RATIOS["resistance_revolter"]),
             ),
             (
@@ -789,11 +812,12 @@ def _validate_civil_war_contract(root: Path, issues: list[str]) -> None:
             "STP_internal_outcome_finalized",
             "save_global_event_target_as = STP_postwar_country",
             "set_country_flag = STP_postwar_campaign_side",
-            "STP_set_crisis_phase = { value = 3 }",
+            "ADISCORD_STP_VAL_effect_value value = 3",
+            "STP_set_crisis_phase = yes",
             "STP_assign_postwar_leader = yes",
             "tree = ADISCORD_STP_postwar_focus",
             "STP_clear_external_crisis_participants = yes",
-            "VAL_STP_start_war_countdown = { type = 120 }",
+            "VAL_STP_start_war_countdown_120 = yes",
         ):
             if token not in finalizer:
                 issues.append(f"single internal finalizer is missing {token}")
@@ -811,15 +835,16 @@ def _validate_civil_war_contract(root: Path, issues: list[str]) -> None:
         ):
             if leader.count(bridge) != 1:
                 issues.append(f"postwar leader assignment must complete {bridge} exactly once")
-        countdown = extract_named_block(war, "VAL_STP_start_war_countdown") or ""
-        for token in (
-            "VAL_STP_countdown_pending",
-            "STP_VAL_start_canonical_countdown = { type = $type$ }",
-        ):
-            if token not in countdown:
-                issues.append(f"countdown forward interface is missing canonical routing token {token}")
-        if "activate_mission" in countdown:
-            issues.append("countdown forward interface must leave mission ownership to the canonical starter")
+        for days in (120, 180, 300, 450):
+            countdown = extract_named_block(war, f"VAL_STP_start_war_countdown_{days}") or ""
+            for token in (
+                "VAL_STP_countdown_pending",
+                f"STP_VAL_start_canonical_countdown_{days} = yes",
+            ):
+                if token not in countdown:
+                    issues.append(f"countdown forward interface {days} is missing {token}")
+            if "activate_mission" in countdown:
+                issues.append("countdown forward interface must leave mission ownership to the canonical starter")
 
     if events is not None:
         death = _block_with_direct_assignment(events, "country_event", "id", "stp_crisis.4") or ""
@@ -1132,11 +1157,11 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
             expected_days = WAR_COUNTDOWN_MISSION_DAYS[mission_id]
             if _direct_scalar_values(mission, "days_mission_timeout") != [str(expected_days)]:
                 issues.append(f"{mission_id} must time out after {expected_days} days")
+            timeout_type = 14 if mission_id.endswith("breached") else expected_days
             for token in (
                 "selectable_mission = no",
-                "cancelable = no",
-                "STP_VAL_resolve_countdown_timeout",
-                "token_flag = VAL_STP_countdown_generation_",
+                "STP_VAL_resolve_countdown_timeout = yes",
+                f"ADISCORD_STP_VAL_timeout_type value = {timeout_type}",
             ):
                 if token not in mission:
                     issues.append(f"{mission_id} is missing canonical timeout token {token}")
@@ -1164,14 +1189,21 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
             ):
                 if token not in contract_effects:
                     issues.append(f"VAL STP exposure system is missing {token}")
-        memory = extract_named_block(contract_effects, "VAL_update_northern_family_memory") or ""
-        for token in ("$last_var$", "$streak_var$", "value = 3", "days = 90"):
-            if token not in memory:
-                issues.append(f"VAL northern family memory is missing {token}")
-        northern_resolver = extract_named_block(contract_effects, "VAL_resolve_northern_operation") or ""
-        for token in ("days = 70", "$influence_var$", "max = 3"):
-            if token not in northern_resolver:
-                issues.append(f"VAL northern resolver is missing {token}")
+        for target in VAL_NORTHERN_OPERATION_TARGETS:
+            resolver = extract_named_block(
+                contract_effects, f"VAL_resolve_{target.lower()}_operation"
+            ) or ""
+            for token in (
+                f"VAL_{target}_last_family",
+                f"VAL_{target}_repeat_streak",
+                "value = 3",
+                "days = 90",
+                "days = 70",
+                f"VAL_{target}_influence",
+                "max = 3",
+            ):
+                if token not in resolver:
+                    issues.append(f"VAL {target} northern resolver is missing {token}")
         floor = extract_named_block(core or "", "VAL_recalculate_stp_leverage_floor") or ""
         for token in (
             "VAL_STP_resource_rights_45",
@@ -1190,8 +1222,15 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
             if flag not in contract_effects:
                 issues.append(f"VAL mountain deal is missing concession {flag}")
         for countdown in (180, 300, 450):
-            if f"countdown = {countdown}" not in contract_effects:
-                issues.append(f"VAL mountain deal cannot select {countdown} days")
+            wrapper = extract_named_block(
+                contract_effects, f"VAL_apply_mountain_contract_{countdown}"
+            ) or ""
+            for token in (
+                f"ADISCORD_STP_VAL_effect_value value = {countdown}",
+                "VAL_apply_mountain_contract = yes",
+            ):
+                if token not in wrapper:
+                    issues.append(f"VAL mountain deal cannot select {countdown} days")
         cleanup = extract_named_block(contract_effects, "VAL_STP_cleanup_contract_relations") or ""
         for token in (
             "remove_resource_rights = 45",
@@ -1275,7 +1314,8 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
             "VAL_clear_foreign_operation = yes",
             "STP_VAL_clear_countdown = yes",
             "remove_wargoal =",
-            "STP_set_crisis_phase = { value = 4 }",
+            "ADISCORD_STP_VAL_effect_value value = 4",
+            "STP_set_crisis_phase = yes",
             "VAL_STP_final_war_active",
         ):
             token_index = final_war.find(token)
@@ -1367,7 +1407,7 @@ def _validate_nod_contract(root: Path, issues: list[str]) -> None:
     for driver in (
         "has_war",
         "strength_ratio",
-        "num_equipment@infantry_equipment",
+        "has_equipment = { infantry_equipment > 1499 }",
         "is_subject_of = NOD",
         "STP_nodrul_shabrat_activity_discovered",
         "STP_nodrul_disinformation_bias",
@@ -1582,7 +1622,11 @@ def _validate_northern_campaign(root: Path, issues: list[str]) -> None:
         if surrender not in block:
             issues.append(f"{trigger_id} is missing exact surrender threshold")
     ai_window = extract_named_block(triggers, "VAL_northern_balanced_civil_war_ai") or ""
-    for token in ("num_divisions > 5", "num_equipment@infantry_equipment", "num_equipment@support_equipment"):
+    for token in (
+        "num_divisions > 5",
+        "has_equipment = { infantry_equipment > 1499 }",
+        "has_equipment = { support_equipment > 149 }",
+    ):
         if token not in ai_window:
             issues.append(f"northern AI reserve gate is missing {token}")
 
@@ -1752,8 +1796,10 @@ def _validate_ai_contract(root: Path, issues: list[str]) -> None:
         issues.append("limited-war ally suppression uses an invalid literal field")
     if masked_strategy.count("target = call_allies") != 4:
         issues.append("each Nodrul limited-war opponent needs addressed call-allies suppression")
-    if masked_strategy.count("id = event_target:NOD_limited_war_target_country") != 4:
-        issues.append("call-allies suppression must use the saved limited-war opponent")
+    for target in ("YPR", "COF", "BHG", "BBV"):
+        block = extract_named_block(strategy, f"NOD_AI_LIMITED_WAR_{target}") or ""
+        if f"id = {target} target = call_allies value = -9999" not in " ".join(block.split()):
+            issues.append(f"call-allies suppression is missing literal target {target}")
 
     for block_id in (
         "VAL_AI_CONTRACT_BROKER",
@@ -1768,21 +1814,23 @@ def _validate_ai_contract(root: Path, issues: list[str]) -> None:
     reserve_tokens = {
         "STP_ai_has_current_course_reserve": (
             "has_political_power > 59.99", "command_power > 14.9",
-            "num_equipment@infantry_equipment > 399",
+            "has_equipment = { infantry_equipment > 399 }",
             "has_political_power > 39.99", "command_power > 29.9",
-            "num_equipment@infantry_equipment > 1199", "STP_ai_army_equipment_above_70",
+            "has_equipment = { infantry_equipment > 1199 }", "STP_ai_army_equipment_above_70",
         ),
         "VAL_ai_has_current_course_reserve": (
             "has_political_power > 59.99", "command_power > 19.9",
-            "num_equipment@infantry_equipment > 1499",
+            "has_equipment = { infantry_equipment > 1499 }",
             "has_political_power > 74.99", "command_power > 39.9",
-            "num_equipment@infantry_equipment > 1999", "ratio < 1.25",
+            "has_equipment = { infantry_equipment > 1999 }",
+            "event_target:STP_crisis_party_side = { num_divisions > 2 }",
+            "event_target:STP_crisis_resistance_side = { num_divisions > 2 }",
         ),
         "NOD_ai_has_current_course_reserve": (
             "has_political_power > 74.99", "command_power > 29.9",
-            "num_equipment@infantry_equipment > 1499",
+            "has_equipment = { infantry_equipment > 1499 }",
             "has_political_power > 34.99", "command_power > 9.9",
-            "num_equipment@infantry_equipment > 1199",
+            "has_equipment = { infantry_equipment > 1199 }",
         ),
     }
     for trigger_id, tokens in reserve_tokens.items():
@@ -1857,7 +1905,7 @@ def _validate_ai_contract(root: Path, issues: list[str]) -> None:
         "NOD_crisis_posture_guardian",
         "VAL_ai_has_current_course_reserve = yes",
         "surrender_progress",
-        "num_equipment@infantry_equipment",
+        "has_equipment = { infantry_equipment > 1999 }",
     ):
         if token not in val_events:
             issues.append(f"VAL deal score is missing adaptive factor {token}")

@@ -6,7 +6,6 @@ NOD_crisis_posture = {
 		activation = { NOD_can_escalate_ypr = yes }
 		available = { always = no }
 		selectable_mission = no
-		cancelable = no
 		days_mission_timeout = 35
 		timeout_effect = { NOD_attempt_limited_war_ypr = yes }
 	}
@@ -18,7 +17,6 @@ NOD_crisis_posture = {
 		activation = { NOD_can_escalate_cof = yes }
 		available = { always = no }
 		selectable_mission = no
-		cancelable = no
 		days_mission_timeout = 35
 		timeout_effect = { NOD_attempt_limited_war_cof = yes }
 	}
@@ -30,7 +28,6 @@ NOD_crisis_posture = {
 		activation = { NOD_can_escalate_bhg = yes }
 		available = { always = no }
 		selectable_mission = no
-		cancelable = no
 		days_mission_timeout = 35
 		timeout_effect = { NOD_attempt_limited_war_bhg = yes }
 	}
@@ -42,7 +39,6 @@ NOD_crisis_posture = {
 		activation = { NOD_can_escalate_bbv = yes }
 		available = { always = no }
 		selectable_mission = no
-		cancelable = no
 		days_mission_timeout = 35
 		timeout_effect = { NOD_attempt_limited_war_bbv = yes }
 	}
@@ -53,7 +49,6 @@ NOD_crisis_posture = {
 		visible = { has_country_flag = NOD_limited_war_ypr }
 		available = { always = no }
 		selectable_mission = no
-		cancelable = no
 		days_mission_timeout = 240
 		timeout_effect = { NOD_resolve_limited_timeout = yes }
 	}
@@ -64,7 +59,6 @@ NOD_crisis_posture = {
 		visible = { has_country_flag = NOD_limited_war_cof }
 		available = { always = no }
 		selectable_mission = no
-		cancelable = no
 		days_mission_timeout = 180
 		timeout_effect = { NOD_resolve_limited_timeout = yes }
 	}
@@ -75,7 +69,6 @@ NOD_crisis_posture = {
 		visible = { has_country_flag = NOD_limited_war_bhg }
 		available = { always = no }
 		selectable_mission = no
-		cancelable = no
 		days_mission_timeout = 120
 		timeout_effect = { NOD_resolve_limited_timeout = yes }
 	}
@@ -86,7 +79,6 @@ NOD_crisis_posture = {
 		visible = { has_country_flag = NOD_limited_war_bbv }
 		available = { always = no }
 		selectable_mission = no
-		cancelable = no
 		days_mission_timeout = 120
 		timeout_effect = { NOD_resolve_limited_timeout = yes }
 	}
@@ -188,8 +180,8 @@ NOD_crisis_posture = {
 		}
 		available = {
 			NOT = { has_country_flag = NOD_STP_material_support }
-			num_equipment@infantry_equipment > 249
-			num_equipment@support_equipment > 24
+			has_equipment = { infantry_equipment > 249 }
+			has_equipment = { support_equipment > 24 }
 		}
 		cost = 0
 		complete_effect = { NOD_send_stp_material_support = yes }
@@ -211,8 +203,8 @@ NOD_crisis_posture = {
 		}
 		available = {
 			NOT = { has_country_flag = NOD_STP_limited_support }
-			num_equipment@infantry_equipment > 499
-			num_equipment@support_equipment > 49
+			has_equipment = { infantry_equipment > 499 }
+			has_equipment = { support_equipment > 49 }
 		}
 		cost = 0
 		complete_effect = { NOD_send_stp_limited_support = yes }
@@ -237,8 +229,8 @@ NOD_crisis_posture = {
 				NOD_can_directly_defend_stp = yes
 			}
 			NOT = { has_country_flag = NOD_STP_full_support }
-			num_equipment@infantry_equipment > 999
-			num_equipment@support_equipment > 99
+			has_equipment = { infantry_equipment > 999 }
+			has_equipment = { support_equipment > 99 }
 		}
 		cost = 0
 		complete_effect = { NOD_send_stp_full_support = yes }

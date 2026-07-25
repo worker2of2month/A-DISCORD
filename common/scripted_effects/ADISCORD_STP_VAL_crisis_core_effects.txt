@@ -169,7 +169,7 @@ ADISCORD_STP_VAL_initialize_schema = {
 }
 
 STP_set_health_stage = {
-	set_temp_variable = { var = STP_requested_health_stage value = $value$ }
+	set_temp_variable = { var = STP_requested_health_stage value = ADISCORD_STP_VAL_effect_value }
 	if = {
 		limit = {
 			check_variable = { var = STP_requested_health_stage value = 1 compare = greater_than_or_equals }
@@ -216,7 +216,7 @@ STP_commit_to_party = {
 }
 
 STP_set_crisis_phase = {
-	set_temp_variable = { var = STP_requested_crisis_phase value = $value$ }
+	set_temp_variable = { var = STP_requested_crisis_phase value = ADISCORD_STP_VAL_effect_value }
 	if = {
 		limit = {
 			check_variable = { var = STP_requested_crisis_phase value = 0 compare = greater_than_or_equals }
@@ -239,7 +239,7 @@ STP_set_crisis_phase = {
 }
 
 STP_change_readiness = {
-	add_to_variable = { var = STP_resistance_readiness value = $value$ }
+	add_to_variable = { var = STP_resistance_readiness value = ADISCORD_STP_VAL_effect_value }
 	if = {
 		limit = { check_variable = { var = STP_resistance_readiness value = 0 compare = less_than } }
 		set_variable = { var = STP_resistance_readiness value = 0 }
@@ -252,7 +252,7 @@ STP_change_readiness = {
 }
 
 STP_change_suspicion = {
-	add_to_variable = { var = STP_party_suspicion value = $value$ }
+	add_to_variable = { var = STP_party_suspicion value = ADISCORD_STP_VAL_effect_value }
 	if = {
 		limit = { check_variable = { var = STP_party_suspicion value = 0 compare = less_than } }
 		set_variable = { var = STP_party_suspicion value = 0 }
@@ -265,14 +265,14 @@ STP_change_suspicion = {
 }
 
 STP_change_node_palace = {
-	add_to_variable = { var = STP_node_palace value = $value$ }
+	add_to_variable = { var = STP_node_palace value = ADISCORD_STP_VAL_effect_value }
 	if = { limit = { check_variable = { var = STP_node_palace value = 0 compare = less_than } } set_variable = { var = STP_node_palace value = 0 } }
 	if = { limit = { check_variable = { var = STP_node_palace value = 2 compare = greater_than } } set_variable = { var = STP_node_palace value = 2 } }
 	STP_refresh_crisis_modifier = yes
 }
 
 STP_change_node_officers = {
-	add_to_variable = { var = STP_node_officers value = $value$ }
+	add_to_variable = { var = STP_node_officers value = ADISCORD_STP_VAL_effect_value }
 	if = { limit = { check_variable = { var = STP_node_officers value = 0 compare = less_than } } set_variable = { var = STP_node_officers value = 0 } }
 	if = { limit = { check_variable = { var = STP_node_officers value = 3 compare = greater_than } } set_variable = { var = STP_node_officers value = 3 } }
 	STP_refresh_crisis_modifier = yes
@@ -287,35 +287,35 @@ STP_change_node_officers = {
 }
 
 STP_change_node_mountains = {
-	add_to_variable = { var = STP_node_mountains value = $value$ }
+	add_to_variable = { var = STP_node_mountains value = ADISCORD_STP_VAL_effect_value }
 	if = { limit = { check_variable = { var = STP_node_mountains value = 0 compare = less_than } } set_variable = { var = STP_node_mountains value = 0 } }
 	if = { limit = { check_variable = { var = STP_node_mountains value = 3 compare = greater_than } } set_variable = { var = STP_node_mountains value = 3 } }
 	STP_refresh_crisis_modifier = yes
 }
 
 STP_change_node_market = {
-	add_to_variable = { var = STP_node_market value = $value$ }
+	add_to_variable = { var = STP_node_market value = ADISCORD_STP_VAL_effect_value }
 	if = { limit = { check_variable = { var = STP_node_market value = 0 compare = less_than } } set_variable = { var = STP_node_market value = 0 } }
 	if = { limit = { check_variable = { var = STP_node_market value = 2 compare = greater_than } } set_variable = { var = STP_node_market value = 2 } }
 	STP_refresh_crisis_modifier = yes
 }
 
 STP_change_node_street = {
-	add_to_variable = { var = STP_node_street value = $value$ }
+	add_to_variable = { var = STP_node_street value = ADISCORD_STP_VAL_effect_value }
 	if = { limit = { check_variable = { var = STP_node_street value = 0 compare = less_than } } set_variable = { var = STP_node_street value = 0 } }
 	if = { limit = { check_variable = { var = STP_node_street value = 2 compare = greater_than } } set_variable = { var = STP_node_street value = 2 } }
 	STP_refresh_crisis_modifier = yes
 }
 
 STP_change_node_val_channel = {
-	add_to_variable = { var = STP_node_val_channel value = $value$ }
+	add_to_variable = { var = STP_node_val_channel value = ADISCORD_STP_VAL_effect_value }
 	if = { limit = { check_variable = { var = STP_node_val_channel value = 0 compare = less_than } } set_variable = { var = STP_node_val_channel value = 0 } }
 	if = { limit = { check_variable = { var = STP_node_val_channel value = 2 compare = greater_than } } set_variable = { var = STP_node_val_channel value = 2 } }
 	STP_refresh_crisis_modifier = yes
 }
 
 STP_change_security_adaptation_palace = {
-	add_to_variable = { var = STP_security_adaptation_palace value = $value$ }
+	add_to_variable = { var = STP_security_adaptation_palace value = ADISCORD_STP_VAL_effect_value }
 	clamp_variable = { var = STP_security_adaptation_palace min = 0 max = 3 }
 	if = {
 		limit = { check_variable = { var = STP_security_adaptation_palace value = 3 compare = greater_than_or_equals } }
@@ -324,7 +324,7 @@ STP_change_security_adaptation_palace = {
 }
 
 STP_change_security_adaptation_officers = {
-	add_to_variable = { var = STP_security_adaptation_officers value = $value$ }
+	add_to_variable = { var = STP_security_adaptation_officers value = ADISCORD_STP_VAL_effect_value }
 	clamp_variable = { var = STP_security_adaptation_officers min = 0 max = 3 }
 	if = {
 		limit = { check_variable = { var = STP_security_adaptation_officers value = 3 compare = greater_than_or_equals } }
@@ -333,7 +333,7 @@ STP_change_security_adaptation_officers = {
 }
 
 STP_change_security_adaptation_mountains = {
-	add_to_variable = { var = STP_security_adaptation_mountains value = $value$ }
+	add_to_variable = { var = STP_security_adaptation_mountains value = ADISCORD_STP_VAL_effect_value }
 	clamp_variable = { var = STP_security_adaptation_mountains min = 0 max = 3 }
 	if = {
 		limit = { check_variable = { var = STP_security_adaptation_mountains value = 3 compare = greater_than_or_equals } }
@@ -342,7 +342,7 @@ STP_change_security_adaptation_mountains = {
 }
 
 STP_change_security_adaptation_market = {
-	add_to_variable = { var = STP_security_adaptation_market value = $value$ }
+	add_to_variable = { var = STP_security_adaptation_market value = ADISCORD_STP_VAL_effect_value }
 	clamp_variable = { var = STP_security_adaptation_market min = 0 max = 3 }
 	if = {
 		limit = { check_variable = { var = STP_security_adaptation_market value = 3 compare = greater_than_or_equals } }
@@ -351,7 +351,7 @@ STP_change_security_adaptation_market = {
 }
 
 STP_change_security_adaptation_street = {
-	add_to_variable = { var = STP_security_adaptation_street value = $value$ }
+	add_to_variable = { var = STP_security_adaptation_street value = ADISCORD_STP_VAL_effect_value }
 	clamp_variable = { var = STP_security_adaptation_street min = 0 max = 3 }
 	if = {
 		limit = { check_variable = { var = STP_security_adaptation_street value = 3 compare = greater_than_or_equals } }
@@ -360,7 +360,7 @@ STP_change_security_adaptation_street = {
 }
 
 STP_change_security_adaptation_foreign = {
-	add_to_variable = { var = STP_security_adaptation_foreign value = $value$ }
+	add_to_variable = { var = STP_security_adaptation_foreign value = ADISCORD_STP_VAL_effect_value }
 	clamp_variable = { var = STP_security_adaptation_foreign min = 0 max = 3 }
 	if = {
 		limit = { check_variable = { var = STP_security_adaptation_foreign value = 3 compare = greater_than_or_equals } }
@@ -373,7 +373,7 @@ STP_change_resistance_escrow_infantry = {
 		limit = { NOT = { has_variable = STP_resistance_escrow_infantry } }
 		set_variable = { var = STP_resistance_escrow_infantry value = 0 }
 	}
-	add_to_variable = { var = STP_resistance_escrow_infantry value = $value$ }
+	add_to_variable = { var = STP_resistance_escrow_infantry value = ADISCORD_STP_VAL_effect_value }
 	clamp_variable = { var = STP_resistance_escrow_infantry min = 0 }
 }
 
@@ -382,7 +382,7 @@ STP_change_resistance_escrow_support = {
 		limit = { NOT = { has_variable = STP_resistance_escrow_support } }
 		set_variable = { var = STP_resistance_escrow_support value = 0 }
 	}
-	add_to_variable = { var = STP_resistance_escrow_support value = $value$ }
+	add_to_variable = { var = STP_resistance_escrow_support value = ADISCORD_STP_VAL_effect_value }
 	clamp_variable = { var = STP_resistance_escrow_support min = 0 }
 }
 
@@ -589,14 +589,14 @@ STP_lose_shabrat = {
 }
 
 VAL_change_contract_authority = {
-	add_to_variable = { var = VAL_contract_authority value = $value$ }
+	add_to_variable = { var = VAL_contract_authority value = ADISCORD_STP_VAL_effect_value }
 	if = { limit = { check_variable = { var = VAL_contract_authority value = 0 compare = less_than } } set_variable = { var = VAL_contract_authority value = 0 } }
 	if = { limit = { check_variable = { var = VAL_contract_authority value = 100 compare = greater_than } } set_variable = { var = VAL_contract_authority value = 100 } }
 	VAL_refresh_contract_modifier = yes
 }
 
 VAL_change_stp_leverage = {
-	add_to_variable = { var = VAL_STP_leverage value = $value$ }
+	add_to_variable = { var = VAL_STP_leverage value = ADISCORD_STP_VAL_effect_value }
 	if = { limit = { check_variable = { var = VAL_STP_leverage value = 0 compare = less_than } } set_variable = { var = VAL_STP_leverage value = 0 } }
 	if = { limit = { check_variable = { var = VAL_STP_leverage value = 100 compare = greater_than } } set_variable = { var = VAL_STP_leverage value = 100 } }
 }
@@ -616,11 +616,11 @@ VAL_recalculate_stp_leverage_floor = {
 }
 
 VAL_handle_stp_regime_change = {
-	VAL_change_stp_exposure_intel = { value = -1 }
-	VAL_change_stp_exposure_supply = { value = -1 }
-	VAL_change_stp_exposure_concession = { value = -1 }
-	VAL_change_stp_exposure_garrison = { value = -1 }
-	VAL_change_stp_exposure_nodrul = { value = -1 }
+	set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } VAL_change_stp_exposure_intel = yes
+	set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } VAL_change_stp_exposure_supply = yes
+	set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } VAL_change_stp_exposure_concession = yes
+	set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } VAL_change_stp_exposure_garrison = yes
+	set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } VAL_change_stp_exposure_nodrul = yes
 	multiply_variable = { var = VAL_STP_leverage value = 0.5 }
 	VAL_recalculate_stp_leverage_floor = yes
 }
