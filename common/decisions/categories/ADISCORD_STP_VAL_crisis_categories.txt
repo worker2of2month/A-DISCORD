@@ -8,6 +8,7 @@ STP_crisis_operations = {
 	}
 
 	visible_when_empty = yes
+	scripted_gui = ADISCORD_STP_crisis_panel
 }
 
 VAL_contract_campaign = {
@@ -20,6 +21,7 @@ VAL_contract_campaign = {
 	}
 
 	visible_when_empty = yes
+	scripted_gui = ADISCORD_VAL_contract_panel
 }
 
 NOD_crisis_posture = {

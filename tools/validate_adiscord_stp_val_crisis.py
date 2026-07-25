@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import struct
 import sys
 from pathlib import Path
 
@@ -207,6 +208,10 @@ REQUIRED_FILES = {
         ("common/scripted_guis/ADISCORD_STP_VAL_crisis_scripted_gui.txt", "crisis scripted GUI"),
     ),
     "localisation": (
+        (
+            "common/scripted_localisation/ADISCORD_STP_VAL_crisis_scripted_loc.txt",
+            "crisis scripted localisation",
+        ),
         ("localisation/russian/ADISCORD_STP_VAL_crisis_l_russian.yml", "Russian crisis localisation"),
     ),
     "performance": (),
@@ -1931,6 +1936,301 @@ def _validate_scripted_peace_contract(root: Path, issues: list[str]) -> None:
             issues.append(f"missing special contract subject level {autonomy_id}")
 
 
+CRISIS_GUI_GETTERS = (
+    "STPGetReadinessBand",
+    "STPGetSuspicionBand",
+    "STPGetNODAssessment",
+    "STPGetVALAssessment",
+    "STPGetActiveMajorOperation",
+    "STPGetActiveAuxOperation",
+    "STPGetObservedCountermeasure",
+    "STPGetBloodlessOutcomeIntel",
+    "STPGetShabratWarOutcomeIntel",
+    "STPGetSotnikovOutcomeIntel",
+    "STPGetPartyOutcomeIntel",
+    "VALGetContractAuthorityBand",
+    "VALGetSTPCrisisPhase",
+    "VALGetNODAssessment",
+    "VALGetCINInfluence",
+    "VALGetOSFInfluence",
+    "VALGetAPHInfluence",
+    "VALGetState45Status",
+    "VALGetState88Status",
+    "VALGetDealStatus",
+    "VALGetCountdownStatus",
+    "VALGetForeignOperationStatus",
+    "VALGetWarConcept",
+)
+
+
+def _png_dimensions(path: Path) -> tuple[int, int] | None:
+    try:
+        with path.open("rb") as stream:
+            if stream.read(8) != b"\x89PNG\r\n\x1a\n":
+                return None
+            if stream.read(4) != b"\x00\x00\x00\r" or stream.read(4) != b"IHDR":
+                return None
+            return struct.unpack(">II", stream.read(8))
+    except FileNotFoundError:
+        return None
+
+
+def _localisation_index(root: Path) -> dict[str, list[str]]:
+    index: dict[str, list[str]] = {}
+    for path in sorted((root / "localisation/russian").glob("*.yml")):
+        text = read(path) or ""
+        for match in re.finditer(r"^\s*([A-Za-z0-9_.-]+):(?:\d+)?\s", text, re.MULTILINE):
+            index.setdefault(match.group(1), []).append(path.name)
+    return index
+
+
+def _validate_gui_contract(root: Path, issues: list[str]) -> None:
+    categories = read(root / "common/decisions/categories/ADISCORD_STP_VAL_crisis_categories.txt") or ""
+    scripted = read(root / "common/scripted_guis/ADISCORD_STP_VAL_crisis_scripted_gui.txt") or ""
+    gui = read(root / "interface/ADISCORD_STP_VAL_crisis.gui") or ""
+    scripted_loc = read(root / "common/scripted_localisation/ADISCORD_STP_VAL_crisis_scripted_loc.txt") or ""
+
+    def block_with_quoted_name(text: str, block_type: str, name: str) -> str:
+        for block in _iter_named_blocks(text, block_type):
+            if re.search(rf'\bname\s*=\s*"{re.escape(name)}"', block):
+                return block
+        return ""
+
+    def defined_text_block(name: str) -> str:
+        for block in _iter_named_blocks(scripted_loc, "defined_text"):
+            if re.search(rf"\bname\s*=\s*{re.escape(name)}\b", block):
+                return block
+        return ""
+
+    for category_id, panel_id, window_id, tag, visible_token in (
+        (
+            "STP_crisis_operations",
+            "ADISCORD_STP_crisis_panel",
+            "ADISCORD_STP_crisis_panel_window",
+            "STP",
+            "has_country_flag = STP_main_campaign_side",
+        ),
+        (
+            "VAL_contract_campaign",
+            "ADISCORD_VAL_contract_panel",
+            "ADISCORD_VAL_contract_panel_window",
+            "VAL",
+            "has_completed_focus = VAL_One_Ledger_One_Banner",
+        ),
+    ):
+        category = extract_named_block(categories, category_id) or ""
+        for token in (
+            f"tag = {tag}",
+            visible_token,
+            "visible_when_empty = yes",
+            f"scripted_gui = {panel_id}",
+        ):
+            if token not in category:
+                issues.append(f"decision category {category_id} is missing GUI contract {token}")
+        panel = extract_named_block(scripted, panel_id) or ""
+        for token in (
+            "context_type = decision_category",
+            f'window_name = "{window_id}"',
+            f"tag = {tag}",
+        ):
+            if token not in panel:
+                issues.append(f"scripted GUI {panel_id} is missing {token}")
+        window = block_with_quoted_name(gui, "containerWindowType", window_id)
+        if not re.search(r"size\s*=\s*\{\s*width\s*=\s*580\s+height\s*=\s*470\s*\}", window):
+            issues.append(f"GUI window {window_id} must be exactly 580 by 470")
+
+    combined = "\n".join((scripted, gui))
+    for forbidden in (
+        "effects =",
+        "buttonType",
+        "_click",
+        "set_variable",
+        "add_to_variable",
+        "set_country_flag",
+        "clr_country_flag",
+        "original_tag = STP",
+        "scrollbarType",
+        "gridBoxType",
+    ):
+        if forbidden in combined:
+            issues.append(f"read-only crisis GUI contains forbidden mutation or nested list token {forbidden}")
+    if "STP_security_posture" in combined or "success_chance" in combined:
+        issues.append("STP crisis panel exposes hidden security posture or exact success chance")
+
+    gui_names = re.findall(r'\bname\s*=\s*"([A-Za-z0-9_]+)"', gui)
+    duplicates = sorted({name for name in gui_names if gui_names.count(name) > 1})
+    for name in duplicates:
+        issues.append(f"crisis GUI object name is duplicated: {name}")
+
+    all_defined_names: dict[str, list[str]] = {}
+    for path in sorted((root / "common/scripted_localisation").glob("*.txt")):
+        text = read(path) or ""
+        for name in re.findall(r"\bname\s*=\s*([A-Za-z0-9_]+)", text):
+            all_defined_names.setdefault(name, []).append(path.name)
+    for getter in CRISIS_GUI_GETTERS:
+        if len(all_defined_names.get(getter, ())) != 1:
+            issues.append(f"scripted localisation getter {getter} must be defined exactly once")
+        block = defined_text_block(getter)
+        if "always = yes" not in block:
+            issues.append(f"scripted localisation getter {getter} lacks an always fallback")
+
+    for getter in (
+        "STPGetReadinessBand",
+        "STPGetSuspicionBand",
+        "VALGetContractAuthorityBand",
+        "VALGetCINInfluence",
+        "VALGetOSFInfluence",
+        "VALGetAPHInfluence",
+    ):
+        block = defined_text_block(getter)
+        thresholds = [int(value) for value in re.findall(
+            r"value\s*=\s*(\d+)\s+compare\s*=\s*greater_than_or_equals", block
+        )]
+        if thresholds != sorted(thresholds, reverse=True):
+            issues.append(f"scripted localisation getter {getter} thresholds are not descending")
+
+    crisis_russian = read(root / "localisation/russian/ADISCORD_STP_VAL_crisis_l_russian.yml") or ""
+    for getter in CRISIS_GUI_GETTERS:
+        if f"[{getter}]" not in crisis_russian:
+            issues.append(f"crisis GUI does not render getter {getter}")
+    for token in (
+        "[?STP_resistance_readiness|0]%",
+        "[?STP_party_suspicion|0]%",
+        "[?VAL_contract_authority|0]%",
+    ):
+        if token not in crisis_russian:
+            issues.append(f"crisis GUI percentage must use whole-number literal formatting: {token}")
+
+    texture_files = (
+        "interface/ADISCORD_STP_VAL_crisis.gfx",
+        "interface/ADISCORD_bop.gfx",
+        "interface/ADISCORD_stp_state_face.gfx",
+        "interface/ADISCORD_leader_portraits.gfx",
+    )
+    for relative in texture_files:
+        text = read(root / relative) or ""
+        for texture in re.findall(r'\btexturefile\s*=\s*"([^\"]+)"', text, re.IGNORECASE):
+            texture_path = root / texture.replace("/", "\\")
+            if not texture_path.is_file():
+                issues.append(f"missing GUI texture referenced by {relative}: {texture}")
+
+    for path in (
+        "gfx/interface/ideas/STP/idea_STP_deadman_rulling_the_country.png",
+        "gfx/interface/ideas/STP/idea_STP_National_Strikes.png",
+        "gfx/interface/ideas/STP/idea_STP_hidden_slaves_trade.png",
+        "gfx/interface/ideas/VAL/idea_VAL_mercenary_state.png",
+    ):
+        if _png_dimensions(root / path) != (68, 68):
+            issues.append(f"crisis spirit icon must be 68 by 68: {path}")
+    for path in (
+        "gfx/interface/bop/STP_bop_less_hedonism_Shabrat.png",
+        "gfx/interface/bop/STP_bop_less_hedonism_Sotnikov.png",
+        "gfx/interface/bop/STP_bop_more_hedonism_Hedersett.png",
+        "gfx/interface/bop/STP_bop_more_hedonism_Rober.png",
+    ):
+        if _png_dimensions(root / path) != (78, 88):
+            issues.append(f"crisis outcome card must be 78 by 88: {path}")
+    for path in (
+        "gfx/leaders/STP/portrait_STP_Maksim_Shabrat.png",
+        "gfx/leaders/STP/portrait_STP_Grigory_Sotnikov.png",
+        "gfx/leaders/STP/portrait_STP_Rufus_Hedersett.png",
+    ):
+        if _png_dimensions(root / path) != (156, 210):
+            issues.append(f"STP successor portrait must be 156 by 210: {path}")
+
+
+def _validate_localisation_contract(root: Path, issues: list[str]) -> None:
+    crisis_path = root / "localisation/russian/ADISCORD_STP_VAL_crisis_l_russian.yml"
+    if not crisis_path.exists():
+        return
+    raw = crisis_path.read_bytes()
+    if not raw.startswith(b"\xef\xbb\xbf"):
+        issues.append("Russian crisis localisation must use a UTF-8 BOM")
+    crisis_loc = read(crisis_path) or ""
+    if len(re.findall(r"^l_russian:\s*$", crisis_loc, re.MULTILINE)) != 1:
+        issues.append("Russian crisis localisation must contain exactly one l_russian header")
+
+    changed_russian = (
+        "localisation/russian/ADISCORD_STP_VAL_crisis_l_russian.yml",
+        "localisation/russian/ADISCORD_stp_state_face_l_russian.yml",
+        "localisation/russian/ADISCORD_STP_party_elections_l_russian.yml",
+        "localisation/russian/ADISCORD_national_focuses_l_russian.yml",
+        "localisation/russian/nsb_characters_l_russian.yml",
+    )
+    for relative in changed_russian:
+        path = root / relative
+        if path.exists() and not path.read_bytes().startswith(b"\xef\xbb\xbf"):
+            issues.append(f"{relative}: changed Russian localisation must retain UTF-8 BOM")
+
+    if "Голос площади" in (read(root / "localisation/russian/ADISCORD_stp_state_face_l_russian.yml") or ""):
+        issues.append("STP health presentation retains obsolete Voice of the Square language")
+
+    localisation = _localisation_index(root)
+    crisis_keys = [
+        key
+        for key in re.findall(r"^\s*([A-Za-z0-9_.-]+):(?:\d+)?\s", crisis_loc, re.MULTILINE)
+        if key != "l_russian"
+    ]
+    for key in sorted(set(crisis_keys)):
+        paths = localisation.get(key, [])
+        if len(paths) != 1:
+            issues.append(f"crisis localisation key is duplicated: {key} in {', '.join(paths)}")
+
+    required: set[str] = set()
+    gui = read(root / "interface/ADISCORD_STP_VAL_crisis.gui") or ""
+    required.update(re.findall(r'\b(?:text|pdx_tooltip)\s*=\s*"([A-Za-z0-9_.-]+)"', gui))
+    scripted_loc = read(root / "common/scripted_localisation/ADISCORD_STP_VAL_crisis_scripted_loc.txt") or ""
+    required.update(re.findall(r"\blocalization_key\s*=\s*([A-Za-z0-9_.-]+)", scripted_loc))
+
+    for relative in (
+        "common/national_focus/ADISCORD_national_focus_STP.txt",
+        "common/national_focus/ADISCORD_national_focus_STP_crisis_war.txt",
+        "common/national_focus/ADISCORD_national_focus_STP_postwar.txt",
+        "common/national_focus/ADISCORD_national_focus_VAL.txt",
+    ):
+        text = read(root / relative) or ""
+        for block in _iter_named_blocks(text, "focus"):
+            values = _direct_scalar_values(block, "id")
+            if values and values[0].startswith(("STP_", "VAL_")):
+                required.add(values[0])
+                required.add(f"{values[0]}_desc")
+
+    for relative in (
+        "common/decisions/ADISCORD_STP_crisis_decisions.txt",
+        "common/decisions/ADISCORD_VAL_contract_decisions.txt",
+        "common/decisions/ADISCORD_NOD_crisis_decisions.txt",
+    ):
+        text = read(root / relative) or ""
+        for decision_id in re.findall(r"^\t([A-Z][A-Za-z0-9_]+)\s*=\s*\{", text, re.MULTILINE):
+            required.add(decision_id)
+            required.add(f"{decision_id}_desc")
+
+    for relative in (
+        "events/ADISCORD_STP_crisis_events.txt",
+        "events/ADISCORD_VAL_contract_events.txt",
+        "events/ADISCORD_NOD_crisis_events.txt",
+    ):
+        text = read(root / relative) or ""
+        required.update(re.findall(r"\b(?:title|desc|text|name)\s*=\s*((?:stp_crisis|val_contract|nod_crisis)\.[A-Za-z0-9_.]+)", text))
+
+    for relative in (
+        "common/dynamic_modifiers/ADISCORD_STP_VAL_crisis_dynamic_modifiers.txt",
+        "common/ideas/ADISCORD_STP_VAL_crisis_ideas.txt",
+    ):
+        text = read(root / relative) or ""
+        for identifier in re.findall(r"^(?:\t+)?((?:STP|VAL|NOD)_[A-Za-z0-9_]+)\s*=\s*\{", text, re.MULTILINE):
+            required.add(identifier)
+            required.add(f"{identifier}_desc")
+    autonomy = read(root / "common/autonomous_states/ADISCORD_contract_clients.txt") or ""
+    for identifier in re.findall(r"\bid\s*=\s*(autonomy_contract_[A-Za-z0-9_]+)", autonomy):
+        required.add(identifier)
+        required.add(f"{identifier}_desc")
+
+    for key in sorted(required):
+        if key not in localisation:
+            issues.append(f"missing Russian crisis localisation key {key}")
+
+
 def _validate_performance(root: Path, issues: list[str]) -> None:
     for relative_path in OWNED_FEATURE_FILES:
         text = read(root / relative_path)
@@ -1962,6 +2262,10 @@ def validate(root: Path, section: str | None = None) -> list[str]:
                 _validate_scripted_peace_contract(root, issues)
             elif name == "ai":
                 _validate_ai_contract(root, issues)
+            elif name == "gui":
+                _validate_gui_contract(root, issues)
+            elif name == "localisation":
+                _validate_localisation_contract(root, issues)
     return list(dict.fromkeys(issues))
 
 

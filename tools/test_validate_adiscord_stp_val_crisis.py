@@ -2851,6 +2851,60 @@ class CrisisValidatorTests(unittest.TestCase):
                 self.assertEqual(stream.read(4), b"IHDR")
                 self.assertEqual(struct.unpack(">II", stream.read(8)), (68, 68))
 
+    def test_crisis_decision_panels_are_read_only_and_bound(self):
+        self.assertEqual(validator.validate(validator.ROOT, "gui"), [])
+        categories = validator.read(
+            validator.ROOT / "common/decisions/categories/ADISCORD_STP_VAL_crisis_categories.txt"
+        ) or ""
+        scripted = validator.read(
+            validator.ROOT / "common/scripted_guis/ADISCORD_STP_VAL_crisis_scripted_gui.txt"
+        ) or ""
+        gui = validator.read(validator.ROOT / "interface/ADISCORD_STP_VAL_crisis.gui") or ""
+        for category_id, panel_id, window_id in (
+            (
+                "STP_crisis_operations",
+                "ADISCORD_STP_crisis_panel",
+                "ADISCORD_STP_crisis_panel_window",
+            ),
+            (
+                "VAL_contract_campaign",
+                "ADISCORD_VAL_contract_panel",
+                "ADISCORD_VAL_contract_panel_window",
+            ),
+        ):
+            category = validator.extract_named_block(categories, category_id) or ""
+            self.assertIn(f"scripted_gui = {panel_id}", category)
+            panel = validator.extract_named_block(scripted, panel_id) or ""
+            self.assertIn("context_type = decision_category", panel)
+            self.assertIn(f'window_name = "{window_id}"', panel)
+            window = self._block_with_assignment(
+                gui, "containerWindowType", f'name = "{window_id}"'
+            )
+            self.assertRegex(window, r"size\s*=\s*\{\s*width\s*=\s*580\s+height\s*=\s*470")
+        self.assertNotIn("effects =", scripted)
+        self.assertNotIn("buttonType", gui)
+        self.assertNotIn("interface/countrydecisionview.gui", scripted)
+
+    def test_crisis_russian_presentation_is_complete_and_bom_safe(self):
+        self.assertEqual(validator.validate(validator.ROOT, "localisation"), [])
+        crisis_path = (
+            validator.ROOT / "localisation/russian/ADISCORD_STP_VAL_crisis_l_russian.yml"
+        )
+        self.assertTrue(crisis_path.read_bytes().startswith(b"\xef\xbb\xbf"))
+        scripted_loc = validator.read(
+            validator.ROOT
+            / "common/scripted_localisation/ADISCORD_STP_VAL_crisis_scripted_loc.txt"
+        ) or ""
+        for getter in validator.CRISIS_GUI_GETTERS:
+            block = self._block_with_assignment(
+                scripted_loc, "defined_text", f"name = {getter}"
+            )
+            self.assertIn("always = yes", block)
+        state_face = validator.read(
+            validator.ROOT / "localisation/russian/ADISCORD_stp_state_face_l_russian.yml"
+        ) or ""
+        self.assertNotIn("Голос площади", state_face)
+
 
 if __name__ == "__main__":
     unittest.main()
