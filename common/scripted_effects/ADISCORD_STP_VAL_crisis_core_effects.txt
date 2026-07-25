@@ -140,6 +140,8 @@ ADISCORD_STP_VAL_initialize_schema = {
 			}
 
 			if = { limit = { NOT = { has_variable = VAL_STP_leverage } } set_variable = { var = VAL_STP_leverage value = 0 } }
+			if = { limit = { NOT = { has_variable = VAL_contract_band } } set_variable = { var = VAL_contract_band value = -1 } }
+			if = { limit = { NOT = { has_variable = VAL_STP_final_war_preparation } } set_variable = { var = VAL_STP_final_war_preparation value = 0 } }
 			if = { limit = { NOT = { has_variable = VAL_negotiation_posture } } set_variable = { var = VAL_negotiation_posture value = 0 } }
 			if = { limit = { NOT = { has_variable = VAL_CIN_influence } } set_variable = { var = VAL_CIN_influence value = 0 } }
 			if = { limit = { NOT = { has_variable = VAL_OSF_influence } } set_variable = { var = VAL_OSF_influence value = 0 } }
@@ -566,7 +568,6 @@ VAL_change_stp_leverage = {
 	add_to_variable = { var = VAL_STP_leverage value = $value$ }
 	if = { limit = { check_variable = { var = VAL_STP_leverage value = 0 compare = less_than } } set_variable = { var = VAL_STP_leverage value = 0 } }
 	if = { limit = { check_variable = { var = VAL_STP_leverage value = 100 compare = greater_than } } set_variable = { var = VAL_STP_leverage value = 100 } }
-	VAL_refresh_contract_modifier = yes
 }
 
 STP_refresh_crisis_modifier = {
@@ -717,6 +718,28 @@ STP_refresh_crisis_modifier = {
 }
 
 VAL_refresh_contract_modifier = {
+	if = {
+		limit = { NOT = { has_variable = VAL_contract_band } }
+		set_variable = { var = VAL_contract_band value = -1 }
+	}
+	set_temp_variable = { var = VAL_contract_new_band value = 5 }
+	if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 25 compare = less_than } }
+		set_temp_variable = { var = VAL_contract_new_band value = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 50 compare = less_than } }
+		set_temp_variable = { var = VAL_contract_new_band value = 2 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 75 compare = less_than } }
+		set_temp_variable = { var = VAL_contract_new_band value = 3 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 90 compare = less_than } }
+		set_temp_variable = { var = VAL_contract_new_band value = 4 }
+	}
+
 	# VAL contract band 0-24
 	if = {
 		limit = { check_variable = { var = VAL_contract_authority value = 25 compare = less_than } }
@@ -802,6 +825,22 @@ VAL_refresh_contract_modifier = {
 		set_variable = { var = VAL_contract_army_expense_factor value = -0.07 }
 	}
 
+	if = {
+		limit = {
+			NOT = {
+				check_variable = {
+					var = VAL_contract_band
+					value = VAL_contract_new_band
+					compare = equals
+				}
+			}
+		}
+		set_variable = { var = VAL_contract_band value = VAL_contract_new_band }
+		if = {
+			limit = { has_dynamic_modifier = { modifier = VAL_contract_state } }
+			force_update_dynamic_modifier = yes
+		}
+	}
 	if = {
 		limit = { NOT = { has_dynamic_modifier = { modifier = VAL_contract_state } } }
 		add_dynamic_modifier = { modifier = VAL_contract_state }

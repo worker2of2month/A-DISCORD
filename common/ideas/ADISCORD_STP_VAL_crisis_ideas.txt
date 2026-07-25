@@ -96,5 +96,32 @@ ideas = {
 				supply_consumption_factor = -0.02
 			}
 		}
+
+		VAL_factory_cathedrals_drive = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				production_speed_arms_factory_factor = 0.10
+			}
+		}
+
+		VAL_hot_production_lines = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				production_factory_max_efficiency_factor = 0.03
+			}
+		}
+
+		VAL_northern_roads_drive = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				production_speed_infrastructure_factor = 0.10
+			}
+		}
 	}
 }

@@ -34,6 +34,10 @@ try:
         STP_RESISTANCE_PROJECTS,
         STP_SHABRAT_FOCUSES,
         STP_SPINE_FOCUS_STAGES,
+        VAL_BASE_FOCUS_IDS,
+        VAL_CONTRACT_BANDS,
+        VAL_CRISIS_FOCUS_IDS,
+        VAL_FOCUS_REWARD_TOKENS,
     )
 except ModuleNotFoundError:
     from stp_val_crisis_manifest import (
@@ -61,6 +65,10 @@ except ModuleNotFoundError:
         STP_RESISTANCE_PROJECTS,
         STP_SHABRAT_FOCUSES,
         STP_SPINE_FOCUS_STAGES,
+        VAL_BASE_FOCUS_IDS,
+        VAL_CONTRACT_BANDS,
+        VAL_CRISIS_FOCUS_IDS,
+        VAL_FOCUS_REWARD_TOKENS,
     )
 
 
@@ -124,8 +132,9 @@ REQUIRED_FILES = {
         ("common/national_focus/ADISCORD_national_focus_STP_postwar.txt", "postwar focus tree"),
     ),
     "val": (
-        ("common/decisions/ADISCORD_VAL_contract_decisions.txt", "VAL contract decisions"),
-        ("events/ADISCORD_VAL_contract_events.txt", "VAL contract events"),
+        ("common/national_focus/ADISCORD_national_focus_VAL.txt", "VAL contract focus tree"),
+        ("common/dynamic_modifiers/ADISCORD_STP_VAL_crisis_dynamic_modifiers.txt", "VAL contract dynamic modifier"),
+        ("common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt", "VAL contract authority effects"),
     ),
     "nod": (
         ("common/decisions/ADISCORD_NOD_crisis_decisions.txt", "NOD crisis decisions"),
@@ -860,6 +869,124 @@ def _validate_civil_war_contract(root: Path, issues: list[str]) -> None:
                 issues.append(f"militia template {template} must remain locked")
 
 
+def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
+    focus_text = read(root / "common/national_focus/ADISCORD_national_focus_VAL.txt")
+    core = read(root / "common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt")
+    triggers = read(root / "common/scripted_triggers/ADISCORD_STP_VAL_crisis_triggers.txt")
+    dynamic = read(root / "common/dynamic_modifiers/ADISCORD_STP_VAL_crisis_dynamic_modifiers.txt")
+    ideas = read(root / "common/ideas/ADISCORD_STP_VAL_crisis_ideas.txt")
+
+    if focus_text is not None:
+        blocks: dict[str, str] = {}
+        for focus_id in (*VAL_BASE_FOCUS_IDS, *VAL_CRISIS_FOCUS_IDS):
+            block = _block_with_direct_assignment(
+                focus_text, "focus", "id", focus_id
+            ) or ""
+            blocks[focus_id] = block
+            if not block:
+                issues.append(f"missing VAL campaign focus {focus_id}")
+                continue
+            if _direct_scalar_values(block, "cost") != ["5"]:
+                issues.append(f"{focus_id} must cost exactly 5")
+            reward = extract_named_block(block, "completion_reward") or ""
+            if not _mask_non_code(reward).strip("{} \t\r\n"):
+                issues.append(f"{focus_id} must have a gameplay reward")
+
+        for focus_id, tokens in VAL_FOCUS_REWARD_TOKENS.items():
+            reward = extract_named_block(blocks.get(focus_id, ""), "completion_reward") or ""
+            for token in tokens:
+                if token not in reward:
+                    issues.append(f"{focus_id} reward is missing {token}")
+
+        for group in (
+            ("VAL_Ballistics_Schools", "VAL_Brokered_Steel"),
+            ("VAL_Vorons_Companies", "VAL_Stahls_Schedules", "VAL_Gromovs_Assault_Tables"),
+            ("VAL_Field_Surgeons", "VAL_Bread_From_Barracks"),
+            ("VAL_Trading_Partners", "VAL_October_Of_2160"),
+            VAL_CRISIS_FOCUS_IDS[:4],
+        ):
+            for focus_id in group:
+                block = blocks.get(focus_id, "")
+                for rival in group:
+                    if rival != focus_id and f"focus = {rival}" not in (
+                        extract_named_block(block, "mutually_exclusive") or ""
+                    ):
+                        issues.append(f"{focus_id} must exclude {rival}")
+
+        final_join = blocks.get("VAL_Contracts_Outlive_Kings", "")
+        for pair in (
+            ("VAL_One_Ledger_One_Banner", "VAL_Export_Rifles_Not_Promises"),
+            ("VAL_One_Ledger_One_Banner", "VAL_Morns_Supply_Trains"),
+            ("VAL_One_Ledger_One_Banner", "VAL_Dead_Villages_Still_Count"),
+            ("VAL_One_Ledger_One_Banner", "VAL_Different_Views_On_Freedom"),
+        ):
+            if not re.search(
+                rf"prerequisite\s*=\s*\{{[^}}]*focus\s*=\s*{pair[0]}[^}}]*focus\s*=\s*{pair[1]}[^}}]*\}}",
+                _mask_non_code(final_join),
+                re.DOTALL,
+            ):
+                issues.append(f"VAL final join is missing alternative {' + '.join(pair)}")
+
+        for focus_id in VAL_CRISIS_FOCUS_IDS[:4]:
+            block = blocks.get(focus_id, "")
+            allow = extract_named_block(block, "allow_branch") or ""
+            for token in (
+                "has_completed_focus = VAL_Contracts_Outlive_Kings",
+                "VAL_stp_crisis_at_least_rupture = yes",
+            ):
+                if token not in allow:
+                    issues.append(f"{focus_id} branch gate is missing {token}")
+
+        for focus_id in ("VAL_Offer_The_Mountain_Contract", "VAL_Secure_The_Resource_Corridor"):
+            if "VAL_has_active_stp_civil_war = yes" not in blocks.get(focus_id, ""):
+                issues.append(f"{focus_id} must require the active saved STP civil war")
+        if "VAL_can_negotiate_deferred_invoice = yes" not in blocks.get(
+            "VAL_Negotiate_The_Deferred_Invoice", ""
+        ):
+            issues.append("VAL deferred-invoice focus must require the live no-war window")
+        present = blocks.get("VAL_Present_The_Final_Invoice", "")
+        if "VAL_has_postwar_stp_target = yes" not in present:
+            issues.append("VAL final-invoice focus must require the saved postwar country")
+        if "VAL_STP_start_war_countdown" in present:
+            issues.append("VAL final-invoice focus must not alter the canonical war timer")
+        if re.search(r"volunteer", _mask_non_code(focus_text + (dynamic or "")), re.IGNORECASE):
+            issues.append("VAL contract campaign must not use volunteer modifiers")
+
+    if core is not None:
+        refresh = extract_named_block(core, "VAL_refresh_contract_modifier") or ""
+        for band in VAL_CONTRACT_BANDS:
+            if f"# VAL contract band {band['minimum']}-{band['maximum']}" not in refresh:
+                issues.append(f"VAL contract modifier is missing band {band['minimum']}-{band['maximum']}")
+        if refresh.count("force_update_dynamic_modifier = yes") != 1:
+            issues.append("VAL contract modifier must force-update exactly once behind a band change")
+        for token in (
+            "VAL_contract_new_band",
+            "VAL_contract_band",
+            "compare = equals",
+        ):
+            if token not in refresh:
+                issues.append(f"VAL band-change guard is missing {token}")
+
+    if triggers is not None:
+        for trigger in (
+            "VAL_stp_crisis_at_least_rupture",
+            "VAL_has_active_stp_civil_war",
+            "VAL_can_negotiate_deferred_invoice",
+            "VAL_has_postwar_stp_target",
+        ):
+            if not extract_named_block(triggers, trigger):
+                issues.append(f"missing VAL crisis focus trigger {trigger}")
+
+    if ideas is not None:
+        for idea, token in (
+            ("VAL_factory_cathedrals_drive", "production_speed_arms_factory_factor = 0.10"),
+            ("VAL_hot_production_lines", "production_factory_max_efficiency_factor = 0.03"),
+            ("VAL_northern_roads_drive", "production_speed_infrastructure_factor = 0.10"),
+        ):
+            if token not in (extract_named_block(ideas, idea) or ""):
+                issues.append(f"missing or incomplete VAL focus idea {idea}")
+
+
 def _validate_nod_contract(root: Path, issues: list[str]) -> None:
     decisions = read(root / "common/decisions/ADISCORD_NOD_crisis_decisions.txt")
     events = read(root / "events/ADISCORD_NOD_crisis_events.txt")
@@ -1057,6 +1184,8 @@ def validate(root: Path, section: str | None = None) -> list[str]:
                 _validate_stp_contract(root, issues)
             elif name == "civil_war":
                 _validate_civil_war_contract(root, issues)
+            elif name == "val":
+                _validate_val_contract_campaign(root, issues)
             elif name == "nod":
                 _validate_nod_contract(root, issues)
     return list(dict.fromkeys(issues))

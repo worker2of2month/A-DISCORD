@@ -29,7 +29,10 @@ from tools.stp_val_crisis_manifest import (
     STP_SHABRAT_FOCUSES,
     STP_SPINE_FOCUS_STAGES,
     VAL_AUTHORITY_FOCUS_REWARDS,
+    VAL_BASE_FOCUS_IDS,
     VAL_CONTRACT_BANDS,
+    VAL_CRISIS_FOCUS_IDS,
+    VAL_FOCUS_REWARD_TOKENS,
     VAL_STP_INTEL_STATES,
     WAR_COUNTDOWN_MISSIONS,
 )
@@ -643,7 +646,7 @@ class CrisisValidatorTests(unittest.TestCase):
             issues = validator.validate(Path(tmp))
         self.assertTrue(any("core scripted effects" in issue for issue in issues))
         self.assertTrue(any("STP crisis decisions" in issue for issue in issues))
-        self.assertTrue(any("VAL contract events" in issue for issue in issues))
+        self.assertTrue(any("VAL contract focus tree" in issue for issue in issues))
         self.assertTrue(any("crisis GUI" in issue for issue in issues))
 
     def test_unknown_section_is_rejected(self):
@@ -2188,6 +2191,20 @@ class CrisisValidatorTests(unittest.TestCase):
             "remove_ideas = STP_nodrul_limited_support",
         ):
             self.assertIn(token, cleanup)
+
+    def test_task_seven_val_focus_campaign_and_contract_bands(self):
+        self.assertEqual(validator.validate(validator.ROOT, "val"), [])
+        focus_text = validator.read(
+            validator.ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt"
+        ) or ""
+        for focus_id in (*VAL_BASE_FOCUS_IDS, *VAL_CRISIS_FOCUS_IDS):
+            block = self._block_with_assignment(focus_text, "focus", f"id = {focus_id}")
+            self.assertEqual(validator._direct_scalar_values(block, "cost"), ["5"])
+        for focus_id, tokens in VAL_FOCUS_REWARD_TOKENS.items():
+            block = self._block_with_assignment(focus_text, "focus", f"id = {focus_id}")
+            reward = validator.extract_named_block(block, "completion_reward") or ""
+            for token in tokens:
+                self.assertIn(token, reward)
 
     def test_legacy_stp_and_val_migration_paths_are_idempotent(self):
         core = validator.read(
