@@ -1,0 +1,1600 @@
+add_namespace = stp_crisis
+
+# Day 71: Ivanov's condition visibly worsens and the side-choice deadline probe starts.
+country_event = {
+	id = stp_crisis.1
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag = STP
+		has_country_flag = STP_main_campaign_side
+		NOT = { has_country_flag = STP_ivanov_dead }
+	}
+
+	immediate = {
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 } STP_set_health_stage = yes
+		clr_country_flag = STP_ai_course_lock
+		country_event = { id = stp_crisis.900 }
+		NOD = {
+			clr_country_flag = NOD_crisis_posture_lock
+			NOD_select_crisis_posture = yes
+		}
+		complete_national_focus = STP_The_Man_Who_Bought_The_Sky
+		complete_national_focus = STP_When_The_Guarantee_Died
+		activate_mission = STP_health_stage_2_to_3
+		country_event = { id = stp_crisis.5 days = 69 }
+	}
+}
+
+# Event-driven AI course selection. A course survives one health stage and is
+# only reconsidered when a stage/event explicitly removes the 70-day lock.
+country_event = {
+	id = stp_crisis.900
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = yes
+		has_country_flag = STP_main_campaign_side
+		NOT = { has_country_flag = STP_ivanov_dead }
+		OR = {
+			check_variable = { var = STP_side_commitment value = 1 compare = equals }
+			check_variable = { var = STP_side_commitment value = 2 compare = equals }
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { NOT = { has_country_flag = STP_ai_course_lock } }
+			clr_country_flag = STP_ai_army_equipment_above_70
+			set_temp_variable = { var = STP_ai_equipment_actual value = num_equipment_in_armies@infantry_equipment }
+			add_to_temp_variable = { var = STP_ai_equipment_actual value = num_equipment_in_armies@support_equipment }
+			set_temp_variable = { var = STP_ai_equipment_target value = num_target_equipment_in_armies@infantry_equipment }
+			add_to_temp_variable = { var = STP_ai_equipment_target value = num_target_equipment_in_armies@support_equipment }
+			multiply_temp_variable = { var = STP_ai_equipment_target value = 0.70 }
+			if = {
+				limit = {
+					OR = {
+						check_variable = { var = STP_ai_equipment_target value = 0 compare = less_than_or_equals }
+						check_variable = { var = STP_ai_equipment_actual value = STP_ai_equipment_target compare = greater_than_or_equals }
+					}
+				}
+				set_country_flag = STP_ai_army_equipment_above_70
+			}
+
+			clr_country_flag = STP_ai_course_cautious_shabrat
+			clr_country_flag = STP_ai_course_military_infiltration
+			clr_country_flag = STP_ai_course_mass_movement
+			clr_country_flag = STP_ai_course_controlled_party
+			clr_country_flag = STP_ai_course_purge_party
+			if = {
+				limit = { check_variable = { var = STP_side_commitment value = 1 compare = equals } }
+				if = {
+					limit = { has_country_flag = STP_shabrat_lost }
+					set_country_flag = STP_ai_course_military_infiltration
+				}
+				else = {
+					random_list = {
+						35 = {
+							modifier = { factor = 2 check_variable = { var = STP_party_suspicion value = 35 compare = greater_than_or_equals } }
+							modifier = { factor = 2 check_variable = { var = STP_node_palace value = 1 compare = greater_than_or_equals } }
+							set_country_flag = STP_ai_course_cautious_shabrat
+						}
+						35 = {
+							modifier = { factor = 2 check_variable = { var = STP_node_officers value = 2 compare = less_than } }
+							modifier = { factor = 2 has_equipment = { infantry_equipment > 999 } }
+							set_country_flag = STP_ai_course_military_infiltration
+						}
+						30 = {
+							modifier = { factor = 2 check_variable = { var = STP_party_suspicion value = 45 compare = less_than } }
+							modifier = { factor = 2 has_country_flag = STP_focus_street_observed }
+							set_country_flag = STP_ai_course_mass_movement
+						}
+					}
+				}
+			}
+			else = {
+				random_list = {
+					55 = {
+						modifier = { factor = 2 is_subject_of = NOD }
+						modifier = { factor = 2 has_country_flag = STP_focus_garrisons_observed }
+						set_country_flag = STP_ai_course_controlled_party
+					}
+					45 = {
+						modifier = { factor = 0 NOT = { has_country_flag = STP_ai_army_equipment_above_70 } }
+						modifier = { factor = 2 has_stability > 0.50 }
+						set_country_flag = STP_ai_course_purge_party
+					}
+				}
+			}
+			set_country_flag = { flag = STP_ai_course_lock days = 70 value = 1 }
+		}
+	}
+}
+
+# Day 141: the second 70-day mission, independently of the day-140 side deadline.
+country_event = {
+	id = stp_crisis.2
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag = STP
+		has_country_flag = STP_main_campaign_side
+		NOT = { has_country_flag = STP_ivanov_dead }
+	}
+
+	immediate = {
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 3 } STP_set_health_stage = yes
+		clr_country_flag = STP_ai_course_lock
+		country_event = { id = stp_crisis.900 }
+		NOD = {
+			clr_country_flag = NOD_crisis_posture_lock
+			NOD_select_crisis_posture = yes
+		}
+		complete_national_focus = STP_The_Dying_Feast
+		complete_national_focus = STP_The_Doctors_Lie
+		activate_mission = STP_health_stage_3_to_4
+	}
+}
+
+# Day 204: the final live stage.
+country_event = {
+	id = stp_crisis.3
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag = STP
+		has_country_flag = STP_main_campaign_side
+		NOT = { has_country_flag = STP_ivanov_dead }
+	}
+
+	immediate = {
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 4 } STP_set_health_stage = yes
+		clr_country_flag = STP_ai_course_lock
+		country_event = { id = stp_crisis.900 }
+		NOD = {
+			clr_country_flag = NOD_crisis_posture_lock
+			NOD_select_crisis_posture = yes
+		}
+		complete_national_focus = STP_The_Last_Signature
+		complete_national_focus = STP_Cancel_The_Morning_Address
+		complete_national_focus = STP_A_Glass_Raised_Too_High
+		activate_mission = STP_health_stage_4_to_death
+	}
+}
+
+# Day 267: terminal health transition. Task 5 consumes the pending outcome.
+country_event = {
+	id = stp_crisis.4
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag = STP
+		has_country_flag = STP_main_campaign_side
+		NOT = { has_country_flag = STP_ivanov_dead }
+	}
+
+	immediate = {
+		set_country_flag = STP_ivanov_dead
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_set_health_stage = yes
+		NOD = {
+			clr_country_flag = NOD_crisis_posture_lock
+			NOD_select_crisis_posture = yes
+		}
+		complete_national_focus = STP_The_Father_Of_Peace_Is_Gone
+		retire_character = STP_Petr_Ivanov
+
+		clr_country_flag = STP_focus_active_STP_Foreign_Guests_At_The_Banquet
+		clr_country_flag = STP_focus_active_STP_Kefreite_Security_Offer
+		clr_country_flag = STP_focus_active_STP_The_Old_Man_On_The_Balcony
+		clr_country_flag = STP_focus_active_STP_The_City_Still_Dances
+		clr_country_flag = STP_focus_active_STP_Count_The_Loyalists
+		clr_country_flag = STP_focus_active_STP_Show_Him_The_Truth
+		clr_country_flag = STP_focus_active_STP_Govern_In_His_Name
+		clr_country_flag = STP_focus_active_STP_The_Valirian_Advisers
+		clr_country_flag = STP_focus_active_STP_Contractors_In_The_Passes
+		clr_country_flag = STP_focus_active_STP_Rumours_In_The_Highlands
+		clr_country_flag = STP_focus_active_STP_The_Lower_Market
+		clr_country_flag = STP_focus_active_STP_The_Party_Was_Not_Born_Here
+		clr_country_flag = STP_focus_active_STP_The_Desert_Watches_The_Snow
+		clr_country_flag = STP_focus_active_STP_The_Mountain_Printing_House
+		clr_country_flag = STP_focus_active_STP_Hunt_The_Mountain_Cells
+		clr_country_flag = STP_focus_active_STP_Steal_The_Black_Ledger
+		clr_country_flag = STP_focus_active_STP_Burn_The_Client_Archives
+		clr_country_flag = STP_focus_active_STP_The_Silent_Mountain_March
+		clr_country_flag = STP_focus_active_STP_One_Last_National_Festival
+		clr_country_flag = STP_focus_active_STP_Turn_The_Young_Officers
+		clr_country_flag = STP_focus_active_STP_Feed_The_Festival_Police
+		clr_country_flag = STP_focus_active_STP_The_Last_Confession
+		clr_country_flag = STP_focus_active_STP_The_Hand_That_Still_Signs
+		clr_country_flag = STP_focus_active_STP_Imported_Freedom
+		clr_country_flag = STP_focus_active_STP_Cut_The_Silk_Leash
+		clr_country_flag = STP_focus_active_STP_Renew_The_Cultural_Mandate
+		clr_country_flag = STP_focus_active_STP_No_Mercenaries_In_Our_Mountains
+		clr_country_flag = STP_focus_active_STP_Sell_The_Highland_Concessions
+		clr_country_flag = STP_focus_active_STP_A_Name_On_The_Walls
+		clr_country_flag = STP_focus_active_STP_Erase_His_Name
+		clr_country_flag = STP_focus_active_STP_The_First_Witness
+		clr_country_flag = STP_focus_active_STP_Silence_The_First_Witness
+		clr_country_flag = STP_focus_active_STP_Lower_Market_Dossiers
+		clr_country_flag = STP_focus_active_STP_The_Port_Must_Smile
+		clr_country_flag = STP_focus_active_STP_Call_For_Shabrat
+		clr_country_flag = STP_focus_active_STP_Seal_The_Western_Wing
+		clr_country_flag = STP_focus_active_STP_The_People_Stop_Singing
+		clr_country_flag = STP_focus_active_STP_Drown_The_Rumours_In_Music
+		clr_country_flag = STP_focus_active_STP_Garrisons_Hesitate
+		clr_country_flag = STP_focus_active_STP_Garrisons_Swear_Loyalty
+
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 } STP_set_crisis_phase = yes
+		set_country_flag = STP_internal_outcome_pending
+		country_event = { id = stp_crisis.50 }
+	}
+}
+
+# Scheduled from the day-71 transition; it fires exactly on campaign day 140.
+country_event = {
+	id = stp_crisis.5
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag = STP
+		has_country_flag = STP_main_campaign_side
+		NOT = { has_country_flag = STP_ivanov_dead }
+		check_variable = {
+			var = STP_side_commitment
+			value = 0
+			compare = equals
+		}
+	}
+
+	immediate = {
+		country_event = { id = stp_crisis.6 }
+	}
+}
+
+# Mandatory fallback when no normal stage-2 commitment finished by day 140.
+country_event = {
+	id = stp_crisis.6
+	title = stp_crisis.6.t
+	desc = stp_crisis.6.d
+	is_triggered_only = yes
+
+	trigger = {
+		tag = STP
+		has_country_flag = STP_main_campaign_side
+		NOT = { has_country_flag = STP_ivanov_dead }
+		check_variable = {
+			var = STP_side_commitment
+			value = 0
+			compare = equals
+		}
+	}
+
+	option = {
+		name = stp_crisis.6.a
+		ai_chance = {
+			base = 50
+			modifier = { factor = 2 hedonism < 0.40 }
+			modifier = { factor = 2 NOT = { is_subject_of = NOD } }
+			modifier = { factor = 2 has_stability < 0.45 }
+			modifier = { factor = 2 num_divisions < 12 }
+		}
+		STP_commit_to_shabrat = yes
+		set_country_flag = STP_forced_commit_no_reward
+		complete_national_focus = STP_Show_Him_The_Truth
+		clr_country_flag = STP_forced_commit_no_reward
+		add_political_power = -50
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
+		set_country_flag = {
+			flag = STP_crisis_late_choice_lock
+			days = 35
+			value = 1
+		}
+	}
+
+	option = {
+		name = stp_crisis.6.b
+		ai_chance = {
+			base = 50
+			modifier = { factor = 2 hedonism > 0.40 }
+			modifier = { factor = 2 is_subject_of = NOD }
+			modifier = { factor = 2 has_stability > 0.45 }
+			modifier = { factor = 2 num_divisions > 11 }
+		}
+		STP_commit_to_party = yes
+		set_country_flag = STP_forced_commit_no_reward
+		complete_national_focus = STP_Govern_In_His_Name
+		clr_country_flag = STP_forced_commit_no_reward
+		add_political_power = -50
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_readiness = yes
+		set_country_flag = {
+			flag = STP_crisis_late_choice_lock
+			days = 35
+			value = 1
+		}
+	}
+}
+
+# The party apparatus fixes one security doctrine after Shabrat is chosen.
+country_event = {
+	id = stp_crisis.10
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		check_variable = {
+			var = STP_side_commitment
+			value = 1
+			compare = equals
+		}
+		check_variable = {
+			var = STP_security_posture
+			value = 0
+			compare = equals
+		}
+	}
+
+	immediate = {
+		random_list = {
+			20 = {
+				modifier = { factor = 2 hedonism > 0.40 }
+				modifier = { factor = 2 has_country_flag = STP_focus_street_observed }
+				modifier = { factor = 2 has_country_flag = STP_focus_palace_observed }
+				set_variable = { var = STP_security_posture value = 1 }
+			}
+			20 = {
+				modifier = { factor = 2 has_stability < 0.50 }
+				modifier = { factor = 2 has_country_flag = STP_focus_palace_observed }
+				modifier = { factor = 2 has_country_flag = STP_focus_mountains_open }
+				set_variable = { var = STP_security_posture value = 2 }
+			}
+			20 = {
+				modifier = {
+					factor = 2
+					has_equipment = { ADISCORD_squad_weapons_equipment > 1000 }
+				}
+				modifier = { factor = 2 has_country_flag = STP_focus_garrisons_observed }
+				modifier = { factor = 2 has_country_flag = STP_focus_market_open }
+				set_variable = { var = STP_security_posture value = 3 }
+			}
+			20 = {
+				modifier = {
+					factor = 2
+					has_equipment = { ADISCORD_squad_weapons_equipment > 1500 }
+				}
+				modifier = { factor = 2 has_country_flag = STP_focus_mountains_open }
+				modifier = { factor = 2 has_country_flag = STP_focus_street_observed }
+				set_variable = { var = STP_security_posture value = 4 }
+			}
+			20 = {
+				modifier = { factor = 2 is_subject_of = NOD }
+				modifier = { factor = 2 has_country_flag = STP_focus_nodrul_observed }
+				modifier = { factor = 2 has_country_flag = STP_focus_kefreyt_observed }
+				set_variable = { var = STP_security_posture value = 5 }
+			}
+		}
+		country_event = { id = stp_crisis.900 }
+	}
+}
+
+# The underground fixes one resistance doctrine after the party is chosen.
+country_event = {
+	id = stp_crisis.11
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		check_variable = {
+			var = STP_side_commitment
+			value = 2
+			compare = equals
+		}
+		check_variable = {
+			var = STP_resistance_posture
+			value = 0
+			compare = equals
+		}
+	}
+
+	immediate = {
+		random_list = {
+			25 = {
+				modifier = { factor = 3 has_country_flag = STP_focus_palace_observed }
+				set_variable = { var = STP_resistance_posture value = 1 }
+			}
+			25 = {
+				modifier = { factor = 3 has_country_flag = STP_focus_garrisons_observed }
+				modifier = {
+					factor = 2
+					check_variable = {
+						var = STP_resistance_escrow_infantry
+						value = 400
+						compare = greater_than_or_equals
+					}
+				}
+				set_variable = { var = STP_resistance_posture value = 2 }
+			}
+			25 = {
+				modifier = { factor = 2 has_country_flag = STP_focus_mountains_open }
+				modifier = { factor = 2 has_country_flag = STP_focus_street_observed }
+				set_variable = { var = STP_resistance_posture value = 3 }
+			}
+			25 = {
+				modifier = { factor = 3 has_country_flag = STP_focus_val_supply_open }
+				modifier = { factor = 2 has_country_flag = STP_focus_kefreyt_observed }
+				modifier = {
+					factor = 2
+					check_variable = {
+						var = STP_resistance_escrow_infantry
+						value = 800
+						compare = greater_than_or_equals
+					}
+				}
+				set_variable = { var = STP_resistance_posture value = 4 }
+			}
+		}
+		country_event = { id = stp_crisis.900 }
+	}
+}
+
+# Shabrat operation: palace channel.
+country_event = {
+	id = stp_crisis.20
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = { has_country_flag = STP_operation_token_palace_channel }
+
+	immediate = {
+		set_temp_variable = { var = STP_operation_result value = 1 }
+		if = {
+			limit = { check_variable = { var = STP_security_posture value = 1 compare = equals } }
+			set_temp_variable = { var = STP_operation_result value = 2 }
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_security_posture value = 2 compare = equals } }
+			if = {
+				limit = { has_country_flag = STP_focus_palace_observed }
+				set_temp_variable = { var = STP_operation_result value = 0 }
+			}
+			else = { set_temp_variable = { var = STP_operation_result value = -1 } }
+		}
+
+		if = {
+			limit = { check_variable = { var = STP_security_adaptation_palace value = 1 compare = equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
+		}
+		if = {
+			limit = { check_variable = { var = STP_operation_result value = 2 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 } STP_change_node_palace = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 8 } STP_change_readiness = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_operation_result value = 1 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_palace = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_palace = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
+		}
+		else = {
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 12 } STP_change_suspicion = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
+		}
+
+		if = {
+			limit = {
+				check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals }
+				has_country_flag = STP_focus_final_palace_move_open
+				check_variable = { var = STP_node_palace value = 2 compare = equals }
+				check_variable = { var = STP_party_suspicion value = 35 compare = less_than_or_equals }
+			}
+			set_country_flag = STP_capital_guard_loyal_to_resistance
+		}
+		if = {
+			limit = {
+				check_variable = { var = STP_operation_result value = 0 compare = less_than_or_equals }
+				check_variable = { var = STP_party_suspicion value = 90 compare = greater_than_or_equals }
+			}
+			STP_lose_shabrat = yes
+		}
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_palace = yes
+		set_temp_variable = { var = STP_operation_cleanup_code value = 20 }
+		STP_clear_operation_slot = yes
+	}
+}
+
+# Shabrat operation: recruit young officers.
+country_event = {
+	id = stp_crisis.21
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = { has_country_flag = STP_operation_token_recruit_young_officers }
+
+	immediate = {
+		set_temp_variable = { var = STP_operation_result value = 1 }
+		if = {
+			limit = { check_variable = { var = STP_security_posture value = 5 compare = equals } }
+			set_temp_variable = { var = STP_operation_result value = 2 }
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_security_posture value = 3 compare = equals } }
+			if = {
+				limit = { has_country_flag = STP_focus_garrisons_observed }
+				set_temp_variable = { var = STP_operation_result value = 0 }
+			}
+			else = { set_temp_variable = { var = STP_operation_result value = -1 } }
+		}
+
+		if = {
+			limit = { check_variable = { var = STP_security_adaptation_officers value = 1 compare = equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
+		}
+		if = {
+			limit = { check_variable = { var = STP_operation_result value = 2 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 } STP_change_node_officers = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 8 } STP_change_readiness = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_operation_result value = 1 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_officers = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_officers = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
+		}
+		else = {
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
+		}
+
+		if = {
+			limit = {
+				check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals }
+				has_country_flag = STP_focus_final_garrison_move_open
+				check_variable = { var = STP_node_officers value = 2 compare = greater_than_or_equals }
+			}
+			set_country_flag = STP_garrison_88_loyal_to_resistance
+		}
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_officers = yes
+		set_temp_variable = { var = STP_operation_cleanup_code value = 21 }
+		STP_clear_operation_slot = yes
+	}
+}
+
+# Shabrat operation: mountain caches.
+country_event = {
+	id = stp_crisis.22
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = { has_country_flag = STP_operation_token_mountain_caches }
+
+	immediate = {
+		set_temp_variable = { var = STP_operation_result value = 1 }
+		if = {
+			limit = { check_variable = { var = STP_security_posture value = 2 compare = equals } }
+			set_temp_variable = { var = STP_operation_result value = 2 }
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_security_posture value = 4 compare = equals } }
+			if = {
+				limit = { has_country_flag = STP_focus_mountains_open }
+				set_temp_variable = { var = STP_operation_result value = 0 }
+			}
+			else = { set_temp_variable = { var = STP_operation_result value = -1 } }
+		}
+
+		if = {
+			limit = { check_variable = { var = STP_security_adaptation_mountains value = 1 compare = equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
+		}
+		if = {
+			limit = { check_variable = { var = STP_operation_result value = 2 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 } STP_change_node_mountains = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 8 } STP_change_readiness = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_operation_result value = 1 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_mountains = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_mountains = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
+		}
+		else = {
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
+		}
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_mountains = yes
+		set_temp_variable = { var = STP_operation_cleanup_code value = 22 }
+		STP_clear_operation_slot = yes
+	}
+}
+
+# Shabrat operation: steal the black ledger.
+country_event = {
+	id = stp_crisis.23
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = { has_country_flag = STP_operation_token_steal_black_ledger }
+
+	immediate = {
+		set_temp_variable = { var = STP_operation_result value = 1 }
+		if = {
+			limit = { check_variable = { var = STP_security_posture value = 3 compare = equals } }
+			set_temp_variable = { var = STP_operation_result value = 2 }
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_security_posture value = 5 compare = equals } }
+			if = {
+				limit = { has_country_flag = STP_focus_market_open }
+				set_temp_variable = { var = STP_operation_result value = 0 }
+			}
+			else = { set_temp_variable = { var = STP_operation_result value = -1 } }
+		}
+
+		if = {
+			limit = { check_variable = { var = STP_security_adaptation_market value = 1 compare = equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
+		}
+		if = {
+			limit = { check_variable = { var = STP_operation_result value = 2 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 } STP_change_node_market = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 8 } STP_change_readiness = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_operation_result value = 1 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_market = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_market = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
+		}
+		else = {
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 15 } STP_change_suspicion = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
+		}
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_market = yes
+		set_temp_variable = { var = STP_operation_cleanup_code value = 23 }
+		STP_clear_operation_slot = yes
+	}
+}
+
+# Shabrat operation: silent march.
+country_event = {
+	id = stp_crisis.24
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = { has_country_flag = STP_operation_token_silent_march }
+
+	immediate = {
+		set_temp_variable = { var = STP_operation_result value = 1 }
+		if = {
+			limit = { check_variable = { var = STP_security_posture value = 4 compare = equals } }
+			set_temp_variable = { var = STP_operation_result value = 2 }
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_security_posture value = 1 compare = equals } }
+			if = {
+				limit = { has_country_flag = STP_focus_street_observed }
+				set_temp_variable = { var = STP_operation_result value = 0 }
+			}
+			else = { set_temp_variable = { var = STP_operation_result value = -1 } }
+		}
+
+		if = {
+			limit = { check_variable = { var = STP_security_adaptation_street value = 1 compare = equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
+		}
+		if = {
+			limit = { check_variable = { var = STP_operation_result value = 2 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 } STP_change_node_street = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 8 } STP_change_readiness = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_operation_result value = 1 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_street = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_street = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
+		}
+		else = {
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 12 } STP_change_suspicion = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
+		}
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_street = yes
+		set_temp_variable = { var = STP_operation_cleanup_code value = 24 }
+		STP_clear_operation_slot = yes
+	}
+}
+
+# Shabrat operation: Nodrul disinformation changes the next posture weighting only.
+country_event = {
+	id = stp_crisis.25
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = { has_country_flag = STP_operation_token_nodrul_disinformation }
+
+	immediate = {
+		set_temp_variable = { var = STP_operation_enemy_posture value = STP_security_posture }
+		set_temp_variable = { var = STP_operation_result value = 1 }
+		add_to_variable = { var = STP_nodrul_disinformation_bias value = 1 }
+		if = {
+			limit = { check_variable = { var = STP_security_adaptation_foreign value = 1 compare = equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
+			set_country_flag = STP_nodrul_shabrat_activity_discovered
+		}
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_val_channel = yes
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_foreign = yes
+		NOD = { NOD_select_crisis_posture = yes }
+		clr_country_flag = STP_operation_paid_with_convoys
+		set_temp_variable = { var = STP_operation_cleanup_code value = 25 }
+		STP_clear_operation_slot = yes
+	}
+}
+
+# Shabrat operation: VAL secret channel. Foreign operations are posture-neutral.
+country_event = {
+	id = stp_crisis.26
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = { has_country_flag = STP_operation_token_val_secret_channel }
+
+	immediate = {
+		set_temp_variable = { var = STP_operation_enemy_posture value = STP_security_posture }
+		set_temp_variable = { var = STP_operation_result value = 1 }
+		if = {
+			limit = { check_variable = { var = STP_security_adaptation_foreign value = 1 compare = equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
+		}
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_val_channel = yes
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_foreign = yes
+		set_temp_variable = { var = STP_operation_cleanup_code value = 26 }
+		STP_clear_operation_slot = yes
+	}
+}
+
+# Party operation: seal the palace.
+country_event = {
+	id = stp_crisis.27
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = { has_country_flag = STP_operation_token_seal_palace }
+
+	immediate = {
+		set_temp_variable = { var = STP_operation_result value = 1 }
+		if = {
+			limit = { check_variable = { var = STP_resistance_posture value = 1 compare = equals } }
+			set_temp_variable = { var = STP_operation_result value = 2 }
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_resistance_posture value = 2 compare = equals } }
+			if = {
+				limit = { has_country_flag = STP_focus_palace_observed }
+				set_temp_variable = { var = STP_operation_result value = 0 }
+			}
+			else = { set_temp_variable = { var = STP_operation_result value = -1 } }
+		}
+
+		if = {
+			limit = { check_variable = { var = STP_security_adaptation_palace value = 1 compare = equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
+		}
+		if = {
+			limit = { check_variable = { var = STP_operation_result value = 2 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 } STP_change_node_palace = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -8 } STP_change_readiness = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_operation_result value = 1 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_palace = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_palace = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 } STP_change_readiness = yes
+		}
+		else = { set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes }
+
+		if = {
+			limit = {
+				check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals }
+				has_country_flag = STP_focus_final_palace_lock_open
+			}
+			clr_country_flag = STP_capital_guard_loyal_to_resistance
+		}
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_palace = yes
+		set_temp_variable = { var = STP_operation_cleanup_code value = 27 }
+		STP_clear_operation_slot = yes
+	}
+}
+
+# Party operation: rotate the garrisons.
+country_event = {
+	id = stp_crisis.28
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = { has_country_flag = STP_operation_token_rotate_garrisons }
+
+	immediate = {
+		set_temp_variable = { var = STP_operation_result value = 1 }
+		if = {
+			limit = { check_variable = { var = STP_resistance_posture value = 2 compare = equals } }
+			set_temp_variable = { var = STP_operation_result value = 2 }
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_resistance_posture value = 3 compare = equals } }
+			if = {
+				limit = { has_country_flag = STP_focus_garrisons_observed }
+				set_temp_variable = { var = STP_operation_result value = 0 }
+			}
+			else = { set_temp_variable = { var = STP_operation_result value = -1 } }
+		}
+
+		if = {
+			limit = { check_variable = { var = STP_security_adaptation_officers value = 1 compare = equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
+		}
+		if = {
+			limit = { check_variable = { var = STP_operation_result value = 2 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 } STP_change_node_officers = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -8 } STP_change_readiness = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_operation_result value = 1 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_officers = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_officers = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 } STP_change_readiness = yes
+		}
+		else = { set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes }
+
+		if = {
+			limit = {
+				check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals }
+				has_country_flag = STP_focus_final_garrison_lock_open
+			}
+			clr_country_flag = STP_garrison_88_loyal_to_resistance
+		}
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_officers = yes
+		set_temp_variable = { var = STP_operation_cleanup_code value = 28 }
+		STP_clear_operation_slot = yes
+	}
+}
+
+# Party operation: the targeted raid is a hard counter bound to the visible project.
+country_event = {
+	id = stp_crisis.29
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = { has_country_flag = STP_operation_token_targeted_raid }
+
+	immediate = {
+		set_temp_variable = { var = STP_operation_enemy_posture value = STP_resistance_posture }
+		if = {
+			limit = { has_country_flag = STP_targeted_raid_family_palace }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_palace = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -6 } STP_change_readiness = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_palace = yes
+			if = {
+				limit = { check_variable = { var = STP_party_suspicion value = 75 compare = greater_than_or_equals } }
+				STP_lose_shabrat = yes
+			}
+		}
+		else_if = {
+			limit = { has_country_flag = STP_targeted_raid_family_officers }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_officers = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -6 } STP_change_readiness = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_officers = yes
+		}
+		else_if = {
+			limit = { has_country_flag = STP_targeted_raid_family_mountains }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_mountains = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -6 } STP_change_readiness = yes
+			STP_resolve_targeted_raid_escrow = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_mountains = yes
+		}
+		else_if = {
+			limit = { has_country_flag = STP_targeted_raid_family_street }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_street = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -6 } STP_change_readiness = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_street = yes
+		}
+		else_if = {
+			limit = { has_country_flag = STP_targeted_raid_family_foreign }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_val_channel = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -6 } STP_change_readiness = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_foreign = yes
+		}
+		clr_country_flag = STP_targeted_raid_family_palace
+		clr_country_flag = STP_targeted_raid_family_officers
+		clr_country_flag = STP_targeted_raid_family_mountains
+		clr_country_flag = STP_targeted_raid_family_street
+		clr_country_flag = STP_targeted_raid_family_foreign
+		set_temp_variable = { var = STP_operation_cleanup_code value = 29 }
+		STP_clear_operation_slot = yes
+	}
+}
+
+# Party operation: burn client archives.
+country_event = {
+	id = stp_crisis.30
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = { has_country_flag = STP_operation_token_burn_client_archives }
+
+	immediate = {
+		set_temp_variable = { var = STP_operation_result value = 1 }
+		if = {
+			limit = { check_variable = { var = STP_resistance_posture value = 4 compare = equals } }
+			if = {
+				limit = { has_country_flag = STP_focus_market_open }
+				set_temp_variable = { var = STP_operation_result value = 0 }
+			}
+			else = { set_temp_variable = { var = STP_operation_result value = -1 } }
+		}
+
+		if = {
+			limit = { check_variable = { var = STP_security_adaptation_market value = 1 compare = equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
+		}
+		if = {
+			limit = { check_variable = { var = STP_operation_result value = 1 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_market = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_market = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 } STP_change_readiness = yes
+		}
+		else = { set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_market = yes
+		set_temp_variable = { var = STP_operation_cleanup_code value = 30 }
+		STP_clear_operation_slot = yes
+	}
+}
+
+# Party operation: arm festival police.
+country_event = {
+	id = stp_crisis.31
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = { has_country_flag = STP_operation_token_arm_festival_police }
+
+	immediate = {
+		set_temp_variable = { var = STP_operation_result value = 1 }
+		if = {
+			limit = { check_variable = { var = STP_resistance_posture value = 3 compare = equals } }
+			set_temp_variable = { var = STP_operation_result value = 2 }
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_resistance_posture value = 1 compare = equals } }
+			if = {
+				limit = { has_country_flag = STP_focus_street_observed }
+				set_temp_variable = { var = STP_operation_result value = 0 }
+			}
+			else = { set_temp_variable = { var = STP_operation_result value = -1 } }
+		}
+
+		if = {
+			limit = { check_variable = { var = STP_security_adaptation_street value = 1 compare = equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
+		}
+		if = {
+			limit = { check_variable = { var = STP_operation_result value = 2 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 } STP_change_node_street = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -8 } STP_change_readiness = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_operation_result value = 1 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_street = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_operation_result value = 0 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_street = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 } STP_change_readiness = yes
+		}
+		else = { set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes }
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_street = yes
+		set_temp_variable = { var = STP_operation_cleanup_code value = 31 }
+		STP_clear_operation_slot = yes
+	}
+}
+
+# Party operation: request Nodrul advisers.
+country_event = {
+	id = stp_crisis.32
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = { has_country_flag = STP_operation_token_request_nodrul_advisers }
+
+	immediate = {
+		set_temp_variable = { var = STP_operation_result value = 1 }
+		if = {
+			limit = { check_variable = { var = STP_resistance_posture value = 4 compare = equals } }
+			set_temp_variable = { var = STP_operation_result value = 2 }
+		}
+		if = {
+			limit = { check_variable = { var = STP_security_adaptation_foreign value = 1 compare = equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
+		}
+		if = {
+			limit = { check_variable = { var = STP_operation_result value = 2 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 } STP_change_node_val_channel = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -8 } STP_change_readiness = yes
+		}
+		else = {
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_val_channel = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
+		}
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_foreign = yes
+		set_temp_variable = { var = STP_operation_cleanup_code value = 32 }
+		STP_clear_operation_slot = yes
+	}
+}
+
+# Party operation: false VAL channel.
+country_event = {
+	id = stp_crisis.33
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = { has_country_flag = STP_operation_token_false_val_channel }
+
+	immediate = {
+		set_temp_variable = { var = STP_operation_result value = 1 }
+		if = {
+			limit = { check_variable = { var = STP_resistance_posture value = 4 compare = equals } }
+			set_temp_variable = { var = STP_operation_result value = 2 }
+		}
+		if = {
+			limit = { check_variable = { var = STP_security_adaptation_foreign value = 1 compare = equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_suspicion = yes
+		}
+		if = {
+			limit = { check_variable = { var = STP_operation_result value = 2 compare = greater_than_or_equals } }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 } STP_change_node_val_channel = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -8 } STP_change_readiness = yes
+		}
+		else = {
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 } STP_change_node_val_channel = yes
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 } STP_change_readiness = yes
+		}
+		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_security_adaptation_foreign = yes
+		set_temp_variable = { var = STP_operation_cleanup_code value = 33 }
+		STP_clear_operation_slot = yes
+	}
+}
+
+# Select exactly one resistance project. The saved resistance posture only changes weights.
+country_event = {
+	id = stp_crisis.40
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag = STP
+		NOT = { has_country_flag = STP_ivanov_dead }
+		check_variable = { var = STP_side_commitment value = 2 compare = equals }
+		NOT = {
+			OR = {
+				has_country_flag = STP_resistance_project_palace
+				has_country_flag = STP_resistance_project_garrison_theft
+				has_country_flag = STP_resistance_project_mountain_smuggling
+				has_country_flag = STP_resistance_project_street_agitation
+				has_country_flag = STP_resistance_project_external_contract
+				has_country_flag = STP_resistance_project_signal_visible
+			}
+		}
+	}
+
+	immediate = {
+		random_list = {
+			20 = {
+				modifier = {
+					factor = 4
+					check_variable = { var = STP_resistance_posture value = 1 compare = equals }
+				}
+				set_country_flag = STP_resistance_project_palace
+			}
+			20 = {
+				modifier = {
+					factor = 4
+					check_variable = { var = STP_resistance_posture value = 2 compare = equals }
+				}
+				set_country_flag = STP_resistance_project_garrison_theft
+			}
+			20 = {
+				modifier = {
+					factor = 3
+					check_variable = { var = STP_resistance_posture value = 3 compare = equals }
+				}
+				modifier = {
+					factor = 2
+					check_variable = {
+						var = STP_node_mountains
+						value = STP_node_street
+						compare = less_than_or_equals
+					}
+				}
+				set_country_flag = STP_resistance_project_mountain_smuggling
+			}
+			20 = {
+				modifier = {
+					factor = 3
+					check_variable = { var = STP_resistance_posture value = 3 compare = equals }
+				}
+				modifier = {
+					factor = 2
+					check_variable = {
+						var = STP_node_street
+						value = STP_node_mountains
+						compare = less_than
+					}
+				}
+				modifier = {
+					factor = 2
+					check_variable = { var = STP_resistance_posture value = 4 compare = equals }
+				}
+				set_country_flag = STP_resistance_project_street_agitation
+			}
+			20 = {
+				modifier = {
+					factor = 4
+					check_variable = { var = STP_resistance_posture value = 4 compare = equals }
+				}
+				modifier = {
+					factor = 0.25
+					NOT = { VAL = { exists = yes } }
+				}
+				set_country_flag = STP_resistance_project_external_contract
+			}
+		}
+		country_event = { id = stp_crisis.41 }
+	}
+}
+
+# The party sees a qualitative warning and has 28 days to launch a targeted raid.
+country_event = {
+	id = stp_crisis.41
+	title = stp_crisis.41.t
+	desc = {
+		trigger = { has_country_flag = STP_resistance_project_palace }
+		text = stp_crisis.41.palace
+	}
+	desc = {
+		trigger = { has_country_flag = STP_resistance_project_garrison_theft }
+		text = stp_crisis.41.garrison
+	}
+	desc = {
+		trigger = { has_country_flag = STP_resistance_project_mountain_smuggling }
+		text = stp_crisis.41.mountains
+	}
+	desc = {
+		trigger = { has_country_flag = STP_resistance_project_street_agitation }
+		text = stp_crisis.41.street
+	}
+	desc = {
+		trigger = { has_country_flag = STP_resistance_project_external_contract }
+		text = stp_crisis.41.external
+	}
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			has_country_flag = STP_resistance_project_palace
+			has_country_flag = STP_resistance_project_garrison_theft
+			has_country_flag = STP_resistance_project_mountain_smuggling
+			has_country_flag = STP_resistance_project_street_agitation
+			has_country_flag = STP_resistance_project_external_contract
+		}
+	}
+
+	immediate = {
+		set_country_flag = STP_resistance_project_signal_visible
+		country_event = { id = stp_crisis.42 days = 28 }
+	}
+
+	option = { name = stp_crisis.41.a }
+}
+
+# Resolve the active project exactly once and immediately select the next project.
+country_event = {
+	id = stp_crisis.42
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			has_country_flag = STP_resistance_project_palace
+			has_country_flag = STP_resistance_project_garrison_theft
+			has_country_flag = STP_resistance_project_mountain_smuggling
+			has_country_flag = STP_resistance_project_street_agitation
+			has_country_flag = STP_resistance_project_external_contract
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { has_country_flag = STP_resistance_project_countered }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -3 } STP_change_readiness = yes
+		}
+		else = {
+			if = {
+				limit = { has_country_flag = STP_resistance_project_palace }
+				set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_palace = yes
+				set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
+			}
+			else_if = {
+				limit = { has_country_flag = STP_resistance_project_garrison_theft }
+				set_temp_variable = { var = STP_project_theft_infantry value = 0 }
+				if = {
+					limit = { has_equipment = { infantry_equipment > 0 } }
+					set_temp_variable = {
+						var = STP_project_theft_infantry
+						value = num_equipment@infantry_equipment
+					}
+					multiply_variable = { var = STP_project_theft_infantry value = 0.2 }
+					subtract_from_variable = { var = STP_project_theft_infantry value = 0.49 }
+					round_variable = STP_project_theft_infantry
+					if = {
+						limit = { check_variable = { var = STP_project_theft_infantry value = 300 compare = greater_than } }
+						set_temp_variable = { var = STP_project_theft_infantry value = 300 }
+					}
+					if = {
+						limit = { check_variable = { var = STP_project_theft_infantry value = 0 compare = greater_than } }
+						set_temp_variable = { var = STP_project_theft_infantry_debit value = STP_project_theft_infantry }
+						multiply_variable = { var = STP_project_theft_infantry_debit value = -1 }
+						add_equipment_to_stockpile = {
+							type = infantry_equipment
+							amount = STP_project_theft_infantry_debit
+							producer = ROOT
+						}
+						set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = STP_project_theft_infantry } STP_change_resistance_escrow_infantry = yes
+					}
+				}
+
+				set_temp_variable = { var = STP_project_theft_support value = 0 }
+				if = {
+					limit = { has_equipment = { support_equipment > 0 } }
+					set_temp_variable = {
+						var = STP_project_theft_support
+						value = num_equipment@support_equipment
+					}
+					multiply_variable = { var = STP_project_theft_support value = 0.2 }
+					subtract_from_variable = { var = STP_project_theft_support value = 0.49 }
+					round_variable = STP_project_theft_support
+					if = {
+						limit = { check_variable = { var = STP_project_theft_support value = 30 compare = greater_than } }
+						set_temp_variable = { var = STP_project_theft_support value = 30 }
+					}
+					if = {
+						limit = { check_variable = { var = STP_project_theft_support value = 0 compare = greater_than } }
+						set_temp_variable = { var = STP_project_theft_support_debit value = STP_project_theft_support }
+						multiply_variable = { var = STP_project_theft_support_debit value = -1 }
+						add_equipment_to_stockpile = {
+							type = support_equipment
+							amount = STP_project_theft_support_debit
+							producer = ROOT
+						}
+						set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = STP_project_theft_support } STP_change_resistance_escrow_support = yes
+					}
+				}
+				set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_officers = yes
+				set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
+			}
+			else_if = {
+				limit = { has_country_flag = STP_resistance_project_mountain_smuggling }
+				set_temp_variable = { var = STP_project_smuggling_paid value = 0 }
+				if = {
+					limit = {
+						has_equipment = { infantry_equipment > 399 }
+						has_equipment = { support_equipment > 29 }
+					}
+					add_equipment_to_stockpile = {
+						type = infantry_equipment
+						amount = -400
+						producer = ROOT
+					}
+					add_equipment_to_stockpile = {
+						type = support_equipment
+						amount = -30
+						producer = ROOT
+					}
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 400 } STP_change_resistance_escrow_infantry = yes
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 30 } STP_change_resistance_escrow_support = yes
+					set_temp_variable = { var = STP_project_smuggling_paid value = 1 }
+				}
+				else_if = {
+					limit = {
+						has_country_flag = STP_focus_val_supply_open
+						VAL = {
+							exists = yes
+							has_equipment = { infantry_equipment > 399 }
+							has_equipment = { support_equipment > 29 }
+						}
+					}
+					VAL = {
+						add_equipment_to_stockpile = {
+							type = infantry_equipment
+							amount = -400
+							producer = VAL
+						}
+						add_equipment_to_stockpile = {
+							type = support_equipment
+							amount = -30
+							producer = VAL
+						}
+					}
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 400 } STP_change_resistance_escrow_infantry = yes
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 30 } STP_change_resistance_escrow_support = yes
+					set_temp_variable = { var = STP_project_smuggling_paid value = 1 }
+				}
+				if = {
+					limit = { check_variable = { var = STP_project_smuggling_paid value = 1 compare = equals } }
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_mountains = yes
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
+				}
+				else = {
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_street = yes
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 3 } STP_change_readiness = yes
+				}
+			}
+			else_if = {
+				limit = { has_country_flag = STP_resistance_project_street_agitation }
+				set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_street = yes
+				set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
+			}
+			else_if = {
+				limit = { has_country_flag = STP_resistance_project_external_contract }
+				if = {
+					limit = {
+						has_country_flag = STP_focus_val_supply_open
+						VAL = { exists = yes }
+					}
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_val_channel = yes
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } STP_change_readiness = yes
+				}
+				else = {
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 } STP_change_node_street = yes
+					set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 3 } STP_change_readiness = yes
+				}
+			}
+		}
+
+		clr_country_flag = STP_resistance_project_palace
+		clr_country_flag = STP_resistance_project_garrison_theft
+		clr_country_flag = STP_resistance_project_mountain_smuggling
+		clr_country_flag = STP_resistance_project_street_agitation
+		clr_country_flag = STP_resistance_project_external_contract
+		clr_country_flag = STP_resistance_project_signal_visible
+		clr_country_flag = STP_resistance_project_countered
+		if = {
+			limit = {
+				NOT = { has_country_flag = STP_ivanov_dead }
+				check_variable = { var = STP_side_commitment value = 2 compare = equals }
+			}
+			country_event = { id = stp_crisis.40 }
+		}
+	}
+}
+
+# Ivanov's death resolves once, in the approved seven-outcome order.
+country_event = {
+	id = stp_crisis.50
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag = STP
+		has_country_flag = STP_main_campaign_side
+		has_country_flag = STP_ivanov_dead
+		has_country_flag = STP_internal_outcome_pending
+		NOT = { has_country_flag = STP_internal_outcome_finalizing }
+		NOT = { has_country_flag = STP_internal_outcome_finalized }
+	}
+
+	immediate = {
+		clr_country_flag = STP_outcome_shabrat_bloodless
+		clr_country_flag = STP_outcome_shabrat_main_war
+		clr_country_flag = STP_outcome_sotnikov_main_war
+		clr_country_flag = STP_outcome_hedersett_fail_state
+		clr_country_flag = STP_outcome_hedersett_consolidation
+		clr_country_flag = STP_outcome_hedersett_vs_shabrat
+		clr_country_flag = STP_outcome_hedersett_vs_sotnikov
+		clr_country_flag = STP_winner_shabrat
+		clr_country_flag = STP_winner_sotnikov
+		clr_country_flag = STP_winner_hedersett
+		clr_country_flag = STP_no_war_outcome
+		clr_country_flag = STP_resistance_leader_shabrat
+		clr_country_flag = STP_resistance_leader_sotnikov
+
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_side_commitment
+					value = 1
+					compare = equals
+				}
+			}
+			if = {
+				limit = { STP_can_attempt_bloodless_coup = yes }
+				set_country_flag = STP_outcome_shabrat_bloodless
+				set_country_flag = STP_winner_shabrat
+				set_country_flag = STP_no_war_outcome
+				STP_finalize_internal_outcome = yes
+			}
+			else_if = {
+				limit = {
+					has_country_flag = STP_shabrat_available
+					STP_resistance_network_is_viable = yes
+				}
+				set_country_flag = STP_outcome_shabrat_main_war
+				set_country_flag = STP_resistance_leader_shabrat
+				STP_start_party_revolt = yes
+			}
+			else_if = {
+				limit = { STP_sotnikov_network_is_viable = yes }
+				set_country_flag = STP_outcome_sotnikov_main_war
+				set_country_flag = STP_resistance_leader_sotnikov
+				STP_start_party_revolt = yes
+			}
+			else = {
+				set_country_flag = STP_outcome_hedersett_fail_state
+				set_country_flag = STP_underground_crushed_fail_state
+				set_country_flag = STP_winner_hedersett
+				set_country_flag = STP_no_war_outcome
+				add_stability = -0.1
+				set_variable = { var = STP_node_officers value = 0 }
+				STP_finalize_internal_outcome = yes
+			}
+		}
+		else = {
+			if = {
+				limit = {
+					NOT = {
+						OR = {
+							AND = {
+								has_country_flag = STP_shabrat_available
+								STP_resistance_network_is_viable = yes
+							}
+							STP_sotnikov_network_is_viable = yes
+						}
+					}
+				}
+				set_country_flag = STP_outcome_hedersett_consolidation
+				set_country_flag = STP_winner_hedersett
+				set_country_flag = STP_no_war_outcome
+				set_country_flag = STP_preserve_active_nodrul_mandate
+				STP_finalize_internal_outcome = yes
+			}
+			else_if = {
+				limit = {
+					has_country_flag = STP_shabrat_available
+					STP_resistance_network_is_viable = yes
+				}
+				set_country_flag = STP_outcome_hedersett_vs_shabrat
+				set_country_flag = STP_resistance_leader_shabrat
+				STP_start_resistance_revolt_chauvinism = yes
+			}
+			else = {
+				set_country_flag = STP_outcome_hedersett_vs_sotnikov
+				set_country_flag = STP_resistance_leader_sotnikov
+				STP_start_resistance_revolt_etatism = yes
+			}
+		}
+	}
+}
+
+# Both internal roles carry this guarded three-day poll. The surviving role
+# keeps polling after the other country's delayed event disappears.
+country_event = {
+	id = stp_crisis.51
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		original_tag = STP
+		OR = {
+			has_country_flag = STP_crisis_party_side
+			has_country_flag = STP_crisis_resistance_side
+		}
+		NOT = { has_country_flag = STP_internal_outcome_finalizing }
+		NOT = { has_country_flag = STP_internal_outcome_finalized }
+		has_event_target = STP_crisis_party_side
+		has_event_target = STP_crisis_resistance_side
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_country_flag = STP_internal_outcome_finalizing }
+				NOT = { has_country_flag = STP_internal_outcome_finalized }
+				has_event_target = STP_crisis_party_side
+				has_event_target = STP_crisis_resistance_side
+			}
+			STP_try_finalize_internal_war = yes
+		}
+		if = {
+			limit = {
+				has_event_target = STP_crisis_party_side
+				has_event_target = STP_crisis_resistance_side
+				NOT = { has_country_flag = STP_internal_outcome_finalizing }
+				NOT = { has_country_flag = STP_internal_outcome_finalized }
+			}
+			country_event = { id = stp_crisis.51 days = 3 }
+		}
+	}
+}
+
+# Sotnikov's single focus opens one explicit, mutually exclusive primary plan.
+country_event = {
+	id = stp_crisis.52
+	title = stp_crisis.52.t
+	desc = stp_crisis.52.d
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = STP_postwar_campaign_side
+		has_country_flag = STP_winner_sotnikov
+		NOT = {
+			OR = {
+				has_country_flag = STP_sotnikov_primary_plan_val
+				has_country_flag = STP_sotnikov_primary_plan_nod
+			}
+		}
+	}
+
+	option = {
+		name = stp_crisis.52.a
+		ai_chance = { base = 60 }
+		set_country_flag = STP_sotnikov_primary_plan_val
+		clr_country_flag = STP_sotnikov_primary_plan_nod
+	}
+	option = {
+		name = stp_crisis.52.b
+		ai_chance = { base = 40 }
+		set_country_flag = STP_sotnikov_primary_plan_nod
+		clr_country_flag = STP_sotnikov_primary_plan_val
+	}
+}

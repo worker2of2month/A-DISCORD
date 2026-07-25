@@ -1,171 +1,48 @@
+# Inert save-compatibility shell. The crisis uses readiness and suspicion, not a BOP.
 STP_inner_party_opinions_bop = {
 	initial_value = 0
-	left_side =  STP_less_hedonism
+	left_side = STP_less_hedonism
 	right_side = STP_more_hedonism
 	decision_category = STP_balance_of_power_category
 
-	### Collective ruling (civilwar, lol) 
-	range = { ##nothing ever happens
+	range = {
 		id = STP_IDK_who_wins
 		min = -0.1
 		max = 0.1
-		modifier = {
-		}
-		on_activate = {
-			set_power_balance_gfx = {
-			    id = STP_inner_party_opinions_bop
-			    side = STP_less_hedonism
-			    gfx = GFX_STP_bop_less_hedonism_Sotnikov
-			}
-			set_power_balance_gfx = {
-			    id = STP_inner_party_opinions_bop
-			    side = STP_more_hedonism
-			    gfx = GFX_STP_bop_more_hedonism_Rober
-			}
-		}
-		on_deactivate = {
-		}
+		modifier = { }
 	}
-
 	range = {
 		id = STP_more_hedonism_non_radical
 		min = 0.1
 		max = 0.5
-		modifier = {
-		}
-		on_activate = {
-			set_power_balance_gfx = {
-			    id = STP_inner_party_opinions_bop
-			    side = STP_less_hedonism
-			    gfx = GFX_STP_bop_less_hedonism_Sotnikov
-			}
-			set_power_balance_gfx = {
-			    id = STP_inner_party_opinions_bop
-			    side = STP_more_hedonism
-			    gfx = GFX_STP_bop_more_hedonism_Rober
-			}
-		}
-		on_deactivate = {
-		}
+		modifier = { }
 	}
-
 	range = {
 		id = STP_less_hedonism_non_radical
 		min = -0.5
 		max = -0.1
-		modifier = {
-		}
-		on_activate = {
-			set_power_balance_gfx = {
-			    id = STP_inner_party_opinions_bop
-			    side = STP_less_hedonism
-			    gfx = GFX_STP_bop_less_hedonism_Sotnikov
-			}
-			set_power_balance_gfx = {
-			    id = STP_inner_party_opinions_bop
-			    side = STP_more_hedonism
-			    gfx = GFX_STP_bop_more_hedonism_Rober
-			}
-		}
-		on_deactivate = {
-		}
+		modifier = { }
 	}
 
-	### Mr. Shabrat's literally 1933 government
-
 	side = {
-		id = STP_less_hedonism	
+		id = STP_less_hedonism
 		icon = "GFX_STP_bop_less_hedonism_Shabrat"
-
 		range = {
 			id = STP_less_hedonism_radical
 			min = -1
 			max = -0.5
-			modifier = {
-			}
-			on_activate = {
-				remove_dynamic_modifier = { modifier = stp_bop_less_hedonism_radical_maksim }
-				remove_dynamic_modifier = { modifier = stp_bop_less_hedonism_radical_hedersett }
-				remove_dynamic_modifier = { modifier = stp_bop_more_hedonism_radical_maksim }
-				remove_dynamic_modifier = { modifier = stp_bop_more_hedonism_radical_hedersett }
-
-				if = {
-					limit = {
-						STP_sided_with_Maksim_trigger = yes
-					}
-					add_dynamic_modifier = { modifier = stp_bop_less_hedonism_radical_maksim }
-				}
-				else_if = {
-					limit = {
-						STP_sided_with_Hedersett_trigger = yes
-					}
-					add_dynamic_modifier = { modifier = stp_bop_less_hedonism_radical_hedersett }
-				}
-
-				set_power_balance_gfx = {
-				    id = STP_inner_party_opinions_bop
-				    side = STP_less_hedonism
-				    gfx = GFX_STP_bop_less_hedonism_Shabrat
-				}
-				set_power_balance_gfx = {
-				    id = STP_inner_party_opinions_bop
-				    side = STP_more_hedonism
-				    gfx = GFX_STP_bop_less_hedonism_Sotnikov
-				}
-			}
-			on_deactivate = {
-				remove_dynamic_modifier = { modifier = stp_bop_less_hedonism_radical_maksim }
-				remove_dynamic_modifier = { modifier = stp_bop_less_hedonism_radical_hedersett }
-			}
+			modifier = { }
 		}
 	}
 
-	### Hedersett's literally Brave New World [Biden's edition] goverment
-
 	side = {
-		id = STP_more_hedonism	
+		id = STP_more_hedonism
 		icon = "GFX_STP_bop_more_hedonism_Hedersett"
-
 		range = {
 			id = STP_more_hedonism_radical
 			min = 0.5
 			max = 1
-			modifier = {
-			}
-			on_activate = {
-				remove_dynamic_modifier = { modifier = stp_bop_less_hedonism_radical_maksim }
-				remove_dynamic_modifier = { modifier = stp_bop_less_hedonism_radical_hedersett }
-				remove_dynamic_modifier = { modifier = stp_bop_more_hedonism_radical_maksim }
-				remove_dynamic_modifier = { modifier = stp_bop_more_hedonism_radical_hedersett }
-
-				if = {
-					limit = {
-						STP_sided_with_Maksim_trigger = yes
-					}
-					add_dynamic_modifier = { modifier = stp_bop_more_hedonism_radical_maksim }
-				}
-				else_if = {
-					limit = {
-						STP_sided_with_Hedersett_trigger = yes
-					}
-					add_dynamic_modifier = { modifier = stp_bop_more_hedonism_radical_hedersett }
-				}
-
-				set_power_balance_gfx = {
-				    id = STP_inner_party_opinions_bop
-				    side = STP_less_hedonism
-				    gfx = GFX_STP_bop_more_hedonism_Rober
-				}
-				set_power_balance_gfx = {
-				    id = STP_inner_party_opinions_bop
-				    side = STP_more_hedonism
-				    gfx = GFX_STP_bop_more_hedonism_Hedersett
-				}
-			}
-			on_deactivate = {
-				remove_dynamic_modifier = { modifier = stp_bop_more_hedonism_radical_maksim }
-				remove_dynamic_modifier = { modifier = stp_bop_more_hedonism_radical_hedersett }
-			}
+			modifier = { }
 		}
 	}
 }

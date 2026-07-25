@@ -17,25 +17,7 @@ ideas = {
 
 			removal_cost = -1
 
-			modifier = {
-				send_volunteer_size = 10
-				army_defence_factor = 0.1
-				army_core_defence_factor = -0.1
-				army_attack_factor = 0.15
-				army_core_attack_factor = -0.15
-				army_org_factor = 0.15
-				recon_factor = 0.2
-				planning_speed = -0.2
-				equipment_capture_factor = 0.1
-				war_stability_factor = 0.3
-				political_power_gain = -0.2
-				ADISCORD_economy_trade_income_factor = 0.05
-				ADISCORD_economy_military_industry_income_factor = 0.05
-				ADISCORD_economy_army_expense_factor = -0.05
-				ADISCORD_economy_war_fatigue_gain_factor = -0.05
-				ADISCORD_economy_state_overload_gain_factor = 0.05
-				ADISCORD_country_development_army_growth_factor = 0.05
-			}
+			modifier = { }
 		}
 
 		VAL_worldwide_famous_weponry = {

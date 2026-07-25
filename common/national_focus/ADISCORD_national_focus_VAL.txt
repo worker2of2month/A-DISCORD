@@ -31,9 +31,10 @@ focus_tree = {
 		y = 0
 		cost = 5
 		available_if_capitulated = yes
-		cancelable = no
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_contract_board_open
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } VAL_change_contract_authority = yes
 		}
 	}
 
@@ -48,6 +49,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_The_Contract_State }
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } VAL_change_contract_authority = yes
 		}
 	}
 
@@ -62,6 +64,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_The_Weaponry_Baron }
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_captain_retainers_unlocked
 		}
 	}
 
@@ -76,6 +79,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_Price_Of_Loyalty }
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_negotiation_posture_visible
 		}
 	}
 
@@ -90,6 +94,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_Count_The_Captains }
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_foreign_operations_unlocked
 		}
 	}
 
@@ -108,6 +113,10 @@ focus_tree = {
 		prerequisite = { focus = VAL_The_Contract_State }
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			add_timed_idea = {
+				idea = VAL_factory_cathedrals_drive
+				days = 365
+			}
 		}
 	}
 
@@ -122,6 +131,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_Factories_Like_Cathedrals }
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			add_ideas = VAL_hot_production_lines
 		}
 	}
 
@@ -134,8 +144,16 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = VAL_Keep_The_Lines_Hot }
+		mutually_exclusive = { focus = VAL_Brokered_Steel }
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_quality_arsenal
+			add_tech_bonus = {
+				name = VAL_ballistics_schools_bonus
+				bonus = 1.0
+				uses = 1
+				category = infantry_weapons
+			}
 		}
 	}
 
@@ -148,8 +166,11 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = VAL_Keep_The_Lines_Hot }
+		mutually_exclusive = { focus = VAL_Ballistics_Schools }
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_broad_resource_network
+			set_variable = { var = VAL_foreign_operation_pp_discount value = 10 }
 		}
 	}
 
@@ -165,6 +186,8 @@ focus_tree = {
 		prerequisite = { focus = VAL_Brokered_Steel }
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_supply_contracts
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } VAL_change_contract_authority = yes
 		}
 	}
 
@@ -183,6 +206,8 @@ focus_tree = {
 		prerequisite = { focus = VAL_The_Contract_State }
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			army_experience = 10
+			set_country_flag = VAL_doctrine_choice_unlocked
 		}
 	}
 
@@ -197,6 +222,8 @@ focus_tree = {
 		prerequisite = { focus = VAL_The_Mercenary_State }
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_foreign_contracts_unlocked
+			add_political_power = 50
 		}
 	}
 
@@ -209,8 +236,13 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = VAL_Hire_Out_War }
+		mutually_exclusive = {
+			focus = VAL_Stahls_Schedules
+			focus = VAL_Gromovs_Assault_Tables
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_doctrine_covert_intervention
 		}
 	}
 
@@ -223,8 +255,13 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = VAL_Hire_Out_War }
+		mutually_exclusive = {
+			focus = VAL_Vorons_Companies
+			focus = VAL_Gromovs_Assault_Tables
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_doctrine_sustained_supply
 		}
 	}
 
@@ -237,8 +274,13 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = VAL_Hire_Out_War }
+		mutually_exclusive = {
+			focus = VAL_Vorons_Companies
+			focus = VAL_Stahls_Schedules
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_doctrine_resource_raider
 		}
 	}
 
@@ -255,6 +297,8 @@ focus_tree = {
 		prerequisite = { focus = VAL_Gromovs_Assault_Tables }
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_supply_preparation
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } VAL_change_contract_authority = yes
 		}
 	}
 
@@ -273,6 +317,8 @@ focus_tree = {
 		prerequisite = { focus = VAL_One_Ledger_One_Banner }
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_ash_model_unlocked
+			add_war_support = 0.05
 		}
 	}
 
@@ -285,8 +331,10 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = VAL_The_Harvest_Of_Ash }
+		mutually_exclusive = { focus = VAL_Bread_From_Barracks }
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_ash_manpower_preservation
 		}
 	}
 
@@ -299,8 +347,10 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = VAL_The_Harvest_Of_Ash }
+		mutually_exclusive = { focus = VAL_Field_Surgeons }
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_ash_rear_mobilization
 		}
 	}
 
@@ -316,6 +366,8 @@ focus_tree = {
 		prerequisite = { focus = VAL_Bread_From_Barracks }
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_ash_model_selected
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } VAL_change_contract_authority = yes
 		}
 	}
 
@@ -334,6 +386,11 @@ focus_tree = {
 		prerequisite = { focus = VAL_One_Ledger_One_Banner }
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_northern_intelligence_unlocked
+			add_timed_idea = {
+				idea = VAL_northern_roads_drive
+				days = 365
+			}
 		}
 	}
 
@@ -346,8 +403,10 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = VAL_Market_Roads_North }
+		mutually_exclusive = { focus = VAL_October_Of_2160 }
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_north_open_market
 		}
 	}
 
@@ -360,8 +419,10 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = VAL_Market_Roads_North }
+		mutually_exclusive = { focus = VAL_Trading_Partners }
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_north_coercive
 		}
 	}
 
@@ -377,6 +438,8 @@ focus_tree = {
 		prerequisite = { focus = VAL_October_Of_2160 }
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_northern_operations_unlocked
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } VAL_change_contract_authority = yes
 		}
 	}
 
@@ -392,12 +455,155 @@ focus_tree = {
 		x = 0
 		y = 5
 		cost = 5
-		prerequisite = { focus = VAL_Export_Rifles_Not_Promises }
-		prerequisite = { focus = VAL_Morns_Supply_Trains }
-		prerequisite = { focus = VAL_Dead_Villages_Still_Count }
-		prerequisite = { focus = VAL_Different_Views_On_Freedom }
+		prerequisite = {
+			focus = VAL_One_Ledger_One_Banner
+			focus = VAL_Export_Rifles_Not_Promises
+		}
+		prerequisite = {
+			focus = VAL_One_Ledger_One_Banner
+			focus = VAL_Morns_Supply_Trains
+		}
+		prerequisite = {
+			focus = VAL_One_Ledger_One_Banner
+			focus = VAL_Dead_Villages_Still_Count
+		}
+		prerequisite = {
+			focus = VAL_One_Ledger_One_Banner
+			focus = VAL_Different_Views_On_Freedom
+		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			set_country_flag = VAL_crisis_strategy_unlocked
+		}
+	}
+
+	#############################################
+	### DYNAMIC STELANDER CRISIS STRATEGIES
+	#############################################
+
+	focus = {
+		id = VAL_Offer_The_Mountain_Contract
+		icon = GFX_goal_generic_dangerous_deal
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = VAL_Contracts_Outlive_Kings
+		x = -6
+		y = 2
+		cost = 5
+		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
+		mutually_exclusive = {
+			focus = VAL_Secure_The_Resource_Corridor
+			focus = VAL_Negotiate_The_Deferred_Invoice
+			focus = VAL_Let_Nodrul_Bleed
+		}
+		allow_branch = {
+			has_completed_focus = VAL_Contracts_Outlive_Kings
+			VAL_stp_crisis_at_least_rupture = yes
+		}
+		available = { VAL_has_active_stp_civil_war = yes }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+			set_country_flag = VAL_strategy_mountain_contract
+		}
+	}
+
+	focus = {
+		id = VAL_Secure_The_Resource_Corridor
+		icon = GFX_goal_generic_demand_territory
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		relative_position_id = VAL_Contracts_Outlive_Kings
+		x = -2
+		y = 2
+		cost = 5
+		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
+		mutually_exclusive = {
+			focus = VAL_Offer_The_Mountain_Contract
+			focus = VAL_Negotiate_The_Deferred_Invoice
+			focus = VAL_Let_Nodrul_Bleed
+		}
+		allow_branch = {
+			has_completed_focus = VAL_Contracts_Outlive_Kings
+			VAL_stp_crisis_at_least_rupture = yes
+		}
+		available = { VAL_has_active_stp_civil_war = yes }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+			set_country_flag = VAL_strategy_resource_corridor
+		}
+	}
+
+	focus = {
+		id = VAL_Negotiate_The_Deferred_Invoice
+		icon = GFX_goal_generic_trade
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = VAL_Contracts_Outlive_Kings
+		x = 2
+		y = 2
+		cost = 5
+		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
+		mutually_exclusive = {
+			focus = VAL_Offer_The_Mountain_Contract
+			focus = VAL_Secure_The_Resource_Corridor
+			focus = VAL_Let_Nodrul_Bleed
+		}
+		allow_branch = {
+			has_completed_focus = VAL_Contracts_Outlive_Kings
+			VAL_stp_crisis_at_least_rupture = yes
+		}
+		available = { VAL_can_negotiate_deferred_invoice = yes }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+			set_country_flag = VAL_strategy_deferred_invoice
+		}
+	}
+
+	focus = {
+		id = VAL_Let_Nodrul_Bleed
+		icon = GFX_goal_generic_major_war
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY }
+		relative_position_id = VAL_Contracts_Outlive_Kings
+		x = 6
+		y = 2
+		cost = 5
+		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
+		mutually_exclusive = {
+			focus = VAL_Offer_The_Mountain_Contract
+			focus = VAL_Secure_The_Resource_Corridor
+			focus = VAL_Negotiate_The_Deferred_Invoice
+		}
+		allow_branch = {
+			has_completed_focus = VAL_Contracts_Outlive_Kings
+			VAL_stp_crisis_at_least_rupture = yes
+		}
+		ai_will_do = { base = 1 }
+		completion_reward = {
+			set_country_flag = VAL_strategy_nodrul_bleed
+			add_to_variable = { var = VAL_STP_final_war_preparation value = 10 }
+			clamp_variable = { var = VAL_STP_final_war_preparation min = 0 max = 100 }
+		}
+	}
+
+	focus = {
+		id = VAL_Present_The_Final_Invoice
+		icon = GFX_goal_generic_major_war
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY }
+		relative_position_id = VAL_Contracts_Outlive_Kings
+		x = 0
+		y = 4
+		cost = 5
+		prerequisite = { focus = VAL_Offer_The_Mountain_Contract }
+		prerequisite = { focus = VAL_Secure_The_Resource_Corridor }
+		prerequisite = { focus = VAL_Negotiate_The_Deferred_Invoice }
+		prerequisite = { focus = VAL_Let_Nodrul_Bleed }
+		allow_branch = {
+			has_completed_focus = VAL_Contracts_Outlive_Kings
+			VAL_stp_crisis_at_least_rupture = yes
+		}
+		available = { VAL_has_postwar_stp_target = yes }
+		ai_will_do = { base = 1 }
+		completion_reward = {
+			set_country_flag = VAL_final_invoice_prepared
+			add_to_variable = { var = VAL_STP_final_war_preparation value = 15 }
+			clamp_variable = { var = VAL_STP_final_war_preparation min = 0 max = 100 }
 		}
 	}
 }

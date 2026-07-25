@@ -1,0 +1,70 @@
+autonomy_state = {
+	id = autonomy_contract_protectorate
+	default = no
+	is_puppet = yes
+	min_freedom_level = 0.20
+	use_overlord_color = yes
+
+	rule = {
+		can_not_declare_war = yes
+		can_decline_call_to_war = no
+		units_deployed_to_overlord = no
+		can_be_spymaster = no
+	}
+
+	allowed_levels_filter = {
+		autonomy_contract_protectorate
+		autonomy_contract_client
+	}
+
+	modifier = {
+		can_master_build_for_us = 1
+		extra_trade_to_overlord_factor = 0.75
+		overlord_trade_cost_factor = -0.35
+		cic_to_overlord_factor = 0.10
+		mic_to_overlord_factor = 0.20
+		master_ideology_drift = 0.05
+	}
+
+	ai_subject_wants_higher = { factor = 0.0 }
+	ai_overlord_wants_lower = { factor = 0.0 }
+	ai_overlord_wants_garrison = { always = yes }
+	can_take_level = { always = no }
+	can_lose_level = { always = no }
+}
+
+autonomy_state = {
+	id = autonomy_contract_client
+	default = no
+	is_puppet = yes
+	min_freedom_level = 0.05
+	use_overlord_color = yes
+
+	rule = {
+		can_not_declare_war = yes
+		can_decline_call_to_war = no
+		units_deployed_to_overlord = yes
+		can_be_spymaster = no
+	}
+
+	allowed_levels_filter = {
+		autonomy_contract_protectorate
+		autonomy_contract_client
+	}
+
+	modifier = {
+		autonomy_manpower_share = 0.60
+		can_master_build_for_us = 1
+		extra_trade_to_overlord_factor = 1.0
+		overlord_trade_cost_factor = -0.50
+		cic_to_overlord_factor = 0.25
+		mic_to_overlord_factor = 0.50
+		master_ideology_drift = 0.10
+	}
+
+	ai_subject_wants_higher = { factor = 0.0 }
+	ai_overlord_wants_lower = { factor = 0.0 }
+	ai_overlord_wants_garrison = { always = yes }
+	can_take_level = { always = no }
+	can_lose_level = { always = no }
+}

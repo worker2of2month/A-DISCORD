@@ -1,0 +1,542 @@
+add_namespace = val_contract
+
+# VAL changes course only on explicit reevaluation events. The persistent
+# course flag drives static AI blocks; the timed lock prevents save-load churn.
+country_event = {
+	id = val_contract.900
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { tag = VAL is_ai = yes }
+	immediate = {
+		if = {
+			limit = { NOT = { has_country_flag = VAL_ai_course_lock } }
+			clr_country_flag = VAL_ai_course_contract_broker
+			clr_country_flag = VAL_ai_course_resource_raider
+			clr_country_flag = VAL_ai_course_patient_invader
+			clr_country_flag = VAL_ai_course_northern_broker
+			random_list = {
+				30 = {
+					modifier = { factor = 2 VAL_has_active_stp_civil_war = yes }
+					modifier = { factor = 2 check_variable = { var = VAL_contract_authority value = 55 compare = greater_than_or_equals } }
+					set_country_flag = VAL_ai_course_contract_broker
+				}
+				25 = {
+					modifier = { factor = 0 VAL_has_active_stp_civil_war = no }
+					modifier = { factor = 2 has_country_flag = VAL_doctrine_resource_raider }
+					modifier = { factor = 2 has_equipment = { infantry_equipment > 1499 } }
+					set_country_flag = VAL_ai_course_resource_raider
+				}
+				25 = {
+					modifier = { factor = 2 has_equipment = { infantry_equipment > 1999 } }
+					modifier = { factor = 2 has_country_flag = VAL_supply_preparation }
+					set_country_flag = VAL_ai_course_patient_invader
+				}
+				20 = {
+					modifier = { factor = 0 NOT = { has_country_flag = VAL_northern_operations_unlocked } }
+					modifier = {
+						factor = 3
+						OR = {
+							check_variable = { var = VAL_CIN_influence value = 2 compare = greater_than_or_equals }
+							check_variable = { var = VAL_OSF_influence value = 2 compare = greater_than_or_equals }
+						}
+					}
+					set_country_flag = VAL_ai_course_northern_broker
+				}
+			}
+			set_country_flag = { flag = VAL_ai_course_lock days = 70 value = 1 }
+		}
+	}
+}
+
+# Mountain contract: channel, viability, concessions, offer, response.
+country_event = {
+	id = val_contract.1
+	title = val_contract.1.t
+	desc = val_contract.1.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = {
+		name = val_contract.1.a
+		ai_chance = {
+			base = 3
+			modifier = { factor = 1.5 surrender_progress > 0.20 }
+			modifier = { factor = 1.5 count_triggers = { amount = 2 check_variable = { var = STP_node_palace value = 0 compare = greater_than } check_variable = { var = STP_node_officers value = 0 compare = greater_than } check_variable = { var = STP_node_mountains value = 0 compare = greater_than } check_variable = { var = STP_node_market value = 0 compare = greater_than } check_variable = { var = STP_node_street value = 0 compare = greater_than } } }
+			modifier = { factor = 1.5 VAL = { has_country_flag = VAL_ai_course_contract_broker has_equipment = { infantry_equipment > 1499 } } }
+			modifier = { factor = 0.5 NOD = { has_country_flag = NOD_crisis_posture_guardian is_subject = no } }
+		}
+		VAL = { VAL_advance_mountain_contract_viability = yes }
+	}
+	option = { name = val_contract.1.b ai_chance = { base = 2 modifier = { factor = 2 VAL = { has_country_flag = VAL_ai_course_patient_invader } } } VAL = { VAL_abort_mountain_contract = yes } }
+}
+
+country_event = { id = val_contract.2 hidden = yes is_triggered_only = yes immediate = { VAL_choose_mountain_concessions = yes } }
+
+country_event = {
+	id = val_contract.3
+	title = val_contract.3.t
+	desc = val_contract.3.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = {
+		name = val_contract.3.a
+		ai_chance = {
+			base = 3
+			modifier = { factor = 1.5 surrender_progress > 0.35 }
+			modifier = { factor = 2 VAL = { check_variable = { var = VAL_STP_concession_count value = 2 compare = greater_than_or_equals } } }
+			modifier = { factor = 1.5 VAL = { has_country_flag = VAL_ai_course_contract_broker VAL_ai_has_current_course_reserve = yes } }
+			modifier = { factor = 0.5 NOD = { has_country_flag = NOD_crisis_posture_guardian is_subject = no } }
+		}
+		VAL = { VAL_accept_mountain_contract = yes }
+	}
+	option = { name = val_contract.3.b ai_chance = { base = 2 modifier = { factor = 2 VAL = { has_country_flag = VAL_ai_course_patient_invader } } modifier = { factor = 1.5 VAL = { check_variable = { var = VAL_STP_concession_count value = 2 compare = less_than } } } } VAL = { VAL_counter_mountain_contract = yes } }
+	option = { name = val_contract.3.c ai_chance = { base = 1 modifier = { factor = 2 surrender_progress < 0.15 } modifier = { factor = 2 VAL = { NOT = { VAL_ai_has_current_course_reserve = yes } } } } VAL = { VAL_abort_mountain_contract = yes } }
+}
+
+country_event = {
+	id = val_contract.4
+	title = val_contract.4.t
+	desc = val_contract.4.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = {
+		name = val_contract.4.a
+		if = { limit = { has_event_target = STP_val_contract_partner } event_target:STP_val_contract_partner = { country_event = { id = val_contract.5 } } }
+	}
+}
+
+country_event = {
+	id = val_contract.5
+	title = val_contract.5.t
+	desc = val_contract.5.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = { name = val_contract.5.a ai_chance = { base = 3 modifier = { factor = 2 VAL = { has_country_flag = VAL_ai_course_contract_broker VAL_ai_has_current_course_reserve = yes } } modifier = { factor = 1.5 surrender_progress > 0.40 } } VAL = { VAL_accept_mountain_contract = yes } }
+	option = { name = val_contract.5.b ai_chance = { base = 2 modifier = { factor = 2 VAL = { has_country_flag = VAL_ai_course_patient_invader } } modifier = { factor = 2 NOD = { has_country_flag = NOD_crisis_posture_guardian is_subject = no } } } VAL = { VAL_abort_mountain_contract = yes } }
+}
+
+country_event = {
+	id = val_contract.8
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { tag = VAL has_country_flag = VAL_STP_offer_generation_1 }
+	immediate = { VAL_abort_mountain_contract = yes }
+}
+country_event = {
+	id = val_contract.9
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { tag = VAL has_country_flag = VAL_STP_offer_generation_2 }
+	immediate = { VAL_abort_mountain_contract = yes }
+}
+
+# Arms-debt instalments consume partner stocks before paying VAL.
+country_event = {
+	id = val_contract.30
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				has_event_target = STP_postwar_country
+				country_exists = event_target:STP_postwar_country
+				event_target:STP_postwar_country = {
+					has_equipment = { infantry_equipment > 399 }
+					has_equipment = { support_equipment > 49 }
+				}
+			}
+			event_target:STP_postwar_country = {
+				add_equipment_to_stockpile = { type = infantry_equipment amount = -400 producer = ROOT }
+				add_equipment_to_stockpile = { type = support_equipment amount = -50 producer = ROOT }
+			}
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 400 producer = event_target:STP_postwar_country }
+			add_equipment_to_stockpile = { type = support_equipment amount = 50 producer = event_target:STP_postwar_country }
+		}
+		else = {
+			add_to_variable = { var = VAL_STP_missed_debt_payments value = 1 }
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } VAL_change_stp_leverage = yes
+			if = { limit = { check_variable = { var = VAL_STP_missed_debt_payments value = 2 compare = greater_than_or_equals } } VAL_STP_trigger_breach = yes }
+		}
+	}
+}
+
+# Corridor concessions are separate from physical occupation and never grant cores.
+country_event = {
+	id = val_contract.40
+	title = val_contract.40.t
+	desc = val_contract.40.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = { name = val_contract.40.a VAL_start_corridor_target_45 = yes }
+	option = { name = val_contract.40.b VAL_start_corridor_target_88 = yes }
+}
+
+country_event = {
+	id = val_contract.50
+	title = val_contract.50.t
+	desc = val_contract.50.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = { name = val_contract.50.a ai_chance = { base = 2 } VAL = { VAL_resolve_resource_corridor_concession = yes } }
+	option = { name = val_contract.50.b ai_chance = { base = 3 } }
+}
+country_event = {
+	id = val_contract.51
+	title = val_contract.51.t
+	desc = val_contract.51.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = { name = val_contract.51.a ai_chance = { base = 2 } VAL = { VAL_resolve_resource_corridor_concession = yes } }
+	option = { name = val_contract.51.b ai_chance = { base = 3 } }
+}
+country_event = {
+	id = val_contract.52
+	title = val_contract.52.t
+	desc = val_contract.52.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = { name = val_contract.52.a ai_chance = { base = 2 } VAL = { VAL_resolve_resource_corridor_concession = yes } }
+	option = { name = val_contract.52.b ai_chance = { base = 3 } }
+}
+
+# STP operation results. Human targets can explicitly cooperate or resist.
+country_event = { id = val_contract.100 hidden = yes is_triggered_only = yes immediate = { if = { limit = { has_event_target = VAL_STP_operation_target event_target:VAL_STP_operation_target = { is_ai = no } } event_target:VAL_STP_operation_target = { country_event = { id = val_contract.110 } } } else = { VAL_resolve_stp_map_operation = yes } } }
+country_event = { id = val_contract.101 hidden = yes is_triggered_only = yes immediate = { if = { limit = { has_event_target = VAL_STP_operation_target event_target:VAL_STP_operation_target = { is_ai = no } } event_target:VAL_STP_operation_target = { country_event = { id = val_contract.110 } } } else_if = { limit = { event_target:VAL_STP_operation_target = { check_variable = { var = STP_security_posture value = 3 compare = equals } } } VAL_reject_stp_operation = yes } else = { VAL_resolve_stp_depot_operation = yes } } }
+country_event = { id = val_contract.102 hidden = yes is_triggered_only = yes immediate = { if = { limit = { has_event_target = VAL_STP_operation_target event_target:VAL_STP_operation_target = { is_ai = no } } event_target:VAL_STP_operation_target = { country_event = { id = val_contract.110 } } } else_if = { limit = { event_target:VAL_STP_operation_target = { check_variable = { var = STP_security_posture value = 5 compare = equals } } } VAL_reject_stp_operation = yes } else = { VAL_resolve_stp_concession_operation = yes } } }
+country_event = { id = val_contract.103 hidden = yes is_triggered_only = yes immediate = { if = { limit = { has_event_target = VAL_STP_operation_target event_target:VAL_STP_operation_target = { is_ai = no } } event_target:VAL_STP_operation_target = { country_event = { id = val_contract.110 } } } else_if = { limit = { event_target:VAL_STP_operation_target = { OR = { check_variable = { var = STP_security_posture value = 2 compare = equals } check_variable = { var = STP_resistance_posture value = 2 compare = equals } } } } VAL_resolve_stp_officer_operation = yes } else = { VAL_reject_stp_operation = yes } } }
+country_event = { id = val_contract.104 hidden = yes is_triggered_only = yes immediate = { if = { limit = { has_event_target = VAL_STP_operation_target event_target:VAL_STP_operation_target = { is_ai = no } } event_target:VAL_STP_operation_target = { country_event = { id = val_contract.110 } } } else = { VAL_resolve_stp_red_line_operation = yes } } }
+
+country_event = {
+	id = val_contract.110
+	title = val_contract.110.t
+	desc = val_contract.110.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = { name = val_contract.110.a ai_chance = { base = 2 } VAL = { VAL_resolve_active_stp_operation = yes } }
+	option = { name = val_contract.110.b ai_chance = { base = 3 } VAL = { VAL_reject_stp_operation = yes } }
+}
+
+# Northern operations always ask a human target and use the same posture-weighted AI response.
+country_event = { id = val_contract.200 hidden = yes is_triggered_only = yes immediate = { CIN = { country_event = { id = val_contract.300 } } } }
+country_event = { id = val_contract.201 hidden = yes is_triggered_only = yes immediate = { CIN = { country_event = { id = val_contract.300 } } } }
+country_event = { id = val_contract.202 hidden = yes is_triggered_only = yes immediate = { CIN = { country_event = { id = val_contract.300 } } } }
+country_event = { id = val_contract.203 hidden = yes is_triggered_only = yes immediate = { CIN = { country_event = { id = val_contract.300 } } } }
+country_event = { id = val_contract.204 hidden = yes is_triggered_only = yes immediate = { CIN = { country_event = { id = val_contract.300 } } } }
+country_event = { id = val_contract.210 hidden = yes is_triggered_only = yes immediate = { OSF = { country_event = { id = val_contract.301 } } } }
+country_event = { id = val_contract.211 hidden = yes is_triggered_only = yes immediate = { OSF = { country_event = { id = val_contract.301 } } } }
+country_event = { id = val_contract.212 hidden = yes is_triggered_only = yes immediate = { OSF = { country_event = { id = val_contract.301 } } } }
+country_event = { id = val_contract.213 hidden = yes is_triggered_only = yes immediate = { OSF = { country_event = { id = val_contract.301 } } } }
+country_event = { id = val_contract.214 hidden = yes is_triggered_only = yes immediate = { OSF = { country_event = { id = val_contract.301 } } } }
+country_event = { id = val_contract.220 hidden = yes is_triggered_only = yes immediate = { APH = { country_event = { id = val_contract.302 } } } }
+country_event = { id = val_contract.221 hidden = yes is_triggered_only = yes immediate = { APH = { country_event = { id = val_contract.302 } } } }
+country_event = { id = val_contract.222 hidden = yes is_triggered_only = yes immediate = { APH = { country_event = { id = val_contract.302 } } } }
+country_event = { id = val_contract.223 hidden = yes is_triggered_only = yes immediate = { APH = { country_event = { id = val_contract.302 } } } }
+country_event = { id = val_contract.224 hidden = yes is_triggered_only = yes immediate = { APH = { country_event = { id = val_contract.302 } } } }
+
+country_event = {
+	id = val_contract.300
+	title = val_contract.300.t
+	desc = val_contract.300.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = { name = val_contract.300.a ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } modifier = { factor = 1.5 has_equipment = { infantry_equipment < 500 } } } VAL = { VAL_resolve_active_cin_operation = yes } }
+	option = { name = val_contract.300.b ai_chance = { base = 2 } VAL = { set_country_flag = { flag = VAL_CIN_target_cooldown days = 70 value = 1 } VAL_clear_foreign_operation = yes } }
+}
+country_event = {
+	id = val_contract.301
+	title = val_contract.301.t
+	desc = val_contract.301.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = { name = val_contract.301.a ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } modifier = { factor = 1.5 has_equipment = { infantry_equipment < 500 } } } VAL = { VAL_resolve_active_osf_operation = yes } }
+	option = { name = val_contract.301.b ai_chance = { base = 2 } VAL = { set_country_flag = { flag = VAL_OSF_target_cooldown days = 70 value = 1 } VAL_clear_foreign_operation = yes } }
+}
+country_event = {
+	id = val_contract.302
+	title = val_contract.302.t
+	desc = val_contract.302.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = { name = val_contract.302.a ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } modifier = { factor = 1.5 has_equipment = { infantry_equipment < 500 } } } VAL = { VAL_resolve_active_aph_operation = yes } }
+	option = { name = val_contract.302.b ai_chance = { base = 2 } VAL = { set_country_flag = { flag = VAL_APH_target_cooldown days = 70 value = 1 } VAL_clear_foreign_operation = yes } }
+}
+
+# Canonical final-war warnings. Delayed events live on the mission owner and
+# validate their matching finite generation token before doing anything.
+country_event = {
+	id = val_contract.60
+	title = val_contract.60.t
+	desc = val_contract.60.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	trigger = { has_active_mission = STP_VAL_war_countdown_120 VAL = { has_country_flag = VAL_STP_countdown_generation_120 NOT = { has_country_flag = VAL_STP_final_war_started } } }
+	immediate = { VAL = { STP_VAL_apply_final_warning = yes } }
+	option = { name = val_contract.warning.a }
+}
+country_event = {
+	id = val_contract.61
+	title = val_contract.60.t
+	desc = val_contract.60.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	trigger = { has_active_mission = STP_VAL_war_countdown_180 VAL = { has_country_flag = VAL_STP_countdown_generation_180 NOT = { has_country_flag = VAL_STP_final_war_started } } }
+	immediate = { VAL = { STP_VAL_apply_final_warning = yes } }
+	option = { name = val_contract.warning.a }
+}
+country_event = {
+	id = val_contract.62
+	title = val_contract.60.t
+	desc = val_contract.60.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	trigger = { has_active_mission = STP_VAL_war_countdown_300 VAL = { has_country_flag = VAL_STP_countdown_generation_300 NOT = { has_country_flag = VAL_STP_final_war_started } } }
+	immediate = { VAL = { STP_VAL_apply_final_warning = yes } }
+	option = { name = val_contract.warning.a }
+}
+country_event = {
+	id = val_contract.63
+	title = val_contract.60.t
+	desc = val_contract.60.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	trigger = { has_active_mission = STP_VAL_war_countdown_450 VAL = { has_country_flag = VAL_STP_countdown_generation_450 NOT = { has_country_flag = VAL_STP_final_war_started } } }
+	immediate = { VAL = { STP_VAL_apply_final_warning = yes } }
+	option = { name = val_contract.warning.a }
+}
+country_event = {
+	id = val_contract.64
+	title = val_contract.64.t
+	desc = val_contract.64.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	trigger = { has_active_mission = STP_VAL_war_countdown_breached VAL = { has_country_flag = VAL_STP_countdown_generation_breached NOT = { has_country_flag = VAL_STP_final_war_started } } }
+	option = { name = val_contract.warning.a }
+}
+
+country_event = {
+	id = val_contract.70
+	title = val_contract.70.t
+	desc = val_contract.70.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	trigger = { has_active_mission = STP_VAL_war_countdown_120 VAL = { has_country_flag = VAL_STP_countdown_generation_120 NOT = { has_country_flag = VAL_STP_final_war_started } } }
+	immediate = { VAL = { STP_VAL_remove_diplomatic_protection = yes } }
+	option = { name = val_contract.deadline.a }
+}
+country_event = {
+	id = val_contract.71
+	title = val_contract.70.t
+	desc = val_contract.70.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	trigger = { has_active_mission = STP_VAL_war_countdown_180 VAL = { has_country_flag = VAL_STP_countdown_generation_180 NOT = { has_country_flag = VAL_STP_final_war_started } } }
+	immediate = { VAL = { STP_VAL_remove_diplomatic_protection = yes } }
+	option = { name = val_contract.deadline.a }
+}
+country_event = {
+	id = val_contract.72
+	title = val_contract.70.t
+	desc = val_contract.70.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	trigger = { has_active_mission = STP_VAL_war_countdown_300 VAL = { has_country_flag = VAL_STP_countdown_generation_300 NOT = { has_country_flag = VAL_STP_final_war_started } } }
+	immediate = { VAL = { STP_VAL_remove_diplomatic_protection = yes } }
+	option = { name = val_contract.deadline.a }
+}
+country_event = {
+	id = val_contract.73
+	title = val_contract.70.t
+	desc = val_contract.70.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	trigger = { has_active_mission = STP_VAL_war_countdown_450 VAL = { has_country_flag = VAL_STP_countdown_generation_450 NOT = { has_country_flag = VAL_STP_final_war_started } } }
+	immediate = { VAL = { STP_VAL_remove_diplomatic_protection = yes } }
+	option = { name = val_contract.deadline.a }
+}
+country_event = {
+	id = val_contract.74
+	title = val_contract.70.t
+	desc = val_contract.70.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	trigger = { has_active_mission = STP_VAL_war_countdown_breached VAL = { has_country_flag = VAL_STP_countdown_generation_breached NOT = { has_country_flag = VAL_STP_final_war_started } } }
+	immediate = { VAL = { STP_VAL_remove_diplomatic_protection = yes } }
+	option = { name = val_contract.deadline.a }
+}
+
+country_event = {
+	id = val_contract.80
+	title = val_contract.80.t
+	desc = val_contract.80.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = { name = val_contract.deadline.a }
+}
+country_event = {
+	id = val_contract.81
+	title = val_contract.60.t
+	desc = val_contract.60.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = { name = val_contract.warning.a }
+}
+country_event = {
+	id = val_contract.82
+	title = val_contract.82.t
+	desc = val_contract.82.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = { name = val_contract.outcome.a }
+}
+country_event = {
+	id = val_contract.83
+	title = val_contract.83.t
+	desc = val_contract.83.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = { name = val_contract.outcome.a }
+}
+
+country_event = {
+	id = val_contract.90
+	title = val_contract.90.t
+	desc = val_contract.90.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	trigger = { tag = NOD has_country_flag = NOD_early_val_aggression_choice_pending }
+	option = {
+		name = val_contract.90.a
+		ai_chance = {
+			base = 3
+			modifier = { factor = 2 has_country_flag = NOD_crisis_posture_guardian }
+			modifier = { factor = 0.5 has_country_flag = NOD_limited_war_pyrrhic }
+		}
+		NOD_emergency_limited_white_peace = yes
+		NOD_join_early_stp_defense = yes
+	}
+	option = {
+		name = val_contract.90.b
+		trigger = {
+			has_equipment = { infantry_equipment > 499 }
+			has_equipment = { support_equipment > 49 }
+			has_political_power > 34
+		}
+		ai_chance = {
+			base = 2
+			modifier = { factor = 2 NOT = { has_country_flag = NOD_crisis_posture_guardian } }
+			modifier = { factor = 2 has_country_flag = NOD_limited_war_pyrrhic }
+		}
+		NOD_send_early_stp_material = yes
+	}
+}
+
+# Northern 30-day control tokens deliberately have no event trigger: the
+# resolver always clears its finite token, then rechecks every campaign guard.
+country_event = {
+	id = val_contract.400
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { VAL = { VAL_resolve_northern_control_59 = yes } }
+}
+country_event = {
+	id = val_contract.401
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { VAL = { VAL_resolve_northern_control_61 = yes } }
+}
+
+country_event = {
+	id = val_contract.410
+	title = val_contract.410.t
+	desc = val_contract.410.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = {
+		name = val_contract.410.a
+		ai_chance = {
+			base = 2
+			modifier = { factor = 2 surrender_progress > 0.45 }
+			modifier = { factor = 1.5 has_equipment = { infantry_equipment < 600 } }
+		}
+		VAL = { VAL_accept_northern_59_concession = yes }
+	}
+	option = {
+		name = val_contract.410.b
+		ai_chance = {
+			base = 3
+			modifier = { factor = 1.5 surrender_progress < 0.25 }
+		}
+		VAL = { set_country_flag = VAL_northern_target_59_refused }
+	}
+}
+
+country_event = {
+	id = val_contract.411
+	title = val_contract.411.t
+	desc = val_contract.411.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = {
+		name = val_contract.411.a
+		ai_chance = {
+			base = 2
+			modifier = { factor = 2 surrender_progress > 0.45 }
+			modifier = { factor = 1.5 has_equipment = { infantry_equipment < 600 } }
+		}
+		VAL = { VAL_accept_northern_61_concession = yes }
+	}
+	option = {
+		name = val_contract.411.b
+		ai_chance = {
+			base = 3
+			modifier = { factor = 1.5 surrender_progress < 0.25 }
+		}
+		VAL = { set_country_flag = VAL_northern_target_61_refused }
+	}
+}
+
+country_event = {
+	id = val_contract.420
+	title = val_contract.420.t
+	desc = val_contract.420.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	option = {
+		name = val_contract.420.a
+		ai_chance = {
+			base = 2
+			modifier = { factor = 2 has_war = yes }
+			modifier = { factor = 2 has_equipment = { infantry_equipment < 700 } }
+		}
+		set_country_flag = APH_VAL_northern_accommodation
+		VAL = {
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 } VAL_change_contract_authority = yes
+			add_political_power = 35
+		}
+	}
+	option = {
+		name = val_contract.420.b
+		ai_chance = { base = 3 }
+		set_country_flag = APH_VAL_northern_refusal
+	}
+}
+
+country_event = {
+	id = val_contract.430
+	title = val_contract.430.t
+	desc = val_contract.430.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	trigger = { tag = VAL has_country_flag = VAL_northern_timer_collision_pending }
+	option = {
+		name = val_contract.430.a
+		ai_chance = { base = 3 }
+		set_country_flag = VAL_northern_timer_collision_resolved
+		clr_country_flag = VAL_northern_timer_collision_pending
+		VAL_resolve_northern_campaign_timeout = yes
+	}
+	option = {
+		name = val_contract.430.b
+		ai_chance = { base = 1 }
+		VAL_continue_northern_two_front_war = yes
+	}
+}

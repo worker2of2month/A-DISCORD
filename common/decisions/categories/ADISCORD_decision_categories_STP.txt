@@ -2,6 +2,9 @@ STP_balance_of_power_category = {
 	allowed = {
 		tag = STP
 	}
+	visible = {
+		always = no
+	}
 }
 
 STP_elections_in_the_party = {

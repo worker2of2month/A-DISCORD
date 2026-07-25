@@ -1,0 +1,68 @@
+STP_crisis_operations = {
+	allowed = {
+		tag = STP
+	}
+
+	visible = {
+		has_country_flag = STP_main_campaign_side
+	}
+
+	visible_when_empty = yes
+	scripted_gui = ADISCORD_STP_crisis_panel
+}
+
+VAL_contract_campaign = {
+	allowed = {
+		tag = VAL
+	}
+
+	visible = {
+		has_completed_focus = VAL_One_Ledger_One_Banner
+	}
+
+	visible_when_empty = yes
+	scripted_gui = ADISCORD_VAL_contract_panel
+}
+
+NOD_crisis_posture = {
+	allowed = {
+		tag = NOD
+	}
+
+	visible = {
+		STP = {
+			exists = yes
+			has_country_flag = STP_main_campaign_side
+			NOT = { has_country_flag = STP_internal_outcome_finalized }
+		}
+	}
+}
+
+VAL_northern_campaign = {
+	allowed = {
+		tag = VAL
+	}
+
+	visible = {
+		has_completed_focus = VAL_Different_Views_On_Freedom
+	}
+}
+
+STP_VAL_war_countdown_category = {
+	allowed = {
+		OR = {
+			tag = VAL
+			STP_is_postwar_country = yes
+		}
+	}
+
+	visible = {
+		OR = {
+			has_active_mission = STP_VAL_war_countdown_120
+			has_active_mission = STP_VAL_war_countdown_180
+			has_active_mission = STP_VAL_war_countdown_300
+			has_active_mission = STP_VAL_war_countdown_450
+			has_active_mission = STP_VAL_war_countdown_breached
+		}
+	}
+}

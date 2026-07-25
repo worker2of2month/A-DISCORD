@@ -1,0 +1,517 @@
+# Stable role triggers. Later crisis layers extend this file with eligibility triggers.
+
+STP_is_main_crisis_country = {
+	tag = STP
+	has_country_flag = STP_main_campaign_side
+}
+
+STP_is_crisis_party_side = {
+	has_country_flag = STP_crisis_party_side
+}
+
+STP_is_crisis_resistance_side = {
+	has_country_flag = STP_crisis_resistance_side
+}
+
+STP_is_postwar_country = {
+	has_country_flag = STP_postwar_campaign_side
+}
+
+STP_can_attempt_bloodless_coup = {
+	check_variable = { var = STP_side_commitment value = 1 compare = equals }
+	has_country_flag = STP_shabrat_available
+	check_variable = { var = STP_node_palace value = 2 compare = equals }
+	has_country_flag = STP_capital_guard_loyal_to_resistance
+	check_variable = { var = STP_node_officers value = 2 compare = greater_than_or_equals }
+	check_variable = { var = STP_node_market value = 2 compare = equals }
+	check_variable = { var = STP_resistance_readiness value = 85 compare = greater_than_or_equals }
+	check_variable = { var = STP_party_suspicion value = 20 compare = less_than_or_equals }
+	NOD_can_directly_defend_stp = no
+}
+
+STP_resistance_network_is_viable = {
+	check_variable = { var = STP_resistance_readiness value = 40 compare = greater_than_or_equals }
+	count_triggers = {
+		amount = 2
+		check_variable = { var = STP_node_palace value = 0 compare = greater_than }
+		check_variable = { var = STP_node_officers value = 0 compare = greater_than }
+		check_variable = { var = STP_node_mountains value = 0 compare = greater_than }
+		check_variable = { var = STP_node_market value = 0 compare = greater_than }
+		check_variable = { var = STP_node_street value = 0 compare = greater_than }
+	}
+	OR = {
+		check_variable = { var = STP_resistance_escrow_infantry value = 800 compare = greater_than_or_equals }
+		check_variable = { var = STP_node_officers value = 2 compare = greater_than_or_equals }
+	}
+}
+
+STP_sotnikov_network_is_viable = {
+	has_country_flag = STP_shabrat_lost
+	NOT = { has_country_flag = STP_shabrat_available }
+	check_variable = { var = STP_resistance_readiness value = 45 compare = greater_than_or_equals }
+	check_variable = { var = STP_node_officers value = 2 compare = greater_than_or_equals }
+	check_variable = { var = STP_node_mountains value = 1 compare = greater_than_or_equals }
+	check_variable = { var = STP_resistance_escrow_infantry value = 1000 compare = greater_than_or_equals }
+}
+
+STP_controls_any_internal_manifest_state = {
+	OR = {
+		controls_state = 1
+		controls_state = 2
+		controls_state = 3
+		controls_state = 28
+		controls_state = 29
+		controls_state = 43
+		controls_state = 44
+		controls_state = 45
+		controls_state = 46
+		controls_state = 53
+		controls_state = 88
+	}
+}
+
+NOD_can_directly_defend_stp = {
+	country_exists = NOD
+	NOD = {
+		has_country_flag = NOD_crisis_posture_guardian
+		has_war = no
+		has_capitulated = no
+		NOD_has_85_percent_army_equipment = yes
+		controls_state = 10
+		controls_state = 11
+		NOT = {
+			strength_ratio = {
+				tag = ROOT
+				ratio < 0.8
+			}
+		}
+	}
+}
+
+NOD_has_85_percent_army_equipment = {
+	check_variable = {
+		var = NOD_army_equipment_ratio
+		value = 85
+		compare = greater_than_or_equals
+	}
+}
+
+NOD_can_escalate_ypr = {
+	tag = NOD
+	OR = { is_ai = no NOD_ai_has_current_course_reserve = yes }
+	NOT = { has_country_flag = NOD_limited_war_active }
+	has_war = no
+	country_exists = YPR
+	YPR = {
+		has_war = no
+		has_capitulated = no
+		is_in_faction = no
+		controls_state = 15
+		controls_state = 19
+	}
+	NOT = {
+		any_country = {
+			has_guaranteed = YPR
+			NOT = { tag = NOD }
+		}
+	}
+	NOT = {
+		strength_ratio = {
+			tag = YPR
+			ratio < 0.9
+		}
+	}
+}
+
+NOD_can_escalate_cof = {
+	tag = NOD
+	OR = { is_ai = no NOD_ai_has_current_course_reserve = yes }
+	NOT = { has_country_flag = NOD_limited_war_active }
+	has_war = no
+	country_exists = COF
+	COF = {
+		has_war = no
+		has_capitulated = no
+		controls_state = 14
+	}
+	NOT = {
+		strength_ratio = {
+			tag = COF
+			ratio < 1.1
+		}
+	}
+}
+
+NOD_can_escalate_bhg = {
+	tag = NOD
+	OR = { is_ai = no NOD_ai_has_current_course_reserve = yes }
+	NOT = { has_country_flag = NOD_limited_war_active }
+	has_war = no
+	country_exists = BHG
+	BHG = {
+		has_war = no
+		has_capitulated = no
+		controls_state = 5
+	}
+	NOT = {
+		strength_ratio = {
+			tag = BHG
+			ratio < 1.25
+		}
+	}
+}
+
+NOD_can_escalate_bbv = {
+	tag = NOD
+	OR = { is_ai = no NOD_ai_has_current_course_reserve = yes }
+	NOT = { has_country_flag = NOD_limited_war_active }
+	has_war = no
+	country_exists = BBV
+	BBV = {
+		has_war = no
+		has_capitulated = no
+		controls_state = 7
+		NOT = { is_in_faction_with = BJK }
+	}
+	NOT = {
+		strength_ratio = {
+			tag = BBV
+			ratio < 1.25
+		}
+	}
+}
+
+# Task 7: visibility and availability gates for Kefreyt's dynamic crisis branch.
+VAL_stp_crisis_at_least_rupture = {
+	country_exists = STP
+	STP = {
+		check_variable = {
+			var = STP_crisis_phase
+			value = 2
+			compare = greater_than_or_equals
+		}
+	}
+}
+
+VAL_has_active_stp_civil_war = {
+	has_event_target = STP_crisis_party_side
+	has_event_target = STP_crisis_resistance_side
+	country_exists = event_target:STP_crisis_party_side
+	country_exists = event_target:STP_crisis_resistance_side
+	event_target:STP_crisis_party_side = {
+		has_country_flag = STP_crisis_party_side
+		has_war_with = event_target:STP_crisis_resistance_side
+	}
+	event_target:STP_crisis_resistance_side = {
+		has_country_flag = STP_crisis_resistance_side
+	}
+}
+
+VAL_can_negotiate_deferred_invoice = {
+	has_event_target = STP_postwar_country
+	country_exists = event_target:STP_postwar_country
+	event_target:STP_postwar_country = {
+		has_country_flag = STP_internal_outcome_finalized
+		has_country_flag = STP_no_war_outcome
+		has_country_flag = VAL_STP_deferred_invoice_window
+	}
+}
+
+VAL_has_postwar_stp_target = {
+	has_event_target = STP_postwar_country
+	country_exists = event_target:STP_postwar_country
+	event_target:STP_postwar_country = {
+		has_country_flag = STP_postwar_campaign_side
+		has_country_flag = STP_internal_outcome_finalized
+	}
+}
+
+VAL_STP_partner_is_viable = {
+	has_event_target = STP_val_contract_partner
+	country_exists = event_target:STP_val_contract_partner
+	event_target:STP_val_contract_partner = {
+		has_capitulated = no
+		surrender_progress < 0.65
+		num_divisions > 2
+		has_equipment = { infantry_equipment > 599 }
+		count_triggers = {
+			amount = 2
+			controls_state = 1
+			controls_state = 2
+			controls_state = 3
+			controls_state = 28
+			controls_state = 29
+			controls_state = 43
+			controls_state = 44
+			controls_state = 45
+			controls_state = 46
+			controls_state = 53
+			controls_state = 88
+		}
+		OR = {
+			count_triggers = {
+				amount = 2
+				check_variable = { var = STP_node_palace value = 1 compare = greater_than_or_equals }
+				check_variable = { var = STP_node_officers value = 1 compare = greater_than_or_equals }
+				check_variable = { var = STP_node_mountains value = 1 compare = greater_than_or_equals }
+				check_variable = { var = STP_node_market value = 1 compare = greater_than_or_equals }
+				check_variable = { var = STP_node_street value = 1 compare = greater_than_or_equals }
+				check_variable = { var = STP_node_val_channel value = 1 compare = greater_than_or_equals }
+			}
+			controls_state = 1
+		}
+	}
+}
+
+# Northern campaign gates are repeated again in the start effect immediately
+# before war declaration. The trigger layer only controls player/AI access.
+VAL_northern_cin_is_eligible = {
+	country_exists = CIN
+	check_variable = { var = VAL_CIN_influence value = 2 compare = greater_than_or_equals }
+	CIN = {
+		is_subject = no
+		has_capitulated = no
+		has_war = no
+		is_in_faction = no
+		owns_state = 59
+		controls_state = 59
+	}
+	NOT = { any_country = { has_guaranteed = CIN } }
+}
+
+VAL_northern_osf_is_eligible = {
+	country_exists = OSF
+	check_variable = { var = VAL_OSF_influence value = 2 compare = greater_than_or_equals }
+	OSF = {
+		is_subject = no
+		has_capitulated = no
+		has_war = no
+		is_in_faction = no
+		owns_state = 61
+		controls_state = 61
+	}
+	NOT = { any_country = { has_guaranteed = OSF } }
+}
+
+VAL_northern_full_mode_is_eligible = {
+	VAL_northern_cin_is_eligible = yes
+	VAL_northern_osf_is_eligible = yes
+}
+
+VAL_northern_partial_cin_is_eligible = {
+	VAL_northern_cin_is_eligible = yes
+	VAL_northern_osf_is_eligible = no
+}
+
+VAL_northern_partial_osf_is_eligible = {
+	VAL_northern_cin_is_eligible = no
+	VAL_northern_osf_is_eligible = yes
+}
+
+VAL_northern_balanced_civil_war_human = {
+	VAL_has_active_stp_civil_war = yes
+	event_target:STP_crisis_party_side = {
+		surrender_progress < 0.50
+		count_triggers = {
+			amount = 2
+			controls_state = 1
+			controls_state = 2
+			controls_state = 3
+			controls_state = 28
+			controls_state = 29
+			controls_state = 43
+			controls_state = 44
+			controls_state = 45
+			controls_state = 46
+			controls_state = 53
+			controls_state = 88
+		}
+	}
+	event_target:STP_crisis_resistance_side = {
+		surrender_progress < 0.50
+		count_triggers = {
+			amount = 2
+			controls_state = 1
+			controls_state = 2
+			controls_state = 3
+			controls_state = 28
+			controls_state = 29
+			controls_state = 43
+			controls_state = 44
+			controls_state = 45
+			controls_state = 46
+			controls_state = 53
+			controls_state = 88
+		}
+	}
+}
+
+VAL_northern_balanced_civil_war_ai = {
+	VAL_has_active_stp_civil_war = yes
+	event_target:STP_crisis_party_side = { surrender_progress < 0.35 }
+	event_target:STP_crisis_resistance_side = { surrender_progress < 0.35 }
+	num_divisions > 5
+	has_equipment = { infantry_equipment > 1499 }
+	has_equipment = { support_equipment > 149 }
+	NOT = { strength_ratio = { tag = CIN ratio < 1.20 } }
+	NOT = { strength_ratio = { tag = OSF ratio < 1.20 } }
+}
+
+VAL_northern_fresh_long_deal = {
+	has_country_flag = VAL_northern_long_deal_fresh_window
+	OR = {
+		has_country_flag = VAL_STP_countdown_300
+		has_country_flag = VAL_STP_countdown_450
+	}
+}
+
+VAL_can_start_northern_campaign = {
+	tag = VAL
+	NOT = { has_country_flag = VAL_northern_campaign_attempted }
+	NOT = { has_country_flag = VAL_northern_campaign_active }
+	NOT = { has_country_flag = VAL_STP_final_warning_active }
+	NOT = { has_country_flag = VAL_STP_final_war_active }
+	OR = {
+		VAL_northern_full_mode_is_eligible = yes
+		VAL_northern_partial_cin_is_eligible = yes
+		VAL_northern_partial_osf_is_eligible = yes
+	}
+	OR = {
+		AND = {
+			is_ai = no
+			OR = {
+				VAL_northern_balanced_civil_war_human = yes
+				VAL_northern_fresh_long_deal = yes
+			}
+		}
+		AND = {
+			is_ai = yes
+			NOT = { has_country_flag = VAL_STP_countdown_120 }
+			NOT = { has_country_flag = VAL_STP_countdown_180 }
+			OR = {
+				VAL_northern_balanced_civil_war_ai = yes
+				VAL_northern_fresh_long_deal = yes
+			}
+		}
+	}
+}
+
+# AI reserves are evaluated only when a decision is considered. They do not
+# restrict the player and they turn an unaffordable course into saving rather
+# than a random substitute purchase.
+STP_ai_has_current_course_reserve = {
+	OR = {
+		AND = {
+			has_country_flag = STP_ai_course_cautious_shabrat
+			has_political_power > 59.99
+			command_power > 14.9
+			has_equipment = { infantry_equipment > 399 }
+		}
+		AND = {
+			has_country_flag = STP_ai_course_military_infiltration
+			has_political_power > 39.99
+			command_power > 29.9
+			has_equipment = { infantry_equipment > 999 }
+		}
+		AND = {
+			has_country_flag = STP_ai_course_mass_movement
+			has_political_power > 29.99
+			command_power > 9.9
+			has_equipment = { infantry_equipment > 1199 }
+			check_variable = { var = STP_party_suspicion value = 75 compare = less_than }
+		}
+		AND = {
+			has_country_flag = STP_ai_course_controlled_party
+			has_political_power > 59.99
+			command_power > 24.9
+			has_equipment = { infantry_equipment > 799 }
+		}
+		AND = {
+			has_country_flag = STP_ai_course_purge_party
+			has_country_flag = STP_ai_army_equipment_above_70
+			has_political_power > 34.99
+			command_power > 14.9
+			has_equipment = { infantry_equipment > 499 }
+		}
+	}
+}
+
+VAL_ai_has_current_course_reserve = {
+	OR = {
+		AND = {
+			has_country_flag = VAL_ai_course_contract_broker
+			has_political_power > 59.99
+			command_power > 19.9
+			has_equipment = { infantry_equipment > 1499 }
+		}
+		AND = {
+			has_country_flag = VAL_ai_course_resource_raider
+			has_political_power > 49.99
+			command_power > 34.9
+			has_equipment = { infantry_equipment > 1499 }
+			has_equipment = { support_equipment > 149 }
+			VAL_has_active_stp_civil_war = yes
+			event_target:STP_crisis_party_side = { num_divisions > 2 }
+			event_target:STP_crisis_resistance_side = { num_divisions > 2 }
+		}
+		AND = {
+			has_country_flag = VAL_ai_course_patient_invader
+			has_political_power > 74.99
+			command_power > 39.9
+			has_equipment = { infantry_equipment > 1999 }
+		}
+		AND = {
+			has_country_flag = VAL_ai_course_northern_broker
+			has_political_power > 49.99
+			has_equipment = { infantry_equipment > 999 }
+			OR = {
+				AND = {
+					check_variable = { var = VAL_CIN_influence value = 2 compare = greater_than_or_equals }
+					check_variable = { var = VAL_OSF_influence value = 2 compare = greater_than_or_equals }
+				}
+				AND = {
+					check_variable = { var = VAL_CIN_influence value = 2 compare = greater_than_or_equals }
+					check_variable = { var = VAL_OSF_influence value = 2 compare = less_than }
+				}
+				AND = {
+					check_variable = { var = VAL_OSF_influence value = 2 compare = greater_than_or_equals }
+					check_variable = { var = VAL_CIN_influence value = 2 compare = less_than }
+				}
+			}
+		}
+	}
+}
+
+NOD_ai_has_current_course_reserve = {
+	OR = {
+		AND = {
+			has_country_flag = NOD_crisis_posture_guardian
+			has_political_power > 74.99
+			command_power > 29.9
+			has_equipment = { infantry_equipment > 999 }
+		}
+		AND = {
+			has_country_flag = NOD_crisis_posture_ypr
+			has_political_power > 49.99
+			command_power > 19.9
+			has_equipment = { infantry_equipment > 1499 }
+		}
+		AND = {
+			has_country_flag = NOD_crisis_posture_cof
+			has_political_power > 39.99
+			command_power > 14.9
+			has_equipment = { infantry_equipment > 999 }
+		}
+		AND = {
+			has_country_flag = NOD_crisis_posture_beshay
+			has_political_power > 34.99
+			command_power > 9.9
+			has_equipment = { infantry_equipment > 799 }
+		}
+		AND = {
+			has_country_flag = NOD_crisis_posture_wait
+			has_political_power > 74.99
+			has_equipment = { infantry_equipment > 1199 }
+		}
+	}
+}

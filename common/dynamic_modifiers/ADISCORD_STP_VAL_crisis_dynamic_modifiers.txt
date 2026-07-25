@@ -1,0 +1,47 @@
+STP_fading_father = {
+	enable = {
+		has_country_flag = STP_main_campaign_side
+		NOT = { has_country_flag = STP_ivanov_dead }
+	}
+	political_power_factor = STP_fading_pp_factor
+	stability_factor = STP_fading_stability_factor
+	command_power_gain_mult = STP_fading_command_power_factor
+	planning_speed = STP_fading_planning_factor
+	army_org_factor = STP_fading_org_factor
+}
+
+STP_underground_network = {
+	enable = {
+		has_country_flag = STP_main_campaign_side
+		NOT = { has_country_flag = STP_internal_war_started }
+	}
+	stability_factor = STP_network_stability_factor
+	consumer_goods_factor = STP_network_consumer_goods_factor
+}
+
+STP_security_pressure = {
+	enable = {
+		has_country_flag = STP_main_campaign_side
+		NOT = { has_country_flag = STP_internal_outcome_finalized }
+	}
+	stability_factor = STP_pressure_stability_factor
+	political_power_factor = STP_pressure_pp_factor
+	industrial_capacity_factory = STP_pressure_factory_output_factor
+}
+
+VAL_contract_state = {
+	enable = { original_tag = VAL }
+	army_attack_factor = VAL_contract_attack_factor
+	army_defence_factor = VAL_contract_defence_factor
+	army_org_factor = VAL_contract_org_factor
+	army_org_regain = VAL_contract_org_regain
+	equipment_capture_factor = VAL_contract_capture_factor
+	supply_consumption_factor = VAL_contract_supply_factor
+	planning_speed = VAL_contract_planning_factor
+	political_power_gain = VAL_contract_pp_gain
+	stability_factor = VAL_contract_stability_factor
+	ADISCORD_economy_state_overload_gain_factor = VAL_contract_state_overload_factor
+	ADISCORD_economy_trade_income_factor = VAL_contract_trade_income_factor
+	ADISCORD_economy_military_industry_income_factor = VAL_contract_military_income_factor
+	ADISCORD_economy_army_expense_factor = VAL_contract_army_expense_factor
+}

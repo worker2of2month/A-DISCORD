@@ -1,0 +1,210 @@
+defined_text = {
+	name = STPGetReadinessBand
+	text = { trigger = { check_variable = { var = STP_resistance_readiness value = 85 compare = greater_than_or_equals } } localization_key = STP_CRISIS_READINESS_DECISIVE }
+	text = { trigger = { check_variable = { var = STP_resistance_readiness value = 65 compare = greater_than_or_equals } } localization_key = STP_CRISIS_READINESS_ORGANISED }
+	text = { trigger = { check_variable = { var = STP_resistance_readiness value = 40 compare = greater_than_or_equals } } localization_key = STP_CRISIS_READINESS_VIABLE }
+	text = { trigger = { check_variable = { var = STP_resistance_readiness value = 20 compare = greater_than_or_equals } } localization_key = STP_CRISIS_READINESS_FRAGMENTED }
+	text = { trigger = { always = yes } localization_key = STP_CRISIS_READINESS_SCATTERED }
+}
+
+defined_text = {
+	name = STPGetSuspicionBand
+	text = { trigger = { check_variable = { var = STP_party_suspicion value = 90 compare = greater_than_or_equals } } localization_key = STP_CRISIS_SUSPICION_MANHUNT }
+	text = { trigger = { check_variable = { var = STP_party_suspicion value = 70 compare = greater_than_or_equals } } localization_key = STP_CRISIS_SUSPICION_COMPROMISED }
+	text = { trigger = { check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } } localization_key = STP_CRISIS_SUSPICION_WATCHED }
+	text = { trigger = { check_variable = { var = STP_party_suspicion value = 25 compare = greater_than_or_equals } } localization_key = STP_CRISIS_SUSPICION_NOTICED }
+	text = { trigger = { always = yes } localization_key = STP_CRISIS_SUSPICION_CONCEALED }
+}
+
+defined_text = {
+	name = STPGetNODAssessment
+	text = { trigger = { NOD = { exists = yes has_country_flag = NOD_crisis_posture_guardian } } localization_key = STP_CRISIS_NOD_GUARDIAN }
+	text = { trigger = { NOD = { exists = yes OR = { has_country_flag = NOD_crisis_posture_ypr has_country_flag = NOD_crisis_posture_cof has_country_flag = NOD_crisis_posture_beshay has_country_flag = NOD_limited_war_active } } } localization_key = STP_CRISIS_NOD_DISTRACTED }
+	text = { trigger = { NOD = { exists = yes has_country_flag = NOD_crisis_posture_wait } } localization_key = STP_CRISIS_NOD_WATCHING }
+	text = { trigger = { always = yes } localization_key = STP_CRISIS_ASSESSMENT_UNKNOWN }
+}
+
+defined_text = {
+	name = STPGetVALAssessment
+	text = { trigger = { VAL = { exists = yes has_country_flag = VAL_resource_corridor_active } } localization_key = STP_CRISIS_VAL_CORRIDOR }
+	text = { trigger = { VAL = { exists = yes has_country_flag = VAL_STP_contract_active } } localization_key = STP_CRISIS_VAL_CONTRACTED }
+	text = { trigger = { VAL = { exists = yes has_country_flag = VAL_foreign_operation_active } } localization_key = STP_CRISIS_VAL_PENETRATING }
+	text = { trigger = { VAL = { exists = yes check_variable = { var = VAL_contract_authority value = 75 compare = greater_than_or_equals } } } localization_key = STP_CRISIS_VAL_READY }
+	text = { trigger = { VAL = { exists = yes check_variable = { var = VAL_contract_authority value = 50 compare = greater_than_or_equals } } } localization_key = STP_CRISIS_VAL_PROBING }
+	text = { trigger = { always = yes } localization_key = STP_CRISIS_ASSESSMENT_UNKNOWN }
+}
+
+defined_text = {
+	name = STPGetActiveMajorOperation
+	text = { trigger = { has_country_flag = STP_operation_token_recruit_young_officers } localization_key = STP_operation_recruit_young_officers }
+	text = { trigger = { has_country_flag = STP_operation_token_mountain_caches } localization_key = STP_operation_mountain_caches }
+	text = { trigger = { has_country_flag = STP_operation_token_steal_black_ledger } localization_key = STP_operation_steal_black_ledger }
+	text = { trigger = { has_country_flag = STP_operation_token_nodrul_disinformation } localization_key = STP_operation_nodrul_disinformation }
+	text = { trigger = { has_country_flag = STP_operation_token_rotate_garrisons } localization_key = STP_operation_rotate_garrisons }
+	text = { trigger = { has_country_flag = STP_operation_token_targeted_raid } localization_key = STP_operation_targeted_raid }
+	text = { trigger = { has_country_flag = STP_operation_token_burn_client_archives } localization_key = STP_operation_burn_client_archives }
+	text = { trigger = { has_country_flag = STP_operation_token_request_nodrul_advisers } localization_key = STP_operation_request_nodrul_advisers }
+	text = { trigger = { always = yes } localization_key = STP_CRISIS_OPERATION_NONE }
+}
+
+defined_text = {
+	name = STPGetActiveAuxOperation
+	text = { trigger = { has_country_flag = STP_operation_token_palace_channel } localization_key = STP_operation_palace_channel }
+	text = { trigger = { has_country_flag = STP_operation_token_silent_march } localization_key = STP_operation_silent_march }
+	text = { trigger = { has_country_flag = STP_operation_token_val_secret_channel } localization_key = STP_operation_val_secret_channel }
+	text = { trigger = { has_country_flag = STP_operation_token_seal_palace } localization_key = STP_operation_seal_palace }
+	text = { trigger = { has_country_flag = STP_operation_token_arm_festival_police } localization_key = STP_operation_arm_festival_police }
+	text = { trigger = { has_country_flag = STP_operation_token_false_val_channel } localization_key = STP_operation_false_val_channel }
+	text = { trigger = { always = yes } localization_key = STP_CRISIS_OPERATION_NONE }
+}
+
+defined_text = {
+	name = STPGetObservedCountermeasure
+	text = { trigger = { has_country_flag = STP_targeted_raid_family_palace } localization_key = STP_CRISIS_COUNTER_PALACE }
+	text = { trigger = { has_country_flag = STP_targeted_raid_family_officers } localization_key = STP_CRISIS_COUNTER_OFFICERS }
+	text = { trigger = { has_country_flag = STP_targeted_raid_family_mountains } localization_key = STP_CRISIS_COUNTER_MOUNTAINS }
+	text = { trigger = { has_country_flag = STP_targeted_raid_family_street } localization_key = STP_CRISIS_COUNTER_STREET }
+	text = { trigger = { has_country_flag = STP_targeted_raid_family_foreign } localization_key = STP_CRISIS_COUNTER_FOREIGN }
+	text = { trigger = { has_country_flag = STP_focus_palace_observed } localization_key = STP_CRISIS_COUNTER_PALACE }
+	text = { trigger = { has_country_flag = STP_focus_garrisons_observed } localization_key = STP_CRISIS_COUNTER_OFFICERS }
+	text = { trigger = { has_country_flag = STP_focus_mountain_raids_improved } localization_key = STP_CRISIS_COUNTER_MOUNTAINS }
+	text = { trigger = { has_country_flag = STP_focus_street_observed } localization_key = STP_CRISIS_COUNTER_STREET }
+	text = { trigger = { OR = { has_country_flag = STP_focus_nodrul_observed has_country_flag = STP_focus_kefreyt_observed } } localization_key = STP_CRISIS_COUNTER_FOREIGN }
+	text = { trigger = { always = yes } localization_key = STP_CRISIS_COUNTER_NONE }
+}
+
+defined_text = {
+	name = STPGetBloodlessOutcomeIntel
+	text = { trigger = { has_country_flag = STP_outcome_shabrat_bloodless } localization_key = STP_CRISIS_INTEL_CONFIRMED }
+	text = { trigger = { OR = { has_country_flag = STP_shabrat_lost has_country_flag = STP_internal_outcome_finalized check_variable = { var = STP_party_suspicion value = 90 compare = greater_than_or_equals } } } localization_key = STP_CRISIS_INTEL_COMPROMISED }
+	text = { trigger = { always = yes } localization_key = STP_CRISIS_INTEL_UNKNOWN }
+}
+
+defined_text = {
+	name = STPGetShabratWarOutcomeIntel
+	text = { trigger = { OR = { has_country_flag = STP_outcome_shabrat_main_war has_country_flag = STP_outcome_hedersett_vs_shabrat } } localization_key = STP_CRISIS_INTEL_CONFIRMED }
+	text = { trigger = { OR = { has_country_flag = STP_shabrat_lost AND = { has_country_flag = STP_internal_outcome_finalized NOT = { has_country_flag = STP_outcome_shabrat_main_war } NOT = { has_country_flag = STP_outcome_hedersett_vs_shabrat } } } } localization_key = STP_CRISIS_INTEL_COMPROMISED }
+	text = { trigger = { always = yes } localization_key = STP_CRISIS_INTEL_UNKNOWN }
+}
+
+defined_text = {
+	name = STPGetSotnikovOutcomeIntel
+	text = { trigger = { OR = { has_country_flag = STP_outcome_sotnikov_main_war has_country_flag = STP_outcome_hedersett_vs_sotnikov } } localization_key = STP_CRISIS_INTEL_CONFIRMED }
+	text = { trigger = { AND = { has_country_flag = STP_internal_outcome_finalized NOT = { has_country_flag = STP_outcome_sotnikov_main_war } NOT = { has_country_flag = STP_outcome_hedersett_vs_sotnikov } } } localization_key = STP_CRISIS_INTEL_COMPROMISED }
+	text = { trigger = { always = yes } localization_key = STP_CRISIS_INTEL_UNKNOWN }
+}
+
+defined_text = {
+	name = STPGetPartyOutcomeIntel
+	text = { trigger = { OR = { has_country_flag = STP_outcome_hedersett_fail_state has_country_flag = STP_outcome_hedersett_consolidation has_country_flag = STP_outcome_hedersett_vs_shabrat has_country_flag = STP_outcome_hedersett_vs_sotnikov } } localization_key = STP_CRISIS_INTEL_CONFIRMED }
+	text = { trigger = { AND = { has_country_flag = STP_internal_outcome_finalized NOT = { has_country_flag = STP_outcome_hedersett_fail_state } NOT = { has_country_flag = STP_outcome_hedersett_consolidation } NOT = { has_country_flag = STP_outcome_hedersett_vs_shabrat } NOT = { has_country_flag = STP_outcome_hedersett_vs_sotnikov } } } localization_key = STP_CRISIS_INTEL_COMPROMISED }
+	text = { trigger = { always = yes } localization_key = STP_CRISIS_INTEL_UNKNOWN }
+}
+
+defined_text = {
+	name = VALGetContractAuthorityBand
+	text = { trigger = { check_variable = { var = VAL_contract_authority value = 75 compare = greater_than_or_equals } } localization_key = VAL_CONTRACT_AUTHORITY_DOMINANT }
+	text = { trigger = { check_variable = { var = VAL_contract_authority value = 50 compare = greater_than_or_equals } } localization_key = VAL_CONTRACT_AUTHORITY_COHERENT }
+	text = { trigger = { check_variable = { var = VAL_contract_authority value = 25 compare = greater_than_or_equals } } localization_key = VAL_CONTRACT_AUTHORITY_BROKERED }
+	text = { trigger = { always = yes } localization_key = VAL_CONTRACT_AUTHORITY_FRAGMENTED }
+}
+
+defined_text = {
+	name = VALGetSTPCrisisPhase
+	text = { trigger = { OR = { has_country_flag = VAL_STP_final_war_started AND = { has_event_target = STP_postwar_country event_target:STP_postwar_country = { check_variable = { var = STP_crisis_phase value = 4 compare = greater_than_or_equals } } } } } localization_key = VAL_STP_PHASE_FINAL_WAR }
+	text = { trigger = { has_event_target = STP_postwar_country event_target:STP_postwar_country = { check_variable = { var = STP_crisis_phase value = 3 compare = greater_than_or_equals } } } localization_key = VAL_STP_PHASE_POSTWAR }
+	text = { trigger = { STP = { exists = yes check_variable = { var = STP_crisis_phase value = 2 compare = greater_than_or_equals } } } localization_key = VAL_STP_PHASE_SUCCESSION }
+	text = { trigger = { STP = { exists = yes check_variable = { var = STP_crisis_phase value = 1 compare = greater_than_or_equals } } } localization_key = VAL_STP_PHASE_DECLINE }
+	text = { trigger = { always = yes } localization_key = STP_CRISIS_ASSESSMENT_UNKNOWN }
+}
+
+defined_text = {
+	name = VALGetNODAssessment
+	text = { trigger = { NOD = { exists = yes has_country_flag = NOD_crisis_posture_guardian } } localization_key = VAL_NOD_ASSESSMENT_GUARDIAN }
+	text = { trigger = { NOD = { exists = yes OR = { has_country_flag = NOD_crisis_posture_ypr has_country_flag = NOD_crisis_posture_cof has_country_flag = NOD_crisis_posture_beshay has_country_flag = NOD_limited_war_active has_war = yes } } } localization_key = VAL_NOD_ASSESSMENT_DISTRACTED }
+	text = { trigger = { NOD = { exists = yes has_country_flag = NOD_crisis_posture_wait } } localization_key = VAL_NOD_ASSESSMENT_WATCHING }
+	text = { trigger = { always = yes } localization_key = STP_CRISIS_ASSESSMENT_UNKNOWN }
+}
+
+defined_text = {
+	name = VALGetCINInfluence
+	text = { trigger = { check_variable = { var = VAL_CIN_influence value = 3 compare = greater_than_or_equals } } localization_key = VAL_INFLUENCE_EMBEDDED }
+	text = { trigger = { check_variable = { var = VAL_CIN_influence value = 2 compare = greater_than_or_equals } } localization_key = VAL_INFLUENCE_ENTRENCHED }
+	text = { trigger = { check_variable = { var = VAL_CIN_influence value = 1 compare = greater_than_or_equals } } localization_key = VAL_INFLUENCE_FOOTHOLD }
+	text = { trigger = { always = yes } localization_key = VAL_INFLUENCE_NONE }
+}
+
+defined_text = {
+	name = VALGetOSFInfluence
+	text = { trigger = { check_variable = { var = VAL_OSF_influence value = 3 compare = greater_than_or_equals } } localization_key = VAL_INFLUENCE_EMBEDDED }
+	text = { trigger = { check_variable = { var = VAL_OSF_influence value = 2 compare = greater_than_or_equals } } localization_key = VAL_INFLUENCE_ENTRENCHED }
+	text = { trigger = { check_variable = { var = VAL_OSF_influence value = 1 compare = greater_than_or_equals } } localization_key = VAL_INFLUENCE_FOOTHOLD }
+	text = { trigger = { always = yes } localization_key = VAL_INFLUENCE_NONE }
+}
+
+defined_text = {
+	name = VALGetAPHInfluence
+	text = { trigger = { check_variable = { var = VAL_APH_influence value = 3 compare = greater_than_or_equals } } localization_key = VAL_INFLUENCE_EMBEDDED }
+	text = { trigger = { check_variable = { var = VAL_APH_influence value = 2 compare = greater_than_or_equals } } localization_key = VAL_INFLUENCE_ENTRENCHED }
+	text = { trigger = { check_variable = { var = VAL_APH_influence value = 1 compare = greater_than_or_equals } } localization_key = VAL_INFLUENCE_FOOTHOLD }
+	text = { trigger = { always = yes } localization_key = VAL_INFLUENCE_NONE }
+}
+
+defined_text = {
+	name = VALGetState45Status
+	text = { trigger = { owns_state = 45 } localization_key = VAL_RESOURCE_STATE_OWNED }
+	text = { trigger = { controls_state = 45 } localization_key = VAL_RESOURCE_STATE_OCCUPIED }
+	text = { trigger = { has_country_flag = VAL_STP_resource_rights_45 } localization_key = VAL_RESOURCE_STATE_RIGHTS }
+	text = { trigger = { has_country_flag = VAL_STP_concession_resource_45 } localization_key = VAL_RESOURCE_STATE_PROMISED }
+	text = { trigger = { always = yes } localization_key = VAL_RESOURCE_STATE_OUTSIDE }
+}
+
+defined_text = {
+	name = VALGetState88Status
+	text = { trigger = { owns_state = 88 } localization_key = VAL_RESOURCE_STATE_OWNED }
+	text = { trigger = { controls_state = 88 } localization_key = VAL_RESOURCE_STATE_OCCUPIED }
+	text = { trigger = { has_country_flag = VAL_STP_resource_rights_88 } localization_key = VAL_RESOURCE_STATE_RIGHTS }
+	text = { trigger = { has_country_flag = VAL_STP_concession_resource_88 } localization_key = VAL_RESOURCE_STATE_PROMISED }
+	text = { trigger = { always = yes } localization_key = VAL_RESOURCE_STATE_OUTSIDE }
+}
+
+defined_text = {
+	name = VALGetDealStatus
+	text = { trigger = { has_country_flag = VAL_resource_corridor_active } localization_key = VAL_DEAL_CORRIDOR_WAR }
+	text = { trigger = { has_country_flag = VAL_STP_contract_active check_variable = { var = VAL_STP_concession_count value = 3 compare = greater_than_or_equals } } localization_key = VAL_DEAL_CONTRACT_HEAVY }
+	text = { trigger = { has_country_flag = VAL_STP_contract_active } localization_key = VAL_DEAL_CONTRACT_LIMITED }
+	text = { trigger = { OR = { has_country_flag = VAL_STP_negotiation_state_channel has_country_flag = VAL_STP_negotiation_state_viability has_country_flag = VAL_STP_negotiation_state_concessions has_country_flag = VAL_STP_negotiation_state_offer has_country_flag = VAL_STP_negotiation_state_response } } localization_key = VAL_DEAL_NEGOTIATING }
+	text = { trigger = { has_event_target = STP_postwar_country event_target:STP_postwar_country = { has_country_flag = VAL_STP_deferred_invoice_window } } localization_key = VAL_DEAL_DEFERRED_WINDOW }
+	text = { trigger = { always = yes } localization_key = VAL_DEAL_NONE }
+}
+
+defined_text = {
+	name = VALGetCountdownStatus
+	text = { trigger = { has_country_flag = VAL_STP_final_war_started } localization_key = VAL_COUNTDOWN_WAR }
+	text = { trigger = { has_country_flag = VAL_STP_countdown_generation_breached } localization_key = VAL_COUNTDOWN_BREACHED }
+	text = { trigger = { has_country_flag = VAL_STP_countdown_generation_450 } localization_key = VAL_COUNTDOWN_450 }
+	text = { trigger = { has_country_flag = VAL_STP_countdown_generation_300 } localization_key = VAL_COUNTDOWN_300 }
+	text = { trigger = { has_country_flag = VAL_STP_countdown_generation_180 } localization_key = VAL_COUNTDOWN_180 }
+	text = { trigger = { has_country_flag = VAL_STP_countdown_generation_120 } localization_key = VAL_COUNTDOWN_120 }
+	text = { trigger = { always = yes } localization_key = VAL_COUNTDOWN_NONE }
+}
+
+defined_text = {
+	name = VALGetForeignOperationStatus
+	text = { trigger = { OR = { has_country_flag = VAL_operation_STP_map_mountain_passes has_country_flag = VAL_operation_STP_build_contractor_depot has_country_flag = VAL_operation_STP_offer_mountain_concession has_country_flag = VAL_operation_STP_buy_border_officers has_country_flag = VAL_operation_STP_test_nodrul_red_line has_country_flag = VAL_STP_negotiation_state_channel has_country_flag = VAL_STP_negotiation_state_viability has_country_flag = VAL_STP_negotiation_state_concessions has_country_flag = VAL_STP_negotiation_state_offer has_country_flag = VAL_STP_negotiation_state_response } } localization_key = VAL_FOREIGN_SLOT_STP }
+	text = { trigger = { OR = { has_country_flag = VAL_operation_CIN_study_market has_country_flag = VAL_operation_CIN_arms_brokerage has_country_flag = VAL_operation_CIN_infrastructure_concession has_country_flag = VAL_operation_CIN_hire_local_captain has_country_flag = VAL_operation_CIN_prepare_separate_terms } } localization_key = VAL_FOREIGN_SLOT_CIN }
+	text = { trigger = { OR = { has_country_flag = VAL_operation_OSF_study_market has_country_flag = VAL_operation_OSF_arms_brokerage has_country_flag = VAL_operation_OSF_infrastructure_concession has_country_flag = VAL_operation_OSF_hire_local_captain has_country_flag = VAL_operation_OSF_prepare_separate_terms } } localization_key = VAL_FOREIGN_SLOT_OSF }
+	text = { trigger = { OR = { has_country_flag = VAL_operation_APH_study_market has_country_flag = VAL_operation_APH_arms_brokerage has_country_flag = VAL_operation_APH_infrastructure_concession has_country_flag = VAL_operation_APH_hire_local_captain has_country_flag = VAL_operation_APH_prepare_separate_terms } } localization_key = VAL_FOREIGN_SLOT_APH }
+	text = { trigger = { has_country_flag = VAL_foreign_operation_active } localization_key = VAL_FOREIGN_SLOT_CLASSIFIED }
+	text = { trigger = { always = yes } localization_key = VAL_FOREIGN_SLOT_FREE }
+}
+
+defined_text = {
+	name = VALGetWarConcept
+	text = { trigger = { has_country_flag = VAL_resource_corridor_active } localization_key = VAL_WAR_CONCEPT_CORRIDOR }
+	text = { trigger = { OR = { has_country_flag = VAL_doctrine_resource_raider has_country_flag = VAL_ai_course_resource_raider } } localization_key = VAL_WAR_CONCEPT_RESOURCE_RAID }
+	text = { trigger = { OR = { has_country_flag = VAL_doctrine_sustained_supply has_country_flag = VAL_ai_course_contract_broker } } localization_key = VAL_WAR_CONCEPT_CONTRACT_ALLY }
+	text = { trigger = { OR = { has_country_flag = VAL_ai_course_northern_broker check_variable = { var = VAL_CIN_influence value = 2 compare = greater_than_or_equals } check_variable = { var = VAL_OSF_influence value = 2 compare = greater_than_or_equals } } } localization_key = VAL_WAR_CONCEPT_NORTHERN_SCREEN }
+	text = { trigger = { OR = { has_country_flag = VAL_doctrine_covert_intervention has_country_flag = VAL_ai_course_patient_invader } } localization_key = VAL_WAR_CONCEPT_PATIENT }
+	text = { trigger = { always = yes } localization_key = VAL_WAR_CONCEPT_UNSET }
+}

@@ -3,39 +3,44 @@ defined_text = {
 
 	text = {
 		trigger = { 
-			original_tag = STP
-			check_variable = { STP_state_face_stage = 5 } 
+			tag = STP
+			has_country_flag = STP_main_campaign_side
+			check_variable = { STP_leader_health_stage = 5 }
 		}
 		localization_key = STP_STATE_FACE_STAGE_5_loc
 	}
 
 	text = {
 		trigger = { 
-			original_tag = STP
-			check_variable = { STP_state_face_stage = 4 } 
+			tag = STP
+			has_country_flag = STP_main_campaign_side
+			check_variable = { STP_leader_health_stage = 4 }
 		}
 		localization_key = STP_STATE_FACE_STAGE_4_loc
 	}
 
 	text = {
 		trigger = { 
-			original_tag = STP
-			check_variable = { STP_state_face_stage = 3 } 
+			tag = STP
+			has_country_flag = STP_main_campaign_side
+			check_variable = { STP_leader_health_stage = 3 }
 		}
 		localization_key = STP_STATE_FACE_STAGE_3_loc
 	}
 
 	text = {
 		trigger = { 
-			original_tag = STP
-			check_variable = { STP_state_face_stage = 2 } 
+			tag = STP
+			has_country_flag = STP_main_campaign_side
+			check_variable = { STP_leader_health_stage = 2 }
 		}
 		localization_key = STP_STATE_FACE_STAGE_2_loc
 	}
 
 	text = {
 		trigger = { 
-			original_tag = STP
+			tag = STP
+			has_country_flag = STP_main_campaign_side
 		}
 		localization_key = STP_STATE_FACE_STAGE_1_loc
 	}
@@ -46,39 +51,44 @@ defined_text = {
 
 	text = {
 		trigger = { 
-			original_tag = STP
-			check_variable = { STP_state_face_stage = 5 } 
+			tag = STP
+			has_country_flag = STP_main_campaign_side
+			check_variable = { STP_leader_health_stage = 5 }
 		}
 		localization_key = STP_STATE_FACE_STAGE_5_TOOLTIP
 	}
 
 	text = {
 		trigger = { 
-			original_tag = STP
-			check_variable = { STP_state_face_stage = 4 } 
+			tag = STP
+			has_country_flag = STP_main_campaign_side
+			check_variable = { STP_leader_health_stage = 4 }
 		}
 		localization_key = STP_STATE_FACE_STAGE_4_TOOLTIP
 	}
 
 	text = {
 		trigger = { 
-			original_tag = STP
-			check_variable = { STP_state_face_stage = 3 } 
+			tag = STP
+			has_country_flag = STP_main_campaign_side
+			check_variable = { STP_leader_health_stage = 3 }
 		}
 		localization_key = STP_STATE_FACE_STAGE_3_TOOLTIP
 	}
 
 	text = {
 		trigger = { 
-			original_tag = STP
-			check_variable = { STP_state_face_stage = 2 } 
+			tag = STP
+			has_country_flag = STP_main_campaign_side
+			check_variable = { STP_leader_health_stage = 2 }
 		}
 		localization_key = STP_STATE_FACE_STAGE_2_TOOLTIP
 	}
 
 	text = {
 		trigger = { 
-			original_tag = STP
+			tag = STP
+			has_country_flag = STP_main_campaign_side
 		}
 		localization_key = STP_STATE_FACE_STAGE_1_TOOLTIP
 	}
