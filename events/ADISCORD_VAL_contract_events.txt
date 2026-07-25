@@ -1,5 +1,53 @@
 add_namespace = val_contract
 
+# VAL changes course only on explicit reevaluation events. The persistent
+# course flag drives static AI blocks; the timed lock prevents save-load churn.
+country_event = {
+	id = val_contract.900
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { tag = VAL is_ai = yes }
+	immediate = {
+		if = {
+			limit = { NOT = { has_country_flag = VAL_ai_course_lock } }
+			clr_country_flag = VAL_ai_course_contract_broker
+			clr_country_flag = VAL_ai_course_resource_raider
+			clr_country_flag = VAL_ai_course_patient_invader
+			clr_country_flag = VAL_ai_course_northern_broker
+			random_list = {
+				30 = {
+					modifier = { factor = 2 VAL_has_active_stp_civil_war = yes }
+					modifier = { factor = 2 check_variable = { var = VAL_contract_authority value = 55 compare = greater_than_or_equals } }
+					set_country_flag = VAL_ai_course_contract_broker
+				}
+				25 = {
+					modifier = { factor = 0 VAL_has_active_stp_civil_war = no }
+					modifier = { factor = 2 has_country_flag = VAL_doctrine_resource_raider }
+					modifier = { factor = 2 num_equipment@infantry_equipment > 1499 }
+					set_country_flag = VAL_ai_course_resource_raider
+				}
+				25 = {
+					modifier = { factor = 2 num_equipment@infantry_equipment > 1999 }
+					modifier = { factor = 2 has_country_flag = VAL_supply_preparation }
+					set_country_flag = VAL_ai_course_patient_invader
+				}
+				20 = {
+					modifier = { factor = 0 NOT = { has_country_flag = VAL_northern_operations_unlocked } }
+					modifier = {
+						factor = 3
+						OR = {
+							check_variable = { var = VAL_CIN_influence value = 2 compare = greater_than_or_equals }
+							check_variable = { var = VAL_OSF_influence value = 2 compare = greater_than_or_equals }
+						}
+					}
+					set_country_flag = VAL_ai_course_northern_broker
+				}
+			}
+			set_country_flag = { flag = VAL_ai_course_lock days = 70 value = 1 }
+		}
+	}
+}
+
 # Mountain contract: channel, viability, concessions, offer, response.
 country_event = {
 	id = val_contract.1
@@ -7,8 +55,18 @@ country_event = {
 	desc = val_contract.1.d
 	picture = GFX_report_event_generic_diplomacy
 	is_triggered_only = yes
-	option = { name = val_contract.1.a ai_chance = { base = 3 } VAL = { VAL_advance_mountain_contract_viability = yes } }
-	option = { name = val_contract.1.b ai_chance = { base = 2 } VAL = { VAL_abort_mountain_contract = yes } }
+	option = {
+		name = val_contract.1.a
+		ai_chance = {
+			base = 3
+			modifier = { factor = 1.5 surrender_progress > 0.20 }
+			modifier = { factor = 1.5 count_triggers = { amount = 2 check_variable = { var = STP_node_palace value = 0 compare = greater_than } check_variable = { var = STP_node_officers value = 0 compare = greater_than } check_variable = { var = STP_node_mountains value = 0 compare = greater_than } check_variable = { var = STP_node_market value = 0 compare = greater_than } check_variable = { var = STP_node_street value = 0 compare = greater_than } } }
+			modifier = { factor = 1.5 VAL = { has_country_flag = VAL_ai_course_contract_broker num_equipment@infantry_equipment > 1499 } }
+			modifier = { factor = 0.5 NOD = { has_country_flag = NOD_crisis_posture_guardian is_subject = no } }
+		}
+		VAL = { VAL_advance_mountain_contract_viability = yes }
+	}
+	option = { name = val_contract.1.b ai_chance = { base = 2 modifier = { factor = 2 VAL = { has_country_flag = VAL_ai_course_patient_invader } } } VAL = { VAL_abort_mountain_contract = yes } }
 }
 
 country_event = { id = val_contract.2 hidden = yes is_triggered_only = yes immediate = { VAL_choose_mountain_concessions = yes } }
@@ -19,9 +77,19 @@ country_event = {
 	desc = val_contract.3.d
 	picture = GFX_report_event_generic_diplomacy
 	is_triggered_only = yes
-	option = { name = val_contract.3.a ai_chance = { base = 3 modifier = { factor = 1.5 surrender_progress > 0.35 } } VAL = { VAL_accept_mountain_contract = yes } }
-	option = { name = val_contract.3.b ai_chance = { base = 2 } VAL = { VAL_counter_mountain_contract = yes } }
-	option = { name = val_contract.3.c ai_chance = { base = 1 } VAL = { VAL_abort_mountain_contract = yes } }
+	option = {
+		name = val_contract.3.a
+		ai_chance = {
+			base = 3
+			modifier = { factor = 1.5 surrender_progress > 0.35 }
+			modifier = { factor = 2 VAL = { check_variable = { var = VAL_STP_concession_count value = 2 compare = greater_than_or_equals } } }
+			modifier = { factor = 1.5 VAL = { has_country_flag = VAL_ai_course_contract_broker VAL_ai_has_current_course_reserve = yes } }
+			modifier = { factor = 0.5 NOD = { has_country_flag = NOD_crisis_posture_guardian is_subject = no } }
+		}
+		VAL = { VAL_accept_mountain_contract = yes }
+	}
+	option = { name = val_contract.3.b ai_chance = { base = 2 modifier = { factor = 2 VAL = { has_country_flag = VAL_ai_course_patient_invader } } modifier = { factor = 1.5 VAL = { check_variable = { var = VAL_STP_concession_count value = 2 compare = less_than } } } } VAL = { VAL_counter_mountain_contract = yes } }
+	option = { name = val_contract.3.c ai_chance = { base = 1 modifier = { factor = 2 surrender_progress < 0.15 } modifier = { factor = 2 VAL = { NOT = { VAL_ai_has_current_course_reserve = yes } } } } VAL = { VAL_abort_mountain_contract = yes } }
 }
 
 country_event = {
@@ -42,8 +110,8 @@ country_event = {
 	desc = val_contract.5.d
 	picture = GFX_report_event_generic_diplomacy
 	is_triggered_only = yes
-	option = { name = val_contract.5.a ai_chance = { base = 3 } VAL = { VAL_accept_mountain_contract = yes } }
-	option = { name = val_contract.5.b ai_chance = { base = 2 } VAL = { VAL_abort_mountain_contract = yes } }
+	option = { name = val_contract.5.a ai_chance = { base = 3 modifier = { factor = 2 VAL = { has_country_flag = VAL_ai_course_contract_broker VAL_ai_has_current_course_reserve = yes } } modifier = { factor = 1.5 surrender_progress > 0.40 } } VAL = { VAL_accept_mountain_contract = yes } }
+	option = { name = val_contract.5.b ai_chance = { base = 2 modifier = { factor = 2 VAL = { has_country_flag = VAL_ai_course_patient_invader } } modifier = { factor = 2 NOD = { has_country_flag = NOD_crisis_posture_guardian is_subject = no } } } VAL = { VAL_abort_mountain_contract = yes } }
 }
 
 country_event = {

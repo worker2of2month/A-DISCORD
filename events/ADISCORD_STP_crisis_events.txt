@@ -14,6 +14,8 @@ country_event = {
 
 	immediate = {
 		STP_set_health_stage = { value = 2 }
+		clr_country_flag = STP_ai_course_lock
+		country_event = { id = stp_crisis.900 }
 		NOD = {
 			clr_country_flag = NOD_crisis_posture_lock
 			NOD_select_crisis_posture = yes
@@ -22,6 +24,92 @@ country_event = {
 		complete_national_focus = STP_When_The_Guarantee_Died
 		activate_mission = STP_health_stage_2_to_3
 		country_event = { id = stp_crisis.5 days = 69 }
+	}
+}
+
+# Event-driven AI course selection. A course survives one health stage and is
+# only reconsidered when a stage/event explicitly removes the 70-day lock.
+country_event = {
+	id = stp_crisis.900
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = yes
+		has_country_flag = STP_main_campaign_side
+		NOT = { has_country_flag = STP_ivanov_dead }
+		OR = {
+			check_variable = { var = STP_side_commitment value = 1 compare = equals }
+			check_variable = { var = STP_side_commitment value = 2 compare = equals }
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { NOT = { has_country_flag = STP_ai_course_lock } }
+			clr_country_flag = STP_ai_army_equipment_above_70
+			set_temp_variable = { var = STP_ai_equipment_actual value = num_equipment_in_armies@infantry_equipment }
+			add_to_temp_variable = { var = STP_ai_equipment_actual value = num_equipment_in_armies@support_equipment }
+			set_temp_variable = { var = STP_ai_equipment_target value = num_target_equipment_in_armies@infantry_equipment }
+			add_to_temp_variable = { var = STP_ai_equipment_target value = num_target_equipment_in_armies@support_equipment }
+			multiply_temp_variable = { var = STP_ai_equipment_target value = 0.70 }
+			if = {
+				limit = {
+					OR = {
+						check_variable = { var = STP_ai_equipment_target value = 0 compare = less_than_or_equals }
+						check_variable = { var = STP_ai_equipment_actual value = STP_ai_equipment_target compare = greater_than_or_equals }
+					}
+				}
+				set_country_flag = STP_ai_army_equipment_above_70
+			}
+
+			clr_country_flag = STP_ai_course_cautious_shabrat
+			clr_country_flag = STP_ai_course_military_infiltration
+			clr_country_flag = STP_ai_course_mass_movement
+			clr_country_flag = STP_ai_course_controlled_party
+			clr_country_flag = STP_ai_course_purge_party
+			if = {
+				limit = { check_variable = { var = STP_side_commitment value = 1 compare = equals } }
+				if = {
+					limit = { has_country_flag = STP_shabrat_lost }
+					set_country_flag = STP_ai_course_military_infiltration
+				}
+				else = {
+					random_list = {
+						35 = {
+							modifier = { factor = 2 check_variable = { var = STP_party_suspicion value = 35 compare = greater_than_or_equals } }
+							modifier = { factor = 2 check_variable = { var = STP_node_palace value = 1 compare = greater_than_or_equals } }
+							set_country_flag = STP_ai_course_cautious_shabrat
+						}
+						35 = {
+							modifier = { factor = 2 check_variable = { var = STP_node_officers value = 2 compare = less_than } }
+							modifier = { factor = 2 num_equipment@infantry_equipment > 999 }
+							set_country_flag = STP_ai_course_military_infiltration
+						}
+						30 = {
+							modifier = { factor = 2 check_variable = { var = STP_party_suspicion value = 45 compare = less_than } }
+							modifier = { factor = 2 has_country_flag = STP_focus_street_observed }
+							set_country_flag = STP_ai_course_mass_movement
+						}
+					}
+				}
+			}
+			else = {
+				random_list = {
+					55 = {
+						modifier = { factor = 2 is_subject_of = NOD }
+						modifier = { factor = 2 has_country_flag = STP_focus_garrisons_observed }
+						set_country_flag = STP_ai_course_controlled_party
+					}
+					45 = {
+						modifier = { factor = 0 NOT = { has_country_flag = STP_ai_army_equipment_above_70 } }
+						modifier = { factor = 2 has_stability > 0.50 }
+						set_country_flag = STP_ai_course_purge_party
+					}
+				}
+			}
+			set_country_flag = { flag = STP_ai_course_lock days = 70 value = 1 }
+		}
 	}
 }
 
@@ -39,6 +127,8 @@ country_event = {
 
 	immediate = {
 		STP_set_health_stage = { value = 3 }
+		clr_country_flag = STP_ai_course_lock
+		country_event = { id = stp_crisis.900 }
 		NOD = {
 			clr_country_flag = NOD_crisis_posture_lock
 			NOD_select_crisis_posture = yes
@@ -63,6 +153,8 @@ country_event = {
 
 	immediate = {
 		STP_set_health_stage = { value = 4 }
+		clr_country_flag = STP_ai_course_lock
+		country_event = { id = stp_crisis.900 }
 		NOD = {
 			clr_country_flag = NOD_crisis_posture_lock
 			NOD_select_crisis_posture = yes
@@ -286,6 +378,7 @@ country_event = {
 				set_variable = { var = STP_security_posture value = 5 }
 			}
 		}
+		country_event = { id = stp_crisis.900 }
 	}
 }
 
@@ -345,6 +438,7 @@ country_event = {
 				set_variable = { var = STP_resistance_posture value = 4 }
 			}
 		}
+		country_event = { id = stp_crisis.900 }
 	}
 }
 

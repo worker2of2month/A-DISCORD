@@ -193,6 +193,13 @@ NOD_crisis_posture = {
 		}
 		cost = 0
 		complete_effect = { NOD_send_stp_material_support = yes }
+		ai_will_do = {
+			base = 1
+			modifier = { factor = 0 NOT = { NOD_ai_has_current_course_reserve = yes } }
+			modifier = { factor = 4 has_country_flag = NOD_crisis_posture_wait }
+			modifier = { factor = 4 has_country_flag = NOD_crisis_posture_cof }
+			modifier = { factor = 2 has_country_flag = NOD_crisis_posture_guardian has_war = yes }
+		}
 	}
 
 	NOD_support_stp_limited = {
@@ -209,6 +216,13 @@ NOD_crisis_posture = {
 		}
 		cost = 0
 		complete_effect = { NOD_send_stp_limited_support = yes }
+		ai_will_do = {
+			base = 1
+			modifier = { factor = 0 NOT = { NOD_ai_has_current_course_reserve = yes } }
+			modifier = { factor = 4 has_country_flag = NOD_crisis_posture_ypr }
+			modifier = { factor = 0 has_country_flag = NOD_crisis_posture_cof }
+			modifier = { factor = 0 has_country_flag = NOD_crisis_posture_wait }
+		}
 	}
 
 	NOD_support_stp_full = {
@@ -228,5 +242,11 @@ NOD_crisis_posture = {
 		}
 		cost = 0
 		complete_effect = { NOD_send_stp_full_support = yes }
+		ai_will_do = {
+			base = 1
+			modifier = { factor = 0 NOT = { NOD_ai_has_current_course_reserve = yes } }
+			modifier = { factor = 5 has_country_flag = NOD_crisis_posture_guardian has_war = no }
+			modifier = { factor = 0 NOT = { has_country_flag = NOD_crisis_posture_guardian } }
+		}
 	}
 }

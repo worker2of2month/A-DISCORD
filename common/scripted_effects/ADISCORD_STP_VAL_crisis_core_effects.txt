@@ -276,6 +276,14 @@ STP_change_node_officers = {
 	if = { limit = { check_variable = { var = STP_node_officers value = 0 compare = less_than } } set_variable = { var = STP_node_officers value = 0 } }
 	if = { limit = { check_variable = { var = STP_node_officers value = 3 compare = greater_than } } set_variable = { var = STP_node_officers value = 3 } }
 	STP_refresh_crisis_modifier = yes
+	if = {
+		limit = {
+			is_ai = yes
+			check_variable = { var = STP_node_officers value = 0 compare = equals }
+		}
+		clr_country_flag = STP_ai_course_lock
+		country_event = { id = stp_crisis.900 }
+	}
 }
 
 STP_change_node_mountains = {
@@ -572,6 +580,11 @@ STP_lose_shabrat = {
 		clr_country_flag = STP_shabrat_available
 		set_country_flag = STP_shabrat_lost
 		retire_character = STP_maksim_shabrat
+		if = {
+			limit = { is_ai = yes }
+			clr_country_flag = STP_ai_course_lock
+			country_event = { id = stp_crisis.900 }
+		}
 	}
 }
 

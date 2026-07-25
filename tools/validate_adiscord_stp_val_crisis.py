@@ -194,6 +194,13 @@ REQUIRED_FILES = {
     ),
     "ai": (
         ("common/ai_strategy/ADISCORD_STP_VAL_crisis_ai.txt", "crisis AI strategies"),
+		("common/scripted_triggers/ADISCORD_STP_VAL_crisis_triggers.txt", "crisis AI reserve triggers"),
+		("common/decisions/ADISCORD_STP_crisis_decisions.txt", "STP AI decision weights"),
+		("common/decisions/ADISCORD_VAL_contract_decisions.txt", "VAL AI decision weights"),
+		("common/decisions/ADISCORD_NOD_crisis_decisions.txt", "NOD AI decision weights"),
+		("events/ADISCORD_STP_crisis_events.txt", "STP AI course events"),
+		("events/ADISCORD_VAL_contract_events.txt", "VAL AI course and deal events"),
+		("events/ADISCORD_NOD_crisis_events.txt", "NOD adaptive response events"),
     ),
     "gui": (
         ("interface/ADISCORD_STP_VAL_crisis.gui", "crisis GUI"),
@@ -1685,6 +1692,175 @@ def _validate_northern_campaign(root: Path, issues: list[str]) -> None:
             issues.append("ADISCORD_test_wars_l_russian.yml must have exactly one header")
 
 
+def _validate_ai_contract(root: Path, issues: list[str]) -> None:
+    strategy = read(root / "common/ai_strategy/ADISCORD_STP_VAL_crisis_ai.txt") or ""
+    triggers = read(
+        root / "common/scripted_triggers/ADISCORD_STP_VAL_crisis_triggers.txt"
+    ) or ""
+    stp_decisions = read(
+        root / "common/decisions/ADISCORD_STP_crisis_decisions.txt"
+    ) or ""
+    val_decisions = read(
+        root / "common/decisions/ADISCORD_VAL_contract_decisions.txt"
+    ) or ""
+    nod_decisions = read(
+        root / "common/decisions/ADISCORD_NOD_crisis_decisions.txt"
+    ) or ""
+    stp_events = read(root / "events/ADISCORD_STP_crisis_events.txt") or ""
+    val_events = read(root / "events/ADISCORD_VAL_contract_events.txt") or ""
+    nod_events = read(root / "events/ADISCORD_NOD_crisis_events.txt") or ""
+
+    course_blocks = {
+        "STP_AI_CAUTIOUS_SHABRAT": "STP_ai_course_cautious_shabrat",
+        "STP_AI_MILITARY_INFILTRATION": "STP_ai_course_military_infiltration",
+        "STP_AI_MASS_MOVEMENT": "STP_ai_course_mass_movement",
+        "STP_AI_CONTROLLED_PARTY": "STP_ai_course_controlled_party",
+        "STP_AI_PURGE_PARTY": "STP_ai_course_purge_party",
+        "VAL_AI_CONTRACT_BROKER": "VAL_ai_course_contract_broker",
+        "VAL_AI_RESOURCE_RAIDER": "VAL_ai_course_resource_raider",
+        "VAL_AI_PATIENT_INVADER": "VAL_ai_course_patient_invader",
+        "VAL_AI_NORTHERN_BROKER": "VAL_ai_course_northern_broker",
+        "NOD_AI_GUARDIAN": "NOD_crisis_posture_guardian",
+        "NOD_AI_YPR": "NOD_crisis_posture_ypr",
+        "NOD_AI_COF": "NOD_crisis_posture_cof",
+        "NOD_AI_WAIT": "NOD_crisis_posture_wait",
+    }
+    for block_id, course_flag in course_blocks.items():
+        block = extract_named_block(strategy, block_id) or ""
+        enable = extract_named_block(block, "enable") or ""
+        if f"has_country_flag = {course_flag}" not in enable:
+            issues.append(f"AI course {block_id} is not enabled by {course_flag}")
+        if "abort_when_not_enabled = yes" not in block:
+            issues.append(f"AI course {block_id} must abort when its posture changes")
+
+    for block_id in ("NOD_AI_BESHAY_BHG", "NOD_AI_BESHAY_BBV"):
+        block = extract_named_block(strategy, block_id) or ""
+        if "has_country_flag = NOD_crisis_posture_beshay" not in block:
+            issues.append(f"AI course {block_id} must belong to the Beshay posture")
+        if "abort_when_not_enabled = yes" not in block:
+            issues.append(f"AI course {block_id} must abort when its target changes")
+
+    masked_strategy = _mask_non_code(strategy)
+    if re.search(r"\badd_ai_strategy\b", masked_strategy):
+        issues.append("crisis AI must use self-removing static strategies, not add_ai_strategy")
+    if re.search(r"\bcall_allies\s*=\s*-9999\b", masked_strategy):
+        issues.append("limited-war ally suppression uses an invalid literal field")
+    if masked_strategy.count("target = call_allies") != 4:
+        issues.append("each Nodrul limited-war opponent needs addressed call-allies suppression")
+    if masked_strategy.count("id = event_target:NOD_limited_war_target_country") != 4:
+        issues.append("call-allies suppression must use the saved limited-war opponent")
+
+    for block_id in (
+        "VAL_AI_CONTRACT_BROKER",
+        "VAL_AI_RESOURCE_RAIDER",
+        "VAL_AI_PATIENT_INVADER",
+        "VAL_AI_NORTHERN_BROKER",
+    ):
+        block = extract_named_block(strategy, block_id) or ""
+        if re.search(r"\btype\s*=\s*(?:conquer|prepare_for_war)\b", _mask_non_code(block)):
+            issues.append(f"{block_id} creates an illicit early VAL war strategy")
+
+    reserve_tokens = {
+        "STP_ai_has_current_course_reserve": (
+            "has_political_power > 59.99", "command_power > 14.9",
+            "num_equipment@infantry_equipment > 399",
+            "has_political_power > 39.99", "command_power > 29.9",
+            "num_equipment@infantry_equipment > 1199", "STP_ai_army_equipment_above_70",
+        ),
+        "VAL_ai_has_current_course_reserve": (
+            "has_political_power > 59.99", "command_power > 19.9",
+            "num_equipment@infantry_equipment > 1499",
+            "has_political_power > 74.99", "command_power > 39.9",
+            "num_equipment@infantry_equipment > 1999", "ratio < 1.25",
+        ),
+        "NOD_ai_has_current_course_reserve": (
+            "has_political_power > 74.99", "command_power > 29.9",
+            "num_equipment@infantry_equipment > 1499",
+            "has_political_power > 34.99", "command_power > 9.9",
+            "num_equipment@infantry_equipment > 1199",
+        ),
+    }
+    for trigger_id, tokens in reserve_tokens.items():
+        block = extract_named_block(triggers, trigger_id) or ""
+        for token in tokens:
+            if token not in block:
+                issues.append(f"AI reserve {trigger_id} is missing {token}")
+
+    for decision_id in (
+        "STP_operation_palace_channel",
+        "STP_operation_recruit_young_officers",
+        "STP_operation_mountain_caches",
+        "STP_operation_steal_black_ledger",
+        "STP_operation_silent_march",
+        "STP_operation_nodrul_disinformation",
+        "STP_operation_nodrul_disinformation_convoys",
+        "STP_operation_val_secret_channel",
+        "STP_operation_seal_palace",
+        "STP_operation_rotate_garrisons",
+        "STP_operation_targeted_raid",
+        "STP_operation_burn_client_archives",
+        "STP_operation_arm_festival_police",
+        "STP_operation_request_nodrul_advisers",
+        "STP_operation_false_val_channel",
+    ):
+        block = extract_named_block(stp_decisions, decision_id) or ""
+        ai = extract_named_block(block, "ai_will_do") or ""
+        if "factor = 0" not in ai or "STP_ai_has_current_course_reserve = yes" not in ai:
+            issues.append(f"{decision_id} can spend below its AI course reserve")
+
+    for decision_id in (
+        "VAL_STP_map_mountain_passes",
+        "VAL_STP_build_contractor_depot",
+        "VAL_STP_offer_mountain_concession",
+        "VAL_STP_buy_border_officers",
+        "VAL_STP_test_nodrul_red_line",
+        "VAL_open_mountain_contract",
+        "VAL_negotiate_deferred_invoice",
+        "VAL_start_resource_corridor",
+        "VAL_launch_northern_campaign",
+    ):
+        block = extract_named_block(val_decisions, decision_id) or ""
+        ai = extract_named_block(block, "ai_will_do") or ""
+        if "factor = 0" not in ai or "VAL_ai_has_current_course_reserve = yes" not in ai:
+            issues.append(f"{decision_id} can spend below its AI course reserve")
+
+    for decision_id in (
+        "NOD_support_stp_material",
+        "NOD_support_stp_limited",
+        "NOD_support_stp_full",
+    ):
+        block = extract_named_block(nod_decisions, decision_id) or ""
+        ai = extract_named_block(block, "ai_will_do") or ""
+        if "factor = 0" not in ai or "NOD_ai_has_current_course_reserve = yes" not in ai:
+            issues.append(f"{decision_id} can spend below its AI course reserve")
+
+    stp_selector = _block_with_direct_assignment(
+        stp_events, "country_event", "id", "stp_crisis.900"
+    ) or ""
+    val_selector = _block_with_direct_assignment(
+        val_events, "country_event", "id", "val_contract.900"
+    ) or ""
+    for label, block, lock in (
+        ("STP", stp_selector, "STP_ai_course_lock"),
+        ("VAL", val_selector, "VAL_ai_course_lock"),
+    ):
+        if f"flag = {lock} days = 70" not in " ".join(block.split()):
+            issues.append(f"{label} AI course selector must lock its choice for 70 days")
+
+    for token in (
+        "VAL_STP_concession_count",
+        "NOD_crisis_posture_guardian",
+        "VAL_ai_has_current_course_reserve = yes",
+        "surrender_progress",
+        "num_equipment@infantry_equipment",
+    ):
+        if token not in val_events:
+            issues.append(f"VAL deal score is missing adaptive factor {token}")
+    for token in ("surrender_progress", "NOD_ai_has_current_course_reserve = yes"):
+        if token not in nod_events:
+            issues.append(f"Nodrul concession AI is missing adaptive factor {token}")
+
+
 def _validate_scripted_peace_contract(root: Path, issues: list[str]) -> None:
     on_actions = read(
         root / "common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt"
@@ -1784,6 +1960,8 @@ def validate(root: Path, section: str | None = None) -> list[str]:
                 _validate_northern_campaign(root, issues)
             elif name == "peace":
                 _validate_scripted_peace_contract(root, issues)
+            elif name == "ai":
+                _validate_ai_contract(root, issues)
     return list(dict.fromkeys(issues))
 
 

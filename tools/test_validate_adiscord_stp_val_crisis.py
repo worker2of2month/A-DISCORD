@@ -2482,6 +2482,73 @@ class CrisisValidatorTests(unittest.TestCase):
         self.assertIn("id = autonomy_contract_client", autonomy)
         self.assertEqual(validator.validate(validator.ROOT, "peace"), [])
 
+    def test_task_eleven_adaptive_ai_courses_and_reserves(self):
+        strategy = validator.read(
+            validator.ROOT
+            / "common/ai_strategy/ADISCORD_STP_VAL_crisis_ai.txt"
+        ) or ""
+        stp_courses = (
+            "STP_AI_CAUTIOUS_SHABRAT",
+            "STP_AI_MILITARY_INFILTRATION",
+            "STP_AI_MASS_MOVEMENT",
+            "STP_AI_CONTROLLED_PARTY",
+            "STP_AI_PURGE_PARTY",
+        )
+        val_courses = (
+            "VAL_AI_CONTRACT_BROKER",
+            "VAL_AI_RESOURCE_RAIDER",
+            "VAL_AI_PATIENT_INVADER",
+            "VAL_AI_NORTHERN_BROKER",
+        )
+        nod_courses = (
+            "NOD_AI_GUARDIAN",
+            "NOD_AI_YPR",
+            "NOD_AI_COF",
+            "NOD_AI_BESHAY_BHG",
+            "NOD_AI_WAIT",
+        )
+        for course in stp_courses + val_courses + nod_courses:
+            block = validator.extract_named_block(strategy, course) or ""
+            self.assertIn("abort_when_not_enabled = yes", block, course)
+        self.assertNotIn("add_ai_strategy", validator._mask_non_code(strategy))
+        self.assertNotRegex(
+            validator._mask_non_code(
+                "\n".join(
+                    validator.extract_named_block(strategy, course) or ""
+                    for course in val_courses
+                )
+            ),
+            r"\btype\s*=\s*(?:conquer|prepare_for_war)\b",
+        )
+        self.assertEqual(strategy.count("target = call_allies"), 4)
+        self.assertEqual(
+            strategy.count("id = event_target:NOD_limited_war_target_country"), 4
+        )
+        self.assertNotIn("call_allies = -9999", strategy)
+
+        triggers = validator.read(
+            validator.ROOT
+            / "common/scripted_triggers/ADISCORD_STP_VAL_crisis_triggers.txt"
+        ) or ""
+        for reserve in (
+            "STP_ai_has_current_course_reserve",
+            "VAL_ai_has_current_course_reserve",
+            "NOD_ai_has_current_course_reserve",
+        ):
+            self.assertTrue(validator.extract_named_block(triggers, reserve), reserve)
+        self.assertIn("ratio < 1.25", triggers)
+        self.assertIn("STP_ai_army_equipment_above_70", triggers)
+
+        stp_events = validator.read(
+            validator.ROOT / "events/ADISCORD_STP_crisis_events.txt"
+        ) or ""
+        val_events = validator.read(
+            validator.ROOT / "events/ADISCORD_VAL_contract_events.txt"
+        ) or ""
+        self.assertIn("flag = STP_ai_course_lock days = 70", " ".join(stp_events.split()))
+        self.assertIn("flag = VAL_ai_course_lock days = 70", " ".join(val_events.split()))
+        self.assertEqual(validator.validate(validator.ROOT, "ai"), [])
+
     def test_legacy_stp_and_val_migration_paths_are_idempotent(self):
         core = validator.read(
             validator.ROOT / "common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt"

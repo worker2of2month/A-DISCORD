@@ -27,7 +27,12 @@ country_event = {
 
 	option = {
 		name = nod_crisis.10.a
-		ai_chance = { base = 2 }
+		ai_chance = {
+			base = 2
+			modifier = { factor = 2 surrender_progress > 0.35 }
+			modifier = { factor = 1.5 num_equipment@infantry_equipment < 700 }
+			modifier = { factor = 0.5 NOD = { NOD_ai_has_current_course_reserve = yes } }
+		}
 		set_country_flag = NOD_limited_concession_accepted
 		if = {
 			limit = {
@@ -41,7 +46,7 @@ country_event = {
 	}
 	option = {
 		name = nod_crisis.10.b
-		ai_chance = { base = 3 }
+		ai_chance = { base = 3 modifier = { factor = 1.5 surrender_progress < 0.20 } }
 	}
 }
 
@@ -54,7 +59,12 @@ country_event = {
 
 	option = {
 		name = nod_crisis.11.a
-		ai_chance = { base = 2 }
+		ai_chance = {
+			base = 2
+			modifier = { factor = 2 surrender_progress > 0.35 }
+			modifier = { factor = 1.5 num_equipment@infantry_equipment < 700 }
+			modifier = { factor = 0.5 NOD = { NOD_ai_has_current_course_reserve = yes } }
+		}
 		set_country_flag = NOD_limited_concession_accepted
 		if = {
 			limit = {
@@ -68,7 +78,7 @@ country_event = {
 	}
 	option = {
 		name = nod_crisis.11.b
-		ai_chance = { base = 3 }
+		ai_chance = { base = 3 modifier = { factor = 1.5 surrender_progress < 0.20 } }
 	}
 }
 

@@ -125,6 +125,7 @@ STP_crisis_operations = {
 			set_country_flag = STP_aux_operation_active
 			country_event = { id = stp_crisis.20 days = 28 }
 		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { STP_ai_has_current_course_reserve = yes } } modifier = { factor = 5 has_country_flag = STP_ai_course_cautious_shabrat } }
 	}
 
 	STP_operation_recruit_young_officers = {
@@ -171,6 +172,7 @@ STP_crisis_operations = {
 			set_country_flag = STP_major_operation_active
 			country_event = { id = stp_crisis.21 days = 35 }
 		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { STP_ai_has_current_course_reserve = yes } } modifier = { factor = 6 has_country_flag = STP_ai_course_military_infiltration } }
 	}
 
 	STP_operation_mountain_caches = {
@@ -215,6 +217,7 @@ STP_crisis_operations = {
 			set_country_flag = STP_major_operation_active
 			country_event = { id = stp_crisis.22 days = 35 }
 		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { STP_ai_has_current_course_reserve = yes } } modifier = { factor = 5 has_country_flag = STP_ai_course_military_infiltration } modifier = { factor = 5 has_country_flag = STP_ai_course_mass_movement } }
 	}
 
 	STP_operation_steal_black_ledger = {
@@ -248,6 +251,7 @@ STP_crisis_operations = {
 			set_country_flag = STP_major_operation_active
 			country_event = { id = stp_crisis.23 days = 28 }
 		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { STP_ai_has_current_course_reserve = yes } } modifier = { factor = 5 has_country_flag = STP_ai_course_cautious_shabrat } }
 	}
 
 	STP_operation_silent_march = {
@@ -281,6 +285,7 @@ STP_crisis_operations = {
 			set_country_flag = STP_aux_operation_active
 			country_event = { id = stp_crisis.24 days = 21 }
 		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { STP_ai_has_current_course_reserve = yes } } modifier = { factor = 4 has_country_flag = STP_ai_course_cautious_shabrat } modifier = { factor = 6 has_country_flag = STP_ai_course_mass_movement } }
 	}
 
 	STP_operation_nodrul_disinformation = {
@@ -319,6 +324,7 @@ STP_crisis_operations = {
 			set_country_flag = STP_major_operation_active
 			country_event = { id = stp_crisis.25 days = 35 }
 		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { STP_ai_has_current_course_reserve = yes } } modifier = { factor = 0 has_country_flag = STP_ai_course_cautious_shabrat } modifier = { factor = 3 has_country_flag = STP_ai_course_military_infiltration } }
 	}
 
 	STP_operation_nodrul_disinformation_convoys = {
@@ -356,6 +362,7 @@ STP_crisis_operations = {
 			set_country_flag = STP_major_operation_active
 			country_event = { id = stp_crisis.25 days = 35 }
 		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { STP_ai_has_current_course_reserve = yes } } modifier = { factor = 0 has_country_flag = STP_ai_course_cautious_shabrat } modifier = { factor = 3 has_country_flag = STP_ai_course_military_infiltration } }
 	}
 
 	STP_operation_val_secret_channel = {
@@ -389,6 +396,7 @@ STP_crisis_operations = {
 			set_country_flag = STP_aux_operation_active
 			country_event = { id = stp_crisis.26 days = 28 }
 		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { STP_ai_has_current_course_reserve = yes } } modifier = { factor = 3 has_country_flag = STP_ai_course_mass_movement } }
 	}
 
 	STP_operation_seal_palace = {
@@ -421,6 +429,7 @@ STP_crisis_operations = {
 			set_country_flag = STP_aux_operation_active
 			country_event = { id = stp_crisis.27 days = 28 }
 		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { STP_ai_has_current_course_reserve = yes } } modifier = { factor = 5 has_country_flag = STP_ai_course_purge_party } }
 	}
 
 	STP_operation_rotate_garrisons = {
@@ -453,6 +462,7 @@ STP_crisis_operations = {
 			set_country_flag = STP_major_operation_active
 			country_event = { id = stp_crisis.28 days = 28 }
 		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { STP_ai_has_current_course_reserve = yes } } modifier = { factor = 6 has_country_flag = STP_ai_course_controlled_party } }
 	}
 
 	STP_operation_targeted_raid = {
@@ -530,6 +540,7 @@ STP_crisis_operations = {
 			set_country_flag = STP_major_operation_active
 			country_event = { id = stp_crisis.29 days = 28 }
 		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { STP_ai_has_current_course_reserve = yes } } modifier = { factor = 5 has_country_flag = STP_ai_course_controlled_party } modifier = { factor = 5 has_country_flag = STP_ai_course_purge_party } }
 	}
 
 	STP_operation_burn_client_archives = {
@@ -563,6 +574,7 @@ STP_crisis_operations = {
 			set_country_flag = STP_major_operation_active
 			country_event = { id = stp_crisis.30 days = 28 }
 		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { STP_ai_has_current_course_reserve = yes } } modifier = { factor = 5 has_country_flag = STP_ai_course_controlled_party } }
 	}
 
 	STP_operation_arm_festival_police = {
@@ -599,6 +611,7 @@ STP_crisis_operations = {
 			set_country_flag = STP_aux_operation_active
 			country_event = { id = stp_crisis.31 days = 21 }
 		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { STP_ai_has_current_course_reserve = yes } } modifier = { factor = 6 has_country_flag = STP_ai_course_purge_party } }
 	}
 
 	STP_operation_request_nodrul_advisers = {
@@ -629,6 +642,7 @@ STP_crisis_operations = {
 			set_country_flag = STP_major_operation_active
 			country_event = { id = stp_crisis.32 days = 35 }
 		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { STP_ai_has_current_course_reserve = yes } } modifier = { factor = 7 has_country_flag = STP_ai_course_controlled_party } modifier = { factor = 0 has_country_flag = STP_ai_course_purge_party } }
 	}
 
 	STP_operation_false_val_channel = {
@@ -662,6 +676,7 @@ STP_crisis_operations = {
 			set_country_flag = STP_aux_operation_active
 			country_event = { id = stp_crisis.33 days = 28 }
 		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { STP_ai_has_current_course_reserve = yes } } modifier = { factor = 4 has_country_flag = STP_ai_course_purge_party } }
 	}
 
 	STP_party_market_sabotage = {

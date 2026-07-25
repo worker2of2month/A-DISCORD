@@ -23,6 +23,10 @@ VAL_clear_foreign_operation = {
 	clr_country_flag = VAL_operation_APH_infrastructure_concession
 	clr_country_flag = VAL_operation_APH_hire_local_captain
 	clr_country_flag = VAL_operation_APH_prepare_separate_terms
+	if = {
+		limit = { is_ai = yes NOT = { has_country_flag = VAL_ai_course_lock } }
+		country_event = { id = val_contract.900 }
+	}
 }
 
 VAL_select_negotiation_posture = {

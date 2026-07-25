@@ -15,6 +15,7 @@ VAL_contract_campaign = {
 			if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 }
 			VAL_start_stp_map_operation = yes
 		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { VAL_ai_has_current_course_reserve = yes } } modifier = { factor = 5 has_country_flag = VAL_ai_course_contract_broker } modifier = { factor = 3 has_country_flag = VAL_ai_course_northern_broker } }
 	}
 
 	VAL_STP_build_contractor_depot = {
@@ -34,6 +35,7 @@ VAL_contract_campaign = {
 			if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 }
 			VAL_start_stp_depot_operation = yes
 		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { VAL_ai_has_current_course_reserve = yes } } modifier = { factor = 4 has_country_flag = VAL_ai_course_patient_invader } modifier = { factor = 3 has_country_flag = VAL_ai_course_contract_broker } }
 	}
 
 	VAL_STP_offer_mountain_concession = {
@@ -53,6 +55,7 @@ VAL_contract_campaign = {
 			if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 }
 			VAL_start_stp_concession_operation = yes
 		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { VAL_ai_has_current_course_reserve = yes } } modifier = { factor = 6 has_country_flag = VAL_ai_course_contract_broker } modifier = { factor = 3 has_country_flag = VAL_ai_course_patient_invader } }
 	}
 
 	VAL_STP_buy_border_officers = {
@@ -73,6 +76,7 @@ VAL_contract_campaign = {
 			if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 }
 			VAL_start_stp_officer_operation = yes
 		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { VAL_ai_has_current_course_reserve = yes } } modifier = { factor = 5 has_country_flag = VAL_ai_course_resource_raider } }
 	}
 
 	VAL_STP_test_nodrul_red_line = {
@@ -91,6 +95,7 @@ VAL_contract_campaign = {
 			if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 }
 			VAL_start_stp_red_line_operation = yes
 		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { VAL_ai_has_current_course_reserve = yes } } modifier = { factor = 5 has_country_flag = VAL_ai_course_contract_broker } modifier = { factor = 3 has_country_flag = VAL_ai_course_resource_raider } }
 	}
 
 	VAL_open_mountain_contract = {
@@ -104,6 +109,7 @@ VAL_contract_campaign = {
 		}
 		cost = 50
 		complete_effect = { VAL_open_mountain_contract_channel = yes }
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { VAL_ai_has_current_course_reserve = yes } } modifier = { factor = 7 has_country_flag = VAL_ai_course_contract_broker } modifier = { factor = 3 has_country_flag = VAL_ai_course_resource_raider } modifier = { factor = 0 has_country_flag = VAL_ai_course_patient_invader } }
 	}
 
 	VAL_negotiate_deferred_invoice = {
@@ -116,6 +122,7 @@ VAL_contract_campaign = {
 		}
 		cost = 40
 		complete_effect = { VAL_accept_deferred_invoice = yes }
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { VAL_ai_has_current_course_reserve = yes } } modifier = { factor = 8 has_country_flag = VAL_ai_course_patient_invader } modifier = { factor = 4 has_country_flag = VAL_ai_course_contract_broker } }
 	}
 
 	VAL_start_resource_corridor = {
@@ -129,6 +136,7 @@ VAL_contract_campaign = {
 		}
 		cost = 60
 		complete_effect = { VAL_prepare_resource_corridor = yes }
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { VAL_ai_has_current_course_reserve = yes } } modifier = { factor = 10 has_country_flag = VAL_ai_course_resource_raider } modifier = { factor = 0 NOT = { has_country_flag = VAL_ai_course_resource_raider } } }
 	}
 
 	VAL_resource_corridor_control_30 = {
@@ -285,6 +293,9 @@ VAL_northern_campaign = {
 		complete_effect = { VAL_start_guarded_northern_campaign = yes }
 		ai_will_do = {
 			base = 1
+			modifier = { factor = 0 NOT = { VAL_ai_has_current_course_reserve = yes } }
+			modifier = { factor = 0 NOT = { has_country_flag = VAL_ai_course_northern_broker } }
+			modifier = { factor = 6 has_country_flag = VAL_ai_course_northern_broker }
 			modifier = { factor = 2 check_variable = { var = VAL_contract_authority value = 70 compare = greater_than_or_equals } }
 			modifier = { factor = 2 has_country_flag = VAL_northern_campaign_full }
 			modifier = { factor = 0.25 num_equipment@infantry_equipment < 2000 }

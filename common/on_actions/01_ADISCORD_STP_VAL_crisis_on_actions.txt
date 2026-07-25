@@ -28,6 +28,7 @@ on_actions = {
 				remove_ideas = VAL_mercenary_state
 				VAL_refresh_contract_modifier = yes
 				if = { limit = { VAL_stp_crisis_at_least_rupture = yes } VAL_select_negotiation_posture = yes }
+				country_event = { id = val_contract.900 }
 			}
 			NOD = {
 				ADISCORD_STP_VAL_initialize_schema = yes
@@ -80,6 +81,20 @@ on_actions = {
 				clr_country_flag = NOD_crisis_posture_lock
 				NOD_check_limited_war_integrity = yes
 				NOD_select_crisis_posture = yes
+			}
+			STP = {
+				if = {
+					limit = { is_ai = yes has_country_flag = STP_main_campaign_side }
+					clr_country_flag = STP_ai_course_lock
+					country_event = { id = stp_crisis.900 }
+				}
+			}
+			VAL = {
+				if = {
+					limit = { is_ai = yes }
+					clr_country_flag = VAL_ai_course_lock
+					country_event = { id = val_contract.900 }
+				}
 			}
 			VAL = { VAL_check_resource_corridor_integrity = yes }
 		}
@@ -151,6 +166,20 @@ on_actions = {
 						}
 						STP_try_finalize_internal_war = yes
 					}
+				}
+			}
+			STP = {
+				if = {
+					limit = { is_ai = yes has_country_flag = STP_main_campaign_side }
+					clr_country_flag = STP_ai_course_lock
+					country_event = { id = stp_crisis.900 }
+				}
+			}
+			VAL = {
+				if = {
+					limit = { is_ai = yes }
+					clr_country_flag = VAL_ai_course_lock
+					country_event = { id = val_contract.900 }
 				}
 			}
 		}
