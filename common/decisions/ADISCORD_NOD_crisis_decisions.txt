@@ -1,0 +1,232 @@
+NOD_crisis_posture = {
+	NOD_escalation_ypr = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NOD }
+		visible = { has_country_flag = NOD_crisis_posture_ypr }
+		activation = { NOD_can_escalate_ypr = yes }
+		available = { always = no }
+		selectable_mission = no
+		cancelable = no
+		days_mission_timeout = 35
+		timeout_effect = { NOD_attempt_limited_war_ypr = yes }
+	}
+
+	NOD_escalation_cof = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NOD }
+		visible = { has_country_flag = NOD_crisis_posture_cof }
+		activation = { NOD_can_escalate_cof = yes }
+		available = { always = no }
+		selectable_mission = no
+		cancelable = no
+		days_mission_timeout = 35
+		timeout_effect = { NOD_attempt_limited_war_cof = yes }
+	}
+
+	NOD_escalation_bhg = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NOD }
+		visible = { has_country_flag = NOD_crisis_posture_beshay }
+		activation = { NOD_can_escalate_bhg = yes }
+		available = { always = no }
+		selectable_mission = no
+		cancelable = no
+		days_mission_timeout = 35
+		timeout_effect = { NOD_attempt_limited_war_bhg = yes }
+	}
+
+	NOD_escalation_bbv = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NOD }
+		visible = { has_country_flag = NOD_crisis_posture_beshay }
+		activation = { NOD_can_escalate_bbv = yes }
+		available = { always = no }
+		selectable_mission = no
+		cancelable = no
+		days_mission_timeout = 35
+		timeout_effect = { NOD_attempt_limited_war_bbv = yes }
+	}
+
+	NOD_limited_war_timeout_ypr = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NOD }
+		visible = { has_country_flag = NOD_limited_war_ypr }
+		available = { always = no }
+		selectable_mission = no
+		cancelable = no
+		days_mission_timeout = 240
+		timeout_effect = { NOD_resolve_limited_timeout = yes }
+	}
+
+	NOD_limited_war_timeout_cof = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NOD }
+		visible = { has_country_flag = NOD_limited_war_cof }
+		available = { always = no }
+		selectable_mission = no
+		cancelable = no
+		days_mission_timeout = 180
+		timeout_effect = { NOD_resolve_limited_timeout = yes }
+	}
+
+	NOD_limited_war_timeout_bhg = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NOD }
+		visible = { has_country_flag = NOD_limited_war_bhg }
+		available = { always = no }
+		selectable_mission = no
+		cancelable = no
+		days_mission_timeout = 120
+		timeout_effect = { NOD_resolve_limited_timeout = yes }
+	}
+
+	NOD_limited_war_timeout_bbv = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NOD }
+		visible = { has_country_flag = NOD_limited_war_bbv }
+		available = { always = no }
+		selectable_mission = no
+		cancelable = no
+		days_mission_timeout = 120
+		timeout_effect = { NOD_resolve_limited_timeout = yes }
+	}
+
+	NOD_control_ypr_generation_1 = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NOD }
+		visible = { has_country_flag = NOD_ypr_control_generation_1 }
+		activation = {
+			has_country_flag = NOD_ypr_control_generation_1
+			controls_state = 15
+			controls_state = 19
+		}
+		available = { always = no }
+		selectable_mission = no
+		days_mission_timeout = 30
+		cancel_trigger = {
+			OR = {
+				NOT = { controls_state = 15 }
+				NOT = { controls_state = 19 }
+			}
+		}
+		timeout_effect = { NOD_apply_ypr_limited_victory = yes }
+		cancel_effect = {
+			clr_country_flag = NOD_ypr_control_generation_1
+			set_country_flag = NOD_ypr_control_generation_2
+		}
+	}
+
+	NOD_control_ypr_generation_2 = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NOD }
+		visible = { has_country_flag = NOD_ypr_control_generation_2 }
+		activation = {
+			has_country_flag = NOD_ypr_control_generation_2
+			controls_state = 15
+			controls_state = 19
+		}
+		available = { always = no }
+		selectable_mission = no
+		days_mission_timeout = 30
+		cancel_trigger = {
+			OR = {
+				NOT = { controls_state = 15 }
+				NOT = { controls_state = 19 }
+			}
+		}
+		timeout_effect = { NOD_apply_ypr_limited_victory = yes }
+		cancel_effect = {
+			clr_country_flag = NOD_ypr_control_generation_2
+			set_country_flag = NOD_ypr_control_generation_1
+		}
+	}
+
+	NOD_control_cof_generation_1 = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NOD }
+		visible = { has_country_flag = NOD_cof_control_generation_1 }
+		activation = {
+			has_country_flag = NOD_cof_control_generation_1
+			controls_state = 14
+		}
+		available = { always = no }
+		selectable_mission = no
+		days_mission_timeout = 30
+		cancel_trigger = { NOT = { controls_state = 14 } }
+		timeout_effect = { NOD_apply_cof_limited_victory = yes }
+		cancel_effect = {
+			clr_country_flag = NOD_cof_control_generation_1
+			set_country_flag = NOD_cof_control_generation_2
+		}
+	}
+
+	NOD_control_cof_generation_2 = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NOD }
+		visible = { has_country_flag = NOD_cof_control_generation_2 }
+		activation = {
+			has_country_flag = NOD_cof_control_generation_2
+			controls_state = 14
+		}
+		available = { always = no }
+		selectable_mission = no
+		days_mission_timeout = 30
+		cancel_trigger = { NOT = { controls_state = 14 } }
+		timeout_effect = { NOD_apply_cof_limited_victory = yes }
+		cancel_effect = {
+			clr_country_flag = NOD_cof_control_generation_2
+			set_country_flag = NOD_cof_control_generation_1
+		}
+	}
+
+	NOD_support_stp_material = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NOD }
+		visible = {
+			has_event_target = STP_crisis_party_side
+			has_event_target = STP_crisis_resistance_side
+		}
+		available = {
+			NOT = { has_country_flag = NOD_STP_material_support }
+			num_equipment@infantry_equipment > 249
+			num_equipment@support_equipment > 24
+		}
+		cost = 0
+		complete_effect = { NOD_send_stp_material_support = yes }
+	}
+
+	NOD_support_stp_limited = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NOD }
+		visible = {
+			has_event_target = STP_crisis_party_side
+			has_event_target = STP_crisis_resistance_side
+		}
+		available = {
+			NOT = { has_country_flag = NOD_STP_limited_support }
+			num_equipment@infantry_equipment > 499
+			num_equipment@support_equipment > 49
+		}
+		cost = 0
+		complete_effect = { NOD_send_stp_limited_support = yes }
+	}
+
+	NOD_support_stp_full = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NOD }
+		visible = {
+			has_event_target = STP_crisis_party_side
+			has_event_target = STP_crisis_resistance_side
+		}
+		available = {
+			event_target:STP_crisis_party_side = {
+				NOD_can_directly_defend_stp = yes
+			}
+			NOT = { has_country_flag = NOD_STP_full_support }
+			num_equipment@infantry_equipment > 999
+			num_equipment@support_equipment > 99
+		}
+		cost = 0
+		complete_effect = { NOD_send_stp_full_support = yes }
+	}
+}

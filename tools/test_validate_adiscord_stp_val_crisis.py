@@ -12,8 +12,12 @@ from tools.stp_val_crisis_manifest import (
     HEALTH_MISSIONS,
     HEALTH_STAGE_DAYS,
     LEADERS,
+    NOD_CONTROL_MISSIONS,
+    NOD_ESCALATION_MISSIONS,
     NOD_LIMITED_TARGET_STATES,
+    NOD_LIMITED_TIMEOUT_DAYS,
     NOD_POSTURES,
+    NOD_SUPPORT_LEVELS,
     NODE_LIMITS,
     POSTWAR_FOCUS_IDS,
     RESOURCE_STATES,
@@ -115,6 +119,26 @@ class CrisisManifestTests(unittest.TestCase):
         self.assertEqual(len(DECISION_CATEGORIES), 5)
         self.assertEqual(len(NOD_POSTURES), 5)
         self.assertEqual(NOD_LIMITED_TARGET_STATES["YPR"], (15, 19))
+        self.assertEqual(
+            NOD_LIMITED_TIMEOUT_DAYS,
+            {"YPR": 240, "COF": 180, "BHG": 120, "BBV": 120},
+        )
+        self.assertEqual(
+            set(NOD_ESCALATION_MISSIONS),
+            {
+                "NOD_escalation_ypr",
+                "NOD_escalation_cof",
+                "NOD_escalation_bhg",
+                "NOD_escalation_bbv",
+            },
+        )
+        self.assertEqual({spec[2] for spec in NOD_ESCALATION_MISSIONS.values()}, {35})
+        self.assertEqual(len(NOD_CONTROL_MISSIONS), 4)
+        self.assertEqual(set(NOD_SUPPORT_LEVELS), {
+            "NOD_support_stp_material",
+            "NOD_support_stp_limited",
+            "NOD_support_stp_full",
+        })
         self.assertEqual(WAR_COUNTDOWN_MISSIONS[-1], "STP_VAL_war_countdown_breached")
         self.assertEqual(set().union(*CIVIL_WAR_STATE_MAP.values()), {1, 2, 3, 28, 29, 43, 44, 45, 46, 53, 88})
 
@@ -1865,6 +1889,305 @@ class CrisisValidatorTests(unittest.TestCase):
         self.assertIn("value = num_equipment@infantry_equipment", purge)
         self.assertIn("max = 100", purge)
         self.assertIn("value = -1", purge)
+
+    def test_task_six_posture_and_escalation_contract(self):
+        root = validator.ROOT
+        decisions = validator.read(
+            root / "common/decisions/ADISCORD_NOD_crisis_decisions.txt"
+        ) or ""
+        effects = validator.read(
+            root / "common/scripted_effects/ADISCORD_STP_VAL_crisis_war_effects.txt"
+        ) or ""
+        triggers = validator.read(
+            root / "common/scripted_triggers/ADISCORD_STP_VAL_crisis_triggers.txt"
+        ) or ""
+        stp_events = validator.read(root / "events/ADISCORD_STP_crisis_events.txt") or ""
+        on_actions = validator.read(
+            root / "common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt"
+        ) or ""
+
+        selector = validator.extract_named_block(effects, "NOD_select_crisis_posture") or ""
+        for posture in NOD_POSTURES:
+            self.assertEqual(selector.count(f"clr_country_flag = {posture}"), 1)
+            self.assertIn(f"set_country_flag = {posture}", selector)
+        for driver in (
+            "has_war",
+            "strength_ratio",
+            "num_equipment@infantry_equipment",
+            "is_subject_of = NOD",
+            "STP_nodrul_shabrat_activity_discovered",
+            "STP_nodrul_disinformation_bias",
+        ):
+            self.assertIn(driver, selector)
+        self.assertIn("NOD_crisis_posture_lock", selector)
+        self.assertRegex(selector, r"days\s*=\s*(?:63|70)")
+
+        startup = validator.extract_named_block(on_actions, "on_startup") or ""
+        self.assertIn("NOD_select_crisis_posture = yes", startup)
+        for event_id in ("stp_crisis.1", "stp_crisis.2", "stp_crisis.3", "stp_crisis.4"):
+            event = self._block_with_assignment(stp_events, "country_event", f"id = {event_id}")
+            self.assertIn("NOD_select_crisis_posture = yes", event)
+
+        for mission, (_, target, days) in NOD_ESCALATION_MISSIONS.items():
+            block = validator.extract_named_block(decisions, mission) or ""
+            self.assertEqual(
+                validator._direct_scalar_values(block, "days_mission_timeout"),
+                [str(days)],
+            )
+            self.assertIn(
+                f"NOD_attempt_limited_war_{target.lower()} = yes",
+                validator.extract_named_block(block, "timeout_effect") or "",
+            )
+            self.assertIn(
+                "always = no",
+                validator.extract_named_block(block, "available") or "",
+            )
+
+        eligibility_contract = {
+            "ypr": ((15, 19), "0.9"),
+            "cof": ((14,), "1.1"),
+            "bhg": ((5,), "1.25"),
+            "bbv": ((7,), "1.25"),
+        }
+        for target, (states, ratio) in eligibility_contract.items():
+            block = validator.extract_named_block(
+                triggers, f"NOD_can_escalate_{target}"
+            ) or ""
+            for state in states:
+                self.assertIn(f"controls_state = {state}", block)
+            self.assertIn(f"ratio < {ratio}", block)
+            self.assertGreaterEqual(block.count("has_war = no"), 2)
+        ypr = validator.extract_named_block(triggers, "NOD_can_escalate_ypr") or ""
+        self.assertIn("is_in_faction = no", ypr)
+        self.assertIn("has_guaranteed = YPR", ypr)
+        bbv = validator.extract_named_block(triggers, "NOD_can_escalate_bbv") or ""
+        self.assertIn("is_in_faction_with = BJK", bbv)
+
+    def test_task_six_limited_peace_generation_and_cleanup_contract(self):
+        root = validator.ROOT
+        decisions = validator.read(
+            root / "common/decisions/ADISCORD_NOD_crisis_decisions.txt"
+        ) or ""
+        events = validator.read(root / "events/ADISCORD_NOD_crisis_events.txt") or ""
+        effects = validator.read(
+            root / "common/scripted_effects/ADISCORD_STP_VAL_crisis_war_effects.txt"
+        ) or ""
+        on_actions = validator.read(
+            root / "common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt"
+        ) or ""
+
+        task_six_blocks = []
+        for target in ("ypr", "cof", "bhg", "bbv"):
+            start = validator.extract_named_block(
+                effects, f"NOD_attempt_limited_war_{target}"
+            ) or ""
+            task_six_blocks.append(start)
+            self.assertIn(f"NOD_can_escalate_{target} = yes", start)
+            self.assertIn("NOD_limited_war_participant", start)
+            self.assertIn("NOD_limited_war_target", start)
+            self.assertIn("save_global_event_target_as = NOD_limited_war_nod", start)
+            self.assertIn(
+                "save_global_event_target_as = NOD_limited_war_target_country",
+                start,
+            )
+            self.assertIn("deployed_army_manpower_k", start)
+            self.assertIn("casualties", start)
+            self.assertIn("declare_war_on", start)
+
+            timeout = validator.extract_named_block(
+                decisions, f"NOD_limited_war_timeout_{target}"
+            ) or ""
+            self.assertEqual(
+                validator._direct_scalar_values(timeout, "days_mission_timeout"),
+                [str(NOD_LIMITED_TIMEOUT_DAYS[target.upper()])],
+            )
+            self.assertIn("NOD_resolve_limited_timeout = yes", timeout)
+
+        for mission, (target, days, generation) in NOD_CONTROL_MISSIONS.items():
+            block = validator.extract_named_block(decisions, mission) or ""
+            self.assertEqual(
+                validator._direct_scalar_values(block, "days_mission_timeout"),
+                [str(days)],
+            )
+            self.assertIn(
+                f"NOD_{target.lower()}_control_generation_{generation}",
+                block,
+            )
+            self.assertIn(
+                f"NOD_apply_{target.lower()}_limited_victory = yes",
+                validator.extract_named_block(block, "timeout_effect") or "",
+            )
+
+        for effect_name, tokens in {
+            "NOD_apply_ypr_limited_victory": (
+                "idea = NOD_ypr_trade_rights",
+                "days = 365",
+                "set_demilitarized_zone = yes",
+                "state = 15",
+                "state = 19",
+            ),
+            "NOD_apply_cof_limited_victory": (
+                "idea = NOD_cof_reparations",
+                "set_demilitarized_zone = yes",
+                "state = 14",
+            ),
+            "NOD_apply_bhg_limited_victory": (
+                "idea = NOD_beshay_trade_concession",
+                "days = 180",
+                "relation = non_aggression_pact",
+            ),
+            "NOD_apply_bbv_limited_victory": (
+                "idea = NOD_beshay_trade_concession",
+                "days = 180",
+                "relation = non_aggression_pact",
+            ),
+        }.items():
+            block = validator.extract_named_block(effects, effect_name) or ""
+            task_six_blocks.append(block)
+            for token in tokens:
+                self.assertIn(token, block)
+
+        emergency = validator.extract_named_block(
+            effects, "NOD_emergency_limited_white_peace"
+        ) or ""
+        cleanup = validator.extract_named_block(
+            effects, "NOD_clear_limited_conflict_state"
+        ) or ""
+        task_six_blocks.extend((emergency, cleanup))
+        self.assertIn("event_target:NOD_limited_war_nod", emergency)
+        self.assertIn("event_target:NOD_limited_war_target_country", emergency)
+        self.assertIn("white_peace", emergency)
+        for token in (
+            "NOD_limited_war_participant",
+            "NOD_limited_war_target",
+            "NOD_limited_war_nod",
+            "NOD_limited_war_target_country",
+            "remove_decision",
+            "clear_global_event_target",
+        ):
+            self.assertIn(token, cleanup)
+        forbidden = "\n".join(task_six_blocks) + events + decisions
+        for token in (
+            "transfer_state",
+            "set_state_owner",
+            "add_to_faction",
+            "skip_default_capitulation",
+        ):
+            self.assertNotIn(token, validator._mask_non_code(forbidden))
+        for hook in (
+            "on_war_relation_added",
+            "on_peace",
+            "on_capitulation",
+            "on_leave_faction",
+            "on_annex",
+            "on_state_control_changed",
+        ):
+            block = validator.extract_named_block(on_actions, hook) or ""
+            self.assertRegex(block, r"NOD_(?:select_crisis_posture|check_limited_war)")
+
+    def test_task_six_support_attention_and_target_scoped_direct_defence(self):
+        root = validator.ROOT
+        decisions = validator.read(
+            root / "common/decisions/ADISCORD_NOD_crisis_decisions.txt"
+        ) or ""
+        effects = validator.read(
+            root / "common/scripted_effects/ADISCORD_STP_VAL_crisis_war_effects.txt"
+        ) or ""
+        triggers = validator.read(
+            root / "common/scripted_triggers/ADISCORD_STP_VAL_crisis_triggers.txt"
+        ) or ""
+        stp_events = validator.read(root / "events/ADISCORD_STP_crisis_events.txt") or ""
+        ideas = validator.read(
+            root / "common/ideas/ADISCORD_STP_VAL_crisis_ideas.txt"
+        ) or ""
+
+        direct = validator.extract_named_block(
+            triggers, "NOD_can_directly_defend_stp"
+        ) or ""
+        self.assertIn("country_exists = NOD", direct)
+        nod_scope = validator.extract_named_block(direct, "NOD") or ""
+        for token in (
+            "NOD_crisis_posture_guardian",
+            "has_war = no",
+            "has_capitulated = no",
+            "NOD_has_85_percent_army_equipment = yes",
+            "controls_state = 10",
+            "controls_state = 11",
+            "tag = ROOT",
+            "ratio < 0.8",
+        ):
+            self.assertIn(token, nod_scope)
+        self.assertNotIn("tag = NOD", validator._mask_non_code(direct))
+
+        for decision, (infantry, support, level) in NOD_SUPPORT_LEVELS.items():
+            block = validator.extract_named_block(decisions, decision) or ""
+            self.assertIn(
+                f"NOD_send_stp_{level}_support = yes",
+                validator.extract_named_block(block, "complete_effect") or "",
+            )
+            support_effect = validator.extract_named_block(
+                effects, f"NOD_send_stp_{level}_support"
+            ) or ""
+            self.assertIn(f"amount = -{infantry}", support_effect)
+            self.assertIn(f"amount = -{support}", support_effect)
+            self.assertLess(
+                support_effect.index(f"amount = -{infantry}"),
+                support_effect.rindex(f"amount = {infantry}"),
+            )
+        limited = validator.extract_named_block(
+            effects, "NOD_send_stp_limited_support"
+        ) or ""
+        self.assertIn("STP_nodrul_limited_support", limited)
+        full = validator.extract_named_block(effects, "NOD_send_stp_full_support") or ""
+        self.assertIn("add_to_war", full)
+        self.assertIn("event_target:STP_crisis_party_side", full)
+        self.assertIn("give_military_access = NOD", full)
+        self.assertNotIn("add_to_faction", full)
+        full_decision = validator.extract_named_block(
+            decisions, "NOD_support_stp_full"
+        ) or ""
+        self.assertIn("event_target:STP_crisis_party_side", full_decision)
+        self.assertIn("NOD_can_directly_defend_stp = yes", full_decision)
+
+        for idea, token in (
+            ("STP_nodrul_limited_support", "supply_consumption_factor"),
+            ("NOD_ypr_trade_rights", "production_lack_of_resource_penalty_factor"),
+            ("NOD_cof_reparations", "industrial_capacity_factory"),
+            ("NOD_beshay_trade_concession", "supply_consumption_factor"),
+        ):
+            idea_block = validator.extract_named_block(ideas, idea) or ""
+            self.assertIn(token, idea_block)
+
+        losses = validator.extract_named_block(
+            effects, "NOD_evaluate_limited_war_losses"
+        ) or ""
+        for token in (
+            "deployed_army_manpower_k",
+            "casualties",
+            "value = 0.08",
+            "value = 1.5",
+            "NOD_limited_war_pyrrhic",
+            "NOD_change_crisis_attention",
+        ):
+            self.assertIn(token, losses)
+        disinformation = self._block_with_assignment(
+            stp_events, "country_event", "id = stp_crisis.25"
+        )
+        self.assertIn("STP_nodrul_disinformation_bias", disinformation)
+        self.assertIn("STP_nodrul_shabrat_activity_discovered", disinformation)
+        self.assertNotIn("declare_war_on", disinformation)
+        cleanup = validator.extract_named_block(
+            effects, "STP_clear_external_crisis_participants"
+        ) or ""
+        for token in (
+            "NOD_STP_material_support",
+            "NOD_STP_limited_support",
+            "NOD_STP_full_support",
+            "relation = military_access",
+            "active = no",
+            "remove_ideas = STP_nodrul_limited_support",
+        ):
+            self.assertIn(token, cleanup)
 
     def test_legacy_stp_and_val_migration_paths_are_idempotent(self):
         core = validator.read(

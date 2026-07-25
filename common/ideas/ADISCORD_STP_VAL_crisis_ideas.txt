@@ -55,5 +55,46 @@ ideas = {
 				land_reinforce_rate = 0.01
 			}
 		}
+
+		STP_nodrul_limited_support = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				supply_consumption_factor = -0.03
+				planning_speed = 0.05
+				land_reinforce_rate = 0.01
+			}
+		}
+
+		NOD_ypr_trade_rights = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				production_lack_of_resource_penalty_factor = -0.05
+				consumer_goods_factor = -0.01
+			}
+		}
+
+		NOD_cof_reparations = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				industrial_capacity_factory = 0.03
+				consumer_goods_factor = -0.02
+			}
+		}
+
+		NOD_beshay_trade_concession = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				production_lack_of_resource_penalty_factor = -0.03
+				supply_consumption_factor = -0.02
+			}
+		}
 	}
 }

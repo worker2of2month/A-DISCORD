@@ -30,12 +30,28 @@ on_actions = {
 			}
 			NOD = {
 				ADISCORD_STP_VAL_initialize_schema = yes
+				NOD_select_crisis_posture = yes
+			}
+		}
+	}
+
+	on_war_relation_added = {
+		effect = {
+			NOD = {
+				clr_country_flag = NOD_crisis_posture_lock
+				NOD_check_limited_war_integrity = yes
+				NOD_select_crisis_posture = yes
 			}
 		}
 	}
 
 	on_peace = {
 		effect = {
+			NOD = {
+				clr_country_flag = NOD_crisis_posture_lock
+				NOD_check_limited_war_integrity = yes
+				NOD_select_crisis_posture = yes
+			}
 			if = {
 				limit = {
 					has_event_target = STP_crisis_party_side
@@ -73,6 +89,11 @@ on_actions = {
 
 	on_capitulation = {
 		effect = {
+			NOD = {
+				clr_country_flag = NOD_crisis_posture_lock
+				NOD_check_limited_war_integrity = yes
+				NOD_select_crisis_posture = yes
+			}
 			if = {
 				limit = {
 					has_event_target = STP_crisis_party_side
@@ -104,6 +125,35 @@ on_actions = {
 						STP_try_finalize_internal_war = yes
 					}
 				}
+			}
+		}
+	}
+
+	on_leave_faction = {
+		effect = {
+			NOD = {
+				clr_country_flag = NOD_crisis_posture_lock
+				NOD_check_limited_war_integrity = yes
+				NOD_select_crisis_posture = yes
+			}
+		}
+	}
+
+	on_annex = {
+		effect = {
+			NOD = {
+				clr_country_flag = NOD_crisis_posture_lock
+				NOD_check_limited_war_integrity = yes
+				NOD_select_crisis_posture = yes
+			}
+		}
+	}
+
+	on_state_control_changed = {
+		effect = {
+			NOD = {
+				NOD_check_limited_war_control = yes
+				NOD_check_limited_war_integrity = yes
 			}
 		}
 	}

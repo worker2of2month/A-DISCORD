@@ -173,6 +173,23 @@ NOD_LIMITED_TARGET_STATES = {
     "BBV": (7,),
 }
 NOD_LIMITED_TIMEOUT_DAYS = {"YPR": 240, "COF": 180, "BHG": 120, "BBV": 120}
+NOD_ESCALATION_MISSIONS = {
+    "NOD_escalation_ypr": ("NOD_crisis_posture_ypr", "YPR", 35),
+    "NOD_escalation_cof": ("NOD_crisis_posture_cof", "COF", 35),
+    "NOD_escalation_bhg": ("NOD_crisis_posture_beshay", "BHG", 35),
+    "NOD_escalation_bbv": ("NOD_crisis_posture_beshay", "BBV", 35),
+}
+NOD_CONTROL_MISSIONS = {
+    "NOD_control_ypr_generation_1": ("YPR", 30, 1),
+    "NOD_control_ypr_generation_2": ("YPR", 30, 2),
+    "NOD_control_cof_generation_1": ("COF", 30, 1),
+    "NOD_control_cof_generation_2": ("COF", 30, 2),
+}
+NOD_SUPPORT_LEVELS = {
+    "NOD_support_stp_material": (250, 25, "material"),
+    "NOD_support_stp_limited": (500, 50, "limited"),
+    "NOD_support_stp_full": (1000, 100, "full"),
+}
 WAR_COUNTDOWN_MISSIONS = (
     "STP_VAL_war_countdown_120",
     "STP_VAL_war_countdown_180",

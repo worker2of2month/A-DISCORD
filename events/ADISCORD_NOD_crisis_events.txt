@@ -1,0 +1,114 @@
+add_namespace = nod_crisis
+
+# BBV inside BJK receives a border ultimatum only. This event cannot start a war.
+country_event = {
+	id = nod_crisis.1
+	title = nod_crisis.1.t
+	desc = nod_crisis.1.d
+	picture = GFX_report_event_generic_read_write
+	is_triggered_only = yes
+
+	option = {
+		name = nod_crisis.1.a
+		add_opinion_modifier = {
+			target = NOD
+			modifier = embargo
+		}
+	}
+}
+
+# Beshay concessions may end only the saved limited pair.
+country_event = {
+	id = nod_crisis.10
+	title = nod_crisis.10.t
+	desc = nod_crisis.10.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+
+	option = {
+		name = nod_crisis.10.a
+		ai_chance = { base = 2 }
+		set_country_flag = NOD_limited_concession_accepted
+		if = {
+			limit = {
+				has_event_target = NOD_limited_war_nod
+				country_exists = event_target:NOD_limited_war_nod
+			}
+			event_target:NOD_limited_war_nod = {
+				NOD_apply_bhg_limited_victory = yes
+			}
+		}
+	}
+	option = {
+		name = nod_crisis.10.b
+		ai_chance = { base = 3 }
+	}
+}
+
+country_event = {
+	id = nod_crisis.11
+	title = nod_crisis.11.t
+	desc = nod_crisis.11.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+
+	option = {
+		name = nod_crisis.11.a
+		ai_chance = { base = 2 }
+		set_country_flag = NOD_limited_concession_accepted
+		if = {
+			limit = {
+				has_event_target = NOD_limited_war_nod
+				country_exists = event_target:NOD_limited_war_nod
+			}
+			event_target:NOD_limited_war_nod = {
+				NOD_apply_bbv_limited_victory = yes
+			}
+		}
+	}
+	option = {
+		name = nod_crisis.11.b
+		ai_chance = { base = 3 }
+	}
+}
+
+# At 180 days an unresolved saved pair loses NOD attention once.
+country_event = {
+	id = nod_crisis.40
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag = NOD
+		has_country_flag = NOD_limited_war_active
+		NOT = { has_country_flag = NOD_limited_stalemate_recorded }
+	}
+
+immediate = {
+		set_country_flag = NOD_limited_stalemate_recorded
+		NOD_change_crisis_attention = { value = -10 }
+	}
+}
+
+# The demilitarized corridors are temporary and are restored by an addressed event.
+country_event = {
+	id = nod_crisis.90
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = { tag = NOD }
+
+	immediate = {
+		if = {
+			limit = { has_country_flag = NOD_ypr_demilitarization_pending }
+			15 = { set_demilitarized_zone = no }
+			19 = { set_demilitarized_zone = no }
+			clr_country_flag = NOD_ypr_demilitarization_pending
+		}
+		if = {
+			limit = { has_country_flag = NOD_cof_demilitarization_pending }
+			14 = { set_demilitarized_zone = no }
+			clr_country_flag = NOD_cof_demilitarization_pending
+		}
+	}
+}

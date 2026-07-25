@@ -14,6 +14,10 @@ country_event = {
 
 	immediate = {
 		STP_set_health_stage = { value = 2 }
+		NOD = {
+			clr_country_flag = NOD_crisis_posture_lock
+			NOD_select_crisis_posture = yes
+		}
 		complete_national_focus = STP_The_Man_Who_Bought_The_Sky
 		complete_national_focus = STP_When_The_Guarantee_Died
 		activate_mission = STP_health_stage_2_to_3
@@ -35,6 +39,10 @@ country_event = {
 
 	immediate = {
 		STP_set_health_stage = { value = 3 }
+		NOD = {
+			clr_country_flag = NOD_crisis_posture_lock
+			NOD_select_crisis_posture = yes
+		}
 		complete_national_focus = STP_The_Dying_Feast
 		complete_national_focus = STP_The_Doctors_Lie
 		activate_mission = STP_health_stage_3_to_4
@@ -55,6 +63,10 @@ country_event = {
 
 	immediate = {
 		STP_set_health_stage = { value = 4 }
+		NOD = {
+			clr_country_flag = NOD_crisis_posture_lock
+			NOD_select_crisis_posture = yes
+		}
 		complete_national_focus = STP_The_Last_Signature
 		complete_national_focus = STP_Cancel_The_Morning_Address
 		complete_national_focus = STP_A_Glass_Raised_Too_High
@@ -77,6 +89,10 @@ country_event = {
 	immediate = {
 		set_country_flag = STP_ivanov_dead
 		STP_set_health_stage = { value = 5 }
+		NOD = {
+			clr_country_flag = NOD_crisis_posture_lock
+			NOD_select_crisis_posture = yes
+		}
 		complete_national_focus = STP_The_Father_Of_Peace_Is_Gone
 		retire_character = STP_Petr_Ivanov
 
@@ -618,7 +634,7 @@ country_event = {
 	}
 }
 
-# Shabrat operation: Nodrul disinformation. Foreign operations are posture-neutral.
+# Shabrat operation: Nodrul disinformation changes the next posture weighting only.
 country_event = {
 	id = stp_crisis.25
 	hidden = yes
@@ -629,13 +645,16 @@ country_event = {
 	immediate = {
 		set_temp_variable = { var = STP_operation_enemy_posture value = STP_security_posture }
 		set_temp_variable = { var = STP_operation_result value = 1 }
+		add_to_variable = { var = STP_nodrul_disinformation_bias value = 1 }
 		if = {
 			limit = { check_variable = { var = STP_security_adaptation_foreign value = 1 compare = equals } }
 			STP_change_suspicion = { value = 5 }
+			set_country_flag = STP_nodrul_shabrat_activity_discovered
 		}
 		STP_change_node_val_channel = { value = 1 }
 		STP_change_readiness = { value = 5 }
 		STP_change_security_adaptation_foreign = { value = 1 }
+		NOD = { NOD_select_crisis_posture = yes }
 		clr_country_flag = STP_operation_paid_with_convoys
 		set_temp_variable = { var = STP_operation_cleanup_code value = 25 }
 		STP_clear_operation_slot = yes

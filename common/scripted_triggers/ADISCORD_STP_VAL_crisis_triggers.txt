@@ -70,7 +70,109 @@ STP_controls_any_internal_manifest_state = {
 	}
 }
 
-# Task 6 replaces this safe forward body with NOD's live corridor/posture check.
 NOD_can_directly_defend_stp = {
-	always = no
+	country_exists = NOD
+	NOD = {
+		has_country_flag = NOD_crisis_posture_guardian
+		has_war = no
+		has_capitulated = no
+		NOD_has_85_percent_army_equipment = yes
+		controls_state = 10
+		controls_state = 11
+		NOT = {
+			strength_ratio = {
+				tag = ROOT
+				ratio < 0.8
+			}
+		}
+	}
+}
+
+NOD_has_85_percent_army_equipment = {
+	check_variable = {
+		var = NOD_army_equipment_ratio
+		value = 85
+		compare = greater_than_or_equals
+	}
+}
+
+NOD_can_escalate_ypr = {
+	tag = NOD
+	NOT = { has_country_flag = NOD_limited_war_active }
+	has_war = no
+	country_exists = YPR
+	YPR = {
+		has_war = no
+		has_capitulated = no
+		is_in_faction = no
+		controls_state = 15
+		controls_state = 19
+	}
+	NOT = {
+		any_country = {
+			has_guaranteed = YPR
+			NOT = { tag = NOD }
+		}
+	}
+	NOT = {
+		strength_ratio = {
+			tag = YPR
+			ratio < 0.9
+		}
+	}
+}
+
+NOD_can_escalate_cof = {
+	tag = NOD
+	NOT = { has_country_flag = NOD_limited_war_active }
+	has_war = no
+	country_exists = COF
+	COF = {
+		has_war = no
+		has_capitulated = no
+		controls_state = 14
+	}
+	NOT = {
+		strength_ratio = {
+			tag = COF
+			ratio < 1.1
+		}
+	}
+}
+
+NOD_can_escalate_bhg = {
+	tag = NOD
+	NOT = { has_country_flag = NOD_limited_war_active }
+	has_war = no
+	country_exists = BHG
+	BHG = {
+		has_war = no
+		has_capitulated = no
+		controls_state = 5
+	}
+	NOT = {
+		strength_ratio = {
+			tag = BHG
+			ratio < 1.25
+		}
+	}
+}
+
+NOD_can_escalate_bbv = {
+	tag = NOD
+	NOT = { has_country_flag = NOD_limited_war_active }
+	has_war = no
+	country_exists = BBV
+	BBV = {
+		has_war = no
+		has_capitulated = no
+		controls_state = 7
+		NOT = { is_in_faction_with = BJK }
+	}
+	NOT = {
+		strength_ratio = {
+			tag = BBV
+			ratio < 1.25
+		}
+	}
 }

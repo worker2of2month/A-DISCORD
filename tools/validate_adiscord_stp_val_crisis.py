@@ -12,6 +12,12 @@ try:
     from tools.stp_val_crisis_manifest import (
         DECISION_CATEGORIES,
         HEALTH_MISSIONS,
+        NOD_CONTROL_MISSIONS,
+        NOD_ESCALATION_MISSIONS,
+        NOD_LIMITED_TARGET_STATES,
+        NOD_LIMITED_TIMEOUT_DAYS,
+        NOD_POSTURES,
+        NOD_SUPPORT_LEVELS,
         OWNED_FEATURE_FILES,
         POSTWAR_FOCUS_IDS,
         RESISTANCE_POSTURES,
@@ -33,6 +39,12 @@ except ModuleNotFoundError:
     from stp_val_crisis_manifest import (
         DECISION_CATEGORIES,
         HEALTH_MISSIONS,
+        NOD_CONTROL_MISSIONS,
+        NOD_ESCALATION_MISSIONS,
+        NOD_LIMITED_TARGET_STATES,
+        NOD_LIMITED_TIMEOUT_DAYS,
+        NOD_POSTURES,
+        NOD_SUPPORT_LEVELS,
         OWNED_FEATURE_FILES,
         POSTWAR_FOCUS_IDS,
         RESISTANCE_POSTURES,
@@ -848,6 +860,182 @@ def _validate_civil_war_contract(root: Path, issues: list[str]) -> None:
                 issues.append(f"militia template {template} must remain locked")
 
 
+def _validate_nod_contract(root: Path, issues: list[str]) -> None:
+    decisions = read(root / "common/decisions/ADISCORD_NOD_crisis_decisions.txt")
+    events = read(root / "events/ADISCORD_NOD_crisis_events.txt")
+    effects = read(
+        root / "common/scripted_effects/ADISCORD_STP_VAL_crisis_war_effects.txt"
+    )
+    triggers = read(
+        root / "common/scripted_triggers/ADISCORD_STP_VAL_crisis_triggers.txt"
+    )
+    on_actions = read(
+        root / "common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt"
+    )
+    ideas = read(root / "common/ideas/ADISCORD_STP_VAL_crisis_ideas.txt")
+    stp_events = read(root / "events/ADISCORD_STP_crisis_events.txt")
+
+    selector = extract_named_block(effects or "", "NOD_select_crisis_posture") or ""
+    for posture in NOD_POSTURES:
+        if (
+            selector.count(f"clr_country_flag = {posture}") != 1
+            or f"set_country_flag = {posture}" not in selector
+        ):
+            issues.append(f"NOD posture selector must clear and reach {posture}")
+    for driver in (
+        "has_war",
+        "strength_ratio",
+        "num_equipment@infantry_equipment",
+        "is_subject_of = NOD",
+        "STP_nodrul_shabrat_activity_discovered",
+        "STP_nodrul_disinformation_bias",
+    ):
+        if driver not in selector:
+            issues.append(f"NOD posture selector is missing contextual driver {driver}")
+    if "NOT = { has_country_flag = NOD_crisis_posture_lock }" not in selector:
+        issues.append("NOD posture selector must respect its stage lock")
+
+    if ideas is not None:
+        for idea, required_tokens in {
+            "STP_nodrul_limited_support": (
+                "supply_consumption_factor",
+                "planning_speed",
+                "land_reinforce_rate",
+            ),
+            "NOD_ypr_trade_rights": ("production_lack_of_resource_penalty_factor",),
+            "NOD_cof_reparations": ("industrial_capacity_factory",),
+            "NOD_beshay_trade_concession": ("supply_consumption_factor",),
+        }.items():
+            block = extract_named_block(ideas, idea) or ""
+            if not block:
+                issues.append(f"missing temporary NOD crisis idea {idea}")
+                continue
+            for token in required_tokens:
+                if token not in block:
+                    issues.append(f"{idea} is missing gameplay modifier {token}")
+
+    if decisions is not None:
+        for mission, (_, target, days) in NOD_ESCALATION_MISSIONS.items():
+            block = extract_named_block(decisions, mission) or ""
+            if _direct_scalar_values(block, "days_mission_timeout") != [str(days)]:
+                issues.append(f"{mission} must last exactly {days} days")
+            if f"NOD_attempt_limited_war_{target.lower()} = yes" not in block:
+                issues.append(f"{mission} must recheck and attempt only {target}")
+        for target, days in NOD_LIMITED_TIMEOUT_DAYS.items():
+            block = (
+                extract_named_block(
+                    decisions, f"NOD_limited_war_timeout_{target.lower()}"
+                )
+                or ""
+            )
+            if _direct_scalar_values(block, "days_mission_timeout") != [str(days)]:
+                issues.append(f"NOD limited war against {target} must time out in {days} days")
+        for mission, (target, days, generation) in NOD_CONTROL_MISSIONS.items():
+            block = extract_named_block(decisions, mission) or ""
+            if _direct_scalar_values(block, "days_mission_timeout") != [str(days)]:
+                issues.append(f"{mission} must hold control for {days} days")
+            if (
+                f"NOD_{target.lower()}_control_generation_{generation}" not in block
+            ):
+                issues.append(f"{mission} is missing its generation token")
+        for decision, (_, _, level) in NOD_SUPPORT_LEVELS.items():
+            block = extract_named_block(decisions, decision) or ""
+            if f"NOD_send_stp_{level}_support = yes" not in block:
+                issues.append(f"{decision} must call its paid support effect")
+
+    if triggers is not None:
+        direct = extract_named_block(triggers, "NOD_can_directly_defend_stp") or ""
+        nod_scope = extract_named_block(direct, "NOD") or ""
+        for token in (
+            "country_exists = NOD",
+            "NOD_crisis_posture_guardian",
+            "has_war = no",
+            "has_capitulated = no",
+            "NOD_has_85_percent_army_equipment = yes",
+            "controls_state = 10",
+            "controls_state = 11",
+            "tag = ROOT",
+            "ratio < 0.8",
+        ):
+            if token not in direct and token not in nod_scope:
+                issues.append(f"target-scoped NOD direct-defence trigger is missing {token}")
+        if re.search(r"\btag\s*=\s*NOD\b", _mask_non_code(direct)):
+            issues.append("NOD direct-defence trigger must remain callable from STP scope")
+        eligibility = {
+            "ypr": ((15, 19), "0.9"),
+            "cof": ((14,), "1.1"),
+            "bhg": ((5,), "1.25"),
+            "bbv": ((7,), "1.25"),
+        }
+        for target, (states, ratio) in eligibility.items():
+            block = extract_named_block(triggers, f"NOD_can_escalate_{target}") or ""
+            if any(f"controls_state = {state}" not in block for state in states):
+                issues.append(f"NOD {target.upper()} eligibility is missing target control")
+            if f"ratio < {ratio}" not in block:
+                issues.append(f"NOD {target.upper()} eligibility has wrong strength ratio")
+
+    task_six_effect_names = [
+        "NOD_clear_limited_conflict_state",
+        "NOD_emergency_limited_white_peace",
+        "NOD_evaluate_limited_war_losses",
+        *(f"NOD_attempt_limited_war_{target}" for target in ("ypr", "cof", "bhg", "bbv")),
+        *(f"NOD_apply_{target}_limited_victory" for target in ("ypr", "cof", "bhg", "bbv")),
+        *(f"NOD_send_stp_{level}_support" for level in ("material", "limited", "full")),
+    ]
+    task_six_effects = "\n".join(
+        extract_named_block(effects or "", name) or "" for name in task_six_effect_names
+    )
+    for token in ("transfer_state", "set_state_owner", "add_to_faction", "skip_default_capitulation"):
+        if token in _mask_non_code(task_six_effects + (events or "") + (decisions or "")):
+            issues.append(f"NOD limited-conflict feature must not use {token}")
+    for required in (
+        "NOD_limited_war_participant",
+        "NOD_limited_war_target",
+        "NOD_limited_war_nod",
+        "NOD_limited_war_target_country",
+        "white_peace",
+        "deployed_army_manpower_k",
+        "casualties",
+        "value = 0.08",
+        "value = 1.5",
+        "NOD_limited_war_pyrrhic",
+        "NOD_change_crisis_attention",
+    ):
+        if required not in task_six_effects:
+            issues.append(f"NOD limited-conflict effects are missing {required}")
+
+    if on_actions is not None:
+        for hook in (
+            "on_war_relation_added",
+            "on_peace",
+            "on_capitulation",
+            "on_leave_faction",
+            "on_annex",
+            "on_state_control_changed",
+        ):
+            block = extract_named_block(on_actions, hook) or ""
+            if not re.search(r"NOD_(?:select_crisis_posture|check_limited_war)", block):
+                issues.append(f"{hook} is missing event-driven NOD reevaluation/cleanup")
+
+    if stp_events is not None:
+        for event_id in ("stp_crisis.1", "stp_crisis.2", "stp_crisis.3", "stp_crisis.4"):
+            block = (
+                _block_with_direct_assignment(stp_events, "country_event", "id", event_id)
+                or ""
+            )
+            if "NOD_select_crisis_posture = yes" not in block:
+                issues.append(f"{event_id} must re-evaluate the NOD posture")
+        disinformation = (
+            _block_with_direct_assignment(stp_events, "country_event", "id", "stp_crisis.25")
+            or ""
+        )
+        if (
+            "STP_nodrul_disinformation_bias" not in disinformation
+            or "declare_war_on" in disinformation
+        ):
+            issues.append("STP disinformation must only bias NOD posture selection")
+
+
 def _validate_performance(root: Path, issues: list[str]) -> None:
     for relative_path in OWNED_FEATURE_FILES:
         text = read(root / relative_path)
@@ -869,6 +1057,8 @@ def validate(root: Path, section: str | None = None) -> list[str]:
                 _validate_stp_contract(root, issues)
             elif name == "civil_war":
                 _validate_civil_war_contract(root, issues)
+            elif name == "nod":
+                _validate_nod_contract(root, issues)
     return list(dict.fromkeys(issues))
 
 
