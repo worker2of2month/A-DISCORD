@@ -78,23 +78,37 @@ guiTypes = {
 			name = "Background"		
 			quadTextureSprite ="GFX_tiled_plain_bg_adiscord"
 		}
-		containerWindowType = {
-			name = "ADISCORD_119_hidden_politics_compat"
+		# Required HOI4 1.19 widgets. The custom politics layout does not display
+		# these controls, but the engine still resolves them by type and parent.
+		iconType = {
+			name = "pol_faction_icon"
 			position = { x = -10000 y = -10000 }
-			size = { width = 1 height = 1 }
-			clipping = no
+			quadTextureSprite = "GFX_tiled_window_transparent"
+			alwaystransparent = yes
+		}
 
-			buttonType = { name = "view_factions_button" quadTextureSprite = "GFX_tiled_window_transparent" alwaystransparent = yes }
-			buttonType = { name = "open_faction_button" quadTextureSprite = "GFX_tiled_window_transparent" alwaystransparent = yes }
-			buttonType = { name = "manage_exiled_collaborations_governments" quadTextureSprite = "GFX_tiled_window_transparent" alwaystransparent = yes }
-			iconType = { name = "icon_manage_subjects" quadTextureSprite = "GFX_tiled_window_transparent" alwaystransparent = yes }
-			iconType = { name = "view_faction_icon" quadTextureSprite = "GFX_tiled_window_transparent" alwaystransparent = yes }
-			iconType = { name = "icon_exiled_collaborations_governments" quadTextureSprite = "GFX_tiled_window_transparent" alwaystransparent = yes }
-			iconType = { name = "icon_occupied_territories" quadTextureSprite = "GFX_tiled_window_transparent" alwaystransparent = yes }
-			instantTextboxType = { name = "faction" font = "hoi_18mbs" text = "" maxWidth = 1 maxHeight = 1 alwaystransparent = yes }
-			instantTextboxType = { name = "no_faction" font = "hoi_18mbs" text = "" maxWidth = 1 maxHeight = 1 alwaystransparent = yes }
-			instantTextboxType = { name = "in_faction" font = "hoi_18mbs" text = "" maxWidth = 1 maxHeight = 1 alwaystransparent = yes }
-			instantTextboxType = { name = "original_in_faction" font = "hoi_18mbs" text = "" maxWidth = 1 maxHeight = 1 alwaystransparent = yes }
+		instantTextboxType = {
+			name = "manage_exiled_collaborations_governments"
+			position = { x = -10000 y = -10000 }
+			font = "hoi_16mbs"
+			text = ""
+			maxWidth = 1
+			maxHeight = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "icon_exiled_collaborations_governments"
+			position = { x = -10000 y = -10000 }
+			quadTextureSprite = "GFX_tiled_window_transparent"
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "icon_occupied_territories"
+			position = { x = -10000 y = -10000 }
+			quadTextureSprite = "GFX_tiled_window_transparent"
+			alwaystransparent = yes
 		}
 
 		iconType ={
@@ -197,43 +211,101 @@ guiTypes = {
 				maxHeight = 20
 			}
 			
-			instantTextboxType = {
-				name = "faction_name"
-				position = { x = -555 y = -45 }
-				font = "hoi_18mbs"
-				text = "faction"
-				maxWidth = 555
-				maxHeight = 20
-				multiline = no
-				format = left
-			}
-
-			instantTextboxType = {
-				name = "original_in_faction"
+			containerWindowType = {
+				name = "faction"
 				position = { x = -10000 y = -10000 }
-				font = "hoi_18mbs"
-				text = ""
-				maxWidth = 1
-				maxHeight = 1
-				alwaystransparent = yes
-			}
+				size = { width = 175 height = 20 }
+				clipping = no
 
-			buttonType = {
-				name = "new_faction_button"
-				position = { x = -10000 y = -10000 }
-				quadTextureSprite = "GFX_tiled_window_transparent"
-				alwaystransparent = yes
-			}
-			
-			buttonType = {
-				name = "dismantle_faction"
-				position = { x = -444 y = -50 }
-				quadTextureSprite = "GFX_dismantle_faction_button"
-				#buttonFont = "hoi_16mbs"
-				#buttonText = "DIPLOMACY_DISMANTLE_FACTION_TITLE"
+				containerWindowType = {
+					name = "no_faction"
+					size = { width = 100%% height = 100% }
 
-				hide = yes
-			}		
+					buttonType = {
+						name = "new_faction_button"
+						quadTextureSprite = "GFX_tiled_window_transparent"
+						alwaystransparent = yes
+					}
+
+					instantTextboxType = {
+						name = "view_factions_text"
+						font = "hoi_18mbs"
+						text = ""
+						maxWidth = 1
+						maxHeight = 1
+						alwaystransparent = yes
+					}
+
+					iconType = {
+						name = "create_faction_icon"
+						quadTextureSprite = "GFX_tiled_window_transparent"
+						alwaystransparent = yes
+					}
+				}
+
+				buttonType = {
+					name = "view_factions_button"
+					quadTextureSprite = "GFX_tiled_window_transparent"
+					alwaystransparent = yes
+				}
+
+				iconType = {
+					name = "view_faction_icon"
+					quadTextureSprite = "GFX_tiled_window_transparent"
+					alwaystransparent = yes
+				}
+
+				containerWindowType = {
+					name = "original_in_faction"
+					size = { width = 100%% height = 100% }
+
+					instantTextboxType = {
+						name = "faction_name"
+						font = "hoi_18mbs"
+						text = ""
+						maxWidth = 1
+						maxHeight = 1
+						alwaystransparent = yes
+					}
+
+					buttonType = {
+						name = "dismantle_faction"
+						quadTextureSprite = "GFX_tiled_window_transparent"
+						alwaystransparent = yes
+					}
+				}
+
+				containerWindowType = {
+					name = "in_faction"
+					size = { width = 100%% height = 100% }
+
+					buttonType = {
+						name = "open_faction_button"
+						quadTextureSprite = "GFX_tiled_window_transparent"
+						alwaystransparent = yes
+					}
+
+					iconType = {
+						name = "faction_icon"
+						quadTextureSprite = "GFX_tiled_window_transparent"
+						alwaystransparent = yes
+					}
+
+					positionType = {
+						name = "faction_name_position"
+						position = { x = 0 y = 0 }
+					}
+
+					instantTextboxType = {
+						name = "faction_name"
+						font = "hoi_18mbs"
+						text = ""
+						maxWidth = 1
+						maxHeight = 1
+						alwaystransparent = yes
+					}
+				}
+			}
 
 			containerWindowType = {
 				name = "power_balance_button"
