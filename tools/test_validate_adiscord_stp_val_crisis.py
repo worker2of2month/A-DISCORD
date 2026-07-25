@@ -33,6 +33,10 @@ from tools.stp_val_crisis_manifest import (
     VAL_CONTRACT_BANDS,
     VAL_CRISIS_FOCUS_IDS,
     VAL_FOCUS_REWARD_TOKENS,
+    VAL_NORTHERN_OPERATION_SPECS,
+    VAL_NORTHERN_OPERATION_TARGETS,
+    VAL_STP_CONCESSION_FLAGS,
+    VAL_STP_OPERATION_SPECS,
     VAL_STP_INTEL_STATES,
     WAR_COUNTDOWN_MISSIONS,
 )
@@ -2205,6 +2209,37 @@ class CrisisValidatorTests(unittest.TestCase):
             reward = validator.extract_named_block(block, "completion_reward") or ""
             for token in tokens:
                 self.assertIn(token, reward)
+
+    def test_task_eight_shared_val_operations_and_contract_lifecycle(self):
+        decisions = validator.read(
+            validator.ROOT / "common/decisions/ADISCORD_VAL_contract_decisions.txt"
+        ) or ""
+        effects = validator.read(
+            validator.ROOT
+            / "common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt"
+        ) or ""
+        for decision_id, (cost, days, _) in VAL_STP_OPERATION_SPECS.items():
+            block = validator.extract_named_block(decisions, decision_id) or ""
+            self.assertEqual(validator._direct_scalar_values(block, "cost"), [str(cost)])
+            self.assertEqual(
+                validator._direct_scalar_values(block, "days_remove"), [str(days)]
+            )
+            self.assertIn("VAL_foreign_operation_active", block)
+            self.assertIn("VAL_STP_target_cooldown", block)
+        for target in VAL_NORTHERN_OPERATION_TARGETS:
+            for suffix, (cost, days, _) in VAL_NORTHERN_OPERATION_SPECS.items():
+                block = validator.extract_named_block(
+                    decisions, f"VAL_{target}_{suffix}"
+                ) or ""
+                self.assertEqual(validator._direct_scalar_values(block, "cost"), [str(cost)])
+                self.assertEqual(
+                    validator._direct_scalar_values(block, "days_remove"), [str(days)]
+                )
+                self.assertIn("VAL_foreign_operation_active", block)
+        for flag in VAL_STP_CONCESSION_FLAGS:
+            self.assertIn(flag, effects)
+        self.assertNotIn("on_daily", validator._mask_non_code(effects))
+        self.assertEqual(validator.validate(validator.ROOT, "val"), [])
 
     def test_legacy_stp_and_val_migration_paths_are_idempotent(self):
         core = validator.read(

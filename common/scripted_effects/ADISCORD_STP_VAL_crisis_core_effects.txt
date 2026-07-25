@@ -149,6 +149,18 @@ ADISCORD_STP_VAL_initialize_schema = {
 			if = { limit = { NOT = { has_variable = VAL_CIN_contract_posture } } set_variable = { var = VAL_CIN_contract_posture value = 0 } }
 			if = { limit = { NOT = { has_variable = VAL_OSF_contract_posture } } set_variable = { var = VAL_OSF_contract_posture value = 0 } }
 			if = { limit = { NOT = { has_variable = VAL_APH_contract_posture } } set_variable = { var = VAL_APH_contract_posture value = 0 } }
+			if = { limit = { NOT = { has_variable = VAL_STP_exposure_intel } } set_variable = { var = VAL_STP_exposure_intel value = 0 } }
+			if = { limit = { NOT = { has_variable = VAL_STP_exposure_supply } } set_variable = { var = VAL_STP_exposure_supply value = 0 } }
+			if = { limit = { NOT = { has_variable = VAL_STP_exposure_concession } } set_variable = { var = VAL_STP_exposure_concession value = 0 } }
+			if = { limit = { NOT = { has_variable = VAL_STP_exposure_garrison } } set_variable = { var = VAL_STP_exposure_garrison value = 0 } }
+			if = { limit = { NOT = { has_variable = VAL_STP_exposure_nodrul } } set_variable = { var = VAL_STP_exposure_nodrul value = 0 } }
+			if = { limit = { NOT = { has_variable = VAL_CIN_last_family } } set_variable = { var = VAL_CIN_last_family value = 0 } }
+			if = { limit = { NOT = { has_variable = VAL_CIN_repeat_streak } } set_variable = { var = VAL_CIN_repeat_streak value = 0 } }
+			if = { limit = { NOT = { has_variable = VAL_OSF_last_family } } set_variable = { var = VAL_OSF_last_family value = 0 } }
+			if = { limit = { NOT = { has_variable = VAL_OSF_repeat_streak } } set_variable = { var = VAL_OSF_repeat_streak value = 0 } }
+			if = { limit = { NOT = { has_variable = VAL_APH_last_family } } set_variable = { var = VAL_APH_last_family value = 0 } }
+			if = { limit = { NOT = { has_variable = VAL_APH_repeat_streak } } set_variable = { var = VAL_APH_repeat_streak value = 0 } }
+			if = { limit = { NOT = { has_variable = VAL_STP_missed_debt_payments } } set_variable = { var = VAL_STP_missed_debt_payments value = 0 } }
 		}
 
 		# Schema assignment is deliberately last: all legacy reconstruction precedes it.
@@ -215,7 +227,13 @@ STP_set_crisis_phase = {
 		mark_focus_tree_layout_dirty = yes
 		if = {
 			limit = { VAL = { exists = yes } }
-			VAL = { mark_focus_tree_layout_dirty = yes }
+			VAL = {
+				mark_focus_tree_layout_dirty = yes
+				if = {
+					limit = { check_variable = { var = PREV.STP_requested_crisis_phase value = 2 compare = greater_than_or_equals } }
+					VAL_select_negotiation_posture = yes
+				}
+			}
 		}
 	}
 }
@@ -568,6 +586,30 @@ VAL_change_stp_leverage = {
 	add_to_variable = { var = VAL_STP_leverage value = $value$ }
 	if = { limit = { check_variable = { var = VAL_STP_leverage value = 0 compare = less_than } } set_variable = { var = VAL_STP_leverage value = 0 } }
 	if = { limit = { check_variable = { var = VAL_STP_leverage value = 100 compare = greater_than } } set_variable = { var = VAL_STP_leverage value = 100 } }
+}
+
+VAL_recalculate_stp_leverage_floor = {
+	set_temp_variable = { var = VAL_STP_leverage_floor value = 0 }
+	if = { limit = { has_country_flag = VAL_STP_resource_rights_45 } add_to_temp_variable = { var = VAL_STP_leverage_floor value = 10 } }
+	if = { limit = { has_country_flag = VAL_STP_resource_rights_88 } add_to_temp_variable = { var = VAL_STP_leverage_floor value = 10 } }
+	if = { limit = { has_country_flag = VAL_STP_client_garrison } add_to_temp_variable = { var = VAL_STP_leverage_floor value = 15 } }
+	if = { limit = { owns_state = 45 } add_to_temp_variable = { var = VAL_STP_leverage_floor value = 25 } }
+	if = { limit = { owns_state = 88 } add_to_temp_variable = { var = VAL_STP_leverage_floor value = 25 } }
+	if = {
+		limit = { check_variable = { var = VAL_STP_leverage value = VAL_STP_leverage_floor compare = less_than } }
+		set_variable = { var = VAL_STP_leverage value = VAL_STP_leverage_floor }
+	}
+	clamp_variable = { var = VAL_STP_leverage min = 0 max = 100 }
+}
+
+VAL_handle_stp_regime_change = {
+	VAL_change_stp_exposure_intel = { value = -1 }
+	VAL_change_stp_exposure_supply = { value = -1 }
+	VAL_change_stp_exposure_concession = { value = -1 }
+	VAL_change_stp_exposure_garrison = { value = -1 }
+	VAL_change_stp_exposure_nodrul = { value = -1 }
+	multiply_variable = { var = VAL_STP_leverage value = 0.5 }
+	VAL_recalculate_stp_leverage_floor = yes
 }
 
 STP_refresh_crisis_modifier = {

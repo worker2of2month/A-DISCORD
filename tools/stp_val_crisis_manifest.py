@@ -414,6 +414,29 @@ VAL_CRISIS_FOCUS_IDS = (
     "VAL_Let_Nodrul_Bleed",
     "VAL_Present_The_Final_Invoice",
 )
+VAL_STP_OPERATION_SPECS = {
+    "VAL_STP_map_mountain_passes": (25, 28, "intel"),
+    "VAL_STP_build_contractor_depot": (35, 35, "supply"),
+    "VAL_STP_offer_mountain_concession": (40, 35, "concession"),
+    "VAL_STP_buy_border_officers": (45, 35, "garrison"),
+    "VAL_STP_test_nodrul_red_line": (30, 28, "nodrul"),
+}
+VAL_NORTHERN_OPERATION_SPECS = {
+    "study_market": (30, 28, 0),
+    "arms_brokerage": (25, 35, 1),
+    "infrastructure_concession": (45, 35, 1),
+    "hire_local_captain": (35, 28, 1),
+    "prepare_separate_terms": (50, 35, 1),
+}
+VAL_NORTHERN_OPERATION_TARGETS = ("CIN", "OSF", "APH")
+VAL_STP_CONCESSION_FLAGS = (
+    "VAL_STP_concession_resource_45",
+    "VAL_STP_concession_resource_88",
+    "VAL_STP_concession_arms_debt",
+    "VAL_STP_concession_transit",
+    "VAL_STP_concession_advisers",
+    "VAL_STP_concession_postwar_contracts",
+)
 VAL_FOCUS_REWARD_TOKENS = {
     "VAL_The_Contract_State": ("VAL_contract_board_open", "VAL_change_contract_authority = { value = 5 }"),
     "VAL_The_Weaponry_Baron": ("VAL_change_contract_authority = { value = 10 }",),

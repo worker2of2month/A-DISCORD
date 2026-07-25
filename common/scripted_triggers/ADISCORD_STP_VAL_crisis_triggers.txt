@@ -221,3 +221,40 @@ VAL_has_postwar_stp_target = {
 		has_country_flag = STP_internal_outcome_finalized
 	}
 }
+
+VAL_STP_partner_is_viable = {
+	has_event_target = STP_val_contract_partner
+	country_exists = event_target:STP_val_contract_partner
+	event_target:STP_val_contract_partner = {
+		has_capitulated = no
+		surrender_progress < 0.65
+		num_divisions > 2
+		num_equipment_in_armies@infantry_equipment > 599
+		count_triggers = {
+			amount = 2
+			controls_state = 1
+			controls_state = 2
+			controls_state = 3
+			controls_state = 28
+			controls_state = 29
+			controls_state = 43
+			controls_state = 44
+			controls_state = 45
+			controls_state = 46
+			controls_state = 53
+			controls_state = 88
+		}
+		OR = {
+			count_triggers = {
+				amount = 2
+				check_variable = { var = STP_node_palace value = 1 compare = greater_than_or_equals }
+				check_variable = { var = STP_node_officers value = 1 compare = greater_than_or_equals }
+				check_variable = { var = STP_node_mountains value = 1 compare = greater_than_or_equals }
+				check_variable = { var = STP_node_market value = 1 compare = greater_than_or_equals }
+				check_variable = { var = STP_node_street value = 1 compare = greater_than_or_equals }
+				check_variable = { var = STP_node_val_channel value = 1 compare = greater_than_or_equals }
+			}
+			controls_state = 1
+		}
+	}
+}

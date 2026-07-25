@@ -123,5 +123,36 @@ ideas = {
 				production_speed_infrastructure_factor = 0.10
 			}
 		}
+
+		STP_val_contract_advisers = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				political_power_gain = -0.05
+				supply_consumption_factor = -0.04
+				planning_speed = 0.05
+			}
+		}
+
+		VAL_STP_postwar_contract_income = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				consumer_goods_factor = -0.02
+				ADISCORD_economy_trade_income_factor = 0.05
+			}
+		}
+
+		STP_VAL_postwar_contract_cost = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				consumer_goods_factor = 0.02
+				ADISCORD_economy_trade_income_factor = -0.05
+			}
+		}
 	}
 }

@@ -1,0 +1,699 @@
+# Kefreyt contract campaign: one shared foreign-operation slot, influence memory,
+# mountain contracts, obligations, and the guarded resource corridor.
+
+VAL_clear_foreign_operation = {
+	clr_country_flag = VAL_foreign_operation_active
+	clr_country_flag = VAL_operation_STP_map_mountain_passes
+	clr_country_flag = VAL_operation_STP_build_contractor_depot
+	clr_country_flag = VAL_operation_STP_offer_mountain_concession
+	clr_country_flag = VAL_operation_STP_buy_border_officers
+	clr_country_flag = VAL_operation_STP_test_nodrul_red_line
+	clr_country_flag = VAL_operation_CIN_study_market
+	clr_country_flag = VAL_operation_CIN_arms_brokerage
+	clr_country_flag = VAL_operation_CIN_infrastructure_concession
+	clr_country_flag = VAL_operation_CIN_hire_local_captain
+	clr_country_flag = VAL_operation_CIN_prepare_separate_terms
+	clr_country_flag = VAL_operation_OSF_study_market
+	clr_country_flag = VAL_operation_OSF_arms_brokerage
+	clr_country_flag = VAL_operation_OSF_infrastructure_concession
+	clr_country_flag = VAL_operation_OSF_hire_local_captain
+	clr_country_flag = VAL_operation_OSF_prepare_separate_terms
+	clr_country_flag = VAL_operation_APH_study_market
+	clr_country_flag = VAL_operation_APH_arms_brokerage
+	clr_country_flag = VAL_operation_APH_infrastructure_concession
+	clr_country_flag = VAL_operation_APH_hire_local_captain
+	clr_country_flag = VAL_operation_APH_prepare_separate_terms
+}
+
+VAL_select_negotiation_posture = {
+	if = {
+		limit = {
+			check_variable = { var = VAL_negotiation_posture value = 0 compare = equals }
+		}
+		random_list = {
+			30 = {
+				modifier = { factor = 2 check_variable = { var = VAL_contract_authority value = 75 compare = less_than } }
+				modifier = { factor = 2 has_country_flag = VAL_doctrine_sustained_supply }
+				set_variable = { var = VAL_negotiation_posture value = 1 }
+			}
+			30 = {
+				modifier = { factor = 2 check_variable = { var = VAL_contract_authority value = 75 compare = greater_than_or_equals } }
+				modifier = { factor = 2 has_country_flag = VAL_doctrine_resource_raider }
+				set_variable = { var = VAL_negotiation_posture value = 2 }
+			}
+			20 = {
+				modifier = { factor = 3 NOD = { NOT = { has_country_flag = NOD_crisis_posture_guardian } } }
+				modifier = { factor = 2 num_equipment@infantry_equipment < 1000 }
+				set_variable = { var = VAL_negotiation_posture value = 3 }
+			}
+			20 = {
+				modifier = { factor = 2 has_country_flag = VAL_doctrine_covert_intervention }
+				modifier = { factor = 2 has_country_flag = VAL_broad_resource_network }
+				set_variable = { var = VAL_negotiation_posture value = 4 }
+			}
+		}
+	}
+}
+
+VAL_save_current_stp_target = {
+	if = {
+		limit = {
+			has_event_target = STP_crisis_resistance_side
+			country_exists = event_target:STP_crisis_resistance_side
+			event_target:STP_crisis_resistance_side = { has_capitulated = no }
+		}
+		event_target:STP_crisis_resistance_side = {
+			save_global_event_target_as = VAL_STP_operation_target
+		}
+	}
+	else_if = {
+		limit = {
+			has_event_target = STP_crisis_party_side
+			country_exists = event_target:STP_crisis_party_side
+		}
+		event_target:STP_crisis_party_side = {
+			save_global_event_target_as = VAL_STP_operation_target
+		}
+	}
+	else_if = {
+		limit = { country_exists = STP }
+		STP = { save_global_event_target_as = VAL_STP_operation_target }
+	}
+}
+
+VAL_finish_stp_operation = {
+	set_country_flag = {
+		flag = VAL_STP_target_cooldown
+		days = 42
+		value = 1
+	}
+	VAL_clear_foreign_operation = yes
+	clear_global_event_target = VAL_STP_operation_target
+}
+
+VAL_change_stp_exposure_intel = {
+	add_to_variable = { var = VAL_STP_exposure_intel value = $value$ }
+	clamp_variable = { var = VAL_STP_exposure_intel min = 0 max = 3 }
+}
+VAL_change_stp_exposure_supply = {
+	add_to_variable = { var = VAL_STP_exposure_supply value = $value$ }
+	clamp_variable = { var = VAL_STP_exposure_supply min = 0 max = 3 }
+}
+VAL_change_stp_exposure_concession = {
+	add_to_variable = { var = VAL_STP_exposure_concession value = $value$ }
+	clamp_variable = { var = VAL_STP_exposure_concession min = 0 max = 3 }
+}
+VAL_change_stp_exposure_garrison = {
+	add_to_variable = { var = VAL_STP_exposure_garrison value = $value$ }
+	clamp_variable = { var = VAL_STP_exposure_garrison min = 0 max = 3 }
+}
+VAL_change_stp_exposure_nodrul = {
+	add_to_variable = { var = VAL_STP_exposure_nodrul value = $value$ }
+	clamp_variable = { var = VAL_STP_exposure_nodrul min = 0 max = 3 }
+}
+
+VAL_apply_stp_family_memory = {
+	if = {
+		limit = { has_country_flag = $success_flag$ }
+		add_political_power = -10
+	}
+	else = {
+		set_country_flag = $success_flag$
+		VAL_change_stp_leverage = { value = $first_leverage$ }
+	}
+	if = {
+		limit = {
+			check_variable = { var = $exposure_var$ value = 2 compare = greater_than_or_equals }
+			has_event_target = VAL_STP_operation_target
+			country_exists = event_target:VAL_STP_operation_target
+		}
+		event_target:VAL_STP_operation_target = {
+			set_country_flag = $counter_flag$
+		}
+	}
+	if = {
+		limit = {
+			check_variable = { var = $exposure_var$ value = 3 compare = greater_than_or_equals }
+		}
+		set_country_flag = {
+			flag = $block_flag$
+			days = 90
+			value = 1
+		}
+		if = {
+			limit = { country_exists = NOD }
+			NOD = { set_country_flag = VAL_STP_repeated_operation_reported }
+		}
+	}
+}
+
+VAL_start_stp_map_operation = {
+	set_country_flag = VAL_foreign_operation_active
+	set_country_flag = VAL_operation_STP_map_mountain_passes
+	VAL_select_negotiation_posture = yes
+	VAL_save_current_stp_target = yes
+	country_event = { id = val_contract.100 days = 28 }
+}
+VAL_start_stp_depot_operation = {
+	set_country_flag = VAL_foreign_operation_active
+	set_country_flag = VAL_operation_STP_build_contractor_depot
+	VAL_select_negotiation_posture = yes
+	VAL_save_current_stp_target = yes
+	add_equipment_to_stockpile = { type = infantry_equipment amount = -300 producer = VAL }
+	country_event = { id = val_contract.101 days = 35 }
+}
+VAL_start_stp_concession_operation = {
+	set_country_flag = VAL_foreign_operation_active
+	set_country_flag = VAL_operation_STP_offer_mountain_concession
+	VAL_select_negotiation_posture = yes
+	VAL_save_current_stp_target = yes
+	country_event = { id = val_contract.102 days = 35 }
+}
+VAL_start_stp_officer_operation = {
+	set_country_flag = VAL_foreign_operation_active
+	set_country_flag = VAL_operation_STP_buy_border_officers
+	VAL_select_negotiation_posture = yes
+	VAL_save_current_stp_target = yes
+	add_command_power = -20
+	add_equipment_to_stockpile = { type = support_equipment amount = -100 producer = VAL }
+	country_event = { id = val_contract.103 days = 35 }
+}
+VAL_start_stp_red_line_operation = {
+	set_country_flag = VAL_foreign_operation_active
+	set_country_flag = VAL_operation_STP_test_nodrul_red_line
+	VAL_select_negotiation_posture = yes
+	VAL_save_current_stp_target = yes
+	country_event = { id = val_contract.104 days = 28 }
+}
+
+VAL_resolve_stp_map_operation = {
+	VAL_change_stp_exposure_intel = { value = 1 }
+	set_country_flag = VAL_STP_intel_43
+	set_country_flag = VAL_STP_intel_44
+	set_country_flag = VAL_STP_intel_45
+	set_country_flag = VAL_STP_intel_88
+	if = {
+		limit = { has_event_target = VAL_STP_operation_target }
+		set_variable = { var = VAL_STP_saved_security_posture value = event_target:VAL_STP_operation_target.STP_security_posture }
+		set_variable = { var = VAL_STP_saved_resistance_posture value = event_target:VAL_STP_operation_target.STP_resistance_posture }
+	}
+	VAL_apply_stp_family_memory = {
+		success_flag = VAL_STP_success_intel
+		first_leverage = 0
+		exposure_var = VAL_STP_exposure_intel
+		counter_flag = STP_VAL_counter_intel
+		block_flag = VAL_STP_block_intel
+	}
+	VAL_finish_stp_operation = yes
+}
+VAL_resolve_stp_depot_operation = {
+	VAL_change_stp_exposure_supply = { value = 1 }
+	VAL_apply_stp_family_memory = {
+		success_flag = VAL_STP_success_supply
+		first_leverage = 10
+		exposure_var = VAL_STP_exposure_supply
+		counter_flag = STP_VAL_counter_supply
+		block_flag = VAL_STP_block_supply
+	}
+	VAL_finish_stp_operation = yes
+}
+VAL_resolve_stp_concession_operation = {
+	VAL_change_stp_exposure_concession = { value = 1 }
+	VAL_apply_stp_family_memory = {
+		success_flag = VAL_STP_success_concession
+		first_leverage = 15
+		exposure_var = VAL_STP_exposure_concession
+		counter_flag = STP_VAL_counter_concession
+		block_flag = VAL_STP_block_concession
+	}
+	VAL_finish_stp_operation = yes
+}
+VAL_resolve_stp_officer_operation = {
+	VAL_change_stp_exposure_garrison = { value = 1 }
+	set_country_flag = VAL_STP_client_garrison
+	VAL_apply_stp_family_memory = {
+		success_flag = VAL_STP_success_garrison
+		first_leverage = 20
+		exposure_var = VAL_STP_exposure_garrison
+		counter_flag = STP_VAL_counter_garrison
+		block_flag = VAL_STP_block_garrison
+	}
+	VAL_finish_stp_operation = yes
+}
+VAL_resolve_stp_red_line_operation = {
+	VAL_change_stp_exposure_nodrul = { value = 1 }
+	if = {
+		limit = { country_exists = NOD }
+		NOD = {
+			save_global_event_target_as = VAL_saved_nodrul_posture
+		}
+	}
+	VAL_apply_stp_family_memory = {
+		success_flag = VAL_STP_success_nodrul
+		first_leverage = 0
+		exposure_var = VAL_STP_exposure_nodrul
+		counter_flag = STP_VAL_counter_nodrul
+		block_flag = VAL_STP_block_nodrul
+	}
+	VAL_finish_stp_operation = yes
+}
+
+VAL_resolve_active_stp_operation = {
+	if = { limit = { has_country_flag = VAL_operation_STP_map_mountain_passes } VAL_resolve_stp_map_operation = yes }
+	else_if = { limit = { has_country_flag = VAL_operation_STP_build_contractor_depot } VAL_resolve_stp_depot_operation = yes }
+	else_if = { limit = { has_country_flag = VAL_operation_STP_offer_mountain_concession } VAL_resolve_stp_concession_operation = yes }
+	else_if = { limit = { has_country_flag = VAL_operation_STP_buy_border_officers } VAL_resolve_stp_officer_operation = yes }
+	else_if = { limit = { has_country_flag = VAL_operation_STP_test_nodrul_red_line } VAL_resolve_stp_red_line_operation = yes }
+}
+
+VAL_reject_stp_operation = {
+	if = {
+		limit = { has_event_target = VAL_STP_operation_target }
+		event_target:VAL_STP_operation_target = { set_country_flag = STP_VAL_foreign_operation_resisted }
+	}
+	VAL_change_stp_leverage = { value = -5 }
+	VAL_recalculate_stp_leverage_floor = yes
+	VAL_finish_stp_operation = yes
+}
+
+# Generic northern-family memory. Full variable and flag names are passed by each resolver.
+VAL_update_northern_family_memory = {
+	if = {
+		limit = { check_variable = { var = $last_var$ value = $family_code$ compare = equals } }
+		add_to_variable = { var = $streak_var$ value = 1 }
+	}
+	else = {
+		set_variable = { var = $last_var$ value = $family_code$ }
+		set_variable = { var = $streak_var$ value = 1 }
+	}
+	if = {
+		limit = { check_variable = { var = $streak_var$ value = 3 compare = greater_than_or_equals } }
+		set_country_flag = { flag = $block_flag$ days = 90 value = 1 }
+	}
+}
+
+VAL_resolve_northern_operation = {
+	VAL_update_northern_family_memory = {
+		last_var = $last_var$
+		streak_var = $streak_var$
+		family_code = $family_code$
+		block_flag = $block_flag$
+	}
+	if = {
+		limit = { NOT = { has_country_flag = $success_flag$ } }
+		set_country_flag = $success_flag$
+		add_to_variable = { var = $influence_var$ value = $influence_delta$ }
+		clamp_variable = { var = $influence_var$ min = 0 max = 3 }
+	}
+	set_country_flag = { flag = $cooldown_flag$ days = 70 value = 1 }
+	VAL_clear_foreign_operation = yes
+}
+
+VAL_select_cin_contract_posture = {
+	if = { limit = { check_variable = { var = VAL_CIN_contract_posture value = 0 compare = equals } } random_list = { 30 = { set_variable = { var = VAL_CIN_contract_posture value = 1 } } 25 = { modifier = { factor = 2 CIN = { has_war = yes } } set_variable = { var = VAL_CIN_contract_posture value = 2 } } 25 = { modifier = { factor = 2 CIN = { stability < 0.4 } } set_variable = { var = VAL_CIN_contract_posture value = 3 } } 20 = { modifier = { factor = 2 CIN = { num_equipment@infantry_equipment < 500 } } set_variable = { var = VAL_CIN_contract_posture value = 4 } } } }
+}
+VAL_select_osf_contract_posture = {
+	if = { limit = { check_variable = { var = VAL_OSF_contract_posture value = 0 compare = equals } } random_list = { 30 = { set_variable = { var = VAL_OSF_contract_posture value = 1 } } 25 = { modifier = { factor = 2 OSF = { has_war = yes } } set_variable = { var = VAL_OSF_contract_posture value = 2 } } 25 = { modifier = { factor = 2 OSF = { stability < 0.4 } } set_variable = { var = VAL_OSF_contract_posture value = 3 } } 20 = { modifier = { factor = 2 OSF = { num_equipment@infantry_equipment < 500 } } set_variable = { var = VAL_OSF_contract_posture value = 4 } } } }
+}
+VAL_select_aph_contract_posture = {
+	if = { limit = { check_variable = { var = VAL_APH_contract_posture value = 0 compare = equals } } random_list = { 30 = { set_variable = { var = VAL_APH_contract_posture value = 1 } } 25 = { modifier = { factor = 2 APH = { has_war = yes } } set_variable = { var = VAL_APH_contract_posture value = 2 } } 25 = { modifier = { factor = 2 APH = { stability < 0.4 } } set_variable = { var = VAL_APH_contract_posture value = 3 } } 20 = { modifier = { factor = 2 APH = { num_equipment@infantry_equipment < 500 } } set_variable = { var = VAL_APH_contract_posture value = 4 } } } }
+}
+
+VAL_start_northern_operation = {
+	set_country_flag = VAL_foreign_operation_active
+	set_country_flag = $operation_flag$
+	country_event = { id = $event_id$ days = $days$ }
+}
+
+VAL_resolve_cin_operation = {
+	VAL_select_cin_contract_posture = yes
+	VAL_resolve_northern_operation = {
+		last_var = VAL_CIN_last_family
+		streak_var = VAL_CIN_repeat_streak
+		family_code = $family_code$
+		block_flag = $block_flag$
+		success_flag = $success_flag$
+		influence_var = VAL_CIN_influence
+		influence_delta = $influence_delta$
+		cooldown_flag = VAL_CIN_target_cooldown
+	}
+}
+VAL_resolve_osf_operation = {
+	VAL_select_osf_contract_posture = yes
+	VAL_resolve_northern_operation = {
+		last_var = VAL_OSF_last_family
+		streak_var = VAL_OSF_repeat_streak
+		family_code = $family_code$
+		block_flag = $block_flag$
+		success_flag = $success_flag$
+		influence_var = VAL_OSF_influence
+		influence_delta = $influence_delta$
+		cooldown_flag = VAL_OSF_target_cooldown
+	}
+}
+VAL_resolve_aph_operation = {
+	VAL_select_aph_contract_posture = yes
+	VAL_resolve_northern_operation = {
+		last_var = VAL_APH_last_family
+		streak_var = VAL_APH_repeat_streak
+		family_code = $family_code$
+		block_flag = $block_flag$
+		success_flag = $success_flag$
+		influence_var = VAL_APH_influence
+		influence_delta = $influence_delta$
+		cooldown_flag = VAL_APH_target_cooldown
+	}
+}
+
+VAL_resolve_active_cin_operation = {
+	if = { limit = { has_country_flag = VAL_operation_CIN_study_market } VAL_resolve_cin_operation = { family_code = 1 block_flag = VAL_CIN_block_market success_flag = VAL_CIN_success_market influence_delta = 0 } }
+	else_if = { limit = { has_country_flag = VAL_operation_CIN_arms_brokerage } VAL_resolve_cin_operation = { family_code = 2 block_flag = VAL_CIN_block_arms success_flag = VAL_CIN_success_arms influence_delta = 1 } }
+	else_if = { limit = { has_country_flag = VAL_operation_CIN_infrastructure_concession } VAL_resolve_cin_operation = { family_code = 3 block_flag = VAL_CIN_block_infrastructure success_flag = VAL_CIN_success_infrastructure influence_delta = 1 } }
+	else_if = { limit = { has_country_flag = VAL_operation_CIN_hire_local_captain } VAL_resolve_cin_operation = { family_code = 4 block_flag = VAL_CIN_block_captain success_flag = VAL_CIN_success_captain influence_delta = 1 } }
+	else_if = { limit = { has_country_flag = VAL_operation_CIN_prepare_separate_terms } VAL_resolve_cin_operation = { family_code = 5 block_flag = VAL_CIN_block_terms success_flag = VAL_CIN_success_terms influence_delta = 1 } }
+}
+VAL_resolve_active_osf_operation = {
+	if = { limit = { has_country_flag = VAL_operation_OSF_study_market } VAL_resolve_osf_operation = { family_code = 1 block_flag = VAL_OSF_block_market success_flag = VAL_OSF_success_market influence_delta = 0 } }
+	else_if = { limit = { has_country_flag = VAL_operation_OSF_arms_brokerage } VAL_resolve_osf_operation = { family_code = 2 block_flag = VAL_OSF_block_arms success_flag = VAL_OSF_success_arms influence_delta = 1 } }
+	else_if = { limit = { has_country_flag = VAL_operation_OSF_infrastructure_concession } VAL_resolve_osf_operation = { family_code = 3 block_flag = VAL_OSF_block_infrastructure success_flag = VAL_OSF_success_infrastructure influence_delta = 1 } }
+	else_if = { limit = { has_country_flag = VAL_operation_OSF_hire_local_captain } VAL_resolve_osf_operation = { family_code = 4 block_flag = VAL_OSF_block_captain success_flag = VAL_OSF_success_captain influence_delta = 1 } }
+	else_if = { limit = { has_country_flag = VAL_operation_OSF_prepare_separate_terms } VAL_resolve_osf_operation = { family_code = 5 block_flag = VAL_OSF_block_terms success_flag = VAL_OSF_success_terms influence_delta = 1 } }
+}
+VAL_resolve_active_aph_operation = {
+	if = { limit = { has_country_flag = VAL_operation_APH_study_market } VAL_resolve_aph_operation = { family_code = 1 block_flag = VAL_APH_block_market success_flag = VAL_APH_success_market influence_delta = 0 } }
+	else_if = { limit = { has_country_flag = VAL_operation_APH_arms_brokerage } VAL_resolve_aph_operation = { family_code = 2 block_flag = VAL_APH_block_arms success_flag = VAL_APH_success_arms influence_delta = 1 } }
+	else_if = { limit = { has_country_flag = VAL_operation_APH_infrastructure_concession } VAL_resolve_aph_operation = { family_code = 3 block_flag = VAL_APH_block_infrastructure success_flag = VAL_APH_success_infrastructure influence_delta = 1 } }
+	else_if = { limit = { has_country_flag = VAL_operation_APH_hire_local_captain } VAL_resolve_aph_operation = { family_code = 4 block_flag = VAL_APH_block_captain success_flag = VAL_APH_success_captain influence_delta = 1 } }
+	else_if = { limit = { has_country_flag = VAL_operation_APH_prepare_separate_terms } VAL_resolve_aph_operation = { family_code = 5 block_flag = VAL_APH_block_terms success_flag = VAL_APH_success_terms influence_delta = 1 } }
+}
+
+# Five-state mountain-deal chain.
+VAL_open_mountain_contract_channel = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = VAL_foreign_operation_active }
+			VAL_has_active_stp_civil_war = yes
+		}
+		VAL_select_negotiation_posture = yes
+		VAL_save_current_stp_target = yes
+		if = {
+			limit = {
+				has_event_target = VAL_STP_operation_target
+				country_exists = event_target:VAL_STP_operation_target
+			}
+			event_target:VAL_STP_operation_target = {
+				save_global_event_target_as = STP_val_contract_partner
+			}
+			set_country_flag = VAL_foreign_operation_active
+			set_country_flag = VAL_STP_negotiation_state_channel
+			event_target:STP_val_contract_partner = { country_event = { id = val_contract.1 } }
+			set_country_flag = VAL_STP_offer_generation_1
+			country_event = { id = val_contract.8 days = 35 }
+		}
+	}
+}
+
+VAL_advance_mountain_contract_viability = {
+	clr_country_flag = VAL_STP_negotiation_state_channel
+	set_country_flag = VAL_STP_negotiation_state_viability
+	if = {
+		limit = { VAL_STP_partner_is_viable = yes }
+		clr_country_flag = VAL_STP_negotiation_state_viability
+		set_country_flag = VAL_STP_negotiation_state_concessions
+		country_event = { id = val_contract.2 days = 2 }
+	}
+	else = { VAL_abort_mountain_contract = yes }
+}
+
+VAL_choose_mountain_concessions = {
+	clr_country_flag = VAL_STP_negotiation_state_concessions
+	set_country_flag = VAL_STP_negotiation_state_offer
+	set_variable = { var = VAL_STP_concession_count value = 1 }
+	set_country_flag = VAL_STP_concession_arms_debt
+	if = {
+		limit = { check_variable = { var = VAL_negotiation_posture value = 1 compare = equals } }
+		set_variable = { var = VAL_STP_concession_count value = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_negotiation_posture value = 2 compare = equals } }
+		set_country_flag = VAL_STP_concession_resource_45
+		set_country_flag = VAL_STP_concession_postwar_contracts
+		set_variable = { var = VAL_STP_concession_count value = 3 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_negotiation_posture value = 3 compare = equals } }
+		set_country_flag = VAL_STP_concession_postwar_contracts
+		set_variable = { var = VAL_STP_concession_count value = 1 }
+	}
+	else = {
+		set_country_flag = VAL_STP_concession_resource_88
+		set_country_flag = VAL_STP_concession_advisers
+		set_variable = { var = VAL_STP_concession_count value = 3 }
+		VAL_change_stp_exposure_nodrul = { value = 1 }
+	}
+	clr_country_flag = VAL_STP_negotiation_state_offer
+	set_country_flag = VAL_STP_negotiation_state_response
+	event_target:STP_val_contract_partner = { country_event = { id = val_contract.3 } }
+}
+
+VAL_accept_mountain_contract = {
+	if = {
+		limit = { VAL_STP_partner_is_viable = yes }
+		if = {
+			limit = { check_variable = { var = VAL_STP_concession_count value = 3 compare = greater_than_or_equals } }
+			VAL_apply_mountain_contract = { countdown = 450 }
+		}
+		else_if = {
+			limit = { check_variable = { var = VAL_STP_concession_count value = 2 compare = greater_than_or_equals } }
+			VAL_apply_mountain_contract = { countdown = 300 }
+		}
+		else = { VAL_apply_mountain_contract = { countdown = 180 } }
+	}
+	else = { VAL_abort_mountain_contract = yes }
+}
+
+VAL_counter_mountain_contract = {
+	if = {
+		limit = { NOT = { has_country_flag = VAL_STP_counteroffer_used } }
+		set_country_flag = VAL_STP_counteroffer_used
+		set_country_flag = VAL_STP_offer_generation_2
+		country_event = { id = val_contract.9 days = 21 }
+		if = {
+			limit = { check_variable = { var = VAL_STP_concession_count value = 1 compare = greater_than } }
+			subtract_from_variable = { var = VAL_STP_concession_count value = 1 }
+			clr_country_flag = VAL_STP_concession_postwar_contracts
+		}
+		country_event = { id = val_contract.4 days = 2 }
+	}
+	else = { VAL_abort_mountain_contract = yes }
+}
+
+VAL_abort_mountain_contract = {
+	clr_country_flag = VAL_STP_offer_generation_1
+	clr_country_flag = VAL_STP_offer_generation_2
+	clr_country_flag = VAL_STP_negotiation_state_channel
+	clr_country_flag = VAL_STP_negotiation_state_viability
+	clr_country_flag = VAL_STP_negotiation_state_concessions
+	clr_country_flag = VAL_STP_negotiation_state_offer
+	clr_country_flag = VAL_STP_negotiation_state_response
+	clr_country_flag = VAL_STP_counteroffer_used
+	set_country_flag = { flag = VAL_STP_target_cooldown days = 42 value = 1 }
+	VAL_clear_foreign_operation = yes
+	clear_global_event_target = STP_val_contract_partner
+}
+
+VAL_apply_mountain_contract = {
+	clr_country_flag = VAL_STP_offer_generation_1
+	clr_country_flag = VAL_STP_offer_generation_2
+	clr_country_flag = VAL_STP_negotiation_state_channel
+	clr_country_flag = VAL_STP_negotiation_state_viability
+	clr_country_flag = VAL_STP_negotiation_state_concessions
+	clr_country_flag = VAL_STP_negotiation_state_offer
+	clr_country_flag = VAL_STP_negotiation_state_response
+	clr_country_flag = VAL_STP_counteroffer_used
+	set_country_flag = VAL_STP_contract_active
+	set_variable = { var = VAL_STP_contract_countdown value = $countdown$ }
+	set_temp_variable = { var = VAL_STP_requested_contract_countdown value = $countdown$ }
+	if = { limit = { has_country_flag = VAL_STP_concession_resource_45 } VAL_activate_resource_rights_45 = yes }
+	if = { limit = { has_country_flag = VAL_STP_concession_resource_88 } VAL_activate_resource_rights_88 = yes }
+	if = { limit = { has_country_flag = VAL_STP_concession_transit } event_target:STP_val_contract_partner = { give_military_access = VAL } }
+	if = {
+		limit = { has_country_flag = VAL_STP_concession_advisers }
+		add_command_power = -20
+		event_target:STP_val_contract_partner = { add_ideas = STP_val_contract_advisers }
+		activate_mission = VAL_STP_adviser_factory_obligation
+	}
+	if = {
+		limit = { has_country_flag = VAL_STP_concession_postwar_contracts }
+		add_timed_idea = { idea = VAL_STP_postwar_contract_income days = $countdown$ }
+		event_target:STP_val_contract_partner = { add_timed_idea = { idea = STP_VAL_postwar_contract_cost days = $countdown$ } }
+	}
+	if = {
+		limit = {
+			check_variable = { var = VAL_STP_requested_contract_countdown value = 299 compare = greater_than }
+			VAL_STP_partner_is_viable = yes
+			NOT = { NOD = { has_country_flag = NOD_STP_full_support } }
+		}
+		add_to_war = {
+			targeted_alliance = event_target:STP_val_contract_partner
+			enemy = event_target:STP_crisis_party_side
+			hostility_reason = asked_to_join
+			single_target_only = yes
+		}
+	}
+	VAL_STP_start_war_countdown = { type = $countdown$ }
+	VAL_finish_stp_operation = yes
+}
+
+VAL_activate_resource_rights_45 = {
+	if = {
+		limit = { has_event_target = STP_val_contract_partner }
+		event_target:STP_val_contract_partner = { give_resource_rights = { receiver = VAL state = 45 } }
+		set_country_flag = VAL_STP_resource_rights_active
+		set_country_flag = VAL_STP_resource_rights_45
+	}
+}
+VAL_activate_resource_rights_88 = {
+	if = {
+		limit = { has_event_target = STP_val_contract_partner }
+		event_target:STP_val_contract_partner = { give_resource_rights = { receiver = VAL state = 88 } }
+		set_country_flag = VAL_STP_resource_rights_active
+		set_country_flag = VAL_STP_resource_rights_88
+	}
+}
+
+VAL_STP_cleanup_contract_relations = {
+	remove_resource_rights = 45
+	remove_resource_rights = 88
+	if = {
+		limit = { has_event_target = STP_postwar_country country_exists = event_target:STP_postwar_country }
+		diplomatic_relation = { country = event_target:STP_postwar_country relation = military_access active = no }
+		diplomatic_relation = { country = event_target:STP_postwar_country relation = non_aggression_pact active = no }
+		event_target:STP_postwar_country = {
+			remove_ideas = STP_val_contract_advisers
+			remove_ideas = STP_VAL_postwar_contract_cost
+		}
+	}
+	remove_ideas = VAL_STP_postwar_contract_income
+	remove_decision = VAL_STP_adviser_factory_obligation
+	remove_decision = VAL_STP_arms_debt_day_30
+	remove_decision = VAL_STP_arms_debt_day_90
+	remove_decision = VAL_STP_arms_debt_day_150
+	clr_country_flag = VAL_STP_resource_rights_active
+	clr_country_flag = VAL_STP_resource_rights_45
+	clr_country_flag = VAL_STP_resource_rights_88
+	clr_country_flag = VAL_STP_concession_resource_45
+	clr_country_flag = VAL_STP_concession_resource_88
+	clr_country_flag = VAL_STP_concession_arms_debt
+	clr_country_flag = VAL_STP_concession_transit
+	clr_country_flag = VAL_STP_concession_advisers
+	clr_country_flag = VAL_STP_concession_postwar_contracts
+	clr_country_flag = VAL_STP_contract_active
+	clr_country_flag = VAL_STP_debt_schedule_started
+	clr_country_flag = VAL_STP_negotiation_state_channel
+	clr_country_flag = VAL_STP_negotiation_state_viability
+	clr_country_flag = VAL_STP_negotiation_state_concessions
+	clr_country_flag = VAL_STP_negotiation_state_offer
+	clr_country_flag = VAL_STP_negotiation_state_response
+	clr_country_flag = VAL_STP_counteroffer_used
+	set_variable = { var = VAL_STP_missed_debt_payments value = 0 }
+	clear_global_event_target = STP_val_contract_partner
+}
+
+VAL_accept_deferred_invoice = {
+	if = {
+		limit = { VAL_can_negotiate_deferred_invoice = yes }
+		set_country_flag = VAL_foreign_operation_active
+		event_target:STP_postwar_country = { save_global_event_target_as = STP_val_contract_partner }
+		VAL_select_negotiation_posture = yes
+		set_variable = { var = VAL_STP_concession_count value = 1 }
+		set_country_flag = VAL_STP_concession_arms_debt
+		if = { limit = { check_variable = { var = VAL_negotiation_posture value = 1 compare = equals } } VAL_apply_mountain_contract = { countdown = 180 } }
+		else_if = { limit = { check_variable = { var = VAL_negotiation_posture value = 3 compare = equals } } set_country_flag = VAL_STP_concession_postwar_contracts VAL_apply_mountain_contract = { countdown = 300 } }
+		else = { set_country_flag = VAL_STP_concession_resource_45 set_country_flag = VAL_STP_concession_postwar_contracts set_country_flag = VAL_STP_concession_arms_debt set_variable = { var = VAL_STP_concession_count value = 3 } VAL_apply_mountain_contract = { countdown = 450 } }
+		event_target:STP_postwar_country = { clr_country_flag = VAL_STP_deferred_invoice_window }
+	}
+}
+
+# Guarded resource-corridor attempt during the internal war.
+VAL_prepare_resource_corridor = {
+	if = {
+		limit = {
+			VAL_has_active_stp_civil_war = yes
+			NOT = { has_country_flag = VAL_resource_corridor_attempted }
+		}
+		set_country_flag = VAL_resource_corridor_attempted
+		45 = { owner = { save_global_event_target_as = VAL_corridor_owner_45 } }
+		88 = { owner = { save_global_event_target_as = VAL_corridor_owner_88 } }
+		if = {
+			limit = { event_target:VAL_corridor_owner_45 = { tag = event_target:VAL_corridor_owner_88 } }
+			set_country_flag = VAL_resource_corridor_full_mode
+			event_target:VAL_corridor_owner_45 = { set_country_flag = VAL_resource_corridor_participant }
+			declare_war_on = { target = event_target:VAL_corridor_owner_45 type = take_state_focus generator = { 45 88 } }
+		}
+		else = {
+			if = { limit = { is_ai = no } country_event = { id = val_contract.40 } }
+			else = {
+				random_list = {
+					45 = { modifier = { factor = 2 has_country_flag = VAL_supply_contracts } VAL_start_corridor_target_45 = yes }
+					55 = { modifier = { factor = 2 has_country_flag = VAL_doctrine_resource_raider } VAL_start_corridor_target_88 = yes }
+				}
+			}
+		}
+	}
+}
+
+VAL_start_corridor_target_45 = {
+	set_country_flag = VAL_resource_corridor_target_45
+	event_target:VAL_corridor_owner_45 = { set_country_flag = VAL_resource_corridor_participant }
+	declare_war_on = { target = event_target:VAL_corridor_owner_45 type = take_state_focus generator = { 45 } }
+}
+
+VAL_start_corridor_target_88 = {
+	set_country_flag = VAL_resource_corridor_target_88
+	event_target:VAL_corridor_owner_88 = { set_country_flag = VAL_resource_corridor_participant }
+	declare_war_on = { target = event_target:VAL_corridor_owner_88 type = take_state_focus generator = { 88 } }
+}
+
+VAL_check_resource_corridor_control = {
+	if = {
+		limit = { has_country_flag = VAL_resource_corridor_full_mode controls_state = 45 controls_state = 88 NOT = { has_country_flag = VAL_corridor_control_generation } }
+		set_country_flag = VAL_corridor_control_generation
+		activate_mission = VAL_resource_corridor_control_30
+	}
+	else_if = {
+		limit = { has_country_flag = VAL_resource_corridor_target_45 controls_state = 45 NOT = { has_country_flag = VAL_corridor_control_generation } }
+		set_country_flag = VAL_corridor_control_generation
+		activate_mission = VAL_resource_corridor_control_30
+	}
+	else_if = {
+		limit = { has_country_flag = VAL_resource_corridor_target_88 controls_state = 88 NOT = { has_country_flag = VAL_corridor_control_generation } }
+		set_country_flag = VAL_corridor_control_generation
+		activate_mission = VAL_resource_corridor_control_30
+	}
+}
+
+VAL_offer_resource_corridor_concession = {
+	if = {
+		limit = { has_country_flag = VAL_resource_corridor_full_mode controls_state = 45 controls_state = 88 }
+		event_target:VAL_corridor_owner_45 = { country_event = { id = val_contract.50 } }
+	}
+	else_if = {
+		limit = { has_country_flag = VAL_resource_corridor_target_45 controls_state = 45 }
+		event_target:VAL_corridor_owner_45 = { country_event = { id = val_contract.51 } }
+	}
+	else_if = {
+		limit = { has_country_flag = VAL_resource_corridor_target_88 controls_state = 88 }
+		event_target:VAL_corridor_owner_88 = { country_event = { id = val_contract.52 } }
+	}
+}
+
+VAL_accept_resource_corridor = {
+	if = { limit = { has_country_flag = VAL_resource_corridor_full_mode controls_state = 45 controls_state = 88 } transfer_state = 45 transfer_state = 88 }
+	else_if = { limit = { has_country_flag = VAL_resource_corridor_target_45 controls_state = 45 } transfer_state = 45 }
+	else_if = { limit = { has_country_flag = VAL_resource_corridor_target_88 controls_state = 88 } transfer_state = 88 }
+	remove_resource_rights = 45
+	remove_resource_rights = 88
+	set_country_flag = VAL_resource_corridor_resolved
+	clr_country_flag = VAL_resource_corridor_control_generation
+}

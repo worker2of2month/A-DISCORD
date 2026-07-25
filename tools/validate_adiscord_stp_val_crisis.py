@@ -38,6 +38,10 @@ try:
         VAL_CONTRACT_BANDS,
         VAL_CRISIS_FOCUS_IDS,
         VAL_FOCUS_REWARD_TOKENS,
+        VAL_NORTHERN_OPERATION_SPECS,
+        VAL_NORTHERN_OPERATION_TARGETS,
+        VAL_STP_CONCESSION_FLAGS,
+        VAL_STP_OPERATION_SPECS,
     )
 except ModuleNotFoundError:
     from stp_val_crisis_manifest import (
@@ -69,6 +73,10 @@ except ModuleNotFoundError:
         VAL_CONTRACT_BANDS,
         VAL_CRISIS_FOCUS_IDS,
         VAL_FOCUS_REWARD_TOKENS,
+        VAL_NORTHERN_OPERATION_SPECS,
+        VAL_NORTHERN_OPERATION_TARGETS,
+        VAL_STP_CONCESSION_FLAGS,
+        VAL_STP_OPERATION_SPECS,
     )
 
 
@@ -875,6 +883,11 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
     triggers = read(root / "common/scripted_triggers/ADISCORD_STP_VAL_crisis_triggers.txt")
     dynamic = read(root / "common/dynamic_modifiers/ADISCORD_STP_VAL_crisis_dynamic_modifiers.txt")
     ideas = read(root / "common/ideas/ADISCORD_STP_VAL_crisis_ideas.txt")
+    decisions = read(root / "common/decisions/ADISCORD_VAL_contract_decisions.txt")
+    contract_effects = read(
+        root / "common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt"
+    )
+    contract_events = read(root / "events/ADISCORD_VAL_contract_events.txt")
 
     if focus_text is not None:
         blocks: dict[str, str] = {}
@@ -985,6 +998,145 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
         ):
             if token not in (extract_named_block(ideas, idea) or ""):
                 issues.append(f"missing or incomplete VAL focus idea {idea}")
+
+    if decisions is None:
+        issues.append("missing VAL contract decisions: common/decisions/ADISCORD_VAL_contract_decisions.txt")
+    else:
+        for decision_id, (cost, days, family) in VAL_STP_OPERATION_SPECS.items():
+            block = extract_named_block(decisions, decision_id) or ""
+            if not block:
+                issues.append(f"missing VAL STP operation {decision_id}")
+                continue
+            if _direct_scalar_values(block, "cost") != [str(cost)]:
+                issues.append(f"{decision_id} must cost {cost} PP")
+            if _direct_scalar_values(block, "days_remove") != [str(days)]:
+                issues.append(f"{decision_id} must last {days} days")
+            available = extract_named_block(block, "available") or ""
+            for token in (
+                "VAL_foreign_operation_active",
+                "VAL_STP_target_cooldown",
+                f"VAL_STP_block_{family}",
+            ):
+                if token not in available:
+                    issues.append(f"{decision_id} availability is missing {token}")
+
+        for target in VAL_NORTHERN_OPERATION_TARGETS:
+            for suffix, (cost, days, _) in VAL_NORTHERN_OPERATION_SPECS.items():
+                decision_id = f"VAL_{target}_{suffix}"
+                block = extract_named_block(decisions, decision_id) or ""
+                if not block:
+                    issues.append(f"missing northern operation {decision_id}")
+                    continue
+                if _direct_scalar_values(block, "cost") != [str(cost)]:
+                    issues.append(f"{decision_id} must cost {cost} PP")
+                if _direct_scalar_values(block, "days_remove") != [str(days)]:
+                    issues.append(f"{decision_id} must last {days} days")
+                available = extract_named_block(block, "available") or ""
+                for token in ("VAL_foreign_operation_active", f"VAL_{target}_target_cooldown"):
+                    if token not in available:
+                        issues.append(f"{decision_id} availability is missing {token}")
+                if suffix == "arms_brokerage" and "amount = -400" not in block:
+                    issues.append(f"{decision_id} must pay 400 infantry equipment")
+                if suffix == "infrastructure_concession" and "civilian_factory_use = 2" not in block:
+                    issues.append(f"{decision_id} must reserve two civilian factories")
+                if suffix == "hire_local_captain":
+                    for token in ("add_command_power = -15", "amount = -80"):
+                        if token not in block:
+                            issues.append(f"{decision_id} is missing paid captain cost {token}")
+                if suffix == "prepare_separate_terms":
+                    for token in ("civilian_factory_use = 1", "amount = 2"):
+                        if token not in block:
+                            issues.append(f"{decision_id} is missing separate-terms gate {token}")
+
+    if contract_effects is None:
+        issues.append("missing contract and northern effects: common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt")
+    else:
+        finish = extract_named_block(contract_effects, "VAL_finish_stp_operation") or ""
+        for token in ("VAL_STP_target_cooldown", "days = 42", "VAL_clear_foreign_operation = yes"):
+            if token not in finish:
+                issues.append(f"VAL STP resolver cleanup is missing {token}")
+        clear = extract_named_block(contract_effects, "VAL_clear_foreign_operation") or ""
+        if "VAL_foreign_operation_active" not in clear:
+            issues.append("VAL shared foreign slot is never cleared")
+        selector = extract_named_block(contract_effects, "VAL_select_negotiation_posture") or ""
+        if "value = 0 compare = equals" not in selector:
+            issues.append("VAL negotiation posture must be selected only while unset")
+        for value in range(1, 5):
+            if f"var = VAL_negotiation_posture value = {value}" not in selector:
+                issues.append(f"VAL negotiation posture selector cannot reach {value}")
+        for family in ("intel", "supply", "concession", "garrison", "nodrul"):
+            for token in (
+                f"VAL_STP_exposure_{family}",
+                f"VAL_STP_block_{family}",
+            ):
+                if token not in contract_effects:
+                    issues.append(f"VAL STP exposure system is missing {token}")
+        memory = extract_named_block(contract_effects, "VAL_update_northern_family_memory") or ""
+        for token in ("$last_var$", "$streak_var$", "value = 3", "days = 90"):
+            if token not in memory:
+                issues.append(f"VAL northern family memory is missing {token}")
+        northern_resolver = extract_named_block(contract_effects, "VAL_resolve_northern_operation") or ""
+        for token in ("days = 70", "$influence_var$", "max = 3"):
+            if token not in northern_resolver:
+                issues.append(f"VAL northern resolver is missing {token}")
+        floor = extract_named_block(core or "", "VAL_recalculate_stp_leverage_floor") or ""
+        for token in (
+            "VAL_STP_resource_rights_45",
+            "VAL_STP_resource_rights_88",
+            "VAL_STP_client_garrison",
+            "owns_state = 45",
+            "owns_state = 88",
+            "VAL_STP_leverage_floor",
+        ):
+            if token not in floor:
+                issues.append(f"VAL STP leverage floor is missing {token}")
+        for state in ("channel", "viability", "concessions", "offer", "response"):
+            if f"VAL_STP_negotiation_state_{state}" not in contract_effects:
+                issues.append(f"VAL mountain deal is missing state {state}")
+        for flag in VAL_STP_CONCESSION_FLAGS:
+            if flag not in contract_effects:
+                issues.append(f"VAL mountain deal is missing concession {flag}")
+        for countdown in (180, 300, 450):
+            if f"countdown = {countdown}" not in contract_effects:
+                issues.append(f"VAL mountain deal cannot select {countdown} days")
+        cleanup = extract_named_block(contract_effects, "VAL_STP_cleanup_contract_relations") or ""
+        for token in (
+            "remove_resource_rights = 45",
+            "remove_resource_rights = 88",
+            "relation = military_access",
+            "civilian_factory_use",
+            "VAL_STP_concession_arms_debt",
+            "clear_global_event_target = STP_val_contract_partner",
+        ):
+            search_block = cleanup if token != "civilian_factory_use" else (decisions or "")
+            if token not in search_block:
+                issues.append(f"VAL contract lifecycle is missing {token}")
+        corridor = extract_named_block(contract_effects, "VAL_prepare_resource_corridor") or ""
+        for token in (
+            "VAL_resource_corridor_attempted",
+            "VAL_corridor_owner_45",
+            "VAL_corridor_owner_88",
+            "generator = { 45 88 }",
+        ):
+            if token not in corridor:
+                issues.append(f"VAL resource corridor is missing {token}")
+        corridor_accept = extract_named_block(contract_effects, "VAL_accept_resource_corridor") or ""
+        for token in ("controls_state = 45", "controls_state = 88", "transfer_state"):
+            if token not in corridor_accept:
+                issues.append(f"VAL corridor concession is missing physical-control guard {token}")
+        if "on_daily" in _mask_non_code(contract_effects):
+            issues.append("VAL contract mechanics must remain event-driven")
+
+    if contract_events is None:
+        issues.append("missing VAL contract events: events/ADISCORD_VAL_contract_events.txt")
+    else:
+        for event_id in ("val_contract.1", "val_contract.2", "val_contract.3", "val_contract.4", "val_contract.5"):
+            if not _block_with_direct_assignment(contract_events, "country_event", "id", event_id):
+                issues.append(f"missing mountain negotiation event {event_id}")
+        for event_id in ("val_contract.300", "val_contract.301", "val_contract.302"):
+            block = _block_with_direct_assignment(contract_events, "country_event", "id", event_id) or ""
+            if "is_triggered_only = yes" not in block or block.count("option =") < 2:
+                issues.append(f"human northern target response is incomplete: {event_id}")
 
 
 def _validate_nod_contract(root: Path, issues: list[str]) -> None:
