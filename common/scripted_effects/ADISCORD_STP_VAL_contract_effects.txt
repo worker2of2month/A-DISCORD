@@ -697,3 +697,478 @@ VAL_accept_resource_corridor = {
 	set_country_flag = VAL_resource_corridor_resolved
 	clr_country_flag = VAL_resource_corridor_control_generation
 }
+
+# Canonical final-war calendar. No engine truce is created: the active mission
+# and NAP are the supported diplomatic protection on this game version.
+STP_VAL_clear_countdown = {
+	remove_decision = STP_VAL_war_countdown_120
+	remove_decision = STP_VAL_war_countdown_180
+	remove_decision = STP_VAL_war_countdown_300
+	remove_decision = STP_VAL_war_countdown_450
+	remove_decision = STP_VAL_war_countdown_breached
+	if = {
+		limit = { has_event_target = STP_VAL_countdown_owner country_exists = event_target:STP_VAL_countdown_owner }
+		event_target:STP_VAL_countdown_owner = {
+			remove_decision = STP_VAL_war_countdown_120
+			remove_decision = STP_VAL_war_countdown_180
+			remove_decision = STP_VAL_war_countdown_300
+			remove_decision = STP_VAL_war_countdown_450
+			remove_decision = STP_VAL_war_countdown_breached
+		}
+	}
+	if = {
+		limit = { has_event_target = STP_postwar_country country_exists = event_target:STP_postwar_country }
+		event_target:STP_postwar_country = {
+			remove_decision = STP_VAL_war_countdown_120
+			remove_decision = STP_VAL_war_countdown_180
+			remove_decision = STP_VAL_war_countdown_300
+			remove_decision = STP_VAL_war_countdown_450
+			remove_decision = STP_VAL_war_countdown_breached
+		}
+	}
+	clr_country_flag = VAL_STP_countdown_120
+	clr_country_flag = VAL_STP_countdown_180
+	clr_country_flag = VAL_STP_countdown_300
+	clr_country_flag = VAL_STP_countdown_450
+	clr_country_flag = VAL_STP_countdown_breached
+	clr_country_flag = VAL_STP_countdown_generation_120
+	clr_country_flag = VAL_STP_countdown_generation_180
+	clr_country_flag = VAL_STP_countdown_generation_300
+	clr_country_flag = VAL_STP_countdown_generation_450
+	clr_country_flag = VAL_STP_countdown_generation_breached
+	clr_country_flag = VAL_STP_countdown_pending
+	clr_country_flag = VAL_STP_breach_pending
+	clr_country_flag = VAL_STP_final_warning_active
+	clr_country_flag = VAL_STP_diplomatic_protection_removed
+	clr_country_flag = VAL_STP_countdown_owner_postwar
+	clr_country_flag = VAL_STP_countdown_owner_val
+	set_variable = { var = VAL_STP_countdown_type value = 0 }
+	clear_global_event_target = STP_VAL_countdown_owner
+}
+
+STP_VAL_select_countdown_owner = {
+	clear_global_event_target = STP_VAL_countdown_owner
+	clr_country_flag = VAL_STP_countdown_owner_postwar
+	clr_country_flag = VAL_STP_countdown_owner_val
+	if = {
+		limit = {
+			has_event_target = STP_postwar_country
+			country_exists = event_target:STP_postwar_country
+			event_target:STP_postwar_country = { is_ai = no }
+		}
+		event_target:STP_postwar_country = { save_global_event_target_as = STP_VAL_countdown_owner }
+		set_country_flag = VAL_STP_countdown_owner_postwar
+	}
+	else_if = {
+		limit = { is_ai = no }
+		save_global_event_target_as = STP_VAL_countdown_owner
+		set_country_flag = VAL_STP_countdown_owner_val
+	}
+	else = {
+		save_global_event_target_as = STP_VAL_countdown_owner
+		set_country_flag = VAL_STP_countdown_owner_val
+	}
+}
+
+STP_VAL_notify_other_countdown_country = {
+	if = {
+		limit = {
+			has_country_flag = VAL_STP_countdown_owner_val
+			has_event_target = STP_postwar_country
+			country_exists = event_target:STP_postwar_country
+		}
+		event_target:STP_postwar_country = { country_event = { id = val_contract.80 } }
+	}
+	else_if = {
+		limit = { has_country_flag = VAL_STP_countdown_owner_postwar }
+		country_event = { id = val_contract.80 }
+	}
+}
+
+STP_VAL_start_canonical_countdown = {
+	if = {
+		limit = {
+			tag = VAL
+			has_event_target = STP_postwar_country
+			country_exists = event_target:STP_postwar_country
+			NOT = { has_country_flag = VAL_STP_final_war_started }
+		}
+		set_temp_variable = { var = VAL_STP_requested_countdown_type value = $type$ }
+		STP_VAL_clear_countdown = yes
+		STP_VAL_select_countdown_owner = yes
+		if = {
+			limit = { check_variable = { var = VAL_STP_requested_countdown_type value = 180 compare = equals } }
+			set_variable = { var = VAL_STP_countdown_type value = 180 }
+			set_country_flag = VAL_STP_countdown_180
+			set_country_flag = VAL_STP_countdown_generation_180
+			event_target:STP_VAL_countdown_owner = {
+				activate_mission = STP_VAL_war_countdown_180
+				country_event = { id = val_contract.61 days = 166 }
+				country_event = { id = val_contract.71 days = 179 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = VAL_STP_requested_countdown_type value = 300 compare = equals } }
+			set_variable = { var = VAL_STP_countdown_type value = 300 }
+			set_country_flag = VAL_STP_countdown_300
+			set_country_flag = VAL_STP_countdown_generation_300
+			event_target:STP_VAL_countdown_owner = {
+				activate_mission = STP_VAL_war_countdown_300
+				country_event = { id = val_contract.62 days = 286 }
+				country_event = { id = val_contract.72 days = 299 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = VAL_STP_requested_countdown_type value = 450 compare = equals } }
+			set_variable = { var = VAL_STP_countdown_type value = 450 }
+			set_country_flag = VAL_STP_countdown_450
+			set_country_flag = VAL_STP_countdown_generation_450
+			event_target:STP_VAL_countdown_owner = {
+				activate_mission = STP_VAL_war_countdown_450
+				country_event = { id = val_contract.63 days = 436 }
+				country_event = { id = val_contract.73 days = 449 }
+			}
+		}
+		else = {
+			set_variable = { var = VAL_STP_countdown_type value = 120 }
+			set_country_flag = VAL_STP_countdown_120
+			set_country_flag = VAL_STP_countdown_generation_120
+			event_target:STP_VAL_countdown_owner = {
+				activate_mission = STP_VAL_war_countdown_120
+				country_event = { id = val_contract.60 days = 106 }
+				country_event = { id = val_contract.70 days = 119 }
+			}
+		}
+		clr_country_flag = VAL_STP_countdown_pending
+		STP_VAL_notify_other_countdown_country = yes
+	}
+}
+
+STP_VAL_expire_countdown_concessions = {
+	remove_resource_rights = 45
+	remove_resource_rights = 88
+	remove_ideas = VAL_STP_postwar_contract_income
+	remove_decision = VAL_STP_adviser_factory_obligation
+	if = {
+		limit = { has_event_target = STP_postwar_country country_exists = event_target:STP_postwar_country }
+		event_target:STP_postwar_country = {
+			remove_ideas = STP_val_contract_advisers
+			remove_ideas = STP_VAL_postwar_contract_cost
+		}
+	}
+	clr_country_flag = VAL_STP_resource_rights_active
+	clr_country_flag = VAL_STP_resource_rights_45
+	clr_country_flag = VAL_STP_resource_rights_88
+	clr_country_flag = VAL_STP_concession_resource_45
+	clr_country_flag = VAL_STP_concession_resource_88
+	clr_country_flag = VAL_STP_concession_advisers
+	clr_country_flag = VAL_STP_concession_postwar_contracts
+}
+
+STP_VAL_apply_final_warning = {
+	if = {
+		limit = { NOT = { has_country_flag = VAL_STP_final_warning_active } }
+		set_country_flag = VAL_STP_final_warning_active
+		STP_VAL_expire_countdown_concessions = yes
+		if = {
+			limit = {
+				has_country_flag = VAL_STP_countdown_owner_val
+				has_event_target = STP_postwar_country
+				country_exists = event_target:STP_postwar_country
+			}
+			event_target:STP_postwar_country = { country_event = { id = val_contract.81 } }
+		}
+		else_if = {
+			limit = { has_country_flag = VAL_STP_countdown_owner_postwar }
+			country_event = { id = val_contract.81 }
+		}
+	}
+}
+
+STP_VAL_remove_diplomatic_protection = {
+	if = {
+		limit = { has_event_target = STP_postwar_country country_exists = event_target:STP_postwar_country }
+		diplomatic_relation = {
+			country = event_target:STP_postwar_country
+			relation = non_aggression_pact
+			active = no
+		}
+		set_country_flag = VAL_STP_diplomatic_protection_removed
+	}
+}
+
+STP_VAL_resolve_countdown_timeout = {
+	if = {
+		limit = {
+			tag = VAL
+			has_country_flag = $token_flag$
+			NOT = { has_country_flag = VAL_STP_final_war_started }
+		}
+		STP_VAL_apply_final_warning = yes
+		STP_VAL_remove_diplomatic_protection = yes
+		STP_VAL_begin_final_war = yes
+	}
+}
+
+STP_VAL_start_breach_countdown = {
+	if = {
+		limit = {
+			tag = VAL
+			has_event_target = STP_postwar_country
+			country_exists = event_target:STP_postwar_country
+			NOT = { has_country_flag = VAL_STP_final_war_started }
+		}
+		if = {
+			limit = { has_country_flag = VAL_STP_final_warning_active }
+			clr_country_flag = VAL_STP_breach_pending
+			STP_VAL_begin_final_war = yes
+		}
+		else = {
+			STP_VAL_clear_countdown = yes
+			STP_VAL_select_countdown_owner = yes
+			set_variable = { var = VAL_STP_countdown_type value = 14 }
+			set_country_flag = VAL_STP_countdown_breached
+			set_country_flag = VAL_STP_countdown_generation_breached
+			event_target:STP_VAL_countdown_owner = {
+				activate_mission = STP_VAL_war_countdown_breached
+				country_event = { id = val_contract.64 }
+				country_event = { id = val_contract.74 days = 13 }
+			}
+			STP_VAL_apply_final_warning = yes
+			clr_country_flag = VAL_STP_breach_pending
+			STP_VAL_notify_other_countdown_country = yes
+		}
+	}
+}
+
+STP_VAL_begin_final_war = {
+	if = {
+		limit = {
+			tag = VAL
+			has_event_target = STP_postwar_country
+			country_exists = event_target:STP_postwar_country
+			NOT = { has_country_flag = VAL_STP_final_war_started }
+		}
+		set_country_flag = VAL_STP_final_war_started
+		set_country_flag = VAL_STP_final_war_active
+		STP_VAL_remove_diplomatic_protection = yes
+		VAL_STP_cleanup_contract_relations = yes
+		VAL_clear_foreign_operation = yes
+		STP_VAL_clear_countdown = yes
+		remove_decision = VAL_resource_corridor_control_30
+		clr_country_flag = VAL_corridor_control_generation
+		clr_country_flag = VAL_resource_corridor_participant
+		clr_country_flag = VAL_resource_corridor_full_mode
+		clr_country_flag = VAL_resource_corridor_target_45
+		clr_country_flag = VAL_resource_corridor_target_88
+		if = {
+			limit = { country_exists = NOD }
+			NOD = {
+				clr_country_flag = NOD_STP_material_support
+				clr_country_flag = NOD_STP_limited_support
+				clr_country_flag = NOD_STP_full_support
+				clr_country_flag = NOD_STP_temporary_access
+			}
+		}
+		event_target:STP_postwar_country = {
+			clr_country_flag = STP_external_crisis_participant
+			clr_country_flag = STP_direct_external_intervention
+			clr_country_flag = VAL_resource_corridor_participant
+			STP_set_crisis_phase = { value = 4 }
+		}
+		if = {
+			limit = { has_wargoal_against = event_target:STP_postwar_country }
+			remove_wargoal = { type = all target = event_target:STP_postwar_country }
+		}
+		if = {
+			limit = { NOT = { has_war_with = event_target:STP_postwar_country } }
+			declare_war_on = { target = event_target:STP_postwar_country type = annex_everything }
+		}
+	}
+}
+
+STP_VAL_clear_final_war_state = {
+	clr_country_flag = VAL_STP_final_war_active
+	STP_VAL_clear_countdown = yes
+	VAL_clear_foreign_operation = yes
+	if = {
+		limit = { has_event_target = STP_postwar_country country_exists = event_target:STP_postwar_country }
+		event_target:STP_postwar_country = {
+			clr_country_flag = STP_external_crisis_participant
+			clr_country_flag = STP_direct_external_intervention
+		}
+	}
+}
+
+STP_VAL_resolve_final_val_victory = {
+	if = {
+		limit = {
+			has_country_flag = VAL_STP_final_war_active
+			has_event_target = STP_postwar_country
+			country_exists = event_target:STP_postwar_country
+		}
+		if = {
+			limit = { has_war_with = event_target:STP_postwar_country }
+			white_peace = { tag = event_target:STP_postwar_country }
+		}
+		event_target:STP_postwar_country = {
+			if = { limit = { is_in_faction = yes } leave_faction = yes }
+		}
+		if = {
+			limit = {
+				country_exists = NOD
+				event_target:STP_postwar_country = { is_subject_of = NOD }
+			}
+			NOD = {
+				set_autonomy = {
+					target = event_target:STP_postwar_country
+					autonomy_state = autonomy_free
+				}
+			}
+		}
+		if = {
+			limit = {
+				check_variable = { var = VAL_STP_leverage value = 70 compare = greater_than_or_equals }
+				check_variable = { var = VAL_contract_authority value = 75 compare = greater_than_or_equals }
+				has_country_flag = VAL_STP_client_garrison
+			}
+			set_autonomy = {
+				target = event_target:STP_postwar_country
+				autonomy_state = autonomy_contract_client
+			}
+			set_country_flag = VAL_STP_final_outcome_contract_client
+			event_target:STP_postwar_country = { set_country_flag = STP_VAL_contract_client_regime }
+		}
+		else = {
+			if = {
+				limit = { 45 = { owner = event_target:STP_postwar_country } }
+				transfer_state = 45
+			}
+			if = {
+				limit = { 88 = { owner = event_target:STP_postwar_country } }
+				transfer_state = 88
+			}
+			set_autonomy = {
+				target = event_target:STP_postwar_country
+				autonomy_state = autonomy_contract_protectorate
+			}
+			set_country_flag = VAL_STP_final_outcome_protectorate
+			event_target:STP_postwar_country = { set_country_flag = STP_VAL_contract_protectorate_regime }
+		}
+		set_country_flag = VAL_STP_final_war_resolved
+		STP_VAL_clear_final_war_state = yes
+		country_event = { id = val_contract.82 }
+		event_target:STP_postwar_country = { country_event = { id = val_contract.82 } }
+	}
+}
+
+STP_VAL_resolve_final_stp_victory = {
+	if = {
+		limit = {
+			has_country_flag = VAL_STP_final_war_active
+			has_event_target = STP_postwar_country
+			country_exists = event_target:STP_postwar_country
+		}
+		if = {
+			limit = { has_war_with = event_target:STP_postwar_country }
+			white_peace = { tag = event_target:STP_postwar_country }
+		}
+		if = {
+			limit = { event_target:STP_postwar_country = { is_subject_of = VAL } }
+			set_autonomy = {
+				target = event_target:STP_postwar_country
+				autonomy_state = autonomy_free
+			}
+		}
+		if = {
+			limit = {
+				country_exists = NOD
+				event_target:STP_postwar_country = { is_subject_of = NOD }
+			}
+			NOD = {
+				set_autonomy = {
+					target = event_target:STP_postwar_country
+					autonomy_state = autonomy_free
+				}
+			}
+		}
+		if = { limit = { owns_state = 45 } event_target:STP_postwar_country = { transfer_state = 45 } }
+		if = { limit = { owns_state = 88 } event_target:STP_postwar_country = { transfer_state = 88 } }
+		set_country_flag = VAL_STP_final_war_resolved
+		set_country_flag = VAL_STP_final_outcome_stp_victory
+		event_target:STP_postwar_country = { set_country_flag = STP_VAL_final_victory }
+		STP_VAL_clear_final_war_state = yes
+		country_event = { id = val_contract.83 }
+		event_target:STP_postwar_country = { country_event = { id = val_contract.83 } }
+	}
+}
+
+NOD_clear_early_val_aggression_targets = {
+	clr_country_flag = NOD_early_val_aggression_choice_pending
+	clear_global_event_target = STP_VAL_early_attacker
+	clear_global_event_target = STP_VAL_early_defender
+}
+
+NOD_join_early_stp_defense = {
+	if = {
+		limit = {
+			has_event_target = STP_VAL_early_attacker
+			has_event_target = STP_VAL_early_defender
+			country_exists = event_target:STP_VAL_early_attacker
+			country_exists = event_target:STP_VAL_early_defender
+			has_capitulated = no
+			has_defensive_war = no
+			NOT = { has_country_flag = NOD_limited_war_pyrrhic }
+			check_variable = { var = NOD_army_equipment_ratio value = 70 compare = greater_than_or_equals }
+		}
+		add_to_war = {
+			targeted_alliance = event_target:STP_VAL_early_defender
+			enemy = event_target:STP_VAL_early_attacker
+			hostility_reason = asked_to_join
+			single_target_only = yes
+		}
+		set_country_flag = NOD_joined_early_stp_defense
+	}
+	NOD_clear_early_val_aggression_targets = yes
+}
+
+NOD_send_early_stp_material = {
+	if = {
+		limit = {
+			has_event_target = STP_VAL_early_defender
+			country_exists = event_target:STP_VAL_early_defender
+			num_equipment@infantry_equipment > 499
+			num_equipment@support_equipment > 49
+		}
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -500 producer = NOD }
+		add_equipment_to_stockpile = { type = support_equipment amount = -50 producer = NOD }
+		event_target:STP_VAL_early_defender = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 500 producer = NOD }
+			add_equipment_to_stockpile = { type = support_equipment amount = 50 producer = NOD }
+			set_country_flag = STP_nodrul_early_defense_package
+		}
+		add_political_power = -35
+		set_country_flag = NOD_paid_early_stp_material
+	}
+	NOD_clear_early_val_aggression_targets = yes
+}
+
+NOD_handle_early_val_aggression = {
+	if = {
+		limit = {
+			has_event_target = STP_VAL_early_attacker
+			has_event_target = STP_VAL_early_defender
+			has_capitulated = no
+			has_defensive_war = no
+			NOT = { has_country_flag = NOD_limited_war_pyrrhic }
+			check_variable = { var = NOD_army_equipment_ratio value = 70 compare = greater_than_or_equals }
+		}
+		if = {
+			limit = { has_country_flag = NOD_limited_war_active }
+			set_country_flag = NOD_early_val_aggression_choice_pending
+			country_event = { id = val_contract.90 }
+		}
+		else = { NOD_join_early_stp_defense = yes }
+	}
+	else = { NOD_clear_early_val_aggression_targets = yes }
+}

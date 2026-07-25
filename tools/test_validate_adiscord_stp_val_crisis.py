@@ -39,6 +39,9 @@ from tools.stp_val_crisis_manifest import (
     VAL_STP_OPERATION_SPECS,
     VAL_STP_INTEL_STATES,
     WAR_COUNTDOWN_MISSIONS,
+    WAR_COUNTDOWN_MISSION_DAYS,
+    WAR_COUNTDOWN_TRUCE_POLICY,
+    WAR_COUNTDOWN_WARNING_EVENTS,
 )
 
 
@@ -1765,7 +1768,8 @@ class CrisisValidatorTests(unittest.TestCase):
             self.assertIn("STP_try_finalize_internal_war = yes", block)
             self.assertIn("STP_internal_outcome_finalizing", block)
             self.assertIn("STP_internal_outcome_finalized", block)
-            self.assertNotIn("FROM", validator._mask_non_code(block))
+            if hook == "on_peace":
+                self.assertNotIn("FROM", validator._mask_non_code(block))
 
     def test_task_five_role_and_postwar_focus_trees_have_exact_ids(self):
         war_tree = validator.read(
@@ -2239,6 +2243,104 @@ class CrisisValidatorTests(unittest.TestCase):
         for flag in VAL_STP_CONCESSION_FLAGS:
             self.assertIn(flag, effects)
         self.assertNotIn("on_daily", validator._mask_non_code(effects))
+        self.assertEqual(validator.validate(validator.ROOT, "val"), [])
+
+    def test_task_nine_canonical_timer_and_scripted_final_peace(self):
+        decisions = validator.read(
+            validator.ROOT / "common/decisions/ADISCORD_VAL_contract_decisions.txt"
+        ) or ""
+        effects = validator.read(
+            validator.ROOT
+            / "common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt"
+        ) or ""
+        events = validator.read(
+            validator.ROOT / "events/ADISCORD_VAL_contract_events.txt"
+        ) or ""
+        on_actions = validator.read(
+            validator.ROOT
+            / "common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt"
+        ) or ""
+
+        self.assertEqual(WAR_COUNTDOWN_TRUCE_POLICY, "no_engine_truce")
+        self.assertNotRegex(
+            validator._mask_non_code(effects), r"\bset_truce\b|relation\s*=\s*truce"
+        )
+        for mission_id in WAR_COUNTDOWN_MISSIONS:
+            block = validator.extract_named_block(decisions, mission_id) or ""
+            self.assertEqual(
+                validator._direct_scalar_values(block, "days_mission_timeout"),
+                [str(WAR_COUNTDOWN_MISSION_DAYS[mission_id])],
+            )
+            self.assertIn("STP_VAL_resolve_countdown_timeout", block)
+
+        selector = (
+            validator.extract_named_block(effects, "STP_VAL_select_countdown_owner")
+            or ""
+        )
+        for token in (
+            "event_target:STP_postwar_country = { is_ai = no }",
+            "save_global_event_target_as = STP_VAL_countdown_owner",
+            "VAL_STP_countdown_owner_postwar",
+            "VAL_STP_countdown_owner_val",
+        ):
+            self.assertIn(token, selector)
+
+        starter = (
+            validator.extract_named_block(effects, "STP_VAL_start_canonical_countdown")
+            or ""
+        )
+        breach = (
+            validator.extract_named_block(effects, "STP_VAL_start_breach_countdown")
+            or ""
+        )
+        for mission_id, (warning_event, warning_day, d1_event, d1_day) in (
+            WAR_COUNTDOWN_WARNING_EVENTS.items()
+        ):
+            self.assertIn(f"activate_mission = {mission_id}", starter + breach)
+            for event_id, day in ((warning_event, warning_day), (d1_event, d1_day)):
+                schedule = f"country_event = {{ id = {event_id}"
+                if day:
+                    schedule += f" days = {day}"
+                schedule += " }"
+                self.assertIn(schedule, starter + breach)
+                event = (
+                    validator._block_with_direct_assignment(
+                        events, "country_event", "id", event_id
+                    )
+                    or ""
+                )
+                generation = mission_id.removeprefix("STP_VAL_war_countdown_")
+                self.assertIn(mission_id, event)
+                self.assertIn(f"VAL_STP_countdown_generation_{generation}", event)
+
+        final_war = (
+            validator.extract_named_block(effects, "STP_VAL_begin_final_war") or ""
+        )
+        declaration = final_war.index("declare_war_on")
+        for token in (
+            "VAL_STP_cleanup_contract_relations = yes",
+            "VAL_clear_foreign_operation = yes",
+            "STP_VAL_clear_countdown = yes",
+            "remove_wargoal =",
+            "STP_set_crisis_phase = { value = 4 }",
+        ):
+            self.assertLess(final_war.index(token), declaration)
+        self.assertNotIn("VAL_Present_The_Final_Invoice", final_war)
+
+        capitulation = validator.extract_named_block(on_actions, "on_capitulation") or ""
+        for token in (
+            "set_global_flag = skip_default_capitulation",
+            "STP_VAL_resolve_final_val_victory = yes",
+            "STP_VAL_resolve_final_stp_victory = yes",
+        ):
+            self.assertIn(token, capitulation)
+        for outcome in (
+            "STP_VAL_resolve_final_val_victory",
+            "STP_VAL_resolve_final_stp_victory",
+        ):
+            self.assertIn(
+                "white_peace", validator.extract_named_block(effects, outcome) or ""
+            )
         self.assertEqual(validator.validate(validator.ROOT, "val"), [])
 
     def test_legacy_stp_and_val_migration_paths_are_idempotent(self):

@@ -38,6 +38,28 @@ on_actions = {
 
 	on_war_relation_added = {
 		effect = {
+			# ROOT is the literal attacker and FROM the literal defender here.
+			# Only an illicit pre-rupture VAL attack can invoke this reaction.
+			if = {
+				limit = {
+					ROOT = { tag = VAL }
+					FROM = {
+						tag = STP
+						has_country_flag = STP_main_campaign_side
+						check_variable = { var = STP_crisis_phase value = 2 compare = less_than }
+					}
+					country_exists = NOD
+				}
+				ROOT = {
+					set_country_flag = VAL_STP_early_aggression_active
+					save_global_event_target_as = STP_VAL_early_attacker
+				}
+				FROM = { save_global_event_target_as = STP_VAL_early_defender }
+				NOD = {
+					NOD_refresh_army_equipment_ratio = yes
+					NOD_handle_early_val_aggression = yes
+				}
+			}
 			NOD = {
 				clr_country_flag = NOD_crisis_posture_lock
 				NOD_check_limited_war_integrity = yes
@@ -117,6 +139,36 @@ on_actions = {
 
 	on_capitulation = {
 		effect = {
+			# Final VAL-STP war: suppress the conference only for the exact
+			# saved participants, then resolve borders and dependency by script.
+			if = {
+				limit = {
+					VAL = {
+						has_country_flag = VAL_STP_final_war_active
+						has_event_target = STP_postwar_country
+					}
+					ROOT = { tag = event_target:STP_postwar_country }
+					FROM = { OR = { tag = VAL has_war_together_with = VAL } }
+				}
+				set_global_flag = skip_default_capitulation
+				set_global_flag = STP_VAL_skip_capitulation_claimed
+				VAL = { STP_VAL_resolve_final_val_victory = yes }
+			}
+			else_if = {
+				limit = {
+					ROOT = { tag = VAL has_country_flag = VAL_STP_final_war_active }
+					VAL = { has_event_target = STP_postwar_country }
+					FROM = {
+						OR = {
+							tag = event_target:STP_postwar_country
+							has_war_together_with = event_target:STP_postwar_country
+						}
+					}
+				}
+				set_global_flag = skip_default_capitulation
+				set_global_flag = STP_VAL_skip_capitulation_claimed
+				VAL = { STP_VAL_resolve_final_stp_victory = yes }
+			}
 			NOD = {
 				clr_country_flag = NOD_crisis_posture_lock
 				NOD_check_limited_war_integrity = yes
@@ -163,6 +215,11 @@ on_actions = {
 						STP_try_finalize_internal_war = yes
 					}
 				}
+			}
+			if = {
+				limit = { has_global_flag = STP_VAL_skip_capitulation_claimed }
+				clr_global_flag = STP_VAL_skip_capitulation_claimed
+				clr_global_flag = skip_default_capitulation
 			}
 		}
 	}

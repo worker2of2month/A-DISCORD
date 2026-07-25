@@ -42,6 +42,10 @@ try:
         VAL_NORTHERN_OPERATION_TARGETS,
         VAL_STP_CONCESSION_FLAGS,
         VAL_STP_OPERATION_SPECS,
+        WAR_COUNTDOWN_MISSION_DAYS,
+        WAR_COUNTDOWN_MISSIONS,
+        WAR_COUNTDOWN_TRUCE_POLICY,
+        WAR_COUNTDOWN_WARNING_EVENTS,
     )
 except ModuleNotFoundError:
     from stp_val_crisis_manifest import (
@@ -77,6 +81,10 @@ except ModuleNotFoundError:
         VAL_NORTHERN_OPERATION_TARGETS,
         VAL_STP_CONCESSION_FLAGS,
         VAL_STP_OPERATION_SPECS,
+        WAR_COUNTDOWN_MISSION_DAYS,
+        WAR_COUNTDOWN_MISSIONS,
+        WAR_COUNTDOWN_TRUCE_POLICY,
+        WAR_COUNTDOWN_WARNING_EVENTS,
     )
 
 
@@ -143,6 +151,11 @@ REQUIRED_FILES = {
         ("common/national_focus/ADISCORD_national_focus_VAL.txt", "VAL contract focus tree"),
         ("common/dynamic_modifiers/ADISCORD_STP_VAL_crisis_dynamic_modifiers.txt", "VAL contract dynamic modifier"),
         ("common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt", "VAL contract authority effects"),
+        ("common/decisions/ADISCORD_VAL_contract_decisions.txt", "VAL contract decisions"),
+        ("common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt", "VAL contract effects"),
+        ("events/ADISCORD_VAL_contract_events.txt", "VAL contract events"),
+        ("common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt", "VAL crisis on-actions"),
+        ("common/autonomous_states/ADISCORD_contract_clients.txt", "VAL contract-client autonomy"),
     ),
     "nod": (
         ("common/decisions/ADISCORD_NOD_crisis_decisions.txt", "NOD crisis decisions"),
@@ -759,11 +772,14 @@ def _validate_civil_war_contract(root: Path, issues: list[str]) -> None:
             if leader.count(bridge) != 1:
                 issues.append(f"postwar leader assignment must complete {bridge} exactly once")
         countdown = extract_named_block(war, "VAL_STP_start_war_countdown") or ""
-        for flag in (120, 180, 300, 450):
-            if f"VAL_STP_countdown_{flag}" not in countdown:
-                issues.append(f"countdown forward interface is missing literal type {flag}")
+        for token in (
+            "VAL_STP_countdown_pending",
+            "STP_VAL_start_canonical_countdown = { type = $type$ }",
+        ):
+            if token not in countdown:
+                issues.append(f"countdown forward interface is missing canonical routing token {token}")
         if "activate_mission" in countdown:
-            issues.append("Task 5 countdown forward interface must not activate undefined missions")
+            issues.append("countdown forward interface must leave mission ownership to the canonical starter")
 
     if events is not None:
         death = _block_with_direct_assignment(events, "country_event", "id", "stp_crisis.4") or ""
@@ -888,6 +904,8 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
         root / "common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt"
     )
     contract_events = read(root / "events/ADISCORD_VAL_contract_events.txt")
+    on_actions = read(root / "common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt")
+    autonomy = read(root / "common/autonomous_states/ADISCORD_contract_clients.txt")
 
     if focus_text is not None:
         blocks: dict[str, str] = {}
@@ -962,6 +980,8 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
             issues.append("VAL final-invoice focus must require the saved postwar country")
         if "VAL_STP_start_war_countdown" in present:
             issues.append("VAL final-invoice focus must not alter the canonical war timer")
+        if "declare_war_on" in _mask_non_code(present):
+            issues.append("VAL final-invoice focus must not be the final-war declaration path")
         if re.search(r"volunteer", _mask_non_code(focus_text + (dynamic or "")), re.IGNORECASE):
             issues.append("VAL contract campaign must not use volunteer modifiers")
 
@@ -1048,6 +1068,23 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
                         if token not in block:
                             issues.append(f"{decision_id} is missing separate-terms gate {token}")
 
+        for mission_id in WAR_COUNTDOWN_MISSIONS:
+            mission = extract_named_block(decisions, mission_id) or ""
+            if not mission:
+                issues.append(f"missing canonical final-war mission {mission_id}")
+                continue
+            expected_days = WAR_COUNTDOWN_MISSION_DAYS[mission_id]
+            if _direct_scalar_values(mission, "days_mission_timeout") != [str(expected_days)]:
+                issues.append(f"{mission_id} must time out after {expected_days} days")
+            for token in (
+                "selectable_mission = no",
+                "cancelable = no",
+                "STP_VAL_resolve_countdown_timeout",
+                "token_flag = VAL_STP_countdown_generation_",
+            ):
+                if token not in mission:
+                    issues.append(f"{mission_id} is missing canonical timeout token {token}")
+
     if contract_effects is None:
         issues.append("missing contract and northern effects: common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt")
     else:
@@ -1127,6 +1164,78 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
         if "on_daily" in _mask_non_code(contract_effects):
             issues.append("VAL contract mechanics must remain event-driven")
 
+        clear_countdown = extract_named_block(contract_effects, "STP_VAL_clear_countdown") or ""
+        selector = extract_named_block(contract_effects, "STP_VAL_select_countdown_owner") or ""
+        starter = extract_named_block(contract_effects, "STP_VAL_start_canonical_countdown") or ""
+        breach = extract_named_block(contract_effects, "STP_VAL_start_breach_countdown") or ""
+        final_warning = extract_named_block(contract_effects, "STP_VAL_apply_final_warning") or ""
+        protection = extract_named_block(contract_effects, "STP_VAL_remove_diplomatic_protection") or ""
+        final_war = extract_named_block(contract_effects, "STP_VAL_begin_final_war") or ""
+        final_val = extract_named_block(contract_effects, "STP_VAL_resolve_final_val_victory") or ""
+        final_stp = extract_named_block(contract_effects, "STP_VAL_resolve_final_stp_victory") or ""
+        for mission_id in WAR_COUNTDOWN_MISSIONS:
+            if f"remove_decision = {mission_id}" not in clear_countdown:
+                issues.append(f"countdown cleanup does not remove {mission_id}")
+        for flag in ("120", "180", "300", "450", "breached"):
+            token = f"VAL_STP_countdown_generation_{flag}"
+            if token not in clear_countdown or token not in starter + breach:
+                issues.append(f"countdown generation token is not finite: {token}")
+        for token in (
+            "event_target:STP_postwar_country = { is_ai = no }",
+            "is_ai = no",
+            "save_global_event_target_as = STP_VAL_countdown_owner",
+            "VAL_STP_countdown_owner_postwar",
+            "VAL_STP_countdown_owner_val",
+        ):
+            if token not in selector:
+                issues.append(f"canonical countdown-owner selector is missing {token}")
+        for mission_id, (warning_event, warning_day, d1_event, d1_day) in WAR_COUNTDOWN_WARNING_EVENTS.items():
+            if f"activate_mission = {mission_id}" not in starter + breach:
+                issues.append(f"canonical starter never activates {mission_id}")
+            for event_id, day in ((warning_event, warning_day), (d1_event, d1_day)):
+                schedule = f"country_event = {{ id = {event_id}" + (" }" if day == 0 else f" days = {day} }}")
+                if schedule not in starter + breach:
+                    issues.append(f"{mission_id} is missing scheduled {event_id} at day {day}")
+        for token in (
+            "VAL_STP_final_warning_active",
+            "STP_VAL_expire_countdown_concessions = yes",
+        ):
+            if token not in final_warning:
+                issues.append(f"D-14 warning is missing {token}")
+        for token in ("relation = non_aggression_pact", "active = no"):
+            if token not in protection:
+                issues.append(f"D-1 protection removal is missing {token}")
+        if WAR_COUNTDOWN_TRUCE_POLICY != "no_engine_truce":
+            issues.append("validator fixture must record the supported no-engine-truce policy")
+        if re.search(r"\bset_truce\b|relation\s*=\s*truce", _mask_non_code(contract_effects)):
+            issues.append("countdown must not invent an unverified engine-truce removal path")
+        if "days = 13" not in breach or "STP_VAL_apply_final_warning = yes" not in breach:
+            issues.append("material breach must warn immediately and remove protection on day 13")
+        if "has_country_flag = VAL_STP_final_warning_active" not in breach or "STP_VAL_begin_final_war = yes" not in breach:
+            issues.append("a post-warning breach must begin the final war immediately")
+        declaration_index = final_war.find("declare_war_on")
+        for token in (
+            "VAL_STP_cleanup_contract_relations = yes",
+            "VAL_clear_foreign_operation = yes",
+            "STP_VAL_clear_countdown = yes",
+            "remove_wargoal =",
+            "STP_set_crisis_phase = { value = 4 }",
+            "VAL_STP_final_war_active",
+        ):
+            token_index = final_war.find(token)
+            if token_index == -1 or declaration_index == -1 or token_index > declaration_index:
+                issues.append(f"final-war cleanup must precede declaration: {token}")
+        for outcome, autonomy_id in (
+            (final_val, "autonomy_contract_client"),
+            (final_val, "autonomy_contract_protectorate"),
+            (final_stp, "autonomy_free"),
+        ):
+            if autonomy_id not in outcome:
+                issues.append(f"scripted final peace is missing autonomy outcome {autonomy_id}")
+        for outcome in (final_val, final_stp):
+            if "white_peace" not in outcome:
+                issues.append("final VAL-STP outcomes must be scripted peace, not a conference")
+
     if contract_events is None:
         issues.append("missing VAL contract events: events/ADISCORD_VAL_contract_events.txt")
     else:
@@ -1137,6 +1246,44 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
             block = _block_with_direct_assignment(contract_events, "country_event", "id", event_id) or ""
             if "is_triggered_only = yes" not in block or block.count("option =") < 2:
                 issues.append(f"human northern target response is incomplete: {event_id}")
+        for mission_id, (warning_event, _, d1_event, _) in WAR_COUNTDOWN_WARNING_EVENTS.items():
+            generation = mission_id.removeprefix("STP_VAL_war_countdown_")
+            for event_id, required_effect in (
+                (warning_event, "STP_VAL_apply_final_warning = yes"),
+                (d1_event, "STP_VAL_remove_diplomatic_protection = yes"),
+            ):
+                block = _block_with_direct_assignment(contract_events, "country_event", "id", event_id) or ""
+                if mission_id not in block or f"VAL_STP_countdown_generation_{generation}" not in block:
+                    issues.append(f"{event_id} does not recheck {mission_id}'s finite generation")
+                if required_effect not in block and event_id != "val_contract.64":
+                    issues.append(f"{event_id} is missing {required_effect}")
+
+    if on_actions is not None:
+        war_hook = extract_named_block(on_actions, "on_war_relation_added") or ""
+        for token in (
+            "ROOT = { tag = VAL }",
+            "check_variable = { var = STP_crisis_phase value = 2 compare = less_than }",
+            "NOD_refresh_army_equipment_ratio = yes",
+            "NOD_handle_early_val_aggression = yes",
+        ):
+            if token not in war_hook:
+                issues.append(f"early VAL aggression reaction is missing {token}")
+        capitulation = extract_named_block(on_actions, "on_capitulation") or ""
+        for token in (
+            "VAL_STP_final_war_active",
+            "set_global_flag = skip_default_capitulation",
+            "STP_VAL_resolve_final_val_victory = yes",
+            "STP_VAL_resolve_final_stp_victory = yes",
+        ):
+            if token not in capitulation:
+                issues.append(f"scripted final peace on-action is missing {token}")
+
+    if autonomy is not None:
+        for autonomy_id in ("autonomy_contract_client", "autonomy_contract_protectorate"):
+            block = _block_with_direct_assignment(autonomy, "autonomy_state", "id", autonomy_id) or ""
+            for token in ("is_puppet = yes", "can_not_declare_war = yes", "can_take_level"):
+                if token not in block:
+                    issues.append(f"special contract subject is incomplete: {autonomy_id} / {token}")
 
 
 def _validate_nod_contract(root: Path, issues: list[str]) -> None:

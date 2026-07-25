@@ -1032,36 +1032,31 @@ STP_clear_external_crisis_participants = {
 }
 
 VAL_STP_start_war_countdown = {
-	clr_country_flag = VAL_STP_countdown_120
-	clr_country_flag = VAL_STP_countdown_180
-	clr_country_flag = VAL_STP_countdown_300
-	clr_country_flag = VAL_STP_countdown_450
-	set_variable = { var = VAL_STP_countdown_type value = $type$ }
 	if = {
-		limit = { check_variable = { var = VAL_STP_countdown_type value = 120 compare = equals } }
-		set_country_flag = VAL_STP_countdown_120
-	}
-	else_if = {
-		limit = { check_variable = { var = VAL_STP_countdown_type value = 180 compare = equals } }
-		set_country_flag = VAL_STP_countdown_180
-	}
-	else_if = {
-		limit = { check_variable = { var = VAL_STP_countdown_type value = 300 compare = equals } }
-		set_country_flag = VAL_STP_countdown_300
-	}
-	else_if = {
-		limit = { check_variable = { var = VAL_STP_countdown_type value = 450 compare = equals } }
-		set_country_flag = VAL_STP_countdown_450
+		limit = { tag = VAL }
+		set_country_flag = VAL_STP_countdown_pending
+		STP_VAL_start_canonical_countdown = { type = $type$ }
 	}
 	else = {
-		set_country_flag = VAL_STP_countdown_120
-		set_variable = { var = VAL_STP_countdown_type value = 120 }
+		VAL = {
+			set_country_flag = VAL_STP_countdown_pending
+			STP_VAL_start_canonical_countdown = { type = $type$ }
+		}
 	}
-	set_country_flag = VAL_STP_countdown_pending
 }
 
 VAL_STP_trigger_breach = {
-	set_country_flag = VAL_STP_breach_pending
+	if = {
+		limit = { tag = VAL }
+		set_country_flag = VAL_STP_breach_pending
+		STP_VAL_start_breach_countdown = yes
+	}
+	else = {
+		VAL = {
+			set_country_flag = VAL_STP_breach_pending
+			STP_VAL_start_breach_countdown = yes
+		}
+	}
 }
 
 STP_assign_postwar_leader = {
@@ -1376,6 +1371,24 @@ NOD_refresh_army_equipment_ratio = {
 			}
 		}
 		set_variable = { var = NOD_army_equipment_ratio value = 85 }
+	}
+	else = {
+		# Reuse the 85% target to expose a second, lower threshold for the
+		# exceptional early-defense reaction without adding a polling tick.
+		multiply_temp_variable = {
+			var = NOD_army_equipment_target
+			value = 0.823529
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = NOD_army_equipment_actual
+					value = NOD_army_equipment_target
+					compare = greater_than_or_equals
+				}
+			}
+			set_variable = { var = NOD_army_equipment_ratio value = 70 }
+		}
 	}
 }
 

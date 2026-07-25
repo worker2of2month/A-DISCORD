@@ -197,6 +197,21 @@ WAR_COUNTDOWN_MISSIONS = (
     "STP_VAL_war_countdown_450",
     "STP_VAL_war_countdown_breached",
 )
+WAR_COUNTDOWN_MISSION_DAYS = {
+    "STP_VAL_war_countdown_120": 120,
+    "STP_VAL_war_countdown_180": 180,
+    "STP_VAL_war_countdown_300": 300,
+    "STP_VAL_war_countdown_450": 450,
+    "STP_VAL_war_countdown_breached": 14,
+}
+WAR_COUNTDOWN_WARNING_EVENTS = {
+    "STP_VAL_war_countdown_120": ("val_contract.60", 106, "val_contract.70", 119),
+    "STP_VAL_war_countdown_180": ("val_contract.61", 166, "val_contract.71", 179),
+    "STP_VAL_war_countdown_300": ("val_contract.62", 286, "val_contract.72", 299),
+    "STP_VAL_war_countdown_450": ("val_contract.63", 436, "val_contract.73", 449),
+    "STP_VAL_war_countdown_breached": ("val_contract.64", 0, "val_contract.74", 13),
+}
+WAR_COUNTDOWN_TRUCE_POLICY = "no_engine_truce"
 NORTHERN_MODES = (
     "VAL_northern_campaign_full",
     "VAL_northern_campaign_partial_cin",
@@ -506,6 +521,7 @@ POSTWAR_FOCUS_IDS = (
 )
 
 OWNED_FEATURE_FILES = (
+	"common/autonomous_states/ADISCORD_contract_clients.txt",
     "common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt",
     "common/scripted_triggers/ADISCORD_STP_VAL_crisis_triggers.txt",
     "common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt",

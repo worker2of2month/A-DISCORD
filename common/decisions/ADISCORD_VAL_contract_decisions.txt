@@ -190,3 +190,83 @@ VAL_contract_campaign = {
 	VAL_APH_hire_local_captain = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = APH NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_APH_target_cooldown } NOT = { has_country_flag = VAL_APH_block_captain } command_power > 14 num_equipment@support_equipment > 79 } cost = 35 days_remove = 28 complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } add_command_power = -15 add_equipment_to_stockpile = { type = support_equipment amount = -80 producer = VAL } VAL_start_northern_operation = { operation_flag = VAL_operation_APH_hire_local_captain event_id = val_contract.223 days = 28 } } }
 	VAL_APH_prepare_separate_terms = { icon = generic_prepare_civil_war allowed = { tag = VAL } visible = { has_country_flag = VAL_northern_operations_unlocked } available = { country_exists = APH NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_country_flag = VAL_APH_target_cooldown } NOT = { has_country_flag = VAL_APH_block_terms } check_variable = { var = VAL_APH_influence value = 2 compare = greater_than_or_equals } count_triggers = { amount = 2 has_country_flag = VAL_APH_success_arms has_country_flag = VAL_APH_success_infrastructure has_country_flag = VAL_APH_success_captain } } cost = 50 days_remove = 35 modifier = { civilian_factory_use = 1 } complete_effect = { if = { limit = { has_country_flag = VAL_broad_resource_network } add_political_power = 10 } VAL_start_northern_operation = { operation_flag = VAL_operation_APH_prepare_separate_terms event_id = val_contract.224 days = 35 } } }
 }
+
+# The mission is activated on one canonical country: a human postwar Stelander,
+# otherwise Kefreyt.  Timeout routing always returns to literal VAL so the war
+# declaration has a single scope and cannot be duplicated by both players.
+STP_VAL_war_countdown_category = {
+	STP_VAL_war_countdown_120 = {
+		icon = generic_prepare_civil_war
+		allowed = { OR = { tag = VAL STP_is_postwar_country = yes } }
+		visible = { always = yes }
+		activation = { always = no }
+		available = { always = no }
+		selectable_mission = no
+		cancelable = no
+		days_mission_timeout = 120
+		timeout_effect = {
+			if = { limit = { tag = VAL } STP_VAL_resolve_countdown_timeout = { token_flag = VAL_STP_countdown_generation_120 } }
+			else = { VAL = { STP_VAL_resolve_countdown_timeout = { token_flag = VAL_STP_countdown_generation_120 } } }
+		}
+	}
+
+	STP_VAL_war_countdown_180 = {
+		icon = generic_prepare_civil_war
+		allowed = { OR = { tag = VAL STP_is_postwar_country = yes } }
+		visible = { always = yes }
+		activation = { always = no }
+		available = { always = no }
+		selectable_mission = no
+		cancelable = no
+		days_mission_timeout = 180
+		timeout_effect = {
+			if = { limit = { tag = VAL } STP_VAL_resolve_countdown_timeout = { token_flag = VAL_STP_countdown_generation_180 } }
+			else = { VAL = { STP_VAL_resolve_countdown_timeout = { token_flag = VAL_STP_countdown_generation_180 } } }
+		}
+	}
+
+	STP_VAL_war_countdown_300 = {
+		icon = generic_prepare_civil_war
+		allowed = { OR = { tag = VAL STP_is_postwar_country = yes } }
+		visible = { always = yes }
+		activation = { always = no }
+		available = { always = no }
+		selectable_mission = no
+		cancelable = no
+		days_mission_timeout = 300
+		timeout_effect = {
+			if = { limit = { tag = VAL } STP_VAL_resolve_countdown_timeout = { token_flag = VAL_STP_countdown_generation_300 } }
+			else = { VAL = { STP_VAL_resolve_countdown_timeout = { token_flag = VAL_STP_countdown_generation_300 } } }
+		}
+	}
+
+	STP_VAL_war_countdown_450 = {
+		icon = generic_prepare_civil_war
+		allowed = { OR = { tag = VAL STP_is_postwar_country = yes } }
+		visible = { always = yes }
+		activation = { always = no }
+		available = { always = no }
+		selectable_mission = no
+		cancelable = no
+		days_mission_timeout = 450
+		timeout_effect = {
+			if = { limit = { tag = VAL } STP_VAL_resolve_countdown_timeout = { token_flag = VAL_STP_countdown_generation_450 } }
+			else = { VAL = { STP_VAL_resolve_countdown_timeout = { token_flag = VAL_STP_countdown_generation_450 } } }
+		}
+	}
+
+	STP_VAL_war_countdown_breached = {
+		icon = generic_prepare_civil_war
+		allowed = { OR = { tag = VAL STP_is_postwar_country = yes } }
+		visible = { always = yes }
+		activation = { always = no }
+		available = { always = no }
+		selectable_mission = no
+		cancelable = no
+		days_mission_timeout = 14
+		timeout_effect = {
+			if = { limit = { tag = VAL } STP_VAL_resolve_countdown_timeout = { token_flag = VAL_STP_countdown_generation_breached } }
+			else = { VAL = { STP_VAL_resolve_countdown_timeout = { token_flag = VAL_STP_countdown_generation_breached } } }
+		}
+	}
+}
