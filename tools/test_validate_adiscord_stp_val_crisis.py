@@ -2455,6 +2455,33 @@ class CrisisValidatorTests(unittest.TestCase):
         self.assertEqual(localisation.decode("utf-8-sig").count("l_russian:"), 1)
         self.assertEqual(validator.validate(validator.ROOT, "north"), [])
 
+    def test_every_crisis_war_has_an_addressed_scripted_peace(self):
+        on_actions = validator.read(
+            validator.ROOT
+            / "common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt"
+        ) or ""
+        capitulation = validator.extract_named_block(on_actions, "on_capitulation") or ""
+        for resolver in (
+            "STP_resolve_scripted_internal_victory = yes",
+            "NOD_resolve_limited_target_capitulation = yes",
+            "VAL_resolve_resource_corridor_concession = yes",
+            "STP_VAL_resolve_early_val_victory = yes",
+            "STP_VAL_resolve_final_val_victory = yes",
+            "VAL_handle_northern_campaign_capitulation = yes",
+        ):
+            self.assertIn(resolver, capitulation)
+        self.assertGreaterEqual(
+            capitulation.count("set_global_flag = skip_default_capitulation"), 9
+        )
+
+        autonomy = validator.read(
+            validator.ROOT
+            / "common/autonomous_states/ADISCORD_contract_clients.txt"
+        ) or ""
+        self.assertIn("id = autonomy_contract_protectorate", autonomy)
+        self.assertIn("id = autonomy_contract_client", autonomy)
+        self.assertEqual(validator.validate(validator.ROOT, "peace"), [])
+
     def test_legacy_stp_and_val_migration_paths_are_idempotent(self):
         core = validator.read(
             validator.ROOT / "common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt"

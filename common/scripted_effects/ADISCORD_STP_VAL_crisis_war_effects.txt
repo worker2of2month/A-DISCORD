@@ -1166,6 +1166,40 @@ STP_resolve_postwar_nodrul_mandate = {
 	clr_country_flag = STP_nodrul_mandate_pending
 }
 
+# The civil war never enters the peace-conference system. The surviving
+# canonical side first closes the exact internal war, absorbs the defeated
+# revolter and only then runs the shared post-war finalizer.
+STP_resolve_scripted_internal_victory = {
+	if = {
+		limit = {
+			has_event_target = STP_internal_capitulated_side
+			country_exists = event_target:STP_internal_capitulated_side
+			OR = {
+				has_country_flag = STP_crisis_party_side
+				has_country_flag = STP_crisis_resistance_side
+			}
+		}
+		if = {
+			limit = { has_war_with = event_target:STP_internal_capitulated_side }
+			white_peace = { tag = event_target:STP_internal_capitulated_side }
+		}
+		annex_country = {
+			target = event_target:STP_internal_capitulated_side
+			transfer_troops = yes
+		}
+		if = {
+			limit = { has_country_flag = STP_crisis_party_side }
+			set_country_flag = STP_winner_hedersett
+		}
+		else_if = {
+			limit = { has_country_flag = STP_resistance_leader_sotnikov }
+			set_country_flag = STP_winner_sotnikov
+		}
+		else = { set_country_flag = STP_winner_shabrat }
+		STP_finalize_internal_outcome = yes
+	}
+}
+
 STP_finalize_internal_outcome = {
 	if = {
 		limit = {
@@ -1926,6 +1960,45 @@ NOD_apply_bbv_limited_victory = {
 		}
 		NOD_clear_limited_conflict_state = yes
 		NOD_select_crisis_posture = yes
+	}
+}
+
+# ROOT/FROM are consumed by on_actions before entering this country scope.
+# A capitulated neighbour receives only concessions that NOD had actually
+# secured; otherwise the limited conflict closes as a costly status quo.
+NOD_resolve_limited_target_capitulation = {
+	if = {
+		limit = { has_country_flag = NOD_limited_war_active }
+		if = {
+			limit = {
+				has_country_flag = NOD_limited_war_ypr
+				controls_state = 15
+				controls_state = 19
+			}
+			NOD_apply_ypr_limited_victory = yes
+		}
+		else_if = {
+			limit = {
+				has_country_flag = NOD_limited_war_cof
+				controls_state = 14
+			}
+			NOD_apply_cof_limited_victory = yes
+		}
+		else_if = {
+			limit = {
+				has_country_flag = NOD_limited_war_bhg
+				controls_state = 5
+			}
+			NOD_apply_bhg_limited_victory = yes
+		}
+		else_if = {
+			limit = {
+				has_country_flag = NOD_limited_war_bbv
+				controls_state = 7
+			}
+			NOD_apply_bbv_limited_victory = yes
+		}
+		else = { NOD_emergency_limited_white_peace = yes }
 	}
 }
 

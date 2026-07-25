@@ -81,6 +81,7 @@ on_actions = {
 				NOD_check_limited_war_integrity = yes
 				NOD_select_crisis_posture = yes
 			}
+			VAL = { VAL_check_resource_corridor_integrity = yes }
 		}
 	}
 
@@ -118,6 +119,7 @@ on_actions = {
 					}
 				}
 				VAL_check_northern_campaign_integrity = yes
+				VAL_check_resource_corridor_integrity = yes
 			}
 			if = {
 				limit = {
@@ -200,6 +202,132 @@ on_actions = {
 				set_global_flag = STP_VAL_skip_capitulation_claimed
 				VAL = { STP_VAL_resolve_final_stp_victory = yes }
 			}
+			# Nodrul's diversion wars are limited conflicts. Capitulation can
+			# grant only the scripted objective package, never a conference.
+			if = {
+				limit = {
+					NOD = { has_country_flag = NOD_limited_war_active }
+					ROOT = { has_country_flag = NOD_limited_war_target }
+					FROM = { OR = { tag = NOD has_war_together_with = NOD } }
+				}
+				set_global_flag = skip_default_capitulation
+				set_global_flag = STP_VAL_skip_capitulation_claimed
+				NOD = { NOD_resolve_limited_target_capitulation = yes }
+			}
+			else_if = {
+				limit = {
+					ROOT = { tag = NOD has_country_flag = NOD_limited_war_active }
+					NOD = { has_event_target = NOD_limited_war_target_country }
+					FROM = {
+						OR = {
+							has_country_flag = NOD_limited_war_target
+							has_war_together_with = event_target:NOD_limited_war_target_country
+						}
+					}
+				}
+				set_global_flag = skip_default_capitulation
+				set_global_flag = STP_VAL_skip_capitulation_claimed
+				NOD = { NOD_emergency_limited_white_peace = yes }
+			}
+			# The resource raid resolves independently from the civil war. A
+			# capitulation transfers only objectives actually controlled by VAL.
+			if = {
+				limit = {
+					VAL = { has_country_flag = VAL_resource_corridor_active }
+					ROOT = {
+						has_country_flag = VAL_resource_corridor_participant
+						NOT = { tag = VAL }
+					}
+					FROM = { OR = { tag = VAL has_war_together_with = VAL } }
+				}
+				set_global_flag = skip_default_capitulation
+				set_global_flag = STP_VAL_skip_capitulation_claimed
+				VAL = { VAL_resolve_resource_corridor_concession = yes }
+			}
+			else_if = {
+				limit = {
+					ROOT = { tag = VAL has_country_flag = VAL_resource_corridor_active }
+					VAL = { has_event_target = VAL_resource_corridor_target_country }
+					FROM = {
+						OR = {
+							tag = event_target:VAL_resource_corridor_target_country
+							has_war_together_with = event_target:VAL_resource_corridor_target_country
+						}
+					}
+				}
+				set_global_flag = skip_default_capitulation
+				set_global_flag = STP_VAL_skip_capitulation_claimed
+				VAL = { VAL_resolve_resource_corridor_defeat = yes }
+			}
+			# Unsupported early aggression still receives a deterministic result:
+			# a hard-won protectorate or a humiliating restoration, never border gore.
+			if = {
+				limit = {
+					VAL = { has_country_flag = VAL_STP_early_aggression_active }
+					ROOT = { tag = STP }
+					FROM = { OR = { tag = VAL has_war_together_with = VAL } }
+				}
+				set_global_flag = skip_default_capitulation
+				set_global_flag = STP_VAL_skip_capitulation_claimed
+				VAL = { STP_VAL_resolve_early_val_victory = yes }
+			}
+			else_if = {
+				limit = {
+					ROOT = { tag = VAL has_country_flag = VAL_STP_early_aggression_active }
+					FROM = {
+						OR = {
+							tag = STP
+							has_war_together_with = STP
+						}
+					}
+				}
+				set_global_flag = skip_default_capitulation
+				set_global_flag = STP_VAL_skip_capitulation_claimed
+				VAL = { STP_VAL_resolve_early_stp_victory = yes }
+			}
+			# Resolve the two canonical internal sides explicitly. Third-party
+			# helpers may deliver the capitulation, but cannot choose the winner.
+			if = {
+				limit = {
+					has_event_target = STP_crisis_party_side
+					has_event_target = STP_crisis_resistance_side
+					OR = {
+						AND = {
+							ROOT = { tag = event_target:STP_crisis_party_side }
+							FROM = {
+								OR = {
+									tag = event_target:STP_crisis_resistance_side
+									has_war_together_with = event_target:STP_crisis_resistance_side
+								}
+							}
+						}
+						AND = {
+							ROOT = { tag = event_target:STP_crisis_resistance_side }
+							FROM = {
+								OR = {
+									tag = event_target:STP_crisis_party_side
+									has_war_together_with = event_target:STP_crisis_party_side
+								}
+							}
+						}
+					}
+				}
+				set_global_flag = skip_default_capitulation
+				set_global_flag = STP_VAL_skip_capitulation_claimed
+				ROOT = { save_global_event_target_as = STP_internal_capitulated_side }
+				if = {
+					limit = { ROOT = { tag = event_target:STP_crisis_party_side } }
+					event_target:STP_crisis_resistance_side = {
+						STP_resolve_scripted_internal_victory = yes
+					}
+				}
+				else = {
+					event_target:STP_crisis_party_side = {
+						STP_resolve_scripted_internal_victory = yes
+					}
+				}
+				clear_global_event_target = STP_internal_capitulated_side
+			}
 			NOD = {
 				clr_country_flag = NOD_crisis_posture_lock
 				NOD_check_limited_war_integrity = yes
@@ -215,6 +343,7 @@ on_actions = {
 					VAL_finish_stp_operation = yes
 				}
 				VAL_check_northern_campaign_integrity = yes
+				VAL_check_resource_corridor_integrity = yes
 			}
 			if = {
 				limit = {

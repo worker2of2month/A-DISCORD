@@ -108,7 +108,7 @@ country_event = {
 	desc = val_contract.50.d
 	picture = GFX_report_event_generic_diplomacy
 	is_triggered_only = yes
-	option = { name = val_contract.50.a ai_chance = { base = 2 } VAL = { VAL_accept_resource_corridor = yes white_peace = { tag = ROOT } } }
+	option = { name = val_contract.50.a ai_chance = { base = 2 } VAL = { VAL_resolve_resource_corridor_concession = yes } }
 	option = { name = val_contract.50.b ai_chance = { base = 3 } }
 }
 country_event = {
@@ -117,7 +117,7 @@ country_event = {
 	desc = val_contract.51.d
 	picture = GFX_report_event_generic_diplomacy
 	is_triggered_only = yes
-	option = { name = val_contract.51.a ai_chance = { base = 2 } VAL = { VAL_accept_resource_corridor = yes white_peace = { tag = ROOT } } }
+	option = { name = val_contract.51.a ai_chance = { base = 2 } VAL = { VAL_resolve_resource_corridor_concession = yes } }
 	option = { name = val_contract.51.b ai_chance = { base = 3 } }
 }
 country_event = {
@@ -126,7 +126,7 @@ country_event = {
 	desc = val_contract.52.d
 	picture = GFX_report_event_generic_diplomacy
 	is_triggered_only = yes
-	option = { name = val_contract.52.a ai_chance = { base = 2 } VAL = { VAL_accept_resource_corridor = yes white_peace = { tag = ROOT } } }
+	option = { name = val_contract.52.a ai_chance = { base = 2 } VAL = { VAL_resolve_resource_corridor_concession = yes } }
 	option = { name = val_contract.52.b ai_chance = { base = 3 } }
 }
 

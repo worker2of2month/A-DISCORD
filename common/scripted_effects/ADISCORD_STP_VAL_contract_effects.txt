@@ -623,12 +623,17 @@ VAL_prepare_resource_corridor = {
 			NOT = { has_country_flag = VAL_resource_corridor_attempted }
 		}
 		set_country_flag = VAL_resource_corridor_attempted
+		set_country_flag = VAL_resource_corridor_active
+		set_country_flag = VAL_resource_corridor_participant
 		45 = { owner = { save_global_event_target_as = VAL_corridor_owner_45 } }
 		88 = { owner = { save_global_event_target_as = VAL_corridor_owner_88 } }
 		if = {
 			limit = { event_target:VAL_corridor_owner_45 = { tag = event_target:VAL_corridor_owner_88 } }
 			set_country_flag = VAL_resource_corridor_full_mode
-			event_target:VAL_corridor_owner_45 = { set_country_flag = VAL_resource_corridor_participant }
+			event_target:VAL_corridor_owner_45 = {
+				set_country_flag = VAL_resource_corridor_participant
+				save_global_event_target_as = VAL_resource_corridor_target_country
+			}
 			declare_war_on = { target = event_target:VAL_corridor_owner_45 type = take_state_focus generator = { 45 88 } }
 		}
 		else = {
@@ -645,13 +650,19 @@ VAL_prepare_resource_corridor = {
 
 VAL_start_corridor_target_45 = {
 	set_country_flag = VAL_resource_corridor_target_45
-	event_target:VAL_corridor_owner_45 = { set_country_flag = VAL_resource_corridor_participant }
+	event_target:VAL_corridor_owner_45 = {
+		set_country_flag = VAL_resource_corridor_participant
+		save_global_event_target_as = VAL_resource_corridor_target_country
+	}
 	declare_war_on = { target = event_target:VAL_corridor_owner_45 type = take_state_focus generator = { 45 } }
 }
 
 VAL_start_corridor_target_88 = {
 	set_country_flag = VAL_resource_corridor_target_88
-	event_target:VAL_corridor_owner_88 = { set_country_flag = VAL_resource_corridor_participant }
+	event_target:VAL_corridor_owner_88 = {
+		set_country_flag = VAL_resource_corridor_participant
+		save_global_event_target_as = VAL_resource_corridor_target_country
+	}
 	declare_war_on = { target = event_target:VAL_corridor_owner_88 type = take_state_focus generator = { 88 } }
 }
 
@@ -696,6 +707,95 @@ VAL_accept_resource_corridor = {
 	remove_resource_rights = 88
 	set_country_flag = VAL_resource_corridor_resolved
 	clr_country_flag = VAL_resource_corridor_control_generation
+}
+
+VAL_address_resource_corridor_white_peace = {
+	if = {
+		limit = {
+			has_event_target = VAL_resource_corridor_target_country
+			country_exists = event_target:VAL_resource_corridor_target_country
+			has_war_with = event_target:VAL_resource_corridor_target_country
+		}
+		white_peace = { tag = event_target:VAL_resource_corridor_target_country }
+	}
+}
+
+VAL_clear_resource_corridor_state = {
+	remove_decision = VAL_resource_corridor_control_30
+	clr_country_flag = VAL_resource_corridor_active
+	clr_country_flag = VAL_resource_corridor_participant
+	clr_country_flag = VAL_resource_corridor_full_mode
+	clr_country_flag = VAL_resource_corridor_target_45
+	clr_country_flag = VAL_resource_corridor_target_88
+	clr_country_flag = VAL_resource_corridor_control_generation
+	if = {
+		limit = {
+			has_event_target = VAL_resource_corridor_target_country
+			country_exists = event_target:VAL_resource_corridor_target_country
+		}
+		event_target:VAL_resource_corridor_target_country = {
+			clr_country_flag = VAL_resource_corridor_participant
+		}
+	}
+	clear_global_event_target = VAL_resource_corridor_target_country
+	clear_global_event_target = VAL_corridor_owner_45
+	clear_global_event_target = VAL_corridor_owner_88
+}
+
+# Used both by an accepted ultimatum and by the exact target capitulating.
+# Territorial concessions remain conditional on real VAL control.
+VAL_resolve_resource_corridor_concession = {
+	if = {
+		limit = { has_country_flag = VAL_resource_corridor_active }
+		VAL_accept_resource_corridor = yes
+		VAL_address_resource_corridor_white_peace = yes
+		VAL_clear_resource_corridor_state = yes
+	}
+}
+
+VAL_resolve_resource_corridor_defeat = {
+	if = {
+		limit = { has_country_flag = VAL_resource_corridor_active }
+		set_country_flag = VAL_resource_corridor_defeat
+		VAL_address_resource_corridor_white_peace = yes
+		VAL_clear_resource_corridor_state = yes
+	}
+}
+
+VAL_check_resource_corridor_integrity = {
+	if = {
+		limit = { has_country_flag = VAL_resource_corridor_active }
+		if = {
+			limit = {
+				OR = {
+					has_capitulated = yes
+					NOT = { has_event_target = VAL_resource_corridor_target_country }
+					NOT = { country_exists = event_target:VAL_resource_corridor_target_country }
+				}
+			}
+			VAL_resolve_resource_corridor_defeat = yes
+		}
+		else_if = {
+			limit = {
+				OR = {
+					NOT = { has_war_with = event_target:VAL_resource_corridor_target_country }
+					any_enemy_country = {
+						NOT = { has_country_flag = VAL_resource_corridor_participant }
+						NOT = { has_country_flag = STP_crisis_party_side }
+						NOT = { has_country_flag = STP_crisis_resistance_side }
+					}
+					event_target:VAL_resource_corridor_target_country = {
+						any_enemy_country = {
+							NOT = { has_country_flag = VAL_resource_corridor_participant }
+							NOT = { has_country_flag = STP_crisis_party_side }
+							NOT = { has_country_flag = STP_crisis_resistance_side }
+						}
+					}
+				}
+			}
+			VAL_resolve_resource_corridor_defeat = yes
+		}
+	}
 }
 
 # Canonical final-war calendar. No engine truce is created: the active mission
@@ -1104,6 +1204,82 @@ STP_VAL_resolve_final_stp_victory = {
 		STP_VAL_clear_final_war_state = yes
 		country_event = { id = val_contract.83 }
 		event_target:STP_postwar_country = { country_event = { id = val_contract.83 } }
+	}
+}
+
+STP_VAL_address_early_aggression_peace = {
+	if = { limit = { has_war_with = STP } white_peace = { tag = STP } }
+	if = {
+		limit = {
+			country_exists = NOD
+			NOD = { has_country_flag = NOD_joined_early_stp_defense }
+			has_war_with = NOD
+		}
+		white_peace = { tag = NOD }
+	}
+}
+
+STP_VAL_clear_early_aggression_state = {
+	clr_country_flag = VAL_STP_early_aggression_active
+	if = {
+		limit = { country_exists = NOD }
+		NOD = { clr_country_flag = NOD_joined_early_stp_defense }
+	}
+	clear_global_event_target = STP_VAL_early_attacker
+	clear_global_event_target = STP_VAL_early_defender
+}
+
+STP_VAL_resolve_early_val_victory = {
+	if = {
+		limit = {
+			tag = VAL
+			has_country_flag = VAL_STP_early_aggression_active
+			country_exists = STP
+		}
+		STP_VAL_address_early_aggression_peace = yes
+		if = {
+			limit = {
+				country_exists = NOD
+				STP = { is_subject_of = NOD }
+			}
+			NOD = {
+				set_autonomy = {
+					target = STP
+					autonomy_state = autonomy_free
+				}
+			}
+		}
+		set_autonomy = {
+			target = STP
+			autonomy_state = autonomy_contract_protectorate
+		}
+		if = { limit = { controls_state = 45 STP = { owns_state = 45 } } transfer_state = 45 }
+		if = { limit = { controls_state = 88 STP = { owns_state = 88 } } transfer_state = 88 }
+		set_country_flag = VAL_STP_early_aggression_victory
+		STP = { set_country_flag = STP_early_contract_protectorate }
+		STP_VAL_clear_early_aggression_state = yes
+	}
+}
+
+STP_VAL_resolve_early_stp_victory = {
+	if = {
+		limit = {
+			tag = VAL
+			has_country_flag = VAL_STP_early_aggression_active
+			country_exists = STP
+		}
+		STP_VAL_address_early_aggression_peace = yes
+		if = { limit = { owns_state = 45 } STP = { transfer_state = 45 } }
+		if = { limit = { owns_state = 88 } STP = { transfer_state = 88 } }
+		VAL_change_contract_authority = { value = -20 }
+		VAL_change_stp_leverage = { value = -20 }
+		set_country_flag = VAL_STP_early_aggression_defeat
+		STP = { set_country_flag = STP_repelled_early_val_aggression }
+		if = {
+			limit = { country_exists = NOD }
+			NOD = { NOD_change_crisis_attention = { value = 10 } }
+		}
+		STP_VAL_clear_early_aggression_state = yes
 	}
 }
 

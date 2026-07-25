@@ -95,7 +95,7 @@ except ModuleNotFoundError:
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SECTIONS = ("core", "stp", "civil_war", "val", "nod", "north", "ai", "gui", "localisation", "performance")
+SECTIONS = ("core", "stp", "civil_war", "val", "nod", "north", "peace", "ai", "gui", "localisation", "performance")
 REQUIRED_FILES = {
     "core": (
         ("common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt", "core scripted effects"),
@@ -162,6 +162,24 @@ REQUIRED_FILES = {
         ("events/ADISCORD_VAL_contract_events.txt", "VAL contract events"),
         ("common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt", "VAL crisis on-actions"),
         ("common/autonomous_states/ADISCORD_contract_clients.txt", "VAL contract-client autonomy"),
+    ),
+    "peace": (
+        (
+            "common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt",
+            "crisis scripted peace router",
+        ),
+        (
+            "common/scripted_effects/ADISCORD_STP_VAL_crisis_war_effects.txt",
+            "internal and Nodrul scripted peace effects",
+        ),
+        (
+            "common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt",
+            "Kefreyt scripted peace effects",
+        ),
+        (
+            "common/autonomous_states/ADISCORD_contract_clients.txt",
+            "contract subject autonomy levels",
+        ),
     ),
     "nod": (
         ("common/decisions/ADISCORD_NOD_crisis_decisions.txt", "NOD crisis decisions"),
@@ -838,8 +856,24 @@ def _validate_civil_war_contract(root: Path, issues: list[str]) -> None:
                 if token not in block:
                     issues.append(f"{hook} is missing guarded internal-war completion")
                     break
-            if re.search(r"\bFROM\b", _mask_non_code(block)):
+            # on_peace has no reliable winner scope. on_capitulation may use
+            # FROM only to verify the exact war side; the winner itself must
+            # still be selected from the saved canonical role targets.
+            if hook == "on_peace" and re.search(r"\bFROM\b", _mask_non_code(block)):
                 issues.append(f"{hook} must not infer the internal winner from FROM")
+
+        capitulation = extract_named_block(on_actions, "on_capitulation") or ""
+        for token in (
+            "STP_internal_capitulated_side",
+            "event_target:STP_crisis_party_side",
+            "event_target:STP_crisis_resistance_side",
+            "STP_resolve_scripted_internal_victory = yes",
+        ):
+            if token not in capitulation:
+                issues.append(
+                    "on_capitulation scripted internal peace must select the winner from saved role targets"
+                )
+                break
 
     for tree, expected, label in (
         (war_tree, set(STP_CIVIL_WAR_FOCUS_IDS), "civil-war"),
@@ -1651,6 +1685,76 @@ def _validate_northern_campaign(root: Path, issues: list[str]) -> None:
             issues.append("ADISCORD_test_wars_l_russian.yml must have exactly one header")
 
 
+def _validate_scripted_peace_contract(root: Path, issues: list[str]) -> None:
+    on_actions = read(
+        root / "common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt"
+    ) or ""
+    internal = read(
+        root / "common/scripted_effects/ADISCORD_STP_VAL_crisis_war_effects.txt"
+    ) or ""
+    contracts = read(
+        root / "common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt"
+    ) or ""
+    autonomy = read(
+        root / "common/autonomous_states/ADISCORD_contract_clients.txt"
+    ) or ""
+
+    capitulation = extract_named_block(on_actions, "on_capitulation") or ""
+    for token in (
+        "NOD_resolve_limited_target_capitulation = yes",
+        "NOD_emergency_limited_white_peace = yes",
+        "VAL_resolve_resource_corridor_concession = yes",
+        "VAL_resolve_resource_corridor_defeat = yes",
+        "STP_VAL_resolve_early_val_victory = yes",
+        "STP_VAL_resolve_early_stp_victory = yes",
+        "STP_resolve_scripted_internal_victory = yes",
+        "STP_VAL_resolve_final_val_victory = yes",
+        "STP_VAL_resolve_final_stp_victory = yes",
+        "VAL_handle_northern_campaign_capitulation = yes",
+    ):
+        if token not in capitulation:
+            issues.append(f"scripted capitulation router is missing {token}")
+    if capitulation.count("set_global_flag = skip_default_capitulation") < 9:
+        issues.append("every crisis capitulation branch must claim scripted peace")
+
+    for token in (
+        "STP_resolve_scripted_internal_victory = {",
+        "white_peace = { tag = event_target:STP_internal_capitulated_side }",
+        "annex_country = {",
+        "NOD_addressed_limited_white_peace = {",
+        "NOD_resolve_limited_target_capitulation = {",
+    ):
+        if token not in internal:
+            issues.append(f"internal or Nodrul scripted peace is missing {token}")
+
+    for token in (
+        "VAL_address_resource_corridor_white_peace = {",
+        "VAL_clear_resource_corridor_state = {",
+        "VAL_check_resource_corridor_integrity = {",
+        "STP_VAL_address_early_aggression_peace = {",
+        "STP_VAL_resolve_early_val_victory = {",
+        "STP_VAL_resolve_early_stp_victory = {",
+        "VAL_address_northern_white_peace = {",
+    ):
+        if token not in contracts:
+            issues.append(f"Kefreyt scripted peace is missing {token}")
+
+    for resolver in (
+        "STP_VAL_resolve_final_val_victory",
+        "STP_VAL_resolve_final_stp_victory",
+    ):
+        block = extract_named_block(contracts, resolver) or ""
+        if "white_peace = { tag = event_target:STP_postwar_country }" not in block:
+            issues.append(f"final-war resolver {resolver} must close the exact war by script")
+
+    for autonomy_id in (
+        "autonomy_contract_protectorate",
+        "autonomy_contract_client",
+    ):
+        if not re.search(rf"\bid\s*=\s*{re.escape(autonomy_id)}\b", autonomy):
+            issues.append(f"missing special contract subject level {autonomy_id}")
+
+
 def _validate_performance(root: Path, issues: list[str]) -> None:
     for relative_path in OWNED_FEATURE_FILES:
         text = read(root / relative_path)
@@ -1678,6 +1782,8 @@ def validate(root: Path, section: str | None = None) -> list[str]:
                 _validate_nod_contract(root, issues)
             elif name == "north":
                 _validate_northern_campaign(root, issues)
+            elif name == "peace":
+                _validate_scripted_peace_contract(root, issues)
     return list(dict.fromkeys(issues))
 
 
