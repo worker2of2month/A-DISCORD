@@ -109,7 +109,11 @@ class CountryRosterTests(unittest.TestCase):
             histories = list((root / 'history' / 'countries').glob(f'{tag} - *.txt'))
             self.assertEqual(len(histories), 1, f'{tag} must have one dormant history')
             history = histories[0].read_text(encoding='utf-8-sig')
-            self.assertRegex(history, rf'(?m)^\s*capital\s*=\s*{state_id}\s*$')
+            self.assertNotRegex(
+                history,
+                r'(?m)^\s*capital\s*=',
+                f'{tag} must not reference an unowned capital before activation',
+            )
             self.assertNotRegex(history, r'(?m)^\s*(oob|add_state_core|transfer_state|create_faction|add_to_faction|set_autonomy)\s*=')
 
             self.assertRegex(characters, rf'(?m)^\s*{tag}_[A-Za-z0-9_]+\s*=\s*\{{')
