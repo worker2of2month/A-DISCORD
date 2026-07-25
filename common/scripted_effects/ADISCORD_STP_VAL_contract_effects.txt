@@ -246,12 +246,6 @@ VAL_resolve_stp_officer_operation = {
 }
 VAL_resolve_stp_red_line_operation = {
 	VAL_change_stp_exposure_nodrul = { value = 1 }
-	if = {
-		limit = { country_exists = NOD }
-		NOD = {
-			save_global_event_target_as = VAL_saved_nodrul_posture
-		}
-	}
 	VAL_apply_stp_family_memory = {
 		success_flag = VAL_STP_success_nodrul
 		first_leverage = 0

@@ -16,26 +16,6 @@ defined_text = {
 }
 
 defined_text = {
-	name = WhoTFDoWeSupportLeader
-	text = {
-		trigger = {
-			tag = STP
-			has_country_flag = STP_main_campaign_side
-			has_country_flag = STP_sided_with_Maksim_flag
-		}
-		localization_key = STP_sided_with_Maksim_loc
-	}
-	text = {
-		trigger = {
-			tag = STP
-			has_country_flag = STP_main_campaign_side
-			has_country_flag = STP_sided_with_the_party_flag
-		}
-		localization_key = STP_sided_with_the_party_loc
-	}
-}
-
-defined_text = {
 	name = STP_display_party_suspicion
 	text = {
 		trigger = {

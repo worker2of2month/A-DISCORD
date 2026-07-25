@@ -1,49 +1,32 @@
 add_namespace = stp
 
-#State of the country
+# Legacy side-choice IDs remain as hidden compatibility forwarders. Old saves
+# that still have either event queued enter the canonical forced-choice event;
+# if a side was already selected, the new event trigger makes this a no-op.
 country_event = {
 	id = stp.1
-	title = stp.1.t
-	desc = stp.1.d
-	picture = GFX_report_event_generic_read_write
-	fire_only_once = no
+	hidden = yes
 	is_triggered_only = yes
 	trigger = {
 		tag = STP
+		has_country_flag = STP_main_campaign_side
+		NOT = { has_country_flag = STP_ivanov_dead }
 	}
 	immediate = {
-	}
-	option = {
-		name = stp.1.a
-		ai_chance = {
-			base = 1
-		}
-	}
-	option = {
-		name = stp.1.b
-		ai_chance = {
-			base = 0
-		}
+		country_event = { id = stp_crisis.6 }
 	}
 }
 
 country_event = {
 	id = stp.2
-	title = stp.2.t
-	desc = stp.2.d
-	picture = GFX_report_event_generic_read_write
-	fire_only_once = no
+	hidden = yes
 	is_triggered_only = yes
 	trigger = {
 		tag = STP
+		has_country_flag = STP_main_campaign_side
+		NOT = { has_country_flag = STP_ivanov_dead }
 	}
 	immediate = {
-	}
-	option = {
-		name = stp.2.a
-		ai_chance = {
-			base = 1
-		}
-		
+		country_event = { id = stp_crisis.6 }
 	}
 }

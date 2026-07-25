@@ -2231,11 +2231,273 @@ def _validate_localisation_contract(root: Path, issues: list[str]) -> None:
             issues.append(f"missing Russian crisis localisation key {key}")
 
 
+def _validate_legacy_integration(root: Path, issues: list[str]) -> None:
+    """Guard save compatibility, cleanup, and cross-file references."""
+    legacy_events_path = root / "events/ADISCORD_events_STP.txt"
+    if not legacy_events_path.exists():
+        return
+
+    legacy_events = read(legacy_events_path) or ""
+    for event_id in ("stp.1", "stp.2"):
+        block = _block_with_direct_assignment(
+            legacy_events, "country_event", "id", event_id
+        ) or ""
+        for token in (
+            "hidden = yes",
+            "is_triggered_only = yes",
+            "tag = STP",
+            "has_country_flag = STP_main_campaign_side",
+            "country_event = { id = stp_crisis.6 }",
+        ):
+            if token not in block:
+                issues.append(f"legacy event {event_id} is not a safe crisis forwarder")
+        for forbidden in (
+            "complete_national_focus",
+            "set_variable",
+            "add_to_variable",
+            "add_power_balance_value",
+        ):
+            if forbidden in _mask_non_code(block):
+                issues.append(f"legacy event {event_id} retains obsolete mutation {forbidden}")
+
+    old_decisions = read(root / "common/decisions/ADISCORD_decisions_STP.txt") or ""
+    for decision_id in (
+        "STP_add_left_bop_debug_decision",
+        "STP_add_right_bop_debug_decision",
+    ):
+        block = extract_named_block(old_decisions, decision_id) or ""
+        visible = extract_named_block(block, "visible") or ""
+        available = extract_named_block(block, "available") or ""
+        complete = extract_named_block(block, "complete_effect") or ""
+        if "always = no" not in visible or "always = no" not in available:
+            issues.append(f"legacy debug decision {decision_id} must remain invisible and inert")
+        if re.sub(r"\s+", "", _mask_non_code(complete)) != "{}":
+            issues.append(f"legacy debug decision {decision_id} has a non-empty effect")
+        if "original_tag" in block or "add_power_balance_value" in block:
+            issues.append(f"legacy debug decision {decision_id} can still mutate the old BOP")
+    old_category = read(
+        root / "common/decisions/categories/ADISCORD_decision_categories_STP.txt"
+    ) or ""
+    category = extract_named_block(old_category, "STP_balance_of_power_category") or ""
+    if "always = no" not in (extract_named_block(category, "visible") or ""):
+        issues.append("legacy STP balance-of-power category must remain hidden")
+
+    scripted_loc_files = sorted((root / "common/scripted_localisation").glob("*.txt"))
+    support_definitions: list[tuple[Path, str]] = []
+    for path in scripted_loc_files:
+        text = read(path) or ""
+        for block in _iter_named_blocks(text, "defined_text"):
+            if _direct_scalar_values(block, "name") == ["WhoTFDoWeSupportLeader"]:
+                support_definitions.append((path, block))
+    if len(support_definitions) != 1:
+        issues.append("WhoTFDoWeSupportLeader must be defined exactly once")
+    else:
+        path, block = support_definitions[0]
+        if "tag = STP" not in block or "STP_main_campaign_side" not in block:
+            issues.append(f"{path.name}: leader support getter lacks current-role gating")
+        if "original_tag = STP" in block:
+            issues.append(f"{path.name}: leader support getter uses stale original-tag gating")
+
+    old_ideas = read(root / "common/ideas/valeraland.txt") or ""
+    mercenary_stub = extract_named_block(old_ideas, "VAL_mercenary_state") or ""
+    modifier = extract_named_block(mercenary_stub, "modifier") or ""
+    if not mercenary_stub or re.sub(r"\s+", "", _mask_non_code(modifier)) != "{}":
+        issues.append("VAL_mercenary_state must parse as an empty compatibility stub")
+    for forbidden in (
+        "send_volunteer_size",
+        "send_volunteer_divisions_required",
+        "army_attack_factor",
+        "army_defence_factor",
+    ):
+        if forbidden in mercenary_stub:
+            issues.append(f"VAL_mercenary_state retains gameplay modifier {forbidden}")
+    for relative in (
+        "history/countries/VAL - ValeraLand.txt",
+        "common/bookmarks/the_gathering_storm.txt",
+    ):
+        if "VAL_mercenary_state" in (read(root / relative) or ""):
+            issues.append(f"{relative}: grants obsolete VAL_mercenary_state")
+
+    core_path = root / "common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt"
+    core = read(core_path) or ""
+    state_face_access = re.compile(
+        r"\bvar\s*=\s*STP_state_face_stage\b"
+        r"|\bvalue\s*=\s*STP_state_face_stage\b"
+        r"|\bSTP_state_face_stage\s*(?:=|>|<)"
+    )
+    for base in (root / "common", root / "events", root / "history"):
+        if not base.exists():
+            continue
+        for path in base.rglob("*.txt"):
+            text = read(path) or ""
+            if state_face_access.search(_mask_non_code(text)) and path != core_path:
+                issues.append(
+                    f"{path.relative_to(root)}: legacy state-face variable is read outside its compatibility API"
+                )
+    if len(state_face_access.findall(_mask_non_code(core))) != 4:
+        issues.append("legacy state-face mirror must be confined to four migration/wrapper accesses")
+
+    initialize = extract_named_block(core, "ADISCORD_STP_VAL_initialize_schema") or ""
+    suspicion_migration = initialize.find(
+        "multiply_variable = { var = STP_party_suspicion value = 100 }"
+    )
+    suspicion_default = initialize.find(
+        "set_variable = { var = STP_party_suspicion value = 5 }"
+    )
+    val_reconstruction = initialize.find(
+        "set_variable = { var = VAL_contract_authority value = 35 }"
+    )
+    schema_commit = initialize.find(
+        "set_variable = { var = ADISCORD_STP_VAL_crisis_schema_version value = 1 }"
+    )
+    if min(suspicion_migration, suspicion_default, val_reconstruction, schema_commit) < 0:
+        issues.append("schema initialization is missing a required migration phase")
+    else:
+        if not suspicion_migration < suspicion_default < schema_commit:
+            issues.append("legacy suspicion must migrate before defaults and schema commit")
+        if not val_reconstruction < schema_commit:
+            issues.append("VAL authority must be reconstructed before schema commit")
+    if "NOT = { has_variable = ADISCORD_STP_VAL_crisis_schema_version }" not in initialize:
+        issues.append("schema migration lacks its idempotent outer guard")
+    for focus_id, rewards in VAL_FOCUS_REWARD_TOKENS.items():
+        if (
+            any("VAL_change_contract_authority" in reward for reward in rewards)
+            and f"has_completed_focus = {focus_id}" not in initialize
+        ):
+            issues.append(f"VAL authority migration omits completed reward {focus_id}")
+
+    crisis_texts: dict[str, str] = {}
+    for relative in OWNED_FEATURE_FILES:
+        text = read(root / relative)
+        if text is not None:
+            crisis_texts[relative] = text
+    combined = "\n".join(crisis_texts.values())
+    saved_targets = set(
+        re.findall(r"\bsave_global_event_target_as\s*=\s*([A-Za-z0-9_]+)", combined)
+    )
+    cleared_targets = set(
+        re.findall(r"\bclear_global_event_target\s*=\s*([A-Za-z0-9_]+)", combined)
+    )
+    persistent_targets = {"STP_postwar_country"}
+    for target in sorted(saved_targets - cleared_targets - persistent_targets):
+        issues.append(f"temporary global event target {target} has no cleanup path")
+
+    for relative, text in crisis_texts.items():
+        if "skip_default_capitulation" in text and relative != (
+            "common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt"
+        ):
+            issues.append(f"{relative}: globally suppresses capitulation outside the exact router")
+    on_actions = crisis_texts.get(
+        "common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt", ""
+    )
+    capitulation = extract_named_block(on_actions, "on_capitulation") or ""
+    for token in (
+        "set_global_flag = STP_VAL_skip_capitulation_claimed",
+        "has_global_flag = STP_VAL_skip_capitulation_claimed",
+        "clr_global_flag = STP_VAL_skip_capitulation_claimed",
+        "clr_global_flag = skip_default_capitulation",
+    ):
+        if token not in capitulation:
+            issues.append(f"scripted capitulation router lacks scoped flag cleanup {token}")
+
+    contracts = crisis_texts.get(
+        "common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt", ""
+    )
+    contract_cleanup = extract_named_block(contracts, "VAL_STP_cleanup_contract_relations") or ""
+    for token in (
+        "remove_resource_rights = 45",
+        "remove_resource_rights = 88",
+        "relation = military_access",
+        "relation = non_aggression_pact",
+        "remove_ideas = STP_val_contract_advisers",
+        "remove_ideas = VAL_STP_postwar_contract_income",
+        "remove_decision = VAL_STP_adviser_factory_obligation",
+        "clr_country_flag = VAL_STP_contract_active",
+        "clear_global_event_target = STP_val_contract_partner",
+    ):
+        if token not in contract_cleanup:
+            issues.append(f"contract cleanup manifest is missing {token}")
+    for effect_id, tokens in {
+        "VAL_clear_foreign_operation": (
+            "VAL_foreign_operation_active",
+            "VAL_operation_STP_map_mountain_passes",
+            "VAL_operation_APH_prepare_separate_terms",
+        ),
+        "VAL_clear_active_northern_campaign": (
+            "VAL_northern_campaign_participant",
+            "VAL_northern_campaign_timeout_210",
+            "VAL_northern_cin_participant",
+            "VAL_northern_owner_61",
+        ),
+    }.items():
+        block = extract_named_block(contracts, effect_id) or ""
+        for token in tokens:
+            if token not in block:
+                issues.append(f"{effect_id} cleanup manifest is missing {token}")
+    war_effects = crisis_texts.get(
+        "common/scripted_effects/ADISCORD_STP_VAL_crisis_war_effects.txt", ""
+    )
+    for effect_id, tokens in {
+        "STP_clear_external_crisis_participants": (
+            "STP_external_crisis_participant",
+            "STP_direct_external_intervention",
+            "STP_nodrul_limited_support",
+            "NOD_STP_temporary_access",
+        ),
+        "NOD_clear_limited_conflict_state": (
+            "NOD_limited_war_active",
+            "NOD_limited_war_target",
+            "NOD_limited_war_target_country",
+            "NOD_limited_war_timeout_ypr",
+        ),
+    }.items():
+        block = extract_named_block(war_effects, effect_id) or ""
+        for token in tokens:
+            if token not in block:
+                issues.append(f"{effect_id} cleanup manifest is missing {token}")
+
+    canonical_variables = (
+        "STP_party_suspicion",
+        "STP_resistance_readiness",
+        "STP_leader_health_stage",
+        "VAL_contract_authority",
+    )
+    direct_mutation = re.compile(
+        r"\b(?:set_variable|add_to_variable|subtract_from_variable|multiply_variable|"
+        r"divide_variable|clamp_variable)\s*=\s*\{[^{}]*\bvar\s*=\s*("
+        + "|".join(map(re.escape, canonical_variables))
+        + r")\b",
+        re.DOTALL,
+    )
+    for relative, text in crisis_texts.items():
+        if relative == "common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt":
+            continue
+        for variable in direct_mutation.findall(_mask_non_code(text)):
+            issues.append(f"{relative}: directly mutates canonical variable {variable}")
+
+    event_definitions: set[str] = set()
+    for path in (root / "events").glob("*.txt"):
+        text = read(path) or ""
+        for block_type in ("country_event", "news_event"):
+            for block in _iter_named_blocks(text, block_type):
+                event_definitions.update(
+                    value
+                    for value in _direct_scalar_values(block, "id")
+                    if value.startswith(("stp_crisis.", "val_contract.", "nod_crisis."))
+                )
+    event_references = set(
+        re.findall(r"\b(?:id|event_id)\s*=\s*((?:stp_crisis|val_contract|nod_crisis)\.\d+)", combined)
+    )
+    for event_id in sorted(event_references - event_definitions):
+        issues.append(f"crisis content references undefined event {event_id}")
+
+
 def _validate_performance(root: Path, issues: list[str]) -> None:
     for relative_path in OWNED_FEATURE_FILES:
         text = read(root / relative_path)
         if text is not None:
             _validate_file(relative_path, text, issues)
+    _validate_legacy_integration(root, issues)
 
 
 def validate(root: Path, section: str | None = None) -> list[str]:

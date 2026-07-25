@@ -2833,6 +2833,97 @@ class CrisisValidatorTests(unittest.TestCase):
         self.assertNotIn("STP_change_party_suspicion_rate", legacy_events)
         self.assertNotIn("stp_party_suspicion", legacy_events)
 
+    def test_task_thirteen_legacy_entry_points_are_safe(self):
+        root = validator.ROOT
+        legacy_events = validator.read(root / "events/ADISCORD_events_STP.txt") or ""
+        for event_id in ("stp.1", "stp.2"):
+            block = self._block_with_assignment(
+                legacy_events, "country_event", f"id = {event_id}"
+            )
+            self.assertIn("hidden = yes", block)
+            self.assertIn("is_triggered_only = yes", block)
+            self.assertIn("tag = STP", block)
+            self.assertIn("has_country_flag = STP_main_campaign_side", block)
+            self.assertIn("country_event = { id = stp_crisis.6 }", block)
+            self.assertNotIn("complete_national_focus", block)
+            self.assertNotIn("set_variable", block)
+
+        decisions = validator.read(
+            root / "common/decisions/ADISCORD_decisions_STP.txt"
+        ) or ""
+        for decision_id in (
+            "STP_add_left_bop_debug_decision",
+            "STP_add_right_bop_debug_decision",
+        ):
+            block = validator.extract_named_block(decisions, decision_id) or ""
+            self.assertIn("always = no", validator.extract_named_block(block, "visible") or "")
+            self.assertIn("always = no", validator.extract_named_block(block, "available") or "")
+            complete = validator.extract_named_block(block, "complete_effect") or ""
+            self.assertEqual(re.sub(r"\s+", "", validator._mask_non_code(complete)), "{}")
+            self.assertNotIn("original_tag", block)
+            self.assertNotIn("add_power_balance_value", block)
+
+        definitions = []
+        for path in sorted((root / "common/scripted_localisation").glob("*.txt")):
+            text = validator.read(path) or ""
+            for block in validator._iter_named_blocks(text, "defined_text"):
+                if validator._direct_scalar_values(block, "name") == [
+                    "WhoTFDoWeSupportLeader"
+                ]:
+                    definitions.append((path, block))
+        self.assertEqual(len(definitions), 1)
+        self.assertIn("tag = STP", definitions[0][1])
+        self.assertIn("STP_main_campaign_side", definitions[0][1])
+        self.assertNotIn("original_tag = STP", definitions[0][1])
+
+    def test_task_thirteen_cleanup_and_reference_audit(self):
+        root = validator.ROOT
+        self.assertEqual(validator.validate(root, "performance"), [])
+
+        combined = "\n".join(
+            validator.read(root / relative) or ""
+            for relative in crisis_manifest.OWNED_FEATURE_FILES
+        )
+        saved = set(
+            re.findall(
+                r"\bsave_global_event_target_as\s*=\s*([A-Za-z0-9_]+)", combined
+            )
+        )
+        cleared = set(
+            re.findall(
+                r"\bclear_global_event_target\s*=\s*([A-Za-z0-9_]+)", combined
+            )
+        )
+        self.assertEqual(saved - cleared, {"STP_postwar_country"})
+        self.assertNotIn("VAL_saved_nodrul_posture", combined)
+
+        on_actions = validator.read(
+            root / "common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt"
+        ) or ""
+        capitulation = validator.extract_named_block(on_actions, "on_capitulation") or ""
+        self.assertIn("set_global_flag = STP_VAL_skip_capitulation_claimed", capitulation)
+        self.assertIn("clr_global_flag = STP_VAL_skip_capitulation_claimed", capitulation)
+        self.assertIn("clr_global_flag = skip_default_capitulation", capitulation)
+
+        core = validator.read(
+            root / "common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt"
+        ) or ""
+        initialize = validator.extract_named_block(
+            core, "ADISCORD_STP_VAL_initialize_schema"
+        ) or ""
+        self.assertLess(
+            initialize.index(
+                "multiply_variable = { var = STP_party_suspicion value = 100 }"
+            ),
+            initialize.index("set_variable = { var = STP_party_suspicion value = 5 }"),
+        )
+        self.assertLess(
+            initialize.index("set_variable = { var = VAL_contract_authority value = 35 }"),
+            initialize.index(
+                "set_variable = { var = ADISCORD_STP_VAL_crisis_schema_version value = 1 }"
+            ),
+        )
+
     def test_idea_sprites_are_exact_68_pixel_aliases(self):
         root = validator.ROOT
         gfx = validator.read(root / "interface/ADISCORD_STP_VAL_crisis.gfx") or ""
