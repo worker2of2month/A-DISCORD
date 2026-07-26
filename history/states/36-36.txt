@@ -17,10 +17,6 @@ state={
             infrastructure = 5
             industrial_complex = 4
             nuclear_reactor = 1
-
-            7464 = {
-                land_facility = 1
-            }
         }
 	victory_points = { 12227 25 }
 	}

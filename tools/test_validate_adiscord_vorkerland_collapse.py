@@ -83,6 +83,17 @@ class StatePartitionTests(unittest.TestCase):
             state_path = validator.state_file(validator.ROOT, state_id)
             self.assertIn(capital, validator.provinces(Path(state_path).read_text(encoding='utf-8-sig')))
 
+    def test_initial_vorkerland_state_does_not_spawn_a_disabled_project_facility(self):
+        state_path = validator.state_file(validator.ROOT, 36)
+        self.assertIsNotNone(state_path)
+        state = Path(state_path).read_text(encoding='utf-8-sig')
+
+        self.assertNotRegex(
+            state,
+            r'\b(?:land|air|naval|nuclear)_facility\s*=',
+            'special-project specializations are masked, so an initial facility leaves an unsafe map object',
+        )
+
 
 class CountryRosterTests(unittest.TestCase):
     """The fixed country roster remains dormant until collapse events activate it."""
