@@ -532,25 +532,37 @@ class DirtySpawnTests(unittest.TestCase):
 
     def test_every_dirty_tag_has_exact_connected_states_and_setup_order(self):
         effects = self.EFFECTS_PATH.read_text(encoding='utf-8-sig')
-        transferred = []
+        assigned = []
         for tag, states in DIRTY_GROUPS.items():
             setup = self.named_block(effects, f'ADISCORD_vorkerland_setup_{tag.lower()}')
             for state_id in states:
-                self.assertRegex(setup, rf'\btransfer_state\s*=\s*{state_id}\b')
                 self.assertRegex(
                     setup,
-                    rf'{state_id}\s*=\s*\{{\s*add_core_of\s*=\s*{tag}\s+set_state_controller_to\s*=\s*{tag}\s*\}}',
+                    rf'{state_id}\s*=\s*\{{\s*add_core_of\s*=\s*{tag}\s+set_state_owner_to\s*=\s*{tag}\s*\}}',
                 )
-                transferred.append(state_id)
+                assigned.append(state_id)
             capital = CAPITALS[tag][0]
             self.assertRegex(setup, rf'set_capital\s*=\s*\{{\s*state\s*=\s*{capital}\s*\}}')
             self.assertIn('ADISCORD_grant_2150_technology_baseline = yes', setup)
             self.assertIn('ADISCORD_economy_initialize_country = yes', setup)
             self.assertIn(f'load_oob = "{tag}_vorkerland_collapse"', setup)
-            self.assertLess(setup.index('transfer_state ='), setup.index('load_oob ='))
-        self.assertEqual(set(transferred), set().union(*map(set, DIRTY_GROUPS.values())))
-        self.assertNotIn(23, transferred)
+            self.assertLess(setup.index('set_state_owner_to ='), setup.index('load_oob ='))
+        self.assertEqual(set(assigned), set().union(*map(set, DIRTY_GROUPS.values())))
+        self.assertNotIn(23, assigned)
+        self.assertNotRegex(effects, r'\btransfer_state\s*=')
+        self.assertNotRegex(effects, r'\bset_state_controller_to\s*=')
         self.assertNotIn('remove_dynamic_modifier', effects)
+
+    def test_ownerless_dirty_states_use_the_owner_safe_effect(self):
+        effects = self.EFFECTS_PATH.read_text(encoding='utf-8-sig')
+        for tag, states in DIRTY_GROUPS.items():
+            setup = self.named_block(effects, f'ADISCORD_vorkerland_setup_{tag.lower()}')
+            for state_id in states:
+                state_path = validator.state_file(self.ROOT, state_id)
+                self.assertIsNotNone(state_path)
+                history = state_path.read_text(encoding='utf-8-sig')
+                self.assertNotRegex(history, r'(?m)^\s*(?:owner|controller)\s*=')
+                self.assertRegex(setup, rf'\bset_state_owner_to\s*=\s*{tag}\b')
 
     def test_waves_spawn_each_tag_once_in_the_intended_order(self):
         events = self.EVENT_PATH.read_text(encoding='utf-8-sig')
@@ -792,3 +804,23 @@ class OutcomeTests(unittest.TestCase):
             self.assertIn(f'clr_global_flag = {flag}', maps)
             self.assertNotIn(f'set_country_flag = {flag}', maps)
             self.assertNotIn(f'clr_country_flag = {flag}', maps)
+
+    def test_collapse_superevent_audio_targets_the_human_country(self):
+        maps = self.MAPS.read_text(encoding='utf-8-sig')
+        news = (self.ROOT / 'events' / 'ADISCORD_news.txt').read_text(encoding='utf-8-sig')
+        audio = self.named_block(maps, 'ADISCORD_vorkerland_play_collapse_superevent_audio')
+        self.assertRegex(audio, r'every_country\s*=\s*\{\s*limit\s*=\s*\{\s*is_ai\s*=\s*no\s*\}')
+        self.assertIn('scoped_sound_effect = superevent_vorkerland_civilwar_sound_e', audio)
+        self.assertIn('scoped_play_song = "one_minute_of_silence"', audio)
+
+        civilwar = self.named_block(news, 'news_event')
+        dirty_opening = self.named_block(maps, 'ADISCORD_vorkerland_show_dirty_opening_superevent')
+        for block in (civilwar, dirty_opening):
+            self.assertIn('ADISCORD_vorkerland_play_collapse_superevent_audio = yes', block)
+
+        sounds = (self.ROOT / 'sound' / 'superevents_sound.asset').read_text(encoding='utf-8-sig')
+        effects = (self.ROOT / 'sound' / 'superevents_effects.asset').read_text(encoding='utf-8-sig')
+        categories = (self.ROOT / 'sound' / 'superevents_category.asset').read_text(encoding='utf-8-sig')
+        self.assertIn('name = "superevent_vorkerland_civilwar_sound"', sounds)
+        self.assertIn('name = superevent_vorkerland_civilwar_sound_e', effects)
+        self.assertIn('superevent_vorkerland_civilwar_sound_e', categories)

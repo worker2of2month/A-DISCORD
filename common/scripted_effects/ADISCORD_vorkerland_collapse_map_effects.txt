@@ -24,9 +24,20 @@ ADISCORD_vorkerland_clear_superevent_flags = {
 	clr_global_flag = superevent_vorkerland_fragmented
 }
 
+ADISCORD_vorkerland_play_collapse_superevent_audio = {
+	# Superevents use a global GUI flag, so play the audio in the actual human
+	# country scope rather than in the AI country that hosts the hidden event.
+	every_country = {
+		limit = { is_ai = no }
+		scoped_sound_effect = superevent_vorkerland_civilwar_sound_e
+		scoped_play_song = "one_minute_of_silence"
+	}
+}
+
 ADISCORD_vorkerland_show_dirty_opening_superevent = {
 	ADISCORD_vorkerland_clear_superevent_flags = yes
 	set_global_flag = superevent_vorkerland_dirty_opening
+	ADISCORD_vorkerland_play_collapse_superevent_audio = yes
 }
 
 ADISCORD_vorkerland_show_worker_victory_superevent = {

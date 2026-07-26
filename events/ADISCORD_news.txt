@@ -17,13 +17,7 @@ news_event = { #vorkerland civilwar
 		name = news.0.a
 		hidden_effect = {
 			set_global_flag = superevent_vorkerland_civilwar
-			if = {
-				limit = {
-					is_ai = no
-				}
-				scoped_sound_effect = superevent_vorkerland_civilwar_sound_e
-				scoped_play_song = "one_minute_of_silence"
-			}
+			ADISCORD_vorkerland_play_collapse_superevent_audio = yes
 		}
 	}
 }

@@ -48,20 +48,16 @@ ADISCORD_vorkerland_apply_dirty_state_modifier = {
 }
 
 ADISCORD_vorkerland_setup_sla = {
-	SLA = {
-		transfer_state = 49
-		transfer_state = 51
-		transfer_state = 155
-		transfer_state = 176
-		transfer_state = 187
-		transfer_state = 191
-	}
-	49 = { add_core_of = SLA set_state_controller_to = SLA }
-	51 = { add_core_of = SLA set_state_controller_to = SLA }
-	155 = { add_core_of = SLA set_state_controller_to = SLA }
-	176 = { add_core_of = SLA set_state_controller_to = SLA }
-	187 = { add_core_of = SLA set_state_controller_to = SLA }
-	191 = { add_core_of = SLA set_state_controller_to = SLA }
+	log = "[ADISCORD Vorkerland] SLA ownerless-state setup started"
+	# Dirty-zone states are ownerless before opening. transfer_state assumes a
+	# previous country owner and crashes the 1.19.2 relation cache on null.
+	49 = { add_core_of = SLA set_state_owner_to = SLA }
+	51 = { add_core_of = SLA set_state_owner_to = SLA }
+	155 = { add_core_of = SLA set_state_owner_to = SLA }
+	176 = { add_core_of = SLA set_state_owner_to = SLA }
+	187 = { add_core_of = SLA set_state_owner_to = SLA }
+	191 = { add_core_of = SLA set_state_owner_to = SLA }
+	log = "[ADISCORD Vorkerland] SLA state ownership assigned"
 	SLA = {
 		set_capital = { state = 49 }
 		ADISCORD_grant_2150_technology_baseline = yes
@@ -69,19 +65,16 @@ ADISCORD_vorkerland_setup_sla = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "SLA_vorkerland_collapse"
 	}
+	log = "[ADISCORD Vorkerland] SLA setup completed"
 }
 
 ADISCORD_vorkerland_setup_rza = {
-	RZA = {
-		transfer_state = 125
-		transfer_state = 177
-		transfer_state = 188
-		transfer_state = 192
-	}
-	125 = { add_core_of = RZA set_state_controller_to = RZA }
-	177 = { add_core_of = RZA set_state_controller_to = RZA }
-	188 = { add_core_of = RZA set_state_controller_to = RZA }
-	192 = { add_core_of = RZA set_state_controller_to = RZA }
+	log = "[ADISCORD Vorkerland] RZA ownerless-state setup started"
+	125 = { add_core_of = RZA set_state_owner_to = RZA }
+	177 = { add_core_of = RZA set_state_owner_to = RZA }
+	188 = { add_core_of = RZA set_state_owner_to = RZA }
+	192 = { add_core_of = RZA set_state_owner_to = RZA }
+	log = "[ADISCORD Vorkerland] RZA state ownership assigned"
 	RZA = {
 		set_capital = { state = 177 }
 		ADISCORD_grant_2150_technology_baseline = yes
@@ -89,23 +82,18 @@ ADISCORD_vorkerland_setup_rza = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "RZA_vorkerland_collapse"
 	}
+	log = "[ADISCORD Vorkerland] RZA setup completed"
 }
 
 ADISCORD_vorkerland_setup_mlr = {
-	MLR = {
-		transfer_state = 152
-		transfer_state = 153
-		transfer_state = 154
-		transfer_state = 160
-		transfer_state = 189
-		transfer_state = 190
-	}
-	152 = { add_core_of = MLR set_state_controller_to = MLR }
-	153 = { add_core_of = MLR set_state_controller_to = MLR }
-	154 = { add_core_of = MLR set_state_controller_to = MLR }
-	160 = { add_core_of = MLR set_state_controller_to = MLR }
-	189 = { add_core_of = MLR set_state_controller_to = MLR }
-	190 = { add_core_of = MLR set_state_controller_to = MLR }
+	log = "[ADISCORD Vorkerland] MLR ownerless-state setup started"
+	152 = { add_core_of = MLR set_state_owner_to = MLR }
+	153 = { add_core_of = MLR set_state_owner_to = MLR }
+	154 = { add_core_of = MLR set_state_owner_to = MLR }
+	160 = { add_core_of = MLR set_state_owner_to = MLR }
+	189 = { add_core_of = MLR set_state_owner_to = MLR }
+	190 = { add_core_of = MLR set_state_owner_to = MLR }
+	log = "[ADISCORD Vorkerland] MLR state ownership assigned"
 	MLR = {
 		set_capital = { state = 152 }
 		ADISCORD_grant_2150_technology_baseline = yes
@@ -113,23 +101,18 @@ ADISCORD_vorkerland_setup_mlr = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "MLR_vorkerland_collapse"
 	}
+	log = "[ADISCORD Vorkerland] MLR setup completed"
 }
 
 ADISCORD_vorkerland_setup_ert = {
-	ERT = {
-		transfer_state = 167
-		transfer_state = 168
-		transfer_state = 169
-		transfer_state = 171
-		transfer_state = 184
-		transfer_state = 185
-	}
-	167 = { add_core_of = ERT set_state_controller_to = ERT }
-	168 = { add_core_of = ERT set_state_controller_to = ERT }
-	169 = { add_core_of = ERT set_state_controller_to = ERT }
-	171 = { add_core_of = ERT set_state_controller_to = ERT }
-	184 = { add_core_of = ERT set_state_controller_to = ERT }
-	185 = { add_core_of = ERT set_state_controller_to = ERT }
+	log = "[ADISCORD Vorkerland] ERT ownerless-state setup started"
+	167 = { add_core_of = ERT set_state_owner_to = ERT }
+	168 = { add_core_of = ERT set_state_owner_to = ERT }
+	169 = { add_core_of = ERT set_state_owner_to = ERT }
+	171 = { add_core_of = ERT set_state_owner_to = ERT }
+	184 = { add_core_of = ERT set_state_owner_to = ERT }
+	185 = { add_core_of = ERT set_state_owner_to = ERT }
+	log = "[ADISCORD Vorkerland] ERT state ownership assigned"
 	ERT = {
 		set_capital = { state = 169 }
 		ADISCORD_grant_2150_technology_baseline = yes
@@ -137,23 +120,18 @@ ADISCORD_vorkerland_setup_ert = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "ERT_vorkerland_collapse"
 	}
+	log = "[ADISCORD Vorkerland] ERT setup completed"
 }
 
 ADISCORD_vorkerland_setup_irt = {
-	IRT = {
-		transfer_state = 178
-		transfer_state = 180
-		transfer_state = 181
-		transfer_state = 182
-		transfer_state = 183
-		transfer_state = 193
-	}
-	178 = { add_core_of = IRT set_state_controller_to = IRT }
-	180 = { add_core_of = IRT set_state_controller_to = IRT }
-	181 = { add_core_of = IRT set_state_controller_to = IRT }
-	182 = { add_core_of = IRT set_state_controller_to = IRT }
-	183 = { add_core_of = IRT set_state_controller_to = IRT }
-	193 = { add_core_of = IRT set_state_controller_to = IRT }
+	log = "[ADISCORD Vorkerland] IRT ownerless-state setup started"
+	178 = { add_core_of = IRT set_state_owner_to = IRT }
+	180 = { add_core_of = IRT set_state_owner_to = IRT }
+	181 = { add_core_of = IRT set_state_owner_to = IRT }
+	182 = { add_core_of = IRT set_state_owner_to = IRT }
+	183 = { add_core_of = IRT set_state_owner_to = IRT }
+	193 = { add_core_of = IRT set_state_owner_to = IRT }
+	log = "[ADISCORD Vorkerland] IRT state ownership assigned"
 	IRT = {
 		set_capital = { state = 181 }
 		ADISCORD_grant_2150_technology_baseline = yes
@@ -161,19 +139,16 @@ ADISCORD_vorkerland_setup_irt = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "IRT_vorkerland_collapse"
 	}
+	log = "[ADISCORD Vorkerland] IRT setup completed"
 }
 
 ADISCORD_vorkerland_setup_sca = {
-	SCA = {
-		transfer_state = 165
-		transfer_state = 166
-		transfer_state = 172
-		transfer_state = 173
-	}
-	165 = { add_core_of = SCA set_state_controller_to = SCA }
-	166 = { add_core_of = SCA set_state_controller_to = SCA }
-	172 = { add_core_of = SCA set_state_controller_to = SCA }
-	173 = { add_core_of = SCA set_state_controller_to = SCA }
+	log = "[ADISCORD Vorkerland] SCA ownerless-state setup started"
+	165 = { add_core_of = SCA set_state_owner_to = SCA }
+	166 = { add_core_of = SCA set_state_owner_to = SCA }
+	172 = { add_core_of = SCA set_state_owner_to = SCA }
+	173 = { add_core_of = SCA set_state_owner_to = SCA }
+	log = "[ADISCORD Vorkerland] SCA state ownership assigned"
 	SCA = {
 		set_capital = { state = 173 }
 		ADISCORD_grant_2150_technology_baseline = yes
@@ -181,6 +156,7 @@ ADISCORD_vorkerland_setup_sca = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "SCA_vorkerland_collapse"
 	}
+	log = "[ADISCORD Vorkerland] SCA setup completed"
 }
 
 ADISCORD_vorkerland_intervene_wave_1 = {

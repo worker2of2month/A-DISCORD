@@ -139,6 +139,18 @@ def validate_dirty(root: Path, issues: list[str]) -> None:
             issues.append("dirty-state modifier must not have a remove_trigger")
     if effects and "ADISCORD_vorkerland_apply_dirty_modifiers" not in effects:
         issues.append("dirty-state application effect is missing")
+    if effects:
+        if re.search(r"\btransfer_state\s*=", effects):
+            issues.append("ownerless dirty states must not use transfer_state")
+        if re.search(r"\bset_state_controller_to\s*=", effects):
+            issues.append("ownerless dirty states must not force a separate controller transition")
+        for tag, states in DIRTY_GROUPS.items():
+            for state_id in states:
+                if re.search(
+                    rf"{state_id}\s*=\s*\{{[^}}]*set_state_owner_to\s*=\s*{tag}\b",
+                    effects,
+                ) is None:
+                    issues.append(f"dirty state {state_id} is not assigned safely to {tag}")
     for path in root.rglob("*.txt"):
         text = read(path) or ""
         if "remove_dynamic_modifier" in text and "ADISCORD_vorkerland_dirty_state" in text:
@@ -241,6 +253,23 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
             for name in ("dirty_opening", "worker_victory", "vlad_victory", "dorian_victory", "fragmented"):
                 if f"superevent_vorkerland_{name}" not in text:
                     issues.append(f"{label} has no Vorkerland {name} binding")
+    maps = require_file(
+        issues,
+        root / "common" / "scripted_effects" / "ADISCORD_vorkerland_collapse_map_effects.txt",
+        "collapse superevent effects",
+    )
+    news = require_file(issues, root / "events" / "ADISCORD_news.txt", "collapse news events")
+    if maps:
+        for required in (
+            "ADISCORD_vorkerland_play_collapse_superevent_audio",
+            "every_country",
+            "is_ai = no",
+            "scoped_sound_effect = superevent_vorkerland_civilwar_sound_e",
+        ):
+            if required not in maps:
+                issues.append(f"collapse superevent audio is missing {required}")
+    if news and "ADISCORD_vorkerland_play_collapse_superevent_audio = yes" not in news:
+        issues.append("civil-war superevent does not route audio to the human country")
 
 
 CHECKS = {
