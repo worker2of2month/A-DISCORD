@@ -1,37 +1,4 @@
 scripted_gui = {
-	ADISCORD_STP_crisis_panel = {
-		context_type = decision_category
-		window_name = "ADISCORD_STP_crisis_panel_window"
-
-		visible = {
-			tag = STP
-			has_country_flag = STP_main_campaign_side
-		}
-
-		triggers = {
-			STP_crisis_health_stage_1_visible = {
-				check_variable = { var = STP_leader_health_stage value = 2 compare = less_than }
-			}
-			STP_crisis_health_stage_2_visible = {
-				check_variable = { var = STP_leader_health_stage value = 2 compare = equals }
-			}
-			STP_crisis_health_stage_3_visible = {
-				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
-			}
-			STP_crisis_health_stage_4_visible = {
-				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
-			}
-			STP_crisis_health_stage_5_visible = {
-				check_variable = { var = STP_leader_health_stage value = 5 compare = greater_than_or_equals }
-			}
-		}
-
-		properties = {
-			STP_crisis_readiness_bar = { frame = STP_resistance_readiness }
-			STP_crisis_suspicion_bar = { frame = STP_party_suspicion }
-		}
-	}
-
 	ADISCORD_VAL_contract_panel = {
 		context_type = decision_category
 		window_name = "ADISCORD_VAL_contract_panel_window"
@@ -46,6 +13,7 @@ scripted_gui = {
 
 		properties = {
 			VAL_contract_authority_bar = { frame = VAL_contract_authority }
+			VAL_contract_readiness_bar = { frame = VAL_STP_campaign_readiness }
 		}
 	}
 }

@@ -21,6 +21,29 @@ on_actions = {
 					}
 				}
 			}
+			# Save-compatible recovery for an interrupted exclusion-zone reveal.
+			# The timed global guard makes this run once per load, not once per
+			# country, and the spawn events themselves skip tags already present.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_dirty_opened
+					NOT = { has_global_flag = ADISCORD_vorkerland_dirty_cascade_complete }
+					NOT = { has_global_flag = ADISCORD_vorkerland_dirty_cascade_recovery_scheduled }
+					RUS = { exists = yes }
+				}
+				set_global_flag = {
+					flag = ADISCORD_vorkerland_dirty_cascade_recovery_scheduled
+					days = 15
+				}
+				RUS = {
+					country_event = { id = ADISCORD_vorkerland_collapse.11 days = 1 }
+					country_event = { id = ADISCORD_vorkerland_collapse.17 days = 3 }
+					country_event = { id = ADISCORD_vorkerland_collapse.12 days = 5 }
+					country_event = { id = ADISCORD_vorkerland_collapse.18 days = 7 }
+					country_event = { id = ADISCORD_vorkerland_collapse.13 days = 9 }
+					country_event = { id = ADISCORD_vorkerland_collapse.19 days = 11 }
+				}
+			}
 		}
 	}
 	on_monthly = {
@@ -57,6 +80,11 @@ on_actions = {
 				}
 				ADISCORD_vorkerland_update_ai_phase = yes
 			}
+		}
+	}
+	on_state_control_changed = {
+		effect = {
+			RUS = { ADISCORD_vorkerland_check_khan_border_war = yes }
 		}
 	}
 }

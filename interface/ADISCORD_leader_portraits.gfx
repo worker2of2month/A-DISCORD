@@ -216,6 +216,12 @@ spriteTypes = {
 	  	texturefile = "gfx/leaders/APH/portrait_APH_Gorak_Bonecleaver.png"
 	}
 
+###EXZ
+	spriteType = {
+		name = "GFX_portrait_EXZ_No_Command"
+		texturefile = "gfx/leaders/EXZ/Portrait_EXZ_No_Command.png"
+	}
+
 ###PLACEHOLDER or default shit
 	spriteType = {
 	  	name = "GFX_portrait_PLACEHOLDER"

@@ -19,10 +19,8 @@ LEADERS = {
     "hedersett": ("STP_rufus_hedersett", "aristocratic_hedonism", "hedonism"),
 }
 DECISION_CATEGORIES = (
-    "STP_crisis_operations",
     "VAL_contract_campaign",
     "NOD_crisis_posture",
-    "VAL_northern_campaign",
     "STP_VAL_war_countdown_category",
 )
 HEALTH_MISSIONS = {
@@ -390,10 +388,14 @@ VAL_NEGOTIATION_POSTURES = {
 VAL_AUTHORITY_FOCUS_REWARDS = {
     "VAL_The_Contract_State": 5,
     "VAL_The_Weaponry_Baron": 10,
+    "VAL_Price_Of_Loyalty": 5,
+    "VAL_Count_The_Captains": 5,
+    "VAL_One_Ledger_One_Banner": 10,
     "VAL_Export_Rifles_Not_Promises": 5,
     "VAL_Morns_Supply_Trains": 5,
     "VAL_Dead_Villages_Still_Count": 5,
     "VAL_Different_Views_On_Freedom": 5,
+    "VAL_Contracts_Outlive_Kings": 5,
 }
 VAL_BASE_FOCUS_IDS = (
     "VAL_The_Contract_State",
@@ -439,11 +441,18 @@ VAL_STP_OPERATION_SPECS = {
 VAL_NORTHERN_OPERATION_SPECS = {
     "study_market": (30, 28, 0),
     "arms_brokerage": (25, 35, 1),
-    "infrastructure_concession": (45, 35, 1),
-    "hire_local_captain": (35, 28, 1),
     "prepare_separate_terms": (50, 35, 1),
 }
 VAL_NORTHERN_OPERATION_TARGETS = ("CIN", "OSF", "APH")
+STP_TRANSITION_FOCUS_MAP = {
+    "STP_outcome_shabrat_bloodless": "STP_The_Mountain_Window",
+    "STP_outcome_shabrat_main_war": "STP_No_One_Controls_The_Transition",
+    "STP_outcome_sotnikov_main_war": "STP_A_General_Takes_The_Passes",
+    "STP_outcome_hedersett_fail_state": "STP_The_Underground_Was_Too_Late",
+    "STP_outcome_hedersett_consolidation": "STP_The_Party_Closes_Ranks",
+    "STP_outcome_hedersett_vs_shabrat": "STP_Two_Claims_To_The_Palace",
+    "STP_outcome_hedersett_vs_sotnikov": "STP_The_Army_Rejects_The_Party",
+}
 VAL_STP_CONCESSION_FLAGS = (
     "VAL_STP_concession_resource_45",
     "VAL_STP_concession_resource_88",
@@ -454,30 +463,30 @@ VAL_STP_CONCESSION_FLAGS = (
 )
 VAL_FOCUS_REWARD_TOKENS = {
     "VAL_The_Contract_State": ("VAL_contract_board_open", "ADISCORD_STP_VAL_effect_value value = 5", "VAL_change_contract_authority = yes"),
-    "VAL_The_Weaponry_Baron": ("ADISCORD_STP_VAL_effect_value value = 10", "VAL_change_contract_authority = yes"),
-    "VAL_Price_Of_Loyalty": ("VAL_captain_retainers_unlocked",),
-    "VAL_Count_The_Captains": ("VAL_negotiation_posture_visible",),
-    "VAL_One_Ledger_One_Banner": ("VAL_foreign_operations_unlocked",),
+    "VAL_The_Weaponry_Baron": ("army_experience = 10", "ADISCORD_STP_VAL_effect_value value = 10", "VAL_change_contract_authority = yes"),
+    "VAL_Price_Of_Loyalty": ("VAL_captain_retainers_unlocked", "add_political_power = 25", "ADISCORD_STP_VAL_effect_value value = 5", "VAL_change_contract_authority = yes"),
+    "VAL_Count_The_Captains": ("VAL_negotiation_posture_visible", "army_experience = 10", "ADISCORD_STP_VAL_effect_value value = 5", "VAL_change_contract_authority = yes"),
+    "VAL_One_Ledger_One_Banner": ("VAL_foreign_operations_unlocked", "add_war_support = 0.05", "ADISCORD_STP_VAL_effect_value value = 10", "VAL_change_contract_authority = yes"),
     "VAL_Factories_Like_Cathedrals": ("VAL_factory_cathedrals_drive", "days = 365"),
     "VAL_Keep_The_Lines_Hot": ("VAL_hot_production_lines",),
-    "VAL_Ballistics_Schools": ("VAL_quality_arsenal", "category = infantry_weapons"),
-    "VAL_Brokered_Steel": ("VAL_broad_resource_network", "VAL_foreign_operation_pp_discount"),
+    "VAL_Ballistics_Schools": ("VAL_quality_arsenal", "category = infantry_weapons", "VAL_refresh_contract_modifier = yes"),
+    "VAL_Brokered_Steel": ("VAL_broad_resource_network", "add_political_power = 25", "VAL_refresh_contract_modifier = yes"),
     "VAL_Export_Rifles_Not_Promises": ("VAL_supply_contracts", "ADISCORD_STP_VAL_effect_value value = 5", "VAL_change_contract_authority = yes"),
     "VAL_The_Mercenary_State": ("army_experience = 10", "VAL_doctrine_choice_unlocked"),
     "VAL_Hire_Out_War": ("VAL_foreign_contracts_unlocked", "add_political_power = 50"),
-    "VAL_Vorons_Companies": ("VAL_doctrine_covert_intervention",),
-    "VAL_Stahls_Schedules": ("VAL_doctrine_sustained_supply",),
-    "VAL_Gromovs_Assault_Tables": ("VAL_doctrine_resource_raider",),
-    "VAL_Morns_Supply_Trains": ("VAL_supply_preparation", "ADISCORD_STP_VAL_effect_value value = 5", "VAL_change_contract_authority = yes"),
+    "VAL_Vorons_Companies": ("VAL_doctrine_covert_intervention", "VAL_refresh_contract_modifier = yes"),
+    "VAL_Stahls_Schedules": ("VAL_doctrine_sustained_supply", "VAL_refresh_contract_modifier = yes"),
+    "VAL_Gromovs_Assault_Tables": ("VAL_doctrine_resource_raider", "VAL_refresh_contract_modifier = yes"),
+    "VAL_Morns_Supply_Trains": ("VAL_supply_preparation", "VAL_change_final_war_preparation = yes", "ADISCORD_STP_VAL_effect_value value = 5", "VAL_change_contract_authority = yes"),
     "VAL_The_Harvest_Of_Ash": ("VAL_ash_model_unlocked", "add_war_support = 0.05"),
-    "VAL_Field_Surgeons": ("VAL_ash_manpower_preservation",),
-    "VAL_Bread_From_Barracks": ("VAL_ash_rear_mobilization",),
-    "VAL_Dead_Villages_Still_Count": ("VAL_ash_model_selected", "ADISCORD_STP_VAL_effect_value value = 5", "VAL_change_contract_authority = yes"),
+    "VAL_Field_Surgeons": ("VAL_ash_manpower_preservation", "VAL_refresh_contract_modifier = yes"),
+    "VAL_Bread_From_Barracks": ("VAL_ash_rear_mobilization", "VAL_refresh_contract_modifier = yes"),
+    "VAL_Dead_Villages_Still_Count": ("VAL_ash_model_selected", "add_war_support = 0.05", "ADISCORD_STP_VAL_effect_value value = 5", "VAL_change_contract_authority = yes"),
     "VAL_Market_Roads_North": ("VAL_northern_intelligence_unlocked", "VAL_northern_roads_drive"),
-    "VAL_Trading_Partners": ("VAL_north_open_market",),
-    "VAL_October_Of_2160": ("VAL_north_coercive",),
-    "VAL_Different_Views_On_Freedom": ("VAL_northern_operations_unlocked", "ADISCORD_STP_VAL_effect_value value = 5", "VAL_change_contract_authority = yes"),
-    "VAL_Contracts_Outlive_Kings": ("VAL_crisis_strategy_unlocked",),
+    "VAL_Trading_Partners": ("VAL_north_open_market", "VAL_refresh_contract_modifier = yes"),
+    "VAL_October_Of_2160": ("VAL_north_coercive", "add_war_support = 0.05", "VAL_refresh_contract_modifier = yes"),
+    "VAL_Different_Views_On_Freedom": ("VAL_northern_operations_unlocked", "add_political_power = 25", "ADISCORD_STP_VAL_effect_value value = 5", "VAL_change_contract_authority = yes"),
+    "VAL_Contracts_Outlive_Kings": ("VAL_crisis_strategy_unlocked", "VAL_change_final_war_preparation = yes", "ADISCORD_STP_VAL_effect_value value = 5", "VAL_change_contract_authority = yes"),
 }
 VAL_CONTRACT_BANDS = (
     {"minimum": 0, "maximum": 24, "modifiers": {"org": 3, "org_regain": 2, "daily_pp": -0.10}},
@@ -502,6 +511,63 @@ VAL_CONTRACT_BANDS = (
         "modifiers": {"attack": 12, "defence": 10, "org": 12, "org_regain": 10, "capture": 10, "supply": -7, "planning": -15, "daily_pp": -0.25, "stability": -5, "state_overload": 8, "trade_income": 7, "military_industry_income": 7, "army_expense": -7},
     },
 )
+VAL_CONTRACT_SPECIALISATIONS = {
+    "VAL_captain_retainers_unlocked": (("VAL_contract_command_power_factor", 0.1),),
+    "VAL_negotiation_posture_visible": (("VAL_contract_pp_gain", 0.1),),
+    "VAL_quality_arsenal": (
+        ("VAL_contract_factory_output_factor", 0.05),
+        ("VAL_contract_capture_factor", 0.02),
+    ),
+    "VAL_broad_resource_network": (
+        ("VAL_contract_supply_factor", -0.03),
+        ("VAL_contract_trade_income_factor", 0.05),
+    ),
+    "VAL_supply_contracts": (
+        ("VAL_contract_military_income_factor", 0.05),
+        ("VAL_contract_army_expense_factor", -0.03),
+    ),
+    "VAL_doctrine_covert_intervention": (
+        ("VAL_contract_planning_factor", 0.05),
+        ("VAL_contract_capture_factor", 0.03),
+    ),
+    "VAL_doctrine_sustained_supply": (
+        ("VAL_contract_org_regain", 0.03),
+        ("VAL_contract_supply_factor", -0.05),
+    ),
+    "VAL_doctrine_resource_raider": (
+        ("VAL_contract_attack_factor", 0.04),
+        ("VAL_contract_capture_factor", 0.05),
+        ("VAL_contract_defence_factor", -0.02),
+    ),
+    "VAL_ash_manpower_preservation": (
+        ("VAL_contract_conscription_factor", 0.05),
+        ("VAL_contract_org_regain", 0.02),
+    ),
+    "VAL_ash_rear_mobilization": (
+        ("VAL_contract_factory_output_factor", 0.05),
+        ("VAL_contract_consumer_goods_factor", -0.03),
+    ),
+    "VAL_north_open_market": (
+        ("VAL_contract_trade_income_factor", 0.07),
+        ("VAL_contract_pp_gain", 0.1),
+    ),
+    "VAL_north_coercive": (
+        ("VAL_contract_military_income_factor", 0.07),
+        ("VAL_contract_attack_factor", 0.02),
+        ("VAL_contract_stability_factor", -0.02),
+    ),
+}
+VAL_AI_FOCUS_COURSE_BIASES = {
+    "VAL_Ballistics_Schools": ("VAL_ai_course_resource_raider",),
+    "VAL_Brokered_Steel": ("VAL_ai_course_contract_broker", "VAL_ai_course_northern_broker"),
+    "VAL_Vorons_Companies": ("VAL_ai_course_contract_broker", "VAL_ai_course_northern_broker"),
+    "VAL_Stahls_Schedules": ("VAL_ai_course_patient_invader",),
+    "VAL_Gromovs_Assault_Tables": ("VAL_ai_course_resource_raider",),
+    "VAL_Field_Surgeons": ("VAL_ai_course_patient_invader",),
+    "VAL_Bread_From_Barracks": ("VAL_ai_course_contract_broker", "VAL_ai_course_northern_broker"),
+    "VAL_Trading_Partners": ("VAL_ai_course_contract_broker", "VAL_ai_course_northern_broker"),
+    "VAL_October_Of_2160": ("VAL_ai_course_resource_raider",),
+}
 POSTWAR_FOCUS_IDS = (
     "STP_Shabrat_Count_The_Surviving_Regiments",
     "STP_Shabrat_Open_The_Archives",

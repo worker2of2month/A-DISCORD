@@ -6,9 +6,40 @@
 # in some cases this trigger is checked for only initatior country, in that case both from & this is same
 
 is_diplomatic_action_valid_stage_coup = {
+	ADISCORD_diplomacy_not_dirty_zone_pair = yes
 	NOT = { has_dlc = "La Resistance" } # we have operation for it
 }
 
 is_diplomatic_action_valid_boost_party_popularity = {
+	ADISCORD_diplomacy_not_dirty_zone_pair = yes
 	NOT = { has_dlc = "La Resistance" } # we have operation for it
 }
+
+# EXZ represents a territory without a government. These hooks are evaluated
+# only when a diplomatic action is opened, so the quarantine has no periodic
+# performance cost.
+is_diplomatic_action_valid_generate_wargoal = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_revoke_guarantee = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_guarantee = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_milacc = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_offer_milacc = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_nonaggressionpact = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_improverelation = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_release_nation = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_air_base_access = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_offer_air_base_access = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_docking_rights = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_offer_docking_rights = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_lend_lease = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_incoming_lend_lease = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_request_licensed_production = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_leave_faction = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_assume_faction_leadership = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_kick_from_faction = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_send_attache = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_join_faction = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_create_faction = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_offer_join_faction = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_request_access_to_licence_production = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_request_foreign_manpower = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+is_diplomatic_action_valid_international_market_access_rights = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }

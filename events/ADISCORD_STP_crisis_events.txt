@@ -1460,6 +1460,7 @@ country_event = {
 			if = {
 				limit = { STP_can_attempt_bloodless_coup = yes }
 				set_country_flag = STP_outcome_shabrat_bloodless
+				STP_complete_transition_outcome_focus = yes
 				set_country_flag = STP_winner_shabrat
 				set_country_flag = STP_no_war_outcome
 				STP_finalize_internal_outcome = yes
@@ -1470,17 +1471,20 @@ country_event = {
 					STP_resistance_network_is_viable = yes
 				}
 				set_country_flag = STP_outcome_shabrat_main_war
+				STP_complete_transition_outcome_focus = yes
 				set_country_flag = STP_resistance_leader_shabrat
 				STP_start_party_revolt = yes
 			}
 			else_if = {
 				limit = { STP_sotnikov_network_is_viable = yes }
 				set_country_flag = STP_outcome_sotnikov_main_war
+				STP_complete_transition_outcome_focus = yes
 				set_country_flag = STP_resistance_leader_sotnikov
 				STP_start_party_revolt = yes
 			}
 			else = {
 				set_country_flag = STP_outcome_hedersett_fail_state
+				STP_complete_transition_outcome_focus = yes
 				set_country_flag = STP_underground_crushed_fail_state
 				set_country_flag = STP_winner_hedersett
 				set_country_flag = STP_no_war_outcome
@@ -1503,6 +1507,7 @@ country_event = {
 					}
 				}
 				set_country_flag = STP_outcome_hedersett_consolidation
+				STP_complete_transition_outcome_focus = yes
 				set_country_flag = STP_winner_hedersett
 				set_country_flag = STP_no_war_outcome
 				set_country_flag = STP_preserve_active_nodrul_mandate
@@ -1514,11 +1519,13 @@ country_event = {
 					STP_resistance_network_is_viable = yes
 				}
 				set_country_flag = STP_outcome_hedersett_vs_shabrat
+				STP_complete_transition_outcome_focus = yes
 				set_country_flag = STP_resistance_leader_shabrat
 				STP_start_resistance_revolt_chauvinism = yes
 			}
 			else = {
 				set_country_flag = STP_outcome_hedersett_vs_sotnikov
+				STP_complete_transition_outcome_focus = yes
 				set_country_flag = STP_resistance_leader_sotnikov
 				STP_start_resistance_revolt_etatism = yes
 			}

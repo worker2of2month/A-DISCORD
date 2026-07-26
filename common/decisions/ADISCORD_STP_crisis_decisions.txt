@@ -1,4 +1,4 @@
-STP_crisis_operations = {
+STP_elections_in_the_party = {
 	STP_health_stage_1_to_2 = {
 		is_good = no
 		selectable_mission = no

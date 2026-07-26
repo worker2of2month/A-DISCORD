@@ -3,7 +3,10 @@
 ADISCORD_STP_VAL_initialize_schema = {
 	if = {
 		limit = {
-			NOT = { has_variable = ADISCORD_STP_VAL_crisis_schema_version }
+			OR = {
+				NOT = { has_variable = ADISCORD_STP_VAL_crisis_schema_version }
+				check_variable = { var = ADISCORD_STP_VAL_crisis_schema_version value = 2 compare = less_than }
+			}
 		}
 
 		if = {
@@ -114,6 +117,18 @@ ADISCORD_STP_VAL_initialize_schema = {
 					add_to_variable = { var = VAL_contract_authority value = 10 }
 				}
 				if = {
+					limit = { has_completed_focus = VAL_Price_Of_Loyalty }
+					add_to_variable = { var = VAL_contract_authority value = 5 }
+				}
+				if = {
+					limit = { has_completed_focus = VAL_Count_The_Captains }
+					add_to_variable = { var = VAL_contract_authority value = 5 }
+				}
+				if = {
+					limit = { has_completed_focus = VAL_One_Ledger_One_Banner }
+					add_to_variable = { var = VAL_contract_authority value = 10 }
+				}
+				if = {
 					limit = { has_completed_focus = VAL_Export_Rifles_Not_Promises }
 					add_to_variable = { var = VAL_contract_authority value = 5 }
 				}
@@ -127,6 +142,10 @@ ADISCORD_STP_VAL_initialize_schema = {
 				}
 				if = {
 					limit = { has_completed_focus = VAL_Different_Views_On_Freedom }
+					add_to_variable = { var = VAL_contract_authority value = 5 }
+				}
+				if = {
+					limit = { has_completed_focus = VAL_Contracts_Outlive_Kings }
 					add_to_variable = { var = VAL_contract_authority value = 5 }
 				}
 			}
@@ -163,8 +182,41 @@ ADISCORD_STP_VAL_initialize_schema = {
 			if = { limit = { NOT = { has_variable = VAL_STP_missed_debt_payments } } set_variable = { var = VAL_STP_missed_debt_payments value = 0 } }
 		}
 
+		# Version 1 saves already own an authority variable, so grant only the
+		# central-spine rewards introduced with the focus-specialisation pass.
+		if = {
+			limit = {
+				tag = VAL
+				has_variable = ADISCORD_STP_VAL_crisis_schema_version
+				check_variable = { var = ADISCORD_STP_VAL_crisis_schema_version value = 2 compare = less_than }
+			}
+			if = { limit = { has_completed_focus = VAL_Price_Of_Loyalty } add_to_variable = { var = VAL_contract_authority value = 5 } }
+			if = { limit = { has_completed_focus = VAL_Count_The_Captains } add_to_variable = { var = VAL_contract_authority value = 5 } }
+			if = { limit = { has_completed_focus = VAL_One_Ledger_One_Banner } add_to_variable = { var = VAL_contract_authority value = 10 } }
+			if = { limit = { has_completed_focus = VAL_Contracts_Outlive_Kings } add_to_variable = { var = VAL_contract_authority value = 5 } }
+			clamp_variable = { var = VAL_contract_authority min = 0 max = 100 }
+		}
+
 		# Schema assignment is deliberately last: all legacy reconstruction precedes it.
-		set_variable = { var = ADISCORD_STP_VAL_crisis_schema_version value = 1 }
+		set_variable = { var = ADISCORD_STP_VAL_crisis_schema_version value = 2 }
+	}
+}
+
+ADISCORD_STP_VAL_refresh_presentation_mirrors = {
+	# Lightweight compatibility mirrors are rebuilt from authoritative state on
+	# startup.  No daily pulse is required for either presentation value.
+	if = {
+		limit = { tag = STP }
+		if = { limit = { check_variable = { var = STP_leader_health_stage value = 1 compare = equals } } set_variable = { var = STP_leader_health value = 100 } }
+		else_if = { limit = { check_variable = { var = STP_leader_health_stage value = 2 compare = equals } } set_variable = { var = STP_leader_health value = 75 } }
+		else_if = { limit = { check_variable = { var = STP_leader_health_stage value = 3 compare = equals } } set_variable = { var = STP_leader_health value = 45 } }
+		else_if = { limit = { check_variable = { var = STP_leader_health_stage value = 4 compare = equals } } set_variable = { var = STP_leader_health value = 15 } }
+		else = { set_variable = { var = STP_leader_health value = 0 } }
+	}
+	else_if = {
+		limit = { tag = VAL }
+		if = { limit = { NOT = { has_variable = VAL_STP_campaign_readiness } } set_variable = { var = VAL_STP_campaign_readiness value = 0 } }
+		VAL_recalculate_stp_campaign_readiness = yes
 	}
 }
 
@@ -178,6 +230,11 @@ STP_set_health_stage = {
 		}
 		set_variable = { var = STP_leader_health_stage value = STP_requested_health_stage }
 		set_variable = { var = STP_state_face_stage value = STP_leader_health_stage }
+		if = { limit = { check_variable = { var = STP_leader_health_stage value = 1 compare = equals } } set_variable = { var = STP_leader_health value = 100 } }
+		else_if = { limit = { check_variable = { var = STP_leader_health_stage value = 2 compare = equals } } set_variable = { var = STP_leader_health value = 75 } }
+		else_if = { limit = { check_variable = { var = STP_leader_health_stage value = 3 compare = equals } } set_variable = { var = STP_leader_health value = 45 } }
+		else_if = { limit = { check_variable = { var = STP_leader_health_stage value = 4 compare = equals } } set_variable = { var = STP_leader_health value = 15 } }
+		else = { set_variable = { var = STP_leader_health value = 0 } }
 		STP_refresh_crisis_modifier = yes
 	}
 }
@@ -593,12 +650,99 @@ VAL_change_contract_authority = {
 	if = { limit = { check_variable = { var = VAL_contract_authority value = 0 compare = less_than } } set_variable = { var = VAL_contract_authority value = 0 } }
 	if = { limit = { check_variable = { var = VAL_contract_authority value = 100 compare = greater_than } } set_variable = { var = VAL_contract_authority value = 100 } }
 	VAL_refresh_contract_modifier = yes
+	VAL_recalculate_stp_campaign_readiness = yes
 }
 
 VAL_change_stp_leverage = {
 	add_to_variable = { var = VAL_STP_leverage value = ADISCORD_STP_VAL_effect_value }
 	if = { limit = { check_variable = { var = VAL_STP_leverage value = 0 compare = less_than } } set_variable = { var = VAL_STP_leverage value = 0 } }
 	if = { limit = { check_variable = { var = VAL_STP_leverage value = 100 compare = greater_than } } set_variable = { var = VAL_STP_leverage value = 100 } }
+	VAL_recalculate_stp_campaign_readiness = yes
+}
+
+VAL_change_final_war_preparation = {
+	add_to_variable = { var = VAL_STP_final_war_preparation value = ADISCORD_STP_VAL_effect_value }
+	clamp_variable = { var = VAL_STP_final_war_preparation min = 0 max = 100 }
+	VAL_recalculate_stp_campaign_readiness = yes
+}
+
+# Readiness is a compact operational score, not another click currency.  It is
+# rebuilt only after relevant state changes and directly powers the temporary
+# war-plan spirit once the canonical countdown expires.
+VAL_recalculate_stp_campaign_readiness = {
+	set_variable = { var = VAL_STP_campaign_readiness value = VAL_STP_final_war_preparation }
+	set_temp_variable = { var = VAL_STP_leverage_component value = VAL_STP_leverage }
+	multiply_temp_variable = { var = VAL_STP_leverage_component value = 0.35 }
+	add_to_variable = { var = VAL_STP_campaign_readiness value = VAL_STP_leverage_component }
+
+	if = { limit = { check_variable = { var = VAL_contract_authority value = 50 compare = greater_than_or_equals } } add_to_variable = { var = VAL_STP_campaign_readiness value = 5 } }
+	if = { limit = { check_variable = { var = VAL_contract_authority value = 75 compare = greater_than_or_equals } } add_to_variable = { var = VAL_STP_campaign_readiness value = 5 } }
+	if = { limit = { has_country_flag = VAL_STP_intel_43 has_country_flag = VAL_STP_intel_44 has_country_flag = VAL_STP_intel_45 has_country_flag = VAL_STP_intel_88 } add_to_variable = { var = VAL_STP_campaign_readiness value = 10 } }
+	if = { limit = { has_country_flag = VAL_STP_client_garrison } add_to_variable = { var = VAL_STP_campaign_readiness value = 10 } }
+	if = { limit = { has_country_flag = VAL_STP_resource_rights_45 } add_to_variable = { var = VAL_STP_campaign_readiness value = 5 } }
+	if = { limit = { has_country_flag = VAL_STP_resource_rights_88 } add_to_variable = { var = VAL_STP_campaign_readiness value = 5 } }
+	if = { limit = { check_variable = { var = VAL_CIN_influence value = 2 compare = greater_than_or_equals } } add_to_variable = { var = VAL_STP_campaign_readiness value = 5 } }
+	if = { limit = { check_variable = { var = VAL_OSF_influence value = 2 compare = greater_than_or_equals } } add_to_variable = { var = VAL_STP_campaign_readiness value = 5 } }
+	if = {
+		limit = {
+			country_exists = NOD
+			NOD = { OR = { has_war = yes has_country_flag = NOD_limited_war_active has_country_flag = NOD_crisis_posture_ypr has_country_flag = NOD_crisis_posture_cof has_country_flag = NOD_crisis_posture_beshay } }
+		}
+		add_to_variable = { var = VAL_STP_campaign_readiness value = 10 }
+	}
+	if = {
+		limit = {
+			country_exists = NOD
+			NOD = { has_country_flag = NOD_crisis_posture_guardian has_war = no }
+		}
+		subtract_from_variable = { var = VAL_STP_campaign_readiness value = 15 }
+	}
+	clamp_variable = { var = VAL_STP_campaign_readiness min = 0 max = 100 }
+	VAL_refresh_stp_campaign_plan_modifier = yes
+}
+
+VAL_refresh_stp_campaign_plan_modifier = {
+	set_variable = { var = VAL_STP_campaign_attack_factor value = 0 }
+	set_variable = { var = VAL_STP_campaign_defence_factor value = 0 }
+	set_variable = { var = VAL_STP_campaign_planning_factor value = 0 }
+	set_variable = { var = VAL_STP_campaign_supply_factor value = 0 }
+	if = {
+		limit = { check_variable = { var = VAL_STP_campaign_readiness value = 25 compare = less_than } }
+		set_variable = { var = VAL_STP_campaign_attack_factor value = -0.10 }
+		set_variable = { var = VAL_STP_campaign_defence_factor value = -0.05 }
+		set_variable = { var = VAL_STP_campaign_planning_factor value = -0.10 }
+		set_variable = { var = VAL_STP_campaign_supply_factor value = 0.10 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_STP_campaign_readiness value = 50 compare = less_than } }
+		set_variable = { var = VAL_STP_campaign_attack_factor value = -0.03 }
+		set_variable = { var = VAL_STP_campaign_planning_factor value = -0.05 }
+		set_variable = { var = VAL_STP_campaign_supply_factor value = 0.05 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_STP_campaign_readiness value = 75 compare = less_than } }
+		set_variable = { var = VAL_STP_campaign_attack_factor value = 0.05 }
+		set_variable = { var = VAL_STP_campaign_defence_factor value = 0.03 }
+		set_variable = { var = VAL_STP_campaign_planning_factor value = 0.05 }
+		set_variable = { var = VAL_STP_campaign_supply_factor value = -0.03 }
+	}
+	else = {
+		set_variable = { var = VAL_STP_campaign_attack_factor value = 0.10 }
+		set_variable = { var = VAL_STP_campaign_defence_factor value = 0.05 }
+		set_variable = { var = VAL_STP_campaign_planning_factor value = 0.10 }
+		set_variable = { var = VAL_STP_campaign_supply_factor value = -0.05 }
+	}
+	if = {
+		limit = {
+			has_country_flag = VAL_STP_final_war_active
+			NOT = { has_dynamic_modifier = { modifier = VAL_stelander_campaign_plan } }
+		}
+		add_dynamic_modifier = { modifier = VAL_stelander_campaign_plan }
+	}
+	else_if = {
+		limit = { NOT = { has_country_flag = VAL_STP_final_war_active } }
+		remove_dynamic_modifier = { modifier = VAL_stelander_campaign_plan }
+	}
 }
 
 VAL_recalculate_stp_leverage_floor = {
@@ -880,6 +1024,75 @@ VAL_refresh_contract_modifier = {
 		set_variable = { var = VAL_contract_army_expense_factor value = -0.07 }
 	}
 
+	# Focus choices are persistent specialisations of the same visible contract
+	# state.  They are recalculated only when a focus or authority mutation calls
+	# this effect; no daily polling is needed.
+	set_variable = { var = VAL_contract_factory_output_factor value = 0.0 }
+	set_variable = { var = VAL_contract_conscription_factor value = 0.0 }
+	set_variable = { var = VAL_contract_command_power_factor value = 0.0 }
+	set_variable = { var = VAL_contract_consumer_goods_factor value = 0.0 }
+
+	if = {
+		limit = { has_country_flag = VAL_captain_retainers_unlocked }
+		add_to_variable = { var = VAL_contract_command_power_factor value = 0.1 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_negotiation_posture_visible }
+		add_to_variable = { var = VAL_contract_pp_gain value = 0.1 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_quality_arsenal }
+		add_to_variable = { var = VAL_contract_factory_output_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_capture_factor value = 0.02 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_broad_resource_network }
+		add_to_variable = { var = VAL_contract_supply_factor value = -0.03 }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_supply_contracts }
+		add_to_variable = { var = VAL_contract_military_income_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_army_expense_factor value = -0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_doctrine_covert_intervention }
+		add_to_variable = { var = VAL_contract_planning_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_capture_factor value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_doctrine_sustained_supply }
+		add_to_variable = { var = VAL_contract_org_regain value = 0.03 }
+		add_to_variable = { var = VAL_contract_supply_factor value = -0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_doctrine_resource_raider }
+		add_to_variable = { var = VAL_contract_attack_factor value = 0.04 }
+		add_to_variable = { var = VAL_contract_capture_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_defence_factor value = -0.02 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_ash_manpower_preservation }
+		add_to_variable = { var = VAL_contract_conscription_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_org_regain value = 0.02 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_ash_rear_mobilization }
+		add_to_variable = { var = VAL_contract_factory_output_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_consumer_goods_factor value = -0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_north_open_market }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.07 }
+		add_to_variable = { var = VAL_contract_pp_gain value = 0.1 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_north_coercive }
+		add_to_variable = { var = VAL_contract_military_income_factor value = 0.07 }
+		add_to_variable = { var = VAL_contract_attack_factor value = 0.02 }
+		add_to_variable = { var = VAL_contract_stability_factor value = -0.02 }
+	}
+
 	if = {
 		limit = {
 			NOT = {
@@ -891,13 +1104,10 @@ VAL_refresh_contract_modifier = {
 			}
 		}
 		set_variable = { var = VAL_contract_band value = VAL_contract_new_band }
-		if = {
-			limit = { has_dynamic_modifier = { modifier = VAL_contract_state } }
-			force_update_dynamic_modifier = yes
-		}
 	}
 	if = {
-		limit = { NOT = { has_dynamic_modifier = { modifier = VAL_contract_state } } }
-		add_dynamic_modifier = { modifier = VAL_contract_state }
+		limit = { has_dynamic_modifier = { modifier = VAL_contract_state } }
+		force_update_dynamic_modifier = yes
 	}
+	else = { add_dynamic_modifier = { modifier = VAL_contract_state } }
 }

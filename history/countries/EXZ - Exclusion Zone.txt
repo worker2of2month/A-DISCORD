@@ -16,5 +16,6 @@ set_popularities = {
 recruit_character = EXZ_No_Authority
 set_research_slots = 0
 set_political_power = 0
+add_ideas = closed_economy
 set_country_flag = ADISCORD_vorkerland_dirty_zone_placeholder
 country_lock_all_division_template = yes

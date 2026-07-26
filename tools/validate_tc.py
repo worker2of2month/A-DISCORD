@@ -14,6 +14,8 @@ import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
+from validate_adiscord_economy_ai import validate as validate_adiscord_economy_ai
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -641,6 +643,9 @@ def main():
 
     economy_issues, economy_total = check_economy_guardrails(args.limit)
     print_section("Economy guardrails", economy_issues, economy_total)
+
+    economy_ai_issues = validate_adiscord_economy_ai()
+    print_section("Economy and AI semantics", economy_ai_issues, len(economy_ai_issues))
 
     token_hits, examples = scan_vanilla_leftovers(tags, ideology_groups, min(args.limit, 8))
     print(f"\n== Vanilla leftovers: {sum(token_hits.values())} hits in {len(token_hits)} tokens ==")

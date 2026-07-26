@@ -75,6 +75,19 @@ on_actions = {
 				ADISCORD_initialize_society_development_variables = yes
 				ADISCORD_update_total_country_development = yes
 			}
+			WRK = {
+				# Ruined great-power baseline: substantial institutions and army,
+				# but only middling post-collapse economic capacity. This prevents
+				# the large inherited factory base from entering an automatic debt spiral.
+				ADISCORD_set_society_development_2 = yes
+				ADISCORD_set_social_system_development_2 = yes
+				ADISCORD_set_army_development_3 = yes
+				ADISCORD_set_cultural_development_2 = yes
+				ADISCORD_set_state_development_3 = yes
+				ADISCORD_set_economic_development_3 = yes
+				ADISCORD_initialize_society_development_variables = yes
+				ADISCORD_update_total_country_development = yes
+			}
 			every_country = {
 				limit = {
 					OR = {

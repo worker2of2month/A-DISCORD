@@ -1171,7 +1171,41 @@ VAL_STP_trigger_breach = {
 	}
 }
 
+STP_complete_transition_outcome_focus = {
+	if = {
+		limit = { has_country_flag = STP_outcome_shabrat_bloodless }
+		complete_national_focus = STP_The_Mountain_Window
+	}
+	else_if = {
+		limit = { has_country_flag = STP_outcome_shabrat_main_war }
+		complete_national_focus = STP_No_One_Controls_The_Transition
+	}
+	else_if = {
+		limit = { has_country_flag = STP_outcome_sotnikov_main_war }
+		complete_national_focus = STP_A_General_Takes_The_Passes
+	}
+	else_if = {
+		limit = { has_country_flag = STP_outcome_hedersett_fail_state }
+		complete_national_focus = STP_The_Underground_Was_Too_Late
+	}
+	else_if = {
+		limit = { has_country_flag = STP_outcome_hedersett_consolidation }
+		complete_national_focus = STP_The_Party_Closes_Ranks
+	}
+	else_if = {
+		limit = { has_country_flag = STP_outcome_hedersett_vs_shabrat }
+		complete_national_focus = STP_Two_Claims_To_The_Palace
+	}
+	else_if = {
+		limit = { has_country_flag = STP_outcome_hedersett_vs_sotnikov }
+		complete_national_focus = STP_The_Army_Rejects_The_Party
+	}
+}
+
 STP_assign_postwar_leader = {
+	# Save compatibility: an already-running civil war from an older save may
+	# not yet have displayed its transition focus.
+	STP_complete_transition_outcome_focus = yes
 	if = {
 		limit = { has_country_flag = STP_winner_shabrat }
 		set_politics = { ruling_party = chauvinism elections_allowed = no }
@@ -1180,7 +1214,6 @@ STP_assign_postwar_leader = {
 			character = STP_maksim_shabrat
 			ideology = chauvinism_ideology
 		}
-		complete_national_focus = STP_The_Mountain_Window
 	}
 	else_if = {
 		limit = { has_country_flag = STP_winner_sotnikov }
@@ -1190,7 +1223,6 @@ STP_assign_postwar_leader = {
 			character = STP_grigory_sotnikov
 			ideology = etatism_ideology
 		}
-		complete_national_focus = STP_No_One_Controls_The_Transition
 	}
 	else = {
 		set_country_flag = STP_winner_hedersett
@@ -1200,7 +1232,6 @@ STP_assign_postwar_leader = {
 			character = STP_rufus_hedersett
 			ideology = aristocratic_hedonism
 		}
-		complete_national_focus = STP_The_Party_Closes_Ranks
 	}
 }
 
@@ -1665,6 +1696,7 @@ NOD_select_crisis_posture = {
 		}
 		NOD_schedule_posture_escalation = yes
 	}
+	if = { limit = { country_exists = VAL } VAL = { VAL_recalculate_stp_campaign_readiness = yes } }
 }
 
 NOD_prepare_limited_war_snapshot = {

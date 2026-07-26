@@ -262,26 +262,26 @@ spriteTypes = {
 		legacy_lazy_load = no
 	}
 
-	SpriteType = { name = "GFX_goal_generic_allies_build_infantry_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
-	SpriteType = { name = "GFX_goal_generic_army_doctrines_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
-	SpriteType = { name = "GFX_goal_generic_attack_allies_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
-	SpriteType = { name = "GFX_goal_generic_construct_civ_factory_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
-	SpriteType = { name = "GFX_goal_generic_construct_infrastructure_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
-	SpriteType = { name = "GFX_goal_generic_construct_mil_factory_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
-	SpriteType = { name = "GFX_goal_generic_consumer_goods_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
-	SpriteType = { name = "GFX_goal_generic_dangerous_deal_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
-	SpriteType = { name = "GFX_goal_generic_demand_territory_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
-	SpriteType = { name = "GFX_goal_generic_major_war_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
-	SpriteType = { name = "GFX_goal_generic_military_sphere_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
-	SpriteType = { name = "GFX_goal_generic_more_territorial_claims_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
-	SpriteType = { name = "GFX_goal_generic_national_unity_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
-	SpriteType = { name = "GFX_goal_generic_political_pressure_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
-	SpriteType = { name = "GFX_goal_generic_positive_trade_relations_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
-	SpriteType = { name = "GFX_goal_generic_production_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
-	SpriteType = { name = "GFX_goal_generic_production2_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
-	SpriteType = { name = "GFX_goal_generic_propaganda_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
-	SpriteType = { name = "GFX_goal_generic_scientific_exchange_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
-	SpriteType = { name = "GFX_goal_generic_special_forces_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
-	SpriteType = { name = "GFX_goal_generic_trade_shine" texturefile = "gfx/interface/goals/goal_unknown.dds" }
+	SpriteType = { name = "GFX_goal_generic_allies_build_infantry_shine" texturefile = "gfx/interface/goals/goal_generic_allies_build_infantry.dds" }
+	SpriteType = { name = "GFX_goal_generic_army_doctrines_shine" texturefile = "gfx/interface/goals/goal_generic_army_doctrines.dds" }
+	SpriteType = { name = "GFX_goal_generic_attack_allies_shine" texturefile = "gfx/interface/goals/goal_generic_attack_allies.dds" }
+	SpriteType = { name = "GFX_goal_generic_construct_civ_factory_shine" texturefile = "gfx/interface/goals/goal_generic_construct_civ_factory.dds" }
+	SpriteType = { name = "GFX_goal_generic_construct_infrastructure_shine" texturefile = "gfx/interface/goals/goal_generic_construct_infrastructure.dds" }
+	SpriteType = { name = "GFX_goal_generic_construct_mil_factory_shine" texturefile = "gfx/interface/goals/goal_generic_construct_mil_factory.dds" }
+	SpriteType = { name = "GFX_goal_generic_consumer_goods_shine" texturefile = "gfx/interface/goals/goal_generic_consumer_goods.dds" }
+	SpriteType = { name = "GFX_goal_generic_dangerous_deal_shine" texturefile = "gfx/interface/goals/goal_generic_dangerous_deal.dds" }
+	SpriteType = { name = "GFX_goal_generic_demand_territory_shine" texturefile = "gfx/interface/goals/goal_generic_demand_territory.dds" }
+	SpriteType = { name = "GFX_goal_generic_major_war_shine" texturefile = "gfx/interface/goals/goal_generic_major_war.dds" }
+	SpriteType = { name = "GFX_goal_generic_military_sphere_shine" texturefile = "gfx/interface/goals/goal_generic_military_sphere.dds" }
+	SpriteType = { name = "GFX_goal_generic_more_territorial_claims_shine" texturefile = "gfx/interface/goals/goal_generic_more_territorial_claims.dds" }
+	SpriteType = { name = "GFX_goal_generic_national_unity_shine" texturefile = "gfx/interface/goals/goal_generic_national_unity.dds" }
+	SpriteType = { name = "GFX_goal_generic_political_pressure_shine" texturefile = "gfx/interface/goals/goal_generic_political_pressure.dds" }
+	SpriteType = { name = "GFX_goal_generic_positive_trade_relations_shine" texturefile = "gfx/interface/goals/goal_generic_positive_trade_relations.dds" }
+	SpriteType = { name = "GFX_goal_generic_production_shine" texturefile = "gfx/interface/goals/goal_generic_production.dds" }
+	SpriteType = { name = "GFX_goal_generic_production2_shine" texturefile = "gfx/interface/goals/goal_generic_production2.dds" }
+	SpriteType = { name = "GFX_goal_generic_propaganda_shine" texturefile = "gfx/interface/goals/goal_generic_propaganda.dds" }
+	SpriteType = { name = "GFX_goal_generic_scientific_exchange_shine" texturefile = "gfx/interface/goals/goal_generic_scientific_exchange.dds" }
+	SpriteType = { name = "GFX_goal_generic_special_forces_shine" texturefile = "gfx/interface/goals/goal_generic_special_forces.dds" }
+	SpriteType = { name = "GFX_goal_generic_trade_shine" texturefile = "gfx/interface/goals/goal_generic_trade.dds" }
 
 }

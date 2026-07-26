@@ -147,10 +147,14 @@ country_event = {
 	immediate = {
 		set_global_flag = ADISCORD_vorkerland_dirty_opened
 		ADISCORD_vorkerland_show_dirty_opening_superevent = yes
-		country_event = {
-			id = ADISCORD_vorkerland_collapse.11
-			days = 1
-		}
+		# One successor per date gives the engine time to rebuild ownership,
+		# supply and front data while keeping the whole reveal under two weeks.
+		country_event = { id = ADISCORD_vorkerland_collapse.11 days = 1 }
+		country_event = { id = ADISCORD_vorkerland_collapse.17 days = 3 }
+		country_event = { id = ADISCORD_vorkerland_collapse.12 days = 5 }
+		country_event = { id = ADISCORD_vorkerland_collapse.18 days = 7 }
+		country_event = { id = ADISCORD_vorkerland_collapse.13 days = 9 }
+		country_event = { id = ADISCORD_vorkerland_collapse.19 days = 11 }
 	}
 }
 
@@ -158,23 +162,15 @@ country_event = {
 	id = ADISCORD_vorkerland_collapse.11
 	hidden = yes
 	is_triggered_only = yes
-	fire_only_once = yes
 	trigger = {
 		tag = RUS
 		has_global_flag = ADISCORD_vorkerland_dirty_opened
-		NOT = { has_global_flag = ADISCORD_vorkerland_dirty_wave_1 }
+		NOT = { country_exists = SLA }
 	}
 	immediate = {
 		set_global_flag = ADISCORD_vorkerland_dirty_wave_1
 		ADISCORD_vorkerland_setup_sla = yes
-		country_event = {
-			id = ADISCORD_vorkerland_collapse.17
-			days = 7
-		}
-		country_event = {
-			id = ADISCORD_vorkerland_collapse.12
-			days = 45
-		}
+		ADISCORD_vorkerland_finalize_dirty_cascade_if_ready = yes
 	}
 }
 
@@ -182,23 +178,15 @@ country_event = {
 	id = ADISCORD_vorkerland_collapse.12
 	hidden = yes
 	is_triggered_only = yes
-	fire_only_once = yes
 	trigger = {
 		tag = RUS
-		has_global_flag = ADISCORD_vorkerland_dirty_wave_1
-		NOT = { has_global_flag = ADISCORD_vorkerland_dirty_wave_2 }
+		has_global_flag = ADISCORD_vorkerland_dirty_opened
+		NOT = { country_exists = RZA }
 	}
 	immediate = {
 		set_global_flag = ADISCORD_vorkerland_dirty_wave_2
 		ADISCORD_vorkerland_setup_rza = yes
-		country_event = {
-			id = ADISCORD_vorkerland_collapse.18
-			days = 7
-		}
-		country_event = {
-			id = ADISCORD_vorkerland_collapse.13
-			days = 45
-		}
+		ADISCORD_vorkerland_finalize_dirty_cascade_if_ready = yes
 	}
 }
 
@@ -206,19 +194,15 @@ country_event = {
 	id = ADISCORD_vorkerland_collapse.13
 	hidden = yes
 	is_triggered_only = yes
-	fire_only_once = yes
 	trigger = {
 		tag = RUS
-		has_global_flag = ADISCORD_vorkerland_dirty_wave_2
-		NOT = { has_global_flag = ADISCORD_vorkerland_dirty_wave_3 }
+		has_global_flag = ADISCORD_vorkerland_dirty_opened
+		NOT = { country_exists = ERT }
 	}
 	immediate = {
 		set_global_flag = ADISCORD_vorkerland_dirty_wave_3
 		ADISCORD_vorkerland_setup_ert = yes
-		country_event = {
-			id = ADISCORD_vorkerland_collapse.19
-			days = 7
-		}
+		ADISCORD_vorkerland_finalize_dirty_cascade_if_ready = yes
 	}
 }
 
@@ -229,15 +213,15 @@ country_event = {
 	id = ADISCORD_vorkerland_collapse.17
 	hidden = yes
 	is_triggered_only = yes
-	fire_only_once = yes
 	trigger = {
 		tag = RUS
-		has_global_flag = ADISCORD_vorkerland_dirty_wave_1
-		country_exists = SLA
+		has_global_flag = ADISCORD_vorkerland_dirty_opened
 		NOT = { country_exists = MLR }
 	}
 	immediate = {
+		set_global_flag = ADISCORD_vorkerland_dirty_wave_1
 		ADISCORD_vorkerland_setup_mlr = yes
+		ADISCORD_vorkerland_finalize_dirty_cascade_if_ready = yes
 		country_event = { id = ADISCORD_vorkerland_collapse.14 days = 1 }
 	}
 }
@@ -246,15 +230,15 @@ country_event = {
 	id = ADISCORD_vorkerland_collapse.18
 	hidden = yes
 	is_triggered_only = yes
-	fire_only_once = yes
 	trigger = {
 		tag = RUS
-		has_global_flag = ADISCORD_vorkerland_dirty_wave_2
-		country_exists = RZA
+		has_global_flag = ADISCORD_vorkerland_dirty_opened
 		NOT = { country_exists = SCA }
 	}
 	immediate = {
+		set_global_flag = ADISCORD_vorkerland_dirty_wave_2
 		ADISCORD_vorkerland_setup_sca = yes
+		ADISCORD_vorkerland_finalize_dirty_cascade_if_ready = yes
 		country_event = { id = ADISCORD_vorkerland_collapse.15 days = 1 }
 	}
 }
@@ -263,15 +247,15 @@ country_event = {
 	id = ADISCORD_vorkerland_collapse.19
 	hidden = yes
 	is_triggered_only = yes
-	fire_only_once = yes
 	trigger = {
 		tag = RUS
-		has_global_flag = ADISCORD_vorkerland_dirty_wave_3
-		country_exists = ERT
+		has_global_flag = ADISCORD_vorkerland_dirty_opened
 		NOT = { country_exists = IRT }
 	}
 	immediate = {
+		set_global_flag = ADISCORD_vorkerland_dirty_wave_3
 		ADISCORD_vorkerland_setup_irt = yes
+		ADISCORD_vorkerland_finalize_dirty_cascade_if_ready = yes
 		country_event = { id = ADISCORD_vorkerland_collapse.16 days = 1 }
 	}
 }
@@ -285,7 +269,7 @@ country_event = {
 		tag = RUS
 		has_global_flag = ADISCORD_vorkerland_dirty_wave_1
 	}
-	immediate = { ADISCORD_vorkerland_intervene_wave_1 = yes }
+	immediate = { ADISCORD_vorkerland_start_khan_border_war = yes }
 }
 
 country_event = {

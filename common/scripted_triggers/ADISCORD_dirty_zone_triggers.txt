@@ -1,3 +1,15 @@
 ADISCORD_vorkerland_dirty_zone_visible = {
 	original_tag = EXZ
 }
+
+# Used by the engine's diplomatic-action validity hooks. Both the selected
+# target and the action initiator are checked so EXZ cannot send or receive
+# ordinary diplomacy, including international-market access requests.
+ADISCORD_diplomacy_not_dirty_zone_pair = {
+	NOT = {
+		OR = {
+			original_tag = EXZ
+			FROM = { original_tag = EXZ }
+		}
+	}
+}

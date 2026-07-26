@@ -1449,14 +1449,33 @@ focus_tree = {
 	}
 
 #############################################
-### BRIDGE OUTCOMES: AUTO-COMPLETED BY EVENT AFTER IVANOV'S DEATH
-### Structural only for now: no country flags, no hidden branch gates, no offset logic. Red mutual-exclusion links are used only on first-choice split focuses. Future event logic should complete exactly one bridge focus.
+### TRANSITION OUTCOMES: EXACTLY ONE IS AUTO-COMPLETED AFTER IVANOV'S DEATH
+### The event router owns the calculation.  These focuses are the visible
+### historical result, not another choice or a duplicate source of logic.
 #############################################
 
-	# The Mountain Window
+	# Bloodless Shabrat coup
 	focus = {
 		id = STP_The_Mountain_Window
 		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Father_Of_Peace_Is_Gone
+		x = -6
+		y = 2
+		cost = 5
+		prerequisite = { focus = STP_The_Father_Of_Peace_Is_Gone }
+		available = {
+			is_completed_by_event = yes
+		}
+		ai_will_do = { base = 1 }
+		completion_reward = {
+		}
+	}
+
+	# Shabrat-led civil war
+	focus = {
+		id = STP_No_One_Controls_The_Transition
+		icon = GFX_focus_STP_It_Has_Only_Begun
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		relative_position_id = STP_The_Father_Of_Peace_Is_Gone
 		x = -4
@@ -1471,13 +1490,13 @@ focus_tree = {
 		}
 	}
 
-	# No One Controls the Transition
+	# Hedersett consolidates without a war
 	focus = {
-		id = STP_No_One_Controls_The_Transition
-		icon = GFX_focus_STP_It_Has_Only_Begun
+		id = STP_The_Party_Closes_Ranks
+		icon = GFX_focus_STP_Side_With_The_Party
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		relative_position_id = STP_The_Father_Of_Peace_Is_Gone
-		x = 0
+		x = 2
 		y = 2
 		cost = 5
 		prerequisite = { focus = STP_The_Father_Of_Peace_Is_Gone }
@@ -1489,22 +1508,64 @@ focus_tree = {
 		}
 	}
 
-	# The Party Closes Ranks
+	# Sotnikov inherits a viable military underground
 	focus = {
-		id = STP_The_Party_Closes_Ranks
+		id = STP_A_General_Takes_The_Passes
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY }
+		relative_position_id = STP_The_Father_Of_Peace_Is_Gone
+		x = -2
+		y = 2
+		cost = 5
+		prerequisite = { focus = STP_The_Father_Of_Peace_Is_Gone }
+		available = { is_completed_by_event = yes }
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	# Shabrat's network collapses and the apparatus inherits the wreckage
+	focus = {
+		id = STP_The_Underground_Was_Too_Late
 		icon = GFX_focus_STP_Side_With_The_Party
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Father_Of_Peace_Is_Gone
+		x = 0
+		y = 2
+		cost = 5
+		prerequisite = { focus = STP_The_Father_Of_Peace_Is_Gone }
+		available = { is_completed_by_event = yes }
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	# Hedersett holds the legal centre while Shabrat starts the war
+	focus = {
+		id = STP_Two_Claims_To_The_Palace
+		icon = GFX_focus_STP_It_Has_Only_Begun
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY }
 		relative_position_id = STP_The_Father_Of_Peace_Is_Gone
 		x = 4
 		y = 2
 		cost = 5
 		prerequisite = { focus = STP_The_Father_Of_Peace_Is_Gone }
-		available = {
-			is_completed_by_event = yes
-		}
+		available = { is_completed_by_event = yes }
 		ai_will_do = { base = 1 }
-		completion_reward = {
-		}
+		completion_reward = { }
+	}
+
+	# Hedersett holds the legal centre while Sotnikov starts the war
+	focus = {
+		id = STP_The_Army_Rejects_The_Party
+		icon = GFX_focus_STP_It_Has_Only_Begun
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY }
+		relative_position_id = STP_The_Father_Of_Peace_Is_Gone
+		x = 6
+		y = 2
+		cost = 5
+		prerequisite = { focus = STP_The_Father_Of_Peace_Is_Gone }
+		available = { is_completed_by_event = yes }
+		ai_will_do = { base = 1 }
+		completion_reward = { }
 	}
 
 }

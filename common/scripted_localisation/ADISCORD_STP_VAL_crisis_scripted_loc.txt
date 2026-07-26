@@ -110,6 +110,14 @@ defined_text = {
 }
 
 defined_text = {
+	name = VALGetCampaignReadinessBand
+	text = { trigger = { check_variable = { var = VAL_STP_campaign_readiness value = 75 compare = greater_than_or_equals } } localization_key = VAL_CAMPAIGN_READINESS_DECISIVE }
+	text = { trigger = { check_variable = { var = VAL_STP_campaign_readiness value = 50 compare = greater_than_or_equals } } localization_key = VAL_CAMPAIGN_READINESS_PREPARED }
+	text = { trigger = { check_variable = { var = VAL_STP_campaign_readiness value = 25 compare = greater_than_or_equals } } localization_key = VAL_CAMPAIGN_READINESS_RISKY }
+	text = { trigger = { always = yes } localization_key = VAL_CAMPAIGN_READINESS_UNREADY }
+}
+
+defined_text = {
 	name = VALGetSTPCrisisPhase
 	text = { trigger = { OR = { has_country_flag = VAL_STP_final_war_started AND = { has_event_target = STP_postwar_country event_target:STP_postwar_country = { check_variable = { var = STP_crisis_phase value = 4 compare = greater_than_or_equals } } } } } localization_key = VAL_STP_PHASE_FINAL_WAR }
 	text = { trigger = { has_event_target = STP_postwar_country event_target:STP_postwar_country = { check_variable = { var = STP_crisis_phase value = 3 compare = greater_than_or_equals } } } localization_key = VAL_STP_PHASE_POSTWAR }

@@ -731,7 +731,7 @@ buildings = {
 
 	ADISCORD_business_center = {
 		show_on_map = 0
-		base_cost = 6500
+		base_cost = 5500
 		icon_frame = 10
 		value = 2
 		show_modifier = yes
@@ -741,14 +741,14 @@ buildings = {
 			state_max = 3
 		}
 		state_modifiers = {
-			state_production_speed_buildings_factor = 0.02
-			local_building_slots_factor = 0.02
+			state_production_speed_buildings_factor = 0.03
+			local_building_slots_factor = 0.03
 		}
 	}
 
 	ADISCORD_science_center = {
 		show_on_map = 0
-		base_cost = 8000
+		base_cost = 7000
 		icon_frame = 11
 		value = 2
 		show_modifier = yes
@@ -758,14 +758,14 @@ buildings = {
 			state_max = 2
 		}
 		state_modifiers = {
-			state_production_speed_buildings_factor = 0.03
-			local_building_slots_factor = 0.03
+			state_production_speed_buildings_factor = 0.04
+			local_building_slots_factor = 0.04
 		}
 	}
 
 	ADISCORD_industrial_cluster = {
 		show_on_map = 0
-		base_cost = 9000
+		base_cost = 8000
 		icon_frame = 2
 		value = 3
 		show_modifier = yes
@@ -776,8 +776,8 @@ buildings = {
 		}
 		state_modifiers = {
 			state_production_speed_buildings_factor = 0.05
-			local_building_slots_factor = 0.05
-			local_factory_energy_consumption = 0.25
+			local_building_slots_factor = 0.06
+			local_factory_energy_consumption = 0.15
 		}
 	}
 

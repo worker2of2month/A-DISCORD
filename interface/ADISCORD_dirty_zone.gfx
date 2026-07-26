@@ -15,7 +15,7 @@ spriteTypes = {
 		name = "GFX_ADISCORD_Dirty_Zone_Animation"
 		textureFile = "gfx/interface/ADISCORD_dirty_zone/dirty_zone_animation.dds"
 		noOfFrames = 17
-		animation_rate_fps = 2
+		animation_rate_fps = 1
 		looping = yes
 		play_on_show = yes
 	}

@@ -1814,7 +1814,16 @@ def check_economy_spending() -> list[str]:
             continue
         block = extract_block(text, match.start())
         pattern = rf"add_to_variable\s*=\s*\{{[^{{}}]*var\s*=\s*ADISCORD_economy_treasury[^{{}}]*value\s*=\s*{value}\b"
-        if not re.search(pattern, block, re.S):
+        bounded_repayment = (
+            effect == "ADISCORD_economy_repay_debt"
+            and re.search(
+                r"subtract_from_variable\s*=\s*\{[^{}]*var\s*=\s*ADISCORD_economy_treasury"
+                r"[^{}]*value\s*=\s*ADISCORD_economy_repay_cash_temp\b",
+                block,
+                re.S,
+            )
+        )
+        if not re.search(pattern, block, re.S) and not bounded_repayment:
             issues.append(f"{effect} does not subtract {abs(value)} treasury")
     return issues
 

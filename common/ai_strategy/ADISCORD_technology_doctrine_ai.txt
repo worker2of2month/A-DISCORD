@@ -55,7 +55,11 @@ ADISCORD_ai_basic_support_buffer = {
 }
 
 ADISCORD_ai_platform_battlegroups = {
-	enable = { has_tech = ADISCORD_tech_semi_autonomous_combat_modules }
+	enable = {
+		has_tech = ADISCORD_tech_semi_autonomous_combat_modules
+		num_of_military_factories > 7
+		ADISCORD_economy_ai_can_fund_advanced_forces = yes
+	}
 	abort_when_not_enabled = yes
 
 	ai_strategy = {
@@ -86,7 +90,11 @@ ADISCORD_ai_platform_battlegroups = {
 }
 
 ADISCORD_ai_heavy_platforms = {
-	enable = { has_tech = ADISCORD_tech_heavy_platform_cores }
+	enable = {
+		has_tech = ADISCORD_tech_heavy_platform_cores
+		num_of_military_factories > 14
+		ADISCORD_economy_ai_is_healthy = yes
+	}
 	abort_when_not_enabled = yes
 
 	ai_strategy = {
@@ -113,7 +121,11 @@ ADISCORD_ai_networked_operations = {
 }
 
 ADISCORD_ai_restored_air_command = {
-	enable = { has_tech = ADISCORD_tech_reclaimed_jet_platforms }
+	enable = {
+		has_tech = ADISCORD_tech_reclaimed_jet_platforms
+		num_of_military_factories > 7
+		NOT = { ADISCORD_economy_ai_is_crisis = yes }
+	}
 	abort_when_not_enabled = yes
 
 	ai_strategy = {
@@ -134,7 +146,11 @@ ADISCORD_ai_restored_air_command = {
 }
 
 ADISCORD_ai_drone_air_wings = {
-	enable = { has_tech = ADISCORD_tech_drone_air_wings }
+	enable = {
+		has_tech = ADISCORD_tech_drone_air_wings
+		num_of_military_factories > 9
+		ADISCORD_economy_ai_can_fund_advanced_forces = yes
+	}
 	abort_when_not_enabled = yes
 
 	ai_strategy = {
@@ -151,10 +167,8 @@ ADISCORD_ai_drone_air_wings = {
 
 ADISCORD_ai_littoral_security = {
 	enable = {
-		OR = {
-			has_war = yes
-			has_tech = ADISCORD_tech_drone_air_wings
-		}
+		num_of_naval_factories > 0
+		has_war = yes
 	}
 	abort_when_not_enabled = yes
 
@@ -162,11 +176,6 @@ ADISCORD_ai_littoral_security = {
 		type = unit_ratio
 		id = convoy
 		value = 10
-	}
-	ai_strategy = {
-		type = unit_ratio
-		id = submarine
-		value = 5
 	}
 	ai_strategy = {
 		type = equipment_production_factor

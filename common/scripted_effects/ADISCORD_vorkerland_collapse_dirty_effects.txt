@@ -62,7 +62,6 @@ ADISCORD_vorkerland_setup_sla = {
 		set_capital = { state = 49 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
-		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "SLA_vorkerland_collapse"
 	}
 	log = "[ADISCORD Vorkerland] SLA setup completed"
@@ -79,7 +78,6 @@ ADISCORD_vorkerland_setup_rza = {
 		set_capital = { state = 177 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
-		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "RZA_vorkerland_collapse"
 	}
 	log = "[ADISCORD Vorkerland] RZA setup completed"
@@ -98,7 +96,6 @@ ADISCORD_vorkerland_setup_mlr = {
 		set_capital = { state = 152 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
-		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "MLR_vorkerland_collapse"
 	}
 	log = "[ADISCORD Vorkerland] MLR setup completed"
@@ -117,7 +114,6 @@ ADISCORD_vorkerland_setup_ert = {
 		set_capital = { state = 169 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
-		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "ERT_vorkerland_collapse"
 	}
 	log = "[ADISCORD Vorkerland] ERT setup completed"
@@ -136,7 +132,6 @@ ADISCORD_vorkerland_setup_irt = {
 		set_capital = { state = 181 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
-		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "IRT_vorkerland_collapse"
 	}
 	log = "[ADISCORD Vorkerland] IRT setup completed"
@@ -153,19 +148,61 @@ ADISCORD_vorkerland_setup_sca = {
 		set_capital = { state = 173 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
-		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "SCA_vorkerland_collapse"
 	}
 	log = "[ADISCORD Vorkerland] SCA setup completed"
 }
 
-ADISCORD_vorkerland_intervene_wave_1 = {
+ADISCORD_vorkerland_finalize_dirty_cascade_if_ready = {
 	if = {
-		limit = { RUS = { exists = yes } }
-		SLA = {
-			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 300 producer = RUS }
-			add_equipment_to_stockpile = { type = support_equipment_1 amount = 150 producer = RUS }
+		limit = {
+			country_exists = SLA
+			country_exists = MLR
+			country_exists = RZA
+			country_exists = SCA
+			country_exists = ERT
+			country_exists = IRT
 		}
+		set_global_flag = ADISCORD_vorkerland_dirty_cascade_complete
+		clr_global_flag = ADISCORD_vorkerland_dirty_cascade_recovery_scheduled
+	}
+}
+
+ADISCORD_vorkerland_start_khan_border_war = {
+	if = {
+		limit = {
+			country_exists = RUS
+			country_exists = SLA
+			NOT = { has_global_flag = ADISCORD_vorkerland_khan_border_war_started }
+			NOT = { has_global_flag = ADISCORD_vorkerland_khan_border_war_resolved }
+			RUS = { NOT = { has_war_with = SLA } }
+		}
+		set_global_flag = ADISCORD_vorkerland_khan_border_war_started
+		49 = { add_claim_by = RUS }
+		176 = { add_claim_by = RUS }
+		RUS = {
+			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 350 producer = RUS }
+			add_equipment_to_stockpile = { type = support_equipment_1 amount = 100 producer = RUS }
+			declare_war_on = { target = SLA type = annex_everything }
+		}
+	}
+}
+
+ADISCORD_vorkerland_check_khan_border_war = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_khan_border_war_started
+			country_exists = SLA
+			has_war_with = SLA
+			controls_state = 49
+			controls_state = 176
+		}
+		clr_global_flag = ADISCORD_vorkerland_khan_border_war_started
+		set_global_flag = ADISCORD_vorkerland_khan_border_war_resolved
+		white_peace = SLA
+		49 = { set_state_owner_to = RUS set_state_controller_to = RUS }
+		176 = { set_state_owner_to = RUS set_state_controller_to = RUS }
+		SLA = { set_capital = { state = 51 } }
 	}
 }
 

@@ -1,104 +1,32 @@
 guiTypes = {
 	containerWindowType = {
-		name = "ADISCORD_STP_crisis_panel_window"
-		position = { x = 0 y = 0 }
-		size = { width = 580 height = 470 }
-		clipping = no
-
-		background = {
-			name = "STP_crisis_panel_background"
-			quadTextureSprite = "GFX_tiled_window_transparent"
-		}
-
-		instantTextBoxType = {
-			name = "STP_crisis_panel_title"
-			position = { x = 16 y = 10 }
-			text = "ADISCORD_STP_crisis_panel_title"
-			font = "hoi_20b"
-			maxWidth = 548
-			maxHeight = 24
-			fixedsize = yes
-			format = center
-			pdx_tooltip = "ADISCORD_STP_crisis_panel_title_tt"
-		}
-
-		iconType = { name = "STP_crisis_health_stage_1" spriteType = "GFX_STP_state_face_stage_1" position = { x = 15 y = 38 } scale = 0.22 pdx_tooltip = "STP_crisis_health_portrait_tt" }
-		iconType = { name = "STP_crisis_health_stage_2" spriteType = "GFX_STP_state_face_stage_2" position = { x = 15 y = 38 } scale = 0.22 pdx_tooltip = "STP_crisis_health_portrait_tt" }
-		iconType = { name = "STP_crisis_health_stage_3" spriteType = "GFX_STP_state_face_stage_3" position = { x = 15 y = 38 } scale = 0.22 pdx_tooltip = "STP_crisis_health_portrait_tt" }
-		iconType = { name = "STP_crisis_health_stage_4" spriteType = "GFX_STP_state_face_stage_4" position = { x = 15 y = 38 } scale = 0.22 pdx_tooltip = "STP_crisis_health_portrait_tt" }
-		iconType = { name = "STP_crisis_health_stage_5" spriteType = "GFX_STP_state_face_stage_5" position = { x = 15 y = 38 } scale = 0.22 pdx_tooltip = "STP_crisis_health_portrait_tt" }
-
-		instantTextBoxType = {
-			name = "STP_crisis_health_text"
-			position = { x = 92 y = 43 }
-			text = "STP_crisis_health_text"
-			font = "hoi_16mbs"
-			maxWidth = 178
-			maxHeight = 36
-			fixedsize = yes
-			pdx_tooltip = "STP_crisis_health_portrait_tt"
-		}
-
-		iconType = { name = "STP_crisis_readiness_bar" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 92 y = 88 } pdx_tooltip = "STP_crisis_readiness_tt" }
-		instantTextBoxType = { name = "STP_crisis_readiness_text" position = { x = 92 y = 68 } text = "STP_crisis_readiness_text" font = "hoi_16mbs" maxWidth = 178 maxHeight = 18 fixedsize = yes pdx_tooltip = "STP_crisis_readiness_tt" }
-
-		iconType = { name = "STP_crisis_suspicion_bar" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 92 y = 124 } pdx_tooltip = "STP_crisis_suspicion_tt" }
-		instantTextBoxType = { name = "STP_crisis_suspicion_text" position = { x = 92 y = 104 } text = "STP_crisis_suspicion_text" font = "hoi_16mbs" maxWidth = 178 maxHeight = 18 fixedsize = yes pdx_tooltip = "STP_crisis_suspicion_tt" }
-
-		instantTextBoxType = { name = "STP_crisis_nod_assessment" position = { x = 286 y = 43 } text = "STP_crisis_nod_assessment" font = "hoi_16mbs" maxWidth = 268 maxHeight = 34 fixedsize = yes pdx_tooltip = "STP_crisis_nod_assessment_tt" }
-		instantTextBoxType = { name = "STP_crisis_val_assessment" position = { x = 286 y = 80 } text = "STP_crisis_val_assessment" font = "hoi_16mbs" maxWidth = 268 maxHeight = 34 fixedsize = yes pdx_tooltip = "STP_crisis_val_assessment_tt" }
-		instantTextBoxType = { name = "STP_crisis_countermeasure" position = { x = 286 y = 117 } text = "STP_crisis_countermeasure" font = "hoi_16mbs" maxWidth = 268 maxHeight = 34 fixedsize = yes pdx_tooltip = "STP_crisis_countermeasure_tt" }
-
-		instantTextBoxType = { name = "STP_crisis_operations_header" position = { x = 16 y = 158 } text = "STP_crisis_operations_header" font = "hoi_18mbs" maxWidth = 548 maxHeight = 20 fixedsize = yes format = center }
-		instantTextBoxType = { name = "STP_crisis_major_operation" position = { x = 24 y = 184 } text = "STP_crisis_major_operation" font = "hoi_16mbs" maxWidth = 258 maxHeight = 42 fixedsize = yes pdx_tooltip = "STP_crisis_operation_tt" }
-		instantTextBoxType = { name = "STP_crisis_aux_operation" position = { x = 298 y = 184 } text = "STP_crisis_aux_operation" font = "hoi_16mbs" maxWidth = 258 maxHeight = 42 fixedsize = yes pdx_tooltip = "STP_crisis_operation_tt" }
-
-		instantTextBoxType = { name = "STP_crisis_outcomes_header" position = { x = 16 y = 232 } text = "STP_crisis_outcomes_header" font = "hoi_18mbs" maxWidth = 548 maxHeight = 20 fixedsize = yes format = center pdx_tooltip = "STP_crisis_outcomes_tt" }
-
-		iconType = { name = "STP_crisis_bloodless_card" spriteType = "GFX_STP_bop_less_hedonism_Shabrat" position = { x = 39 y = 260 } pdx_tooltip = "STP_crisis_bloodless_card_tt" }
-		iconType = { name = "STP_crisis_shabrat_war_card" spriteType = "GFX_STP_bop_less_hedonism_Shabrat" position = { x = 176 y = 260 } pdx_tooltip = "STP_crisis_shabrat_war_card_tt" }
-		iconType = { name = "STP_crisis_sotnikov_card" spriteType = "GFX_STP_bop_less_hedonism_Sotnikov" position = { x = 313 y = 260 } pdx_tooltip = "STP_crisis_sotnikov_card_tt" }
-		iconType = { name = "STP_crisis_party_card" spriteType = "GFX_STP_bop_more_hedonism_Hedersett" position = { x = 450 y = 260 } pdx_tooltip = "STP_crisis_party_card_tt" }
-
-		instantTextBoxType = { name = "STP_crisis_bloodless_title" position = { x = 12 y = 351 } text = "STP_crisis_bloodless_title" font = "hoi_16mbs" maxWidth = 132 maxHeight = 38 fixedsize = yes format = center pdx_tooltip = "STP_crisis_bloodless_card_tt" }
-		instantTextBoxType = { name = "STP_crisis_shabrat_war_title" position = { x = 149 y = 351 } text = "STP_crisis_shabrat_war_title" font = "hoi_16mbs" maxWidth = 132 maxHeight = 38 fixedsize = yes format = center pdx_tooltip = "STP_crisis_shabrat_war_card_tt" }
-		instantTextBoxType = { name = "STP_crisis_sotnikov_title" position = { x = 286 y = 351 } text = "STP_crisis_sotnikov_title" font = "hoi_16mbs" maxWidth = 132 maxHeight = 38 fixedsize = yes format = center pdx_tooltip = "STP_crisis_sotnikov_card_tt" }
-		instantTextBoxType = { name = "STP_crisis_party_title" position = { x = 423 y = 351 } text = "STP_crisis_party_title" font = "hoi_16mbs" maxWidth = 132 maxHeight = 38 fixedsize = yes format = center pdx_tooltip = "STP_crisis_party_card_tt" }
-
-		instantTextBoxType = { name = "STP_crisis_bloodless_intel" position = { x = 12 y = 402 } text = "STP_crisis_bloodless_intel" font = "hoi_16mbs" maxWidth = 132 maxHeight = 24 fixedsize = yes format = center pdx_tooltip = "STP_crisis_bloodless_card_tt" }
-		instantTextBoxType = { name = "STP_crisis_shabrat_war_intel" position = { x = 149 y = 402 } text = "STP_crisis_shabrat_war_intel" font = "hoi_16mbs" maxWidth = 132 maxHeight = 24 fixedsize = yes format = center pdx_tooltip = "STP_crisis_shabrat_war_card_tt" }
-		instantTextBoxType = { name = "STP_crisis_sotnikov_intel" position = { x = 286 y = 402 } text = "STP_crisis_sotnikov_intel" font = "hoi_16mbs" maxWidth = 132 maxHeight = 24 fixedsize = yes format = center pdx_tooltip = "STP_crisis_sotnikov_card_tt" }
-		instantTextBoxType = { name = "STP_crisis_party_intel" position = { x = 423 y = 402 } text = "STP_crisis_party_intel" font = "hoi_16mbs" maxWidth = 132 maxHeight = 24 fixedsize = yes format = center pdx_tooltip = "STP_crisis_party_card_tt" }
-
-		instantTextBoxType = { name = "STP_crisis_intel_warning" position = { x = 16 y = 440 } text = "STP_crisis_intel_warning" font = "hoi_16mbs" maxWidth = 548 maxHeight = 18 fixedsize = yes format = center }
-	}
-
-	containerWindowType = {
 		name = "ADISCORD_VAL_contract_panel_window"
 		position = { x = 0 y = 0 }
-		size = { width = 580 height = 470 }
+		size = { width = 460 height = 470 }
 		clipping = no
 
 		background = { name = "VAL_contract_panel_background" quadTextureSprite = "GFX_tiled_window_transparent" }
 
-		instantTextBoxType = { name = "VAL_contract_panel_title" position = { x = 16 y = 10 } text = "ADISCORD_VAL_contract_panel_title" font = "hoi_20b" maxWidth = 548 maxHeight = 24 fixedsize = yes format = center pdx_tooltip = "ADISCORD_VAL_contract_panel_title_tt" }
-		instantTextBoxType = { name = "VAL_contract_authority_text" position = { x = 24 y = 48 } text = "VAL_contract_authority_text" font = "hoi_18mbs" maxWidth = 532 maxHeight = 22 fixedsize = yes format = center pdx_tooltip = "VAL_contract_authority_tt" }
-		iconType = { name = "VAL_contract_authority_bar" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 209 y = 75 } pdx_tooltip = "VAL_contract_authority_tt" }
+		instantTextBoxType = { name = "VAL_contract_panel_title" position = { x = 10 y = 10 } text = "ADISCORD_VAL_contract_panel_title" font = "hoi_20b" maxWidth = 440 maxHeight = 24 fixedsize = yes format = center pdx_tooltip = "ADISCORD_VAL_contract_panel_title_tt" }
+		instantTextBoxType = { name = "VAL_contract_authority_text" position = { x = 12 y = 48 } text = "VAL_contract_authority_text" font = "hoi_16mbs" maxWidth = 214 maxHeight = 38 fixedsize = yes format = center pdx_tooltip = "VAL_contract_authority_tt" }
+		iconType = { name = "VAL_contract_authority_bar" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 72 y = 82 } pdx_tooltip = "VAL_contract_authority_tt" }
+		instantTextBoxType = { name = "VAL_contract_readiness_text" position = { x = 234 y = 48 } text = "VAL_contract_readiness_text" font = "hoi_16mbs" maxWidth = 214 maxHeight = 38 fixedsize = yes format = center pdx_tooltip = "VAL_contract_readiness_tt" }
+		iconType = { name = "VAL_contract_readiness_bar" spriteType = "GFX_tno_politics_circular_progress_bar" position = { x = 294 y = 82 } pdx_tooltip = "VAL_contract_readiness_tt" }
 
-		instantTextBoxType = { name = "VAL_contract_stp_phase" position = { x = 24 y = 106 } text = "VAL_contract_stp_phase" font = "hoi_16mbs" maxWidth = 258 maxHeight = 38 fixedsize = yes pdx_tooltip = "VAL_contract_stp_phase_tt" }
-		instantTextBoxType = { name = "VAL_contract_nod_assessment" position = { x = 298 y = 106 } text = "VAL_contract_nod_assessment" font = "hoi_16mbs" maxWidth = 258 maxHeight = 38 fixedsize = yes pdx_tooltip = "VAL_contract_nod_assessment_tt" }
+		instantTextBoxType = { name = "VAL_contract_stp_phase" position = { x = 12 y = 118 } text = "VAL_contract_stp_phase" font = "hoi_16mbs" maxWidth = 214 maxHeight = 38 fixedsize = yes pdx_tooltip = "VAL_contract_stp_phase_tt" }
+		instantTextBoxType = { name = "VAL_contract_nod_assessment" position = { x = 234 y = 118 } text = "VAL_contract_nod_assessment" font = "hoi_16mbs" maxWidth = 214 maxHeight = 38 fixedsize = yes pdx_tooltip = "VAL_contract_nod_assessment_tt" }
 
-		instantTextBoxType = { name = "VAL_contract_influence_header" position = { x = 16 y = 151 } text = "VAL_contract_influence_header" font = "hoi_18mbs" maxWidth = 548 maxHeight = 20 fixedsize = yes format = center pdx_tooltip = "VAL_contract_influence_tt" }
-		instantTextBoxType = { name = "VAL_contract_cin_influence" position = { x = 24 y = 178 } text = "VAL_contract_cin_influence" font = "hoi_16mbs" maxWidth = 164 maxHeight = 34 fixedsize = yes format = center pdx_tooltip = "VAL_contract_influence_tt" }
-		instantTextBoxType = { name = "VAL_contract_osf_influence" position = { x = 208 y = 178 } text = "VAL_contract_osf_influence" font = "hoi_16mbs" maxWidth = 164 maxHeight = 34 fixedsize = yes format = center pdx_tooltip = "VAL_contract_influence_tt" }
-		instantTextBoxType = { name = "VAL_contract_aph_influence" position = { x = 392 y = 178 } text = "VAL_contract_aph_influence" font = "hoi_16mbs" maxWidth = 164 maxHeight = 34 fixedsize = yes format = center pdx_tooltip = "VAL_contract_influence_tt" }
+		instantTextBoxType = { name = "VAL_contract_influence_header" position = { x = 10 y = 163 } text = "VAL_contract_influence_header" font = "hoi_18mbs" maxWidth = 440 maxHeight = 20 fixedsize = yes format = center pdx_tooltip = "VAL_contract_influence_tt" }
+		instantTextBoxType = { name = "VAL_contract_cin_influence" position = { x = 10 y = 190 } text = "VAL_contract_cin_influence" font = "hoi_16mbs" maxWidth = 135 maxHeight = 34 fixedsize = yes format = center pdx_tooltip = "VAL_contract_influence_tt" }
+		instantTextBoxType = { name = "VAL_contract_osf_influence" position = { x = 162 y = 190 } text = "VAL_contract_osf_influence" font = "hoi_16mbs" maxWidth = 135 maxHeight = 34 fixedsize = yes format = center pdx_tooltip = "VAL_contract_influence_tt" }
+		instantTextBoxType = { name = "VAL_contract_aph_influence" position = { x = 315 y = 190 } text = "VAL_contract_aph_influence" font = "hoi_16mbs" maxWidth = 135 maxHeight = 34 fixedsize = yes format = center pdx_tooltip = "VAL_contract_influence_tt" }
 
-		instantTextBoxType = { name = "VAL_contract_state_45" position = { x = 24 y = 227 } text = "VAL_contract_state_45" font = "hoi_16mbs" maxWidth = 258 maxHeight = 38 fixedsize = yes pdx_tooltip = "VAL_contract_resource_states_tt" }
-		instantTextBoxType = { name = "VAL_contract_state_88" position = { x = 298 y = 227 } text = "VAL_contract_state_88" font = "hoi_16mbs" maxWidth = 258 maxHeight = 38 fixedsize = yes pdx_tooltip = "VAL_contract_resource_states_tt" }
+		instantTextBoxType = { name = "VAL_contract_state_45" position = { x = 12 y = 227 } text = "VAL_contract_state_45" font = "hoi_16mbs" maxWidth = 214 maxHeight = 38 fixedsize = yes pdx_tooltip = "VAL_contract_resource_states_tt" }
+		instantTextBoxType = { name = "VAL_contract_state_88" position = { x = 234 y = 227 } text = "VAL_contract_state_88" font = "hoi_16mbs" maxWidth = 214 maxHeight = 38 fixedsize = yes pdx_tooltip = "VAL_contract_resource_states_tt" }
 
-		instantTextBoxType = { name = "VAL_contract_deal_status" position = { x = 24 y = 279 } text = "VAL_contract_deal_status" font = "hoi_16mbs" maxWidth = 532 maxHeight = 42 fixedsize = yes pdx_tooltip = "VAL_contract_deal_status_tt" }
-		instantTextBoxType = { name = "VAL_contract_countdown_status" position = { x = 24 y = 327 } text = "VAL_contract_countdown_status" font = "hoi_16mbs" maxWidth = 532 maxHeight = 38 fixedsize = yes pdx_tooltip = "VAL_contract_countdown_status_tt" }
-		instantTextBoxType = { name = "VAL_contract_foreign_operation" position = { x = 24 y = 371 } text = "VAL_contract_foreign_operation" font = "hoi_16mbs" maxWidth = 532 maxHeight = 38 fixedsize = yes pdx_tooltip = "VAL_contract_foreign_operation_tt" }
-		instantTextBoxType = { name = "VAL_contract_war_concept" position = { x = 24 y = 415 } text = "VAL_contract_war_concept" font = "hoi_16mbs" maxWidth = 532 maxHeight = 42 fixedsize = yes pdx_tooltip = "VAL_contract_war_concept_tt" }
+		instantTextBoxType = { name = "VAL_contract_deal_status" position = { x = 16 y = 279 } text = "VAL_contract_deal_status" font = "hoi_16mbs" maxWidth = 428 maxHeight = 42 fixedsize = yes pdx_tooltip = "VAL_contract_deal_status_tt" }
+		instantTextBoxType = { name = "VAL_contract_countdown_status" position = { x = 16 y = 327 } text = "VAL_contract_countdown_status" font = "hoi_16mbs" maxWidth = 428 maxHeight = 38 fixedsize = yes pdx_tooltip = "VAL_contract_countdown_status_tt" }
+		instantTextBoxType = { name = "VAL_contract_foreign_operation" position = { x = 16 y = 371 } text = "VAL_contract_foreign_operation" font = "hoi_16mbs" maxWidth = 428 maxHeight = 38 fixedsize = yes pdx_tooltip = "VAL_contract_foreign_operation_tt" }
+		instantTextBoxType = { name = "VAL_contract_war_concept" position = { x = 16 y = 415 } text = "VAL_contract_war_concept" font = "hoi_16mbs" maxWidth = 428 maxHeight = 42 fixedsize = yes pdx_tooltip = "VAL_contract_war_concept_tt" }
 	}
 }

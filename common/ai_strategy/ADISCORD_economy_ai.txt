@@ -1,0 +1,76 @@
+# Economy-to-engine AI bridge. All conditions are country-local and cheap.
+
+ADISCORD_ai_fiscal_crisis = {
+	enable = { ADISCORD_economy_ai_is_crisis = yes }
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = ai_wanted_divisions_factor value = -45 }
+	ai_strategy = { type = role_ratio id = armor value = -80 }
+	ai_strategy = { type = unit_ratio id = fighter value = -60 }
+	ai_strategy = { type = unit_ratio id = cas value = -60 }
+	ai_strategy = { type = equipment_production_factor id = infantry value = 30 }
+	ai_strategy = { type = equipment_production_factor id = support value = 10 }
+	ai_strategy = { type = added_military_to_civilian_factory_ratio value = -40 }
+	ai_strategy = { type = building_target id = ADISCORD_business_center value = 0 }
+	ai_strategy = { type = building_target id = ADISCORD_science_center value = 0 }
+	ai_strategy = { type = building_target id = ADISCORD_industrial_cluster value = 0 }
+}
+
+ADISCORD_ai_fiscal_stress = {
+	enable = { ADISCORD_economy_ai_is_stressed = yes }
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = ai_wanted_divisions_factor value = -20 }
+	ai_strategy = { type = role_ratio id = armor value = -30 }
+	ai_strategy = { type = unit_ratio id = fighter value = -20 }
+	ai_strategy = { type = unit_ratio id = cas value = -20 }
+	ai_strategy = { type = equipment_production_factor id = infantry value = 20 }
+	ai_strategy = { type = added_military_to_civilian_factory_ratio value = -20 }
+}
+
+ADISCORD_ai_fiscal_recovery = {
+	enable = { ADISCORD_economy_ai_is_recovery = yes }
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = ai_wanted_divisions_factor value = -10 }
+	ai_strategy = { type = added_military_to_civilian_factory_ratio value = -35 }
+	ai_strategy = { type = building_target id = industrial_complex value = 8 }
+	ai_strategy = { type = building_target id = ADISCORD_business_center value = 1 }
+	ai_strategy = { type = building_target id = ADISCORD_science_center value = 0 }
+	ai_strategy = { type = building_target id = ADISCORD_industrial_cluster value = 1 }
+}
+
+ADISCORD_ai_healthy_civilian_growth = {
+	enable = {
+		ADISCORD_economy_ai_is_healthy = yes
+		has_war = no
+		check_variable = { var = ADISCORD_economy_surplus_streak value = 2 compare = greater_than_or_equals }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = added_military_to_civilian_factory_ratio value = -15 }
+	ai_strategy = { type = building_target id = ADISCORD_business_center value = 2 }
+	ai_strategy = { type = building_target id = ADISCORD_science_center value = 1 }
+	ai_strategy = { type = building_target id = ADISCORD_industrial_cluster value = 1 }
+}
+
+ADISCORD_ai_healthy_war_industry = {
+	enable = {
+		ADISCORD_economy_ai_is_healthy = yes
+		has_war = yes
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = ai_wanted_divisions_factor value = 15 }
+	ai_strategy = { type = added_military_to_civilian_factory_ratio value = 35 }
+	ai_strategy = { type = building_target id = ADISCORD_industrial_cluster value = 2 }
+	ai_strategy = { type = equipment_production_factor id = infantry value = 20 }
+	ai_strategy = { type = equipment_production_factor id = artillery value = 10 }
+}
+
+ADISCORD_ai_overstretched_avoid_wars = {
+	enable = { ADISCORD_economy_is_overstretched = yes }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = avoid_starting_wars value = -200 }
+	ai_strategy = { type = force_concentration_factor value = -10 }
+}

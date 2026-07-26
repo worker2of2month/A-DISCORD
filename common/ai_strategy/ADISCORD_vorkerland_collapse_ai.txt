@@ -116,6 +116,20 @@ ADISCORD_vorkerland_sla_dirty_defense = {
 	ai_strategy = { type = ai_wanted_divisions_factor value = 10 }
 }
 
+ADISCORD_vorkerland_khan_border_offensive = {
+	allowed = { tag = RUS }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		has_global_flag = ADISCORD_vorkerland_khan_border_war_started
+		country_exists = SLA
+		has_war_with = SLA
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = SLA ratio = 1.00 priority = 150 ordertype = front execution_type = rush execute_order = yes }
+	ai_strategy = { type = consider_weak id = SLA value = 100 }
+	ai_strategy = { type = conquer id = SLA value = 150 }
+}
+
 ADISCORD_vorkerland_rza_dirty_defense = {
 	allowed = { tag = RZA }
 	enable = {

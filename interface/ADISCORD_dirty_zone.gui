@@ -6,12 +6,6 @@ guiTypes = {
 		position = { x = 0 y = 0 }
 		size = { width = 540 height = -11 }
 
-		iconType = {
-			name = "ADISCORD_Dirty_Zone_Relations_Block"
-			position = { x = 324 y = -45 }
-			spriteType = "GFX_ADISCORD_Dirty_Zone_Relations_Block"
-		}
-
 		containerWindowType = {
 			name = "ADISCORD_Dirty_Zone_Wallpaper_Container"
 			position = { x = 12 y = -12 }
@@ -27,8 +21,8 @@ guiTypes = {
 
 		containerWindowType = {
 			name = "ADISCORD_Dirty_Zone_Animation_Clip"
-			position = { x = 280 y = 380 }
-			size = { width = 250 height = -11 }
+			position = { x = 265 y = 365 }
+			size = { width = 265 height = -11 }
 			verticalScrollbar = "right_vertical_slider"
 
 			background = {
@@ -37,7 +31,7 @@ guiTypes = {
 			}
 			iconType = {
 				name = "ADISCORD_Dirty_Zone_Scrollbar_Block"
-				position = { x = 235 y = 0 }
+				position = { x = 250 y = 0 }
 				spriteType = "GFX_ADISCORD_Dirty_Zone_Scrollbar_Block"
 			}
 			iconType = {

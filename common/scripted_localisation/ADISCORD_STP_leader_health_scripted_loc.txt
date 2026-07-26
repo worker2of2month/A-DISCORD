@@ -141,3 +141,28 @@ defined_text = {
 		localization_key = STP_LEADER_HEALTH_STAGE_1_TOOLTIP
 	}
 }
+
+defined_text = {
+	name = STPGetLeaderHealthEffects
+
+	text = {
+		trigger = { check_variable = { STP_leader_health_stage = 5 } }
+		localization_key = STP_LEADER_HEALTH_EFFECTS_5
+	}
+	text = {
+		trigger = { check_variable = { STP_leader_health_stage = 4 } }
+		localization_key = STP_LEADER_HEALTH_EFFECTS_4
+	}
+	text = {
+		trigger = { check_variable = { STP_leader_health_stage = 3 } }
+		localization_key = STP_LEADER_HEALTH_EFFECTS_3
+	}
+	text = {
+		trigger = { check_variable = { STP_leader_health_stage = 2 } }
+		localization_key = STP_LEADER_HEALTH_EFFECTS_2
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = STP_LEADER_HEALTH_EFFECTS_1
+	}
+}

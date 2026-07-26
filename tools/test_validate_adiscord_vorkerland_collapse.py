@@ -324,7 +324,7 @@ class EventOrchestrationTests(unittest.TestCase):
         self.assertRegex(events, r'(?m)^\s*add_namespace\s*=\s*ADISCORD_vorkerland_collapse\s*$')
         self.assertEqual(len(re.findall(r'(?m)^country_event\s*=\s*\{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.1\s*$', events)), 1)
         self.assertEqual(len(re.findall(r'(?m)^country_event\s*=\s*\{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.2\s*$', events)), 1)
-        for event_id in ('1', '2', '10', '11', '12', '13', '20', '21', '22', '23'):
+        for event_id in ('1', '2', '10', '20', '21', '22', '23'):
             definition = re.search(
                 rf'(?m)^country_event\s*=\s*\{{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.{event_id}\s*$',
                 events,
@@ -332,6 +332,17 @@ class EventOrchestrationTests(unittest.TestCase):
             self.assertIsNotNone(definition, event_id)
             block = self.named_block(events[definition.start():], 'country_event')
             self.assertIn('fire_only_once = yes', block)
+            self.assertIn('is_triggered_only = yes', block)
+            self.assertIn('hidden = yes', block)
+
+        for event_id in ('11', '12', '13', '17', '18', '19'):
+            definition = re.search(
+                rf'(?m)^country_event\s*=\s*\{{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.{event_id}\s*$',
+                events,
+            )
+            self.assertIsNotNone(definition, event_id)
+            block = self.named_block(events[definition.start():], 'country_event')
+            self.assertNotIn('fire_only_once = yes', block)
             self.assertIn('is_triggered_only = yes', block)
             self.assertIn('hidden = yes', block)
 
@@ -462,10 +473,11 @@ class AIStrategyTests(unittest.TestCase):
         ai = self.AI_PATH.read_text(encoding='utf-8-sig')
         for tag in (*self.COMBAT_TAGS, *self.DIRTY_TAGS):
             self.assertRegex(ai, rf'\btag\s*=\s*{tag}\b')
-        for _, block in self.top_level_blocks(ai):
+        for name, block in self.top_level_blocks(ai):
             self.assertIn('abort_when_not_enabled = yes', block)
             self.assertRegex(block, r'has_global_flag\s*=\s*ADISCORD_vorkerland_collapse_wars_started')
-            self.assertRegex(block, r'has_country_flag\s*=\s*ADISCORD_vorkerland_phase_(?:consolidate|regional|endgame|finished)')
+            if name != 'ADISCORD_vorkerland_khan_border_offensive':
+                self.assertRegex(block, r'has_country_flag\s*=\s*ADISCORD_vorkerland_phase_(?:consolidate|regional|endgame|finished)')
 
     def test_phase_scheduler_sets_one_phase_per_existing_combat_or_dirty_tag(self):
         events = self.EVENT_PATH.read_text(encoding='utf-8-sig')
@@ -489,7 +501,7 @@ class AIStrategyTests(unittest.TestCase):
             for target in targets:
                 self.assertRegex(ai, rf'(?s)allowed\s*=\s*\{{\s*tag\s*=\s*{tag}\s*\}}.*?country_exists\s*=\s*{target}.*?has_war_with\s*=\s*{target}.*?type\s*=\s*(?:front_control|conquer).*?(?:tag|id)\s*=\s*{target}')
         for _, target in re.findall(r'type\s*=\s*(front_control|conquer).*?(?:tag|id)\s*=\s*([A-Z]{3})', ai, re.DOTALL):
-            self.assertIn(target, set().union(*map(set, self.ADJACENCY.values())))
+            self.assertIn(target, set().union(*map(set, self.ADJACENCY.values())) | {'SLA'})
         self.assertNotIn('start_civil_war', ai)
 
     def test_dirty_tags_only_receive_defensive_infantry_coverage(self):
@@ -525,8 +537,11 @@ class DirtySpawnTests(unittest.TestCase):
             first,
             r'RUS\s*=\s*\{\s*country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.10\s+days\s*=\s*60\s+random_days\s*=\s*30\s*\}',
         )
-        for event_id in (10, 11, 12, 13, 17, 18, 19):
+        self.assertEqual(events.count('id = ADISCORD_vorkerland_collapse.10'), 2)
+        for event_id in (11, 12, 13, 17, 18, 19):
             self.assertEqual(events.count(f'id = ADISCORD_vorkerland_collapse.{event_id}'), 2)
+            on_actions = (self.ROOT / 'common' / 'on_actions' / '01_ADISCORD_vorkerland_collapse_on_actions.txt').read_text(encoding='utf-8-sig')
+            self.assertEqual(on_actions.count(f'id = ADISCORD_vorkerland_collapse.{event_id}'), 1)
         self.assertIn('set_global_flag = ADISCORD_vorkerland_dirty_opened', events)
         for wave in self.WAVES:
             self.assertIn(f'set_global_flag = ADISCORD_vorkerland_dirty_wave_{wave}', events)
@@ -594,22 +609,38 @@ class DirtySpawnTests(unittest.TestCase):
         localisation = (root / 'localisation' / 'russian' / 'ADISCORD_vorkerland_collapse_l_russian.yml').read_text(encoding='utf-8-sig')
 
         self.assertRegex(tags, r'(?m)^EXZ\s*=\s*"countries/EXZ\.txt"$')
-        self.assertIn('color = rgb { 39 43 46 }', country)
+        self.assertIn('color = rgb { 82 96 91 }', country)
+        self.assertIn('color_ui = rgb { 82 96 91 }', country)
         self.assertIn('recruit_character = EXZ_No_Authority', history)
+        self.assertIn('add_ideas = closed_economy', history)
         self.assertIn('set_country_flag = ADISCORD_vorkerland_dirty_zone_placeholder', history)
         self.assertIn('EXZ_No_Authority', characters)
+        self.assertIn('GFX_portrait_EXZ_No_Command', characters)
         self.assertIn('original_tag = EXZ', trigger)
+        self.assertIn('ADISCORD_diplomacy_not_dirty_zone_pair', trigger)
         self.assertIn('context_type = selected_country_context', scripted_gui)
         self.assertIn('parent_window_token = selected_country_view', scripted_gui)
         self.assertIn('ADISCORD_Dirty_Zone_Diplomacy_Container', gui)
+        self.assertNotIn('name = "ADISCORD_Dirty_Zone_Relations_Block"', gui)
+        self.assertIn('position = { x = 265 y = 365 }', gui)
         self.assertIn('GFX_ADISCORD_Dirty_Zone_Wallpaper', gfx)
         self.assertRegex(localisation, r'(?m)^ EXZ:\s*""$')
+
+        diplo = (root / 'common' / 'scripted_triggers' / '00_diplo_action_valid_triggers.txt').read_text(encoding='utf-8-sig')
+        for action in (
+            'generate_wargoal', 'guarantee', 'improverelation', 'join_faction',
+            'lend_lease', 'milacc', 'nonaggressionpact', 'send_attache',
+            'international_market_access_rights',
+        ):
+            block = self.named_block(diplo, f'is_diplomatic_action_valid_{action}')
+            self.assertIn('ADISCORD_diplomacy_not_dirty_zone_pair = yes', block)
 
         for relative in (
             'gfx/interface/ADISCORD_dirty_zone/dirty_zone_wallpaper.dds',
             'gfx/interface/ADISCORD_dirty_zone/dirty_zone_animation.dds',
             'gfx/interface/ADISCORD_dirty_zone/relations_block.dds',
             'gfx/interface/ADISCORD_dirty_zone/scrollbar_block.dds',
+            'gfx/leaders/EXZ/Portrait_EXZ_No_Command.png',
             'gfx/flags/EXZ.tga',
             'gfx/flags/medium/EXZ.tga',
             'gfx/flags/small/EXZ.tga',
@@ -629,60 +660,69 @@ class DirtySpawnTests(unittest.TestCase):
                 self.assertEqual(events.count(call), 1)
                 self.assertGreater(events.index(call), flag_pos)
         self.assertEqual(positions, sorted(positions))
-        self.assertRegex(events, r'id\s*=\s*ADISCORD_vorkerland_collapse\.12\s+days\s*=\s*45')
-        self.assertRegex(events, r'id\s*=\s*ADISCORD_vorkerland_collapse\.13\s+days\s*=\s*45')
-
-    def test_each_dirty_wave_materialises_only_one_country_per_date(self):
-        events = self.EVENT_PATH.read_text(encoding='utf-8-sig')
-        for first_event, second_event, first_tag, second_tag in (
-            (11, 17, 'SLA', 'MLR'),
-            (12, 18, 'RZA', 'SCA'),
-            (13, 19, 'ERT', 'IRT'),
-        ):
-            first_definition = re.search(
-                rf'(?m)^country_event\s*=\s*\{{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.{first_event}\s*$',
-                events,
-            )
-            self.assertIsNotNone(first_definition, first_event)
-            first = self.named_block(events[first_definition.start():], 'country_event')
-            self.assertIn(f'ADISCORD_vorkerland_setup_{first_tag.lower()} = yes', first)
-            self.assertNotIn(f'ADISCORD_vorkerland_setup_{second_tag.lower()} = yes', first)
+        opening_definition = re.search(
+            r'(?m)^country_event\s*=\s*\{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.10\s*$',
+            events,
+        )
+        self.assertIsNotNone(opening_definition)
+        opening = self.named_block(events[opening_definition.start():], 'country_event')
+        for event_id, days in ((11, 1), (17, 3), (12, 5), (18, 7), (13, 9), (19, 11)):
             self.assertRegex(
-                first,
-                rf'id\s*=\s*ADISCORD_vorkerland_collapse\.{second_event}\s+days\s*=\s*7',
+                opening,
+                rf'country_event\s*=\s*\{{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.{event_id}\s+days\s*=\s*{days}\s*\}}',
             )
 
-            second_definition = re.search(
-                rf'(?m)^country_event\s*=\s*\{{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.{second_event}\s*$',
+    def test_each_dirty_wave_materialises_one_country_per_distinct_date(self):
+        events = self.EVENT_PATH.read_text(encoding='utf-8-sig')
+        for event_id, tag in (
+            (11, 'SLA'), (17, 'MLR'), (12, 'RZA'),
+            (18, 'SCA'), (13, 'ERT'), (19, 'IRT'),
+        ):
+            definition = re.search(
+                rf'(?m)^country_event\s*=\s*\{{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.{event_id}\s*$',
                 events,
             )
-            self.assertIsNotNone(second_definition, second_event)
-            second = self.named_block(events[second_definition.start():], 'country_event')
-            self.assertIn(f'ADISCORD_vorkerland_setup_{second_tag.lower()} = yes', second)
+            self.assertIsNotNone(definition, event_id)
+            block = self.named_block(events[definition.start():], 'country_event')
+            self.assertIn(f'ADISCORD_vorkerland_setup_{tag.lower()} = yes', block)
+            for other in DIRTY_GROUPS:
+                if other != tag:
+                    self.assertNotIn(f'ADISCORD_vorkerland_setup_{other.lower()} = yes', block)
 
-    def test_intervention_is_limited_to_supplies(self):
+    def test_external_interventions_are_scoped_and_the_khan_takes_only_two_states(self):
         effects = self.EFFECTS_PATH.read_text(encoding='utf-8-sig')
-        for producer, recipient in (('RUS', 'SLA'), ('EFL', 'SCA'), ('VAL', 'ERT'), ('CIN', 'IRT')):
+        for producer, recipient in (('EFL', 'SCA'), ('VAL', 'ERT'), ('CIN', 'IRT')):
             self.assertIsNotNone(re.search(
                 rf'{recipient}\s*=\s*\{{.*?add_equipment_to_stockpile\s*=\s*\{{.*?producer\s*=\s*{producer}',
                 effects,
                 re.DOTALL,
             ))
-        self.assertNotIn('declare_war_on', effects)
-        self.assertNotIn('annex_everything', effects)
+        start = self.named_block(effects, 'ADISCORD_vorkerland_start_khan_border_war')
+        self.assertIn('declare_war_on = { target = SLA type = annex_everything }', start)
+        self.assertIn('49 = { add_claim_by = RUS }', start)
+        self.assertIn('176 = { add_claim_by = RUS }', start)
+        resolution = self.named_block(effects, 'ADISCORD_vorkerland_check_khan_border_war')
+        self.assertIn('controls_state = 49', resolution)
+        self.assertIn('controls_state = 176', resolution)
+        self.assertIn('white_peace = SLA', resolution)
+        self.assertEqual(len(re.findall(r'set_state_owner_to\s*=\s*RUS', resolution)), 2)
         self.assertNotIn('give_guarantee', effects)
         self.assertNotIn('has_guaranteed', effects)
 
     def test_intervention_waits_for_spawned_country_registration(self):
         events = self.EVENT_PATH.read_text(encoding='utf-8-sig')
-        for wave, spawn_event, intervention_event in ((1, 17, 14), (2, 18, 15), (3, 19, 16)):
+        for wave, spawn_event, intervention_event, helper in (
+            (1, 17, 14, 'ADISCORD_vorkerland_start_khan_border_war'),
+            (2, 18, 15, 'ADISCORD_vorkerland_intervene_wave_2'),
+            (3, 19, 16, 'ADISCORD_vorkerland_intervene_wave_3'),
+        ):
             definition = re.search(
                 rf'(?m)^country_event\s*=\s*\{{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.{spawn_event}\s*$',
                 events,
             )
             self.assertIsNotNone(definition, spawn_event)
             block = self.named_block(events[definition.start():], 'country_event')
-            self.assertNotIn(f'ADISCORD_vorkerland_intervene_wave_{wave} = yes', block)
+            self.assertNotIn(f'{helper} = yes', block)
             self.assertRegex(
                 block,
                 rf'country_event\s*=\s*\{{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.{intervention_event}\s+days\s*=\s*1\s*\}}',
@@ -694,7 +734,7 @@ class DirtySpawnTests(unittest.TestCase):
             )
             self.assertIsNotNone(intervention_definition, intervention_event)
             intervention = self.named_block(events[intervention_definition.start():], 'country_event')
-            self.assertIn(f'ADISCORD_vorkerland_intervene_wave_{wave} = yes', intervention)
+            self.assertIn(f'{helper} = yes', intervention)
 
 
 class ConflictSpiritTests(unittest.TestCase):
@@ -730,10 +770,12 @@ class ConflictSpiritTests(unittest.TestCase):
         initial = self.named_block(effects, 'ADISCORD_vorkerland_prepare_initial_combatants')
         for tag in ('WRK', 'VAD', 'ZAO', 'PWR', 'VLA', 'ROM', 'SOL', 'TRU'):
             self.assertRegex(initial, rf'\b{tag}\s*=\s*\{{\s*ADISCORD_vorkerland_prepare_conflict_country\s*=\s*yes\s*\}}')
-        for tag in TAGS:
-            source = dirty if tag in DIRTY_GROUPS else effects
-            setup = self.named_block(source, f'ADISCORD_vorkerland_setup_{tag.lower()}')
+        for tag in (tag for tag in TAGS if tag not in DIRTY_GROUPS):
+            setup = self.named_block(effects, f'ADISCORD_vorkerland_setup_{tag.lower()}')
             self.assertIn('ADISCORD_vorkerland_prepare_conflict_country = yes', setup)
+        for tag in DIRTY_GROUPS:
+            setup = self.named_block(dirty, f'ADISCORD_vorkerland_setup_{tag.lower()}')
+            self.assertNotIn('ADISCORD_vorkerland_prepare_conflict_country = yes', setup)
 
     def test_outcomes_remove_the_wartime_spirit(self):
         maps = self.MAPS_PATH.read_text(encoding='utf-8-sig')

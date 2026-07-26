@@ -122,7 +122,11 @@ def validate_countries(root: Path, issues: list[str]) -> None:
 
     if tag_text and re.search(r'(?m)^\s*EXZ\s*=\s*"countries/EXZ\.txt"', tag_text) is None:
         issues.append("the exclusion-zone placeholder tag EXZ is absent from the tag registry")
-    require_file(issues, root / "common" / "countries" / "EXZ.txt", "country definition for EXZ")
+    exz_country = require_file(issues, root / "common" / "countries" / "EXZ.txt", "country definition for EXZ")
+    if exz_country:
+        for token in ("color = rgb { 82 96 91 }", "color_ui = rgb { 82 96 91 }"):
+            if token not in exz_country:
+                issues.append(f"EXZ country definition is missing {token}")
     exz_histories = list((root / "history" / "countries").glob("EXZ - *.txt"))
     if not exz_histories:
         issues.append("missing country history for the exclusion-zone placeholder EXZ")
@@ -133,6 +137,14 @@ def validate_countries(root: Path, issues: list[str]) -> None:
     )
     if placeholder_characters and "EXZ_No_Authority" not in placeholder_characters:
         issues.append("exclusion-zone character database has no No Authority leader")
+    if placeholder_characters and "GFX_portrait_EXZ_No_Command" not in placeholder_characters:
+        issues.append("exclusion-zone character does not use the No Command portrait")
+    if not (root / "gfx" / "leaders" / "EXZ" / "Portrait_EXZ_No_Command.png").exists():
+        issues.append("missing EXZ No Command portrait asset")
+    if exz_histories:
+        history = read(exz_histories[0]) or ""
+        if "add_ideas = closed_economy" not in history:
+            issues.append("EXZ must use closed_economy to remain outside the market")
     for size in ("", "medium", "small"):
         flag = root / "gfx" / "flags" / size / "EXZ.tga" if size else root / "gfx" / "flags" / "EXZ.tga"
         if not flag.exists():
@@ -198,6 +210,28 @@ def validate_dirty(root: Path, issues: list[str]) -> None:
     ):
         if token not in gui_text:
             issues.append(f"dirty-zone diplomacy overlay is missing {token}")
+    gui = read(root / "interface" / "ADISCORD_dirty_zone.gui") or ""
+    if 'name = "ADISCORD_Dirty_Zone_Relations_Block"' in gui:
+        issues.append("dirty-zone GUI still displays the baked TNO Anarchy relations block")
+    if "position = { x = 265 y = 365 }" not in gui:
+        issues.append("dirty-zone terminal panel does not use the adjusted position")
+
+    diplo = require_file(
+        issues,
+        root / "common" / "scripted_triggers" / "00_diplo_action_valid_triggers.txt",
+        "diplomatic-action validity hooks",
+    )
+    for action in (
+        "generate_wargoal", "guarantee", "improverelation", "join_faction",
+        "lend_lease", "milacc", "nonaggressionpact", "send_attache",
+        "international_market_access_rights",
+    ):
+        if re.search(
+            rf"is_diplomatic_action_valid_{action}\s*=\s*\{{[^}}]*ADISCORD_diplomacy_not_dirty_zone_pair\s*=\s*yes",
+            diplo,
+            re.DOTALL,
+        ) is None:
+            issues.append(f"EXZ diplomatic quarantine does not cover {action}")
     for asset in (
         "dirty_zone_wallpaper.dds",
         "dirty_zone_animation.dds",
@@ -233,27 +267,41 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append("collapse effects do not prepare combatant national spirits")
     if dirty_effects and ("give_guarantee" in dirty_effects or "has_guaranteed" in dirty_effects):
         issues.append("dirty-zone activation must not mutate diplomatic relations in the spawn tick")
+    if dirty_effects and "ADISCORD_vorkerland_prepare_conflict_country" in dirty_effects:
+        issues.append("dirty-zone successors must not receive the Vorkerland civil-war spirit")
     if events:
-        for first_event, second_event, first_tag, second_tag in (
-            (11, 17, "SLA", "MLR"),
-            (12, 18, "RZA", "SCA"),
-            (13, 19, "ERT", "IRT"),
+        opening = re.search(
+            r"(?m)^country_event\s*=\s*\{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.10\s*$"
+            r"(?P<body>.*?)^\}",
+            events,
+            re.DOTALL,
+        )
+        opening_text = opening.group("body") if opening else ""
+        for event_id, days in ((11, 1), (17, 3), (12, 5), (18, 7), (13, 9), (19, 11)):
+            if re.search(
+                rf"country_event\s*=\s*\{{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.{event_id}\s+days\s*=\s*{days}\s*\}}",
+                opening_text,
+            ) is None:
+                issues.append(f"dirty-zone opening must schedule event {event_id} for day {days}")
+        for event_id in (11, 12, 13, 17, 18, 19):
+            definition = re.search(
+                rf"country_event\s*=\s*\{{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.{event_id}\b(?P<body>.*?)\n\}}",
+                events,
+                re.DOTALL,
+            )
+            if definition and "fire_only_once = yes" in definition.group("body"):
+                issues.append(f"recoverable dirty spawn event {event_id} must not be fire_only_once")
+    if dirty_effects:
+        for token in (
+            "ADISCORD_vorkerland_start_khan_border_war",
+            "declare_war_on = { target = SLA type = annex_everything }",
+            "ADISCORD_vorkerland_check_khan_border_war",
+            "controls_state = 49",
+            "controls_state = 176",
+            "white_peace = SLA",
         ):
-            first_pattern = re.compile(
-                rf"id\s*=\s*ADISCORD_vorkerland_collapse\.{first_event}\b"
-                rf".*?ADISCORD_vorkerland_setup_{first_tag.lower()}\s*=\s*yes"
-                rf".*?id\s*=\s*ADISCORD_vorkerland_collapse\.{second_event}\s+days\s*=\s*7",
-                re.DOTALL,
-            )
-            second_pattern = re.compile(
-                rf"id\s*=\s*ADISCORD_vorkerland_collapse\.{second_event}\b"
-                rf".*?ADISCORD_vorkerland_setup_{second_tag.lower()}\s*=\s*yes",
-                re.DOTALL,
-            )
-            if first_pattern.search(events) is None or second_pattern.search(events) is None:
-                issues.append(
-                    f"dirty wave {first_event} must stagger {first_tag} and {second_tag} by seven days"
-                )
+            if token not in dirty_effects:
+                issues.append(f"Khan border war is missing {token}")
     if ideas and not re.search(
         r"ADISCORD_vorkerland_to_the_last\s*=\s*\{.*?surrender_limit\s*=\s*1\.0",
         ideas,
@@ -275,6 +323,9 @@ def validate_ai(root: Path, issues: list[str]) -> None:
         for target in ("TVA", "VAD", "WRK", "EYR", "EGC", "WPA", "WPS", "ZAO", "PSD", "PWR", "EBA", "VLA", "DVA", "ROM", "SRA", "SOL", "ZTA", "TRU"):
             if f"has_war_with = {target}" not in ai:
                 issues.append(f"collapse AI lacks a guarded front against {target}")
+        for token in ("ADISCORD_vorkerland_khan_border_offensive", "has_war_with = SLA", "type = conquer id = SLA"):
+            if token not in ai:
+                issues.append(f"Khan border-war AI is missing {token}")
     if effects and "ADISCORD_vorkerland_update_ai_phase" not in effects:
         issues.append("collapse AI phase updater is missing")
     if on_actions:
@@ -282,6 +333,8 @@ def validate_ai(root: Path, issues: list[str]) -> None:
             issues.append("collapse monthly phase update is missing")
         if "every_country" in on_actions:
             issues.append("collapse monthly phase update must remain country-scoped")
+        if "on_state_control_changed" not in on_actions or "ADISCORD_vorkerland_check_khan_border_war = yes" not in on_actions:
+            issues.append("Khan border war must resolve from on_state_control_changed")
 
 
 def validate_outcomes(root: Path, issues: list[str]) -> None:

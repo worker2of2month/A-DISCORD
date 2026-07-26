@@ -18,17 +18,23 @@ country_event = {
 				30 = {
 					modifier = { factor = 2 VAL_has_active_stp_civil_war = yes }
 					modifier = { factor = 2 check_variable = { var = VAL_contract_authority value = 55 compare = greater_than_or_equals } }
+					modifier = { factor = 2 check_variable = { var = VAL_STP_leverage value = 25 compare = greater_than_or_equals } }
 					set_country_flag = VAL_ai_course_contract_broker
 				}
 				25 = {
 					modifier = { factor = 0 VAL_has_active_stp_civil_war = no }
 					modifier = { factor = 2 has_country_flag = VAL_doctrine_resource_raider }
 					modifier = { factor = 2 has_equipment = { infantry_equipment > 1499 } }
+					modifier = { factor = 2 check_variable = { var = VAL_STP_campaign_readiness value = 50 compare = greater_than_or_equals } }
+					modifier = { factor = 2 NOD = { OR = { has_war = yes has_country_flag = NOD_limited_war_active } } }
+					modifier = { factor = 0.25 NOD = { has_country_flag = NOD_crisis_posture_guardian has_war = no } }
 					set_country_flag = VAL_ai_course_resource_raider
 				}
 				25 = {
 					modifier = { factor = 2 has_equipment = { infantry_equipment > 1999 } }
 					modifier = { factor = 2 has_country_flag = VAL_supply_preparation }
+					modifier = { factor = 3 check_variable = { var = VAL_STP_campaign_readiness value = 50 compare = less_than } }
+					modifier = { factor = 2 NOD = { has_country_flag = NOD_crisis_posture_guardian has_war = no } }
 					set_country_flag = VAL_ai_course_patient_invader
 				}
 				20 = {

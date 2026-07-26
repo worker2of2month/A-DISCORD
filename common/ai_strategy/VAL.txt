@@ -4,6 +4,7 @@ VAL_Wants_To_Sell_Stuff = {
 	}
 	enable = {
 		has_war = no
+		NOT = { ADISCORD_economy_ai_is_crisis = yes }
 	}
 	abort_when_not_enabled = yes
 
@@ -28,6 +29,6 @@ VAL_Wants_To_Sell_Stuff = {
 	ai_strategy = {
 		type = equipment_market_for_sale_factor
 		id = infantry
-		value = 50  # put less rifles up for sale
+		value = 50  # retain a strategic rifle reserve
 	}
 }

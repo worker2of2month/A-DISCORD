@@ -8,7 +8,6 @@ STP_balance_of_power_category = {
 }
 
 STP_elections_in_the_party = {
-
 	picture = GFX_STP_decision_election_in_the_party
 
 	allowed = {
@@ -16,6 +15,10 @@ STP_elections_in_the_party = {
 	}
 
 	priority = 1
+	visible = {
+		has_country_flag = STP_main_campaign_side
+		NOT = { has_country_flag = STP_internal_outcome_finalized }
+	}
 
 	visible_when_empty = yes
 }

@@ -161,6 +161,28 @@ ideas = {
 				industrial_capacity_factory = -0.03
 			}
 		}
+		ADISCORD_economy_stretched_1 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_intel_bonus
+			modifier = {
+				stability_factor = -0.01
+				production_speed_buildings_factor = -0.01
+			}
+		}
+		ADISCORD_economy_stretched_2 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_intel_bonus
+			modifier = {
+				stability_factor = -0.02
+				war_support_factor = -0.01
+				production_speed_buildings_factor = -0.03
+				industrial_capacity_factory = -0.01
+			}
+		}
 		ADISCORD_economy_stretched_4 = {
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -186,6 +208,41 @@ ideas = {
 				production_speed_buildings_factor = -0.03
 			}
 		}
+		ADISCORD_economy_rising_inflation = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_production_bonus
+			modifier = {
+				consumer_goods_factor = 0.01
+				production_speed_buildings_factor = -0.01
+			}
+		}
+		ADISCORD_economy_severe_inflation = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_production_bonus
+			modifier = {
+				consumer_goods_factor = 0.08
+				stability_factor = -0.06
+				production_speed_buildings_factor = -0.07
+				industrial_capacity_factory = -0.03
+			}
+		}
+		ADISCORD_economy_hyperinflation = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_production_bonus
+			modifier = {
+				consumer_goods_factor = 0.15
+				stability_factor = -0.10
+				production_speed_buildings_factor = -0.12
+				industrial_capacity_factory = -0.06
+				research_speed_factor = -0.05
+			}
+		}
 		ADISCORD_economy_debt_burden = {
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -196,5 +253,68 @@ ideas = {
 				research_speed_factor = -0.01
 			}
 		}
+		ADISCORD_economy_debt_warning = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_intel_bonus
+			modifier = { political_power_gain = -0.02 }
+		}
+		ADISCORD_economy_debt_crisis = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_intel_bonus
+			modifier = {
+				political_power_gain = -0.10
+				research_speed_factor = -0.03
+				production_speed_buildings_factor = -0.04
+				stability_factor = -0.03
+			}
+		}
+		ADISCORD_economy_debt_default = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_intel_bonus
+			modifier = {
+				political_power_gain = -0.18
+				research_speed_factor = -0.07
+				production_speed_buildings_factor = -0.08
+				industrial_capacity_factory = -0.05
+				stability_factor = -0.08
+			}
+		}
+
+		ADISCORD_economy_war_fatigue_2 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_manpower_bonus
+			modifier = { stability_factor = -0.02 war_support_factor = -0.03 industrial_capacity_factory = -0.01 }
+		}
+		ADISCORD_economy_war_fatigue_3 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_manpower_bonus
+			modifier = { stability_factor = -0.05 war_support_factor = -0.07 industrial_capacity_factory = -0.03 army_morale_factor = -0.03 }
+		}
+		ADISCORD_economy_war_fatigue_4 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_manpower_bonus
+			modifier = { stability_factor = -0.08 war_support_factor = -0.12 industrial_capacity_factory = -0.06 army_morale_factor = -0.07 }
+		}
+
+		ADISCORD_economy_science_network_1 = { allowed = { always = no } allowed_civil_war = { always = yes } removal_cost = -1 picture = generic_research_bonus modifier = { research_speed_factor = 0.01 } }
+		ADISCORD_economy_science_network_2 = { allowed = { always = no } allowed_civil_war = { always = yes } removal_cost = -1 picture = generic_research_bonus modifier = { research_speed_factor = 0.02 } }
+		ADISCORD_economy_science_network_3 = { allowed = { always = no } allowed_civil_war = { always = yes } removal_cost = -1 picture = generic_research_bonus modifier = { research_speed_factor = 0.03 } }
+		ADISCORD_economy_science_network_4 = { allowed = { always = no } allowed_civil_war = { always = yes } removal_cost = -1 picture = generic_research_bonus modifier = { research_speed_factor = 0.04 } }
+		ADISCORD_economy_industrial_network_1 = { allowed = { always = no } allowed_civil_war = { always = yes } removal_cost = -1 picture = generic_production_bonus modifier = { industrial_capacity_factory = 0.01 } }
+		ADISCORD_economy_industrial_network_2 = { allowed = { always = no } allowed_civil_war = { always = yes } removal_cost = -1 picture = generic_production_bonus modifier = { industrial_capacity_factory = 0.02 production_factory_efficiency_gain_factor = 0.01 } }
+		ADISCORD_economy_industrial_network_3 = { allowed = { always = no } allowed_civil_war = { always = yes } removal_cost = -1 picture = generic_production_bonus modifier = { industrial_capacity_factory = 0.03 production_factory_efficiency_gain_factor = 0.02 } }
+		ADISCORD_economy_industrial_network_4 = { allowed = { always = no } allowed_civil_war = { always = yes } removal_cost = -1 picture = generic_production_bonus modifier = { industrial_capacity_factory = 0.04 production_factory_efficiency_gain_factor = 0.03 } }
 	}
 }

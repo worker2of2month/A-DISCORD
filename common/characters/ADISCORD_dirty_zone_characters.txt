@@ -2,7 +2,7 @@ characters = {
 	EXZ_No_Authority = {
 		name = EXZ_No_Authority
 		portraits = {
-			civilian = { large = GFX_portrait_PLACEHOLDER }
+			civilian = { large = GFX_portrait_EXZ_No_Command }
 		}
 		country_leader = {
 			ideology = pragmatism_ideology

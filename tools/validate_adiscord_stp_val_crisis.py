@@ -38,8 +38,11 @@ try:
         STP_RESISTANCE_PROJECTS,
         STP_SHABRAT_FOCUSES,
         STP_SPINE_FOCUS_STAGES,
+        STP_TRANSITION_FOCUS_MAP,
         VAL_BASE_FOCUS_IDS,
+        VAL_AI_FOCUS_COURSE_BIASES,
         VAL_CONTRACT_BANDS,
+        VAL_CONTRACT_SPECIALISATIONS,
         VAL_CRISIS_FOCUS_IDS,
         VAL_FOCUS_REWARD_TOKENS,
         VAL_NORTHERN_OPERATION_SPECS,
@@ -80,8 +83,11 @@ except ModuleNotFoundError:
         STP_RESISTANCE_PROJECTS,
         STP_SHABRAT_FOCUSES,
         STP_SPINE_FOCUS_STAGES,
+        STP_TRANSITION_FOCUS_MAP,
         VAL_BASE_FOCUS_IDS,
+        VAL_AI_FOCUS_COURSE_BIASES,
         VAL_CONTRACT_BANDS,
+        VAL_CONTRACT_SPECIALISATIONS,
         VAL_CRISIS_FOCUS_IDS,
         VAL_FOCUS_REWARD_TOKENS,
         VAL_NORTHERN_OPERATION_SPECS,
@@ -109,6 +115,10 @@ REQUIRED_FILES = {
         ("interface/ADISCORD_STP_VAL_crisis.gfx", "crisis sprite aliases"),
     ),
     "stp": (
+        (
+            "common/decisions/categories/ADISCORD_decision_categories_STP.txt",
+            "canonical STP party decision category",
+        ),
         (
             "common/decisions/categories/ADISCORD_STP_VAL_crisis_categories.txt",
             "crisis decision categories",
@@ -156,6 +166,7 @@ REQUIRED_FILES = {
     ),
     "val": (
         ("common/national_focus/ADISCORD_national_focus_VAL.txt", "VAL contract focus tree"),
+        ("interface/goals_shine.gfx", "VAL focus shine sprites"),
         ("common/dynamic_modifiers/ADISCORD_STP_VAL_crisis_dynamic_modifiers.txt", "VAL contract dynamic modifier"),
         ("common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt", "VAL contract authority effects"),
         ("common/decisions/ADISCORD_VAL_contract_decisions.txt", "VAL contract decisions"),
@@ -437,6 +448,21 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
                     f"STP crisis category {category} must be defined exactly once"
                 )
 
+    party_categories = read(
+        root / "common/decisions/categories/ADISCORD_decision_categories_STP.txt"
+    )
+    if party_categories is not None:
+        party = extract_named_block(party_categories, "STP_elections_in_the_party") or ""
+        for token in (
+            "tag = STP",
+            "has_country_flag = STP_main_campaign_side",
+            "visible_when_empty = yes",
+        ):
+            if token not in party:
+                issues.append(f"canonical STP party category is missing {token}")
+    if decisions is not None and not extract_named_block(decisions, "STP_elections_in_the_party"):
+        issues.append("STP crisis decisions must live in STP_elections_in_the_party")
+
     if decisions is not None:
         for mission, (days, event_id) in HEALTH_MISSIONS.items():
             block = extract_named_block(decisions, mission)
@@ -642,8 +668,20 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
             re.DOTALL,
         ):
             issues.append("STP startup calendar activation must be guarded and atomic")
+        if startup.count("ADISCORD_STP_VAL_refresh_presentation_mirrors = yes") < 2:
+            issues.append("STP and VAL startup scopes must refresh their presentation mirrors")
 
     if core is not None:
+        mirrors = extract_named_block(
+            core, "ADISCORD_STP_VAL_refresh_presentation_mirrors"
+        ) or ""
+        health_mutation = extract_named_block(core, "STP_set_health_stage") or ""
+        for stage, health in ((1, 100), (2, 75), (3, 45), (4, 15)):
+            token = f"var = STP_leader_health value = {health}"
+            if token not in mirrors or token not in health_mutation:
+                issues.append(
+                    f"STP health stage {stage} must keep the {health}% presentation mirror"
+                )
         for effect, value, event_id in (
             ("STP_commit_to_shabrat", 1, "stp_crisis.10"),
             ("STP_commit_to_party", 2, "stp_crisis.11"),
@@ -689,6 +727,13 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
     )
     party_loc = read(party_loc_path)
     if party_loc is not None:
+        health_loc = read(
+            root / "localisation/russian/ADISCORD_STP_leader_health_l_russian.yml"
+        ) or ""
+        if "[?STP_leader_health|0]%" not in health_loc:
+            issues.append("STP leader health must display as a whole-number percentage")
+        if "[STPGetLeaderHealthEffects]" not in health_loc:
+            issues.append("STP leader health display must expose its current modifiers")
         if "[?STP_party_suspicion|R0]%" not in party_loc:
             issues.append("STP party suspicion must display as a whole-number percentage")
         for legacy in (
@@ -828,13 +873,12 @@ def _validate_civil_war_contract(root: Path, issues: list[str]) -> None:
             > finalizer.index("tree = ADISCORD_STP_postwar_focus")
         ):
             issues.append("bridge focus must complete before the postwar tree is loaded")
-        for bridge in (
-            "STP_The_Mountain_Window",
-            "STP_No_One_Controls_The_Transition",
-            "STP_The_Party_Closes_Ranks",
-        ):
-            if leader.count(bridge) != 1:
-                issues.append(f"postwar leader assignment must complete {bridge} exactly once")
+        transition = extract_named_block(war, "STP_complete_transition_outcome_focus") or ""
+        for outcome, focus in STP_TRANSITION_FOCUS_MAP.items():
+            if outcome not in transition or transition.count(focus) != 1:
+                issues.append(f"transition outcome {outcome} must complete {focus} exactly once")
+        if "STP_complete_transition_outcome_focus = yes" not in leader:
+            issues.append("postwar leader assignment must restore the transition focus for old saves")
         for days in (120, 180, 300, 450):
             countdown = extract_named_block(war, f"VAL_STP_start_war_countdown_{days}") or ""
             for token in (
@@ -976,6 +1020,7 @@ def _validate_civil_war_contract(root: Path, issues: list[str]) -> None:
 
 def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
     focus_text = read(root / "common/national_focus/ADISCORD_national_focus_VAL.txt")
+    goal_shines = read(root / "interface/goals_shine.gfx")
     core = read(root / "common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt")
     triggers = read(root / "common/scripted_triggers/ADISCORD_STP_VAL_crisis_triggers.txt")
     dynamic = read(root / "common/dynamic_modifiers/ADISCORD_STP_VAL_crisis_dynamic_modifiers.txt")
@@ -1003,12 +1048,36 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
             reward = extract_named_block(block, "completion_reward") or ""
             if not _mask_non_code(reward).strip("{} \t\r\n"):
                 issues.append(f"{focus_id} must have a gameplay reward")
+            hidden = extract_named_block(reward, "hidden_effect") or ""
+            internal_effects = (
+                "VAL_change_contract_authority = yes",
+                "VAL_refresh_contract_modifier = yes",
+                "VAL_change_final_war_preparation = yes",
+                "VAL_change_stp_leverage = yes",
+            )
+            for token in internal_effects:
+                if token in reward and token not in hidden:
+                    issues.append(f"{focus_id} exposes internal recalculation {token}")
+            if any(token in reward for token in internal_effects) and "custom_effect_tooltip" not in reward:
+                issues.append(f"{focus_id} must explain hidden gameplay changes with a custom tooltip")
 
         for focus_id, tokens in VAL_FOCUS_REWARD_TOKENS.items():
             reward = extract_named_block(blocks.get(focus_id, ""), "completion_reward") or ""
             for token in tokens:
                 if token not in reward:
                     issues.append(f"{focus_id} reward is missing {token}")
+
+        for focus_id, course_flags in VAL_AI_FOCUS_COURSE_BIASES.items():
+            ai = extract_named_block(blocks.get(focus_id, ""), "ai_will_do") or ""
+            if ai.strip() == "{ base = 1 }":
+                issues.append(f"{focus_id} must not use a context-free AI choice")
+            for flag in course_flags:
+                if f"has_country_flag = {flag}" not in ai:
+                    issues.append(f"{focus_id} AI choice is missing course bias {flag}")
+        for focus_id in ("VAL_Gromovs_Assault_Tables", "VAL_October_Of_2160"):
+            ai = extract_named_block(blocks.get(focus_id, ""), "ai_will_do") or ""
+            if "NOD =" not in ai or "NOD_crisis_posture_guardian" not in ai:
+                issues.append(f"{focus_id} AI choice must react to the live Nodrul posture")
 
         for group in (
             ("VAL_Ballistics_Schools", "VAL_Brokered_Steel"),
@@ -1066,13 +1135,31 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
         if re.search(r"volunteer", _mask_non_code(focus_text + (dynamic or "")), re.IGNORECASE):
             issues.append("VAL contract campaign must not use volunteer modifiers")
 
+        if goal_shines is not None:
+            used_icons = set(re.findall(r"\bicon\s*=\s*(GFX_goal_generic_[A-Za-z0-9_]+)", focus_text))
+            for icon in used_icons:
+                shine = f"{icon}_shine"
+                expected_texture = f'gfx/interface/goals/{icon.removeprefix("GFX_")}.dds'
+                sprite = next(
+                    (
+                        block
+                        for block in _iter_named_blocks(goal_shines, "SpriteType")
+                        if re.search(rf'\bname\s*=\s*"{re.escape(shine)}"', block)
+                    ),
+                    "",
+                )
+                if not sprite:
+                    issues.append(f"VAL focus icon {icon} is missing its shine sprite")
+                elif expected_texture not in sprite or "goal_unknown.dds" in sprite:
+                    issues.append(f"VAL focus icon {icon} has an invalid shine texture")
+
     if core is not None:
         refresh = extract_named_block(core, "VAL_refresh_contract_modifier") or ""
         for band in VAL_CONTRACT_BANDS:
             if f"# VAL contract band {band['minimum']}-{band['maximum']}" not in refresh:
                 issues.append(f"VAL contract modifier is missing band {band['minimum']}-{band['maximum']}")
         if refresh.count("force_update_dynamic_modifier = yes") != 1:
-            issues.append("VAL contract modifier must force-update exactly once behind a band change")
+            issues.append("VAL contract modifier must force-update exactly once per requested refresh")
         for token in (
             "VAL_contract_new_band",
             "VAL_contract_band",
@@ -1080,6 +1167,66 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
         ):
             if token not in refresh:
                 issues.append(f"VAL band-change guard is missing {token}")
+        for flag, assignments in VAL_CONTRACT_SPECIALISATIONS.items():
+            branch = next(
+                (
+                    block
+                    for block in _iter_named_blocks(refresh, "if")
+                    if f"has_country_flag = {flag}" in block
+                ),
+                "",
+            )
+            if not branch:
+                issues.append(f"VAL contract specialisation is missing flag {flag}")
+                continue
+            for variable, value in assignments:
+                token = f"add_to_variable = {{ var = {variable} value = {value} }}"
+                if token not in branch:
+                    issues.append(f"VAL contract specialisation {flag} is missing {token}")
+        readiness = extract_named_block(core, "VAL_recalculate_stp_campaign_readiness") or ""
+        for token in (
+            "VAL_STP_final_war_preparation",
+            "VAL_STP_leverage_component",
+            "value = 0.35",
+            "VAL_contract_authority value = 75",
+            "VAL_STP_intel_43",
+            "VAL_STP_client_garrison",
+            "VAL_STP_resource_rights_45",
+            "VAL_CIN_influence value = 2",
+            "VAL_OSF_influence value = 2",
+            "NOD_crisis_posture_guardian",
+            "value = 15",
+            "clamp_variable = { var = VAL_STP_campaign_readiness min = 0 max = 100 }",
+            "VAL_refresh_stp_campaign_plan_modifier = yes",
+        ):
+            if token not in readiness:
+                issues.append(f"VAL campaign-readiness calculation is missing {token}")
+        plan = extract_named_block(core, "VAL_refresh_stp_campaign_plan_modifier") or ""
+        for threshold in (25, 50, 75):
+            if f"VAL_STP_campaign_readiness value = {threshold}" not in plan:
+                issues.append(f"VAL campaign plan is missing readiness band {threshold}")
+        for token in (
+            "VAL_STP_campaign_attack_factor",
+            "VAL_STP_campaign_defence_factor",
+            "VAL_STP_campaign_planning_factor",
+            "VAL_STP_campaign_supply_factor",
+            "VAL_STP_final_war_active",
+            "modifier = VAL_stelander_campaign_plan",
+        ):
+            if token not in plan:
+                issues.append(f"VAL campaign-plan refresh is missing {token}")
+
+    if dynamic is not None:
+        campaign_plan = extract_named_block(dynamic, "VAL_stelander_campaign_plan") or ""
+        for token in (
+            "has_country_flag = VAL_STP_final_war_active",
+            "army_attack_factor = VAL_STP_campaign_attack_factor",
+            "army_defence_factor = VAL_STP_campaign_defence_factor",
+            "planning_speed = VAL_STP_campaign_planning_factor",
+            "supply_consumption_factor = VAL_STP_campaign_supply_factor",
+        ):
+            if token not in campaign_plan:
+                issues.append(f"VAL campaign dynamic modifier is missing {token}")
 
     if triggers is not None:
         for trigger in (
@@ -1113,6 +1260,10 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
             if _direct_scalar_values(block, "days_remove") != [str(days)]:
                 issues.append(f"{decision_id} must last {days} days")
             available = extract_named_block(block, "available") or ""
+            if "VAL_has_active_stp_civil_war = yes" not in available:
+                issues.append(
+                    f"{decision_id} must remain locked until the saved STP civil war is active"
+                )
             for token in (
                 "VAL_foreign_operation_active",
                 "VAL_STP_target_cooldown",
@@ -1145,7 +1296,11 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
                         if token not in block:
                             issues.append(f"{decision_id} is missing paid captain cost {token}")
                 if suffix == "prepare_separate_terms":
-                    for token in ("civilian_factory_use = 1", "amount = 2"):
+                    for token in (
+                        "civilian_factory_use = 1",
+                        f"VAL_{target}_success_market",
+                        f"VAL_{target}_success_arms",
+                    ):
                         if token not in block:
                             issues.append(f"{decision_id} is missing separate-terms gate {token}")
 
@@ -1170,7 +1325,12 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
         issues.append("missing contract and northern effects: common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt")
     else:
         finish = extract_named_block(contract_effects, "VAL_finish_stp_operation") or ""
-        for token in ("VAL_STP_target_cooldown", "days = 42", "VAL_clear_foreign_operation = yes"):
+        for token in (
+            "VAL_STP_target_cooldown",
+            "days = 42",
+            "VAL_recalculate_stp_campaign_readiness = yes",
+            "VAL_clear_foreign_operation = yes",
+        ):
             if token not in finish:
                 issues.append(f"VAL STP resolver cleanup is missing {token}")
         clear = extract_named_block(contract_effects, "VAL_clear_foreign_operation") or ""
@@ -1310,6 +1470,7 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
             issues.append("a post-warning breach must begin the final war immediately")
         declaration_index = final_war.find("declare_war_on")
         for token in (
+            "VAL_recalculate_stp_campaign_readiness = yes",
             "VAL_STP_cleanup_contract_relations = yes",
             "VAL_clear_foreign_operation = yes",
             "STP_VAL_clear_countdown = yes",
@@ -1331,6 +1492,8 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
         for outcome in (final_val, final_stp):
             if "white_peace" not in outcome:
                 issues.append("final VAL-STP outcomes must be scripted peace, not a conference")
+        if "VAL_STP_campaign_readiness value = 75" not in final_val:
+            issues.append("the contract-client peace requires at least 75 campaign readiness")
 
     if contract_events is None:
         issues.append("missing VAL contract events: events/ADISCORD_VAL_contract_events.txt")
@@ -2052,13 +2215,6 @@ def _validate_gui_contract(root: Path, issues: list[str]) -> None:
 
     for category_id, panel_id, window_id, tag, visible_token in (
         (
-            "STP_crisis_operations",
-            "ADISCORD_STP_crisis_panel",
-            "ADISCORD_STP_crisis_panel_window",
-            "STP",
-            "has_country_flag = STP_main_campaign_side",
-        ),
-        (
             "VAL_contract_campaign",
             "ADISCORD_VAL_contract_panel",
             "ADISCORD_VAL_contract_panel_window",
@@ -2084,8 +2240,13 @@ def _validate_gui_contract(root: Path, issues: list[str]) -> None:
             if token not in panel:
                 issues.append(f"scripted GUI {panel_id} is missing {token}")
         window = block_with_quoted_name(gui, "containerWindowType", window_id)
-        if not re.search(r"size\s*=\s*\{\s*width\s*=\s*580\s+height\s*=\s*470\s*\}", window):
-            issues.append(f"GUI window {window_id} must be exactly 580 by 470")
+        if not re.search(r"size\s*=\s*\{\s*width\s*=\s*460\s+height\s*=\s*470\s*\}", window):
+            issues.append(f"GUI window {window_id} must be exactly 460 by 470")
+        for text_box in _iter_named_blocks(window, "instantTextBoxType"):
+            position = re.search(r"position\s*=\s*\{\s*x\s*=\s*(\d+)", text_box)
+            width = re.search(r"maxWidth\s*=\s*(\d+)", text_box)
+            if position and width and int(position.group(1)) + int(width.group(1)) > 460:
+                issues.append(f"GUI window {window_id} contains a clipped text box")
 
     combined = "\n".join((scripted, gui))
     for forbidden in (
@@ -2145,6 +2306,7 @@ def _validate_gui_contract(root: Path, issues: list[str]) -> None:
         "[?STP_resistance_readiness|0]%",
         "[?STP_party_suspicion|0]%",
         "[?VAL_contract_authority|0]%",
+        "[?VAL_STP_campaign_readiness|0]%",
     ):
         if token not in crisis_russian:
             issues.append(f"crisis GUI percentage must use whole-number literal formatting: {token}")
@@ -2396,7 +2558,7 @@ def _validate_legacy_integration(root: Path, issues: list[str]) -> None:
         "set_variable = { var = VAL_contract_authority value = 35 }"
     )
     schema_commit = initialize.find(
-        "set_variable = { var = ADISCORD_STP_VAL_crisis_schema_version value = 1 }"
+        "set_variable = { var = ADISCORD_STP_VAL_crisis_schema_version value = 2 }"
     )
     if min(suspicion_migration, suspicion_default, val_reconstruction, schema_commit) < 0:
         issues.append("schema initialization is missing a required migration phase")
@@ -2407,6 +2569,13 @@ def _validate_legacy_integration(root: Path, issues: list[str]) -> None:
             issues.append("VAL authority must be reconstructed before schema commit")
     if "NOT = { has_variable = ADISCORD_STP_VAL_crisis_schema_version }" not in initialize:
         issues.append("schema migration lacks its idempotent outer guard")
+    for token in (
+        "check_variable = { var = ADISCORD_STP_VAL_crisis_schema_version value = 2 compare = less_than }",
+        "has_variable = ADISCORD_STP_VAL_crisis_schema_version",
+        "clamp_variable = { var = VAL_contract_authority min = 0 max = 100 }",
+    ):
+        if token not in initialize:
+            issues.append(f"schema v1-to-v2 migration is missing {token}")
     for focus_id, rewards in VAL_FOCUS_REWARD_TOKENS.items():
         if (
             any("VAL_change_contract_authority" in reward for reward in rewards)

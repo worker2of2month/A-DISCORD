@@ -54,6 +54,33 @@ ADISCORD_economy_should_show_player_ui = {
 	is_ai = no
 }
 
+# Shared fiscal state for budget policy and engine-native AI strategies.
+ADISCORD_economy_ai_is_healthy = {
+	check_variable = { var = ADISCORD_economy_ai_state value = 0 compare = less_than_or_equals }
+}
+ADISCORD_economy_ai_is_stressed = {
+	check_variable = { var = ADISCORD_economy_ai_state value = 1 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_ai_state value = 2 compare = less_than }
+}
+ADISCORD_economy_ai_is_crisis = {
+	check_variable = { var = ADISCORD_economy_ai_state value = 2 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_ai_state value = 3 compare = less_than }
+}
+ADISCORD_economy_ai_is_recovery = {
+	check_variable = { var = ADISCORD_economy_ai_state value = 3 compare = greater_than_or_equals }
+}
+ADISCORD_economy_ai_can_fund_advanced_forces = {
+	NOT = { ADISCORD_economy_ai_is_crisis = yes }
+	check_variable = { var = ADISCORD_economy_army_spending_mode value = 2 compare = greater_than_or_equals }
+}
+ADISCORD_economy_ai_can_expand_civilian_economy = {
+	OR = {
+		ADISCORD_economy_ai_is_healthy = yes
+		ADISCORD_economy_ai_is_recovery = yes
+	}
+	check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = greater_than_or_equals }
+}
+
 ADISCORD_economy_window_is_open = {
 	check_variable = { var = ADISCORD_economy_show_window value = 1 compare = greater_than_or_equals }
 }
@@ -193,21 +220,27 @@ ADISCORD_economy_has_high_stretched = { check_variable = { var = ADISCORD_econom
 ADISCORD_economy_is_overstretched = { check_variable = { var = ADISCORD_economy_stretched_level value = 3 compare = greater_than_or_equals } }
 ADISCORD_economy_can_increase_army_spending = {
 	check_variable = { var = ADISCORD_economy_army_spending_mode value = 5 compare = less_than }
+	check_variable = { var = ADISCORD_economy_army_budget_change_cooldown value = 1 compare = less_than }
 }
 ADISCORD_economy_can_decrease_army_spending = {
 	check_variable = { var = ADISCORD_economy_army_spending_mode value = 1 compare = greater_than }
+	check_variable = { var = ADISCORD_economy_army_budget_change_cooldown value = 1 compare = less_than }
 }
 ADISCORD_economy_can_increase_construction_spending = {
 	check_variable = { var = ADISCORD_economy_construction_spending_mode value = 5 compare = less_than }
+	check_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 1 compare = less_than }
 }
 ADISCORD_economy_can_decrease_construction_spending = {
 	check_variable = { var = ADISCORD_economy_construction_spending_mode value = 1 compare = greater_than }
+	check_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 1 compare = less_than }
 }
 ADISCORD_economy_can_increase_tax_burden = {
 	check_variable = { var = ADISCORD_economy_tax_burden_mode value = 5 compare = less_than }
+	check_variable = { var = ADISCORD_economy_tax_change_cooldown value = 1 compare = less_than }
 }
 ADISCORD_economy_can_decrease_tax_burden = {
 	check_variable = { var = ADISCORD_economy_tax_burden_mode value = 1 compare = greater_than }
+	check_variable = { var = ADISCORD_economy_tax_change_cooldown value = 1 compare = less_than }
 }
 
 ADISCORD_economy_tax_burden_mode_1 = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 1 compare = less_than_or_equals } }
@@ -267,6 +300,16 @@ ADISCORD_economy_can_invest_reserves = {
 	}
 }
 
+ADISCORD_economy_can_expand_public_capital = {
+	ADISCORD_economy_can_invest_reserves = yes
+	check_variable = { var = ADISCORD_economy_public_investment_stock value = 10 compare = less_than }
+}
+
+ADISCORD_economy_can_use_civilian_stimulus = {
+	ADISCORD_economy_can_invest_reserves = yes
+	NOT = { has_idea = ADISCORD_economy_civilian_investment }
+}
+
 ADISCORD_economy_can_take_debt = {
 	OR = {
 		NOT = { ADISCORD_economy_model_is_fragmented = yes }
@@ -292,6 +335,7 @@ ADISCORD_economy_can_print_money = {
 	check_variable = { var = ADISCORD_economy_recent_money_printing value = 1 compare = less_than }
 	check_variable = { var = ADISCORD_economy_money_printing_level value = 5 compare = less_than }
 	NOT = { ADISCORD_economy_is_overstretched = yes }
+	NOT = { has_idea = ADISCORD_economy_money_printing }
 }
 
 ADISCORD_economy_can_expand_money_emission = {
@@ -301,6 +345,8 @@ ADISCORD_economy_can_expand_money_emission = {
 
 ADISCORD_economy_can_reduce_money_emission = {
 	check_variable = { var = ADISCORD_economy_money_printing_level value = 0 compare = greater_than }
+	check_variable = { var = ADISCORD_economy_recent_money_printing value = 1 compare = less_than }
+	NOT = { has_idea = ADISCORD_economy_money_printing }
 }
 
 ADISCORD_economy_can_stabilize_macro = {
@@ -317,6 +363,7 @@ ADISCORD_economy_can_restructure_debt = {
 	has_tech = ADISCORD_tech_fiscal_administration_2
 	ADISCORD_economy_has_debt = yes
 	check_variable = { var = ADISCORD_economy_debt value = 100 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_recent_debt value = 1 compare = less_than }
 	OR = {
 		check_variable = { var = ADISCORD_economy_debt_ratio value = 80 compare = greater_than_or_equals }
 		ADISCORD_economy_has_debt_crisis = yes
@@ -332,6 +379,7 @@ ADISCORD_economy_can_early_repay_debt = {
 ADISCORD_economy_can_use_war_taxes = {
 	check_variable = { var = ADISCORD_economy_recent_war_financing value = 1 compare = less_than }
 	ADISCORD_economy_model_allows_emergency_extraction = yes
+	NOT = { has_idea = ADISCORD_economy_war_taxes }
 }
 
 ADISCORD_economy_can_use_military_investment = {
@@ -339,6 +387,7 @@ ADISCORD_economy_can_use_military_investment = {
 	ADISCORD_economy_has_treasury_50 = yes
 	check_variable = { var = ADISCORD_economy_recent_war_financing value = 1 compare = less_than }
 	ADISCORD_economy_model_allows_mobilization_economy = yes
+	NOT = { has_idea = ADISCORD_economy_military_investment }
 }
 
 ADISCORD_economy_has_development_progress_ready = {
