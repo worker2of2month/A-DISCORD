@@ -142,15 +142,15 @@ def validate_dirty(root: Path, issues: list[str]) -> None:
     if effects:
         if re.search(r"\btransfer_state\s*=", effects):
             issues.append("ownerless dirty states must not use transfer_state")
-        if re.search(r"\bset_state_controller_to\s*=", effects):
-            issues.append("ownerless dirty states must not force a separate controller transition")
         for tag, states in DIRTY_GROUPS.items():
             for state_id in states:
                 if re.search(
-                    rf"{state_id}\s*=\s*\{{[^}}]*set_state_owner_to\s*=\s*{tag}\b",
+                    rf"{state_id}\s*=\s*\{{[^}}]*set_state_owner_to\s*=\s*{tag}\b[^}}]*set_state_controller_to\s*=\s*{tag}\b",
                     effects,
                 ) is None:
-                    issues.append(f"dirty state {state_id} is not assigned safely to {tag}")
+                    issues.append(
+                        f"dirty state {state_id} must receive {tag} as owner and then controller"
+                    )
     for path in root.rglob("*.txt"):
         text = read(path) or ""
         if "remove_dynamic_modifier" in text and "ADISCORD_vorkerland_dirty_state" in text:
@@ -178,6 +178,27 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append("collapse effects do not prepare combatant national spirits")
     if dirty_effects and ("give_guarantee" in dirty_effects or "has_guaranteed" in dirty_effects):
         issues.append("dirty-zone activation must not mutate diplomatic relations in the spawn tick")
+    if events:
+        for first_event, second_event, first_tag, second_tag in (
+            (11, 17, "SLA", "MLR"),
+            (12, 18, "RZA", "SCA"),
+            (13, 19, "ERT", "IRT"),
+        ):
+            first_pattern = re.compile(
+                rf"id\s*=\s*ADISCORD_vorkerland_collapse\.{first_event}\b"
+                rf".*?ADISCORD_vorkerland_setup_{first_tag.lower()}\s*=\s*yes"
+                rf".*?id\s*=\s*ADISCORD_vorkerland_collapse\.{second_event}\s+days\s*=\s*7",
+                re.DOTALL,
+            )
+            second_pattern = re.compile(
+                rf"id\s*=\s*ADISCORD_vorkerland_collapse\.{second_event}\b"
+                rf".*?ADISCORD_vorkerland_setup_{second_tag.lower()}\s*=\s*yes",
+                re.DOTALL,
+            )
+            if first_pattern.search(events) is None or second_pattern.search(events) is None:
+                issues.append(
+                    f"dirty wave {first_event} must stagger {first_tag} and {second_tag} by seven days"
+                )
     if ideas and not re.search(
         r"ADISCORD_vorkerland_to_the_last\s*=\s*\{.*?surrender_limit\s*=\s*1\.0",
         ideas,

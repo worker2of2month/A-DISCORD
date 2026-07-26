@@ -167,10 +167,9 @@ country_event = {
 	immediate = {
 		set_global_flag = ADISCORD_vorkerland_dirty_wave_1
 		ADISCORD_vorkerland_setup_sla = yes
-		ADISCORD_vorkerland_setup_mlr = yes
 		country_event = {
-			id = ADISCORD_vorkerland_collapse.14
-			days = 1
+			id = ADISCORD_vorkerland_collapse.17
+			days = 7
 		}
 		country_event = {
 			id = ADISCORD_vorkerland_collapse.12
@@ -192,10 +191,9 @@ country_event = {
 	immediate = {
 		set_global_flag = ADISCORD_vorkerland_dirty_wave_2
 		ADISCORD_vorkerland_setup_rza = yes
-		ADISCORD_vorkerland_setup_sca = yes
 		country_event = {
-			id = ADISCORD_vorkerland_collapse.15
-			days = 1
+			id = ADISCORD_vorkerland_collapse.18
+			days = 7
 		}
 		country_event = {
 			id = ADISCORD_vorkerland_collapse.13
@@ -217,11 +215,64 @@ country_event = {
 	immediate = {
 		set_global_flag = ADISCORD_vorkerland_dirty_wave_3
 		ADISCORD_vorkerland_setup_ert = yes
-		ADISCORD_vorkerland_setup_irt = yes
 		country_event = {
-			id = ADISCORD_vorkerland_collapse.16
-			days = 1
+			id = ADISCORD_vorkerland_collapse.19
+			days = 7
 		}
+	}
+}
+
+# Each second country is materialised on a separate date. HOI4 1.19 rebuilds
+# state ownership, supply and front data asynchronously after a tag appears;
+# creating two ownerless-state countries in one effect can race that rebuild.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.17
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = RUS
+		has_global_flag = ADISCORD_vorkerland_dirty_wave_1
+		country_exists = SLA
+		NOT = { country_exists = MLR }
+	}
+	immediate = {
+		ADISCORD_vorkerland_setup_mlr = yes
+		country_event = { id = ADISCORD_vorkerland_collapse.14 days = 1 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.18
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = RUS
+		has_global_flag = ADISCORD_vorkerland_dirty_wave_2
+		country_exists = RZA
+		NOT = { country_exists = SCA }
+	}
+	immediate = {
+		ADISCORD_vorkerland_setup_sca = yes
+		country_event = { id = ADISCORD_vorkerland_collapse.15 days = 1 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.19
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = RUS
+		has_global_flag = ADISCORD_vorkerland_dirty_wave_3
+		country_exists = ERT
+		NOT = { country_exists = IRT }
+	}
+	immediate = {
+		ADISCORD_vorkerland_setup_irt = yes
+		country_event = { id = ADISCORD_vorkerland_collapse.16 days = 1 }
 	}
 }
 

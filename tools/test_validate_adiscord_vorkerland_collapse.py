@@ -524,7 +524,7 @@ class DirtySpawnTests(unittest.TestCase):
             first,
             r'RUS\s*=\s*\{\s*country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.10\s+days\s*=\s*60\s+random_days\s*=\s*30\s*\}',
         )
-        for event_id in (10, 11, 12, 13):
+        for event_id in (10, 11, 12, 13, 17, 18, 19):
             self.assertEqual(events.count(f'id = ADISCORD_vorkerland_collapse.{event_id}'), 2)
         self.assertIn('set_global_flag = ADISCORD_vorkerland_dirty_opened', events)
         for wave in self.WAVES:
@@ -538,7 +538,7 @@ class DirtySpawnTests(unittest.TestCase):
             for state_id in states:
                 self.assertRegex(
                     setup,
-                    rf'{state_id}\s*=\s*\{{\s*add_core_of\s*=\s*{tag}\s+set_state_owner_to\s*=\s*{tag}\s*\}}',
+                    rf'{state_id}\s*=\s*\{{\s*add_core_of\s*=\s*{tag}\s+set_state_owner_to\s*=\s*{tag}\s+set_state_controller_to\s*=\s*{tag}\s*\}}',
                 )
                 assigned.append(state_id)
             capital = CAPITALS[tag][0]
@@ -547,10 +547,10 @@ class DirtySpawnTests(unittest.TestCase):
             self.assertIn('ADISCORD_economy_initialize_country = yes', setup)
             self.assertIn(f'load_oob = "{tag}_vorkerland_collapse"', setup)
             self.assertLess(setup.index('set_state_owner_to ='), setup.index('load_oob ='))
+            self.assertLess(setup.index('set_state_controller_to ='), setup.index('load_oob ='))
         self.assertEqual(set(assigned), set().union(*map(set, DIRTY_GROUPS.values())))
         self.assertNotIn(23, assigned)
         self.assertNotRegex(effects, r'\btransfer_state\s*=')
-        self.assertNotRegex(effects, r'\bset_state_controller_to\s*=')
         self.assertNotIn('remove_dynamic_modifier', effects)
 
     def test_ownerless_dirty_states_use_the_owner_safe_effect(self):
@@ -563,6 +563,15 @@ class DirtySpawnTests(unittest.TestCase):
                 history = state_path.read_text(encoding='utf-8-sig')
                 self.assertNotRegex(history, r'(?m)^\s*(?:owner|controller)\s*=')
                 self.assertRegex(setup, rf'\bset_state_owner_to\s*=\s*{tag}\b')
+                state_assignment = re.search(
+                    rf'{state_id}\s*=\s*\{{[^}}]+\}}',
+                    setup,
+                ).group(0)
+                self.assertRegex(state_assignment, rf'\bset_state_controller_to\s*=\s*{tag}\b')
+                self.assertLess(
+                    state_assignment.index('set_state_owner_to ='),
+                    state_assignment.index('set_state_controller_to ='),
+                )
 
     def test_waves_spawn_each_tag_once_in_the_intended_order(self):
         events = self.EVENT_PATH.read_text(encoding='utf-8-sig')
@@ -577,6 +586,34 @@ class DirtySpawnTests(unittest.TestCase):
         self.assertEqual(positions, sorted(positions))
         self.assertRegex(events, r'id\s*=\s*ADISCORD_vorkerland_collapse\.12\s+days\s*=\s*45')
         self.assertRegex(events, r'id\s*=\s*ADISCORD_vorkerland_collapse\.13\s+days\s*=\s*45')
+
+    def test_each_dirty_wave_materialises_only_one_country_per_date(self):
+        events = self.EVENT_PATH.read_text(encoding='utf-8-sig')
+        for first_event, second_event, first_tag, second_tag in (
+            (11, 17, 'SLA', 'MLR'),
+            (12, 18, 'RZA', 'SCA'),
+            (13, 19, 'ERT', 'IRT'),
+        ):
+            first_definition = re.search(
+                rf'(?m)^country_event\s*=\s*\{{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.{first_event}\s*$',
+                events,
+            )
+            self.assertIsNotNone(first_definition, first_event)
+            first = self.named_block(events[first_definition.start():], 'country_event')
+            self.assertIn(f'ADISCORD_vorkerland_setup_{first_tag.lower()} = yes', first)
+            self.assertNotIn(f'ADISCORD_vorkerland_setup_{second_tag.lower()} = yes', first)
+            self.assertRegex(
+                first,
+                rf'id\s*=\s*ADISCORD_vorkerland_collapse\.{second_event}\s+days\s*=\s*7',
+            )
+
+            second_definition = re.search(
+                rf'(?m)^country_event\s*=\s*\{{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.{second_event}\s*$',
+                events,
+            )
+            self.assertIsNotNone(second_definition, second_event)
+            second = self.named_block(events[second_definition.start():], 'country_event')
+            self.assertIn(f'ADISCORD_vorkerland_setup_{second_tag.lower()} = yes', second)
 
     def test_intervention_is_limited_to_supplies(self):
         effects = self.EFFECTS_PATH.read_text(encoding='utf-8-sig')
@@ -593,7 +630,7 @@ class DirtySpawnTests(unittest.TestCase):
 
     def test_intervention_waits_for_spawned_country_registration(self):
         events = self.EVENT_PATH.read_text(encoding='utf-8-sig')
-        for wave, spawn_event, intervention_event in ((1, 11, 14), (2, 12, 15), (3, 13, 16)):
+        for wave, spawn_event, intervention_event in ((1, 17, 14), (2, 18, 15), (3, 19, 16)):
             definition = re.search(
                 rf'(?m)^country_event\s*=\s*\{{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.{spawn_event}\s*$',
                 events,
