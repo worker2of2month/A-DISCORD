@@ -148,6 +148,8 @@ def validate_dirty(root: Path, issues: list[str]) -> None:
 def validate_events(root: Path, issues: list[str]) -> None:
     events = require_file(issues, root / "events" / "ADISCORD_vorkerland_collapse_events.txt", "collapse event file")
     effects = require_file(issues, root / "common" / "scripted_effects" / "ADISCORD_vorkerland_collapse_effects.txt", "collapse effects")
+    dirty_effects = require_file(issues, root / "common" / "scripted_effects" / "ADISCORD_vorkerland_collapse_dirty_effects.txt", "dirty-zone collapse effects")
+    ideas = require_file(issues, root / "common" / "ideas" / "ADISCORD_vorkerland_collapse_ideas.txt", "collapse national spirits")
     triggers = require_file(issues, root / "common" / "scripted_triggers" / "ADISCORD_vorkerland_collapse_triggers.txt", "collapse triggers")
     on_actions = require_file(issues, root / "common" / "on_actions" / "01_ADISCORD_vorkerland_collapse_on_actions.txt", "collapse on-actions")
     for text, label in ((events, "events"), (triggers, "triggers"), (on_actions, "on-actions")):
@@ -160,6 +162,16 @@ def validate_events(root: Path, issues: list[str]) -> None:
         ):
             if helper not in effects:
                 issues.append(f"collapse effects are missing {helper}")
+        if "ADISCORD_vorkerland_prepare_conflict_country" not in effects:
+            issues.append("collapse effects do not prepare combatant national spirits")
+    if dirty_effects and ("give_guarantee" in dirty_effects or "has_guaranteed" in dirty_effects):
+        issues.append("dirty-zone activation must not mutate diplomatic relations in the spawn tick")
+    if ideas and not re.search(
+        r"ADISCORD_vorkerland_to_the_last\s*=\s*\{.*?surrender_limit\s*=\s*1\.0",
+        ideas,
+        re.DOTALL,
+    ):
+        issues.append("the To the Last spirit must provide +100% capitulation limit")
 
 
 def validate_ai(root: Path, issues: list[str]) -> None:

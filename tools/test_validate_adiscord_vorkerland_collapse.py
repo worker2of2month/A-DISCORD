@@ -166,6 +166,33 @@ class CountryRosterTests(unittest.TestCase):
                 if line.strip():
                     self.assertRegex(line, r'^\s+[A-Za-z0-9_.-]+:\s*".*"\s*$')
 
+    def test_fragment_names_are_polities_not_bureaucratic_placeholders(self):
+        localisation = (
+            validator.ROOT / 'localisation' / 'russian' / 'ADISCORD_vorkerland_collapse_l_russian.yml'
+        ).read_text(encoding='utf-8-sig')
+        expected = {
+            'TVA': 'Технократический Воркерланд',
+            'EYR': 'Эйрмийская республика',
+            'EGC': 'Эйрмийский военный совет',
+            'WPA': 'Западная республика',
+            'WPS': 'Западный союз',
+            'PSD': 'Пепельная республика',
+            'EBA': 'Восточное содружество',
+            'DVA': 'Долинская республика',
+            'SRA': 'Республика Солнечной Равнины',
+            'ZTA': 'Златореченская республика',
+            'SLA': 'Старолесская республика',
+            'RZA': 'Союз Реакторной зоны',
+            'MLR': 'Республика Малой низины',
+            'ERT': 'Восточная республика',
+            'IRT': 'Республика Внутренних земель',
+            'SCA': 'Южная федерация',
+        }
+        for tag, name in expected.items():
+            self.assertRegex(localisation, rf'(?m)^\s*{tag}:\s*"{re.escape(name)}"\s*$')
+        for placeholder in ('Управление снабжения', 'восстановительная территория', 'администрация'):
+            self.assertNotIn(placeholder.lower(), localisation.lower())
+
     def test_collapse_oobs_use_ordered_division_name_blocks(self):
         root = validator.ROOT / 'history' / 'units'
         for tag in TAGS:
@@ -539,10 +566,8 @@ class DirtySpawnTests(unittest.TestCase):
         self.assertRegex(events, r'id\s*=\s*ADISCORD_vorkerland_collapse\.12\s+days\s*=\s*45')
         self.assertRegex(events, r'id\s*=\s*ADISCORD_vorkerland_collapse\.13\s+days\s*=\s*45')
 
-    def test_intervention_is_limited_to_supplies_and_guarantees(self):
+    def test_intervention_is_limited_to_supplies(self):
         effects = self.EFFECTS_PATH.read_text(encoding='utf-8-sig')
-        self.assertIsNotNone(re.search(r'RUS\s*=\s*\{.*?give_guarantee\s*=\s*SLA', effects, re.DOTALL))
-        self.assertIsNotNone(re.search(r'EFL\s*=\s*\{.*?give_guarantee\s*=\s*SCA', effects, re.DOTALL))
         for producer, recipient in (('RUS', 'SLA'), ('EFL', 'SCA'), ('VAL', 'ERT'), ('CIN', 'IRT')):
             self.assertIsNotNone(re.search(
                 rf'{recipient}\s*=\s*\{{.*?add_equipment_to_stockpile\s*=\s*\{{.*?producer\s*=\s*{producer}',
@@ -551,6 +576,76 @@ class DirtySpawnTests(unittest.TestCase):
             ))
         self.assertNotIn('declare_war_on', effects)
         self.assertNotIn('annex_everything', effects)
+        self.assertNotIn('give_guarantee', effects)
+        self.assertNotIn('has_guaranteed', effects)
+
+    def test_intervention_waits_for_spawned_country_registration(self):
+        events = self.EVENT_PATH.read_text(encoding='utf-8-sig')
+        for wave, spawn_event, intervention_event in ((1, 11, 14), (2, 12, 15), (3, 13, 16)):
+            definition = re.search(
+                rf'(?m)^country_event\s*=\s*\{{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.{spawn_event}\s*$',
+                events,
+            )
+            self.assertIsNotNone(definition, spawn_event)
+            block = self.named_block(events[definition.start():], 'country_event')
+            self.assertNotIn(f'ADISCORD_vorkerland_intervene_wave_{wave} = yes', block)
+            self.assertRegex(
+                block,
+                rf'country_event\s*=\s*\{{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.{intervention_event}\s+days\s*=\s*1\s*\}}',
+            )
+
+            intervention_definition = re.search(
+                rf'(?m)^country_event\s*=\s*\{{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.{intervention_event}\s*$',
+                events,
+            )
+            self.assertIsNotNone(intervention_definition, intervention_event)
+            intervention = self.named_block(events[intervention_definition.start():], 'country_event')
+            self.assertIn(f'ADISCORD_vorkerland_intervene_wave_{wave} = yes', intervention)
+
+
+class ConflictSpiritTests(unittest.TestCase):
+    ROOT = validator.ROOT
+    IDEA_PATH = ROOT / 'common' / 'ideas' / 'ADISCORD_vorkerland_collapse_ideas.txt'
+    EFFECTS_PATH = ROOT / 'common' / 'scripted_effects' / 'ADISCORD_vorkerland_collapse_effects.txt'
+    DIRTY_EFFECTS_PATH = ROOT / 'common' / 'scripted_effects' / 'ADISCORD_vorkerland_collapse_dirty_effects.txt'
+    MAPS_PATH = ROOT / 'common' / 'scripted_effects' / 'ADISCORD_vorkerland_collapse_map_effects.txt'
+
+    @staticmethod
+    def named_block(text, identifier):
+        return EventOrchestrationTests.named_block(text, identifier)
+
+    def test_to_the_last_has_exact_capitulation_modifier(self):
+        ideas = self.IDEA_PATH.read_text(encoding='utf-8-sig')
+        spirit = self.named_block(ideas, 'ADISCORD_vorkerland_to_the_last')
+        self.assertRegex(spirit, r'\bsurrender_limit\s*=\s*1\.0\b')
+        self.assertRegex(spirit, r'\bremoval_cost\s*=\s*-1\b')
+
+    def test_all_collapse_combatants_receive_the_shared_spirit(self):
+        effects = self.EFFECTS_PATH.read_text(encoding='utf-8-sig')
+        dirty = self.DIRTY_EFFECTS_PATH.read_text(encoding='utf-8-sig')
+        preparation = self.named_block(effects, 'ADISCORD_vorkerland_prepare_conflict_country')
+        for old_spirit in (
+            'WRK_ashes_of_the_crown',
+            'WRK_hourglass_of_discord',
+            'WRK_constitution_of_the_republic',
+            'VLA_national_spirit',
+        ):
+            self.assertIn(f'remove_ideas = {old_spirit}', preparation)
+        self.assertIn('add_ideas = ADISCORD_vorkerland_to_the_last', preparation)
+
+        initial = self.named_block(effects, 'ADISCORD_vorkerland_prepare_initial_combatants')
+        for tag in ('WRK', 'VAD', 'ZAO', 'PWR', 'VLA', 'ROM', 'SOL', 'TRU'):
+            self.assertRegex(initial, rf'\b{tag}\s*=\s*\{{\s*ADISCORD_vorkerland_prepare_conflict_country\s*=\s*yes\s*\}}')
+        for tag in TAGS:
+            source = dirty if tag in DIRTY_GROUPS else effects
+            setup = self.named_block(source, f'ADISCORD_vorkerland_setup_{tag.lower()}')
+            self.assertIn('ADISCORD_vorkerland_prepare_conflict_country = yes', setup)
+
+    def test_outcomes_remove_the_wartime_spirit(self):
+        maps = self.MAPS_PATH.read_text(encoding='utf-8-sig')
+        for outcome in ('worker', 'vlad', 'dorian', 'fragmented'):
+            block = self.named_block(maps, f'ADISCORD_vorkerland_apply_{outcome}_map')
+            self.assertIn('ADISCORD_vorkerland_remove_conflict_spirits = yes', block)
 
 
 class OutcomeTests(unittest.TestCase):

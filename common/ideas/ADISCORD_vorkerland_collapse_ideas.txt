@@ -1,0 +1,25 @@
+ideas = {
+	country = {
+		ADISCORD_vorkerland_to_the_last = {
+			picture = generic_war_preparation
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			modifier = {
+				surrender_limit = 1.0
+			}
+
+			ai_will_do = {
+				factor = 0
+			}
+		}
+	}
+}

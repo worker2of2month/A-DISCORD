@@ -66,6 +66,7 @@ ADISCORD_vorkerland_setup_sla = {
 		set_capital = { state = 49 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
+		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "SLA_vorkerland_collapse"
 	}
 }
@@ -85,6 +86,7 @@ ADISCORD_vorkerland_setup_rza = {
 		set_capital = { state = 177 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
+		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "RZA_vorkerland_collapse"
 	}
 }
@@ -108,6 +110,7 @@ ADISCORD_vorkerland_setup_mlr = {
 		set_capital = { state = 152 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
+		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "MLR_vorkerland_collapse"
 	}
 }
@@ -131,6 +134,7 @@ ADISCORD_vorkerland_setup_ert = {
 		set_capital = { state = 169 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
+		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "ERT_vorkerland_collapse"
 	}
 }
@@ -154,6 +158,7 @@ ADISCORD_vorkerland_setup_irt = {
 		set_capital = { state = 181 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
+		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "IRT_vorkerland_collapse"
 	}
 }
@@ -173,6 +178,7 @@ ADISCORD_vorkerland_setup_sca = {
 		set_capital = { state = 173 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
+		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "SCA_vorkerland_collapse"
 	}
 }
@@ -180,9 +186,6 @@ ADISCORD_vorkerland_setup_sca = {
 ADISCORD_vorkerland_intervene_wave_1 = {
 	if = {
 		limit = { RUS = { exists = yes } }
-		RUS = {
-			if = { limit = { NOT = { has_guaranteed = SLA } } give_guarantee = SLA }
-		}
 		SLA = {
 			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 300 producer = RUS }
 			add_equipment_to_stockpile = { type = support_equipment_1 amount = 150 producer = RUS }
@@ -193,9 +196,6 @@ ADISCORD_vorkerland_intervene_wave_1 = {
 ADISCORD_vorkerland_intervene_wave_2 = {
 	if = {
 		limit = { EFL = { exists = yes } }
-		EFL = {
-			if = { limit = { NOT = { has_guaranteed = SCA } } give_guarantee = SCA }
-		}
 		SCA = {
 			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 250 producer = EFL }
 			add_equipment_to_stockpile = { type = support_equipment_1 amount = 125 producer = EFL }
