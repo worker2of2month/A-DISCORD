@@ -1,0 +1,51 @@
+guiTypes = {
+	# Temporary presentation adapted from TNO's Siberian anarchy diplomacy
+	# overlay. All tokens are namespaced so the art can be replaced later.
+	containerWindowType = {
+		name = "ADISCORD_Dirty_Zone_Diplomacy_Container"
+		position = { x = 0 y = 0 }
+		size = { width = 540 height = -11 }
+
+		iconType = {
+			name = "ADISCORD_Dirty_Zone_Relations_Block"
+			position = { x = 324 y = -45 }
+			spriteType = "GFX_ADISCORD_Dirty_Zone_Relations_Block"
+		}
+
+		containerWindowType = {
+			name = "ADISCORD_Dirty_Zone_Wallpaper_Container"
+			position = { x = 12 y = -12 }
+
+			iconType = {
+				name = "ADISCORD_Dirty_Zone_Wallpaper"
+				spriteType = "GFX_ADISCORD_Dirty_Zone_Wallpaper"
+				position = { x = 0 y = 0 }
+				pdx_tooltip = ADISCORD_dirty_zone_title_tt
+				pdx_tooltip_delayed = ADISCORD_dirty_zone_desc_tt
+			}
+		}
+
+		containerWindowType = {
+			name = "ADISCORD_Dirty_Zone_Animation_Clip"
+			position = { x = 280 y = 380 }
+			size = { width = 250 height = -11 }
+			verticalScrollbar = "right_vertical_slider"
+
+			background = {
+				name = "ADISCORD_Dirty_Zone_Animation_Clip_Background"
+				quadTextureSprite = "GFX_tiled_window_transparent"
+			}
+			iconType = {
+				name = "ADISCORD_Dirty_Zone_Scrollbar_Block"
+				position = { x = 235 y = 0 }
+				spriteType = "GFX_ADISCORD_Dirty_Zone_Scrollbar_Block"
+			}
+			iconType = {
+				name = "ADISCORD_Dirty_Zone_Animation"
+				position = { x = 0 y = 0 }
+				quadTextureSprite = "GFX_ADISCORD_Dirty_Zone_Animation"
+				pdx_tooltip = ADISCORD_dirty_zone_diplomacy_tt
+			}
+		}
+	}
+}

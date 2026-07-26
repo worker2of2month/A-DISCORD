@@ -1,0 +1,22 @@
+spriteTypes = {
+	spriteType = {
+		name = "GFX_ADISCORD_Dirty_Zone_Relations_Block"
+		textureFile = "gfx/interface/ADISCORD_dirty_zone/relations_block.dds"
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_Dirty_Zone_Scrollbar_Block"
+		textureFile = "gfx/interface/ADISCORD_dirty_zone/scrollbar_block.dds"
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_Dirty_Zone_Wallpaper"
+		textureFile = "gfx/interface/ADISCORD_dirty_zone/dirty_zone_wallpaper.dds"
+	}
+	frameAnimatedSpriteType = {
+		name = "GFX_ADISCORD_Dirty_Zone_Animation"
+		textureFile = "gfx/interface/ADISCORD_dirty_zone/dirty_zone_animation.dds"
+		noOfFrames = 17
+		animation_rate_fps = 2
+		looping = yes
+		play_on_show = yes
+	}
+}

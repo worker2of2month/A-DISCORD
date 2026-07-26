@@ -1,0 +1,20 @@
+capital = 181
+
+set_politics = {
+	ruling_party = pragmatism
+	elections_allowed = no
+}
+
+set_popularities = {
+	etatism = 0
+	chauvinism = 0
+	humanism = 0
+	pragmatism = 100
+	technocracy = 0
+}
+
+recruit_character = EXZ_No_Authority
+set_research_slots = 0
+set_political_power = 0
+set_country_flag = ADISCORD_vorkerland_dirty_zone_placeholder
+country_lock_all_division_template = yes

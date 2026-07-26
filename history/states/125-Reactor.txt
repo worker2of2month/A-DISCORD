@@ -9,4 +9,8 @@ state={
 	buildings_max_level_factor=1
 	local_supplies=0.25
 	state_category = wasteland
+	history = {
+		owner = EXZ
+		add_core_of = EXZ
+	}
 }

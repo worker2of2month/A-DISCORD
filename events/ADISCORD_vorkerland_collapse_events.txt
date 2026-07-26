@@ -224,7 +224,7 @@ country_event = {
 
 # Each second country is materialised on a separate date. HOI4 1.19 rebuilds
 # state ownership, supply and front data asynchronously after a tag appears;
-# creating two ownerless-state countries in one effect can race that rebuild.
+# creating two closed-zone countries in one effect can race that rebuild.
 country_event = {
 	id = ADISCORD_vorkerland_collapse.17
 	hidden = yes

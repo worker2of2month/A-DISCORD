@@ -48,10 +48,9 @@ ADISCORD_vorkerland_apply_dirty_state_modifier = {
 }
 
 ADISCORD_vorkerland_setup_sla = {
-	log = "[ADISCORD Vorkerland] SLA ownerless-state setup started"
-	# Dirty-zone states have neither an owner nor a controller before opening.
-	# Set the owner first, then the controller, so asynchronous map/front updates
-	# never observe a country-owned state whose controller is still null.
+	log = "[ADISCORD Vorkerland] SLA exclusion-zone setup started"
+	# EXZ owns and controls every closed-zone state from game start. Keep the
+	# explicit owner-then-controller order when a successor materialises.
 	49 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
 	51 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
 	155 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
@@ -70,7 +69,7 @@ ADISCORD_vorkerland_setup_sla = {
 }
 
 ADISCORD_vorkerland_setup_rza = {
-	log = "[ADISCORD Vorkerland] RZA ownerless-state setup started"
+	log = "[ADISCORD Vorkerland] RZA exclusion-zone setup started"
 	125 = { add_core_of = RZA set_state_owner_to = RZA set_state_controller_to = RZA }
 	177 = { add_core_of = RZA set_state_owner_to = RZA set_state_controller_to = RZA }
 	188 = { add_core_of = RZA set_state_owner_to = RZA set_state_controller_to = RZA }
@@ -87,7 +86,7 @@ ADISCORD_vorkerland_setup_rza = {
 }
 
 ADISCORD_vorkerland_setup_mlr = {
-	log = "[ADISCORD Vorkerland] MLR ownerless-state setup started"
+	log = "[ADISCORD Vorkerland] MLR exclusion-zone setup started"
 	152 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
 	153 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
 	154 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
@@ -106,7 +105,7 @@ ADISCORD_vorkerland_setup_mlr = {
 }
 
 ADISCORD_vorkerland_setup_ert = {
-	log = "[ADISCORD Vorkerland] ERT ownerless-state setup started"
+	log = "[ADISCORD Vorkerland] ERT exclusion-zone setup started"
 	167 = { add_core_of = ERT set_state_owner_to = ERT set_state_controller_to = ERT }
 	168 = { add_core_of = ERT set_state_owner_to = ERT set_state_controller_to = ERT }
 	169 = { add_core_of = ERT set_state_owner_to = ERT set_state_controller_to = ERT }
@@ -125,7 +124,7 @@ ADISCORD_vorkerland_setup_ert = {
 }
 
 ADISCORD_vorkerland_setup_irt = {
-	log = "[ADISCORD Vorkerland] IRT ownerless-state setup started"
+	log = "[ADISCORD Vorkerland] IRT exclusion-zone setup started"
 	178 = { add_core_of = IRT set_state_owner_to = IRT set_state_controller_to = IRT }
 	180 = { add_core_of = IRT set_state_owner_to = IRT set_state_controller_to = IRT }
 	181 = { add_core_of = IRT set_state_owner_to = IRT set_state_controller_to = IRT }
@@ -144,7 +143,7 @@ ADISCORD_vorkerland_setup_irt = {
 }
 
 ADISCORD_vorkerland_setup_sca = {
-	log = "[ADISCORD Vorkerland] SCA ownerless-state setup started"
+	log = "[ADISCORD Vorkerland] SCA exclusion-zone setup started"
 	165 = { add_core_of = SCA set_state_owner_to = SCA set_state_controller_to = SCA }
 	166 = { add_core_of = SCA set_state_owner_to = SCA set_state_controller_to = SCA }
 	172 = { add_core_of = SCA set_state_owner_to = SCA set_state_controller_to = SCA }

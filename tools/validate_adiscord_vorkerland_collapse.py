@@ -120,6 +120,24 @@ def validate_countries(root: Path, issues: list[str]) -> None:
             if not flag.exists():
                 issues.append(f"missing {size or 'large'} flag for {tag}")
 
+    if tag_text and re.search(r'(?m)^\s*EXZ\s*=\s*"countries/EXZ\.txt"', tag_text) is None:
+        issues.append("the exclusion-zone placeholder tag EXZ is absent from the tag registry")
+    require_file(issues, root / "common" / "countries" / "EXZ.txt", "country definition for EXZ")
+    exz_histories = list((root / "history" / "countries").glob("EXZ - *.txt"))
+    if not exz_histories:
+        issues.append("missing country history for the exclusion-zone placeholder EXZ")
+    placeholder_characters = require_file(
+        issues,
+        root / "common" / "characters" / "ADISCORD_dirty_zone_characters.txt",
+        "exclusion-zone character database",
+    )
+    if placeholder_characters and "EXZ_No_Authority" not in placeholder_characters:
+        issues.append("exclusion-zone character database has no No Authority leader")
+    for size in ("", "medium", "small"):
+        flag = root / "gfx" / "flags" / size / "EXZ.tga" if size else root / "gfx" / "flags" / "EXZ.tga"
+        if not flag.exists():
+            issues.append(f"missing {size or 'large'} black flag for EXZ")
+
 
 def validate_dirty(root: Path, issues: list[str]) -> None:
     modifier = require_file(
@@ -141,9 +159,15 @@ def validate_dirty(root: Path, issues: list[str]) -> None:
         issues.append("dirty-state application effect is missing")
     if effects:
         if re.search(r"\btransfer_state\s*=", effects):
-            issues.append("ownerless dirty states must not use transfer_state")
+            issues.append("dirty-zone successor setup must not use transfer_state")
         for tag, states in DIRTY_GROUPS.items():
             for state_id in states:
+                path = state_file(root, state_id)
+                history = read(path) if path else None
+                if history is None or re.search(r"(?m)^\s*owner\s*=\s*EXZ\s*$", history) is None:
+                    issues.append(f"dirty state {state_id} is not owned by EXZ at game start")
+                if history is None or re.search(r"(?m)^\s*add_core_of\s*=\s*EXZ\s*$", history) is None:
+                    issues.append(f"dirty state {state_id} is not cored by EXZ at game start")
                 if re.search(
                     rf"{state_id}\s*=\s*\{{[^}}]*set_state_owner_to\s*=\s*{tag}\b[^}}]*set_state_controller_to\s*=\s*{tag}\b",
                     effects,
@@ -151,6 +175,37 @@ def validate_dirty(root: Path, issues: list[str]) -> None:
                     issues.append(
                         f"dirty state {state_id} must receive {tag} as owner and then controller"
                     )
+        excluded = CONTAMINATED_STATES - set().union(*(set(states) for states in DIRTY_GROUPS.values()))
+        for state_id in excluded:
+            path = state_file(root, state_id)
+            history = read(path) if path else None
+            if history and re.search(r"(?m)^\s*owner\s*=\s*EXZ\s*$", history):
+                issues.append(f"excluded contaminated state {state_id} must not be assigned to EXZ")
+
+    gui_files = (
+        (root / "interface" / "ADISCORD_dirty_zone.gui", "dirty-zone GUI"),
+        (root / "interface" / "ADISCORD_dirty_zone.gfx", "dirty-zone GFX"),
+        (root / "common" / "scripted_guis" / "ADISCORD_dirty_zone_scripted_gui.txt", "dirty-zone scripted GUI"),
+        (root / "common" / "scripted_triggers" / "ADISCORD_dirty_zone_triggers.txt", "dirty-zone GUI trigger"),
+    )
+    gui_text = "\n".join(require_file(issues, path, label) for path, label in gui_files)
+    for token in (
+        "ADISCORD_Dirty_Zone_Diplomacy_Container",
+        "selected_country_context",
+        "parent_window_token = selected_country_view",
+        "original_tag = EXZ",
+        "GFX_ADISCORD_Dirty_Zone_Wallpaper",
+    ):
+        if token not in gui_text:
+            issues.append(f"dirty-zone diplomacy overlay is missing {token}")
+    for asset in (
+        "dirty_zone_wallpaper.dds",
+        "dirty_zone_animation.dds",
+        "relations_block.dds",
+        "scrollbar_block.dds",
+    ):
+        if not (root / "gfx" / "interface" / "ADISCORD_dirty_zone" / asset).exists():
+            issues.append(f"dirty-zone diplomacy overlay is missing {asset}")
     for path in root.rglob("*.txt"):
         text = read(path) or ""
         if "remove_dynamic_modifier" in text and "ADISCORD_vorkerland_dirty_state" in text:

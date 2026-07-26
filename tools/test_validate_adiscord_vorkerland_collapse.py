@@ -252,7 +252,7 @@ class DirtyStateTests(unittest.TestCase):
                 removals.append(path.relative_to(validator.ROOT).as_posix())
         self.assertEqual(removals, [])
 
-    def test_spawn_states_are_playable_and_ownerless(self):
+    def test_spawn_states_are_playable_and_owned_by_placeholder(self):
         for state_id in self.SPAWN_STATES:
             path = validator.state_file(validator.ROOT, state_id)
             self.assertIsNotNone(path, f'missing spawn state {state_id}')
@@ -260,7 +260,8 @@ class DirtyStateTests(unittest.TestCase):
             self.assertRegex(text, r'\bmanpower\s*=\s*[1-9]\d*\b', f'state {state_id} needs positive manpower')
             self.assertRegex(text, r'\bstate_category\s*=\s*\w+', f'state {state_id} needs a category')
             self.assertRegex(text, r'\blocal_supplies\s*=\s*0\.[0-9]*[1-9]\d*', f'state {state_id} needs local supplies')
-            self.assertNotRegex(text, r'(?m)^\s*(owner|add_core_of|add_state_core|controller)\s*=', f'state {state_id} must stay ownerless')
+            self.assertRegex(text, r'(?m)^\s*owner\s*=\s*EXZ\s*$', f'state {state_id} must belong to EXZ')
+            self.assertRegex(text, r'(?m)^\s*add_core_of\s*=\s*EXZ\s*$', f'state {state_id} must be an EXZ core')
 
     def test_capital_states_have_exact_vp_and_buildings(self):
         for state_id, (province, vp, building) in self.CAPITALS.items():
@@ -553,7 +554,7 @@ class DirtySpawnTests(unittest.TestCase):
         self.assertNotRegex(effects, r'\btransfer_state\s*=')
         self.assertNotIn('remove_dynamic_modifier', effects)
 
-    def test_ownerless_dirty_states_use_the_owner_safe_effect(self):
+    def test_dirty_states_start_under_the_exclusion_zone_placeholder(self):
         effects = self.EFFECTS_PATH.read_text(encoding='utf-8-sig')
         for tag, states in DIRTY_GROUPS.items():
             setup = self.named_block(effects, f'ADISCORD_vorkerland_setup_{tag.lower()}')
@@ -561,7 +562,8 @@ class DirtySpawnTests(unittest.TestCase):
                 state_path = validator.state_file(self.ROOT, state_id)
                 self.assertIsNotNone(state_path)
                 history = state_path.read_text(encoding='utf-8-sig')
-                self.assertNotRegex(history, r'(?m)^\s*(?:owner|controller)\s*=')
+                self.assertRegex(history, r'(?m)^\s*owner\s*=\s*EXZ\s*$')
+                self.assertRegex(history, r'(?m)^\s*add_core_of\s*=\s*EXZ\s*$')
                 self.assertRegex(setup, rf'\bset_state_owner_to\s*=\s*{tag}\b')
                 state_assignment = re.search(
                     rf'{state_id}\s*=\s*\{{[^}}]+\}}',
@@ -572,6 +574,49 @@ class DirtySpawnTests(unittest.TestCase):
                     state_assignment.index('set_state_owner_to ='),
                     state_assignment.index('set_state_controller_to ='),
                 )
+
+        for state_id in CONTAMINATED_STATES - set().union(*map(set, DIRTY_GROUPS.values())):
+            state_path = validator.state_file(self.ROOT, state_id)
+            self.assertIsNotNone(state_path)
+            history = state_path.read_text(encoding='utf-8-sig')
+            self.assertNotRegex(history, r'(?m)^\s*owner\s*=\s*EXZ\s*$')
+
+    def test_exclusion_zone_has_a_namespaced_tno_style_diplomacy_overlay(self):
+        root = self.ROOT
+        tags = (root / 'common' / 'country_tags' / '01_ADISCORD_vorkerland_collapse_tags.txt').read_text(encoding='utf-8-sig')
+        country = (root / 'common' / 'countries' / 'EXZ.txt').read_text(encoding='utf-8-sig')
+        history = next((root / 'history' / 'countries').glob('EXZ - *.txt')).read_text(encoding='utf-8-sig')
+        characters = (root / 'common' / 'characters' / 'ADISCORD_dirty_zone_characters.txt').read_text(encoding='utf-8-sig')
+        trigger = (root / 'common' / 'scripted_triggers' / 'ADISCORD_dirty_zone_triggers.txt').read_text(encoding='utf-8-sig')
+        scripted_gui = (root / 'common' / 'scripted_guis' / 'ADISCORD_dirty_zone_scripted_gui.txt').read_text(encoding='utf-8-sig')
+        gui = (root / 'interface' / 'ADISCORD_dirty_zone.gui').read_text(encoding='utf-8-sig')
+        gfx = (root / 'interface' / 'ADISCORD_dirty_zone.gfx').read_text(encoding='utf-8-sig')
+        localisation = (root / 'localisation' / 'russian' / 'ADISCORD_vorkerland_collapse_l_russian.yml').read_text(encoding='utf-8-sig')
+
+        self.assertRegex(tags, r'(?m)^EXZ\s*=\s*"countries/EXZ\.txt"$')
+        self.assertIn('color = rgb { 39 43 46 }', country)
+        self.assertIn('recruit_character = EXZ_No_Authority', history)
+        self.assertIn('set_country_flag = ADISCORD_vorkerland_dirty_zone_placeholder', history)
+        self.assertIn('EXZ_No_Authority', characters)
+        self.assertIn('original_tag = EXZ', trigger)
+        self.assertIn('context_type = selected_country_context', scripted_gui)
+        self.assertIn('parent_window_token = selected_country_view', scripted_gui)
+        self.assertIn('ADISCORD_Dirty_Zone_Diplomacy_Container', gui)
+        self.assertIn('GFX_ADISCORD_Dirty_Zone_Wallpaper', gfx)
+        self.assertRegex(localisation, r'(?m)^ EXZ:\s*""$')
+
+        for relative in (
+            'gfx/interface/ADISCORD_dirty_zone/dirty_zone_wallpaper.dds',
+            'gfx/interface/ADISCORD_dirty_zone/dirty_zone_animation.dds',
+            'gfx/interface/ADISCORD_dirty_zone/relations_block.dds',
+            'gfx/interface/ADISCORD_dirty_zone/scrollbar_block.dds',
+            'gfx/flags/EXZ.tga',
+            'gfx/flags/medium/EXZ.tga',
+            'gfx/flags/small/EXZ.tga',
+        ):
+            path = root / relative
+            self.assertTrue(path.is_file(), relative)
+            self.assertGreater(path.stat().st_size, 0, relative)
 
     def test_waves_spawn_each_tag_once_in_the_intended_order(self):
         events = self.EVENT_PATH.read_text(encoding='utf-8-sig')

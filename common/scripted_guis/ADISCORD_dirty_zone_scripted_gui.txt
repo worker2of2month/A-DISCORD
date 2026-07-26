@@ -1,0 +1,8 @@
+scripted_gui = {
+	ADISCORD_dirty_zone_diplomacy = {
+		context_type = selected_country_context
+		parent_window_token = selected_country_view
+		window_name = "ADISCORD_Dirty_Zone_Diplomacy_Container"
+		visible = { ADISCORD_vorkerland_dirty_zone_visible = yes }
+	}
+}
