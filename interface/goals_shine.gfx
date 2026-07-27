@@ -262,6 +262,65 @@ spriteTypes = {
 		legacy_lazy_load = no
 	}
 
+	####VAL
+
+	SpriteType = {
+		name = "GFX_focus_VAL_The_Weaponry_Baron_shine"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_The_Weaponry_Baron.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/VAL/GFX_focus_VAL_The_Weaponry_Baron.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_VAL_Contracts_Outlive_Kings_shine"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Contracts_Outlive_Kings.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/VAL/GFX_focus_VAL_Contracts_Outlive_Kings.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_VAL_Different_Views_On_Freedom_shine"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Different_Views_On_Freedom.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/VAL/GFX_focus_VAL_Different_Views_On_Freedom.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
 	SpriteType = { name = "GFX_goal_generic_allies_build_infantry_shine" texturefile = "gfx/interface/goals/goal_generic_allies_build_infantry.dds" }
 	SpriteType = { name = "GFX_goal_generic_army_doctrines_shine" texturefile = "gfx/interface/goals/goal_generic_army_doctrines.dds" }
 	SpriteType = { name = "GFX_goal_generic_attack_allies_shine" texturefile = "gfx/interface/goals/goal_generic_attack_allies.dds" }

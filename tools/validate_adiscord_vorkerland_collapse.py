@@ -63,8 +63,8 @@ def validate_manifest(issues: list[str]) -> None:
     dirty_states = set().union(*(set(group) for group in DIRTY_GROUPS.values()))
     if len(TAGS) != 16 or len(TAGS) != len(set(TAGS)):
         issues.append("manifest must define 16 unique fixed tags")
-    if len(CONTAMINATED_STATES) != 37:
-        issues.append("manifest must define 37 contaminated states")
+    if len(CONTAMINATED_STATES) != 59:
+        issues.append("manifest must define 59 contaminated states")
     if (
         dirty_states != CONTAMINATED_STATES - {23, 24, 57, 59, 60}
         or len(dirty_sequence) != len(dirty_states)
@@ -312,6 +312,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
 
 def validate_ai(root: Path, issues: list[str]) -> None:
     ai = require_file(issues, root / "common" / "ai_strategy" / "ADISCORD_vorkerland_collapse_ai.txt", "collapse AI strategy file")
+    defines = require_file(issues, root / "common" / "defines" / "ADISCORD_defines_changes.lua", "global AI defines")
     effects = require_file(issues, root / "common" / "scripted_effects" / "ADISCORD_vorkerland_collapse_effects.txt", "collapse phase effects")
     on_actions = require_file(issues, root / "common" / "on_actions" / "01_ADISCORD_vorkerland_collapse_on_actions.txt", "collapse phase on-actions")
     if ai:
@@ -326,6 +327,26 @@ def validate_ai(root: Path, issues: list[str]) -> None:
         for token in ("ADISCORD_vorkerland_khan_border_offensive", "has_war_with = SLA", "type = conquer id = SLA"):
             if token not in ai:
                 issues.append(f"Khan border-war AI is missing {token}")
+        for token in (
+            "ADISCORD_vorkerland_force_front_commitment",
+            "type = front_unit_request",
+            "value = 100",
+            "priority = 1500",
+            "execution_type = rush",
+            "execute_order = yes",
+            "manual_attack = yes",
+        ):
+            if token not in ai:
+                issues.append(f"collapse low-supply front commitment is missing {token}")
+    if defines:
+        for token in (
+            "NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_HIGH = 0.15",
+            "NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_HIGH = 0.25",
+            "NDefines.NAI.FRONT_EVAL_UNIT_SUPPLY_AND_ORG_LACK_IMPACT = 0.2",
+            "NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT = 0.0",
+        ):
+            if token not in defines:
+                issues.append(f"global low-supply AI handling is missing {token}")
     if effects and "ADISCORD_vorkerland_update_ai_phase" not in effects:
         issues.append("collapse AI phase updater is missing")
     if on_actions:

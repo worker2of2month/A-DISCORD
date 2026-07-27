@@ -65,6 +65,9 @@ ADISCORD_vorkerland_apply_worker_map = {
 	ADISCORD_vorkerland_remove_conflict_spirits = yes
 	WRK = {
 		transfer_state = 27
+		transfer_state = 200
+		transfer_state = 201
+		transfer_state = 202
 		transfer_state = 32
 		transfer_state = 33
 		transfer_state = 34
@@ -94,6 +97,9 @@ ADISCORD_vorkerland_apply_worker_map = {
 		set_capital = { state = 32 }
 	}
 	27 = { add_core_of = WRK set_state_controller_to = WRK }
+	200 = { add_core_of = WRK set_state_controller_to = WRK }
+	201 = { add_core_of = WRK set_state_controller_to = WRK }
+	202 = { add_core_of = WRK set_state_controller_to = WRK }
 	32 = { add_core_of = WRK set_state_controller_to = WRK }
 	33 = { add_core_of = WRK set_state_controller_to = WRK }
 	34 = { add_core_of = WRK set_state_controller_to = WRK }
@@ -156,6 +162,9 @@ ADISCORD_vorkerland_apply_vlad_map = {
 	ADISCORD_vorkerland_remove_conflict_spirits = yes
 	VAD = {
 		transfer_state = 27
+		transfer_state = 200
+		transfer_state = 201
+		transfer_state = 202
 		transfer_state = 32
 		transfer_state = 33
 		transfer_state = 34
@@ -185,6 +194,9 @@ ADISCORD_vorkerland_apply_vlad_map = {
 		set_capital = { state = 75 }
 	}
 	27 = { add_core_of = VAD set_state_controller_to = VAD }
+	200 = { add_core_of = VAD set_state_controller_to = VAD }
+	201 = { add_core_of = VAD set_state_controller_to = VAD }
+	202 = { add_core_of = VAD set_state_controller_to = VAD }
 	32 = { add_core_of = VAD set_state_controller_to = VAD }
 	33 = { add_core_of = VAD set_state_controller_to = VAD }
 	34 = { add_core_of = VAD set_state_controller_to = VAD }
@@ -257,6 +269,9 @@ ADISCORD_vorkerland_apply_dorian_map = {
 	ADISCORD_vorkerland_remove_conflict_spirits = yes
 	TVA = {
 		transfer_state = 27
+		transfer_state = 200
+		transfer_state = 201
+		transfer_state = 202
 		transfer_state = 32
 		transfer_state = 33
 		transfer_state = 34
@@ -272,6 +287,9 @@ ADISCORD_vorkerland_apply_dorian_map = {
 		set_capital = { state = 36 }
 	}
 	27 = { add_core_of = TVA set_state_controller_to = TVA }
+	200 = { add_core_of = TVA set_state_controller_to = TVA }
+	201 = { add_core_of = TVA set_state_controller_to = TVA }
+	202 = { add_core_of = TVA set_state_controller_to = TVA }
 	32 = { add_core_of = TVA set_state_controller_to = TVA }
 	33 = { add_core_of = TVA set_state_controller_to = TVA }
 	34 = { add_core_of = TVA set_state_controller_to = TVA }

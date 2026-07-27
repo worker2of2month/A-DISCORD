@@ -100,6 +100,93 @@ ADISCORD_vorkerland_combat_endgame = {
 	ai_strategy = { type = force_concentration_factor value = 25 }
 }
 
+# Expert AI-style execution override for the background civil war. The ordinary
+# target blocks below still decide which neighbouring front matters; this layer
+# only keeps divisions assigned and battle plans active when supply is poor.
+ADISCORD_vorkerland_force_front_commitment = {
+	allowed = {
+		OR = {
+			tag = WRK
+			tag = TVA
+			tag = VAD
+			tag = EYR
+			tag = EGC
+			tag = ZAO
+			tag = WPA
+			tag = WPS
+			tag = PWR
+			tag = PSD
+			tag = VLA
+			tag = EBA
+			tag = ROM
+			tag = DVA
+			tag = SOL
+			tag = SRA
+			tag = TRU
+			tag = ZTA
+		}
+	}
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		has_war = yes
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_phase_consolidate
+			has_country_flag = ADISCORD_vorkerland_phase_regional
+			has_country_flag = ADISCORD_vorkerland_phase_endgame
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_unit_request
+		value = 100
+		tag = WRK
+		tag = TVA
+		tag = VAD
+		tag = EYR
+		tag = EGC
+		tag = ZAO
+		tag = WPA
+		tag = WPS
+		tag = PWR
+		tag = PSD
+		tag = VLA
+		tag = EBA
+		tag = ROM
+		tag = DVA
+		tag = SOL
+		tag = SRA
+		tag = TRU
+		tag = ZTA
+	}
+	ai_strategy = {
+		type = front_control
+		tag = WRK
+		tag = TVA
+		tag = VAD
+		tag = EYR
+		tag = EGC
+		tag = ZAO
+		tag = WPA
+		tag = WPS
+		tag = PWR
+		tag = PSD
+		tag = VLA
+		tag = EBA
+		tag = ROM
+		tag = DVA
+		tag = SOL
+		tag = SRA
+		tag = TRU
+		tag = ZTA
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = rush
+		execute_order = yes
+		manual_attack = yes
+	}
+}
+
 ADISCORD_vorkerland_sla_dirty_defense = {
 	allowed = { tag = SLA }
 	enable = {

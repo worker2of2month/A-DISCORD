@@ -50,7 +50,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_The_Weaponry_Baron
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_VAL_The_Weaponry_Baron
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		relative_position_id = VAL_The_Contract_State
 		x = 0
@@ -583,7 +583,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Different_Views_On_Freedom
-		icon = GFX_goal_generic_propaganda
+		icon = GFX_focus_VAL_Different_Views_On_Freedom
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		relative_position_id = VAL_Market_Roads_North
 		x = 0
@@ -614,7 +614,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Contracts_Outlive_Kings
-		icon = GFX_goal_generic_major_war
+		icon = GFX_focus_VAL_Contracts_Outlive_Kings
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		relative_position_id = VAL_One_Ledger_One_Banner
 		x = 0

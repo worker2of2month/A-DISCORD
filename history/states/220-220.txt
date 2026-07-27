@@ -1,0 +1,15 @@
+state={
+	id=220
+	name="STATE_220"
+	provinces={
+		354 690 2123 2741 3458 3696 4533 5194 5700 6196 6220 7164 7650 8557 9692 10064 10571 10584 10950 12725
+	}
+	manpower=30000
+	buildings_max_level_factor=1
+	state_category=rural
+	local_supplies=0.25
+	history = {
+		owner = EXZ
+		add_core_of = EXZ
+	}
+}

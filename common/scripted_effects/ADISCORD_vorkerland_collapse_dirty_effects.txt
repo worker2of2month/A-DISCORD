@@ -36,6 +36,28 @@ ADISCORD_vorkerland_apply_dirty_modifiers = {
     191 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     192 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     193 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    203 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    204 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    205 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    206 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    207 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    208 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    209 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    210 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    211 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    212 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    213 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    214 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    215 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    216 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    217 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    218 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    219 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    220 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    221 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    222 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    223 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+    224 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
 }
 
 ADISCORD_vorkerland_apply_dirty_state_modifier = {
@@ -73,6 +95,13 @@ ADISCORD_vorkerland_setup_rza = {
 	177 = { add_core_of = RZA set_state_owner_to = RZA set_state_controller_to = RZA }
 	188 = { add_core_of = RZA set_state_owner_to = RZA set_state_controller_to = RZA }
 	192 = { add_core_of = RZA set_state_owner_to = RZA set_state_controller_to = RZA }
+	208 = { add_core_of = RZA set_state_owner_to = RZA set_state_controller_to = RZA }
+	213 = { add_core_of = RZA set_state_owner_to = RZA set_state_controller_to = RZA }
+	214 = { add_core_of = RZA set_state_owner_to = RZA set_state_controller_to = RZA }
+	215 = { add_core_of = RZA set_state_owner_to = RZA set_state_controller_to = RZA }
+	216 = { add_core_of = RZA set_state_owner_to = RZA set_state_controller_to = RZA }
+	217 = { add_core_of = RZA set_state_owner_to = RZA set_state_controller_to = RZA }
+	220 = { add_core_of = RZA set_state_owner_to = RZA set_state_controller_to = RZA }
 	log = "[ADISCORD Vorkerland] RZA state ownership assigned"
 	RZA = {
 		set_capital = { state = 177 }
@@ -91,6 +120,12 @@ ADISCORD_vorkerland_setup_mlr = {
 	160 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
 	189 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
 	190 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
+	218 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
+	219 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
+	221 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
+	222 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
+	223 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
+	224 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
 	log = "[ADISCORD Vorkerland] MLR state ownership assigned"
 	MLR = {
 		set_capital = { state = 152 }
@@ -109,6 +144,7 @@ ADISCORD_vorkerland_setup_ert = {
 	171 = { add_core_of = ERT set_state_owner_to = ERT set_state_controller_to = ERT }
 	184 = { add_core_of = ERT set_state_owner_to = ERT set_state_controller_to = ERT }
 	185 = { add_core_of = ERT set_state_owner_to = ERT set_state_controller_to = ERT }
+	203 = { add_core_of = ERT set_state_owner_to = ERT set_state_controller_to = ERT }
 	log = "[ADISCORD Vorkerland] ERT state ownership assigned"
 	ERT = {
 		set_capital = { state = 169 }
@@ -127,6 +163,8 @@ ADISCORD_vorkerland_setup_irt = {
 	182 = { add_core_of = IRT set_state_owner_to = IRT set_state_controller_to = IRT }
 	183 = { add_core_of = IRT set_state_owner_to = IRT set_state_controller_to = IRT }
 	193 = { add_core_of = IRT set_state_owner_to = IRT set_state_controller_to = IRT }
+	206 = { add_core_of = IRT set_state_owner_to = IRT set_state_controller_to = IRT }
+	207 = { add_core_of = IRT set_state_owner_to = IRT set_state_controller_to = IRT }
 	log = "[ADISCORD Vorkerland] IRT state ownership assigned"
 	IRT = {
 		set_capital = { state = 181 }
@@ -143,6 +181,12 @@ ADISCORD_vorkerland_setup_sca = {
 	166 = { add_core_of = SCA set_state_owner_to = SCA set_state_controller_to = SCA }
 	172 = { add_core_of = SCA set_state_owner_to = SCA set_state_controller_to = SCA }
 	173 = { add_core_of = SCA set_state_owner_to = SCA set_state_controller_to = SCA }
+	204 = { add_core_of = SCA set_state_owner_to = SCA set_state_controller_to = SCA }
+	205 = { add_core_of = SCA set_state_owner_to = SCA set_state_controller_to = SCA }
+	209 = { add_core_of = SCA set_state_owner_to = SCA set_state_controller_to = SCA }
+	210 = { add_core_of = SCA set_state_owner_to = SCA set_state_controller_to = SCA }
+	211 = { add_core_of = SCA set_state_owner_to = SCA set_state_controller_to = SCA }
+	212 = { add_core_of = SCA set_state_owner_to = SCA set_state_controller_to = SCA }
 	log = "[ADISCORD Vorkerland] SCA state ownership assigned"
 	SCA = {
 		set_capital = { state = 173 }

@@ -1,0 +1,15 @@
+state={
+	id=232
+	name="STATE_232"
+	provinces={
+		11546
+	}
+	manpower=3000
+	buildings_max_level_factor=1
+	state_category=rural
+	local_supplies=0
+	history = {
+		owner = PIV
+		add_core_of = PIV
+	}
+}

@@ -17,7 +17,7 @@ class ManifestTests(unittest.TestCase):
     def test_manifest_is_unique_and_complete(self):
         self.assertEqual(len(TAGS), len(set(TAGS)))
         self.assertEqual(len(TAGS), 16)
-        self.assertEqual(len(CONTAMINATED_STATES), 37)
+        self.assertEqual(len(CONTAMINATED_STATES), 59)
         self.assertEqual(
             set().union(*map(set, DIRTY_GROUPS.values())),
             CONTAMINATED_STATES - {23, 24, 57, 59, 60},
@@ -284,7 +284,7 @@ class EventOrchestrationTests(unittest.TestCase):
     ON_ACTIONS_PATH = ROOT / 'common' / 'on_actions' / '01_ADISCORD_vorkerland_collapse_on_actions.txt'
 
     INITIAL_MAP = {
-        'WRK': (27, 32, 33, 34, 35, 40, 79, 82, 105),
+        'WRK': (27, 32, 33, 34, 35, 40, 79, 82, 105, 200, 201, 202),
         'TVA': (36, 37, 38, 39), 'VAD': (75, 106, 107, 121, 123),
         'EYR': (102, 108, 109, 111, 122), 'EGC': (81, 104, 110, 124),
         'ZAO': (72,), 'WPA': (195,), 'WPS': (196,), 'PWR': (71, 90, 91),
@@ -503,6 +503,28 @@ class AIStrategyTests(unittest.TestCase):
         for _, target in re.findall(r'type\s*=\s*(front_control|conquer).*?(?:tag|id)\s*=\s*([A-Z]{3})', ai, re.DOTALL):
             self.assertIn(target, set().union(*map(set, self.ADJACENCY.values())) | {'SLA'})
         self.assertNotIn('start_civil_war', ai)
+
+    def test_civil_war_keeps_expert_ai_style_front_commitment_under_low_supply(self):
+        ai = self.AI_PATH.read_text(encoding='utf-8-sig')
+        block = dict(self.top_level_blocks(ai)).get('ADISCORD_vorkerland_force_front_commitment', '')
+        self.assertTrue(block, 'low-supply front commitment strategy is missing')
+        self.assertIn('type = front_unit_request', block)
+        self.assertRegex(block, r'type\s*=\s*front_unit_request(?s:.*?)value\s*=\s*100')
+        self.assertRegex(block, r'type\s*=\s*front_control(?s:.*?)ratio\s*=\s*0\.01')
+        self.assertRegex(block, r'type\s*=\s*front_control(?s:.*?)priority\s*=\s*1500')
+        self.assertRegex(block, r'type\s*=\s*front_control(?s:.*?)execution_type\s*=\s*rush')
+        self.assertRegex(block, r'type\s*=\s*front_control(?s:.*?)execute_order\s*=\s*yes')
+        self.assertRegex(block, r'type\s*=\s*front_control(?s:.*?)manual_attack\s*=\s*yes')
+        for tag in self.COMBAT_TAGS:
+            self.assertRegex(block, rf'\btag\s*=\s*{tag}\b')
+
+    def test_global_ai_can_keep_aggressive_plans_alive_in_supply_crises(self):
+        defines_path = self.ROOT / 'common' / 'defines' / 'ADISCORD_defines_changes.lua'
+        defines = defines_path.read_text(encoding='utf-8-sig')
+        self.assertIn('NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_HIGH = 0.15', defines)
+        self.assertIn('NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_HIGH = 0.25', defines)
+        self.assertIn('NDefines.NAI.FRONT_EVAL_UNIT_SUPPLY_AND_ORG_LACK_IMPACT = 0.2', defines)
+        self.assertIn('NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT = 0.0', defines)
 
     def test_dirty_tags_only_receive_defensive_infantry_coverage(self):
         ai = self.AI_PATH.read_text(encoding='utf-8-sig')
@@ -790,7 +812,7 @@ class OutcomeTests(unittest.TestCase):
     TRIGGERS = ROOT / 'common' / 'scripted_triggers' / 'ADISCORD_vorkerland_collapse_triggers.txt'
     MAPS = ROOT / 'common' / 'scripted_effects' / 'ADISCORD_vorkerland_collapse_map_effects.txt'
     OUTCOMES_ON_ACTION = ROOT / 'common' / 'on_actions' / '02_ADISCORD_vorkerland_collapse_outcomes_on_actions.txt'
-    CENTRAL = {27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 75, 79, 81, 82, 102, 104, 105, 106, 107, 108, 109, 110, 111, 121, 122, 123, 124}
+    CENTRAL = {27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 75, 79, 81, 82, 102, 104, 105, 106, 107, 108, 109, 110, 111, 121, 122, 123, 124, 200, 201, 202}
     ALL_WAR_STATES = CENTRAL | {72, 195, 196, 71, 90, 91, 93, 94, 194, 74, 197, 73, 144, 145, 76, 198, 80, 199}
 
     @staticmethod
@@ -860,7 +882,7 @@ class OutcomeTests(unittest.TestCase):
         validator.validate_outcomes(self.ROOT, issues)
         self.assertEqual(issues, [])
 
-    def test_each_final_map_covers_only_the_forty_five_war_states(self):
+    def test_each_final_map_covers_only_the_war_states(self):
         maps = self.MAPS.read_text(encoding='utf-8-sig')
         for name in ('worker', 'vlad', 'dorian'):
             block = self.named_block(maps, f'ADISCORD_vorkerland_apply_{name}_map')

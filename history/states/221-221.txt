@@ -1,0 +1,15 @@
+state={
+	id=221
+	name="STATE_221"
+	provinces={
+		1707 4300 4580 4581 4905 7753 7890 9736 9786 9843 10788
+	}
+	manpower=16500
+	buildings_max_level_factor=1
+	state_category=rural
+	local_supplies=0.25
+	history = {
+		owner = EXZ
+		add_core_of = EXZ
+	}
+}

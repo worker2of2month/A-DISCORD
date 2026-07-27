@@ -1,0 +1,15 @@
+state={
+	id=228
+	name="STATE_228"
+	provinces={
+		180 947 1559 3024 3243 3351 3884 6145 6231 6649 6816 6893 8682 10993 11043 11422
+	}
+	manpower=17600
+	buildings_max_level_factor=1
+	state_category=rural
+	local_supplies=0
+	history = {
+		owner = NAM
+		add_core_of = NAM
+	}
+}

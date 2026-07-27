@@ -56,4 +56,19 @@ spriteTypes = {
 	  	name = "STP_bookmark_operation"
 	  	texturefile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_operation.png"
 	}
+
+###VAL
+
+	spriteType = {
+		name = "GFX_focus_VAL_The_Weaponry_Baron"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_The_Weaponry_Baron.png"
+	}
+	spriteType = {
+		name = "GFX_focus_VAL_Contracts_Outlive_Kings"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Contracts_Outlive_Kings.png"
+	}
+	spriteType = {
+		name = "GFX_focus_VAL_Different_Views_On_Freedom"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Different_Views_On_Freedom.png"
+	}
 }
