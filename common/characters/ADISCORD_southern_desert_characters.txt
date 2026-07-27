@@ -1,0 +1,101 @@
+characters = {
+	KDR_Rashid_al_Kadir = {
+		name = KDR_Rashid_al_Kadir
+		portraits = { civilian = { large = GFX_portrait_KDR_Rashid_al_Kadir } }
+		country_leader = {
+			ideology = chauvinism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = KDR_Rashid_al_Kadir_desc
+			traits = { KDR_keeper_of_caravan_law }
+		}
+	}
+	RHM_Faris_Rahma = {
+		name = RHM_Faris_Rahma
+		portraits = { civilian = { large = GFX_portrait_RHM_Faris_Rahma } }
+		country_leader = {
+			ideology = humanism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = RHM_Faris_Rahma_desc
+			traits = { RHM_first_voice_of_cisterns }
+		}
+	}
+	SDR_Hamid_Sahr = {
+		name = SDR_Hamid_Sahr
+		portraits = { civilian = { large = GFX_portrait_SDR_Hamid_Sahr } }
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = SDR_Hamid_Sahr_desc
+			traits = { SDR_marshal_of_the_dry_bed }
+		}
+	}
+	MZR_Ration_Assembly = {
+		name = MZR_Ration_Assembly
+		portraits = { civilian = { large = GFX_portrait_PLACEHOLDER } }
+		country_leader = {
+			ideology = utilitarism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = MZR_Ration_Assembly_desc
+			traits = { MZR_stewards_of_common_wells }
+		}
+	}
+	KYZ_Qanat_Assembly = {
+		name = KYZ_Qanat_Assembly
+		portraits = { civilian = { large = GFX_portrait_PLACEHOLDER } }
+		country_leader = {
+			ideology = anarchism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = KYZ_Qanat_Assembly_desc
+			traits = { KYZ_voice_of_the_communes }
+		}
+	}
+	SHL_Jalil_Nur = {
+		name = SHL_Jalil_Nur
+		portraits = { civilian = { large = GFX_portrait_SHL_Jalil_Nur } }
+		country_leader = {
+			ideology = aristocratic_hedonism
+			expire = "2200.1.1.1"
+			id = -1
+			desc = SHL_Jalil_Nur_desc
+			traits = { SHL_mediator_of_nine_furnaces }
+		}
+	}
+	GLP_Miran_Veyr = {
+		name = GLP_Miran_Veyr
+		portraits = { civilian = { large = GFX_portrait_GLP_Miran_Veyr } }
+		country_leader = {
+			ideology = hedonism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = GLP_Miran_Veyr_desc
+			traits = { GLP_broker_of_glass_ports }
+		}
+	}
+	AZH_Samir_Azhar = {
+		name = AZH_Samir_Azhar
+		portraits = { civilian = { large = GFX_portrait_AZH_Samir_Azhar } }
+		country_leader = {
+			ideology = etatism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = AZH_Samir_Azhar_desc
+			traits = { AZH_warden_of_the_black_basin }
+		}
+	}
+	WEF_Elina_Fenn = {
+		name = WEF_Elina_Fenn
+		portraits = { civilian = { large = GFX_portrait_WEF_Elina_Fenn } }
+		country_leader = {
+			ideology = utilitarism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = WEF_Elina_Fenn_desc
+			traits = { WEF_mayor_of_the_last_bridge }
+		}
+	}
+}

@@ -1,19 +1,16 @@
 state={
 	id=197
-	name=STATE_197
+	name="STATE_197"
+
+	history = {
+		owner = VLA
+		add_core_of = VLA
+	}
 	provinces={
-		1386 2131 2474 6341 6560 6839 7406 9688 10016 10251 12923 16605 16608 16623 16626
+		1386 2131 2474 6560 6839 7406 10016 10251 16623 
 	}
 	manpower=70000
-	state_category=rural
 	buildings_max_level_factor=1
+	state_category=rural
 	local_supplies=0
-	history={
-		owner=VLA
-		buildings={
-			infrastructure=1
-		}
-		add_core_of=VLA
-		victory_points={ 10016 3 }
-	}
 }

@@ -1,0 +1,18 @@
+state = {
+	id = 312
+	name = "STATE_312"
+	manpower = 53976
+	state_category = rural
+	history = {
+		owner = VLA
+		add_core_of = VLA
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		1794 10911 11471 16637
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

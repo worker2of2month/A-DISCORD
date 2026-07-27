@@ -2,11 +2,15 @@ state={
 	id=50
 	name="STATE_50"
 	provinces={
-		3088 9395 11419 16631
+		11419
 	}
 	manpower=0
 	impassable = yes
 	buildings_max_level_factor=1
 	state_category=wasteland
 	local_supplies=0
+	history = {
+		owner = EXZ
+		add_core_of = EXZ
+	}
 }

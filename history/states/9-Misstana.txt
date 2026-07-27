@@ -2,7 +2,7 @@ state={
 	id=9
 	name="STATE_9"
 	provinces={
-		5 19 20 65 115 11534 16447 16506 16549 
+		5 19 20 65 115 11534 16447 16506 16549 16651
 	}
 	manpower=120000
 	buildings_max_level_factor=1.000
@@ -16,6 +16,7 @@ state={
 		add_core_of = BCM
 
 		victory_points = { 16447 10 }
+		victory_points = { 16651 1 }
 	}
 
 	state_category=town

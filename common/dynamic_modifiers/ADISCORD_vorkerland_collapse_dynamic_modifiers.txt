@@ -1,9 +1,26 @@
 ADISCORD_vorkerland_dirty_state = {
-    enable = { always = yes }
-    icon = GFX_modifiers_sabotaged_resource
-    local_manpower = -0.75
-    state_resources_factor = -0.60
-    local_building_slots_factor = -0.40
-    state_production_speed_buildings_factor = -0.50
-    local_supply_impact_factor = 0.35
+	enable = { always = yes }
+	icon = GFX_modifiers_sabotaged_resource
+	local_manpower = -0.75
+	state_resources_factor = -0.60
+	local_building_slots_factor = -0.40
+	state_production_speed_buildings_factor = -0.50
+	local_supply_impact_factor = 0.35
+}
+
+ADISCORD_vorkerland_war_weariness = {
+	icon = GFX_idea_generic_demoralized_populace
+	custom_modifier_tooltip = ADISCORD_vorkerland_war_weariness_level_tt
+	enable = {
+		check_variable = {
+			var = ADISCORD_vorkerland_war_weariness_level
+			value = 1
+			compare = greater_than_or_equals
+		}
+	}
+
+	war_support_factor = ADISCORD_vorkerland_war_weariness_war_support_factor
+	stability_factor = ADISCORD_vorkerland_war_weariness_stability_factor
+	consumer_goods_factor = ADISCORD_vorkerland_war_weariness_consumer_goods_factor
+	surrender_limit = ADISCORD_vorkerland_surrender_limit_offset
 }

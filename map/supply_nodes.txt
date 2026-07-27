@@ -1,3 +1,74 @@
-1 45 
-1 6713 
-1 16374 
+# Existing hubs
+1 45
+1 6713
+1 16374
+
+# National capital regions
+1 1493   # APH
+1 16365  # BBV
+1 16447  # BCM
+1 16496  # BGT
+1 16527  # BHG
+1 16439  # BJK
+1 16452  # BLD
+1 16556  # BTL
+1 3595   # CIN
+1 75     # COF
+1 569    # DAN
+1 259    # EFL
+1 2226   # EXZ
+1 16568  # IVN
+1 176    # NAM
+1 16441  # NOD
+1 16339  # OSF
+1 4218   # PIV
+1 16591  # PWR
+1 16571  # ROM
+1 16531  # RUS
+1 16582  # SOL
+1 16533  # TFF
+1 3083   # TRU
+1 16594  # VAD
+1 16521  # VAL
+1 16585  # VLA
+1 16355  # WIT
+1 16372  # YPR
+1 16622  # ZAO
+
+# Western and central urban corridors
+1 16440
+1 16547
+1 16450
+1 16356
+1 11
+1 16511
+1 16478
+1 16340
+
+# Vorkerland industrial belt
+1 3248
+1 16426
+1 16388
+1 12227
+1 16397
+1 16584
+
+# Vadland and eastern railway belt
+1 16593
+1 16574
+1 16566
+1 7567
+
+# Populated exclusion-zone railway stops
+1 10693
+1 2952
+1 16517
+1 8535
+
+# Post-collapse regional centers
+1 2339
+1 8032
+1 7129
+1 10016
+1 9104
+1 12930

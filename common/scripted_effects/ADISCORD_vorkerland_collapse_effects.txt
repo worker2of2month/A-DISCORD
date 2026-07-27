@@ -1,3 +1,115 @@
+ADISCORD_vorkerland_refresh_war_weariness = {
+	set_variable = {
+		var = ADISCORD_vorkerland_war_weariness_war_support_factor
+		value = ADISCORD_vorkerland_war_weariness_level
+	}
+	multiply_variable = { var = ADISCORD_vorkerland_war_weariness_war_support_factor value = -0.10 }
+	set_variable = {
+		var = ADISCORD_vorkerland_war_weariness_stability_factor
+		value = ADISCORD_vorkerland_war_weariness_level
+	}
+	multiply_variable = { var = ADISCORD_vorkerland_war_weariness_stability_factor value = -0.05 }
+	set_variable = {
+		var = ADISCORD_vorkerland_war_weariness_consumer_goods_factor
+		value = ADISCORD_vorkerland_war_weariness_level
+	}
+	multiply_variable = { var = ADISCORD_vorkerland_war_weariness_consumer_goods_factor value = 0.03 }
+	if = {
+		limit = {
+			has_dynamic_modifier = { modifier = ADISCORD_vorkerland_war_weariness }
+		}
+		force_update_dynamic_modifier = yes
+	}
+	else = {
+		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_war_weariness }
+	}
+}
+
+ADISCORD_vorkerland_increase_war_weariness = {
+	# Removing the compatibility idea is harmless in a fresh game and migrates
+	# an old save before the stronger dynamic values are applied.
+	remove_ideas = ADISCORD_vorkerland_war_weariness
+	add_to_variable = { var = ADISCORD_vorkerland_war_weariness_level value = 1 }
+	clamp_variable = { var = ADISCORD_vorkerland_war_weariness_level min = 1 max = 5 }
+	add_to_variable = { var = ADISCORD_vorkerland_surrender_limit_offset value = -0.05 }
+	clamp_variable = { var = ADISCORD_vorkerland_surrender_limit_offset min = -1 max = 0 }
+	ADISCORD_vorkerland_refresh_war_weariness = yes
+}
+
+ADISCORD_vorkerland_clear_war_weariness = {
+	remove_ideas = ADISCORD_vorkerland_war_weariness
+	if = {
+		limit = {
+			has_dynamic_modifier = { modifier = ADISCORD_vorkerland_war_weariness }
+		}
+		remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_war_weariness }
+	}
+	clear_variable = ADISCORD_vorkerland_war_weariness_level
+	clear_variable = ADISCORD_vorkerland_war_weariness_war_support_factor
+	clear_variable = ADISCORD_vorkerland_war_weariness_stability_factor
+	clear_variable = ADISCORD_vorkerland_war_weariness_consumer_goods_factor
+	clear_variable = ADISCORD_vorkerland_surrender_limit_offset
+}
+
+ADISCORD_vorkerland_migrate_war_weariness = {
+	if = {
+		limit = { has_idea = ADISCORD_vorkerland_war_weariness }
+		remove_ideas = ADISCORD_vorkerland_war_weariness
+		set_variable = { var = ADISCORD_vorkerland_war_weariness_level value = 1 }
+		set_variable = { var = ADISCORD_vorkerland_surrender_limit_offset value = -0.05 }
+		ADISCORD_vorkerland_refresh_war_weariness = yes
+		if = {
+			limit = {
+				NOT = { has_capitulated = yes }
+				has_war = yes
+			}
+			activate_mission = ADISCORD_vorkerland_stalemate_deadline
+		}
+	}
+	# Saves made with the first dynamic-weariness implementation already have
+	# a level but no capitulation decay variable. Reconstruct the missed decay.
+	if = {
+		limit = {
+			has_dynamic_modifier = { modifier = ADISCORD_vorkerland_war_weariness }
+			NOT = { has_variable = ADISCORD_vorkerland_surrender_limit_offset }
+		}
+		set_variable = {
+			var = ADISCORD_vorkerland_surrender_limit_offset
+			value = ADISCORD_vorkerland_war_weariness_level
+		}
+		multiply_variable = { var = ADISCORD_vorkerland_surrender_limit_offset value = -0.05 }
+		clamp_variable = { var = ADISCORD_vorkerland_surrender_limit_offset min = -1 max = 0 }
+		ADISCORD_vorkerland_refresh_war_weariness = yes
+	}
+}
+
+ADISCORD_vorkerland_migrate_conflict_weariness = {
+	WRK = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	VAD = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	TVA = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	EYR = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	EGC = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	ZAO = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	WPA = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	WPS = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	PWR = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	PSD = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	VLA = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	EBA = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	ROM = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	DVA = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	SOL = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	SRA = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	TRU = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	ZTA = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	SLA = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	RZA = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	MLR = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	ERT = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	IRT = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+	SCA = { ADISCORD_vorkerland_migrate_war_weariness = yes }
+}
+
 ADISCORD_vorkerland_prepare_conflict_country = {
 	# The old confederation spirits no longer describe any side after the split.
 	# Ministers are left intact; only national spirits are replaced.
@@ -5,6 +117,7 @@ ADISCORD_vorkerland_prepare_conflict_country = {
 	remove_ideas = WRK_hourglass_of_discord
 	remove_ideas = WRK_constitution_of_the_republic
 	remove_ideas = VLA_national_spirit
+	ADISCORD_vorkerland_clear_war_weariness = yes
 	add_ideas = ADISCORD_vorkerland_to_the_last
 }
 
@@ -19,31 +132,61 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 	TRU = { ADISCORD_vorkerland_prepare_conflict_country = yes }
 }
 
+# One engine-managed mission per combatant replaces outcome polling. The mission
+# only handles a prolonged stalemate; capitulation itself resolves the winner.
+ADISCORD_vorkerland_activate_stalemate_missions = {
+	if = { limit = { country_exists = WRK } WRK = { activate_mission = ADISCORD_vorkerland_stalemate_deadline } }
+	if = { limit = { country_exists = TVA } TVA = { activate_mission = ADISCORD_vorkerland_stalemate_deadline } }
+	if = { limit = { country_exists = VAD } VAD = { activate_mission = ADISCORD_vorkerland_stalemate_deadline } }
+	if = { limit = { country_exists = EYR } EYR = { activate_mission = ADISCORD_vorkerland_stalemate_deadline } }
+	if = { limit = { country_exists = EGC } EGC = { activate_mission = ADISCORD_vorkerland_stalemate_deadline } }
+	if = { limit = { country_exists = ZAO } ZAO = { activate_mission = ADISCORD_vorkerland_stalemate_deadline } }
+	if = { limit = { country_exists = WPA } WPA = { activate_mission = ADISCORD_vorkerland_stalemate_deadline } }
+	if = { limit = { country_exists = WPS } WPS = { activate_mission = ADISCORD_vorkerland_stalemate_deadline } }
+	if = { limit = { country_exists = PWR } PWR = { activate_mission = ADISCORD_vorkerland_stalemate_deadline } }
+	if = { limit = { country_exists = PSD } PSD = { activate_mission = ADISCORD_vorkerland_stalemate_deadline } }
+	if = { limit = { country_exists = VLA } VLA = { activate_mission = ADISCORD_vorkerland_stalemate_deadline } }
+	if = { limit = { country_exists = EBA } EBA = { activate_mission = ADISCORD_vorkerland_stalemate_deadline } }
+	if = { limit = { country_exists = ROM } ROM = { activate_mission = ADISCORD_vorkerland_stalemate_deadline } }
+	if = { limit = { country_exists = DVA } DVA = { activate_mission = ADISCORD_vorkerland_stalemate_deadline } }
+	if = { limit = { country_exists = SOL } SOL = { activate_mission = ADISCORD_vorkerland_stalemate_deadline } }
+	if = { limit = { country_exists = SRA } SRA = { activate_mission = ADISCORD_vorkerland_stalemate_deadline } }
+	if = { limit = { country_exists = TRU } TRU = { activate_mission = ADISCORD_vorkerland_stalemate_deadline } }
+	if = { limit = { country_exists = ZTA } ZTA = { activate_mission = ADISCORD_vorkerland_stalemate_deadline } }
+}
+
+ADISCORD_vorkerland_clear_conflict_country = {
+	remove_decision = ADISCORD_vorkerland_stalemate_deadline
+	remove_ideas = ADISCORD_vorkerland_to_the_last
+	ADISCORD_vorkerland_clear_war_weariness = yes
+	clr_country_flag = ADISCORD_vorkerland_stalemate_escalation
+}
+
 ADISCORD_vorkerland_remove_conflict_spirits = {
-	WRK = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	VAD = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	ZAO = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	PWR = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	VLA = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	ROM = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	SOL = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	TRU = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	TVA = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	EYR = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	EGC = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	WPA = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	WPS = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	PSD = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	EBA = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	DVA = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	SRA = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	ZTA = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	SLA = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	RZA = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	MLR = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	ERT = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	IRT = { remove_ideas = ADISCORD_vorkerland_to_the_last }
-	SCA = { remove_ideas = ADISCORD_vorkerland_to_the_last }
+	WRK = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	VAD = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	ZAO = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	PWR = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	VLA = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	ROM = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	SOL = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	TRU = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	TVA = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	EYR = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	EGC = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	WPA = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	WPS = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	PSD = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	EBA = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	DVA = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	SRA = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	ZTA = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	SLA = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	RZA = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	MLR = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	ERT = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	IRT = { ADISCORD_vorkerland_clear_conflict_country = yes }
+	SCA = { ADISCORD_vorkerland_clear_conflict_country = yes }
 }
 
 ADISCORD_vorkerland_teardown_confederation = {
@@ -65,17 +208,28 @@ ADISCORD_vorkerland_setup_tva = {
 		transfer_state = 37
 		transfer_state = 38
 		transfer_state = 39
+		transfer_state = 308
+		transfer_state = 318
+		transfer_state = 320
+		transfer_state = 323
+		transfer_state = 324
 	}
 	36 = { add_core_of = TVA set_state_controller_to = TVA }
 	37 = { add_core_of = TVA set_state_controller_to = TVA }
 	38 = { add_core_of = TVA set_state_controller_to = TVA }
 	39 = { add_core_of = TVA set_state_controller_to = TVA }
+	308 = { add_core_of = TVA set_state_controller_to = TVA }
+	318 = { add_core_of = TVA set_state_controller_to = TVA }
+	320 = { add_core_of = TVA set_state_controller_to = TVA }
+	323 = { add_core_of = TVA set_state_controller_to = TVA }
+	324 = { add_core_of = TVA set_state_controller_to = TVA }
 	TVA = {
 		set_capital = { state = 36 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "TVA_vorkerland_collapse"
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 160 producer = TVA }
 	}
 }
 
@@ -86,18 +240,21 @@ ADISCORD_vorkerland_setup_eyr = {
 		transfer_state = 109
 		transfer_state = 111
 		transfer_state = 122
+		transfer_state = 325
 	}
 	102 = { add_core_of = EYR set_state_controller_to = EYR }
 	108 = { add_core_of = EYR set_state_controller_to = EYR }
 	109 = { add_core_of = EYR set_state_controller_to = EYR }
 	111 = { add_core_of = EYR set_state_controller_to = EYR }
 	122 = { add_core_of = EYR set_state_controller_to = EYR }
+	325 = { add_core_of = EYR set_state_controller_to = EYR }
 	EYR = {
 		set_capital = { state = 102 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "EYR_vorkerland_collapse"
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 160 producer = EYR }
 	}
 }
 
@@ -118,6 +275,7 @@ ADISCORD_vorkerland_setup_egc = {
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "EGC_vorkerland_collapse"
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 160 producer = EGC }
 	}
 }
 
@@ -132,20 +290,24 @@ ADISCORD_vorkerland_setup_wpa = {
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "WPA_vorkerland_collapse"
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 160 producer = WPA }
 	}
 }
 
 ADISCORD_vorkerland_setup_wps = {
 	WPS = {
 		transfer_state = 196
+		transfer_state = 322
 	}
 	196 = { add_core_of = WPS set_state_controller_to = WPS }
+	322 = { add_core_of = WPS set_state_controller_to = WPS }
 	WPS = {
 		set_capital = { state = 196 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "WPS_vorkerland_collapse"
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 160 producer = WPS }
 	}
 }
 
@@ -154,30 +316,42 @@ ADISCORD_vorkerland_setup_psd = {
 		transfer_state = 194
 		transfer_state = 93
 		transfer_state = 94
+		transfer_state = 328
 	}
 	194 = { add_core_of = PSD set_state_controller_to = PSD }
 	93 = { add_core_of = PSD set_state_controller_to = PSD }
 	94 = { add_core_of = PSD set_state_controller_to = PSD }
+	328 = { add_core_of = PSD set_state_controller_to = PSD }
 	PSD = {
 		set_capital = { state = 194 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "PSD_vorkerland_collapse"
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 160 producer = PSD }
 	}
 }
 
 ADISCORD_vorkerland_setup_eba = {
 	EBA = {
 		transfer_state = 197
+		transfer_state = 311
+		transfer_state = 312
+		transfer_state = 313
+		transfer_state = 314
 	}
 	197 = { add_core_of = EBA set_state_controller_to = EBA }
+	311 = { add_core_of = EBA set_state_controller_to = EBA }
+	312 = { add_core_of = EBA set_state_controller_to = EBA }
+	313 = { add_core_of = EBA set_state_controller_to = EBA }
+	314 = { add_core_of = EBA set_state_controller_to = EBA }
 	EBA = {
 		set_capital = { state = 197 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "EBA_vorkerland_collapse"
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 160 producer = EBA }
 	}
 }
 
@@ -185,43 +359,60 @@ ADISCORD_vorkerland_setup_dva = {
 	DVA = {
 		transfer_state = 144
 		transfer_state = 145
+		transfer_state = 319
+		transfer_state = 321
 	}
 	144 = { add_core_of = DVA set_state_controller_to = DVA }
 	145 = { add_core_of = DVA set_state_controller_to = DVA }
+	319 = { add_core_of = DVA set_state_controller_to = DVA }
+	321 = { add_core_of = DVA set_state_controller_to = DVA }
 	DVA = {
 		set_capital = { state = 145 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "DVA_vorkerland_collapse"
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 160 producer = DVA }
 	}
 }
 
 ADISCORD_vorkerland_setup_sra = {
 	SRA = {
 		transfer_state = 198
+		transfer_state = 307
+		transfer_state = 310
 	}
 	198 = { add_core_of = SRA set_state_controller_to = SRA }
+	307 = { add_core_of = SRA set_state_controller_to = SRA }
+	310 = { add_core_of = SRA set_state_controller_to = SRA }
 	SRA = {
 		set_capital = { state = 198 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "SRA_vorkerland_collapse"
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 160 producer = SRA }
 	}
 }
 
 ADISCORD_vorkerland_setup_zta = {
 	ZTA = {
 		transfer_state = 199
+		transfer_state = 315
+		transfer_state = 316
+		transfer_state = 317
 	}
 	199 = { add_core_of = ZTA set_state_controller_to = ZTA }
+	315 = { add_core_of = ZTA set_state_controller_to = ZTA }
+	316 = { add_core_of = ZTA set_state_controller_to = ZTA }
+	317 = { add_core_of = ZTA set_state_controller_to = ZTA }
 	ZTA = {
 		set_capital = { state = 199 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "ZTA_vorkerland_collapse"
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 160 producer = ZTA }
 	}
 }
 
@@ -239,6 +430,9 @@ ADISCORD_vorkerland_apply_initial_map = {
 		transfer_state = 79
 		transfer_state = 82
 		transfer_state = 105
+		transfer_state = 306
+		transfer_state = 309
+		transfer_state = 327
 	}
 	VAD = {
 		transfer_state = 75
@@ -282,6 +476,10 @@ ADISCORD_vorkerland_update_ai_phase = {
 		set_country_flag = ADISCORD_vorkerland_phase_finished
 	}
 	else_if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_stalemate_escalation }
+		set_country_flag = ADISCORD_vorkerland_phase_endgame
+	}
+	else_if = {
 		limit = { has_global_flag = ADISCORD_vorkerland_ai_consolidation_window }
 		set_country_flag = ADISCORD_vorkerland_phase_consolidate
 	}
@@ -291,47 +489,5 @@ ADISCORD_vorkerland_update_ai_phase = {
 	}
 	else = {
 		set_country_flag = ADISCORD_vorkerland_phase_endgame
-	}
-}
-
-ADISCORD_vorkerland_update_worker_victory_timer = {
-	if = {
-		limit = { WRK = { exists = yes ADISCORD_vorkerland_worker_victory_candidate = yes } }
-		add_to_variable = { var = ADISCORD_vorkerland_worker_victory_samples value = 1 }
-		if = {
-			limit = { check_variable = { var = ADISCORD_vorkerland_worker_victory_samples value = 7 compare = greater_than_or_equals } }
-			WRK = { country_event = { id = ADISCORD_vorkerland_collapse.20 hours = 1 } }
-		}
-	}
-	else = {
-		set_variable = { var = ADISCORD_vorkerland_worker_victory_samples value = 0 }
-	}
-}
-
-ADISCORD_vorkerland_update_vlad_victory_timer = {
-	if = {
-		limit = { VAD = { exists = yes ADISCORD_vorkerland_vlad_victory_candidate = yes } }
-		add_to_variable = { var = ADISCORD_vorkerland_vlad_victory_samples value = 1 }
-		if = {
-			limit = { check_variable = { var = ADISCORD_vorkerland_vlad_victory_samples value = 7 compare = greater_than_or_equals } }
-			VAD = { country_event = { id = ADISCORD_vorkerland_collapse.21 hours = 1 } }
-		}
-	}
-	else = {
-		set_variable = { var = ADISCORD_vorkerland_vlad_victory_samples value = 0 }
-	}
-}
-
-ADISCORD_vorkerland_update_dorian_victory_timer = {
-	if = {
-		limit = { TVA = { exists = yes ADISCORD_vorkerland_dorian_victory_candidate = yes } }
-		add_to_variable = { var = ADISCORD_vorkerland_dorian_victory_samples value = 1 }
-		if = {
-			limit = { check_variable = { var = ADISCORD_vorkerland_dorian_victory_samples value = 7 compare = greater_than_or_equals } }
-			TVA = { country_event = { id = ADISCORD_vorkerland_collapse.22 hours = 1 } }
-		}
-	}
-	else = {
-		set_variable = { var = ADISCORD_vorkerland_dorian_victory_samples value = 0 }
 	}
 }

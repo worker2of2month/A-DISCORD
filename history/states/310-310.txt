@@ -1,0 +1,18 @@
+state = {
+	id = 310
+	name = "STATE_310"
+	manpower = 43630
+	state_category = rural
+	history = {
+		owner = SOL
+		add_core_of = SOL
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		2153 3149 4932 11930 12137 16588
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

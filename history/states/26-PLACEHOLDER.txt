@@ -19,5 +19,6 @@ state={
 		}
 		add_core_of = WIT
 		victory_points = { 16355 5 }
+		victory_points = { 16376 10 }
 	}
 }

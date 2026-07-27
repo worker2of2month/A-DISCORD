@@ -1,0 +1,103 @@
+ideas = {
+	country = {
+		KDR_law_of_a_thousand_miles = {
+			picture = PER_persepolis_idea
+			allowed = { original_tag = KDR }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				supply_consumption_factor = -0.08
+				army_org_regain = 0.05
+				trade_opinion_factor = 0.10
+			}
+		}
+		RHM_cistern_parliament = {
+			picture = AFG_helmand_adopted_treaty
+			allowed = { original_tag = RHM }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.06
+				trade_opinion_factor = 0.12
+				production_speed_infrastructure_factor = 0.08
+			}
+		}
+		SDR_dry_river_patrols = {
+			picture = generic_fortify_the_borders
+			allowed = { original_tag = SDR }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_org_regain = 0.08
+				max_dig_in = 1
+				supply_consumption_factor = -0.05
+			}
+		}
+		MZR_common_water_charter = {
+			picture = PER_food_for_all_idea
+			allowed = { original_tag = MZR }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.08
+				consumer_goods_factor = -0.03
+				production_speed_infrastructure_factor = 0.10
+			}
+		}
+		KYZ_free_qanat_compact = {
+			picture = PER_feat_of_engineering_idea
+			allowed = { original_tag = KYZ }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				production_speed_infrastructure_factor = 0.15
+				local_resources_factor = 0.08
+				consumer_goods_factor = -0.02
+			}
+		}
+		SHL_nine_furnaces_compact = {
+			picture = IRQ_state_company_for_iron_and_steel
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.08
+				local_resources_factor = 0.10
+				political_power_gain = 0.05
+			}
+		}
+		GLP_prismatic_trade_code = {
+			picture = CHI_china_merchant_group
+			allowed = { original_tag = GLP }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.10
+				trade_opinion_factor = 0.15
+				political_power_gain = 0.03
+			}
+		}
+		AZH_black_basin_levy = {
+			picture = generic_central_management
+			allowed = { original_tag = AZH }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				war_support_factor = 0.08
+				mobilization_speed = 0.08
+				attrition = -0.04
+			}
+		}
+		WEF_frontier_municipalism = {
+			picture = ger_rebuild_the_nation
+			allowed = { original_tag = WEF }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.07
+				political_power_gain = 0.05
+				production_speed_rail_way_factor = 0.10
+			}
+		}
+	}
+}

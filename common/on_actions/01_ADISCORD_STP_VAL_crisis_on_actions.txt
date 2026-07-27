@@ -411,7 +411,6 @@ on_actions = {
 			if = {
 				limit = { has_global_flag = STP_VAL_skip_capitulation_claimed }
 				clr_global_flag = STP_VAL_skip_capitulation_claimed
-				clr_global_flag = skip_default_capitulation
 			}
 		}
 	}

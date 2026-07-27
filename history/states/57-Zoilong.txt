@@ -2,12 +2,12 @@ state={
 	id=57
 	name="STATE_57"
 	provinces={
-		556 779 6519 10917 16477 16493 16511 
+		556 779 2965 6519 10917 10985 11394 16477 16493 16511
 	}
 	manpower=932643
-	buildings_max_level_factor=1.000
+	buildings_max_level_factor=1
 	state_category=town
-	local_supplies=0.000
+	local_supplies=0
 
 	history={
 		owner = VAL
@@ -17,7 +17,6 @@ state={
 			arms_factory = 1
 		}
 		add_core_of = VAL
-
 		victory_points = { 16511 15 }
 	}
 }

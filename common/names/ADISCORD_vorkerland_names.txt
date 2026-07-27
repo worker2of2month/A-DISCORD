@@ -1,0 +1,153 @@
+# Shared Vorkerland naming pool for the confederation and its collapse successors.
+# The game keys generated commander names by country tag, so each successor needs
+# its own entry even though the regional pool is intentionally shared.
+
+WRK = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+VAD = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+ZAO = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+PWR = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+VLA = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+ROM = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+SOL = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+TRU = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+TVA = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+EYR = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+EGC = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+WPA = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+WPS = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+PSD = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+EBA = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+DVA = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+SRA = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+ZTA = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+SLA = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+RZA = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+MLR = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+ERT = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+IRT = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+SCA = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}
+
+EXZ = {
+	male = { names = { Adrian Alek Anton Arsen Boris Damian Denis Edem Emil Erik Gleb Helio Igor Ilya Jan Karim Karl Kirill Leon Maks Mark Mikhail Nikita Oleg Orest Pavel Richard Roman Ruslan Sergei Stefan Ted Teo Timur Viktor Vlad Yan Zack } }
+	female = { names = { Alba Alina Daria Elena Greta Irina Kira Lidia Lina Marta Mira Nika Nora Oksana Rada Sabina Samira Vera Yara Yulia } }
+	surnames = { Abel Aster Bagley Cinder Clay Dol Feld Fen Finch Gordon Greb Holt Kett Klin Knox Koval Kranz Lav Marr Mera Mertz Nox Pale Petrichev Pike Rauf Rios Rosen Sagan Sern Shade Silver Shtab Strazh Takt Trent Veil Ward Wight Wither Worcker Zogby }
+}

@@ -1,0 +1,19 @@
+state = {
+	id = 259
+	name = "STATE_259"
+	manpower = 29021
+	state_category = rural
+	history = {
+		owner = SDR
+		add_core_of = SDR
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		540 1626 4889 5817 6554 7208 7661 7936 8968 9896 9974 11637
+		12803
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

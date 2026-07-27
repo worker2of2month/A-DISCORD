@@ -1,0 +1,23 @@
+state = {
+	id = 255
+	name = "STATE_255"
+	manpower = 32345
+	state_category = rural
+	resources = {
+		aluminium = 3
+		oil = 1
+	}
+	history = {
+		owner = RHM
+		add_core_of = RHM
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		1168 2184 2962 3571 4673 5341 5674 6646 10580 10713 10846 10865
+		12079 12994
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

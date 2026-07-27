@@ -1,0 +1,80 @@
+guiTypes = {
+	containerWindowType = {
+		name = "ADISCORD_news_settings_panel_window"
+		position = { x = 5 y = 45 }
+		size = { width = 502 height = 74 }
+		clipping = no
+
+		containerWindowType = {
+			name = "ADISCORD_major_news_option"
+			position = { x = 330 y = 0 }
+			size = { width = 167 height = 37 }
+			clipping = no
+
+			buttonType = {
+				name = "ADISCORD_major_news_unchecked"
+				position = { x = 0 y = 28 }
+				quadTextureSprite = "GFX_generic_checkbox3"
+				frame = 0
+				clicksound = click_checkbox
+				pdx_tooltip = "ADISCORD_major_news_checkbox_tt"
+			}
+			buttonType = {
+				name = "ADISCORD_major_news_checked"
+				position = { x = 0 y = 28 }
+				quadTextureSprite = "GFX_generic_checkbox3"
+				frame = 1
+				clicksound = click_checkbox
+				pdx_tooltip = "ADISCORD_major_news_checkbox_tt"
+			}
+			instantTextboxType = {
+				name = "ADISCORD_major_news_label"
+				position = { x = 34 y = 30 }
+				font = "hoi_16mbs"
+				text = "ADISCORD_major_news_checkbox"
+				maxWidth = 130
+				maxHeight = 18
+				format = left
+				vertical_alignment = center
+				pdx_tooltip = "ADISCORD_major_news_checkbox_tt"
+				alwaystransparent = yes
+			}
+		}
+
+		containerWindowType = {
+			name = "ADISCORD_local_news_option"
+			position = { x = 376 y = 0 }
+			size = { width = 121 height = 74 }
+			clipping = no
+
+			buttonType = {
+				name = "ADISCORD_local_news_unchecked"
+				position = { x = 0 y = 51 }
+				quadTextureSprite = "GFX_generic_checkbox3"
+				frame = 0
+				clicksound = click_checkbox
+				pdx_tooltip = "ADISCORD_local_news_checkbox_tt"
+			}
+			buttonType = {
+				name = "ADISCORD_local_news_checked"
+				position = { x = 0 y = 51 }
+				quadTextureSprite = "GFX_generic_checkbox3"
+				frame = 1
+				clicksound = click_checkbox
+				pdx_tooltip = "ADISCORD_local_news_checkbox_tt"
+			}
+			instantTextboxType = {
+				name = "ADISCORD_local_news_label"
+				position = { x = 34 y = 53 }
+				font = "hoi_16mbs"
+				text = "ADISCORD_local_news_checkbox"
+				maxWidth = 84
+				maxHeight = 18
+				format = left
+				vertical_alignment = center
+				pdx_tooltip = "ADISCORD_local_news_checkbox_tt"
+				alwaystransparent = yes
+			}
+		}
+	}
+}

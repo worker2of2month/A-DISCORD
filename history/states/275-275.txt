@@ -1,0 +1,22 @@
+state = {
+	id = 275
+	name = "STATE_275"
+	manpower = 145000
+	state_category = town
+	history = {
+		owner = MZR
+		add_core_of = MZR
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 2
+			arms_factory = 1
+			air_base = 1
+		}
+	}
+	provinces = {
+		193 196 2249 2303 2947 3767 4397 5458 6904 9006 9830 10551
+		10796 11177 11348
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 3.0
+}

@@ -3,6 +3,7 @@ division_template = {
 	regiments = {
 		ADISCORD_militia = { x = 0 y = 0 }
 		ADISCORD_militia = { x = 0 y = 1 }
+		ADISCORD_militia = { x = 0 y = 2 }
 	}
 }
 units = {
@@ -11,6 +12,6 @@ units = {
 		location = 2226
 		division_template = "IRT Collapse Militia"
 		start_experience_factor = 0.10
-		start_equipment_factor = 0.22
+		start_equipment_factor = 0.70
 	}
 }

@@ -1,0 +1,19 @@
+state = {
+	id = 264
+	name = "STATE_264"
+	manpower = 33616
+	state_category = wasteland
+	history = {
+		owner = SDR
+		add_core_of = SDR
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		1382 2327 2365 3013 3590 3654 4467 5051 6442 6557 8116 8123
+		8903 10673 10717 11244 11730 12307 12851
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

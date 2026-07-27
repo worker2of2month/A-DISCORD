@@ -1,0 +1,19 @@
+state = {
+	id = 298
+	name = "STATE_298"
+	manpower = 22862
+	state_category = rural
+	history = {
+		owner = GLP
+		add_core_of = GLP
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		381 1904 2138 2342 3742 4379 4447 5473 6512 6849 9248 10144
+		12277
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

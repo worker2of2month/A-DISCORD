@@ -1,0 +1,18 @@
+state = {
+	id = 286
+	name = "STATE_286"
+	manpower = 32834
+	state_category = rural
+	history = {
+		owner = KYZ
+		add_core_of = KYZ
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		1020 3306 7108 7660 7903 10762 10845 12742
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

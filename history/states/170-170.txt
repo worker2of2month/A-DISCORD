@@ -7,4 +7,9 @@ state={
 	manpower=0
 	buildings_max_level_factor=1
 	local_supplies=0
+	history = {
+		owner = EXZ
+		add_core_of = EXZ
+		victory_points = { 16526 5 }
+	}
 }

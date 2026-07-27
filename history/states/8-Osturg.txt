@@ -2,7 +2,7 @@ state={
 	id=8
 	name="STATE_8"
 	provinces={
-		9 17 38 56  
+		9 17 38 56 16648
 	}
 	buildings_max_level_factor=1.000
     manpower=1
@@ -11,6 +11,7 @@ state={
     history = {
 		owner = YPR
 		add_core_of = YPR
+		victory_points = { 16648 1 }
 	}
 	
 }

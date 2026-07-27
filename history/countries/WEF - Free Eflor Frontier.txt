@@ -1,0 +1,20 @@
+capital = 174
+oob = "WEF"
+
+recruit_character = WEF_Elina_Fenn
+
+set_politics = {
+	ruling_party = utilitarism
+	last_election = "2159.6.23"
+	elections_allowed = yes
+}
+set_popularities = {
+	utilitarism = 46
+	humanism = 22
+	pragmatism = 20
+	etatism = 12
+}
+set_stability = 0.56
+set_war_support = 0.35
+set_research_slots = 2
+add_ideas = { WEF_frontier_municipalism }

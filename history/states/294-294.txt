@@ -1,0 +1,22 @@
+state = {
+	id = 294
+	name = "STATE_294"
+	manpower = 128000
+	state_category = town
+	history = {
+		owner = SHL
+		add_core_of = SHL
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 2
+			arms_factory = 1
+			air_base = 1
+		}
+	}
+	provinces = {
+		1198 2407 3042 3284 4949 6218 7306 8216 9056 9294 9508 9600
+		10264 12903
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 3.0
+}

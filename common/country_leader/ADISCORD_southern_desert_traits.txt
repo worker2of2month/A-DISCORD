@@ -1,0 +1,73 @@
+leader_traits = {
+	KDR_keeper_of_caravan_law = {
+		random = no
+		sprite = 1
+		political_power_gain = 0.05
+		supply_consumption_factor = -0.03
+		trade_opinion_factor = 0.05
+	}
+
+	RHM_first_voice_of_cisterns = {
+		random = no
+		sprite = 1
+		stability_factor = 0.04
+		consumer_goods_factor = -0.01
+		production_speed_infrastructure_factor = 0.05
+	}
+
+	SDR_marshal_of_the_dry_bed = {
+		random = no
+		sprite = 1
+		war_support_factor = 0.04
+		army_org_factor = 0.03
+		max_dig_in = 0.5
+	}
+
+	MZR_stewards_of_common_wells = {
+		random = no
+		sprite = 1
+		political_power_gain = 0.04
+		consumer_goods_factor = -0.01
+		local_resources_factor = 0.04
+	}
+
+	KYZ_voice_of_the_communes = {
+		random = no
+		sprite = 1
+		research_speed_factor = 0.02
+		stability_factor = 0.03
+		production_speed_infrastructure_factor = 0.06
+	}
+
+	SHL_mediator_of_nine_furnaces = {
+		random = no
+		sprite = 1
+		political_power_gain = 0.04
+		production_factory_efficiency_gain_factor = 0.04
+		production_speed_arms_factory_factor = 0.04
+	}
+
+	GLP_broker_of_glass_ports = {
+		random = no
+		sprite = 1
+		trade_opinion_factor = 0.08
+		consumer_goods_factor = -0.01
+		stability_factor = 0.02
+	}
+
+	AZH_warden_of_the_black_basin = {
+		random = no
+		sprite = 1
+		war_support_factor = 0.04
+		mobilization_speed = 0.05
+		attrition = -0.02
+	}
+
+	WEF_mayor_of_the_last_bridge = {
+		random = no
+		sprite = 1
+		stability_factor = 0.04
+		production_speed_rail_way_factor = 0.06
+		army_org_regain = 0.03
+	}
+}

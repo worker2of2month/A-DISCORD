@@ -16,5 +16,6 @@ state={
 			infrastructure = 2
 		}
 		add_core_of = VAD
+		victory_points = { 7778 5 }
 	}
 }

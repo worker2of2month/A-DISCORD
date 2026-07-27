@@ -1,0 +1,20 @@
+capital = 241
+oob = "KDR"
+
+recruit_character = KDR_Rashid_al_Kadir
+
+set_politics = {
+	ruling_party = chauvinism
+	last_election = "2158.4.17"
+	elections_allowed = no
+}
+set_popularities = {
+	chauvinism = 55
+	etatism = 20
+	pragmatism = 15
+	hedonism = 10
+}
+set_stability = 0.58
+set_war_support = 0.31
+set_research_slots = 2
+add_ideas = { KDR_law_of_a_thousand_miles }

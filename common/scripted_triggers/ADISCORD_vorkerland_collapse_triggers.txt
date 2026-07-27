@@ -6,9 +6,32 @@ ADISCORD_vorkerland_collapse_wars_not_started = {
 	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
 }
 
+ADISCORD_vorkerland_wrk_defeated = {
+	OR = {
+		NOT = { country_exists = WRK }
+		WRK = { has_capitulated = yes }
+	}
+}
+
+ADISCORD_vorkerland_vad_defeated = {
+	OR = {
+		NOT = { country_exists = VAD }
+		VAD = { has_capitulated = yes }
+	}
+}
+
+ADISCORD_vorkerland_tva_defeated = {
+	OR = {
+		NOT = { country_exists = TVA }
+		TVA = { has_capitulated = yes }
+	}
+}
+
 ADISCORD_vorkerland_worker_victory_candidate = {
 	tag = WRK
 	NOT = { has_capitulated = yes }
+	ADISCORD_vorkerland_vad_defeated = yes
+	ADISCORD_vorkerland_tva_defeated = yes
 	controls_state = 27
 	controls_state = 32
 	controls_state = 33
@@ -23,6 +46,8 @@ ADISCORD_vorkerland_worker_victory_candidate = {
 ADISCORD_vorkerland_vlad_victory_candidate = {
 	tag = VAD
 	NOT = { has_capitulated = yes }
+	ADISCORD_vorkerland_wrk_defeated = yes
+	ADISCORD_vorkerland_tva_defeated = yes
 	controls_state = 32
 	controls_state = 75
 	controls_state = 81
@@ -31,6 +56,8 @@ ADISCORD_vorkerland_vlad_victory_candidate = {
 ADISCORD_vorkerland_dorian_victory_candidate = {
 	tag = TVA
 	NOT = { has_capitulated = yes }
+	ADISCORD_vorkerland_wrk_defeated = yes
+	ADISCORD_vorkerland_vad_defeated = yes
 	controls_state = 32
 	controls_state = 36
 	controls_state = 37

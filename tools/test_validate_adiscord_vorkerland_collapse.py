@@ -8,6 +8,8 @@ from tools.vorkerland_collapse_manifest import (
     CAPITALS,
     CONTAMINATED_STATES,
     DIRTY_GROUPS,
+    DIRTY_INITIAL_OWNER_OVERRIDES,
+    EXZ_REMAINDER_GROUPS,
     STATE_PARTITIONS,
     TAGS,
 )
@@ -37,6 +39,12 @@ class ManifestTests(unittest.TestCase):
             'dirty groups must cover every transferable contaminated state exactly once',
             issues,
         )
+
+    def test_exz_remainder_manifest_is_unique_and_separate(self):
+        remainder = [state for states in EXZ_REMAINDER_GROUPS.values() for state in states]
+        dirty = set().union(*map(set, DIRTY_GROUPS.values()))
+        self.assertEqual(len(remainder), len(set(remainder)))
+        self.assertFalse(set(remainder) & dirty)
 
     def test_province_parser_ignores_hash_comments(self):
         text = '''provinces = {
@@ -115,7 +123,7 @@ class CountryRosterTests(unittest.TestCase):
 
             country = (root / 'common' / 'countries' / f'{tag}.txt').read_text(encoding='utf-8-sig')
             self.assertIn('graphical_culture = western_european_gfx', country)
-            self.assertIn('graphical_culture_2d = western_european_2d', country)
+            self.assertIn('graphical_culture_2d = WRK', country)
 
             histories = list((root / 'history' / 'countries').glob(f'{tag} - *.txt'))
             self.assertEqual(len(histories), 1, f'{tag} must have one dormant history')
@@ -260,14 +268,33 @@ class DirtyStateTests(unittest.TestCase):
             self.assertRegex(text, r'\bmanpower\s*=\s*[1-9]\d*\b', f'state {state_id} needs positive manpower')
             self.assertRegex(text, r'\bstate_category\s*=\s*\w+', f'state {state_id} needs a category')
             self.assertRegex(text, r'\blocal_supplies\s*=\s*0\.[0-9]*[1-9]\d*', f'state {state_id} needs local supplies')
-            self.assertRegex(text, r'(?m)^\s*owner\s*=\s*EXZ\s*$', f'state {state_id} must belong to EXZ')
-            self.assertRegex(text, r'(?m)^\s*add_core_of\s*=\s*EXZ\s*$', f'state {state_id} must be an EXZ core')
+            initial_owner = DIRTY_INITIAL_OWNER_OVERRIDES.get(state_id, 'EXZ')
+            self.assertRegex(
+                text,
+                rf'(?m)^\s*owner\s*=\s*{initial_owner}\s*$',
+                f'state {state_id} must belong to {initial_owner}',
+            )
+            self.assertRegex(
+                text,
+                rf'(?m)^\s*add_core_of\s*=\s*{initial_owner}\s*$',
+                f'state {state_id} must be a {initial_owner} core',
+            )
 
-    def test_capital_states_have_exact_vp_and_buildings(self):
+    def test_capital_states_only_keep_vp_on_urban_provinces(self):
+        definition = (validator.ROOT / 'map' / 'definition.csv').read_text(encoding='utf-8-sig')
+        terrain = {
+            int(fields[0]): fields[6]
+            for line in definition.splitlines()
+            if len(fields := line.split(';')) > 6 and fields[0].isdigit()
+        }
         for state_id, (province, vp, building) in self.CAPITALS.items():
             path = validator.state_file(validator.ROOT, state_id)
             text = Path(path).read_text(encoding='utf-8-sig')
-            self.assertRegex(text, rf'victory_points\s*=\s*\{{\s*{province}\s+{vp}\s*\}}')
+            vp_pattern = rf'victory_points\s*=\s*\{{\s*{province}\s+{vp}\s*\}}'
+            if terrain.get(province) == 'urban':
+                self.assertRegex(text, vp_pattern)
+            else:
+                self.assertNotRegex(text, vp_pattern)
             self.assertRegex(text, r'\bstate_category\s*=\s*town\b')
             self.assertRegex(text, r'\blocal_supplies\s*=\s*0\.5\b')
             self.assertRegex(text, r'\binfrastructure\s*=\s*1\b')
@@ -504,27 +531,58 @@ class AIStrategyTests(unittest.TestCase):
             self.assertIn(target, set().union(*map(set, self.ADJACENCY.values())) | {'SLA'})
         self.assertNotIn('start_civil_war', ai)
 
-    def test_civil_war_keeps_expert_ai_style_front_commitment_under_low_supply(self):
+    def test_civil_war_keeps_front_coverage_without_forcing_depleted_attacks(self):
         ai = self.AI_PATH.read_text(encoding='utf-8-sig')
         block = dict(self.top_level_blocks(ai)).get('ADISCORD_vorkerland_force_front_commitment', '')
         self.assertTrue(block, 'low-supply front commitment strategy is missing')
         self.assertIn('type = front_unit_request', block)
-        self.assertRegex(block, r'type\s*=\s*front_unit_request(?s:.*?)value\s*=\s*100')
-        self.assertRegex(block, r'type\s*=\s*front_control(?s:.*?)ratio\s*=\s*0\.01')
-        self.assertRegex(block, r'type\s*=\s*front_control(?s:.*?)priority\s*=\s*1500')
-        self.assertRegex(block, r'type\s*=\s*front_control(?s:.*?)execution_type\s*=\s*rush')
-        self.assertRegex(block, r'type\s*=\s*front_control(?s:.*?)execute_order\s*=\s*yes')
-        self.assertRegex(block, r'type\s*=\s*front_control(?s:.*?)manual_attack\s*=\s*yes')
+        self.assertRegex(block, r'type\s*=\s*front_unit_request(?s:.*?)value\s*=\s*75')
+        self.assertNotIn('type = front_control', block)
+        self.assertNotIn('execution_type = rush', block)
+        self.assertNotIn('manual_attack = yes', block)
         for tag in self.COMBAT_TAGS:
             self.assertRegex(block, rf'\btag\s*=\s*{tag}\b')
 
-    def test_global_ai_can_keep_aggressive_plans_alive_in_supply_crises(self):
+    def test_global_ai_rests_depleted_units_and_respects_supply_crises(self):
         defines_path = self.ROOT / 'common' / 'defines' / 'ADISCORD_defines_changes.lua'
         defines = defines_path.read_text(encoding='utf-8-sig')
-        self.assertIn('NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_HIGH = 0.15', defines)
-        self.assertIn('NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_HIGH = 0.25', defines)
-        self.assertIn('NDefines.NAI.FRONT_EVAL_UNIT_SUPPLY_AND_ORG_LACK_IMPACT = 0.2', defines)
-        self.assertIn('NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT = 0.0', defines)
+        self.assertIn('NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_HIGH = 0.50', defines)
+        self.assertIn('NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_HIGH = 0.50', defines)
+        self.assertIn('NDefines.NAI.FRONT_EVAL_UNIT_SUPPLY_AND_ORG_LACK_IMPACT = 1.0', defines)
+        self.assertIn('NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT = 0.1', defines)
+        self.assertIn('NDefines.NAI.PLAN_ACTIVATION_SUPERIORITY_AGGRO = 1.0', defines)
+        self.assertIn('NDefines.NMilitary.PLAN_EXECUTE_BALANCED_LIMIT = 0.0', defines)
+        self.assertIn('NDefines.NMilitary.PLAN_EXECUTE_RUSH = -10', defines)
+
+    def test_combat_damage_uses_vanilla_dice_with_moderated_scalars(self):
+        defines = (self.ROOT / 'common' / 'defines' / 'ADISCORD_defines_changes.lua').read_text(encoding='utf-8-sig')
+        for token in (
+            'NDefines.NMilitary.LAND_COMBAT_ORG_DICE_SIZE = 4',
+            'NDefines.NMilitary.LAND_COMBAT_STR_DICE_SIZE = 2',
+            'NDefines.NMilitary.EQUIPMENT_COMBAT_LOSS_FACTOR = 0.40',
+            'NDefines.NMilitary.LAND_COMBAT_STR_DAMAGE_MODIFIER = 0.03',
+            'NDefines.NMilitary.LAND_COMBAT_ORG_DAMAGE_MODIFIER = 0.045',
+            'NDefines.NMilitary.ATTRITION_EQUIPMENT_LOSS_CHANCE = 0.01',
+        ):
+            self.assertIn(token, defines)
+
+    def test_spawned_collapse_armies_are_combat_ready_and_have_rifle_reserves(self):
+        effects = (self.ROOT / 'common' / 'scripted_effects' / 'ADISCORD_vorkerland_collapse_effects.txt').read_text(encoding='utf-8-sig')
+        dirty_effects = (self.ROOT / 'common' / 'scripted_effects' / 'ADISCORD_vorkerland_collapse_dirty_effects.txt').read_text(encoding='utf-8-sig')
+        dirty_tags = set(DIRTY_GROUPS)
+        for tag in TAGS:
+            oob = (self.ROOT / 'history' / 'units' / f'{tag}_vorkerland_collapse.txt').read_text(encoding='utf-8-sig')
+            template = oob.split('units =', 1)[0]
+            self.assertEqual(template.count('ADISCORD_militia ='), 3, tag)
+            factors = re.findall(r'start_equipment_factor\s*=\s*([0-9.]+)', oob)
+            self.assertTrue(factors, tag)
+            self.assertEqual(set(factors), {'0.70'}, tag)
+            reserve = 80 if tag in dirty_tags else 160
+            setup = dirty_effects if tag in dirty_tags else effects
+            self.assertRegex(
+                setup,
+                rf'load_oob\s*=\s*"{tag}_vorkerland_collapse"\s*add_equipment_to_stockpile\s*=\s*\{{\s*type\s*=\s*infantry_equipment_0\s+amount\s*=\s*{reserve}\s+producer\s*=\s*{tag}\s*\}}',
+            )
 
     def test_dirty_tags_only_receive_defensive_infantry_coverage(self):
         ai = self.AI_PATH.read_text(encoding='utf-8-sig')
@@ -599,8 +657,9 @@ class DirtySpawnTests(unittest.TestCase):
                 state_path = validator.state_file(self.ROOT, state_id)
                 self.assertIsNotNone(state_path)
                 history = state_path.read_text(encoding='utf-8-sig')
-                self.assertRegex(history, r'(?m)^\s*owner\s*=\s*EXZ\s*$')
-                self.assertRegex(history, r'(?m)^\s*add_core_of\s*=\s*EXZ\s*$')
+                initial_owner = DIRTY_INITIAL_OWNER_OVERRIDES.get(state_id, 'EXZ')
+                self.assertRegex(history, rf'(?m)^\s*owner\s*=\s*{initial_owner}\s*$')
+                self.assertRegex(history, rf'(?m)^\s*add_core_of\s*=\s*{initial_owner}\s*$')
                 self.assertRegex(setup, rf'\bset_state_owner_to\s*=\s*{tag}\b')
                 state_assignment = re.search(
                     rf'{state_id}\s*=\s*\{{[^}}]+\}}',
@@ -617,6 +676,33 @@ class DirtySpawnTests(unittest.TestCase):
             self.assertIsNotNone(state_path)
             history = state_path.read_text(encoding='utf-8-sig')
             self.assertNotRegex(history, r'(?m)^\s*owner\s*=\s*EXZ\s*$')
+
+    def test_every_exz_owned_state_is_routed_to_a_successor(self):
+        effects = self.EFFECTS_PATH.read_text(encoding='utf-8-sig')
+        routed = set()
+        for tag, states in DIRTY_GROUPS.items():
+            for state_id in states:
+                if DIRTY_INITIAL_OWNER_OVERRIDES.get(state_id, 'EXZ') == 'EXZ':
+                    routed.add(state_id)
+        for tag, states in EXZ_REMAINDER_GROUPS.items():
+            setup = self.named_block(effects, f'ADISCORD_vorkerland_setup_{tag.lower()}')
+            for state_id in states:
+                routed.add(state_id)
+                state_path = validator.state_file(self.ROOT, state_id)
+                self.assertIsNotNone(state_path)
+                history = state_path.read_text(encoding='utf-8-sig')
+                self.assertRegex(history, r'(?m)^\s*owner\s*=\s*EXZ\s*$')
+                self.assertRegex(
+                    setup,
+                    rf'{state_id}\s*=\s*\{{\s*add_core_of\s*=\s*{tag}\s+set_state_owner_to\s*=\s*{tag}\s+set_state_controller_to\s*=\s*{tag}\s*\}}',
+                )
+
+        actual = set()
+        for path in (self.ROOT / 'history' / 'states').glob('*.txt'):
+            history = path.read_text(encoding='utf-8-sig')
+            if re.search(r'(?m)^\s*owner\s*=\s*EXZ\s*$', history):
+                actual.add(int(re.search(r'\bid\s*=\s*(\d+)', history).group(1)))
+        self.assertEqual(actual, routed)
 
     def test_exclusion_zone_has_a_namespaced_tno_style_diplomacy_overlay(self):
         root = self.ROOT
@@ -763,6 +849,7 @@ class ConflictSpiritTests(unittest.TestCase):
     ROOT = validator.ROOT
     IDEA_PATH = ROOT / 'common' / 'ideas' / 'ADISCORD_vorkerland_collapse_ideas.txt'
     EFFECTS_PATH = ROOT / 'common' / 'scripted_effects' / 'ADISCORD_vorkerland_collapse_effects.txt'
+    DYNAMIC_PATH = ROOT / 'common' / 'dynamic_modifiers' / 'ADISCORD_vorkerland_collapse_dynamic_modifiers.txt'
     DIRTY_EFFECTS_PATH = ROOT / 'common' / 'scripted_effects' / 'ADISCORD_vorkerland_collapse_dirty_effects.txt'
     MAPS_PATH = ROOT / 'common' / 'scripted_effects' / 'ADISCORD_vorkerland_collapse_map_effects.txt'
 
@@ -770,11 +857,20 @@ class ConflictSpiritTests(unittest.TestCase):
     def named_block(text, identifier):
         return EventOrchestrationTests.named_block(text, identifier)
 
-    def test_to_the_last_has_exact_capitulation_modifier(self):
+    def test_to_the_last_starts_at_full_resolve_and_decays_with_weariness(self):
         ideas = self.IDEA_PATH.read_text(encoding='utf-8-sig')
         spirit = self.named_block(ideas, 'ADISCORD_vorkerland_to_the_last')
         self.assertRegex(spirit, r'\bsurrender_limit\s*=\s*1\.0\b')
         self.assertRegex(spirit, r'\bremoval_cost\s*=\s*-1\b')
+
+        dynamic = self.DYNAMIC_PATH.read_text(encoding='utf-8-sig')
+        weariness = self.named_block(dynamic, 'ADISCORD_vorkerland_war_weariness')
+        self.assertIn('surrender_limit = ADISCORD_vorkerland_surrender_limit_offset', weariness)
+
+        effects = self.EFFECTS_PATH.read_text(encoding='utf-8-sig')
+        increase = self.named_block(effects, 'ADISCORD_vorkerland_increase_war_weariness')
+        self.assertIn('add_to_variable = { var = ADISCORD_vorkerland_surrender_limit_offset value = -0.05 }', increase)
+        self.assertIn('clamp_variable = { var = ADISCORD_vorkerland_surrender_limit_offset min = -1 max = 0 }', increase)
 
     def test_all_collapse_combatants_receive_the_shared_spirit(self):
         effects = self.EFFECTS_PATH.read_text(encoding='utf-8-sig')
@@ -801,9 +897,26 @@ class ConflictSpiritTests(unittest.TestCase):
 
     def test_outcomes_remove_the_wartime_spirit(self):
         maps = self.MAPS_PATH.read_text(encoding='utf-8-sig')
+        effects = self.EFFECTS_PATH.read_text(encoding='utf-8-sig')
         for outcome in ('worker', 'vlad', 'dorian', 'fragmented'):
             block = self.named_block(maps, f'ADISCORD_vorkerland_apply_{outcome}_map')
             self.assertIn('ADISCORD_vorkerland_remove_conflict_spirits = yes', block)
+        cleanup = self.named_block(effects, 'ADISCORD_vorkerland_clear_conflict_country')
+        self.assertIn('remove_decision = ADISCORD_vorkerland_stalemate_deadline', cleanup)
+        self.assertIn('remove_ideas = ADISCORD_vorkerland_to_the_last', cleanup)
+        self.assertIn('ADISCORD_vorkerland_clear_war_weariness = yes', cleanup)
+        self.assertIn('clr_country_flag = ADISCORD_vorkerland_stalemate_escalation', cleanup)
+
+        weariness_cleanup = self.named_block(effects, 'ADISCORD_vorkerland_clear_war_weariness')
+        self.assertIn('remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_war_weariness }', weariness_cleanup)
+        for variable in (
+            'ADISCORD_vorkerland_war_weariness_level',
+            'ADISCORD_vorkerland_war_weariness_war_support_factor',
+            'ADISCORD_vorkerland_war_weariness_stability_factor',
+            'ADISCORD_vorkerland_war_weariness_consumer_goods_factor',
+            'ADISCORD_vorkerland_surrender_limit_offset',
+        ):
+            self.assertIn(f'clear_variable = {variable}', weariness_cleanup)
 
 
 class OutcomeTests(unittest.TestCase):
@@ -813,7 +926,12 @@ class OutcomeTests(unittest.TestCase):
     MAPS = ROOT / 'common' / 'scripted_effects' / 'ADISCORD_vorkerland_collapse_map_effects.txt'
     OUTCOMES_ON_ACTION = ROOT / 'common' / 'on_actions' / '02_ADISCORD_vorkerland_collapse_outcomes_on_actions.txt'
     CENTRAL = {27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 75, 79, 81, 82, 102, 104, 105, 106, 107, 108, 109, 110, 111, 121, 122, 123, 124, 200, 201, 202}
-    ALL_WAR_STATES = CENTRAL | {72, 195, 196, 71, 90, 91, 93, 94, 194, 74, 197, 73, 144, 145, 76, 198, 80, 199}
+    ALL_WAR_STATES = CENTRAL | {
+        72, 195, 196, 71, 90, 91, 93, 94, 194, 74, 197, 73, 144, 145,
+        76, 198, 80, 199,
+        306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317,
+        318, 319, 320, 321, 322, 323, 324, 325, 327, 328,
+    }
 
     @staticmethod
     def named_block(text, identifier):
@@ -833,51 +951,78 @@ class OutcomeTests(unittest.TestCase):
             self.assertIn(f'controls_state = {state_id}', vlad)
         for state_id in (36, 37, 38, 39):
             self.assertIn(f'controls_state = {state_id}', dorian)
+        for defeated in ('vad', 'tva'):
+            self.assertIn(f'ADISCORD_vorkerland_{defeated}_defeated = yes', worker)
+        for defeated in ('wrk', 'tva'):
+            self.assertIn(f'ADISCORD_vorkerland_{defeated}_defeated = yes', vlad)
+        for defeated in ('wrk', 'vad'):
+            self.assertIn(f'ADISCORD_vorkerland_{defeated}_defeated = yes', dorian)
 
-    def test_single_rus_monitor_requires_seven_continuous_fortnights(self):
+    def test_defeated_claimant_triggers_accept_capitulation_or_annexation(self):
+        triggers = self.TRIGGERS.read_text(encoding='utf-8-sig')
+        for tag in ('WRK', 'VAD', 'TVA'):
+            block = self.named_block(triggers, f'ADISCORD_vorkerland_{tag.lower()}_defeated')
+            self.assertIn(f'NOT = {{ country_exists = {tag} }}', block)
+            self.assertRegex(block, rf'{tag}\s*=\s*\{{\s*has_capitulated\s*=\s*yes\s*\}}')
+
+    def test_capitulation_routes_outcomes_without_polling(self):
         self.assertFalse(self.OUTCOMES_ON_ACTION.exists())
-        on_actions = '\n'.join(
-            path.read_text(encoding='utf-8-sig')
-            for path in (self.ROOT / 'common' / 'on_actions').glob('*.txt')
-        )
-        self.assertNotRegex(on_actions, r'(?s)on_weekly\s*=\s*\{.*?ADISCORD_vorkerland_update_(?:worker|vlad|dorian)_victory_timer')
+        on_actions = (self.ROOT / 'common' / 'on_actions' / '01_ADISCORD_vorkerland_collapse_on_actions.txt').read_text(encoding='utf-8-sig')
         events = self.EVENTS.read_text(encoding='utf-8-sig')
-        war_definition = re.search(
-            r'(?m)^country_event\s*=\s*\{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.2\s*$',
-            events,
-        )
-        self.assertIsNotNone(war_definition)
-        war_start = self.named_block(events[war_definition.start():], 'country_event')
-        self.assertIsNotNone(re.search(
-            r'RUS\s*=\s*\{.*?country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.24\s+days\s*=\s*14\s*\}',
-            war_start,
-            re.DOTALL,
-        ))
-        monitor_definition = re.search(
-            r'(?m)^country_event\s*=\s*\{\s*\n\tid\s*=\s*ADISCORD_vorkerland_collapse\.24\s*$',
-            events,
-        )
-        self.assertIsNotNone(monitor_definition)
-        monitor = self.named_block(events[monitor_definition.start():], 'country_event')
-        self.assertIn('tag = RUS', monitor)
-        self.assertIn('ADISCORD_vorkerland_update_worker_victory_timer = yes', monitor)
-        self.assertIn('ADISCORD_vorkerland_update_vlad_victory_timer = yes', monitor)
-        self.assertIn('ADISCORD_vorkerland_update_dorian_victory_timer = yes', monitor)
-        self.assertRegex(
-            monitor,
-            r'country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.24\s+days\s*=\s*14\s*\}',
-        )
         effects = (self.ROOT / 'common' / 'scripted_effects' / 'ADISCORD_vorkerland_collapse_effects.txt').read_text(encoding='utf-8-sig')
+        self.assertIn('on_capitulation', on_actions)
+        self.assertNotIn('ADISCORD_vorkerland_collapse.24', events)
+        self.assertNotIn('ADISCORD_vorkerland_collapse.25', events)
+        self.assertNotIn('victory_timer', effects)
         for candidate, tag, event_id in (('worker', 'WRK', 20), ('vlad', 'VAD', 21), ('dorian', 'TVA', 22)):
-            block = self.named_block(effects, f'ADISCORD_vorkerland_update_{candidate}_victory_timer')
-            self.assertIsNotNone(re.search(rf'{tag}\s*=\s*\{{.*?ADISCORD_vorkerland_{candidate}_victory_candidate\s*=\s*yes', block, re.DOTALL))
-            self.assertIn('value = 1', block)
-            self.assertIn('value = 7', block)
-            self.assertIn('compare = greater_than_or_equals', block)
-            self.assertRegex(block, rf'{tag}\s*=\s*\{{\s*country_event\s*=\s*\{{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.{event_id}')
-            self.assertIsNotNone(re.search(r'else\s*=\s*\{\s*set_variable\s*=\s*\{.*?value\s*=\s*0', block, re.DOTALL))
+            self.assertIn(f'ADISCORD_vorkerland_{candidate}_victory_candidate = yes', on_actions)
+            self.assertRegex(on_actions, rf'{tag}\s*=\s*\{{\s*country_event\s*=\s*\{{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.{event_id}\s+hours\s*=\s*1')
+        self.assertEqual(on_actions.count('set_global_flag = skip_default_capitulation'), 3)
 
-    def test_feature_validator_accepts_the_fortnight_monitor(self):
+    def test_unclaimed_capitulations_use_the_global_tfr_style_annex_fallback(self):
+        fallback_path = self.ROOT / 'common' / 'on_actions' / 'ZZ_ADISCORD_default_capitulation_on_actions.txt'
+        fallback = fallback_path.read_text(encoding='utf-8-sig')
+        self.assertIn('on_capitulation', fallback)
+        self.assertIn('NOT = { has_global_flag = skip_default_capitulation }', fallback)
+        self.assertIn('every_enemy_country', fallback)
+        self.assertIn('original_tag = ROOT', fallback)
+        self.assertIn('is_in_faction_with = ROOT', fallback)
+        self.assertIn('is_puppet_of = ROOT', fallback)
+        self.assertIn('white_peace = PREV', fallback)
+        self.assertRegex(fallback, r'annex_country\s*=\s*\{\s*target\s*=\s*PREV\s+transfer_troops\s*=\s*no')
+        self.assertIn('clr_global_flag = skip_default_capitulation', fallback)
+
+    def test_stalemate_is_a_timed_mission_with_weariness_and_ai_escalation(self):
+        decisions = (self.ROOT / 'common' / 'decisions' / 'ADISCORD_vorkerland_collapse_decisions.txt').read_text(encoding='utf-8-sig')
+        events = self.EVENTS.read_text(encoding='utf-8-sig')
+        effects = (self.ROOT / 'common' / 'scripted_effects' / 'ADISCORD_vorkerland_collapse_effects.txt').read_text(encoding='utf-8-sig')
+        dynamic = (self.ROOT / 'common' / 'dynamic_modifiers' / 'ADISCORD_vorkerland_collapse_dynamic_modifiers.txt').read_text(encoding='utf-8-sig')
+        ai = (self.ROOT / 'common' / 'ai_strategy' / 'ADISCORD_vorkerland_collapse_ai.txt').read_text(encoding='utf-8-sig')
+        self.assertIn('ADISCORD_vorkerland_activate_stalemate_missions = yes', events)
+        self.assertIn('selectable_mission = no', decisions)
+        self.assertIn('fire_only_once = no', decisions)
+        self.assertIn('days_mission_timeout = 180', decisions)
+        self.assertNotIn('add_ideas = ADISCORD_vorkerland_war_weariness', decisions)
+        self.assertIn('custom_effect_tooltip = ADISCORD_vorkerland_war_weariness_increase_tt', decisions)
+        self.assertIn('hidden_effect = {', decisions)
+        self.assertIn('ADISCORD_vorkerland_increase_war_weariness = yes', decisions)
+        self.assertIn('activate_mission = ADISCORD_vorkerland_stalemate_deadline', decisions)
+        self.assertIn('set_country_flag = ADISCORD_vorkerland_stalemate_escalation', decisions)
+        self.assertNotIn('id = ADISCORD_vorkerland_collapse.30', events)
+        self.assertIn('ADISCORD_vorkerland_war_weariness = {', dynamic)
+        self.assertIn('custom_modifier_tooltip = ADISCORD_vorkerland_war_weariness_level_tt', dynamic)
+        self.assertIn('war_support_factor = ADISCORD_vorkerland_war_weariness_war_support_factor', dynamic)
+        self.assertIn('surrender_limit = ADISCORD_vorkerland_surrender_limit_offset', dynamic)
+        increase = self.named_block(effects, 'ADISCORD_vorkerland_increase_war_weariness')
+        self.assertIn('add_to_variable = { var = ADISCORD_vorkerland_war_weariness_level value = 1 }', increase)
+        self.assertIn('clamp_variable = { var = ADISCORD_vorkerland_war_weariness_level min = 1 max = 5 }', increase)
+        self.assertIn('add_to_variable = { var = ADISCORD_vorkerland_surrender_limit_offset value = -0.05 }', increase)
+        self.assertIn('clamp_variable = { var = ADISCORD_vorkerland_surrender_limit_offset min = -1 max = 0 }', increase)
+        self.assertIn('ADISCORD_vorkerland_refresh_war_weariness = yes', increase)
+        self.assertIn('ADISCORD_vorkerland_stalemate_offensive', ai)
+        self.assertIn('priority = 600', ai)
+
+    def test_feature_validator_accepts_capitulation_and_timed_mission(self):
         issues = []
         validator.validate_outcomes(self.ROOT, issues)
         self.assertEqual(issues, [])
@@ -942,11 +1087,14 @@ class OutcomeTests(unittest.TestCase):
             self.assertIn(f'has_global_flag = {flag}', script_loc)
             self.assertNotIn(f'has_country_flag = {flag}', script_loc)
 
+        def timed_flag(flag):
+            return rf'set_global_flag\s*=\s*\{{\s*flag\s*=\s*{flag}\s+value\s*=\s*1\s+days\s*=\s*20\s*\}}'
+
         for flag in flags[:2]:
-            self.assertIn(f'set_global_flag = {flag}', news)
+            self.assertRegex(news, timed_flag(flag))
             self.assertNotIn(f'set_country_flag = {flag}', news)
         for flag in flags[2:]:
-            self.assertIn(f'set_global_flag = {flag}', maps)
+            self.assertRegex(maps, timed_flag(flag))
             self.assertIn(f'clr_global_flag = {flag}', maps)
             self.assertNotIn(f'set_country_flag = {flag}', maps)
             self.assertNotIn(f'clr_country_flag = {flag}', maps)
@@ -955,14 +1103,19 @@ class OutcomeTests(unittest.TestCase):
         maps = self.MAPS.read_text(encoding='utf-8-sig')
         news = (self.ROOT / 'events' / 'ADISCORD_news.txt').read_text(encoding='utf-8-sig')
         audio = self.named_block(maps, 'ADISCORD_vorkerland_play_collapse_superevent_audio')
-        self.assertRegex(audio, r'every_country\s*=\s*\{\s*limit\s*=\s*\{\s*is_ai\s*=\s*no\s*\}')
+        self.assertRegex(audio, r'every_country\s*=\s*\{\s*limit\s*=\s*\{\s*is_ai\s*=\s*no')
+        self.assertIn('ADISCORD_major_news_enabled = yes', audio)
         self.assertIn('scoped_sound_effect = superevent_vorkerland_civilwar_sound_e', audio)
         self.assertIn('scoped_play_song = "one_minute_of_silence"', audio)
 
+        local_audio = self.named_block(maps, 'ADISCORD_vorkerland_play_local_superevent_audio')
+        self.assertIn('ADISCORD_local_news_enabled = yes', local_audio)
+        self.assertIn('scoped_sound_effect = superevent_vorkerland_civilwar_sound_e', local_audio)
+
         civilwar = self.named_block(news, 'news_event')
         dirty_opening = self.named_block(maps, 'ADISCORD_vorkerland_show_dirty_opening_superevent')
-        for block in (civilwar, dirty_opening):
-            self.assertIn('ADISCORD_vorkerland_play_collapse_superevent_audio = yes', block)
+        self.assertIn('ADISCORD_vorkerland_play_collapse_superevent_audio = yes', civilwar)
+        self.assertIn('ADISCORD_vorkerland_play_local_superevent_audio = yes', dirty_opening)
 
         sounds = (self.ROOT / 'sound' / 'superevents_sound.asset').read_text(encoding='utf-8-sig')
         effects = (self.ROOT / 'sound' / 'superevents_effects.asset').read_text(encoding='utf-8-sig')

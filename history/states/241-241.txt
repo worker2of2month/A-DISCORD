@@ -1,0 +1,22 @@
+state = {
+	id = 241
+	name = "STATE_241"
+	manpower = 135000
+	state_category = town
+	history = {
+		owner = KDR
+		add_core_of = KDR
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 2
+			arms_factory = 1
+			air_base = 1
+		}
+	}
+	provinces = {
+		971 1295 2374 2523 4093 5262 5348 5711 6343 7512 8280 9141
+		10293 10755
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 3.0
+}

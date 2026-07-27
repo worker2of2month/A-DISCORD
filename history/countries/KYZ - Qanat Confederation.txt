@@ -1,0 +1,20 @@
+capital = 283
+oob = "KYZ"
+
+recruit_character = KYZ_Qanat_Assembly
+
+set_politics = {
+	ruling_party = anarchism
+	last_election = "2154.3.1"
+	elections_allowed = no
+}
+set_popularities = {
+	anarchism = 52
+	pragmatism = 20
+	humanism = 18
+	utilitarism = 10
+}
+set_stability = 0.64
+set_war_support = 0.21
+set_research_slots = 2
+add_ideas = { KYZ_free_qanat_compact }

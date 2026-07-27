@@ -1,0 +1,15 @@
+spriteTypes = {
+	# ADISCORD_militia is a custom subunit key, so the engine cannot fall back to
+	# vanilla's GFX_unit_militia_* sprites even though it uses infantry models.
+	spriteType = {
+		name = "GFX_unit_ADISCORD_militia_icon_medium"
+		texturefile = "gfx/interface/counters/divisions_large/unit_militia_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_militia_icon_medium_white"
+		texturefile = "gfx/interface/counters/divisions_small/onmap_unit_militia_icon.dds"
+		noOfFrames = 2
+	}
+}

@@ -1,0 +1,12 @@
+division_template = {
+	name = "Caravan Guard"
+	regiments = {
+		ADISCORD_militia = { x = 0 y = 0 }
+		ADISCORD_militia = { x = 0 y = 1 }
+		ADISCORD_militia = { x = 1 y = 0 }
+	}
+}
+units = {
+	division = { division_name = { is_name_ordered = yes name_order = 1 } location = 971 division_template = "Caravan Guard" start_experience_factor = 0.15 start_equipment_factor = 0.55 }
+	division = { division_name = { is_name_ordered = yes name_order = 2 } location = 971 division_template = "Caravan Guard" start_experience_factor = 0.10 start_equipment_factor = 0.45 }
+}

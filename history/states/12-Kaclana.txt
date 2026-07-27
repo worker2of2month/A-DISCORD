@@ -2,7 +2,7 @@ state={
 	id=12
 	name="STATE_12"
 	provinces={
-		80 121 122 141 7986 11467 16353 16357 16380 
+		80 121 122 141 7986 11467 16353 16357 16380 16644 16647
 	}
 	manpower=221847
 	buildings_max_level_factor=1.000
@@ -15,5 +15,7 @@ state={
 			infrastructure = 2
 		}
 		add_core_of = NOD
+		victory_points = { 16644 1 }
+		victory_points = { 16647 1 }
 	}
 }

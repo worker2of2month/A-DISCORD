@@ -1,0 +1,20 @@
+capital = 253
+oob = "RHM"
+
+recruit_character = RHM_Faris_Rahma
+
+set_politics = {
+	ruling_party = humanism
+	last_election = "2159.2.11"
+	elections_allowed = yes
+}
+set_popularities = {
+	humanism = 48
+	pragmatism = 24
+	utilitarism = 16
+	anarchism = 12
+}
+set_stability = 0.61
+set_war_support = 0.25
+set_research_slots = 2
+add_ideas = { RHM_cistern_parliament }

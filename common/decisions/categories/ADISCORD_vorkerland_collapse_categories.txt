@@ -1,0 +1,26 @@
+ADISCORD_vorkerland_collapse_category = {
+	allowed = {
+		OR = {
+			tag = WRK
+			tag = TVA
+			tag = VAD
+			tag = EYR
+			tag = EGC
+			tag = ZAO
+			tag = WPA
+			tag = WPS
+			tag = PWR
+			tag = PSD
+			tag = VLA
+			tag = EBA
+			tag = ROM
+			tag = DVA
+			tag = SOL
+			tag = SRA
+			tag = TRU
+			tag = ZTA
+		}
+	}
+
+	visible = { has_active_mission = ADISCORD_vorkerland_stalemate_deadline }
+}

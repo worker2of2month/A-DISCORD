@@ -1,0 +1,21 @@
+capital = 294
+oob = "SHL"
+
+recruit_character = SHL_Jalil_Nur
+
+set_politics = {
+	ruling_party = hedonism
+	last_election = "2159.9.2"
+	elections_allowed = no
+}
+set_popularities = {
+	hedonism = 51
+	pragmatism = 20
+	utilitarism = 12
+	humanism = 10
+	etatism = 7
+}
+set_stability = 0.54
+set_war_support = 0.27
+set_research_slots = 2
+add_ideas = { SHL_nine_furnaces_compact }

@@ -74,17 +74,21 @@ ADISCORD_vorkerland_setup_sla = {
 	# EXZ owns and controls every closed-zone state from game start. Keep the
 	# explicit owner-then-controller order when a successor materialises.
 	49 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
+	50 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
 	51 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
 	155 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
 	176 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
 	187 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
 	191 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
+	233 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
+	329 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
 	log = "[ADISCORD Vorkerland] SLA state ownership assigned"
 	SLA = {
 		set_capital = { state = 49 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "SLA_vorkerland_collapse"
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 80 producer = SLA }
 	}
 	log = "[ADISCORD Vorkerland] SLA setup completed"
 }
@@ -93,6 +97,7 @@ ADISCORD_vorkerland_setup_rza = {
 	log = "[ADISCORD Vorkerland] RZA exclusion-zone setup started"
 	125 = { add_core_of = RZA set_state_owner_to = RZA set_state_controller_to = RZA }
 	177 = { add_core_of = RZA set_state_owner_to = RZA set_state_controller_to = RZA }
+	186 = { add_core_of = RZA set_state_owner_to = RZA set_state_controller_to = RZA }
 	188 = { add_core_of = RZA set_state_owner_to = RZA set_state_controller_to = RZA }
 	192 = { add_core_of = RZA set_state_owner_to = RZA set_state_controller_to = RZA }
 	208 = { add_core_of = RZA set_state_owner_to = RZA set_state_controller_to = RZA }
@@ -108,6 +113,7 @@ ADISCORD_vorkerland_setup_rza = {
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "RZA_vorkerland_collapse"
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 80 producer = RZA }
 	}
 	log = "[ADISCORD Vorkerland] RZA setup completed"
 }
@@ -132,6 +138,7 @@ ADISCORD_vorkerland_setup_mlr = {
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "MLR_vorkerland_collapse"
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 80 producer = MLR }
 	}
 	log = "[ADISCORD Vorkerland] MLR setup completed"
 }
@@ -141,6 +148,7 @@ ADISCORD_vorkerland_setup_ert = {
 	167 = { add_core_of = ERT set_state_owner_to = ERT set_state_controller_to = ERT }
 	168 = { add_core_of = ERT set_state_owner_to = ERT set_state_controller_to = ERT }
 	169 = { add_core_of = ERT set_state_owner_to = ERT set_state_controller_to = ERT }
+	170 = { add_core_of = ERT set_state_owner_to = ERT set_state_controller_to = ERT }
 	171 = { add_core_of = ERT set_state_owner_to = ERT set_state_controller_to = ERT }
 	184 = { add_core_of = ERT set_state_owner_to = ERT set_state_controller_to = ERT }
 	185 = { add_core_of = ERT set_state_owner_to = ERT set_state_controller_to = ERT }
@@ -151,6 +159,7 @@ ADISCORD_vorkerland_setup_ert = {
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "ERT_vorkerland_collapse"
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 80 producer = ERT }
 	}
 	log = "[ADISCORD Vorkerland] ERT setup completed"
 }
@@ -165,12 +174,14 @@ ADISCORD_vorkerland_setup_irt = {
 	193 = { add_core_of = IRT set_state_owner_to = IRT set_state_controller_to = IRT }
 	206 = { add_core_of = IRT set_state_owner_to = IRT set_state_controller_to = IRT }
 	207 = { add_core_of = IRT set_state_owner_to = IRT set_state_controller_to = IRT }
+	330 = { add_core_of = IRT set_state_owner_to = IRT set_state_controller_to = IRT }
 	log = "[ADISCORD Vorkerland] IRT state ownership assigned"
 	IRT = {
 		set_capital = { state = 181 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "IRT_vorkerland_collapse"
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 80 producer = IRT }
 	}
 	log = "[ADISCORD Vorkerland] IRT setup completed"
 }
@@ -193,6 +204,7 @@ ADISCORD_vorkerland_setup_sca = {
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "SCA_vorkerland_collapse"
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 80 producer = SCA }
 	}
 	log = "[ADISCORD Vorkerland] SCA setup completed"
 }

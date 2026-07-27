@@ -1,0 +1,22 @@
+state = {
+	id = 253
+	name = "STATE_253"
+	manpower = 105000
+	state_category = town
+	history = {
+		owner = RHM
+		add_core_of = RHM
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 2
+			arms_factory = 1
+			air_base = 1
+		}
+	}
+	provinces = {
+		443 812 1450 2317 3065 3135 5957 6403 7006 7273 8164 8843
+		9398 9739 11092 12188 12966
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 3.0
+}

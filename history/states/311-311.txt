@@ -1,0 +1,19 @@
+state = {
+	id = 311
+	name = "STATE_311"
+	manpower = 560000
+	state_category = rural
+	history = {
+		owner = WRK
+		add_core_of = WRK
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+	provinces = {
+		1218 1915 3238 3722 5905 8080 9279 11640
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

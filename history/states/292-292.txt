@@ -1,0 +1,18 @@
+state = {
+	id = 292
+	name = "STATE_292"
+	manpower = 10348
+	state_category = wasteland
+	history = {
+		owner = SHL
+		add_core_of = SHL
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		2350 5350 5857 6582 7276 9070 10221 10869 11627 11807 12683
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

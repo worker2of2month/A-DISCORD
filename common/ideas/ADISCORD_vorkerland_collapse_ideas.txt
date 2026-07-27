@@ -15,11 +15,27 @@ ideas = {
 
 			modifier = {
 				surrender_limit = 1.0
+				army_attack_factor = 0.10
+				breakthrough_factor = 0.25
+				army_morale_factor = 0.10
+				supply_consumption_factor = -0.10
 			}
 
 			ai_will_do = {
 				factor = 0
 			}
+		}
+
+		ADISCORD_vorkerland_war_weariness = {
+			# Legacy definition retained only so old saves can migrate the idea
+			# into the variable-backed dynamic modifier on startup.
+			picture = generic_demoralized_populace
+
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+
+			ai_will_do = { factor = 0 }
 		}
 	}
 }

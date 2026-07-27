@@ -3008,7 +3008,11 @@ class CrisisValidatorTests(unittest.TestCase):
         capitulation = validator.extract_named_block(on_actions, "on_capitulation") or ""
         self.assertIn("set_global_flag = STP_VAL_skip_capitulation_claimed", capitulation)
         self.assertIn("clr_global_flag = STP_VAL_skip_capitulation_claimed", capitulation)
-        self.assertIn("clr_global_flag = skip_default_capitulation", capitulation)
+        self.assertNotIn("clr_global_flag = skip_default_capitulation", capitulation)
+        fallback = validator.read(
+            root / "common/on_actions/ZZ_ADISCORD_default_capitulation_on_actions.txt"
+        ) or ""
+        self.assertIn("clr_global_flag = skip_default_capitulation", fallback)
 
         core = validator.read(
             root / "common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt"

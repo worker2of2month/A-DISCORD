@@ -13,8 +13,5 @@ state={
 		owner = COF
 		add_core_of = COF
 
-		victory_points = { 2 1 }
-		victory_points = { 75 3 }
-		victory_points = { 5421 1 }
 	}
 }

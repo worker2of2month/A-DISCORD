@@ -16,7 +16,11 @@ news_event = { #vorkerland civilwar
 	option = {
 		name = news.0.a
 		hidden_effect = {
-			set_global_flag = superevent_vorkerland_civilwar
+			set_global_flag = {
+				flag = superevent_vorkerland_civilwar
+				value = 1
+				days = 20
+			}
 			ADISCORD_vorkerland_play_collapse_superevent_audio = yes
 		}
 	}
@@ -100,10 +104,15 @@ news_event = { #stelander empire
 	option = {
 		name = news.1.a
 		hidden_effect = {
-			set_global_flag = superevent_stelander_empire
-			if = {
+			set_global_flag = {
+				flag = superevent_stelander_empire
+				value = 1
+				days = 20
+			}
+			every_country = {
 				limit = {
 					is_ai = no
+					ADISCORD_major_news_enabled = yes
 				}
 				scoped_sound_effect = superevent_stelander_empire_sound_e
 				scoped_play_song = "one_minute_of_silence"

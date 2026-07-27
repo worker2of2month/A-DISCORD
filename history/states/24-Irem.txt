@@ -16,7 +16,6 @@ state={
 		}
 		add_core_of = VAL
 
-		victory_points = { 4214 1 }
 	}
 	resources = {
         oil = 17

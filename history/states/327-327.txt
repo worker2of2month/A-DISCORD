@@ -1,0 +1,20 @@
+state = {
+	id = 327
+	name = "STATE_327"
+	manpower = 310000
+	state_category = town
+	history = {
+		owner = WRK
+		add_core_of = WRK
+		victory_points = { 16641 5 }
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+		}
+	}
+	provinces = {
+		284 10999 16641
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 2.0
+}

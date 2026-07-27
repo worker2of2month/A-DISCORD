@@ -24,7 +24,8 @@ state={
             nuclear_reactor = 1
             rocket_site = 1
             synthetic_refinery = 2
-        }
-	victory_points = { 6713 100 }
+		}
+		victory_points = { 6713 100 }
+		victory_points = { 16405 25 }
 	}
 }

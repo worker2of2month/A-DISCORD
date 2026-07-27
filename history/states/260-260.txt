@@ -1,0 +1,22 @@
+state = {
+	id = 260
+	name = "STATE_260"
+	manpower = 72000
+	state_category = town
+	history = {
+		owner = SDR
+		add_core_of = SDR
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 2
+			arms_factory = 1
+			air_base = 1
+		}
+	}
+	provinces = {
+		197 1396 1571 1784 3967 5123 5590 6040 7727 9572 9817 12495
+		12578
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 3.0
+}

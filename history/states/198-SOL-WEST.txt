@@ -4,17 +4,16 @@ state={
 	provinces={
 		513 741 3183 4185 6510 6764 8323 8570 9104 9193 9466 11282 11411 11659 12232 12564 12584
 	}
-	manpower=75000
+	manpower=410000
 	state_category=rural
 	buildings_max_level_factor=1
-	local_supplies=0
+	local_supplies=1.5
 	history={
-		owner=SOL
+		owner=VAD
 		buildings={
-			infrastructure=1
+			infrastructure=2
 			industrial_complex=1
 		}
-		add_core_of=SOL
-		victory_points={ 9104 3 }
+		add_core_of=VAD
 	}
 }

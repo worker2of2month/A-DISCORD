@@ -1,0 +1,19 @@
+state = {
+	id = 317
+	name = "STATE_317"
+	manpower = 31841
+	state_category = rural
+	history = {
+		owner = TRU
+		add_core_of = TRU
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		1853 2159 2200 2490 2501 3031 5309 7483 8803 9929 9985 11384
+		12019 12832 12847
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

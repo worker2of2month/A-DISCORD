@@ -1,14 +1,18 @@
 state={
 	id=59
 	name="STATE_59"
+	resources={
+		tungsten=1
+		aluminium=4
+		steel=8
+	}
 	provinces={
-		3595 6206 6885 9285 10404
+		3595 6206 6885 10404
 	}
 	manpower=32000
-
-	state_category = rural
-	buildings_max_level_factor=1.000
-	local_supplies=0.000
+	buildings_max_level_factor=1
+	state_category=rural
+	local_supplies=0
 
 	history = {
 		owner = CIN
@@ -16,11 +20,5 @@ state={
 			infrastructure = 1
 		}
 		add_core_of = CIN
-		victory_points = { 10404 1 }
 	}
-	resources = {
-        tungsten = 1
-        aluminium = 4
-        steel = 8
-    }
 }

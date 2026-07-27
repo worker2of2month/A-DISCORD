@@ -1,0 +1,20 @@
+capital = 69
+oob = "AZH"
+
+recruit_character = AZH_Samir_Azhar
+
+set_politics = {
+	ruling_party = etatism
+	last_election = "2142.1.1"
+	elections_allowed = no
+}
+set_popularities = {
+	etatism = 52
+	chauvinism = 20
+	utilitarism = 16
+	pragmatism = 12
+}
+set_stability = 0.53
+set_war_support = 0.48
+set_research_slots = 2
+add_ideas = { AZH_black_basin_levy }

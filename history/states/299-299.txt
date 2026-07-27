@@ -1,0 +1,22 @@
+state = {
+	id = 299
+	name = "STATE_299"
+	manpower = 30781
+	state_category = rural
+	resources = {
+		aluminium = 3
+		chromium = 1
+	}
+	history = {
+		owner = GLP
+		add_core_of = GLP
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		1656 4757 10918 10975 11245 11511
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

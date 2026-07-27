@@ -94,3 +94,40 @@ continent = {
 		}
 	}
 }
+
+# Shared Vorkerland military portrait pool. Random unit leaders are selected
+# from portraits/*.txt by country tag; graphical_culture_2d does not control it.
+WRK = {
+	army = {
+		male = {
+			"GFX_Portrait_WRK_Generic_land_1"
+			"GFX_Portrait_WRK_Generic_land_2"
+			"GFX_Portrait_WRK_Generic_land_3"
+		}
+	}
+}
+
+VAD = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+ZAO = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+PWR = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+VLA = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+ROM = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+SOL = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+TRU = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+TVA = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+EYR = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+EGC = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+WPA = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+WPS = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+PSD = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+EBA = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+DVA = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+SRA = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+ZTA = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+SLA = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+RZA = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+MLR = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+ERT = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+IRT = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+SCA = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+EXZ = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }

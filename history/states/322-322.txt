@@ -1,0 +1,18 @@
+state = {
+	id = 322
+	name = "STATE_322"
+	manpower = 57706
+	state_category = rural
+	history = {
+		owner = ZAO
+		add_core_of = ZAO
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		587 1946 2268 2304 2623 4524 8824 11520
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

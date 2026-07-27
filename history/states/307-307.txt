@@ -1,0 +1,21 @@
+state = {
+	id = 307
+	name = "STATE_307"
+	manpower = 620000
+	state_category = town
+	history = {
+		owner = VAD
+		add_core_of = VAD
+		victory_points = { 16584 3 }
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+	provinces = {
+		385 1780 2844 4156 4290 6506 6716 8740 10699 10946 11968 12739
+		16584
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 2.0
+}

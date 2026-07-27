@@ -1,0 +1,20 @@
+capital = 260
+oob = "SDR"
+
+recruit_character = SDR_Hamid_Sahr
+
+set_politics = {
+	ruling_party = pragmatism
+	last_election = "2148.8.4"
+	elections_allowed = yes
+}
+set_popularities = {
+	pragmatism = 45
+	etatism = 27
+	utilitarism = 16
+	chauvinism = 12
+}
+set_stability = 0.47
+set_war_support = 0.44
+set_research_slots = 2
+add_ideas = { SDR_dry_river_patrols }

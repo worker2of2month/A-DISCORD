@@ -2,7 +2,7 @@ state={
 	id=20
 	name="STATE_20"
 	provinces={
-		6 21 51 81 88 16372 
+		6 21 51 81 88 16372 16646
 	}
 	manpower=180000
 	buildings_max_level_factor=1.000
@@ -19,6 +19,7 @@ state={
 		add_core_of = YPR
 
 		victory_points = { 16372 10 }
+		victory_points = { 16646 1 }
 	}
 	
 }

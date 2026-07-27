@@ -1,0 +1,12 @@
+﻿l_russian:
+ PRODUCTION_MATERIALS_COAL: "Электричество"
+ coal_desc: "Электричество — стратегический ресурс, обеспечивающий энергией промышленное производство."
+ local_resources_coal_factor: "Эффективность выработки электричества"
+ local_resources_coal_factor_desc: "Изменяет объём получаемого электричества."
+ MODIFIER_ENERGY_GAIN_FACTOR: "Эффективность энергоснабжения"
+ state_resource_coal: "Электричество"
+ temporary_state_resource_coal: "Электричество"
+ country_resource_coal: "Электричество"
+ alert_lack_of_power_delayed_header: "Нам не хватает $COAL|R$£out_of_power_texticon ед. электричества\nПромышленность получает $PERCENTAGE|.0H%$ необходимой энергии, что имеет следующие последствия:"
+ TOPBAR_COAL_CURRENTLY_USED: "Из §Y$COUNT$§! ед. используемого £energy_consumption_texticon электричества"
+ TOPBAR_TOTAL_COAL: "Из §Y$COUNT$§! ед. доступного £energy_consumption_texticon электричества"

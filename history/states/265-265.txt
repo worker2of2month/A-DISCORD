@@ -1,0 +1,19 @@
+state = {
+	id = 265
+	name = "STATE_265"
+	manpower = 41535
+	state_category = rural
+	history = {
+		owner = MZR
+		add_core_of = MZR
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		1989 2244 2599 3465 3528 3667 3805 4831 5562 5719 7371 8214
+		8334 9900
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

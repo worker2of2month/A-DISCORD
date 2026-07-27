@@ -1,0 +1,18 @@
+state = {
+	id = 296
+	name = "STATE_296"
+	manpower = 42024
+	state_category = wasteland
+	history = {
+		owner = GLP
+		add_core_of = GLP
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		201 1846 1900 4315 6385 8376 10949 11644 12029 12068 12990
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

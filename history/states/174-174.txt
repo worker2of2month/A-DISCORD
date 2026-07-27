@@ -1,15 +1,23 @@
-state={
-	id=174
-	name="STATE_174"
-	provinces={
-		158 191 3367 4013 4792 5261 5869 6266 6325 7243 8134 8479 8972 10636 10727 11140 
-	}
-	manpower=0
-	buildings_max_level_factor=1
-	local_supplies=0
-
+state = {
+	id = 174
+	name = "STATE_174"
+	manpower = 95000
+	state_category = town
 	history = {
-		owner = EFL
+		owner = WEF
+		add_core_of = WEF
 		add_core_of = EFL
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 2
+			arms_factory = 1
+			air_base = 1
+		}
 	}
+	provinces = {
+		158 191 3367 4013 4792 5261 5869 6266 6325 7243 8134 8479
+		8972 10636 10727 11140
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 3.0
 }

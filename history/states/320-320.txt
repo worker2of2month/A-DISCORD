@@ -1,0 +1,18 @@
+state = {
+	id = 320
+	name = "STATE_320"
+	manpower = 390000
+	state_category = rural
+	history = {
+		owner = WRK
+		add_core_of = WRK
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		3674 5371 6410 7460 8827 9163 11586 12099
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

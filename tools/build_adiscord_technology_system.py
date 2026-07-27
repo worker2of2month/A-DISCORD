@@ -1558,7 +1558,7 @@ BUILDING_DISPLAY_NAMES = {
     "ADISCORD_metallurgical_complex": ("металлургический комплекс", "Metallurgical Complex"),
     "ADISCORD_electrolysis_complex": ("электролизный комплекс", "Electrolysis Complex"),
     "ADISCORD_strategic_mining_complex": ("комплекс стратегической добычи", "Strategic Mining Complex"),
-    "ADISCORD_thermal_power_complex": ("теплоэнергетический комплекс", "Thermal Power Complex"),
+    "ADISCORD_thermal_power_complex": ("энергогенерирующий комплекс", "Power Generation Complex"),
     "synthetic_refinery": ("завод синтетических материалов", "Synthetic Materials Plant"),
     "fuel_silo": ("топливное хранилище", "Fuel Silo"),
     "anti_air_building": ("региональную ПВО", "State Anti-Air"),

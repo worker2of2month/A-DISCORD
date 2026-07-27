@@ -1,0 +1,12 @@
+﻿l_english:
+ PRODUCTION_MATERIALS_COAL: "Electricity"
+ coal_desc: "Electricity is a strategic resource used to power industrial production."
+ local_resources_coal_factor: "Electricity Generation Efficiency"
+ local_resources_coal_factor_desc: "Modifies the amount of electricity generated."
+ MODIFIER_ENERGY_GAIN_FACTOR: "Power Supply Efficiency"
+ state_resource_coal: "Electricity"
+ temporary_state_resource_coal: "Electricity"
+ country_resource_coal: "Electricity"
+ alert_lack_of_power_delayed_header: "We lack $COAL|R$£out_of_power_texticon units of electricity.\nIndustry receives $PERCENTAGE|.0H%$ of its energy demand, with the following effects:"
+ TOPBAR_COAL_CURRENTLY_USED: "From §Y$COUNT$§! £energy_consumption_texticon electricity currently used"
+ TOPBAR_TOTAL_COAL: "From §Y$COUNT$§! £energy_consumption_texticon electricity available for use"

@@ -19,6 +19,5 @@ state={
 			industrial_complex = 1
 		}
 		add_core_of = NAM
-		victory_points = { 176 3 }
 	}
 }

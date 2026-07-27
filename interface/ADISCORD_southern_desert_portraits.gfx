@@ -1,0 +1,30 @@
+spriteTypes = {
+	spriteType = {
+		name = "GFX_portrait_KDR_Rashid_al_Kadir"
+		texturefile = "gfx/leaders/arab1.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_RHM_Faris_Rahma"
+		texturefile = "gfx/leaders/arab3.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_SDR_Hamid_Sahr"
+		texturefile = "gfx/leaders/arab2.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_SHL_Jalil_Nur"
+		texturefile = "gfx/leaders/arab4.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_GLP_Miran_Veyr"
+		texturefile = "gfx/leaders/arab7.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_AZH_Samir_Azhar"
+		texturefile = "gfx/leaders/arab5.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_WEF_Elina_Fenn"
+		texturefile = "gfx/leaders/arab6.png"
+	}
+}

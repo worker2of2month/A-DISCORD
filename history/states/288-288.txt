@@ -1,0 +1,20 @@
+state = {
+	id = 288
+	name = "STATE_288"
+	manpower = 65000
+	state_category = town
+	history = {
+		owner = SHL
+		add_core_of = SHL
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+	provinces = {
+		834 960 2675 3234 4883 5433 5497 5929 6008 6082 6137 7739
+		8034 8976 9095 10490 12352
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

@@ -1,0 +1,25 @@
+scripted_gui = {
+	ADISCORD_news_settings_panel = {
+		context_type = player_context
+		window_name = "ADISCORD_news_settings_panel_window"
+		parent_window_token = decision_tab
+
+		# Attach directly to the Decisions tab instead of living in a category.
+		# Player context gives the filter buttons a normal input scope.
+		visible = { always = yes }
+
+		effects = {
+			ADISCORD_major_news_checked_click = { set_country_flag = ADISCORD_major_news_disabled }
+			ADISCORD_major_news_unchecked_click = { clr_country_flag = ADISCORD_major_news_disabled }
+			ADISCORD_local_news_checked_click = { set_country_flag = ADISCORD_local_news_disabled }
+			ADISCORD_local_news_unchecked_click = { clr_country_flag = ADISCORD_local_news_disabled }
+		}
+
+		triggers = {
+			ADISCORD_major_news_checked_visible = { ADISCORD_major_news_enabled = yes }
+			ADISCORD_major_news_unchecked_visible = { has_country_flag = ADISCORD_major_news_disabled }
+			ADISCORD_local_news_checked_visible = { ADISCORD_local_news_enabled = yes }
+			ADISCORD_local_news_unchecked_visible = { has_country_flag = ADISCORD_local_news_disabled }
+		}
+	}
+}

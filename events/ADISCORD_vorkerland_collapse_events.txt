@@ -84,10 +84,6 @@ country_event = {
 			limit = { RUS = { exists = yes } }
 			RUS = {
 				country_event = {
-					id = ADISCORD_vorkerland_collapse.24
-					days = 14
-				}
-				country_event = {
 					id = ADISCORD_vorkerland_collapse.23
 					days = 1080
 				}
@@ -131,6 +127,7 @@ country_event = {
 		TRU = {
 			if = { limit = { country_exists = ZTA NOT = { has_war_with = ZTA } } declare_war_on = { target = ZTA type = annex_everything } }
 		}
+		ADISCORD_vorkerland_activate_stalemate_missions = yes
 	}
 }
 
@@ -343,24 +340,4 @@ country_event = {
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
 	}
 	immediate = { ADISCORD_vorkerland_apply_fragmented_map = yes }
-}
-
-country_event = {
-	id = ADISCORD_vorkerland_collapse.24
-	hidden = yes
-	is_triggered_only = yes
-	trigger = {
-		tag = RUS
-		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-	}
-	immediate = {
-		ADISCORD_vorkerland_update_worker_victory_timer = yes
-		ADISCORD_vorkerland_update_vlad_victory_timer = yes
-		ADISCORD_vorkerland_update_dorian_victory_timer = yes
-		if = {
-			limit = { NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished } }
-			country_event = { id = ADISCORD_vorkerland_collapse.24 days = 14 }
-		}
-	}
 }

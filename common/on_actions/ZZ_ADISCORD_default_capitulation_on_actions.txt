@@ -1,0 +1,46 @@
+on_actions = {
+	# Loaded after feature-specific routers. Those routers reserve a
+	# capitulation with skip_default_capitulation when they have a bespoke
+	# scripted peace; everything else receives the deterministic TFR-style
+	# white-peace-and-annex fallback below.
+	on_capitulation = {
+		effect = {
+			if = {
+				limit = {
+					NOT = { has_global_flag = skip_default_capitulation }
+					# Do not end a faction war when the defeated country still has
+					# an active faction partner. The fallback runs for the last survivor.
+					NOT = {
+						ROOT = {
+							is_in_faction = yes
+							any_other_country = {
+								is_in_faction_with = PREV
+								has_capitulated = no
+							}
+						}
+					}
+				}
+				FROM = {
+					every_enemy_country = {
+						limit = {
+							OR = {
+								original_tag = ROOT
+								is_in_faction_with = ROOT
+								is_puppet_of = ROOT
+							}
+						}
+						FROM = {
+							white_peace = PREV
+							annex_country = {
+								target = PREV
+								transfer_troops = no
+							}
+						}
+					}
+				}
+			}
+			# The reservation is per capitulation and must never leak into the next one.
+			clr_global_flag = skip_default_capitulation
+		}
+	}
+}

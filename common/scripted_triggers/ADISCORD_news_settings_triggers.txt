@@ -1,0 +1,9 @@
+# Player-scoped opt-outs. Missing flags mean enabled, which keeps old saves
+# compatible and avoids any initialization or recurring maintenance pulse.
+ADISCORD_major_news_enabled = {
+	NOT = { has_country_flag = ADISCORD_major_news_disabled }
+}
+
+ADISCORD_local_news_enabled = {
+	NOT = { has_country_flag = ADISCORD_local_news_disabled }
+}

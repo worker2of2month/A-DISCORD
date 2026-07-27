@@ -1,0 +1,22 @@
+state = {
+	id = 300
+	name = "STATE_300"
+	manpower = 118000
+	state_category = town
+	history = {
+		owner = GLP
+		add_core_of = GLP
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 2
+			arms_factory = 1
+			air_base = 1
+		}
+	}
+	provinces = {
+		492 1169 3222 4782 5595 6011 7073 8056 9672 9950 10937 11478
+		11938 12043 12321 12583
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 3.0
+}

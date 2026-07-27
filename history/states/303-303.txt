@@ -1,0 +1,18 @@
+state = {
+	id = 303
+	name = "STATE_303"
+	manpower = 9000
+	state_category = rural
+	history = {
+		owner = TFF
+		add_core_of = TFF
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		3261
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

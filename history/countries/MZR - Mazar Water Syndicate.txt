@@ -1,0 +1,20 @@
+capital = 275
+oob = "MZR"
+
+recruit_character = MZR_Ration_Assembly
+
+set_politics = {
+	ruling_party = utilitarism
+	last_election = "2146.1.1"
+	elections_allowed = yes
+}
+set_popularities = {
+	utilitarism = 54
+	humanism = 18
+	pragmatism = 16
+	etatism = 12
+}
+set_stability = 0.66
+set_war_support = 0.24
+set_research_slots = 2
+add_ideas = { MZR_common_water_charter }

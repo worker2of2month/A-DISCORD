@@ -16,6 +16,5 @@ state={
 		}
 		add_core_of = BBV
 
-		victory_points = { 16554 5 }
 	}
 }

@@ -16,7 +16,6 @@ state={
 			infrastructure = 1
 		}
 		add_core_of = OSF
-		victory_points = { 16316 1 }
 	}
 	resources = {
         tungsten = 4

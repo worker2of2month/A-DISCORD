@@ -1,0 +1,18 @@
+state = {
+	id = 324
+	name = "STATE_324"
+	manpower = 68052
+	state_category = rural
+	history = {
+		owner = VAD
+		add_core_of = VAD
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		1067 3334 6360 6378 7703 12130 12192
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

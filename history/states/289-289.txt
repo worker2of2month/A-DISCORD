@@ -1,0 +1,19 @@
+state = {
+	id = 289
+	name = "STATE_289"
+	manpower = 21591
+	state_category = rural
+	history = {
+		owner = SHL
+		add_core_of = SHL
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		1149 2030 2412 2869 3416 4995 9568 9742 9976 10107 10927 11295
+		12500
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

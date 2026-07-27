@@ -1,0 +1,18 @@
+state = {
+	id = 250
+	name = "STATE_250"
+	manpower = 27750
+	state_category = rural
+	history = {
+		owner = RHM
+		add_core_of = RHM
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		314 2661 4959 7721 8742 10055 11075 11870
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

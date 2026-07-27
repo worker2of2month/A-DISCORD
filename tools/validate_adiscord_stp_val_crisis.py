@@ -2612,10 +2612,16 @@ def _validate_legacy_integration(root: Path, issues: list[str]) -> None:
         "set_global_flag = STP_VAL_skip_capitulation_claimed",
         "has_global_flag = STP_VAL_skip_capitulation_claimed",
         "clr_global_flag = STP_VAL_skip_capitulation_claimed",
-        "clr_global_flag = skip_default_capitulation",
     ):
         if token not in capitulation:
             issues.append(f"scripted capitulation router lacks scoped flag cleanup {token}")
+    if "clr_global_flag = skip_default_capitulation" in capitulation:
+        issues.append("scripted capitulation router must leave shared fallback cleanup to the final global router")
+    fallback = read(
+        root / "common/on_actions/ZZ_ADISCORD_default_capitulation_on_actions.txt"
+    ) or ""
+    if "clr_global_flag = skip_default_capitulation" not in fallback:
+        issues.append("final global capitulation router does not clean its shared reservation flag")
 
     contracts = crisis_texts.get(
         "common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt", ""

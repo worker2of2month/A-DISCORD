@@ -151,4 +151,34 @@ spriteTypes = {
 		name = "GFX_portrait_europe_generic_land_13_small"
 		texturefile = "gfx/interface/ideas/idea_europe_generic_land_13.dds"
 	}
+
+
+	### VORKERLAND
+
+	spriteType = {
+		name = "GFX_Portrait_WRK_Generic_land_1"
+		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_1.png"
+	}
+	spriteType = {
+		name = "GFX_Portrait_WRK_Generic_land_1_small"
+		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_1.png"
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_WRK_Generic_land_2"
+		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_2.png"
+	}
+	spriteType = {
+		name = "GFX_Portrait_WRK_Generic_land_2_small"
+		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_2.png"
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_WRK_Generic_land_3"
+		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_3.png"
+	}
+	spriteType = {
+		name = "GFX_Portrait_WRK_Generic_land_3_small"
+		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_3.png"
+	}
 }

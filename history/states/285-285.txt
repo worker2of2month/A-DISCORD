@@ -1,0 +1,22 @@
+state = {
+	id = 285
+	name = "STATE_285"
+	manpower = 24915
+	state_category = rural
+	resources = {
+		tungsten = 2
+		aluminium = 2
+	}
+	history = {
+		owner = KYZ
+		add_core_of = KYZ
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		2542 3756 6233 6445 8237 8348 10988 12594
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

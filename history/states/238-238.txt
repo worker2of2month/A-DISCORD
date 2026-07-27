@@ -1,0 +1,18 @@
+state = {
+	id = 238
+	name = "STATE_238"
+	manpower = 37722
+	state_category = wasteland
+	history = {
+		owner = KDR
+		add_core_of = KDR
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		1377 2785 3142 3686 4457 7930 9348 10408 10861 11764 12503
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

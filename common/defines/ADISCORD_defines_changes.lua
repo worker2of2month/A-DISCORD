@@ -16,11 +16,14 @@ NDefines.NGame.START_DATE = "2160.1.1.1";
 	NDefines.NMilitary.ENEMY_AIR_SUPERIORITY_IMPACT = -0.5
 	NDefines.NMilitary.ENEMY_AIR_SUPERIORITY_SPEED_IMPACT = -0.2
 	NDefines.NMilitary.UNIT_EXPERIENCE_PER_TRAINING_DAY = 0.001
-	NDefines.NMilitary.LAND_COMBAT_ORG_DICE_SIZE = 2
-	NDefines.NMilitary.LAND_COMBAT_STR_DICE_SIZE = 6
-	NDefines.NMilitary.EQUIPMENT_COMBAT_LOSS_FACTOR = 0.15
-	NDefines.NMilitary.LAND_COMBAT_STR_DAMAGE_MODIFIER = 0.01
-	NDefines.NMilitary.LAND_COMBAT_ORG_DAMAGE_MODIFIER = 0.03
+	-- Restore the vanilla damage-dice relationship so attacks can actually
+	-- degrade a defended formation. The scalar values remain below vanilla
+	-- to preserve A-Discord's slower, equipment-constrained wars.
+	NDefines.NMilitary.LAND_COMBAT_ORG_DICE_SIZE = 4
+	NDefines.NMilitary.LAND_COMBAT_STR_DICE_SIZE = 2
+	NDefines.NMilitary.EQUIPMENT_COMBAT_LOSS_FACTOR = 0.40
+	NDefines.NMilitary.LAND_COMBAT_STR_DAMAGE_MODIFIER = 0.03
+	NDefines.NMilitary.LAND_COMBAT_ORG_DAMAGE_MODIFIER = 0.045
 	NDefines.NMilitary.LAND_COMBAT_COLLATERAL_FACTOR = 0.07
 	NDefines.NMilitary.BASE_LEADER_TRAIT_GAIN_XP = 0.75
 	NDefines.NMilitary.STRATEGIC_INFRA_SPEED = 15.0;
@@ -33,8 +36,10 @@ NDefines.NGame.START_DATE = "2160.1.1.1";
 	NDefines.NMilitary.GARRISON_ORDER_ARMY_CAP_FACTOR = 1.0
 	NDefines.NMilitary.BASE_DIVISION_SUPPORT_SLOT_COST = 5
 	NDefines.NMilitary.ATTRITION_DAMAGE_ORG = 0.04
-	NDefines.NMilitary.ATTRITION_EQUIPMENT_LOSS_CHANCE = 0.05
-	NDefines.NMilitary.ATTRITION_EQUIPMENT_PER_TYPE_LOSS_CHANCE = 0.05
+	-- Keep wasteland attrition relevant without erasing the rifle reserve
+	-- before the divisions have had a chance to fight.
+	NDefines.NMilitary.ATTRITION_EQUIPMENT_LOSS_CHANCE = 0.01
+	NDefines.NMilitary.ATTRITION_EQUIPMENT_PER_TYPE_LOSS_CHANCE = 0.01
 	NDefines.NMilitary.TACTIC_SWAP_FREQUENCEY = 24
 	NDefines.NMilitary.BASE_COMBAT_WIDTH = 120
 	NDefines.NMilitary.ADDITIONAL_COMBAT_WIDTH = 60
@@ -66,7 +71,7 @@ NDefines.NGame.START_DATE = "2160.1.1.1";
 	NDefines.NCountry.EVENT_PROCESS_OFFSET = 30
 	NDefines_Graphics.NGraphics.MAPICON_GROUP_PASSES = 10
 
-	NDefines.NAI.PLAN_ACTIVATION_SUPERIORITY_AGGRO = 4.0
+	NDefines.NAI.PLAN_ACTIVATION_SUPERIORITY_AGGRO = 1.0
 	NDefines.NAI.MIN_PLAN_VALUE_TO_MICRO_INACTIVE = 0.2
 
 	NDefines.NAI.VP_LEVEL_IMPORTANCE_HIGH = 25
@@ -99,9 +104,11 @@ NDefines.NGame.START_DATE = "2160.1.1.1";
 	NDefines.NMilitary.PLAN_STICKINESS_FACTOR = 95.0
 	NDefines.NMilitary.PLAN_STICKINESS_IGNORE_STACK_LIMIT = 1
 
-	NDefines.NMilitary.PLAN_EXECUTE_CAREFUL_LIMIT = 6.0
-	NDefines.NMilitary.PLAN_EXECUTE_BALANCED_LIMIT = -10.0
-	NDefines.NMilitary.PLAN_EXECUTE_RUSH = -200
+	-- Balanced plans use the vanilla score floor; even a rush remains selective
+	-- as in Expert AI instead of accepting virtually any losing attack.
+	NDefines.NMilitary.PLAN_EXECUTE_CAREFUL_LIMIT = 10.0
+	NDefines.NMilitary.PLAN_EXECUTE_BALANCED_LIMIT = 0.0
+	NDefines.NMilitary.PLAN_EXECUTE_RUSH = -10
 	NDefines.NMilitary.PLAN_EXECUTE_CAREFUL_MAX_FORT = 4
 
 	NDefines.NMilitary.PLAN_MAX_PROGRESS_TO_JOIN = 0.54
@@ -441,11 +448,12 @@ NDefines.NGame.START_DATE = "2160.1.1.1";
 	NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_MED = 0.65
 	NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_MED = 0.65
 
-	-- Aggressive plans must remain usable on the mod's large low-supply fronts.
-	NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_HIGH = 0.15
-	NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_HIGH = 0.25
-	NDefines.NAI.FRONT_EVAL_UNIT_SUPPLY_AND_ORG_LACK_IMPACT = 0.2
-	NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT = 0.0
+	-- Expert AI-style safety floor: aggressive plans still attack, but only
+	-- with formations capable of finishing the battle and holding the gain.
+	NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_HIGH = 0.50
+	NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_HIGH = 0.50
+	NDefines.NAI.FRONT_EVAL_UNIT_SUPPLY_AND_ORG_LACK_IMPACT = 1.0
+	NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT = 0.1
 
 	NDefines.NAI.PLAN_FACTION_STRONG_TO_EXECUTE = 0.65
 	NDefines.NAI.ORG_UNIT_STRONG = 0.75

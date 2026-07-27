@@ -28,7 +28,21 @@ ADISCORD_vorkerland_play_collapse_superevent_audio = {
 	# Superevents use a global GUI flag, so play the audio in the actual human
 	# country scope rather than in the AI country that hosts the hidden event.
 	every_country = {
-		limit = { is_ai = no }
+		limit = {
+			is_ai = no
+			ADISCORD_major_news_enabled = yes
+		}
+		scoped_sound_effect = superevent_vorkerland_civilwar_sound_e
+		scoped_play_song = "one_minute_of_silence"
+	}
+}
+
+ADISCORD_vorkerland_play_local_superevent_audio = {
+	every_country = {
+		limit = {
+			is_ai = no
+			ADISCORD_local_news_enabled = yes
+		}
 		scoped_sound_effect = superevent_vorkerland_civilwar_sound_e
 		scoped_play_song = "one_minute_of_silence"
 	}
@@ -36,28 +50,48 @@ ADISCORD_vorkerland_play_collapse_superevent_audio = {
 
 ADISCORD_vorkerland_show_dirty_opening_superevent = {
 	ADISCORD_vorkerland_clear_superevent_flags = yes
-	set_global_flag = superevent_vorkerland_dirty_opening
-	ADISCORD_vorkerland_play_collapse_superevent_audio = yes
+	set_global_flag = {
+		flag = superevent_vorkerland_dirty_opening
+		value = 1
+		days = 20
+	}
+	ADISCORD_vorkerland_play_local_superevent_audio = yes
 }
 
 ADISCORD_vorkerland_show_worker_victory_superevent = {
 	ADISCORD_vorkerland_clear_superevent_flags = yes
-	set_global_flag = superevent_vorkerland_worker_victory
+	set_global_flag = {
+		flag = superevent_vorkerland_worker_victory
+		value = 1
+		days = 20
+	}
 }
 
 ADISCORD_vorkerland_show_vlad_victory_superevent = {
 	ADISCORD_vorkerland_clear_superevent_flags = yes
-	set_global_flag = superevent_vorkerland_vlad_victory
+	set_global_flag = {
+		flag = superevent_vorkerland_vlad_victory
+		value = 1
+		days = 20
+	}
 }
 
 ADISCORD_vorkerland_show_dorian_victory_superevent = {
 	ADISCORD_vorkerland_clear_superevent_flags = yes
-	set_global_flag = superevent_vorkerland_dorian_victory
+	set_global_flag = {
+		flag = superevent_vorkerland_dorian_victory
+		value = 1
+		days = 20
+	}
 }
 
 ADISCORD_vorkerland_show_fragmented_superevent = {
 	ADISCORD_vorkerland_clear_superevent_flags = yes
-	set_global_flag = superevent_vorkerland_fragmented
+	set_global_flag = {
+		flag = superevent_vorkerland_fragmented
+		value = 1
+		days = 20
+	}
 }
 
 ADISCORD_vorkerland_apply_worker_map = {
@@ -94,6 +128,15 @@ ADISCORD_vorkerland_apply_worker_map = {
 		transfer_state = 122
 		transfer_state = 123
 		transfer_state = 124
+		transfer_state = 306
+		transfer_state = 308
+		transfer_state = 309
+		transfer_state = 318
+		transfer_state = 320
+		transfer_state = 323
+		transfer_state = 324
+		transfer_state = 325
+		transfer_state = 327
 		set_capital = { state = 32 }
 	}
 	27 = { add_core_of = WRK set_state_controller_to = WRK }
@@ -126,18 +169,27 @@ ADISCORD_vorkerland_apply_worker_map = {
 	122 = { add_core_of = WRK set_state_controller_to = WRK }
 	123 = { add_core_of = WRK set_state_controller_to = WRK }
 	124 = { add_core_of = WRK set_state_controller_to = WRK }
-	ZAO = { transfer_state = 72 transfer_state = 195 transfer_state = 196 set_capital = { state = 72 } }
-	PWR = { transfer_state = 71 transfer_state = 90 transfer_state = 91 transfer_state = 93 transfer_state = 94 transfer_state = 194 set_capital = { state = 71 } }
-	VLA = { transfer_state = 74 transfer_state = 197 set_capital = { state = 74 } }
-	ROM = { transfer_state = 73 transfer_state = 144 transfer_state = 145 set_capital = { state = 73 } }
-	SOL = { transfer_state = 76 transfer_state = 198 set_capital = { state = 76 } }
-	TRU = { transfer_state = 80 transfer_state = 199 set_capital = { state = 80 } }
-	72 = { add_core_of = ZAO } 195 = { add_core_of = ZAO } 196 = { add_core_of = ZAO }
-	71 = { add_core_of = PWR } 90 = { add_core_of = PWR } 91 = { add_core_of = PWR } 93 = { add_core_of = PWR } 94 = { add_core_of = PWR } 194 = { add_core_of = PWR }
-	74 = { add_core_of = VLA } 197 = { add_core_of = VLA }
-	73 = { add_core_of = ROM } 144 = { add_core_of = ROM } 145 = { add_core_of = ROM }
-	76 = { add_core_of = SOL } 198 = { add_core_of = SOL }
-	80 = { add_core_of = TRU } 199 = { add_core_of = TRU }
+	306 = { add_core_of = WRK set_state_controller_to = WRK }
+	308 = { add_core_of = WRK set_state_controller_to = WRK }
+	309 = { add_core_of = WRK set_state_controller_to = WRK }
+	318 = { add_core_of = WRK set_state_controller_to = WRK }
+	320 = { add_core_of = WRK set_state_controller_to = WRK }
+	323 = { add_core_of = WRK set_state_controller_to = WRK }
+	324 = { add_core_of = WRK set_state_controller_to = WRK }
+	325 = { add_core_of = WRK set_state_controller_to = WRK }
+	327 = { add_core_of = WRK set_state_controller_to = WRK }
+	ZAO = { transfer_state = 72 transfer_state = 195 transfer_state = 196 transfer_state = 322 set_capital = { state = 72 } }
+	PWR = { transfer_state = 71 transfer_state = 90 transfer_state = 91 transfer_state = 93 transfer_state = 94 transfer_state = 194 transfer_state = 328 set_capital = { state = 71 } }
+	VLA = { transfer_state = 74 transfer_state = 197 transfer_state = 311 transfer_state = 312 transfer_state = 313 transfer_state = 314 set_capital = { state = 74 } }
+	ROM = { transfer_state = 73 transfer_state = 144 transfer_state = 145 transfer_state = 319 transfer_state = 321 set_capital = { state = 73 } }
+	SOL = { transfer_state = 76 transfer_state = 198 transfer_state = 307 transfer_state = 310 set_capital = { state = 76 } }
+	TRU = { transfer_state = 80 transfer_state = 199 transfer_state = 315 transfer_state = 316 transfer_state = 317 set_capital = { state = 80 } }
+	72 = { add_core_of = ZAO } 195 = { add_core_of = ZAO } 196 = { add_core_of = ZAO } 322 = { add_core_of = ZAO }
+	71 = { add_core_of = PWR } 90 = { add_core_of = PWR } 91 = { add_core_of = PWR } 93 = { add_core_of = PWR } 94 = { add_core_of = PWR } 194 = { add_core_of = PWR } 328 = { add_core_of = PWR }
+	74 = { add_core_of = VLA } 197 = { add_core_of = VLA } 311 = { add_core_of = VLA } 312 = { add_core_of = VLA } 313 = { add_core_of = VLA } 314 = { add_core_of = VLA }
+	73 = { add_core_of = ROM } 144 = { add_core_of = ROM } 145 = { add_core_of = ROM } 319 = { add_core_of = ROM } 321 = { add_core_of = ROM }
+	76 = { add_core_of = SOL } 198 = { add_core_of = SOL } 307 = { add_core_of = SOL } 310 = { add_core_of = SOL }
+	80 = { add_core_of = TRU } 199 = { add_core_of = TRU } 315 = { add_core_of = TRU } 316 = { add_core_of = TRU } 317 = { add_core_of = TRU }
 	WRK = {
 		puppet = ZAO
 		set_autonomy = { target = ZAO autonomy_state = autonomy_republic_in_Vorkerland freedom_level = 0.50 }
@@ -191,6 +243,15 @@ ADISCORD_vorkerland_apply_vlad_map = {
 		transfer_state = 122
 		transfer_state = 123
 		transfer_state = 124
+		transfer_state = 306
+		transfer_state = 308
+		transfer_state = 309
+		transfer_state = 318
+		transfer_state = 320
+		transfer_state = 323
+		transfer_state = 324
+		transfer_state = 325
+		transfer_state = 327
 		set_capital = { state = 75 }
 	}
 	27 = { add_core_of = VAD set_state_controller_to = VAD }
@@ -223,18 +284,27 @@ ADISCORD_vorkerland_apply_vlad_map = {
 	122 = { add_core_of = VAD set_state_controller_to = VAD }
 	123 = { add_core_of = VAD set_state_controller_to = VAD }
 	124 = { add_core_of = VAD set_state_controller_to = VAD }
-	ZAO = { transfer_state = 72 transfer_state = 195 transfer_state = 196 set_capital = { state = 72 } }
-	PWR = { transfer_state = 71 transfer_state = 90 transfer_state = 91 transfer_state = 93 transfer_state = 94 transfer_state = 194 set_capital = { state = 71 } }
-	VLA = { transfer_state = 74 transfer_state = 197 set_capital = { state = 74 } }
-	ROM = { transfer_state = 73 transfer_state = 144 transfer_state = 145 set_capital = { state = 73 } }
-	SOL = { transfer_state = 76 transfer_state = 198 set_capital = { state = 76 } }
-	TRU = { transfer_state = 80 transfer_state = 199 set_capital = { state = 80 } }
-	72 = { add_core_of = ZAO } 195 = { add_core_of = ZAO } 196 = { add_core_of = ZAO }
-	71 = { add_core_of = PWR } 90 = { add_core_of = PWR } 91 = { add_core_of = PWR } 93 = { add_core_of = PWR } 94 = { add_core_of = PWR } 194 = { add_core_of = PWR }
-	74 = { add_core_of = VLA } 197 = { add_core_of = VLA }
-	73 = { add_core_of = ROM } 144 = { add_core_of = ROM } 145 = { add_core_of = ROM }
-	76 = { add_core_of = SOL } 198 = { add_core_of = SOL }
-	80 = { add_core_of = TRU } 199 = { add_core_of = TRU }
+	306 = { add_core_of = VAD set_state_controller_to = VAD }
+	308 = { add_core_of = VAD set_state_controller_to = VAD }
+	309 = { add_core_of = VAD set_state_controller_to = VAD }
+	318 = { add_core_of = VAD set_state_controller_to = VAD }
+	320 = { add_core_of = VAD set_state_controller_to = VAD }
+	323 = { add_core_of = VAD set_state_controller_to = VAD }
+	324 = { add_core_of = VAD set_state_controller_to = VAD }
+	325 = { add_core_of = VAD set_state_controller_to = VAD }
+	327 = { add_core_of = VAD set_state_controller_to = VAD }
+	ZAO = { transfer_state = 72 transfer_state = 195 transfer_state = 196 transfer_state = 322 set_capital = { state = 72 } }
+	PWR = { transfer_state = 71 transfer_state = 90 transfer_state = 91 transfer_state = 93 transfer_state = 94 transfer_state = 194 transfer_state = 328 set_capital = { state = 71 } }
+	VLA = { transfer_state = 74 transfer_state = 197 transfer_state = 311 transfer_state = 312 transfer_state = 313 transfer_state = 314 set_capital = { state = 74 } }
+	ROM = { transfer_state = 73 transfer_state = 144 transfer_state = 145 transfer_state = 319 transfer_state = 321 set_capital = { state = 73 } }
+	SOL = { transfer_state = 76 transfer_state = 198 transfer_state = 307 transfer_state = 310 set_capital = { state = 76 } }
+	TRU = { transfer_state = 80 transfer_state = 199 transfer_state = 315 transfer_state = 316 transfer_state = 317 set_capital = { state = 80 } }
+	72 = { add_core_of = ZAO } 195 = { add_core_of = ZAO } 196 = { add_core_of = ZAO } 322 = { add_core_of = ZAO }
+	71 = { add_core_of = PWR } 90 = { add_core_of = PWR } 91 = { add_core_of = PWR } 93 = { add_core_of = PWR } 94 = { add_core_of = PWR } 194 = { add_core_of = PWR } 328 = { add_core_of = PWR }
+	74 = { add_core_of = VLA } 197 = { add_core_of = VLA } 311 = { add_core_of = VLA } 312 = { add_core_of = VLA } 313 = { add_core_of = VLA } 314 = { add_core_of = VLA }
+	73 = { add_core_of = ROM } 144 = { add_core_of = ROM } 145 = { add_core_of = ROM } 319 = { add_core_of = ROM } 321 = { add_core_of = ROM }
+	76 = { add_core_of = SOL } 198 = { add_core_of = SOL } 307 = { add_core_of = SOL } 310 = { add_core_of = SOL }
+	80 = { add_core_of = TRU } 199 = { add_core_of = TRU } 315 = { add_core_of = TRU } 316 = { add_core_of = TRU } 317 = { add_core_of = TRU }
 	VAD = {
 		puppet = ZAO
 		set_autonomy = { target = ZAO autonomy_state = autonomy_district_in_Vorkerland freedom_level = 0.15 }
@@ -284,6 +354,14 @@ ADISCORD_vorkerland_apply_dorian_map = {
 		transfer_state = 79
 		transfer_state = 82
 		transfer_state = 105
+		transfer_state = 306
+		transfer_state = 308
+		transfer_state = 309
+		transfer_state = 318
+		transfer_state = 320
+		transfer_state = 323
+		transfer_state = 324
+		transfer_state = 327
 		set_capital = { state = 36 }
 	}
 	27 = { add_core_of = TVA set_state_controller_to = TVA }
@@ -302,6 +380,14 @@ ADISCORD_vorkerland_apply_dorian_map = {
 	79 = { add_core_of = TVA set_state_controller_to = TVA }
 	82 = { add_core_of = TVA set_state_controller_to = TVA }
 	105 = { add_core_of = TVA set_state_controller_to = TVA }
+	306 = { add_core_of = TVA set_state_controller_to = TVA }
+	308 = { add_core_of = TVA set_state_controller_to = TVA }
+	309 = { add_core_of = TVA set_state_controller_to = TVA }
+	318 = { add_core_of = TVA set_state_controller_to = TVA }
+	320 = { add_core_of = TVA set_state_controller_to = TVA }
+	323 = { add_core_of = TVA set_state_controller_to = TVA }
+	324 = { add_core_of = TVA set_state_controller_to = TVA }
+	327 = { add_core_of = TVA set_state_controller_to = TVA }
 	EYR = {
 		transfer_state = 75
 		transfer_state = 81
@@ -317,24 +403,25 @@ ADISCORD_vorkerland_apply_dorian_map = {
 		transfer_state = 122
 		transfer_state = 123
 		transfer_state = 124
+		transfer_state = 325
 		set_capital = { state = 102 }
 	}
 	75 = { add_core_of = EYR } 81 = { add_core_of = EYR } 102 = { add_core_of = EYR } 104 = { add_core_of = EYR }
 	106 = { add_core_of = EYR } 107 = { add_core_of = EYR } 108 = { add_core_of = EYR } 109 = { add_core_of = EYR }
 	110 = { add_core_of = EYR } 111 = { add_core_of = EYR } 121 = { add_core_of = EYR } 122 = { add_core_of = EYR }
-	123 = { add_core_of = EYR } 124 = { add_core_of = EYR }
-	WPA = { transfer_state = 72 transfer_state = 195 transfer_state = 196 set_capital = { state = 195 } }
-	PSD = { transfer_state = 71 transfer_state = 90 transfer_state = 91 transfer_state = 93 transfer_state = 94 transfer_state = 194 set_capital = { state = 194 } }
-	EBA = { transfer_state = 74 transfer_state = 197 set_capital = { state = 197 } }
-	DVA = { transfer_state = 73 transfer_state = 144 transfer_state = 145 set_capital = { state = 145 } }
-	SRA = { transfer_state = 76 transfer_state = 198 set_capital = { state = 198 } }
-	ZTA = { transfer_state = 80 transfer_state = 199 set_capital = { state = 199 } }
-	72 = { add_core_of = WPA } 195 = { add_core_of = WPA } 196 = { add_core_of = WPA }
-	71 = { add_core_of = PSD } 90 = { add_core_of = PSD } 91 = { add_core_of = PSD } 93 = { add_core_of = PSD } 94 = { add_core_of = PSD } 194 = { add_core_of = PSD }
-	74 = { add_core_of = EBA } 197 = { add_core_of = EBA }
-	73 = { add_core_of = DVA } 144 = { add_core_of = DVA } 145 = { add_core_of = DVA }
-	76 = { add_core_of = SRA } 198 = { add_core_of = SRA }
-	80 = { add_core_of = ZTA } 199 = { add_core_of = ZTA }
+	123 = { add_core_of = EYR } 124 = { add_core_of = EYR } 325 = { add_core_of = EYR }
+	WPA = { transfer_state = 72 transfer_state = 195 transfer_state = 196 transfer_state = 322 set_capital = { state = 195 } }
+	PSD = { transfer_state = 71 transfer_state = 90 transfer_state = 91 transfer_state = 93 transfer_state = 94 transfer_state = 194 transfer_state = 328 set_capital = { state = 194 } }
+	EBA = { transfer_state = 74 transfer_state = 197 transfer_state = 311 transfer_state = 312 transfer_state = 313 transfer_state = 314 set_capital = { state = 197 } }
+	DVA = { transfer_state = 73 transfer_state = 144 transfer_state = 145 transfer_state = 319 transfer_state = 321 set_capital = { state = 145 } }
+	SRA = { transfer_state = 76 transfer_state = 198 transfer_state = 307 transfer_state = 310 set_capital = { state = 198 } }
+	ZTA = { transfer_state = 80 transfer_state = 199 transfer_state = 315 transfer_state = 316 transfer_state = 317 set_capital = { state = 199 } }
+	72 = { add_core_of = WPA } 195 = { add_core_of = WPA } 196 = { add_core_of = WPA } 322 = { add_core_of = WPA }
+	71 = { add_core_of = PSD } 90 = { add_core_of = PSD } 91 = { add_core_of = PSD } 93 = { add_core_of = PSD } 94 = { add_core_of = PSD } 194 = { add_core_of = PSD } 328 = { add_core_of = PSD }
+	74 = { add_core_of = EBA } 197 = { add_core_of = EBA } 311 = { add_core_of = EBA } 312 = { add_core_of = EBA } 313 = { add_core_of = EBA } 314 = { add_core_of = EBA }
+	73 = { add_core_of = DVA } 144 = { add_core_of = DVA } 145 = { add_core_of = DVA } 319 = { add_core_of = DVA } 321 = { add_core_of = DVA }
+	76 = { add_core_of = SRA } 198 = { add_core_of = SRA } 307 = { add_core_of = SRA } 310 = { add_core_of = SRA }
+	80 = { add_core_of = ZTA } 199 = { add_core_of = ZTA } 315 = { add_core_of = ZTA } 316 = { add_core_of = ZTA } 317 = { add_core_of = ZTA }
 	TVA = {
 		puppet = EYR
 		set_autonomy = { target = EYR autonomy_state = autonomy_republic_in_Vorkerland freedom_level = 0.40 }

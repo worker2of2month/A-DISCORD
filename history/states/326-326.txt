@@ -1,0 +1,18 @@
+state = {
+	id = 326
+	name = "STATE_326"
+	manpower = 30398
+	state_category = rural
+	history = {
+		owner = PIV
+		add_core_of = PIV
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		6341 9688 12923 16605 16608 16626
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

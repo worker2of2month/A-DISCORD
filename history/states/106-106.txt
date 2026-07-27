@@ -14,7 +14,6 @@ state={
 		add_core_of = VAD
 
 		victory_points = { 11944 10 }
-		victory_points = { 5636 1 }
 
 		buildings = {
 	        infrastructure = 3

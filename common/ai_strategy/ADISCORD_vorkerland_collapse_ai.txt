@@ -100,9 +100,75 @@ ADISCORD_vorkerland_combat_endgame = {
 	ai_strategy = { type = force_concentration_factor value = 25 }
 }
 
-# Expert AI-style execution override for the background civil war. The ordinary
-# target blocks below still decide which neighbouring front matters; this layer
-# only keeps divisions assigned and battle plans active when supply is poor.
+# Activated only by the 180-day mission timeout. It concentrates the surviving
+# formations and raises front priority without bypassing organisation, strength,
+# or supply checks.
+ADISCORD_vorkerland_stalemate_offensive = {
+	allowed = {
+		OR = {
+			tag = WRK
+			tag = TVA
+			tag = VAD
+			tag = EYR
+			tag = EGC
+			tag = ZAO
+			tag = WPA
+			tag = WPS
+			tag = PWR
+			tag = PSD
+			tag = VLA
+			tag = EBA
+			tag = ROM
+			tag = DVA
+			tag = SOL
+			tag = SRA
+			tag = TRU
+			tag = ZTA
+		}
+	}
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		has_country_flag = ADISCORD_vorkerland_stalemate_escalation
+		has_country_flag = ADISCORD_vorkerland_phase_endgame
+		has_war = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = ai_wanted_divisions_factor value = 40 }
+	ai_strategy = { type = force_concentration_factor value = 50 }
+	ai_strategy = {
+		type = front_control
+		tag = WRK
+		tag = TVA
+		tag = VAD
+		tag = EYR
+		tag = EGC
+		tag = ZAO
+		tag = WPA
+		tag = WPS
+		tag = PWR
+		tag = PSD
+		tag = VLA
+		tag = EBA
+		tag = ROM
+		tag = DVA
+		tag = SOL
+		tag = SRA
+		tag = TRU
+		tag = ZTA
+		ratio = 0.60
+		priority = 600
+		ordertype = front
+		execution_type = rush
+		execute_order = yes
+		manual_attack = no
+	}
+}
+
+# Expert AI-style front coverage for the background civil war. The ordinary
+# target blocks below decide which neighbouring front matters and execute safe
+# rush plans; this layer only prevents the tiny armies from abandoning the
+# front. It must not force depleted divisions into manual attacks.
 ADISCORD_vorkerland_force_front_commitment = {
 	allowed = {
 		OR = {
@@ -138,7 +204,7 @@ ADISCORD_vorkerland_force_front_commitment = {
 	abort_when_not_enabled = yes
 	ai_strategy = {
 		type = front_unit_request
-		value = 100
+		value = 75
 		tag = WRK
 		tag = TVA
 		tag = VAD
@@ -157,33 +223,6 @@ ADISCORD_vorkerland_force_front_commitment = {
 		tag = SRA
 		tag = TRU
 		tag = ZTA
-	}
-	ai_strategy = {
-		type = front_control
-		tag = WRK
-		tag = TVA
-		tag = VAD
-		tag = EYR
-		tag = EGC
-		tag = ZAO
-		tag = WPA
-		tag = WPS
-		tag = PWR
-		tag = PSD
-		tag = VLA
-		tag = EBA
-		tag = ROM
-		tag = DVA
-		tag = SOL
-		tag = SRA
-		tag = TRU
-		tag = ZTA
-		ratio = 0.01
-		priority = 1500
-		ordertype = front
-		execution_type = rush
-		execute_order = yes
-		manual_attack = yes
 	}
 }
 
@@ -311,7 +350,7 @@ ADISCORD_vorkerland_front_wrk_tva = {
 		has_war_with = TVA
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = TVA ratio = 0.55 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = TVA ratio = 0.55 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_wrk_vad = {
@@ -327,7 +366,7 @@ ADISCORD_vorkerland_front_wrk_vad = {
 		has_war_with = VAD
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = VAD ratio = 0.45 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = VAD ratio = 0.45 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_tva_wrk = {
@@ -343,7 +382,7 @@ ADISCORD_vorkerland_front_tva_wrk = {
 		has_war_with = WRK
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = WRK ratio = 0.55 priority = 105 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = WRK ratio = 0.55 priority = 105 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_tva_vad = {
@@ -359,7 +398,7 @@ ADISCORD_vorkerland_front_tva_vad = {
 		has_war_with = VAD
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = VAD ratio = 0.45 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = VAD ratio = 0.45 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_vad_wrk = {
@@ -375,7 +414,7 @@ ADISCORD_vorkerland_front_vad_wrk = {
 		has_war_with = WRK
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = WRK ratio = 0.35 priority = 110 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = WRK ratio = 0.35 priority = 110 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_vad_tva = {
@@ -391,7 +430,7 @@ ADISCORD_vorkerland_front_vad_tva = {
 		has_war_with = TVA
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = TVA ratio = 0.25 priority = 105 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = TVA ratio = 0.25 priority = 105 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_vad_eyr = {
@@ -407,7 +446,7 @@ ADISCORD_vorkerland_front_vad_eyr = {
 		has_war_with = EYR
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = EYR ratio = 0.20 priority = 95 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = EYR ratio = 0.20 priority = 95 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_vad_egc = {
@@ -423,7 +462,7 @@ ADISCORD_vorkerland_front_vad_egc = {
 		has_war_with = EGC
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = EGC ratio = 0.20 priority = 95 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = EGC ratio = 0.20 priority = 95 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_eyr_vad = {
@@ -439,7 +478,7 @@ ADISCORD_vorkerland_front_eyr_vad = {
 		has_war_with = VAD
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = VAD ratio = 0.55 priority = 105 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = VAD ratio = 0.55 priority = 105 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_eyr_egc = {
@@ -455,7 +494,7 @@ ADISCORD_vorkerland_front_eyr_egc = {
 		has_war_with = EGC
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = EGC ratio = 0.45 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = EGC ratio = 0.45 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_egc_vad = {
@@ -471,7 +510,7 @@ ADISCORD_vorkerland_front_egc_vad = {
 		has_war_with = VAD
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = VAD ratio = 0.55 priority = 105 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = VAD ratio = 0.55 priority = 105 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_egc_eyr = {
@@ -487,7 +526,7 @@ ADISCORD_vorkerland_front_egc_eyr = {
 		has_war_with = EYR
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = EYR ratio = 0.45 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = EYR ratio = 0.45 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_zao_wpa = {
@@ -503,7 +542,7 @@ ADISCORD_vorkerland_front_zao_wpa = {
 		has_war_with = WPA
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = WPA ratio = 0.50 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = WPA ratio = 0.50 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_zao_wps = {
@@ -519,7 +558,7 @@ ADISCORD_vorkerland_front_zao_wps = {
 		has_war_with = WPS
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = WPS ratio = 0.50 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = WPS ratio = 0.50 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_wpa_zao = {
@@ -535,7 +574,7 @@ ADISCORD_vorkerland_front_wpa_zao = {
 		has_war_with = ZAO
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = ZAO ratio = 0.50 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = ZAO ratio = 0.50 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_wpa_wps = {
@@ -551,7 +590,7 @@ ADISCORD_vorkerland_front_wpa_wps = {
 		has_war_with = WPS
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = WPS ratio = 0.50 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = WPS ratio = 0.50 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_wps_zao = {
@@ -567,7 +606,7 @@ ADISCORD_vorkerland_front_wps_zao = {
 		has_war_with = ZAO
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = ZAO ratio = 0.50 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = ZAO ratio = 0.50 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_wps_wpa = {
@@ -583,7 +622,7 @@ ADISCORD_vorkerland_front_wps_wpa = {
 		has_war_with = WPA
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = WPA ratio = 0.50 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = WPA ratio = 0.50 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_pwr_psd = {
@@ -599,7 +638,7 @@ ADISCORD_vorkerland_front_pwr_psd = {
 		has_war_with = PSD
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = PSD ratio = 1.00 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = PSD ratio = 1.00 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_psd_pwr = {
@@ -615,7 +654,7 @@ ADISCORD_vorkerland_front_psd_pwr = {
 		has_war_with = PWR
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = PWR ratio = 1.00 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = PWR ratio = 1.00 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_vla_eba = {
@@ -631,7 +670,7 @@ ADISCORD_vorkerland_front_vla_eba = {
 		has_war_with = EBA
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = EBA ratio = 1.00 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = EBA ratio = 1.00 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_eba_vla = {
@@ -647,7 +686,7 @@ ADISCORD_vorkerland_front_eba_vla = {
 		has_war_with = VLA
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = VLA ratio = 1.00 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = VLA ratio = 1.00 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_rom_dva = {
@@ -663,7 +702,7 @@ ADISCORD_vorkerland_front_rom_dva = {
 		has_war_with = DVA
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = DVA ratio = 1.00 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = DVA ratio = 1.00 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_dva_rom = {
@@ -679,7 +718,7 @@ ADISCORD_vorkerland_front_dva_rom = {
 		has_war_with = ROM
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = ROM ratio = 1.00 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = ROM ratio = 1.00 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_sol_sra = {
@@ -695,7 +734,7 @@ ADISCORD_vorkerland_front_sol_sra = {
 		has_war_with = SRA
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = SRA ratio = 1.00 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = SRA ratio = 1.00 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_sra_sol = {
@@ -711,7 +750,7 @@ ADISCORD_vorkerland_front_sra_sol = {
 		has_war_with = SOL
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = SOL ratio = 1.00 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = SOL ratio = 1.00 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_tru_zta = {
@@ -727,7 +766,7 @@ ADISCORD_vorkerland_front_tru_zta = {
 		has_war_with = ZTA
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = ZTA ratio = 1.00 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = ZTA ratio = 1.00 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_zta_tru = {
@@ -743,7 +782,7 @@ ADISCORD_vorkerland_front_zta_tru = {
 		has_war_with = TRU
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = TRU ratio = 1.00 priority = 100 ordertype = front execution_type = balanced execute_order = yes }
+	ai_strategy = { type = front_control tag = TRU ratio = 1.00 priority = 100 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 # The main claimants become more decisive only when already fighting a weaker neighbor.

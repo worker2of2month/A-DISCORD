@@ -1,0 +1,52 @@
+ADISCORD_vorkerland_collapse_category = {
+	ADISCORD_vorkerland_stalemate_deadline = {
+		icon = generic_prepare_civil_war
+		allowed = {
+			OR = {
+				tag = WRK
+				tag = TVA
+				tag = VAD
+				tag = EYR
+				tag = EGC
+				tag = ZAO
+				tag = WPA
+				tag = WPS
+				tag = PWR
+				tag = PSD
+				tag = VLA
+				tag = EBA
+				tag = ROM
+				tag = DVA
+				tag = SOL
+				tag = SRA
+				tag = TRU
+				tag = ZTA
+			}
+		}
+		visible = {
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		}
+		available = { always = no }
+		selectable_mission = no
+		fire_only_once = no
+		days_mission_timeout = 180
+		cancel_trigger = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		timeout_effect = {
+			if = {
+				limit = {
+					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+					NOT = { has_capitulated = yes }
+					has_war = yes
+				}
+				custom_effect_tooltip = ADISCORD_vorkerland_war_weariness_increase_tt
+				hidden_effect = {
+					ADISCORD_vorkerland_increase_war_weariness = yes
+					set_country_flag = ADISCORD_vorkerland_stalemate_escalation
+					ADISCORD_vorkerland_update_ai_phase = yes
+					activate_mission = ADISCORD_vorkerland_stalemate_deadline
+				}
+			}
+		}
+	}
+}

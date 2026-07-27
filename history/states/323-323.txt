@@ -1,0 +1,20 @@
+state = {
+	id = 323
+	name = "STATE_323"
+	manpower = 710000
+	state_category = town
+	history = {
+		owner = WRK
+		add_core_of = WRK
+		victory_points = { 16590 3 }
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+		}
+	}
+	provinces = {
+		161 266 561 2540 3147 4802 5532 9186 9301 9733 11990 16590
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 2.0
+}

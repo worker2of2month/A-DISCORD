@@ -1,0 +1,18 @@
+state = {
+	id = 244
+	name = "STATE_244"
+	manpower = 15236
+	state_category = rural
+	history = {
+		owner = KDR
+		add_core_of = KDR
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		771 939 1011 3562 5355 5505 5739 6232 8223 10768
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}
