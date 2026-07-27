@@ -158,15 +158,15 @@ def validate_countries() -> None:
         "WEF": ("utilitarism", "utilitarism_ideology"),
     }
     portrait_profiles = {
-        "KDR": ("GFX_portrait_KDR_Rashid_al_Kadir", "arab1.png"),
-        "RHM": ("GFX_portrait_RHM_Faris_Rahma", "arab3.png"),
-        "SDR": ("GFX_portrait_SDR_Hamid_Sahr", "arab2.png"),
+        "KDR": ("GFX_portrait_KDR_Rashid_al_Kadir", "KDR/portrait_KDR_Rashid_al_Kadir.png"),
+        "RHM": ("GFX_portrait_RHM_Faris_Rahma", "RHM/portrait_RHM_Faris_Rahma.png"),
+        "SDR": ("GFX_portrait_SDR_Hamid_Sahr", "SDR/portrait_SDR_Hamid_Sahr.png"),
         "MZR": ("GFX_portrait_PLACEHOLDER", None),
         "KYZ": ("GFX_portrait_PLACEHOLDER", None),
-        "SHL": ("GFX_portrait_SHL_Jalil_Nur", "arab4.png"),
-        "GLP": ("GFX_portrait_GLP_Miran_Veyr", "arab7.png"),
-        "AZH": ("GFX_portrait_AZH_Samir_Azhar", "arab5.png"),
-        "WEF": ("GFX_portrait_WEF_Elina_Fenn", "arab6.png"),
+        "SHL": ("GFX_portrait_SHL_Jalil_Nur", "SHL/portrait_SHL_Jalil_Nur.png"),
+        "GLP": ("GFX_portrait_GLP_Miran_Veyr", "GLP/portrait_GLP_Miran_Veyr.png"),
+        "AZH": ("GFX_portrait_AZH_Samir_Azhar", "AZH/portrait_AZH_Samir_Azhar.png"),
+        "WEF": ("GFX_portrait_WEF_Elina_Fenn", "WEF/portrait_WEF_Elina_Fenn.png"),
     }
     idea_pictures = {
         "KDR": "PER_persepolis_idea",
