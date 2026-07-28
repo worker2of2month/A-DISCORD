@@ -1,4 +1,6 @@
-# Staged total-conversion templates. Each role has one non-overlapping family.
+# Staged total-conversion templates.  Cheap line troops, offensive assault
+# groups, specialists, and tanks use separate roles so the AI keeps a balanced
+# army instead of converting every formation to the most expensive design.
 
 ADISCORD_garrison_templates = {
 	role = garrison
@@ -10,6 +12,7 @@ ADISCORD_garrison_templates = {
 		reinforce_prio = 0
 		custom_icon = 7
 		upgrade_prio = { base = 2 }
+		can_upgrade_in_field = { always = yes }
 		target_template = { regiments = { ADISCORD_militia = 4 } }
 	}
 }
@@ -45,27 +48,87 @@ ADISCORD_infantry_templates = {
 			regiments = { infantry = 6 }
 		}
 		replace_at_match = 0.98
-		replace_with = ADISCORD_assault_brigade
+		replace_with = ADISCORD_defensive_line_brigade
 	}
 
-	ADISCORD_assault_brigade = {
+	ADISCORD_defensive_line_brigade = {
 		enable = {
+			has_tech = ADISCORD_tech_forward_supply_hubs
+			has_tech = ADISCORD_tech_scrap_at_launchers
+			has_tech = ADISCORD_tech_point_defense_aa
+			num_of_military_factories > 6
+			NOT = { ADISCORD_economy_ai_is_crisis = yes }
+			has_equipment = { support_equipment > 900 }
+			has_equipment = { artillery_equipment > 500 }
+			has_equipment = { anti_tank_equipment > 160 }
+			has_equipment = { anti_air_equipment > 160 }
+		}
+		reinforce_prio = 1
+		upgrade_prio = { base = 8 }
+		can_upgrade_in_field = {
+			has_equipment = { support_equipment > 1300 }
+			has_equipment = { artillery_equipment > 750 }
+			has_equipment = { anti_tank_equipment > 240 }
+			has_equipment = { anti_air_equipment > 240 }
+		}
+		target_template = {
+			support = {
+				engineer = 1
+				artillery = 1
+				anti_tank = 1
+				anti_air = 1
+				logistics_company = 1
+			}
+			regiments = { infantry = 7 ADISCORD_line_artillery = 1 }
+		}
+	}
+}
+
+# Assault formations use the mobile role.  This keeps them as a limited
+# offensive reserve rather than replacing every ordinary infantry division.
+ADISCORD_assault_templates = {
+	role = mobile
+	upgrade_prio = {
+		base = 0
+		modifier = {
+			add = 9
 			has_tech = ADISCORD_tech_remote_weapon_tripods
 			num_of_military_factories > 9
 			ADISCORD_economy_ai_can_fund_advanced_forces = yes
+		}
+	}
+
+	ADISCORD_assault_group = {
+		enable = {
+			has_tech = ADISCORD_tech_remote_weapon_tripods
+			has_tech = ADISCORD_tech_standardized_field_tool_chests
+			has_tech = ADISCORD_tech_frequency_hopping_field_sets
+			num_of_military_factories > 9
+			ADISCORD_economy_ai_can_fund_advanced_forces = yes
 			has_equipment = { ADISCORD_squad_weapons_equipment > 1600 }
-			has_equipment = { support_equipment > 1000 }
+			has_equipment = { support_equipment > 1200 }
+			has_equipment = { artillery_equipment > 450 }
 		}
 		reinforce_prio = 2
-		upgrade_prio = { base = 8 }
+		upgrade_prio = { base = 9 }
 		can_upgrade_in_field = {
 			NOT = { ADISCORD_economy_ai_is_crisis = yes }
 			has_equipment = { ADISCORD_squad_weapons_equipment > 2200 }
-			has_equipment = { support_equipment > 1400 }
+			has_equipment = { support_equipment > 1600 }
+			has_equipment = { artillery_equipment > 650 }
 		}
 		target_template = {
-			support = { engineer = 1 artillery = 1 maintenance_company = 1 signal_company = 1 }
-			regiments = { infantry = 6 ADISCORD_assault_infantry = 3 }
+			support = {
+				engineer = 1
+				artillery = 1
+				maintenance_company = 1
+				signal_company = 1
+			}
+			regiments = {
+				infantry = 5
+				ADISCORD_assault_infantry = 3
+				ADISCORD_line_artillery = 1
+			}
 		}
 	}
 }
@@ -84,10 +147,36 @@ ADISCORD_mountaineer_templates = {
 			support = { engineer = 1 artillery = 1 }
 			regiments = { mountaineers = 6 }
 		}
+		replace_at_match = 0.98
+		replace_with = ADISCORD_networked_mountaineer_brigade
+	}
+
+	ADISCORD_networked_mountaineer_brigade = {
+		enable = {
+			has_tech = ADISCORD_tech_forward_supply_hubs
+			has_tech = ADISCORD_tech_frequency_hopping_field_sets
+			NOT = { ADISCORD_economy_ai_is_crisis = yes }
+			has_equipment = { support_equipment > 1000 }
+			has_equipment = { artillery_equipment > 400 }
+		}
+		upgrade_prio = { base = 5 }
+		can_upgrade_in_field = {
+			has_equipment = { support_equipment > 1400 }
+			has_equipment = { artillery_equipment > 600 }
+		}
+		target_template = {
+			support = {
+				engineer = 1
+				artillery = 1
+				logistics_company = 1
+				signal_company = 1
+			}
+			regiments = { mountaineers = 8 }
+		}
 	}
 }
 
-ADISCORD_platform_templates = {
+ADISCORD_tank_templates = {
 	role = armor
 	upgrade_prio = {
 		base = 0
@@ -99,7 +188,7 @@ ADISCORD_platform_templates = {
 		}
 	}
 
-	ADISCORD_platform_battlegroup = {
+	ADISCORD_tank_battlegroup = {
 		enable = {
 			has_tech = ADISCORD_tech_semi_autonomous_combat_modules
 			num_of_military_factories > 7
@@ -117,10 +206,38 @@ ADISCORD_platform_templates = {
 			regiments = { infantry = 4 ADISCORD_combat_platform = 4 }
 		}
 		replace_at_match = 0.98
-		replace_with = ADISCORD_heavy_battlegroup
+		replace_with = ADISCORD_networked_tank_battlegroup
 	}
 
-	ADISCORD_heavy_battlegroup = {
+	ADISCORD_networked_tank_battlegroup = {
+		enable = {
+			has_tech = ADISCORD_tech_remote_repair_sections
+			has_tech = ADISCORD_tech_frequency_hopping_field_sets
+			num_of_military_factories > 10
+			ADISCORD_economy_ai_can_fund_advanced_forces = yes
+			has_equipment = { ADISCORD_combat_platform_archetype > 320 }
+			has_equipment = { ADISCORD_recovery_platform_archetype > 24 }
+			has_equipment = { support_equipment > 600 }
+		}
+		reinforce_prio = 2
+		upgrade_prio = { base = 10 }
+		can_upgrade_in_field = {
+			ADISCORD_economy_ai_is_healthy = yes
+			has_equipment = { ADISCORD_combat_platform_archetype > 440 }
+			has_equipment = { ADISCORD_recovery_platform_archetype > 40 }
+		}
+		target_template = {
+			support = {
+				engineer = 1
+				ADISCORD_recon_platform = 1
+				ADISCORD_recovery_platform = 1
+				signal_company = 1
+			}
+			regiments = { infantry = 4 ADISCORD_combat_platform = 4 }
+		}
+	}
+
+	ADISCORD_heavy_tank_battlegroup = {
 		enable = {
 			has_tech = ADISCORD_tech_heavy_platform_cores
 			num_of_military_factories > 14
@@ -134,7 +251,7 @@ ADISCORD_platform_templates = {
 			has_equipment = { ADISCORD_heavy_platform_archetype > 220 }
 		}
 		target_template = {
-			support = { engineer = 1 maintenance_company = 1 }
+			support = { engineer = 1 maintenance_company = 1 logistics_company = 1 }
 			regiments = { infantry = 5 ADISCORD_heavy_platform = 3 }
 		}
 	}

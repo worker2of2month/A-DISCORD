@@ -3,24 +3,43 @@ ADISCORD_naval_doctrine_littoral_security_network = {
 	name = ADISCORD_naval_doctrine_littoral_security_network
 	description = ADISCORD_naval_doctrine_littoral_security_network_desc
 	icon = GFX_doctrine_escort_patrols_medium
-	xp_cost = 50
+	xp_cost = 45
 	xp_type = navy
-	available = { always = yes }
+	available = {
+		has_tech = ADISCORD_tech_coastal_patrols
+	}
+	xor = {
+		ADISCORD_naval_doctrine_convoy_shield_doctrine
+		ADISCORD_naval_doctrine_mine_warfare_command
+	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 2 has_war = yes }
+		modifier = { factor = 1.6 has_war = yes }
 	}
-	screening_efficiency = 0.05
-	mines_sweeping_by_fleets_factor = 0.10
+	screening_efficiency = 0.04
+	mines_sweeping_by_fleets_factor = 0.05
 	rewards = {
 		coastal_watch_posts = {
-			navy_intel_factor = 0.05
+			mastery = 50
+			navy_intel_factor = 0.03
 		}
 		minefield_drills = {
-			mines_sweeping_by_fleets_factor = 0.10
+			mastery = 50
+			mines_sweeping_by_fleets_factor = 0.06
 		}
 		screen_coordination = {
-			screening_efficiency = 0.05
+			mastery = 50
+			screening_efficiency = 0.03
+		}
+		ADISCORD_naval_doctrine_littoral_security_network_shallow_patrols = {
+			mastery = 50
+			naval_detection = 0.03
+		}
+		ADISCORD_naval_doctrine_littoral_security_network_littoral_network = {
+			mastery = 50
+			screening_efficiency = 0.04
+			naval_detection = 0.04
+			mines_sweeping_by_fleets_factor = 0.06
 		}
 	}
 }
@@ -30,78 +49,358 @@ ADISCORD_naval_doctrine_convoy_shield_doctrine = {
 	name = ADISCORD_naval_doctrine_convoy_shield_doctrine
 	description = ADISCORD_naval_doctrine_convoy_shield_doctrine_desc
 	icon = GFX_doctrine_convoy_sailing_medium
-	xp_cost = 50
+	xp_cost = 45
 	xp_type = navy
-	available = { always = yes }
+	available = {
+		has_tech = ADISCORD_tech_convoy_routing
+	}
+	xor = {
+		ADISCORD_naval_doctrine_littoral_security_network
+		ADISCORD_naval_doctrine_mine_warfare_command
+	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 2 has_war = yes }
+		modifier = { factor = 1.8 has_war = yes }
 	}
-	convoy_escort_efficiency = 0.10
-	convoy_retreat_speed = 0.05
+	convoy_escort_efficiency = 0.06
+	convoy_retreat_speed = 0.03
 	rewards = {
 		escort_routing = {
-			convoy_escort_efficiency = 0.05
+			mastery = 50
+			convoy_escort_efficiency = 0.03
 		}
 		emergency_sailing_orders = {
-			convoy_retreat_speed = 0.05
+			mastery = 50
+			convoy_retreat_speed = 0.03
 		}
 		repair_crews = {
-			navy_max_range_factor = 0.05
+			mastery = 50
+			navy_max_range_factor = 0.03
+		}
+		ADISCORD_naval_doctrine_convoy_shield_doctrine_hunter_groups = {
+			mastery = 50
+			naval_detection = 0.03
+		}
+		ADISCORD_naval_doctrine_convoy_shield_doctrine_protected_sealane = {
+			mastery = 50
+			convoy_escort_efficiency = 0.05
+			screening_efficiency = 0.03
+		}
+	}
+}
+
+ADISCORD_naval_doctrine_mine_warfare_command = {
+	track = ADISCORD_naval_littoral_security
+	name = ADISCORD_naval_doctrine_mine_warfare_command
+	description = ADISCORD_naval_doctrine_mine_warfare_command_desc
+	icon = GFX_basic_naval_mines_medium
+	xp_cost = 45
+	xp_type = navy
+	available = {
+		has_tech = ADISCORD_tech_unmanned_mine_countermeasure_boats
+	}
+	xor = {
+		ADISCORD_naval_doctrine_littoral_security_network
+		ADISCORD_naval_doctrine_convoy_shield_doctrine
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 1.7 has_war = yes }
+	}
+	naval_mine_hit_chance = 0.03
+	naval_mines_effect_reduction = 0.03
+	rewards = {
+		ADISCORD_naval_doctrine_mine_warfare_command_surveyed_channels = {
+			mastery = 50
+			naval_mines_effect_reduction = 0.04
+		}
+		ADISCORD_naval_doctrine_mine_warfare_command_rapid_laying = {
+			mastery = 50
+			naval_mine_hit_chance = 0.03
+		}
+		ADISCORD_naval_doctrine_mine_warfare_command_remote_minefields = {
+			mastery = 50
+			naval_coordination = 0.01
+		}
+		ADISCORD_naval_doctrine_mine_warfare_command_sweeper_escorts = {
+			mastery = 50
+			mines_sweeping_by_fleets_factor = 0.05
+		}
+		ADISCORD_naval_doctrine_mine_warfare_command_controlled_waters = {
+			mastery = 50
+			naval_mine_hit_chance = 0.05
+			naval_mines_effect_reduction = 0.05
 		}
 	}
 }
 
 ADISCORD_naval_doctrine_drone_carrier_groups = {
-	track = ADISCORD_naval_littoral_security
+	track = ADISCORD_naval_surface_control
 	name = ADISCORD_naval_doctrine_drone_carrier_groups
 	description = ADISCORD_naval_doctrine_drone_carrier_groups_desc
 	icon = GFX_doctrine_carrier_battlegroups_medium
-	xp_cost = 50
+	xp_cost = 45
 	xp_type = navy
-	available = { has_tech = ADISCORD_tech_drone_air_wings }
+	available = {
+		has_tech = ADISCORD_tech_drone_carrier_deck_systems
+	}
+	xor = {
+		ADISCORD_naval_doctrine_missile_surface_groups
+		ADISCORD_naval_doctrine_coastal_fire_support
+	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 2 has_tech = ADISCORD_tech_drone_air_wings }
+		modifier = { factor = 2 has_tech = ADISCORD_tech_drone_carrier_deck_systems }
 	}
-	navy_carrier_air_agility_factor = 0.05
-	naval_strike_attack_factor = 0.05
+	navy_carrier_air_agility_factor = 0.04
+	naval_strike_attack_factor = 0.03
 	rewards = {
 		deck_control_drones = {
-			navy_carrier_air_agility_factor = 0.05
+			mastery = 50
+			navy_carrier_air_agility_factor = 0.03
 		}
 		strike_coordination = {
-			naval_strike_attack_factor = 0.05
+			mastery = 50
+			naval_strike_attack_factor = 0.03
 		}
 		drone_maintenance = {
-			air_accidents_factor = -0.03
+			mastery = 50
+			air_accidents_factor = -0.02
+		}
+		ADISCORD_naval_doctrine_drone_carrier_groups_distributed_decks = {
+			mastery = 50
+			naval_coordination = 0.015
+		}
+		ADISCORD_naval_doctrine_drone_carrier_groups_carrier_mesh = {
+			mastery = 50
+			naval_strike_attack_factor = 0.05
+			navy_carrier_air_agility_factor = 0.04
+		}
+	}
+}
+
+ADISCORD_naval_doctrine_missile_surface_groups = {
+	track = ADISCORD_naval_surface_control
+	name = ADISCORD_naval_doctrine_missile_surface_groups
+	description = ADISCORD_naval_doctrine_missile_surface_groups_desc
+	icon = GFX_doctrine_floating_fortress_medium
+	xp_cost = 45
+	xp_type = navy
+	available = {
+		has_tech = ADISCORD_tech_missile_batteries
+	}
+	xor = {
+		ADISCORD_naval_doctrine_drone_carrier_groups
+		ADISCORD_naval_doctrine_coastal_fire_support
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 1.8 has_tech = ADISCORD_tech_networked_task_groups }
+	}
+	naval_hit_chance = 0.025
+	naval_coordination = 0.01
+	rewards = {
+		ADISCORD_naval_doctrine_missile_surface_groups_over_horizon = {
+			mastery = 50
+			naval_detection = 0.03
+		}
+		ADISCORD_naval_doctrine_missile_surface_groups_salvo_timing = {
+			mastery = 50
+			naval_hit_chance = 0.025
+		}
+		ADISCORD_naval_doctrine_missile_surface_groups_screened_launchers = {
+			mastery = 50
+			screening_efficiency = 0.03
+		}
+		ADISCORD_naval_doctrine_missile_surface_groups_cooperative_fire = {
+			mastery = 50
+			naval_coordination = 0.02
+		}
+		ADISCORD_naval_doctrine_missile_surface_groups_saturation_salvo = {
+			mastery = 50
+			naval_hit_chance = 0.04
+			naval_coordination = 0.025
+		}
+	}
+}
+
+ADISCORD_naval_doctrine_coastal_fire_support = {
+	track = ADISCORD_naval_surface_control
+	name = ADISCORD_naval_doctrine_coastal_fire_support
+	description = ADISCORD_naval_doctrine_coastal_fire_support_desc
+	icon = GFX_doctrine_base_strike_medium
+	xp_cost = 45
+	xp_type = navy
+	available = {
+		has_tech = ADISCORD_tech_modular_landing_causeways
+	}
+	xor = {
+		ADISCORD_naval_doctrine_drone_carrier_groups
+		ADISCORD_naval_doctrine_missile_surface_groups
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 2 has_tech = ADISCORD_tech_autonomous_littoral_fire_control }
+	}
+	shore_bombardment_bonus = 0.04
+	naval_invasion_prep_speed = 0.03
+	rewards = {
+		ADISCORD_naval_doctrine_coastal_fire_support_landing_tables = {
+			mastery = 50
+			naval_invasion_prep_speed = 0.04
+		}
+		ADISCORD_naval_doctrine_coastal_fire_support_shore_observers = {
+			mastery = 50
+			shore_bombardment_bonus = 0.03
+		}
+		ADISCORD_naval_doctrine_coastal_fire_support_fire_corridors = {
+			mastery = 50
+			naval_coordination = 0.015
+		}
+		ADISCORD_naval_doctrine_coastal_fire_support_floating_depots = {
+			mastery = 50
+			supply_consumption_factor = -0.01
+		}
+		ADISCORD_naval_doctrine_coastal_fire_support_coastal_fire_command = {
+			mastery = 50
+			shore_bombardment_bonus = 0.06
+			naval_invasion_penalty = -0.03
 		}
 	}
 }
 
 ADISCORD_naval_doctrine_subsurface_denial = {
-	track = ADISCORD_naval_littoral_security
+	track = ADISCORD_naval_subsurface_warfare
 	name = ADISCORD_naval_doctrine_subsurface_denial
 	description = ADISCORD_naval_doctrine_subsurface_denial_desc
 	icon = GFX_doctrine_wolfpacks_medium
-	xp_cost = 50
+	xp_cost = 45
 	xp_type = navy
-	available = { always = yes }
+	available = {
+		has_tech = ADISCORD_tech_homing_torpedoes
+	}
+	xor = {
+		ADISCORD_naval_doctrine_silent_ambush_groups
+		ADISCORD_naval_doctrine_seabed_hunter_network
+	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 2 has_war = yes }
+		modifier = { factor = 1.8 has_war = yes }
 	}
-	convoy_raiding_efficiency_factor = 0.10
-	navy_submarine_attack_factor = 0.05
+	convoy_raiding_efficiency_factor = 0.06
+	navy_submarine_attack_factor = 0.03
 	rewards = {
 		quiet_approaches = {
-			convoy_raiding_efficiency_factor = 0.05
+			mastery = 50
+			convoy_raiding_efficiency_factor = 0.03
 		}
 		ambush_grids = {
-			navy_submarine_attack_factor = 0.05
+			mastery = 50
+			navy_submarine_attack_factor = 0.03
 		}
 		salvage_torpedo_cells = {
+			mastery = 50
+			naval_hit_chance = 0.02
+		}
+		ADISCORD_naval_doctrine_subsurface_denial_silent_withdrawal = {
+			mastery = 50
+			navy_submarine_defence_factor = 0.03
+		}
+		ADISCORD_naval_doctrine_subsurface_denial_subsurface_denial = {
+			mastery = 50
 			convoy_raiding_efficiency_factor = 0.05
+			navy_submarine_attack_factor = 0.05
+		}
+	}
+}
+
+ADISCORD_naval_doctrine_silent_ambush_groups = {
+	track = ADISCORD_naval_subsurface_warfare
+	name = ADISCORD_naval_doctrine_silent_ambush_groups
+	description = ADISCORD_naval_doctrine_silent_ambush_groups_desc
+	icon = GFX_doctrine_convoy_interdiction_medium
+	xp_cost = 45
+	xp_type = navy
+	available = {
+		has_tech = ADISCORD_tech_quiet_propulsion
+	}
+	xor = {
+		ADISCORD_naval_doctrine_subsurface_denial
+		ADISCORD_naval_doctrine_seabed_hunter_network
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 2 has_tech = ADISCORD_tech_magnetohydrodynamic_silent_drive }
+	}
+	navy_submarine_defence_factor = 0.03
+	convoy_raiding_efficiency_factor = 0.04
+	rewards = {
+		ADISCORD_naval_doctrine_silent_ambush_groups_passive_sonar = {
+			mastery = 50
+			naval_detection = 0.025
+		}
+		ADISCORD_naval_doctrine_silent_ambush_groups_thermal_layers = {
+			mastery = 50
+			navy_submarine_defence_factor = 0.03
+		}
+		ADISCORD_naval_doctrine_silent_ambush_groups_patient_hunters = {
+			mastery = 50
+			convoy_raiding_efficiency_factor = 0.03
+		}
+		ADISCORD_naval_doctrine_silent_ambush_groups_coordinated_ambush = {
+			mastery = 50
+			naval_coordination = 0.015
+		}
+		ADISCORD_naval_doctrine_silent_ambush_groups_silent_sea = {
+			mastery = 50
+			navy_submarine_attack_factor = 0.04
+			navy_submarine_defence_factor = 0.04
+			naval_detection = 0.03
+		}
+	}
+}
+
+ADISCORD_naval_doctrine_seabed_hunter_network = {
+	track = ADISCORD_naval_subsurface_warfare
+	name = ADISCORD_naval_doctrine_seabed_hunter_network
+	description = ADISCORD_naval_doctrine_seabed_hunter_network_desc
+	icon = GFX_doctrine_submarine_operations_medium
+	xp_cost = 45
+	xp_type = navy
+	available = {
+		has_tech = ADISCORD_tech_seabed_sensor_webs
+	}
+	xor = {
+		ADISCORD_naval_doctrine_subsurface_denial
+		ADISCORD_naval_doctrine_silent_ambush_groups
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 2 has_tech = ADISCORD_tech_autonomous_submarines }
+	}
+	naval_detection = 0.035
+	navy_submarine_attack_factor = 0.025
+	rewards = {
+		ADISCORD_naval_doctrine_seabed_hunter_network_bottom_arrays = {
+			mastery = 50
+			naval_detection = 0.03
+		}
+		ADISCORD_naval_doctrine_seabed_hunter_network_autonomous_hunters = {
+			mastery = 50
+			navy_submarine_attack_factor = 0.03
+		}
+		ADISCORD_naval_doctrine_seabed_hunter_network_data_fusion = {
+			mastery = 50
+			naval_coordination = 0.015
+		}
+		ADISCORD_naval_doctrine_seabed_hunter_network_closing_routes = {
+			mastery = 50
+			convoy_raiding_efficiency_factor = 0.03
+		}
+		ADISCORD_naval_doctrine_seabed_hunter_network_seabed_control = {
+			mastery = 50
+			naval_detection = 0.05
+			navy_submarine_attack_factor = 0.04
 		}
 	}
 }

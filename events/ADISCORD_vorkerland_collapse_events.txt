@@ -72,6 +72,10 @@ country_event = {
 
 	immediate = {
 		set_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		if = {
+			limit = { VAL = { exists = yes } }
+			VAL = { VAL_handle_vorkerland_war_outbreak = yes }
+		}
 		set_global_flag = {
 			flag = ADISCORD_vorkerland_ai_consolidation_window
 			days = 60

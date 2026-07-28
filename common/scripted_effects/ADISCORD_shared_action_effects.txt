@@ -1,0 +1,42 @@
+# Shared action-accounting API. Country decisions should use these effects
+# instead of changing the treasury without recording the transaction.
+ADISCORD_economy_spend_15 = {
+	ADISCORD_economy_initialize_country = yes
+	add_to_variable = { var = ADISCORD_economy_treasury value = -15 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 15 }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+ADISCORD_economy_spend_25 = {
+	ADISCORD_economy_initialize_country = yes
+	add_to_variable = { var = ADISCORD_economy_treasury value = -25 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 25 }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+ADISCORD_economy_spend_50 = {
+	ADISCORD_economy_initialize_country = yes
+	add_to_variable = { var = ADISCORD_economy_treasury value = -50 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 50 }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+ADISCORD_economy_receive_15 = {
+	ADISCORD_economy_initialize_country = yes
+	add_to_variable = { var = ADISCORD_economy_treasury value = 15 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 15 }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+ADISCORD_economy_receive_50 = {
+	ADISCORD_economy_initialize_country = yes
+	add_to_variable = { var = ADISCORD_economy_treasury value = 50 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 50 }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# Native campaign slots are global engine state; these wrappers provide a
+# common hook for country-specific propaganda systems.
+ADISCORD_campaign_slot_grant = { add_campaign_slot = yes }
+ADISCORD_campaign_slot_consume = { remove_campaign_slot = yes }
+ADISCORD_campaign_slot_release = { add_campaign_slot = yes }

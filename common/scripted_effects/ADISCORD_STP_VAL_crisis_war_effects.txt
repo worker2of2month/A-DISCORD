@@ -546,6 +546,14 @@ STP_start_party_revolt = {
 	STP_assign_internal_characters = yes
 	if = {
 		limit = {
+			has_country_flag = STP_outcome_shabrat_main_war
+			has_event_target = STP_crisis_resistance_side
+			country_exists = event_target:STP_crisis_resistance_side
+		}
+		event_target:STP_crisis_resistance_side = { STP_start_last_banquet_mission = yes }
+	}
+	if = {
+		limit = {
 			has_event_target = STP_crisis_party_side
 			country_exists = event_target:STP_crisis_party_side
 			has_event_target = STP_crisis_resistance_side
@@ -585,6 +593,13 @@ STP_apply_civil_war_state_map = {
 		}
 
 		if = {
+			limit = {
+				has_country_flag = STP_prewar_owned_state_28
+				has_country_flag = STP_outcome_shabrat_main_war
+			}
+			event_target:STP_crisis_party_side = { transfer_state = 28 }
+		}
+		else_if = {
 			limit = {
 				has_country_flag = STP_prewar_owned_state_28
 				check_variable = { var = STP_node_palace value = 2 compare = equals }
@@ -1171,41 +1186,7 @@ VAL_STP_trigger_breach = {
 	}
 }
 
-STP_complete_transition_outcome_focus = {
-	if = {
-		limit = { has_country_flag = STP_outcome_shabrat_bloodless }
-		complete_national_focus = STP_The_Mountain_Window
-	}
-	else_if = {
-		limit = { has_country_flag = STP_outcome_shabrat_main_war }
-		complete_national_focus = STP_No_One_Controls_The_Transition
-	}
-	else_if = {
-		limit = { has_country_flag = STP_outcome_sotnikov_main_war }
-		complete_national_focus = STP_A_General_Takes_The_Passes
-	}
-	else_if = {
-		limit = { has_country_flag = STP_outcome_hedersett_fail_state }
-		complete_national_focus = STP_The_Underground_Was_Too_Late
-	}
-	else_if = {
-		limit = { has_country_flag = STP_outcome_hedersett_consolidation }
-		complete_national_focus = STP_The_Party_Closes_Ranks
-	}
-	else_if = {
-		limit = { has_country_flag = STP_outcome_hedersett_vs_shabrat }
-		complete_national_focus = STP_Two_Claims_To_The_Palace
-	}
-	else_if = {
-		limit = { has_country_flag = STP_outcome_hedersett_vs_sotnikov }
-		complete_national_focus = STP_The_Army_Rejects_The_Party
-	}
-}
-
 STP_assign_postwar_leader = {
-	# Save compatibility: an already-running civil war from an older save may
-	# not yet have displayed its transition focus.
-	STP_complete_transition_outcome_focus = yes
 	if = {
 		limit = { has_country_flag = STP_winner_shabrat }
 		set_politics = { ruling_party = chauvinism elections_allowed = no }
@@ -2229,6 +2210,80 @@ NOD_check_limited_war_integrity = {
 			}
 			NOD_emergency_limited_white_peace = yes
 		}
+	}
+}
+
+STP_start_last_banquet_mission = {
+	if = {
+		limit = {
+			has_country_flag = STP_crisis_resistance_side
+			has_country_flag = STP_outcome_shabrat_main_war
+			NOT = { has_country_flag = STP_last_banquet_resolved }
+		}
+		set_country_flag = STP_last_banquet_active
+		activate_mission = STP_last_banquet_secure_bronze_congress
+		if = {
+			limit = { has_country_flag = STP_last_banquet_prepared }
+			add_timed_idea = { idea = STP_last_banquet_plan days = 90 }
+		}
+	}
+}
+
+STP_resolve_last_banquet_success = {
+	if = {
+		limit = {
+			has_country_flag = STP_crisis_resistance_side
+			has_country_flag = STP_last_banquet_active
+			controls_state = 28
+		}
+		clr_country_flag = STP_last_banquet_active
+		set_country_flag = STP_last_banquet_resolved
+		set_country_flag = STP_last_banquet_success
+		remove_decision = STP_last_banquet_secure_bronze_congress
+		add_timed_idea = { idea = STP_last_banquet_momentum days = 90 }
+		if = {
+			limit = {
+				has_event_target = STP_crisis_party_side
+				country_exists = event_target:STP_crisis_party_side
+			}
+			event_target:STP_crisis_party_side = {
+				add_timed_idea = { idea = STP_bronze_congress_lost days = 90 }
+			}
+		}
+		country_event = { id = stp_crisis.60 }
+	}
+}
+
+STP_resolve_last_banquet_timeout = {
+	if = {
+		limit = {
+			has_country_flag = STP_crisis_resistance_side
+			has_country_flag = STP_last_banquet_active
+			NOT = { controls_state = 28 }
+		}
+		clr_country_flag = STP_last_banquet_active
+		set_country_flag = STP_last_banquet_resolved
+		set_country_flag = STP_last_banquet_failed
+		add_timed_idea = { idea = STP_last_banquet_delayed days = 120 }
+		if = { limit = { country_exists = NOD } NOD = { NOD_refresh_army_equipment_ratio = yes } }
+		if = {
+			limit = { NOD_can_directly_defend_stp = yes }
+			NOD = { NOD_send_stp_full_support = yes }
+			set_country_flag = STP_last_banquet_nodrul_intervention
+		}
+		else_if = {
+			limit = {
+				country_exists = NOD
+				NOD = {
+					has_country_flag = NOD_crisis_posture_guardian
+					has_war = no
+					has_capitulated = no
+				}
+			}
+			NOD = { NOD_send_stp_limited_support = yes }
+			set_country_flag = STP_last_banquet_nodrul_limited
+		}
+		country_event = { id = stp_crisis.61 }
 	}
 }
 

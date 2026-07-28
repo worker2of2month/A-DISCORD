@@ -1,14 +1,4 @@
 on_actions = {
-	on_startup = {
-		effect = {
-			random_country = {
-				limit = { is_ai = no }
-			}
-		}
-	}
-
-	on_government_change = { }
-
 	on_declare_war = {
 		effect = {
 			ROOT = {
@@ -22,10 +12,6 @@ on_actions = {
 			}
 		}
 	}
-
-	on_join_faction = { }
-	on_offer_join_faction = { }
-	on_create_faction = { }
 
 	on_leave_faction = {
 		effect = {
@@ -44,28 +30,6 @@ on_actions = {
 			}
 		}
 	}
-
-	on_border_war_lost = { }
-
-	on_faction_formed = {
-		effect = { }
-	}
-
-	on_nuke_drop = {
-		effect = { }
-	}
-
-	on_wargoal_expire = { }
-
-	on_justifying_wargoal_pulse = { }
-
-	on_ace_promoted = { }
-	on_aces_killed_each_other = { }
-	on_ace_killed_by_ace = { }
-	on_ace_killed_other_ace = { }
-	on_ace_killed = { }
-
-	on_new_term_election = { }
 
 	on_coup_succeeded = {
 		effect = {

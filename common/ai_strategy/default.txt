@@ -20,7 +20,9 @@ ADISCORD_default_surplus_management = {
 
 	ai_strategy = { type = equipment_production_surplus_management id = infantry_equipment value = 12 }
 	ai_strategy = { type = equipment_production_surplus_management id = support_equipment value = 6 }
-	ai_strategy = { type = equipment_production_surplus_management id = artillery_equipment value = 4 }
+	ai_strategy = { type = equipment_production_surplus_management id = artillery_equipment value = 6 }
+	ai_strategy = { type = equipment_production_surplus_management id = anti_tank_equipment value = 2 }
+	ai_strategy = { type = equipment_production_surplus_management id = anti_air_equipment value = 2 }
 	ai_strategy = { type = equipment_production_surplus_management id = ADISCORD_squad_weapons_equipment value = 10 }
 	ai_strategy = { type = equipment_stockpile_surplus_ratio value = 15 }
 }

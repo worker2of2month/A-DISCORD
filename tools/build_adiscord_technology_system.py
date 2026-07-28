@@ -7,24 +7,40 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE_GAME = Path(r"Z:\SteamLibrary\steamapps\common\Hearts of Iron IV")
-# The legacy part of the tree is intentionally broad.  From the intended
-# campaign baseline in 2160 onward, the cadence tightens to roughly one
-# research generation every two to three years, following the dense-tree
-# pattern used by large total conversions such as TFR and Darkest Hour.
-YEARS = (
+# The campaign starts in 2160. Keep only a short recovered baseline before
+# that date, place the overwhelming majority of research in the playable
+# 2160-2175 window, and leave one small 2180 endgame generation. This follows
+# Darkest Hour's useful cadence: dense playable eras, not decades of empty
+# waiting between otherwise interesting nodes.
+LEGACY_YEARS = (
     2100, 2120, 2140, 2150,
     2160, 2162, 2164, 2166, 2168,
     2170, 2173, 2176, 2179,
     2182, 2185, 2188,
     2191, 2194, 2197, 2200,
 )
-MILESTONE_YEARS = (2100, 2120, 2140, 2160, 2170, 2182, 2200)
-# Clausewitz technology grids use x for parallel lanes and y for progress
-# along a LEFT-formatted tree.  The GUI turns every two y-slots into one
-# horizontal 140-pixel era column.
-YEAR_TO_Y = {year: index * 2 for index, year in enumerate(YEARS)}
+YEARS = (
+    2150, 2155, 2158,
+    2160, 2161, 2162, 2163, 2164,
+    2165, 2166, 2167, 2168,
+    2169, 2170, 2171, 2172,
+    2173, 2174, 2175,
+    2180,
+)
+LEGACY_TO_CAMPAIGN_YEAR = dict(zip(LEGACY_YEARS, YEARS, strict=True))
+MILESTONE_YEARS = tuple(
+    LEGACY_TO_CAMPAIGN_YEAR[year]
+    for year in (2100, 2120, 2140, 2160, 2170, 2182, 2200)
+)
+# Darkest Hour lays time out vertically and uses horizontal space for parallel
+# weapon families and specialisations. One 70px row per represented year keeps
+# the playable window dense without the old 2,800px horizontal runway.
+YEAR_TO_Y = {year: index for index, year in enumerate(YEARS)}
 GRID_X = 150
-LANE_SLOT_MULTIPLIER = 2
+GRID_Y = 130
+GRID_SLOT = 70
+LANE_SLOT_MULTIPLIER = 3
+BRANCH_GAP = 90
 
 
 @dataclass(frozen=True)
@@ -208,7 +224,7 @@ dirty_energy_munitions|Боеприпасы грязной энергии|Dirty 
 singularity_cooling_systems|Сингулярное охлаждение|Singularity Cooling Systems|advanced_nuclear_reactor
 black_grid_protocols|Протоколы чёрной энергосети|Black Grid Protocols|special_project_nuclear_reactor
 """),
-        (2100, 2120, 2140, 2160, 2182, 2200),
+        (2164, 2166, 2168, 2170, 2173, 2180),
     ),
     Branch(
         "forbidden_automation", "ADISCORD_forbidden.txt", ("electronics_folder",),
@@ -218,7 +234,7 @@ self_repairing_industrial_swarms|Самовосстанавливающиеся 
 neural_command_cores|Нейронные командные ядра|Neural Command Cores|improved_mainframe
 forbidden_automation_doctrine|Доктрина запретной автоматизации|Forbidden Automation Doctrine|advanced_mainframe
 """),
-        (2170, 2182, 2200),
+        (2168, 2172, 2180),
     ),
     Branch(
         "small_arms", "ADISCORD_infantry.txt", ("infantry_folder",),
@@ -365,12 +381,12 @@ autonomous_recon_screen|Автономное разведывательное о
     ),
     Branch(
         "combat_armor", "ADISCORD_armor.txt", ("armour_folder", "nsb_armour_folder"),
-        "Основные боевые платформы", "Main Combat Platforms", "combat_armor",
+        "Основные боевые танки", "Main Battle Tanks", "combat_armor",
         techs("""
 recovered_medium_chassis|Восстановленное среднее шасси|Recovered Medium Chassis|basic_medium_tank
 remote_weapon_stations|Дистанционные боевые модули|Remote Weapon Stations|improved_medium_tank
 composite_armor_arrays|Массивы композитной брони|Composite Armor Arrays|advanced_medium_tank
-semi_autonomous_combat_modules|Полуавтономные платформы|Semi-autonomous Combat Modules|basic_modern_tank
+semi_autonomous_combat_modules|Полуавтономное управление танком|Semi-autonomous Tank Control|basic_modern_tank
 adaptive_fire_control|Адаптивное управление огнём|Adaptive Fire Control|improved_modern_tank
 limited_battle_ai|Ограниченный боевой ИИ|Limited Battle AI|advanced_modern_tank
 distributed_battlegroup|Распределённая бронегруппа|Distributed Battlegroup|generic_modern_tank
@@ -378,15 +394,15 @@ distributed_battlegroup|Распределённая бронегруппа|Dist
     ),
     Branch(
         "heavy_armor", "ADISCORD_armor.txt", ("armour_folder", "nsb_armour_folder"),
-        "Тяжёлые и автономные платформы", "Heavy and Autonomous Platforms", "heavy_armor",
+        "Тяжёлые и автономные танки", "Heavy and Autonomous Tanks", "heavy_armor",
         techs("""
 heavy_recovery_frames|Тяжёлые ремонтные рамы|Heavy Recovery Frames|basic_heavy_tank
 reinforced_powertrains|Усиленные силовые установки|Reinforced Powertrains|improved_heavy_tank
 heavy_composite_cores|Тяжёлые композитные ядра|Heavy Composite Cores|advanced_heavy_tank
 remote_repair_sections|Дистанционные ремонтные машины|Remote Repair Sections|maintenance_company
-heavy_platform_cores|Ядро тяжёлой платформы|Heavy Platform Cores|super_heavy_tank
-autonomous_breakthrough_platforms|Автономные платформы прорыва|Autonomous Breakthrough Platforms|main_battle_tank
-siege_platform_networks|Сеть осадных платформ|Siege Platform Networks|land_cruiser
+heavy_platform_cores|Усиленный корпус тяжёлого танка|Reinforced Heavy Tank Hull|super_heavy_tank
+autonomous_breakthrough_platforms|Автономные танки прорыва|Autonomous Breakthrough Tanks|main_battle_tank
+siege_platform_networks|Сеть осадных танков|Networked Siege Tanks|land_cruiser
 """),
     ),
     Branch(
@@ -473,12 +489,25 @@ deep_ocean_denial|Глубоководное сдерживание|Deep-ocean D
 try:
     from adiscord_technology_expansions_civil import EXPANSIONS as CIVIL_EXPANSIONS
     from adiscord_technology_expansions_combat import EXPANSIONS as COMBAT_EXPANSIONS
+    from adiscord_technology_applied_programmes import (
+        APPLIED_EFFECTS,
+        APPLIED_PROGRAMMES,
+        APPLIED_YEARS,
+        LEADER_TRAINING,
+    )
 except ModuleNotFoundError:
     from tools.adiscord_technology_expansions_civil import EXPANSIONS as CIVIL_EXPANSIONS
     from tools.adiscord_technology_expansions_combat import EXPANSIONS as COMBAT_EXPANSIONS
+    from tools.adiscord_technology_applied_programmes import (
+        APPLIED_EFFECTS,
+        APPLIED_PROGRAMMES,
+        APPLIED_YEARS,
+        LEADER_TRAINING,
+    )
 
 
-EXPANSION_YEARS = set(YEARS) - set(MILESTONE_YEARS)
+LEGACY_MILESTONE_YEARS = (2100, 2120, 2140, 2160, 2170, 2182, 2200)
+LEGACY_EXPANSION_YEARS = set(LEGACY_YEARS) - set(LEGACY_MILESTONE_YEARS)
 DENSE_TECH_EXPANSIONS = {**CIVIL_EXPANSIONS, **COMBAT_EXPANSIONS}
 
 
@@ -492,13 +521,18 @@ def expand_dense_branch(branch: Branch) -> Branch:
     additions = DENSE_TECH_EXPANSIONS.get(branch.key)
     if additions is None:
         raise ValueError(f"{branch.key}: missing dense technology expansion")
-    if set(additions) != EXPANSION_YEARS:
-        missing = sorted(EXPANSION_YEARS - set(additions))
-        extra = sorted(set(additions) - EXPANSION_YEARS)
+    if set(additions) != LEGACY_EXPANSION_YEARS:
+        missing = sorted(LEGACY_EXPANSION_YEARS - set(additions))
+        extra = sorted(set(additions) - LEGACY_EXPANSION_YEARS)
         raise ValueError(f"{branch.key}: bad expansion years; missing={missing}, extra={extra}")
 
     by_year = dict(zip(MILESTONE_YEARS, branch.techs, strict=True))
-    by_year.update({year: Tech(*additions[year]) for year in EXPANSION_YEARS})
+    by_year.update(
+        {
+            LEGACY_TO_CAMPAIGN_YEAR[year]: Tech(*additions[year])
+            for year in LEGACY_EXPANSION_YEARS
+        }
+    )
     return replace(branch, techs=tuple(by_year[year] for year in YEARS), years=YEARS)
 
 
@@ -530,6 +564,11 @@ TECH_TEXT_OVERRIDES = {
     "high_pressure_polymer_synthesis": (
         "Высокобарическое восстановление руды", "High-Pressure Ore Reduction",
     ),
+    # This remains a risky energy-storage programme, not an early bomb.
+    # Preserve the internal key for saves while correcting the visible concept.
+    "dirty_energy_munitions": (
+        "Нестабильные изотопные накопители", "Unstable Isotope Storage",
+    ),
 }
 
 
@@ -542,6 +581,36 @@ def apply_tech_text_overrides(branch: Branch) -> Branch:
 
 
 BRANCHES = tuple(apply_tech_text_overrides(branch) for branch in BRANCHES)
+
+
+APPLIED_DESCRIPTION_RU_BY_BRANCH = {
+    programme["key"]: programme["description_ru"] for programme in APPLIED_PROGRAMMES
+}
+APPLIED_DESCRIPTION_EN_BY_BRANCH = {
+    programme["key"]: programme["description_en"] for programme in APPLIED_PROGRAMMES
+}
+APPLIED_PROGRAMME_KEYS = {programme["key"] for programme in APPLIED_PROGRAMMES}
+
+
+def build_applied_branches() -> tuple[Branch, ...]:
+    """Create optional TDA-style programmes without lengthening old trunks."""
+
+    return tuple(
+        Branch(
+            programme["key"],
+            programme["file"],
+            programme["folders"],
+            programme["ru"],
+            programme["en"],
+            programme["profile"],
+            tuple(Tech(*row) for row in programme["techs"]),
+            tuple(programme.get("years", APPLIED_YEARS)),
+        )
+        for programme in APPLIED_PROGRAMMES
+    )
+
+
+BRANCHES += build_applied_branches()
 
 
 def chain_edges(indices: tuple[int, ...]) -> list[tuple[int, int]]:
@@ -719,6 +788,15 @@ def alternating_choices_graph() -> BranchGraph:
     return make_graph(tuple(lanes), edges)
 
 
+def applied_dual_choice_graph() -> BranchGraph:
+    """A compact optional programme with two persistent applied schools."""
+
+    return make_graph(
+        (1, 0, 2, 0, 2, 0, 2, 1),
+        [(0, 1), (0, 2), (1, 3), (2, 4), (3, 5), (4, 6), (5, 7), (6, 7)],
+    )
+
+
 def infantry_integration_graph() -> BranchGraph:
     """Rifle mechanisms, ammunition, and optics form three real programmes."""
 
@@ -822,30 +900,37 @@ GRAPH_PATTERN_BY_BRANCH = {
     "air_support": "alternating_choices",
     "naval_support": "alternating_choices",
 }
+GRAPH_PATTERN_BY_BRANCH.update(
+    {key: "applied_dual_choice" for key in APPLIED_PROGRAMME_KEYS}
+)
 
 
-DUAL_PROGRAMME_YEARS = (
+def remap_programme_years(years: tuple[int, ...]) -> tuple[int, ...]:
+    return tuple(LEGACY_TO_CAMPAIGN_YEAR[year] for year in years)
+
+
+DUAL_PROGRAMME_YEARS = remap_programme_years((
     2100, 2120, 2140, 2150, 2160,
     2162, 2162, 2168, 2168, 2173, 2173, 2179, 2179,
     2185, 2185, 2191, 2191, 2197, 2197, 2200,
-)
-TRIDENT_PROGRAMME_YEARS = (
+))
+TRIDENT_PROGRAMME_YEARS = remap_programme_years((
     2100, 2120, 2140, 2150, 2160,
     2162, 2162, 2162, 2170, 2170, 2170, 2182, 2182, 2182,
     2191, 2191, 2191, 2200, 2200, 2200,
-)
-DOUBLE_PROGRAMME_YEARS = (
+))
+DOUBLE_PROGRAMME_YEARS = remap_programme_years((
     2100, 2120, 2140, 2150, 2160,
     2162, 2162, 2164, 2164, 2166, 2166, 2168,
     2173, 2173, 2179, 2179, 2185, 2185, 2194, 2200,
-)
-ALTERNATING_PROGRAMME_YEARS = (
+))
+ALTERNATING_PROGRAMME_YEARS = remap_programme_years((
     2100, 2120, 2140, 2150, 2160,
     2162, 2162, 2164, 2166,
     2168, 2168, 2170, 2173,
     2176, 2176, 2179, 2182,
     2188, 2188, 2200,
-)
+))
 
 
 def align_programme_years(branch: Branch) -> Branch:
@@ -876,6 +961,7 @@ GRAPH_BUILDERS = {
     "double_choice": double_choice_graph,
     "alternating_diamonds": alternating_diamonds_graph,
     "alternating_choices": alternating_choices_graph,
+    "applied_dual_choice": applied_dual_choice_graph,
     "infantry_integration": infantry_integration_graph,
     "squad_integration": squad_integration_graph,
     "protection_programmes": protection_programmes_graph,
@@ -924,6 +1010,8 @@ for branch in BRANCHES:
         XOR_INDEX_GROUPS_BY_BRANCH[branch.key] = (
             (5, 6), (9, 10), (13, 14), (17, 18),
         )
+    elif pattern == "applied_dual_choice":
+        XOR_INDEX_GROUPS_BY_BRANCH[branch.key] = ((1, 2),)
 
 
 def xor_siblings(branch: Branch, index: int) -> tuple[str, ...]:
@@ -1130,6 +1218,10 @@ def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
     another, keeping their cumulative strength under control.
     """
 
+    tech = branch.techs[tier]
+    if tech.key in APPLIED_EFFECTS:
+        return tuple(APPLIED_EFFECTS[tech.key])
+
     profile = branch.profile
     tier_count = len(branch.techs)
     progress = 0 if tier_count <= 1 else tier * 6 / (tier_count - 1)
@@ -1150,8 +1242,23 @@ def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
     if pattern == "dual_choice" and tier >= 5 and tier != 19:
         dual = {
             "reconstruction": {
-                0: (f"production_speed_buildings_factor = {n(medium)}", f"production_speed_industrial_complex_factor = {n(small)}"),
-                2: (f"industry_repair_factor = {n(medium)}", f"production_speed_infrastructure_factor = {n(small)}"),
+                # Expansion is the peacetime construction route.  It keeps a
+                # small infrastructure dividend so its value is not limited
+                # to factory spam.
+                0: (
+                    f"production_speed_buildings_factor = {n(medium)}",
+                    f"production_speed_industrial_complex_factor = {n(small)}",
+                    f"production_speed_infrastructure_factor = {n(small / 2)}",
+                ),
+                # Repair used to be a trap choice: repair speed matters only
+                # after damage, while its rival accelerated expansion every
+                # day.  Faster restoration now also represents less factory
+                # downtime, granting a modest always-on output bonus.
+                2: (
+                    f"industry_repair_factor = {n(medium * 1.35)}",
+                    f"production_speed_infrastructure_factor = {n(small)}",
+                    f"industrial_capacity_factory = {n(small / 2)}",
+                ),
             },
             "finance": {
                 0: (f"production_factory_start_efficiency_factor = {n(medium)}", f"production_factory_efficiency_gain_factor = {n(small)}"),
@@ -1244,6 +1351,72 @@ def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
             ),
         }
         return choices[branch.key][min(xor_option, 1)]
+
+    # Parallel civil and electronics programmes should feel like distinct
+    # research projects, not twenty copies of the same global percentage.
+    # These lanes ultimately merge, so each package is deliberately narrow:
+    # choosing a route changes the order in which a country gains capabilities
+    # without creating a permanent all-purpose super-modifier.
+    if tier >= 5 and branch.key in {"administration", "computing", "signals", "power"}:
+        programme_effects = {
+            "administration": {
+                0: (
+                    f"consumer_goods_factor = -{n(small / 2)}",
+                    f"production_factory_start_efficiency_factor = {n(small / 2)}",
+                ),
+                1: (
+                    f"research_speed_factor = {n(small * 0.65)}",
+                    f"political_power_gain = {n(small / 2)}",
+                ),
+                2: (
+                    f"coordination_bonus = {n(small)}",
+                    f"planning_speed = {n(small / 2)}",
+                ),
+            },
+            "computing": {
+                0: (
+                    f"supply_consumption_factor = -{n(small / 2)}",
+                    f"production_factory_efficiency_gain_factor = {n(small / 2)}",
+                ),
+                1: (
+                    f"research_speed_factor = {n(small * 0.75)}",
+                    f"encryption_factor = {n(small)}",
+                ),
+                2: (
+                    f"coordination_bonus = {n(small)}",
+                    f"land_reinforce_rate = {n(small / 2)}",
+                ),
+            },
+            "signals": {
+                0: (
+                    f"encryption_factor = {n(medium)}",
+                    f"decryption_factor = {n(small / 2)}",
+                ),
+                1: (
+                    f"coordination_bonus = {n(small)}",
+                    f"land_reinforce_rate = {n(small / 2)}",
+                ),
+                2: (
+                    f"decryption_factor = {n(medium)}",
+                    f"encryption_factor = {n(small / 2)}",
+                ),
+            },
+            "power": {
+                0: (
+                    f"nuclear_production_factor = {n(medium)}",
+                    f"industrial_capacity_factory = {n(small / 2)}",
+                ),
+                1: (
+                    f"industry_repair_factor = {n(medium)}",
+                    f"fuel_gain_factor = {n(small)}",
+                ),
+                2: (
+                    f"production_speed_buildings_factor = {n(small)}",
+                    f"local_resources_factor = {n(small)}",
+                ),
+            },
+        }
+        return programme_effects[branch.key][lane]
 
     profiles = {
         "construction": (
@@ -1390,7 +1563,8 @@ ICON_ALIASES = {
     "naval_mines3": "advanced_naval_mines",
     "naval_radar4": "advanced_centimetric_radar",
     "night_vision1": "night_vision",
-    "nuclear_bomb": "nuclear_missile_equipment_1",
+    # Never turn an abstract energy programme into a nuclear-warhead card.
+    "nuclear_bomb": "sp_nuclear_isotope_separation",
     "railgun": "generic_railway_gun",
     "railway_gun": "generic_railway_gun",
     "railway_gun2": "generic_super_heavy_railway_gun",
@@ -1401,10 +1575,10 @@ ICON_ALIASES = {
     "special_forces": "tech_special_forces",
     "special_project_air_guided_missile": "sp_rockets_glide_bombs",
     "special_project_air_icbm": "guided_missile_3",
-    "special_project_air_nuclear_missile": "nuclear_missile_equipment_1",
+    "special_project_air_nuclear_missile": "sp_rockets_improved_guidance",
     "special_project_land_railgun": "generic_super_heavy_railway_gun",
     "special_project_nuclear_reactor": "nuclear_reactor",
-    "special_project_thermonuclear_bomb": "sp_nuclear_isotope_separation",
+    "special_project_thermonuclear_bomb": "advanced_centimetric_radar",
     "tech_engineers": "engineers",
     "tech_engineers2": "engineers2",
     "tech_engineers3": "engineers3",
@@ -1431,7 +1605,7 @@ COMPACT_ICONS_BY_PROFILE = {
     "resources": ("excavation1", "oil_processing", "rubber_processing"),
     "finance": ("mechanical_computing", "computing_machine"),
     "administration": ("radio", "computing_machine"),
-    "civil": ("basic_construction", "engineers", "radio"),
+    "civil": ("basic_construction", "improved_construction", "radio"),
     "power": ("electronic_mechanical_engineering", "atomic_research", "radio"),
     "signals": ("radio", "basic_encryption", "basic_decryption"),
     "computing": ("mechanical_computing", "computing_machine", "improved_computing_machine"),
@@ -1439,17 +1613,17 @@ COMPACT_ICONS_BY_PROFILE = {
     "forbidden_automation": ("flexible_line", "advanced_computing_machine"),
     "infantry": ("infantry_weapons", "infantry_weapons2", "night_vision"),
     "squad": ("support_weapons", "support_weapons2", "infantry_at"),
-    "protection": ("engineers", "tech_field_hospital", "recon"),
-    "special_forces": ("recon", "tech_special_forces", "paratroopers"),
-    "support": ("engineers", "tech_maintenance_company", "tech_field_hospital"),
-    "logistics": ("tech_logistics_company", "radio", "engineers"),
-    "rail": ("engineers", "radio", "tech_maintenance_company"),
+    "protection": ("night_vision", "basic_construction", "improved_construction"),
+    "special_forces": ("night_vision", "radio", "basic_decryption"),
+    "support": ("basic_machine_tools", "improved_construction", "radio"),
+    "logistics": ("radio", "computing_machine", "assembly_line_production"),
+    "rail": ("basic_machine_tools", "basic_construction", "assembly_line_production"),
     "artillery": ("artillery1", "artillery2", "artillery3"),
     "anti_tank": ("antitank1", "antitank2", "antitank3"),
     "anti_air": ("antiair1", "antiair2", "antiair3"),
-    "recon_armor": ("nsb_engine_tech_1", "nsb_armor_tech_1", "armored_operations"),
-    "combat_armor": ("nsb_armor_tech_1", "nsb_engine_tech_1", "armored_operations"),
-    "heavy_armor": ("nsb_armor_tech_1", "engineers", "armored_operations"),
+    "recon_armor": ("nsb_engine_tech_1", "nsb_armor_tech_1", "basic_machine_tools"),
+    "combat_armor": ("nsb_armor_tech_1", "nsb_engine_tech_1", "advanced_machine_tools"),
+    "heavy_armor": ("nsb_armor_tech_1", "nsb_engine_tech_2", "advanced_machine_tools"),
     "fighter": ("bba_tech_aircraft_construction", "bba_tech_engines_1", "centimetric_radar"),
     "air_support": ("bba_tech_armor_piercing_bombs", "bba_tech_engines_1", "radio"),
     "strategic_air": ("rocket_engines", "advanced_rocket_engines", "centimetric_radar"),
@@ -1457,6 +1631,178 @@ COMPACT_ICONS_BY_PROFILE = {
     "surface_fleet": ("basic_cruiser_armor_scheme", "advanced_centimetric_radar", "naval_air_operations"),
     "subsurface": ("sonar", "basic_naval_mines", "advanced_sonar"),
 }
+
+
+# Several of the original dense branches were built from dark equipment
+# silhouettes or just three repeated symbols.  Rotate a compact engine-owned
+# thematic palette for those entire branches so chronology and function are
+# readable at a glance inside a 72x72 cell.
+BRANCH_ICON_PALETTES = {
+    "small_arms": (
+        "infantry_weapons", "infantry_weapons2", "support_weapons", "night_vision",
+        "infantry_at", "basic_encryption", "radio", "support_weapons2",
+        "night_vision2", "improved_encryption",
+    ),
+    "squad_weapons": (
+        "support_weapons", "support_weapons2", "infantry_at", "radio",
+        "support_weapons3", "centimetric_radar", "infantry_at2",
+        "support_weapons4", "advanced_centimetric_radar",
+    ),
+    "protection": (
+        "basic_construction", "night_vision", "improved_construction",
+        "basic_encryption", "radio", "advanced_construction",
+        "improved_encryption", "night_vision2",
+    ),
+    "special_forces": (
+        "night_vision", "radio", "basic_decryption", "centimetric_radar",
+        "improved_decryption", "night_vision2", "advanced_decryption",
+        "advanced_centimetric_radar",
+    ),
+    "field_support": (
+        "basic_machine_tools", "basic_construction", "improved_machine_tools",
+        "radio", "advanced_machine_tools", "improved_construction",
+        "assembly_line_production", "advanced_construction",
+    ),
+    "logistics": (
+        "radio", "basic_machine_tools", "computing_machine",
+        "assembly_line_production", "improved_computing_machine",
+        "improved_construction", "advanced_computing_machine",
+        "advanced_construction",
+    ),
+    "rail": (
+        "basic_machine_tools", "basic_construction", "improved_machine_tools",
+        "radio", "assembly_line_production", "improved_construction",
+        "advanced_machine_tools", "computing_machine",
+        "advanced_construction", "advanced_computing_machine",
+    ),
+    "combat_medicine": (
+        "basic_construction", "radio", "improved_construction",
+        "computing_machine", "advanced_construction", "improved_computing_machine",
+        "night_vision", "advanced_computing_machine",
+    ),
+    "combat_engineering": (
+        "basic_machine_tools", "basic_construction", "improved_machine_tools",
+        "improved_construction", "advanced_machine_tools", "radio",
+        "advanced_construction", "assembly_line_production",
+    ),
+    "officer_training": (
+        "radio", "mechanical_computing", "basic_encryption",
+        "computing_machine", "improved_encryption", "improved_computing_machine",
+        "advanced_encryption", "advanced_computing_machine",
+    ),
+    "finance": (
+        "mechanical_computing", "computing_machine", "improved_computing_machine",
+        "advanced_computing_machine", "basic_encryption", "radio",
+        "improved_machine_tools", "dispersed_industry",
+    ),
+    "administration": (
+        "radio", "mechanical_computing", "basic_encryption", "computing_machine",
+        "improved_encryption", "improved_computing_machine", "advanced_encryption",
+        "advanced_computing_machine",
+    ),
+    "power": (
+        "electronic_mechanical_engineering", "oil_plant", "atomic_research",
+        "nuclear_reactor", "advanced_oil_plant", "sp_nuclear_isotope_separation",
+        "sp_physics_improved_radio", "sp_physics_advanced_radio",
+    ),
+    "computing": (
+        "mechanical_computing", "electronic_mechanical_engineering", "computing_machine",
+        "basic_encryption", "radio_detection", "improved_computing_machine",
+        "centimetric_radar", "advanced_computing_machine",
+    ),
+    "forbidden_energy": (
+        "atomic_research", "nuclear_reactor", "sp_nuclear_isotope_separation",
+        "experimental_rockets", "advanced_rocket_engines", "sp_physics_advanced_radio",
+    ),
+    "recon_armor": (
+        "nsb_engine_tech_1", "nsb_armor_tech_1", "basic_machine_tools",
+        "radio", "nsb_engine_tech_2", "centimetric_radar",
+        "nsb_armor_tech_2", "improved_machine_tools", "nsb_engine_tech_3",
+        "advanced_centimetric_radar",
+    ),
+    "combat_armor": (
+        "nsb_armor_tech_1", "nsb_engine_tech_1", "basic_machine_tools",
+        "nsb_armor_tech_2", "nsb_engine_tech_2", "radio",
+        "nsb_armor_tech_3", "nsb_engine_tech_3", "advanced_machine_tools",
+        "nsb_armor_tech_4", "nsb_engine_tech_4", "advanced_centimetric_radar",
+    ),
+    "heavy_armor": (
+        "nsb_armor_tech_1", "nsb_engine_tech_1", "basic_machine_tools",
+        "nsb_armor_tech_2", "nsb_engine_tech_2", "improved_machine_tools",
+        "nsb_armor_tech_3", "nsb_engine_tech_3", "advanced_machine_tools",
+        "nsb_armor_tech_4", "nsb_engine_tech_4", "advanced_construction",
+    ),
+    "naval_support": (
+        "sonar", "basic_torpedo", "improved_sonar", "basic_naval_mines",
+        "advanced_sonar", "improved_naval_mines", "advanced_centimetric_radar",
+        "advanced_naval_mines", "modern_sonar", "homing_torpedo",
+    ),
+    "surface_fleet": (
+        "basic_cruiser_armor_scheme", "decimetric_radar", "improved_cruiser_armor_scheme",
+        "improved_centimetric_radar", "advanced_cruiser_armor_scheme",
+        "advanced_centimetric_radar", "naval_air_operations", "air_defence",
+    ),
+    "subsurface": (
+        "sonar", "basic_submarine_snorkel", "basic_torpedo", "submarine_mine_laying",
+        "improved_sonar", "electric_torpedo", "improved_submarine_snorkel",
+        "advanced_sonar", "homing_torpedo", "advanced_submarine_warfare",
+    ),
+}
+
+
+# Wide cards are reserved for technologies that unlock something the player
+# can actually put on a production line. Give those cards the corresponding
+# equipment silhouette instead of a 64px support-company badge.
+EQUIPMENT_UNLOCK_ICONS = {
+    "ADISCORD_tech_modular_rifle_kits": "infantry1",
+    "ADISCORD_tech_programmable_ammunition": "infantry2",
+    "ADISCORD_tech_networked_service_rifles": "infantry3",
+    "ADISCORD_tech_remote_weapon_tripods": "support_weapons2",
+    "ADISCORD_tech_swarm_fireteams": "support_weapons4",
+    "ADISCORD_tech_field_workshop_tools": "support_equipment_1",
+    "ADISCORD_tech_drone_delivered_repair_spares": "support_equipment_1",
+    "ADISCORD_tech_predictive_parts_prepositioning": "support_equipment_1",
+    "ADISCORD_tech_self_sustaining_support": "support_equipment_1",
+    "ADISCORD_tech_hardened_logistics_nodes": "train_equipment_3",
+    "ADISCORD_tech_restored_field_artillery": "artillery_equipment",
+    "ADISCORD_tech_inertial_battery_survey": "artillery_equipment",
+    "ADISCORD_tech_assisted_projectiles": "artillery_equipment",
+    "ADISCORD_tech_course_correcting_fuzes": "rocket_artillery_equipment",
+    "ADISCORD_tech_multispectral_spotter_drones": "rocket_artillery_equipment",
+    "ADISCORD_tech_robotic_shell_handling": "artillery_equipment",
+    "ADISCORD_tech_drone_spotted_batteries": "rocket_artillery_equipment",
+    "ADISCORD_tech_scrap_at_launchers": "anti_tank_equipment",
+    "ADISCORD_tech_superconducting_coil_barrels": "anti_tank_equipment",
+    "ADISCORD_tech_guided_hypervelocity_penetrators": "anti_tank_equipment",
+    "ADISCORD_tech_point_defense_aa": "anti_air_equipment",
+    "ADISCORD_tech_high_energy_laser_turrets": "anti_air_equipment",
+    "ADISCORD_tech_remote_repair_sections": "generic_armored_support_vehicle_recovery_1",
+    "ADISCORD_tech_low_observable_inlet_geometry": "fighter2",
+    "ADISCORD_tech_cooperative_fighter_sensor_fusion": "jet_fighter2",
+    "ADISCORD_tech_loyal_wingmen": "jet_fighter2",
+    "ADISCORD_tech_orbital_tracking_relics": "guided_missile_1",
+    "ADISCORD_tech_low_observable_cruise_missile_skins": "guided_missile_2",
+    "ADISCORD_tech_suborbital_skip_glide_guidance": "guided_missile_3",
+    "ADISCORD_tech_autonomous_strategic_strike_planning": "guided_missile_3",
+    "ADISCORD_tech_suborbital_strike_systems": "ballistic_missile_equipment_3",
+}
+
+COMPACT_ICON_OVERRIDES = {
+    "dirty_energy_munitions": "sp_nuclear_isotope_separation",
+}
+
+# These vanilla sprites are valid 64x64 files but are composed as support
+# company badges with a soldier silhouette. They read badly when repeated as
+# generic research icons, so effect-only nodes use neutral technical art.
+UNSUITABLE_COMPACT_ICON_PREFIXES = (
+    "engineers",
+    "recon",
+    "tech_field_hospital",
+    "tech_logistics_company",
+    "tech_maintenance_company",
+    "tech_signal_company",
+    "tech_special_forces",
+)
 
 
 def technology_icon_size(icon: str) -> tuple[int, int] | None:
@@ -1476,8 +1822,27 @@ def technology_icon_size(icon: str) -> tuple[int, int] | None:
 def icon_for_technology(branch: Branch, index: int) -> str:
     tech = branch.techs[index]
     icon = ICON_ALIASES.get(tech.icon, tech.icon)
+
+    # The GUI selects the wide item template for equipment unlocks. Preserve a
+    # readable vehicle/weapon silhouette there; the old code compacted these
+    # sprites and turned trains and tanks into unrelated support-company icons.
+    if tech.id in ENABLE_EQUIPMENT:
+        candidate = EQUIPMENT_UNLOCK_ICONS.get(tech.id, icon)
+        size = technology_icon_size(candidate)
+        if size and size[0] <= 190 and size[1] <= 84:
+            return candidate
+
+    palette = BRANCH_ICON_PALETTES.get(branch.key)
+    if palette:
+        candidate = palette[index % len(palette)]
+        if technology_icon_size(candidate):
+            icon = candidate
+    icon = COMPACT_ICON_OVERRIDES.get(tech.key, icon)
     size = technology_icon_size(icon)
-    if tech.id not in ENABLE_EQUIPMENT and size and (size[0] > 72 or size[1] > 72):
+    unsuitable = icon.startswith(UNSUITABLE_COMPACT_ICON_PREFIXES)
+    # Effect-only nodes use the 72x72 compact template. Oversized equipment art
+    # and support-company silhouettes are replaced with technical symbols.
+    if size and (size[0] > 72 or size[1] > 72 or unsuitable):
         compact = COMPACT_ICONS_BY_PROFILE[branch.profile]
         return compact[index % len(compact)]
     return icon
@@ -1506,8 +1871,8 @@ BRANCH_DESCRIPTION_RU = {
     "anti_tank": "увеличивает бронепробитие и эффективность против тяжёлых целей",
     "anti_air": "усиливает обнаружение и поражение воздушных целей",
     "recon_armor": "повышает скорость и надёжность разведывательной бронетехники",
-    "combat_armor": "усиливает огневую мощь и прорыв основных боевых платформ",
-    "heavy_armor": "повышает защиту и живучесть тяжёлых автономных платформ",
+    "combat_armor": "усиливает огневую мощь и прорыв основных боевых танков",
+    "heavy_armor": "повышает защиту и живучесть тяжёлых автономных танков",
     "fighter": "повышает эффективность перехвата и снижает аварийность авиации",
     "air_support": "повышает эффективность непосредственной поддержки наземных войск",
     "strategic_air": "развивает дальние ракетные удары и стратегическое наведение",
@@ -1541,8 +1906,8 @@ BRANCH_DESCRIPTION_EN = {
         "anti_tank": "increases armor penetration and performance against heavy targets",
         "anti_air": "improves detection and destruction of aerial targets",
         "recon_armor": "improves the speed and reliability of reconnaissance armor",
-        "combat_armor": "improves the firepower and breakthrough of main combat platforms",
-        "heavy_armor": "improves protection and survivability of heavy autonomous platforms",
+        "combat_armor": "improves the firepower and breakthrough of main battle tanks",
+        "heavy_armor": "improves protection and survivability of heavy autonomous tanks",
         "fighter": "improves interception efficiency and reduces aviation accidents",
         "air_support": "improves close support for ground forces",
         "strategic_air": "develops long-range missile strikes and strategic guidance",
@@ -1608,6 +1973,200 @@ def technology_description_notes(branch: Branch, index: int, is_ru: bool) -> lis
     return notes
 
 
+POST_2160_RESEARCH_COST_BY_PROFILE = {
+    "construction": 1.20,
+    "production": 1.30,
+    "resources": 1.35,
+    "finance": 1.20,
+    "administration": 1.20,
+    "civil": 1.15,
+    "power": 1.40,
+    "signals": 1.35,
+    "computing": 1.40,
+    "infantry": 1.30,
+    "squad": 1.35,
+    "protection": 1.20,
+    "special_forces": 1.25,
+    "support": 1.25,
+    "logistics": 1.25,
+    "rail": 1.30,
+    "artillery": 1.35,
+    "anti_tank": 1.35,
+    "anti_air": 1.35,
+    "recon_armor": 1.40,
+    "combat_armor": 1.45,
+    "heavy_armor": 1.55,
+    "fighter": 1.45,
+    "air_support": 1.40,
+    "strategic_air": 1.55,
+    "naval_support": 1.35,
+    "surface_fleet": 1.50,
+    "subsurface": 1.40,
+}
+
+
+AI_RESEARCH_WEIGHT_BY_PROFILE = {
+    "construction": 30,
+    "production": 30,
+    "resources": 28,
+    "finance": 18,
+    "administration": 20,
+    "civil": 18,
+    "power": 20,
+    "signals": 24,
+    "computing": 24,
+    "infantry": 32,
+    "squad": 30,
+    "protection": 24,
+    "special_forces": 14,
+    "support": 26,
+    "logistics": 24,
+    "rail": 18,
+    "artillery": 26,
+    "anti_tank": 20,
+    "anti_air": 20,
+    "recon_armor": 12,
+    "combat_armor": 12,
+    "heavy_armor": 8,
+    "fighter": 14,
+    "air_support": 12,
+    "strategic_air": 8,
+    "naval_support": 10,
+    "surface_fleet": 8,
+    "subsurface": 9,
+}
+
+
+def research_cost_for(
+    branch: Branch,
+    index: int,
+    dependencies: tuple[str, ...],
+    xor: tuple[str, ...],
+) -> float:
+    """Price recovered baseline cheaply and live choices by commitment.
+
+    The campaign grants ordinary pre-2160 knowledge on startup, so its listed
+    cost is mainly a historical fallback. Live programmes are intentionally
+    closer to the 1.5-2.5 range used by dense total conversions: a two-slot
+    state can develop several coherent arms, but cannot casually finish every
+    specialisation before the late game.
+    """
+
+    tech = branch.techs[index]
+    year = branch.years[index]
+    if branch.profile.startswith("forbidden_"):
+        return 2.60 + index * (0.18 if len(branch.techs) > 3 else 0.35)
+    if year <= 2158:
+        return 0.55
+
+    progress = max(0.0, min(1.0, (year - 2160) / 20))
+    cost = POST_2160_RESEARCH_COST_BY_PROFILE[branch.profile] + progress * 0.55
+    if xor:
+        cost = max(cost, 1.75)
+    if tech.id in ENABLE_EQUIPMENT or tech.id in ENABLE_SUBUNITS or tech.id in ENABLE_BUILDINGS:
+        cost = max(cost, 2.05)
+    if tech.id in BUILDING_RESOURCE_UPGRADES:
+        cost = max(cost, 1.75)
+    if len(dependencies) >= 2:
+        cost = max(cost, 2.40)
+    if index == len(branch.techs) - 1 and year >= 2180:
+        cost = max(cost, 2.55)
+    return cost
+
+
+def ai_will_do_for(branch: Branch, index: int) -> tuple[str, ...]:
+    """Give AI research a role and capacity-aware score."""
+
+    tech = branch.techs[index]
+    year = branch.years[index]
+    if branch.profile.startswith("forbidden_"):
+        return ("factor = 1",)
+
+    base = AI_RESEARCH_WEIGHT_BY_PROFILE[branch.profile]
+    if year <= 2160:
+        base *= 1.25
+    if tech.id in ENABLE_EQUIPMENT or tech.id in ENABLE_SUBUNITS:
+        base *= 1.35
+    if tech.id in ENABLE_BUILDINGS:
+        base *= 1.20
+
+    entries = [f"factor = {n(base)}"]
+    profile = branch.profile
+    if profile in {"construction", "resources", "civil", "rail"} and not (
+        branch.key == "reconstruction" and year > 2160
+    ):
+        entries.append("modifier = { factor = 1.35 ADISCORD_economy_ai_is_crisis = yes }")
+    if profile in {"production", "finance", "administration", "computing"}:
+        entries.append("modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }")
+    if profile in {
+        "infantry", "squad", "protection", "support", "logistics", "artillery",
+        "anti_tank", "anti_air", "recon_armor", "combat_armor", "heavy_armor",
+        "fighter", "air_support", "strategic_air",
+    }:
+        entries.append("modifier = { factor = 1.25 has_war = yes }")
+        entries.append("modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }")
+    if profile in {"recon_armor", "combat_armor", "heavy_armor"}:
+        entries.append("modifier = { factor = 0.15 num_of_military_factories < 8 }")
+        entries.append("modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }")
+    if profile in {"fighter", "air_support", "strategic_air"}:
+        entries.append("modifier = { factor = 0.20 num_of_military_factories < 8 }")
+        entries.append("modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }")
+    if profile in {"naval_support", "surface_fleet", "subsurface"}:
+        entries.append("modifier = { factor = 0.05 num_of_naval_factories < 1 }")
+        entries.append("modifier = { factor = 1.35 num_of_naval_factories > 3 }")
+
+    lane = BRANCH_GRAPHS[branch.key].lanes[index]
+    # Reconstruction is a persistent school after the first XOR decision, so
+    # every later node in the chosen lane retains its strategic AI context.
+    if branch.key == "reconstruction" and year > 2160:
+        if lane == 0:
+            entries.append("modifier = { factor = 1.30 ADISCORD_economy_ai_is_healthy = yes }")
+        elif lane == 2:
+            entries.append("modifier = { factor = 1.35 has_war = yes }")
+            entries.append("modifier = { factor = 1.40 ADISCORD_economy_ai_is_crisis = yes }")
+
+    xor = xor_siblings(branch, index)
+    if xor and branch.key != "reconstruction":
+        if lane == 0:
+            entries.append("modifier = { factor = 1.25 ADISCORD_economy_ai_is_stressed = yes }")
+        elif lane == 2:
+            entries.append("modifier = { factor = 1.25 ADISCORD_economy_ai_is_healthy = yes }")
+    return tuple(entries)
+
+
+def render_leader_training_effect(tech: Tech) -> list[str]:
+    """Render the bounded random-general improvement pattern used by TDA."""
+
+    training = LEADER_TRAINING.get(tech.key)
+    if training is None:
+        return []
+    attribute, count = training
+    flag = f"ADISCORD_training_pick_{attribute}"
+    lines = [
+        "\t\tshow_effect_as_desc = yes",
+        "\t\ton_research_complete = {",
+        f"\t\t\tcustom_effect_tooltip = {tech.id}_leader_effect_tt",
+        "\t\t\thidden_effect = {",
+    ]
+    for _ in range(count):
+        lines.extend((
+            "\t\t\t\trandom_army_leader = {",
+            f"\t\t\t\t\tlimit = {{ NOT = {{ has_unit_leader_flag = {flag} }} }}",
+            f"\t\t\t\t\tset_unit_leader_flag = {flag}",
+            f"\t\t\t\t\tadd_{attribute} = 1",
+            "\t\t\t\t}",
+        ))
+    lines.extend((
+        "\t\t\t\tevery_army_leader = {",
+        f"\t\t\t\t\tlimit = {{ has_unit_leader_flag = {flag} }}",
+        f"\t\t\t\t\tclr_unit_leader_flag = {flag}",
+        "\t\t\t\t}",
+        "\t\t\t}",
+        "\t\t}",
+    ))
+    return lines
+
+
 def render_technology(branch: Branch, index: int) -> str:
     tech = branch.techs[index]
     year = branch.years[index]
@@ -1622,6 +2181,7 @@ def render_technology(branch: Branch, index: int) -> str:
         f"\t\t{effect}"
         for effect in effects_for(branch, index)
     )
+    lines.extend(render_leader_training_effect(tech))
     for target in graph.successors[index]:
         lines.append(
             f"\t\tpath = {{ leads_to_tech = {branch.techs[target].id} research_cost_coeff = 1 }}"
@@ -1676,28 +2236,7 @@ def render_technology(branch: Branch, index: int) -> str:
                 "\t\t\t}",
             ))
         lines.extend(("\t\t}", "\t\tshow_effect_as_desc = yes"))
-    year_index = YEARS.index(year)
-    research_progress = year_index * 6 / (len(YEARS) - 1)
-    if year <= 2140:
-        research_cost = 0.55
-    elif year <= 2150:
-        research_cost = 0.70
-    elif year <= 2160:
-        research_cost = 0.90
-    else:
-        research_cost = 1.05 + min(0.30, (year - 2160) * 0.0075)
-    if xor:
-        research_cost = max(research_cost, 1.50)
-    if tech.id in ENABLE_EQUIPMENT or tech.id in ENABLE_SUBUNITS or tech.id in ENABLE_BUILDINGS:
-        research_cost = max(research_cost, 1.75)
-    if tech.id in BUILDING_RESOURCE_UPGRADES:
-        research_cost = max(research_cost, 1.35)
-    if len(dependencies) >= 2:
-        research_cost = max(research_cost, 2.35)
-    if index == len(branch.techs) - 1 and year >= 2200:
-        research_cost = max(research_cost, 2.20)
-    if branch.profile.startswith("forbidden_"):
-        research_cost += 1.25
+    research_cost = research_cost_for(branch, index, dependencies, xor)
     lines.extend((
         f"\t\tresearch_cost = {n(research_cost)}",
         f"\t\tstart_year = {year}",
@@ -1709,13 +2248,10 @@ def render_technology(branch: Branch, index: int) -> str:
             f"\t\t\tposition = {{ x = {graph.lanes[index] * LANE_SLOT_MULTIPLIER} y = {YEAR_TO_Y[year]} }}",
             "\t\t}",
         ))
-    ai_factor = (
-        1
-        if branch.profile.startswith("forbidden_")
-        else max(8, round(36 - research_progress * 4))
-    )
+    lines.append("\t\tai_will_do = {")
+    lines.extend(f"\t\t\t{entry}" for entry in ai_will_do_for(branch, index))
     lines.extend((
-        f"\t\tai_will_do = {{ factor = {ai_factor} }}",
+        "\t\t}",
         f"\t\tcategories = {{ {CATEGORY_BY_PROFILE[branch.profile]} }}",
         "\t}",
     ))
@@ -1744,12 +2280,13 @@ def write_starting_technology_effect() -> None:
         for branch in BRANCHES
         if not branch.profile.startswith("forbidden_")
         for tech, year in zip(branch.techs, branch.years, strict=True)
-        if year <= 2150
+        if year <= 2158
     ]
     lines = [
         "# Generated by tools/build_adiscord_technology_system.py.",
-        "# The campaign begins in 2160; recovered 2100-2150 knowledge is baseline,",
-        "# while the dense 2160+ programmes remain player and AI decisions.",
+        "# The campaign begins in 2160; recovered 2150-2158 knowledge is baseline,",
+        "# while dense 2160-2175 programmes remain player and AI decisions.",
+        "# The legacy effect ID is retained for existing saves and collapse scripts.",
         "ADISCORD_grant_2150_technology_baseline = {",
         "\tset_technology = {",
     ]
@@ -1814,7 +2351,14 @@ def generated_localisation(language: str) -> list[str]:
         lines.append(f" {key}:0 \"{branch.ru if is_ru else branch.en}\"")
     lines.append("")
     for branch in BRANCHES:
-        description = BRANCH_DESCRIPTION_RU[branch.profile] if is_ru else BRANCH_DESCRIPTION_EN[branch.profile]
+        if is_ru:
+            description = APPLIED_DESCRIPTION_RU_BY_BRANCH.get(
+                branch.key, BRANCH_DESCRIPTION_RU[branch.profile]
+            )
+        else:
+            description = APPLIED_DESCRIPTION_EN_BY_BRANCH.get(
+                branch.key, BRANCH_DESCRIPTION_EN[branch.profile]
+            )
         for index, tech in enumerate(branch.techs):
             name = tech.ru if is_ru else tech.en
             year = branch.years[index]
@@ -1827,6 +2371,24 @@ def generated_localisation(language: str) -> list[str]:
                 desc += " " + " ".join(notes)
             lines.append(f" {tech.id}:0 \"{name}\"")
             lines.append(f" {tech.id}_desc:0 \"{desc}\"")
+            training = LEADER_TRAINING.get(tech.key)
+            if training:
+                attribute, count = training
+                attribute_ru = {
+                    "attack": "атаке",
+                    "defense": "обороне",
+                    "planning": "планированию",
+                    "logistics": "логистике",
+                }[attribute]
+                if is_ru:
+                    tooltip = (
+                        f"{count} случайных генерала получают §G+1§! к {attribute_ru}."
+                    )
+                else:
+                    tooltip = (
+                        f"{count} random army leaders gain §G+1§! {attribute.title()}."
+                    )
+                lines.append(f" {tech.id}_leader_effect_tt:0 \"{tooltip}\"")
     return lines
 
 
@@ -1882,21 +2444,18 @@ def find_block_end(text: str, open_brace: int) -> int:
 
 def render_folder(folder: str) -> str:
     branches = [branch for branch in BRANCHES if folder in branch.folders]
-    branch_layouts: list[tuple[Branch, int, int, int]] = []
-    cursor_y = 0
+    branch_layouts: list[tuple[Branch, int, int]] = []
+    cursor_x = GRID_X
     for branch in branches:
         graph = BRANCH_GRAPHS[branch.key]
-        grid_height = (max(graph.lanes) * LANE_SLOT_MULTIPLIER + 1) * 70
-        title_y = 105 + cursor_y
-        grid_y = 147 + cursor_y
-        branch_layouts.append((branch, title_y, grid_y, grid_height))
-        cursor_y += grid_height + 80
-    height = max(700, 150 + cursor_y)
-    grid_width = (max(YEAR_TO_Y.values()) + 1) * 70
-    # The year labels and wide equipment cards extend beyond the nominal
-    # 70-pixel grid slot.  Keep enough room for the final 2200 card instead
-    # of clipping it against the scrollable content edge.
-    content_width = max(1180, GRID_X + grid_width + 120)
+        grid_width = (
+            max(graph.lanes) * LANE_SLOT_MULTIPLIER + LANE_SLOT_MULTIPLIER
+        ) * GRID_SLOT
+        branch_layouts.append((branch, cursor_x, grid_width))
+        cursor_x += grid_width + BRANCH_GAP
+    content_width = max(1180, cursor_x + 80)
+    grid_height = (max(YEAR_TO_Y.values()) + 1) * GRID_SLOT
+    height = max(700, GRID_Y + grid_height + 100)
     background = FOLDER_BACKGROUNDS[folder]
     lines = [
         "\t\tcontainerWindowType = {",
@@ -1926,12 +2485,12 @@ def render_folder(folder: str) -> str:
         lines.extend((
             "\t\t\t\tinstantTextBoxType = {",
             f"\t\t\t\t\tname = \"ADISCORD_{folder}_year_{year}\"",
-            f"\t\t\t\t\tposition = {{ x = {135 + index * 140} y = 42 }}",
-            "\t\t\t\t\tfont = \"hoi_24header\"",
+            f"\t\t\t\t\tposition = {{ x = 24 y = {GRID_Y + index * GRID_SLOT + 18} }}",
+            "\t\t\t\t\tfont = \"hoi_18b\"",
             f"\t\t\t\t\ttext = \"{year}\"",
-            "\t\t\t\t\tmaxWidth = 100",
-            "\t\t\t\t\tmaxHeight = 28",
-            "\t\t\t\t\tformat = center",
+            "\t\t\t\t\tmaxWidth = 94",
+            "\t\t\t\t\tmaxHeight = 22",
+            "\t\t\t\t\tformat = left",
             "\t\t\t\t\tOrientation = \"UPPER_LEFT\"",
             "\t\t\t\t}",
         ))
@@ -1940,24 +2499,24 @@ def render_folder(folder: str) -> str:
     # ``techtree_stripes`` container and reports every technology as having
     # no grid box even when the grid name itself is correct.
     lines.append("\t\t\t}")
-    for branch, title_y, grid_y, grid_height in branch_layouts:
+    for branch, grid_x, grid_width in branch_layouts:
         lines.extend((
             "\t\t\tinstantTextBoxType = {",
             f"\t\t\t\tname = \"ADISCORD_branch_{branch.key}\"",
-            f"\t\t\t\tposition = {{ x = 36 y = {title_y} }}",
+            f"\t\t\t\tposition = {{ x = {grid_x} y = 76 }}",
             "\t\t\t\tfont = \"hoi_18b\"",
             f"\t\t\t\ttext = \"ADISCORD_TECH_BRANCH_{branch.key.upper()}\"",
-            f"\t\t\t\tmaxWidth = {content_width - 72}",
+            f"\t\t\t\tmaxWidth = {grid_width}",
             "\t\t\t\tmaxHeight = 24",
-            "\t\t\t\tformat = left",
+            "\t\t\t\tformat = center",
             "\t\t\t\tOrientation = \"UPPER_LEFT\"",
             "\t\t\t}",
             "\t\t\tgridboxtype = {",
             f"\t\t\t\tname = \"{branch.techs[0].id}_tree\"",
-            f"\t\t\t\tposition = {{ x = {GRID_X} y = {grid_y} }}",
+            f"\t\t\t\tposition = {{ x = {grid_x} y = {GRID_Y} }}",
             f"\t\t\t\tsize = {{ width = {grid_width} height = {grid_height} }}",
-            "\t\t\t\tslotsize = { width = 70 height = 70 }",
-            "\t\t\t\tformat = \"LEFT\"",
+            f"\t\t\t\tslotsize = {{ width = {GRID_SLOT} height = {GRID_SLOT} }}",
+            "\t\t\t\tformat = \"UP\"",
             "\t\t\t}",
         ))
     lines.append("\t\t}")
@@ -1988,11 +2547,12 @@ def write_gui() -> None:
     if missing:
         raise ValueError(f"Missing technology folder containers: {sorted(missing)}")
 
-    # Vanilla gives the industry/electronics default item a 204x72 container,
-    # even when it displays an ordinary effect-only technology.  With a dense
-    # 140px year cadence that creates overlapping click targets and protruding
-    # frames.  Reuse the complete, engine-compatible 72x72 infantry small-item
-    # template instead of trying to hand-maintain its many required children.
+    # Industry and electronics contain no production-equipment unlocks, so
+    # their vanilla 204x72 all-purpose item would incorrectly make every
+    # abstract method look like a vehicle model. Reuse the complete 72x72
+    # small-item template there. Infantry, support, armor, artillery, air, and
+    # naval folders retain both templates: equipment unlocks are wide, while
+    # stat/method technologies are compact.
     compact_source_name = "techtree_infantry_folder_small_item"
     compact_targets = (
         "techtree_industry_folder_item",

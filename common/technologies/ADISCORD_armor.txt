@@ -3,16 +3,22 @@ technologies = {
 		category_all_armor = { maximum_speed = 0.012 reliability = 0.012 }
 		path = { leads_to_tech = ADISCORD_tech_light_suspension research_cost_coeff = 1 }
 		research_cost = 0.55
-		start_year = 2100
+		start_year = 2150
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 0 }
+			position = { x = 3 y = 0 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 0 }
+			position = { x = 3 y = 0 }
 		}
-		ai_will_do = { factor = 36 }
+		ai_will_do = {
+			factor = 15
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -20,16 +26,22 @@ technologies = {
 		category_all_armor = { maximum_speed = 0.012 reliability = 0.012 }
 		path = { leads_to_tech = ADISCORD_tech_modular_recon_chassis research_cost_coeff = 1 }
 		research_cost = 0.55
-		start_year = 2120
+		start_year = 2155
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 2 }
+			position = { x = 3 y = 1 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 2 }
+			position = { x = 3 y = 1 }
 		}
-		ai_will_do = { factor = 35 }
+		ai_will_do = {
+			factor = 15
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -37,33 +49,45 @@ technologies = {
 		category_all_armor = { maximum_speed = 0.013 reliability = 0.013 }
 		path = { leads_to_tech = ADISCORD_tech_sealed_electric_scout_drives research_cost_coeff = 1 }
 		research_cost = 0.55
-		start_year = 2140
+		start_year = 2158
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 4 }
+			position = { x = 3 y = 2 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 4 }
+			position = { x = 3 y = 2 }
 		}
-		ai_will_do = { factor = 33 }
+		ai_will_do = {
+			factor = 15
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_sealed_electric_scout_drives = {
 		category_all_armor = { maximum_speed = 0.013 reliability = 0.013 }
 		path = { leads_to_tech = ADISCORD_tech_drone_recon_swarms research_cost_coeff = 1 }
-		research_cost = 0.7
-		start_year = 2150
+		research_cost = 1.4
+		start_year = 2160
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 6 }
+			position = { x = 3 y = 3 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 6 }
+			position = { x = 3 y = 3 }
 		}
-		ai_will_do = { factor = 32 }
+		ai_will_do = {
+			factor = 15
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -73,17 +97,23 @@ technologies = {
 		path = { leads_to_tech = ADISCORD_tech_hybrid_silent_running research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_light_combat_platform_2163 }
 		enable_subunits = { ADISCORD_recon_platform }
-		research_cost = 1.75
-		start_year = 2160
+		research_cost = 2.05
+		start_year = 2161
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 8 }
+			position = { x = 3 y = 4 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 8 }
+			position = { x = 3 y = 4 }
 		}
-		ai_will_do = { factor = 31 }
+		ai_will_do = {
+			factor = 16.2
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -93,17 +123,24 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_hybrid_silent_running
 		}
-		research_cost = 1.5
+		research_cost = 1.75
 		start_year = 2162
 		folder = {
 			name = armour_folder
-			position = { x = 0 y = 10 }
+			position = { x = 0 y = 5 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 0 y = 10 }
+			position = { x = 0 y = 5 }
 		}
-		ai_will_do = { factor = 30 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_stressed = yes }
+		}
 		categories = { armor }
 	}
 
@@ -113,85 +150,116 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_retractable_sensor_masts
 		}
-		research_cost = 1.5
+		research_cost = 1.75
 		start_year = 2162
 		folder = {
 			name = armour_folder
-			position = { x = 4 y = 10 }
+			position = { x = 6 y = 5 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 4 y = 10 }
+			position = { x = 6 y = 5 }
 		}
-		ai_will_do = { factor = 30 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_healthy = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_multispectral_recon_suites = {
 		category_all_armor = { maximum_speed = 0.014 reliability = 0.014 }
 		path = { leads_to_tech = ADISCORD_tech_active_scouting_suites research_cost_coeff = 1 }
-		research_cost = 1.08
-		start_year = 2164
+		research_cost = 1.482
+		start_year = 2163
 		folder = {
 			name = armour_folder
-			position = { x = 0 y = 12 }
+			position = { x = 0 y = 6 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 0 y = 12 }
+			position = { x = 0 y = 6 }
 		}
-		ai_will_do = { factor = 28 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_terrain_mapping_suspension = {
 		category_all_armor = { maximum_speed = 0.015 reliability = 0.015 }
 		path = { leads_to_tech = ADISCORD_tech_deployable_microdrone_racks research_cost_coeff = 1 }
-		research_cost = 1.08
-		start_year = 2164
+		research_cost = 1.482
+		start_year = 2163
 		folder = {
 			name = armour_folder
-			position = { x = 4 y = 12 }
+			position = { x = 6 y = 6 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 4 y = 12 }
+			position = { x = 6 y = 6 }
 		}
-		ai_will_do = { factor = 28 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_active_scouting_suites = {
 		category_all_armor = { maximum_speed = 0.015 reliability = 0.015 }
 		path = { leads_to_tech = ADISCORD_tech_terrain_following_autopilots research_cost_coeff = 1 }
-		research_cost = 1.095
-		start_year = 2166
+		research_cost = 1.51
+		start_year = 2164
 		folder = {
 			name = armour_folder
-			position = { x = 0 y = 14 }
+			position = { x = 0 y = 7 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 0 y = 14 }
+			position = { x = 0 y = 7 }
 		}
-		ai_will_do = { factor = 27 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_deployable_microdrone_racks = {
 		category_all_armor = { maximum_speed = 0.015 reliability = 0.015 }
 		path = { leads_to_tech = ADISCORD_tech_terrain_following_autopilots research_cost_coeff = 1 }
-		research_cost = 1.095
-		start_year = 2166
+		research_cost = 1.51
+		start_year = 2164
 		folder = {
 			name = armour_folder
-			position = { x = 4 y = 14 }
+			position = { x = 6 y = 7 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 4 y = 14 }
+			position = { x = 6 y = 7 }
 		}
-		ai_will_do = { factor = 27 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -199,17 +267,23 @@ technologies = {
 		category_all_armor = { maximum_speed = 0.015 reliability = 0.015 }
 		path = { leads_to_tech = ADISCORD_tech_signature_management_skins research_cost_coeff = 1 }
 		path = { leads_to_tech = ADISCORD_tech_unmanned_recon_vehicles research_cost_coeff = 1 }
-		research_cost = 1.11
-		start_year = 2168
+		research_cost = 1.537
+		start_year = 2165
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 16 }
+			position = { x = 3 y = 8 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 16 }
+			position = { x = 3 y = 8 }
 		}
-		ai_will_do = { factor = 26 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -220,17 +294,24 @@ technologies = {
 			ADISCORD_tech_unmanned_recon_vehicles
 		}
 		enable_equipments = { ADISCORD_recon_drone_carrier_2170 }
-		research_cost = 1.75
-		start_year = 2173
+		research_cost = 2.05
+		start_year = 2167
 		folder = {
 			name = armour_folder
-			position = { x = 0 y = 20 }
+			position = { x = 0 y = 10 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 0 y = 20 }
+			position = { x = 0 y = 10 }
 		}
-		ai_will_do = { factor = 23 }
+		ai_will_do = {
+			factor = 16.2
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_stressed = yes }
+		}
 		categories = { armor }
 	}
 
@@ -241,118 +322,161 @@ technologies = {
 			ADISCORD_tech_signature_management_skins
 		}
 		enable_equipments = { ADISCORD_recon_drone_carrier_2170 }
-		research_cost = 1.75
-		start_year = 2173
+		research_cost = 2.05
+		start_year = 2167
 		folder = {
 			name = armour_folder
-			position = { x = 4 y = 20 }
+			position = { x = 6 y = 10 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 4 y = 20 }
+			position = { x = 6 y = 10 }
 		}
-		ai_will_do = { factor = 23 }
+		ai_will_do = {
+			factor = 16.2
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_healthy = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_unmanned_scout_turrets = {
 		category_all_armor = { maximum_speed = 0.016 reliability = 0.016 }
 		path = { leads_to_tech = ADISCORD_tech_expendable_sensor_carriers research_cost_coeff = 1 }
-		research_cost = 1.193
-		start_year = 2179
+		research_cost = 1.647
+		start_year = 2169
 		folder = {
 			name = armour_folder
-			position = { x = 0 y = 24 }
+			position = { x = 0 y = 12 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 0 y = 24 }
+			position = { x = 0 y = 12 }
 		}
-		ai_will_do = { factor = 21 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_cooperative_mapping_relays = {
 		category_all_armor = { maximum_speed = 0.017 reliability = 0.017 }
 		path = { leads_to_tech = ADISCORD_tech_autonomous_route_clearance_scouts research_cost_coeff = 1 }
-		research_cost = 1.193
-		start_year = 2179
+		research_cost = 1.647
+		start_year = 2169
 		folder = {
 			name = armour_folder
-			position = { x = 4 y = 24 }
+			position = { x = 6 y = 12 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 4 y = 24 }
+			position = { x = 6 y = 12 }
 		}
-		ai_will_do = { factor = 21 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_expendable_sensor_carriers = {
 		category_all_armor = { maximum_speed = 0.017 reliability = 0.017 }
 		path = { leads_to_tech = ADISCORD_tech_self_organizing_scout_formations research_cost_coeff = 1 }
-		research_cost = 1.238
-		start_year = 2185
+		research_cost = 1.702
+		start_year = 2171
 		folder = {
 			name = armour_folder
-			position = { x = 0 y = 28 }
+			position = { x = 0 y = 14 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 0 y = 28 }
+			position = { x = 0 y = 14 }
 		}
-		ai_will_do = { factor = 18 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_autonomous_route_clearance_scouts = {
 		category_all_armor = { maximum_speed = 0.017 reliability = 0.017 }
 		path = { leads_to_tech = ADISCORD_tech_self_organizing_scout_formations research_cost_coeff = 1 }
-		research_cost = 1.238
-		start_year = 2185
+		research_cost = 1.702
+		start_year = 2171
 		folder = {
 			name = armour_folder
-			position = { x = 4 y = 28 }
+			position = { x = 6 y = 14 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 4 y = 28 }
+			position = { x = 6 y = 14 }
 		}
-		ai_will_do = { factor = 18 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_self_organizing_scout_formations = {
 		category_all_armor = { maximum_speed = 0.018 reliability = 0.018 }
 		path = { leads_to_tech = ADISCORD_tech_autonomous_recon_screen research_cost_coeff = 1 }
-		research_cost = 1.305
-		start_year = 2194
+		research_cost = 1.785
+		start_year = 2174
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 34 }
+			position = { x = 3 y = 17 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 34 }
+			position = { x = 3 y = 17 }
 		}
-		ai_will_do = { factor = 15 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_autonomous_recon_screen = {
 		category_all_armor = { maximum_speed = 0.026 reliability = 0.026 }
-		research_cost = 2.2
-		start_year = 2200
+		research_cost = 2.55
+		start_year = 2180
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 38 }
+			position = { x = 3 y = 19 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 38 }
+			position = { x = 3 y = 19 }
 		}
-		ai_will_do = { factor = 12 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -360,16 +484,22 @@ technologies = {
 		category_all_armor = { breakthrough = 0.02 hard_attack = 0.012 }
 		path = { leads_to_tech = ADISCORD_tech_remote_weapon_stations research_cost_coeff = 1 }
 		research_cost = 0.55
-		start_year = 2100
+		start_year = 2150
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 0 }
+			position = { x = 3 y = 0 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 0 }
+			position = { x = 3 y = 0 }
 		}
-		ai_will_do = { factor = 36 }
+		ai_will_do = {
+			factor = 15
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -377,16 +507,22 @@ technologies = {
 		category_all_armor = { breakthrough = 0.021 hard_attack = 0.012 }
 		path = { leads_to_tech = ADISCORD_tech_composite_armor_arrays research_cost_coeff = 1 }
 		research_cost = 0.55
-		start_year = 2120
+		start_year = 2155
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 2 }
+			position = { x = 3 y = 1 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 2 }
+			position = { x = 3 y = 1 }
 		}
-		ai_will_do = { factor = 35 }
+		ai_will_do = {
+			factor = 15
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -394,33 +530,45 @@ technologies = {
 		category_all_armor = { breakthrough = 0.021 hard_attack = 0.013 }
 		path = { leads_to_tech = ADISCORD_tech_electric_turret_drives research_cost_coeff = 1 }
 		research_cost = 0.55
-		start_year = 2140
+		start_year = 2158
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 4 }
+			position = { x = 3 y = 2 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 4 }
+			position = { x = 3 y = 2 }
 		}
-		ai_will_do = { factor = 33 }
+		ai_will_do = {
+			factor = 15
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_electric_turret_drives = {
 		category_all_armor = { breakthrough = 0.022 hard_attack = 0.013 }
 		path = { leads_to_tech = ADISCORD_tech_semi_autonomous_combat_modules research_cost_coeff = 1 }
-		research_cost = 0.7
-		start_year = 2150
+		research_cost = 1.45
+		start_year = 2160
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 6 }
+			position = { x = 3 y = 3 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 6 }
+			position = { x = 3 y = 3 }
 		}
-		ai_will_do = { factor = 32 }
+		ai_will_do = {
+			factor = 15
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -430,17 +578,23 @@ technologies = {
 		path = { leads_to_tech = ADISCORD_tech_hard_kill_protection_arrays research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_combat_platform_2170 }
 		enable_subunits = { ADISCORD_combat_platform }
-		research_cost = 1.75
-		start_year = 2160
+		research_cost = 2.05
+		start_year = 2161
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 8 }
+			position = { x = 3 y = 4 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 8 }
+			position = { x = 3 y = 4 }
 		}
-		ai_will_do = { factor = 31 }
+		ai_will_do = {
+			factor = 16.2
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -450,17 +604,24 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_hard_kill_protection_arrays
 		}
-		research_cost = 1.5
+		research_cost = 1.75
 		start_year = 2162
 		folder = {
 			name = armour_folder
-			position = { x = 0 y = 10 }
+			position = { x = 0 y = 5 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 0 y = 10 }
+			position = { x = 0 y = 5 }
 		}
-		ai_will_do = { factor = 30 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_stressed = yes }
+		}
 		categories = { armor }
 	}
 
@@ -470,119 +631,162 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_digital_fire_control_buses
 		}
-		research_cost = 1.5
+		research_cost = 1.75
 		start_year = 2162
 		folder = {
 			name = armour_folder
-			position = { x = 4 y = 10 }
+			position = { x = 6 y = 5 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 4 y = 10 }
+			position = { x = 6 y = 5 }
 		}
-		ai_will_do = { factor = 30 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_healthy = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_modular_ceramic_armor_blocks = {
 		category_all_armor = { breakthrough = 0.024 hard_attack = 0.024 }
 		path = { leads_to_tech = ADISCORD_tech_adaptive_fire_control research_cost_coeff = 1 }
-		research_cost = 1.11
-		start_year = 2168
+		research_cost = 1.587
+		start_year = 2165
 		folder = {
 			name = armour_folder
-			position = { x = 0 y = 16 }
+			position = { x = 0 y = 8 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 0 y = 16 }
+			position = { x = 0 y = 8 }
 		}
-		ai_will_do = { factor = 26 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_distributed_crew_stations = {
 		category_all_armor = { armor_value = 0.025 defense = 0.025 reliability = 0.015 }
 		path = { leads_to_tech = ADISCORD_tech_multispectral_gunner_sights research_cost_coeff = 1 }
-		research_cost = 1.11
-		start_year = 2168
+		research_cost = 1.587
+		start_year = 2165
 		folder = {
 			name = armour_folder
-			position = { x = 4 y = 16 }
+			position = { x = 6 y = 8 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 4 y = 16 }
+			position = { x = 6 y = 8 }
 		}
-		ai_will_do = { factor = 26 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_adaptive_fire_control = {
 		category_all_armor = { breakthrough = 0.026 hard_attack = 0.026 }
 		path = { leads_to_tech = ADISCORD_tech_unmanned_turret_capsules research_cost_coeff = 1 }
-		research_cost = 1.147
-		start_year = 2173
+		research_cost = 1.643
+		start_year = 2167
 		folder = {
 			name = armour_folder
-			position = { x = 0 y = 20 }
+			position = { x = 0 y = 10 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 0 y = 20 }
+			position = { x = 0 y = 10 }
 		}
-		ai_will_do = { factor = 23 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_multispectral_gunner_sights = {
 		category_all_armor = { armor_value = 0.026 defense = 0.026 reliability = 0.015 }
 		path = { leads_to_tech = ADISCORD_tech_armored_platoon_target_handoff research_cost_coeff = 1 }
-		research_cost = 1.147
-		start_year = 2173
+		research_cost = 1.643
+		start_year = 2167
 		folder = {
 			name = armour_folder
-			position = { x = 4 y = 20 }
+			position = { x = 6 y = 10 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 4 y = 20 }
+			position = { x = 6 y = 10 }
 		}
-		ai_will_do = { factor = 23 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_unmanned_turret_capsules = {
 		category_all_armor = { breakthrough = 0.027 hard_attack = 0.027 }
 		path = { leads_to_tech = ADISCORD_tech_limited_battle_ai research_cost_coeff = 1 }
-		research_cost = 1.193
-		start_year = 2179
+		research_cost = 1.698
+		start_year = 2169
 		folder = {
 			name = armour_folder
-			position = { x = 0 y = 24 }
+			position = { x = 0 y = 12 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 0 y = 24 }
+			position = { x = 0 y = 12 }
 		}
-		ai_will_do = { factor = 21 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_armored_platoon_target_handoff = {
 		category_all_armor = { armor_value = 0.028 defense = 0.028 reliability = 0.016 }
 		path = { leads_to_tech = ADISCORD_tech_adaptive_suspension_control research_cost_coeff = 1 }
-		research_cost = 1.193
-		start_year = 2179
+		research_cost = 1.698
+		start_year = 2169
 		folder = {
 			name = armour_folder
-			position = { x = 4 y = 24 }
+			position = { x = 6 y = 12 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 4 y = 24 }
+			position = { x = 6 y = 12 }
 		}
-		ai_will_do = { factor = 21 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -590,17 +794,23 @@ technologies = {
 		category_all_armor = { breakthrough = 0.028 hard_attack = 0.028 }
 		path = { leads_to_tech = ADISCORD_tech_electromagnetic_main_guns research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_combat_platform_2183 }
-		research_cost = 1.75
-		start_year = 2185
+		research_cost = 2.05
+		start_year = 2171
 		folder = {
 			name = armour_folder
-			position = { x = 0 y = 28 }
+			position = { x = 0 y = 14 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 0 y = 28 }
+			position = { x = 0 y = 14 }
 		}
-		ai_will_do = { factor = 18 }
+		ai_will_do = {
+			factor = 16.2
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -608,102 +818,138 @@ technologies = {
 		category_all_armor = { armor_value = 0.029 defense = 0.029 reliability = 0.016 }
 		path = { leads_to_tech = ADISCORD_tech_self_healing_armor_matrices research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_combat_platform_2183 }
-		research_cost = 1.75
-		start_year = 2185
+		research_cost = 2.05
+		start_year = 2171
 		folder = {
 			name = armour_folder
-			position = { x = 4 y = 28 }
+			position = { x = 6 y = 14 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 4 y = 28 }
+			position = { x = 6 y = 14 }
 		}
-		ai_will_do = { factor = 18 }
+		ai_will_do = {
+			factor = 16.2
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_electromagnetic_main_guns = {
 		category_all_armor = { breakthrough = 0.029 hard_attack = 0.029 }
 		path = { leads_to_tech = ADISCORD_tech_autonomous_platoon_control research_cost_coeff = 1 }
-		research_cost = 1.282
-		start_year = 2191
+		research_cost = 1.808
+		start_year = 2173
 		folder = {
 			name = armour_folder
-			position = { x = 0 y = 32 }
+			position = { x = 0 y = 16 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 0 y = 32 }
+			position = { x = 0 y = 16 }
 		}
-		ai_will_do = { factor = 16 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_self_healing_armor_matrices = {
 		category_all_armor = { armor_value = 0.03 defense = 0.03 reliability = 0.017 }
 		path = { leads_to_tech = ADISCORD_tech_resilient_combat_cloud_nodes research_cost_coeff = 1 }
-		research_cost = 1.282
-		start_year = 2191
+		research_cost = 1.808
+		start_year = 2173
 		folder = {
 			name = armour_folder
-			position = { x = 4 y = 32 }
+			position = { x = 6 y = 16 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 4 y = 32 }
+			position = { x = 6 y = 16 }
 		}
-		ai_will_do = { factor = 16 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_autonomous_platoon_control = {
 		category_all_armor = { breakthrough = 0.031 hard_attack = 0.031 }
 		path = { leads_to_tech = ADISCORD_tech_distributed_battlegroup research_cost_coeff = 1 }
-		research_cost = 1.328
-		start_year = 2197
+		research_cost = 1.863
+		start_year = 2175
 		folder = {
 			name = armour_folder
-			position = { x = 0 y = 36 }
+			position = { x = 0 y = 18 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 0 y = 36 }
+			position = { x = 0 y = 18 }
 		}
-		ai_will_do = { factor = 13 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_resilient_combat_cloud_nodes = {
 		category_all_armor = { armor_value = 0.031 defense = 0.031 reliability = 0.018 }
 		path = { leads_to_tech = ADISCORD_tech_distributed_battlegroup research_cost_coeff = 1 }
-		research_cost = 1.328
-		start_year = 2197
+		research_cost = 1.863
+		start_year = 2175
 		folder = {
 			name = armour_folder
-			position = { x = 4 y = 36 }
+			position = { x = 6 y = 18 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 4 y = 36 }
+			position = { x = 6 y = 18 }
 		}
-		ai_will_do = { factor = 13 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_distributed_battlegroup = {
 		category_all_armor = { breakthrough = 0.046 hard_attack = 0.026 }
 		enable_equipments = { ADISCORD_combat_platform_2200 }
-		research_cost = 2.2
-		start_year = 2200
+		research_cost = 2.55
+		start_year = 2180
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 38 }
+			position = { x = 3 y = 19 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 38 }
+			position = { x = 3 y = 19 }
 		}
-		ai_will_do = { factor = 12 }
+		ai_will_do = {
+			factor = 16.2
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -711,16 +957,22 @@ technologies = {
 		category_all_armor = { armor_value = 0.02 defense = 0.012 }
 		path = { leads_to_tech = ADISCORD_tech_reinforced_powertrains research_cost_coeff = 1 }
 		research_cost = 0.55
-		start_year = 2100
+		start_year = 2150
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 0 }
+			position = { x = 3 y = 0 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 0 }
+			position = { x = 3 y = 0 }
 		}
-		ai_will_do = { factor = 36 }
+		ai_will_do = {
+			factor = 10
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -728,16 +980,22 @@ technologies = {
 		category_all_armor = { armor_value = 0.021 defense = 0.012 }
 		path = { leads_to_tech = ADISCORD_tech_heavy_composite_cores research_cost_coeff = 1 }
 		research_cost = 0.55
-		start_year = 2120
+		start_year = 2155
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 2 }
+			position = { x = 3 y = 1 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 2 }
+			position = { x = 3 y = 1 }
 		}
-		ai_will_do = { factor = 35 }
+		ai_will_do = {
+			factor = 10
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -745,33 +1003,45 @@ technologies = {
 		category_all_armor = { armor_value = 0.021 defense = 0.013 }
 		path = { leads_to_tech = ADISCORD_tech_hydropneumatic_load_equalizers research_cost_coeff = 1 }
 		research_cost = 0.55
-		start_year = 2140
+		start_year = 2158
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 4 }
+			position = { x = 3 y = 2 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 4 }
+			position = { x = 3 y = 2 }
 		}
-		ai_will_do = { factor = 33 }
+		ai_will_do = {
+			factor = 10
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_hydropneumatic_load_equalizers = {
 		category_all_armor = { armor_value = 0.022 defense = 0.013 }
 		path = { leads_to_tech = ADISCORD_tech_remote_repair_sections research_cost_coeff = 1 }
-		research_cost = 0.7
-		start_year = 2150
+		research_cost = 1.55
+		start_year = 2160
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 6 }
+			position = { x = 3 y = 3 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 6 }
+			position = { x = 3 y = 3 }
 		}
-		ai_will_do = { factor = 32 }
+		ai_will_do = {
+			factor = 10
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -781,17 +1051,23 @@ technologies = {
 		path = { leads_to_tech = ADISCORD_tech_spall_isolated_crew_citadels research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_repair_platform_2183 }
 		enable_subunits = { ADISCORD_recovery_platform }
-		research_cost = 1.75
-		start_year = 2160
+		research_cost = 2.05
+		start_year = 2161
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 8 }
+			position = { x = 3 y = 4 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 8 }
+			position = { x = 3 y = 4 }
 		}
-		ai_will_do = { factor = 31 }
+		ai_will_do = {
+			factor = 10.8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -801,17 +1077,23 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_spall_isolated_crew_citadels
 		}
-		research_cost = 1.5
+		research_cost = 1.75
 		start_year = 2162
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 10 }
+			position = { x = 3 y = 5 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 10 }
+			position = { x = 3 y = 5 }
 		}
-		ai_will_do = { factor = 30 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -821,34 +1103,47 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_compact_turbine_powerpacks
 		}
-		research_cost = 1.5
+		research_cost = 1.75
 		start_year = 2162
 		folder = {
 			name = armour_folder
-			position = { x = 0 y = 10 }
+			position = { x = 0 y = 5 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 0 y = 10 }
+			position = { x = 0 y = 5 }
 		}
-		ai_will_do = { factor = 30 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_stressed = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_modular_heavy_armor_cassettes = {
 		category_all_armor = { armor_value = 0.024 defense = 0.014 }
 		path = { leads_to_tech = ADISCORD_tech_robotic_recovery_booms research_cost_coeff = 1 }
-		research_cost = 1.08
-		start_year = 2164
+		research_cost = 1.633
+		start_year = 2163
 		folder = {
 			name = armour_folder
-			position = { x = 0 y = 12 }
+			position = { x = 0 y = 6 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 0 y = 12 }
+			position = { x = 0 y = 6 }
 		}
-		ai_will_do = { factor = 28 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -856,17 +1151,23 @@ technologies = {
 		category_all_armor = { armor_value = 0.025 defense = 0.015 }
 		path = { leads_to_tech = ADISCORD_tech_heavy_platform_cores research_cost_coeff = 1 }
 		path = { leads_to_tech = ADISCORD_tech_active_mass_balancing_suspension research_cost_coeff = 1 }
-		research_cost = 1.095
-		start_year = 2166
+		research_cost = 1.66
+		start_year = 2164
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 14 }
+			position = { x = 3 y = 7 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 14 }
+			position = { x = 3 y = 7 }
 		}
-		ai_will_do = { factor = 27 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -878,17 +1179,23 @@ technologies = {
 		}
 		enable_equipments = { ADISCORD_heavy_combat_platform_2183 }
 		enable_subunits = { ADISCORD_heavy_platform }
-		research_cost = 1.75
-		start_year = 2168
+		research_cost = 2.05
+		start_year = 2165
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 16 }
+			position = { x = 3 y = 8 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 16 }
+			position = { x = 3 y = 8 }
 		}
-		ai_will_do = { factor = 26 }
+		ai_will_do = {
+			factor = 10.8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -900,34 +1207,47 @@ technologies = {
 		}
 		enable_equipments = { ADISCORD_heavy_combat_platform_2183 }
 		enable_subunits = { ADISCORD_heavy_platform }
-		research_cost = 1.75
-		start_year = 2168
+		research_cost = 2.05
+		start_year = 2165
 		folder = {
 			name = armour_folder
-			position = { x = 4 y = 16 }
+			position = { x = 6 y = 8 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 4 y = 16 }
+			position = { x = 6 y = 8 }
 		}
-		ai_will_do = { factor = 26 }
+		ai_will_do = {
+			factor = 10.8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_healthy = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_remote_breaching_manipulators = {
 		category_all_armor = { armor_value = 0.027 defense = 0.015 }
 		path = { leads_to_tech = ADISCORD_tech_distributed_hull_power_buses research_cost_coeff = 1 }
-		research_cost = 1.125
-		start_year = 2170
+		research_cost = 1.715
+		start_year = 2166
 		folder = {
 			name = armour_folder
-			position = { x = 4 y = 18 }
+			position = { x = 6 y = 9 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 4 y = 18 }
+			position = { x = 6 y = 9 }
 		}
-		ai_will_do = { factor = 25 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -935,17 +1255,23 @@ technologies = {
 		category_all_armor = { armor_value = 0.028 defense = 0.016 }
 		path = { leads_to_tech = ADISCORD_tech_autonomous_breakthrough_platforms research_cost_coeff = 1 }
 		path = { leads_to_tech = ADISCORD_tech_hybrid_siege_powerplants research_cost_coeff = 1 }
-		research_cost = 1.147
-		start_year = 2173
+		research_cost = 1.743
+		start_year = 2167
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 20 }
+			position = { x = 3 y = 10 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 20 }
+			position = { x = 3 y = 10 }
 		}
-		ai_will_do = { factor = 23 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -955,17 +1281,23 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_hybrid_siege_powerplants
 		}
-		research_cost = 1.5
-		start_year = 2176
+		research_cost = 1.77
+		start_year = 2168
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 22 }
+			position = { x = 3 y = 11 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 22 }
+			position = { x = 3 y = 11 }
 		}
-		ai_will_do = { factor = 22 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -975,34 +1307,47 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_autonomous_breakthrough_platforms
 		}
-		research_cost = 1.5
-		start_year = 2176
+		research_cost = 1.77
+		start_year = 2168
 		folder = {
 			name = armour_folder
-			position = { x = 0 y = 22 }
+			position = { x = 0 y = 11 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 0 y = 22 }
+			position = { x = 0 y = 11 }
 		}
-		ai_will_do = { factor = 22 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_stressed = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_electromagnetic_siege_mortars = {
 		category_all_armor = { armor_value = 0.029 defense = 0.017 }
 		path = { leads_to_tech = ADISCORD_tech_autonomous_obstacle_reduction research_cost_coeff = 1 }
-		research_cost = 1.193
-		start_year = 2179
+		research_cost = 1.798
+		start_year = 2169
 		folder = {
 			name = armour_folder
-			position = { x = 0 y = 24 }
+			position = { x = 0 y = 12 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 0 y = 24 }
+			position = { x = 0 y = 12 }
 		}
-		ai_will_do = { factor = 21 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -1010,17 +1355,23 @@ technologies = {
 		category_all_armor = { armor_value = 0.03 defense = 0.017 }
 		path = { leads_to_tech = ADISCORD_tech_self_repairing_track_assemblies research_cost_coeff = 1 }
 		path = { leads_to_tech = ADISCORD_tech_networked_siege_coordination_cores research_cost_coeff = 1 }
-		research_cost = 1.215
-		start_year = 2182
+		research_cost = 1.825
+		start_year = 2170
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 26 }
+			position = { x = 3 y = 13 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 26 }
+			position = { x = 3 y = 13 }
 		}
-		ai_will_do = { factor = 20 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -1030,17 +1381,23 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_networked_siege_coordination_cores
 		}
-		research_cost = 1.5
-		start_year = 2188
+		research_cost = 1.88
+		start_year = 2172
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 30 }
+			position = { x = 3 y = 15 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 30 }
+			position = { x = 3 y = 15 }
 		}
-		ai_will_do = { factor = 17 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 
@@ -1050,34 +1407,248 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_self_repairing_track_assemblies
 		}
-		research_cost = 1.5
-		start_year = 2188
+		research_cost = 1.88
+		start_year = 2172
 		folder = {
 			name = armour_folder
-			position = { x = 4 y = 30 }
+			position = { x = 6 y = 15 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 4 y = 30 }
+			position = { x = 6 y = 15 }
 		}
-		ai_will_do = { factor = 17 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_healthy = yes }
+		}
 		categories = { armor }
 	}
 
 	ADISCORD_tech_siege_platform_networks = {
 		category_all_armor = { armor_value = 0.046 defense = 0.026 }
 		enable_equipments = { ADISCORD_heavy_combat_platform_2200 }
-		research_cost = 2.2
-		start_year = 2200
+		research_cost = 2.55
+		start_year = 2180
 		folder = {
 			name = armour_folder
-			position = { x = 2 y = 38 }
+			position = { x = 3 y = 19 }
 		}
 		folder = {
 			name = nsb_armour_folder
-			position = { x = 2 y = 38 }
+			position = { x = 3 y = 19 }
 		}
-		ai_will_do = { factor = 12 }
+		ai_will_do = {
+			factor = 10.8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
+		categories = { armor }
+	}
+
+	ADISCORD_tech_teleoperated_scout_carts = {
+		category_recon = { recon = 0.5 defense = 0.02 }
+		category_all_armor = { reliability = 0.02 }
+		path = { leads_to_tech = ADISCORD_tech_armed_recon_drones research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_autonomous_recovery_tractors research_cost_coeff = 1 }
+		research_cost = 1.4
+		start_year = 2160
+		folder = {
+			name = armour_folder
+			position = { x = 3 y = 3 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 3 y = 3 }
+		}
+		ai_will_do = {
+			factor = 15
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
+		categories = { armor }
+	}
+
+	ADISCORD_tech_armed_recon_drones = {
+		category_recon = { recon = 0.75 soft_attack = 0.04 }
+		category_all_armor = { maximum_speed = 0.02 }
+		path = { leads_to_tech = ADISCORD_tech_hunter_killer_ground_pairs research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_autonomous_recovery_tractors
+		}
+		research_cost = 1.75
+		start_year = 2163
+		folder = {
+			name = armour_folder
+			position = { x = 0 y = 6 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_stressed = yes }
+		}
+		categories = { armor }
+	}
+
+	ADISCORD_tech_autonomous_recovery_tractors = {
+		category_all_armor = { reliability = 0.05 default_morale = 0.03 }
+		industry_repair_factor = 0.02
+		path = { leads_to_tech = ADISCORD_tech_robotic_damage_control_crews research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_armed_recon_drones
+		}
+		research_cost = 1.75
+		start_year = 2163
+		folder = {
+			name = armour_folder
+			position = { x = 6 y = 6 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 6 y = 6 }
+		}
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_healthy = yes }
+		}
+		categories = { armor }
+	}
+
+	ADISCORD_tech_hunter_killer_ground_pairs = {
+		category_all_armor = { breakthrough = 0.05 hard_attack = 0.04 }
+		category_recon = { recon = 0.5 }
+		path = { leads_to_tech = ADISCORD_tech_distributed_ground_swarm_control research_cost_coeff = 1 }
+		research_cost = 1.592
+		start_year = 2167
+		folder = {
+			name = armour_folder
+			position = { x = 0 y = 10 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
+		categories = { armor }
+	}
+
+	ADISCORD_tech_robotic_damage_control_crews = {
+		category_all_armor = { reliability = 0.06 defense = 0.04 }
+		attrition = -0.01
+		path = { leads_to_tech = ADISCORD_tech_self_recovering_combat_vehicles research_cost_coeff = 1 }
+		research_cost = 1.592
+		start_year = 2167
+		folder = {
+			name = armour_folder
+			position = { x = 6 y = 10 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 6 y = 10 }
+		}
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
+		categories = { armor }
+	}
+
+	ADISCORD_tech_distributed_ground_swarm_control = {
+		category_all_armor = { breakthrough = 0.06 soft_attack = 0.05 }
+		coordination_bonus = 0.015
+		path = { leads_to_tech = ADISCORD_tech_autonomous_combined_arms_mesh research_cost_coeff = 1 }
+		research_cost = 1.702
+		start_year = 2171
+		folder = {
+			name = armour_folder
+			position = { x = 0 y = 14 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 0 y = 14 }
+		}
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
+		categories = { armor }
+	}
+
+	ADISCORD_tech_self_recovering_combat_vehicles = {
+		category_all_armor = { reliability = 0.08 default_morale = 0.05 }
+		industry_repair_factor = 0.03
+		path = { leads_to_tech = ADISCORD_tech_autonomous_combined_arms_mesh research_cost_coeff = 1 }
+		research_cost = 1.702
+		start_year = 2171
+		folder = {
+			name = armour_folder
+			position = { x = 6 y = 14 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 6 y = 14 }
+		}
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
+		categories = { armor }
+	}
+
+	ADISCORD_tech_autonomous_combined_arms_mesh = {
+		category_all_armor = { breakthrough = 0.08 defense = 0.06 reliability = 0.05 }
+		category_recon = { recon = 1 }
+		coordination_bonus = 0.02
+		research_cost = 1.812
+		start_year = 2175
+		folder = {
+			name = armour_folder
+			position = { x = 3 y = 18 }
+		}
+		folder = {
+			name = nsb_armour_folder
+			position = { x = 3 y = 18 }
+		}
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.15 num_of_military_factories < 8 }
+			modifier = { factor = 1.45 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { armor }
 	}
 }

@@ -1,0 +1,15 @@
+add_namespace = val_rework
+
+country_event = {
+	id = val_rework.1
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag = VAL
+		has_completed_focus = VAL_Quarterly_Contract_Norm
+		NOT = { has_country_flag = VAL_quarterly_contract_active }
+	}
+
+	immediate = { VAL_start_quarterly_contract_norm = yes }
+}

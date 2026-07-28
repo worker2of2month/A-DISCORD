@@ -4,7 +4,7 @@ ADISCORD_land_mass_restoration = {
 	icon = "GFX_doctrine_milestone_infantry_land"
 	icon_frame = "GFX_doctrine_decor_land"
 	mastery = {
-		multiplier = 1.0
+		multiplier = 1
 		categories = {
 			category_all_infantry
 		}
@@ -17,7 +17,7 @@ ADISCORD_land_platform_centric = {
 	icon = "GFX_doctrine_milestone_armored_land"
 	icon_frame = "GFX_doctrine_decor_land"
 	mastery = {
-		multiplier = 8.0
+		multiplier = 6
 		categories = {
 			category_tanks
 			category_all_armor
@@ -31,7 +31,7 @@ ADISCORD_land_networked_operations = {
 	icon = "GFX_doctrine_milestone_operations_land"
 	icon_frame = "GFX_doctrine_decor_land"
 	mastery = {
-		multiplier = 0.7
+		multiplier = 0.8
 		categories = {
 			category_all_infantry
 			category_support_battalions
@@ -47,10 +47,11 @@ ADISCORD_land_fortress_state = {
 	icon = "GFX_doctrine_milestone_artillery_land"
 	icon_frame = "GFX_doctrine_decor_land"
 	mastery = {
-		multiplier = 1.0
+		multiplier = 0.8
 		categories = {
 			category_all_infantry
 			category_support_battalions
+			category_line_artillery
 		}
 	}
 }
@@ -61,7 +62,7 @@ ADISCORD_air_drone_swarm = {
 	icon = "GFX_doctrine_milestone_fighter_air"
 	icon_frame = "GFX_doctrine_decor_air"
 	mastery = {
-		multiplier = 8.0
+		multiplier = 7
 		equipment = {
 			fighter
 			cas
@@ -76,7 +77,7 @@ ADISCORD_air_vtol_deep_strike = {
 	icon = "GFX_doctrine_milestone_striker_air"
 	icon_frame = "GFX_doctrine_decor_air"
 	mastery = {
-		multiplier = 8.0
+		multiplier = 7
 		equipment = {
 			cas
 			tactical_bomber
@@ -91,7 +92,7 @@ ADISCORD_air_strategic_denial = {
 	icon = "GFX_doctrine_milestone_heavy_air"
 	icon_frame = "GFX_doctrine_decor_air"
 	mastery = {
-		multiplier = 8.0
+		multiplier = 7
 		equipment = {
 			fighter
 			interceptor
@@ -102,15 +103,67 @@ ADISCORD_air_strategic_denial = {
 
 ADISCORD_naval_littoral_security = {
 	name = ADISCORD_naval_littoral_security
+	background = "GFX_screens_bg"
+	icon = "GFX_doctrine_milestone_screens_naval"
+	icon_frame = "GFX_doctrine_decor_naval"
+	mastery = {
+		multiplier = 2
+		equipment = {
+			screen_ship
+		}
+	}
+}
+
+ADISCORD_naval_surface_control = {
+	name = ADISCORD_naval_surface_control
+	background = "GFX_fleet_in_being_bg"
+	icon = "GFX_doctrine_milestone_ships_naval"
+	icon_frame = "GFX_doctrine_decor_naval"
+	mastery = {
+		multiplier = 2.5
+		equipment = {
+			capital_ship
+			carrier
+			screen_ship
+		}
+	}
+}
+
+ADISCORD_naval_subsurface_warfare = {
+	name = ADISCORD_naval_subsurface_warfare
 	background = "GFX_trade_interdiction_bg"
 	icon = "GFX_doctrine_milestone_submarine_naval"
 	icon_frame = "GFX_doctrine_decor_naval"
 	mastery = {
-		multiplier = 4.0
+		multiplier = 3
 		equipment = {
-			screen_ship
 			submarine
-			carrier
+		}
+	}
+}
+
+ADISCORD_special_forces_adaptation = {
+	name = ADISCORD_special_forces_adaptation
+	background = "GFX_paratroopers_bg"
+	icon = "GFX_doctrine_milestone_special_forces"
+	icon_frame = "GFX_doctrine_decor_special_forces"
+	mastery = {
+		multiplier = 4
+		categories = {
+			category_special_forces
+		}
+	}
+}
+
+ADISCORD_special_forces_insertion = {
+	name = ADISCORD_special_forces_insertion
+	background = "GFX_marine_bg"
+	icon = "GFX_doctrine_milestone_special_forces"
+	icon_frame = "GFX_doctrine_decor_special_forces"
+	mastery = {
+		multiplier = 4
+		categories = {
+			category_special_forces
 		}
 	}
 }

@@ -67,6 +67,47 @@ ideas = {
 			}
 		}
 
+		STP_last_banquet_plan = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				planning_speed = 0.10
+				supply_consumption_factor = -0.05
+			}
+		}
+
+		STP_last_banquet_momentum = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.05
+				army_org_factor = 0.05
+				planning_speed = 0.10
+			}
+		}
+
+		STP_bronze_congress_lost = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = -0.05
+				army_org_factor = -0.05
+			}
+		}
+
+		STP_last_banquet_delayed = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = -0.05
+				planning_speed = -0.10
+			}
+		}
+
 		NOD_ypr_trade_rights = {
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -97,33 +138,6 @@ ideas = {
 			}
 		}
 
-		VAL_factory_cathedrals_drive = {
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				production_speed_arms_factory_factor = 0.10
-			}
-		}
-
-		VAL_hot_production_lines = {
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				production_factory_max_efficiency_factor = 0.03
-			}
-		}
-
-		VAL_northern_roads_drive = {
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				production_speed_infrastructure_factor = 0.10
-			}
-		}
-
 		STP_val_contract_advisers = {
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -136,6 +150,7 @@ ideas = {
 		}
 
 		VAL_STP_postwar_contract_income = {
+			picture = VAL_contract_state
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -156,6 +171,7 @@ ideas = {
 		}
 
 		VAL_northern_two_front_overstretch = {
+			picture = VAL_contract_state
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1

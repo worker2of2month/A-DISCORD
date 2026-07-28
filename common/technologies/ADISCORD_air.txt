@@ -4,17 +4,23 @@ technologies = {
 		air_accidents_factor = -0.012
 		path = { leads_to_tech = ADISCORD_tech_standardized_airframes research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_fighter_airframe_2163 }
-		research_cost = 1.75
-		start_year = 2100
+		research_cost = 0.55
+		start_year = 2150
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 0 }
+			position = { x = 3 y = 0 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 0 }
+			position = { x = 3 y = 0 }
 		}
-		ai_will_do = { factor = 36 }
+		ai_will_do = {
+			factor = 23.625
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment electronics }
 	}
 
@@ -23,16 +29,22 @@ technologies = {
 		air_accidents_factor = -0.012
 		path = { leads_to_tech = ADISCORD_tech_pulse_doppler_radar research_cost_coeff = 1 }
 		research_cost = 0.55
-		start_year = 2120
+		start_year = 2155
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 2 }
+			position = { x = 3 y = 1 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 2 }
+			position = { x = 3 y = 1 }
 		}
-		ai_will_do = { factor = 35 }
+		ai_will_do = {
+			factor = 17.5
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment electronics }
 	}
 
@@ -41,16 +53,22 @@ technologies = {
 		air_accidents_factor = -0.013
 		path = { leads_to_tech = ADISCORD_tech_composite_wing_spars research_cost_coeff = 1 }
 		research_cost = 0.55
-		start_year = 2140
+		start_year = 2158
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 4 }
+			position = { x = 3 y = 2 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 4 }
+			position = { x = 3 y = 2 }
 		}
-		ai_will_do = { factor = 33 }
+		ai_will_do = {
+			factor = 17.5
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment electronics }
 	}
 
@@ -58,17 +76,23 @@ technologies = {
 		air_mission_efficiency = 0.013
 		air_accidents_factor = -0.013
 		path = { leads_to_tech = ADISCORD_tech_high_altitude_interceptors research_cost_coeff = 1 }
-		research_cost = 0.7
-		start_year = 2150
+		research_cost = 1.45
+		start_year = 2160
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 6 }
+			position = { x = 3 y = 3 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 6 }
+			position = { x = 3 y = 3 }
 		}
-		ai_will_do = { factor = 32 }
+		ai_will_do = {
+			factor = 17.5
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment electronics }
 	}
 
@@ -78,17 +102,23 @@ technologies = {
 		path = { leads_to_tech = ADISCORD_tech_digital_flight_controls research_cost_coeff = 1 }
 		path = { leads_to_tech = ADISCORD_tech_electronically_scanned_fighter_radar research_cost_coeff = 1 }
 		path = { leads_to_tech = ADISCORD_tech_helmet_cued_targeting research_cost_coeff = 1 }
-		research_cost = 0.9
-		start_year = 2160
+		research_cost = 1.478
+		start_year = 2161
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 8 }
+			position = { x = 3 y = 4 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 8 }
+			position = { x = 3 y = 4 }
 		}
-		ai_will_do = { factor = 31 }
+		ai_will_do = {
+			factor = 14
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment electronics }
 	}
 
@@ -99,17 +129,24 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_electronically_scanned_fighter_radar
 		}
-		research_cost = 1.5
+		research_cost = 1.75
 		start_year = 2162
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 10 }
+			position = { x = 0 y = 5 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 10 }
+			position = { x = 0 y = 5 }
 		}
-		ai_will_do = { factor = 30 }
+		ai_will_do = {
+			factor = 14
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_stressed = yes }
+		}
 		categories = { air_equipment electronics }
 	}
 
@@ -120,17 +157,23 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_digital_flight_controls
 		}
-		research_cost = 1.5
+		research_cost = 1.75
 		start_year = 2162
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 10 }
+			position = { x = 3 y = 5 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 10 }
+			position = { x = 3 y = 5 }
 		}
-		ai_will_do = { factor = 30 }
+		ai_will_do = {
+			factor = 14
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment electronics }
 	}
 
@@ -138,17 +181,23 @@ technologies = {
 		air_mission_efficiency = 0.024
 		air_accidents_factor = -0.024
 		path = { leads_to_tech = ADISCORD_tech_supercruise_turbofans research_cost_coeff = 1 }
-		research_cost = 1.065
+		research_cost = 1.505
 		start_year = 2162
 		folder = {
 			name = air_techs_folder
-			position = { x = 4 y = 10 }
+			position = { x = 6 y = 5 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 4 y = 10 }
+			position = { x = 6 y = 5 }
 		}
-		ai_will_do = { factor = 30 }
+		ai_will_do = {
+			factor = 14
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment electronics }
 	}
 
@@ -156,17 +205,23 @@ technologies = {
 		air_mission_efficiency = 0.025
 		air_accidents_factor = -0.015
 		path = { leads_to_tech = ADISCORD_tech_low_observable_inlet_geometry research_cost_coeff = 1 }
-		research_cost = 1.125
-		start_year = 2170
+		research_cost = 1.615
+		start_year = 2166
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 18 }
+			position = { x = 0 y = 9 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 18 }
+			position = { x = 0 y = 9 }
 		}
-		ai_will_do = { factor = 25 }
+		ai_will_do = {
+			factor = 14
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment electronics }
 	}
 
@@ -174,17 +229,23 @@ technologies = {
 		air_intercept_efficiency = 0.026
 		air_mission_efficiency = 0.015
 		path = { leads_to_tech = ADISCORD_tech_cooperative_fighter_sensor_fusion research_cost_coeff = 1 }
-		research_cost = 1.125
-		start_year = 2170
+		research_cost = 1.615
+		start_year = 2166
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 18 }
+			position = { x = 3 y = 9 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 18 }
+			position = { x = 3 y = 9 }
 		}
-		ai_will_do = { factor = 25 }
+		ai_will_do = {
+			factor = 14
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment electronics }
 	}
 
@@ -192,17 +253,23 @@ technologies = {
 		air_mission_efficiency = 0.026
 		air_accidents_factor = -0.026
 		path = { leads_to_tech = ADISCORD_tech_loyal_wingmen research_cost_coeff = 1 }
-		research_cost = 1.125
-		start_year = 2170
+		research_cost = 1.615
+		start_year = 2166
 		folder = {
 			name = air_techs_folder
-			position = { x = 4 y = 18 }
+			position = { x = 6 y = 9 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 4 y = 18 }
+			position = { x = 6 y = 9 }
 		}
-		ai_will_do = { factor = 25 }
+		ai_will_do = {
+			factor = 14
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment electronics }
 	}
 
@@ -211,17 +278,23 @@ technologies = {
 		air_accidents_factor = -0.015
 		path = { leads_to_tech = ADISCORD_tech_adaptive_cycle_engines research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_interceptor_airframe_2183 }
-		research_cost = 1.75
-		start_year = 2182
+		research_cost = 2.05
+		start_year = 2170
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 26 }
+			position = { x = 0 y = 13 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 26 }
+			position = { x = 0 y = 13 }
 		}
-		ai_will_do = { factor = 20 }
+		ai_will_do = {
+			factor = 18.9
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment electronics }
 	}
 
@@ -230,17 +303,23 @@ technologies = {
 		air_mission_efficiency = 0.016
 		path = { leads_to_tech = ADISCORD_tech_directed_energy_defensive_suites research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_interceptor_airframe_2183 }
-		research_cost = 1.75
-		start_year = 2182
+		research_cost = 2.05
+		start_year = 2170
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 26 }
+			position = { x = 3 y = 13 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 26 }
+			position = { x = 3 y = 13 }
 		}
-		ai_will_do = { factor = 20 }
+		ai_will_do = {
+			factor = 18.9
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment electronics }
 	}
 
@@ -249,17 +328,23 @@ technologies = {
 		air_accidents_factor = -0.028
 		path = { leads_to_tech = ADISCORD_tech_autonomous_dogfight_controller research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_interceptor_airframe_2183 }
-		research_cost = 1.75
-		start_year = 2182
+		research_cost = 2.05
+		start_year = 2170
 		folder = {
 			name = air_techs_folder
-			position = { x = 4 y = 26 }
+			position = { x = 6 y = 13 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 4 y = 26 }
+			position = { x = 6 y = 13 }
 		}
-		ai_will_do = { factor = 20 }
+		ai_will_do = {
+			factor = 18.9
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment electronics }
 	}
 
@@ -267,17 +352,23 @@ technologies = {
 		air_mission_efficiency = 0.029
 		air_accidents_factor = -0.016
 		path = { leads_to_tech = ADISCORD_tech_exoatmospheric_boost_stages research_cost_coeff = 1 }
-		research_cost = 1.282
-		start_year = 2191
+		research_cost = 1.808
+		start_year = 2173
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 32 }
+			position = { x = 0 y = 16 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 32 }
+			position = { x = 0 y = 16 }
 		}
-		ai_will_do = { factor = 16 }
+		ai_will_do = {
+			factor = 14
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment electronics }
 	}
 
@@ -285,17 +376,23 @@ technologies = {
 		air_intercept_efficiency = 0.029
 		air_mission_efficiency = 0.017
 		path = { leads_to_tech = ADISCORD_tech_distributed_interceptor_swarms research_cost_coeff = 1 }
-		research_cost = 1.282
-		start_year = 2191
+		research_cost = 1.808
+		start_year = 2173
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 32 }
+			position = { x = 3 y = 16 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 32 }
+			position = { x = 3 y = 16 }
 		}
-		ai_will_do = { factor = 16 }
+		ai_will_do = {
+			factor = 14
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment electronics }
 	}
 
@@ -303,68 +400,92 @@ technologies = {
 		air_mission_efficiency = 0.03
 		air_accidents_factor = -0.03
 		path = { leads_to_tech = ADISCORD_tech_aerospace_interceptors research_cost_coeff = 1 }
-		research_cost = 1.282
-		start_year = 2191
+		research_cost = 1.808
+		start_year = 2173
 		folder = {
 			name = air_techs_folder
-			position = { x = 4 y = 32 }
+			position = { x = 6 y = 16 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 4 y = 32 }
+			position = { x = 6 y = 16 }
 		}
-		ai_will_do = { factor = 16 }
+		ai_will_do = {
+			factor = 14
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment electronics }
 	}
 
 	ADISCORD_tech_exoatmospheric_boost_stages = {
 		air_mission_efficiency = 0.031
 		air_accidents_factor = -0.017
-		research_cost = 1.35
-		start_year = 2200
+		research_cost = 2
+		start_year = 2180
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 38 }
+			position = { x = 0 y = 19 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 38 }
+			position = { x = 0 y = 19 }
 		}
-		ai_will_do = { factor = 12 }
+		ai_will_do = {
+			factor = 14
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment electronics }
 	}
 
 	ADISCORD_tech_distributed_interceptor_swarms = {
 		air_intercept_efficiency = 0.031
 		air_mission_efficiency = 0.018
-		research_cost = 1.35
-		start_year = 2200
+		research_cost = 2
+		start_year = 2180
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 38 }
+			position = { x = 3 y = 19 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 38 }
+			position = { x = 3 y = 19 }
 		}
-		ai_will_do = { factor = 12 }
+		ai_will_do = {
+			factor = 14
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment electronics }
 	}
 
 	ADISCORD_tech_aerospace_interceptors = {
 		air_mission_efficiency = 0.046
 		air_accidents_factor = -0.046
-		research_cost = 2.2
-		start_year = 2200
+		research_cost = 2.55
+		start_year = 2180
 		folder = {
 			name = air_techs_folder
-			position = { x = 4 y = 38 }
+			position = { x = 6 y = 19 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 4 y = 38 }
+			position = { x = 6 y = 19 }
 		}
-		ai_will_do = { factor = 12 }
+		ai_will_do = {
+			factor = 14
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment electronics }
 	}
 
@@ -373,17 +494,23 @@ technologies = {
 		ground_attack_factor = 0.02
 		path = { leads_to_tech = ADISCORD_tech_guided_munitions research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_cas_airframe_2170 }
-		research_cost = 1.75
-		start_year = 2100
+		research_cost = 0.55
+		start_year = 2150
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 0 }
+			position = { x = 3 y = 0 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 0 }
+			position = { x = 3 y = 0 }
 		}
-		ai_will_do = { factor = 36 }
+		ai_will_do = {
+			factor = 20.25
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment }
 	}
 
@@ -392,16 +519,22 @@ technologies = {
 		ground_attack_factor = 0.021
 		path = { leads_to_tech = ADISCORD_tech_armored_cockpits research_cost_coeff = 1 }
 		research_cost = 0.55
-		start_year = 2120
+		start_year = 2155
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 2 }
+			position = { x = 3 y = 1 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 2 }
+			position = { x = 3 y = 1 }
 		}
-		ai_will_do = { factor = 35 }
+		ai_will_do = {
+			factor = 15
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment }
 	}
 
@@ -410,16 +543,22 @@ technologies = {
 		ground_attack_factor = 0.021
 		path = { leads_to_tech = ADISCORD_tech_ruggedized_targeting_pods research_cost_coeff = 1 }
 		research_cost = 0.55
-		start_year = 2140
+		start_year = 2158
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 4 }
+			position = { x = 3 y = 2 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 4 }
+			position = { x = 3 y = 2 }
 		}
-		ai_will_do = { factor = 33 }
+		ai_will_do = {
+			factor = 15
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment }
 	}
 
@@ -427,17 +566,23 @@ technologies = {
 		air_mission_efficiency = 0.013
 		ground_attack_factor = 0.022
 		path = { leads_to_tech = ADISCORD_tech_vtol_assault_frames research_cost_coeff = 1 }
-		research_cost = 0.7
-		start_year = 2150
+		research_cost = 1.4
+		start_year = 2160
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 6 }
+			position = { x = 3 y = 3 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 6 }
+			position = { x = 3 y = 3 }
 		}
-		ai_will_do = { factor = 32 }
+		ai_will_do = {
+			factor = 15
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment }
 	}
 
@@ -447,17 +592,23 @@ technologies = {
 		path = { leads_to_tech = ADISCORD_tech_millimeter_wave_ground_radar research_cost_coeff = 1 }
 		path = { leads_to_tech = ADISCORD_tech_precision_glide_bomb_kits research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_vtol_airframe_2170 }
-		research_cost = 1.75
-		start_year = 2160
+		research_cost = 2.05
+		start_year = 2161
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 8 }
+			position = { x = 3 y = 4 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 8 }
+			position = { x = 3 y = 4 }
 		}
-		ai_will_do = { factor = 31 }
+		ai_will_do = {
+			factor = 16.2
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment }
 	}
 
@@ -468,17 +619,23 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_precision_glide_bomb_kits
 		}
-		research_cost = 1.5
+		research_cost = 1.75
 		start_year = 2162
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 10 }
+			position = { x = 3 y = 5 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 10 }
+			position = { x = 3 y = 5 }
 		}
-		ai_will_do = { factor = 30 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment }
 	}
 
@@ -489,17 +646,24 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_millimeter_wave_ground_radar
 		}
-		research_cost = 1.5
+		research_cost = 1.75
 		start_year = 2162
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 10 }
+			position = { x = 0 y = 5 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 10 }
+			position = { x = 0 y = 5 }
 		}
-		ai_will_do = { factor = 30 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_stressed = yes }
+		}
 		categories = { air_equipment }
 	}
 
@@ -507,17 +671,23 @@ technologies = {
 		air_mission_efficiency = 0.014
 		ground_attack_factor = 0.024
 		path = { leads_to_tech = ADISCORD_tech_modular_airframe_armor_pods research_cost_coeff = 1 }
-		research_cost = 1.08
-		start_year = 2164
+		research_cost = 1.482
+		start_year = 2163
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 12 }
+			position = { x = 0 y = 6 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 12 }
+			position = { x = 0 y = 6 }
 		}
-		ai_will_do = { factor = 28 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment }
 	}
 
@@ -526,17 +696,23 @@ technologies = {
 		ground_attack_factor = 0.025
 		path = { leads_to_tech = ADISCORD_tech_drone_air_wings research_cost_coeff = 1 }
 		path = { leads_to_tech = ADISCORD_tech_tiltrotor_assault_propulsion research_cost_coeff = 1 }
-		research_cost = 1.095
-		start_year = 2166
+		research_cost = 1.51
+		start_year = 2164
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 14 }
+			position = { x = 3 y = 7 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 14 }
+			position = { x = 3 y = 7 }
 		}
-		ai_will_do = { factor = 27 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment }
 	}
 
@@ -547,17 +723,23 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_tiltrotor_assault_propulsion
 		}
-		research_cost = 1.5
-		start_year = 2168
+		research_cost = 1.75
+		start_year = 2165
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 16 }
+			position = { x = 3 y = 8 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 16 }
+			position = { x = 3 y = 8 }
 		}
-		ai_will_do = { factor = 26 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment }
 	}
 
@@ -568,17 +750,24 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_drone_air_wings
 		}
-		research_cost = 1.5
-		start_year = 2168
+		research_cost = 1.75
+		start_year = 2165
 		folder = {
 			name = air_techs_folder
-			position = { x = 4 y = 16 }
+			position = { x = 6 y = 8 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 4 y = 16 }
+			position = { x = 6 y = 8 }
 		}
-		ai_will_do = { factor = 26 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_healthy = yes }
+		}
 		categories = { air_equipment }
 	}
 
@@ -586,17 +775,23 @@ technologies = {
 		air_mission_efficiency = 0.015
 		ground_attack_factor = 0.027
 		path = { leads_to_tech = ADISCORD_tech_cooperative_close_air_control_links research_cost_coeff = 1 }
-		research_cost = 1.125
-		start_year = 2170
+		research_cost = 1.565
+		start_year = 2166
 		folder = {
 			name = air_techs_folder
-			position = { x = 4 y = 18 }
+			position = { x = 6 y = 9 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 4 y = 18 }
+			position = { x = 6 y = 9 }
 		}
-		ai_will_do = { factor = 25 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment }
 	}
 
@@ -605,17 +800,23 @@ technologies = {
 		ground_attack_factor = 0.028
 		path = { leads_to_tech = ADISCORD_tech_autonomous_strike_wings research_cost_coeff = 1 }
 		path = { leads_to_tech = ADISCORD_tech_autonomous_target_discrimination research_cost_coeff = 1 }
-		research_cost = 1.147
-		start_year = 2173
+		research_cost = 1.592
+		start_year = 2167
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 20 }
+			position = { x = 3 y = 10 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 20 }
+			position = { x = 3 y = 10 }
 		}
-		ai_will_do = { factor = 23 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment }
 	}
 
@@ -626,17 +827,23 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_autonomous_target_discrimination
 		}
-		research_cost = 1.5
-		start_year = 2176
+		research_cost = 1.75
+		start_year = 2168
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 22 }
+			position = { x = 3 y = 11 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 22 }
+			position = { x = 3 y = 11 }
 		}
-		ai_will_do = { factor = 22 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment }
 	}
 
@@ -647,17 +854,24 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_autonomous_strike_wings
 		}
-		research_cost = 1.5
-		start_year = 2176
+		research_cost = 1.75
+		start_year = 2168
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 22 }
+			position = { x = 0 y = 11 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 22 }
+			position = { x = 0 y = 11 }
 		}
-		ai_will_do = { factor = 22 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_stressed = yes }
+		}
 		categories = { air_equipment }
 	}
 
@@ -665,17 +879,23 @@ technologies = {
 		air_mission_efficiency = 0.017
 		ground_attack_factor = 0.029
 		path = { leads_to_tech = ADISCORD_tech_electromagnetic_cannon_pods research_cost_coeff = 1 }
-		research_cost = 1.193
-		start_year = 2179
+		research_cost = 1.647
+		start_year = 2169
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 24 }
+			position = { x = 0 y = 12 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 24 }
+			position = { x = 0 y = 12 }
 		}
-		ai_will_do = { factor = 21 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment }
 	}
 
@@ -685,17 +905,23 @@ technologies = {
 		path = { leads_to_tech = ADISCORD_tech_unmanned_forward_air_controllers research_cost_coeff = 1 }
 		path = { leads_to_tech = ADISCORD_tech_persistent_sensor_strike_loops research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_drone_airframe_2183 }
-		research_cost = 1.75
-		start_year = 2182
+		research_cost = 2.05
+		start_year = 2170
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 26 }
+			position = { x = 3 y = 13 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 26 }
+			position = { x = 3 y = 13 }
 		}
-		ai_will_do = { factor = 20 }
+		ai_will_do = {
+			factor = 16.2
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment }
 	}
 
@@ -706,17 +932,23 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_persistent_sensor_strike_loops
 		}
-		research_cost = 1.5
-		start_year = 2188
+		research_cost = 1.75
+		start_year = 2172
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 30 }
+			position = { x = 3 y = 15 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 30 }
+			position = { x = 3 y = 15 }
 		}
-		ai_will_do = { factor = 17 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment }
 	}
 
@@ -727,34 +959,47 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_unmanned_forward_air_controllers
 		}
-		research_cost = 1.5
-		start_year = 2188
+		research_cost = 1.75
+		start_year = 2172
 		folder = {
 			name = air_techs_folder
-			position = { x = 4 y = 30 }
+			position = { x = 6 y = 15 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 4 y = 30 }
+			position = { x = 6 y = 15 }
 		}
-		ai_will_do = { factor = 17 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_healthy = yes }
+		}
 		categories = { air_equipment }
 	}
 
 	ADISCORD_tech_persistent_air_support = {
 		air_mission_efficiency = 0.026
 		ground_attack_factor = 0.046
-		research_cost = 2.2
-		start_year = 2200
+		research_cost = 2.55
+		start_year = 2180
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 38 }
+			position = { x = 3 y = 19 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 38 }
+			position = { x = 3 y = 19 }
 		}
-		ai_will_do = { factor = 12 }
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment }
 	}
 
@@ -763,16 +1008,22 @@ technologies = {
 		strategic_bomb_visibility = -0.012
 		path = { leads_to_tech = ADISCORD_tech_inertial_guidance research_cost_coeff = 1 }
 		research_cost = 0.55
-		start_year = 2100
+		start_year = 2150
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 0 }
+			position = { x = 3 y = 0 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 0 }
+			position = { x = 3 y = 0 }
 		}
-		ai_will_do = { factor = 36 }
+		ai_will_do = {
+			factor = 10
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment rocketry electronics }
 	}
 
@@ -781,16 +1032,22 @@ technologies = {
 		strategic_bomb_visibility = -0.012
 		path = { leads_to_tech = ADISCORD_tech_cruise_missiles research_cost_coeff = 1 }
 		research_cost = 0.55
-		start_year = 2120
+		start_year = 2155
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 2 }
+			position = { x = 3 y = 1 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 2 }
+			position = { x = 3 y = 1 }
 		}
-		ai_will_do = { factor = 35 }
+		ai_will_do = {
+			factor = 10
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment rocketry electronics }
 	}
 
@@ -799,16 +1056,22 @@ technologies = {
 		strategic_bomb_visibility = -0.013
 		path = { leads_to_tech = ADISCORD_tech_storable_liquid_propellants research_cost_coeff = 1 }
 		research_cost = 0.55
-		start_year = 2140
+		start_year = 2158
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 4 }
+			position = { x = 3 y = 2 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 4 }
+			position = { x = 3 y = 2 }
 		}
-		ai_will_do = { factor = 33 }
+		ai_will_do = {
+			factor = 10
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment rocketry electronics }
 	}
 
@@ -816,17 +1079,23 @@ technologies = {
 		air_mission_efficiency = 0.013
 		strategic_bomb_visibility = -0.013
 		path = { leads_to_tech = ADISCORD_tech_strategic_rocket_architecture research_cost_coeff = 1 }
-		research_cost = 0.7
-		start_year = 2150
+		research_cost = 1.55
+		start_year = 2160
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 6 }
+			position = { x = 3 y = 3 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 6 }
+			position = { x = 3 y = 3 }
 		}
-		ai_will_do = { factor = 32 }
+		ai_will_do = {
+			factor = 10
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment rocketry electronics }
 	}
 
@@ -839,17 +1108,23 @@ technologies = {
 			building = rocket_site
 			level = 1
 		}
-		research_cost = 1.75
-		start_year = 2160
+		research_cost = 2.05
+		start_year = 2161
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 8 }
+			position = { x = 3 y = 4 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 8 }
+			position = { x = 3 y = 4 }
 		}
-		ai_will_do = { factor = 31 }
+		ai_will_do = {
+			factor = 9.6
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment rocketry electronics }
 	}
 
@@ -860,17 +1135,24 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_terrain_contour_matching
 		}
-		research_cost = 1.5
+		research_cost = 1.75
 		start_year = 2162
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 10 }
+			position = { x = 0 y = 5 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 10 }
+			position = { x = 0 y = 5 }
 		}
-		ai_will_do = { factor = 30 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_stressed = yes }
+		}
 		categories = { air_equipment rocketry electronics }
 	}
 
@@ -881,17 +1163,24 @@ technologies = {
 		XOR = {
 			ADISCORD_tech_ring_laser_gyroscopes
 		}
-		research_cost = 1.5
+		research_cost = 1.75
 		start_year = 2162
 		folder = {
 			name = air_techs_folder
-			position = { x = 4 y = 10 }
+			position = { x = 6 y = 5 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 4 y = 10 }
+			position = { x = 6 y = 5 }
 		}
-		ai_will_do = { factor = 30 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_healthy = yes }
+		}
 		categories = { air_equipment rocketry electronics }
 	}
 
@@ -899,17 +1188,23 @@ technologies = {
 		ground_attack_factor = 0.024
 		air_mission_efficiency = 0.014
 		path = { leads_to_tech = ADISCORD_tech_orbital_tracking_relics research_cost_coeff = 1 }
-		research_cost = 1.11
-		start_year = 2168
+		research_cost = 1.688
+		start_year = 2165
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 16 }
+			position = { x = 0 y = 8 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 16 }
+			position = { x = 0 y = 8 }
 		}
-		ai_will_do = { factor = 26 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment rocketry electronics }
 	}
 
@@ -917,17 +1212,23 @@ technologies = {
 		strategic_bomb_visibility = -0.025
 		air_accidents_factor = -0.015
 		path = { leads_to_tech = ADISCORD_tech_low_observable_cruise_missile_skins research_cost_coeff = 1 }
-		research_cost = 1.11
-		start_year = 2168
+		research_cost = 1.688
+		start_year = 2165
 		folder = {
 			name = air_techs_folder
-			position = { x = 4 y = 16 }
+			position = { x = 6 y = 8 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 4 y = 16 }
+			position = { x = 6 y = 8 }
 		}
-		ai_will_do = { factor = 26 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment rocketry electronics }
 	}
 
@@ -936,17 +1237,23 @@ technologies = {
 		air_mission_efficiency = 0.015
 		path = { leads_to_tech = ADISCORD_tech_hypersonic_glide_vehicles research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_rocket_strike_platform_2183 }
-		research_cost = 1.75
-		start_year = 2173
+		research_cost = 2.05
+		start_year = 2167
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 20 }
+			position = { x = 0 y = 10 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 20 }
+			position = { x = 0 y = 10 }
 		}
-		ai_will_do = { factor = 23 }
+		ai_will_do = {
+			factor = 10.8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment rocketry electronics }
 	}
 
@@ -955,17 +1262,23 @@ technologies = {
 		air_accidents_factor = -0.015
 		path = { leads_to_tech = ADISCORD_tech_astro_inertial_navigation research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_rocket_strike_platform_2183 }
-		research_cost = 1.75
-		start_year = 2173
+		research_cost = 2.05
+		start_year = 2167
 		folder = {
 			name = air_techs_folder
-			position = { x = 4 y = 20 }
+			position = { x = 6 y = 10 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 4 y = 20 }
+			position = { x = 6 y = 10 }
 		}
-		ai_will_do = { factor = 23 }
+		ai_will_do = {
+			factor = 10.8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment rocketry electronics }
 	}
 
@@ -973,17 +1286,23 @@ technologies = {
 		ground_attack_factor = 0.027
 		air_mission_efficiency = 0.015
 		path = { leads_to_tech = ADISCORD_tech_deep_strike_targeting research_cost_coeff = 1 }
-		research_cost = 1.193
-		start_year = 2179
+		research_cost = 1.798
+		start_year = 2169
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 24 }
+			position = { x = 0 y = 12 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 24 }
+			position = { x = 0 y = 12 }
 		}
-		ai_will_do = { factor = 21 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment rocketry electronics }
 	}
 
@@ -991,17 +1310,23 @@ technologies = {
 		strategic_bomb_visibility = -0.028
 		air_accidents_factor = -0.016
 		path = { leads_to_tech = ADISCORD_tech_reusable_boost_stages research_cost_coeff = 1 }
-		research_cost = 1.193
-		start_year = 2179
+		research_cost = 1.798
+		start_year = 2169
 		folder = {
 			name = air_techs_folder
-			position = { x = 4 y = 24 }
+			position = { x = 6 y = 12 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 4 y = 24 }
+			position = { x = 6 y = 12 }
 		}
-		ai_will_do = { factor = 21 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment rocketry electronics }
 	}
 
@@ -1013,17 +1338,23 @@ technologies = {
 			building = rocket_site
 			level = 2
 		}
-		research_cost = 1.75
-		start_year = 2185
+		research_cost = 2.05
+		start_year = 2171
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 28 }
+			position = { x = 0 y = 14 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 28 }
+			position = { x = 0 y = 14 }
 		}
-		ai_will_do = { factor = 18 }
+		ai_will_do = {
+			factor = 9.6
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment rocketry electronics }
 	}
 
@@ -1031,17 +1362,23 @@ technologies = {
 		strategic_bomb_visibility = -0.029
 		air_accidents_factor = -0.016
 		path = { leads_to_tech = ADISCORD_tech_orbital_relay_targeting research_cost_coeff = 1 }
-		research_cost = 1.238
-		start_year = 2185
+		research_cost = 1.853
+		start_year = 2171
 		folder = {
 			name = air_techs_folder
-			position = { x = 4 y = 28 }
+			position = { x = 6 y = 14 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 4 y = 28 }
+			position = { x = 6 y = 14 }
 		}
-		ai_will_do = { factor = 18 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment rocketry electronics }
 	}
 
@@ -1049,17 +1386,23 @@ technologies = {
 		ground_attack_factor = 0.029
 		air_mission_efficiency = 0.017
 		path = { leads_to_tech = ADISCORD_tech_suborbital_skip_glide_guidance research_cost_coeff = 1 }
-		research_cost = 1.282
-		start_year = 2191
+		research_cost = 1.908
+		start_year = 2173
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 32 }
+			position = { x = 0 y = 16 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 32 }
+			position = { x = 0 y = 16 }
 		}
-		ai_will_do = { factor = 16 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment rocketry electronics }
 	}
 
@@ -1067,17 +1410,23 @@ technologies = {
 		strategic_bomb_visibility = -0.03
 		air_accidents_factor = -0.017
 		path = { leads_to_tech = ADISCORD_tech_autonomous_strategic_strike_planning research_cost_coeff = 1 }
-		research_cost = 1.282
-		start_year = 2191
+		research_cost = 1.908
+		start_year = 2173
 		folder = {
 			name = air_techs_folder
-			position = { x = 4 y = 32 }
+			position = { x = 6 y = 16 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 4 y = 32 }
+			position = { x = 6 y = 16 }
 		}
-		ai_will_do = { factor = 16 }
+		ai_will_do = {
+			factor = 8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment rocketry electronics }
 	}
 
@@ -1086,17 +1435,23 @@ technologies = {
 		air_mission_efficiency = 0.017
 		path = { leads_to_tech = ADISCORD_tech_suborbital_strike_systems research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_deep_strike_airframe_2200 }
-		research_cost = 1.75
-		start_year = 2197
+		research_cost = 2.05
+		start_year = 2175
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 36 }
+			position = { x = 0 y = 18 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 36 }
+			position = { x = 0 y = 18 }
 		}
-		ai_will_do = { factor = 13 }
+		ai_will_do = {
+			factor = 10.8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment rocketry electronics }
 	}
 
@@ -1105,17 +1460,23 @@ technologies = {
 		air_accidents_factor = -0.018
 		path = { leads_to_tech = ADISCORD_tech_suborbital_strike_systems research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_deep_strike_airframe_2200 }
-		research_cost = 1.75
-		start_year = 2197
+		research_cost = 2.05
+		start_year = 2175
 		folder = {
 			name = air_techs_folder
-			position = { x = 4 y = 36 }
+			position = { x = 6 y = 18 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 4 y = 36 }
+			position = { x = 6 y = 18 }
 		}
-		ai_will_do = { factor = 13 }
+		ai_will_do = {
+			factor = 10.8
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment rocketry electronics }
 	}
 
@@ -1127,17 +1488,232 @@ technologies = {
 			building = rocket_site
 			level = 3
 		}
-		research_cost = 2.2
-		start_year = 2200
+		research_cost = 2.55
+		start_year = 2180
 		folder = {
 			name = air_techs_folder
-			position = { x = 2 y = 38 }
+			position = { x = 3 y = 19 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 2 y = 38 }
+			position = { x = 3 y = 19 }
 		}
-		ai_will_do = { factor = 12 }
+		ai_will_do = {
+			factor = 12.96
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
 		categories = { air_equipment rocketry electronics }
+	}
+
+	ADISCORD_tech_restored_airlift_planning = {
+		air_mission_efficiency = 0.02
+		air_mission_xp_gain_factor = 0.03
+		supply_consumption_factor = -0.005
+		path = { leads_to_tech = ADISCORD_tech_forward_tiltrotor_basing research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_autonomous_cargo_gliders research_cost_coeff = 1 }
+		research_cost = 1.4
+		start_year = 2160
+		folder = {
+			name = air_techs_folder
+			position = { x = 3 y = 3 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 3 y = 3 }
+		}
+		ai_will_do = {
+			factor = 15
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_forward_tiltrotor_basing = {
+		air_cas_present_factor = 0.03
+		army_bonus_air_superiority_factor = 0.02
+		air_accidents_factor = -0.01
+		path = { leads_to_tech = ADISCORD_tech_vertical_envelopment_control research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_autonomous_cargo_gliders
+		}
+		research_cost = 1.75
+		start_year = 2163
+		folder = {
+			name = air_techs_folder
+			position = { x = 0 y = 6 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_stressed = yes }
+		}
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_autonomous_cargo_gliders = {
+		air_mission_efficiency = 0.03
+		air_power_projection_factor = 0.02
+		supply_consumption_factor = -0.01
+		path = { leads_to_tech = ADISCORD_tech_precision_aerial_resupply research_cost_coeff = 1 }
+		XOR = {
+			ADISCORD_tech_forward_tiltrotor_basing
+		}
+		research_cost = 1.75
+		start_year = 2163
+		folder = {
+			name = air_techs_folder
+			position = { x = 6 y = 6 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 6 y = 6 }
+		}
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+			modifier = { factor = 1.25 ADISCORD_economy_ai_is_healthy = yes }
+		}
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_vertical_envelopment_control = {
+		air_cas_efficiency = 0.04
+		planning_speed = 0.03
+		land_reinforce_rate = 0.005
+		path = { leads_to_tech = ADISCORD_tech_distributed_assault_landing_zones research_cost_coeff = 1 }
+		research_cost = 1.592
+		start_year = 2167
+		folder = {
+			name = air_techs_folder
+			position = { x = 0 y = 10 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_precision_aerial_resupply = {
+		air_mission_efficiency = 0.04
+		supply_consumption_factor = -0.02
+		air_accidents_factor = -0.015
+		path = { leads_to_tech = ADISCORD_tech_persistent_airbridge_networks research_cost_coeff = 1 }
+		research_cost = 1.592
+		start_year = 2167
+		folder = {
+			name = air_techs_folder
+			position = { x = 6 y = 10 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 6 y = 10 }
+		}
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_distributed_assault_landing_zones = {
+		air_cas_present_factor = 0.05
+		army_bonus_air_superiority_factor = 0.03
+		planning_speed = 0.03
+		path = { leads_to_tech = ADISCORD_tech_autonomous_theater_airlift research_cost_coeff = 1 }
+		research_cost = 1.702
+		start_year = 2171
+		folder = {
+			name = air_techs_folder
+			position = { x = 0 y = 14 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 0 y = 14 }
+		}
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_persistent_airbridge_networks = {
+		air_power_projection_factor = 0.05
+		air_mission_efficiency = 0.04
+		supply_consumption_factor = -0.02
+		path = { leads_to_tech = ADISCORD_tech_autonomous_theater_airlift research_cost_coeff = 1 }
+		research_cost = 1.702
+		start_year = 2171
+		folder = {
+			name = air_techs_folder
+			position = { x = 6 y = 14 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 6 y = 14 }
+		}
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
+		categories = { air_equipment }
+	}
+
+	ADISCORD_tech_autonomous_theater_airlift = {
+		air_mission_efficiency = 0.06
+		air_mission_xp_gain_factor = 0.06
+		land_reinforce_rate = 0.01
+		supply_consumption_factor = -0.025
+		research_cost = 1.812
+		start_year = 2175
+		folder = {
+			name = air_techs_folder
+			position = { x = 3 y = 18 }
+		}
+		folder = {
+			name = bba_air_techs_folder
+			position = { x = 3 y = 18 }
+		}
+		ai_will_do = {
+			factor = 12
+			modifier = { factor = 1.25 has_war = yes }
+			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
+			modifier = { factor = 0.20 num_of_military_factories < 8 }
+			modifier = { factor = 1.35 ADISCORD_economy_ai_can_fund_advanced_forces = yes }
+		}
+		categories = { air_equipment }
 	}
 }

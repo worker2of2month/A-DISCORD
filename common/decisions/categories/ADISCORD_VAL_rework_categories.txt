@@ -1,0 +1,23 @@
+VAL_military_operations = {
+	allowed = { tag = VAL }
+	visible = { has_country_flag = VAL_operations_map_unlocked }
+	visible_when_empty = yes
+	scripted_gui = ADISCORD_VAL_operations_panel
+}
+
+VAL_propaganda_campaigns = {
+	allowed = { tag = VAL }
+	visible = { has_completed_focus = VAL_Ministry_Of_Contract_Memory }
+}
+
+VAL_contract_obligations = {
+	allowed = { tag = VAL }
+	visible = { has_completed_focus = VAL_Quarterly_Contract_Norm }
+	visible_when_empty = yes
+}
+
+VAL_rework_debug = {
+	allowed = { tag = VAL }
+	visible = { is_debug = yes }
+	visible_when_empty = yes
+}

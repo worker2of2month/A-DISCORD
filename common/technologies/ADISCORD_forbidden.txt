@@ -6,13 +6,15 @@ technologies = {
 		nuclear_production_factor = 0.04
 		stability_factor = -0.005
 		path = { leads_to_tech = ADISCORD_tech_dead_reactor_salvage research_cost_coeff = 1 }
-		research_cost = 1.8
-		start_year = 2100
+		research_cost = 2.6
+		start_year = 2164
 		folder = {
 			name = electronics_folder
-			position = { x = 2 y = 0 }
+			position = { x = 3 y = 7 }
 		}
-		ai_will_do = { factor = 1 }
+		ai_will_do = {
+			factor = 1
+		}
 		categories = { electronics nuclear }
 	}
 
@@ -23,13 +25,15 @@ technologies = {
 		nuclear_production_factor = 0.06
 		stability_factor = -0.008
 		path = { leads_to_tech = ADISCORD_tech_legacy_reactor_compactification research_cost_coeff = 1 }
-		research_cost = 1.8
-		start_year = 2120
+		research_cost = 2.78
+		start_year = 2166
 		folder = {
 			name = electronics_folder
-			position = { x = 2 y = 2 }
+			position = { x = 3 y = 9 }
 		}
-		ai_will_do = { factor = 1 }
+		ai_will_do = {
+			factor = 1
+		}
 		categories = { electronics nuclear }
 	}
 
@@ -41,13 +45,15 @@ technologies = {
 		stability_factor = -0.011
 		path = { leads_to_tech = ADISCORD_tech_dirty_energy_munitions research_cost_coeff = 1 }
 		path = { leads_to_tech = ADISCORD_tech_singularity_cooling_systems research_cost_coeff = 1 }
-		research_cost = 1.8
-		start_year = 2140
+		research_cost = 2.96
+		start_year = 2168
 		folder = {
 			name = electronics_folder
-			position = { x = 2 y = 4 }
+			position = { x = 3 y = 11 }
 		}
-		ai_will_do = { factor = 1 }
+		ai_will_do = {
+			factor = 1
+		}
 		categories = { electronics nuclear }
 	}
 
@@ -59,13 +65,15 @@ technologies = {
 		nuclear_production_factor = 0.1
 		stability_factor = -0.014
 		path = { leads_to_tech = ADISCORD_tech_black_grid_protocols research_cost_coeff = 1 }
-		research_cost = 2.15
-		start_year = 2160
+		research_cost = 3.14
+		start_year = 2170
 		folder = {
 			name = electronics_folder
-			position = { x = 0 y = 8 }
+			position = { x = 0 y = 13 }
 		}
-		ai_will_do = { factor = 1 }
+		ai_will_do = {
+			factor = 1
+		}
 		categories = { electronics nuclear }
 	}
 
@@ -76,13 +84,15 @@ technologies = {
 		nuclear_production_factor = 0.12
 		stability_factor = -0.017
 		path = { leads_to_tech = ADISCORD_tech_black_grid_protocols research_cost_coeff = 1 }
-		research_cost = 2.465
-		start_year = 2182
+		research_cost = 3.32
+		start_year = 2173
 		folder = {
 			name = electronics_folder
-			position = { x = 4 y = 26 }
+			position = { x = 6 y = 16 }
 		}
-		ai_will_do = { factor = 1 }
+		ai_will_do = {
+			factor = 1
+		}
 		categories = { electronics nuclear }
 	}
 
@@ -96,13 +106,15 @@ technologies = {
 			ADISCORD_tech_dirty_energy_munitions = 1
 			ADISCORD_tech_singularity_cooling_systems = 1
 		}
-		research_cost = 3.6
-		start_year = 2200
+		research_cost = 3.5
+		start_year = 2180
 		folder = {
 			name = electronics_folder
-			position = { x = 2 y = 38 }
+			position = { x = 3 y = 19 }
 		}
-		ai_will_do = { factor = 1 }
+		ai_will_do = {
+			factor = 1
+		}
 		categories = { electronics nuclear }
 	}
 
@@ -115,13 +127,15 @@ technologies = {
 		stability_factor = -0.01
 		path = { leads_to_tech = ADISCORD_tech_neural_command_cores research_cost_coeff = 1 }
 		path = { leads_to_tech = ADISCORD_tech_forbidden_automation_doctrine research_cost_coeff = 1 }
-		research_cost = 2.375
-		start_year = 2170
+		research_cost = 2.6
+		start_year = 2168
 		folder = {
 			name = electronics_folder
-			position = { x = 2 y = 18 }
+			position = { x = 3 y = 11 }
 		}
-		ai_will_do = { factor = 1 }
+		ai_will_do = {
+			factor = 1
+		}
 		categories = { electronics computing_tech industry }
 	}
 
@@ -132,13 +146,15 @@ technologies = {
 		}
 		production_factory_max_efficiency_factor = 0.03
 		stability_factor = -0.015
-		research_cost = 2.465
-		start_year = 2182
+		research_cost = 2.95
+		start_year = 2172
 		folder = {
 			name = electronics_folder
-			position = { x = 0 y = 26 }
+			position = { x = 0 y = 15 }
 		}
-		ai_will_do = { factor = 1 }
+		ai_will_do = {
+			factor = 1
+		}
 		categories = { electronics computing_tech industry }
 	}
 
@@ -150,13 +166,15 @@ technologies = {
 		}
 		production_factory_max_efficiency_factor = 0.04
 		stability_factor = -0.02
-		research_cost = 3.45
-		start_year = 2200
+		research_cost = 3.3
+		start_year = 2180
 		folder = {
 			name = electronics_folder
-			position = { x = 4 y = 38 }
+			position = { x = 6 y = 19 }
 		}
-		ai_will_do = { factor = 1 }
+		ai_will_do = {
+			factor = 1
+		}
 		categories = { electronics computing_tech industry }
 	}
 }

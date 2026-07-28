@@ -6,7 +6,6 @@ scripted_gui = {
 
 	    visible = {
 			has_global_flag = superevent_vorkerland_civilwar
-			ADISCORD_major_news_enabled = yes
 	    }
 
 	    effects = {
@@ -22,7 +21,6 @@ scripted_gui = {
 
 	    visible = {
 			has_global_flag = superevent_stelander_empire
-			ADISCORD_major_news_enabled = yes
 	    }
 
 	    effects = {
@@ -37,7 +35,6 @@ scripted_gui = {
 		context_type = player_context
 		visible = {
 			has_global_flag = superevent_vorkerland_dirty_opening
-			ADISCORD_local_news_enabled = yes
 		}
 		effects = { superevents_button_click = { clr_global_flag = superevent_vorkerland_dirty_opening } }
 	}
@@ -47,7 +44,6 @@ scripted_gui = {
 		context_type = player_context
 		visible = {
 			has_global_flag = superevent_vorkerland_worker_victory
-			ADISCORD_major_news_enabled = yes
 		}
 		effects = { superevents_button_click = { clr_global_flag = superevent_vorkerland_worker_victory } }
 	}
@@ -57,7 +53,6 @@ scripted_gui = {
 		context_type = player_context
 		visible = {
 			has_global_flag = superevent_vorkerland_vlad_victory
-			ADISCORD_major_news_enabled = yes
 		}
 		effects = { superevents_button_click = { clr_global_flag = superevent_vorkerland_vlad_victory } }
 	}
@@ -67,7 +62,6 @@ scripted_gui = {
 		context_type = player_context
 		visible = {
 			has_global_flag = superevent_vorkerland_dorian_victory
-			ADISCORD_major_news_enabled = yes
 		}
 		effects = { superevents_button_click = { clr_global_flag = superevent_vorkerland_dorian_victory } }
 	}
@@ -77,7 +71,6 @@ scripted_gui = {
 		context_type = player_context
 		visible = {
 			has_global_flag = superevent_vorkerland_fragmented
-			ADISCORD_major_news_enabled = yes
 		}
 		effects = { superevents_button_click = { clr_global_flag = superevent_vorkerland_fragmented } }
 	}

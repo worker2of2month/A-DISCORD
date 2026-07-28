@@ -1,0 +1,451 @@
+VAL_military_operations = {
+	VAL_ops_bribe_stelander_brokers = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = { OR = { VAL_stp_crisis_at_least_rupture = yes VAL_has_active_stp_civil_war = yes } }
+		available = {
+			NOT = { has_country_flag = VAL_foreign_operation_active }
+		}
+		custom_cost_trigger = { ADISCORD_economy_can_spend_25 = yes }
+		custom_cost_text = ADISCORD_cost_t25
+		cost = 10
+		days_remove = 14
+		days_re_enable = 45
+		complete_effect = {
+			ADISCORD_economy_spend_25 = yes
+			set_country_flag = VAL_foreign_operation_active
+			set_country_flag = VAL_operation_bribe_stelander_brokers
+		}
+		remove_effect = {
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 }
+			VAL_change_stp_leverage = yes
+			add_to_variable = { var = VAL_STP_intelligence value = 1 }
+			clr_country_flag = VAL_operation_bribe_stelander_brokers
+			clr_country_flag = VAL_foreign_operation_active
+		}
+		ai_will_do = {
+			base = 2
+			modifier = { factor = 0 NOT = { ADISCORD_economy_can_spend_50 = yes } }
+			modifier = { factor = 3 VAL_has_active_stp_civil_war = yes }
+		}
+	}
+
+	VAL_ops_arm_stelander_clients = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = { VAL_has_active_stp_civil_war = yes }
+		available = {
+			NOT = { has_country_flag = VAL_foreign_operation_active }
+		}
+		custom_cost_trigger = { ADISCORD_has_2500_infantry_equipment = yes }
+		custom_cost_text = ADISCORD_cost_r2500
+		cost = 10
+		days_remove = 21
+		days_re_enable = 60
+		complete_effect = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = -2500 producer = VAL }
+			set_country_flag = VAL_foreign_operation_active
+			set_country_flag = VAL_operation_arm_stelander_clients
+		}
+		remove_effect = {
+			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 }
+			VAL_change_stp_leverage = yes
+			add_to_variable = { var = VAL_STP_contract_readiness value = 1 }
+			clr_country_flag = VAL_operation_arm_stelander_clients
+			clr_country_flag = VAL_foreign_operation_active
+		}
+		ai_will_do = {
+			base = 2
+			modifier = { factor = 0 NOT = { has_equipment = { infantry_equipment > 9999 } } }
+			modifier = { factor = 3 has_country_flag = VAL_ai_course_resource_raider }
+		}
+	}
+
+	VAL_ops_finance_cin_contacts = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = {
+			has_country_flag = VAL_northern_operations_unlocked
+			country_exists = CIN
+		}
+		available = {
+			NOT = { has_country_flag = VAL_foreign_operation_active }
+		}
+		custom_cost_trigger = { ADISCORD_economy_can_spend_25 = yes }
+		custom_cost_text = ADISCORD_cost_t25
+		cost = 10
+		days_remove = 21
+		days_re_enable = 60
+		complete_effect = {
+			ADISCORD_economy_spend_25 = yes
+			set_country_flag = VAL_foreign_operation_active
+			set_country_flag = VAL_operation_finance_cin_contacts
+		}
+		remove_effect = {
+			add_to_variable = { var = VAL_CIN_influence value = 1 }
+			clr_country_flag = VAL_operation_finance_cin_contacts
+			clr_country_flag = VAL_foreign_operation_active
+		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { ADISCORD_economy_can_spend_50 = yes } } }
+	}
+
+	VAL_ops_sell_rifles_to_cin = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = {
+			has_country_flag = VAL_northern_operations_unlocked
+			country_exists = CIN
+		}
+		available = {
+			NOT = { has_country_flag = VAL_foreign_operation_active }
+		}
+		custom_cost_trigger = { ADISCORD_has_2500_infantry_equipment = yes }
+		custom_cost_text = ADISCORD_cost_r2500
+		cost = 10
+		days_remove = 21
+		days_re_enable = 60
+		complete_effect = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = -2500 producer = VAL }
+			set_country_flag = VAL_foreign_operation_active
+			set_country_flag = VAL_operation_sell_rifles_to_cin
+		}
+		remove_effect = {
+			ADISCORD_economy_receive_15 = yes
+			add_to_variable = { var = VAL_CIN_influence value = 2 }
+			clr_country_flag = VAL_operation_sell_rifles_to_cin
+			clr_country_flag = VAL_foreign_operation_active
+		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { has_equipment = { infantry_equipment > 11999 } } } }
+	}
+
+	VAL_ops_finance_osf_contacts = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = {
+			has_country_flag = VAL_northern_operations_unlocked
+			country_exists = OSF
+		}
+		available = {
+			NOT = { has_country_flag = VAL_foreign_operation_active }
+		}
+		custom_cost_trigger = { ADISCORD_economy_can_spend_25 = yes }
+		custom_cost_text = ADISCORD_cost_t25
+		cost = 10
+		days_remove = 21
+		days_re_enable = 60
+		complete_effect = {
+			ADISCORD_economy_spend_25 = yes
+			set_country_flag = VAL_foreign_operation_active
+			set_country_flag = VAL_operation_finance_osf_contacts
+		}
+		remove_effect = {
+			add_to_variable = { var = VAL_OSF_influence value = 1 }
+			clr_country_flag = VAL_operation_finance_osf_contacts
+			clr_country_flag = VAL_foreign_operation_active
+		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { ADISCORD_economy_can_spend_50 = yes } } }
+	}
+
+	VAL_ops_sell_rifles_to_osf = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = {
+			has_country_flag = VAL_northern_operations_unlocked
+			country_exists = OSF
+		}
+		available = {
+			NOT = { has_country_flag = VAL_foreign_operation_active }
+		}
+		custom_cost_trigger = { ADISCORD_has_2500_infantry_equipment = yes }
+		custom_cost_text = ADISCORD_cost_r2500
+		cost = 10
+		days_remove = 21
+		days_re_enable = 60
+		complete_effect = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = -2500 producer = VAL }
+			set_country_flag = VAL_foreign_operation_active
+			set_country_flag = VAL_operation_sell_rifles_to_osf
+		}
+		remove_effect = {
+			ADISCORD_economy_receive_15 = yes
+			add_to_variable = { var = VAL_OSF_influence value = 2 }
+			clr_country_flag = VAL_operation_sell_rifles_to_osf
+			clr_country_flag = VAL_foreign_operation_active
+		}
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { has_equipment = { infantry_equipment > 11999 } } } }
+	}
+
+	VAL_ops_secure_stelander_steel = {
+		icon = generic_resources
+		allowed = { tag = VAL }
+		visible = {
+			has_country_flag = VAL_stelander_resource_search
+			NOT = { has_country_flag = VAL_local_resource_rights_45 }
+		}
+		available = {
+			NOT = { has_country_flag = VAL_foreign_operation_active }
+		}
+		custom_cost_trigger = {
+			ADISCORD_economy_can_spend_50 = yes
+			ADISCORD_has_5000_infantry_equipment = yes
+		}
+		custom_cost_text = ADISCORD_cost_t50_r5000
+		cost = 15
+		days_remove = 35
+		complete_effect = {
+			ADISCORD_economy_spend_50 = yes
+			add_equipment_to_stockpile = { type = infantry_equipment amount = -5000 producer = VAL }
+			set_country_flag = VAL_foreign_operation_active
+			set_country_flag = VAL_operation_secure_stelander_steel
+		}
+		remove_effect = {
+			VAL_secure_stelander_interim_supply = yes
+			clr_country_flag = VAL_operation_secure_stelander_steel
+			clr_country_flag = VAL_foreign_operation_active
+		}
+		ai_will_do = {
+			base = 4
+			modifier = { factor = 0 NOT = { has_country_flag = VAL_westerholm_metal_lost } }
+			modifier = { factor = 0 NOT = { has_equipment = { infantry_equipment > 14999 } } }
+		}
+	}
+}
+
+VAL_propaganda_campaigns = {
+	VAL_campaign_rifles_and_bread = {
+		icon = generic_propaganda_campaigns
+		allowed = { tag = VAL }
+		available = { has_campaign_slot = yes }
+		cost = 25
+		days_remove = 50
+		days_re_enable = 70
+		modifier = {
+			industrial_capacity_factory = 0.05
+			war_support_weekly = 0.001
+		}
+		complete_effect = { ADISCORD_campaign_slot_consume = yes }
+		remove_effect = { ADISCORD_campaign_slot_release = yes }
+		ai_will_do = { base = 2 modifier = { factor = 2 has_war = yes } }
+	}
+
+	VAL_campaign_contracts_feed_families = {
+		icon = generic_propaganda_campaigns
+		allowed = { tag = VAL }
+		available = { has_campaign_slot = yes }
+		cost = 25
+		days_remove = 60
+		days_re_enable = 80
+		modifier = {
+			consumer_goods_factor = -0.03
+			stability_weekly = 0.001
+		}
+		complete_effect = { ADISCORD_campaign_slot_consume = yes }
+		remove_effect = { ADISCORD_campaign_slot_release = yes }
+		ai_will_do = { base = 2 modifier = { factor = 2 stability < 0.60 } }
+	}
+
+	VAL_campaign_no_promise_without_payment = {
+		icon = generic_propaganda_campaigns
+		allowed = { tag = VAL }
+		available = { has_campaign_slot = yes }
+		cost = 20
+		days_remove = 45
+		days_re_enable = 70
+		modifier = {
+			political_power_gain = 0.10
+			ADISCORD_economy_trade_income_factor = 0.08
+		}
+		complete_effect = { ADISCORD_campaign_slot_consume = yes ADISCORD_economy_mark_dirty = yes }
+		remove_effect = { ADISCORD_campaign_slot_release = yes ADISCORD_economy_mark_dirty = yes }
+		ai_will_do = { base = 2 }
+	}
+
+	VAL_campaign_the_mine_was_stolen = {
+		icon = generic_propaganda_campaigns
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_westerholm_metal_lost }
+		available = { has_campaign_slot = yes }
+		cost = 15
+		days_remove = 35
+		days_re_enable = 70
+		modifier = {
+			war_support_weekly = 0.002
+			justify_war_goal_time = -0.15
+		}
+		complete_effect = { ADISCORD_campaign_slot_consume = yes }
+		remove_effect = { ADISCORD_campaign_slot_release = yes }
+		ai_will_do = { base = 4 }
+	}
+}
+
+VAL_contract_obligations = {
+	VAL_quarterly_contract_deadline = {
+		icon = generic_production
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_Quarterly_Contract_Norm }
+		available = { always = no }
+		selectable_mission = no
+		days_mission_timeout = 90
+		timeout_effect = { VAL_resolve_quarterly_contract_norm = yes }
+	}
+
+	VAL_pay_quarterly_contract_norm = {
+		icon = generic_production
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_quarterly_contract_active NOT = { has_country_flag = VAL_quarterly_contract_paid } }
+		available = { VAL_can_pay_quarterly_contract_norm = yes }
+		custom_cost_trigger = { ADISCORD_has_4000_infantry_equipment = yes }
+		custom_cost_text = ADISCORD_cost_r4000
+		cost = 10
+		complete_effect = { VAL_pay_quarterly_contract_norm = yes }
+		ai_will_do = {
+			base = 50
+			modifier = { factor = 0 NOT = { VAL_can_pay_quarterly_contract_norm = yes } }
+		}
+	}
+}
+
+VAL_rework_debug = {
+	VAL_debug_initialize_systems = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = { VAL_initialize_rework = yes }
+	}
+
+	VAL_debug_unlock_operations_map = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			set_country_flag = VAL_operations_map_unlocked
+			set_country_flag = VAL_local_operations_unlocked
+		}
+	}
+
+	VAL_debug_set_crisis_rupture = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			set_country_flag = VAL_debug_stp_rupture
+			clr_country_flag = VAL_debug_stp_civil_war
+			clr_country_flag = VAL_debug_stp_postwar
+		}
+	}
+
+	VAL_debug_set_active_civil_war = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			set_country_flag = VAL_debug_stp_rupture
+			set_country_flag = VAL_debug_stp_civil_war
+			clr_country_flag = VAL_debug_stp_postwar
+		}
+	}
+
+	VAL_debug_set_postwar_stelander = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			set_country_flag = VAL_debug_stp_rupture
+			clr_country_flag = VAL_debug_stp_civil_war
+			set_country_flag = VAL_debug_stp_postwar
+		}
+	}
+
+	VAL_debug_disrupt_vorkerland_contracts = {
+		icon = generic_resources
+		allowed = { tag = VAL }
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			set_country_flag = VAL_debug_vorkerland_collapse
+			VAL_handle_vorkerland_war_outbreak = yes
+		}
+	}
+
+	VAL_debug_lose_westerholm_metal = {
+		icon = generic_resources
+		allowed = { tag = VAL }
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			set_country_flag = VAL_debug_vorkerland_collapse
+			set_country_flag = VAL_westerholm_resource_rights_active
+			VAL_handle_westerholm_loss = yes
+		}
+	}
+
+	VAL_debug_reputation_maximum = {
+		icon = generic_production
+		allowed = { tag = VAL }
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			set_variable = { var = VAL_contract_reputation_level value = 3 }
+			VAL_refresh_contract_reputation = yes
+		}
+	}
+
+	VAL_debug_reputation_minimum = {
+		icon = generic_production
+		allowed = { tag = VAL }
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			set_variable = { var = VAL_contract_reputation_level value = 0 }
+			VAL_refresh_contract_reputation = yes
+		}
+	}
+
+	VAL_debug_grant_contract_reserves = {
+		icon = generic_production
+		allowed = { tag = VAL }
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			ADISCORD_economy_receive_50 = yes
+			ADISCORD_economy_receive_50 = yes
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 20000 producer = VAL }
+			add_equipment_to_stockpile = { type = support_equipment amount = 2000 producer = VAL }
+		}
+	}
+
+	VAL_debug_reset_rework_state = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			clr_country_flag = VAL_debug_stp_rupture
+			clr_country_flag = VAL_debug_stp_civil_war
+			clr_country_flag = VAL_debug_stp_postwar
+			clr_country_flag = VAL_debug_vorkerland_collapse
+			clr_country_flag = VAL_vorkerland_contracts_disrupted
+			clr_country_flag = VAL_westerholm_metal_lost
+			remove_ideas = VAL_vorkerland_contract_disruptions
+			remove_ideas = VAL_vorkerland_metal_shortage
+			set_variable = { var = VAL_contract_reputation_level value = 3 }
+			VAL_refresh_contract_reputation = yes
+		}
+	}
+}

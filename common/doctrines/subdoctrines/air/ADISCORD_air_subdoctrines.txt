@@ -3,25 +3,134 @@ ADISCORD_air_doctrine_swarm_recon = {
 	name = ADISCORD_air_doctrine_swarm_recon
 	description = ADISCORD_air_doctrine_swarm_recon_desc
 	icon = GFX_doctrine_forward_interception_medium
-	xp_cost = 60
+	xp_cost = 55
 	xp_type = air
-	available = { has_tech = ADISCORD_tech_drone_air_wings }
+	available = {
+		has_tech = ADISCORD_tech_drone_air_wings
+	}
+	xor = {
+		ADISCORD_air_doctrine_attritional_drone_swarms
+		ADISCORD_air_doctrine_autonomous_air_screen
+	}
 	ai_will_do = {
 		base = 1
 		modifier = { factor = 2 has_tech = ADISCORD_tech_drone_air_wings }
 	}
-	air_mission_efficiency = 0.03
+	air_mission_efficiency = 0.025
+	air_interception_detect_factor = 0.02
 	rewards = {
 		ADISCORD_air_doctrine_disposable_airframes = {
-			air_accidents_factor = -0.05
+			mastery = 50
+			air_accidents_factor = -0.03
 		}
 		ADISCORD_air_doctrine_layered_drone_screen = {
-			air_superiority_efficiency = 0.05
-			category_fighter = { air_defence = 0.05 }
+			mastery = 50
+			air_superiority_efficiency = 0.03
+			category_fighter = { air_defence = 0.03 }
 		}
 		ADISCORD_air_doctrine_autonomous_target_marking = {
-			air_cas_efficiency = 0.05
-			category_cas = { air_ground_attack = 0.05 }
+			mastery = 50
+			air_cas_efficiency = 0.03
+			category_cas = { air_ground_attack = 0.03 }
+		}
+		ADISCORD_air_doctrine_swarm_recon_swarm_relay = {
+			mastery = 50
+			air_mission_efficiency = 0.03
+		}
+		ADISCORD_air_doctrine_swarm_recon_persistent_swarm = {
+			mastery = 50
+			air_mission_efficiency = 0.04
+			air_superiority_efficiency = 0.04
+			air_cas_efficiency = 0.04
+		}
+	}
+}
+
+ADISCORD_air_doctrine_attritional_drone_swarms = {
+	track = ADISCORD_air_drone_swarm
+	name = ADISCORD_air_doctrine_attritional_drone_swarms
+	description = ADISCORD_air_doctrine_attritional_drone_swarms_desc
+	icon = GFX_doctrine_air_skirmish_medium
+	xp_cost = 55
+	xp_type = air
+	available = {
+		has_tech = ADISCORD_tech_loitering_strike_drones
+	}
+	xor = {
+		ADISCORD_air_doctrine_swarm_recon
+		ADISCORD_air_doctrine_autonomous_air_screen
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 1.7 num_of_military_factories > 8 }
+	}
+	air_superiority_efficiency = 0.03
+	air_mission_xp_gain_factor = 0.02
+	rewards = {
+		ADISCORD_air_doctrine_attritional_drone_swarms_modular_drones = {
+			mastery = 50
+			air_accidents_factor = -0.03
+		}
+		ADISCORD_air_doctrine_attritional_drone_swarms_replacement_waves = {
+			mastery = 50
+			air_mission_xp_gain_factor = 0.03
+		}
+		ADISCORD_air_doctrine_attritional_drone_swarms_risk_tolerance = {
+			mastery = 50
+			air_cas_efficiency = 0.03
+		}
+		ADISCORD_air_doctrine_attritional_drone_swarms_mass_sorties = {
+			mastery = 50
+			air_mission_efficiency = 0.04
+		}
+		ADISCORD_air_doctrine_attritional_drone_swarms_attritional_saturation = {
+			mastery = 50
+			air_superiority_efficiency = 0.05
+			category_fighter = { air_attack = 0.04 }
+		}
+	}
+}
+
+ADISCORD_air_doctrine_autonomous_air_screen = {
+	track = ADISCORD_air_drone_swarm
+	name = ADISCORD_air_doctrine_autonomous_air_screen
+	description = ADISCORD_air_doctrine_autonomous_air_screen_desc
+	icon = GFX_fighter_sweeps_medium
+	xp_cost = 55
+	xp_type = air
+	available = {
+		has_tech = ADISCORD_tech_loyal_wingmen
+	}
+	xor = {
+		ADISCORD_air_doctrine_swarm_recon
+		ADISCORD_air_doctrine_attritional_drone_swarms
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 2 has_tech = ADISCORD_tech_autonomous_dogfight_controller }
+	}
+	category_fighter = { air_defence = 0.03 air_agility = 0.02 }
+	rewards = {
+		ADISCORD_air_doctrine_autonomous_air_screen_passive_sensors = {
+			mastery = 50
+			air_interception_detect_factor = 0.03
+		}
+		ADISCORD_air_doctrine_autonomous_air_screen_machine_wingmen = {
+			mastery = 50
+			category_fighter = { air_agility = 0.03 }
+		}
+		ADISCORD_air_doctrine_autonomous_air_screen_distributed_control = {
+			mastery = 50
+			air_mission_efficiency = 0.03
+		}
+		ADISCORD_air_doctrine_autonomous_air_screen_adaptive_intercepts = {
+			mastery = 50
+			air_intercept_efficiency = 0.04
+		}
+		ADISCORD_air_doctrine_autonomous_air_screen_autonomous_air_screen = {
+			mastery = 50
+			category_fighter = { air_attack = 0.04 air_defence = 0.04 }
+			air_superiority_efficiency = 0.04
 		}
 	}
 }
@@ -31,25 +140,136 @@ ADISCORD_air_doctrine_vtol_assault_groups = {
 	name = ADISCORD_air_doctrine_vtol_assault_groups
 	description = ADISCORD_air_doctrine_vtol_assault_groups_desc
 	icon = GFX_doctrine_low_echelon_support_medium
-	xp_cost = 60
+	xp_cost = 55
 	xp_type = air
-	available = { has_tech = ADISCORD_tech_vtol_assault_frames }
+	available = {
+		has_tech = ADISCORD_tech_vtol_assault_frames
+	}
+	xor = {
+		ADISCORD_air_doctrine_persistent_close_support
+		ADISCORD_air_doctrine_theater_air_mobility
+	}
 	ai_will_do = {
 		base = 1
 		modifier = { factor = 2 has_tech = ADISCORD_tech_vtol_assault_frames }
 	}
-	air_cas_present_factor = 0.05
+	air_cas_present_factor = 0.04
+	planning_speed = 0.02
 	rewards = {
 		ADISCORD_air_doctrine_precision_cas = {
-			air_cas_efficiency = 0.05
-			category_cas = { air_ground_attack = 0.05 }
+			mastery = 50
+			air_cas_efficiency = 0.03
+			category_cas = { air_ground_attack = 0.03 }
 		}
 		ADISCORD_air_doctrine_forward_air_liaisons = {
-			army_bonus_air_superiority_factor = 0.05
+			mastery = 50
+			army_bonus_air_superiority_factor = 0.03
 		}
 		ADISCORD_air_doctrine_deep_strike_windows = {
-			category_tac_bomber = { air_ground_attack = 0.05 }
-			air_mission_xp_gain_factor = 0.05
+			mastery = 50
+			category_tac_bomber = { air_ground_attack = 0.03 }
+			air_mission_xp_gain_factor = 0.03
+		}
+		ADISCORD_air_doctrine_vtol_assault_groups_landing_control = {
+			mastery = 50
+			planning_speed = 0.025
+		}
+		ADISCORD_air_doctrine_vtol_assault_groups_vertical_battlegroup = {
+			mastery = 50
+			air_cas_present_factor = 0.04
+			air_cas_efficiency = 0.04
+			land_reinforce_rate = 0.005
+		}
+	}
+}
+
+ADISCORD_air_doctrine_persistent_close_support = {
+	track = ADISCORD_air_vtol_deep_strike
+	name = ADISCORD_air_doctrine_persistent_close_support
+	description = ADISCORD_air_doctrine_persistent_close_support_desc
+	icon = GFX_doctrine_direct_ground_support_medium
+	xp_cost = 55
+	xp_type = air
+	available = {
+		has_tech = ADISCORD_tech_cooperative_close_air_control_links
+	}
+	xor = {
+		ADISCORD_air_doctrine_vtol_assault_groups
+		ADISCORD_air_doctrine_theater_air_mobility
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 1.7 has_war = yes }
+	}
+	air_cas_efficiency = 0.035
+	air_cas_present_factor = 0.025
+	rewards = {
+		ADISCORD_air_doctrine_persistent_close_support_loiter_patterns = {
+			mastery = 50
+			air_cas_present_factor = 0.03
+		}
+		ADISCORD_air_doctrine_persistent_close_support_rapid_retasking = {
+			mastery = 50
+			air_mission_efficiency = 0.03
+		}
+		ADISCORD_air_doctrine_persistent_close_support_ground_relays = {
+			mastery = 50
+			army_bonus_air_superiority_factor = 0.025
+		}
+		ADISCORD_air_doctrine_persistent_close_support_armed_overwatch = {
+			mastery = 50
+			category_cas = { air_ground_attack = 0.04 }
+		}
+		ADISCORD_air_doctrine_persistent_close_support_continuous_support = {
+			mastery = 50
+			air_cas_efficiency = 0.05
+			air_cas_present_factor = 0.04
+		}
+	}
+}
+
+ADISCORD_air_doctrine_theater_air_mobility = {
+	track = ADISCORD_air_vtol_deep_strike
+	name = ADISCORD_air_doctrine_theater_air_mobility
+	description = ADISCORD_air_doctrine_theater_air_mobility_desc
+	icon = GFX_bomber_ace_initiative_medium
+	xp_cost = 55
+	xp_type = air
+	available = {
+		has_tech = ADISCORD_tech_restored_airlift_planning
+	}
+	xor = {
+		ADISCORD_air_doctrine_vtol_assault_groups
+		ADISCORD_air_doctrine_persistent_close_support
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 2 has_tech = ADISCORD_tech_vertical_envelopment_control }
+	}
+	air_mission_efficiency = 0.025
+	supply_consumption_factor = -0.005
+	rewards = {
+		ADISCORD_air_doctrine_theater_air_mobility_airlift_tables = {
+			mastery = 50
+			air_mission_efficiency = 0.02
+		}
+		ADISCORD_air_doctrine_theater_air_mobility_forward_basing = {
+			mastery = 50
+			air_power_projection_factor = 0.03
+		}
+		ADISCORD_air_doctrine_theater_air_mobility_aerial_resupply = {
+			mastery = 50
+			supply_consumption_factor = -0.01
+		}
+		ADISCORD_air_doctrine_theater_air_mobility_airbridge = {
+			mastery = 50
+			air_mission_efficiency = 0.04
+		}
+		ADISCORD_air_doctrine_theater_air_mobility_theater_mobility = {
+			mastery = 50
+			air_power_projection_factor = 0.04
+			air_mission_efficiency = 0.04
+			land_reinforce_rate = 0.005
 		}
 	}
 }
@@ -59,26 +279,136 @@ ADISCORD_air_doctrine_interceptor_grids = {
 	name = ADISCORD_air_doctrine_interceptor_grids
 	description = ADISCORD_air_doctrine_interceptor_grids_desc
 	icon = GFX_doctrine_forward_interception_medium
-	xp_cost = 60
+	xp_cost = 55
 	xp_type = air
-	available = { has_tech = ADISCORD_tech_high_altitude_interceptors }
+	available = {
+		has_tech = ADISCORD_tech_high_altitude_interceptors
+	}
+	xor = {
+		ADISCORD_air_doctrine_layered_missile_defense
+		ADISCORD_air_doctrine_electronic_suppression
+	}
 	ai_will_do = {
 		base = 1
 		modifier = { factor = 2 has_tech = ADISCORD_tech_high_altitude_interceptors }
 	}
-	air_intercept_efficiency = 0.05
+	air_intercept_efficiency = 0.04
+	air_home_defence_factor = 0.025
 	rewards = {
 		ADISCORD_air_doctrine_hardened_airfields = {
-			air_accidents_factor = -0.05
-			air_home_defence_factor = 0.05
+			mastery = 50
+			air_accidents_factor = -0.03
+			air_home_defence_factor = 0.03
 		}
 		ADISCORD_air_doctrine_strategic_denial_zones = {
-			air_interception_detect_factor = 0.05
-			category_fighter = { air_attack = 0.05 }
+			mastery = 50
+			air_interception_detect_factor = 0.03
+			category_fighter = { air_attack = 0.03 }
 		}
 		ADISCORD_air_doctrine_rocket_warning_network = {
+			mastery = 50
+			air_intercept_efficiency = 0.03
+			air_power_projection_factor = 0.03
+		}
+		ADISCORD_air_doctrine_interceptor_grids_interceptor_rotation = {
+			mastery = 50
+			category_fighter = { air_defence = 0.03 }
+		}
+		ADISCORD_air_doctrine_interceptor_grids_closed_airspace = {
+			mastery = 50
 			air_intercept_efficiency = 0.05
-			air_power_projection_factor = 0.05
+			air_home_defence_factor = 0.04
+		}
+	}
+}
+
+ADISCORD_air_doctrine_layered_missile_defense = {
+	track = ADISCORD_air_strategic_denial
+	name = ADISCORD_air_doctrine_layered_missile_defense
+	description = ADISCORD_air_doctrine_layered_missile_defense_desc
+	icon = GFX_doctrine_home_defence_medium
+	xp_cost = 55
+	xp_type = air
+	available = {
+		has_tech = ADISCORD_tech_integrated_short_range_missile_cells
+	}
+	xor = {
+		ADISCORD_air_doctrine_interceptor_grids
+		ADISCORD_air_doctrine_electronic_suppression
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 1.8 has_tech = ADISCORD_tech_predictive_airspace_denial_grid }
+	}
+	air_interception_detect_factor = 0.03
+	air_home_defence_factor = 0.03
+	rewards = {
+		ADISCORD_air_doctrine_layered_missile_defense_launch_detection = {
+			mastery = 50
+			air_interception_detect_factor = 0.04
+		}
+		ADISCORD_air_doctrine_layered_missile_defense_dispersed_batteries = {
+			mastery = 50
+			air_home_defence_factor = 0.03
+		}
+		ADISCORD_air_doctrine_layered_missile_defense_defense_cues = {
+			mastery = 50
+			air_intercept_efficiency = 0.03
+		}
+		ADISCORD_air_doctrine_layered_missile_defense_hardened_nodes = {
+			mastery = 50
+			air_accidents_factor = -0.02
+		}
+		ADISCORD_air_doctrine_layered_missile_defense_layered_defense = {
+			mastery = 50
+			air_home_defence_factor = 0.05
+			air_interception_detect_factor = 0.05
+		}
+	}
+}
+
+ADISCORD_air_doctrine_electronic_suppression = {
+	track = ADISCORD_air_strategic_denial
+	name = ADISCORD_air_doctrine_electronic_suppression
+	description = ADISCORD_air_doctrine_electronic_suppression_desc
+	icon = GFX_doctrine_formation_flying_medium
+	xp_cost = 55
+	xp_type = air
+	available = {
+		has_tech = ADISCORD_tech_offensive_jamming_cells
+	}
+	xor = {
+		ADISCORD_air_doctrine_interceptor_grids
+		ADISCORD_air_doctrine_layered_missile_defense
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 2 has_tech = ADISCORD_tech_adaptive_spectrum_dominance }
+	}
+	decryption_factor = 0.025
+	enemy_army_bonus_air_superiority_factor = -0.01
+	rewards = {
+		ADISCORD_air_doctrine_electronic_suppression_threat_libraries = {
+			mastery = 50
+			decryption_factor = 0.02
+		}
+		ADISCORD_air_doctrine_electronic_suppression_spoofed_corridors = {
+			mastery = 50
+			air_mission_efficiency = 0.025
+		}
+		ADISCORD_air_doctrine_electronic_suppression_hardened_waveforms = {
+			mastery = 50
+			encryption_factor = 0.03
+		}
+		ADISCORD_air_doctrine_electronic_suppression_jamming_swarms = {
+			mastery = 50
+			enemy_army_bonus_air_superiority_factor = -0.02
+		}
+		ADISCORD_air_doctrine_electronic_suppression_spectrum_control = {
+			mastery = 50
+			encryption_factor = 0.04
+			decryption_factor = 0.04
+			air_intercept_efficiency = 0.03
 		}
 	}
 }

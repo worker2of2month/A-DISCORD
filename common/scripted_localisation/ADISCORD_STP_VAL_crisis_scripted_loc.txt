@@ -110,6 +110,22 @@ defined_text = {
 }
 
 defined_text = {
+	name = STPGetSuspicionValue
+	text = { trigger = { check_variable = { var = STP_party_suspicion value = 70 compare = greater_than_or_equals } } localization_key = STP_CRISIS_SUSPICION_VALUE_HIGH }
+	text = { trigger = { check_variable = { var = STP_party_suspicion value = 35 compare = greater_than_or_equals } } localization_key = STP_CRISIS_SUSPICION_VALUE_MEDIUM }
+	text = { trigger = { always = yes } localization_key = STP_CRISIS_SUSPICION_VALUE_LOW }
+}
+
+defined_text = {
+	name = STPGetTransitionBalance
+	text = { trigger = { check_variable = { var = STP_transition_balance_score value = 55 compare = greater_than_or_equals } } localization_key = STP_TRANSITION_BALANCE_DECISIVE }
+	text = { trigger = { check_variable = { var = STP_transition_balance_score value = 20 compare = greater_than_or_equals } } localization_key = STP_TRANSITION_BALANCE_FAVOURABLE }
+	text = { trigger = { check_variable = { var = STP_transition_balance_score value = -15 compare = greater_than_or_equals } } localization_key = STP_TRANSITION_BALANCE_CONTESTED }
+	text = { trigger = { check_variable = { var = STP_transition_balance_score value = -45 compare = greater_than_or_equals } } localization_key = STP_TRANSITION_BALANCE_EXPOSED }
+	text = { trigger = { always = yes } localization_key = STP_TRANSITION_BALANCE_PARTY }
+}
+
+defined_text = {
 	name = VALGetCampaignReadinessBand
 	text = { trigger = { check_variable = { var = VAL_STP_campaign_readiness value = 75 compare = greater_than_or_equals } } localization_key = VAL_CAMPAIGN_READINESS_DECISIVE }
 	text = { trigger = { check_variable = { var = VAL_STP_campaign_readiness value = 50 compare = greater_than_or_equals } } localization_key = VAL_CAMPAIGN_READINESS_PREPARED }

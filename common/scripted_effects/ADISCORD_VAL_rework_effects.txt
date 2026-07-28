@@ -1,0 +1,265 @@
+VAL_apply_contract_administration_1 = {
+	custom_effect_tooltip = VAL_contract_administration_upgrade_tt
+	hidden_effect = {
+		remove_ideas = VAL_contract_administration_2
+		remove_ideas = VAL_contract_administration_3
+		add_ideas = VAL_contract_administration_1
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_apply_contract_administration_2 = {
+	custom_effect_tooltip = VAL_contract_administration_upgrade_tt
+	hidden_effect = {
+		remove_ideas = VAL_contract_administration_1
+		remove_ideas = VAL_contract_administration_3
+		add_ideas = VAL_contract_administration_2
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_apply_contract_administration_3 = {
+	custom_effect_tooltip = VAL_contract_administration_upgrade_tt
+	hidden_effect = {
+		remove_ideas = VAL_contract_administration_1
+		remove_ideas = VAL_contract_administration_2
+		add_ideas = VAL_contract_administration_3
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_apply_contract_industry_1 = {
+	custom_effect_tooltip = VAL_contract_industry_upgrade_tt
+	hidden_effect = {
+		remove_ideas = VAL_contract_industry_2
+		remove_ideas = VAL_contract_industry_3
+		add_ideas = VAL_contract_industry_1
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_apply_contract_industry_2 = {
+	custom_effect_tooltip = VAL_contract_industry_upgrade_tt
+	hidden_effect = {
+		remove_ideas = VAL_contract_industry_1
+		remove_ideas = VAL_contract_industry_3
+		add_ideas = VAL_contract_industry_2
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_apply_contract_industry_3 = {
+	custom_effect_tooltip = VAL_contract_industry_upgrade_tt
+	hidden_effect = {
+		remove_ideas = VAL_contract_industry_1
+		remove_ideas = VAL_contract_industry_2
+		add_ideas = VAL_contract_industry_3
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_apply_contract_army_1 = {
+	custom_effect_tooltip = VAL_contract_army_upgrade_tt
+	hidden_effect = {
+		remove_ideas = VAL_contract_army_2
+		remove_ideas = VAL_contract_army_3
+		add_ideas = VAL_contract_army_1
+	}
+}
+
+VAL_apply_contract_army_2 = {
+	custom_effect_tooltip = VAL_contract_army_upgrade_tt
+	hidden_effect = {
+		remove_ideas = VAL_contract_army_1
+		remove_ideas = VAL_contract_army_3
+		add_ideas = VAL_contract_army_2
+	}
+}
+
+VAL_apply_contract_army_3 = {
+	custom_effect_tooltip = VAL_contract_army_upgrade_tt
+	hidden_effect = {
+		remove_ideas = VAL_contract_army_1
+		remove_ideas = VAL_contract_army_2
+		add_ideas = VAL_contract_army_3
+	}
+}
+
+VAL_refresh_contract_reputation = {
+	custom_effect_tooltip = VAL_contract_reputation_refresh_tt
+	hidden_effect = {
+		remove_ideas = VAL_contract_reputation_3
+		remove_ideas = VAL_contract_reputation_2
+		remove_ideas = VAL_contract_reputation_1
+		remove_ideas = VAL_contract_reputation_0
+		if = {
+			limit = { check_variable = { var = VAL_contract_reputation_level value = 3 compare = greater_than_or_equals } }
+			add_ideas = VAL_contract_reputation_3
+		}
+		else_if = {
+			limit = { check_variable = { var = VAL_contract_reputation_level value = 2 compare = greater_than_or_equals } }
+			add_ideas = VAL_contract_reputation_2
+		}
+		else_if = {
+			limit = { check_variable = { var = VAL_contract_reputation_level value = 1 compare = greater_than_or_equals } }
+			add_ideas = VAL_contract_reputation_1
+		}
+		else = { add_ideas = VAL_contract_reputation_0 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_start_quarterly_contract_norm = {
+	set_country_flag = VAL_quarterly_contract_active
+	clr_country_flag = VAL_quarterly_contract_paid
+	clr_country_flag = VAL_ai_emergency_quartermaster_used
+	set_variable = { var = VAL_quarterly_contract_months_elapsed value = 0 }
+	activate_mission = VAL_quarterly_contract_deadline
+}
+
+VAL_pay_quarterly_contract_norm = {
+	add_equipment_to_stockpile = { type = infantry_equipment amount = -4000 producer = VAL }
+	set_country_flag = VAL_quarterly_contract_paid
+}
+
+VAL_complete_quarterly_contract_norm = {
+	clr_country_flag = VAL_quarterly_contract_active
+	clr_country_flag = VAL_quarterly_contract_paid
+	add_to_variable = { var = VAL_contract_reputation_level value = 1 }
+	clamp_variable = { var = VAL_contract_reputation_level min = 0 max = 3 }
+	VAL_refresh_contract_reputation = yes
+	country_event = { id = val_rework.1 days = 1 }
+}
+
+VAL_fail_quarterly_contract_norm = {
+	clr_country_flag = VAL_quarterly_contract_active
+	clr_country_flag = VAL_quarterly_contract_paid
+	add_to_variable = { var = VAL_contract_reputation_level value = -1 }
+	clamp_variable = { var = VAL_contract_reputation_level min = 0 max = 3 }
+	add_to_variable = { var = VAL_quarterly_contract_failures value = 1 }
+	VAL_refresh_contract_reputation = yes
+	country_event = { id = val_rework.1 days = 1 }
+}
+
+VAL_resolve_quarterly_contract_norm = {
+	if = {
+		limit = { has_country_flag = VAL_quarterly_contract_paid }
+		VAL_complete_quarterly_contract_norm = yes
+	}
+	else = { VAL_fail_quarterly_contract_norm = yes }
+}
+
+VAL_grant_westerholm_concession = {
+	if = {
+		limit = {
+			WRK = { exists = yes }
+			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
+			NOT = { has_country_flag = VAL_westerholm_concession_granted }
+		}
+		202 = { add_resource = { type = steel amount = 10 } }
+		WRK = { give_resource_rights = { receiver = VAL state = 202 } }
+		set_country_flag = VAL_westerholm_concession_granted
+		set_country_flag = VAL_westerholm_resource_rights_active
+		add_ideas = VAL_westerholm_concession_income
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_handle_vorkerland_war_outbreak = {
+	if = {
+		limit = { NOT = { has_country_flag = VAL_vorkerland_contracts_disrupted } }
+		set_country_flag = VAL_vorkerland_contracts_disrupted
+		remove_ideas = VAL_westerholm_concession_income
+		add_ideas = VAL_vorkerland_contract_disruptions
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_handle_westerholm_loss = {
+	if = {
+		limit = { has_country_flag = VAL_westerholm_resource_rights_active }
+		remove_resource_rights = 202
+		clr_country_flag = VAL_westerholm_resource_rights_active
+		set_country_flag = VAL_westerholm_metal_lost
+		remove_ideas = VAL_westerholm_concession_income
+		add_ideas = VAL_vorkerland_metal_shortage
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_secure_stelander_interim_supply = {
+	if = {
+		limit = { 45 = { controller = { exists = yes } } }
+		45 = { controller = { give_resource_rights = { receiver = VAL state = 45 } } }
+		set_country_flag = VAL_local_resource_rights_45
+		set_country_flag = VAL_STP_resource_rights_active
+		set_country_flag = VAL_STP_resource_rights_45_active
+		remove_ideas = VAL_vorkerland_metal_shortage
+		add_ideas = VAL_stelander_interim_supply
+		clr_country_flag = VAL_westerholm_metal_lost
+	}
+}
+
+VAL_initialize_rework = {
+	ADISCORD_economy_initialize_country = yes
+	if = {
+		limit = {
+			OR = {
+				has_completed_focus = VAL_Operational_Directorate
+				has_country_flag = VAL_local_operations_unlocked
+			}
+			NOT = { has_country_flag = VAL_operations_map_unlocked }
+		}
+		set_country_flag = VAL_operations_map_unlocked
+		set_country_flag = VAL_local_operations_unlocked
+	}
+	if = {
+		limit = {
+			has_completed_focus = VAL_Ministry_Of_Contract_Memory
+			NOT = { has_country_flag = VAL_propaganda_slot_granted }
+		}
+		ADISCORD_campaign_slot_grant = yes
+		set_country_flag = VAL_propaganda_slot_granted
+	}
+	if = {
+		limit = {
+			has_completed_focus = VAL_Two_Concurrent_Narratives
+			NOT = { has_country_flag = VAL_second_propaganda_slot_granted }
+		}
+		ADISCORD_campaign_slot_grant = yes
+		set_country_flag = VAL_second_propaganda_slot_granted
+	}
+	if = {
+		limit = {
+			has_completed_focus = VAL_Quarterly_Contract_Norm
+			NOT = { has_variable = VAL_contract_reputation_level }
+		}
+		set_variable = { var = VAL_contract_reputation_level value = 3 }
+		set_variable = { var = VAL_quarterly_contract_failures value = 0 }
+		VAL_refresh_contract_reputation = yes
+	}
+	if = {
+		limit = {
+			has_completed_focus = VAL_Quarterly_Contract_Norm
+			OR = {
+				NOT = { has_country_flag = VAL_quarterly_contract_active }
+				NOT = { has_active_mission = VAL_quarterly_contract_deadline }
+			}
+		}
+		VAL_start_quarterly_contract_norm = yes
+	}
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_country_flag = VAL_vorkerland_contracts_disrupted }
+		}
+		VAL_handle_vorkerland_war_outbreak = yes
+	}
+	if = {
+		limit = {
+			has_country_flag = VAL_westerholm_resource_rights_active
+			202 = { NOT = { controller = { tag = WRK } } }
+		}
+		VAL_handle_westerholm_loss = yes
+	}
+}

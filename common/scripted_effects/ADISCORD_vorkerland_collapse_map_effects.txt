@@ -30,7 +30,6 @@ ADISCORD_vorkerland_play_collapse_superevent_audio = {
 	every_country = {
 		limit = {
 			is_ai = no
-			ADISCORD_major_news_enabled = yes
 		}
 		scoped_sound_effect = superevent_vorkerland_civilwar_sound_e
 		scoped_play_song = "one_minute_of_silence"
@@ -41,7 +40,6 @@ ADISCORD_vorkerland_play_local_superevent_audio = {
 	every_country = {
 		limit = {
 			is_ai = no
-			ADISCORD_local_news_enabled = yes
 		}
 		scoped_sound_effect = superevent_vorkerland_civilwar_sound_e
 		scoped_play_song = "one_minute_of_silence"

@@ -1,0 +1,265 @@
+ADISCORD_special_forces_mountain_companies = {
+	track = ADISCORD_special_forces_adaptation
+	name = ADISCORD_special_forces_mountain_companies
+	description = ADISCORD_special_forces_mountain_companies_desc
+	icon = GFX_special_forces_mountaineers_medium
+	xp_cost = 60
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_fieldcraft_manuals
+	}
+	xor = {
+		ADISCORD_special_forces_contaminated_zone_teams
+		ADISCORD_special_forces_urban_assault_groups
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 1.5 has_war = yes }
+	}
+	category_special_forces = { defense = 0.04 supply_consumption = -0.01 }
+	rewards = {
+		ADISCORD_special_forces_mountain_companies_cold_acclimation = {
+			mastery = 50
+			acclimatization_cold_climate_gain_factor = 0.08
+		}
+		ADISCORD_special_forces_mountain_companies_light_columns = {
+			mastery = 50
+			category_special_forces = { supply_consumption = -0.02 }
+		}
+		ADISCORD_special_forces_mountain_companies_ridge_positions = {
+			mastery = 50
+			category_special_forces = { defense = 0.04 }
+		}
+		ADISCORD_special_forces_mountain_companies_vertical_routes = {
+			mastery = 50
+			category_special_forces = { maximum_speed = 0.03 }
+		}
+		ADISCORD_special_forces_mountain_companies_highland_mastery = {
+			mastery = 50
+			category_special_forces = { defense = 0.06 soft_attack = 0.04 max_organisation = 3 }
+		}
+	}
+}
+
+ADISCORD_special_forces_contaminated_zone_teams = {
+	track = ADISCORD_special_forces_adaptation
+	name = ADISCORD_special_forces_contaminated_zone_teams
+	description = ADISCORD_special_forces_contaminated_zone_teams_desc
+	icon = GFX_doctrine_special_forces_1_medium
+	xp_cost = 60
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_radiation_patrols
+	}
+	xor = {
+		ADISCORD_special_forces_mountain_companies
+		ADISCORD_special_forces_urban_assault_groups
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 1.8 has_tech = ADISCORD_tech_adaptive_radiation_shielding }
+	}
+	attrition = -0.015
+	category_special_forces = { default_morale = 0.02 }
+	rewards = {
+		ADISCORD_special_forces_contaminated_zone_teams_sealed_patrols = {
+			mastery = 50
+			attrition = -0.015
+		}
+		ADISCORD_special_forces_contaminated_zone_teams_dose_rotation = {
+			mastery = 50
+			category_special_forces = { default_morale = 0.03 }
+		}
+		ADISCORD_special_forces_contaminated_zone_teams_ruin_navigation = {
+			mastery = 50
+			category_special_forces = { maximum_speed = 0.02 }
+		}
+		ADISCORD_special_forces_contaminated_zone_teams_protected_supply = {
+			mastery = 50
+			category_special_forces = { supply_consumption = -0.02 }
+		}
+		ADISCORD_special_forces_contaminated_zone_teams_dead_zone_raiders = {
+			mastery = 50
+			attrition = -0.025
+			category_special_forces = { breakthrough = 0.05 defense = 0.05 }
+		}
+	}
+}
+
+ADISCORD_special_forces_urban_assault_groups = {
+	track = ADISCORD_special_forces_adaptation
+	name = ADISCORD_special_forces_urban_assault_groups
+	description = ADISCORD_special_forces_urban_assault_groups_desc
+	icon = GFX_marines_commandoes_medium
+	xp_cost = 60
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_urban_breaching
+	}
+	xor = {
+		ADISCORD_special_forces_mountain_companies
+		ADISCORD_special_forces_contaminated_zone_teams
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 1.7 has_war = yes }
+	}
+	category_special_forces = { breakthrough = 0.04 soft_attack = 0.03 }
+	rewards = {
+		ADISCORD_special_forces_urban_assault_groups_building_recon = {
+			mastery = 50
+			category_recon = { recon = 0.5 }
+		}
+		ADISCORD_special_forces_urban_assault_groups_breach_cells = {
+			mastery = 50
+			category_special_forces = { breakthrough = 0.04 }
+		}
+		ADISCORD_special_forces_urban_assault_groups_vertical_clearance = {
+			mastery = 50
+			category_special_forces = { soft_attack = 0.04 }
+		}
+		ADISCORD_special_forces_urban_assault_groups_isolated_strongpoints = {
+			mastery = 50
+			planning_speed = 0.025
+		}
+		ADISCORD_special_forces_urban_assault_groups_urban_assault = {
+			mastery = 50
+			category_special_forces = { breakthrough = 0.06 soft_attack = 0.06 max_organisation = 2 }
+		}
+	}
+}
+
+ADISCORD_special_forces_deep_recon_cells = {
+	track = ADISCORD_special_forces_insertion
+	name = ADISCORD_special_forces_deep_recon_cells
+	description = ADISCORD_special_forces_deep_recon_cells_desc
+	icon = GFX_special_forces_rangers_medium
+	xp_cost = 60
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_deep_recon_cells
+	}
+	xor = {
+		ADISCORD_special_forces_vertical_insertion
+		ADISCORD_special_forces_autonomous_raiders
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 2 has_tech = ADISCORD_tech_distributed_recon_sensor_caches }
+	}
+	category_recon = { recon = 0.75 }
+	planning_speed = 0.015
+	rewards = {
+		ADISCORD_special_forces_deep_recon_cells_deep_observation = {
+			mastery = 50
+			category_recon = { recon = 0.75 }
+		}
+		ADISCORD_special_forces_deep_recon_cells_hidden_relays = {
+			mastery = 50
+			coordination_bonus = 0.01
+		}
+		ADISCORD_special_forces_deep_recon_cells_target_handover = {
+			mastery = 50
+			category_support_battalions = { soft_attack = 0.025 }
+		}
+		ADISCORD_special_forces_deep_recon_cells_stay_behind = {
+			mastery = 50
+			category_special_forces = { supply_consumption = -0.02 }
+		}
+		ADISCORD_special_forces_deep_recon_cells_theater_recon = {
+			mastery = 50
+			category_recon = { recon = 1 }
+			planning_speed = 0.04
+			coordination_bonus = 0.015
+		}
+	}
+}
+
+ADISCORD_special_forces_vertical_insertion = {
+	track = ADISCORD_special_forces_insertion
+	name = ADISCORD_special_forces_vertical_insertion
+	description = ADISCORD_special_forces_vertical_insertion_desc
+	icon = GFX_special_forces_paratroopers_medium
+	xp_cost = 60
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_vertical_assault_training
+	}
+	xor = {
+		ADISCORD_special_forces_deep_recon_cells
+		ADISCORD_special_forces_autonomous_raiders
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 2 has_tech = ADISCORD_tech_vertical_envelopment_control }
+	}
+	category_special_forces = { breakthrough = 0.04 }
+	planning_speed = 0.02
+	rewards = {
+		ADISCORD_special_forces_vertical_insertion_landing_beacons = {
+			mastery = 50
+			planning_speed = 0.02
+		}
+		ADISCORD_special_forces_vertical_insertion_airmobile_supply = {
+			mastery = 50
+			category_special_forces = { supply_consumption = -0.02 }
+		}
+		ADISCORD_special_forces_vertical_insertion_rapid_concentration = {
+			mastery = 50
+			land_reinforce_rate = 0.005
+		}
+		ADISCORD_special_forces_vertical_insertion_assault_landing = {
+			mastery = 50
+			category_special_forces = { breakthrough = 0.05 }
+		}
+		ADISCORD_special_forces_vertical_insertion_vertical_envelopment = {
+			mastery = 50
+			category_special_forces = { breakthrough = 0.06 maximum_speed = 0.03 }
+			planning_speed = 0.03
+		}
+	}
+}
+
+ADISCORD_special_forces_autonomous_raiders = {
+	track = ADISCORD_special_forces_insertion
+	name = ADISCORD_special_forces_autonomous_raiders
+	description = ADISCORD_special_forces_autonomous_raiders_desc
+	icon = GFX_doctrine_special_forces_2_medium
+	xp_cost = 60
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_autonomous_scout_microdrones
+	}
+	xor = {
+		ADISCORD_special_forces_deep_recon_cells
+		ADISCORD_special_forces_vertical_insertion
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 2 has_tech = ADISCORD_tech_augmented_special_forces }
+	}
+	category_special_forces = { supply_consumption = -0.015 soft_attack = 0.03 }
+	rewards = {
+		ADISCORD_special_forces_autonomous_raiders_machine_scouts = {
+			mastery = 50
+			category_recon = { recon = 0.75 }
+		}
+		ADISCORD_special_forces_autonomous_raiders_distributed_cells = {
+			mastery = 50
+			category_special_forces = { defense = 0.03 }
+		}
+		ADISCORD_special_forces_autonomous_raiders_remote_fire = {
+			mastery = 50
+			category_special_forces = { soft_attack = 0.04 }
+		}
+		ADISCORD_special_forces_autonomous_raiders_self_sustaining_teams = {
+			mastery = 50
+			category_special_forces = { supply_consumption = -0.025 }
+		}
+		ADISCORD_special_forces_autonomous_raiders_autonomous_raiders = {
+			mastery = 50
+			category_special_forces = { soft_attack = 0.05 breakthrough = 0.05 max_organisation = 3 }
+			coordination_bonus = 0.015
+		}
+	}
+}

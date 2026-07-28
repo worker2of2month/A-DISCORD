@@ -30,6 +30,8 @@ try:
         STP_CIVIL_WAR_ARMY_RATIOS,
         STP_CIVIL_WAR_FOCUS_IDS,
         STP_CIVIL_WAR_STATES,
+        STP_CALENDAR_LORE_EVENTS,
+        STP_CRISIS_FOCUS_LAYOUT,
         STP_CRISIS_FOCUS_REWARDS,
         STP_CRISIS_FOCUS_STAGES,
         STP_OPERATION_SPECS,
@@ -38,7 +40,7 @@ try:
         STP_RESISTANCE_PROJECTS,
         STP_SHABRAT_FOCUSES,
         STP_SPINE_FOCUS_STAGES,
-        STP_TRANSITION_FOCUS_MAP,
+        STP_STORY_ONLY_FOCUS_IDS,
         VAL_BASE_FOCUS_IDS,
         VAL_AI_FOCUS_COURSE_BIASES,
         VAL_CONTRACT_BANDS,
@@ -75,6 +77,8 @@ except ModuleNotFoundError:
         STP_CIVIL_WAR_ARMY_RATIOS,
         STP_CIVIL_WAR_FOCUS_IDS,
         STP_CIVIL_WAR_STATES,
+        STP_CALENDAR_LORE_EVENTS,
+        STP_CRISIS_FOCUS_LAYOUT,
         STP_CRISIS_FOCUS_REWARDS,
         STP_CRISIS_FOCUS_STAGES,
         STP_OPERATION_SPECS,
@@ -83,7 +87,7 @@ except ModuleNotFoundError:
         STP_RESISTANCE_PROJECTS,
         STP_SHABRAT_FOCUSES,
         STP_SPINE_FOCUS_STAGES,
-        STP_TRANSITION_FOCUS_MAP,
+        STP_STORY_ONLY_FOCUS_IDS,
         VAL_BASE_FOCUS_IDS,
         VAL_AI_FOCUS_COURSE_BIASES,
         VAL_CONTRACT_BANDS,
@@ -215,8 +219,8 @@ REQUIRED_FILES = {
 		("events/ADISCORD_NOD_crisis_events.txt", "NOD adaptive response events"),
     ),
     "gui": (
-        ("interface/ADISCORD_STP_VAL_crisis.gui", "crisis GUI"),
-        ("common/scripted_guis/ADISCORD_STP_VAL_crisis_scripted_gui.txt", "crisis scripted GUI"),
+        # The obsolete VAL status panel was deliberately retired by the Kefreyt
+        # rework. The replacement operations map has its own targeted gate.
     ),
     "localisation": (
         (
@@ -425,6 +429,8 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
     decisions = read(root / "common/decisions/ADISCORD_STP_crisis_decisions.txt")
     events = read(root / "events/ADISCORD_STP_crisis_events.txt")
     focuses = read(root / "common/national_focus/ADISCORD_national_focus_STP.txt")
+    focus_sprites = read(root / "interface/ADISCORD_national_focus.gfx")
+    focus_shines = read(root / "interface/goals_shine.gfx")
     on_actions = read(
         root / "common/on_actions/01_ADISCORD_STP_VAL_crisis_on_actions.txt"
     )
@@ -486,23 +492,23 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
             (
                 "stp_crisis.1",
                 2,
-                STP_SPINE_FOCUS_STAGES[2],
+                STP_CALENDAR_LORE_EVENTS[2],
                 "STP_health_stage_2_to_3",
             ),
             (
                 "stp_crisis.2",
                 3,
-                STP_SPINE_FOCUS_STAGES[3],
+                STP_CALENDAR_LORE_EVENTS[3],
                 "STP_health_stage_3_to_4",
             ),
             (
                 "stp_crisis.3",
                 4,
-                STP_SPINE_FOCUS_STAGES[4],
+                STP_CALENDAR_LORE_EVENTS[4],
                 "STP_health_stage_4_to_death",
             ),
         )
-        for event_id, stage, spine, next_mission in chain:
+        for event_id, stage, lore_events, next_mission in chain:
             block = _block_with_direct_assignment(
                 events, "country_event", "id", event_id
             )
@@ -514,7 +520,7 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
                 f"ADISCORD_STP_VAL_effect_value value = {stage}",
                 "STP_set_health_stage = yes",
                 f"activate_mission = {next_mission}",
-                *(f"complete_national_focus = {focus}" for focus in spine),
+                *(f"country_event = {{ id = {lore_event} }}" for lore_event in lore_events),
             ):
                 if token not in block:
                     issues.append(f"{event_id} is missing calendar action {token}")
@@ -541,8 +547,8 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
                 "set_country_flag = STP_ivanov_dead",
                 "ADISCORD_STP_VAL_effect_value value = 5",
                 "STP_set_health_stage = yes",
-                "complete_national_focus = STP_The_Father_Of_Peace_Is_Gone",
-                "retire_character = STP_Petr_Ivanov",
+                "country_event = { id = stp_lore.12 }",
+                "kill_country_leader = yes",
                 "ADISCORD_STP_VAL_effect_value value = 2",
                 "STP_set_crisis_phase = yes",
             ):
@@ -591,13 +597,30 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
                 issues.append(f"{event_id} must assign every canonical {variable} value")
 
     if focuses is not None:
+        playable_focus_ids = {
+            values[0]
+            for block in _iter_named_blocks(focuses, "focus")
+            if (values := _direct_scalar_values(block, "id"))
+        }
+        if playable_focus_ids != set(STP_CRISIS_FOCUS_STAGES):
+            issues.append("STP pre-death tree must contain exactly the 18 playable crisis focuses")
+        if STP_SPINE_FOCUS_STAGES:
+            issues.append("calendar spine focus manifest must remain empty")
+        for removed_focus in STP_STORY_ONLY_FOCUS_IDS:
+            if removed_focus in playable_focus_ids:
+                issues.append(f"story-only focus {removed_focus} must not exist in the tree")
+        if "is_completed_by_event = yes" in _mask_non_code(focuses):
+            issues.append("STP pre-death tree must not contain event-completed focuses")
+        used_icons: set[str] = set()
         for focus, stage in STP_CRISIS_FOCUS_STAGES.items():
             block = _block_with_direct_assignment(focuses, "focus", "id", focus)
             if block is None:
                 issues.append(f"missing playable STP crisis focus {focus}")
                 continue
-            if _direct_scalar_values(block, "cost") != ["5"]:
-                issues.append(f"playable focus {focus} must preserve cost 5")
+            used_icons.update(_direct_scalar_values(block, "icon"))
+            costs = _direct_scalar_values(block, "cost")
+            if len(costs) != 1 or not 0 < float(costs[0]) <= 5:
+                issues.append(f"playable focus {focus} must last at most 35 days")
             if _direct_scalar_values(block, "cancelable") != ["no"]:
                 issues.append(f"playable focus {focus} must be noncancelable")
             if _direct_scalar_values(block, "cancel_if_invalid") != ["yes"]:
@@ -635,6 +658,25 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
             )
             if expected_reward not in reward:
                 issues.append(f"playable focus {focus} is missing reward {interface}")
+            if "country_event" in _mask_non_code(reward):
+                issues.append(f"playable focus {focus} must not use a story event as its reward")
+            broad_markers = re.findall(
+                r"\b(?:set_country_flag|add_political_power|add_stability|add_war_support|"
+                r"army_experience|add_command_power|STP_improve_transition_[A-Za-z0-9_]+|"
+                r"STP_change_node_[A-Za-z0-9_]+|STP_commit_to_[A-Za-z0-9_]+)\b",
+                _mask_non_code(reward),
+            )
+            if len(broad_markers) < 2:
+                issues.append(f"playable focus {focus} must provide a broad mechanical reward")
+            relative, x, y = STP_CRISIS_FOCUS_LAYOUT[focus]
+            if _direct_scalar_values(block, "x") != [str(x)] or _direct_scalar_values(
+                block, "y"
+            ) != [str(y)]:
+                issues.append(f"playable focus {focus} breaks the compact four-row layout")
+            actual_relative = _direct_scalar_values(block, "relative_position_id")
+            expected_relative = [] if relative is None else [relative]
+            if actual_relative != expected_relative:
+                issues.append(f"playable focus {focus} has the wrong layout anchor")
             side_value = (
                 1 if focus in STP_SHABRAT_FOCUSES else 2 if focus in STP_PARTY_FOCUSES else None
             )
@@ -644,17 +686,59 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
                 _mask_non_code(available),
             ):
                 issues.append(f"playable focus {focus} has the wrong side gate")
-        for spine in (focus for focuses_by_stage in STP_SPINE_FOCUS_STAGES.values() for focus in focuses_by_stage):
-            block = _block_with_direct_assignment(focuses, "focus", "id", spine)
-            available = extract_named_block(block or "", "available") or ""
-            if "is_completed_by_event = yes" not in available:
-                issues.append(f"calendar spine focus {spine} must be event-only")
-
+        show = _block_with_direct_assignment(
+            focuses, "focus", "id", "STP_Show_Him_The_Truth"
+        ) or ""
+        show_prerequisites = list(_iter_named_blocks(show, "prerequisite"))
+        expected_opening = {
+            "STP_The_Old_Man_On_The_Balcony",
+            "STP_Count_The_Loyalists",
+            "STP_The_City_Still_Dances",
+            "STP_Foreign_Guests_At_The_Banquet",
+        }
+        actual_opening = set(
+            re.findall(
+                r"\bfocus\s*=\s*(STP_[A-Za-z0-9_]+)",
+                _mask_non_code(show_prerequisites[0]) if show_prerequisites else "",
+            )
+        )
+        if len(show_prerequisites) != 1 or actual_opening != expected_opening:
+            issues.append("the four opening programmes must converge on the visible route focus")
+        for party_focus in STP_PARTY_FOCUSES:
+            block = _block_with_direct_assignment(focuses, "focus", "id", party_focus) or ""
+            if any(_iter_named_blocks(block, "prerequisite")):
+                issues.append(f"AI-only focus {party_focus} must not draw ghost prerequisite lines")
+        if "GFX_focus_STP_Open_Wounds_Of_The_System" in used_icons:
+            issues.append("the placeholder Open Wounds artwork must not be used by a focus")
+        if focus_sprites is not None and focus_shines is not None:
+            for icon in used_icons:
+                base_sprite = next(
+                    (
+                        block
+                        for block in _iter_named_blocks(focus_sprites, "spriteType")
+                        if re.search(rf'\bname\s*=\s*"{re.escape(icon)}"', block)
+                    ),
+                    "",
+                )
+                shine_sprite = next(
+                    (
+                        block
+                        for block in _iter_named_blocks(focus_shines, "SpriteType")
+                        if re.search(
+                            rf'\bname\s*=\s*"{re.escape(icon)}_shine"', block
+                        )
+                    ),
+                    "",
+                )
+                if not base_sprite:
+                    issues.append(f"STP focus icon {icon} is missing its base sprite")
+                if not shine_sprite:
+                    issues.append(f"STP focus icon {icon} is missing its shine sprite")
     if on_actions is not None:
         startup = extract_named_block(on_actions, "on_startup") or ""
         for token in (
             "STP_health_calendar_started",
-            "complete_national_focus = STP_Nectar_of_the_Gods",
+            "country_event = { id = stp_lore.1 }",
             "activate_mission = STP_health_stage_1_to_2",
         ):
             if token not in startup:
@@ -662,7 +746,7 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
         if not re.search(
             r"NOT\s*=\s*\{\s*has_country_flag\s*=\s*STP_health_calendar_started\s*\}"
             r".*set_country_flag\s*=\s*STP_health_calendar_started"
-            r".*complete_national_focus\s*=\s*STP_Nectar_of_the_Gods"
+            r".*country_event\s*=\s*\{\s*id\s*=\s*stp_lore\.1\s*\}"
             r".*activate_mission\s*=\s*STP_health_stage_1_to_2",
             _mask_non_code(startup),
             re.DOTALL,
@@ -851,7 +935,6 @@ def _validate_civil_war_contract(root: Path, issues: list[str]) -> None:
                 issues.append(f"{source} must transfer once before every copied source is zeroed")
 
         finalizer = extract_named_block(war, "STP_finalize_internal_outcome") or ""
-        leader = extract_named_block(war, "STP_assign_postwar_leader") or ""
         for token in (
             "STP_internal_outcome_finalizing",
             "STP_internal_outcome_finalized",
@@ -872,13 +955,11 @@ def _validate_civil_war_contract(root: Path, issues: list[str]) -> None:
             and finalizer.index("STP_assign_postwar_leader = yes")
             > finalizer.index("tree = ADISCORD_STP_postwar_focus")
         ):
-            issues.append("bridge focus must complete before the postwar tree is loaded")
-        transition = extract_named_block(war, "STP_complete_transition_outcome_focus") or ""
-        for outcome, focus in STP_TRANSITION_FOCUS_MAP.items():
-            if outcome not in transition or transition.count(focus) != 1:
-                issues.append(f"transition outcome {outcome} must complete {focus} exactly once")
-        if "STP_complete_transition_outcome_focus = yes" not in leader:
-            issues.append("postwar leader assignment must restore the transition focus for old saves")
+            issues.append("postwar leader assignment must run before the postwar tree is loaded")
+        if extract_named_block(war, "STP_complete_transition_outcome_focus") is not None:
+            issues.append("outcomes must route directly without a transition-focus bridge")
+        if "STP_complete_transition_outcome_focus = yes" in war:
+            issues.append("postwar logic must not call a transition-focus bridge")
         for days in (120, 180, 300, 450):
             countdown = extract_named_block(war, f"VAL_STP_start_war_countdown_{days}") or ""
             for token in (
@@ -899,10 +980,7 @@ def _validate_civil_war_contract(root: Path, issues: list[str]) -> None:
             "STP_outcome_shabrat_bloodless",
             "STP_outcome_shabrat_main_war",
             "STP_outcome_sotnikov_main_war",
-            "STP_outcome_hedersett_fail_state",
             "STP_outcome_hedersett_consolidation",
-            "STP_outcome_hedersett_vs_shabrat",
-            "STP_outcome_hedersett_vs_sotnikov",
         }
         actual_outcomes = set(
             re.findall(
@@ -911,9 +989,9 @@ def _validate_civil_war_contract(root: Path, issues: list[str]) -> None:
             )
         )
         if actual_outcomes != expected_outcomes:
-            issues.append("Ivanov death router must expose exactly seven canonical outcomes")
-        if router.count("STP_finalize_internal_outcome = yes") != 3:
-            issues.append("all three no-war outcomes must use the single finalizer")
+            issues.append("Ivanov death router must expose exactly four canonical outcomes")
+        if router.count("STP_finalize_internal_outcome = yes") != 1:
+            issues.append("the rare bloodless outcome must use the single finalizer")
         fallback = _block_with_direct_assignment(
             events, "country_event", "id", "stp_crisis.51"
         ) or ""
@@ -1024,7 +1102,15 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
     core = read(root / "common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt")
     triggers = read(root / "common/scripted_triggers/ADISCORD_STP_VAL_crisis_triggers.txt")
     dynamic = read(root / "common/dynamic_modifiers/ADISCORD_STP_VAL_crisis_dynamic_modifiers.txt")
-    ideas = read(root / "common/ideas/ADISCORD_STP_VAL_crisis_ideas.txt")
+    ideas = "\n".join(
+        filter(
+            None,
+            (
+                read(root / "common/ideas/ADISCORD_STP_VAL_crisis_ideas.txt"),
+                read(root / "common/ideas/ADISCORD_VAL_rework_ideas.txt"),
+            ),
+        )
+    )
     decisions = read(root / "common/decisions/ADISCORD_VAL_contract_decisions.txt")
     contract_effects = read(
         root / "common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt"
@@ -1095,18 +1181,16 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
                         issues.append(f"{focus_id} must exclude {rival}")
 
         final_join = blocks.get("VAL_Contracts_Outlive_Kings", "")
-        for pair in (
-            ("VAL_One_Ledger_One_Banner", "VAL_Export_Rifles_Not_Promises"),
-            ("VAL_One_Ledger_One_Banner", "VAL_Morns_Supply_Trains"),
-            ("VAL_One_Ledger_One_Banner", "VAL_Dead_Villages_Still_Count"),
-            ("VAL_One_Ledger_One_Banner", "VAL_Different_Views_On_Freedom"),
+        for terminal in (
+            "VAL_State_Contract",
+            "VAL_Industrial_Mobilization_Plan",
+            "VAL_Army_Of_The_Ledger",
         ):
             if not re.search(
-                rf"prerequisite\s*=\s*\{{[^}}]*focus\s*=\s*{pair[0]}[^}}]*focus\s*=\s*{pair[1]}[^}}]*\}}",
+                rf"prerequisite\s*=\s*\{{\s*focus\s*=\s*{terminal}\s*\}}",
                 _mask_non_code(final_join),
-                re.DOTALL,
             ):
-                issues.append(f"VAL final join is missing alternative {' + '.join(pair)}")
+                issues.append(f"VAL final join must require completed branch {terminal}")
 
         for focus_id in VAL_CRISIS_FOCUS_IDS[:4]:
             block = blocks.get(focus_id, "")
@@ -1250,59 +1334,16 @@ def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:
     if decisions is None:
         issues.append("missing VAL contract decisions: common/decisions/ADISCORD_VAL_contract_decisions.txt")
     else:
-        for decision_id, (cost, days, family) in VAL_STP_OPERATION_SPECS.items():
-            block = extract_named_block(decisions, decision_id) or ""
-            if not block:
-                issues.append(f"missing VAL STP operation {decision_id}")
-                continue
-            if _direct_scalar_values(block, "cost") != [str(cost)]:
-                issues.append(f"{decision_id} must cost {cost} PP")
-            if _direct_scalar_values(block, "days_remove") != [str(days)]:
-                issues.append(f"{decision_id} must last {days} days")
-            available = extract_named_block(block, "available") or ""
-            if "VAL_has_active_stp_civil_war = yes" not in available:
-                issues.append(
-                    f"{decision_id} must remain locked until the saved STP civil war is active"
-                )
-            for token in (
-                "VAL_foreign_operation_active",
-                "VAL_STP_target_cooldown",
-                f"VAL_STP_block_{family}",
-            ):
-                if token not in available:
-                    issues.append(f"{decision_id} availability is missing {token}")
-
+        # Player-facing operations moved to ADISCORD_VAL_rework_decisions.txt.
+        # This legacy file may contain service missions only.
+        for obsolete_id in (*VAL_STP_OPERATION_SPECS, "VAL_launch_northern_campaign"):
+            if extract_named_block(decisions, obsolete_id):
+                issues.append(f"obsolete player-facing VAL decision remains: {obsolete_id}")
         for target in VAL_NORTHERN_OPERATION_TARGETS:
-            for suffix, (cost, days, _) in VAL_NORTHERN_OPERATION_SPECS.items():
-                decision_id = f"VAL_{target}_{suffix}"
-                block = extract_named_block(decisions, decision_id) or ""
-                if not block:
-                    issues.append(f"missing northern operation {decision_id}")
-                    continue
-                if _direct_scalar_values(block, "cost") != [str(cost)]:
-                    issues.append(f"{decision_id} must cost {cost} PP")
-                if _direct_scalar_values(block, "days_remove") != [str(days)]:
-                    issues.append(f"{decision_id} must last {days} days")
-                available = extract_named_block(block, "available") or ""
-                for token in ("VAL_foreign_operation_active", f"VAL_{target}_target_cooldown"):
-                    if token not in available:
-                        issues.append(f"{decision_id} availability is missing {token}")
-                if suffix == "arms_brokerage" and "amount = -400" not in block:
-                    issues.append(f"{decision_id} must pay 400 infantry equipment")
-                if suffix == "infrastructure_concession" and "civilian_factory_use = 2" not in block:
-                    issues.append(f"{decision_id} must reserve two civilian factories")
-                if suffix == "hire_local_captain":
-                    for token in ("add_command_power = -15", "amount = -80"):
-                        if token not in block:
-                            issues.append(f"{decision_id} is missing paid captain cost {token}")
-                if suffix == "prepare_separate_terms":
-                    for token in (
-                        "civilian_factory_use = 1",
-                        f"VAL_{target}_success_market",
-                        f"VAL_{target}_success_arms",
-                    ):
-                        if token not in block:
-                            issues.append(f"{decision_id} is missing separate-terms gate {token}")
+            for suffix in VAL_NORTHERN_OPERATION_SPECS:
+                obsolete_id = f"VAL_{target}_{suffix}"
+                if extract_named_block(decisions, obsolete_id):
+                    issues.append(f"obsolete player-facing VAL decision remains: {obsolete_id}")
 
         for mission_id in WAR_COUNTDOWN_MISSIONS:
             mission = extract_named_block(decisions, mission_id) or ""
@@ -1796,10 +1837,8 @@ def _validate_northern_campaign(root: Path, issues: list[str]) -> None:
     mission = extract_named_block(decisions, "VAL_northern_campaign_timeout_210") or ""
     if _direct_scalar_values(mission, "days_mission_timeout") != ["210"]:
         issues.append("northern campaign must use one 210-day mission")
-    start_decision = extract_named_block(decisions, "VAL_launch_northern_campaign") or ""
-    for token in ("VAL_can_start_northern_campaign = yes", "VAL_start_guarded_northern_campaign = yes"):
-        if token not in start_decision:
-            issues.append(f"northern start decision is missing {token}")
+    if extract_named_block(decisions, "VAL_launch_northern_campaign"):
+        issues.append("obsolete northern start decision remains player-facing")
 
     start = extract_named_block(effects, "VAL_start_guarded_northern_campaign") or ""
     attempted_index = start.find("set_country_flag = VAL_northern_campaign_attempted")
@@ -1913,7 +1952,7 @@ def _validate_ai_contract(root: Path, issues: list[str]) -> None:
         root / "common/decisions/ADISCORD_STP_crisis_decisions.txt"
     ) or ""
     val_decisions = read(
-        root / "common/decisions/ADISCORD_VAL_contract_decisions.txt"
+        root / "common/decisions/ADISCORD_VAL_rework_decisions.txt"
     ) or ""
     nod_decisions = read(
         root / "common/decisions/ADISCORD_NOD_crisis_decisions.txt"
@@ -2025,19 +2064,18 @@ def _validate_ai_contract(root: Path, issues: list[str]) -> None:
             issues.append(f"{decision_id} can spend below its AI course reserve")
 
     for decision_id in (
-        "VAL_STP_map_mountain_passes",
-        "VAL_STP_build_contractor_depot",
-        "VAL_STP_offer_mountain_concession",
-        "VAL_STP_buy_border_officers",
-        "VAL_STP_test_nodrul_red_line",
-        "VAL_open_mountain_contract",
-        "VAL_negotiate_deferred_invoice",
-        "VAL_start_resource_corridor",
-        "VAL_launch_northern_campaign",
+        "VAL_ops_bribe_stelander_brokers",
+        "VAL_ops_arm_stelander_clients",
+        "VAL_ops_finance_cin_contacts",
+        "VAL_ops_sell_rifles_to_cin",
+        "VAL_ops_finance_osf_contacts",
+        "VAL_ops_sell_rifles_to_osf",
+        "VAL_ops_secure_stelander_steel",
+        "VAL_pay_quarterly_contract_norm",
     ):
         block = extract_named_block(val_decisions, decision_id) or ""
         ai = extract_named_block(block, "ai_will_do") or ""
-        if "factor = 0" not in ai or "VAL_ai_has_current_course_reserve = yes" not in ai:
+        if "factor = 0" not in ai:
             issues.append(f"{decision_id} can spend below its AI course reserve")
 
     for decision_id in (
@@ -2213,40 +2251,15 @@ def _validate_gui_contract(root: Path, issues: list[str]) -> None:
                 return block
         return ""
 
-    for category_id, panel_id, window_id, tag, visible_token in (
-        (
-            "VAL_contract_campaign",
-            "ADISCORD_VAL_contract_panel",
-            "ADISCORD_VAL_contract_panel_window",
-            "VAL",
-            "has_completed_focus = VAL_One_Ledger_One_Banner",
-        ),
-    ):
-        category = extract_named_block(categories, category_id) or ""
-        for token in (
-            f"tag = {tag}",
-            visible_token,
-            "visible_when_empty = yes",
-            f"scripted_gui = {panel_id}",
-        ):
-            if token not in category:
-                issues.append(f"decision category {category_id} is missing GUI contract {token}")
-        panel = extract_named_block(scripted, panel_id) or ""
-        for token in (
-            "context_type = decision_category",
-            f'window_name = "{window_id}"',
-            f"tag = {tag}",
-        ):
-            if token not in panel:
-                issues.append(f"scripted GUI {panel_id} is missing {token}")
-        window = block_with_quoted_name(gui, "containerWindowType", window_id)
-        if not re.search(r"size\s*=\s*\{\s*width\s*=\s*460\s+height\s*=\s*470\s*\}", window):
-            issues.append(f"GUI window {window_id} must be exactly 460 by 470")
-        for text_box in _iter_named_blocks(window, "instantTextBoxType"):
-            position = re.search(r"position\s*=\s*\{\s*x\s*=\s*(\d+)", text_box)
-            width = re.search(r"maxWidth\s*=\s*(\d+)", text_box)
-            if position and width and int(position.group(1)) + int(width.group(1)) > 460:
-                issues.append(f"GUI window {window_id} contains a clipped text box")
+    legacy_category = extract_named_block(categories, "VAL_contract_campaign") or ""
+    for token in ("tag = VAL", "visible = { always = no }"):
+        if token not in " ".join(legacy_category.split()):
+            issues.append(f"retired VAL category is missing compatibility guard {token}")
+    for forbidden in ("visible_when_empty", "scripted_gui"):
+        if forbidden in legacy_category:
+            issues.append(f"retired VAL category still exposes obsolete GUI token {forbidden}")
+    if scripted or gui:
+        issues.append("retired VAL crisis panel files still exist")
 
     combined = "\n".join((scripted, gui))
     for forbidden in (

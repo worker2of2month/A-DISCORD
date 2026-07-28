@@ -89,7 +89,7 @@ EXPANSIONS: dict[str, dict[int, tuple[str, str, str, str]]] = {
         2188: ("electromagnetic_siege_mortars", "Электромагнитные осадные мортиры", "Electromagnetic Siege Mortars", "tech_maintenance_company"),
         2191: ("autonomous_obstacle_reduction", "Автономное преодоление заграждений", "Autonomous Obstacle Reduction", "super_heavy_tank"),
         2194: ("self_repairing_track_assemblies", "Самовосстанавливающиеся гусеничные узлы", "Self-repairing Track Assemblies", "main_battle_tank"),
-        2197: ("networked_siege_coordination_cores", "Сетевые ядра координации осадных платформ", "Networked Siege-coordination Cores", "generic_land_cruiser_chassis"),
+        2197: ("networked_siege_coordination_cores", "Сетевые ядра координации осадных танков", "Networked Siege-tank Coordination Cores", "generic_land_cruiser_chassis"),
     },
     "fighter": {
         2150: ("composite_wing_spars", "Композитные лонжероны крыла", "Composite Wing Spars", "early_fighter"),

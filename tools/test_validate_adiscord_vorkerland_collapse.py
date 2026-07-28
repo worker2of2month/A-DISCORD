@@ -123,7 +123,7 @@ class CountryRosterTests(unittest.TestCase):
 
             country = (root / 'common' / 'countries' / f'{tag}.txt').read_text(encoding='utf-8-sig')
             self.assertIn('graphical_culture = western_european_gfx', country)
-            self.assertIn('graphical_culture_2d = WRK', country)
+            self.assertIn('graphical_culture_2d = western_european_2d', country)
 
             histories = list((root / 'history' / 'countries').glob(f'{tag} - *.txt'))
             self.assertEqual(len(histories), 1, f'{tag} must have one dormant history')
@@ -1104,12 +1104,12 @@ class OutcomeTests(unittest.TestCase):
         news = (self.ROOT / 'events' / 'ADISCORD_news.txt').read_text(encoding='utf-8-sig')
         audio = self.named_block(maps, 'ADISCORD_vorkerland_play_collapse_superevent_audio')
         self.assertRegex(audio, r'every_country\s*=\s*\{\s*limit\s*=\s*\{\s*is_ai\s*=\s*no')
-        self.assertIn('ADISCORD_major_news_enabled = yes', audio)
+        self.assertNotIn('ADISCORD_major_news_enabled', audio)
         self.assertIn('scoped_sound_effect = superevent_vorkerland_civilwar_sound_e', audio)
         self.assertIn('scoped_play_song = "one_minute_of_silence"', audio)
 
         local_audio = self.named_block(maps, 'ADISCORD_vorkerland_play_local_superevent_audio')
-        self.assertIn('ADISCORD_local_news_enabled = yes', local_audio)
+        self.assertNotIn('ADISCORD_local_news_enabled', local_audio)
         self.assertIn('scoped_sound_effect = superevent_vorkerland_civilwar_sound_e', local_audio)
 
         civilwar = self.named_block(news, 'news_event')

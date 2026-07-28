@@ -16,7 +16,10 @@ STP_elections_in_the_party = {
 
 	priority = 1
 	visible = {
-		has_country_flag = STP_main_campaign_side
+		OR = {
+			has_country_flag = STP_main_campaign_side
+			has_country_flag = STP_last_banquet_active
+		}
 		NOT = { has_country_flag = STP_internal_outcome_finalized }
 	}
 

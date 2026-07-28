@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import re
+import statistics
 import sys
 from pathlib import Path
 
@@ -14,6 +15,7 @@ try:
         BUILDING_RESOURCE_UPGRADES as GENERATED_BUILDING_RESOURCE_UPGRADES,
         ENABLE_BUILDINGS as GENERATED_ENABLE_BUILDINGS,
         ENABLE_EQUIPMENT as GENERATED_ENABLE_EQUIPMENT,
+        ENABLE_SUBUNITS as GENERATED_ENABLE_SUBUNITS,
         EXTRA_TECH_DEPENDENCIES as GENERATED_EXTRA_TECH_DEPENDENCIES,
         FOLDER_BACKGROUNDS as GENERATED_FOLDERS,
         FORBIDDEN_IDS as GENERATED_FORBIDDEN_IDS,
@@ -22,6 +24,18 @@ try:
         YEARS as GENERATED_YEARS,
         YEAR_TO_Y as GENERATED_YEAR_TO_Y,
     )
+    from build_adiscord_doctrine_system import (
+        GRANDS as GENERATED_GRANDS,
+        REWARD_PROFILES as GENERATED_REWARD_PROFILES,
+        SCHOOLS as GENERATED_SCHOOLS,
+        TRACKS as GENERATED_TRACKS,
+        reward_id as generated_reward_id,
+    )
+    from adiscord_technology_applied_programmes import (
+        APPLIED_EFFECTS as GENERATED_APPLIED_EFFECTS,
+        APPLIED_PROGRAMMES as GENERATED_APPLIED_PROGRAMMES,
+        LEADER_TRAINING as GENERATED_LEADER_TRAINING,
+    )
 except ModuleNotFoundError:
     from tools.build_adiscord_technology_system import (
         BRANCH_GRAPHS as GENERATED_BRANCH_GRAPHS,
@@ -29,6 +43,7 @@ except ModuleNotFoundError:
         BUILDING_RESOURCE_UPGRADES as GENERATED_BUILDING_RESOURCE_UPGRADES,
         ENABLE_BUILDINGS as GENERATED_ENABLE_BUILDINGS,
         ENABLE_EQUIPMENT as GENERATED_ENABLE_EQUIPMENT,
+        ENABLE_SUBUNITS as GENERATED_ENABLE_SUBUNITS,
         EXTRA_TECH_DEPENDENCIES as GENERATED_EXTRA_TECH_DEPENDENCIES,
         FOLDER_BACKGROUNDS as GENERATED_FOLDERS,
         FORBIDDEN_IDS as GENERATED_FORBIDDEN_IDS,
@@ -36,6 +51,18 @@ except ModuleNotFoundError:
         XOR_INDEX_GROUPS_BY_BRANCH as GENERATED_XOR_INDEX_GROUPS_BY_BRANCH,
         YEARS as GENERATED_YEARS,
         YEAR_TO_Y as GENERATED_YEAR_TO_Y,
+    )
+    from tools.build_adiscord_doctrine_system import (
+        GRANDS as GENERATED_GRANDS,
+        REWARD_PROFILES as GENERATED_REWARD_PROFILES,
+        SCHOOLS as GENERATED_SCHOOLS,
+        TRACKS as GENERATED_TRACKS,
+        reward_id as generated_reward_id,
+    )
+    from tools.adiscord_technology_applied_programmes import (
+        APPLIED_EFFECTS as GENERATED_APPLIED_EFFECTS,
+        APPLIED_PROGRAMMES as GENERATED_APPLIED_PROGRAMMES,
+        LEADER_TRAINING as GENERATED_LEADER_TRAINING,
     )
 
 
@@ -78,7 +105,7 @@ REQUIRED_SCRIPT_ENUMS = {
     "script_enum_equipment_category",
     "script_enum_equipment_bonus_type",
 }
-REQUIRED_DOCTRINE_FOLDERS = {"land", "naval", "air"}
+REQUIRED_DOCTRINE_FOLDERS = {"land", "naval", "air", "special_forces"}
 REQUIRED_AIR_MAP_ICON_FRAMES = {
     "ADISCORD_fighter_archetype": 1,
     "ADISCORD_cas_archetype": 2,
@@ -274,6 +301,20 @@ EXPECTED_TRACKS = [
     "ADISCORD_naval_littoral_security",
 ]
 
+# Generated doctrine expectations supersede the compact legacy baseline above.
+# Keeping them derived from the manifest makes missing schools, mastery rewards,
+# or compatibility IDs a hard validation failure instead of a silent content
+# regression.
+EXPECTED_GRAND_DOCTRINES = [grand["key"] for grand in GENERATED_GRANDS]
+EXPECTED_SCHOOLS = [school.key for school in GENERATED_SCHOOLS]
+EXPECTED_REWARDS = [
+    generated_reward_id(school, index, stage[0])
+    for school in GENERATED_SCHOOLS
+    for index, stage in enumerate(GENERATED_REWARD_PROFILES[school.profile])
+]
+EXPECTED_DOCTRINES = EXPECTED_GRAND_DOCTRINES + EXPECTED_SCHOOLS + EXPECTED_REWARDS
+EXPECTED_TRACKS = [track.key for track in GENERATED_TRACKS]
+
 TECHNOLOGY_FILES = [
     "common/technologies/ADISCORD_industry.txt",
     "common/technologies/ADISCORD_electronics.txt",
@@ -405,7 +446,7 @@ NEW_DATA_FILES = [
     "common/doctrines/subdoctrines/land/ADISCORD_land_subdoctrines.txt",
     "common/doctrines/subdoctrines/air/ADISCORD_air_subdoctrines.txt",
     "common/doctrines/subdoctrines/sea/ADISCORD_naval_subdoctrines.txt",
-    "common/doctrines/subdoctrines/special_forces/ADISCORD_no_special_forces_subdoctrines.txt",
+    "common/doctrines/subdoctrines/special_forces/ADISCORD_special_forces_subdoctrines.txt",
     "common/operation_phases/lar_infiltration.txt",
     "common/operation_phases/lar_exfiltration.txt",
     "common/operation_phases/lar_historical_operations.txt",
@@ -415,6 +456,8 @@ NEW_DATA_FILES = [
     "interface/countrytechtreeview.gui",
     "localisation/english/ADISCORD_technology_doctrine_l_english.yml",
     "localisation/russian/ADISCORD_technology_doctrine_l_russian.yml",
+    "localisation/english/ADISCORD_mastery_doctrines_l_english.yml",
+    "localisation/russian/ADISCORD_mastery_doctrines_l_russian.yml",
 ]
 
 LOCAL_TECH_REFERENCE_ROOTS = [
@@ -427,7 +470,7 @@ LOCAL_DOCTRINE_REFERENCE_ROOTS = [
     "history/countries",
 ]
 
-DOCTRINE_FOLDERS = {"land", "air", "naval"}
+DOCTRINE_FOLDERS = {"land", "air", "naval", "special_forces"}
 
 VANILLA_TAGS = {
     "AFG", "ALB", "ARG", "AST", "AUS", "BEL", "BOL", "BRA", "BUL", "CAN",
@@ -831,6 +874,152 @@ def check_doctrine_folder_database() -> list[str]:
     return [f"missing doctrine folder definition {folder}" for folder in missing]
 
 
+def collect_runtime_sprite_names() -> set[str]:
+    """Collect only sprites that the mod can actually load at runtime."""
+    names: set[str] = set()
+    for base in (ROOT / "interface", BASE_GAME / "interface"):
+        if not base.exists():
+            continue
+        for path in base.rglob("*.gfx"):
+            text = read_text(path)
+            names.update(re.findall(r'\bname\s*=\s*"(GFX_[A-Za-z0-9_.:-]+)"', text))
+    return names
+
+
+def check_generated_doctrine_structure(
+    grand: set[str],
+    tracks: set[str],
+    subdoctrines: set[str],
+    doctrine_blocks: dict[str, str],
+) -> list[str]:
+    issues: list[str] = []
+    expected_grand = set(EXPECTED_GRAND_DOCTRINES)
+    expected_tracks = set(EXPECTED_TRACKS)
+    expected_schools = set(EXPECTED_SCHOOLS)
+    expected_rewards = set(EXPECTED_REWARDS)
+
+    if grand != expected_grand:
+        issues.append(
+            "grand doctrine manifest mismatch: "
+            f"missing={sorted(expected_grand - grand)}, extra={sorted(grand - expected_grand)}"
+        )
+    if tracks != expected_tracks:
+        issues.append(
+            "doctrine track manifest mismatch: "
+            f"missing={sorted(expected_tracks - tracks)}, extra={sorted(tracks - expected_tracks)}"
+        )
+    missing_schools = sorted(expected_schools - subdoctrines)
+    missing_rewards = sorted(expected_rewards - subdoctrines)
+    if missing_schools:
+        issues.append(f"missing generated doctrine schools: {', '.join(missing_schools)}")
+    if missing_rewards:
+        issues.append(f"missing generated mastery rewards: {', '.join(missing_rewards)}")
+
+    runtime_sprites = collect_runtime_sprite_names()
+    for track in GENERATED_TRACKS:
+        for sprite in (track.background, track.icon, track.frame):
+            if sprite not in runtime_sprites:
+                issues.append(f"doctrine track {track.key} references unavailable sprite {sprite}")
+    for grand_spec in GENERATED_GRANDS:
+        if grand_spec["icon"] not in runtime_sprites:
+            issues.append(
+                f"grand doctrine {grand_spec['key']} references unavailable sprite {grand_spec['icon']}"
+            )
+
+    schools_per_track: dict[str, int] = {}
+    for school in GENERATED_SCHOOLS:
+        schools_per_track[school.track] = schools_per_track.get(school.track, 0) + 1
+        if school.icon not in runtime_sprites:
+            issues.append(f"doctrine school {school.key} references unavailable sprite {school.icon}")
+        block = doctrine_blocks.get(school.key, "")
+        if not block:
+            continue
+        compact = re.sub(r"\s+", " ", block)
+        if f"track = {school.track}" not in compact:
+            issues.append(f"doctrine school {school.key} is not assigned to {school.track}")
+        if "available = {" not in block or re.sub(r"\s+", " ", school.gate) not in compact:
+            issues.append(f"doctrine school {school.key} lost its technology/capability gate")
+        if "ai_will_do = {" not in block:
+            issues.append(f"doctrine school {school.key} has no AI selection logic")
+        for effect in school.root_effects:
+            if re.sub(r"\s+", " ", effect) not in compact:
+                issues.append(f"doctrine school {school.key} lost root effect {effect}")
+        reward_match = re.search(r"\brewards\s*=\s*\{", block)
+        if not reward_match:
+            continue
+        reward_block = extract_block(block, reward_match.start())
+        reward_keys = top_level_keys(reward_block)
+        if len(reward_keys) != 5:
+            issues.append(f"doctrine school {school.key} has {len(reward_keys)} rewards instead of 5")
+        if len(re.findall(r"\bmastery\s*=\s*50\b", reward_block)) != 5:
+            issues.append(f"doctrine school {school.key} does not have five mastery-gated rewards")
+
+    expected_per_track = {
+        "ADISCORD_land_mass_restoration": 4,
+        "ADISCORD_land_platform_centric": 4,
+        "ADISCORD_land_networked_operations": 4,
+        "ADISCORD_land_fortress_state": 4,
+        "ADISCORD_air_drone_swarm": 3,
+        "ADISCORD_air_vtol_deep_strike": 3,
+        "ADISCORD_air_strategic_denial": 3,
+        "ADISCORD_naval_littoral_security": 3,
+        "ADISCORD_naval_surface_control": 3,
+        "ADISCORD_naval_subsurface_warfare": 3,
+        "ADISCORD_special_forces_adaptation": 3,
+        "ADISCORD_special_forces_insertion": 3,
+    }
+    if schools_per_track != expected_per_track:
+        issues.append(
+            f"doctrine school distribution mismatch: expected={expected_per_track}, actual={schools_per_track}"
+        )
+    return issues
+
+
+def check_applied_technology_programmes(tech_blocks: dict[str, str]) -> list[str]:
+    issues: list[str] = []
+    if len(GENERATED_APPLIED_PROGRAMMES) != 7:
+        issues.append(f"expected 7 applied technology programmes, got {len(GENERATED_APPLIED_PROGRAMMES)}")
+    for programme in GENERATED_APPLIED_PROGRAMMES:
+        if len(programme["techs"]) != 8:
+            issues.append(f"applied programme {programme['key']} does not have 8 technologies")
+        for key, _ru, _en, _icon in programme["techs"]:
+            tech_id = f"ADISCORD_tech_{key}"
+            block = tech_blocks.get(tech_id, "")
+            compact = re.sub(r"\s+", " ", block)
+            for effect in GENERATED_APPLIED_EFFECTS[key]:
+                if re.sub(r"\s+", " ", effect) not in compact:
+                    issues.append(f"{tech_id} lost applied effect {effect}")
+
+    for key, (_attribute, count) in GENERATED_LEADER_TRAINING.items():
+        tech_id = f"ADISCORD_tech_{key}"
+        block = tech_blocks.get(tech_id, "")
+        if "show_effect_as_desc = yes" not in block or "on_research_complete" not in block:
+            issues.append(f"{tech_id} has no visible one-time leader training effect")
+        if len(re.findall(r"\brandom_army_leader\s*=\s*\{", block)) != count:
+            issues.append(f"{tech_id} should train {count} different random generals")
+        if "clr_unit_leader_flag" not in block or "every_army_leader" not in block:
+            issues.append(f"{tech_id} does not clear temporary random-general selection flags")
+    return issues
+
+
+def check_duplicate_localisation_keys() -> list[str]:
+    issues: list[str] = []
+    for language in ("russian", "english"):
+        seen: dict[str, str] = {}
+        for path in sorted((ROOT / "localisation" / language).rglob("*.yml")):
+            for line in read_text(path).splitlines():
+                match = re.match(r"\s*([A-Za-z0-9_.:-]+)\s*:", line)
+                if not match or match.group(1).startswith("l_"):
+                    continue
+                key = match.group(1)
+                if key in seen and key.startswith(("ADISCORD_doctrine_", "ADISCORD_air_doctrine_", "ADISCORD_naval_doctrine_", "ADISCORD_special_forces_", "ADISCORD_land_", "ADISCORD_air_", "ADISCORD_naval_")):
+                    issues.append(
+                        f"duplicate {language} doctrine localisation {key}: {seen[key]} and {rel(path)}"
+                    )
+                seen[key] = rel(path)
+    return issues
+
+
 def check_split_technology_layout() -> list[str]:
     issues: list[str] = []
     for rel_path in TECHNOLOGY_FILES + EQUIPMENT_FILES:
@@ -1113,6 +1302,7 @@ def check_required_unit_definitions() -> list[str]:
         "anti_air",
         "ADISCORD_militia",
         "ADISCORD_assault_infantry",
+        "ADISCORD_line_artillery",
         "ADISCORD_recon_platform",
         "ADISCORD_combat_platform",
         "ADISCORD_heavy_platform",
@@ -1487,6 +1677,28 @@ def check_technology_gridboxes(tech_blocks: dict[str, str]) -> list[str]:
             block,
         ):
             issues.append(f"{template} must use a compact 72x72 container")
+    wide_templates = (
+        "techtree_infantry_folder_item",
+        "techtree_support_folder_item",
+        "techtree_armour_folder_item",
+        "techtree_nsb_armour_folder_item",
+        "techtree_artillery_folder_item",
+        "techtree_naval_folder_item",
+        "techtree_mtgnavalfolder_item",
+        "techtree_mtgnavalsupportfolder_item",
+        "techtree_air_techs_folder_item",
+        "techtree_bba_air_techs_folder_item",
+    )
+    for template in wide_templates:
+        block = extract_named_container(gui_text, template)
+        size = re.search(
+            r"\bsize\s*=\s*\{\s*width\s*=\s*(\d+)\s*height\s*=\s*(\d+)\s*\}",
+            block,
+        )
+        if not block or not size:
+            issues.append(f"missing wide equipment GUI template {template}")
+        elif int(size.group(1)) <= 72:
+            issues.append(f"{template} must retain a wide equipment container")
     expected_gridboxes_by_folder: dict[str, set[str]] = {
         folder: {
             f"{branch.techs[0].id}_tree"
@@ -1631,8 +1843,8 @@ def check_technology_gridboxes(tech_blocks: dict[str, str]) -> list[str]:
             if position in positions:
                 issues.append(f"{folder} gridboxes {positions[position]} and {name} overlap at {position}")
             positions[position] = name
-            if not re.search(r'\bformat\s*=\s*"LEFT"', grid_block):
-                issues.append(f"{folder} gridbox {name} must use horizontal LEFT format")
+            if not re.search(r'\bformat\s*=\s*"UP"', grid_block):
+                issues.append(f"{folder} gridbox {name} must use vertical UP format")
             if not re.search(r"\bslotsize\s*=\s*\{\s*width\s*=\s*70\s*height\s*=\s*70\s*\}", grid_block):
                 issues.append(f"{folder} gridbox {name} must use stable 70x70 slots")
 
@@ -1668,7 +1880,7 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
     issues: list[str] = []
     path = ROOT / "common" / "scripted_effects" / "ADISCORD_technology_baseline_effects.txt"
     if not path.exists():
-        return ["missing generated 2150 campaign technology baseline"]
+        return ["missing generated pre-2160 campaign technology baseline"]
     text = strip_comments(read_text(path))
     actual = set(re.findall(r"(?m)^\s*(ADISCORD_tech_[A-Za-z0-9_]+)\s*=\s*1\b", text))
     expected = {
@@ -1676,7 +1888,7 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
         for branch in GENERATED_BRANCHES
         if not branch.profile.startswith("forbidden_")
         for tech, year in zip(branch.techs, branch.years)
-        if year <= 2150
+        if year <= 2158
     }
     if actual != expected:
         missing = sorted(expected - actual)
@@ -1684,7 +1896,7 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
         issues.append(f"campaign baseline mismatch; missing={missing}, extra={extra}")
     on_action = ROOT / "common" / "on_actions" / "00_ADISCORD_on_actions.txt"
     if not on_action.exists() or "ADISCORD_grant_2150_technology_baseline = yes" not in read_text(on_action):
-        issues.append("on_startup does not apply the generated 2150 technology baseline")
+        issues.append("on_startup does not apply the generated pre-2160 technology baseline")
     for tech, block in tech_blocks.items():
         if re.search(r"\brepair_speed_factor\s*=", block):
             issues.append(
@@ -1703,7 +1915,9 @@ def check_campaign_dates_cover_technology_tree() -> list[str]:
         issues.append("campaign START_DATE must be 2160.1.1.1")
     end_match = re.search(r'NDefines\.NGame\.END_DATE\s*=\s*"(\d+)\.', defines_text)
     if not end_match or int(end_match.group(1)) < max(GENERATED_YEARS):
-        issues.append("campaign END_DATE does not cover the 2200 technology generation")
+        issues.append(
+            f"campaign END_DATE does not cover the {max(GENERATED_YEARS)} technology generation"
+        )
     if not re.search(r"\bdate\s*=\s*2160\.1\.1\.12\b", bookmark_text):
         issues.append("default bookmark must start on 2160.1.1.12")
     return issues
@@ -1794,6 +2008,138 @@ def check_braces() -> list[str]:
     return issues
 
 
+def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
+    issues: list[str] = []
+    costs: list[float] = []
+    unlocks = (
+        set(GENERATED_ENABLE_EQUIPMENT)
+        | set(GENERATED_ENABLE_SUBUNITS)
+        | set(GENERATED_ENABLE_BUILDINGS)
+    )
+
+    for branch in GENERATED_BRANCHES:
+        for index, tech in enumerate(branch.techs):
+            block = tech_blocks.get(tech.id, "")
+            match = re.search(r"\bresearch_cost\s*=\s*([0-9.]+)", block)
+            if not match:
+                issues.append(f"{tech.id} has no numeric research_cost")
+                continue
+            cost = float(match.group(1))
+            year = branch.years[index]
+
+            # Count numeric leaf modifiers before paths/cost/UI/AI metadata.
+            # Every live technology must provide an actual package rather
+            # than a single cosmetic percentage hidden in a dense tree.
+            effect_prefix = re.split(
+                r"(?m)^\s*(?:path|research_cost)\s*=",
+                block,
+                maxsplit=1,
+            )[0]
+            effect_count = len(
+                re.findall(r"\b[A-Za-z0-9_]+\s*=\s*-?[0-9]+(?:\.[0-9]+)?\b", effect_prefix)
+            )
+            if year >= 2160 and effect_count < 2:
+                issues.append(
+                    f"post-2160 technology {tech.id} has only {effect_count} numeric gameplay effects"
+                )
+
+            # The reconstruction choice must not have a trap lane.  Both
+            # specialisations carry three benefits; repair also needs an
+            # always-on output dividend and wartime/crisis AI weighting.
+            if year >= 2160 and branch.key == "reconstruction":
+                lane = GENERATED_BRANCH_GRAPHS[branch.key].lanes[index]
+                if lane in {0, 2} and effect_count < 3:
+                    issues.append(
+                        f"reconstruction specialisation {tech.id} has only {effect_count} effects"
+                    )
+                if lane == 0 and "ADISCORD_economy_ai_is_healthy = yes" not in block:
+                    issues.append(f"construction specialisation {tech.id} lacks healthy-economy AI weighting")
+                if lane == 2:
+                    for required in (
+                        "industry_repair_factor",
+                        "production_speed_infrastructure_factor",
+                        "industrial_capacity_factory",
+                        "has_war = yes",
+                        "ADISCORD_economy_ai_is_crisis = yes",
+                    ):
+                        if required not in block:
+                            issues.append(f"repair specialisation {tech.id} lacks {required}")
+
+            if branch.profile.startswith("forbidden_"):
+                if cost < 2.5:
+                    issues.append(f"forbidden technology {tech.id} is too cheap at {cost}")
+                continue
+            if year < 2160:
+                continue
+            costs.append(cost)
+            if tech.id in unlocks and cost < 2.0:
+                issues.append(f"capability unlock {tech.id} is too cheap at {cost}")
+            if index == len(branch.techs) - 1 and year >= 2180 and cost < 2.5:
+                issues.append(f"capstone {tech.id} is too cheap at {cost}")
+
+    if not costs:
+        return issues + ["no post-2160 technology costs collected"]
+    mean_cost = statistics.mean(costs)
+    if not 1.65 <= mean_cost <= 1.90:
+        issues.append(f"post-2160 mean research cost {mean_cost:.3f} is outside 1.65-1.90")
+    if min(costs) < 1.10:
+        issues.append(f"post-2160 technology floor is too low at {min(costs):.3f}")
+    if max(costs) > 2.60:
+        issues.append(f"ordinary post-2160 technology ceiling is too high at {max(costs):.3f}")
+    return issues
+
+
+def check_ai_force_progression() -> list[str]:
+    issues: list[str] = []
+    templates_path = ROOT / "common" / "ai_templates" / "ADISCORD_land_templates.txt"
+    strategy_path = ROOT / "common" / "ai_strategy" / "ADISCORD_technology_doctrine_ai.txt"
+    icon_path = ROOT / "interface" / "modifiericons_texticons.gfx"
+    if not templates_path.exists() or not strategy_path.exists():
+        return ["A-DISCORD AI template/strategy framework is missing"]
+
+    templates = strip_comments(read_text(templates_path))
+    strategies = strip_comments(read_text(strategy_path))
+    icons = strip_comments(read_text(icon_path)) if icon_path.exists() else ""
+    required_template_fragments = {
+        "separate mobile assault role": "role = mobile",
+        "line artillery template": "ADISCORD_line_artillery = 1",
+        "stock-gated defensive template": "ADISCORD_defensive_line_brigade",
+        "stock-gated assault template": "ADISCORD_assault_group",
+        "networked tank upgrade": "ADISCORD_networked_tank_battlegroup",
+        "armored recovery support": "ADISCORD_recovery_platform = 1",
+    }
+    for label, fragment in required_template_fragments.items():
+        if fragment not in templates:
+            issues.append(f"AI templates missing {label}")
+
+    required_strategy_fragments = {
+        "division-template XP priority": "id = division_template",
+        "technology weighting": "type = research_weight_factor",
+        "mobile reserve ratio": "id = mobile",
+        "line artillery production floor": "id = artillery_equipment",
+        "anti-tank production floor": "id = anti_tank_equipment",
+        "anti-air production floor": "id = anti_air_equipment",
+        "tank production floor": "id = ADISCORD_combat_platform_archetype",
+        "combat medicine programme weighting": "id = ADISCORD_tech_trauma_registry_networks",
+        "officer academy programme weighting": "id = ADISCORD_tech_reconstituted_staff_academies",
+        "wartime field surgery weighting": "id = ADISCORD_tech_forward_surgical_cells",
+        "air mobility programme weighting": "id = ADISCORD_tech_restored_airlift_planning",
+        "riverine programme weighting": "id = ADISCORD_tech_shallow_water_navigation_tables",
+        "unmanned ground programme weighting": "id = ADISCORD_tech_teleoperated_scout_carts",
+    }
+    for label, fragment in required_strategy_fragments.items():
+        if fragment not in strategies:
+            issues.append(f"AI strategies missing {label}")
+
+    if "GFX_unit_ADISCORD_line_artillery_icon_small" not in icons:
+        issues.append("line artillery small text icon is missing")
+    texture = ROOT / "gfx" / "texticons" / "unit_artillery_icon_small.dds"
+    base_texture = BASE_GAME / "gfx" / "texticons" / "unit_artillery_icon_small.dds"
+    if not texture.exists() and not base_texture.exists():
+        issues.append("line artillery small text icon texture is missing")
+    return issues
+
+
 def check_economy_spending() -> list[str]:
     issues: list[str] = []
     effects = ROOT / "common" / "scripted_effects" / "ADISCORD_economy_effects.txt"
@@ -1856,32 +2202,86 @@ def main() -> int:
         elif sprites[sprite] and not texture_has_valid_dimensions(sprites[sprite]):
             issues.append(f"{sprite} points to invalid or zero-sized DDS {sprites[sprite]}")
 
-    # Effect-only technologies use 72x72 item templates.  Wide equipment and
-    # ship silhouettes are valid only when the technology actually unlocks
-    # equipment and therefore receives the corresponding large GUI item.
+    # Effect-only technologies use compact technical symbols. Real equipment
+    # unlocks deliberately use wide vanilla weapon/vehicle art, but never a
+    # support-company badge or an unrelated nuclear warhead.
+    unsuitable_prefixes = (
+        "engineers",
+        "recon",
+        "tech_field_hospital",
+        "tech_logistics_company",
+        "tech_maintenance_company",
+        "tech_signal_company",
+        "tech_special_forces",
+    )
     for branch in GENERATED_BRANCHES:
         for tech_spec in branch.techs:
-            if tech_spec.id in GENERATED_ENABLE_EQUIPMENT:
-                continue
             sprite = f"GFX_{tech_spec.id}_medium"
             texture = sprites.get(sprite, "")
             dimensions = texture_dimensions(texture)
-            if dimensions and (dimensions[0] > 72 or dimensions[1] > 72):
+            stem = Path(texture).stem
+            is_equipment = tech_spec.id in GENERATED_ENABLE_EQUIPMENT
+            if "nuclear_missile" in stem or "thermonuclear_bomb" in stem:
                 issues.append(
-                    f"{sprite} uses oversized effect-only texture {dimensions[0]}x{dimensions[1]}"
+                    f"{sprite} uses misleading nuclear-warhead texture {stem}"
                 )
+            if stem.startswith(unsuitable_prefixes):
+                issues.append(f"{sprite} uses support-company badge {stem}")
+            if not dimensions:
+                continue
+            if is_equipment:
+                if dimensions[0] > 190 or dimensions[1] > 84:
+                    issues.append(
+                        f"{sprite} equipment texture is too large at "
+                        f"{dimensions[0]}x{dimensions[1]}"
+                    )
+            elif dimensions[0] > 72 or dimensions[1] > 72:
+                issues.append(
+                    f"{sprite} uses oversized compact texture "
+                    f"{dimensions[0]}x{dimensions[1]}"
+                )
+
+    year_counts = {
+        "before": sum(
+            1 for branch in GENERATED_BRANCHES for year in branch.years if year < 2160
+        ),
+        "playable": sum(
+            1
+            for branch in GENERATED_BRANCHES
+            for year in branch.years
+            if 2160 <= year <= 2175
+        ),
+        "after": sum(
+            1 for branch in GENERATED_BRANCHES for year in branch.years if year > 2175
+        ),
+    }
+    total_years = sum(year_counts.values())
+    if total_years:
+        if year_counts["playable"] / total_years < 0.75:
+            issues.append(
+                "fewer than 75% of technologies are in the playable 2160-2175 window"
+            )
+        if year_counts["before"] / total_years > 0.15:
+            issues.append("too many technologies are dated before the 2160 start")
+        if year_counts["after"] / total_years > 0.10:
+            issues.append("too many technologies are dated after 2175")
 
     for trigger in EXPECTED_TRIGGERS:
         if trigger not in triggers:
             issues.append(f"missing scripted trigger {trigger}")
 
     all_doctrines = grand | subdoctrines
-    for doctrine in EXPECTED_DOCTRINES:
+    for doctrine in EXPECTED_GRAND_DOCTRINES + EXPECTED_SCHOOLS:
         if doctrine not in all_doctrines:
             issues.append(f"missing doctrine {doctrine}")
         for key in (doctrine, f"{doctrine}_desc"):
             if key not in loc_keys:
                 issues.append(f"missing localisation {key}")
+    for reward in EXPECTED_REWARDS:
+        if reward not in all_doctrines:
+            issues.append(f"missing doctrine reward {reward}")
+        if reward not in loc_keys:
+            issues.append(f"missing localisation {reward}")
 
     for track in EXPECTED_TRACKS:
         if track not in tracks:
@@ -1934,16 +2334,21 @@ def main() -> int:
     issues.extend(check_script_enums(equipment))
     issues.extend(check_local_equipment_references(equipment))
     issues.extend(check_technology_parser_constraints(tech_blocks))
+    issues.extend(check_applied_technology_programmes(tech_blocks))
     issues.extend(check_total_conversion_technology_scope(techs))
     issues.extend(check_technology_gridboxes(tech_blocks))
     issues.extend(check_resource_building_architecture(tech_blocks))
     issues.extend(check_doctrine_parser_constraints())
     issues.extend(check_doctrine_folder_database())
+    issues.extend(check_generated_doctrine_structure(grand, tracks, subdoctrines, doctrine_blocks))
+    issues.extend(check_duplicate_localisation_keys())
     issues.extend(check_technology_replace_path())
     issues.extend(check_technology_ui_years())
     issues.extend(check_local_technology_references(techs))
     issues.extend(check_campaign_technology_baseline(tech_blocks))
     issues.extend(check_campaign_dates_cover_technology_tree())
+    issues.extend(check_post_2160_research_balance(tech_blocks))
+    issues.extend(check_ai_force_progression())
     issues.extend(check_local_doctrine_references(grand, tracks, subdoctrines, top_level_doctrines))
     issues.extend(check_braces())
     issues.extend(check_economy_spending())
@@ -1956,7 +2361,10 @@ def main() -> int:
 
     print("A-DISCORD technology/doctrine validation: OK")
     print(f"Technologies: {len(EXPECTED_TECHS)}")
-    print(f"Doctrines/subdoctrines: {len(EXPECTED_DOCTRINES)}")
+    print(
+        "Grand doctrines/schools/mastery rewards: "
+        f"{len(EXPECTED_GRAND_DOCTRINES)}/{len(EXPECTED_SCHOOLS)}/{len(EXPECTED_REWARDS)}"
+    )
     print(f"Tracks: {len(EXPECTED_TRACKS)}")
     return 0
 

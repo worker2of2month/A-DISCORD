@@ -1,0 +1,46 @@
+guiTypes = {
+	containerWindowType = {
+		name = "ADISCORD_VAL_operations_panel_window"
+		position = { x = 0 y = 0 }
+		size = { width = 460 height = 360 }
+		clipping = no
+
+		background = { name = "VAL_operations_panel_background" quadTextureSprite = "GFX_tiled_window_transparent" }
+		instantTextBoxType = { name = "VAL_operations_title" position = { x = 10 y = 8 } text = "VAL_operations_panel_title" font = "hoi_20b" maxWidth = 440 maxHeight = 24 fixedsize = yes format = center pdx_tooltip = "VAL_operations_panel_tt" }
+		iconType = { name = "VAL_operations_map" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_map_background" pdx_tooltip = "VAL_operations_map_tt" }
+
+		iconType = { name = "VAL_ops_43_home" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_43" frame = 1 pdx_tooltip = "VAL_operations_map_tt" }
+		iconType = { name = "VAL_ops_43_resistance" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_43" frame = 2 pdx_tooltip = "VAL_operations_map_tt" }
+		iconType = { name = "VAL_ops_43_party" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_43" frame = 3 pdx_tooltip = "VAL_operations_map_tt" }
+		iconType = { name = "VAL_ops_43_val" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_43" frame = 4 pdx_tooltip = "VAL_operations_map_tt" }
+		iconType = { name = "VAL_ops_43_other" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_43" frame = 5 pdx_tooltip = "VAL_operations_map_tt" }
+
+		iconType = { name = "VAL_ops_44_home" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_44" frame = 1 pdx_tooltip = "VAL_operations_map_tt" }
+		iconType = { name = "VAL_ops_44_resistance" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_44" frame = 2 pdx_tooltip = "VAL_operations_map_tt" }
+		iconType = { name = "VAL_ops_44_party" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_44" frame = 3 pdx_tooltip = "VAL_operations_map_tt" }
+		iconType = { name = "VAL_ops_44_val" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_44" frame = 4 pdx_tooltip = "VAL_operations_map_tt" }
+		iconType = { name = "VAL_ops_44_other" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_44" frame = 5 pdx_tooltip = "VAL_operations_map_tt" }
+
+		iconType = { name = "VAL_ops_45_home" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_45" frame = 1 pdx_tooltip = "VAL_operations_map_tt" }
+		iconType = { name = "VAL_ops_45_resistance" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_45" frame = 2 pdx_tooltip = "VAL_operations_map_tt" }
+		iconType = { name = "VAL_ops_45_party" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_45" frame = 3 pdx_tooltip = "VAL_operations_map_tt" }
+		iconType = { name = "VAL_ops_45_val" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_45" frame = 4 pdx_tooltip = "VAL_operations_map_tt" }
+		iconType = { name = "VAL_ops_45_other" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_45" frame = 5 pdx_tooltip = "VAL_operations_map_tt" }
+
+		iconType = { name = "VAL_ops_88_home" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_88" frame = 1 pdx_tooltip = "VAL_operations_map_tt" }
+		iconType = { name = "VAL_ops_88_resistance" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_88" frame = 2 pdx_tooltip = "VAL_operations_map_tt" }
+		iconType = { name = "VAL_ops_88_party" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_88" frame = 3 pdx_tooltip = "VAL_operations_map_tt" }
+		iconType = { name = "VAL_ops_88_val" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_88" frame = 4 pdx_tooltip = "VAL_operations_map_tt" }
+		iconType = { name = "VAL_ops_88_other" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_88" frame = 5 pdx_tooltip = "VAL_operations_map_tt" }
+
+		iconType = { name = "VAL_ops_59_home" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_59" frame = 1 pdx_tooltip = "VAL_operations_map_tt" }
+		iconType = { name = "VAL_ops_59_val" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_59" frame = 4 pdx_tooltip = "VAL_operations_map_tt" }
+		iconType = { name = "VAL_ops_59_other" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_59" frame = 5 pdx_tooltip = "VAL_operations_map_tt" }
+
+		iconType = { name = "VAL_ops_61_home" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_61" frame = 1 pdx_tooltip = "VAL_operations_map_tt" }
+		iconType = { name = "VAL_ops_61_val" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_61" frame = 4 pdx_tooltip = "VAL_operations_map_tt" }
+		iconType = { name = "VAL_ops_61_other" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_state_61" frame = 5 pdx_tooltip = "VAL_operations_map_tt" }
+
+		instantTextBoxType = { name = "VAL_operations_legend" position = { x = 16 y = 306 } text = "VAL_operations_legend" font = "hoi_16mbs" maxWidth = 428 maxHeight = 44 fixedsize = yes format = center pdx_tooltip = "VAL_operations_map_tt" }
+	}
+}

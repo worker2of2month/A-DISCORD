@@ -112,7 +112,6 @@ news_event = { #stelander empire
 			every_country = {
 				limit = {
 					is_ai = no
-					ADISCORD_major_news_enabled = yes
 				}
 				scoped_sound_effect = superevent_stelander_empire_sound_e
 				scoped_play_song = "one_minute_of_silence"

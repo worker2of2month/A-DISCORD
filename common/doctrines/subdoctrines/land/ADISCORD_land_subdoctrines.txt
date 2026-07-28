@@ -3,31 +3,179 @@ ADISCORD_doctrine_mass_recruitment_bureaus = {
 	name = ADISCORD_doctrine_mass_recruitment_bureaus
 	description = ADISCORD_doctrine_mass_recruitment_bureaus_desc
 	icon = GFX_doctrine_mass_assault_medium
-	xp_cost = 75
+	xp_cost = 70
 	xp_type = army
-	available = { ADISCORD_has_military_standardization_tech = yes }
-	ai_will_do = {
-		base = 2
-		modifier = { factor = 1.5 has_manpower > 50000 }
+	available = {
+		ADISCORD_has_military_standardization_tech = yes
 	}
-	category_all_infantry = { max_organisation = 3 }
+	xor = {
+		ADISCORD_doctrine_assault_detachments
+		ADISCORD_doctrine_mobile_line_groups
+		ADISCORD_doctrine_dispersed_militia_system
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 1.6 has_manpower > 50000 }
+	}
+	category_all_infantry = { max_organisation = 2 }
+	land_reinforce_rate = 0.005
 	rewards = {
 		ADISCORD_doctrine_salvage_line_infantry = {
-			category_all_infantry = { soft_attack = 0.05 }
+			mastery = 50
+			category_all_infantry = { default_morale = 0.03 }
 		}
 		ADISCORD_doctrine_distributed_militias = {
-			category_all_infantry = { defense = 0.05 }
-			land_reinforce_rate = 0.01
+			mastery = 50
+			category_all_infantry = { soft_attack = 0.03 }
 		}
 		ADISCORD_doctrine_emergency_replacement_system = {
-			category_all_infantry = { default_morale = 0.05 }
+			mastery = 50
+			land_reinforce_rate = 0.01
 		}
 		ADISCORD_doctrine_total_restoration_front = {
-			land_reinforce_rate = 0.02
-			planning_speed = 0.05
+			mastery = 50
+			category_all_infantry = { max_organisation = 2 }
 		}
 		ADISCORD_doctrine_people_and_scrap = {
-			category_all_infantry = { max_organisation = 5 defense = 0.05 }
+			mastery = 50
+			category_all_infantry = { defense = 0.05 max_organisation = 3 }
+			planning_speed = 0.03
+		}
+	}
+}
+
+ADISCORD_doctrine_assault_detachments = {
+	track = ADISCORD_land_mass_restoration
+	name = ADISCORD_doctrine_assault_detachments
+	description = ADISCORD_doctrine_assault_detachments_desc
+	icon = GFX_doctrine_assault_infantry_medium
+	xp_cost = 70
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_assault_breaching_packages
+	}
+	xor = {
+		ADISCORD_doctrine_mass_recruitment_bureaus
+		ADISCORD_doctrine_mobile_line_groups
+		ADISCORD_doctrine_dispersed_militia_system
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 1.8 has_war = yes }
+	}
+	category_all_infantry = { breakthrough = 0.03 }
+	planning_speed = 0.02
+	rewards = {
+		ADISCORD_doctrine_assault_detachments_assault_recon = {
+			mastery = 50
+			category_recon = { recon = 0.5 }
+		}
+		ADISCORD_doctrine_assault_detachments_breach_groups = {
+			mastery = 50
+			category_all_infantry = { breakthrough = 0.04 }
+		}
+		ADISCORD_doctrine_assault_detachments_short_fireplans = {
+			mastery = 50
+			planning_speed = 0.04
+		}
+		ADISCORD_doctrine_assault_detachments_shock_reserves = {
+			mastery = 50
+			category_all_infantry = { soft_attack = 0.03 }
+		}
+		ADISCORD_doctrine_assault_detachments_continuous_assault = {
+			mastery = 50
+		}
+	}
+}
+
+ADISCORD_doctrine_mobile_line_groups = {
+	track = ADISCORD_land_mass_restoration
+	name = ADISCORD_doctrine_mobile_line_groups
+	description = ADISCORD_doctrine_mobile_line_groups_desc
+	icon = GFX_doctrine_mobile_infantry_medium
+	xp_cost = 70
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_standardized_transport_columns
+	}
+	xor = {
+		ADISCORD_doctrine_mass_recruitment_bureaus
+		ADISCORD_doctrine_assault_detachments
+		ADISCORD_doctrine_dispersed_militia_system
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 1.5 has_tech = ADISCORD_tech_forward_supply_hubs }
+	}
+	category_all_infantry = { maximum_speed = 0.02 }
+	org_loss_when_moving = -0.01
+	rewards = {
+		ADISCORD_doctrine_mobile_line_groups_march_discipline = {
+			mastery = 50
+			org_loss_when_moving = -0.015
+		}
+		ADISCORD_doctrine_mobile_line_groups_mobile_reserves = {
+			mastery = 50
+			land_reinforce_rate = 0.01
+		}
+		ADISCORD_doctrine_mobile_line_groups_route_control = {
+			mastery = 50
+			supply_consumption_factor = -0.01
+		}
+		ADISCORD_doctrine_mobile_line_groups_rolling_front = {
+			mastery = 50
+			category_all_infantry = { maximum_speed = 0.03 }
+		}
+		ADISCORD_doctrine_mobile_line_groups_operational_mobility = {
+			mastery = 50
+			category_all_infantry = { maximum_speed = 0.04 max_organisation = 3 }
+			org_loss_when_moving = -0.02
+		}
+	}
+}
+
+ADISCORD_doctrine_dispersed_militia_system = {
+	track = ADISCORD_land_mass_restoration
+	name = ADISCORD_doctrine_dispersed_militia_system
+	description = ADISCORD_doctrine_dispersed_militia_system_desc
+	icon = GFX_doctrine_defensive_postures_medium
+	xp_cost = 70
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_fieldcraft_manuals
+	}
+	xor = {
+		ADISCORD_doctrine_mass_recruitment_bureaus
+		ADISCORD_doctrine_assault_detachments
+		ADISCORD_doctrine_mobile_line_groups
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 1.5 num_of_military_factories < 8 }
+	}
+	category_all_infantry = { defense = 0.04 }
+	dig_in_speed_factor = 0.02
+	rewards = {
+		ADISCORD_doctrine_dispersed_militia_system_local_guides = {
+			mastery = 50
+			category_all_infantry = { defense = 0.03 }
+		}
+		ADISCORD_doctrine_dispersed_militia_system_hidden_stores = {
+			mastery = 50
+			supply_consumption_factor = -0.01
+		}
+		ADISCORD_doctrine_dispersed_militia_system_district_reserves = {
+			mastery = 50
+			land_reinforce_rate = 0.01
+		}
+		ADISCORD_doctrine_dispersed_militia_system_ruin_positions = {
+			mastery = 50
+			dig_in_speed_factor = 0.04
+		}
+		ADISCORD_doctrine_dispersed_militia_system_defense_in_depth = {
+			mastery = 50
+			category_all_infantry = { defense = 0.07 max_organisation = 2 }
+			dig_in_speed_factor = 0.05
 		}
 	}
 }
@@ -37,32 +185,181 @@ ADISCORD_doctrine_platform_battlegroups = {
 	name = ADISCORD_doctrine_platform_battlegroups
 	description = ADISCORD_doctrine_platform_battlegroups_desc
 	icon = GFX_doctrine_armored_spearhead_medium
-	xp_cost = 75
+	xp_cost = 70
 	xp_type = army
-	available = { has_tech = ADISCORD_tech_restored_armored_chassis }
+	available = {
+		has_tech = ADISCORD_tech_restored_armored_chassis
+	}
+	xor = {
+		ADISCORD_doctrine_armored_spearhead_command
+		ADISCORD_doctrine_infantry_tank_integration
+		ADISCORD_doctrine_autonomous_armored_screen
+	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 2 has_tech = ADISCORD_tech_restored_armored_chassis }
 		modifier = { factor = 2 has_tech = ADISCORD_tech_remote_weapon_stations }
 	}
-	category_all_armor = { max_organisation = 2 }
+	category_all_armor = { max_organisation = 2 breakthrough = 0.03 }
 	rewards = {
 		ADISCORD_doctrine_remote_weapon_coordination = {
-			category_all_armor = { soft_attack = 0.05 }
+			mastery = 50
+			category_all_armor = { soft_attack = 0.04 }
 		}
 		ADISCORD_doctrine_heavy_breakthrough_columns = {
-			category_tanks = { breakthrough = 0.10 }
+			mastery = 50
+			category_tanks = { breakthrough = 0.06 }
 		}
 		ADISCORD_doctrine_drone_screened_advance = {
-			category_all_armor = { defense = 0.05 }
+			mastery = 50
+			category_all_armor = { defense = 0.04 }
 			coordination_bonus = 0.01
 		}
 		ADISCORD_doctrine_autonomous_repair_cycles = {
-			category_all_armor = { default_morale = 0.05 }
-			repair_speed_factor = 0.05
+			mastery = 50
+			category_all_armor = { reliability = 0.04 default_morale = 0.03 }
 		}
 		ADISCORD_doctrine_armored_decision_warfare = {
-			category_all_armor = { breakthrough = 0.10 max_organisation = 3 }
+			mastery = 50
+			category_all_armor = { breakthrough = 0.08 max_organisation = 2 }
+		}
+	}
+}
+
+ADISCORD_doctrine_armored_spearhead_command = {
+	track = ADISCORD_land_platform_centric
+	name = ADISCORD_doctrine_armored_spearhead_command
+	description = ADISCORD_doctrine_armored_spearhead_command_desc
+	icon = GFX_doctrine_armored_cavalry_medium
+	xp_cost = 70
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_composite_armor_arrays
+	}
+	xor = {
+		ADISCORD_doctrine_platform_battlegroups
+		ADISCORD_doctrine_infantry_tank_integration
+		ADISCORD_doctrine_autonomous_armored_screen
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 1.5 num_of_military_factories > 12 }
+	}
+	category_tanks = { breakthrough = 0.05 }
+	max_planning = 0.01
+	rewards = {
+		ADISCORD_doctrine_armored_spearhead_command_remote_weapons = {
+			mastery = 50
+			category_all_armor = { soft_attack = 0.04 }
+		}
+		ADISCORD_doctrine_armored_spearhead_command_heavy_columns = {
+			mastery = 50
+			category_tanks = { breakthrough = 0.06 }
+		}
+		ADISCORD_doctrine_armored_spearhead_command_drone_screen = {
+			mastery = 50
+			category_all_armor = { defense = 0.04 }
+			coordination_bonus = 0.01
+		}
+		ADISCORD_doctrine_armored_spearhead_command_repair_cycles = {
+			mastery = 50
+			category_all_armor = { reliability = 0.04 default_morale = 0.03 }
+		}
+		ADISCORD_doctrine_armored_spearhead_command_armored_decision = {
+			mastery = 50
+			category_all_armor = { breakthrough = 0.08 max_organisation = 2 }
+		}
+	}
+}
+
+ADISCORD_doctrine_infantry_tank_integration = {
+	track = ADISCORD_land_platform_centric
+	name = ADISCORD_doctrine_infantry_tank_integration
+	description = ADISCORD_doctrine_infantry_tank_integration_desc
+	icon = GFX_doctrine_armored_infantry_support_medium
+	xp_cost = 70
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_armored_platoon_target_handoff
+	}
+	xor = {
+		ADISCORD_doctrine_platform_battlegroups
+		ADISCORD_doctrine_armored_spearhead_command
+		ADISCORD_doctrine_autonomous_armored_screen
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 1.5 has_tech = ADISCORD_tech_combat_engineering_sections }
+	}
+	category_all_armor = { defense = 0.03 }
+	category_all_infantry = { breakthrough = 0.02 }
+	rewards = {
+		ADISCORD_doctrine_infantry_tank_integration_infantry_liaisons = {
+			mastery = 50
+			coordination_bonus = 0.01
+		}
+		ADISCORD_doctrine_infantry_tank_integration_protected_approach = {
+			mastery = 50
+			category_all_infantry = { breakthrough = 0.03 }
+		}
+		ADISCORD_doctrine_infantry_tank_integration_mutual_support = {
+			mastery = 50
+			category_all_armor = { defense = 0.04 }
+			category_all_infantry = { defense = 0.02 }
+		}
+		ADISCORD_doctrine_infantry_tank_integration_combined_reserves = {
+			mastery = 50
+			land_reinforce_rate = 0.01
+		}
+		ADISCORD_doctrine_infantry_tank_integration_integrated_battlegroup = {
+			mastery = 50
+			category_all_armor = { max_organisation = 3 breakthrough = 0.05 }
+			category_all_infantry = { breakthrough = 0.03 }
+		}
+	}
+}
+
+ADISCORD_doctrine_autonomous_armored_screen = {
+	track = ADISCORD_land_platform_centric
+	name = ADISCORD_doctrine_autonomous_armored_screen
+	description = ADISCORD_doctrine_autonomous_armored_screen_desc
+	icon = GFX_mechanised_offensive_medium
+	xp_cost = 70
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_armed_recon_drones
+	}
+	xor = {
+		ADISCORD_doctrine_platform_battlegroups
+		ADISCORD_doctrine_armored_spearhead_command
+		ADISCORD_doctrine_infantry_tank_integration
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 2 has_tech = ADISCORD_tech_distributed_ground_swarm_control }
+	}
+	category_all_armor = { reliability = 0.03 }
+	category_recon = { recon = 0.5 }
+	rewards = {
+		ADISCORD_doctrine_autonomous_armored_screen_crewless_scouts = {
+			mastery = 50
+			category_recon = { recon = 0.75 }
+		}
+		ADISCORD_doctrine_autonomous_armored_screen_machine_pickets = {
+			mastery = 50
+			category_all_armor = { defense = 0.04 }
+		}
+		ADISCORD_doctrine_autonomous_armored_screen_swarm_fire = {
+			mastery = 50
+			category_all_armor = { soft_attack = 0.05 }
+		}
+		ADISCORD_doctrine_autonomous_armored_screen_self_recovery = {
+			mastery = 50
+			category_all_armor = { reliability = 0.05 default_morale = 0.03 }
+		}
+		ADISCORD_doctrine_autonomous_armored_screen_autonomous_battlefield = {
+			mastery = 50
+			category_all_armor = { breakthrough = 0.06 reliability = 0.04 }
+			coordination_bonus = 0.02
 		}
 	}
 }
@@ -72,33 +369,185 @@ ADISCORD_doctrine_mesh_battlefield_command = {
 	name = ADISCORD_doctrine_mesh_battlefield_command
 	description = ADISCORD_doctrine_mesh_battlefield_command_desc
 	icon = GFX_doctrine_mission_type_tactics_medium
-	xp_cost = 75
+	xp_cost = 70
 	xp_type = army
-	available = { ADISCORD_has_cyber_command_tech = yes }
+	available = {
+		ADISCORD_has_cyber_command_tech = yes
+	}
+	xor = {
+		ADISCORD_doctrine_mission_command
+		ADISCORD_doctrine_deep_operations
+		ADISCORD_doctrine_centralized_fire_control
+	}
 	ai_will_do = {
 		base = 1
 		modifier = { factor = 2 has_tech = ADISCORD_tech_mesh_command_networks }
-		modifier = { factor = 2 has_tech = ADISCORD_tech_battlefield_analytics }
 	}
-	coordination_bonus = 0.02
+	coordination_bonus = 0.015
+	planning_speed = 0.02
 	rewards = {
 		ADISCORD_doctrine_reconnaissance_saturation = {
+			mastery = 50
 			category_recon = { recon = 1 }
 		}
 		ADISCORD_doctrine_predictive_operational_planning = {
-			planning_speed = 0.10
-			max_planning = 0.05
+			mastery = 50
+			planning_speed = 0.05
+			max_planning = 0.02
 		}
 		ADISCORD_doctrine_integrated_fire_control = {
-			coordination_bonus = 0.02
-			category_support_battalions = { soft_attack = 0.05 }
+			mastery = 50
+			coordination_bonus = 0.015
+			category_support_battalions = { soft_attack = 0.03 }
 		}
 		ADISCORD_doctrine_distributed_command_cells = {
-			land_reinforce_rate = 0.02
+			mastery = 50
+			land_reinforce_rate = 0.01
 		}
 		ADISCORD_doctrine_algorithmic_campaigning = {
-			coordination_bonus = 0.03
-			planning_speed = 0.10
+			mastery = 50
+			coordination_bonus = 0.025
+			planning_speed = 0.05
+		}
+	}
+}
+
+ADISCORD_doctrine_mission_command = {
+	track = ADISCORD_land_networked_operations
+	name = ADISCORD_doctrine_mission_command
+	description = ADISCORD_doctrine_mission_command_desc
+	icon = GFX_doctrine_mission_type_tactics_medium
+	xp_cost = 70
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_reconstituted_staff_academies
+	}
+	xor = {
+		ADISCORD_doctrine_mesh_battlefield_command
+		ADISCORD_doctrine_deep_operations
+		ADISCORD_doctrine_centralized_fire_control
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 1.5 has_war = yes }
+	}
+	land_reinforce_rate = 0.005
+	category_all_infantry = { default_morale = 0.02 }
+	rewards = {
+		ADISCORD_doctrine_mission_command_intent_orders = {
+			mastery = 50
+			planning_speed = 0.03
+		}
+		ADISCORD_doctrine_mission_command_local_initiative = {
+			mastery = 50
+			land_reinforce_rate = 0.01
+		}
+		ADISCORD_doctrine_mission_command_reserve_authority = {
+			mastery = 50
+			category_all_infantry = { default_morale = 0.03 }
+		}
+		ADISCORD_doctrine_mission_command_fault_tolerant_staff = {
+			mastery = 50
+			coordination_bonus = 0.015
+		}
+		ADISCORD_doctrine_mission_command_adaptive_command = {
+			mastery = 50
+			planning_speed = 0.05
+			land_reinforce_rate = 0.015
+			coordination_bonus = 0.02
+		}
+	}
+}
+
+ADISCORD_doctrine_deep_operations = {
+	track = ADISCORD_land_networked_operations
+	name = ADISCORD_doctrine_deep_operations
+	description = ADISCORD_doctrine_deep_operations_desc
+	icon = GFX_doctrine_deep_battle_medium
+	xp_cost = 70
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_operational_planning_exercises
+	}
+	xor = {
+		ADISCORD_doctrine_mesh_battlefield_command
+		ADISCORD_doctrine_mission_command
+		ADISCORD_doctrine_centralized_fire_control
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 1.5 num_of_military_factories > 10 }
+	}
+	max_planning = 0.02
+	category_all_armor = { breakthrough = 0.03 }
+	rewards = {
+		ADISCORD_doctrine_deep_operations_operational_axes = {
+			mastery = 50
+			max_planning = 0.02
+		}
+		ADISCORD_doctrine_deep_operations_follow_on_echelons = {
+			mastery = 50
+			land_reinforce_rate = 0.01
+		}
+		ADISCORD_doctrine_deep_operations_rear_disruption = {
+			mastery = 50
+			category_all_infantry = { breakthrough = 0.03 }
+		}
+		ADISCORD_doctrine_deep_operations_tempo_control = {
+			mastery = 50
+			org_loss_when_moving = -0.02
+		}
+		ADISCORD_doctrine_deep_operations_deep_campaign = {
+			mastery = 50
+			planning_speed = 0.05
+			max_planning = 0.03
+			category_all_armor = { breakthrough = 0.05 }
+		}
+	}
+}
+
+ADISCORD_doctrine_centralized_fire_control = {
+	track = ADISCORD_land_networked_operations
+	name = ADISCORD_doctrine_centralized_fire_control
+	description = ADISCORD_doctrine_centralized_fire_control_desc
+	icon = GFX_doctrine_fire_concentration_medium
+	xp_cost = 70
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_smart_fire_control
+	}
+	xor = {
+		ADISCORD_doctrine_mesh_battlefield_command
+		ADISCORD_doctrine_mission_command
+		ADISCORD_doctrine_deep_operations
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 1.5 has_tech = ADISCORD_tech_counterbattery_radar_links }
+	}
+	category_line_artillery = { soft_attack = 0.03 }
+	coordination_bonus = 0.01
+	rewards = {
+		ADISCORD_doctrine_centralized_fire_control_target_registry = {
+			mastery = 50
+			coordination_bonus = 0.01
+		}
+		ADISCORD_doctrine_centralized_fire_control_counterbattery = {
+			mastery = 50
+			category_line_artillery = { soft_attack = 0.04 }
+		}
+		ADISCORD_doctrine_centralized_fire_control_munition_timing = {
+			mastery = 50
+			category_support_battalions = { soft_attack = 0.03 }
+		}
+		ADISCORD_doctrine_centralized_fire_control_fire_shift = {
+			mastery = 50
+			planning_speed = 0.03
+		}
+		ADISCORD_doctrine_centralized_fire_control_theater_fire_network = {
+			mastery = 50
+			coordination_bonus = 0.025
+			category_line_artillery = { soft_attack = 0.06 breakthrough = 0.03 }
 		}
 	}
 }
@@ -108,33 +557,183 @@ ADISCORD_doctrine_fortress_state_command = {
 	name = ADISCORD_doctrine_fortress_state_command
 	description = ADISCORD_doctrine_fortress_state_command_desc
 	icon = GFX_doctrine_defensive_postures_medium
-	xp_cost = 75
+	xp_cost = 70
 	xp_type = army
-	available = { ADISCORD_has_civil_resilience_tech = yes }
+	available = {
+		ADISCORD_has_civil_resilience_tech = yes
+	}
+	xor = {
+		ADISCORD_doctrine_artillery_support_network
+		ADISCORD_doctrine_combat_engineer_groups
+		ADISCORD_doctrine_resilient_logistics_command
+	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 2 has_war = yes }
-		modifier = { factor = 2 has_tech = ADISCORD_tech_civil_defense_networks }
+		modifier = { factor = 1.8 has_war = yes }
 	}
-	dig_in_speed_factor = 0.05
-	category_all_infantry = { defense = 0.05 }
+	dig_in_speed_factor = 0.04
+	category_all_infantry = { defense = 0.04 }
 	rewards = {
 		ADISCORD_doctrine_urban_defense_grids = {
-			category_all_infantry = { entrenchment = 0.10 }
+			mastery = 50
+			category_all_infantry = { entrenchment = 0.05 }
 		}
 		ADISCORD_doctrine_hardened_logistics = {
-			supply_consumption_factor = -0.03
+			mastery = 50
+			supply_consumption_factor = -0.015
 		}
 		ADISCORD_doctrine_radiation_zone_operations = {
-			attrition = -0.05
+			mastery = 50
+			attrition = -0.02
 		}
 		ADISCORD_doctrine_counteroffensive_reserves = {
-			land_reinforce_rate = 0.02
-			category_all_infantry = { breakthrough = 0.05 }
+			mastery = 50
+			land_reinforce_rate = 0.01
+			category_all_infantry = { breakthrough = 0.03 }
 		}
 		ADISCORD_doctrine_national_redoubt_protocols = {
-			category_all_infantry = { defense = 0.10 max_organisation = 5 }
-			dig_in_speed_factor = 0.10
+			mastery = 50
+			category_all_infantry = { defense = 0.07 max_organisation = 3 }
+			dig_in_speed_factor = 0.06
+		}
+	}
+}
+
+ADISCORD_doctrine_artillery_support_network = {
+	track = ADISCORD_land_fortress_state
+	name = ADISCORD_doctrine_artillery_support_network
+	description = ADISCORD_doctrine_artillery_support_network_desc
+	icon = GFX_doctrine_fire_concentration_medium
+	xp_cost = 70
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_restored_field_artillery
+	}
+	xor = {
+		ADISCORD_doctrine_fortress_state_command
+		ADISCORD_doctrine_combat_engineer_groups
+		ADISCORD_doctrine_resilient_logistics_command
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 1.8 has_tech = ADISCORD_tech_drone_spotted_batteries }
+	}
+	category_line_artillery = { soft_attack = 0.04 }
+	planning_speed = 0.015
+	rewards = {
+		ADISCORD_doctrine_artillery_support_network_forward_observers = {
+			mastery = 50
+			category_recon = { recon = 0.5 }
+		}
+		ADISCORD_doctrine_artillery_support_network_distributed_batteries = {
+			mastery = 50
+			category_line_artillery = { defense = 0.03 }
+		}
+		ADISCORD_doctrine_artillery_support_network_rapid_fireplans = {
+			mastery = 50
+			planning_speed = 0.03
+		}
+		ADISCORD_doctrine_artillery_support_network_precision_barrages = {
+			mastery = 50
+			category_line_artillery = { soft_attack = 0.05 }
+		}
+		ADISCORD_doctrine_artillery_support_network_artillery_web = {
+			mastery = 50
+			category_line_artillery = { soft_attack = 0.06 breakthrough = 0.04 }
+			coordination_bonus = 0.015
+		}
+	}
+}
+
+ADISCORD_doctrine_combat_engineer_groups = {
+	track = ADISCORD_land_fortress_state
+	name = ADISCORD_doctrine_combat_engineer_groups
+	description = ADISCORD_doctrine_combat_engineer_groups_desc
+	icon = GFX_doctrine_field_engineering_medium
+	xp_cost = 70
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_battle_damage_survey_teams
+	}
+	xor = {
+		ADISCORD_doctrine_fortress_state_command
+		ADISCORD_doctrine_artillery_support_network
+		ADISCORD_doctrine_resilient_logistics_command
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 2 has_tech = ADISCORD_tech_robotic_obstacle_clearance }
+	}
+	engineer = { breakthrough = 0.04 defense = 0.03 }
+	industry_repair_factor = 0.02
+	rewards = {
+		ADISCORD_doctrine_combat_engineer_groups_damage_surveys = {
+			mastery = 50
+			industry_repair_factor = 0.02
+		}
+		ADISCORD_doctrine_combat_engineer_groups_breaching_teams = {
+			mastery = 50
+			engineer = { breakthrough = 0.04 }
+		}
+		ADISCORD_doctrine_combat_engineer_groups_mobile_bridges = {
+			mastery = 50
+			planning_speed = 0.02
+		}
+		ADISCORD_doctrine_combat_engineer_groups_robotic_clearance = {
+			mastery = 50
+			engineer = { defense = 0.04 breakthrough = 0.04 }
+		}
+		ADISCORD_doctrine_combat_engineer_groups_engineer_command = {
+			mastery = 50
+			engineer = { defense = 0.06 breakthrough = 0.06 }
+			category_support_battalions = { max_organisation = 2 }
+		}
+	}
+}
+
+ADISCORD_doctrine_resilient_logistics_command = {
+	track = ADISCORD_land_fortress_state
+	name = ADISCORD_doctrine_resilient_logistics_command
+	description = ADISCORD_doctrine_resilient_logistics_command_desc
+	icon = GFX_tech_logistics_company_medium
+	xp_cost = 70
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_theater_logistics_wargames
+	}
+	xor = {
+		ADISCORD_doctrine_fortress_state_command
+		ADISCORD_doctrine_artillery_support_network
+		ADISCORD_doctrine_combat_engineer_groups
+	}
+	ai_will_do = {
+		base = 1
+		modifier = { factor = 1.7 has_tech = ADISCORD_tech_hardened_logistics_nodes }
+	}
+	supply_consumption_factor = -0.015
+	category_support_battalions = { defense = 0.02 }
+	rewards = {
+		ADISCORD_doctrine_resilient_logistics_command_route_audits = {
+			mastery = 50
+			supply_consumption_factor = -0.01
+		}
+		ADISCORD_doctrine_resilient_logistics_command_forward_pools = {
+			mastery = 50
+			org_loss_when_moving = -0.01
+		}
+		ADISCORD_doctrine_resilient_logistics_command_repair_columns = {
+			mastery = 50
+			industry_repair_factor = 0.02
+		}
+		ADISCORD_doctrine_resilient_logistics_command_depot_dispersion = {
+			mastery = 50
+			category_support_battalions = { defense = 0.03 }
+		}
+		ADISCORD_doctrine_resilient_logistics_command_resilient_theater = {
+			mastery = 50
+			supply_consumption_factor = -0.025
+			land_reinforce_rate = 0.01
+			category_support_battalions = { default_morale = 0.03 }
 		}
 	}
 }

@@ -1,0 +1,241 @@
+ideas = {
+	country = {
+		VAL_westerholm_concession_income = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				ADISCORD_economy_resource_rent_income_factor = 0.12
+				production_factory_max_efficiency_factor = 0.03
+			}
+		}
+
+		VAL_vorkerland_contract_disruptions = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				ADISCORD_economy_trade_income_factor = -0.60
+				ADISCORD_economy_resource_rent_income_factor = -0.50
+				stability_factor = -0.05
+			}
+		}
+
+		VAL_vorkerland_metal_shortage = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				industrial_capacity_factory = -0.08
+				production_factory_efficiency_gain_factor = -0.10
+				production_lack_of_resource_penalty_factor = 0.15
+			}
+		}
+
+		VAL_stelander_interim_supply = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+				ADISCORD_economy_trade_income_factor = 0.05
+			}
+		}
+
+	}
+
+	hidden_ideas = {
+		VAL_contract_reputation_3 = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.15
+				ADISCORD_economy_resource_rent_income_factor = 0.10
+				ADISCORD_economy_debt_capacity_factor = 0.10
+			}
+		}
+
+		VAL_contract_reputation_2 = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_resource_rent_income_factor = 0.03
+			}
+		}
+
+		VAL_contract_reputation_1 = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				ADISCORD_economy_trade_income_factor = -0.15
+				ADISCORD_economy_resource_rent_income_factor = -0.10
+				ADISCORD_economy_debt_capacity_factor = -0.10
+				ADISCORD_economy_debt_service_factor = 0.15
+			}
+		}
+
+		VAL_contract_reputation_0 = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				ADISCORD_economy_trade_income_factor = -0.40
+				ADISCORD_economy_resource_rent_income_factor = -0.30
+				ADISCORD_economy_debt_capacity_factor = -0.25
+				ADISCORD_economy_debt_service_factor = 0.35
+				stability_factor = -0.10
+			}
+		}
+
+		VAL_factory_cathedrals_drive = {
+			picture = VAL_contract_state
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				production_speed_arms_factory_factor = 0.10
+			}
+		}
+
+		VAL_hot_production_lines = {
+			picture = VAL_contract_state
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				production_factory_max_efficiency_factor = 0.03
+			}
+		}
+
+		VAL_northern_roads_drive = {
+			picture = VAL_contract_state
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				production_speed_infrastructure_factor = 0.10
+			}
+		}
+
+		VAL_contract_administration_1 = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				political_power_gain = 0.05
+				stability_factor = 0.02
+				ADISCORD_economy_tax_collection_factor = 0.04
+			}
+		}
+
+		VAL_contract_administration_2 = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				political_power_gain = 0.08
+				stability_factor = 0.04
+				ADISCORD_economy_tax_collection_factor = 0.07
+				ADISCORD_economy_trade_income_factor = 0.03
+			}
+		}
+
+		VAL_contract_administration_3 = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				political_power_gain = 0.12
+				stability_factor = 0.06
+				ADISCORD_economy_tax_collection_factor = 0.10
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_state_overload_gain_factor = -0.08
+			}
+		}
+
+		VAL_contract_industry_1 = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				industrial_capacity_factory = 0.04
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		VAL_contract_industry_2 = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				industrial_capacity_factory = 0.07
+				production_factory_efficiency_gain_factor = 0.08
+				production_factory_max_efficiency_factor = 0.05
+				production_lack_of_resource_penalty_factor = -0.05
+			}
+		}
+
+		VAL_contract_industry_3 = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				industrial_capacity_factory = 0.10
+				production_factory_efficiency_gain_factor = 0.12
+				production_factory_max_efficiency_factor = 0.08
+				production_lack_of_resource_penalty_factor = -0.10
+				ADISCORD_economy_military_industry_income_factor = 0.08
+			}
+		}
+
+		VAL_contract_army_1 = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = 0.03
+				planning_speed = 0.05
+			}
+		}
+
+		VAL_contract_army_2 = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = 0.05
+				planning_speed = 0.10
+				supply_consumption_factor = -0.03
+				land_reinforce_rate = 0.01
+			}
+		}
+
+		VAL_contract_army_3 = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = 0.07
+				planning_speed = 0.15
+				supply_consumption_factor = -0.05
+				land_reinforce_rate = 0.02
+				command_power_gain_mult = 0.10
+			}
+		}
+
+		VAL_contract_propaganda_office = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				stability_weekly = 0.001
+				war_support_weekly = 0.001
+				political_power_gain = 0.05
+			}
+		}
+	}
+}

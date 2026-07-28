@@ -265,54 +265,29 @@ def validate_countries() -> None:
 
 
 def validate_news_settings() -> None:
-    panel = text(ROOT / "common/scripted_guis/ADISCORD_news_settings_scripted_gui.txt")
-    gui = text(ROOT / "interface/ADISCORD_news_settings.gui")
-    decision_view = text(ROOT / "interface/countrydecisionview.gui")
-    triggers = text(ROOT / "common/scripted_triggers/ADISCORD_news_settings_triggers.txt")
     superevents = text(ROOT / "common/scripted_guis/superevents.txt")
     effects = text(ROOT / "common/scripted_effects/ADISCORD_vorkerland_collapse_map_effects.txt")
+    news = text(ROOT / "events/ADISCORD_news.txt")
     localisation = text(ROOT / "localisation/russian/ADISCORD_southern_desert_l_russian.yml")
 
-    check(not (ROOT / "common/decisions/categories/ADISCORD_news_settings_categories.txt").exists(), "news settings: obsolete decision category must be removed")
-    check(not (ROOT / "common/decisions/ADISCORD_news_settings_anchor.txt").exists(), "news settings: obsolete category anchor must be removed")
-    check(not (ROOT / "common/decisions/ADISCORD_news_settings_decisions.txt").exists(), "news settings: legacy toggle decisions must be removed")
-    check(bool(block(panel, "ADISCORD_news_settings_panel")), "news settings: missing scripted GUI panel")
-    check("context_type = player_context" in panel, "news settings: top filters must use player input context")
-    check('window_name = "ADISCORD_news_settings_panel_window"' in panel, "news settings: scripted GUI uses the wrong window")
-    check("parent_window_token = decision_tab" in panel, "news settings: checkbox effects are not attached to the Decisions view")
-    check("visible = { always = yes }" in panel, "news settings: checkbox panel can disappear after country switching")
-    check('name = "ADISCORD_news_settings_panel_window"' in gui, "news settings: missing checkbox panel window")
-    check("position = { x = 5 y = 45 }" in gui, "news settings: filters are not attached to the event header")
-    check("position = {x=170 y=35}" in decision_view, "news settings: minor-event filter was not compacted")
-    check("position = {x=170 y=58}" in decision_view, "news settings: event filter was not compacted")
-    check("position = {x=270 y=58}" in decision_view, "news settings: news filter was not compacted")
+    for obsolete in (
+        "common/decisions/categories/ADISCORD_news_settings_categories.txt",
+        "common/decisions/ADISCORD_news_settings_anchor.txt",
+        "common/decisions/ADISCORD_news_settings_decisions.txt",
+        "common/scripted_guis/ADISCORD_news_settings_scripted_gui.txt",
+        "common/scripted_triggers/ADISCORD_news_settings_triggers.txt",
+        "interface/ADISCORD_news_settings.gui",
+    ):
+        check(not (ROOT / obsolete).exists(), f"news settings: obsolete file must be removed: {obsolete}")
+
+    combined = "\n".join((superevents, effects, news, localisation))
     for kind in ("major", "local"):
         disabled_flag = f"ADISCORD_{kind}_news_disabled"
         enabled_trigger = f"ADISCORD_{kind}_news_enabled"
-        check(bool(block(triggers, enabled_trigger)), f"news settings: missing {enabled_trigger} trigger")
-        check(disabled_flag in triggers, f"news settings: {enabled_trigger} does not use its opt-out flag")
-        checked_click = block(panel, f"ADISCORD_{kind}_news_checked_click")
-        unchecked_click = block(panel, f"ADISCORD_{kind}_news_unchecked_click")
-        check(f"set_country_flag = {disabled_flag}" in checked_click, f"news settings: {kind} checkbox cannot disable news")
-        check(f"clr_country_flag = {disabled_flag}" in unchecked_click, f"news settings: {kind} checkbox cannot enable news")
-        check(f"ADISCORD_{kind}_news_checked_visible" in panel, f"news settings: {kind} checked state is not bound")
-        check(f"ADISCORD_{kind}_news_unchecked_visible" in panel, f"news settings: {kind} unchecked state is not bound")
-        check(
-            bool(re.search(rf'buttonType\s*=\s*\{{[\s\S]{{0,120}}?name\s*=\s*"ADISCORD_{kind}_news_checked"[\s\S]{{0,180}}?frame\s*=\s*1', gui)),
-            f"news settings: {kind} checked state is not a clickable checkbox",
-        )
-        check(
-            bool(re.search(rf'buttonType\s*=\s*\{{[\s\S]{{0,120}}?name\s*=\s*"ADISCORD_{kind}_news_unchecked"[\s\S]{{0,180}}?frame\s*=\s*0', gui)),
-            f"news settings: {kind} unchecked state is not a clickable checkbox",
-        )
+        check(disabled_flag not in combined, f"news settings: obsolete country flag remains: {disabled_flag}")
+        check(enabled_trigger not in combined, f"news settings: obsolete scripted trigger remains: {enabled_trigger}")
         for key in (f"ADISCORD_{kind}_news_checkbox", f"ADISCORD_{kind}_news_checkbox_tt"):
-            check(bool(re.search(rf"(?m)^\s*{key}:\s*\"", localisation)), f"news settings: missing localisation {key}")
-
-    check("ADISCORD_major_news_enabled = yes" in superevents, "news settings: major superevents ignore the player setting")
-    check("ADISCORD_local_news_enabled = yes" in superevents, "news settings: local superevents ignore the player setting")
-    check("ADISCORD_major_news_enabled = yes" in block(effects, "ADISCORD_vorkerland_play_collapse_superevent_audio"), "news settings: major audio ignores the player setting")
-    check("ADISCORD_local_news_enabled = yes" in block(effects, "ADISCORD_vorkerland_play_local_superevent_audio"), "news settings: local audio ignores the player setting")
-    check("on_daily" not in panel and "on_weekly" not in panel, "news settings: recurring polling is not allowed")
+            check(not re.search(rf"(?m)^\s*{key}:\s*\"", localisation), f"news settings: obsolete localisation remains: {key}")
 
 
 def validate_vorkerland_expansion() -> None:
@@ -343,7 +318,7 @@ def main() -> int:
         for error in ERRORS:
             print(f"- {error}")
         return 1
-    print("New-state validation passed: 100 rebuilt states, 9 microstates with unique spirits/leader traits, news opt-outs, 5 legacy owner gaps and 5-state Doctor Work expansion.")
+    print("New-state validation passed: 100 rebuilt states, 9 microstates with unique spirits/leader traits, obsolete news settings removed, 5 legacy owner gaps and 5-state Doctor Work expansion.")
     return 0
 
 

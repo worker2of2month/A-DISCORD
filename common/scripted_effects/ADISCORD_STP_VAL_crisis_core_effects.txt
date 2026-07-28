@@ -220,6 +220,37 @@ ADISCORD_STP_VAL_refresh_presentation_mirrors = {
 	}
 }
 
+# The player sees one consolidated preparation spirit. Three small internal
+# components let broad focuses improve different capabilities without adding
+# three more currencies to the decisions panel.
+STP_initialize_transition_preparations = {
+	if = { limit = { NOT = { has_variable = STP_transition_administration } } set_variable = { var = STP_transition_administration value = 0 } }
+	if = { limit = { NOT = { has_variable = STP_transition_security } } set_variable = { var = STP_transition_security value = 0 } }
+	if = { limit = { NOT = { has_variable = STP_transition_mobilization } } set_variable = { var = STP_transition_mobilization value = 0 } }
+	if = { limit = { NOT = { has_variable = STP_transition_balance_score } } set_variable = { var = STP_transition_balance_score value = 0 } }
+}
+
+STP_improve_transition_administration = {
+	STP_initialize_transition_preparations = yes
+	add_to_variable = { var = STP_transition_administration value = 1 }
+	clamp_variable = { var = STP_transition_administration min = 0 max = 4 }
+	STP_refresh_crisis_modifier = yes
+}
+
+STP_improve_transition_security = {
+	STP_initialize_transition_preparations = yes
+	add_to_variable = { var = STP_transition_security value = 1 }
+	clamp_variable = { var = STP_transition_security min = 0 max = 4 }
+	STP_refresh_crisis_modifier = yes
+}
+
+STP_improve_transition_mobilization = {
+	STP_initialize_transition_preparations = yes
+	add_to_variable = { var = STP_transition_mobilization value = 1 }
+	clamp_variable = { var = STP_transition_mobilization min = 0 max = 4 }
+	STP_refresh_crisis_modifier = yes
+}
+
 STP_set_health_stage = {
 	set_temp_variable = { var = STP_requested_health_stage value = ADISCORD_STP_VAL_effect_value }
 	if = {
@@ -636,7 +667,9 @@ STP_lose_shabrat = {
 		limit = { has_country_flag = STP_shabrat_available }
 		clr_country_flag = STP_shabrat_available
 		set_country_flag = STP_shabrat_lost
+		set_country_flag = STP_shabrat_arrested
 		retire_character = STP_maksim_shabrat
+		country_event = { id = stp_crisis.48 days = 30 }
 		if = {
 			limit = { is_ai = yes }
 			clr_country_flag = STP_ai_course_lock
@@ -770,6 +803,7 @@ VAL_handle_stp_regime_change = {
 }
 
 STP_refresh_crisis_modifier = {
+	STP_initialize_transition_preparations = yes
 	# Fading father stage 1: 0 0 0 0 0
 	set_variable = { var = STP_fading_pp_factor value = 0 }
 	set_variable = { var = STP_fading_stability_factor value = 0 }
@@ -879,6 +913,41 @@ STP_refresh_crisis_modifier = {
 		set_variable = { var = STP_pressure_factory_output_factor value = -0.10 }
 	}
 
+	# Broad focus programmes feed one visible dynamic modifier. Existing
+	# readiness and suspicion remain authoritative, but only suspicion is shown
+	# numerically in the decisions panel.
+	set_variable = { var = STP_transition_pp_factor value = STP_transition_administration }
+	multiply_variable = { var = STP_transition_pp_factor value = 0.03 }
+	add_to_variable = { var = STP_transition_pp_factor value = STP_pressure_pp_factor }
+
+	set_variable = { var = STP_transition_stability_factor value = STP_transition_administration }
+	multiply_variable = { var = STP_transition_stability_factor value = 0.01 }
+	set_temp_variable = { var = STP_transition_mobilization_stability value = STP_transition_mobilization }
+	multiply_temp_variable = { var = STP_transition_mobilization_stability value = 0.005 }
+	add_to_variable = { var = STP_transition_stability_factor value = STP_transition_mobilization_stability }
+	add_to_variable = { var = STP_transition_stability_factor value = STP_network_stability_factor }
+	add_to_variable = { var = STP_transition_stability_factor value = STP_pressure_stability_factor }
+
+	set_variable = { var = STP_transition_command_factor value = STP_transition_security }
+	multiply_variable = { var = STP_transition_command_factor value = 0.04 }
+	set_variable = { var = STP_transition_planning_factor value = STP_transition_security }
+	multiply_variable = { var = STP_transition_planning_factor value = 0.025 }
+	set_variable = { var = STP_transition_org_factor value = STP_transition_security }
+	multiply_variable = { var = STP_transition_org_factor value = 0.01 }
+	set_variable = { var = STP_transition_factory_factor value = STP_transition_mobilization }
+	multiply_variable = { var = STP_transition_factory_factor value = 0.02 }
+	add_to_variable = { var = STP_transition_factory_factor value = STP_pressure_factory_output_factor }
+	set_variable = { var = STP_transition_consumer_goods_factor value = STP_network_consumer_goods_factor }
+
+	set_variable = { var = STP_transition_balance_score value = STP_resistance_readiness }
+	subtract_from_variable = { var = STP_transition_balance_score value = STP_party_suspicion }
+	set_temp_variable = { var = STP_transition_programme_score value = STP_transition_administration }
+	add_to_temp_variable = { var = STP_transition_programme_score value = STP_transition_security }
+	add_to_temp_variable = { var = STP_transition_programme_score value = STP_transition_mobilization }
+	multiply_temp_variable = { var = STP_transition_programme_score value = 5 }
+	add_to_variable = { var = STP_transition_balance_score value = STP_transition_programme_score }
+	clamp_variable = { var = STP_transition_balance_score min = -100 max = 100 }
+
 	if = {
 		limit = {
 			has_country_flag = STP_main_campaign_side
@@ -891,29 +960,21 @@ STP_refresh_crisis_modifier = {
 	}
 	else = { remove_dynamic_modifier = { modifier = STP_fading_father } }
 
+	# Migration cleanup for saves made before the consolidated spirit.
+	remove_dynamic_modifier = { modifier = STP_underground_network }
+	remove_dynamic_modifier = { modifier = STP_security_pressure }
 	if = {
 		limit = {
 			has_country_flag = STP_main_campaign_side
+			NOT = { has_country_flag = STP_ivanov_dead }
 			NOT = { has_country_flag = STP_internal_war_started }
 		}
 		if = {
-			limit = { NOT = { has_dynamic_modifier = { modifier = STP_underground_network } } }
-			add_dynamic_modifier = { modifier = STP_underground_network }
+			limit = { NOT = { has_dynamic_modifier = { modifier = STP_transition_preparations } } }
+			add_dynamic_modifier = { modifier = STP_transition_preparations }
 		}
 	}
-	else = { remove_dynamic_modifier = { modifier = STP_underground_network } }
-
-	if = {
-		limit = {
-			has_country_flag = STP_main_campaign_side
-			NOT = { has_country_flag = STP_internal_outcome_finalized }
-		}
-		if = {
-			limit = { NOT = { has_dynamic_modifier = { modifier = STP_security_pressure } } }
-			add_dynamic_modifier = { modifier = STP_security_pressure }
-		}
-	}
-	else = { remove_dynamic_modifier = { modifier = STP_security_pressure } }
+	else = { remove_dynamic_modifier = { modifier = STP_transition_preparations } }
 }
 
 VAL_refresh_contract_modifier = {

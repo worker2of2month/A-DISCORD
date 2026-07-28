@@ -183,46 +183,68 @@ NOD_can_escalate_bbv = {
 
 # Task 7: visibility and availability gates for Kefreyt's dynamic crisis branch.
 VAL_stp_crisis_at_least_rupture = {
-	country_exists = STP
-	STP = {
-		check_variable = {
-			var = STP_crisis_phase
-			value = 2
-			compare = greater_than_or_equals
+	OR = {
+		has_country_flag = VAL_debug_stp_rupture
+		has_country_flag = VAL_debug_stp_civil_war
+		has_country_flag = VAL_debug_stp_postwar
+		AND = {
+			country_exists = STP
+			STP = {
+				check_variable = {
+					var = STP_crisis_phase
+					value = 2
+					compare = greater_than_or_equals
+				}
+			}
 		}
 	}
 }
 
 VAL_has_active_stp_civil_war = {
-	has_event_target = STP_crisis_party_side
-	has_event_target = STP_crisis_resistance_side
-	country_exists = event_target:STP_crisis_party_side
-	country_exists = event_target:STP_crisis_resistance_side
-	event_target:STP_crisis_party_side = {
-		has_country_flag = STP_crisis_party_side
-		has_war_with = event_target:STP_crisis_resistance_side
-	}
-	event_target:STP_crisis_resistance_side = {
-		has_country_flag = STP_crisis_resistance_side
+	OR = {
+		has_country_flag = VAL_debug_stp_civil_war
+		AND = {
+			has_event_target = STP_crisis_party_side
+			has_event_target = STP_crisis_resistance_side
+			country_exists = event_target:STP_crisis_party_side
+			country_exists = event_target:STP_crisis_resistance_side
+			event_target:STP_crisis_party_side = {
+				has_country_flag = STP_crisis_party_side
+				has_war_with = event_target:STP_crisis_resistance_side
+			}
+			event_target:STP_crisis_resistance_side = {
+				has_country_flag = STP_crisis_resistance_side
+			}
+		}
 	}
 }
 
 VAL_can_negotiate_deferred_invoice = {
-	has_event_target = STP_postwar_country
-	country_exists = event_target:STP_postwar_country
-	event_target:STP_postwar_country = {
-		has_country_flag = STP_internal_outcome_finalized
-		has_country_flag = STP_no_war_outcome
-		has_country_flag = VAL_STP_deferred_invoice_window
+	OR = {
+		has_country_flag = VAL_debug_stp_postwar
+		AND = {
+			has_event_target = STP_postwar_country
+			country_exists = event_target:STP_postwar_country
+			event_target:STP_postwar_country = {
+				has_country_flag = STP_internal_outcome_finalized
+				has_country_flag = STP_no_war_outcome
+				has_country_flag = VAL_STP_deferred_invoice_window
+			}
+		}
 	}
 }
 
 VAL_has_postwar_stp_target = {
-	has_event_target = STP_postwar_country
-	country_exists = event_target:STP_postwar_country
-	event_target:STP_postwar_country = {
-		has_country_flag = STP_postwar_campaign_side
-		has_country_flag = STP_internal_outcome_finalized
+	OR = {
+		has_country_flag = VAL_debug_stp_postwar
+		AND = {
+			has_event_target = STP_postwar_country
+			country_exists = event_target:STP_postwar_country
+			event_target:STP_postwar_country = {
+				has_country_flag = STP_postwar_campaign_side
+				has_country_flag = STP_internal_outcome_finalized
+			}
+		}
 	}
 }
 

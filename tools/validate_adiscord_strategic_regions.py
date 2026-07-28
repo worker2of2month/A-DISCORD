@@ -11,9 +11,15 @@ from pathlib import Path
 
 from build_adiscord_strategic_regions import (
     MONTH_RANGES,
+    OUTER_CLIMATE_BELTS,
+    OUTER_REGION_SPECS,
+    OUTER_STATE_MARKER,
     REGIONS,
+    REMAINDER_STATE_MARKER,
     SEA_REGIONS,
+    build_state_adjacency,
     connected_components,
+    phenomenon,
     load_province_adjacency,
     load_province_definitions,
 )
@@ -58,6 +64,25 @@ def load_state_provinces() -> dict[int, set[int]]:
         if state_match and province_match:
             states[int(state_match.group(1))] = {int(value) for value in re.findall(r"\d+", province_match.group(1))}
     return states
+
+
+def load_generated_climate_keys(errors: list[str]) -> dict[int, str]:
+    climate_keys: dict[int, str] = {}
+    for path in (ROOT / "history" / "states").glob("*.txt"):
+        text = path.read_text(encoding="utf-8-sig", errors="strict")
+        if not text.startswith((OUTER_STATE_MARKER, REMAINDER_STATE_MARKER)):
+            continue
+        state_match = re.search(r"\bid\s*=\s*(\d+)", text)
+        climate_match = re.search(r"(?m)^# adiscord_climate_region = ([a-z_]+)\s*$", text)
+        if not state_match or not climate_match:
+            errors.append(f"{path.relative_to(ROOT)}: missing generated climate marker")
+            continue
+        climate_key = climate_match.group(1)
+        if climate_key not in OUTER_CLIMATE_BELTS:
+            errors.append(f"{path.relative_to(ROOT)}: unknown climate key {climate_key}")
+            continue
+        climate_keys[int(state_match.group(1))] = climate_key
+    return climate_keys
 
 
 def parse_regions(errors: list[str]) -> dict[int, dict[str, object]]:
@@ -128,10 +153,14 @@ def main() -> int:
     errors: list[str] = []
     definitions, color_to_province = load_province_definitions()
     adjacency = load_province_adjacency(definitions, color_to_province)
+    physical_adjacency = load_province_adjacency(
+        definitions, color_to_province, include_special_adjacencies=False
+    )
     sea_provinces = {province_id for province_id, province_type in definitions.items() if province_type == "sea"}
     sea_components = connected_components(sea_provinces, adjacency)
     main_ocean = sea_components[0] if sea_components else set()
     states = load_state_provinces()
+    generated_climate_keys = load_generated_climate_keys(errors)
     regions = parse_regions(errors)
     expected_region_ids = {region.region_id for region in (*SEA_REGIONS, *REGIONS)}
     sea_region_ids = {region.region_id for region in SEA_REGIONS}
@@ -202,6 +231,63 @@ def main() -> int:
         elif next(iter(actual)) != expected_by_state[state_id]:
             errors.append(f"state {state_id}: expected region {expected_by_state[state_id]}, found {next(iter(actual))}")
 
+    state_adjacency = build_state_adjacency(states, physical_adjacency)
+    profile_belts: dict[str, set[int]] = {}
+    for climate_key, (_slug, _name, profile) in OUTER_REGION_SPECS.items():
+        profile_belts.setdefault(profile, set()).add(OUTER_CLIMATE_BELTS[climate_key])
+    for region in REGIONS:
+        if region.region_id < 43:
+            continue
+        components = connected_components(set(region.states), state_adjacency)
+        if len(components) != 1:
+            errors.append(
+                f"generated land region {region.region_id}: fractioned into {len(components)} "
+                f"non-neighbouring state groups {list(map(sorted, components))}"
+            )
+        belts = {
+            OUTER_CLIMATE_BELTS[generated_climate_keys[state_id]]
+            for state_id in region.states
+            if state_id in generated_climate_keys
+        }
+        if len(belts) != 1:
+            errors.append(f"generated land region {region.region_id}: crosses climate belts {sorted(belts)}")
+        elif next(iter(belts)) not in profile_belts.get(region.climate, set()):
+            errors.append(
+                f"generated land region {region.region_id}: profile {region.climate} does not match belt {next(iter(belts))}"
+            )
+
+    for climate_key, (_slug, _name, profile) in OUTER_REGION_SPECS.items():
+        if not climate_key.startswith("world_"):
+            continue
+        belt = OUTER_CLIMATE_BELTS[climate_key]
+        max_snow = max(phenomenon(profile, month)[3] for month in range(12))
+        max_blizzard = max(phenomenon(profile, month)[4] for month in range(12))
+        if belt == 5 and (max_snow > 0.0 or max_blizzard > 0.0):
+            errors.append(f"{climate_key}: tropical belt must not generate snow or blizzards")
+        elif belt == 4 and (max_snow > 0.03 or max_blizzard > 0.0):
+            errors.append(f"{climate_key}: warm belt has excessive winter weather")
+        elif belt <= 1 and max_snow < 0.25:
+            errors.append(f"{climate_key}: polar/subarctic belt has too little winter snow")
+
+    checked_state_edges: set[tuple[int, int]] = set()
+    for state_id, neighbours in state_adjacency.items():
+        if state_id not in generated_climate_keys:
+            continue
+        for neighbour in neighbours:
+            if neighbour not in generated_climate_keys:
+                continue
+            edge = tuple(sorted((state_id, neighbour)))
+            if edge in checked_state_edges:
+                continue
+            checked_state_edges.add(edge)
+            first_belt = OUTER_CLIMATE_BELTS[generated_climate_keys[state_id]]
+            second_belt = OUTER_CLIMATE_BELTS[generated_climate_keys[neighbour]]
+            if abs(first_belt - second_belt) > 1:
+                errors.append(
+                    f"neighbouring generated states {state_id}/{neighbour}: climate jumps from belt "
+                    f"{first_belt} to {second_belt}"
+                )
+
     for region_id, data in regions.items():
         validate_weather(region_id, str(data["text"]), errors)
 
@@ -212,11 +298,44 @@ def main() -> int:
         if not localisation_path.read_bytes().startswith(b"\xef\xbb\xbf"):
             errors.append("strategic-region localisation must use UTF-8 BOM")
         localisation = localisation_path.read_text(encoding="utf-8-sig", errors="strict")
-        keys = Counter(re.findall(r"^\s*(STRATEGICREGION_\d+)\s*:", localisation, re.MULTILINE))
+        localisation_rows = re.findall(
+            r'^\s*(STRATEGICREGION_\d+)\s*:\s*"([^"]+)"', localisation, re.MULTILINE
+        )
+        keys = Counter(key for key, _name in localisation_rows)
         for region_id in sorted(expected_region_ids):
             key = f"STRATEGICREGION_{region_id}"
             if keys[key] != 1:
                 errors.append(f"localisation key {key}: expected once, found {keys[key]}")
+        generated_names = [
+            name
+            for key, name in localisation_rows
+            if int(key.rsplit("_", 1)[1]) >= 43
+        ]
+        duplicate_generated_names = sorted(
+            name for name, count in Counter(generated_names).items() if count > 1
+        )
+        if duplicate_generated_names:
+            errors.append(f"generated strategic regions have duplicate names {duplicate_generated_names[:20]}")
+        technical_names = [
+            name for name in generated_names if re.search(r"\b(?:лев(?:ый|ая|ое|ые)|прав(?:ый|ая|ое|ые))\b", name, re.IGNORECASE)
+        ]
+        if technical_names:
+            errors.append(f"generated strategic regions expose technical side names {technical_names[:20]}")
+        numbered_names = [
+            name for name in generated_names if re.search(r"\s[IVXLCDM]+$", name)
+        ]
+        if numbered_names:
+            errors.append(f"generated strategic regions expose technical Roman suffixes {numbered_names[:20]}")
+        misplaced_state_toponyms = [
+            name
+            for _key, name in localisation_rows
+            if re.search(r"(?:Римат|Итор|Англи)", name, re.IGNORECASE)
+        ]
+        if misplaced_state_toponyms:
+            errors.append(
+                "strategic regions reuse state/country-only toponyms "
+                f"{misplaced_state_toponyms[:20]}"
+            )
 
     weather_positions_path = ROOT / "map" / "weatherpositions.txt"
     position_counts: Counter[int] = Counter()

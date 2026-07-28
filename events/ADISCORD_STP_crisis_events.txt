@@ -20,8 +20,8 @@ country_event = {
 			clr_country_flag = NOD_crisis_posture_lock
 			NOD_select_crisis_posture = yes
 		}
-		complete_national_focus = STP_The_Man_Who_Bought_The_Sky
-		complete_national_focus = STP_When_The_Guarantee_Died
+		country_event = { id = stp_lore.2 }
+		country_event = { id = stp_lore.3 }
 		activate_mission = STP_health_stage_2_to_3
 		country_event = { id = stp_crisis.5 days = 69 }
 	}
@@ -133,8 +133,8 @@ country_event = {
 			clr_country_flag = NOD_crisis_posture_lock
 			NOD_select_crisis_posture = yes
 		}
-		complete_national_focus = STP_The_Dying_Feast
-		complete_national_focus = STP_The_Doctors_Lie
+		country_event = { id = stp_lore.7 }
+		country_event = { id = stp_lore.11 }
 		activate_mission = STP_health_stage_3_to_4
 	}
 }
@@ -159,10 +159,8 @@ country_event = {
 			clr_country_flag = NOD_crisis_posture_lock
 			NOD_select_crisis_posture = yes
 		}
-		complete_national_focus = STP_The_Last_Signature
-		complete_national_focus = STP_Cancel_The_Morning_Address
-		complete_national_focus = STP_A_Glass_Raised_Too_High
 		activate_mission = STP_health_stage_4_to_death
+		country_event = { id = stp_crisis.4 days = 64 }
 	}
 }
 
@@ -185,8 +183,8 @@ country_event = {
 			clr_country_flag = NOD_crisis_posture_lock
 			NOD_select_crisis_posture = yes
 		}
-		complete_national_focus = STP_The_Father_Of_Peace_Is_Gone
-		retire_character = STP_Petr_Ivanov
+		country_event = { id = stp_lore.12 }
+		kill_country_leader = yes
 
 		clr_country_flag = STP_focus_active_STP_Foreign_Guests_At_The_Banquet
 		clr_country_flag = STP_focus_active_STP_Kefreite_Security_Offer
@@ -299,6 +297,7 @@ country_event = {
 
 	option = {
 		name = stp_crisis.6.b
+		trigger = { is_ai = yes }
 		ai_chance = {
 			base = 50
 			modifier = { factor = 2 hedonism > 0.40 }
@@ -1419,7 +1418,32 @@ country_event = {
 	}
 }
 
-# Ivanov's death resolves once, in the approved seven-outcome order.
+# Shabrat is removed from play at arrest; this delayed event records the
+# execution so the consequence is communicated as a political event rather
+# than another permanent indicator.
+country_event = {
+	id = stp_crisis.48
+	title = stp_crisis.48.t
+	desc = stp_crisis.48.d
+	picture = GFX_report_event_JAP_communists_arrested
+	is_triggered_only = yes
+
+	trigger = {
+		original_tag = STP
+		has_country_flag = STP_shabrat_arrested
+		NOT = { has_country_flag = STP_shabrat_executed }
+	}
+
+	immediate = {
+		set_country_flag = STP_shabrat_executed
+		clr_country_flag = STP_shabrat_arrested
+	}
+
+	option = { name = stp_crisis.48.a }
+}
+
+# Ivanov's death resolves once into four player-readable outcomes. Minor
+# variants (the resistance commander or Nodrul posture) remain internal.
 country_event = {
 	id = stp_crisis.50
 	hidden = yes
@@ -1460,7 +1484,6 @@ country_event = {
 			if = {
 				limit = { STP_can_attempt_bloodless_coup = yes }
 				set_country_flag = STP_outcome_shabrat_bloodless
-				STP_complete_transition_outcome_focus = yes
 				set_country_flag = STP_winner_shabrat
 				set_country_flag = STP_no_war_outcome
 				STP_finalize_internal_outcome = yes
@@ -1471,66 +1494,87 @@ country_event = {
 					STP_resistance_network_is_viable = yes
 				}
 				set_country_flag = STP_outcome_shabrat_main_war
-				STP_complete_transition_outcome_focus = yes
 				set_country_flag = STP_resistance_leader_shabrat
 				STP_start_party_revolt = yes
 			}
-			else_if = {
-				limit = { STP_sotnikov_network_is_viable = yes }
-				set_country_flag = STP_outcome_sotnikov_main_war
-				STP_complete_transition_outcome_focus = yes
-				set_country_flag = STP_resistance_leader_sotnikov
-				STP_start_party_revolt = yes
-			}
 			else = {
-				set_country_flag = STP_outcome_hedersett_fail_state
-				STP_complete_transition_outcome_focus = yes
-				set_country_flag = STP_underground_crushed_fail_state
-				set_country_flag = STP_winner_hedersett
-				set_country_flag = STP_no_war_outcome
+				# Botched resistance preparation removes Shabrat but does not end
+				# the player's campaign. Sotnikov inherits the surviving network.
+				if = { limit = { has_country_flag = STP_shabrat_available } STP_lose_shabrat = yes }
+				set_country_flag = STP_outcome_sotnikov_main_war
+				set_country_flag = STP_resistance_leader_sotnikov
 				add_stability = -0.1
-				set_variable = { var = STP_node_officers value = 0 }
-				STP_finalize_internal_outcome = yes
+				if = {
+					limit = { check_variable = { var = STP_node_officers value = 1 compare = less_than } }
+					set_variable = { var = STP_node_officers value = 1 }
+				}
+				STP_start_party_revolt = yes
 			}
 		}
 		else = {
+			# Party gameplay is intentionally AI-only for this pass. It still has
+			# a complete civil-war skeleton and one consolidated outcome.
+			set_country_flag = STP_outcome_hedersett_consolidation
 			if = {
-				limit = {
-					NOT = {
-						OR = {
-							AND = {
-								has_country_flag = STP_shabrat_available
-								STP_resistance_network_is_viable = yes
-							}
-							STP_sotnikov_network_is_viable = yes
-						}
-					}
-				}
-				set_country_flag = STP_outcome_hedersett_consolidation
-				STP_complete_transition_outcome_focus = yes
-				set_country_flag = STP_winner_hedersett
-				set_country_flag = STP_no_war_outcome
-				set_country_flag = STP_preserve_active_nodrul_mandate
-				STP_finalize_internal_outcome = yes
-			}
-			else_if = {
 				limit = {
 					has_country_flag = STP_shabrat_available
 					STP_resistance_network_is_viable = yes
 				}
-				set_country_flag = STP_outcome_hedersett_vs_shabrat
-				STP_complete_transition_outcome_focus = yes
 				set_country_flag = STP_resistance_leader_shabrat
 				STP_start_resistance_revolt_chauvinism = yes
 			}
 			else = {
-				set_country_flag = STP_outcome_hedersett_vs_sotnikov
-				STP_complete_transition_outcome_focus = yes
+				if = { limit = { has_country_flag = STP_shabrat_available } STP_lose_shabrat = yes }
 				set_country_flag = STP_resistance_leader_sotnikov
 				STP_start_resistance_revolt_etatism = yes
 			}
 		}
 	}
+}
+
+# The Congress objective is mechanical; these events only explain the result.
+country_event = {
+	id = stp_crisis.60
+	title = stp_crisis.60.t
+	desc = stp_crisis.60.d
+	picture = GFX_report_event_generic_parliament
+	is_triggered_only = yes
+	trigger = {
+		original_tag = STP
+		has_country_flag = STP_last_banquet_success
+	}
+	option = { name = stp_crisis.60.a }
+}
+
+country_event = {
+	id = stp_crisis.61
+	title = stp_crisis.61.t
+	desc = {
+		trigger = { has_country_flag = STP_last_banquet_nodrul_intervention }
+		text = stp_crisis.61.intervention
+	}
+	desc = {
+		trigger = { has_country_flag = STP_last_banquet_nodrul_limited }
+		text = stp_crisis.61.limited
+	}
+	desc = {
+		trigger = {
+			NOT = {
+				OR = {
+					has_country_flag = STP_last_banquet_nodrul_intervention
+					has_country_flag = STP_last_banquet_nodrul_limited
+				}
+			}
+		}
+		text = stp_crisis.61.distracted
+	}
+	picture = GFX_report_event_generic_army
+	is_triggered_only = yes
+	trigger = {
+		original_tag = STP
+		has_country_flag = STP_last_banquet_failed
+	}
+	option = { name = stp_crisis.61.a }
 }
 
 # Both internal roles carry this guarded three-day poll. The surviving role

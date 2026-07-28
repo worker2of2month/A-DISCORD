@@ -4,11 +4,8 @@ VAL_contract_campaign = {
 	}
 
 	visible = {
-		has_completed_focus = VAL_One_Ledger_One_Banner
+		always = no
 	}
-
-	visible_when_empty = yes
-	scripted_gui = ADISCORD_VAL_contract_panel
 }
 
 NOD_crisis_posture = {

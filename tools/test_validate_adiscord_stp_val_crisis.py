@@ -26,11 +26,14 @@ from tools.stp_val_crisis_manifest import (
     RESOURCE_STATES,
     RESISTANCE_POSTURES,
     SECURITY_POSTURES,
+    STP_CALENDAR_LORE_EVENTS,
+    STP_CRISIS_FOCUS_LAYOUT,
     STP_CRISIS_FOCUS_REWARDS,
     STP_CRISIS_FOCUS_STAGES,
     STP_PARTY_FOCUSES,
     STP_SHABRAT_FOCUSES,
     STP_SPINE_FOCUS_STAGES,
+    STP_STORY_ONLY_FOCUS_IDS,
     STP_TRANSITION_FOCUS_MAP,
     VAL_AUTHORITY_FOCUS_REWARDS,
     VAL_AI_FOCUS_COURSE_BIASES,
@@ -170,10 +173,14 @@ class CrisisManifestTests(unittest.TestCase):
                 "STP_health_stage_4_to_death": (63, "stp_crisis.4"),
             },
         )
-        self.assertEqual(len(STP_CRISIS_FOCUS_STAGES), 40)
+        self.assertEqual(len(STP_CRISIS_FOCUS_STAGES), 18)
         self.assertEqual(set(STP_CRISIS_FOCUS_STAGES), set(STP_CRISIS_FOCUS_REWARDS))
         self.assertFalse(set(STP_SHABRAT_FOCUSES) & set(STP_PARTY_FOCUSES))
-        self.assertEqual(set(STP_SPINE_FOCUS_STAGES), {1, 2, 3, 4, 5})
+        self.assertEqual(STP_SPINE_FOCUS_STAGES, {})
+        self.assertEqual(STP_TRANSITION_FOCUS_MAP, {})
+        self.assertEqual(set(STP_CALENDAR_LORE_EVENTS), {1, 2, 3, 4, 5})
+        self.assertEqual(set(STP_CRISIS_FOCUS_LAYOUT), set(STP_CRISIS_FOCUS_STAGES))
+        self.assertEqual(len(STP_STORY_ONLY_FOCUS_IDS), 13)
         self.assertEqual(set(SECURITY_POSTURES), {1, 2, 3, 4, 5})
         self.assertEqual(set(RESISTANCE_POSTURES), {1, 2, 3, 4})
 
@@ -230,33 +237,14 @@ class CrisisManifestTests(unittest.TestCase):
             crisis_manifest.STP_CIVIL_WAR_STATES,
             (1, 2, 3, 28, 29, 43, 44, 45, 46, 53, 88),
         )
-        self.assertEqual(len(crisis_manifest.STP_INTERNAL_OUTCOMES), 7)
+        self.assertEqual(len(crisis_manifest.STP_INTERNAL_OUTCOMES), 4)
         self.assertEqual(
             crisis_manifest.STP_INTERNAL_OUTCOMES,
             {
                 "shabrat_bloodless": ("shabrat", "no_war", None),
-                "shabrat_main_war": (
-                    "shabrat",
-                    "resistance_main",
-                    "hedersett",
-                ),
-                "sotnikov_main_war": (
-                    "sotnikov",
-                    "resistance_main",
-                    "hedersett",
-                ),
-                "hedersett_fail_state": ("hedersett", "no_war", None),
-                "hedersett_consolidation": ("hedersett", "no_war", None),
-                "hedersett_vs_shabrat": (
-                    "hedersett",
-                    "party_main",
-                    "shabrat",
-                ),
-                "hedersett_vs_sotnikov": (
-                    "hedersett",
-                    "party_main",
-                    "sotnikov",
-                ),
+                "shabrat_main_war": ("shabrat", "resistance_main", "hedersett"),
+                "sotnikov_main_war": ("sotnikov", "resistance_main", "hedersett"),
+                "hedersett_consolidation": ("hedersett", "party_main", "resistance"),
             },
         )
         self.assertEqual(
@@ -561,15 +549,11 @@ class CrisisValidatorTests(unittest.TestCase):
         lifecycle_contract = {
             "STP_fading_father": (
                 "STP_main_campaign_side",
-                "STP_ivanov_dead",
+                ("STP_ivanov_dead",),
             ),
-            "STP_underground_network": (
+            "STP_transition_preparations": (
                 "STP_main_campaign_side",
-                "STP_internal_war_started",
-            ),
-            "STP_security_pressure": (
-                "STP_main_campaign_side",
-                "STP_internal_outcome_finalized",
+                ("STP_ivanov_dead", "STP_internal_war_started"),
             ),
         }
         top_level_if = direct_blocks(refresh, "if")
@@ -578,7 +562,7 @@ class CrisisValidatorTests(unittest.TestCase):
             validator.ROOT
             / "common/dynamic_modifiers/ADISCORD_STP_VAL_crisis_dynamic_modifiers.txt"
         ) or ""
-        for modifier, (positive_flag, negative_flag) in lifecycle_contract.items():
+        for modifier, (positive_flag, negative_flags) in lifecycle_contract.items():
             add_branches = [
                 block
                 for block in top_level_if
@@ -598,19 +582,20 @@ class CrisisValidatorTests(unittest.TestCase):
             masked_limit = validator._mask_non_code(limit)
             self.assertEqual(
                 set(re.findall(r"\bhas_country_flag\s*=\s*([A-Za-z0-9_]+)", masked_limit)),
-                {positive_flag, negative_flag},
+                {positive_flag, *negative_flags},
             )
             negative_blocks = list(validator._iter_named_blocks(limit, "NOT"))
-            self.assertTrue(
-                any(
-                    re.search(
-                        rf"\bhas_country_flag\s*=\s*{re.escape(negative_flag)}\b",
-                        validator._mask_non_code(block),
-                    )
-                    for block in negative_blocks
-                ),
-                f"{modifier} must negate {negative_flag}",
-            )
+            for negative_flag in negative_flags:
+                self.assertTrue(
+                    any(
+                        re.search(
+                            rf"\bhas_country_flag\s*=\s*{re.escape(negative_flag)}\b",
+                            validator._mask_non_code(block),
+                        )
+                        for block in negative_blocks
+                    ),
+                    f"{modifier} must negate {negative_flag}",
+                )
             self.assertFalse(
                 any(
                     re.search(
@@ -654,13 +639,25 @@ class CrisisValidatorTests(unittest.TestCase):
             masked_enable = validator._mask_non_code(enable)
             self.assertEqual(
                 set(re.findall(r"\bhas_country_flag\s*=\s*([A-Za-z0-9_]+)", masked_enable)),
-                {positive_flag, negative_flag},
+                {positive_flag, *negative_flags},
             )
             enable_not = list(validator._iter_named_blocks(enable, "NOT"))
-            self.assertEqual(len(enable_not), 1)
-            self.assertRegex(
-                validator._mask_non_code(enable_not[0]),
-                rf"\bhas_country_flag\s*=\s*{re.escape(negative_flag)}\b",
+            self.assertEqual(len(enable_not), len(negative_flags))
+            for negative_flag in negative_flags:
+                self.assertTrue(
+                    any(
+                        re.search(
+                            rf"\bhas_country_flag\s*=\s*{re.escape(negative_flag)}\b",
+                            validator._mask_non_code(block),
+                        )
+                        for block in enable_not
+                    )
+                )
+
+        for legacy_modifier in ("STP_underground_network", "STP_security_pressure"):
+            self.assertIn(
+                f"remove_dynamic_modifier = {{ modifier = {legacy_modifier} }}",
+                refresh,
             )
 
     def _write_required_files(self, root: Path, text: str = "feature = { }") -> None:
@@ -928,7 +925,7 @@ class CrisisValidatorTests(unittest.TestCase):
         self.assertIn("remove_ideas = VAL_mercenary_state", startup)
         for task_3_token in (
             "STP_health_calendar_started",
-            "complete_national_focus = STP_Nectar_of_the_Gods",
+            "country_event = { id = stp_lore.1 }",
             "activate_mission = STP_health_stage_1_to_2",
         ):
             self.assertIn(task_3_token, startup)
@@ -936,7 +933,7 @@ class CrisisValidatorTests(unittest.TestCase):
             startup,
             r"(?s)NOT\s*=\s*\{\s*has_country_flag\s*=\s*STP_health_calendar_started\s*\}"
             r".*?set_country_flag\s*=\s*STP_health_calendar_started"
-            r".*?complete_national_focus\s*=\s*STP_Nectar_of_the_Gods"
+            r".*?country_event\s*=\s*\{\s*id\s*=\s*stp_lore\.1\s*\}"
             r".*?activate_mission\s*=\s*STP_health_stage_1_to_2",
         )
 
@@ -988,7 +985,7 @@ class CrisisValidatorTests(unittest.TestCase):
         self.assertIn("has_country_flag = STP_main_campaign_side", stp)
         val = validator.extract_named_block(categories, "VAL_contract_campaign") or ""
         self.assertIn("tag = VAL", validator.extract_named_block(val, "allowed") or "")
-        self.assertIn("has_completed_focus = VAL_One_Ledger_One_Banner", val)
+        self.assertIn("always = no", validator.extract_named_block(val, "visible") or "")
         nod = validator.extract_named_block(categories, "NOD_crisis_posture") or ""
         self.assertIn("tag = NOD", validator.extract_named_block(nod, "allowed") or "")
         self.assertIn("STP_main_campaign_side", nod)
@@ -1008,18 +1005,18 @@ class CrisisValidatorTests(unittest.TestCase):
             validator.ROOT / "events/ADISCORD_STP_crisis_events.txt"
         ) or ""
         expected = (
-            ("stp_crisis.1", 2, STP_SPINE_FOCUS_STAGES[2], "STP_health_stage_2_to_3"),
-            ("stp_crisis.2", 3, STP_SPINE_FOCUS_STAGES[3], "STP_health_stage_3_to_4"),
-            ("stp_crisis.3", 4, STP_SPINE_FOCUS_STAGES[4], "STP_health_stage_4_to_death"),
+            ("stp_crisis.1", 2, STP_CALENDAR_LORE_EVENTS[2], "STP_health_stage_2_to_3"),
+            ("stp_crisis.2", 3, STP_CALENDAR_LORE_EVENTS[3], "STP_health_stage_3_to_4"),
+            ("stp_crisis.3", 4, STP_CALENDAR_LORE_EVENTS[4], "STP_health_stage_4_to_death"),
         )
-        for event_id, stage, spine, next_mission in expected:
+        for event_id, stage, lore_events, next_mission in expected:
             block = self._block_with_assignment(
                 events, "country_event", f"id = {event_id}"
             )
             self.assertIn("hidden = yes", block)
             self._assert_engine_safe_effect_call(block, "STP_set_health_stage", stage)
-            for focus in spine:
-                self.assertIn(f"complete_national_focus = {focus}", block)
+            for lore_event in lore_events:
+                self.assertIn(f"country_event = {{ id = {lore_event} }}", block)
             self.assertIn(f"activate_mission = {next_mission}", block)
         stage_two = self._block_with_assignment(
             events, "country_event", "id = stp_crisis.1"
@@ -1040,7 +1037,7 @@ class CrisisValidatorTests(unittest.TestCase):
         self.assertIn("country_event = { id = stp_crisis.6 }", probe)
         self.assertNotIn("on_daily", events)
 
-    def test_death_event_is_terminal_and_completes_the_spine(self):
+    def test_death_event_is_terminal_and_routes_lore_without_a_focus(self):
         events = validator.read(
             validator.ROOT / "events/ADISCORD_STP_crisis_events.txt"
         ) or ""
@@ -1049,11 +1046,10 @@ class CrisisValidatorTests(unittest.TestCase):
         )
         self.assertIn("set_country_flag = STP_ivanov_dead", death)
         self._assert_engine_safe_effect_call(death, "STP_set_health_stage", 5)
-        self.assertIn(
-            "complete_national_focus = STP_The_Father_Of_Peace_Is_Gone", death
-        )
+        self.assertIn("country_event = { id = stp_lore.12 }", death)
+        self.assertNotIn("complete_national_focus", death)
         self._assert_engine_safe_effect_call(death, "STP_set_crisis_phase", 2)
-        self.assertIn("retire_character = STP_Petr_Ivanov", death)
+        self.assertIn("kill_country_leader = yes", death)
         self.assertNotIn("activate_mission = STP_health_stage_", death)
         for focus in STP_CRISIS_FOCUS_STAGES:
             self.assertIn(f"clr_country_flag = STP_focus_active_{focus}", death)
@@ -1175,7 +1171,10 @@ class CrisisValidatorTests(unittest.TestCase):
             block = self._block_with_assignment(tree, "focus", f"id = {focus}")
             self.assertTrue(block, focus)
             masked = validator._mask_non_code(block)
-            self.assertRegex(masked, r"\bcost\s*=\s*5\b")
+            cost_match = re.search(r"\bcost\s*=\s*(\d+)\b", masked)
+            self.assertIsNotNone(cost_match, focus)
+            self.assertGreater(int(cost_match.group(1)), 0, focus)
+            self.assertLessEqual(int(cost_match.group(1)), 5, focus)
             self.assertRegex(masked, r"\bcancelable\s*=\s*no\b")
             self.assertRegex(masked, r"\bcancel_if_invalid\s*=\s*yes\b")
             self.assertRegex(masked, r"\bcontinue_if_invalid\s*=\s*no\b")
@@ -1217,30 +1216,71 @@ class CrisisValidatorTests(unittest.TestCase):
                 )
         self.assertEqual(len(sticky_flags), len(STP_CRISIS_FOCUS_STAGES))
 
-    def test_focus_prerequisite_deadlocks_are_repaired_without_new_ids(self):
+    def test_predeath_tree_is_compact_playable_and_has_no_story_nodes(self):
         tree = validator.read(
             validator.ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt"
         ) or ""
+        self.assertNotIn("is_completed_by_event = yes", tree)
+        for removed_focus in STP_STORY_ONLY_FOCUS_IDS:
+            self.assertNotRegex(tree, rf"\bid\s*=\s*{re.escape(removed_focus)}\b")
+        actual_focuses = {
+            values[0]
+            for block in validator._iter_named_blocks(tree, "focus")
+            if (values := validator._direct_scalar_values(block, "id"))
+        }
+        self.assertEqual(actual_focuses, set(STP_CRISIS_FOCUS_STAGES))
+        for focus, (relative, x, y) in STP_CRISIS_FOCUS_LAYOUT.items():
+            block = self._block_with_assignment(tree, "focus", f"id = {focus}")
+            self.assertEqual(validator._direct_scalar_values(block, "x"), [str(x)])
+            self.assertEqual(validator._direct_scalar_values(block, "y"), [str(y)])
+            expected_relative = [] if relative is None else [relative]
+            self.assertEqual(
+                validator._direct_scalar_values(block, "relative_position_id"),
+                expected_relative,
+            )
+
+        for opening_focus in (
+            "STP_The_Old_Man_On_The_Balcony",
+            "STP_Count_The_Loyalists",
+            "STP_The_City_Still_Dances",
+            "STP_Foreign_Guests_At_The_Banquet",
+        ):
+            block = self._block_with_assignment(tree, "focus", f"id = {opening_focus}")
+            self.assertEqual(list(validator._iter_named_blocks(block, "prerequisite")), [])
+        show = self._block_with_assignment(
+            tree, "focus", "id = STP_Show_Him_The_Truth"
+        )
+        show_prerequisite = validator.extract_named_block(show, "prerequisite") or ""
+        self.assertEqual(
+            set(
+                re.findall(
+                    r"\bfocus\s*=\s*(STP_[A-Za-z0-9_]+)", show_prerequisite
+                )
+            ),
+            {
+                "STP_The_Old_Man_On_The_Balcony",
+                "STP_Count_The_Loyalists",
+                "STP_The_City_Still_Dances",
+                "STP_Foreign_Guests_At_The_Banquet",
+            },
+        )
+        for party_focus in STP_PARTY_FOCUSES:
+            block = self._block_with_assignment(tree, "focus", f"id = {party_focus}")
+            self.assertEqual(
+                list(validator._iter_named_blocks(block, "prerequisite")), []
+            )
         prerequisites = {
-            "STP_Foreign_Guests_At_The_Banquet": "STP_Nectar_of_the_Gods",
-            "STP_Kefreite_Security_Offer": "STP_Foreign_Guests_At_The_Banquet",
-            "STP_The_Old_Man_On_The_Balcony": "STP_Nectar_of_the_Gods",
-            "STP_The_City_Still_Dances": "STP_Nectar_of_the_Gods",
-            "STP_Count_The_Loyalists": "STP_Nectar_of_the_Gods",
-            "STP_Show_Him_The_Truth": "STP_The_Old_Man_On_The_Balcony",
-            "STP_Govern_In_His_Name": "STP_The_Old_Man_On_The_Balcony",
-            "STP_The_Valirian_Advisers": "STP_Foreign_Guests_At_The_Banquet",
-            "STP_Contractors_In_The_Passes": "STP_Kefreite_Security_Offer",
-            "STP_Rumours_In_The_Highlands": "STP_Kefreite_Security_Offer",
-            "STP_The_Lower_Market": "STP_The_City_Still_Dances",
-            "STP_Renew_The_Cultural_Mandate": "STP_The_Valirian_Advisers",
+            "STP_The_Last_Confession": "STP_Show_Him_The_Truth",
+            "STP_Turn_The_Young_Officers": "STP_Show_Him_The_Truth",
+            "STP_Cut_The_Silk_Leash": "STP_Show_Him_The_Truth",
+            "STP_Call_For_Shabrat": "STP_The_Last_Confession",
+            "STP_Garrisons_Hesitate": "STP_Turn_The_Young_Officers",
+            "STP_The_People_Stop_Singing": "STP_The_Last_Confession",
         }
         for focus, prerequisite in prerequisites.items():
             block = self._block_with_assignment(tree, "focus", f"id = {focus}")
             prereq = validator.extract_named_block(block, "prerequisite") or ""
             self.assertRegex(prereq, rf"\bfocus\s*=\s*{re.escape(prerequisite)}\b")
-        focus_ids = re.findall(r"\bid\s*=\s*(STP_[A-Za-z0-9_]+)", tree)
-        self.assertEqual(len(focus_ids), len(set(focus_ids)))
 
     def test_state_face_and_party_suspicion_use_canonical_whole_values(self):
         root = validator.ROOT
@@ -1716,14 +1756,20 @@ class CrisisValidatorTests(unittest.TestCase):
         )
         self.assertIn("country_event = { id = stp_crisis.50 }", death)
         self.assertIn("hidden = yes", router)
+        for event_id, picture in (
+            ("stp_crisis.48", "GFX_report_event_JAP_communists_arrested"),
+            ("stp_crisis.60", "GFX_report_event_generic_parliament"),
+            ("stp_crisis.61", "GFX_report_event_generic_army"),
+        ):
+            event = self._block_with_assignment(
+                events, "country_event", f"id = {event_id}"
+            )
+            self.assertIn(f"picture = {picture}", event)
         outcome_flags = {
             "STP_outcome_shabrat_bloodless",
             "STP_outcome_shabrat_main_war",
             "STP_outcome_sotnikov_main_war",
-            "STP_outcome_hedersett_fail_state",
             "STP_outcome_hedersett_consolidation",
-            "STP_outcome_hedersett_vs_shabrat",
-            "STP_outcome_hedersett_vs_sotnikov",
         }
         self.assertEqual(
             set(
@@ -1737,16 +1783,14 @@ class CrisisValidatorTests(unittest.TestCase):
         for token in (
             "STP_can_attempt_bloodless_coup = yes",
             "STP_resistance_network_is_viable = yes",
-            "STP_sotnikov_network_is_viable = yes",
             "STP_start_resistance_revolt_chauvinism = yes",
             "STP_start_resistance_revolt_etatism = yes",
             "STP_start_party_revolt = yes",
-            "STP_underground_crushed_fail_state",
             "add_stability = -0.1",
-            "set_variable = { var = STP_node_officers value = 0 }",
+            "set_variable = { var = STP_node_officers value = 1 }",
         ):
             self.assertIn(token, router)
-        self.assertEqual(router.count("STP_finalize_internal_outcome = yes"), 3)
+        self.assertEqual(router.count("STP_finalize_internal_outcome = yes"), 1)
 
         war = validator.read(
             validator.ROOT
@@ -1770,22 +1814,17 @@ class CrisisValidatorTests(unittest.TestCase):
             "STP_set_crisis_phase = yes",
             "tree = ADISCORD_STP_postwar_focus",
             "STP_clear_external_crisis_participants = yes",
-            "STP_complete_transition_outcome_focus = yes",
             "VAL_STP_start_war_countdown_120 = yes",
             "clear_global_event_target = STP_crisis_main_side",
             "clear_global_event_target = STP_crisis_party_side",
             "clear_global_event_target = STP_crisis_resistance_side",
         ):
             self.assertIn(token, finalizer_bundle)
-        focus_bridge = (
+        self.assertIsNone(
             validator.extract_named_block(war, "STP_complete_transition_outcome_focus")
-            or ""
         )
-        self.assertEqual(router.count("STP_complete_transition_outcome_focus = yes"), 7)
-        self.assertIn("STP_complete_transition_outcome_focus = yes", leader_assignment)
-        for outcome_flag, bridge in STP_TRANSITION_FOCUS_MAP.items():
-            self.assertIn(f"has_country_flag = {outcome_flag}", focus_bridge)
-            self.assertEqual(focus_bridge.count(f"complete_national_focus = {bridge}"), 1)
+        self.assertNotIn("STP_complete_transition_outcome_focus", router)
+        self.assertNotIn("STP_complete_transition_outcome_focus", leader_assignment)
         self.assertLess(
             finalizer.index("STP_assign_postwar_leader = yes"),
             finalizer.index("tree = ADISCORD_STP_postwar_focus"),
@@ -2276,31 +2315,37 @@ class CrisisValidatorTests(unittest.TestCase):
                 self.assertIn(token, reward)
 
     def test_task_eight_shared_val_operations_and_contract_lifecycle(self):
-        decisions = validator.read(
+        legacy_decisions = validator.read(
             validator.ROOT / "common/decisions/ADISCORD_VAL_contract_decisions.txt"
+        ) or ""
+        decisions = validator.read(
+            validator.ROOT / "common/decisions/ADISCORD_VAL_rework_decisions.txt"
         ) or ""
         effects = validator.read(
             validator.ROOT
             / "common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt"
         ) or ""
-        for decision_id, (cost, days, _) in VAL_STP_OPERATION_SPECS.items():
-            block = validator.extract_named_block(decisions, decision_id) or ""
-            self.assertEqual(validator._direct_scalar_values(block, "cost"), [str(cost)])
-            self.assertEqual(
-                validator._direct_scalar_values(block, "days_remove"), [str(days)]
-            )
-            self.assertIn("VAL_foreign_operation_active", block)
-            self.assertIn("VAL_STP_target_cooldown", block)
+        for decision_id in (*VAL_STP_OPERATION_SPECS, "VAL_launch_northern_campaign"):
+            self.assertFalse(validator.extract_named_block(legacy_decisions, decision_id))
         for target in VAL_NORTHERN_OPERATION_TARGETS:
-            for suffix, (cost, days, _) in VAL_NORTHERN_OPERATION_SPECS.items():
-                block = validator.extract_named_block(
-                    decisions, f"VAL_{target}_{suffix}"
-                ) or ""
-                self.assertEqual(validator._direct_scalar_values(block, "cost"), [str(cost)])
-                self.assertEqual(
-                    validator._direct_scalar_values(block, "days_remove"), [str(days)]
+            for suffix in VAL_NORTHERN_OPERATION_SPECS:
+                self.assertFalse(
+                    validator.extract_named_block(
+                        legacy_decisions, f"VAL_{target}_{suffix}"
+                    )
                 )
-                self.assertIn("VAL_foreign_operation_active", block)
+        for decision_id in (
+            "VAL_ops_bribe_stelander_brokers",
+            "VAL_ops_arm_stelander_clients",
+            "VAL_ops_finance_cin_contacts",
+            "VAL_ops_sell_rifles_to_cin",
+            "VAL_ops_finance_osf_contacts",
+            "VAL_ops_sell_rifles_to_osf",
+            "VAL_ops_secure_stelander_steel",
+        ):
+            block = validator.extract_named_block(decisions, decision_id) or ""
+            self.assertIn("VAL_foreign_operation_active", block)
+            self.assertIn("factor = 0", validator.extract_named_block(block, "ai_will_do") or "")
         for flag in VAL_STP_CONCESSION_FLAGS:
             self.assertIn(flag, effects)
         self.assertNotIn("on_daily", validator._mask_non_code(effects))
@@ -2460,6 +2505,9 @@ class CrisisValidatorTests(unittest.TestCase):
         )
         self.assertEqual(
             validator._direct_scalar_values(mission, "days_mission_timeout"), ["210"]
+        )
+        self.assertFalse(
+            validator.extract_named_block(decisions, "VAL_launch_northern_campaign")
         )
         start = (
             validator.extract_named_block(effects, "VAL_start_guarded_northern_campaign")
@@ -2688,14 +2736,14 @@ class CrisisValidatorTests(unittest.TestCase):
                 "planning_speed = STP_fading_planning_factor",
                 "army_org_factor = STP_fading_org_factor",
             ),
-            "STP_underground_network": (
-                "stability_factor = STP_network_stability_factor",
-                "consumer_goods_factor = STP_network_consumer_goods_factor",
-            ),
-            "STP_security_pressure": (
-                "stability_factor = STP_pressure_stability_factor",
-                "political_power_factor = STP_pressure_pp_factor",
-                "industrial_capacity_factory = STP_pressure_factory_output_factor",
+            "STP_transition_preparations": (
+                "political_power_factor = STP_transition_pp_factor",
+                "stability_factor = STP_transition_stability_factor",
+                "command_power_gain_mult = STP_transition_command_factor",
+                "planning_speed = STP_transition_planning_factor",
+                "army_org_factor = STP_transition_org_factor",
+                "industrial_capacity_factory = STP_transition_factory_factor",
+                "consumer_goods_factor = STP_transition_consumer_goods_factor",
             ),
             "VAL_contract_state": (
                 "army_attack_factor = VAL_contract_attack_factor",
@@ -2721,6 +2769,14 @@ class CrisisValidatorTests(unittest.TestCase):
             block = validator.extract_named_block(dynamic, modifier) or ""
             for assignment in assignments:
                 self.assertIn(assignment, block)
+        for legacy_modifier in ("STP_underground_network", "STP_security_pressure"):
+            block = validator.extract_named_block(dynamic, legacy_modifier) or ""
+            self.assertIn("enable = { always = no }", block)
+            self.assertNotRegex(
+                validator._mask_non_code(block),
+                r"\b(?:stability_factor|political_power_factor|consumer_goods_factor"
+                r"|industrial_capacity_factory)\s*=",
+            )
 
         core = validator.read(
             validator.ROOT / "common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt"
@@ -2806,8 +2862,8 @@ class CrisisValidatorTests(unittest.TestCase):
                 "NOT = { has_country_flag = STP_internal_war_finished }",
             ),
             "remove operation": (
-                "remove_dynamic_modifier = { modifier = STP_security_pressure }",
-                "remove_dynamic_modifier = { modifier = STP_security_pressure_mutated }",
+                "remove_dynamic_modifier = { modifier = STP_transition_preparations }",
+                "remove_dynamic_modifier = { modifier = STP_transition_preparations_mutated }",
             ),
         }
         for name, (before, after) in mutations.items():
@@ -3056,26 +3112,34 @@ class CrisisValidatorTests(unittest.TestCase):
         categories = validator.read(
             validator.ROOT / "common/decisions/categories/ADISCORD_STP_VAL_crisis_categories.txt"
         ) or ""
-        scripted = validator.read(
-            validator.ROOT / "common/scripted_guis/ADISCORD_STP_VAL_crisis_scripted_gui.txt"
-        ) or ""
-        gui = validator.read(validator.ROOT / "interface/ADISCORD_STP_VAL_crisis.gui") or ""
         category = validator.extract_named_block(categories, "VAL_contract_campaign") or ""
-        self.assertIn("scripted_gui = ADISCORD_VAL_contract_panel", category)
-        panel = validator.extract_named_block(scripted, "ADISCORD_VAL_contract_panel") or ""
+        self.assertIn("visible = { always = no }", " ".join(category.split()))
+        self.assertNotIn("scripted_gui", category)
+        self.assertFalse(
+            (validator.ROOT / "common/scripted_guis/ADISCORD_STP_VAL_crisis_scripted_gui.txt").exists()
+        )
+        self.assertFalse((validator.ROOT / "interface/ADISCORD_STP_VAL_crisis.gui").exists())
+
+        rework_categories = validator.read(
+            validator.ROOT / "common/decisions/categories/ADISCORD_VAL_rework_categories.txt"
+        ) or ""
+        scripted = validator.read(
+            validator.ROOT / "common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt"
+        ) or ""
+        gui = validator.read(validator.ROOT / "interface/ADISCORD_VAL_operations.gui") or ""
+        category = validator.extract_named_block(rework_categories, "VAL_military_operations") or ""
+        self.assertIn("has_country_flag = VAL_operations_map_unlocked", category)
+        self.assertIn("scripted_gui = ADISCORD_VAL_operations_panel", category)
+        panel = validator.extract_named_block(scripted, "ADISCORD_VAL_operations_panel") or ""
         self.assertIn("context_type = decision_category", panel)
-        self.assertIn('window_name = "ADISCORD_VAL_contract_panel_window"', panel)
+        self.assertIn('window_name = "ADISCORD_VAL_operations_panel_window"', panel)
+        self.assertIn("visible = { always = yes }", " ".join(panel.split()))
         window = self._block_with_assignment(
             gui,
             "containerWindowType",
-            'name = "ADISCORD_VAL_contract_panel_window"',
+            'name = "ADISCORD_VAL_operations_panel_window"',
         )
-        self.assertRegex(window, r"size\s*=\s*\{\s*width\s*=\s*460\s+height\s*=\s*470")
-        for text_box in validator._iter_named_blocks(window, "instantTextBoxType"):
-            position = re.search(r"position\s*=\s*\{\s*x\s*=\s*(\d+)", text_box)
-            width = re.search(r"maxWidth\s*=\s*(\d+)", text_box)
-            if position and width:
-                self.assertLessEqual(int(position.group(1)) + int(width.group(1)), 460)
+        self.assertTrue(window)
         stp_categories = validator.read(
             validator.ROOT
             / "common/decisions/categories/ADISCORD_decision_categories_STP.txt"
@@ -3083,7 +3147,6 @@ class CrisisValidatorTests(unittest.TestCase):
         stp_category = validator.extract_named_block(stp_categories, "STP_elections_in_the_party") or ""
         self.assertNotIn("scripted_gui", stp_category)
         self.assertNotIn("effects =", scripted)
-        self.assertNotIn("buttonType", gui)
         self.assertNotIn("interface/countrydecisionview.gui", scripted)
 
     def test_crisis_russian_presentation_is_complete_and_bom_safe(self):

@@ -4,6 +4,7 @@ on_actions = {
 			STP = {
 				ADISCORD_STP_VAL_initialize_schema = yes
 				ADISCORD_STP_VAL_refresh_presentation_mirrors = yes
+				STP_initialize_transition_preparations = yes
 				STP_refresh_crisis_modifier = yes
 
 				if = {
@@ -13,8 +14,22 @@ on_actions = {
 						NOT = { has_country_flag = STP_ivanov_dead }
 					}
 					set_country_flag = STP_health_calendar_started
-					complete_national_focus = STP_Nectar_of_the_Gods
+					country_event = { id = stp_lore.1 }
 					activate_mission = STP_health_stage_1_to_2
+				}
+
+				# Recovery for saves where the terminal mission was lost during a
+				# version change. The event itself remains the guarded authority.
+				if = {
+					limit = {
+						has_country_flag = STP_main_campaign_side
+						has_country_flag = STP_health_calendar_started
+						NOT = { has_country_flag = STP_ivanov_dead }
+						check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
+						NOT = { has_active_mission = STP_health_stage_4_to_death }
+					}
+					activate_mission = STP_health_stage_4_to_death
+					country_event = { id = stp_crisis.4 days = 64 }
 				}
 
 				if = {
@@ -455,6 +470,17 @@ on_actions = {
 			}
 			VAL = { VAL_check_resource_corridor_control = yes }
 			VAL = { VAL_check_northern_campaign_control = yes }
+			if = {
+				limit = {
+					has_event_target = STP_crisis_resistance_side
+					country_exists = event_target:STP_crisis_resistance_side
+					event_target:STP_crisis_resistance_side = {
+						has_country_flag = STP_last_banquet_active
+						controls_state = 28
+					}
+				}
+				event_target:STP_crisis_resistance_side = { STP_resolve_last_banquet_success = yes }
+			}
 		}
 	}
 }

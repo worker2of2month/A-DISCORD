@@ -206,6 +206,63 @@ spriteTypes = {
 	}
 
 	SpriteType = {
+		name = "GFX_focus_STP_Triumph_Of_Common_Sense_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Triumph_Of_Common_Sense.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Triumph_Of_Common_Sense.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_STP_Prepare_For_The_Upcoming_BOP_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Prepare_For_The_Upcoming_BOP.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Prepare_For_The_Upcoming_BOP.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_STP_Open_Their_Eyes_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Open_Their_Eyes.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Open_Their_Eyes.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
 		name = "STP_bookmark_maksim_shine"
 		texturefile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_maksim.png"
 		effectFile = "gfx/FX/buttonstate.lua"
