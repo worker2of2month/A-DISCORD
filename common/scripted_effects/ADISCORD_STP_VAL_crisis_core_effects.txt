@@ -773,7 +773,10 @@ VAL_refresh_stp_campaign_plan_modifier = {
 		add_dynamic_modifier = { modifier = VAL_stelander_campaign_plan }
 	}
 	else_if = {
-		limit = { NOT = { has_country_flag = VAL_STP_final_war_active } }
+		limit = {
+			NOT = { has_country_flag = VAL_STP_final_war_active }
+			has_dynamic_modifier = { modifier = VAL_stelander_campaign_plan }
+		}
 		remove_dynamic_modifier = { modifier = VAL_stelander_campaign_plan }
 	}
 }
@@ -961,8 +964,14 @@ STP_refresh_crisis_modifier = {
 	else = { remove_dynamic_modifier = { modifier = STP_fading_father } }
 
 	# Migration cleanup for saves made before the consolidated spirit.
-	remove_dynamic_modifier = { modifier = STP_underground_network }
-	remove_dynamic_modifier = { modifier = STP_security_pressure }
+	if = {
+		limit = { has_dynamic_modifier = { modifier = STP_underground_network } }
+		remove_dynamic_modifier = { modifier = STP_underground_network }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = STP_security_pressure } }
+		remove_dynamic_modifier = { modifier = STP_security_pressure }
+	}
 	if = {
 		limit = {
 			has_country_flag = STP_main_campaign_side

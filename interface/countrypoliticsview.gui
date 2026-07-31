@@ -659,10 +659,10 @@ guiTypes = {
 		
 		containerWindowType = {
 			name = "ideas"
-			# ADISCORD fix: move the whole scrollable list up, but keep this shit inside its own viewport.
-			# Without explicit height + clipping the lower custom development block draws over the law categories.
+			# Fill the space above the bottom-anchored 315 px development block.
+			# A negative height is a parent-relative bottom offset in HOI4 GUI layouts.
 			position = { x = 0 y = 545 }
-			size = { width=570 height=520 }
+			size = { width=570 height=-315 }
 			clipping = yes
 			verticalScrollbar = "right_vertical_slider"
 			scroll_wheel_factor = 40

@@ -1,0 +1,7 @@
+# NCNS requires every faction's default leadership rule to belong to a rule
+# group. Keep only the engine's influence-based rule instead of importing the
+# vanilla ideology, industry, and manpower rule set.
+change_leader_rule_influence = {
+	type = change_leader_rules
+	trigger = { has_enough_influence_for_leadership = yes }
+}

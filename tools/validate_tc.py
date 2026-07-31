@@ -15,6 +15,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 from validate_adiscord_economy_ai import validate as validate_adiscord_economy_ai
+from build_adiscord_map_buildings import validate as validate_adiscord_map_buildings
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -593,14 +594,22 @@ def check_ncns_and_campaign_compatibility(limit):
 
     template_path = ROOT / "common" / "factions" / "templates" / "ADISCORD_faction_templates.txt"
     manifest_path = ROOT / "common" / "factions" / "goals" / "ADISCORD_faction_manifests.txt"
+    leadership_rule_path = ROOT / "common" / "factions" / "rules" / "ADISCORD_change_leader_rules.txt"
+    rule_group_path = ROOT / "common" / "factions" / "rules" / "groups" / "ADISCORD_rule_groups.txt"
     template_text = strip_comments(read_text(template_path)) if template_path.exists() else ""
     manifest_text = strip_comments(read_text(manifest_path)) if manifest_path.exists() else ""
+    leadership_rule_text = strip_comments(read_text(leadership_rule_path)) if leadership_rule_path.exists() else ""
+    rule_group_text = strip_comments(read_text(rule_group_path)) if rule_group_path.exists() else ""
     if "faction_template_ADISCORD_standard" not in template_text:
         issues.append(f"{rel(template_path)}: missing A-Discord NCNS faction template")
     if "ADISCORD_faction_manifest_continuity" not in template_text:
         issues.append(f"{rel(template_path)}: template is missing the A-Discord manifest")
     if "ADISCORD_faction_manifest_continuity" not in manifest_text:
         issues.append(f"{rel(manifest_path)}: missing A-Discord faction manifest")
+    if "change_leader_rule_influence" not in leadership_rule_text:
+        issues.append(f"{rel(leadership_rule_path)}: missing NCNS leadership rule definition")
+    if "change_leader_rule_influence" not in rule_group_text:
+        issues.append(f"{rel(rule_group_path)}: NCNS leadership rule is not assigned to a rule group")
 
     faction_histories = {
         "WRK - WorkerLand.txt": "faction_vorkerland_confederation",
@@ -684,6 +693,9 @@ def main():
 
     state_issues, state_total = check_states(tags, provinces, args.limit)
     print_section("Map and states", state_issues, state_total)
+
+    building_issues = validate_adiscord_map_buildings()
+    print_section("Map building state assignments", building_issues[: args.limit], len(building_issues))
 
     loc_issues, loc_total = check_localisation(args.limit)
     print_section("Localisation headers", loc_issues, loc_total)

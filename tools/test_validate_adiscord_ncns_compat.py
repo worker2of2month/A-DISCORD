@@ -31,10 +31,17 @@ class NcnsFactionCompatibilityTests(unittest.TestCase):
     def test_faction_template_is_mod_native(self):
         template = read("common/factions/templates/ADISCORD_faction_templates.txt")
         manifest = read("common/factions/goals/ADISCORD_faction_manifests.txt")
+        leadership_rule = read("common/factions/rules/ADISCORD_change_leader_rules.txt")
+        rule_group = read("common/factions/rules/groups/ADISCORD_rule_groups.txt")
         self.assertIn("faction_template_ADISCORD_standard", template)
         self.assertIn("ADISCORD_faction_manifest_continuity", template)
         self.assertIn("ADISCORD_faction_manifest_continuity", manifest)
-        self.assertNotRegex(template + manifest, r"\b(?:democratic|fascism|communism|neutrality)\b")
+        self.assertIn("ratio_progress", manifest)
+        self.assertIn("total_amount = 1", manifest)
+        self.assertIn("completed_amount = 1", manifest)
+        self.assertIn("change_leader_rule_influence", leadership_rule)
+        self.assertIn("change_leader_rule_influence", rule_group)
+        self.assertNotRegex(template + manifest + leadership_rule + rule_group, r"\b(?:democratic|fascism|communism|neutrality)\b")
 
     def test_campaign_slots_use_scripted_variable(self):
         effects = read("common/scripted_effects/ADISCORD_shared_action_effects.txt")

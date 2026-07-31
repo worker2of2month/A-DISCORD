@@ -1,8 +1,10 @@
 import re
+import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 
+from tools import build_adiscord_map_buildings as map_buildings
 from tools import validate_adiscord_vorkerland_collapse as validator
 from tools.vorkerland_collapse_manifest import (
     CAPITALS,
@@ -56,6 +58,38 @@ class ManifestTests(unittest.TestCase):
 
 
 class StatePartitionTests(unittest.TestCase):
+    def test_map_building_state_ids_follow_current_province_partition(self):
+        self.assertEqual(map_buildings.validate(), [])
+
+    def test_map_building_validator_rejects_terminal_empty_row(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "map").mkdir()
+            (root / "map" / "buildings.txt").write_bytes(
+                b"1;arms_factory;1.00;1.00;1.00;0.00;0\r\n"
+            )
+
+            self.assertIn("terminal empty row", map_buildings.validate(root)[0])
+
+    def test_map_building_validator_requires_dlc_spawn_positions_per_state(self):
+        lines = [
+            f"1;{building_type};1.00;1.00;1.00;0.00;0"
+            for building_type in map_buildings.REQUIRED_STATE_SPAWN_COUNTS
+            for _ in range(map_buildings.REQUIRED_STATE_SPAWN_COUNTS[building_type])
+        ]
+        lines.pop()
+
+        issues = map_buildings.required_spawn_issues(lines, {1, 2})
+
+        self.assertTrue(any("state 1" in issue for issue in issues))
+        self.assertTrue(any("state 2" in issue for issue in issues))
+        self.assertTrue(any("HOI4 1.19 requires" in issue for issue in issues))
+
+    def test_state_generators_resynchronize_map_buildings(self):
+        for name in ("build_adiscord_outer_states.py", "build_adiscord_remainder_states.py"):
+            source = (validator.ROOT / "tools" / name).read_text(encoding="utf-8-sig")
+            self.assertIn("synchronize_buildings(ROOT, apply=True)", source)
+
     def test_partitions_conserve_all_provinces_and_hold_new_capitals(self):
         expected_new_states = {194, 195, 196, 197, 198, 199}
         expected_capitals = {

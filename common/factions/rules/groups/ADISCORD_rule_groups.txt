@@ -1,0 +1,6 @@
+ADISCORD_rule_group_leader_influence = {
+	default_rule = change_leader_rule_influence
+	rules = {
+		change_leader_rule_influence
+	}
+}

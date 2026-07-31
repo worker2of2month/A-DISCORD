@@ -32,6 +32,7 @@ from build_adiscord_strategic_regions import (
     load_province_adjacency,
     load_province_definitions,
 )
+from build_adiscord_map_buildings import synchronize_buildings
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -337,6 +338,8 @@ def main() -> None:
     print(f"Climate groups: {dict(sorted(climate_counts.items()))}")
     if args.apply:
         apply_plan(planned, data, generated_paths)
+        mismatches = synchronize_buildings(ROOT, apply=True)
+        print(f"Synchronized {len(mismatches)} map-building state assignments.")
     else:
         print("Dry run only; pass --apply to write files.")
 

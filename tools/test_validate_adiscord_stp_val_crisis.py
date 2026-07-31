@@ -2315,6 +2315,7 @@ class CrisisValidatorTests(unittest.TestCase):
         full_decision = validator.extract_named_block(
             decisions, "NOD_support_stp_full"
         ) or ""
+        self.assertIn("has_event_target = STP_crisis_party_side", full_decision)
         self.assertIn("event_target:STP_crisis_party_side", full_decision)
         self.assertIn("NOD_can_directly_defend_stp = yes", full_decision)
 

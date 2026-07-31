@@ -47,10 +47,11 @@ guiTypes = {
 
 	containerWindowType = {
 		name = "ADISCORD_development_category_society_type"
-		# ADISCORD fix: keep development as a separate fixed block below the scrollable law list.
-		# The law categories are country-dependent, so this block must not sit too close to their viewport.
-		position = { x = -10 y = 1065 }
+		# Keep the complete development block pinned to the bottom at every resolution.
+		# The law list reserves the same 315 px dynamically in countrypoliticsview.gui.
+		position = { x = -10 y = -315 }
 		size = { width=594 height=315 }
+		Orientation = LOWER_LEFT
 		clipping = yes
 
 		iconType ={

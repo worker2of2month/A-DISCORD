@@ -225,8 +225,12 @@ NOD_crisis_posture = {
 			has_event_target = STP_crisis_resistance_side
 		}
 		available = {
-			event_target:STP_crisis_party_side = {
-				NOD_can_directly_defend_stp = yes
+			has_event_target = STP_crisis_party_side
+			if = {
+				limit = { has_event_target = STP_crisis_party_side }
+				event_target:STP_crisis_party_side = {
+					NOD_can_directly_defend_stp = yes
+				}
 			}
 			NOT = { has_country_flag = NOD_STP_full_support }
 			has_equipment = { infantry_equipment > 999 }

@@ -36,6 +36,7 @@ from build_adiscord_strategic_regions import (
     outer_macro_bounds,
     outer_macro_toponym,
 )
+from build_adiscord_map_buildings import synchronize_buildings
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -727,6 +728,8 @@ def main() -> None:
     print_summary(planned, data)
     if args.apply:
         apply_plan(planned, data, original_outer, outer_source, generated_paths)
+        mismatches = synchronize_buildings(ROOT, apply=True)
+        print(f"Synchronized {len(mismatches)} map-building state assignments.")
     else:
         print("Dry run only; pass --apply to write files.")
 

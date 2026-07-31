@@ -2,5 +2,9 @@ ADISCORD_faction_manifest_continuity = {
 	name = ADISCORD_faction_manifest_continuity
 	description = ADISCORD_faction_manifest_continuity_desc
 	is_manifest = yes
+	ratio_progress = {
+		total_amount = 1
+		completed_amount = 1
+	}
 	completed = { always = no }
 }

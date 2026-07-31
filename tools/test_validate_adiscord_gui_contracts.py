@@ -78,6 +78,28 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
 
         self.assertEqual(required - nodes, set())
 
+    def test_development_panel_is_bottom_anchored_and_law_list_reserves_room(self):
+        development_text = (
+            ROOT / 'interface' / 'ADISCORD_CountryView.gui'
+        ).read_text(encoding='utf-8-sig')
+        politics_text = (
+            ROOT / 'interface' / 'countrypoliticsview.gui'
+        ).read_text(encoding='utf-8-sig')
+
+        self.assertRegex(
+            development_text,
+            r'(?s)name\s*=\s*"ADISCORD_development_category_society_type"'
+            r'.{0,500}?position\s*=\s*\{\s*x\s*=\s*-10\s+y\s*=\s*-315\s*\}'
+            r'.{0,200}?size\s*=\s*\{\s*width\s*=\s*594\s+height\s*=\s*315\s*\}'
+            r'.{0,200}?Orientation\s*=\s*LOWER_LEFT',
+        )
+        self.assertRegex(
+            politics_text,
+            r'(?s)name\s*=\s*"ideas"'
+            r'.{0,500}?position\s*=\s*\{\s*x\s*=\s*0\s+y\s*=\s*545\s*\}'
+            r'.{0,200}?size\s*=\s*\{\s*width\s*=\s*570\s+height\s*=\s*-315\s*\}',
+        )
+
 
 class NationalFocusGuiContractTests(unittest.TestCase):
     def test_hoi4_119_focus_item_has_overlay_icon(self):
