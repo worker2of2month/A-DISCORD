@@ -7,7 +7,10 @@ recruit_character = BJK_Graison
 
 ####### Faction
 
-create_faction = faction_besjaysk_kingdom
+create_faction_from_template = {
+	template = faction_template_ADISCORD_standard
+	name = faction_besjaysk_kingdom
+}
 add_to_faction = BLD
 add_to_faction = BHD
 add_to_faction = BGT

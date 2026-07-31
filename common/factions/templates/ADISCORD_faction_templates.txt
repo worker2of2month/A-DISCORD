@@ -1,0 +1,12 @@
+# NCNS makes faction templates mandatory for safe scripted faction creation.
+# A-Discord deliberately starts with the legacy behavior: a named alliance,
+# no imported vanilla goals, and no vanilla ideology-dependent rules.
+faction_template_ADISCORD_standard = {
+	name = ADISCORD_faction_generic_name
+	manifest = ADISCORD_faction_manifest_continuity
+	icon = GFX_faction_logo_generic
+	can_leader_join_other_factions = no
+
+	visible = { always = no }
+	available = { always = yes }
+}

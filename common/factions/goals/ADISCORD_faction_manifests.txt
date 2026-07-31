@@ -1,0 +1,6 @@
+ADISCORD_faction_manifest_continuity = {
+	name = ADISCORD_faction_manifest_continuity
+	description = ADISCORD_faction_manifest_continuity_desc
+	is_manifest = yes
+	completed = { always = no }
+}

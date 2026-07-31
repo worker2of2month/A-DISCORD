@@ -583,6 +583,71 @@ def check_economy_guardrails(limit):
     return issues[:limit], len(issues)
 
 
+def check_ncns_and_campaign_compatibility(limit):
+    issues = []
+
+    descriptor = ROOT / "descriptor.mod"
+    descriptor_text = read_text(descriptor) if descriptor.exists() else ""
+    if 'replace_path="common/factions"' not in descriptor_text:
+        issues.append("descriptor.mod: common/factions must be owned by the total conversion")
+
+    template_path = ROOT / "common" / "factions" / "templates" / "ADISCORD_faction_templates.txt"
+    manifest_path = ROOT / "common" / "factions" / "goals" / "ADISCORD_faction_manifests.txt"
+    template_text = strip_comments(read_text(template_path)) if template_path.exists() else ""
+    manifest_text = strip_comments(read_text(manifest_path)) if manifest_path.exists() else ""
+    if "faction_template_ADISCORD_standard" not in template_text:
+        issues.append(f"{rel(template_path)}: missing A-Discord NCNS faction template")
+    if "ADISCORD_faction_manifest_continuity" not in template_text:
+        issues.append(f"{rel(template_path)}: template is missing the A-Discord manifest")
+    if "ADISCORD_faction_manifest_continuity" not in manifest_text:
+        issues.append(f"{rel(manifest_path)}: missing A-Discord faction manifest")
+
+    faction_histories = {
+        "WRK - WorkerLand.txt": "faction_vorkerland_confederation",
+        "BJK - Besjaysk.txt": "faction_besjaysk_kingdom",
+        "NOD - Nodral.txt": "faction_stp_nod",
+    }
+    country_dir = ROOT / "history" / "countries"
+    for filename, faction_name in faction_histories.items():
+        path = country_dir / filename
+        text = strip_comments(read_text(path)) if path.exists() else ""
+        if "create_faction_from_template" not in text:
+            issues.append(f"{rel(path)}: starting faction is not created from an NCNS template")
+        if "template = faction_template_ADISCORD_standard" not in text:
+            issues.append(f"{rel(path)}: starting faction does not use the A-Discord template")
+        if f"name = {faction_name}" not in text:
+            issues.append(f"{rel(path)}: scripted faction name {faction_name} is missing")
+
+    obsolete_faction = re.compile(r"(?m)^\s*create_faction\s*=")
+    invalid_campaign = re.compile(r"\b(?:has|add|remove)_campaign_slot\b")
+    for path in iter_files("common", "history", "events"):
+        text = strip_comments(read_text(path))
+        for pattern, reason in (
+            (obsolete_faction, "obsolete pre-NCNS create_faction effect"),
+            (invalid_campaign, "nonexistent native campaign-slot token"),
+        ):
+            for match in pattern.finditer(text):
+                lineno = text[: match.start()].count("\n") + 1
+                issues.append(f"{rel(path)}:{lineno}: {reason}")
+
+    shared_effects_path = ROOT / "common" / "scripted_effects" / "ADISCORD_shared_action_effects.txt"
+    shared_triggers_path = ROOT / "common" / "scripted_triggers" / "ADISCORD_shared_action_triggers.txt"
+    shared_effects = strip_comments(read_text(shared_effects_path)) if shared_effects_path.exists() else ""
+    shared_triggers = strip_comments(read_text(shared_triggers_path)) if shared_triggers_path.exists() else ""
+    for token in (
+        "ADISCORD_campaign_slot_grant",
+        "ADISCORD_campaign_slot_consume",
+        "ADISCORD_campaign_slot_release",
+        "ADISCORD_available_campaign_slots",
+    ):
+        if token not in shared_effects:
+            issues.append(f"{rel(shared_effects_path)}: missing variable-backed campaign API token {token}")
+    if "ADISCORD_has_campaign_slot" not in shared_triggers or "ADISCORD_available_campaign_slots" not in shared_triggers:
+        issues.append(f"{rel(shared_triggers_path)}: missing variable-backed campaign availability trigger")
+
+    return issues[:limit], len(issues)
+
+
 def print_section(title: str, issues, total: int | None = None):
     total_text = len(issues) if total is None else total
     print(f"\n== {title}: {total_text} ==")
@@ -646,6 +711,9 @@ def main():
 
     economy_ai_issues = validate_adiscord_economy_ai()
     print_section("Economy and AI semantics", economy_ai_issues, len(economy_ai_issues))
+
+    ncns_issues, ncns_total = check_ncns_and_campaign_compatibility(args.limit)
+    print_section("NCNS factions and campaign slots", ncns_issues, ncns_total)
 
     token_hits, examples = scan_vanilla_leftovers(tags, ideology_groups, min(args.limit, 8))
     print(f"\n== Vanilla leftovers: {sum(token_hits.values())} hits in {len(token_hits)} tokens ==")

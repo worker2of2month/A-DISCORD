@@ -269,7 +269,7 @@ def main() -> int:
         "amount = -2500",
         "amount = -5000",
         "VAL_resolve_quarterly_contract_norm = yes",
-        "has_campaign_slot = yes",
+        "ADISCORD_has_campaign_slot = yes",
     ):
         if token not in decisions:
             issues.append(f"decision system is missing {token}")

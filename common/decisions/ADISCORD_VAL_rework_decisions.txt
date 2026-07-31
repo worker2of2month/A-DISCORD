@@ -215,7 +215,7 @@ VAL_propaganda_campaigns = {
 	VAL_campaign_rifles_and_bread = {
 		icon = generic_propaganda_campaigns
 		allowed = { tag = VAL }
-		available = { has_campaign_slot = yes }
+		available = { ADISCORD_has_campaign_slot = yes }
 		cost = 25
 		days_remove = 50
 		days_re_enable = 70
@@ -231,7 +231,7 @@ VAL_propaganda_campaigns = {
 	VAL_campaign_contracts_feed_families = {
 		icon = generic_propaganda_campaigns
 		allowed = { tag = VAL }
-		available = { has_campaign_slot = yes }
+		available = { ADISCORD_has_campaign_slot = yes }
 		cost = 25
 		days_remove = 60
 		days_re_enable = 80
@@ -241,13 +241,13 @@ VAL_propaganda_campaigns = {
 		}
 		complete_effect = { ADISCORD_campaign_slot_consume = yes }
 		remove_effect = { ADISCORD_campaign_slot_release = yes }
-		ai_will_do = { base = 2 modifier = { factor = 2 stability < 0.60 } }
+		ai_will_do = { base = 2 modifier = { factor = 2 has_stability < 0.60 } }
 	}
 
 	VAL_campaign_no_promise_without_payment = {
 		icon = generic_propaganda_campaigns
 		allowed = { tag = VAL }
-		available = { has_campaign_slot = yes }
+		available = { ADISCORD_has_campaign_slot = yes }
 		cost = 20
 		days_remove = 45
 		days_re_enable = 70
@@ -264,7 +264,7 @@ VAL_propaganda_campaigns = {
 		icon = generic_propaganda_campaigns
 		allowed = { tag = VAL }
 		visible = { has_country_flag = VAL_westerholm_metal_lost }
-		available = { has_campaign_slot = yes }
+		available = { ADISCORD_has_campaign_slot = yes }
 		cost = 15
 		days_remove = 35
 		days_re_enable = 70

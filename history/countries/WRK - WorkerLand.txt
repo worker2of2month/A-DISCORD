@@ -8,7 +8,10 @@ recruit_character = WRK_Nikita_Worcker
 
 ####### Faction
 
-create_faction = faction_vorkerland_confederation
+create_faction_from_template = {
+	template = faction_template_ADISCORD_standard
+	name = faction_vorkerland_confederation
+}
 add_to_faction = NAM
 add_to_faction = DAN
 add_to_faction = VAD

@@ -35,8 +35,19 @@ ADISCORD_economy_receive_50 = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
-# Native campaign slots are global engine state; these wrappers provide a
-# common hook for country-specific propaganda systems.
-ADISCORD_campaign_slot_grant = { add_campaign_slot = yes }
-ADISCORD_campaign_slot_consume = { remove_campaign_slot = yes }
-ADISCORD_campaign_slot_release = { add_campaign_slot = yes }
+# Propaganda campaigns use a country-scoped pool. HOI4 has no native slot
+# effects, so keep the accounting in a scripted variable.
+ADISCORD_campaign_slot_grant = {
+	add_to_variable = { var = ADISCORD_available_campaign_slots value = 1 }
+}
+
+ADISCORD_campaign_slot_consume = {
+	if = {
+		limit = { ADISCORD_has_campaign_slot = yes }
+		add_to_variable = { var = ADISCORD_available_campaign_slots value = -1 }
+	}
+}
+
+ADISCORD_campaign_slot_release = {
+	add_to_variable = { var = ADISCORD_available_campaign_slots value = 1 }
+}

@@ -12,6 +12,10 @@ ADISCORD_economy_can_spend_50 = {
 	check_variable = { var = ADISCORD_economy_treasury value = 50 compare = greater_than_or_equals }
 }
 
+ADISCORD_has_campaign_slot = {
+	check_variable = { var = ADISCORD_available_campaign_slots value = 1 compare = greater_than_or_equals }
+}
+
 ADISCORD_has_2500_infantry_equipment = {
 	has_equipment = { infantry_equipment > 2499 }
 }
