@@ -173,7 +173,15 @@ class CrisisManifestTests(unittest.TestCase):
                 "STP_health_stage_4_to_death": (63, "stp_crisis.4"),
             },
         )
-        self.assertEqual(len(STP_CRISIS_FOCUS_STAGES), 18)
+        self.assertEqual(len(STP_CRISIS_FOCUS_STAGES), 24)
+        self.assertEqual(
+            len(
+                set(STP_CRISIS_FOCUS_STAGES)
+                - set(STP_PARTY_FOCUSES)
+                - {"STP_Govern_In_His_Name"}
+            ),
+            17,
+        )
         self.assertEqual(set(STP_CRISIS_FOCUS_STAGES), set(STP_CRISIS_FOCUS_REWARDS))
         self.assertFalse(set(STP_SHABRAT_FOCUSES) & set(STP_PARTY_FOCUSES))
         self.assertEqual(STP_SPINE_FOCUS_STAGES, {})
@@ -1161,6 +1169,11 @@ class CrisisValidatorTests(unittest.TestCase):
         self.assertEqual(forced.count("add_political_power = -50"), 2)
         self.assertEqual(forced.count("flag = STP_crisis_late_choice_lock"), 2)
         self.assertEqual(forced.count("days = 35"), 2)
+        for focus in (
+            "STP_Divide_The_Command_Registers",
+            "STP_Establish_Reserve_Communications",
+        ):
+            self.assertIn(f"complete_national_focus = {focus}", forced)
 
     def test_playable_crisis_focus_windows_are_exact_and_sticky(self):
         tree = validator.read(
@@ -1270,17 +1283,33 @@ class CrisisValidatorTests(unittest.TestCase):
                 list(validator._iter_named_blocks(block, "prerequisite")), []
             )
         prerequisites = {
-            "STP_The_Last_Confession": "STP_Show_Him_The_Truth",
-            "STP_Turn_The_Young_Officers": "STP_Show_Him_The_Truth",
-            "STP_Cut_The_Silk_Leash": "STP_Show_Him_The_Truth",
-            "STP_Call_For_Shabrat": "STP_The_Last_Confession",
-            "STP_Garrisons_Hesitate": "STP_Turn_The_Young_Officers",
-            "STP_The_People_Stop_Singing": "STP_The_Last_Confession",
+            "STP_Divide_The_Command_Registers": {"STP_Show_Him_The_Truth"},
+            "STP_Establish_Reserve_Communications": {"STP_Show_Him_The_Truth"},
+            "STP_The_Last_Confession": {"STP_Divide_The_Command_Registers"},
+            "STP_Turn_The_Young_Officers": {
+                "STP_Divide_The_Command_Registers",
+                "STP_Establish_Reserve_Communications",
+            },
+            "STP_Cut_The_Silk_Leash": {"STP_Establish_Reserve_Communications"},
+            "STP_Unify_The_Administrative_Protocol": {"STP_The_Last_Confession"},
+            "STP_Assign_Regional_Command_Groups": {"STP_Turn_The_Young_Officers"},
+            "STP_Close_The_External_Channels": {"STP_Cut_The_Silk_Leash"},
+            "STP_Approve_The_Emergency_Protocol": {
+                "STP_Unify_The_Administrative_Protocol",
+                "STP_Assign_Regional_Command_Groups",
+                "STP_Close_The_External_Channels",
+            },
+            "STP_Call_For_Shabrat": {"STP_Approve_The_Emergency_Protocol"},
+            "STP_Garrisons_Hesitate": {"STP_Approve_The_Emergency_Protocol"},
+            "STP_The_People_Stop_Singing": {"STP_Approve_The_Emergency_Protocol"},
         }
-        for focus, prerequisite in prerequisites.items():
+        for focus, expected in prerequisites.items():
             block = self._block_with_assignment(tree, "focus", f"id = {focus}")
             prereq = validator.extract_named_block(block, "prerequisite") or ""
-            self.assertRegex(prereq, rf"\bfocus\s*=\s*{re.escape(prerequisite)}\b")
+            actual = set(
+                re.findall(r"\bfocus\s*=\s*(STP_[A-Za-z0-9_]+)", prereq)
+            )
+            self.assertEqual(actual, expected, focus)
 
     def test_state_face_and_party_suspicion_use_canonical_whole_values(self):
         root = validator.ROOT
@@ -1313,6 +1342,35 @@ class CrisisValidatorTests(unittest.TestCase):
         self.assertNotIn("[?STP_party_suspicion|R1%]", party_loc)
         self.assertNotIn(
             "STP_party_suspicion_political_power_gain_dynamic_var", party_loc
+        )
+
+    def test_ivanov_death_portrait_is_a_guarded_animated_strip(self):
+        root = validator.ROOT
+        self.assertEqual(
+            validator._dds_dimensions(root / "gfx/leaders/STP/ivanov_glitch_animation.dds"),
+            (8112, 210),
+        )
+        state_gfx = validator.read(root / "interface/ADISCORD_stp_state_face.gfx") or ""
+        leader_gfx = validator.read(root / "interface/ADISCORD_leader_portraits.gfx") or ""
+        for text, sprite in (
+            (state_gfx, "GFX_STP_state_face_dead"),
+            (leader_gfx, "GFX_portrait_STP_Petr_Ivanov_animated"),
+        ):
+            self.assertIn("frameAnimatedSpriteType", text)
+            self.assertIn(f'name = "{sprite}"', text)
+            self.assertIn('texturefile = "gfx/leaders/STP/ivanov_glitch_animation.dds"', text)
+            self.assertIn("noOfFrames = 48", text)
+            self.assertIn("animation_rate_fps = 12", text)
+        inlay = validator.read(
+            root / "common/focus_inlay_windows/ADISCORD_STP_state_face_inlay_window.txt"
+        ) or ""
+        self.assertRegex(
+            validator._mask_non_code(inlay),
+            r"GFX_STP_state_face_dead\s*=\s*\{\s*has_country_flag\s*=\s*STP_ivanov_dead\s*\}",
+        )
+        self.assertLess(
+            inlay.index("GFX_STP_state_face_dead"),
+            inlay.index("GFX_STP_state_face_stage_5"),
         )
 
     def test_task_four_operations_have_exact_slots_prices_and_delays(self):
@@ -1754,7 +1812,7 @@ class CrisisValidatorTests(unittest.TestCase):
         router = self._block_with_assignment(
             events, "country_event", "id = stp_crisis.50"
         )
-        self.assertIn("country_event = { id = stp_crisis.50 }", death)
+        self.assertIn("country_event = { id = stp_crisis.50 days = 3 }", death)
         self.assertIn("hidden = yes", router)
         for event_id, picture in (
             ("stp_crisis.48", "GFX_report_event_JAP_communists_arrested"),

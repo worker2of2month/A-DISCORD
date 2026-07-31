@@ -41,6 +41,18 @@ spriteTypes = {
 	  	name = "GFX_focus_STP_Open_Their_Eyes" 
 	  	texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Open_Their_Eyes.png"
 	}
+	spriteType = {
+		name = "GFX_focus_STP_Command_Registers"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/swing politician.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_No_External_Channels"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/no deals with bandits.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_Emergency_Protocol"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/All in.png"
+	}
 
 ###STP BOOKMARK
 

@@ -1,111 +1,243 @@
 VAL_apply_contract_administration_1 = {
-	custom_effect_tooltip = VAL_contract_administration_upgrade_tt
-	hidden_effect = {
-		remove_ideas = VAL_contract_administration_2
-		remove_ideas = VAL_contract_administration_3
+	if = {
+		limit = {
+			NOT = { has_idea = VAL_contract_administration_1 }
+			NOT = { has_idea = VAL_contract_administration_2 }
+			NOT = { has_idea = VAL_contract_administration_3 }
+		}
 		add_ideas = VAL_contract_administration_1
+	}
+	hidden_effect = {
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
 
 VAL_apply_contract_administration_2 = {
-	custom_effect_tooltip = VAL_contract_administration_upgrade_tt
+	if = {
+		limit = { has_idea = VAL_contract_administration_1 }
+		swap_ideas = {
+			remove_idea = VAL_contract_administration_1
+			add_idea = VAL_contract_administration_2
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = { has_idea = VAL_contract_administration_2 }
+			NOT = { has_idea = VAL_contract_administration_3 }
+		}
+		add_ideas = VAL_contract_administration_2
+	}
 	hidden_effect = {
 		remove_ideas = VAL_contract_administration_1
-		remove_ideas = VAL_contract_administration_3
-		add_ideas = VAL_contract_administration_2
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
 
 VAL_apply_contract_administration_3 = {
-	custom_effect_tooltip = VAL_contract_administration_upgrade_tt
+	if = {
+		limit = { has_idea = VAL_contract_administration_2 }
+		swap_ideas = {
+			remove_idea = VAL_contract_administration_2
+			add_idea = VAL_contract_administration_3
+		}
+	}
+	else_if = {
+		limit = { has_idea = VAL_contract_administration_1 }
+		swap_ideas = {
+			remove_idea = VAL_contract_administration_1
+			add_idea = VAL_contract_administration_3
+		}
+	}
+	else_if = {
+		limit = { NOT = { has_idea = VAL_contract_administration_3 } }
+		add_ideas = VAL_contract_administration_3
+	}
 	hidden_effect = {
 		remove_ideas = VAL_contract_administration_1
 		remove_ideas = VAL_contract_administration_2
-		add_ideas = VAL_contract_administration_3
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
 
 VAL_apply_contract_industry_1 = {
-	custom_effect_tooltip = VAL_contract_industry_upgrade_tt
-	hidden_effect = {
-		remove_ideas = VAL_contract_industry_2
-		remove_ideas = VAL_contract_industry_3
+	if = {
+		limit = {
+			NOT = { has_idea = VAL_contract_industry_1 }
+			NOT = { has_idea = VAL_contract_industry_2 }
+			NOT = { has_idea = VAL_contract_industry_3 }
+		}
 		add_ideas = VAL_contract_industry_1
+	}
+	hidden_effect = {
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
 
 VAL_apply_contract_industry_2 = {
-	custom_effect_tooltip = VAL_contract_industry_upgrade_tt
+	if = {
+		limit = { has_idea = VAL_contract_industry_1 }
+		swap_ideas = {
+			remove_idea = VAL_contract_industry_1
+			add_idea = VAL_contract_industry_2
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = { has_idea = VAL_contract_industry_2 }
+			NOT = { has_idea = VAL_contract_industry_3 }
+		}
+		add_ideas = VAL_contract_industry_2
+	}
 	hidden_effect = {
 		remove_ideas = VAL_contract_industry_1
-		remove_ideas = VAL_contract_industry_3
-		add_ideas = VAL_contract_industry_2
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
 
 VAL_apply_contract_industry_3 = {
-	custom_effect_tooltip = VAL_contract_industry_upgrade_tt
+	if = {
+		limit = { has_idea = VAL_contract_industry_2 }
+		swap_ideas = {
+			remove_idea = VAL_contract_industry_2
+			add_idea = VAL_contract_industry_3
+		}
+	}
+	else_if = {
+		limit = { has_idea = VAL_contract_industry_1 }
+		swap_ideas = {
+			remove_idea = VAL_contract_industry_1
+			add_idea = VAL_contract_industry_3
+		}
+	}
+	else_if = {
+		limit = { NOT = { has_idea = VAL_contract_industry_3 } }
+		add_ideas = VAL_contract_industry_3
+	}
 	hidden_effect = {
 		remove_ideas = VAL_contract_industry_1
 		remove_ideas = VAL_contract_industry_2
-		add_ideas = VAL_contract_industry_3
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
 
 VAL_apply_contract_army_1 = {
-	custom_effect_tooltip = VAL_contract_army_upgrade_tt
-	hidden_effect = {
-		remove_ideas = VAL_contract_army_2
-		remove_ideas = VAL_contract_army_3
+	if = {
+		limit = {
+			NOT = { has_idea = VAL_contract_army_1 }
+			NOT = { has_idea = VAL_contract_army_2 }
+			NOT = { has_idea = VAL_contract_army_3 }
+		}
 		add_ideas = VAL_contract_army_1
 	}
 }
 
 VAL_apply_contract_army_2 = {
-	custom_effect_tooltip = VAL_contract_army_upgrade_tt
+	if = {
+		limit = { has_idea = VAL_contract_army_1 }
+		swap_ideas = {
+			remove_idea = VAL_contract_army_1
+			add_idea = VAL_contract_army_2
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = { has_idea = VAL_contract_army_2 }
+			NOT = { has_idea = VAL_contract_army_3 }
+		}
+		add_ideas = VAL_contract_army_2
+	}
 	hidden_effect = {
 		remove_ideas = VAL_contract_army_1
-		remove_ideas = VAL_contract_army_3
-		add_ideas = VAL_contract_army_2
 	}
 }
 
 VAL_apply_contract_army_3 = {
-	custom_effect_tooltip = VAL_contract_army_upgrade_tt
+	if = {
+		limit = { has_idea = VAL_contract_army_2 }
+		swap_ideas = {
+			remove_idea = VAL_contract_army_2
+			add_idea = VAL_contract_army_3
+		}
+	}
+	else_if = {
+		limit = { has_idea = VAL_contract_army_1 }
+		swap_ideas = {
+			remove_idea = VAL_contract_army_1
+			add_idea = VAL_contract_army_3
+		}
+	}
+	else_if = {
+		limit = { NOT = { has_idea = VAL_contract_army_3 } }
+		add_ideas = VAL_contract_army_3
+	}
 	hidden_effect = {
 		remove_ideas = VAL_contract_army_1
 		remove_ideas = VAL_contract_army_2
-		add_ideas = VAL_contract_army_3
 	}
 }
 
 VAL_refresh_contract_reputation = {
-	custom_effect_tooltip = VAL_contract_reputation_refresh_tt
+	if = {
+		limit = { check_variable = { var = VAL_contract_reputation_level value = 3 compare = greater_than_or_equals } }
+		VAL_apply_contract_reputation_3 = yes
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_reputation_level value = 2 compare = greater_than_or_equals } }
+		VAL_apply_contract_reputation_2 = yes
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_reputation_level value = 1 compare = greater_than_or_equals } }
+		VAL_apply_contract_reputation_1 = yes
+	}
+	else = { VAL_apply_contract_reputation_0 = yes }
+	hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+}
+
+VAL_apply_contract_reputation_3 = {
+	if = { limit = { has_idea = VAL_contract_reputation_2 } swap_ideas = { remove_idea = VAL_contract_reputation_2 add_idea = VAL_contract_reputation_3 } }
+	else_if = { limit = { has_idea = VAL_contract_reputation_1 } swap_ideas = { remove_idea = VAL_contract_reputation_1 add_idea = VAL_contract_reputation_3 } }
+	else_if = { limit = { has_idea = VAL_contract_reputation_0 } swap_ideas = { remove_idea = VAL_contract_reputation_0 add_idea = VAL_contract_reputation_3 } }
+	else_if = { limit = { NOT = { has_idea = VAL_contract_reputation_3 } } add_ideas = VAL_contract_reputation_3 }
 	hidden_effect = {
-		remove_ideas = VAL_contract_reputation_3
-		remove_ideas = VAL_contract_reputation_2
-		remove_ideas = VAL_contract_reputation_1
 		remove_ideas = VAL_contract_reputation_0
-		if = {
-			limit = { check_variable = { var = VAL_contract_reputation_level value = 3 compare = greater_than_or_equals } }
-			add_ideas = VAL_contract_reputation_3
-		}
-		else_if = {
-			limit = { check_variable = { var = VAL_contract_reputation_level value = 2 compare = greater_than_or_equals } }
-			add_ideas = VAL_contract_reputation_2
-		}
-		else_if = {
-			limit = { check_variable = { var = VAL_contract_reputation_level value = 1 compare = greater_than_or_equals } }
-			add_ideas = VAL_contract_reputation_1
-		}
-		else = { add_ideas = VAL_contract_reputation_0 }
-		ADISCORD_economy_mark_dirty = yes
+		remove_ideas = VAL_contract_reputation_1
+		remove_ideas = VAL_contract_reputation_2
+	}
+}
+
+VAL_apply_contract_reputation_2 = {
+	if = { limit = { has_idea = VAL_contract_reputation_3 } swap_ideas = { remove_idea = VAL_contract_reputation_3 add_idea = VAL_contract_reputation_2 } }
+	else_if = { limit = { has_idea = VAL_contract_reputation_1 } swap_ideas = { remove_idea = VAL_contract_reputation_1 add_idea = VAL_contract_reputation_2 } }
+	else_if = { limit = { has_idea = VAL_contract_reputation_0 } swap_ideas = { remove_idea = VAL_contract_reputation_0 add_idea = VAL_contract_reputation_2 } }
+	else_if = { limit = { NOT = { has_idea = VAL_contract_reputation_2 } } add_ideas = VAL_contract_reputation_2 }
+	hidden_effect = {
+		remove_ideas = VAL_contract_reputation_0
+		remove_ideas = VAL_contract_reputation_1
+		remove_ideas = VAL_contract_reputation_3
+	}
+}
+
+VAL_apply_contract_reputation_1 = {
+	if = { limit = { has_idea = VAL_contract_reputation_3 } swap_ideas = { remove_idea = VAL_contract_reputation_3 add_idea = VAL_contract_reputation_1 } }
+	else_if = { limit = { has_idea = VAL_contract_reputation_2 } swap_ideas = { remove_idea = VAL_contract_reputation_2 add_idea = VAL_contract_reputation_1 } }
+	else_if = { limit = { has_idea = VAL_contract_reputation_0 } swap_ideas = { remove_idea = VAL_contract_reputation_0 add_idea = VAL_contract_reputation_1 } }
+	else_if = { limit = { NOT = { has_idea = VAL_contract_reputation_1 } } add_ideas = VAL_contract_reputation_1 }
+	hidden_effect = {
+		remove_ideas = VAL_contract_reputation_0
+		remove_ideas = VAL_contract_reputation_2
+		remove_ideas = VAL_contract_reputation_3
+	}
+}
+
+VAL_apply_contract_reputation_0 = {
+	if = { limit = { has_idea = VAL_contract_reputation_3 } swap_ideas = { remove_idea = VAL_contract_reputation_3 add_idea = VAL_contract_reputation_0 } }
+	else_if = { limit = { has_idea = VAL_contract_reputation_2 } swap_ideas = { remove_idea = VAL_contract_reputation_2 add_idea = VAL_contract_reputation_0 } }
+	else_if = { limit = { has_idea = VAL_contract_reputation_1 } swap_ideas = { remove_idea = VAL_contract_reputation_1 add_idea = VAL_contract_reputation_0 } }
+	else_if = { limit = { NOT = { has_idea = VAL_contract_reputation_0 } } add_ideas = VAL_contract_reputation_0 }
+	hidden_effect = {
+		remove_ideas = VAL_contract_reputation_1
+		remove_ideas = VAL_contract_reputation_2
+		remove_ideas = VAL_contract_reputation_3
 	}
 }
 

@@ -363,7 +363,7 @@ def main() -> int:
     initialize = named_blocks(effects, "VAL_initialize_rework")
     if not initialize or "set_country_flag = VAL_operations_map_unlocked" not in initialize[0]:
         issues.append("rework initialization does not migrate the operations-map unlock")
-    for effect_id in (
+    tier_effect_ids = (
         "VAL_apply_contract_administration_1",
         "VAL_apply_contract_administration_2",
         "VAL_apply_contract_administration_3",
@@ -373,19 +373,44 @@ def main() -> int:
         "VAL_apply_contract_army_1",
         "VAL_apply_contract_army_2",
         "VAL_apply_contract_army_3",
-        "VAL_refresh_contract_reputation",
-    ):
+    )
+    for effect_id in tier_effect_ids:
         effect_blocks = named_blocks(effects, effect_id)
         if not effect_blocks:
             issues.append(f"missing tier effect {effect_id}")
             continue
         effect_block = effect_blocks[0]
         hidden = named_blocks(effect_block, "hidden_effect")
-        if "custom_effect_tooltip" not in effect_block or not hidden:
-            issues.append(f"{effect_id} exposes implementation details in its tooltip")
-            continue
-        if effect_block.count("remove_ideas") != hidden[0].count("remove_ideas"):
+        hidden_removals = sum(block.count("remove_ideas") for block in hidden)
+        if effect_block.count("remove_ideas") != hidden_removals:
             issues.append(f"{effect_id} exposes tier removals outside hidden_effect")
+        if effect_id.endswith(("_2", "_3")) and "swap_ideas" not in effect_block:
+            issues.append(f"{effect_id} does not present a TFR-style idea swap")
+
+    reputation_refresh = named_blocks(effects, "VAL_refresh_contract_reputation")
+    if not reputation_refresh:
+        issues.append("missing reputation refresh effect")
+    else:
+        for level in range(4):
+            if f"VAL_apply_contract_reputation_{level} = yes" not in reputation_refresh[0]:
+                issues.append(f"reputation refresh cannot select tier {level}")
+    for level in range(4):
+        effect_id = f"VAL_apply_contract_reputation_{level}"
+        effect_blocks = named_blocks(effects, effect_id)
+        if not effect_blocks:
+            issues.append(f"missing reputation swap effect {effect_id}")
+            continue
+        effect_block = effect_blocks[0]
+        hidden = named_blocks(effect_block, "hidden_effect")
+        if "swap_ideas" not in effect_block:
+            issues.append(f"{effect_id} does not present a TFR-style idea swap")
+        if effect_block.count("remove_ideas") != sum(
+            block.count("remove_ideas") for block in hidden
+        ):
+            issues.append(f"{effect_id} exposes reputation cleanup outside hidden_effect")
+        for swap in named_blocks(effect_block, "swap_ideas"):
+            if swap.count("remove_idea") != 1 or swap.count("add_idea") != 1:
+                issues.append(f"{effect_id} contains an invalid idea swap")
 
     ideas_text = read("common/ideas/ADISCORD_VAL_rework_ideas.txt")
     hidden_ideas = named_blocks(ideas_text, "hidden_ideas")

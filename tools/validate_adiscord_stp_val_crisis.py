@@ -564,6 +564,8 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
                 "STP_commit_to_shabrat = yes",
                 "STP_commit_to_party = yes",
                 "STP_forced_commit_no_reward",
+                "complete_national_focus = STP_Divide_The_Command_Registers",
+                "complete_national_focus = STP_Establish_Reserve_Communications",
                 "STP_crisis_late_choice_lock",
                 "days = 35",
             ):
@@ -603,7 +605,17 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
             if (values := _direct_scalar_values(block, "id"))
         }
         if playable_focus_ids != set(STP_CRISIS_FOCUS_STAGES):
-            issues.append("STP pre-death tree must contain exactly the 18 playable crisis focuses")
+            issues.append(
+                "STP pre-death tree must contain exactly the "
+                f"{len(STP_CRISIS_FOCUS_STAGES)} playable crisis focuses"
+            )
+        visible_focus_ids = (
+            playable_focus_ids
+            - set(STP_PARTY_FOCUSES)
+            - {"STP_Govern_In_His_Name"}
+        )
+        if len(visible_focus_ids) != 17:
+            issues.append("STP player route must contain exactly 17 visible mechanical focuses")
         if STP_SPINE_FOCUS_STAGES:
             issues.append("calendar spine focus manifest must remain empty")
         for removed_focus in STP_STORY_ONLY_FOCUS_IDS:
@@ -672,7 +684,7 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
             if _direct_scalar_values(block, "x") != [str(x)] or _direct_scalar_values(
                 block, "y"
             ) != [str(y)]:
-                issues.append(f"playable focus {focus} breaks the compact four-row layout")
+                issues.append(f"playable focus {focus} breaks the compact crisis layout")
             actual_relative = _direct_scalar_values(block, "relative_position_id")
             expected_relative = [] if relative is None else [relative]
             if actual_relative != expected_relative:
@@ -974,8 +986,10 @@ def _validate_civil_war_contract(root: Path, issues: list[str]) -> None:
     if events is not None:
         death = _block_with_direct_assignment(events, "country_event", "id", "stp_crisis.4") or ""
         router = _block_with_direct_assignment(events, "country_event", "id", "stp_crisis.50") or ""
-        if "country_event = { id = stp_crisis.50 }" not in death:
-            issues.append("Ivanov death event must invoke the Task 5 outcome router")
+        if "country_event = { id = stp_crisis.50 days = 3 }" not in death:
+            issues.append(
+                "Ivanov death event must leave a three-day interregnum before the outcome router"
+            )
         expected_outcomes = {
             "STP_outcome_shabrat_bloodless",
             "STP_outcome_shabrat_main_war",
@@ -2224,6 +2238,21 @@ def _png_dimensions(path: Path) -> tuple[int, int] | None:
         return None
 
 
+def _dds_dimensions(path: Path) -> tuple[int, int] | None:
+    try:
+        with path.open("rb") as stream:
+            if stream.read(4) != b"DDS ":
+                return None
+            header = stream.read(124)
+            if len(header) != 124 or struct.unpack_from("<I", header, 0)[0] != 124:
+                return None
+            height = struct.unpack_from("<I", header, 8)[0]
+            width = struct.unpack_from("<I", header, 12)[0]
+            return width, height
+    except FileNotFoundError:
+        return None
+
+
 def _localisation_index(root: Path) -> dict[str, list[str]]:
     index: dict[str, list[str]] = {}
     for path in sorted((root / "localisation/russian").glob("*.yml")):
@@ -2336,6 +2365,41 @@ def _validate_gui_contract(root: Path, issues: list[str]) -> None:
             texture_path = root / texture.replace("/", "\\")
             if not texture_path.is_file():
                 issues.append(f"missing GUI texture referenced by {relative}: {texture}")
+
+    dead_strip = "gfx/leaders/STP/ivanov_glitch_animation.dds"
+    if _dds_dimensions(root / dead_strip) != (8112, 210):
+        issues.append("Ivanov death animation must be a 48-frame 169 by 210 DDS strip")
+    state_face_gfx = read(root / "interface/ADISCORD_stp_state_face.gfx") or ""
+    leader_gfx = read(root / "interface/ADISCORD_leader_portraits.gfx") or ""
+    inlay = read(
+        root / "common/focus_inlay_windows/ADISCORD_STP_state_face_inlay_window.txt"
+    ) or ""
+    for relative, text, sprite in (
+        ("interface/ADISCORD_stp_state_face.gfx", state_face_gfx, "GFX_STP_state_face_dead"),
+        (
+            "interface/ADISCORD_leader_portraits.gfx",
+            leader_gfx,
+            "GFX_portrait_STP_Petr_Ivanov_animated",
+        ),
+    ):
+        for token in (
+            "frameAnimatedSpriteType",
+            f'name = "{sprite}"',
+            f'texturefile = "{dead_strip}"',
+            "noOfFrames = 48",
+            "animation_rate_fps = 12",
+            "looping = yes",
+            "play_on_show = yes",
+        ):
+            if token not in text:
+                issues.append(f"Ivanov death animation is missing {token} in {relative}")
+    if not re.search(
+        r"GFX_STP_state_face_dead\s*=\s*\{\s*has_country_flag\s*=\s*STP_ivanov_dead\s*\}",
+        _mask_non_code(inlay),
+    ):
+        issues.append("state-face inlay must select the animated portrait only after Ivanov dies")
+    elif inlay.index("GFX_STP_state_face_dead") > inlay.index("GFX_STP_state_face_stage_5"):
+        issues.append("animated death portrait must take priority over the static terminal face")
 
     for path in (
         "gfx/interface/ideas/STP/idea_STP_deadman_rulling_the_country.png",

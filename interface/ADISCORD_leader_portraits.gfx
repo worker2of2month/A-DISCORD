@@ -54,9 +54,14 @@ spriteTypes = {
 	  	name = "GFX_portrait_STP_Petr_Ivanov"
 	  	texturefile = "gfx/leaders/STP/portrait_STP_Petr_Ivanov.png"
 	}
-	spriteType = {
+	frameAnimatedSpriteType = {
 	  	name = "GFX_portrait_STP_Petr_Ivanov_animated"
-	  	texturefile = "gfx/leaders/STP/portrait_STP_Petr_Ivanov.png"
+		texturefile = "gfx/leaders/STP/ivanov_glitch_animation.dds"
+		noOfFrames = 48
+		animation_rate_fps = 12
+		looping = yes
+		play_on_show = yes
+		pause_on_loop = 0.0
 	}
 	spriteType = {
 	  	name = "GFX_portrait_STP_general_1"

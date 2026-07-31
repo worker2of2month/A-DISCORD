@@ -226,10 +226,18 @@ country_event = {
 		clr_country_flag = STP_focus_active_STP_Drown_The_Rumours_In_Music
 		clr_country_flag = STP_focus_active_STP_Garrisons_Hesitate
 		clr_country_flag = STP_focus_active_STP_Garrisons_Swear_Loyalty
+		clr_country_flag = STP_focus_active_STP_Divide_The_Command_Registers
+		clr_country_flag = STP_focus_active_STP_Establish_Reserve_Communications
+		clr_country_flag = STP_focus_active_STP_Unify_The_Administrative_Protocol
+		clr_country_flag = STP_focus_active_STP_Assign_Regional_Command_Groups
+		clr_country_flag = STP_focus_active_STP_Close_The_External_Channels
+		clr_country_flag = STP_focus_active_STP_Approve_The_Emergency_Protocol
 
 		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 } STP_set_crisis_phase = yes
 		set_country_flag = STP_internal_outcome_pending
-		country_event = { id = stp_crisis.50 }
+		# Three days of leaderless administration keep the dead portrait visible
+		# before the bloodless transfer or civil-war split resolves.
+		country_event = { id = stp_crisis.50 days = 3 }
 	}
 }
 
@@ -285,6 +293,8 @@ country_event = {
 		STP_commit_to_shabrat = yes
 		set_country_flag = STP_forced_commit_no_reward
 		complete_national_focus = STP_Show_Him_The_Truth
+		complete_national_focus = STP_Divide_The_Command_Registers
+		complete_national_focus = STP_Establish_Reserve_Communications
 		clr_country_flag = STP_forced_commit_no_reward
 		add_political_power = -50
 		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 } STP_change_suspicion = yes
