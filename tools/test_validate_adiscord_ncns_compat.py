@@ -39,6 +39,7 @@ class NcnsFactionCompatibilityTests(unittest.TestCase):
         self.assertIn("ratio_progress", manifest)
         self.assertIn("total_amount = 1", manifest)
         self.assertIn("completed_amount = 1", manifest)
+        self.assertNotIn("completed =", manifest)
         self.assertIn("change_leader_rule_influence", leadership_rule)
         self.assertIn("change_leader_rule_influence", rule_group)
         self.assertNotRegex(template + manifest + leadership_rule + rule_group, r"\b(?:democratic|fascism|communism|neutrality)\b")

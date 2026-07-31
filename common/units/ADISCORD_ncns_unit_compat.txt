@@ -1,0 +1,120 @@
+# HOI4 1.19 combat_tactics.txt checks these DLC sub-unit IDs even when their
+# technology branches are replaced by a total conversion. Keep inactive
+# A-Discord-compatible database entries so the vanilla tactics can parse.
+sub_units = {
+	light_flame_tank = {
+		abbreviation = "LFT"
+		sprite = ADISCORD_combat_platform
+		map_icon_category = armored
+		priority = 0
+		ai_priority = 0
+		active = no
+		type = { armor support }
+		group = support
+		categories = {
+			category_front_line
+			category_support_battalions
+			category_divisional_support_battalions
+			category_army
+		}
+		regimental = no
+		combat_width = 0
+		max_strength = 2
+		max_organisation = 20
+		default_morale = 0.3
+		manpower = 300
+		training_time = 120
+		weight = 0.1
+		supply_consumption = 0.02
+		need = { ADISCORD_combat_platform_archetype = 15 }
+		same_support_type = ADISCORD_flame_compat
+	}
+
+	medium_flame_tank = {
+		abbreviation = "MFT"
+		sprite = ADISCORD_combat_platform
+		map_icon_category = armored
+		priority = 0
+		ai_priority = 0
+		active = no
+		type = { armor support }
+		group = support
+		categories = {
+			category_front_line
+			category_support_battalions
+			category_divisional_support_battalions
+			category_army
+		}
+		regimental = no
+		combat_width = 0
+		max_strength = 2
+		max_organisation = 20
+		default_morale = 0.3
+		manpower = 300
+		training_time = 120
+		weight = 0.1
+		supply_consumption = 0.025
+		need = { ADISCORD_combat_platform_archetype = 15 }
+		same_support_type = ADISCORD_flame_compat
+	}
+
+	heavy_flame_tank = {
+		abbreviation = "HFT"
+		sprite = ADISCORD_heavy_platform
+		map_icon_category = armored
+		priority = 0
+		ai_priority = 0
+		active = no
+		type = { armor support }
+		group = support
+		categories = {
+			category_front_line
+			category_support_battalions
+			category_divisional_support_battalions
+			category_army
+		}
+		regimental = no
+		combat_width = 0
+		max_strength = 2
+		max_organisation = 20
+		default_morale = 0.3
+		manpower = 300
+		training_time = 120
+		weight = 0.1
+		supply_consumption = 0.03
+		need = { ADISCORD_heavy_platform_archetype = 15 }
+		same_support_type = ADISCORD_flame_compat
+	}
+
+	pioneer_support = {
+		abbreviation = "PIO"
+		sprite = infantry
+		map_icon_category = infantry
+		priority = 0
+		ai_priority = 0
+		active = no
+		affects_speed = no
+		type = { infantry support }
+		group = support
+		categories = {
+			category_front_line
+			category_support_battalions
+			category_divisional_support_battalions
+			category_army
+		}
+		regimental = no
+		combat_width = 0
+		max_strength = 2
+		max_organisation = 20
+		default_morale = 0.3
+		manpower = 300
+		training_time = 120
+		weight = 0.1
+		supply_consumption = 0.02
+		need = {
+			infantry_equipment = 10
+			support_equipment = 40
+		}
+		same_support_type = engineer
+	}
+}

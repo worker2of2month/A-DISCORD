@@ -6,5 +6,4 @@ ADISCORD_faction_manifest_continuity = {
 		total_amount = 1
 		completed_amount = 1
 	}
-	completed = { always = no }
 }

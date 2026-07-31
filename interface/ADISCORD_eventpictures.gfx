@@ -1,0 +1,26 @@
+spriteTypes = {
+	# Keep this file A-Discord-prefixed. Naming it eventpictures.gfx shadows the
+	# vanilla sprite database and removes the default event pictures at runtime.
+	spriteType = {
+		name = "GFX_event_doctor_work"
+		texturefile = "gfx/event_pictures/event_doctor_work.png"
+	}
+
+	spriteType = {
+		name = "GFX_event_vorkerland_explosion"
+		texturefile = "gfx/event_pictures/event_vorkerland_explosion.png"
+	}
+
+	# Legacy IDs used by A-Discord events but removed from HOI4 1.19. The
+	# textures are current vanilla assets, so every report event has a valid
+	# 401x116 fallback without duplicating the bitmap in the mod.
+	spriteType = {
+		name = "GFX_report_event_generic_diplomacy"
+		texturefile = "gfx/event_pictures/report_event_generic_read_write.dds"
+	}
+
+	spriteType = {
+		name = "GFX_report_event_political"
+		texturefile = "gfx/event_pictures/report_event_generic_parliament.dds"
+	}
+}
