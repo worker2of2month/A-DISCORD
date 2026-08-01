@@ -12,6 +12,7 @@ try:
     from build_adiscord_technology_system import (
         BRANCH_GRAPHS as GENERATED_BRANCH_GRAPHS,
         BRANCHES as GENERATED_BRANCHES,
+        ACCESS_REQUIREMENT_LOCALISATION as GENERATED_ACCESS_REQUIREMENT_LOCALISATION,
         BUILDING_RESOURCE_UPGRADES as GENERATED_BUILDING_RESOURCE_UPGRADES,
         ENABLE_BUILDINGS as GENERATED_ENABLE_BUILDINGS,
         ENABLE_EQUIPMENT as GENERATED_ENABLE_EQUIPMENT,
@@ -40,6 +41,7 @@ except ModuleNotFoundError:
     from tools.build_adiscord_technology_system import (
         BRANCH_GRAPHS as GENERATED_BRANCH_GRAPHS,
         BRANCHES as GENERATED_BRANCHES,
+        ACCESS_REQUIREMENT_LOCALISATION as GENERATED_ACCESS_REQUIREMENT_LOCALISATION,
         BUILDING_RESOURCE_UPGRADES as GENERATED_BUILDING_RESOURCE_UPGRADES,
         ENABLE_BUILDINGS as GENERATED_ENABLE_BUILDINGS,
         ENABLE_EQUIPMENT as GENERATED_ENABLE_EQUIPMENT,
@@ -2124,6 +2126,148 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
     return issues
 
 
+def check_technology_graph_quality(tech_blocks: dict[str, str]) -> list[str]:
+    """Reject one-sided choices and branches made from one repeated package."""
+
+    issues: list[str] = []
+    required_graph_complexity = {
+        "production": (2, 2),
+        "resources": (2, 2),
+        "administration": (2, 2),
+        "field_support": (2, 2),
+        "logistics": (1, 1),
+        "rail": (2, 2),
+        "artillery": (2, 2),
+        "anti_air": (2, 2),
+        "heavy_armor": (2, 2),
+        "fighter": (2, 2),
+        "air_support": (2, 2),
+        "naval_support": (2, 2),
+    }
+    minimum_effect_signatures = {
+        "production": 6,
+        "resources": 6,
+        "administration": 5,
+        "civil_resilience": 7,
+        "small_arms": 6,
+        "squad_weapons": 6,
+        "protection": 7,
+        "special_forces": 7,
+        "field_support": 7,
+        "logistics": 6,
+        "rail": 6,
+        "anti_tank": 5,
+        "anti_air": 4,
+        "recon_armor": 5,
+        "combat_armor": 6,
+        "heavy_armor": 6,
+        "fighter": 6,
+        "air_support": 6,
+        "naval_support": 5,
+        "surface_fleet": 5,
+        "subsurface": 5,
+    }
+
+    localisation = collect_localisation_keys()
+    for key in GENERATED_ACCESS_REQUIREMENT_LOCALISATION:
+        if key not in localisation:
+            issues.append(f"forbidden access condition leaks raw key {key}")
+
+    tech_years = {
+        tech.id: year
+        for branch in GENERATED_BRANCHES
+        for tech, year in zip(branch.techs, branch.years)
+    }
+    applied_keys = {programme["key"] for programme in GENERATED_APPLIED_PROGRAMMES}
+    for branch in GENERATED_BRANCHES:
+        if branch.key not in applied_keys:
+            continue
+        entry = branch.techs[0].id
+        if entry not in GENERATED_EXTRA_TECH_DEPENDENCIES:
+            issues.append(f"applied programme {branch.key} is an unattached root")
+    for tech_id, dependencies in GENERATED_EXTRA_TECH_DEPENDENCIES.items():
+        for dependency in dependencies:
+            if dependency not in tech_years:
+                issues.append(f"{tech_id} has undefined generated dependency {dependency}")
+            elif tech_years[dependency] > tech_years[tech_id]:
+                issues.append(
+                    f"{tech_id} ({tech_years[tech_id]}) depends on later "
+                    f"{dependency} ({tech_years[dependency]})"
+                )
+
+    for branch in GENERATED_BRANCHES:
+        graph = GENERATED_BRANCH_GRAPHS[branch.key]
+        parent_indices: list[list[int]] = [[] for _ in branch.techs]
+        for source, targets in enumerate(graph.successors):
+            for target in targets:
+                parent_indices[target].append(source)
+        forks = sum(len(targets) > 1 for targets in graph.successors)
+        merges = sum(len(parents) > 1 for parents in parent_indices)
+        leaves = sum(not targets for targets in graph.successors)
+        if branch.key != "forbidden_automation" and leaves != 1:
+            issues.append(
+                f"{branch.key} graph has {leaves} disconnected programme endings; expected 1"
+            )
+        required = required_graph_complexity.get(branch.key)
+        if required and (forks < required[0] or merges < required[1]):
+            issues.append(
+                f"{branch.key} graph has {forks} forks/{merges} merges; "
+                f"expected at least {required[0]}/{required[1]}"
+            )
+
+        def distances_from(start: int) -> dict[int, int]:
+            distances = {start: 0}
+            frontier = [start]
+            while frontier:
+                source = frontier.pop(0)
+                for target in graph.successors[source]:
+                    distance = distances[source] + 1
+                    if target not in distances or distance < distances[target]:
+                        distances[target] = distance
+                        frontier.append(target)
+            return distances
+
+        for group in GENERATED_XOR_INDEX_GROUPS_BY_BRANCH.get(branch.key, ()):
+            distances = [distances_from(index) for index in group]
+            common_descendants = set(distances[0])
+            for option_distances in distances[1:]:
+                common_descendants &= set(option_distances)
+            if common_descendants:
+                first_merge = min(common_descendants)
+                lengths = [option_distances[first_merge] for option_distances in distances]
+                if len(set(lengths)) != 1:
+                    choices = [branch.techs[index].id for index in group]
+                    issues.append(
+                        f"{branch.key} choice {choices} reaches "
+                        f"{branch.techs[first_merge].id} in unequal steps {lengths}"
+                    )
+
+        minimum = minimum_effect_signatures.get(branch.key)
+        if not minimum:
+            continue
+        signatures: set[str] = set()
+        for tech in branch.techs:
+            block = tech_blocks.get(tech.id, "")
+            body = block[block.find("{") + 1:] if "{" in block else block
+            stop = re.search(
+                r"(?mi)^\s*(?:path|dependencies|XOR|enable_equipments|"
+                r"enable_subunits|enable_building|on_research_complete|"
+                r"research_cost|start_year|folder|ai_will_do|categories)\s*=",
+                body,
+            )
+            effect_body = body[:stop.start()] if stop else body
+            signature = re.sub(r"-?[0-9]+(?:\.[0-9]+)?", "#", effect_body)
+            signature = re.sub(r"\s+", " ", signature).strip()
+            if signature:
+                signatures.add(signature)
+        if len(signatures) < minimum:
+            issues.append(
+                f"{branch.key} has only {len(signatures)} semantic effect packages; "
+                f"expected at least {minimum}"
+            )
+    return issues
+
+
 def check_ai_force_progression() -> list[str]:
     issues: list[str] = []
     templates_path = ROOT / "common" / "ai_templates" / "ADISCORD_land_templates.txt"
@@ -2383,6 +2527,7 @@ def main() -> int:
     issues.extend(check_campaign_technology_baseline(tech_blocks))
     issues.extend(check_campaign_dates_cover_technology_tree())
     issues.extend(check_post_2160_research_balance(tech_blocks))
+    issues.extend(check_technology_graph_quality(tech_blocks))
     issues.extend(check_ai_force_progression())
     issues.extend(check_local_doctrine_references(grand, tracks, subdoctrines, top_level_doctrines))
     issues.extend(check_braces())

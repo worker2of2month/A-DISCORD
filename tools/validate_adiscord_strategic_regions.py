@@ -17,17 +17,30 @@ from build_adiscord_strategic_regions import (
     REGIONS,
     REMAINDER_STATE_MARKER,
     SEA_REGIONS,
+    TEMPERATURES,
+    arctic_water,
     build_state_adjacency,
     connected_components,
     phenomenon,
     load_province_adjacency,
     load_province_definitions,
+    minimum_snow_level,
 )
 
 
 ROOT = Path(__file__).resolve().parents[1]
 PHENOMENA = ("no_phenomenon", "rain_light", "rain_heavy", "snow", "blizzard", "sandstorm")
-PROBABILITIES = PHENOMENA + ("arctic_water", "mud", "min_snow_level")
+WEATHER_VALUES = PHENOMENA + ("arctic_water", "mud", "min_snow_level")
+EXPECTED_INIT_RUN_PASSES = 90
+PHENOMENON_INDICES = {
+    "no_phenomenon": 0,
+    "rain_light": 1,
+    "rain_heavy": 2,
+    "snow": 3,
+    "blizzard": 4,
+    "mud": 5,
+    "sandstorm": 6,
+}
 
 
 def extract_block(text: str, key: str, start: int = 0) -> tuple[str, int]:
@@ -106,7 +119,7 @@ def parse_regions(errors: list[str]) -> dict[int, dict[str, object]]:
     return parsed
 
 
-def validate_weather(region_id: int, text: str, errors: list[str]) -> None:
+def validate_weather(region_id: int, climate: str, text: str, errors: list[str]) -> None:
     try:
         weather, _ = extract_block(text, "weather")
     except ValueError as exc:
@@ -134,23 +147,83 @@ def validate_weather(region_id: int, text: str, errors: list[str]) -> None:
             errors.append(f"region {region_id}, month {month}: missing temperature range")
         elif float(temperature.group(1)) > float(temperature.group(2)):
             errors.append(f"region {region_id}, month {month}: reversed temperature range")
+        elif tuple(map(float, temperature.groups())) != tuple(map(float, TEMPERATURES[climate][month])):
+            errors.append(f"region {region_id}, month {month}: temperature does not match {climate}")
 
         values: dict[str, float] = {}
-        for key in PROBABILITIES:
+        for key in WEATHER_VALUES:
             match = re.search(rf"\b{key}\s*=\s*([0-9.]+)", period)
             if not match:
                 errors.append(f"region {region_id}, month {month}: missing {key}")
                 continue
             value = float(match.group(1))
             values[key] = value
-            if not 0.0 <= value <= 1.0:
-                errors.append(f"region {region_id}, month {month}: {key}={value} is outside 0..1")
-        if sum(values.get(key, 0.0) for key in PHENOMENA) > 1.0001:
-            errors.append(f"region {region_id}, month {month}: phenomenon probabilities exceed 1")
+            upper_bound = 2.0 if key == "mud" else 1.0
+            if not 0.0 <= value <= upper_bound:
+                errors.append(
+                    f"region {region_id}, month {month}: {key}={value} is outside 0..{upper_bound:g}"
+                )
+
+        expected_row = phenomenon(climate, month)
+        expected = {
+            key: expected_row[index]
+            for key, index in PHENOMENON_INDICES.items()
+        }
+        expected["arctic_water"] = arctic_water(climate, month)
+        expected["min_snow_level"] = minimum_snow_level(climate, month)
+        for key, expected_value in expected.items():
+            if key in values and abs(values[key] - expected_value) > 0.0001:
+                errors.append(
+                    f"region {region_id}, month {month}: {key}={values[key]} does not match "
+                    f"{climate} profile {expected_value}"
+                )
+
+
+def validate_climate_profiles(errors: list[str]) -> None:
+    """Guard the gameplay-scale distinctions that normalization used to erase."""
+    profiles = {climate: [phenomenon(climate, month) for month in range(12)] for climate in TEMPERATURES}
+    checks = (
+        (max(row[3] for row in profiles["polar"]), 0.50, "polar winter snow"),
+        (max(row[4] for row in profiles["polar"]), 0.25, "polar blizzards"),
+        (max(row[1] for row in profiles["cool_maritime"]), 0.70, "maritime rain"),
+        (max(row[5] for row in profiles["temperate_wet"]), 1.00, "wet-climate mud"),
+        (max(row[2] for row in profiles["tropical_maritime"]), 0.45, "tropical downpours"),
+        (max(row[6] for row in profiles["hot_arid"]), 0.35, "desert sandstorms"),
+    )
+    for actual, minimum, label in checks:
+        if actual < minimum:
+            errors.append(f"climate profiles: {label} is too weak ({actual} < {minimum})")
+    if max(sum(row[:5]) + row[6] for rows in profiles.values() for row in rows) <= 1.0:
+        errors.append("climate profiles: phenomenon weights were incorrectly normalized to a total of 1")
+    if max(minimum_snow_level(climate, month) for climate in TEMPERATURES for month in range(12)) > 0.30:
+        errors.append("climate profiles: min_snow_level exceeds the vanilla-scale maximum of 0.30")
+
+
+def validate_global_weather_settings(errors: list[str]) -> None:
+    """Keep vanilla weather mechanics while warming up the replaced map longer."""
+    path = ROOT / "common" / "weather.txt"
+    if not path.exists():
+        errors.append("common/weather.txt: missing A-Discord startup weather settings")
+        return
+    text = path.read_text(encoding="utf-8-sig", errors="strict")
+    expected_values = {
+        "snow_gain_on_snowing": 1.0,
+        "snow_gain_on_blizzard": 5.0,
+        "snow_visual_min": 128.0,
+        "init_run_passes": float(EXPECTED_INIT_RUN_PASSES),
+    }
+    for key, expected in expected_values.items():
+        matches = re.findall(rf"\b{key}\s*=\s*([0-9.]+)", text)
+        if len(matches) != 1:
+            errors.append(f"common/weather.txt: expected one {key}, found {len(matches)}")
+        elif float(matches[0]) != expected:
+            errors.append(f"common/weather.txt: {key}={matches[0]} does not match {expected:g}")
 
 
 def main() -> int:
     errors: list[str] = []
+    validate_climate_profiles(errors)
+    validate_global_weather_settings(errors)
     definitions, color_to_province = load_province_definitions()
     adjacency = load_province_adjacency(definitions, color_to_province)
     physical_adjacency = load_province_adjacency(
@@ -288,8 +361,16 @@ def main() -> int:
                     f"{first_belt} to {second_belt}"
                 )
 
+    climate_by_region = {
+        region.region_id: region.climate
+        for region in (*SEA_REGIONS, *REGIONS)
+    }
     for region_id, data in regions.items():
-        validate_weather(region_id, str(data["text"]), errors)
+        climate = climate_by_region.get(region_id)
+        if climate is None:
+            errors.append(f"region {region_id}: no climate profile in manifest")
+            continue
+        validate_weather(region_id, climate, str(data["text"]), errors)
 
     localisation_path = ROOT / "localisation" / "replace" / "strategic_region_names_l_russian.yml"
     if not localisation_path.exists():

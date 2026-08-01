@@ -54,7 +54,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_caseless_ammunition_trials = {
-		category_all_infantry = { soft_attack = 0.022 breakthrough = 0.013 }
+		category_all_infantry = { hard_attack = 0.022 ap_attack = 0.022 }
 		path = { leads_to_tech = ADISCORD_tech_electrothermal_ignition research_cost_coeff = 1 }
 		research_cost = 1.3
 		start_year = 2160
@@ -71,7 +71,8 @@ technologies = {
 	}
 
 	ADISCORD_tech_smart_optics = {
-		category_all_infantry = { soft_attack = 0.023 breakthrough = 0.013 }
+		coordination_bonus = 0.023
+		land_night_attack = 0.007
 		path = { leads_to_tech = ADISCORD_tech_networked_weapon_sights research_cost_coeff = 1 }
 		research_cost = 1.328
 		start_year = 2161
@@ -105,7 +106,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_electrothermal_ignition = {
-		category_all_infantry = { soft_attack = 0.024 breakthrough = 0.014 }
+		category_all_infantry = { soft_attack = 0.024 hard_attack = 0.014 }
 		path = { leads_to_tech = ADISCORD_tech_variable_velocity_ammunition research_cost_coeff = 1 }
 		research_cost = 1.383
 		start_year = 2163
@@ -122,7 +123,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_smart_recoil_compensators = {
-		category_all_infantry = { soft_attack = 0.024 breakthrough = 0.014 }
+		category_all_infantry = { soft_attack = 0.024 reliability = 0.014 }
 		path = { leads_to_tech = ADISCORD_tech_modular_rifle_kits research_cost_coeff = 1 }
 		research_cost = 1.41
 		start_year = 2164
@@ -139,7 +140,8 @@ technologies = {
 	}
 
 	ADISCORD_tech_networked_weapon_sights = {
-		category_all_infantry = { soft_attack = 0.025 breakthrough = 0.015 }
+		planning_speed = 0.025
+		land_reinforce_rate = 0.007
 		path = { leads_to_tech = ADISCORD_tech_integrated_target_designation research_cost_coeff = 1 }
 		research_cost = 1.438
 		start_year = 2165
@@ -191,7 +193,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_variable_velocity_ammunition = {
-		category_all_infantry = { soft_attack = 0.027 breakthrough = 0.015 }
+		category_all_infantry = { hard_attack = 0.027 ap_attack = 0.027 }
 		path = { leads_to_tech = ADISCORD_tech_programmable_ammunition research_cost_coeff = 1 }
 		research_cost = 1.52
 		start_year = 2168
@@ -208,7 +210,8 @@ technologies = {
 	}
 
 	ADISCORD_tech_integrated_target_designation = {
-		category_all_infantry = { soft_attack = 0.028 breakthrough = 0.016 }
+		coordination_bonus = 0.028
+		land_night_attack = 0.008
 		path = { leads_to_tech = ADISCORD_tech_squad_fire_control_optics research_cost_coeff = 1 }
 		research_cost = 1.548
 		start_year = 2169
@@ -225,7 +228,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_programmable_ammunition = {
-		category_all_infantry = { soft_attack = 0.028 breakthrough = 0.016 }
+		category_all_infantry = { hard_attack = 0.028 ap_attack = 0.028 }
 		path = { leads_to_tech = ADISCORD_tech_powered_ammunition_carriers research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_infantry_equipment_2183 }
 		research_cost = 2.05
@@ -243,7 +246,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_powered_ammunition_carriers = {
-		category_all_infantry = { soft_attack = 0.029 breakthrough = 0.016 }
+		category_all_infantry = { soft_attack = 0.029 hard_attack = 0.016 }
 		path = { leads_to_tech = ADISCORD_tech_adaptive_projectile_fuzing research_cost_coeff = 1 }
 		research_cost = 1.603
 		start_year = 2171
@@ -260,7 +263,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_coil_assisted_service_rifles = {
-		category_all_infantry = { soft_attack = 0.029 breakthrough = 0.017 }
+		category_all_infantry = { soft_attack = 0.029 reliability = 0.017 }
 		path = { leads_to_tech = ADISCORD_tech_hybrid_kinetic_energy_carbines research_cost_coeff = 1 }
 		research_cost = 1.63
 		start_year = 2172
@@ -277,7 +280,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_adaptive_projectile_fuzing = {
-		category_all_infantry = { soft_attack = 0.03 breakthrough = 0.017 }
+		category_all_infantry = { hard_attack = 0.03 ap_attack = 0.03 }
 		path = { leads_to_tech = ADISCORD_tech_networked_service_rifles research_cost_coeff = 1 }
 		research_cost = 1.658
 		start_year = 2173
@@ -294,7 +297,8 @@ technologies = {
 	}
 
 	ADISCORD_tech_squad_fire_control_optics = {
-		category_all_infantry = { soft_attack = 0.031 breakthrough = 0.017 }
+		coordination_bonus = 0.031
+		land_night_attack = 0.009
 		path = { leads_to_tech = ADISCORD_tech_networked_service_rifles research_cost_coeff = 1 }
 		research_cost = 1.685
 		start_year = 2174
@@ -328,7 +332,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_networked_service_rifles = {
-		category_all_infantry = { soft_attack = 0.046 breakthrough = 0.026 }
+		category_all_infantry = { soft_attack = 0.046 hard_attack = 0.046 breakthrough = 0.026 }
 		dependencies = {
 			ADISCORD_tech_adaptive_projectile_fuzing = 1
 			ADISCORD_tech_squad_fire_control_optics = 1
@@ -370,7 +374,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_squad_grenade_launchers = {
-		category_all_infantry = { soft_attack = 0.012 defense = 0.021 }
+		category_all_infantry = { soft_attack = 0.021 hard_attack = 0.012 }
 		path = { leads_to_tech = ADISCORD_tech_portable_at_cells research_cost_coeff = 1 }
 		research_cost = 0.55
 		start_year = 2155
@@ -387,7 +391,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_portable_at_cells = {
-		category_all_infantry = { soft_attack = 0.013 defense = 0.021 }
+		category_all_infantry = { breakthrough = 0.021 ap_attack = 0.013 }
 		path = { leads_to_tech = ADISCORD_tech_recoilless_squad_launchers research_cost_coeff = 1 }
 		research_cost = 0.55
 		start_year = 2158
@@ -404,7 +408,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_recoilless_squad_launchers = {
-		category_all_infantry = { soft_attack = 0.013 defense = 0.022 }
+		category_all_infantry = { soft_attack = 0.022 hard_attack = 0.013 }
 		path = { leads_to_tech = ADISCORD_tech_programmable_grenade_fuzes research_cost_coeff = 1 }
 		research_cost = 1.35
 		start_year = 2160
@@ -421,7 +425,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_field_ew_units = {
-		category_all_infantry = { soft_attack = 0.013 defense = 0.023 }
+		category_all_infantry = { max_organisation = 0.902 default_morale = 0.013 }
 		path = { leads_to_tech = ADISCORD_tech_man_portable_sensor_masts research_cost_coeff = 1 }
 		research_cost = 1.378
 		start_year = 2161
@@ -438,7 +442,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_programmable_grenade_fuzes = {
-		category_all_infantry = { soft_attack = 0.014 defense = 0.023 }
+		category_all_infantry = { soft_attack = 0.023 hard_attack = 0.014 }
 		path = { leads_to_tech = ADISCORD_tech_loitering_munition_teams research_cost_coeff = 1 }
 		research_cost = 1.405
 		start_year = 2162
@@ -455,7 +459,8 @@ technologies = {
 	}
 
 	ADISCORD_tech_man_portable_sensor_masts = {
-		category_all_infantry = { soft_attack = 0.014 defense = 0.024 }
+		coordination_bonus = 0.024
+		land_reinforce_rate = 0.007
 		path = { leads_to_tech = ADISCORD_tech_drone_guided_support_fire research_cost_coeff = 1 }
 		research_cost = 1.433
 		start_year = 2163
@@ -472,7 +477,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_distributed_ammunition_carriers = {
-		category_all_infantry = { soft_attack = 0.014 defense = 0.024 }
+		category_all_infantry = { soft_attack = 0.024 breakthrough = 0.014 }
 		path = { leads_to_tech = ADISCORD_tech_remote_weapon_tripods research_cost_coeff = 1 }
 		research_cost = 1.46
 		start_year = 2164
@@ -489,7 +494,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_drone_guided_support_fire = {
-		category_all_infantry = { soft_attack = 0.015 defense = 0.025 }
+		category_all_infantry = { max_organisation = 1.053 default_morale = 0.015 }
 		path = { leads_to_tech = ADISCORD_tech_networked_command_terminals research_cost_coeff = 1 }
 		research_cost = 1.488
 		start_year = 2165
@@ -506,7 +511,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_networked_command_terminals = {
-		category_all_infantry = { soft_attack = 0.015 defense = 0.026 }
+		category_all_infantry = { max_organisation = 1.091 default_morale = 0.015 }
 		path = { leads_to_tech = ADISCORD_tech_cooperative_target_handoff research_cost_coeff = 1 }
 		research_cost = 1.515
 		start_year = 2166
@@ -523,7 +528,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_remote_weapon_tripods = {
-		category_all_infantry = { soft_attack = 0.015 defense = 0.026 }
+		category_all_infantry = { soft_attack = 0.026 defense = 0.015 }
 		path = { leads_to_tech = ADISCORD_tech_autonomous_support_weapons research_cost_coeff = 1 }
 		dependencies = {
 			ADISCORD_tech_distributed_ammunition_carriers = 1
@@ -546,7 +551,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_loitering_munition_teams = {
-		category_all_infantry = { soft_attack = 0.015 defense = 0.027 }
+		category_all_infantry = { breakthrough = 0.027 ap_attack = 0.015 }
 		path = { leads_to_tech = ADISCORD_tech_electromagnetic_anti_armor_launchers research_cost_coeff = 1 }
 		research_cost = 1.57
 		start_year = 2168
@@ -563,7 +568,8 @@ technologies = {
 	}
 
 	ADISCORD_tech_cooperative_target_handoff = {
-		category_all_infantry = { soft_attack = 0.016 defense = 0.028 }
+		coordination_bonus = 0.028
+		land_reinforce_rate = 0.008
 		path = { leads_to_tech = ADISCORD_tech_autonomous_support_weapons research_cost_coeff = 1 }
 		path = { leads_to_tech = ADISCORD_tech_microdrone_suppression_nets research_cost_coeff = 1 }
 		research_cost = 1.598
@@ -581,7 +587,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_autonomous_support_weapons = {
-		category_all_infantry = { soft_attack = 0.016 defense = 0.028 }
+		category_all_infantry = { soft_attack = 0.028 breakthrough = 0.016 }
 		path = { leads_to_tech = ADISCORD_tech_autonomous_mortar_sections research_cost_coeff = 1 }
 		dependencies = {
 			ADISCORD_tech_remote_weapon_tripods = 1
@@ -604,7 +610,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_autonomous_mortar_sections = {
-		category_all_infantry = { soft_attack = 0.016 defense = 0.029 }
+		category_all_infantry = { soft_attack = 0.029 breakthrough = 0.016 }
 		path = { leads_to_tech = ADISCORD_tech_robotic_heavy_weapon_teams research_cost_coeff = 1 }
 		research_cost = 1.653
 		start_year = 2171
@@ -621,7 +627,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_microdrone_suppression_nets = {
-		category_all_infantry = { soft_attack = 0.017 defense = 0.029 }
+		category_all_infantry = { max_organisation = 1.318 default_morale = 0.017 }
 		path = { leads_to_tech = ADISCORD_tech_swarm_coordinated_fire_support research_cost_coeff = 1 }
 		research_cost = 1.68
 		start_year = 2172
@@ -638,7 +644,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_electromagnetic_anti_armor_launchers = {
-		category_all_infantry = { soft_attack = 0.017 defense = 0.03 }
+		category_all_infantry = { soft_attack = 0.03 hard_attack = 0.017 }
 		path = { leads_to_tech = ADISCORD_tech_swarm_coordinated_fire_support research_cost_coeff = 1 }
 		research_cost = 1.708
 		start_year = 2173
@@ -655,7 +661,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_robotic_heavy_weapon_teams = {
-		category_all_infantry = { soft_attack = 0.017 defense = 0.031 }
+		category_all_infantry = { soft_attack = 0.031 defense = 0.017 }
 		path = { leads_to_tech = ADISCORD_tech_swarm_coordinated_fire_support research_cost_coeff = 1 }
 		research_cost = 1.735
 		start_year = 2174
@@ -678,6 +684,7 @@ technologies = {
 			ADISCORD_tech_microdrone_suppression_nets = 1
 			ADISCORD_tech_electromagnetic_anti_armor_launchers = 1
 			ADISCORD_tech_robotic_heavy_weapon_teams = 1
+			ADISCORD_tech_battlefield_sensor_fusion = 1
 		}
 		research_cost = 2.4
 		start_year = 2175
@@ -694,7 +701,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_swarm_fireteams = {
-		category_all_infantry = { soft_attack = 0.026 defense = 0.046 }
+		category_all_infantry = { soft_attack = 0.046 defense = 0.046 max_organisation = 2.131 }
 		dependencies = {
 			ADISCORD_tech_swarm_coordinated_fire_support = 1
 			ADISCORD_tech_networked_service_rifles = 1
@@ -734,7 +741,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_trauma_plates = {
-		category_all_infantry = { defense = 0.021 max_organisation = 0.788 }
+		category_all_infantry = { defense = 0.021 reliability = 0.012 }
 		path = { leads_to_tech = ADISCORD_tech_ceramic_trauma_inserts research_cost_coeff = 1 }
 		research_cost = 0.55
 		start_year = 2155
@@ -751,7 +758,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_sealed_combat_suits = {
-		category_all_infantry = { defense = 0.021 max_organisation = 0.826 }
+		category_all_infantry = { defense = 0.021 supply_consumption = -0.006 }
 		path = { leads_to_tech = ADISCORD_tech_sealed_respirator_interfaces research_cost_coeff = 1 }
 		research_cost = 0.55
 		start_year = 2158
@@ -768,7 +775,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_ceramic_trauma_inserts = {
-		category_all_infantry = { defense = 0.022 max_organisation = 0.864 }
+		category_all_infantry = { defense = 0.022 breakthrough = 0.013 }
 		path = { leads_to_tech = ADISCORD_tech_active_hearing_protection research_cost_coeff = 1 }
 		research_cost = 1.2
 		start_year = 2160
@@ -785,7 +792,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_battlefield_medical_drones = {
-		category_all_infantry = { defense = 0.023 max_organisation = 0.902 }
+		field_hospital = { casualty_trickleback = 0.023 experience_loss_factor = -0.013 }
 		path = { leads_to_tech = ADISCORD_tech_smart_tourniquet_systems research_cost_coeff = 1 }
 		research_cost = 1.228
 		start_year = 2161
@@ -802,7 +809,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_sealed_respirator_interfaces = {
-		category_all_infantry = { defense = 0.023 max_organisation = 0.939 }
+		category_all_infantry = { default_morale = 0.023 defense = 0.014 }
 		path = { leads_to_tech = ADISCORD_tech_thermal_signature_liners research_cost_coeff = 1 }
 		research_cost = 1.255
 		start_year = 2162
@@ -819,7 +826,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_active_hearing_protection = {
-		category_all_infantry = { defense = 0.024 max_organisation = 0.977 }
+		category_all_infantry = { defense = 0.024 reliability = 0.014 }
 		path = { leads_to_tech = ADISCORD_tech_powered_load_bearing_harnesses research_cost_coeff = 1 }
 		research_cost = 1.282
 		start_year = 2163
@@ -836,7 +843,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_thermal_signature_liners = {
-		category_all_infantry = { defense = 0.024 max_organisation = 1.015 }
+		category_all_infantry = { defense = 0.024 supply_consumption = -0.007 }
 		path = { leads_to_tech = ADISCORD_tech_reactive_camouflage_textiles research_cost_coeff = 1 }
 		research_cost = 1.31
 		start_year = 2164
@@ -853,7 +860,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_powered_load_bearing_harnesses = {
-		category_all_infantry = { defense = 0.025 max_organisation = 1.053 }
+		category_all_infantry = { defense = 0.025 reliability = 0.015 }
 		path = { leads_to_tech = ADISCORD_tech_exoskeleton_load_frames research_cost_coeff = 1 }
 		research_cost = 1.337
 		start_year = 2165
@@ -870,7 +877,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_exoskeleton_load_frames = {
-		category_all_infantry = { defense = 0.026 max_organisation = 1.091 }
+		category_all_infantry = { defense = 0.026 breakthrough = 0.015 }
 		path = { leads_to_tech = ADISCORD_tech_exosuit_joint_actuators research_cost_coeff = 1 }
 		research_cost = 1.365
 		start_year = 2166
@@ -887,7 +894,8 @@ technologies = {
 	}
 
 	ADISCORD_tech_smart_tourniquet_systems = {
-		category_all_infantry = { defense = 0.026 max_organisation = 1.129 }
+		field_hospital = { casualty_trickleback = 0.015 experience_loss_factor = -0.026 }
+		category_all_infantry = { default_morale = 0.015 }
 		path = { leads_to_tech = ADISCORD_tech_autonomous_casualty_monitors research_cost_coeff = 1 }
 		research_cost = 1.393
 		start_year = 2167
@@ -904,7 +912,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_autonomous_casualty_monitors = {
-		category_all_infantry = { defense = 0.027 max_organisation = 1.167 }
+		field_hospital = { casualty_trickleback = 0.027 experience_loss_factor = -0.015 }
 		path = { leads_to_tech = ADISCORD_tech_nanofiber_wound_dressings research_cost_coeff = 1 }
 		research_cost = 1.42
 		start_year = 2168
@@ -921,7 +929,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_reactive_camouflage_textiles = {
-		category_all_infantry = { defense = 0.028 max_organisation = 1.205 }
+		category_all_infantry = { defense = 0.028 supply_consumption = -0.008 }
 		path = { leads_to_tech = ADISCORD_tech_adaptive_camouflage research_cost_coeff = 1 }
 		research_cost = 1.448
 		start_year = 2169
@@ -938,7 +946,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_adaptive_camouflage = {
-		category_all_infantry = { defense = 0.028 max_organisation = 1.243 }
+		category_all_infantry = { default_morale = 0.028 defense = 0.016 }
 		path = { leads_to_tech = ADISCORD_tech_adaptive_radiation_shielding research_cost_coeff = 1 }
 		research_cost = 1.475
 		start_year = 2170
@@ -955,7 +963,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_exosuit_joint_actuators = {
-		category_all_infantry = { defense = 0.029 max_organisation = 1.281 }
+		category_all_infantry = { defense = 0.029 reliability = 0.016 }
 		path = { leads_to_tech = ADISCORD_tech_self_sealing_combat_skins research_cost_coeff = 1 }
 		research_cost = 1.502
 		start_year = 2171
@@ -972,7 +980,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_nanofiber_wound_dressings = {
-		category_all_infantry = { defense = 0.029 max_organisation = 1.318 }
+		field_hospital = { casualty_trickleback = 0.029 experience_loss_factor = -0.017 }
 		path = { leads_to_tech = ADISCORD_tech_closed_loop_combat_life_support research_cost_coeff = 1 }
 		research_cost = 1.53
 		start_year = 2172
@@ -989,7 +997,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_adaptive_radiation_shielding = {
-		category_all_infantry = { defense = 0.03 max_organisation = 1.356 }
+		category_all_infantry = { defense = 0.03 supply_consumption = -0.009 }
 		path = { leads_to_tech = ADISCORD_tech_closed_loop_combat_life_support research_cost_coeff = 1 }
 		research_cost = 1.558
 		start_year = 2173
@@ -1048,7 +1056,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_assault_sapper_kits = {
-		category_all_infantry = { defense = 0.046 max_organisation = 2.131 }
+		category_all_infantry = { defense = 0.046 default_morale = 0.026 supply_consumption = -0.013 }
 		research_cost = 2.55
 		start_year = 2180
 		folder = {
@@ -1081,7 +1089,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_urban_breaching = {
-		category_special_forces = { breakthrough = 0.021 maximum_speed = 0.006 }
+		category_special_forces = { soft_attack = 0.021 breakthrough = 0.021 }
 		path = { leads_to_tech = ADISCORD_tech_subterranean_route_reconnaissance research_cost_coeff = 1 }
 		research_cost = 0.55
 		start_year = 2155
@@ -1096,7 +1104,8 @@ technologies = {
 	}
 
 	ADISCORD_tech_radiation_patrols = {
-		category_special_forces = { breakthrough = 0.021 maximum_speed = 0.006 }
+		category_recon = { recon = 0.35 }
+		category_special_forces = { maximum_speed = 0.006 }
 		path = { leads_to_tech = ADISCORD_tech_combat_recon_drones research_cost_coeff = 1 }
 		research_cost = 0.55
 		start_year = 2158
@@ -1111,7 +1120,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_subterranean_route_reconnaissance = {
-		category_special_forces = { breakthrough = 0.022 maximum_speed = 0.006 }
+		category_special_forces = { breakthrough = 0.022 defense = 0.013 }
 		path = { leads_to_tech = ADISCORD_tech_urban_vertical_access_rigs research_cost_coeff = 1 }
 		research_cost = 1.25
 		start_year = 2160
@@ -1126,7 +1135,8 @@ technologies = {
 	}
 
 	ADISCORD_tech_combat_recon_drones = {
-		category_special_forces = { breakthrough = 0.023 maximum_speed = 0.007 }
+		category_recon = { recon = 0.34 }
+		land_night_attack = 0.007
 		path = { leads_to_tech = ADISCORD_tech_low_observable_infiltration_suits research_cost_coeff = 1 }
 		research_cost = 1.278
 		start_year = 2161
@@ -1141,7 +1151,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_urban_vertical_access_rigs = {
-		category_special_forces = { breakthrough = 0.023 maximum_speed = 0.007 }
+		category_special_forces = { soft_attack = 0.023 breakthrough = 0.023 }
 		path = { leads_to_tech = ADISCORD_tech_robotic_breaching_companions research_cost_coeff = 1 }
 		research_cost = 1.305
 		start_year = 2162
@@ -1156,7 +1166,8 @@ technologies = {
 	}
 
 	ADISCORD_tech_low_observable_infiltration_suits = {
-		category_special_forces = { breakthrough = 0.024 maximum_speed = 0.007 }
+		category_recon = { recon = 0.43 }
+		category_special_forces = { maximum_speed = 0.007 }
 		path = { leads_to_tech = ADISCORD_tech_autonomous_scout_microdrones research_cost_coeff = 1 }
 		research_cost = 1.333
 		start_year = 2163
@@ -1171,7 +1182,8 @@ technologies = {
 	}
 
 	ADISCORD_tech_autonomous_scout_microdrones = {
-		category_special_forces = { breakthrough = 0.024 maximum_speed = 0.007 }
+		category_recon = { recon = 0.47 }
+		category_special_forces = { maximum_speed = 0.007 }
 		path = { leads_to_tech = ADISCORD_tech_contested_zone_navigation research_cost_coeff = 1 }
 		research_cost = 1.36
 		start_year = 2164
@@ -1186,7 +1198,8 @@ technologies = {
 	}
 
 	ADISCORD_tech_contested_zone_navigation = {
-		category_special_forces = { breakthrough = 0.025 maximum_speed = 0.007 }
+		category_recon = { recon = 0.46 }
+		land_night_attack = 0.007
 		path = { leads_to_tech = ADISCORD_tech_multispectral_concealment_discipline research_cost_coeff = 1 }
 		research_cost = 1.387
 		start_year = 2165
@@ -1201,7 +1214,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_vertical_assault_training = {
-		category_special_forces = { breakthrough = 0.026 maximum_speed = 0.007 }
+		category_special_forces = { maximum_speed = 0.015 supply_consumption = -0.007 }
 		path = { leads_to_tech = ADISCORD_tech_high_altitude_insertion_capsules research_cost_coeff = 1 }
 		research_cost = 1.415
 		start_year = 2166
@@ -1216,7 +1229,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_high_altitude_insertion_capsules = {
-		category_special_forces = { breakthrough = 0.026 maximum_speed = 0.008 }
+		category_special_forces = { max_organisation = 1.129 breakthrough = 0.015 }
 		path = { leads_to_tech = ADISCORD_tech_remote_beacon_extraction research_cost_coeff = 1 }
 		research_cost = 1.442
 		start_year = 2167
@@ -1231,7 +1244,8 @@ technologies = {
 	}
 
 	ADISCORD_tech_multispectral_concealment_discipline = {
-		category_special_forces = { breakthrough = 0.027 maximum_speed = 0.008 }
+		category_recon = { recon = 0.55 }
+		category_special_forces = { maximum_speed = 0.008 }
 		path = { leads_to_tech = ADISCORD_tech_deep_recon_cells research_cost_coeff = 1 }
 		research_cost = 1.47
 		start_year = 2168
@@ -1246,7 +1260,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_remote_beacon_extraction = {
-		category_special_forces = { breakthrough = 0.028 maximum_speed = 0.008 }
+		category_special_forces = { maximum_speed = 0.016 supply_consumption = -0.008 }
 		path = { leads_to_tech = ADISCORD_tech_deep_area_sustainment_pods research_cost_coeff = 1 }
 		research_cost = 1.498
 		start_year = 2169
@@ -1261,7 +1275,8 @@ technologies = {
 	}
 
 	ADISCORD_tech_deep_recon_cells = {
-		category_special_forces = { breakthrough = 0.028 maximum_speed = 0.008 }
+		category_recon = { recon = 0.59 }
+		category_special_forces = { maximum_speed = 0.008 }
 		path = { leads_to_tech = ADISCORD_tech_predictive_patrol_evasion research_cost_coeff = 1 }
 		research_cost = 1.525
 		start_year = 2170
@@ -1276,7 +1291,8 @@ technologies = {
 	}
 
 	ADISCORD_tech_predictive_patrol_evasion = {
-		category_special_forces = { breakthrough = 0.029 maximum_speed = 0.008 }
+		category_recon = { recon = 0.58 }
+		land_night_attack = 0.008
 		path = { leads_to_tech = ADISCORD_tech_distributed_recon_sensor_caches research_cost_coeff = 1 }
 		research_cost = 1.552
 		start_year = 2171
@@ -1291,7 +1307,8 @@ technologies = {
 	}
 
 	ADISCORD_tech_distributed_recon_sensor_caches = {
-		category_special_forces = { breakthrough = 0.029 maximum_speed = 0.008 }
+		category_recon = { recon = 0.67 }
+		category_special_forces = { maximum_speed = 0.008 }
 		path = { leads_to_tech = ADISCORD_tech_augmented_mission_rehearsal research_cost_coeff = 1 }
 		research_cost = 1.58
 		start_year = 2172
@@ -1306,7 +1323,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_robotic_breaching_companions = {
-		category_special_forces = { breakthrough = 0.03 maximum_speed = 0.009 }
+		category_special_forces = { soft_attack = 0.03 breakthrough = 0.03 }
 		path = { leads_to_tech = ADISCORD_tech_augmented_mission_rehearsal research_cost_coeff = 1 }
 		research_cost = 1.607
 		start_year = 2173
@@ -1321,7 +1338,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_deep_area_sustainment_pods = {
-		category_special_forces = { breakthrough = 0.031 maximum_speed = 0.009 }
+		category_special_forces = { maximum_speed = 0.017 supply_consumption = -0.009 }
 		path = { leads_to_tech = ADISCORD_tech_augmented_mission_rehearsal research_cost_coeff = 1 }
 		research_cost = 1.635
 		start_year = 2174
@@ -1356,7 +1373,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_augmented_special_forces = {
-		category_special_forces = { breakthrough = 0.046 maximum_speed = 0.013 }
+		category_special_forces = { breakthrough = 0.046 defense = 0.046 max_organisation = 2.131 }
 		research_cost = 2.55
 		start_year = 2180
 		folder = {
@@ -1374,6 +1391,9 @@ technologies = {
 		category_all_infantry = { default_morale = 0.02 }
 		path = { leads_to_tech = ADISCORD_tech_rapid_casualty_corridors research_cost_coeff = 1 }
 		path = { leads_to_tech = ADISCORD_tech_forward_surgical_cells research_cost_coeff = 1 }
+		dependencies = {
+			ADISCORD_tech_combat_engineering_sections = 1
+		}
 		research_cost = 1.2
 		start_year = 2160
 		folder = {

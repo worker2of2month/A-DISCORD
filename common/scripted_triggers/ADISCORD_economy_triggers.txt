@@ -55,21 +55,32 @@ ADISCORD_economy_should_show_player_ui = {
 }
 
 # Shared fiscal state for budget policy and engine-native AI strategies.
+ADISCORD_economy_ai_participates = {
+	has_variable = ADISCORD_economy_initialized
+	has_variable = ADISCORD_economy_simulation_tier
+	check_variable = { var = ADISCORD_economy_simulation_tier value = 3 compare = less_than }
+}
+
 ADISCORD_economy_ai_is_healthy = {
+	ADISCORD_economy_ai_participates = yes
 	check_variable = { var = ADISCORD_economy_ai_state value = 0 compare = less_than_or_equals }
 }
 ADISCORD_economy_ai_is_stressed = {
+	ADISCORD_economy_ai_participates = yes
 	check_variable = { var = ADISCORD_economy_ai_state value = 1 compare = greater_than_or_equals }
 	check_variable = { var = ADISCORD_economy_ai_state value = 2 compare = less_than }
 }
 ADISCORD_economy_ai_is_crisis = {
+	ADISCORD_economy_ai_participates = yes
 	check_variable = { var = ADISCORD_economy_ai_state value = 2 compare = greater_than_or_equals }
 	check_variable = { var = ADISCORD_economy_ai_state value = 3 compare = less_than }
 }
 ADISCORD_economy_ai_is_recovery = {
+	ADISCORD_economy_ai_participates = yes
 	check_variable = { var = ADISCORD_economy_ai_state value = 3 compare = greater_than_or_equals }
 }
 ADISCORD_economy_ai_can_fund_advanced_forces = {
+	ADISCORD_economy_ai_participates = yes
 	NOT = { ADISCORD_economy_ai_is_crisis = yes }
 	check_variable = { var = ADISCORD_economy_army_spending_mode value = 2 compare = greater_than_or_equals }
 }
@@ -204,6 +215,55 @@ ADISCORD_economy_has_treasury_150 = { check_variable = { var = ADISCORD_economy_
 ADISCORD_economy_has_low_treasury = { check_variable = { var = ADISCORD_economy_treasury value = 50 compare = less_than } }
 ADISCORD_economy_has_large_reserve = { check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals } }
 
+# Liquidity actions must have enough real headroom to produce a strategic,
+# non-zero result. Temp calculations avoid fragile variable-to-variable trigger
+# comparisons and keep the nominal action packages bounded in their effects.
+ADISCORD_economy_has_treasury_room_35 = {
+	set_temp_variable = {
+		ADISCORD_economy_treasury_room_trigger_temp = {
+			value = ADISCORD_economy_treasury_cap
+			subtract = ADISCORD_economy_treasury
+		}
+	}
+	check_variable = { var = ADISCORD_economy_treasury_room_trigger_temp value = 35 compare = greater_than_or_equals }
+}
+ADISCORD_economy_has_treasury_room_40 = {
+	set_temp_variable = {
+		ADISCORD_economy_treasury_room_trigger_temp = {
+			value = ADISCORD_economy_treasury_cap
+			subtract = ADISCORD_economy_treasury
+		}
+	}
+	check_variable = { var = ADISCORD_economy_treasury_room_trigger_temp value = 40 compare = greater_than_or_equals }
+}
+ADISCORD_economy_has_treasury_room_50 = {
+	set_temp_variable = {
+		ADISCORD_economy_treasury_room_trigger_temp = {
+			value = ADISCORD_economy_treasury_cap
+			subtract = ADISCORD_economy_treasury
+		}
+	}
+	check_variable = { var = ADISCORD_economy_treasury_room_trigger_temp value = 50 compare = greater_than_or_equals }
+}
+ADISCORD_economy_has_debt_room_58 = {
+	set_temp_variable = {
+		ADISCORD_economy_debt_room_trigger_temp = {
+			value = ADISCORD_economy_debt_capacity
+			subtract = ADISCORD_economy_debt
+		}
+	}
+	check_variable = { var = ADISCORD_economy_debt_room_trigger_temp value = 58 compare = greater_than_or_equals }
+}
+ADISCORD_economy_has_debt_room_64 = {
+	set_temp_variable = {
+		ADISCORD_economy_debt_room_trigger_temp = {
+			value = ADISCORD_economy_debt_capacity
+			subtract = ADISCORD_economy_debt
+		}
+	}
+	check_variable = { var = ADISCORD_economy_debt_room_trigger_temp value = 64 compare = greater_than_or_equals }
+}
+
 ADISCORD_economy_has_debt = { check_variable = { var = ADISCORD_economy_debt value = 1 compare = greater_than_or_equals } }
 ADISCORD_economy_has_high_debt = {
 	OR = {
@@ -241,6 +301,15 @@ ADISCORD_economy_can_increase_tax_burden = {
 ADISCORD_economy_can_decrease_tax_burden = {
 	check_variable = { var = ADISCORD_economy_tax_burden_mode value = 1 compare = greater_than }
 	check_variable = { var = ADISCORD_economy_tax_change_cooldown value = 1 compare = less_than }
+}
+
+ADISCORD_economy_can_increase_social_spending = {
+	check_variable = { var = ADISCORD_economy_social_spending_mode value = 5 compare = less_than }
+	check_variable = { var = ADISCORD_economy_social_budget_change_cooldown value = 1 compare = less_than }
+}
+ADISCORD_economy_can_decrease_social_spending = {
+	check_variable = { var = ADISCORD_economy_social_spending_mode value = 1 compare = greater_than }
+	check_variable = { var = ADISCORD_economy_social_budget_change_cooldown value = 1 compare = less_than }
 }
 
 ADISCORD_economy_tax_burden_mode_1 = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 1 compare = less_than_or_equals } }
@@ -317,6 +386,8 @@ ADISCORD_economy_can_take_debt = {
 	}
 	check_variable = { var = ADISCORD_economy_debt_ratio value = 100 compare = less_than }
 	check_variable = { var = ADISCORD_economy_recent_debt value = 1 compare = less_than }
+	ADISCORD_economy_has_treasury_room_50 = yes
+	ADISCORD_economy_has_debt_room_58 = yes
 }
 
 ADISCORD_economy_can_issue_internal_bonds = {
@@ -329,6 +400,7 @@ ADISCORD_economy_can_take_external_loan = {
 	ADISCORD_economy_can_take_debt = yes
 	check_variable = { var = ADISCORD_economy_creditworthiness value = 35 compare = greater_than_or_equals }
 	check_variable = { var = ADISCORD_economy_debt_crisis_level value = 4 compare = less_than }
+	ADISCORD_economy_has_debt_room_64 = yes
 }
 
 ADISCORD_economy_can_print_money = {
@@ -340,6 +412,7 @@ ADISCORD_economy_can_print_money = {
 
 ADISCORD_economy_can_expand_money_emission = {
 	ADISCORD_economy_can_print_money = yes
+	ADISCORD_economy_has_treasury_room_35 = yes
 	check_variable = { var = ADISCORD_economy_fiscal_stress value = 85 compare = less_than }
 }
 
@@ -377,8 +450,10 @@ ADISCORD_economy_can_early_repay_debt = {
 }
 
 ADISCORD_economy_can_use_war_taxes = {
+	has_war = yes
 	check_variable = { var = ADISCORD_economy_recent_war_financing value = 1 compare = less_than }
 	ADISCORD_economy_model_allows_emergency_extraction = yes
+	ADISCORD_economy_has_treasury_room_40 = yes
 	NOT = { has_idea = ADISCORD_economy_war_taxes }
 }
 

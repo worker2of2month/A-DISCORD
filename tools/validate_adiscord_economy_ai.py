@@ -53,6 +53,8 @@ def validate() -> list[str]:
     interface_gfx = strip_comments(read("interface/ADISCORD_economy.gfx"))
     scripted_gui = strip_comments(read("common/scripted_guis/ADISCORD_economy_scripted_gui.txt"))
     scripted_loc = strip_comments(read("common/scripted_localisation/ADISCORD_economy_scripted_loc.txt"))
+    ideas = strip_comments(read("common/ideas/ADISCORD_economy_ideas.txt"))
+    buildings = strip_comments(read("common/buildings/00_buildings.txt"))
     localisation = read("localisation/russian/ADISCORD_economy_l_russian.yml")
 
     def require(condition: bool, message: str) -> None:
@@ -95,13 +97,22 @@ def validate() -> list[str]:
 
     require("ADISCORD_economy_ai_state" in effects, "economy lacks the AI state variable")
     require("ADISCORD_economy_update_ai_state" in effects, "economy lacks the AI state transition effect")
+    require("ADISCORD_economy_ai_participates" in triggers, "economy lacks an explicit secondary-AI participation contract")
     for state in ("healthy", "stressed", "crisis", "recovery"):
         require(f"ADISCORD_economy_ai_is_{state}" in triggers, f"missing AI economy trigger for {state}")
+        require("ADISCORD_economy_ai_participates" in block(triggers, f"ADISCORD_economy_ai_is_{state}"),
+                f"AI economy state {state} can activate for a dormant country")
 
     monthly = block(effects, "ADISCORD_economy_monthly_update")
     yearly = block(effects, "ADISCORD_economy_yearly_update")
     require("ADISCORD_economy_update_ai_state" in monthly, "monthly update does not refresh AI state")
     require("ADISCORD_economy_apply_yearly_balance" in yearly, "secondary yearly economy lacks aggregate fiscal semantics")
+    require("ADISCORD_economy_tick_scale value = 6" in yearly,
+            "secondary AI does not use the explicit half-pressure annual stabilizer")
+    require("ADISCORD_economy_update_workforce_drain" in yearly,
+            "secondary yearly economy omits workforce pressure")
+    require(yearly.rfind("ADISCORD_economy_update_ai_state") > yearly.find("ADISCORD_economy_apply_yearly_balance"),
+            "secondary AI state is not refreshed after its annual transaction")
     require("ADISCORD_economy_full_refresh = yes" not in monthly.split("ADISCORD_economy_building_recount_months", 1)[0],
             "monthly update performs an unconditional building scan")
     require("ADISCORD_economy_full_refresh_if_needed" in monthly,
@@ -110,6 +121,17 @@ def validate() -> list[str]:
             "monthly update does not release budget-control cooldowns")
     require(monthly.find("ADISCORD_economy_apply_monthly_balance") < monthly.find("ADISCORD_economy_tick_budget_cooldowns"),
             "budget cooldowns expire before the selected policy is charged")
+
+    stretched = block(effects, "ADISCORD_economy_update_stretched")
+    require("ADISCORD_economy_planned_shortage_pressure" in stretched,
+            "planned shortages do not feed the derived overstretch score")
+    require("ADISCORD_economy_action_overload_residue" in stretched,
+            "one-off action overload does not persist into the derived overstretch score")
+    effects_without_stretched = effects.replace(stretched, "")
+    require(
+        re.search(r"add_to_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_stretched_score", effects_without_stretched) is None,
+        "an action writes directly into the derived overstretch score and will be erased",
+    )
 
     macro = block(effects, "ADISCORD_economy_calculate_macro_indicators")
     ordered_steps = [
@@ -130,6 +152,7 @@ def validate() -> list[str]:
     require("else_if" in policy, "AI monthly policy is not an exclusive ordered decision chain")
     require("ADISCORD_economy_increase_army_spending" in policy, "AI never restores army spending")
     require("ADISCORD_economy_increase_construction_spending" in policy, "AI never restores construction spending")
+    require("ADISCORD_economy_increase_social_spending" in policy, "AI never restores social spending")
 
     emission = block(effects, "ADISCORD_economy_expand_money_emission")
     require("ADISCORD_economy_treasury" in emission, "money emission creates no liquidity")
@@ -137,6 +160,20 @@ def validate() -> list[str]:
     reduce_emission = block(effects, "ADISCORD_economy_reduce_money_emission")
     require("ADISCORD_economy_recent_money_printing" in reduce_emission,
             "emission can be expanded and reversed in the same accounting month")
+    require("ADISCORD_economy_has_treasury_room_35" in block(triggers, "ADISCORD_economy_can_expand_money_emission"),
+            "money emission can charge penalties when the treasury has no room")
+    require("ADISCORD_economy_has_debt_room_58" in block(triggers, "ADISCORD_economy_can_take_debt"),
+            "internal borrowing can charge penalties for a zero-sized loan")
+    require("ADISCORD_economy_has_debt_room_64" in block(triggers, "ADISCORD_economy_can_take_external_loan"),
+            "external borrowing can charge penalties for a zero-sized loan")
+
+    apply_balance = block(effects, "ADISCORD_economy_apply_monthly_balance")
+    require("ADISCORD_economy_last_month_cap_writeoff" in apply_balance,
+            "treasury-cap overflow is not recorded in the ledger")
+    require(apply_balance.find("ADISCORD_economy_last_month_cap_writeoff") < apply_balance.find("ADISCORD_economy_treasury_after_tick"),
+            "treasury is snapshotted before cap overflow is recorded")
+    require("value = ADISCORD_economy_last_month_cap_writeoff" in apply_balance,
+            "cap writeoff is missing from the accounting identity")
 
     timed_actions = {
         "ADISCORD_economy_expand_money_emission": "ADISCORD_economy_money_printing",
@@ -179,8 +216,25 @@ def validate() -> list[str]:
         "ADISCORD_economy_tax_change_cooldown",
         "ADISCORD_economy_army_budget_change_cooldown",
         "ADISCORD_economy_construction_budget_change_cooldown",
+        "ADISCORD_economy_social_budget_change_cooldown",
     ):
         require(cooldown in effects and cooldown in triggers, f"budget control lacks cooldown {cooldown}")
+        require(f"var = {cooldown} min = 0 max = 3" in effects,
+                f"strategic budget cooldown {cooldown} is not three months")
+
+    require("ADISCORD_economy_set_budget_course_" not in effects
+            and "ADISCORD_economy_can_select_budget_course_" not in triggers,
+            "obsolete all-in-one budget courses remain wired into the economy")
+
+    social_expenses = block(effects, "ADISCORD_economy_calculate_social_expenses")
+    for multiplier in ("0.45", "0.75", "1.00", "1.35", "1.80"):
+        require(f"value = {multiplier}" in social_expenses,
+                f"social budget lacks the distinct {multiplier} cost multiplier")
+    for level in range(1, 6):
+        idea_name = f"ADISCORD_economy_social_spending_{level}"
+        require(idea_name in ideas, f"social budget level {level} has no gameplay idea")
+        require(effects.count(idea_name) >= 2,
+                f"social budget level {level} is not refreshed with policy ideas")
 
     army_expenses = block(effects, "ADISCORD_economy_calculate_army_expenses")
     require("has_army_manpower" in army_expenses, "army upkeep is disconnected from fielded manpower")
@@ -190,6 +244,12 @@ def validate() -> list[str]:
     recount = block(effects, "ADISCORD_economy_recount_economic_buildings")
     require("ADISCORD_economy_resource_endowment" in resource_income,
             "strategic rent ignores the country's resource endowment")
+    require("set_variable = { var = ADISCORD_economy_resource_income value = ADISCORD_economy_resource_endowment }" in resource_income,
+            "strategic rent is not rooted in the cached resource endowment")
+    require("has_idea = free_trade } multiply_variable" in resource_income,
+            "trade law still grants a flat resource windfall instead of multiplying real rent")
+    require("has_idea = free_trade } add_to_variable" not in resource_income,
+            "free trade creates resource income for countries without resources")
     require("resource@steel" in recount and "resource@oil" in recount and "resource@coal" in recount,
             "owned-state refresh does not build a real resource-endowment index")
     require("check_variable = { resource@steel >" in recount,
@@ -198,18 +258,69 @@ def validate() -> list[str]:
             "bombing disruption is not connected to actual damaged industry")
     require("ADISCORD_economy_public_investment_stock" in effects,
             "reserve investment has no persistent productive-capital stock")
+    require(recount.count("every_owned_state") == 1 and "every_country" not in recount,
+            "economic buildings are not recounted in one country-local owned-state pass")
 
-    require("value = 3 compare = less_than" in block(effects, "ADISCORD_economy_migrate_schema"),
-            "economy save migration was not advanced for the tabbed GUI state")
-    require("ADISCORD_economy_gui_page" in effects,
-            "economy does not initialize and persist the selected dashboard page")
-    require("clamp_variable = { var = ADISCORD_economy_gui_page min = 0 max = 2 }" in effects,
-            "dashboard page state is not clamped to the three valid pages")
+    expected_building_costs = {
+        "ADISCORD_business_center": "750",
+        "ADISCORD_science_center": "1250",
+        "ADISCORD_industrial_cluster": "1500",
+    }
+    for building_name, extra_cost in expected_building_costs.items():
+        building = block(buildings, building_name)
+        require(bool(building), f"missing economic building {building_name}")
+        require(f"per_controlled_building_extra_cost = {extra_cost}" in building,
+                f"{building_name} does not become progressively more expensive")
+    require("local_building_slots_factor = 0.05" in block(buildings, "ADISCORD_business_center"),
+            "business center lacks its distinct commercial-slot role")
+    require("local_building_slots_factor = 0.02" in block(buildings, "ADISCORD_science_center"),
+            "science center still duplicates the stronger commercial/industrial state role")
+    require("local_factory_energy_consumption = 0.20" in block(buildings, "ADISCORD_industrial_cluster"),
+            "industrial cluster lacks its visible heavy-industry energy burden")
+    custom_targets = [int(value) for value in re.findall(
+        r"building_target\s+id\s*=\s*ADISCORD_(?:business_center|science_center|industrial_cluster)\s+value\s*=\s*(\d+)",
+        economy_ai,
+    )]
+    require(bool(custom_targets) and max(custom_targets) <= 2,
+            "AI economic-building targets are missing or encourage uncontrolled construction")
+
+    construction_expenses = block(effects, "ADISCORD_economy_calculate_construction_expenses")
+    require("num_of_available_civilian_factories" in construction_expenses,
+            "construction expenses ignore actual assigned civilian capacity")
+    military_factory_expenses = block(effects, "ADISCORD_economy_calculate_military_factory_expenses")
+    require("num_of_available_military_factories" in military_factory_expenses,
+            "military-industry expenses ignore actual assigned factories")
+    bombing = block(effects, "ADISCORD_economy_update_bombing_disruption")
+    require("ADISCORD_economy_damage_index_temp" in bombing and "num_of_civilian_factories" in bombing,
+            "bombing damage is not normalized by country industry")
+    workforce = block(effects, "ADISCORD_economy_update_workforce_drain")
+    require("has_army_manpower" in workforce and "ADISCORD_economy_army_expenses" not in workforce,
+            "workforce drain can be erased merely by cutting army pay")
+    require("ADISCORD_economy_apply_institutional_income_factors" in block(effects, "ADISCORD_economy_calculate_income"),
+            "financial-control and confidence KPIs remain cosmetic")
+    idea_refresh = block(effects, "ADISCORD_economy_refresh_spending_ideas")
+    require("ADISCORD_economy_last_idea_signature" in idea_refresh,
+            "economy still churns all national spirits every regular refresh")
+    require("ADISCORD_economy_social_spending_mode" in idea_refresh,
+            "social budget changes do not invalidate the optimized idea signature")
+
+    require("value = 5 compare = less_than" in block(effects, "ADISCORD_economy_migrate_schema"),
+            "economy save migration was not advanced for the v5 economy state")
+    cycle = block(effects, "ADISCORD_economy_update_model_and_cycle")
+    require("ADISCORD_economy_cycle_phase value = 4" not in cycle
+            and "ADISCORD_economy_cycle_phase value = 5" not in cycle
+            and "ADISCORD_economy_cycle_phase value = 6" not in cycle
+            and "ADISCORD_economy_cycle_phase value = 7" not in cycle,
+            "dashboard still computes model-specific pseudo-cycles above the four readable states")
+    require("clamp_variable = { var = ADISCORD_economy_cycle_phase min = 0 max = 3 }" in effects,
+            "economy cycle is not clamped to the four-state contract")
+    require(scripted_loc.count("localization_key = ADISCORD_economy_cycle_") == 4,
+            "scripted localisation exposes more than four economy-cycle states")
 
     require('name = "ADISCORD_economy_dashboard_window"' in gui, "economy dashboard window is missing")
-    require('position = { x = -460 y = -340 }' in gui and re.search(r"Orientation\s*=\s*CENTER", gui, re.I),
+    require('position = { x = -420 y = -280 }' in gui and re.search(r"Orientation\s*=\s*CENTER", gui, re.I),
             "economy dashboard is not centered for common screen resolutions")
-    require("size = { width = 920 height = 700 }" in gui,
+    require("size = { width = 840 height = 560 }" in gui,
             "economy dashboard no longer fits the supported 1366x768 layout envelope")
     require("ADISCORD_economy_header_art" not in gui,
             "economy dashboard still uses the broken decorative header sprite")
@@ -225,59 +336,56 @@ def validate() -> list[str]:
             "society-development debug decisions are exposed at game start")
     require(not (ROOT / "common/decisions/categories/ADISCORD_society_development_debug_categories.txt").exists(),
             "society-development debug category is exposed at game start")
-    require(gui.count("position = { x = -445 y = -155 }") == 3,
-            "economy content pages are not aligned below the KPI row")
-    require(gui.count("size = { width = 890 height = 500 }") == 3,
-            "economy content pages do not fit below the rebuilt navigation area")
-    require('name = "ADISCORD_economy_budget_model"' not in gui,
-            "budget page still duplicates the long model summary and overlaps its controls")
-    require("ADISCORD_economy_overview_refresh_click" in scripted_gui,
-            "read-only overview page lacks the engine binding needed for reliable registration")
+    require("ADISCORD_economy_tab_" not in gui and "ADISCORD_economy_budget_page" not in gui
+            and "ADISCORD_economy_operations_page" not in gui,
+            "economy dashboard still exposes the old multi-tab office UI")
+    require("ADISCORD_economy_overview_page" not in gui
+            and "ADISCORD_economy_overview_script" not in scripted_gui,
+            "economy content remains a separate window that can disappear behind the shell")
+    dashboard_start = gui.find('name = "ADISCORD_economy_dashboard_window"')
+    dashboard_gui = gui[dashboard_start:] if dashboard_start >= 0 else ""
+    require("ADISCORD_economy_status_panel" in dashboard_gui
+            and "ADISCORD_economy_command_panel" in dashboard_gui,
+            "dashboard content is not nested inside the single registered window")
+    dashboard_script = block(scripted_gui, "ADISCORD_economy_dashboard_script")
+    require('window_name = "ADISCORD_economy_dashboard_window"' in dashboard_script
+            and "ADISCORD_economy_window_is_open = yes" in dashboard_script,
+            "single economy window is not bound to the open-state trigger")
 
-    page_indexes = {"overview": 0, "budget": 1, "operations": 2}
-    for page, page_index in page_indexes.items():
-        page_name = f"ADISCORD_economy_{page}_page"
-        page_script_name = f"ADISCORD_economy_{page}_script"
-        page_script = block(scripted_gui, page_script_name)
-        require(f'name = "{page_name}"' in gui, f"economy dashboard lacks its {page} page container")
-        require(f'window_name = "{page_name}"' in page_script,
-                f"economy dashboard does not bind the {page} page as a separate window")
-        require("ADISCORD_economy_window_is_open = yes" in page_script,
-                f"economy dashboard can show the {page} page while the shell is closed")
-        require(
-            re.search(
-                rf"check_variable\s*=\s*\{{\s*var\s*=\s*ADISCORD_economy_gui_page\s+value\s*=\s*{page_index}\s+compare\s*=\s*equals\s*\}}",
-                page_script,
-            )
-            is not None,
-            f"economy dashboard does not exclusively gate the {page} page",
-        )
-        require(f"ADISCORD_economy_tab_{page}_click" in scripted_gui, f"economy dashboard lacks a {page} tab action")
-
-        tab_match = re.search(
-            rf'name\s*=\s*"ADISCORD_economy_tab_{page}"\s+'
-            rf'quadTextureSprite\s*=\s*"GFX_generic_box_smallest"',
-            gui,
-        )
-        require(tab_match is not None,
-                f"economy dashboard {page} tab does not use the stable vanilla button sprite")
+    for removed_control in (
+        "ADISCORD_economy_tax_burden_1", "ADISCORD_economy_army_budget_1",
+        "ADISCORD_economy_construction_budget_1", "ADISCORD_economy_action_external_loan",
+        "ADISCORD_economy_action_early_repay_debt", "ADISCORD_economy_action_expand_emission",
+        "ADISCORD_economy_action_civilian_investment", "ADISCORD_economy_action_military_investment",
+    ):
+        require(removed_control not in gui, f"simplified economy UI still exposes {removed_control}")
+    require("ADISCORD_economy_course_" not in gui,
+            "economy UI still exposes preset courses instead of direct compact controls")
+    visible_regulators = set(re.findall(
+        r'name\s*=\s*"(ADISCORD_economy_(?:tax|army|construction|social)_(?:decrease|increase))"', gui
+    ))
+    expected_regulators = {
+        f"ADISCORD_economy_{category}_{direction}"
+        for category in ("tax", "army", "construction", "social")
+        for direction in ("decrease", "increase")
+    }
+    require(visible_regulators == expected_regulators,
+            "economy UI must expose exactly eight compact +/- budget controls")
+    visible_actions = re.findall(r'name\s*=\s*"(ADISCORD_economy_action_[^"]+)"', gui)
+    require(len(visible_actions) == 4, "economy UI must expose exactly four rare crisis actions")
+    require('pdx_tooltip = "ADISCORD_economy_budget_breakdown_tt"' in gui,
+            "balance KPI lacks the requested income/expense breakdown tooltip")
 
     gui_buttons = set(re.findall(r'buttonType\s*=\s*\{.*?name\s*=\s*"(ADISCORD_economy_[^"]+)"', gui, re.S))
     require(bool(gui_buttons), "economy dashboard contains no discoverable interactive buttons")
     for button_name in sorted(gui_buttons):
         require(f"{button_name}_click" in scripted_gui, f"GUI button {button_name} has no scripted click effect")
-        guarded = (
-            "_tax_burden_" in button_name
-            or "_army_budget_" in button_name
-            or "_construction_budget_" in button_name
-            or "_action_" in button_name
-            or "_tab_" in button_name
-        )
+        guarded = button_name in expected_regulators or "_action_" in button_name
         if guarded and button_name != "ADISCORD_economy_action_toggle_auto_loan":
             require(f"{button_name}_click_enabled" in scripted_gui,
                     f"GUI button {button_name} gives no disabled-state feedback")
 
-    for action in ("early_repay_debt", "war_taxes"):
+    for action in ("repay_debt", "restructure_debt", "stabilization", "war_taxes"):
         require(f'ADISCORD_economy_action_{action}' in gui,
                 f"the dashboard does not expose the {action} economy operation")
         require(f"ADISCORD_economy_gui_try_{action}" in effects,
@@ -286,7 +394,7 @@ def validate() -> list[str]:
     localisation_keys = set(re.findall(r"(?m)^\s*([A-Za-z0-9_.-]+):", localisation))
     for match in re.finditer(r'(?:text|buttonText|pdx_tooltip)\s*=\s*"([^"]+)"', gui):
         key = match.group(1)
-        if key in {"CLOSE", "X", "1", "2", "3", "4", "5"}:
+        if key in {"CLOSE", "X", "+", "-", "1", "2", "3", "4", "5"}:
             continue
         require(key in localisation_keys, f"economy GUI references missing localisation key {key}")
     custom_sprites = set(re.findall(r'"(GFX_ADISCORD_economy_[^"]+)"', gui))

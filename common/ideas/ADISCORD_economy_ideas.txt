@@ -91,8 +91,8 @@ ideas = {
 			removal_cost = -1
 			picture = generic_production_bonus
 			modifier = {
-				production_speed_buildings_factor = 0.07
-				production_speed_industrial_complex_factor = 0.05
+				production_speed_buildings_factor = 0.05
+				production_speed_industrial_complex_factor = 0.03
 			}
 		}
 		ADISCORD_economy_construction_spending_5 = {
@@ -101,11 +101,46 @@ ideas = {
 			removal_cost = -1
 			picture = generic_production_bonus
 			modifier = {
-				production_speed_buildings_factor = 0.12
-				production_speed_industrial_complex_factor = 0.08
-				production_speed_arms_factory_factor = 0.04
-				stability_factor = -0.02
+				production_speed_buildings_factor = 0.08
+				production_speed_industrial_complex_factor = 0.05
+				production_speed_arms_factory_factor = 0.03
+				stability_factor = -0.03
 			}
+		}
+
+		ADISCORD_economy_social_spending_1 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_manpower_bonus
+			modifier = { stability_factor = -0.04 political_power_gain = -0.03 }
+		}
+		ADISCORD_economy_social_spending_2 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_manpower_bonus
+			modifier = { stability_factor = -0.015 }
+		}
+		ADISCORD_economy_social_spending_3 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_manpower_bonus
+		}
+		ADISCORD_economy_social_spending_4 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_manpower_bonus
+			modifier = { stability_factor = 0.015 }
+		}
+		ADISCORD_economy_social_spending_5 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_manpower_bonus
+			modifier = { stability_factor = 0.03 political_power_gain = 0.02 }
 		}
 
 		ADISCORD_economy_civilian_investment = {

@@ -26,6 +26,9 @@ ADISCORD_ai_fiscal_stress = {
 	ai_strategy = { type = unit_ratio id = cas value = -20 }
 	ai_strategy = { type = equipment_production_factor id = infantry value = 20 }
 	ai_strategy = { type = added_military_to_civilian_factory_ratio value = -20 }
+	ai_strategy = { type = building_target id = ADISCORD_business_center value = 0 }
+	ai_strategy = { type = building_target id = ADISCORD_science_center value = 0 }
+	ai_strategy = { type = building_target id = ADISCORD_industrial_cluster value = 0 }
 }
 
 ADISCORD_ai_fiscal_recovery = {
@@ -37,7 +40,7 @@ ADISCORD_ai_fiscal_recovery = {
 	ai_strategy = { type = building_target id = industrial_complex value = 8 }
 	ai_strategy = { type = building_target id = ADISCORD_business_center value = 1 }
 	ai_strategy = { type = building_target id = ADISCORD_science_center value = 0 }
-	ai_strategy = { type = building_target id = ADISCORD_industrial_cluster value = 1 }
+	ai_strategy = { type = building_target id = ADISCORD_industrial_cluster value = 0 }
 }
 
 ADISCORD_ai_healthy_civilian_growth = {

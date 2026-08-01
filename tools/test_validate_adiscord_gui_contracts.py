@@ -101,6 +101,47 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
         )
 
 
+class DiplomacyGuiContractTests(unittest.TestCase):
+    def test_national_spirit_row_reserves_full_idea_icon_height(self):
+        text = (ROOT / 'interface' / 'countrydiplomacyview.gui').read_text(
+            encoding='utf-8-sig'
+        )
+
+        self.assertRegex(
+            text,
+            r'(?s)name\s*=\s*"national_spirit_info"'
+            r'.{0,200}?position\s*=\s*\{\s*x\s*=\s*17\s+y\s*=\s*285\s*\}'
+            r'.{0,100}?size\s*=\s*\{\s*width\s*=\s*530\s+height\s*=\s*80\s*\}',
+        )
+        self.assertRegex(
+            text,
+            r'(?s)name\s*=\s*"national_spirit_container"'
+            r'.{0,200}?position\s*=\s*\{\s*x\s*=\s*-380\s+y\s*=\s*-5\s*\}'
+            r'.{0,100}?size\s*=\s*\{\s*width\s*=\s*375\s+height\s*=\s*84\s*\}',
+        )
+        self.assertRegex(
+            text,
+            r'(?s)name\s*=\s*"national_spirit_ideas_grid"'
+            r'.{0,200}?position\s*=\s*\{\s*x\s*=\s*3\s+y\s*=\s*2\s*\}',
+        )
+        for grid_name, width in (
+            ('national_spirit_ideas_grid', 360),
+            ('nat_spirit_ideas_grid_over_defined', 330),
+        ):
+            self.assertRegex(
+                text,
+                rf'(?s)name\s*=\s*"{grid_name}"'
+                rf'.{{0,200}}?size\s*=\s*\{{\s*width\s*=\s*{width}\s+height\s*=\s*80\s*\}}',
+            )
+
+        for pane_name, x in (('relations_info', 11), ('diplomatic_actions', 272)):
+            self.assertRegex(
+                text,
+                rf'(?s)name\s*=\s*"{pane_name}"'
+                rf'.{{0,200}}?position\s*=\s*\{{\s*x\s*=\s*{x}\s+y\s*=\s*365\s*\}}',
+            )
+
+
 class NationalFocusGuiContractTests(unittest.TestCase):
     def test_hoi4_119_focus_item_has_overlay_icon(self):
         text = (ROOT / 'interface' / 'nationalfocusview.gui').read_text(

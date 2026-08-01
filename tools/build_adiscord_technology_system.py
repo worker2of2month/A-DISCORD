@@ -694,28 +694,6 @@ def dual_choice_graph() -> BranchGraph:
     return make_graph(tuple(lanes), edges)
 
 
-def trident_graph() -> BranchGraph:
-    left = (5, 8, 11, 14, 17)
-    centre = (6, 9, 12, 15, 18)
-    right = (7, 10, 13, 16, 19)
-    edges = chain_edges((0, 1, 2, 3, 4))
-    for lane in (left, centre, right):
-        edges.append((4, lane[0]))
-        edges += chain_edges(lane)
-    lanes = [1] * 20
-    for index in left:
-        lanes[index] = 0
-    for index in right:
-        lanes[index] = 2
-    return make_graph(tuple(lanes), edges)
-
-
-def trident_specialization_graph() -> BranchGraph:
-    """Three mutually exclusive, long-lived programmes after a common trunk."""
-
-    return trident_graph()
-
-
 def double_diamond_graph() -> BranchGraph:
     left_one = (5, 7, 9)
     right_one = (6, 8, 10)
@@ -872,13 +850,14 @@ GRAPH_PATTERN_BY_BRANCH = {
     "surface_fleet": "dual_choice",
     # These branches intentionally require both programmes for synthesis.
     "power": "dual_synthesis",
-    # Three long-lived specializations after the common 2160 baseline.
-    "production": "trident_specialization",
-    "resources": "trident_specialization",
-    "artillery": "trident_specialization",
-    "fighter": "trident_specialization",
-    # Three independent programmes can all be pursued if research permits.
-    "administration": "trident",
+    # These capability families use two short integration cycles rather than
+    # three permanent columns.  The old trident layout invited the player to
+    # beeline the highest-output column and leave the other two as dead ends.
+    "production": "double_diamond",
+    "resources": "double_diamond",
+    "artillery": "double_diamond",
+    "fighter": "double_diamond",
+    "administration": "double_diamond",
     "small_arms": "infantry_integration",
     # Repeated paired research programmes converge into integrated systems.
     "civil_resilience": "double_diamond",
@@ -891,14 +870,16 @@ GRAPH_PATTERN_BY_BRANCH = {
     "anti_tank": "double_choice",
     "recon_armor": "double_choice",
     "subsurface": "double_choice",
-    # A stable main line absorbs one of two field projects at each stage.
-    "field_support": "alternating_choices",
-    "logistics": "alternating_choices",
-    "rail": "alternating_choices",
-    "anti_air": "alternating_choices",
-    "heavy_armor": "alternating_choices",
-    "air_support": "alternating_choices",
-    "naval_support": "alternating_choices",
+    # Supporting capabilities also converge at regular intervals.  This keeps
+    # the tree readable and prevents narrow service technologies from becoming
+    # isolated columns which a rational player never revisits.
+    "field_support": "double_diamond",
+    "logistics": "dual_synthesis",
+    "rail": "double_diamond",
+    "anti_air": "double_diamond",
+    "heavy_armor": "double_diamond",
+    "air_support": "double_diamond",
+    "naval_support": "double_diamond",
 }
 GRAPH_PATTERN_BY_BRANCH.update(
     {key: "applied_dual_choice" for key in APPLIED_PROGRAMME_KEYS}
@@ -913,11 +894,6 @@ DUAL_PROGRAMME_YEARS = remap_programme_years((
     2100, 2120, 2140, 2150, 2160,
     2162, 2162, 2168, 2168, 2173, 2173, 2179, 2179,
     2185, 2185, 2191, 2191, 2197, 2197, 2200,
-))
-TRIDENT_PROGRAMME_YEARS = remap_programme_years((
-    2100, 2120, 2140, 2150, 2160,
-    2162, 2162, 2162, 2170, 2170, 2170, 2182, 2182, 2182,
-    2191, 2191, 2191, 2200, 2200, 2200,
 ))
 DOUBLE_PROGRAMME_YEARS = remap_programme_years((
     2100, 2120, 2140, 2150, 2160,
@@ -938,8 +914,6 @@ def align_programme_years(branch: Branch) -> Branch:
     years_by_pattern = {
         "dual_choice": DUAL_PROGRAMME_YEARS,
         "dual_synthesis": DUAL_PROGRAMME_YEARS,
-        "trident": TRIDENT_PROGRAMME_YEARS,
-        "trident_specialization": TRIDENT_PROGRAMME_YEARS,
         "double_diamond": DOUBLE_PROGRAMME_YEARS,
         "double_choice": DOUBLE_PROGRAMME_YEARS,
         "alternating_diamonds": ALTERNATING_PROGRAMME_YEARS,
@@ -955,8 +929,6 @@ BRANCHES = tuple(align_programme_years(branch) for branch in BRANCHES)
 GRAPH_BUILDERS = {
     "dual_synthesis": dual_synthesis_graph,
     "dual_choice": dual_choice_graph,
-    "trident": trident_graph,
-    "trident_specialization": trident_specialization_graph,
     "double_diamond": double_diamond_graph,
     "double_choice": double_choice_graph,
     "alternating_diamonds": alternating_diamonds_graph,
@@ -998,11 +970,6 @@ XOR_INDEX_GROUPS_BY_BRANCH = {}
 for branch in BRANCHES:
     pattern = GRAPH_PATTERN_BY_BRANCH.get(branch.key)
     if pattern == "dual_choice":
-        XOR_INDEX_GROUPS_BY_BRANCH[branch.key] = ((5, 6),)
-    elif pattern == "trident_specialization":
-        # Clausewitz only renders two outgoing XOR paths reliably.  The first
-        # two lanes are rival schools; the third is an independent programme
-        # that either school may fund, mirroring large-mod industry layouts.
         XOR_INDEX_GROUPS_BY_BRANCH[branch.key] = ((5, 6),)
     elif pattern == "double_choice":
         XOR_INDEX_GROUPS_BY_BRANCH[branch.key] = ((5, 6), (12, 13))
@@ -1093,9 +1060,80 @@ ENABLE_EQUIPMENT = {
 # between separate grid boxes is fragile in HOI4, while dependencies provide
 # the required AND gate in the technology tooltip and research logic.
 EXTRA_TECH_DEPENDENCIES = {
+    # Applied eight-tech packages are side specialisations of the core tree,
+    # not seven additional starting columns.  Their entry projects attach to
+    # a contemporary core technology through a tooltip-only dependency; long
+    # cross-grid cables are deliberately avoided because HOI4 renders them
+    # unreliably.
+    "ADISCORD_tech_trauma_registry_networks": (
+        "ADISCORD_tech_combat_engineering_sections",
+    ),
+    "ADISCORD_tech_battle_damage_survey_teams": (
+        "ADISCORD_tech_standardized_field_tool_chests",
+    ),
+    "ADISCORD_tech_spectrum_threat_libraries": (
+        "ADISCORD_tech_frequency_hopping_field_sets",
+        "ADISCORD_tech_stabilized_autocannon_mounts",
+    ),
+    "ADISCORD_tech_restored_airlift_planning": (
+        "ADISCORD_tech_composite_wing_spars",
+    ),
+    "ADISCORD_tech_shallow_water_navigation_tables": (
+        "ADISCORD_tech_modular_escort_combat_systems",
+    ),
+    "ADISCORD_tech_teleoperated_scout_carts": (
+        "ADISCORD_tech_sealed_electric_scout_drives",
+        "ADISCORD_tech_vacuum_sealed_logic_restoration",
+    ),
+    "ADISCORD_tech_reconstituted_staff_academies": (
+        "ADISCORD_tech_cadastral_archive_digitization",
+    ),
     "ADISCORD_tech_remote_weapon_tripods": ("ADISCORD_tech_modular_rifle_kits",),
     "ADISCORD_tech_autonomous_support_weapons": ("ADISCORD_tech_programmable_ammunition",),
     "ADISCORD_tech_swarm_fireteams": ("ADISCORD_tech_networked_service_rifles",),
+    # Late industrial automation is an information-system project, not a
+    # parallel percentage ladder.  A production beeline therefore picks up a
+    # compact set of useful computing and secure-network technologies without
+    # forcing the player through an entire second tree.
+    "ADISCORD_tech_autonomous_factory_cells": (
+        "ADISCORD_tech_predictive_logistics",
+        "ADISCORD_tech_battlefield_analytics",
+    ),
+    "ADISCORD_tech_distributed_manufacturing": (
+        "ADISCORD_tech_strategic_digital_twins",
+        "ADISCORD_tech_quantum_command_authentication",
+    ),
+    "ADISCORD_tech_predictive_administration": (
+        "ADISCORD_tech_strategic_digital_twins",
+        "ADISCORD_tech_quantum_command_authentication",
+    ),
+    # Late autonomous and directed-energy systems are integrations, not
+    # isolated percentage ladders.  Cross-folder paths are deliberately not
+    # drawn because the HOI4 grid renderer handles them unreliably.
+    "ADISCORD_tech_high_energy_laser_turrets": (
+        "ADISCORD_tech_superconducting_power_busbars",
+    ),
+    "ADISCORD_tech_autonomous_breakthrough_platforms": (
+        "ADISCORD_tech_operational_ai_assistants",
+    ),
+    "ADISCORD_tech_autonomous_strike_wings": (
+        "ADISCORD_tech_operational_ai_assistants",
+    ),
+    "ADISCORD_tech_autonomous_submarines": (
+        "ADISCORD_tech_operational_ai_assistants",
+    ),
+    "ADISCORD_tech_swarm_coordinated_fire_support": (
+        "ADISCORD_tech_battlefield_sensor_fusion",
+    ),
+    "ADISCORD_tech_distributed_battlegroup": (
+        "ADISCORD_tech_self_healing_tactical_networks",
+    ),
+    "ADISCORD_tech_siege_platform_networks": (
+        "ADISCORD_tech_battlefield_sensor_fusion",
+    ),
+    "ADISCORD_tech_distributed_sea_control": (
+        "ADISCORD_tech_self_healing_tactical_networks",
+    ),
 }
 
 
@@ -1209,6 +1247,694 @@ def n(value: float) -> str:
     return f"{value:.3f}".rstrip("0").rstrip(".")
 
 
+PROGRAMME_INDEX_SETS = {
+    "production": {
+        "flexible_tooling": (5, 7, 9, 12, 14, 16),
+        "volume_automation": (6, 8, 10, 13, 15, 17),
+    },
+    "resources": {
+        "primary_extraction": (5, 7, 9, 12, 14, 16),
+        "circular_recovery": (6, 8, 10, 13, 15, 17),
+    },
+    "administration": {
+        "local_services": (5, 7, 9, 12, 14, 16),
+        "automated_state": (6, 8, 10, 13, 15, 17),
+    },
+    "civil_resilience": {
+        "emergency_services": (5, 7, 9, 12, 14, 16),
+        "distributed_resilience": (6, 8, 10, 13, 15, 17),
+    },
+    "small_arms": {
+        "rifles": (5, 7, 9, 10, 15, 18),
+        "ammunition": (3, 6, 11, 13, 14, 16),
+        "optics": (4, 8, 12, 17),
+    },
+    "squad_weapons": {
+        "explosive": (1, 2, 3, 5, 11, 16),
+        "command": (4, 6, 8, 9, 12, 15),
+        "automatic": (7, 10, 13, 14, 17),
+    },
+    "protection": {
+        "body": (1, 3, 6, 8, 9, 14),
+        "medicine": (4, 10, 11, 15),
+        "environment": (2, 5, 7, 12, 13, 16),
+    },
+    "special_forces": {
+        "urban": (1, 3, 5, 16),
+        "reconnaissance": (2, 4, 6, 7, 8, 11, 13, 14, 15),
+        "airborne": (9, 10, 12, 17),
+    },
+    "field_support": {
+        "field_services": (5, 7, 9, 12, 14, 16),
+        "engineering": (6, 8, 10, 13, 15, 17),
+    },
+    "logistics": {
+        "resilience": (5, 7, 9, 11, 13, 15, 17),
+        "automation": (6, 8, 10, 12, 14, 16, 18),
+    },
+    "rail": {
+        "network": (5, 7, 9, 12, 14, 16),
+        "railway_artillery": (6, 8, 10, 13, 15, 17),
+    },
+    "anti_tank": {
+        "missile": (5, 7, 9),
+        "seeker": (6, 8, 10),
+        "ambush": (12, 14, 16),
+        "coil": (13, 15, 17),
+    },
+    "artillery": {
+        "fire_control": (5, 7, 9),
+        "guided_munitions": (6, 8, 10),
+        "mass_fire": (12, 14, 16),
+        "autonomous_battery": (13, 15, 17),
+    },
+    "anti_air": {
+        "sensors": (5, 7, 9, 12, 14, 16),
+        "directed_energy": (6, 8, 10, 13, 15, 17),
+    },
+    "recon_armor": {
+        "active_sensors": (5, 7, 9),
+        "silent_mobility": (6, 8, 10),
+        "signature_control": (12, 14, 16),
+        "autonomous_screen": (13, 15, 17),
+    },
+    "combat_armor": {
+        "armored_offense": (5, 7, 9, 11, 13, 15, 17),
+        "armored_survival": (6, 8, 10, 12, 14, 16, 18),
+    },
+    "heavy_armor": {
+        "survivability": (5, 7, 9, 12, 14, 16),
+        "siege": (6, 8, 10, 13, 15, 17),
+    },
+    "air_support": {
+        "precision": (5, 7, 9, 12, 14, 16),
+        "persistent": (6, 8, 10, 13, 15, 17),
+    },
+    "fighter": {
+        "flight_control": (5, 7, 9),
+        "interception": (6, 8, 10),
+        "endurance": (12, 14, 16),
+        "wingmen": (13, 15, 17),
+    },
+    "naval_support": {
+        "sensors": (5, 7, 9, 12, 14, 16),
+        "unmanned_screen": (6, 8, 10, 13, 15, 17),
+    },
+    "surface_fleet": {
+        "fleet_strike": (5, 7, 9, 11, 13, 15, 17),
+        "fleet_defense": (6, 8, 10, 12, 14, 16, 18),
+    },
+    "subsurface": {
+        "silent_hunter": (5, 7, 9),
+        "torpedo_boat": (6, 8, 10),
+        "deep_network": (12, 14, 16),
+        "autonomous_pack": (13, 15, 17),
+    },
+}
+
+
+def programme_for(branch_key: str, index: int) -> tuple[str | None, int]:
+    for programme, indices in PROGRAMME_INDEX_SETS.get(branch_key, {}).items():
+        if index in indices:
+            return programme, indices.index(index)
+    return None, 0
+
+
+def integrated_capstone_effects(
+    branch_key: str,
+    small: float,
+    medium: float,
+    organisation: float,
+) -> tuple[str, ...] | None:
+    packages = {
+        "production": (
+            f"industrial_capacity_factory = {n(medium)}",
+            f"production_factory_efficiency_gain_factor = {n(small)}",
+            f"line_change_production_efficiency_factor = {n(medium)}",
+        ),
+        "resources": (
+            f"local_resources_factor = {n(medium)}",
+            f"fuel_gain_factor = {n(small)}",
+            f"production_lack_of_resource_penalty_factor = -{n(small)}",
+        ),
+        "administration": (
+            f"research_speed_factor = {n(small)}",
+            f"consumer_goods_factor = -{n(small / 2)}",
+            f"political_power_gain = {n(small / 2)}",
+        ),
+        "small_arms": (
+            f"category_all_infantry = {{ soft_attack = {n(medium)} hard_attack = {n(medium)} breakthrough = {n(small)} }}",
+        ),
+        "civil_resilience": (
+            f"industry_repair_factor = {n(medium)}",
+            f"stability_factor = {n(small)}",
+            f"production_speed_infrastructure_factor = {n(small)}",
+        ),
+        "squad_weapons": (
+            f"category_all_infantry = {{ soft_attack = {n(medium)} defense = {n(medium)} max_organisation = {n(organisation)} }}",
+        ),
+        "protection": (
+            f"category_all_infantry = {{ defense = {n(medium)} default_morale = {n(small)} supply_consumption = -{n(small / 2)} }}",
+        ),
+        "special_forces": (
+            f"category_special_forces = {{ breakthrough = {n(medium)} defense = {n(medium)} max_organisation = {n(organisation)} }}",
+        ),
+        "field_support": (
+            f"category_support_battalions = {{ defense = {n(medium)} default_morale = {n(small)} max_organisation = {n(organisation)} }}",
+        ),
+        "logistics": (
+            f"supply_consumption_factor = -{n(medium)}",
+            f"land_reinforce_rate = {n(small)}",
+            f"org_loss_when_moving = -{n(small)}",
+        ),
+        "rail": (
+            f"artillery = {{ soft_attack = {n(medium)} reliability = {n(small)} }}",
+            f"industry_repair_factor = {n(medium)}",
+        ),
+        "artillery": (
+            f"artillery = {{ soft_attack = {n(medium)} hard_attack = {n(medium)} reliability = {n(small)} }}",
+            f"coordination_bonus = {n(small)}",
+        ),
+        "anti_tank": (
+            f"category_anti_tank = {{ hard_attack = {n(medium)} ap_attack = {n(medium)} reliability = {n(small)} }}",
+        ),
+        "anti_air": (
+            f"anti_air = {{ air_attack = {n(medium)} reliability = {n(medium)} }}",
+            f"air_intercept_efficiency = {n(small)}",
+        ),
+        "recon_armor": (
+            f"category_all_armor = {{ maximum_speed = {n(small)} reliability = {n(medium)} defense = {n(medium)} }}",
+        ),
+        "combat_armor": (
+            f"category_all_armor = {{ breakthrough = {n(medium)} armor_value = {n(medium)} reliability = {n(small)} }}",
+        ),
+        "heavy_armor": (
+            f"category_all_armor = {{ armor_value = {n(medium)} breakthrough = {n(medium)} reliability = {n(small)} }}",
+        ),
+        "air_support": (
+            f"ground_attack_factor = {n(medium)}",
+            f"air_mission_efficiency = {n(medium)}",
+            f"air_accidents_factor = -{n(small)}",
+        ),
+        "fighter": (
+            f"air_intercept_efficiency = {n(medium)}",
+            f"air_mission_efficiency = {n(medium)}",
+            f"air_accidents_factor = -{n(small)}",
+        ),
+        "naval_support": (
+            f"convoy_escort_efficiency = {n(medium)}",
+            f"naval_detection = {n(medium)}",
+            f"naval_coordination = {n(small)}",
+        ),
+        "surface_fleet": (
+            f"naval_hit_chance = {n(medium)}",
+            f"naval_coordination = {n(medium)}",
+            f"naval_detection = {n(small)}",
+        ),
+        "subsurface": (
+            f"naval_detection = {n(medium)}",
+            f"naval_mines_effect_reduction = {n(medium)}",
+            f"naval_coordination = {n(small)}",
+        ),
+    }
+    return packages.get(branch_key)
+
+
+def integrated_stage_effects(
+    branch_key: str,
+    stage: int,
+    small: float,
+    medium: float,
+    organisation: float,
+) -> tuple[str, ...] | None:
+    """Reward intermediate programme convergence with a mixed capability."""
+
+    packages = {
+        "production": (
+            (
+                f"industrial_capacity_factory = {n(small)}",
+                f"production_factory_efficiency_gain_factor = {n(medium)}",
+            ),
+            (
+                f"production_factory_max_efficiency_factor = {n(medium)}",
+                f"line_change_production_efficiency_factor = {n(medium)}",
+            ),
+        ),
+        "resources": (
+            (
+                f"local_resources_factor = {n(medium)}",
+                f"production_lack_of_resource_penalty_factor = -{n(small)}",
+            ),
+            (
+                f"fuel_gain_factor = {n(medium)}",
+                f"industry_repair_factor = {n(small)}",
+            ),
+        ),
+        "administration": (
+            (
+                f"research_speed_factor = {n(small)}",
+                f"political_power_gain = {n(small)}",
+            ),
+            (
+                f"consumer_goods_factor = -{n(small)}",
+                f"coordination_bonus = {n(medium)}",
+            ),
+        ),
+        "field_support": (
+            (
+                f"engineer = {{ entrenchment = {n(organisation / 2)} defense = {n(small)} }}",
+                f"field_hospital = {{ casualty_trickleback = {n(small)} }}",
+            ),
+            (
+                f"maintenance_company = {{ reliability = {n(medium)} }}",
+                f"category_support_battalions = {{ max_organisation = {n(organisation)} }}",
+            ),
+        ),
+        "rail": (
+            (
+                f"industry_repair_factor = {n(medium)}",
+                f"artillery = {{ reliability = {n(small)} }}",
+            ),
+            (
+                f"supply_consumption_factor = -{n(small)}",
+                f"artillery = {{ soft_attack = {n(medium)} }}",
+            ),
+        ),
+        "artillery": (
+            (
+                f"artillery = {{ soft_attack = {n(medium)} reliability = {n(small)} }}",
+                f"planning_speed = {n(small)}",
+            ),
+            (
+                f"artillery = {{ hard_attack = {n(medium)} breakthrough = {n(small)} }}",
+                f"coordination_bonus = {n(small)}",
+            ),
+        ),
+        "anti_air": (
+            (
+                f"anti_air = {{ air_attack = {n(medium)} reliability = {n(small)} }}",
+                f"air_intercept_efficiency = {n(small)}",
+            ),
+            (
+                f"anti_air = {{ air_attack = {n(medium)} defense = {n(small)} }}",
+                f"coordination_bonus = {n(small)}",
+            ),
+        ),
+        "heavy_armor": (
+            (
+                f"category_all_armor = {{ armor_value = {n(medium)} breakthrough = {n(small)} }}",
+            ),
+            (
+                f"category_all_armor = {{ reliability = {n(medium)} defense = {n(small)} }}",
+            ),
+        ),
+        "fighter": (
+            (
+                f"air_intercept_efficiency = {n(medium)}",
+                f"air_agility_factor = {n(small)}",
+            ),
+            (
+                f"air_mission_efficiency = {n(medium)}",
+                f"air_accidents_factor = -{n(small)}",
+            ),
+        ),
+        "air_support": (
+            (
+                f"ground_attack_factor = {n(medium)}",
+                f"air_range_factor = {n(small)}",
+            ),
+            (
+                f"air_mission_efficiency = {n(medium)}",
+                f"air_accidents_factor = -{n(small)}",
+            ),
+        ),
+        "naval_support": (
+            (
+                f"naval_detection = {n(medium)}",
+                f"convoy_escort_efficiency = {n(small)}",
+            ),
+            (
+                f"naval_mines_effect_reduction = {n(medium)}",
+                f"naval_coordination = {n(small)}",
+            ),
+        ),
+    }
+    stages = packages.get(branch_key)
+    return stages[stage % len(stages)] if stages else None
+
+
+def themed_programme_effects(
+    branch_key: str,
+    programme: str,
+    step: int,
+    small: float,
+    medium: float,
+    organisation: float,
+) -> tuple[str, ...]:
+    """Give programme nodes distinct roles instead of a repeated branch bonus."""
+
+    phase = step % 3
+    if programme == "flexible_tooling":
+        return (
+            f"line_change_production_efficiency_factor = {n(medium * 1.5)}",
+            f"production_factory_efficiency_gain_factor = {n(small)}",
+        ) if phase % 2 == 0 else (
+            f"production_factory_start_efficiency_factor = {n(medium)}",
+            f"production_lack_of_resource_penalty_factor = -{n(small)}",
+        )
+    if programme == "volume_automation":
+        return (
+            f"industrial_capacity_factory = {n(medium)}",
+            f"production_factory_max_efficiency_factor = {n(small)}",
+        ) if phase % 2 == 0 else (
+            f"production_factory_max_efficiency_factor = {n(medium)}",
+            f"industrial_capacity_factory = {n(small)}",
+        )
+    if programme == "primary_extraction":
+        return (
+            f"local_resources_factor = {n(medium)}",
+            f"fuel_gain_factor = {n(small)}",
+        ) if phase % 2 == 0 else (
+            f"local_resources_factor = {n(medium * 1.25)}",
+            f"production_lack_of_resource_penalty_factor = -{n(small / 2)}",
+        )
+    if programme == "circular_recovery":
+        return (
+            f"production_lack_of_resource_penalty_factor = -{n(medium)}",
+            f"industry_repair_factor = {n(small)}",
+        ) if phase % 2 == 0 else (
+            f"local_resources_factor = {n(small)}",
+            f"fuel_gain_factor = {n(medium)}",
+        )
+    if programme == "local_services":
+        return (
+            f"consumer_goods_factor = -{n(small)}",
+            f"political_power_gain = {n(small / 2)}",
+        ) if phase % 2 == 0 else (
+            f"stability_factor = {n(small / 2)}",
+            f"production_factory_start_efficiency_factor = {n(small)}",
+        )
+    if programme == "automated_state":
+        return (
+            f"research_speed_factor = {n(small)}",
+            f"coordination_bonus = {n(small / 2)}",
+        ) if phase % 2 == 0 else (
+            f"planning_speed = {n(medium)}",
+            f"production_factory_efficiency_gain_factor = {n(small / 2)}",
+        )
+    if programme == "emergency_services":
+        return (
+            f"industry_repair_factor = {n(medium)}",
+            f"production_speed_infrastructure_factor = {n(small)}",
+        ) if phase == 0 else (
+            f"stability_factor = {n(small)}",
+            f"industry_repair_factor = {n(medium)}",
+        ) if phase == 1 else (
+            f"production_speed_buildings_factor = {n(small)}",
+            f"industry_repair_factor = {n(medium)}",
+        )
+    if programme == "distributed_resilience":
+        return (
+            f"stability_factor = {n(medium / 2)}",
+            f"supply_consumption_factor = -{n(small / 2)}",
+        ) if phase == 0 else (
+            f"production_speed_infrastructure_factor = {n(small)}",
+            f"stability_factor = {n(small)}",
+        ) if phase == 1 else (
+            f"consumer_goods_factor = -{n(small / 2)}",
+            f"industry_repair_factor = {n(small)}",
+        )
+    infantry_packages = {
+        "rifles": (
+            (f"category_all_infantry = {{ soft_attack = {n(medium)} breakthrough = {n(small)} }}",),
+            (f"category_all_infantry = {{ soft_attack = {n(medium)} reliability = {n(small)} }}",),
+        ),
+        "ammunition": (
+            (f"category_all_infantry = {{ hard_attack = {n(medium)} ap_attack = {n(medium)} }}",),
+            (f"category_all_infantry = {{ soft_attack = {n(medium)} hard_attack = {n(small)} }}",),
+        ),
+        "optics": (
+            (f"coordination_bonus = {n(medium)}", f"land_night_attack = {n(small / 2)}"),
+            (f"planning_speed = {n(medium)}", f"land_reinforce_rate = {n(small / 2)}"),
+        ),
+        "explosive": (
+            (f"category_all_infantry = {{ soft_attack = {n(medium)} hard_attack = {n(small)} }}",),
+            (f"category_all_infantry = {{ breakthrough = {n(medium)} ap_attack = {n(small)} }}",),
+        ),
+        "command": (
+            (f"category_all_infantry = {{ max_organisation = {n(organisation)} default_morale = {n(small)} }}",),
+            (f"coordination_bonus = {n(medium)}", f"land_reinforce_rate = {n(small / 2)}"),
+        ),
+        "automatic": (
+            (f"category_all_infantry = {{ soft_attack = {n(medium)} breakthrough = {n(small)} }}",),
+            (f"category_all_infantry = {{ soft_attack = {n(medium)} defense = {n(small)} }}",),
+        ),
+        "body": (
+            (f"category_all_infantry = {{ defense = {n(medium)} reliability = {n(small)} }}",),
+            (f"category_all_infantry = {{ defense = {n(medium)} breakthrough = {n(small)} }}",),
+        ),
+        "environment": (
+            (f"category_all_infantry = {{ defense = {n(medium)} supply_consumption = -{n(small / 2)} }}",),
+            (f"category_all_infantry = {{ default_morale = {n(medium)} defense = {n(small)} }}",),
+        ),
+        "urban": (
+            (f"category_special_forces = {{ soft_attack = {n(medium)} breakthrough = {n(medium)} }}",),
+            (f"category_special_forces = {{ breakthrough = {n(medium)} defense = {n(small)} }}",),
+        ),
+        "reconnaissance": (
+            (f"category_recon = {{ recon = {n(0.35 + step * 0.04)} }}", f"category_special_forces = {{ maximum_speed = {n(small / 2)} }}"),
+            (f"category_recon = {{ recon = {n(0.30 + step * 0.04)} }}", f"land_night_attack = {n(small / 2)}"),
+        ),
+        "airborne": (
+            (f"category_special_forces = {{ maximum_speed = {n(small)} supply_consumption = -{n(small / 2)} }}",),
+            (f"category_special_forces = {{ max_organisation = {n(organisation)} breakthrough = {n(small)} }}",),
+        ),
+    }
+    if programme in infantry_packages:
+        return infantry_packages[programme][phase % len(infantry_packages[programme])]
+
+    if branch_key == "protection" and programme == "medicine":
+        return (
+            f"field_hospital = {{ casualty_trickleback = {n(medium)} experience_loss_factor = -{n(small)} }}",
+        ) if phase % 2 == 0 else (
+            f"field_hospital = {{ casualty_trickleback = {n(small)} experience_loss_factor = -{n(medium)} }}",
+            f"category_all_infantry = {{ default_morale = {n(small)} }}",
+        )
+    if programme == "field_services":
+        return (
+            f"field_hospital = {{ casualty_trickleback = {n(medium)} experience_loss_factor = -{n(small)} }}",
+            f"category_support_battalions = {{ default_morale = {n(small)} }}",
+        ) if phase % 2 == 0 else (
+            f"maintenance_company = {{ reliability = {n(medium)} }}",
+            f"category_support_battalions = {{ max_organisation = {n(organisation)} }}",
+        )
+    if programme == "engineering":
+        return (
+            f"engineer = {{ entrenchment = {n(organisation / 2)} defense = {n(small)} }}",
+        ) if phase % 2 == 0 else (
+            f"category_support_battalions = {{ breakthrough = {n(medium)} defense = {n(small)} }}",
+        )
+    if programme == "resilience":
+        return (
+            f"logistics_company = {{ supply_consumption = -{n(medium)} }}",
+            f"industry_repair_factor = {n(small)}",
+        ) if phase % 2 == 0 else (
+            f"supply_consumption_factor = -{n(medium)}",
+            f"category_support_battalions = {{ default_morale = {n(small)} }}",
+        )
+    if programme == "automation":
+        return (
+            f"land_reinforce_rate = {n(medium)}",
+            f"org_loss_when_moving = -{n(small)}",
+        ) if phase == 0 else (
+            f"planning_speed = {n(medium)}",
+            f"supply_consumption_factor = -{n(small)}",
+        ) if phase == 1 else (
+            f"logistics_company = {{ supply_consumption = -{n(small)} }}",
+            f"coordination_bonus = {n(medium)}",
+        )
+    if programme == "network":
+        return (
+            f"supply_consumption_factor = -{n(small)}",
+            f"industry_repair_factor = {n(medium)}",
+        ) if phase == 0 else (
+            f"land_reinforce_rate = {n(small)}",
+            f"supply_consumption_factor = -{n(medium)}",
+        ) if phase == 1 else (
+            f"production_speed_infrastructure_factor = {n(small)}",
+            f"industry_repair_factor = {n(medium)}",
+        )
+    if programme == "railway_artillery":
+        return (
+            f"artillery = {{ soft_attack = {n(medium)} hard_attack = {n(small)} }}",
+        ) if phase == 0 else (
+            f"artillery = {{ reliability = {n(medium)} breakthrough = {n(small)} }}",
+        ) if phase == 1 else (
+            f"planning_speed = {n(medium)}",
+            f"coordination_bonus = {n(small)}",
+        )
+
+    anti_tank_packages = {
+        "missile": (f"category_anti_tank = {{ hard_attack = {n(medium)} ap_attack = {n(medium)} }}",),
+        "seeker": (f"category_anti_tank = {{ reliability = {n(medium)} defense = {n(small)} }}",),
+        "ambush": (f"category_anti_tank = {{ hard_attack = {n(medium)} defense = {n(small)} }}",),
+        "coil": (f"category_anti_tank = {{ ap_attack = {n(medium)} breakthrough = {n(small)} }}",),
+    }
+    if programme in anti_tank_packages:
+        return anti_tank_packages[programme]
+
+    artillery_packages = {
+        "fire_control": (
+            (f"artillery = {{ soft_attack = {n(medium)} reliability = {n(small)} }}",),
+            (f"coordination_bonus = {n(medium)}", f"planning_speed = {n(small)}"),
+        ),
+        "guided_munitions": (
+            (f"artillery = {{ hard_attack = {n(medium)} ap_attack = {n(medium)} }}",),
+            (f"artillery = {{ soft_attack = {n(medium)} breakthrough = {n(small)} }}",),
+        ),
+        "mass_fire": (
+            (f"artillery = {{ soft_attack = {n(medium)} breakthrough = {n(small)} }}",),
+            (f"artillery = {{ soft_attack = {n(medium)} reliability = {n(medium)} }}",),
+        ),
+        "autonomous_battery": (
+            (f"artillery = {{ hard_attack = {n(medium)} reliability = {n(small)} }}",),
+            (f"coordination_bonus = {n(medium)}", f"planning_speed = {n(small)}"),
+        ),
+    }
+    if programme in artillery_packages:
+        packages = artillery_packages[programme]
+        return packages[phase % len(packages)]
+
+    anti_air_packages = {
+        "sensors": (f"anti_air = {{ air_attack = {n(small)} reliability = {n(medium)} }}", f"coordination_bonus = {n(small / 2)}"),
+        "kinetic": (f"anti_air = {{ air_attack = {n(medium)} soft_attack = {n(small)} }}",),
+        "directed_energy": (f"anti_air = {{ air_attack = {n(medium)} reliability = {n(medium)} }}", f"air_intercept_efficiency = {n(small)}"),
+    }
+    if branch_key == "anti_air" and programme in anti_air_packages:
+        return anti_air_packages[programme]
+
+    recon_armor_packages = {
+        "active_sensors": (f"category_all_armor = {{ reliability = {n(small)} defense = {n(medium)} }}", f"category_recon = {{ recon = {n(0.35 + step * 0.05)} }}"),
+        "silent_mobility": (f"category_all_armor = {{ maximum_speed = {n(medium)} reliability = {n(small)} }}",),
+        "signature_control": (f"category_all_armor = {{ defense = {n(medium)} breakthrough = {n(small)} }}",),
+        "autonomous_screen": (f"category_all_armor = {{ maximum_speed = {n(small)} breakthrough = {n(medium)} }}",),
+    }
+    if programme in recon_armor_packages:
+        return recon_armor_packages[programme]
+
+    if programme == "armored_offense":
+        return (
+            f"category_all_armor = {{ breakthrough = {n(medium)} hard_attack = {n(medium)} }}",
+        ) if phase == 0 else (
+            f"category_all_armor = {{ soft_attack = {n(medium)} maximum_speed = {n(small)} }}",
+        ) if phase == 1 else (
+            f"category_all_armor = {{ hard_attack = {n(medium)} reliability = {n(small)} }}",
+        )
+    if programme == "armored_survival":
+        return (
+            f"category_all_armor = {{ armor_value = {n(medium)} defense = {n(medium)} }}",
+        ) if phase == 0 else (
+            f"category_all_armor = {{ reliability = {n(medium)} defense = {n(small)} }}",
+        ) if phase == 1 else (
+            f"category_all_armor = {{ armor_value = {n(medium)} default_morale = {n(small)} }}",
+        )
+
+    if programme == "survivability":
+        return (
+            f"category_all_armor = {{ armor_value = {n(medium)} reliability = {n(small)} }}",
+        ) if phase % 2 == 0 else (
+            f"category_all_armor = {{ defense = {n(medium)} reliability = {n(medium)} }}",
+        )
+    if programme == "siege":
+        return (
+            f"category_all_armor = {{ breakthrough = {n(medium)} hard_attack = {n(medium)} }}",
+        ) if phase == 0 else (
+            f"category_all_armor = {{ soft_attack = {n(medium)} breakthrough = {n(small)} }}",
+        ) if phase == 1 else (
+            f"category_all_armor = {{ maximum_speed = {n(small)} reliability = {n(medium)} }}",
+        )
+    if programme == "precision":
+        return (
+            f"ground_attack_factor = {n(medium)}",
+            f"air_mission_efficiency = {n(small)}",
+        ) if phase % 2 == 0 else (
+            f"air_attack_factor = {n(small)}",
+            f"air_range_factor = {n(medium)}",
+        )
+    if programme == "persistent":
+        return (
+            f"ground_attack_factor = {n(medium)}",
+            f"air_accidents_factor = -{n(small)}",
+        ) if phase == 0 else (
+            f"air_agility_factor = {n(medium)}",
+            f"air_mission_efficiency = {n(small)}",
+        ) if phase == 1 else (
+            f"air_mission_efficiency = {n(medium)}",
+            f"air_accidents_factor = -{n(medium)}",
+        )
+
+    if programme == "flight_control":
+        return (
+            f"air_agility_factor = {n(medium)}",
+            f"air_accidents_factor = -{n(small)}",
+        ) if phase % 2 == 0 else (
+            f"air_range_factor = {n(medium)}",
+            f"air_mission_efficiency = {n(small)}",
+        )
+    if programme == "interception":
+        return (
+            f"air_intercept_efficiency = {n(medium)}",
+            f"air_attack_factor = {n(small)}",
+        ) if phase % 2 == 0 else (
+            f"air_mission_efficiency = {n(medium)}",
+            f"air_agility_factor = {n(small)}",
+        )
+    if programme == "endurance":
+        return (
+            f"air_range_factor = {n(medium)}",
+            f"air_accidents_factor = -{n(small)}",
+        ) if phase % 2 == 0 else (
+            f"air_mission_efficiency = {n(medium)}",
+            f"air_agility_factor = {n(small)}",
+        )
+    if programme == "wingmen":
+        return (
+            f"air_attack_factor = {n(medium)}",
+            f"air_mission_efficiency = {n(small)}",
+        ) if phase % 2 == 0 else (
+            f"air_accidents_factor = -{n(medium)}",
+            f"air_intercept_efficiency = {n(small)}",
+        )
+
+    if programme == "fleet_strike":
+        return (
+            f"naval_hit_chance = {n(medium)}",
+            f"naval_coordination = {n(small)}",
+        ) if phase % 2 == 0 else (
+            f"naval_speed_factor = {n(small)}",
+            f"naval_hit_chance = {n(medium)}",
+        )
+    if programme == "fleet_defense":
+        return (
+            f"naval_detection = {n(medium)}",
+            f"convoy_escort_efficiency = {n(small)}",
+        ) if phase % 2 == 0 else (
+            f"naval_mines_effect_reduction = {n(medium)}",
+            f"naval_coordination = {n(small)}",
+        )
+
+    naval_packages = {
+        "sensors": (f"naval_detection = {n(medium)}", f"naval_coordination = {n(small)}"),
+        "escort_hulls": (f"convoy_escort_efficiency = {n(medium)}", f"naval_speed_factor = {n(small)}"),
+        "unmanned_screen": (f"naval_detection = {n(small)}", f"naval_mines_effect_reduction = {n(medium)}"),
+        "silent_hunter": (f"naval_detection = {n(medium)}", f"naval_mines_effect_reduction = {n(small)}"),
+        "torpedo_boat": (f"naval_hit_chance = {n(medium)}", f"naval_coordination = {n(small)}"),
+        "deep_network": (f"naval_detection = {n(medium)}", f"convoy_escort_efficiency = {n(small)}"),
+        "autonomous_pack": (f"naval_coordination = {n(medium)}", f"naval_detection = {n(small)}"),
+    }
+    return naval_packages[programme]
+
+
 def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
     """Return an effect package that reflects the actual programme selected.
 
@@ -1230,6 +1956,24 @@ def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
     medium = (0.020 + progress * 0.002) * capstone_scale
     organisation = (0.75 + progress * 0.12) * capstone_scale
 
+    if branch.key == "forbidden_energy":
+        packages = (
+            (f"nuclear_production_factor = {n(0.04)}", f"industry_repair_factor = {n(0.02)}", f"stability_factor = -{n(0.005)}"),
+            (f"nuclear_production_factor = {n(0.06)}", f"local_resources_factor = {n(0.02)}", f"stability_factor = -{n(0.008)}"),
+            (f"nuclear_production_factor = {n(0.08)}", f"production_speed_buildings_factor = {n(0.025)}", f"stability_factor = -{n(0.011)}"),
+            (f"nuclear_production_factor = {n(0.10)}", f"fuel_gain_factor = {n(0.03)}", f"stability_factor = -{n(0.014)}"),
+            (f"nuclear_production_factor = {n(0.12)}", f"research_speed_factor = {n(0.025)}", f"stability_factor = -{n(0.017)}"),
+            (f"nuclear_production_factor = {n(0.16)}", f"industrial_capacity_factory = {n(0.04)}", f"stability_factor = -{n(0.025)}"),
+        )
+        return packages[tier]
+    if branch.key == "forbidden_automation":
+        packages = (
+            (f"production_factory_max_efficiency_factor = {n(0.04)}", f"industry_repair_factor = {n(0.03)}", f"stability_factor = -{n(0.01)}"),
+            (f"coordination_bonus = {n(0.05)}", f"land_reinforce_rate = {n(0.03)}", f"stability_factor = -{n(0.02)}"),
+            (f"production_factory_max_efficiency_factor = {n(0.08)}", f"research_speed_factor = {n(0.04)}", f"stability_factor = -{n(0.035)}"),
+        )
+        return packages[tier]
+
     pattern = GRAPH_PATTERN_BY_BRANCH.get(branch.key)
     lane = BRANCH_GRAPHS[branch.key].lanes[tier]
     xor_group = next(
@@ -1237,6 +1981,35 @@ def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
         (),
     )
     xor_option = xor_group.index(tier) if xor_group else None
+
+    if tier == tier_count - 1:
+        capstone = integrated_capstone_effects(
+            branch.key, small, medium, organisation,
+        )
+        if capstone:
+            return capstone
+
+    if BRANCH_GRAPHS[branch.key].dependencies[tier]:
+        synthesis_nodes = [
+            index
+            for index, parents in enumerate(BRANCH_GRAPHS[branch.key].dependencies)
+            if parents
+        ]
+        stage_effects = integrated_stage_effects(
+            branch.key,
+            synthesis_nodes.index(tier),
+            small,
+            medium,
+            organisation,
+        )
+        if stage_effects:
+            return stage_effects
+
+    programme, programme_step = programme_for(branch.key, tier)
+    if programme:
+        return themed_programme_effects(
+            branch.key, programme, programme_step, small, medium, organisation,
+        )
 
     # Persistent strategic schools.
     if pattern == "dual_choice" and tier >= 5 and tier != 19:
@@ -1278,32 +2051,6 @@ def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
             },
         }
         return dual[branch.key][lane]
-
-    # Long-lived three-way industrial and equipment specializations.
-    if pattern == "trident_specialization" and tier >= 5:
-        trident = {
-            "production": {
-                0: (f"line_change_production_efficiency_factor = {n(medium * 2)}", f"production_factory_efficiency_gain_factor = {n(small)}"),
-                1: (f"industrial_capacity_factory = {n(medium)}", f"production_factory_start_efficiency_factor = {n(small)}"),
-                2: (f"production_factory_max_efficiency_factor = {n(medium)}", f"production_lack_of_resource_penalty_factor = -{n(small)}"),
-            },
-            "resources": {
-                0: (f"local_resources_factor = {n(medium)}", f"production_lack_of_resource_penalty_factor = -{n(small)}"),
-                1: (f"fuel_gain_factor = {n(medium)}", f"local_resources_factor = {n(small)}"),
-                2: (f"local_resources_factor = {n(medium * 1.25)}", f"industry_repair_factor = {n(small)}"),
-            },
-            "artillery": {
-                0: (f"artillery = {{ soft_attack = {n(medium)} reliability = {n(small)} }}",),
-                1: (f"artillery = {{ hard_attack = {n(medium)} ap_attack = {n(medium)} }}",),
-                2: (f"artillery = {{ soft_attack = {n(medium)} breakthrough = {n(small)} }}",),
-            },
-            "fighter": {
-                0: (f"air_mission_efficiency = {n(medium)}", f"air_accidents_factor = -{n(small)}"),
-                1: (f"air_intercept_efficiency = {n(medium)}", f"air_mission_efficiency = {n(small)}"),
-                2: (f"air_mission_efficiency = {n(medium)}", f"air_accidents_factor = -{n(medium)}"),
-            },
-        }
-        return trident[branch.key][lane]
 
     # Repeated field choices: option A and B consistently favour different
     # operational priorities, while the shared merge nodes use the base line.
@@ -1391,6 +2138,7 @@ def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
                 0: (
                     f"encryption_factor = {n(medium)}",
                     f"decryption_factor = {n(small / 2)}",
+                    f"production_factory_efficiency_gain_factor = {n(small / 2)}",
                 ),
                 1: (
                     f"coordination_bonus = {n(small)}",
@@ -1399,6 +2147,7 @@ def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
                 2: (
                     f"decryption_factor = {n(medium)}",
                     f"encryption_factor = {n(small / 2)}",
+                    f"research_speed_factor = {n(small / 2)}",
                 ),
             },
             "power": {
@@ -1943,19 +2692,17 @@ def technology_description_notes(branch: Branch, index: int, is_ru: bool) -> lis
     if siblings:
         names_by_id = {tech.id: (tech.ru if is_ru else tech.en) for tech in branch.techs}
         alternatives = ", ".join(names_by_id[sibling] for sibling in siblings)
-        pattern = GRAPH_PATTERN_BY_BRANCH[branch.key]
-        if pattern == "trident_specialization":
-            notes.append(
-                f"Долгосрочная специализация; закрывает программы: {alternatives}."
-                if is_ru else
-                f"Long-term specialization; locks out: {alternatives}."
-            )
-        else:
-            notes.append(
-                f"Взаимоисключающий проект с вариантом: {alternatives}; общая линия продолжится после любого выбора."
-                if is_ru else
-                f"Mutually exclusive with: {alternatives}; the common line continues after either choice."
-            )
+        notes.append(
+            f"Взаимоисключающий проект с вариантом: {alternatives}; общая линия продолжится после любого выбора."
+            if is_ru else
+            f"Mutually exclusive with: {alternatives}; the common line continues after either choice."
+        )
+    if len(BRANCH_GRAPHS[branch.key].dependencies[index]) >= 2:
+        notes.append(
+            "Требует завершения всех входящих программ и объединяет их результаты."
+            if is_ru else
+            "Requires every incoming programme and integrates their results."
+        )
     buildings = ENABLE_BUILDINGS.get(branch.techs[index].id, ())
     if buildings:
         names = [BUILDING_DISPLAY_NAMES[building][0 if is_ru else 1] for building, _ in buildings]
@@ -2343,9 +3090,41 @@ def write_gfx() -> None:
     (ROOT / "interface" / "ADISCORD_technologies.gfx").write_text(content, encoding="utf-8")
 
 
+ACCESS_REQUIREMENT_LOCALISATION = {
+    "ADISCORD_forbidden_legacy_access": (
+        "Доступ к запретному наследию",
+        "Forbidden legacy access",
+    ),
+    "ADISCORD_legacy_research_authorized": (
+        "Разрешено исследование наследия",
+        "Legacy research authorized",
+    ),
+    "ADISCORD_legacy_site_secured": (
+        "Защищённый объект старого мира",
+        "Secured old-world site",
+    ),
+    "ADISCORD_forbidden_relic_complex": (
+        "Комплекс с запретными реликтами",
+        "Forbidden relic complex",
+    ),
+    "ADISCORD_black_grid_protocols_authorized": (
+        "Разрешены протоколы чёрной энергосети",
+        "Black-grid protocols authorized",
+    ),
+    "ADISCORD_black_grid_node": (
+        "Узел чёрной энергосети",
+        "Black-grid node",
+    ),
+}
+
+
 def generated_localisation(language: str) -> list[str]:
     is_ru = language == "russian"
-    lines: list[str] = []
+    lines = [
+        f' {key}:0 "{names[0 if is_ru else 1]}"'
+        for key, names in ACCESS_REQUIREMENT_LOCALISATION.items()
+    ]
+    lines.append("")
     for branch in BRANCHES:
         key = f"ADISCORD_TECH_BRANCH_{branch.key.upper()}"
         lines.append(f" {key}:0 \"{branch.ru if is_ru else branch.en}\"")
@@ -2397,13 +3176,23 @@ def write_localisation() -> None:
         "russian": ROOT / "localisation" / "russian" / "ADISCORD_technology_doctrine_l_russian.yml",
         "english": ROOT / "localisation" / "english" / "ADISCORD_technology_doctrine_l_english.yml",
     }
-    generated_key = re.compile(r"^\s+(?:ADISCORD_tech_|ADISCORD_TECH_BRANCH_)")
+    generated_key = re.compile(r"^\s+(ADISCORD_[A-Za-z0-9_]+)\s*:")
     for language, path in targets.items():
         if path.exists():
             original = path.read_text(encoding="utf-8-sig").splitlines()
         else:
             original = [f"l_{language}:"]
-        preserved = [line for line in original if not generated_key.match(line)]
+        preserved = []
+        for line in original:
+            match = generated_key.match(line)
+            key = match.group(1) if match else ""
+            if (
+                key.startswith("ADISCORD_tech_")
+                or key.startswith("ADISCORD_TECH_BRANCH_")
+                or key in ACCESS_REQUIREMENT_LOCALISATION
+            ):
+                continue
+            preserved.append(line)
         while preserved and not preserved[-1].strip():
             preserved.pop()
         output = preserved + [""] + generated_localisation(language)
@@ -2587,7 +3376,10 @@ def main() -> None:
     write_gfx()
     write_localisation()
     write_gui()
-    print(f"Generated {len(all_ids)} technologies in {len(BRANCHES)} independent branches.")
+    print(
+        f"Generated {len(all_ids)} technologies in {len(BRANCHES)} content branches; "
+        f"{len(APPLIED_PROGRAMME_KEYS)} applied branches are attached specialisations."
+    )
 
 
 if __name__ == "__main__":

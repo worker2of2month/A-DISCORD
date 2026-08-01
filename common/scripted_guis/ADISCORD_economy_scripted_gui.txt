@@ -4,137 +4,44 @@ scripted_gui = {
 		window_name = "ADISCORD_economy_topbar_window"
 		parent_window_token = top_bar
 		dirty = ADISCORD_economy_gui_update_var
-
 		visible = { ADISCORD_economy_should_show_player_ui = yes }
 		effects = {
 			ADISCORD_economy_topbar_button_click = { ADISCORD_economy_open_window = yes }
 		}
 	}
 
-	# The shell owns the header, KPI row, tabs and close button. Each content
-	# page is a separate scripted GUI below, so inactive pages cannot bleed
-	# through one another when Clausewitz evaluates nested containers.
 	ADISCORD_economy_dashboard_script = {
 		context_type = player_context
 		window_name = "ADISCORD_economy_dashboard_window"
 		dirty = ADISCORD_economy_gui_update_var
-
 		visible = { ADISCORD_economy_window_is_open = yes }
 		effects = {
 			ADISCORD_economy_dashboard_close_click = { ADISCORD_economy_close_window = yes }
-			ADISCORD_economy_tab_overview_click = {
-				set_variable = { var = ADISCORD_economy_gui_page value = 0 }
-				ADISCORD_economy_update_gui = yes
-			}
-			ADISCORD_economy_tab_budget_click = {
-				set_variable = { var = ADISCORD_economy_gui_page value = 1 }
-				ADISCORD_economy_update_gui = yes
-			}
-			ADISCORD_economy_tab_operations_click = {
-				set_variable = { var = ADISCORD_economy_gui_page value = 2 }
-				ADISCORD_economy_update_gui = yes
-			}
-		}
-		triggers = {
-			ADISCORD_economy_tab_overview_click_enabled = { NOT = { check_variable = { var = ADISCORD_economy_gui_page value = 0 compare = equals } } }
-			ADISCORD_economy_tab_budget_click_enabled = { NOT = { check_variable = { var = ADISCORD_economy_gui_page value = 1 compare = equals } } }
-			ADISCORD_economy_tab_operations_click_enabled = { NOT = { check_variable = { var = ADISCORD_economy_gui_page value = 2 compare = equals } } }
-		}
-	}
-
-	ADISCORD_economy_overview_script = {
-		context_type = player_context
-		window_name = "ADISCORD_economy_overview_page"
-		dirty = ADISCORD_economy_gui_update_var
-		visible = {
-			ADISCORD_economy_window_is_open = yes
-			check_variable = { var = ADISCORD_economy_gui_page value = 0 compare = equals }
-		}
-		effects = {
-			# A real binding keeps the read-only overview window registered by the engine.
-			ADISCORD_economy_overview_refresh_click = { ADISCORD_economy_update_gui = yes }
-		}
-	}
-
-	ADISCORD_economy_budget_script = {
-		context_type = player_context
-		window_name = "ADISCORD_economy_budget_page"
-		dirty = ADISCORD_economy_gui_update_var
-		visible = {
-			ADISCORD_economy_window_is_open = yes
-			check_variable = { var = ADISCORD_economy_gui_page value = 1 compare = equals }
-		}
-		effects = {
-			ADISCORD_economy_tax_burden_1_click = { ADISCORD_economy_set_tax_burden_1 = yes }
-			ADISCORD_economy_tax_burden_2_click = { ADISCORD_economy_set_tax_burden_2 = yes }
-			ADISCORD_economy_tax_burden_3_click = { ADISCORD_economy_set_tax_burden_3 = yes }
-			ADISCORD_economy_tax_burden_4_click = { ADISCORD_economy_set_tax_burden_4 = yes }
-			ADISCORD_economy_tax_burden_5_click = { ADISCORD_economy_set_tax_burden_5 = yes }
-			ADISCORD_economy_army_budget_1_click = { ADISCORD_economy_set_army_spending_1 = yes }
-			ADISCORD_economy_army_budget_2_click = { ADISCORD_economy_set_army_spending_2 = yes }
-			ADISCORD_economy_army_budget_3_click = { ADISCORD_economy_set_army_spending_3 = yes }
-			ADISCORD_economy_army_budget_4_click = { ADISCORD_economy_set_army_spending_4 = yes }
-			ADISCORD_economy_army_budget_5_click = { ADISCORD_economy_set_army_spending_5 = yes }
-			ADISCORD_economy_construction_budget_1_click = { ADISCORD_economy_set_construction_spending_1 = yes }
-			ADISCORD_economy_construction_budget_2_click = { ADISCORD_economy_set_construction_spending_2 = yes }
-			ADISCORD_economy_construction_budget_3_click = { ADISCORD_economy_set_construction_spending_3 = yes }
-			ADISCORD_economy_construction_budget_4_click = { ADISCORD_economy_set_construction_spending_4 = yes }
-			ADISCORD_economy_construction_budget_5_click = { ADISCORD_economy_set_construction_spending_5 = yes }
-		}
-		triggers = {
-			ADISCORD_economy_tax_burden_1_click_enabled = { check_variable = { var = ADISCORD_economy_tax_change_cooldown value = 1 compare = less_than } NOT = { ADISCORD_economy_tax_burden_mode_1 = yes } }
-			ADISCORD_economy_tax_burden_2_click_enabled = { check_variable = { var = ADISCORD_economy_tax_change_cooldown value = 1 compare = less_than } NOT = { ADISCORD_economy_tax_burden_mode_2 = yes } }
-			ADISCORD_economy_tax_burden_3_click_enabled = { check_variable = { var = ADISCORD_economy_tax_change_cooldown value = 1 compare = less_than } NOT = { ADISCORD_economy_tax_burden_mode_3 = yes } }
-			ADISCORD_economy_tax_burden_4_click_enabled = { check_variable = { var = ADISCORD_economy_tax_change_cooldown value = 1 compare = less_than } NOT = { ADISCORD_economy_tax_burden_mode_4 = yes } }
-			ADISCORD_economy_tax_burden_5_click_enabled = { check_variable = { var = ADISCORD_economy_tax_change_cooldown value = 1 compare = less_than } NOT = { ADISCORD_economy_tax_burden_mode_5 = yes } }
-			ADISCORD_economy_army_budget_1_click_enabled = { check_variable = { var = ADISCORD_economy_army_budget_change_cooldown value = 1 compare = less_than } NOT = { ADISCORD_economy_army_spending_mode_1 = yes } }
-			ADISCORD_economy_army_budget_2_click_enabled = { check_variable = { var = ADISCORD_economy_army_budget_change_cooldown value = 1 compare = less_than } NOT = { ADISCORD_economy_army_spending_mode_2 = yes } }
-			ADISCORD_economy_army_budget_3_click_enabled = { check_variable = { var = ADISCORD_economy_army_budget_change_cooldown value = 1 compare = less_than } NOT = { ADISCORD_economy_army_spending_mode_3 = yes } }
-			ADISCORD_economy_army_budget_4_click_enabled = { check_variable = { var = ADISCORD_economy_army_budget_change_cooldown value = 1 compare = less_than } NOT = { ADISCORD_economy_army_spending_mode_4 = yes } }
-			ADISCORD_economy_army_budget_5_click_enabled = { check_variable = { var = ADISCORD_economy_army_budget_change_cooldown value = 1 compare = less_than } NOT = { ADISCORD_economy_army_spending_mode_5 = yes } }
-			ADISCORD_economy_construction_budget_1_click_enabled = { check_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 1 compare = less_than } NOT = { ADISCORD_economy_construction_spending_mode_1 = yes } }
-			ADISCORD_economy_construction_budget_2_click_enabled = { check_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 1 compare = less_than } NOT = { ADISCORD_economy_construction_spending_mode_2 = yes } }
-			ADISCORD_economy_construction_budget_3_click_enabled = { check_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 1 compare = less_than } NOT = { ADISCORD_economy_construction_spending_mode_3 = yes } }
-			ADISCORD_economy_construction_budget_4_click_enabled = { check_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 1 compare = less_than } NOT = { ADISCORD_economy_construction_spending_mode_4 = yes } }
-			ADISCORD_economy_construction_budget_5_click_enabled = { check_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 1 compare = less_than } NOT = { ADISCORD_economy_construction_spending_mode_5 = yes } }
-		}
-	}
-
-	ADISCORD_economy_operations_script = {
-		context_type = player_context
-		window_name = "ADISCORD_economy_operations_page"
-		dirty = ADISCORD_economy_gui_update_var
-		visible = {
-			ADISCORD_economy_window_is_open = yes
-			check_variable = { var = ADISCORD_economy_gui_page value = 2 compare = equals }
-		}
-		effects = {
-			ADISCORD_economy_action_internal_bonds_click = { ADISCORD_economy_gui_try_issue_internal_bonds = yes }
-			ADISCORD_economy_action_external_loan_click = { ADISCORD_economy_gui_try_take_external_loan = yes }
+			ADISCORD_economy_tax_decrease_click = { ADISCORD_economy_decrease_tax_burden = yes }
+			ADISCORD_economy_tax_increase_click = { ADISCORD_economy_increase_tax_burden = yes }
+			ADISCORD_economy_army_decrease_click = { ADISCORD_economy_decrease_army_spending = yes }
+			ADISCORD_economy_army_increase_click = { ADISCORD_economy_increase_army_spending = yes }
+			ADISCORD_economy_construction_decrease_click = { ADISCORD_economy_decrease_construction_spending = yes }
+			ADISCORD_economy_construction_increase_click = { ADISCORD_economy_increase_construction_spending = yes }
+			ADISCORD_economy_social_decrease_click = { ADISCORD_economy_decrease_social_spending = yes }
+			ADISCORD_economy_social_increase_click = { ADISCORD_economy_increase_social_spending = yes }
 			ADISCORD_economy_action_repay_debt_click = { ADISCORD_economy_gui_try_repay_debt = yes }
-			ADISCORD_economy_action_early_repay_debt_click = { ADISCORD_economy_gui_try_early_repay_debt = yes }
 			ADISCORD_economy_action_restructure_debt_click = { ADISCORD_economy_gui_try_restructure_debt = yes }
-			ADISCORD_economy_action_toggle_auto_loan_click = { ADISCORD_economy_gui_try_toggle_auto_loan = yes }
-			ADISCORD_economy_action_expand_emission_click = { ADISCORD_economy_gui_try_expand_emission = yes }
-			ADISCORD_economy_action_reduce_emission_click = { ADISCORD_economy_gui_try_reduce_emission = yes }
 			ADISCORD_economy_action_stabilization_click = { ADISCORD_economy_gui_try_stabilization_package = yes }
-			ADISCORD_economy_action_invest_reserves_click = { ADISCORD_economy_gui_try_invest_reserves = yes }
-			ADISCORD_economy_action_civilian_investment_click = { ADISCORD_economy_gui_try_civilian_investment = yes }
-			ADISCORD_economy_action_military_investment_click = { ADISCORD_economy_gui_try_military_investment = yes }
 			ADISCORD_economy_action_war_taxes_click = { ADISCORD_economy_gui_try_war_taxes = yes }
 		}
 		triggers = {
-			ADISCORD_economy_action_internal_bonds_click_enabled = { ADISCORD_economy_can_issue_internal_bonds = yes }
-			ADISCORD_economy_action_external_loan_click_enabled = { ADISCORD_economy_can_take_external_loan = yes }
+			ADISCORD_economy_tax_decrease_click_enabled = { ADISCORD_economy_can_decrease_tax_burden = yes }
+			ADISCORD_economy_tax_increase_click_enabled = { ADISCORD_economy_can_increase_tax_burden = yes }
+			ADISCORD_economy_army_decrease_click_enabled = { ADISCORD_economy_can_decrease_army_spending = yes }
+			ADISCORD_economy_army_increase_click_enabled = { ADISCORD_economy_can_increase_army_spending = yes }
+			ADISCORD_economy_construction_decrease_click_enabled = { ADISCORD_economy_can_decrease_construction_spending = yes }
+			ADISCORD_economy_construction_increase_click_enabled = { ADISCORD_economy_can_increase_construction_spending = yes }
+			ADISCORD_economy_social_decrease_click_enabled = { ADISCORD_economy_can_decrease_social_spending = yes }
+			ADISCORD_economy_social_increase_click_enabled = { ADISCORD_economy_can_increase_social_spending = yes }
 			ADISCORD_economy_action_repay_debt_click_enabled = { ADISCORD_economy_has_treasury_50 = yes ADISCORD_economy_has_debt = yes }
-			ADISCORD_economy_action_early_repay_debt_click_enabled = { ADISCORD_economy_can_early_repay_debt = yes }
 			ADISCORD_economy_action_restructure_debt_click_enabled = { ADISCORD_economy_can_restructure_debt = yes }
-			ADISCORD_economy_action_expand_emission_click_enabled = { ADISCORD_economy_can_expand_money_emission = yes }
-			ADISCORD_economy_action_reduce_emission_click_enabled = { ADISCORD_economy_can_reduce_money_emission = yes }
 			ADISCORD_economy_action_stabilization_click_enabled = { ADISCORD_economy_can_stabilize_macro = yes }
-			ADISCORD_economy_action_invest_reserves_click_enabled = { ADISCORD_economy_can_expand_public_capital = yes }
-			ADISCORD_economy_action_civilian_investment_click_enabled = { ADISCORD_economy_can_use_civilian_stimulus = yes }
-			ADISCORD_economy_action_military_investment_click_enabled = { ADISCORD_economy_can_use_military_investment = yes }
 			ADISCORD_economy_action_war_taxes_click_enabled = { ADISCORD_economy_can_use_war_taxes = yes }
 		}
 	}

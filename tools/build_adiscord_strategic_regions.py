@@ -376,89 +376,100 @@ TEMPERATURES = {
 
 
 def phenomenon(climate: str, month: int) -> tuple[float, float, float, float, float, float, float]:
-    """Return clear, light rain, heavy rain, snow, blizzard, mud and sandstorm."""
+    """Return independent weather weights plus mud and sandstorm intensity.
+
+    Clausewitz does not treat these values as one normalized probability
+    distribution.  In particular, vanilla commonly combines a clear-weather
+    weight around 0.5 with rain_light at 0.4-1.0, while mud may exceed 1.0.
+    Keeping the values independent is important: normalizing their sum makes
+    every climate unnaturally dry and suppresses the gameplay weather effects.
+    """
     winter = month in (11, 0, 1)
     shoulder = month in (2, 3, 9, 10)
     summer = month in (5, 6, 7)
 
     if climate == "polar_ocean":
-        return (0.30, 0.04, 0.01, 0.35, 0.18, 0.0, 0.0) if winter else (0.38, 0.14, 0.06, 0.24, 0.09, 0.0, 0.0)
+        return (0.30, 0.10, 0.03, 0.55, 0.30, 0.0, 0.0) if winter else (0.38, 0.35, 0.12, 0.30, 0.12, 0.0, 0.0)
     if climate == "subpolar_ocean":
         if winter:
-            return (0.35, 0.18, 0.09, 0.22, 0.08, 0.0, 0.0)
-        return (0.35, 0.39, 0.18, 0.01, 0.0, 0.0, 0.0)
+            return (0.35, 0.30, 0.12, 0.35, 0.15, 0.0, 0.0)
+        return (0.40, 0.55, 0.22, 0.05, 0.01, 0.0, 0.0)
     if climate == "temperate_ocean":
-        return (0.36, 0.38, 0.18, 0.05 if winter else 0.0, 0.01 if winter else 0.0, 0.0, 0.0)
+        return (0.45, 0.60, 0.25, 0.10 if winter else 0.0, 0.03 if winter else 0.0, 0.0, 0.0)
     if climate == "warm_ocean":
-        return (0.40, 0.37, 0.18, 0.0, 0.0, 0.0, 0.0)
+        return (0.50, 0.45, 0.25, 0.0, 0.0, 0.0, 0.0)
     if climate == "tropical_ocean":
-        return (0.25, 0.35, 0.32, 0.0, 0.0, 0.0, 0.0) if month in (4, 5, 6, 7, 8) else (0.45, 0.31, 0.18, 0.0, 0.0, 0.0, 0.0)
+        return (0.30, 0.45, 0.45, 0.0, 0.0, 0.0, 0.0) if month in (4, 5, 6, 7, 8) else (0.50, 0.40, 0.25, 0.0, 0.0, 0.0, 0.0)
     if climate == "polar":
-        return (0.32, 0.03, 0.01, 0.38, 0.18, 0.03, 0.0) if winter else (0.40, 0.12, 0.04, 0.23, 0.08, 0.12, 0.0)
+        if winter:
+            return (0.32, 0.05, 0.01, 0.55, 0.30, 0.35, 0.0)
+        if shoulder:
+            return (0.40, 0.15, 0.05, 0.35, 0.15, 0.55, 0.0)
+        return (0.45, 0.25, 0.08, 0.12, 0.03, 0.45, 0.0)
     if climate == "subarctic_maritime":
         if winter:
-            return (0.36, 0.12, 0.05, 0.30, 0.09, 0.08, 0.0)
+            return (0.36, 0.20, 0.08, 0.45, 0.18, 0.60, 0.0)
         if shoulder:
-            return (0.35, 0.28, 0.10, 0.12, 0.02, 0.34, 0.0)
-        return (0.42, 0.30, 0.12, 0.02, 0.0, 0.18, 0.0)
+            return (0.35, 0.45, 0.18, 0.18, 0.05, 1.00, 0.0)
+        return (0.42, 0.45, 0.18, 0.03, 0.0, 0.70, 0.0)
     if climate == "subarctic_continental":
         if winter:
-            return (0.42, 0.08, 0.02, 0.34, 0.12, 0.05, 0.0)
+            return (0.42, 0.08, 0.02, 0.50, 0.22, 0.45, 0.0)
         if shoulder:
-            return (0.45, 0.20, 0.06, 0.12, 0.02, 0.31, 0.0)
-        return (0.54, 0.23, 0.08, 0.02, 0.0, 0.12, 0.0)
+            return (0.45, 0.25, 0.08, 0.25, 0.06, 1.10, 0.0)
+        return (0.54, 0.35, 0.12, 0.03, 0.0, 0.70, 0.0)
     if climate == "cold_highland":
         if winter:
-            return (0.34, 0.08, 0.02, 0.40, 0.15, 0.04, 0.0)
+            return (0.34, 0.10, 0.03, 0.55, 0.25, 0.40, 0.0)
         if shoulder:
-            return (0.39, 0.20, 0.06, 0.18, 0.04, 0.28, 0.0)
-        return (0.48, 0.25, 0.08, 0.06, 0.01, 0.14, 0.0)
+            return (0.39, 0.28, 0.10, 0.30, 0.08, 0.90, 0.0)
+        return (0.48, 0.35, 0.12, 0.10, 0.02, 0.55, 0.0)
     if climate == "cool_maritime":
         if winter:
-            return (0.36, 0.20, 0.07, 0.22, 0.05, 0.18, 0.0)
+            return (0.36, 0.75, 0.18, 0.30, 0.08, 0.55, 0.0)
         if shoulder:
-            return (0.36, 0.31, 0.11, 0.06, 0.01, 0.38, 0.0)
-        return (0.43, 0.32, 0.13, 0.0, 0.0, 0.18, 0.0)
+            return (0.36, 0.85, 0.22, 0.08, 0.02, 0.90, 0.0)
+        return (0.43, 0.75, 0.20, 0.0, 0.0, 0.65, 0.0)
     if climate == "boreal_wet":
         if winter:
-            return (0.36, 0.17, 0.06, 0.28, 0.07, 0.14, 0.0)
+            return (0.36, 0.30, 0.10, 0.40, 0.12, 0.70, 0.0)
         if shoulder:
-            return (0.34, 0.32, 0.12, 0.08, 0.01, 0.42, 0.0)
-        return (0.40, 0.34, 0.15, 0.0, 0.0, 0.24, 0.0)
+            return (0.34, 0.50, 0.20, 0.15, 0.03, 1.20, 0.0)
+        return (0.40, 0.55, 0.25, 0.0, 0.0, 0.90, 0.0)
     if climate in ("cool_continental", "cool_highland"):
         if winter:
-            return (0.39, 0.10, 0.03, 0.31, 0.09, 0.08, 0.0)
+            return (0.39, 0.12, 0.04, 0.45, 0.15, 0.65, 0.0)
         if shoulder:
-            return (0.43, 0.25, 0.08, 0.08, 0.01, 0.36, 0.0)
-        return (0.51, 0.27, 0.10, 0.0, 0.0, 0.14, 0.0)
+            return (0.43, 0.35, 0.12, 0.12, 0.03, 1.15, 0.0)
+        return (0.51, 0.40, 0.15, 0.0, 0.0, 0.75, 0.0)
     if climate in ("temperate_continental", "temperate_highland"):
         if winter:
-            return (0.45, 0.13, 0.03, 0.25, 0.05, 0.10, 0.0)
+            return (0.45, 0.18, 0.06, 0.35, 0.08, 0.80, 0.0)
         if shoulder:
-            return (0.43, 0.27, 0.09, 0.05, 0.0, 0.34, 0.0)
-        return (0.50, 0.28, 0.12, 0.0, 0.0, 0.14, 0.0)
+            return (0.43, 0.40, 0.14, 0.07, 0.01, 1.25, 0.0)
+        return (0.50, 0.45, 0.18, 0.0, 0.0, 0.80, 0.0)
     if climate == "temperate_wet":
         if winter:
-            return (0.35, 0.27, 0.10, 0.15, 0.03, 0.22, 0.0)
+            return (0.35, 0.45, 0.16, 0.22, 0.05, 0.90, 0.0)
         if shoulder:
-            return (0.32, 0.37, 0.16, 0.02, 0.0, 0.44, 0.0)
-        return (0.38, 0.36, 0.19, 0.0, 0.0, 0.25, 0.0)
+            return (0.32, 0.65, 0.28, 0.03, 0.0, 1.40, 0.0)
+        return (0.38, 0.60, 0.30, 0.0, 0.0, 1.00, 0.0)
     if climate == "warm_semiarid":
-        return (0.64, 0.12, 0.04, 0.03 if winter else 0.0, 0.0, 0.12 if shoulder else 0.04, 0.10 if summer else 0.06)
+        return (0.64, 0.12, 0.04, 0.03 if winter else 0.0, 0.0, 0.35 if shoulder else 0.12, 0.25 if summer else 0.15)
     if climate in ("arid", "arid_highland", "hot_arid"):
-        rain_light = 0.08 if winter or shoulder else 0.04
-        rain_heavy = 0.03 if winter or shoulder else 0.01
-        snow = 0.08 if climate == "arid_highland" and winter else 0.0
-        sand = 0.17 if summer else 0.11
-        return (0.67, rain_light, rain_heavy, snow, 0.01 if snow else 0.0, 0.07 if shoulder else 0.02, sand)
+        rain_light = 0.04 if winter or shoulder else 0.02
+        rain_heavy = 0.01 if winter or shoulder else 0.0
+        snow = 0.12 if climate == "arid_highland" and winter else 0.0
+        sand = 0.40 if summer else 0.25
+        return (0.67, rain_light, rain_heavy, snow, 0.02 if snow else 0.0, 0.12 if shoulder else 0.04, sand)
     if climate == "hot_highland":
-        return (0.55, 0.18, 0.07, 0.01 if winter else 0.0, 0.0, 0.16 if shoulder else 0.07, 0.08 if summer else 0.03)
+        return (0.55, 0.22, 0.08, 0.02 if winter else 0.0, 0.0, 0.50 if shoulder else 0.25, 0.15 if summer else 0.08)
     if climate == "tropical_maritime":
         if month in (4, 5, 6, 7, 8):
-            return (0.28, 0.34, 0.28, 0.0, 0.0, 0.30, 0.0)
-        return (0.47, 0.29, 0.16, 0.0, 0.0, 0.14, 0.0)
+            return (0.28, 0.45, 0.50, 0.0, 0.0, 1.25, 0.0)
+        return (0.47, 0.35, 0.25, 0.0, 0.0, 0.75, 0.0)
     if climate == "warm_maritime":
-        return (0.42, 0.35, 0.16, 0.0, 0.0, 0.22 if shoulder else 0.10, 0.0)
+        return (0.42, 0.60, 0.25, 0.0, 0.0, 0.90 if shoulder else 0.60, 0.0)
     raise ValueError(f"unknown climate profile: {climate}")
 
 
@@ -467,6 +478,34 @@ def arctic_water(climate: str, month: int) -> float:
         return 0.70 if month in (11, 0, 1) else 0.35 if month in (2, 3, 9, 10) else 0.08
     if climate == "subpolar_ocean":
         return 0.25 if month in (11, 0, 1) else 0.05 if month in (2, 10) else 0.0
+    return 0.0
+
+
+def minimum_snow_level(climate: str, month: int) -> float:
+    """Use vanilla-scale floors; startup accumulation is handled globally.
+
+    This value is not a deterministic initial snow layer.  Raising it above
+    vanilla's usual 0.1-0.3 range only distorts weather after a snowy state has
+    already been selected, while leaving the initial region-shaped gaps intact.
+    """
+    winter = month in (11, 0, 1)
+    shoulder = month in (2, 3, 9, 10)
+    if climate == "polar_ocean":
+        return 0.20 if winter else 0.10 if shoulder else 0.0
+    if climate == "polar":
+        return 0.30 if winter else 0.20 if shoulder else 0.0
+    if climate == "subpolar_ocean":
+        return 0.10 if winter else 0.03 if shoulder else 0.0
+    if climate in ("subarctic_maritime", "subarctic_continental"):
+        return 0.20 if winter else 0.10 if shoulder else 0.0
+    if climate == "cold_highland":
+        return 0.30 if winter else 0.15 if shoulder else 0.0
+    if climate in ("cool_maritime", "boreal_wet", "cool_continental", "cool_highland"):
+        return 0.10 if winter else 0.0
+    if climate == "temperate_highland":
+        return 0.10 if winter else 0.0
+    if climate == "arid_highland":
+        return 0.05 if winter else 0.0
     return 0.0
 
 
@@ -941,7 +980,7 @@ def format_weather(climate: str) -> str:
             f"\t\t\tarctic_water={arctic_water(climate, month):.2f}",
             f"\t\t\tmud={mud:.2f}",
             f"\t\t\tsandstorm={sandstorm:.2f}",
-            "\t\t\tmin_snow_level=0.00",
+            f"\t\t\tmin_snow_level={minimum_snow_level(climate, month):.2f}",
             "\t\t}",
         ))
     lines.append("\t}")
