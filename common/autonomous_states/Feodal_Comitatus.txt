@@ -30,9 +30,9 @@ autonomy_state = {
 	}
 
 	allowed_levels_filter = {
-		autonomy_puppet
+		autonomy_feodal_baronage
 		autonomy_feodal_comitatus
-		autonomy_ducatis_in_bezhaisk
+		autonomy_feodal_ducatus
 	}
 
 	ai_overlord_wants_garrison = {

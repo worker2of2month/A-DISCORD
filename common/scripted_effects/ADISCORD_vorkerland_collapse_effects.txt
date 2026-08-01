@@ -190,15 +190,18 @@ ADISCORD_vorkerland_remove_conflict_spirits = {
 }
 
 ADISCORD_vorkerland_teardown_confederation = {
-	if = { limit = { NAM = { is_subject_of = WRK } } WRK = { end_puppet = NAM } }
-	if = { limit = { DAN = { is_subject_of = WRK } } WRK = { end_puppet = DAN } }
-	if = { limit = { VAD = { is_subject_of = WRK } } WRK = { end_puppet = VAD } }
-	if = { limit = { ZAO = { is_subject_of = WRK } } WRK = { end_puppet = ZAO } }
-	if = { limit = { PWR = { is_subject_of = WRK } } WRK = { end_puppet = PWR } }
-	if = { limit = { VLA = { is_subject_of = WRK } } WRK = { end_puppet = VLA } }
-	if = { limit = { ROM = { is_subject_of = WRK } } WRK = { end_puppet = ROM } }
-	if = { limit = { SOL = { is_subject_of = WRK } } WRK = { end_puppet = SOL } }
-	if = { limit = { TRU = { is_subject_of = WRK } } WRK = { end_puppet = TRU } }
+	# The legacy subject-release effect can leave the old overlord relation alive until the next
+	# diplomatic update. The war event fires on the following day, so promote
+	# every confederation member explicitly before the collapse wars begin.
+	if = { limit = { NAM = { is_subject_of = WRK } } WRK = { set_autonomy = { target = NAM autonomy_state = autonomy_free } } }
+	if = { limit = { DAN = { is_subject_of = WRK } } WRK = { set_autonomy = { target = DAN autonomy_state = autonomy_free } } }
+	if = { limit = { VAD = { is_subject_of = WRK } } WRK = { set_autonomy = { target = VAD autonomy_state = autonomy_free } } }
+	if = { limit = { ZAO = { is_subject_of = WRK } } WRK = { set_autonomy = { target = ZAO autonomy_state = autonomy_free } } }
+	if = { limit = { PWR = { is_subject_of = WRK } } WRK = { set_autonomy = { target = PWR autonomy_state = autonomy_free } } }
+	if = { limit = { VLA = { is_subject_of = WRK } } WRK = { set_autonomy = { target = VLA autonomy_state = autonomy_free } } }
+	if = { limit = { ROM = { is_subject_of = WRK } } WRK = { set_autonomy = { target = ROM autonomy_state = autonomy_free } } }
+	if = { limit = { SOL = { is_subject_of = WRK } } WRK = { set_autonomy = { target = SOL autonomy_state = autonomy_free } } }
+	if = { limit = { TRU = { is_subject_of = WRK } } WRK = { set_autonomy = { target = TRU autonomy_state = autonomy_free } } }
 	if = { limit = { WRK = { is_faction_leader = yes } } WRK = { dismantle_faction = yes } }
 }
 

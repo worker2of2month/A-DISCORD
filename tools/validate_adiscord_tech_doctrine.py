@@ -1249,18 +1249,53 @@ def check_infantry_visual_model_chain() -> list[str]:
             )
 
     legacy_asset = ROOT / "gfx" / "units_infantry.asset"
-    canonical_asset = ROOT / "gfx" / "entities" / "units_infantry.asset"
+    vanilla_override = ROOT / "gfx" / "entities" / "units_infantry.asset"
+    early_custom_asset = (
+        ROOT / "gfx" / "entities" / "ADISCORD_country_infantry.asset"
+    )
+    canonical_asset = (
+        ROOT / "gfx" / "entities" / "zz_ADISCORD_country_infantry.asset"
+    )
     if legacy_asset.exists():
+        issues.append("gfx/units_infantry.asset is an obsolete vanilla override")
+    if vanilla_override.exists():
         issues.append(
-            "gfx/units_infantry.asset duplicates gfx/entities/units_infantry.asset"
+            "gfx/entities/units_infantry.asset overrides the current vanilla models"
+        )
+    if early_custom_asset.exists():
+        issues.append(
+            "ADISCORD_country_infantry.asset loads before its vanilla clone parents"
+        )
+    if canonical_asset.name.casefold() <= "units_infantry.asset":
+        issues.append(
+            "country infantry asset must load after vanilla units_infantry.asset"
         )
     if not canonical_asset.exists():
-        issues.append("gfx/entities/units_infantry.asset missing")
+        issues.append("gfx/entities/zz_ADISCORD_country_infantry.asset missing")
     else:
         asset_text = read_text(canonical_asset)
-        for entity in ("infantry_entity", "infantry_2_entity", "infantry_3_entity"):
+        for entity in (
+            "STP_infantry_entity",
+            "STP_infantry_2_entity",
+            "NOD_infantry_entity",
+            "NOD_infantry_2_entity",
+            "VAL_infantry_entity",
+            "VAL_infantry_2_entity",
+            "CIN_infantry_entity",
+            "CIN_infantry_2_entity",
+            "CIN_infantry_3_entity",
+            "OSF_infantry_entity",
+            "OSF_infantry_2_entity",
+            "OSF_infantry_3_entity",
+            "APH_infantry_entity",
+            "APH_infantry_2_entity",
+            "APH_infantry_3_entity",
+            "APH_mountaineers_entity",
+            "APH_mountaineers_2_entity",
+            "APH_mountaineers_3_entity",
+        ):
             if not re.search(rf'\bname\s*=\s*"{entity}"', asset_text):
-                issues.append(f"canonical infantry asset is missing {entity}")
+                issues.append(f"A-Discord infantry asset is missing {entity}")
     return issues
 
 

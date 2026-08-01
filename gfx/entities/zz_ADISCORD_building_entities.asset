@@ -1,0 +1,7 @@
+# A-Discord-only entity aliases. Vanilla building entities stay owned by the
+# current HOI4 installation so game updates do not leave stale full-file copies.
+
+entity = {
+	clone = "building_dam"
+	name = "building_hidden_dam"
+}

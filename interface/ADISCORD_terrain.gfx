@@ -1,0 +1,8 @@
+spriteTypes = {
+	# The contaminated terrain is an A-Discord map type. Reuse the desert card
+	# until dedicated artwork exists so stateview never requests a missing sprite.
+	spriteType = {
+		name = "GFX_terrain_contaminated"
+		textureFile = "gfx/interface/terrains/terrain_desert.dds"
+	}
+}

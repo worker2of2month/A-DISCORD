@@ -71,6 +71,20 @@ particle={
 		time="life"
 	}
 	force={
+		type="planar"
+		name="sidewind"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			-1.000 0.000 0.000
+		}
+		local_force=yes
+		yaw=0.000
+		division=16
+		amount=-1.000
+	}
+	force={
 		type="turbulence"
 		name="chaos"
 		position={

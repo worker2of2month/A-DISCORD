@@ -385,7 +385,7 @@ def build_flags() -> None:
         target = ROOT / "gfx" / "flags" / folder
         target.mkdir(parents=True, exist_ok=True)
         for tag, drawer in drawers.items():
-            drawer(size).save(target / f"{tag}.tga", compression=None)
+            drawer(size).convert("RGBA").save(target / f"{tag}.tga", compression=None)
 
 
 def detach_northern_lighthouse() -> None:

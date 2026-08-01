@@ -12,6 +12,13 @@ autonomy_state = {
 		can_not_declare_war = yes
 		can_decline_call_to_war = no
 	}
+
+	allowed_levels_filter = {
+		autonomy_integrated_puppet
+		autonomy_puppet
+		autonomy_colony
+		autonomy_dominion
+	}
 	
 	modifier = {
 		autonomy_manpower_share = 0.0

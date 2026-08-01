@@ -455,8 +455,13 @@ class EventOrchestrationTests(unittest.TestCase):
         effects = self.EFFECTS_PATH.read_text(encoding='utf-8-sig')
         teardown = self.named_block(effects, 'ADISCORD_vorkerland_teardown_confederation')
         for tag in ('NAM', 'DAN', 'VAD', 'ZAO', 'PWR', 'VLA', 'ROM', 'SOL', 'TRU'):
-            self.assertRegex(teardown, rf'WRK\s*=\s*\{{\s*end_puppet\s*=\s*{tag}\s*\}}')
-        self.assertLess(teardown.rindex('end_puppet ='), teardown.index('dismantle_faction = yes'))
+            self.assertRegex(
+                teardown,
+                rf'WRK\s*=\s*\{{\s*set_autonomy\s*=\s*\{{\s*target\s*=\s*{tag}\s+'
+                rf'autonomy_state\s*=\s*autonomy_free\s*\}}\s*\}}',
+            )
+        self.assertNotIn('end_puppet', teardown)
+        self.assertLess(teardown.rindex('autonomy_free'), teardown.index('dismantle_faction = yes'))
         initial_map = self.named_block(effects, 'ADISCORD_vorkerland_apply_initial_map')
         for tag, states in self.INITIAL_MAP.items():
             if tag in self.NEW_TAGS:

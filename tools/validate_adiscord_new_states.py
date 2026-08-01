@@ -222,6 +222,7 @@ def validate_countries() -> None:
             if flag.is_file():
                 with Image.open(flag) as image:
                     check(image.size == size, f"{tag}: {folder or 'large'} flag has size {image.size}, expected {size}")
+                    check(image.mode == "RGBA", f"{tag}: {folder or 'large'} flag must be 32bpp RGBA, got {image.mode}")
         for key in (
             tag,
             f"{tag}_DEF",

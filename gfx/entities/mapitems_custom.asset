@@ -64,6 +64,15 @@ entity = {
 	pdxmesh = "ADISCORD_vorkerland_pyramid_mesh"
 
 	locator = { name = "smog_particle_1" position = { 0.0 5.0 0.0 } }
+	# Preserve A-Discord's denser seven-point city-smoke composition on the
+	# Vorkerland pyramid only instead of overriding vanilla city_smoke_entity.
+	locator = { name = "ADISCORD_city_smoke_1" position = { 1.0 0.1 -1.8 } }
+	locator = { name = "ADISCORD_city_smoke_2" position = { 0.1 0.0 0.0 } }
+	locator = { name = "ADISCORD_city_smoke_3" position = { -2.0 0.0 1.5 } }
+	locator = { name = "ADISCORD_city_smoke_4" position = { 3.0 0.0 1.0 } }
+	locator = { name = "ADISCORD_city_smoke_5" position = { -1.5 0.0 0.5 } }
+	locator = { name = "ADISCORD_city_smoke_6" position = { 2.0 0.0 -0.5 } }
+	locator = { name = "ADISCORD_city_smoke_7" position = { 0.0 0.0 1.0 } }
 
 	default_state = "idle"
 	state = { name = "idle"
@@ -71,6 +80,13 @@ entity = {
 			time = 0.0 node="smog_particle_1"   
 			particle = "smog_particle"
 		}
+		event = { time = 0 node = "ADISCORD_city_smoke_1" particle = "city_smoke_particle" keep_particle = yes }
+		event = { time = 0 node = "ADISCORD_city_smoke_2" particle = "city_smoke_l_particle" keep_particle = yes }
+		event = { time = 0 node = "ADISCORD_city_smoke_3" particle = "city_smoke_particle" keep_particle = yes }
+		event = { time = 0 node = "ADISCORD_city_smoke_4" particle = "city_smoke_s_particle" keep_particle = yes }
+		event = { time = 0 node = "ADISCORD_city_smoke_5" particle = "city_smoke_l_particle" keep_particle = yes }
+		event = { time = 0 node = "ADISCORD_city_smoke_6" particle = "city_smoke_s_particle" keep_particle = yes }
+		event = { time = 0 node = "ADISCORD_city_smoke_7" particle = "city_smoke_particle" keep_particle = yes }
 	}
 }
 

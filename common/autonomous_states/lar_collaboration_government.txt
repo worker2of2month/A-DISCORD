@@ -43,4 +43,8 @@ autonomy_state = {
 		has_dlc = "La Resistance"
 		has_variable = collaboration_formed_by
 	}
+
+	allowed_levels_filter = {
+		autonomy_collaboration_government
+	}
 }

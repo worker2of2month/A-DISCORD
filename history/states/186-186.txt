@@ -5,6 +5,7 @@ state={
 		1112 16517 16525 16532 
 	}
 	manpower=0
+	state_category = rural
 	buildings_max_level_factor=1
 	local_supplies=0
 	history = {

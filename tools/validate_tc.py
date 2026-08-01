@@ -242,6 +242,8 @@ def parse_states():
             provs = [int(x) for x in re.findall(r"\d+", extract_block(text, pm.start()))]
         owners = re.findall(r"\bowner\s*=\s*([A-Z][A-Z0-9]{2,3})\b", text)
         cores = re.findall(r"\badd_core_of\s*=\s*([A-Z][A-Z0-9]{2,3})\b", text)
+        category_match = re.search(r"\bstate_category\s*=\s*([A-Za-z_][A-Za-z0-9_]*)", text)
+        category = category_match.group(1) if category_match else None
         vps = [int(x) for x in re.findall(r"\bvictory_points\s*=\s*\{\s*(\d+)\b", text)]
         building_provs = []
         bm = re.search(r"\bbuildings\s*=\s*\{", text)
@@ -255,6 +257,7 @@ def parse_states():
                 "provinces": provs,
                 "owners": owners,
                 "cores": cores,
+                "category": category,
                 "vps": vps,
                 "building_provs": building_provs,
             }
@@ -307,6 +310,8 @@ def check_states(tags, provinces, limit):
             issues.append(f"{rel(state['file'])}: missing state id")
         else:
             state_ids[state["id"]].append(state["file"])
+        if state["category"] is None:
+            issues.append(f"{rel(state['file'])}: missing state_category")
         state_provs = set(state["provinces"])
         for province in state["provinces"]:
             province_to_states[province].append(state)
@@ -428,27 +433,157 @@ def check_entity_unit_mesh_refs(limit):
     return issues[:limit], len(issues)
 
 
-def check_gfx_root_entity_mirrors(limit):
+def check_gfx_entity_ownership(limit):
     issues = []
     entity_dir = ROOT / "gfx" / "entities"
     root_gfx = ROOT / "gfx"
     if not entity_dir.exists() or not root_gfx.exists():
         return issues, 0
-    expected = [
-        "ADISCORD_vanilla_unit_entity_compat.asset",
-        "buildings.asset",
-        "infantry.gfx",
-        "particle_entities.asset",
-        "particles.gfx",
-        "particles_custom.gfx",
+
+    required = [
+        entity_dir / "ADISCORD_country_infantry.gfx",
+        entity_dir / "zz_ADISCORD_country_infantry.asset",
+        entity_dir / "zz_ADISCORD_building_entities.asset",
+        entity_dir / "mapitems_custom.asset",
+        entity_dir / "particles_custom.gfx",
+        root_gfx / "particles" / "environment" / "smog.asset",
     ]
-    for name in expected:
-        source = entity_dir / name
-        mirror = root_gfx / name
-        if source.exists() and not mirror.exists():
-            issues.append(f"{rel(mirror)} is missing root-level mirror for {rel(source)}")
-        elif source.exists() and mirror.exists() and source.read_bytes() != mirror.read_bytes():
-            issues.append(f"{rel(mirror)} differs from {rel(source)}")
+    for path in required:
+        if not path.is_file():
+            issues.append(f"{rel(path)} is missing required A-Discord entity addendum")
+
+    forbidden = [
+        root_gfx / "ADISCORD_country_infantry.gfx",
+        root_gfx / "buildings.asset",
+        root_gfx / "particle_entities.asset",
+        root_gfx / "particles.gfx",
+        root_gfx / "particles_custom.gfx",
+        entity_dir / "buildings.asset",
+        entity_dir / "particle_entities.asset",
+        entity_dir / "particles.gfx",
+    ]
+    for path in forbidden:
+        if path.exists():
+            issues.append(f"{rel(path)} overrides or duplicates the vanilla 1.19 entity database")
+
+    for source in entity_dir.iterdir():
+        mirror = root_gfx / source.name
+        if source.is_file() and mirror.is_file() and source.read_bytes() == mirror.read_bytes():
+            issues.append(f"{rel(mirror)} exactly duplicates {rel(source)}")
+
+    mapitems_path = entity_dir / "mapitems_custom.asset"
+    if mapitems_path.is_file():
+        mapitems = read_text(mapitems_path)
+        pyramid = ""
+        for entity_match in re.finditer(r"\bentity\s*=\s*\{", mapitems):
+            block = extract_block(mapitems, entity_match.start())
+            if re.search(
+                r'\bname\s*=\s*"ADISCORD_vorkerland_pyramid_entity"', block
+            ):
+                pyramid = block
+                break
+        for index in range(1, 8):
+            locator = f'ADISCORD_city_smoke_{index}'
+            if pyramid.count(locator) < 2:
+                issues.append(
+                    f"{rel(mapitems_path)}: Vorkerland pyramid is missing locator/event pair {locator}"
+                )
+
+    smog_path = root_gfx / "particles" / "environment" / "smog.asset"
+    if smog_path.is_file():
+        smog = read_text(smog_path)
+        if "force=chaos,sidewind" in smog and not re.search(
+            r'force\s*=\s*\{(?:(?!\n\s*force\s*=).)*?name\s*=\s*"sidewind"',
+            smog,
+            re.DOTALL,
+        ):
+            issues.append(f'{rel(smog_path)}: smog references undefined particle force "sidewind"')
+
+    for path in sorted(entity_dir.glob("*.asset")):
+        if re.search(r'\bname\s*=\s*"city_smoke_entity"', read_text(path)):
+            issues.append(
+                f"{rel(path)} globally overrides vanilla city_smoke_entity; keep custom smoke on ADISCORD entities"
+            )
+
+    terrain_path = ROOT / "interface" / "ADISCORD_terrain.gfx"
+    terrain = read_text(terrain_path) if terrain_path.is_file() else ""
+    if not re.search(r'\bname\s*=\s*"GFX_terrain_contaminated"', terrain):
+        issues.append(
+            f'{rel(terrain_path)} is missing sprite GFX_terrain_contaminated for the custom terrain'
+        )
+
+    music_station = ROOT / "music" / "one_minute.txt"
+    music_gui_path = ROOT / "interface" / "ADISCORD_musicplayer_compat.gui"
+    if music_station.is_file():
+        music_gui = read_text(music_gui_path) if music_gui_path.is_file() else ""
+        for widget in ("one_minute_faceplate", "one_minute_stations_entry"):
+            if not re.search(rf'\bname\s*=\s*"{widget}"', music_gui):
+                issues.append(
+                    f'{rel(music_gui_path)} is missing {widget} required by music station one_minute'
+                )
+    return issues[:limit], len(issues)
+
+
+def check_autonomy_chains(limit):
+    issues = []
+    standard = {
+        "autonomy_integrated_puppet",
+        "autonomy_puppet",
+        "autonomy_colony",
+        "autonomy_dominion",
+    }
+    vorkerland = {
+        "autonomy_district_in_Vorkerland",
+        "autonomy_republic_in_Vorkerland",
+    }
+    feudal = {
+        "autonomy_feodal_baronage",
+        "autonomy_feodal_comitatus",
+        "autonomy_feodal_ducatus",
+    }
+    contracts = {
+        "autonomy_contract_protectorate",
+        "autonomy_contract_client",
+    }
+    expected = {
+        **{identifier: standard for identifier in standard},
+        **{identifier: vorkerland for identifier in vorkerland},
+        **{identifier: feudal for identifier in feudal},
+        **{identifier: contracts for identifier in contracts},
+        "autonomy_shadow_state": {"autonomy_shadow_state"},
+        "autonomy_supervised_state": {"autonomy_supervised_state"},
+        "autonomy_collaboration_government": {"autonomy_collaboration_government"},
+    }
+
+    autonomy_dir = ROOT / "common" / "autonomous_states"
+    found = set()
+    if not autonomy_dir.is_dir():
+        issues.append(f"{rel(autonomy_dir)} is missing")
+        return issues[:limit], len(issues)
+
+    for path in sorted(autonomy_dir.glob("*.txt")):
+        text = strip_comments(read_text(path))
+        for state_match in re.finditer(r"\bautonomy_state\s*=\s*\{", text):
+            block = extract_block(text, state_match.start())
+            id_match = re.search(r"\bid\s*=\s*([A-Za-z0-9_]+)", block)
+            if not id_match or id_match.group(1) not in expected:
+                continue
+            identifier = id_match.group(1)
+            found.add(identifier)
+            filter_match = re.search(
+                r"\ballowed_levels_filter\s*=\s*\{(?P<body>[^{}]*)\}",
+                block,
+                re.DOTALL,
+            )
+            actual = set(re.findall(r"\bautonomy_[A-Za-z0-9_]+\b", filter_match.group("body"))) if filter_match else set()
+            if actual != expected[identifier]:
+                issues.append(
+                    f"{rel(path)}: {identifier} leaks between autonomy chains; "
+                    f"expected {sorted(expected[identifier])}, found {sorted(actual)}"
+                )
+
+    for identifier in sorted(set(expected) - found):
+        issues.append(f"common/autonomous_states: missing audited autonomy state {identifier}")
     return issues[:limit], len(issues)
 
 
@@ -479,6 +614,12 @@ def check_vanilla_filename_leftovers(tags, limit):
             tag = path.stem
             if tag in vanilla_tags:
                 issues.append(f"{rel(path)}: vanilla country flag file without matching mod tag")
+            if path.suffix.lower() == ".tga":
+                data = path.read_bytes()
+                if len(data) < 18:
+                    issues.append(f"{rel(path)}: malformed TGA header")
+                elif data[16] != 32:
+                    issues.append(f"{rel(path)}: {data[16]}bpp TGA should be 32bpp for HOI4 runtime loading")
 
     return issues[:limit], len(issues)
 
@@ -712,8 +853,11 @@ def main():
     entity_issues, entity_total = check_entity_unit_mesh_refs(args.limit)
     print_section("Entity unit mesh refs", entity_issues, entity_total)
 
-    gfx_mirror_issues, gfx_mirror_total = check_gfx_root_entity_mirrors(args.limit)
-    print_section("GFX root entity mirrors", gfx_mirror_issues, gfx_mirror_total)
+    gfx_entity_issues, gfx_entity_total = check_gfx_entity_ownership(args.limit)
+    print_section("GFX entity ownership", gfx_entity_issues, gfx_entity_total)
+
+    autonomy_issues, autonomy_total = check_autonomy_chains(args.limit)
+    print_section("Autonomy chain isolation", autonomy_issues, autonomy_total)
 
     filename_issues, filename_total = check_vanilla_filename_leftovers(tags, args.limit)
     print_section("Vanilla filename leftovers", filename_issues, filename_total)

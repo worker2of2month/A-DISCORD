@@ -5,6 +5,7 @@ state={
 		4217 7713 8532 9685 9894 10130 11382 
 	}
 	manpower=0
+	state_category = rural
 	buildings_max_level_factor=1
 	local_supplies=0
 

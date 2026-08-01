@@ -312,6 +312,15 @@ def validate_events(root: Path, issues: list[str]) -> None:
         ):
             if helper not in effects:
                 issues.append(f"collapse effects are missing {helper}")
+        for tag in ("NAM", "DAN", "VAD", "ZAO", "PWR", "VLA", "ROM", "SOL", "TRU"):
+            if re.search(
+                rf"WRK\s*=\s*\{{\s*set_autonomy\s*=\s*\{{\s*target\s*=\s*{tag}\s+"
+                rf"autonomy_state\s*=\s*autonomy_free\s*\}}\s*\}}",
+                effects,
+            ) is None:
+                issues.append(f"collapse teardown must release {tag} with autonomy_free")
+        if re.search(r"\bend_puppet\s*=", effects):
+            issues.append("collapse teardown must not rely on delayed end_puppet updates")
         if "ADISCORD_vorkerland_prepare_conflict_country" not in effects:
             issues.append("collapse effects do not prepare combatant national spirits")
     if dirty_effects and ("give_guarantee" in dirty_effects or "has_guaranteed" in dirty_effects):

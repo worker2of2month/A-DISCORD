@@ -12,6 +12,13 @@ autonomy_state = {
 		can_decline_call_to_war = no
 		units_deployed_to_overlord = yes
 	}
+
+	allowed_levels_filter = {
+		autonomy_integrated_puppet
+		autonomy_puppet
+		autonomy_colony
+		autonomy_dominion
+	}
 	
 	modifier = {
 		autonomy_manpower_share = 1.0

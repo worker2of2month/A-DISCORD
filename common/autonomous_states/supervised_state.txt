@@ -38,6 +38,18 @@ autonomy_state = {
 		always = no
 	}
 
+	allowed = {
+		has_dlc = "Man the Guns"
+		OR = {
+			is_subject = no
+			has_autonomy_state = autonomy_supervised_state
+		}
+	}
+
+	allowed_levels_filter = {
+		autonomy_supervised_state
+	}
+
 	can_take_level = {
 		#trigger here
 	}
