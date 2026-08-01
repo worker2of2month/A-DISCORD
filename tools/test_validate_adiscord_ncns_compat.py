@@ -31,6 +31,7 @@ class NcnsFactionCompatibilityTests(unittest.TestCase):
     def test_faction_template_is_mod_native(self):
         template = read("common/factions/templates/ADISCORD_faction_templates.txt")
         manifest = read("common/factions/goals/ADISCORD_faction_manifests.txt")
+        goals = read("common/factions/goals/ADISCORD_faction_goals.txt")
         leadership_rule = read("common/factions/rules/ADISCORD_change_leader_rules.txt")
         rule_group = read("common/factions/rules/groups/ADISCORD_rule_groups.txt")
         self.assertIn("faction_template_ADISCORD_standard", template)
@@ -40,6 +41,18 @@ class NcnsFactionCompatibilityTests(unittest.TestCase):
         self.assertIn("total_amount = 1", manifest)
         self.assertIn("completed_amount = 1", manifest)
         self.assertNotIn("completed =", manifest)
+        for goal_id, category in (
+            ("ADISCORD_faction_goal_operational_continuity", "short_term"),
+            ("ADISCORD_faction_goal_strategic_coordination", "medium_term"),
+            ("ADISCORD_faction_goal_long_term_security", "long_term"),
+        ):
+            self.assertIn(goal_id, template)
+            self.assertRegex(
+                goals,
+                rf"(?s){goal_id}\s*=\s*\{{.*?category\s*=\s*{category}.*?"
+                r"group\s*=\s*FOCUS_FILTER_POLITICAL_CHARACTER",
+            )
+        self.assertEqual(3, template.count("ADISCORD_faction_goal_"))
         self.assertIn("change_leader_rule_influence", leadership_rule)
         self.assertIn("change_leader_rule_influence", rule_group)
         self.assertNotRegex(template + manifest + leadership_rule + rule_group, r"\b(?:democratic|fascism|communism|neutrality)\b")

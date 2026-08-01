@@ -1,0 +1,37 @@
+# A-Discord replaces the complete NCNS faction database. Keep one stable goal
+# in every duration slot: an entirely empty selectable-goal pool makes the
+# HOI4 1.19 faction AI enqueue a set-goal command with an invalid database
+# pointer. These permanent goals preserve the mod's legacy alliance behavior
+# while giving the engine valid objects for all three slots.
+ADISCORD_faction_goal_operational_continuity = {
+	name = ADISCORD_faction_goal_operational_continuity
+	description = ADISCORD_faction_goal_operational_continuity_desc
+	category = short_term
+	group = FOCUS_FILTER_POLITICAL_CHARACTER
+	visible = { always = yes }
+	available = { always = yes }
+	completed = { always = no }
+	ai_will_do = { factor = 0 }
+}
+
+ADISCORD_faction_goal_strategic_coordination = {
+	name = ADISCORD_faction_goal_strategic_coordination
+	description = ADISCORD_faction_goal_strategic_coordination_desc
+	category = medium_term
+	group = FOCUS_FILTER_POLITICAL_CHARACTER
+	visible = { always = yes }
+	available = { always = yes }
+	completed = { always = no }
+	ai_will_do = { factor = 0 }
+}
+
+ADISCORD_faction_goal_long_term_security = {
+	name = ADISCORD_faction_goal_long_term_security
+	description = ADISCORD_faction_goal_long_term_security_desc
+	category = long_term
+	group = FOCUS_FILTER_POLITICAL_CHARACTER
+	visible = { always = yes }
+	available = { always = yes }
+	completed = { always = no }
+	ai_will_do = { factor = 0 }
+}

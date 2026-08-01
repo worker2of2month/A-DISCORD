@@ -9,4 +9,12 @@ faction_template_ADISCORD_standard = {
 
 	visible = { always = no }
 	available = { always = yes }
+
+	# Fill every NCNS goal slot at creation. Leaving the mod-owned goal database
+	# empty lets the faction AI enqueue an invalid set-goal command in HOI4 1.19.
+	goals = {
+		ADISCORD_faction_goal_operational_continuity
+		ADISCORD_faction_goal_strategic_coordination
+		ADISCORD_faction_goal_long_term_security
+	}
 }
