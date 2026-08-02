@@ -156,11 +156,16 @@ class NationalFocusGuiContractTests(unittest.TestCase):
 
 
 class RuntimePulseTests(unittest.TestCase):
-    def test_economy_has_no_weekly_full_player_refresh(self):
+    def test_economy_weekly_pulse_uses_the_light_settlement(self):
         text = (ROOT / 'common' / 'on_actions' / '00_ADISCORD_on_actions.txt').read_text(
             encoding='utf-8-sig'
         )
 
+        self.assertRegex(
+            text,
+            r'(?s)\bon_weekly\s*=\s*\{.*?ADISCORD_economy_should_weekly_update\s*=\s*yes'
+            r'.*?ADISCORD_economy_weekly_update\s*=\s*yes',
+        )
         self.assertNotRegex(
             text,
             r'(?s)\bon_weekly\s*=\s*\{.*?ADISCORD_economy_weekly_player_refresh\s*=\s*yes',

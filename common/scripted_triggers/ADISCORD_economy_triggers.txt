@@ -45,6 +45,13 @@ ADISCORD_economy_should_monthly_update = {
 	}
 }
 
+ADISCORD_economy_should_weekly_update = {
+	OR = {
+		ADISCORD_economy_is_player_tier_country = yes
+		ADISCORD_economy_is_primary_tier_country = yes
+	}
+}
+
 ADISCORD_economy_should_yearly_update = {
 	ADISCORD_economy_is_secondary_tier_country = yes
 	NOT = { ADISCORD_economy_should_monthly_update = yes }

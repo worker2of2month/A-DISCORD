@@ -101,6 +101,16 @@ on_actions = {
 			}
 		}
 	}
+	on_weekly = {
+		effect = {
+			# Country-scoped cash settlement. Forecast inputs are cached country
+			# variables; no country or state iteration is allowed in this pulse.
+			if = {
+				limit = { ADISCORD_economy_should_weekly_update = yes }
+				ADISCORD_economy_weekly_update = yes
+			}
+		}
+	}
 	on_monthly = {
 		effect = {
 			# HOI4 monthly pulse is already country-scoped. Do not every_country here.

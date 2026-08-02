@@ -28,7 +28,7 @@ ADISCORD_economy_migrate_schema = {
 		limit = {
 			OR = {
 				NOT = { has_variable = ADISCORD_economy_schema_version }
-				check_variable = { var = ADISCORD_economy_schema_version value = 5 compare = less_than }
+				check_variable = { var = ADISCORD_economy_schema_version value = 6 compare = less_than }
 			}
 		}
 		ADISCORD_economy_initialize_variables = yes
@@ -42,7 +42,7 @@ ADISCORD_economy_migrate_schema = {
 		if = { limit = { NOT = { has_variable = ADISCORD_economy_social_budget_change_cooldown } } set_variable = { var = ADISCORD_economy_social_budget_change_cooldown value = 0 } }
 		if = { limit = { NOT = { has_variable = ADISCORD_economy_gui_page } } set_variable = { var = ADISCORD_economy_gui_page value = 0 } }
 		set_variable = { var = ADISCORD_economy_last_idea_signature value = -1 }
-		set_variable = { var = ADISCORD_economy_schema_version value = 5 }
+		set_variable = { var = ADISCORD_economy_schema_version value = 6 }
 		set_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 }
 	}
 }
@@ -83,7 +83,23 @@ ADISCORD_economy_initialize_variables = {
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_auto_borrowing } } set_variable = { var = ADISCORD_economy_last_auto_borrowing value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_uncovered_deficit } } set_variable = { var = ADISCORD_economy_last_uncovered_deficit value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_auto_loan_enabled } } set_variable = { var = ADISCORD_economy_auto_loan_enabled value = 1 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_weekly_income } } set_variable = { var = ADISCORD_economy_weekly_income value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_weekly_expenses } } set_variable = { var = ADISCORD_economy_weekly_expenses value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_weekly_balance } } set_variable = { var = ADISCORD_economy_weekly_balance value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_weekly_balance_applied } } set_variable = { var = ADISCORD_economy_last_weekly_balance_applied value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_accounting_period_treasury_start } } set_variable = { var = ADISCORD_economy_accounting_period_treasury_start value = ADISCORD_economy_treasury } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_period_treasury_before } } set_variable = { var = ADISCORD_economy_last_period_treasury_before value = ADISCORD_economy_treasury } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_period_treasury_after } } set_variable = { var = ADISCORD_economy_last_period_treasury_after value = ADISCORD_economy_treasury } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_period_income } } set_variable = { var = ADISCORD_economy_last_period_income value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_period_expenses } } set_variable = { var = ADISCORD_economy_last_period_expenses value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_period_balance } } set_variable = { var = ADISCORD_economy_last_period_balance value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_period_action_income } } set_variable = { var = ADISCORD_economy_last_period_action_income value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_period_action_costs } } set_variable = { var = ADISCORD_economy_last_period_action_costs value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_period_building_costs } } set_variable = { var = ADISCORD_economy_last_period_building_costs value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_period_debt_added } } set_variable = { var = ADISCORD_economy_last_period_debt_added value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_period_debt_paid } } set_variable = { var = ADISCORD_economy_last_period_debt_paid value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_period_cap_writeoff } } set_variable = { var = ADISCORD_economy_last_period_cap_writeoff value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_period_unexplained_delta } } set_variable = { var = ADISCORD_economy_last_period_unexplained_delta value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_month_treasury_before } } set_variable = { var = ADISCORD_economy_last_month_treasury_before value = ADISCORD_economy_treasury } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_month_income } } set_variable = { var = ADISCORD_economy_last_month_income value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_last_month_expenses } } set_variable = { var = ADISCORD_economy_last_month_expenses value = 0 } }
@@ -124,12 +140,15 @@ ADISCORD_economy_initialize_variables = {
 
 ADISCORD_economy_set_default_values = {
 	set_variable = { var = ADISCORD_economy_initialized value = 1 }
-	set_variable = { var = ADISCORD_economy_schema_version value = 5 }
+	set_variable = { var = ADISCORD_economy_schema_version value = 6 }
 	set_variable = { var = ADISCORD_economy_treasury value = 100 }
 	set_variable = { var = ADISCORD_economy_treasury_cap value = 500 }
 	set_variable = { var = ADISCORD_economy_monthly_income value = 0 }
 	set_variable = { var = ADISCORD_economy_monthly_expenses value = 0 }
 	set_variable = { var = ADISCORD_economy_monthly_balance value = 0 }
+	set_variable = { var = ADISCORD_economy_weekly_income value = 0 }
+	set_variable = { var = ADISCORD_economy_weekly_expenses value = 0 }
+	set_variable = { var = ADISCORD_economy_weekly_balance value = 0 }
 	set_variable = { var = ADISCORD_economy_personal_income value = 0 }
 	set_variable = { var = ADISCORD_economy_business_income value = 0 }
 	set_variable = { var = ADISCORD_economy_consumer_goods_income value = 0 }
@@ -214,7 +233,20 @@ ADISCORD_economy_set_default_values = {
 	set_variable = { var = ADISCORD_economy_treasury_after_tick value = 0 }
 	set_variable = { var = ADISCORD_economy_actual_treasury_delta value = 0 }
 	set_variable = { var = ADISCORD_economy_last_monthly_balance_applied value = 0 }
+	set_variable = { var = ADISCORD_economy_last_weekly_balance_applied value = 0 }
 	set_variable = { var = ADISCORD_economy_accounting_period_treasury_start value = ADISCORD_economy_treasury }
+	set_variable = { var = ADISCORD_economy_last_period_treasury_before value = ADISCORD_economy_treasury }
+	set_variable = { var = ADISCORD_economy_last_period_treasury_after value = ADISCORD_economy_treasury }
+	set_variable = { var = ADISCORD_economy_last_period_income value = 0 }
+	set_variable = { var = ADISCORD_economy_last_period_expenses value = 0 }
+	set_variable = { var = ADISCORD_economy_last_period_balance value = 0 }
+	set_variable = { var = ADISCORD_economy_last_period_action_income value = 0 }
+	set_variable = { var = ADISCORD_economy_last_period_action_costs value = 0 }
+	set_variable = { var = ADISCORD_economy_last_period_building_costs value = 0 }
+	set_variable = { var = ADISCORD_economy_last_period_debt_added value = 0 }
+	set_variable = { var = ADISCORD_economy_last_period_debt_paid value = 0 }
+	set_variable = { var = ADISCORD_economy_last_period_cap_writeoff value = 0 }
+	set_variable = { var = ADISCORD_economy_last_period_unexplained_delta value = 0 }
 	set_variable = { var = ADISCORD_economy_last_month_treasury_before value = ADISCORD_economy_treasury }
 	set_variable = { var = ADISCORD_economy_last_month_income value = 0 }
 	set_variable = { var = ADISCORD_economy_last_month_expenses value = 0 }
@@ -273,7 +305,7 @@ ADISCORD_economy_monthly_update = {
 	ADISCORD_economy_calculate_monthly_balance = yes
 	ADISCORD_economy_update_ai_state = yes
 	if = { limit = { is_ai = yes } ADISCORD_economy_ai_monthly_policy = yes }
-	ADISCORD_economy_apply_monthly_balance = yes
+	ADISCORD_economy_update_monthly_budget_trend = yes
 	ADISCORD_economy_apply_tax_burden_side_effects = yes
 	ADISCORD_economy_update_fiscal_stress = yes
 	ADISCORD_economy_update_inflation = yes
@@ -346,6 +378,14 @@ ADISCORD_economy_light_update = {
 	ADISCORD_economy_calculate_expenses = yes
 	ADISCORD_economy_calculate_monthly_balance = yes
 	ADISCORD_economy_update_model_and_cycle = yes
+}
+
+ADISCORD_economy_weekly_update = {
+	ADISCORD_economy_initialize_country = yes
+	ADISCORD_economy_light_update = yes
+	ADISCORD_economy_calculate_weekly_budget = yes
+	ADISCORD_economy_apply_weekly_balance = yes
+	ADISCORD_economy_update_gui = yes
 }
 
 ADISCORD_economy_weekly_player_refresh = {
@@ -940,6 +980,119 @@ ADISCORD_economy_update_debt_crisis_level = {
 ADISCORD_economy_calculate_monthly_balance = {
 	set_variable = { var = ADISCORD_economy_monthly_balance value = ADISCORD_economy_monthly_income }
 	subtract_from_variable = { var = ADISCORD_economy_monthly_balance value = ADISCORD_economy_monthly_expenses }
+}
+
+ADISCORD_economy_calculate_weekly_budget = {
+	# 52 weekly settlements must equal the former twelve monthly settlements:
+	# 12 / 52 = 3 / 13.
+	set_variable = { var = ADISCORD_economy_weekly_income value = ADISCORD_economy_monthly_income }
+	multiply_variable = { var = ADISCORD_economy_weekly_income value = 3 }
+	divide_variable = { var = ADISCORD_economy_weekly_income value = 13 }
+	set_variable = { var = ADISCORD_economy_weekly_expenses value = ADISCORD_economy_monthly_expenses }
+	multiply_variable = { var = ADISCORD_economy_weekly_expenses value = 3 }
+	divide_variable = { var = ADISCORD_economy_weekly_expenses value = 13 }
+	set_variable = { var = ADISCORD_economy_weekly_balance value = ADISCORD_economy_weekly_income }
+	subtract_from_variable = { var = ADISCORD_economy_weekly_balance value = ADISCORD_economy_weekly_expenses }
+}
+
+ADISCORD_economy_update_monthly_budget_trend = {
+	# Macro pressure remains monthly even though cash now settles weekly.
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = greater_than_or_equals } }
+		set_variable = { var = ADISCORD_economy_deficit_streak value = 0 }
+		add_to_variable = { var = ADISCORD_economy_surplus_streak value = 1 }
+		add_to_variable = { var = ADISCORD_economy_deficit_pressure value = -2 }
+	}
+	else = {
+		add_to_variable = { var = ADISCORD_economy_deficit_pressure value = 1 }
+		add_to_variable = { var = ADISCORD_economy_deficit_streak value = 1 }
+		set_variable = { var = ADISCORD_economy_surplus_streak value = 0 }
+	}
+	clamp_variable = { var = ADISCORD_economy_deficit_streak min = 0 max = 24 }
+	clamp_variable = { var = ADISCORD_economy_surplus_streak min = 0 max = 24 }
+	clamp_variable = { var = ADISCORD_economy_deficit_pressure min = 0 max = 100 }
+}
+
+ADISCORD_economy_apply_weekly_balance = {
+	# One country, one week, one transparent cash settlement.
+	set_variable = { var = ADISCORD_economy_last_auto_borrowing value = 0 }
+	set_variable = { var = ADISCORD_economy_last_uncovered_deficit value = 0 }
+	set_variable = { var = ADISCORD_economy_last_weekly_balance_applied value = ADISCORD_economy_weekly_balance }
+	set_variable = { var = ADISCORD_economy_treasury_before_tick value = ADISCORD_economy_treasury }
+	set_variable = { var = ADISCORD_economy_last_period_treasury_before value = ADISCORD_economy_accounting_period_treasury_start }
+	set_variable = { var = ADISCORD_economy_last_period_income value = ADISCORD_economy_weekly_income }
+	set_variable = { var = ADISCORD_economy_last_period_expenses value = ADISCORD_economy_weekly_expenses }
+	set_variable = { var = ADISCORD_economy_last_period_balance value = ADISCORD_economy_weekly_balance }
+	set_variable = { var = ADISCORD_economy_last_period_debt_added value = ADISCORD_economy_current_month_debt_added }
+	set_variable = { var = ADISCORD_economy_last_period_debt_paid value = ADISCORD_economy_current_month_debt_paid }
+	set_variable = { var = ADISCORD_economy_last_period_action_costs value = ADISCORD_economy_current_month_action_costs }
+	set_variable = { var = ADISCORD_economy_last_period_action_income value = ADISCORD_economy_current_month_action_income }
+	set_variable = { var = ADISCORD_economy_last_period_building_costs value = ADISCORD_economy_current_month_building_costs }
+
+	add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_weekly_balance }
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_treasury value = 0 compare = less_than } }
+		set_variable = { var = ADISCORD_economy_uncovered_deficit_temp value = 0 }
+		subtract_from_variable = { var = ADISCORD_economy_uncovered_deficit_temp value = ADISCORD_economy_treasury }
+		if = {
+			limit = { check_variable = { var = ADISCORD_economy_auto_loan_enabled value = 1 compare = greater_than_or_equals } }
+			set_variable = { var = ADISCORD_economy_debt_capacity_room_temp value = ADISCORD_economy_debt_capacity }
+			subtract_from_variable = { var = ADISCORD_economy_debt_capacity_room_temp value = ADISCORD_economy_debt }
+			clamp_variable = { var = ADISCORD_economy_debt_capacity_room_temp min = 0 max = 5000 }
+			set_variable = { var = ADISCORD_economy_auto_borrow_temp value = ADISCORD_economy_uncovered_deficit_temp }
+			set_temp_variable = { var = ADISCORD_economy_auto_borrow_over_cap_temp value = ADISCORD_economy_auto_borrow_temp }
+			subtract_from_variable = { var = ADISCORD_economy_auto_borrow_over_cap_temp value = ADISCORD_economy_debt_capacity_room_temp }
+			if = {
+				limit = { check_variable = { var = ADISCORD_economy_auto_borrow_over_cap_temp value = 0 compare = greater_than } }
+				subtract_from_variable = { var = ADISCORD_economy_auto_borrow_temp value = ADISCORD_economy_auto_borrow_over_cap_temp }
+			}
+			clamp_variable = { var = ADISCORD_economy_auto_borrow_temp min = 0 max = 5000 }
+			if = {
+				limit = { check_variable = { var = ADISCORD_economy_auto_borrow_temp value = 0.1 compare = greater_than } }
+				add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp }
+				add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp }
+				set_variable = { var = ADISCORD_economy_last_auto_borrowing value = ADISCORD_economy_auto_borrow_temp }
+				add_to_variable = { var = ADISCORD_economy_last_period_debt_added value = ADISCORD_economy_auto_borrow_temp }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = ADISCORD_economy_treasury value = 0 compare = less_than } }
+			set_variable = { var = ADISCORD_economy_last_uncovered_deficit value = 0 }
+			subtract_from_variable = { var = ADISCORD_economy_last_uncovered_deficit value = ADISCORD_economy_treasury }
+			set_variable = { var = ADISCORD_economy_treasury value = 0 }
+			add_to_variable = { var = ADISCORD_economy_fiscal_stress value = 0.25 }
+			add_to_variable = { var = ADISCORD_economy_deficit_pressure value = 1.5 }
+		}
+	}
+
+	set_variable = { var = ADISCORD_economy_last_period_cap_writeoff value = 0 }
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_treasury_cap compare = greater_than } }
+		set_variable = { var = ADISCORD_economy_last_period_cap_writeoff value = ADISCORD_economy_treasury }
+		subtract_from_variable = { var = ADISCORD_economy_last_period_cap_writeoff value = ADISCORD_economy_treasury_cap }
+		set_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_treasury_cap }
+	}
+	set_variable = { var = ADISCORD_economy_treasury_after_tick value = ADISCORD_economy_treasury }
+	set_variable = { var = ADISCORD_economy_actual_treasury_delta value = ADISCORD_economy_treasury_after_tick }
+	subtract_from_variable = { var = ADISCORD_economy_actual_treasury_delta value = ADISCORD_economy_treasury_before_tick }
+	set_variable = { var = ADISCORD_economy_last_period_treasury_after value = ADISCORD_economy_treasury_after_tick }
+	set_variable = { var = ADISCORD_economy_accounting_expected_treasury_after_temp value = ADISCORD_economy_last_period_treasury_before }
+	add_to_variable = { var = ADISCORD_economy_accounting_expected_treasury_after_temp value = ADISCORD_economy_last_weekly_balance_applied }
+	add_to_variable = { var = ADISCORD_economy_accounting_expected_treasury_after_temp value = ADISCORD_economy_last_period_action_income }
+	subtract_from_variable = { var = ADISCORD_economy_accounting_expected_treasury_after_temp value = ADISCORD_economy_last_period_action_costs }
+	subtract_from_variable = { var = ADISCORD_economy_accounting_expected_treasury_after_temp value = ADISCORD_economy_last_period_building_costs }
+	add_to_variable = { var = ADISCORD_economy_accounting_expected_treasury_after_temp value = ADISCORD_economy_last_period_debt_added }
+	subtract_from_variable = { var = ADISCORD_economy_accounting_expected_treasury_after_temp value = ADISCORD_economy_last_period_debt_paid }
+	subtract_from_variable = { var = ADISCORD_economy_accounting_expected_treasury_after_temp value = ADISCORD_economy_last_period_cap_writeoff }
+	set_variable = { var = ADISCORD_economy_last_period_unexplained_delta value = ADISCORD_economy_last_period_treasury_after }
+	subtract_from_variable = { var = ADISCORD_economy_last_period_unexplained_delta value = ADISCORD_economy_accounting_expected_treasury_after_temp }
+	set_variable = { var = ADISCORD_economy_accounting_period_treasury_start value = ADISCORD_economy_last_period_treasury_after }
+	set_variable = { var = ADISCORD_economy_current_month_debt_added value = 0 }
+	set_variable = { var = ADISCORD_economy_current_month_debt_paid value = 0 }
+	set_variable = { var = ADISCORD_economy_current_month_action_costs value = 0 }
+	set_variable = { var = ADISCORD_economy_current_month_action_income value = 0 }
+	set_variable = { var = ADISCORD_economy_current_month_building_costs value = 0 }
+	ADISCORD_economy_clamp_treasury = yes
 }
 
 ADISCORD_economy_apply_monthly_balance = {
@@ -2090,6 +2243,17 @@ ADISCORD_economy_clamp_all_variables = {
 	clamp_variable = { var = ADISCORD_economy_last_auto_borrowing min = 0 max = 5000 }
 	clamp_variable = { var = ADISCORD_economy_last_uncovered_deficit min = 0 max = 5000 }
 	clamp_variable = { var = ADISCORD_economy_auto_loan_enabled min = 0 max = 1 }
+	clamp_variable = { var = ADISCORD_economy_weekly_income min = 0 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_weekly_expenses min = 0 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_weekly_balance min = -5000 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_last_weekly_balance_applied min = -5000 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_last_period_debt_added min = 0 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_last_period_debt_paid min = 0 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_last_period_action_income min = 0 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_last_period_action_costs min = 0 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_last_period_building_costs min = 0 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_last_period_cap_writeoff min = 0 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_last_period_unexplained_delta min = -5000 max = 5000 }
 	clamp_variable = { var = ADISCORD_economy_last_month_debt_added min = 0 max = 5000 }
 	clamp_variable = { var = ADISCORD_economy_last_month_debt_paid min = 0 max = 5000 }
 	clamp_variable = { var = ADISCORD_economy_last_month_action_costs min = 0 max = 5000 }

@@ -104,6 +104,7 @@ def validate() -> list[str]:
                 f"AI economy state {state} can activate for a dormant country")
 
     monthly = block(effects, "ADISCORD_economy_monthly_update")
+    weekly = block(effects, "ADISCORD_economy_weekly_update")
     yearly = block(effects, "ADISCORD_economy_yearly_update")
     require("ADISCORD_economy_update_ai_state" in monthly, "monthly update does not refresh AI state")
     require("ADISCORD_economy_apply_yearly_balance" in yearly, "secondary yearly economy lacks aggregate fiscal semantics")
@@ -119,8 +120,16 @@ def validate() -> list[str]:
             "monthly update lacks a dirty-state building refresh")
     require("ADISCORD_economy_tick_budget_cooldowns" in monthly,
             "monthly update does not release budget-control cooldowns")
-    require(monthly.find("ADISCORD_economy_apply_monthly_balance") < monthly.find("ADISCORD_economy_tick_budget_cooldowns"),
-            "budget cooldowns expire before the selected policy is charged")
+    require("ADISCORD_economy_apply_monthly_balance" not in monthly
+            and "ADISCORD_economy_apply_weekly_balance" not in monthly,
+            "monthly strategy update still changes treasury")
+    require(monthly.find("ADISCORD_economy_update_monthly_budget_trend") < monthly.find("ADISCORD_economy_tick_budget_cooldowns"),
+            "budget cooldowns expire before monthly fiscal pressure is recorded")
+    require(weekly.count("ADISCORD_economy_apply_weekly_balance") == 1,
+            "weekly economy does not contain exactly one cash settlement")
+    require("ADISCORD_economy_full_refresh" not in weekly
+            and "ADISCORD_economy_recount_economic_buildings" not in weekly,
+            "weekly economy directly invokes a heavy building refresh")
 
     stretched = block(effects, "ADISCORD_economy_update_stretched")
     require("ADISCORD_economy_planned_shortage_pressure" in stretched,
@@ -167,12 +176,12 @@ def validate() -> list[str]:
     require("ADISCORD_economy_has_debt_room_64" in block(triggers, "ADISCORD_economy_can_take_external_loan"),
             "external borrowing can charge penalties for a zero-sized loan")
 
-    apply_balance = block(effects, "ADISCORD_economy_apply_monthly_balance")
-    require("ADISCORD_economy_last_month_cap_writeoff" in apply_balance,
+    apply_balance = block(effects, "ADISCORD_economy_apply_weekly_balance")
+    require("ADISCORD_economy_last_period_cap_writeoff" in apply_balance,
             "treasury-cap overflow is not recorded in the ledger")
-    require(apply_balance.find("ADISCORD_economy_last_month_cap_writeoff") < apply_balance.find("ADISCORD_economy_treasury_after_tick"),
+    require(apply_balance.find("ADISCORD_economy_last_period_cap_writeoff") < apply_balance.find("ADISCORD_economy_treasury_after_tick"),
             "treasury is snapshotted before cap overflow is recorded")
-    require("value = ADISCORD_economy_last_month_cap_writeoff" in apply_balance,
+    require("value = ADISCORD_economy_last_period_cap_writeoff" in apply_balance,
             "cap writeoff is missing from the accounting identity")
 
     timed_actions = {
@@ -304,8 +313,8 @@ def validate() -> list[str]:
     require("ADISCORD_economy_social_spending_mode" in idea_refresh,
             "social budget changes do not invalidate the optimized idea signature")
 
-    require("value = 5 compare = less_than" in block(effects, "ADISCORD_economy_migrate_schema"),
-            "economy save migration was not advanced for the v5 economy state")
+    require("value = 6 compare = less_than" in block(effects, "ADISCORD_economy_migrate_schema"),
+            "economy save migration was not advanced from schema 5 to schema 6")
     cycle = block(effects, "ADISCORD_economy_update_model_and_cycle")
     require("ADISCORD_economy_cycle_phase value = 4" not in cycle
             and "ADISCORD_economy_cycle_phase value = 5" not in cycle
@@ -405,6 +414,13 @@ def validate() -> list[str]:
 
     monthly_on_action = block(block(on_actions, "on_actions"), "on_monthly")
     require("every_country" not in monthly_on_action, "on_monthly contains a global country scan")
+    weekly_on_action = block(block(on_actions, "on_actions"), "on_weekly")
+    require("ADISCORD_economy_should_weekly_update" in weekly_on_action,
+            "on_weekly lacks the primary-economy eligibility gate")
+    require(weekly_on_action.count("ADISCORD_economy_weekly_update") == 1,
+            "on_weekly does not invoke exactly one economy settlement")
+    require(not any(token in weekly_on_action for token in ("every_country", "every_owned_state", "all_owned_state")),
+            "on_weekly contains a country or state scan")
 
     unsupported_generic_roles = (
         "strategic_bomber",
