@@ -1114,11 +1114,7 @@ ADISCORD_economy_apply_monthly_balance = {
 
 	if = {
 		limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = greater_than_or_equals } }
-		set_variable = { var = ADISCORD_economy_balance_temp value = ADISCORD_economy_monthly_balance }
-		multiply_variable = { var = ADISCORD_economy_balance_temp value = ADISCORD_economy_final_reserve_growth_factor_bp }
-		divide_variable = { var = ADISCORD_economy_balance_temp value = 100 }
-		add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_balance_temp }
-		set_variable = { var = ADISCORD_economy_last_monthly_balance_applied value = ADISCORD_economy_balance_temp }
+		add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_monthly_balance }
 		set_variable = { var = ADISCORD_economy_deficit_streak value = 0 }
 		add_to_variable = { var = ADISCORD_economy_surplus_streak value = 1 }
 		add_to_variable = { var = ADISCORD_economy_deficit_pressure value = -2 }

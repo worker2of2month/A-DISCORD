@@ -13,6 +13,24 @@ TRIGGERS = (
 EFFECTS = (
     ROOT / "common" / "scripted_effects" / "ADISCORD_economy_effects.txt"
 ).read_text(encoding="utf-8-sig")
+MODIFIER_EFFECTS = (
+    ROOT / "common" / "scripted_effects" / "ADISCORD_economy_modifier_effects.txt"
+).read_text(encoding="utf-8-sig")
+MODIFIER_DEFINITIONS = (
+    ROOT
+    / "common"
+    / "modifier_definitions"
+    / "00_ADISCORD_economy_modifiers_definition.txt"
+).read_text(encoding="utf-8-sig")
+TOKENS = (
+    ROOT / "common" / "synchronized_dynamic_tokens" / "ADISCORD_tokens.txt"
+).read_text(encoding="utf-8-sig")
+MODIFIER_LOC = (
+    ROOT / "localisation" / "russian" / "ADISCORD_economy_modifiers_l_russian.yml"
+).read_text(encoding="utf-8-sig")
+ECONOMY_LOC = (
+    ROOT / "localisation" / "russian" / "ADISCORD_economy_l_russian.yml"
+).read_text(encoding="utf-8-sig")
 
 
 def block(text, name):
@@ -98,6 +116,23 @@ class WeeklyEconomyContracts(unittest.TestCase):
         self.assertNotRegex(
             migration,
             r"set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_treasury\s+value\s*=\s*100",
+        )
+
+    def test_reserve_growth_factor_is_fully_retired(self):
+        for text in (
+            EFFECTS,
+            MODIFIER_EFFECTS,
+            MODIFIER_DEFINITIONS,
+            TOKENS,
+            MODIFIER_LOC,
+        ):
+            self.assertNotIn("reserve_growth", text)
+
+    def test_treasury_tooltip_uses_weekly_and_period_values(self):
+        self.assertIn("ADISCORD_economy_weekly_balance", ECONOMY_LOC)
+        self.assertIn("ADISCORD_economy_last_period_unexplained_delta", ECONOMY_LOC)
+        self.assertNotIn(
+            "Фактическое изменение казны происходит раз в месяц", ECONOMY_LOC
         )
 
 

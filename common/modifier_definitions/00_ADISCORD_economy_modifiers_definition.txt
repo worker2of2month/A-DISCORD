@@ -263,15 +263,6 @@ ADISCORD_economy_treasury_capacity_factor = {
 	category = politics
 }
 
-ADISCORD_economy_reserve_growth_factor = {
-	color_type = good
-	value_type = percentage
-	precision = 1
-	postfix = none
-	category = country
-	category = politics
-}
-
 ADISCORD_economy_state_overload_gain_factor = {
 	color_type = bad
 	value_type = percentage

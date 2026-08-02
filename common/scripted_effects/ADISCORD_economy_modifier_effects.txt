@@ -33,7 +33,6 @@ ADISCORD_economy_initialize_modifier_variables = {
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_static_fiscal_stress_resistance_bonus_bp } } set_variable = { var = ADISCORD_economy_static_fiscal_stress_resistance_bonus_bp value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_static_investment_confidence_bonus_bp } } set_variable = { var = ADISCORD_economy_static_investment_confidence_bonus_bp value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_static_treasury_capacity_bonus_bp } } set_variable = { var = ADISCORD_economy_static_treasury_capacity_bonus_bp value = 0 } }
-	if = { limit = { NOT = { has_variable = ADISCORD_economy_static_reserve_growth_bonus_bp } } set_variable = { var = ADISCORD_economy_static_reserve_growth_bonus_bp value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_static_state_overload_gain_bonus_bp } } set_variable = { var = ADISCORD_economy_static_state_overload_gain_bonus_bp value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_static_war_fatigue_gain_bonus_bp } } set_variable = { var = ADISCORD_economy_static_war_fatigue_gain_bonus_bp value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_static_demographic_fatigue_gain_bonus_bp } } set_variable = { var = ADISCORD_economy_static_demographic_fatigue_gain_bonus_bp value = 0 } }
@@ -81,7 +80,6 @@ ADISCORD_economy_reset_static_modifier_variables = {
 	set_variable = { var = ADISCORD_economy_static_fiscal_stress_resistance_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_static_investment_confidence_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_static_treasury_capacity_bonus_bp value = 0 }
-	set_variable = { var = ADISCORD_economy_static_reserve_growth_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_static_state_overload_gain_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_static_war_fatigue_gain_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_static_demographic_fatigue_gain_bonus_bp value = 0 }
@@ -127,7 +125,6 @@ ADISCORD_economy_reset_policy_modifier_variables = {
 	set_variable = { var = ADISCORD_economy_policy_fiscal_stress_resistance_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_policy_investment_confidence_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_policy_treasury_capacity_bonus_bp value = 0 }
-	set_variable = { var = ADISCORD_economy_policy_reserve_growth_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_policy_state_overload_gain_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_policy_war_fatigue_gain_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_policy_demographic_fatigue_gain_bonus_bp value = 0 }
@@ -173,7 +170,6 @@ ADISCORD_economy_reset_final_factor_variables = {
 	set_variable = { var = ADISCORD_economy_final_fiscal_stress_resistance_factor_bp value = 100 }
 	set_variable = { var = ADISCORD_economy_final_investment_confidence_factor_bp value = 100 }
 	set_variable = { var = ADISCORD_economy_final_treasury_capacity_factor_bp value = 100 }
-	set_variable = { var = ADISCORD_economy_final_reserve_growth_factor_bp value = 100 }
 	set_variable = { var = ADISCORD_economy_final_state_overload_gain_factor_bp value = 100 }
 	set_variable = { var = ADISCORD_economy_final_war_fatigue_gain_factor_bp value = 100 }
 	set_variable = { var = ADISCORD_economy_final_demographic_fatigue_gain_factor_bp value = 100 }
@@ -263,8 +259,6 @@ ADISCORD_economy_calculate_final_modifier_factors = {
 	add_to_variable = { var = ADISCORD_economy_final_investment_confidence_factor_bp value = ADISCORD_economy_policy_investment_confidence_bonus_bp }
 	add_to_variable = { var = ADISCORD_economy_final_treasury_capacity_factor_bp value = ADISCORD_economy_static_treasury_capacity_bonus_bp }
 	add_to_variable = { var = ADISCORD_economy_final_treasury_capacity_factor_bp value = ADISCORD_economy_policy_treasury_capacity_bonus_bp }
-	add_to_variable = { var = ADISCORD_economy_final_reserve_growth_factor_bp value = ADISCORD_economy_static_reserve_growth_bonus_bp }
-	add_to_variable = { var = ADISCORD_economy_final_reserve_growth_factor_bp value = ADISCORD_economy_policy_reserve_growth_bonus_bp }
 	add_to_variable = { var = ADISCORD_economy_final_state_overload_gain_factor_bp value = ADISCORD_economy_static_state_overload_gain_bonus_bp }
 	add_to_variable = { var = ADISCORD_economy_final_state_overload_gain_factor_bp value = ADISCORD_economy_policy_state_overload_gain_bonus_bp }
 	add_to_variable = { var = ADISCORD_economy_final_war_fatigue_gain_factor_bp value = ADISCORD_economy_static_war_fatigue_gain_bonus_bp }
@@ -385,9 +379,6 @@ ADISCORD_economy_apply_visible_modifier_definition_factors = {
 	set_variable = { var = ADISCORD_economy_visible_modifier_temp value = modifier@ADISCORD_economy_treasury_capacity_factor }
 	multiply_variable = { var = ADISCORD_economy_visible_modifier_temp value = 100 }
 	add_to_variable = { var = ADISCORD_economy_final_treasury_capacity_factor_bp value = ADISCORD_economy_visible_modifier_temp }
-	set_variable = { var = ADISCORD_economy_visible_modifier_temp value = modifier@ADISCORD_economy_reserve_growth_factor }
-	multiply_variable = { var = ADISCORD_economy_visible_modifier_temp value = 100 }
-	add_to_variable = { var = ADISCORD_economy_final_reserve_growth_factor_bp value = ADISCORD_economy_visible_modifier_temp }
 	set_variable = { var = ADISCORD_economy_visible_modifier_temp value = modifier@ADISCORD_economy_state_overload_gain_factor }
 	multiply_variable = { var = ADISCORD_economy_visible_modifier_temp value = 100 }
 	add_to_variable = { var = ADISCORD_economy_final_state_overload_gain_factor_bp value = ADISCORD_economy_visible_modifier_temp }
@@ -460,7 +451,6 @@ ADISCORD_economy_clamp_modifier_factors = {
 	clamp_variable = { var = ADISCORD_economy_final_fiscal_stress_resistance_factor_bp min = 25 max = 250 }
 	clamp_variable = { var = ADISCORD_economy_final_investment_confidence_factor_bp min = 25 max = 250 }
 	clamp_variable = { var = ADISCORD_economy_final_treasury_capacity_factor_bp min = 25 max = 250 }
-	clamp_variable = { var = ADISCORD_economy_final_reserve_growth_factor_bp min = 25 max = 250 }
 	clamp_variable = { var = ADISCORD_economy_final_state_overload_gain_factor_bp min = 25 max = 250 }
 	clamp_variable = { var = ADISCORD_economy_final_war_fatigue_gain_factor_bp min = 25 max = 250 }
 	clamp_variable = { var = ADISCORD_economy_final_demographic_fatigue_gain_factor_bp min = 25 max = 250 }
