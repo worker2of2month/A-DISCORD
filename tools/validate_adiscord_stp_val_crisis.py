@@ -175,6 +175,7 @@ REQUIRED_FILES = {
         ("common/scripted_effects/ADISCORD_STP_VAL_crisis_war_effects.txt", "crisis war effects"),
         ("common/national_focus/ADISCORD_national_focus_STP_crisis_war.txt", "civil-war focus tree"),
         ("common/national_focus/ADISCORD_national_focus_STP_postwar.txt", "postwar focus tree"),
+        ("history/units/STP.txt", "STP starting OOB"),
     ),
     "val": (
         ("common/national_focus/ADISCORD_national_focus_VAL.txt", "VAL contract focus tree"),
@@ -1172,28 +1173,96 @@ def _validate_civil_war_contract(root: Path, issues: list[str]) -> None:
         if _direct_scalar_values(modifier, "civilian_factory_use") != ["1"]:
             issues.append("party market sabotage must reserve exactly one civilian factory")
 
-    if units is not None:
-        for template in (
-            "STP Mountain Resistance Militia",
-            "STP Urban Resistance Militia",
+    if units is not None and war is not None:
+        starting_templates = tuple(_iter_named_blocks(units, "division_template"))
+        for effect_name, template_name, cap in (
+            (
+                "STP_create_empty_mountain_militia",
+                "STP Mountain Resistance Militia",
+                "3",
+            ),
+            (
+                "STP_create_empty_urban_militia",
+                "STP Urban Resistance Militia",
+                "2",
+            ),
         ):
-            block = next(
-                (
-                    candidate
-                    for candidate in _iter_named_blocks(units, "division_template")
-                    if re.search(
-                        rf'\bname\s*=\s*"{re.escape(template)}"', candidate
-                    )
-                ),
-                None,
-            )
-            if block is None or "ADISCORD_militia" not in block:
-                issues.append(f"missing locked militia template {template}")
-            elif (
-                _direct_scalar_values(block, "is_locked") != ["yes"]
-                or _direct_scalar_values(block, "force_allow_recruiting") != ["no"]
+            if any(
+                f'name = "{template_name}"' in block
+                for block in starting_templates
             ):
-                issues.append(f"militia template {template} must remain locked")
+                issues.append(
+                    f"{template_name} must not exist in the STP starting OOB"
+                )
+            creator = extract_named_block(war, effect_name) or ""
+            definition = next(
+                (
+                    block
+                    for block in _iter_named_blocks(creator, "division_template")
+                    if f'name = "{template_name}"' in block
+                ),
+                "",
+            )
+            if not definition:
+                issues.append(
+                    f"{effect_name} must define {template_name} before spawning it"
+                )
+            elif (
+                _direct_scalar_values(definition, "is_locked") != ["yes"]
+                or _direct_scalar_values(definition, "force_allow_recruiting")
+                != ["no"]
+                or _direct_scalar_values(definition, "division_cap") != [cap]
+                or "ADISCORD_militia" not in definition
+            ):
+                issues.append(
+                    f"late militia template {template_name} has an invalid locked definition"
+                )
+            if f'NOT = {{ has_template = "{template_name}" }}' not in creator:
+                issues.append(
+                    f"late militia template {template_name} must be idempotent"
+                )
+            elif creator.find(f'name = "{template_name}"') > creator.find(
+                "create_unit ="
+            ):
+                issues.append(
+                    f"{effect_name} must define {template_name} before spawning it"
+                )
+
+        guard = next(
+            (
+                block
+                for block in starting_templates
+                if 'name = "Capital Guard"' in block
+            ),
+            "",
+        )
+        regiments = extract_named_block(guard, "regiments") or ""
+        support = extract_named_block(guard, "support") or ""
+        if len(list(_iter_named_blocks(regiments, "infantry"))) != 9:
+            issues.append("Capital Guard must contain exactly 9 infantry battalions")
+        if (
+            len(list(_iter_named_blocks(regiments, "ADISCORD_line_artillery")))
+            != 2
+        ):
+            issues.append(
+                "Capital Guard must contain exactly 2 line artillery battalions"
+            )
+        support_counts = {
+            company: len(list(_iter_named_blocks(support, company)))
+            for company in ("engineer", "artillery", "ADISCORD_recon_platform")
+        }
+        if support_counts != {
+            "engineer": 1,
+            "artillery": 1,
+            "ADISCORD_recon_platform": 1,
+        }:
+            issues.append("Capital Guard support companies are noncanonical")
+        if (
+            _direct_scalar_values(guard, "is_locked") != ["yes"]
+            or _direct_scalar_values(guard, "force_allow_recruiting") != ["no"]
+            or _direct_scalar_values(guard, "division_cap") != ["1"]
+        ):
+            issues.append("Capital Guard must remain locked and capped at one")
 
 
 def _validate_val_contract_campaign(root: Path, issues: list[str]) -> None:

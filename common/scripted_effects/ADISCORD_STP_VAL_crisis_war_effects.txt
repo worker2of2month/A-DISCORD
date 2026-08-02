@@ -868,6 +868,23 @@ STP_transfer_resistance_escrow = {
 }
 
 STP_create_empty_mountain_militia = {
+	if = {
+		limit = {
+			NOT = { has_template = "STP Mountain Resistance Militia" }
+		}
+		division_template = {
+			name = "STP Mountain Resistance Militia"
+			division_names_group = STP_INF_01
+			is_locked = yes
+			force_allow_recruiting = no
+			division_cap = 3
+			regiments = {
+				ADISCORD_militia = { x = 0 y = 0 }
+				ADISCORD_militia = { x = 0 y = 1 }
+				ADISCORD_militia = { x = 1 y = 0 }
+			}
+		}
+	}
 	capital_scope = {
 		create_unit = {
 			division = "division_template = \"STP Mountain Resistance Militia\" start_experience_factor = 0 start_manpower_factor = 0 start_equipment_factor = 0"
@@ -878,6 +895,23 @@ STP_create_empty_mountain_militia = {
 }
 
 STP_create_empty_urban_militia = {
+	if = {
+		limit = {
+			NOT = { has_template = "STP Urban Resistance Militia" }
+		}
+		division_template = {
+			name = "STP Urban Resistance Militia"
+			division_names_group = STP_INF_01
+			is_locked = yes
+			force_allow_recruiting = no
+			division_cap = 2
+			regiments = {
+				ADISCORD_militia = { x = 0 y = 0 }
+				ADISCORD_militia = { x = 0 y = 1 }
+				ADISCORD_militia = { x = 1 y = 0 }
+			}
+		}
+	}
 	capital_scope = {
 		create_unit = {
 			division = "division_template = \"STP Urban Resistance Militia\" start_experience_factor = 0 start_manpower_factor = 0 start_equipment_factor = 0"

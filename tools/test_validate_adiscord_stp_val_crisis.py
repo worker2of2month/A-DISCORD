@@ -762,6 +762,101 @@ class CrisisValidatorTests(unittest.TestCase):
 
         self.assertTrue(any("STP starting army lock" in issue for issue in issues))
 
+    def test_resistance_militia_templates_exist_only_during_the_revolt(self):
+        root = validator.ROOT
+        oob = validator.read(root / "history/units/STP.txt") or ""
+        war = validator.read(
+            root / "common/scripted_effects/ADISCORD_STP_VAL_crisis_war_effects.txt"
+        ) or ""
+        for effect_name, template_name, cap in (
+            (
+                "STP_create_empty_mountain_militia",
+                "STP Mountain Resistance Militia",
+                "3",
+            ),
+            (
+                "STP_create_empty_urban_militia",
+                "STP Urban Resistance Militia",
+                "2",
+            ),
+        ):
+            self.assertNotIn(f'name = "{template_name}"', oob)
+            creator = validator.extract_named_block(war, effect_name) or ""
+            definition = next(
+                (
+                    block
+                    for block in validator._iter_named_blocks(
+                        creator, "division_template"
+                    )
+                    if f'name = "{template_name}"' in block
+                ),
+                "",
+            )
+            self.assertTrue(definition)
+            self.assertIn(f'NOT = {{ has_template = "{template_name}" }}', creator)
+            self.assertIn("is_locked = yes", definition)
+            self.assertIn("force_allow_recruiting = no", definition)
+            self.assertIn(f"division_cap = {cap}", definition)
+            self.assertLess(
+                creator.index(f'name = "{template_name}"'),
+                creator.index("create_unit ="),
+            )
+
+    def test_capital_guard_is_the_unique_elite_defensive_template(self):
+        oob = validator.read(validator.ROOT / "history/units/STP.txt") or ""
+        guard = self._block_with_assignment(
+            oob, "division_template", 'name = "Capital Guard"'
+        )
+        regiments = validator.extract_named_block(guard, "regiments") or ""
+        support = validator.extract_named_block(guard, "support") or ""
+
+        self.assertEqual(
+            len(list(validator._iter_named_blocks(regiments, "infantry"))), 9
+        )
+        self.assertEqual(
+            len(
+                list(
+                    validator._iter_named_blocks(
+                        regiments, "ADISCORD_line_artillery"
+                    )
+                )
+            ),
+            2,
+        )
+        for company in ("engineer", "artillery", "ADISCORD_recon_platform"):
+            self.assertEqual(
+                len(list(validator._iter_named_blocks(support, company))), 1
+            )
+        self.assertEqual(
+            validator._direct_scalar_values(guard, "is_locked"), ["yes"]
+        )
+        self.assertEqual(
+            validator._direct_scalar_values(guard, "force_allow_recruiting"),
+            ["no"],
+        )
+        self.assertEqual(
+            validator._direct_scalar_values(guard, "division_cap"), ["1"]
+        )
+
+    def test_civil_war_validator_rejects_a_starting_resistance_template(self):
+        paths = tuple(
+            relative for relative, _ in validator.REQUIRED_FILES["civil_war"]
+        ) + ("history/units/STP.txt",)
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._copy_repo_files(root, *paths)
+            units = root / "history/units/STP.txt"
+            units.write_text(
+                units.read_text(encoding="utf-8-sig")
+                + '\ndivision_template = { name = "STP Mountain Resistance Militia" }\n',
+                encoding="utf-8-sig",
+            )
+            issues = validator.validate(root, "civil_war")
+
+        self.assertTrue(
+            any("must not exist in the STP starting OOB" in issue for issue in issues)
+        )
+
     def test_empty_root_reports_each_feature_layer(self):
         with TemporaryDirectory() as tmp:
             issues = validator.validate(Path(tmp))
