@@ -6,11 +6,15 @@ ADISCORD_economy_initialize_country = {
 		limit = { NOT = { has_variable = ADISCORD_economy_initialized } }
 		ADISCORD_economy_set_default_values = yes
 		ADISCORD_economy_initialize_from_development = yes
+		ADISCORD_economy_apply_country_starting_profile = yes
 		ADISCORD_economy_set_simulation_tier = yes
 		ADISCORD_economy_update_model_and_cycle = yes
 		ADISCORD_economy_recalculate_policy_modifiers = yes
 		ADISCORD_economy_full_refresh = yes
 		ADISCORD_economy_light_update = yes
+		ADISCORD_economy_update_stretched = yes
+		ADISCORD_economy_calculate_macro_indicators = yes
+		ADISCORD_economy_update_model_and_cycle = yes
 		ADISCORD_economy_calculate_development_multiplier = yes
 		ADISCORD_economy_refresh_spending_ideas = yes
 		ADISCORD_economy_update_gui = yes
@@ -19,6 +23,50 @@ ADISCORD_economy_initialize_country = {
 		ADISCORD_economy_migrate_schema = yes
 		ADISCORD_economy_set_simulation_tier = yes
 	}
+}
+
+# Country flavour is applied only on first initialization. Existing saves keep
+# their live economy, while a new campaign receives its intended starting
+# pressure without adding work to weekly or monthly pulses.
+ADISCORD_economy_apply_country_starting_profile = {
+	if = {
+		limit = { tag = VAL }
+		ADISCORD_economy_apply_val_starting_profile = yes
+	}
+	else_if = {
+		limit = { tag = STP }
+		ADISCORD_economy_apply_stp_starting_profile = yes
+	}
+}
+
+ADISCORD_economy_apply_val_starting_profile = {
+	set_variable = { var = ADISCORD_economy_treasury value = 180 }
+	set_variable = { var = ADISCORD_economy_debt value = 260 }
+	set_variable = { var = ADISCORD_economy_inflation value = 9 }
+	set_variable = { var = ADISCORD_economy_deficit_pressure value = 14 }
+	set_variable = { var = ADISCORD_economy_fiscal_stress value = 22 }
+	set_variable = { var = ADISCORD_economy_price_shock value = 10 }
+	ADISCORD_economy_sync_starting_accounting = yes
+}
+
+ADISCORD_economy_apply_stp_starting_profile = {
+	set_variable = { var = ADISCORD_economy_treasury value = 240 }
+	set_variable = { var = ADISCORD_economy_debt value = 140 }
+	set_variable = { var = ADISCORD_economy_inflation value = 14 }
+	set_variable = { var = ADISCORD_economy_deficit_pressure value = 8 }
+	set_variable = { var = ADISCORD_economy_fiscal_stress value = 26 }
+	set_variable = { var = ADISCORD_economy_price_shock value = 16 }
+	ADISCORD_economy_sync_starting_accounting = yes
+}
+
+ADISCORD_economy_sync_starting_accounting = {
+	set_variable = { var = ADISCORD_economy_accounting_period_treasury_start value = ADISCORD_economy_treasury }
+	set_variable = { var = ADISCORD_economy_last_period_treasury_before value = ADISCORD_economy_treasury }
+	set_variable = { var = ADISCORD_economy_last_period_treasury_after value = ADISCORD_economy_treasury }
+	set_variable = { var = ADISCORD_economy_last_month_treasury_before value = ADISCORD_economy_treasury }
+	set_variable = { var = ADISCORD_economy_last_month_treasury_after value = ADISCORD_economy_treasury }
+	set_variable = { var = ADISCORD_economy_treasury_before_tick value = ADISCORD_economy_treasury }
+	set_variable = { var = ADISCORD_economy_treasury_after_tick value = ADISCORD_economy_treasury }
 }
 
 ADISCORD_economy_migrate_schema = {

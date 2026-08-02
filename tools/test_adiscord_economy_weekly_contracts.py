@@ -58,6 +58,69 @@ def block(text, name):
 
 
 class WeeklyEconomyContracts(unittest.TestCase):
+    def test_val_and_stp_start_with_distinct_macroeconomic_profiles(self):
+        initialization = block(EFFECTS, "ADISCORD_economy_initialize_country")
+        profile_call = "ADISCORD_economy_apply_country_starting_profile = yes"
+        self.assertEqual(initialization.count(profile_call), 1)
+        self.assertLess(initialization.index(profile_call), initialization.index("else ="))
+        self.assertIn("ADISCORD_economy_update_stretched = yes", initialization)
+        self.assertIn("ADISCORD_economy_calculate_macro_indicators = yes", initialization)
+
+        dispatcher = block(EFFECTS, "ADISCORD_economy_apply_country_starting_profile")
+        self.assertIn("tag = VAL", dispatcher)
+        self.assertIn("ADISCORD_economy_apply_val_starting_profile = yes", dispatcher)
+        self.assertIn("tag = STP", dispatcher)
+        self.assertIn("ADISCORD_economy_apply_stp_starting_profile = yes", dispatcher)
+
+        profiles = {
+            "val": {
+                "treasury": 180,
+                "debt": 260,
+                "inflation": 9,
+                "deficit_pressure": 14,
+                "fiscal_stress": 22,
+                "price_shock": 10,
+            },
+            "stp": {
+                "treasury": 240,
+                "debt": 140,
+                "inflation": 14,
+                "deficit_pressure": 8,
+                "fiscal_stress": 26,
+                "price_shock": 16,
+            },
+        }
+        for country, expected in profiles.items():
+            profile = block(
+                EFFECTS,
+                f"ADISCORD_economy_apply_{country}_starting_profile",
+            )
+            for metric, value in expected.items():
+                self.assertRegex(
+                    profile,
+                    rf"set_variable\s*=\s*\{{\s*var\s*=\s*ADISCORD_economy_{metric}\s+value\s*=\s*{value}\s*\}}",
+                )
+            self.assertIn("ADISCORD_economy_sync_starting_accounting = yes", profile)
+
+        accounting = block(EFFECTS, "ADISCORD_economy_sync_starting_accounting")
+        for snapshot in (
+            "accounting_period_treasury_start",
+            "last_period_treasury_before",
+            "last_period_treasury_after",
+            "last_month_treasury_before",
+            "last_month_treasury_after",
+        ):
+            self.assertRegex(
+                accounting,
+                rf"var\s*=\s*ADISCORD_economy_{snapshot}\s+value\s*=\s*ADISCORD_economy_treasury",
+            )
+
+        for recurring_effect in (
+            "ADISCORD_economy_weekly_update",
+            "ADISCORD_economy_monthly_update",
+        ):
+            self.assertNotIn(profile_call, block(EFFECTS, recurring_effect))
+
     def test_weekly_pulse_is_country_scoped_and_applies_once(self):
         weekly = block(ON_ACTIONS, "on_weekly")
         self.assertIn("ADISCORD_economy_should_weekly_update", weekly)

@@ -25,6 +25,8 @@ scripted_gui = {
 			ADISCORD_economy_construction_increase_click = { ADISCORD_economy_increase_construction_spending = yes }
 			ADISCORD_economy_social_decrease_click = { ADISCORD_economy_decrease_social_spending = yes }
 			ADISCORD_economy_social_increase_click = { ADISCORD_economy_increase_social_spending = yes }
+			ADISCORD_economy_action_internal_bonds_click = { ADISCORD_economy_gui_try_issue_internal_bonds = yes }
+			ADISCORD_economy_action_external_loan_click = { ADISCORD_economy_gui_try_take_external_loan = yes }
 			ADISCORD_economy_action_repay_debt_click = { ADISCORD_economy_gui_try_repay_debt = yes }
 			ADISCORD_economy_action_restructure_debt_click = { ADISCORD_economy_gui_try_restructure_debt = yes }
 			ADISCORD_economy_action_stabilization_click = { ADISCORD_economy_gui_try_stabilization_package = yes }
@@ -119,6 +121,8 @@ scripted_gui = {
 				}
 				else = { set_temp_variable = { var = ADISCORD_economy_social_active_marker_x_position value = 96 } }
 			}
+			ADISCORD_economy_action_internal_bonds_click_enabled = { ADISCORD_economy_can_issue_internal_bonds = yes }
+			ADISCORD_economy_action_external_loan_click_enabled = { ADISCORD_economy_can_take_external_loan = yes }
 			ADISCORD_economy_action_repay_debt_click_enabled = { ADISCORD_economy_has_treasury_50 = yes ADISCORD_economy_has_debt = yes }
 			ADISCORD_economy_action_restructure_debt_click_enabled = { ADISCORD_economy_can_restructure_debt = yes }
 			ADISCORD_economy_action_stabilization_click_enabled = { ADISCORD_economy_can_stabilize_macro = yes }

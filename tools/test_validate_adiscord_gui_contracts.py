@@ -166,6 +166,15 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         self.scripted_gui = (
             ROOT / 'common' / 'scripted_guis' / 'ADISCORD_economy_scripted_gui.txt'
         ).read_text(encoding='utf-8-sig')
+        self.scripted_loc = (
+            ROOT
+            / 'common'
+            / 'scripted_localisation'
+            / 'ADISCORD_economy_scripted_loc.txt'
+        ).read_text(encoding='utf-8-sig')
+        self.localisation = (
+            ROOT / 'localisation' / 'russian' / 'ADISCORD_economy_l_russian.yml'
+        ).read_text(encoding='utf-8-sig')
         self.nodes = set(named_gui_nodes(self.gui))
 
     def test_topbar_uses_icon_and_numeric_value(self):
@@ -239,6 +248,128 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                     rf'var\s*=\s*ADISCORD_economy_{policy}_active_marker_x_position'
                     rf'\s+value\s*=\s*{position}',
                 )
+
+    def test_each_budget_step_exposes_its_own_level_tooltip(self):
+        contracts = {
+            'tax': (
+                'ADISCORD_economy_tax_burden_mode',
+                'GetADISCORDTaxBurdenEffectsLoc',
+            ),
+            'army': (
+                'ADISCORD_economy_army_spending_mode',
+                'GetADISCORDArmySpendingEffectsLoc',
+            ),
+            'construction': (
+                'ADISCORD_economy_construction_spending_mode',
+                'GetADISCORDConstructionSpendingEffectsLoc',
+            ),
+            'social': (
+                'ADISCORD_economy_social_spending_mode',
+                'GetADISCORDSocialSpendingEffectsLoc',
+            ),
+        }
+        for policy, (mode_var, effect_loc) in contracts.items():
+            for level in range(1, 6):
+                step_name = f'ADISCORD_economy_{policy}_step_{level}'
+                step_line = next(
+                    line
+                    for line in self.gui.splitlines()
+                    if f'name = "{step_name}"' in line
+                )
+                self.assertNotIn('alwaystransparent = yes', step_line)
+                self.assertIn(
+                    f'pdx_tooltip = "ADISCORD_economy_{policy}_level_{level}_tt"',
+                    step_line,
+                )
+                tooltip_match = re.search(
+                    rf'(?m)^\s*ADISCORD_economy_{policy}_level_{level}_tt:\d*\s+"([^"]*)"',
+                    self.localisation,
+                )
+                self.assertIsNotNone(tooltip_match)
+                self.assertIn(f'уровень {level}/5', tooltip_match.group(1))
+                self.assertIn(
+                    f'$ADISCORD_economy_{policy}_effects_{level}$',
+                    tooltip_match.group(1),
+                )
+
+            marker_name = f'ADISCORD_economy_{policy}_active_marker'
+            marker_line = next(
+                line for line in self.gui.splitlines() if f'name = "{marker_name}"' in line
+            )
+            self.assertNotIn('alwaystransparent = yes', marker_line)
+            self.assertIn(
+                f'pdx_tooltip = "ADISCORD_economy_{policy}_controls_tt"',
+                marker_line,
+            )
+
+            tooltip_match = re.search(
+                rf'(?m)^\s*ADISCORD_economy_{policy}_controls_tt:\d*\s+"([^"]*)"',
+                self.localisation,
+            )
+            self.assertIsNotNone(tooltip_match)
+            tooltip = tooltip_match.group(1)
+            self.assertIn(f'?{mode_var}|0', tooltip)
+            self.assertIn(f'[{effect_loc}]', tooltip)
+            self.assertNotIn('Сравнение 1–5', tooltip)
+            self.assertIn(f'name = {effect_loc}', self.scripted_loc)
+
+    def test_increase_arrows_use_visible_absolute_positioning(self):
+        for policy in ('tax', 'army', 'construction', 'social'):
+            increase_line = next(
+                line
+                for line in self.gui.splitlines()
+                if f'name = "ADISCORD_economy_{policy}_increase"' in line
+            )
+            self.assertIn('spriteType = "button_right"', increase_line)
+            self.assertIn('position = { x = 424 ', increase_line)
+            self.assertNotIn('orientation = upper_right', increase_line)
+
+    def test_compact_dashboard_exposes_manual_borrowing_actions(self):
+        contracts = {
+            'internal_bonds': (
+                'ADISCORD_economy_gui_try_issue_internal_bonds',
+                'ADISCORD_economy_can_issue_internal_bonds',
+            ),
+            'external_loan': (
+                'ADISCORD_economy_gui_try_take_external_loan',
+                'ADISCORD_economy_can_take_external_loan',
+            ),
+        }
+        for action, (effect, trigger) in contracts.items():
+            node_name = f'ADISCORD_economy_action_{action}'
+            self.assertIn(
+                (
+                    'buttonType',
+                    node_name,
+                    ('ADISCORD_economy_dashboard_window', 'ADISCORD_economy_command_panel'),
+                ),
+                self.nodes,
+            )
+            self.assertIn(f'{node_name}_click = {{ {effect} = yes }}', self.scripted_gui)
+            self.assertIn(
+                f'{node_name}_click_enabled = {{ {trigger} = yes }}',
+                self.scripted_gui,
+            )
+            self.assertIn(
+                f'pdx_tooltip = "ADISCORD_economy_action_{action}_tt"',
+                next(line for line in self.gui.splitlines() if f'name = "{node_name}"' in line),
+            )
+
+        internal_bonds_tt = re.search(
+            r'(?m)^\s*ADISCORD_economy_action_internal_bonds_tt:\d*\s+"([^"]*)"',
+            self.localisation,
+        ).group(1)
+        external_loan_tt = re.search(
+            r'(?m)^\s*ADISCORD_economy_action_external_loan_tt:\d*\s+"([^"]*)"',
+            self.localisation,
+        ).group(1)
+        for tooltip in (internal_bonds_tt, external_loan_tt):
+            self.assertIn('?ADISCORD_economy_treasury|0', tooltip)
+            self.assertIn('?ADISCORD_economy_treasury_cap|0', tooltip)
+            self.assertIn('?ADISCORD_economy_debt|0', tooltip)
+            self.assertIn('?ADISCORD_economy_debt_capacity|0', tooltip)
+            self.assertIn('?ADISCORD_economy_debt_ratio|0', tooltip)
+        self.assertIn('?ADISCORD_economy_creditworthiness|0', external_loan_tt)
 
     def test_left_panel_text_zones_do_not_overlap(self):
         self.assertNotIn('ADISCORD_economy_automation_note', self.gui)

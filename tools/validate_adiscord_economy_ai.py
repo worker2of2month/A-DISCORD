@@ -389,7 +389,7 @@ def validate() -> list[str]:
 
     for removed_control in (
         "ADISCORD_economy_tax_burden_1", "ADISCORD_economy_army_budget_1",
-        "ADISCORD_economy_construction_budget_1", "ADISCORD_economy_action_external_loan",
+        "ADISCORD_economy_construction_budget_1",
         "ADISCORD_economy_action_early_repay_debt", "ADISCORD_economy_action_expand_emission",
         "ADISCORD_economy_action_civilian_investment", "ADISCORD_economy_action_military_investment",
     ):
@@ -415,8 +415,17 @@ def validate() -> list[str]:
             rf'name\s*=\s*"ADISCORD_economy_{category}_increase"[\s\S]{{0,200}}spriteType\s*=\s*"button_right"',
             gui,
         ) is not None, f"economy {category} increase control is not a right arrow")
-    visible_actions = re.findall(r'name\s*=\s*"(ADISCORD_economy_action_[^"]+)"', gui)
-    require(len(visible_actions) == 4, "economy UI must expose exactly four rare crisis actions")
+    visible_actions = set(re.findall(r'name\s*=\s*"(ADISCORD_economy_action_[^"]+)"', gui))
+    expected_actions = {
+        "ADISCORD_economy_action_internal_bonds",
+        "ADISCORD_economy_action_external_loan",
+        "ADISCORD_economy_action_repay_debt",
+        "ADISCORD_economy_action_restructure_debt",
+        "ADISCORD_economy_action_stabilization",
+        "ADISCORD_economy_action_war_taxes",
+    }
+    require(visible_actions == expected_actions,
+            "economy UI must expose exactly six focused treasury operations")
     require('pdx_tooltip = "ADISCORD_economy_budget_breakdown_tt"' in gui,
             "balance KPI lacks the requested income/expense breakdown tooltip")
     require('name = "ADISCORD_economy_topbar_icon"' in gui
@@ -437,10 +446,18 @@ def validate() -> list[str]:
             require(f"{button_name}_click_enabled" in scripted_gui,
                     f"GUI button {button_name} gives no disabled-state feedback")
 
-    for action in ("repay_debt", "restructure_debt", "stabilization", "war_taxes"):
+    guarded_actions = {
+        "internal_bonds": "issue_internal_bonds",
+        "external_loan": "take_external_loan",
+        "repay_debt": "repay_debt",
+        "restructure_debt": "restructure_debt",
+        "stabilization": "stabilization",
+        "war_taxes": "war_taxes",
+    }
+    for action, effect in guarded_actions.items():
         require(f'ADISCORD_economy_action_{action}' in gui,
                 f"the dashboard does not expose the {action} economy operation")
-        require(f"ADISCORD_economy_gui_try_{action}" in effects,
+        require(f"ADISCORD_economy_gui_try_{effect}" in effects,
                 f"the dashboard operation {action} has no guarded GUI effect")
 
     localisation_keys = set(re.findall(r"(?m)^\s*([A-Za-z0-9_.-]+):", localisation))
