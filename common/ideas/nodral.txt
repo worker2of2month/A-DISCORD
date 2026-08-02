@@ -3,6 +3,30 @@
 ideas = {
 
 	country = {
+		NOD_hedonism_with_no_bondaries = {
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_STP_hedonism_with_no_bondaries
+
+			modifier = {
+				monthly_population = -0.25
+				research_speed_factor = -0.08
+				stability_factor = -0.15
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_civilian_factory_income_factor = 0.05
+				ADISCORD_economy_social_expense_factor = 0.10
+				ADISCORD_economy_state_overload_gain_factor = 0.05
+				ADISCORD_country_development_society_growth_factor = -0.05
+			}
+		}
 
 		NOD_home_of_hedonist_revolution = {
 			picture = GFX_idea_NOD_home_of_hedonist_revolution

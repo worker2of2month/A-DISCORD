@@ -42,6 +42,11 @@ set_research_slots = 1
 
 ####### Ideas
 
+country_lock_all_division_template = {
+	is_locked = yes
+	desc = STP_hedonism_army_restriction_reason
+}
+
 add_ideas = {
 	STP_hedonism_with_no_bondaries
 	STP_hidden_slaves_trade

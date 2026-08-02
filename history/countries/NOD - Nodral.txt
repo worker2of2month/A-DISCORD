@@ -34,7 +34,7 @@ set_popularities = {
 
 add_ideas = {
 	NOD_home_of_hedonist_revolution
-	STP_hedonism_with_no_bondaries
+	NOD_hedonism_with_no_bondaries
 	STP_hidden_slaves_trade
 
 	#ministers

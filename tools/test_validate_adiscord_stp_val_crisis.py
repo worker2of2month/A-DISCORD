@@ -675,6 +675,93 @@ class CrisisValidatorTests(unittest.TestCase):
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(text, encoding="utf-8-sig")
 
+    def _copy_repo_files(self, root: Path, *relative_paths: str) -> None:
+        for relative in relative_paths:
+            source = validator.ROOT / relative
+            target = root / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(source.read_bytes())
+
+    def test_stp_hedonism_spirit_owns_an_stp_only_army_lock(self):
+        root = validator.ROOT
+        stp_ideas = validator.read(root / "common/ideas/steland.txt") or ""
+        nod_ideas = validator.read(root / "common/ideas/nodral.txt") or ""
+        stp_history = validator.read(
+            root / "history/countries/STP - StepanLand.txt"
+        ) or ""
+        nod_history = validator.read(
+            root / "history/countries/NOD - Nodral.txt"
+        ) or ""
+
+        stp_idea = validator.extract_named_block(
+            stp_ideas, "STP_hedonism_with_no_bondaries"
+        ) or ""
+        nod_idea = validator.extract_named_block(
+            nod_ideas, "NOD_hedonism_with_no_bondaries"
+        ) or ""
+        stp_lock = list(
+            validator._iter_named_blocks(
+                stp_history, "country_lock_all_division_template"
+            )
+        )
+
+        self.assertEqual(len(stp_lock), 1)
+        self.assertEqual(
+            validator._direct_scalar_values(stp_lock[0], "is_locked"), ["yes"]
+        )
+        self.assertEqual(
+            validator._direct_scalar_values(stp_lock[0], "desc"),
+            ["STP_hedonism_army_restriction_reason"],
+        )
+        self.assertIn(
+            "custom_modifier_tooltip = STP_hedonism_army_restriction_tt",
+            validator.extract_named_block(stp_idea, "modifier") or "",
+        )
+        self.assertIn(
+            "country_lock_all_division_template = no",
+            validator.extract_named_block(stp_idea, "on_remove") or "",
+        )
+        self.assertTrue(nod_idea)
+        self.assertNotIn("country_lock_all_division_template", nod_idea)
+        self.assertIn("NOD_hedonism_with_no_bondaries", nod_history)
+        self.assertNotIn("STP_hedonism_with_no_bondaries", nod_history)
+
+        loc_path = root / "localisation/russian/ADISCORD_ideas_l_russian.yml"
+        self.assertTrue(loc_path.read_bytes().startswith(b"\xef\xbb\xbf"))
+        loc = validator.read(loc_path) or ""
+        for key in (
+            "NOD_hedonism_with_no_bondaries",
+            "NOD_hedonism_with_no_bondaries_desc",
+            "STP_hedonism_army_restriction_tt",
+            "STP_hedonism_army_restriction_reason",
+        ):
+            self.assertIn(f" {key}:", loc)
+
+    def test_stp_validator_rejects_missing_country_army_lock(self):
+        paths = tuple(relative for relative, _ in validator.REQUIRED_FILES["stp"]) + (
+            "common/ideas/steland.txt",
+            "common/ideas/nodral.txt",
+            "history/countries/STP - StepanLand.txt",
+            "history/countries/NOD - Nodral.txt",
+            "localisation/russian/ADISCORD_ideas_l_russian.yml",
+        )
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._copy_repo_files(root, *paths)
+            history = root / "history/countries/STP - StepanLand.txt"
+            text = history.read_text(encoding="utf-8-sig")
+            text = re.sub(
+                r"country_lock_all_division_template\s*=\s*\{.*?\}\s*",
+                "",
+                text,
+                count=1,
+                flags=re.DOTALL,
+            )
+            history.write_text(text, encoding="utf-8-sig")
+            issues = validator.validate(root, "stp")
+
+        self.assertTrue(any("STP starting army lock" in issue for issue in issues))
+
     def test_empty_root_reports_each_feature_layer(self):
         with TemporaryDirectory() as tmp:
             issues = validator.validate(Path(tmp))

@@ -27,6 +27,11 @@ ideas = {
 				ADISCORD_economy_social_expense_factor = 0.10
 				ADISCORD_economy_state_overload_gain_factor = 0.05
 				ADISCORD_country_development_society_growth_factor = -0.05
+				custom_modifier_tooltip = STP_hedonism_army_restriction_tt
+			}
+
+			on_remove = {
+				country_lock_all_division_template = no
 			}
 		}
 	}

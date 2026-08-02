@@ -162,6 +162,14 @@ REQUIRED_FILES = {
             "localisation/russian/ADISCORD_STP_party_elections_l_russian.yml",
             "Russian STP party localisation",
         ),
+        ("common/ideas/steland.txt", "STP starting national spirits"),
+        ("common/ideas/nodral.txt", "NOD starting national spirits"),
+        ("history/countries/STP - StepanLand.txt", "STP starting history"),
+        ("history/countries/NOD - Nodral.txt", "NOD starting history"),
+        (
+            "localisation/russian/ADISCORD_ideas_l_russian.yml",
+            "STP/NOD ideas localisation",
+        ),
     ),
     "civil_war": (
         ("common/scripted_effects/ADISCORD_STP_VAL_crisis_war_effects.txt", "crisis war effects"),
@@ -440,6 +448,84 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
     triggers = read(
         root / "common/scripted_triggers/ADISCORD_STP_VAL_crisis_triggers.txt"
     )
+    stp_ideas = read(root / "common/ideas/steland.txt")
+    nod_ideas = read(root / "common/ideas/nodral.txt")
+    stp_history = read(root / "history/countries/STP - StepanLand.txt")
+    nod_history = read(root / "history/countries/NOD - Nodral.txt")
+    ideas_loc_path = root / "localisation/russian/ADISCORD_ideas_l_russian.yml"
+    ideas_loc = read(ideas_loc_path)
+
+    if stp_ideas is not None and nod_ideas is not None:
+        stp_idea = extract_named_block(
+            stp_ideas, "STP_hedonism_with_no_bondaries"
+        ) or ""
+        nod_idea = extract_named_block(
+            nod_ideas, "NOD_hedonism_with_no_bondaries"
+        ) or ""
+        stp_modifier = extract_named_block(stp_idea, "modifier") or ""
+        nod_modifier = extract_named_block(nod_idea, "modifier") or ""
+        if (
+            "custom_modifier_tooltip = STP_hedonism_army_restriction_tt"
+            not in stp_modifier
+        ):
+            issues.append("STP hedonism spirit must explain the starting army lock")
+        if (
+            "country_lock_all_division_template = no"
+            not in (extract_named_block(stp_idea, "on_remove") or "")
+        ):
+            issues.append("STP hedonism spirit must unlock templates when removed")
+        if not nod_idea:
+            issues.append("NOD must have a separate hedonism spirit")
+        elif "country_lock_all_division_template" in _mask_non_code(nod_idea):
+            issues.append("NOD hedonism spirit must not lock division templates")
+        for modifier in (
+            "monthly_population",
+            "research_speed_factor",
+            "stability_factor",
+            "ADISCORD_economy_trade_income_factor",
+            "ADISCORD_economy_civilian_factory_income_factor",
+            "ADISCORD_economy_social_expense_factor",
+            "ADISCORD_economy_state_overload_gain_factor",
+            "ADISCORD_country_development_society_growth_factor",
+        ):
+            if _direct_scalar_values(stp_modifier, modifier) != _direct_scalar_values(
+                nod_modifier, modifier
+            ):
+                issues.append(
+                    f"NOD hedonism spirit must preserve STP balance modifier {modifier}"
+                )
+
+    if stp_history is not None:
+        locks = list(
+            _iter_named_blocks(stp_history, "country_lock_all_division_template")
+        )
+        if (
+            len(locks) != 1
+            or _direct_scalar_values(locks[0], "is_locked") != ["yes"]
+            or _direct_scalar_values(locks[0], "desc")
+            != ["STP_hedonism_army_restriction_reason"]
+        ):
+            issues.append(
+                "STP starting army lock must use the hedonism restriction reason"
+            )
+
+    if nod_history is not None:
+        if "NOD_hedonism_with_no_bondaries" not in nod_history:
+            issues.append("NOD history must use its separate hedonism spirit")
+        if "STP_hedonism_with_no_bondaries" in nod_history:
+            issues.append("NOD history must not use the STP hedonism spirit")
+
+    if ideas_loc is not None:
+        for key in (
+            "NOD_hedonism_with_no_bondaries",
+            "NOD_hedonism_with_no_bondaries_desc",
+            "STP_hedonism_army_restriction_tt",
+            "STP_hedonism_army_restriction_reason",
+        ):
+            if f" {key}:" not in ideas_loc:
+                issues.append(f"missing Russian ideas localisation key {key}")
+        if not ideas_loc_path.read_bytes().startswith(b"\xef\xbb\xbf"):
+            issues.append("Russian STP/NOD ideas localisation must retain UTF-8 BOM")
 
     if categories is not None:
         masked_categories = _mask_non_code(categories)
