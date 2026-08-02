@@ -333,8 +333,12 @@ def validate() -> list[str]:
             "economy dashboard no longer fits the supported 1366x768 layout envelope")
     require("ADISCORD_economy_header_art" not in gui,
             "economy dashboard still uses the broken decorative header sprite")
-    require("GFX_ADISCORD_economy_slider_button" not in gui,
-            "economy dashboard still uses the clipped custom tab indicator sprite")
+    require(len(re.findall(r'name\s*=\s*"ADISCORD_economy_(?:tax|army|construction|social)_step_[1-5]"', gui)) == 20,
+            "economy dashboard does not expose four complete five-step scales")
+    require(len(re.findall(r'name\s*=\s*"ADISCORD_economy_(?:tax|army|construction|social)_active_marker"', gui)) == 4,
+            "economy dashboard does not expose one active marker per budget scale")
+    require(re.search(r'buttonText\s*=\s*"[+-]"', gui) is None,
+            "economy dashboard still uses blank text +/- controls")
     require("GFX_button_123x34" not in gui,
             "economy dashboard still uses the button sprite that clips compact policy controls")
     require(not (ROOT / "common/decisions/ADISCORD_economy_decisions.txt").exists(),
@@ -379,11 +383,28 @@ def validate() -> list[str]:
         for direction in ("decrease", "increase")
     }
     require(visible_regulators == expected_regulators,
-            "economy UI must expose exactly eight compact +/- budget controls")
+            "economy UI must expose exactly eight compact arrow budget controls")
+    for category in ("tax", "army", "construction", "social"):
+        require(re.search(
+            rf'name\s*=\s*"ADISCORD_economy_{category}_decrease"[\s\S]{{0,200}}spriteType\s*=\s*"button_left"',
+            gui,
+        ) is not None, f"economy {category} decrease control is not a left arrow")
+        require(re.search(
+            rf'name\s*=\s*"ADISCORD_economy_{category}_increase"[\s\S]{{0,200}}spriteType\s*=\s*"button_right"',
+            gui,
+        ) is not None, f"economy {category} increase control is not a right arrow")
     visible_actions = re.findall(r'name\s*=\s*"(ADISCORD_economy_action_[^"]+)"', gui)
     require(len(visible_actions) == 4, "economy UI must expose exactly four rare crisis actions")
     require('pdx_tooltip = "ADISCORD_economy_budget_breakdown_tt"' in gui,
             "balance KPI lacks the requested income/expense breakdown tooltip")
+    require('name = "ADISCORD_economy_topbar_icon"' in gui
+            and 'spriteType = "GFX_ADISCORD_treasury_icon"' in gui,
+            "topbar lacks the compact treasury icon")
+    require('name = "ADISCORD_economy_topbar_value"' in gui
+            and 'text = "ADISCORD_economy_topbar_treasury_value"' in gui,
+            "topbar lacks the numeric-only treasury value")
+    require('name = "GFX_ADISCORD_treasury_icon"' in interface_gfx,
+            "temporary treasury icon sprite is not registered")
 
     gui_buttons = set(re.findall(r'buttonType\s*=\s*\{.*?name\s*=\s*"(ADISCORD_economy_[^"]+)"', gui, re.S))
     require(bool(gui_buttons), "economy dashboard contains no discoverable interactive buttons")

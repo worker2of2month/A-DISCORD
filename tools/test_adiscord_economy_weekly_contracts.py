@@ -135,6 +135,17 @@ class WeeklyEconomyContracts(unittest.TestCase):
             "Фактическое изменение казны происходит раз в месяц", ECONOMY_LOC
         )
 
+    def test_budget_breakdown_leads_with_the_weekly_forecast(self):
+        match = re.search(
+            r'(?m)^\s*ADISCORD_economy_budget_breakdown_tt:\d*\s+"([^"]*)"',
+            ECONOMY_LOC,
+        )
+        self.assertIsNotNone(match)
+        tooltip = match.group(1)
+        self.assertIn("ADISCORD_economy_weekly_income", tooltip)
+        self.assertIn("ADISCORD_economy_weekly_expenses", tooltip)
+        self.assertIn("ADISCORD_economy_weekly_balance", tooltip)
+
 
 if __name__ == "__main__":
     unittest.main()

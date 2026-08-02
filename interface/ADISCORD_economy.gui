@@ -3,18 +3,36 @@ guiTypes = {
 		name = "ADISCORD_economy_topbar_window"
 		position = { x = -650 y = 4 }
 		Orientation = UPPER_RIGHT
-		size = { width = 170 height = 28 }
+		size = { width = 112 height = 28 }
 		clipping = no
 
 		buttonType = {
 			name = "ADISCORD_economy_topbar_button"
-			quadTextureSprite = "GFX_generic_box_smallest"
+			quadTextureSprite = "GFX_tiled_window_transparent"
 			position = { x = 0 y = 0 }
-			size = { x = 170 y = 28 }
-			buttonText = "ADISCORD_economy_topbar_treasury_text"
-			buttonFont = "hoi_16mbs"
+			size = { x = 112 y = 28 }
 			clicksound = click_default
 			pdx_tooltip = "ADISCORD_economy_topbar_treasury_tooltip"
+		}
+
+		iconType = {
+			name = "ADISCORD_economy_topbar_icon"
+			position = { x = 4 y = 2 }
+			spriteType = "GFX_ADISCORD_treasury_icon"
+			alwaystransparent = yes
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_economy_topbar_value"
+			position = { x = 32 y = 4 }
+			font = "hoi_18mbs"
+			text = "ADISCORD_economy_topbar_treasury_value"
+			format = center
+			maxWidth = 76
+			maxHeight = 22
+			multiline = no
+			fixedsize = yes
+			alwaystransparent = yes
 		}
 	}
 
@@ -100,10 +118,9 @@ guiTypes = {
 			position = { x = 20 y = 120 }
 			size = { width = 310 height = 420 }
 			background = { name = "ADISCORD_economy_status_bg" quadTextureSprite = "GFX_tiled_window2_1b_border" }
-			instantTextboxType = { name = "ADISCORD_economy_player_summary" position = { x = 14 y = 14 } font = "hoi_16mbs" text = "ADISCORD_economy_dashboard_player_summary" maxWidth = 282 maxHeight = 142 pdx_tooltip = "ADISCORD_economy_macro_tt" }
-			instantTextboxType = { name = "ADISCORD_economy_player_advice" position = { x = 14 y = 164 } font = "hoi_18mbs" text = "ADISCORD_economy_dashboard_player_advice" maxWidth = 282 maxHeight = 88 pdx_tooltip = "ADISCORD_economy_stretched_tt" }
-			instantTextboxType = { name = "ADISCORD_economy_automation_note" position = { x = 14 y = 264 } font = "hoi_16mbs" text = "ADISCORD_economy_dashboard_automation_note" maxWidth = 282 maxHeight = 72 pdx_tooltip = "ADISCORD_economy_last_month_accounting_tt" }
-			instantTextboxType = { name = "ADISCORD_economy_buildings_summary" position = { x = 14 y = 346 } font = "hoi_16mbs" text = "ADISCORD_economy_dashboard_buildings_compact" maxWidth = 282 maxHeight = 60 pdx_tooltip = "ADISCORD_economy_buildings_tt" }
+			instantTextboxType = { name = "ADISCORD_economy_player_summary" position = { x = 14 y = 14 } font = "hoi_16mbs" text = "ADISCORD_economy_dashboard_player_summary" maxWidth = 282 maxHeight = 126 pdx_tooltip = "ADISCORD_economy_macro_tt" }
+			instantTextboxType = { name = "ADISCORD_economy_player_advice" position = { x = 14 y = 154 } font = "hoi_18mbs" text = "ADISCORD_economy_dashboard_player_advice" maxWidth = 282 maxHeight = 112 pdx_tooltip = "ADISCORD_economy_stretched_tt" }
+			instantTextboxType = { name = "ADISCORD_economy_buildings_summary" position = { x = 14 y = 342 } font = "hoi_16mbs" text = "ADISCORD_economy_dashboard_buildings_compact" maxWidth = 282 maxHeight = 58 pdx_tooltip = "ADISCORD_economy_buildings_tt" }
 		}
 
 		containerWindowType = {
@@ -113,21 +130,65 @@ guiTypes = {
 			background = { name = "ADISCORD_economy_command_bg" quadTextureSprite = "GFX_tiled_window2_1b_border" }
 			instantTextboxType = { name = "ADISCORD_economy_budget_title" position = { x = 18 y = 12 } font = "hoi_18mbs" text = "ADISCORD_economy_budget_controls_title" maxWidth = 444 maxHeight = 28 format = center pdx_tooltip = "ADISCORD_economy_budget_controls_tt" }
 
-			instantTextboxType = { name = "ADISCORD_economy_tax_row" position = { x = 20 y = 52 } font = "hoi_16mbs" text = "ADISCORD_economy_budget_tax_row" maxWidth = 330 maxHeight = 30 pdx_tooltip = "ADISCORD_economy_tax_controls_tt" }
-			buttonType = { name = "ADISCORD_economy_tax_decrease" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 366 y = 44 } size = { x = 42 y = 32 } buttonText = "-" buttonFont = "hoi_18mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_tax_decrease_tt" }
-			buttonType = { name = "ADISCORD_economy_tax_increase" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 420 y = 44 } size = { x = 42 y = 32 } buttonText = "+" buttonFont = "hoi_18mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_tax_increase_tt" }
+			instantTextboxType = { name = "ADISCORD_economy_tax_row" position = { x = 20 y = 52 } font = "hoi_16mbs" text = "ADISCORD_economy_budget_tax_row" maxWidth = 208 maxHeight = 30 pdx_tooltip = "ADISCORD_economy_tax_controls_tt" }
+			containerWindowType = {
+				name = "ADISCORD_economy_tax_scale"
+				position = { x = 240 y = 49 }
+				size = { width = 112 height = 20 }
+				iconType = { name = "ADISCORD_economy_tax_step_1" position = { x = 0 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 1 alwaystransparent = yes }
+				iconType = { name = "ADISCORD_economy_tax_step_2" position = { x = 24 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 1 alwaystransparent = yes }
+				iconType = { name = "ADISCORD_economy_tax_step_3" position = { x = 48 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 1 alwaystransparent = yes }
+				iconType = { name = "ADISCORD_economy_tax_step_4" position = { x = 72 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 1 alwaystransparent = yes }
+				iconType = { name = "ADISCORD_economy_tax_step_5" position = { x = 96 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 1 alwaystransparent = yes }
+				iconType = { name = "ADISCORD_economy_tax_active_marker" position = { x = 0 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 2 alwaystransparent = yes }
+			}
+			buttonType = { name = "ADISCORD_economy_tax_decrease" position = { x = 366 y = 47 } spriteType = "button_left" scale = 0.75 clicksound = click_default pdx_tooltip = "ADISCORD_economy_tax_decrease_tt" }
+			buttonType = { name = "ADISCORD_economy_tax_increase" position = { x = 424 y = 47 } spriteType = "button_right" scale = 0.75 orientation = upper_right clicksound = click_default pdx_tooltip = "ADISCORD_economy_tax_increase_tt" }
 
-			instantTextboxType = { name = "ADISCORD_economy_army_row" position = { x = 20 y = 94 } font = "hoi_16mbs" text = "ADISCORD_economy_budget_army_row" maxWidth = 330 maxHeight = 30 pdx_tooltip = "ADISCORD_economy_army_controls_tt" }
-			buttonType = { name = "ADISCORD_economy_army_decrease" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 366 y = 86 } size = { x = 42 y = 32 } buttonText = "-" buttonFont = "hoi_18mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_army_decrease_tt" }
-			buttonType = { name = "ADISCORD_economy_army_increase" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 420 y = 86 } size = { x = 42 y = 32 } buttonText = "+" buttonFont = "hoi_18mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_army_increase_tt" }
+			instantTextboxType = { name = "ADISCORD_economy_army_row" position = { x = 20 y = 94 } font = "hoi_16mbs" text = "ADISCORD_economy_budget_army_row" maxWidth = 208 maxHeight = 30 pdx_tooltip = "ADISCORD_economy_army_controls_tt" }
+			containerWindowType = {
+				name = "ADISCORD_economy_army_scale"
+				position = { x = 240 y = 91 }
+				size = { width = 112 height = 20 }
+				iconType = { name = "ADISCORD_economy_army_step_1" position = { x = 0 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 1 alwaystransparent = yes }
+				iconType = { name = "ADISCORD_economy_army_step_2" position = { x = 24 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 1 alwaystransparent = yes }
+				iconType = { name = "ADISCORD_economy_army_step_3" position = { x = 48 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 1 alwaystransparent = yes }
+				iconType = { name = "ADISCORD_economy_army_step_4" position = { x = 72 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 1 alwaystransparent = yes }
+				iconType = { name = "ADISCORD_economy_army_step_5" position = { x = 96 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 1 alwaystransparent = yes }
+				iconType = { name = "ADISCORD_economy_army_active_marker" position = { x = 0 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 2 alwaystransparent = yes }
+			}
+			buttonType = { name = "ADISCORD_economy_army_decrease" position = { x = 366 y = 89 } spriteType = "button_left" scale = 0.75 clicksound = click_default pdx_tooltip = "ADISCORD_economy_army_decrease_tt" }
+			buttonType = { name = "ADISCORD_economy_army_increase" position = { x = 424 y = 89 } spriteType = "button_right" scale = 0.75 orientation = upper_right clicksound = click_default pdx_tooltip = "ADISCORD_economy_army_increase_tt" }
 
-			instantTextboxType = { name = "ADISCORD_economy_construction_row" position = { x = 20 y = 136 } font = "hoi_16mbs" text = "ADISCORD_economy_budget_construction_row" maxWidth = 330 maxHeight = 30 pdx_tooltip = "ADISCORD_economy_construction_controls_tt" }
-			buttonType = { name = "ADISCORD_economy_construction_decrease" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 366 y = 128 } size = { x = 42 y = 32 } buttonText = "-" buttonFont = "hoi_18mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_construction_decrease_tt" }
-			buttonType = { name = "ADISCORD_economy_construction_increase" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 420 y = 128 } size = { x = 42 y = 32 } buttonText = "+" buttonFont = "hoi_18mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_construction_increase_tt" }
+			instantTextboxType = { name = "ADISCORD_economy_construction_row" position = { x = 20 y = 136 } font = "hoi_16mbs" text = "ADISCORD_economy_budget_construction_row" maxWidth = 208 maxHeight = 30 pdx_tooltip = "ADISCORD_economy_construction_controls_tt" }
+			containerWindowType = {
+				name = "ADISCORD_economy_construction_scale"
+				position = { x = 240 y = 133 }
+				size = { width = 112 height = 20 }
+				iconType = { name = "ADISCORD_economy_construction_step_1" position = { x = 0 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 1 alwaystransparent = yes }
+				iconType = { name = "ADISCORD_economy_construction_step_2" position = { x = 24 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 1 alwaystransparent = yes }
+				iconType = { name = "ADISCORD_economy_construction_step_3" position = { x = 48 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 1 alwaystransparent = yes }
+				iconType = { name = "ADISCORD_economy_construction_step_4" position = { x = 72 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 1 alwaystransparent = yes }
+				iconType = { name = "ADISCORD_economy_construction_step_5" position = { x = 96 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 1 alwaystransparent = yes }
+				iconType = { name = "ADISCORD_economy_construction_active_marker" position = { x = 0 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 2 alwaystransparent = yes }
+			}
+			buttonType = { name = "ADISCORD_economy_construction_decrease" position = { x = 366 y = 131 } spriteType = "button_left" scale = 0.75 clicksound = click_default pdx_tooltip = "ADISCORD_economy_construction_decrease_tt" }
+			buttonType = { name = "ADISCORD_economy_construction_increase" position = { x = 424 y = 131 } spriteType = "button_right" scale = 0.75 orientation = upper_right clicksound = click_default pdx_tooltip = "ADISCORD_economy_construction_increase_tt" }
 
-			instantTextboxType = { name = "ADISCORD_economy_social_row" position = { x = 20 y = 178 } font = "hoi_16mbs" text = "ADISCORD_economy_budget_social_row" maxWidth = 330 maxHeight = 30 pdx_tooltip = "ADISCORD_economy_social_controls_tt" }
-			buttonType = { name = "ADISCORD_economy_social_decrease" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 366 y = 170 } size = { x = 42 y = 32 } buttonText = "-" buttonFont = "hoi_18mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_social_decrease_tt" }
-			buttonType = { name = "ADISCORD_economy_social_increase" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 420 y = 170 } size = { x = 42 y = 32 } buttonText = "+" buttonFont = "hoi_18mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_social_increase_tt" }
+			instantTextboxType = { name = "ADISCORD_economy_social_row" position = { x = 20 y = 178 } font = "hoi_16mbs" text = "ADISCORD_economy_budget_social_row" maxWidth = 208 maxHeight = 30 pdx_tooltip = "ADISCORD_economy_social_controls_tt" }
+			containerWindowType = {
+				name = "ADISCORD_economy_social_scale"
+				position = { x = 240 y = 175 }
+				size = { width = 112 height = 20 }
+				iconType = { name = "ADISCORD_economy_social_step_1" position = { x = 0 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 1 alwaystransparent = yes }
+				iconType = { name = "ADISCORD_economy_social_step_2" position = { x = 24 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 1 alwaystransparent = yes }
+				iconType = { name = "ADISCORD_economy_social_step_3" position = { x = 48 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 1 alwaystransparent = yes }
+				iconType = { name = "ADISCORD_economy_social_step_4" position = { x = 72 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 1 alwaystransparent = yes }
+				iconType = { name = "ADISCORD_economy_social_step_5" position = { x = 96 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 1 alwaystransparent = yes }
+				iconType = { name = "ADISCORD_economy_social_active_marker" position = { x = 0 y = 0 } spriteType = "GFX_ADISCORD_economy_slider_button" frame = 2 alwaystransparent = yes }
+			}
+			buttonType = { name = "ADISCORD_economy_social_decrease" position = { x = 366 y = 173 } spriteType = "button_left" scale = 0.75 clicksound = click_default pdx_tooltip = "ADISCORD_economy_social_decrease_tt" }
+			buttonType = { name = "ADISCORD_economy_social_increase" position = { x = 424 y = 173 } spriteType = "button_right" scale = 0.75 orientation = upper_right clicksound = click_default pdx_tooltip = "ADISCORD_economy_social_increase_tt" }
 
 			instantTextboxType = { name = "ADISCORD_economy_emergency_title" position = { x = 18 y = 224 } font = "hoi_18mbs" text = "ADISCORD_economy_emergency_title" maxWidth = 444 maxHeight = 28 format = center }
 			buttonType = { name = "ADISCORD_economy_action_repay_debt" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 18 y = 260 } size = { x = 214 y = 34 } buttonText = "ADISCORD_economy_button_repay_debt" buttonFont = "hoi_16mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_action_repay_debt_tt" }

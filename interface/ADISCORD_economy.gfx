@@ -1,5 +1,10 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_ADISCORD_treasury_icon"
+		texturefile = "gfx/interface/ADISCORD_economy_gui/treasury_icon.dds"
+		legacy_lazy_load = no
+	}
+	spriteType = {
 		name = "GFX_ADISCORD_economy_header_bg"
 		texturefile = "gfx/interface/ADISCORD_economy_gui/economy_header_bg.dds"
 	}

@@ -155,6 +155,106 @@ class NationalFocusGuiContractTests(unittest.TestCase):
         )
 
 
+class EconomyDashboardGuiContractTests(unittest.TestCase):
+    def setUp(self):
+        self.gui = (ROOT / 'interface' / 'ADISCORD_economy.gui').read_text(
+            encoding='utf-8-sig'
+        )
+        self.gfx = (ROOT / 'interface' / 'ADISCORD_economy.gfx').read_text(
+            encoding='utf-8-sig'
+        )
+        self.scripted_gui = (
+            ROOT / 'common' / 'scripted_guis' / 'ADISCORD_economy_scripted_gui.txt'
+        ).read_text(encoding='utf-8-sig')
+        self.nodes = set(named_gui_nodes(self.gui))
+
+    def test_topbar_uses_icon_and_numeric_value(self):
+        self.assertIn(
+            (
+                'iconType',
+                'ADISCORD_economy_topbar_icon',
+                ('ADISCORD_economy_topbar_window',),
+            ),
+            self.nodes,
+        )
+        self.assertIn(
+            (
+                'instantTextboxType',
+                'ADISCORD_economy_topbar_value',
+                ('ADISCORD_economy_topbar_window',),
+            ),
+            self.nodes,
+        )
+        self.assertNotRegex(
+            self.gui,
+            r'buttonText\s*=\s*"ADISCORD_economy_topbar_treasury_text"',
+        )
+
+    def test_treasury_sprite_has_a_real_temporary_asset(self):
+        self.assertIn('name = "GFX_ADISCORD_treasury_icon"', self.gfx)
+        self.assertIn(
+            'texturefile = "gfx/interface/ADISCORD_economy_gui/treasury_icon.dds"',
+            self.gfx,
+        )
+        self.assertTrue(
+            (
+                ROOT
+                / 'gfx'
+                / 'interface'
+                / 'ADISCORD_economy_gui'
+                / 'treasury_icon.dds'
+            ).is_file()
+        )
+
+    def test_four_budget_rows_use_arrows_and_five_step_markers(self):
+        for policy in ('tax', 'army', 'construction', 'social'):
+            self.assertRegex(
+                self.gui,
+                rf'name\s*=\s*"ADISCORD_economy_{policy}_decrease"'
+                rf'[\s\S]{{0,200}}spriteType\s*=\s*"button_left"',
+            )
+            self.assertRegex(
+                self.gui,
+                rf'name\s*=\s*"ADISCORD_economy_{policy}_increase"'
+                rf'[\s\S]{{0,200}}spriteType\s*=\s*"button_right"',
+            )
+            for level in range(1, 6):
+                self.assertIn(f'ADISCORD_economy_{policy}_step_{level}', self.gui)
+            self.assertIn(f'ADISCORD_economy_{policy}_active_marker', self.gui)
+        self.assertNotRegex(self.gui, r'buttonText\s*=\s*"[+-]"')
+
+    def test_active_markers_bind_to_all_five_mode_positions(self):
+        for policy in ('tax', 'army', 'construction', 'social'):
+            self.assertIn(
+                f'ADISCORD_economy_{policy}_active_marker_visible',
+                self.scripted_gui,
+            )
+            self.assertIn(
+                f'ADISCORD_economy_{policy}_active_marker_x_position',
+                self.scripted_gui,
+            )
+            for position in (0, 24, 48, 72, 96):
+                self.assertRegex(
+                    self.scripted_gui,
+                    rf'var\s*=\s*ADISCORD_economy_{policy}_active_marker_x_position'
+                    rf'\s+value\s*=\s*{position}',
+                )
+
+    def test_left_panel_text_zones_do_not_overlap(self):
+        self.assertNotIn('ADISCORD_economy_automation_note', self.gui)
+        for name, y, height in (
+            ('ADISCORD_economy_player_summary', 14, 126),
+            ('ADISCORD_economy_player_advice', 154, 112),
+            ('ADISCORD_economy_buildings_summary', 342, 58),
+        ):
+            self.assertRegex(
+                self.gui,
+                rf'name\s*=\s*"{name}"'
+                rf'[\s\S]{{0,160}}position\s*=\s*\{{\s*x\s*=\s*14\s+y\s*=\s*{y}\s*\}}'
+                rf'[\s\S]{{0,160}}maxHeight\s*=\s*{height}',
+            )
+
+
 class RuntimePulseTests(unittest.TestCase):
     def test_economy_weekly_pulse_uses_the_light_settlement(self):
         text = (ROOT / 'common' / 'on_actions' / '00_ADISCORD_on_actions.txt').read_text(
