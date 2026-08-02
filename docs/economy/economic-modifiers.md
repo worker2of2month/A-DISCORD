@@ -1,0 +1,122 @@
+# Кастомные модификаторы экономики
+
+Этот файл — публичный API для национальных духов, законов и наград фокусов A-DISCORD. Все перечисленные ключи видимы в подсказках HOI4, считываются через `modifier@...` и входят в очередной лёгкий пересчёт экономики.
+
+Значения записываются десятичной долей: `0.10` означает +10%, `-0.10` означает −10%. Модификаторы складываются с другими бонусами, после чего итоговый коэффициент ограничивается движком системы диапазоном от 25% до 250% базового значения.
+
+## Как выдать через фокус
+
+Кастомный модификатор следует помещать в национальный дух. Сам фокус выдаёт этот дух через `completion_reward`; так эффект виден игроку и автоматически снимается вместе с идеей.
+
+```txt
+ideas = {
+    country = {
+        ADISCORD_example_resource_concessions = {
+            allowed = { always = no }
+            removal_cost = -1
+            modifier = {
+                ADISCORD_economy_resource_rent_income_factor = 0.15
+                ADISCORD_economy_state_overload_gain_factor = 0.05
+            }
+        }
+    }
+}
+```
+
+```txt
+ADISCORD_example_focus = {
+    cost = 10
+    completion_reward = {
+        add_ideas = ADISCORD_example_resource_concessions
+    }
+}
+```
+
+В этом примере ресурсная рента растёт на 15%, но рост перегрузки государства увеличивается на 5%. Рента умножает реальный кэш ресурсной обеспеченности страны и ничего не даёт государству без ресурсной базы.
+
+## Безопасные диапазоны
+
+- Узкий бонус к одному доходу, расходу или направлению развития: обычно 5–15% (`0.05`…`0.15`).
+- Сильная награда в конце ветки: до 20–25%, если она не складывается с несколькими аналогами.
+- Общий доход или общие расходы влияют на весь бюджет: обычно 3–10%.
+- Для сокращения расходов нужен минус: `ADISCORD_economy_army_expense_factor = -0.10` уменьшает содержание армии на 10%.
+- Для роста дохода, ёмкости, доверия, устойчивости или развития нужен плюс.
+- Для инфляционного давления, процентной ставки, перегрузки и прироста усталости плюс является штрафом, минус — бонусом.
+- Не балансируйте контент вокруг системного предела 25–250%: это аварийный clamp, а не рекомендуемый диапазон.
+
+## Доходы
+
+| Ключ | Что меняет | Полезный знак | Обычная сила |
+|---|---|---:|---:|
+| `ADISCORD_economy_tax_collection_factor` | Общая собираемость налоговых доходов: население, бизнес, гражданский выпуск, оружейный доход, рента и здания | + | 5–10% |
+| `ADISCORD_economy_population_tax_income_factor` | Налоги с населения | + | 5–15% |
+| `ADISCORD_economy_trade_income_factor` | Торгово-деловой доход, гражданский выпуск и ресурсная рента | + | 5–15% |
+| `ADISCORD_economy_civilian_factory_income_factor` | Деловой доход, связанный с гражданской экономикой | + | 5–15% |
+| `ADISCORD_economy_military_industry_income_factor` | Доход военной промышленности, если он разрешён моделью или профилем страны | + | 5–15% |
+| `ADISCORD_economy_resource_rent_income_factor` | Рента от реальных стратегических ресурсов | + | 10–20% |
+| `ADISCORD_economy_building_income_factor` | Прямой доход экономических зданий и общественных инвестиций | + | 5–15% |
+| `ADISCORD_economy_overall_income_factor` | Итоговый месячный доход после всех отдельных корзин | + | 3–10% |
+
+## Расходы
+
+У всех ключей в этой таблице положительное значение повышает расходы, отрицательное — сокращает. Например, `-0.10` означает экономию 10% по указанной статье.
+
+| Ключ | Что меняет | Обычная сила |
+|---|---|---:|
+| `ADISCORD_economy_army_expense_factor` | Содержание сухопутных войск | ±5–15% |
+| `ADISCORD_economy_airforce_expense_factor` | Содержание авиации | ±5–15% |
+| `ADISCORD_economy_navy_expense_factor` | Содержание флота | ±5–15% |
+| `ADISCORD_economy_military_factory_expense_factor` | Военно-промышленные расходы и субсидии кластеров | ±5–15% |
+| `ADISCORD_economy_construction_expense_factor` | Финансирование активного строительства | ±5–15% |
+| `ADISCORD_economy_social_expense_factor` | Социальный бюджет | ±5–15% |
+| `ADISCORD_economy_research_expense_factor` | Образование, наука и содержание научных центров | ±5–15% |
+| `ADISCORD_economy_admin_expense_factor` | Управление государством и экономическими объектами | ±5–15% |
+| `ADISCORD_economy_debt_service_factor` | Итоговая стоимость обслуживания уже существующего долга | ±5–15% |
+| `ADISCORD_economy_overall_expense_factor` | Все месячные расходы после отдельных статей | ±3–10% |
+
+## Долг, казна и макроэкономика
+
+| Ключ | Что меняет | Плюс означает | Обычная сила |
+|---|---|---|---:|
+| `ADISCORD_economy_debt_capacity_factor` | Максимальную долговую ёмкость | больше доступного долга | 5–15% |
+| `ADISCORD_economy_interest_rate_factor` | Процентную ставку | более дорогой долг, штраф | 5–15% |
+| `ADISCORD_economy_creditworthiness_factor` | Итоговую кредитоспособность | более надёжный заёмщик | 5–15% |
+| `ADISCORD_economy_inflation_pressure_factor` | Прирост инфляционного давления | больше инфляции, штраф | 5–15% |
+| `ADISCORD_economy_money_printing_efficiency_factor` | Эффективность эмиссии | меньше инфляции от печати денег | 5–15% |
+| `ADISCORD_economy_price_stability_factor` | Сопротивление инфляции | меньше итогового инфляционного давления | 5–15% |
+| `ADISCORD_economy_deficit_pressure_factor` | Давление бюджетного дефицита | сильнее последствия дефицита, штраф | 5–15% |
+| `ADISCORD_economy_fiscal_stress_gain_factor` | Положительный прирост фискального стресса | стресс растёт быстрее, штраф | 5–15% |
+| `ADISCORD_economy_fiscal_stress_resistance_factor` | Сопротивление фискальному стрессу | стресс растёт медленнее | 5–15% |
+| `ADISCORD_economy_investment_confidence_factor` | Итоговое инвестиционное доверие | больше доверия | 5–15% |
+| `ADISCORD_economy_treasury_capacity_factor` | Максимальный размер казны | больше места для резервов | 5–15% |
+
+## Перегрузка и усталость
+
+| Ключ | Что меняет | Плюс означает | Обычная сила |
+|---|---|---|---:|
+| `ADISCORD_economy_state_overload_gain_factor` | Формирование перегрузки государства | больше перегрузки, штраф | 5–15% |
+| `ADISCORD_economy_war_fatigue_gain_factor` | Только положительный прирост военной усталости | усталость растёт быстрее, штраф | 5–15% |
+| `ADISCORD_economy_demographic_fatigue_gain_factor` | Только положительный прирост демографической усталости | усталость растёт быстрее, штраф | 5–15% |
+| `ADISCORD_economy_demobilization_pressure_gain_factor` | Нагрузка на гражданскую рабочую силу от сохраняемой мобилизации | давление демобилизации сильнее, штраф | 5–15% |
+| `ADISCORD_economy_bombing_disruption_resistance_factor` | Сопротивление хозяйственному ущербу от бомбардировок | меньше ущерба | 5–15% |
+| `ADISCORD_economy_overload_resistance_factor` | Дополнительное сопротивление перегрузке | меньше итоговой перегрузки | 5–15% |
+
+## Развитие страны
+
+Все модификаторы развития используют положительное значение для ускорения соответствующего прогресса. Обычная награда фокуса — 5–10%, сильная специализация — до 15%.
+
+| Ключ | Направление |
+|---|---|
+| `ADISCORD_country_development_global_growth_factor` | Все направления развития страны |
+| `ADISCORD_country_development_society_growth_factor` | Общество |
+| `ADISCORD_country_development_social_system_growth_factor` | Социальная система |
+| `ADISCORD_country_development_army_growth_factor` | Армия |
+| `ADISCORD_country_development_cultural_growth_factor` | Культура |
+| `ADISCORD_country_development_state_growth_factor` | Государственный аппарат |
+| `ADISCORD_country_development_economic_growth_factor` | Экономика |
+
+## Практические сочетания
+
+Ресурсная концессия может дать `ADISCORD_economy_resource_rent_income_factor = 0.15` вместе с небольшим ростом перегрузки. Военная реформа обычно сочетает снижение `ADISCORD_economy_army_expense_factor` с меньшим бонусом к `ADISCORD_economy_debt_capacity_factor`. Социальная программа может повысить `ADISCORD_economy_social_expense_factor`, но ускорить `ADISCORD_country_development_social_system_growth_factor`.
+
+Не используйте общий доход как универсальную награду каждого фокуса: узкие модификаторы лучше объясняют игроку источник эффекта и создают различимые экономические специализации.

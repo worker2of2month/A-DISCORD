@@ -1004,7 +1004,12 @@ ADISCORD_economy_update_monthly_budget_trend = {
 		add_to_variable = { var = ADISCORD_economy_deficit_pressure value = -2 }
 	}
 	else = {
-		add_to_variable = { var = ADISCORD_economy_deficit_pressure value = 1 }
+		# Only new pressure is modified. A surplus always clears two points, so a
+		# penalty cannot accidentally weaken recovery as well as worsening deficits.
+		set_temp_variable = { var = ADISCORD_economy_deficit_pressure_gain_temp value = 1 }
+		multiply_temp_variable = { var = ADISCORD_economy_deficit_pressure_gain_temp value = ADISCORD_economy_final_deficit_pressure_factor_bp }
+		divide_temp_variable = { var = ADISCORD_economy_deficit_pressure_gain_temp value = 100 }
+		add_to_variable = { var = ADISCORD_economy_deficit_pressure value = ADISCORD_economy_deficit_pressure_gain_temp }
 		add_to_variable = { var = ADISCORD_economy_deficit_streak value = 1 }
 		set_variable = { var = ADISCORD_economy_surplus_streak value = 0 }
 	}
@@ -1111,6 +1116,7 @@ ADISCORD_economy_apply_monthly_balance = {
 	set_variable = { var = ADISCORD_economy_last_month_action_costs value = ADISCORD_economy_current_month_action_costs }
 	set_variable = { var = ADISCORD_economy_last_month_action_income value = ADISCORD_economy_current_month_action_income }
 	set_variable = { var = ADISCORD_economy_last_month_building_costs value = ADISCORD_economy_current_month_building_costs }
+	set_variable = { var = ADISCORD_economy_deficit_pressure_before_temp value = ADISCORD_economy_deficit_pressure }
 
 	if = {
 		limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = greater_than_or_equals } }
@@ -1207,6 +1213,17 @@ ADISCORD_economy_apply_monthly_balance = {
 	set_variable = { var = ADISCORD_economy_current_month_action_income value = 0 }
 	set_variable = { var = ADISCORD_economy_current_month_building_costs value = 0 }
 
+	# Compatibility/yearly callers can add several pressure components in this
+	# transaction. Scale their combined positive gain once; never slow recovery.
+	set_variable = { var = ADISCORD_economy_deficit_pressure_gain_temp value = ADISCORD_economy_deficit_pressure }
+	subtract_from_variable = { var = ADISCORD_economy_deficit_pressure_gain_temp value = ADISCORD_economy_deficit_pressure_before_temp }
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_deficit_pressure_gain_temp value = 0 compare = greater_than } }
+		multiply_variable = { var = ADISCORD_economy_deficit_pressure_gain_temp value = ADISCORD_economy_final_deficit_pressure_factor_bp }
+		divide_variable = { var = ADISCORD_economy_deficit_pressure_gain_temp value = 100 }
+		set_variable = { var = ADISCORD_economy_deficit_pressure value = ADISCORD_economy_deficit_pressure_before_temp }
+		add_to_variable = { var = ADISCORD_economy_deficit_pressure value = ADISCORD_economy_deficit_pressure_gain_temp }
+	}
 	clamp_variable = { var = ADISCORD_economy_deficit_streak min = 0 max = 24 }
 	clamp_variable = { var = ADISCORD_economy_surplus_streak min = 0 max = 24 }
 	clamp_variable = { var = ADISCORD_economy_deficit_pressure min = 0 max = 100 }
@@ -1229,7 +1246,10 @@ ADISCORD_economy_apply_yearly_balance = {
 		# The transaction already applied one pressure step. Five additional
 		# steps implement the documented secondary-AI stabilizer.
 		add_to_variable = { var = ADISCORD_economy_deficit_streak value = 5 }
-		add_to_variable = { var = ADISCORD_economy_deficit_pressure value = 5 }
+		set_temp_variable = { var = ADISCORD_economy_yearly_deficit_pressure_gain_temp value = 5 }
+		multiply_temp_variable = { var = ADISCORD_economy_yearly_deficit_pressure_gain_temp value = ADISCORD_economy_final_deficit_pressure_factor_bp }
+		divide_temp_variable = { var = ADISCORD_economy_yearly_deficit_pressure_gain_temp value = 100 }
+		add_to_variable = { var = ADISCORD_economy_deficit_pressure value = ADISCORD_economy_yearly_deficit_pressure_gain_temp }
 	}
 	else = {
 		add_to_variable = { var = ADISCORD_economy_surplus_streak value = 5 }
@@ -1583,6 +1603,10 @@ ADISCORD_economy_update_workforce_drain = {
 	if = { limit = { has_army_manpower = { size > 249999 } } set_variable = { var = ADISCORD_economy_workforce_drain_level value = 2 } }
 	if = { limit = { has_army_manpower = { size > 499999 } } set_variable = { var = ADISCORD_economy_workforce_drain_level value = 3 } }
 	if = { limit = { ADISCORD_economy_has_labor_mobilized_labor = yes } add_to_variable = { var = ADISCORD_economy_workforce_drain_level value = 1 } }
+	# Demobilization pressure is the economic burden of keeping this workforce in
+	# uniform. Positive factors worsen the burden; negative factors ease it.
+	multiply_variable = { var = ADISCORD_economy_workforce_drain_level value = ADISCORD_economy_final_demobilization_pressure_gain_factor_bp }
+	divide_variable = { var = ADISCORD_economy_workforce_drain_level value = 100 }
 	clamp_variable = { var = ADISCORD_economy_workforce_drain_level min = 0 max = 4 }
 }
 
@@ -1597,6 +1621,10 @@ ADISCORD_economy_update_bombing_disruption = {
 	set_temp_variable = { var = ADISCORD_economy_damage_index_temp value = ADISCORD_economy_damaged_industry_score }
 	multiply_temp_variable = { var = ADISCORD_economy_damage_index_temp value = 100 }
 	divide_temp_variable = { var = ADISCORD_economy_damage_index_temp value = ADISCORD_economy_damage_base_temp }
+	# Resistance lowers the normalized damage index before discrete disruption
+	# thresholds are selected. This remains O(1) and uses the quarterly cache.
+	multiply_temp_variable = { var = ADISCORD_economy_damage_index_temp value = 100 }
+	divide_temp_variable = { var = ADISCORD_economy_damage_index_temp value = ADISCORD_economy_final_bombing_disruption_resistance_factor_bp }
 	set_variable = { var = ADISCORD_economy_bombing_disruption_level value = 0 }
 	if = { limit = { check_variable = { var = ADISCORD_economy_damage_index_temp value = 5 compare = greater_than_or_equals } } set_variable = { var = ADISCORD_economy_bombing_disruption_level value = 1 } }
 	if = { limit = { check_variable = { var = ADISCORD_economy_damage_index_temp value = 15 compare = greater_than_or_equals } } set_variable = { var = ADISCORD_economy_bombing_disruption_level value = 2 } }

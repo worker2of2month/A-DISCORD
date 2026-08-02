@@ -38,6 +38,7 @@ ECONOMY_AI = (
     ROOT / "common" / "ai_strategy" / "ADISCORD_economy_ai.txt"
 ).read_text(encoding="utf-8-sig")
 BUILDING_DOC = ROOT / "docs" / "economy" / "economic-buildings.md"
+MODIFIER_DOC = ROOT / "docs" / "economy" / "economic-modifiers.md"
 
 
 def block(text, name):
@@ -249,6 +250,52 @@ class WeeklyEconomyContracts(unittest.TestCase):
             "3 / 13",
         ):
             self.assertIn(required, documentation)
+
+    def test_public_modifier_api_is_connected_localised_and_documented(self):
+        modifier_keys = set(
+            re.findall(
+                r"(?m)^\s*(ADISCORD_(?:economy|country_development)_[A-Za-z0-9_]+)\s*=\s*\{",
+                MODIFIER_DEFINITIONS,
+            )
+        )
+        self.assertEqual(len(modifier_keys), 42)
+        self.assertTrue(MODIFIER_DOC.is_file())
+        documentation = MODIFIER_DOC.read_text(encoding="utf-8-sig")
+        for key in modifier_keys:
+            self.assertIn(f"modifier@{key}", MODIFIER_EFFECTS, key)
+            self.assertRegex(MODIFIER_LOC, rf"(?m)^\s*{re.escape(key)}:\d*\s+")
+            self.assertIn(f"`{key}`", documentation, key)
+
+    def test_modifier_reference_is_focus_ready_and_has_no_retired_reserve_api(self):
+        self.assertTrue(MODIFIER_DOC.is_file())
+        documentation = MODIFIER_DOC.read_text(encoding="utf-8-sig")
+        self.assertIn("ADISCORD_economy_resource_rent_income_factor = 0.15", documentation)
+        self.assertIn("completion_reward", documentation)
+        self.assertIn("add_ideas", documentation)
+        self.assertIn("Безопасные диапазоны", documentation)
+        for text in (MODIFIER_DEFINITIONS, MODIFIER_EFFECTS, MODIFIER_LOC, documentation):
+            self.assertNotIn("reserve_growth", text)
+
+    def test_pressure_and_bombing_modifier_outputs_have_real_consumers(self):
+        budget_trend = block(EFFECTS, "ADISCORD_economy_update_monthly_budget_trend")
+        compatibility_month = block(EFFECTS, "ADISCORD_economy_apply_monthly_balance")
+        yearly = block(EFFECTS, "ADISCORD_economy_apply_yearly_balance")
+        workforce = block(EFFECTS, "ADISCORD_economy_update_workforce_drain")
+        bombing = block(EFFECTS, "ADISCORD_economy_update_bombing_disruption")
+        self.assertIn("ADISCORD_economy_final_deficit_pressure_factor_bp", budget_trend)
+        self.assertIn(
+            "ADISCORD_economy_final_deficit_pressure_factor_bp",
+            compatibility_month,
+        )
+        self.assertIn("ADISCORD_economy_final_deficit_pressure_factor_bp", yearly)
+        self.assertIn(
+            "ADISCORD_economy_final_demobilization_pressure_gain_factor_bp",
+            workforce,
+        )
+        self.assertIn(
+            "ADISCORD_economy_final_bombing_disruption_resistance_factor_bp",
+            bombing,
+        )
 
 
 if __name__ == "__main__":
