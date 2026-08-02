@@ -31,6 +31,13 @@ MODIFIER_LOC = (
 ECONOMY_LOC = (
     ROOT / "localisation" / "russian" / "ADISCORD_economy_l_russian.yml"
 ).read_text(encoding="utf-8-sig")
+BUILDINGS = (ROOT / "common" / "buildings" / "00_buildings.txt").read_text(
+    encoding="utf-8-sig"
+)
+ECONOMY_AI = (
+    ROOT / "common" / "ai_strategy" / "ADISCORD_economy_ai.txt"
+).read_text(encoding="utf-8-sig")
+BUILDING_DOC = ROOT / "docs" / "economy" / "economic-buildings.md"
 
 
 def block(text, name):
@@ -145,6 +152,103 @@ class WeeklyEconomyContracts(unittest.TestCase):
         self.assertIn("ADISCORD_economy_weekly_income", tooltip)
         self.assertIn("ADISCORD_economy_weekly_expenses", tooltip)
         self.assertIn("ADISCORD_economy_weekly_balance", tooltip)
+
+    def test_economic_buildings_keep_distinct_bounded_state_roles(self):
+        specs = {
+            "ADISCORD_business_center": (
+                "5500",
+                "750",
+                "3",
+                "local_building_slots_factor = 0.05",
+            ),
+            "ADISCORD_science_center": (
+                "7000",
+                "1250",
+                "2",
+                "local_building_slots_factor = 0.02",
+            ),
+            "ADISCORD_industrial_cluster": (
+                "8000",
+                "1500",
+                "3",
+                "local_factory_energy_consumption = 0.20",
+            ),
+        }
+        for name, (cost, extra_cost, state_cap, signature) in specs.items():
+            building = block(BUILDINGS, name)
+            self.assertRegex(building, r"show_on_map\s*=\s*0")
+            self.assertRegex(building, rf"base_cost\s*=\s*{cost}\b")
+            self.assertRegex(
+                building,
+                rf"per_controlled_building_extra_cost\s*=\s*{extra_cost}\b",
+            )
+            self.assertRegex(building, rf"state_max\s*=\s*{state_cap}\b")
+            self.assertIn(signature, building)
+
+    def test_economic_building_effects_use_cached_country_counts(self):
+        recount = block(EFFECTS, "ADISCORD_economy_recount_economic_buildings")
+        weekly = block(EFFECTS, "ADISCORD_economy_weekly_update")
+        for building in (
+            "ADISCORD_business_center",
+            "ADISCORD_science_center",
+            "ADISCORD_industrial_cluster",
+        ):
+            self.assertIn(building, recount)
+            self.assertIn(f"{building}_count", EFFECTS)
+        self.assertEqual(recount.count("every_owned_state"), 1)
+        self.assertNotIn("recount_economic_buildings", weekly)
+        self.assertNotIn("every_owned_state", weekly)
+
+    def test_ai_building_targets_are_bounded_by_fiscal_state(self):
+        expected = {
+            "ADISCORD_ai_fiscal_crisis": (0, 0, 0),
+            "ADISCORD_ai_fiscal_stress": (0, 0, 0),
+            "ADISCORD_ai_fiscal_recovery": (1, 0, 0),
+            "ADISCORD_ai_healthy_civilian_growth": (2, 1, 1),
+        }
+        names = (
+            "ADISCORD_business_center",
+            "ADISCORD_science_center",
+            "ADISCORD_industrial_cluster",
+        )
+        for strategy_name, targets in expected.items():
+            strategy = block(ECONOMY_AI, strategy_name)
+            for building, target in zip(names, targets):
+                self.assertRegex(
+                    strategy,
+                    rf"building_target\s+id\s*=\s*{building}\s+value\s*=\s*{target}\b",
+                )
+        wartime = block(ECONOMY_AI, "ADISCORD_ai_healthy_war_industry")
+        self.assertRegex(
+            wartime,
+            r"building_target\s+id\s*=\s*ADISCORD_industrial_cluster\s+value\s*=\s*2\b",
+        )
+
+    def test_building_tooltips_lead_with_role_and_budget_impact(self):
+        self.assertNotIn("Строятся в обычном меню", ECONOMY_LOC)
+        for key, role, budget in (
+            ("ADISCORD_business_center_desc", "Роль: доход", "+0,90"),
+            ("ADISCORD_science_center_desc", "Роль: исследования", "-0,42"),
+            ("ADISCORD_industrial_cluster_desc", "Роль: производство", "+0,08"),
+        ):
+            match = re.search(rf'(?m)^\s*{key}:\d*\s+"([^"]*)"', ECONOMY_LOC)
+            self.assertIsNotNone(match, key)
+            self.assertIn(role, match.group(1))
+            self.assertIn(budget, match.group(1))
+
+    def test_economic_building_reference_documents_roles_and_formulas(self):
+        self.assertTrue(BUILDING_DOC.is_file())
+        documentation = BUILDING_DOC.read_text(encoding="utf-8-sig")
+        for required in (
+            "Деловой центр",
+            "Научный центр",
+            "Промышленный кластер",
+            "0.85 + 0.15 - 0.10 = +0.90",
+            "0.05 - 0.35 - 0.12 = -0.42",
+            "0.30 + 0.08 - 0.18 - 0.12 = +0.08",
+            "3 / 13",
+        ):
+            self.assertIn(required, documentation)
 
 
 if __name__ == "__main__":
