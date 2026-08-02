@@ -65,11 +65,19 @@ class WeeklyEconomyContracts(unittest.TestCase):
         for forbidden in ("every_country", "every_owned_state", "all_owned_state"):
             self.assertNotIn(forbidden, weekly)
 
-    def test_weekly_eligibility_reuses_player_and_primary_tiers(self):
+    def test_weekly_eligibility_uses_cached_tier_without_country_iteration(self):
         weekly_trigger = block(TRIGGERS, "ADISCORD_economy_should_weekly_update")
         self.assertIn("ADISCORD_economy_is_player_tier_country = yes", weekly_trigger)
-        self.assertIn("ADISCORD_economy_is_primary_tier_country = yes", weekly_trigger)
-        self.assertNotIn("ADISCORD_economy_is_secondary_tier_country", weekly_trigger)
+        self.assertIn("has_variable = ADISCORD_economy_simulation_tier", weekly_trigger)
+        self.assertIn("var = ADISCORD_economy_simulation_tier", weekly_trigger)
+        for forbidden in (
+            "ADISCORD_economy_is_primary_tier_country",
+            "ADISCORD_economy_is_secondary_tier_country",
+            "any_enemy_country",
+            "any_country",
+            "every_country",
+        ):
+            self.assertNotIn(forbidden, weekly_trigger)
 
     def test_weekly_budget_uses_exact_annual_parity_ratio(self):
         weekly = block(EFFECTS, "ADISCORD_economy_calculate_weekly_budget")
@@ -93,6 +101,8 @@ class WeeklyEconomyContracts(unittest.TestCase):
     def test_weekly_update_has_no_full_refresh_or_map_scan(self):
         weekly = block(EFFECTS, "ADISCORD_economy_weekly_update")
         self.assertEqual(weekly.count("ADISCORD_economy_apply_weekly_balance = yes"), 1)
+        self.assertIn("ADISCORD_economy_prepare_weekly_country = yes", weekly)
+        self.assertNotIn("ADISCORD_economy_initialize_country = yes", weekly)
         for forbidden in (
             "ADISCORD_economy_full_refresh",
             "ADISCORD_economy_recount_economic_buildings",
@@ -101,6 +111,19 @@ class WeeklyEconomyContracts(unittest.TestCase):
             "all_owned_state",
         ):
             self.assertNotIn(forbidden, weekly)
+
+    def test_weekly_prepare_does_not_recalculate_simulation_tier(self):
+        prepare = block(EFFECTS, "ADISCORD_economy_prepare_weekly_country")
+        self.assertIn("ADISCORD_economy_migrate_schema = yes", prepare)
+        for forbidden in (
+            "ADISCORD_economy_set_simulation_tier",
+            "ADISCORD_economy_is_primary_tier_country",
+            "any_enemy_country",
+            "any_country",
+            "every_country",
+            "every_owned_state",
+        ):
+            self.assertNotIn(forbidden, prepare)
 
     def test_monthly_tick_does_not_apply_cash(self):
         monthly = block(EFFECTS, "ADISCORD_economy_monthly_update")
@@ -118,9 +141,9 @@ class WeeklyEconomyContracts(unittest.TestCase):
         self.assertIn("ADISCORD_economy_surplus_streak", trend)
         self.assertNotIn("ADISCORD_economy_treasury", trend)
 
-    def test_schema_six_preserves_existing_treasury(self):
+    def test_schema_seven_preserves_existing_treasury(self):
         migration = block(EFFECTS, "ADISCORD_economy_migrate_schema")
-        self.assertIn("value = 6", migration)
+        self.assertIn("value = 7", migration)
         self.assertNotRegex(
             migration,
             r"set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_treasury\s+value\s*=\s*100",
@@ -138,10 +161,30 @@ class WeeklyEconomyContracts(unittest.TestCase):
 
     def test_treasury_tooltip_uses_weekly_and_period_values(self):
         self.assertIn("ADISCORD_economy_weekly_balance", ECONOMY_LOC)
+        self.assertIn("ADISCORD_economy_last_period_unfunded_deficit", ECONOMY_LOC)
         self.assertIn("ADISCORD_economy_last_period_unexplained_delta", ECONOMY_LOC)
         self.assertNotIn(
             "Фактическое изменение казны происходит раз в месяц", ECONOMY_LOC
         )
+
+    def test_unfunded_deficit_is_a_known_accounting_adjustment(self):
+        settlement = block(EFFECTS, "ADISCORD_economy_apply_weekly_balance")
+        field = "ADISCORD_economy_last_period_unfunded_deficit"
+        self.assertIn(f"var = {field} value = 0", settlement)
+        self.assertIn(f"var = {field} value = ADISCORD_economy_last_uncovered_deficit", settlement)
+        expected_start = settlement.find("ADISCORD_economy_accounting_expected_treasury_after_temp")
+        adjustment = settlement.find(f"value = {field}", expected_start)
+        unexplained = settlement.find("ADISCORD_economy_last_period_unexplained_delta", expected_start)
+        self.assertGreater(adjustment, expected_start)
+        self.assertGreater(unexplained, adjustment)
+
+    def test_unfunded_deficit_pressure_respects_modifier_factor(self):
+        settlement = block(EFFECTS, "ADISCORD_economy_apply_weekly_balance")
+        uncovered = settlement.find("ADISCORD_economy_last_uncovered_deficit value = 0")
+        pressure_factor = settlement.find(
+            "ADISCORD_economy_final_deficit_pressure_factor_bp", uncovered
+        )
+        self.assertGreater(pressure_factor, uncovered)
 
     def test_budget_breakdown_leads_with_the_weekly_forecast(self):
         match = re.search(

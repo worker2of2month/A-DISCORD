@@ -106,6 +106,8 @@ def validate() -> list[str]:
     monthly = block(effects, "ADISCORD_economy_monthly_update")
     weekly = block(effects, "ADISCORD_economy_weekly_update")
     yearly = block(effects, "ADISCORD_economy_yearly_update")
+    weekly_gate = block(triggers, "ADISCORD_economy_should_weekly_update")
+    weekly_prepare = block(effects, "ADISCORD_economy_prepare_weekly_country")
     require("ADISCORD_economy_update_ai_state" in monthly, "monthly update does not refresh AI state")
     require("ADISCORD_economy_apply_yearly_balance" in yearly, "secondary yearly economy lacks aggregate fiscal semantics")
     require("ADISCORD_economy_tick_scale value = 6" in yearly,
@@ -130,6 +132,17 @@ def validate() -> list[str]:
     require("ADISCORD_economy_full_refresh" not in weekly
             and "ADISCORD_economy_recount_economic_buildings" not in weekly,
             "weekly economy directly invokes a heavy building refresh")
+    require("ADISCORD_economy_prepare_weekly_country" in weekly
+            and "ADISCORD_economy_initialize_country" not in weekly,
+            "weekly economy does not use the lightweight preparation path")
+    require("ADISCORD_economy_simulation_tier" in weekly_gate
+            and "ADISCORD_economy_is_primary_tier_country" not in weekly_gate,
+            "weekly eligibility recalculates primary status instead of using the cached tier")
+    require(not any(token in weekly_gate for token in ("any_enemy_country", "any_country", "every_country")),
+            "weekly eligibility contains a country iteration")
+    require("ADISCORD_economy_set_simulation_tier" not in weekly_prepare
+            and not any(token in weekly_prepare for token in ("any_enemy_country", "any_country", "every_country", "every_owned_state")),
+            "weekly preparation recalculates the tier or scans countries/states")
 
     stretched = block(effects, "ADISCORD_economy_update_stretched")
     require("ADISCORD_economy_planned_shortage_pressure" in stretched,
@@ -183,6 +196,15 @@ def validate() -> list[str]:
             "treasury is snapshotted before cap overflow is recorded")
     require("value = ADISCORD_economy_last_period_cap_writeoff" in apply_balance,
             "cap writeoff is missing from the accounting identity")
+    require("ADISCORD_economy_last_period_unfunded_deficit" in apply_balance,
+            "unfunded deficit is not recorded in the weekly ledger")
+    require("value = ADISCORD_economy_last_period_unfunded_deficit" in apply_balance,
+            "treasury-floor adjustment is missing from the accounting identity")
+    require(apply_balance.find("value = ADISCORD_economy_last_period_unfunded_deficit")
+            < apply_balance.find("ADISCORD_economy_last_period_unexplained_delta"),
+            "unexplained delta is calculated before the treasury-floor adjustment")
+    require("ADISCORD_economy_final_deficit_pressure_factor_bp" in apply_balance,
+            "unfunded-deficit pressure ignores its custom modifier")
 
     timed_actions = {
         "ADISCORD_economy_expand_money_emission": "ADISCORD_economy_money_printing",
@@ -313,8 +335,8 @@ def validate() -> list[str]:
     require("ADISCORD_economy_social_spending_mode" in idea_refresh,
             "social budget changes do not invalidate the optimized idea signature")
 
-    require("value = 6 compare = less_than" in block(effects, "ADISCORD_economy_migrate_schema"),
-            "economy save migration was not advanced from schema 5 to schema 6")
+    require("value = 7 compare = less_than" in block(effects, "ADISCORD_economy_migrate_schema"),
+            "economy save migration was not advanced to schema 7")
     cycle = block(effects, "ADISCORD_economy_update_model_and_cycle")
     require("ADISCORD_economy_cycle_phase value = 4" not in cycle
             and "ADISCORD_economy_cycle_phase value = 5" not in cycle

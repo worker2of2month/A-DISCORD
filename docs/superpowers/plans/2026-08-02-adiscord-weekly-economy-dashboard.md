@@ -29,7 +29,7 @@
 ## File Map
 
 - `common/on_actions/00_ADISCORD_on_actions.txt` — частота weekly/monthly/yearly.
-- `common/scripted_effects/ADISCORD_economy_effects.txt` — миграция schema 6, прогноз, недельное и годовое денежное исполнение, бухгалтерия.
+- `common/scripted_effects/ADISCORD_economy_effects.txt` — миграция schema 7, прогноз, недельное и годовое денежное исполнение, бухгалтерия.
 - `common/scripted_triggers/ADISCORD_economy_triggers.txt` — eligibility уровней симуляции.
 - `common/scripted_effects/ADISCORD_economy_modifier_effects.txt` — потребление публичных modifier definitions.
 - `common/modifier_definitions/00_ADISCORD_economy_modifiers_definition.txt` — публичный API модификаторов.
@@ -52,7 +52,7 @@
 
 ---
 
-### Task 1: Недельный денежный контракт и schema 6
+### Task 1: Недельный денежный контракт и schema 7
 
 **Files:**
 - Create: `tools/test_adiscord_economy_weekly_contracts.py`
@@ -152,7 +152,7 @@ on_weekly = {
 
 Keep `on_monthly` for strategic effects and `on_yearly` for secondary-tier AI.
 
-- [ ] **Step 4: Add schema 6 variables without resetting saves**
+- [x] **Step 4: Add schema 7 variables without resetting saves**
 
 Initialize these variables in defaults and guarded migration:
 

@@ -48,7 +48,10 @@ ADISCORD_economy_should_monthly_update = {
 ADISCORD_economy_should_weekly_update = {
 	OR = {
 		ADISCORD_economy_is_player_tier_country = yes
-		ADISCORD_economy_is_primary_tier_country = yes
+		AND = {
+			has_variable = ADISCORD_economy_simulation_tier
+			check_variable = { var = ADISCORD_economy_simulation_tier value = 1 compare = less_than_or_equals }
+		}
 	}
 }
 
