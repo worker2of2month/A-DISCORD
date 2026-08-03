@@ -14,7 +14,7 @@ ideas = {
 
 			removal_cost = -1
 
-			picture = GFX_idea_STP_hedonism_with_no_bondaries
+			picture = GFX_idea_NOD_hedonism_with_no_bondaries
 
 			modifier = {
 				monthly_population = -0.25

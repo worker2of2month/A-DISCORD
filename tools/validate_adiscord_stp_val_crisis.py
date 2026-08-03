@@ -164,6 +164,7 @@ REQUIRED_FILES = {
         ),
         ("common/ideas/steland.txt", "STP starting national spirits"),
         ("common/ideas/nodral.txt", "NOD starting national spirits"),
+        ("interface/ADISCORD_ideas.gfx", "STP/NOD national-spirit sprites"),
         ("history/countries/STP - StepanLand.txt", "STP starting history"),
         ("history/countries/NOD - Nodral.txt", "NOD starting history"),
         (
@@ -451,6 +452,7 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
     )
     stp_ideas = read(root / "common/ideas/steland.txt")
     nod_ideas = read(root / "common/ideas/nodral.txt")
+    ideas_gfx = read(root / "interface/ADISCORD_ideas.gfx")
     stp_history = read(root / "history/countries/STP - StepanLand.txt")
     nod_history = read(root / "history/countries/NOD - Nodral.txt")
     ideas_loc_path = root / "localisation/russian/ADISCORD_ideas_l_russian.yml"
@@ -494,6 +496,31 @@ def _validate_stp_contract(root: Path, issues: list[str]) -> None:
             ):
                 issues.append(
                     f"NOD hedonism spirit must preserve STP balance modifier {modifier}"
+                )
+
+        if _direct_scalar_values(nod_idea, "picture") != [
+            "GFX_idea_NOD_hedonism_with_no_bondaries"
+        ]:
+            issues.append("NOD hedonism spirit must use its shared STP icon alias")
+
+    if ideas_gfx is not None:
+        sprite_blocks = list(_iter_named_blocks(ideas_gfx, "spriteType"))
+        shared_texture = (
+            'texturefile = "gfx/interface/ideas/STP/'
+            'idea_STP_hedonism_with_no_bondaries.dds"'
+        )
+        for sprite_name in (
+            "GFX_idea_STP_hedonism_with_no_bondaries",
+            "GFX_idea_NOD_hedonism_with_no_bondaries",
+        ):
+            matching = [
+                block
+                for block in sprite_blocks
+                if f'name = "{sprite_name}"' in block
+            ]
+            if len(matching) != 1 or shared_texture not in matching[0]:
+                issues.append(
+                    f"{sprite_name} must resolve to the shared STP hedonism icon"
                 )
 
     if stp_history is not None:

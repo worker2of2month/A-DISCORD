@@ -34,6 +34,10 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/STP/idea_STP_hedonism_with_no_bondaries.dds"
 	}
 	spriteType = {
+		name = "GFX_idea_NOD_hedonism_with_no_bondaries"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_hedonism_with_no_bondaries.dds"
+	}
+	spriteType = {
 	  	name = "GFX_idea_STP_hidden_slaves_trade"
 	  	texturefile = "gfx/interface/ideas/STP/idea_STP_hidden_slaves_trade.png"
 	}

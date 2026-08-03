@@ -692,6 +692,7 @@ class CrisisValidatorTests(unittest.TestCase):
         nod_history = validator.read(
             root / "history/countries/NOD - Nodral.txt"
         ) or ""
+        ideas_gfx = validator.read(root / "interface/ADISCORD_ideas.gfx") or ""
 
         stp_idea = validator.extract_named_block(
             stp_ideas, "STP_hedonism_with_no_bondaries"
@@ -723,6 +724,25 @@ class CrisisValidatorTests(unittest.TestCase):
         )
         self.assertTrue(nod_idea)
         self.assertNotIn("country_lock_all_division_template", nod_idea)
+        self.assertIn(
+            "picture = GFX_idea_NOD_hedonism_with_no_bondaries", nod_idea
+        )
+        stp_sprite = next(
+            block
+            for block in validator._iter_named_blocks(ideas_gfx, "spriteType")
+            if 'name = "GFX_idea_STP_hedonism_with_no_bondaries"' in block
+        )
+        nod_sprite = next(
+            block
+            for block in validator._iter_named_blocks(ideas_gfx, "spriteType")
+            if 'name = "GFX_idea_NOD_hedonism_with_no_bondaries"' in block
+        )
+        shared_texture = (
+            'texturefile = "gfx/interface/ideas/STP/'
+            'idea_STP_hedonism_with_no_bondaries.dds"'
+        )
+        self.assertIn(shared_texture, stp_sprite)
+        self.assertIn(shared_texture, nod_sprite)
         self.assertIn("NOD_hedonism_with_no_bondaries", nod_history)
         self.assertNotIn("STP_hedonism_with_no_bondaries", nod_history)
 
