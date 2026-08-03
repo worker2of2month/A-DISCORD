@@ -14,6 +14,8 @@ state={
 			arms_factory = 3
 			hidden_dam = 1
 			industrial_complex  = 2
+			ADISCORD_industrial_cluster = 1
+			ADISCORD_business_center = 1
 
 			16368 = {
         		bunker = 3

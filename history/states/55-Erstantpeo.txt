@@ -12,7 +12,7 @@ state={
 	history={
 		owner = VAL
 		buildings = {
-			infrastructure = 1
+			infrastructure = 2
 		}
 		add_core_of = VAL
 		add_claim_by = STP
@@ -20,7 +20,7 @@ state={
 	}
 
 	resources = {
-        oil = 2
-        chromium = 10
+		oil = 12
+		chromium = 12
     }
 }

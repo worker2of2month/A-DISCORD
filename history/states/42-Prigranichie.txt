@@ -12,7 +12,7 @@ state={
 	history={
 		owner = VAL
 		buildings = {
-			infrastructure = 1
+			infrastructure = 2
 			hidden_dam = 1
 			16436 = { dam = 1 }
 		}
@@ -22,7 +22,7 @@ state={
 	}
 
 	resources = {
-        tungsten = 10
-        steel = 11
+		tungsten = 12
+		steel = 20
     }
 }
