@@ -369,7 +369,64 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             self.assertIn('?ADISCORD_economy_debt|0', tooltip)
             self.assertIn('?ADISCORD_economy_debt_capacity|0', tooltip)
             self.assertIn('?ADISCORD_economy_debt_ratio|0', tooltip)
+            self.assertIn('?ADISCORD_economy_interest_rate|1', tooltip)
+            self.assertIn('?ADISCORD_economy_debt_service|2', tooltip)
+            self.assertIn('40/70/100/140%', tooltip)
+            self.assertIn('инфляц', tooltip.lower())
         self.assertIn('?ADISCORD_economy_creditworthiness|0', external_loan_tt)
+
+    def test_macro_kpis_use_plain_language_dedicated_tooltips(self):
+        debt_line = next(
+            line
+            for line in self.gui.splitlines()
+            if 'name = "ADISCORD_economy_kpi_debt"' in line
+        )
+        status_line = next(
+            line
+            for line in self.gui.splitlines()
+            if 'name = "ADISCORD_economy_kpi_risk"' in line
+        )
+        summary_line = next(
+            line
+            for line in self.gui.splitlines()
+            if 'name = "ADISCORD_economy_player_summary"' in line
+        )
+        self.assertIn('pdx_tooltip = "ADISCORD_economy_debt_tt"', debt_line)
+        self.assertIn('pdx_tooltip = "ADISCORD_economy_status_tt"', status_line)
+        self.assertIn('pdx_tooltip = "ADISCORD_economy_inflation_tt"', summary_line)
+
+        debt_tt = re.search(
+            r'(?m)^\s*ADISCORD_economy_debt_tt:\d*\s+"([^"]*)"',
+            self.localisation,
+        ).group(1)
+        for required in (
+            '?ADISCORD_economy_debt|0',
+            '?ADISCORD_economy_debt_capacity|0',
+            '?ADISCORD_economy_debt_ratio|0',
+            '?ADISCORD_economy_interest_rate|1',
+            '?ADISCORD_economy_debt_service|2',
+            '[GetADISCORDDebtEffectsLoc]',
+            '40/70/100/140%',
+        ):
+            self.assertIn(required, debt_tt)
+
+        inflation_tt = re.search(
+            r'(?m)^\s*ADISCORD_economy_inflation_tt:\d*\s+"([^"]*)"',
+            self.localisation,
+        ).group(1)
+        for required in (
+            '?ADISCORD_economy_inflation|1',
+            '?ADISCORD_economy_inflation_delta_temp|=+2',
+            'эмиссия',
+            'дефицитное давление',
+            'ценовые шоки',
+            '[GetADISCORDInflationEffectsLoc]',
+            '10/25/50/75%',
+        ):
+            self.assertIn(required, inflation_tt)
+
+        self.assertIn('name = GetADISCORDDebtEffectsLoc', self.scripted_loc)
+        self.assertIn('name = GetADISCORDInflationEffectsLoc', self.scripted_loc)
 
     def test_left_panel_text_zones_do_not_overlap(self):
         self.assertNotIn('ADISCORD_economy_automation_note', self.gui)

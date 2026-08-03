@@ -112,6 +112,7 @@ ADISCORD_economy_initialize_variables = {
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_debt_ratio } } set_variable = { var = ADISCORD_economy_debt_ratio value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_interest_rate } } set_variable = { var = ADISCORD_economy_interest_rate value = 3 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_creditworthiness } } set_variable = { var = ADISCORD_economy_creditworthiness value = 60 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_inflation_delta_temp } } set_variable = { var = ADISCORD_economy_inflation_delta_temp value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_deficit_pressure } } set_variable = { var = ADISCORD_economy_deficit_pressure value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_deficit_streak } } set_variable = { var = ADISCORD_economy_deficit_streak value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_surplus_streak } } set_variable = { var = ADISCORD_economy_surplus_streak value = 0 } }
@@ -222,6 +223,7 @@ ADISCORD_economy_set_default_values = {
 	set_variable = { var = ADISCORD_economy_debt value = 0 }
 	set_variable = { var = ADISCORD_economy_debt_pressure value = 0 }
 	set_variable = { var = ADISCORD_economy_inflation value = 0 }
+	set_variable = { var = ADISCORD_economy_inflation_delta_temp value = 0 }
 	set_variable = { var = ADISCORD_economy_debt_capacity value = 250 }
 	set_variable = { var = ADISCORD_economy_debt_ratio value = 0 }
 	set_variable = { var = ADISCORD_economy_interest_rate value = 3 }
@@ -1117,8 +1119,15 @@ ADISCORD_economy_apply_weekly_balance = {
 				limit = { check_variable = { var = ADISCORD_economy_auto_borrow_temp value = 0.1 compare = greater_than } }
 				add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp }
 				add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp }
+				set_temp_variable = { var = ADISCORD_economy_auto_borrow_inflation_temp value = ADISCORD_economy_auto_borrow_temp }
+				divide_temp_variable = { var = ADISCORD_economy_auto_borrow_inflation_temp value = 100 }
+				add_to_variable = { var = ADISCORD_economy_inflation value = ADISCORD_economy_auto_borrow_inflation_temp }
 				set_variable = { var = ADISCORD_economy_last_auto_borrowing value = ADISCORD_economy_auto_borrow_temp }
 				add_to_variable = { var = ADISCORD_economy_last_period_debt_added value = ADISCORD_economy_auto_borrow_temp }
+				ADISCORD_economy_calculate_macro_indicators = yes
+				ADISCORD_economy_update_stretched = yes
+				ADISCORD_economy_refresh_spending_ideas = yes
+				if = { limit = { is_ai = no } country_event = { id = ADISCORD_economy.1 } }
 			}
 		}
 		if = {
@@ -1197,7 +1206,8 @@ ADISCORD_economy_apply_monthly_balance = {
 		add_to_variable = { var = ADISCORD_economy_deficit_streak value = 1 }
 		set_variable = { var = ADISCORD_economy_surplus_streak value = 0 }
 
-		# Automatic loan only for uncovered deficit. No huge packages, no inflation spiral.
+		# Automatic loan only for uncovered deficit. Its price is proportional to
+		# the amount actually borrowed, so coarse yearly AI settlement stays bounded.
 		if = {
 			limit = { check_variable = { var = ADISCORD_economy_treasury value = 0 compare = less_than } }
 			set_variable = { var = ADISCORD_economy_uncovered_deficit_temp value = 0 }
@@ -1223,6 +1233,9 @@ ADISCORD_economy_apply_monthly_balance = {
 				if = {
 					limit = { check_variable = { var = ADISCORD_economy_auto_borrow_temp value = 0.1 compare = greater_than } }
 					add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp }
+					set_temp_variable = { var = ADISCORD_economy_auto_borrow_inflation_temp value = ADISCORD_economy_auto_borrow_temp }
+					divide_temp_variable = { var = ADISCORD_economy_auto_borrow_inflation_temp value = 100 }
+					add_to_variable = { var = ADISCORD_economy_inflation value = ADISCORD_economy_auto_borrow_inflation_temp }
 					set_variable = { var = ADISCORD_economy_last_auto_borrowing value = ADISCORD_economy_auto_borrow_temp }
 					add_to_variable = { var = ADISCORD_economy_last_month_debt_added value = ADISCORD_economy_auto_borrow_temp }
 				}
@@ -1366,11 +1379,19 @@ ADISCORD_economy_update_inflation = {
 	if = {
 		limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes }
 		set_variable = { var = ADISCORD_economy_emission_pressure value = 0 }
+		set_variable = { var = ADISCORD_economy_inflation_delta_temp value = 0 }
 		if = {
 			limit = { check_variable = { var = ADISCORD_economy_inflation value = 0 compare = greater_than } }
-			set_temp_variable = { var = ADISCORD_economy_planned_inflation_decay_temp value = -2 }
-			multiply_temp_variable = { var = ADISCORD_economy_planned_inflation_decay_temp value = ADISCORD_economy_tick_scale }
-			add_to_variable = { var = ADISCORD_economy_inflation value = ADISCORD_economy_planned_inflation_decay_temp }
+			set_variable = { var = ADISCORD_economy_inflation_delta_temp value = -2 }
+			multiply_variable = { var = ADISCORD_economy_inflation_delta_temp value = ADISCORD_economy_tick_scale }
+			set_temp_variable = { var = ADISCORD_economy_planned_inflation_floor_temp value = ADISCORD_economy_inflation }
+			add_to_temp_variable = { var = ADISCORD_economy_planned_inflation_floor_temp value = ADISCORD_economy_inflation_delta_temp }
+			if = {
+				limit = { check_variable = { var = ADISCORD_economy_planned_inflation_floor_temp value = 0 compare = less_than } }
+				set_variable = { var = ADISCORD_economy_inflation_delta_temp value = 0 }
+				subtract_from_variable = { var = ADISCORD_economy_inflation_delta_temp value = ADISCORD_economy_inflation }
+			}
+			add_to_variable = { var = ADISCORD_economy_inflation value = ADISCORD_economy_inflation_delta_temp }
 		}
 		# Planned systems convert monetary and fiscal pressure into persistent
 		# shortages. This is a base component of overload, not a write into the
@@ -1408,10 +1429,9 @@ ADISCORD_economy_update_inflation = {
 		divide_variable = { var = ADISCORD_economy_inflation_pressure_temp value = ADISCORD_economy_final_price_stability_factor_bp }
 		set_variable = { var = ADISCORD_economy_inflation_delta_temp value = ADISCORD_economy_inflation_pressure_temp }
 		divide_variable = { var = ADISCORD_economy_inflation_delta_temp value = 6 }
-		if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = greater_than_or_equals } } add_to_variable = { var = ADISCORD_economy_inflation_delta_temp value = -0.5 } }
-		if = { limit = { check_variable = { var = ADISCORD_economy_surplus_streak value = 3 compare = greater_than_or_equals } } add_to_variable = { var = ADISCORD_economy_inflation_delta_temp value = -0.5 } }
-		if = { limit = { check_variable = { var = ADISCORD_economy_money_printing_level value = 0 compare = less_than_or_equals } } add_to_variable = { var = ADISCORD_economy_inflation_delta_temp value = -0.25 } }
-		clamp_variable = { var = ADISCORD_economy_inflation_delta_temp min = -1.0 max = 1.5 }
+		# Like TDA, ordinary inactivity is not an anti-inflation policy. Market
+		# inflation is sticky and falls only through explicit stabilisation actions.
+		clamp_variable = { var = ADISCORD_economy_inflation_delta_temp min = 0 max = 1.5 }
 		multiply_variable = { var = ADISCORD_economy_inflation_delta_temp value = ADISCORD_economy_tick_scale }
 		add_to_variable = { var = ADISCORD_economy_inflation value = ADISCORD_economy_inflation_delta_temp }
 	}
@@ -1789,6 +1809,9 @@ ADISCORD_economy_take_debt = {
 		add_to_variable = { var = ADISCORD_economy_current_month_debt_added value = ADISCORD_economy_loan_cash_temp }
 		set_temp_variable = { var = ADISCORD_economy_loan_realized_factor_temp value = ADISCORD_economy_loan_cash_temp }
 		divide_temp_variable = { var = ADISCORD_economy_loan_realized_factor_temp value = 100 }
+		set_temp_variable = { var = ADISCORD_economy_loan_inflation_temp value = 1 }
+		multiply_temp_variable = { var = ADISCORD_economy_loan_inflation_temp value = ADISCORD_economy_loan_realized_factor_temp }
+		add_to_variable = { var = ADISCORD_economy_inflation value = ADISCORD_economy_loan_inflation_temp }
 		set_temp_variable = { var = ADISCORD_economy_loan_deficit_relief_temp value = -5 }
 		multiply_temp_variable = { var = ADISCORD_economy_loan_deficit_relief_temp value = ADISCORD_economy_loan_realized_factor_temp }
 		add_to_variable = { var = ADISCORD_economy_deficit_pressure value = ADISCORD_economy_loan_deficit_relief_temp }
@@ -1867,6 +1890,9 @@ ADISCORD_economy_take_external_loan = {
 		add_to_variable = { var = ADISCORD_economy_current_month_debt_added value = ADISCORD_economy_external_cash_temp }
 		set_temp_variable = { var = ADISCORD_economy_external_realized_factor_temp value = ADISCORD_economy_external_cash_temp }
 		divide_temp_variable = { var = ADISCORD_economy_external_realized_factor_temp value = 150 }
+		set_temp_variable = { var = ADISCORD_economy_external_inflation_temp value = 1.5 }
+		multiply_temp_variable = { var = ADISCORD_economy_external_inflation_temp value = ADISCORD_economy_external_realized_factor_temp }
+		add_to_variable = { var = ADISCORD_economy_inflation value = ADISCORD_economy_external_inflation_temp }
 		set_temp_variable = { var = ADISCORD_economy_external_stress_temp value = 4 }
 		multiply_temp_variable = { var = ADISCORD_economy_external_stress_temp value = ADISCORD_economy_external_realized_factor_temp }
 		add_to_variable = { var = ADISCORD_economy_fiscal_stress value = ADISCORD_economy_external_stress_temp }
@@ -2181,6 +2207,9 @@ ADISCORD_economy_gui_try_issue_internal_bonds = {
 		limit = { ADISCORD_economy_can_issue_internal_bonds = yes }
 		ADISCORD_economy_issue_internal_bonds = yes
 		ADISCORD_economy_light_update = yes
+		ADISCORD_economy_update_stretched = yes
+		ADISCORD_economy_calculate_development_multiplier = yes
+		ADISCORD_economy_refresh_spending_ideas = yes
 		ADISCORD_economy_update_gui = yes
 	}
 }
@@ -2191,6 +2220,9 @@ ADISCORD_economy_gui_try_take_external_loan = {
 		limit = { ADISCORD_economy_can_take_external_loan = yes }
 		ADISCORD_economy_take_external_loan = yes
 		ADISCORD_economy_light_update = yes
+		ADISCORD_economy_update_stretched = yes
+		ADISCORD_economy_calculate_development_multiplier = yes
+		ADISCORD_economy_refresh_spending_ideas = yes
 		ADISCORD_economy_update_gui = yes
 	}
 }

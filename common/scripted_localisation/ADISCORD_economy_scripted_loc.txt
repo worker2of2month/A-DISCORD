@@ -141,3 +141,21 @@ defined_text = {
 	text = { trigger = { check_variable = { var = ADISCORD_economy_surplus_streak value = 3 compare = greater_than_or_equals } check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_advice_growth }
 	text = { localization_key = ADISCORD_economy_advice_balanced }
 }
+
+defined_text = {
+	name = GetADISCORDDebtEffectsLoc
+	text = { trigger = { check_variable = { var = ADISCORD_economy_debt_ratio value = 140 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_effect_default }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_debt_ratio value = 100 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_effect_crisis }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_debt_ratio value = 70 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_effect_burden }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_debt_ratio value = 40 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_effect_warning }
+	text = { localization_key = ADISCORD_economy_debt_effect_none }
+}
+
+defined_text = {
+	name = GetADISCORDInflationEffectsLoc
+	text = { trigger = { check_variable = { var = ADISCORD_economy_inflation value = 75 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_inflation_effect_hyper }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_inflation value = 50 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_inflation_effect_severe }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_inflation value = 25 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_inflation_effect_high }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_inflation value = 10 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_inflation_effect_rising }
+	text = { localization_key = ADISCORD_economy_inflation_effect_none }
+}

@@ -204,6 +204,116 @@ class WeeklyEconomyContracts(unittest.TestCase):
         self.assertIn("ADISCORD_economy_surplus_streak", trend)
         self.assertNotIn("ADISCORD_economy_treasury", trend)
 
+    def test_market_inflation_does_not_self_heal_without_an_explicit_action(self):
+        inflation = block(EFFECTS, "ADISCORD_economy_update_inflation")
+        market_branch = inflation[inflation.index("else =") :]
+        delta_start = market_branch.index(
+            "set_variable = { var = ADISCORD_economy_inflation_delta_temp"
+        )
+        delta_end = market_branch.index(
+            "add_to_variable = { var = ADISCORD_economy_inflation value = ADISCORD_economy_inflation_delta_temp",
+            delta_start,
+        )
+        delta_formula = market_branch[delta_start:delta_end]
+
+        self.assertNotIn("ADISCORD_economy_monthly_balance", delta_formula)
+        self.assertNotIn("ADISCORD_economy_surplus_streak", delta_formula)
+        self.assertNotIn("ADISCORD_economy_money_printing_level", delta_formula)
+        self.assertRegex(
+            delta_formula,
+            r"clamp_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_inflation_delta_temp\s+min\s*=\s*0\s+max\s*=\s*1\.5\s*\}",
+        )
+
+        planned_branch = inflation[: inflation.index("else =")]
+        self.assertIn(
+            "set_variable = { var = ADISCORD_economy_inflation_delta_temp value = -2 }",
+            planned_branch,
+        )
+        self.assertIn(
+            "add_to_variable = { var = ADISCORD_economy_inflation value = -8 }",
+            block(EFFECTS, "ADISCORD_economy_stabilization_package"),
+        )
+        self.assertIn(
+            "add_to_variable = { var = ADISCORD_economy_inflation value = -2 }",
+            block(EFFECTS, "ADISCORD_economy_reduce_money_emission"),
+        )
+
+    def test_borrowing_has_immediate_inflation_and_refreshes_visible_penalties(self):
+        internal = block(EFFECTS, "ADISCORD_economy_take_debt")
+        self.assertIn("ADISCORD_economy_loan_inflation_temp value = 1", internal)
+        self.assertIn(
+            "value = ADISCORD_economy_loan_realized_factor_temp", internal
+        )
+        self.assertIn(
+            "var = ADISCORD_economy_inflation value = ADISCORD_economy_loan_inflation_temp",
+            internal,
+        )
+
+        external = block(EFFECTS, "ADISCORD_economy_take_external_loan")
+        self.assertIn("ADISCORD_economy_external_inflation_temp value = 1.5", external)
+        self.assertIn(
+            "value = ADISCORD_economy_external_realized_factor_temp", external
+        )
+        self.assertIn(
+            "var = ADISCORD_economy_inflation value = ADISCORD_economy_external_inflation_temp",
+            external,
+        )
+
+        weekly_settlement = block(EFFECTS, "ADISCORD_economy_apply_weekly_balance")
+        self.assertIn(
+            "var = ADISCORD_economy_auto_borrow_inflation_temp value = ADISCORD_economy_auto_borrow_temp",
+            weekly_settlement,
+        )
+        self.assertIn(
+            "divide_temp_variable = { var = ADISCORD_economy_auto_borrow_inflation_temp value = 100 }",
+            weekly_settlement,
+        )
+
+        yearly_settlement = block(EFFECTS, "ADISCORD_economy_apply_monthly_balance")
+        self.assertIn(
+            "var = ADISCORD_economy_auto_borrow_inflation_temp value = ADISCORD_economy_auto_borrow_temp",
+            yearly_settlement,
+        )
+        self.assertIn(
+            "divide_temp_variable = { var = ADISCORD_economy_auto_borrow_inflation_temp value = 100 }",
+            yearly_settlement,
+        )
+
+        for effect_name in (
+            "ADISCORD_economy_gui_try_issue_internal_bonds",
+            "ADISCORD_economy_gui_try_take_external_loan",
+        ):
+            action = block(EFFECTS, effect_name)
+            self.assertIn("ADISCORD_economy_update_stretched = yes", action)
+            self.assertIn("ADISCORD_economy_refresh_spending_ideas = yes", action)
+
+    def test_player_is_notified_when_a_deficit_triggers_automatic_borrowing(self):
+        settlement = block(EFFECTS, "ADISCORD_economy_apply_weekly_balance")
+        auto_borrow = settlement[
+            settlement.index("ADISCORD_economy_auto_borrow_temp value = 0.1") :
+        ]
+        self.assertIn("is_ai = no", auto_borrow)
+        self.assertIn(
+            "country_event = { id = ADISCORD_economy.1 }", auto_borrow
+        )
+
+        event_path = ROOT / "events" / "ADISCORD_economy_events.txt"
+        self.assertTrue(event_path.is_file())
+        event_text = event_path.read_text(encoding="utf-8-sig")
+        notification = block(event_text, "country_event")
+        self.assertIn("id = ADISCORD_economy.1", notification)
+        self.assertIn("is_triggered_only = yes", notification)
+        self.assertIn("title = ADISCORD_economy.1.t", notification)
+        self.assertIn("desc = ADISCORD_economy.1.d", notification)
+
+        for key in (
+            "ADISCORD_economy.1.t",
+            "ADISCORD_economy.1.d",
+            "ADISCORD_economy.1.a",
+        ):
+            self.assertRegex(ECONOMY_LOC, rf"(?m)^\s*{re.escape(key)}:\d*\s+")
+        self.assertIn("ADISCORD_economy_last_auto_borrowing", ECONOMY_LOC)
+
     def test_schema_seven_preserves_existing_treasury(self):
         migration = block(EFFECTS, "ADISCORD_economy_migrate_schema")
         self.assertIn("value = 7", migration)
