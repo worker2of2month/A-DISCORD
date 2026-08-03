@@ -178,6 +178,27 @@ def assignment_values(text: str, key: str) -> list[str]:
     )
 
 
+def assignment_names_at_depth(text: str, depth: int) -> list[str]:
+    masked = mask_non_code(text)
+    return [
+        match.group(1)
+        for match in re.finditer(r"(?<![A-Za-z0-9_])([A-Za-z_][A-Za-z0-9_]*)\s*=", masked)
+        if brace_depth_before(masked, match.start()) == depth
+    ]
+
+
+def assignment_values_at_depth(text: str, key: str, depth: int) -> list[str]:
+    masked = mask_non_code(text)
+    return [
+        match.group(1)
+        for match in re.finditer(
+            rf"(?<![A-Za-z0-9_]){re.escape(key)}\s*=\s*([A-Za-z0-9_]+)\b",
+            masked,
+        )
+        if brace_depth_before(masked, match.start()) == depth
+    ]
+
+
 def main() -> int:
     issues: list[str] = []
     focus_text = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
@@ -551,23 +572,45 @@ def main() -> int:
             return None
         hidden = hidden_blocks[0].text
         expected_ideas = set(tier_families[family])
-        removals = scalar_values(hidden, "remove_ideas")
-        additions = scalar_values(hidden, "add_ideas")
+        removals = assignment_values_at_depth(hidden, "remove_ideas", 1)
+        additions = assignment_values_at_depth(hidden, "add_ideas", 1)
         if (
             len(removals) != len(expected_ideas)
             or set(removals) != expected_ideas
-            or scalar_values(hidden, "remove_idea")
+            or assignment_values_at_depth(hidden, "remove_idea", 1)
         ):
-            issues.append(f"{owner} does not remove every {family} tier exactly once")
-        if additions != [target] or scalar_values(hidden, "add_idea"):
-            issues.append(f"{owner} does not add only target tier {target}")
+            issues.append(
+                f"{owner} does not directly remove every {family} tier exactly once"
+            )
+        if additions != [target] or assignment_values_at_depth(hidden, "add_idea", 1):
+            issues.append(f"{owner} does not directly add only target tier {target}")
+        idea_commands = {"add_idea", "add_ideas", "remove_idea", "remove_ideas", "swap_ideas"}
+        direct_idea_commands = [
+            name for name in assignment_names_at_depth(hidden, 1) if name in idea_commands
+        ]
+        expected_direct_commands = ["remove_ideas"] * len(expected_ideas) + ["add_ideas"]
+        if direct_idea_commands != expected_direct_commands:
+            issues.append(f"{owner} has an invalid direct idea-render command sequence")
+        masked_hidden = mask_non_code(hidden)
+        nested_idea_commands = [
+            match.group(1)
+            for match in re.finditer(
+                r"(?<![A-Za-z0-9_])(add_idea|add_ideas|remove_idea|remove_ideas|swap_ideas)\s*=",
+                masked_hidden,
+            )
+            if brace_depth_before(masked_hidden, match.start()) > 1
+        ]
+        if nested_idea_commands:
+            issues.append(f"{owner} nests idea rendering below hidden_effect direct depth")
         removal_positions = [
             match.start()
             for match in re.finditer(r"(?m)^\s*remove_ideas\s*=", mask_comments(hidden))
+            if brace_depth_before(masked_hidden, match.start()) == 1
         ]
         addition_positions = [
             match.start()
             for match in re.finditer(r"(?m)^\s*add_ideas\s*=", mask_comments(hidden))
+            if brace_depth_before(masked_hidden, match.start()) == 1
         ]
         if removal_positions and addition_positions and max(removal_positions) > min(addition_positions):
             issues.append(f"{owner} adds {target} before completing its remove-all render")
@@ -606,15 +649,27 @@ def main() -> int:
                 guard = guards[0]
                 missing_checks = direct_named_blocks(guard.text, "NOT", guard.start)
                 level_checks = direct_named_blocks(guard.text, "check_variable", guard.start)
+                guard_operands = assignment_names_at_depth(guard.text, 1)
+                if len(guard_operands) != 2 or set(guard_operands) != {
+                    "NOT",
+                    "check_variable",
+                }:
+                    issues.append(
+                        f"{effect_id} OR guard must contain only missing-variable and less-than checks"
+                    )
                 if (
                     len(missing_checks) != 1
                     or assignment_values(missing_checks[0].text, "has_variable") != [variable]
+                    or assignment_names_at_depth(missing_checks[0].text, 1)
+                    != ["has_variable"]
                 ):
                     issues.append(f"{effect_id} does not guard the missing {variable}")
                 if len(level_checks) != 1 or (
                     scalar_values(level_checks[0].text, "var") != [variable]
                     or scalar_values(level_checks[0].text, "value") != [str(tier)]
                     or scalar_values(level_checks[0].text, "compare") != ["less_than"]
+                    or assignment_names_at_depth(level_checks[0].text, 1)
+                    != ["var", "value", "compare"]
                 ):
                     issues.append(f"{effect_id} does not guard {variable} as less than {tier}")
             setter = setters[0].text
@@ -782,11 +837,50 @@ def main() -> int:
                 if (
                     len(missing) != 1
                     or assignment_values(missing[0].text, "has_variable") != [variable]
+                    or assignment_names_at_depth(missing[0].text, 1)
+                    != ["has_variable"]
                 ):
                     issues.append(f"{effect_id} migration must require missing {variable}")
-                completed = set(scalar_values(limit.text, "has_completed_focus"))
-                if completed != migration_focuses[(family, tier)]:
-                    issues.append(f"{effect_id} migration has incomplete focus coverage")
+                expected_focuses = migration_focuses[(family, tier)]
+                limit_operands = assignment_names_at_depth(limit.text, 1)
+                if len(expected_focuses) == 1:
+                    direct_focuses = assignment_values_at_depth(
+                        limit.text, "has_completed_focus", 1
+                    )
+                    if (
+                        len(limit_operands) != 2
+                        or set(limit_operands) != {"NOT", "has_completed_focus"}
+                        or direct_focuses != list(expected_focuses)
+                    ):
+                        issues.append(
+                            f"{effect_id} migration must directly check its single caller focus"
+                        )
+                else:
+                    alternatives = direct_named_blocks(limit.text, "OR", limit.start)
+                    if (
+                        len(limit_operands) != 2
+                        or set(limit_operands) != {"NOT", "OR"}
+                        or len(alternatives) != 1
+                    ):
+                        issues.append(
+                            f"{effect_id} migration must combine caller focuses in one direct OR"
+                        )
+                    else:
+                        alternative_operands = assignment_names_at_depth(
+                            alternatives[0].text, 1
+                        )
+                        alternative_focuses = assignment_values_at_depth(
+                            alternatives[0].text, "has_completed_focus", 1
+                        )
+                        if (
+                            alternative_operands
+                            != ["has_completed_focus"] * len(expected_focuses)
+                            or len(alternative_focuses) != len(expected_focuses)
+                            or set(alternative_focuses) != expected_focuses
+                        ):
+                            issues.append(
+                                f"{effect_id} migration OR alternatives do not exactly cover callers"
+                            )
 
     if not initialize or not re.search(
         r"VAL_initialize_rework\s*=\s*\{\s*VAL_migrate_contract_tier_levels\s*=\s*yes\b",
