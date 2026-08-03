@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 
 from PIL import Image
@@ -43,6 +44,138 @@ def named_blocks(text: str, key: str) -> list[str]:
                     blocks.append(text[start : index + 1])
                     break
     return blocks
+
+
+def mask_comments(text: str) -> str:
+    """Mask Clausewitz comments while preserving source offsets and line breaks."""
+    result: list[str] = []
+    in_string = False
+    escaped = False
+    in_comment = False
+    for character in text:
+        if in_comment:
+            if character in "\r\n":
+                in_comment = False
+                result.append(character)
+            else:
+                result.append(" ")
+            continue
+        if in_string:
+            result.append(character)
+            if escaped:
+                escaped = False
+            elif character == "\\":
+                escaped = True
+            elif character == '"':
+                in_string = False
+            continue
+        if character == "#":
+            in_comment = True
+            result.append(" ")
+        else:
+            result.append(character)
+            if character == '"':
+                in_string = True
+    return "".join(result)
+
+
+def mask_non_code(text: str) -> str:
+    """Mask comments and strings while preserving source offsets and line breaks."""
+    result: list[str] = []
+    in_string = False
+    escaped = False
+    in_comment = False
+    for character in text:
+        if in_comment:
+            if character in "\r\n":
+                in_comment = False
+                result.append(character)
+            else:
+                result.append(" ")
+            continue
+        if in_string:
+            result.append(" " if character not in "\r\n" else character)
+            if escaped:
+                escaped = False
+            elif character == "\\":
+                escaped = True
+            elif character == '"':
+                in_string = False
+            continue
+        if character == "#":
+            in_comment = True
+            result.append(" ")
+        elif character == '"':
+            in_string = True
+            result.append(" ")
+        else:
+            result.append(character)
+    return "".join(result)
+
+
+def closing_brace(text: str, opening: int) -> int:
+    depth = 0
+    for index in range(opening, len(text)):
+        if text[index] == "{":
+            depth += 1
+        elif text[index] == "}":
+            depth -= 1
+            if depth == 0:
+                return index
+    raise ValueError(f"unclosed brace at index {opening}")
+
+
+@dataclass(frozen=True)
+class Block:
+    name: str
+    start: int
+    end: int
+    text: str
+
+
+def named_block_spans(text: str, name: str, offset: int = 0) -> list[Block]:
+    masked = mask_non_code(text)
+    pattern = re.compile(rf"(?<![A-Za-z0-9_]){re.escape(name)}\s*=\s*\{{")
+    blocks: list[Block] = []
+    for match in pattern.finditer(masked):
+        opening = masked.index("{", match.start(), match.end())
+        closing = closing_brace(masked, opening) + 1
+        blocks.append(
+            Block(
+                name=name,
+                start=offset + match.start(),
+                end=offset + closing,
+                text=text[match.start() : closing],
+            )
+        )
+    return blocks
+
+
+def brace_depth_before(text: str, position: int) -> int:
+    return text[:position].count("{") - text[:position].count("}")
+
+
+def direct_named_blocks(text: str, name: str, offset: int = 0) -> list[Block]:
+    masked = mask_non_code(text)
+    return [
+        block
+        for block in named_block_spans(text, name, offset)
+        if brace_depth_before(masked, block.start - offset) == 1
+    ]
+
+
+def scalar_values(text: str, key: str) -> list[str]:
+    return re.findall(
+        rf"(?m)^\s*{re.escape(key)}\s*=\s*([A-Za-z0-9_]+)\s*(?:#.*)?$",
+        mask_comments(text),
+    )
+
+
+def assignment_values(text: str, key: str) -> list[str]:
+    return re.findall(
+        rf"\b{re.escape(key)}\s*=\s*([A-Za-z0-9_]+)\b",
+        mask_non_code(text),
+    )
 
 
 def main() -> int:
@@ -363,54 +496,303 @@ def main() -> int:
     initialize = named_blocks(effects, "VAL_initialize_rework")
     if not initialize or "set_country_flag = VAL_operations_map_unlocked" not in initialize[0]:
         issues.append("rework initialization does not migrate the operations-map unlock")
-    tier_effect_ids = (
-        "VAL_apply_contract_administration_1",
-        "VAL_apply_contract_administration_2",
-        "VAL_apply_contract_administration_3",
-        "VAL_apply_contract_industry_1",
-        "VAL_apply_contract_industry_2",
-        "VAL_apply_contract_industry_3",
-        "VAL_apply_contract_army_1",
-        "VAL_apply_contract_army_2",
-        "VAL_apply_contract_army_3",
-    )
-    for effect_id in tier_effect_ids:
-        effect_blocks = named_blocks(effects, effect_id)
-        if not effect_blocks:
-            issues.append(f"missing tier effect {effect_id}")
-            continue
-        effect_block = effect_blocks[0]
-        hidden = named_blocks(effect_block, "hidden_effect")
-        hidden_removals = sum(block.count("remove_ideas") for block in hidden)
-        if effect_block.count("remove_ideas") != hidden_removals:
-            issues.append(f"{effect_id} exposes tier removals outside hidden_effect")
-        if effect_id.endswith(("_2", "_3")) and "swap_ideas" not in effect_block:
-            issues.append(f"{effect_id} does not present a TFR-style idea swap")
 
-    reputation_refresh = named_blocks(effects, "VAL_refresh_contract_reputation")
-    if not reputation_refresh:
-        issues.append("missing reputation refresh effect")
+    tier_families = {
+        "administration": tuple(f"VAL_contract_administration_{tier}" for tier in range(1, 4)),
+        "industry": tuple(f"VAL_contract_industry_{tier}" for tier in range(1, 4)),
+        "army": tuple(f"VAL_contract_army_{tier}" for tier in range(1, 4)),
+        "reputation": tuple(f"VAL_contract_reputation_{tier}" for tier in range(4)),
+    }
+    level_variables = {
+        "administration": "VAL_contract_administration_level",
+        "industry": "VAL_contract_industry_level",
+        "army": "VAL_contract_army_level",
+    }
+    authoritative_level_variables = {
+        *level_variables.values(),
+        "VAL_contract_reputation_level",
+    }
+    used_contract_level_variables = set(
+        re.findall(
+            r"\bvar\s*=\s*(VAL_contract_[A-Za-z0-9_]*level)\b",
+            mask_comments(effects),
+        )
+    )
+    if used_contract_level_variables != authoritative_level_variables:
+        issues.append(
+            "contract tier effects do not use exactly the authoritative level variables: "
+            + ", ".join(sorted(used_contract_level_variables))
+        )
+    for family, expected_variable in {
+        **level_variables,
+        "reputation": "VAL_contract_reputation_level",
+    }.items():
+        family_variables = set(
+            re.findall(
+                rf"\bvar\s*=\s*(VAL_contract_{family}_[A-Za-z0-9_]+)\b",
+                mask_comments(effects),
+            )
+        )
+        if family_variables != {expected_variable}:
+            issues.append(
+                f"{family} contract state must use only {expected_variable}: "
+                + ", ".join(sorted(family_variables))
+            )
+
+    def validate_hidden_renderer(
+        owner: str,
+        container: str,
+        family: str,
+        target: str,
+    ) -> str | None:
+        hidden_blocks = direct_named_blocks(container, "hidden_effect")
+        if len(hidden_blocks) != 1:
+            issues.append(f"{owner} needs exactly one direct hidden_effect renderer")
+            return None
+        hidden = hidden_blocks[0].text
+        expected_ideas = set(tier_families[family])
+        removals = scalar_values(hidden, "remove_ideas")
+        additions = scalar_values(hidden, "add_ideas")
+        if (
+            len(removals) != len(expected_ideas)
+            or set(removals) != expected_ideas
+            or scalar_values(hidden, "remove_idea")
+        ):
+            issues.append(f"{owner} does not remove every {family} tier exactly once")
+        if additions != [target] or scalar_values(hidden, "add_idea"):
+            issues.append(f"{owner} does not add only target tier {target}")
+        removal_positions = [
+            match.start()
+            for match in re.finditer(r"(?m)^\s*remove_ideas\s*=", mask_comments(hidden))
+        ]
+        addition_positions = [
+            match.start()
+            for match in re.finditer(r"(?m)^\s*add_ideas\s*=", mask_comments(hidden))
+        ]
+        if removal_positions and addition_positions and max(removal_positions) > min(addition_positions):
+            issues.append(f"{owner} adds {target} before completing its remove-all render")
+        return hidden
+
+    for family in ("administration", "industry", "army"):
+        variable = level_variables[family]
+        for tier, target in enumerate(tier_families[family], start=1):
+            effect_id = f"VAL_apply_contract_{family}_{tier}"
+            effect_blocks = named_block_spans(effects, effect_id)
+            if len(effect_blocks) != 1:
+                issues.append(f"expected exactly one tier effect {effect_id}")
+                continue
+            effect_block = effect_blocks[0].text
+            engine_effect = mask_comments(effect_block)
+            if re.search(r"\b(?:has_idea|swap_ideas)\s*=", engine_effect):
+                issues.append(f"{effect_id} still derives transitions from idea state")
+            branches = direct_named_blocks(effect_block, "if")
+            if len(branches) != 1 or direct_named_blocks(effect_block, "else_if"):
+                issues.append(f"{effect_id} needs one direct guarded transition branch")
+                continue
+            branch = branches[0]
+            limits = direct_named_blocks(branch.text, "limit", branch.start)
+            setters = direct_named_blocks(branch.text, "set_variable", branch.start)
+            hidden_blocks = direct_named_blocks(branch.text, "hidden_effect", branch.start)
+            if len(limits) != 1 or len(setters) != 1 or len(hidden_blocks) != 1:
+                issues.append(
+                    f"{effect_id} must directly contain one limit, level setter, and hidden renderer"
+                )
+                continue
+            limit = limits[0]
+            guards = direct_named_blocks(limit.text, "OR", limit.start)
+            if len(guards) != 1:
+                issues.append(f"{effect_id} needs one direct OR level guard")
+            else:
+                guard = guards[0]
+                missing_checks = direct_named_blocks(guard.text, "NOT", guard.start)
+                level_checks = direct_named_blocks(guard.text, "check_variable", guard.start)
+                if (
+                    len(missing_checks) != 1
+                    or assignment_values(missing_checks[0].text, "has_variable") != [variable]
+                ):
+                    issues.append(f"{effect_id} does not guard the missing {variable}")
+                if len(level_checks) != 1 or (
+                    scalar_values(level_checks[0].text, "var") != [variable]
+                    or scalar_values(level_checks[0].text, "value") != [str(tier)]
+                    or scalar_values(level_checks[0].text, "compare") != ["less_than"]
+                ):
+                    issues.append(f"{effect_id} does not guard {variable} as less than {tier}")
+            setter = setters[0].text
+            if not re.search(
+                rf"\bvar\s*=\s*{re.escape(variable)}\b.*?\bvalue\s*=\s*{tier}\b",
+                mask_comments(setter),
+                re.DOTALL,
+            ):
+                issues.append(f"{effect_id} does not set {variable} to {tier}")
+            hidden = validate_hidden_renderer(effect_id, branch.text, family, target)
+            all_removals = scalar_values(effect_block, "remove_ideas")
+            all_additions = scalar_values(effect_block, "add_ideas")
+            if hidden is not None and (
+                all_removals != scalar_values(hidden, "remove_ideas")
+                or all_additions != scalar_values(hidden, "add_ideas")
+            ):
+                issues.append(f"{effect_id} renders tier ideas outside hidden_effect")
+            dirty_calls = scalar_values(hidden or "", "ADISCORD_economy_mark_dirty")
+            if family in {"administration", "industry"} and dirty_calls != ["yes"]:
+                issues.append(f"{effect_id} must mark the economy dirty inside its renderer")
+            if family == "army" and dirty_calls:
+                issues.append(f"{effect_id} must not mark the economy dirty")
+
+    reputation_refresh = named_block_spans(effects, "VAL_refresh_contract_reputation")
+    if len(reputation_refresh) != 1:
+        issues.append("expected exactly one reputation refresh selector")
     else:
-        for level in range(4):
-            if f"VAL_apply_contract_reputation_{level} = yes" not in reputation_refresh[0]:
-                issues.append(f"reputation refresh cannot select tier {level}")
+        refresh = reputation_refresh[0].text
+        conditional_branches = sorted(
+            [
+                *direct_named_blocks(refresh, "if"),
+                *direct_named_blocks(refresh, "else_if"),
+            ],
+            key=lambda branch: branch.start,
+        )
+        if [branch.name for branch in conditional_branches] != ["if", "else_if", "else_if"]:
+            issues.append("reputation refresh must select tiers 3, 2, and 1 in descending order")
+        else:
+            for tier, branch in zip((3, 2, 1), conditional_branches):
+                limits = direct_named_blocks(branch.text, "limit", branch.start)
+                checks = (
+                    direct_named_blocks(limits[0].text, "check_variable", limits[0].start)
+                    if len(limits) == 1
+                    else []
+                )
+                if len(checks) != 1 or (
+                    assignment_values(checks[0].text, "var")
+                    != ["VAL_contract_reputation_level"]
+                    or assignment_values(checks[0].text, "value") != [str(tier)]
+                    or assignment_values(checks[0].text, "compare")
+                    != ["greater_than_or_equals"]
+                ):
+                    issues.append(f"reputation refresh has an invalid tier {tier} level check")
+                effect_id = f"VAL_apply_contract_reputation_{tier}"
+                renderer_calls = re.findall(
+                    r"\bVAL_apply_contract_reputation_([0-3])\s*=\s*yes\b",
+                    mask_comments(branch.text),
+                )
+                if renderer_calls != [str(tier)]:
+                    issues.append(f"reputation refresh tier {tier} does not call only {effect_id}")
+        fallback = direct_named_blocks(refresh, "else")
+        fallback_calls = re.findall(
+            r"\bVAL_apply_contract_reputation_([0-3])\s*=\s*yes\b",
+            mask_comments(fallback[0].text if fallback else ""),
+        )
+        if len(fallback) != 1 or fallback_calls != ["0"]:
+            issues.append("reputation refresh needs an unconditional tier-0 fallback")
+        elif named_block_spans(fallback[0].text, "check_variable"):
+            issues.append("reputation tier-0 fallback must not have a level guard")
     for level in range(4):
         effect_id = f"VAL_apply_contract_reputation_{level}"
-        effect_blocks = named_blocks(effects, effect_id)
-        if not effect_blocks:
-            issues.append(f"missing reputation swap effect {effect_id}")
+        effect_blocks = named_block_spans(effects, effect_id)
+        if len(effect_blocks) != 1:
+            issues.append(f"expected exactly one reputation renderer {effect_id}")
             continue
-        effect_block = effect_blocks[0]
-        hidden = named_blocks(effect_block, "hidden_effect")
-        if "swap_ideas" not in effect_block:
-            issues.append(f"{effect_id} does not present a TFR-style idea swap")
-        if effect_block.count("remove_ideas") != sum(
-            block.count("remove_ideas") for block in hidden
+        effect_block = effect_blocks[0].text
+        if re.search(r"\b(?:has_idea|swap_ideas)\s*=", mask_comments(effect_block)):
+            issues.append(f"{effect_id} still derives rendering from idea state")
+        target = tier_families["reputation"][level]
+        hidden = validate_hidden_renderer(effect_id, effect_block, "reputation", target)
+        if hidden is not None and (
+            scalar_values(effect_block, "remove_ideas")
+            != scalar_values(hidden, "remove_ideas")
+            or scalar_values(effect_block, "add_ideas")
+            != scalar_values(hidden, "add_ideas")
         ):
-            issues.append(f"{effect_id} exposes reputation cleanup outside hidden_effect")
-        for swap in named_blocks(effect_block, "swap_ideas"):
-            if swap.count("remove_idea") != 1 or swap.count("add_idea") != 1:
-                issues.append(f"{effect_id} contains an invalid idea swap")
+            issues.append(f"{effect_id} renders reputation ideas outside hidden_effect")
+
+    migration_focuses = {
+        ("administration", 3): {"VAL_State_Contract"},
+        ("administration", 2): {
+            "VAL_Central_Payment_Office",
+            "VAL_Provincial_Contract_Courts",
+        },
+        ("administration", 1): {
+            "VAL_The_Weaponry_Baron",
+            "VAL_Provincial_Brokers",
+            "VAL_Ministry_Auditors",
+        },
+        ("industry", 3): {"VAL_Industrial_Mobilization_Plan"},
+        ("industry", 2): {
+            "VAL_Standardize_Rifle_Lots",
+            "VAL_Standard_Cartridges",
+            "VAL_Three_Shift_Arsenals",
+        },
+        ("industry", 1): {
+            "VAL_Contract_Accounting_Office",
+            "VAL_Munitions_Board",
+        },
+        ("army", 3): {"VAL_Contract_General_Staff", "VAL_Army_Of_The_Ledger"},
+        ("army", 2): {
+            "VAL_Contractor_Officers",
+            "VAL_Motorized_Columns",
+            "VAL_Field_Repair_Corps",
+            "VAL_Contract_NCO_Schools",
+            "VAL_Logistics_Command",
+        },
+        ("army", 1): {
+            "VAL_Count_The_Captains",
+            "VAL_The_Mercenary_State",
+            "VAL_Company_Rosters",
+            "VAL_Border_Survey_Corps",
+            "VAL_Company_Service_Code",
+        },
+    }
+    migration_blocks = named_block_spans(effects, "VAL_migrate_contract_tier_levels")
+    if len(migration_blocks) != 1:
+        issues.append("expected exactly one VAL_migrate_contract_tier_levels effect")
+    else:
+        migration = migration_blocks[0].text
+        migration_branches = sorted(
+            [
+                *direct_named_blocks(migration, "if"),
+                *direct_named_blocks(migration, "else_if"),
+            ],
+            key=lambda branch: branch.start,
+        )
+        expected_branches = [
+            (family, tier, "if" if tier == 3 else "else_if")
+            for family in ("administration", "industry", "army")
+            for tier in (3, 2, 1)
+        ]
+        if len(migration_branches) != len(expected_branches):
+            issues.append("tier migration must have one descending three-branch chain per family")
+        else:
+            for branch, (family, tier, branch_name) in zip(
+                migration_branches, expected_branches
+            ):
+                effect_id = f"VAL_apply_contract_{family}_{tier}"
+                if branch.name != branch_name:
+                    issues.append(f"{effect_id} migration branch is out of descending order")
+                apply_calls = re.findall(
+                    r"(?m)^\s*(VAL_apply_contract_(?:administration|industry|army)_[1-3])\s*=\s*yes\s*$",
+                    mask_comments(branch.text),
+                )
+                if apply_calls != [effect_id]:
+                    issues.append(f"migration branch must call only {effect_id}")
+                limits = direct_named_blocks(branch.text, "limit", branch.start)
+                if len(limits) != 1:
+                    issues.append(f"{effect_id} migration branch needs one direct limit")
+                    continue
+                limit = limits[0]
+                missing = direct_named_blocks(limit.text, "NOT", limit.start)
+                variable = level_variables[family]
+                if (
+                    len(missing) != 1
+                    or assignment_values(missing[0].text, "has_variable") != [variable]
+                ):
+                    issues.append(f"{effect_id} migration must require missing {variable}")
+                completed = set(scalar_values(limit.text, "has_completed_focus"))
+                if completed != migration_focuses[(family, tier)]:
+                    issues.append(f"{effect_id} migration has incomplete focus coverage")
+
+    if not initialize or not re.search(
+        r"VAL_initialize_rework\s*=\s*\{\s*VAL_migrate_contract_tier_levels\s*=\s*yes\b",
+        mask_comments(initialize[0]),
+    ):
+        issues.append("VAL_initialize_rework does not begin with tier-level migration")
 
     ideas_text = read("common/ideas/ADISCORD_VAL_rework_ideas.txt")
     hidden_ideas = named_blocks(ideas_text, "hidden_ideas")
@@ -436,8 +818,9 @@ def main() -> int:
             "VAL_hot_production_lines",
             "VAL_northern_roads_drive",
         ):
-            if not named_blocks(hidden_ideas[0], idea_id):
-                issues.append(f"technical idea remains visible: {idea_id}")
+            declarations = named_blocks(hidden_ideas[0], idea_id)
+            if len(declarations) != 1:
+                issues.append(f"technical idea must be declared once under hidden_ideas: {idea_id}")
 
     for ideas_path in (
         "common/ideas/ADISCORD_VAL_rework_ideas.txt",
