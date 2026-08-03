@@ -50,4 +50,3 @@ The implementation must preserve all unrelated working-tree changes. Only the ap
 4. Run `python -B tools/validate_tc.py --limit 300` and `git diff --check` on the scoped files.
 5. Start a fresh 1 January 2160 game and inspect fresh logs for weather, snow, terrain, and strategic-region errors.
 6. Obtain a screenshot showing the polar belt. Acceptance requires continuous visible polar snow with a smooth southern boundary and no permanent snow spill into temperate lowlands.
-
