@@ -1,5 +1,6 @@
 import re
 import unittest
+from dataclasses import dataclass
 from pathlib import Path
 
 
@@ -56,6 +57,40 @@ def mask_comments(text: str) -> str:
     return "".join(result)
 
 
+def mask_non_code(text: str) -> str:
+    """Mask comments and quoted strings while keeping all source offsets stable."""
+    result: list[str] = []
+    in_string = False
+    escaped = False
+    in_comment = False
+    for character in text:
+        if in_comment:
+            if character in "\r\n":
+                in_comment = False
+                result.append(character)
+            else:
+                result.append(" ")
+            continue
+        if in_string:
+            result.append(" " if character not in "\r\n" else character)
+            if escaped:
+                escaped = False
+            elif character == "\\":
+                escaped = True
+            elif character == '"':
+                in_string = False
+            continue
+        if character == "#":
+            in_comment = True
+            result.append(" ")
+        elif character == '"':
+            in_string = True
+            result.append(" ")
+        else:
+            result.append(character)
+    return "".join(result)
+
+
 def closing_brace(text: str, opening: int) -> int:
     depth = 0
     in_string = False
@@ -83,19 +118,78 @@ def closing_brace(text: str, opening: int) -> int:
     raise ValueError(f"unclosed brace at index {opening}")
 
 
-def named_blocks(text: str, name: str) -> list[str]:
-    masked = mask_comments(text)
-    pattern = re.compile(rf"(?m)^\s*{re.escape(name)}\s*=\s*\{{")
-    blocks = []
+@dataclass(frozen=True)
+class Block:
+    name: str
+    start: int
+    end: int
+    text: str
+
+
+def named_block_spans(text: str, name: str, offset: int = 0) -> list[Block]:
+    masked = mask_non_code(text)
+    pattern = re.compile(rf"(?<![A-Za-z0-9_]){re.escape(name)}\s*=\s*\{{")
+    blocks: list[Block] = []
     for match in pattern.finditer(masked):
         opening = masked.index("{", match.start(), match.end())
-        blocks.append(text[match.start() : closing_brace(masked, opening) + 1])
+        closing = closing_brace(masked, opening) + 1
+        blocks.append(
+            Block(
+                name=name,
+                start=offset + match.start(),
+                end=offset + closing,
+                text=text[match.start() : closing],
+            )
+        )
     return blocks
+
+
+def brace_depth_before(text: str, position: int) -> int:
+    depth = 0
+    in_string = False
+    escaped = False
+    for character in text[:position]:
+        if in_string:
+            if escaped:
+                escaped = False
+            elif character == "\\":
+                escaped = True
+            elif character == '"':
+                in_string = False
+            continue
+        if character == '"':
+            in_string = True
+        elif character == "{":
+            depth += 1
+        elif character == "}":
+            depth -= 1
+    return depth
+
+
+def direct_named_blocks(text: str, name: str, offset: int = 0) -> list[Block]:
+    masked = mask_non_code(text)
+    return [
+        block
+        for block in named_block_spans(text, name, offset)
+        if brace_depth_before(masked, block.start - offset) == 1
+    ]
+
+
+def named_blocks(text: str, name: str) -> list[str]:
+    return [block.text for block in named_block_spans(text, name)]
 
 
 def only_named_block(test: unittest.TestCase, text: str, name: str) -> str:
     blocks = named_blocks(text, name)
     test.assertEqual(len(blocks), 1, f"expected exactly one brace-aware {name} block")
+    return blocks[0]
+
+
+def only_direct_named_block(
+    test: unittest.TestCase, text: str, name: str, offset: int = 0
+) -> Block:
+    blocks = direct_named_blocks(text, name, offset)
+    test.assertEqual(len(blocks), 1, f"expected exactly one direct {name} block")
     return blocks[0]
 
 
@@ -145,8 +239,27 @@ class ValTierTransitionContractTests(unittest.TestCase):
         self.assertTrue(addition_positions, "tier rebuild must add its target idea")
         self.assertLess(max(removal_positions), min(addition_positions))
 
-    def assert_authoritative_guard(self, effect: str, variable: str, tier: int) -> None:
-        checks = named_blocks(effect, "check_variable")
+    def transition_branch(self, effect: str, variable: str, tier: int) -> Block:
+        level_update = re.compile(
+            rf"\bset_variable\s*=\s*\{{\s*var\s*=\s*{re.escape(variable)}"
+            rf"\s+value\s*=\s*{tier}\s*\}}"
+        )
+        branches = [
+            branch
+            for branch in direct_named_blocks(effect, "if")
+            if level_update.search(mask_comments(branch.text))
+            and len(direct_named_blocks(branch.text, "hidden_effect", branch.start)) == 1
+        ]
+        self.assertEqual(
+            len(branches),
+            1,
+            f"expected one if branch that sets {variable} to tier {tier} and rebuilds hidden ideas",
+        )
+        return branches[0]
+
+    def assert_authoritative_guard(self, branch: Block, variable: str, tier: int) -> None:
+        limit = only_direct_named_block(self, branch.text, "limit", branch.start)
+        checks = named_blocks(limit.text, "check_variable")
         expected = re.compile(
             rf"\bvar\s*=\s*{re.escape(variable)}\b.*?\bvalue\s*=\s*{tier}\b"
             rf".*?\bcompare\s*=\s*less_than\b",
@@ -156,6 +269,44 @@ class ValTierTransitionContractTests(unittest.TestCase):
             any(expected.search(mask_comments(check)) for check in checks),
             f"tier {tier} needs a {variable} less_than guard",
         )
+
+    def renderer_calls(self, block: str) -> list[int]:
+        return [
+            int(tier)
+            for tier in re.findall(
+                r"\bVAL_apply_contract_reputation_([0-3])\s*=\s*yes\b",
+                mask_comments(block),
+            )
+        ]
+
+    def assert_reputation_refresh_selection(self, refresh: str) -> None:
+        conditional_branches = sorted(
+            [
+                *direct_named_blocks(refresh, "if"),
+                *direct_named_blocks(refresh, "else_if"),
+            ],
+            key=lambda branch: branch.start,
+        )
+        self.assertEqual(
+            [branch.name for branch in conditional_branches],
+            ["if", "else_if", "else_if"],
+        )
+        for tier, branch in zip((3, 2, 1), conditional_branches):
+            with self.subTest(refresh_tier=tier):
+                limit = only_direct_named_block(self, branch.text, "limit", branch.start)
+                checks = named_blocks(limit.text, "check_variable")
+                self.assertEqual(len(checks), 1, "each reputation branch needs one level check")
+                self.assertRegex(
+                    mask_comments(checks[0]),
+                    rf"\bvar\s*=\s*VAL_contract_reputation_level\b.*?\bvalue\s*=\s*{tier}\b"
+                    r".*?\bcompare\s*=\s*greater_than_or_equals\b",
+                )
+                self.assertEqual(self.renderer_calls(branch.text), [tier])
+
+        fallback = only_direct_named_block(self, refresh, "else")
+        self.assertGreater(fallback.start, conditional_branches[-1].start)
+        self.assertEqual(self.renderer_calls(fallback.text), [0])
+        self.assertEqual(named_blocks(fallback.text, "check_variable"), [])
 
     def test_sources_have_balanced_clausewitz_blocks(self) -> None:
         for path, text in (
@@ -183,20 +334,24 @@ class ValTierTransitionContractTests(unittest.TestCase):
                     self.assertEqual(len(named_blocks(hidden_ideas, idea)), 1)
 
         apply_effect_names = re.findall(
-            r"(?m)^\s*(VAL_apply_contract_[a-z]+_\d+)\s*=\s*\{", mask_comments(self.effects)
+            r"(?m)^\s*(VAL_apply_contract_[A-Za-z0-9_]+)\s*=\s*\{",
+            mask_comments(self.effects),
         )
         self.assertTrue(apply_effect_names, "expected VAL contract apply effects")
+        referenced_tiers: set[str] = set()
         for effect_name in apply_effect_names:
             with self.subTest(effect=effect_name):
                 effect = only_named_block(self, self.effects, effect_name)
                 used_tiers = set(
                     re.findall(
-                        r"\bVAL_contract_(?:administration|industry|army|reputation)_\d+\b",
+                        r"\b(?:add_ideas?|remove_ideas?)\s*=\s*"
+                        r"(VAL_contract_[A-Za-z0-9_]+)\b",
                         mask_comments(effect),
                     )
                 )
-                self.assertTrue(used_tiers, "each apply effect must name a contract tier")
+                referenced_tiers.update(used_tiers)
                 self.assertTrue(used_tiers <= declared, used_tiers - declared)
+        self.assertTrue(referenced_tiers, "expected tier ideas in VAL apply effects")
 
     def test_upward_apply_effects_rebuild_from_authoritative_levels(self) -> None:
         for family in UPWARD_FAMILIES:
@@ -207,17 +362,13 @@ class ValTierTransitionContractTests(unittest.TestCase):
                     engine_effect = mask_comments(effect)
                     self.assertNotRegex(engine_effect, r"\bhas_idea\s*=")
                     self.assertNotRegex(engine_effect, r"\bswap_ideas\s*=")
-                    successful = named_blocks(effect, "if")[0]
-                    self.assertRegex(
-                        successful,
-                        rf"\bset_variable\s*=\s*\{{\s*var\s*=\s*{variable}\s+value\s*=\s*{tier}\s*\}}",
-                    )
-                    self.assert_hidden_rebuild(successful, family, target)
+                    successful = self.transition_branch(effect, variable, tier)
+                    self.assert_hidden_rebuild(successful.text, family, target)
                     if tier < 3:
-                        self.assert_authoritative_guard(effect, variable, tier)
+                        self.assert_authoritative_guard(successful, variable, tier)
                     if family in {"administration", "industry"}:
                         self.assertRegex(
-                            successful,
+                            successful.text,
                             r"\bADISCORD_economy_mark_dirty\s*=\s*yes\b",
                         )
 
@@ -231,7 +382,7 @@ class ValTierTransitionContractTests(unittest.TestCase):
                 self.assertNotRegex(engine_effect, r"\bhas_idea\s*=")
                 self.assertNotRegex(engine_effect, r"\bswap_ideas\s*=")
                 self.assert_hidden_rebuild(effect, "reputation", target)
-                self.assertRegex(refresh, rf"\b{effect_name}\s*=\s*yes\b")
+        self.assert_reputation_refresh_selection(refresh)
 
     def test_old_save_migration_replays_every_completed_tier_focus_in_descending_order(self) -> None:
         caller_focuses: dict[tuple[str, int], set[str]] = {
@@ -267,23 +418,36 @@ class ValTierTransitionContractTests(unittest.TestCase):
                 effect_name = f"VAL_apply_contract_{family}_{tier}"
                 branches = [
                     branch
-                    for branch_name in ("if", "else_if")
-                    for branch in named_blocks(migration, branch_name)
-                    if re.search(rf"\b{effect_name}\s*=\s*yes\b", mask_comments(branch))
+                    for branch in [
+                        *named_block_spans(migration, "if"),
+                        *named_block_spans(migration, "else_if"),
+                    ]
+                    if re.search(
+                        rf"\b{effect_name}\s*=\s*yes\b", mask_comments(branch.text)
+                    )
                 ]
-                self.assertTrue(branches, f"migration needs a {effect_name} branch")
-                tier_positions[tier] = min(migration.index(branch) for branch in branches)
+                owning_branches = [
+                    branch
+                    for branch in branches
+                    if not any(
+                        nested.start > branch.start and nested.end < branch.end
+                        for nested in branches
+                    )
+                ]
+                self.assertEqual(
+                    len(owning_branches),
+                    1,
+                    f"migration needs one owning {effect_name} branch",
+                )
+                branch = owning_branches[0]
+                tier_positions[tier] = branch.start
+                limit = only_direct_named_block(self, branch.text, "limit", branch.start)
                 for focus_id in caller_focuses[(family, tier)]:
                     with self.subTest(family=family, tier=tier, focus=focus_id):
-                        self.assertTrue(
-                            any(
-                                re.search(
-                                    rf"\bhas_completed_focus\s*=\s*{re.escape(focus_id)}\b",
-                                    mask_comments(branch),
-                                )
-                                for branch in branches
-                            ),
-                            f"{focus_id} is missing from the {effect_name} migration branch",
+                        self.assertRegex(
+                            mask_comments(limit.text),
+                            rf"\bhas_completed_focus\s*=\s*{re.escape(focus_id)}\b",
+                            f"{focus_id} is missing from the {effect_name} migration branch limit",
                         )
             with self.subTest(family=family, order="descending"):
                 self.assertLess(tier_positions[3], tier_positions[2])
