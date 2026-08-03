@@ -16,7 +16,7 @@ state={
 			industrial_complex  = 3
 		}
 		add_core_of = STP
-
+		victory_points = { 110 1 }
 	}
 
 	resources = {

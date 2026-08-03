@@ -18,6 +18,7 @@ state={
 		}
 		add_core_of = VAL
 		add_claim_by = STP
+		victory_points = { 125 1 }
 	}
 
 	resources = {

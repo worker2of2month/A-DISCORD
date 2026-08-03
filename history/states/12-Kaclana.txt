@@ -15,7 +15,7 @@ state={
 			infrastructure = 2
 		}
 		add_core_of = NOD
-		victory_points = { 16644 1 }
-		victory_points = { 16647 1 }
+		victory_points = { 16644 5 }
+		victory_points = { 16647 5 }
 	}
 }

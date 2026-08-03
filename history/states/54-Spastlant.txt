@@ -19,7 +19,7 @@ state={
 		add_core_of = VAL
 
 		victory_points = { 16510 15 }
-		victory_points = { 16653 1 }
+		victory_points = { 16653 5 }
 	}
 	resources = {
         steel = 11

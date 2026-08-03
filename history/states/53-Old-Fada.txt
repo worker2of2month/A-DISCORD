@@ -17,6 +17,7 @@ state={
 			70 = { dam = 1 }
 		}
 		add_core_of = STP
+		victory_points = { 70 1 }
 	}
 	resources = {
     }
