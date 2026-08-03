@@ -207,6 +207,7 @@ def validate_global_weather_settings(errors: list[str]) -> None:
         return
     text = path.read_text(encoding="utf-8-sig", errors="strict")
     expected_values = {
+        "temperature_neighbor_smoothing": 0.5,
         "snow_gain_on_snowing": 1.0,
         "snow_gain_on_blizzard": 5.0,
         "snow_visual_min": 128.0,

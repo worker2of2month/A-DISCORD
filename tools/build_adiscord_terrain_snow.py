@@ -15,8 +15,8 @@ and the highest mountain pixels worldwide.
 from __future__ import annotations
 
 import argparse
+import os
 import re
-import shutil
 from pathlib import Path
 
 from PIL import Image
@@ -155,14 +155,14 @@ def apply() -> None:
 
     terrain.putdata(pixels)
     temporary = TERRAIN_PATH.with_suffix(".bmp.tmp")
-    terrain.save(temporary, format="BMP")
-    # os.replace() is unreliable for BMPs watched by the Windows shell/HOI4.
-    # Copying the already complete temporary file keeps the destination valid
-    # even when metadata watchers have an open handle to the old image.
-    with temporary.open("rb") as generated, TERRAIN_PATH.open("r+b") as destination:
-        shutil.copyfileobj(generated, destination)
-        destination.truncate()
-    temporary.unlink()
+    try:
+        terrain.save(temporary, format="BMP")
+        with temporary.open("r+b") as generated:
+            generated.flush()
+            os.fsync(generated.fileno())
+        os.replace(temporary, TERRAIN_PATH)
+    finally:
+        temporary.unlink(missing_ok=True)
     mountain_snow, plain_snow = snow_counts(pixels)
     print(
         "Generated permanent snow: "

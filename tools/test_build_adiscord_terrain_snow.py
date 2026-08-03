@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import os
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -79,6 +80,36 @@ class TerrainSnowTests(unittest.TestCase):
                 with self.assertRaisesRegex(RuntimeError, "coverage rejected"):
                     snow.apply()
             self.assertEqual(terrain_path.read_bytes(), original)
+
+    def test_apply_replace_failure_preserves_original_and_cleans_temp(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            terrain_path = root / "terrain.bmp"
+            heightmap_path = root / "heightmap.bmp"
+            definition_path = root / "00_terrain.txt"
+            terrain = Image.new("P", (2, 2), color=4)
+            terrain.putpalette(
+                [value for channel in range(3) for value in range(256)]
+            )
+            terrain.save(terrain_path, format="BMP")
+            Image.new("L", (2, 2), color=100).save(heightmap_path, format="BMP")
+            definition_path.write_text(
+                "snow_16 = { type = mountain color = { 16 } texture = 11 perm_snow = yes }\n"
+                "plains_17 = { type = plains color = { 19 } texture = 0 perm_snow = yes }\n",
+                encoding="utf-8",
+            )
+            original = terrain_path.read_bytes()
+            with (
+                patch.object(snow, "TERRAIN_PATH", terrain_path),
+                patch.object(snow, "HEIGHTMAP_PATH", heightmap_path),
+                patch.object(snow, "TERRAIN_DEFINITION_PATH", definition_path),
+                patch.object(snow, "coverage_issues", return_value=[]),
+                patch.object(os, "replace", side_effect=OSError("replace denied")),
+            ):
+                with self.assertRaisesRegex(OSError, "replace denied"):
+                    snow.apply()
+            self.assertEqual(terrain_path.read_bytes(), original)
+            self.assertFalse(terrain_path.with_suffix(".bmp.tmp").exists())
 
 
 if __name__ == "__main__":
