@@ -240,7 +240,7 @@ ADISCORD_naval_doctrine_coastal_fire_support = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 2 has_tech = ADISCORD_tech_autonomous_littoral_fire_control }
+		modifier = { factor = 2 has_tech = ADISCORD_tech_modular_landing_causeways }
 	}
 	shore_bombardment_bonus = 0.04
 	naval_invasion_prep_speed = 0.03
@@ -330,7 +330,7 @@ ADISCORD_naval_doctrine_silent_ambush_groups = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 2 has_tech = ADISCORD_tech_magnetohydrodynamic_silent_drive }
+		modifier = { factor = 2 has_tech = ADISCORD_tech_autonomous_submarines }
 	}
 	navy_submarine_defence_factor = 0.03
 	convoy_raiding_efficiency_factor = 0.04

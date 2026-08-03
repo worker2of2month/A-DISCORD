@@ -31,10 +31,7 @@ add_ideas = {
 	civilian_economy
 }
 
-set_technology = {
-	ADISCORD_tech_salvage_standards = 1
-	ADISCORD_tech_postwar_weapon_standardization = 1
-}
+# Starting technologies are granted by the generated OSF profile on_startup.
 
 add_equipment_to_stockpile = {
 	type = infantry_equipment

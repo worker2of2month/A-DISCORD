@@ -50,14 +50,7 @@ set_stability = 0.44
 
 set_research_slots = 3
 
-set_technology = {
-	ADISCORD_tech_salvage_standards = 1
-	ADISCORD_tech_standardized_machine_tools = 1
-	ADISCORD_tech_postwar_weapon_standardization = 1
-	ADISCORD_tech_composite_protection_kits = 1
-	ADISCORD_tech_smart_optics = 1
-	ADISCORD_tech_remote_weapon_stations = 1
-}
+# Starting technologies are granted by the generated VAL profile on_startup.
 
 add_equipment_to_stockpile = {
 	type = infantry_equipment

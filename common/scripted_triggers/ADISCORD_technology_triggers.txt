@@ -48,7 +48,7 @@ ADISCORD_has_cyber_command_tech = {
 
 ADISCORD_has_civil_resilience_tech = {
 	OR = {
-		has_tech = ADISCORD_tech_population_resilience_planning
+		has_tech = ADISCORD_tech_public_repair_corps
 		has_tech = ADISCORD_tech_civil_defense_networks
 	}
 }

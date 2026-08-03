@@ -110,7 +110,7 @@ guiTypes = {
 			position = { x = 620 y = 58 }
 			size = { width = 200 height = 44 }
 			background = { name = "ADISCORD_economy_kpi_risk_bg" quadTextureSprite = "GFX_tiled_window2_1b_border" }
-			instantTextboxType = { name = "ADISCORD_economy_kpi_risk" position = { x = 6 y = 10 } font = "hoi_16mbs" text = "ADISCORD_economy_kpi_risk" maxWidth = 188 maxHeight = 24 format = center pdx_tooltip = "ADISCORD_economy_status_tt" }
+			instantTextboxType = { name = "ADISCORD_economy_kpi_risk" position = { x = 6 y = 10 } font = "hoi_16mbs" text = "ADISCORD_economy_kpi_inflation" maxWidth = 188 maxHeight = 24 format = center pdx_tooltip = "ADISCORD_economy_inflation_tt" }
 		}
 
 		containerWindowType = {
@@ -118,7 +118,7 @@ guiTypes = {
 			position = { x = 20 y = 120 }
 			size = { width = 310 height = 420 }
 			background = { name = "ADISCORD_economy_status_bg" quadTextureSprite = "GFX_tiled_window2_1b_border" }
-			instantTextboxType = { name = "ADISCORD_economy_player_summary" position = { x = 14 y = 14 } font = "hoi_16mbs" text = "ADISCORD_economy_dashboard_player_summary" maxWidth = 282 maxHeight = 126 pdx_tooltip = "ADISCORD_economy_inflation_tt" }
+			instantTextboxType = { name = "ADISCORD_economy_player_summary" position = { x = 14 y = 14 } font = "hoi_16mbs" text = "ADISCORD_economy_dashboard_player_summary" maxWidth = 282 maxHeight = 126 pdx_tooltip = "ADISCORD_economy_summary_tt" }
 			instantTextboxType = { name = "ADISCORD_economy_player_advice" position = { x = 14 y = 154 } font = "hoi_18mbs" text = "ADISCORD_economy_dashboard_player_advice" maxWidth = 282 maxHeight = 112 pdx_tooltip = "ADISCORD_economy_stretched_tt" }
 			instantTextboxType = { name = "ADISCORD_economy_buildings_summary" position = { x = 14 y = 342 } font = "hoi_16mbs" text = "ADISCORD_economy_dashboard_buildings_compact" maxWidth = 282 maxHeight = 58 pdx_tooltip = "ADISCORD_economy_buildings_tt" }
 		}
@@ -198,6 +198,54 @@ guiTypes = {
 			buttonType = { name = "ADISCORD_economy_action_stabilization" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 18 y = 344 } size = { x = 214 y = 34 } buttonText = "ADISCORD_economy_button_stabilization" buttonFont = "hoi_16mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_action_stabilization_tt" }
 			buttonType = { name = "ADISCORD_economy_action_war_taxes" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 248 y = 344 } size = { x = 214 y = 34 } buttonText = "ADISCORD_economy_button_war_taxes" buttonFont = "hoi_16mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_action_war_taxes_tt" }
 			instantTextboxType = { name = "ADISCORD_economy_emergency_hint" position = { x = 18 y = 386 } font = "hoi_16mbs" text = "ADISCORD_economy_emergency_hint" maxWidth = 444 maxHeight = 30 format = center }
+		}
+	}
+
+	# TDA-style acknowledgement window. The weekly calculation only flips two
+	# cached country variables, so displaying it adds no recurring scan.
+	containerWindowType = {
+		name = "ADISCORD_economy_auto_loan_popup_window"
+		position = { x = -240 y = -155 }
+		Orientation = CENTER
+		size = { width = 480 height = 310 }
+		clipping = no
+		click_to_front = yes
+		fade_time = 120
+		fade_type = linear
+
+		background = {
+			name = "ADISCORD_economy_auto_loan_popup_bg"
+			quadTextureSprite = "GFX_tiled_window2_1b_border"
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_economy_auto_loan_popup_title"
+			position = { x = 22 y = 20 }
+			font = "hoi_20b"
+			text = "ADISCORD_economy_auto_loan_popup_title"
+			maxWidth = 436
+			maxHeight = 30
+			format = center
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_economy_auto_loan_popup_desc"
+			position = { x = 30 y = 64 }
+			font = "hoi_16mbs"
+			text = "ADISCORD_economy_auto_loan_popup_desc"
+			maxWidth = 420
+			maxHeight = 168
+			format = center
+		}
+
+		buttonType = {
+			name = "ADISCORD_economy_auto_loan_popup_ok"
+			quadTextureSprite = "GFX_ADISCORD_economy_button"
+			position = { x = 140 y = 252 }
+			size = { x = 200 y = 36 }
+			buttonText = "ADISCORD_economy_auto_loan_popup_ok"
+			buttonFont = "hoi_18mbs"
+			clicksound = click_default
 		}
 	}
 }

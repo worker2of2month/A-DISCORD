@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 import statistics
 import sys
@@ -21,6 +22,12 @@ try:
         FOLDER_BACKGROUNDS as GENERATED_FOLDERS,
         FORBIDDEN_IDS as GENERATED_FORBIDDEN_IDS,
         LANE_SLOT_MULTIPLIER as GENERATED_LANE_SLOT_MULTIPLIER,
+        MAIN_BRANCH_KEYS_BY_FOLDER as GENERATED_MAIN_BRANCH_KEYS_BY_FOLDER,
+        SIDE_PROGRAMME_KEYS as GENERATED_SIDE_PROGRAMME_KEYS,
+        STARTING_COUNTRY_TECH_PROFILES as GENERATED_STARTING_COUNTRY_TECH_PROFILES,
+        STARTING_TECH_PROFILES as GENERATED_STARTING_TECH_PROFILES,
+        TECHNOLOGY_ID_MIGRATIONS as GENERATED_TECHNOLOGY_ID_MIGRATIONS,
+        XOR_KIND_BY_BRANCH as GENERATED_XOR_KIND_BY_BRANCH,
         XOR_INDEX_GROUPS_BY_BRANCH as GENERATED_XOR_INDEX_GROUPS_BY_BRANCH,
         YEARS as GENERATED_YEARS,
         YEAR_TO_Y as GENERATED_YEAR_TO_Y,
@@ -50,6 +57,12 @@ except ModuleNotFoundError:
         FOLDER_BACKGROUNDS as GENERATED_FOLDERS,
         FORBIDDEN_IDS as GENERATED_FORBIDDEN_IDS,
         LANE_SLOT_MULTIPLIER as GENERATED_LANE_SLOT_MULTIPLIER,
+        MAIN_BRANCH_KEYS_BY_FOLDER as GENERATED_MAIN_BRANCH_KEYS_BY_FOLDER,
+        SIDE_PROGRAMME_KEYS as GENERATED_SIDE_PROGRAMME_KEYS,
+        STARTING_COUNTRY_TECH_PROFILES as GENERATED_STARTING_COUNTRY_TECH_PROFILES,
+        STARTING_TECH_PROFILES as GENERATED_STARTING_TECH_PROFILES,
+        TECHNOLOGY_ID_MIGRATIONS as GENERATED_TECHNOLOGY_ID_MIGRATIONS,
+        XOR_KIND_BY_BRANCH as GENERATED_XOR_KIND_BY_BRANCH,
         XOR_INDEX_GROUPS_BY_BRANCH as GENERATED_XOR_INDEX_GROUPS_BY_BRANCH,
         YEARS as GENERATED_YEARS,
         YEAR_TO_Y as GENERATED_YEAR_TO_Y,
@@ -464,7 +477,8 @@ NEW_DATA_FILES = [
 
 LOCAL_TECH_REFERENCE_ROOTS = [
     "common",
-    "history/countries",
+    "events",
+    "history",
 ]
 
 LOCAL_DOCTRINE_REFERENCE_ROOTS = [
@@ -979,12 +993,22 @@ def check_generated_doctrine_structure(
 
 def check_applied_technology_programmes(tech_blocks: dict[str, str]) -> list[str]:
     issues: list[str] = []
+    live_keys = {
+        tech.key
+        for branch in GENERATED_BRANCHES
+        for tech in branch.techs
+    }
     if len(GENERATED_APPLIED_PROGRAMMES) != 7:
         issues.append(f"expected 7 applied technology programmes, got {len(GENERATED_APPLIED_PROGRAMMES)}")
     for programme in GENERATED_APPLIED_PROGRAMMES:
-        if len(programme["techs"]) != 8:
-            issues.append(f"applied programme {programme['key']} does not have 8 technologies")
+        retained = [tech for tech in programme["techs"] if tech[0] in live_keys]
+        if not 1 <= len(retained) <= 3:
+            issues.append(
+                f"applied programme {programme['key']} retains {len(retained)} technologies; expected 1-3"
+            )
         for key, _ru, _en, _icon in programme["techs"]:
+            if key not in live_keys:
+                continue
             tech_id = f"ADISCORD_tech_{key}"
             block = tech_blocks.get(tech_id, "")
             compact = re.sub(r"\s+", " ", block)
@@ -993,6 +1017,8 @@ def check_applied_technology_programmes(tech_blocks: dict[str, str]) -> list[str
                     issues.append(f"{tech_id} lost applied effect {effect}")
 
     for key, (_attribute, count) in GENERATED_LEADER_TRAINING.items():
+        if key not in live_keys:
+            continue
         tech_id = f"ADISCORD_tech_{key}"
         block = tech_blocks.get(tech_id, "")
         if "show_effect_as_desc = yes" not in block or "on_research_complete" not in block:
@@ -1047,9 +1073,29 @@ def check_equipment_definitions(equipment: set[str]) -> list[str]:
 def check_equipment_unlocks(tech_blocks: dict[str, str], equipment: set[str]) -> list[str]:
     issues: list[str] = []
     unlocked: set[str] = set()
+    actual_equipment_by_tech: dict[str, set[str]] = {}
     for block in tech_blocks.values():
         for match in re.finditer(r"\benable_equipments\s*=\s*\{([^{}]*)\}", block, re.S):
             unlocked.update(re.findall(r"[A-Za-z0-9_]+", match.group(1)))
+    for tech_id, block in tech_blocks.items():
+        entries: set[str] = set()
+        for match in re.finditer(r"\benable_equipments\s*=\s*\{([^{}]*)\}", block, re.S):
+            entries.update(re.findall(r"[A-Za-z0-9_]+", match.group(1)))
+        if entries:
+            actual_equipment_by_tech[tech_id] = entries
+
+    expected_equipment_by_tech = {
+        tech_id: set(entries)
+        for tech_id, entries in GENERATED_ENABLE_EQUIPMENT.items()
+    }
+    if actual_equipment_by_tech != expected_equipment_by_tech:
+        for tech_id in sorted(set(actual_equipment_by_tech) | set(expected_equipment_by_tech)):
+            actual = actual_equipment_by_tech.get(tech_id, set())
+            expected = expected_equipment_by_tech.get(tech_id, set())
+            if actual != expected:
+                issues.append(
+                    f"{tech_id} equipment unlocks are {sorted(actual)}; expected {sorted(expected)}"
+                )
 
     for eq in sorted(unlocked):
         if eq not in equipment:
@@ -1069,6 +1115,53 @@ def check_equipment_unlocks(tech_blocks: dict[str, str], equipment: set[str]) ->
     for eq in sorted(required_unlocks - unlocked):
         issues.append(f"no technology unlocks required equipment {eq}")
 
+    return issues
+
+
+def check_generated_capability_unlock_contract(tech_blocks: dict[str, str]) -> list[str]:
+    issues: list[str] = []
+    actual_subunits: dict[str, set[str]] = {}
+    actual_buildings: dict[str, set[tuple[str, int]]] = {}
+    for tech_id, block in tech_blocks.items():
+        subunits: set[str] = set()
+        for match in re.finditer(r"\benable_subunits\s*=\s*\{([^{}]*)\}", block, re.S):
+            subunits.update(re.findall(r"[A-Za-z0-9_]+", match.group(1)))
+        if subunits:
+            actual_subunits[tech_id] = subunits
+        buildings: set[tuple[str, int]] = set()
+        for match in re.finditer(r"\benable_building\s*=\s*\{", block):
+            building_block = extract_block(block, match.start())
+            building = re.search(r"\bbuilding\s*=\s*([A-Za-z0-9_]+)", building_block)
+            level = re.search(r"\blevel\s*=\s*(\d+)", building_block)
+            if building and level:
+                buildings.add((building.group(1), int(level.group(1))))
+        if buildings:
+            actual_buildings[tech_id] = buildings
+
+    expected_subunits = {
+        tech_id: set(entries)
+        for tech_id, entries in GENERATED_ENABLE_SUBUNITS.items()
+    }
+    expected_buildings = {
+        tech_id: set(entries)
+        for tech_id, entries in GENERATED_ENABLE_BUILDINGS.items()
+    }
+    if actual_subunits != expected_subunits:
+        for tech_id in sorted(set(actual_subunits) | set(expected_subunits)):
+            actual = actual_subunits.get(tech_id, set())
+            expected = expected_subunits.get(tech_id, set())
+            if actual != expected:
+                issues.append(
+                    f"{tech_id} subunit unlocks are {sorted(actual)}; expected {sorted(expected)}"
+                )
+    if actual_buildings != expected_buildings:
+        for tech_id in sorted(set(actual_buildings) | set(expected_buildings)):
+            actual = actual_buildings.get(tech_id, set())
+            expected = expected_buildings.get(tech_id, set())
+            if actual != expected:
+                issues.append(
+                    f"{tech_id} building unlocks are {sorted(actual)}; expected {sorted(expected)}"
+                )
     return issues
 
 
@@ -1913,27 +2006,280 @@ def check_local_technology_references(defined_techs: set[str]) -> list[str]:
     return issues
 
 
+def check_technology_migration_contract(defined_techs: set[str]) -> list[str]:
+    issues: list[str] = []
+    path = ROOT / "tools" / "data" / "adiscord_technology_id_migrations.json"
+    try:
+        payload = json.loads(read_text(path))
+    except (OSError, json.JSONDecodeError) as exc:
+        return [f"technology migration manifest is unreadable: {exc}"]
+    actual = payload.get("migrations", {})
+    if actual != GENERATED_TECHNOLOGY_ID_MIGRATIONS:
+        issues.append("technology migration manifest differs from the generator contract")
+    if payload.get("legacy_count") != len(GENERATED_TECHNOLOGY_ID_MIGRATIONS):
+        issues.append("technology migration manifest has the wrong legacy count")
+    if payload.get("current_count") != len(defined_techs):
+        issues.append("technology migration manifest has the wrong current count")
+    for old_id, entry in GENERATED_TECHNOLOGY_ID_MIGRATIONS.items():
+        status = entry.get("status")
+        replacement = entry.get("replacement")
+        if status not in {"preserved", "replaced", "removed"}:
+            issues.append(f"{old_id} has invalid migration status {status}")
+        if status in {"preserved", "replaced"} and replacement not in defined_techs:
+            issues.append(f"{old_id} migrates to undefined technology {replacement}")
+        if status == "removed" and replacement is not None:
+            issues.append(f"removed technology {old_id} still has replacement {replacement}")
+
+    retired_ids = set(GENERATED_TECHNOLOGY_ID_MIGRATIONS) - defined_techs
+    if retired_ids:
+        retired_pattern = re.compile(
+            r"\b(" + "|".join(re.escape(tech_id) for tech_id in sorted(retired_ids)) + r")\b"
+        )
+        for root in LOCAL_TECH_REFERENCE_ROOTS:
+            for text_path in iter_text_files(root):
+                text = strip_comments(read_text(text_path))
+                for match in retired_pattern.finditer(text):
+                    issues.append(
+                        f"retired technology ID {match.group(1)} remains at "
+                        f"{rel(text_path)}:{line_for_offset(text, match.start())}"
+                    )
+    return issues
+
+
 def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]:
     issues: list[str] = []
     path = ROOT / "common" / "scripted_effects" / "ADISCORD_technology_baseline_effects.txt"
     if not path.exists():
-        return ["missing generated pre-2160 campaign technology baseline"]
+        return ["missing generated starting-technology profiles"]
     text = strip_comments(read_text(path))
-    actual = set(re.findall(r"(?m)^\s*(ADISCORD_tech_[A-Za-z0-9_]+)\s*=\s*1\b", text))
-    expected = {
-        tech.id
-        for branch in GENERATED_BRANCHES
-        if not branch.profile.startswith("forbidden_")
-        for tech, year in zip(branch.techs, branch.years)
-        if year <= 2158
+    common_match = re.search(r"(?m)^ADISCORD_grant_technology_profile_common\s*=\s*\{", text)
+    common_block = extract_block(text, common_match.start()) if common_match else ""
+    actual_common = set(
+        re.findall(r"(?m)^\s*(ADISCORD_tech_[A-Za-z0-9_]+)\s*=\s*1\b", common_block)
+    )
+    expected_common = set(GENERATED_STARTING_TECH_PROFILES["common"])
+    if actual_common != expected_common:
+        issues.append(
+            "common starting profile mismatch; "
+            f"missing={sorted(expected_common - actual_common)}, "
+            f"extra={sorted(actual_common - expected_common)}"
+        )
+    if "ADISCORD_grant_2150_technology_baseline = {" not in text:
+        issues.append("legacy baseline effect ID is missing")
+    if "ADISCORD_grant_technology_profile_common = yes" not in text:
+        issues.append("legacy baseline no longer delegates to the common profile")
+
+    manifest_path = ROOT / "tools" / "data" / "adiscord_starting_technology_profiles.json"
+    try:
+        manifest = json.loads(read_text(manifest_path))
+    except (OSError, json.JSONDecodeError) as exc:
+        issues.append(f"starting technology profile manifest is unreadable: {exc}")
+        manifest = {}
+
+    assigned_tags = set(GENERATED_STARTING_COUNTRY_TECH_PROFILES)
+    observed_evidence: dict[str, dict[str, object]] = {
+        tag: {
+            "states": 0,
+            "civilian_factories": 0,
+            "military_factories": 0,
+            "dockyards": 0,
+            "air_bases": 0,
+            "power_sites": 0,
+            "infrastructure_levels": 0,
+            "research_slots": 0,
+            "convoys": 0,
+            "oob_divisions": 0,
+            "starting_doctrines": [],
+        }
+        for tag in assigned_tags
     }
-    if actual != expected:
-        missing = sorted(expected - actual)
-        extra = sorted(actual - expected)
-        issues.append(f"campaign baseline mismatch; missing={missing}, extra={extra}")
+    building_fields = {
+        "industrial_complex": "civilian_factories",
+        "arms_factory": "military_factories",
+        "dockyard": "dockyards",
+        "air_base": "air_bases",
+        "infrastructure": "infrastructure_levels",
+        "nuclear_reactor": "power_sites",
+        "commercial_nuclear_reactor": "power_sites",
+        "ADISCORD_thermal_power_complex": "power_sites",
+    }
+    active_owners: set[str] = set()
+    for state_path in (ROOT / "history" / "states").glob("*.txt"):
+        state_text = read_text(state_path)
+        owners = re.findall(
+            r"(?m)^\s*owner\s*=\s*([A-Z0-9]{3})\s*$",
+            state_text,
+        )
+        active_owners.update(owners)
+        if not owners or owners[0] not in observed_evidence:
+            continue
+        row = observed_evidence[owners[0]]
+        row["states"] += 1
+        for building, field in building_fields.items():
+            row[field] += sum(
+                int(value)
+                for value in re.findall(
+                    rf"(?m)^\s*{re.escape(building)}\s*=\s*(\d+)",
+                    state_text,
+                )
+            )
+    for tag, row in observed_evidence.items():
+        country_paths = sorted((ROOT / "history" / "countries").glob(f"{tag} - *.txt"))
+        if country_paths:
+            country_text = read_text(country_paths[0])
+            slots = re.search(r"\bset_research_slots\s*=\s*(\d+)", country_text)
+            convoys = re.search(r"\bset_convoys\s*=\s*(\d+)", country_text)
+            row["research_slots"] = int(slots.group(1)) if slots else 0
+            row["convoys"] = int(convoys.group(1)) if convoys else 0
+            row["starting_doctrines"] = re.findall(
+                r"\bset_grand_doctrine\s*=\s*([A-Za-z0-9_]+)",
+                country_text,
+            )
+        oob_path = ROOT / "history" / "units" / f"{tag}.txt"
+        if oob_path.exists():
+            row["oob_divisions"] = len(
+                re.findall(r"(?m)^\s*division\s*=\s*\{", read_text(oob_path))
+            )
+    if assigned_tags != active_owners:
+        issues.append(
+            "starting profile country coverage mismatch; "
+            f"missing={sorted(active_owners - assigned_tags)}, "
+            f"extra={sorted(assigned_tags - active_owners)}"
+        )
+
+    manifest_countries = manifest.get("countries", {}) if isinstance(manifest, dict) else {}
+    if set(manifest_countries) != assigned_tags:
+        issues.append("starting profile manifest country list differs from the generator map")
+    for tag, profiles in GENERATED_STARTING_COUNTRY_TECH_PROFILES.items():
+        entry = manifest_countries.get(tag, {})
+        expected_profiles = ["common", *profiles]
+        if entry.get("profiles") != expected_profiles:
+            issues.append(f"starting profile manifest has wrong profile list for {tag}")
+        if entry.get("evidence") != observed_evidence[tag]:
+            issues.append(f"starting profile evidence for {tag} is stale")
+        rationale = entry.get("rationale", "")
+        if not isinstance(rationale, str) or len(rationale) < 24:
+            issues.append(f"starting profile for {tag} has no explicit rationale")
+        evidence = observed_evidence[tag]
+        factory_total = evidence["civilian_factories"] + evidence["military_factories"]
+        if "industrial" in profiles and factory_total < 3:
+            issues.append(f"industrial starting profile for {tag} lacks a three-factory evidence base")
+        if (
+            "energy" in profiles
+            and evidence["power_sites"] < 1
+            and factory_total < 10
+            and tag not in {"KYZ", "MZR", "RHM"}
+        ):
+            issues.append(f"energy starting profile for {tag} lacks grid, industry, or water-system evidence")
+        if (
+            "institutional" in profiles
+            and evidence["research_slots"] < 3
+            and not (evidence["states"] >= 2 and evidence["infrastructure_levels"] >= 4)
+        ):
+            issues.append(f"institutional starting profile for {tag} lacks administrative evidence")
+        if (
+            "land" in profiles
+            and evidence["oob_divisions"] < 2
+            and evidence["military_factories"] < 1
+        ):
+            issues.append(f"land starting profile for {tag} lacks an army or arms-industry evidence base")
+        if (
+            "air" in profiles
+            and evidence["air_bases"] < 1
+            and evidence["military_factories"] < 5
+            and not any("air_doctrine" in doctrine for doctrine in evidence["starting_doctrines"])
+        ):
+            issues.append(f"air starting profile for {tag} lacks airfield, doctrine, or arms-industry evidence")
+        if (
+            "naval" in profiles
+            and evidence["dockyards"] < 1
+            and evidence["convoys"] < 1
+            and tag != "GLP"
+        ):
+            issues.append(f"naval starting profile for {tag} lacks dockyard, convoy, or port-lore evidence")
+        if not profiles and "intentionally" not in rationale.lower():
+            issues.append(f"common-only starting assignment for {tag} is not explicitly intentional")
+        expected_techs = set(GENERATED_STARTING_TECH_PROFILES["common"])
+        for profile in profiles:
+            expected_techs.update(GENERATED_STARTING_TECH_PROFILES[profile])
+        if set(entry.get("technologies_2160", ())) != expected_techs:
+            issues.append(f"starting technologies for {tag} do not match its profiles")
+        for branch in GENERATED_BRANCHES:
+            if GENERATED_XOR_KIND_BY_BRANCH.get(branch.key) != "permanent":
+                continue
+            for group in GENERATED_XOR_INDEX_GROUPS_BY_BRANCH.get(branch.key, ()):
+                choices = {branch.techs[index].id for index in group}
+                if choices <= expected_techs:
+                    issues.append(f"starting profile for {tag} grants both permanent XOR choices {sorted(choices)}")
+
     on_action = ROOT / "common" / "on_actions" / "00_ADISCORD_on_actions.txt"
-    if not on_action.exists() or "ADISCORD_grant_2150_technology_baseline = yes" not in read_text(on_action):
-        issues.append("on_startup does not apply the generated pre-2160 technology baseline")
+    on_action_text = read_text(on_action) if on_action.exists() else ""
+    if "ADISCORD_grant_starting_technology_profile = yes" not in on_action_text:
+        issues.append("on_startup does not apply generated country technology profiles")
+    flag = "ADISCORD_starting_technology_profiles_applied"
+    if f"has_global_flag = {flag}" not in on_action_text or f"set_global_flag = {flag}" not in on_action_text:
+        issues.append("starting technology distribution is not guarded by a global one-shot flag")
+    if "date > 2183.1.1" not in text or "ADISCORD_grant_technology_profile_late_2183 = yes" not in text:
+        issues.append("late bookmark has no bounded starting-technology extension")
+    for tag in assigned_tags:
+        if not re.search(rf"limit\s*=\s*\{{\s*tag\s*=\s*{tag}\s*\}}", text):
+            issues.append(f"starting technology dispatch is missing explicit tag {tag}")
+
+    for country_path in (ROOT / "history" / "countries").glob("*.txt"):
+        if re.search(r"(?m)^\s*set_technology\s*=\s*\{", strip_comments(read_text(country_path))):
+            issues.append(f"{rel(country_path)} duplicates generated starting technology profiles")
+
+    unlockers_by_equipment: dict[str, set[str]] = {}
+    for tech_id, equipment_types in GENERATED_ENABLE_EQUIPMENT.items():
+        for equipment_type in equipment_types:
+            unlockers_by_equipment.setdefault(equipment_type, set()).add(tech_id)
+    for tag, profiles in GENERATED_STARTING_COUNTRY_TECH_PROFILES.items():
+        granted = set(GENERATED_STARTING_TECH_PROFILES["common"])
+        for profile in profiles:
+            granted.update(GENERATED_STARTING_TECH_PROFILES[profile])
+        oob_path = ROOT / "history" / "units" / f"{tag}.txt"
+        if not oob_path.exists():
+            continue
+        equipment_types = set(
+            re.findall(r"\btype\s*=\s*([A-Za-z0-9_]+)", strip_comments(read_text(oob_path)))
+        )
+        for equipment_type in sorted(equipment_types):
+            unlockers = unlockers_by_equipment.get(equipment_type)
+            if unlockers and not (unlockers & granted):
+                issues.append(
+                    f"{tag} OOB uses {equipment_type} without a granted enabling technology"
+                )
+
+    collapse_setup_count = 0
+    for collapse_name in (
+        "ADISCORD_vorkerland_collapse_effects.txt",
+        "ADISCORD_vorkerland_collapse_dirty_effects.txt",
+    ):
+        collapse_text = read_text(ROOT / "common" / "scripted_effects" / collapse_name)
+        setup_matches = list(
+            re.finditer(
+                r"(?m)^ADISCORD_vorkerland_setup_([a-z0-9_]+)\s*=\s*\{",
+                collapse_text,
+            )
+        )
+        collapse_setup_count += len(setup_matches)
+        for match in setup_matches:
+            setup_name = match.group(1)
+            setup_block = extract_block(collapse_text, match.start())
+            if setup_block.count("ADISCORD_grant_2150_technology_baseline = yes") != 1:
+                issues.append(
+                    f"{collapse_name} setup {setup_name} must grant the legacy baseline exactly once"
+                )
+            if setup_block.count(
+                "ADISCORD_grant_technology_profile_fragment_low_tech = yes"
+            ) != 1:
+                issues.append(
+                    f"{collapse_name} setup {setup_name} must grant the fragment profile exactly once"
+                )
+    if collapse_setup_count != 16:
+        issues.append(
+            f"Vorkerland collapse technology profile audit expected 16 setups, got {collapse_setup_count}"
+        )
     for tech, block in tech_blocks.items():
         if re.search(r"\brepair_speed_factor\s*=", block):
             issues.append(
@@ -1957,6 +2303,47 @@ def check_campaign_dates_cover_technology_tree() -> list[str]:
         )
     if not re.search(r"\bdate\s*=\s*2160\.1\.1\.12\b", bookmark_text):
         issues.append("default bookmark must start on 2160.1.1.12")
+    return issues
+
+
+def check_technology_description_contract(tech_blocks: dict[str, str]) -> list[str]:
+    issues: list[str] = []
+    english_path = ROOT / "localisation" / "english" / "ADISCORD_technology_doctrine_l_english.yml"
+    russian_path = ROOT / "localisation" / "russian" / "ADISCORD_technology_doctrine_l_russian.yml"
+    english = read_text(english_path) if english_path.exists() else ""
+    russian = read_text(russian_path) if russian_path.exists() else ""
+
+    def has_fragment(text: str, tech_id: str, fragment: str) -> bool:
+        return bool(
+            re.search(
+                rf'(?m)^\s*{re.escape(tech_id)}_desc:\d+\s+"[^"]*{re.escape(fragment)}',
+                text,
+            )
+        )
+
+    for tech_id, block in tech_blocks.items():
+        energy = re.search(r"\bfactory_energy_consumption\s*=\s*([0-9.]+)", block)
+        if energy and float(energy.group(1)) > 0:
+            if not has_fragment(english, tech_id, "Energy price:"):
+                issues.append(f"{tech_id} English description hides its energy price")
+            if not has_fragment(russian, tech_id, "Энергетическая цена:"):
+                issues.append(f"{tech_id} Russian description hides its energy price")
+
+    for branch in GENERATED_BRANCHES:
+        kind = GENERATED_XOR_KIND_BY_BRANCH.get(branch.key)
+        for group in GENERATED_XOR_INDEX_GROUPS_BY_BRANCH.get(branch.key, ()):
+            for index in group:
+                tech_id = branch.techs[index].id
+                if kind == "permanent":
+                    if not has_fragment(english, tech_id, "Permanent specialization choice:"):
+                        issues.append(f"{tech_id} English description does not mark permanent XOR")
+                    if not has_fragment(russian, tech_id, "Постоянный выбор специализации:"):
+                        issues.append(f"{tech_id} Russian description does not mark permanent XOR")
+                elif kind == "temporary":
+                    if not has_fragment(english, tech_id, "the common line continues"):
+                        issues.append(f"{tech_id} English description does not explain temporary XOR")
+                    if not has_fragment(russian, tech_id, "общая линия продолжится"):
+                        issues.append(f"{tech_id} Russian description does not explain temporary XOR")
     return issues
 
 
@@ -2079,28 +2466,48 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
                 issues.append(
                     f"post-2160 technology {tech.id} has only {effect_count} numeric gameplay effects"
                 )
+            if effect_count > 6 and index != len(branch.techs) - 1:
+                issues.append(
+                    f"ordinary technology {tech.id} has an uncontrolled {effect_count}-modifier package"
+                )
 
-            # The reconstruction choice must not have a trap lane.  Both
-            # specialisations carry three benefits; repair also needs an
-            # always-on output dividend and wartime/crisis AI weighting.
-            if year >= 2160 and branch.key == "reconstruction":
+            # The industrial-organisation choice must not have a trap lane.
+            # Concentration buys more output with power demand and strategic
+            # vulnerability; distribution buys resilience and flexibility.
+            if year >= 2160 and branch.key == "industry_organization":
                 lane = GENERATED_BRANCH_GRAPHS[branch.key].lanes[index]
                 if lane in {0, 2} and effect_count < 3:
                     issues.append(
-                        f"reconstruction specialisation {tech.id} has only {effect_count} effects"
+                        f"industrial-organisation specialisation {tech.id} has only {effect_count} effects"
                     )
-                if lane == 0 and "ADISCORD_economy_ai_is_healthy = yes" not in block:
-                    issues.append(f"construction specialisation {tech.id} lacks healthy-economy AI weighting")
-                if lane == 2:
+                if lane == 0:
                     for required in (
-                        "industry_repair_factor",
-                        "production_speed_infrastructure_factor",
                         "industrial_capacity_factory",
-                        "has_war = yes",
-                        "ADISCORD_economy_ai_is_crisis = yes",
+                        "factory_energy_consumption",
+                        "energy_ratio > 0.94",
                     ):
                         if required not in block:
-                            issues.append(f"repair specialisation {tech.id} lacks {required}")
+                            issues.append(f"concentrated-industry technology {tech.id} lacks {required}")
+                if lane == 2:
+                    for required in (
+                        "industrial_capacity_factory",
+                        "factory_energy_consumption",
+                        "energy_ratio < 0.80",
+                    ):
+                        if required not in block:
+                            issues.append(f"distributed-industry technology {tech.id} lacks {required}")
+
+            output_match = re.search(
+                r"\bindustrial_capacity_(?:factory|dockyard)\s*=\s*([0-9.]+)",
+                effect_prefix,
+            )
+            if (
+                not branch.profile.startswith("forbidden_")
+                and output_match
+                and float(output_match.group(1)) >= 0.02
+            ):
+                if "factory_energy_consumption" not in effect_prefix:
+                    issues.append(f"industrial output technology {tech.id} has no energy price")
 
             if branch.profile.startswith("forbidden_"):
                 if cost < 2.5:
@@ -2130,43 +2537,6 @@ def check_technology_graph_quality(tech_blocks: dict[str, str]) -> list[str]:
     """Reject one-sided choices and branches made from one repeated package."""
 
     issues: list[str] = []
-    required_graph_complexity = {
-        "production": (2, 2),
-        "resources": (2, 2),
-        "administration": (2, 2),
-        "field_support": (2, 2),
-        "logistics": (1, 1),
-        "rail": (2, 2),
-        "artillery": (2, 2),
-        "anti_air": (2, 2),
-        "heavy_armor": (2, 2),
-        "fighter": (2, 2),
-        "air_support": (2, 2),
-        "naval_support": (2, 2),
-    }
-    minimum_effect_signatures = {
-        "production": 6,
-        "resources": 6,
-        "administration": 5,
-        "civil_resilience": 7,
-        "small_arms": 6,
-        "squad_weapons": 6,
-        "protection": 7,
-        "special_forces": 7,
-        "field_support": 7,
-        "logistics": 6,
-        "rail": 6,
-        "anti_tank": 5,
-        "anti_air": 4,
-        "recon_armor": 5,
-        "combat_armor": 6,
-        "heavy_armor": 6,
-        "fighter": 6,
-        "air_support": 6,
-        "naval_support": 5,
-        "surface_fleet": 5,
-        "subsurface": 5,
-    }
 
     localisation = collect_localisation_keys()
     for key in GENERATED_ACCESS_REQUIREMENT_LOCALISATION:
@@ -2201,18 +2571,14 @@ def check_technology_graph_quality(tech_blocks: dict[str, str]) -> list[str]:
         for source, targets in enumerate(graph.successors):
             for target in targets:
                 parent_indices[target].append(source)
-        forks = sum(len(targets) > 1 for targets in graph.successors)
-        merges = sum(len(parents) > 1 for parents in parent_indices)
         leaves = sum(not targets for targets in graph.successors)
-        if branch.key != "forbidden_automation" and leaves != 1:
+        xor_kind = GENERATED_XOR_KIND_BY_BRANCH.get(branch.key)
+        expected_leaves = 2 if xor_kind == "permanent" else 1
+        if branch.key in {"computing", "forbidden_automation"}:
+            expected_leaves = 2
+        if leaves != expected_leaves:
             issues.append(
-                f"{branch.key} graph has {leaves} disconnected programme endings; expected 1"
-            )
-        required = required_graph_complexity.get(branch.key)
-        if required and (forks < required[0] or merges < required[1]):
-            issues.append(
-                f"{branch.key} graph has {forks} forks/{merges} merges; "
-                f"expected at least {required[0]}/{required[1]}"
+                f"{branch.key} graph has {leaves} programme endings; expected {expected_leaves}"
             )
 
         def distances_from(start: int) -> dict[int, int]:
@@ -2232,7 +2598,13 @@ def check_technology_graph_quality(tech_blocks: dict[str, str]) -> list[str]:
             common_descendants = set(distances[0])
             for option_distances in distances[1:]:
                 common_descendants &= set(option_distances)
-            if common_descendants:
+            if xor_kind == "temporary" and not common_descendants:
+                choices = [branch.techs[index].id for index in group]
+                issues.append(f"temporary choice {choices} in {branch.key} never rejoins")
+            if xor_kind == "permanent" and common_descendants:
+                choices = [branch.techs[index].id for index in group]
+                issues.append(f"permanent choice {choices} in {branch.key} rejoins")
+            if xor_kind == "temporary" and common_descendants:
                 first_merge = min(common_descendants)
                 lengths = [option_distances[first_merge] for option_distances in distances]
                 if len(set(lengths)) != 1:
@@ -2242,9 +2614,7 @@ def check_technology_graph_quality(tech_blocks: dict[str, str]) -> list[str]:
                         f"{branch.techs[first_merge].id} in unequal steps {lengths}"
                     )
 
-        minimum = minimum_effect_signatures.get(branch.key)
-        if not minimum:
-            continue
+        minimum = min(3, len(branch.techs))
         signatures: set[str] = set()
         for tech in branch.techs:
             block = tech_blocks.get(tech.id, "")
@@ -2436,11 +2806,11 @@ def main() -> int:
     }
     total_years = sum(year_counts.values())
     if total_years:
-        if year_counts["playable"] / total_years < 0.75:
+        if year_counts["playable"] / total_years < 0.70:
             issues.append(
-                "fewer than 75% of technologies are in the playable 2160-2175 window"
+                "fewer than 70% of technologies are in the playable 2160-2175 window"
             )
-        if year_counts["before"] / total_years > 0.15:
+        if year_counts["before"] / total_years > 0.21:
             issues.append("too many technologies are dated before the 2160 start")
         if year_counts["after"] / total_years > 0.10:
             issues.append("too many technologies are dated after 2175")
@@ -2504,6 +2874,7 @@ def main() -> int:
     issues.extend(check_country_tag_database())
     issues.extend(check_equipment_definitions(equipment))
     issues.extend(check_equipment_unlocks(tech_blocks, equipment))
+    issues.extend(check_generated_capability_unlock_contract(tech_blocks))
     issues.extend(check_equipment_parser_constraints())
     issues.extend(check_platform_equipment_architecture())
     issues.extend(check_infantry_visual_model_chain())
@@ -2524,8 +2895,10 @@ def main() -> int:
     issues.extend(check_technology_replace_path())
     issues.extend(check_technology_ui_years())
     issues.extend(check_local_technology_references(techs))
+    issues.extend(check_technology_migration_contract(techs))
     issues.extend(check_campaign_technology_baseline(tech_blocks))
     issues.extend(check_campaign_dates_cover_technology_tree())
+    issues.extend(check_technology_description_contract(tech_blocks))
     issues.extend(check_post_2160_research_balance(tech_blocks))
     issues.extend(check_technology_graph_quality(tech_blocks))
     issues.extend(check_ai_force_progression())

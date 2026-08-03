@@ -279,7 +279,7 @@ ADISCORD_doctrine_infantry_tank_integration = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_armored_platoon_target_handoff
+		has_tech = ADISCORD_tech_multispectral_gunner_sights
 	}
 	xor = {
 		ADISCORD_doctrine_platform_battlegroups
@@ -662,7 +662,7 @@ ADISCORD_doctrine_combat_engineer_groups = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 2 has_tech = ADISCORD_tech_robotic_obstacle_clearance }
+		modifier = { factor = 2 has_tech = ADISCORD_tech_assault_breaching_packages }
 	}
 	engineer = { breakthrough = 0.04 defense = 0.03 }
 	industry_repair_factor = 0.02
@@ -699,7 +699,7 @@ ADISCORD_doctrine_resilient_logistics_command = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_theater_logistics_wargames
+		has_tech = ADISCORD_tech_operational_planning_exercises
 	}
 	xor = {
 		ADISCORD_doctrine_fortress_state_command

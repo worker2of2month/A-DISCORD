@@ -130,6 +130,33 @@ defined_text = {
 	text = { localization_key = ADISCORD_economy_auto_loan_off }
 }
 
+# The buttons remain compact, while the tooltip names the first failed gate.
+# These are read-only trigger checks: no refresh, country loop or state scan.
+defined_text = {
+	name = GetADISCORDInternalBondsAvailabilityLoc
+	text = { trigger = { NOT = { has_tech = ADISCORD_tech_recovered_semiconductors } } localization_key = ADISCORD_economy_loan_blocked_technology }
+	text = { trigger = { ADISCORD_economy_model_is_fragmented = yes NOT = { ADISCORD_economy_model_allows_oligarchic_deals = yes } } localization_key = ADISCORD_economy_loan_blocked_model }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_debt_ratio value = 100 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_loan_blocked_ratio }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_recent_debt value = 1 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_loan_blocked_cooldown }
+	text = { trigger = { NOT = { ADISCORD_economy_has_treasury_room_50 = yes } } localization_key = ADISCORD_economy_loan_blocked_treasury_room }
+	text = { trigger = { NOT = { ADISCORD_economy_has_debt_room_58 = yes } } localization_key = ADISCORD_economy_loan_blocked_debt_room }
+	text = { localization_key = ADISCORD_economy_loan_available_internal }
+}
+
+defined_text = {
+	name = GetADISCORDExternalLoanAvailabilityLoc
+	text = { trigger = { NOT = { has_tech = ADISCORD_tech_recovered_semiconductors } } localization_key = ADISCORD_economy_loan_blocked_technology }
+	text = { trigger = { ADISCORD_economy_model_is_fragmented = yes NOT = { ADISCORD_economy_model_allows_oligarchic_deals = yes } } localization_key = ADISCORD_economy_loan_blocked_model }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_debt_ratio value = 100 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_loan_blocked_ratio }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_recent_debt value = 1 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_loan_blocked_cooldown }
+	text = { trigger = { NOT = { ADISCORD_economy_has_treasury_room_50 = yes } } localization_key = ADISCORD_economy_loan_blocked_treasury_room }
+	text = { trigger = { NOT = { ADISCORD_economy_has_debt_room_58 = yes } } localization_key = ADISCORD_economy_loan_blocked_debt_room }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_creditworthiness value = 35 compare = less_than } } localization_key = ADISCORD_economy_loan_blocked_creditworthiness }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_debt_crisis_level value = 4 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_loan_blocked_default }
+	text = { trigger = { NOT = { ADISCORD_economy_has_debt_room_64 = yes } } localization_key = ADISCORD_economy_loan_blocked_external_room }
+	text = { localization_key = ADISCORD_economy_loan_available_external }
+}
+
 defined_text = {
 	name = GetADISCORDEconomyAdviceLoc
 	text = { trigger = { check_variable = { var = ADISCORD_economy_fiscal_stress value = 75 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_advice_critical }

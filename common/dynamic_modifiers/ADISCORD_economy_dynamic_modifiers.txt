@@ -1,0 +1,6 @@
+ADISCORD_economy_cluster_local_factory_output = {
+	# Intentionally no icon: the economy dashboard explains the effect, while a
+	# hidden modifier avoids adding another permanent indicator to the top bar.
+	enable = { always = yes }
+	industrial_capacity_factory = ADISCORD_economy_cluster_factory_output_factor
+}

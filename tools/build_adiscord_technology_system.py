@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 from pathlib import Path
+import json
 import re
 
 
@@ -612,6 +613,418 @@ def build_applied_branches() -> tuple[Branch, ...]:
 
 BRANCHES += build_applied_branches()
 
+# Preserve the pre-compact data set for the migration contract.  The generated
+# tree below intentionally contains fewer nodes, but every one of these legacy
+# IDs receives a deterministic migration outcome.
+LEGACY_BRANCHES = BRANCHES
+LEGACY_BRANCH_BY_KEY = {branch.key: branch for branch in LEGACY_BRANCHES}
+LEGACY_TECH_BY_KEY = {
+    tech.key: tech
+    for branch in LEGACY_BRANCHES
+    for tech in branch.techs
+}
+
+
+def compact_years(count: int) -> tuple[int, ...]:
+    """Spread a compact linear programme across the live campaign window."""
+
+    if count < 1:
+        raise ValueError("A technology programme cannot be empty")
+    baseline = (2150, 2155, 2158)[:count]
+    if count <= len(baseline):
+        return baseline
+    live_count = count - len(baseline)
+    live_years = YEARS[3:]
+    if live_count > len(live_years):
+        raise ValueError(f"Cannot place {count} compact technology nodes")
+    if live_count == 1:
+        selected = (2160,)
+    else:
+        selected_indices = tuple(
+            round(index * (len(live_years) - 1) / (live_count - 1))
+            for index in range(live_count)
+        )
+        if len(set(selected_indices)) != live_count:
+            raise ValueError(f"Could not distribute {live_count} live technology years")
+        selected = tuple(live_years[index] for index in selected_indices)
+    return baseline + selected
+
+
+def legacy_tech(key: str) -> Tech:
+    try:
+        return LEGACY_TECH_BY_KEY[key]
+    except KeyError as exc:
+        raise ValueError(f"Unknown legacy technology key {key}") from exc
+
+
+def compact_legacy_branch(
+    key: str,
+    tech_keys: tuple[str, ...],
+    *,
+    years: tuple[int, ...] | None = None,
+    file: str | None = None,
+    folders: tuple[str, ...] | None = None,
+    ru: str | None = None,
+    en: str | None = None,
+    profile: str | None = None,
+) -> Branch:
+    source = LEGACY_BRANCH_BY_KEY.get(key)
+    if source is None:
+        if not all((file, folders, ru, en, profile)):
+            raise ValueError(f"New branch {key} is missing metadata")
+        source_file = file
+        source_folders = folders
+        source_ru = ru
+        source_en = en
+        source_profile = profile
+    else:
+        source_file = file or source.file
+        source_folders = folders or source.folders
+        source_ru = ru or source.ru
+        source_en = en or source.en
+        source_profile = profile or source.profile
+    branch_years = years or compact_years(len(tech_keys))
+    return Branch(
+        key,
+        source_file,
+        source_folders,
+        source_ru,
+        source_en,
+        source_profile,
+        tuple(legacy_tech(tech_key) for tech_key in tech_keys),
+        branch_years,
+    )
+
+
+def new_branch(
+    key: str,
+    file: str,
+    folders: tuple[str, ...],
+    ru: str,
+    en: str,
+    profile: str,
+    rows: tuple[tuple[str, str, str, str, int], ...],
+) -> Branch:
+    return Branch(
+        key,
+        file,
+        folders,
+        ru,
+        en,
+        profile,
+        tuple(Tech(row[0], row[1], row[2], row[3]) for row in rows),
+        tuple(row[4] for row in rows),
+    )
+
+
+PRODUCTION_BRANCH = compact_legacy_branch(
+    "production",
+    (
+        "standardized_machine_tools",
+        "interchangeable_components",
+        "industrial_cluster_planning",
+        "precision_metrology_recovery",
+        "automated_assembly",
+        "digital_tooling_libraries",
+        "sensor_calibrated_machining",
+        "predictive_maintenance",
+        "autonomous_factory_cells",
+        "lights_out_microfactories",
+        "distributed_manufacturing",
+    ),
+    years=(2150, 2155, 2158, 2160, 2161, 2162, 2162, 2165, 2169, 2175, 2180),
+    ru="Станки и автоматизация",
+    en="Machine Tools and Automation",
+)
+
+INDUSTRY_ORGANIZATION_BRANCH = new_branch(
+    "industry_organization",
+    "ADISCORD_industry.txt",
+    ("industry_folder",),
+    "Организация промышленности",
+    "Industrial Organization",
+    "production",
+    (
+        ("industrial_organization_baseline", "Организация производственных сетей", "Production Network Organization", "basic_machine_tools", 2160),
+        ("concentrated_industrial_zones", "Концентрированные промышленные зоны", "Concentrated Industrial Zones", "basic_machine_tools", 2162),
+        ("distributed_workshop_networks", "Распределённые сети мастерских", "Distributed Workshop Networks", "basic_machine_tools", 2162),
+        ("megafactory_power_buses", "Энергоконтуры мегафабрик", "Megafactory Power Buses", "basic_machine_tools", 2168),
+        ("regional_spare_capacity", "Региональный резерв мощностей", "Regional Spare Capacity", "basic_machine_tools", 2168),
+        ("strategic_production_complexes", "Стратегические производственные комплексы", "Strategic Production Complexes", "basic_machine_tools", 2180),
+        ("resilient_production_meshes", "Устойчивые производственные сети", "Resilient Production Meshes", "basic_machine_tools", 2180),
+    ),
+)
+
+RECONSTRUCTION_BRANCH = compact_legacy_branch(
+    "reconstruction",
+    (
+        "salvage_standards",
+        "ruin_workshops",
+        "reconstruction_bureaus",
+        "drone_construction_cartography",
+        "modular_rebuilding",
+        "prefabricated_districts",
+        "public_repair_corps",
+        "automated_civil_works",
+        "civil_defense_networks",
+    ),
+    ru="Строительство и восстановление",
+    en="Construction and Recovery",
+)
+
+RESOURCES_BRANCH = compact_legacy_branch(
+    "resources",
+    (
+        "salvage_metallurgy",
+        "grid_rationing",
+        "refinery_reclamation",
+        "spectral_ore_sorting",
+        "logistics_hub_networks",
+        "borehole_sensor_grids",
+        "plasma_scrap_separation",
+        "microbial_tailings_leaching",
+        "synthetic_resource_cycles",
+        "high_pressure_polymer_synthesis",
+        "rare_earth_solvent_loops",
+        "closed_loop_smelting",
+        "automated_deep_mining",
+        "carbon_feedstock_cracking",
+        "isotope_selective_refining",
+        "urban_mine_cartography",
+        "strategic_element_reclamation",
+        "strategic_material_recovery",
+    ),
+    ru="Ресурсы и промышленные резервы",
+    en="Resources and Industrial Reserves",
+)
+
+SIGNALS_BRANCH = compact_legacy_branch(
+    "signals",
+    (
+        "mesh_command_networks",
+        "field_radio_networks",
+        "encryption_rebuild",
+        "frequency_hopping_field_sets",
+        "signal_intercept_arrays",
+        "passive_emitter_geolocation",
+        "battlefield_analytics",
+        "counterintelligence_filters",
+        "battlefield_sensor_fusion",
+        "self_healing_tactical_networks",
+        "memetic_security_protocols",
+    ),
+    ru="Связь, обнаружение и безопасность",
+    en="Communications, Detection, and Security",
+)
+
+COMPUTING_BRANCH = compact_legacy_branch(
+    "computing",
+    (
+        "electromechanical_relays",
+        "recovered_data_archives",
+        "recovered_semiconductors",
+        "hardened_computers",
+        "error_correcting_field_computers",
+        "analog_ai_accelerators",
+        "predictive_logistics",
+        "operational_ai_assistants",
+        "strategic_digital_twins",
+        "bounded_general_planning_cores",
+        "strategic_ai_coordination",
+        "predictive_budgeting",
+    ),
+    years=(2150, 2155, 2158, 2161, 2163, 2163, 2167, 2167, 2171, 2174, 2180, 2180),
+    ru="Вычисления и управление",
+    en="Computing and Control",
+)
+
+POWER_BRANCH = compact_legacy_branch(
+    "power",
+    (
+        "local_grid_restoration",
+        "substation_networks",
+        "radiation_mapping",
+        "phase_synchronized_substations",
+        "solid_state_grid_breakers",
+        "reactor_safety_protocols",
+        "load_following_microreactors",
+        "superconducting_power_busbars",
+        "microreactor_blocks",
+        "passive_decay_heat_sinks",
+        "autonomous_reactor_diagnostics",
+        "high_density_thermal_storage",
+        "continental_load_balancing",
+        "emergency_core_suppression",
+    ),
+    ru="Энергосети и реакторы",
+    en="Power Grids and Reactors",
+)
+
+
+LINEAR_COMPACT_INDICES = {
+    "small_arms": (0, 1, 2, 3, 4, 6, 8, 9, 13, 15, 18, 19),
+    "squad_weapons": (0, 1, 2, 3, 4, 6, 8, 9, 10, 13, 15, 18, 19),
+    "protection": (0, 1, 2, 4, 6, 8, 9, 10, 13, 16, 18, 19),
+    "special_forces": (0, 1, 2, 3, 4, 6, 7, 9, 10, 13, 15, 16, 19),
+    "field_support": (0, 1, 2, 3, 4, 5, 8, 9, 12, 13, 16, 18, 19),
+    "logistics": (0, 1, 2, 3, 4, 8, 9, 10, 11, 13, 16, 18, 19),
+    "rail": (0, 1, 2, 3, 4, 6, 9, 12, 13, 14, 15, 18, 19),
+    "anti_tank": (0, 1, 2, 3, 4, 6, 8, 9, 11, 13, 14, 15, 17, 19),
+    "anti_air": (0, 1, 2, 3, 4, 5, 8, 9, 11, 12, 14, 16, 18, 19),
+    "recon_armor": (0, 1, 2, 3, 4, 7, 9, 12, 13, 15, 17, 19),
+    "heavy_armor": (0, 1, 2, 3, 4, 6, 9, 10, 11, 13, 15, 18, 19),
+    "air_support": (0, 1, 2, 3, 4, 6, 9, 11, 12, 13, 16, 18, 19),
+    "strategic_air": (0, 1, 2, 3, 4, 6, 9, 10, 11, 13, 16, 17, 18, 19),
+    "naval_support": (0, 1, 2, 3, 4, 5, 9, 11, 12, 13, 15, 18, 19),
+    "surface_fleet": (0, 1, 2, 3, 4, 6, 9, 10, 12, 13, 15, 16, 18, 19),
+    "subsurface": (0, 1, 2, 3, 4, 6, 9, 11, 12, 13, 15, 17, 19),
+}
+
+
+def compact_linear_branch(key: str) -> Branch:
+    source = LEGACY_BRANCH_BY_KEY[key]
+    keys = tuple(source.techs[index].key for index in LINEAR_COMPACT_INDICES[key])
+    return compact_legacy_branch(key, keys)
+
+
+ARTILLERY_BRANCH = compact_legacy_branch(
+    "artillery",
+    (
+        "restored_field_artillery",
+        "recoil_recovery",
+        "modular_gun_carriages",
+        "electrohydraulic_gun_laying",
+        "smart_fire_control",
+        "solid_state_ballistic_computers",
+        "counterbattery_radar_links",
+        "inertial_battery_survey",
+        "assisted_projectiles",
+        "course_correcting_fuzes",
+        "multispectral_spotter_drones",
+        "robotic_shell_handling",
+        "drone_spotted_batteries",
+        "distributed_counterbattery_mesh",
+        "electromagnetic_recoil_brakes",
+        "loitering_artillery_observers",
+        "predictive_fire_mission_control",
+        "autonomous_battery_network",
+    ),
+    years=(2150, 2155, 2158, 2160, 2161, 2162, 2163, 2164, 2165, 2166, 2167, 2168, 2169, 2171, 2173, 2173, 2180, 2180),
+)
+
+COMBAT_ARMOR_BRANCH = compact_legacy_branch(
+    "combat_armor",
+    (
+        "recovered_medium_chassis",
+        "remote_weapon_stations",
+        "composite_armor_arrays",
+        "electric_turret_drives",
+        "semi_autonomous_combat_modules",
+        "digital_fire_control_buses",
+        "hard_kill_protection_arrays",
+        "adaptive_fire_control",
+        "multispectral_gunner_sights",
+        "limited_battle_ai",
+        "electromagnetic_main_guns",
+        "adaptive_suspension_control",
+        "distributed_battlegroup",
+        "resilient_combat_cloud_nodes",
+    ),
+    years=(2150, 2155, 2158, 2160, 2161, 2162, 2164, 2166, 2168, 2171, 2173, 2173, 2180, 2180),
+)
+
+FIGHTER_BRANCH = compact_legacy_branch(
+    "fighter",
+    (
+        "reclaimed_jet_platforms",
+        "standardized_airframes",
+        "pulse_doppler_radar",
+        "composite_wing_spars",
+        "high_altitude_interceptors",
+        "digital_flight_controls",
+        "electronically_scanned_fighter_radar",
+        "helmet_cued_targeting",
+        "low_observable_inlet_geometry",
+        "cooperative_fighter_sensor_fusion",
+        "loyal_wingmen",
+        "autonomous_dogfight_controller",
+        "directed_energy_defensive_suites",
+        "aerospace_interceptors",
+        "distributed_interceptor_swarms",
+    ),
+    years=(2150, 2155, 2158, 2160, 2161, 2162, 2163, 2164, 2166, 2168, 2171, 2173, 2173, 2180, 2180),
+)
+
+
+SIDE_PROGRAMME_SELECTIONS = {
+    "combat_medicine": ("trauma_registry_networks", "forward_surgical_cells", "distributed_combat_medicine"),
+    "combat_engineering": ("battle_damage_survey_teams", "assault_breaching_packages", "integrated_engineer_command"),
+    "counter_drone_warfare": ("spectrum_threat_libraries", "offensive_jamming_cells", "adaptive_spectrum_dominance"),
+    "air_mobility": ("restored_airlift_planning", "vertical_envelopment_control", "precision_aerial_resupply"),
+    "riverine_warfare": ("shallow_water_navigation_tables", "modular_landing_causeways", "rapid_beachhead_logistics"),
+    "unmanned_ground_systems": ("teleoperated_scout_carts", "armed_recon_drones", "distributed_ground_swarm_control"),
+    "officer_training": ("reconstituted_staff_academies", "operational_planning_exercises", "adaptive_general_staff"),
+}
+SIDE_PROGRAMME_KEYS = set(SIDE_PROGRAMME_SELECTIONS)
+
+
+def compact_side_branch(key: str) -> Branch:
+    return compact_legacy_branch(
+        key,
+        SIDE_PROGRAMME_SELECTIONS[key],
+        years=(2162, 2169, 2175),
+    )
+
+
+BRANCHES = (
+    PRODUCTION_BRANCH,
+    INDUSTRY_ORGANIZATION_BRANCH,
+    RECONSTRUCTION_BRANCH,
+    RESOURCES_BRANCH,
+    SIGNALS_BRANCH,
+    COMPUTING_BRANCH,
+    POWER_BRANCH,
+    LEGACY_BRANCH_BY_KEY["forbidden_energy"],
+    LEGACY_BRANCH_BY_KEY["forbidden_automation"],
+    compact_linear_branch("small_arms"),
+    compact_linear_branch("squad_weapons"),
+    compact_linear_branch("protection"),
+    compact_linear_branch("special_forces"),
+    compact_side_branch("combat_medicine"),
+    compact_linear_branch("field_support"),
+    compact_linear_branch("logistics"),
+    compact_linear_branch("rail"),
+    compact_side_branch("combat_engineering"),
+    compact_side_branch("officer_training"),
+    ARTILLERY_BRANCH,
+    compact_linear_branch("anti_tank"),
+    compact_linear_branch("anti_air"),
+    compact_linear_branch("recon_armor"),
+    COMBAT_ARMOR_BRANCH,
+    compact_linear_branch("heavy_armor"),
+    compact_side_branch("unmanned_ground_systems"),
+    FIGHTER_BRANCH,
+    compact_linear_branch("air_support"),
+    compact_linear_branch("strategic_air"),
+    compact_side_branch("air_mobility"),
+    compact_linear_branch("naval_support"),
+    compact_linear_branch("surface_fleet"),
+    compact_linear_branch("subsurface"),
+    compact_side_branch("riverine_warfare"),
+    compact_side_branch("counter_drone_warfare"),
+)
+
+MAIN_BRANCH_KEYS_BY_FOLDER = {
+    "industry_folder": {"production", "industry_organization", "reconstruction", "resources"},
+    "electronics_folder": {"signals", "computing", "power"},
+    "infantry_folder": {"small_arms", "squad_weapons", "protection", "special_forces"},
+    "support_folder": {"field_support", "logistics", "rail"},
+    "artillery_folder": {"artillery", "anti_tank", "anti_air"},
+    "armour_folder": {"recon_armor", "combat_armor", "heavy_armor"},
+    "air_techs_folder": {"fighter", "air_support", "strategic_air"},
+    "naval_folder": {"naval_support", "surface_fleet", "subsurface"},
+}
+
 
 def chain_edges(indices: tuple[int, ...]) -> list[tuple[int, int]]:
     return list(zip(indices, indices[1:]))
@@ -841,121 +1254,94 @@ def special_forces_programmes_graph() -> BranchGraph:
     return make_graph(tuple(lanes), edges, (18,))
 
 
-GRAPH_PATTERN_BY_BRANCH = {
-    # Persistent strategic schools share a late OR-gated capstone.
-    "reconstruction": "dual_choice",
-    "finance": "dual_choice",
-    "combat_armor": "dual_choice",
-    "strategic_air": "dual_choice",
-    "surface_fleet": "dual_choice",
-    # These branches intentionally require both programmes for synthesis.
-    "power": "dual_synthesis",
-    # These capability families use two short integration cycles rather than
-    # three permanent columns.  The old trident layout invited the player to
-    # beeline the highest-output column and leave the other two as dead ends.
-    "production": "double_diamond",
-    "resources": "double_diamond",
-    "artillery": "double_diamond",
-    "fighter": "double_diamond",
-    "administration": "double_diamond",
-    "small_arms": "infantry_integration",
-    # Repeated paired research programmes converge into integrated systems.
-    "civil_resilience": "double_diamond",
-    "signals": "double_diamond",
-    "computing": "double_diamond",
-    "squad_weapons": "squad_integration",
-    "protection": "protection_programmes",
-    "special_forces": "special_forces_programmes",
-    # Two successive attack/defence or manned/autonomous decisions.
-    "anti_tank": "double_choice",
-    "recon_armor": "double_choice",
-    "subsurface": "double_choice",
-    # Supporting capabilities also converge at regular intervals.  This keeps
-    # the tree readable and prevents narrow service technologies from becoming
-    # isolated columns which a rational player never revisits.
-    "field_support": "double_diamond",
-    "logistics": "dual_synthesis",
-    "rail": "double_diamond",
-    "anti_air": "double_diamond",
-    "heavy_armor": "double_diamond",
-    "air_support": "double_diamond",
-    "naval_support": "double_diamond",
+def linear_graph(count: int) -> BranchGraph:
+    return make_graph((1,) * count, chain_edges(tuple(range(count))))
+
+
+def temporary_production_graph() -> BranchGraph:
+    edges = chain_edges((0, 1, 2, 3, 4))
+    edges += [(4, 5), (4, 6), (5, 7), (6, 7)]
+    edges += chain_edges((7, 8, 9, 10))
+    lanes = (1, 1, 1, 1, 1, 0, 2, 1, 1, 1, 1)
+    return make_graph(lanes, edges)
+
+
+def industry_organization_graph() -> BranchGraph:
+    return make_graph(
+        (1, 0, 2, 0, 2, 0, 2),
+        [(0, 1), (0, 2), (1, 3), (2, 4), (3, 5), (4, 6)],
+    )
+
+
+def compact_computing_graph() -> BranchGraph:
+    edges = chain_edges((0, 1, 2, 3))
+    edges += [(3, 4), (3, 5), (4, 6), (5, 7), (6, 8), (7, 8)]
+    edges += chain_edges((8, 9, 10))
+    edges += [(8, 11)]
+    lanes = (1, 1, 1, 1, 0, 2, 0, 2, 1, 1, 1, 2)
+    return make_graph(lanes, edges)
+
+
+def permanent_tail_choice_graph(count: int) -> BranchGraph:
+    if count < 5:
+        raise ValueError("A persistent choice needs a trunk and two two-node paths")
+    fork = count - 5
+    left_entry, right_entry, left_final, right_final = range(count - 4, count)
+    edges = chain_edges(tuple(range(fork + 1)))
+    edges += [
+        (fork, left_entry),
+        (fork, right_entry),
+        (left_entry, left_final),
+        (right_entry, right_final),
+    ]
+    lanes = [1] * count
+    lanes[left_entry] = lanes[left_final] = 0
+    lanes[right_entry] = lanes[right_final] = 2
+    return make_graph(tuple(lanes), edges)
+
+
+XOR_KIND_BY_BRANCH = {
+    "production": "temporary",
+    "industry_organization": "permanent",
+    "computing": "temporary",
+    "artillery": "permanent",
+    "combat_armor": "permanent",
+    "fighter": "permanent",
 }
-GRAPH_PATTERN_BY_BRANCH.update(
-    {key: "applied_dual_choice" for key in APPLIED_PROGRAMME_KEYS}
-)
 
-
-def remap_programme_years(years: tuple[int, ...]) -> tuple[int, ...]:
-    return tuple(LEGACY_TO_CAMPAIGN_YEAR[year] for year in years)
-
-
-DUAL_PROGRAMME_YEARS = remap_programme_years((
-    2100, 2120, 2140, 2150, 2160,
-    2162, 2162, 2168, 2168, 2173, 2173, 2179, 2179,
-    2185, 2185, 2191, 2191, 2197, 2197, 2200,
-))
-DOUBLE_PROGRAMME_YEARS = remap_programme_years((
-    2100, 2120, 2140, 2150, 2160,
-    2162, 2162, 2164, 2164, 2166, 2166, 2168,
-    2173, 2173, 2179, 2179, 2185, 2185, 2194, 2200,
-))
-ALTERNATING_PROGRAMME_YEARS = remap_programme_years((
-    2100, 2120, 2140, 2150, 2160,
-    2162, 2162, 2164, 2166,
-    2168, 2168, 2170, 2173,
-    2176, 2176, 2179, 2182,
-    2188, 2188, 2200,
-))
-
-
-def align_programme_years(branch: Branch) -> Branch:
-    pattern = GRAPH_PATTERN_BY_BRANCH.get(branch.key)
-    years_by_pattern = {
-        "dual_choice": DUAL_PROGRAMME_YEARS,
-        "dual_synthesis": DUAL_PROGRAMME_YEARS,
-        "double_diamond": DOUBLE_PROGRAMME_YEARS,
-        "double_choice": DOUBLE_PROGRAMME_YEARS,
-        "alternating_diamonds": ALTERNATING_PROGRAMME_YEARS,
-        "alternating_choices": ALTERNATING_PROGRAMME_YEARS,
-    }
-    years = years_by_pattern.get(pattern)
-    return replace(branch, years=years) if years else branch
-
-
-BRANCHES = tuple(align_programme_years(branch) for branch in BRANCHES)
-
-
-GRAPH_BUILDERS = {
-    "dual_synthesis": dual_synthesis_graph,
-    "dual_choice": dual_choice_graph,
-    "double_diamond": double_diamond_graph,
-    "double_choice": double_choice_graph,
-    "alternating_diamonds": alternating_diamonds_graph,
-    "alternating_choices": alternating_choices_graph,
-    "applied_dual_choice": applied_dual_choice_graph,
-    "infantry_integration": infantry_integration_graph,
-    "squad_integration": squad_integration_graph,
-    "protection_programmes": protection_programmes_graph,
-    "special_forces_programmes": special_forces_programmes_graph,
+XOR_INDEX_GROUPS_BY_BRANCH = {
+    "production": ((5, 6),),
+    "industry_organization": ((1, 2),),
+    "computing": ((4, 5),),
+    "artillery": ((len(ARTILLERY_BRANCH.techs) - 4, len(ARTILLERY_BRANCH.techs) - 3),),
+    "combat_armor": ((len(COMBAT_ARMOR_BRANCH.techs) - 4, len(COMBAT_ARMOR_BRANCH.techs) - 3),),
+    "fighter": ((len(FIGHTER_BRANCH.techs) - 4, len(FIGHTER_BRANCH.techs) - 3),),
 }
 
 
 def graph_for_branch(branch: Branch) -> BranchGraph:
-    if branch.key == "forbidden_energy":
-        return make_graph(
+    if branch.key == "production":
+        graph = temporary_production_graph()
+    elif branch.key == "industry_organization":
+        graph = industry_organization_graph()
+    elif branch.key == "computing":
+        graph = compact_computing_graph()
+    elif branch.key in {"artillery", "combat_armor", "fighter"}:
+        graph = permanent_tail_choice_graph(len(branch.techs))
+    elif branch.key == "forbidden_energy":
+        graph = make_graph(
             (1, 1, 1, 0, 2, 1),
             [(0, 1), (1, 2), (2, 3), (2, 4), (3, 5), (4, 5)],
             (5,),
         )
-    if branch.key == "forbidden_automation":
-        return make_graph((1, 0, 2), [(0, 1), (0, 2)])
-    pattern = GRAPH_PATTERN_BY_BRANCH.get(branch.key)
-    if pattern is None:
-        raise ValueError(f"{branch.key}: missing technology graph pattern")
-    graph = GRAPH_BUILDERS[pattern]()
+    elif branch.key == "forbidden_automation":
+        graph = make_graph((1, 0, 2), [(0, 1), (0, 2)])
+    else:
+        graph = linear_graph(len(branch.techs))
     if len(graph.lanes) != len(branch.techs):
-        raise ValueError(f"{branch.key}: graph has {len(graph.lanes)} nodes for {len(branch.techs)} techs")
+        raise ValueError(
+            f"{branch.key}: graph has {len(graph.lanes)} nodes for {len(branch.techs)} techs"
+        )
     for source, targets in enumerate(graph.successors):
         for target in targets:
             if branch.years[target] <= branch.years[source]:
@@ -965,20 +1351,55 @@ def graph_for_branch(branch: Branch) -> BranchGraph:
 
 BRANCH_GRAPHS = {branch.key: graph_for_branch(branch) for branch in BRANCHES}
 
+# Compatibility name retained for older validator imports.  Geometry is no
+# longer selected from a global pattern library.
+GRAPH_PATTERN_BY_BRANCH = {branch.key: "explicit" for branch in BRANCHES}
 
-XOR_INDEX_GROUPS_BY_BRANCH = {}
-for branch in BRANCHES:
-    pattern = GRAPH_PATTERN_BY_BRANCH.get(branch.key)
-    if pattern == "dual_choice":
-        XOR_INDEX_GROUPS_BY_BRANCH[branch.key] = ((5, 6),)
-    elif pattern == "double_choice":
-        XOR_INDEX_GROUPS_BY_BRANCH[branch.key] = ((5, 6), (12, 13))
-    elif pattern == "alternating_choices":
-        XOR_INDEX_GROUPS_BY_BRANCH[branch.key] = (
-            (5, 6), (9, 10), (13, 14), (17, 18),
-        )
-    elif pattern == "applied_dual_choice":
-        XOR_INDEX_GROUPS_BY_BRANCH[branch.key] = ((1, 2),)
+
+CURRENT_TECH_IDS = {tech.id for branch in BRANCHES for tech in branch.techs}
+CURRENT_BRANCH_TECHS = {
+    branch.key: tuple(zip(branch.techs, branch.years, strict=True))
+    for branch in BRANCHES
+}
+LEGACY_MIGRATION_TARGET_BRANCH = {
+    "finance": "computing",
+    "administration": "computing",
+    "civil_resilience": "reconstruction",
+}
+
+
+def closest_compact_technology(branch_key: str, year: int) -> str:
+    target_branch = LEGACY_MIGRATION_TARGET_BRANCH.get(branch_key, branch_key)
+    candidates = CURRENT_BRANCH_TECHS.get(target_branch)
+    if not candidates:
+        raise ValueError(f"No compact migration target for legacy branch {branch_key}")
+    tech, _ = min(
+        candidates,
+        key=lambda pair: (
+            abs(pair[1] - year),
+            pair[1] > year,
+            pair[1],
+            pair[0].id,
+        ),
+    )
+    return tech.id
+
+
+TECHNOLOGY_ID_MIGRATIONS = {}
+for legacy_branch in LEGACY_BRANCHES:
+    for legacy_tech_spec, legacy_year in zip(
+        legacy_branch.techs, legacy_branch.years, strict=True
+    ):
+        if legacy_tech_spec.id in CURRENT_TECH_IDS:
+            status = "preserved"
+            replacement = legacy_tech_spec.id
+        else:
+            status = "replaced"
+            replacement = closest_compact_technology(legacy_branch.key, legacy_year)
+        TECHNOLOGY_ID_MIGRATIONS[legacy_tech_spec.id] = {
+            "status": status,
+            "replacement": replacement,
+        }
 
 
 def xor_siblings(branch: Branch, index: int) -> tuple[str, ...]:
@@ -1060,11 +1481,9 @@ ENABLE_EQUIPMENT = {
 # between separate grid boxes is fragile in HOI4, while dependencies provide
 # the required AND gate in the technology tooltip and research logic.
 EXTRA_TECH_DEPENDENCIES = {
-    # Applied eight-tech packages are side specialisations of the core tree,
-    # not seven additional starting columns.  Their entry projects attach to
-    # a contemporary core technology through a tooltip-only dependency; long
+    # Short side programmes attach to contemporary core capabilities.  Long
     # cross-grid cables are deliberately avoided because HOI4 renders them
-    # unreliably.
+    # unreliably; dependencies still provide the gameplay gate and tooltip.
     "ADISCORD_tech_trauma_registry_networks": (
         "ADISCORD_tech_combat_engineering_sections",
     ),
@@ -1083,10 +1502,10 @@ EXTRA_TECH_DEPENDENCIES = {
     ),
     "ADISCORD_tech_teleoperated_scout_carts": (
         "ADISCORD_tech_sealed_electric_scout_drives",
-        "ADISCORD_tech_vacuum_sealed_logic_restoration",
+        "ADISCORD_tech_hardened_computers",
     ),
     "ADISCORD_tech_reconstituted_staff_academies": (
-        "ADISCORD_tech_cadastral_archive_digitization",
+        "ADISCORD_tech_hardened_computers",
     ),
     "ADISCORD_tech_remote_weapon_tripods": ("ADISCORD_tech_modular_rifle_kits",),
     "ADISCORD_tech_autonomous_support_weapons": ("ADISCORD_tech_programmable_ammunition",),
@@ -1101,11 +1520,7 @@ EXTRA_TECH_DEPENDENCIES = {
     ),
     "ADISCORD_tech_distributed_manufacturing": (
         "ADISCORD_tech_strategic_digital_twins",
-        "ADISCORD_tech_quantum_command_authentication",
-    ),
-    "ADISCORD_tech_predictive_administration": (
-        "ADISCORD_tech_strategic_digital_twins",
-        "ADISCORD_tech_quantum_command_authentication",
+        "ADISCORD_tech_self_healing_tactical_networks",
     ),
     # Late autonomous and directed-energy systems are integrations, not
     # isolated percentage ladders.  Cross-folder paths are deliberately not
@@ -1134,6 +1549,200 @@ EXTRA_TECH_DEPENDENCIES = {
     "ADISCORD_tech_distributed_sea_control": (
         "ADISCORD_tech_self_healing_tactical_networks",
     ),
+}
+
+
+BRANCH_BY_KEY = {branch.key: branch for branch in BRANCHES}
+TECH_POSITION_BY_ID = {
+    tech.id: (branch, index)
+    for branch in BRANCHES
+    for index, tech in enumerate(branch.techs)
+}
+
+
+def branch_technology_ids_through(branch_key: str, year: int) -> tuple[str, ...]:
+    branch = BRANCH_BY_KEY[branch_key]
+    return tuple(
+        tech.id
+        for tech, tech_year in zip(branch.techs, branch.years, strict=True)
+        if tech_year <= year
+    )
+
+
+def technology_prerequisite_closure(seed_ids: tuple[str, ...]) -> tuple[str, ...]:
+    """Resolve every generated parent and dependency for a starting package."""
+
+    resolved: set[str] = set()
+    pending = list(seed_ids)
+    while pending:
+        tech_id = pending.pop()
+        if tech_id in resolved:
+            continue
+        if tech_id not in TECH_POSITION_BY_ID:
+            raise ValueError(f"Unknown starting technology {tech_id}")
+        resolved.add(tech_id)
+        branch, index = TECH_POSITION_BY_ID[tech_id]
+        for parent_index, successors in enumerate(BRANCH_GRAPHS[branch.key].successors):
+            if index in successors:
+                pending.append(branch.techs[parent_index].id)
+        pending.extend(EXTRA_TECH_DEPENDENCIES.get(tech_id, ()))
+    return tuple(sorted(resolved))
+
+
+COMMON_STARTING_ROOTS = tuple(
+    sorted(
+        BRANCH_BY_KEY[branch_key].techs[0].id
+        for branch_keys in MAIN_BRANCH_KEYS_BY_FOLDER.values()
+        for branch_key in branch_keys
+    )
+)
+
+STARTING_TECH_PROFILE_SEEDS = {
+    "common": COMMON_STARTING_ROOTS,
+    "industrial": tuple(
+        tech_id
+        for branch_key in ("production", "reconstruction", "resources")
+        for tech_id in branch_technology_ids_through(branch_key, 2158)
+    ),
+    "energy": branch_technology_ids_through("power", 2160),
+    "institutional": (
+        *branch_technology_ids_through("signals", 2158),
+        *branch_technology_ids_through("computing", 2158),
+    ),
+    "land": tuple(
+        tech_id
+        for branch_key in (
+            "small_arms", "squad_weapons", "protection", "field_support",
+            "logistics", "rail", "artillery", "anti_tank", "anti_air",
+        )
+        for tech_id in branch_technology_ids_through(branch_key, 2158)
+    ),
+    "air": tuple(
+        tech_id
+        for branch_key in ("fighter", "air_support", "strategic_air")
+        for tech_id in branch_technology_ids_through(branch_key, 2158)
+    ),
+    "naval": tuple(
+        tech_id
+        for branch_key in ("naval_support", "surface_fleet", "subsurface")
+        for tech_id in branch_technology_ids_through(branch_key, 2158)
+    ),
+    "fragment_low_tech": (
+        "ADISCORD_tech_ruin_workshops",
+        "ADISCORD_tech_refurbished_receivers",
+        "ADISCORD_tech_restored_truck_fleets",
+    ),
+    # The late bookmark receives a bounded recovered-generation package, not
+    # every technology whose nominal date is earlier than 2183.
+    "late_2183": (
+        "ADISCORD_tech_precision_metrology_recovery",
+        "ADISCORD_tech_drone_construction_cartography",
+        "ADISCORD_tech_spectral_ore_sorting",
+        "ADISCORD_tech_frequency_hopping_field_sets",
+        "ADISCORD_tech_hardened_computers",
+        "ADISCORD_tech_phase_synchronized_substations",
+        "ADISCORD_tech_caseless_ammunition_trials",
+        "ADISCORD_tech_standardized_field_tool_chests",
+        "ADISCORD_tech_electrohydraulic_gun_laying",
+        "ADISCORD_tech_electric_turret_drives",
+        "ADISCORD_tech_composite_wing_spars",
+        "ADISCORD_tech_modular_escort_combat_systems",
+    ),
+}
+
+STARTING_TECH_PROFILES = {
+    profile: technology_prerequisite_closure(seeds)
+    for profile, seeds in STARTING_TECH_PROFILE_SEEDS.items()
+}
+
+# Manual, lore-aware mapping for every tag owning at least one state on
+# 2160.1.1.  Empty tuples are intentional common-only assignments.
+STARTING_COUNTRY_TECH_PROFILES = {
+    "APH": ("fragment_low_tech",),
+    "AZH": ("fragment_low_tech",),
+    "BBV": ("fragment_low_tech",),
+    "BCM": ("fragment_low_tech",),
+    "BGT": ("fragment_low_tech",),
+    "BHG": ("fragment_low_tech",),
+    "BJK": ("fragment_low_tech",),
+    "BLD": ("fragment_low_tech",),
+    "BTL": ("fragment_low_tech", "land"),
+    "CIN": ("fragment_low_tech",),
+    "COF": (),
+    "DAN": ("fragment_low_tech", "land"),
+    "EFL": ("fragment_low_tech", "land"),
+    "EXZ": (),
+    "GLP": ("fragment_low_tech", "naval"),
+    "IVN": ("institutional", "land", "air"),
+    "KDR": ("fragment_low_tech",),
+    "KYZ": ("fragment_low_tech", "energy"),
+    "MZR": ("fragment_low_tech", "energy"),
+    "NAM": ("fragment_low_tech",),
+    "NOD": ("industrial", "energy", "institutional", "land", "air", "naval"),
+    "OSF": ("fragment_low_tech",),
+    "PIV": ("fragment_low_tech", "land"),
+    "PWR": (),
+    "RHM": ("fragment_low_tech", "energy"),
+    "ROM": ("fragment_low_tech",),
+    "RUS": ("fragment_low_tech",),
+    "SDR": ("fragment_low_tech",),
+    "SHL": ("fragment_low_tech", "industrial"),
+    "SOL": ("fragment_low_tech",),
+    "STP": ("industrial", "energy", "institutional", "land", "air", "naval"),
+    "TFF": ("fragment_low_tech",),
+    "TRU": ("industrial", "institutional", "land"),
+    "VAD": ("industrial", "energy", "institutional", "land", "air", "naval"),
+    "VAL": ("industrial", "energy", "institutional", "land", "air", "naval"),
+    "VLA": ("institutional", "land", "air"),
+    "WEF": ("institutional", "land", "air"),
+    "WIT": ("institutional", "land", "naval"),
+    "WRK": ("industrial", "energy", "institutional", "land", "air", "naval"),
+    "YPR": ("fragment_low_tech", "land"),
+    "ZAO": ("fragment_low_tech",),
+}
+
+STARTING_COUNTRY_TECH_PROFILE_RATIONALE = {
+    "APH": "Traditional extraction polity with a small arms base and no advanced infrastructure.",
+    "AZH": "Black Basin levy with only a small local economy and one field formation.",
+    "BBV": "Single-state Besjaysk fragment with one inherited formation and no industrial plant.",
+    "BCM": "Single-state Besjaysk fragment sustained by one civilian workshop base.",
+    "BGT": "Single-state Besjaysk fragment without an established industrial or institutional base.",
+    "BHG": "Single-state Besjaysk fragment with one civilian workshop base.",
+    "BJK": "Besjaysk core survives as a small fragment rather than a modern institutional state.",
+    "BLD": "Dispersed Besjaysk fragment with no starting factories or advanced service base.",
+    "BTL": "Multi-state polity with several formations but only a minimal civilian economy.",
+    "CIN": "Agrarian ash tribe with informal education and artisan production.",
+    "COF": "Forest cult intentionally receives only the common equipment-enabling roots.",
+    "DAN": "Small military polity with an army but no industrial or energy system to support advanced profiles.",
+    "EFL": "Small regional state with a standing army but little intact infrastructure or industrial depth.",
+    "EXZ": "Exclusion-zone placeholder intentionally receives only the common base before its scripted breakup.",
+    "GLP": "Glass Ports trade compact retains maritime practice despite its fragmentary workshop economy.",
+    "IVN": "Large territory with four research slots, an organized army, and operating air bases.",
+    "KDR": "Caravan union relies on mobile low-technology logistics rather than fixed institutions.",
+    "KYZ": "Qanat confederation adds grid and water-system expertise to a fragmentary material base.",
+    "MZR": "Water syndicate adds grid engineering to a fragmentary material base.",
+    "NAM": "Thinly industrialized regional administration with only a small field force.",
+    "NOD": "High-output military-industrial power with a dockyard and advanced institutional continuity.",
+    "OSF": "Agrarian traditional federation with informal education and limited industrial depth.",
+    "PIV": "Small regional army supported by a fragmentary industrial base.",
+    "PWR": "Post-war zone intentionally receives only common equipment-enabling roots.",
+    "RHM": "Cistern parliament adds grid and water-system expertise to a fragmentary material base.",
+    "ROM": "Small Vorkerland successor with little intact industry and one inherited formation.",
+    "RUS": "One-state, one-slot polity without the institutions needed for advanced profile packages.",
+    "SDR": "Dry River patrol compact retains local logistics but no advanced industrial specialization.",
+    "SHL": "Nine Furnaces compact has the southern region's clearest concentrated workshop base.",
+    "SOL": "Small Vorkerland successor with no intact starting factory base.",
+    "STP": "Major industrial state with dockyards, restored air and naval doctrines, and a large standing army.",
+    "TFF": "Frontier polity has a small army and fragmentary production without advanced institutions.",
+    "TRU": "Organized Vorkerland successor with enough factories, infrastructure, and army continuity for core profiles.",
+    "VAD": "Major Vorkerland successor with dense industry, a live power site, dockyards, and ten air bases.",
+    "VAL": "Weapons superpower with twelve military factories, three research slots, and a large convoy reserve.",
+    "VLA": "Institutionally capable successor with four research slots, a standing army, and an air base.",
+    "WEF": "Organized frontier administration with factories, a standing formation, and an air base.",
+    "WIT": "Organized state with a standing army and a large inherited convoy reserve.",
+    "WRK": "Largest surviving industrial state with five research slots, power sites, air bases, and convoy capacity.",
+    "YPR": "Army-bearing regional polity whose small economy remains fragmentary.",
+    "ZAO": "High-slot autonomous zone still lacks the factories and infrastructure for broad recovered packages.",
 }
 
 
@@ -1935,6 +2544,305 @@ def themed_programme_effects(
     return naval_packages[programme]
 
 
+# Deliberate packages for the compact strategic trunks.  These are keyed by
+# stable technology keys rather than list positions so later layout tweaks do
+# not silently change the economic model.
+COMPACT_EFFECTS_BY_TECH_KEY = {
+    "standardized_machine_tools": (
+        "production_factory_max_efficiency_factor = 0.03",
+        "production_factory_efficiency_gain_factor = 0.02",
+    ),
+    "interchangeable_components": (
+        "production_factory_start_efficiency_factor = 0.03",
+        "line_change_production_efficiency_factor = 0.04",
+    ),
+    "industrial_cluster_planning": (
+        "production_speed_industrial_complex_factor = 0.03",
+        "production_speed_arms_factory_factor = 0.03",
+    ),
+    "precision_metrology_recovery": (
+        "production_factory_max_efficiency_factor = 0.04",
+        "production_factory_efficiency_gain_factor = 0.03",
+    ),
+    "automated_assembly": (
+        "industrial_capacity_factory = 0.015",
+        "production_factory_efficiency_gain_factor = 0.03",
+    ),
+    "digital_tooling_libraries": (
+        "production_factory_start_efficiency_factor = 0.05",
+        "line_change_production_efficiency_factor = 0.08",
+    ),
+    "sensor_calibrated_machining": (
+        "production_factory_max_efficiency_factor = 0.06",
+        "production_factory_efficiency_gain_factor = 0.04",
+    ),
+    "predictive_maintenance": (
+        "production_factory_efficiency_gain_factor = 0.05",
+        "industry_repair_factor = 0.04",
+    ),
+    "autonomous_factory_cells": (
+        "industrial_capacity_factory = 0.025",
+        "factory_energy_consumption = 0.04",
+        "production_factory_max_efficiency_factor = 0.05",
+    ),
+    "lights_out_microfactories": (
+        "industrial_capacity_factory = 0.03",
+        "factory_energy_consumption = 0.06",
+        "production_factory_efficiency_gain_factor = 0.04",
+    ),
+    "distributed_manufacturing": (
+        "industrial_capacity_factory = 0.035",
+        "industrial_capacity_dockyard = 0.025",
+        "factory_energy_consumption = 0.07",
+        "production_factory_max_efficiency_factor = 0.06",
+    ),
+    "industrial_organization_baseline": (
+        "production_factory_start_efficiency_factor = 0.02",
+        "production_factory_efficiency_gain_factor = 0.02",
+    ),
+    "concentrated_industrial_zones": (
+        "industrial_capacity_factory = 0.04",
+        "industrial_capacity_dockyard = 0.03",
+        "factory_energy_consumption = 0.08",
+        "industry_air_damage_factor = 0.05",
+    ),
+    "megafactory_power_buses": (
+        "industrial_capacity_factory = 0.05",
+        "industrial_capacity_dockyard = 0.04",
+        "factory_energy_consumption = 0.12",
+        "line_change_production_efficiency_factor = -0.10",
+    ),
+    "strategic_production_complexes": (
+        "industrial_capacity_factory = 0.07",
+        "industrial_capacity_dockyard = 0.06",
+        "factory_energy_consumption = 0.18",
+        "industry_air_damage_factor = 0.10",
+        "line_change_production_efficiency_factor = -0.10",
+    ),
+    "distributed_workshop_networks": (
+        "industrial_capacity_factory = 0.02",
+        "factory_energy_consumption = 0.015",
+        "production_factory_start_efficiency_factor = 0.05",
+        "industry_air_damage_factor = -0.05",
+    ),
+    "regional_spare_capacity": (
+        "industrial_capacity_factory = 0.02",
+        "factory_energy_consumption = 0.015",
+        "line_change_production_efficiency_factor = 0.10",
+        "industry_repair_factor = 0.08",
+    ),
+    "resilient_production_meshes": (
+        "industrial_capacity_factory = 0.03",
+        "factory_energy_consumption = 0.025",
+        "production_factory_start_efficiency_factor = 0.07",
+        "line_change_production_efficiency_factor = 0.15",
+        "industry_air_damage_factor = -0.12",
+        "industry_repair_factor = 0.15",
+    ),
+    "mesh_command_networks": (
+        "coordination_bonus = 0.01",
+        "encryption_factor = 0.01",
+    ),
+    "field_radio_networks": (
+        "land_reinforce_rate = 0.01",
+        "encryption_factor = 0.02",
+    ),
+    "encryption_rebuild": (
+        "encryption_factor = 0.03",
+        "coordination_bonus = 0.01",
+    ),
+    "frequency_hopping_field_sets": (
+        "encryption_factor = 0.04",
+        "land_reinforce_rate = 0.01",
+    ),
+    "signal_intercept_arrays": (
+        "decryption_factor = 0.04",
+        "air_interception_detect_factor = 0.02",
+    ),
+    "passive_emitter_geolocation": (
+        "decryption_factor = 0.04",
+        "recon_factor = 0.02",
+    ),
+    "battlefield_analytics": (
+        "coordination_bonus = 0.02",
+        "decryption_factor = 0.03",
+    ),
+    "counterintelligence_filters": (
+        "encryption_factor = 0.05",
+        "decryption_factor = 0.02",
+    ),
+    "battlefield_sensor_fusion": (
+        "coordination_bonus = 0.03",
+        "air_interception_detect_factor = 0.04",
+    ),
+    "self_healing_tactical_networks": (
+        "encryption_factor = 0.06",
+        "land_reinforce_rate = 0.02",
+    ),
+    "memetic_security_protocols": (
+        "encryption_factor = 0.07",
+        "decryption_factor = 0.04",
+        "coordination_bonus = 0.03",
+    ),
+    "electromechanical_relays": (
+        "research_speed_factor = 0.01",
+        "production_factory_efficiency_gain_factor = 0.01",
+    ),
+    "recovered_data_archives": (
+        "research_speed_factor = 0.015",
+        "planning_speed = 0.01",
+    ),
+    "recovered_semiconductors": (
+        "research_speed_factor = 0.02",
+        "production_factory_efficiency_gain_factor = 0.02",
+    ),
+    "hardened_computers": (
+        "research_speed_factor = 0.025",
+        "encryption_factor = 0.02",
+    ),
+    "error_correcting_field_computers": (
+        "research_speed_factor = 0.03",
+        "encryption_factor = 0.035",
+        "supply_consumption_factor = -0.015",
+    ),
+    "analog_ai_accelerators": (
+        "research_speed_factor = 0.03",
+        "production_factory_efficiency_gain_factor = 0.04",
+        "factory_energy_consumption = 0.05",
+    ),
+    "predictive_logistics": (
+        "research_speed_factor = 0.025",
+        "supply_consumption_factor = -0.03",
+        "encryption_factor = 0.03",
+    ),
+    "operational_ai_assistants": (
+        "research_speed_factor = 0.025",
+        "coordination_bonus = 0.035",
+        "factory_energy_consumption = 0.06",
+    ),
+    "strategic_digital_twins": (
+        "research_speed_factor = 0.03",
+        "planning_speed = 0.03",
+        "production_factory_efficiency_gain_factor = 0.03",
+    ),
+    "bounded_general_planning_cores": (
+        "research_speed_factor = 0.035",
+        "coordination_bonus = 0.04",
+        "factory_energy_consumption = 0.03",
+    ),
+    "strategic_ai_coordination": (
+        "research_speed_factor = 0.04",
+        "coordination_bonus = 0.05",
+        "production_factory_efficiency_gain_factor = 0.04",
+        "factory_energy_consumption = 0.04",
+    ),
+    "predictive_budgeting": (
+        "consumer_goods_factor = -0.015",
+        "production_factory_start_efficiency_factor = 0.03",
+    ),
+    "local_grid_restoration": (
+        "factory_energy_consumption = -0.03",
+        "industry_repair_factor = 0.02",
+    ),
+    "substation_networks": (
+        "factory_energy_consumption = -0.035",
+        "production_speed_infrastructure_factor = 0.025",
+    ),
+    "radiation_mapping": (
+        "factory_energy_consumption = -0.025",
+        "nuclear_production_factor = 0.03",
+    ),
+    "phase_synchronized_substations": (
+        "factory_energy_consumption = -0.04",
+        "industry_repair_factor = 0.03",
+    ),
+    "solid_state_grid_breakers": (
+        "factory_energy_consumption = -0.04",
+        "industry_air_damage_factor = -0.03",
+    ),
+    "reactor_safety_protocols": (
+        "factory_energy_consumption = -0.04",
+        "nuclear_production_factor = 0.05",
+    ),
+    "load_following_microreactors": (
+        "factory_energy_consumption = -0.05",
+        "nuclear_production_factor = 0.06",
+    ),
+    "superconducting_power_busbars": (
+        "factory_energy_consumption = -0.05",
+        "industrial_capacity_factory = 0.01",
+    ),
+    "microreactor_blocks": (
+        "factory_energy_consumption = -0.055",
+        "nuclear_production_factor = 0.07",
+    ),
+    "passive_decay_heat_sinks": (
+        "factory_energy_consumption = -0.035",
+        "industry_repair_factor = 0.05",
+    ),
+    "autonomous_reactor_diagnostics": (
+        "factory_energy_consumption = -0.04",
+        "nuclear_production_factor = 0.06",
+    ),
+    "high_density_thermal_storage": (
+        "factory_energy_consumption = -0.05",
+        "fuel_gain_factor = 0.04",
+    ),
+    "continental_load_balancing": (
+        "factory_energy_consumption = -0.06",
+        "production_speed_buildings_factor = 0.04",
+    ),
+    "emergency_core_suppression": (
+        "factory_energy_consumption = -0.07",
+        "nuclear_production_factor = 0.08",
+        "industry_repair_factor = 0.06",
+    ),
+    "electromagnetic_recoil_brakes": (
+        "artillery = { soft_attack = 0.05 breakthrough = 0.03 }",
+    ),
+    "predictive_fire_mission_control": (
+        "artillery = { soft_attack = 0.08 breakthrough = 0.05 }",
+        "planning_speed = 0.02",
+    ),
+    "loitering_artillery_observers": (
+        "artillery = { reliability = 0.05 defense = 0.04 }",
+    ),
+    "autonomous_battery_network": (
+        "artillery = { reliability = 0.08 defense = 0.06 }",
+        "coordination_bonus = 0.02",
+    ),
+    "electromagnetic_main_guns": (
+        "category_all_armor = { hard_attack = 0.06 breakthrough = 0.05 }",
+    ),
+    "distributed_battlegroup": (
+        "category_all_armor = { hard_attack = 0.09 breakthrough = 0.08 }",
+        "coordination_bonus = 0.02",
+    ),
+    "adaptive_suspension_control": (
+        "category_all_armor = { maximum_speed = 0.05 reliability = 0.05 }",
+    ),
+    "resilient_combat_cloud_nodes": (
+        "category_all_armor = { maximum_speed = 0.07 reliability = 0.08 defense = 0.05 }",
+    ),
+    "autonomous_dogfight_controller": (
+        "air_intercept_efficiency = 0.05",
+        "air_accidents_factor = -0.03",
+    ),
+    "aerospace_interceptors": (
+        "air_intercept_efficiency = 0.08",
+        "air_mission_efficiency = 0.04",
+    ),
+    "directed_energy_defensive_suites": (
+        "air_mission_efficiency = 0.05",
+        "air_accidents_factor = -0.04",
+    ),
+    "distributed_interceptor_swarms": (
+        "air_mission_efficiency = 0.08",
+        "air_power_projection_factor = 0.05",
+    ),
+}
+
+
 def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
     """Return an effect package that reflects the actual programme selected.
 
@@ -1947,6 +2855,9 @@ def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
     tech = branch.techs[tier]
     if tech.key in APPLIED_EFFECTS:
         return tuple(APPLIED_EFFECTS[tech.key])
+    compact_effects = COMPACT_EFFECTS_BY_TECH_KEY.get(tech.key)
+    if compact_effects:
+        return compact_effects
 
     profile = branch.profile
     tier_count = len(branch.techs)
@@ -2692,11 +3603,27 @@ def technology_description_notes(branch: Branch, index: int, is_ru: bool) -> lis
     if siblings:
         names_by_id = {tech.id: (tech.ru if is_ru else tech.en) for tech in branch.techs}
         alternatives = ", ".join(names_by_id[sibling] for sibling in siblings)
-        notes.append(
-            f"Взаимоисключающий проект с вариантом: {alternatives}; общая линия продолжится после любого выбора."
-            if is_ru else
-            f"Mutually exclusive with: {alternatives}; the common line continues after either choice."
-        )
+        if XOR_KIND_BY_BRANCH[branch.key] == "temporary":
+            notes.append(
+                f"Взаимоисключающий проект с вариантом: {alternatives}; общая линия продолжится после любого выбора."
+                if is_ru else
+                f"Mutually exclusive with: {alternatives}; the common line continues after either choice."
+            )
+        else:
+            notes.append(
+                f"Постоянный выбор специализации: альтернатива «{alternatives}» останется закрыта до конца магистрали."
+                if is_ru else
+                f"Permanent specialization choice: {alternatives} remains locked for the rest of the branch."
+            )
+    for effect in effects_for(branch, index):
+        energy_match = re.fullmatch(r"factory_energy_consumption = ([0-9.]+)", effect)
+        if energy_match and float(energy_match.group(1)) > 0:
+            percent = f"{float(energy_match.group(1)) * 100:g}"
+            notes.append(
+                f"Энергетическая цена: потребление энергии фабриками +{percent}%."
+                if is_ru else
+                f"Energy price: factory energy consumption +{percent}%."
+            )
     if len(BRANCH_GRAPHS[branch.key].dependencies[index]) >= 2:
         notes.append(
             "Требует завершения всех входящих программ и объединяет их результаты."
@@ -2861,19 +3788,35 @@ def ai_will_do_for(branch: Branch, index: int) -> tuple[str, ...]:
     if profile in {"naval_support", "surface_fleet", "subsurface"}:
         entries.append("modifier = { factor = 0.05 num_of_naval_factories < 1 }")
         entries.append("modifier = { factor = 1.35 num_of_naval_factories > 3 }")
+    if branch.key == "power":
+        entries.append("modifier = { factor = 1.75 energy_ratio < 0.80 }")
+    if branch.key in {"signals", "computing"} and year <= 2167:
+        entries.append("modifier = { factor = 1.20 has_war = yes }")
 
     lane = BRANCH_GRAPHS[branch.key].lanes[index]
-    # Reconstruction is a persistent school after the first XOR decision, so
-    # every later node in the chosen lane retains its strategic AI context.
-    if branch.key == "reconstruction" and year > 2160:
+    if branch.key == "industry_organization" and lane == 0:
+        entries.append("modifier = { factor = 1.50 energy_ratio > 0.94 }")
+        entries.append("modifier = { factor = 1.25 ADISCORD_economy_ai_is_healthy = yes }")
+        entries.append("modifier = { factor = 0.35 has_war = yes }")
+    elif branch.key == "industry_organization" and lane == 2:
+        entries.append("modifier = { factor = 1.60 energy_ratio < 0.80 }")
+        entries.append("modifier = { factor = 1.35 has_war = yes }")
+        entries.append("modifier = { factor = 1.35 ADISCORD_economy_ai_is_crisis = yes }")
+
+    if branch.key == "computing" and lane == 2:
+        entries.append("modifier = { factor = 1.35 energy_ratio > 0.94 }")
+        entries.append("modifier = { factor = 0.25 energy_ratio < 0.80 }")
+    elif branch.key == "computing" and lane == 0:
+        entries.append("modifier = { factor = 1.25 energy_ratio < 0.80 }")
+
+    if branch.key == "production" and lane in {0, 2}:
         if lane == 0:
-            entries.append("modifier = { factor = 1.30 ADISCORD_economy_ai_is_healthy = yes }")
-        elif lane == 2:
-            entries.append("modifier = { factor = 1.35 has_war = yes }")
-            entries.append("modifier = { factor = 1.40 ADISCORD_economy_ai_is_crisis = yes }")
+            entries.append("modifier = { factor = 1.20 ADISCORD_economy_ai_is_stressed = yes }")
+        else:
+            entries.append("modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }")
 
     xor = xor_siblings(branch, index)
-    if xor and branch.key != "reconstruction":
+    if xor and branch.key not in {"production", "industry_organization", "computing"}:
         if lane == 0:
             entries.append("modifier = { factor = 1.25 ADISCORD_economy_ai_is_stressed = yes }")
         elif lane == 2:
@@ -2988,7 +3931,7 @@ def render_technology(branch: Branch, index: int) -> str:
         f"\t\tresearch_cost = {n(research_cost)}",
         f"\t\tstart_year = {year}",
     ))
-    for folder in branch.folders:
+    for folder in sorted(branch.folders):
         lines.extend((
             "\t\tfolder = {",
             f"\t\t\tname = {folder}",
@@ -3020,27 +3963,32 @@ def write_technology_files() -> None:
 
 
 def write_starting_technology_effect() -> None:
-    """Grant the recovered pre-campaign baseline to every existing country."""
+    """Render the common baseline, profile packages and explicit tag dispatch."""
 
-    baseline = [
-        tech.id
-        for branch in BRANCHES
-        if not branch.profile.startswith("forbidden_")
-        for tech, year in zip(branch.techs, branch.years, strict=True)
-        if year <= 2158
-    ]
     lines = [
         "# Generated by tools/build_adiscord_technology_system.py.",
-        "# The campaign begins in 2160; recovered 2150-2158 knowledge is baseline,",
-        "# while dense 2160-2175 programmes remain player and AI decisions.",
-        "# The legacy effect ID is retained for existing saves and collapse scripts.",
-        "ADISCORD_grant_2150_technology_baseline = {",
-        "\tset_technology = {",
+        "# The campaign begins in 2160.  Common roots and bounded country profiles",
+        "# preserve technological differences instead of granting every pre-2160 node.",
+        "",
     ]
-    lines.extend(f"\t\t{tech_id} = 1" for tech_id in baseline)
+    for profile, technology_ids in STARTING_TECH_PROFILES.items():
+        lines.extend((
+            f"ADISCORD_grant_technology_profile_{profile} = {{",
+            "\tset_technology = {",
+        ))
+        lines.extend(f"\t\t{tech_id} = 1" for tech_id in technology_ids)
+        lines.extend((
+            "\t\tpopup = no",
+            "\t}",
+            "}",
+            "",
+        ))
+
     lines.extend((
-        "\t\tpopup = no",
-        "\t}",
+        "# The legacy effect ID is retained for collapse scripts and old callers,",
+        "# but now contains only the minimum common base and transition stockpiles.",
+        "ADISCORD_grant_2150_technology_baseline = {",
+        "\tADISCORD_grant_technology_profile_common = yes",
         "\t# Existing line battalions now require squad fire-support kits.  Give",
         "\t# every country a modest transition reserve while AI production catches up.",
         "\tif = {",
@@ -3070,9 +4018,134 @@ def write_starting_technology_effect() -> None:
         "\t}",
         "}",
         "",
+        "ADISCORD_grant_starting_technology_profile = {",
+        "\tADISCORD_grant_2150_technology_baseline = yes",
+    ))
+    for tag, profiles in sorted(STARTING_COUNTRY_TECH_PROFILES.items()):
+        lines.extend((
+            "\tif = {",
+            f"\t\tlimit = {{ tag = {tag} }}",
+        ))
+        if profiles:
+            lines.extend(
+                f"\t\tADISCORD_grant_technology_profile_{profile} = yes"
+                for profile in profiles
+            )
+        else:
+            lines.extend((
+                "\t\t# Intentional common-only assignment.",
+                "\t\tADISCORD_grant_technology_profile_common = yes",
+            ))
+        lines.append("\t}")
+    lines.extend((
+        "\tif = {",
+        "\t\tlimit = { date > 2183.1.1 }",
+        "\t\tADISCORD_grant_technology_profile_late_2183 = yes",
+        "\t}",
+        "}",
+        "",
     ))
     path = ROOT / "common" / "scripted_effects" / "ADISCORD_technology_baseline_effects.txt"
     path.write_text("\n".join(lines), encoding="utf-8")
+
+
+def collect_starting_country_profile_evidence() -> dict[str, dict[str, object]]:
+    evidence = {
+        tag: {
+            "states": 0,
+            "civilian_factories": 0,
+            "military_factories": 0,
+            "dockyards": 0,
+            "air_bases": 0,
+            "power_sites": 0,
+            "infrastructure_levels": 0,
+            "research_slots": 0,
+            "convoys": 0,
+            "oob_divisions": 0,
+            "starting_doctrines": [],
+        }
+        for tag in STARTING_COUNTRY_TECH_PROFILES
+    }
+    building_fields = {
+        "industrial_complex": "civilian_factories",
+        "arms_factory": "military_factories",
+        "dockyard": "dockyards",
+        "air_base": "air_bases",
+        "infrastructure": "infrastructure_levels",
+        "nuclear_reactor": "power_sites",
+        "commercial_nuclear_reactor": "power_sites",
+        "ADISCORD_thermal_power_complex": "power_sites",
+    }
+    for state_path in (ROOT / "history" / "states").glob("*.txt"):
+        state_text = state_path.read_text(encoding="utf-8-sig")
+        owner_match = re.search(r"(?m)^\s*owner\s*=\s*([A-Z0-9]{3})\s*$", state_text)
+        if not owner_match or owner_match.group(1) not in evidence:
+            continue
+        row = evidence[owner_match.group(1)]
+        row["states"] += 1
+        for building, field in building_fields.items():
+            row[field] += sum(
+                int(value)
+                for value in re.findall(
+                    rf"(?m)^\s*{re.escape(building)}\s*=\s*(\d+)",
+                    state_text,
+                )
+            )
+    for tag, row in evidence.items():
+        country_paths = sorted((ROOT / "history" / "countries").glob(f"{tag} - *.txt"))
+        if country_paths:
+            country_text = country_paths[0].read_text(encoding="utf-8-sig")
+            slots = re.search(r"\bset_research_slots\s*=\s*(\d+)", country_text)
+            convoys = re.search(r"\bset_convoys\s*=\s*(\d+)", country_text)
+            row["research_slots"] = int(slots.group(1)) if slots else 0
+            row["convoys"] = int(convoys.group(1)) if convoys else 0
+            row["starting_doctrines"] = re.findall(
+                r"\bset_grand_doctrine\s*=\s*([A-Za-z0-9_]+)",
+                country_text,
+            )
+        oob_path = ROOT / "history" / "units" / f"{tag}.txt"
+        if oob_path.exists():
+            oob_text = oob_path.read_text(encoding="utf-8-sig")
+            row["oob_divisions"] = len(
+                re.findall(r"(?m)^\s*division\s*=\s*\{", oob_text)
+            )
+    return evidence
+
+
+def write_starting_technology_profile_manifest() -> None:
+    path = ROOT / "tools" / "data" / "adiscord_starting_technology_profiles.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    countries = {}
+    evidence = collect_starting_country_profile_evidence()
+    common = set(STARTING_TECH_PROFILES["common"])
+    for tag, profiles in sorted(STARTING_COUNTRY_TECH_PROFILES.items()):
+        technologies = set(common)
+        for profile in profiles:
+            technologies.update(STARTING_TECH_PROFILES[profile])
+        countries[tag] = {
+            "profiles": ["common", *profiles],
+            "common_only": not profiles,
+            "rationale": STARTING_COUNTRY_TECH_PROFILE_RATIONALE[tag],
+            "evidence": evidence[tag],
+            "technologies_2160": sorted(technologies),
+        }
+    payload = {
+        "schema": 1,
+        "campaign_start": "2160.1.1",
+        "active_country_count": len(countries),
+        "profiles": {
+            profile: {
+                "seeds": list(STARTING_TECH_PROFILE_SEEDS[profile]),
+                "technologies": list(STARTING_TECH_PROFILES[profile]),
+            }
+            for profile in STARTING_TECH_PROFILES
+        },
+        "countries": countries,
+    }
+    path.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
 
 
 def write_gfx() -> None:
@@ -3366,6 +4439,24 @@ def write_gui() -> None:
     (ROOT / "interface" / "countrytechtreeview.gui").write_text(text, encoding="utf-8")
 
 
+def write_technology_migration_manifest() -> None:
+    path = ROOT / "tools" / "data" / "adiscord_technology_id_migrations.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "schema": 1,
+        "legacy_count": len(TECHNOLOGY_ID_MIGRATIONS),
+        "current_count": len(CURRENT_TECH_IDS),
+        "migrations": {
+            tech_id: TECHNOLOGY_ID_MIGRATIONS[tech_id]
+            for tech_id in sorted(TECHNOLOGY_ID_MIGRATIONS)
+        },
+    }
+    path.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
 def main() -> None:
     all_ids = [tech.id for branch in BRANCHES for tech in branch.techs]
     duplicates = sorted({tech_id for tech_id in all_ids if all_ids.count(tech_id) > 1})
@@ -3376,6 +4467,8 @@ def main() -> None:
     write_gfx()
     write_localisation()
     write_gui()
+    write_technology_migration_manifest()
+    write_starting_technology_profile_manifest()
     print(
         f"Generated {len(all_ids)} technologies in {len(BRANCHES)} content branches; "
         f"{len(APPLIED_PROGRAMME_KEYS)} applied branches are attached specialisations."

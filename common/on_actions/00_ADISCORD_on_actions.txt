@@ -42,10 +42,16 @@ on_actions = {
 			#    min_zoom = 5555.0
 			#    #visible = scripted_trigger_name
 			#}
+			# Starting technology profiles are a new-campaign migration.  The global
+			# flag prevents a save reload from overwriting later player research.
+			if = {
+				limit = { NOT = { has_global_flag = ADISCORD_starting_technology_profiles_applied } }
+				set_global_flag = ADISCORD_starting_technology_profiles_applied
+				every_country = {
+					ADISCORD_grant_starting_technology_profile = yes
+				}
+			}
 			every_country = {
-				# The scenario starts in 2160.  Old recovered knowledge should not
-				# consume the first decades of every country's research queue.
-				ADISCORD_grant_2150_technology_baseline = yes
 				if = {
 					limit = { OR = { ADISCORD_is_playable_development_country = yes is_ai = no } }
 					ADISCORD_initialize_default_country_development = yes
@@ -108,6 +114,24 @@ on_actions = {
 			if = {
 				limit = { ADISCORD_economy_should_weekly_update = yes }
 				ADISCORD_economy_weekly_update = yes
+			}
+		}
+	}
+	on_state_control_changed = {
+		# ROOT is the new controller and FROM is the old controller. A control
+		# change can enable or disable regional cluster output, so invalidate both
+		# country caches cheaply and let the next scheduled/open-window refresh do
+		# the single owned-state recount.
+		effect = {
+			if = {
+				limit = { has_variable = ADISCORD_economy_initialized }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			FROM = {
+				if = {
+					limit = { has_variable = ADISCORD_economy_initialized }
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 	}

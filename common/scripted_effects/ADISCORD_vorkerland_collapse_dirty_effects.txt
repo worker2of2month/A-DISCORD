@@ -86,6 +86,7 @@ ADISCORD_vorkerland_setup_sla = {
 	SLA = {
 		set_capital = { state = 49 }
 		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "SLA_vorkerland_collapse"
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 80 producer = SLA }
@@ -111,6 +112,7 @@ ADISCORD_vorkerland_setup_rza = {
 	RZA = {
 		set_capital = { state = 177 }
 		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "RZA_vorkerland_collapse"
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 80 producer = RZA }
@@ -136,6 +138,7 @@ ADISCORD_vorkerland_setup_mlr = {
 	MLR = {
 		set_capital = { state = 152 }
 		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "MLR_vorkerland_collapse"
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 80 producer = MLR }
@@ -157,6 +160,7 @@ ADISCORD_vorkerland_setup_ert = {
 	ERT = {
 		set_capital = { state = 169 }
 		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "ERT_vorkerland_collapse"
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 80 producer = ERT }
@@ -179,6 +183,7 @@ ADISCORD_vorkerland_setup_irt = {
 	IRT = {
 		set_capital = { state = 181 }
 		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "IRT_vorkerland_collapse"
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 80 producer = IRT }
@@ -202,6 +207,7 @@ ADISCORD_vorkerland_setup_sca = {
 	SCA = {
 		set_capital = { state = 173 }
 		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "SCA_vorkerland_collapse"
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 80 producer = SCA }

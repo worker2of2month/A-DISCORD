@@ -74,10 +74,10 @@ ADISCORD_ai_wartime_resilience_programmes = {
 	abort_when_not_enabled = yes
 
 	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_forward_surgical_cells value = 55 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_mobile_restoration_columns value = 55 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_passive_drone_detection_meshes value = 45 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_defensive_command_curriculum value = 40 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_theater_logistics_wargames value = 45 }
+	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_battle_damage_survey_teams value = 55 }
+	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_spectrum_threat_libraries value = 45 }
+	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_reconstituted_staff_academies value = 40 }
+	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_operational_planning_exercises value = 45 }
 }
 
 ADISCORD_ai_offensive_staff_programmes = {
@@ -89,9 +89,9 @@ ADISCORD_ai_offensive_staff_programmes = {
 	abort_when_not_enabled = yes
 
 	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_assault_breaching_packages value = 55 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_assault_command_curriculum value = 55 }
+	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_reconstituted_staff_academies value = 55 }
 	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_operational_planning_exercises value = 45 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_rotational_front_commands value = 35 }
+	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_adaptive_general_staff value = 35 }
 }
 
 ADISCORD_ai_air_mobility_programme = {
@@ -129,7 +129,6 @@ ADISCORD_ai_unmanned_ground_programme = {
 
 	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_teleoperated_scout_carts value = 50 }
 	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_armed_recon_drones value = 45 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_autonomous_recovery_tractors value = 40 }
 	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_distributed_ground_swarm_control value = 35 }
 }
 

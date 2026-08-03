@@ -135,4 +135,21 @@ scripted_gui = {
 			ADISCORD_economy_social_active_marker = { x = ADISCORD_economy_social_active_marker_x_position }
 		}
 	}
+
+	ADISCORD_economy_auto_loan_popup_script = {
+		context_type = player_context
+		window_name = "ADISCORD_economy_auto_loan_popup_window"
+		dirty = ADISCORD_economy_gui_update_var
+		visible = {
+			is_ai = no
+			check_variable = { var = ADISCORD_economy_show_auto_loan_popup value = 1 compare = greater_than_or_equals }
+		}
+		effects = {
+			ADISCORD_economy_auto_loan_popup_ok_click = {
+				set_variable = { var = ADISCORD_economy_show_auto_loan_popup value = 0 }
+				set_variable = { var = ADISCORD_economy_auto_loan_popup_amount value = 0 }
+				ADISCORD_economy_update_gui = yes
+			}
+		}
+	}
 }

@@ -34,6 +34,9 @@ ECONOMY_LOC = (
 BUILDINGS = (ROOT / "common" / "buildings" / "00_buildings.txt").read_text(
     encoding="utf-8-sig"
 )
+DYNAMIC_MODIFIERS = (
+    ROOT / "common" / "dynamic_modifiers" / "ADISCORD_economy_dynamic_modifiers.txt"
+).read_text(encoding="utf-8-sig")
 ECONOMY_AI = (
     ROOT / "common" / "ai_strategy" / "ADISCORD_economy_ai.txt"
 ).read_text(encoding="utf-8-sig")
@@ -165,6 +168,8 @@ class WeeklyEconomyContracts(unittest.TestCase):
         weekly = block(EFFECTS, "ADISCORD_economy_weekly_update")
         self.assertEqual(weekly.count("ADISCORD_economy_apply_weekly_balance = yes"), 1)
         self.assertIn("ADISCORD_economy_prepare_weekly_country = yes", weekly)
+        self.assertIn("ADISCORD_economy_light_update = yes", weekly)
+        self.assertNotIn("ADISCORD_economy_calculate_weekly_budget = yes", weekly)
         self.assertNotIn("ADISCORD_economy_initialize_country = yes", weekly)
         for forbidden in (
             "ADISCORD_economy_full_refresh",
@@ -174,6 +179,29 @@ class WeeklyEconomyContracts(unittest.TestCase):
             "all_owned_state",
         ):
             self.assertNotIn(forbidden, weekly)
+
+    def test_light_update_refreshes_weekly_forecast_for_every_gui_action(self):
+        light = block(EFFECTS, "ADISCORD_economy_light_update")
+        self.assertIn("ADISCORD_economy_calculate_monthly_balance = yes", light)
+        self.assertIn("ADISCORD_economy_calculate_weekly_budget = yes", light)
+        self.assertLess(
+            light.index("ADISCORD_economy_calculate_monthly_balance = yes"),
+            light.index("ADISCORD_economy_calculate_weekly_budget = yes"),
+        )
+        budget_refresh = block(
+            EFFECTS, "ADISCORD_economy_refresh_after_budget_control_change"
+        )
+        self.assertIn("ADISCORD_economy_light_update = yes", budget_refresh)
+
+    def test_state_control_changes_only_invalidate_existing_country_caches(self):
+        control_change = block(ON_ACTIONS, "on_state_control_changed")
+        self.assertEqual(control_change.count("ADISCORD_economy_mark_dirty = yes"), 2)
+        self.assertEqual(
+            control_change.count("has_variable = ADISCORD_economy_initialized"), 2
+        )
+        self.assertIn("FROM =", control_change)
+        for forbidden in ("every_country", "every_owned_state", "full_refresh"):
+            self.assertNotIn(forbidden, control_change)
 
     def test_weekly_prepare_does_not_recalculate_simulation_tier(self):
         prepare = block(EFFECTS, "ADISCORD_economy_prepare_weekly_country")
@@ -287,36 +315,34 @@ class WeeklyEconomyContracts(unittest.TestCase):
             self.assertIn("ADISCORD_economy_update_stretched = yes", action)
             self.assertIn("ADISCORD_economy_refresh_spending_ideas = yes", action)
 
-    def test_player_is_notified_when_a_deficit_triggers_automatic_borrowing(self):
+    def test_player_gets_a_persistent_popup_when_a_deficit_triggers_automatic_borrowing(self):
         settlement = block(EFFECTS, "ADISCORD_economy_apply_weekly_balance")
         auto_borrow = settlement[
             settlement.index("ADISCORD_economy_auto_borrow_temp value = 0.1") :
         ]
         self.assertIn("is_ai = no", auto_borrow)
-        self.assertIn(
-            "country_event = { id = ADISCORD_economy.1 }", auto_borrow
-        )
+        self.assertIn("ADISCORD_economy_show_auto_loan_popup value = 1", auto_borrow)
+        self.assertIn("ADISCORD_economy_auto_loan_popup_amount", auto_borrow)
+        self.assertNotIn("country_event = { id = ADISCORD_economy.1 }", auto_borrow)
 
-        event_path = ROOT / "events" / "ADISCORD_economy_events.txt"
-        self.assertTrue(event_path.is_file())
-        event_text = event_path.read_text(encoding="utf-8-sig")
-        notification = block(event_text, "country_event")
-        self.assertIn("id = ADISCORD_economy.1", notification)
-        self.assertIn("is_triggered_only = yes", notification)
-        self.assertIn("title = ADISCORD_economy.1.t", notification)
-        self.assertIn("desc = ADISCORD_economy.1.d", notification)
-
+        gui = (ROOT / "interface" / "ADISCORD_economy.gui").read_text(encoding="utf-8-sig")
+        scripted_gui = (
+            ROOT / "common" / "scripted_guis" / "ADISCORD_economy_scripted_gui.txt"
+        ).read_text(encoding="utf-8-sig")
+        self.assertIn('name = "ADISCORD_economy_auto_loan_popup_window"', gui)
+        self.assertIn("ADISCORD_economy_auto_loan_popup_script", scripted_gui)
+        self.assertIn("ADISCORD_economy_auto_loan_popup_ok_click", scripted_gui)
         for key in (
-            "ADISCORD_economy.1.t",
-            "ADISCORD_economy.1.d",
-            "ADISCORD_economy.1.a",
+            "ADISCORD_economy_auto_loan_popup_title",
+            "ADISCORD_economy_auto_loan_popup_desc",
+            "ADISCORD_economy_auto_loan_popup_ok",
         ):
             self.assertRegex(ECONOMY_LOC, rf"(?m)^\s*{re.escape(key)}:\d*\s+")
-        self.assertIn("ADISCORD_economy_last_auto_borrowing", ECONOMY_LOC)
+        self.assertIn("ADISCORD_economy_auto_loan_popup_amount", ECONOMY_LOC)
 
-    def test_schema_seven_preserves_existing_treasury(self):
+    def test_schema_eight_preserves_existing_treasury(self):
         migration = block(EFFECTS, "ADISCORD_economy_migrate_schema")
-        self.assertIn("value = 7", migration)
+        self.assertIn("value = 8", migration)
         self.assertNotRegex(
             migration,
             r"set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_treasury\s+value\s*=\s*100",
@@ -416,12 +442,48 @@ class WeeklyEconomyContracts(unittest.TestCase):
         self.assertNotIn("recount_economic_buildings", weekly)
         self.assertNotIn("every_owned_state", weekly)
 
+    def test_industrial_cluster_output_is_location_weighted_without_a_new_scan(self):
+        recount = block(EFFECTS, "ADISCORD_economy_recount_economic_buildings")
+        dynamic_modifier = block(
+            DYNAMIC_MODIFIERS, "ADISCORD_economy_cluster_local_factory_output"
+        )
+        self.assertEqual(recount.count("every_owned_state"), 1)
+        self.assertGreaterEqual(recount.count("is_controlled_by = ROOT"), 2)
+        for signature in (
+            "building_level@arms_factory",
+            "damaged_building_level@arms_factory",
+            "is_controlled_by = ROOT",
+            "ADISCORD_economy_state_cluster_level_temp",
+            "ADISCORD_economy_cluster_supported_factory_points_temp",
+            "ADISCORD_economy_operational_military_factories_temp",
+            "ADISCORD_economy_cluster_factory_output_percent value = 5",
+            "ADISCORD_economy_cluster_factory_output_factor value = 100",
+            "max = 15",
+            "remove_dynamic_modifier = { modifier = ADISCORD_economy_cluster_local_factory_output }",
+            "force_update_dynamic_modifier = yes",
+        ):
+            self.assertIn(signature, recount)
+        self.assertIn(
+            "industrial_capacity_factory = ADISCORD_economy_cluster_factory_output_factor",
+            dynamic_modifier,
+        )
+        self.assertNotIn("icon =", dynamic_modifier)
+        for key in (
+            "ADISCORD_economy_cluster_local_factory_output",
+            "ADISCORD_economy_cluster_local_factory_output_desc",
+        ):
+            self.assertRegex(ECONOMY_LOC, rf"(?m)^\s*{key}:\d*\s+")
+        self.assertIn("ADISCORD_economy_cluster_factory_output_percent", ECONOMY_LOC)
+        weekly = block(EFFECTS, "ADISCORD_economy_weekly_update")
+        self.assertNotIn("cluster_supported_factory", weekly)
+        self.assertNotIn("every_owned_state", weekly)
+
     def test_ai_building_targets_are_bounded_by_fiscal_state(self):
         expected = {
             "ADISCORD_ai_fiscal_crisis": (0, 0, 0),
             "ADISCORD_ai_fiscal_stress": (0, 0, 0),
             "ADISCORD_ai_fiscal_recovery": (1, 0, 0),
-            "ADISCORD_ai_healthy_civilian_growth": (2, 1, 1),
+            "ADISCORD_ai_healthy_civilian_growth": (2, 2, 2),
         }
         names = (
             "ADISCORD_business_center",
@@ -438,7 +500,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
         wartime = block(ECONOMY_AI, "ADISCORD_ai_healthy_war_industry")
         self.assertRegex(
             wartime,
-            r"building_target\s+id\s*=\s*ADISCORD_industrial_cluster\s+value\s*=\s*2\b",
+            r"building_target\s+id\s*=\s*ADISCORD_industrial_cluster\s+value\s*=\s*3\b",
         )
 
     def test_building_tooltips_lead_with_role_and_budget_impact(self):
@@ -446,7 +508,11 @@ class WeeklyEconomyContracts(unittest.TestCase):
         for key, role, budget in (
             ("ADISCORD_business_center_desc", "Роль: доход", "+0,90"),
             ("ADISCORD_science_center_desc", "Роль: исследования", "-0,42"),
-            ("ADISCORD_industrial_cluster_desc", "Роль: производство", "+0,08"),
+            (
+                "ADISCORD_industrial_cluster_desc",
+                "Роль: местное военное производство",
+                "+0,08",
+            ),
         ):
             match = re.search(rf'(?m)^\s*{key}:\d*\s+"([^"]*)"', ECONOMY_LOC)
             self.assertIsNotNone(match, key)
@@ -463,6 +529,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
             "0.85 + 0.15 - 0.10 = +0.90",
             "0.05 - 0.35 - 0.12 = -0.42",
             "0.30 + 0.08 - 0.18 - 0.12 = +0.08",
+            "5% × сумма(исправные военные заводы региона × уровень кластера)",
             "3 / 13",
         ):
             self.assertIn(required, documentation)

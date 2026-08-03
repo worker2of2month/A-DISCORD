@@ -55,6 +55,9 @@ def validate() -> list[str]:
     scripted_loc = strip_comments(read("common/scripted_localisation/ADISCORD_economy_scripted_loc.txt"))
     ideas = strip_comments(read("common/ideas/ADISCORD_economy_ideas.txt"))
     buildings = strip_comments(read("common/buildings/00_buildings.txt"))
+    dynamic_modifiers = strip_comments(
+        read("common/dynamic_modifiers/ADISCORD_economy_dynamic_modifiers.txt")
+    )
     localisation = read("localisation/russian/ADISCORD_economy_l_russian.yml")
 
     def require(condition: bool, message: str) -> None:
@@ -63,6 +66,12 @@ def validate() -> list[str]:
 
     require("ADISCORD_economy_schema_version" in effects, "economy lacks a schema-versioned migration")
     require("ADISCORD_economy_migrate_schema" in effects, "economy lacks ADISCORD_economy_migrate_schema")
+
+    for name in ("GetADISCORDInternalBondsAvailabilityLoc", "GetADISCORDExternalLoanAvailabilityLoc"):
+        require(f"name = {name}" in scripted_loc, f"loan UI lacks dynamic availability text {name}")
+    require("[GetADISCORDInternalBondsAvailabilityLoc]" in localisation
+            and "[GetADISCORDExternalLoanAvailabilityLoc]" in localisation,
+            "loan tooltips do not expose the current failed requirement")
 
     base_gains = numeric_assignments(effects, "ADISCORD_economy_base_monthly_development_gain")
     require(any(value > 0 for value in base_gains), "base monthly economic-development gain is never positive")
@@ -132,6 +141,11 @@ def validate() -> list[str]:
     require("ADISCORD_economy_full_refresh" not in weekly
             and "ADISCORD_economy_recount_economic_buildings" not in weekly,
             "weekly economy directly invokes a heavy building refresh")
+    light_update = block(effects, "ADISCORD_economy_light_update")
+    require("ADISCORD_economy_calculate_weekly_budget = yes" in light_update,
+            "light economy refresh leaves the player-facing weekly forecast stale")
+    require("ADISCORD_economy_calculate_weekly_budget = yes" not in weekly,
+            "weekly settlement duplicates the forecast already refreshed by the light update")
     require("ADISCORD_economy_prepare_weekly_country" in weekly
             and "ADISCORD_economy_initialize_country" not in weekly,
             "weekly economy does not use the lightweight preparation path")
@@ -143,6 +157,12 @@ def validate() -> list[str]:
     require("ADISCORD_economy_set_simulation_tier" not in weekly_prepare
             and not any(token in weekly_prepare for token in ("any_enemy_country", "any_country", "every_country", "every_owned_state")),
             "weekly preparation recalculates the tier or scans countries/states")
+    control_change = block(on_actions, "on_state_control_changed")
+    require(control_change.count("ADISCORD_economy_mark_dirty = yes") == 2
+            and control_change.count("has_variable = ADISCORD_economy_initialized") == 2,
+            "state control changes do not invalidate both existing economy caches")
+    require("every_country" not in control_change and "every_owned_state" not in control_change,
+            "state control cache invalidation performs a global or state scan")
 
     stretched = block(effects, "ADISCORD_economy_update_stretched")
     require("ADISCORD_economy_planned_shortage_pressure" in stretched,
@@ -308,11 +328,29 @@ def validate() -> list[str]:
             "science center still duplicates the stronger commercial/industrial state role")
     require("local_factory_energy_consumption = 0.20" in block(buildings, "ADISCORD_industrial_cluster"),
             "industrial cluster lacks its visible heavy-industry energy burden")
+    cluster_output = block(dynamic_modifiers, "ADISCORD_economy_cluster_local_factory_output")
+    require("industrial_capacity_factory = ADISCORD_economy_cluster_factory_output_factor" in cluster_output,
+            "industrial cluster lacks its location-weighted military-factory output modifier")
+    require("building_level@arms_factory" in recount
+            and "damaged_building_level@arms_factory" in recount
+            and "is_controlled_by = ROOT" in recount
+            and "ADISCORD_economy_state_cluster_level_temp" in recount,
+            "industrial cluster output is not tied to operational military factories in its state")
+    require("ADISCORD_economy_cluster_supported_factory_points_temp" in recount
+            and "ADISCORD_economy_operational_military_factories_temp" in recount
+            and "force_update_dynamic_modifier = yes" in recount,
+            "industrial cluster weighted output is not refreshed by the cached state recount")
+    require(recount.count("is_controlled_by = ROOT") >= 2,
+            "occupied economic buildings still contribute income or national network bonuses")
+    require("ADISCORD_economy_cluster_factory_output_percent value = 5" in recount
+            and "ADISCORD_economy_cluster_factory_output_factor value = 100" in recount
+            and "max = 15" in recount,
+            "industrial cluster output formula is not bounded to +5% per state level")
     custom_targets = [int(value) for value in re.findall(
         r"building_target\s+id\s*=\s*ADISCORD_(?:business_center|science_center|industrial_cluster)\s+value\s*=\s*(\d+)",
         economy_ai,
     )]
-    require(bool(custom_targets) and max(custom_targets) <= 2,
+    require(bool(custom_targets) and max(custom_targets) <= 3,
             "AI economic-building targets are missing or encourage uncontrolled construction")
 
     construction_expenses = block(effects, "ADISCORD_economy_calculate_construction_expenses")
@@ -335,8 +373,8 @@ def validate() -> list[str]:
     require("ADISCORD_economy_social_spending_mode" in idea_refresh,
             "social budget changes do not invalidate the optimized idea signature")
 
-    require("value = 7 compare = less_than" in block(effects, "ADISCORD_economy_migrate_schema"),
-            "economy save migration was not advanced to schema 7")
+    require("value = 8 compare = less_than" in block(effects, "ADISCORD_economy_migrate_schema"),
+            "economy save migration was not advanced to schema 8")
     cycle = block(effects, "ADISCORD_economy_update_model_and_cycle")
     require("ADISCORD_economy_cycle_phase value = 4" not in cycle
             and "ADISCORD_economy_cycle_phase value = 5" not in cycle

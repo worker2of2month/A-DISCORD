@@ -476,6 +476,7 @@ class EventOrchestrationTests(unittest.TestCase):
                 self.assertRegex(setup, rf'{state_id}\s*=\s*\{{\s*add_core_of\s*=\s*{tag}\s+set_state_controller_to\s*=\s*{tag}\s*\}}')
             self.assertRegex(setup, rf'set_capital\s*=\s*\{{\s*state\s*=\s*{self.CAPITALS[tag]}\s*\}}')
             self.assertIn('ADISCORD_grant_2150_technology_baseline = yes', setup)
+            self.assertIn('ADISCORD_grant_technology_profile_fragment_low_tech = yes', setup)
             self.assertIn('ADISCORD_economy_initialize_country = yes', setup)
             self.assertIn(f'load_oob = "{tag}_vorkerland_collapse"', setup)
             self.assertLess(setup.index('ADISCORD_economy_initialize_country = yes'), setup.index('load_oob ='))
@@ -679,6 +680,7 @@ class DirtySpawnTests(unittest.TestCase):
             capital = CAPITALS[tag][0]
             self.assertRegex(setup, rf'set_capital\s*=\s*\{{\s*state\s*=\s*{capital}\s*\}}')
             self.assertIn('ADISCORD_grant_2150_technology_baseline = yes', setup)
+            self.assertIn('ADISCORD_grant_technology_profile_fragment_low_tech = yes', setup)
             self.assertIn('ADISCORD_economy_initialize_country = yes', setup)
             self.assertIn(f'load_oob = "{tag}_vorkerland_collapse"', setup)
             self.assertLess(setup.index('set_state_owner_to ='), setup.index('load_oob ='))

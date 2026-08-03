@@ -287,10 +287,11 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                 )
                 self.assertIsNotNone(tooltip_match)
                 self.assertIn(f'уровень {level}/5', tooltip_match.group(1))
-                self.assertIn(
-                    f'$ADISCORD_economy_{policy}_effects_{level}$',
-                    tooltip_match.group(1),
-                )
+                # HOI4 does not recursively resolve $KEY$ aliases in these
+                # scripted-GUI icon tooltips. Keep the hovered level fully
+                # self-contained so the player never sees a raw loc key.
+                self.assertNotIn('$ADISCORD_', tooltip_match.group(1))
+                self.assertIn('§W', tooltip_match.group(1))
 
             marker_name = f'ADISCORD_economy_{policy}_active_marker'
             marker_line = next(
@@ -374,6 +375,25 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             self.assertIn('40/70/100/140%', tooltip)
             self.assertIn('инфляц', tooltip.lower())
         self.assertIn('?ADISCORD_economy_creditworthiness|0', external_loan_tt)
+        self.assertIn('[GetADISCORDInternalBondsAvailabilityLoc]', internal_bonds_tt)
+        self.assertIn('[GetADISCORDExternalLoanAvailabilityLoc]', external_loan_tt)
+        for name in (
+            'GetADISCORDInternalBondsAvailabilityLoc',
+            'GetADISCORDExternalLoanAvailabilityLoc',
+        ):
+            self.assertIn(f'name = {name}', self.scripted_loc)
+        for key in (
+            'ADISCORD_economy_loan_blocked_technology',
+            'ADISCORD_economy_loan_blocked_ratio',
+            'ADISCORD_economy_loan_blocked_cooldown',
+            'ADISCORD_economy_loan_blocked_treasury_room',
+            'ADISCORD_economy_loan_blocked_debt_room',
+            'ADISCORD_economy_loan_blocked_creditworthiness',
+            'ADISCORD_economy_loan_blocked_default',
+            'ADISCORD_economy_loan_available_internal',
+            'ADISCORD_economy_loan_available_external',
+        ):
+            self.assertRegex(self.localisation, rf'(?m)^\s*{key}:')
 
     def test_macro_kpis_use_plain_language_dedicated_tooltips(self):
         debt_line = next(
@@ -381,7 +401,7 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             for line in self.gui.splitlines()
             if 'name = "ADISCORD_economy_kpi_debt"' in line
         )
-        status_line = next(
+        inflation_line = next(
             line
             for line in self.gui.splitlines()
             if 'name = "ADISCORD_economy_kpi_risk"' in line
@@ -392,8 +412,9 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             if 'name = "ADISCORD_economy_player_summary"' in line
         )
         self.assertIn('pdx_tooltip = "ADISCORD_economy_debt_tt"', debt_line)
-        self.assertIn('pdx_tooltip = "ADISCORD_economy_status_tt"', status_line)
-        self.assertIn('pdx_tooltip = "ADISCORD_economy_inflation_tt"', summary_line)
+        self.assertIn('text = "ADISCORD_economy_kpi_inflation"', inflation_line)
+        self.assertIn('pdx_tooltip = "ADISCORD_economy_inflation_tt"', inflation_line)
+        self.assertIn('pdx_tooltip = "ADISCORD_economy_summary_tt"', summary_line)
 
         debt_tt = re.search(
             r'(?m)^\s*ADISCORD_economy_debt_tt:\d*\s+"([^"]*)"',

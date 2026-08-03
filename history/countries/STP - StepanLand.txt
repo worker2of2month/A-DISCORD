@@ -66,18 +66,7 @@ add_ideas = {
 set_convoys = 100
 oob = "STP"
 
-set_technology = {
-	ADISCORD_tech_salvage_standards = 1
-	ADISCORD_tech_basic_fiscal_records = 1
-	ADISCORD_tech_local_grid_restoration = 1
-	ADISCORD_tech_standardized_machine_tools = 1
-	ADISCORD_tech_logistics_hub_networks = 1
-	ADISCORD_tech_postwar_weapon_standardization = 1
-	ADISCORD_tech_composite_protection_kits = 1
-	ADISCORD_tech_smart_optics = 1
-	ADISCORD_tech_drone_recon_swarms = 1
-	ADISCORD_tech_ration_distribution_systems = 1
-}
+# Starting technologies are granted by the generated STP profile on_startup.
 
 set_grand_doctrine = ADISCORD_doctrine_restoration_general_staff
 set_grand_doctrine = ADISCORD_naval_doctrine_littoral_command
