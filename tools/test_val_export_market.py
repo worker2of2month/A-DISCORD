@@ -8,6 +8,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 BUYERS = ("WRK", "STP", "NOD", "IVN", "WIT", "NAM")
 AAT = '"Arms Against Tyranny"'
+REQUIRED_EXPORT_PORTS = {
+    "WRK": ("79-79.txt", 5986),
+    "IVN": ("25-PLACEHOLDER.txt", 16568),
+    "WIT": ("26-PLACEHOLDER.txt", 16376),
+}
 
 
 def mask_comments(text: str) -> str:
@@ -232,6 +237,11 @@ def validate_export_relationships(text: str) -> None:
                     "target": "market_access_rights",
                     "value": "200",
                 },
+                {
+                    "type": "equipment_market_trade_desire",
+                    "id": buyer,
+                    "value": "200",
+                },
             ),
         )
 
@@ -280,7 +290,7 @@ class ValExportMarketTests(unittest.TestCase):
                     ),
                 )
 
-    def test_val_accepts_each_buyers_market_access_request(self) -> None:
+    def test_val_accepts_and_retains_each_buyers_market_access(self) -> None:
         for buyer in BUYERS:
             with self.subTest(buyer=buyer):
                 validate_relationship(
@@ -293,6 +303,11 @@ class ValExportMarketTests(unittest.TestCase):
                             "type": "diplo_action_acceptance",
                             "id": buyer,
                             "target": "market_access_rights",
+                            "value": "200",
+                        },
+                        {
+                            "type": "equipment_market_trade_desire",
+                            "id": buyer,
                             "value": "200",
                         },
                     ),
@@ -318,6 +333,18 @@ class ValExportMarketTests(unittest.TestCase):
         code = mask_non_code(self.ai_text)
         self.assertNotIn("give_market_access", code)
         self.assertNotRegex(code, r"(?i)\bon_[A-Za-z0-9_]*market[A-Za-z0-9_]*\b")
+
+    def test_nonadjacent_export_buyers_have_starting_trade_ports(self) -> None:
+        for buyer, (filename, province) in REQUIRED_EXPORT_PORTS.items():
+            with self.subTest(buyer=buyer, province=province):
+                state_text = (ROOT / "history" / "states" / filename).read_text(
+                    encoding="utf-8-sig"
+                )
+                port = re.compile(
+                    rf"(?s)(?<![A-Za-z0-9_]){province}\s*=\s*\{{"
+                    rf"[^}}]*\bnaval_base\s*=\s*([1-9][0-9]*)"
+                )
+                self.assertRegex(state_text, port)
 
     def test_checker_rejects_commented_aat_gates(self) -> None:
         mutated = re.sub(

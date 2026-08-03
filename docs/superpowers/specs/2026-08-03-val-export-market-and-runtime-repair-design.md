@@ -40,7 +40,9 @@ While enabled, the buyer will:
 1. Have increased `diplo_action_desire` to request `market_access_rights` from VAL.
 2. Have increased `equipment_market_trade_desire` toward VAL, making VAL the preferred seller when normal AI purchasing logic decides that equipment is needed.
 
-VAL will receive matching `diplo_action_acceptance` preferences for market-access requests from the six buyers. These preferences will use the same existence and hostility guards.
+VAL will receive matching `diplo_action_acceptance` preferences for market-access requests from the six buyers. These preferences will use the same existence and hostility guards. Runtime evidence also requires a matching `equipment_market_trade_desire` on VAL: acceptance changes only the incoming answer, while bilateral trade desire keeps VAL from immediately cancelling an established market relationship during later AI reevaluation.
+
+WRK, IVN, and WIT do not share a land border with VAL and originally had no starting naval base, so the engine applied the no-valid-trade-route penalty and VAL cancelled access. Each receives one level-1 naval base on an existing coastal province with an existing map spawn anchor. This is the minimum physical route repair; it does not grant access, equipment, factories, or subsidies.
 
 The existing strategy named `VAL_Wants_To_Sell_Stuff` currently makes VAL request access to IVN, WRK, and WIT, which models VAL as a buyer. Those reversed desires will be removed. VAL's existing infantry sale-reserve behavior will remain unless runtime evidence shows it prevents the approved export loop from functioning.
 
@@ -48,7 +50,7 @@ The existing strategy named `VAL_Wants_To_Sell_Stuff` currently makes VAL reques
 
 1. A fixed buyer evaluates its strategy and sees that VAL exists and is not its wartime enemy.
 2. The buyer gains a strong desire to request access to VAL's market.
-3. VAL evaluates the incoming request with a matching positive acceptance preference.
+3. VAL evaluates the incoming request with a matching positive acceptance preference and retains the resulting relationship through its partner-specific trade desire.
 4. After ordinary diplomacy grants access, the buyer's equipment-market preference points toward VAL.
 5. The normal HOI4 market AI decides whether the buyer has a shortage and enough civilian-industrial capacity to purchase equipment.
 6. If war begins between the two countries, both the request and acceptance preferences deactivate.
@@ -85,7 +87,8 @@ Add focused tests that fail before the market change and prove:
 - Buyer and seller strategy blocks are gated behind `Arms Against Tyranny`.
 - Every buyer desires `market_access_rights` from VAL.
 - Every buyer has `equipment_market_trade_desire` toward VAL.
-- VAL has matching acceptance preferences for all six buyers.
+- VAL has matching acceptance and relationship-retention preferences for all six buyers.
+- WRK, IVN, and WIT have a starting coastal route endpoint so the access is usable.
 - Buyer and seller preferences deactivate during a war between the pair.
 - VAL no longer requests access from IVN, WRK, or WIT as part of its supplier strategy.
 - No automatic `give_market_access` or periodic market-maintenance on-action is introduced.
@@ -127,7 +130,7 @@ The implementation is complete only when all of the following are true:
 
 1. The six approved buyers use ordinary diplomacy to seek VAL market access.
 2. Their equipment-market preference points to VAL without forcing unaffordable or unnecessary purchases.
-3. VAL is biased to accept their requests and no longer behaves as the buyer in the old supplier strategy.
+3. VAL is biased to accept and retain their requests and no longer behaves as the buyer in the old supplier strategy.
 4. War between VAL and a buyer disables the relationship preferences.
 5. All targeted automated and static gates pass.
 6. A fresh runtime exercise covers all four VAL tier families and produces zero errors sourced from VAL-specific files.

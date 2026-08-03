@@ -165,6 +165,11 @@ ADISCORD_VAL_export_accept_WRK = {
 		target = market_access_rights
 		value = 200
 	}
+	ai_strategy = {
+		type = equipment_market_trade_desire
+		id = WRK
+		value = 200
+	}
 }
 ADISCORD_VAL_export_accept_STP = {
 	allowed = {
@@ -180,6 +185,11 @@ ADISCORD_VAL_export_accept_STP = {
 		type = diplo_action_acceptance
 		id = STP
 		target = market_access_rights
+		value = 200
+	}
+	ai_strategy = {
+		type = equipment_market_trade_desire
+		id = STP
 		value = 200
 	}
 }
@@ -199,6 +209,11 @@ ADISCORD_VAL_export_accept_NOD = {
 		target = market_access_rights
 		value = 200
 	}
+	ai_strategy = {
+		type = equipment_market_trade_desire
+		id = NOD
+		value = 200
+	}
 }
 ADISCORD_VAL_export_accept_IVN = {
 	allowed = {
@@ -214,6 +229,11 @@ ADISCORD_VAL_export_accept_IVN = {
 		type = diplo_action_acceptance
 		id = IVN
 		target = market_access_rights
+		value = 200
+	}
+	ai_strategy = {
+		type = equipment_market_trade_desire
+		id = IVN
 		value = 200
 	}
 }
@@ -233,6 +253,11 @@ ADISCORD_VAL_export_accept_WIT = {
 		target = market_access_rights
 		value = 200
 	}
+	ai_strategy = {
+		type = equipment_market_trade_desire
+		id = WIT
+		value = 200
+	}
 }
 ADISCORD_VAL_export_accept_NAM = {
 	allowed = {
@@ -248,6 +273,11 @@ ADISCORD_VAL_export_accept_NAM = {
 		type = diplo_action_acceptance
 		id = NAM
 		target = market_access_rights
+		value = 200
+	}
+	ai_strategy = {
+		type = equipment_market_trade_desire
+		id = NAM
 		value = 200
 	}
 }
