@@ -385,6 +385,15 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                 rf'[\s\S]{{0,160}}maxHeight\s*=\s*{height}',
             )
 
+    def test_treasury_hint_uses_cyrillic_capable_font(self):
+        hint_line = next(
+            line
+            for line in self.gui.splitlines()
+            if 'name = "ADISCORD_economy_emergency_hint"' in line
+        )
+        self.assertIn('font = "hoi_16mbs"', hint_line)
+        self.assertNotIn('font = "hoi_14mbs"', hint_line)
+
 
 class RuntimePulseTests(unittest.TestCase):
     def test_economy_weekly_pulse_uses_the_light_settlement(self):

@@ -197,7 +197,7 @@ guiTypes = {
 			buttonType = { name = "ADISCORD_economy_action_restructure_debt" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 248 y = 302 } size = { x = 214 y = 34 } buttonText = "ADISCORD_economy_button_restructure_debt" buttonFont = "hoi_16mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_action_restructure_debt_tt" }
 			buttonType = { name = "ADISCORD_economy_action_stabilization" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 18 y = 344 } size = { x = 214 y = 34 } buttonText = "ADISCORD_economy_button_stabilization" buttonFont = "hoi_16mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_action_stabilization_tt" }
 			buttonType = { name = "ADISCORD_economy_action_war_taxes" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 248 y = 344 } size = { x = 214 y = 34 } buttonText = "ADISCORD_economy_button_war_taxes" buttonFont = "hoi_16mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_action_war_taxes_tt" }
-			instantTextboxType = { name = "ADISCORD_economy_emergency_hint" position = { x = 18 y = 386 } font = "hoi_14mbs" text = "ADISCORD_economy_emergency_hint" maxWidth = 444 maxHeight = 30 format = center }
+			instantTextboxType = { name = "ADISCORD_economy_emergency_hint" position = { x = 18 y = 386 } font = "hoi_16mbs" text = "ADISCORD_economy_emergency_hint" maxWidth = 444 maxHeight = 30 format = center }
 		}
 	}
 }
