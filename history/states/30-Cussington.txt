@@ -4,7 +4,7 @@ state={
 	provinces={
 		12434 16346 16363 16369 16441 16442 16444 
 	}
-	manpower=7243512
+	manpower=7600000
 	buildings_max_level_factor=1.000
 
 	history={

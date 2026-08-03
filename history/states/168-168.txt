@@ -4,9 +4,9 @@ state={
 	provinces={
 		721 5388 11452 11567 11664 11667 16534
 	}
-	manpower=10500
+	manpower=180000
 	buildings_max_level_factor=1
-	state_category=rural
+	state_category=town
 	local_supplies=0.25
 	history = {
 		owner = VAL

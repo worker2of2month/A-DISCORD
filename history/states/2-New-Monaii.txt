@@ -4,9 +4,9 @@ state={
 	provinces={
 		1 10 117 119 134 16445 16539 16540 16541 16547 16553 
 	}
-	manpower=2539515
+	manpower=3000000
 	buildings_max_level_factor=1.000
-	state_category=town
+	state_category=city
 	local_supplies=0.000
 
 	history={

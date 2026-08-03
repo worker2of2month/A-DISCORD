@@ -4,10 +4,10 @@ state={
 	provinces={
 		98 100 153 3250 9376 10254 16349 16456 
 	}
-	manpower=163414
+	manpower=300000
 	buildings_max_level_factor=1.000
 	local_supplies=0.000
-	state_category = rural
+	state_category = town
 	resources = {
 		steel = 11
 		aluminium = 12
