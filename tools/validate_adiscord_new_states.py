@@ -19,6 +19,7 @@ from build_adiscord_new_states import (
     VORKERLAND_CENTRES,
     state_path,
 )
+from adiscord_core_state_balance_manifest import NON_URBAN_SETTLEMENT_VPS
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -110,7 +111,10 @@ def validate_states() -> None:
     for path in (ROOT / "history/states").glob("*.txt*"):
         source = text(path)
         for province_id in map(int, re.findall(r"victory_points\s*=\s*\{\s*(\d+)", source)):
-            check(province_terrain.get(province_id) == "urban", f"{path.name}: VP {province_id} is not urban")
+            check(
+                province_terrain.get(province_id) == "urban" or province_id in NON_URBAN_SETTLEMENT_VPS,
+                f"{path.name}: VP {province_id} is not urban or an approved settlement",
+            )
 
 
 def validate_countries() -> None:
