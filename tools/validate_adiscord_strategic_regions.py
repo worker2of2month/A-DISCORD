@@ -31,7 +31,7 @@ from build_adiscord_strategic_regions import (
 ROOT = Path(__file__).resolve().parents[1]
 PHENOMENA = ("no_phenomenon", "rain_light", "rain_heavy", "snow", "blizzard", "sandstorm")
 WEATHER_VALUES = PHENOMENA + ("arctic_water", "mud", "min_snow_level")
-EXPECTED_INIT_RUN_PASSES = 90
+EXPECTED_INIT_RUN_PASSES = 720
 PHENOMENON_INDICES = {
     "no_phenomenon": 0,
     "rain_light": 1,

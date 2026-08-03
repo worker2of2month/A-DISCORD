@@ -138,7 +138,7 @@ settings = {
     # Give cold provinces a three-month pre-start weather history so January
     # snow cover is accumulated by climate instead of by the vanilla seed's
     # region-shaped first roll. This runs only while constructing a new game.
-    init_run_passes = 90
+    init_run_passes = 720
     texture_refresh_freq = 2.0
   }
 }
