@@ -4,6 +4,12 @@ spriteTypes = {
 		texturefile = "gfx/texticons/adiscord/parties/unknown_party.png"
 		legacy_lazy_load = no
 	}
+	##WRK
+	spriteType = {
+		name = "GFX_WRK_worker_revolutionary_party_texticon"
+		texturefile = "gfx/texticons/adiscord/parties/WRK/WRK_worker_revolutionary_party.png"
+		legacy_lazy_load = no
+	}
 	##STP
 	spriteType = {
 		name = "GFX_STP_hedonist_party_texticon"
@@ -17,4 +23,4 @@ spriteTypes = {
 		legacy_lazy_load = no
 	}
 
-} 
+}
