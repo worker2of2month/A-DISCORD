@@ -266,23 +266,25 @@ class ValTierTransitionContractTests(unittest.TestCase):
         ]
 
     def contract_tier_operands(self, effect: str) -> set[str]:
+        idea_commands = (
+            "add_idea",
+            "add_ideas",
+            "remove_idea",
+            "remove_ideas",
+            "swap_ideas",
+        )
         operands = set(
             re.findall(
-                r"\b(?:add_ideas?|remove_ideas?)\s*=\s*"
+                r"\b(?:add_ideas?|remove_ideas?|swap_ideas)\s*=\s*"
                 r"(VAL_contract_[A-Za-z0-9_]+)\b",
-                mask_comments(effect),
+                mask_non_code(effect),
             )
         )
-        operands.update(
-            re.findall(
-                r"\bswap_ideas\s*=\s*(VAL_contract_[A-Za-z0-9_]+)\b",
-                mask_comments(effect),
-            )
-        )
-        for swap in named_blocks(effect, "swap_ideas"):
-            operands.update(
-                re.findall(r"\bVAL_contract_[A-Za-z0-9_]+\b", mask_comments(swap))
-            )
+        for command in idea_commands:
+            for block in named_blocks(effect, command):
+                operands.update(
+                    re.findall(r"\bVAL_contract_[A-Za-z0-9_]+\b", mask_non_code(block))
+                )
         return operands
 
     def assert_authoritative_guard(self, branch: Block, variable: str, tier: int) -> None:
@@ -356,6 +358,38 @@ class ValTierTransitionContractTests(unittest.TestCase):
     def test_each_contract_tier_is_declared_once_and_apply_effects_use_only_it(self) -> None:
         hidden_ideas = only_named_block(self, self.ideas, "hidden_ideas")
         declared = set().union(*map(set, FAMILIES.values()))
+
+        for command in (
+            "add_idea",
+            "add_ideas",
+            "remove_idea",
+            "remove_ideas",
+            "swap_ideas",
+        ):
+            for form, assignment, expected in (
+                (
+                    "scalar",
+                    "VAL_contract_not_declared",
+                    {"VAL_contract_not_declared"},
+                ),
+                (
+                    "brace",
+                    "{ VAL_contract_administration_1 VAL_contract_not_declared }",
+                    {"VAL_contract_administration_1", "VAL_contract_not_declared"},
+                ),
+            ):
+                with self.subTest(command=command, form=form):
+                    probe = (
+                        "VAL_apply_contract_probe = {\n"
+                        f"\t{command} = {assignment}\n"
+                        "\t# VAL_contract_ignored_comment\n"
+                        '\tcustom_effect_tooltip = "VAL_contract_ignored_string"\n'
+                        "}"
+                    )
+                    operands = self.contract_tier_operands(probe)
+                    self.assertEqual(operands, expected)
+                    self.assertFalse(operands <= declared)
+
         for family in FAMILIES.values():
             for idea in family:
                 with self.subTest(idea=idea):
