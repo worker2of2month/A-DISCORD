@@ -1,7 +1,7 @@
 # VAL Export Market and Runtime Repair Design
 
 **Date:** 2026-08-03  
-**Status:** Approved design, awaiting written-spec review  
+**Status:** Approved
 **Scope:** Make VAL function as the preferred arms supplier for a fixed set of major countries and remove current runtime errors originating from VAL-specific files.
 
 ## Goal
