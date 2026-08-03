@@ -240,14 +240,11 @@ class ValTierTransitionContractTests(unittest.TestCase):
         self.assertLess(max(removal_positions), min(addition_positions))
 
     def transition_branch(self, effect: str, variable: str, tier: int) -> Block:
-        level_update = re.compile(
-            rf"\bset_variable\s*=\s*\{{\s*var\s*=\s*{re.escape(variable)}"
-            rf"\s+value\s*=\s*{tier}\s*\}}"
-        )
         branches = [
             branch
             for branch in direct_named_blocks(effect, "if")
-            if level_update.search(mask_comments(branch.text))
+            if len(self.direct_level_setters(branch, variable, tier)) == 1
+            and len(direct_named_blocks(branch.text, "limit", branch.start)) == 1
             and len(direct_named_blocks(branch.text, "hidden_effect", branch.start)) == 1
         ]
         self.assertEqual(
@@ -256,6 +253,37 @@ class ValTierTransitionContractTests(unittest.TestCase):
             f"expected one if branch that sets {variable} to tier {tier} and rebuilds hidden ideas",
         )
         return branches[0]
+
+    def direct_level_setters(self, branch: Block, variable: str, tier: int) -> list[Block]:
+        expected = re.compile(
+            rf"\bvar\s*=\s*{re.escape(variable)}\b.*?\bvalue\s*=\s*{tier}\b",
+            re.DOTALL,
+        )
+        return [
+            setter
+            for setter in direct_named_blocks(branch.text, "set_variable", branch.start)
+            if expected.search(mask_comments(setter.text))
+        ]
+
+    def contract_tier_operands(self, effect: str) -> set[str]:
+        operands = set(
+            re.findall(
+                r"\b(?:add_ideas?|remove_ideas?)\s*=\s*"
+                r"(VAL_contract_[A-Za-z0-9_]+)\b",
+                mask_comments(effect),
+            )
+        )
+        operands.update(
+            re.findall(
+                r"\bswap_ideas\s*=\s*(VAL_contract_[A-Za-z0-9_]+)\b",
+                mask_comments(effect),
+            )
+        )
+        for swap in named_blocks(effect, "swap_ideas"):
+            operands.update(
+                re.findall(r"\bVAL_contract_[A-Za-z0-9_]+\b", mask_comments(swap))
+            )
+        return operands
 
     def assert_authoritative_guard(self, branch: Block, variable: str, tier: int) -> None:
         limit = only_direct_named_block(self, branch.text, "limit", branch.start)
@@ -342,13 +370,7 @@ class ValTierTransitionContractTests(unittest.TestCase):
         for effect_name in apply_effect_names:
             with self.subTest(effect=effect_name):
                 effect = only_named_block(self, self.effects, effect_name)
-                used_tiers = set(
-                    re.findall(
-                        r"\b(?:add_ideas?|remove_ideas?)\s*=\s*"
-                        r"(VAL_contract_[A-Za-z0-9_]+)\b",
-                        mask_comments(effect),
-                    )
-                )
+                used_tiers = self.contract_tier_operands(effect)
                 referenced_tiers.update(used_tiers)
                 self.assertTrue(used_tiers <= declared, used_tiers - declared)
         self.assertTrue(referenced_tiers, "expected tier ideas in VAL apply effects")
