@@ -1,0 +1,18 @@
+capital = 688
+
+recruit_character = SLF_Yaroslav_Veter
+
+set_politics = {
+	ruling_party = humanism
+	last_election = "2159.1.1"
+	elections_allowed = no
+}
+set_popularities = {
+	humanism = 55
+	pragmatism = 25
+	anarchism = 12
+	etatism = 8
+}
+set_stability = 0.42
+set_war_support = 0.68
+set_research_slots = 2

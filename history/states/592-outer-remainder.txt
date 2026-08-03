@@ -4,7 +4,7 @@
 state = {
 	id = 592
 	name = "STATE_592"
-	manpower = 0
+	manpower = 1
 	state_category = rural
 	provinces = {
 		6727 8256

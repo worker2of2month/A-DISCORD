@@ -1,13 +1,14 @@
 state = {
 	id = 328
 	name = "STATE_328"
-	manpower = 40744
+	manpower = 260000
 	state_category = rural
 	history = {
 		owner = PWR
 		add_core_of = PWR
 		buildings = {
 			infrastructure = 2
+			industrial_complex = 1
 		}
 	}
 	provinces = {
@@ -15,5 +16,5 @@ state = {
 		9698
 	}
 	buildings_max_level_factor = 1.000
-	local_supplies = 1.5
+	local_supplies = 2.0
 }

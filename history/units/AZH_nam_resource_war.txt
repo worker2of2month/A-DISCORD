@@ -1,0 +1,15 @@
+division_template = {
+	name = "AZH Basin Levy"
+	division_names_group = ADISCORD_INF_01
+	regiments = {
+		ADISCORD_militia = { x = 0 y = 0 }
+		ADISCORD_militia = { x = 0 y = 1 }
+		ADISCORD_militia = { x = 1 y = 0 }
+	}
+}
+
+units = {
+	division = { division_name = { is_name_ordered = yes name_order = 20 } location = 367 division_template = "AZH Basin Levy" start_experience_factor = 0.30 start_equipment_factor = 0.90 }
+	division = { division_name = { is_name_ordered = yes name_order = 21 } location = 367 division_template = "AZH Basin Levy" start_experience_factor = 0.30 start_equipment_factor = 0.90 }
+	division = { division_name = { is_name_ordered = yes name_order = 22 } location = 367 division_template = "AZH Basin Levy" start_experience_factor = 0.25 start_equipment_factor = 0.85 }
+}

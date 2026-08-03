@@ -4,12 +4,17 @@ state={
 	provinces={
 		432 3173 4004 11406 12732 13018
 	}
-	manpower=6600
-	buildings_max_level_factor=1
-	state_category=rural
-	local_supplies=0
+	manpower = 160000
+	buildings_max_level_factor = 1.000
+	state_category = rural
+	local_supplies = 2.5
 	history = {
 		owner = NAM
-		add_core_of = NAM
+		# adiscord_nam_overseas_colony = yes
+		buildings = {
+			arms_factory = 1
+			industrial_complex = 1
+			infrastructure = 2
+		}
 	}
 }

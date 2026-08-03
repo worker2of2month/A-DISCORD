@@ -4,12 +4,10 @@ state={
 	provinces={
 		361 4081 4988 6192 6728 6774 8243 8877 9337 9664 11120 11209 11443 12296 12955 16593 
 	}
-	manpower=7432721
-	buildings_max_level_factor=1.000
-	local_supplies=0.000
+	manpower = 7430000
+	buildings_max_level_factor = 1.000
+	local_supplies = 8.0
 	state_category = large_city
-
-
     resources = {
         oil = 21
         chromium = 11
@@ -24,8 +22,9 @@ state={
         victory_points = { 8243 10 }
 
 		buildings = {
+			air_base = 3
 	        infrastructure = 5
-	        industrial_complex = 2
+	        industrial_complex = 5
 	        arms_factory = 5
 	        dockyard = 1
 	        8243 = {

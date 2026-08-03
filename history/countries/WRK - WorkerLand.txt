@@ -5,6 +5,8 @@ oob = "WRK"
 ####### Characters
 
 recruit_character = WRK_Nikita_Worcker
+recruit_character = WRK_Anton_Bagley
+recruit_character = WRK_VAD_Joint_Council
 
 ####### Faction
 

@@ -4,16 +4,16 @@ state={
 	provinces={
 		265 449 686 860 868 1423 1426 1581 1672 1969 2914 3083 3567 3997 4133 4278 5153 5358 5376 5676 6399 7434 7770 7819 8849 9464 9845 10034 10609 10624 10746 11472 16619 16633 16634
 	}
-	manpower=115000
-	buildings_max_level_factor=1
-	state_category=town
-	local_supplies=0
-
+	manpower = 720000
+	buildings_max_level_factor = 1.000
+	state_category = large_town
+	local_supplies = 3.5
 	history = {
 		owner = TRU
 		buildings = {
-			infrastructure = 2
-			industrial_complex = 1
+			arms_factory = 2
+			infrastructure = 3
+			industrial_complex = 2
 		}
 		add_core_of = TRU
 		victory_points = { 16619 5 }

@@ -4,17 +4,16 @@ state={
 	provinces={
 		1143 4841 9188 16570 16572 16575 16580 16586 16594 
 	}
-	manpower=13523891
-	buildings_max_level_factor=1.000
-	local_supplies=0.000
+	manpower = 13520000
+	buildings_max_level_factor = 1.000
+	local_supplies = 10.0
 	state_category = megalopolis
-
 	history={
 		owner = VAD
 		buildings = {
 			infrastructure = 5
-			industrial_complex = 6
-			arms_factory = 4
+			industrial_complex = 7
+			arms_factory = 5
 			anti_air_building = 1
 			commercial_nuclear_reactor = 1
 			air_base = 10

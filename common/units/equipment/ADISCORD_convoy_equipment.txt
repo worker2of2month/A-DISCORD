@@ -34,4 +34,40 @@ equipments = {
 		active = yes
 		priority = 10
 	}
+
+	ADISCORD_coastal_patrol_ship = {
+		year = 2100
+		is_archetype = yes
+		type = screen_ship
+		picture = archetype_destroyer
+		group_by = archetype
+		sprite = destroyer
+		interface_category = interface_category_screen_ships
+
+		surface_detection = 18
+		sub_detection = 10
+		fuel_consumption = 18
+		lg_armor_piercing = 3
+		armor_value = 1
+		reliability = 0.82
+		surface_visibility = 10
+		torpedo_attack = 6
+		lg_attack = 4
+		naval_speed = 31
+		naval_range = 1800
+		max_strength = 80
+		max_organisation = 40
+		anti_air_attack = 1
+		offensive_weapons = yes
+		build_cost_ic = 620
+		resources = { steel = 2 }
+	}
+
+	ADISCORD_coastal_patrol_ship_1 = {
+		year = 2100
+		archetype = ADISCORD_coastal_patrol_ship
+		type = { screen_ship }
+		active = yes
+		priority = 20
+	}
 }

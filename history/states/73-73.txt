@@ -4,16 +4,16 @@ state={
 	provinces={
 		404 930 1374 2346 2767 2916 3573 4139 4423 4795 4798 4859 4924 4931 5076 5695 5762 5878 6742 6927 7615 7954 7974 8019 8912 9266 9323 9537 9962 10323 10555 10696 10747 11072 11904 12126 12450 12692 12850 12940 12946 12984 13007 13011 16557 16571 16618 
 	}
-	manpower=160000
-	buildings_max_level_factor=1
-	state_category=town
-	local_supplies=0
-
+	manpower = 640000
+	buildings_max_level_factor = 1.000
+	state_category = town
+	local_supplies = 3.5
 	history={
 		owner = ROM
 		buildings = {
-			infrastructure = 2
-			industrial_complex = 1
+			arms_factory = 2
+			infrastructure = 3
+			industrial_complex = 2
 		}
 		add_core_of = ROM
 		victory_points = { 16571 1 }

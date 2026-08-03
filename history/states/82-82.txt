@@ -5,12 +5,16 @@ state={
 	history = {
 		owner = WRK
 		add_core_of = WRK
+		buildings = {
+			industrial_complex = 1
+			infrastructure = 2
+		}
 	}
 	provinces={
 		1764 2620 3215 3310 4590 5180 5337 5568 7357 8059 
 	}
-	manpower=0
-	buildings_max_level_factor=1
-	state_category=wasteland
-	local_supplies=0
+	manpower = 420000
+	buildings_max_level_factor = 1.000
+	state_category = rural
+	local_supplies = 2.5
 }

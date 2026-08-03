@@ -69,8 +69,8 @@ def main() -> int:
 
         if re.search(r"\b(owner|add_core_of|victory_points|buildings)\s*=", text):
             errors.append(f"{path.relative_to(ROOT)}: neutral shell has ownership/core/content history")
-        if not re.search(r"\bmanpower\s*=\s*0\b", text):
-            errors.append(f"{path.relative_to(ROOT)}: manpower must be zero")
+        if not re.search(r"\bmanpower\s*=\s*1\b", text):
+            errors.append(f"{path.relative_to(ROOT)}: neutral shell manpower must be 1")
 
     if 23 not in rows:
         errors.append("state 23 is not a generated connected remainder shell")

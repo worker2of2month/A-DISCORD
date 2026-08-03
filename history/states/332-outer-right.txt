@@ -3,7 +3,7 @@
 state = {
 	id = 332
 	name = "STATE_332"
-	manpower = 0
+	manpower = 1
 	state_category = wasteland
 	provinces = {
 		239 348 2270 2391 2890 2993 3326 4957 5635 5861 6472 6682 6901 7425 9801 10628

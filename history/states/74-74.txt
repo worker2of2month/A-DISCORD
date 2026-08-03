@@ -4,19 +4,19 @@ state={
 	provinces={
 		2197 2402 2516 2583 3492 5408 5666 5799 6543 8497 8704 12316 12541 12947 16585
 	}
-	manpower=70000
-	state_category = rural
-	buildings_max_level_factor=1
-	local_supplies=0
-
+	manpower = 1100000
+	state_category = large_town
+	buildings_max_level_factor = 1.000
+	local_supplies = 4.5
 	history = {
         owner = VLA
         buildings = {
-            infrastructure = 2
-            arms_factory = 1
+			industrial_complex = 3
+            infrastructure = 4
+            arms_factory = 2
             air_base = 1
         }
         add_core_of = VLA
-        victory_points = { 16585 3 }
+        victory_points = { 16585 5 }
 	}
 }

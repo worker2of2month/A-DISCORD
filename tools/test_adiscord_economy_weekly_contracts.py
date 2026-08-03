@@ -193,6 +193,131 @@ class WeeklyEconomyContracts(unittest.TestCase):
         )
         self.assertIn("ADISCORD_economy_light_update = yes", budget_refresh)
 
+    def test_weekly_hot_path_reuses_monthly_idea_and_policy_caches(self):
+        light = block(EFFECTS, "ADISCORD_economy_light_update")
+        self.assertIn("ADISCORD_economy_cycle_phase", light)
+        for expensive_idea_refresh in (
+            "ADISCORD_economy_recalculate_policy_modifiers = yes",
+            "ADISCORD_economy_update_model_and_cycle = yes",
+            "has_idea =",
+        ):
+            self.assertNotIn(expensive_idea_refresh, light)
+
+        model_refresh = block(EFFECTS, "ADISCORD_economy_update_model_and_cycle")
+        self.assertIn(
+            "ADISCORD_economy_has_idea_economic_system_agrarian = yes",
+            model_refresh,
+        )
+        self.assertIn("ADISCORD_economy_cycle_phase", model_refresh)
+
+        # New scripted-effect identifiers do not reliably register during the
+        # mod's iterative HOI4 hot-reload workflow. Keep this tiny hot-path
+        # calculation inline so a reload cannot produce Unknown effect-type.
+        self.assertNotIn("ADISCORD_economy_update_cycle =", EFFECTS)
+
+        for scheduled_refresh in (
+            "ADISCORD_economy_monthly_update",
+            "ADISCORD_economy_yearly_update",
+            "ADISCORD_economy_open_window",
+        ):
+            body = block(EFFECTS, scheduled_refresh)
+            self.assertIn("ADISCORD_economy_update_model_and_cycle = yes", body)
+            self.assertIn("ADISCORD_economy_recalculate_policy_modifiers = yes", body)
+
+    def test_weekly_forecast_has_no_transitive_idea_database_queries(self):
+        for hot_effect in (
+            "ADISCORD_economy_light_update",
+            "ADISCORD_economy_calculate_income",
+            "ADISCORD_economy_calculate_consumer_goods_income",
+            "ADISCORD_economy_calculate_factory_income",
+            "ADISCORD_economy_calculate_resource_income",
+            "ADISCORD_economy_calculate_expenses",
+            "ADISCORD_economy_calculate_army_expenses",
+        ):
+            self.assertNotIn("has_idea =", block(EFFECTS, hot_effect), hot_effect)
+
+        policy_refresh = block(
+            MODIFIER_EFFECTS, "ADISCORD_economy_recalculate_policy_modifiers"
+        )
+        for cache in (
+            "ADISCORD_economy_cached_consumer_goods_law_adjustment",
+            "ADISCORD_economy_cached_val_weaponry_active",
+            "ADISCORD_economy_cached_resource_trade_law_factor",
+            "ADISCORD_economy_cached_army_organization_flat_expense",
+            "ADISCORD_economy_cached_army_organization_factor",
+        ):
+            self.assertIn(cache, policy_refresh)
+
+    def test_monthly_model_refresh_checks_each_system_law_only_once(self):
+        model_refresh = block(EFFECTS, "ADISCORD_economy_update_model_and_cycle")
+        for suffix in (
+            "agrarian",
+            "industrializing",
+            "free_market",
+            "mixed",
+            "state_coordinated",
+            "planned_bureaucratic",
+            "mobilization",
+            "oligarchic_clan",
+            "technocratic",
+        ):
+            trigger_call = (
+                f"ADISCORD_economy_has_idea_economic_system_{suffix} = yes"
+            )
+            self.assertEqual(model_refresh.count(trigger_call), 1, trigger_call)
+
+        monthly = block(EFFECTS, "ADISCORD_economy_monthly_update")
+        self.assertEqual(
+            monthly.count("ADISCORD_economy_update_model_and_cycle = yes"), 1
+        )
+        self.assertIn("ADISCORD_economy_cycle_phase", monthly)
+
+    def test_hot_reloadable_economy_effects_use_stable_idea_wrappers(self):
+        self.assertNotIn("has_idea =", EFFECTS)
+        self.assertNotIn("has_idea =", MODIFIER_EFFECTS)
+
+        wrappers = {
+            "ADISCORD_economy_has_idea_civilian_economy": "civilian_economy",
+            "ADISCORD_economy_has_idea_low_economic_mobilisation": "low_economic_mobilisation",
+            "ADISCORD_economy_has_idea_partial_economic_mobilisation": "partial_economic_mobilisation",
+            "ADISCORD_economy_has_idea_war_economy": "war_economy",
+            "ADISCORD_economy_has_idea_total_economic_mobilisation": "tot_economic_mobilisation",
+            "ADISCORD_economy_has_idea_free_trade": "free_trade",
+            "ADISCORD_economy_has_idea_export_focus": "export_focus",
+            "ADISCORD_economy_has_idea_limited_exports": "limited_exports",
+            "ADISCORD_economy_has_idea_closed_economy": "closed_economy",
+            "ADISCORD_economy_has_idea_val_worldwide_famous_weaponry": "VAL_worldwide_famous_weponry",
+            "ADISCORD_economy_has_idea_society_type_information": "ADISCORD_society_type_information",
+        }
+        for suffix in (
+            "agrarian",
+            "industrializing",
+            "free_market",
+            "mixed",
+            "state_coordinated",
+            "planned_bureaucratic",
+            "mobilization",
+            "oligarchic_clan",
+            "technocratic",
+        ):
+            wrappers[f"ADISCORD_economy_has_idea_economic_system_{suffix}"] = (
+                f"ADISCORD_economic_system_{suffix}"
+            )
+        for suffix in (
+            "contract_brigades",
+            "general_staff",
+            "total_defense_grid",
+            "militia_autonomy",
+        ):
+            wrappers[f"ADISCORD_economy_has_idea_military_organization_{suffix}"] = (
+                f"ADISCORD_military_organization_{suffix}"
+            )
+
+        combined_effects = EFFECTS + MODIFIER_EFFECTS
+        for wrapper, idea in wrappers.items():
+            self.assertIn(f"{wrapper} = yes", combined_effects, wrapper)
+            self.assertIn(f"has_idea = {idea}", block(TRIGGERS, wrapper), wrapper)
+
     def test_state_control_changes_only_invalidate_existing_country_caches(self):
         control_change = block(ON_ACTIONS, "on_state_control_changed")
         self.assertEqual(control_change.count("ADISCORD_economy_mark_dirty = yes"), 2)
@@ -340,9 +465,10 @@ class WeeklyEconomyContracts(unittest.TestCase):
             self.assertRegex(ECONOMY_LOC, rf"(?m)^\s*{re.escape(key)}:\d*\s+")
         self.assertIn("ADISCORD_economy_auto_loan_popup_amount", ECONOMY_LOC)
 
-    def test_schema_eight_preserves_existing_treasury(self):
+    def test_schema_nine_initializes_policy_caches_without_resetting_treasury(self):
         migration = block(EFFECTS, "ADISCORD_economy_migrate_schema")
-        self.assertIn("value = 8", migration)
+        self.assertIn("value = 9", migration)
+        self.assertIn("ADISCORD_economy_recalculate_policy_modifiers = yes", migration)
         self.assertNotRegex(
             migration,
             r"set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_treasury\s+value\s*=\s*100",

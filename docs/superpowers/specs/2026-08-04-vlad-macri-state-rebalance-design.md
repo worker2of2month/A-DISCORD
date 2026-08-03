@@ -24,7 +24,7 @@ The combined EBA territory has 3,550,000 population, seven civilian factories, t
 
 ## Collapse military balance
 
-EBA keeps four three-battalion militia divisions. Their placement changes from four divisions stacked in Ebern to two in Ebern (province 10016), one in Noyen (province 16637), and one in Estervik (province 16617).
+EBA keeps four three-battalion militia divisions. Their placement changes from four divisions stacked at the old south-eastern anchor to two in Ebern (bay-side urban province 16623), one in Noyen (province 16637), and one in Estervik (province 16617).
 
 The setup reserve changes from 8,000 to 10,000 manpower and from 800 to 1,100 infantry equipment. No fifth division, support company, artillery, or additional equipment type is added.
 

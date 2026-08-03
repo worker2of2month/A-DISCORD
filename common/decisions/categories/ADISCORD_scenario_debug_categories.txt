@@ -1,0 +1,15 @@
+ADISCORD_scenario_debug_category = {
+	allowed = {
+		OR = {
+			tag = WRK
+			tag = VAD
+			tag = TVA
+			tag = IVN
+			tag = NAM
+			tag = EFL
+			tag = AZH
+			tag = SLF
+		}
+	}
+	visible = { is_debug = yes }
+}

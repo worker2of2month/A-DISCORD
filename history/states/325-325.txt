@@ -1,18 +1,19 @@
 state = {
 	id = 325
 	name = "STATE_325"
-	manpower = 25225
+	manpower = 290000
 	state_category = rural
 	history = {
 		owner = VAD
 		add_core_of = VAD
 		buildings = {
 			infrastructure = 2
+			industrial_complex = 1
 		}
 	}
 	provinces = {
 		1830 2469 3688 3709 4569 4781 8316 9368
 	}
 	buildings_max_level_factor = 1.000
-	local_supplies = 1.5
+	local_supplies = 2.0
 }

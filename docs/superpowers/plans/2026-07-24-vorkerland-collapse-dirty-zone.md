@@ -258,7 +258,7 @@ Roster:
 | EBA | Администрация Восточного плацдарма | Вера Кранц | 126 92 54 | VLA |
 | DVA | Долинская администрация | Карл Розен | 151 100 126 | ROM |
 | SRA | Администрация Солнечной равнины | Гелио Марр | 184 137 34 | SOL |
-| ZTA | Златореченская временная администрация | Вера Холт | 150 55 58 | TRU |
+| ZTA | Златореченская временная администрация | Виктор Холт | 150 55 58 | TRU |
 | SLA | Администрация Старолесья | Старолесская окружная управа | 52 101 58 | PWR |
 | RZA | Реакторная администрация | Реакторная техническая дирекция | 112 119 55 | PWR |
 | MLR | Республика Малой низины | Низинная временная рада | 134 112 75 | PWR |
@@ -440,7 +440,7 @@ ZTA: 199
 
 Assert: `news.0` is presentation-only and one-shot; nuke/damage occur once
 in event `.1`; teardown frees `NAM DAN VAD ZAO PWR VLA ROM SOL TRU`; setup
-precedes `load_oob`; wars occur only in delayed `.2`; state 40 follows 32.
+precedes `load_oob`; wars occur only in delayed `.2`; TGD spawns in physical state 105 between VLA and EBA.
 
 - [ ] **Step 2: Run RED**
 
@@ -619,8 +619,8 @@ Expected: PASS.
 
 **Interfaces:**
 - Produces `ADISCORD_vorkerland_apply_worker_map`,
-  `_apply_vlad_map`, `_apply_dorian_map`, `_apply_fragmented_map`.
-- Produces super-event flags for dirty opening and four outcomes.
+  `_apply_vlad_map`, `_apply_dorian_map`.
+- Produces super-event flags for dirty opening and three claimant outcomes.
 
 - [ ] **Step 1: Add failing outcome tests**
 
@@ -642,7 +642,7 @@ Expected: FAIL because final-map effects are absent.
 - Dorian candidate: TVA controls 32, 36, 37, 38 and 39; WRK/VAD cannot
   contest.
 - Candidate must remain valid for 90 days.
-- After 1080 days without a valid candidate, apply fragmentation.
+- Elapsed time alone never chooses a winner or applies a fallback map.
 
 Final maps:
 
@@ -654,8 +654,6 @@ Final maps:
 - Dorian: TVA directly receives all WRK states; `EYR/WPA/PSD/EBA/DVA/SRA/ZTA`
   administer their regions as technical dependencies; RZA becomes TVA's
   associated administration.
-- Fragmentation: white peace freezes current connected ownership; no forced
-  annexation.
 
 Use the existing Dorian victory image. Other new sprite keys may point to
 the existing civil-war image; no duplicate binary is needed.

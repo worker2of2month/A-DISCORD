@@ -32,3 +32,8 @@ add_ideas = {
 }
 
 set_research_slots = 2
+
+set_technology = {
+	ADISCORD_tech_coastal_patrols = 1
+	ADISCORD_tech_convoy_routing = 1
+}

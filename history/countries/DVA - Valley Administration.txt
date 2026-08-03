@@ -1,4 +1,4 @@
-set_politics = { ruling_party = pragmatism elections_allowed = no }
-set_popularities = { etatism = 0 chauvinism = 0 humanism = 0 pragmatism = 100 technocracy = 0 }
-recruit_character = DVA_Karl_Rosen
+set_politics = { ruling_party = etatism elections_allowed = no }
+set_popularities = { etatism = 75 chauvinism = 10 humanism = 5 pragmatism = 10 technocracy = 0 }
+recruit_character = DVA_Severin_Mark
 set_research_slots = 2

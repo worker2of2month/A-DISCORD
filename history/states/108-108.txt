@@ -4,15 +4,15 @@ state={
 	provinces={
 		2621 3297 4127 10147 11267
 	}
-	manpower=163412
-	buildings_max_level_factor=1.000
-	local_supplies=0.000
+	manpower = 220000
+	buildings_max_level_factor = 1.000
+	local_supplies = 2.5
 	state_category = rural
-
 	history={
 		owner = VAD
 		add_core_of = VAD
 		buildings = {
+			industrial_complex = 1
 	        infrastructure = 3
 	    }
 	}

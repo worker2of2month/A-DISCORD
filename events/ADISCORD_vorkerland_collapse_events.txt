@@ -33,12 +33,38 @@ country_event = {
 			}
 		}
 		random_list = {
-			60 = { set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad }
-			30 = { set_global_flag = ADISCORD_vorkerland_worker_missing }
-			10 = { set_global_flag = ADISCORD_vorkerland_worker_killed }
+			60 = { set_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+			25 = { set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad }
+			10 = { set_global_flag = ADISCORD_vorkerland_worker_missing }
+			5 = { set_global_flag = ADISCORD_vorkerland_worker_killed }
 		}
-		ADISCORD_vorkerland_teardown_confederation = yes
 		ADISCORD_vorkerland_apply_initial_map = yes
+		ADISCORD_vorkerland_teardown_confederation = yes
+		ADISCORD_vorkerland_apply_claimant_cosmetics = yes
+		ROM = {
+			set_country_leader_portrait = {
+				ideology = humanism
+				portrait = GFX_portrait_ROM_Erwin_Von_Romanovskiy_civilwar
+			}
+		}
+		TRU = {
+			set_country_leader_portrait = {
+				ideology = pragmatism
+				portrait = GFX_portrait_TRU_Nikita_Truman_civilwar
+			}
+		}
+		random_list = {
+			7 = { ADISCORD_vorkerland_form_joint_government = yes }
+			93 = { }
+		}
+		# The end of the unified state is the opening news of the collapse, not
+		# a verdict delivered years into its wars. Keep an explicit save-safe
+		# guard in addition to the news event's own fire_only_once contract.
+		if = {
+			limit = { NOT = { has_global_flag = ADISCORD_vorkerland_collapse_news_shown } }
+			set_global_flag = ADISCORD_vorkerland_collapse_news_shown
+			news_event = { id = news.0 }
+		}
 		country_event = {
 			id = ADISCORD_vorkerland_collapse.2
 			days = 1
@@ -52,10 +78,6 @@ country_event = {
 					random_days = 30
 				}
 			}
-		}
-		news_event = {
-			id = news.0
-			hours = 1
 		}
 	}
 }
@@ -76,62 +98,77 @@ country_event = {
 			limit = { VAL = { exists = yes } }
 			VAL = { VAL_handle_vorkerland_war_outbreak = yes }
 		}
-		set_global_flag = {
-			flag = ADISCORD_vorkerland_ai_consolidation_window
-			days = 60
-		}
-		set_global_flag = {
-			flag = ADISCORD_vorkerland_ai_regional_window
-			days = 540
+		if = {
+			limit = { WRK = { exists = yes } }
+			WRK = {
+				country_event = {
+					id = ADISCORD_vorkerland_collapse.31
+					days = 21
+					random_days = 14
+				}
+			}
 		}
 		if = {
 			limit = { RUS = { exists = yes } }
 			RUS = {
 				country_event = {
-					id = ADISCORD_vorkerland_collapse.23
-					days = 1080
+					id = ADISCORD_vorkerland_collapse.30
+					days = 90
+					random_days = 180
 				}
 			}
 		}
-		WRK = {
-			if = { limit = { country_exists = TVA NOT = { has_war_with = TVA } } declare_war_on = { target = TVA type = annex_everything } }
-			if = { limit = { country_exists = VAD NOT = { has_war_with = VAD } } declare_war_on = { target = VAD type = annex_everything } }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.30
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = RUS
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }
+		NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_available }
+	}
+	immediate = {
+		if = {
+			limit = {
+				IVN = { exists = yes }
+				PWR = { exists = yes is_subject = no controls_state = 90 }
+				IBL = { exists = yes is_subject = no controls_state = 91 }
+			}
+			random_list = {
+				35 = { set_global_flag = ADISCORD_vorkerland_ivanland_intervention_available }
+				65 = {
+					set_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved
+					set_global_flag = ADISCORD_vorkerland_ivanland_stayed_out
+				}
+			}
 		}
-		TVA = {
-			if = { limit = { country_exists = VAD NOT = { has_war_with = VAD } } declare_war_on = { target = VAD type = annex_everything } }
+		else = {
+				set_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved
+				set_global_flag = ADISCORD_vorkerland_ivanland_stayed_out
 		}
-		VAD = {
-			if = { limit = { country_exists = EYR NOT = { has_war_with = EYR } } declare_war_on = { target = EYR type = annex_everything } }
-			if = { limit = { country_exists = EGC NOT = { has_war_with = EGC } } declare_war_on = { target = EGC type = annex_everything } }
-		}
-		EYR = {
-			if = { limit = { country_exists = EGC NOT = { has_war_with = EGC } } declare_war_on = { target = EGC type = annex_everything } }
-		}
-		ZAO = {
-			if = { limit = { country_exists = WPA NOT = { has_war_with = WPA } } declare_war_on = { target = WPA type = annex_everything } }
-		}
-		WPA = {
-			if = { limit = { country_exists = WPS NOT = { has_war_with = WPS } } declare_war_on = { target = WPS type = annex_everything } }
-		}
-		WPS = {
-			if = { limit = { country_exists = ZAO NOT = { has_war_with = ZAO } } declare_war_on = { target = ZAO type = annex_everything } }
-		}
-		PWR = {
-			if = { limit = { country_exists = PSD NOT = { has_war_with = PSD } } declare_war_on = { target = PSD type = annex_everything } }
-		}
-		VLA = {
-			if = { limit = { country_exists = EBA NOT = { has_war_with = EBA } } declare_war_on = { target = EBA type = annex_everything } }
-		}
-		ROM = {
-			if = { limit = { country_exists = DVA NOT = { has_war_with = DVA } } declare_war_on = { target = DVA type = annex_everything } }
-		}
-		SOL = {
-			if = { limit = { country_exists = SRA NOT = { has_war_with = SRA } } declare_war_on = { target = SRA type = annex_everything } }
-		}
-		TRU = {
-			if = { limit = { country_exists = ZTA NOT = { has_war_with = ZTA } } declare_war_on = { target = ZTA type = annex_everything } }
-		}
-		ADISCORD_vorkerland_activate_stalemate_missions = yes
+	}
+}
+
+# A short mobilisation pause prevents the successor states from declaring war
+# on the day the map is rebuilt. All later wars still come from visible/AI
+# decisions and require a live common border.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.31
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = WRK
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_claim_wars_authorized }
+	}
+	immediate = {
+		set_global_flag = ADISCORD_vorkerland_claim_wars_authorized
 	}
 }
 
@@ -305,6 +342,7 @@ country_event = {
 	trigger = {
 		ADISCORD_vorkerland_worker_victory_candidate = yes
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 	}
 	immediate = { ADISCORD_vorkerland_apply_worker_map = yes }
 }
@@ -317,6 +355,7 @@ country_event = {
 	trigger = {
 		ADISCORD_vorkerland_vlad_victory_candidate = yes
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 	}
 	immediate = { ADISCORD_vorkerland_apply_vlad_map = yes }
 }
@@ -329,19 +368,31 @@ country_event = {
 	trigger = {
 		ADISCORD_vorkerland_dorian_victory_candidate = yes
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 	}
 	immediate = { ADISCORD_vorkerland_apply_dorian_map = yes }
 }
 
-country_event = {
-	id = ADISCORD_vorkerland_collapse.23
+add_namespace = ADISCORD_vorkerland_news
+
+news_event = {
+	id = ADISCORD_vorkerland_news.1
+	title = ADISCORD_vorkerland_news.1.t
+	desc = ADISCORD_vorkerland_news.1.d
+	picture = GFX_event_vorkerland_explosion
 	hidden = yes
 	is_triggered_only = yes
 	fire_only_once = yes
-	trigger = {
-		tag = RUS
-		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-	}
-	immediate = { ADISCORD_vorkerland_apply_fragmented_map = yes }
+	option = { name = ADISCORD_vorkerland_news.1.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_news.2
+	title = ADISCORD_vorkerland_news.2.t
+	desc = ADISCORD_vorkerland_news.2.d
+	picture = GFX_event_vorkerland_explosion
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_news.2.a }
 }

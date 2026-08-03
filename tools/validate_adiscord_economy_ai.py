@@ -45,6 +45,9 @@ def numeric_assignments(text: str, variable: str) -> list[float]:
 def validate() -> list[str]:
     issues: list[str] = []
     effects = strip_comments(read("common/scripted_effects/ADISCORD_economy_effects.txt"))
+    modifier_effects = strip_comments(
+        read("common/scripted_effects/ADISCORD_economy_modifier_effects.txt")
+    )
     triggers = strip_comments(read("common/scripted_triggers/ADISCORD_economy_triggers.txt"))
     on_actions = strip_comments(read("common/on_actions/00_ADISCORD_on_actions.txt"))
     default_ai = strip_comments(read("common/ai_strategy/default.txt"))
@@ -292,15 +295,30 @@ def validate() -> list[str]:
     require(re.search(r"has_army_manpower\s*=\s*\{\s*size\s*>", army_expenses) is not None,
             "army-upkeep manpower thresholds do not use the engine-supported comparison syntax")
     resource_income = block(effects, "ADISCORD_economy_calculate_resource_income")
+    policy_refresh = block(
+        modifier_effects, "ADISCORD_economy_recalculate_policy_modifiers"
+    )
     recount = block(effects, "ADISCORD_economy_recount_economic_buildings")
     require("ADISCORD_economy_resource_endowment" in resource_income,
             "strategic rent ignores the country's resource endowment")
     require("set_variable = { var = ADISCORD_economy_resource_income value = ADISCORD_economy_resource_endowment }" in resource_income,
             "strategic rent is not rooted in the cached resource endowment")
-    require("has_idea = free_trade } multiply_variable" in resource_income,
-            "trade law still grants a flat resource windfall instead of multiplying real rent")
-    require("has_idea = free_trade } add_to_variable" not in resource_income,
-            "free trade creates resource income for countries without resources")
+    require(
+        "multiply_variable = { var = ADISCORD_economy_resource_income value = ADISCORD_economy_cached_resource_trade_law_factor }"
+        in resource_income,
+        "trade law is not applied as a cached multiplier of real resource rent",
+    )
+    require(
+        "ADISCORD_economy_has_idea_free_trade = yes" in policy_refresh
+        and "var = ADISCORD_economy_cached_resource_trade_law_factor value = 1.25"
+        in policy_refresh,
+        "free trade does not refresh the cached resource-rent multiplier",
+    )
+    require(
+        "add_to_variable = { var = ADISCORD_economy_resource_income value = ADISCORD_economy_cached_resource_trade_law_factor }"
+        not in resource_income,
+        "trade law creates resource income for countries without resources",
+    )
     require("resource@steel" in recount and "resource@oil" in recount and "resource@coal" in recount,
             "owned-state refresh does not build a real resource-endowment index")
     require("check_variable = { resource@steel >" in recount,
@@ -373,8 +391,11 @@ def validate() -> list[str]:
     require("ADISCORD_economy_social_spending_mode" in idea_refresh,
             "social budget changes do not invalidate the optimized idea signature")
 
-    require("value = 8 compare = less_than" in block(effects, "ADISCORD_economy_migrate_schema"),
-            "economy save migration was not advanced to schema 8")
+    migration = block(effects, "ADISCORD_economy_migrate_schema")
+    require("value = 9 compare = less_than" in migration,
+            "economy save migration was not advanced to schema 9")
+    require("ADISCORD_economy_recalculate_policy_modifiers = yes" in migration,
+            "schema 9 does not initialize weekly policy caches for existing saves")
     cycle = block(effects, "ADISCORD_economy_update_model_and_cycle")
     require("ADISCORD_economy_cycle_phase value = 4" not in cycle
             and "ADISCORD_economy_cycle_phase value = 5" not in cycle

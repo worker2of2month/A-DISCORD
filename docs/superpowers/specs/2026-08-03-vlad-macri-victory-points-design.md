@@ -10,7 +10,7 @@ The collapse setup transfers states 197 and 311-314 to EBA. The change covers on
 
 ## VP layout
 
-- State 197: raise Ebern, province 10016, from 5 to 10 VP. It remains EBA's capital.
+- State 197: place Ebern on the bay-side urban province 16623 at 10 VP. It remains EBA's capital; province 10016 is the rugged south-eastern approach, not the city centre.
 - State 312: add Noyen, urban province 16637, as a 3 VP secondary city.
 - State 313: add Estervik, urban province 16617, as a 3 VP secondary city. This is the missing city visible in the supplied screenshot.
 - State 311: add Felden, province 5905, as a 1 VP railway-junction settlement. Province 5905 joins three local rail routes.

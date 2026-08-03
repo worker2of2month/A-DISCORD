@@ -20,16 +20,16 @@ add_ideas = {
 }
 
 set_politics = {
-	ruling_party = pragmatism
+	ruling_party = humanism
 	last_election = "2110.12.01"
 	elections_allowed = no
 }
 set_popularities = {
-	etatism = 24
-	chauvinism = 26
-	humanism = 4
+	etatism = 10
+	chauvinism = 6
+	humanism = 60
 	utilitarism = 6
-	pragmatism = 40
+	pragmatism = 18
 }
 
 set_stability = 0.31

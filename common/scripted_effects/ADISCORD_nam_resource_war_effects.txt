@@ -1,0 +1,261 @@
+ADISCORD_nam_resource_war_start = {
+	NAM = {
+		if = {
+			limit = { is_subject = yes }
+			overlord = { set_autonomy = { target = NAM autonomy_state = autonomy_free } }
+		}
+		if = { limit = { is_in_faction = yes } leave_faction = yes }
+	}
+	if = {
+		limit = { ADISCORD_nam_resource_war_ready = yes }
+		set_global_flag = ADISCORD_nam_resource_war_started
+		clr_global_flag = ADISCORD_nam_resource_war_scheduled
+		clr_global_flag = ADISCORD_nam_resource_war_EFL_defeated
+		clr_global_flag = ADISCORD_nam_resource_war_AZH_defeated
+		clr_global_flag = ADISCORD_nam_resource_war_SLF_defeated
+
+		NAM = {
+			add_ideas = ADISCORD_nam_extraction_defence_corps
+			add_war_support = 0.20
+			load_oob = "NAM_resource_war"
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 6000 producer = NAM }
+			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 80 producer = NAM }
+			add_equipment_to_stockpile = { type = support_equipment amount = 900 producer = NAM }
+			add_equipment_to_stockpile = { type = artillery_equipment amount = 700 producer = NAM }
+		}
+		EFL = {
+			if = { limit = { is_in_faction = yes } leave_faction = yes }
+			add_ideas = ADISCORD_nam_restitution_coalition
+			add_war_support = 0.18
+			load_oob = "EFL_nam_resource_war"
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = EFL }
+			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 100 producer = EFL }
+			add_equipment_to_stockpile = { type = support_equipment amount = 350 producer = EFL }
+		}
+		AZH = {
+			if = { limit = { is_in_faction = yes } leave_faction = yes }
+			add_ideas = ADISCORD_nam_restitution_coalition
+			add_war_support = 0.22
+			load_oob = "AZH_nam_resource_war"
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1800 producer = AZH }
+		}
+
+		# Only states with a direct material interest mobilise expeditionary corps:
+		# Rahma wants capped fuel prices; Mazar wants priority access for water convoys.
+		if = {
+			limit = { RHM = { exists = yes is_subject = no has_war = no } }
+			RHM = { add_ideas = ADISCORD_nam_profitable_volunteer_contracts }
+		}
+		if = {
+			limit = { MZR = { exists = yes is_subject = no has_war = no } }
+			MZR = { add_ideas = ADISCORD_nam_profitable_volunteer_contracts }
+		}
+
+		EFL = {
+			create_faction_from_template = {
+				template = faction_template_ADISCORD_standard
+				name = faction_eflor_azhar_restitution_alliance
+			}
+			add_to_faction = AZH
+		}
+
+		67 = { add_claim_by = EFL add_claim_by = AZH }
+		EFL = { declare_war_on = { target = NAM type = annex_everything } }
+		AZH = {
+			add_to_war = {
+				targeted_alliance = EFL
+				enemy = NAM
+				hostility_reason = asked_to_join
+				single_target_only = yes
+			}
+		}
+
+		NAM = {
+			country_event = { id = ADISCORD_nam_resource_war.2 days = 24 random_days = 18 }
+			country_event = { id = ADISCORD_nam_resource_war.50 days = 420 }
+			news_event = { id = ADISCORD_nam_resource_news.1 hours = 1 }
+		}
+	}
+}
+
+ADISCORD_nam_resource_war_start_mainland_rebellion = {
+	if = {
+		limit = {
+			ADISCORD_nam_resource_war_active = yes
+			688 = { is_owned_by = NAM }
+		}
+		SLF = {
+			transfer_state = 688
+			set_capital = { state = 688 }
+			add_ideas = ADISCORD_nam_insurgent_columns
+			add_war_support = 0.20
+			load_oob = "SLF_nam_resource_war"
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1800 producer = SLF }
+			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 20 producer = SLF }
+			add_equipment_to_stockpile = { type = support_equipment amount = 220 producer = SLF }
+			declare_war_on = { target = NAM type = annex_everything }
+		}
+		688 = { add_core_of = SLF set_state_controller_to = SLF }
+	}
+	else = {
+		set_global_flag = ADISCORD_nam_resource_war_SLF_defeated
+	}
+}
+
+ADISCORD_nam_resource_war_clear_temporary_support = {
+	NAM = { remove_ideas = ADISCORD_nam_extraction_defence_corps }
+	EFL = { remove_ideas = ADISCORD_nam_restitution_coalition }
+	AZH = { remove_ideas = ADISCORD_nam_restitution_coalition }
+	RHM = { remove_ideas = ADISCORD_nam_profitable_volunteer_contracts }
+	MZR = { remove_ideas = ADISCORD_nam_profitable_volunteer_contracts }
+	if = { limit = { SLF = { exists = yes } } SLF = { remove_ideas = ADISCORD_nam_insurgent_columns } }
+}
+
+ADISCORD_nam_resource_war_end_all_wars = {
+	if = { limit = { NAM = { has_war_with = EFL } } NAM = { white_peace = EFL } }
+	if = { limit = { NAM = { has_war_with = AZH } } NAM = { white_peace = AZH } }
+	if = { limit = { SLF = { exists = yes has_war_with = NAM } } SLF = { white_peace = NAM } }
+}
+
+ADISCORD_nam_resource_war_resolve_coalition_victory = {
+	if = {
+		limit = { ADISCORD_nam_resource_war_active = yes }
+		set_global_flag = ADISCORD_nam_resource_war_resolved
+		set_global_flag = ADISCORD_nam_resource_war_coalition_victory
+		clr_global_flag = ADISCORD_nam_resource_war_started
+		ADISCORD_nam_resource_war_end_all_wars = yes
+
+		EFL = {
+			if = {
+				limit = { SLF = { exists = yes } }
+				annex_country = { target = SLF transfer_troops = no }
+			}
+			transfer_state = 67
+			transfer_state = 225
+			transfer_state = 228
+			transfer_state = 230
+			transfer_state = 231
+			transfer_state = 688
+		}
+		67 = { add_core_of = EFL set_state_controller_to = EFL }
+		225 = { add_core_of = EFL set_state_controller_to = EFL }
+		228 = { add_core_of = EFL set_state_controller_to = EFL }
+		230 = { add_core_of = EFL set_state_controller_to = EFL }
+		231 = { add_core_of = EFL set_state_controller_to = EFL }
+		688 = { remove_core_of = SLF remove_core_of = NAM add_core_of = EFL set_state_controller_to = EFL }
+
+		AZH = {
+			transfer_state = 226
+			transfer_state = 227
+			transfer_state = 229
+			transfer_state = 689
+		}
+		226 = { add_core_of = AZH set_state_controller_to = AZH }
+		227 = { add_core_of = AZH set_state_controller_to = AZH }
+		229 = { add_core_of = AZH set_state_controller_to = AZH }
+		689 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }
+
+		if = {
+			limit = { NAM = { exists = yes } }
+			EFL = { annex_country = { target = NAM transfer_troops = no } }
+		}
+
+		ADISCORD_nam_resource_war_clear_temporary_support = yes
+		EFL = { news_event = { id = ADISCORD_nam_resource_news.2 hours = 1 } }
+	}
+}
+
+ADISCORD_nam_resource_war_resolve_nam_victory = {
+	if = {
+		limit = { ADISCORD_nam_resource_war_active = yes }
+		set_global_flag = ADISCORD_nam_resource_war_resolved
+		set_global_flag = ADISCORD_nam_resource_war_nam_victory
+		clr_global_flag = ADISCORD_nam_resource_war_started
+		ADISCORD_nam_resource_war_end_all_wars = yes
+		NAM = {
+			if = {
+				limit = { SLF = { exists = yes } }
+				annex_country = { target = SLF transfer_troops = no }
+			}
+			transfer_state = 688
+		}
+		688 = { remove_core_of = SLF add_core_of = NAM set_state_controller_to = NAM }
+
+		# A narrow Eflorian border district is the only annexation. Azhar survives,
+		# while recognising a Svetlogorsk claim to the Black Basin.
+		NAM = { transfer_state = 68 }
+		68 = { add_core_of = NAM set_state_controller_to = NAM }
+		69 = { add_claim_by = NAM }
+		NAM = {
+			set_country_flag = NAM_treaty_independence_recognised
+			add_ideas = ADISCORD_nam_treaty_independence
+			add_stability = 0.15
+		}
+		ADISCORD_nam_resource_war_clear_temporary_support = yes
+		NAM = { news_event = { id = ADISCORD_nam_resource_news.3 hours = 1 } }
+	}
+}
+
+ADISCORD_nam_resource_war_check_nam_victory = {
+	if = {
+		limit = {
+			ADISCORD_nam_resource_war_active = yes
+			ADISCORD_nam_victory_record_complete = yes
+		}
+		ADISCORD_nam_resource_war_resolve_nam_victory = yes
+	}
+}
+
+ADISCORD_nam_resource_war_mark_eflor_defeated = {
+	set_global_flag = ADISCORD_nam_resource_war_EFL_defeated
+	if = { limit = { NAM = { has_war_with = EFL } } NAM = { white_peace = EFL } }
+	ADISCORD_nam_resource_war_check_nam_victory = yes
+}
+
+ADISCORD_nam_resource_war_mark_azhar_defeated = {
+	set_global_flag = ADISCORD_nam_resource_war_AZH_defeated
+	if = { limit = { NAM = { has_war_with = AZH } } NAM = { white_peace = AZH } }
+	ADISCORD_nam_resource_war_check_nam_victory = yes
+}
+
+ADISCORD_nam_resource_war_mark_rebels_defeated = {
+	set_global_flag = ADISCORD_nam_resource_war_SLF_defeated
+	if = { limit = { NAM = { has_war_with = SLF } } NAM = { white_peace = SLF } }
+	if = {
+		limit = { 688 = { is_owned_by = SLF } }
+		NAM = { transfer_state = 688 }
+		688 = { remove_core_of = SLF set_state_controller_to = NAM }
+	}
+	ADISCORD_nam_resource_war_check_nam_victory = yes
+}
+
+ADISCORD_nam_resource_war_timeout_resolution = {
+	if = {
+		limit = { ADISCORD_nam_resource_war_active = yes }
+		if = {
+			limit = { NAM = { exists = yes controls_state = 67 } }
+			ADISCORD_nam_resource_war_resolve_nam_victory = yes
+		}
+		else = {
+			ADISCORD_nam_resource_war_resolve_coalition_victory = yes
+		}
+	}
+}
+
+# Compact entry points for the shared debug category. They deliberately call
+# the production effects instead of duplicating any resource-war mechanics.
+ADISCORD_nam_debug_start_resource_war = {
+	set_global_flag = ADISCORD_vorkerland_collapse_wars_started
+	clr_global_flag = ADISCORD_nam_resource_war_scheduled
+	clr_global_flag = ADISCORD_nam_resource_war_started
+	clr_global_flag = ADISCORD_nam_resource_war_resolved
+	ADISCORD_nam_resource_war_start = yes
+}
+
+ADISCORD_nam_debug_resolve_coalition_victory = {
+	ADISCORD_nam_resource_war_resolve_coalition_victory = yes
+}
+
+ADISCORD_nam_debug_resolve_nam_victory = {
+	ADISCORD_nam_resource_war_resolve_nam_victory = yes
+}

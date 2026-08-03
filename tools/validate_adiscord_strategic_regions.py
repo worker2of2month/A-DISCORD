@@ -197,6 +197,10 @@ def validate_climate_profiles(errors: list[str]) -> None:
         errors.append("climate profiles: phenomenon weights were incorrectly normalized to a total of 1")
     if max(minimum_snow_level(climate, month) for climate in TEMPERATURES for month in range(12)) > 0.30:
         errors.append("climate profiles: min_snow_level exceeds the vanilla-scale maximum of 0.30")
+    if max(phenomenon("temperate_continental", month)[3] for month in range(12)) > 0.18:
+        errors.append("climate profiles: temperate continental snow reaches too far south")
+    if max(phenomenon("temperate_wet", month)[3] for month in range(12)) > 0.10:
+        errors.append("climate profiles: temperate wet snow reaches too far south")
 
 
 def validate_global_weather_settings(errors: list[str]) -> None:

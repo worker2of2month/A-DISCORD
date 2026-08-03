@@ -1,4 +1,4 @@
-set_politics = { ruling_party = pragmatism elections_allowed = no }
-set_popularities = { etatism = 0 chauvinism = 0 humanism = 0 pragmatism = 100 technocracy = 0 }
+set_politics = { ruling_party = humanism elections_allowed = yes }
+set_popularities = { etatism = 5 chauvinism = 5 humanism = 75 pragmatism = 10 technocracy = 5 }
 recruit_character = EYR_Irina_Koval
 set_research_slots = 2

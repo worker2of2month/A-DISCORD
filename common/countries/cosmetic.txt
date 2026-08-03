@@ -2,4 +2,55 @@ STP_empire = {
 	color = rgb { 54 0 74 }
 	color_ui = rgb { 115 115 115 }
 }
- 
+
+# Both claim the Vorkerland imperial succession, but their palettes deliberately
+# encode rival political projects rather than recolouring one shared banner.
+WRK_vorkerland_emergency = {
+	color = rgb { 72 61 57 }
+	color_ui = rgb { 196 93 52 }
+}
+
+WRK_vorkerland_utilitarian_republic = {
+	color = rgb { 45 43 40 }
+	color_ui = rgb { 207 91 25 }
+}
+
+VAD_vorkerland_restoration = {
+	color = rgb { 19 45 105 }
+	color_ui = rgb { 65 112 210 }
+}
+
+WRK_vorkerland_joint_government = {
+	color = rgb { 58 57 63 }
+	color_ui = rgb { 214 180 102 }
+}
+
+PWR_rimat_republic = {
+	color = rgb { 55 92 109 }
+	color_ui = rgb { 194 126 84 }
+}
+
+VLA_volnograd_republic = {
+	color = rgb { 108 46 46 }
+	color_ui = rgb { 214 123 105 }
+}
+
+ZAO_zaozersk_republic = {
+	color = rgb { 23 71 101 }
+	color_ui = rgb { 227 168 68 }
+}
+
+ROM_frealor_republic = {
+	color = rgb { 121 80 104 }
+	color_ui = rgb { 191 131 165 }
+}
+
+TRU_zolotorevsk_republic = {
+	color = rgb { 114 37 37 }
+	color_ui = rgb { 190 82 69 }
+}
+
+SLF_svetlogorsk_republic = {
+	color = rgb { 31 105 95 }
+	color_ui = rgb { 77 173 153 }
+}

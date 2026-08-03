@@ -65,13 +65,4 @@ scripted_gui = {
 		}
 		effects = { superevents_button_click = { clr_global_flag = superevent_vorkerland_dorian_victory } }
 	}
-
-	superevent_vorkerland_fragmented = {
-		window_name = "superevent_vorkerland_fragmented"
-		context_type = player_context
-		visible = {
-			has_global_flag = superevent_vorkerland_fragmented
-		}
-		effects = { superevents_button_click = { clr_global_flag = superevent_vorkerland_fragmented } }
-	}
 }

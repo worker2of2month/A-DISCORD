@@ -19,8 +19,15 @@ ADISCORD_vorkerland_collapse_category = {
 			tag = SRA
 			tag = TRU
 			tag = ZTA
+			tag = TGD
+			tag = IBA
+			tag = IBL
+			tag = IVN
 		}
 	}
 
-	visible = { has_active_mission = ADISCORD_vorkerland_stalemate_deadline }
+	visible = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+	}
 }

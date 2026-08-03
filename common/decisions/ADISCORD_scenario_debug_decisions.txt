@@ -1,0 +1,118 @@
+ADISCORD_scenario_debug_category = {
+	ADISCORD_debug_start_vorkerland_collapse = {
+		allowed = { tag = WRK }
+		visible = { NOT = { has_global_flag = ADISCORD_vorkerland_collapse_started } }
+		cost = 0
+		complete_effect = { country_event = { id = ADISCORD_vorkerland_collapse.1 } }
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_add_vorkerland_war_exhaustion = {
+		allowed = { OR = { tag = WRK tag = VAD } }
+		visible = { has_global_flag = ADISCORD_vorkerland_collapse_started }
+		cost = 0
+		complete_effect = {
+			add_to_variable = {
+				var = ADISCORD_vorkerland_civil_war_exhaustion
+				value = 25
+			}
+			clamp_variable = {
+				var = ADISCORD_vorkerland_civil_war_exhaustion
+				min = 0
+				max = 100
+			}
+			ADISCORD_vorkerland_refresh_civil_war_exhaustion = yes
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_reset_vorkerland_war_exhaustion = {
+		allowed = { OR = { tag = WRK tag = VAD } }
+		visible = { has_global_flag = ADISCORD_vorkerland_collapse_started }
+		cost = 0
+		complete_effect = { ADISCORD_vorkerland_reset_civil_war_exhaustion = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_form_vorkerland_joint_government = {
+		allowed = { tag = WRK }
+		visible = {
+			has_global_flag = ADISCORD_vorkerland_collapse_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			VAD = { exists = yes }
+		}
+		cost = 0
+		complete_effect = { ADISCORD_vorkerland_form_joint_government = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_force_vorkerland_central_victory = {
+		allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
+		visible = {
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		cost = 0
+		complete_effect = {
+			if = { limit = { tag = WRK } ADISCORD_vorkerland_apply_worker_map = yes }
+			else_if = { limit = { tag = VAD } ADISCORD_vorkerland_apply_vlad_map = yes }
+			else_if = { limit = { tag = TVA } ADISCORD_vorkerland_apply_dorian_map = yes }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_open_ivanland_intervention = {
+		allowed = { tag = IVN }
+		visible = { NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved } }
+		cost = 0
+		complete_effect = {
+			if = {
+				limit = { NOT = { has_global_flag = ADISCORD_vorkerland_collapse_started } WRK = { exists = yes } }
+				WRK = { country_event = { id = ADISCORD_vorkerland_collapse.1 } }
+			}
+			set_global_flag = ADISCORD_vorkerland_ivanland_intervention_available
+			set_global_flag = ADISCORD_vorkerland_claim_wars_authorized
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_resolve_ivanland_success = {
+		allowed = { tag = IVN }
+		visible = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active }
+		cost = 0
+		complete_effect = { ADISCORD_vorkerland_ivanland_intervention_success = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_resolve_ivanland_failure = {
+		allowed = { tag = IVN }
+		visible = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active }
+		cost = 0
+		complete_effect = { ADISCORD_vorkerland_ivanland_intervention_failure = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_start_resource_war = {
+		allowed = { OR = { tag = NAM tag = EFL tag = AZH tag = SLF } }
+		visible = { NOT = { has_global_flag = ADISCORD_nam_resource_war_started } }
+		cost = 0
+		complete_effect = { ADISCORD_nam_debug_start_resource_war = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_resolve_coalition_victory = {
+		allowed = { OR = { tag = NAM tag = EFL tag = AZH tag = SLF } }
+		visible = { has_global_flag = ADISCORD_nam_resource_war_started }
+		cost = 0
+		complete_effect = { ADISCORD_nam_debug_resolve_coalition_victory = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_resolve_nam_victory = {
+		allowed = { OR = { tag = NAM tag = EFL tag = AZH tag = SLF } }
+		visible = { has_global_flag = ADISCORD_nam_resource_war_started }
+		cost = 0
+		complete_effect = { ADISCORD_nam_debug_resolve_nam_victory = yes }
+		ai_will_do = { factor = 0 }
+	}
+}

@@ -96,7 +96,7 @@ BASE_REGIONS = (
     Region(21, "western-reactor-zone", "Западная реакторная зона", "arid", (152, 153, 154, 155, 156, 160, 223, 224)),
     Region(22, "loren-corridor", "Лоренский коридор", "arid", (167, 169, 170, 171, 172, 173, 203, 204, 205, 211, 216, 217)),
     Region(23, "southern-reactor-zone", "Южная реакторная зона", "hot_arid", (165, 166, 209, 210, 212, 213, 214, 215, 218, 219, 222)),
-    Region(24, "mardar-lowlands", "Мардарская низина", "hot_arid", (67, 68, 69, 70, 174, 175)),
+    Region(24, "mardar-lowlands", "Мардарская низина", "hot_arid", (67, 68, 69, 70, 174, 175, 688, 689)),
     Region(25, "southern-islands", "Южные острова", "tropical_maritime", (200, 225, 226, 227, 228, 229, 230, 231, 232)),
     Region(40, "kadir-coast", "Кадирское побережье", "hot_arid", tuple(range(234, 265))),
     Region(41, "mazar-oases", "Мазарские оазисы", "hot_arid", tuple(range(265, 287))),
@@ -118,6 +118,7 @@ OUTER_REGION_SPECS = {
     "left_cool_highlands": ("left-cool-highlands", "Левые прохладные нагорья", "cool_highland"),
     "left_temperate_wet": ("left-temperate-riverlands", "Левые умеренные речные земли", "temperate_wet"),
     "left_temperate_continental": ("left-temperate-interior", "Левый умеренный материк", "temperate_continental"),
+    "left_temperate_highlands": ("left-temperate-highlands", "Левое умеренное нагорье", "temperate_highland"),
     "left_warm_interior": ("left-warm-interior", "Левые тёплые внутренние земли", "warm_semiarid"),
     "left_southern_coast": ("left-southern-coast", "Левое южное побережье", "warm_maritime"),
     "right_polar": ("right-polar-lands", "Правый полярный край", "polar"),
@@ -130,6 +131,7 @@ OUTER_REGION_SPECS = {
     "right_cool_highlands": ("right-cool-highlands", "Правые прохладные нагорья", "cool_highland"),
     "right_temperate_wet": ("right-temperate-riverlands", "Правые умеренные речные земли", "temperate_wet"),
     "right_temperate_continental": ("right-temperate-interior", "Правый умеренный материк", "temperate_continental"),
+    "right_temperate_highlands": ("right-temperate-highlands", "Правое умеренное нагорье", "temperate_highland"),
     "world_polar": ("world-polar", "Полярные земли", "polar"),
     "world_subarctic_maritime": ("world-subarctic-coast", "Субарктическое побережье", "subarctic_maritime"),
     "world_subarctic_continental": ("world-subarctic-interior", "Субарктическая тайга", "subarctic_continental"),
@@ -161,6 +163,7 @@ OUTER_REGION_NAMES = {
     "left_cool_highlands": "Западное нагорье",
     "left_temperate_wet": "Западное междуречье",
     "left_temperate_continental": "Западные равнины",
+    "left_temperate_highlands": "Западное умеренное нагорье",
     "left_warm_interior": "Юго-западные степи",
     "left_southern_coast": "Юго-западное побережье",
     "right_polar": "Северо-восточная тундра",
@@ -173,6 +176,7 @@ OUTER_REGION_NAMES = {
     "right_cool_highlands": "Восточное нагорье",
     "right_temperate_wet": "Восточное междуречье",
     "right_temperate_continental": "Восточные равнины",
+    "right_temperate_highlands": "Восточное умеренное нагорье",
 }
 
 OUTER_CLIMATE_BELTS = {
@@ -185,6 +189,7 @@ OUTER_CLIMATE_BELTS = {
     "left_cool_highlands": 2,
     "left_temperate_wet": 3,
     "left_temperate_continental": 3,
+    "left_temperate_highlands": 3,
     "left_warm_interior": 4,
     "left_southern_coast": 4,
     "right_polar": 0,
@@ -197,6 +202,7 @@ OUTER_CLIMATE_BELTS = {
     "right_cool_highlands": 2,
     "right_temperate_wet": 3,
     "right_temperate_continental": 3,
+    "right_temperate_highlands": 3,
     "world_polar": 0,
     "world_subarctic_maritime": 1,
     "world_subarctic_continental": 1,
@@ -271,7 +277,7 @@ OUTER_X_BOUNDS = {
     "right": (2800.0, 3200.0, 3550.0, 3900.0, 4250.0, 4800.0),
 }
 OUTER_Y_BOUNDS = {
-    "left": ((0.0, 300.0), (300.0, 650.0), (650.0, 1050.0), (1050.0, 1550.0), (1550.0, 2048.0)),
+    "left": ((0.0, 300.0), (300.0, 650.0), (650.0, 900.0), (900.0, 1550.0), (1550.0, 2048.0)),
     "right": ((0.0, 300.0), (300.0, 520.0), (520.0, 780.0), (780.0, 1200.0)),
 }
 
@@ -361,10 +367,10 @@ TEMPERATURES = {
     "cool_maritime": ((-12, 3), (-11, 4), (-7, 8), (-1, 14), (4, 19), (9, 23), (12, 26), (11, 25), (7, 20), (2, 14), (-4, 8), (-9, 4)),
     "boreal_wet": ((-16, -2), (-14, 0), (-8, 7), (-1, 14), (5, 20), (10, 25), (13, 28), (12, 27), (7, 21), (1, 13), (-6, 6), (-13, 0)),
     "cool_continental": ((-18, -3), (-16, 0), (-9, 7), (-1, 15), (5, 21), (10, 27), (13, 30), (11, 28), (6, 22), (-1, 14), (-8, 6), (-15, 0)),
-    "temperate_continental": ((-10, 5), (-8, 7), (-3, 13), (3, 19), (8, 24), (13, 29), (16, 32), (14, 30), (9, 25), (3, 18), (-3, 11), (-8, 6)),
-    "temperate_wet": ((-6, 7), (-4, 9), (1, 14), (6, 19), (10, 24), (14, 28), (17, 31), (16, 30), (12, 26), (7, 20), (1, 13), (-4, 8)),
+    "temperate_continental": ((-4, 8), (-3, 9), (0, 13), (4, 19), (8, 24), (13, 29), (16, 32), (14, 30), (9, 25), (3, 18), (0, 11), (-3, 8)),
+    "temperate_wet": ((-1, 9), (0, 10), (2, 14), (6, 19), (10, 24), (14, 28), (17, 31), (16, 30), (12, 26), (7, 20), (2, 13), (0, 9)),
     "cool_highland": ((-18, -2), (-16, 0), (-10, 6), (-4, 12), (1, 17), (6, 22), (9, 25), (8, 23), (3, 18), (-3, 11), (-9, 5), (-15, 0)),
-    "temperate_highland": ((-10, 4), (-8, 6), (-3, 11), (2, 16), (6, 21), (10, 25), (13, 28), (12, 27), (8, 22), (3, 16), (-3, 10), (-8, 5)),
+    "temperate_highland": ((-7, 5), (-6, 6), (-2, 11), (2, 16), (6, 21), (10, 25), (13, 28), (12, 27), (8, 22), (3, 16), (-2, 10), (-6, 6)),
     "warm_semiarid": ((1, 16), (3, 19), (7, 23), (11, 28), (15, 33), (19, 37), (22, 40), (21, 39), (17, 34), (11, 28), (6, 22), (2, 18)),
     "arid_highland": ((-5, 12), (-3, 15), (2, 20), (7, 25), (12, 30), (16, 34), (19, 37), (18, 36), (13, 31), (7, 25), (1, 18), (-3, 13)),
     "arid": ((2, 18), (4, 21), (9, 27), (14, 33), (19, 38), (23, 42), (26, 45), (25, 44), (20, 39), (14, 32), (8, 25), (3, 19)),
@@ -426,33 +432,33 @@ def phenomenon(climate: str, month: int) -> tuple[float, float, float, float, fl
         return (0.48, 0.35, 0.12, 0.10, 0.02, 0.55, 0.0)
     if climate == "cool_maritime":
         if winter:
-            return (0.36, 0.75, 0.18, 0.30, 0.08, 0.55, 0.0)
+            return (0.40, 0.75, 0.18, 0.24, 0.05, 0.55, 0.0)
         if shoulder:
             return (0.36, 0.85, 0.22, 0.08, 0.02, 0.90, 0.0)
         return (0.43, 0.75, 0.20, 0.0, 0.0, 0.65, 0.0)
     if climate == "boreal_wet":
         if winter:
-            return (0.36, 0.30, 0.10, 0.40, 0.12, 0.70, 0.0)
+            return (0.38, 0.30, 0.10, 0.32, 0.08, 0.70, 0.0)
         if shoulder:
             return (0.34, 0.50, 0.20, 0.15, 0.03, 1.20, 0.0)
         return (0.40, 0.55, 0.25, 0.0, 0.0, 0.90, 0.0)
     if climate in ("cool_continental", "cool_highland"):
         if winter:
-            return (0.39, 0.12, 0.04, 0.45, 0.15, 0.65, 0.0)
+            return (0.42, 0.12, 0.04, 0.34, 0.10, 0.65, 0.0)
         if shoulder:
             return (0.43, 0.35, 0.12, 0.12, 0.03, 1.15, 0.0)
         return (0.51, 0.40, 0.15, 0.0, 0.0, 0.75, 0.0)
     if climate in ("temperate_continental", "temperate_highland"):
         if winter:
-            return (0.45, 0.18, 0.06, 0.35, 0.08, 0.80, 0.0)
+            return (0.52, 0.18, 0.06, 0.14, 0.02, 0.60, 0.0)
         if shoulder:
-            return (0.43, 0.40, 0.14, 0.07, 0.01, 1.25, 0.0)
+            return (0.46, 0.40, 0.14, 0.03, 0.0, 1.10, 0.0)
         return (0.50, 0.45, 0.18, 0.0, 0.0, 0.80, 0.0)
     if climate == "temperate_wet":
         if winter:
-            return (0.35, 0.45, 0.16, 0.22, 0.05, 0.90, 0.0)
+            return (0.42, 0.45, 0.16, 0.08, 0.01, 0.75, 0.0)
         if shoulder:
-            return (0.32, 0.65, 0.28, 0.03, 0.0, 1.40, 0.0)
+            return (0.35, 0.65, 0.28, 0.01, 0.0, 1.25, 0.0)
         return (0.38, 0.60, 0.30, 0.0, 0.0, 1.00, 0.0)
     if climate == "warm_semiarid":
         return (0.64, 0.12, 0.04, 0.03 if winter else 0.0, 0.0, 0.35 if shoulder else 0.12, 0.25 if summer else 0.15)
@@ -841,9 +847,9 @@ def load_generated_outer_regions() -> tuple[Region, ...]:
             # one latitude band, so they intentionally remain one region each.
             target_provinces = 1.0
         elif landmass == "left":
-            target_provinces = 520.0
+            target_provinces = (180.0, 180.0, 220.0, 420.0, 520.0)[belt]
         else:
-            target_provinces = (520.0, 400.0, 300.0, 250.0)[belt]
+            target_provinces = (220.0, 200.0, 220.0, 250.0)[belt]
         partition_weights = {
             state_id: (1.0 if landmass == "world" else province_weights[state_id] / target_provinces)
             for state_id in zone_states

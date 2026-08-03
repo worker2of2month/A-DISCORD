@@ -252,7 +252,7 @@ def render_state(state: PlannedState, data: dict[int, ProvinceData]) -> str:
         "state = {\n"
         f"\tid = {state.state_id}\n"
         f'\tname = "STATE_{state.state_id}"\n'
-        "\tmanpower = 0\n"
+        "\tmanpower = 1\n"
         f"\tstate_category = {category}\n"
         "\tprovinces = {\n"
         f"{format_provinces(state.provinces)}\n"

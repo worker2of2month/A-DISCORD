@@ -76,7 +76,7 @@ ADISCORD_economy_migrate_schema = {
 		limit = {
 			OR = {
 				NOT = { has_variable = ADISCORD_economy_schema_version }
-				check_variable = { var = ADISCORD_economy_schema_version value = 8 compare = less_than }
+				check_variable = { var = ADISCORD_economy_schema_version value = 9 compare = less_than }
 			}
 		}
 		ADISCORD_economy_initialize_variables = yes
@@ -89,8 +89,11 @@ ADISCORD_economy_migrate_schema = {
 		if = { limit = { NOT = { has_variable = ADISCORD_economy_construction_budget_change_cooldown } } set_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 0 } }
 		if = { limit = { NOT = { has_variable = ADISCORD_economy_social_budget_change_cooldown } } set_variable = { var = ADISCORD_economy_social_budget_change_cooldown value = 0 } }
 		if = { limit = { NOT = { has_variable = ADISCORD_economy_gui_page } } set_variable = { var = ADISCORD_economy_gui_page value = 0 } }
+		# Schema 9 adds scalar policy caches consumed by the weekly hot path.
+		# Refresh them once for existing saves before their next weekly settlement.
+		ADISCORD_economy_recalculate_policy_modifiers = yes
 		set_variable = { var = ADISCORD_economy_last_idea_signature value = -1 }
-		set_variable = { var = ADISCORD_economy_schema_version value = 8 }
+		set_variable = { var = ADISCORD_economy_schema_version value = 9 }
 		set_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 }
 	}
 }
@@ -194,7 +197,7 @@ ADISCORD_economy_initialize_variables = {
 
 ADISCORD_economy_set_default_values = {
 	set_variable = { var = ADISCORD_economy_initialized value = 1 }
-	set_variable = { var = ADISCORD_economy_schema_version value = 8 }
+	set_variable = { var = ADISCORD_economy_schema_version value = 9 }
 	set_variable = { var = ADISCORD_economy_treasury value = 100 }
 	set_variable = { var = ADISCORD_economy_treasury_cap value = 500 }
 	set_variable = { var = ADISCORD_economy_monthly_income value = 0 }
@@ -378,7 +381,21 @@ ADISCORD_economy_monthly_update = {
 	ADISCORD_economy_update_public_investment_stock = yes
 	ADISCORD_economy_calculate_development_multiplier = yes
 	ADISCORD_economy_check_economic_development_upgrade = yes
-	ADISCORD_economy_update_model_and_cycle = yes
+	# Kept inline: a newly named scripted effect is not registered reliably by
+	# HOI4's hot reload, while these four cached-variable checks are cheap.
+	set_variable = { var = ADISCORD_economy_cycle_phase value = 1 }
+	if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } } set_variable = { var = ADISCORD_economy_cycle_phase value = 0 } }
+	if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 5 compare = greater_than_or_equals } check_variable = { var = ADISCORD_economy_stretched_level value = 2 compare = less_than } } set_variable = { var = ADISCORD_economy_cycle_phase value = 2 } }
+	if = {
+		limit = {
+			OR = {
+				check_variable = { var = ADISCORD_economy_inflation value = 30 compare = greater_than_or_equals }
+				check_variable = { var = ADISCORD_economy_stretched_level value = 3 compare = greater_than_or_equals }
+				check_variable = { var = ADISCORD_economy_debt_crisis_level value = 3 compare = greater_than_or_equals }
+			}
+		}
+		set_variable = { var = ADISCORD_economy_cycle_phase value = 3 }
+	}
 	ADISCORD_economy_refresh_spending_ideas = yes
 	ADISCORD_economy_update_gui = yes
 	ADISCORD_economy_clear_recent_action_flags = yes
@@ -431,8 +448,9 @@ ADISCORD_economy_full_refresh_if_needed = {
 	}
 }
 ADISCORD_economy_light_update = {
-	# Cheap TDA-style forecast/update. No every_owned_state scan here.
-	ADISCORD_economy_recalculate_policy_modifiers = yes
+	# Cheap TDA-style forecast/update. Idea-backed economic model and policy
+	# factors are cached by monthly/yearly refreshes and by opening the window;
+	# the weekly cash pulse must not query every law again.
 	ADISCORD_economy_calculate_income = yes
 	ADISCORD_economy_calculate_macro_indicators = yes
 	ADISCORD_economy_calculate_expenses = yes
@@ -440,7 +458,21 @@ ADISCORD_economy_light_update = {
 	# Every caller, including budget buttons and treasury actions, must refresh
 	# the weekly KPI immediately instead of leaving it stale until the next pulse.
 	ADISCORD_economy_calculate_weekly_budget = yes
-	ADISCORD_economy_update_model_and_cycle = yes
+	# Kept inline: a newly named scripted effect is not registered reliably by
+	# HOI4's hot reload, while these four cached-variable checks are cheap.
+	set_variable = { var = ADISCORD_economy_cycle_phase value = 1 }
+	if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } } set_variable = { var = ADISCORD_economy_cycle_phase value = 0 } }
+	if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 5 compare = greater_than_or_equals } check_variable = { var = ADISCORD_economy_stretched_level value = 2 compare = less_than } } set_variable = { var = ADISCORD_economy_cycle_phase value = 2 } }
+	if = {
+		limit = {
+			OR = {
+				check_variable = { var = ADISCORD_economy_inflation value = 30 compare = greater_than_or_equals }
+				check_variable = { var = ADISCORD_economy_stretched_level value = 3 compare = greater_than_or_equals }
+				check_variable = { var = ADISCORD_economy_debt_crisis_level value = 3 compare = greater_than_or_equals }
+			}
+		}
+		set_variable = { var = ADISCORD_economy_cycle_phase value = 3 }
+	}
 }
 
 ADISCORD_economy_prepare_weekly_country = {
@@ -470,7 +502,19 @@ ADISCORD_economy_weekly_player_refresh = {
 	ADISCORD_economy_calculate_macro_indicators = yes
 	ADISCORD_economy_calculate_expenses = yes
 	ADISCORD_economy_calculate_monthly_balance = yes
-	ADISCORD_economy_update_model_and_cycle = yes
+	set_variable = { var = ADISCORD_economy_cycle_phase value = 1 }
+	if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } } set_variable = { var = ADISCORD_economy_cycle_phase value = 0 } }
+	if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 5 compare = greater_than_or_equals } check_variable = { var = ADISCORD_economy_stretched_level value = 2 compare = less_than } } set_variable = { var = ADISCORD_economy_cycle_phase value = 2 } }
+	if = {
+		limit = {
+			OR = {
+				check_variable = { var = ADISCORD_economy_inflation value = 30 compare = greater_than_or_equals }
+				check_variable = { var = ADISCORD_economy_stretched_level value = 3 compare = greater_than_or_equals }
+				check_variable = { var = ADISCORD_economy_debt_crisis_level value = 3 compare = greater_than_or_equals }
+			}
+		}
+		set_variable = { var = ADISCORD_economy_cycle_phase value = 3 }
+	}
 	ADISCORD_economy_calculate_development_multiplier = yes
 	ADISCORD_economy_refresh_spending_ideas = yes
 	ADISCORD_economy_update_gui = yes
@@ -551,11 +595,7 @@ ADISCORD_economy_calculate_consumer_goods_income = {
 	add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = ADISCORD_economy_consumer_goods_cluster_temp }
 	if = { limit = { ADISCORD_economy_has_industrial_civilian_expansion = yes } add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = 0.6 } }
 	if = { limit = { ADISCORD_economy_has_industrial_state_planning = yes } add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = 0.3 } }
-	if = { limit = { has_idea = civilian_economy } add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = 0.7 } }
-	if = { limit = { has_idea = low_economic_mobilisation } add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = 0.4 } }
-	if = { limit = { has_idea = partial_economic_mobilisation } add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = -0.2 } }
-	if = { limit = { has_idea = war_economy } add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = -0.5 } }
-	if = { limit = { has_idea = tot_economic_mobilisation } add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = -0.9 } }
+	add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = ADISCORD_economy_cached_consumer_goods_law_adjustment }
 	if = { limit = { ADISCORD_economy_model_is_decentralized_market = yes } add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = 0.4 } }
 	if = { limit = { ADISCORD_economy_model_is_mixed = yes } add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = 0.2 } }
 	if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes } add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = -0.4 } }
@@ -571,7 +611,7 @@ ADISCORD_economy_calculate_factory_income = {
 				ADISCORD_economy_model_is_decentralized_market = yes
 				ADISCORD_economy_model_is_mixed = yes
 				ADISCORD_economy_model_is_oligarchic_clan = yes
-				has_idea = VAL_worldwide_famous_weponry
+				check_variable = { var = ADISCORD_economy_cached_val_weaponry_active value = 1 compare = greater_than_or_equals }
 				ADISCORD_economy_has_taxation_industrial_tariffs = yes
 				ADISCORD_economy_has_taxation_extraction_quotas = yes
 			}
@@ -581,14 +621,16 @@ ADISCORD_economy_calculate_factory_income = {
 	}
 	if = { limit = { ADISCORD_economy_has_taxation_industrial_tariffs = yes } add_to_variable = { var = ADISCORD_economy_factory_income value = 0.4 } }
 	if = { limit = { ADISCORD_economy_has_taxation_extraction_quotas = yes } add_to_variable = { var = ADISCORD_economy_factory_income value = 0.3 } }
-	if = { limit = { has_idea = VAL_worldwide_famous_weponry } add_to_variable = { var = ADISCORD_economy_factory_income value = 0.9 } }
+	set_temp_variable = { var = ADISCORD_economy_val_weaponry_income_temp value = ADISCORD_economy_cached_val_weaponry_active }
+	multiply_temp_variable = { var = ADISCORD_economy_val_weaponry_income_temp value = 0.9 }
+	add_to_variable = { var = ADISCORD_economy_factory_income value = ADISCORD_economy_val_weaponry_income_temp }
 	if = {
 		limit = {
 			OR = {
 				ADISCORD_economy_model_is_decentralized_market = yes
 				ADISCORD_economy_model_is_mixed = yes
 				ADISCORD_economy_model_is_oligarchic_clan = yes
-				has_idea = VAL_worldwide_famous_weponry
+				check_variable = { var = ADISCORD_economy_cached_val_weaponry_active value = 1 compare = greater_than_or_equals }
 				ADISCORD_economy_has_taxation_industrial_tariffs = yes
 				ADISCORD_economy_has_taxation_extraction_quotas = yes
 			}
@@ -617,10 +659,7 @@ ADISCORD_economy_calculate_resource_income = {
 		clamp_temp_variable = { var = ADISCORD_economy_resource_industry_temp min = 0 max = 1.5 }
 		add_to_variable = { var = ADISCORD_economy_resource_income value = ADISCORD_economy_resource_industry_temp }
 	}
-	if = { limit = { has_idea = free_trade } multiply_variable = { var = ADISCORD_economy_resource_income value = 1.25 } }
-	if = { limit = { has_idea = export_focus } multiply_variable = { var = ADISCORD_economy_resource_income value = 1.15 } }
-	if = { limit = { has_idea = limited_exports } multiply_variable = { var = ADISCORD_economy_resource_income value = 1.05 } }
-	if = { limit = { has_idea = closed_economy } multiply_variable = { var = ADISCORD_economy_resource_income value = 0.80 } }
+	multiply_variable = { var = ADISCORD_economy_resource_income value = ADISCORD_economy_cached_resource_trade_law_factor }
 	if = { limit = { ADISCORD_economy_has_taxation_industrial_tariffs = yes } multiply_variable = { var = ADISCORD_economy_resource_income value = 1.10 } }
 	if = { limit = { ADISCORD_economy_has_taxation_extraction_quotas = yes } multiply_variable = { var = ADISCORD_economy_resource_income value = 1.25 } }
 	if = { limit = { ADISCORD_economy_model_is_fragmented = yes } multiply_variable = { var = ADISCORD_economy_resource_income value = 0.70 } }
@@ -773,10 +812,8 @@ ADISCORD_economy_calculate_army_expenses = {
 	if = { limit = { ADISCORD_army_development_at_least_3 = yes } add_to_variable = { var = ADISCORD_economy_army_expenses value = 0.5 } }
 	if = { limit = { ADISCORD_army_development_at_least_4 = yes } add_to_variable = { var = ADISCORD_economy_army_expenses value = 0.75 } }
 	if = { limit = { ADISCORD_army_development_at_least_5 = yes } add_to_variable = { var = ADISCORD_economy_army_expenses value = 0.75 } }
-	if = { limit = { has_idea = ADISCORD_military_organization_contract_brigades } add_to_variable = { var = ADISCORD_economy_army_expenses value = 0.5 } }
-	if = { limit = { has_idea = ADISCORD_military_organization_general_staff } add_to_variable = { var = ADISCORD_economy_army_expenses value = 0.75 } }
-	if = { limit = { has_idea = ADISCORD_military_organization_total_defense_grid } add_to_variable = { var = ADISCORD_economy_army_expenses value = 1.0 } }
-	if = { limit = { has_idea = ADISCORD_military_organization_militia_autonomy } multiply_variable = { var = ADISCORD_economy_army_expenses value = 0.85 } }
+	add_to_variable = { var = ADISCORD_economy_army_expenses value = ADISCORD_economy_cached_army_organization_flat_expense }
+	multiply_variable = { var = ADISCORD_economy_army_expenses value = ADISCORD_economy_cached_army_organization_factor }
 	if = { limit = { has_war = yes } multiply_variable = { var = ADISCORD_economy_army_expenses value = 1.25 } }
 	if = { limit = { ADISCORD_army_development_at_least_4 = yes } multiply_variable = { var = ADISCORD_economy_army_expenses value = 1.10 } }
 	if = { limit = { ADISCORD_army_development_at_least_5 = yes } multiply_variable = { var = ADISCORD_economy_army_expenses value = 1.05 } }
@@ -2273,6 +2310,7 @@ ADISCORD_economy_open_window = {
 	ADISCORD_economy_initialize_country = yes
 	ADISCORD_economy_full_refresh = yes
 	ADISCORD_economy_update_model_and_cycle = yes
+	ADISCORD_economy_recalculate_policy_modifiers = yes
 	ADISCORD_economy_light_update = yes
 	ADISCORD_economy_calculate_development_multiplier = yes
 	set_variable = { var = ADISCORD_economy_show_window value = 1 }
@@ -3052,35 +3090,18 @@ ADISCORD_economy_ai_yearly_policy = {
 ADISCORD_economy_update_model_and_cycle = {
 	# V7: explicit economic-system laws are authoritative when present.
 	# If an old save has no ADISCORD_economic_system_* law, fall back to the old inferred model logic.
-	set_variable = { var = ADISCORD_economy_model value = 2 }
-
-	if = { limit = { has_idea = ADISCORD_economic_system_agrarian } set_variable = { var = ADISCORD_economy_model value = 0 } }
-	if = { limit = { has_idea = ADISCORD_economic_system_industrializing } set_variable = { var = ADISCORD_economy_model value = 2 } }
-	if = { limit = { has_idea = ADISCORD_economic_system_free_market } set_variable = { var = ADISCORD_economy_model value = 1 } }
-	if = { limit = { has_idea = ADISCORD_economic_system_mixed } set_variable = { var = ADISCORD_economy_model value = 2 } }
-	if = { limit = { has_idea = ADISCORD_economic_system_state_coordinated } set_variable = { var = ADISCORD_economy_model value = 3 } }
-	if = { limit = { has_idea = ADISCORD_economic_system_planned_bureaucratic } set_variable = { var = ADISCORD_economy_model value = 4 } }
-	if = { limit = { has_idea = ADISCORD_economic_system_mobilization } set_variable = { var = ADISCORD_economy_model value = 5 } }
-	if = { limit = { has_idea = ADISCORD_economic_system_oligarchic_clan } set_variable = { var = ADISCORD_economy_model value = 6 } }
-	if = { limit = { has_idea = ADISCORD_economic_system_technocratic } set_variable = { var = ADISCORD_economy_model value = 7 } }
-
-	if = {
-		limit = {
-			NOT = {
-				OR = {
-					has_idea = ADISCORD_economic_system_agrarian
-					has_idea = ADISCORD_economic_system_industrializing
-					has_idea = ADISCORD_economic_system_free_market
-					has_idea = ADISCORD_economic_system_mixed
-					has_idea = ADISCORD_economic_system_state_coordinated
-					has_idea = ADISCORD_economic_system_planned_bureaucratic
-					has_idea = ADISCORD_economic_system_mobilization
-					has_idea = ADISCORD_economic_system_oligarchic_clan
-					has_idea = ADISCORD_economic_system_technocratic
-				}
-			}
-		}
-
+	# The category is a law list, so exactly one branch can be active. A single
+	# if/else_if chain avoids querying the same nine idea IDs a second time.
+	if = { limit = { ADISCORD_economy_has_idea_economic_system_agrarian = yes } set_variable = { var = ADISCORD_economy_model value = 0 } }
+	else_if = { limit = { ADISCORD_economy_has_idea_economic_system_industrializing = yes } set_variable = { var = ADISCORD_economy_model value = 2 } }
+	else_if = { limit = { ADISCORD_economy_has_idea_economic_system_free_market = yes } set_variable = { var = ADISCORD_economy_model value = 1 } }
+	else_if = { limit = { ADISCORD_economy_has_idea_economic_system_mixed = yes } set_variable = { var = ADISCORD_economy_model value = 2 } }
+	else_if = { limit = { ADISCORD_economy_has_idea_economic_system_state_coordinated = yes } set_variable = { var = ADISCORD_economy_model value = 3 } }
+	else_if = { limit = { ADISCORD_economy_has_idea_economic_system_planned_bureaucratic = yes } set_variable = { var = ADISCORD_economy_model value = 4 } }
+	else_if = { limit = { ADISCORD_economy_has_idea_economic_system_mobilization = yes } set_variable = { var = ADISCORD_economy_model value = 5 } }
+	else_if = { limit = { ADISCORD_economy_has_idea_economic_system_oligarchic_clan = yes } set_variable = { var = ADISCORD_economy_model value = 6 } }
+	else_if = { limit = { ADISCORD_economy_has_idea_economic_system_technocratic = yes } set_variable = { var = ADISCORD_economy_model value = 7 } }
+	else = {
 		set_variable = { var = ADISCORD_economy_model value = 2 }
 		if = { limit = { ADISCORD_economy_has_industrial_artisan_markets = yes ADISCORD_state_development_at_most_2 = yes } set_variable = { var = ADISCORD_economy_model value = 0 } }
 		if = { limit = { ADISCORD_economy_has_taxation_light_dues = yes ADISCORD_economy_has_labor_loose_contracts = yes } set_variable = { var = ADISCORD_economy_model value = 1 } }

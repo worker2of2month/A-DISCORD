@@ -4,15 +4,16 @@ state={
 	provinces={
 		1029 3218 4130 5135 5380 6574 6801 7764 12072
 	}
-	manpower=0
-
-	state_category = wasteland
-	buildings_max_level_factor=1.000
-	local_supplies=0.000
-
+	manpower = 360000
+	state_category = rural
+	buildings_max_level_factor = 1.000
+	local_supplies = 2.5
 	history = {
         owner = PWR
         add_core_of = PWR
-        set_demilitarized_zone = yes
+		buildings = {
+			industrial_complex = 1
+			infrastructure = 2
+		}
 	}
 }

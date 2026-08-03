@@ -4,14 +4,18 @@ state={
 	provinces={
 		882 5681 5788 6010 6418 6714 6866 10381 10716 10882 11396 11458
 	}
-	manpower=0
-
-	state_category = wasteland
-	buildings_max_level_factor=1.000
-	local_supplies=0.000
-
+	manpower = 1450000
+	state_category = large_city
+	buildings_max_level_factor = 1.000
+	local_supplies = 5.0
 	history = {
         owner = IVN
         add_core_of = IVN
+		buildings = {
+			air_base = 2
+			arms_factory = 3
+			industrial_complex = 4
+			infrastructure = 4
+		}
 	}
 }

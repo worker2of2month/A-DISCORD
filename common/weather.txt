@@ -135,7 +135,7 @@ settings = {
     provinces_per_update = 584
     regions_per_update = 7
     # A-Discord has a fully replaced map and a different strategic-region order.
-    # Give cold provinces a three-month pre-start weather history so January
+    # Give cold provinces a deep pre-start weather history so January
     # snow cover is accumulated by climate instead of by the vanilla seed's
     # region-shaped first roll. This runs only while constructing a new game.
     init_run_passes = 720
@@ -164,4 +164,3 @@ weather_effects = {
   	weather_effect = { entity = sandstorm_entity }
   }
 }
-

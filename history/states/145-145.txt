@@ -4,13 +4,17 @@ state={
 	provinces={
 		765 2168 3448 3887 5282 6729 6749 10605 11658 
 	}
-	manpower=45000
-	state_category = rural
-	buildings_max_level_factor=1
-	local_supplies=0
-
+	manpower = 420000
+	state_category = town
+	buildings_max_level_factor = 1.000
+	local_supplies = 3.0
 	history={
 		owner = ROM
 		add_core_of = ROM
+		buildings = {
+			arms_factory = 2
+			industrial_complex = 1
+			infrastructure = 3
+		}
 	}
 }

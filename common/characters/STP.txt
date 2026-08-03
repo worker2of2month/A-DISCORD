@@ -69,7 +69,7 @@ characters = {
 		name = STP_Roland_Keitel
 		portraits = {
 			army = {
-				large = GFX_portrait_STP_general_1
+				large = GFX_portrait_STP_Roland_Keitel
 			}
 		}
 		corps_commander = {
@@ -87,7 +87,7 @@ characters = {
 		name = STP_Maurice_Dallon
 		portraits = {
 			army = {
-				large = GFX_portrait_STP_general_2
+				large = GFX_portrait_STP_Maurice_Dallon
 			}
 		}
 		corps_commander = {
@@ -105,7 +105,7 @@ characters = {
 		name = STP_Leonid_Barchel
 		portraits = {
 			army = {
-				large = GFX_portrait_STP_general_3
+				large = GFX_portrait_STP_Leonid_Barchel
 			}
 		}
 		corps_commander = {
@@ -123,7 +123,7 @@ characters = {
 		name = STP_Edmund_Ravel
 		portraits = {
 			army = {
-				large = GFX_portrait_STP_general_4
+				large = GFX_portrait_STP_Edmund_Ravel
 			}
 		}
 		corps_commander = {
@@ -141,7 +141,7 @@ characters = {
 		name = STP_Viktor_Marent
 		portraits = {
 			army = {
-				large = GFX_portrait_STP_general_5
+				large = GFX_portrait_STP_Viktor_Marent
 			}
 		}
 		corps_commander = {
@@ -159,7 +159,7 @@ characters = {
 		name = STP_Severin_Drake
 		portraits = {
 			army = {
-				large = GFX_portrait_STP_field_marshal_1
+				large = GFX_portrait_STP_Severin_Drake
 			}
 		}
 		field_marshal = {
@@ -177,7 +177,7 @@ characters = {
 		name = STP_August_Veil
 		portraits = {
 			army = {
-				large = GFX_portrait_STP_field_marshal_2
+				large = GFX_portrait_STP_August_Veil
 			}
 		}
 		field_marshal = {

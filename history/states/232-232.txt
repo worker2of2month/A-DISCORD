@@ -4,12 +4,17 @@ state={
 	provinces={
 		11546
 	}
-	manpower=3000
-	buildings_max_level_factor=1
-	state_category=rural
-	local_supplies=0
+	manpower = 120000
+	buildings_max_level_factor = 1.000
+	state_category = rural
+	local_supplies = 1.5
 	history = {
 		owner = PIV
 		add_core_of = PIV
+		buildings = {
+			industrial_complex = 1
+			infrastructure = 2
+		}
+		victory_points = { 11546 1 }
 	}
 }

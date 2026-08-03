@@ -1,7 +1,7 @@
 state = {
 	id = 69
 	name = "STATE_69"
-	manpower = 145000
+	manpower = 320000
 	state_category = town
 	resources = {
 		oil = 3
@@ -11,10 +11,12 @@ state = {
 		owner = AZH
 		add_core_of = AZH
 		buildings = {
-			infrastructure = 2
+			infrastructure = 3
 			industrial_complex = 2
 			arms_factory = 1
 			air_base = 1
+			dockyard = 1
+			493 = { naval_base = 1 }
 		}
 	}
 	provinces = {
@@ -27,5 +29,5 @@ state = {
 		12837 12937 13019
 	}
 	buildings_max_level_factor = 1.000
-	local_supplies = 3.0
+	local_supplies = 4.0
 }

@@ -474,7 +474,7 @@ def climate_region(landmass: str, stats: dict[str, object]) -> str:
                 return "right_cool_maritime"
             return "right_boreal_wet" if wet else "right_cool_continental"
         if highland:
-            return "right_cool_highlands"
+            return "right_temperate_highlands"
         return "right_temperate_wet" if wet else "right_temperate_continental"
 
     if y < 300:
@@ -483,13 +483,13 @@ def climate_region(landmass: str, stats: dict[str, object]) -> str:
         if highland:
             return "left_cold_highlands"
         return "left_subarctic_maritime" if maritime else "left_subarctic_continental"
-    if y < 1050:
+    if y < 900:
         if highland:
             return "left_cool_highlands"
         return "left_cool_maritime" if maritime else "left_cool_continental"
     if y < 1550:
         if highland:
-            return "left_cool_highlands"
+            return "left_temperate_highlands"
         return "left_temperate_wet" if wet else "left_temperate_continental"
     return "left_southern_coast" if maritime else "left_warm_interior"
 
@@ -627,7 +627,7 @@ def render_state(state: PlannedState, data: dict[int, ProvinceData]) -> str:
         "state = {\n"
         f"\tid = {state.state_id}\n"
         f'\tname = "STATE_{state.state_id}"\n'
-        "\tmanpower = 0\n"
+        "\tmanpower = 1\n"
         f"\tstate_category = {category}\n"
         "\tprovinces = {\n"
         f"{format_provinces(state.provinces)}\n"

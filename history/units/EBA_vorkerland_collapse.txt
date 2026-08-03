@@ -9,14 +9,28 @@ division_template = {
 units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 1 }
-		location = 10016
+		location = 16623
 		division_template = "EBA Collapse Militia"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.70
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 2 }
-		location = 10016
+		location = 16623
+		division_template = "EBA Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.70
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 3 }
+		location = 16637
+		division_template = "EBA Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.70
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 4 }
+		location = 16617
 		division_template = "EBA Collapse Militia"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.70

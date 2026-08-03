@@ -9,17 +9,57 @@ from pathlib import Path
 from PIL import Image
 
 from build_adiscord_new_states import (
+    AFRELA_LEGACY_VICTORY_POINTS,
     CAPITALS,
     LEGACY_OWNER_GAPS,
     LEGACY_OWNER_OVERRIDES,
     MINOR_VPS,
+    NAM_LEGACY_VICTORY_POINTS,
     SECONDARY_CENTRES,
+    STATE_PROFILES,
     STATE_RESOURCES,
     STARTING_OWNERS,
     VORKERLAND_CENTRES,
+    VORKERLAND_LEGACY_PROFILES,
+    VORKERLAND_MINOR_VPS,
+    render_state,
     state_path,
 )
 from adiscord_core_state_balance_manifest import NON_URBAN_SETTLEMENT_VPS
+
+
+APPROVED_NON_URBAN_SETTLEMENT_VPS = NON_URBAN_SETTLEMENT_VPS | frozenset(
+    province_id
+    for points in (
+        *AFRELA_LEGACY_VICTORY_POINTS.values(),
+        *NAM_LEGACY_VICTORY_POINTS.values(),
+    )
+    for province_id, _value in points
+) | frozenset(province_id for province_id, _value in VORKERLAND_MINOR_VPS.values())
+
+EBA_EXPECTED_VPS = {
+    197: {16623: 10},
+    311: {5905: 1},
+    312: {16637: 3},
+    313: {16617: 3},
+    314: {5405: 1},
+}
+
+EBA_EXPECTED_VP_NAMES = {
+    16623: "Эберн",
+    5905: "Фельден",
+    16637: "Нойен",
+    16617: "Эстервик",
+    5405: "Линден",
+}
+
+EBA_EXPECTED_STATE_PROFILES = {
+    197: {"population": 1_050_000, "category": "large_town", "infrastructure": 4, "civilian": 3, "military": 1, "air_base": 1, "supplies": 4.5},
+    311: {"population": 750_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 0, "air_base": 0, "supplies": 2.5},
+    312: {"population": 650_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "air_base": 0, "supplies": 3.0},
+    313: {"population": 550_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 0, "air_base": 0, "supplies": 3.0},
+    314: {"population": 550_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 0, "air_base": 0, "supplies": 3.0},
+}
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -51,6 +91,42 @@ def block(source: str, name: str) -> str:
                 return source[start + 1:index]
     ERRORS.append(f"unterminated scripted block {name}")
     return ""
+
+
+def building_level(source: str, name: str) -> int:
+    match = re.search(rf"(?m)^\s*{re.escape(name)}\s*=\s*(\d+)", source)
+    return int(match.group(1)) if match else 0
+
+
+def state_profile(source: str) -> dict[str, int | float | str]:
+    history = block(source, "history")
+    buildings = block(history, "buildings")
+    return {
+        "population": int(re.search(r"(?m)^\s*manpower\s*=\s*(\d+)", source).group(1)),
+        "category": re.search(r"(?m)^\s*state_category\s*=\s*(\w+)", source).group(1),
+        "infrastructure": building_level(buildings, "infrastructure"),
+        "civilian": building_level(buildings, "industrial_complex"),
+        "military": building_level(buildings, "arms_factory"),
+        "air_base": building_level(buildings, "air_base"),
+        "supplies": float(re.search(r"(?m)^\s*local_supplies\s*=\s*([\d.]+)", source).group(1)),
+    }
+
+
+def normalized_builder_profile(state_id: int) -> dict[str, int | float | str]:
+    profile = (
+        VORKERLAND_LEGACY_PROFILES[state_id]
+        if state_id in VORKERLAND_LEGACY_PROFILES
+        else STATE_PROFILES[state_id]
+    )
+    return {
+        "population": int(profile["population"]),
+        "category": str(profile["category"]),
+        "infrastructure": int(profile["infrastructure"]),
+        "civilian": int(profile.get("civilian", profile.get("industry", 0))),
+        "military": int(profile.get("military", 0)),
+        "air_base": int(profile.get("air_base", 0)),
+        "supplies": float(profile["supplies"]),
+    }
 
 
 def validate_states() -> None:
@@ -97,11 +173,102 @@ def validate_states() -> None:
         check(bool(re.search(rf"(?m)^\s*owner\s*=\s*{owner}\s*$", source)), f"legacy state {state_id}: expected owner {owner}")
         check(bool(re.search(rf"(?m)^\s*add_core_of\s*=\s*{owner}\s*$", source)), f"legacy state {state_id}: missing {owner} core")
 
-    centres = {**CAPITALS, **SECONDARY_CENTRES, **MINOR_VPS, **VORKERLAND_CENTRES}
+    for state_id, expected_vps in EBA_EXPECTED_VPS.items():
+        source = text(state_path(state_id))
+        actual_vps = {
+            int(province_id): int(value)
+            for province_id, value in re.findall(
+                r"victory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}", source
+            )
+        }
+        for province_id, value in expected_vps.items():
+            check(
+                actual_vps.get(province_id) == value,
+                f"EBA state {state_id}: expected VP {province_id}:{value}",
+            )
+        if state_id in STARTING_OWNERS:
+            rendered_vps = {
+                int(province_id): int(value)
+                for province_id, value in re.findall(
+                    r"victory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}",
+                    render_state(state_id, STARTING_OWNERS[state_id]),
+                )
+            }
+            for province_id, value in expected_vps.items():
+                check(
+                    rendered_vps.get(province_id) == value,
+                    f"EBA generator state {state_id}: expected VP {province_id}:{value}",
+                )
+
+    actual_profiles: dict[int, dict[str, int | float | str]] = {}
+    for state_id, expected_profile in EBA_EXPECTED_STATE_PROFILES.items():
+        actual_profile = state_profile(text(state_path(state_id)))
+        actual_profiles[state_id] = actual_profile
+        check(
+            actual_profile == expected_profile,
+            f"EBA state {state_id}: expected profile {expected_profile}, found {actual_profile}",
+        )
+        check(
+            normalized_builder_profile(state_id) == expected_profile,
+            f"EBA builder state {state_id}: expected profile {expected_profile}",
+        )
+        if state_id in STARTING_OWNERS:
+            rendered_profile = state_profile(
+                render_state(state_id, STARTING_OWNERS[state_id])
+            )
+            check(
+                rendered_profile == expected_profile,
+                f"EBA generator state {state_id}: expected profile {expected_profile}, found {rendered_profile}",
+            )
+
+    check(
+        sum(int(profile["population"]) for profile in actual_profiles.values()) == 3_550_000,
+        "EBA: expected total population 3550000",
+    )
+    check(
+        sum(int(profile["civilian"]) for profile in actual_profiles.values()) == 7,
+        "EBA: expected seven civilian factories",
+    )
+    check(
+        sum(int(profile["military"]) for profile in actual_profiles.values()) == 2,
+        "EBA: expected two military factories",
+    )
+    check(
+        sum(int(profile["air_base"]) for profile in actual_profiles.values()) == 1,
+        "EBA: expected one air base",
+    )
+    check(
+        sum(float(profile["supplies"]) for profile in actual_profiles.values()) == 16.0,
+        "EBA: expected 16.0 total local supplies",
+    )
+
+    for province_id, expected_name in EBA_EXPECTED_VP_NAMES.items():
+        pattern = rf'(?m)^\s*VICTORY_POINTS_{province_id}:\s*"([^"]*)"\s*$'
+        matches = re.findall(pattern, localisation)
+        check(
+            len(matches) == 1,
+            f"EBA VP {province_id}: expected one Russian localisation key",
+        )
+        if matches:
+            check(
+                matches[0] == expected_name,
+                f"EBA VP {province_id}: expected name {expected_name!r}",
+            )
+
+    centres = {
+        **CAPITALS,
+        **SECONDARY_CENTRES,
+        **MINOR_VPS,
+        **VORKERLAND_CENTRES,
+        **VORKERLAND_MINOR_VPS,
+    }
     for state_id, (province_id, value) in centres.items():
         source = text(state_path(state_id))
         vp_pattern = rf"victory_points\s*=\s*\{{\s*{province_id}\s+{value}\s*\}}"
-        if province_terrain.get(province_id) == "urban":
+        if (
+            province_terrain.get(province_id) == "urban"
+            or province_id in APPROVED_NON_URBAN_SETTLEMENT_VPS
+        ):
             check(bool(re.search(vp_pattern, source)), f"state {state_id}: missing urban VP {province_id}")
             city_key = rf"(?m)^\s*VICTORY_POINTS_{province_id}:\s*\".+\""
             check(len(re.findall(city_key, localisation)) == 1, f"VP {province_id}: expected one Russian city name")
@@ -112,7 +279,8 @@ def validate_states() -> None:
         source = text(path)
         for province_id in map(int, re.findall(r"victory_points\s*=\s*\{\s*(\d+)", source)):
             check(
-                province_terrain.get(province_id) == "urban" or province_id in NON_URBAN_SETTLEMENT_VPS,
+                province_terrain.get(province_id) == "urban"
+                or province_id in APPROVED_NON_URBAN_SETTLEMENT_VPS,
                 f"{path.name}: VP {province_id} is not urban or an approved settlement",
             )
 
@@ -304,13 +472,22 @@ def validate_vorkerland_expansion() -> None:
         check(f"transfer_state = {state_id}" in setup, f"TVA setup: missing new state {state_id}")
         check(bool(re.search(rf"\b{state_id}\s*=\s*\{{\s*add_core_of\s*=\s*TVA", setup)), f"TVA setup: missing core for state {state_id}")
 
-    dorian = block(maps, "ADISCORD_vorkerland_apply_dorian_map")
-    for state_id in (306, 308, 309, 318, 320, 323, 324, 327):
-        check(f"transfer_state = {state_id}" in dorian, f"Dorian winner map: missing state {state_id}")
-    for map_name in ("ADISCORD_vorkerland_apply_worker_map", "ADISCORD_vorkerland_apply_vlad_map"):
+    # A central victory now unlocks the next, border-by-border phase instead of
+    # swallowing every successor state in one scripted effect. Keep this gate
+    # here so the state generator cannot accidentally reintroduce the old map
+    # paint while all generated expansion states remain assigned at setup.
+    for map_name, winner_tag in (
+        ("ADISCORD_vorkerland_apply_worker_map", "WRK"),
+        ("ADISCORD_vorkerland_apply_vlad_map", "VAD"),
+        ("ADISCORD_vorkerland_apply_dorian_map", "TVA"),
+    ):
         winner = block(maps, map_name)
-        for state_id in (306, 308, 309, 318, 320, 323, 324, 325, 327):
-            check(f"transfer_state = {state_id}" in winner, f"{map_name}: missing reunification state {state_id}")
+        check(
+            bool(re.search(rf"\b{winner_tag}\s*=\s*\{{.*?set_country_flag\s*=\s*ADISCORD_vorkerland_central_unifier", winner, re.DOTALL)),
+            f"{map_name}: missing central-unifier marker for {winner_tag}",
+        )
+        for forbidden in ("transfer_state", "annex_country", "puppet =", "set_autonomy"):
+            check(forbidden not in winner, f"{map_name}: central victory must not use {forbidden}")
 
 
 def main() -> int:

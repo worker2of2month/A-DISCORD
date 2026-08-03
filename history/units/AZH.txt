@@ -8,4 +8,18 @@ division_template = {
 }
 units = {
 	division = { division_name = { is_name_ordered = yes name_order = 1 } location = 367 division_template = "Basin Levy" start_experience_factor = 0.20 start_equipment_factor = 0.45 }
+	fleet = {
+		name = "Black Basin Flotilla"
+		naval_base = 493
+		task_force = {
+			name = "Azhar Coastal Patrol"
+			location = 493
+			ship = { name = "Black Basin" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = AZH } } }
+			ship = { name = "Azhar" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = AZH } } }
+		}
+	}
+}
+
+instant_effect = {
+	add_equipment_to_stockpile = { type = convoy_1 amount = 15 producer = AZH }
 }

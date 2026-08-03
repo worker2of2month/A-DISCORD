@@ -16,6 +16,7 @@ from pathlib import Path
 
 from validate_adiscord_economy_ai import validate as validate_adiscord_economy_ai
 from build_adiscord_map_buildings import validate as validate_adiscord_map_buildings
+from build_adiscord_terrain_snow import validate as validate_adiscord_terrain_snow
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -244,6 +245,8 @@ def parse_states():
         cores = re.findall(r"\badd_core_of\s*=\s*([A-Z][A-Z0-9]{2,3})\b", text)
         category_match = re.search(r"\bstate_category\s*=\s*([A-Za-z_][A-Za-z0-9_]*)", text)
         category = category_match.group(1) if category_match else None
+        manpower_match = re.search(r"\bmanpower\s*=\s*(-?\d+)", text)
+        manpower = int(manpower_match.group(1)) if manpower_match else None
         vps = [int(x) for x in re.findall(r"\bvictory_points\s*=\s*\{\s*(\d+)\b", text)]
         building_provs = []
         bm = re.search(r"\bbuildings\s*=\s*\{", text)
@@ -258,6 +261,7 @@ def parse_states():
                 "owners": owners,
                 "cores": cores,
                 "category": category,
+                "manpower": manpower,
                 "vps": vps,
                 "building_provs": building_provs,
             }
@@ -312,6 +316,10 @@ def check_states(tags, provinces, limit):
             state_ids[state["id"]].append(state["file"])
         if state["category"] is None:
             issues.append(f"{rel(state['file'])}: missing state_category")
+        if state["manpower"] is None:
+            issues.append(f"{rel(state['file'])}: missing manpower")
+        elif state["manpower"] < 1:
+            issues.append(f"{rel(state['file'])}: manpower must be at least 1")
         state_provs = set(state["provinces"])
         for province in state["provinces"]:
             province_to_states[province].append(state)
@@ -837,6 +845,9 @@ def main():
 
     building_issues = validate_adiscord_map_buildings()
     print_section("Map building state assignments", building_issues[: args.limit], len(building_issues))
+
+    terrain_snow_issues = validate_adiscord_terrain_snow()
+    print_section("Permanent snow terrain", terrain_snow_issues[: args.limit], len(terrain_snow_issues))
 
     loc_issues, loc_total = check_localisation(args.limit)
     print_section("Localisation headers", loc_issues, loc_total)

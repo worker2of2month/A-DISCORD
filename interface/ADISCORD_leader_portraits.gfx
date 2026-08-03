@@ -10,6 +10,34 @@ spriteTypes = {
 	  	texturefile = "gfx/leaders/WRK/portrait_WRK_Vlad_Petrichev.png"
 	}
 	spriteType = {
+		name = "GFX_portrait_WRK_Nikita_Worcker_civilwar"
+		texturefile = "gfx/leaders/WRK/portrait_WRK_Nikita_Worcker_civilwar.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_WRK_Vlad_Petrichev_civilwar"
+		texturefile = "gfx/leaders/WRK/portrait_WRK_Vlad_Petrichev_civilwar.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_WRK_Anton_Bagley"
+		texturefile = "gfx/leaders/WRK/portrait_WRK_Anton_Bagley.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_WRK_Ted_Cuttle"
+		texturefile = "gfx/leaders/WRK/portrait_WRK_Ted_Cuttle.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_WPA_Oliver_Larry_Gates"
+		texturefile = "gfx/leaders/WPA/portrait_WPA_Oliver_Larry_Gates.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_DVA_Severin_Mark"
+		texturefile = "gfx/leaders/DVA/portrait_DVA_Severin_Mark.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_WRK_Temporary_Government"
+		texturefile = "gfx/leaders/WRK/temp_government.png"
+	}
+	spriteType = {
 	  	name = "GFX_portrait_WRK_Vlad_Mecra"
 	  	texturefile = "gfx/leaders/WRK/portrait_WRK_Vlad_Mecra.png"
 	}
@@ -64,37 +92,41 @@ spriteTypes = {
 		pause_on_loop = 0.0
 	}
 	spriteType = {
-	  	name = "GFX_portrait_STP_general_1"
-	  	texturefile = "gfx/leaders/STP/general 1.png"
+		name = "GFX_portrait_STP_Roland_Keitel"
+		texturefile = "gfx/leaders/STP/portrait_STP_Roland_Keitel.png"
 	}
 	spriteType = {
-	  	name = "GFX_portrait_STP_general_2"
-	  	texturefile = "gfx/leaders/STP/general 2.png"
+		name = "GFX_portrait_STP_Maurice_Dallon"
+		texturefile = "gfx/leaders/STP/portrait_STP_Maurice_Dallon.png"
 	}
 	spriteType = {
-	  	name = "GFX_portrait_STP_general_3"
-	  	texturefile = "gfx/leaders/STP/general 3.png"
+		name = "GFX_portrait_STP_Leonid_Barchel"
+		texturefile = "gfx/leaders/STP/portrait_STP_Leonid_Barchel.png"
 	}
 	spriteType = {
-	  	name = "GFX_portrait_STP_general_4"
-	  	texturefile = "gfx/leaders/STP/general 4.png"
+		name = "GFX_portrait_STP_Edmund_Ravel"
+		texturefile = "gfx/leaders/STP/portrait_STP_Edmund_Ravel.png"
 	}
 	spriteType = {
-	  	name = "GFX_portrait_STP_general_5"
-	  	texturefile = "gfx/leaders/STP/general 5.png"
+		name = "GFX_portrait_STP_Viktor_Marent"
+		texturefile = "gfx/leaders/STP/portrait_STP_Viktor_Marent.png"
 	}
 	spriteType = {
-	  	name = "GFX_portrait_STP_field_marshal_1"
-	  	texturefile = "gfx/leaders/STP/field marshal.png"
+		name = "GFX_portrait_STP_Severin_Drake"
+		texturefile = "gfx/leaders/STP/portrait_STP_Severin_Drake.png"
 	}
 	spriteType = {
-	  	name = "GFX_portrait_STP_field_marshal_2"
-	  	texturefile = "gfx/leaders/STP/field marshal 2.png"
+		name = "GFX_portrait_STP_August_Veil"
+		texturefile = "gfx/leaders/STP/portrait_STP_August_Veil.png"
 	}
 ###IVN
 	spriteType = {
 	  	name = "GFX_portrait_IVN_Vadim_Ivanchik"
 	  	texturefile = "gfx/leaders/IVN/portrait_IVN_Vadim_Ivanchik.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_IVN_Vadim_Ivanchik_after_retreat"
+		texturefile = "gfx/leaders/IVN/portrait_IVN_Vadim_Ivanchik_2.png"
 	}
 ###VAL
 	spriteType = {
@@ -166,10 +198,18 @@ spriteTypes = {
 	  	name = "GFX_portrait_ROM_Erwin_Von_Romanovskiy"
 	  	texturefile = "gfx/leaders/ROM/portrait_ROM_Erwin_Von_Romanovskiy.png" 
 	}
+	spriteType = {
+		name = "GFX_portrait_ROM_Erwin_Von_Romanovskiy_civilwar"
+		texturefile = "gfx/leaders/ROM/portrait_ROM_Erwin_Von_Romanovskiy_2.png"
+	}
 ###TRU
 	spriteType = {
 	  	name = "GFX_portrait_TRU_Nikita_Truman"
 	  	texturefile = "gfx/leaders/TRU/portrait_TRU_Nikita_Truman.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_TRU_Nikita_Truman_civilwar"
+		texturefile = "gfx/leaders/TRU/portrait_TRU_Nikita_Truman_test.png"
 	}
 ###DAN
 	spriteType = {
@@ -221,6 +261,24 @@ spriteTypes = {
 	  	texturefile = "gfx/leaders/APH/portrait_APH_Gorak_Bonecleaver.png"
 	}
 
+### VORKERLAND COLLAPSE SUCCESSORS
+	spriteType = {
+		name = "GFX_portrait_EGC_Ruslan_Pike"
+		texturefile = "gfx/leaders/EGC/portrait_EGC_Ruslan_Pike.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_WPS_Karim_Dol"
+		texturefile = "gfx/leaders/WPS/portrait_WPS_Karim_Dol.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_SRA_Helio_Marr"
+		texturefile = "gfx/leaders/SRA/portrait_SRA_Helio_Marr.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_ZTA_Viktor_Holt"
+		texturefile = "gfx/leaders/ZTA/portrait_ZTA_Viktor_Holt.png"
+	}
+
 ###EXZ
 	spriteType = {
 		name = "GFX_portrait_EXZ_No_Command"
@@ -228,6 +286,14 @@ spriteTypes = {
 	}
 
 ###PLACEHOLDER or default shit
+	spriteType = {
+		name = "GFX_portrait_IBA_Matvey_Mateusk"
+		texturefile = "gfx/leaders/IBA/portrait_IBA_Matvey_Mateusk.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_IBL_Anton_Selevyostrov"
+		texturefile = "gfx/leaders/IBL/portrait_IBL_Anton_Selevyostrov.png"
+	}
 	spriteType = {
 	  	name = "GFX_portrait_PLACEHOLDER"
 	  	texturefile = "gfx/leaders/portrait_PLACEHOLDER.png"

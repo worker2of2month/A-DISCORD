@@ -4,12 +4,10 @@ state={
 	provinces={
 		378 430 1397 3344 4370 6640 8072 16556
 	}
-	manpower=125326
-
+	manpower = 180000
 	state_category = rural
-	buildings_max_level_factor=1
-	local_supplies=0
-
+	buildings_max_level_factor = 1.000
+	local_supplies = 2.0
 	history={
 		owner = BTL
 		buildings = {

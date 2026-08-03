@@ -52,11 +52,24 @@ units = {
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.29
 	}
+	fleet = {
+		name = "Svetlogorsk Patrol Flotilla"
+		naval_base = 2038
+		task_force = {
+			name = "Northern Basin Patrol"
+			location = 2038
+			ship = { name = "Svetlogorsk" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NAM } } }
+			ship = { name = "Northern Basin" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NAM } } }
+			ship = { name = "Warden" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NAM } } }
+			ship = { name = "Surveyor" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NAM } } }
+		}
+	}
 }
 
 ##### No notable air forces #####
 
 instant_effect = {
+	add_equipment_to_stockpile = { type = convoy_1 amount = 30 producer = NAM }
 	add_equipment_production = {
 		equipment = { type = infantry_equipment_0 creator = "NAM" }
 		requested_factories = 1

@@ -96,6 +96,14 @@ ADISCORD_economy_reset_static_modifier_variables = {
 }
 
 ADISCORD_economy_reset_policy_modifier_variables = {
+	# Monthly/open-window caches keep the weekly settlement independent from the
+	# idea database. This also prevents law checks from multiplying with every
+	# primary country on every weekly pulse.
+	set_variable = { var = ADISCORD_economy_cached_consumer_goods_law_adjustment value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_val_weaponry_active value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_resource_trade_law_factor value = 1 }
+	set_variable = { var = ADISCORD_economy_cached_army_organization_flat_expense value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_army_organization_factor value = 1 }
 	set_variable = { var = ADISCORD_economy_policy_tax_collection_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_policy_population_tax_income_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_policy_trade_income_bonus_bp value = 0 }
@@ -189,12 +197,32 @@ ADISCORD_economy_recalculate_policy_modifiers = {
 	ADISCORD_economy_initialize_modifier_variables = yes
 	ADISCORD_economy_reset_policy_modifier_variables = yes
 
+	# Cache mutually exclusive law effects once. Forecast and cash-settlement
+	# effects consume these scalar variables without repeated has_idea queries.
+	if = { limit = { ADISCORD_economy_has_idea_civilian_economy = yes } set_variable = { var = ADISCORD_economy_cached_consumer_goods_law_adjustment value = 0.7 } }
+	else_if = { limit = { ADISCORD_economy_has_idea_low_economic_mobilisation = yes } set_variable = { var = ADISCORD_economy_cached_consumer_goods_law_adjustment value = 0.4 } }
+	else_if = { limit = { ADISCORD_economy_has_idea_partial_economic_mobilisation = yes } set_variable = { var = ADISCORD_economy_cached_consumer_goods_law_adjustment value = -0.2 } }
+	else_if = { limit = { ADISCORD_economy_has_idea_war_economy = yes } set_variable = { var = ADISCORD_economy_cached_consumer_goods_law_adjustment value = -0.5 } }
+	else_if = { limit = { ADISCORD_economy_has_idea_total_economic_mobilisation = yes } set_variable = { var = ADISCORD_economy_cached_consumer_goods_law_adjustment value = -0.9 } }
+
+	if = { limit = { ADISCORD_economy_has_idea_val_worldwide_famous_weaponry = yes } set_variable = { var = ADISCORD_economy_cached_val_weaponry_active value = 1 } }
+
+	if = { limit = { ADISCORD_economy_has_idea_free_trade = yes } set_variable = { var = ADISCORD_economy_cached_resource_trade_law_factor value = 1.25 } }
+	else_if = { limit = { ADISCORD_economy_has_idea_export_focus = yes } set_variable = { var = ADISCORD_economy_cached_resource_trade_law_factor value = 1.15 } }
+	else_if = { limit = { ADISCORD_economy_has_idea_limited_exports = yes } set_variable = { var = ADISCORD_economy_cached_resource_trade_law_factor value = 1.05 } }
+	else_if = { limit = { ADISCORD_economy_has_idea_closed_economy = yes } set_variable = { var = ADISCORD_economy_cached_resource_trade_law_factor value = 0.80 } }
+
+	if = { limit = { ADISCORD_economy_has_idea_military_organization_contract_brigades = yes } set_variable = { var = ADISCORD_economy_cached_army_organization_flat_expense value = 0.5 } }
+	else_if = { limit = { ADISCORD_economy_has_idea_military_organization_general_staff = yes } set_variable = { var = ADISCORD_economy_cached_army_organization_flat_expense value = 0.75 } }
+	else_if = { limit = { ADISCORD_economy_has_idea_military_organization_total_defense_grid = yes } set_variable = { var = ADISCORD_economy_cached_army_organization_flat_expense value = 1.0 } }
+	else_if = { limit = { ADISCORD_economy_has_idea_military_organization_militia_autonomy = yes } set_variable = { var = ADISCORD_economy_cached_army_organization_factor value = 0.85 } }
+
 	# Base law and national-spirit effects are visible custom modifiers read by modifier@ below.
 	# Keep only conditional policy bonuses that cannot be represented as a static idea modifier.
-	if = { limit = { has_idea = ADISCORD_economic_system_state_coordinated ADISCORD_state_development_at_least_3 = yes } add_to_variable = { var = ADISCORD_economy_policy_overload_resistance_bonus_bp value = 5 } }
-	if = { limit = { has_idea = ADISCORD_economic_system_state_coordinated ADISCORD_state_development_at_most_2 = yes } add_to_variable = { var = ADISCORD_economy_policy_state_overload_gain_bonus_bp value = 10 } }
-	if = { limit = { has_idea = ADISCORD_economic_system_planned_bureaucratic ADISCORD_state_development_at_most_3 = yes } add_to_variable = { var = ADISCORD_economy_policy_state_overload_gain_bonus_bp value = 12 } }
-	if = { limit = { has_idea = ADISCORD_society_type_information ADISCORD_state_development_at_least_4 = yes ADISCORD_social_system_development_at_least_4 = yes } add_to_variable = { var = ADISCORD_economy_policy_overload_resistance_bonus_bp value = 10 } }
+	if = { limit = { ADISCORD_economy_has_idea_economic_system_state_coordinated = yes ADISCORD_state_development_at_least_3 = yes } add_to_variable = { var = ADISCORD_economy_policy_overload_resistance_bonus_bp value = 5 } }
+	if = { limit = { ADISCORD_economy_has_idea_economic_system_state_coordinated = yes ADISCORD_state_development_at_most_2 = yes } add_to_variable = { var = ADISCORD_economy_policy_state_overload_gain_bonus_bp value = 10 } }
+	if = { limit = { ADISCORD_economy_has_idea_economic_system_planned_bureaucratic = yes ADISCORD_state_development_at_most_3 = yes } add_to_variable = { var = ADISCORD_economy_policy_state_overload_gain_bonus_bp value = 12 } }
+	if = { limit = { ADISCORD_economy_has_idea_society_type_information = yes ADISCORD_state_development_at_least_4 = yes ADISCORD_social_system_development_at_least_4 = yes } add_to_variable = { var = ADISCORD_economy_policy_overload_resistance_bonus_bp value = 10 } }
 
 	ADISCORD_economy_calculate_final_modifier_factors = yes
 }

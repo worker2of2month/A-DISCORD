@@ -1,18 +1,21 @@
 state = {
 	id = 326
 	name = "STATE_326"
-	manpower = 30398
-	state_category = rural
+	manpower = 1100000
+	state_category = large_town
 	history = {
 		owner = PIV
 		add_core_of = PIV
 		buildings = {
-			infrastructure = 2
+			arms_factory = 1
+			industrial_complex = 2
+			infrastructure = 3
 		}
+		victory_points = { 16626 5 }
 	}
 	provinces = {
 		6341 9688 12923 16605 16608 16626
 	}
 	buildings_max_level_factor = 1.000
-	local_supplies = 1.5
+	local_supplies = 3.5
 }

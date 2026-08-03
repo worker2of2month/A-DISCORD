@@ -59,11 +59,23 @@ units = {
 		start_experience_factor = 0.17
 		start_equipment_factor = 0.32
 	}
+	fleet = {
+		name = "Loren Restitution Flotilla"
+		naval_base = 6495
+		task_force = {
+			name = "Lower Loren Patrol"
+			location = 6495
+			ship = { name = "Upper Loren" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = EFL } } }
+			ship = { name = "Lower Loren" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = EFL } } }
+			ship = { name = "Restitution" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = EFL } } }
+		}
+	}
 }
 
 ##### No notable air forces #####
 
 instant_effect = {
+	add_equipment_to_stockpile = { type = convoy_1 amount = 20 producer = EFL }
 	add_equipment_production = {
 		equipment = { type = infantry_equipment_0 creator = "EFL" }
 		requested_factories = 1

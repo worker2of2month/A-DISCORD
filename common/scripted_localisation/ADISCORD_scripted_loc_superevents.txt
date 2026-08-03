@@ -5,7 +5,6 @@ defined_text = {
 	text = { trigger = { has_global_flag = superevent_vorkerland_worker_victory } localization_key = superevent_vorkerland_worker_victory_quote }
 	text = { trigger = { has_global_flag = superevent_vorkerland_vlad_victory } localization_key = superevent_vorkerland_vlad_victory_quote }
 	text = { trigger = { has_global_flag = superevent_vorkerland_dorian_victory } localization_key = superevent_vorkerland_dorian_victory_quote }
-	text = { trigger = { has_global_flag = superevent_vorkerland_fragmented } localization_key = superevent_vorkerland_fragmented_quote }
 	text = {
 	trigger = {
 			has_global_flag = superevent_stelander_empire
@@ -26,7 +25,6 @@ defined_text = {
 	text = { trigger = { has_global_flag = superevent_vorkerland_worker_victory } localization_key = superevent_vorkerland_worker_victory_title }
 	text = { trigger = { has_global_flag = superevent_vorkerland_vlad_victory } localization_key = superevent_vorkerland_vlad_victory_title }
 	text = { trigger = { has_global_flag = superevent_vorkerland_dorian_victory } localization_key = superevent_vorkerland_dorian_victory_title }
-	text = { trigger = { has_global_flag = superevent_vorkerland_fragmented } localization_key = superevent_vorkerland_fragmented_title }
 	text = {
 		trigger = {
 			has_global_flag = superevent_vorkerland_civilwar
@@ -47,7 +45,6 @@ defined_text = {
 	text = { trigger = { has_global_flag = superevent_vorkerland_worker_victory } localization_key = superevent_vorkerland_worker_victory_comment }
 	text = { trigger = { has_global_flag = superevent_vorkerland_vlad_victory } localization_key = superevent_vorkerland_vlad_victory_comment }
 	text = { trigger = { has_global_flag = superevent_vorkerland_dorian_victory } localization_key = superevent_vorkerland_dorian_victory_comment }
-	text = { trigger = { has_global_flag = superevent_vorkerland_fragmented } localization_key = superevent_vorkerland_fragmented_comment }
 	text = {
 		trigger = {
 			has_global_flag = superevent_vorkerland_civilwar

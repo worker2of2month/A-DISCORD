@@ -1,0 +1,4 @@
+set_politics = { ruling_party = pragmatism elections_allowed = no }
+set_popularities = { etatism = 10 chauvinism = 0 humanism = 20 pragmatism = 65 technocracy = 5 }
+recruit_character = CSL_Miron_Rudakov
+set_research_slots = 2

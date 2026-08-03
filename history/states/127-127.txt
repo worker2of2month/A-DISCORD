@@ -4,13 +4,17 @@ state={
 	provinces={
 		595 1659 1681 1697 2097 2752 3245 3829 3896 4553 5203 6608 6694 6896 7148 7603 7774 8345 9053 9336 11578 12463 12614 
 	}
-	manpower=110000
-	buildings_max_level_factor=1
-	state_category=rural
-	local_supplies=0
-
+	manpower = 650000
+	buildings_max_level_factor = 1.000
+	state_category = town
+	local_supplies = 3.0
 	history={
 		owner = IVN
 		add_core_of = IVN
+		buildings = {
+			arms_factory = 1
+			industrial_complex = 2
+			infrastructure = 3
+		}
 	}
 }

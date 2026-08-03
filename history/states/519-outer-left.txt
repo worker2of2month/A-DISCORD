@@ -3,7 +3,7 @@
 state = {
 	id = 519
 	name = "STATE_519"
-	manpower = 0
+	manpower = 1
 	state_category = rural
 	provinces = {
 		206 512 637 641 655 719 886 1041 1214 1231 1238 1283 1419 1562 1676 1877

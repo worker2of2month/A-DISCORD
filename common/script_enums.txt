@@ -189,6 +189,8 @@ script_enum_equipment_bonus_type = {
 	rocket
 	flame
 	land_cruiser
+	ADISCORD_coastal_patrol_ship
+	ADISCORD_coastal_patrol_ship_1
 
 	ADISCORD_fighter_archetype
 	ADISCORD_fighter_airframe_2163

@@ -1,13 +1,14 @@
 state = {
 	id = 315
 	name = "STATE_315"
-	manpower = 69495
+	manpower = 310000
 	state_category = rural
 	history = {
 		owner = TRU
 		add_core_of = TRU
 		buildings = {
 			infrastructure = 2
+			industrial_complex = 1
 		}
 	}
 	provinces = {
@@ -15,5 +16,5 @@ state = {
 		12932
 	}
 	buildings_max_level_factor = 1.000
-	local_supplies = 1.5
+	local_supplies = 2.0
 }

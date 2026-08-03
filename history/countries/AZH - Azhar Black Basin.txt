@@ -18,3 +18,8 @@ set_stability = 0.53
 set_war_support = 0.48
 set_research_slots = 2
 add_ideas = { AZH_black_basin_levy }
+
+set_technology = {
+	ADISCORD_tech_coastal_patrols = 1
+	ADISCORD_tech_convoy_routing = 1
+}

@@ -4,18 +4,21 @@ state={
 	provinces={
 		7778 16564 16567 16583 16595
 	}
-	manpower=0
-
-	state_category = wasteland
-	buildings_max_level_factor=1.000
-	local_supplies=0.000
-
+	manpower = 2400000
+	state_category = metropolis
+	buildings_max_level_factor = 1.000
+	local_supplies = 6.0
 	history={
 		owner = VAD
 		buildings = {
-			infrastructure = 2
+			air_base = 2
+			arms_factory = 2
+			industrial_complex = 4
+			infrastructure = 4
 		}
 		add_core_of = VAD
-		victory_points = { 7778 5 }
+		victory_points = { 7778 8 }
+		victory_points = { 16564 3 }
+		victory_points = { 16583 2 }
 	}
 }

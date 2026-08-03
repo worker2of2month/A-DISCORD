@@ -36,6 +36,66 @@ REQUIRED_STATE_SPAWN_COUNTS = {
     "synthetic_refinery": 1,
 }
 
+# The deliberate NAM mainland split assigns the original state 67 positions to
+# their physical provinces. Both resulting states still need the complete set
+# of 1.19 spawn anchors even when a building is not present at game start.
+NAM_SPLIT_SPAWN_POSITION_CANDIDATES = {
+    (67, "air_base"): (
+        "67;air_base;3701.00;10.25;548.00;0.66;0",
+    ),
+    (67, "anti_air_building"): (
+        "67;anti_air_building;3701.00;10.25;548.00;0.66;0",
+        "67;anti_air_building;3690.00;10.80;575.00;4.36;0",
+    ),
+    (67, "stronghold_network"): (
+        "67;stronghold_network;3724.00;10.60;605.00;5.21;0",
+    ),
+    (67, "synthetic_refinery"): (
+        "67;synthetic_refinery;3700.00;10.80;583.00;4.75;0",
+    ),
+    (688, "anti_air_building"): (
+        "688;anti_air_building;3599.00;10.35;600.00;2.76;0",
+    ),
+    (688, "fuel_silo"): (
+        "688;fuel_silo;3609.00;10.53;605.00;2.82;0",
+    ),
+    (688, "nuclear_reactor_spawn"): (
+        "688;nuclear_reactor_spawn;3611.00;10.65;605.00;6.27;0",
+    ),
+    (688, "radar_station"): (
+        "688;radar_station;3641.00;10.60;593.00;1.25;0",
+    ),
+    (688, "rocket_site_spawn"): (
+        "688;rocket_site_spawn;3638.00;11.00;614.00;5.94;0",
+    ),
+    (688, "stronghold_network"): (
+        "688;stronghold_network;3616.00;10.50;594.00;4.14;0",
+    ),
+    (689, "air_base"): (
+        "689;air_base;3666.00;10.65;540.00;2.65;0",
+    ),
+    (689, "anti_air_building"): (
+        "689;anti_air_building;3665.00;10.80;545.00;0.57;0",
+        "689;anti_air_building;3699.00;10.50;527.00;5.76;0",
+        "689;anti_air_building;3675.00;10.30;535.00;4.14;0",
+    ),
+    (689, "fuel_silo"): (
+        "689;fuel_silo;3689.00;11.00;551.00;4.33;0",
+    ),
+    (689, "nuclear_reactor_spawn"): (
+        "689;nuclear_reactor_spawn;3669.00;10.65;543.00;3.55;0",
+    ),
+    (689, "radar_station"): (
+        "689;radar_station;3653.00;10.45;555.00;2.77;0",
+    ),
+    (689, "rocket_site_spawn"): (
+        "689;rocket_site_spawn;3696.00;10.30;527.00;0.15;0",
+    ),
+    (689, "synthetic_refinery"): (
+        "689;synthetic_refinery;3683.00;10.60;540.00;2.69;0",
+    ),
+}
+
 
 @dataclass(frozen=True)
 class BuildingMismatch:
@@ -136,6 +196,37 @@ def synchronize_buildings(root: Path = ROOT, *, apply: bool = False) -> list[Bui
         payload = "\r\n".join(lines).encode("utf-8")
         (root / "map" / "buildings.txt").write_bytes(payload)
     return mismatches
+
+
+def ensure_nam_split_spawn_positions(root: Path = ROOT) -> int:
+    """Add only spawn anchors lost when states 688/689 were carved from 67."""
+    path = root / "map" / "buildings.txt"
+    lines = path.read_text(encoding="utf-8-sig", errors="strict").splitlines()
+    counts: dict[tuple[int, str], int] = {}
+    for line in lines:
+        fields = line.split(";")
+        if len(fields) == 7 and fields[0].isdigit():
+            key = (int(fields[0]), fields[1])
+            counts[key] = counts.get(key, 0) + 1
+
+    added = 0
+    for key, candidates in NAM_SPLIT_SPAWN_POSITION_CANDIDATES.items():
+        minimum = REQUIRED_STATE_SPAWN_COUNTS[key[1]]
+        for candidate in candidates:
+            if counts.get(key, 0) >= minimum:
+                break
+            if candidate not in lines:
+                lines.append(candidate)
+                counts[key] = counts.get(key, 0) + 1
+                added += 1
+        if counts.get(key, 0) < minimum:
+            raise RuntimeError(
+                f"state {key[0]} still lacks {key[1]} spawn positions after NAM split repair"
+            )
+
+    if added:
+        path.write_bytes("\r\n".join(lines).encode("utf-8"))
+    return added
 
 
 def required_spawn_issues(lines: list[str], state_ids: set[int]) -> list[str]:

@@ -1,0 +1,4 @@
+set_politics = { ruling_party = technocracy elections_allowed = no }
+set_popularities = { etatism = 5 chauvinism = 5 humanism = 5 pragmatism = 20 technocracy = 65 }
+recruit_character = TGD_Ted_Cuttle
+set_research_slots = 2

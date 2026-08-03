@@ -13,7 +13,7 @@ add_ideas = {
 	#ministers
 	minister_TRU_Morgan_Trent
 	minister_TRU_Boris_Clay
-	minister_TRU_Vera_Holt
+	minister_TRU_Viktor_Holt
 	minister_TRU_Ilya_Ward
 	minister_TRU_Sabina_Knox
 	minister_TRU_Cyril_Finch
@@ -25,12 +25,11 @@ set_politics = {
 	elections_allowed = no
 }
 set_popularities = {
-	etatism = 1
-	chauvinism = 6
-	humanism = 3
-	utilitarism = 8
-	chauvinism = 12
-	pragmatism = 68
+	etatism = 8
+	chauvinism = 8
+	humanism = 28
+	utilitarism = 10
+	pragmatism = 44
 	technocracy = 2
 }
 

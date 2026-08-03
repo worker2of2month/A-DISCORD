@@ -1,18 +1,19 @@
 state = {
 	id = 319
 	name = "STATE_319"
-	manpower = 42187
+	manpower = 300000
 	state_category = rural
 	history = {
 		owner = ROM
 		add_core_of = ROM
 		buildings = {
 			infrastructure = 2
+			industrial_complex = 1
 		}
 	}
 	provinces = {
 		4571 6383 7379 11999 12367 12920
 	}
 	buildings_max_level_factor = 1.000
-	local_supplies = 1.5
+	local_supplies = 2.0
 }

@@ -5,12 +5,17 @@ state={
 	history = {
 		owner = PWR
 		add_core_of = PWR
+		buildings = {
+			arms_factory = 2
+			industrial_complex = 1
+			infrastructure = 3
+		}
 	}
 	provinces={
 		773 1128 1375 1685 1906 1968 2192 2202 2339 2363 2571 2740 3757 4381 5469 6461 6921 7869 7989 8238 8679 8869 8881 9269 9453 9725 9908 9935 10250 10345 11082 11505 12023 12103 12302 12441 
 	}
-	manpower=42500
-	buildings_max_level_factor=1
-	state_category=rural
-	local_supplies=0
+	manpower = 410000
+	buildings_max_level_factor = 1.000
+	state_category = town
+	local_supplies = 3.0
 }

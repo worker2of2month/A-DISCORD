@@ -4,17 +4,18 @@ state={
 	provinces={
 		5444 6790 9958 16387 16398 16402 16425 
 	}
-	manpower=1634643
-	buildings_max_level_factor=1.000
-	local_supplies=0.000
+	manpower = 1650000
+	buildings_max_level_factor = 1.000
+	local_supplies = 6.0
 	local_supplies=10
 
-	state_category = megalopolis
-
+	state_category = metropolis
 	history = {
         owner = WRK
         add_core_of = WRK
         buildings = {
+			air_base = 2
+			arms_factory = 2
             infrastructure = 5
             industrial_complex = 6
             commercial_nuclear_reactor = 1

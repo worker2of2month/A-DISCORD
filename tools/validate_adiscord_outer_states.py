@@ -61,8 +61,8 @@ def main() -> int:
         for forbidden in (r"\bowner\s*=", r"\badd_core_of\s*=", r"\bvictory_points\s*=", r"\bbuildings\s*=\s*\{"):
             if re.search(forbidden, source):
                 errors.append(f"state {state_id}: neutral shell contains {forbidden}")
-        if not re.search(r"(?m)^\s*manpower\s*=\s*0\s*$", source):
-            errors.append(f"state {state_id}: manpower must remain zero until country content is added")
+        if not re.search(r"(?m)^\s*manpower\s*=\s*1\s*$", source):
+            errors.append(f"state {state_id}: neutral shell manpower must be 1")
         if not re.search(r"(?m)^\s*state_category\s*=\s*(rural|wasteland)\s*$", source):
             errors.append(f"state {state_id}: invalid provisional state category")
         overlap = assigned & provinces

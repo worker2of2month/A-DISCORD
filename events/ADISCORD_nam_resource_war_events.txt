@@ -1,0 +1,80 @@
+add_namespace = ADISCORD_nam_resource_war
+
+# The daily router schedules this after the Vorkerland confederation collapses;
+# the start effect also normalises any lingering NAM overlord or faction tie.
+country_event = {
+	id = ADISCORD_nam_resource_war.1
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { ADISCORD_nam_resource_war_ready = yes }
+			ADISCORD_nam_resource_war_start = yes
+		}
+		else = {
+			# A temporary third-party war should delay the scenario, not delete it.
+			clr_global_flag = ADISCORD_nam_resource_war_scheduled
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.2
+	title = ADISCORD_nam_resource_war.2.t
+	desc = ADISCORD_nam_resource_war.2.d
+	picture = GFX_event_vorkerland_explosion
+	is_triggered_only = yes
+
+	trigger = { ADISCORD_nam_resource_war_active = yes }
+
+	immediate = { ADISCORD_nam_resource_war_start_mainland_rebellion = yes }
+
+	option = { name = ADISCORD_nam_resource_war.2.a }
+}
+
+# Hard ceiling for an edge case in which neither mainland AI can convert its
+# strength into capitulation. Control of the resource basin decides the treaty.
+country_event = {
+	id = ADISCORD_nam_resource_war.50
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = { ADISCORD_nam_resource_war_active = yes }
+	immediate = { ADISCORD_nam_resource_war_timeout_resolution = yes }
+}
+
+add_namespace = ADISCORD_nam_resource_news
+
+news_event = {
+	id = ADISCORD_nam_resource_news.1
+	title = ADISCORD_nam_resource_news.1.t
+	desc = ADISCORD_nam_resource_news.1.d
+	picture = GFX_event_vorkerland_explosion
+	hidden = yes
+	fire_only_once = yes
+	is_triggered_only = yes
+	option = { name = ADISCORD_nam_resource_news.1.a }
+}
+
+news_event = {
+	id = ADISCORD_nam_resource_news.2
+	title = ADISCORD_nam_resource_news.2.t
+	desc = ADISCORD_nam_resource_news.2.d
+	picture = GFX_event_vorkerland_explosion
+	hidden = yes
+	fire_only_once = yes
+	is_triggered_only = yes
+	option = { name = ADISCORD_nam_resource_news.2.a }
+}
+
+news_event = {
+	id = ADISCORD_nam_resource_news.3
+	title = ADISCORD_nam_resource_news.3.t
+	desc = ADISCORD_nam_resource_news.3.d
+	picture = GFX_event_vorkerland_explosion
+	hidden = yes
+	fire_only_once = yes
+	is_triggered_only = yes
+	option = { name = ADISCORD_nam_resource_news.3.a }
+}

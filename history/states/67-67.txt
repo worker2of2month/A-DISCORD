@@ -2,21 +2,24 @@ state={
 	id=67
 	name="STATE_67"
 	resources={
-		oil=164
-		chromium=15
+		oil = 144
+		chromium = 13
 	}
 	provinces={
-		176 334 461 689 1015 1710 2038 2231 2299 2935 3127 4025 4287 4321 4912 6099 6961 7324 7618 7639 8058 8351 8358 8445 8635 8888 9016 9116 9211 9641 10909 10967 11069 11696 11926 11942 12480 12668 12982
+		334 461 1015 1710 2231 2935 4287 4321 4912 6099 6961 7324
+		8058 8351 8445 8888 9016 9116 9641 10909 11069 11696 11926 11942
+		12480 12668 12982
 	}
-	manpower=47100
-	buildings_max_level_factor=1
-	state_category=rural
-	local_supplies=0
+	manpower = 430000
+	buildings_max_level_factor = 1.000
+	state_category = large_city
+	local_supplies = 5.0
 	history = {
 		owner = NAM
 		buildings = {
-			infrastructure = 2
-			industrial_complex = 1
+			air_base = 1
+			infrastructure = 4
+			industrial_complex = 2
 		}
 		add_core_of = NAM
 	}

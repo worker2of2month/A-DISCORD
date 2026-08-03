@@ -4,11 +4,10 @@ state={
 	provinces={
 		1477 1492 2926 3007 3043 4404 5772 6104 9478 11743 16574 
 	}
-	manpower=523152
-	buildings_max_level_factor=1.000
-	local_supplies=0.000
+	manpower = 523000
+	buildings_max_level_factor = 1.000
+	local_supplies = 3.5
 	state_category = town
-
 	history={
 		owner = VAD
 		add_core_of = VAD
@@ -16,8 +15,9 @@ state={
 		victory_points = { 16574 5 }
 
 		buildings = {
+			arms_factory = 1
 	        infrastructure = 3
-	        industrial_complex = 1
+	        industrial_complex = 2
 	    }
 	}
 }

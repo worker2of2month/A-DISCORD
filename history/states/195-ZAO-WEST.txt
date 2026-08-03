@@ -4,14 +4,16 @@ state={
 	provinces={
 		647 806 1100 1111 2896 3534 4528 4634 7090 7230 8032 9075 9149 9158 9727 10606 11635 11717 12025 12995
 	}
-	manpower=43333
-	state_category=rural
-	buildings_max_level_factor=1
-	local_supplies=0
+	manpower = 480000
+	state_category = town
+	buildings_max_level_factor = 1.000
+	local_supplies = 3.0
 	history={
 		owner=ZAO
 		buildings={
-			infrastructure=1
+			arms_factory = 1
+			industrial_complex = 1
+			infrastructure = 3
 		}
 		add_core_of=ZAO
 	}

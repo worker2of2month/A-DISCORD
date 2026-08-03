@@ -3,7 +3,7 @@ strategic_region={
 	id=194
 	name="STRATEGICREGION_194"
 	provinces={
-		411 1894 3313 3382 5938 8457 9481 12570 12574
+		5910
 	}
 	weather={
 		period={
