@@ -1,6 +1,7 @@
 VAL_Wants_To_Sell_Stuff = {
 	allowed = {
 		original_tag = VAL
+		has_dlc = "Arms Against Tyranny"
 	}
 	enable = {
 		has_war = no
@@ -9,26 +10,244 @@ VAL_Wants_To_Sell_Stuff = {
 	abort_when_not_enabled = yes
 
 	ai_strategy = {
-		type = diplo_action_desire
-		id = IVN
-		target = market_access_rights
-		value = 70
-	}
-	ai_strategy = {
-		type = diplo_action_desire
-		id = WRK
-		target = market_access_rights
-		value = 90
-	}
-	ai_strategy = {
-		type = diplo_action_desire
-		id = WIT
-		target = market_access_rights
-		value = 50
-	}
-	ai_strategy = {
 		type = equipment_market_for_sale_factor
 		id = infantry
 		value = 50  # retain a strategic rifle reserve
+	}
+}
+
+ADISCORD_VAL_export_buyer_WRK = {
+	allowed = {
+		original_tag = WRK
+		has_dlc = "Arms Against Tyranny"
+	}
+	enable = {
+		country_exists = VAL
+		NOT = { has_war_with = VAL }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = diplo_action_desire
+		id = VAL
+		target = market_access_rights
+		value = 150
+	}
+	ai_strategy = {
+		type = equipment_market_trade_desire
+		id = VAL
+		value = 100
+	}
+}
+ADISCORD_VAL_export_buyer_STP = {
+	allowed = {
+		original_tag = STP
+		has_dlc = "Arms Against Tyranny"
+	}
+	enable = {
+		country_exists = VAL
+		NOT = { has_war_with = VAL }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = diplo_action_desire
+		id = VAL
+		target = market_access_rights
+		value = 150
+	}
+	ai_strategy = {
+		type = equipment_market_trade_desire
+		id = VAL
+		value = 100
+	}
+}
+ADISCORD_VAL_export_buyer_NOD = {
+	allowed = {
+		original_tag = NOD
+		has_dlc = "Arms Against Tyranny"
+	}
+	enable = {
+		country_exists = VAL
+		NOT = { has_war_with = VAL }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = diplo_action_desire
+		id = VAL
+		target = market_access_rights
+		value = 150
+	}
+	ai_strategy = {
+		type = equipment_market_trade_desire
+		id = VAL
+		value = 100
+	}
+}
+ADISCORD_VAL_export_buyer_IVN = {
+	allowed = {
+		original_tag = IVN
+		has_dlc = "Arms Against Tyranny"
+	}
+	enable = {
+		country_exists = VAL
+		NOT = { has_war_with = VAL }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = diplo_action_desire
+		id = VAL
+		target = market_access_rights
+		value = 150
+	}
+	ai_strategy = {
+		type = equipment_market_trade_desire
+		id = VAL
+		value = 100
+	}
+}
+ADISCORD_VAL_export_buyer_WIT = {
+	allowed = {
+		original_tag = WIT
+		has_dlc = "Arms Against Tyranny"
+	}
+	enable = {
+		country_exists = VAL
+		NOT = { has_war_with = VAL }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = diplo_action_desire
+		id = VAL
+		target = market_access_rights
+		value = 150
+	}
+	ai_strategy = {
+		type = equipment_market_trade_desire
+		id = VAL
+		value = 100
+	}
+}
+ADISCORD_VAL_export_buyer_NAM = {
+	allowed = {
+		original_tag = NAM
+		has_dlc = "Arms Against Tyranny"
+	}
+	enable = {
+		country_exists = VAL
+		NOT = { has_war_with = VAL }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = diplo_action_desire
+		id = VAL
+		target = market_access_rights
+		value = 150
+	}
+	ai_strategy = {
+		type = equipment_market_trade_desire
+		id = VAL
+		value = 100
+	}
+}
+
+ADISCORD_VAL_export_accept_WRK = {
+	allowed = {
+		original_tag = VAL
+		has_dlc = "Arms Against Tyranny"
+	}
+	enable = {
+		country_exists = WRK
+		NOT = { has_war_with = WRK }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = diplo_action_acceptance
+		id = WRK
+		target = market_access_rights
+		value = 200
+	}
+}
+ADISCORD_VAL_export_accept_STP = {
+	allowed = {
+		original_tag = VAL
+		has_dlc = "Arms Against Tyranny"
+	}
+	enable = {
+		country_exists = STP
+		NOT = { has_war_with = STP }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = diplo_action_acceptance
+		id = STP
+		target = market_access_rights
+		value = 200
+	}
+}
+ADISCORD_VAL_export_accept_NOD = {
+	allowed = {
+		original_tag = VAL
+		has_dlc = "Arms Against Tyranny"
+	}
+	enable = {
+		country_exists = NOD
+		NOT = { has_war_with = NOD }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = diplo_action_acceptance
+		id = NOD
+		target = market_access_rights
+		value = 200
+	}
+}
+ADISCORD_VAL_export_accept_IVN = {
+	allowed = {
+		original_tag = VAL
+		has_dlc = "Arms Against Tyranny"
+	}
+	enable = {
+		country_exists = IVN
+		NOT = { has_war_with = IVN }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = diplo_action_acceptance
+		id = IVN
+		target = market_access_rights
+		value = 200
+	}
+}
+ADISCORD_VAL_export_accept_WIT = {
+	allowed = {
+		original_tag = VAL
+		has_dlc = "Arms Against Tyranny"
+	}
+	enable = {
+		country_exists = WIT
+		NOT = { has_war_with = WIT }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = diplo_action_acceptance
+		id = WIT
+		target = market_access_rights
+		value = 200
+	}
+}
+ADISCORD_VAL_export_accept_NAM = {
+	allowed = {
+		original_tag = VAL
+		has_dlc = "Arms Against Tyranny"
+	}
+	enable = {
+		country_exists = NAM
+		NOT = { has_war_with = NAM }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = diplo_action_acceptance
+		id = NAM
+		target = market_access_rights
+		value = 200
 	}
 }
