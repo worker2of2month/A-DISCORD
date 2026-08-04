@@ -408,20 +408,30 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if token not in second:
             issues.append(f"collapse mobilisation pause is missing {token}")
 
-    for decision in (
-        "ADISCORD_vorkerland_consolidate_central_border",
-        "ADISCORD_vorkerland_settle_regional_border",
-        "ADISCORD_vorkerland_continue_reunification",
-    ):
-        block = named_block(decisions, decision)
-        if not block or "random_neighbor_country" not in block or "declare_war_on" not in block:
-            issues.append(f"{decision}: war is not gated by an actual common border")
-        if "ai_will_do" not in block:
-            issues.append(f"{decision}: AI cannot take the war decision")
+    central_war = named_block(decisions, "ADISCORD_vorkerland_consolidate_central_border")
+    for target in ("WRK", "VAD", "TVA"):
+        if f"declare_war_on = {{ target = {target}" not in central_war:
+            issues.append(f"central-war decision cannot directly attack {target}")
+    if "ai_will_do" not in central_war:
+        issues.append("ADISCORD_vorkerland_consolidate_central_border: AI cannot take the war decision")
+
+    reunification_war = named_block(decisions, "ADISCORD_vorkerland_continue_reunification")
+    if not reunification_war or "random_neighbor_country" not in reunification_war or "declare_war_on" not in reunification_war:
+        issues.append("ADISCORD_vorkerland_continue_reunification: war is not gated by an actual common border")
+    if "ai_will_do" not in reunification_war:
+        issues.append("ADISCORD_vorkerland_continue_reunification: AI cannot take the war decision")
+    if "ADISCORD_vorkerland_settle_regional_border" in decisions:
+        issues.append("post-opening regional neighbour war decision survived")
+    if "ADISCORD_vorkerland_is_local_rival_for_ROOT" in triggers:
+        issues.append("post-opening regional neighbour war target trigger survived")
+    reunification_allowed = named_block(
+        named_block(decisions, "ADISCORD_vorkerland_continue_reunification"), "allowed"
+    )
+    if "NOT = { tag = WRK }" not in reunification_allowed:
+        issues.append("WRK can still launch post-victory reunification wars")
 
     for name, block in (
         ("central", named_block(triggers, "ADISCORD_vorkerland_is_central_target_for_ROOT")),
-        ("local", named_block(triggers, "ADISCORD_vorkerland_is_local_rival_for_ROOT")),
         ("reunification", named_block(triggers, "ADISCORD_vorkerland_is_reunification_target_for_ROOT")),
     ):
         if "has_war = no" not in block:
@@ -497,25 +507,32 @@ def validate_events(root: Path, issues: list[str]) -> None:
     if "recruit_character = IBA_Matvey_Mateusk" in ivn_history or "recruit_character = IBA_Matvey_Mateusk" not in iba_history:
         issues.append("Matvey Mateusk must be recruited directly by IBA history")
     for token in (
-        "has_character = IBA_Matvey_Mateusk",
-        "GFX_portrait_IBA_Matvey_Mateusk",
         "90 = { add_core_of = IBA add_claim_by = IBA",
         "71 = { add_claim_by = IBA }",
-        "ADISCORD_vorkerland_mateusk_legacy_leader_created",
-        "create_country_leader = {",
-        'name = "Матвей Матеуск"',
-        "picture = GFX_portrait_IBA_Matvey_Mateusk",
+        "ADISCORD_vorkerland_appoint_mateusk = yes",
     ):
         if token not in mandate:
             issues.append(f"Norvane setup is missing {token}")
-    legacy_leader = named_block(mandate, "create_country_leader")
-    if "desc =" in legacy_leader:
-        issues.append("old-save Matvey fallback must not expose an obsolete biography desc")
+    mateusk = named_block(effects, "ADISCORD_vorkerland_appoint_mateusk")
+    for token in (
+        "promote_character = {",
+        "character = IBA_Matvey_Mateusk",
+        "portrait = GFX_portrait_IBA_Matvey_Mateusk",
+        "ideology = pragmatism_ideology",
+        "set_country_leader_portrait = {",
+        "ADISCORD_vorkerland_mateusk_character_repair_v2",
+    ):
+        if token not in mateusk:
+            issues.append(f"Mateusk appointment is missing {token}")
+    if "create_country_leader" in mateusk:
+        issues.append("Mateusk appointment still uses the legacy leader API")
+    if "recruit_character" in mateusk:
+        issues.append("Mateusk appointment uses recruit_character outside history")
     owned_by_iba = set(re.findall(r"transfer_state\s*=\s*(\d+)", mandate))
     if owned_by_iba != {"90", "91"} or "transfer_state = 71" in mandate:
         issues.append(f"Norvane ownership allowlist drifted from states 90/91: {sorted(owned_by_iba)}")
     war_cleanup = named_block(effects, "ADISCORD_vorkerland_end_ivanland_intervention_wars")
-    for pair in (("IVN", "PWR"), ("IVN", "IBL"), ("IVN", "IBA"), ("IBA", "PWR"), ("IBA", "IBL"), ("IBL", "PWR")):
+    for pair in (("IVN", "PWR"), ("IVN", "IBL"), ("IVN", "IBA"), ("IBA", "WRK"), ("IBA", "VAD"), ("IBA", "TVA"), ("IBA", "PWR"), ("IBA", "IBL"), ("IBL", "PWR")):
         if f"has_war_with = {pair[1]}" not in named_block(war_cleanup, pair[0]):
             issues.append(f"Ivanland cleanup does not white-peace {pair[0]}-{pair[1]}")
     success = named_block(effects, "ADISCORD_vorkerland_ivanland_intervention_success")
@@ -540,6 +557,33 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append(f"Ivanland failure is missing {token}")
     if "clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_succeeded" not in failure:
         issues.append("Ivanland failure does not clear the mutually exclusive success flag")
+
+    monthly = named_block(on_actions, "on_monthly")
+    for token in (
+        "tag = IBA",
+        "has_country_leader = {",
+        "character = IBA_Matvey_Mateusk",
+        "ruling_only = yes",
+        "ADISCORD_vorkerland_appoint_mateusk = yes",
+        "ADISCORD_vorkerland_end_ivanland_intervention_wars = yes",
+        "tag = WRK",
+        "ADISCORD_vorkerland_appoint_joint_council = yes",
+    ):
+        if token not in monthly:
+            issues.append(f"Vorkerland save repair is missing {token}")
+    joint = named_block(effects, "ADISCORD_vorkerland_appoint_joint_council")
+    for token in (
+        "promote_character = {",
+        "character = WRK_VAD_Joint_Council",
+        "portrait = GFX_portrait_WRK_Temporary_Government",
+        "ADISCORD_vorkerland_joint_council_character_repair_v2",
+    ):
+        if token not in joint:
+            issues.append(f"joint-government appointment is missing {token}")
+    if "create_country_leader" in joint:
+        issues.append("joint-government appointment still uses the legacy leader API")
+    if "recruit_character" in joint:
+        issues.append("joint-government appointment uses recruit_character outside history")
 
     for news_id, outcome, shown_flag, completion_token in (
         (
@@ -601,6 +645,16 @@ def validate_events(root: Path, issues: list[str]) -> None:
 
     if "ADISCORD_vorkerland_erased_nations" not in effects or "ADISCORD_vorkerland_erased_nations" not in ideas:
         issues.append("cultural-erasure legacy is not represented as a national spirit")
+    erased_nations = named_block(ideas, "ADISCORD_vorkerland_erased_nations")
+    if "picture = generic_oppression" not in erased_nations:
+        issues.append("cultural-erasure spirit must use the registered generic_oppression picture")
+    macri_mission = named_block(
+        ideas, "ADISCORD_vorkerland_piv_macri_volunteer_mission"
+    )
+    if "picture = generic_volunteer_expedition_bonus" not in macri_mission:
+        issues.append(
+            "Macri volunteer mission must use the registered generic_volunteer_expedition_bonus picture"
+        )
     prepare = named_block(effects, "ADISCORD_vorkerland_prepare_conflict_country")
     initial = named_block(effects, "ADISCORD_vorkerland_prepare_initial_combatants")
     removed_by_prepare = set(re.findall(r"remove_ideas\s*=\s*([A-Za-z0-9_]+)", prepare))
@@ -814,6 +868,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
 
 def validate_ai(root: Path, issues: list[str]) -> None:
     ai = read(root, "common/ai_strategy/ADISCORD_vorkerland_collapse_ai.txt", issues)
+    defines = read(root, "common/defines/ADISCORD_defines_changes.lua", issues)
     if not balanced(ai):
         issues.append("collapse AI: unbalanced braces or quote")
     for stale in STALE_SYSTEM_TOKENS:
@@ -824,34 +879,19 @@ def validate_ai(root: Path, issues: list[str]) -> None:
         issues.append("collapse AI wanted-division factor must stay at the moderate value 8")
     if "ADISCORD_vorkerland_collapse_front_commitment" in ai:
         issues.append("obsolete all-tags front commitment survived")
-    fallback = named_block(ai, "ADISCORD_vorkerland_dynamic_regional_front_commitment")
+    if "ADISCORD_vorkerland_dynamic_regional_front_commitment" in ai or "country_trigger = {" in ai:
+        issues.append("removed dynamic regional front fallback survived")
     for token in (
-        "has_global_flag = ADISCORD_vorkerland_collapse_wars_started",
-        "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }",
-        "has_war = yes",
-        "type = front_unit_request",
-        "type = front_control",
-        "ratio = 1.00",
-        "priority = 900",
-        "execution_type = rush",
-        "execute_order = yes",
-        "manual_attack = yes",
+        "NDefines.NMilitary.PLAN_EXECUTE_RUSH = -200",
+        "NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_HIGH = 0.15",
+        "NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_HIGH = 0.25",
+        "NDefines.NAI.FRONT_EVAL_UNIT_SUPPLY_AND_ORG_LACK_IMPACT = 0.2",
+        "NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT = 0.0",
     ):
-        if token not in fallback:
-            issues.append(f"dynamic regional front fallback is missing {token}")
-    for token in (
-        "country_trigger = {",
-        "has_war_with = FROM",
-        "ADISCORD_vorkerland_is_regional_combatant = yes",
-    ):
-        if fallback.count(token) != 2:
-            issues.append(f"dynamic regional front fallback must contain two {token} selectors")
-    fallback_execution = fallback[fallback.find("ai_strategy = {") :]
-    if "tag =" in fallback_execution:
-        issues.append("dynamic regional front fallback must select enemies with country_trigger, not a fixed tag")
+        if token not in defines:
+            issues.append(f"collapse anti-freeze defines are missing {token}")
 
-    targeted_ai = ai.replace(fallback, "")
-    for strategy in re.findall(r"ai_strategy\s*=\s*\{([^{}]*)\}", targeted_ai, re.DOTALL):
+    for strategy in re.findall(r"ai_strategy\s*=\s*\{([^{}]*)\}", ai, re.DOTALL):
         if "type = front_control" in strategy or "type = front_unit_request" in strategy:
             if len(re.findall(r"\btag\s*=", strategy)) != 1:
                 issues.append("front scalar strategy must contain exactly one target tag")
@@ -921,11 +961,8 @@ def validate_outcomes(root: Path, issues: list[str]) -> None:
     if "tag = TGD" in central or set(re.findall(r"tag\s*=\s*([A-Z]{3})", central)) != {"WRK", "VAD", "TVA", "EYR", "EGC"}:
         issues.append("TGD must be outside the central claimant campaign")
     regional = named_block(triggers, "ADISCORD_vorkerland_is_regional_combatant")
-    local = named_block(triggers, "ADISCORD_vorkerland_is_local_rival_for_ROOT")
-    if not all(f"tag = {tag}" in regional for tag in ("VLA", "EBA", "TGD")) or local.count(
-        "ADISCORD_vorkerland_is_regional_combatant = yes"
-    ) < 2:
-        issues.append("TGD/VLA/EBA peripheral rivalry triangle is missing")
+    if not all(f"tag = {tag}" in regional for tag in ("VLA", "EBA", "TGD")):
+        issues.append("TGD/VLA/EBA peripheral country classification is missing")
     for candidate in ("worker", "vlad", "dorian"):
         victory = named_block(triggers, f"ADISCORD_vorkerland_{candidate}_victory_candidate")
         if "ADISCORD_vorkerland_tgd_defeated" in victory:

@@ -1954,11 +1954,22 @@ NOD_clear_limited_conflict_state = {
 			clr_country_flag = NOD_limited_concession_accepted
 		}
 	}
-	clear_global_event_target = NOD_limited_war_nod
-	clear_global_event_target = NOD_limited_war_target_country
+	# on_peace can run for unrelated wars and after the exact pair has already
+	# been cleared. Never ask the engine to remove an undefined global target.
+	if = {
+		limit = { has_event_target = NOD_limited_war_nod }
+		clear_global_event_target = NOD_limited_war_nod
+	}
+	if = {
+		limit = { has_event_target = NOD_limited_war_target_country }
+		clear_global_event_target = NOD_limited_war_target_country
+	}
 }
 
 NOD_addressed_limited_white_peace = {
+	# white_peace synchronously fires on_peace. Keep the integrity callback from
+	# clearing these event targets while the current event option still uses them.
+	set_country_flag = NOD_limited_resolution_in_progress
 	if = {
 		limit = {
 			has_event_target = NOD_limited_war_nod
@@ -1975,6 +1986,7 @@ NOD_addressed_limited_white_peace = {
 			}
 		}
 	}
+	clr_country_flag = NOD_limited_resolution_in_progress
 }
 
 NOD_emergency_limited_white_peace = {
@@ -1982,22 +1994,7 @@ NOD_emergency_limited_white_peace = {
 		limit = { has_country_flag = NOD_limited_war_active }
 		NOD_evaluate_limited_war_losses = yes
 		set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -10 } NOD_change_crisis_attention = yes
-		if = {
-			limit = {
-				has_event_target = NOD_limited_war_nod
-				has_event_target = NOD_limited_war_target_country
-				country_exists = event_target:NOD_limited_war_nod
-				country_exists = event_target:NOD_limited_war_target_country
-				event_target:NOD_limited_war_nod = {
-					has_war_with = event_target:NOD_limited_war_target_country
-				}
-			}
-			event_target:NOD_limited_war_nod = {
-				white_peace = {
-					tag = event_target:NOD_limited_war_target_country
-				}
-			}
-		}
+		NOD_addressed_limited_white_peace = yes
 		NOD_clear_limited_conflict_state = yes
 		NOD_select_crisis_posture = yes
 	}
@@ -2201,7 +2198,10 @@ NOD_check_limited_war_control = {
 
 NOD_check_limited_war_integrity = {
 	if = {
-		limit = { has_country_flag = NOD_limited_war_active }
+		limit = {
+			has_country_flag = NOD_limited_war_active
+			NOT = { has_country_flag = NOD_limited_resolution_in_progress }
+		}
 		if = {
 			limit = { has_capitulated = yes }
 			NOD_emergency_limited_white_peace = yes

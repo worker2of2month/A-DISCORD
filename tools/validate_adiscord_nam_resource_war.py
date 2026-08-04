@@ -165,6 +165,7 @@ def main() -> int:
     debug_categories = sources["common/decisions/categories/ADISCORD_scenario_debug_categories.txt"]
     debug_decisions = sources["common/decisions/ADISCORD_scenario_debug_decisions.txt"]
     news = sources["events/ADISCORD_nam_resource_war_events.txt"]
+    ideas = sources["common/ideas/ADISCORD_nam_resource_war_ideas.txt"]
     equipment_source = sources["common/units/equipment/ADISCORD_convoy_equipment.txt"]
     naval_units = sources["common/units/ADISCORD_naval_units.txt"]
     script_enums = sources["common/script_enums.txt"]
@@ -452,16 +453,21 @@ def main() -> int:
         check(f"transfer_state = {state_id}" not in mainland_rebellion,
               f"the opening uprising still receives island state {state_id}")
 
+    restitution_coalition = named_block(ideas, "ADISCORD_nam_restitution_coalition")
+    check(
+        "picture = generic_war_preparation" in restitution_coalition,
+        "restitution coalition must use the registered generic_war_preparation picture",
+    )
+
     public_sources = "\n".join((
         effects,
         news,
-        sources["common/ideas/ADISCORD_nam_resource_war_ideas.txt"],
+        ideas,
         slf_oob,
         sources["docs/lore/countries.md"],
     ))
-    check("ADISCORD_nam_insurgent_columns = {" in sources[
-        "common/ideas/ADISCORD_nam_resource_war_ideas.txt"
-    ], "SLF insurgent-column national spirit is missing")
+    check("ADISCORD_nam_insurgent_columns = {" in ideas,
+          "SLF insurgent-column national spirit is missing")
     check("ADISCORD_nam_republican_volunteer_columns" not in public_sources,
           "obsolete republican SLF spirit key remains")
     for obsolete in (

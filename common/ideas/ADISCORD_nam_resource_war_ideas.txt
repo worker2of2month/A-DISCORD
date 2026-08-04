@@ -16,7 +16,7 @@ ideas = {
 		}
 
 		ADISCORD_nam_restitution_coalition = {
-			picture = generic_axis_build_up
+			picture = generic_war_preparation
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {

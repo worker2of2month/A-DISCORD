@@ -49,6 +49,13 @@ guiTypes = {
 			pdx_tooltip = "etatism_ideology_desc"
 		}
 		iconType = {
+			name = "ideology_icon_vorkerism"
+			position = { x = 0 y = 0 }
+			spriteType = "GFX_ideology_vorkerism_countryview"
+			scale = 0.66
+			pdx_tooltip = "vorkerism_desc"
+		}
+		iconType = {
 			name = "ideology_icon_pragmatism"
 			position = { x = 7 y = -3 }
 			spriteType = "GFX_ideology_pragmatism_countryview_group"

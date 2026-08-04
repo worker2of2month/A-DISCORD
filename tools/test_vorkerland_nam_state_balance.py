@@ -474,6 +474,16 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             {105, 197, 311, 312},
         )
 
+    def test_distant_post_approach_is_mountain_terrain(self) -> None:
+        terrain_by_province = {
+            int(fields[0]): fields[6]
+            for line in (builder.ROOT / "map" / "definition.csv").read_text(
+                encoding="utf-8-sig"
+            ).splitlines()
+            if len(fields := line.split(";")) > 6 and fields[0].isdigit()
+        }
+        self.assertEqual(terrain_by_province.get(10016), "mountain")
+
     def test_new_city_vps_use_urban_provinces_and_bom_localisation(self) -> None:
         urban_provinces = {
             int(fields[0])

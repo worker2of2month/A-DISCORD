@@ -23,48 +23,6 @@ ADISCORD_vorkerland_collapse_war_economy = {
 	ai_strategy = { type = force_concentration_factor value = 35 }
 }
 
-# Dynamic regional settlement decisions can create new neighbour pairs after
-# the fixed opening wars have redrawn the map. Select the current enemy through
-# country_trigger so those legal wars still receive an executable battle plan.
-# Priority 900 leaves the tuned fixed-pair profiles below in control whenever
-# one exists, while covering pairs such as WPA-PWR without a quadratic matrix.
-ADISCORD_vorkerland_dynamic_regional_front_commitment = {
-	allowed = {
-		OR = {
-			tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD
-			tag = VLA tag = EBA tag = TGD tag = ROM tag = DVA
-			tag = SOL tag = SRA tag = TRU tag = ZTA tag = CSL
-		}
-	}
-	enable = {
-		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-		has_war = yes
-	}
-	abort_when_not_enabled = yes
-	ai_strategy = {
-		type = front_unit_request
-		value = 100
-		country_trigger = {
-			has_war_with = FROM
-			ADISCORD_vorkerland_is_regional_combatant = yes
-		}
-	}
-	ai_strategy = {
-		type = front_control
-		ratio = 1.00
-		priority = 900
-		ordertype = front
-		execution_type = rush
-		execute_order = yes
-		manual_attack = yes
-		country_trigger = {
-			has_war_with = FROM
-			ADISCORD_vorkerland_is_regional_combatant = yes
-		}
-	}
-}
-
 # Fixed regional wars use mirrored, target-specific front profiles. Every
 # scalar strategy contains exactly one target tag; no profile tries to assign
 # the same army to every possible successor at once.

@@ -492,7 +492,29 @@ ADISCORD_vorkerland_end_ivanland_intervention_wars = {
 	if = {
 		limit = { country_exists = IBA }
 		IBA = {
+			# IBA was previously admitted to the generic neighbour-war pool. Repair
+			# every possible inherited Vorkerland war, not only the original
+			# intervention pair, so an old WRK-IBA or VAD-IBA war cannot survive.
+			if = { limit = { country_exists = WRK has_war_with = WRK } white_peace = WRK }
+			if = { limit = { country_exists = VAD has_war_with = VAD } white_peace = VAD }
+			if = { limit = { country_exists = TVA has_war_with = TVA } white_peace = TVA }
+			if = { limit = { country_exists = EYR has_war_with = EYR } white_peace = EYR }
+			if = { limit = { country_exists = EGC has_war_with = EGC } white_peace = EGC }
+			if = { limit = { country_exists = ZAO has_war_with = ZAO } white_peace = ZAO }
+			if = { limit = { country_exists = WPA has_war_with = WPA } white_peace = WPA }
+			if = { limit = { country_exists = WPS has_war_with = WPS } white_peace = WPS }
 			if = { limit = { country_exists = PWR has_war_with = PWR } white_peace = PWR }
+			if = { limit = { country_exists = PSD has_war_with = PSD } white_peace = PSD }
+			if = { limit = { country_exists = VLA has_war_with = VLA } white_peace = VLA }
+			if = { limit = { country_exists = EBA has_war_with = EBA } white_peace = EBA }
+			if = { limit = { country_exists = TGD has_war_with = TGD } white_peace = TGD }
+			if = { limit = { country_exists = ROM has_war_with = ROM } white_peace = ROM }
+			if = { limit = { country_exists = DVA has_war_with = DVA } white_peace = DVA }
+			if = { limit = { country_exists = SOL has_war_with = SOL } white_peace = SOL }
+			if = { limit = { country_exists = SRA has_war_with = SRA } white_peace = SRA }
+			if = { limit = { country_exists = TRU has_war_with = TRU } white_peace = TRU }
+			if = { limit = { country_exists = ZTA has_war_with = ZTA } white_peace = ZTA }
+			if = { limit = { country_exists = CSL has_war_with = CSL } white_peace = CSL }
 			if = { limit = { country_exists = IBL has_war_with = IBL } white_peace = IBL }
 		}
 	}
@@ -500,6 +522,22 @@ ADISCORD_vorkerland_end_ivanland_intervention_wars = {
 		limit = { country_exists = IBL country_exists = PWR }
 		IBL = { if = { limit = { has_war_with = PWR } white_peace = PWR } }
 	}
+}
+
+# Legacy create_country_leader does not replace a character-system leader in
+# HOI4 1.19. Mateusk is recruited by IBA history, so promote that character
+# directly; recruit_character is deliberately forbidden in scripted effects.
+ADISCORD_vorkerland_appoint_mateusk = {
+	set_politics = { ruling_party = pragmatism elections_allowed = yes }
+	promote_character = {
+		character = IBA_Matvey_Mateusk
+		ideology = pragmatism_ideology
+	}
+	set_country_leader_portrait = {
+		ideology = pragmatism
+		portrait = GFX_portrait_IBA_Matvey_Mateusk
+	}
+	set_country_flag = ADISCORD_vorkerland_mateusk_character_repair_v2
 }
 
 # Called only after IVN occupies the complete 90-91 corridor. IBA is the sole
@@ -514,7 +552,6 @@ ADISCORD_vorkerland_setup_ivanland_mandate = {
 	71 = { add_claim_by = IBA }
 	IBA = {
 		set_capital = { state = 90 }
-		set_politics = { ruling_party = pragmatism elections_allowed = yes }
 		if = {
 			limit = { NOT = { has_country_flag = ADISCORD_vorkerland_iba_initialized } }
 			ADISCORD_grant_2150_technology_baseline = yes
@@ -525,27 +562,7 @@ ADISCORD_vorkerland_setup_ivanland_mandate = {
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 320 producer = IVN }
 			set_country_flag = ADISCORD_vorkerland_iba_initialized
 		}
-		if = {
-			limit = { has_character = IBA_Matvey_Mateusk }
-			promote_character = { character = IBA_Matvey_Mateusk ideology = pragmatism_ideology }
-			set_country_leader_portrait = {
-				ideology = pragmatism
-				portrait = GFX_portrait_IBA_Matvey_Mateusk
-			}
-		}
-		else_if = {
-			limit = { NOT = { has_country_flag = ADISCORD_vorkerland_mateusk_legacy_leader_created } }
-			# Save-compatibility path for saves made before IBA recruited its
-			# predeclared leader directly from country history.
-			create_country_leader = {
-				name = "Матвей Матеуск"
-				picture = GFX_portrait_IBA_Matvey_Mateusk
-				expire = "2200.1.1.1"
-				ideology = pragmatism_ideology
-				traits = { }
-			}
-			set_country_flag = ADISCORD_vorkerland_mateusk_legacy_leader_created
-		}
+		ADISCORD_vorkerland_appoint_mateusk = yes
 	}
 	IVN = {
 		if = {
@@ -705,6 +722,21 @@ ADISCORD_vorkerland_apply_claimant_cosmetics = {
 	VLA = { set_cosmetic_tag = VLA_volnograd_republic }
 }
 
+# Use the same character-system path as Mateusk. This avoids leaving the
+# generated pragmatist in office when the joint government is formed.
+ADISCORD_vorkerland_appoint_joint_council = {
+	set_politics = { ruling_party = pragmatism elections_allowed = no }
+	promote_character = {
+		character = WRK_VAD_Joint_Council
+		ideology = pragmatism_ideology
+	}
+	set_country_leader_portrait = {
+		ideology = pragmatism
+		portrait = GFX_portrait_WRK_Temporary_Government
+	}
+	set_country_flag = ADISCORD_vorkerland_joint_council_character_repair_v2
+}
+
 ADISCORD_vorkerland_form_joint_government = {
 	set_global_flag = ADISCORD_vorkerland_joint_government_formed
 	WRK = {
@@ -718,11 +750,7 @@ ADISCORD_vorkerland_form_joint_government = {
 		82 = { add_core_of = EYR set_state_controller_to = EYR }
 		123 = { add_core_of = EYR set_state_controller_to = EYR }
 		set_cosmetic_tag = WRK_vorkerland_joint_government
-		promote_character = { character = WRK_VAD_Joint_Council ideology = pragmatism_ideology }
-		set_country_leader_portrait = {
-			ideology = pragmatism
-			portrait = GFX_portrait_WRK_Temporary_Government
-		}
+		ADISCORD_vorkerland_appoint_joint_council = yes
 	}
 }
 

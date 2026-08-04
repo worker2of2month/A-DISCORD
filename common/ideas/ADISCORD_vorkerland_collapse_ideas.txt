@@ -1,7 +1,7 @@
 ideas = {
 	country = {
 		ADISCORD_vorkerland_erased_nations = {
-			picture = generic_colonial_elite
+			picture = generic_oppression
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -155,7 +155,7 @@ ideas = {
 		}
 
 		ADISCORD_vorkerland_piv_macri_volunteer_mission = {
-			picture = generic_allies_build_infantry
+			picture = generic_volunteer_expedition_bonus
 			allowed = { original_tag = PIV }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1

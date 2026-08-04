@@ -37,8 +37,14 @@ scripted_gui = {
             ideology_icon_etatism_visible = {
                 has_government = etatism
             }
+            ideology_icon_vorkerism_visible = {
+                has_country_leader_ideology = vorkerism
+            }
             ideology_icon_pragmatism_visible = {
-                has_government = pragmatism
+                AND = {
+                    has_government = pragmatism
+                    NOT = { has_country_leader_ideology = vorkerism }
+                }
             }
             ideology_icon_anarchism_visible = {
                 has_government = anarchism

@@ -63,14 +63,11 @@ class BorderWarArchitectureTests(unittest.TestCase):
             self.assertNotIn(f"ADISCORD_vorkerland_collapse.{event_id}", events)
 
         decisions = read("common/decisions/ADISCORD_vorkerland_collapse_decisions.txt")
-        for decision_id in (
-            "ADISCORD_vorkerland_consolidate_central_border",
-            "ADISCORD_vorkerland_settle_regional_border",
-        ):
-            decision = named_block(decisions, decision_id)
-            self.assertIn("has_global_flag = ADISCORD_vorkerland_claim_wars_authorized", decision)
-            self.assertIn("declare_war_on", decision)
-            self.assertIn("ai_will_do", decision)
+        decision = named_block(decisions, "ADISCORD_vorkerland_consolidate_central_border")
+        self.assertIn("has_global_flag = ADISCORD_vorkerland_claim_wars_authorized", decision)
+        self.assertIn("declare_war_on", decision)
+        self.assertIn("ai_will_do", decision)
+        self.assertNotIn("ADISCORD_vorkerland_settle_regional_border", decisions)
 
     def test_border_wars_are_declared_by_decisions_not_hidden_seed_events(self) -> None:
         events = read("events/ADISCORD_vorkerland_collapse_events.txt")
@@ -87,7 +84,6 @@ class BorderWarArchitectureTests(unittest.TestCase):
 
         for decision in (
             "ADISCORD_vorkerland_consolidate_central_border",
-            "ADISCORD_vorkerland_settle_regional_border",
             "ADISCORD_vorkerland_continue_reunification",
         ):
             self.assertIn("declare_war_on", named_block(decisions, decision), decision)
@@ -112,66 +108,22 @@ class BorderWarArchitectureTests(unittest.TestCase):
         central = named_block(decisions, "ADISCORD_vorkerland_consolidate_central_border")
         available = named_block(central, "available")
         complete = named_block(central, "complete_effect")
-        for block in (available, complete):
-            self.assertIn(
-                "ADISCORD_vorkerland_is_main_claimant_rival_for_ROOT = yes", block
-            )
-        self.assertLess(
-            complete.find("ADISCORD_vorkerland_is_main_claimant_rival_for_ROOT = yes"),
-            complete.find("ADISCORD_vorkerland_is_central_target_for_ROOT = yes"),
-        )
+        for tag in ("WRK", "VAD", "TVA"):
+            self.assertIn(f"tag = {tag}", available)
+        for target in ("WRK", "VAD", "TVA"):
+            self.assertIn(f"declare_war_on = {{ target = {target}", complete)
+        self.assertIn("random_neighbor_country", complete)
 
-    def test_regional_winners_treat_any_live_regional_neighbor_as_a_rival(self) -> None:
+    def test_post_opening_regional_neighbor_war_decision_is_removed(self) -> None:
         triggers = read("common/scripted_triggers/ADISCORD_vorkerland_collapse_triggers.txt")
         decisions = read("common/decisions/ADISCORD_vorkerland_collapse_decisions.txt")
+        self.assertNotIn("ADISCORD_vorkerland_settle_regional_border", decisions)
+        self.assertNotIn("ADISCORD_vorkerland_is_local_rival_for_ROOT", triggers)
 
-        participant = named_block(triggers, "ADISCORD_vorkerland_is_regional_combatant")
-        for tag in ("WPA", "PWR", "ZAO", "PSD", "VLA", "EBA", "ROM", "TRU", "CSL"):
-            self.assertIn(f"tag = {tag}", participant)
-
-        rival = named_block(triggers, "ADISCORD_vorkerland_is_local_rival_for_ROOT")
-        self.assertGreaterEqual(
-            rival.count("ADISCORD_vorkerland_is_regional_combatant = yes"), 2
-        )
-        self.assertNotIn("AND = { tag = PSD ROOT = { tag = PWR } }", rival)
-
-        regional = named_block(decisions, "ADISCORD_vorkerland_settle_regional_border")
-        self.assertIn("has_war = no", named_block(regional, "available"))
-        self.assertIn("ADISCORD_vorkerland_is_local_rival_for_ROOT = yes", regional)
-
-    def test_dynamic_regional_wars_have_a_country_triggered_execution_fallback(self) -> None:
+    def test_dynamic_regional_front_fallback_is_removed(self) -> None:
         ai = read("common/ai_strategy/ADISCORD_vorkerland_collapse_ai.txt")
-        fallback = named_block(
-            ai, "ADISCORD_vorkerland_dynamic_regional_front_commitment"
-        )
-
-        for tag in (
-            "ZAO", "WPA", "WPS", "PWR", "PSD", "VLA", "EBA", "TGD",
-            "ROM", "DVA", "SOL", "SRA", "TRU", "ZTA", "CSL",
-        ):
-            self.assertIn(f"tag = {tag}", fallback)
-        for token in (
-            "has_global_flag = ADISCORD_vorkerland_collapse_wars_started",
-            "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }",
-            "has_war = yes",
-            "abort_when_not_enabled = yes",
-        ):
-            self.assertIn(token, fallback)
-
-        execution = fallback[fallback.find("ai_strategy = {") :]
-        self.assertEqual(execution.count("type = front_unit_request"), 1)
-        self.assertEqual(execution.count("type = front_control"), 1)
-        self.assertEqual(execution.count("country_trigger = {"), 2)
-        self.assertEqual(execution.count("has_war_with = FROM"), 2)
-        self.assertEqual(
-            execution.count("ADISCORD_vorkerland_is_regional_combatant = yes"), 2
-        )
-        self.assertNotIn("tag =", execution)
-        self.assertIn("ratio = 1.00", execution)
-        self.assertIn("priority = 900", execution)
-        self.assertIn("execution_type = rush", execution)
-        self.assertIn("execute_order = yes", execution)
-        self.assertIn("manual_attack = yes", execution)
+        self.assertNotIn("ADISCORD_vorkerland_dynamic_regional_front_commitment", ai)
+        self.assertNotIn("country_trigger = {", ai)
 
     def test_partition_evacuates_legacy_armies_to_owned_capitals(self) -> None:
         effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
@@ -199,23 +151,22 @@ class BorderWarArchitectureTests(unittest.TestCase):
             initial.find("ADISCORD_vorkerland_prepare_initial_combatants = yes"),
         )
 
-    def test_all_new_wars_require_a_neighbor_decision(self) -> None:
+    def test_reunification_requires_neighbors_but_central_claimants_cannot_deadlock(self) -> None:
         decisions = read("common/decisions/ADISCORD_vorkerland_collapse_decisions.txt")
-        for key in (
-            "ADISCORD_vorkerland_consolidate_central_border",
-            "ADISCORD_vorkerland_settle_regional_border",
-            "ADISCORD_vorkerland_continue_reunification",
-        ):
-            block = named_block(decisions, key)
-            self.assertIn("random_neighbor_country", block, key)
-            self.assertIn("declare_war_on", block, key)
-            self.assertIn("ai_will_do", block, key)
+        reunification = named_block(decisions, "ADISCORD_vorkerland_continue_reunification")
+        self.assertIn("random_neighbor_country", reunification)
+        self.assertIn("declare_war_on", reunification)
+        self.assertIn("ai_will_do", reunification)
+
+        central = named_block(decisions, "ADISCORD_vorkerland_consolidate_central_border")
+        for target in ("WRK", "VAD", "TVA"):
+            self.assertIn(f"declare_war_on = {{ target = {target}", central)
+        self.assertIn("ai_will_do", central)
 
     def test_war_targets_cannot_be_dogpiled_into_a_mega_war(self) -> None:
         triggers = read("common/scripted_triggers/ADISCORD_vorkerland_collapse_triggers.txt")
         for key in (
             "ADISCORD_vorkerland_is_central_target_for_ROOT",
-            "ADISCORD_vorkerland_is_local_rival_for_ROOT",
             "ADISCORD_vorkerland_is_reunification_target_for_ROOT",
         ):
             self.assertIn("has_war = no", named_block(triggers, key), key)
@@ -256,8 +207,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         regional = named_block(triggers, "ADISCORD_vorkerland_is_regional_combatant")
         for tag in ("VLA", "EBA", "TGD"):
             self.assertIn(f"tag = {tag}", regional)
-        local = named_block(triggers, "ADISCORD_vorkerland_is_local_rival_for_ROOT")
-        self.assertGreaterEqual(local.count("ADISCORD_vorkerland_is_regional_combatant = yes"), 2)
+        self.assertNotIn("ADISCORD_vorkerland_is_local_rival_for_ROOT", triggers)
 
     def test_central_victory_does_not_annex_the_periphery(self) -> None:
         maps = read("common/scripted_effects/ADISCORD_vorkerland_collapse_map_effects.txt")
@@ -291,13 +241,16 @@ class BorderWarArchitectureTests(unittest.TestCase):
         regional = named_block(triggers, "ADISCORD_vorkerland_is_regional_combatant")
         for tag in ("SOL", "SRA", "CSL"):
             self.assertIn(f"tag = {tag}", regional)
-        rivals = named_block(triggers, "ADISCORD_vorkerland_is_local_rival_for_ROOT")
-        self.assertGreaterEqual(rivals.count("ADISCORD_vorkerland_is_regional_combatant = yes"), 2)
 
         decisions = read("common/decisions/ADISCORD_vorkerland_collapse_decisions.txt")
-        regional = named_block(decisions, "ADISCORD_vorkerland_settle_regional_border")
-        self.assertIn("tag = CSL", regional)
-        self.assertIn("factor = 0 tag = CSL", regional)
+        self.assertNotIn("ADISCORD_vorkerland_settle_regional_border", decisions)
+
+    def test_worker_victory_has_no_reunification_war_decision(self) -> None:
+        decisions = read("common/decisions/ADISCORD_vorkerland_collapse_decisions.txt")
+        reunification = named_block(decisions, "ADISCORD_vorkerland_continue_reunification")
+        allowed = named_block(reunification, "allowed")
+        self.assertIn("ADISCORD_vorkerland_is_main_claimant = yes", allowed)
+        self.assertIn("NOT = { tag = WRK }", allowed)
 
     def test_no_timeout_fragmentation_outcome_exists(self) -> None:
         combined = "\n".join(
@@ -364,6 +317,17 @@ class FrontAndSupplyTests(unittest.TestCase):
             self.assertIn("manual_attack = no", front)
             self.assertNotIn("execution_type = rush", front)
             self.assertNotIn("manual_attack = yes", front)
+
+    def test_global_ai_thresholds_keep_small_collapse_fronts_moving(self) -> None:
+        defines = read("common/defines/ADISCORD_defines_changes.lua")
+        for token in (
+            "NDefines.NMilitary.PLAN_EXECUTE_RUSH = -200",
+            "NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_HIGH = 0.15",
+            "NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_HIGH = 0.25",
+            "NDefines.NAI.FRONT_EVAL_UNIT_SUPPLY_AND_ORG_LACK_IMPACT = 0.2",
+            "NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT = 0.0",
+        ):
+            self.assertIn(token, defines)
 
     def test_technograd_is_a_supplied_megalopolis(self) -> None:
         state_paths = list((ROOT / "history" / "states").glob("105-*.txt"))
@@ -576,22 +540,30 @@ class CharactersAndPoliticsTests(unittest.TestCase):
                 character,
             )
 
-    def test_joint_government_promotes_temp_government_portrait(self) -> None:
+    def test_joint_government_appoints_temp_government_portrait(self) -> None:
         characters = read("common/characters/ADISCORD_vorkerland_collapse_characters.txt")
         effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
         council = named_block(characters, "WRK_VAD_Joint_Council")
         joint = named_block(effects, "ADISCORD_vorkerland_form_joint_government")
+        appointment = named_block(effects, "ADISCORD_vorkerland_appoint_joint_council")
+        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        monthly = named_block(on_actions, "on_monthly")
 
         self.assertIn("GFX_portrait_WRK_Temporary_Government", council)
         self.assertIn("country_leader", council)
         self.assertIn("ideology = pragmatism_ideology", council)
         self.assertIn("traits = { Emergency_Powers }", council)
-        self.assertRegex(
-            joint,
-            r"promote_character\s*=\s*\{[^{}]*character\s*=\s*WRK_VAD_Joint_Council"
-            r"[^{}]*ideology\s*=\s*pragmatism_ideology[^{}]*\}",
-        )
-        self.assertIn("portrait = GFX_portrait_WRK_Temporary_Government", joint)
+        self.assertIn("ADISCORD_vorkerland_appoint_joint_council = yes", joint)
+        self.assertNotIn("create_country_leader", appointment)
+        self.assertNotIn("recruit_character", appointment)
+        self.assertIn("promote_character", appointment)
+        self.assertIn("character = WRK_VAD_Joint_Council", appointment)
+        self.assertIn("portrait = GFX_portrait_WRK_Temporary_Government", appointment)
+        self.assertIn("ADISCORD_vorkerland_joint_council_character_repair_v2", appointment)
+        self.assertIn("ADISCORD_vorkerland_appoint_joint_council = yes", monthly)
+        self.assertIn("has_country_leader", monthly)
+        self.assertIn("character = WRK_VAD_Joint_Council", monthly)
+        self.assertIn("ruling_only = yes", monthly)
 
     def test_joint_government_starts_with_reduced_frontier(self) -> None:
         effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
@@ -679,12 +651,23 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
         loc = read("localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml")
         self.assertIn("ADISCORD_vorkerland_erased_nations", ideas)
+        self.assertIn(
+            "picture = generic_oppression",
+            named_block(ideas, "ADISCORD_vorkerland_erased_nations"),
+        )
         self.assertIn("Стёртые народы Империи", loc)
         prepare = named_block(effects, "ADISCORD_vorkerland_prepare_conflict_country")
         self.assertNotIn("add_ideas = ADISCORD_vorkerland_erased_nations", prepare)
         self.assertEqual(effects.count("add_ideas = ADISCORD_vorkerland_erased_nations"), 1)
         initial = named_block(effects, "ADISCORD_vorkerland_prepare_initial_combatants")
         self.assertRegex(initial, r"WRK\s*=\s*\{[^{}]*add_ideas\s*=\s*ADISCORD_vorkerland_erased_nations")
+
+    def test_fallback_spirit_pictures_use_registered_idea_sprites(self) -> None:
+        ideas = read("common/ideas/ADISCORD_vorkerland_collapse_ideas.txt")
+        mission = named_block(
+            ideas, "ADISCORD_vorkerland_piv_macri_volunteer_mission"
+        )
+        self.assertIn("picture = generic_volunteer_expedition_bonus", mission)
 
     def test_selected_sides_have_unique_moderate_spirits(self) -> None:
         ideas = read("common/ideas/ADISCORD_vorkerland_collapse_ideas.txt")
@@ -777,18 +760,27 @@ class InterventionAndVisualTests(unittest.TestCase):
     def test_ivanland_puppet_is_led_by_mateusk(self) -> None:
         effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
         mandate = named_block(effects, "ADISCORD_vorkerland_setup_ivanland_mandate")
-        promotion = (
-            "promote_character = { character = IBA_Matvey_Mateusk "
-            "ideology = pragmatism_ideology }"
-        )
+        appointment = named_block(effects, "ADISCORD_vorkerland_appoint_mateusk")
+        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        monthly = named_block(on_actions, "on_monthly")
 
         self.assertIn("puppet = IBA", mandate)
-        self.assertIn(promotion, mandate)
-        self.assertLess(mandate.find(promotion), mandate.find("puppet = IBA"))
+        self.assertIn("ADISCORD_vorkerland_appoint_mateusk = yes", mandate)
         self.assertLess(
-            mandate.find(promotion),
-            mandate.find("portrait = GFX_portrait_IBA_Matvey_Mateusk"),
+            mandate.find("ADISCORD_vorkerland_appoint_mateusk = yes"),
+            mandate.find("puppet = IBA"),
         )
+        self.assertNotIn("create_country_leader", appointment)
+        self.assertNotIn("recruit_character", appointment)
+        self.assertIn("promote_character", appointment)
+        self.assertIn("character = IBA_Matvey_Mateusk", appointment)
+        self.assertIn("portrait = GFX_portrait_IBA_Matvey_Mateusk", appointment)
+        self.assertIn("ideology = pragmatism_ideology", appointment)
+        self.assertIn("ADISCORD_vorkerland_mateusk_character_repair_v2", appointment)
+        self.assertIn("ADISCORD_vorkerland_appoint_mateusk = yes", monthly)
+        self.assertIn("ADISCORD_vorkerland_end_ivanland_intervention_wars = yes", monthly)
+        self.assertIn("character = IBA_Matvey_Mateusk", monthly)
+        self.assertIn("ruling_only = yes", monthly)
 
     def test_ivanland_has_one_timed_puppet_outcome(self) -> None:
         decisions = read("common/decisions/ADISCORD_vorkerland_collapse_decisions.txt")
@@ -805,13 +797,14 @@ class InterventionAndVisualTests(unittest.TestCase):
         self.assertIn("puppet = IBA", mandate)
         self.assertNotIn("set_nationality = IBA", mandate)
         self.assertNotIn("add_country_leader_role", mandate)
-        self.assertIn("GFX_portrait_IBA_Matvey_Mateusk", mandate)
+        self.assertIn("ADISCORD_vorkerland_appoint_mateusk = yes", mandate)
         self.assertIn("71 = { add_claim_by = IBA }", mandate)
-        self.assertIn("ADISCORD_vorkerland_mateusk_legacy_leader_created", mandate)
-        legacy = named_block(mandate, "create_country_leader")
-        self.assertIn('name = "Матвей Матеуск"', legacy)
-        self.assertIn("picture = GFX_portrait_IBA_Matvey_Mateusk", legacy)
-        self.assertNotIn("desc =", legacy)
+        appointment = named_block(effects, "ADISCORD_vorkerland_appoint_mateusk")
+        self.assertIn("ADISCORD_vorkerland_mateusk_character_repair_v2", appointment)
+        self.assertNotIn("create_country_leader", appointment)
+        self.assertNotIn("recruit_character", appointment)
+        self.assertIn("promote_character", appointment)
+        self.assertIn("portrait = GFX_portrait_IBA_Matvey_Mateusk", appointment)
         self.assertEqual(set(re.findall(r"transfer_state\s*=\s*(\d+)", mandate)), {"90", "91"})
         self.assertNotIn("transfer_state = 71", mandate)
         ivn_history = read("history/countries/IVN - IvanLand.txt")
@@ -1021,8 +1014,8 @@ class InterventionAndVisualTests(unittest.TestCase):
         effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
         history = read("history/countries/WRK - WorkerLand.txt")
         for character in ("WRK_Anton_Bagley", "WRK_VAD_Joint_Council"):
-            self.assertNotIn(f"recruit_character = {character}", effects)
             self.assertIn(f"recruit_character = {character}", history)
+            self.assertNotIn(f"recruit_character = {character}", effects)
 
     def test_player_facing_names_are_short_and_not_legacy_cringe(self) -> None:
         loc = read("localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml")

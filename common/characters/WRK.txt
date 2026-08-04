@@ -17,7 +17,7 @@ characters = {
 			}
 		}
 		country_leader = {
-			ideology = pragmatism_ideology
+			ideology = vorkerism
 			expire = "2200.1.1.1"
 			id = -1
 			traits = { Emergency_Powers }

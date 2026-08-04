@@ -682,6 +682,19 @@ class CrisisValidatorTests(unittest.TestCase):
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(source.read_bytes())
 
+    def test_crisis_national_spirits_have_assigned_pictures(self):
+        ideas = validator.read(
+            validator.ROOT / "common/ideas/ADISCORD_STP_VAL_crisis_ideas.txt"
+        ) or ""
+
+        for idea, picture in validator.CRISIS_IDEA_PICTURES.items():
+            block = validator.extract_named_block(ideas, idea) or ""
+            self.assertEqual(
+                validator._direct_scalar_values(block, "picture"),
+                [picture],
+                idea,
+            )
+
     def test_stp_hedonism_spirit_owns_an_stp_only_army_lock(self):
         root = validator.ROOT
         stp_ideas = validator.read(root / "common/ideas/steland.txt") or ""
@@ -2424,10 +2437,15 @@ class CrisisValidatorTests(unittest.TestCase):
         cleanup = validator.extract_named_block(
             effects, "NOD_clear_limited_conflict_state"
         ) or ""
-        task_six_blocks.extend((emergency, cleanup))
-        self.assertIn("event_target:NOD_limited_war_nod", emergency)
-        self.assertIn("event_target:NOD_limited_war_target_country", emergency)
-        self.assertIn("white_peace", emergency)
+        addressed = validator.extract_named_block(
+            effects, "NOD_addressed_limited_white_peace"
+        ) or ""
+        task_six_blocks.extend((emergency, addressed, cleanup))
+        self.assertIn("NOD_addressed_limited_white_peace = yes", emergency)
+        self.assertIn("event_target:NOD_limited_war_nod", addressed)
+        self.assertIn("event_target:NOD_limited_war_target_country", addressed)
+        self.assertIn("white_peace", addressed)
+        self.assertIn("NOD_limited_resolution_in_progress", addressed)
         for token in (
             "NOD_limited_war_participant",
             "NOD_limited_war_target",

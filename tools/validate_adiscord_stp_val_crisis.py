@@ -107,6 +107,24 @@ except ModuleNotFoundError:
 
 ROOT = Path(__file__).resolve().parents[1]
 SECTIONS = ("core", "stp", "civil_war", "val", "nod", "north", "peace", "ai", "gui", "localisation", "performance")
+CRISIS_IDEA_PICTURES = {
+    "STP_officer_preparation_1": "generic_army_war_college",
+    "STP_officer_preparation_2": "generic_army_war_college",
+    "STP_officer_preparation_3": "generic_army_war_college",
+    "STP_sotnikov_rebuilt_general_staff": "generic_central_management",
+    "STP_hedersett_lists_production": "generic_production_bonus",
+    "STP_crisis_war_logistics": "generic_logistics",
+    "STP_nodrul_limited_support": "generic_supply_lines",
+    "STP_last_banquet_plan": "generic_intel_bonus",
+    "STP_last_banquet_momentum": "generic_morale_bonus",
+    "STP_bronze_congress_lost": "generic_disjointed_gov",
+    "STP_last_banquet_delayed": "generic_army_problems",
+    "NOD_ypr_trade_rights": "CHI_china_merchant_group",
+    "NOD_cof_reparations": "generic_economic_increase",
+    "NOD_beshay_trade_concession": "generic_foreign_capital",
+    "STP_val_contract_advisers": "VAL_contract_state",
+    "STP_VAL_postwar_contract_cost": "VAL_contract_state",
+}
 REQUIRED_FILES = {
     "core": (
         ("common/scripted_effects/ADISCORD_STP_VAL_crisis_core_effects.txt", "core scripted effects"),
@@ -1181,6 +1199,10 @@ def _validate_civil_war_contract(root: Path, issues: list[str]) -> None:
     if ideas is None:
         issues.append("missing Task 5 officer preparation ideas")
     else:
+        for idea, picture in CRISIS_IDEA_PICTURES.items():
+            block = extract_named_block(ideas, idea) or ""
+            if _direct_scalar_values(block, "picture") != [picture]:
+                issues.append(f"{idea} must use its assigned picture {picture}")
         for idea, planning in (
             ("STP_officer_preparation_1", "0.05"),
             ("STP_officer_preparation_2", "0.075"),

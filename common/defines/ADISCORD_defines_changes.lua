@@ -108,7 +108,7 @@ NDefines.NGame.START_DATE = "2160.1.1.1";
 	-- as in Expert AI instead of accepting virtually any losing attack.
 	NDefines.NMilitary.PLAN_EXECUTE_CAREFUL_LIMIT = 10.0
 	NDefines.NMilitary.PLAN_EXECUTE_BALANCED_LIMIT = 0.0
-	NDefines.NMilitary.PLAN_EXECUTE_RUSH = -10
+	NDefines.NMilitary.PLAN_EXECUTE_RUSH = -200
 	NDefines.NMilitary.PLAN_EXECUTE_CAREFUL_MAX_FORT = 4
 
 	NDefines.NMilitary.PLAN_MAX_PROGRESS_TO_JOIN = 0.54
@@ -448,12 +448,12 @@ NDefines.NGame.START_DATE = "2160.1.1.1";
 	NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_MED = 0.65
 	NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_MED = 0.65
 
-	-- Expert AI-style safety floor: aggressive plans still attack, but only
-	-- with formations capable of finishing the battle and holding the gain.
-	NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_HIGH = 0.50
-	NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_HIGH = 0.50
-	NDefines.NAI.FRONT_EVAL_UNIT_SUPPLY_AND_ORG_LACK_IMPACT = 1.0
-	NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT = 0.1
+	-- Small collapse armies must execute their assigned fronts even when the
+	-- ruined regional supply network would make the stock AI wait forever.
+	NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_HIGH = 0.15
+	NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_HIGH = 0.25
+	NDefines.NAI.FRONT_EVAL_UNIT_SUPPLY_AND_ORG_LACK_IMPACT = 0.2
+	NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT = 0.0
 
 	NDefines.NAI.PLAN_FACTION_STRONG_TO_EXECUTE = 0.65
 	NDefines.NAI.ORG_UNIT_STRONG = 0.75

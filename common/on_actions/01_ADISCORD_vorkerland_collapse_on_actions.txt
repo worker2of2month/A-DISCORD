@@ -97,6 +97,36 @@ on_actions = {
 	}
 	on_monthly = {
 		effect = {
+			# Legacy create_country_leader could set its repair flag without replacing
+			# the generated character leader. Check the actual ruling character so the
+			# repair also recovers saves where a random leader returned later.
+			if = {
+				limit = {
+					tag = IBA
+					has_country_flag = ADISCORD_vorkerland_iba_initialized
+					NOT = {
+						has_country_leader = {
+							character = IBA_Matvey_Mateusk
+							ruling_only = yes
+						}
+					}
+				}
+				ADISCORD_vorkerland_appoint_mateusk = yes
+				ADISCORD_vorkerland_end_ivanland_intervention_wars = yes
+			}
+			if = {
+				limit = {
+					tag = WRK
+					has_global_flag = ADISCORD_vorkerland_joint_government_formed
+					NOT = {
+						has_country_leader = {
+							character = WRK_VAD_Joint_Council
+							ruling_only = yes
+						}
+					}
+				}
+				ADISCORD_vorkerland_appoint_joint_council = yes
+			}
 			if = {
 				limit = { OR = { tag = ROM tag = TRU tag = ZAO } }
 				ADISCORD_vorkerland_sync_independence_cosmetic = yes

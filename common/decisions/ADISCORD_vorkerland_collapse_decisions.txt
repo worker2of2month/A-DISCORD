@@ -6,8 +6,26 @@ ADISCORD_vorkerland_collapse_category = {
 			has_global_flag = ADISCORD_vorkerland_claim_wars_authorized
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 			OR = {
-				any_neighbor_country = {
-					ADISCORD_vorkerland_is_main_claimant_rival_for_ROOT = yes
+				AND = {
+					tag = WRK
+					OR = {
+						VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } }
+						TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } }
+					}
+				}
+				AND = {
+					tag = VAD
+					OR = {
+						WRK = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } }
+						TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } }
+					}
+				}
+				AND = {
+					tag = TVA
+					OR = {
+						WRK = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } }
+						VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } }
+					}
 				}
 				any_neighbor_country = {
 					ADISCORD_vorkerland_is_central_target_for_ROOT = yes
@@ -17,8 +35,26 @@ ADISCORD_vorkerland_collapse_category = {
 		}
 		available = {
 			OR = {
-				any_neighbor_country = {
-					ADISCORD_vorkerland_is_main_claimant_rival_for_ROOT = yes
+				AND = {
+					tag = WRK
+					OR = {
+						VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } }
+						TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } }
+					}
+				}
+				AND = {
+					tag = VAD
+					OR = {
+						WRK = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } }
+						TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } }
+					}
+				}
+				AND = {
+					tag = TVA
+					OR = {
+						WRK = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } }
+						VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } }
+					}
 				}
 				AND = {
 					has_war = no
@@ -34,26 +70,31 @@ ADISCORD_vorkerland_collapse_category = {
 		days_re_enable = 7
 		complete_effect = {
 			if = {
-				limit = {
-					any_neighbor_country = {
-						ADISCORD_vorkerland_is_main_claimant_rival_for_ROOT = yes
-					}
-				}
-				random_neighbor_country = {
-					limit = {
-						ADISCORD_vorkerland_is_main_claimant_rival_for_ROOT = yes
-					}
-					ROOT = { declare_war_on = { target = PREV type = annex_everything } }
-				}
+				limit = { tag = WRK VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } } }
+				declare_war_on = { target = VAD type = annex_everything }
 			}
 			else_if = {
-				limit = {
-					has_war = no
-					any_neighbor_country = {
-						ADISCORD_vorkerland_is_central_target_for_ROOT = yes
-						NOT = { has_war_with = ROOT }
-					}
-				}
+				limit = { tag = VAD WRK = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } } }
+				declare_war_on = { target = WRK type = annex_everything }
+			}
+			else_if = {
+				limit = { tag = TVA WRK = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } } }
+				declare_war_on = { target = WRK type = annex_everything }
+			}
+			else_if = {
+				limit = { tag = WRK TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } } }
+				declare_war_on = { target = TVA type = annex_everything }
+			}
+			else_if = {
+				limit = { tag = VAD TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } } }
+				declare_war_on = { target = TVA type = annex_everything }
+			}
+			else_if = {
+				limit = { tag = TVA VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } } }
+				declare_war_on = { target = VAD type = annex_everything }
+			}
+			else_if = {
+				limit = { has_war = no any_neighbor_country = { ADISCORD_vorkerland_is_central_target_for_ROOT = yes NOT = { has_war_with = ROOT } } }
 				random_neighbor_country = {
 					limit = {
 						ADISCORD_vorkerland_is_central_target_for_ROOT = yes
@@ -66,55 +107,12 @@ ADISCORD_vorkerland_collapse_category = {
 		ai_will_do = { factor = 250 }
 	}
 
-	ADISCORD_vorkerland_settle_regional_border = {
-		icon = generic_border_conflict
-		allowed = {
-			OR = {
-				tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD
-				tag = VLA tag = EBA tag = TGD tag = ROM tag = DVA tag = SOL
-				tag = SRA tag = TRU tag = ZTA tag = IBA tag = IBL tag = CSL
-			}
-		}
-		visible = {
-			has_global_flag = ADISCORD_vorkerland_claim_wars_authorized
-			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-			any_neighbor_country = {
-				ADISCORD_vorkerland_is_local_rival_for_ROOT = yes
-				NOT = { has_war_with = ROOT }
-			}
-		}
-		available = {
-			has_war = no
-			any_neighbor_country = {
-				ADISCORD_vorkerland_is_local_rival_for_ROOT = yes
-				NOT = { has_war_with = ROOT }
-			}
-		}
-		cost = 0
-		fire_only_once = no
-		days_re_enable = 7
-		complete_effect = {
-			random_neighbor_country = {
-				limit = {
-					ADISCORD_vorkerland_is_local_rival_for_ROOT = yes
-					NOT = { has_war_with = ROOT }
-				}
-				ROOT = { declare_war_on = { target = PREV type = annex_everything } }
-			}
-			if = {
-				limit = { tag = EBA PIV = { exists = yes } }
-				PIV = { add_ideas = ADISCORD_vorkerland_piv_macri_volunteer_mission }
-			}
-		}
-		ai_will_do = {
-			factor = 225
-			modifier = { factor = 0 tag = CSL }
-		}
-	}
-
 	ADISCORD_vorkerland_continue_reunification = {
 		icon = generic_prepare_civil_war
-		allowed = { ADISCORD_vorkerland_is_main_claimant = yes }
+		allowed = {
+			ADISCORD_vorkerland_is_main_claimant = yes
+			NOT = { tag = WRK }
+		}
 		visible = {
 			has_country_flag = ADISCORD_vorkerland_central_unifier
 			any_neighbor_country = {

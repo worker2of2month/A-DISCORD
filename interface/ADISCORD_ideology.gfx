@@ -64,6 +64,10 @@ spriteTypes = {
             y = 70
         }
 	}
+	spriteType = {
+		name = "GFX_ideology_vorkerism"
+		texturefile = "gfx/interface/ideologies/vorkerism_group.png"
+	}
 	corneredTileSpriteType = {
 		name = "GFX_ideology_hedonism_group"
 		texturefile = "gfx/interface/ideologies/hedonism_group.dds"
@@ -87,6 +91,10 @@ spriteTypes = {
             x = 125 
             y = 125
         }
+	}
+	spriteType = {
+		name = "GFX_ideology_vorkerism_countryview"
+		texturefile = "gfx/interface/ideologies/vorkerism_group.png"
 	}
 	corneredTileSpriteType = {
 		name = "GFX_ideology_humanism_countryview_group"

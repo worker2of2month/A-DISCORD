@@ -1,6 +1,7 @@
 ideas = {
 	country = {
 		STP_officer_preparation_1 = {
+			picture = generic_army_war_college
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -10,6 +11,7 @@ ideas = {
 		}
 
 		STP_officer_preparation_2 = {
+			picture = generic_army_war_college
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -19,6 +21,7 @@ ideas = {
 		}
 
 		STP_officer_preparation_3 = {
+			picture = generic_army_war_college
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -28,6 +31,7 @@ ideas = {
 		}
 
 		STP_sotnikov_rebuilt_general_staff = {
+			picture = generic_central_management
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -37,6 +41,7 @@ ideas = {
 		}
 
 		STP_hedersett_lists_production = {
+			picture = generic_production_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -47,6 +52,7 @@ ideas = {
 		}
 
 		STP_crisis_war_logistics = {
+			picture = generic_logistics
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -57,6 +63,7 @@ ideas = {
 		}
 
 		STP_nodrul_limited_support = {
+			picture = generic_supply_lines
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -68,6 +75,7 @@ ideas = {
 		}
 
 		STP_last_banquet_plan = {
+			picture = generic_intel_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -78,6 +86,7 @@ ideas = {
 		}
 
 		STP_last_banquet_momentum = {
+			picture = generic_morale_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -89,6 +98,7 @@ ideas = {
 		}
 
 		STP_bronze_congress_lost = {
+			picture = generic_disjointed_gov
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -99,6 +109,7 @@ ideas = {
 		}
 
 		STP_last_banquet_delayed = {
+			picture = generic_army_problems
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -109,6 +120,7 @@ ideas = {
 		}
 
 		NOD_ypr_trade_rights = {
+			picture = CHI_china_merchant_group
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -119,6 +131,7 @@ ideas = {
 		}
 
 		NOD_cof_reparations = {
+			picture = generic_economic_increase
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -129,6 +142,7 @@ ideas = {
 		}
 
 		NOD_beshay_trade_concession = {
+			picture = generic_foreign_capital
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -139,6 +153,7 @@ ideas = {
 		}
 
 		STP_val_contract_advisers = {
+			picture = VAL_contract_state
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -161,6 +176,7 @@ ideas = {
 		}
 
 		STP_VAL_postwar_contract_cost = {
+			picture = VAL_contract_state
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1

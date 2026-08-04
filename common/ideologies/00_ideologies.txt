@@ -183,6 +183,10 @@ ideologies = {
 		types = {
 			pragmatism_ideology = {
 			}
+			vorkerism = {
+				can_be_randomly_selected = no
+				color = { 181 73 26 }
+			}
 		}
 
 		dynamic_faction_names = {

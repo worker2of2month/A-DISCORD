@@ -79,37 +79,13 @@ ADISCORD_vorkerland_is_central_target_for_ROOT = {
 	ROOT = { ADISCORD_vorkerland_is_main_claimant = yes }
 }
 
-# Ordinary regional successors use their current border instead of a frozen
-# pair table. This lets new post-victory borders such as WPA-PWR continue the
-# civil war without adding another hidden event or bespoke pair.
+# Regional identity is reused by outcome and presentation checks. War targets
+# are deliberately defined by the separate fixed pair table below.
 ADISCORD_vorkerland_is_regional_combatant = {
 	OR = {
 		tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD
 		tag = VLA tag = EBA tag = TGD tag = ROM tag = DVA
 		tag = SOL tag = SRA tag = TRU tag = ZTA tag = CSL
-	}
-}
-
-ADISCORD_vorkerland_is_local_rival_for_ROOT = {
-	is_subject = no
-	has_war = no
-	NOT = { has_capitulated = yes }
-	OR = {
-		AND = {
-			ADISCORD_vorkerland_is_regional_combatant = yes
-			ROOT = { ADISCORD_vorkerland_is_regional_combatant = yes }
-		}
-		AND = { tag = PWR ROOT = { tag = IBA } }
-		AND = {
-			tag = PSD
-			has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved
-			ROOT = { tag = IBL }
-		}
-		AND = {
-			tag = VAD
-			has_country_flag = ADISCORD_vorkerland_central_unifier
-			ROOT = { OR = { tag = ROM tag = TRU } }
-		}
 	}
 }
 
