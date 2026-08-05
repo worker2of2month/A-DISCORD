@@ -43,6 +43,12 @@ guiTypes = {
 			pdx_tooltip = "chauvinism_ideology_desc"
 		}
 		iconType = {
+			name = "ideology_icon_contractual_etatism"
+			position = { x = 0 y = 0 }
+			spriteType = "GFX_ideology_contractual_etatism_countryview"
+			pdx_tooltip = "contractual_etatism_desc"
+		}
+		iconType = {
 			name = "ideology_icon_etatism"
 			position = { x = 5 y = -3 }
 			spriteType = "GFX_ideology_etatism_countryview_group"

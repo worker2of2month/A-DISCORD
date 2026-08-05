@@ -57,6 +57,14 @@ spriteTypes = {
         }
 	}
 	corneredTileSpriteType = {
+		name = "GFX_ideology_contractual_etatism"
+		texturefile = "gfx/interface/ideologies/condottierism_group.png"
+		size = {
+            x = 70
+            y = 70
+        }
+	}
+	corneredTileSpriteType = {
 		name = "GFX_ideology_aristocratic_hedonism"
 		texturefile = "gfx/interface/ideologies/aristocratic_hedonism_group.png"
 		size = {
@@ -85,10 +93,26 @@ spriteTypes = {
         }
 	}
 	corneredTileSpriteType = {
+		name = "GFX_ideology_contractual_etatism_countryview"
+		texturefile = "gfx/interface/ideologies/condottierism_group.png"
+		size = {
+            x = 125
+            y = 125
+        }
+	}
+	corneredTileSpriteType = {
 		name = "GFX_ideology_aristocratic_hedonism_countryview"
 		texturefile = "gfx/interface/ideologies/aristocratic_hedonism_group.png"
 		size = {
             x = 125 
+            y = 125
+        }
+	}
+	spriteType = {
+		name = "GFX_ideology_vorkerism_countryview"
+		texturefile = "gfx/interface/ideologies/vorkerism_group.png"
+		size = {
+            x = 125
             y = 125
         }
 	}

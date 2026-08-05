@@ -80,6 +80,10 @@ defined_text = {
 
 defined_text = {
 	name = GetSubIdeologyEtatism
+	text = {
+		trigger = { has_country_leader_ideology = contractual_etatism }
+		localization_key = contractual_etatism
+	}
 	text = { localization_key = etatism_ideology }
 }
 

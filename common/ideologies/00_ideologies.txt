@@ -365,6 +365,10 @@ ideologies = {
 		types = {
 			etatism_ideology = {
 			}
+			contractual_etatism = {
+				can_be_randomly_selected = no
+				color = { 143 50 29 }
+			}
 		}
 
 		dynamic_faction_names = {
