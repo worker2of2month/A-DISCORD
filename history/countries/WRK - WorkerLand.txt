@@ -23,6 +23,7 @@ add_to_faction = VLA
 add_to_faction = ROM
 add_to_faction = SOL
 add_to_faction = TRU
+add_to_faction = WCG
 
 ####### Politics
 
@@ -30,6 +31,7 @@ add_ideas = {
 	WRK_ashes_of_the_crown
 	WRK_hourglass_of_discord
 	WRK_constitution_of_the_republic
+	WRK_birthplace_of_the_first_revolution
 
 	#ministers
 	minister_WRK_Dorian_Worx
@@ -94,6 +96,10 @@ set_autonomy = {
 set_autonomy = {
 	target = TRU
 	autonomous_state = autonomy_republic_in_Vorkerland
+}
+set_autonomy = {
+	target = WCG
+	autonomous_state = autonomy_vorkerland_sanitary_gate
 }
 
 set_convoys = 533

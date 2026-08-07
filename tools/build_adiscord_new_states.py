@@ -147,6 +147,8 @@ VORKERLAND_CENTRES = {
     309: (11795, 5),
     312: (16637, 3),
     313: (16617, 3),
+    317: (8803, 3),
+    318: (16642, 3),
     323: (16590, 3),
     327: (16641, 5),
 }
@@ -161,7 +163,7 @@ VORKERLAND_MINOR_VPS = {
 # Explicit profiles replace the old pseudo-random 24-72k population formula
 # around the densely populated Vorkernsberg conurbation.
 STATE_PROFILES = {
-    306: {"population": 1_180_000, "category": "large_town", "infrastructure": 3, "industry": 2, "supplies": 3.0},
+    306: {"population": 1_180_000, "category": "large_town", "infrastructure": 3, "industry": 2, "military": 1, "supplies": 3.0},
     307: {"population": 620_000, "category": "town", "infrastructure": 2, "industry": 1, "supplies": 2.0},
     308: {"population": 840_000, "category": "large_town", "infrastructure": 3, "industry": 1, "supplies": 2.5},
     309: {"population": 470_000, "category": "town", "infrastructure": 3, "industry": 1, "supplies": 2.0},
@@ -172,8 +174,8 @@ STATE_PROFILES = {
     314: {"population": 550_000, "category": "town", "infrastructure": 3, "industry": 1, "supplies": 3.0},
     315: {"population": 310_000, "category": "rural", "infrastructure": 2, "industry": 1, "supplies": 2.0},
     316: {"population": 280_000, "category": "rural", "infrastructure": 2, "industry": 1, "supplies": 2.0},
-    317: {"population": 360_000, "category": "town", "infrastructure": 3, "industry": 1, "supplies": 2.5},
-    318: {"population": 420_000, "category": "town", "infrastructure": 3, "industry": 1, "supplies": 2.5},
+    317: {"population": 360_000, "category": "town", "infrastructure": 3, "industry": 1, "military": 1, "supplies": 3.0},
+    318: {"population": 420_000, "category": "town", "infrastructure": 3, "industry": 1, "military": 1, "supplies": 3.0},
     319: {"population": 300_000, "category": "rural", "infrastructure": 2, "industry": 1, "supplies": 2.0},
     320: {"population": 390_000, "category": "rural", "infrastructure": 2, "industry": 0, "supplies": 1.5},
     321: {"population": 280_000, "category": "rural", "infrastructure": 2, "industry": 1, "supplies": 2.0},
@@ -276,7 +278,7 @@ VORKERLAND_INITIAL_MAP_LEGACY_PROFILES = {
     38: {"population": 1_650_000, "category": "metropolis", "infrastructure": 5, "civilian": 3, "military": 2, "air_base": 2, "supplies": 6.0},
     75: {"population": 7_430_000, "category": "large_city", "infrastructure": 5, "civilian": 5, "military": 3, "air_base": 3, "supplies": 8.0},
     81: {"population": 1_350_000, "category": "large_city", "infrastructure": 5, "civilian": 3, "military": 2, "air_base": 2, "supplies": 5.0},
-    82: {"population": 420_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
+    82: {"population": 420_000, "category": "rural", "infrastructure": 2, "civilian": 1, "military": 1, "supplies": 4.0},
     102: {"population": 13_520_000, "category": "megalopolis", "infrastructure": 5, "civilian": 7, "military": 5, "air_base": 3, "supplies": 10.0},
     104: {"population": 2_400_000, "category": "metropolis", "infrastructure": 4, "civilian": 4, "military": 2, "air_base": 2, "supplies": 6.0},
     105: {"population": 9_800_000, "category": "megalopolis", "infrastructure": 5, "civilian": 7, "military": 5, "air_base": 3, "supplies": 10.0},
@@ -292,9 +294,9 @@ VORKERLAND_INITIAL_MAP_LEGACY_PROFILES = {
     115: {"population": 220_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.0},
     116: {"population": 180_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.0},
     117: {"population": 210_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.0},
-    118: {"population": 120_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 1.5},
-    119: {"population": 110_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 1.5},
-    120: {"population": 90_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 1.5},
+    # States 118-120 are now owned by the Ainholm mandate/Orval setup. Their
+    # complete profiles belong to build_adiscord_ainholm_mandate.py; keeping
+    # old theatre defaults here would silently overwrite that generator.
     121: {"population": 1_650_000, "category": "large_city", "infrastructure": 4, "civilian": 3, "military": 2, "supplies": 5.0},
     122: {"population": 986_000, "category": "large_town", "infrastructure": 4, "civilian": 2, "military": 1, "supplies": 4.0},
     123: {"population": 1_640_000, "category": "large_city", "infrastructure": 4, "civilian": 3, "military": 2, "supplies": 5.0},
@@ -305,6 +307,7 @@ VORKERLAND_INITIAL_MAP_LEGACY_PROFILES = {
 }
 
 VORKERLAND_LEGACY_VICTORY_POINTS = {
+    82: ((8059, 3),),
     74: ((16585, 5),),
     197: ((16623, 10),),
     104: ((7778, 8), (16564, 3), (16583, 2)),
@@ -312,6 +315,8 @@ VORKERLAND_LEGACY_VICTORY_POINTS = {
 }
 
 VORKERLAND_VICTORY_POINT_NAMES = {
+    8803: "Верховье",
+    16642: "Оствин",
     5405: "Линден",
     5905: "Фельден",
     16585: "Восточный плацдарм",
@@ -367,6 +372,11 @@ GENERATED_VICTORY_POINT_NAMES = {
 }
 
 VORKERLAND_STATE_NAMES = {
+    315: "Златореченское нагорье",
+    316: "Верхнеречье",
+    317: "Верховье",
+    318: "Оствинский округ",
+    320: "Оствинская низина",
     104: "Центральная Слобода",
     105: "Фирновская агломерация",
 }

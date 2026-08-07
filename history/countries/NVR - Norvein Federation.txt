@@ -1,0 +1,19 @@
+capital = 389
+oob = "NVR"
+
+recruit_character = NVR_Leif_Norven
+
+set_politics = {
+	ruling_party = pragmatism
+	last_election = "2158.12.7"
+	elections_allowed = yes
+}
+set_popularities = {
+	pragmatism = 60
+	humanism = 20
+	etatism = 10
+	utilitarism = 10
+}
+set_stability = 0.66
+set_war_support = 0.30
+set_research_slots = 2

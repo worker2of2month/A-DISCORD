@@ -1,0 +1,13 @@
+division_template = {
+	name = "Поселенческая дружина"
+	regiments = {
+		ADISCORD_militia = { x = 0 y = 0 }
+		ADISCORD_militia = { x = 1 y = 0 }
+		ADISCORD_militia = { x = 2 y = 0 }
+	}
+}
+units = {
+	division = { division_name = { is_name_ordered = yes name_order = 1 } location = 887 division_template = "Поселенческая дружина" start_experience_factor = 0.15 start_equipment_factor = 0.72 }
+	division = { division_name = { is_name_ordered = yes name_order = 2 } location = 4597 division_template = "Поселенческая дружина" start_experience_factor = 0.15 start_equipment_factor = 0.72 }
+	division = { division_name = { is_name_ordered = yes name_order = 3 } location = 9078 division_template = "Поселенческая дружина" start_experience_factor = 0.15 start_equipment_factor = 0.72 }
+}

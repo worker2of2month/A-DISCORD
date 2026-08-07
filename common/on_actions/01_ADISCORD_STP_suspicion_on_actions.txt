@@ -1,0 +1,13 @@
+on_actions = {
+	on_startup = {
+		effect = {
+			if = {
+				limit = { STP = { exists = yes } }
+				STP = {
+					STP_initialize_party_suspicion = yes
+					STP_initialize_leader_health = yes
+				}
+			}
+		}
+	}
+}

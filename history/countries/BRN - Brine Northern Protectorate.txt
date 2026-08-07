@@ -1,0 +1,19 @@
+capital = 334
+oob = "BRN"
+
+recruit_character = BRN_Emilia_Brandt
+
+set_politics = {
+	ruling_party = etatism
+	elections_allowed = no
+}
+set_popularities = {
+	etatism = 60
+	pragmatism = 20
+	chauvinism = 10
+	humanism = 10
+}
+set_stability = 0.62
+set_war_support = 0.42
+set_research_slots = 3
+add_ideas = { BRN_polar_signal_line }

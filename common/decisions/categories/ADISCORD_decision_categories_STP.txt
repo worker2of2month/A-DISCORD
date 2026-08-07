@@ -1,27 +1,7 @@
-STP_balance_of_power_category = {
-	allowed = {
-		tag = STP
-	}
-	visible = {
-		always = no
-	}
-}
-
 STP_elections_in_the_party = {
 	picture = GFX_STP_decision_election_in_the_party
-
-	allowed = {
-		tag = STP
-	}
-
-	priority = 1
-	visible = {
-		OR = {
-			has_country_flag = STP_main_campaign_side
-			has_country_flag = STP_last_banquet_active
-		}
-		NOT = { has_country_flag = STP_internal_outcome_finalized }
-	}
-
+	allowed = { tag = STP }
+	visible = { always = yes }
 	visible_when_empty = yes
+	priority = 1
 }

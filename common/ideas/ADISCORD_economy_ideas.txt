@@ -183,6 +183,24 @@ ideas = {
 				stability_factor = -0.03
 			}
 		}
+		ADISCORD_economy_postwar_demobilization = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_manpower_bonus
+			modifier = {
+				stability_factor = 0.02
+				war_support_factor = -0.05
+				industrial_capacity_factory = -0.08
+				production_speed_arms_factory_factor = -0.15
+				production_speed_dockyard_factor = -0.10
+				production_speed_industrial_complex_factor = 0.10
+				ADISCORD_economy_army_expense_factor = -0.10
+				ADISCORD_economy_inflation_pressure_factor = -0.10
+				ADISCORD_economy_state_overload_gain_factor = -0.10
+				ADISCORD_country_development_economic_growth_factor = 0.05
+			}
+		}
 
 		ADISCORD_economy_stretched_3 = {
 			allowed = { always = no }

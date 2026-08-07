@@ -1,0 +1,19 @@
+capital = 455
+oob = "ORV"
+
+recruit_character = ORV_Anton_Orval
+
+set_politics = {
+	ruling_party = pragmatism
+	last_election = "2159.2.14"
+	elections_allowed = yes
+}
+set_popularities = {
+	pragmatism = 65
+	humanism = 15
+	etatism = 10
+	hedonism = 10
+}
+set_stability = 0.63
+set_war_support = 0.32
+set_research_slots = 2

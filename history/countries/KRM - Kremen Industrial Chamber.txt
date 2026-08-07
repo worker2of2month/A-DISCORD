@@ -1,0 +1,22 @@
+capital = 161
+oob = "KRM"
+
+recruit_character = KRM_Ivo_Kremen
+
+set_politics = {
+	ruling_party = utilitarism
+	elections_allowed = yes
+}
+set_popularities = {
+	utilitarism = 65
+	pragmatism = 20
+	technocracy = 10
+	humanism = 5
+}
+set_stability = 0.61
+set_war_support = 0.48
+set_research_slots = 3
+add_ideas = KRM_slag_road_compact
+graphical_culture = western_european_gfx
+graphical_culture_2d = western_european_2d
+color = rgb { 83 78 69 }

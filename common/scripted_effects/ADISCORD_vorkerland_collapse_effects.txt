@@ -9,6 +9,22 @@ ADISCORD_vorkerland_prepare_conflict_country = {
 		remove_ideas = WRK_hourglass_of_discord
 		remove_ideas = WRK_constitution_of_the_republic
 		remove_ideas = ADISCORD_vorkerland_erased_nations
+		if = {
+			limit = {
+				OR = {
+					has_country_leader_ideology = vorkerism
+					has_country_leader_ideology = neo_vorkerism
+				}
+				NOT = {
+					OR = {
+						has_idea = WRK_birthplace_of_the_first_revolution
+						has_idea = WRK_birthplace_of_the_first_revolution_front_republic
+						has_idea = WRK_birthplace_of_the_first_revolution_renewed_mandate
+					}
+				}
+			}
+			add_ideas = WRK_birthplace_of_the_first_revolution
+		}
 	}
 	else_if = {
 		limit = { tag = VAD }
@@ -28,8 +44,237 @@ ADISCORD_vorkerland_prepare_conflict_country = {
 		add_ideas = ADISCORD_vorkerland_republics_from_the_ruins
 	}
 	else_if = {
-		limit = { OR = { tag = TVA tag = EYR tag = EGC tag = PSD tag = DVA tag = SRA tag = IBL tag = IBA tag = CSL } }
+		limit = { tag = TVA }
 		add_ideas = ADISCORD_vorkerland_mobilized_periphery
+		add_ideas = ADISCORD_vorkerland_tva_field_directorate
+		add_ideas = ADISCORD_vorkerland_tva_ideological_fanaticism
+	}
+	else_if = {
+		limit = { tag = WTD }
+		add_ideas = ADISCORD_vorkerland_mobilized_periphery
+		add_ideas = ADISCORD_vorkerland_wtd_worx_protocols
+	}
+	else_if = { limit = { tag = WPA } add_ideas = ADISCORD_vorkerland_wpa_municipal_compact }
+	else_if = { limit = { tag = WPS } add_ideas = ADISCORD_vorkerland_wps_factory_councils }
+	else_if = { limit = { tag = EBA } add_ideas = ADISCORD_vorkerland_eba_free_quays }
+	else_if = { limit = { tag = ZTA } add_ideas = ADISCORD_vorkerland_zta_golden_river_order }
+	else_if = { limit = { tag = TGD } add_ideas = ADISCORD_vorkerland_tgd_grid_collapse }
+	else_if = {
+		limit = { tag = CSL }
+		add_ideas = ADISCORD_vorkerland_mobilized_periphery
+		add_ideas = ADISCORD_vorkerland_csl_isolated_city
+	}
+	else_if = {
+		limit = { OR = { tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV tag = PSD tag = DVA tag = SRA tag = IBL tag = IBA } }
+		add_ideas = ADISCORD_vorkerland_mobilized_periphery
+	}
+	# Like TFR's common Volunteer Militia, this thin locked template exists so a
+	# minor can turn one political mobilisation into frontage without acquiring
+	# a duplicate long-term force-design track.
+	if = {
+		limit = { ADISCORD_vorkerland_is_minor_combatant = yes }
+		division_template = {
+			name = "Чрезвычайное ополчение"
+			is_locked = yes
+			force_allow_recruiting = yes
+			regiments = {
+				ADISCORD_militia = { x = 0 y = 0 }
+				ADISCORD_militia = { x = 0 y = 1 }
+				ADISCORD_militia = { x = 0 y = 2 }
+			}
+		}
+	}
+	# Every collapse participant receives cores on the territory assigned during
+	# its one-time setup. This also covers legacy tags whose old history files do
+	# not know about the post-collapse partition.
+	every_owned_state = { add_core_of = ROOT }
+}
+
+# One bounded mobilisation per minor. Two three-battalion formations are enough
+# to close a hole or form a reserve, but not enough to erase the advantage of a
+# 12-15 formation main claimant. PREV is the country owning the capital scope.
+ADISCORD_vorkerland_raise_emergency_levies = {
+	add_manpower = 1800
+	add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 360 producer = ROOT }
+	capital_scope = {
+		create_unit = {
+			division = "division_template = \"Чрезвычайное ополчение\" start_experience_factor = 0.05 start_equipment_factor = 0.75"
+			owner = PREV
+			count = 2
+		}
+	}
+}
+
+# Political caches and subject status finish rebuilding after the initial map
+# effect. This explicit, idempotent second pass is called once by event .41; it
+# replaces the old monthly repair idea without scanning every country.
+ADISCORD_vorkerland_finalize_conflict_spirits = {
+	if = {
+		limit = { tag = WRK }
+		remove_ideas = WRK_ashes_of_the_crown
+		remove_ideas = WRK_hourglass_of_discord
+		remove_ideas = WRK_constitution_of_the_republic
+		add_ideas = ADISCORD_vorkerland_erased_nations
+		if = {
+			limit = {
+				OR = {
+					has_country_leader_ideology = vorkerism
+					has_country_leader_ideology = neo_vorkerism
+				}
+				NOT = {
+					OR = {
+						has_idea = WRK_birthplace_of_the_first_revolution
+						has_idea = WRK_birthplace_of_the_first_revolution_front_republic
+						has_idea = WRK_birthplace_of_the_first_revolution_renewed_mandate
+					}
+				}
+			}
+			add_ideas = WRK_birthplace_of_the_first_revolution
+		}
+	}
+	else_if = {
+		limit = { tag = VAD }
+		remove_ideas = WRK_ashes_of_the_crown
+		remove_ideas = WRK_hourglass_of_discord
+		remove_ideas = WRK_constitution_of_the_republic
+		add_ideas = ADISCORD_vorkerland_vad_imperial_chancery
+	}
+	else_if = {
+		limit = { tag = VLA }
+		remove_ideas = WRK_hourglass_of_discord
+		remove_ideas = VLA_national_spirit
+		add_ideas = ADISCORD_vorkerland_republics_from_the_ruins
+	}
+	else_if = {
+		limit = { OR = { tag = ZAO tag = PWR tag = ROM tag = SOL tag = TRU } }
+		remove_ideas = WRK_hourglass_of_discord
+		add_ideas = ADISCORD_vorkerland_republics_from_the_ruins
+	}
+	else_if = {
+		limit = { tag = TVA }
+		add_ideas = ADISCORD_vorkerland_mobilized_periphery
+		add_ideas = ADISCORD_vorkerland_tva_field_directorate
+		add_ideas = ADISCORD_vorkerland_tva_ideological_fanaticism
+	}
+	else_if = {
+		limit = { tag = WTD }
+		add_ideas = ADISCORD_vorkerland_mobilized_periphery
+		add_ideas = ADISCORD_vorkerland_wtd_worx_protocols
+	}
+	else_if = { limit = { tag = WPA } add_ideas = ADISCORD_vorkerland_wpa_municipal_compact }
+	else_if = { limit = { tag = WPS } add_ideas = ADISCORD_vorkerland_wps_factory_councils }
+	else_if = { limit = { tag = EBA } add_ideas = ADISCORD_vorkerland_eba_free_quays }
+	else_if = { limit = { tag = ZTA } add_ideas = ADISCORD_vorkerland_zta_golden_river_order }
+	else_if = { limit = { tag = TGD } add_ideas = ADISCORD_vorkerland_tgd_grid_collapse }
+	else_if = {
+		limit = { tag = CSL }
+		add_ideas = ADISCORD_vorkerland_mobilized_periphery
+		add_ideas = ADISCORD_vorkerland_csl_isolated_city
+	}
+	else_if = {
+		limit = { OR = { tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV tag = PSD tag = DVA tag = SRA tag = IBL tag = IBA } }
+		add_ideas = ADISCORD_vorkerland_mobilized_periphery
+	}
+	set_country_flag = ADISCORD_vorkerland_conflict_spirits_finalized
+}
+
+# A versioned, idempotent assertion for the main claimant spirits. The initial
+# partition and the deferred political-cache rebuild already clean WRK, but old
+# saves and the actual war-outbreak tick need a later pass after those systems
+# have finished. Progress already bought through decisions is never downgraded.
+ADISCORD_vorkerland_repair_claimant_spirit_progression = {
+	if = {
+		limit = { tag = WRK }
+		remove_ideas = WRK_ashes_of_the_crown
+		remove_ideas = WRK_hourglass_of_discord
+		remove_ideas = WRK_constitution_of_the_republic
+		if = {
+			limit = {
+				OR = {
+					has_country_leader_ideology = vorkerism
+					has_country_leader_ideology = neo_vorkerism
+				}
+				NOT = {
+					OR = {
+						has_idea = WRK_birthplace_of_the_first_revolution
+						has_idea = WRK_birthplace_of_the_first_revolution_front_republic
+						has_idea = WRK_birthplace_of_the_first_revolution_renewed_mandate
+					}
+				}
+			}
+			add_ideas = WRK_birthplace_of_the_first_revolution
+		}
+	}
+	else_if = {
+		limit = { tag = TVA }
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						has_idea = ADISCORD_vorkerland_tva_field_directorate
+						has_idea = ADISCORD_vorkerland_tva_field_directorate_2
+						has_idea = ADISCORD_vorkerland_tva_field_directorate_3
+					}
+				}
+			}
+			add_ideas = ADISCORD_vorkerland_tva_field_directorate
+		}
+	}
+}
+
+# A republic no longer lacks a metropolis once it accepts WRK sovereignty.
+# Centralising this test keeps decisions and subject on-actions consistent.
+ADISCORD_vorkerland_sync_republics_from_ruins = {
+	if = {
+		limit = {
+			has_idea = ADISCORD_vorkerland_republics_from_the_ruins
+			is_subject_of = WRK
+		}
+		remove_ideas = ADISCORD_vorkerland_republics_from_the_ruins
+	}
+}
+
+ADISCORD_vorkerland_wrk_activate_vla_auxiliaries = {
+	if = {
+		limit = { tag = WRK VLA = { exists = yes is_subject_of = ROOT } }
+		# A finite contract delivery represents Volnograd opening its arsenals.
+		if = {
+			limit = { VLA = { NOT = { has_country_flag = ADISCORD_vorkerland_auxiliary_contract_activated } } }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 300 producer = VLA }
+			VLA = { set_country_flag = ADISCORD_vorkerland_auxiliary_contract_activated }
+		}
+		VLA = {
+			ADISCORD_vorkerland_sync_republics_from_ruins = yes
+			if = {
+				limit = { WRK = { has_war_with = VAD } NOT = { has_war_with = VAD } }
+				add_to_war = { targeted_alliance = WRK enemy = VAD hostility_reason = asked_to_join }
+			}
+			if = {
+				limit = { WRK = { has_war_with = TVA } NOT = { has_war_with = TVA } }
+				add_to_war = { targeted_alliance = WRK enemy = TVA hostility_reason = asked_to_join }
+			}
+		}
+	}
+}
+
+ADISCORD_vorkerland_wrk_complete_protectorate_enforcement = {
+	if = {
+		limit = {
+			tag = WRK
+			VLA = {
+				exists = yes
+				has_country_flag = ADISCORD_vorkerland_wrk_protectorate_enforcement
+			}
+		}
+		if = { limit = { has_war_with = VLA } white_peace = VLA }
+		puppet = VLA
+		set_autonomy = { target = VLA autonomy_state = autonomy_district_in_Vorkerland freedom_level = 0.10 }
+		VLA = {
+			clr_country_flag = ADISCORD_vorkerland_wrk_protectorate_enforcement
+			set_country_flag = ADISCORD_vorkerland_joined_worker_republic
+			ADISCORD_vorkerland_sync_republics_from_ruins = yes
+		}
+		ADISCORD_vorkerland_wrk_activate_vla_auxiliaries = yes
 	}
 }
 
@@ -37,14 +282,43 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 	WRK = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		add_ideas = ADISCORD_vorkerland_erased_nations
+		ADISCORD_vorkerland_initialize_civil_war_exhaustion = yes
 		add_manpower = 8000
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 600 producer = WRK }
+		add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 60 producer = WRK }
+		add_equipment_to_stockpile = { type = support_equipment_1 amount = 100 producer = WRK }
+		add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 24 producer = WRK }
+		add_equipment_to_stockpile = { type = ADISCORD_combat_platform_2170 amount = 180 producer = WRK }
+		add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 24 producer = WRK }
+		add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 12 producer = WRK }
+		add_fuel = 7500
+		load_oob = "WRK_vorkerland_collapse_air"
+		set_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed
 	}
 	VAD = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		add_ideas = ADISCORD_vorkerland_vad_imperial_chancery
+		ADISCORD_vorkerland_initialize_civil_war_exhaustion = yes
 		add_manpower = 8000
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 600 producer = VAD }
+		add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 60 producer = VAD }
+		add_equipment_to_stockpile = { type = support_equipment_1 amount = 100 producer = VAD }
+		add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 24 producer = VAD }
+		add_equipment_to_stockpile = { type = ADISCORD_combat_platform_2170 amount = 180 producer = VAD }
+		add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 24 producer = VAD }
+		add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 12 producer = VAD }
+		add_fuel = 7500
+		load_oob = "VAD_vorkerland_collapse_air"
+		set_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed
+		75 = {
+			create_unit = {
+				division = "name = \"1st Armi Mobile Group\" division_template = \"Armi Mobile Group\" start_experience_factor = 0.35 start_equipment_factor = 0.90"
+				owner = VAD
+			}
+		}
+	}
+	TVA = {
+		ADISCORD_vorkerland_initialize_civil_war_exhaustion = yes
 	}
 	TGD = { ADISCORD_vorkerland_prepare_conflict_country = yes }
 	ZAO = {
@@ -82,6 +356,87 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1400 producer = TRU }
 		add_equipment_to_stockpile = { type = support_equipment amount = 120 producer = TRU }
 	}
+	# One northern bloc receives a temporary operational initiative. Together
+	# with careful AI plans this creates a moving campaign instead of equal
+	# militias burning organisation in permanent attacks.
+	random_list = {
+		34 = { ZAO = { add_timed_idea = { idea = ADISCORD_vorkerland_northern_operational_initiative days = 240 } } }
+		33 = {
+			WPA = { add_timed_idea = { idea = ADISCORD_vorkerland_northern_operational_initiative days = 240 } }
+			WPS = { add_timed_idea = { idea = ADISCORD_vorkerland_northern_operational_initiative days = 240 } }
+		}
+		33 = {
+			PSD = { add_timed_idea = { idea = ADISCORD_vorkerland_northern_operational_initiative days = 240 } }
+			PWR = { add_timed_idea = { idea = ADISCORD_vorkerland_northern_operational_initiative days = 240 } }
+		}
+	}
+}
+
+# A released country may keep the old confederation faction in the diplomatic
+# cache even after its autonomy changed. Civil-war declarations against a
+# country in that faction are rejected by the engine, so each war launcher uses
+# these focused detach effects immediately before it opens its fronts.
+ADISCORD_vorkerland_leave_inherited_faction = {
+	if = {
+		limit = { is_subject = no is_faction_leader = yes }
+		dismantle_faction = yes
+	}
+	else_if = {
+		limit = { is_subject = no is_in_faction = yes }
+		leave_faction = yes
+	}
+}
+
+ADISCORD_vorkerland_detach_central_war_factions = {
+	WRK = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	VAD = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	TVA = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	EYR = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	EGC = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	RIV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	REV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	YOR = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	NDN = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	SWB = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	VHV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	OSV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+}
+
+ADISCORD_vorkerland_detach_regional_war_factions = {
+	ZAO = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	WPA = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	WPS = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	PSD = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	PWR = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	VLA = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	EBA = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	TGD = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	ROM = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	DVA = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	SOL = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	SRA = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	CSL = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	TRU = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	ZTA = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+}
+
+ADISCORD_vorkerland_detach_worker_doctor_factions = {
+	WRK = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+	TVA = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+}
+
+# Called only from WRK-scoped delayed events after the diplomatic cache confirms
+# that neither claimant remains in a faction. Keeping the launch in one effect
+# prevents the normal and one-retry event paths from drifting apart.
+ADISCORD_vorkerland_launch_worker_doctor_war = {
+	set_global_flag = ADISCORD_vorkerland_worker_doctor_showdown_started
+	declare_war_on = { target = TVA type = annex_everything }
+	if = {
+		limit = { WTD = { exists = yes is_subject_of = TVA } }
+		# Oitfort joins after the new war itself has entered the diplomatic cache.
+		WTD = { country_event = { id = ADISCORD_vorkerland_collapse.47 days = 1 } }
+	}
+	clr_global_flag = ADISCORD_vorkerland_worker_doctor_front_preparation
 }
 
 ADISCORD_vorkerland_teardown_confederation = {
@@ -140,6 +495,34 @@ ADISCORD_vorkerland_teardown_confederation = {
 		if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = EGC autonomy_state = autonomy_free } } }
 		if = { limit = { is_in_faction = yes } leave_faction = yes }
 	}
+	RIV = {
+		if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = RIV autonomy_state = autonomy_free } } }
+		if = { limit = { is_in_faction = yes } leave_faction = yes }
+	}
+	REV = {
+		if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = REV autonomy_state = autonomy_free } } }
+		if = { limit = { is_in_faction = yes } leave_faction = yes }
+	}
+	YOR = {
+		if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = YOR autonomy_state = autonomy_free } } }
+		if = { limit = { is_in_faction = yes } leave_faction = yes }
+	}
+	NDN = {
+		if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = NDN autonomy_state = autonomy_free } } }
+		if = { limit = { is_in_faction = yes } leave_faction = yes }
+	}
+	SWB = {
+		if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = SWB autonomy_state = autonomy_free } } }
+		if = { limit = { is_in_faction = yes } leave_faction = yes }
+	}
+	VHV = {
+		if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = VHV autonomy_state = autonomy_free } } }
+		if = { limit = { is_in_faction = yes } leave_faction = yes }
+	}
+	OSV = {
+		if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = OSV autonomy_state = autonomy_free } } }
+		if = { limit = { is_in_faction = yes } leave_faction = yes }
+	}
 	WPA = {
 		if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = WPA autonomy_state = autonomy_free } } }
 		if = { limit = { is_in_faction = yes } leave_faction = yes }
@@ -189,54 +572,245 @@ ADISCORD_vorkerland_teardown_confederation = {
 	if = { limit = { WRK = { is_faction_leader = yes } } WRK = { dismantle_faction = yes } }
 }
 
+# Shared builder and save repair for independent regional war instances. It is
+# called only by one-day delayed events and restores only a live canonical
+# rivalry; an eliminated country can never be respawned by it.
+ADISCORD_vorkerland_repair_regional_wars = {
+	if = {
+		limit = {
+			country_exists = ZAO country_exists = WPA
+			ZAO = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WPA } }
+			WPA = { is_subject = no NOT = { has_capitulated = yes } }
+		}
+		ZAO = { declare_war_on = { target = WPA type = annex_everything } }
+	}
+	if = {
+		limit = {
+			country_exists = ZAO country_exists = WPS
+			ZAO = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WPS } }
+			WPS = { is_subject = no NOT = { has_capitulated = yes } }
+		}
+		WPS = { declare_war_on = { target = ZAO type = annex_everything } }
+	}
+	if = {
+		limit = {
+			country_exists = ZAO country_exists = PSD
+			ZAO = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = PSD } }
+			PSD = { is_subject = no NOT = { has_capitulated = yes } }
+		}
+		ZAO = { declare_war_on = { target = PSD type = annex_everything } }
+	}
+	if = {
+		limit = {
+			country_exists = ZAO country_exists = PWR
+			ZAO = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = PWR } }
+			PWR = { is_subject = no NOT = { has_capitulated = yes } }
+		}
+		PWR = { declare_war_on = { target = ZAO type = annex_everything } }
+	}
+	if = {
+		limit = {
+			country_exists = WPA country_exists = PSD
+			WPA = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = PSD } }
+			PSD = { is_subject = no NOT = { has_capitulated = yes } }
+		}
+		WPA = { declare_war_on = { target = PSD type = annex_everything } }
+	}
+	if = {
+		limit = {
+			country_exists = WPA country_exists = PWR
+			WPA = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = PWR } }
+			PWR = { is_subject = no NOT = { has_capitulated = yes } }
+		}
+		WPA = { declare_war_on = { target = PWR type = annex_everything } }
+	}
+	if = {
+		limit = {
+			country_exists = WPS country_exists = PSD
+			WPS = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = PSD } }
+			PSD = { is_subject = no NOT = { has_capitulated = yes } }
+		}
+		WPS = { declare_war_on = { target = PSD type = annex_everything } }
+	}
+	if = {
+		limit = {
+			country_exists = WPS country_exists = PWR
+			WPS = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = PWR } }
+			PWR = { is_subject = no NOT = { has_capitulated = yes } }
+		}
+		WPS = { declare_war_on = { target = PWR type = annex_everything } }
+	}
+	if = {
+		limit = {
+			country_exists = VLA country_exists = EBA
+			VLA = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = EBA } }
+			EBA = { is_subject = no NOT = { has_capitulated = yes } }
+		}
+		VLA = { declare_war_on = { target = EBA type = annex_everything } }
+	}
+	if = {
+		limit = {
+			country_exists = VLA country_exists = TGD
+			VLA = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = TGD } }
+			TGD = { is_subject = no NOT = { has_capitulated = yes } }
+		}
+		VLA = { declare_war_on = { target = TGD type = annex_everything } }
+	}
+	if = {
+		limit = {
+			country_exists = TGD country_exists = EBA
+			TGD = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = EBA } }
+			EBA = { is_subject = no NOT = { has_capitulated = yes } }
+		}
+		TGD = { declare_war_on = { target = EBA type = annex_everything } }
+	}
+	if = {
+		limit = {
+			country_exists = SOL country_exists = SRA
+			SOL = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = SRA } }
+			SRA = { is_subject = no NOT = { has_capitulated = yes } }
+		}
+		SOL = { declare_war_on = { target = SRA type = annex_everything } }
+	}
+	if = {
+		limit = {
+			country_exists = SOL country_exists = CSL
+			SOL = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = CSL } }
+			CSL = { is_subject = no NOT = { has_capitulated = yes } }
+		}
+		SOL = { declare_war_on = { target = CSL type = annex_everything } }
+	}
+	if = {
+		limit = {
+			country_exists = SRA country_exists = CSL
+			SRA = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = CSL } }
+			CSL = { is_subject = no NOT = { has_capitulated = yes } }
+		}
+		SRA = { declare_war_on = { target = CSL type = annex_everything } }
+	}
+	if = {
+		limit = {
+			country_exists = ROM country_exists = DVA
+			ROM = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = DVA } }
+			DVA = { is_subject = no NOT = { has_capitulated = yes } }
+		}
+		ROM = { declare_war_on = { target = DVA type = annex_everything } }
+	}
+	if = {
+		limit = {
+			country_exists = TRU country_exists = ZTA
+			TRU = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ZTA } }
+			ZTA = { is_subject = no NOT = { has_capitulated = yes } }
+		}
+		TRU = { declare_war_on = { target = ZTA type = annex_everything } }
+	}
+}
+
+# The regional decision runs this once after faction membership has had a full
+# day to leave the diplomatic cache. All rivalries are independent war objects,
+# so the capitulation of one minor cannot white-peace the rest of its theatre.
+ADISCORD_vorkerland_open_regional_fronts_after_detach = {
+	ADISCORD_vorkerland_repair_regional_wars = yes
+	set_global_flag = ADISCORD_vorkerland_northern_wars_began
+	clr_global_flag = ADISCORD_vorkerland_regional_war_launch_scheduled
+	if = {
+		limit = {
+			RUS = { exists = yes }
+			NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }
+			NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_available }
+		}
+		RUS = { country_event = { id = ADISCORD_vorkerland_collapse.30 days = 30 random_days = 60 } }
+	}
+}
+
 ADISCORD_vorkerland_setup_tva = {
 	TVA = {
 		transfer_state = 36
 		transfer_state = 37
 		transfer_state = 38
 		transfer_state = 39
-		transfer_state = 308
-		transfer_state = 318
-		transfer_state = 320
-		transfer_state = 323
 		transfer_state = 324
 	}
 	36 = { add_core_of = TVA set_state_controller_to = TVA }
 	37 = { add_core_of = TVA set_state_controller_to = TVA }
 	38 = { add_core_of = TVA set_state_controller_to = TVA }
 	39 = { add_core_of = TVA set_state_controller_to = TVA }
-	308 = { add_core_of = TVA set_state_controller_to = TVA }
-	318 = { add_core_of = TVA set_state_controller_to = TVA }
-	320 = { add_core_of = TVA set_state_controller_to = TVA }
-	323 = { add_core_of = TVA set_state_controller_to = TVA }
 	324 = { add_core_of = TVA set_state_controller_to = TVA }
 	TVA = {
 		promote_character = { character = TVA_Dorian_Worx ideology = technocracy_ideology }
 		set_capital = { state = 36 }
 		ADISCORD_grant_2150_technology_baseline = yes
-		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_industrial = yes
+		ADISCORD_grant_technology_profile_energy = yes
+		ADISCORD_grant_technology_profile_institutional = yes
+		ADISCORD_grant_technology_profile_land = yes
+		ADISCORD_grant_technology_profile_air = yes
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
+		add_ideas = ADISCORD_vorkerland_tva_field_directorate
+		add_ideas = ADISCORD_vorkerland_tva_ideological_fanaticism
+		add_manpower = 11000
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1800 producer = TVA }
+		add_equipment_to_stockpile = { type = support_equipment amount = 120 producer = TVA }
+		add_equipment_to_stockpile = { type = artillery_equipment amount = 72 producer = TVA }
+		add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 60 producer = TVA }
+		add_equipment_to_stockpile = { type = ADISCORD_combat_platform_2170 amount = 180 producer = TVA }
+		add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 36 producer = TVA }
+		add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 18 producer = TVA }
+		add_fuel = 7500
 		load_oob = "TVA_vorkerland_collapse"
-		add_manpower = 3000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 160 producer = TVA }
+		load_oob = "TVA_vorkerland_collapse_air"
+		set_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed
+	}
+}
+
+# A small committee of grid engineers and emergency planners seizes the
+# Oitfort industrial district for Doctor Worx. WRK keeps its capital and
+# remains a full claimant in the civil war.
+ADISCORD_vorkerland_setup_wtd = {
+	WTD = {
+		transfer_state = 34
+	}
+	34 = { add_core_of = WTD set_state_controller_to = WTD }
+	WTD = {
+		promote_character = { character = WTD_Central_Engineering_Council ideology = technocracy_ideology }
+		set_capital = { state = 34 }
+		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_grant_technology_profile_industrial = yes
+		ADISCORD_grant_technology_profile_energy = yes
+		ADISCORD_economy_initialize_country = yes
+		ADISCORD_vorkerland_prepare_conflict_country = yes
+		load_oob = "WTD_vorkerland_collapse"
+		add_manpower = 7500
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1100 producer = WTD }
+		add_equipment_to_stockpile = { type = support_equipment amount = 80 producer = WTD }
+		add_equipment_to_stockpile = { type = artillery_equipment amount = 36 producer = WTD }
+	}
+}
+
+# The committee openly accepts Doctor Worx as its strategic patron, but it
+# never replaces or annexes WRK.
+ADISCORD_vorkerland_align_wtd_with_worx = {
+	if = {
+		limit = { country_exists = WTD country_exists = TVA }
+		TVA = {
+			puppet = WTD
+			set_autonomy = { target = WTD autonomy_state = autonomy_puppet freedom_level = 0.20 }
+		}
+		WTD = { set_country_flag = ADISCORD_vorkerland_worx_aligned_technocrats }
 	}
 }
 
 ADISCORD_vorkerland_setup_eyr = {
 	EYR = {
 		transfer_state = 102
-		transfer_state = 108
 		transfer_state = 109
 		transfer_state = 111
-		transfer_state = 122
 		transfer_state = 325
 	}
 	102 = { add_core_of = EYR set_state_controller_to = EYR }
-	108 = { add_core_of = EYR set_state_controller_to = EYR }
 	109 = { add_core_of = EYR set_state_controller_to = EYR }
 	111 = { add_core_of = EYR set_state_controller_to = EYR }
-	122 = { add_core_of = EYR set_state_controller_to = EYR }
 	325 = { add_core_of = EYR set_state_controller_to = EYR }
 	EYR = {
 		promote_character = { character = EYR_Irina_Koval ideology = humanism_ideology }
@@ -246,8 +820,8 @@ ADISCORD_vorkerland_setup_eyr = {
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "EYR_vorkerland_collapse"
-		add_manpower = 3000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 160 producer = EYR }
+		add_manpower = 6500
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 800 producer = EYR }
 	}
 }
 
@@ -268,8 +842,150 @@ ADISCORD_vorkerland_setup_egc = {
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "EGC_vorkerland_collapse"
-		add_manpower = 3000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 160 producer = EGC }
+		add_manpower = 5500
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 650 producer = EGC }
+	}
+}
+
+ADISCORD_vorkerland_setup_riv = {
+	RIV = {
+		transfer_state = 79
+		transfer_state = 306
+		transfer_state = 308
+		transfer_state = 309
+		transfer_state = 327
+	}
+	79 = { add_core_of = RIV set_state_controller_to = RIV }
+	306 = { add_core_of = RIV set_state_controller_to = RIV }
+	308 = { add_core_of = RIV set_state_controller_to = RIV }
+	309 = { add_core_of = RIV set_state_controller_to = RIV }
+	327 = { add_core_of = RIV set_state_controller_to = RIV }
+	RIV = {
+		promote_character = { character = RIV_Mikhail_Arsenyev ideology = pragmatism_ideology }
+		set_capital = { state = 306 }
+		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_economy_initialize_country = yes
+		ADISCORD_vorkerland_prepare_conflict_country = yes
+		load_oob = "RIV_vorkerland_collapse"
+		add_manpower = 7000
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 850 producer = RIV }
+	}
+}
+
+ADISCORD_vorkerland_setup_rev = {
+	REV = {
+		transfer_state = 82
+		transfer_state = 323
+	}
+	82 = { add_core_of = REV set_state_controller_to = REV }
+	323 = { add_core_of = REV set_state_controller_to = REV }
+	REV = {
+		promote_character = { character = REV_Elena_Rudenko ideology = etatism_ideology }
+		set_capital = { state = 82 }
+		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_economy_initialize_country = yes
+		ADISCORD_vorkerland_prepare_conflict_country = yes
+		load_oob = "REV_vorkerland_collapse"
+		add_manpower = 5500
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 650 producer = REV }
+	}
+}
+
+ADISCORD_vorkerland_setup_yor = {
+	YOR = {
+		transfer_state = 108
+		transfer_state = 122
+		transfer_state = 123
+	}
+	108 = { add_core_of = YOR set_state_controller_to = YOR }
+	122 = { add_core_of = YOR set_state_controller_to = YOR }
+	123 = { add_core_of = YOR set_state_controller_to = YOR }
+	YOR = {
+		promote_character = { character = YOR_Pavel_Korin ideology = humanism_ideology }
+		set_capital = { state = 123 }
+		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_economy_initialize_country = yes
+		ADISCORD_vorkerland_prepare_conflict_country = yes
+		load_oob = "YOR_vorkerland_collapse"
+		add_manpower = 5500
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 650 producer = YOR }
+	}
+}
+
+ADISCORD_vorkerland_setup_ndn = {
+	NDN = { transfer_state = 27 }
+	27 = { add_core_of = NDN set_state_controller_to = NDN }
+	NDN = {
+		promote_character = { character = NDN_Anna_Lind ideology = humanism_ideology }
+		set_capital = { state = 27 }
+		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_economy_initialize_country = yes
+		ADISCORD_vorkerland_prepare_conflict_country = yes
+		load_oob = "NDN_vorkerland_collapse"
+		add_manpower = 4500
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 550 producer = NDN }
+	}
+}
+
+ADISCORD_vorkerland_setup_swb = {
+	SWB = { transfer_state = 35 }
+	35 = { add_core_of = SWB set_state_controller_to = SWB }
+	SWB = {
+		promote_character = { character = SWB_Oskar_Renn ideology = etatism_ideology }
+		set_capital = { state = 35 }
+		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_economy_initialize_country = yes
+		ADISCORD_vorkerland_prepare_conflict_country = yes
+		load_oob = "SWB_vorkerland_collapse"
+		add_manpower = 4500
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 550 producer = SWB }
+	}
+}
+
+ADISCORD_vorkerland_setup_vhv = {
+	VHV = {
+		transfer_state = 315
+		transfer_state = 316
+		transfer_state = 317
+	}
+	315 = { add_core_of = VHV set_state_controller_to = VHV }
+	316 = { add_core_of = VHV set_state_controller_to = VHV }
+	317 = { add_core_of = VHV set_state_controller_to = VHV }
+	VHV = {
+		promote_character = { character = VHV_Sergey_Melnik ideology = pragmatism_ideology }
+		set_capital = { state = 317 }
+		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_economy_initialize_country = yes
+		ADISCORD_vorkerland_prepare_conflict_country = yes
+		load_oob = "VHV_vorkerland_collapse"
+		add_manpower = 5500
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 650 producer = VHV }
+	}
+}
+
+ADISCORD_vorkerland_setup_osv = {
+	OSV = {
+		transfer_state = 318
+		transfer_state = 320
+	}
+	318 = { add_core_of = OSV set_state_controller_to = OSV }
+	320 = { add_core_of = OSV set_state_controller_to = OSV }
+	OSV = {
+		promote_character = { character = OSV_Marina_Volkova ideology = humanism_ideology }
+		set_capital = { state = 318 }
+		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_economy_initialize_country = yes
+		ADISCORD_vorkerland_prepare_conflict_country = yes
+		load_oob = "OSV_vorkerland_collapse"
+		add_manpower = 4500
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 550 producer = OSV }
 	}
 }
 
@@ -285,8 +1001,8 @@ ADISCORD_vorkerland_setup_csl = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		add_ideas = ADISCORD_vorkerland_csl_isolated_city
 		load_oob = "CSL_vorkerland_collapse"
-		add_manpower = 1000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 80 producer = CSL }
+		add_manpower = 3500
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 500 producer = CSL }
 	}
 }
 
@@ -304,8 +1020,8 @@ ADISCORD_vorkerland_setup_wpa = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		add_ideas = ADISCORD_vorkerland_wpa_municipal_compact
 		load_oob = "WPA_vorkerland_collapse"
-		add_manpower = 3000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 160 producer = WPA }
+		add_manpower = 4500
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 600 producer = WPA }
 	}
 }
 
@@ -325,8 +1041,8 @@ ADISCORD_vorkerland_setup_wps = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		add_ideas = ADISCORD_vorkerland_wps_factory_councils
 		load_oob = "WPS_vorkerland_collapse"
-		add_manpower = 3000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 160 producer = WPS }
+		add_manpower = 4500
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 600 producer = WPS }
 	}
 }
 
@@ -422,21 +1138,16 @@ ADISCORD_vorkerland_setup_sra = {
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "SRA_vorkerland_collapse"
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 160 producer = SRA }
+		add_manpower = 3500
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 500 producer = SRA }
 	}
 }
 
 ADISCORD_vorkerland_setup_zta = {
 	ZTA = {
 		transfer_state = 199
-		transfer_state = 315
-		transfer_state = 316
-		transfer_state = 317
 	}
 	199 = { add_core_of = ZTA set_state_controller_to = ZTA }
-	315 = { add_core_of = ZTA set_state_controller_to = ZTA }
-	316 = { add_core_of = ZTA set_state_controller_to = ZTA }
-	317 = { add_core_of = ZTA set_state_controller_to = ZTA }
 	ZTA = {
 		promote_character = { character = ZTA_Viktor_Holt ideology = chauvinism_ideology }
 		set_capital = { state = 199 }
@@ -468,60 +1179,229 @@ ADISCORD_vorkerland_setup_tgd = {
 	}
 }
 
+ADISCORD_vorkerland_appoint_selevyostrov = {
+	set_politics = { ruling_party = chauvinism elections_allowed = no }
+	promote_character = {
+		character = IBL_Anton_Selevyostrov
+		ideology = chauvinism_ideology
+	}
+	set_country_leader_portrait = {
+		ideology = chauvinism
+		portrait = GFX_portrait_IBL_Anton_Selevyostrov
+	}
+	set_country_flag = ADISCORD_vorkerland_selevyostrov_character_repair_v1
+}
+
+ADISCORD_vorkerland_appoint_pwr_technocrat = {
+	set_politics = { ruling_party = technocracy elections_allowed = no }
+	if = {
+		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_pwr_technocrat_role_added } }
+		add_country_leader_role = {
+			character = PWR_Alexey_Lange
+			promote_leader = yes
+			country_leader = {
+				ideology = technocracy_ideology
+				expire = "2200.1.1.1"
+			}
+		}
+		set_country_flag = ADISCORD_vorkerland_pwr_technocrat_role_added
+	}
+	promote_character = {
+		character = PWR_Alexey_Lange
+		ideology = technocracy_ideology
+	}
+	set_country_leader_portrait = {
+		ideology = technocracy
+		portrait = GFX_Portrait_Forul_Generic_4
+	}
+	set_country_flag = ADISCORD_vorkerland_pwr_technocrat_repair_v1
+}
+
+ADISCORD_vorkerland_appoint_rom_etatist = {
+	set_politics = { ruling_party = etatism elections_allowed = no }
+	if = {
+		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_rom_etatist_role_added } }
+		add_country_leader_role = {
+			character = ROM_Erwin_Von_Romanovskiy
+			promote_leader = yes
+			country_leader = {
+				ideology = etatism_ideology
+				expire = "2200.1.1.1"
+				traits = { Veteran_Of_War }
+			}
+		}
+		set_country_flag = ADISCORD_vorkerland_rom_etatist_role_added
+	}
+	promote_character = {
+		character = ROM_Erwin_Von_Romanovskiy
+		ideology = etatism_ideology
+	}
+	set_country_leader_portrait = {
+		ideology = etatism
+		portrait = GFX_portrait_ROM_Erwin_Von_Romanovskiy_civilwar
+	}
+	set_country_flag = ADISCORD_vorkerland_rom_etatist_repair_v1
+}
+
+ADISCORD_vorkerland_appoint_tru_chauvinist = {
+	set_politics = { ruling_party = chauvinism elections_allowed = no }
+	if = {
+		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_tru_chauvinist_role_added } }
+		add_country_leader_role = {
+			character = TRU_Nikita_Truman
+			promote_leader = yes
+			country_leader = {
+				ideology = chauvinism_ideology
+				expire = "2200.1.1.1"
+			}
+		}
+		set_country_flag = ADISCORD_vorkerland_tru_chauvinist_role_added
+	}
+	promote_character = {
+		character = TRU_Nikita_Truman
+		ideology = chauvinism_ideology
+	}
+	set_country_leader_portrait = {
+		ideology = chauvinism
+		portrait = GFX_portrait_TRU_Nikita_Truman_civilwar
+	}
+	set_country_flag = ADISCORD_vorkerland_tru_chauvinist_repair_v1
+}
+
 ADISCORD_vorkerland_setup_ibl = {
 	IBL = { transfer_state = 91 }
 	91 = { add_core_of = IBL set_state_controller_to = IBL }
 	IBL = {
-		promote_character = { character = IBL_Anton_Selevyostrov ideology = chauvinism_ideology }
+		ADISCORD_vorkerland_appoint_selevyostrov = yes
+		country_event = { id = ADISCORD_vorkerland_collapse.42 days = 1 }
 		set_capital = { state = 91 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "IBL_vorkerland_collapse"
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 180 producer = IBL }
+		add_manpower = 4500
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 700 producer = IBL }
 	}
+}
+
+# Preserve the exact northern war graph before the foreign operation. Each edge
+# was created as its own war, so each can be safely stopped and restored.
+ADISCORD_vorkerland_begin_ivanland_intervention = {
+	clr_global_flag = ADISCORD_vorkerland_restore_zao_wpa
+	clr_global_flag = ADISCORD_vorkerland_restore_zao_wps
+	clr_global_flag = ADISCORD_vorkerland_restore_zao_psd
+	clr_global_flag = ADISCORD_vorkerland_restore_zao_pwr
+	clr_global_flag = ADISCORD_vorkerland_restore_wpa_psd
+	clr_global_flag = ADISCORD_vorkerland_restore_wpa_pwr
+	clr_global_flag = ADISCORD_vorkerland_restore_wps_psd
+	clr_global_flag = ADISCORD_vorkerland_restore_wps_pwr
+	clr_global_flag = ADISCORD_vorkerland_northern_wars_restored
+	if = { limit = { ZAO = { has_war_with = WPA } } set_global_flag = ADISCORD_vorkerland_restore_zao_wpa }
+	if = { limit = { ZAO = { has_war_with = WPS } } set_global_flag = ADISCORD_vorkerland_restore_zao_wps }
+	if = { limit = { ZAO = { has_war_with = PSD } } set_global_flag = ADISCORD_vorkerland_restore_zao_psd }
+	if = { limit = { ZAO = { has_war_with = PWR } } set_global_flag = ADISCORD_vorkerland_restore_zao_pwr }
+	if = { limit = { WPA = { has_war_with = PSD } } set_global_flag = ADISCORD_vorkerland_restore_wpa_psd }
+	if = { limit = { WPA = { has_war_with = PWR } } set_global_flag = ADISCORD_vorkerland_restore_wpa_pwr }
+	if = { limit = { WPS = { has_war_with = PSD } } set_global_flag = ADISCORD_vorkerland_restore_wps_psd }
+	if = { limit = { WPS = { has_war_with = PWR } } set_global_flag = ADISCORD_vorkerland_restore_wps_pwr }
+
+	ZAO = {
+		if = { limit = { country_exists = WPA has_war_with = WPA } white_peace = WPA }
+		if = { limit = { country_exists = WPS has_war_with = WPS } white_peace = WPS }
+		if = { limit = { country_exists = PSD has_war_with = PSD } white_peace = PSD }
+		if = { limit = { country_exists = PWR has_war_with = PWR } white_peace = PWR }
+	}
+	WPA = {
+		if = { limit = { country_exists = PSD has_war_with = PSD } white_peace = PSD }
+		if = { limit = { country_exists = PWR has_war_with = PWR } white_peace = PWR }
+	}
+	WPS = {
+		if = { limit = { country_exists = PSD has_war_with = PSD } white_peace = PSD }
+		if = { limit = { country_exists = PWR has_war_with = PWR } white_peace = PWR }
+	}
+
+	# Krait accepts protection at the start of the operation. It is not part of
+	# the northern defence front and therefore never fights its future overlord.
+	IVN = {
+		puppet = IBL
+		set_autonomy = { target = IBL autonomy_state = autonomy_puppet freedom_level = 0.10 }
+		if = {
+			limit = { NOT = { has_country_flag = ADISCORD_vorkerland_ivanland_expedition_supplied } }
+			add_manpower = 8000
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1600 producer = IVN }
+			add_equipment_to_stockpile = { type = support_equipment amount = 120 producer = IVN }
+			add_equipment_to_stockpile = { type = artillery_equipment amount = 48 producer = IVN }
+			add_fuel = 5000
+			set_country_flag = ADISCORD_vorkerland_ivanland_expedition_supplied
+		}
+	}
+	IBL = {
+		set_country_flag = ADISCORD_vorkerland_ivanland_client
+		ADISCORD_vorkerland_appoint_selevyostrov = yes
+		country_event = { id = ADISCORD_vorkerland_collapse.42 days = 1 }
+	}
+
+	PWR = {
+		create_faction_from_template = {
+			template = faction_template_ADISCORD_standard
+			name = faction_vorkerland_northern_defense_front
+		}
+		add_to_faction = ZAO
+		add_to_faction = WPA
+		add_to_faction = WPS
+		add_to_faction = PSD
+	}
+
+	ZAO = { add_manpower = 1000 add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 250 producer = ZAO } add_timed_idea = { idea = ADISCORD_vorkerland_northern_defense_front days = 260 } }
+	WPA = { add_manpower = 1000 add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 250 producer = WPA } add_timed_idea = { idea = ADISCORD_vorkerland_northern_defense_front days = 260 } }
+	WPS = { add_manpower = 1000 add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 250 producer = WPS } add_timed_idea = { idea = ADISCORD_vorkerland_northern_defense_front days = 260 } }
+	PWR = { add_manpower = 1000 add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 250 producer = PWR } add_timed_idea = { idea = ADISCORD_vorkerland_northern_defense_front days = 260 } }
+	PSD = { add_manpower = 1000 add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 250 producer = PSD } add_timed_idea = { idea = ADISCORD_vorkerland_northern_defense_front days = 260 } }
+
+	IVN = { declare_war_on = { target = PWR type = take_state_focus generator = { 90 } } }
+	ZAO = { if = { limit = { NOT = { has_war_with = IVN } } add_to_war = { targeted_alliance = PWR enemy = IVN hostility_reason = asked_to_join } } }
+	WPA = { if = { limit = { NOT = { has_war_with = IVN } } add_to_war = { targeted_alliance = PWR enemy = IVN hostility_reason = asked_to_join } } }
+	WPS = { if = { limit = { NOT = { has_war_with = IVN } } add_to_war = { targeted_alliance = PWR enemy = IVN hostility_reason = asked_to_join } } }
+	PSD = { if = { limit = { NOT = { has_war_with = IVN } } add_to_war = { targeted_alliance = PWR enemy = IVN hostility_reason = asked_to_join } } }
 }
 
 ADISCORD_vorkerland_end_ivanland_intervention_wars = {
 	IVN = {
+		if = { limit = { country_exists = ZAO has_war_with = ZAO } white_peace = ZAO }
+		if = { limit = { country_exists = WPA has_war_with = WPA } white_peace = WPA }
+		if = { limit = { country_exists = WPS has_war_with = WPS } white_peace = WPS }
 		if = { limit = { country_exists = PWR has_war_with = PWR } white_peace = PWR }
+		if = { limit = { country_exists = PSD has_war_with = PSD } white_peace = PSD }
 		if = { limit = { country_exists = IBL has_war_with = IBL } white_peace = IBL }
 		if = { limit = { country_exists = IBA has_war_with = IBA } white_peace = IBA }
 	}
-	if = {
-		limit = { country_exists = IBA }
-		IBA = {
-			# IBA was previously admitted to the generic neighbour-war pool. Repair
-			# every possible inherited Vorkerland war, not only the original
-			# intervention pair, so an old WRK-IBA or VAD-IBA war cannot survive.
-			if = { limit = { country_exists = WRK has_war_with = WRK } white_peace = WRK }
-			if = { limit = { country_exists = VAD has_war_with = VAD } white_peace = VAD }
-			if = { limit = { country_exists = TVA has_war_with = TVA } white_peace = TVA }
-			if = { limit = { country_exists = EYR has_war_with = EYR } white_peace = EYR }
-			if = { limit = { country_exists = EGC has_war_with = EGC } white_peace = EGC }
-			if = { limit = { country_exists = ZAO has_war_with = ZAO } white_peace = ZAO }
-			if = { limit = { country_exists = WPA has_war_with = WPA } white_peace = WPA }
-			if = { limit = { country_exists = WPS has_war_with = WPS } white_peace = WPS }
-			if = { limit = { country_exists = PWR has_war_with = PWR } white_peace = PWR }
-			if = { limit = { country_exists = PSD has_war_with = PSD } white_peace = PSD }
-			if = { limit = { country_exists = VLA has_war_with = VLA } white_peace = VLA }
-			if = { limit = { country_exists = EBA has_war_with = EBA } white_peace = EBA }
-			if = { limit = { country_exists = TGD has_war_with = TGD } white_peace = TGD }
-			if = { limit = { country_exists = ROM has_war_with = ROM } white_peace = ROM }
-			if = { limit = { country_exists = DVA has_war_with = DVA } white_peace = DVA }
-			if = { limit = { country_exists = SOL has_war_with = SOL } white_peace = SOL }
-			if = { limit = { country_exists = SRA has_war_with = SRA } white_peace = SRA }
-			if = { limit = { country_exists = TRU has_war_with = TRU } white_peace = TRU }
-			if = { limit = { country_exists = ZTA has_war_with = ZTA } white_peace = ZTA }
-			if = { limit = { country_exists = CSL has_war_with = CSL } white_peace = CSL }
-			if = { limit = { country_exists = IBL has_war_with = IBL } white_peace = IBL }
-		}
-	}
-	if = {
-		limit = { country_exists = IBL country_exists = PWR }
-		IBL = { if = { limit = { has_war_with = PWR } white_peace = PWR } }
-	}
+	PWR = { if = { limit = { is_faction_leader = yes } dismantle_faction = yes } else_if = { limit = { is_in_faction = yes } leave_faction = yes } }
+	ZAO = { if = { limit = { is_faction_leader = yes } dismantle_faction = yes } else_if = { limit = { is_in_faction = yes } leave_faction = yes } }
+	WPA = { if = { limit = { is_faction_leader = yes } dismantle_faction = yes } else_if = { limit = { is_in_faction = yes } leave_faction = yes } }
+	WPS = { if = { limit = { is_faction_leader = yes } dismantle_faction = yes } else_if = { limit = { is_in_faction = yes } leave_faction = yes } }
+	PSD = { if = { limit = { is_faction_leader = yes } dismantle_faction = yes } else_if = { limit = { is_in_faction = yes } leave_faction = yes } }
+	IBL = { if = { limit = { is_faction_leader = yes } dismantle_faction = yes } else_if = { limit = { is_in_faction = yes } leave_faction = yes } }
+}
+
+ADISCORD_vorkerland_restore_northern_wars = {
+	if = { limit = { has_global_flag = ADISCORD_vorkerland_restore_zao_wpa country_exists = ZAO country_exists = WPA ZAO = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WPA } } WPA = { is_subject = no NOT = { has_capitulated = yes } } } ZAO = { declare_war_on = { target = WPA type = annex_everything } } }
+	if = { limit = { has_global_flag = ADISCORD_vorkerland_restore_zao_wps country_exists = ZAO country_exists = WPS ZAO = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WPS } } WPS = { is_subject = no NOT = { has_capitulated = yes } } } WPS = { declare_war_on = { target = ZAO type = annex_everything } } }
+	if = { limit = { has_global_flag = ADISCORD_vorkerland_restore_zao_psd country_exists = ZAO country_exists = PSD ZAO = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = PSD } } PSD = { is_subject = no NOT = { has_capitulated = yes } } } ZAO = { declare_war_on = { target = PSD type = annex_everything } } }
+	if = { limit = { has_global_flag = ADISCORD_vorkerland_restore_zao_pwr country_exists = ZAO country_exists = PWR ZAO = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = PWR } } PWR = { is_subject = no NOT = { has_capitulated = yes } } } PWR = { declare_war_on = { target = ZAO type = annex_everything } } }
+	if = { limit = { has_global_flag = ADISCORD_vorkerland_restore_wpa_psd country_exists = WPA country_exists = PSD WPA = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = PSD } } PSD = { is_subject = no NOT = { has_capitulated = yes } } } WPA = { declare_war_on = { target = PSD type = annex_everything } } }
+	if = { limit = { has_global_flag = ADISCORD_vorkerland_restore_wpa_pwr country_exists = WPA country_exists = PWR WPA = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = PWR } } PWR = { is_subject = no NOT = { has_capitulated = yes } } } WPA = { declare_war_on = { target = PWR type = annex_everything } } }
+	if = { limit = { has_global_flag = ADISCORD_vorkerland_restore_wps_psd country_exists = WPS country_exists = PSD WPS = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = PSD } } PSD = { is_subject = no NOT = { has_capitulated = yes } } } WPS = { declare_war_on = { target = PSD type = annex_everything } } }
+	if = { limit = { has_global_flag = ADISCORD_vorkerland_restore_wps_pwr country_exists = WPS country_exists = PWR WPS = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = PWR } } PWR = { is_subject = no NOT = { has_capitulated = yes } } } WPS = { declare_war_on = { target = PWR type = annex_everything } } }
+	clr_global_flag = ADISCORD_vorkerland_restore_zao_wpa
+	clr_global_flag = ADISCORD_vorkerland_restore_zao_wps
+	clr_global_flag = ADISCORD_vorkerland_restore_zao_psd
+	clr_global_flag = ADISCORD_vorkerland_restore_zao_pwr
+	clr_global_flag = ADISCORD_vorkerland_restore_wpa_psd
+	clr_global_flag = ADISCORD_vorkerland_restore_wpa_pwr
+	clr_global_flag = ADISCORD_vorkerland_restore_wps_psd
+	clr_global_flag = ADISCORD_vorkerland_restore_wps_pwr
+	set_global_flag = ADISCORD_vorkerland_northern_wars_restored
 }
 
 # Legacy create_country_leader does not replace a character-system leader in
@@ -540,15 +1420,47 @@ ADISCORD_vorkerland_appoint_mateusk = {
 	set_country_flag = ADISCORD_vorkerland_mateusk_character_repair_v2
 }
 
-# Called only after IVN occupies the complete 90-91 corridor. IBA is the sole
-# puppet created by the intervention; the pre-war IBL directorate is absorbed.
+# Krait must receive its new land before state 91 changes hands. Otherwise the
+# tag becomes landless and may disappear before the second Ivanland client is
+# created.
+ADISCORD_vorkerland_expand_krait_client = {
+	if = {
+		limit = { country_exists = IBL }
+		IBL = {
+			transfer_state = 93
+			transfer_state = 94
+			set_capital = { state = 93 }
+		}
+		93 = { add_core_of = IBL add_claim_by = IBL set_state_controller_to = IBL }
+		94 = { add_core_of = IBL add_claim_by = IBL set_state_controller_to = IBL }
+		IBL = {
+			ADISCORD_vorkerland_appoint_selevyostrov = yes
+			set_country_flag = ADISCORD_vorkerland_ivanland_client
+			add_manpower = 1500
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 350 producer = IVN }
+		}
+		IVN = {
+			puppet = IBL
+			set_autonomy = { target = IBL autonomy_state = autonomy_puppet freedom_level = 0.10 }
+		}
+		IBL = {
+			ADISCORD_vorkerland_appoint_selevyostrov = yes
+			country_event = { id = ADISCORD_vorkerland_collapse.42 days = 1 }
+		}
+		set_global_flag = ADISCORD_vorkerland_ivanland_krait_frontier_secured
+	}
+}
+
+# The final settlement leaves Ivanland with two separate clients: Krait in
+# states 93-94 and Mateusk's Norvane in states 90-91.
 ADISCORD_vorkerland_setup_ivanland_mandate = {
+	ADISCORD_vorkerland_expand_krait_client = yes
 	IBA = {
 		transfer_state = 90
 		transfer_state = 91
 	}
 	90 = { add_core_of = IBA add_claim_by = IBA set_state_controller_to = IBA }
-	91 = { add_core_of = IBA add_claim_by = IBA set_state_controller_to = IBA }
+	91 = { remove_core_of = IBL add_core_of = IBA add_claim_by = IBA set_state_controller_to = IBA }
 	71 = { add_claim_by = IBA }
 	IBA = {
 		set_capital = { state = 90 }
@@ -559,10 +1471,10 @@ ADISCORD_vorkerland_setup_ivanland_mandate = {
 			ADISCORD_economy_initialize_country = yes
 			ADISCORD_vorkerland_prepare_conflict_country = yes
 			load_oob = "IBA_vorkerland_collapse"
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 320 producer = IVN }
+			add_manpower = 3500
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 700 producer = IVN }
 			set_country_flag = ADISCORD_vorkerland_iba_initialized
 		}
-		ADISCORD_vorkerland_appoint_mateusk = yes
 	}
 	IVN = {
 		if = {
@@ -570,6 +1482,135 @@ ADISCORD_vorkerland_setup_ivanland_mandate = {
 			puppet = IBA
 			set_autonomy = { target = IBA autonomy_state = autonomy_puppet freedom_level = 0.10 }
 		}
+	}
+	# Puppeting may rebuild the new country's politics and replace an already
+	# promoted leader with a generated one. Appoint Mateusk only after that
+	# rebuild, then make one deferred assertion on the following day.
+	IBA = {
+		ADISCORD_vorkerland_appoint_mateusk = yes
+		country_event = { id = ADISCORD_vorkerland_collapse.40 days = 1 }
+	}
+}
+
+# A successful Ivanland operation also secures Zaozersk. When the republic has
+# already been eliminated, state 72 is detached from its current holder and the
+# historical tag is released there before the subject relationship is applied.
+ADISCORD_vorkerland_ivanland_secure_zaozersk = {
+	if = {
+		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_zaozersk_secured } }
+		if = {
+			limit = { NOT = { country_exists = ZAO } }
+			IVN = { transfer_state = 72 }
+			72 = { add_core_of = ZAO set_state_controller_to = IVN }
+			IVN = {
+				release_autonomy = {
+					target = ZAO
+					autonomy_state = autonomy_puppet
+					freedom_level = 0.10
+				}
+			}
+		}
+		else = {
+			ZAO = {
+				if = { limit = { country_exists = WPA has_war_with = WPA } white_peace = WPA }
+				if = { limit = { country_exists = WPS has_war_with = WPS } white_peace = WPS }
+				if = { limit = { country_exists = PSD has_war_with = PSD } white_peace = PSD }
+				if = { limit = { country_exists = PWR has_war_with = PWR } white_peace = PWR }
+				if = { limit = { country_exists = ROM has_war_with = ROM } white_peace = ROM }
+				if = {
+					limit = { is_subject = yes }
+					overlord = { set_autonomy = { target = ZAO autonomy_state = autonomy_free } }
+				}
+				if = { limit = { is_in_faction = yes } leave_faction = yes }
+			}
+			IVN = {
+				puppet = ZAO
+				set_autonomy = { target = ZAO autonomy_state = autonomy_puppet freedom_level = 0.10 }
+			}
+		}
+		ZAO = {
+			ADISCORD_vorkerland_sync_independence_cosmetic = yes
+			ADISCORD_vorkerland_sync_republics_from_ruins = yes
+			set_country_flag = ADISCORD_vorkerland_ivanland_protectorate
+		}
+		set_global_flag = ADISCORD_vorkerland_ivanland_zaozersk_secured
+	}
+}
+
+ADISCORD_vorkerland_end_rom_northern_intervention_wars = {
+	ROM = {
+		if = { limit = { country_exists = ZAO has_war_with = ZAO } white_peace = ZAO }
+		if = { limit = { country_exists = WPS has_war_with = WPS } white_peace = WPS }
+	}
+}
+
+ADISCORD_vorkerland_rom_northern_intervention_success = {
+	if = {
+		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_resolved } }
+		ADISCORD_vorkerland_end_rom_northern_intervention_wars = yes
+		ROM = {
+			transfer_state = 72
+			transfer_state = 196
+			transfer_state = 322
+			set_country_flag = ADISCORD_vorkerland_northern_corridor_secured
+		}
+		72 = { add_claim_by = ROM set_state_controller_to = ROM }
+		196 = { add_claim_by = ROM set_state_controller_to = ROM }
+		322 = { add_claim_by = ROM set_state_controller_to = ROM }
+		set_global_flag = ADISCORD_vorkerland_rom_northern_intervention_succeeded
+		set_global_flag = ADISCORD_vorkerland_rom_northern_intervention_resolved
+		clr_global_flag = ADISCORD_vorkerland_rom_northern_intervention_active
+	}
+}
+
+ADISCORD_vorkerland_rom_northern_intervention_failure = {
+	if = {
+		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_resolved } }
+		ADISCORD_vorkerland_end_rom_northern_intervention_wars = yes
+		set_global_flag = ADISCORD_vorkerland_rom_northern_intervention_failed
+		set_global_flag = ADISCORD_vorkerland_rom_northern_intervention_resolved
+		clr_global_flag = ADISCORD_vorkerland_rom_northern_intervention_active
+	}
+}
+
+# Only Workerland's own victory can restore its former republic autonomies.
+# The two rolls are independent. Ivanland's timely guarantee suppresses this
+# entire settlement and leaves both republics sovereign.
+ADISCORD_vorkerland_resolve_unguaranteed_free_republics = {
+	if = {
+		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_free_republics_resolution_done } }
+		if = {
+			limit = { NOT = { has_global_flag = ADISCORD_vorkerland_free_republics_guaranteed_by_ivn } }
+			WRK = {
+				if = {
+					limit = { ROM = { exists = yes is_subject = no } }
+					random_list = {
+						50 = {
+							puppet = ROM
+							set_autonomy = { target = ROM autonomy_state = autonomy_republic_in_Vorkerland freedom_level = 0.10 }
+							ROM = { ADISCORD_vorkerland_sync_republics_from_ruins = yes }
+						}
+						50 = {
+							if = { limit = { NOT = { has_war_with = ROM } } declare_war_on = { target = ROM type = annex_everything } }
+						}
+					}
+				}
+				if = {
+					limit = { TRU = { exists = yes is_subject = no } }
+					random_list = {
+						50 = {
+							puppet = TRU
+							set_autonomy = { target = TRU autonomy_state = autonomy_republic_in_Vorkerland freedom_level = 0.10 }
+							TRU = { ADISCORD_vorkerland_sync_republics_from_ruins = yes }
+						}
+						50 = {
+							if = { limit = { NOT = { has_war_with = TRU } } declare_war_on = { target = TRU type = annex_everything } }
+						}
+					}
+				}
+			}
+		}
+		set_global_flag = ADISCORD_vorkerland_free_republics_resolution_done
 	}
 }
 
@@ -579,12 +1620,15 @@ ADISCORD_vorkerland_ivanland_intervention_success = {
 		set_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved
 		set_global_flag = ADISCORD_vorkerland_ivanland_intervened
 		set_global_flag = ADISCORD_vorkerland_ivanland_intervention_succeeded
+		set_global_flag = ADISCORD_vorkerland_ivanland_mandate_proclaimed
 		clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_failed
 		clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
-		log = "[ADISCORD][VORKERLAND] Ivanland intervention resolved: SUCCESS; IBA receives states 90 and 91 only."
+		log = "[ADISCORD][VORKERLAND] Ivanland intervention resolved: SUCCESS; IBL receives states 93-94 and IBA receives states 90-91."
 		ADISCORD_vorkerland_end_ivanland_intervention_wars = yes
 		ADISCORD_vorkerland_setup_ivanland_mandate = yes
+		ADISCORD_vorkerland_ivanland_secure_zaozersk = yes
 		ADISCORD_vorkerland_end_ivanland_intervention_wars = yes
+		country_event = { id = ADISCORD_vorkerland_collapse.43 days = 2 }
 		if = {
 			limit = { NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_success_news_shown } }
 			set_global_flag = ADISCORD_vorkerland_ivanland_success_news_shown
@@ -605,12 +1649,12 @@ ADISCORD_vorkerland_ivanland_intervention_failure = {
 		clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_succeeded
 		clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
 		clr_global_flag = ADISCORD_vorkerland_ivanland_mandate_proclaimed
-		log = "[ADISCORD][VORKERLAND] Ivanland intervention resolved: FAILURE; IBA is dissolved and states 90-91 are restored."
+		log = "[ADISCORD][VORKERLAND] Ivanland intervention resolved: FAILURE; IBA is dissolved and the pre-settlement borders are restored."
 		ADISCORD_vorkerland_end_ivanland_intervention_wars = yes
 		if = {
 			limit = { country_exists = IBA }
-			# The mandate setup owns only 90 and 91. Annexing the zero-extra-state
-			# tag guarantees that a proclaimed mandate cannot survive failure.
+			# Annex first, then restore both clients' pre-settlement land. This is
+			# primarily a safeguard for a save made during the proclamation tick.
 			IVN = { annex_country = { target = IBA transfer_troops = yes } }
 			90 = { remove_core_of = IBA }
 			91 = { remove_core_of = IBA }
@@ -621,11 +1665,28 @@ ADISCORD_vorkerland_ivanland_intervention_failure = {
 			}
 			if = {
 				limit = { country_exists = IBL }
-				IBL = { transfer_state = 91 }
-				91 = { set_state_controller_to = IBL }
+				IBL = {
+					transfer_state = 91
+					set_capital = { state = 91 }
+				}
+				91 = { add_core_of = IBL set_state_controller_to = IBL }
+			}
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_ivanland_krait_frontier_secured
+					country_exists = PSD
+				}
+				PSD = {
+					transfer_state = 93
+					transfer_state = 94
+				}
+				93 = { remove_core_of = IBL set_state_controller_to = PSD }
+				94 = { remove_core_of = IBL set_state_controller_to = PSD }
 			}
 		}
+		clr_global_flag = ADISCORD_vorkerland_ivanland_krait_frontier_secured
 		ADISCORD_vorkerland_end_ivanland_intervention_wars = yes
+		country_event = { id = ADISCORD_vorkerland_collapse.43 days = 2 }
 		IVN = {
 			set_politics = {
 				ruling_party = etatism
@@ -697,6 +1758,7 @@ ADISCORD_vorkerland_apply_claimant_cosmetics = {
 		if = {
 			limit = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
 			set_cosmetic_tag = WRK_vorkerland_emergency
+			set_country_leader_ideology = neo_vorkerism
 			set_country_leader_portrait = {
 				ideology = pragmatism
 				portrait = GFX_portrait_WRK_Nikita_Worcker_civilwar
@@ -715,10 +1777,22 @@ ADISCORD_vorkerland_apply_claimant_cosmetics = {
 			portrait = GFX_portrait_WRK_Vlad_Petrichev_civilwar
 		}
 	}
-	ROM = { ADISCORD_vorkerland_sync_independence_cosmetic = yes }
-	TRU = { ADISCORD_vorkerland_sync_independence_cosmetic = yes }
+	ROM = {
+		ADISCORD_vorkerland_sync_independence_cosmetic = yes
+		ADISCORD_vorkerland_appoint_rom_etatist = yes
+		country_event = { id = ADISCORD_vorkerland_collapse.60 days = 1 }
+	}
+	TRU = {
+		ADISCORD_vorkerland_sync_independence_cosmetic = yes
+		ADISCORD_vorkerland_appoint_tru_chauvinist = yes
+		country_event = { id = ADISCORD_vorkerland_collapse.61 days = 1 }
+	}
 	ZAO = { ADISCORD_vorkerland_sync_independence_cosmetic = yes }
-	PWR = { set_cosmetic_tag = PWR_rimat_republic }
+	PWR = {
+		set_cosmetic_tag = PWR_rimat_republic
+		ADISCORD_vorkerland_appoint_pwr_technocrat = yes
+		country_event = { id = ADISCORD_vorkerland_collapse.44 days = 1 }
+	}
 	VLA = { set_cosmetic_tag = VLA_volnograd_republic }
 }
 
@@ -741,16 +1815,9 @@ ADISCORD_vorkerland_form_joint_government = {
 	set_global_flag = ADISCORD_vorkerland_joint_government_formed
 	WRK = {
 		annex_country = { target = VAD transfer_troops = yes }
-		TVA = { transfer_state = 27 }
-		EYR = {
-			transfer_state = 82
-			transfer_state = 123
-		}
-		27 = { add_core_of = TVA set_state_controller_to = TVA }
-		82 = { add_core_of = EYR set_state_controller_to = EYR }
-		123 = { add_core_of = EYR set_state_controller_to = EYR }
 		set_cosmetic_tag = WRK_vorkerland_joint_government
 		ADISCORD_vorkerland_appoint_joint_council = yes
+		country_event = { id = ADISCORD_vorkerland_collapse.62 days = 1 }
 	}
 }
 
@@ -772,41 +1839,43 @@ ADISCORD_vorkerland_relocate_legacy_armies = {
 
 ADISCORD_vorkerland_apply_initial_map = {
 	WRK = {
-		transfer_state = 27
 		transfer_state = 32
-		transfer_state = 200
-		transfer_state = 201
-		transfer_state = 202
 		transfer_state = 33
 		transfer_state = 34
-		transfer_state = 35
-		transfer_state = 79
-		transfer_state = 82
-		transfer_state = 306
-		transfer_state = 309
-		transfer_state = 327
+		transfer_state = 200
+		transfer_state = 201
+		set_capital = { state = 32 }
 	}
 	VAD = {
 		transfer_state = 75
 		transfer_state = 106
 		transfer_state = 107
 		transfer_state = 121
-		transfer_state = 123
 		set_capital = { state = 75 }
 	}
 	ZAO = { transfer_state = 72 }
 	PWR = {
 		transfer_state = 71
 		transfer_state = 90
+		transfer_state = 202
 	}
+	202 = { add_core_of = PWR set_state_controller_to = PWR }
 	VLA = { transfer_state = 74 }
 	ROM = { transfer_state = 73 }
 	SOL = { transfer_state = 76 }
 	TRU = { transfer_state = 80 }
 
 	ADISCORD_vorkerland_setup_tva = yes
+	ADISCORD_vorkerland_setup_wtd = yes
 	ADISCORD_vorkerland_setup_eyr = yes
 	ADISCORD_vorkerland_setup_egc = yes
+	ADISCORD_vorkerland_setup_riv = yes
+	ADISCORD_vorkerland_setup_rev = yes
+	ADISCORD_vorkerland_setup_yor = yes
+	ADISCORD_vorkerland_setup_ndn = yes
+	ADISCORD_vorkerland_setup_swb = yes
+	ADISCORD_vorkerland_setup_vhv = yes
+	ADISCORD_vorkerland_setup_osv = yes
 	ADISCORD_vorkerland_setup_csl = yes
 	ADISCORD_vorkerland_setup_wpa = yes
 	ADISCORD_vorkerland_setup_wps = yes
@@ -817,12 +1886,22 @@ ADISCORD_vorkerland_apply_initial_map = {
 	ADISCORD_vorkerland_setup_zta = yes
 	ADISCORD_vorkerland_setup_tgd = yes
 	ADISCORD_vorkerland_setup_ibl = yes
+	# The External Gate is a WRK emergency dependency, not a civil-war claimant.
+	# At the collapse its core-bearing Kremen and Leman administrations replace it.
+	ADISCORD_vorkerland_split_external_gate = yes
 	ADISCORD_vorkerland_prepare_initial_combatants = yes
 	ADISCORD_vorkerland_relocate_legacy_armies = yes
 }
 
-# Country-scoped monthly exhaustion. WRK and VAD call this separately, so the
+# Country-scoped monthly exhaustion. WRK, VAD and TVA call this separately, so the
 # shared variable names remain independent and each side pays only its losses.
+ADISCORD_vorkerland_initialize_civil_war_exhaustion = {
+	set_variable = { var = ADISCORD_vorkerland_civil_war_exhaustion value = 1 }
+	set_variable = { var = ADISCORD_vorkerland_civil_war_casualties_delta_k value = 0 }
+	set_variable = { var = ADISCORD_vorkerland_civil_war_casualties_snapshot_k value = casualties_k }
+	ADISCORD_vorkerland_refresh_civil_war_exhaustion = yes
+}
+
 ADISCORD_vorkerland_update_civil_war_exhaustion = {
 	if = {
 		limit = {
@@ -854,10 +1933,8 @@ ADISCORD_vorkerland_update_civil_war_exhaustion = {
 
 	if = {
 		limit = {
-			OR = {
-				AND = { tag = WRK has_war_with = VAD }
-				AND = { tag = VAD has_war_with = WRK }
-			}
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+			has_war = yes
 		}
 		add_to_variable = {
 			var = ADISCORD_vorkerland_civil_war_exhaustion
@@ -903,15 +1980,9 @@ ADISCORD_vorkerland_update_civil_war_exhaustion = {
 			}
 		}
 	}
-	else = {
-		add_to_variable = {
-			var = ADISCORD_vorkerland_civil_war_exhaustion
-			value = -8
-		}
-	}
 	clamp_variable = {
 		var = ADISCORD_vorkerland_civil_war_exhaustion
-		min = 0
+		min = 1
 		max = 100
 	}
 	ADISCORD_vorkerland_refresh_civil_war_exhaustion = yes

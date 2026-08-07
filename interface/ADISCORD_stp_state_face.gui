@@ -2,15 +2,14 @@ guiTypes = {
 	containerWindowType = {
 		name = "STP_state_face_ui_window"
 		position = { x = 0 y = 0 }
-		size = { width = 190 height = 365 }
+		size = { width = 340 height = 650 }
 		clipping = no
 
 		# Dynamic sprite controlled by common/focus_inlay_windows/ADISCORD_STP_state_face_inlay_window.txt
 		iconType = {
 			name = "STP_state_face_portrait"
-			position = { x = 13 y = 30 }
+			position = { x = 24 y = 55 }
 			spriteType = "GFX_STP_state_face_stage_1"
-			scale = 0.55
 			context_aware_tooltip = [STPGetStateFaceTooltip]
 		}
 
@@ -18,17 +17,16 @@ guiTypes = {
 			name = "STP_state_face_frame"
 			position = { x = 0 y = 0 }
 			spriteType = "GFX_STP_state_face_frame"
-			scale = 0.55
 			context_aware_tooltip = [STPGetStateFaceTooltip]
 		}
 
 		instantTextBoxType = {
 			name = "STP_state_face_title"
-			position = { x = 25 y = 328 }
+			position = { x = 45 y = 596 }
 			text = "STP_STATE_FACE_TITLE"
-			font = "hoi_16mbs"
-			maxWidth = 140
-			maxHeight = 16
+			font = "hoi_18mbs"
+			maxWidth = 250
+			maxHeight = 18
 			fixedsize = yes
 			format = center
 			context_aware_tooltip = [STPGetStateFaceTooltip]
@@ -37,10 +35,10 @@ guiTypes = {
 		# Germany-style dynamic text: context_aware_text evaluates scripted localisation in inlay UI.
 		instantTextBoxType = {
 			name = "STP_state_face_stage_text"
-			position = { x = 30 y = 345 }
+			position = { x = 60 y = 615 }
 			context_aware_text = [STPGetStateFaceStageName]
-			font = "hoi_16mbs"
-			maxWidth = 130
+			font = "hoi_18mbs"
+			maxWidth = 220
 			maxHeight = 16
 			fixedsize = yes
 			format = center

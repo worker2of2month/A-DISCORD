@@ -14,9 +14,10 @@ from build_adiscord_strategic_regions import (
     OUTER_CLIMATE_BELTS,
     OUTER_REGION_SPECS,
     OUTER_STATE_MARKER,
+    ALL_SEA_REGIONS,
+    DEDICATED_SEA_PROVINCES,
     REGIONS,
     REMAINDER_STATE_MARKER,
-    SEA_REGIONS,
     TEMPERATURES,
     arctic_water,
     build_state_adjacency,
@@ -240,8 +241,9 @@ def main() -> int:
     states = load_state_provinces()
     generated_climate_keys = load_generated_climate_keys(errors)
     regions = parse_regions(errors)
-    expected_region_ids = {region.region_id for region in (*SEA_REGIONS, *REGIONS)}
-    sea_region_ids = {region.region_id for region in SEA_REGIONS}
+    expected_region_ids = {region.region_id for region in (*ALL_SEA_REGIONS, *REGIONS)}
+    sea_by_id = {region.region_id: region for region in ALL_SEA_REGIONS}
+    sea_region_ids = set(sea_by_id)
     if set(regions) != expected_region_ids:
         errors.append(f"strategic region ids differ: expected {sorted(expected_region_ids)}, found {sorted(regions)}")
 
@@ -250,10 +252,15 @@ def main() -> int:
         expected_name = f"STRATEGICREGION_{region_id}"
         if data["name"] != expected_name:
             errors.append(f"region {region_id}: expected name {expected_name}, found {data['name']}")
-        has_naval_terrain = bool(re.search(r"\bnaval_terrain\s*=\s*water_deep_ocean\b", str(data["text"])))
-        if region_id in sea_region_ids and not has_naval_terrain:
-            errors.append(f"sea region {region_id}: missing naval terrain")
-        elif region_id not in sea_region_ids and has_naval_terrain:
+        naval_terrain_match = re.search(r"\bnaval_terrain\s*=\s*([a-z0-9_]+)\b", str(data["text"]))
+        if region_id in sea_region_ids:
+            expected_terrain = sea_by_id[region_id].naval_terrain
+            actual_terrain = naval_terrain_match.group(1) if naval_terrain_match else None
+            if actual_terrain != expected_terrain:
+                errors.append(
+                    f"sea region {region_id}: expected naval terrain {expected_terrain}, found {actual_terrain}"
+                )
+        elif naval_terrain_match:
             errors.append(f"land region {region_id}: unexpected naval terrain")
         for province_id in data["provinces"]:
             province_regions.setdefault(province_id, []).append(region_id)
@@ -267,8 +274,10 @@ def main() -> int:
     naval_provinces = set().union(
         *(set(regions[region_id]["provinces"]) for region_id in sea_region_ids if region_id in regions)
     )
-    missing_ocean = sorted(main_ocean - naval_provinces)
-    non_ocean_naval = sorted(naval_provinces - main_ocean)
+    dedicated_naval = set().union(*(set(provinces) for provinces in DEDICATED_SEA_PROVINCES.values()))
+    expected_naval = main_ocean | dedicated_naval
+    missing_ocean = sorted(expected_naval - naval_provinces)
+    non_ocean_naval = sorted(naval_provinces - expected_naval)
     if missing_ocean:
         errors.append(f"ocean provinces outside naval regions: {missing_ocean[:30]}")
     if non_ocean_naval:
@@ -281,15 +290,34 @@ def main() -> int:
                 f"sea region {region_id}: fractioned into {len(components)} components "
                 f"with sizes {[len(component) for component in components]}"
             )
+    dedicated_components = {
+        frozenset(provinces): region_id
+        for region_id, provinces in DEDICATED_SEA_PROVINCES.items()
+    }
     for component in sea_components[1:]:
         actual_regions = {
             province_regions[province_id][0]
             for province_id in component
             if province_id in province_regions and len(province_regions[province_id]) == 1
         }
-        if len(actual_regions) != 1 or actual_regions & sea_region_ids:
+        expected_dedicated_region = dedicated_components.get(frozenset(component))
+        if expected_dedicated_region is not None:
+            if actual_regions != {expected_dedicated_region}:
+                errors.append(
+                    f"dedicated sea component {sorted(component)} must belong to region "
+                    f"{expected_dedicated_region}, found {sorted(actual_regions)}"
+                )
+        elif len(actual_regions) != 1 or actual_regions & sea_region_ids:
             errors.append(
                 f"isolated lake component {sorted(component)} must belong to one land region, found {sorted(actual_regions)}"
+            )
+
+    for region_id, expected_provinces in DEDICATED_SEA_PROVINCES.items():
+        actual_provinces = set(regions.get(region_id, {}).get("provinces", set()))
+        if actual_provinces != set(expected_provinces):
+            errors.append(
+                f"dedicated sea region {region_id}: expected provinces {sorted(expected_provinces)}, "
+                f"found {sorted(actual_provinces)}"
             )
 
     missing = sorted(set(definitions) - set(province_regions))
@@ -368,7 +396,7 @@ def main() -> int:
 
     climate_by_region = {
         region.region_id: region.climate
-        for region in (*SEA_REGIONS, *REGIONS)
+        for region in (*ALL_SEA_REGIONS, *REGIONS)
     }
     for region_id, data in regions.items():
         climate = climate_by_region.get(region_id)
@@ -392,6 +420,15 @@ def main() -> int:
             key = f"STRATEGICREGION_{region_id}"
             if keys[key] != 1:
                 errors.append(f"localisation key {key}: expected once, found {keys[key]}")
+        localisation_by_key = dict(localisation_rows)
+        for region in ALL_SEA_REGIONS:
+            if region.region_id in DEDICATED_SEA_PROVINCES:
+                actual_name = localisation_by_key.get(f"STRATEGICREGION_{region.region_id}")
+                if actual_name != region.russian_name:
+                    errors.append(
+                        f"dedicated sea region {region.region_id}: expected Russian name "
+                        f"{region.russian_name}, found {actual_name}"
+                    )
         generated_names = [
             name
             for key, name in localisation_rows

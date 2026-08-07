@@ -19,12 +19,14 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
         self.assertIn("exhaustion", SECTIONS)
         self.assertEqual(validate(ROOT, "exhaustion"), [])
 
-    def test_monthly_update_is_country_scoped_to_wrk_and_vad(self) -> None:
+    def test_monthly_update_is_country_scoped_to_the_three_claimants(self) -> None:
         on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
         monthly = named_block(on_actions, "on_monthly")
         self.assertIn("tag = WRK", monthly)
         self.assertIn("tag = VAD", monthly)
+        self.assertIn("tag = TVA", monthly)
         self.assertIn("ADISCORD_vorkerland_update_civil_war_exhaustion = yes", monthly)
+        self.assertNotIn("ADISCORD_vorkerland_piv_macri_volunteer_mission", monthly)
         self.assertNotIn("every_country", monthly)
         self.assertNotIn("every_state", monthly)
         self.assertNotIn("on_daily", on_actions)
@@ -38,8 +40,10 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
             "value = ADISCORD_vorkerland_civil_war_casualties_snapshot_k",
             update,
         )
-        self.assertIn("has_war_with = VAD", update)
-        self.assertIn("has_war_with = WRK", update)
+        self.assertIn("has_global_flag = ADISCORD_vorkerland_central_war_finished", update)
+        self.assertIn("has_war = yes", update)
+        self.assertNotIn("has_war_with = VAD", update)
+        self.assertNotIn("has_war_with = WRK", update)
         self.assertRegex(
             update,
             r"add_to_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_vorkerland_civil_war_exhaustion\s*value\s*=\s*2\s*\}",
@@ -51,20 +55,38 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
                 rf"ADISCORD_vorkerland_civil_war_exhaustion\s+value\s*=\s*{gain}\b",
             )
 
-    def test_peace_recovers_score_and_all_values_are_clamped(self) -> None:
+    def test_finished_war_stops_updates_and_all_values_are_clamped(self) -> None:
         effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
         update = named_block(effects, "ADISCORD_vorkerland_update_civil_war_exhaustion")
-        self.assertRegex(
+        self.assertNotRegex(
             update,
             r"ADISCORD_vorkerland_civil_war_exhaustion\s+value\s*=\s*-8\b",
         )
         self.assertRegex(
             update,
-            r"clamp_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_vorkerland_civil_war_exhaustion\s+min\s*=\s*0\s+max\s*=\s*100\s*\}",
+            r"clamp_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_vorkerland_civil_war_exhaustion\s+min\s*=\s*1\s+max\s*=\s*100\s*\}",
         )
         self.assertRegex(
             update,
             r"clamp_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_vorkerland_civil_war_casualties_delta_k\s+min\s*=\s*0\s+max\s*=\s*10000\s*\}",
+        )
+
+    def test_piv_volunteer_mission_uses_war_edges_not_monthly_polling(self) -> None:
+        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        monthly = named_block(on_actions, "on_monthly")
+        on_war = named_block(on_actions, "on_war")
+        on_peace = named_block(on_actions, "on_peace")
+        capitulation = named_block(on_actions, "on_capitulation")
+        self.assertNotIn("ADISCORD_vorkerland_piv_macri_volunteer_mission", monthly)
+        self.assertIn("tag = EBA", on_war)
+        self.assertIn("add_ideas = ADISCORD_vorkerland_piv_macri_volunteer_mission", on_war)
+        self.assertIn("tag = EBA", on_peace)
+        self.assertIn("has_war = no", on_peace)
+        self.assertIn("remove_ideas = ADISCORD_vorkerland_piv_macri_volunteer_mission", on_peace)
+        self.assertIn("ROOT = { tag = EBA }", capitulation)
+        self.assertIn(
+            "remove_ideas = ADISCORD_vorkerland_piv_macri_volunteer_mission",
+            capitulation,
         )
 
     def test_one_modifier_scales_without_attack_or_organisation_penalties(self) -> None:

@@ -74,11 +74,19 @@ spriteTypes = {
 	}
 	corneredTileSpriteType = {
 		name = "GFX_ideology_vorkerism"
+		texturefile = "gfx/interface/ideologies/vorkerism_pre_civil_war.png"
+		size = {
+			x = 70
+			y = 70
+		}
+	}
+	corneredTileSpriteType = {
+		name = "GFX_ideology_neo_vorkerism"
 		texturefile = "gfx/interface/ideologies/vorkerism_group.png"
 		size = {
-            x = 70
-            y = 70
-        }
+			x = 70
+			y = 70
+		}
 	}
 	corneredTileSpriteType = {
 		name = "GFX_ideology_hedonism_group"
@@ -114,11 +122,19 @@ spriteTypes = {
 	}
 	corneredTileSpriteType = {
 		name = "GFX_ideology_vorkerism_countryview"
+		texturefile = "gfx/interface/ideologies/vorkerism_pre_civil_war.png"
+		size = {
+			x = 125
+			y = 125
+		}
+	}
+	corneredTileSpriteType = {
+		name = "GFX_ideology_neo_vorkerism_countryview"
 		texturefile = "gfx/interface/ideologies/vorkerism_group.png"
 		size = {
-            x = 125 
-            y = 125
-        }
+			x = 125
+			y = 125
+		}
 	}
 	corneredTileSpriteType = {
 		name = "GFX_ideology_humanism_countryview_group"

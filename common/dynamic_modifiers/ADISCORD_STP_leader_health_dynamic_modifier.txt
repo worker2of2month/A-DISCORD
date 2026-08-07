@@ -1,0 +1,11 @@
+STP_fading_father = {
+	enable = {
+		original_tag = STP
+		NOT = { has_country_flag = STP_ivanov_dead }
+	}
+	political_power_factor = STP_fading_pp_factor
+	stability_factor = STP_fading_stability_factor
+	command_power_gain_mult = STP_fading_command_power_factor
+	planning_speed = STP_fading_planning_factor
+	army_org_factor = STP_fading_org_factor
+}

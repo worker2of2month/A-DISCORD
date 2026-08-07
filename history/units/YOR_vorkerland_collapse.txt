@@ -1,0 +1,33 @@
+division_template = {
+	name = "Йорское ополчение"
+	regiments = {
+		ADISCORD_militia = { x = 0 y = 0 }
+		ADISCORD_militia = { x = 0 y = 1 }
+		ADISCORD_militia = { x = 0 y = 2 }
+	}
+}
+units = {
+	division = {
+		division_name = { is_name_ordered = yes name_order = 1 }
+		location = 16576
+		division_template = "Йорское ополчение"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.70
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 2 }
+		location = 16576
+		division_template = "Йорское ополчение"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.70
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 3 }
+		location = 16576
+		division_template = "Йорское ополчение"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.70
+	}
+	division = { division_name = { is_name_ordered = yes name_order = 4 } location = 16576 division_template = "Йорское ополчение" start_experience_factor = 0.10 start_equipment_factor = 0.75 }
+	division = { division_name = { is_name_ordered = yes name_order = 5 } location = 16576 division_template = "Йорское ополчение" start_experience_factor = 0.10 start_equipment_factor = 0.75 }
+}

@@ -1,36 +1,40 @@
 spriteTypes = {
 
 	spriteType = {
-		name = "GFX_Portrait_Forul_Generic_Anarhism"
-		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_Anarhism.dds"
+		name = "GFX_Portrait_Forul_Generic_1"
+		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_1.png"
 	}
 	spriteType = {
-		name = "GFX_Portrait_Forul_Generic_chauvinism"
-		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_chauvinism.dds"
+		name = "GFX_Portrait_Forul_Generic_2"
+		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_2.png"
 	}
 	spriteType = {
-		name = "GFX_Portrait_Forul_Generic_Etatism"
-		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_Etatism.dds"
+		name = "GFX_Portrait_Forul_Generic_3"
+		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_3.png"
 	}
 	spriteType = {
-		name = "GFX_Portrait_Forul_Generic_Hedonism"
-		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_Hedonism.dds"
+		name = "GFX_Portrait_Forul_Generic_4"
+		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_4.png"
 	}
 	spriteType = {
-		name = "GFX_Portrait_Forul_Generic_Pragmatism"
-		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_Pragmatism.dds"
+		name = "GFX_Portrait_Forul_Generic_5"
+		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_5.png"
 	}
 	spriteType = {
-		name = "GFX_Portrait_Forul_Generic_Technocratic"
-		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_Technocratic.dds"
+		name = "GFX_Portrait_Forul_Generic_6"
+		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_6.png"
 	}
 	spriteType = {
-		name = "GFX_Portrait_Forul_Generic_Utilitarism"
-		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_Utilitarism.dds"
+		name = "GFX_Portrait_Forul_Generic_7"
+		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_7.png"
 	}
 	spriteType = {
-		name = "GFX_Portrait_Forul_Generic_Humanism"
-		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_Humanism.dds"
+		name = "GFX_Portrait_Forul_Generic_8"
+		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_8.png"
+	}
+	spriteType = {
+		name = "GFX_Portrait_Forul_Generic_9"
+		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_9.png"
 	}
 	
 	spriteType = {

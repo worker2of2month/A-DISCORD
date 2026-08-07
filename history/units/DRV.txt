@@ -1,0 +1,13 @@
+division_template = {
+	name = "Северная дружина"
+	regiments = {
+		ADISCORD_militia = { x = 0 y = 0 }
+		ADISCORD_militia = { x = 1 y = 0 }
+		ADISCORD_militia = { x = 2 y = 0 }
+	}
+}
+units = {
+	division = { division_name = { is_name_ordered = yes name_order = 1 } location = 2421 division_template = "Северная дружина" start_experience_factor = 0.15 start_equipment_factor = 0.72 }
+	division = { division_name = { is_name_ordered = yes name_order = 2 } location = 4008 division_template = "Северная дружина" start_experience_factor = 0.15 start_equipment_factor = 0.72 }
+	division = { division_name = { is_name_ordered = yes name_order = 3 } location = 9304 division_template = "Северная дружина" start_experience_factor = 0.15 start_equipment_factor = 0.72 }
+}

@@ -1,0 +1,4 @@
+set_politics = { ruling_party = technocracy elections_allowed = no }
+set_popularities = { etatism = 10 chauvinism = 0 humanism = 5 pragmatism = 10 technocracy = 75 }
+recruit_character = WTD_Central_Engineering_Council
+set_research_slots = 2

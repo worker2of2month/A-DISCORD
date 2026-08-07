@@ -1,0 +1,16 @@
+division_template = {
+	name = "Северная линейная бригада"
+	regiments = {
+		infantry = { x = 0 y = 0 }
+		infantry = { x = 1 y = 0 }
+		infantry = { x = 2 y = 0 }
+		infantry = { x = 0 y = 1 }
+	}
+}
+units = {
+	division = { division_name = { is_name_ordered = yes name_order = 1 } location = 6603 division_template = "Северная линейная бригада" start_experience_factor = 0.15 start_equipment_factor = 0.72 }
+	division = { division_name = { is_name_ordered = yes name_order = 2 } location = 639 division_template = "Северная линейная бригада" start_experience_factor = 0.15 start_equipment_factor = 0.72 }
+	division = { division_name = { is_name_ordered = yes name_order = 3 } location = 12405 division_template = "Северная линейная бригада" start_experience_factor = 0.15 start_equipment_factor = 0.72 }
+	division = { division_name = { is_name_ordered = yes name_order = 4 } location = 12336 division_template = "Северная линейная бригада" start_experience_factor = 0.15 start_equipment_factor = 0.72 }
+	division = { division_name = { is_name_ordered = yes name_order = 5 } location = 10974 division_template = "Северная линейная бригада" start_experience_factor = 0.15 start_equipment_factor = 0.72 }
+}

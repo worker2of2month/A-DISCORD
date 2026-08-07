@@ -31,6 +31,12 @@ MODIFIER_LOC = (
 ECONOMY_LOC = (
     ROOT / "localisation" / "russian" / "ADISCORD_economy_l_russian.yml"
 ).read_text(encoding="utf-8-sig")
+ECONOMY_EVENTS = (ROOT / "events" / "ADISCORD_economy_events.txt").read_text(
+    encoding="utf-8-sig"
+)
+ECONOMY_IDEAS = (
+    ROOT / "common" / "ideas" / "ADISCORD_economy_ideas.txt"
+).read_text(encoding="utf-8-sig")
 BUILDINGS = (ROOT / "common" / "buildings" / "00_buildings.txt").read_text(
     encoding="utf-8-sig"
 )
@@ -164,6 +170,54 @@ class WeeklyEconomyContracts(unittest.TestCase):
             r"weekly_expenses[\s\S]*divide_variable[\s\S]*value\s*=\s*13",
         )
 
+    def test_safe_reserve_reuses_weekly_expenses_without_a_new_scan(self):
+        weekly = block(EFFECTS, "ADISCORD_economy_calculate_weekly_budget")
+        self.assertIn(
+            "var = ADISCORD_economy_safe_reserve value = ADISCORD_economy_weekly_expenses",
+            weekly,
+        )
+        self.assertIn(
+            "clamp_variable = { var = ADISCORD_economy_safe_reserve min = 50 max = 250 }",
+            weekly,
+        )
+        for forbidden in ("every_country", "every_owned_state", "all_owned_state"):
+            self.assertNotIn(forbidden, weekly)
+
+    def test_deficit_borrowing_cannot_be_disabled_by_hidden_save_state(self):
+        for settlement_name in (
+            "ADISCORD_economy_apply_weekly_balance",
+            "ADISCORD_economy_apply_monthly_balance",
+        ):
+            settlement = block(EFFECTS, settlement_name)
+            self.assertIn("ADISCORD_economy_auto_borrow_temp", settlement)
+            self.assertNotIn("ADISCORD_economy_auto_loan_enabled", settlement)
+
+        for retired_name in (
+            "ADISCORD_economy_auto_loan_enabled",
+            "ADISCORD_economy_toggle_auto_loan",
+            "ADISCORD_economy_gui_try_toggle_auto_loan",
+        ):
+            self.assertNotIn(retired_name, EFFECTS)
+
+    def test_removed_dashboard_state_has_no_runtime_consumers(self):
+        for retired_name in (
+            "ADISCORD_economy_gui_page",
+            "ADISCORD_economy_research_spending_mode",
+            "ADISCORD_economy_admin_spending_mode",
+        ):
+            self.assertNotIn(retired_name, EFFECTS)
+
+        for retired_effect in (
+            "ADISCORD_economy_weekly_player_refresh",
+            "ADISCORD_economy_gui_try_early_repay_debt",
+            "ADISCORD_economy_gui_try_expand_emission",
+            "ADISCORD_economy_gui_try_reduce_emission",
+            "ADISCORD_economy_gui_try_invest_reserves",
+            "ADISCORD_economy_gui_try_civilian_investment",
+            "ADISCORD_economy_gui_try_military_investment",
+        ):
+            self.assertNotIn(retired_effect, EFFECTS)
+
     def test_weekly_update_has_no_full_refresh_or_map_scan(self):
         weekly = block(EFFECTS, "ADISCORD_economy_weekly_update")
         self.assertEqual(weekly.count("ADISCORD_economy_apply_weekly_balance = yes"), 1)
@@ -248,6 +302,186 @@ class WeeklyEconomyContracts(unittest.TestCase):
         ):
             self.assertIn(cache, policy_refresh)
 
+    def test_treasury_operations_overlay_is_click_only_and_resets_with_window(self):
+        for window_effect in (
+            "ADISCORD_economy_open_window",
+            "ADISCORD_economy_close_window",
+        ):
+            body = block(EFFECTS, window_effect)
+            self.assertRegex(
+                body,
+                r"set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_show_operations"
+                r"\s+value\s*=\s*0\s*\}",
+            )
+
+        for recurring_effect in (
+            "ADISCORD_economy_weekly_update",
+            "ADISCORD_economy_monthly_update",
+            "ADISCORD_economy_yearly_update",
+            "ADISCORD_economy_light_update",
+        ):
+            self.assertNotIn(
+                "ADISCORD_economy_show_operations",
+                block(EFFECTS, recurring_effect),
+                recurring_effect,
+            )
+
+    def test_peacetime_war_fatigue_always_decays(self):
+        fatigue = block(EFFECTS, "ADISCORD_economy_update_war_fatigue")
+        for source in (
+            "ADISCORD_economy_has_military_total_defense_grid = yes",
+            "ADISCORD_economy_has_labor_mobilized_labor = yes",
+            "ADISCORD_economy_has_taxation_extraction_quotas = yes",
+        ):
+            line = next(line for line in fatigue.splitlines() if source in line)
+            self.assertIn("has_war = yes", line, source)
+
+    def test_postwar_demobilization_reuses_scheduled_economy_updates(self):
+        definition = EFFECTS.index("ADISCORD_economy_update_postwar_demobilization = {")
+        first_monthly_call = EFFECTS.index(
+            "ADISCORD_economy_update_postwar_demobilization = yes"
+        )
+        tick_definition = EFFECTS.index(
+            "ADISCORD_economy_tick_postwar_demobilization = {"
+        )
+        first_tick_call = EFFECTS.index(
+            "ADISCORD_economy_tick_postwar_demobilization = yes"
+        )
+        self.assertLess(definition, first_monthly_call)
+        self.assertLess(tick_definition, first_tick_call)
+
+        monthly = block(EFFECTS, "ADISCORD_economy_monthly_update")
+        yearly = block(EFFECTS, "ADISCORD_economy_yearly_update")
+        for scheduled_update in (monthly, yearly):
+            self.assertIn(
+                "ADISCORD_economy_update_postwar_demobilization = yes",
+                scheduled_update,
+            )
+        on_monthly = block(ON_ACTIONS, "on_monthly")
+        for forbidden in ("every_country", "every_owned_state", "all_owned_state"):
+            self.assertNotRegex(on_monthly, rf"(?m)^\s*{forbidden}\s*=")
+
+    def test_war_edges_trigger_demobilization_immediately_without_recurring_scans(self):
+        on_war = block(ON_ACTIONS, "on_war")
+        on_peace = block(ON_ACTIONS, "on_peace")
+
+        for edge in (on_war, on_peace):
+            self.assertIn("has_variable = ADISCORD_economy_initialized", edge)
+            self.assertEqual(
+                edge.count("ADISCORD_economy_update_postwar_demobilization = yes"),
+                1,
+            )
+            for forbidden in (
+                "every_country",
+                "every_owned_state",
+                "all_owned_state",
+                "on_daily",
+            ):
+                self.assertNotIn(forbidden, edge)
+
+        self.assertIn("has_war = no", on_peace)
+        self.assertIn("ADISCORD_economy_recalculate_policy_modifiers = yes", on_peace)
+        self.assertIn(
+            "ADISCORD_economy_refresh_after_budget_control_change = yes", on_peace
+        )
+
+    def test_postwar_transition_is_one_shot_and_automatically_normalizes_war_laws(self):
+        transition = block(EFFECTS, "ADISCORD_economy_update_postwar_demobilization")
+        self.assertIn("ADISCORD_economy_was_at_war", transition)
+        self.assertIn("has_war = no", transition)
+        self.assertIn("ADISCORD_economy_postwar_demobilization_months value = 6", transition)
+        self.assertIn("ADISCORD_economy_army_spending_mode value = 3", transition)
+        self.assertIn("add_ideas = partial_economic_mobilisation", transition)
+        self.assertIn("add_ideas = limited_conscription", transition)
+        self.assertIn("ADISCORD_economy_postwar_demobilization", transition)
+        self.assertIn("country_event = { id = ADISCORD_economy.2 }", transition)
+        for forbidden in ("every_country", "every_owned_state", "all_owned_state"):
+            self.assertNotIn(forbidden, transition)
+
+    def test_demobilization_accelerates_recovery_and_is_cancelled_by_a_new_war(self):
+        transition = block(EFFECTS, "ADISCORD_economy_update_postwar_demobilization")
+        fatigue = block(EFFECTS, "ADISCORD_economy_update_war_fatigue")
+        tick = block(EFFECTS, "ADISCORD_economy_tick_postwar_demobilization")
+        self.assertIn("has_war = yes", transition)
+        self.assertIn("remove_ideas = ADISCORD_economy_postwar_demobilization", transition)
+        self.assertIn("ADISCORD_economy_postwar_demobilization_months", fatigue)
+        self.assertIn("value = -4", fatigue)
+        self.assertIn("ADISCORD_economy_tick_scale", tick)
+        self.assertIn("min = 0 max = 6", tick)
+        self.assertIn("ADISCORD_economy_postwar_demobilization", ECONOMY_IDEAS)
+
+        monthly = block(EFFECTS, "ADISCORD_economy_monthly_update")
+        transition_index = monthly.index(
+            "ADISCORD_economy_update_postwar_demobilization = yes"
+        )
+        fatigue_index = monthly.index("ADISCORD_economy_update_war_fatigue = yes")
+        tick_index = monthly.index("ADISCORD_economy_tick_postwar_demobilization = yes")
+        self.assertLess(transition_index, fatigue_index)
+        self.assertLess(fatigue_index, tick_index)
+
+    def test_demobilization_tradeoffs_are_explicit_for_the_player(self):
+        idea = block(ECONOMY_IDEAS, "ADISCORD_economy_postwar_demobilization")
+        for modifier, value in (
+            ("stability_factor", "0.02"),
+            ("war_support_factor", "-0.05"),
+            ("industrial_capacity_factory", "-0.08"),
+            ("production_speed_arms_factory_factor", "-0.15"),
+            ("production_speed_dockyard_factor", "-0.10"),
+            ("production_speed_industrial_complex_factor", "0.10"),
+            ("ADISCORD_economy_army_expense_factor", "-0.10"),
+            ("ADISCORD_economy_inflation_pressure_factor", "-0.10"),
+            ("ADISCORD_economy_state_overload_gain_factor", "-0.10"),
+            ("ADISCORD_country_development_economic_growth_factor", "0.05"),
+        ):
+            self.assertRegex(idea, rf"\b{modifier}\s*=\s*{re.escape(value)}\b")
+
+        status = re.search(
+            r'(?m)^\s*ADISCORD_economy_demobilization_status_active:\d*\s+"([^"]*)"',
+            ECONOMY_LOC,
+        ).group(1)
+        for required in (
+            "+2%",
+            "+10%",
+            "-10%",
+            "-8%",
+            "-15%",
+            "-5%",
+        ):
+            self.assertIn(required, status)
+
+        fatigue_tooltip = re.search(
+            r'(?m)^\s*ADISCORD_economy_war_fatigue_tt:\d*\s+"([^"]*)"',
+            ECONOMY_LOC,
+        ).group(1)
+        self.assertIn("8 пунктов", fatigue_tooltip)
+        self.assertIn("первый мирный месяц", fatigue_tooltip)
+
+    def test_every_dashboard_variable_is_backed_by_runtime_script(self):
+        references = set(
+            re.findall(r"\[\?(ADISCORD_[A-Za-z0-9_]+)", ECONOMY_LOC)
+        )
+        runtime = "\n".join(
+            path.read_text(encoding="utf-8-sig", errors="ignore")
+            for path in (ROOT / "common" / "scripted_effects").glob("*.txt")
+        )
+        missing = sorted(reference for reference in references if reference not in runtime)
+        self.assertFalse(missing, f"unbacked dashboard variables: {missing}")
+
+    def test_player_receives_a_plain_language_postwar_notification(self):
+        second_event_start = ECONOMY_EVENTS.find("id = ADISCORD_economy.2")
+        self.assertGreater(second_event_start, 0)
+        self.assertNotIn("id = ADISCORD_economy.1", ECONOMY_EVENTS)
+        second_event = ECONOMY_EVENTS[second_event_start:]
+        self.assertIn("is_triggered_only = yes", second_event)
+        for key in (
+            "ADISCORD_economy.2.t",
+            "ADISCORD_economy.2.d",
+            "ADISCORD_economy.2.a",
+            "ADISCORD_economy_postwar_demobilization",
+            "ADISCORD_economy_postwar_demobilization_desc",
+        ):
+            self.assertRegex(ECONOMY_LOC, rf"(?m)^\s*{re.escape(key)}:\d*\s+")
+
     def test_monthly_model_refresh_checks_each_system_law_only_once(self):
         model_refresh = block(EFFECTS, "ADISCORD_economy_update_model_and_cycle")
         for suffix in (
@@ -282,6 +516,10 @@ class WeeklyEconomyContracts(unittest.TestCase):
             "ADISCORD_economy_has_idea_partial_economic_mobilisation": "partial_economic_mobilisation",
             "ADISCORD_economy_has_idea_war_economy": "war_economy",
             "ADISCORD_economy_has_idea_total_economic_mobilisation": "tot_economic_mobilisation",
+            "ADISCORD_economy_has_idea_extensive_conscription": "extensive_conscription",
+            "ADISCORD_economy_has_idea_service_by_requirement": "service_by_requirement",
+            "ADISCORD_economy_has_idea_all_adults_serve": "all_adults_serve",
+            "ADISCORD_economy_has_idea_scraping_the_barrel": "scraping_the_barrel",
             "ADISCORD_economy_has_idea_free_trade": "free_trade",
             "ADISCORD_economy_has_idea_export_focus": "export_focus",
             "ADISCORD_economy_has_idea_limited_exports": "limited_exports",
@@ -465,9 +703,14 @@ class WeeklyEconomyContracts(unittest.TestCase):
             self.assertRegex(ECONOMY_LOC, rf"(?m)^\s*{re.escape(key)}:\d*\s+")
         self.assertIn("ADISCORD_economy_auto_loan_popup_amount", ECONOMY_LOC)
 
-    def test_schema_nine_initializes_policy_caches_without_resetting_treasury(self):
+    def test_schema_eleven_initializes_reserve_and_postwar_state_without_resetting_treasury(self):
         migration = block(EFFECTS, "ADISCORD_economy_migrate_schema")
-        self.assertIn("value = 9", migration)
+        self.assertIn("value = 11", migration)
+        self.assertIn("ADISCORD_economy_was_at_war", migration)
+        self.assertIn("ADISCORD_economy_postwar_demobilization_months", migration)
+        self.assertIn("ADISCORD_economy_initialize_variables = yes", migration)
+        initialization = block(EFFECTS, "ADISCORD_economy_initialize_variables")
+        self.assertIn("ADISCORD_economy_safe_reserve", initialization)
         self.assertIn("ADISCORD_economy_recalculate_policy_modifiers = yes", migration)
         self.assertNotRegex(
             migration,
@@ -486,8 +729,9 @@ class WeeklyEconomyContracts(unittest.TestCase):
 
     def test_treasury_tooltip_uses_weekly_and_period_values(self):
         self.assertIn("ADISCORD_economy_weekly_balance", ECONOMY_LOC)
-        self.assertIn("ADISCORD_economy_last_period_unfunded_deficit", ECONOMY_LOC)
-        self.assertIn("ADISCORD_economy_last_period_unexplained_delta", ECONOMY_LOC)
+        self.assertIn("ADISCORD_economy_weekly_income", ECONOMY_LOC)
+        self.assertIn("ADISCORD_economy_weekly_expenses", ECONOMY_LOC)
+        self.assertNotIn("ADISCORD_economy_last_period_unexplained_delta", ECONOMY_LOC)
         self.assertNotIn(
             "Фактическое изменение казны происходит раз в месяц", ECONOMY_LOC
         )

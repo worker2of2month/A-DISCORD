@@ -1,11 +1,26 @@
-state={
-	id=151
-	name="STATE_151"
-	provinces={
-		1337 2944 3228 4817 5510 7787 8752 9704 9884 11775 11861 12310 
-	}
-	manpower=60000
+# Populated by tools/build_adiscord_inner_frontier_countries.py
+state = {
+	id = 151
+	name = "STATE_151"
+	manpower = 538029
 	state_category = rural
-	buildings_max_level_factor=1
-	local_supplies=0
+	history = {
+		owner = WCG
+		add_core_of = WCG
+		add_core_of = KRM
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 2
+			arms_factory = 1
+		}
+	}
+	provinces = {
+		1337 2944 3228 4817 5510 7787 8752 9704 9884 11775 11861 12310
+	}
+	resources = {
+		steel = 3
+		tungsten = 4
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 3.1
 }

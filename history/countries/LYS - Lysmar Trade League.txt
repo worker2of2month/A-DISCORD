@@ -1,0 +1,19 @@
+capital = 420
+oob = "LYS"
+
+recruit_character = LYS_Cassian_Lys
+
+set_politics = {
+	ruling_party = hedonism
+	elections_allowed = no
+}
+set_popularities = {
+	hedonism = 60
+	pragmatism = 20
+	humanism = 10
+	etatism = 10
+}
+set_stability = 0.64
+set_war_support = 0.22
+set_research_slots = 3
+add_ideas = { LYS_bonded_warehouses }

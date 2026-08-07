@@ -1,0 +1,157 @@
+characters = {
+	BRN_Emilia_Brandt = {
+		name = BRN_Emilia_Brandt
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_1 } }
+		country_leader = {
+			ideology = etatism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = BRN_Emilia_Brandt_desc
+		}
+	}
+	KRL_Edvard_Karel = {
+		name = KRL_Edvard_Karel
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_8 } }
+		country_leader = {
+			ideology = aristocratic_hedonism
+			expire = "2200.1.1.1"
+			id = -1
+			desc = KRL_Edvard_Karel_desc
+			traits = { KRL_winter_crown }
+		}
+	}
+	FRS_Mikael_Frost = {
+		name = FRS_Mikael_Frost
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_5 } }
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = FRS_Mikael_Frost_desc
+		}
+	}
+	KHV_Ilva_Havren = {
+		name = KHV_Ilva_Havren
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
+		country_leader = {
+			ideology = technocracy_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = KHV_Ilva_Havren_desc
+		}
+	}
+	ELN_Taal_Elander = {
+		name = ELN_Taal_Elander
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_7 } }
+		country_leader = {
+			ideology = technocracy_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = ELN_Taal_Elander_desc
+		}
+	}
+	AUR_Sofia_Aurell = {
+		name = AUR_Sofia_Aurell
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } }
+		country_leader = {
+			ideology = humanism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = AUR_Sofia_Aurell_desc
+		}
+	}
+	HON_Honter_Woke = {
+		name = HON_Honter_Woke
+		portraits = { civilian = { large = GFX_portrait_HON_Honter_Woke } }
+		country_leader = {
+			ideology = humanism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = HON_Honter_Woke_desc
+			traits = { HON_first_citizen }
+		}
+	}
+	NVR_Leif_Norven = {
+		name = NVR_Leif_Norven
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_5 } }
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = NVR_Leif_Norven_desc
+		}
+	}
+	SKN_Ren_Skad = {
+		name = SKN_Ren_Skad
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_9 } }
+		country_leader = {
+			ideology = etatism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = SKN_Ren_Skad_desc
+			traits = { SKN_iron_marshal }
+		}
+	}
+	TMR_Mira_Timer = {
+		name = TMR_Mira_Timer
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_7 } }
+		country_leader = {
+			ideology = utilitarism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = TMR_Mira_Timer_desc
+		}
+	}
+	LYS_Cassian_Lys = {
+		name = LYS_Cassian_Lys
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_8 } }
+		country_leader = {
+			ideology = hedonism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = LYS_Cassian_Lys_desc
+		}
+	}
+	VES_Oskar_Vest = {
+		name = VES_Oskar_Vest
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_2 } }
+		country_leader = {
+			ideology = etatism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = VES_Oskar_Vest_desc
+			traits = { VES_warden_of_western_gates }
+		}
+	}
+	DRV_Council_of_Free_Valleys = {
+		name = DRV_Council_of_Free_Valleys
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_3 } }
+		country_leader = {
+			ideology = anarchism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = DRV_Council_of_Free_Valleys_desc
+		}
+	}
+	ORV_Anton_Orval = {
+		name = ORV_Anton_Orval
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_5 } }
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = ORV_Anton_Orval_desc
+		}
+	}
+	MON_Marius_II_Arken = {
+		name = MON_Marius_II_Arken
+		portraits = { civilian = { large = GFX_portrait_MON_Marius_II_Arken } }
+		country_leader = {
+			ideology = chauvinism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = MON_Marius_II_Arken_desc
+			traits = { MON_emperor_of_the_northern_marches }
+		}
+	}
+}

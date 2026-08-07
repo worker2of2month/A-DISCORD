@@ -31,7 +31,7 @@ ideas = {
 			}
 
 			on_remove = {
-				country_lock_all_division_template = no
+				ADISCORD_STP_unlock_regular_army_templates = yes
 			}
 		}
 	}

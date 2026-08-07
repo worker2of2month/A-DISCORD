@@ -1,0 +1,4 @@
+set_politics = { ruling_party = etatism elections_allowed = no }
+set_popularities = { etatism = 65 chauvinism = 5 humanism = 10 pragmatism = 15 technocracy = 5 }
+recruit_character = SWB_Oskar_Renn
+set_research_slots = 2

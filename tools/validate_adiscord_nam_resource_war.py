@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 import sys
+import json
 from pathlib import Path
 
 from PIL import Image
@@ -281,8 +282,10 @@ def main() -> int:
         check(len(definitions) == 1, f"{event_id} must have exactly one definition")
         if definitions:
             check("is_triggered_only = yes" in definitions[0]
-                  and "fire_only_once = yes" in definitions[0],
-                  f"{event_id} must be triggered-only and single-shot")
+                  and "fire_only_once = yes" in definitions[0]
+                  and "major = yes" in definitions[0]
+                  and "hidden = yes" not in definitions[0],
+                  f"{event_id} must be visible major, triggered-only and single-shot")
 
     all_script_sources = {
         path.relative_to(ROOT).as_posix(): path.read_text(encoding="utf-8-sig", errors="strict")
@@ -533,15 +536,23 @@ def main() -> int:
     }
     check(fleet_oobs == {"NAM.txt", "EFL.txt", "AZH.txt"},
           f"starting fleets must exist only for NAM/EFL/AZH, found {sorted(fleet_oobs)}")
+    technology_manifest = json.loads(
+        read("tools/data/adiscord_starting_technology_profiles.json")
+    )
     for tag, relative in (
         ("NAM", "history/countries/NAM - NamestnikLand.txt"),
         ("EFL", "history/countries/EFL - Eflor.txt"),
         ("AZH", "history/countries/AZH - Azhar Black Basin.txt"),
     ):
         history = sources[relative]
+        check("set_technology = {" not in history,
+              f"{tag} history duplicates the generated starting technology system")
+        country_profile = technology_manifest["countries"].get(tag, {})
+        check("naval" in country_profile.get("profiles", ()),
+              f"{tag} generated starting profile lacks naval continuity")
         for technology in ("ADISCORD_tech_coastal_patrols", "ADISCORD_tech_convoy_routing"):
-            check(re.search(rf"(?m)^\s*{technology}\s*=\s*1\s*$", history) is not None,
-                  f"{tag} history lacks proportional naval technology {technology}")
+            check(technology in country_profile.get("technologies_2160", ()),
+                  f"{tag} generated profile lacks proportional naval technology {technology}")
 
     check(owner_of_state(67) == "NAM", "state 67 is no longer the NAM resource basin")
     check(owner_of_state(688) == "NAM", "state 688 must begin as a NAM core before the internal uprising")

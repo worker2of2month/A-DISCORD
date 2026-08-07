@@ -2251,6 +2251,10 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
                 )
 
     collapse_setup_count = 0
+    specialized_collapse_profiles = {
+        "tva": ("industrial", "energy", "institutional", "land", "air"),
+        "wtd": ("industrial", "energy"),
+    }
     for collapse_name in (
         "ADISCORD_vorkerland_collapse_effects.txt",
         "ADISCORD_vorkerland_collapse_dirty_effects.txt",
@@ -2270,15 +2274,31 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
                 issues.append(
                     f"{collapse_name} setup {setup_name} must grant the legacy baseline exactly once"
                 )
-            if setup_block.count(
-                "ADISCORD_grant_technology_profile_fragment_low_tech = yes"
-            ) != 1:
-                issues.append(
-                    f"{collapse_name} setup {setup_name} must grant the fragment profile exactly once"
+            expected_profiles = specialized_collapse_profiles.get(
+                setup_name, ("fragment_low_tech",)
+            )
+            all_profiles = (
+                "fragment_low_tech",
+                "industrial",
+                "energy",
+                "institutional",
+                "land",
+                "air",
+                "naval",
+            )
+            for profile in all_profiles:
+                expected_count = 1 if profile in expected_profiles else 0
+                actual_count = setup_block.count(
+                    f"ADISCORD_grant_technology_profile_{profile} = yes"
                 )
-    if collapse_setup_count != 16:
+                if actual_count != expected_count:
+                    issues.append(
+                        f"{collapse_name} setup {setup_name} must grant {profile} "
+                        f"profile {expected_count} times, got {actual_count}"
+                    )
+    if collapse_setup_count != 28:
         issues.append(
-            f"Vorkerland collapse technology profile audit expected 16 setups, got {collapse_setup_count}"
+            f"Vorkerland collapse technology profile audit expected 28 setups, got {collapse_setup_count}"
         )
     for tech, block in tech_blocks.items():
         if re.search(r"\brepair_speed_factor\s*=", block):

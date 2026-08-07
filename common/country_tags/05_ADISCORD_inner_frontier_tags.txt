@@ -1,0 +1,7 @@
+BOR = "countries/BOR.txt"
+DOL = "countries/DOL.txt"
+RIN = "countries/RIN.txt"
+KRM = "countries/KRM.txt"
+LMN = "countries/LMN.txt"
+RLY = "countries/RLY.txt"
+WCG = "countries/WCG.txt"

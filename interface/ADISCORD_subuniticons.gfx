@@ -12,4 +12,76 @@ spriteTypes = {
 		texturefile = "gfx/interface/counters/divisions_small/onmap_unit_militia_icon.dds"
 		noOfFrames = 2
 	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_assault_infantry_icon_medium"
+		texturefile = "gfx/interface/counters/divisions_large/unit_infantry_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_assault_infantry_icon_medium_white"
+		texturefile = "gfx/interface/counters/divisions_small/onmap_unit_infantry_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_line_artillery_icon_medium"
+		texturefile = "gfx/interface/counters/divisions_large/unit_art_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_line_artillery_icon_medium_white"
+		texturefile = "gfx/interface/counters/divisions_small/onmap_unit_art_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_recon_platform_icon_medium"
+		texturefile = "gfx/interface/counters/divisions_large/support_unit_armored_recon_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_recon_platform_icon_medium_white"
+		texturefile = "gfx/interface/counters/divisions_small/onmap_unit_light_tank_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_combat_platform_icon_medium"
+		texturefile = "gfx/interface/counters/divisions_large/unit_medium_tank_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_combat_platform_icon_medium_white"
+		texturefile = "gfx/interface/counters/divisions_small/onmap_unit_medium_tank_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_heavy_platform_icon_medium"
+		texturefile = "gfx/interface/counters/divisions_large/unit_heavy_armor_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_heavy_platform_icon_medium_white"
+		texturefile = "gfx/interface/counters/divisions_small/onmap_unit_heavy_armor_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_recovery_platform_icon_medium"
+		texturefile = "gfx/interface/counters/divisions_large/support_unit_maintenance_company_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_recovery_platform_icon_medium_white"
+		texturefile = "gfx/interface/counters/divisions_small/onmap_unit_armored_maintenance_icon.dds"
+		noOfFrames = 2
+	}
 }

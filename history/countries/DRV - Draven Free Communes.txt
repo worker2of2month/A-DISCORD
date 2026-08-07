@@ -1,0 +1,18 @@
+capital = 434
+oob = "DRV"
+
+recruit_character = DRV_Council_of_Free_Valleys
+
+set_politics = {
+	ruling_party = anarchism
+	elections_allowed = no
+}
+set_popularities = {
+	anarchism = 70
+	humanism = 15
+	utilitarism = 10
+	pragmatism = 5
+}
+set_stability = 0.55
+set_war_support = 0.35
+set_research_slots = 2

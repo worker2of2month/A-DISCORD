@@ -96,6 +96,15 @@ NAM_SPLIT_SPAWN_POSITION_CANDIDATES = {
     ),
 }
 
+# States that lost ordinary-terrain provinces when the Exclusion Zone was
+# aligned to contaminated terrain.  Existing building coordinates follow the
+# moved provinces; compact EXZ remnants still need one complete set of 1.19
+# construction anchors of their own.
+EXCLUSION_BOUNDARY_SPAWN_STATES = {
+    49, 51, 153, 154, 155, 165, 166, 169, 173, 180, 184, 185, 187,
+    189, 193, 210, 211, 213, 214, 215, 222, 223, 224, 329, 330,
+}
+
 
 @dataclass(frozen=True)
 class BuildingMismatch:
@@ -229,6 +238,58 @@ def ensure_nam_split_spawn_positions(root: Path = ROOT) -> int:
     return added
 
 
+def load_unitstack_positions(root: Path = ROOT) -> dict[int, tuple[str, str, str]]:
+    positions: dict[int, tuple[str, str, str]] = {}
+    for line in (root / "map" / "unitstacks.txt").read_text(
+        encoding="utf-8-sig", errors="strict"
+    ).splitlines():
+        fields = line.split(";")
+        if len(fields) >= 5 and fields[0].isdigit() and fields[1] == "0":
+            positions.setdefault(int(fields[0]), (fields[2], fields[3], fields[4]))
+    return positions
+
+
+def ensure_exclusion_boundary_spawn_positions(root: Path = ROOT) -> int:
+    """Restore construction anchors left behind by the EXZ realignment."""
+    path = root / "map" / "buildings.txt"
+    lines = path.read_text(encoding="utf-8-sig", errors="strict").splitlines()
+    state_by_province = load_state_by_province(root)
+    positions = load_unitstack_positions(root)
+    provinces_by_state: dict[int, list[int]] = {}
+    for province_id, state_id in state_by_province.items():
+        if state_id in EXCLUSION_BOUNDARY_SPAWN_STATES and province_id in positions:
+            provinces_by_state.setdefault(state_id, []).append(province_id)
+    counts: dict[tuple[int, str], int] = {}
+    for line in lines:
+        fields = line.split(";")
+        if len(fields) == 7 and fields[0].isdigit():
+            key = (int(fields[0]), fields[1])
+            counts[key] = counts.get(key, 0) + 1
+
+    added = 0
+    for state_id in sorted(EXCLUSION_BOUNDARY_SPAWN_STATES):
+        candidates = sorted(provinces_by_state.get(state_id, ()))
+        if not candidates:
+            raise RuntimeError(f"state {state_id} has no unitstack position for spawn repair")
+        cursor = 0
+        for building_type, minimum in REQUIRED_STATE_SPAWN_COUNTS.items():
+            key = (state_id, building_type)
+            while counts.get(key, 0) < minimum:
+                province_id = candidates[cursor % len(candidates)]
+                cursor += 1
+                x, height, z = positions[province_id]
+                rotation = ((state_id * 37 + cursor * 53) % 628) / 100.0
+                line = f"{state_id};{building_type};{x};{height};{z};{rotation:.2f};0"
+                if line not in lines:
+                    lines.append(line)
+                    added += 1
+                counts[key] = counts.get(key, 0) + 1
+
+    if added:
+        path.write_bytes("\r\n".join(lines).encode("utf-8"))
+    return added
+
+
 def required_spawn_issues(lines: list[str], state_ids: set[int]) -> list[str]:
     counts: dict[tuple[int, str], int] = {}
     for line in lines:
@@ -279,6 +340,7 @@ def main() -> None:
     args = parser.parse_args()
 
     mismatches = synchronize_buildings(ROOT, apply=args.apply)
+    added = ensure_exclusion_boundary_spawn_positions(ROOT) if args.apply else 0
     action = "Corrected" if args.apply else "Found"
     print(f"{action} {len(mismatches)} map-building state mismatches.")
     for item in mismatches[:20]:
@@ -288,6 +350,8 @@ def main() -> None:
         )
     if mismatches and not args.apply:
         print("Dry run only; pass --apply to update map/buildings.txt.")
+    if args.apply:
+        print(f"Added {added} Exclusion Zone boundary spawn anchors.")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,24 @@
+capital = 469
+oob = "MON"
+
+recruit_character = MON_Marius_II_Arken
+
+set_politics = {
+	ruling_party = chauvinism
+	elections_allowed = no
+}
+set_popularities = {
+	chauvinism = 75
+	etatism = 15
+	hedonism = 5
+	pragmatism = 5
+}
+set_stability = 0.76
+set_war_support = 0.82
+set_research_slots = 4
+add_ideas = {
+	MON_throne_of_fifteen_crowns
+	MON_imperial_general_staff
+	MON_arsenal_belt
+	MON_hierarchy_of_peoples
+}

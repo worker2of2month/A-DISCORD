@@ -46,10 +46,14 @@ scripted_gui = {
             ideology_icon_vorkerism_visible = {
                 has_country_leader_ideology = vorkerism
             }
+            ideology_icon_neo_vorkerism_visible = {
+                has_country_leader_ideology = neo_vorkerism
+            }
             ideology_icon_pragmatism_visible = {
                 AND = {
                     has_government = pragmatism
                     NOT = { has_country_leader_ideology = vorkerism }
+                    NOT = { has_country_leader_ideology = neo_vorkerism }
                 }
             }
             ideology_icon_anarchism_visible = {

@@ -3,7 +3,7 @@ characters = {
 		name = OSF_Tiber_Marrowkeeper
 		portraits = {
 			civilian = {
-				large = GFX_portrait_PLACEHOLDER
+				large = GFX_Portrait_Forul_Generic_2
 			}
 		}
 		country_leader = {

@@ -1,0 +1,19 @@
+capital = 411
+oob = "VES"
+
+recruit_character = VES_Oskar_Vest
+
+set_politics = {
+	ruling_party = etatism
+	elections_allowed = no
+}
+set_popularities = {
+	etatism = 60
+	pragmatism = 20
+	chauvinism = 15
+	humanism = 5
+}
+set_stability = 0.58
+set_war_support = 0.48
+set_research_slots = 3
+add_ideas = { VES_border_charters }

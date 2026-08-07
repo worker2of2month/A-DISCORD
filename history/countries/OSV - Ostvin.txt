@@ -1,0 +1,4 @@
+set_politics = { ruling_party = humanism elections_allowed = yes }
+set_popularities = { etatism = 10 chauvinism = 0 humanism = 70 pragmatism = 15 technocracy = 5 }
+recruit_character = OSV_Marina_Volkova
+set_research_slots = 2

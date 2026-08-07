@@ -1,15 +1,25 @@
-state={
-	id=223
-	name="STATE_223"
-	provinces={
-		537 676 2116 4919 6351 6573 8095 8866 8993 9472 12097 12894
-	}
-	manpower=18000
-	buildings_max_level_factor=1
-	state_category=rural
-	local_supplies=0.25
+# Populated by tools/build_adiscord_inner_frontier_countries.py
+state = {
+	id = 223
+	name = "STATE_223"
+	manpower = 235918
+	state_category = rural
 	history = {
-		owner = EXZ
-		add_core_of = EXZ
+		owner = WCG
+		add_core_of = WCG
+		add_core_of = LMN
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+			arms_factory = 1
+		}
 	}
+	provinces = {
+		1647 4512 4785 4919 5552 6351 6573 7549 9472 9569 9679 12894
+	}
+	resources = {
+		chromium = 3
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 2.3
 }

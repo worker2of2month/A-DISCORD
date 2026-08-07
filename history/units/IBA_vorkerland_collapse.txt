@@ -21,4 +21,5 @@ units = {
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.85
 	}
+	division = { division_name = { is_name_ordered = yes name_order = 3 } location = 5135 division_template = "IBA Border Rifles" start_experience_factor = 0.15 start_equipment_factor = 0.80 }
 }

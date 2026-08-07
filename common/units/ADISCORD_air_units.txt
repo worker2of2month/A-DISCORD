@@ -3,7 +3,7 @@ sub_units = {
 		sprite = light_plane
 		priority = 1
 		active = yes
-		type = { fighter }
+		type = fighter
 		need = {
 			ADISCORD_fighter_archetype = 1
 		}
@@ -17,7 +17,7 @@ sub_units = {
 		sprite = light_plane
 		priority = 1
 		active = yes
-		type = { cas }
+		type = cas
 		need = {
 			ADISCORD_cas_archetype = 1
 		}
@@ -31,7 +31,7 @@ sub_units = {
 		sprite = medium_plane
 		priority = 1
 		active = yes
-		type = { tactical_bomber }
+		type = tactical_bomber
 		need = {
 			ADISCORD_rocket_strike_archetype = 1
 		}

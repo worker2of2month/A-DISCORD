@@ -1,65 +1,5 @@
 VAL_military_operations = {
-	VAL_ops_bribe_stelander_brokers = {
-		icon = generic_political_pressure
-		allowed = { tag = VAL }
-		visible = { OR = { VAL_stp_crisis_at_least_rupture = yes VAL_has_active_stp_civil_war = yes } }
-		available = {
-			NOT = { has_country_flag = VAL_foreign_operation_active }
-		}
-		custom_cost_trigger = { ADISCORD_economy_can_spend_25 = yes }
-		custom_cost_text = ADISCORD_cost_t25
-		cost = 10
-		days_remove = 14
-		days_re_enable = 45
-		complete_effect = {
-			ADISCORD_economy_spend_25 = yes
-			set_country_flag = VAL_foreign_operation_active
-			set_country_flag = VAL_operation_bribe_stelander_brokers
-		}
-		remove_effect = {
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 }
-			VAL_change_stp_leverage = yes
-			add_to_variable = { var = VAL_STP_intelligence value = 1 }
-			clr_country_flag = VAL_operation_bribe_stelander_brokers
-			clr_country_flag = VAL_foreign_operation_active
-		}
-		ai_will_do = {
-			base = 2
-			modifier = { factor = 0 NOT = { ADISCORD_economy_can_spend_50 = yes } }
-			modifier = { factor = 3 VAL_has_active_stp_civil_war = yes }
-		}
-	}
 
-	VAL_ops_arm_stelander_clients = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = VAL }
-		visible = { VAL_has_active_stp_civil_war = yes }
-		available = {
-			NOT = { has_country_flag = VAL_foreign_operation_active }
-		}
-		custom_cost_trigger = { ADISCORD_has_2500_infantry_equipment = yes }
-		custom_cost_text = ADISCORD_cost_r2500
-		cost = 10
-		days_remove = 21
-		days_re_enable = 60
-		complete_effect = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = -2500 producer = VAL }
-			set_country_flag = VAL_foreign_operation_active
-			set_country_flag = VAL_operation_arm_stelander_clients
-		}
-		remove_effect = {
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 }
-			VAL_change_stp_leverage = yes
-			add_to_variable = { var = VAL_STP_contract_readiness value = 1 }
-			clr_country_flag = VAL_operation_arm_stelander_clients
-			clr_country_flag = VAL_foreign_operation_active
-		}
-		ai_will_do = {
-			base = 2
-			modifier = { factor = 0 NOT = { has_equipment = { infantry_equipment > 9999 } } }
-			modifier = { factor = 3 has_country_flag = VAL_ai_course_resource_raider }
-		}
-	}
 
 	VAL_ops_finance_cin_contacts = {
 		icon = generic_political_pressure
@@ -175,40 +115,6 @@ VAL_military_operations = {
 		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { has_equipment = { infantry_equipment > 11999 } } } }
 	}
 
-	VAL_ops_secure_stelander_steel = {
-		icon = generic_resources
-		allowed = { tag = VAL }
-		visible = {
-			has_country_flag = VAL_stelander_resource_search
-			NOT = { has_country_flag = VAL_local_resource_rights_45 }
-		}
-		available = {
-			NOT = { has_country_flag = VAL_foreign_operation_active }
-		}
-		custom_cost_trigger = {
-			ADISCORD_economy_can_spend_50 = yes
-			ADISCORD_has_5000_infantry_equipment = yes
-		}
-		custom_cost_text = ADISCORD_cost_t50_r5000
-		cost = 15
-		days_remove = 35
-		complete_effect = {
-			ADISCORD_economy_spend_50 = yes
-			add_equipment_to_stockpile = { type = infantry_equipment amount = -5000 producer = VAL }
-			set_country_flag = VAL_foreign_operation_active
-			set_country_flag = VAL_operation_secure_stelander_steel
-		}
-		remove_effect = {
-			VAL_secure_stelander_interim_supply = yes
-			clr_country_flag = VAL_operation_secure_stelander_steel
-			clr_country_flag = VAL_foreign_operation_active
-		}
-		ai_will_do = {
-			base = 4
-			modifier = { factor = 0 NOT = { has_country_flag = VAL_westerholm_metal_lost } }
-			modifier = { factor = 0 NOT = { has_equipment = { infantry_equipment > 14999 } } }
-		}
-	}
 }
 
 VAL_propaganda_campaigns = {
@@ -327,44 +233,8 @@ VAL_rework_debug = {
 		}
 	}
 
-	VAL_debug_set_crisis_rupture = {
-		icon = generic_political_pressure
-		allowed = { tag = VAL }
-		available = { always = yes }
-		cost = 0
-		fire_only_once = no
-		complete_effect = {
-			set_country_flag = VAL_debug_stp_rupture
-			clr_country_flag = VAL_debug_stp_civil_war
-			clr_country_flag = VAL_debug_stp_postwar
-		}
-	}
 
-	VAL_debug_set_active_civil_war = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = VAL }
-		available = { always = yes }
-		cost = 0
-		fire_only_once = no
-		complete_effect = {
-			set_country_flag = VAL_debug_stp_rupture
-			set_country_flag = VAL_debug_stp_civil_war
-			clr_country_flag = VAL_debug_stp_postwar
-		}
-	}
 
-	VAL_debug_set_postwar_stelander = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = VAL }
-		available = { always = yes }
-		cost = 0
-		fire_only_once = no
-		complete_effect = {
-			set_country_flag = VAL_debug_stp_rupture
-			clr_country_flag = VAL_debug_stp_civil_war
-			set_country_flag = VAL_debug_stp_postwar
-		}
-	}
 
 	VAL_debug_disrupt_vorkerland_contracts = {
 		icon = generic_resources

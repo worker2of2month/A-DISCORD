@@ -1,0 +1,25 @@
+capital = 149
+oob = "RIN"
+
+recruit_character = RIN_Alaric_IV_Ren
+
+set_politics = {
+	ruling_party = hedonism
+	elections_allowed = no
+}
+set_popularities = {
+	hedonism = 60
+	chauvinism = 20
+	pragmatism = 15
+	humanism = 5
+}
+set_stability = 0.66
+set_war_support = 0.62
+set_research_slots = 3
+add_ideas = {
+	RIN_two_oaths
+	RIN_palace_guard
+}
+graphical_culture = western_european_gfx
+graphical_culture_2d = western_european_2d
+color = rgb { 102 48 61 }

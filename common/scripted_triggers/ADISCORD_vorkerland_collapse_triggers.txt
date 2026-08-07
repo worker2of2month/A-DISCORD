@@ -41,6 +41,55 @@ ADISCORD_vorkerland_egc_defeated = {
 	}
 }
 
+ADISCORD_vorkerland_riv_defeated = {
+	OR = {
+		NOT = { country_exists = RIV }
+		RIV = { has_capitulated = yes }
+	}
+}
+
+ADISCORD_vorkerland_rev_defeated = {
+	OR = {
+		NOT = { country_exists = REV }
+		REV = { has_capitulated = yes }
+	}
+}
+
+ADISCORD_vorkerland_yor_defeated = {
+	OR = {
+		NOT = { country_exists = YOR }
+		YOR = { has_capitulated = yes }
+	}
+}
+
+ADISCORD_vorkerland_ndn_defeated = {
+	OR = {
+		NOT = { country_exists = NDN }
+		NDN = { has_capitulated = yes }
+	}
+}
+
+ADISCORD_vorkerland_swb_defeated = {
+	OR = {
+		NOT = { country_exists = SWB }
+		SWB = { has_capitulated = yes }
+	}
+}
+
+ADISCORD_vorkerland_vhv_defeated = {
+	OR = {
+		NOT = { country_exists = VHV }
+		VHV = { has_capitulated = yes }
+	}
+}
+
+ADISCORD_vorkerland_osv_defeated = {
+	OR = {
+		NOT = { country_exists = OSV }
+		OSV = { has_capitulated = yes }
+	}
+}
+
 ADISCORD_vorkerland_is_central_claimant = {
 	OR = {
 		tag = WRK
@@ -48,6 +97,13 @@ ADISCORD_vorkerland_is_central_claimant = {
 		tag = TVA
 		tag = EYR
 		tag = EGC
+		tag = RIV
+		tag = REV
+		tag = YOR
+		tag = NDN
+		tag = SWB
+		tag = VHV
+		tag = OSV
 	}
 }
 
@@ -59,23 +115,32 @@ ADISCORD_vorkerland_is_main_claimant = {
 	}
 }
 
-# The three main claimants must fight one another whenever they share a border,
-# even while one of them is already absorbing a minor central administration.
+# Main claimants fight only across a live border. An unrelated current war must
+# not freeze the centre: the collapse is explicitly allowed to become a
+# multi-front conflict. Worker and Doctor Worx are the exception: their direct
+# war is opened only by the dedicated preparation decision after one finishes
+# its opening campaign.
 ADISCORD_vorkerland_is_main_claimant_rival_for_ROOT = {
 	is_subject = no
 	NOT = { has_capitulated = yes }
 	NOT = { has_war_with = ROOT }
 	ADISCORD_vorkerland_is_main_claimant = yes
 	ROOT = { ADISCORD_vorkerland_is_main_claimant = yes }
+	NOT = {
+		OR = {
+			AND = { tag = TVA ROOT = { tag = WRK } }
+			AND = { tag = WRK ROOT = { tag = TVA } }
+		}
+	}
 }
 
-# EYR and EGC remain secondary central targets and are attacked only when both
-# sides are otherwise at peace.
+# Smaller central states remain valid targets even while fighting another
+# claimant. This prevents one long campaign from locking every adjacent front.
 ADISCORD_vorkerland_is_central_target_for_ROOT = {
 	is_subject = no
-	has_war = no
 	NOT = { has_capitulated = yes }
-	OR = { tag = EYR tag = EGC }
+	NOT = { has_war_with = ROOT }
+	OR = { tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV }
 	ROOT = { ADISCORD_vorkerland_is_main_claimant = yes }
 }
 
@@ -89,12 +154,23 @@ ADISCORD_vorkerland_is_regional_combatant = {
 	}
 }
 
+# TFR's American civil war gives even small factions a field OOB and a bounded
+# state levy. This allowlist keeps the equivalent WRK reserve away from the
+# three main claimants and from non-combatant dirty-zone administrations.
+ADISCORD_vorkerland_is_minor_combatant = {
+	OR = {
+		tag = EYR tag = EGC tag = RIV tag = REV tag = YOR
+		tag = NDN tag = SWB tag = VHV tag = OSV
+		ADISCORD_vorkerland_is_regional_combatant = yes
+	}
+}
+
 # After winning the centre, the claimant may advance only into neighbouring
 # former confederation territories. WRK recognises ROM and TRU instead.
 ADISCORD_vorkerland_is_reunification_target_for_ROOT = {
 	is_subject = no
-	has_war = no
 	NOT = { has_capitulated = yes }
+	NOT = { has_war_with = ROOT }
 	OR = {
 		tag = ZAO
 		tag = WPA
@@ -126,6 +202,13 @@ ADISCORD_vorkerland_worker_victory_candidate = {
 	ADISCORD_vorkerland_tva_defeated = yes
 	ADISCORD_vorkerland_eyr_defeated = yes
 	ADISCORD_vorkerland_egc_defeated = yes
+	ADISCORD_vorkerland_riv_defeated = yes
+	ADISCORD_vorkerland_rev_defeated = yes
+	ADISCORD_vorkerland_yor_defeated = yes
+	ADISCORD_vorkerland_ndn_defeated = yes
+	ADISCORD_vorkerland_swb_defeated = yes
+	ADISCORD_vorkerland_vhv_defeated = yes
+	ADISCORD_vorkerland_osv_defeated = yes
 	controls_state = 27
 	controls_state = 32
 	controls_state = 33
@@ -143,6 +226,13 @@ ADISCORD_vorkerland_vlad_victory_candidate = {
 	ADISCORD_vorkerland_tva_defeated = yes
 	ADISCORD_vorkerland_eyr_defeated = yes
 	ADISCORD_vorkerland_egc_defeated = yes
+	ADISCORD_vorkerland_riv_defeated = yes
+	ADISCORD_vorkerland_rev_defeated = yes
+	ADISCORD_vorkerland_yor_defeated = yes
+	ADISCORD_vorkerland_ndn_defeated = yes
+	ADISCORD_vorkerland_swb_defeated = yes
+	ADISCORD_vorkerland_vhv_defeated = yes
+	ADISCORD_vorkerland_osv_defeated = yes
 	controls_state = 32
 	controls_state = 40
 	controls_state = 75
@@ -156,6 +246,13 @@ ADISCORD_vorkerland_dorian_victory_candidate = {
 	ADISCORD_vorkerland_vad_defeated = yes
 	ADISCORD_vorkerland_eyr_defeated = yes
 	ADISCORD_vorkerland_egc_defeated = yes
+	ADISCORD_vorkerland_riv_defeated = yes
+	ADISCORD_vorkerland_rev_defeated = yes
+	ADISCORD_vorkerland_yor_defeated = yes
+	ADISCORD_vorkerland_ndn_defeated = yes
+	ADISCORD_vorkerland_swb_defeated = yes
+	ADISCORD_vorkerland_vhv_defeated = yes
+	ADISCORD_vorkerland_osv_defeated = yes
 	controls_state = 32
 	controls_state = 40
 	controls_state = 36

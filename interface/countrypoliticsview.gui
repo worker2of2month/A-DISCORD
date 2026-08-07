@@ -58,8 +58,13 @@ guiTypes = {
 			name = "ideology_icon_vorkerism"
 			position = { x = 0 y = 0 }
 			spriteType = "GFX_ideology_vorkerism_countryview"
-			scale = 0.66
 			pdx_tooltip = "vorkerism_desc"
+		}
+		iconType = {
+			name = "ideology_icon_neo_vorkerism"
+			position = { x = 0 y = 0 }
+			spriteType = "GFX_ideology_neo_vorkerism_countryview"
+			pdx_tooltip = "neo_vorkerism_desc"
 		}
 		iconType = {
 			name = "ideology_icon_pragmatism"

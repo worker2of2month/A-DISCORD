@@ -49,36 +49,113 @@ units = {
 		division_name = { is_name_ordered = yes name_order = 1 }
 		location = 16568
 		division_template = "Capital Guard"
-		start_experience_factor = 0.26
-		start_equipment_factor = 0.41
+		start_experience_factor = 0.35
+		start_equipment_factor = 0.90
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 2 }
-		location = 3462
-		division_template = "Line Infantry Brigade"
-		start_experience_factor = 0.17
-		start_equipment_factor = 0.33
+		location = 9327
+		division_template = "Capital Guard"
+		start_experience_factor = 0.30
+		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 3 }
-		location = 6507
+		location = 3462
 		division_template = "Line Infantry Brigade"
-		start_experience_factor = 0.17
-		start_equipment_factor = 0.33
+		start_experience_factor = 0.22
+		start_equipment_factor = 0.82
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 4 }
 		location = 3318
-		division_template = "Local Security Detachment"
-		start_experience_factor = 0.12
-		start_equipment_factor = 0.26
+		division_template = "Line Infantry Brigade"
+		start_experience_factor = 0.22
+		start_equipment_factor = 0.82
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 5 }
-		location = 4103
+		location = 888
 		division_template = "Line Infantry Brigade"
-		start_experience_factor = 0.17
-		start_equipment_factor = 0.33
+		start_experience_factor = 0.22
+		start_equipment_factor = 0.80
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 6 }
+		location = 838
+		division_template = "Line Infantry Brigade"
+		start_experience_factor = 0.22
+		start_equipment_factor = 0.80
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 7 }
+		location = 2448
+		division_template = "Line Infantry Brigade"
+		start_experience_factor = 0.20
+		start_equipment_factor = 0.80
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 8 }
+		location = 882
+		division_template = "Line Infantry Brigade"
+		start_experience_factor = 0.20
+		start_equipment_factor = 0.80
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 9 }
+		location = 702
+		division_template = "Line Infantry Brigade"
+		start_experience_factor = 0.20
+		start_equipment_factor = 0.78
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 10 }
+		location = 595
+		division_template = "Line Infantry Brigade"
+		start_experience_factor = 0.20
+		start_equipment_factor = 0.78
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 11 }
+		location = 1971
+		division_template = "Line Infantry Brigade"
+		start_experience_factor = 0.18
+		start_equipment_factor = 0.78
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 12 }
+		location = 3447
+		division_template = "Line Infantry Brigade"
+		start_experience_factor = 0.18
+		start_equipment_factor = 0.78
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 13 }
+		location = 579
+		division_template = "Local Security Detachment"
+		start_experience_factor = 0.12
+		start_equipment_factor = 0.72
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 14 }
+		location = 2262
+		division_template = "Local Security Detachment"
+		start_experience_factor = 0.12
+		start_equipment_factor = 0.72
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 15 }
+		location = 423
+		division_template = "Local Security Detachment"
+		start_experience_factor = 0.12
+		start_equipment_factor = 0.70
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 16 }
+		location = 4217
+		division_template = "Local Security Detachment"
+		start_experience_factor = 0.12
+		start_equipment_factor = 0.70
 	}
 }
 
@@ -87,8 +164,20 @@ units = {
 instant_effect = {
 	add_equipment_production = {
 		equipment = { type = infantry_equipment_0 creator = "IVN" }
-		requested_factories = 1
+		requested_factories = 6
 		progress = 0.60
 		efficiency = 70
+	}
+	add_equipment_production = {
+		equipment = { type = support_equipment creator = "IVN" }
+		requested_factories = 2
+		progress = 0.40
+		efficiency = 60
+	}
+	add_equipment_production = {
+		equipment = { type = artillery_equipment creator = "IVN" }
+		requested_factories = 2
+		progress = 0.40
+		efficiency = 60
 	}
 }

@@ -1,5 +1,6 @@
 focus_tree = {
 	id = STP_focus
+
 	country = {
 		factor = 0
 		modifier = {
@@ -10,906 +11,1095 @@ focus_tree = {
 
 	inlay_window = {
 		id = STP_state_face_inlay_window
-		position = { x = 1160 y = 10 }
+		position = { x = 2222 y = 10 }
 	}
 
 	#############################################
-	### STELANDER: THE SUCCESSION CRISIS
-	### Health stages and narrative beats are event-driven. The focus tree
-	### contains programmes the player actually chooses and pays time for.
-	#############################################
-
-	#############################################
-	### STAGE I — STATE AUDIT, DAYS 1–70
-	### Four programmes are available, but the calendar permits only three.
+	### STELANDER — OPENING
 	#############################################
 
 	focus = {
-		id = STP_The_Old_Man_On_The_Balcony
-		icon = GFX_focus_STP_Triumph_Of_Common_Sense
+		id = STP_NECTAR_OF_GODS
+		icon = GFX_focus_STP_Nectar_of_the_Gods
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		x = -3
-		y = 0
-		cost = 3
-		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_The_Old_Man_On_The_Balcony }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 1 compare = equals }
-				has_country_flag = STP_focus_active_STP_The_Old_Man_On_The_Balcony
-			}
-		}
-		ai_will_do = { base = 4 modifier = { factor = 2 has_stability < 0.4 } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_The_Old_Man_On_The_Balcony
-			set_country_flag = STP_focus_palace_observed
-			set_country_flag = STP_focus_market_open
-			add_political_power = 25
-			STP_improve_transition_administration = yes
-			custom_effect_tooltip = STP_focus_state_secretariat_program_tt
-		}
-	}
-
-	focus = {
-		id = STP_Count_The_Loyalists
-		icon = GFX_focus_STP_Side_With_Maksim
-		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 2
+		x = 12
 		y = 0
 		cost = 5
+		available_if_capitulated = yes
 		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_Count_The_Loyalists }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 1 compare = equals }
-				has_country_flag = STP_focus_active_STP_Count_The_Loyalists
-			}
-		}
-		ai_will_do = { base = 5 modifier = { factor = 2 num_divisions > 10 } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_Count_The_Loyalists
-			set_country_flag = STP_focus_garrisons_observed
-			set_country_flag = STP_focus_mountains_open
-			army_experience = 10
-			add_command_power = 10
-			STP_improve_transition_security = yes
-			custom_effect_tooltip = STP_focus_command_audit_program_tt
-		}
+		ai_will_do = { base = 1 }
+		completion_reward = { }
 	}
 
 	focus = {
-		id = STP_The_City_Still_Dances
-		icon = GFX_focus_STP_It_Has_Only_Begun
-		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_INDUSTRY }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 4
-		y = 0
-		cost = 3
-		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_The_City_Still_Dances }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 1 compare = equals }
-				has_country_flag = STP_focus_active_STP_The_City_Still_Dances
-			}
-		}
-		ai_will_do = { base = 4 modifier = { factor = 2 has_war_support < 0.2 } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_The_City_Still_Dances
-			set_country_flag = STP_focus_street_observed
-			set_country_flag = STP_focus_market_open
-			add_stability = 0.02
-			add_war_support = 0.02
-			STP_improve_transition_mobilization = yes
-			custom_effect_tooltip = STP_focus_capital_administration_program_tt
-		}
-	}
-
-	focus = {
-		id = STP_Foreign_Guests_At_The_Banquet
-		icon = GFX_focus_STP_Ruin_Their_Deal
+		id = STP_SMILE_YOU_ARE_WELCOME
+		icon = GFX_focus_STP_Nectar_of_the_Gods
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 6
-		y = 0
+		relative_position_id = STP_NECTAR_OF_GODS
+		x = 0
+		y = 1
 		cost = 3
+		prerequisite = { focus = STP_NECTAR_OF_GODS }
+		available_if_capitulated = yes
 		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_Foreign_Guests_At_The_Banquet }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 1 compare = equals }
-				has_country_flag = STP_focus_active_STP_Foreign_Guests_At_The_Banquet
-			}
-		}
-		ai_will_do = { base = 4 modifier = { factor = 2 is_subject = yes } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_Foreign_Guests_At_The_Banquet
-			set_country_flag = STP_focus_nodrul_observed
-			set_country_flag = STP_focus_kefreyt_observed
-			add_political_power = 25
-			STP_improve_transition_administration = yes
-			custom_effect_tooltip = STP_focus_external_guarantees_program_tt
-		}
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_STATE_OF_THE_REPUBLIC
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_SMILE_YOU_ARE_WELCOME
+		x = 0
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_SMILE_YOU_ARE_WELCOME }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_2160_program
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_STATE_OF_THE_REPUBLIC
+		x = 0
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_STATE_OF_THE_REPUBLIC }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
 	}
 
 	#############################################
-	### STAGE II — WHO MAY SPEAK FOR IVANOV, DAYS 71–140
+	### PROGRAMME 2160 — ECONOMY AND REGIONS
 	#############################################
+
+	focus = {
+		id = STP_2160_budget
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		relative_position_id = STP_2160_program
+		x = -8
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_2160_program }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_current_spending
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		relative_position_id = STP_2160_budget
+		x = -1
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_2160_budget }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_internal_investment
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		relative_position_id = STP_2160_budget
+		x = 1
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_2160_budget }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_BALANCED_APPROPRIATIONS
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		relative_position_id = STP_2160_budget
+		x = 0
+		y = 3
+		cost = 3
+		prerequisite = { focus = STP_current_spending }
+		prerequisite = { focus = STP_internal_investment }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_highland_program
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_2160_budget
+		x = -4
+		y = 2
+		cost = 3
+		prerequisite = { focus = STP_current_spending }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_regional_agreements
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_highland_program
+		x = -1
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_highland_program }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_central_district_funding
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		relative_position_id = STP_highland_program
+		x = 1
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_highland_program }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_HIGHLAND_SETTLEMENT
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_highland_program
+		x = 0
+		y = 3
+		cost = 3
+		prerequisite = { focus = STP_regional_agreements }
+		prerequisite = { focus = STP_central_district_funding }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_port_reform
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		relative_position_id = STP_2160_budget
+		x = 4
+		y = 2
+		cost = 3
+		prerequisite = { focus = STP_internal_investment }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_private_port_management
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		relative_position_id = STP_port_reform
+		x = -1
+		y = 1
+		cost = 4
+		prerequisite = { focus = STP_port_reform }
+		mutually_exclusive = { focus = STP_state_port_oversight }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_state_port_oversight
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		relative_position_id = STP_port_reform
+		x = 1
+		y = 1
+		cost = 4
+		prerequisite = { focus = STP_port_reform }
+		mutually_exclusive = { focus = STP_private_port_management }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_PORT_AUTHORITY_2160
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		relative_position_id = STP_port_reform
+		x = 0
+		y = 3
+		cost = 3
+		prerequisite = { focus = STP_private_port_management focus = STP_state_port_oversight }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	#############################################
+	### PROGRAMME 2160 — ADMINISTRATION
+	#############################################
+
+	focus = {
+		id = STP_personnel_policy
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_2160_program
+		x = 0
+		y = 2
+		cost = 3
+		prerequisite = { focus = STP_2160_program }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_foreign_specialists
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_personnel_policy
+		x = -1
+		y = 1
+		cost = 4
+		prerequisite = { focus = STP_personnel_policy }
+		mutually_exclusive = { focus = STP_local_training }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_local_training
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_personnel_policy
+		x = 1
+		y = 1
+		cost = 4
+		prerequisite = { focus = STP_personnel_policy }
+		mutually_exclusive = { focus = STP_foreign_specialists }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_CIVIL_SERVICE_REGISTER
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_personnel_policy
+		x = 0
+		y = 3
+		cost = 3
+		prerequisite = { focus = STP_foreign_specialists focus = STP_local_training }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	#############################################
+	### PROGRAMME 2160 — DEFENCE AND NODRUL
+	#############################################
+
+	focus = {
+		id = STP_defense_budget
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_2160_program
+		x = 6
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_2160_program }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_garrison_funding
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		relative_position_id = STP_defense_budget
+		x = -1
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_defense_budget }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_mobilization_reserve
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
+		relative_position_id = STP_defense_budget
+		x = 1
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_defense_budget }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_READINESS_REVIEW
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
+		relative_position_id = STP_defense_budget
+		x = 0
+		y = 3
+		cost = 3
+		prerequisite = { focus = STP_garrison_funding }
+		prerequisite = { focus = STP_mobilization_reserve }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_nodrul_agreement
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_2160_program
+		x = 10
+		y = 2
+		cost = 3
+		prerequisite = { focus = STP_2160_program }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_extend_nodrul_missions
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_nodrul_agreement
+		x = -1
+		y = 1
+		cost = 4
+		prerequisite = { focus = STP_nodrul_agreement }
+		mutually_exclusive = { focus = STP_reduce_nodrul_presence }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_reduce_nodrul_presence
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_nodrul_agreement
+		x = 1
+		y = 1
+		cost = 4
+		prerequisite = { focus = STP_nodrul_agreement }
+		mutually_exclusive = { focus = STP_extend_nodrul_missions }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_FRONTIER_PROTOCOL_2160
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_nodrul_agreement
+		x = 0
+		y = 3
+		cost = 3
+		prerequisite = { focus = STP_extend_nodrul_missions focus = STP_reduce_nodrul_presence }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	#############################################
+	### THE POLITICAL CRISIS
+	#############################################
+
+	focus = {
+		id = STP_ADRESS_PARTY_CRISIS
+		icon = GFX_focus_STP_Prepare_For_The_Upcoming_BOP
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 12
+		y = 10
+		cost = 3
+		prerequisite = { focus = STP_2160_program }
+		available = { has_country_flag = STP_party_crisis_unlocked }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 10 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_PRESIDENT_REMAINS_IN_OFFICE
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_ADRESS_PARTY_CRISIS
+		x = 0
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_ADRESS_PARTY_CRISIS }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_CONTINUITY_OF_AUTHORITY
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_PRESIDENT_REMAINS_IN_OFFICE
+		x = 0
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_PRESIDENT_REMAINS_IN_OFFICE }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_Govern_In_His_Name
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_CONTINUITY_OF_AUTHORITY
+		x = -4
+		y = 1
+		cost = 5
+		prerequisite = { focus = STP_CONTINUITY_OF_AUTHORITY }
+		mutually_exclusive = { focus = STP_Show_Him_The_Truth }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
 
 	focus = {
 		id = STP_Show_Him_The_Truth
 		icon = GFX_focus_STP_Side_With_Maksim
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 3
+		relative_position_id = STP_CONTINUITY_OF_AUTHORITY
+		x = 4
 		y = 1
 		cost = 5
-		prerequisite = {
-			focus = STP_The_Old_Man_On_The_Balcony
-			focus = STP_Count_The_Loyalists
-			focus = STP_The_City_Still_Dances
-			focus = STP_Foreign_Guests_At_The_Banquet
-		}
+		prerequisite = { focus = STP_CONTINUITY_OF_AUTHORITY }
 		mutually_exclusive = { focus = STP_Govern_In_His_Name }
+		available_if_capitulated = yes
 		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_Show_Him_The_Truth }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			check_variable = { var = STP_side_commitment value = 0 compare = equals }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 2 compare = equals }
-				has_country_flag = STP_focus_active_STP_Show_Him_The_Truth
-			}
-		}
-		ai_will_do = { base = 1 modifier = { factor = 2 has_war_support < 0.2 } modifier = { factor = 2 num_divisions < 12 } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_Show_Him_The_Truth
-			if = {
-				limit = { NOT = { has_country_flag = STP_forced_commit_no_reward } }
-				add_political_power = 30
-				set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 10 }
-				STP_change_readiness = yes
-				STP_improve_transition_mobilization = yes
-			}
-			STP_commit_to_shabrat = yes
-		}
+		ai_will_do = { base = 1 }
+		completion_reward = { }
 	}
 
+	#############################################
+	### HEDERSETT — PARTY APPARATUS
+	#############################################
+
 	focus = {
-		id = STP_Govern_In_His_Name
-		allow_branch = { is_ai = yes }
+		id = STP_PARTY_DISCIPLINE
 		icon = GFX_focus_STP_Side_With_The_Party
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
+		relative_position_id = STP_Govern_In_His_Name
+		x = 0
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_Govern_In_His_Name }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_SEAL_THE_WESTERN_WING
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_PARTY_DISCIPLINE
+		x = -3
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_PARTY_DISCIPLINE }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_ROTATE_DISTRICT_COMMAND
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_SEAL_THE_WESTERN_WING
+		x = 0
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_SEAL_THE_WESTERN_WING }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_BURN_THE_CLIENT_ARCHIVES
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_ROTATE_DISTRICT_COMMAND
+		x = 0
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_ROTATE_DISTRICT_COMMAND }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_GUARANTEE_MINISTERS
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_PARTY_DISCIPLINE
+		x = -1
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_PARTY_DISCIPLINE }
+		mutually_exclusive = { focus = STP_EMERGENCY_APPOINTMENTS }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_EMERGENCY_APPOINTMENTS
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_PARTY_DISCIPLINE
+		x = 1
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_PARTY_DISCIPLINE }
+		mutually_exclusive = { focus = STP_GUARANTEE_MINISTERS }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_DISTRICT_GOVERNMENT
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_PARTY_DISCIPLINE
+		x = 0
+		y = 3
+		cost = 3
+		prerequisite = { focus = STP_GUARANTEE_MINISTERS focus = STP_EMERGENCY_APPOINTMENTS }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_CONFIRM_DISTRICT_ADMINISTRATIONS
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_DISTRICT_GOVERNMENT
+		x = -1
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_DISTRICT_GOVERNMENT }
+		mutually_exclusive = { focus = STP_PRESIDENTIAL_COMMISSIONERS }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_PRESIDENTIAL_COMMISSIONERS
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_DISTRICT_GOVERNMENT
+		x = 1
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_DISTRICT_GOVERNMENT }
+		mutually_exclusive = { focus = STP_CONFIRM_DISTRICT_ADMINISTRATIONS }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_PUBLIC_INFORMATION_POLICY
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_PARTY_DISCIPLINE
 		x = 3
 		y = 1
-		cost = 5
-		mutually_exclusive = { focus = STP_Show_Him_The_Truth }
+		cost = 3
+		prerequisite = { focus = STP_PARTY_DISCIPLINE }
+		available_if_capitulated = yes
 		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_Govern_In_His_Name }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			check_variable = { var = STP_side_commitment value = 0 compare = equals }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 2 compare = equals }
-				has_country_flag = STP_focus_active_STP_Govern_In_His_Name
-			}
-		}
-		ai_will_do = { base = 1 modifier = { factor = 2 has_stability > 0.4 } modifier = { factor = 2 num_divisions > 11 } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_Govern_In_His_Name
-			if = {
-				limit = { NOT = { has_country_flag = STP_forced_commit_no_reward } }
-				add_political_power = 30
-				set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -10 }
-				STP_change_readiness = yes
-				STP_improve_transition_administration = yes
-			}
-			STP_commit_to_party = yes
-		}
+		ai_will_do = { base = 1 }
+		completion_reward = { }
 	}
 
 	focus = {
-		id = STP_Divide_The_Command_Registers
-		icon = GFX_focus_STP_Command_Registers
+		id = STP_MEDICAL_BULLETINS
+		icon = GFX_focus_STP_Nectar_of_the_Gods
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 2
-		y = 2
-		cost = 2
-		prerequisite = { focus = STP_Show_Him_The_Truth }
+		relative_position_id = STP_PUBLIC_INFORMATION_POLICY
+		x = -1
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_PUBLIC_INFORMATION_POLICY }
+		available_if_capitulated = yes
 		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_Divide_The_Command_Registers }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			check_variable = { var = STP_side_commitment value = 1 compare = equals }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 2 compare = equals }
-				has_country_flag = STP_focus_active_STP_Divide_The_Command_Registers
-			}
-		}
-		ai_will_do = { base = 5 modifier = { factor = 2 has_country_flag = STP_ai_course_cautious_shabrat } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_Divide_The_Command_Registers
-			if = {
-				limit = { NOT = { has_country_flag = STP_forced_commit_no_reward } }
-				set_country_flag = STP_focus_command_registers_divided
-				add_political_power = 20
-				set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 }
-				STP_change_suspicion = yes
-				set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 }
-				STP_change_readiness = yes
-				STP_improve_transition_administration = yes
-				STP_improve_transition_security = yes
-				custom_effect_tooltip = STP_focus_command_registers_program_tt
-			}
-		}
+		ai_will_do = { base = 1 }
+		completion_reward = { }
 	}
 
 	focus = {
-		id = STP_Establish_Reserve_Communications
-		icon = GFX_focus_STP_Open_Their_Eyes
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 4
-		y = 2
-		cost = 2
-		prerequisite = { focus = STP_Show_Him_The_Truth }
+		id = STP_RESTRICT_HEALTH_INFORMATION
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_PUBLIC_INFORMATION_POLICY
+		x = 1
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_PUBLIC_INFORMATION_POLICY }
+		available_if_capitulated = yes
 		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_Establish_Reserve_Communications }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			check_variable = { var = STP_side_commitment value = 1 compare = equals }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 2 compare = equals }
-				has_country_flag = STP_focus_active_STP_Establish_Reserve_Communications
-			}
-		}
-		ai_will_do = { base = 5 modifier = { factor = 2 has_country_flag = STP_ai_course_military_infiltration } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_Establish_Reserve_Communications
-			if = {
-				limit = { NOT = { has_country_flag = STP_forced_commit_no_reward } }
-				set_country_flag = STP_focus_reserve_communications_ready
-				add_command_power = 15
-				set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 }
-				STP_change_readiness = yes
-				STP_improve_transition_security = yes
-				STP_improve_transition_mobilization = yes
-				custom_effect_tooltip = STP_focus_reserve_communications_program_tt
-			}
-		}
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_FADA_PACT
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_PUBLIC_INFORMATION_POLICY
+		x = 0
+		y = 3
+		cost = 3
+		prerequisite = { focus = STP_PUBLIC_INFORMATION_POLICY }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_RENEW_THE_CULTURAL_MANDATE
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_FADA_PACT
+		x = 0
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_FADA_PACT }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_THE_PARTY_CLOSES_RANKS
+		icon = GFX_focus_STP_Side_With_The_Party
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_PARTY_DISCIPLINE
+		x = 0
+		y = 7
+		cost = 5
+		prerequisite = { focus = STP_CONFIRM_DISTRICT_ADMINISTRATIONS focus = STP_PRESIDENTIAL_COMMISSIONERS }
+		prerequisite = { focus = STP_BURN_THE_CLIENT_ARCHIVES focus = STP_RENEW_THE_CULTURAL_MANDATE }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
 	}
 
 	#############################################
-	### STAGE III — INSTITUTIONAL PROGRAMMES, DAYS 141–203
-	### Each programme unlocks several operations in the decision category.
+	### SHABRAT — OPPOSITION NETWORK
 	#############################################
+
+	focus = {
+		id = STP_Count_The_Loyalists
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
+		relative_position_id = STP_Show_Him_The_Truth
+		x = 0
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_Show_Him_The_Truth }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
 
 	focus = {
 		id = STP_The_Last_Confession
-		icon = GFX_focus_STP_Open_Their_Eyes
+		icon = GFX_focus_STP_Side_With_Maksim
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 1
-		y = 3
+		relative_position_id = STP_Count_The_Loyalists
+		x = -3
+		y = 1
 		cost = 3
-		prerequisite = { focus = STP_Divide_The_Command_Registers }
+		prerequisite = { focus = STP_Count_The_Loyalists }
+		available_if_capitulated = yes
 		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_The_Last_Confession }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			check_variable = { var = STP_side_commitment value = 1 compare = equals }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
-				has_country_flag = STP_focus_active_STP_The_Last_Confession
-			}
-		}
-		ai_will_do = { base = 4 modifier = { factor = 2 has_country_flag = STP_ai_course_cautious_shabrat } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_The_Last_Confession
-			set_country_flag = STP_focus_palace_observed
-			set_country_flag = STP_focus_black_ledger_open
-			set_country_flag = STP_focus_silent_march_open
-			add_political_power = 25
-			STP_improve_transition_administration = yes
-			custom_effect_tooltip = STP_focus_shabrat_secretariat_program_tt
-		}
-	}
-
-	focus = {
-		id = STP_Turn_The_Young_Officers
-		icon = GFX_focus_STP_Prepare_For_The_Upcoming_BOP
-		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 3
-		y = 3
-		cost = 5
-		prerequisite = {
-			focus = STP_Divide_The_Command_Registers
-			focus = STP_Establish_Reserve_Communications
-		}
-		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_Turn_The_Young_Officers }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			check_variable = { var = STP_side_commitment value = 1 compare = equals }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
-				has_country_flag = STP_focus_active_STP_Turn_The_Young_Officers
-			}
-		}
-		ai_will_do = { base = 5 modifier = { factor = 2 has_country_flag = STP_ai_course_military_infiltration } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_Turn_The_Young_Officers
-			set_country_flag = STP_focus_young_officers_open
-			set_country_flag = STP_focus_mountains_open
-			set_country_flag = STP_focus_val_supply_open
-			army_experience = 15
-			add_command_power = 10
-			STP_improve_transition_security = yes
-			STP_improve_transition_mobilization = yes
-			custom_effect_tooltip = STP_focus_shabrat_military_program_tt
-		}
-	}
-
-	focus = {
-		id = STP_Cut_The_Silk_Leash
-		icon = GFX_focus_STP_Ruin_Their_Deal
-		search_filters = { FOCUS_FILTER_POLITICAL }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 5
-		y = 3
-		cost = 3
-		prerequisite = { focus = STP_Establish_Reserve_Communications }
-		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_Cut_The_Silk_Leash }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			check_variable = { var = STP_side_commitment value = 1 compare = equals }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
-				has_country_flag = STP_focus_active_STP_Cut_The_Silk_Leash
-			}
-		}
-		ai_will_do = { base = 4 modifier = { factor = 2 has_country_flag = STP_ai_course_cautious_shabrat } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_Cut_The_Silk_Leash
-			set_country_flag = STP_focus_break_mandate_ready
-			set_country_flag = STP_focus_nodrul_disinformation_open
-			set_country_flag = STP_focus_val_supply_open
-			set_country_flag = STP_focus_val_channel_countered
-			add_political_power = 25
-			STP_improve_transition_administration = yes
-			custom_effect_tooltip = STP_focus_shabrat_foreign_program_tt
-		}
-	}
-
-	focus = {
-		id = STP_Unify_The_Administrative_Protocol
-		icon = GFX_focus_STP_Triumph_Of_Common_Sense
-		search_filters = { FOCUS_FILTER_POLITICAL }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 1
-		y = 4
-		cost = 2
-		prerequisite = { focus = STP_The_Last_Confession }
-		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_Unify_The_Administrative_Protocol }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			check_variable = { var = STP_side_commitment value = 1 compare = equals }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
-				has_country_flag = STP_focus_active_STP_Unify_The_Administrative_Protocol
-			}
-		}
-		ai_will_do = { base = 5 modifier = { factor = 2 has_country_flag = STP_ai_course_cautious_shabrat } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_Unify_The_Administrative_Protocol
-			set_country_flag = STP_focus_administrative_protocol_ready
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 }
-			STP_change_node_palace = yes
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 }
-			STP_change_node_market = yes
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 }
-			STP_change_readiness = yes
-			add_political_power = 20
-			STP_improve_transition_administration = yes
-			custom_effect_tooltip = STP_focus_administrative_protocol_program_tt
-		}
-	}
-
-	focus = {
-		id = STP_Assign_Regional_Command_Groups
-		icon = GFX_focus_STP_Prepare_For_The_Upcoming_BOP
-		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 3
-		y = 4
-		cost = 2
-		prerequisite = { focus = STP_Turn_The_Young_Officers }
-		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_Assign_Regional_Command_Groups }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			check_variable = { var = STP_side_commitment value = 1 compare = equals }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
-				has_country_flag = STP_focus_active_STP_Assign_Regional_Command_Groups
-			}
-		}
-		ai_will_do = { base = 5 modifier = { factor = 2 has_country_flag = STP_ai_course_military_infiltration } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_Assign_Regional_Command_Groups
-			set_country_flag = STP_focus_regional_command_groups_ready
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 }
-			STP_change_node_officers = yes
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 }
-			STP_change_node_mountains = yes
-			army_experience = 10
-			add_command_power = 10
-			STP_improve_transition_security = yes
-			STP_improve_transition_mobilization = yes
-			custom_effect_tooltip = STP_focus_regional_command_groups_program_tt
-		}
-	}
-
-	focus = {
-		id = STP_Close_The_External_Channels
-		icon = GFX_focus_STP_No_External_Channels
-		search_filters = { FOCUS_FILTER_POLITICAL }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 5
-		y = 4
-		cost = 2
-		prerequisite = { focus = STP_Cut_The_Silk_Leash }
-		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_Close_The_External_Channels }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			check_variable = { var = STP_side_commitment value = 1 compare = equals }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
-				has_country_flag = STP_focus_active_STP_Close_The_External_Channels
-			}
-		}
-		ai_will_do = { base = 5 modifier = { factor = 2 has_country_flag = STP_ai_course_cautious_shabrat } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_Close_The_External_Channels
-			set_country_flag = STP_focus_external_channels_controlled
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 }
-			STP_change_node_val_channel = yes
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -5 }
-			STP_change_suspicion = yes
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 }
-			STP_change_readiness = yes
-			STP_improve_transition_administration = yes
-			STP_improve_transition_security = yes
-			custom_effect_tooltip = STP_focus_external_channels_control_program_tt
-		}
-	}
-
-	focus = {
-		id = STP_The_Hand_That_Still_Signs
-		allow_branch = { is_ai = yes }
-		icon = GFX_focus_STP_Side_With_The_Party
-		search_filters = { FOCUS_FILTER_POLITICAL }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 1
-		y = 3
-		cost = 3
-		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_The_Hand_That_Still_Signs }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			check_variable = { var = STP_side_commitment value = 2 compare = equals }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
-				has_country_flag = STP_focus_active_STP_The_Hand_That_Still_Signs
-			}
-		}
-		ai_will_do = { base = 4 modifier = { factor = 2 has_country_flag = STP_ai_course_controlled_party } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_The_Hand_That_Still_Signs
-			set_country_flag = STP_focus_seal_palace_improved
-			set_country_flag = STP_focus_archive_burning_open
-			set_country_flag = STP_focus_festival_police_open
-			add_stability = 0.03
-			STP_improve_transition_administration = yes
-			custom_effect_tooltip = STP_focus_party_secretariat_program_tt
-		}
-	}
-
-	focus = {
-		id = STP_Feed_The_Festival_Police
-		allow_branch = { is_ai = yes }
-		icon = GFX_focus_STP_It_Has_Only_Begun
-		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 3
-		y = 3
-		cost = 5
-		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_Feed_The_Festival_Police }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			check_variable = { var = STP_side_commitment value = 2 compare = equals }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
-				has_country_flag = STP_focus_active_STP_Feed_The_Festival_Police
-			}
-		}
-		ai_will_do = { base = 5 modifier = { factor = 2 has_country_flag = STP_ai_course_purge_party } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_Feed_The_Festival_Police
-			set_country_flag = STP_focus_garrison_rotation_open
-			set_country_flag = STP_focus_mountain_raids_improved
-			set_country_flag = STP_focus_festival_police_open
-			army_experience = 15
-			add_command_power = 10
-			STP_improve_transition_security = yes
-			STP_improve_transition_mobilization = yes
-			custom_effect_tooltip = STP_focus_party_security_program_tt
-		}
-	}
-
-	focus = {
-		id = STP_Renew_The_Cultural_Mandate
-		allow_branch = { is_ai = yes }
-		icon = GFX_focus_STP_Nectar_of_the_Gods
-		search_filters = { FOCUS_FILTER_POLITICAL }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 5
-		y = 3
-		cost = 3
-		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_Renew_The_Cultural_Mandate }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			check_variable = { var = STP_side_commitment value = 2 compare = equals }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 3 compare = equals }
-				has_country_flag = STP_focus_active_STP_Renew_The_Cultural_Mandate
-			}
-		}
-		ai_will_do = { base = 4 modifier = { factor = 2 is_subject_of = NOD } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_Renew_The_Cultural_Mandate
-			set_country_flag = STP_focus_renew_mandate_ready
-			set_country_flag = STP_focus_nodrul_advisers_open
-			set_country_flag = STP_focus_val_channel_countered
-			set_country_flag = STP_focus_archive_burning_open
-			add_political_power = 25
-			STP_improve_transition_administration = yes
-			custom_effect_tooltip = STP_focus_party_foreign_program_tt
-		}
-	}
-
-	#############################################
-	### STAGE IV — THE FINAL ORDER, DAYS 204–267
-	### One final method is selected. These focuses enact broad preparations;
-	### they do not merely unlock one more operation.
-	#############################################
-
-	focus = {
-		id = STP_Approve_The_Emergency_Protocol
-		icon = GFX_focus_STP_Emergency_Protocol
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 3
-		y = 5
-		cost = 3
-		prerequisite = {
-			focus = STP_Unify_The_Administrative_Protocol
-			focus = STP_Assign_Regional_Command_Groups
-			focus = STP_Close_The_External_Channels
-		}
-		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_Approve_The_Emergency_Protocol }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			check_variable = { var = STP_side_commitment value = 1 compare = equals }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
-				has_country_flag = STP_focus_active_STP_Approve_The_Emergency_Protocol
-			}
-		}
-		ai_will_do = { base = 8 }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_Approve_The_Emergency_Protocol
-			set_country_flag = STP_focus_emergency_protocol_ready
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 5 }
-			STP_change_readiness = yes
-			add_stability = 0.03
-			add_command_power = 10
-			STP_improve_transition_administration = yes
-			STP_improve_transition_security = yes
-			STP_improve_transition_mobilization = yes
-			custom_effect_tooltip = STP_focus_emergency_protocol_program_tt
-		}
+		ai_will_do = { base = 1 }
+		completion_reward = { }
 	}
 
 	focus = {
 		id = STP_Call_For_Shabrat
-		icon = GFX_focus_STP_Operation_Last_Banquette
+		icon = GFX_focus_STP_Side_With_Maksim
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 1
-		y = 6
+		relative_position_id = STP_The_Last_Confession
+		x = 0
+		y = 1
 		cost = 3
-		prerequisite = { focus = STP_Approve_The_Emergency_Protocol }
-		mutually_exclusive = { focus = STP_Garrisons_Hesitate focus = STP_The_People_Stop_Singing }
+		prerequisite = { focus = STP_The_Last_Confession }
+		available_if_capitulated = yes
 		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_Call_For_Shabrat }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			check_variable = { var = STP_side_commitment value = 1 compare = equals }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
-				has_country_flag = STP_focus_active_STP_Call_For_Shabrat
-			}
-		}
-		ai_will_do = { base = 4 modifier = { factor = 3 check_variable = { var = STP_node_palace value = 1 compare = greater_than_or_equals } } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_Call_For_Shabrat
-			set_country_flag = STP_last_banquet_prepared
-			set_country_flag = STP_focus_final_palace_move_open
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 }
-			STP_change_node_palace = yes
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 }
-			STP_change_node_market = yes
-			add_political_power = 50
-			STP_improve_transition_administration = yes
-		}
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_Turn_The_Young_Officers
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
+		relative_position_id = STP_Count_The_Loyalists
+		x = -1
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_Count_The_Loyalists }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
 	}
 
 	focus = {
 		id = STP_Garrisons_Hesitate
-		icon = GFX_focus_STP_Side_With_Maksim
-		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 3
-		y = 6
-		cost = 3
-		prerequisite = { focus = STP_Approve_The_Emergency_Protocol }
-		mutually_exclusive = { focus = STP_Call_For_Shabrat focus = STP_The_People_Stop_Singing }
-		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_Garrisons_Hesitate }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			check_variable = { var = STP_side_commitment value = 1 compare = equals }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
-				has_country_flag = STP_focus_active_STP_Garrisons_Hesitate
-			}
-		}
-		ai_will_do = { base = 4 modifier = { factor = 3 has_country_flag = STP_ai_course_military_infiltration } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_Garrisons_Hesitate
-			set_country_flag = STP_focus_final_garrison_move_open
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 }
-			STP_change_node_officers = yes
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 }
-			STP_change_node_mountains = yes
-			army_experience = 20
-			add_command_power = 15
-			STP_improve_transition_security = yes
-			STP_improve_transition_mobilization = yes
-		}
-	}
-
-	focus = {
-		id = STP_The_People_Stop_Singing
 		icon = GFX_focus_STP_Nectar_of_the_Gods
-		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_WAR_SUPPORT }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 5
-		y = 6
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		relative_position_id = STP_Turn_The_Young_Officers
+		x = 0
+		y = 1
 		cost = 3
-		prerequisite = { focus = STP_Approve_The_Emergency_Protocol }
-		mutually_exclusive = { focus = STP_Call_For_Shabrat focus = STP_Garrisons_Hesitate }
+		prerequisite = { focus = STP_Turn_The_Young_Officers }
+		available_if_capitulated = yes
 		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_The_People_Stop_Singing }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			check_variable = { var = STP_side_commitment value = 1 compare = equals }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
-				has_country_flag = STP_focus_active_STP_The_People_Stop_Singing
-			}
-		}
-		ai_will_do = { base = 4 modifier = { factor = 3 has_country_flag = STP_ai_course_mass_movement } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_The_People_Stop_Singing
-			set_country_flag = STP_focus_final_street_move_open
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 2 }
-			STP_change_node_street = yes
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = 1 }
-			STP_change_node_market = yes
-			add_stability = 0.03
-			add_war_support = 0.05
-			STP_improve_transition_mobilization = yes
-		}
+		ai_will_do = { base = 1 }
+		completion_reward = { }
 	}
 
 	focus = {
-		id = STP_Seal_The_Western_Wing
-		allow_branch = { is_ai = yes }
+		id = STP_Rumours_In_The_Highlands
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Count_The_Loyalists
+		x = 2
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_Count_The_Loyalists }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_The_Mountain_Printing_House
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Rumours_In_The_Highlands
+		x = 0
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_Rumours_In_The_Highlands }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_The_Silent_Mountain_March
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Mountain_Printing_House
+		x = 0
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_The_Mountain_Printing_House }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_The_Lower_Market
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		relative_position_id = STP_Count_The_Loyalists
+		x = 5
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_Count_The_Loyalists }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_Steal_The_Black_Ledger
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_Lower_Market
+		x = 0
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_The_Lower_Market }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_The_First_Witness
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Steal_The_Black_Ledger
+		x = 0
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_Steal_The_Black_Ledger }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_Kefreite_Security_Offer
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_First_Witness
+		x = -1
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_The_First_Witness }
+		mutually_exclusive = { focus = STP_No_Mercenaries_In_Our_Mountains }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_No_Mercenaries_In_Our_Mountains
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_The_First_Witness
+		x = 1
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_The_First_Witness }
+		mutually_exclusive = { focus = STP_Kefreite_Security_Offer }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_THE_MOUNTAIN_WINDOW
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_Count_The_Loyalists
+		x = 0
+		y = 7
+		cost = 5
+		prerequisite = { focus = STP_Call_For_Shabrat }
+		prerequisite = { focus = STP_Garrisons_Hesitate focus = STP_The_Silent_Mountain_March focus = STP_The_First_Witness }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	#############################################
+	### THE SUCCESSION
+	#############################################
+
+	focus = {
+		id = STP_INCAPACITY_PROTOCOL
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 12
+		y = 21
+		cost = 3
+		prerequisite = { focus = STP_THE_PARTY_CLOSES_RANKS focus = STP_THE_MOUNTAIN_WINDOW }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_INCAPACITY_PROTOCOL
+		x = 0
+		y = 1
+		cost = 3
+		prerequisite = { focus = STP_INCAPACITY_PROTOCOL }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_THE_FATHER_OF_PEACE_IS_GONE
+		icon = GFX_focus_STP_It_Has_Only_Begun
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_EMERGENCY_PRESIDIUM
+		x = 0
+		y = 1
+		cost = 1
+		prerequisite = { focus = STP_EMERGENCY_PRESIDIUM }
+		available = { has_country_flag = STP_ivanov_dead }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_PARTY_INHERITS_THE_STATE
 		icon = GFX_focus_STP_Side_With_The_Party
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 1
-		y = 6
-		cost = 2
-		mutually_exclusive = { focus = STP_Garrisons_Swear_Loyalty focus = STP_Drown_The_Rumours_In_Music }
+		relative_position_id = STP_THE_FATHER_OF_PEACE_IS_GONE
+		x = -5
+		y = 1
+		cost = 1
+		prerequisite = { focus = STP_THE_FATHER_OF_PEACE_IS_GONE }
+		available = { has_country_flag = STP_outcome_party }
+		available_if_capitulated = yes
 		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_Seal_The_Western_Wing }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			check_variable = { var = STP_side_commitment value = 2 compare = equals }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
-				has_country_flag = STP_focus_active_STP_Seal_The_Western_Wing
-			}
-		}
-		ai_will_do = { base = 4 modifier = { factor = 3 has_country_flag = STP_ai_course_controlled_party } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_Seal_The_Western_Wing
-			set_country_flag = STP_focus_final_palace_lock_open
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 }
-			STP_change_node_palace = yes
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 }
-			STP_change_node_market = yes
-			add_stability = 0.05
-			STP_improve_transition_administration = yes
-			STP_improve_transition_security = yes
-		}
+		ai_will_do = { base = 1 }
+		completion_reward = { }
 	}
 
 	focus = {
-		id = STP_Garrisons_Swear_Loyalty
-		allow_branch = { is_ai = yes }
+		id = STP_NO_ONE_CONTROLS_THE_TRANSITION
+		icon = GFX_focus_STP_Prepare_For_The_Upcoming_BOP
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_THE_FATHER_OF_PEACE_IS_GONE
+		x = -2
+		y = 1
+		cost = 1
+		prerequisite = { focus = STP_THE_FATHER_OF_PEACE_IS_GONE }
+		available = { has_country_flag = STP_outcome_civil_war }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_SHABRAT_AT_THE_PALACE
+		icon = GFX_focus_STP_Side_With_Maksim
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_THE_FATHER_OF_PEACE_IS_GONE
+		x = 2
+		y = 1
+		cost = 1
+		prerequisite = { focus = STP_THE_FATHER_OF_PEACE_IS_GONE }
+		available = { has_country_flag = STP_outcome_shabrat }
+		available_if_capitulated = yes
+		cancelable = no
+		ai_will_do = { base = 1 }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = STP_SOTNIKOV_TAKES_COMMAND
 		icon = GFX_focus_STP_It_Has_Only_Begun
-		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 3
-		y = 6
-		cost = 2
-		mutually_exclusive = { focus = STP_Seal_The_Western_Wing focus = STP_Drown_The_Rumours_In_Music }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		relative_position_id = STP_THE_FATHER_OF_PEACE_IS_GONE
+		x = 5
+		y = 1
+		cost = 1
+		prerequisite = { focus = STP_THE_FATHER_OF_PEACE_IS_GONE }
+		available = { has_country_flag = STP_outcome_sotnikov }
+		available_if_capitulated = yes
 		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_Garrisons_Swear_Loyalty }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			check_variable = { var = STP_side_commitment value = 2 compare = equals }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
-				has_country_flag = STP_focus_active_STP_Garrisons_Swear_Loyalty
-			}
-		}
-		ai_will_do = { base = 4 modifier = { factor = 3 has_country_flag = STP_ai_course_purge_party } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_Garrisons_Swear_Loyalty
-			set_country_flag = STP_focus_final_garrison_lock_open
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 }
-			STP_change_node_officers = yes
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 }
-			STP_change_node_mountains = yes
-			army_experience = 20
-			add_command_power = 15
-			STP_improve_transition_security = yes
-			STP_improve_transition_mobilization = yes
-		}
+		ai_will_do = { base = 1 }
+		completion_reward = { }
 	}
 
-	focus = {
-		id = STP_Drown_The_Rumours_In_Music
-		allow_branch = { is_ai = yes }
-		icon = GFX_focus_STP_Nectar_of_the_Gods
-		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_WAR_SUPPORT }
-		relative_position_id = STP_The_Old_Man_On_The_Balcony
-		x = 5
-		y = 6
-		cost = 2
-		mutually_exclusive = { focus = STP_Seal_The_Western_Wing focus = STP_Garrisons_Swear_Loyalty }
-		cancelable = no
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		select_effect = { set_country_flag = STP_focus_active_STP_Drown_The_Rumours_In_Music }
-		available = {
-			NOT = { has_country_flag = STP_ivanov_dead }
-			NOT = { has_country_flag = STP_crisis_late_choice_lock }
-			check_variable = { var = STP_side_commitment value = 2 compare = equals }
-			OR = {
-				check_variable = { var = STP_leader_health_stage value = 4 compare = equals }
-				has_country_flag = STP_focus_active_STP_Drown_The_Rumours_In_Music
-			}
-		}
-		ai_will_do = { base = 4 modifier = { factor = 3 has_country_flag = STP_ai_course_controlled_party } }
-		completion_reward = {
-			clr_country_flag = STP_focus_active_STP_Drown_The_Rumours_In_Music
-			set_country_flag = STP_focus_final_street_lock_open
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -2 }
-			STP_change_node_street = yes
-			set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = -1 }
-			STP_change_node_market = yes
-			add_stability = 0.05
-			add_war_support = 0.03
-			STP_improve_transition_administration = yes
-		}
-	}
 }

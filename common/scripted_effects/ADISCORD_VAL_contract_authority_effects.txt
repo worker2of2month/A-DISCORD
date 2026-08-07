@@ -1,0 +1,210 @@
+# Independent Kefreyt contract-authority runtime. It has no Stelander crisis hooks.
+
+VAL_initialize_contract_authority = {
+	if = { limit = { NOT = { has_variable = VAL_contract_authority } } set_variable = { var = VAL_contract_authority value = 35 } }
+	clamp_variable = { var = VAL_contract_authority min = 0 max = 100 }
+	VAL_refresh_contract_modifier = yes
+}
+
+VAL_change_contract_authority = {
+	VAL_initialize_contract_authority = yes
+	add_to_variable = { var = VAL_contract_authority value = ADISCORD_VAL_effect_value }
+	clamp_variable = { var = VAL_contract_authority min = 0 max = 100 }
+	VAL_refresh_contract_modifier = yes
+}
+
+VAL_refresh_contract_modifier = {
+	if = {
+		limit = { NOT = { has_variable = VAL_contract_band } }
+		set_variable = { var = VAL_contract_band value = -1 }
+	}
+	set_temp_variable = { var = VAL_contract_new_band value = 5 }
+	if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 25 compare = less_than } }
+		set_temp_variable = { var = VAL_contract_new_band value = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 50 compare = less_than } }
+		set_temp_variable = { var = VAL_contract_new_band value = 2 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 75 compare = less_than } }
+		set_temp_variable = { var = VAL_contract_new_band value = 3 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 90 compare = less_than } }
+		set_temp_variable = { var = VAL_contract_new_band value = 4 }
+	}
+
+	# VAL contract band 0-24
+	if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 25 compare = less_than } }
+		set_variable = { var = VAL_contract_attack_factor value = 0.0 }
+		set_variable = { var = VAL_contract_defence_factor value = 0.0 }
+		set_variable = { var = VAL_contract_org_factor value = 0.03 }
+		set_variable = { var = VAL_contract_org_regain value = 0.02 }
+		set_variable = { var = VAL_contract_capture_factor value = 0.0 }
+		set_variable = { var = VAL_contract_supply_factor value = 0.0 }
+		set_variable = { var = VAL_contract_planning_factor value = 0.0 }
+		set_variable = { var = VAL_contract_pp_gain value = -0.1 }
+		set_variable = { var = VAL_contract_stability_factor value = 0.0 }
+		set_variable = { var = VAL_contract_state_overload_factor value = 0.0 }
+		set_variable = { var = VAL_contract_trade_income_factor value = 0.0 }
+		set_variable = { var = VAL_contract_military_income_factor value = 0.0 }
+		set_variable = { var = VAL_contract_army_expense_factor value = 0.0 }
+	}
+	# VAL contract band 25-49
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 50 compare = less_than } }
+		set_variable = { var = VAL_contract_attack_factor value = 0.03 }
+		set_variable = { var = VAL_contract_defence_factor value = 0.03 }
+		set_variable = { var = VAL_contract_org_factor value = 0.05 }
+		set_variable = { var = VAL_contract_org_regain value = 0.03 }
+		set_variable = { var = VAL_contract_capture_factor value = 0.02 }
+		set_variable = { var = VAL_contract_supply_factor value = 0.0 }
+		set_variable = { var = VAL_contract_planning_factor value = -0.05 }
+		set_variable = { var = VAL_contract_pp_gain value = -0.1 }
+		set_variable = { var = VAL_contract_stability_factor value = 0.0 }
+		set_variable = { var = VAL_contract_state_overload_factor value = 0.0 }
+		set_variable = { var = VAL_contract_trade_income_factor value = 0.0 }
+		set_variable = { var = VAL_contract_military_income_factor value = 0.0 }
+		set_variable = { var = VAL_contract_army_expense_factor value = 0.0 }
+	}
+	# VAL contract band 50-74
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 75 compare = less_than } }
+		set_variable = { var = VAL_contract_attack_factor value = 0.06 }
+		set_variable = { var = VAL_contract_defence_factor value = 0.05 }
+		set_variable = { var = VAL_contract_org_factor value = 0.08 }
+		set_variable = { var = VAL_contract_org_regain value = 0.05 }
+		set_variable = { var = VAL_contract_capture_factor value = 0.05 }
+		set_variable = { var = VAL_contract_supply_factor value = -0.03 }
+		set_variable = { var = VAL_contract_planning_factor value = -0.05 }
+		set_variable = { var = VAL_contract_pp_gain value = 0.0 }
+		set_variable = { var = VAL_contract_stability_factor value = 0.0 }
+		set_variable = { var = VAL_contract_state_overload_factor value = 0.03 }
+		set_variable = { var = VAL_contract_trade_income_factor value = 0.03 }
+		set_variable = { var = VAL_contract_military_income_factor value = 0.03 }
+		set_variable = { var = VAL_contract_army_expense_factor value = -0.03 }
+	}
+	# VAL contract band 75-89
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 90 compare = less_than } }
+		set_variable = { var = VAL_contract_attack_factor value = 0.1 }
+		set_variable = { var = VAL_contract_defence_factor value = 0.08 }
+		set_variable = { var = VAL_contract_org_factor value = 0.1 }
+		set_variable = { var = VAL_contract_org_regain value = 0.08 }
+		set_variable = { var = VAL_contract_capture_factor value = 0.08 }
+		set_variable = { var = VAL_contract_supply_factor value = -0.05 }
+		set_variable = { var = VAL_contract_planning_factor value = -0.1 }
+		set_variable = { var = VAL_contract_pp_gain value = -0.2 }
+		set_variable = { var = VAL_contract_stability_factor value = 0.0 }
+		set_variable = { var = VAL_contract_state_overload_factor value = 0.05 }
+		set_variable = { var = VAL_contract_trade_income_factor value = 0.05 }
+		set_variable = { var = VAL_contract_military_income_factor value = 0.05 }
+		set_variable = { var = VAL_contract_army_expense_factor value = -0.05 }
+	}
+	# VAL contract band 90-100
+	else = {
+		set_variable = { var = VAL_contract_attack_factor value = 0.12 }
+		set_variable = { var = VAL_contract_defence_factor value = 0.1 }
+		set_variable = { var = VAL_contract_org_factor value = 0.12 }
+		set_variable = { var = VAL_contract_org_regain value = 0.1 }
+		set_variable = { var = VAL_contract_capture_factor value = 0.1 }
+		set_variable = { var = VAL_contract_supply_factor value = -0.07 }
+		set_variable = { var = VAL_contract_planning_factor value = -0.15 }
+		set_variable = { var = VAL_contract_pp_gain value = -0.25 }
+		set_variable = { var = VAL_contract_stability_factor value = -0.05 }
+		set_variable = { var = VAL_contract_state_overload_factor value = 0.08 }
+		set_variable = { var = VAL_contract_trade_income_factor value = 0.07 }
+		set_variable = { var = VAL_contract_military_income_factor value = 0.07 }
+		set_variable = { var = VAL_contract_army_expense_factor value = -0.07 }
+	}
+
+	# Focus choices are persistent specialisations of the same visible contract
+	# state.  They are recalculated only when a focus or authority mutation calls
+	# this effect; no daily polling is needed.
+	set_variable = { var = VAL_contract_factory_output_factor value = 0.0 }
+	set_variable = { var = VAL_contract_conscription_factor value = 0.0 }
+	set_variable = { var = VAL_contract_command_power_factor value = 0.0 }
+	set_variable = { var = VAL_contract_consumer_goods_factor value = 0.0 }
+
+	if = {
+		limit = { has_country_flag = VAL_captain_retainers_unlocked }
+		add_to_variable = { var = VAL_contract_command_power_factor value = 0.1 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_negotiation_posture_visible }
+		add_to_variable = { var = VAL_contract_pp_gain value = 0.1 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_quality_arsenal }
+		add_to_variable = { var = VAL_contract_factory_output_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_capture_factor value = 0.02 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_broad_resource_network }
+		add_to_variable = { var = VAL_contract_supply_factor value = -0.03 }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_supply_contracts }
+		add_to_variable = { var = VAL_contract_military_income_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_army_expense_factor value = -0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_doctrine_covert_intervention }
+		add_to_variable = { var = VAL_contract_planning_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_capture_factor value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_doctrine_sustained_supply }
+		add_to_variable = { var = VAL_contract_org_regain value = 0.03 }
+		add_to_variable = { var = VAL_contract_supply_factor value = -0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_doctrine_resource_raider }
+		add_to_variable = { var = VAL_contract_attack_factor value = 0.04 }
+		add_to_variable = { var = VAL_contract_capture_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_defence_factor value = -0.02 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_ash_manpower_preservation }
+		add_to_variable = { var = VAL_contract_conscription_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_org_regain value = 0.02 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_ash_rear_mobilization }
+		add_to_variable = { var = VAL_contract_factory_output_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_consumer_goods_factor value = -0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_north_open_market }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.07 }
+		add_to_variable = { var = VAL_contract_pp_gain value = 0.1 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_north_coercive }
+		add_to_variable = { var = VAL_contract_military_income_factor value = 0.07 }
+		add_to_variable = { var = VAL_contract_attack_factor value = 0.02 }
+		add_to_variable = { var = VAL_contract_stability_factor value = -0.02 }
+	}
+
+	if = {
+		limit = {
+			NOT = {
+				check_variable = {
+					var = VAL_contract_band
+					value = VAL_contract_new_band
+					compare = equals
+				}
+			}
+		}
+		set_variable = { var = VAL_contract_band value = VAL_contract_new_band }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = VAL_contract_state } }
+		force_update_dynamic_modifier = yes
+	}
+	else = { add_dynamic_modifier = { modifier = VAL_contract_state } }
+}

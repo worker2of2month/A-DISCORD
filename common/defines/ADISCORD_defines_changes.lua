@@ -543,9 +543,11 @@ NDefines.NGame.START_DATE = "2160.1.1.1";
 	NDefines.NAI.NUM_FACTORIES_IN_STATE_TO_WANT_ENERGY_REDUCTION = 6
 	NDefines.NAI.TOTAL_STATE_EXTRACTED_RESOURCES_FOR_BUILDING_RESOURCE_CAP_BUILDING = 30.0
 
-	-- Keep deployable Army HQs disabled for AI unless the mod deliberately integrates HQ/comms gameplay.
-	NDefines.NAI.MAX_DEPLOYED_ARMY_HQS = 0
-	NDefines.NAI.MAX_CAPTURED_GENERALS_TO_STOP_HQ_DEPLOY = 1
+	-- Army HQs are part of the TAOG command layer.  A-Discord supplies its own
+	-- HQ battalions, templates, AI role, and technology unlocks, so retain the
+	-- vanilla deployment limits instead of silently disabling the feature.
+	NDefines.NAI.MAX_DEPLOYED_ARMY_HQS = 5
+	NDefines.NAI.MAX_CAPTURED_GENERALS_TO_STOP_HQ_DEPLOY = 3
 
 	NDefines.NGraphics.COUNTRY_FLAG_TEX_MAX_SIZE = 2048
 	NDefines.NGraphics.COUNTRY_FLAG_SMALL_TEX_MAX_SIZE = 512

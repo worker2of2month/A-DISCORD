@@ -337,18 +337,6 @@ VAL_handle_westerholm_loss = {
 	}
 }
 
-VAL_secure_stelander_interim_supply = {
-	if = {
-		limit = { 45 = { controller = { exists = yes } } }
-		45 = { controller = { give_resource_rights = { receiver = VAL state = 45 } } }
-		set_country_flag = VAL_local_resource_rights_45
-		set_country_flag = VAL_STP_resource_rights_active
-		set_country_flag = VAL_STP_resource_rights_45_active
-		remove_ideas = VAL_vorkerland_metal_shortage
-		add_ideas = VAL_stelander_interim_supply
-		clr_country_flag = VAL_westerholm_metal_lost
-	}
-}
 
 VAL_migrate_contract_tier_levels = {
 	if = {
@@ -449,6 +437,7 @@ VAL_migrate_contract_tier_levels = {
 
 VAL_initialize_rework = {
 	VAL_migrate_contract_tier_levels = yes
+	VAL_initialize_contract_authority = yes
 	ADISCORD_economy_initialize_country = yes
 	if = {
 		limit = {

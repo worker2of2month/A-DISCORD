@@ -1,0 +1,92 @@
+ideas = {
+	country = {
+		BOR_itoran_relief_charter = {
+			picture = AFG_helmand_adopted_treaty
+			allowed = { original_tag = BOR }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.06
+				production_speed_infrastructure_factor = 0.08
+				consumer_goods_factor = 0.01
+			}
+		}
+		RIN_two_oaths = {
+			picture = AFG_helmand_adopted_treaty
+			allowed = { original_tag = RIN }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.05
+				war_support_factor = 0.05
+				stability_factor = -0.06
+				political_power_gain = -0.05
+			}
+		}
+		RIN_palace_guard = {
+			picture = generic_fortify_the_borders
+			allowed = { original_tag = RIN }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = 0.05
+				training_time_army_factor = -0.05
+				consumer_goods_factor = 0.02
+			}
+		}
+		KRM_slag_road_compact = {
+			picture = generic_production_bonus
+			allowed = { original_tag = KRM }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				local_resources_factor = 0.12
+				industrial_capacity_factory = 0.06
+				attrition = -0.03
+			}
+		}
+		LMN_permanent_quarantine = {
+			picture = generic_fortify_the_borders
+			allowed = { original_tag = LMN }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.08
+				max_dig_in = 1
+				recruitable_population_factor = -0.06
+				consumer_goods_factor = 0.03
+			}
+		}
+		RLY_closed_circuit = {
+			picture = PER_feat_of_engineering_idea
+			allowed = { original_tag = RLY }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				supply_consumption_factor = -0.15
+				research_speed_factor = 0.03
+				local_resources_factor = 0.10
+				consumer_goods_factor = 0.05
+			}
+		}
+		WCG_living_filter = {
+			picture = generic_fortify_the_borders
+			allowed = { original_tag = WCG }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = -0.25
+				political_power_gain = -0.25
+				consumer_goods_factor = 0.25
+				industrial_capacity_factory = -0.20
+				production_factory_efficiency_gain_factor = -0.20
+				research_speed_factor = -0.15
+				recruitable_population_factor = -0.35
+				supply_consumption_factor = 0.20
+				army_org_factor = -0.10
+				army_defence_factor = 0.10
+				max_dig_in = 2
+			}
+		}
+	}
+}

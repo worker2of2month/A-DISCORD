@@ -58,7 +58,7 @@ technologies = {
 		encryption_factor = 0.04
 		land_reinforce_rate = 0.01
 		path = { leads_to_tech = ADISCORD_tech_signal_intercept_arrays research_cost_coeff = 1 }
-		enable_subunits = { signal_company }
+		enable_subunits = { signal_company hq_signal }
 		research_cost = 2.05
 		start_year = 2160
 		folder = {

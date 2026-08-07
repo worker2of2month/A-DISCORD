@@ -1,17 +1,24 @@
-state={
-	id=120
-	name="STATE_120"
-	provinces={
-		99 109 112 123 126 142 146 151 152 16314
-	}
-	manpower = 90000
-	buildings_max_level_factor = 1.000
-	local_supplies = 1.5
+state = {
+	id = 120
+	name = "STATE_120"
+	manpower = 260000
 	state_category = rural
 	history = {
+		owner = ORV
+		add_core_of = ORV
+		victory_points = { 16314 2 }
 		buildings = {
-			industrial_complex = 1
 			infrastructure = 2
+			industrial_complex = 1
 		}
 	}
+	provinces = {
+		99 109 112 123 126 142 146 151 152 16314
+	}
+	resources = {
+		chromium = 2
+		steel = 5
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 2.0
 }

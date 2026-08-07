@@ -10,6 +10,10 @@ ADISCORD_economy_has_idea_low_economic_mobilisation = { has_idea = low_economic_
 ADISCORD_economy_has_idea_partial_economic_mobilisation = { has_idea = partial_economic_mobilisation }
 ADISCORD_economy_has_idea_war_economy = { has_idea = war_economy }
 ADISCORD_economy_has_idea_total_economic_mobilisation = { has_idea = tot_economic_mobilisation }
+ADISCORD_economy_has_idea_extensive_conscription = { has_idea = extensive_conscription }
+ADISCORD_economy_has_idea_service_by_requirement = { has_idea = service_by_requirement }
+ADISCORD_economy_has_idea_all_adults_serve = { has_idea = all_adults_serve }
+ADISCORD_economy_has_idea_scraping_the_barrel = { has_idea = scraping_the_barrel }
 
 ADISCORD_economy_has_idea_free_trade = { has_idea = free_trade }
 ADISCORD_economy_has_idea_export_focus = { has_idea = export_focus }
@@ -434,12 +438,10 @@ ADISCORD_economy_can_take_debt = {
 }
 
 ADISCORD_economy_can_issue_internal_bonds = {
-	has_tech = ADISCORD_tech_recovered_semiconductors
 	ADISCORD_economy_can_take_debt = yes
 }
 
 ADISCORD_economy_can_take_external_loan = {
-	has_tech = ADISCORD_tech_recovered_semiconductors
 	ADISCORD_economy_can_take_debt = yes
 	check_variable = { var = ADISCORD_economy_creditworthiness value = 35 compare = greater_than_or_equals }
 	check_variable = { var = ADISCORD_economy_debt_crisis_level value = 4 compare = less_than }

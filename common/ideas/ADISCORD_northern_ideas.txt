@@ -1,0 +1,127 @@
+ideas = {
+	country = {
+		BRN_polar_signal_line = {
+			picture = generic_fortify_the_borders
+			allowed = { original_tag = BRN }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				supply_consumption_factor = -0.05
+				attrition = -0.05
+				production_speed_infrastructure_factor = 0.08
+			}
+		}
+		KHV_geothermal_colleges = {
+			picture = PER_feat_of_engineering_idea
+			allowed = { original_tag = KHV }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				research_speed_factor = 0.03
+				local_resources_factor = 0.08
+				consumer_goods_factor = 0.01
+			}
+		}
+		ELN_census_engines = {
+			picture = generic_research_bonus
+			allowed = { original_tag = ELN }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				research_speed_factor = 0.04
+				production_factory_efficiency_gain_factor = 0.05
+				stability_factor = -0.02
+			}
+		}
+		HON_civic_compact = {
+			picture = AFG_helmand_adopted_treaty
+			allowed = { original_tag = HON }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.08
+				political_power_gain = 0.05
+				consumer_goods_factor = -0.02
+			}
+		}
+		SKN_reserve_districts = {
+			picture = generic_central_management
+			allowed = { original_tag = SKN }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				mobilization_speed = 0.10
+				army_org_regain = 0.05
+				consumer_goods_factor = 0.02
+			}
+		}
+		LYS_bonded_warehouses = {
+			picture = CHI_china_merchant_group
+			allowed = { original_tag = LYS }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				trade_opinion_factor = 0.15
+				production_factory_efficiency_gain_factor = 0.06
+				consumer_goods_factor = -0.02
+			}
+		}
+		VES_border_charters = {
+			picture = ger_rebuild_the_nation
+			allowed = { original_tag = VES }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.05
+				max_dig_in = 1
+				production_speed_infrastructure_factor = 0.08
+			}
+		}
+		MON_throne_of_fifteen_crowns = {
+			picture = generic_central_management
+			allowed = { original_tag = MON }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.12
+				war_support_factor = 0.12
+				political_power_gain = 0.10
+				consumer_goods_factor = 0.03
+			}
+		}
+		MON_imperial_general_staff = {
+			picture = generic_fortify_the_borders
+			allowed = { original_tag = MON }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = 0.08
+				planning_speed = 0.12
+				training_time_army_factor = -0.08
+			}
+		}
+		MON_arsenal_belt = {
+			picture = generic_production_bonus
+			allowed = { original_tag = MON }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				industrial_capacity_factory = 0.10
+				production_factory_efficiency_gain_factor = 0.08
+				production_speed_arms_factory_factor = 0.12
+				consumer_goods_factor = 0.02
+			}
+		}
+		MON_hierarchy_of_peoples = {
+			picture = AFG_helmand_adopted_treaty
+			allowed = { original_tag = MON }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				recruitable_population_factor = 0.08
+				consumer_goods_factor = -0.02
+				stability_factor = -0.03
+			}
+		}
+	}
+}

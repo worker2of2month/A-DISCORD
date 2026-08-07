@@ -5,8 +5,10 @@ state={
 	history = {
 		owner = WRK
 		add_core_of = WRK
+		victory_points = { 8059 3 }
 		buildings = {
 			industrial_complex = 1
+			arms_factory = 1
 			infrastructure = 2
 		}
 	}
@@ -16,5 +18,5 @@ state={
 	manpower = 420000
 	buildings_max_level_factor = 1.000
 	state_category = rural
-	local_supplies = 2.5
+	local_supplies = 4.0
 }

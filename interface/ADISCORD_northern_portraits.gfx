@@ -1,0 +1,10 @@
+spriteTypes = {
+	spriteType = {
+		name = "GFX_portrait_MON_Marius_II_Arken"
+		texturefile = "gfx/leaders/MON/portrait_MON_mongol_monarchy.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_HON_Honter_Woke"
+		texturefile = "gfx/leaders/HON/portrait_HON_honter_woke.png"
+	}
+}

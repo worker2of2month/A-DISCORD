@@ -1,0 +1,4 @@
+set_politics = { ruling_party = pragmatism elections_allowed = yes }
+set_popularities = { etatism = 15 chauvinism = 0 humanism = 20 pragmatism = 60 technocracy = 5 }
+recruit_character = VHV_Sergey_Melnik
+set_research_slots = 2

@@ -1,0 +1,6 @@
+air_wings = {
+	75 = {
+		ADISCORD_fighter_airframe_2163 = { owner = "VAD" amount = 100 }
+		ADISCORD_cas_airframe_2170 = { owner = "VAD" amount = 50 }
+	}
+}

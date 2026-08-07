@@ -6,6 +6,37 @@ division_template = {
 		ADISCORD_militia = { x = 0 y = 2 }
 	}
 }
+
+division_template = {
+	name = "TVA Infiltration Cell"
+	regiments = {
+		ADISCORD_militia = { x = 0 y = 0 }
+		ADISCORD_militia = { x = 0 y = 1 }
+	}
+}
+
+division_template = {
+	name = "TVA Mobile Test Group"
+	regiments = {
+		ADISCORD_combat_platform = { x = 0 y = 0 }
+		ADISCORD_combat_platform = { x = 0 y = 1 }
+		ADISCORD_combat_platform = { x = 0 y = 2 }
+		ADISCORD_combat_platform = { x = 0 y = 3 }
+		infantry = { x = 1 y = 0 }
+		infantry = { x = 1 y = 1 }
+		infantry = { x = 1 y = 2 }
+		infantry = { x = 2 y = 0 }
+		infantry = { x = 2 y = 1 }
+		infantry = { x = 2 y = 2 }
+	}
+	support = {
+		engineer = { x = 0 y = 0 }
+		artillery = { x = 0 y = 1 }
+		maintenance_company = { x = 0 y = 2 }
+		signal_company = { x = 0 y = 3 }
+	}
+}
+
 units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 1 }
@@ -37,9 +68,19 @@ units = {
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 5 }
-		location = 12227
+		location = 16400
 		division_template = "TVA Collapse Militia"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.70
 	}
+	division = { division_name = { is_name_ordered = yes name_order = 6 } location = 16400 division_template = "TVA Collapse Militia" start_experience_factor = 0.15 start_equipment_factor = 0.80 }
+	division = { division_name = { is_name_ordered = yes name_order = 7 } location = 16397 division_template = "TVA Collapse Militia" start_experience_factor = 0.15 start_equipment_factor = 0.80 }
+	division = { division_name = { is_name_ordered = yes name_order = 8 } location = 16397 division_template = "TVA Collapse Militia" start_experience_factor = 0.15 start_equipment_factor = 0.80 }
+	division = { division_name = { is_name_ordered = yes name_order = 9 } location = 12227 division_template = "TVA Mobile Test Group" start_experience_factor = 0.40 start_equipment_factor = 0.95 }
+	division = { division_name = { is_name_ordered = yes name_order = 10 } location = 12227 division_template = "TVA Collapse Militia" start_experience_factor = 0.10 start_equipment_factor = 0.75 }
+	division = { division_name = { is_name_ordered = yes name_order = 11 } location = 12227 division_template = "TVA Collapse Militia" start_experience_factor = 0.10 start_equipment_factor = 0.75 }
+	division = { division_name = { is_name_ordered = yes name_order = 12 } location = 16400 division_template = "TVA Collapse Militia" start_experience_factor = 0.10 start_equipment_factor = 0.75 }
+	division = { division_name = { is_name_ordered = yes name_order = 13 } location = 16400 division_template = "TVA Collapse Militia" start_experience_factor = 0.10 start_equipment_factor = 0.75 }
+	division = { division_name = { is_name_ordered = yes name_order = 14 } location = 16397 division_template = "TVA Collapse Militia" start_experience_factor = 0.10 start_equipment_factor = 0.75 }
+	division = { division_name = { is_name_ordered = yes name_order = 15 } location = 16397 division_template = "TVA Collapse Militia" start_experience_factor = 0.10 start_equipment_factor = 0.75 }
 }

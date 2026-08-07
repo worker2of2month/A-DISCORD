@@ -3,7 +3,7 @@ capital = 71
 oob = "PWR"
 ####### Characters
 
-recruit_character = WRK_Zack_Wither
+recruit_character = PWR_Alexey_Lange
 
 ####### Basic shit
 
@@ -25,11 +25,11 @@ set_politics = {
 	elections_allowed = no
 }
 set_popularities = {
-	pragmatism = 42
+	pragmatism = 55
 	anarchism = 4
-	technocracy = 10
-	hedonism = 36
-	humanism = 8
+	technocracy = 20
+	hedonism = 10
+	humanism = 11
 }
 
 set_stability = -0.89

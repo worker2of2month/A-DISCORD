@@ -236,12 +236,22 @@ ADISCORD_grant_2150_technology_baseline = {
 ADISCORD_grant_starting_technology_profile = {
 	ADISCORD_grant_2150_technology_baseline = yes
 	if = {
+		limit = { tag = AIN }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_institutional = yes
+	}
+	if = {
 		limit = { tag = APH }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+	}
+	if = {
+		limit = { tag = AUR }
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 	}
 	if = {
 		limit = { tag = AZH }
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_naval = yes
 	}
 	if = {
 		limit = { tag = BBV }
@@ -268,6 +278,15 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 	}
 	if = {
+		limit = { tag = BOR }
+		ADISCORD_grant_technology_profile_institutional = yes
+		ADISCORD_grant_technology_profile_land = yes
+	}
+	if = {
+		limit = { tag = BRN }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+	}
+	if = {
 		limit = { tag = BTL }
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_grant_technology_profile_land = yes
@@ -287,9 +306,22 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_land = yes
 	}
 	if = {
+		limit = { tag = DOL }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+	}
+	if = {
+		limit = { tag = DRV }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+	}
+	if = {
 		limit = { tag = EFL }
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_grant_technology_profile_land = yes
+		ADISCORD_grant_technology_profile_naval = yes
+	}
+	if = {
+		limit = { tag = ELN }
+		ADISCORD_grant_technology_profile_institutional = yes
 	}
 	if = {
 		limit = { tag = EXZ }
@@ -297,9 +329,18 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_common = yes
 	}
 	if = {
+		limit = { tag = FRS }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+	}
+	if = {
 		limit = { tag = GLP }
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_grant_technology_profile_naval = yes
+	}
+	if = {
+		limit = { tag = HON }
+		ADISCORD_grant_technology_profile_institutional = yes
+		ADISCORD_grant_technology_profile_land = yes
 	}
 	if = {
 		limit = { tag = IVN }
@@ -312,9 +353,30 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 	}
 	if = {
+		limit = { tag = KHV }
+		ADISCORD_grant_technology_profile_industrial = yes
+	}
+	if = {
+		limit = { tag = KRL }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_land = yes
+	}
+	if = {
 		limit = { tag = KYZ }
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_grant_technology_profile_energy = yes
+	}
+	if = {
+		limit = { tag = LYS }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_institutional = yes
+	}
+	if = {
+		limit = { tag = MON }
+		ADISCORD_grant_technology_profile_industrial = yes
+		ADISCORD_grant_technology_profile_institutional = yes
+		ADISCORD_grant_technology_profile_land = yes
+		ADISCORD_grant_technology_profile_air = yes
 	}
 	if = {
 		limit = { tag = MZR }
@@ -324,6 +386,7 @@ ADISCORD_grant_starting_technology_profile = {
 	if = {
 		limit = { tag = NAM }
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_naval = yes
 	}
 	if = {
 		limit = { tag = NOD }
@@ -333,6 +396,16 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_land = yes
 		ADISCORD_grant_technology_profile_air = yes
 		ADISCORD_grant_technology_profile_naval = yes
+	}
+	if = {
+		limit = { tag = NVR }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_land = yes
+	}
+	if = {
+		limit = { tag = ORV }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_land = yes
 	}
 	if = {
 		limit = { tag = OSF }
@@ -354,6 +427,15 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_energy = yes
 	}
 	if = {
+		limit = { tag = RIN }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_land = yes
+	}
+	if = {
+		limit = { tag = RLY }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+	}
+	if = {
 		limit = { tag = ROM }
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 	}
@@ -371,6 +453,11 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_industrial = yes
 	}
 	if = {
+		limit = { tag = SKN }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_land = yes
+	}
+	if = {
 		limit = { tag = SOL }
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 	}
@@ -386,6 +473,10 @@ ADISCORD_grant_starting_technology_profile = {
 	if = {
 		limit = { tag = TFF }
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+	}
+	if = {
+		limit = { tag = TMR }
+		ADISCORD_grant_technology_profile_industrial = yes
 	}
 	if = {
 		limit = { tag = TRU }
@@ -412,10 +503,20 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_naval = yes
 	}
 	if = {
+		limit = { tag = VES }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_land = yes
+	}
+	if = {
 		limit = { tag = VLA }
 		ADISCORD_grant_technology_profile_institutional = yes
 		ADISCORD_grant_technology_profile_land = yes
 		ADISCORD_grant_technology_profile_air = yes
+	}
+	if = {
+		limit = { tag = WCG }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_land = yes
 	}
 	if = {
 		limit = { tag = WEF }

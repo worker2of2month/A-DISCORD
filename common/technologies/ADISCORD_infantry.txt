@@ -657,6 +657,7 @@ technologies = {
 	ADISCORD_tech_fieldcraft_manuals = {
 		category_special_forces = { breakthrough = 0.02 maximum_speed = 0.006 }
 		path = { leads_to_tech = ADISCORD_tech_urban_breaching research_cost_coeff = 1 }
+		enable_subunits = { hq_recon }
 		research_cost = 0.55
 		start_year = 2150
 		folder = {
@@ -664,7 +665,7 @@ technologies = {
 			position = { x = 3 y = 0 }
 		}
 		ai_will_do = {
-			factor = 17.5
+			factor = 23.625
 		}
 		categories = { infantry_weapons support_tech }
 	}
@@ -766,14 +767,15 @@ technologies = {
 		category_recon = { recon = 0.47 }
 		category_special_forces = { maximum_speed = 0.008 }
 		path = { leads_to_tech = ADISCORD_tech_high_altitude_insertion_capsules research_cost_coeff = 1 }
-		research_cost = 1.442
+		enable_subunits = { hq_paratrooper }
+		research_cost = 2.05
 		start_year = 2167
 		folder = {
 			name = infantry_folder
 			position = { x = 3 y = 10 }
 		}
 		ai_will_do = {
-			factor = 14
+			factor = 18.9
 		}
 		categories = { infantry_weapons support_tech }
 	}

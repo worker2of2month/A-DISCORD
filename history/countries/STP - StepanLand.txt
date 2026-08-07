@@ -1,7 +1,7 @@
 capital = 28 
 
+# Retained only as the visibility contract for the STP State Face UI.
 set_country_flag = STP_main_campaign_side
-set_country_flag = STP_shabrat_available
 
 ####### Characters
 
@@ -41,11 +41,6 @@ set_war_support = 0.15
 set_research_slots = 1
 
 ####### Ideas
-
-country_lock_all_division_template = {
-	is_locked = yes
-	desc = STP_hedonism_army_restriction_reason
-}
 
 add_ideas = {
 	STP_hedonism_with_no_bondaries

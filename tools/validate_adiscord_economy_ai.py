@@ -75,6 +75,12 @@ def validate() -> list[str]:
     require("[GetADISCORDInternalBondsAvailabilityLoc]" in localisation
             and "[GetADISCORDExternalLoanAvailabilityLoc]" in localisation,
             "loan tooltips do not expose the current failed requirement")
+    for trigger_name in ("ADISCORD_economy_can_issue_internal_bonds", "ADISCORD_economy_can_take_external_loan"):
+        require("has_tech =" not in block(triggers, trigger_name),
+                f"ordinary debt action still has an unrelated technology gate: {trigger_name}")
+    require("ADISCORD_economy_loan_blocked_technology" not in scripted_loc
+            and "ADISCORD_economy_loan_blocked_technology" not in localisation,
+            "loan UI still documents the removed technology gate")
 
     base_gains = numeric_assignments(effects, "ADISCORD_economy_base_monthly_development_gain")
     require(any(value > 0 for value in base_gains), "base monthly economic-development gain is never positive")
@@ -392,10 +398,37 @@ def validate() -> list[str]:
             "social budget changes do not invalidate the optimized idea signature")
 
     migration = block(effects, "ADISCORD_economy_migrate_schema")
-    require("value = 9 compare = less_than" in migration,
-            "economy save migration was not advanced to schema 9")
+    require("value = 11 compare = less_than" in migration,
+            "economy save migration was not advanced to schema 11")
     require("ADISCORD_economy_recalculate_policy_modifiers = yes" in migration,
-            "schema 9 does not initialize weekly policy caches for existing saves")
+            "schema 11 does not initialize weekly policy caches for existing saves")
+    require("ADISCORD_economy_was_at_war" in migration
+            and "ADISCORD_economy_postwar_demobilization_months" in migration,
+            "schema 11 does not initialize postwar demobilization state")
+    weekly_budget = block(effects, "ADISCORD_economy_calculate_weekly_budget")
+    require("ADISCORD_economy_safe_reserve value = ADISCORD_economy_weekly_expenses" in weekly_budget
+            and "ADISCORD_economy_safe_reserve min = 50 max = 250" in weekly_budget,
+            "schema 11 reserve target does not reuse the O(1) weekly forecast")
+    for settlement_name in ("ADISCORD_economy_apply_weekly_balance", "ADISCORD_economy_apply_monthly_balance"):
+        settlement = block(effects, settlement_name)
+        require("ADISCORD_economy_auto_borrow_temp" in settlement
+                and "ADISCORD_economy_auto_loan_enabled" not in settlement,
+                f"{settlement_name} still allows hidden save state to disable deficit borrowing")
+    for retired_name in (
+        "ADISCORD_economy_auto_loan_enabled",
+        "ADISCORD_economy_toggle_auto_loan",
+        "ADISCORD_economy_gui_page",
+        "ADISCORD_economy_research_spending_mode",
+        "ADISCORD_economy_admin_spending_mode",
+        "ADISCORD_economy_weekly_player_refresh",
+        "ADISCORD_economy_gui_try_early_repay_debt",
+        "ADISCORD_economy_gui_try_expand_emission",
+        "ADISCORD_economy_gui_try_reduce_emission",
+        "ADISCORD_economy_gui_try_invest_reserves",
+        "ADISCORD_economy_gui_try_civilian_investment",
+        "ADISCORD_economy_gui_try_military_investment",
+    ):
+        require(retired_name not in effects, f"retired economy state is still live: {retired_name}")
     cycle = block(effects, "ADISCORD_economy_update_model_and_cycle")
     require("ADISCORD_economy_cycle_phase value = 4" not in cycle
             and "ADISCORD_economy_cycle_phase value = 5" not in cycle
@@ -501,7 +534,7 @@ def validate() -> list[str]:
     for button_name in sorted(gui_buttons):
         require(f"{button_name}_click" in scripted_gui, f"GUI button {button_name} has no scripted click effect")
         guarded = button_name in expected_regulators or "_action_" in button_name
-        if guarded and button_name != "ADISCORD_economy_action_toggle_auto_loan":
+        if guarded:
             require(f"{button_name}_click_enabled" in scripted_gui,
                     f"GUI button {button_name} gives no disabled-state feedback")
 

@@ -34,12 +34,9 @@ continent = {
 	name = europe #forul continent (right one)
 	army = {
 		male = {
-			"GFX_Portrait_Europe_Generic_land_1"
-			"GFX_Portrait_Europe_Generic_land_2"
-			"GFX_Portrait_Europe_Generic_land_3"
-			"GFX_Portrait_Europe_Generic_land_4"
-			"GFX_Portrait_Europe_Generic_land_5"
-			"GFX_portrait_europe_generic_land_13"
+			"GFX_Portrait_Forul_Generic_2"
+			"GFX_Portrait_Forul_Generic_3"
+			"GFX_Portrait_Forul_Generic_9"
 		}
 	}
 	
@@ -54,42 +51,42 @@ continent = {
 	political = {
 		humanism = {
 			male = { 
-				"GFX_Portrait_Forul_Generic_Humanism"
+				"GFX_Portrait_Forul_Generic_6"
 			}
 		}
 		utilitarism = {
 			male = { 
-				"GFX_Portrait_Forul_Generic_Utilitarism"
+				"GFX_Portrait_Forul_Generic_7"
 			}
 		}
 		chauvinism = {
 			male = { 
-				"GFX_Portrait_Forul_Generic_chauvinism"
+				"GFX_Portrait_Forul_Generic_2"
 			}
 		}
 		pragmatism = {
 			male = { 
-				"GFX_Portrait_Forul_Generic_Pragmatism"
+				"GFX_Portrait_Forul_Generic_5"
 			}
 		}
 		anarchism = {
 			male = { 
-				"GFX_Portrait_Forul_Generic_Anarhism"
+				"GFX_Portrait_Forul_Generic_3"
 			}
 		}
 		technocracy = {
 			male = { 
-				"GFX_Portrait_Forul_Generic_Technocratic"
+				"GFX_Portrait_Forul_Generic_4"
 			}
 		}
 		etatism = {
 			male = { 
-				"GFX_Portrait_Forul_Generic_Etatism"
+				"GFX_Portrait_Forul_Generic_1"
 			}
 		}
 		hedonism = {
 			male = { 
-				"GFX_Portrait_Forul_Generic_Hedonism"
+				"GFX_Portrait_Forul_Generic_8"
 			}
 		}
 	}

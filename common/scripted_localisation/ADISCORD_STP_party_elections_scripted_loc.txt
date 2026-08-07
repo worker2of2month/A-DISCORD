@@ -1,18 +1,26 @@
-## Party elections / support side
+defined_text = {
+	name = STPGetSuspicionValue
+	text = { trigger = { check_variable = { var = STP_party_suspicion value = 70 compare = greater_than_or_equals } } localization_key = STP_SUSPICION_VALUE_HIGH }
+	text = { trigger = { check_variable = { var = STP_party_suspicion value = 35 compare = greater_than_or_equals } } localization_key = STP_SUSPICION_VALUE_MEDIUM }
+	text = { localization_key = STP_SUSPICION_VALUE_LOW }
+}
 
 defined_text = {
-	name = WhoTFDoWeSupportText
-	text = {
-		trigger = {
-			tag = STP
-			has_country_flag = STP_main_campaign_side
-			OR = {
-				has_country_flag = STP_sided_with_the_party_flag
-				has_country_flag = STP_sided_with_Maksim_flag
-			}
-		}
-		localization_key = STP_WhoTFDoWeSupportText_loc
-	}
+	name = STPGetSuspicionBand
+	text = { trigger = { check_variable = { var = STP_party_suspicion value = 90 compare = greater_than_or_equals } } localization_key = STP_SUSPICION_BAND_MANHUNT }
+	text = { trigger = { check_variable = { var = STP_party_suspicion value = 70 compare = greater_than_or_equals } } localization_key = STP_SUSPICION_BAND_COMPROMISED }
+	text = { trigger = { check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } } localization_key = STP_SUSPICION_BAND_WATCHED }
+	text = { trigger = { check_variable = { var = STP_party_suspicion value = 25 compare = greater_than_or_equals } } localization_key = STP_SUSPICION_BAND_NOTICED }
+	text = { localization_key = STP_SUSPICION_BAND_HIDDEN }
+}
+
+defined_text = {
+	name = STPGetSuspicionExplanation
+	text = { trigger = { check_variable = { var = STP_party_suspicion value = 90 compare = greater_than_or_equals } } localization_key = STP_SUSPICION_EXPLANATION_MANHUNT }
+	text = { trigger = { check_variable = { var = STP_party_suspicion value = 70 compare = greater_than_or_equals } } localization_key = STP_SUSPICION_EXPLANATION_COMPROMISED }
+	text = { trigger = { check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } } localization_key = STP_SUSPICION_EXPLANATION_WATCHED }
+	text = { trigger = { check_variable = { var = STP_party_suspicion value = 25 compare = greater_than_or_equals } } localization_key = STP_SUSPICION_EXPLANATION_NOTICED }
+	text = { localization_key = STP_SUSPICION_EXPLANATION_HIDDEN }
 }
 
 defined_text = {
@@ -21,10 +29,6 @@ defined_text = {
 		trigger = {
 			tag = STP
 			has_country_flag = STP_main_campaign_side
-			OR = {
-				has_country_flag = STP_sided_with_the_party_flag
-				has_country_flag = STP_sided_with_Maksim_flag
-			}
 		}
 		localization_key = STP_display_party_suspicion_loc
 	}
@@ -32,28 +36,6 @@ defined_text = {
 
 defined_text = {
 	name = stp_party_suspicion_loc
-	text = {
-		trigger = {
-			tag = STP
-			has_country_flag = STP_main_campaign_side
-			check_variable = {
-				var = STP_party_suspicion
-				value = 50
-				compare = greater_than_or_equals
-			}
-		}
-		localization_key = stp_party_suspicion_loc_bad
-	}
-	text = {
-		trigger = {
-			tag = STP
-			has_country_flag = STP_main_campaign_side
-			check_variable = {
-				var = STP_party_suspicion
-				value = 50
-				compare = less_than
-			}
-		}
-		localization_key = stp_party_suspicion_loc_good
-	}
+	text = { trigger = { check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } } localization_key = stp_party_suspicion_loc_bad }
+	text = { localization_key = stp_party_suspicion_loc_good }
 }

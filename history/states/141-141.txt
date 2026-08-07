@@ -1,11 +1,24 @@
-state={
-	id=141
-	name="STATE_141"
-	provinces={
-		389 2188 2503 4177 4279 4466 6432 9221 9461 9518 10334 11383 12472 
-	}
-	manpower=65000
+# Populated by tools/build_adiscord_inner_frontier_countries.py
+state = {
+	id = 141
+	name = "STATE_141"
+	manpower = 416647
 	state_category = rural
-	buildings_max_level_factor=1
-	local_supplies=0
+	history = {
+		owner = DOL
+		add_core_of = DOL
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+			arms_factory = 1
+		}
+	}
+	provinces = {
+		389 2188 2503 4177 4279 4466 6432 9221 9461 9518 10334 11383 12472
+	}
+	resources = {
+		aluminium = 4
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 2.3
 }

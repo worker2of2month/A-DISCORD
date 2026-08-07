@@ -2,8 +2,8 @@ characters = {
 	SLF_Yaroslav_Veter = {
 		name = SLF_Yaroslav_Veter
 		portraits = {
-			civilian = { large = GFX_portrait_PLACEHOLDER }
-			army = { large = GFX_portrait_PLACEHOLDER }
+			civilian = { large = GFX_Portrait_Forul_Generic_9 }
+			army = { large = GFX_Portrait_Forul_Generic_9 }
 		}
 		country_leader = {
 			ideology = humanism_ideology

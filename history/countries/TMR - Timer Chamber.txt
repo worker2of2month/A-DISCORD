@@ -1,0 +1,18 @@
+capital = 423
+oob = "TMR"
+
+recruit_character = TMR_Mira_Timer
+
+set_politics = {
+	ruling_party = utilitarism
+	elections_allowed = no
+}
+set_popularities = {
+	utilitarism = 65
+	technocracy = 15
+	humanism = 10
+	pragmatism = 10
+}
+set_stability = 0.61
+set_war_support = 0.25
+set_research_slots = 2

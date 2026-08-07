@@ -1,0 +1,42 @@
+leader_traits = {
+	KRL_winter_crown = {
+		random = no
+		sprite = 1
+		attrition = -0.05
+		army_defence_factor = 0.04
+		war_support_factor = 0.03
+	}
+
+	HON_first_citizen = {
+		random = no
+		sprite = 1
+		stability_factor = 0.05
+		research_speed_factor = 0.02
+		political_power_gain = 0.05
+	}
+
+	SKN_iron_marshal = {
+		random = no
+		sprite = 1
+		planning_speed = 0.08
+		army_defence_factor = 0.05
+		political_power_gain = -0.03
+	}
+
+	VES_warden_of_western_gates = {
+		random = no
+		sprite = 1
+		max_dig_in = 1
+		supply_consumption_factor = -0.03
+		army_org_factor = 0.03
+	}
+
+	MON_emperor_of_the_northern_marches = {
+		random = no
+		sprite = 1
+		political_power_gain = 0.15
+		army_org_factor = 0.08
+		planning_speed = 0.15
+		war_support_factor = 0.08
+	}
+}

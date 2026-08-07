@@ -80,6 +80,10 @@ spriteTypes = {
 	  	name = "GFX_idea_VAL_harvest_of_ash"
 	  	texturefile = "gfx/interface/ideas/VAL/idea_VAL_harvest_of_ash.png"
 	}
+	spriteType = {
+		name = "GFX_idea_VAL_contract_state"
+		texturefile = "gfx/interface/ideas/VAL/idea_VAL_mercenary_state.png"
+	}
 ###WRK
  #ideas
  	spriteType = {
@@ -94,6 +98,18 @@ spriteTypes = {
 	  	name = "GFX_idea_WRK_constitution_of_the_republic"
 	  	texturefile = "gfx/interface/ideas/WRK/idea_WRK_constitution_of_the_republic.png"
 	}
+	spriteType = {
+		name = "GFX_idea_WRK_birthplace_of_the_first_revolution"
+		texturefile = "gfx/interface/ideas/WRK/WRK_the_empire_in_flames.png"
+	}
+	spriteType = {
+		name = "GFX_idea_WRK_birthplace_of_the_first_revolution_front_republic"
+		texturefile = "gfx/interface/ideas/WRK/WRK_the_empire_in_flames.png"
+	}
+	spriteType = {
+		name = "GFX_idea_WRK_birthplace_of_the_first_revolution_renewed_mandate"
+		texturefile = "gfx/interface/ideas/WRK/idea_WRK_constitution_of_the_republic.png"
+	}
 ###NOD
  #ideas
  	spriteType = {
@@ -107,7 +123,7 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_idea_VLA_national_spirit"
-		texturefile = "gfx/interface/ideas/idea_generic_political_reform.dds"
+		texturefile = "gfx/interface/ideas/idea_generic_central_management.dds"
 	}
 	spriteType = {
 		name = "GFX_idea_NAM_national_spirit"

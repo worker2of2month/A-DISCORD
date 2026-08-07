@@ -325,7 +325,7 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             self.assertIn('position = { x = 424 ', increase_line)
             self.assertNotIn('orientation = upper_right', increase_line)
 
-    def test_compact_dashboard_exposes_manual_borrowing_actions(self):
+    def test_compact_dashboard_keeps_manual_borrowing_in_treasury_operations(self):
         contracts = {
             'internal_bonds': (
                 'ADISCORD_economy_gui_try_issue_internal_bonds',
@@ -342,7 +342,7 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                 (
                     'buttonType',
                     node_name,
-                    ('ADISCORD_economy_dashboard_window', 'ADISCORD_economy_command_panel'),
+                    ('ADISCORD_economy_dashboard_window', 'ADISCORD_economy_operations_panel'),
                 ),
                 self.nodes,
             )
@@ -383,7 +383,6 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         ):
             self.assertIn(f'name = {name}', self.scripted_loc)
         for key in (
-            'ADISCORD_economy_loan_blocked_technology',
             'ADISCORD_economy_loan_blocked_ratio',
             'ADISCORD_economy_loan_blocked_cooldown',
             'ADISCORD_economy_loan_blocked_treasury_room',
@@ -395,25 +394,122 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         ):
             self.assertRegex(self.localisation, rf'(?m)^\s*{key}:')
 
-    def test_macro_kpis_use_plain_language_dedicated_tooltips(self):
-        debt_line = next(
-            line
-            for line in self.gui.splitlines()
-            if 'name = "ADISCORD_economy_kpi_debt"' in line
+        triggers = (
+            ROOT / 'common' / 'scripted_triggers' / 'ADISCORD_economy_triggers.txt'
+        ).read_text(encoding='utf-8-sig')
+        for trigger_name in (
+            'ADISCORD_economy_can_issue_internal_bonds',
+            'ADISCORD_economy_can_take_external_loan',
+        ):
+            match = re.search(
+                rf'(?ms)^\s*{trigger_name}\s*=\s*\{{(.*?)^\}}',
+                triggers,
+            )
+            self.assertIsNotNone(match)
+            self.assertNotIn('has_tech =', match.group(1))
+        self.assertNotIn('ADISCORD_economy_loan_blocked_technology', self.scripted_loc)
+        self.assertNotRegex(
+            self.localisation,
+            r'(?m)^\s*ADISCORD_economy_loan_blocked_technology:',
         )
-        inflation_line = next(
-            line
-            for line in self.gui.splitlines()
-            if 'name = "ADISCORD_economy_kpi_risk"' in line
+
+    def test_rare_treasury_actions_are_hidden_behind_one_explicit_second_layer(self):
+        self.assertIn(
+            (
+                'buttonType',
+                'ADISCORD_economy_operations_open',
+                ('ADISCORD_economy_dashboard_window', 'ADISCORD_economy_command_panel'),
+            ),
+            self.nodes,
         )
+        self.assertIn(
+            (
+                'containerWindowType',
+                'ADISCORD_economy_operations_panel',
+                ('ADISCORD_economy_dashboard_window',),
+            ),
+            self.nodes,
+        )
+
+        actions = (
+            'internal_bonds',
+            'external_loan',
+            'repay_debt',
+            'restructure_debt',
+            'stabilization',
+            'war_taxes',
+        )
+        for action in actions:
+            node_name = f'ADISCORD_economy_action_{action}'
+            self.assertIn(
+                (
+                    'buttonType',
+                    node_name,
+                    ('ADISCORD_economy_dashboard_window', 'ADISCORD_economy_operations_panel'),
+                ),
+                self.nodes,
+            )
+            self.assertNotIn(
+                (
+                    'buttonType',
+                    node_name,
+                    ('ADISCORD_economy_dashboard_window', 'ADISCORD_economy_command_panel'),
+                ),
+                self.nodes,
+            )
+
+        self.assertRegex(
+            self.scripted_gui,
+            r'ADISCORD_economy_operations_open_click\s*=\s*\{'
+            r'[\s\S]*?ADISCORD_economy_show_operations\s+value\s*=\s*1'
+            r'[\s\S]*?ADISCORD_economy_update_gui\s*=\s*yes',
+        )
+        self.assertRegex(
+            self.scripted_gui,
+            r'ADISCORD_economy_operations_close_click\s*=\s*\{'
+            r'[\s\S]*?ADISCORD_economy_show_operations\s+value\s*=\s*0'
+            r'[\s\S]*?ADISCORD_economy_update_gui\s*=\s*yes',
+        )
+        self.assertRegex(
+            self.scripted_gui,
+            r'ADISCORD_economy_operations_panel_visible\s*=\s*\{'
+            r'[\s\S]*?ADISCORD_economy_show_operations\s+value\s*=\s*1',
+        )
+
+    def test_headline_kpis_show_cash_flow_before_secondary_risks(self):
+        for node, text_key, tooltip in (
+            ('ADISCORD_economy_kpi_treasury', 'ADISCORD_economy_kpi_treasury', 'ADISCORD_economy_treasury_tt'),
+            ('ADISCORD_economy_kpi_income', 'ADISCORD_economy_kpi_income', 'ADISCORD_economy_income_tt'),
+            ('ADISCORD_economy_kpi_expenses', 'ADISCORD_economy_kpi_expenses', 'ADISCORD_economy_expenses_tt'),
+            ('ADISCORD_economy_kpi_balance', 'ADISCORD_economy_kpi_balance', 'ADISCORD_economy_budget_breakdown_tt'),
+        ):
+            line = next(
+                line for line in self.gui.splitlines() if f'name = "{node}"' in line
+            )
+            self.assertIn(f'text = "{text_key}"', line)
+            self.assertIn(f'pdx_tooltip = "{tooltip}"', line)
+
+        self.assertNotIn('name = "ADISCORD_economy_kpi_debt"', self.gui)
+        self.assertNotIn('name = "ADISCORD_economy_kpi_risk"', self.gui)
+
+    def test_secondary_risks_have_visible_rows_and_dedicated_explanations(self):
+        for node, text_key, tooltip in (
+            ('ADISCORD_economy_risk_debt', 'ADISCORD_economy_risk_debt', 'ADISCORD_economy_debt_tt'),
+            ('ADISCORD_economy_risk_inflation', 'ADISCORD_economy_risk_inflation', 'ADISCORD_economy_inflation_tt'),
+            ('ADISCORD_economy_risk_overload', 'ADISCORD_economy_risk_overload', 'ADISCORD_economy_stretched_tt'),
+            ('ADISCORD_economy_risk_war_fatigue', 'ADISCORD_economy_risk_war_fatigue', 'ADISCORD_economy_war_fatigue_tt'),
+        ):
+            line = next(
+                line for line in self.gui.splitlines() if f'name = "{node}"' in line
+            )
+            self.assertIn(f'text = "{text_key}"', line)
+            self.assertIn(f'pdx_tooltip = "{tooltip}"', line)
+
         summary_line = next(
             line
             for line in self.gui.splitlines()
             if 'name = "ADISCORD_economy_player_summary"' in line
         )
-        self.assertIn('pdx_tooltip = "ADISCORD_economy_debt_tt"', debt_line)
-        self.assertIn('text = "ADISCORD_economy_kpi_inflation"', inflation_line)
-        self.assertIn('pdx_tooltip = "ADISCORD_economy_inflation_tt"', inflation_line)
         self.assertIn('pdx_tooltip = "ADISCORD_economy_summary_tt"', summary_line)
 
         debt_tt = re.search(
@@ -449,12 +545,48 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         self.assertIn('name = GetADISCORDDebtEffectsLoc', self.scripted_loc)
         self.assertIn('name = GetADISCORDInflationEffectsLoc', self.scripted_loc)
 
+        overload_tt = re.search(
+            r'(?m)^\s*ADISCORD_economy_stretched_tt:\d*\s+"([^"]*)"',
+            self.localisation,
+        ).group(1)
+        for required in (
+            '?ADISCORD_economy_stretched_score|0',
+            '?ADISCORD_economy_debt_pressure|0',
+            '?ADISCORD_economy_demographic_fatigue_score|0',
+            '?ADISCORD_economy_workforce_drain_level|0',
+            '?ADISCORD_economy_fiscal_stress|0',
+            '[GetADISCORDStateLoadEffectsLoc]',
+            '20/40/60/80',
+        ):
+            self.assertIn(required, overload_tt)
+
+        fatigue_tt = re.search(
+            r'(?m)^\s*ADISCORD_economy_war_fatigue_tt:\d*\s+"([^"]*)"',
+            self.localisation,
+        ).group(1)
+        for required in (
+            '?ADISCORD_economy_war_fatigue_score|0',
+            '?ADISCORD_economy_monthly_casualties_delta_k|0',
+            '[GetADISCORDWarFatigueEffectsLoc]',
+            '[GetADISCORDDemobilizationStatusLoc]',
+            '15/30/50/75',
+        ):
+            self.assertIn(required, fatigue_tt)
+        self.assertIn('name = GetADISCORDStateLoadEffectsLoc', self.scripted_loc)
+        self.assertIn('name = GetADISCORDWarFatigueEffectsLoc', self.scripted_loc)
+        self.assertIn('name = GetADISCORDDemobilizationStatusLoc', self.scripted_loc)
+
     def test_left_panel_text_zones_do_not_overlap(self):
         self.assertNotIn('ADISCORD_economy_automation_note', self.gui)
         for name, y, height in (
-            ('ADISCORD_economy_player_summary', 14, 126),
-            ('ADISCORD_economy_player_advice', 154, 112),
-            ('ADISCORD_economy_buildings_summary', 342, 58),
+            ('ADISCORD_economy_player_summary', 14, 86),
+            ('ADISCORD_economy_player_advice', 108, 94),
+            ('ADISCORD_economy_risk_title', 214, 22),
+            ('ADISCORD_economy_risk_debt', 242, 24),
+            ('ADISCORD_economy_risk_inflation', 270, 24),
+            ('ADISCORD_economy_risk_overload', 298, 24),
+            ('ADISCORD_economy_risk_war_fatigue', 326, 24),
+            ('ADISCORD_economy_buildings_summary', 378, 24),
         ):
             self.assertRegex(
                 self.gui,
@@ -463,14 +595,60 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                 rf'[\s\S]{{0,160}}maxHeight\s*=\s*{height}',
             )
 
-    def test_treasury_hint_uses_cyrillic_capable_font(self):
-        hint_line = next(
-            line
-            for line in self.gui.splitlines()
-            if 'name = "ADISCORD_economy_emergency_hint"' in line
+    def test_removed_tab_layout_localisation_does_not_return(self):
+        for dead_key in (
+            'ADISCORD_economy_tab_overview',
+            'ADISCORD_economy_tab_budget',
+            'ADISCORD_economy_tab_operations',
+            'ADISCORD_economy_dashboard_accounting_block',
+            'ADISCORD_economy_dashboard_budget_block',
+            'ADISCORD_economy_dashboard_income_block',
+            'ADISCORD_economy_dashboard_expenses_block',
+            'ADISCORD_economy_debt_operations_title',
+            'ADISCORD_economy_monetary_operations_title',
+            'ADISCORD_economy_investment_operations_title',
+            'ADISCORD_economy_dashboard_buildings_block',
+            'ADISCORD_economy_last_month_accounting_tt',
+            'ADISCORD_economy_tax_burden_tt',
+            'ADISCORD_economy_army_spending_tt',
+            'ADISCORD_economy_construction_spending_tt',
+            'ADISCORD_economy_emergency_title',
+            'ADISCORD_economy_emergency_hint',
+        ):
+            self.assertNotRegex(self.localisation, rf'(?m)^\s*{dead_key}:')
+
+    def test_treasury_guidance_uses_cyrillic_capable_fonts(self):
+        for hint_name in (
+            'ADISCORD_economy_main_help',
+            'ADISCORD_economy_operations_main_hint',
+            'ADISCORD_economy_operations_hint',
+        ):
+            hint_line = next(
+                line
+                for line in self.gui.splitlines()
+                if f'name = "{hint_name}"' in line
+            )
+            self.assertIn('font = "hoi_16mbs"', hint_line)
+            self.assertNotIn('font = "hoi_14mbs"', hint_line)
+
+    def test_treasury_operations_hint_is_actionable_and_read_only(self):
+        self.assertRegex(
+            self.localisation,
+            r'(?m)^\s*ADISCORD_economy_operations_main_hint:\d*\s+"\[GetADISCORDTreasuryOperationsHintLoc\]"',
         )
-        self.assertIn('font = "hoi_16mbs"', hint_line)
-        self.assertNotIn('font = "hoi_14mbs"', hint_line)
+        self.assertIn('name = GetADISCORDTreasuryOperationsHintLoc', self.scripted_loc)
+        for key in (
+            'ADISCORD_economy_operations_hint_deficit',
+            'ADISCORD_economy_operations_hint_debt',
+            'ADISCORD_economy_operations_hint_inflation',
+            'ADISCORD_economy_operations_hint_reserve',
+            'ADISCORD_economy_operations_hint_safe',
+        ):
+            self.assertRegex(self.localisation, rf'(?m)^\s*{key}:')
+            self.assertIn(f'localization_key = {key}', self.scripted_loc)
+        self.assertIn('ADISCORD_economy_safe_reserve', self.scripted_loc)
+        for forbidden in ('every_country', 'every_owned_state', 'all_owned_state'):
+            self.assertNotIn(forbidden, self.scripted_loc)
 
 
 class RuntimePulseTests(unittest.TestCase):

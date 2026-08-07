@@ -34,7 +34,7 @@ characters = {
 	}
 	MZR_Ration_Assembly = {
 		name = MZR_Ration_Assembly
-		portraits = { civilian = { large = GFX_portrait_PLACEHOLDER } }
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_7 } }
 		country_leader = {
 			ideology = utilitarism_ideology
 			expire = "2200.1.1.1"
@@ -45,7 +45,7 @@ characters = {
 	}
 	KYZ_Qanat_Assembly = {
 		name = KYZ_Qanat_Assembly
-		portraits = { civilian = { large = GFX_portrait_PLACEHOLDER } }
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_3 } }
 		country_leader = {
 			ideology = anarchism_ideology
 			expire = "2200.1.1.1"

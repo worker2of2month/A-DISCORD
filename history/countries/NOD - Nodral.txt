@@ -12,6 +12,7 @@ create_faction_from_template = {
 	name = faction_stp_nod
 }
 add_to_faction = STP
+add_to_faction = AIN
 
 ####### Basic shit
 
@@ -56,4 +57,8 @@ set_research_slots = 2
 set_autonomy = {
 	target = STP
 	autonomous_state = autonomy_shadow_state
+}
+set_autonomy = {
+	target = AIN
+	autonomous_state = autonomy_colony
 }

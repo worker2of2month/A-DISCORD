@@ -1,0 +1,4 @@
+set_politics = { ruling_party = pragmatism elections_allowed = no }
+set_popularities = { etatism = 10 chauvinism = 0 humanism = 15 pragmatism = 70 technocracy = 5 }
+recruit_character = RIV_Mikhail_Arsenyev
+set_research_slots = 2

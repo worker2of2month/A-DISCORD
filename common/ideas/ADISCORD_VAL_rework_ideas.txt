@@ -32,15 +32,6 @@ ideas = {
 			}
 		}
 
-		VAL_stelander_interim_supply = {
-			picture = VAL_contract_state
-			allowed = { original_tag = VAL }
-			removal_cost = -1
-			modifier = {
-				production_factory_efficiency_gain_factor = 0.05
-				ADISCORD_economy_trade_income_factor = 0.05
-			}
-		}
 
 	}
 

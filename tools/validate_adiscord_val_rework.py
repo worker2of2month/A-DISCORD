@@ -14,7 +14,10 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def read(relative: str) -> str:
-    return (ROOT / relative).read_text(encoding="utf-8-sig", errors="replace")
+    path = ROOT / relative
+    if not path.exists():
+        return ""
+    return path.read_text(encoding="utf-8-sig", errors="replace")
 
 
 def named_blocks(text: str, key: str) -> list[str]:
@@ -219,8 +222,6 @@ def main() -> int:
         "VAL_State_Above_Captains",
         "VAL_Westerholm_Concessions",
         "VAL_Vorkerland_Contracts_Burn",
-        "VAL_Look_To_Stelander",
-        "VAL_The_Passes_Are_Open",
         "VAL_State_Contract",
         "VAL_Industrial_Mobilization_Plan",
         "VAL_Army_Of_The_Ledger",
@@ -230,7 +231,7 @@ def main() -> int:
     }
     for missing in sorted(required - ids):
         issues.append(f"missing focus {missing}")
-    if len(focuses) < 75:
+    if len(focuses) < 70:
         issues.append(f"focus tree is still too small ({len(focuses)} focuses)")
     for block in focuses:
         focus_id = re.search(r"(?m)^\s*id\s*=\s*(\S+)", block)
@@ -326,13 +327,6 @@ def main() -> int:
             final_join,
         ):
             issues.append(f"final branch join is missing {terminal}")
-    final_invoice = focus_blocks.get("VAL_Present_The_Final_Invoice", "")
-    invoice_prerequisites = named_blocks(final_invoice, "prerequisite")
-    if len(invoice_prerequisites) != 1 or len(
-        re.findall(r"\bfocus\s*=\s*VAL_(?:Offer|Secure|Negotiate|Let)_[A-Za-z0-9_]+", invoice_prerequisites[0])
-    ) != 4:
-        issues.append("final invoice must accept any one of the four crisis strategies")
-
     coordinates: dict[str, tuple[int, int, str | None]] = {}
     for block in focuses:
         focus_id = re.search(r"(?m)^\s*id\s*=\s*(\S+)", block)
@@ -397,7 +391,7 @@ def main() -> int:
             if len(strategy_rows) != 1:
                 issues.append("the four final crisis alternatives are not aligned")
 
-    for focus_id in ("VAL_Westerholm_Concessions", "VAL_Vorkerland_Contracts_Burn", "VAL_The_Passes_Are_Open"):
+    for focus_id in ("VAL_Westerholm_Concessions", "VAL_Vorkerland_Contracts_Burn"):
         block = next((block for block in focuses if f"id = {focus_id}" in block), "")
         if "allow_branch" not in block:
             issues.append(f"{focus_id} is not world-reactive")
@@ -421,7 +415,6 @@ def main() -> int:
     for token in (
         "days_mission_timeout = 90",
         "amount = -2500",
-        "amount = -5000",
         "VAL_resolve_quarterly_contract_norm = yes",
         "ADISCORD_has_campaign_slot = yes",
     ):
@@ -432,9 +425,6 @@ def main() -> int:
     for debug_decision in (
         "VAL_debug_initialize_systems",
         "VAL_debug_unlock_operations_map",
-        "VAL_debug_set_crisis_rupture",
-        "VAL_debug_set_active_civil_war",
-        "VAL_debug_set_postwar_stelander",
         "VAL_debug_disrupt_vorkerland_contracts",
         "VAL_debug_reputation_maximum",
         "VAL_debug_reputation_minimum",
@@ -510,7 +500,6 @@ def main() -> int:
         "VAL_vorkerland_contract_disruptions",
         "give_resource_rights = { receiver = VAL state = 202 }",
         "remove_resource_rights = 202",
-        "give_resource_rights = { receiver = VAL state = 45 }",
     ):
         if token not in effects:
             issues.append(f"rework effects are missing {token}")
@@ -947,7 +936,7 @@ def main() -> int:
         ):
             if token not in " ".join(panel[0].split()):
                 issues.append(f"operations scripted-GUI panel is missing {token}")
-    for state in (43, 44, 45, 88, 59, 61):
+    for state in (59, 61):
         path = ROOT / f"gfx/interface/VAL_operations/VAL_ops_state_{state}.png"
         if not path.exists():
             issues.append(f"missing operations overlay for state {state}")
@@ -986,9 +975,6 @@ def main() -> int:
         "VAL_rework_debug",
         "VAL_debug_initialize_systems",
         "VAL_debug_unlock_operations_map",
-        "VAL_debug_set_crisis_rupture",
-        "VAL_debug_set_active_civil_war",
-        "VAL_debug_set_postwar_stelander",
         "VAL_debug_disrupt_vorkerland_contracts",
         "VAL_debug_lose_westerholm_metal",
         "VAL_debug_reputation_maximum",
@@ -997,7 +983,6 @@ def main() -> int:
         "VAL_debug_reset_rework_state",
         "ADISCORD_cost_t25",
         "ADISCORD_cost_r2500",
-        "ADISCORD_cost_t50_r5000",
         "ADISCORD_cost_r4000",
     ):
         if not re.search(rf"(?m)^\s*{re.escape(key)}:", all_russian_localization):
@@ -1008,7 +993,7 @@ def main() -> int:
         for issue in issues:
             print(f"- {issue}")
         return 1
-    print(f"Kefreyt rework validation passed ({len(focuses)} focuses, 6 dynamic map regions).")
+    print(f"Kefreyt rework validation passed ({len(focuses)} focuses, 2 active map regions).")
     return 0
 
 

@@ -1,0 +1,6 @@
+air_wings = {
+	38 = {
+		ADISCORD_fighter_airframe_2163 = { owner = "TVA" amount = 100 }
+		ADISCORD_cas_airframe_2170 = { owner = "TVA" amount = 50 }
+	}
+}

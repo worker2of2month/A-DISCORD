@@ -1,0 +1,26 @@
+capital = 118
+oob = "AIN"
+
+recruit_character = AIN_Elias_Marven
+
+set_politics = {
+	ruling_party = hedonism
+	last_election = "2158.9.12"
+	election_frequency = 48
+	elections_allowed = yes
+}
+set_popularities = {
+	hedonism = 55
+	pragmatism = 20
+	technocracy = 12
+	humanism = 6
+	etatism = 4
+	utilitarism = 2
+	anarchism = 1
+}
+
+set_stability = 0.57
+set_war_support = 0.28
+set_research_slots = 1
+
+add_ideas = AIN_concession_economy

@@ -1,0 +1,17 @@
+characters = {
+	AIN_Elias_Marven = {
+		name = AIN_Elias_Marven
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_8
+			}
+		}
+		country_leader = {
+			ideology = aristocratic_hedonism
+			expire = "2200.1.1.1"
+			id = -1
+			desc = AIN_Elias_Marven_desc
+			traits = { AIN_concessionary_director }
+		}
+	}
+}

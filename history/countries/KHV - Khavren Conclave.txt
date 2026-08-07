@@ -1,0 +1,19 @@
+capital = 364
+oob = "KHV"
+
+recruit_character = KHV_Ilva_Havren
+
+set_politics = {
+	ruling_party = technocracy
+	elections_allowed = no
+}
+set_popularities = {
+	technocracy = 60
+	utilitarism = 20
+	pragmatism = 10
+	etatism = 10
+}
+set_stability = 0.56
+set_war_support = 0.30
+set_research_slots = 3
+add_ideas = { KHV_geothermal_colleges }

@@ -1,0 +1,22 @@
+# Independent Kefreyt contract-state modifier.
+
+VAL_contract_state = {
+	enable = { original_tag = VAL }
+	army_attack_factor = VAL_contract_attack_factor
+	army_defence_factor = VAL_contract_defence_factor
+	army_org_factor = VAL_contract_org_factor
+	army_org_regain = VAL_contract_org_regain
+	equipment_capture_factor = VAL_contract_capture_factor
+	supply_consumption_factor = VAL_contract_supply_factor
+	planning_speed = VAL_contract_planning_factor
+	political_power_gain = VAL_contract_pp_gain
+	stability_factor = VAL_contract_stability_factor
+	industrial_capacity_factory = VAL_contract_factory_output_factor
+	conscription_factor = VAL_contract_conscription_factor
+	command_power_gain_mult = VAL_contract_command_power_factor
+	consumer_goods_factor = VAL_contract_consumer_goods_factor
+	ADISCORD_economy_state_overload_gain_factor = VAL_contract_state_overload_factor
+	ADISCORD_economy_trade_income_factor = VAL_contract_trade_income_factor
+	ADISCORD_economy_military_industry_income_factor = VAL_contract_military_income_factor
+	ADISCORD_economy_army_expense_factor = VAL_contract_army_expense_factor
+}

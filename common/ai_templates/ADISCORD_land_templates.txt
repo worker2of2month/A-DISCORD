@@ -188,6 +188,35 @@ ADISCORD_tank_templates = {
 		}
 	}
 
+	# The three central claimants use the same combat-ready 20-width armoured
+	# group as their collapse OOB.  It is large enough to hold organisation and
+	# breakthrough, but remains a single limited reserve in the emergency economy.
+	ADISCORD_vorkerland_mobile_reserve = {
+		enable = {
+			is_ai = yes
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+			OR = { tag = WRK tag = VAD tag = TVA }
+			has_tech = ADISCORD_tech_semi_autonomous_combat_modules
+			num_of_military_factories > 2
+			has_equipment = { ADISCORD_combat_platform_archetype > 100 }
+		}
+		reinforce_prio = 2
+		upgrade_prio = { base = 12 }
+		can_upgrade_in_field = {
+			has_equipment = { ADISCORD_combat_platform_archetype > 120 }
+		}
+		target_template = {
+			support = {
+				engineer = 1
+				artillery = 1
+				maintenance_company = 1
+				signal_company = 1
+			}
+			regiments = { infantry = 6 ADISCORD_combat_platform = 4 }
+		}
+	}
+
 	ADISCORD_tank_battlegroup = {
 		enable = {
 			has_tech = ADISCORD_tech_semi_autonomous_combat_modules
@@ -203,7 +232,7 @@ ADISCORD_tank_templates = {
 		}
 		target_template = {
 			support = { engineer = 1 ADISCORD_recon_platform = 1 maintenance_company = 1 }
-			regiments = { infantry = 4 ADISCORD_combat_platform = 4 }
+			regiments = { infantry = 6 ADISCORD_combat_platform = 4 }
 		}
 		replace_at_match = 0.98
 		replace_with = ADISCORD_networked_tank_battlegroup
@@ -233,11 +262,11 @@ ADISCORD_tank_templates = {
 				ADISCORD_recovery_platform = 1
 				signal_company = 1
 			}
-			regiments = { infantry = 4 ADISCORD_combat_platform = 4 }
+			regiments = { infantry = 6 ADISCORD_combat_platform = 4 }
 		}
 	}
 
-	ADISCORD_heavy_tank_battlegroup = {
+ADISCORD_heavy_tank_battlegroup = {
 		enable = {
 			has_tech = ADISCORD_tech_heavy_platform_cores
 			num_of_military_factories > 14
@@ -252,7 +281,23 @@ ADISCORD_tank_templates = {
 		}
 		target_template = {
 			support = { engineer = 1 maintenance_company = 1 logistics_company = 1 }
-			regiments = { infantry = 5 ADISCORD_heavy_platform = 3 }
+			regiments = { infantry = 6 ADISCORD_heavy_platform = 4 }
+		}
+	}
+}
+
+# Army HQ templates use their own engine role.  Without this block the AI can
+# deploy the starter HQ, but it has no valid total-conversion design target.
+ADISCORD_army_hq_templates = {
+	role = hq_role
+	upgrade_prio = { base = 0 }
+
+	ADISCORD_field_headquarters = {
+		reinforce_prio = 2
+		upgrade_prio = { base = 0 }
+		target_template = {
+			support = { hq_support_company = 1 }
+			regiments = { hq_infantry = 2 }
 		}
 	}
 }

@@ -92,25 +92,25 @@ guiTypes = {
 			instantTextboxType = { name = "ADISCORD_economy_kpi_treasury" position = { x = 6 y = 10 } font = "hoi_16mbs" text = "ADISCORD_economy_kpi_treasury" maxWidth = 178 maxHeight = 24 format = center pdx_tooltip = "ADISCORD_economy_treasury_tt" }
 		}
 		containerWindowType = {
-			name = "ADISCORD_economy_kpi_balance_panel"
+			name = "ADISCORD_economy_kpi_income_panel"
 			position = { x = 220 y = 58 }
 			size = { width = 190 height = 44 }
-			background = { name = "ADISCORD_economy_kpi_balance_bg" quadTextureSprite = "GFX_tiled_window2_1b_border" }
-			instantTextboxType = { name = "ADISCORD_economy_kpi_balance" position = { x = 6 y = 10 } font = "hoi_16mbs" text = "ADISCORD_economy_kpi_balance" maxWidth = 178 maxHeight = 24 format = center pdx_tooltip = "ADISCORD_economy_budget_breakdown_tt" }
+			background = { name = "ADISCORD_economy_kpi_income_bg" quadTextureSprite = "GFX_tiled_window2_1b_border" }
+			instantTextboxType = { name = "ADISCORD_economy_kpi_income" position = { x = 6 y = 10 } font = "hoi_16mbs" text = "ADISCORD_economy_kpi_income" maxWidth = 178 maxHeight = 24 format = center pdx_tooltip = "ADISCORD_economy_income_tt" }
 		}
 		containerWindowType = {
-			name = "ADISCORD_economy_kpi_debt_panel"
+			name = "ADISCORD_economy_kpi_expenses_panel"
 			position = { x = 420 y = 58 }
 			size = { width = 190 height = 44 }
-			background = { name = "ADISCORD_economy_kpi_debt_bg" quadTextureSprite = "GFX_tiled_window2_1b_border" }
-			instantTextboxType = { name = "ADISCORD_economy_kpi_debt" position = { x = 6 y = 10 } font = "hoi_16mbs" text = "ADISCORD_economy_kpi_debt" maxWidth = 178 maxHeight = 24 format = center pdx_tooltip = "ADISCORD_economy_debt_tt" }
+			background = { name = "ADISCORD_economy_kpi_expenses_bg" quadTextureSprite = "GFX_tiled_window2_1b_border" }
+			instantTextboxType = { name = "ADISCORD_economy_kpi_expenses" position = { x = 6 y = 10 } font = "hoi_16mbs" text = "ADISCORD_economy_kpi_expenses" maxWidth = 178 maxHeight = 24 format = center pdx_tooltip = "ADISCORD_economy_expenses_tt" }
 		}
 		containerWindowType = {
-			name = "ADISCORD_economy_kpi_risk_panel"
+			name = "ADISCORD_economy_kpi_balance_panel"
 			position = { x = 620 y = 58 }
 			size = { width = 200 height = 44 }
-			background = { name = "ADISCORD_economy_kpi_risk_bg" quadTextureSprite = "GFX_tiled_window2_1b_border" }
-			instantTextboxType = { name = "ADISCORD_economy_kpi_risk" position = { x = 6 y = 10 } font = "hoi_16mbs" text = "ADISCORD_economy_kpi_inflation" maxWidth = 188 maxHeight = 24 format = center pdx_tooltip = "ADISCORD_economy_inflation_tt" }
+			background = { name = "ADISCORD_economy_kpi_balance_bg" quadTextureSprite = "GFX_tiled_window2_1b_border" }
+			instantTextboxType = { name = "ADISCORD_economy_kpi_balance" position = { x = 6 y = 10 } font = "hoi_16mbs" text = "ADISCORD_economy_kpi_balance" maxWidth = 188 maxHeight = 24 format = center pdx_tooltip = "ADISCORD_economy_budget_breakdown_tt" }
 		}
 
 		containerWindowType = {
@@ -118,9 +118,14 @@ guiTypes = {
 			position = { x = 20 y = 120 }
 			size = { width = 310 height = 420 }
 			background = { name = "ADISCORD_economy_status_bg" quadTextureSprite = "GFX_tiled_window2_1b_border" }
-			instantTextboxType = { name = "ADISCORD_economy_player_summary" position = { x = 14 y = 14 } font = "hoi_16mbs" text = "ADISCORD_economy_dashboard_player_summary" maxWidth = 282 maxHeight = 126 pdx_tooltip = "ADISCORD_economy_summary_tt" }
-			instantTextboxType = { name = "ADISCORD_economy_player_advice" position = { x = 14 y = 154 } font = "hoi_18mbs" text = "ADISCORD_economy_dashboard_player_advice" maxWidth = 282 maxHeight = 112 pdx_tooltip = "ADISCORD_economy_stretched_tt" }
-			instantTextboxType = { name = "ADISCORD_economy_buildings_summary" position = { x = 14 y = 342 } font = "hoi_16mbs" text = "ADISCORD_economy_dashboard_buildings_compact" maxWidth = 282 maxHeight = 58 pdx_tooltip = "ADISCORD_economy_buildings_tt" }
+			instantTextboxType = { name = "ADISCORD_economy_player_summary" position = { x = 14 y = 14 } font = "hoi_16mbs" text = "ADISCORD_economy_dashboard_player_summary" maxWidth = 282 maxHeight = 86 pdx_tooltip = "ADISCORD_economy_summary_tt" }
+			instantTextboxType = { name = "ADISCORD_economy_player_advice" position = { x = 14 y = 108 } font = "hoi_16mbs" text = "ADISCORD_economy_dashboard_player_advice" maxWidth = 282 maxHeight = 94 pdx_tooltip = "ADISCORD_economy_summary_tt" }
+			instantTextboxType = { name = "ADISCORD_economy_risk_title" position = { x = 14 y = 214 } font = "hoi_16mbs" text = "ADISCORD_economy_risk_title" maxWidth = 282 maxHeight = 22 format = center }
+			instantTextboxType = { name = "ADISCORD_economy_risk_debt" position = { x = 14 y = 242 } font = "hoi_16mbs" text = "ADISCORD_economy_risk_debt" maxWidth = 282 maxHeight = 24 pdx_tooltip = "ADISCORD_economy_debt_tt" }
+			instantTextboxType = { name = "ADISCORD_economy_risk_inflation" position = { x = 14 y = 270 } font = "hoi_16mbs" text = "ADISCORD_economy_risk_inflation" maxWidth = 282 maxHeight = 24 pdx_tooltip = "ADISCORD_economy_inflation_tt" }
+			instantTextboxType = { name = "ADISCORD_economy_risk_overload" position = { x = 14 y = 298 } font = "hoi_16mbs" text = "ADISCORD_economy_risk_overload" maxWidth = 282 maxHeight = 24 pdx_tooltip = "ADISCORD_economy_stretched_tt" }
+			instantTextboxType = { name = "ADISCORD_economy_risk_war_fatigue" position = { x = 14 y = 326 } font = "hoi_16mbs" text = "ADISCORD_economy_risk_war_fatigue" maxWidth = 282 maxHeight = 24 pdx_tooltip = "ADISCORD_economy_war_fatigue_tt" }
+			instantTextboxType = { name = "ADISCORD_economy_buildings_summary" position = { x = 14 y = 378 } font = "hoi_16mbs" text = "ADISCORD_economy_dashboard_buildings_compact" maxWidth = 282 maxHeight = 24 pdx_tooltip = "ADISCORD_economy_buildings_tt" }
 		}
 
 		containerWindowType = {
@@ -190,14 +195,36 @@ guiTypes = {
 			buttonType = { name = "ADISCORD_economy_social_decrease" position = { x = 366 y = 173 } spriteType = "button_left" scale = 0.75 clicksound = click_default pdx_tooltip = "ADISCORD_economy_social_decrease_tt" }
 			buttonType = { name = "ADISCORD_economy_social_increase" position = { x = 424 y = 173 } spriteType = "button_right" scale = 0.75 clicksound = click_default pdx_tooltip = "ADISCORD_economy_social_increase_tt" }
 
-			instantTextboxType = { name = "ADISCORD_economy_emergency_title" position = { x = 18 y = 224 } font = "hoi_18mbs" text = "ADISCORD_economy_emergency_title" maxWidth = 444 maxHeight = 28 format = center }
-			buttonType = { name = "ADISCORD_economy_action_internal_bonds" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 18 y = 260 } size = { x = 214 y = 34 } buttonText = "ADISCORD_economy_button_internal_bonds" buttonFont = "hoi_16mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_action_internal_bonds_tt" }
-			buttonType = { name = "ADISCORD_economy_action_external_loan" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 248 y = 260 } size = { x = 214 y = 34 } buttonText = "ADISCORD_economy_button_external_loan" buttonFont = "hoi_16mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_action_external_loan_tt" }
-			buttonType = { name = "ADISCORD_economy_action_repay_debt" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 18 y = 302 } size = { x = 214 y = 34 } buttonText = "ADISCORD_economy_button_repay_debt" buttonFont = "hoi_16mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_action_repay_debt_tt" }
-			buttonType = { name = "ADISCORD_economy_action_restructure_debt" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 248 y = 302 } size = { x = 214 y = 34 } buttonText = "ADISCORD_economy_button_restructure_debt" buttonFont = "hoi_16mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_action_restructure_debt_tt" }
-			buttonType = { name = "ADISCORD_economy_action_stabilization" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 18 y = 344 } size = { x = 214 y = 34 } buttonText = "ADISCORD_economy_button_stabilization" buttonFont = "hoi_16mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_action_stabilization_tt" }
-			buttonType = { name = "ADISCORD_economy_action_war_taxes" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 248 y = 344 } size = { x = 214 y = 34 } buttonText = "ADISCORD_economy_button_war_taxes" buttonFont = "hoi_16mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_action_war_taxes_tt" }
-			instantTextboxType = { name = "ADISCORD_economy_emergency_hint" position = { x = 18 y = 386 } font = "hoi_16mbs" text = "ADISCORD_economy_emergency_hint" maxWidth = 444 maxHeight = 30 format = center }
+			instantTextboxType = { name = "ADISCORD_economy_main_help" position = { x = 34 y = 232 } font = "hoi_16mbs" text = "ADISCORD_economy_main_help" maxWidth = 412 maxHeight = 52 format = center }
+			buttonType = { name = "ADISCORD_economy_operations_open" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 70 y = 300 } size = { x = 340 y = 42 } buttonText = "ADISCORD_economy_operations_open" buttonFont = "hoi_18mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_operations_open_tt" }
+			instantTextboxType = { name = "ADISCORD_economy_operations_main_hint" position = { x = 34 y = 356 } font = "hoi_16mbs" text = "ADISCORD_economy_operations_main_hint" maxWidth = 412 maxHeight = 44 format = center }
+		}
+
+		# The rare actions stay inside the registered dashboard. Hiding this nested
+		# panel only changes one scalar on click and never adds a scheduled update.
+		containerWindowType = {
+			name = "ADISCORD_economy_operations_panel"
+			position = { x = 20 y = 120 }
+			size = { width = 800 height = 420 }
+			background = { name = "ADISCORD_economy_operations_bg" quadTextureSprite = "GFX_tiled_window2_1b_border" }
+
+			instantTextboxType = { name = "ADISCORD_economy_operations_title" position = { x = 24 y = 16 } font = "hoi_20b" text = "ADISCORD_economy_operations_title" maxWidth = 700 maxHeight = 28 format = center }
+			buttonType = { name = "ADISCORD_economy_operations_close" quadTextureSprite = "GFX_tiled_window_transparent" position = { x = 758 y = 10 } size = { x = 26 y = 26 } buttonText = "X" buttonFont = "hoi_18mbs" clicksound = click_close pdx_tooltip = "CLOSE" }
+			instantTextboxType = { name = "ADISCORD_economy_operations_snapshot" position = { x = 24 y = 50 } font = "hoi_16mbs" text = "ADISCORD_economy_operations_snapshot" maxWidth = 752 maxHeight = 24 format = center pdx_tooltip = "ADISCORD_economy_debt_tt" }
+			instantTextboxType = { name = "ADISCORD_economy_operations_intro" position = { x = 48 y = 78 } font = "hoi_16mbs" text = "ADISCORD_economy_operations_intro" maxWidth = 704 maxHeight = 42 format = center }
+
+			instantTextboxType = { name = "ADISCORD_economy_operations_loans_title" position = { x = 24 y = 122 } font = "hoi_16mbs" text = "ADISCORD_economy_operations_loans_title" maxWidth = 752 maxHeight = 22 format = center }
+			buttonType = { name = "ADISCORD_economy_action_internal_bonds" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 24 y = 148 } size = { x = 360 y = 38 } buttonText = "ADISCORD_economy_button_internal_bonds" buttonFont = "hoi_16mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_action_internal_bonds_tt" }
+			buttonType = { name = "ADISCORD_economy_action_external_loan" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 416 y = 148 } size = { x = 360 y = 38 } buttonText = "ADISCORD_economy_button_external_loan" buttonFont = "hoi_16mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_action_external_loan_tt" }
+
+			instantTextboxType = { name = "ADISCORD_economy_operations_debt_title" position = { x = 24 y = 196 } font = "hoi_16mbs" text = "ADISCORD_economy_operations_debt_title" maxWidth = 752 maxHeight = 22 format = center }
+			buttonType = { name = "ADISCORD_economy_action_repay_debt" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 24 y = 222 } size = { x = 360 y = 38 } buttonText = "ADISCORD_economy_button_repay_debt" buttonFont = "hoi_16mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_action_repay_debt_tt" }
+			buttonType = { name = "ADISCORD_economy_action_restructure_debt" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 416 y = 222 } size = { x = 360 y = 38 } buttonText = "ADISCORD_economy_button_restructure_debt" buttonFont = "hoi_16mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_action_restructure_debt_tt" }
+
+			instantTextboxType = { name = "ADISCORD_economy_operations_crisis_title" position = { x = 24 y = 270 } font = "hoi_16mbs" text = "ADISCORD_economy_operations_crisis_title" maxWidth = 752 maxHeight = 22 format = center }
+			buttonType = { name = "ADISCORD_economy_action_stabilization" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 24 y = 296 } size = { x = 360 y = 38 } buttonText = "ADISCORD_economy_button_stabilization" buttonFont = "hoi_16mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_action_stabilization_tt" }
+			buttonType = { name = "ADISCORD_economy_action_war_taxes" quadTextureSprite = "GFX_ADISCORD_economy_button" position = { x = 416 y = 296 } size = { x = 360 y = 38 } buttonText = "ADISCORD_economy_button_war_taxes" buttonFont = "hoi_16mbs" clicksound = click_default pdx_tooltip = "ADISCORD_economy_action_war_taxes_tt" }
+			instantTextboxType = { name = "ADISCORD_economy_operations_hint" position = { x = 48 y = 354 } font = "hoi_16mbs" text = "ADISCORD_economy_operations_hint" maxWidth = 704 maxHeight = 48 format = center }
 		}
 	}
 

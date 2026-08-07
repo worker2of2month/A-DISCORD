@@ -95,7 +95,7 @@ technologies = {
 		category_all_armor = { maximum_speed = 0.014 reliability = 0.014 }
 		path = { leads_to_tech = ADISCORD_tech_multispectral_recon_suites research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_light_combat_platform_2163 }
-		enable_subunits = { ADISCORD_recon_platform }
+		enable_subunits = { ADISCORD_recon_platform hq_light_armor }
 		research_cost = 2.05
 		start_year = 2162
 		folder = {
@@ -377,7 +377,7 @@ technologies = {
 		category_all_armor = { breakthrough = 0.024 hard_attack = 0.014 }
 		path = { leads_to_tech = ADISCORD_tech_digital_fire_control_buses research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_combat_platform_2170 }
-		enable_subunits = { ADISCORD_combat_platform }
+		enable_subunits = { ADISCORD_combat_platform hq_medium_armor }
 		research_cost = 2.05
 		start_year = 2161
 		folder = {
@@ -764,7 +764,7 @@ technologies = {
 		category_all_armor = { breakthrough = 0.026 hard_attack = 0.026 }
 		path = { leads_to_tech = ADISCORD_tech_active_mass_balancing_suspension research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_heavy_combat_platform_2183 }
-		enable_subunits = { ADISCORD_heavy_platform }
+		enable_subunits = { ADISCORD_heavy_platform hq_heavy_armor }
 		research_cost = 2.05
 		start_year = 2165
 		folder = {
@@ -789,7 +789,7 @@ technologies = {
 		category_all_armor = { defense = 0.027 reliability = 0.027 }
 		path = { leads_to_tech = ADISCORD_tech_remote_breaching_manipulators research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_heavy_combat_platform_2183 }
-		enable_subunits = { ADISCORD_heavy_platform }
+		enable_subunits = { ADISCORD_heavy_platform hq_heavy_armor }
 		research_cost = 2.05
 		start_year = 2167
 		folder = {

@@ -1,0 +1,9 @@
+leader_traits = {
+	AIN_concessionary_director = {
+		random = no
+		sprite = 1
+		political_power_gain = 0.06
+		stability_factor = 0.04
+		consumer_goods_factor = -0.02
+	}
+}

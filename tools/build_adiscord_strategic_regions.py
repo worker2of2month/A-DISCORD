@@ -42,6 +42,7 @@ class SeaRegion:
     climate: str
     latitude_band: int
     longitude_band: int
+    naval_terrain: str = "water_deep_ocean"
 
 
 SEA_REGIONS = (
@@ -61,6 +62,18 @@ SEA_REGIONS = (
     SeaRegion(38, "southern-ocean", "Южный океан", "tropical_ocean", 4, 1),
     SeaRegion(39, "southeastern-ocean", "Юго-восточный океан", "tropical_ocean", 4, 2),
 )
+
+# The enclosed Antolla basin is a separate, shallow inland sea.  It must not
+# be swallowed by the eastern-ocean partition or treated like a landlocked
+# lake: all six provinces form one navigable component around the inner
+# frontier countries.
+DEDICATED_SEA_REGIONS = (
+    SeaRegion(228, "antolla-sea", "Антолльское море", "temperate_ocean", 2, 2, "water_shallow_sea"),
+)
+DEDICATED_SEA_PROVINCES = {
+    228: frozenset({16258, 16262, 16264, 16265, 16266, 16268}),
+}
+ALL_SEA_REGIONS = (*SEA_REGIONS, *DEDICATED_SEA_REGIONS)
 
 SEA_REGION_GRID = (
     (1, 26, 27),
@@ -1074,6 +1087,24 @@ def build() -> None:
         raise ValueError("map contains no sea provinces")
     main_ocean = sea_components[0]
 
+    dedicated_union: set[int] = set()
+    for region in DEDICATED_SEA_REGIONS:
+        provinces = set(DEDICATED_SEA_PROVINCES[region.region_id])
+        if provinces - sea:
+            raise ValueError(
+                f"dedicated sea region {region.region_id} contains non-sea provinces: {sorted(provinces - sea)}"
+            )
+        overlap = dedicated_union & provinces
+        if overlap:
+            raise ValueError(f"dedicated sea provinces assigned more than once: {sorted(overlap)}")
+        if not provinces <= main_ocean:
+            raise ValueError(
+                f"dedicated sea region {region.region_id} must belong to the navigable ocean component"
+            )
+        if len(connected_components(provinces, adjacency)) != 1:
+            raise ValueError(f"dedicated sea region {region.region_id} is not internally connected")
+        dedicated_union.update(provinces)
+
     region_provinces: dict[int, set[int]] = {}
     land_region_by_province: dict[int, int] = {}
     for region in REGIONS:
@@ -1083,6 +1114,9 @@ def build() -> None:
         region_provinces[region.region_id] = provinces
         for province_id in provinces:
             land_region_by_province[province_id] = region.region_id
+
+    for region_id, provinces in DEDICATED_SEA_PROVINCES.items():
+        region_provinces[region_id] = set(provinces)
 
     # Inland lakes must belong to their surrounding land region. Combining them
     # with the ocean makes Clausewitz report a fractioned naval strategic region.
@@ -1098,9 +1132,23 @@ def build() -> None:
         region_id = min(neighbouring_land, key=lambda candidate: (-neighbouring_land[candidate], candidate))
         region_provinces[region_id].update(component)
 
-    region_provinces.update(partition_connected_sea(main_ocean, adjacency, province_positions))
+    # Partition the complete navigable ocean first, then cut the local basin out
+    # of its macro region.  This keeps every unrelated ocean boundary stable.
+    macro_partition = partition_connected_sea(main_ocean, adjacency, province_positions)
+    for region_id, provinces in DEDICATED_SEA_PROVINCES.items():
+        source_regions = {
+            macro_region_id
+            for macro_region_id, macro_provinces in macro_partition.items()
+            if macro_provinces & set(provinces)
+        }
+        if len(source_regions) != 1:
+            raise ValueError(
+                f"dedicated sea region {region_id} crosses macro-ocean boundaries: {sorted(source_regions)}"
+            )
+        macro_partition[next(iter(source_regions))].difference_update(provinces)
+    region_provinces.update(macro_partition)
 
-    sea_by_id = {region.region_id: region for region in SEA_REGIONS}
+    sea_by_id = {region.region_id: region for region in ALL_SEA_REGIONS}
     for region_id, region in sorted(sea_by_id.items()):
         provinces = region_provinces.get(region_id, set())
         if not provinces:
@@ -1113,7 +1161,7 @@ def build() -> None:
             "\tprovinces={\n"
             f"{format_provinces(provinces)}\n"
             "\t}\n"
-            "\tnaval_terrain=water_deep_ocean\n"
+            f"\tnaval_terrain={region.naval_terrain}\n"
             f"{format_weather(region.climate)}\n"
             "}\n"
         )
@@ -1138,7 +1186,7 @@ def build() -> None:
 
     LOCALISATION.parent.mkdir(parents=True, exist_ok=True)
     localisation_lines = ["\ufeffl_russian:"]
-    for region in sorted((*SEA_REGIONS, *REGIONS), key=lambda item: item.region_id):
+    for region in sorted((*ALL_SEA_REGIONS, *REGIONS), key=lambda item: item.region_id):
         localisation_lines.append(f' STRATEGICREGION_{region.region_id}: "{region.russian_name}"')
     LOCALISATION.write_text("\n".join(localisation_lines) + "\n", encoding="utf-8", newline="\n")
 
@@ -1151,7 +1199,7 @@ def build() -> None:
             weather_lines.append(f"{region_id};{x:.2f};{height:.2f};{z:.2f};{size}")
     WEATHER_POSITIONS.write_text("\n".join(weather_lines) + "\n", encoding="utf-8", newline="\n")
 
-    print(f"Built {len(REGIONS)} land and {len(SEA_REGIONS)} sea strategic regions for {len(states)} states.")
+    print(f"Built {len(REGIONS)} land and {len(ALL_SEA_REGIONS)} sea strategic regions for {len(states)} states.")
 
 
 if __name__ == "__main__":

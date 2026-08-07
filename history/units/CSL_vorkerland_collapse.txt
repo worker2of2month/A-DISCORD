@@ -13,4 +13,6 @@ units = {
 		start_experience_factor = 0.05
 		start_equipment_factor = 0.55
 	}
+	division = { division_name = { is_name_ordered = yes name_order = 2 } location = 7778 division_template = "CSL Municipal Militia" start_experience_factor = 0.05 start_equipment_factor = 0.60 }
+	division = { division_name = { is_name_ordered = yes name_order = 3 } location = 7778 division_template = "CSL Municipal Militia" start_experience_factor = 0.05 start_equipment_factor = 0.60 }
 }

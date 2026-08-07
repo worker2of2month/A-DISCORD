@@ -1,0 +1,19 @@
+capital = 378
+oob = "ELN"
+
+recruit_character = ELN_Taal_Elander
+
+set_politics = {
+	ruling_party = technocracy
+	elections_allowed = no
+}
+set_popularities = {
+	technocracy = 65
+	utilitarism = 20
+	etatism = 10
+	pragmatism = 5
+}
+set_stability = 0.59
+set_war_support = 0.32
+set_research_slots = 3
+add_ideas = { ELN_census_engines }

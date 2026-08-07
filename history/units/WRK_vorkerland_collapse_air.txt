@@ -1,0 +1,9 @@
+air_wings = {
+	# The capital airfield receives one operational fighter group and a smaller
+	# ground-support group.  Additional aircraft from the collapse effect remain
+	# in reserve as replacements instead of hiding the entire force in stockpile.
+	32 = {
+		ADISCORD_fighter_airframe_2163 = { owner = "WRK" amount = 100 }
+		ADISCORD_cas_airframe_2170 = { owner = "WRK" amount = 50 }
+	}
+}

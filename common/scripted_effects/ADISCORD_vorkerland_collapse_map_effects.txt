@@ -12,13 +12,38 @@ ADISCORD_vorkerland_end_internal_wars = {
 	if = { limit = { country_exists = TVA country_exists = TGD } TVA = { if = { limit = { has_war_with = TGD } white_peace = TGD } } }
 	if = { limit = { country_exists = TVA country_exists = EYR } TVA = { if = { limit = { has_war_with = EYR } white_peace = EYR } } }
 	if = { limit = { country_exists = TVA country_exists = EGC } TVA = { if = { limit = { has_war_with = EGC } white_peace = EGC } } }
+	if = { limit = { country_exists = WRK country_exists = RIV } WRK = { if = { limit = { has_war_with = RIV } white_peace = RIV } } }
+	if = { limit = { country_exists = WRK country_exists = REV } WRK = { if = { limit = { has_war_with = REV } white_peace = REV } } }
+	if = { limit = { country_exists = WRK country_exists = YOR } WRK = { if = { limit = { has_war_with = YOR } white_peace = YOR } } }
+	if = { limit = { country_exists = VAD country_exists = RIV } VAD = { if = { limit = { has_war_with = RIV } white_peace = RIV } } }
+	if = { limit = { country_exists = VAD country_exists = REV } VAD = { if = { limit = { has_war_with = REV } white_peace = REV } } }
+	if = { limit = { country_exists = VAD country_exists = YOR } VAD = { if = { limit = { has_war_with = YOR } white_peace = YOR } } }
+	if = { limit = { country_exists = TVA country_exists = RIV } TVA = { if = { limit = { has_war_with = RIV } white_peace = RIV } } }
+	if = { limit = { country_exists = TVA country_exists = REV } TVA = { if = { limit = { has_war_with = REV } white_peace = REV } } }
+	if = { limit = { country_exists = TVA country_exists = YOR } TVA = { if = { limit = { has_war_with = YOR } white_peace = YOR } } }
+	if = { limit = { country_exists = WRK country_exists = NDN } WRK = { if = { limit = { has_war_with = NDN } white_peace = NDN } } }
+	if = { limit = { country_exists = WRK country_exists = SWB } WRK = { if = { limit = { has_war_with = SWB } white_peace = SWB } } }
+	if = { limit = { country_exists = VAD country_exists = NDN } VAD = { if = { limit = { has_war_with = NDN } white_peace = NDN } } }
+	if = { limit = { country_exists = VAD country_exists = SWB } VAD = { if = { limit = { has_war_with = SWB } white_peace = SWB } } }
+	if = { limit = { country_exists = TVA country_exists = NDN } TVA = { if = { limit = { has_war_with = NDN } white_peace = NDN } } }
+	if = { limit = { country_exists = TVA country_exists = SWB } TVA = { if = { limit = { has_war_with = SWB } white_peace = SWB } } }
+	if = { limit = { country_exists = WRK country_exists = VHV } WRK = { if = { limit = { has_war_with = VHV } white_peace = VHV } } }
+	if = { limit = { country_exists = WRK country_exists = OSV } WRK = { if = { limit = { has_war_with = OSV } white_peace = OSV } } }
+	if = { limit = { country_exists = VAD country_exists = VHV } VAD = { if = { limit = { has_war_with = VHV } white_peace = VHV } } }
+	if = { limit = { country_exists = VAD country_exists = OSV } VAD = { if = { limit = { has_war_with = OSV } white_peace = OSV } } }
+	if = { limit = { country_exists = TVA country_exists = VHV } TVA = { if = { limit = { has_war_with = VHV } white_peace = VHV } } }
+	if = { limit = { country_exists = TVA country_exists = OSV } TVA = { if = { limit = { has_war_with = OSV } white_peace = OSV } } }
 
 	# Local wars may still be active when a central claimant wins. Close them
 	# explicitly before applying that claimant's final political map.
 	if = { limit = { country_exists = ZAO country_exists = WPA } ZAO = { if = { limit = { has_war_with = WPA } white_peace = WPA } } }
-	if = { limit = { country_exists = WPA country_exists = WPS } WPA = { if = { limit = { has_war_with = WPS } white_peace = WPS } } }
 	if = { limit = { country_exists = WPS country_exists = ZAO } WPS = { if = { limit = { has_war_with = ZAO } white_peace = ZAO } } }
-	if = { limit = { country_exists = PWR country_exists = PSD } PWR = { if = { limit = { has_war_with = PSD } white_peace = PSD } } }
+	if = { limit = { country_exists = ZAO country_exists = PSD } ZAO = { if = { limit = { has_war_with = PSD } white_peace = PSD } } }
+	if = { limit = { country_exists = ZAO country_exists = PWR } ZAO = { if = { limit = { has_war_with = PWR } white_peace = PWR } } }
+	if = { limit = { country_exists = WPA country_exists = PSD } WPA = { if = { limit = { has_war_with = PSD } white_peace = PSD } } }
+	if = { limit = { country_exists = WPA country_exists = PWR } WPA = { if = { limit = { has_war_with = PWR } white_peace = PWR } } }
+	if = { limit = { country_exists = WPS country_exists = PSD } WPS = { if = { limit = { has_war_with = PSD } white_peace = PSD } } }
+	if = { limit = { country_exists = WPS country_exists = PWR } WPS = { if = { limit = { has_war_with = PWR } white_peace = PWR } } }
 	if = { limit = { country_exists = VLA country_exists = EBA } VLA = { if = { limit = { has_war_with = EBA } white_peace = EBA } } }
 	if = { limit = { country_exists = ROM country_exists = DVA } ROM = { if = { limit = { has_war_with = DVA } white_peace = DVA } } }
 	if = { limit = { country_exists = SOL country_exists = SRA } SOL = { if = { limit = { has_war_with = SRA } white_peace = SRA } } }
@@ -60,16 +85,25 @@ ADISCORD_vorkerland_show_dirty_opening_superevent = {
 ADISCORD_vorkerland_show_worker_victory_superevent = {
 	ADISCORD_vorkerland_clear_superevent_flags = yes
 	set_global_flag = { flag = superevent_vorkerland_worker_victory value = 1 days = 20 }
+	ADISCORD_vorkerland_play_local_superevent_audio = yes
 }
 
 ADISCORD_vorkerland_show_vlad_victory_superevent = {
 	ADISCORD_vorkerland_clear_superevent_flags = yes
 	set_global_flag = { flag = superevent_vorkerland_vlad_victory value = 1 days = 20 }
+	ADISCORD_vorkerland_play_local_superevent_audio = yes
 }
 
 ADISCORD_vorkerland_show_dorian_victory_superevent = {
 	ADISCORD_vorkerland_clear_superevent_flags = yes
 	set_global_flag = { flag = superevent_vorkerland_dorian_victory value = 1 days = 20 }
+	ADISCORD_vorkerland_play_local_superevent_audio = yes
+}
+
+ADISCORD_vorkerland_finish_civil_war_exhaustion = {
+	WRK = { ADISCORD_vorkerland_reset_civil_war_exhaustion = yes }
+	VAD = { ADISCORD_vorkerland_reset_civil_war_exhaustion = yes }
+	TVA = { ADISCORD_vorkerland_reset_civil_war_exhaustion = yes }
 }
 
 # Central victory records the claimant and unlocks border-by-border
@@ -80,6 +114,9 @@ ADISCORD_vorkerland_apply_worker_map = {
 	set_global_flag = ADISCORD_vorkerland_worker_won
 	clr_global_flag = ADISCORD_vorkerland_central_outcome_pending
 	WRK = { set_country_flag = ADISCORD_vorkerland_central_unifier }
+	ADISCORD_vorkerland_finish_civil_war_exhaustion = yes
+	ADISCORD_vorkerland_split_external_gate = yes
+	ADISCORD_vorkerland_resolve_unguaranteed_free_republics = yes
 	ADISCORD_vorkerland_show_worker_victory_superevent = yes
 }
 
@@ -93,6 +130,8 @@ ADISCORD_vorkerland_apply_vlad_map = {
 		if = { limit = { has_global_flag = ADISCORD_vorkerland_worker_missing } set_country_flag = ADISCORD_vorkerland_worker_unaccounted_for }
 		if = { limit = { has_global_flag = ADISCORD_vorkerland_worker_killed } set_country_flag = ADISCORD_vorkerland_worker_martyr }
 	}
+	ADISCORD_vorkerland_finish_civil_war_exhaustion = yes
+	ADISCORD_vorkerland_split_external_gate = yes
 	ADISCORD_vorkerland_show_vlad_victory_superevent = yes
 }
 
@@ -101,5 +140,7 @@ ADISCORD_vorkerland_apply_dorian_map = {
 	set_global_flag = ADISCORD_vorkerland_dorian_won
 	clr_global_flag = ADISCORD_vorkerland_central_outcome_pending
 	TVA = { set_country_flag = ADISCORD_vorkerland_central_unifier }
+	ADISCORD_vorkerland_finish_civil_war_exhaustion = yes
+	ADISCORD_vorkerland_split_external_gate = yes
 	ADISCORD_vorkerland_show_dorian_victory_superevent = yes
 }

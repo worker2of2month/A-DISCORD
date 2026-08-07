@@ -1,0 +1,76 @@
+characters = {
+	BOR_Elena_Borey = {
+		name = BOR_Elena_Borey
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } }
+		country_leader = {
+			ideology = humanism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = BOR_Elena_Borey_desc
+			traits = { BOR_frontier_mediator }
+		}
+	}
+	DOL_Marko_Doln = {
+		name = DOL_Marko_Doln
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_5 } }
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = DOL_Marko_Doln_desc
+		}
+	}
+	RIN_Alaric_IV_Ren = {
+		name = RIN_Alaric_IV_Ren
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_8 } }
+		country_leader = {
+			ideology = aristocratic_hedonism
+			expire = "2200.1.1.1"
+			id = -1
+			desc = RIN_Alaric_IV_Ren_desc
+			traits = { RIN_last_palatin }
+		}
+	}
+	KRM_Ivo_Kremen = {
+		name = KRM_Ivo_Kremen
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_7 } }
+		country_leader = {
+			ideology = utilitarism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = KRM_Ivo_Kremen_desc
+		}
+	}
+	LMN_Vera_Lemann = {
+		name = LMN_Vera_Lemann
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_1 } }
+		country_leader = {
+			ideology = etatism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = LMN_Vera_Lemann_desc
+			traits = { LMN_quarantine_commissioner }
+		}
+	}
+	RLY_Relay_Assembly_17 = {
+		name = RLY_Relay_Assembly_17
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
+		country_leader = {
+			ideology = technocracy_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = RLY_Relay_Assembly_17_desc
+		}
+	}
+	WCG_Edgar_Raut = {
+		name = WCG_Edgar_Raut
+		portraits = { civilian = { large = GFX_portrait_WCG_Edgar_Raut } }
+		country_leader = {
+			ideology = etatism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = WCG_Edgar_Raut_desc
+			traits = { WCG_gate_commandant }
+		}
+	}
+}

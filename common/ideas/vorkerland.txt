@@ -19,27 +19,27 @@ ideas = {
 			picture = GFX_idea_WRK_ashes_of_the_crown
 
 			modifier = {
-				send_volunteer_size = 0
-				army_defence_factor = -0.2
+				send_volunteer_factor = -0.50
+				army_defence_factor = -0.15
 				army_attack_factor = -0.15
-				army_org_factor = -0.25
-				recon_factor = -0.2
-				planning_speed = -0.2
+				army_org_factor = -0.20
+				recon_factor = -0.15
+				planning_speed = -0.25
 				equipment_capture_factor = -0.4
-				war_support_factor = -0.5
-				war_stability_factor = -0.7
-				command_power_gain_mult = -0.3
-				non_core_manpower = -0.9
-				conscription_factor = -0.7
+				war_support_factor = -0.30
+				war_stability_factor = -0.40
+				command_power_gain_mult = -0.25
+				non_core_manpower = -0.75
+				conscription_factor = -0.40
 				cannot_use_abilities = 1
 				no_compliance_gain = 1
-				ADISCORD_economy_tax_collection_factor = -0.15
+				ADISCORD_economy_tax_collection_factor = -0.10
 				ADISCORD_economy_population_tax_income_factor = -0.10
-				ADISCORD_economy_civilian_factory_income_factor = -0.10
+				ADISCORD_economy_civilian_factory_income_factor = -0.05
 				ADISCORD_economy_admin_expense_factor = 0.10
-				ADISCORD_economy_state_overload_gain_factor = 0.15
+				ADISCORD_economy_state_overload_gain_factor = 0.10
 				ADISCORD_country_development_state_growth_factor = -0.10
-				ADISCORD_country_development_economic_growth_factor = -0.10
+				ADISCORD_country_development_army_growth_factor = -0.10
 			}
 		}
 
@@ -58,12 +58,13 @@ ideas = {
 			picture = GFX_idea_WRK_hourglass_of_discord
 
 			modifier = {
-				political_power_gain = -0.2
-				drift_defence_factor = -0.6
-				ADISCORD_economy_overall_expense_factor = 0.15
+				political_power_gain = -0.25
+				stability_factor = -0.10
+				drift_defence_factor = -0.50
+				ADISCORD_economy_overall_expense_factor = 0.10
 				ADISCORD_economy_social_expense_factor = 0.10
 				ADISCORD_economy_inflation_pressure_factor = 0.10
-				ADISCORD_economy_state_overload_gain_factor = 0.15
+				ADISCORD_economy_state_overload_gain_factor = 0.10
 				ADISCORD_economy_demographic_fatigue_gain_factor = 0.10
 				ADISCORD_country_development_economic_growth_factor = -0.15
 			}
@@ -84,9 +85,120 @@ ideas = {
 			picture = GFX_idea_WRK_constitution_of_the_republic
 
 			modifier = {
-				stability_factor = 0.25
+				stability_factor = -0.10
+				political_power_gain = -0.15
+				consumer_goods_factor = 0.10
+				ADISCORD_economy_tax_collection_factor = -0.05
+				ADISCORD_country_development_state_growth_factor = -0.10
 			}
 		}
+
+		WRK_birthplace_of_the_first_revolution = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_WRK_birthplace_of_the_first_revolution
+
+			# The loyalist civil-war regime is an explicit continuation of the first
+			# revolutionary settlement. The spirit disappears only when WRK leaves
+			# both the old and the neo-vorkerist projects.
+			cancel = {
+				NOT = {
+					OR = {
+						has_country_leader_ideology = vorkerism
+						has_country_leader_ideology = neo_vorkerism
+					}
+				}
+			}
+
+			modifier = {
+				stability_factor = -0.05
+				war_support_factor = -0.10
+				political_power_gain = -0.10
+				research_speed_factor = -0.05
+				consumer_goods_factor = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.10
+				ADISCORD_country_development_cultural_growth_factor = -0.10
+			}
+		}
+
+		WRK_birthplace_of_the_first_revolution_front_republic = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_WRK_birthplace_of_the_first_revolution_front_republic
+
+			cancel = {
+				NOT = {
+					OR = {
+						has_country_leader_ideology = vorkerism
+						has_country_leader_ideology = neo_vorkerism
+					}
+				}
+			}
+
+			modifier = {
+				stability_factor = -0.02
+				war_support_factor = -0.03
+				political_power_gain = -0.03
+				research_speed_factor = -0.02
+				consumer_goods_factor = 0.02
+				army_org_regain = 0.03
+				ADISCORD_economy_admin_expense_factor = 0.05
+				ADISCORD_country_development_cultural_growth_factor = -0.03
+			}
+		}
+
+		WRK_birthplace_of_the_first_revolution_renewed_mandate = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_WRK_birthplace_of_the_first_revolution_renewed_mandate
+
+			cancel = {
+				NOT = {
+					OR = {
+						has_country_leader_ideology = vorkerism
+						has_country_leader_ideology = neo_vorkerism
+					}
+				}
+			}
+
+			modifier = {
+				stability_factor = 0.05
+				war_support_factor = 0.10
+				political_power_gain = 0.05
+				research_speed_factor = 0.03
+				consumer_goods_factor = -0.02
+				army_org_regain = 0.05
+				ADISCORD_country_development_cultural_growth_factor = 0.08
+			}
+		}
+
 		WRK_separatism = {
 
 			allowed = {

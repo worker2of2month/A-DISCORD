@@ -1,0 +1,60 @@
+# Specialist production for the three central Vorkerland claimants.  Generic
+# peacetime profiles deliberately shut armour and aviation down during an
+# economy crisis; this bounded wartime profile keeps the equipment already
+# represented by their collapse OOBs in production without giving every
+# fragment an expensive mechanised army.
+
+ADISCORD_vorkerland_armored_reserve_program = {
+	allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
+	enable = {
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		has_tech = ADISCORD_tech_semi_autonomous_combat_modules
+		num_of_military_factories > 2
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = role_ratio id = armor value = 12 }
+	ai_strategy = { type = equipment_production_factor id = armor value = 30 }
+	ai_strategy = { type = equipment_variant_production_factor id = ADISCORD_combat_platform_archetype value = 35 }
+	ai_strategy = { type = equipment_production_min_factories_archetype id = ADISCORD_combat_platform_archetype value = 1 }
+}
+
+ADISCORD_vorkerland_air_denial_program = {
+	allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
+	enable = {
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		has_tech = ADISCORD_tech_reclaimed_jet_platforms
+		num_of_military_factories > 2
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = unit_ratio id = fighter value = 90 }
+	ai_strategy = { type = unit_ratio id = cas value = 25 }
+	ai_strategy = { type = equipment_production_factor id = fighter value = 28 }
+	ai_strategy = { type = equipment_production_factor id = cas value = 10 }
+	ai_strategy = { type = equipment_variant_production_factor id = ADISCORD_fighter_archetype value = 35 }
+	ai_strategy = { type = equipment_variant_production_factor id = ADISCORD_cas_archetype value = 12 }
+	ai_strategy = { type = equipment_production_min_factories id = fighter value = 1 }
+}
+
+# Air employment must not disappear when a claimant drops below the factory
+# threshold used by the production programme. Regions 12 and 9 cover the
+# central and eastern collapse fronts; this wartime-only score deliberately
+# dominates the ordinary front score so the deployed wings are assigned there.
+ADISCORD_vorkerland_active_air_operations = {
+	allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
+	enable = {
+		is_ai = yes
+		has_war = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = strategic_air_importance id = 12 value = 100000 }
+	ai_strategy = { type = strategic_air_importance id = 9 value = 100000 }
+}

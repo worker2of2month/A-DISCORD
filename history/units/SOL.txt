@@ -50,8 +50,10 @@ units = {
 		location = 16582
 		division_template = "Line Infantry Brigade"
 		start_experience_factor = 0.15
-		start_equipment_factor = 0.29
+		start_equipment_factor = 0.60
 	}
+	division = { division_name = { is_name_ordered = yes name_order = 2 } location = 16582 division_template = "Local Security Detachment" start_experience_factor = 0.10 start_equipment_factor = 0.70 }
+	division = { division_name = { is_name_ordered = yes name_order = 3 } location = 16582 division_template = "Local Security Detachment" start_experience_factor = 0.10 start_equipment_factor = 0.70 }
 }
 
 ##### No notable air forces #####

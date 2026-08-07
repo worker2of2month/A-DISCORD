@@ -1,0 +1,6 @@
+spriteTypes = {
+	spriteType = {
+		name = "GFX_portrait_WCG_Edgar_Raut"
+		texturefile = "gfx/leaders/WCG/portrait_WCG_Edgar_Raut.png"
+	}
+}

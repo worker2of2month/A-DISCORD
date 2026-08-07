@@ -1,7 +1,21 @@
+# Minimal public API retained for future STP focuses and decisions.
+STP_initialize_party_suspicion = {
+	if = { limit = { NOT = { has_variable = STP_party_suspicion } } set_variable = { var = STP_party_suspicion value = 5 } }
+	clamp_variable = { var = STP_party_suspicion min = 0 max = 100 }
+}
+
+# Call with ADISCORD_STP_VAL_effect_value. The user-restored focus file already
+# uses this temporary-variable contract.
+STP_change_suspicion = {
+	STP_initialize_party_suspicion = yes
+	add_to_variable = { var = STP_party_suspicion value = ADISCORD_STP_VAL_effect_value }
+	clamp_variable = { var = STP_party_suspicion min = 0 max = 100 }
+}
+
+# Compatibility wrapper for the pre-existing 0.0-1.0 input convention.
 STP_change_party_suspicion_rate = {
-	multiply_variable = {
-		var = STP_party_suspicion_temp
-		value = 100
-	}
-	set_temp_variable = { var = ADISCORD_STP_VAL_effect_value value = STP_party_suspicion_temp } STP_change_suspicion = yes
+	STP_initialize_party_suspicion = yes
+	multiply_variable = { var = STP_party_suspicion_temp value = 100 }
+	add_to_variable = { var = STP_party_suspicion value = STP_party_suspicion_temp }
+	clamp_variable = { var = STP_party_suspicion min = 0 max = 100 }
 }

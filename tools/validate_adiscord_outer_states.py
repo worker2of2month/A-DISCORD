@@ -22,6 +22,8 @@ from build_adiscord_outer_states import (
     select_landmasses,
 )
 from build_adiscord_strategic_regions import OUTER_REGION_SPECS, connected_components
+from build_adiscord_northern_countries import POPULATION_MARKER
+from validate_adiscord_northern_countries import validate as validate_northern_countries
 
 
 def main() -> int:
@@ -58,13 +60,17 @@ def main() -> int:
             landmass = landmass_match.group(1)
         if not source.startswith(GENERATED_MARKER):
             errors.append(f"state {state_id}: missing generated marker")
-        for forbidden in (r"\bowner\s*=", r"\badd_core_of\s*=", r"\bvictory_points\s*=", r"\bbuildings\s*=\s*\{"):
-            if re.search(forbidden, source):
-                errors.append(f"state {state_id}: neutral shell contains {forbidden}")
-        if not re.search(r"(?m)^\s*manpower\s*=\s*1\s*$", source):
-            errors.append(f"state {state_id}: neutral shell manpower must be 1")
-        if not re.search(r"(?m)^\s*state_category\s*=\s*(rural|wasteland)\s*$", source):
-            errors.append(f"state {state_id}: invalid provisional state category")
+        if landmass == "right":
+            if POPULATION_MARKER not in source:
+                errors.append(f"state {state_id}: northern-right shell is not populated")
+        else:
+            for forbidden in (r"\bowner\s*=", r"\badd_core_of\s*=", r"\bvictory_points\s*=", r"\bbuildings\s*=\s*\{"):
+                if re.search(forbidden, source):
+                    errors.append(f"state {state_id}: neutral shell contains {forbidden}")
+            if not re.search(r"(?m)^\s*manpower\s*=\s*1\s*$", source):
+                errors.append(f"state {state_id}: neutral shell manpower must be 1")
+            if not re.search(r"(?m)^\s*state_category\s*=\s*(rural|wasteland)\s*$", source):
+                errors.append(f"state {state_id}: invalid provisional state category")
         overlap = assigned & provinces
         if overlap:
             errors.append(f"state {state_id}: duplicate provinces {sorted(overlap)[:20]}")
@@ -98,6 +104,8 @@ def main() -> int:
     if not 70 <= landmass_counts["left"] <= 85:
         errors.append(f"left continent: expected 70-85 coarse states, found {landmass_counts['left']}")
 
+    errors.extend(f"northern countries: {issue}" for issue in validate_northern_countries())
+
     if not LOCALISATION.exists():
         errors.append("missing generated outer-state localisation")
     else:
@@ -126,8 +134,8 @@ def main() -> int:
             print(f"- {error}")
         return 1
     print(
-        f"Outer-state validation passed: {len(generated)} neutral shells "
-        f"({landmass_counts['right']} northern-right, {landmass_counts['left']} coarse-left) "
+        f"Outer-state validation passed: {len(generated)} generated states "
+        f"({landmass_counts['right']} populated northern-right, {landmass_counts['left']} neutral coarse-left) "
         f"across {len(climate_counts)} climate groups."
     )
     return 0

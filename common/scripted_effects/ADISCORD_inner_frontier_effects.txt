@@ -1,0 +1,55 @@
+# The External Gate is only a pre-collapse WRK dependency. When the unified
+# command chain vanishes, its industrial and quarantine halves immediately
+# materialise as the Kremen and Leman administrations that already hold cores.
+ADISCORD_vorkerland_split_external_gate = {
+	if = {
+		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_external_gate_split } }
+		set_global_flag = ADISCORD_vorkerland_external_gate_split
+
+		151 = { add_core_of = KRM set_state_owner_to = KRM set_state_controller_to = KRM }
+		156 = { add_core_of = KRM set_state_owner_to = KRM set_state_controller_to = KRM }
+		161 = { add_core_of = KRM set_state_owner_to = KRM set_state_controller_to = KRM }
+		162 = { add_core_of = KRM set_state_owner_to = KRM set_state_controller_to = KRM }
+		163 = { add_core_of = KRM set_state_owner_to = KRM set_state_controller_to = KRM }
+
+		157 = { add_core_of = LMN set_state_owner_to = LMN set_state_controller_to = LMN }
+		158 = { add_core_of = LMN set_state_owner_to = LMN set_state_controller_to = LMN }
+		159 = { add_core_of = LMN set_state_owner_to = LMN set_state_controller_to = LMN }
+		160 = { add_core_of = LMN set_state_owner_to = LMN set_state_controller_to = LMN }
+		223 = { add_core_of = LMN set_state_owner_to = LMN set_state_controller_to = LMN }
+
+		KRM = {
+			set_capital = { state = 161 }
+			set_politics = { ruling_party = utilitarism elections_allowed = yes }
+			set_popularities = { utilitarism = 65 pragmatism = 20 technocracy = 10 humanism = 5 }
+			promote_character = { character = KRM_Ivo_Kremen ideology = utilitarism_ideology }
+			add_ideas = KRM_slag_road_compact
+			ADISCORD_grant_2150_technology_baseline = yes
+			ADISCORD_grant_technology_profile_industrial = yes
+			ADISCORD_economy_initialize_country = yes
+			load_oob = "KRM"
+			add_manpower = 6000
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 900 producer = KRM }
+		}
+		LMN = {
+			set_capital = { state = 159 }
+			set_politics = { ruling_party = etatism elections_allowed = no }
+			set_popularities = { etatism = 70 pragmatism = 15 chauvinism = 10 humanism = 5 }
+			promote_character = { character = LMN_Vera_Lemann ideology = etatism_ideology }
+			add_ideas = LMN_permanent_quarantine
+			ADISCORD_grant_2150_technology_baseline = yes
+			ADISCORD_grant_technology_profile_fragment_low_tech = yes
+			ADISCORD_grant_technology_profile_land = yes
+			ADISCORD_economy_initialize_country = yes
+			load_oob = "LMN"
+			add_manpower = 3500
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 550 producer = LMN }
+		}
+
+		if = {
+			limit = { WCG = { exists = yes } }
+			# Gate formations belong to the dissolved command, not either successor.
+			KRM = { annex_country = { target = WCG transfer_troops = no } }
+		}
+	}
+}

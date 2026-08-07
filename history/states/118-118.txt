@@ -1,17 +1,25 @@
-state={
-	id=118
-	name="STATE_118"
-	provinces={
-		147
-	}
-	manpower = 120000
-	state_category = rural
-	buildings_max_level_factor = 1.000
-	local_supplies = 1.5
+state = {
+	id = 118
+	name = "STATE_118"
+	manpower = 420000
+	state_category = town
 	history = {
+		owner = AIN
+		add_core_of = AIN
+		add_claim_by = TFF
+		victory_points = { 147 6 }
 		buildings = {
-			industrial_complex = 1
-			infrastructure = 2
+			infrastructure = 4
+			industrial_complex = 2
+			arms_factory = 1
 		}
 	}
+	provinces = {
+		147
+	}
+	resources = {
+		aluminium = 3
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 3.0
 }

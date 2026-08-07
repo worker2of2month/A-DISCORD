@@ -58,6 +58,9 @@ on_actions = {
 				}
 			}
 			STP = {
+				# Convert the legacy country-wide template lock so Army HQs remain usable.
+				ADISCORD_STP_migrate_army_template_lock = yes
+
 				# Starting society development levels for StepanLand.
 				ADISCORD_set_society_development_2 = yes
 				ADISCORD_set_social_system_development_2 = yes
@@ -104,6 +107,33 @@ on_actions = {
 				ADISCORD_economy_initialize_country = yes
 				# V19 TDA-core: disabled hidden startup economic pseudo-building distribution.
 				# ADISCORD_distribute_starting_buildings_by_country = yes
+			}
+		}
+	}
+	# Event-driven war-state edges keep demobilization responsive without adding
+	# a daily poll. The monthly/yearly economy update remains a save-safe fallback.
+	on_war = {
+		effect = {
+			if = {
+				limit = { has_variable = ADISCORD_economy_initialized }
+				ADISCORD_economy_update_postwar_demobilization = yes
+				ADISCORD_economy_update_gui = yes
+			}
+		}
+	}
+	on_peace = {
+		effect = {
+			if = {
+				limit = {
+					has_variable = ADISCORD_economy_initialized
+					has_war = no
+				}
+				ADISCORD_economy_update_postwar_demobilization = yes
+				# The transition can replace economy and conscription laws. Refresh
+				# their scalar caches once, then reuse the ordinary budget-control
+				# refresh instead of waiting up to a month for the menu to catch up.
+				ADISCORD_economy_recalculate_policy_modifiers = yes
+				ADISCORD_economy_refresh_after_budget_control_change = yes
 			}
 		}
 	}

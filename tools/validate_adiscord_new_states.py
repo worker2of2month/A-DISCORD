@@ -26,6 +26,32 @@ from build_adiscord_new_states import (
     state_path,
 )
 from adiscord_core_state_balance_manifest import NON_URBAN_SETTLEMENT_VPS
+from build_adiscord_ainholm_mandate import STATE_PROFILES as AINHOLM_STATE_PROFILES
+from build_adiscord_northern_countries import COUNTRIES as NORTHERN_COUNTRIES, build_profiles as build_northern_profiles
+from build_adiscord_inner_frontier_countries import (
+    COUNTRIES as INNER_FRONTIER_COUNTRIES,
+    build_profiles as build_inner_frontier_profiles,
+)
+
+
+_NORTHERN_PROFILES, _NORTHERN_PRINCIPAL_PROVINCES = build_northern_profiles()
+_INNER_FRONTIER_PROFILES, _INNER_FRONTIER_PRINCIPAL_PROVINCES = build_inner_frontier_profiles()
+NORTHERN_SETTLEMENT_STATES = {
+    int(country["capital"])
+    for country in NORTHERN_COUNTRIES.values()
+} | {
+    int(state_id)
+    for country in NORTHERN_COUNTRIES.values()
+    for state_id, _name, _value in country.get("secondary_vps", ())
+}
+INNER_FRONTIER_SETTLEMENT_STATES = {
+    int(country["capital"])
+    for country in INNER_FRONTIER_COUNTRIES.values()
+} | {
+    int(state_id)
+    for country in INNER_FRONTIER_COUNTRIES.values()
+    for state_id, _name, _value in country.get("secondary_vps", ())
+}
 
 
 APPROVED_NON_URBAN_SETTLEMENT_VPS = NON_URBAN_SETTLEMENT_VPS | frozenset(
@@ -33,9 +59,16 @@ APPROVED_NON_URBAN_SETTLEMENT_VPS = NON_URBAN_SETTLEMENT_VPS | frozenset(
     for points in (
         *AFRELA_LEGACY_VICTORY_POINTS.values(),
         *NAM_LEGACY_VICTORY_POINTS.values(),
+        *(profile["victory_points"] for profile in AINHOLM_STATE_PROFILES.values()),
     )
     for province_id, _value in points
-) | frozenset(province_id for province_id, _value in VORKERLAND_MINOR_VPS.values())
+) | frozenset(province_id for province_id, _value in VORKERLAND_CENTRES.values()) | frozenset(
+    province_id for province_id, _value in VORKERLAND_MINOR_VPS.values()
+) | frozenset(
+    _NORTHERN_PRINCIPAL_PROVINCES[state_id] for state_id in NORTHERN_SETTLEMENT_STATES
+) | frozenset(
+    _INNER_FRONTIER_PRINCIPAL_PROVINCES[state_id] for state_id in INNER_FRONTIER_SETTLEMENT_STATES
+)
 
 EBA_EXPECTED_VPS = {
     197: {16623: 10},
@@ -333,8 +366,8 @@ def validate_countries() -> None:
         "KDR": ("GFX_portrait_KDR_Rashid_al_Kadir", "KDR/portrait_KDR_Rashid_al_Kadir.png"),
         "RHM": ("GFX_portrait_RHM_Faris_Rahma", "RHM/portrait_RHM_Faris_Rahma.png"),
         "SDR": ("GFX_portrait_SDR_Hamid_Sahr", "SDR/portrait_SDR_Hamid_Sahr.png"),
-        "MZR": ("GFX_portrait_PLACEHOLDER", None),
-        "KYZ": ("GFX_portrait_PLACEHOLDER", None),
+        "MZR": ("GFX_Portrait_Forul_Generic_7", None),
+        "KYZ": ("GFX_Portrait_Forul_Generic_3", None),
         "SHL": ("GFX_portrait_SHL_Jalil_Nur", "SHL/portrait_SHL_Jalil_Nur.png"),
         "GLP": ("GFX_portrait_GLP_Miran_Veyr", "GLP/portrait_GLP_Miran_Veyr.png"),
         "AZH": ("GFX_portrait_AZH_Samir_Azhar", "AZH/portrait_AZH_Samir_Azhar.png"),
@@ -466,11 +499,23 @@ def validate_news_settings() -> None:
 def validate_vorkerland_expansion() -> None:
     effects = text(ROOT / "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
     maps = text(ROOT / "common/scripted_effects/ADISCORD_vorkerland_collapse_map_effects.txt")
-    tva_expansion = {308, 318, 320, 323, 324}
-    setup = block(effects, "ADISCORD_vorkerland_setup_tva")
-    for state_id in sorted(tva_expansion):
-        check(f"transfer_state = {state_id}" in setup, f"TVA setup: missing new state {state_id}")
-        check(bool(re.search(rf"\b{state_id}\s*=\s*\{{\s*add_core_of\s*=\s*TVA", setup)), f"TVA setup: missing core for state {state_id}")
+    expansion_assignments = {
+        "tva": ("TVA", {324}),
+        "riv": ("RIV", {308}),
+        "rev": ("REV", {323}),
+        "osv": ("OSV", {318, 320}),
+    }
+    for setup_name, (tag, state_ids) in expansion_assignments.items():
+        setup = block(effects, f"ADISCORD_vorkerland_setup_{setup_name}")
+        for state_id in sorted(state_ids):
+            check(
+                f"transfer_state = {state_id}" in setup,
+                f"{tag} setup: missing assigned expansion state {state_id}",
+            )
+            check(
+                bool(re.search(rf"\b{state_id}\s*=\s*\{{\s*add_core_of\s*=\s*{tag}", setup)),
+                f"{tag} setup: missing core for state {state_id}",
+            )
 
     # A central victory now unlocks the next, border-by-border phase instead of
     # swallowing every successor state in one scripted effect. Keep this gate

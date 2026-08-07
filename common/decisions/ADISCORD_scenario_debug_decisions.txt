@@ -8,7 +8,7 @@ ADISCORD_scenario_debug_category = {
 	}
 
 	ADISCORD_debug_add_vorkerland_war_exhaustion = {
-		allowed = { OR = { tag = WRK tag = VAD } }
+		allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
 		visible = { has_global_flag = ADISCORD_vorkerland_collapse_started }
 		cost = 0
 		complete_effect = {
@@ -27,7 +27,7 @@ ADISCORD_scenario_debug_category = {
 	}
 
 	ADISCORD_debug_reset_vorkerland_war_exhaustion = {
-		allowed = { OR = { tag = WRK tag = VAD } }
+		allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
 		visible = { has_global_flag = ADISCORD_vorkerland_collapse_started }
 		cost = 0
 		complete_effect = { ADISCORD_vorkerland_reset_civil_war_exhaustion = yes }

@@ -1,0 +1,18 @@
+capital = 345
+oob = "KRL"
+
+recruit_character = KRL_Edvard_Karel
+
+set_politics = {
+	ruling_party = hedonism
+	elections_allowed = no
+}
+set_popularities = {
+	hedonism = 55
+	chauvinism = 25
+	pragmatism = 15
+	humanism = 5
+}
+set_stability = 0.58
+set_war_support = 0.38
+set_research_slots = 3

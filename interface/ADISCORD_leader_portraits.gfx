@@ -267,6 +267,34 @@ spriteTypes = {
 		texturefile = "gfx/leaders/EGC/portrait_EGC_Ruslan_Pike.png"
 	}
 	spriteType = {
+		name = "GFX_portrait_RIV_Mikhail_Arsenyev"
+		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_1.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_REV_Elena_Rudenko"
+		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_2.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_YOR_Pavel_Korin"
+		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_3.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_NDN_Anna_Lind"
+		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_1.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_SWB_Oskar_Renn"
+		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_3.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_VHV_Sergey_Melnik"
+		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_2.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_OSV_Marina_Volkova"
+		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_1.png"
+	}
+	spriteType = {
 		name = "GFX_portrait_WPS_Karim_Dol"
 		texturefile = "gfx/leaders/WPS/portrait_WPS_Karim_Dol.png"
 	}
@@ -285,7 +313,7 @@ spriteTypes = {
 		texturefile = "gfx/leaders/EXZ/Portrait_EXZ_No_Command.png"
 	}
 
-###PLACEHOLDER or default shit
+	### Shared portraits
 	spriteType = {
 		name = "GFX_portrait_IBA_Matvey_Mateusk"
 		texturefile = "gfx/leaders/IBA/portrait_IBA_Matvey_Mateusk.png"
@@ -293,9 +321,5 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_portrait_IBL_Anton_Selevyostrov"
 		texturefile = "gfx/leaders/IBL/portrait_IBL_Anton_Selevyostrov.png"
-	}
-	spriteType = {
-	  	name = "GFX_portrait_PLACEHOLDER"
-	  	texturefile = "gfx/leaders/portrait_PLACEHOLDER.png"
 	}
 }

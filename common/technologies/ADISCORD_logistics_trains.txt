@@ -37,6 +37,7 @@ technologies = {
 	ADISCORD_tech_combat_engineering_sections = {
 		category_support_battalions = { defense = 0.022 soft_attack = 0.013 }
 		path = { leads_to_tech = ADISCORD_tech_standardized_field_tool_chests research_cost_coeff = 1 }
+		enable_subunits = { hq_engineer }
 		research_cost = 0.55
 		start_year = 2158
 		folder = {
@@ -44,7 +45,7 @@ technologies = {
 			position = { x = 3 y = 2 }
 		}
 		ai_will_do = {
-			factor = 32.5
+			factor = 43.875
 			modifier = { factor = 1.25 has_war = yes }
 			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
 		}
@@ -54,7 +55,7 @@ technologies = {
 	ADISCORD_tech_standardized_field_tool_chests = {
 		category_support_battalions = { defense = 0.023 soft_attack = 0.013 }
 		path = { leads_to_tech = ADISCORD_tech_casualty_evacuation research_cost_coeff = 1 }
-		enable_subunits = { maintenance_company }
+		enable_subunits = { maintenance_company hq_maintenance }
 		research_cost = 2.05
 		start_year = 2160
 		folder = {
@@ -72,7 +73,7 @@ technologies = {
 	ADISCORD_tech_casualty_evacuation = {
 		category_support_battalions = { defense = 0.024 soft_attack = 0.014 }
 		path = { leads_to_tech = ADISCORD_tech_portable_diagnostic_benches research_cost_coeff = 1 }
-		enable_subunits = { field_hospital }
+		enable_subunits = { field_hospital hq_field_hospital }
 		research_cost = 2.05
 		start_year = 2162
 		folder = {
@@ -304,7 +305,7 @@ technologies = {
 		supply_consumption_factor = -0.014
 		land_reinforce_rate = 0.007
 		path = { leads_to_tech = ADISCORD_tech_automated_depot_manifests research_cost_coeff = 1 }
-		enable_subunits = { logistics_company }
+		enable_subunits = { logistics_company hq_logistics }
 		research_cost = 2.05
 		start_year = 2162
 		folder = {
@@ -757,14 +758,15 @@ technologies = {
 		dependencies = {
 			ADISCORD_tech_hardened_computers = 1
 		}
-		research_cost = 1.305
+		enable_subunits = { hq_military_police }
+		research_cost = 2.05
 		start_year = 2162
 		folder = {
 			name = support_folder
 			position = { x = 3 y = 5 }
 		}
 		ai_will_do = {
-			factor = 26
+			factor = 35.1
 			modifier = { factor = 1.25 has_war = yes }
 			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
 		}

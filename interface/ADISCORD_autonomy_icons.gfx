@@ -29,4 +29,9 @@ spriteTypes = {
 		name = "GFX_autonomy_feodal_baronage_icon"
 		textureFile = "gfx/interface/autonomy/autonomy_feodal_baronage_icon.png"
 	}
-} 
+
+	spriteType = {
+		name = "GFX_autonomy_vorkerland_sanitary_gate_icon"
+		textureFile = "gfx/interface/autonomy/autonomy_vorkerland_sanitary_gate_icon.png"
+	}
+}

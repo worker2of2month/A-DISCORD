@@ -1,24 +1,33 @@
 characters = {
 	TVA_Dorian_Worx = { name = TVA_Dorian_Worx portraits = { civilian = { large = GFX_portrait_WRK_Dorian_Worx } } country_leader = { ideology = technocracy_ideology expire = "2200.1.1.1" id = -1 } }
-	EYR_Irina_Koval = { name = EYR_Irina_Koval portraits = { civilian = { large = GFX_portrait_PLACEHOLDER } } country_leader = { ideology = humanism_ideology expire = "2200.1.1.1" id = -1 } }
+	WTD_Central_Engineering_Council = { name = WTD_Central_Engineering_Council portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } } country_leader = { ideology = technocracy_ideology expire = "2200.1.1.1" id = -1 } }
+	EYR_Irina_Koval = { name = EYR_Irina_Koval portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = humanism_ideology expire = "2200.1.1.1" id = -1 } }
 	EGC_Ruslan_Pike = { name = EGC_Ruslan_Pike portraits = { civilian = { large = GFX_portrait_EGC_Ruslan_Pike } } country_leader = { ideology = etatism_ideology expire = "2200.1.1.1" id = -1 } }
+	RIV_Mikhail_Arsenyev = { name = RIV_Mikhail_Arsenyev portraits = { civilian = { large = GFX_portrait_RIV_Mikhail_Arsenyev } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
+	REV_Elena_Rudenko = { name = REV_Elena_Rudenko portraits = { civilian = { large = GFX_portrait_REV_Elena_Rudenko } } country_leader = { ideology = etatism_ideology expire = "2200.1.1.1" id = -1 } }
+	YOR_Pavel_Korin = { name = YOR_Pavel_Korin portraits = { civilian = { large = GFX_portrait_YOR_Pavel_Korin } } country_leader = { ideology = humanism_ideology expire = "2200.1.1.1" id = -1 } }
+	NDN_Anna_Lind = { name = NDN_Anna_Lind portraits = { civilian = { large = GFX_portrait_NDN_Anna_Lind } } country_leader = { ideology = humanism_ideology expire = "2200.1.1.1" id = -1 } }
+	SWB_Oskar_Renn = { name = SWB_Oskar_Renn portraits = { civilian = { large = GFX_portrait_SWB_Oskar_Renn } } country_leader = { ideology = etatism_ideology expire = "2200.1.1.1" id = -1 } }
+	VHV_Sergey_Melnik = { name = VHV_Sergey_Melnik portraits = { civilian = { large = GFX_portrait_VHV_Sergey_Melnik } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
+	OSV_Marina_Volkova = { name = OSV_Marina_Volkova portraits = { civilian = { large = GFX_portrait_OSV_Marina_Volkova } } country_leader = { ideology = humanism_ideology expire = "2200.1.1.1" id = -1 } }
 	WPA_Oliver_Larry_Gates = { name = WPA_Oliver_Larry_Gates portraits = { civilian = { large = GFX_portrait_WPA_Oliver_Larry_Gates } } country_leader = { ideology = humanism_ideology expire = "2200.1.1.1" id = -1 } }
 	WPS_Karim_Dol = { name = WPS_Karim_Dol portraits = { civilian = { large = GFX_portrait_WPS_Karim_Dol } } country_leader = { ideology = technocracy_ideology expire = "2200.1.1.1" id = -1 } }
-	PSD_Marta_Cinder = { name = PSD_Marta_Cinder portraits = { civilian = { large = GFX_portrait_PLACEHOLDER } } country_leader = { ideology = etatism_ideology expire = "2200.1.1.1" id = -1 } }
+	PWR_Alexey_Lange = { name = PWR_Alexey_Lange portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
+	PSD_Marta_Cinder = { name = PSD_Marta_Cinder portraits = { civilian = { large = GFX_Portrait_Forul_Generic_1 } } country_leader = { ideology = etatism_ideology expire = "2200.1.1.1" id = -1 } }
 	EBA_Vlad_Mecra = { name = EBA_Vlad_Mecra portraits = { civilian = { large = GFX_portrait_WRK_Vlad_Mecra } } country_leader = { ideology = hedonism_ideology expire = "2200.1.1.1" id = -1 } }
 	DVA_Severin_Mark = { name = DVA_Severin_Mark portraits = { civilian = { large = GFX_portrait_DVA_Severin_Mark } } country_leader = { ideology = etatism_ideology expire = "2200.1.1.1" id = -1 } }
 	SRA_Helio_Marr = { name = SRA_Helio_Marr portraits = { civilian = { large = GFX_portrait_SRA_Helio_Marr } } country_leader = { ideology = humanism_ideology expire = "2200.1.1.1" id = -1 } }
 	ZTA_Viktor_Holt = { name = ZTA_Viktor_Holt portraits = { civilian = { large = GFX_portrait_ZTA_Viktor_Holt } } country_leader = { ideology = chauvinism_ideology expire = "2200.1.1.1" id = -1 } }
-	SLA_Starolesye_District_Board = { name = SLA_Starolesye_District_Board portraits = { civilian = { large = GFX_portrait_PLACEHOLDER } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
-	RZA_Reactor_Technical_Directorate = { name = RZA_Reactor_Technical_Directorate portraits = { civilian = { large = GFX_portrait_PLACEHOLDER } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
-	MLR_Lowland_Interim_Rada = { name = MLR_Lowland_Interim_Rada portraits = { civilian = { large = GFX_portrait_PLACEHOLDER } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
-	ERT_Eastern_Restoration_Administration = { name = ERT_Eastern_Restoration_Administration portraits = { civilian = { large = GFX_portrait_PLACEHOLDER } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
-	IRT_Interior_Republican_Council = { name = IRT_Interior_Republican_Council portraits = { civilian = { large = GFX_portrait_PLACEHOLDER } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
-	SCA_Southern_Corridor_Administration = { name = SCA_Southern_Corridor_Administration portraits = { civilian = { large = GFX_portrait_PLACEHOLDER } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
+	SLA_Starolesye_District_Board = { name = SLA_Starolesye_District_Board portraits = { civilian = { large = GFX_Portrait_Forul_Generic_5 } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
+	RZA_Reactor_Technical_Directorate = { name = RZA_Reactor_Technical_Directorate portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
+	MLR_Lowland_Interim_Rada = { name = MLR_Lowland_Interim_Rada portraits = { civilian = { large = GFX_Portrait_Forul_Generic_7 } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
+	ERT_Eastern_Restoration_Administration = { name = ERT_Eastern_Restoration_Administration portraits = { civilian = { large = GFX_Portrait_Forul_Generic_1 } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
+	IRT_Interior_Republican_Council = { name = IRT_Interior_Republican_Council portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
+	SCA_Southern_Corridor_Administration = { name = SCA_Southern_Corridor_Administration portraits = { civilian = { large = GFX_Portrait_Forul_Generic_9 } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
 	TGD_Ted_Cuttle = { name = TGD_Ted_Cuttle portraits = { civilian = { large = GFX_portrait_WRK_Ted_Cuttle } } country_leader = { ideology = technocracy_ideology expire = "2200.1.1.1" id = -1 } }
 	IBA_Matvey_Mateusk = { name = IBA_Matvey_Mateusk portraits = { civilian = { large = GFX_portrait_IBA_Matvey_Mateusk } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
 	IBL_Anton_Selevyostrov = { name = IBL_Anton_Selevyostrov portraits = { civilian = { large = GFX_portrait_IBL_Anton_Selevyostrov } } country_leader = { ideology = chauvinism_ideology expire = "2200.1.1.1" id = -1 } }
-	CSL_Miron_Rudakov = { name = CSL_Miron_Rudakov portraits = { civilian = { large = GFX_portrait_PLACEHOLDER } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
+	CSL_Miron_Rudakov = { name = CSL_Miron_Rudakov portraits = { civilian = { large = GFX_Portrait_Forul_Generic_5 } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
 	WRK_Anton_Bagley = { name = WRK_Anton_Bagley portraits = { civilian = { large = GFX_portrait_WRK_Anton_Bagley } } }
 	WRK_VAD_Joint_Council = {
 		name = WRK_VAD_Joint_Council

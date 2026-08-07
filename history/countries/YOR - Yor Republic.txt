@@ -1,0 +1,4 @@
+set_politics = { ruling_party = humanism elections_allowed = yes }
+set_popularities = { etatism = 5 chauvinism = 0 humanism = 75 pragmatism = 15 technocracy = 5 }
+recruit_character = YOR_Pavel_Korin
+set_research_slots = 2

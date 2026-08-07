@@ -13,7 +13,7 @@ characters = {
 		name = GHN_Maison
 		portraits = {
 			civilian = {
-				large = GFX_portrait_PLACEHOLDER
+				large = GFX_Portrait_Forul_Generic_3
 			}
 		}
 		country_leader = {

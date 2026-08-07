@@ -70,6 +70,21 @@ def ibl() -> Image.Image:
     return image
 
 
+def wtd() -> Image.Image:
+    image = Image.new("RGB", CANVAS, "#243f4b")
+    draw = ImageDraw.Draw(image)
+    pale, copper, deep = "#dde4d6", "#d18445", "#162b33"
+    draw.rectangle((0, 0, 655, 415), outline=deep, width=24)
+    draw.polygon(((328, 58), (455, 132), (455, 284), (328, 358), (201, 284), (201, 132)), fill=pale)
+    draw.polygon(((328, 94), (420, 147), (420, 269), (328, 322), (236, 269), (236, 147)), fill=deep)
+    ring(draw, (276, 156, 380, 260), copper, 18)
+    draw.line((0, 208, 205, 208), fill=copper, width=18)
+    draw.line((451, 208, 656, 208), fill=copper, width=18)
+    draw.line((328, 0, 328, 96), fill=copper, width=18)
+    draw.line((328, 320, 328, 416), fill=copper, width=18)
+    return image
+
+
 def slf() -> Image.Image:
     image = Image.new("RGB", CANVAS, "#1a1b18")
     draw = ImageDraw.Draw(image)
@@ -180,6 +195,7 @@ BUILDERS = {
     "EBA": eba,
     "TGD": tgd,
     "IBL": ibl,
+    "WTD": wtd,
     "SLF": slf,
     "PWR_rimat_republic": pwr,
     "ROM_frealor_republic": rom,

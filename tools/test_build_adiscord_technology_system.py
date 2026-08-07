@@ -151,7 +151,7 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
 
     def test_starting_profile_manifest_is_machine_readable_and_bounded(self) -> None:
         payload = json.loads(STARTING_PROFILE_MANIFEST.read_text(encoding="utf-8"))
-        self.assertEqual(payload["active_country_count"], 41)
+        self.assertEqual(payload["active_country_count"], 62)
         self.assertEqual(set(payload["countries"]), set(generator.STARTING_COUNTRY_TECH_PROFILES))
         self.assertEqual(
             set(generator.STARTING_COUNTRY_TECH_PROFILE_RATIONALE),

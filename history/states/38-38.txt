@@ -20,5 +20,8 @@ state={
             industrial_complex = 6
             commercial_nuclear_reactor = 1
         }
+		victory_points = { 16398 30 }
+		victory_points = { 6790 20 }
+		victory_points = { 16425 10 }
 	}
 }

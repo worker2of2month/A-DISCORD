@@ -11,7 +11,6 @@ ADISCORD_vorkerland_apply_dirty_modifiers = {
     153 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     154 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     155 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    160 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     165 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     166 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     167 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
@@ -51,12 +50,10 @@ ADISCORD_vorkerland_apply_dirty_modifiers = {
     215 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     216 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     217 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    218 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     219 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     220 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     221 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     222 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    223 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     224 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
 }
 
@@ -125,14 +122,11 @@ ADISCORD_vorkerland_setup_mlr = {
 	152 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
 	153 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
 	154 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
-	160 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
 	189 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
 	190 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
-	218 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
 	219 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
 	221 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
 	222 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
-	223 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
 	224 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
 	log = "[ADISCORD Vorkerland] MLR state ownership assigned"
 	MLR = {

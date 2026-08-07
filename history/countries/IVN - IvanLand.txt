@@ -1,6 +1,7 @@
 capital = 25
 
 oob = "IVN"
+set_major = yes
 ####### Characters
 
 recruit_character = IVN_Vadim_Ivanchik
@@ -50,4 +51,4 @@ add_ideas = {
 	minister_IVN_Alina_Sek
 }
 
-set_research_slots = 4
+set_research_slots = 5

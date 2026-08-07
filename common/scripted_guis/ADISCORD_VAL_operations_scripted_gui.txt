@@ -7,29 +7,9 @@ scripted_gui = {
 		visible = { always = yes }
 
 		triggers = {
-			VAL_ops_43_home_visible = { 43 = { controller = { OR = { tag = STP has_country_flag = STP_main_campaign_side } NOT = { has_country_flag = STP_crisis_resistance_side } NOT = { has_country_flag = STP_crisis_party_side } } } }
-			VAL_ops_43_resistance_visible = { 43 = { controller = { has_country_flag = STP_crisis_resistance_side } } }
-			VAL_ops_43_party_visible = { 43 = { controller = { has_country_flag = STP_crisis_party_side } } }
-			VAL_ops_43_val_visible = { 43 = { controller = { tag = VAL } } }
-			VAL_ops_43_other_visible = { 43 = { controller = { NOT = { tag = VAL } NOT = { tag = STP } NOT = { has_country_flag = STP_main_campaign_side } NOT = { has_country_flag = STP_crisis_resistance_side } NOT = { has_country_flag = STP_crisis_party_side } } } }
 
-			VAL_ops_44_home_visible = { 44 = { controller = { OR = { tag = STP has_country_flag = STP_main_campaign_side } NOT = { has_country_flag = STP_crisis_resistance_side } NOT = { has_country_flag = STP_crisis_party_side } } } }
-			VAL_ops_44_resistance_visible = { 44 = { controller = { has_country_flag = STP_crisis_resistance_side } } }
-			VAL_ops_44_party_visible = { 44 = { controller = { has_country_flag = STP_crisis_party_side } } }
-			VAL_ops_44_val_visible = { 44 = { controller = { tag = VAL } } }
-			VAL_ops_44_other_visible = { 44 = { controller = { NOT = { tag = VAL } NOT = { tag = STP } NOT = { has_country_flag = STP_main_campaign_side } NOT = { has_country_flag = STP_crisis_resistance_side } NOT = { has_country_flag = STP_crisis_party_side } } } }
 
-			VAL_ops_45_home_visible = { 45 = { controller = { OR = { tag = STP has_country_flag = STP_main_campaign_side } NOT = { has_country_flag = STP_crisis_resistance_side } NOT = { has_country_flag = STP_crisis_party_side } } } }
-			VAL_ops_45_resistance_visible = { 45 = { controller = { has_country_flag = STP_crisis_resistance_side } } }
-			VAL_ops_45_party_visible = { 45 = { controller = { has_country_flag = STP_crisis_party_side } } }
-			VAL_ops_45_val_visible = { 45 = { controller = { tag = VAL } } }
-			VAL_ops_45_other_visible = { 45 = { controller = { NOT = { tag = VAL } NOT = { tag = STP } NOT = { has_country_flag = STP_main_campaign_side } NOT = { has_country_flag = STP_crisis_resistance_side } NOT = { has_country_flag = STP_crisis_party_side } } } }
 
-			VAL_ops_88_home_visible = { 88 = { controller = { OR = { tag = STP has_country_flag = STP_main_campaign_side } NOT = { has_country_flag = STP_crisis_resistance_side } NOT = { has_country_flag = STP_crisis_party_side } } } }
-			VAL_ops_88_resistance_visible = { 88 = { controller = { has_country_flag = STP_crisis_resistance_side } } }
-			VAL_ops_88_party_visible = { 88 = { controller = { has_country_flag = STP_crisis_party_side } } }
-			VAL_ops_88_val_visible = { 88 = { controller = { tag = VAL } } }
-			VAL_ops_88_other_visible = { 88 = { controller = { NOT = { tag = VAL } NOT = { tag = STP } NOT = { has_country_flag = STP_main_campaign_side } NOT = { has_country_flag = STP_crisis_resistance_side } NOT = { has_country_flag = STP_crisis_party_side } } } }
 
 			VAL_ops_59_home_visible = { 59 = { controller = { tag = CIN } } }
 			VAL_ops_59_val_visible = { 59 = { controller = { tag = VAL } } }

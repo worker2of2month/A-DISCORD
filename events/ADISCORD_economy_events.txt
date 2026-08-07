@@ -1,13 +1,13 @@
 add_namespace = ADISCORD_economy
 
 country_event = {
-	id = ADISCORD_economy.1
-	title = ADISCORD_economy.1.t
-	desc = ADISCORD_economy.1.d
+	id = ADISCORD_economy.2
+	title = ADISCORD_economy.2.t
+	desc = ADISCORD_economy.2.d
 	picture = GFX_report_event_generic_read_write
 	is_triggered_only = yes
 
 	option = {
-		name = ADISCORD_economy.1.a
+		name = ADISCORD_economy.2.a
 	}
 }
