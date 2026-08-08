@@ -1,6 +1,6 @@
 import unittest
 
-from tools.validate_adiscord_exclusion_zone_boundaries import validate
+from tools.validators.validate_adiscord_exclusion_zone_boundaries import validate
 
 
 class ExclusionZoneBoundaryContractsTest(unittest.TestCase):

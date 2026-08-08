@@ -8,7 +8,7 @@ from pathlib import Path
 from tools.builders import build_adiscord_technology_system as generator
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 LEGACY_MANIFEST = ROOT / "tools" / "data" / "adiscord_technology_legacy_manifest.json"
 STARTING_PROFILE_MANIFEST = ROOT / "tools" / "data" / "adiscord_starting_technology_profiles.json"
 

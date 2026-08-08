@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 DEBUG_BLOCK = re.compile(r"(?mi)^\s*([A-Za-z0-9_]*debug[A-Za-z0-9_]*)\s*=\s*\{")
 LOCALISATION = re.compile(r'^\s*([A-Za-z0-9_.-]+):(?:\d+)?\s*"([^"]*)"', re.MULTILINE)
 

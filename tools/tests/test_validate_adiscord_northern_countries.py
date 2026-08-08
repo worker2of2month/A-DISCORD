@@ -1,6 +1,6 @@
 import unittest
 
-from tools.validate_adiscord_northern_countries import validate
+from tools.validators.validate_adiscord_northern_countries import validate
 
 
 class NorthernCountryContractsTest(unittest.TestCase):

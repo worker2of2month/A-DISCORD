@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 GUI_NODE_RE = re.compile(
     r'(?P<type>[A-Za-z_][A-Za-z0-9_]*Type)\s*=\s*\{'
     r'|(?P<name>name\s*=\s*"(?P<name_value>[^"]+)")'

@@ -27,6 +27,14 @@ BUILDER_NAMES = (
     "build_adiscord_vorkerland_original_flags",
 )
 
+LIBRARY_NAMES = (
+    "adiscord_core_state_balance_manifest",
+    "adiscord_technology_applied_programmes",
+    "adiscord_technology_expansions_civil",
+    "adiscord_technology_expansions_combat",
+    "vorkerland_collapse_manifest",
+)
+
 # These builders already expose a genuinely read-only default/check path.
 # The remaining six are import-checked only until Task 5 adds explicit
 # check/apply contracts; invoking their current default would rewrite output.
@@ -139,3 +147,34 @@ class ToolEntrypointCompatibilityTests(unittest.TestCase):
                 self.assertEqual(facade.returncode, package.returncode)
                 self.assertEqual(facade.stdout, package.stdout)
                 self.assertEqual(facade.stderr, package.stderr)
+
+    def test_validator_facades_match_package_modules(self) -> None:
+        """Every compatibility validator facade must expose the package main."""
+        validator_names = tuple(
+            path.stem
+            for path in sorted((REPOSITORY_ROOT / "tools").glob("validate_adiscord_*.py"))
+        ) + ("validate_tc",)
+
+        for validator_name in validator_names:
+            with self.subTest(validator=validator_name):
+                implementation = importlib.import_module(
+                    f"tools.validators.{validator_name}"
+                )
+                facade = importlib.import_module(f"tools.{validator_name}")
+                self.assertIs(facade.main, implementation.main)
+
+    def test_library_modules_and_canonical_test_discovery_are_importable(self) -> None:
+        """Libraries and tests must live in their importable package directories."""
+        for library_name in LIBRARY_NAMES:
+            with self.subTest(library=library_name):
+                self.assertIsNotNone(importlib.import_module(f"tools.lib.{library_name}"))
+
+        root_tests = sorted((REPOSITORY_ROOT / "tools").glob("test_*.py"))
+        self.assertEqual(root_tests, [], "tests must be discovered from tools/tests")
+
+        suite = unittest.defaultTestLoader.discover(
+            str(REPOSITORY_ROOT / "tools" / "tests"),
+            pattern="test_*.py",
+            top_level_dir=str(REPOSITORY_ROOT),
+        )
+        self.assertGreater(suite.countTestCases(), 2)

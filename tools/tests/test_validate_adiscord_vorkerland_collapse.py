@@ -7,11 +7,11 @@ from pathlib import Path
 
 from PIL import Image
 
-from tools.validate_adiscord_vorkerland_collapse import SECTIONS, named_block, validate
-from tools.vorkerland_collapse_manifest import CAPITALS, TAGS
+from tools.validators.validate_adiscord_vorkerland_collapse import SECTIONS, named_block, validate
+from tools.lib.vorkerland_collapse_manifest import CAPITALS, TAGS
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 
 
 def read(relative: str) -> str:

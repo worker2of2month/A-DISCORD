@@ -1,6 +1,6 @@
 import unittest
 
-from tools.validate_adiscord_inner_frontier_countries import validate
+from tools.validators.validate_adiscord_inner_frontier_countries import validate
 
 
 class InnerFrontierCountryContractsTest(unittest.TestCase):

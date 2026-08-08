@@ -489,9 +489,9 @@ deep_ocean_denial|Глубоководное сдерживание|Deep-ocean D
 )
 
 
-from tools.adiscord_technology_expansions_civil import EXPANSIONS as CIVIL_EXPANSIONS
-from tools.adiscord_technology_expansions_combat import EXPANSIONS as COMBAT_EXPANSIONS
-from tools.adiscord_technology_applied_programmes import (
+from tools.lib.adiscord_technology_expansions_civil import EXPANSIONS as CIVIL_EXPANSIONS
+from tools.lib.adiscord_technology_expansions_combat import EXPANSIONS as COMBAT_EXPANSIONS
+from tools.lib.adiscord_technology_applied_programmes import (
     APPLIED_EFFECTS,
     APPLIED_PROGRAMMES,
     APPLIED_YEARS,

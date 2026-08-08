@@ -7,7 +7,7 @@ from pathlib import Path
 from PIL import Image
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 ICON = ROOT / "gfx/texticons/adiscord/parties/WRK/WRK_worker_revolutionary_party.png"
 SPRITE = "GFX_WRK_worker_revolutionary_party_texticon"
 

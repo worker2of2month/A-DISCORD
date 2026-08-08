@@ -9,7 +9,7 @@ from pathlib import Path
 from PIL import Image
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 FLAG_ROOT = ROOT / "gfx" / "flags"
 GENERATOR = ROOT / "tools" / "build_adiscord_vorkerland_original_flags.py"
 

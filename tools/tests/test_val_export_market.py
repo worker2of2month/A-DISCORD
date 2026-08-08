@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 BUYERS = ("WRK", "STP", "NOD", "IVN", "WIT", "NAM")
 AAT = '"Arms Against Tyranny"'
 REQUIRED_EXPORT_PORTS = {

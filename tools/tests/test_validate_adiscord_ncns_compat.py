@@ -1,12 +1,10 @@
 import re
-import sys
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "tools"))
+ROOT = Path(__file__).resolve().parents[2]
 
-import validate_tc
+from tools.validators import validate_tc
 
 
 def read(relative_path: str) -> str:

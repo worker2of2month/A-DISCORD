@@ -6,7 +6,7 @@ from dataclasses import replace
 from pathlib import Path
 from unittest.mock import patch
 
-from tools import validate_adiscord_tech_doctrine as validator
+from tools.validators import validate_adiscord_tech_doctrine as validator
 
 
 class TechnologyValidatorNegativeTests(unittest.TestCase):

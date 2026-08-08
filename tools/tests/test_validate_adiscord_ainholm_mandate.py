@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from tools.validate_adiscord_ainholm_mandate import validate
+from tools.validators.validate_adiscord_ainholm_mandate import validate
 
 
 class AinholmMandateContractTests(unittest.TestCase):
