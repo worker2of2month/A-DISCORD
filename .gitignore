@@ -1,0 +1,26 @@
+# Python bytecode and local test state
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Local console history
+console_history.txt
+
+# Clausewitz runtime logs, crashes, and dumps
+logs/
+crashes/
+*.log
+*.dmp
+*.mdmp
+
+# Editor recovery and backup files
+*~
+*.bak
+*.tmp
+*.swp
+*.swo
+.#*
