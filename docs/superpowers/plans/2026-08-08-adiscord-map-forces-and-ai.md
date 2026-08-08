@@ -21,6 +21,21 @@
 
 ---
 
+## Exclusive Shared-File Block Ownership
+
+After core Tasks 1-6 commit, this plan may add or replace only these blocks in shared collapse files:
+
+- decisions/missions: `ADISCORD_vorkerland_central_initiative`, `ADISCORD_vorkerland_recruit_local_volunteers`, `ADISCORD_vorkerland_establish_last_defensive_line`, `ADISCORD_vorkerland_frontline_propaganda`, `ADISCORD_vorkerland_collect_local_weapons`, `ADISCORD_vorkerland_prepare_regional_integration`;
+- effects: `ADISCORD_vorkerland_initialize_initiative`, `ADISCORD_vorkerland_refresh_initiative_progress`, `ADISCORD_vorkerland_handle_initiative_expiry`, `ADISCORD_vorkerland_cancel_initiative`, `ADISCORD_vorkerland_select_militia_spawn_state`, `ADISCORD_vorkerland_recruit_local_volunteers_effect`, `ADISCORD_vorkerland_establish_last_defensive_line_effect`, `ADISCORD_vorkerland_apply_frontline_propaganda`, `ADISCORD_vorkerland_collect_local_weapons_effect`, `ADISCORD_vorkerland_prepare_regional_integration_effect`;
+- triggers: `ADISCORD_vorkerland_meaningful_progress_detected`, `ADISCORD_vorkerland_has_exposed_supplied_front`, `ADISCORD_vorkerland_has_valid_militia_spawn_state`, `ADISCORD_vorkerland_can_recruit_local_volunteers`, `ADISCORD_vorkerland_can_spend_surplus_pp`;
+- ideas/flags: `ADISCORD_vorkerland_initiative_recovery`, `ADISCORD_vorkerland_frontline_propaganda_modifier`, and prefixed use/cooldown/counter flags for the six decision IDs above.
+
+For Task 6 stockpile recalculation and Task 7 one-time air setup, this plan additionally owns only equipment/manpower/`load_oob` statements and calls to `ADISCORD_vorkerland_initialize_claimant_air_setup` inside these existing setup effects: `ADISCORD_vorkerland_prepare_initial_combatants`, `ADISCORD_vorkerland_setup_tva`, `ADISCORD_vorkerland_setup_wtd`, `ADISCORD_vorkerland_setup_eyr`, `ADISCORD_vorkerland_setup_egc`, `ADISCORD_vorkerland_setup_riv`, `ADISCORD_vorkerland_setup_rev`, `ADISCORD_vorkerland_setup_yor`, `ADISCORD_vorkerland_setup_ndn`, `ADISCORD_vorkerland_setup_swb`, `ADISCORD_vorkerland_setup_vhv`, `ADISCORD_vorkerland_setup_osv`, `ADISCORD_vorkerland_setup_csl`, `ADISCORD_vorkerland_setup_wpa`, `ADISCORD_vorkerland_setup_wps`, `ADISCORD_vorkerland_setup_psd`, `ADISCORD_vorkerland_setup_eba`, `ADISCORD_vorkerland_setup_dva`, `ADISCORD_vorkerland_setup_sra`, `ADISCORD_vorkerland_setup_zta`, and `ADISCORD_vorkerland_setup_tgd`. The new `ADISCORD_vorkerland_initialize_claimant_air_setup` block itself is owned by this plan in `ADISCORD_vorkerland_force_design_effects.txt`. Ownership, control, cores, leaders, phase flags, diplomacy, war declarations, and outcome logic inside these setup effects remain read-only.
+
+The only permitted `01_ADISCORD_vorkerland_collapse_on_actions.txt` edits are calls to initialize/refresh/cancel the named initiative effects from the existing war/state-control hooks. Any other shared-block need is a plan defect and stops the task.
+
+---
+
 ## Task 1: Create the Theater Balance Manifest and Baseline Report
 
 **Files:**
@@ -44,16 +59,26 @@
 - Update: `tools/lib/vorkerland_collapse_manifest.py`
 - Update: `tools/tests/test_vorkerland_nam_state_balance.py`
 - Update: `tools/tests/test_validate_adiscord_vorkerland_theater_balance.py`
-- Generate: `history/states/331-*.txt` through `history/states/340-*.txt` as applicable
+- Generate: `history/states/331-*.txt` through `history/states/340-*.txt`
 - Generate: affected source `history/states/*.txt`
 
-- [ ] Reserve IDs 331-340 only for maneuver splits, one residual connected state per selected source; do not collide with outer-state generation beginning at 341.
-- [ ] Add failing graph tests requiring connected source/residual province sets, preserved union, valid capital/VP province, at least two physical state adjacencies per new state, and at least three usable border provinces on the affected war front.
-- [ ] Apply the deterministic split set: central single-state bottlenecks 27 and 35; northern contestants 72, 195, and 196; regional single-state fronts 73, 74, 76, 80, and 199. A source may consume its reserved ID only if its connected residual satisfies every graph contract; otherwise record the rejected split and leave that ID unused rather than creating an island or one-province trap.
-- [ ] Require at least six of the ten reserved splits to pass. If fewer pass, redesign explicit province partitions before proceeding; do not waive connectivity/frontage contracts merely to hit a file-count target.
-- [ ] Store explicit province tuples and state profiles in the builder; do not implement runtime ownership surgery for these splits.
-- [ ] Preserve each source's total manpower, resources, buildings, VPs, and provinces across source plus residual before the later balance adjustments.
-- [ ] Add every accepted residual ID to the same package as its source in `tools/data/adiscord_vorkerland_integration_packages.json`, run the recovery builder, and verify postwar integration coverage.
+- [ ] Reserve IDs 331-340 only for the following ten maneuver splits; do not collide with outer-state generation beginning at 341. Add failing graph tests requiring both listed province sets to be connected, their union to equal the current source, every capital to belong to its state, every retained VP to belong to its state, at least two physical state adjacencies per residual, and the named front to contain at least three residual border provinces.
+- [ ] Generate the exact central partitions:
+  - `27 -> 331`: residual `331 = (524,904,4568,4878,6435,11842,16598,16601)`, remaining `27 = (2643,5090,6451,6850,7564,9525,10215,12618,16614)`, capital `4878`, borders `27:6,35:1,199:4,317:1,318:2`, four-province front against 199. All current rail and the `16614` junction remain in 27; no rail or supply-file edit is required.
+  - `35 -> 332`: residual `332 = (566,7885,9321,10805,16422)`, remaining `35 = (1378,4880,16388,16410,16412)`, capital `7885`, borders `32:2,34:1,35:3,36:4,320:2`, four-province front against 36. Keep VP/hub `16388` in 35; the state border crosses rail edge `7885-16388`, while branch `7885-12227` remains available to 332.
+- [ ] Generate the exact northern partitions:
+  - `72 -> 333`: residual `333 = (4262,5136,5844,6636,6730,7664,7685,7959,11945,12433,16625)`, remaining `72 = (2565,3738,4178,6181,8631,8987,9022,10896,11703,12093,16622)`, capital/existing VP `16625`, borders `72:9,133:1,196:8,322:2`, eight-province front against 196. Keep VP/hub `16622` in 72; retain rail `16625-7959-5844` in 333 and allow border crossings `2565-6730` and `16625-12093`.
+  - `195 -> 334`: residual `334 = (647,1111,7230,9158,9727,10606,11635,11717,12025,12995)`, remaining `195 = (806,1100,2896,3534,4528,4634,7090,8032,9075,9149)`, capital `1111`, borders `137:1,194:2,195:8,196:9`, nine-province front against 196. Keep hub `8032` in 195; rail crosses at `1111-8032` and `8032-647`, with the branch from `7230` retained in 334.
+  - `196 -> 335`: residual `335 = (1569,3069,3928,4224,7341,7443,8051,10171,10864)`, remaining `196 = (236,1711,3151,4331,5207,5409,6253,6799,7129,7827,7934)`, capital `10864`, borders `72:5,194:1,195:2,196:5,322:2`, five-province front against 72. Keep hub `7129` and its rail in 196; retain segment `3928-10864` in 335.
+- [ ] Generate the exact regional partitions:
+  - `73 -> 336`: residual `336 = (404,2346,2767,3573,4139,4423,4924,5695,6927,9537,9962,10323,10696,11072,11904,12126,12450,12692,12940,12984,13011,16618)`, remaining `73 = (930,1374,2916,4795,4798,4859,4931,5076,5762,5878,6742,7615,7954,7974,8019,8912,9266,9323,10555,10747,12850,12946,13007,16557,16571)`, capital/existing VP `16618`, borders `72:6,73:7,319:3,321:4,322:1`, six-province front against 72. Keep VP/hub `16571` in 73; rail crosses at `9323-12984` and `4798-404`, while the `404-4924-4423-16618-6927` segment remains in 336.
+  - `74 -> 337`: residual `337 = (3492,5408,5666,6543,8704,12541)`, remaining `74 = (2197,2402,2516,2583,5799,8497,12316,12947,16585)`, capital `6543`, borders `74:5,105:1,197:2,311:1,312:3,326:1`, three-province front against 312. Keep VP/hub `16585` in 74; rail crosses at `2516-8704`, with `8704-6543-5408` and `5666-6543` retained in 337.
+  - `76 -> 338`: residual `338 = (336,2552,2866,3905,5741,9833,10964)`, remaining `76 = (2988,5721,6443,9452,11090,16582)`, capital `2866`, borders `76:3,104:2,198:4,307:1,310:1`, four-province front against 198. Keep VP/hub `16582` in 76; rail crosses only at `16582-9833`, with `9833-2866-3905` retained in 338.
+  - `80 -> 339`: residual `339 = (1423,1672,1969,2914,4133,4278,5676,6399,7434,7770,8849,10034,10609,10746,16633,16634)`, remaining `80 = (265,449,686,860,868,1426,1581,3083,3567,3997,5153,5358,5376,7819,9464,9845,10624,11472,16619)`, capital `10034`, borders `80:8,146:2,150:1,151:2,157:1,159:2,161:5,162:4,199:2,315:1`, five-province front against 161. Keep VP `16619` and hub `3083` in 80; rail crosses at `10624-10034`.
+  - `199 -> 340`: residual `340 = (531,976,1889,4501,6456,6465,6759,9448,9811,10990,12508)`, remaining `199 = (1280,3345,3518,5314,5524,5679,5888,6820,7267,7942,11379,11563,11592,12930)`, capital `10990`, borders `27:3,80:3,199:5,317:3,318:1`, three-province fronts against 27, 80, and 317. Keep hub `12930` in 199; rail crosses at `10990-5314` and `12930-4501`, while `6456-976` remains in 340.
+- [ ] Store these literal province tuples and state profiles in the builder; do not implement runtime ownership surgery. Province IDs and global rail/supply endpoints remain unchanged, so regenerate `map/buildings.txt` and strategic regions but do not edit `map/railways.txt` or `map/supply_nodes.txt`.
+- [ ] Preserve each source's total manpower, resources, buildings, existing VPs, and provinces across source plus residual before Task 3 balance additions. Task 3 adds 1-point VPs at residual capitals `4878,7885,1111,10864,6543,2866,10034,10990`; existing residual VPs `16625` and `16618` remain unchanged.
+- [ ] Record for later core Task 9 that the exact final packages are: central `(27,34,35,40,79,81,82,102,108,109,110,111,122,123,124,306,308,309,315,316,317,318,320,323,325,327,331,332)`; northern `(71,72,90,91,93,94,194,195,196,202,322,328,333,334,335)`; Volnograd `(74,105,197,311,312,313,314,337)`; Frealor `(73,144,145,319,321,336)`; Solyarino `(76,104,198,307,310,338)`; Zlatorech `(80,199,339,340)`. Do not create or update the not-yet-owned integration-package file during this map task; theater tests assert the source-to-package mapping so core Task 9 can consume it.
 - [ ] Run the builder with `--apply`, rerun with `--check`, then rerun to prove byte-idempotence.
 - [ ] Run state connectivity, theater balance, strategic-region, building, and total-conversion validators.
 - [ ] Commit generated state changes as `feat: add Vorkerland maneuver states`.
@@ -190,7 +215,8 @@
 - Update: `tools/tests/test_validate_adiscord_vorkerland_collapse.py`
 
 - [ ] Write failing tests for one visible 90-day mission per active war participant, activated by war-launch events rather than monthly polling.
-- [ ] Define meaningful progress as capture of a listed state or VP from the current assigned enemy; use state-control change hooks/events to refresh the mission.
+- [ ] Define `ADISCORD_vorkerland_meaningful_progress_detected` as capture of a listed state or VP from the current assigned enemy; use the existing state-control hook to call `ADISCORD_vorkerland_refresh_initiative_progress`.
+- [ ] Use `ADISCORD_vorkerland_initialize_initiative` at war launch, `ADISCORD_vorkerland_handle_initiative_expiry` on mission timeout, and `ADISCORD_vorkerland_cancel_initiative` when the assigned war ends.
 - [ ] On first expiry, grant a bounded 30-day planning/supply/organization-recovery modifier and reset the mission.
 - [ ] On a second consecutive expiry, unlock emergency mobilization or a prepared offensive and add war exhaustion; reset the consecutive counter on meaningful progress.
 - [ ] Prohibit winner assignment, state transfer, arbitrary white peace, and direct attack bonuses above the approved modest-assistance bounds.
@@ -210,13 +236,14 @@
 - Update: `tools/tests/test_validate_adiscord_vorkerland_collapse.py`
 - Update: `tools/tests/test_validate_adiscord_division_templates.py`
 
+- [ ] Implement exactly `ADISCORD_vorkerland_recruit_local_volunteers` and `ADISCORD_vorkerland_establish_last_defensive_line`, calling `ADISCORD_vorkerland_recruit_local_volunteers_effect` and `ADISCORD_vorkerland_establish_last_defensive_line_effect` after `ADISCORD_vorkerland_select_militia_spawn_state` succeeds.
 - [ ] Add failing tests that major defensive lines/last stands are `fire_only_once`, while local volunteer mobilization has a 90-day cooldown and per-region quota.
 - [ ] Require a controlled, supplied, non-encircled spawn state adjacent to the threatened front; reject capitals surrounded by enemy-controlled provinces.
 - [ ] Charge manpower, infantry equipment, and political power before unit creation; abort without setting success when payment or spawn selection fails.
 - [ ] Spawn weak militia with 25-40% equipment and at most 0.10 experience; better reservists pay at least twice the equipment/PP cost and start above the weak-militia factors.
 - [ ] Accumulate war exhaustion/economic strain per repeated mobilization and cap active emergency formations per theater.
 - [ ] Allow AI only when retreat/front-density/initiative conditions show genuine need and political power remains above the story-action reserve.
-- [ ] Add repeatable `frontline_propaganda` at 25 PP/90 days, `collect_local_weapons` at 30 PP/90 days, and `prepare_regional_integration` at 35 PP/120 days. Each refreshes or advances one capped result rather than stacking an unbounded modifier or spawning free resources.
+- [ ] Add repeatable `ADISCORD_vorkerland_frontline_propaganda` at 25 PP/90 days, `ADISCORD_vorkerland_collect_local_weapons` at 30 PP/90 days, and `ADISCORD_vorkerland_prepare_regional_integration` at 35 PP/120 days. Each calls its exact prefixed effect and refreshes or advances one capped result rather than stacking an unbounded modifier or spawning free resources.
 - [ ] Let AI use these sinks only after mandatory story/military decisions and only above 100 PP; weapon collection additionally requires a verified equipment deficit, and integration preparation requires an eligible controlled package.
 - [ ] Run decision, template, war-exhaustion, and collapse validators.
 - [ ] Commit as `feat: add finite defensive mobilization and PP sinks`.

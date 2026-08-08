@@ -19,7 +19,7 @@
 - AI uses the same inflation, debt, crisis, and default rules as the player.
 - Weekly accounting may consume cached scalars but may not reach `has_idea`, full building recounts, `every_country`, or full spending-idea rebuilds.
 - Russian and English new economy localisation have matching key sets; Russian remains UTF-8 BOM.
-- `common/on_actions/00_ADISCORD_on_actions.txt` remains structurally unchanged unless a failing test proves a missing country-scoped invalidation hook.
+- `common/on_actions/00_ADISCORD_on_actions.txt` is read-only for this recovery. A missing cache invalidation is implemented inside the existing economy entry effects or `common/on_actions/00_ADISCORD_minor_optimization_on_actions.txt`; if neither interface can express it safely, stop and revise the plan instead of conditionally taking ownership.
 
 ---
 
@@ -94,7 +94,7 @@
 - [ ] Keep only a non-gameplay numeric-overflow/corruption guard. A stored-debt clamp such as `debt <= 5000` is prohibited because it becomes a hidden capacity.
 - [ ] Update modifier documentation and localisation to explain creditworthiness without mentioning debt room.
 - [ ] Run focused capacity-removal tests, modifier validation, economy AI validation, and `rg -n "debt_capacity" common interface events localisation docs tools` with only explicitly versioned migration/debt-report exceptions allowed.
-- [ ] Commit atomically as `feat(economy): replace debt capacity with interest pressure`.
+- [ ] Do not commit an intermediate state after this step; immediately complete Task 5 because removal of the old capacity API and replacement of its borrowing callers form one atomic change.
 
 ## Task 5: Implement Interest-Pressure Debt Metrics and Full Deficit Borrowing
 
@@ -110,7 +110,7 @@
 - [ ] Rewrite manual bonds/external loan/restructuring availability against debt state, interest share, creditworthiness, treasury room, and existing monthly cooldown only.
 - [ ] On repayment, reduce principal, recalculate rate/interest/pressure immediately, and call the downward reconciler without advancing weekly streaks.
 - [ ] Run automatic borrowing, debt metric, repayment, and weekly performance tests.
-- [ ] Commit with Task 4 if necessary to avoid an invalid intermediate debt API; otherwise commit as `feat(economy): calculate debt from interest pressure`.
+- [ ] Commit Tasks 4-5 atomically as `feat(economy): replace debt capacity with interest pressure` after both tasks' focused tests pass.
 
 ## Task 6: Add Persistent Debt States, Debuffs, and Non-Spam Notifications
 

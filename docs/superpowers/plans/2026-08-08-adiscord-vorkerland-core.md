@@ -78,15 +78,19 @@
 - Create: `events/ADISCORD_vorkerland_phase_events.txt`
 - Update: `common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt`
 - Update: `events/ADISCORD_vorkerland_collapse_events.txt`
+- Update: `tools/data/adiscord_event_ids.json`
 - Test: `tools/tests/test_adiscord_vorkerland_recovery.py`
 
 - [ ] Define exactly one of: `phase_prewar`, `phase_collapse`, `phase_regional_consolidation`, `phase_central_preparation`, `phase_central_showdown`, `phase_reunification`, `phase_postwar_integration`, all prefixed `ADISCORD_vorkerland_`.
 - [ ] Implement one `ADISCORD_vorkerland_clear_phase_flags` and seven setter effects; prohibit direct phase flag mutation outside this file and migration.
 - [ ] Implement triggers `is_temporary_claimant`, `collapse_materialized`, `regional_consolidation_complete`, `central_showdown_required`, `central_showdown_edges_verified`, `has_single_surviving_claimant`, and `reunification_verified`.
-- [ ] Implement effects `begin_collapse`, `verify_collapse_materialized`, `verify_regional_consolidation`, `begin_central_preparation`, `attempt_central_showdown`, `verify_central_showdown`, `begin_reunification`, and `verify_reunified_wrk`.
-- [ ] Add phase events `.1` prewar preference, `.2` one-day collapse verification, `.3` regional completion, `.4` 45-day preparation expiry/launch, `.5` showdown postcondition and one retry, `.6` winner dispatcher, `.7` WRK formation postcondition and one retry.
-- [ ] Verify every still-live pair WKR-VAD, WKR-TVA, and VAD-TVA. Set `central_showdown_started` only after all required live pairs report `has_war_with`.
-- [ ] Add terminal flags for collapse materialization, regional war launch, central border launch, central showdown launch, and reunification failures, each with an explicit diagnostic log.
+- [ ] Implement effects `begin_collapse`, `verify_collapse_materialized`, `verify_regional_consolidation`, `begin_central_preparation`, `initialize_showdown_edge_queue`, `attempt_next_showdown_edge`, `verify_showdown_edge_wkr_vad`, `verify_showdown_edge_wkr_tva`, `verify_showdown_edge_vad_tva`, `verify_central_showdown`, `begin_reunification`, and `verify_reunified_wrk`.
+- [ ] Use `add_namespace = ADISCORD_vorkerland_phase` and the inventoried full IDs: `.1` prewar preference, `.2` one-day collapse verification, `.3` regional completion, `.4` 45-day preparation expiry/queue initialization, `.5` one-edge attempt/postcondition dispatcher, `.6` winner dispatcher, `.7` WRK formation postcondition and one retry. Switch these registry entries from `reserved` to `active` with this owning file.
+- [ ] At `.4`, set a `required` flag for each pair whose two tags still exist: `showdown_edge_wkr_vad_required`, `showdown_edge_wkr_tva_required`, and `showdown_edge_vad_tva_required`. Clear all previous attempted/retry/verified/failed edge flags before initialization.
+- [ ] Event `.5` processes exactly one next required-unverified edge in fixed order WKR-VAD, WKR-TVA, VAD-TVA. It detaches the pair from conflicting factions, attempts one declaration, and schedules itself one day later for postcondition verification; a missing `has_war_with` gets exactly one retry flag and one second attempt.
+- [ ] After an edge verifies, set its `..._verified` flag and schedule `.5` for the next edge. After its second failure, set its `..._failed` flag plus `ADISCORD_vorkerland_central_showdown_launch_failed`, log the exact pair, and stop without setting showdown success.
+- [ ] Set `ADISCORD_vorkerland_central_showdown_started` and enter the showdown phase only when every required edge has its verified flag. A non-required edge is skipped, never treated as implicitly successful.
+- [ ] Add terminal flags for collapse materialization, regional war launch, central border launch, the three named showdown edges, central showdown launch, and reunification failures, each with an explicit diagnostic log.
 - [ ] Run phase exclusivity, transition, bounded retry, event namespace, and no-polling tests.
 - [ ] Commit as `feat: add Vorkerland phase controller`.
 
@@ -136,6 +140,7 @@
 - Generate: `common/scripted_effects/ADISCORD_vorkerland_regional_outcome_effects.txt`
 - Create: `events/ADISCORD_vorkerland_postwar_events.txt`
 - Update: `common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt`
+- Update: `tools/data/adiscord_event_ids.json`
 - Test: `tools/tests/test_adiscord_vorkerland_recovery.py`
 
 - [ ] Encode all 30 winner/partner x route cells exactly:
@@ -153,7 +158,7 @@
 - [ ] Generate recording effects for northern, ROM/DVA, and TRU/ZTA winners; generate one named outcome effect for every cell and an `apply_pending_regional_outcomes` dispatcher.
 - [ ] Call winner recording from relevant capitulation/peace hooks and apply pending outcomes both when a row becomes terminal and after WRK formation.
 - [ ] Prohibit generic `puppet`, generic `set_autonomy`, generic subject fallback, and unhandled cells in data, generator, and output.
-- [ ] Add postwar events `.1` ZAO accept/refuse, `.2` WRK acceptance notice, `.3` refusal notice. Refusal leaves ZAO sovereign and applies the route fallback.
+- [ ] Use `add_namespace = ADISCORD_vorkerland_postwar`; switch inventoried `.1-.3` from reserved to active. `.1` is the ZAO accept/refuse event, `.2` the WRK acceptance notice, and `.3` the refusal notice. Refusal leaves ZAO sovereign and applies the route fallback.
 - [ ] Treat VAL wartime support-recipient flags as historical inputs only; never map them to subjection.
 - [ ] Run matrix completeness/prohibition tests and generator check/apply/idempotence.
 - [ ] Commit as `feat: generate Vorkerland regional outcomes`.
@@ -175,7 +180,10 @@
 - [ ] For VAD/TVA victory, move any defeated country still occupying the WRK tag to WKR before changing the winner into WRK; never annex WRK as the formation mechanism.
 - [ ] For WKR victory, change WKR into WRK and retain player control, armies, air wings, subjects, and relevant event targets.
 - [ ] Promote `WRK_VAD_Joint_Council` and its compromise cabinet on the joint route; repair the leader exactly once.
-- [ ] Retire temporary claimant tags only after country_exists WRK, correct route flag, leader/government, and required capital/control postconditions all pass.
+- [ ] Before retiring losers, detach WKR/VAD/TVA from internal-war factions. For each losing claimant, release every surviving subject to `autonomy_free`, remove that subject from the claimant's faction, and verify it is no longer subject; regional/proxy subjects never transfer automatically to WRK.
+- [ ] After the winner has changed into WRK and its route/leader/capital postconditions pass, annex each existing losing temporary claimant from WRK scope with troop transfer enabled. This postwar cleanup transfers the loser's armies, navy, air wings, owned states, and occupations; it is not the prohibited VAD-annexes-pre-existing-WRK formation mechanism.
+- [ ] A human player on the winning claimant follows `change_tag_from` into WRK. A human player on a losing claimant is defeated normally and is not silently switched to the winner.
+- [ ] Verify each losing claimant no longer exists, owns/controls no state, has no subject, and leaves no active internal war before setting `reunification_verified`. On failure, preserve the tag for diagnosis, set `ADISCORD_vorkerland_reunification_failed`, and do not enter postwar integration.
 - [ ] Apply pending regional outcomes and enter postwar integration only after WRK formation verifies.
 - [ ] Run tag-formation tests and targeted save migration/runtime scenarios for all three winners.
 - [ ] Commit as `feat: form postwar WRK from every claimant`.
@@ -212,18 +220,18 @@
 - [ ] Delete `every_owned_state = { add_core_of = ROOT }` from claimant preparation.
 - [ ] Give temporary home cores only: WKR `32,33,200,201`; VAD `75,106,107,121`; TVA `36,37,38,39,324`.
 - [ ] Encode explicit integration packages:
-  - central `27,34,35,40,79,81,82,102,108,109,110,111,122,123,124,306,308,309,315,316,317,318,320,323,325,327`;
-  - northern `71,72,90,91,93,94,194,195,196,202,322,328`;
-  - Volnograd `74,105,197,311,312,313,314`;
-  - Frealor `73,144,145,319,321`;
-  - Solyarino `76,104,198,307,310`;
-  - Zlatorech `80,199`.
+  - central `27,34,35,40,79,81,82,102,108,109,110,111,122,123,124,306,308,309,315,316,317,318,320,323,325,327,331,332`;
+  - northern `71,72,90,91,93,94,194,195,196,202,322,328,333,334,335`;
+  - Volnograd `74,105,197,311,312,313,314,337`;
+  - Frealor `73,144,145,319,321,336`;
+  - Solyarino `76,104,198,307,310,338`;
+  - Zlatorech `80,199,339,340`.
 - [ ] Generate explicit state enumerations; prohibit `every_owned_state` and `every_state` coring. VAL is not coreable in this project.
 - [ ] Add central integration at 75 PP/120 days and accepted voluntary northern confederation at 75 PP/120 days.
 - [ ] Add forced northern, Volnograd, Frealor, Solyarino, and Zlatorech integration at 150 PP/360 days each.
 - [ ] Require every listed state owned and controlled by WRK, resistance below 25, and compliance at least 40 for forced packages. Voluntary confederation uses the acceptance flag and its cheaper path.
 - [ ] Independent allies remain uncoreable; decisions are unavailable until the relevant relationship/outcome permits annexed integration.
-- [ ] Have the later map plan add any maneuver-split state ID to the same package as its source and regenerate through this builder.
+- [ ] Assert against the already-completed map theater manifest that every maneuver residual `331-340` is in exactly the same package as its source; this task is the sole creator of the integration-package file.
 - [ ] Run home-core, package completeness, decision cost/time, prohibited blanket-core, generator, and migration tests.
 - [ ] Commit as `feat: integrate Vorkerland through explicit coring packages`.
 
@@ -234,11 +242,13 @@
 - Update: `common/scripted_effects/ADISCORD_vorkerland_collapse_dirty_effects.txt`
 - Update: `common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt`
 - Update: `events/ADISCORD_vorkerland_collapse_events.txt`
+- Update: `tools/data/adiscord_event_ids.json`
 - Update: `localisation/english/ADISCORD_vorkerland_recovery_l_english.yml`
 - Update: `localisation/russian/ADISCORD_vorkerland_recovery_l_russian.yml`
 - Update: `localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml` only for compatibility-event text retained from the old namespace
 - Test: `tools/tests/test_adiscord_vorkerland_recovery.py`
 
+- [ ] Use `add_namespace = ADISCORD_vorkerland_dirty_zone` and switch inventoried `.1-.3` from reserved to active in this owning file.
 - [ ] Add event `.1` exactly on 2163-01-01 for SLA+MLR fringe sectors; set `dirty_stage_1_complete` only after verification and schedule `.2` in 11 days.
 - [ ] Add `.2` exactly on 2163-01-12 for RZA+SCA; set stage 2 only after verification and schedule `.3` in 15 days.
 - [ ] Add `.3` exactly on 2163-01-27 for ERT+IRT plus conflict activation; set stage 3 only after verification.

@@ -26,33 +26,36 @@
 - Create: `.gitignore`
 - Create: `AGENTS.md`
 - Create: `tools/README.md`
+- Create: `tools/__init__.py`
+- Create: `tools/tests/__init__.py`
 - Create: `tools/tests/test_repository_contracts.py`
+- Create: `docs/audits/2026-08-08-recovery-starting-tree.md`
 - Delete: tracked `tools/__pycache__/*.pyc`
 - Delete: `console_history.txt` after verifying it is transient and contains no source data
 
-- [ ] Write a failing test that rejects tracked `__pycache__`, `.pyc`, `console_history.txt`, editor backups, and root-level reference binaries that are not registered assets.
+- [ ] Write a failing test that rejects tracked `__pycache__`, `.pyc`, `console_history.txt`, and editor backups. Binary placement is added to this contract only in Task 6, when the test and the move can turn GREEN together.
 - [ ] Run `python -B -m unittest tools.tests.test_repository_contracts.RepositoryHygieneTests -v` and confirm RED against the present tracked cache files.
 - [ ] Add `.gitignore` entries for `__pycache__/`, `*.py[cod]`, `console_history.txt`, Clausewitz logs/dumps, editor backups, and local test caches; do not ignore source `.txt`, `.json`, `.yml`, map, audio, or image assets generically.
 - [ ] Write `AGENTS.md` with generated-file ownership rules, BOM rules, required static gates, full-restart requirements, and dirty-worktree protection.
 - [ ] Write `tools/README.md` with check/apply conventions and the single full static command.
+- [ ] Record HEAD/branch, the 333-test and `validate_tc` baseline, dirty-path counts, generated owners, and protected user work in the starting-tree audit.
 - [ ] Remove only verified transient tracked artifacts, rerun the focused test, and confirm GREEN.
-- [ ] Run `git diff --check` and stage only the four documentation/config paths plus verified transient deletions.
+- [ ] Run `git diff --check` and stage only the paths named in this task plus verified transient deletions.
 - [ ] Commit as `chore: document repository and ignore transient artifacts`.
 
 ## Task 2: Create the Tool Package Skeleton and Compatibility Test
 
 **Files:**
-- Create: `tools/__init__.py`
 - Create: `tools/builders/__init__.py`
 - Create: `tools/validators/__init__.py`
-- Create: `tools/tests/__init__.py`
 - Create: `tools/lib/__init__.py`
+- Create: `tools/lib/paths.py`
 - Create: `tools/tests/test_tool_entrypoints.py`
 - Update: `tools/validate_tc.py`
 
 - [ ] Write a failing test that imports `tools.builders`, `tools.validators`, `tools.tests`, and `tools.lib`, and invokes representative old root CLIs with `--help` or check mode.
 - [ ] Run `python -B -m unittest tools.tests.test_tool_entrypoints -v` and confirm RED because the packages do not yet exist.
-- [ ] Add package markers and a shared `tools/lib/paths.py` only if required to keep root detection identical across moved modules.
+- [ ] Add package markers and a shared `tools/lib/paths.py` that keeps root detection identical across moved modules and direct root-level facades.
 - [ ] Change `validate_tc.py` imports to package-qualified imports with one documented compatibility fallback for direct execution.
 - [ ] Rerun the focused test and `python -B tools/validate_tc.py --limit 300`.
 - [ ] Commit as `refactor: establish importable tool packages`.
@@ -172,7 +175,23 @@
 - [ ] Run the full division-template audit and collapse validators.
 - [ ] Commit as `refactor: remove Cyrillic division template identifiers`.
 
-## Task 10: Resolve Localisation Duplicates and Enforce the Internationalisation Boundary
+## Task 10: Create the Central Event-ID Inventory
+
+**Files:**
+- Create: `tools/data/adiscord_event_ids.json`
+- Create: `tools/validators/validate_adiscord_event_ids.py`
+- Create: `tools/tests/test_validate_adiscord_event_ids.py`
+- Update: `tools/validators/validate_tc.py`
+
+- [ ] Write failing tests that parse every `add_namespace` and `id =` in `events/*.txt`, reject duplicate full IDs, reject IDs missing from the inventory, and reject active entries whose owning file/namespace does not match reality.
+- [ ] Store full namespace, numeric ID/range, owner file, subsystem, and status (`active`, `compatibility`, or `reserved`) for every event.
+- [ ] Seed all current event IDs and reserve recovery ranges: `ADISCORD_vorkerland_phase.1-.7` for `events/ADISCORD_vorkerland_phase_events.txt`; `ADISCORD_vorkerland_dirty_zone.1-.3` for `events/ADISCORD_vorkerland_dirty_zone_events.txt`; `ADISCORD_vorkerland_postwar.1-.3` for `events/ADISCORD_vorkerland_postwar_events.txt`.
+- [ ] Mark existing `ADISCORD_vorkerland_collapse.10-.19`, `.48-.49`, `.63-.64`, and `.71-.72` as compatibility IDs owned by `events/ADISCORD_vorkerland_collapse_events.txt`; core implementation may change their bodies but not reuse their IDs.
+- [ ] Allow a `reserved` owner path to be absent, but require the later core task to switch each created range to `active`. Active and compatibility owners must exist immediately.
+- [ ] Run the event-ID tests and integrate the validator into `validate_tc.py`.
+- [ ] Commit as `test: inventory A-Discord event ids`.
+
+## Task 11: Resolve Localisation Duplicates and Enforce the Internationalisation Boundary
 
 **Files:**
 - Create: `tools/validators/validate_adiscord_localisation.py`
@@ -187,7 +206,7 @@
 - [ ] Run the localisation validator, full unit discovery, `validate_tc.py`, and `git diff --check`.
 - [ ] Commit as `fix: enforce localisation and technical id contracts`.
 
-## Task 11: Safe File Consolidation Audit
+## Task 12: Safe File Consolidation Audit
 
 **Files:**
 - Create: `docs/audits/2026-08-08-file-consolidation.md`
@@ -202,7 +221,7 @@
 - [ ] Run country-tag uniqueness, path-existence, and full static gates.
 - [ ] Commit only if a real safe consolidation remains; otherwise commit the audit with the nearest related tooling commit.
 
-## Task 12: Repository Plan Verification
+## Task 13: Repository Plan Verification
 
 - [ ] Run `python -B -m unittest discover -s tools/tests -p "test_*.py"`.
 - [ ] Run every registered generated-output check command.

@@ -27,24 +27,18 @@
 | Order | Plan | Primary ownership | Shared-file rule |
 | --- | --- | --- | --- |
 | 1 | `2026-08-08-adiscord-repository-tooling-and-ascii.md` | `tools/`, root docs/config, technical-name migration | Move/import foundation before other plans add tests; ASCII migration owns generators and OOB names only |
-| 2 | `2026-08-08-adiscord-economy-recovery.md` | economy effects, ideas, GUI, scripted loc, economy AI | Economy agent owns `common/on_actions/00_ADISCORD_on_actions.txt` only if a cache invalidation hook is proven necessary |
-| 3 | `2026-08-08-adiscord-vorkerland-core.md` | tags, phase controller, focuses, decisions, regional matrix, coring, dirty-zone schedule | Owns collapse events/effects/on_actions before military tuning begins |
-| 4 | `2026-08-08-adiscord-map-forces-and-ai.md` | map manifests/builders, templates, OOB, military/air AI, militia and initiative balance | May edit collapse decisions/effects only after the core plan is committed and only in named military blocks |
-| 5 | `2026-08-08-adiscord-integration-and-runtime-acceptance.md` | migrations, cross-subsystem validators, runtime evidence and final fixes | No feature expansion; fixes acceptance failures only |
+| 2 | `2026-08-08-adiscord-economy-recovery.md` | economy effects, ideas, GUI, scripted loc, economy AI | `common/on_actions/00_ADISCORD_on_actions.txt` is read-only for this recovery; cache invalidation stays inside existing economy entry effects or the minor-optimization hook file |
+| 3 | `2026-08-08-adiscord-vorkerland-core.md` Tasks 1-6 | claimant tags, phase controller, war topology, claimant skeletons, regional matrix | Owns collapse events/effects/on_actions until the matrix commit; do not start postwar Tasks 7-12 yet |
+| 4 | `2026-08-08-adiscord-map-forces-and-ai.md` Tasks 1-10 | map manifests/builders, templates, OOB, military/air AI, militia and initiative balance | May edit only the exact prefixed blocks and setup sub-blocks listed in that plan's exclusive-ownership section |
+| 5 | `2026-08-08-adiscord-vorkerland-core.md` Tasks 7-12 | postwar WRK, shared/postwar focuses, coring packages, dirty-zone schedule, migration | Resumes only after all map/forces commits; consumes final maneuver-state IDs and must not rewrite military-owned setup sub-blocks |
+| 6 | `2026-08-08-adiscord-integration-and-runtime-acceptance.md` | migrations, cross-subsystem validators, runtime evidence and final fixes | No feature expansion; fixes acceptance failures only |
 
 ## Task 1: Freeze and Record the Authoritative Starting Tree
 
-**Files:**
-- Create: `docs/audits/2026-08-08-recovery-starting-tree.md`
-- Test: `tools/tests/test_repository_contracts.py`
+**Files:** none; this is a read-only execution preflight whose evidence is written by repository/tooling Task 1.
 
-- [ ] Record `git rev-parse HEAD`, branch, staged paths, modified/deleted/untracked counts, and active Git processes.
-- [ ] Record the existing generated owners for states, buildings, strategic regions, technology, northern countries, inner-frontier countries, and collapse manifests.
-- [ ] Add a failing repository contract that requires every generated output family to appear in the ownership registry planned below.
-- [ ] Run `python -B -m unittest tools.tests.test_repository_contracts -v` and preserve the expected RED output in the implementation notes.
-- [ ] Implement only the inventory needed to make the contract GREEN; do not modify gameplay in this task.
-- [ ] Run the focused test, `python -B tools/validate_tc.py --limit 300`, and `git diff --check`.
-- [ ] Commit the frozen-tree inventory and tooling foundation as `chore: establish recovery repository contracts`.
+- [ ] Capture `git rev-parse HEAD`, branch, staged paths, modified/deleted/untracked counts, active Git processes, generated owners, and the current 333-test plus `validate_tc.py --limit 300` baseline in the SDD ledger.
+- [ ] Do not create or commit an audit or repository contract here. `docs/audits/2026-08-08-recovery-starting-tree.md` and `tools/tests/test_repository_contracts.py` are owned solely by repository/tooling Task 1.
 
 ## Task 2: Execute the Repository and ASCII Plan
 
@@ -64,15 +58,14 @@
 - [ ] Verify the debt tiers and notifications use the exact approved thresholds.
 - [ ] Commit logic/migration before GUI/localisation when the staged diff is too large for one review.
 
-## Task 4: Execute the Civil-War Core
+## Task 4: Execute the Civil-War Core Foundation
 
 **Plan:** `docs/superpowers/plans/2026-08-08-adiscord-vorkerland-core.md`
 
 - [ ] Replace stale WRK-as-claimant tests before adding `WKR`.
-- [ ] Complete the phase controller and formation paths before tuning any front.
+- [ ] Complete core Tasks 1-6 only: claimant tags, phase controller, war topology, claimant focus skeletons, and the explicit regional outcome matrix.
 - [ ] Implement the explicit regional outcome matrix without a generic puppet fallback.
-- [ ] Implement progressive January 2163 dirty-zone events and idempotent migration.
-- [ ] Commit the state machine before focus/decision content, then commit coring/dirty-zone separately.
+- [ ] Commit the state machine before focus/decision content and stop after the Task 6 matrix commit; postwar formation, coring, dirty-zone, and migration wait for map/forces.
 
 ## Task 5: Execute Map, Force, and AI Balance
 
@@ -84,7 +77,17 @@
 - [ ] Add bounded militia and initiative systems only after baseline organization, stockpiles, and supply are valid.
 - [ ] Commit generated map output separately from military AI/decision logic.
 
-## Task 6: Run Cross-Subsystem Integration and Runtime Acceptance
+## Task 6: Complete Postwar WRK, Coring, and Dirty-Zone Work
+
+**Plan:** `docs/superpowers/plans/2026-08-08-adiscord-vorkerland-core.md`, Tasks 7-12
+
+- [ ] Form postwar WRK and retire temporary tags only after the final map/OOB ownership graph exists.
+- [ ] Generate the full integration packages with state IDs 331-340 already included in the exact package of their source.
+- [ ] Implement postwar/shared focuses, the progressive January 2163 dirty-zone events, and idempotent migration.
+- [ ] Do not rewrite the stockpile/air/initiative/militia setup sub-blocks owned by the completed map/forces phase.
+- [ ] Run the core plan verification task and commit postwar formation, coring, and dirty-zone changes separately.
+
+## Task 7: Run Cross-Subsystem Integration and Runtime Acceptance
 
 **Plan:** `docs/superpowers/plans/2026-08-08-adiscord-integration-and-runtime-acceptance.md`
 
@@ -96,7 +99,7 @@
 - [ ] Record failures as targeted tests before fixing them.
 - [ ] Do not mark the release gate complete until runtime evidence meets every acceptance condition.
 
-## Task 7: Final Git Audit and Delivery
+## Task 8: Final Git Audit and Delivery
 
 **Files:**
 - Update: `docs/audits/2026-08-08-recovery-starting-tree.md`
