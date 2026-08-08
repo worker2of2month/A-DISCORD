@@ -14,12 +14,22 @@ import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
-from validate_adiscord_economy_ai import validate as validate_adiscord_economy_ai
-from build_adiscord_map_buildings import validate as validate_adiscord_map_buildings
-from build_adiscord_terrain_snow import validate as validate_adiscord_terrain_snow
+try:
+    from tools.validate_adiscord_economy_ai import validate as validate_adiscord_economy_ai
+    from tools.build_adiscord_map_buildings import validate as validate_adiscord_map_buildings
+    from tools.build_adiscord_terrain_snow import validate as validate_adiscord_terrain_snow
+    from tools.lib.paths import repository_root
+except ModuleNotFoundError as error:
+    # Direct ``python tools/validate_tc.py`` keeps the legacy tools directory on sys.path.
+    if error.name is None or not error.name.startswith("tools"):
+        raise
+    from validate_adiscord_economy_ai import validate as validate_adiscord_economy_ai
+    from build_adiscord_map_buildings import validate as validate_adiscord_map_buildings
+    from build_adiscord_terrain_snow import validate as validate_adiscord_terrain_snow
+    from lib.paths import repository_root
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = repository_root()
 
 GAME_DIRS = [
     "common",
