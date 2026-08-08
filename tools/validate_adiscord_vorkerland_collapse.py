@@ -10,8 +10,12 @@ from pathlib import Path
 
 from PIL import Image
 
+_REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPOSITORY_ROOT))
+
 try:
-    from tools import build_adiscord_strategic_regions as map_regions
+    from tools.builders import build_adiscord_strategic_regions as map_regions
     from tools.vorkerland_collapse_manifest import (
         CAPITALS,
         CONTAMINATED_STATES,
@@ -21,7 +25,7 @@ try:
         TAGS,
     )
 except (ModuleNotFoundError, ImportError):
-    import build_adiscord_strategic_regions as map_regions
+    from builders import build_adiscord_strategic_regions as map_regions
     from vorkerland_collapse_manifest import (
         CAPITALS,
         CONTAMINATED_STATES,

@@ -5,9 +5,9 @@ import re
 import unittest
 from pathlib import Path
 
-from tools import build_adiscord_map_buildings as map_buildings
-from tools import build_adiscord_new_states as builder
-from tools import build_adiscord_strategic_regions as regions
+from tools.builders import build_adiscord_map_buildings as map_buildings
+from tools.builders import build_adiscord_new_states as builder
+from tools.builders import build_adiscord_strategic_regions as regions
 
 
 VORKERLAND_GENERATED_STATES = set(range(306, 329)) - {326}

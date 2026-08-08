@@ -10,8 +10,12 @@ from pathlib import Path
 
 from PIL import Image
 
+_REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPOSITORY_ROOT))
+
 try:
-    from tools.build_adiscord_northern_countries import (
+    from tools.builders.build_adiscord_northern_countries import (
         COUNTRIES,
         EXPECTED_STATES,
         FLAG_DIR,
@@ -23,7 +27,7 @@ try:
         state_path,
     )
 except ModuleNotFoundError:
-    from build_adiscord_northern_countries import (
+    from builders.build_adiscord_northern_countries import (
         COUNTRIES,
         EXPECTED_STATES,
         FLAG_DIR,
@@ -119,7 +123,7 @@ def validate() -> list[str]:
     country_loc_path = ROOT / "localisation" / "russian" / "ADISCORD_northern_countries_l_russian.yml"
     country_loc = country_loc_path.read_text(encoding="utf-8-sig", errors="strict")
     vp_loc = VP_LOCALISATION.read_text(encoding="utf-8-sig", errors="strict") if VP_LOCALISATION.exists() else ""
-    tech_builder = read("tools/build_adiscord_technology_system.py")
+    tech_builder = read("tools/builders/build_adiscord_technology_system.py")
     tech_data = read("tools/data/adiscord_starting_technology_profiles.json")
 
     for localisation_path in (country_loc_path, VP_LOCALISATION):

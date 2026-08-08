@@ -8,23 +8,46 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-from build_adiscord_outer_states import build_province_data, parse_state
-from build_adiscord_remainder_states import (
-    BASE_STATE_LOCALISATION,
-    EXPECTED_PROVINCE_COUNT,
-    FIRST_NEW_STATE_ID,
-    GENERATED_MARKER,
-    LATITUDE_EDGES,
-    LOCALISATION,
-    band_for_y,
-)
-from build_adiscord_strategic_regions import (
-    OUTER_CLIMATE_BELTS,
-    OUTER_REGION_SPECS,
-    connected_components,
-    load_province_adjacency,
-    load_province_definitions,
-)
+_REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPOSITORY_ROOT))
+
+try:
+    from tools.builders.build_adiscord_outer_states import build_province_data, parse_state
+    from tools.builders.build_adiscord_remainder_states import (
+        BASE_STATE_LOCALISATION,
+        EXPECTED_PROVINCE_COUNT,
+        FIRST_NEW_STATE_ID,
+        GENERATED_MARKER,
+        LATITUDE_EDGES,
+        LOCALISATION,
+        band_for_y,
+    )
+    from tools.builders.build_adiscord_strategic_regions import (
+        OUTER_CLIMATE_BELTS,
+        OUTER_REGION_SPECS,
+        connected_components,
+        load_province_adjacency,
+        load_province_definitions,
+    )
+except ModuleNotFoundError:
+    from builders.build_adiscord_outer_states import build_province_data, parse_state
+    from builders.build_adiscord_remainder_states import (
+        BASE_STATE_LOCALISATION,
+        EXPECTED_PROVINCE_COUNT,
+        FIRST_NEW_STATE_ID,
+        GENERATED_MARKER,
+        LATITUDE_EDGES,
+        LOCALISATION,
+        band_for_y,
+    )
+    from builders.build_adiscord_strategic_regions import (
+        OUTER_CLIMATE_BELTS,
+        OUTER_REGION_SPECS,
+        connected_components,
+        load_province_adjacency,
+        load_province_definitions,
+    )
 
 
 ROOT = Path(__file__).resolve().parents[1]

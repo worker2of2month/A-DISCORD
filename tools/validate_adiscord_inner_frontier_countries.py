@@ -9,8 +9,12 @@ from pathlib import Path
 
 from PIL import Image
 
+_REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPOSITORY_ROOT))
+
 try:
-    from tools.build_adiscord_inner_frontier_countries import (
+    from tools.builders.build_adiscord_inner_frontier_countries import (
         CLAIMS_BY_STATE,
         COUNTRIES,
         EXPECTED_STATES,
@@ -26,14 +30,14 @@ try:
         render_state,
         state_path,
     )
-    from tools.build_adiscord_strategic_regions import (
+    from tools.builders.build_adiscord_strategic_regions import (
         build_state_adjacency,
         connected_components,
         load_province_adjacency,
         load_province_definitions,
     )
 except ModuleNotFoundError:
-    from build_adiscord_inner_frontier_countries import (
+    from builders.build_adiscord_inner_frontier_countries import (
         CLAIMS_BY_STATE,
         COUNTRIES,
         EXPECTED_STATES,
@@ -49,7 +53,7 @@ except ModuleNotFoundError:
         render_state,
         state_path,
     )
-    from build_adiscord_strategic_regions import (
+    from builders.build_adiscord_strategic_regions import (
         build_state_adjacency,
         connected_components,
         load_province_adjacency,
@@ -111,7 +115,7 @@ def validate() -> list[str]:
     country_loc = country_loc_path.read_text(encoding="utf-8-sig", errors="strict")
     vp_loc = VP_LOCALISATION.read_text(encoding="utf-8-sig", errors="strict") if VP_LOCALISATION.exists() else ""
     adjacency_source = read("map/adjacencies.csv")
-    tech_builder = read("tools/build_adiscord_technology_system.py")
+    tech_builder = read("tools/builders/build_adiscord_technology_system.py")
     tech_data = read("tools/data/adiscord_starting_technology_profiles.json")
     split_effect = read("common/scripted_effects/ADISCORD_inner_frontier_effects.txt")
     collapse_maps = read("common/scripted_effects/ADISCORD_vorkerland_collapse_map_effects.txt")

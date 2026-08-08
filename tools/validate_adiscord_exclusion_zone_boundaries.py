@@ -5,9 +5,14 @@ from __future__ import annotations
 
 import re
 import sys
+from pathlib import Path
+
+_REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPOSITORY_ROOT))
 
 try:
-    from tools.build_adiscord_exclusion_zone_boundaries import (
+    from tools.builders.build_adiscord_exclusion_zone_boundaries import (
         CITY_EXCEPTION_STATES,
         GEOGRAPHIC_EXCEPTION_STATES,
         NEW_OWNERS,
@@ -16,14 +21,14 @@ try:
         plan_boundaries,
         state_path,
     )
-    from tools.build_adiscord_northern_countries import load_definition
+    from tools.builders.build_adiscord_northern_countries import load_definition
     from tools.vorkerland_collapse_manifest import (
         CONTAMINATED_STATES,
         DIRTY_GROUPS,
         EXZ_REMAINDER_GROUPS,
     )
 except ModuleNotFoundError:
-    from build_adiscord_exclusion_zone_boundaries import (
+    from builders.build_adiscord_exclusion_zone_boundaries import (
         CITY_EXCEPTION_STATES,
         GEOGRAPHIC_EXCEPTION_STATES,
         NEW_OWNERS,
@@ -32,7 +37,7 @@ except ModuleNotFoundError:
         plan_boundaries,
         state_path,
     )
-    from build_adiscord_northern_countries import load_definition
+    from builders.build_adiscord_northern_countries import load_definition
     from vorkerland_collapse_manifest import (
         CONTAMINATED_STATES,
         DIRTY_GROUPS,

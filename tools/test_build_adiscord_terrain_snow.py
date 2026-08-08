@@ -11,7 +11,7 @@ from unittest.mock import patch
 
 from PIL import Image
 
-import build_adiscord_terrain_snow as snow
+from tools.builders import build_adiscord_terrain_snow as snow
 
 
 class TerrainSnowTests(unittest.TestCase):

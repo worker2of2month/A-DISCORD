@@ -6,23 +6,46 @@ from __future__ import annotations
 import re
 import sys
 from collections import Counter
+from pathlib import Path
 
-from build_adiscord_outer_states import (
-    CLIMATE_MARKER,
-    FIRST_STATE_ID,
-    GENERATED_MARKER,
-    LOCALISATION,
-    STATE_DIR,
-    build_province_data,
-    cluster_statistics,
-    load_province_adjacency,
-    load_province_definitions,
-    load_source_pool,
-    parse_state,
-    select_landmasses,
-)
-from build_adiscord_strategic_regions import OUTER_REGION_SPECS, connected_components
-from build_adiscord_northern_countries import POPULATION_MARKER
+_REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPOSITORY_ROOT))
+
+try:
+    from tools.builders.build_adiscord_outer_states import (
+        CLIMATE_MARKER,
+        FIRST_STATE_ID,
+        GENERATED_MARKER,
+        LOCALISATION,
+        STATE_DIR,
+        build_province_data,
+        cluster_statistics,
+        load_province_adjacency,
+        load_province_definitions,
+        load_source_pool,
+        parse_state,
+        select_landmasses,
+    )
+    from tools.builders.build_adiscord_strategic_regions import OUTER_REGION_SPECS, connected_components
+    from tools.builders.build_adiscord_northern_countries import POPULATION_MARKER
+except ModuleNotFoundError:
+    from builders.build_adiscord_outer_states import (
+        CLIMATE_MARKER,
+        FIRST_STATE_ID,
+        GENERATED_MARKER,
+        LOCALISATION,
+        STATE_DIR,
+        build_province_data,
+        cluster_statistics,
+        load_province_adjacency,
+        load_province_definitions,
+        load_source_pool,
+        parse_state,
+        select_landmasses,
+    )
+    from builders.build_adiscord_strategic_regions import OUTER_REGION_SPECS, connected_components
+    from builders.build_adiscord_northern_countries import POPULATION_MARKER
 from validate_adiscord_northern_countries import validate as validate_northern_countries
 
 

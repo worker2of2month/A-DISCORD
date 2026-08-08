@@ -5,7 +5,7 @@ import re
 import unittest
 from pathlib import Path
 
-from tools import build_adiscord_technology_system as generator
+from tools.builders import build_adiscord_technology_system as generator
 
 
 ROOT = Path(__file__).resolve().parents[1]

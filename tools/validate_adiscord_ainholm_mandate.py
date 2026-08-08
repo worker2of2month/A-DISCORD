@@ -9,8 +9,12 @@ from pathlib import Path
 
 from PIL import Image
 
+_REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPOSITORY_ROOT))
+
 try:
-    from tools.build_adiscord_ainholm_mandate import (
+    from tools.builders.build_adiscord_ainholm_mandate import (
         FLAG_DIR,
         LOCALISATION_PATH,
         ROOT,
@@ -19,7 +23,7 @@ try:
         state_path,
     )
 except ModuleNotFoundError:
-    from build_adiscord_ainholm_mandate import (
+    from builders.build_adiscord_ainholm_mandate import (
         FLAG_DIR,
         LOCALISATION_PATH,
         ROOT,

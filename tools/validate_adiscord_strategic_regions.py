@@ -9,7 +9,12 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-from build_adiscord_strategic_regions import (
+_REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPOSITORY_ROOT))
+
+try:
+    from tools.builders.build_adiscord_strategic_regions import (
     MONTH_RANGES,
     OUTER_CLIMATE_BELTS,
     OUTER_REGION_SPECS,
@@ -26,7 +31,26 @@ from build_adiscord_strategic_regions import (
     load_province_adjacency,
     load_province_definitions,
     minimum_snow_level,
-)
+    )
+except ModuleNotFoundError:
+    from builders.build_adiscord_strategic_regions import (
+        MONTH_RANGES,
+        OUTER_CLIMATE_BELTS,
+        OUTER_REGION_SPECS,
+        OUTER_STATE_MARKER,
+        ALL_SEA_REGIONS,
+        DEDICATED_SEA_PROVINCES,
+        REGIONS,
+        REMAINDER_STATE_MARKER,
+        TEMPERATURES,
+        arctic_water,
+        build_state_adjacency,
+        connected_components,
+        phenomenon,
+        load_province_adjacency,
+        load_province_definitions,
+        minimum_snow_level,
+    )
 
 
 ROOT = Path(__file__).resolve().parents[1]

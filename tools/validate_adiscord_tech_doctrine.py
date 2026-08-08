@@ -9,8 +9,12 @@ import statistics
 import sys
 from pathlib import Path
 
+_REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPOSITORY_ROOT))
+
 try:
-    from build_adiscord_technology_system import (
+    from tools.builders.build_adiscord_technology_system import (
         BRANCH_GRAPHS as GENERATED_BRANCH_GRAPHS,
         BRANCHES as GENERATED_BRANCHES,
         ACCESS_REQUIREMENT_LOCALISATION as GENERATED_ACCESS_REQUIREMENT_LOCALISATION,
@@ -32,7 +36,7 @@ try:
         YEARS as GENERATED_YEARS,
         YEAR_TO_Y as GENERATED_YEAR_TO_Y,
     )
-    from build_adiscord_doctrine_system import (
+    from tools.builders.build_adiscord_doctrine_system import (
         GRANDS as GENERATED_GRANDS,
         REWARD_PROFILES as GENERATED_REWARD_PROFILES,
         SCHOOLS as GENERATED_SCHOOLS,
@@ -45,7 +49,7 @@ try:
         LEADER_TRAINING as GENERATED_LEADER_TRAINING,
     )
 except ModuleNotFoundError:
-    from tools.build_adiscord_technology_system import (
+    from builders.build_adiscord_technology_system import (
         BRANCH_GRAPHS as GENERATED_BRANCH_GRAPHS,
         BRANCHES as GENERATED_BRANCHES,
         ACCESS_REQUIREMENT_LOCALISATION as GENERATED_ACCESS_REQUIREMENT_LOCALISATION,
@@ -67,7 +71,7 @@ except ModuleNotFoundError:
         YEARS as GENERATED_YEARS,
         YEAR_TO_Y as GENERATED_YEAR_TO_Y,
     )
-    from tools.build_adiscord_doctrine_system import (
+    from builders.build_adiscord_doctrine_system import (
         GRANDS as GENERATED_GRANDS,
         REWARD_PROFILES as GENERATED_REWARD_PROFILES,
         SCHOOLS as GENERATED_SCHOOLS,

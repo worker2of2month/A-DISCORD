@@ -8,7 +8,11 @@ from pathlib import Path
 
 from PIL import Image
 
-from build_adiscord_new_states import (
+_REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPOSITORY_ROOT))
+
+from tools.builders.build_adiscord_new_states import (
     AFRELA_LEGACY_VICTORY_POINTS,
     CAPITALS,
     LEGACY_OWNER_GAPS,
@@ -26,9 +30,9 @@ from build_adiscord_new_states import (
     state_path,
 )
 from adiscord_core_state_balance_manifest import NON_URBAN_SETTLEMENT_VPS
-from build_adiscord_ainholm_mandate import STATE_PROFILES as AINHOLM_STATE_PROFILES
-from build_adiscord_northern_countries import COUNTRIES as NORTHERN_COUNTRIES, build_profiles as build_northern_profiles
-from build_adiscord_inner_frontier_countries import (
+from tools.builders.build_adiscord_ainholm_mandate import STATE_PROFILES as AINHOLM_STATE_PROFILES
+from tools.builders.build_adiscord_northern_countries import COUNTRIES as NORTHERN_COUNTRIES, build_profiles as build_northern_profiles
+from tools.builders.build_adiscord_inner_frontier_countries import (
     COUNTRIES as INNER_FRONTIER_COUNTRIES,
     build_profiles as build_inner_frontier_profiles,
 )

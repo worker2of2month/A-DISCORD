@@ -11,21 +11,26 @@ from __future__ import annotations
 import argparse
 import csv
 import re
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
+_REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPOSITORY_ROOT))
+
 try:
     from tools.validate_adiscord_economy_ai import validate as validate_adiscord_economy_ai
-    from tools.build_adiscord_map_buildings import validate as validate_adiscord_map_buildings
-    from tools.build_adiscord_terrain_snow import validate as validate_adiscord_terrain_snow
+    from tools.builders.build_adiscord_map_buildings import validate as validate_adiscord_map_buildings
+    from tools.builders.build_adiscord_terrain_snow import validate as validate_adiscord_terrain_snow
     from tools.lib.paths import repository_root
 except ModuleNotFoundError as error:
     # Direct ``python tools/validate_tc.py`` keeps the legacy tools directory on sys.path.
     if error.name is None or not error.name.startswith("tools"):
         raise
     from validate_adiscord_economy_ai import validate as validate_adiscord_economy_ai
-    from build_adiscord_map_buildings import validate as validate_adiscord_map_buildings
-    from build_adiscord_terrain_snow import validate as validate_adiscord_terrain_snow
+    from builders.build_adiscord_map_buildings import validate as validate_adiscord_map_buildings
+    from builders.build_adiscord_terrain_snow import validate as validate_adiscord_terrain_snow
     from lib.paths import repository_root
 
 
