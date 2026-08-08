@@ -958,9 +958,7 @@ def apply_generated_state_name_localisation() -> None:
     path.write_text(source.rstrip() + "\n", encoding="utf-8-sig", newline="\n")
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description="Generate A-Discord state metadata.")
-    parser.parse_args()
+def apply() -> None:
     missing = sorted(set(range(234, 331)) - set(STARTING_OWNERS))
     if missing:
         raise RuntimeError(f"new states without a starting owner: {missing}")
@@ -976,5 +974,19 @@ def main() -> None:
     print(f"Built metadata for {len(STARTING_OWNERS)} states; hand-authored flags were left untouched.")
 
 
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Generate A-Discord state metadata.")
+    actions = parser.add_mutually_exclusive_group()
+    actions.add_argument("--check", action="store_true", help="validate current generated outputs (default)")
+    actions.add_argument("--apply", action="store_true", help="write generated state metadata and localisation")
+    args = parser.parse_args()
+    if args.apply:
+        apply()
+        return 0
+    from tools.validators.validate_adiscord_new_states import main as validate_main
+
+    return validate_main()
+
+
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

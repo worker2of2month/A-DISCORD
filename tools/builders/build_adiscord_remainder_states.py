@@ -319,10 +319,17 @@ def apply_plan(planned: list[PlannedState], data: dict[int, ProvinceData], gener
     )
 
 
-def main() -> None:
+def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--apply", action="store_true", help="write generated state files and localisation")
+    actions = parser.add_mutually_exclusive_group()
+    actions.add_argument("--check", action="store_true", help="validate current generated outputs (default)")
+    actions.add_argument("--apply", action="store_true", help="write generated state files and localisation")
     args = parser.parse_args()
+
+    if not args.apply:
+        from tools.validators.validate_adiscord_remainder_states import main as validate_main
+
+        return validate_main()
 
     pool, _base_source, generated_paths = load_source_pool()
     province_types, color_to_province = load_province_definitions()
@@ -337,13 +344,11 @@ def main() -> None:
     climate_counts = Counter(state.climate_region for state in planned)
     print(f"Planned {len(planned)} connected climate shells from {len(pool)} provinces.")
     print(f"Climate groups: {dict(sorted(climate_counts.items()))}")
-    if args.apply:
-        apply_plan(planned, data, generated_paths)
-        mismatches = synchronize_buildings(ROOT, apply=True)
-        print(f"Synchronized {len(mismatches)} map-building state assignments.")
-    else:
-        print("Dry run only; pass --apply to write files.")
+    apply_plan(planned, data, generated_paths)
+    mismatches = synchronize_buildings(ROOT, apply=True)
+    print(f"Synchronized {len(mismatches)} map-building state assignments.")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

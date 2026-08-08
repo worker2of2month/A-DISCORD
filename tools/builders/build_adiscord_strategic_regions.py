@@ -1204,11 +1204,19 @@ def build() -> None:
     print(f"Built {len(REGIONS)} land and {len(ALL_SEA_REGIONS)} sea strategic regions for {len(states)} states.")
 
 
-def main() -> None:
+def main() -> int:
     parser = argparse.ArgumentParser(description="Generate A-Discord strategic regions and weather positions.")
-    parser.parse_args()
-    build()
+    actions = parser.add_mutually_exclusive_group()
+    actions.add_argument("--check", action="store_true", help="validate current generated outputs (default)")
+    actions.add_argument("--apply", action="store_true", help="write strategic regions, localisation and weather positions")
+    args = parser.parse_args()
+    if args.apply:
+        build()
+        return 0
+    from tools.validators.validate_adiscord_strategic_regions import main as validate_main
+
+    return validate_main()
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

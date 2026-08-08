@@ -182,19 +182,19 @@ def apply() -> None:
     print("Applied Ainholm mandate: 3 states, 2 divisions, 3 flags and Russian localisation.")
 
 
-def main() -> None:
+def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--apply", action="store_true", help="write states, OOB, flags and localisation")
+    actions = parser.add_mutually_exclusive_group()
+    actions.add_argument("--check", action="store_true", help="validate current generated outputs (default)")
+    actions.add_argument("--apply", action="store_true", help="write states, OOB, flags and localisation")
     args = parser.parse_args()
-    print(
-        "AIN: states=2 population=610,000 factories=2+2 divisions=2 "
-        "resources={'aluminium': 3, 'steel': 3, 'tungsten': 4}; state 120 -> ORV"
-    )
     if args.apply:
         apply()
-    else:
-        print("Dry run only; pass --apply to write generated data.")
+        return 0
+    from tools.validators.validate_adiscord_ainholm_mandate import main as validate_main
+
+    return validate_main()
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

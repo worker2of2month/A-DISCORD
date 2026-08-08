@@ -714,10 +714,17 @@ def apply_plan(
     print("Run tools/build_adiscord_northern_countries.py --apply next to restore northern owners and balance data.")
 
 
-def main() -> None:
+def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--apply", action="store_true", help="write generated state files and localisation")
+    actions = parser.add_mutually_exclusive_group()
+    actions.add_argument("--check", action="store_true", help="validate current generated outputs (default)")
+    actions.add_argument("--apply", action="store_true", help="write generated state files and localisation")
     args = parser.parse_args()
+
+    if not args.apply:
+        from tools.validators.validate_adiscord_outer_states import main as validate_main
+
+        return validate_main()
 
     source_pool, original_outer, outer_source, generated_paths = load_source_pool()
     province_types, color_to_province = load_province_definitions()
@@ -728,13 +735,11 @@ def main() -> None:
     planned = assign_ids_and_metadata(clusters, data)
     validate_plan(planned, source_pool, left, right)
     print_summary(planned, data)
-    if args.apply:
-        apply_plan(planned, data, original_outer, outer_source, generated_paths)
-        mismatches = synchronize_buildings(ROOT, apply=True)
-        print(f"Synchronized {len(mismatches)} map-building state assignments.")
-    else:
-        print("Dry run only; pass --apply to write files.")
+    apply_plan(planned, data, original_outer, outer_source, generated_paths)
+    mismatches = synchronize_buildings(ROOT, apply=True)
+    print(f"Synchronized {len(mismatches)} map-building state assignments.")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

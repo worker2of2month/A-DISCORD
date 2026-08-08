@@ -740,9 +740,7 @@ def validate_manifest() -> None:
         raise ValueError(f"Duplicate reward IDs: {duplicates}")
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description="Generate the A-Discord mastery doctrine system.")
-    parser.parse_args()
+def apply() -> None:
     validate_manifest()
     (ROOT / "common/doctrines/folders/ADISCORD_doctrine_folders.txt").write_text(render_folders(), encoding="utf-8")
     (ROOT / "common/doctrines/tracks/ADISCORD_doctrine_tracks.txt").write_text(render_tracks(), encoding="utf-8")
@@ -753,5 +751,19 @@ def main() -> None:
     print(f"Generated {len(GRANDS)} grand doctrines, {len(TRACKS)} tracks, {len(SCHOOLS)} schools and {len(SCHOOLS) * 5} mastery rewards.")
 
 
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Generate the A-Discord mastery doctrine system.")
+    actions = parser.add_mutually_exclusive_group()
+    actions.add_argument("--check", action="store_true", help="validate current generated outputs (default)")
+    actions.add_argument("--apply", action="store_true", help="write doctrine files and localisation")
+    args = parser.parse_args()
+    if args.apply:
+        apply()
+        return 0
+    from tools.validators.validate_adiscord_tech_doctrine import main as validate_main
+
+    return validate_main()
+
+
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

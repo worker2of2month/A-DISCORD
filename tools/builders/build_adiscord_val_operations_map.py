@@ -64,10 +64,7 @@ def transform(mask: Image.Image, box: tuple[int, int, int, int]) -> Image.Image:
     return canvas
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description="Generate Kefreyt's local operations map.")
-    parser.parse_args()
-    OUT.mkdir(parents=True, exist_ok=True)
+def render_outputs() -> tuple[dict[str, Image.Image], tuple[int, int, int, int], tuple[int, int], tuple[int, int]]:
     province_to_color, land_colors = province_colors()
     state_sets = {
         state: state_provinces(state)
@@ -144,7 +141,7 @@ def main() -> None:
     for i in range(18):
         vd.rectangle((i, i, WIDTH - i - 1, HEIGHT - i - 1), outline=(0, 0, 0, max(0, 9 - i // 2)))
     background.alpha_composite(vignette)
-    background.save(OUT / "VAL_ops_map_background.png", optimize=True)
+    outputs = {"VAL_ops_map_background.png": background}
 
     for state in STATE_IDS:
         frames = Image.new("RGBA", (WIDTH * 5, HEIGHT), (0, 0, 0, 0))
@@ -156,10 +153,58 @@ def main() -> None:
             frame.alpha_composite(Image.composite(Image.new("RGBA", frame.size, (*color, 210)), Image.new("RGBA", frame.size), mask))
             frame.alpha_composite(Image.composite(Image.new("RGBA", frame.size, (235, 215, 160, 235)), Image.new("RGBA", frame.size), rim))
             frames.paste(frame, (WIDTH * index, 0))
-        frames.save(OUT / f"VAL_ops_state_{state}.png", optimize=True)
+        outputs[f"VAL_ops_state_{state}.png"] = frames
 
-    print(f"Wrote operations map to {OUT.relative_to(ROOT)}; source crop={box}, resized={size}, offset={offset}")
+    return outputs, box, size, offset
+
+
+def validate_outputs(outputs: dict[str, Image.Image]) -> list[str]:
+    issues: list[str] = []
+    for filename, expected in outputs.items():
+        path = OUT / filename
+        if not path.is_file():
+            issues.append(f"missing generated operations-map image: {path.relative_to(ROOT)}")
+            continue
+        try:
+            with Image.open(path) as source:
+                actual = source.convert("RGBA")
+        except OSError as exc:
+            issues.append(f"cannot read {path.relative_to(ROOT)}: {exc}")
+            continue
+        if actual.size != expected.size:
+            issues.append(
+                f"{path.relative_to(ROOT)} has size {actual.size}, expected {expected.size}"
+            )
+            continue
+        if ImageChops.difference(actual, expected.convert("RGBA")).getbbox() is not None:
+            issues.append(f"{path.relative_to(ROOT)} pixels differ from deterministic render")
+    return issues
+
+
+def apply(outputs: dict[str, Image.Image]) -> None:
+    OUT.mkdir(parents=True, exist_ok=True)
+    for filename, image in outputs.items():
+        image.save(OUT / filename, optimize=True)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Generate Kefreyt's local operations map.")
+    actions = parser.add_mutually_exclusive_group()
+    actions.add_argument("--check", action="store_true", help="compare current PNGs with a deterministic render (default)")
+    actions.add_argument("--apply", action="store_true", help="write the deterministic operations-map PNGs")
+    args = parser.parse_args()
+    outputs, box, size, offset = render_outputs()
+    if args.apply:
+        apply(outputs)
+        print(f"Wrote operations map to {OUT.relative_to(ROOT)}; source crop={box}, resized={size}, offset={offset}")
+    issues = validate_outputs(outputs)
+    if issues:
+        for issue in issues:
+            print(f"ERROR: {issue}")
+        return 1
+    print("VAL operations-map validation passed.")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

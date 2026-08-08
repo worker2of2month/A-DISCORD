@@ -4522,9 +4522,7 @@ def write_technology_migration_manifest() -> None:
     )
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description="Generate the A-Discord technology system.")
-    parser.parse_args()
+def apply() -> None:
     all_ids = [tech.id for branch in BRANCHES for tech in branch.techs]
     duplicates = sorted({tech_id for tech_id in all_ids if all_ids.count(tech_id) > 1})
     if duplicates:
@@ -4542,5 +4540,19 @@ def main() -> None:
     )
 
 
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Generate the A-Discord technology system.")
+    actions = parser.add_mutually_exclusive_group()
+    actions.add_argument("--check", action="store_true", help="validate current generated outputs (default)")
+    actions.add_argument("--apply", action="store_true", help="write technology files, manifests, GUI and localisation")
+    args = parser.parse_args()
+    if args.apply:
+        apply()
+        return 0
+    from tools.validators.validate_adiscord_tech_doctrine import main as validate_main
+
+    return validate_main()
+
+
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

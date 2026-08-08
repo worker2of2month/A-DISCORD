@@ -6,9 +6,8 @@ from __future__ import annotations
 import argparse
 import math
 from pathlib import Path
-from shutil import copyfile
 
-from PIL import Image, ImageDraw, ImageOps
+from PIL import Image, ImageChops, ImageDraw, ImageOps
 from tools.lib.paths import repository_root
 
 
@@ -220,38 +219,72 @@ COPIED_FLAG_TRIPLETS = {
 }
 
 
-def write_triplet(flag_id: str, image: Image.Image) -> None:
-    SOURCE_ROOT.mkdir(parents=True, exist_ok=True)
-    image.save(SOURCE_ROOT / f"{flag_id}.png")
+def add_triplet(outputs: dict[Path, Image.Image], flag_id: str, image: Image.Image) -> None:
+    outputs[SOURCE_ROOT / f"{flag_id}.png"] = image.copy()
     for directory, size in (("", (82, 52)), ("medium", (41, 26)), ("small", (10, 7))):
-        target_dir = FLAG_ROOT / directory
-        target_dir.mkdir(parents=True, exist_ok=True)
         resized = image.resize(size, Image.Resampling.LANCZOS).convert("RGBA")
-        resized.save(target_dir / f"{flag_id}.tga")
+        outputs[FLAG_ROOT / directory / f"{flag_id}.tga"] = resized
 
 
-def copy_triplet(source_flag_id: str, target_flag_id: str) -> None:
-    for directory in (FLAG_ROOT, FLAG_ROOT / "medium", FLAG_ROOT / "small"):
-        copyfile(directory / f"{source_flag_id}.tga", directory / f"{target_flag_id}.tga")
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser(description="Generate Vorkerland successor-state flags.")
-    parser.parse_args()
+def expected_outputs() -> dict[Path, Image.Image]:
+    outputs: dict[Path, Image.Image] = {}
     for flag_id, builder in BUILDERS.items():
-        write_triplet(flag_id, builder())
+        add_triplet(outputs, flag_id, builder())
 
     for flag_id, supplied in SUPPLIED_FLAGS.items():
         with Image.open(supplied) as source:
             prepared = ImageOps.fit(source.convert("RGB"), CANVAS, method=Image.Resampling.LANCZOS)
-        write_triplet(flag_id, prepared)
+        add_triplet(outputs, flag_id, prepared)
 
     for target_flag_id, source_flag_id in COPIED_FLAG_TRIPLETS.items():
-        copy_triplet(source_flag_id, target_flag_id)
+        for directory in (FLAG_ROOT, FLAG_ROOT / "medium", FLAG_ROOT / "small"):
+            with Image.open(directory / f"{source_flag_id}.tga") as source:
+                outputs[directory / f"{target_flag_id}.tga"] = source.convert("RGBA")
+    return outputs
 
-    total = len(BUILDERS) + len(SUPPLIED_FLAGS) + len(COPIED_FLAG_TRIPLETS)
-    print(f"Built {total} original flag triplets.")
+
+def validate_outputs(outputs: dict[Path, Image.Image]) -> list[str]:
+    issues: list[str] = []
+    for path, expected in outputs.items():
+        if not path.is_file():
+            issues.append(f"missing generated flag: {path.relative_to(ROOT)}")
+            continue
+        try:
+            with Image.open(path) as source:
+                actual = source.convert("RGBA")
+        except OSError as exc:
+            issues.append(f"cannot read {path.relative_to(ROOT)}: {exc}")
+            continue
+        expected_rgba = expected.convert("RGBA")
+        if actual.size != expected_rgba.size:
+            issues.append(f"{path.relative_to(ROOT)} has size {actual.size}, expected {expected_rgba.size}")
+        elif ImageChops.difference(actual, expected_rgba).getbbox() is not None:
+            issues.append(f"{path.relative_to(ROOT)} pixels differ from deterministic render")
+    return issues
 
 
+def apply_outputs(outputs: dict[Path, Image.Image]) -> None:
+    for path, image in outputs.items():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        image.save(path)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Generate Vorkerland successor-state flags.")
+    actions = parser.add_mutually_exclusive_group()
+    actions.add_argument("--check", action="store_true", help="compare current flags with deterministic renders (default)")
+    actions.add_argument("--apply", action="store_true", help="write source PNGs and TGA triplets")
+    args = parser.parse_args()
+    outputs = expected_outputs()
+    if args.apply:
+        apply_outputs(outputs)
+        print(f"Built {len(BUILDERS) + len(SUPPLIED_FLAGS) + len(COPIED_FLAG_TRIPLETS)} original flag triplets.")
+    issues = validate_outputs(outputs)
+    if issues:
+        for issue in issues:
+            print(f"ERROR: {issue}")
+        return 1
+    print("Vorkerland successor-state flag validation passed.")
+    return 0
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

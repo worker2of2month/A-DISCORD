@@ -15,6 +15,7 @@ and the highest mountain pixels worldwide.
 from __future__ import annotations
 
 import argparse
+from io import BytesIO
 import os
 import re
 from pathlib import Path
@@ -147,7 +148,9 @@ def apply() -> None:
     if problems:
         raise RuntimeError("\n".join(problems))
 
-    with Image.open(TERRAIN_PATH) as source, Image.open(HEIGHTMAP_PATH) as heightmap:
+    with Image.open(BytesIO(TERRAIN_PATH.read_bytes())) as source, Image.open(
+        BytesIO(HEIGHTMAP_PATH.read_bytes())
+    ) as heightmap:
         terrain = source.copy()
         pixels = generated_pixels(source, heightmap)
     problems = coverage_issues(pixels)
@@ -172,8 +175,10 @@ def apply() -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--apply", action="store_true", help="write map/terrain.bmp")
+    parser = argparse.ArgumentParser(description=__doc__)
+    actions = parser.add_mutually_exclusive_group()
+    actions.add_argument("--check", action="store_true", help="validate current generated output (default)")
+    actions.add_argument("--apply", action="store_true", help="write map/terrain.bmp")
     args = parser.parse_args()
     if args.apply:
         apply()

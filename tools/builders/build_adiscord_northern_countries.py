@@ -533,16 +533,20 @@ def print_summary() -> None:
         )
 
 
-def main() -> None:
+def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--apply", action="store_true", help="write states, OOBs, victory-point localisation and flags")
+    actions = parser.add_mutually_exclusive_group()
+    actions.add_argument("--check", action="store_true", help="validate current generated outputs (default)")
+    actions.add_argument("--apply", action="store_true", help="write states, OOBs, victory-point localisation and flags")
     args = parser.parse_args()
-    print_summary()
     if args.apply:
+        print_summary()
         apply()
-    else:
-        print("Dry run only; pass --apply to write generated data.")
+        return 0
+    from tools.validators.validate_adiscord_northern_countries import main as validate_main
+
+    return validate_main()
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

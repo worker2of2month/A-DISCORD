@@ -335,25 +335,26 @@ def validate(root: Path = ROOT) -> list[str]:
     return issues
 
 
-def main() -> None:
+def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--apply", action="store_true", help="rewrite mismatched state ids")
+    actions = parser.add_mutually_exclusive_group()
+    actions.add_argument("--check", action="store_true", help="validate current generated output (default)")
+    actions.add_argument("--apply", action="store_true", help="rewrite mismatched state ids")
     args = parser.parse_args()
 
-    mismatches = synchronize_buildings(ROOT, apply=args.apply)
-    added = ensure_exclusion_boundary_spawn_positions(ROOT) if args.apply else 0
-    action = "Corrected" if args.apply else "Found"
-    print(f"{action} {len(mismatches)} map-building state mismatches.")
-    for item in mismatches[:20]:
-        print(
-            f"- line {item.line}: {item.building_type} {item.recorded_state} -> "
-            f"{item.actual_state} (province {item.province})"
-        )
-    if mismatches and not args.apply:
-        print("Dry run only; pass --apply to update map/buildings.txt.")
     if args.apply:
+        mismatches = synchronize_buildings(ROOT, apply=True)
+        added = ensure_exclusion_boundary_spawn_positions(ROOT)
+        print(f"Corrected {len(mismatches)} map-building state mismatches.")
         print(f"Added {added} Exclusion Zone boundary spawn anchors.")
+    issues = validate()
+    if issues:
+        for issue in issues:
+            print(f"ERROR: {issue}")
+        return 1
+    print("Map-building validation passed.")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
