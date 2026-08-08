@@ -20,6 +20,7 @@ if str(_REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPOSITORY_ROOT))
 
 from tools.validators.validate_adiscord_economy_ai import validate as validate_adiscord_economy_ai
+from tools.validators.validate_adiscord_division_templates import validate as validate_adiscord_division_templates
 from tools.builders.build_adiscord_map_buildings import validate as validate_adiscord_map_buildings
 from tools.builders.build_adiscord_terrain_snow import validate as validate_adiscord_terrain_snow
 from tools.lib.paths import repository_root
@@ -884,6 +885,13 @@ def main():
 
     economy_ai_issues = validate_adiscord_economy_ai()
     print_section("Economy and AI semantics", economy_ai_issues, len(economy_ai_issues))
+
+    division_template_issues = validate_adiscord_division_templates()
+    print_section(
+        "Division template audit",
+        division_template_issues[: args.limit],
+        len(division_template_issues),
+    )
 
     ncns_issues, ncns_total = check_ncns_and_campaign_compatibility(args.limit)
     print_section("NCNS factions and campaign slots", ncns_issues, ncns_total)
