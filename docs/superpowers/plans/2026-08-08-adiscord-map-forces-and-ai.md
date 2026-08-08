@@ -199,6 +199,7 @@ The only permitted `01_ADISCORD_vorkerland_collapse_on_actions.txt` edits are ca
 - [ ] In recovery, pause offensive priority after severe loss/organization conditions while retaining defensive coverage.
 - [ ] In final showdown, activate only for surviving WKR/VAD/TVA claimants and one live-border opponent at a time.
 - [ ] Add parallel phase blocks for northern and paired regional wars so they do not remain on generic peacetime AI.
+- [ ] Treat the NAM resource war as its own three-front acceptance case: NAM must allocate forces against EFL, AZH, and the delayed SLF rebellion without abandoning its capital or feeding divisions into isolated tiles. Preserve the coalition victory path, but prohibit a balance in which NAM loses every observer run; verify that the event-loaded OOB, equipment, organization, supply, and AI ratios give both outcomes a credible route.
 - [ ] Run collapse/force-design validators and grep for stale `allowed = { ... tag = WRK ... }` wartime strategies.
 - [ ] Commit as `feat: make Vorkerland military AI phase aware`.
 
@@ -258,6 +259,8 @@ The only permitted `01_ADISCORD_vorkerland_collapse_on_actions.txt` edits are ca
 - [ ] Run full unit discovery, every generated-owner check, `python -B tools/validate_tc.py --limit 300`, and `git diff --check`.
 - [ ] Fully restart HOI4 and verify each claimant starts with organization, equipment, supply, valid air wings, fuel, and active missions.
 - [ ] Run 8-12 observer campaigns and record seed, claimant route, start/end dates, winner, longest no-progress interval, northern/regional progress, aircraft mission use, and militia counts.
+- [ ] Record NAM resource-war outcomes separately, including control of states 67/688/689, the EFL/AZH/SLF front split, time to first meaningful movement, and whether either NAM or the restitution coalition wins every sampled run.
 - [ ] Require normal central completion in two to three years, meaningful movement every 60-120 days, no overwhelming single-claimant win share, no multi-year northern stasis, and no militia growth beyond caps.
+- [ ] Require at least one credible NAM survival or victory path and at least one credible coalition path across the sample; if one side wins every run, convert the observed failure mode into a focused OOB, supply, or AI regression test before tuning.
 - [ ] Convert every runtime failure into a focused regression test before adjustment.
 - [ ] Do not declare this plan complete until fresh runtime logs and observer data satisfy the acceptance targets.
