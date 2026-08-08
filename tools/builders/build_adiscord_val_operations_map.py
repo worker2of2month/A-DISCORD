@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import csv
 import re
 from pathlib import Path
@@ -64,6 +65,8 @@ def transform(mask: Image.Image, box: tuple[int, int, int, int]) -> Image.Image:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Generate Kefreyt's local operations map.")
+    parser.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
     province_to_color, land_colors = province_colors()
     state_sets = {

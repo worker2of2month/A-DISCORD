@@ -9,6 +9,7 @@ deliberately outside this map builder's ownership.
 
 from __future__ import annotations
 
+import argparse
 import re
 from pathlib import Path
 
@@ -958,6 +959,8 @@ def apply_generated_state_name_localisation() -> None:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Generate A-Discord state metadata.")
+    parser.parse_args()
     missing = sorted(set(range(234, 331)) - set(STARTING_OWNERS))
     if missing:
         raise RuntimeError(f"new states without a starting owner: {missing}")

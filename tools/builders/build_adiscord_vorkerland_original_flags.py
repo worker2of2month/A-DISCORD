@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import math
 from pathlib import Path
 from shutil import copyfile
@@ -235,6 +236,8 @@ def copy_triplet(source_flag_id: str, target_flag_id: str) -> None:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Generate Vorkerland successor-state flags.")
+    parser.parse_args()
     for flag_id, builder in BUILDERS.items():
         write_triplet(flag_id, builder())
 

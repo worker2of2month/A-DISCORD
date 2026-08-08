@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import csv
 import math
 import re
@@ -1204,6 +1205,8 @@ def build() -> None:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Generate A-Discord strategic regions and weather positions.")
+    parser.parse_args()
     build()
 
 

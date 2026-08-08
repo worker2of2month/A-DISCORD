@@ -8,6 +8,7 @@ IDs are retained for the original eleven schools and their existing rewards.
 
 from __future__ import annotations
 
+import argparse
 from dataclasses import dataclass
 from pathlib import Path
 import re
@@ -740,6 +741,8 @@ def validate_manifest() -> None:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Generate the A-Discord mastery doctrine system.")
+    parser.parse_args()
     validate_manifest()
     (ROOT / "common/doctrines/folders/ADISCORD_doctrine_folders.txt").write_text(render_folders(), encoding="utf-8")
     (ROOT / "common/doctrines/tracks/ADISCORD_doctrine_tracks.txt").write_text(render_tracks(), encoding="utf-8")

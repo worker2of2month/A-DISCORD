@@ -78,34 +78,64 @@ class ToolEntrypointCompatibilityTests(unittest.TestCase):
                 facade = importlib.import_module(f"tools.{builder_name}")
                 self.assertIs(facade.main, implementation.main)
 
+        for builder_name in BUILDER_NAMES:
+            with self.subTest(builder=builder_name, arguments=("--help",)):
+                facade = subprocess.run(
+                    [
+                        sys.executable,
+                        "-B",
+                        str(REPOSITORY_ROOT / "tools" / f"{builder_name}.py"),
+                        "--help",
+                    ],
+                    cwd=REPOSITORY_ROOT,
+                    capture_output=True,
+                    text=True,
+                    timeout=60,
+                )
+                package = subprocess.run(
+                    [
+                        sys.executable,
+                        "-B",
+                        "-m",
+                        f"tools.builders.{builder_name}",
+                        "--help",
+                    ],
+                    cwd=REPOSITORY_ROOT,
+                    capture_output=True,
+                    text=True,
+                    timeout=60,
+                )
+                self.assertEqual(facade.returncode, 0, facade.stderr)
+                self.assertEqual(package.returncode, 0, package.stderr)
+                self.assertIn("usage:", facade.stdout.lower())
+                self.assertEqual(facade.stdout, package.stdout)
+                self.assertEqual(facade.stderr, package.stderr)
+
         for builder_name in READ_ONLY_BUILDERS:
-            for arguments in (("--help",), ()):
-                with self.subTest(builder=builder_name, arguments=arguments):
-                    facade = subprocess.run(
-                        [
-                            sys.executable,
-                            "-B",
-                            str(REPOSITORY_ROOT / "tools" / f"{builder_name}.py"),
-                            *arguments,
-                        ],
-                        cwd=REPOSITORY_ROOT,
-                        capture_output=True,
-                        text=True,
-                        timeout=60,
-                    )
-                    package = subprocess.run(
-                        [
-                            sys.executable,
-                            "-B",
-                            "-m",
-                            f"tools.builders.{builder_name}",
-                            *arguments,
-                        ],
-                        cwd=REPOSITORY_ROOT,
-                        capture_output=True,
-                        text=True,
-                        timeout=60,
-                    )
-                    self.assertEqual(facade.returncode, package.returncode)
-                    self.assertEqual(facade.stdout, package.stdout)
-                    self.assertEqual(facade.stderr, package.stderr)
+            with self.subTest(builder=builder_name, arguments=()):
+                facade = subprocess.run(
+                    [
+                        sys.executable,
+                        "-B",
+                        str(REPOSITORY_ROOT / "tools" / f"{builder_name}.py"),
+                    ],
+                    cwd=REPOSITORY_ROOT,
+                    capture_output=True,
+                    text=True,
+                    timeout=60,
+                )
+                package = subprocess.run(
+                    [
+                        sys.executable,
+                        "-B",
+                        "-m",
+                        f"tools.builders.{builder_name}",
+                    ],
+                    cwd=REPOSITORY_ROOT,
+                    capture_output=True,
+                    text=True,
+                    timeout=60,
+                )
+                self.assertEqual(facade.returncode, package.returncode)
+                self.assertEqual(facade.stdout, package.stdout)
+                self.assertEqual(facade.stderr, package.stderr)

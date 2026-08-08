@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 from dataclasses import dataclass, replace
 from pathlib import Path
 import json
@@ -4522,6 +4523,8 @@ def write_technology_migration_manifest() -> None:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Generate the A-Discord technology system.")
+    parser.parse_args()
     all_ids = [tech.id for branch in BRANCHES for tech in branch.techs]
     duplicates = sorted({tech_id for tech_id in all_ids if all_ids.count(tech_id) > 1})
     if duplicates:
