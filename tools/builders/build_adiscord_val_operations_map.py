@@ -160,6 +160,10 @@ def render_outputs() -> tuple[dict[str, Image.Image], tuple[int, int, int, int],
 
 def validate_outputs(outputs: dict[str, Image.Image]) -> list[str]:
     issues: list[str] = []
+    expected_filenames = set(outputs)
+    for path in sorted(OUT.glob("VAL_ops_*.png")):
+        if path.is_file() and path.name not in expected_filenames:
+            issues.append(f"unexpected generated operations-map image: {path.name}")
     for filename, expected in outputs.items():
         path = OUT / filename
         if not path.is_file():
@@ -183,6 +187,10 @@ def validate_outputs(outputs: dict[str, Image.Image]) -> list[str]:
 
 def apply(outputs: dict[str, Image.Image]) -> None:
     OUT.mkdir(parents=True, exist_ok=True)
+    expected_filenames = set(outputs)
+    for path in sorted(OUT.glob("VAL_ops_*.png")):
+        if path.is_file() and path.name not in expected_filenames:
+            path.unlink()
     for filename, image in outputs.items():
         image.save(OUT / filename, optimize=True)
 

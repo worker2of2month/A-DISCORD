@@ -169,7 +169,7 @@
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_map_buildings", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "Outer and remainder state builders invoke the same building synchronizer after repartitioning provinces; this dedicated owner is the canonical standalone pass."
+      "overlap_explanation": "State-history, outer, and remainder state builders invoke the same building synchronizer after repartitioning provinces; this dedicated owner is the canonical standalone pass."
     },
     {
       "id": "state_history",
@@ -211,10 +211,13 @@
         "history/states/330-*.txt",
         "history/states/68[8-9]-*.txt",
         "localisation/russian/victory_points_l_russian.yml",
-        "localisation/russian/state_names_l_russian.yml"
+        "localisation/russian/state_names_l_russian.yml",
+        "map/buildings.txt"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_new_states.py",
+        "history/states/*.txt",
+        "map/buildings.txt",
         "map/definition.csv",
         "map/provinces.bmp"
       ],
@@ -222,7 +225,7 @@
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_new_states", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "The base state-history pass owns generated metadata and selected legacy repairs; later regional builders populate or repartition subsets of the same files."
+      "overlap_explanation": "The base state-history pass owns generated metadata and selected legacy repairs, then invokes the shared map/buildings synchronizer; later regional builders populate or repartition subsets of the same files."
     },
     {
       "id": "northern_countries",
@@ -406,7 +409,7 @@
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_val_operations_map"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_val_operations_map", "--apply"],
-      "may_delete_outputs": false,
+      "may_delete_outputs": true,
       "ownership_mode": "exclusive"
     },
     {

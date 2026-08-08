@@ -10,7 +10,11 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
+from PIL import Image
+
+from tools.builders import build_adiscord_val_operations_map as val_operations_map
 from tools.lib.generated_outputs import (
     load_registry,
     run_apply_pipeline,
@@ -74,6 +78,57 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
             <= set(self.entries["vorkerland_flags"]["source_inputs"]),
             "copied joint-government flags depend on all three base WRK TGA inputs",
         )
+
+    def test_registry_declares_every_builder_that_writes_map_buildings(self) -> None:
+        declared_owners = {
+            entry["id"]
+            for entry in self.entries.values()
+            if "map/buildings.txt" in entry["output_globs"]
+        }
+        self.assertEqual(
+            declared_owners,
+            {"map_buildings", "outer_states", "remainder_states", "state_history"},
+        )
+        self.assertTrue(
+            {"map/buildings.txt", "history/states/*.txt"}
+            <= set(self.entries["state_history"]["source_inputs"]),
+        )
+
+    def test_val_check_rejects_an_unexpected_owned_png(self) -> None:
+        self.assertTrue(self.entries["val_operations_map"]["may_delete_outputs"])
+        with tempfile.TemporaryDirectory() as temporary:
+            output_dir = Path(temporary)
+            expected = Image.new("RGBA", (2, 2), (10, 20, 30, 255))
+            outputs = {"VAL_ops_expected.png": expected}
+            expected.save(output_dir / "VAL_ops_expected.png")
+            Image.new("RGBA", (2, 2), (40, 50, 60, 255)).save(
+                output_dir / "VAL_ops_stale.png"
+            )
+
+            with patch.object(val_operations_map, "OUT", output_dir):
+                issues = val_operations_map.validate_outputs(outputs)
+
+            self.assertIn("VAL_ops_stale.png", "\n".join(issues))
+
+    def test_val_apply_removes_only_unexpected_owned_pngs(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            output_dir = Path(temporary)
+            expected = Image.new("RGBA", (2, 2), (10, 20, 30, 255))
+            outputs = {"VAL_ops_expected.png": expected}
+            expected.save(output_dir / "VAL_ops_expected.png")
+            Image.new("RGBA", (2, 2), (40, 50, 60, 255)).save(
+                output_dir / "VAL_ops_stale.png"
+            )
+            unrelated = output_dir / "unrelated.png"
+            Image.new("RGBA", (2, 2), (70, 80, 90, 255)).save(unrelated)
+            unrelated_before = unrelated.read_bytes()
+
+            with patch.object(val_operations_map, "OUT", output_dir):
+                val_operations_map.apply(outputs)
+
+            self.assertTrue((output_dir / "VAL_ops_expected.png").is_file())
+            self.assertFalse((output_dir / "VAL_ops_stale.png").exists())
+            self.assertEqual(unrelated.read_bytes(), unrelated_before)
 
     def test_pipeline_is_explicit_and_repeats_northern_after_exclusion(self) -> None:
         sequence = self.registry["apply_sequence"]
