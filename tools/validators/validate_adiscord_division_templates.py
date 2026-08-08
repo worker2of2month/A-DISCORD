@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
@@ -223,6 +222,25 @@ def _number(entries: list[Entry], key: str, default: float | None = None) -> flo
         return default
 
 
+def _factor(
+    entries: list[Entry],
+    key: str,
+    default: float,
+    context: str,
+    issues: list[str],
+) -> float | None:
+    entry = next((candidate for candidate in entries if candidate.key == key), None)
+    if entry is None:
+        return default
+    if isinstance(entry.value, str):
+        try:
+            return float(entry.value)
+        except ValueError:
+            pass
+    issues.append(f"{context}: invalid numeric {key} {entry.value!r}")
+    return None
+
+
 def _read_ast(path: Path) -> list[Entry]:
     return parse_clausewitz(path.read_text(encoding="utf-8-sig"))
 
@@ -309,16 +327,23 @@ def collect_templates_and_references(root: Path) -> tuple[list[ActualTemplate], 
                     "oob",
                     name,
                     entry.line,
-                    _number(entry.value, "start_experience_factor", 1.0),
-                    _number(entry.value, "start_equipment_factor", 1.0),
+                    _factor(
+                        entry.value,
+                        "start_experience_factor",
+                        1.0,
+                        f"{relative}:{entry.line}",
+                        issues,
+                    ),
+                    _factor(
+                        entry.value,
+                        "start_equipment_factor",
+                        1.0,
+                        f"{relative}:{entry.line}",
+                        issues,
+                    ),
                 )
             )
 
-    inline_template = re.compile(r'\bdivision_template\s*=\s*"([^"]+)"')
-    inline_factor = {
-        "experience": re.compile(r"\bstart_experience_factor\s*=\s*(-?\d+(?:\.\d+)?)"),
-        "equipment": re.compile(r"\bstart_equipment_factor\s*=\s*(-?\d+(?:\.\d+)?)"),
-    }
     for path in _script_paths(root):
         ast = parsed_scripts.get(path)
         if ast is None:
@@ -343,20 +368,37 @@ def collect_templates_and_references(root: Path) -> tuple[list[ActualTemplate], 
             for division in _entries(entry.value, "division"):
                 if not isinstance(division.value, str):
                     continue
-                match = inline_template.search(division.value)
-                if match is None:
-                    issues.append(f"{relative}:{entry.line}: create_unit has no literal division_template")
+                try:
+                    inline = parse_clausewitz(division.value)
+                except ValueError as error:
+                    issues.append(
+                        f"{relative}:{division.line}: create_unit division parse error: {error}"
+                    )
                     continue
-                experience = inline_factor["experience"].search(division.value)
-                equipment = inline_factor["equipment"].search(division.value)
+                name = _scalar(inline, "division_template")
+                if name is None:
+                    issues.append(f"{relative}:{division.line}: create_unit has no literal division_template")
+                    continue
                 references.append(
                     ActualReference(
                         relative,
                         "create_unit",
-                        match.group(1),
-                        entry.line,
-                        float(experience.group(1)) if experience else 1.0,
-                        float(equipment.group(1)) if equipment else 1.0,
+                        name,
+                        division.line,
+                        _factor(
+                            inline,
+                            "start_experience_factor",
+                            1.0,
+                            f"{relative}:{division.line}: create_unit",
+                            issues,
+                        ),
+                        _factor(
+                            inline,
+                            "start_equipment_factor",
+                            1.0,
+                            f"{relative}:{division.line}: create_unit",
+                            issues,
+                        ),
                     )
                 )
     return templates, references, issues
@@ -514,7 +556,7 @@ def _starting_organization_modifiers(root: Path) -> tuple[dict[str, float], list
             technology_ids.update(
                 entry.key
                 for entry in set_technology.value
-                if entry.key.startswith("ADISCORD_tech_") and entry.value == "1"
+                if entry.key and entry.key != "popup" and entry.value == "1"
             )
         return technology_ids
 
@@ -548,30 +590,26 @@ def _starting_organization_modifiers(root: Path) -> tuple[dict[str, float], list
                     technology_blocks[entry.key] = entry.value
 
     modifiers: dict[str, float] = defaultdict(float)
-    for technology_id in technology_ids:
+    for technology_id in sorted(starting_profile_technologies):
         block = technology_blocks.get(technology_id)
         if block is None:
             issues.append(f"starting technology {technology_id} has no definition")
             continue
-        for entry in block:
-            if not entry.key or not isinstance(entry.value, list):
-                continue
-            value = _number(entry.value, "max_organisation")
-            if value is not None:
-                modifiers[entry.key] += value
-    for technology_id in sorted(starting_profile_technologies - technology_ids):
-        block = technology_blocks.get(technology_id)
-        if block is None:
-            continue
-        if any(
-            _number(entry.value, "max_organisation") is not None
+        organization_effects = [
+            (entry.key, value)
             for entry in block
-            if entry.key and isinstance(entry.value, list)
-        ):
+            if entry.key
+            and isinstance(entry.value, list)
+            and (value := _number(entry.value, "max_organisation")) is not None
+        ]
+        if technology_id not in technology_ids and organization_effects:
             issues.append(
                 "owner-specific starting organization modifier "
                 f"{technology_id} is not represented by the common-baseline audit"
             )
+            continue
+        for target, value in organization_effects:
+            modifiers[target] += value
     return dict(modifiers), issues
 
 
@@ -700,11 +738,23 @@ def _validate_schema(audit: dict[str, object]) -> list[str]:
         if collection == "templates":
             keys = seen
     for row in audit.get("templates", []):
+        key = row.get("key")
+        source = row.get("source")
+        if not isinstance(source, dict):
+            issues.append(f"{key}: source must be an object")
+        else:
+            source_kind = source.get("kind")
+            if source_kind not in {"oob", "script"}:
+                issues.append(f"{key}: source kind must be oob or script, got {source_kind}")
+            for field in ("path", "owner"):
+                value = source.get(field)
+                if not isinstance(value, str) or not value or not value.isascii():
+                    issues.append(f"{key}: source {field} must be a non-empty ASCII string")
         replacement = row.get("replacement_path")
         if not isinstance(replacement, dict) or replacement.get("kind") not in {"retain", "replace"}:
-            issues.append(f"{row.get('key')}: invalid replacement_path")
+            issues.append(f"{key}: invalid replacement_path")
         elif replacement.get("target") not in keys:
-            issues.append(f"{row.get('key')}: replacement target {replacement.get('target')} is not audited")
+            issues.append(f"{key}: replacement target {replacement.get('target')} is not audited")
     return issues
 
 
@@ -759,15 +809,34 @@ def _validate_structural_coverage(
     for row in audit.get("templates", []):
         source = row.get("source", {})
         path = source.get("path")
-        candidates = [
+        path_and_name_candidates = [
             index
             for index, template in enumerate(templates)
             if index not in matched_templates
             and template.path == path
             and _accepted_name(row, template.name)
         ]
+        candidates = [
+            index
+            for index in path_and_name_candidates
+            if templates[index].source_kind == source.get("kind")
+            and templates[index].owner == source.get("owner")
+        ]
         if not candidates:
             if path in optional_paths and not (root / path).exists():
+                continue
+            if path_and_name_candidates:
+                actual = templates[path_and_name_candidates[0]]
+                if source.get("kind") != actual.source_kind:
+                    issues.append(
+                        f"template coverage: audit row {row.get('key')} source kind "
+                        f"{source.get('kind')} does not match actual {actual.source_kind}"
+                    )
+                if source.get("owner") != actual.owner:
+                    issues.append(
+                        f"template coverage: audit row {row.get('key')} source owner "
+                        f"{source.get('owner')} does not match actual {actual.owner}"
+                    )
                 continue
             issues.append(f"template coverage: audit row {row.get('key')} has no actual definition at {path}")
             continue
@@ -837,7 +906,8 @@ def validate(root: Path = ROOT, audit_path: Path | None = None) -> list[str]:
     compositions: dict[tuple[str, str], set[tuple[Slot, ...]]] = defaultdict(set)
     locations: dict[tuple[str, str], list[str]] = defaultdict(list)
     for template in templates:
-        identity = (template.namespace, template.name)
+        scope = f"owner {template.owner}" if template.source_kind == "oob" else template.namespace
+        identity = (scope, template.name)
         compositions[identity].add(template.slots)
         locations[identity].append(f"{template.path}:{template.line}")
     for identity, variants in compositions.items():

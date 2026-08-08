@@ -259,6 +259,60 @@ ADISCORD_grant_starting_technology_profile = {
             self._issues(),
         )
 
+    def test_present_malformed_oob_start_factor_is_a_hard_issue(self) -> None:
+        oob = self.root / "history/units/AAA.txt"
+        oob.write_text(
+            oob.read_text(encoding="utf-8").replace(
+                "start_experience_factor = 0.15",
+                "start_experience_factor = invalid",
+            ),
+            encoding="utf-8",
+        )
+        audit = self._valid_audit()
+        audit["references"][0]["start_experience_factor"] = 1.0
+        self._write_audit(audit)
+
+        self.assertTrue(
+            any(
+                "invalid numeric start_experience_factor" in issue
+                for issue in self._issues()
+            ),
+            self._issues(),
+        )
+
+    def test_present_malformed_create_unit_start_factor_is_a_hard_issue(self) -> None:
+        self._write(
+            "common/decisions/ADISCORD_refs.txt",
+            '''x = {
+    create_unit = {
+        division = "division_template = \\"Audit Line\\" start_experience_factor = 0.25 start_equipment_factor = invalid"
+    }
+}
+''',
+        )
+        audit = self._valid_audit()
+        audit["references"].append(
+            {
+                "key": "aaa_malformed_create_unit",
+                "path": "common/decisions/ADISCORD_refs.txt",
+                "kind": "create_unit",
+                "technical_name": "Audit Line",
+                "legacy_names": [],
+                "start_experience_factor": 0.25,
+                "start_equipment_factor": 1.0,
+                "count": 1,
+            }
+        )
+        self._write_audit(audit)
+
+        self.assertTrue(
+            any(
+                "invalid numeric start_equipment_factor" in issue
+                for issue in self._issues()
+            ),
+            self._issues(),
+        )
+
     def test_missing_equipment_archetype_is_explicit(self) -> None:
         equipment = self.root / "common/units/equipment/ADISCORD_test_equipment.txt"
         equipment.write_text(
@@ -315,6 +369,70 @@ ADISCORD_grant_starting_technology_profile = {
             self._issues(),
         )
 
+    def test_non_prefixed_starting_organization_technology_is_audited(self) -> None:
+        self._write(
+            "common/technologies/ADISCORD_test_tech.txt",
+            '''technologies = {
+    ADISCORD_tech_starting_org = {
+        category_all_infantry = { max_organisation = 1 }
+    }
+    vanilla_org = {
+        category_all_infantry = { max_organisation = 2 }
+    }
+}
+''',
+        )
+        self._write(
+            "common/scripted_effects/ADISCORD_technology_baseline_effects.txt",
+            '''ADISCORD_grant_technology_profile_common = {
+    set_technology = { ADISCORD_tech_starting_org = 1 popup = no }
+}
+ADISCORD_grant_technology_profile_land = {
+    set_technology = { vanilla_org = 1 popup = no }
+}
+ADISCORD_grant_2150_technology_baseline = {
+    ADISCORD_grant_technology_profile_common = yes
+}
+ADISCORD_grant_starting_technology_profile = {
+    ADISCORD_grant_2150_technology_baseline = yes
+    ADISCORD_grant_technology_profile_land = yes
+}
+''',
+        )
+        self.assertTrue(
+            any(
+                "owner-specific starting organization modifier vanilla_org" in issue
+                for issue in self._issues()
+            ),
+            self._issues(),
+        )
+
+    def test_profile_granted_technology_without_definition_is_a_hard_issue(self) -> None:
+        self._write(
+            "common/scripted_effects/ADISCORD_technology_baseline_effects.txt",
+            '''ADISCORD_grant_technology_profile_common = {
+    set_technology = { ADISCORD_tech_starting_org = 1 popup = no }
+}
+ADISCORD_grant_technology_profile_land = {
+    set_technology = { ADISCORD_tech_missing = 1 popup = no }
+}
+ADISCORD_grant_2150_technology_baseline = {
+    ADISCORD_grant_technology_profile_common = yes
+}
+ADISCORD_grant_starting_technology_profile = {
+    ADISCORD_grant_2150_technology_baseline = yes
+    ADISCORD_grant_technology_profile_land = yes
+}
+''',
+        )
+        self.assertTrue(
+            any(
+                "starting technology ADISCORD_tech_missing has no definition" in issue
+                for issue in self._issues()
+            ),
+            self._issues(),
+        )
+
     def test_divergent_duplicate_name_fails_only_within_owner_namespace(self) -> None:
         self._write(
             "history/units/AAA.txt",
@@ -327,6 +445,68 @@ ADISCORD_grant_starting_technology_profile = {
         )
         self.assertTrue(
             any("divergent duplicate" in issue for issue in self._issues()),
+            self._issues(),
+        )
+
+    def test_divergent_duplicate_name_fails_across_oobs_with_the_same_owner(self) -> None:
+        self._write(
+            "history/units/AAA.txt",
+            '''division_template = {
+    name = "Audit Line"
+    regiments = { infantry = { x = 0 y = 0 } }
+    support = { engineer = { x = 0 y = 0 } }
+}
+units = {
+    division = {
+        division_template = "Audit Line"
+        start_experience_factor = 0.15
+        start_equipment_factor = 0.70
+    }
+}
+''',
+        )
+        country = self.root / "history/countries/AAA - Audit.txt"
+        country.write_text(
+            country.read_text(encoding="utf-8") + 'load_oob = "AAA_alt"\n',
+            encoding="utf-8",
+        )
+        self._write(
+            "history/units/AAA_alt.txt",
+            '''division_template = {
+    name = "Audit Line"
+    regiments = {
+        infantry = { x = 0 y = 0 }
+        infantry = { x = 0 y = 1 }
+    }
+}
+''',
+        )
+        audit = self._valid_audit()
+        second = dict(audit["templates"][0])
+        second["key"] = "aaa_audit_line_alt"
+        second["source"] = {
+            "kind": "oob",
+            "path": "history/units/AAA_alt.txt",
+            "owner": "AAA",
+        }
+        second["regiments"] = [
+            {"type": "infantry", "x": 0, "y": 0},
+            {"type": "infantry", "x": 0, "y": 1},
+        ]
+        second["support"] = []
+        second["computed"] = {
+            "organization": 56.0,
+            "manpower": 2000.0,
+            "equipment": {"infantry_equipment": 200.0},
+            "supply": 0.12,
+        }
+        second["equipment_availability"] = {"infantry_equipment": True}
+        second["replacement_path"] = {"kind": "retain", "target": "aaa_audit_line_alt"}
+        audit["templates"].append(second)
+        self._write_audit(audit)
+
+        self.assertTrue(
+            any("divergent duplicate" in issue and "owner AAA" in issue for issue in self._issues()),
             self._issues(),
         )
 
@@ -369,6 +549,28 @@ ADISCORD_grant_starting_technology_profile = {
         )
         self.assertTrue(
             any("template coverage" in issue and "BBB" in issue for issue in self._issues()),
+            self._issues(),
+        )
+
+    def test_template_source_kind_must_be_known_and_match_the_actual_definition(self) -> None:
+        for source_kind in ("unknown", "script"):
+            with self.subTest(source_kind=source_kind):
+                audit = self._valid_audit()
+                audit["templates"][0]["source"]["kind"] = source_kind
+                self._write_audit(audit)
+
+                self.assertTrue(
+                    any("source kind" in issue for issue in self._issues()),
+                    self._issues(),
+                )
+
+    def test_template_source_owner_must_match_the_actual_definition(self) -> None:
+        audit = self._valid_audit()
+        audit["templates"][0]["source"]["owner"] = "WRONG"
+        self._write_audit(audit)
+
+        self.assertTrue(
+            any("source owner" in issue for issue in self._issues()),
             self._issues(),
         )
 
