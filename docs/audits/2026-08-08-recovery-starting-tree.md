@@ -23,6 +23,7 @@ Generated output remains owned by its builders:
 - `tools/build_adiscord_remainder_states.py` owns remainder state files.
 - `tools/build_adiscord_new_states.py` owns its generated states and related
   state/victory-point localisation.
+- `tools/build_adiscord_map_buildings.py` owns `map/buildings.txt`.
 - `tools/build_adiscord_strategic_regions.py` owns marked strategic regions.
 - `tools/build_adiscord_technology_system.py` owns marked technology output.
 
