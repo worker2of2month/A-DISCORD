@@ -552,6 +552,53 @@ units = {
             self._issues(),
         )
 
+    def test_absent_optional_oob_still_requires_exact_row_source_provenance(self) -> None:
+        self._write(
+            "tools/data/generated_output_owners.json",
+            json.dumps(
+                {
+                    "schema_version": 1,
+                    "families": [
+                        {
+                            "id": "northern",
+                            "owner_module": "tools.builders.build_adiscord_northern_countries",
+                            "output_globs": ["history/units/ARS.txt"],
+                        }
+                    ],
+                }
+            ),
+        )
+        audit = self._valid_audit()
+        audit["optional_sources"] = [
+            {
+                "path": "history/units/ARS.txt",
+                "owner_module": "tools.builders.build_adiscord_northern_countries",
+            }
+        ]
+        optional_row = dict(audit["templates"][0])
+        optional_row["key"] = "ars_optional_line"
+        optional_row["source"] = {
+            "kind": "script",
+            "path": "history/units/ARS.txt",
+            "owner": "WRONG",
+        }
+        optional_row["replacement_path"] = {
+            "kind": "retain",
+            "target": "ars_optional_line",
+        }
+        audit["templates"].append(optional_row)
+        self._write_audit(audit)
+
+        issues = self._issues()
+        self.assertTrue(
+            any("optional template row" in issue and "source kind" in issue for issue in issues),
+            issues,
+        )
+        self.assertTrue(
+            any("optional template row" in issue and "source owner" in issue for issue in issues),
+            issues,
+        )
+
     def test_template_source_kind_must_be_known_and_match_the_actual_definition(self) -> None:
         for source_kind in ("unknown", "script"):
             with self.subTest(source_kind=source_kind):

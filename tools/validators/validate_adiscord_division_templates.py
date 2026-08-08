@@ -809,6 +809,18 @@ def _validate_structural_coverage(
     for row in audit.get("templates", []):
         source = row.get("source", {})
         path = source.get("path")
+        if path in optional_paths:
+            if source.get("kind") != "oob":
+                issues.append(
+                    f"optional template row {row.get('key')} source kind "
+                    f"must be oob, got {source.get('kind')}"
+                )
+            expected_owner = Path(path).stem
+            if source.get("owner") != expected_owner:
+                issues.append(
+                    f"optional template row {row.get('key')} source owner "
+                    f"must match path tag {expected_owner}, got {source.get('owner')}"
+                )
         path_and_name_candidates = [
             index
             for index, template in enumerate(templates)
