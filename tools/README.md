@@ -67,3 +67,34 @@ python -B tools/validate_tc.py --limit 300
 Pair it with the focused test or validator for the changed subsystem and
 `git diff --check`. A green static gate does not replace a full game restart
 and fresh-log review for runtime-visible changes.
+
+## Vendor and reference assets
+
+`third_party/hoi4_flag_maker/` is a manual, opaque vendor GUI, separate from
+the supported Python tooling. Its A-Discord provenance and update policy are
+in `third_party/hoi4_flag_maker/README.adiscord.md`; do not add a wrapper or
+make it part of the validation command surface.
+
+`tools/assets/reference/` holds non-runtime visual guidance imported with the
+2026-01-07 icon-reference bundle. These binaries have no repository path
+consumers and are neither generated output nor HOI4-loaded assets. Their move
+preserves the following SHA256 values:
+
+| Asset | Purpose and provenance | SHA256 |
+| --- | --- | --- |
+| `tools/assets/reference/REV'S COMPREHENSIVE BASIC ICON GUIDE v1.0.docx` | Third-party icon reference guide from the 2026-01-07 bundle. | `12d318f1681509c0d7919a7a9bcd4cb6c76af08324bc2f0d05512f5c09dc0b83` |
+| `tools/assets/reference/Sudin‘s TFR Icon Guide.docx` | Third-party TFR icon reference guide from the 2026-01-07 bundle. | `b6c05cc68eafceef01af4b1185bdfe2696b0794c90cdde648f73948746458f6a` |
+| `tools/assets/reference/TFR 图标教程 Icon Guide CN.docx` | Third-party Chinese icon reference guide from the 2026-01-07 bundle. | `6f252790c399d4448ed641542ed09d0303e50492022be38cc4648b34078b44a7` |
+| `tools/assets/reference/focus.psd` | Generic focus-art reference PSD from the 2026-01-07 bundle. | `ade29c1bdece678057a165a566abaaf52cbe81b9908b488dfa9dc014efa4f1f0` |
+| `tools/assets/reference/人像比例Framing.png` | Portrait-framing reference image from the 2026-01-07 bundle. | `864b6522d7c7576147a9fa7ee1e452bcb16d4f822503fa67a8a2a8ad6953d7bb` |
+| `tools/assets/reference/色彩Color.png` | Colour reference image from the 2026-01-07 bundle. | `f8da09d5fed8b22ae87445139db1d133d3a40a59fd0fe52f26a0235af7300f21` |
+
+Update reference files only as a reviewed, attributable asset change: record
+source, purpose, and replacement SHA256 in this table. Do not treat the
+guidance as a licence for its visual content.
+
+The following `tools/` binaries were examined and intentionally left in place
+because their names or embedded project content identify them as active or
+ambiguous A-Discord editable sources rather than reference material:
+`decisions.psd`, `portrait.psd`, `STP_Operation_Last_Banquette.psd`,
+`val_ideology.psd`, `wrk_ideology.psd`, and `wrk_ideology_2.psd`.

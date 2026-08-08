@@ -5,6 +5,7 @@ from __future__ import annotations
 import subprocess
 import tempfile
 import unittest
+from hashlib import sha256
 from pathlib import Path
 
 
@@ -23,10 +24,32 @@ TRANSIENT_PATTERNS = (
     "**/.#*",
 )
 
+LEGACY_VENDOR_PREFIX = "tools/hoi4_flag_maker_gui/"
+VENDOR_PREFIX = "third_party/hoi4_flag_maker/"
+VENDOR_DOCUMENTATION = "third_party/hoi4_flag_maker/README.adiscord.md"
+REFERENCE_BINARY_HASHES = {
+    "tools/assets/reference/REV'S COMPREHENSIVE BASIC ICON GUIDE v1.0.docx": "12d318f1681509c0d7919a7a9bcd4cb6c76af08324bc2f0d05512f5c09dc0b83",
+    "tools/assets/reference/Sudin‘s TFR Icon Guide.docx": "b6c05cc68eafceef01af4b1185bdfe2696b0794c90cdde648f73948746458f6a",
+    "tools/assets/reference/TFR 图标教程 Icon Guide CN.docx": "6f252790c399d4448ed641542ed09d0303e50492022be38cc4648b34078b44a7",
+    "tools/assets/reference/focus.psd": "ade29c1bdece678057a165a566abaaf52cbe81b9908b488dfa9dc014efa4f1f0",
+    "tools/assets/reference/人像比例Framing.png": "864b6522d7c7576147a9fa7ee1e452bcb16d4f822503fa67a8a2a8ad6953d7bb",
+    "tools/assets/reference/色彩Color.png": "f8da09d5fed8b22ae87445139db1d133d3a40a59fd0fe52f26a0235af7300f21",
+}
+
 
 def tracked_transient_paths(repository_root: Path) -> list[str]:
     result = subprocess.run(
         ["git", "ls-files", "-z", "--", *TRANSIENT_PATTERNS],
+        cwd=repository_root,
+        check=True,
+        capture_output=True,
+    )
+    return sorted(path for path in result.stdout.decode("utf-8").split("\0") if path)
+
+
+def tracked_paths(repository_root: Path, pathspec: str) -> list[str]:
+    result = subprocess.run(
+        ["git", "ls-files", "-z", "--", pathspec],
         cwd=repository_root,
         check=True,
         capture_output=True,
@@ -64,3 +87,26 @@ class RepositoryHygieneTests(unittest.TestCase):
             )
 
             self.assertEqual(tracked_transient_paths(fixture_root), fixture_paths)
+
+    def test_vendor_bundle_and_moved_reference_binaries_are_documented(self) -> None:
+        """A vendor GUI stays outside tooling and every moved reference blob is attributable."""
+        self.assertEqual(tracked_paths(REPOSITORY_ROOT, f"{LEGACY_VENDOR_PREFIX}**"), [])
+
+        vendor_paths = tracked_paths(REPOSITORY_ROOT, f"{VENDOR_PREFIX}**")
+        self.assertIn(f"{VENDOR_PREFIX}hoi4_flag_maker_gui.exe", vendor_paths)
+
+        vendor_documentation = REPOSITORY_ROOT / VENDOR_DOCUMENTATION
+        self.assertTrue(vendor_documentation.is_file())
+        documentation = vendor_documentation.read_text(encoding="utf-8")
+        self.assertIn("atthematyo/hoi4_flag_maker", documentation)
+        self.assertIn("Version 1.1.0", documentation)
+
+        tools_documentation = (REPOSITORY_ROOT / "tools/README.md").read_text(
+            encoding="utf-8"
+        )
+        for relative_path, expected_hash in REFERENCE_BINARY_HASHES.items():
+            binary_path = REPOSITORY_ROOT / relative_path
+            self.assertTrue(binary_path.is_file(), relative_path)
+            self.assertEqual(sha256(binary_path.read_bytes()).hexdigest(), expected_hash)
+            self.assertIn(relative_path, tools_documentation)
+            self.assertIn(expected_hash, tools_documentation)
