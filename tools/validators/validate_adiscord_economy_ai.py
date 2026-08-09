@@ -925,51 +925,247 @@ def debt_transition_flow_issues(text: str) -> list[str]:
 def debt_notification_flow_issues(text: str) -> list[str]:
     definitions = _definitions((text,))
     issues: list[str] = []
+    queue_name = "ADISCORD_economy_queue_debt_notification"
+    queue = definitions.get(queue_name)
+    if queue is None or not isinstance(queue.value, list):
+        return ["missing debt notification queue"]
+
+    settlement_names = {
+        "ADISCORD_economy_apply_weekly_balance",
+        "ADISCORD_economy_apply_monthly_balance",
+    }
     for name, definition in definitions.items():
-        if name == "ADISCORD_economy_queue_debt_notification":
+        calls = [
+            (ancestors, entry)
+            for ancestors, entry in _walk_entries(definition.value)
+            if entry.key == queue_name and entry.value == "yes"
+        ]
+        if name not in settlement_names:
+            if calls:
+                issues.append(f"{name}: debt queue call outside a settlement")
             continue
-        owner_calls: dict[int, int] = {}
-        for ancestors, entry in _walk_entries(definition.value):
-            if entry.key != "ADISCORD_economy_queue_debt_notification":
-                continue
-            owner = next(
-                (
-                    ancestor
-                    for ancestor in reversed(ancestors)
-                    if ancestor.key in {"if", "else_if"}
-                    and isinstance(ancestor.value, list)
-                ),
-                None,
-            )
-            if owner is None or not ancestors or ancestors[-1] is not owner:
-                issues.append(f"{name}: routine debt notification call")
-                continue
-            owner_calls[id(owner)] = owner_calls.get(id(owner), 0) + 1
-            limits = [
-                candidate.value
-                for candidate in owner.value
-                if candidate.key == "limit" and isinstance(candidate.value, list)
-            ]
-            if len(limits) != 1 or not _limit_is_satisfiable(limits[0]):
-                issues.append(f"{name}: routine debt notification call")
-                continue
-            limit = limits[0]
-            first_loan = _exact_scalar(
+        direct_calls = [entry for entry in definition.value if entry.key == queue_name]
+        direct_updates = [
+            entry
+            for entry in definition.value
+            if entry.key == "ADISCORD_economy_update_debt_state_after_settlement"
+            and entry.value == "yes"
+        ]
+        if len(calls) != 1 or len(direct_calls) != 1:
+            issues.append(f"{name}: notification queue is not called directly once")
+            continue
+        if len(direct_updates) != 1:
+            issues.append(f"{name}: debt state is not updated directly once")
+            continue
+        previous_cache = _direct_variable_operation(
+            definition.value,
+            "set_variable",
+            "ADISCORD_economy_pending_debt_notification_previous_state",
+            "ADISCORD_economy_debt_state",
+        )
+        amount_reset = _direct_variable_operation(
+            definition.value,
+            "set_variable",
+            "ADISCORD_economy_pending_debt_notification_amount",
+            "0",
+        )
+        if len(previous_cache) != 1 or len(amount_reset) != 1:
+            issues.append(f"{name}: settlement notification caches are not reset once")
+            continue
+        positions = [
+            definition.value.index(previous_cache[0]),
+            definition.value.index(amount_reset[0]),
+            definition.value.index(direct_updates[0]),
+            definition.value.index(direct_calls[0]),
+        ]
+        if max(positions[:2]) >= positions[2] or positions[2] >= positions[3]:
+            issues.append(f"{name}: notification cache/update/queue order is invalid")
+
+    def direct_limits(branch: Entry) -> list[list[Entry]]:
+        if not isinstance(branch.value, list):
+            return []
+        return [
+            entry.value
+            for entry in branch.value
+            if entry.key == "limit" and isinstance(entry.value, list)
+        ]
+
+    kind_variable = "ADISCORD_economy_pending_debt_notification_kind"
+    direct_kind_reset = _direct_variable_operation(
+        queue.value, "set_variable", kind_variable, "0"
+    )
+    new_state_cache = _direct_variable_operation(
+        queue.value,
+        "set_variable",
+        "ADISCORD_economy_pending_debt_notification_new_state",
+        "ADISCORD_economy_debt_state",
+    )
+    if len(direct_kind_reset) != 1 or len(new_state_cache) != 1:
+        issues.append("notification queue does not reset kind and cache new state once")
+
+    first_branch: Entry | None = None
+    upward_branch: Entry | None = None
+    improvement_branch: Entry | None = None
+    for branch in queue.value:
+        if branch.key not in {"if", "else_if"} or not isinstance(branch.value, list):
+            continue
+        limits = direct_limits(branch)
+        if len(limits) != 1 or not _limit_is_satisfiable(limits[0]):
+            continue
+        limit = limits[0]
+        if (
+            len(_direct_variable_operation(branch.value, "set_variable", kind_variable, "1"))
+            == 1
+        ):
+            first_branch = branch
+            if not (
+                len(limit) == 2
+                and _exact_check(
+                    limit,
+                    "ADISCORD_economy_pending_debt_notification_amount",
+                    "0",
+                    "greater_than",
+                )
+                and _exact_scalar(
+                    limit,
+                    "has_variable",
+                    "ADISCORD_economy_first_loan_notified",
+                    positive=False,
+                )
+                and len(
+                    _direct_variable_operation(
+                        branch.value,
+                        "set_variable",
+                        "ADISCORD_economy_first_loan_notified",
+                        "1",
+                    )
+                )
+                == 1
+            ):
+                issues.append("first-loan notification owner is invalid")
+        if (
+            _exact_check(
                 limit,
-                "has_variable",
-                "ADISCORD_economy_first_loan_notified",
-                positive=False,
+                "ADISCORD_economy_debt_state",
+                "ADISCORD_economy_pending_debt_notification_previous_state",
+                "greater_than",
             )
-            upward = _exact_check(
+            or _exact_check(
                 limit,
                 "ADISCORD_economy_debt_state",
                 "ADISCORD_economy_last_notified_debt_state",
                 "greater_than",
             )
-            if not (first_loan or upward):
-                issues.append(f"{name}: routine debt notification call")
-        if any(count != 1 for count in owner_calls.values()):
-            issues.append(f"{name}: duplicate debt notification call in one branch")
+        ):
+            upward_branch = branch
+            if not (
+                len(limit) == 2
+                and _exact_check(
+                    limit,
+                    "ADISCORD_economy_debt_state",
+                    "ADISCORD_economy_pending_debt_notification_previous_state",
+                    "greater_than",
+                )
+                and _exact_check(
+                    limit,
+                    "ADISCORD_economy_debt_state",
+                    "ADISCORD_economy_last_notified_debt_state",
+                    "greater_than",
+                )
+                and len(
+                    _direct_variable_operation(
+                        branch.value,
+                        "set_variable",
+                        "ADISCORD_economy_last_notified_debt_state",
+                        "ADISCORD_economy_debt_state",
+                    )
+                )
+                == 1
+            ):
+                issues.append("upward debt notification owner is invalid")
+        if _exact_check(
+            limit,
+            "ADISCORD_economy_debt_state",
+            "ADISCORD_economy_pending_debt_notification_previous_state",
+            "less_than",
+        ):
+            improvement_branch = branch
+            if not (
+                len(limit) == 2
+                and _exact_check(
+                    limit,
+                    "ADISCORD_economy_last_notified_debt_state",
+                    "ADISCORD_economy_debt_state",
+                    "greater_than",
+                )
+                and len(
+                    _direct_variable_operation(
+                        branch.value,
+                        "set_variable",
+                        "ADISCORD_economy_last_notified_debt_state",
+                        "ADISCORD_economy_debt_state",
+                    )
+                )
+                == 1
+            ):
+                issues.append("improvement does not lower notification state exactly")
+
+    if first_branch is None:
+        issues.append("missing first-loan notification owner")
+    if upward_branch is None:
+        issues.append("missing upward debt-state notification owner")
+    if improvement_branch is None:
+        issues.append("missing debt-state improvement owner")
+    if (
+        first_branch is not None
+        and upward_branch is not None
+        and queue.value.index(first_branch) >= queue.value.index(upward_branch)
+    ):
+        issues.append("first-loan kind is not overridden by later state severity")
+
+    kind_writes = [
+        entry
+        for _, entry in _walk_entries(queue.value)
+        if entry.key == "set_variable"
+        and isinstance(entry.value, list)
+        and _direct_scalar(entry.value, "var") == kind_variable
+    ]
+    for kind in range(6):
+        if sum(_direct_scalar(entry.value, "value") == str(kind) for entry in kind_writes) != 1:
+            issues.append(f"notification kind {kind} does not have one exact owner")
+
+    all_debt_events: list[tuple[str, tuple[Entry, ...], Entry]] = []
+    for name, definition in definitions.items():
+        for ancestors, entry in _walk_entries(definition.value):
+            if (
+                entry.key == "country_event"
+                and isinstance(entry.value, list)
+                and _direct_scalar(entry.value, "id") == "ADISCORD_economy.3"
+            ):
+                all_debt_events.append((name, ancestors, entry))
+    if len(all_debt_events) != 1 or all_debt_events[0][0] != queue_name:
+        issues.append("debt modal is not dispatched exactly once by the queue")
+    else:
+        _, ancestors, _ = all_debt_events[0]
+        owner = next(
+            (
+                entry
+                for entry in reversed(ancestors)
+                if entry.key in {"if", "else_if"} and isinstance(entry.value, list)
+            ),
+            None,
+        )
+        limits = direct_limits(owner) if owner is not None else []
+        if (
+            owner is None
+            or not ancestors
+            or ancestors[-1] is not owner
+            or len(limits) != 1
+            or len(limits[0]) != 2
+            or not _exact_scalar(limits[0], "is_ai", "no")
+            or not _exact_check(limits[0], kind_variable, "0", "greater_than")
+        ):
+            issues.append("debt modal dispatch is not exactly human-only and pending")
     return issues
 
 

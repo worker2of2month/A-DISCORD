@@ -74,7 +74,7 @@ def localisation_value(text, key):
     return match.group(1)
 
 
-def named_assignment_body(text, assignment, name):
+def named_assignment_body(text, assignment, name, identity_key='name'):
     bodies = []
     for match in re.finditer(rf"(?m)^\s*{re.escape(assignment)}\s*=\s*\{{", text):
         opening = text.find("{", match.start())
@@ -86,7 +86,10 @@ def named_assignment_body(text, assignment, name):
                 depth -= 1
                 if depth == 0:
                     body = text[opening + 1 : index]
-                    assigned_name = re.search(r"\bname\s*=\s*([A-Za-z0-9_.-]+)", body)
+                    assigned_name = re.search(
+                        rf"\b{re.escape(identity_key)}\s*=\s*([A-Za-z0-9_.-]+)",
+                        body,
+                    )
                     if assigned_name and assigned_name.group(1) == name:
                         bodies.append(body)
                     break
@@ -281,6 +284,9 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         self.localisation = (
             ROOT / 'localisation' / 'russian' / 'ADISCORD_economy_l_russian.yml'
         ).read_text(encoding='utf-8-sig')
+        self.events = (
+            ROOT / 'events' / 'ADISCORD_economy_events.txt'
+        ).read_text(encoding='utf-8-sig')
         self.nodes = set(named_gui_nodes(self.gui))
 
     def test_schema_twelve_policy_rows_are_tax_military_research_social(self):
@@ -438,27 +444,18 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         self.assertIn('4', localisation_value(self.localisation, 'ADISCORD_economy_debt_delayed_tt'))
         self.assertIn('13', localisation_value(self.localisation, 'ADISCORD_economy_debt_delayed_tt'))
 
-    def test_debt_notification_is_dynamic_and_replaces_auto_loan_popup(self):
-        for obsolete in (
-            'ADISCORD_economy_auto_loan_popup_window',
-            'ADISCORD_economy_auto_loan_popup_script',
-            'ADISCORD_economy_auto_loan_popup_ok_click',
-        ):
-            self.assertNotIn(obsolete, self.gui + self.scripted_gui)
-        self.assertIn(
-            (
-                'containerWindowType',
-                'ADISCORD_economy_debt_notification_window',
-                (),
-            ),
-            self.nodes,
+    def test_debt_notification_uses_dynamic_human_event_not_recurring_custom_popup(self):
+        self.assertNotIn('ADISCORD_economy_auto_loan_popup_script', self.scripted_gui)
+        self.assertNotIn('ADISCORD_economy_auto_loan_popup_ok_click', self.scripted_gui)
+        event = named_assignment_body(
+            self.events, 'country_event', 'ADISCORD_economy.3', identity_key='id'
         )
-        self.assertIn('ADISCORD_economy_debt_notification_script', self.scripted_gui)
-        self.assertIn(
-            'ADISCORD_economy_pending_debt_notification_kind', self.scripted_gui
-        )
+        self.assertIn('is_triggered_only = yes', event)
+        self.assertIn('title = ADISCORD_economy.3.t', event)
+        self.assertIn('desc = ADISCORD_economy.3.d', event)
+        self.assertIn('name = ADISCORD_economy.3.a', event)
         description = localisation_value(
-            self.localisation, 'ADISCORD_economy_debt_notification_desc'
+            self.localisation, 'ADISCORD_economy.3.d'
         )
         for selector in (
             'GetADISCORDEconomyDebtNotificationCauseLoc',
@@ -469,6 +466,7 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             self.assertIn(f'name = {selector}', self.scripted_loc)
         for variable in (
             'ADISCORD_economy_pending_debt_notification_amount',
+            'ADISCORD_economy_debt',
             'ADISCORD_economy_weekly_interest',
             'ADISCORD_economy_interest_share_income',
         ):

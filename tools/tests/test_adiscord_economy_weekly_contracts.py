@@ -45,6 +45,14 @@ MODIFIER_LOC = (
 ECONOMY_LOC = (
     ROOT / "localisation" / "russian" / "ADISCORD_economy_l_russian.yml"
 ).read_text(encoding="utf-8-sig")
+ECONOMY_LOC_EN_PATH = (
+    ROOT / "localisation" / "english" / "ADISCORD_economy_l_english.yml"
+)
+ECONOMY_LOC_EN = (
+    ECONOMY_LOC_EN_PATH.read_text(encoding="utf-8-sig")
+    if ECONOMY_LOC_EN_PATH.exists()
+    else ""
+)
 ECONOMY_EVENTS = (ROOT / "events" / "ADISCORD_economy_events.txt").read_text(
     encoding="utf-8-sig"
 )
@@ -293,6 +301,411 @@ def _entry_scalar(entries, key):
         ),
         None,
     )
+
+
+def _exact_direct_check_set(branch, expected):
+    if not isinstance(branch.value, list):
+        return False
+    limits = [
+        entry.value
+        for entry in branch.value
+        if entry.key == "limit" and isinstance(entry.value, list)
+    ]
+    if len(limits) != 1 or len(limits[0]) != len(expected):
+        return False
+    actual = []
+    for check in limits[0]:
+        if check.key != "check_variable" or not isinstance(check.value, list):
+            return False
+        if len(check.value) != 3:
+            return False
+        actual.append(
+            (
+                _entry_scalar(check.value, "var"),
+                _entry_scalar(check.value, "value"),
+                _entry_scalar(check.value, "compare"),
+            )
+        )
+    return sorted(actual) == sorted(expected)
+
+
+def _exact_direct_variable_write(branch, operation, variable, value):
+    if not isinstance(branch.value, list):
+        return False
+    matches = []
+    for entry in branch.value:
+        if entry.key != operation or not isinstance(entry.value, list):
+            continue
+        if _entry_scalar(entry.value, "var") != variable:
+            continue
+        matches.append(entry)
+    return (
+        len(matches) == 1
+        and len(matches[0].value) == 2
+        and _entry_scalar(matches[0].value, "value") == str(value)
+    )
+
+
+def task6_debt_state_sequence_issues(text):
+    """Validate one exact settlement state machine, including branch ownership."""
+
+    issues = list(debt_transition_flow_issues(text))
+    try:
+        definition = _parsed_definition(
+            text, "ADISCORD_economy_update_debt_state_after_settlement"
+        )
+    except AssertionError as error:
+        return issues + [str(error)]
+
+    branches = [
+        entry for entry in definition.value if entry.key in {"if", "else_if", "else"}
+    ]
+    expected_keys = ["if", "else", "if", "else", "if"]
+    if [entry.key for entry in branches] != expected_keys:
+        issues.append("transition branches are not two streak pairs plus one fallback owner")
+        return issues
+
+    emergency, emergency_reset, default, default_reset, fallback = branches
+    if not _exact_direct_check_set(
+        emergency,
+        [("ADISCORD_economy_interest_share_income", "40", "greater_than_or_equals")],
+    ):
+        issues.append("emergency streak owner is not exactly interest share >= 40")
+    if not _exact_direct_variable_write(
+        emergency, "add_to_variable", "ADISCORD_economy_debt_emergency_streak", 1
+    ):
+        issues.append("emergency streak does not advance exactly once")
+    emergency_thresholds = [
+        entry
+        for entry in emergency.value
+        if entry.key == "if" and isinstance(entry.value, list)
+    ]
+    if (
+        len(emergency_thresholds) != 1
+        or not _exact_direct_check_set(
+            emergency_thresholds[0],
+            [("ADISCORD_economy_debt_emergency_streak", "4", "greater_than_or_equals")],
+        )
+        or not _exact_direct_variable_write(
+            emergency_thresholds[0], "set_variable", "ADISCORD_economy_debt_state", 3
+        )
+    ):
+        issues.append("emergency state is not owned by the fourth settlement")
+    if not _exact_direct_variable_write(
+        emergency_reset, "set_variable", "ADISCORD_economy_debt_emergency_streak", 0
+    ):
+        issues.append("emergency streak reset is missing or not directly owned")
+
+    if not _exact_direct_check_set(
+        default,
+        [
+            ("ADISCORD_economy_interest_share_income", "40", "greater_than_or_equals"),
+            ("ADISCORD_economy_weekly_balance", "0", "less_than"),
+        ],
+    ):
+        issues.append("default streak owner is not exactly share >= 40 and balance < 0")
+    if not _exact_direct_variable_write(
+        default, "add_to_variable", "ADISCORD_economy_debt_default_streak", 1
+    ):
+        issues.append("default streak does not advance exactly once")
+    default_thresholds = [
+        entry
+        for entry in default.value
+        if entry.key == "if" and isinstance(entry.value, list)
+    ]
+    if (
+        len(default_thresholds) != 1
+        or not _exact_direct_check_set(
+            default_thresholds[0],
+            [("ADISCORD_economy_debt_default_streak", "13", "greater_than_or_equals")],
+        )
+        or not _exact_direct_variable_write(
+            default_thresholds[0], "set_variable", "ADISCORD_economy_debt_state", 4
+        )
+    ):
+        issues.append("default state is not owned by the thirteenth deficit settlement")
+    if not _exact_direct_variable_write(
+        default_reset, "set_variable", "ADISCORD_economy_debt_default_streak", 0
+    ):
+        issues.append("default streak reset is missing or not directly owned")
+
+    if not _exact_direct_check_set(
+        fallback,
+        [
+            ("ADISCORD_economy_debt_default_streak", "13", "less_than"),
+            ("ADISCORD_economy_debt_emergency_streak", "4", "less_than"),
+        ],
+    ):
+        issues.append("lower-state chain can overwrite an earned emergency/default")
+        return issues
+    state_branches = [
+        entry
+        for entry in fallback.value
+        if entry.key in {"if", "else_if", "else"} and isinstance(entry.value, list)
+    ]
+    if [entry.key for entry in state_branches] != ["if", "else_if", "else"]:
+        issues.append("lower-state chain is not crisis, strain, healthy")
+        return issues
+    state_contract = (
+        ([("ADISCORD_economy_interest_share_income", "25", "greater_than_or_equals")], 2),
+        ([("ADISCORD_economy_interest_share_income", "10", "greater_than_or_equals")], 1),
+    )
+    for branch, (checks, target) in zip(state_branches[:2], state_contract):
+        if not _exact_direct_check_set(branch, checks):
+            issues.append(f"state {target} has the wrong direct threshold owner")
+        if not _exact_direct_variable_write(
+            branch, "set_variable", "ADISCORD_economy_debt_state", target
+        ):
+            issues.append(f"state {target} is not the branch's only direct state write")
+    if not _exact_direct_variable_write(
+        state_branches[2], "set_variable", "ADISCORD_economy_debt_state", 0
+    ):
+        issues.append("healthy fallback does not set state 0 directly")
+
+    write_operations = {
+        "set_variable", "add_to_variable", "subtract_from_variable",
+        "multiply_variable", "divide_variable", "clamp_variable", "clear_variable",
+    }
+    expected_counts = {
+        "ADISCORD_economy_debt_state": 5,
+        "ADISCORD_economy_debt_emergency_streak": 3,
+        "ADISCORD_economy_debt_default_streak": 3,
+    }
+    for variable, expected_count in expected_counts.items():
+        actual = 0
+        for _, entry in _walk_parsed(definition.value):
+            if entry.key not in write_operations:
+                continue
+            if entry.key == "clear_variable":
+                owned = entry.value == variable
+            else:
+                owned = (
+                    isinstance(entry.value, list)
+                    and _entry_scalar(entry.value, "var") == variable
+                )
+            actual += int(owned)
+        if actual != expected_count:
+            issues.append(f"{variable} has {actual} writes, expected {expected_count}")
+    return issues
+
+
+def task6_debt_state_authority_issues(effects_text, localisation_text):
+    """Keep persistent state authoritative over the compatibility mirror and UI."""
+
+    issues = []
+    try:
+        compatibility = unique_block(
+            effects_text, "ADISCORD_economy_update_debt_crisis_level"
+        )
+    except AssertionError as error:
+        return [str(error)]
+
+    mirror_writes = re.findall(
+        r"set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_debt_crisis_level"
+        r"\s+value\s*=\s*([^\s}]+)\s*\}",
+        compatibility,
+    )
+    if mirror_writes != ["ADISCORD_economy_debt_state"]:
+        issues.append("debt_crisis_level is not one exact mirror write from debt_state")
+    if re.search(r"\b(?:add_to|clamp|subtract_from)_variable\b", compatibility):
+        issues.append("compatibility mirror independently mutates the legacy tier")
+
+    exact_clamp = (
+        "clamp_variable = { var = ADISCORD_economy_debt_crisis_level "
+        "min = 0 max = 4 }"
+    )
+    if effects_text.count(exact_clamp) != 1:
+        issues.append("debt_crisis_level does not have exactly one 0..4 clamp owner")
+
+    try:
+        debt_tooltip = localisation_value(localisation_text, "ADISCORD_economy_debt_tt")
+    except AssertionError as error:
+        return issues + [str(error)]
+    if "?ADISCORD_economy_debt_state|0" not in debt_tooltip:
+        issues.append("debt tooltip does not expose persistent debt_state")
+    if "?ADISCORD_economy_debt_crisis_level" in debt_tooltip:
+        issues.append("debt tooltip still exposes the compatibility tier")
+    for visible_metric in (
+        "?ADISCORD_economy_interest_rate|1",
+        "?ADISCORD_economy_weekly_interest|2",
+        "?ADISCORD_economy_interest_share_income|1",
+        "?ADISCORD_economy_debt_pressure|0",
+    ):
+        if visible_metric not in debt_tooltip:
+            issues.append(f"debt tooltip hides {visible_metric}")
+    return issues
+
+
+def task6_policy_preview_persistent_state_issues(text):
+    """Preview arithmetic may round-trip metrics, never persistent debt state."""
+
+    reachable = reachable_script_blocks(
+        (text,), ("ADISCORD_economy_preview_tax_policy",)
+    )
+    if "ADISCORD_economy_preview_tax_policy" not in reachable:
+        return ["tax policy preview is missing"]
+    graph = "\n".join(reachable.values())
+    writes = set(
+        re.findall(
+            r"(?:set_variable|add_to_variable|subtract_from_variable|"
+            r"multiply_variable|divide_variable|clamp_variable|clear_variable)"
+            r"\s+(?:var\s+)?(ADISCORD_economy_[A-Za-z0-9_]+)",
+            graph,
+        )
+    )
+    persistent = {
+        "ADISCORD_economy_debt_state",
+        "ADISCORD_economy_last_notified_debt_state",
+        "ADISCORD_economy_debt_emergency_streak",
+        "ADISCORD_economy_debt_default_streak",
+        "ADISCORD_economy_pending_debt_notification_kind",
+    }
+    return [
+        f"tax policy preview writes persistent state: {', '.join(sorted(writes & persistent))}"
+    ] if writes & persistent else []
+
+
+def task6_schema_fourteen_migration_issues(text):
+    """Validate safe migration without manufacturing old streak evidence."""
+
+    try:
+        migration = unique_block(text, "ADISCORD_economy_migrate_schema")
+        start = migration.index("value = 14 compare = less_than")
+    except (AssertionError, ValueError) as error:
+        return [f"schema 14 migration is missing: {error}"]
+    schema = migration[start:]
+    issues = []
+    state_writes = re.findall(
+        r"set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_debt_state"
+        r"\s+value\s*=\s*([^\s}]+)\s*\}",
+        schema,
+    )
+    if state_writes != ["0", "2", "1"]:
+        issues.append(f"schema 14 unsafe debt-state mapping: {state_writes}")
+    for legacy, state in ((2, 2), (1, 1)):
+        required = (
+            "check_variable = { var = ADISCORD_economy_debt_crisis_level "
+            f"value = {legacy} compare = greater_than_or_equals }}"
+        )
+        if schema.count(required) != 1:
+            issues.append(f"legacy level {legacy} does not map exactly to state {state}")
+    exact_writes = {
+        "ADISCORD_economy_debt_emergency_streak": "0",
+        "ADISCORD_economy_debt_default_streak": "0",
+        "ADISCORD_economy_pending_debt_notification_kind": "0",
+        "ADISCORD_economy_pending_debt_notification_amount": "0",
+        "ADISCORD_economy_pending_debt_notification_previous_state": (
+            "ADISCORD_economy_debt_state"
+        ),
+        "ADISCORD_economy_pending_debt_notification_new_state": (
+            "ADISCORD_economy_debt_state"
+        ),
+        "ADISCORD_economy_last_notified_debt_state": "ADISCORD_economy_debt_state",
+    }
+    for variable, value in exact_writes.items():
+        token = f"set_variable = {{ var = {variable} value = {value} }}"
+        if schema.count(token) != 1:
+            issues.append(f"schema 14 does not initialize {variable} exactly to {value}")
+    clear_first = "clear_variable = ADISCORD_economy_first_loan_notified"
+    mark_first = (
+        "set_variable = { var = ADISCORD_economy_first_loan_notified value = 1 }"
+    )
+    debt_positive = (
+        "check_variable = { var = ADISCORD_economy_debt value = 0 compare = greater_than }"
+    )
+    if not (
+        schema.count(clear_first) == 1
+        and schema.count(mark_first) == 1
+        and schema.count(debt_positive) == 1
+        and schema.index(clear_first) < schema.index(debt_positive) < schema.index(mark_first)
+    ):
+        issues.append("schema 14 first-loan marker does not preserve existing debt safely")
+    return issues
+
+
+def task6_notification_queue_issues(text):
+    """Validate first-loan/state precedence and the single human event sink."""
+
+    issues = list(debt_notification_flow_issues(text))
+    try:
+        queue = unique_block(text, "ADISCORD_economy_queue_debt_notification")
+    except AssertionError as error:
+        return issues + [str(error)]
+
+    exact_tokens = {
+        "pending reset": (
+            "set_variable = { var = ADISCORD_economy_pending_debt_notification_kind value = 0 }"
+        ),
+        "new-state cache": (
+            "set_variable = { var = ADISCORD_economy_pending_debt_notification_new_state value = ADISCORD_economy_debt_state }"
+        ),
+        "first-loan kind": (
+            "set_variable = { var = ADISCORD_economy_pending_debt_notification_kind value = 1 }"
+        ),
+        "first-loan marker": (
+            "set_variable = { var = ADISCORD_economy_first_loan_notified value = 1 }"
+        ),
+        "human event": "country_event = { id = ADISCORD_economy.3 }",
+    }
+    for label, token in exact_tokens.items():
+        if queue.count(token) != 1:
+            issues.append(f"{label} is not unique in the notification queue")
+
+    first_owner = re.search(
+        r"if\s*=\s*\{\s*limit\s*=\s*\{\s*"
+        r"check_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_pending_debt_notification_amount"
+        r"\s+value\s*=\s*0\s+compare\s*=\s*greater_than\s*\}\s*"
+        r"NOT\s*=\s*\{\s*has_variable\s*=\s*ADISCORD_economy_first_loan_notified\s*\}\s*\}",
+        queue,
+    )
+    if first_owner is None:
+        issues.append("first-loan kind lacks its exact positive amount and unseen owner")
+
+    upward_owner = re.search(
+        r"if\s*=\s*\{\s*limit\s*=\s*\{\s*"
+        r"check_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_debt_state"
+        r"\s+value\s*=\s*ADISCORD_economy_pending_debt_notification_previous_state"
+        r"\s+compare\s*=\s*greater_than\s*\}\s*"
+        r"check_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_debt_state"
+        r"\s+value\s*=\s*ADISCORD_economy_last_notified_debt_state"
+        r"\s+compare\s*=\s*greater_than\s*\}\s*\}",
+        queue,
+    )
+    if upward_owner is None:
+        issues.append("state notice lacks exact upward and last-notified ownership")
+
+    mapping_positions = []
+    for state, kind in ((4, 5), (3, 4), (2, 3), (1, 2)):
+        mapping = re.search(
+            rf"check_variable\s*=\s*\{{\s*var\s*=\s*ADISCORD_economy_debt_state"
+            rf"\s+value\s*=\s*{state}\s+compare\s*=\s*equals\s*\}}"
+            rf"(?:(?!check_variable).)*set_variable\s*=\s*\{{\s*var\s*=\s*"
+            rf"ADISCORD_economy_pending_debt_notification_kind\s+value\s*=\s*{kind}\s*\}}",
+            queue,
+            re.DOTALL,
+        )
+        if mapping is None:
+            issues.append(f"state {state} does not map uniquely to notification kind {kind}")
+        else:
+            mapping_positions.append(mapping.start())
+    first_kind = queue.find(exact_tokens["first-loan kind"])
+    if mapping_positions and not (first_kind >= 0 and first_kind < min(mapping_positions)):
+        issues.append("state severity does not override the earlier first-loan kind")
+
+    human_owner = re.search(
+        r"if\s*=\s*\{\s*limit\s*=\s*\{\s*is_ai\s*=\s*no\s+"
+        r"check_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_pending_debt_notification_kind"
+        r"\s+value\s*=\s*0\s+compare\s*=\s*greater_than\s*\}\s*\}"
+        r"\s*country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_economy\.3\s*\}\s*\}",
+        queue,
+    )
+    if human_owner is None:
+        issues.append("event sink is not exactly human-only with a positive pending kind")
+    if text.count("country_event = { id = ADISCORD_economy.3 }") != 1:
+        issues.append("debt modal has more than one dispatch sink")
+    if "ADISCORD_economy_show_auto_loan_popup" in queue:
+        issues.append("obsolete automatic custom popup is still active")
+    return issues
 
 
 def duplicate_direct_key_blocks(text, key):
@@ -1122,21 +1535,37 @@ ADISCORD_economy_apply_monthly_balance = {
 ADISCORD_economy_update_debt_state_after_settlement = {
  if = { limit = { check_variable = { var = ADISCORD_economy_interest_share_income value = 40 compare = greater_than_or_equals } }
   add_to_variable = { var = ADISCORD_economy_debt_emergency_streak value = 1 }
-  if = { limit = { check_variable = { var = ADISCORD_economy_debt_emergency_streak value = 4 compare = greater_than_or_equals } } set_variable = { var = ADISCORD_economy_debt_state value = 3 } }
+  if = { limit = { check_variable = { var = ADISCORD_economy_debt_emergency_streak value = 4 compare = greater_than_or_equals } }
+   set_variable = { var = ADISCORD_economy_debt_state value = 3 }
+  }
  } else = { set_variable = { var = ADISCORD_economy_debt_emergency_streak value = 0 } }
  if = { limit = {
   check_variable = { var = ADISCORD_economy_interest_share_income value = 40 compare = greater_than_or_equals }
   check_variable = { var = ADISCORD_economy_weekly_balance value = 0 compare = less_than }
  } add_to_variable = { var = ADISCORD_economy_debt_default_streak value = 1 }
-  if = { limit = { check_variable = { var = ADISCORD_economy_debt_default_streak value = 13 compare = greater_than_or_equals } } set_variable = { var = ADISCORD_economy_debt_state value = 4 } }
+  if = { limit = { check_variable = { var = ADISCORD_economy_debt_default_streak value = 13 compare = greater_than_or_equals } }
+   set_variable = { var = ADISCORD_economy_debt_state value = 4 }
+  }
  } else = { set_variable = { var = ADISCORD_economy_debt_default_streak value = 0 } }
+ if = { limit = {
+  check_variable = { var = ADISCORD_economy_debt_default_streak value = 13 compare = less_than }
+  check_variable = { var = ADISCORD_economy_debt_emergency_streak value = 4 compare = less_than }
+ }
+  if = { limit = { check_variable = { var = ADISCORD_economy_interest_share_income value = 25 compare = greater_than_or_equals } }
+   set_variable = { var = ADISCORD_economy_debt_state value = 2 }
+  } else_if = { limit = { check_variable = { var = ADISCORD_economy_interest_share_income value = 10 compare = greater_than_or_equals } }
+   set_variable = { var = ADISCORD_economy_debt_state value = 1 }
+  } else = { set_variable = { var = ADISCORD_economy_debt_state value = 0 } }
+ }
+ clamp_variable = { var = ADISCORD_economy_debt_emergency_streak min = 0 max = 4 }
+ clamp_variable = { var = ADISCORD_economy_debt_default_streak min = 0 max = 13 }
 }
 """
-        self.assertEqual(debt_transition_flow_issues(transition), [])
-        self.assertTrue(debt_transition_flow_issues(transition.replace(
+        self.assertEqual(task6_debt_state_sequence_issues(transition), [])
+        self.assertTrue(task6_debt_state_sequence_issues(transition.replace(
             "check_variable = { var = ADISCORD_economy_weekly_balance value = 0 compare = less_than }", "always = yes"
         )))
-        self.assertTrue(debt_transition_flow_issues(transition.replace(
+        self.assertTrue(task6_debt_state_sequence_issues(transition.replace(
             " } else = { set_variable = { var = ADISCORD_economy_debt_emergency_streak value = 0 } }",
             " } set_variable = { var = ADISCORD_economy_debt_emergency_streak value = 0 }",
         )))
@@ -1160,6 +1589,10 @@ ADISCORD_economy_update_debt_state_after_settlement = {
             transition.replace(
                 "ADISCORD_economy_debt_emergency_streak value = 4 compare = greater_than_or_equals",
                 "ADISCORD_economy_debt_emergency_streak value = 5 compare = greater_than_or_equals",
+            ),
+            transition.replace(
+                "ADISCORD_economy_debt_emergency_streak value = 4 compare = greater_than_or_equals",
+                "ADISCORD_economy_debt_emergency_streak value = 3 compare = greater_than_or_equals",
             ),
             transition.replace(
                 "ADISCORD_economy_debt_default_streak value = 13 compare = greater_than_or_equals",
@@ -1187,39 +1620,130 @@ ADISCORD_economy_update_debt_state_after_settlement = {
                 "check_variable = { var = ADISCORD_economy_debt_emergency_streak value = 4 compare = greater_than_or_equals }",
                 "check_variable = { var = ADISCORD_economy_debt_emergency_streak value = 4 compare = greater_than_or_equals } AND = { always = no }",
             ),
+            transition.replace(
+                "add_to_variable = { var = ADISCORD_economy_debt_emergency_streak value = 1 }",
+                "add_to_variable = { var = ADISCORD_economy_debt_emergency_streak value = 1 }\n"
+                "  add_to_variable = { var = ADISCORD_economy_debt_emergency_streak value = 1 }",
+            ),
+            transition.replace(
+                "ADISCORD_economy_interest_share_income value = 25 compare = greater_than_or_equals",
+                "ADISCORD_economy_interest_share_income value = 25 compare = less_than",
+            ),
+            transition.replace(
+                "  } else_if = { limit = { check_variable = { var = ADISCORD_economy_interest_share_income value = 10 compare = greater_than_or_equals } }\n"
+                "   set_variable = { var = ADISCORD_economy_debt_state value = 1 }",
+                "  } else_if = { limit = { always = yes }\n"
+                "   set_variable = { var = ADISCORD_economy_debt_state value = 1 }",
+            ),
         )):
             with self.subTest(transition_mutation=index):
-                self.assertTrue(debt_transition_flow_issues(invalid))
+                self.assertTrue(task6_debt_state_sequence_issues(invalid))
 
-        notification = """
-ADISCORD_economy_queue_debt_notification = { set_country_flag = queued }
-ADISCORD_first_loan = { if = { limit = { NOT = { has_variable = ADISCORD_economy_first_loan_notified } } ADISCORD_economy_queue_debt_notification = yes } }
-ADISCORD_transition = { if = { limit = { check_variable = { var = ADISCORD_economy_debt_state value = ADISCORD_economy_last_notified_debt_state compare = greater_than } } ADISCORD_economy_queue_debt_notification = yes } }
+        queue_notification = """
+ADISCORD_economy_queue_debt_notification = {
+ set_variable = { var = ADISCORD_economy_pending_debt_notification_kind value = 0 }
+ set_variable = { var = ADISCORD_economy_pending_debt_notification_new_state value = ADISCORD_economy_debt_state }
+ if = { limit = {
+  check_variable = { var = ADISCORD_economy_pending_debt_notification_amount value = 0 compare = greater_than }
+  NOT = { has_variable = ADISCORD_economy_first_loan_notified }
+ }
+  set_variable = { var = ADISCORD_economy_pending_debt_notification_kind value = 1 }
+  set_variable = { var = ADISCORD_economy_first_loan_notified value = 1 }
+ }
+ if = { limit = {
+  check_variable = { var = ADISCORD_economy_debt_state value = ADISCORD_economy_pending_debt_notification_previous_state compare = greater_than }
+  check_variable = { var = ADISCORD_economy_debt_state value = ADISCORD_economy_last_notified_debt_state compare = greater_than }
+ }
+  if = { limit = { check_variable = { var = ADISCORD_economy_debt_state value = 4 compare = equals } } set_variable = { var = ADISCORD_economy_pending_debt_notification_kind value = 5 } }
+  else_if = { limit = { check_variable = { var = ADISCORD_economy_debt_state value = 3 compare = equals } } set_variable = { var = ADISCORD_economy_pending_debt_notification_kind value = 4 } }
+  else_if = { limit = { check_variable = { var = ADISCORD_economy_debt_state value = 2 compare = equals } } set_variable = { var = ADISCORD_economy_pending_debt_notification_kind value = 3 } }
+  else_if = { limit = { check_variable = { var = ADISCORD_economy_debt_state value = 1 compare = equals } } set_variable = { var = ADISCORD_economy_pending_debt_notification_kind value = 2 } }
+  set_variable = { var = ADISCORD_economy_last_notified_debt_state value = ADISCORD_economy_debt_state }
+ }
+ if = { limit = {
+  check_variable = { var = ADISCORD_economy_debt_state value = ADISCORD_economy_pending_debt_notification_previous_state compare = less_than }
+  check_variable = { var = ADISCORD_economy_last_notified_debt_state value = ADISCORD_economy_debt_state compare = greater_than }
+ }
+  set_variable = { var = ADISCORD_economy_last_notified_debt_state value = ADISCORD_economy_debt_state }
+ }
+ if = { limit = { is_ai = no check_variable = { var = ADISCORD_economy_pending_debt_notification_kind value = 0 compare = greater_than } }
+  country_event = { id = ADISCORD_economy.3 }
+ }
+}
 """
-        self.assertEqual(debt_notification_flow_issues(notification), [])
-        self.assertTrue(debt_notification_flow_issues(notification + "\nADISCORD_routine = { ADISCORD_economy_queue_debt_notification = yes }"))
-        positive_first_loan = notification.replace(
-            "NOT = { has_variable = ADISCORD_economy_first_loan_notified }",
-            "has_variable = ADISCORD_economy_first_loan_notified",
+        self.assertEqual(task6_notification_queue_issues(queue_notification), [])
+        queue_mutations = {
+            "already-notified first loan": queue_notification.replace(
+                "NOT = { has_variable = ADISCORD_economy_first_loan_notified }",
+                "has_variable = ADISCORD_economy_first_loan_notified",
+            ),
+            "wrong state kind": queue_notification.replace(
+                "ADISCORD_economy_pending_debt_notification_kind value = 5",
+                "ADISCORD_economy_pending_debt_notification_kind value = 4",
+                1,
+            ),
+            "reversed upward owner": queue_notification.replace(
+                "ADISCORD_economy_pending_debt_notification_previous_state compare = greater_than",
+                "ADISCORD_economy_pending_debt_notification_previous_state compare = less_than",
+                1,
+            ),
+            "AI event": queue_notification.replace("is_ai = no", "is_ai = yes"),
+            "duplicate modal": queue_notification.replace(
+                "country_event = { id = ADISCORD_economy.3 }",
+                "country_event = { id = ADISCORD_economy.3 }\n"
+                "  country_event = { id = ADISCORD_economy.3 }",
+            ),
+            "legacy popup": queue_notification.replace(
+                "country_event = { id = ADISCORD_economy.3 }",
+                "country_event = { id = ADISCORD_economy.3 }\n"
+                "  set_variable = { var = ADISCORD_economy_show_auto_loan_popup value = 1 }",
+            ),
+        }
+        for name, invalid in queue_mutations.items():
+            with self.subTest(notification_mutation=name):
+                self.assertTrue(task6_notification_queue_issues(invalid))
+
+        settlement_notification_flow = queue_notification + """
+ADISCORD_economy_apply_weekly_balance = {
+ set_variable = { var = ADISCORD_economy_pending_debt_notification_previous_state value = ADISCORD_economy_debt_state }
+ set_variable = { var = ADISCORD_economy_pending_debt_notification_amount value = 0 }
+ ADISCORD_economy_update_debt_state_after_settlement = yes
+ ADISCORD_economy_queue_debt_notification = yes
+}
+ADISCORD_economy_apply_monthly_balance = {
+ set_variable = { var = ADISCORD_economy_pending_debt_notification_previous_state value = ADISCORD_economy_debt_state }
+ set_variable = { var = ADISCORD_economy_pending_debt_notification_amount value = 0 }
+ ADISCORD_economy_update_debt_state_after_settlement = yes
+ ADISCORD_economy_queue_debt_notification = yes
+}
+"""
+        self.assertEqual(
+            debt_notification_flow_issues(settlement_notification_flow), []
         )
-        self.assertTrue(debt_notification_flow_issues(positive_first_loan))
-        double_negated = notification.replace(
-            "NOT = { has_variable = ADISCORD_economy_first_loan_notified }",
-            "NOT = { NOT = { has_variable = ADISCORD_economy_first_loan_notified } }",
-        )
-        self.assertTrue(debt_notification_flow_issues(double_negated))
-        duplicate_queue = notification.replace(
-            "ADISCORD_economy_queue_debt_notification = yes } }",
-            "ADISCORD_economy_queue_debt_notification = yes ADISCORD_economy_queue_debt_notification = yes } }",
-            1,
-        )
-        self.assertTrue(debt_notification_flow_issues(duplicate_queue))
-        negated_upward = notification.replace(
-            "check_variable = { var = ADISCORD_economy_debt_state value = ADISCORD_economy_last_notified_debt_state compare = greater_than }",
-            "NOT = { check_variable = { var = ADISCORD_economy_debt_state value = ADISCORD_economy_last_notified_debt_state compare = greater_than } }",
-        )
-        with self.subTest(mutation="negated upward notification"):
-            self.assertTrue(debt_notification_flow_issues(negated_upward))
+        settlement_mutations = {
+            "duplicate settlement queue": settlement_notification_flow.replace(
+                " ADISCORD_economy_queue_debt_notification = yes\n}",
+                " ADISCORD_economy_queue_debt_notification = yes\n"
+                " ADISCORD_economy_queue_debt_notification = yes\n}",
+                1,
+            ),
+            "queue before state": settlement_notification_flow.replace(
+                " ADISCORD_economy_update_debt_state_after_settlement = yes\n"
+                " ADISCORD_economy_queue_debt_notification = yes",
+                " ADISCORD_economy_queue_debt_notification = yes\n"
+                " ADISCORD_economy_update_debt_state_after_settlement = yes",
+                1,
+            ),
+            "modal outside queue": settlement_notification_flow.replace(
+                " ADISCORD_economy_update_debt_state_after_settlement = yes\n",
+                " country_event = { id = ADISCORD_economy.3 }\n"
+                " ADISCORD_economy_update_debt_state_after_settlement = yes\n",
+                1,
+            ),
+        }
+        for name, invalid in settlement_mutations.items():
+            with self.subTest(settlement_notification_mutation=name):
+                self.assertTrue(debt_notification_flow_issues(invalid))
 
         branches = {
             0: """ if = {
@@ -2126,6 +2650,18 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 rf"set_variable\s*=\s*\{{\s*var\s*=\s*{re.escape(variable)}\s+"
                 rf"value\s*=\s*{re.escape(saved)}\s*\}}",
             )
+        self.assertFalse(task6_policy_preview_persistent_state_issues(EFFECTS))
+        preview = unique_block(EFFECTS, "ADISCORD_economy_preview_tax_policy")
+        preview_mutation = EFFECTS.replace(
+            preview,
+            preview
+            + "\n\tset_variable = { var = ADISCORD_economy_debt_state value = 4 }",
+            1,
+        )
+        self.assertNotEqual(preview_mutation, EFFECTS)
+        self.assertTrue(
+            task6_policy_preview_persistent_state_issues(preview_mutation)
+        )
 
         for policy, assignments in restored.items():
             preview_name = f"ADISCORD_economy_preview_{policy}_policy"
@@ -2240,10 +2776,11 @@ class WeeklyEconomyContracts(unittest.TestCase):
 
     def test_task45_debt_metrics_use_exact_interest_pressure_flow(self):
         self.assertFalse(debt_metric_flow_issues(EFFECTS))
+        self.assertFalse(task6_debt_state_authority_issues(EFFECTS, ECONOMY_LOC))
         risk_clamp = (
             "clamp_variable = { var = ADISCORD_economy_debt_crisis_level min = 0 max = 4 }"
         )
-        self.assertEqual(EFFECTS.count(risk_clamp), 2)
+        self.assertEqual(EFFECTS.count(risk_clamp), 1)
         self.assertNotIn(
             "clamp_variable = { var = ADISCORD_economy_debt_crisis_level min = 0 max = 5 }",
             EFFECTS,
@@ -2377,11 +2914,11 @@ class WeeklyEconomyContracts(unittest.TestCase):
         self.assertIn("нулевая ступень", no_tier_effect.casefold())
         self.assertNotIn("40%", no_tier_effect)
         self.assertIn(
-            "?ADISCORD_economy_debt_crisis_level|0",
+            "?ADISCORD_economy_debt_state|0",
             localisation_value(ECONOMY_LOC, "ADISCORD_economy_debt_tt"),
         )
         self.assertIn(
-            "?ADISCORD_economy_debt_crisis_level|0]/4",
+            "?ADISCORD_economy_debt_state|0]/4",
             localisation_value(ECONOMY_LOC, "ADISCORD_economy_debt_tt"),
         )
         mutations = {
@@ -2471,7 +3008,8 @@ class WeeklyEconomyContracts(unittest.TestCase):
             )
 
     def test_debt_tiers_use_interest_share_and_four_thirteen_settlement_streaks(self):
-        self.assertFalse(debt_transition_flow_issues(EFFECTS))
+        self.assertFalse(task6_debt_state_sequence_issues(EFFECTS))
+        self.assertFalse(task6_debt_state_authority_issues(EFFECTS, ECONOMY_LOC))
         metrics = unique_block(EFFECTS, "ADISCORD_economy_calculate_debt_metrics")
         for variable in (
             "ADISCORD_economy_weekly_interest",
@@ -2555,8 +3093,65 @@ class WeeklyEconomyContracts(unittest.TestCase):
             for modifier, value in expected.items():
                 self.assertEqual(numeric_values(idea, modifier), [value], idea_name)
 
+        compatibility = unique_block(
+            EFFECTS, "ADISCORD_economy_update_debt_crisis_level"
+        )
+        self.assertEqual(
+            re.findall(
+                r"set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_debt_crisis_level"
+                r"\s+value\s*=\s*([^\s}]+)\s*\}",
+                compatibility,
+            ),
+            ["ADISCORD_economy_debt_state"],
+        )
+        self.assertNotRegex(compatibility, r"\b(?:add_to|clamp|subtract_from)_variable\b")
+        refresh = unique_block(EFFECTS, "ADISCORD_economy_refresh_spending_ideas")
+        self.assertIn("ADISCORD_economy_debt_state", refresh)
+        self.assertNotIn("ADISCORD_economy_debt_crisis_level", refresh)
+
+        mirror_line = (
+            "set_variable = { var = ADISCORD_economy_debt_crisis_level "
+            "value = ADISCORD_economy_debt_state }"
+        )
+        authority_mutations = {
+            "independent legacy tier recomputation": (
+                EFFECTS.replace(
+                    compatibility,
+                    compatibility.replace(
+                        mirror_line,
+                        mirror_line
+                        + "\n\tset_variable = { var = ADISCORD_economy_debt_crisis_level value = 3 }",
+                    ),
+                    1,
+                ),
+                ECONOMY_LOC,
+            ),
+            "extra legacy tier clamp": (
+                EFFECTS.replace(
+                    mirror_line,
+                    mirror_line
+                    + "\n\tclamp_variable = { var = ADISCORD_economy_debt_crisis_level min = 0 max = 4 }",
+                    1,
+                ),
+                ECONOMY_LOC,
+            ),
+            "tooltip reads compatibility tier": (
+                EFFECTS,
+                ECONOMY_LOC.replace(
+                    "?ADISCORD_economy_debt_state|0",
+                    "?ADISCORD_economy_debt_crisis_level|0",
+                    1,
+                ),
+            ),
+        }
+        for name, (mutated_effects, mutated_loc) in authority_mutations.items():
+            with self.subTest(authority_mutation=name):
+                self.assertTrue(
+                    task6_debt_state_authority_issues(mutated_effects, mutated_loc)
+                )
+
     def test_debt_notifications_are_first_loan_and_upward_transitions_only(self):
-        self.assertFalse(debt_notification_flow_issues(EFFECTS))
+        self.assertFalse(task6_notification_queue_issues(EFFECTS))
         queue = unique_block(EFFECTS, "ADISCORD_economy_queue_debt_notification")
         transition = unique_block(
             EFFECTS, "ADISCORD_economy_update_debt_state_after_settlement"
@@ -2586,6 +3181,38 @@ class WeeklyEconomyContracts(unittest.TestCase):
         )
         self.assertIn("is_ai = no", queue)
         self.assertNotIn("ADISCORD_economy_refresh_spending_ideas", queue)
+        for forbidden_scan in (
+            "every_country",
+            "any_country",
+            "random_country",
+            "every_owned_state",
+        ):
+            self.assertNotIn(forbidden_scan, combined)
+
+        for settlement_name in (
+            "ADISCORD_economy_apply_weekly_balance",
+            "ADISCORD_economy_apply_monthly_balance",
+        ):
+            settlement = unique_block(EFFECTS, settlement_name)
+            update = "ADISCORD_economy_update_debt_state_after_settlement = yes"
+            dispatch = "ADISCORD_economy_queue_debt_notification = yes"
+            self.assertEqual(settlement.count(update), 1, settlement_name)
+            self.assertEqual(settlement.count(dispatch), 1, settlement_name)
+            self.assertLess(settlement.index(update), settlement.index(dispatch))
+            self.assertEqual(
+                settlement.count(
+                    "set_variable = { var = ADISCORD_economy_pending_debt_notification_amount value = 0 }"
+                ),
+                1,
+                settlement_name,
+            )
+            self.assertEqual(
+                settlement.count(
+                    "set_variable = { var = ADISCORD_economy_pending_debt_notification_previous_state value = ADISCORD_economy_debt_state }"
+                ),
+                1,
+                settlement_name,
+            )
 
     def test_repayment_recalculates_interest_and_can_lower_debuff_immediately(self):
         self.assertFalse(debt_reconciler_issues(EFFECTS))
@@ -2678,6 +3305,30 @@ class WeeklyEconomyContracts(unittest.TestCase):
         ):
             self.assertEqual(assignment_blocks(ECONOMY_IDEAS, retired_id), [])
             self.assertNotIn(retired_id, localisation_key_set(ECONOMY_LOC))
+
+        sync = unique_block(EFFECTS, "ADISCORD_economy_sync_debt_state_idea")
+        for state, idea_name in enumerate(
+            (
+                None,
+                "ADISCORD_economy_debt_strain",
+                "ADISCORD_economy_debt_crisis",
+                "ADISCORD_economy_debt_emergency",
+                "ADISCORD_economy_debt_default",
+            )
+        ):
+            if idea_name is None:
+                continue
+            self.assertEqual(sync.count(f"add_ideas = {idea_name}"), 1, idea_name)
+            self.assertRegex(
+                sync,
+                rf"check_variable\s*=\s*\{{\s*var\s*=\s*ADISCORD_economy_debt_state"
+                rf"\s+value\s*=\s*{state}\s+compare\s*=\s*equals\s*\}}"
+                rf"[^\n]*add_ideas\s*=\s*{idea_name}",
+                idea_name,
+            )
+        self.assertEqual(sync.count("add_ideas = ADISCORD_economy_debt_"), 4)
+        self.assertRegex(sync, r"(?m)^\s*if\s*=.*debt_state value = 4")
+        self.assertEqual(len(re.findall(r"(?m)^\s*else_if\s*=", sync)), 3)
 
     def test_weekly_path_has_no_idea_query_building_recount_or_country_iteration(self):
         reachable = reachable_script_blocks(
@@ -3453,20 +4104,144 @@ class WeeklyEconomyContracts(unittest.TestCase):
             (EFFECTS, TRIGGERS), ("ADISCORD_economy_apply_weekly_balance",)
         )
         self.assertIn("ADISCORD_economy_queue_debt_notification", reachable)
-        self.assertTrue(
-            all("country_event =" not in body for body in reachable.values())
-        )
-
-        gui = (ROOT / "interface" / "ADISCORD_economy.gui").read_text(encoding="utf-8-sig")
-        self.assertIn('name = "ADISCORD_economy_debt_notification_window"', gui)
-        self.assertIn("ADISCORD_economy_debt_notification_script", SCRIPTED_GUI)
-        for key in (
-            "ADISCORD_economy_debt_notification_title",
-            "ADISCORD_economy_debt_notification_desc",
-            "ADISCORD_economy_debt_notification_ok",
-        ):
+        event_owners = [
+            name
+            for name, body in reachable.items()
+            if "country_event id ADISCORD_economy.3" in body
+        ]
+        self.assertEqual(event_owners, ["ADISCORD_economy_queue_debt_notification"])
+        event_blocks = [
+            body
+            for body in assignment_blocks(ECONOMY_EVENTS, "country_event")
+            if re.search(r"\bid\s*=\s*ADISCORD_economy\.3\b", body)
+        ]
+        self.assertEqual(len(event_blocks), 1)
+        event = event_blocks[0]
+        self.assertIn("is_triggered_only = yes", event)
+        for key in ("ADISCORD_economy.3.t", "ADISCORD_economy.3.d", "ADISCORD_economy.3.a"):
+            self.assertIn(key, event)
             self.assertRegex(ECONOMY_LOC, rf"(?m)^\s*{re.escape(key)}:\d*\s+")
-        self.assertIn("ADISCORD_economy_pending_debt_notification_amount", ECONOMY_LOC)
+            self.assertRegex(ECONOMY_LOC_EN, rf"(?m)^\s*{re.escape(key)}:\d*\s+")
+        selector_surfaces = {
+            "GetADISCORDEconomyDebtNotificationKindLoc": "ADISCORD_economy.3.t",
+            "GetADISCORDEconomyDebtNotificationCauseLoc": "ADISCORD_economy.3.d",
+            "GetADISCORDEconomyDebtNotificationStateLoc": "ADISCORD_economy.3.d",
+            "GetADISCORDEconomyDebtNotificationNextRiskLoc": "ADISCORD_economy.3.d",
+        }
+        selector_bodies = []
+        for selector, surface_key in selector_surfaces.items():
+            self.assertIn(f"name = {selector}", SCRIPTED_LOC)
+            self.assertIn(
+                f"[{selector}]", localisation_value(ECONOMY_LOC, surface_key)
+            )
+            self.assertIn(
+                f"[{selector}]", localisation_value(ECONOMY_LOC_EN, surface_key)
+            )
+            selector_body = unique_defined_text(SCRIPTED_LOC, selector)
+            selector_bodies.append(selector_body)
+            self.assertRegex(
+                selector_body,
+                r"text\s*=\s*\{\s*localization_key\s*=\s*"
+                r"ADISCORD_economy_debt_notification_[A-Za-z0-9_]+\s*\}\s*$",
+                selector,
+            )
+        self.assertIn(
+            "[GetADISCORDDebtEffectsLoc]",
+            localisation_value(ECONOMY_LOC, "ADISCORD_economy.3.d"),
+        )
+        self.assertIn(
+            "[GetADISCORDDebtEffectsLoc]",
+            localisation_value(ECONOMY_LOC_EN, "ADISCORD_economy.3.d"),
+        )
+        task6_required_keys = {
+            "ADISCORD_economy.3.t",
+            "ADISCORD_economy.3.d",
+            "ADISCORD_economy.3.a",
+        }
+        for selector_body in selector_bodies + [
+            unique_defined_text(SCRIPTED_LOC, "GetADISCORDDebtEffectsLoc")
+        ]:
+            task6_required_keys.update(
+                re.findall(
+                    r"localization_key\s*=\s*"
+                    r"(ADISCORD_economy_debt_(?:notification|effect)_[A-Za-z0-9_]+)",
+                    selector_body,
+                )
+            )
+        for key in sorted(task6_required_keys):
+            with self.subTest(task6_localisation_key=key):
+                self.assertRegex(ECONOMY_LOC, rf"(?m)^\s*{re.escape(key)}:\d*\s+")
+                self.assertRegex(ECONOMY_LOC_EN, rf"(?m)^\s*{re.escape(key)}:\d*\s+")
+        for variable in (
+            "ADISCORD_economy_pending_debt_notification_amount",
+            "ADISCORD_economy_debt",
+            "ADISCORD_economy_weekly_interest",
+            "ADISCORD_economy_interest_share_income",
+        ):
+            self.assertIn(variable, localisation_value(ECONOMY_LOC, "ADISCORD_economy.3.d"))
+            self.assertIn(variable, localisation_value(ECONOMY_LOC_EN, "ADISCORD_economy.3.d"))
+        self.assertNotIn("ADISCORD_economy_auto_loan_popup_script", SCRIPTED_GUI)
+
+    def test_schema_fourteen_initializes_persistent_debt_state_without_load_spam(self):
+        self.assertFalse(task6_schema_fourteen_migration_issues(EFFECTS))
+        migration = unique_block(EFFECTS, "ADISCORD_economy_migrate_schema")
+        self.assertIn(
+            "check_variable = { var = ADISCORD_economy_schema_version value = 14 compare = less_than }",
+            migration,
+        )
+        for variable in (
+            "ADISCORD_economy_debt_state",
+            "ADISCORD_economy_debt_emergency_streak",
+            "ADISCORD_economy_debt_default_streak",
+            "ADISCORD_economy_last_notified_debt_state",
+            "ADISCORD_economy_pending_debt_notification_kind",
+            "ADISCORD_economy_pending_debt_notification_amount",
+            "ADISCORD_economy_pending_debt_notification_previous_state",
+            "ADISCORD_economy_pending_debt_notification_new_state",
+        ):
+            self.assertIn(variable, migration)
+        schema_fourteen = migration[migration.index("value = 14 compare = less_than") :]
+        self.assertNotRegex(
+            schema_fourteen,
+            r"ADISCORD_economy_debt_state\s+value\s*=\s*[34]\b",
+        )
+        self.assertRegex(
+            schema_fourteen,
+            r"check_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_debt"
+            r"\s+value\s*=\s*0\s+compare\s*=\s*greater_than\s*\}"
+            r"(?s:.*?)set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_first_loan_notified\s+value\s*=\s*1\s*\}",
+        )
+        defaults = unique_block(EFFECTS, "ADISCORD_economy_set_default_values")
+        self.assertIn("ADISCORD_economy_schema_version value = 14", defaults)
+        self.assertNotIn("ADISCORD_economy_first_loan_notified", defaults)
+
+        migration_mutations = {
+            "legacy save jumps directly to emergency": migration.replace(
+                "set_variable = { var = ADISCORD_economy_debt_state value = 2 }",
+                "set_variable = { var = ADISCORD_economy_debt_state value = 3 }",
+                1,
+            ),
+            "streak evidence manufactured on load": migration.replace(
+                "set_variable = { var = ADISCORD_economy_debt_emergency_streak value = 0 }",
+                "set_variable = { var = ADISCORD_economy_debt_emergency_streak value = 1 }",
+                1,
+            ),
+            "notification watermark reset below migrated state": migration.replace(
+                "set_variable = { var = ADISCORD_economy_last_notified_debt_state value = ADISCORD_economy_debt_state }",
+                "set_variable = { var = ADISCORD_economy_last_notified_debt_state value = 0 }",
+                1,
+            ),
+            "existing debt no longer suppresses first-loan spam": migration.replace(
+                "check_variable = { var = ADISCORD_economy_debt value = 0 compare = greater_than }",
+                "check_variable = { var = ADISCORD_economy_debt value = 0 compare = less_than }",
+                1,
+            ),
+        }
+        for name, mutated_migration in migration_mutations.items():
+            with self.subTest(schema14_mutation=name):
+                self.assertNotEqual(mutated_migration, migration)
+                mutated_effects = EFFECTS.replace(migration, mutated_migration, 1)
+                self.assertTrue(task6_schema_fourteen_migration_issues(mutated_effects))
 
     def test_schema_twelve_initializes_reserve_and_postwar_state_without_resetting_treasury(self):
         migration = block(EFFECTS, "ADISCORD_economy_migrate_schema")

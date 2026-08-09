@@ -283,11 +283,46 @@ defined_text = {
 
 defined_text = {
 	name = GetADISCORDDebtEffectsLoc
-	text = { trigger = { check_variable = { var = ADISCORD_economy_debt_crisis_level value = 4 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_effect_default }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_debt_crisis_level value = 3 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_effect_crisis }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_debt_crisis_level value = 2 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_effect_burden }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_debt_crisis_level value = 1 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_effect_warning }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_debt_state value = 4 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_effect_default }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_debt_state value = 3 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_effect_crisis }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_debt_state value = 2 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_effect_burden }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_debt_state value = 1 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_effect_warning }
 	text = { localization_key = ADISCORD_economy_debt_effect_none }
+}
+
+defined_text = {
+	name = GetADISCORDEconomyDebtNotificationKindLoc
+	text = { trigger = { check_variable = { var = ADISCORD_economy_pending_debt_notification_kind value = 5 compare = equals } } localization_key = ADISCORD_economy_debt_notification_kind_default }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_pending_debt_notification_kind value = 4 compare = equals } } localization_key = ADISCORD_economy_debt_notification_kind_emergency }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_pending_debt_notification_kind value = 3 compare = equals } } localization_key = ADISCORD_economy_debt_notification_kind_crisis }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_pending_debt_notification_kind value = 2 compare = equals } } localization_key = ADISCORD_economy_debt_notification_kind_strain }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_pending_debt_notification_kind value = 1 compare = equals } } localization_key = ADISCORD_economy_debt_notification_kind_first_loan }
+	text = { localization_key = ADISCORD_economy_debt_notification_kind_fallback }
+}
+
+defined_text = {
+	name = GetADISCORDEconomyDebtNotificationCauseLoc
+	text = { trigger = { check_variable = { var = ADISCORD_economy_pending_debt_notification_amount value = 0 compare = greater_than } } localization_key = ADISCORD_economy_debt_notification_cause_auto_loan }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_pending_debt_notification_new_state value = 1 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_notification_cause_interest }
+	text = { localization_key = ADISCORD_economy_debt_notification_cause_fallback }
+}
+
+defined_text = {
+	name = GetADISCORDEconomyDebtNotificationStateLoc
+	text = { trigger = { check_variable = { var = ADISCORD_economy_pending_debt_notification_new_state value = 4 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_notification_state_default }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_pending_debt_notification_new_state value = 3 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_notification_state_emergency }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_pending_debt_notification_new_state value = 2 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_notification_state_crisis }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_pending_debt_notification_new_state value = 1 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_notification_state_strain }
+	text = { localization_key = ADISCORD_economy_debt_notification_state_healthy }
+}
+
+defined_text = {
+	name = GetADISCORDEconomyDebtNotificationNextRiskLoc
+	text = { trigger = { check_variable = { var = ADISCORD_economy_pending_debt_notification_new_state value = 4 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_notification_next_default }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_pending_debt_notification_new_state value = 3 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_notification_next_emergency }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_pending_debt_notification_new_state value = 2 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_notification_next_crisis }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_pending_debt_notification_new_state value = 1 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_notification_next_strain }
+	text = { localization_key = ADISCORD_economy_debt_notification_next_healthy }
 }
 
 defined_text = {
