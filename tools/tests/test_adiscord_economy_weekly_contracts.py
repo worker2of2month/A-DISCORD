@@ -235,6 +235,50 @@ WEEKLY_FORBIDDEN_TOKEN_PREFIXES = (
     "modifier@",
 )
 
+PERSISTENT_VARIABLE_BLOCK_WRITE_OPERATORS = {
+    "set_variable",
+    "add_to_variable",
+    "subtract_from_variable",
+    "multiply_variable",
+    "divide_variable",
+    "clamp_variable",
+}
+
+PERSISTENT_VARIABLE_SCALAR_WRITE_OPERATORS = {
+    "clear_variable",
+    "round_variable",
+}
+
+PERSISTENT_VARIABLE_READ_OPERATORS = {
+    "check_variable",
+    "has_variable",
+}
+
+
+def persistent_variable_write_targets(entry):
+    """Return persistent variables mutated by one parsed Clausewitz entry."""
+
+    if entry.key in PERSISTENT_VARIABLE_READ_OPERATORS:
+        return set()
+    if entry.key in PERSISTENT_VARIABLE_SCALAR_WRITE_OPERATORS:
+        if isinstance(entry.value, str):
+            return {entry.value}
+        return set()
+    if entry.key not in PERSISTENT_VARIABLE_BLOCK_WRITE_OPERATORS:
+        return set()
+    if not isinstance(entry.value, list):
+        return set()
+
+    targets = set()
+    named_target = _entry_scalar(entry.value, "var")
+    if named_target:
+        targets.add(named_target)
+    reserved_arguments = {"var", "value", "min", "max", "compare", "tooltip"}
+    targets.update(
+        child.key for child in entry.value if child.key not in reserved_arguments
+    )
+    return targets
+
 
 def weekly_reachability_issues(texts, roots=WEEKLY_ACCOUNTING_ROOTS):
     """Classify heavy operations in the parsed transitive weekly graph."""
@@ -363,19 +407,22 @@ def task7_weekly_on_action_issues(
         for entry in parsed
         if isinstance(entry.value, list)
     }
-    hook_roots = sorted(
+    callable_adiscord_entries = {
+        entry.key
+        for _, entry in hook_entries
+        if entry.key.startswith("ADISCORD_")
+        and (entry.value == "yes" or isinstance(entry.value, list))
+    }
+    graph_roots = sorted(
         {
-            entry.key
-            for _, entry in hook_entries
-            if entry.key in source_definitions
-            and (entry.value == "yes" or isinstance(entry.value, list))
+            name for name in callable_adiscord_entries if name in source_definitions
         }
     )
     allowed_roots = {
         "ADISCORD_economy_should_weekly_update",
         "ADISCORD_economy_weekly_update",
     }
-    unexpected_roots = sorted(set(hook_roots) - allowed_roots)
+    unexpected_roots = sorted(callable_adiscord_entries - allowed_roots)
     if unexpected_roots:
         issues.append(
             "on_weekly contains an extra scripted sibling: "
@@ -399,9 +446,9 @@ def task7_weekly_on_action_issues(
             + ", ".join(direct_offenders)
         )
 
-    if hook_roots:
+    if graph_roots:
         try:
-            issues.extend(weekly_reachability_issues(source_texts, tuple(hook_roots)))
+            issues.extend(weekly_reachability_issues(source_texts, tuple(graph_roots)))
         except AssertionError as error:
             issues.append(f"weekly hook graph is incomplete: {error}")
     return issues
@@ -661,14 +708,13 @@ def task7_cache_invalidation_issues(
                 + ", ".join(escaped)
             )
         readiness_writers = []
+        readiness_variables = {
+            "ADISCORD_economy_weekly_source_cache_ready",
+            "ADISCORD_economy_weekly_ready",
+        }
         for definition_name, definition in reachable.items():
             for _, entry in _walk_parsed(definition.value):
-                if entry.key != "set_variable" or not isinstance(entry.value, list):
-                    continue
-                if _entry_scalar(entry.value, "var") in {
-                    "ADISCORD_economy_weekly_source_cache_ready",
-                    "ADISCORD_economy_weekly_ready",
-                }:
+                if persistent_variable_write_targets(entry) & readiness_variables:
                     readiness_writers.append(definition_name)
                     break
         if readiness_writers:
@@ -4321,6 +4367,24 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 + "\nADISCORD_task7_weekly_wrapper = {\n"
                 + "\tADISCORD_economy_update_gui = yes\n}\n",
             ),
+            "weekly hook calls an external ADISCORD wrapper": (
+                ON_ACTIONS.replace(
+                    weekly_call,
+                    weekly_call
+                    + "\n\t\t\t\tADISCORD_tick_all_society_development_monthly = yes",
+                    1,
+                ),
+                EFFECTS,
+            ),
+            "weekly hook calls an undefined ADISCORD wrapper": (
+                ON_ACTIONS.replace(
+                    weekly_call,
+                    weekly_call
+                    + "\n\t\t\t\tADISCORD_task7_unknown_external_wrapper = yes",
+                    1,
+                ),
+                EFFECTS,
+            ),
         }
         for name, (mutated_on_actions, mutated_effects) in on_action_mutations.items():
             with self.subTest(on_action_mutation=name):
@@ -4338,9 +4402,9 @@ class WeeklyEconomyContracts(unittest.TestCase):
 
         decoy_on_actions = ON_ACTIONS.replace(
             weekly_call,
-            '# ADISCORD_economy_update_gui = yes\n'
+            '# ADISCORD_tick_all_society_development_monthly = yes\n'
             + weekly_call
-            + '\n\t\t\t\tlog = "ADISCORD_task7_weekly_wrapper = yes"',
+            + '\n\t\t\t\tlog = "ADISCORD_task7_unknown_external_wrapper = yes"',
             1,
         )
         self.assertFalse(
@@ -4542,6 +4606,18 @@ class WeeklyEconomyContracts(unittest.TestCase):
         )
         army_policy_idea_call = "\tADISCORD_economy_refresh_army_policy_idea = yes"
         self.assertIn(army_policy_idea_call, army_policy_source)
+
+        def mutate_army_idea_readiness(write):
+            return EFFECTS.replace(
+                army_idea_source,
+                army_idea_source.replace(
+                    army_idea_anchor,
+                    f"\t{write}\n" + army_idea_anchor,
+                    1,
+                ),
+                1,
+            )
+
         mutations = {
             "dirty cache remains eligible": (
                 EFFECTS.replace(
@@ -4617,15 +4693,44 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 MODIFIER_EFFECTS,
             ),
             "targeted descendant falsely restores global readiness": (
-                EFFECTS.replace(
-                    army_idea_source,
-                    army_idea_source.replace(
-                        army_idea_anchor,
-                        "\tset_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 1 }\n"
-                        + army_idea_anchor,
-                        1,
-                    ),
-                    1,
+                mutate_army_idea_readiness(
+                    "set_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 1 }"
+                ),
+                MODIFIER_EFFECTS,
+            ),
+            "targeted descendant adds to source readiness": (
+                mutate_army_idea_readiness(
+                    "add_to_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 1 }"
+                ),
+                MODIFIER_EFFECTS,
+            ),
+            "targeted descendant subtracts a negative from source readiness": (
+                mutate_army_idea_readiness(
+                    "subtract_from_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = -1 }"
+                ),
+                MODIFIER_EFFECTS,
+            ),
+            "targeted descendant multiplies source readiness": (
+                mutate_army_idea_readiness(
+                    "multiply_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = -1 }"
+                ),
+                MODIFIER_EFFECTS,
+            ),
+            "targeted descendant divides source readiness": (
+                mutate_army_idea_readiness(
+                    "divide_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = -1 }"
+                ),
+                MODIFIER_EFFECTS,
+            ),
+            "targeted descendant clamps source readiness to one": (
+                mutate_army_idea_readiness(
+                    "clamp_variable = { var = ADISCORD_economy_weekly_source_cache_ready min = 1 max = 1 }"
+                ),
+                MODIFIER_EFFECTS,
+            ),
+            "targeted descendant clears weekly readiness": (
+                mutate_army_idea_readiness(
+                    "clear_variable = ADISCORD_economy_weekly_ready"
                 ),
                 MODIFIER_EFFECTS,
             ),
@@ -4690,9 +4795,12 @@ class WeeklyEconomyContracts(unittest.TestCase):
 
         decoy_effects = EFFECTS.replace(
             army_policy_idea_call,
-            '# set_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 1 }\n'
+            '# add_to_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 1 }\n'
             + army_policy_idea_call
-            + '\n\tlog = "ADISCORD_task7_bad_ready_wrapper = yes"',
+            + '\n\tlog = "clear_variable = ADISCORD_economy_weekly_ready"'
+            + "\n\tif = { limit = { has_variable = ADISCORD_economy_weekly_ready "
+            + "check_variable = { var = ADISCORD_economy_weekly_source_cache_ready "
+            + "value = 1 compare = equals } } always = yes }",
             1,
         )
         self.assertFalse(
