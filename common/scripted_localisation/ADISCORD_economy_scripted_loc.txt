@@ -53,21 +53,11 @@ defined_text = {
 
 defined_text = {
 	name = GetADISCORDResearchSpendingModeLoc
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_funding_mode_1 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_funding_mode_2 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_funding_mode_3 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 4 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_funding_mode_4 }
-	text = { localization_key = ADISCORD_economy_construction_funding_mode_5 }
-}
-
-# Task 9 removes this selector-name shim together with the old visual row.
-defined_text = {
-	name = GetADISCORDConstructionSpendingModeLoc
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_funding_mode_1 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_funding_mode_2 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_funding_mode_3 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 4 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_funding_mode_4 }
-	text = { localization_key = ADISCORD_economy_construction_funding_mode_5 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_research_funding_mode_1 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_research_funding_mode_2 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_research_funding_mode_3 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 4 compare = less_than_or_equals } } localization_key = ADISCORD_economy_research_funding_mode_4 }
+	text = { localization_key = ADISCORD_economy_research_funding_mode_5 }
 }
 
 defined_text = {
@@ -108,20 +98,11 @@ defined_text = {
 
 defined_text = {
 	name = GetADISCORDResearchSpendingEffectsLoc
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_1 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_2 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_3 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 4 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_4 }
-	text = { localization_key = ADISCORD_economy_construction_effects_5 }
-}
-
-defined_text = {
-	name = GetADISCORDConstructionSpendingEffectsLoc
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_1 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_2 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_3 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 4 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_4 }
-	text = { localization_key = ADISCORD_economy_construction_effects_5 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_research_effects_1 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_research_effects_2 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_research_effects_3 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 4 compare = less_than_or_equals } } localization_key = ADISCORD_economy_research_effects_4 }
+	text = { localization_key = ADISCORD_economy_research_effects_5 }
 }
 
 defined_text = {
@@ -134,7 +115,7 @@ defined_text = {
 }
 
 defined_text = {
-	name = GetADISCORDEconomyTaxIncreasePreviewLoc
+	name = GetADISCORDEconomyTaxIncreaseEffectLoc
 	text = { trigger = { check_variable = { var = ADISCORD_economy_tax_increase_target_level value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_tax_effects_1 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_tax_increase_target_level value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_tax_effects_2 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_tax_increase_target_level value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_tax_effects_3 }
@@ -143,7 +124,7 @@ defined_text = {
 }
 
 defined_text = {
-	name = GetADISCORDEconomyTaxDecreasePreviewLoc
+	name = GetADISCORDEconomyTaxDecreaseEffectLoc
 	text = { trigger = { check_variable = { var = ADISCORD_economy_tax_decrease_target_level value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_tax_effects_1 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_tax_decrease_target_level value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_tax_effects_2 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_tax_decrease_target_level value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_tax_effects_3 }
@@ -152,7 +133,7 @@ defined_text = {
 }
 
 defined_text = {
-	name = GetADISCORDEconomyArmyIncreasePreviewLoc
+	name = GetADISCORDEconomyArmyIncreaseEffectLoc
 	text = { trigger = { check_variable = { var = ADISCORD_economy_army_increase_target_level value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_army_effects_1 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_army_increase_target_level value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_army_effects_2 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_army_increase_target_level value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_army_effects_3 }
@@ -161,7 +142,7 @@ defined_text = {
 }
 
 defined_text = {
-	name = GetADISCORDEconomyArmyDecreasePreviewLoc
+	name = GetADISCORDEconomyArmyDecreaseEffectLoc
 	text = { trigger = { check_variable = { var = ADISCORD_economy_army_decrease_target_level value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_army_effects_1 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_army_decrease_target_level value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_army_effects_2 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_army_decrease_target_level value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_army_effects_3 }
@@ -170,44 +151,25 @@ defined_text = {
 }
 
 defined_text = {
-	name = GetADISCORDEconomyResearchIncreasePreviewLoc
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_increase_target_level value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_1 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_increase_target_level value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_2 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_increase_target_level value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_3 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_increase_target_level value = 4 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_4 }
-	text = { localization_key = ADISCORD_economy_construction_effects_5 }
+	name = GetADISCORDEconomyResearchIncreaseEffectLoc
+	text = { trigger = { check_variable = { var = ADISCORD_economy_research_increase_target_level value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_research_effects_1 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_research_increase_target_level value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_research_effects_2 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_research_increase_target_level value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_research_effects_3 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_research_increase_target_level value = 4 compare = less_than_or_equals } } localization_key = ADISCORD_economy_research_effects_4 }
+	text = { localization_key = ADISCORD_economy_research_effects_5 }
 }
 
 defined_text = {
-	name = GetADISCORDEconomyResearchDecreasePreviewLoc
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_decrease_target_level value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_1 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_decrease_target_level value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_2 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_decrease_target_level value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_3 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_decrease_target_level value = 4 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_4 }
-	text = { localization_key = ADISCORD_economy_construction_effects_5 }
-}
-
-# Task 9 removes these selector-name shims when the visual row is renamed.
-defined_text = {
-	name = GetADISCORDConstructionIncreasePolicyPreviewLoc
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_increase_target_level value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_1 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_increase_target_level value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_2 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_increase_target_level value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_3 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_increase_target_level value = 4 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_4 }
-	text = { localization_key = ADISCORD_economy_construction_effects_5 }
+	name = GetADISCORDEconomyResearchDecreaseEffectLoc
+	text = { trigger = { check_variable = { var = ADISCORD_economy_research_decrease_target_level value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_research_effects_1 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_research_decrease_target_level value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_research_effects_2 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_research_decrease_target_level value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_research_effects_3 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_research_decrease_target_level value = 4 compare = less_than_or_equals } } localization_key = ADISCORD_economy_research_effects_4 }
+	text = { localization_key = ADISCORD_economy_research_effects_5 }
 }
 
 defined_text = {
-	name = GetADISCORDConstructionDecreasePolicyPreviewLoc
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_decrease_target_level value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_1 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_decrease_target_level value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_2 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_decrease_target_level value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_3 }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_research_decrease_target_level value = 4 compare = less_than_or_equals } } localization_key = ADISCORD_economy_construction_effects_4 }
-	text = { localization_key = ADISCORD_economy_construction_effects_5 }
-}
-
-defined_text = {
-	name = GetADISCORDEconomySocialIncreasePreviewLoc
+	name = GetADISCORDEconomySocialIncreaseEffectLoc
 	text = { trigger = { check_variable = { var = ADISCORD_economy_social_increase_target_level value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_social_effects_1 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_social_increase_target_level value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_social_effects_2 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_social_increase_target_level value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_social_effects_3 }
@@ -216,12 +178,77 @@ defined_text = {
 }
 
 defined_text = {
-	name = GetADISCORDEconomySocialDecreasePreviewLoc
+	name = GetADISCORDEconomySocialDecreaseEffectLoc
 	text = { trigger = { check_variable = { var = ADISCORD_economy_social_decrease_target_level value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_social_effects_1 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_social_decrease_target_level value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_social_effects_2 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_social_decrease_target_level value = 3 compare = less_than_or_equals } } localization_key = ADISCORD_economy_social_effects_3 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_social_decrease_target_level value = 4 compare = less_than_or_equals } } localization_key = ADISCORD_economy_social_effects_4 }
 	text = { localization_key = ADISCORD_economy_social_effects_5 }
+}
+
+# Policy preview selectors expose the first failed gate without mutating state.
+defined_text = {
+	name = GetADISCORDEconomyTaxDecreasePreviewLoc
+	text = { trigger = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_policy_blocked_minimum }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_tax_change_cooldown value = 0 compare = greater_than } } localization_key = ADISCORD_economy_policy_blocked_cooldown }
+	text = { trigger = { NOT = { ADISCORD_economy_should_show_player_ui = yes } } localization_key = ADISCORD_economy_policy_blocked_scope }
+	text = { localization_key = ADISCORD_economy_policy_preview_available }
+}
+
+defined_text = {
+	name = GetADISCORDEconomyTaxIncreasePreviewLoc
+	text = { trigger = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 5 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_policy_blocked_maximum }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_tax_change_cooldown value = 0 compare = greater_than } } localization_key = ADISCORD_economy_policy_blocked_cooldown }
+	text = { trigger = { NOT = { ADISCORD_economy_should_show_player_ui = yes } } localization_key = ADISCORD_economy_policy_blocked_scope }
+	text = { localization_key = ADISCORD_economy_policy_preview_available }
+}
+
+defined_text = {
+	name = GetADISCORDEconomyArmyDecreasePreviewLoc
+	text = { trigger = { check_variable = { var = ADISCORD_economy_army_spending_mode value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_policy_blocked_minimum }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_army_budget_change_cooldown value = 0 compare = greater_than } } localization_key = ADISCORD_economy_policy_blocked_cooldown }
+	text = { trigger = { NOT = { ADISCORD_economy_should_show_player_ui = yes } } localization_key = ADISCORD_economy_policy_blocked_scope }
+	text = { localization_key = ADISCORD_economy_policy_preview_available }
+}
+
+defined_text = {
+	name = GetADISCORDEconomyArmyIncreasePreviewLoc
+	text = { trigger = { check_variable = { var = ADISCORD_economy_army_spending_mode value = 5 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_policy_blocked_maximum }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_army_budget_change_cooldown value = 0 compare = greater_than } } localization_key = ADISCORD_economy_policy_blocked_cooldown }
+	text = { trigger = { NOT = { ADISCORD_economy_should_show_player_ui = yes } } localization_key = ADISCORD_economy_policy_blocked_scope }
+	text = { localization_key = ADISCORD_economy_policy_preview_available }
+}
+
+defined_text = {
+	name = GetADISCORDEconomyResearchDecreasePreviewLoc
+	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_policy_blocked_minimum }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_research_budget_change_cooldown value = 0 compare = greater_than } } localization_key = ADISCORD_economy_policy_blocked_cooldown }
+	text = { trigger = { NOT = { ADISCORD_economy_should_show_player_ui = yes } } localization_key = ADISCORD_economy_policy_blocked_scope }
+	text = { localization_key = ADISCORD_economy_policy_preview_available }
+}
+
+defined_text = {
+	name = GetADISCORDEconomyResearchIncreasePreviewLoc
+	text = { trigger = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 5 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_policy_blocked_maximum }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_research_budget_change_cooldown value = 0 compare = greater_than } } localization_key = ADISCORD_economy_policy_blocked_cooldown }
+	text = { trigger = { NOT = { ADISCORD_economy_should_show_player_ui = yes } } localization_key = ADISCORD_economy_policy_blocked_scope }
+	text = { localization_key = ADISCORD_economy_policy_preview_available }
+}
+
+defined_text = {
+	name = GetADISCORDEconomySocialDecreasePreviewLoc
+	text = { trigger = { check_variable = { var = ADISCORD_economy_social_spending_mode value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_policy_blocked_minimum }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_social_budget_change_cooldown value = 0 compare = greater_than } } localization_key = ADISCORD_economy_policy_blocked_cooldown }
+	text = { trigger = { NOT = { ADISCORD_economy_should_show_player_ui = yes } } localization_key = ADISCORD_economy_policy_blocked_scope }
+	text = { localization_key = ADISCORD_economy_policy_preview_available }
+}
+
+defined_text = {
+	name = GetADISCORDEconomySocialIncreasePreviewLoc
+	text = { trigger = { check_variable = { var = ADISCORD_economy_social_spending_mode value = 5 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_policy_blocked_maximum }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_social_budget_change_cooldown value = 0 compare = greater_than } } localization_key = ADISCORD_economy_policy_blocked_cooldown }
+	text = { trigger = { NOT = { ADISCORD_economy_should_show_player_ui = yes } } localization_key = ADISCORD_economy_policy_blocked_scope }
+	text = { localization_key = ADISCORD_economy_policy_preview_available }
 }
 
 defined_text = {

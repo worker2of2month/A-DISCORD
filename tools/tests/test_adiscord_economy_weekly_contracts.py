@@ -13,6 +13,7 @@ from tools.validators.validate_adiscord_economy_ai import (
     debt_reconciler_issues,
     debt_transition_flow_issues,
     migration_contract_issues,
+    policy_selector_issues,
     reachable_script_entries,
     research_policy_flow_issues,
     retired_capacity_boundary_issues,
@@ -3287,7 +3288,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
             "construction expense cannot contain a positive fixed output term",
         )
 
-    def test_live_construction_compatibility_localisation_describes_research_policy(self):
+    def test_live_research_policy_localisation_uses_canonical_ui_ids(self):
         budget_controls = localisation_value(
             ECONOMY_LOC, "ADISCORD_economy_budget_controls_tt"
         )
@@ -3295,13 +3296,13 @@ class WeeklyEconomyContracts(unittest.TestCase):
         self.assertNotIn("строительств", budget_controls.lower())
 
         row = localisation_value(
-            ECONOMY_LOC, "ADISCORD_economy_budget_construction_row"
+            ECONOMY_LOC, "ADISCORD_economy_budget_research_row"
         )
         self.assertIn("Наука", row)
-        self.assertIn("[GetADISCORDConstructionSpendingModeLoc]", row)
+        self.assertIn("[GetADISCORDResearchSpendingModeLoc]", row)
 
         controls = localisation_value(
-            ECONOMY_LOC, "ADISCORD_economy_construction_controls_tt"
+            ECONOMY_LOC, "ADISCORD_economy_research_controls_tt"
         )
         self.assertIn("[?ADISCORD_economy_research_spending_mode|0]", controls)
         self.assertIn(
@@ -3327,10 +3328,10 @@ class WeeklyEconomyContracts(unittest.TestCase):
         keys = localisation_key_set(ECONOMY_LOC)
         for level, (expense, research_speed) in expected.items():
             level_tooltip = localisation_value(
-                ECONOMY_LOC, f"ADISCORD_economy_construction_level_{level}_tt"
+                ECONOMY_LOC, f"ADISCORD_economy_research_level_{level}_tt"
             )
             effect_tooltip = localisation_value(
-                ECONOMY_LOC, f"ADISCORD_economy_construction_effects_{level}"
+                ECONOMY_LOC, f"ADISCORD_economy_research_effects_{level}"
             )
             for value in (level_tooltip, effect_tooltip):
                 self.assertIn(f"расходы {expense}".lower(), value.lower())
@@ -3352,7 +3353,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                     self.assertNotIn("строительств", value.lower())
 
             mode = localisation_value(
-                ECONOMY_LOC, f"ADISCORD_economy_construction_funding_mode_{level}"
+                ECONOMY_LOC, f"ADISCORD_economy_research_funding_mode_{level}"
             )
             self.assertIn("наук", mode.lower())
 
@@ -3380,8 +3381,8 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 self.assertNotIn("строительств", idea_description.lower())
 
         for arrow_key in (
-            "ADISCORD_economy_construction_decrease_tt",
-            "ADISCORD_economy_construction_increase_tt",
+            "ADISCORD_economy_research_decrease_tt",
+            "ADISCORD_economy_research_increase_tt",
         ):
             self.assertIn(
                 "наук", localisation_value(ECONOMY_LOC, arrow_key).lower()
@@ -3744,14 +3745,17 @@ class WeeklyEconomyContracts(unittest.TestCase):
         self.assertEqual(
             facade.strip(), "ADISCORD_economy_refresh_research_policy = yes"
         )
-        for direction in ("increase", "decrease"):
-            construction = unique_block(
-                SCRIPTED_GUI, f"ADISCORD_economy_construction_{direction}_click"
-            )
-            self.assertEqual(
-                construction.strip(),
-                f"ADISCORD_economy_{direction}_research_spending = yes",
-            )
+        for policy in expected:
+            for direction in ("increase", "decrease"):
+                noun = "tax_burden" if policy == "tax" else f"{policy}_spending"
+                click = unique_block(
+                    SCRIPTED_GUI, f"ADISCORD_economy_{policy}_{direction}_click"
+                )
+                self.assertEqual(
+                    click.strip(), f"ADISCORD_economy_{direction}_{noun} = yes"
+                )
+        self.assertNotIn("ADISCORD_economy_construction_increase_click", SCRIPTED_GUI)
+        self.assertNotIn("ADISCORD_economy_construction_decrease_click", SCRIPTED_GUI)
 
     def test_tax_targeted_refresh_updates_macro_only_when_income_changes(self):
         self.assertEqual(tax_refresh_macro_flow_issues(EFFECTS), [])
@@ -3793,14 +3797,32 @@ class WeeklyEconomyContracts(unittest.TestCase):
         effect_prefixes = {
             "tax": "ADISCORD_economy_tax_effects",
             "army": "ADISCORD_economy_army_effects",
-            "research": "ADISCORD_economy_construction_effects",
+            "research": "ADISCORD_economy_research_effects",
             "social": "ADISCORD_economy_social_effects",
+        }
+        variables = {
+            "tax": (
+                "ADISCORD_economy_tax_burden_mode",
+                "ADISCORD_economy_tax_change_cooldown",
+            ),
+            "army": (
+                "ADISCORD_economy_army_spending_mode",
+                "ADISCORD_economy_army_budget_change_cooldown",
+            ),
+            "research": (
+                "ADISCORD_economy_research_spending_mode",
+                "ADISCORD_economy_research_budget_change_cooldown",
+            ),
+            "social": (
+                "ADISCORD_economy_social_spending_mode",
+                "ADISCORD_economy_social_budget_change_cooldown",
+            ),
         }
         for policy, localisation_prefix in effect_prefixes.items():
             for direction in ("Increase", "Decrease"):
                 selector = unique_defined_text(
                     SCRIPTED_LOC,
-                    f"GetADISCORDEconomy{policy.title()}{direction}PreviewLoc",
+                    f"GetADISCORDEconomy{policy.title()}{direction}EffectLoc",
                 )
                 target = (
                     f"ADISCORD_economy_{policy}_{direction.lower()}_target_level"
@@ -3808,17 +3830,28 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 self.assertEqual(selector.count(target), 4)
                 for level in range(1, 6):
                     self.assertIn(f"{localisation_prefix}_{level}", selector)
+                reason_selector = (
+                    f"GetADISCORDEconomy{policy.title()}{direction}PreviewLoc"
+                )
+                mode_var, cooldown_var = variables[policy]
+                self.assertEqual(
+                    policy_selector_issues(
+                        SCRIPTED_LOC,
+                        reason_selector,
+                        mode_var,
+                        cooldown_var,
+                        direction.lower(),
+                    ),
+                    [],
+                )
 
-        for direction in ("Increase", "Decrease"):
-            compatibility = unique_defined_text(
-                SCRIPTED_LOC,
-                f"GetADISCORDConstruction{direction}PolicyPreviewLoc",
-            )
-            self.assertIn(
-                f"ADISCORD_economy_research_{direction.lower()}_target_level",
-                compatibility,
-            )
-            self.assertIn("ADISCORD_economy_construction_effects_5", compatibility)
+        for alias in (
+            "GetADISCORDConstructionSpendingModeLoc",
+            "GetADISCORDConstructionSpendingEffectsLoc",
+            "GetADISCORDConstructionIncreasePolicyPreviewLoc",
+            "GetADISCORDConstructionDecreasePolicyPreviewLoc",
+        ):
+            self.assertNotIn(alias, SCRIPTED_LOC)
 
     def test_policy_previews_are_side_effect_bounded_and_restore_live_state(self):
         restored = {

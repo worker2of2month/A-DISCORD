@@ -103,6 +103,393 @@ def named_assignment_body(text, assignment, name, identity_key='name'):
     return bodies[0]
 
 
+def _walk_clausewitz(entries):
+    for entry in entries:
+        yield entry
+        if isinstance(entry.value, list):
+            yield from _walk_clausewitz(entry.value)
+
+
+def _direct_clausewitz(entries, key):
+    return [entry for entry in entries if entry.key == key]
+
+
+def _direct_scalar(entries, key):
+    values = [
+        entry.value
+        for entry in entries
+        if entry.key == key and isinstance(entry.value, str)
+    ]
+    return values[0] if len(values) == 1 else None
+
+
+def _unique_direct_block(entries, key):
+    matches = [
+        entry
+        for entry in entries
+        if entry.key == key and isinstance(entry.value, list)
+    ]
+    return matches[0].value if len(matches) == 1 else None
+
+
+def _scripted_gui_dashboard_sections(text):
+    try:
+        ast = economy_validator.parse_clausewitz(text)
+    except ValueError:
+        return None
+    roots = [
+        entry
+        for entry in ast
+        if entry.key == 'scripted_gui' and isinstance(entry.value, list)
+    ]
+    if len(roots) != 1:
+        return None
+    dashboards = [
+        entry
+        for entry in roots[0].value
+        if entry.key == 'ADISCORD_economy_dashboard_script'
+        and isinstance(entry.value, list)
+    ]
+    if len(dashboards) != 1:
+        return None
+    dashboard = dashboards[0].value
+    sections = {
+        section: _unique_direct_block(dashboard, section)
+        for section in ('effects', 'triggers', 'properties')
+    }
+    sections['all_effects'] = [
+        effect
+        for owner in roots[0].value
+        if isinstance(owner.value, list)
+        for effect in (_unique_direct_block(owner.value, 'effects') or [])
+    ]
+    return sections
+
+
+def _gui_position(body):
+    match = re.search(
+        r'\bposition\s*=\s*\{\s*x\s*=\s*(-?\d+)\s+y\s*=\s*(-?\d+)\s*\}',
+        body,
+    )
+    return tuple(map(int, match.groups())) if match else None
+
+
+def _gui_size(body):
+    explicit = re.search(
+        r'\bsize\s*=\s*\{\s*(?:x|width)\s*=\s*(\d+)\s+'
+        r'(?:y|height)\s*=\s*(\d+)\s*\}',
+        body,
+    )
+    if explicit:
+        return tuple(map(int, explicit.groups()))
+    width = re.search(r'\bmaxWidth\s*=\s*(\d+)', body)
+    height = re.search(r'\bmaxHeight\s*=\s*(\d+)', body)
+    if width and height:
+        return int(width.group(1)), int(height.group(1))
+    return None
+
+
+def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
+    """Return semantic Task 9 UI graph and geometry violations.
+
+    The checks deliberately bind the rendered controls to their direct
+    scripted-GUI owners.  Comments, quoted diagnostic strings, and unrelated
+    economy mechanics are not treated as policy actions.
+    """
+
+    issues = []
+    policies = ('tax', 'army', 'research', 'social')
+    directions = ('decrease', 'increase')
+    mode_vars = {
+        'tax': 'ADISCORD_economy_tax_burden_mode',
+        'army': 'ADISCORD_economy_army_spending_mode',
+        'research': 'ADISCORD_economy_research_spending_mode',
+        'social': 'ADISCORD_economy_social_spending_mode',
+    }
+    cooldown_vars = {
+        'tax': 'ADISCORD_economy_tax_change_cooldown',
+        'army': 'ADISCORD_economy_army_budget_change_cooldown',
+        'research': 'ADISCORD_economy_research_budget_change_cooldown',
+        'social': 'ADISCORD_economy_social_budget_change_cooldown',
+    }
+    effects = {
+        ('tax', 'decrease'): 'ADISCORD_economy_decrease_tax_burden',
+        ('tax', 'increase'): 'ADISCORD_economy_increase_tax_burden',
+        ('army', 'decrease'): 'ADISCORD_economy_decrease_army_spending',
+        ('army', 'increase'): 'ADISCORD_economy_increase_army_spending',
+        ('research', 'decrease'): 'ADISCORD_economy_decrease_research_spending',
+        ('research', 'increase'): 'ADISCORD_economy_increase_research_spending',
+        ('social', 'decrease'): 'ADISCORD_economy_decrease_social_spending',
+        ('social', 'increase'): 'ADISCORD_economy_increase_social_spending',
+    }
+    enabled = {
+        key: value.replace('ADISCORD_economy_decrease_', 'ADISCORD_economy_can_decrease_')
+        .replace('ADISCORD_economy_increase_', 'ADISCORD_economy_can_increase_')
+        for key, value in effects.items()
+    }
+
+    node_list = named_gui_nodes(gui)
+    node_names = [name for _, name, _ in node_list]
+    duplicate_nodes = sorted(
+        name for name in set(node_names) if node_names.count(name) > 1
+    )
+    if duplicate_nodes:
+        issues.append(f'GUI node names are duplicated: {duplicate_nodes}')
+    policy_rows = [
+        match.group(1)
+        for name in node_names
+        if (match := re.fullmatch(
+            r'ADISCORD_economy_(tax|army|research|social|construction)_row',
+            name,
+        ))
+    ]
+    if policy_rows != list(policies):
+        issues.append(f'policy row order/identity is {policy_rows!r}')
+
+    expected_buttons = {
+        f'ADISCORD_economy_{policy}_{direction}'
+        for policy in policies
+        for direction in directions
+    }
+    policy_buttons = {
+        name
+        for kind, name, _ in node_list
+        if kind == 'buttonType'
+        and re.fullmatch(
+            r'ADISCORD_economy_(?:tax|army|research|social|construction)_(?:decrease|increase)',
+            name,
+        )
+    }
+    if policy_buttons != expected_buttons:
+        issues.append('GUI does not expose exactly eight canonical policy buttons')
+
+    sections = _scripted_gui_dashboard_sections(scripted_gui)
+    if not sections or any(sections[section] is None for section in sections):
+        issues.append('dashboard scripted-GUI sections are missing or duplicated')
+        return issues
+    effect_entries = sections['effects']
+    ownership_effect_entries = sections['all_effects']
+    trigger_entries = sections['triggers']
+    property_entries = sections['properties']
+
+    gui_buttons = {
+        name for kind, name, _ in node_list if kind == 'buttonType'
+    }
+    click_owner_names = [
+        entry.key
+        for entry in ownership_effect_entries
+        if entry.key.endswith('_click') and isinstance(entry.value, list)
+    ]
+    duplicate_clicks = sorted(
+        name for name in set(click_owner_names) if click_owner_names.count(name) > 1
+    )
+    if duplicate_clicks:
+        issues.append(f'scripted click owners are duplicated: {duplicate_clicks}')
+    owned_clicks = {name[:-6] for name in click_owner_names}
+    missing_owners = sorted(gui_buttons - owned_clicks)
+    dead_owners = sorted(owned_clicks - gui_buttons)
+    if missing_owners:
+        issues.append(f'GUI buttons lack direct click owners: {missing_owners}')
+    if dead_owners:
+        issues.append(f'scripted clicks lack GUI buttons: {dead_owners}')
+
+    expected_clicks = {f'{name}_click' for name in expected_buttons}
+    live_policy_clicks = {
+        entry.key
+        for entry in effect_entries
+        if re.fullmatch(
+            r'ADISCORD_economy_(?:tax|army|research|social|construction)_(?:decrease|increase)_click',
+            entry.key,
+        )
+    }
+    if live_policy_clicks != expected_clicks:
+        issues.append('scripted GUI does not own exactly eight policy clicks')
+
+    row_rects = []
+    for policy in policies:
+        row_name = f'ADISCORD_economy_{policy}_row'
+        try:
+            row = gui_node_body(gui, row_name)
+        except AssertionError as error:
+            issues.append(str(error))
+            continue
+        row_pos = _gui_position(row)
+        row_size = _gui_size(row)
+        if row_pos is None or row_size is None:
+            issues.append(f'{policy} row lacks explicit geometry')
+            continue
+        x, y = row_pos
+        width, height = row_size
+        if width < 440 or height < 36:
+            issues.append(f'{policy} row is not a useful full-row hover surface')
+        if not (0 <= x and 0 <= y and x + width <= 480 and y + height <= 420):
+            issues.append(f'{policy} row leaves the command panel')
+        if f'pdx_tooltip = "ADISCORD_economy_{policy}_controls_tt"' not in row:
+            issues.append(f'{policy} row lacks its current-policy tooltip')
+        row_rects.append((policy, x, y, width, height))
+
+        children = []
+        for child_name in (
+            f'ADISCORD_economy_{policy}_scale',
+            f'ADISCORD_economy_{policy}_decrease',
+            f'ADISCORD_economy_{policy}_increase',
+        ):
+            try:
+                child = gui_node_body(gui, child_name)
+            except AssertionError as error:
+                issues.append(str(error))
+                continue
+            child_pos = _gui_position(child)
+            child_size = _gui_size(child)
+            if child_pos is None or child_size is None:
+                issues.append(f'{child_name} lacks explicit geometry')
+                continue
+            children.append((child_name, *child_pos, *child_size))
+        for child_name, child_x, child_y, child_w, child_h in children:
+            if not (
+                x <= child_x
+                and y <= child_y
+                and child_x + child_w <= x + width
+                and child_y + child_h <= y + height
+            ):
+                issues.append(f'{child_name} is outside its owning row')
+
+        for level, marker_x in enumerate((0, 24, 48, 72, 96), start=1):
+            marker_name = f'ADISCORD_economy_{policy}_step_{level}'
+            marker_nodes = [
+                (kind, parents)
+                for kind, name, parents in node_list
+                if name == marker_name
+            ]
+            if marker_nodes != [
+                ('iconType', (
+                    'ADISCORD_economy_dashboard_window',
+                    'ADISCORD_economy_command_panel',
+                    f'ADISCORD_economy_{policy}_scale',
+                ))
+            ]:
+                issues.append(f'{marker_name} is missing, duplicated, or disconnected')
+                continue
+            marker = gui_node_body(gui, marker_name)
+            if _gui_position(marker) != (marker_x, 0):
+                issues.append(f'{marker_name} has the wrong level position')
+            if 'alwaystransparent = yes' in marker:
+                issues.append(f'{marker_name} cannot receive hover input')
+            if f'pdx_tooltip = "ADISCORD_economy_{policy}_level_{level}_tt"' not in marker:
+                issues.append(f'{marker_name} lacks its level tooltip')
+
+        for direction in directions:
+            button = f'ADISCORD_economy_{policy}_{direction}'
+            click = _direct_clausewitz(effect_entries, f'{button}_click')
+            if not (
+                len(click) == 1
+                and isinstance(click[0].value, list)
+                and len(click[0].value) == 1
+                and click[0].value[0].key == effects[(policy, direction)]
+                and click[0].value[0].value == 'yes'
+            ):
+                issues.append(f'{button} does not delegate once to its targeted effect')
+            gate = _direct_clausewitz(trigger_entries, f'{button}_click_enabled')
+            if not (
+                len(gate) == 1
+                and isinstance(gate[0].value, list)
+                and len(gate[0].value) == 1
+                and gate[0].value[0].key == enabled[(policy, direction)]
+                and gate[0].value[0].value == 'yes'
+            ):
+                issues.append(f'{button} has the wrong direct availability owner')
+
+            title = 'Army' if policy == 'army' else policy.title()
+            reason_selector = (
+                f'GetADISCORDEconomy{title}{direction.title()}PreviewLoc'
+            )
+            issues.extend(
+                economy_validator.policy_selector_issues(
+                    scripted_loc,
+                    reason_selector,
+                    mode_vars[policy],
+                    cooldown_vars[policy],
+                    direction,
+                )
+            )
+            effect_selector = (
+                f'GetADISCORDEconomy{title}{direction.title()}EffectLoc'
+            )
+            try:
+                effect_block = named_assignment_body(
+                    scripted_loc, 'defined_text', effect_selector
+                )
+            except AssertionError as error:
+                issues.append(str(error))
+            else:
+                target = f'ADISCORD_economy_{policy}_{direction}_target_level'
+                effect_prefix = f'ADISCORD_economy_{policy}_effects'
+                if effect_block.count(target) != 4:
+                    issues.append(f'{effect_selector} uses the wrong preview target')
+                for level in range(1, 6):
+                    if f'{effect_prefix}_{level}' not in effect_block:
+                        issues.append(f'{effect_selector} misses effect level {level}')
+
+        marker_owner = _direct_clausewitz(
+            trigger_entries, f'ADISCORD_economy_{policy}_active_marker_visible'
+        )
+        if not (
+            len(marker_owner) == 1
+            and isinstance(marker_owner[0].value, list)
+        ):
+            issues.append(f'{policy} active marker has no unique trigger owner')
+        else:
+            tokens = [
+                value
+                for entry in _walk_clausewitz(marker_owner[0].value)
+                for value in (entry.key, entry.value)
+                if isinstance(value, str)
+            ]
+            if mode_vars[policy] not in tokens:
+                issues.append(f'{policy} active marker uses the wrong mode')
+            for position in ('0', '24', '48', '72', '96'):
+                if position not in tokens:
+                    issues.append(f'{policy} active marker misses position {position}')
+        marker_property = _direct_clausewitz(
+            property_entries, f'ADISCORD_economy_{policy}_active_marker'
+        )
+        if len(marker_property) != 1:
+            issues.append(f'{policy} active marker lacks a unique property owner')
+
+    ordered_rects = sorted(row_rects, key=lambda item: item[2])
+    if [item[0] for item in ordered_rects] != list(policies):
+        issues.append('policy rows do not preserve vertical order')
+    for previous, current in zip(ordered_rects, ordered_rects[1:]):
+        if previous[2] + previous[4] > current[2]:
+            issues.append(f'{previous[0]} and {current[0]} rows overlap')
+
+    for source_name, source in (
+        ('GUI', gui),
+        ('scripted GUI', scripted_gui),
+        ('scripted localisation', scripted_loc),
+    ):
+        try:
+            tokens = [
+                value
+                for entry in _walk_clausewitz(
+                    economy_validator.parse_clausewitz(source)
+                )
+                for value in (entry.key, entry.value)
+                if isinstance(value, str)
+            ]
+        except ValueError:
+            issues.append(f'{source_name} does not parse')
+            continue
+        if any(
+            token.startswith('ADISCORD_economy_construction_')
+            or token.startswith('GetADISCORDConstruction')
+            for token in tokens
+        ):
+            issues.append(f'{source_name} retains a construction-policy UI alias')
+
+    return issues
+
+
 class CountryPoliticsGuiContractTests(unittest.TestCase):
     def test_hoi4_119_faction_widgets_have_required_types_and_parents(self):
         text = (ROOT / 'interface' / 'countrypoliticsview.gui').read_text(
@@ -290,6 +677,143 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         ).read_text(encoding='utf-8-sig')
         self.nodes = set(named_gui_nodes(self.gui))
 
+    def test_policy_ui_graph_geometry_and_selectors_are_connected(self):
+        self.assertEqual(
+            economy_policy_ui_issues(
+                self.gui, self.scripted_gui, self.scripted_loc
+            ),
+            [],
+        )
+
+    def test_policy_ui_graph_rejects_stable_invalid_mutations(self):
+        self.assertEqual(
+            economy_policy_ui_issues(
+                self.gui, self.scripted_gui, self.scripted_loc
+            ),
+            [],
+            'live Task 9 UI must be valid before testing mutations',
+        )
+
+        def replace_once(text, old, new):
+            self.assertIn(old, text, f'mutation source is absent: {old}')
+            return text.replace(old, new, 1)
+
+        gui_mutations = {
+            'rows swapped': replace_once(
+                replace_once(
+                    self.gui,
+                    'name = "ADISCORD_economy_tax_row"',
+                    'name = "ADISCORD_economy_row_swap_temp"',
+                ),
+                'name = "ADISCORD_economy_army_row"',
+                'name = "ADISCORD_economy_tax_row"',
+            ).replace(
+                'name = "ADISCORD_economy_row_swap_temp"',
+                'name = "ADISCORD_economy_army_row"',
+                1,
+            ),
+            'row overlap': replace_once(
+                self.gui,
+                'name = "ADISCORD_economy_army_row" position = { x = 20 y = 87 }',
+                'name = "ADISCORD_economy_army_row" position = { x = 20 y = 60 }',
+            ),
+            'arrow outside owner': replace_once(
+                self.gui,
+                'name = "ADISCORD_economy_tax_increase" position = { x = 424 y = 47 }',
+                'name = "ADISCORD_economy_tax_increase" position = { x = 450 y = 47 }',
+            ),
+            'marker made hover-transparent': replace_once(
+                self.gui,
+                'name = "ADISCORD_economy_tax_step_1" position = { x = 0 y = 0 }',
+                'name = "ADISCORD_economy_tax_step_1" position = { x = 0 y = 0 } alwaystransparent = yes',
+            ),
+            'unowned orphan button': replace_once(
+                self.gui,
+                'name = "ADISCORD_economy_dashboard_close"',
+                'name = "ADISCORD_economy_policy_orphan"',
+            ),
+            'duplicate policy node': replace_once(
+                self.gui,
+                'name = "ADISCORD_economy_tax_increase"',
+                'name = "ADISCORD_economy_tax_decrease"',
+            ),
+        }
+        scripted_gui_mutations = {
+            'wrong targeted effect': replace_once(
+                self.scripted_gui,
+                'ADISCORD_economy_tax_decrease_click = { ADISCORD_economy_decrease_tax_burden = yes }',
+                'ADISCORD_economy_tax_decrease_click = { ADISCORD_economy_decrease_army_spending = yes }',
+            ),
+            'wrong availability trigger': replace_once(
+                self.scripted_gui,
+                'ADISCORD_economy_tax_decrease_click_enabled = { ADISCORD_economy_can_decrease_tax_burden = yes }',
+                'ADISCORD_economy_tax_decrease_click_enabled = { ADISCORD_economy_can_decrease_army_spending = yes }',
+            ),
+            'ninth construction action': replace_once(
+                self.scripted_gui,
+                'ADISCORD_economy_social_increase_click = { ADISCORD_economy_increase_social_spending = yes }',
+                'ADISCORD_economy_social_increase_click = { ADISCORD_economy_increase_social_spending = yes }\n'
+                '\t\t\tADISCORD_economy_construction_increase_click = { ADISCORD_economy_increase_research_spending = yes }',
+            ),
+            'research marker reads army mode': self.scripted_gui.replace(
+                'var = ADISCORD_economy_research_spending_mode',
+                'var = ADISCORD_economy_army_spending_mode',
+            ),
+            'duplicate policy click across owners': replace_once(
+                self.scripted_gui,
+                'ADISCORD_economy_topbar_button_click = { ADISCORD_economy_open_window = yes }',
+                'ADISCORD_economy_topbar_button_click = { ADISCORD_economy_open_window = yes }\n'
+                '\t\t\tADISCORD_economy_tax_decrease_click = { ADISCORD_economy_decrease_tax_burden = yes }',
+            ),
+        }
+        scripted_loc_mutations = {
+            'effect selector reads wrong direction': replace_once(
+                self.scripted_loc,
+                'var = ADISCORD_economy_research_increase_target_level value = 1',
+                'var = ADISCORD_economy_research_decrease_target_level value = 1',
+            ),
+            'effect selector uses legacy key': replace_once(
+                self.scripted_loc,
+                'localization_key = ADISCORD_economy_research_effects_1',
+                'localization_key = ADISCORD_economy_construction_effects_1',
+            ),
+            'reason selector hidden in wrapper': replace_once(
+                self.scripted_loc,
+                'name = GetADISCORDEconomyTaxDecreasePreviewLoc',
+                'name = DeadTaxPreviewLoc',
+            )
+            + '\nADISCORD_dead_preview_owner = { defined_text = { '
+            'name = GetADISCORDEconomyTaxDecreasePreviewLoc '
+            'text = { localization_key = ADISCORD_economy_policy_preview_available } } }\n',
+        }
+
+        for name, invalid_gui in gui_mutations.items():
+            with self.subTest(gui_mutation=name):
+                self.assertTrue(economy_validator.parse_clausewitz(invalid_gui))
+                self.assertTrue(
+                    economy_policy_ui_issues(
+                        invalid_gui, self.scripted_gui, self.scripted_loc
+                    )
+                )
+        for name, invalid_scripted_gui in scripted_gui_mutations.items():
+            with self.subTest(scripted_gui_mutation=name):
+                self.assertTrue(
+                    economy_validator.parse_clausewitz(invalid_scripted_gui)
+                )
+                self.assertTrue(
+                    economy_policy_ui_issues(
+                        self.gui, invalid_scripted_gui, self.scripted_loc
+                    )
+                )
+        for name, invalid_scripted_loc in scripted_loc_mutations.items():
+            with self.subTest(scripted_loc_mutation=name):
+                self.assertTrue(economy_validator.parse_clausewitz(invalid_scripted_loc))
+                self.assertTrue(
+                    economy_policy_ui_issues(
+                        self.gui, self.scripted_gui, invalid_scripted_loc
+                    )
+                )
+
     def test_schema_twelve_policy_rows_are_tax_military_research_social(self):
         rows = re.findall(
             r'name\s*=\s*"ADISCORD_economy_(tax|army|construction|research|social)_row"',
@@ -446,6 +970,8 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         self.assertIn('13', localisation_value(self.localisation, 'ADISCORD_economy_debt_delayed_tt'))
 
     def test_debt_notification_uses_dynamic_human_event_not_recurring_custom_popup(self):
+        self.assertNotIn('ADISCORD_economy_auto_loan_popup_window', self.gui)
+        self.assertNotIn('ADISCORD_economy_auto_loan_popup_ok', self.gui)
         self.assertNotIn('ADISCORD_economy_auto_loan_popup_script', self.scripted_gui)
         self.assertNotIn('ADISCORD_economy_auto_loan_popup_ok_click', self.scripted_gui)
         event = named_assignment_body(

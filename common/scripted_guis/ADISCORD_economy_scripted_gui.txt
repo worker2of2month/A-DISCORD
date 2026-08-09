@@ -31,9 +31,6 @@ scripted_gui = {
 			ADISCORD_economy_army_increase_click = { ADISCORD_economy_increase_army_spending = yes }
 			ADISCORD_economy_research_decrease_click = { ADISCORD_economy_decrease_research_spending = yes }
 			ADISCORD_economy_research_increase_click = { ADISCORD_economy_increase_research_spending = yes }
-			# Task 9 removes these two interface-name shims when the visual row is renamed.
-			ADISCORD_economy_construction_decrease_click = { ADISCORD_economy_decrease_research_spending = yes }
-			ADISCORD_economy_construction_increase_click = { ADISCORD_economy_increase_research_spending = yes }
 			ADISCORD_economy_social_decrease_click = { ADISCORD_economy_decrease_social_spending = yes }
 			ADISCORD_economy_social_increase_click = { ADISCORD_economy_increase_social_spending = yes }
 			ADISCORD_economy_action_internal_bonds_click = { ADISCORD_economy_gui_try_issue_internal_bonds = yes }
@@ -53,8 +50,6 @@ scripted_gui = {
 			ADISCORD_economy_army_increase_click_enabled = { ADISCORD_economy_can_increase_army_spending = yes }
 			ADISCORD_economy_research_decrease_click_enabled = { ADISCORD_economy_can_decrease_research_spending = yes }
 			ADISCORD_economy_research_increase_click_enabled = { ADISCORD_economy_can_increase_research_spending = yes }
-			ADISCORD_economy_construction_decrease_click_enabled = { ADISCORD_economy_can_decrease_research_spending = yes }
-			ADISCORD_economy_construction_increase_click_enabled = { ADISCORD_economy_can_increase_research_spending = yes }
 			ADISCORD_economy_social_decrease_click_enabled = { ADISCORD_economy_can_decrease_social_spending = yes }
 			ADISCORD_economy_social_increase_click_enabled = { ADISCORD_economy_can_increase_social_spending = yes }
 			ADISCORD_economy_tax_active_marker_visible = {
@@ -97,14 +92,13 @@ scripted_gui = {
 				}
 				else = { set_temp_variable = { var = ADISCORD_economy_army_active_marker_x_position value = 96 } }
 			}
-			# Temporary Task 9 compatibility marker for the still-construction-named GUI node.
-			ADISCORD_economy_construction_active_marker_visible = {
-				set_temp_variable = { var = ADISCORD_economy_construction_active_marker_x_position value = 48 }
-				if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 1 compare = less_than_or_equals } } set_temp_variable = { var = ADISCORD_economy_construction_active_marker_x_position value = 0 } }
-				else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 2 compare = less_than_or_equals } } set_temp_variable = { var = ADISCORD_economy_construction_active_marker_x_position value = 24 } }
-				else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = less_than_or_equals } } set_temp_variable = { var = ADISCORD_economy_construction_active_marker_x_position value = 48 } }
-				else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 4 compare = less_than_or_equals } } set_temp_variable = { var = ADISCORD_economy_construction_active_marker_x_position value = 72 } }
-				else = { set_temp_variable = { var = ADISCORD_economy_construction_active_marker_x_position value = 96 } }
+			ADISCORD_economy_research_active_marker_visible = {
+				set_temp_variable = { var = ADISCORD_economy_research_active_marker_x_position value = 48 }
+				if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 1 compare = less_than_or_equals } } set_temp_variable = { var = ADISCORD_economy_research_active_marker_x_position value = 0 } }
+				else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 2 compare = less_than_or_equals } } set_temp_variable = { var = ADISCORD_economy_research_active_marker_x_position value = 24 } }
+				else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = less_than_or_equals } } set_temp_variable = { var = ADISCORD_economy_research_active_marker_x_position value = 48 } }
+				else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 4 compare = less_than_or_equals } } set_temp_variable = { var = ADISCORD_economy_research_active_marker_x_position value = 72 } }
+				else = { set_temp_variable = { var = ADISCORD_economy_research_active_marker_x_position value = 96 } }
 			}
 			ADISCORD_economy_social_active_marker_visible = {
 				set_temp_variable = { var = ADISCORD_economy_social_active_marker_x_position value = 48 }
@@ -136,7 +130,7 @@ scripted_gui = {
 		properties = {
 			ADISCORD_economy_tax_active_marker = { x = ADISCORD_economy_tax_active_marker_x_position }
 			ADISCORD_economy_army_active_marker = { x = ADISCORD_economy_army_active_marker_x_position }
-			ADISCORD_economy_construction_active_marker = { x = ADISCORD_economy_construction_active_marker_x_position }
+			ADISCORD_economy_research_active_marker = { x = ADISCORD_economy_research_active_marker_x_position }
 			ADISCORD_economy_social_active_marker = { x = ADISCORD_economy_social_active_marker_x_position }
 		}
 	}
