@@ -124,38 +124,68 @@ def uncommented(text: str) -> str:
     return "\n".join(line.split("#", 1)[0] for line in text.splitlines())
 
 
-def history_slots(tag: str) -> int | None:
-    matches = sorted((ROOT / "history/countries").glob(f"{tag} -*.txt"))
+def history_slots(tag: str, root: Path = ROOT) -> int | None:
+    matches = sorted((root / "history/countries").glob(f"{tag} -*.txt"))
     if len(matches) != 1:
         return None
     match = re.search(r"(?m)^\s*set_research_slots\s*=\s*(\d+)", read(matches[0]))
     return int(match.group(1)) if match else None
 
 
-def participation_files(tag: str) -> list[Path]:
+def participation_files(tag: str, root: Path = ROOT) -> list[Path]:
     token = re.compile(rf"\b{re.escape(tag)}\b")
     hits: list[Path] = []
-    for root in PARTICIPATION_ROOTS:
-        if not root.exists():
+    participation_roots = (
+        root / "events",
+        root / "common/decisions",
+        root / "common/national_focus",
+        root / "common/ai_strategy",
+        root / "common/ai_strategy_plans",
+        root / "common/on_actions",
+        root / "common/scripted_effects",
+        root / "common/scripted_triggers",
+    )
+    scan_exclusions = {
+        (root / "common/scripted_triggers/ADISCORD_minor_optimization_triggers.txt").resolve(),
+        (root / "common/scripted_effects/ADISCORD_minor_optimization_effects.txt").resolve(),
+        (root / "common/on_actions/00_ADISCORD_minor_optimization_on_actions.txt").resolve(),
+        (root / "common/scripted_effects/ADISCORD_technology_baseline_effects.txt").resolve(),
+        (root / "common/scripted_triggers/ADISCORD_development_country_lists.txt").resolve(),
+    }
+    for participation_root in participation_roots:
+        if not participation_root.exists():
             continue
-        for path in root.rglob("*.txt"):
-            if path.resolve() in SCAN_EXCLUSIONS:
+        for path in participation_root.rglob("*.txt"):
+            if path.resolve() in scan_exclusions:
                 continue
             if token.search(uncommented(read(path))):
-                hits.append(path.relative_to(ROOT))
+                hits.append(path.relative_to(root))
     return sorted(hits)
 
 
-def main() -> int:
+def validate(root: Path = ROOT) -> list[str]:
+    root = Path(root)
     issues: list[str] = []
-    trigger_text = read(TRIGGER_FILE)
-    effect_text = read(EFFECT_FILE)
-    idea_text = read(IDEA_FILE)
-    all_idea_text = "\n".join(
-        read(path) for path in sorted((ROOT / "common/ideas").rglob("*.txt"))
+    trigger_text = read(
+        root / "common/scripted_triggers/ADISCORD_minor_optimization_triggers.txt"
     )
-    on_action_text = read(ON_ACTION_FILE)
-    economy_effect_text = read(ECONOMY_EFFECT_FILE)
+    effect_text = read(
+        root / "common/scripted_effects/ADISCORD_minor_optimization_effects.txt"
+    )
+    idea_text = read(root / "common/ideas/ADISCORD_minor_optimization_ideas.txt")
+    all_idea_text = "\n".join(
+        read(path) for path in sorted((root / "common/ideas").rglob("*.txt"))
+    )
+    all_effect_text = "\n".join(
+        read(path)
+        for path in sorted((root / "common/scripted_effects").rglob("*.txt"))
+    )
+    on_action_text = read(
+        root / "common/on_actions/00_ADISCORD_minor_optimization_on_actions.txt"
+    )
+    economy_effect_text = read(
+        root / "common/scripted_effects/ADISCORD_economy_effects.txt"
+    )
 
     try:
         dormant_block = named_block(trigger_text, "ADISCORD_is_non_participating_minor")
@@ -182,10 +212,10 @@ def main() -> int:
             issues.append(f"eligibility trigger lacks {required}")
 
     for tag, expected_slots in sorted(EXPECTED_SLOTS.items()):
-        actual_slots = history_slots(tag)
+        actual_slots = history_slots(tag, root)
         if actual_slots != expected_slots:
             issues.append(f"{tag}: history has {actual_slots!r} research slots, expected {expected_slots}")
-        hits = participation_files(tag)
+        hits = participation_files(tag, root)
         allowed_hits = EVENT_AWAKENED_PARTICIPATION.get(tag, set())
         unexpected_hits = set(hits) - allowed_hits
         if unexpected_hits:
@@ -249,7 +279,7 @@ def main() -> int:
             issues.append(f"optimization uses recurring poll {forbidden}")
 
     issues.extend(
-        ai_assistance_contract_issues(all_idea_text, effect_text, trigger_text)
+        ai_assistance_contract_issues(all_idea_text, all_effect_text, trigger_text)
     )
     issues.extend(
         ai_assistance_lifecycle_issues(
@@ -257,6 +287,11 @@ def main() -> int:
         )
     )
 
+    return issues
+
+
+def main() -> int:
+    issues = validate()
     if issues:
         print("Dormant-minor optimization validation failed:")
         for issue in issues:
@@ -264,7 +299,7 @@ def main() -> int:
         return 1
 
     print(
-        f"Dormant-minor optimization validation passed: {len(expected_tags)} audited AI tags, "
+        f"Dormant-minor optimization validation passed: {len(EXPECTED_SLOTS)} audited AI tags, "
         "TFR-style suppression, and event-driven wartime release."
     )
     return 0

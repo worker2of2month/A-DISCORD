@@ -2355,35 +2355,55 @@ def policy_selector_issues(text: str, selector: str, mode_var: str, cooldown_var
     return issues
 
 
-def validate() -> list[str]:
+def validate(root: Path = ROOT) -> list[str]:
+    root = Path(root)
     issues: list[str] = []
 
+    def read_at_root(path: str) -> str:
+        return (root / path).read_text(encoding="utf-8-sig")
+
     def read_required(path: str) -> str:
-        source = ROOT / path
+        source = root / path
         if not source.is_file():
             issues.append(f"missing required future-owned source: {path}")
             return ""
         return source.read_text(encoding="utf-8-sig")
 
-    effects = strip_comments(read("common/scripted_effects/ADISCORD_economy_effects.txt"))
-    modifier_effects = strip_comments(
-        read("common/scripted_effects/ADISCORD_economy_modifier_effects.txt")
+    effects = strip_comments(
+        read_at_root("common/scripted_effects/ADISCORD_economy_effects.txt")
     )
-    triggers = strip_comments(read("common/scripted_triggers/ADISCORD_economy_triggers.txt"))
-    on_actions = strip_comments(read("common/on_actions/00_ADISCORD_on_actions.txt"))
-    default_ai = strip_comments(read("common/ai_strategy/default.txt"))
-    economy_ai = strip_comments(read("common/ai_strategy/ADISCORD_economy_ai.txt"))
-    gui = strip_comments(read("interface/ADISCORD_economy.gui"))
-    interface_gfx = strip_comments(read("interface/ADISCORD_economy.gfx"))
-    scripted_gui = strip_comments(read("common/scripted_guis/ADISCORD_economy_scripted_gui.txt"))
-    scripted_loc = strip_comments(read("common/scripted_localisation/ADISCORD_economy_scripted_loc.txt"))
-    ideas = strip_comments(read("common/ideas/ADISCORD_economy_ideas.txt"))
+    modifier_effects = strip_comments(
+        read_at_root("common/scripted_effects/ADISCORD_economy_modifier_effects.txt")
+    )
+    triggers = strip_comments(
+        read_at_root("common/scripted_triggers/ADISCORD_economy_triggers.txt")
+    )
+    on_actions = strip_comments(
+        read_at_root("common/on_actions/00_ADISCORD_on_actions.txt")
+    )
+    default_ai = strip_comments(read_at_root("common/ai_strategy/default.txt"))
+    economy_ai = strip_comments(
+        read_at_root("common/ai_strategy/ADISCORD_economy_ai.txt")
+    )
+    gui = strip_comments(read_at_root("interface/ADISCORD_economy.gui"))
+    interface_gfx = strip_comments(read_at_root("interface/ADISCORD_economy.gfx"))
+    scripted_gui = strip_comments(
+        read_at_root("common/scripted_guis/ADISCORD_economy_scripted_gui.txt")
+    )
+    scripted_loc = strip_comments(
+        read_at_root("common/scripted_localisation/ADISCORD_economy_scripted_loc.txt")
+    )
+    ideas = strip_comments(read_at_root("common/ideas/ADISCORD_economy_ideas.txt"))
     minor_ideas = strip_comments(
         read_required("common/ideas/ADISCORD_minor_optimization_ideas.txt")
     )
     all_idea_text = "\n".join(
         strip_comments(path.read_text(encoding="utf-8-sig"))
-        for path in sorted((ROOT / "common/ideas").rglob("*.txt"))
+        for path in sorted((root / "common/ideas").rglob("*.txt"))
+    )
+    all_effect_text = "\n".join(
+        path.read_text(encoding="utf-8-sig")
+        for path in sorted((root / "common/scripted_effects").rglob("*.txt"))
     )
     minor_effects = strip_comments(
         read_required("common/scripted_effects/ADISCORD_minor_optimization_effects.txt")
@@ -2394,11 +2414,11 @@ def validate() -> list[str]:
     minor_triggers = strip_comments(
         read_required("common/scripted_triggers/ADISCORD_minor_optimization_triggers.txt")
     )
-    buildings = strip_comments(read("common/buildings/00_buildings.txt"))
+    buildings = strip_comments(read_at_root("common/buildings/00_buildings.txt"))
     dynamic_modifiers = strip_comments(
-        read("common/dynamic_modifiers/ADISCORD_economy_dynamic_modifiers.txt")
+        read_at_root("common/dynamic_modifiers/ADISCORD_economy_dynamic_modifiers.txt")
     )
-    localisation = read("localisation/russian/ADISCORD_economy_l_russian.yml")
+    localisation = read_at_root("localisation/russian/ADISCORD_economy_l_russian.yml")
 
     def require(condition: bool, message: str) -> None:
         if not condition:
@@ -2419,7 +2439,7 @@ def validate() -> list[str]:
     if minor_ideas and minor_effects:
         issues.extend(
             ai_assistance_contract_issues(
-                all_idea_text, minor_effects + "\n" + effects, minor_triggers
+                all_idea_text, all_effect_text, minor_triggers
             )
         )
         issues.extend(
@@ -2437,9 +2457,9 @@ def validate() -> list[str]:
     boundary_sources: dict[str, str] = {}
     text_suffixes = {".txt", ".gui", ".gfx", ".yml", ".yaml", ".md", ".py"}
     for directory in ("common", "interface", "events", "localisation", "docs", "tools"):
-        for path in (ROOT / directory).rglob("*"):
+        for path in (root / directory).rglob("*"):
             if path.is_file() and path.suffix.casefold() in text_suffixes:
-                boundary_sources[path.relative_to(ROOT).as_posix()] = path.read_text(
+                boundary_sources[path.relative_to(root).as_posix()] = path.read_text(
                     encoding="utf-8-sig", errors="replace"
                 )
     issues.extend(retired_capacity_boundary_issues(boundary_sources))
@@ -2916,13 +2936,13 @@ def validate() -> list[str]:
             "economy dashboard still uses blank text +/- controls")
     require("GFX_button_123x34" not in gui,
             "economy dashboard still uses the button sprite that clips compact policy controls")
-    require(not (ROOT / "common/decisions/ADISCORD_economy_decisions.txt").exists(),
+    require(not (root / "common/decisions/ADISCORD_economy_decisions.txt").exists(),
             "economy actions have returned to the decisions menu")
-    require(not (ROOT / "common/decisions/categories/ADISCORD_economy_categories.txt").exists(),
+    require(not (root / "common/decisions/categories/ADISCORD_economy_categories.txt").exists(),
             "economy decision category still exists")
-    require(not (ROOT / "common/decisions/ADISCORD_society_development_debug_decisions.txt").exists(),
+    require(not (root / "common/decisions/ADISCORD_society_development_debug_decisions.txt").exists(),
             "society-development debug decisions are exposed at game start")
-    require(not (ROOT / "common/decisions/categories/ADISCORD_society_development_debug_categories.txt").exists(),
+    require(not (root / "common/decisions/categories/ADISCORD_society_development_debug_categories.txt").exists(),
             "society-development debug category is exposed at game start")
     require("ADISCORD_economy_tab_" not in gui and "ADISCORD_economy_budget_page" not in gui
             and "ADISCORD_economy_operations_page" not in gui,

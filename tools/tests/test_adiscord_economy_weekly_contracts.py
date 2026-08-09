@@ -1,4 +1,6 @@
 import re
+import shutil
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -17,6 +19,9 @@ from tools.validators.validate_adiscord_economy_ai import (
     validate as validate_economy_ai,
 )
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+from tools.validators.validate_adiscord_minor_optimization import (
+    validate as validate_minor_optimization,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -5328,6 +5333,74 @@ ADISCORD_bad_assistance_owner = {
                     ),
                     name,
                 )
+
+    def test_ai_assistance_entrypoints_inventory_every_scripted_effect_source(self):
+        expected_issue = "an effect outside the assistance refresh owns an assistance idea"
+
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            temporary_root = Path(temporary_directory)
+            for relative in ("common", "interface", "localisation", "events"):
+                shutil.copytree(ROOT / relative, temporary_root / relative)
+            shutil.copytree(
+                ROOT / "history" / "countries",
+                temporary_root / "history" / "countries",
+            )
+            third_effect_file = (
+                temporary_root
+                / "common"
+                / "scripted_effects"
+                / "ZZ_ADISCORD_test_external_assistance_owner.txt"
+            )
+
+            for entrypoint in (validate_economy_ai, validate_minor_optimization):
+                with self.subTest(entrypoint=entrypoint.__module__, mutation="control"):
+                    self.assertNotIn(
+                        expected_issue,
+                        entrypoint(root=temporary_root),
+                    )
+
+            third_effect_file.write_text(
+                "# add_ideas = ADISCORD_economy_ai_assistance_base\n"
+                "ADISCORD_test_assistance_owner_decoy = {\n"
+                '\tlog = "remove_ideas = ADISCORD_economy_ai_assistance_retreat"\n'
+                "}\n",
+                encoding="utf-8",
+            )
+            for entrypoint in (validate_economy_ai, validate_minor_optimization):
+                with self.subTest(
+                    entrypoint=entrypoint.__module__, mutation="comment-and-quote control"
+                ):
+                    self.assertNotIn(
+                        expected_issue,
+                        entrypoint(root=temporary_root),
+                    )
+
+            assistance_ideas = (
+                "ADISCORD_economy_ai_assistance_base",
+                "ADISCORD_economy_ai_assistance_civil_war",
+                "ADISCORD_economy_ai_assistance_retreat",
+            )
+            for operation in ("add_ideas", "remove_ideas"):
+                for idea in assistance_ideas:
+                    third_effect_file.write_text(
+                        "ADISCORD_test_external_assistance_owner = {\n"
+                        f"\t{operation} = {idea}\n"
+                        "}\n",
+                        encoding="utf-8",
+                    )
+                    for entrypoint in (
+                        validate_economy_ai,
+                        validate_minor_optimization,
+                    ):
+                        with self.subTest(
+                            entrypoint=entrypoint.__module__,
+                            operation=operation,
+                            idea=idea,
+                        ):
+                            self.assertIn(
+                                expected_issue,
+                                entrypoint(root=temporary_root),
+                            )
 
     def test_ai_assistance_is_bounded_reversible_and_never_player_visible(self):
         for relative in (
