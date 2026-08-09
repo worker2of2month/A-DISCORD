@@ -383,6 +383,48 @@ ADISCORD_economy_apply_monthly_balance = {
 }
 """
         self.assertEqual(automatic_borrow_flow_issues(settlement), [])
+        nested_positive_owner = settlement.replace(
+            "limit = { check_variable = { var = ADISCORD_economy_treasury value = 0 compare = less_than } }",
+            "limit = { OR = { AND = { check_variable = { var = ADISCORD_economy_treasury value = 0 compare = less_than } } AND = { always = no } } }",
+        )
+        self.assertEqual(automatic_borrow_flow_issues(nested_positive_owner), [])
+        outside_accounting = settlement.replace(
+            "  add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp }\n }\n}",
+            "  add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp }\n"
+            " }\n"
+            " set_variable = { var = ADISCORD_economy_debt value = ADISCORD_unrelated_accounting }\n"
+            " add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_unrelated_accounting }\n"
+            "}",
+        )
+        self.assertEqual(automatic_borrow_flow_issues(outside_accounting), [])
+        account_write_templates = {
+            "subtract": "subtract_from_variable = { var = %s value = ADISCORD_economy_auto_borrow_temp }",
+            "set": "set_variable = { var = %s value = ADISCORD_economy_auto_borrow_temp }",
+            "multiply": "multiply_variable = { var = %s value = ADISCORD_economy_auto_borrow_temp }",
+            "divide": "divide_variable = { var = %s value = ADISCORD_economy_auto_borrow_temp }",
+            "clamp": "clamp_variable = { var = %s min = 0 max = ADISCORD_economy_auto_borrow_temp }",
+        }
+        for account in ("ADISCORD_economy_debt", "ADISCORD_economy_treasury"):
+            canonical_addition = (
+                f"  add_to_variable = {{ var = {account} "
+                "value = ADISCORD_economy_auto_borrow_temp }"
+            )
+            for operation, template in account_write_templates.items():
+                account_write = settlement.replace(
+                    canonical_addition,
+                    canonical_addition + "\n  " + template % account,
+                )
+                with self.subTest(account=account, operation=operation):
+                    self.assertTrue(automatic_borrow_flow_issues(account_write))
+            unrelated_owner_write = settlement.replace(
+                canonical_addition,
+                canonical_addition
+                + f"\n  set_variable = {{ var = {account} value = ADISCORD_unrelated_accounting }}",
+            )
+            with self.subTest(account=account, operation="owner rewrite"):
+                self.assertTrue(
+                    automatic_borrow_flow_issues(unrelated_owner_write)
+                )
         negated_treasury_owner = settlement.replace(
             "limit = { check_variable = { var = ADISCORD_economy_treasury value = 0 compare = less_than } }",
             "limit = { NOT = { check_variable = { var = ADISCORD_economy_treasury value = 0 compare = less_than } } }",

@@ -773,12 +773,18 @@ def automatic_borrow_flow_issues(text: str) -> list[str]:
         )
         if flow_is_exact:
             canonical.extend((source_sets[0], source_negations[0], copies[0]))
+        copy_position = copies[0][0] if len(copies) == 1 else -1
         for account in ("ADISCORD_economy_debt", "ADISCORD_economy_treasury"):
-            owner_additions = [
+            owner_account_writes = [
                 operation
                 for operation in ordered
-                if operation[2].key == "add_to_variable"
+                if operation[0] > copy_position
                 and _direct_scalar(operation[2].value, "var") == account
+            ]
+            owner_additions = [
+                operation
+                for operation in owner_account_writes
+                if operation[2].key == "add_to_variable"
                 and _direct_scalar(operation[2].value, "value")
                 == "ADISCORD_economy_auto_borrow_temp"
             ]
@@ -792,7 +798,8 @@ def automatic_borrow_flow_issues(text: str) -> list[str]:
                 == "ADISCORD_economy_auto_borrow_temp"
             ]
             if (
-                len(owner_additions) != 1
+                len(owner_account_writes) != 1
+                or len(owner_additions) != 1
                 or owner_additions[0][1]
                 or len(all_additions) != 1
             ):
