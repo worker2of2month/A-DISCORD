@@ -83,6 +83,10 @@ ADISCORD_economy_should_monthly_update = {
 }
 
 ADISCORD_economy_should_weekly_update = {
+	has_variable = ADISCORD_economy_initialized
+	has_variable = ADISCORD_economy_weekly_source_cache_ready
+	check_variable = { var = ADISCORD_economy_schema_version value = 14 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 1 compare = greater_than_or_equals }
 	OR = {
 		ADISCORD_economy_is_player_tier_country = yes
 		AND = {
@@ -544,6 +548,29 @@ ADISCORD_economy_has_welfare_universal_provision = { has_idea = ADISCORD_welfare
 ADISCORD_economy_has_welfare_rationed_support = { has_idea = ADISCORD_welfare_rationed_support }
 ADISCORD_economy_has_education_technical_institutes = { has_idea = ADISCORD_education_technical_institutes }
 ADISCORD_economy_has_education_elite_academies = { has_idea = ADISCORD_education_elite_academies }
+
+# Weekly-safe policy and law predicates. Their source has_idea queries are
+# collected by ADISCORD_economy_cache_weekly_policy_sources outside the weekly
+# accounting graph.
+ADISCORD_economy_cached_has_taxation_light_dues = { check_variable = { var = ADISCORD_economy_cached_taxation_light_dues_active value = 1 compare = greater_than_or_equals } }
+ADISCORD_economy_cached_has_taxation_balanced_register = { check_variable = { var = ADISCORD_economy_cached_taxation_balanced_register_active value = 1 compare = greater_than_or_equals } }
+ADISCORD_economy_cached_has_taxation_progressive_brackets = { check_variable = { var = ADISCORD_economy_cached_taxation_progressive_brackets_active value = 1 compare = greater_than_or_equals } }
+ADISCORD_economy_cached_has_taxation_industrial_tariffs = { check_variable = { var = ADISCORD_economy_cached_taxation_industrial_tariffs_active value = 1 compare = greater_than_or_equals } }
+ADISCORD_economy_cached_has_taxation_extraction_quotas = { check_variable = { var = ADISCORD_economy_cached_taxation_extraction_quotas_active value = 1 compare = greater_than_or_equals } }
+ADISCORD_economy_cached_has_industrial_artisan_markets = { check_variable = { var = ADISCORD_economy_cached_industrial_artisan_markets_active value = 1 compare = greater_than_or_equals } }
+ADISCORD_economy_cached_has_industrial_balanced_workshops = { check_variable = { var = ADISCORD_economy_cached_industrial_balanced_workshops_active value = 1 compare = greater_than_or_equals } }
+ADISCORD_economy_cached_has_industrial_civilian_expansion = { check_variable = { var = ADISCORD_economy_cached_industrial_civilian_expansion_active value = 1 compare = greater_than_or_equals } }
+ADISCORD_economy_cached_has_industrial_military_prioritization = { check_variable = { var = ADISCORD_economy_cached_industrial_military_prioritization_active value = 1 compare = greater_than_or_equals } }
+ADISCORD_economy_cached_has_industrial_state_planning = { check_variable = { var = ADISCORD_economy_cached_industrial_state_planning_active value = 1 compare = greater_than_or_equals } }
+ADISCORD_economy_cached_has_labor_loose_contracts = { check_variable = { var = ADISCORD_economy_cached_labor_loose_contracts_active value = 1 compare = greater_than_or_equals } }
+ADISCORD_economy_cached_has_labor_technocratic_work_norms = { check_variable = { var = ADISCORD_economy_cached_labor_technocratic_work_norms_active value = 1 compare = greater_than_or_equals } }
+ADISCORD_economy_cached_has_labor_mobilized_labor = { check_variable = { var = ADISCORD_economy_cached_labor_mobilized_labor_active value = 1 compare = greater_than_or_equals } }
+ADISCORD_economy_cached_has_welfare_basic_services = { check_variable = { var = ADISCORD_economy_cached_welfare_basic_services_active value = 1 compare = greater_than_or_equals } }
+ADISCORD_economy_cached_has_welfare_social_insurance = { check_variable = { var = ADISCORD_economy_cached_welfare_social_insurance_active value = 1 compare = greater_than_or_equals } }
+ADISCORD_economy_cached_has_welfare_universal_provision = { check_variable = { var = ADISCORD_economy_cached_welfare_universal_provision_active value = 1 compare = greater_than_or_equals } }
+ADISCORD_economy_cached_has_welfare_rationed_support = { check_variable = { var = ADISCORD_economy_cached_welfare_rationed_support_active value = 1 compare = greater_than_or_equals } }
+ADISCORD_economy_cached_has_education_technical_institutes = { check_variable = { var = ADISCORD_economy_cached_education_technical_institutes_active value = 1 compare = greater_than_or_equals } }
+ADISCORD_economy_cached_has_education_elite_academies = { check_variable = { var = ADISCORD_economy_cached_education_elite_academies_active value = 1 compare = greater_than_or_equals } }
 ADISCORD_economy_has_military_total_defense_grid = { has_idea = ADISCORD_military_organization_total_defense_grid }
 ADISCORD_economy_has_infrastructure_strategic_highways = { has_idea = ADISCORD_infrastructure_strategic_highways }
 ADISCORD_economy_has_logistics_emergency_requisitioning = { has_idea = ADISCORD_logistics_emergency_requisitioning }

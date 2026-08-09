@@ -2178,12 +2178,17 @@ def validate() -> list[str]:
     require(bool(custom_targets) and max(custom_targets) <= 3,
             "AI economic-building targets are missing or encourage uncontrolled construction")
 
+    factory_source_cache = block(effects, "ADISCORD_economy_cache_weekly_factory_sources")
     construction_expenses = block(effects, "ADISCORD_economy_calculate_construction_expenses")
-    require("num_of_available_civilian_factories" in construction_expenses,
-            "construction expenses ignore actual assigned civilian capacity")
+    require("num_of_available_civilian_factories" in factory_source_cache
+            and "ADISCORD_economy_cached_available_civilian_factories" in construction_expenses
+            and "num_of_available_civilian_factories" not in construction_expenses,
+            "construction expenses do not consume cached assigned civilian capacity")
     military_factory_expenses = block(effects, "ADISCORD_economy_calculate_military_factory_expenses")
-    require("num_of_available_military_factories" in military_factory_expenses,
-            "military-industry expenses ignore actual assigned factories")
+    require("num_of_available_military_factories" in factory_source_cache
+            and "ADISCORD_economy_cached_available_military_factories" in military_factory_expenses
+            and "num_of_available_military_factories" not in military_factory_expenses,
+            "military-industry expenses do not consume cached assigned factories")
     bombing = block(effects, "ADISCORD_economy_update_bombing_disruption")
     require("ADISCORD_economy_damage_index_temp" in bombing and "num_of_civilian_factories" in bombing,
             "bombing damage is not normalized by country industry")

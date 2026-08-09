@@ -189,9 +189,51 @@ ADISCORD_economy_reset_final_factor_variables = {
 	set_variable = { var = ADISCORD_country_development_final_economic_growth_factor_bp value = 100 }
 }
 
+ADISCORD_economy_cache_weekly_policy_sources = {
+	set_variable = { var = ADISCORD_economy_cached_taxation_light_dues_active value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_taxation_balanced_register_active value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_taxation_progressive_brackets_active value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_taxation_industrial_tariffs_active value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_taxation_extraction_quotas_active value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_industrial_artisan_markets_active value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_industrial_balanced_workshops_active value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_industrial_civilian_expansion_active value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_industrial_military_prioritization_active value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_industrial_state_planning_active value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_labor_loose_contracts_active value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_labor_technocratic_work_norms_active value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_labor_mobilized_labor_active value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_welfare_basic_services_active value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_welfare_social_insurance_active value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_welfare_universal_provision_active value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_welfare_rationed_support_active value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_education_technical_institutes_active value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_education_elite_academies_active value = 0 }
+	if = { limit = { ADISCORD_economy_has_taxation_light_dues = yes } set_variable = { var = ADISCORD_economy_cached_taxation_light_dues_active value = 1 } }
+	if = { limit = { ADISCORD_economy_has_taxation_balanced_register = yes } set_variable = { var = ADISCORD_economy_cached_taxation_balanced_register_active value = 1 } }
+	if = { limit = { ADISCORD_economy_has_taxation_progressive_brackets = yes } set_variable = { var = ADISCORD_economy_cached_taxation_progressive_brackets_active value = 1 } }
+	if = { limit = { ADISCORD_economy_has_taxation_industrial_tariffs = yes } set_variable = { var = ADISCORD_economy_cached_taxation_industrial_tariffs_active value = 1 } }
+	if = { limit = { ADISCORD_economy_has_taxation_extraction_quotas = yes } set_variable = { var = ADISCORD_economy_cached_taxation_extraction_quotas_active value = 1 } }
+	if = { limit = { ADISCORD_economy_has_industrial_artisan_markets = yes } set_variable = { var = ADISCORD_economy_cached_industrial_artisan_markets_active value = 1 } }
+	if = { limit = { ADISCORD_economy_has_industrial_balanced_workshops = yes } set_variable = { var = ADISCORD_economy_cached_industrial_balanced_workshops_active value = 1 } }
+	if = { limit = { ADISCORD_economy_has_industrial_civilian_expansion = yes } set_variable = { var = ADISCORD_economy_cached_industrial_civilian_expansion_active value = 1 } }
+	if = { limit = { ADISCORD_economy_has_industrial_military_prioritization = yes } set_variable = { var = ADISCORD_economy_cached_industrial_military_prioritization_active value = 1 } }
+	if = { limit = { ADISCORD_economy_has_industrial_state_planning = yes } set_variable = { var = ADISCORD_economy_cached_industrial_state_planning_active value = 1 } }
+	if = { limit = { ADISCORD_economy_has_labor_loose_contracts = yes } set_variable = { var = ADISCORD_economy_cached_labor_loose_contracts_active value = 1 } }
+	if = { limit = { ADISCORD_economy_has_labor_technocratic_work_norms = yes } set_variable = { var = ADISCORD_economy_cached_labor_technocratic_work_norms_active value = 1 } }
+	if = { limit = { ADISCORD_economy_has_labor_mobilized_labor = yes } set_variable = { var = ADISCORD_economy_cached_labor_mobilized_labor_active value = 1 } }
+	if = { limit = { ADISCORD_economy_has_welfare_basic_services = yes } set_variable = { var = ADISCORD_economy_cached_welfare_basic_services_active value = 1 } }
+	if = { limit = { ADISCORD_economy_has_welfare_social_insurance = yes } set_variable = { var = ADISCORD_economy_cached_welfare_social_insurance_active value = 1 } }
+	if = { limit = { ADISCORD_economy_has_welfare_universal_provision = yes } set_variable = { var = ADISCORD_economy_cached_welfare_universal_provision_active value = 1 } }
+	if = { limit = { ADISCORD_economy_has_welfare_rationed_support = yes } set_variable = { var = ADISCORD_economy_cached_welfare_rationed_support_active value = 1 } }
+	if = { limit = { ADISCORD_economy_has_education_technical_institutes = yes } set_variable = { var = ADISCORD_economy_cached_education_technical_institutes_active value = 1 } }
+	if = { limit = { ADISCORD_economy_has_education_elite_academies = yes } set_variable = { var = ADISCORD_economy_cached_education_elite_academies_active value = 1 } }
+}
+
 ADISCORD_economy_recalculate_policy_modifiers = {
 	ADISCORD_economy_initialize_modifier_variables = yes
 	ADISCORD_economy_reset_policy_modifier_variables = yes
+	ADISCORD_economy_cache_weekly_policy_sources = yes
 
 	# Cache mutually exclusive law effects once. Forecast and cash-settlement
 	# effects consume these scalar variables without repeated has_idea queries.

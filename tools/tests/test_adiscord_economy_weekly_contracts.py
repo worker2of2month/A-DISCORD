@@ -178,6 +178,96 @@ def reachable_script_blocks(texts, roots):
     }
 
 
+WEEKLY_ACCOUNTING_ROOTS = (
+    "ADISCORD_economy_prepare_weekly_country",
+    "ADISCORD_economy_light_update",
+    "ADISCORD_economy_apply_weekly_balance",
+)
+
+WEEKLY_FORBIDDEN_EXACT_TOKENS = {
+    "has_idea",
+    "every_country",
+    "any_country",
+    "any_enemy_country",
+    "random_country",
+    "every_state",
+    "any_state",
+    "every_owned_state",
+    "all_owned_state",
+    "random_owned_state",
+    "every_controlled_state",
+    "num_of_civilian_factories",
+    "num_of_available_civilian_factories",
+    "num_of_military_factories",
+    "num_of_available_military_factories",
+    "num_of_naval_factories",
+}
+
+WEEKLY_FORBIDDEN_DEFINITIONS = {
+    "ADISCORD_economy_initialize_country",
+    "ADISCORD_economy_initialize_variables",
+    "ADISCORD_economy_migrate_schema",
+    "ADISCORD_economy_monthly_update",
+    "ADISCORD_economy_yearly_update",
+    "ADISCORD_economy_full_refresh",
+    "ADISCORD_economy_full_refresh_if_needed",
+    "ADISCORD_economy_recount_economic_buildings",
+    "ADISCORD_economy_count_buildings",
+    "ADISCORD_economy_update_model_and_cycle",
+    "ADISCORD_economy_calculate_development_multiplier",
+    "ADISCORD_economy_recalculate_policy_modifiers",
+    "ADISCORD_economy_calculate_final_modifier_factors",
+    "ADISCORD_economy_apply_visible_modifier_definition_factors",
+    "ADISCORD_economy_refresh_spending_ideas",
+    "ADISCORD_economy_refresh_policy_previews",
+    "ADISCORD_economy_preview_tax_policy",
+    "ADISCORD_economy_preview_army_policy",
+    "ADISCORD_economy_preview_research_policy",
+    "ADISCORD_economy_preview_social_policy",
+    "ADISCORD_economy_update_gui",
+}
+
+WEEKLY_FORBIDDEN_TOKEN_PREFIXES = (
+    "building_level@",
+    "damaged_building_level@",
+    "non_damaged_building_level",
+    "modifier@",
+)
+
+
+def weekly_reachability_issues(texts, roots=WEEKLY_ACCOUNTING_ROOTS):
+    """Classify heavy operations in the parsed transitive weekly graph."""
+
+    issues = []
+    reachable = reachable_script_entries(tuple(texts), tuple(roots))
+    for name, definition in reachable.items():
+        if name in WEEKLY_FORBIDDEN_DEFINITIONS:
+            issues.append(f"{name}: forbidden weekly facade")
+        keys = []
+        scalar_values = []
+        for _, entry in _walk_parsed(definition.value):
+            keys.append(entry.key)
+            if isinstance(entry.value, str):
+                scalar_values.append(entry.value)
+        offenders = sorted(
+            {
+                token
+                for token in keys
+                if token in WEEKLY_FORBIDDEN_EXACT_TOKENS
+                or any(token.startswith(prefix) for prefix in WEEKLY_FORBIDDEN_TOKEN_PREFIXES)
+            }
+            | {
+                token
+                for token in scalar_values
+                if token.startswith("num_of_")
+                or any(token.startswith(prefix) for prefix in WEEKLY_FORBIDDEN_TOKEN_PREFIXES)
+            }
+        )
+        if offenders:
+            issues.append(f"{name}: {', '.join(offenders)}")
+    return issues
+
+
 def numeric_values(text, key):
     return [
         float(value)
@@ -1512,6 +1602,46 @@ ADISCORD_heavy = { has_idea = forbidden }
         with self.assertRaisesRegex(AssertionError, "duplicate"):
             reachable_script_entries((graph + "\nADISCORD_heavy = { always = yes }",), ("ADISCORD_root",))
 
+    def test_weekly_heavy_analyzer_rejects_all_edge_shapes_without_decoy_noise(self):
+        clean = """
+ADISCORD_root = {
+  ADISCORD_safe = yes
+  quoted_decoy = "has_idea"
+  quoted_call_decoy = "ADISCORD_heavy = yes"
+  # has_idea = forbidden
+}
+ADISCORD_safe = { check_variable = { var = cached_value value = 1 compare = equals } }
+ADISCORD_heavy = { has_idea = forbidden }
+ADISCORD_cycle = { ADISCORD_root = yes }
+"""
+        self.assertEqual(weekly_reachability_issues((clean,), ("ADISCORD_root",)), [])
+        mutations = {
+            "scalar heavy edge": clean.replace(
+                "ADISCORD_safe = yes", "ADISCORD_safe = yes ADISCORD_heavy = yes", 1
+            ),
+            "parameter heavy edge": clean.replace(
+                "ADISCORD_safe = yes",
+                "ADISCORD_safe = yes ADISCORD_heavy = { ARG = value }",
+                1,
+            ),
+            "cycle-hidden heavy edge": clean.replace(
+                "ADISCORD_safe = {",
+                "ADISCORD_safe = { ADISCORD_cycle = yes ADISCORD_heavy = yes",
+                1,
+            ),
+        }
+        for name, mutation in mutations.items():
+            with self.subTest(mutation=name):
+                self.assertTrue(
+                    weekly_reachability_issues((mutation,), ("ADISCORD_root",)),
+                    name,
+                )
+        with self.assertRaisesRegex(AssertionError, "duplicate"):
+            weekly_reachability_issues(
+                (clean + "\nADISCORD_heavy = { always = yes }",),
+                ("ADISCORD_root",),
+            )
+
     def test_ai_assistance_requires_remove_first_ai_gate_and_exact_conditions(self):
         self.assertEqual(
             ai_assistance_contract_issues(self.ASSISTANCE_IDEAS, self.ASSISTANCE_EFFECT),
@@ -2353,15 +2483,26 @@ class WeeklyEconomyContracts(unittest.TestCase):
         construction = unique_block(
             EFFECTS, "ADISCORD_economy_calculate_construction_expenses"
         )
-        for activity_scalar in (
-            "num_of_civilian_factories",
-            "num_of_available_civilian_factories",
+        factory_cache = unique_block(
+            EFFECTS, "ADISCORD_economy_cache_weekly_factory_sources"
+        )
+        for activity_scalar, cached_scalar in (
+            (
+                "num_of_civilian_factories",
+                "ADISCORD_economy_cached_civilian_factories",
+            ),
+            (
+                "num_of_available_civilian_factories",
+                "ADISCORD_economy_cached_available_civilian_factories",
+            ),
         ):
-            self.assertIn(activity_scalar, construction)
+            self.assertIn(activity_scalar, factory_cache)
+            self.assertIn(cached_scalar, construction)
+            self.assertNotIn(activity_scalar, construction)
         self.assertRegex(
             construction,
             r"subtract_from_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_active_construction_temp"
-            r"\s+value\s*=\s*num_of_available_civilian_factories\s*\}",
+            r"\s+value\s*=\s*ADISCORD_economy_cached_available_civilian_factories\s*\}",
         )
         self.assertNotIn("spending_mode", construction)
         development = unique_block(
@@ -3703,38 +3844,205 @@ class WeeklyEconomyContracts(unittest.TestCase):
         self.assertEqual(len(re.findall(r"(?m)^\s*else_if\s*=", sync)), 3)
 
     def test_weekly_path_has_no_idea_query_building_recount_or_country_iteration(self):
-        reachable = reachable_script_blocks(
-            (EFFECTS, MODIFIER_EFFECTS, TRIGGERS),
-            (
-                "ADISCORD_economy_prepare_weekly_country",
-                "ADISCORD_economy_light_update",
-                "ADISCORD_economy_apply_weekly_balance",
+        sources = (EFFECTS, MODIFIER_EFFECTS, TRIGGERS)
+        self.assertFalse(weekly_reachability_issues(sources))
+
+        settlement_anchor = "\tADISCORD_economy_clamp_treasury = yes"
+        self.assertIn(settlement_anchor, EFFECTS)
+        mutations = {
+            "automatic borrowing rebuilds spending ideas": EFFECTS.replace(
+                settlement_anchor,
+                settlement_anchor + "\n\tADISCORD_economy_refresh_spending_ideas = yes",
+                1,
             ),
-        )
-        forbidden_tokens = (
-            "has_idea",
-            "every_country",
-            "any_country",
-            "every_owned_state",
-            "all_owned_state",
-            "num_of_civilian_factories",
-            "num_of_available_civilian_factories",
-            "num_of_military_factories",
-            "num_of_available_military_factories",
-            "ADISCORD_economy_recount_economic_buildings",
-            "ADISCORD_economy_full_refresh",
-            "ADISCORD_economy_full_refresh_if_needed",
-            "ADISCORD_economy_recalculate_policy_modifiers",
-            "ADISCORD_economy_apply_visible_modifier_definition_factors",
-            "ADISCORD_economy_refresh_spending_ideas",
-            "ADISCORD_economy_update_gui",
-        )
-        offenders = {
-            name: [token for token in forbidden_tokens if token in body]
-            for name, body in reachable.items()
-            if any(token in body for token in forbidden_tokens)
+            "automatic borrowing reaches a parameterized full refresh": EFFECTS.replace(
+                settlement_anchor,
+                settlement_anchor + "\n\tADISCORD_economy_full_refresh = { FORCE = yes }",
+                1,
+            ),
+            "automatic borrowing performs a direct idea query": EFFECTS.replace(
+                settlement_anchor,
+                settlement_anchor + "\n\tif = { limit = { has_idea = forbidden } always = yes }",
+                1,
+            ),
         }
-        self.assertFalse(offenders, f"heavy weekly reachability: {offenders}")
+        for name, mutation in mutations.items():
+            with self.subTest(mutation=name):
+                self.assertTrue(
+                    weekly_reachability_issues((mutation, MODIFIER_EFFECTS, TRIGGERS)),
+                    name,
+                )
+
+    def test_weekly_ready_gate_prevents_uninitialized_or_unmigrated_settlement(self):
+        prepare = unique_block(EFFECTS, "ADISCORD_economy_prepare_weekly_country")
+        weekly = unique_block(EFFECTS, "ADISCORD_economy_weekly_update")
+        should_weekly = unique_block(TRIGGERS, "ADISCORD_economy_should_weekly_update")
+        for body in (prepare, should_weekly):
+            self.assertIn("has_variable = ADISCORD_economy_initialized", body)
+            self.assertIn("has_variable = ADISCORD_economy_weekly_source_cache_ready", body)
+            self.assertRegex(
+                body,
+                r"check_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_schema_version"
+                r"\s+value\s*=\s*14\s+compare\s*=\s*greater_than_or_equals\s*\}",
+            )
+        self.assertEqual(
+            prepare.count(
+                "set_variable = { var = ADISCORD_economy_weekly_ready value = 0 }"
+            ),
+            1,
+        )
+        self.assertEqual(
+            prepare.count(
+                "set_variable = { var = ADISCORD_economy_weekly_ready value = 1 }"
+            ),
+            1,
+        )
+        self.assertNotIn("ADISCORD_economy_initialize_country", prepare)
+        self.assertNotIn("ADISCORD_economy_migrate_schema", prepare)
+        self.assertRegex(
+            weekly,
+            r"(?s)^\s*ADISCORD_economy_prepare_weekly_country\s*=\s*yes\s*"
+            r"if\s*=\s*\{\s*limit\s*=\s*\{\s*check_variable\s*=\s*\{\s*"
+            r"var\s*=\s*ADISCORD_economy_weekly_ready\s+value\s*=\s*1\s+"
+            r"compare\s*=\s*greater_than_or_equals\s*\}\s*\}\s*"
+            r"ADISCORD_economy_light_update\s*=\s*yes\s*"
+            r"ADISCORD_economy_apply_weekly_balance\s*=\s*yes",
+        )
+
+    def test_weekly_query_caches_have_bounded_refresh_and_invalidation_owners(self):
+        factory_cache = unique_block(
+            EFFECTS, "ADISCORD_economy_cache_weekly_factory_sources"
+        )
+        factory_sources = {
+            "ADISCORD_economy_cached_civilian_factories": "num_of_civilian_factories",
+            "ADISCORD_economy_cached_available_civilian_factories": "num_of_available_civilian_factories",
+            "ADISCORD_economy_cached_military_factories": "num_of_military_factories",
+            "ADISCORD_economy_cached_available_military_factories": "num_of_available_military_factories",
+            "ADISCORD_economy_cached_naval_factories": "num_of_naval_factories",
+        }
+        for variable, source in factory_sources.items():
+            self.assertEqual(factory_cache.count(source), 1, source)
+            self.assertRegex(
+                factory_cache,
+                rf"set_variable\s*=\s*\{{\s*var\s*=\s*{variable}\s+value\s*=\s*{source}\s*\}}",
+            )
+
+        policy_cache = unique_block(
+            MODIFIER_EFFECTS, "ADISCORD_economy_cache_weekly_policy_sources"
+        )
+        policy_suffixes = (
+            "taxation_light_dues",
+            "taxation_balanced_register",
+            "taxation_progressive_brackets",
+            "taxation_industrial_tariffs",
+            "taxation_extraction_quotas",
+            "industrial_artisan_markets",
+            "industrial_balanced_workshops",
+            "industrial_civilian_expansion",
+            "industrial_military_prioritization",
+            "industrial_state_planning",
+            "labor_loose_contracts",
+            "labor_technocratic_work_norms",
+            "labor_mobilized_labor",
+            "welfare_basic_services",
+            "welfare_social_insurance",
+            "welfare_universal_provision",
+            "welfare_rationed_support",
+            "education_technical_institutes",
+            "education_elite_academies",
+        )
+        for suffix in policy_suffixes:
+            source_trigger = f"ADISCORD_economy_has_{suffix}"
+            cached_variable = f"ADISCORD_economy_cached_{suffix}_active"
+            cached_trigger = f"ADISCORD_economy_cached_has_{suffix}"
+            self.assertEqual(policy_cache.count(f"{source_trigger} = yes"), 1, suffix)
+            self.assertIn(cached_variable, policy_cache)
+            cached_body = unique_block(TRIGGERS, cached_trigger)
+            self.assertIn(cached_variable, cached_body)
+            self.assertNotIn("has_idea", cached_body)
+
+        recalculate = unique_block(
+            MODIFIER_EFFECTS, "ADISCORD_economy_recalculate_policy_modifiers"
+        )
+        self.assertEqual(
+            recalculate.count("ADISCORD_economy_cache_weekly_policy_sources = yes"),
+            1,
+        )
+        full_refresh = unique_block(EFFECTS, "ADISCORD_economy_full_refresh")
+        ordered = (
+            "ADISCORD_economy_recount_economic_buildings = yes",
+            "ADISCORD_economy_cache_weekly_factory_sources = yes",
+            "ADISCORD_economy_recalculate_policy_modifiers = yes",
+            "set_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 1 }",
+            "ADISCORD_economy_clear_dirty = yes",
+        )
+        positions = [full_refresh.find(token) for token in ordered]
+        self.assertTrue(all(position >= 0 for position in positions), positions)
+        self.assertEqual(positions, sorted(positions))
+
+        all_sources = (EFFECTS, MODIFIER_EFFECTS, TRIGGERS)
+        for owner in (
+            "ADISCORD_economy_initialize_country",
+            "ADISCORD_economy_migrate_schema",
+            "ADISCORD_economy_monthly_update",
+            "ADISCORD_economy_yearly_update",
+            "ADISCORD_economy_open_window",
+        ):
+            reachable = reachable_script_entries(all_sources, (owner,))
+            self.assertIn("ADISCORD_economy_cache_weekly_factory_sources", reachable, owner)
+            self.assertIn("ADISCORD_economy_cache_weekly_policy_sources", reachable, owner)
+        migration = unique_block(EFFECTS, "ADISCORD_economy_migrate_schema")
+        self.assertIn("ADISCORD_economy_full_refresh_if_needed = yes", migration)
+        dirty = unique_block(EFFECTS, "ADISCORD_economy_mark_dirty")
+        self.assertIn(
+            "set_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 }",
+            dirty,
+        )
+        defaults = unique_block(EFFECTS, "ADISCORD_economy_set_default_values")
+        self.assertIn(
+            "set_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 0 }",
+            defaults,
+        )
+
+    def test_weekly_forecast_reprices_live_debt_and_inflation_from_cached_sources(self):
+        reachable = reachable_script_entries(
+            (EFFECTS, MODIFIER_EFFECTS, TRIGGERS),
+            ("ADISCORD_economy_light_update",),
+        )
+        for definition in (
+            "ADISCORD_economy_calculate_income",
+            "ADISCORD_economy_calculate_expenses",
+            "ADISCORD_economy_calculate_debt_metrics",
+            "ADISCORD_economy_calculate_interest_rate",
+            "ADISCORD_economy_calculate_monthly_balance",
+            "ADISCORD_economy_calculate_weekly_budget",
+        ):
+            self.assertIn(definition, reachable)
+        interest = unique_block(EFFECTS, "ADISCORD_economy_calculate_interest_rate")
+        metrics = unique_block(EFFECTS, "ADISCORD_economy_calculate_debt_metrics")
+
+        def live_input_issues(interest_body, metric_body):
+            issues = []
+            for variable in (
+                "ADISCORD_economy_inflation",
+                "ADISCORD_economy_fiscal_stress",
+            ):
+                if not re.search(rf"\b{re.escape(variable)}\b", interest_body):
+                    issues.append(f"interest rate lost live {variable}")
+            if not re.search(
+                r"\bvalue\s*=\s*ADISCORD_economy_debt\b", metric_body
+            ):
+                issues.append("debt metrics lost live principal")
+            return issues
+
+        self.assertEqual(live_input_issues(interest, metrics), [])
+        mutations = (
+            (interest.replace("ADISCORD_economy_inflation", "ADISCORD_economy_cached_inflation"), metrics),
+            (interest.replace("ADISCORD_economy_fiscal_stress", "ADISCORD_economy_cached_fiscal_stress"), metrics),
+            (interest, metrics.replace("value = ADISCORD_economy_debt", "value = ADISCORD_economy_cached_debt", 1)),
+        )
+        for mutation in mutations:
+            self.assertTrue(live_input_issues(*mutation))
 
     def test_ai_assistance_is_bounded_reversible_and_never_player_visible(self):
         for relative in (
@@ -4361,8 +4669,12 @@ class WeeklyEconomyContracts(unittest.TestCase):
 
     def test_weekly_prepare_does_not_recalculate_simulation_tier(self):
         prepare = block(EFFECTS, "ADISCORD_economy_prepare_weekly_country")
-        self.assertIn("ADISCORD_economy_migrate_schema = yes", prepare)
+        self.assertIn("has_variable = ADISCORD_economy_initialized", prepare)
+        self.assertIn("has_variable = ADISCORD_economy_weekly_source_cache_ready", prepare)
+        self.assertIn("ADISCORD_economy_weekly_ready value = 1", prepare)
         for forbidden in (
+            "ADISCORD_economy_initialize_country",
+            "ADISCORD_economy_migrate_schema",
             "ADISCORD_economy_set_simulation_tier",
             "ADISCORD_economy_is_primary_tier_country",
             "any_enemy_country",
