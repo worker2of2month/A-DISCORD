@@ -115,6 +115,17 @@ def unique_block(text, name):
     return bodies[0]
 
 
+def unique_defined_text(text, name):
+    bodies = [
+        body
+        for body in assignment_blocks(text, "defined_text")
+        if re.search(rf"(?m)^\s*name\s*=\s*{re.escape(name)}\s*$", body)
+    ]
+    if len(bodies) != 1:
+        raise AssertionError(f"expected one defined_text {name}, found {len(bodies)}")
+    return bodies[0]
+
+
 def top_level_blocks(text):
     """Parse top-level scripted definitions without accepting shadow copies."""
 
@@ -165,6 +176,38 @@ def numeric_values(text, key):
             text,
         )
     ]
+
+
+def policy_multiplier_rows(text, target_variable, output_variables):
+    """Extract exact, condition-owned rows from one policy multiplier table."""
+
+    rows = {}
+    for branch_name in ("if", "else_if"):
+        for body in assignment_blocks(text, branch_name):
+            operations = tuple(
+                (operation, variable, float(value))
+                for operation, variable, value in re.findall(
+                    r"\b(multiply_variable|add_to_variable)\s*=\s*\{\s*var\s*=\s*"
+                    r"(ADISCORD_economy_[A-Za-z0-9_]+)\s+value\s*=\s*"
+                    r"(-?\d+(?:\.\d+)?)\s*\}",
+                    body,
+                )
+                if variable in output_variables
+            )
+            if not operations:
+                continue
+            owner = re.search(
+                rf"check_variable\s*=\s*\{{\s*var\s*=\s*{re.escape(target_variable)}"
+                r"\s+value\s*=\s*([1-5])\s+compare\s*=\s*equals\s*\}",
+                body,
+            )
+            if not owner:
+                continue
+            level = int(owner.group(1))
+            if level in rows:
+                raise AssertionError(f"duplicate policy multiplier row: {level}")
+            rows[level] = operations
+    return rows
 
 
 def localisation_key_set(text):
@@ -908,6 +951,312 @@ class WeeklyEconomyContracts(unittest.TestCase):
         )
         self.assertTrue(all(value <= 0.03 for value in all_construction_bonuses))
 
+    def test_policy_accounting_tables_have_five_exact_condition_owned_levels(self):
+        tax_outputs = {
+            "ADISCORD_economy_personal_income",
+            "ADISCORD_economy_business_income",
+            "ADISCORD_economy_factory_income",
+            "ADISCORD_economy_consumer_goods_income",
+        }
+        expected_tax = {
+            1: (
+                ("multiply_variable", "ADISCORD_economy_personal_income", 0.65),
+                ("multiply_variable", "ADISCORD_economy_business_income", 0.85),
+                ("multiply_variable", "ADISCORD_economy_factory_income", 0.90),
+                ("add_to_variable", "ADISCORD_economy_consumer_goods_income", 0.30),
+            ),
+            2: (
+                ("multiply_variable", "ADISCORD_economy_personal_income", 0.85),
+                ("multiply_variable", "ADISCORD_economy_business_income", 0.95),
+                ("multiply_variable", "ADISCORD_economy_factory_income", 0.95),
+                ("add_to_variable", "ADISCORD_economy_consumer_goods_income", 0.10),
+            ),
+            3: (
+                ("multiply_variable", "ADISCORD_economy_personal_income", 1.00),
+                ("multiply_variable", "ADISCORD_economy_business_income", 1.00),
+                ("multiply_variable", "ADISCORD_economy_factory_income", 1.00),
+                ("add_to_variable", "ADISCORD_economy_consumer_goods_income", 0.00),
+            ),
+            4: (
+                ("multiply_variable", "ADISCORD_economy_personal_income", 1.15),
+                ("multiply_variable", "ADISCORD_economy_business_income", 1.08),
+                ("multiply_variable", "ADISCORD_economy_factory_income", 1.05),
+                ("add_to_variable", "ADISCORD_economy_consumer_goods_income", -0.10),
+            ),
+            5: (
+                ("multiply_variable", "ADISCORD_economy_personal_income", 1.35),
+                ("multiply_variable", "ADISCORD_economy_business_income", 1.15),
+                ("multiply_variable", "ADISCORD_economy_factory_income", 1.10),
+                ("add_to_variable", "ADISCORD_economy_consumer_goods_income", -0.30),
+            ),
+        }
+        tables = {
+            "tax": (
+                "ADISCORD_economy_apply_tax_burden_to_income",
+                "ADISCORD_economy_tax_burden_mode",
+                tax_outputs,
+                expected_tax,
+            ),
+            "army": (
+                "ADISCORD_economy_calculate_army_expenses",
+                "ADISCORD_economy_army_spending_mode",
+                {"ADISCORD_economy_army_expenses"},
+                {
+                    level: (("multiply_variable", "ADISCORD_economy_army_expenses", factor),)
+                    for level, factor in enumerate((0.50, 0.75, 1.00, 1.50, 2.50), 1)
+                },
+            ),
+            "research": (
+                "ADISCORD_economy_calculate_research_expenses",
+                "ADISCORD_economy_research_spending_mode",
+                {"ADISCORD_economy_research_expenses"},
+                {
+                    level: (("multiply_variable", "ADISCORD_economy_research_expenses", factor),)
+                    for level, factor in enumerate((0.60, 0.80, 1.00, 1.30, 1.60), 1)
+                },
+            ),
+            "social": (
+                "ADISCORD_economy_calculate_social_expenses",
+                "ADISCORD_economy_social_spending_mode",
+                {"ADISCORD_economy_social_expenses"},
+                {
+                    level: (("multiply_variable", "ADISCORD_economy_social_expenses", factor),)
+                    for level, factor in enumerate((0.45, 0.75, 1.00, 1.35, 1.80), 1)
+                },
+            ),
+        }
+        for policy, (effect_name, target, outputs, expected) in tables.items():
+            with self.subTest(policy=policy):
+                effect = unique_block(EFFECTS, effect_name)
+                self.assertEqual(policy_multiplier_rows(effect, target, outputs), expected)
+
+        research = unique_block(EFFECTS, "ADISCORD_economy_calculate_research_expenses")
+        for level in range(1, 6):
+            with self.subTest(mutation=f"research level {level} unconditional"):
+                mutation = re.sub(
+                    rf"check_variable\s*=\s*\{{\s*var\s*=\s*ADISCORD_economy_research_spending_mode"
+                    rf"\s+value\s*=\s*{level}\s+compare\s*=\s*equals\s*\}}",
+                    "always = yes",
+                    research,
+                    count=1,
+                )
+                self.assertNotEqual(
+                    policy_multiplier_rows(
+                        mutation,
+                        "ADISCORD_economy_research_spending_mode",
+                        {"ADISCORD_economy_research_expenses"},
+                    ),
+                    tables["research"][3],
+                )
+
+    def test_policy_previews_cache_clamped_targets_and_exact_weekly_balance_deltas(self):
+        refresh = unique_block(EFFECTS, "ADISCORD_economy_refresh_policy_previews")
+        for policy, mode in (
+            ("tax", "tax_burden"),
+            ("army", "army_spending"),
+            ("research", "research_spending"),
+            ("social", "social_spending"),
+        ):
+            for direction, offset in (("increase", "1"), ("decrease", "-1")):
+                target = f"ADISCORD_economy_{policy}_{direction}_target_level"
+                delta = f"ADISCORD_economy_{policy}_{direction}_weekly_balance_delta"
+                self.assertRegex(
+                    refresh,
+                    rf"set_variable\s*=\s*\{{\s*var\s*=\s*{target}\s+value\s*=\s*"
+                    rf"ADISCORD_economy_{mode}_mode\s*\}}",
+                )
+                self.assertRegex(
+                    refresh,
+                    rf"add_to_variable\s*=\s*\{{\s*var\s*=\s*{target}\s+value\s*=\s*{re.escape(offset)}\s*\}}",
+                )
+                self.assertRegex(
+                    refresh,
+                    rf"clamp_variable\s*=\s*\{{\s*var\s*=\s*{target}\s+min\s*=\s*1\s+max\s*=\s*5\s*\}}",
+                )
+                self.assertRegex(
+                    refresh,
+                    rf"set_variable\s*=\s*\{{\s*var\s*=\s*{delta}\s+value\s*=\s*"
+                    r"ADISCORD_economy_policy_preview_weekly_delta_temp\s*\}",
+                )
+
+            preview = unique_block(EFFECTS, f"ADISCORD_economy_preview_{policy}_policy")
+            preview_blocks = reachable_script_blocks(
+                (EFFECTS,), (f"ADISCORD_economy_preview_{policy}_policy",)
+            )
+            preview_graph = "\n".join(preview_blocks.values())
+            self.assertIn(
+                f"ADISCORD_economy_{mode}_mode value = ADISCORD_economy_policy_preview_target_temp",
+                preview,
+            )
+            self.assertIn("ADISCORD_economy_policy_preview_weekly_delta_temp", preview_graph)
+            self.assertNotIn("every_country", preview_graph)
+            self.assertNotIn("every_owned_state", preview_graph)
+            if policy == "tax":
+                self.assertIn("ADISCORD_economy_recalculate_tax_dependent_income = yes", preview)
+                self.assertIn("value = 3", preview)
+                self.assertIn("value = 13", preview)
+            else:
+                self.assertIn(
+                    f"ADISCORD_economy_calculate_{policy}_expenses = yes", preview
+                )
+                self.assertIn("ADISCORD_economy_policy_preview_uses_cached_base_temp", preview)
+                self.assertIn(
+                    "ADISCORD_economy_finish_expense_policy_preview", preview_blocks
+                )
+
+        expense_finish = unique_block(
+            EFFECTS, "ADISCORD_economy_finish_expense_policy_preview"
+        )
+        self.assertIn("value = 3", expense_finish)
+        self.assertIn("value = 13", expense_finish)
+
+    def test_each_policy_click_reaches_only_its_targeted_refresh_path(self):
+        expected = {
+            "tax": "ADISCORD_economy_refresh_tax_policy",
+            "army": "ADISCORD_economy_refresh_army_policy",
+            "research": "ADISCORD_economy_refresh_research_policy",
+            "social": "ADISCORD_economy_refresh_social_policy",
+        }
+        forbidden = (
+            "ADISCORD_economy_full_refresh",
+            "ADISCORD_economy_light_update",
+            "ADISCORD_economy_recount_economic_buildings",
+            "ADISCORD_economy_count_buildings",
+            "ADISCORD_economy_calculate_income",
+            "ADISCORD_economy_calculate_expenses",
+            "ADISCORD_economy_recalculate_policy_modifiers",
+            "ADISCORD_economy_refresh_spending_ideas",
+            "every_country",
+            "every_owned_state",
+        )
+        for policy, refresh_name in expected.items():
+            for direction in ("increase", "decrease"):
+                noun = "tax_burden" if policy == "tax" else f"{policy}_spending"
+                mutator = f"ADISCORD_economy_{direction}_{noun}"
+                body = unique_block(EFFECTS, mutator)
+                self.assertIn(f"{refresh_name} = yes", body, mutator)
+                reachable = reachable_script_blocks((EFFECTS,), (mutator,))
+                flattened = "\n".join(reachable.values())
+                for forbidden_name in forbidden:
+                    self.assertNotIn(forbidden_name, flattened, mutator)
+
+        for policy, refresh_name in expected.items():
+            refresh = unique_block(EFFECTS, refresh_name)
+            self.assertIn(
+                "ADISCORD_economy_finish_targeted_policy_refresh = yes", refresh
+            )
+            if policy == "tax":
+                self.assertIn("ADISCORD_economy_calculate_macro_indicators = yes", refresh)
+            else:
+                self.assertIn(f"ADISCORD_economy_calculate_{policy}_expenses = yes", refresh)
+                self.assertNotIn("ADISCORD_economy_calculate_macro_indicators", refresh)
+
+        targeted_tail = unique_block(
+            EFFECTS, "ADISCORD_economy_finish_targeted_policy_refresh"
+        )
+        self.assertEqual(
+            set(re.findall(r"\b(ADISCORD_economy_[A-Za-z0-9_]+)\s*=\s*yes", targeted_tail)),
+            {
+                "ADISCORD_economy_sum_expenses",
+                "ADISCORD_economy_calculate_monthly_balance",
+                "ADISCORD_economy_calculate_weekly_budget",
+                "ADISCORD_economy_refresh_policy_previews",
+                "ADISCORD_economy_update_gui",
+            },
+        )
+
+        facade = unique_block(
+            EFFECTS, "ADISCORD_economy_refresh_after_budget_control_change"
+        )
+        self.assertEqual(
+            facade.strip(), "ADISCORD_economy_refresh_research_policy = yes"
+        )
+        for direction in ("increase", "decrease"):
+            construction = unique_block(
+                SCRIPTED_GUI, f"ADISCORD_economy_construction_{direction}_click"
+            )
+            self.assertEqual(
+                construction.strip(),
+                f"ADISCORD_economy_{direction}_research_spending = yes",
+            )
+
+    def test_policy_preview_selectors_use_cached_directional_targets(self):
+        effect_prefixes = {
+            "tax": "ADISCORD_economy_tax_effects",
+            "army": "ADISCORD_economy_army_effects",
+            "research": "ADISCORD_economy_construction_effects",
+            "social": "ADISCORD_economy_social_effects",
+        }
+        for policy, localisation_prefix in effect_prefixes.items():
+            for direction in ("Increase", "Decrease"):
+                selector = unique_defined_text(
+                    SCRIPTED_LOC,
+                    f"GetADISCORDEconomy{policy.title()}{direction}PreviewLoc",
+                )
+                target = (
+                    f"ADISCORD_economy_{policy}_{direction.lower()}_target_level"
+                )
+                self.assertEqual(selector.count(target), 4)
+                for level in range(1, 6):
+                    self.assertIn(f"{localisation_prefix}_{level}", selector)
+
+        for direction in ("Increase", "Decrease"):
+            compatibility = unique_defined_text(
+                SCRIPTED_LOC,
+                f"GetADISCORDConstruction{direction}PolicyPreviewLoc",
+            )
+            self.assertIn(
+                f"ADISCORD_economy_research_{direction.lower()}_target_level",
+                compatibility,
+            )
+            self.assertIn("ADISCORD_economy_construction_effects_5", compatibility)
+
+    def test_policy_previews_are_side_effect_bounded_and_restore_live_state(self):
+        restored = {
+            "tax": {
+                "ADISCORD_economy_tax_burden_mode": "ADISCORD_economy_policy_preview_saved_mode_temp",
+                "ADISCORD_economy_monthly_income": "ADISCORD_economy_policy_preview_current_monthly_temp",
+                "ADISCORD_economy_personal_income": "ADISCORD_economy_policy_preview_saved_personal_temp",
+                "ADISCORD_economy_business_income": "ADISCORD_economy_policy_preview_saved_business_temp",
+                "ADISCORD_economy_consumer_goods_income": "ADISCORD_economy_policy_preview_saved_consumer_goods_temp",
+                "ADISCORD_economy_factory_income": "ADISCORD_economy_policy_preview_saved_factory_temp",
+            },
+            "army": {
+                "ADISCORD_economy_army_spending_mode": "ADISCORD_economy_policy_preview_saved_mode_temp",
+                "ADISCORD_economy_army_expenses": "ADISCORD_economy_policy_preview_current_expense_temp",
+            },
+            "research": {
+                "ADISCORD_economy_research_spending_mode": "ADISCORD_economy_policy_preview_saved_mode_temp",
+                "ADISCORD_economy_research_expenses": "ADISCORD_economy_policy_preview_current_expense_temp",
+            },
+            "social": {
+                "ADISCORD_economy_social_spending_mode": "ADISCORD_economy_policy_preview_saved_mode_temp",
+                "ADISCORD_economy_social_expenses": "ADISCORD_economy_policy_preview_current_expense_temp",
+            },
+        }
+        for policy, assignments in restored.items():
+            preview_name = f"ADISCORD_economy_preview_{policy}_policy"
+            preview = unique_block(EFFECTS, preview_name)
+            preview_graph = "\n".join(
+                reachable_script_blocks((EFFECTS,), (preview_name,)).values()
+            )
+            for variable, saved in assignments.items():
+                self.assertIn(f"var = {variable} value = {saved}", preview)
+            self.assertNotIn("ADISCORD_economy_update_gui", preview_graph)
+            self.assertNotIn("ADISCORD_economy_refresh_spending_ideas", preview_graph)
+            self.assertNotIn("add_ideas", preview_graph)
+            self.assertNotIn("remove_ideas", preview_graph)
+
+            if policy != "tax":
+                self.assertIn(
+                    "ADISCORD_economy_policy_preview_uses_cached_base_temp value = 1",
+                    preview,
+                )
+                self.assertIn(
+                    "ADISCORD_economy_policy_preview_uses_cached_base_temp value = 0",
+                    preview,
+                )
+
     def test_debt_capacity_is_absent_from_runtime_and_public_modifier_api(self):
         scanned_boundary = {}
         text_suffixes = {".txt", ".gui", ".gfx", ".yml", ".yaml", ".md", ".py"}
@@ -1471,10 +1820,28 @@ class WeeklyEconomyContracts(unittest.TestCase):
             light.index("ADISCORD_economy_calculate_monthly_balance = yes"),
             light.index("ADISCORD_economy_calculate_weekly_budget = yes"),
         )
+        targeted_tail = block(
+            EFFECTS, "ADISCORD_economy_finish_targeted_policy_refresh"
+        )
+        self.assertLess(
+            targeted_tail.index("ADISCORD_economy_calculate_monthly_balance = yes"),
+            targeted_tail.index("ADISCORD_economy_calculate_weekly_budget = yes"),
+        )
+        for policy in ("tax", "army", "research", "social"):
+            policy_refresh = block(
+                EFFECTS, f"ADISCORD_economy_refresh_{policy}_policy"
+            )
+            self.assertIn(
+                "ADISCORD_economy_finish_targeted_policy_refresh = yes",
+                policy_refresh,
+            )
+
         budget_refresh = block(
             EFFECTS, "ADISCORD_economy_refresh_after_budget_control_change"
         )
-        self.assertIn("ADISCORD_economy_light_update = yes", budget_refresh)
+        self.assertEqual(
+            budget_refresh.strip(), "ADISCORD_economy_refresh_research_policy = yes"
+        )
 
     def test_weekly_hot_path_reuses_monthly_idea_and_policy_caches(self):
         light = block(EFFECTS, "ADISCORD_economy_light_update")
