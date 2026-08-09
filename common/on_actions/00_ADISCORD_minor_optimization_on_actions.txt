@@ -1,0 +1,38 @@
+on_actions = {
+	on_startup = {
+		effect = {
+			# A single load/start scan replaces any recurring global country poll.
+			every_country = {
+				ADISCORD_apply_non_participating_minor_optimization = yes
+				ADISCORD_economy_refresh_ai_assistance = yes
+			}
+		}
+	}
+
+	on_war = {
+		effect = {
+			# Country-scoped emergency release: an organically involved minor must
+			# become fully functional before it has to replace wartime losses.
+			ADISCORD_release_non_participating_minor_optimization = yes
+			ADISCORD_economy_refresh_ai_assistance = yes
+		}
+	}
+
+	on_peace = {
+		effect = {
+			# War-state changes remove civil-war and retreat help immediately.
+			ADISCORD_economy_refresh_ai_assistance = yes
+		}
+	}
+
+	on_monthly = {
+		effect = {
+			# There is no surrender-progress edge on_action. Evaluate the strict
+			# threshold in this existing country pulse; the signature skips no-op work.
+			if = {
+				limit = { ADISCORD_economy_ai_assistance_needs_monthly_evaluation = yes }
+				ADISCORD_economy_refresh_ai_assistance = yes
+			}
+		}
+	}
+}

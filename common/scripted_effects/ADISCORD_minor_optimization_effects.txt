@@ -1,0 +1,148 @@
+# TFR-style suppression for AI countries which have no scripted participation.
+# Existing formations remain on the map; only future research, production, and
+# division training are stopped.
+ADISCORD_apply_non_participating_minor_optimization = {
+	if = {
+		limit = { ADISCORD_can_optimize_non_participating_minor = yes }
+		add_ideas = ADISCORD_non_participating_minor_optimization
+		country_lock_all_division_template = yes
+		set_research_slots = 0
+		set_country_flag = ADISCORD_non_participating_minor_optimized
+	}
+}
+
+# If an otherwise dormant country is pulled into an unscripted war, restore its
+# historical research capacity once and let it participate normally thereafter.
+ADISCORD_restore_non_participating_minor_research_slots = {
+	if = {
+		limit = { OR = { tag = AIN tag = COF tag = TFF } }
+		set_research_slots = 1
+	}
+	else_if = {
+		limit = {
+			OR = {
+				tag = AUR
+				tag = BBV
+				tag = BCM
+				tag = BGT
+				tag = BHG
+				tag = BJK
+				tag = BLD
+				tag = DRV
+				tag = FRS
+				tag = GLP
+				tag = KDR
+				tag = KYZ
+				tag = NVR
+				tag = ORV
+				tag = RLY
+				tag = SDR
+				tag = SHL
+				tag = TMR
+				tag = WEF
+				tag = YPR
+			}
+		}
+		set_research_slots = 2
+	}
+	else_if = {
+		limit = {
+			OR = {
+				tag = BOR
+				tag = BRN
+				tag = DOL
+				tag = ELN
+				tag = HON
+				tag = KHV
+				tag = KRL
+				tag = LYS
+				tag = RIN
+				tag = SKN
+				tag = VES
+			}
+		}
+		set_research_slots = 3
+	}
+	else_if = {
+		limit = { tag = MON }
+		set_research_slots = 4
+	}
+}
+
+ADISCORD_release_non_participating_minor_optimization = {
+	if = {
+		limit = { has_country_flag = ADISCORD_non_participating_minor_optimized }
+		remove_ideas = ADISCORD_non_participating_minor_optimization
+		country_lock_all_division_template = no
+		ADISCORD_restore_non_participating_minor_research_slots = yes
+		clr_country_flag = ADISCORD_non_participating_minor_optimized
+		set_country_flag = ADISCORD_non_participating_minor_released
+	}
+}
+
+# One country owns the complete assistance stack. The signature stores every
+# applicability input as a separate bit, so unchanged monthly checks are O(1)
+# and any player/tier/war/phase/retreat edge removes stale ideas first.
+ADISCORD_economy_refresh_ai_assistance = {
+	set_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = 0 }
+	if = {
+		limit = { has_variable = ADISCORD_economy_simulation_tier }
+		set_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = ADISCORD_economy_simulation_tier }
+	}
+	if = {
+		limit = { is_ai = yes }
+		add_to_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = 10 }
+	}
+	if = {
+		limit = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
+		add_to_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = 100 }
+	}
+	if = {
+		limit = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		add_to_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = 150 }
+	}
+	if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_conflict_spirits_finalized }
+		add_to_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = 200 }
+	}
+	if = {
+		limit = { has_war = yes }
+		add_to_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = 400 }
+	}
+	if = {
+		limit = { surrender_progress > 0.35 }
+		add_to_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = 800 }
+	}
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_variable = ADISCORD_economy_ai_assistance_signature }
+				check_variable = {
+					var = ADISCORD_economy_ai_assistance_signature
+					value = ADISCORD_economy_ai_assistance_signature_temp
+					compare = not_equals
+				}
+			}
+		}
+		remove_ideas = ADISCORD_economy_ai_assistance_base
+		remove_ideas = ADISCORD_economy_ai_assistance_civil_war
+		remove_ideas = ADISCORD_economy_ai_assistance_retreat
+		if = {
+			limit = { ADISCORD_economy_ai_assistance_is_eligible = yes }
+			add_ideas = ADISCORD_economy_ai_assistance_base
+		}
+		if = {
+			limit = { ADISCORD_economy_ai_assistance_civil_war_active = yes }
+			add_ideas = ADISCORD_economy_ai_assistance_civil_war
+		}
+		if = {
+			limit = { ADISCORD_economy_ai_assistance_retreat_active = yes }
+			add_ideas = ADISCORD_economy_ai_assistance_retreat
+		}
+		ADISCORD_economy_refresh_ai_assistance_income_cache = yes
+		set_variable = {
+			var = ADISCORD_economy_ai_assistance_signature
+			value = ADISCORD_economy_ai_assistance_signature_temp
+		}
+	}
+}

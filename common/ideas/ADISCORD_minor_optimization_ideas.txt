@@ -1,0 +1,49 @@
+ideas = {
+	hidden_ideas = {
+		ADISCORD_non_participating_minor_optimization = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				# Deliberately mirrors TFR's ai_disabled_production idea. Large
+				# negative values guarantee that unrelated positive modifiers cannot
+				# restart queues for a country outside the playable conflict graph.
+				production_speed_buildings_factor = -9999
+				industrial_capacity_factory = -9999
+				industrial_capacity_dockyard = -9999
+				consumer_goods_factor = 10
+				conscription = -1
+			}
+		}
+
+		# Small AI-only simulation assistance. These three increments are the
+		# complete stack owned by this system; claimant spirits remain independent.
+		ADISCORD_economy_ai_assistance_base = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				ADISCORD_economy_overall_income_factor = 0.05
+				industrial_capacity_factory = 0.05
+			}
+		}
+
+		ADISCORD_economy_ai_assistance_civil_war = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				supply_consumption_factor = -0.10
+			}
+		}
+
+		ADISCORD_economy_ai_assistance_retreat = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.05
+			}
+		}
+	}
+}

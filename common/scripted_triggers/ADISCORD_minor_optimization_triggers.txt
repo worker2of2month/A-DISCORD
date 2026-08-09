@@ -1,0 +1,81 @@
+# Explicitly dormant tags use the same structural approach as The Fire Rises:
+# only countries without scripted wars, decisions, focuses, or military AI are
+# suppressed. Keep this list audited instead of deriving relevance every pulse.
+ADISCORD_is_non_participating_minor = {
+	OR = {
+		tag = AIN
+		tag = AUR
+		tag = BBV
+		tag = BCM
+		tag = BGT
+		tag = BHG
+		tag = BJK
+		tag = BLD
+		tag = BOR
+		tag = BRN
+		tag = COF
+		tag = DOL
+		tag = DRV
+		tag = ELN
+		tag = FRS
+		tag = GLP
+		tag = HON
+		tag = KDR
+		tag = KHV
+		tag = KRL
+		tag = KYZ
+		tag = LYS
+		tag = MON
+		tag = NVR
+		tag = ORV
+		tag = RIN
+		tag = RLY
+		tag = SDR
+		tag = SHL
+		tag = SKN
+		tag = TFF
+		tag = TMR
+		tag = VES
+		tag = WEF
+		tag = YPR
+	}
+}
+
+ADISCORD_can_optimize_non_participating_minor = {
+	is_ai = yes
+	has_war = no
+	ADISCORD_is_non_participating_minor = yes
+	NOT = { has_country_flag = ADISCORD_non_participating_minor_released }
+}
+
+# Base help is limited to simulated AI countries that receive monthly or yearly
+# economy updates. Dormant tier 3 countries and every player are excluded.
+ADISCORD_economy_ai_assistance_is_eligible = {
+	is_ai = yes
+	check_variable = { var = ADISCORD_economy_simulation_tier value = 1 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_simulation_tier value = 2 compare = less_than_or_equals }
+}
+
+ADISCORD_economy_ai_assistance_civil_war_active = {
+	ADISCORD_economy_ai_assistance_is_eligible = yes
+	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+	has_country_flag = ADISCORD_vorkerland_conflict_spirits_finalized
+	has_war = yes
+}
+
+ADISCORD_economy_ai_assistance_retreat_active = {
+	ADISCORD_economy_ai_assistance_civil_war_active = yes
+	surrender_progress > 0.35
+}
+
+# Eligible AI needs the retreat-threshold fallback. A player switch or tier
+# downgrade remains eligible only while an assistance idea needs cleanup.
+ADISCORD_economy_ai_assistance_needs_monthly_evaluation = {
+	OR = {
+		ADISCORD_economy_ai_assistance_is_eligible = yes
+		has_idea = ADISCORD_economy_ai_assistance_base
+		has_idea = ADISCORD_economy_ai_assistance_civil_war
+		has_idea = ADISCORD_economy_ai_assistance_retreat
+	}
+}

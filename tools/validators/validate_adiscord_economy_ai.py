@@ -525,6 +525,33 @@ def _limit_is_satisfiable(entries: list[Entry]) -> bool:
     return bool(_boolean_entries_paths(entries))
 
 
+def _direct_scalar_comparisons(entries: list[Entry]) -> list[tuple[str, str, str]]:
+    """Return Clausewitz ``lhs <op> rhs`` triples owned by this exact block."""
+
+    comparisons: list[tuple[str, str, str]] = []
+    index = 0
+    while index + 2 < len(entries):
+        left, operator, right = entries[index : index + 3]
+        if (
+            left.key == operator.key == right.key == ""
+            and isinstance(left.value, str)
+            and isinstance(operator.value, str)
+            and isinstance(right.value, str)
+            and operator.value in {"<", "<=", "=", "==", ">=", ">"}
+        ):
+            comparisons.append((left.value, operator.value, right.value))
+            index += 3
+            continue
+        index += 1
+    return comparisons
+
+
+def _requires_direct_scalar_comparison(
+    entries: list[Entry], left: str, operator: str, right: str
+) -> bool:
+    return _direct_scalar_comparisons(entries).count((left, operator, right)) == 1
+
+
 def _conditional_else_pairs(entries: list[Entry]):
     for index, branch in enumerate(entries):
         if branch.key in {"if", "else_if"} and isinstance(branch.value, list):
@@ -535,33 +562,240 @@ def _conditional_else_pairs(entries: list[Entry]):
             yield from _conditional_else_pairs(branch.value)
 
 
-def ai_assistance_contract_issues(ideas_text: str, effects_text: str) -> list[str]:
+def _unique_definition(text: str, name: str) -> Entry | None:
+    matches = [entry for entry in parse_clausewitz(text) if entry.key == name]
+    return matches[0] if len(matches) == 1 else None
+
+
+def _direct_operation_value(
+    entries: list[Entry], operation: str, variable: str
+) -> list[str]:
+    return [
+        value
+        for entry in entries
+        if entry.key == operation
+        and isinstance(entry.value, list)
+        and _direct_scalar(entry.value, "var") == variable
+        and (value := _direct_scalar(entry.value, "value")) is not None
+    ]
+
+
+def _branch_direct_call(branch: Entry) -> str | None:
+    if not isinstance(branch.value, list):
+        return None
+    calls = [
+        entry.key
+        for entry in branch.value
+        if entry.key.startswith("ADISCORD_") and entry.value == "yes"
+    ]
+    return calls[0] if len(calls) == 1 else None
+
+
+def _direct_decision_branches(entries: list[Entry]) -> list[Entry]:
+    return [entry for entry in entries if entry.key in {"if", "else_if"}]
+
+
+def _policy_branch_limit(branch: Entry) -> list[Entry]:
+    limit = _direct_limit(branch)
+    return limit if limit is not None else []
+
+
+def ai_policy_contract_issues(effects_text: str) -> list[str]:
+    """Validate one ordered, reserve-aware economy action chain for the AI."""
+
+    issues: list[str] = []
+    policy = _unique_definition(effects_text, "ADISCORD_economy_ai_monthly_policy")
+    if policy is None or not isinstance(policy.value, list):
+        return ["missing unique AI monthly policy"]
+    if any(token in block(effects_text, policy.key) for token in LEGACY_CONSTRUCTION):
+        issues.append("AI policy references retired construction-policy state")
+
+    if [entry.key for entry in policy.value] != ["if"]:
+        return issues + ["AI policy contains an action outside its reserve owner"]
+    owners = [entry for entry in policy.value if entry.key == "if"]
+    if len(owners) != 1 or not isinstance(owners[0].value, list):
+        return issues + ["AI policy lacks one direct reserve owner"]
+    owner = owners[0]
+    owner_limit = _direct_limit(owner)
+    if owner_limit is None or not _limit_is_satisfiable(owner_limit):
+        return issues + ["AI policy reserve owner is missing or dead"]
+    if not _exact_scalar(owner_limit, "is_ai", "yes"):
+        issues.append("AI policy reserve owner is not AI-only")
+    if not _requires_direct_scalar_comparison(
+        owner_limit, "has_political_power", ">", "50"
+    ):
+        issues.append("AI policy lacks the exact 50 PP story reserve")
+
+    state_chain = [
+        entry for entry in owner.value if entry.key in {"if", "else_if", "else"}
+    ]
+    if [entry.key for entry in state_chain] != ["if", "else_if", "else_if", "else"]:
+        return issues + ["AI fiscal states are not one exclusive four-way chain"]
+    if [entry.key for entry in owner.value] != [
+        "limit", "if", "else_if", "else_if", "else"
+    ]:
+        issues.append("AI reserve owner contains an action outside its fiscal-state chain")
+    state_names = ("crisis", "stressed", "recovery", "healthy")
+    state_actions: dict[str, list[tuple[str, list[Entry]]]] = {}
+    for state_name, state in zip(state_names, state_chain):
+        assert isinstance(state.value, list)
+        decisions = _direct_decision_branches(state.value)
+        keys = [entry.key for entry in decisions]
+        if keys and keys != ["if", *("else_if" for _ in keys[1:])]:
+            issues.append(f"{state_name}: policy actions are not an exclusive chain")
+        expected_state_keys = (["limit"] if state_name != "healthy" else []) + keys
+        if [entry.key for entry in state.value] != expected_state_keys:
+            issues.append(f"{state_name}: action escapes the exclusive policy chain")
+        actions: list[tuple[str, list[Entry]]] = []
+        for decision in decisions:
+            call = _branch_direct_call(decision)
+            if call is None:
+                issues.append(f"{state_name}: decision does not own exactly one action")
+                continue
+            if [entry.key for entry in decision.value] != ["limit", call]:
+                issues.append(f"{state_name}: decision contains a sibling action")
+            condition = _policy_branch_limit(decision)
+            if not condition or not _limit_is_satisfiable(condition):
+                issues.append(f"{state_name}: action owner is missing or dead")
+            actions.append((call, condition))
+        state_actions[state_name] = actions
+
+    def action_positions(state: str) -> dict[str, list[int]]:
+        result: dict[str, list[int]] = {}
+        for index, (action, _) in enumerate(state_actions.get(state, [])):
+            result.setdefault(action, []).append(index)
+        return result
+
+    for state in ("crisis", "stressed"):
+        positions = action_positions(state)
+        ordered = (
+            "ADISCORD_economy_increase_tax_burden",
+            "ADISCORD_economy_decrease_social_spending",
+            "ADISCORD_economy_decrease_army_spending",
+            "ADISCORD_economy_decrease_research_spending",
+        )
+        if any(len(positions.get(action, [])) != 1 for action in ordered):
+            issues.append(f"{state}: missing one ordered fiscal recovery action")
+        else:
+            indices = [positions[action][0] for action in ordered]
+            if indices != sorted(indices):
+                issues.append(f"{state}: research is cut before tax/nonessential spending")
+
+    def matching_conditions(state: str, action: str) -> list[list[Entry]]:
+        return [condition for call, condition in state_actions.get(state, []) if call == action]
+
+    recovery_up = matching_conditions(
+        "recovery", "ADISCORD_economy_increase_research_spending"
+    )
+    recovery_down = matching_conditions(
+        "recovery", "ADISCORD_economy_decrease_research_spending"
+    )
+    if len(recovery_up) != 1 or not _exact_check(
+        recovery_up[0], "ADISCORD_economy_research_spending_mode", "3", "less_than"
+    ):
+        issues.append("recovery does not restore research toward level 3 from below")
+    if len(recovery_down) != 1 or not _exact_check(
+        recovery_down[0], "ADISCORD_economy_research_spending_mode", "3", "greater_than"
+    ):
+        issues.append("recovery does not restore research toward level 3 from above")
+
+    healthy_up = matching_conditions(
+        "healthy", "ADISCORD_economy_increase_research_spending"
+    )
+    healthy_down = matching_conditions(
+        "healthy", "ADISCORD_economy_decrease_research_spending"
+    )
+    level_three = [
+        condition
+        for condition in healthy_up
+        if _exact_check(
+            condition, "ADISCORD_economy_research_spending_mode", "3", "equals"
+        )
+    ]
+    toward_three = [
+        condition
+        for condition in healthy_up
+        if _exact_check(
+            condition, "ADISCORD_economy_research_spending_mode", "3", "less_than"
+        )
+    ]
+    if len(toward_three) != 1:
+        issues.append("healthy AI does not restore research toward level 3")
+    if len(level_three) != 1 or not all(
+        (
+            _exact_check(level_three[0], "ADISCORD_economy_monthly_balance", "0", "greater_than"),
+            _exact_check(level_three[0], "ADISCORD_economy_debt_state", "0", "equals"),
+            _exact_check(level_three[0], "ADISCORD_economy_interest_share_income", "10", "less_than"),
+        )
+    ):
+        issues.append("research level 4 lacks real surplus and safe debt/interest gates")
+    if len(healthy_down) != 2:
+        issues.append("healthy AI lacks bounded research fallback toward level 3/4")
+    for condition in healthy_up:
+        signatures = _check_variable_signatures(
+            condition, "ADISCORD_economy_research_spending_mode"
+        )
+        if not signatures or any(
+            compare not in {"equals", "less_than"}
+            or (compare == "equals" and value != "3")
+            or (compare == "less_than" and value != "3")
+            for value, compare in signatures
+        ):
+            issues.append("AI can automatically raise research to level 5")
+    return issues
+
+
+def ai_assistance_contract_issues(
+    ideas_text: str, effects_text: str, triggers_text: str = ""
+) -> list[str]:
+    """Validate exact incremental assistance, signature ownership, and reversibility."""
+
     issues: list[str] = []
     idea_ast = parse_clausewitz(ideas_text)
     effect_ast = parse_clausewitz(effects_text)
-    found_ideas = {
-        entry.key: entry for _, entry in _walk_entries(idea_ast) if entry.key in ASSISTANCE_IDEAS
-    }
     expected = {
-        ASSISTANCE_IDEAS[0]: {"ADISCORD_economy_overall_income_factor": (0.05, 0.05), "industrial_capacity_factory": (0.05, 0.05)},
-        ASSISTANCE_IDEAS[1]: {"supply_consumption_factor": (-0.10, 0.0)},
-        ASSISTANCE_IDEAS[2]: {"army_defence_factor": (0.05, 0.05)},
+        ASSISTANCE_IDEAS[0]: {
+            "ADISCORD_economy_overall_income_factor": 0.05,
+            "industrial_capacity_factory": 0.05,
+        },
+        ASSISTANCE_IDEAS[1]: {"supply_consumption_factor": -0.10},
+        ASSISTANCE_IDEAS[2]: {"army_defence_factor": 0.05},
     }
-    for name, bounds in expected.items():
-        idea = found_ideas.get(name)
-        if idea is None or not isinstance(idea.value, list):
-            issues.append(f"missing assistance idea {name}")
+    all_assistance_defs = [
+        entry
+        for _, entry in _walk_entries(idea_ast)
+        if entry.key.startswith("ADISCORD_economy_ai_assistance_")
+    ]
+    for name, expected_modifiers in expected.items():
+        matches = [entry for entry in all_assistance_defs if entry.key == name]
+        if len(matches) != 1 or not isinstance(matches[0].value, list):
+            issues.append(f"expected one assistance idea {name}")
             continue
-        for modifier, (low, high) in bounds.items():
-            values = []
-            for _, entry in _walk_entries(idea.value):
-                if entry.key == modifier and isinstance(entry.value, str):
-                    try:
-                        values.append(float(entry.value))
-                    except ValueError:
-                        pass
-            if len(values) != 1 or not low <= values[0] <= high:
-                issues.append(f"{name}: invalid exact bound for {modifier}")
+        idea = matches[0]
+        modifiers = [
+            entry
+            for entry in idea.value
+            if entry.key == "modifier" and isinstance(entry.value, list)
+        ]
+        if len(modifiers) != 1:
+            issues.append(f"{name}: missing unique modifier block")
+            continue
+        found: dict[str, list[float]] = {}
+        for entry in modifiers[0].value:
+            if not isinstance(entry.value, str):
+                continue
+            try:
+                found.setdefault(entry.key, []).append(float(entry.value))
+            except ValueError:
+                found.setdefault(entry.key, [])
+        exact_found = {
+            key: values[0] for key, values in found.items() if len(values) == 1
+        }
+        if exact_found != expected_modifiers:
+            issues.append(f"{name}: modifier stack is not the exact bounded increment")
+    if len(all_assistance_defs) != len(ASSISTANCE_IDEAS):
+        issues.append("assistance has a duplicate or renamed stacking idea")
+
     refreshes = [
         entry
         for entry in effect_ast
@@ -569,75 +803,264 @@ def ai_assistance_contract_issues(ideas_text: str, effects_text: str) -> list[st
     ]
     if len(refreshes) != 1 or not isinstance(refreshes[0].value, list):
         return issues + ["missing unique AI-assistance refresh"]
-    refresh = refreshes[0]
-    direct = refresh.value
-    gates = [
-        entry
-        for entry in direct
-        if entry.key == "if"
-        and isinstance(entry.value, list)
+    direct = refreshes[0].value
+    signature = "ADISCORD_economy_ai_assistance_signature_temp"
+    stored_signature = "ADISCORD_economy_ai_assistance_signature"
+    if _direct_operation_value(direct, "set_temp_variable", signature) != ["0"]:
+        issues.append("assistance signature lacks a safe zero default")
+    tier_owners = []
+    for branch in direct:
+        if branch.key != "if" or not isinstance(branch.value, list):
+            continue
+        limit = _direct_limit(branch)
+        if limit is not None and _exact_scalar(
+            limit, "has_variable", "ADISCORD_economy_simulation_tier"
+        ):
+            tier_owners.append(branch)
+    if len(tier_owners) != 1 or _direct_operation_value(
+        tier_owners[0].value, "set_temp_variable", signature
+    ) != ["ADISCORD_economy_simulation_tier"]:
+        issues.append("assistance signature does not safely own the exact simulation tier")
+
+    signature_inputs = (
+        ("is_ai", "yes", "10"),
+        ("has_global_flag", "ADISCORD_vorkerland_collapse_wars_started", "100"),
+        ("has_global_flag", "ADISCORD_vorkerland_collapse_finished", "150"),
+        ("has_country_flag", "ADISCORD_vorkerland_conflict_spirits_finalized", "200"),
+        ("has_war", "yes", "400"),
+    )
+    for key, value, weight in signature_inputs:
+        owners = []
+        for branch in direct:
+            if branch.key != "if" or not isinstance(branch.value, list):
+                continue
+            limit = _direct_limit(branch)
+            if limit is not None and _exact_scalar(limit, key, value):
+                owners.append(branch)
+        if len(owners) != 1 or _direct_operation_value(
+            owners[0].value, "add_to_temp_variable", signature
+        ) != [weight]:
+            issues.append(f"assistance signature lacks exact input {key}={value}")
+    surrender_owners = []
+    for branch in direct:
+        if branch.key != "if" or not isinstance(branch.value, list):
+            continue
+        limit = _direct_limit(branch)
+        if limit is not None and _requires_direct_scalar_comparison(
+            limit, "surrender_progress", ">", "0.35"
+        ):
+            surrender_owners.append(branch)
+    if len(surrender_owners) != 1 or _direct_operation_value(
+        surrender_owners[0].value, "add_to_temp_variable", signature
+    ) != ["800"]:
+        issues.append("assistance signature lacks the exact surrender threshold bit")
+
+    change_owners = [
+        branch
+        for branch in direct
+        if branch.key == "if"
+        and isinstance(branch.value, list)
         and any(
-            candidate.key == "limit"
-            and isinstance(candidate.value, list)
-            and _exact_scalar(candidate.value, "is_ai", "yes")
-            for candidate in entry.value
+            entry.key == "remove_ideas" for entry in branch.value
         )
     ]
-    if len(gates) != 1:
-        return issues + ["assistance additions lack one direct is_ai gate"]
-    gate = gates[0]
-    gate_index = direct.index(gate)
-    removed: set[str] = set()
-    for entry in direct[:gate_index]:
-        if entry.key == "remove_ideas":
-            removed.update(_operand_values(entry))
+    if len(change_owners) != 1:
+        return issues + ["assistance lacks one signature-change owner"]
+    owner = change_owners[0]
+    owner_limit = _direct_limit(owner)
+    if owner_limit is None or not _limit_is_satisfiable(owner_limit):
+        issues.append("assistance signature-change owner is missing or dead")
+    else:
+        owner_tokens = _tokens_in(owner_limit)
+        for token in ("has_variable", stored_signature, signature, "not_equals"):
+            if token not in owner_tokens:
+                issues.append(f"assistance signature-change owner lacks {token}")
+    assert isinstance(owner.value, list)
+    removals = [
+        (index, _operand_values(entry))
+        for index, entry in enumerate(owner.value)
+        if entry.key == "remove_ideas"
+    ]
+    additions = [
+        (index, _operand_values(entry), ancestors)
+        for ancestors, entry in _walk_entries(owner.value)
+        if entry.key == "add_ideas"
+        for index in [owner.value.index(ancestors[0]) if ancestors else -1]
+    ]
+    removed = set().union(*(values for _, values in removals)) if removals else set()
+    added = set().union(*(values for _, values, _ in additions)) if additions else set()
     for idea in ASSISTANCE_IDEAS:
         if idea not in removed:
-            issues.append(f"{idea}: removal is not unconditional and remove-first")
-    additions: dict[str, list[tuple[Entry, ...]]] = {idea: [] for idea in ASSISTANCE_IDEAS}
-    assert isinstance(gate.value, list)
-    for ancestors, entry in _walk_entries(gate.value):
-        if entry.key == "add_ideas":
-            for idea in _operand_values(entry) & set(ASSISTANCE_IDEAS):
-                additions[idea].append(ancestors)
-    all_adds = [entry for _, entry in _walk_entries(direct) if entry.key == "add_ideas"]
-    gated_adds = [entry for _, entry in _walk_entries(gate.value) if entry.key == "add_ideas"]
-    if len(all_adds) != len(gated_adds):
-        issues.append("assistance add_ideas escapes the is_ai gate")
-    for idea in ASSISTANCE_IDEAS:
-        if len(additions[idea]) != 1:
-            issues.append(f"{idea}: expected one AI-only conditional addition")
+            issues.append(f"{idea}: no remove-first path")
+        if idea not in added:
+            issues.append(f"{idea}: no bounded add path")
+    if additions and removals and max(index for index, _ in removals) >= min(
+        index for index, _, _ in additions
+    ):
+        issues.append("assistance additions precede complete removal")
+    all_adds = [
+        entry for _, entry in _walk_entries(direct) if entry.key == "add_ideas"
+    ]
+    owner_adds = [
+        entry for _, entry in _walk_entries(owner.value) if entry.key == "add_ideas"
+    ]
+    if len(all_adds) != len(owner_adds):
+        issues.append("assistance addition escapes the signature-change owner")
+    trigger_for_idea = {
+        ASSISTANCE_IDEAS[0]: "ADISCORD_economy_ai_assistance_is_eligible",
+        ASSISTANCE_IDEAS[1]: "ADISCORD_economy_ai_assistance_civil_war_active",
+        ASSISTANCE_IDEAS[2]: "ADISCORD_economy_ai_assistance_retreat_active",
+    }
+    for _, values, ancestors in additions:
+        for idea in values & set(ASSISTANCE_IDEAS):
+            branch = next(
+                (
+                    ancestor
+                    for ancestor in reversed(ancestors)
+                    if ancestor.key in {"if", "else_if"}
+                ),
+                None,
+            )
+            condition = _direct_limit(branch) if branch is not None else None
+            if condition is None or not _exact_scalar(
+                condition, trigger_for_idea[idea], "yes"
+            ):
+                issues.append(f"{idea}: addition uses the wrong eligibility trigger")
+    owner_calls = [
+        entry.key
+        for entry in owner.value
+        if entry.key.startswith("ADISCORD_") and entry.value == "yes"
+    ]
+    if owner_calls != ["ADISCORD_economy_refresh_ai_assistance_income_cache"]:
+        issues.append("assistance does not refresh its economy-owned input exactly once")
+    stored_writes = _direct_operation_value(
+        owner.value, "set_variable", stored_signature
+    )
+    if stored_writes != [signature] or not owner.value or owner.value[-1].key != "set_variable":
+        issues.append("assistance signature is not published last")
+
+    if triggers_text:
+        trigger_definitions = _definitions((triggers_text,))
+        eligible = trigger_definitions.get("ADISCORD_economy_ai_assistance_is_eligible")
+        civil = trigger_definitions.get("ADISCORD_economy_ai_assistance_civil_war_active")
+        retreat = trigger_definitions.get("ADISCORD_economy_ai_assistance_retreat_active")
+        monthly = trigger_definitions.get("ADISCORD_economy_ai_assistance_needs_monthly_evaluation")
+        if eligible is None or not isinstance(eligible.value, list) or not all(
+            (
+                _exact_scalar(eligible.value, "is_ai", "yes"),
+                _exact_check(eligible.value, "ADISCORD_economy_simulation_tier", "1", "greater_than_or_equals"),
+                _exact_check(eligible.value, "ADISCORD_economy_simulation_tier", "2", "less_than_or_equals"),
+            )
+        ):
+            issues.append("base assistance eligibility is not AI-only tier 1-2")
+        if civil is None or not isinstance(civil.value, list) or not all(
+            (
+                _exact_scalar(civil.value, "ADISCORD_economy_ai_assistance_is_eligible", "yes"),
+                _exact_scalar(civil.value, "has_global_flag", "ADISCORD_vorkerland_collapse_wars_started"),
+                _exact_scalar(civil.value, "has_global_flag", "ADISCORD_vorkerland_collapse_finished", False),
+                _exact_scalar(civil.value, "has_country_flag", "ADISCORD_vorkerland_conflict_spirits_finalized"),
+                _exact_scalar(civil.value, "has_war", "yes"),
+            )
+        ):
+            issues.append("civil-war assistance lacks the exact live collapse/war gate")
+        if retreat is None or not isinstance(retreat.value, list) or not all(
+            (
+                _exact_scalar(retreat.value, "ADISCORD_economy_ai_assistance_civil_war_active", "yes"),
+                _requires_direct_scalar_comparison(retreat.value, "surrender_progress", ">", "0.35"),
+            )
+        ):
+            issues.append("retreat assistance lacks strict surrender_progress > 0.35")
+        monthly_or = (
+            [entry for entry in monthly.value if entry.key == "OR" and isinstance(entry.value, list)]
+            if monthly is not None and isinstance(monthly.value, list)
+            else []
+        )
+        expected_monthly_gate = [
+            ("ADISCORD_economy_ai_assistance_is_eligible", "yes"),
+            *(("has_idea", idea) for idea in ASSISTANCE_IDEAS),
+        ]
+        if (
+            monthly is None
+            or not isinstance(monthly.value, list)
+            or len(monthly_or) != 1
+            or len(monthly.value) != 1
+            or [
+                (entry.key, entry.value)
+                for entry in monthly_or[0].value
+                if isinstance(entry.value, str)
+            ]
+            != expected_monthly_gate
+        ):
+            issues.append("monthly assistance evaluation is not limited to eligible AI or stale ideas")
+    forbidden = (
+        "attack_bonus",
+        "army_attack_factor",
+        "breakthrough_factor",
+        "add_tech",
+        "set_technology",
+        "add_equipment_to_stockpile",
+        "add_manpower",
+        "add_political_power",
+        "add_stability",
+        "production_speed_buildings_factor",
+        "research_speed_factor",
+        "ADISCORD_economy_treasury",
+        "ADISCORD_economy_inflation",
+        "debt_" + "capacity",
+        "every_country",
+        "any_country",
+    )
+    contract_text = block(effects_text, "ADISCORD_economy_refresh_ai_assistance")
+    for token in forbidden:
+        if token in contract_text:
+            issues.append(f"assistance refresh uses prohibited token {token}")
+    return issues
+
+
+def ai_assistance_lifecycle_issues(
+    economy_effects: str, minor_effects: str, minor_on_actions: str
+) -> list[str]:
+    issues: list[str] = []
+    refresh = block(minor_effects, "ADISCORD_economy_refresh_ai_assistance")
+    if any(token in refresh for token in ("every_country", "any_country")):
+        issues.append("assistance refresh scans countries")
+    tier = block(economy_effects, "ADISCORD_economy_set_simulation_tier")
+    full_if_needed = block(
+        economy_effects, "ADISCORD_economy_full_refresh_if_needed"
+    )
+    income = block(
+        economy_effects, "ADISCORD_economy_refresh_ai_assistance_income_cache"
+    )
+    if tier.count("ADISCORD_economy_refresh_ai_assistance = yes") != 1:
+        issues.append("simulation-tier changes do not refresh assistance exactly once")
+    if full_if_needed.count("ADISCORD_economy_refresh_ai_assistance = yes") != 1:
+        issues.append("bounded dirty/full refresh does not refresh assistance exactly once")
+    if not income or any(
+        token in income
+        for token in ("every_country", "any_country", "every_owned_state", "ADISCORD_economy_full_refresh")
+    ):
+        issues.append("economy-owned assistance input refresh is missing or unbounded")
+
+    for hook in ("on_startup", "on_war", "on_peace", "on_monthly"):
+        body = block(minor_on_actions, hook)
+        if not body:
+            issues.append(f"minor optimization lacks {hook} assistance hook")
             continue
-        ancestors = additions[idea][0]
-        branch = next((ancestor for ancestor in reversed(ancestors)
-                       if ancestor.key in {"if", "else_if"} and isinstance(ancestor.value, list)), None)
-        limit = next((entry for entry in (branch.value if branch else [])
-                      if entry.key == "limit" and isinstance(entry.value, list)), None)
-        condition = limit.value if limit else []
-        valid_condition = _limit_is_satisfiable(condition)
-        if idea == ASSISTANCE_IDEAS[0]:
-            valid_condition = valid_condition and _exact_check(
-                condition,
-                "ADISCORD_economy_simulation_tier",
-                "1",
-                "greater_than_or_equals",
-            )
-        elif idea == ASSISTANCE_IDEAS[1]:
-            valid_condition = valid_condition and (
-                _exact_check(
-                    condition,
-                    "ADISCORD_vorkerland_collapse_phase",
-                    "1",
-                    "greater_than_or_equals",
-                )
-                and _exact_scalar(condition, "has_war", "yes")
-            )
-        else:
-            valid_condition = valid_condition and _exact_check(
-                condition, "surrender_progress", "0.35", "greater_than"
-            )
-        if not valid_condition:
-            issues.append(f"{idea}: wrong or disconnected application condition")
+        if body.count("ADISCORD_economy_refresh_ai_assistance = yes") != 1:
+            issues.append(f"{hook} does not route assistance exactly once")
+        if hook != "on_startup" and any(
+            token in body for token in ("every_country", "any_country")
+        ):
+            issues.append(f"{hook} assistance hook scans countries")
+    startup = block(minor_on_actions, "on_startup")
+    if startup.count("every_country") != 1:
+        issues.append("protected startup must retain exactly one dormant-tag scan")
+    monthly = block(minor_on_actions, "on_monthly")
+    if "ADISCORD_economy_ai_assistance_needs_monthly_evaluation = yes" not in monthly:
+        issues.append("monthly surrender evaluation lacks a bounded eligibility gate")
+    for forbidden_hook in ("on_daily", "on_weekly", "on_yearly"):
+        if block(minor_on_actions, forbidden_hook):
+            issues.append(f"assistance uses forbidden recurring hook {forbidden_hook}")
     return issues
 
 
@@ -1754,11 +2177,19 @@ def validate() -> list[str]:
     minor_ideas = strip_comments(
         read_required("common/ideas/ADISCORD_minor_optimization_ideas.txt")
     )
+    all_idea_text = "\n".join(
+        strip_comments(path.read_text(encoding="utf-8-sig"))
+        for path in sorted((ROOT / "common/ideas").rglob("*.txt"))
+    )
     minor_effects = strip_comments(
         read_required("common/scripted_effects/ADISCORD_minor_optimization_effects.txt")
     )
-    read_required("common/on_actions/00_ADISCORD_minor_optimization_on_actions.txt")
-    read_required("common/scripted_triggers/ADISCORD_minor_optimization_triggers.txt")
+    minor_on_actions = strip_comments(
+        read_required("common/on_actions/00_ADISCORD_minor_optimization_on_actions.txt")
+    )
+    minor_triggers = strip_comments(
+        read_required("common/scripted_triggers/ADISCORD_minor_optimization_triggers.txt")
+    )
     buildings = strip_comments(read("common/buildings/00_buildings.txt"))
     dynamic_modifiers = strip_comments(
         read("common/dynamic_modifiers/ADISCORD_economy_dynamic_modifiers.txt")
@@ -1782,7 +2213,17 @@ def validate() -> list[str]:
         )
     )
     if minor_ideas and minor_effects:
-        issues.extend(ai_assistance_contract_issues(minor_ideas, minor_effects + "\n" + effects))
+        issues.extend(
+            ai_assistance_contract_issues(
+                all_idea_text, minor_effects + "\n" + effects, minor_triggers
+            )
+        )
+        issues.extend(
+            ai_assistance_lifecycle_issues(
+                effects, minor_effects, minor_on_actions
+            )
+        )
+    issues.extend(ai_policy_contract_issues(effects))
     issues.extend(research_policy_flow_issues(effects))
     issues.extend(automatic_borrow_flow_issues(effects))
     issues.extend(debt_transition_flow_issues(effects))

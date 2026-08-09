@@ -455,11 +455,26 @@ ADISCORD_economy_initialize_from_development = {
 	set_variable = { var = ADISCORD_economy_development_progress value = ADISCORD_economic_development_progress }
 }
 
+# Assistance ideas are owned by the minor-optimization module, but this economy
+# effect owns their cached income consequence. It runs only when the complete
+# assistance signature changes, never from the weekly settlement graph.
+ADISCORD_economy_refresh_ai_assistance_income_cache = {
+	if = {
+		limit = { has_variable = ADISCORD_economy_initialized }
+		ADISCORD_economy_recalculate_policy_modifiers = yes
+		ADISCORD_economy_calculate_income = yes
+		ADISCORD_economy_calculate_macro_indicators = yes
+		ADISCORD_economy_calculate_expenses = yes
+		ADISCORD_economy_calculate_monthly_balance = yes
+	}
+}
+
 ADISCORD_economy_set_simulation_tier = {
 	if = { limit = { ADISCORD_economy_is_player_tier_country = yes } set_variable = { var = ADISCORD_economy_simulation_tier value = 0 } }
 	else_if = { limit = { ADISCORD_economy_is_primary_tier_country = yes } set_variable = { var = ADISCORD_economy_simulation_tier value = 1 } }
 	else_if = { limit = { ADISCORD_economy_is_secondary_tier_country = yes } set_variable = { var = ADISCORD_economy_simulation_tier value = 2 } }
 	else = { set_variable = { var = ADISCORD_economy_simulation_tier value = 3 } }
+	ADISCORD_economy_refresh_ai_assistance = yes
 }
 
 # Keep newly introduced transition effects above their first caller. Full game
@@ -632,6 +647,7 @@ ADISCORD_economy_cache_weekly_factory_sources = {
 ADISCORD_economy_full_refresh_if_needed = {
 	if = {
 		limit = { check_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 compare = greater_than_or_equals } }
+		ADISCORD_economy_refresh_ai_assistance = yes
 		ADISCORD_economy_full_refresh = yes
 	}
 }
@@ -3556,47 +3572,54 @@ ADISCORD_economy_update_ai_state = {
 }
 
 ADISCORD_economy_ai_monthly_policy = {
-	# Exactly one discretionary action per tick. Passive balance and automatic
-	# deficit coverage remain separate accounting operations.
 	if = {
-		limit = { ADISCORD_economy_ai_is_crisis = yes }
-		if = { limit = { ADISCORD_economy_can_restructure_debt = yes } ADISCORD_economy_restructure_debt = yes }
-		else_if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 15 compare = greater_than_or_equals } ADISCORD_economy_can_stabilize_macro = yes } ADISCORD_economy_stabilization_package = yes }
-		else_if = { limit = { has_war = yes ADISCORD_economy_can_use_war_taxes = yes } ADISCORD_economy_war_taxes_action = yes }
-		else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_increase_tax_burden = yes } ADISCORD_economy_increase_tax_burden = yes }
-		else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_decrease_research_spending = yes } ADISCORD_economy_decrease_research_spending = yes }
-		else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } check_variable = { var = ADISCORD_economy_social_spending_mode value = 2 compare = greater_than } ADISCORD_economy_can_decrease_social_spending = yes } ADISCORD_economy_decrease_social_spending = yes }
-		else_if = { limit = { has_war = no check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_decrease_army_spending = yes } ADISCORD_economy_decrease_army_spending = yes }
-		else_if = { limit = { ADISCORD_economy_can_issue_internal_bonds = yes ADISCORD_economy_has_low_treasury = yes } ADISCORD_economy_issue_internal_bonds = yes }
-		else_if = { limit = { ADISCORD_economy_can_take_external_loan = yes ADISCORD_economy_has_low_treasury = yes } ADISCORD_economy_take_external_loan = yes }
-	}
-	else_if = {
-		limit = { ADISCORD_economy_ai_is_stressed = yes }
-		if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 15 compare = greater_than_or_equals } ADISCORD_economy_can_stabilize_macro = yes } ADISCORD_economy_stabilization_package = yes }
-		else_if = { limit = { has_war = yes ADISCORD_economy_can_use_war_taxes = yes } ADISCORD_economy_war_taxes_action = yes }
-		else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_increase_tax_burden = yes } ADISCORD_economy_increase_tax_burden = yes }
-		else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_decrease_research_spending = yes } ADISCORD_economy_decrease_research_spending = yes }
-		else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } check_variable = { var = ADISCORD_economy_social_spending_mode value = 3 compare = greater_than } ADISCORD_economy_can_decrease_social_spending = yes } ADISCORD_economy_decrease_social_spending = yes }
-		else_if = { limit = { has_war = no check_variable = { var = ADISCORD_economy_fiscal_stress value = 55 compare = greater_than_or_equals } ADISCORD_economy_can_decrease_army_spending = yes } ADISCORD_economy_decrease_army_spending = yes }
-		else_if = { limit = { ADISCORD_economy_can_stabilize_macro = yes } ADISCORD_economy_stabilization_package = yes }
-	}
-	else_if = {
-		limit = { ADISCORD_economy_ai_is_recovery = yes }
-		if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 15 compare = greater_than_or_equals } ADISCORD_economy_can_stabilize_macro = yes } ADISCORD_economy_stabilization_package = yes }
-		else_if = { limit = { ADISCORD_economy_can_early_repay_debt = yes } ADISCORD_economy_early_repay_debt = yes }
-		else_if = { limit = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 3 compare = greater_than } ADISCORD_economy_can_decrease_tax_burden = yes } ADISCORD_economy_decrease_tax_burden = yes }
-		else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_research_spending = yes } ADISCORD_economy_increase_research_spending = yes }
-		else_if = { limit = { check_variable = { var = ADISCORD_economy_social_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_social_spending = yes } ADISCORD_economy_increase_social_spending = yes }
-		else_if = { limit = { check_variable = { var = ADISCORD_economy_army_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_army_spending = yes } ADISCORD_economy_increase_army_spending = yes }
-	}
-	else = {
-		if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 15 compare = greater_than_or_equals } ADISCORD_economy_can_stabilize_macro = yes } ADISCORD_economy_stabilization_package = yes }
-		else_if = { limit = { ADISCORD_economy_can_early_repay_debt = yes check_variable = { var = ADISCORD_economy_surplus_streak value = 3 compare = greater_than_or_equals } } ADISCORD_economy_early_repay_debt = yes }
-		else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_research_spending = yes } ADISCORD_economy_increase_research_spending = yes }
-		else_if = { limit = { check_variable = { var = ADISCORD_economy_social_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_social_spending = yes } ADISCORD_economy_increase_social_spending = yes }
-		else_if = { limit = { check_variable = { var = ADISCORD_economy_army_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_army_spending = yes } ADISCORD_economy_increase_army_spending = yes }
-		else_if = { limit = { ADISCORD_economy_can_expand_public_capital = yes check_variable = { var = ADISCORD_economy_surplus_streak value = 4 compare = greater_than_or_equals } } ADISCORD_economy_invest_reserves = yes }
-		else_if = { limit = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 3 compare = greater_than } ADISCORD_economy_can_decrease_tax_burden = yes } ADISCORD_economy_decrease_tax_burden = yes }
+		# Exactly one discretionary action per tick, and never spend the story
+		# reserve below 50 political power. Automatic settlement remains separate.
+		limit = { is_ai = yes has_political_power > 50 }
+		if = {
+			limit = { ADISCORD_economy_ai_is_crisis = yes }
+			if = { limit = { ADISCORD_economy_can_restructure_debt = yes } ADISCORD_economy_restructure_debt = yes }
+			else_if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 15 compare = greater_than_or_equals } ADISCORD_economy_can_stabilize_macro = yes } ADISCORD_economy_stabilization_package = yes }
+			else_if = { limit = { has_war = yes ADISCORD_economy_can_use_war_taxes = yes } ADISCORD_economy_war_taxes_action = yes }
+			else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_increase_tax_burden = yes } ADISCORD_economy_increase_tax_burden = yes }
+			else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } check_variable = { var = ADISCORD_economy_social_spending_mode value = 2 compare = greater_than } ADISCORD_economy_can_decrease_social_spending = yes } ADISCORD_economy_decrease_social_spending = yes }
+			else_if = { limit = { has_war = no check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_decrease_army_spending = yes } ADISCORD_economy_decrease_army_spending = yes }
+			else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_decrease_research_spending = yes } ADISCORD_economy_decrease_research_spending = yes }
+			else_if = { limit = { ADISCORD_economy_can_issue_internal_bonds = yes ADISCORD_economy_has_low_treasury = yes } ADISCORD_economy_issue_internal_bonds = yes }
+			else_if = { limit = { ADISCORD_economy_can_take_external_loan = yes ADISCORD_economy_has_low_treasury = yes } ADISCORD_economy_take_external_loan = yes }
+		}
+		else_if = {
+			limit = { ADISCORD_economy_ai_is_stressed = yes }
+			if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 15 compare = greater_than_or_equals } ADISCORD_economy_can_stabilize_macro = yes } ADISCORD_economy_stabilization_package = yes }
+			else_if = { limit = { has_war = yes ADISCORD_economy_can_use_war_taxes = yes } ADISCORD_economy_war_taxes_action = yes }
+			else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_increase_tax_burden = yes } ADISCORD_economy_increase_tax_burden = yes }
+			else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } check_variable = { var = ADISCORD_economy_social_spending_mode value = 3 compare = greater_than } ADISCORD_economy_can_decrease_social_spending = yes } ADISCORD_economy_decrease_social_spending = yes }
+			else_if = { limit = { has_war = no check_variable = { var = ADISCORD_economy_fiscal_stress value = 55 compare = greater_than_or_equals } ADISCORD_economy_can_decrease_army_spending = yes } ADISCORD_economy_decrease_army_spending = yes }
+			else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_decrease_research_spending = yes } ADISCORD_economy_decrease_research_spending = yes }
+			else_if = { limit = { ADISCORD_economy_can_stabilize_macro = yes } ADISCORD_economy_stabilization_package = yes }
+		}
+		else_if = {
+			limit = { ADISCORD_economy_ai_is_recovery = yes }
+			if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 15 compare = greater_than_or_equals } ADISCORD_economy_can_stabilize_macro = yes } ADISCORD_economy_stabilization_package = yes }
+			else_if = { limit = { ADISCORD_economy_can_early_repay_debt = yes } ADISCORD_economy_early_repay_debt = yes }
+			else_if = { limit = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 3 compare = greater_than } ADISCORD_economy_can_decrease_tax_burden = yes } ADISCORD_economy_decrease_tax_burden = yes }
+			else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = greater_than } ADISCORD_economy_can_decrease_research_spending = yes } ADISCORD_economy_decrease_research_spending = yes }
+			else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_research_spending = yes } ADISCORD_economy_increase_research_spending = yes }
+			else_if = { limit = { check_variable = { var = ADISCORD_economy_social_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_social_spending = yes } ADISCORD_economy_increase_social_spending = yes }
+			else_if = { limit = { check_variable = { var = ADISCORD_economy_army_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_army_spending = yes } ADISCORD_economy_increase_army_spending = yes }
+		}
+		else = {
+			if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 15 compare = greater_than_or_equals } ADISCORD_economy_can_stabilize_macro = yes } ADISCORD_economy_stabilization_package = yes }
+			else_if = { limit = { ADISCORD_economy_can_early_repay_debt = yes check_variable = { var = ADISCORD_economy_surplus_streak value = 3 compare = greater_than_or_equals } } ADISCORD_economy_early_repay_debt = yes }
+			else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 4 compare = greater_than } ADISCORD_economy_can_decrease_research_spending = yes } ADISCORD_economy_decrease_research_spending = yes }
+			else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = greater_than } OR = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than_or_equals } check_variable = { var = ADISCORD_economy_debt_state value = 0 compare = greater_than } check_variable = { var = ADISCORD_economy_interest_share_income value = 10 compare = greater_than_or_equals } } ADISCORD_economy_can_decrease_research_spending = yes } ADISCORD_economy_decrease_research_spending = yes }
+			else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_research_spending = yes } ADISCORD_economy_increase_research_spending = yes }
+			else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = equals } check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = greater_than } check_variable = { var = ADISCORD_economy_debt_state value = 0 compare = equals } check_variable = { var = ADISCORD_economy_interest_share_income value = 10 compare = less_than } ADISCORD_economy_can_increase_research_spending = yes } ADISCORD_economy_increase_research_spending = yes }
+			else_if = { limit = { check_variable = { var = ADISCORD_economy_social_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_social_spending = yes } ADISCORD_economy_increase_social_spending = yes }
+			else_if = { limit = { check_variable = { var = ADISCORD_economy_army_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_army_spending = yes } ADISCORD_economy_increase_army_spending = yes }
+			else_if = { limit = { ADISCORD_economy_can_expand_public_capital = yes check_variable = { var = ADISCORD_economy_surplus_streak value = 4 compare = greater_than_or_equals } } ADISCORD_economy_invest_reserves = yes }
+			else_if = { limit = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 3 compare = greater_than } ADISCORD_economy_can_decrease_tax_burden = yes } ADISCORD_economy_decrease_tax_burden = yes }
+		}
 	}
 }
 
