@@ -267,12 +267,183 @@ def _check_variable_signatures(entries: list[Entry], variable: str) -> list[tupl
     ]
 
 
-def _exact_check(entries: list[Entry], variable: str, value: str, compare: str) -> bool:
-    signatures = _check_variable_signatures(entries, variable)
-    if len(signatures) != 1:
+def _atom_signature(entry: Entry) -> tuple:
+    value = (
+        entry.value
+        if isinstance(entry.value, str)
+        else tuple(_atom_signature(child) for child in entry.value)
+    )
+    return entry.key, value
+
+
+def _numeric_check_constraint(
+    entry: Entry, positive: bool
+) -> tuple[str, float, str] | None:
+    if entry.key != "check_variable" or not isinstance(entry.value, list):
+        return None
+    variable = _direct_scalar(entry.value, "var")
+    value = _direct_scalar(entry.value, "value")
+    compare = _direct_scalar(entry.value, "compare")
+    if variable is None or value is None or compare is None:
+        return None
+    try:
+        numeric_value = float(value)
+    except ValueError:
+        return None
+    if not positive:
+        compare = {
+            "equals": "not_equals",
+            "not_equals": "equals",
+            "greater_than": "less_than_or_equals",
+            "greater_than_or_equals": "less_than",
+            "less_than": "greater_than_or_equals",
+            "less_than_or_equals": "greater_than",
+        }.get(compare, "")
+    return variable, numeric_value, compare
+
+
+def _boolean_path_is_satisfiable(path: tuple[tuple[Entry, bool], ...]) -> bool:
+    polarities: dict[tuple, set[bool]] = {}
+    boolean_values: dict[str, set[bool]] = {}
+    numeric: dict[str, list[tuple[float, str]]] = {}
+    for entry, positive in path:
+        polarities.setdefault(_atom_signature(entry), set()).add(positive)
+        if isinstance(entry.value, str) and entry.value in {"yes", "no"}:
+            truth = entry.value == "yes"
+            boolean_values.setdefault(entry.key, set()).add(
+                truth if positive else not truth
+            )
+        constraint = _numeric_check_constraint(entry, positive)
+        if constraint is not None:
+            variable, value, compare = constraint
+            numeric.setdefault(variable, []).append((value, compare))
+    if any(values == {True, False} for values in polarities.values()):
         return False
-    actual_value, actual_compare = signatures[0]
-    if actual_compare != compare or actual_value is None:
+    if any(values == {True, False} for values in boolean_values.values()):
+        return False
+    for constraints in numeric.values():
+        lower: tuple[float, bool] | None = None
+        upper: tuple[float, bool] | None = None
+        equals: set[float] = set()
+        excluded: set[float] = set()
+        for value, compare in constraints:
+            if compare == "equals":
+                equals.add(value)
+            elif compare == "not_equals":
+                excluded.add(value)
+            elif compare in {"greater_than", "greater_than_or_equals"}:
+                candidate = (value, compare == "greater_than_or_equals")
+                if lower is None or candidate[0] > lower[0] or (
+                    candidate[0] == lower[0] and not candidate[1]
+                ):
+                    lower = candidate
+            elif compare in {"less_than", "less_than_or_equals"}:
+                candidate = (value, compare == "less_than_or_equals")
+                if upper is None or candidate[0] < upper[0] or (
+                    candidate[0] == upper[0] and not candidate[1]
+                ):
+                    upper = candidate
+        if len(equals) > 1:
+            return False
+        if equals:
+            exact = next(iter(equals))
+            if exact in excluded:
+                return False
+            if lower is not None and (
+                exact < lower[0] or (exact == lower[0] and not lower[1])
+            ):
+                return False
+            if upper is not None and (
+                exact > upper[0] or (exact == upper[0] and not upper[1])
+            ):
+                return False
+        if lower is not None and upper is not None and (
+            lower[0] > upper[0]
+            or (lower[0] == upper[0] and (not lower[1] or not upper[1]))
+        ):
+            return False
+    return True
+
+
+def _and_boolean_paths(
+    alternatives: list[list[tuple[tuple[Entry, bool], ...]]],
+) -> list[tuple[tuple[Entry, bool], ...]]:
+    paths: list[tuple[tuple[Entry, bool], ...]] = [()]
+    for child_paths in alternatives:
+        merged: list[tuple[tuple[Entry, bool], ...]] = []
+        for prefix in paths:
+            for suffix in child_paths:
+                candidate = prefix + suffix
+                if _boolean_path_is_satisfiable(candidate):
+                    merged.append(candidate)
+        paths = merged
+        if not paths:
+            break
+    return paths
+
+
+def _boolean_entry_paths(
+    entry: Entry, positive: bool
+) -> list[tuple[tuple[Entry, bool], ...]]:
+    if entry.key == "NOT" and isinstance(entry.value, list):
+        return _boolean_entries_paths(entry.value, not positive)
+    if entry.key in {"AND", "OR"} and isinstance(entry.value, list):
+        alternatives = [
+            _boolean_entry_paths(child, positive) for child in entry.value
+        ]
+        is_conjunction = (entry.key == "AND") == positive
+        return _and_boolean_paths(alternatives) if is_conjunction else [
+            path for child_paths in alternatives for path in child_paths
+        ]
+    if entry.key == "always" and isinstance(entry.value, str):
+        truth = entry.value == "yes"
+        return [()] if truth == positive else []
+    return [((entry, positive),)]
+
+
+def _boolean_entries_paths(
+    entries: list[Entry], positive: bool = True
+) -> list[tuple[tuple[Entry, bool], ...]]:
+    alternatives = [_boolean_entry_paths(entry, positive) for entry in entries]
+    if positive:
+        return _and_boolean_paths(alternatives)
+    return [path for child_paths in alternatives for path in child_paths]
+
+
+def _condition_requires_entry(
+    entries: list[Entry], matcher, positive: bool = True
+) -> bool:
+    matches = [entry for _, entry in _walk_entries(entries) if matcher(entry)]
+    if len(matches) != 1:
+        return False
+    required = matches[0]
+    paths = _boolean_entries_paths(entries)
+    return bool(paths) and all(
+        any(entry is required and polarity == positive for entry, polarity in path)
+        for path in paths
+    )
+
+
+def _condition_is_exact_entry(entries: list[Entry], matcher) -> bool:
+    matches = [entry for _, entry in _walk_entries(entries) if matcher(entry)]
+    if len(matches) != 1:
+        return False
+    required = matches[0]
+    paths = _boolean_entries_paths(entries)
+    return bool(paths) and all(
+        path
+        and all(entry is required and positive for entry, positive in path)
+        for path in paths
+    )
+
+
+def _check_matches(entry: Entry, variable: str, value: str, compare: str) -> bool:
+    if entry.key != "check_variable" or not isinstance(entry.value, list):
+        return False
+    if _direct_scalar(entry.value, "var") != variable:
+        return False
+    actual_value = _direct_scalar(entry.value, "value")
+    if _direct_scalar(entry.value, "compare") != compare or actual_value is None:
         return False
     if value.replace(".", "", 1).isdigit():
         try:
@@ -280,6 +451,23 @@ def _exact_check(entries: list[Entry], variable: str, value: str, compare: str) 
         except ValueError:
             return False
     return actual_value == value
+
+
+def _exact_check(entries: list[Entry], variable: str, value: str, compare: str) -> bool:
+    return _condition_requires_entry(
+        entries,
+        lambda entry: _check_matches(entry, variable, value, compare),
+    )
+
+
+def _exact_scalar(
+    entries: list[Entry], key: str, value: str, positive: bool = True
+) -> bool:
+    return _condition_requires_entry(
+        entries,
+        lambda entry: entry.key == key and entry.value == value,
+        positive,
+    )
 
 
 def _direct_variable_operation(
@@ -297,40 +485,8 @@ def _direct_variable_operation(
     return matches
 
 
-def _branch_is_statically_dead(ancestors: tuple[Entry, ...]) -> bool:
-    for ancestor in ancestors:
-        if ancestor.key not in {"if", "else_if"} or not isinstance(ancestor.value, list):
-            continue
-        limit = next(
-            (entry for entry in ancestor.value if entry.key == "limit" and isinstance(entry.value, list)),
-            None,
-        )
-        if limit is not None and _direct_scalar(limit.value, "always") == "no":
-            return True
-    return False
-
-
 def _limit_is_satisfiable(entries: list[Entry]) -> bool:
-    if any(entry.key == "always" and entry.value == "no" for entry in entries):
-        return False
-    ai_values = {
-        entry.value
-        for entry in entries
-        if entry.key == "is_ai" and isinstance(entry.value, str)
-    }
-    if ai_values == {"yes", "no"}:
-        return False
-    direct_ai = next(iter(ai_values), None) if len(ai_values) == 1 else None
-    negated_ai = {
-        entry.value
-        for entry in entries
-        if entry.key == "NOT" and isinstance(entry.value, list)
-        for _, nested in _walk_entries(entry.value)
-        if nested.key == "is_ai" and isinstance(nested.value, str)
-    }
-    if direct_ai is not None and direct_ai in negated_ai:
-        return False
-    return True
+    return bool(_boolean_entries_paths(entries))
 
 
 def _conditional_else_pairs(entries: list[Entry]):
@@ -387,8 +543,7 @@ def ai_assistance_contract_issues(ideas_text: str, effects_text: str) -> list[st
         and any(
             candidate.key == "limit"
             and isinstance(candidate.value, list)
-            and _direct_scalar(candidate.value, "is_ai") == "yes"
-            and _limit_is_satisfiable(candidate.value)
+            and _exact_scalar(candidate.value, "is_ai", "yes")
             for candidate in entry.value
         )
     ]
@@ -439,7 +594,7 @@ def ai_assistance_contract_issues(ideas_text: str, effects_text: str) -> list[st
                     "1",
                     "greater_than_or_equals",
                 )
-                and _direct_scalar(condition, "has_war") == "yes"
+                and _exact_scalar(condition, "has_war", "yes")
             )
         else:
             valid_condition = valid_condition and _exact_check(
@@ -484,7 +639,12 @@ def research_policy_flow_issues(text: str) -> list[str]:
             and signatures[0][0] is not None
             and signatures[0][1] == "equals"
             and len(multipliers) == 1
-            and _limit_is_satisfiable(limit.value)
+            and _exact_check(
+                limit.value,
+                "ADISCORD_economy_research_spending_mode",
+                signatures[0][0],
+                "equals",
+            )
         ):
             level = signatures[0][0]
             try:
@@ -525,22 +685,28 @@ def automatic_borrow_flow_issues(text: str) -> list[str]:
                 ),
                 None,
             )
-            copies = _direct_variable_operation(
-                branch.value,
-                "set_variable",
-                "ADISCORD_economy_auto_borrow_temp",
-                "ADISCORD_economy_uncovered_deficit_temp",
-            )
+            candidate_copies = [
+                entry
+                for _, entry in _walk_entries(branch.value)
+                if entry.key == "set_variable"
+                and isinstance(entry.value, list)
+                and _direct_scalar(entry.value, "var")
+                == "ADISCORD_economy_auto_borrow_temp"
+                and _direct_scalar(entry.value, "value")
+                == "ADISCORD_economy_uncovered_deficit_temp"
+            ]
             if (
                 limit is not None
-                and _limit_is_satisfiable(limit.value)
-                and _exact_check(
+                and len(candidate_copies) == 1
+                and _condition_is_exact_entry(
                     limit.value,
-                    "ADISCORD_economy_treasury",
-                    "0",
-                    "less_than",
+                    lambda entry: _check_matches(
+                        entry,
+                        "ADISCORD_economy_treasury",
+                        "0",
+                        "less_than",
+                    ),
                 )
-                and len(copies) == 1
             ):
                 owners.append(branch)
         if len(owners) != 1:
@@ -548,61 +714,74 @@ def automatic_borrow_flow_issues(text: str) -> list[str]:
             continue
         owner = owners[0]
         assert isinstance(owner.value, list)
-        copy = _direct_variable_operation(
-            owner.value,
+        write_operations = {
             "set_variable",
-            "ADISCORD_economy_auto_borrow_temp",
-            "ADISCORD_economy_uncovered_deficit_temp",
-        )[0]
-        automatic_writes = [
-            entry
-            for _, entry in _walk_entries(definition.value)
-            if entry.key
-            in {
-                "set_variable",
-                "add_to_variable",
-                "subtract_from_variable",
-                "multiply_variable",
-                "divide_variable",
-                "clamp_variable",
-            }
-            and isinstance(entry.value, list)
-            and _direct_scalar(entry.value, "var")
-            == "ADISCORD_economy_auto_borrow_temp"
+            "set_temp_variable",
+            "add_to_variable",
+            "add_to_temp_variable",
+            "subtract_from_variable",
+            "subtract_from_temp_variable",
+            "multiply_variable",
+            "multiply_temp_variable",
+            "divide_variable",
+            "divide_temp_variable",
+            "clamp_variable",
+            "clamp_temp_variable",
+        }
+        ordered = [
+            (position, ancestors, entry)
+            for position, (ancestors, entry) in enumerate(_walk_entries(owner.value))
+            if entry.key in write_operations and isinstance(entry.value, list)
         ]
-        source_writes = [
-            entry
-            for entry in owner.value
-            if entry.key
-            in {
-                "set_variable",
-                "add_to_variable",
-                "subtract_from_variable",
-                "multiply_variable",
-                "divide_variable",
-                "clamp_variable",
-            }
-            and isinstance(entry.value, list)
-            and _direct_scalar(entry.value, "var")
+
+        def writes_to(variable: str):
+            return [
+                operation
+                for operation in ordered
+                if _direct_scalar(operation[2].value, "var") == variable
+            ]
+
+        source_writes = writes_to("ADISCORD_economy_uncovered_deficit_temp")
+        automatic_writes = writes_to("ADISCORD_economy_auto_borrow_temp")
+        source_sets = [
+            operation
+            for operation in source_writes
+            if operation[2].key == "set_variable"
+            and _direct_scalar(operation[2].value, "value") == "0"
+        ]
+        source_negations = [
+            operation
+            for operation in source_writes
+            if operation[2].key == "subtract_from_variable"
+            and _direct_scalar(operation[2].value, "value")
+            == "ADISCORD_economy_treasury"
+        ]
+        copies = [
+            operation
+            for operation in automatic_writes
+            if operation[2].key == "set_variable"
+            and _direct_scalar(operation[2].value, "value")
             == "ADISCORD_economy_uncovered_deficit_temp"
         ]
-        source_ok = (
+        canonical: list[tuple[int, tuple[Entry, ...], Entry]] = []
+        flow_is_exact = (
             len(source_writes) == 2
-            and source_writes[0].key == "set_variable"
-            and _direct_scalar(source_writes[0].value, "value") == "0"
-            and source_writes[1].key == "subtract_from_variable"
-            and _direct_scalar(source_writes[1].value, "value")
-            == "ADISCORD_economy_treasury"
-            and owner.value.index(source_writes[1]) < owner.value.index(copy)
+            and len(automatic_writes) == 1
+            and len(source_sets) == 1
+            and len(source_negations) == 1
+            and len(copies) == 1
         )
-        flow_is_exact = len(automatic_writes) == 1 and source_ok
+        if flow_is_exact:
+            canonical.extend((source_sets[0], source_negations[0], copies[0]))
         for account in ("ADISCORD_economy_debt", "ADISCORD_economy_treasury"):
-            direct_additions = _direct_variable_operation(
-                owner.value,
-                "add_to_variable",
-                account,
-                "ADISCORD_economy_auto_borrow_temp",
-            )
+            owner_additions = [
+                operation
+                for operation in ordered
+                if operation[2].key == "add_to_variable"
+                and _direct_scalar(operation[2].value, "var") == account
+                and _direct_scalar(operation[2].value, "value")
+                == "ADISCORD_economy_auto_borrow_temp"
+            ]
             all_additions = [
                 entry
                 for _, entry in _walk_entries(definition.value)
@@ -612,10 +791,22 @@ def automatic_borrow_flow_issues(text: str) -> list[str]:
                 and _direct_scalar(entry.value, "value")
                 == "ADISCORD_economy_auto_borrow_temp"
             ]
-            if len(direct_additions) != 1 or len(all_additions) != 1:
+            if (
+                len(owner_additions) != 1
+                or owner_additions[0][1]
+                or len(all_additions) != 1
+            ):
                 flow_is_exact = False
+            elif canonical:
+                canonical.append(owner_additions[0])
             if len(all_additions) != 1:
                 issues.append(f"{name}: automatic borrow does not fully fund {account}")
+        if canonical and (
+            any(ancestors for _, ancestors, _ in canonical)
+            or [position for position, _, _ in canonical]
+            != sorted(position for position, _, _ in canonical)
+        ):
+            flow_is_exact = False
         if not flow_is_exact:
             issues.append(
                 f"{name}: uncovered deficit is capped, rewritten, or conditionally funded"
@@ -741,13 +932,12 @@ def debt_notification_flow_issues(text: str) -> list[str]:
                 issues.append(f"{name}: routine debt notification call")
                 continue
             limit = limits[0]
-            notified_occurrences = [
-                sum(ancestor.key == "NOT" for ancestor in nested_ancestors)
-                for nested_ancestors, candidate in _walk_entries(limit)
-                if candidate.key == "has_variable"
-                and candidate.value == "ADISCORD_economy_first_loan_notified"
-            ]
-            first_loan = notified_occurrences == [1]
+            first_loan = _exact_scalar(
+                limit,
+                "has_variable",
+                "ADISCORD_economy_first_loan_notified",
+                positive=False,
+            )
             upward = _exact_check(
                 limit,
                 "ADISCORD_economy_debt_state",
@@ -818,10 +1008,17 @@ def debt_reconciler_issues(text: str) -> list[str]:
                 str(target),
                 "greater_than",
             )
-            uses_lower_interest_band = len(interest_checks) == 1 and interest_checks[0][1] in {
-                "less_than",
-                "less_than_or_equals",
-            }
+            uses_lower_interest_band = (
+                len(interest_checks) == 1
+                and interest_checks[0][0] is not None
+                and interest_checks[0][1] in {"less_than", "less_than_or_equals"}
+                and _exact_check(
+                    condition,
+                    "ADISCORD_economy_interest_share_income",
+                    interest_checks[0][0],
+                    interest_checks[0][1],
+                )
+            )
             removed: set[str] = set()
             for operation in branch.value:
                 if operation.key == "remove_ideas":

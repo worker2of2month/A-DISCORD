@@ -250,6 +250,14 @@ ADISCORD_heavy = { has_idea = forbidden }
             ai_assistance_contract_issues(self.ASSISTANCE_IDEAS, self.ASSISTANCE_EFFECT),
             [],
         )
+        nested_positive = self.ASSISTANCE_EFFECT.replace(
+            "check_variable = { var = surrender_progress value = 0.35 compare = greater_than }",
+            "OR = { AND = { check_variable = { var = surrender_progress value = 0.35 compare = greater_than } } AND = { always = no } }",
+        )
+        self.assertEqual(
+            ai_assistance_contract_issues(self.ASSISTANCE_IDEAS, nested_positive),
+            [],
+        )
         mutations = (
             self.ASSISTANCE_EFFECT.replace(
                 "  limit = { is_ai = yes }",
@@ -300,9 +308,24 @@ ADISCORD_heavy = { has_idea = forbidden }
                 "var = surrender_progress value = 0.35 compare = greater_than } }",
                 "var = surrender_progress value = 0.35 compare = greater_than } always = no }",
             ),
+            self.ASSISTANCE_EFFECT.replace(
+                "check_variable = { var = surrender_progress value = 0.35 compare = greater_than }",
+                "NOT = { check_variable = { var = surrender_progress value = 0.35 compare = greater_than } }",
+            ),
+            self.ASSISTANCE_EFFECT.replace(
+                "check_variable = { var = surrender_progress value = 0.35 compare = greater_than }",
+                "check_variable = { var = surrender_progress value = 0.35 compare = greater_than } AND = { always = no }",
+            ),
+            self.ASSISTANCE_EFFECT.replace(
+                "check_variable = { var = surrender_progress value = 0.35 compare = greater_than }",
+                "OR = { AND = { check_variable = { var = surrender_progress value = 0.35 compare = greater_than } always = no } always = yes }",
+            ),
         )
-        for mutation in mutations:
-            self.assertTrue(ai_assistance_contract_issues(self.ASSISTANCE_IDEAS, mutation))
+        for index, mutation in enumerate(mutations):
+            with self.subTest(mutation=index):
+                self.assertTrue(
+                    ai_assistance_contract_issues(self.ASSISTANCE_IDEAS, mutation)
+                )
 
     def test_core_policy_and_debt_flow_negative_fixtures(self):
         research = "\n".join(
@@ -318,6 +341,15 @@ ADISCORD_heavy = { has_idea = forbidden }
         self.assertTrue(research_policy_flow_issues(unconditional))
         overlapping = research.replace("compare = equals", "compare = greater_than")
         self.assertTrue(research_policy_flow_issues(overlapping))
+        negated_research = research.replace(
+            "limit = { check_variable",
+            "limit = { NOT = { check_variable",
+        ).replace(
+            "compare = equals } } multiply_variable",
+            "compare = equals } } } multiply_variable",
+        )
+        with self.subTest(mutation="negated research owners"):
+            self.assertTrue(research_policy_flow_issues(negated_research))
         level_one_branch = (
             "if = { limit = { check_variable = { var = "
             "ADISCORD_economy_research_spending_mode value = 1 compare = equals } } "
@@ -351,6 +383,12 @@ ADISCORD_economy_apply_monthly_balance = {
 }
 """
         self.assertEqual(automatic_borrow_flow_issues(settlement), [])
+        negated_treasury_owner = settlement.replace(
+            "limit = { check_variable = { var = ADISCORD_economy_treasury value = 0 compare = less_than } }",
+            "limit = { NOT = { check_variable = { var = ADISCORD_economy_treasury value = 0 compare = less_than } } }",
+        )
+        with self.subTest(mutation="negated treasury owner"):
+            self.assertTrue(automatic_borrow_flow_issues(negated_treasury_owner))
         dead_funding = settlement.replace(
             "  add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp }\n  add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp }",
             "  if = { limit = { always = no } add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp } add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp } }",
@@ -377,6 +415,23 @@ ADISCORD_economy_apply_monthly_balance = {
                 f"  {source_mutation}\n  set_variable = {{ var = ADISCORD_economy_auto_borrow_temp value = ADISCORD_economy_uncovered_deficit_temp }}",
             )
             self.assertTrue(automatic_borrow_flow_issues(hidden_source_cap))
+        nested_source_cap = settlement.replace(
+            "  subtract_from_variable = { var = ADISCORD_economy_uncovered_deficit_temp value = ADISCORD_economy_treasury }\n",
+            "  subtract_from_variable = { var = ADISCORD_economy_uncovered_deficit_temp value = ADISCORD_economy_treasury }\n"
+            "  if = { limit = { always = yes } clamp_variable = { var = ADISCORD_economy_uncovered_deficit_temp min = 0 max = ADISCORD_hidden_cap } }\n",
+        )
+        with self.subTest(mutation="nested uncovered-source cap"):
+            self.assertTrue(automatic_borrow_flow_issues(nested_source_cap))
+        additions_before_copy = settlement.replace(
+            "  set_variable = { var = ADISCORD_economy_auto_borrow_temp value = ADISCORD_economy_uncovered_deficit_temp }\n"
+            "  add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp }\n"
+            "  add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp }",
+            "  add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp }\n"
+            "  add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp }\n"
+            "  set_variable = { var = ADISCORD_economy_auto_borrow_temp value = ADISCORD_economy_uncovered_deficit_temp }",
+        )
+        with self.subTest(mutation="account additions before copy"):
+            self.assertTrue(automatic_borrow_flow_issues(additions_before_copy))
 
     def test_transition_notification_and_reconciler_negative_fixtures(self):
         transition = """
@@ -401,7 +456,7 @@ ADISCORD_economy_update_debt_state_after_settlement = {
             " } else = { set_variable = { var = ADISCORD_economy_debt_emergency_streak value = 0 } }",
             " } set_variable = { var = ADISCORD_economy_debt_emergency_streak value = 0 }",
         )))
-        for invalid in (
+        for index, invalid in enumerate((
             transition.replace(
                 "ADISCORD_economy_interest_share_income value = 40 compare = greater_than_or_equals",
                 "ADISCORD_economy_interest_share_income value = 40 compare = less_than",
@@ -435,8 +490,22 @@ ADISCORD_economy_update_debt_state_after_settlement = {
                 "ADISCORD_economy_debt_emergency_streak value = 4 compare = greater_than_or_equals } }",
                 "ADISCORD_economy_debt_emergency_streak value = 4 compare = greater_than_or_equals } always = no }",
             ),
-        ):
-            self.assertTrue(debt_transition_flow_issues(invalid))
+            transition.replace(
+                "check_variable = { var = ADISCORD_economy_interest_share_income value = 40 compare = greater_than_or_equals }",
+                "NOT = { check_variable = { var = ADISCORD_economy_interest_share_income value = 40 compare = greater_than_or_equals } }",
+                1,
+            ),
+            transition.replace(
+                "check_variable = { var = ADISCORD_economy_debt_emergency_streak value = 4 compare = greater_than_or_equals }",
+                "NOT = { check_variable = { var = ADISCORD_economy_debt_emergency_streak value = 4 compare = greater_than_or_equals } }",
+            ),
+            transition.replace(
+                "check_variable = { var = ADISCORD_economy_debt_emergency_streak value = 4 compare = greater_than_or_equals }",
+                "check_variable = { var = ADISCORD_economy_debt_emergency_streak value = 4 compare = greater_than_or_equals } AND = { always = no }",
+            ),
+        )):
+            with self.subTest(transition_mutation=index):
+                self.assertTrue(debt_transition_flow_issues(invalid))
 
         notification = """
 ADISCORD_economy_queue_debt_notification = { set_country_flag = queued }
@@ -461,6 +530,12 @@ ADISCORD_transition = { if = { limit = { check_variable = { var = ADISCORD_econo
             1,
         )
         self.assertTrue(debt_notification_flow_issues(duplicate_queue))
+        negated_upward = notification.replace(
+            "check_variable = { var = ADISCORD_economy_debt_state value = ADISCORD_economy_last_notified_debt_state compare = greater_than }",
+            "NOT = { check_variable = { var = ADISCORD_economy_debt_state value = ADISCORD_economy_last_notified_debt_state compare = greater_than } }",
+        )
+        with self.subTest(mutation="negated upward notification"):
+            self.assertTrue(debt_notification_flow_issues(negated_upward))
 
         reconciler = """
 ADISCORD_economy_reconcile_debt_state_after_action = {
@@ -498,6 +573,18 @@ ADISCORD_economy_reconcile_debt_state_after_action = {
             "check_variable = { var = ADISCORD_economy_debt_state value = 1 compare = greater_than }\n  always = no",
         )
         self.assertTrue(debt_reconciler_issues(dead_reconciler))
+        negated_reconciler = reconciler.replace(
+            "check_variable = { var = ADISCORD_economy_debt_state value = 1 compare = greater_than }",
+            "NOT = { check_variable = { var = ADISCORD_economy_debt_state value = 1 compare = greater_than } }",
+        )
+        with self.subTest(mutation="negated reconciler owner"):
+            self.assertTrue(debt_reconciler_issues(negated_reconciler))
+        nested_dead_reconciler = reconciler.replace(
+            "check_variable = { var = ADISCORD_economy_debt_state value = 1 compare = greater_than }",
+            "check_variable = { var = ADISCORD_economy_debt_state value = 1 compare = greater_than } AND = { always = no }",
+        )
+        with self.subTest(mutation="nested dead reconciler owner"):
+            self.assertTrue(debt_reconciler_issues(nested_dead_reconciler))
 
 
 class WeeklyEconomyContracts(unittest.TestCase):
