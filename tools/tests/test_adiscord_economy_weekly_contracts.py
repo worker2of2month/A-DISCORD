@@ -1960,6 +1960,49 @@ def task10_live_localisation_keys(gui_text, scripted_loc_text):
 
 
 TASK10_FIXED_LEVEL_POLICIES = ("tax", "army", "social")
+TASK10_NUMERIC_PROSE_EQUIVALENCES = {
+    "ADISCORD_economy_action_repay_debt_tt": {
+        "russian": ("-50", "50"),
+        "english": ("50", "50"),
+        "reason": "Russian signs the treasury outflow; English says spend 50",
+    },
+    "ADISCORD_economy_research_controls_tt": {
+        "russian": (
+            "+2%", "+3%", "+30%", "+5%", "+60%", "-20%", "-3%",
+            "-40%", "-8%", "0%", "0%", "1", "5", "5", "5",
+        ),
+        "english": (
+            "+2%", "+3%", "+30%", "+5%", "+60%", "-20%", "-3%",
+            "-40%", "-8%", "0%", "0%", "5", "5",
+        ),
+        "reason": "Russian labels the enumerated range 1-5; English enumerates it",
+    },
+    "ADISCORD_economy_research_level_3_tt": {
+        "russian": ("0%", "0%", "3", "5"),
+        "english": ("3", "5"),
+        "reason": "English no modifiers is equivalent to two Russian zero effects",
+    },
+    "ADISCORD_economy_topbar_treasury_tooltip": {
+        "russian": ("100", "4"),
+        "english": ("100",),
+        "reason": "English four weeks spells the Russian digit 4 as a word",
+    },
+    "ADISCORD_economy_war_fatigue_effect_0": {
+        "russian": ("0", "1"),
+        "english": ("0", "1", "1"),
+        "reason": "English repeats level 1 in the warning sentence",
+    },
+}
+TASK10_MATERIAL_NUMERIC_SURFACES = frozenset(
+    {
+        "ADISCORD_economy_action_restructure_debt_tt",
+        "ADISCORD_economy_buildings_tt",
+        "ADISCORD_economy_war_fatigue_tt",
+    }
+)
+TASK10_REVIEW_NUMERIC_SURFACES = frozenset(TASK10_NUMERIC_PROSE_EQUIVALENCES) | (
+    TASK10_MATERIAL_NUMERIC_SURFACES
+)
 TASK10_DISPLAY_CACHE_NAMES = (
     "ADISCORD_economy_deficit_runway",
     "ADISCORD_economy_inflation_expense_multiplier",
@@ -1998,6 +2041,52 @@ def task10_numeric_effects(value):
             without_references,
         )
     )
+
+
+def task10_material_numeric_surface_issues(russian_text, english_text):
+    issues = []
+    exact_numeric_contracts = {
+        "ADISCORD_economy_action_restructure_debt_tt": {
+            "russian": ("10%", "100", "15%", "35", "50"),
+            "english": ("10%", "100", "15%", "2", "35", "50"),
+        },
+        "ADISCORD_economy_buildings_tt": {
+            "russian": ("+0.90", "+5%", "0.42", "1", "2", "4", "6"),
+            "english": ("+0.90", "+5%", "-0.42", "1", "2", "4", "6"),
+        },
+        "ADISCORD_economy_war_fatigue_tt": {
+            "russian": (
+                "+2", "+2", "+4", "1", "100", "15", "30", "4", "4",
+                "50", "75", "8",
+            ),
+            "english": (
+                "+2", "+2", "+4", "+8", "-1", "-4", "100", "15", "30",
+                "4", "50", "75",
+            ),
+        },
+    }
+    for key, expected_by_language in exact_numeric_contracts.items():
+        for language, text in (("russian", russian_text), ("english", english_text)):
+            actual = tuple(task10_numeric_effects(localisation_value(text, key)))
+            if actual != expected_by_language[language]:
+                issues.append(
+                    f"{key} {language} numeric contract is {actual}, expected "
+                    f"{expected_by_language[language]}"
+                )
+
+    restructure_ru = localisation_value(
+        russian_text, "ADISCORD_economy_action_restructure_debt_tt"
+    ).lower()
+    restructure_en = localisation_value(
+        english_text, "ADISCORD_economy_action_restructure_debt_tt"
+    ).lower()
+    for phrase in ("в этом месяце ещё не брали заём", "хотя бы один сигнал риска"):
+        if phrase not in restructure_ru:
+            issues.append(f"Russian restructuring omits exact condition: {phrase}")
+    for phrase in ("no loan has been taken this month", "at least one risk signal"):
+        if phrase not in restructure_en:
+            issues.append(f"English restructuring omits exact condition: {phrase}")
+    return issues
 
 
 def task10_balance_surface_issues(gui_text, russian_text, english_text):
@@ -2333,6 +2422,7 @@ def task10_doc_schema_contract_issues(player_doc):
 def task10_bilingual_semantic_issues(gui_text, russian_text, english_text):
     issues = []
     owned = task10_live_localisation_keys(gui_text, SCRIPTED_LOC)
+    numeric_mismatches = set()
     for key in sorted(owned):
         try:
             russian = localisation_value(russian_text, key)
@@ -2344,6 +2434,32 @@ def task10_bilingual_semantic_issues(gui_text, russian_text, english_text):
             english
         ):
             issues.append(f"{key} formatted variables/selectors differ by language")
+        russian_numeric = tuple(task10_numeric_effects(russian))
+        english_numeric = tuple(task10_numeric_effects(english))
+        if russian_numeric == english_numeric:
+            continue
+        numeric_mismatches.add(key)
+        if key in TASK10_NUMERIC_PROSE_EQUIVALENCES:
+            expected = TASK10_NUMERIC_PROSE_EQUIVALENCES[key]
+            if (
+                russian_numeric != expected["russian"]
+                or english_numeric != expected["english"]
+            ):
+                issues.append(
+                    f"{key} exceeds its exact numeric prose equivalence: "
+                    f"{russian_numeric} / {english_numeric}"
+                )
+        elif key not in TASK10_MATERIAL_NUMERIC_SURFACES:
+            issues.append(f"{key} has an unclassified numeric semantic mismatch")
+
+    if len(TASK10_REVIEW_NUMERIC_SURFACES) != 8:
+        issues.append("Task 10 review numeric-surface inventory is not exactly eight")
+    unexpected_mismatches = numeric_mismatches - TASK10_REVIEW_NUMERIC_SURFACES
+    if unexpected_mismatches:
+        issues.append(
+            f"unexpected live numeric mismatches: {sorted(unexpected_mismatches)}"
+        )
+    issues.extend(task10_material_numeric_surface_issues(russian_text, english_text))
 
     for policy in TASK10_FIXED_LEVEL_POLICIES:
         for level in range(1, 6):
@@ -6215,6 +6331,80 @@ ADISCORD_bad_assistance_owner = {
                 ECONOMY_GUI, ECONOMY_LOC, external_loan_mutation
             )
         )
+
+        restructure_value = localisation_value(
+            ECONOMY_LOC_EN, "ADISCORD_economy_action_restructure_debt_tt"
+        )
+        for name, changed_value in (
+            ("risk branch", restructure_value.replace("10%", "", 1)),
+            (
+                "monthly loan guard",
+                restructure_value.replace(
+                    "no loan has been taken this month", "", 1
+                ),
+            ),
+        ):
+            with self.subTest(restructure_mutation=name):
+                mutation = ECONOMY_LOC_EN.replace(
+                    restructure_value, changed_value, 1
+                )
+                self.assertNotEqual(mutation, ECONOMY_LOC_EN)
+                self.assertTrue(
+                    task10_bilingual_semantic_issues(
+                        ECONOMY_GUI, ECONOMY_LOC, mutation
+                    )
+                )
+
+        buildings_value = localisation_value(
+            ECONOMY_LOC_EN, "ADISCORD_economy_buildings_tt"
+        )
+        buildings_mutation = ECONOMY_LOC_EN.replace(
+            buildings_value,
+            buildings_value.replace("+0.90", "", 1),
+            1,
+        )
+        self.assertNotEqual(buildings_mutation, ECONOMY_LOC_EN)
+        self.assertTrue(
+            task10_bilingual_semantic_issues(
+                ECONOMY_GUI, ECONOMY_LOC, buildings_mutation
+            )
+        )
+
+        fatigue_value = localisation_value(
+            ECONOMY_LOC_EN, "ADISCORD_economy_war_fatigue_tt"
+        )
+        fatigue_mutation = ECONOMY_LOC_EN.replace(
+            fatigue_value,
+            fatigue_value.replace("+8", "", 1),
+            1,
+        )
+        self.assertNotEqual(fatigue_mutation, ECONOMY_LOC_EN)
+        self.assertTrue(
+            task10_bilingual_semantic_issues(
+                ECONOMY_GUI, ECONOMY_LOC, fatigue_mutation
+            )
+        )
+
+        restructure_trigger = unique_block(
+            TRIGGERS, "ADISCORD_economy_can_restructure_debt"
+        )
+        self.assertEqual(restructure_trigger.count("check_variable"), 6)
+        self.assertIn(
+            "check_variable = { var = ADISCORD_economy_recent_debt value = 1 compare = less_than }",
+            restructure_trigger,
+        )
+        restructure_or = unique_block(restructure_trigger, "OR")
+        for variable, value, compare in (
+            ("ADISCORD_economy_interest_share_income", 10, "greater_than_or_equals"),
+            ("ADISCORD_economy_debt_pressure", 50, "greater_than_or_equals"),
+            ("ADISCORD_economy_debt_crisis_level", 2, "greater_than_or_equals"),
+            ("ADISCORD_economy_creditworthiness", 35, "less_than"),
+        ):
+            self.assertIn(
+                f"check_variable = {{ var = {variable} value = {value} compare = {compare} }}",
+                restructure_or,
+            )
+        self.assertEqual(restructure_or.count("check_variable"), 4)
 
     def test_task10_balance_kpi_has_short_and_delayed_bilingual_breakdown(self):
         self.assertEqual(
