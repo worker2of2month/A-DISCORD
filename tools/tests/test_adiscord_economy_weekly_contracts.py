@@ -394,10 +394,13 @@ ADISCORD_economy_apply_monthly_balance = {
             " }\n"
             " set_variable = { var = ADISCORD_economy_debt value = ADISCORD_unrelated_accounting }\n"
             " add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_unrelated_accounting }\n"
+            " clear_variable = ADISCORD_economy_debt\n"
+            " clear_variable = ADISCORD_economy_treasury\n"
             "}",
         )
         self.assertEqual(automatic_borrow_flow_issues(outside_accounting), [])
         account_write_templates = {
+            "clear": "clear_variable = %s",
             "subtract": "subtract_from_variable = { var = %s value = ADISCORD_economy_auto_borrow_temp }",
             "set": "set_variable = { var = %s value = ADISCORD_economy_auto_borrow_temp }",
             "multiply": "multiply_variable = { var = %s value = ADISCORD_economy_auto_borrow_temp }",

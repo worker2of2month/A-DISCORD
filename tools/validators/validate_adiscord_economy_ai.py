@@ -715,6 +715,7 @@ def automatic_borrow_flow_issues(text: str) -> list[str]:
         owner = owners[0]
         assert isinstance(owner.value, list)
         write_operations = {
+            "clear_variable",
             "set_variable",
             "set_temp_variable",
             "add_to_variable",
@@ -731,14 +732,19 @@ def automatic_borrow_flow_issues(text: str) -> list[str]:
         ordered = [
             (position, ancestors, entry)
             for position, (ancestors, entry) in enumerate(_walk_entries(owner.value))
-            if entry.key in write_operations and isinstance(entry.value, list)
+            if entry.key in write_operations
+            and (
+                isinstance(entry.value, list)
+                or (entry.key == "clear_variable" and isinstance(entry.value, str))
+            )
         ]
 
         def writes_to(variable: str):
             return [
                 operation
                 for operation in ordered
-                if _direct_scalar(operation[2].value, "var") == variable
+                if isinstance(operation[2].value, list)
+                and _direct_scalar(operation[2].value, "var") == variable
             ]
 
         source_writes = writes_to("ADISCORD_economy_uncovered_deficit_temp")
@@ -779,7 +785,16 @@ def automatic_borrow_flow_issues(text: str) -> list[str]:
                 operation
                 for operation in ordered
                 if operation[0] > copy_position
-                and _direct_scalar(operation[2].value, "var") == account
+                and (
+                    (
+                        isinstance(operation[2].value, list)
+                        and _direct_scalar(operation[2].value, "var") == account
+                    )
+                    or (
+                        operation[2].key == "clear_variable"
+                        and operation[2].value == account
+                    )
+                )
             ]
             owner_additions = [
                 operation
