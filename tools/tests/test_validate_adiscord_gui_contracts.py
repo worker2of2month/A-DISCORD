@@ -161,7 +161,9 @@ def _scripted_gui_dashboard_sections(text):
         effect
         for owner in roots[0].value
         if isinstance(owner.value, list)
-        for effect in (_unique_direct_block(owner.value, 'effects') or [])
+        for effect_section in owner.value
+        if effect_section.key == 'effects' and isinstance(effect_section.value, list)
+        for effect in effect_section.value
     ]
     return sections
 
@@ -272,6 +274,30 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
     trigger_entries = sections['triggers']
     property_entries = sections['properties']
 
+    protected_targets = set(effects.values())
+    target_invocations = []
+    for owner in ownership_effect_entries:
+        if not isinstance(owner.value, list):
+            continue
+        for operation in owner.value:
+            if operation.key in protected_targets:
+                target_invocations.append(
+                    (operation.key, owner.key, operation.value, True)
+                )
+            if isinstance(operation.value, list):
+                for nested in _walk_clausewitz(operation.value):
+                    if nested.key in protected_targets:
+                        target_invocations.append(
+                            (nested.key, owner.key, nested.value, False)
+                        )
+    for (policy, direction), target in effects.items():
+        expected_owner = f'ADISCORD_economy_{policy}_{direction}_click'
+        matches = [call for call in target_invocations if call[0] == target]
+        if matches != [(target, expected_owner, 'yes', True)]:
+            issues.append(
+                f'{target} is not called exactly once by its canonical click owner'
+            )
+
     gui_buttons = {
         name for kind, name, _ in node_list if kind == 'buttonType'
     }
@@ -306,8 +332,19 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
         issues.append('scripted GUI does not own exactly eight policy clicks')
 
     row_rects = []
+    command_parent = (
+        'ADISCORD_economy_dashboard_window',
+        'ADISCORD_economy_command_panel',
+    )
     for policy in policies:
         row_name = f'ADISCORD_economy_{policy}_row'
+        row_nodes = [
+            (kind, parents)
+            for kind, name, parents in node_list
+            if name == row_name
+        ]
+        if row_nodes != [('instantTextboxType', command_parent)]:
+            issues.append(f'{row_name} has the wrong command-panel parent')
         try:
             row = gui_node_body(gui, row_name)
         except AssertionError as error:
@@ -334,6 +371,16 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
             f'ADISCORD_economy_{policy}_decrease',
             f'ADISCORD_economy_{policy}_increase',
         ):
+            expected_kind = (
+                'containerWindowType' if child_name.endswith('_scale') else 'buttonType'
+            )
+            child_nodes = [
+                (kind, parents)
+                for kind, name, parents in node_list
+                if name == child_name
+            ]
+            if child_nodes != [(expected_kind, command_parent)]:
+                issues.append(f'{child_name} has the wrong command-panel parent')
             try:
                 child = gui_node_body(gui, child_name)
             except AssertionError as error:
@@ -415,20 +462,14 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
             effect_selector = (
                 f'GetADISCORDEconomy{title}{direction.title()}EffectLoc'
             )
-            try:
-                effect_block = named_assignment_body(
-                    scripted_loc, 'defined_text', effect_selector
+            issues.extend(
+                economy_validator.policy_effect_selector_issues(
+                    scripted_loc,
+                    effect_selector,
+                    f'ADISCORD_economy_{policy}_{direction}_target_level',
+                    f'ADISCORD_economy_{policy}_effects',
                 )
-            except AssertionError as error:
-                issues.append(str(error))
-            else:
-                target = f'ADISCORD_economy_{policy}_{direction}_target_level'
-                effect_prefix = f'ADISCORD_economy_{policy}_effects'
-                if effect_block.count(target) != 4:
-                    issues.append(f'{effect_selector} uses the wrong preview target')
-                for level in range(1, 6):
-                    if f'{effect_prefix}_{level}' not in effect_block:
-                        issues.append(f'{effect_selector} misses effect level {level}')
+            )
 
         marker_owner = _direct_clausewitz(
             trigger_entries, f'ADISCORD_economy_{policy}_active_marker_visible'
@@ -648,7 +689,25 @@ defined_text = {
             "name = DisconnectedSelector",
         ) + "\ndefined_text = { name = GetADISCORDEconomyTaxDecreasePreviewLoc text = { localization_key = ADISCORD_economy_policy_preview_available } }"
         nested_dead_wrapper = f"ADISCORD_dead = {{ {self.VALID} }}"
-        for invalid in (swapped, wrong_trigger, dead, disconnected, nested_dead_wrapper):
+        negated_boundary = self.VALID.replace(
+            "trigger = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 1 compare = less_than_or_equals } }",
+            "trigger = { NOT = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 1 compare = less_than_or_equals } } }",
+            1,
+        )
+        contradictory_boundary = self.VALID.replace(
+            "trigger = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 1 compare = less_than_or_equals } }",
+            "trigger = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 1 compare = less_than_or_equals } always = no }",
+            1,
+        )
+        for invalid in (
+            swapped,
+            wrong_trigger,
+            dead,
+            disconnected,
+            nested_dead_wrapper,
+            negated_boundary,
+            contradictory_boundary,
+        ):
             self.assertTrue(self.issues(invalid))
 
 
@@ -698,6 +757,36 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             self.assertIn(old, text, f'mutation source is absent: {old}')
             return text.replace(old, new, 1)
 
+        def move_single_line_node_to_gui_root(text, node_name):
+            match = re.search(
+                rf'(?m)^\s*[A-Za-z_][A-Za-z0-9_]*Type\s*=\s*\{{[^\r\n]*'
+                rf'name\s*=\s*"{re.escape(node_name)}"[^\r\n]*\}}\s*$',
+                text,
+            )
+            self.assertIsNotNone(match, f'mutation node is absent: {node_name}')
+            node = match.group(0).strip()
+            without_node = text[:match.start()] + text[match.end():]
+            root_close = without_node.rfind('\n}')
+            self.assertGreater(root_close, 0, 'GUI root close is absent')
+            return (
+                without_node[:root_close]
+                + f'\n\t{node}\n'
+                + without_node[root_close:]
+            )
+
+        research_effect_1 = (
+            'text = { trigger = { check_variable = { var = '
+            'ADISCORD_economy_research_increase_target_level value = 1 '
+            'compare = less_than_or_equals } } localization_key = '
+            'ADISCORD_economy_research_effects_1 }'
+        )
+        research_effect_2 = (
+            'text = { trigger = { check_variable = { var = '
+            'ADISCORD_economy_research_increase_target_level value = 2 '
+            'compare = less_than_or_equals } } localization_key = '
+            'ADISCORD_economy_research_effects_2 }'
+        )
+
         gui_mutations = {
             'rows swapped': replace_once(
                 replace_once(
@@ -737,6 +826,9 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                 'name = "ADISCORD_economy_tax_increase"',
                 'name = "ADISCORD_economy_tax_decrease"',
             ),
+            'policy button disconnected at GUI root': move_single_line_node_to_gui_root(
+                self.gui, 'ADISCORD_economy_tax_decrease'
+            ),
         }
         scripted_gui_mutations = {
             'wrong targeted effect': replace_once(
@@ -765,6 +857,13 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                 'ADISCORD_economy_topbar_button_click = { ADISCORD_economy_open_window = yes }\n'
                 '\t\t\tADISCORD_economy_tax_decrease_click = { ADISCORD_economy_decrease_tax_burden = yes }',
             ),
+            'non-policy click invokes a ninth targeted effect': replace_once(
+                self.scripted_gui,
+                'ADISCORD_economy_dashboard_close_click = { ADISCORD_economy_close_window = yes }',
+                'ADISCORD_economy_dashboard_close_click = { '
+                'ADISCORD_economy_close_window = yes '
+                'ADISCORD_economy_decrease_tax_burden = yes }',
+            ),
         }
         scripted_loc_mutations = {
             'effect selector reads wrong direction': replace_once(
@@ -785,6 +884,50 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             + '\nADISCORD_dead_preview_owner = { defined_text = { '
             'name = GetADISCORDEconomyTaxDecreasePreviewLoc '
             'text = { localization_key = ADISCORD_economy_policy_preview_available } } }\n',
+            'reason boundary is negated': replace_once(
+                self.scripted_loc,
+                'trigger = { check_variable = { var = '
+                'ADISCORD_economy_tax_burden_mode value = 1 '
+                'compare = less_than_or_equals } } localization_key = '
+                'ADISCORD_economy_policy_blocked_minimum',
+                'trigger = { NOT = { check_variable = { var = '
+                'ADISCORD_economy_tax_burden_mode value = 1 '
+                'compare = less_than_or_equals } } } localization_key = '
+                'ADISCORD_economy_policy_blocked_minimum',
+            ),
+            'reason boundary is unsatisfiable': replace_once(
+                self.scripted_loc,
+                'trigger = { check_variable = { var = '
+                'ADISCORD_economy_tax_burden_mode value = 1 '
+                'compare = less_than_or_equals } } localization_key = '
+                'ADISCORD_economy_policy_blocked_minimum',
+                'trigger = { check_variable = { var = '
+                'ADISCORD_economy_tax_burden_mode value = 1 '
+                'compare = less_than_or_equals } always = no } '
+                'localization_key = ADISCORD_economy_policy_blocked_minimum',
+            ),
+            'effect selector repeats the wrong threshold': replace_once(
+                self.scripted_loc,
+                research_effect_1,
+                research_effect_1.replace('value = 1', 'value = 5', 1),
+            ),
+            'effect selector swaps level keys': replace_once(
+                replace_once(
+                    self.scripted_loc,
+                    research_effect_1,
+                    research_effect_1.replace(
+                        'ADISCORD_economy_research_effects_1',
+                        'ADISCORD_economy_research_effects_2',
+                        1,
+                    ),
+                ),
+                research_effect_2,
+                research_effect_2.replace(
+                    'ADISCORD_economy_research_effects_2',
+                    'ADISCORD_economy_research_effects_1',
+                    1,
+                ),
+            ),
         }
 
         for name, invalid_gui in gui_mutations.items():

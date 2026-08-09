@@ -2309,49 +2309,186 @@ def debt_notification_selector_issues(text: str) -> list[str]:
     return issues
 
 
-def policy_selector_issues(text: str, selector: str, mode_var: str, cooldown_var: str, direction: str) -> list[str]:
+def policy_effect_selector_issues(
+    text: str, selector: str, target_var: str, effect_prefix: str
+) -> list[str]:
+    """Validate one exact five-level directional effect selector."""
+
     ast = parse_clausewitz(text)
     matches = [
         entry
         for entry in ast
         if entry.key == "defined_text"
         and isinstance(entry.value, list)
-        and _direct_scalar(entry.value, "name") == selector
+        and any(
+            child.key == "name" and child.value == selector
+            for child in entry.value
+        )
     ]
     if len(matches) != 1:
         return [f"{selector}: missing unique defined_text"]
-    branches = [entry for entry in matches[0].value if entry.key == "text" and isinstance(entry.value, list)]
-    boundary = "ADISCORD_economy_policy_blocked_minimum" if direction == "decrease" else "ADISCORD_economy_policy_blocked_maximum"
-    expected = [boundary, "ADISCORD_economy_policy_blocked_cooldown", "ADISCORD_economy_policy_blocked_scope"]
-    reasons = [_direct_scalar(branch.value, "localization_key") for branch in branches]
-    if reasons[:3] != expected:
-        return [f"{selector}: disabled reasons are missing, swapped, or unreachable"]
+
+    selector_body = matches[0].value
+    assert isinstance(selector_body, list)
+    if not (
+        len(selector_body) == 6
+        and selector_body[0].key == "name"
+        and selector_body[0].value == selector
+        and [entry.key for entry in selector_body[1:]] == ["text"] * 5
+        and all(isinstance(entry.value, list) for entry in selector_body[1:])
+    ):
+        return [f"{selector}: body has extra fields or the wrong branch count"]
+
     issues: list[str] = []
-    boundary_limit = next((entry for entry in branches[0].value if entry.key == "trigger" and isinstance(entry.value, list)), None)
-    cooldown_limit = next((entry for entry in branches[1].value if entry.key == "trigger" and isinstance(entry.value, list)), None)
-    scope_limit = next((entry for entry in branches[2].value if entry.key == "trigger" and isinstance(entry.value, list)), None)
-    boundary_tokens = _tokens_in(boundary_limit.value) if boundary_limit else []
-    cooldown_tokens = _tokens_in(cooldown_limit.value) if cooldown_limit else []
-    scope_tokens = _tokens_in(scope_limit.value) if scope_limit else []
+    branches = selector_body[1:]
+    for level, branch in enumerate(branches[:4], start=1):
+        assert isinstance(branch.value, list)
+        triggers = [
+            entry
+            for entry in branch.value
+            if entry.key == "trigger" and isinstance(entry.value, list)
+        ]
+        expected_key = f"{effect_prefix}_{level}"
+        branch_ok = bool(
+            len(branch.value) == 2
+            and [entry.key for entry in branch.value]
+            == ["trigger", "localization_key"]
+            and len(triggers) == 1
+            and len(triggers[0].value) == 1
+            and _limit_is_satisfiable(triggers[0].value)
+            and _is_exact_check_entry(
+                triggers[0].value[0],
+                target_var,
+                str(level),
+                "less_than_or_equals",
+            )
+            and _direct_scalar(branch.value, "localization_key") == expected_key
+        )
+        if not branch_ok:
+            issues.append(
+                f"{selector}: level {level} threshold/effect mapping is not exact"
+            )
+
+    terminal = branches[4]
+    assert isinstance(terminal.value, list)
+    if not (
+        len(terminal.value) == 1
+        and terminal.value[0].key == "localization_key"
+        and terminal.value[0].value == f"{effect_prefix}_5"
+    ):
+        issues.append(f"{selector}: level 5 fallback is conditional, missing, or wrong")
+    return issues
+
+
+def policy_selector_issues(
+    text: str,
+    selector: str,
+    mode_var: str,
+    cooldown_var: str,
+    direction: str,
+) -> list[str]:
+    """Validate exact ordered, positive and satisfiable disabled reasons."""
+
+    ast = parse_clausewitz(text)
+    matches = [
+        entry
+        for entry in ast
+        if entry.key == "defined_text"
+        and isinstance(entry.value, list)
+        and any(
+            child.key == "name" and child.value == selector
+            for child in entry.value
+        )
+    ]
+    if len(matches) != 1:
+        return [f"{selector}: missing unique defined_text"]
+
+    selector_body = matches[0].value
+    assert isinstance(selector_body, list)
+    if not (
+        len(selector_body) == 5
+        and selector_body[0].key == "name"
+        and selector_body[0].value == selector
+        and [entry.key for entry in selector_body[1:]] == ["text"] * 4
+        and all(isinstance(entry.value, list) for entry in selector_body[1:])
+    ):
+        return [f"{selector}: body has extra fields or the wrong branch count"]
+
+    branches = selector_body[1:]
+    boundary = "ADISCORD_economy_policy_blocked_minimum" if direction == "decrease" else "ADISCORD_economy_policy_blocked_maximum"
+    issues: list[str] = []
     boundary_value = "1" if direction == "decrease" else "5"
     boundary_compare = "less_than_or_equals" if direction == "decrease" else "greater_than_or_equals"
-    if not {mode_var, boundary_value, boundary_compare}.issubset(boundary_tokens):
-        issues.append(f"{selector}: boundary reason is disconnected")
-    if not {cooldown_var, "0", "greater_than"}.issubset(cooldown_tokens):
-        issues.append(f"{selector}: cooldown reason is disconnected")
-    if not {"NOT", "ADISCORD_economy_should_show_player_ui", "yes"}.issubset(scope_tokens):
-        issues.append(f"{selector}: country-scope reason is disconnected")
-    if len(branches) < 4 or any(
-        not any(entry.key == "trigger" for entry in branch.value) for branch in branches[:3]
+
+    exact_checks = (
+        (mode_var, boundary_value, boundary_compare, boundary),
+        (
+            cooldown_var,
+            "0",
+            "greater_than",
+            "ADISCORD_economy_policy_blocked_cooldown",
+        ),
+    )
+    for branch, (variable, value, compare, key) in zip(
+        branches[:2], exact_checks
     ):
-        issues.append(f"{selector}: required branch is dead")
-    elif (
-        any(entry.key == "trigger" for entry in branches[3].value)
-        or not (_direct_scalar(branches[3].value, "localization_key") or "").startswith(
-            "ADISCORD_economy_policy_preview_"
+        assert isinstance(branch.value, list)
+        triggers = [
+            entry
+            for entry in branch.value
+            if entry.key == "trigger" and isinstance(entry.value, list)
+        ]
+        if not (
+            len(branch.value) == 2
+            and [entry.key for entry in branch.value]
+            == ["trigger", "localization_key"]
+            and len(triggers) == 1
+            and len(triggers[0].value) == 1
+            and _limit_is_satisfiable(triggers[0].value)
+            and _is_exact_check_entry(
+                triggers[0].value[0], variable, value, compare
+            )
+            and _direct_scalar(branch.value, "localization_key") == key
+        ):
+            issues.append(f"{selector}: reason {key} has the wrong exact owner")
+
+    scope_branch = branches[2]
+    assert isinstance(scope_branch.value, list)
+    scope_triggers = [
+        entry
+        for entry in scope_branch.value
+        if entry.key == "trigger" and isinstance(entry.value, list)
+    ]
+    scope_ok = False
+    if (
+        len(scope_branch.value) == 2
+        and [entry.key for entry in scope_branch.value]
+        == ["trigger", "localization_key"]
+        and len(scope_triggers) == 1
+        and len(scope_triggers[0].value) == 1
+        and _limit_is_satisfiable(scope_triggers[0].value)
+    ):
+        negation = scope_triggers[0].value[0]
+        scope_ok = bool(
+            negation.key == "NOT"
+            and isinstance(negation.value, list)
+            and len(negation.value) == 1
+            and negation.value[0].key == "ADISCORD_economy_should_show_player_ui"
+            and negation.value[0].value == "yes"
+            and _direct_scalar(scope_branch.value, "localization_key")
+            == "ADISCORD_economy_policy_blocked_scope"
         )
+    if not scope_ok:
+        issues.append(f"{selector}: unavailable-scope reason has the wrong exact owner")
+
+    terminal = branches[3]
+    assert isinstance(terminal.value, list)
+    if not (
+        len(terminal.value) == 1
+        and terminal.value[0].key == "localization_key"
+        and terminal.value[0].value == "ADISCORD_economy_policy_preview_available"
     ):
-        issues.append(f"{selector}: available preview is not the final fallback")
+        issues.append(f"{selector}: available preview is not the sole final fallback")
     return issues
 
 
@@ -2464,17 +2601,28 @@ def validate(root: Path = ROOT) -> list[str]:
                 )
     issues.extend(retired_capacity_boundary_issues(boundary_sources))
     selector_policies = {
-        "Tax": ("ADISCORD_economy_tax_burden_mode", "ADISCORD_economy_tax_change_cooldown"),
-        "Army": ("ADISCORD_economy_army_spending_mode", "ADISCORD_economy_army_budget_change_cooldown"),
-        "Research": ("ADISCORD_economy_research_spending_mode", "ADISCORD_economy_research_budget_change_cooldown"),
-        "Social": ("ADISCORD_economy_social_spending_mode", "ADISCORD_economy_social_budget_change_cooldown"),
+        "Tax": ("tax", "ADISCORD_economy_tax_burden_mode", "ADISCORD_economy_tax_change_cooldown"),
+        "Army": ("army", "ADISCORD_economy_army_spending_mode", "ADISCORD_economy_army_budget_change_cooldown"),
+        "Research": ("research", "ADISCORD_economy_research_spending_mode", "ADISCORD_economy_research_budget_change_cooldown"),
+        "Social": ("social", "ADISCORD_economy_social_spending_mode", "ADISCORD_economy_social_budget_change_cooldown"),
     }
-    for title, (mode_var, cooldown_var) in selector_policies.items():
+    for title, (policy, mode_var, cooldown_var) in selector_policies.items():
         for direction in ("decrease", "increase"):
             selector = f"GetADISCORDEconomy{title}{direction.title()}PreviewLoc"
             issues.extend(
                 policy_selector_issues(
                     scripted_loc, selector, mode_var, cooldown_var, direction
+                )
+            )
+            effect_selector = (
+                f"GetADISCORDEconomy{title}{direction.title()}EffectLoc"
+            )
+            issues.extend(
+                policy_effect_selector_issues(
+                    scripted_loc,
+                    effect_selector,
+                    f"ADISCORD_economy_{policy}_{direction}_target_level",
+                    f"ADISCORD_economy_{policy}_effects",
                 )
             )
 

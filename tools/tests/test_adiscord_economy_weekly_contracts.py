@@ -13,6 +13,7 @@ from tools.validators.validate_adiscord_economy_ai import (
     debt_reconciler_issues,
     debt_transition_flow_issues,
     migration_contract_issues,
+    policy_effect_selector_issues,
     policy_selector_issues,
     reachable_script_entries,
     research_policy_flow_issues,
@@ -3820,16 +3821,21 @@ class WeeklyEconomyContracts(unittest.TestCase):
         }
         for policy, localisation_prefix in effect_prefixes.items():
             for direction in ("Increase", "Decrease"):
-                selector = unique_defined_text(
-                    SCRIPTED_LOC,
-                    f"GetADISCORDEconomy{policy.title()}{direction}EffectLoc",
+                selector_name = (
+                    f"GetADISCORDEconomy{policy.title()}{direction}EffectLoc"
                 )
                 target = (
                     f"ADISCORD_economy_{policy}_{direction.lower()}_target_level"
                 )
-                self.assertEqual(selector.count(target), 4)
-                for level in range(1, 6):
-                    self.assertIn(f"{localisation_prefix}_{level}", selector)
+                self.assertEqual(
+                    policy_effect_selector_issues(
+                        SCRIPTED_LOC,
+                        selector_name,
+                        target,
+                        localisation_prefix,
+                    ),
+                    [],
+                )
                 reason_selector = (
                     f"GetADISCORDEconomy{policy.title()}{direction}PreviewLoc"
                 )
