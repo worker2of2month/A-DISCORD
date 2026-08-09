@@ -171,6 +171,16 @@ def localisation_key_set(text):
     return set(re.findall(r"(?m)^\s*([A-Za-z0-9_.-]+):\d*\s+", text))
 
 
+def localisation_value(text, key):
+    match = re.search(
+        rf'(?m)^\s*{re.escape(key)}:\d*\s+"((?:[^"\\]|\\.)*)"\s*$',
+        text,
+    )
+    if not match:
+        raise AssertionError(f"missing localisation value: {key}")
+    return match.group(1)
+
+
 class EconomySemanticFixtureTests(unittest.TestCase):
     MIGRATION = """
 ADISCORD_economy_migrate_schema = {
@@ -725,6 +735,130 @@ class WeeklyEconomyContracts(unittest.TestCase):
             EFFECTS, "ADISCORD_economy_calculate_development_multiplier"
         )
         self.assertNotIn("construction_spending", development)
+
+    def test_zero_construction_activity_has_no_positive_fixed_expense(self):
+        construction = unique_block(
+            EFFECTS, "ADISCORD_economy_calculate_construction_expenses"
+        )
+        initial_values = [
+            float(value)
+            for value in re.findall(
+                r"set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_construction_expenses"
+                r"\s+value\s*=\s*(-?\d+(?:\.\d+)?)\s*\}",
+                construction,
+            )
+        ]
+        self.assertEqual(
+            initial_values,
+            [0.0],
+            "zero installed and active civilian factories must start at zero expense",
+        )
+        self.assertNotRegex(
+            construction,
+            r"add_to_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_construction_expenses"
+            r"\s+value\s*=\s*(?:0*[1-9]\d*(?:\.\d+)?|0*\.0*[1-9]\d*)\s*\}",
+            "construction expense cannot contain a positive fixed output term",
+        )
+
+    def test_live_construction_compatibility_localisation_describes_research_policy(self):
+        budget_controls = localisation_value(
+            ECONOMY_LOC, "ADISCORD_economy_budget_controls_tt"
+        )
+        self.assertIn("наук", budget_controls.lower())
+        self.assertNotIn("строительств", budget_controls.lower())
+
+        row = localisation_value(
+            ECONOMY_LOC, "ADISCORD_economy_budget_construction_row"
+        )
+        self.assertIn("Наука", row)
+        self.assertIn("[GetADISCORDConstructionSpendingModeLoc]", row)
+
+        controls = localisation_value(
+            ECONOMY_LOC, "ADISCORD_economy_construction_controls_tt"
+        )
+        self.assertIn("[?ADISCORD_economy_research_spending_mode|0]", controls)
+        self.assertIn(
+            "[?ADISCORD_economy_research_budget_change_cooldown|0]", controls
+        )
+        self.assertNotIn("ADISCORD_economy_construction_spending_mode", controls)
+        self.assertNotIn(
+            "ADISCORD_economy_construction_budget_change_cooldown", controls
+        )
+
+        expected = {
+            1: ("§G-40%§!", "§R-8%§!"),
+            2: ("§G-20%§!", "§R-3%§!"),
+            3: ("§Y0%§!", "§Y0%§!"),
+            4: ("§R+30%§!", "§G+3%§!"),
+            5: ("§R+60%§!", "§G+5%§!"),
+        }
+        for expense, research_speed in expected.values():
+            self.assertIn(expense, controls)
+            self.assertIn(research_speed, controls)
+        self.assertIn("скорость строительства §G+2%§!", controls)
+
+        keys = localisation_key_set(ECONOMY_LOC)
+        for level, (expense, research_speed) in expected.items():
+            level_tooltip = localisation_value(
+                ECONOMY_LOC, f"ADISCORD_economy_construction_level_{level}_tt"
+            )
+            effect_tooltip = localisation_value(
+                ECONOMY_LOC, f"ADISCORD_economy_construction_effects_{level}"
+            )
+            for value in (level_tooltip, effect_tooltip):
+                self.assertIn(f"расходы {expense}".lower(), value.lower())
+                self.assertIn(
+                    f"скорость исследований {research_speed}".lower(),
+                    value.lower(),
+                )
+                for obsolete_claim in (
+                    "скорость всех строек",
+                    "гражданских",
+                    "военных",
+                    "развитие",
+                    "стабильность",
+                ):
+                    self.assertNotIn(obsolete_claim, value.lower())
+                if level == 5:
+                    self.assertIn("скорость строительства §G+2%§!", value)
+                else:
+                    self.assertNotIn("строительств", value.lower())
+
+            mode = localisation_value(
+                ECONOMY_LOC, f"ADISCORD_economy_construction_funding_mode_{level}"
+            )
+            self.assertIn("наук", mode.lower())
+
+            idea_key = f"ADISCORD_economy_research_spending_{level}"
+            self.assertNotIn(
+                f"ADISCORD_economy_construction_spending_{level}", keys
+            )
+            self.assertIn(idea_key, keys)
+            self.assertIn(f"{idea_key}_desc", keys)
+            idea_name = localisation_value(ECONOMY_LOC, idea_key)
+            idea_description = localisation_value(ECONOMY_LOC, f"{idea_key}_desc")
+            self.assertIn("наук", idea_name.lower())
+            self.assertIn(
+                f"расходы {expense}".lower(), idea_description.lower()
+            )
+            self.assertIn(
+                f"скорость исследований {research_speed}".lower(),
+                idea_description.lower(),
+            )
+            if level == 5:
+                self.assertIn(
+                    "скорость строительства §G+2%§!", idea_description
+                )
+            else:
+                self.assertNotIn("строительств", idea_description.lower())
+
+        for arrow_key in (
+            "ADISCORD_economy_construction_decrease_tt",
+            "ADISCORD_economy_construction_increase_tt",
+        ):
+            self.assertIn(
+                "наук", localisation_value(ECONOMY_LOC, arrow_key).lower()
+            )
 
     def test_research_policy_has_five_levels_and_level_five_construction_bonus_is_bounded(self):
         self.assertFalse(research_policy_flow_issues(EFFECTS))

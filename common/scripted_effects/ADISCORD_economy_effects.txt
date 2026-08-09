@@ -960,7 +960,7 @@ ADISCORD_economy_calculate_research_expenses = {
 ADISCORD_economy_calculate_construction_expenses = {
 	# Installed civilian capacity has light upkeep; assigned factories carry the
 	# real programme cost. Both are O(1) country aggregates from the engine.
-	set_variable = { var = ADISCORD_economy_construction_expenses value = 1.0 }
+	set_variable = { var = ADISCORD_economy_construction_expenses value = 0 }
 	set_temp_variable = { var = ADISCORD_economy_construction_factory_temp value = num_of_civilian_factories }
 	multiply_temp_variable = { var = ADISCORD_economy_construction_factory_temp value = 0.02 }
 	add_to_variable = { var = ADISCORD_economy_construction_expenses value = ADISCORD_economy_construction_factory_temp }
