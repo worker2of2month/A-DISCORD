@@ -498,6 +498,18 @@ def _is_exact_variable_write(
     )
 
 
+def _is_exact_check_entry(
+    entry: Entry, variable: str, value: str, compare: str
+) -> bool:
+    return (
+        entry.key == "check_variable"
+        and isinstance(entry.value, list)
+        and len(entry.value) == 3
+        and sorted(child.key for child in entry.value) == ["compare", "value", "var"]
+        and _check_matches(entry, variable, value, compare)
+    )
+
+
 def _direct_limit(branch: Entry) -> list[Entry] | None:
     if not isinstance(branch.value, list):
         return None
@@ -1179,14 +1191,14 @@ def debt_notification_flow_issues(text: str) -> list[str]:
             improvement_limit is not None
             and len(improvement_limit) == 2
             and _limit_is_satisfiable(improvement_limit)
-            and _exact_check(
-                improvement_limit,
+            and _is_exact_check_entry(
+                improvement_limit[0],
                 "ADISCORD_economy_debt_state",
                 "ADISCORD_economy_pending_debt_notification_previous_state",
                 "less_than",
             )
-            and _exact_check(
-                improvement_limit,
+            and _is_exact_check_entry(
+                improvement_limit[1],
                 "ADISCORD_economy_last_notified_debt_state",
                 "ADISCORD_economy_debt_state",
                 "greater_than",
@@ -1200,6 +1212,50 @@ def debt_notification_flow_issues(text: str) -> list[str]:
         )
     if not improvement_ok:
         issues.append("improvement does not lower notification state exactly")
+
+    variable_write_operations = {
+        "set_variable", "add_to_variable", "subtract_from_variable",
+        "multiply_variable", "divide_variable", "clamp_variable", "clear_variable",
+    }
+    watermark_writes = [
+        (ancestors, entry)
+        for ancestors, entry in _walk_entries(queue.value)
+        if entry.key in variable_write_operations
+        and (
+            entry.value == "ADISCORD_economy_last_notified_debt_state"
+            or (
+                isinstance(entry.value, list)
+                and _direct_scalar(entry.value, "var")
+                == "ADISCORD_economy_last_notified_debt_state"
+            )
+        )
+    ]
+    watermark_owners_ok = bool(
+        upward_branch
+        and isinstance(upward_branch.value, list)
+        and len(upward_branch.value) == 6
+        and improvement_branch
+        and isinstance(improvement_branch.value, list)
+        and len(improvement_branch.value) == 2
+        and len(watermark_writes) == 2
+        and len(watermark_writes[0][0]) == 1
+        and watermark_writes[0][0][0] is upward_branch
+        and watermark_writes[0][1] is upward_branch.value[5]
+        and len(watermark_writes[1][0]) == 1
+        and watermark_writes[1][0][0] is improvement_branch
+        and watermark_writes[1][1] is improvement_branch.value[1]
+        and all(
+            _is_exact_variable_write(
+                entry,
+                "set_variable",
+                "ADISCORD_economy_last_notified_debt_state",
+                "ADISCORD_economy_debt_state",
+            )
+            for _, entry in watermark_writes
+        )
+    )
+    if not watermark_owners_ok:
+        issues.append("notification watermark has duplicate or unowned writes")
 
     dispatch_branch = queue.value[5] if len(queue.value) > 5 else None
     dispatch_ok = bool(
@@ -1576,11 +1632,6 @@ def debt_notification_selector_issues(text: str) -> list[str]:
             continue
         selector_body = matches[0].value
         assert isinstance(selector_body, list)
-        branches = [
-            entry
-            for entry in selector_body
-            if entry.key == "text" and isinstance(entry.value, list)
-        ]
         if shared_variable is None:
             expected = [tuple(branch) for branch in raw_branches]
         else:
@@ -1588,6 +1639,18 @@ def debt_notification_selector_issues(text: str) -> list[str]:
                 (shared_variable, value, compare, key)
                 for value, compare, key in raw_branches
             ]
+        exact_body_identity = bool(
+            len(selector_body) == len(expected) + 2
+            and selector_body[0].key == "name"
+            and selector_body[0].value == selector
+            and [entry.key for entry in selector_body[1:]]
+            == ["text"] * (len(expected) + 1)
+            and all(isinstance(entry.value, list) for entry in selector_body[1:])
+        )
+        if not exact_body_identity:
+            issues.append(f"{selector}: body has duplicate identity or extra direct fields")
+            continue
+        branches = selector_body[1:]
         if len(branches) != len(expected) + 1:
             issues.append(f"{selector}: wrong number of ordered selector branches")
             continue

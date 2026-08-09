@@ -669,11 +669,11 @@ def task6_schema_fourteen_migration_issues(text):
         and len(state_operations) == 3
         and len(global_state_operations) == 3
         and all(ancestors and ancestors[0] is owner for ancestors, _ in global_state_operations)
-        and sorted(
+        and {
             _entry_scalar(entry.value, "value")
             for _, entry in state_operations
             if entry.key == "set_variable" and isinstance(entry.value, list)
-        ) == ["0", "1", "2"]
+        } == {"0", "1", "2"}
     )
     if not mapping_ok:
         issues.append("schema 14 safe state 0/1/2 mapping lacks exact branch ownership")
@@ -725,17 +725,32 @@ def task6_schema_fourteen_migration_issues(text):
         else:
             initialization_entries.append(direct[0])
             initialization_by_variable[variable] = direct[0]
-    last_notified = initialization_by_variable.get(
-        "ADISCORD_economy_last_notified_debt_state"
+    previous_state_cache = initialization_by_variable.get(
+        "ADISCORD_economy_pending_debt_notification_previous_state"
     )
+    new_state_cache = initialization_by_variable.get(
+        "ADISCORD_economy_pending_debt_notification_new_state"
+    )
+    last_notified = initialization_by_variable.get("ADISCORD_economy_last_notified_debt_state")
     if not (
         mapping_branches
+        and previous_state_cache is not None
+        and new_state_cache is not None
         and last_notified is not None
-        and owner.value.index(mapping_branches[-1]) < owner.value.index(last_notified)
+        and owner.value.index(mapping_branches[-1])
+        < owner.value.index(previous_state_cache)
+        < owner.value.index(new_state_cache)
+        < owner.value.index(last_notified)
     ):
-        issues.append("schema 14 notification watermark is not initialized after mapping")
+        issues.append("schema 14 state caches and notification watermark do not follow mapping")
 
-    clear_first = [
+    direct_clear_first = [
+        entry
+        for entry in owner.value
+        if entry.key == "clear_variable"
+        and entry.value == "ADISCORD_economy_first_loan_notified"
+    ]
+    all_clear_first = [
         (ancestors, entry)
         for ancestors, entry in _walk_parsed(migration.value)
         if entry.key == "clear_variable"
@@ -758,9 +773,11 @@ def task6_schema_fourteen_migration_issues(text):
         and _entry_scalar(entry.value, "var") == "ADISCORD_economy_first_loan_notified"
     ]
     first_loan_ok = bool(
-        len(clear_first) == 1
-        and clear_first[0][0]
-        and clear_first[0][0][0] is owner
+        len(direct_clear_first) == 1
+        and len(all_clear_first) == 1
+        and len(all_clear_first[0][0]) == 1
+        and all_clear_first[0][0][0] is owner
+        and all_clear_first[0][1] is direct_clear_first[0]
         and len(marker_owners) == 1
         and len(all_first_markers) == 1
         and all_first_markers[0][0]
@@ -769,7 +786,7 @@ def task6_schema_fourteen_migration_issues(text):
             marker_owners[0],
             [("ADISCORD_economy_debt", "0", "greater_than")],
         )
-        and owner.value.index(clear_first[0][1]) < owner.value.index(marker_owners[0])
+        and owner.value.index(direct_clear_first[0]) < owner.value.index(marker_owners[0])
     )
     if not first_loan_ok:
         issues.append("schema 14 first-loan marker does not preserve existing debt safely")
@@ -1961,6 +1978,50 @@ ADISCORD_economy_queue_debt_notification = {
             ),
             "severity mappings moved outside upward owner": mapping_outside_upward,
             "human dispatch moved before severity override": dispatch_before_severity,
+            "improvement check hidden behind unrelated gate": queue_notification.replace(
+                "  check_variable = { var = ADISCORD_economy_debt_state value = ADISCORD_economy_pending_debt_notification_previous_state compare = less_than }",
+                "  AND = {\n"
+                "   check_variable = { var = ADISCORD_economy_debt_state value = ADISCORD_economy_pending_debt_notification_previous_state compare = less_than }\n"
+                "   has_country_flag = hidden_notice_gate\n"
+                "  }",
+                1,
+            ),
+            "improvement has an extra direct predicate": queue_notification.replace(
+                "  check_variable = { var = ADISCORD_economy_debt_state value = ADISCORD_economy_pending_debt_notification_previous_state compare = less_than }",
+                "  check_variable = { var = ADISCORD_economy_debt_state value = ADISCORD_economy_pending_debt_notification_previous_state compare = less_than }\n"
+                "  has_country_flag = hidden_notice_gate",
+                1,
+            ),
+            "improvement owner made dead": queue_notification.replace(
+                "  check_variable = { var = ADISCORD_economy_debt_state value = ADISCORD_economy_pending_debt_notification_previous_state compare = less_than }",
+                "  check_variable = { var = ADISCORD_economy_debt_state value = ADISCORD_economy_pending_debt_notification_previous_state compare = less_than }\n"
+                "  always = no",
+                1,
+            ),
+            "improvement check negated": queue_notification.replace(
+                "  check_variable = { var = ADISCORD_economy_debt_state value = ADISCORD_economy_pending_debt_notification_previous_state compare = less_than }",
+                "  NOT = { check_variable = { var = ADISCORD_economy_debt_state value = ADISCORD_economy_pending_debt_notification_previous_state compare = less_than } }",
+                1,
+            ),
+            "improvement watermark made conditional": queue_notification.replace(
+                "  set_variable = { var = ADISCORD_economy_last_notified_debt_state value = ADISCORD_economy_debt_state }\n"
+                " }\n"
+                " if = { limit = { is_ai = no",
+                "  if = { limit = { always = yes } set_variable = { var = ADISCORD_economy_last_notified_debt_state value = ADISCORD_economy_debt_state } }\n"
+                " }\n"
+                " if = { limit = { is_ai = no",
+                1,
+            ),
+            "improvement watermark duplicated": queue_notification.replace(
+                "  set_variable = { var = ADISCORD_economy_last_notified_debt_state value = ADISCORD_economy_debt_state }\n"
+                " }\n"
+                " if = { limit = { is_ai = no",
+                "  set_variable = { var = ADISCORD_economy_last_notified_debt_state value = ADISCORD_economy_debt_state }\n"
+                "  set_variable = { var = ADISCORD_economy_last_notified_debt_state value = ADISCORD_economy_debt_state }\n"
+                " }\n"
+                " if = { limit = { is_ai = no",
+                1,
+            ),
         }
         for name, invalid in queue_mutations.items():
             with self.subTest(notification_mutation=name):
@@ -3480,6 +3541,18 @@ class WeeklyEconomyContracts(unittest.TestCase):
         )
         self.assertIn("is_ai = no", queue)
         self.assertNotIn("ADISCORD_economy_refresh_spending_ideas", queue)
+        hidden_improvement_gate = queue.replace(
+            "\t\tcheck_variable = { var = ADISCORD_economy_debt_state value = ADISCORD_economy_pending_debt_notification_previous_state compare = less_than }",
+            "\t\tAND = {\n"
+            "\t\t\tcheck_variable = { var = ADISCORD_economy_debt_state value = ADISCORD_economy_pending_debt_notification_previous_state compare = less_than }\n"
+            "\t\t\thas_country_flag = hidden_notice_gate\n"
+            "\t\t}",
+            1,
+        )
+        self.assertNotEqual(hidden_improvement_gate, queue)
+        mutated_effects = EFFECTS.replace(queue, hidden_improvement_gate, 1)
+        self.assertTrue(parse_clausewitz(mutated_effects))
+        self.assertTrue(task6_notification_queue_issues(mutated_effects))
         for forbidden_scan in (
             "every_country",
             "any_country",
@@ -4596,6 +4669,23 @@ class WeeklyEconomyContracts(unittest.TestCase):
             + "\n\tset_variable = { var = ADISCORD_economy_debt_state value = 2 }",
             "unowned duplicate streak reset": migration
             + "\n\tset_variable = { var = ADISCORD_economy_debt_emergency_streak value = 0 }",
+            "first-loan clear hidden behind dead owner": migration.replace(
+                "\t\tclear_variable = ADISCORD_economy_first_loan_notified",
+                "\t\tif = { limit = { always = no } clear_variable = ADISCORD_economy_first_loan_notified }",
+                1,
+            ),
+            "pending state caches moved before legacy mapping": migration.replace(
+                "\t\tset_variable = { var = ADISCORD_economy_pending_debt_notification_previous_state value = ADISCORD_economy_debt_state }\n"
+                "\t\tset_variable = { var = ADISCORD_economy_pending_debt_notification_new_state value = ADISCORD_economy_debt_state }\n",
+                "",
+                1,
+            ).replace(
+                "\t\tset_variable = { var = ADISCORD_economy_debt_state value = 0 }\n",
+                "\t\tset_variable = { var = ADISCORD_economy_pending_debt_notification_previous_state value = ADISCORD_economy_debt_state }\n"
+                "\t\tset_variable = { var = ADISCORD_economy_pending_debt_notification_new_state value = ADISCORD_economy_debt_state }\n"
+                "\t\tset_variable = { var = ADISCORD_economy_debt_state value = 0 }\n",
+                1,
+            ),
         }
         for name, mutated_migration in migration_mutations.items():
             with self.subTest(schema14_mutation=name):

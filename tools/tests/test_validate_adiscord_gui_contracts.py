@@ -513,7 +513,32 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                 'defined_text = {\n\tname = GetADISCORDEconomyDebtNotificationNextRiskLoc',
                 1,
             ),
+            'kind selector has a second wrong name': self.scripted_loc.replace(
+                'name = GetADISCORDEconomyDebtNotificationKindLoc',
+                'name = GetADISCORDEconomyDebtNotificationKindLoc\n'
+                '\tname = BrokenDebtNotificationSelector',
+                1,
+            ),
+            'kind selector has a duplicate name': self.scripted_loc.replace(
+                'name = GetADISCORDEconomyDebtNotificationKindLoc',
+                'name = GetADISCORDEconomyDebtNotificationKindLoc\n'
+                '\tname = GetADISCORDEconomyDebtNotificationKindLoc',
+                1,
+            ),
         }
+        for selector in (
+            'GetADISCORDEconomyDebtNotificationKindLoc',
+            'GetADISCORDEconomyDebtNotificationCauseLoc',
+            'GetADISCORDEconomyDebtNotificationStateLoc',
+            'GetADISCORDEconomyDebtNotificationNextRiskLoc',
+        ):
+            mutations[f'{selector} rejects extra direct identity field'] = (
+                self.scripted_loc.replace(
+                    f'name = {selector}',
+                    f'name = {selector}\n\talways = no',
+                    1,
+                )
+            )
         for name, invalid in mutations.items():
             with self.subTest(selector_mutation=name):
                 self.assertNotEqual(invalid, self.scripted_loc)
