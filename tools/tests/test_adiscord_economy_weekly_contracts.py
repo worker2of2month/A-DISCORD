@@ -1959,6 +1959,414 @@ def task10_live_localisation_keys(gui_text, scripted_loc_text):
     return keys
 
 
+TASK10_FIXED_LEVEL_POLICIES = ("tax", "army", "social")
+TASK10_DISPLAY_CACHE_NAMES = (
+    "ADISCORD_economy_deficit_runway",
+    "ADISCORD_economy_inflation_expense_multiplier",
+    "ADISCORD_economy_weekly_inflation_change",
+)
+TASK10_DISPLAY_CACHE_OWNER = "ADISCORD_economy_calculate_weekly_budget"
+TASK10_EFFECTS_PATH = ROOT / "common" / "scripted_effects" / "ADISCORD_economy_effects.txt"
+TASK10_GAMEPLAY_SCRIPT_ROOTS = (
+    ROOT / "common",
+    ROOT / "events",
+    ROOT / "history",
+)
+
+
+def task10_localisation_references(value):
+    """Return exact formatted variables/selectors rendered by one loc value."""
+
+    return sorted(
+        re.findall(
+            r"\[(?:\?)?(?:GetADISCORD[A-Za-z0-9_]+|ADISCORD_[A-Za-z0-9_]+)"
+            r"(?:\|[^\]]+)?\]",
+            value,
+        )
+    )
+
+
+def task10_numeric_effects(value):
+    """Return a polarity-preserving multiset of player-visible numeric effects."""
+
+    without_references = re.sub(r"\[[^\]]+\]", "", value)
+    without_references = re.sub(r"§(?:[A-Za-z0-9_]|!)", "", without_references)
+    return sorted(
+        token.replace(",", ".")
+        for token in re.findall(
+            r"(?<![A-Za-z0-9_])[-+]?[0-9]+(?:[.,][0-9]+)?%?",
+            without_references,
+        )
+    )
+
+
+def task10_balance_surface_issues(gui_text, russian_text, english_text):
+    issues = []
+    nodes = re.findall(
+        r'(?m)^\s*instantTextboxType\s*=.*name\s*=\s*"ADISCORD_economy_kpi_balance".*$',
+        gui_text,
+    )
+    if len(nodes) != 1:
+        return [f"balance KPI owner count is {len(nodes)}, expected 1"]
+    owner = nodes[0]
+    if owner.count('pdx_tooltip = "ADISCORD_economy_balance_tt"') != 1:
+        issues.append("balance KPI is not bound once to its short tooltip")
+    if owner.count(
+        'pdx_tooltip_delayed = "ADISCORD_economy_balance_delayed_tt"'
+    ) != 1:
+        issues.append("balance KPI is not bound once to its delayed tooltip")
+
+    delayed_references = (
+        "ADISCORD_economy_treasury",
+        "ADISCORD_economy_resource_income",
+        "ADISCORD_economy_business_income",
+        "ADISCORD_economy_personal_income",
+        "ADISCORD_economy_consumer_goods_income",
+        "ADISCORD_economy_factory_income",
+        "ADISCORD_economy_building_income",
+        "ADISCORD_economy_army_expenses",
+        "ADISCORD_economy_airforce_expenses",
+        "ADISCORD_economy_navy_expenses",
+        "ADISCORD_economy_military_factory_expenses",
+        "ADISCORD_economy_social_expenses",
+        "ADISCORD_economy_research_expenses",
+        "ADISCORD_economy_construction_expenses",
+        "ADISCORD_economy_admin_expenses",
+        "ADISCORD_economy_repair_expenses",
+        "ADISCORD_economy_debt_service",
+        "ADISCORD_economy_weekly_income",
+        "ADISCORD_economy_weekly_expenses",
+        "ADISCORD_economy_weekly_balance",
+        "ADISCORD_economy_safe_reserve",
+        "ADISCORD_economy_deficit_runway",
+    )
+    values = {}
+    for language, text in (("Russian", russian_text), ("English", english_text)):
+        try:
+            short = localisation_value(text, "ADISCORD_economy_balance_tt")
+            delayed = localisation_value(text, "ADISCORD_economy_balance_delayed_tt")
+        except AssertionError as error:
+            issues.append(f"{language}: {error}")
+            continue
+        values[language] = (short, delayed)
+        if short.count(r"\n") > 6:
+            issues.append(f"{language} balance short tooltip is not short")
+        if delayed.count(r"\n") <= short.count(r"\n") or len(delayed) <= len(short):
+            issues.append(f"{language} balance delayed tooltip is not explanatory")
+        for token in (
+            "ADISCORD_economy_weekly_income",
+            "ADISCORD_economy_weekly_expenses",
+            "ADISCORD_economy_weekly_balance",
+        ):
+            if token not in short:
+                issues.append(f"{language} balance short tooltip omits {token}")
+        for token in delayed_references + ("3/13", "260"):
+            if token not in delayed:
+                issues.append(f"{language} balance delayed tooltip omits {token}")
+    if set(values) == {"Russian", "English"}:
+        for surface, index in (("short", 0), ("delayed", 1)):
+            russian_refs = task10_localisation_references(values["Russian"][index])
+            english_refs = task10_localisation_references(values["English"][index])
+            if russian_refs != english_refs:
+                issues.append(f"balance {surface} tooltip references differ by language")
+    return issues
+
+
+def _task10_direct_variable_operation(entry, operation, variable, value=None):
+    if entry.key != operation or not isinstance(entry.value, list):
+        return False
+    if _entry_scalar(entry.value, "var") != variable:
+        return False
+    if value is None:
+        return True
+    return _entry_scalar(entry.value, "value") == str(value)
+
+
+def _task10_positive_threshold_branch(entry, variable, threshold, result):
+    if entry.key != "if" or not isinstance(entry.value, list):
+        return False
+    limits = [child for child in entry.value if child.key == "limit"]
+    writes = [child for child in entry.value if child.key == "set_variable"]
+    if len(limits) != 1 or len(writes) != 1 or len(entry.value) != 2:
+        return False
+    if not isinstance(limits[0].value, list) or len(limits[0].value) != 1:
+        return False
+    check = limits[0].value[0]
+    if check.key != "check_variable" or not isinstance(check.value, list):
+        return False
+    return (
+        len(check.value) == 3
+        and _entry_scalar(check.value, "var") == variable
+        and _entry_scalar(check.value, "value") == str(threshold)
+        and _entry_scalar(check.value, "compare") == "greater_than_or_equals"
+        and _task10_direct_variable_operation(
+            writes[0],
+            "set_variable",
+            "ADISCORD_economy_inflation_expense_multiplier",
+            result,
+        )
+    )
+
+
+def task10_display_cache_producer_issues(effects_text):
+    """Validate live, direct and bounded Task 10 cache production."""
+
+    issues = []
+    try:
+        owner = _parsed_definition(effects_text, TASK10_DISPLAY_CACHE_OWNER)
+    except AssertionError as error:
+        return [str(error)]
+    direct = owner.value
+    all_definitions = parse_clausewitz(effects_text)
+    for cache in TASK10_DISPLAY_CACHE_NAMES:
+        owners = {
+            definition.key
+            for definition in all_definitions
+            if isinstance(definition.value, list)
+            and any(
+                entry.value == cache
+                for _, entry in _walk_parsed(definition.value)
+                if isinstance(entry.value, str)
+            )
+        }
+        if owners != {TASK10_DISPLAY_CACHE_OWNER}:
+            issues.append(f"{cache} owners are {sorted(owners)}")
+        expected_write_counts = {
+            "ADISCORD_economy_deficit_runway": 4,
+            "ADISCORD_economy_inflation_expense_multiplier": 5,
+            "ADISCORD_economy_weekly_inflation_change": 3,
+        }
+        writes = [
+            entry
+            for _, entry in _walk_parsed(owner.value)
+            if entry.key
+            in {
+                "set_variable",
+                "add_to_variable",
+                "subtract_from_variable",
+                "multiply_variable",
+                "divide_variable",
+                "clamp_variable",
+                "clear_variable",
+            }
+            and (
+                (isinstance(entry.value, list) and _entry_scalar(entry.value, "var") == cache)
+                or (entry.key == "clear_variable" and entry.value == cache)
+            )
+        ]
+        if len(writes) != expected_write_counts[cache]:
+            issues.append(
+                f"{cache} has {len(writes)} writes, expected {expected_write_counts[cache]}"
+            )
+
+    runway_direct = [
+        entry
+        for entry in direct
+        if _task10_direct_variable_operation(
+            entry, "set_variable", "ADISCORD_economy_deficit_runway", 260
+        )
+        or _task10_direct_variable_operation(
+            entry, "clamp_variable", "ADISCORD_economy_deficit_runway"
+        )
+    ]
+    if len(runway_direct) != 2:
+        issues.append("runway initialization/clamp are not direct and unique")
+    else:
+        clamp = runway_direct[1]
+        if (
+            clamp.key != "clamp_variable"
+            or _entry_scalar(clamp.value, "min") != "0"
+            or _entry_scalar(clamp.value, "max") != "260"
+            or len(clamp.value) != 3
+        ):
+            issues.append("runway clamp is not exactly 0..260")
+    runway_branches = []
+    for entry in direct:
+        if entry.key != "if" or not isinstance(entry.value, list):
+            continue
+        if any(
+            child.value == "ADISCORD_economy_deficit_runway"
+            for _, child in _walk_parsed(entry.value)
+            if isinstance(child.value, str)
+        ):
+            runway_branches.append(entry)
+    if len(runway_branches) != 1:
+        issues.append("runway deficit branch is not direct and unique")
+    else:
+        branch = runway_branches[0]
+        limits = [child for child in branch.value if child.key == "limit"]
+        expected_limit = (
+            len(limits) == 1
+            and isinstance(limits[0].value, list)
+            and len(limits[0].value) == 1
+            and limits[0].value[0].key == "check_variable"
+            and isinstance(limits[0].value[0].value, list)
+            and _entry_scalar(limits[0].value[0].value, "var")
+            == "ADISCORD_economy_weekly_balance"
+            and _entry_scalar(limits[0].value[0].value, "value") == "0"
+            and _entry_scalar(limits[0].value[0].value, "compare") == "less_than"
+        )
+        expected_operations = (
+            ("set_temp_variable", "ADISCORD_economy_deficit_runway_denominator_temp", "0"),
+            ("subtract_from_temp_variable", "ADISCORD_economy_deficit_runway_denominator_temp", "ADISCORD_economy_weekly_balance"),
+            ("clamp_temp_variable", "ADISCORD_economy_deficit_runway_denominator_temp", None),
+            ("set_variable", "ADISCORD_economy_deficit_runway", "ADISCORD_economy_treasury"),
+            ("divide_variable", "ADISCORD_economy_deficit_runway", "ADISCORD_economy_deficit_runway_denominator_temp"),
+        )
+        operations = [child for child in branch.value if child.key != "limit"]
+        if not expected_limit or len(operations) != len(expected_operations):
+            issues.append("runway branch limit or operation count is not exact")
+        else:
+            for child, (operation, variable, value) in zip(operations, expected_operations):
+                if not _task10_direct_variable_operation(child, operation, variable, value):
+                    issues.append("runway branch operation order/formula is not exact")
+                    break
+            clamp = operations[2]
+            if (
+                _entry_scalar(clamp.value, "min") != "0.01"
+                or _entry_scalar(clamp.value, "max") != "5000"
+                or len(clamp.value) != 3
+            ):
+                issues.append("runway denominator clamp is not exactly 0.01..5000")
+
+    multiplier_sequence = []
+    for entry in direct:
+        if _task10_direct_variable_operation(
+            entry,
+            "set_variable",
+            "ADISCORD_economy_inflation_expense_multiplier",
+            1,
+        ):
+            multiplier_sequence.append(("base", "1"))
+        for threshold, result in ((10, "1.01"), (25, "1.04"), (50, "1.08"), (75, "1.15")):
+            if _task10_positive_threshold_branch(entry, "ADISCORD_economy_inflation", threshold, result):
+                multiplier_sequence.append((str(threshold), result))
+    if multiplier_sequence != [
+        ("base", "1"),
+        ("10", "1.01"),
+        ("25", "1.04"),
+        ("50", "1.08"),
+        ("75", "1.15"),
+    ]:
+        issues.append("inflation multiplier branches are not exact, positive, and ordered")
+
+    weekly_inflation_operations = [
+        entry
+        for entry in direct
+        if isinstance(entry.value, list)
+        and _entry_scalar(entry.value, "var")
+        == "ADISCORD_economy_weekly_inflation_change"
+    ]
+    expected_weekly_inflation = (
+        ("set_variable", "ADISCORD_economy_inflation_delta_temp"),
+        ("multiply_variable", "3"),
+        ("divide_variable", "13"),
+    )
+    actual_weekly_inflation = [
+        (entry.key, _entry_scalar(entry.value, "value"))
+        for entry in weekly_inflation_operations
+    ]
+    if actual_weekly_inflation != list(expected_weekly_inflation):
+        issues.append("weekly inflation display cache is not direct source * 3 / 13")
+    return issues
+
+
+def task10_gameplay_cache_reference_issues(overrides=None):
+    """Recursively inventory every gameplay script containing a display cache."""
+
+    overrides = {
+        Path(path).resolve(): text for path, text in (overrides or {}).items()
+    }
+    paths = set()
+    for root in TASK10_GAMEPLAY_SCRIPT_ROOTS:
+        paths.update(path.resolve() for path in root.rglob("*.txt"))
+    paths.update(overrides)
+    issues = []
+    for path in sorted(paths):
+        text = overrides.get(path)
+        if text is None:
+            text = path.read_text(encoding="utf-8-sig")
+        if not any(cache in text for cache in TASK10_DISPLAY_CACHE_NAMES):
+            continue
+        relative = path.relative_to(ROOT.resolve()).as_posix()
+        for definition in parse_clausewitz(text):
+            if not isinstance(definition.value, list):
+                continue
+            for ancestors, entry in _walk_parsed(definition.value):
+                if not isinstance(entry.value, str):
+                    continue
+                if entry.value not in TASK10_DISPLAY_CACHE_NAMES:
+                    continue
+                if not (
+                    path == TASK10_EFFECTS_PATH.resolve()
+                    and definition.key == TASK10_DISPLAY_CACHE_OWNER
+                ):
+                    issues.append(
+                        f"{relative}:{definition.key}:{entry.key} consumes or writes {entry.value}"
+                    )
+    return issues
+
+
+def task10_doc_schema_contract_issues(player_doc):
+    rows = {}
+    for line in player_doc.splitlines():
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if len(cells) == 2 and cells[0] in {"`schema 15`", "Task 10 display caches"}:
+            rows[cells[0]] = cells[1]
+    if set(rows) != {"`schema 15`", "Task 10 display caches"}:
+        return ["schema/cache ownership table is incomplete"]
+    issues = []
+    schema = rows["`schema 15`"]
+    display = rows["Task 10 display caches"]
+    if "ADISCORD_economy_weekly_source_cache_ready" not in schema:
+        issues.append("schema 15 is not assigned to weekly source-cache readiness")
+    for cache in TASK10_DISPLAY_CACHE_NAMES:
+        if cache in schema:
+            issues.append(f"schema 15 falsely owns {cache}")
+        if cache not in display:
+            issues.append(f"Task 10 display-cache row omits {cache}")
+    if "не миграция" not in display.lower():
+        issues.append("Task 10 display caches are not explicitly distinguished from migration")
+    return issues
+
+
+def task10_bilingual_semantic_issues(gui_text, russian_text, english_text):
+    issues = []
+    owned = task10_live_localisation_keys(gui_text, SCRIPTED_LOC)
+    for key in sorted(owned):
+        try:
+            russian = localisation_value(russian_text, key)
+            english = localisation_value(english_text, key)
+        except AssertionError as error:
+            issues.append(str(error))
+            continue
+        if task10_localisation_references(russian) != task10_localisation_references(
+            english
+        ):
+            issues.append(f"{key} formatted variables/selectors differ by language")
+
+    for policy in TASK10_FIXED_LEVEL_POLICIES:
+        for level in range(1, 6):
+            key = f"ADISCORD_economy_{policy}_level_{level}_tt"
+            russian = localisation_value(russian_text, key)
+            english = localisation_value(english_text, key)
+            if "GetADISCORD" in russian or "GetADISCORD" in english:
+                issues.append(f"{key} uses a current-mode selector instead of hovered level")
+            if task10_numeric_effects(russian) != task10_numeric_effects(english):
+                issues.append(f"{key} numeric effects differ by language")
+
+    for key in (
+        "ADISCORD_economy_demobilization_status_active",
+        "ADISCORD_economy_action_internal_bonds_tt",
+        "ADISCORD_economy_action_external_loan_tt",
+    ):
+        russian = localisation_value(russian_text, key)
+        english = localisation_value(english_text, key)
+        if task10_numeric_effects(russian) != task10_numeric_effects(english):
+            issues.append(f"{key} numeric effects/requirements differ by language")
+    return issues
+
+
 class EconomySemanticFixtureTests(unittest.TestCase):
     MIGRATION = """
 ADISCORD_economy_migrate_schema = {
@@ -5756,6 +6164,75 @@ ADISCORD_bad_assistance_owner = {
             self.assertNotIn(key, russian_keys)
             self.assertNotIn(key, english_keys)
 
+    def test_task10_live_localisation_has_true_bilingual_semantic_parity(self):
+        self.assertEqual(
+            task10_bilingual_semantic_issues(
+                ECONOMY_GUI, ECONOMY_LOC, ECONOMY_LOC_EN
+            ),
+            [],
+        )
+
+        tax_value = localisation_value(
+            ECONOMY_LOC_EN, "ADISCORD_economy_tax_level_1_tt"
+        )
+        selector_mutation = ECONOMY_LOC_EN.replace(
+            tax_value,
+            tax_value + r"\n[GetADISCORDTaxBurdenEffectsLoc]",
+            1,
+        )
+        self.assertTrue(
+            task10_bilingual_semantic_issues(
+                ECONOMY_GUI, ECONOMY_LOC, selector_mutation
+            )
+        )
+
+        demobilization_value = localisation_value(
+            ECONOMY_LOC_EN, "ADISCORD_economy_demobilization_status_active"
+        )
+        demobilization_mutation = ECONOMY_LOC_EN.replace(
+            demobilization_value,
+            demobilization_value.replace("-10%", "", 1),
+            1,
+        )
+        self.assertNotEqual(demobilization_mutation, ECONOMY_LOC_EN)
+        self.assertTrue(
+            task10_bilingual_semantic_issues(
+                ECONOMY_GUI, ECONOMY_LOC, demobilization_mutation
+            )
+        )
+
+        external_loan_value = localisation_value(
+            ECONOMY_LOC_EN, "ADISCORD_economy_action_external_loan_tt"
+        )
+        external_loan_mutation = ECONOMY_LOC_EN.replace(
+            external_loan_value,
+            external_loan_value.replace("35", "", 1),
+            1,
+        )
+        self.assertNotEqual(external_loan_mutation, ECONOMY_LOC_EN)
+        self.assertTrue(
+            task10_bilingual_semantic_issues(
+                ECONOMY_GUI, ECONOMY_LOC, external_loan_mutation
+            )
+        )
+
+    def test_task10_balance_kpi_has_short_and_delayed_bilingual_breakdown(self):
+        self.assertEqual(
+            task10_balance_surface_issues(ECONOMY_GUI, ECONOMY_LOC, ECONOMY_LOC_EN),
+            [],
+        )
+        binding_mutation = ECONOMY_GUI.replace(
+            ' pdx_tooltip_delayed = "ADISCORD_economy_balance_delayed_tt"',
+            "",
+            1,
+        )
+        self.assertNotEqual(binding_mutation, ECONOMY_GUI)
+        self.assertTrue(
+            task10_balance_surface_issues(
+                binding_mutation, ECONOMY_LOC, ECONOMY_LOC_EN
+            )
+        )
+
     def test_task10_short_and_delayed_tooltips_have_distinct_bilingual_semantics(self):
         language_files = {
             "Russian": ECONOMY_LOC,
@@ -5806,13 +6283,13 @@ ADISCORD_bad_assistance_owner = {
             "inflation": {
                 "short": (
                     "ADISCORD_economy_inflation",
-                    "ADISCORD_economy_inflation_delta_temp",
+                    "ADISCORD_economy_weekly_inflation_change",
                     "GetADISCORDInflationEffectsLoc",
                     "10/25/50/75%",
                 ),
                 "delayed": (
                     "ADISCORD_economy_inflation",
-                    "ADISCORD_economy_inflation_delta_temp",
+                    "ADISCORD_economy_weekly_inflation_change",
                     "ADISCORD_economy_inflation_expense_multiplier",
                     "ADISCORD_economy_emission_pressure",
                     "ADISCORD_economy_deficit_pressure",
@@ -5837,6 +6314,19 @@ ADISCORD_bad_assistance_owner = {
                     self.assertIn(token, delayed, (language, metric, "delayed"))
                 self.assertNotIn("debt_capacity", short.lower())
                 self.assertNotIn("debt_capacity", delayed.lower())
+
+            risk = localisation_value(text, "ADISCORD_economy_risk_inflation")
+            inflation_short = localisation_value(text, "ADISCORD_economy_inflation_tt")
+            inflation_delayed = localisation_value(
+                text, "ADISCORD_economy_inflation_delayed_tt"
+            )
+            for surface in (risk, inflation_short, inflation_delayed):
+                self.assertIn("ADISCORD_economy_weekly_inflation_change", surface)
+                self.assertNotIn("ADISCORD_economy_inflation_delta_temp", surface)
+            if language == "Russian":
+                self.assertIn("эквивалент", inflation_short.lower())
+            else:
+                self.assertIn("equivalent", inflation_short.lower())
 
             for policy, title in (
                 ("tax", "Tax"),
@@ -5866,59 +6356,74 @@ ADISCORD_bad_assistance_owner = {
                     )
 
     def test_task10_display_caches_have_one_bounded_non_gameplay_owner(self):
-        weekly = unique_block(EFFECTS, "ADISCORD_economy_calculate_weekly_budget")
-        parsed = parse_clausewitz(EFFECTS)
-        cache_names = (
-            "ADISCORD_economy_deficit_runway",
-            "ADISCORD_economy_inflation_expense_multiplier",
+        self.assertEqual(task10_display_cache_producer_issues(EFFECTS), [])
+        self.assertEqual(task10_gameplay_cache_reference_issues(), [])
+
+        monthly = unique_block(EFFECTS, "ADISCORD_economy_monthly_update")
+        self.assertLess(
+            monthly.index(
+                "set_variable = { var = ADISCORD_economy_tick_scale value = 1 }"
+            ),
+            monthly.index("ADISCORD_economy_update_inflation = yes"),
         )
-        for cache in cache_names:
-            owners = {
-                definition.key
-                for definition in parsed
-                if isinstance(definition.value, list)
-                and any(
-                    entry.value == cache
-                    for _, entry in _walk_parsed(definition.value)
-                    if entry.key == "var" and isinstance(entry.value, str)
-                )
-            }
-            self.assertEqual(
-                owners,
-                {"ADISCORD_economy_calculate_weekly_budget"},
-                f"{cache} must have one bounded display-cache owner",
-            )
-
-        for token in (
-            "set_variable = { var = ADISCORD_economy_deficit_runway value = 260 }",
-            "check_variable = { var = ADISCORD_economy_weekly_balance value = 0 compare = less_than }",
-            "set_temp_variable = { var = ADISCORD_economy_deficit_runway_denominator_temp value = 0 }",
-            "subtract_from_temp_variable = { var = ADISCORD_economy_deficit_runway_denominator_temp value = ADISCORD_economy_weekly_balance }",
-            "clamp_temp_variable = { var = ADISCORD_economy_deficit_runway_denominator_temp min = 0.01 max = 5000 }",
-            "set_variable = { var = ADISCORD_economy_deficit_runway value = ADISCORD_economy_treasury }",
-            "divide_variable = { var = ADISCORD_economy_deficit_runway value = ADISCORD_economy_deficit_runway_denominator_temp }",
-            "clamp_variable = { var = ADISCORD_economy_deficit_runway min = 0 max = 260 }",
-        ):
-            self.assertIn(token, weekly)
-
-        multiplier_writes = re.findall(
-            r"set_variable\s*=\s*\{\s*var\s*=\s*"
-            r"ADISCORD_economy_inflation_expense_multiplier\s+value\s*=\s*"
-            r"(\d+(?:\.\d+)?)\s*\}",
-            weekly,
+        player_ui = unique_block(
+            TRIGGERS, "ADISCORD_economy_should_show_player_ui"
         )
-        self.assertEqual(multiplier_writes, ["1", "1.01", "1.04", "1.08", "1.15"])
-        for threshold, value in ((10, "1.01"), (25, "1.04"), (50, "1.08"), (75, "1.15")):
-            self.assertRegex(
-                weekly,
-                rf"check_variable\s*=\s*\{{\s*var\s*=\s*ADISCORD_economy_inflation\s+"
-                rf"value\s*=\s*{threshold}\s+compare\s*=\s*greater_than_or_equals\s*\}}\s*\}}\s*"
-                rf"set_variable\s*=\s*\{{\s*var\s*=\s*ADISCORD_economy_inflation_expense_multiplier\s+value\s*=\s*{re.escape(value)}\s*\}}",
-            )
+        self.assertRegex(player_ui, r"\bis_ai\s*=\s*no\b")
+        yearly_scope = unique_block(
+            TRIGGERS, "ADISCORD_economy_should_yearly_update"
+        )
+        self.assertIn("ADISCORD_economy_is_secondary_tier_country = yes", yearly_scope)
+        self.assertRegex(
+            yearly_scope,
+            r"NOT\s*=\s*\{\s*ADISCORD_economy_should_monthly_update\s*=\s*yes\s*\}",
+        )
 
-        non_display_consumers = "\n".join((TRIGGERS, ECONOMY_AI, SCRIPTED_GUI, ECONOMY_EVENTS))
-        for cache in cache_names:
-            self.assertNotIn(cache, non_display_consumers)
+        weekly = unique_block(EFFECTS, TASK10_DISPLAY_CACHE_OWNER)
+        start = weekly.index(
+            "\tset_variable = { var = ADISCORD_economy_deficit_runway value = 260 }"
+        )
+        end_token = (
+            "\tif = { limit = { check_variable = { var = ADISCORD_economy_inflation "
+            "value = 75 compare = greater_than_or_equals } } set_variable = { var = "
+            "ADISCORD_economy_inflation_expense_multiplier value = 1.15 } }"
+        )
+        end = weekly.index(end_token, start) + len(end_token)
+        dead_segment = weekly[start:end]
+        dead_wrapper = (
+            "\tif = {\n\t\tlimit = { always = no }\n"
+            + "\n".join("\t" + line for line in dead_segment.splitlines())
+            + "\n\t}"
+        )
+        dead_weekly = weekly[:start] + dead_wrapper + weekly[end:]
+        dead_mutation = EFFECTS.replace(weekly, dead_weekly, 1)
+        self.assertNotEqual(dead_mutation, EFFECTS)
+        self.assertTrue(task10_display_cache_producer_issues(dead_mutation))
+
+        extra_producer_mutation = EFFECTS.replace(
+            "\tdivide_variable = { var = ADISCORD_economy_weekly_inflation_change value = 13 }",
+            "\tdivide_variable = { var = ADISCORD_economy_weekly_inflation_change value = 13 }\n"
+            "\tif = { limit = { always = yes } add_to_variable = { var = "
+            "ADISCORD_economy_weekly_inflation_change value = 1 } }",
+            1,
+        )
+        self.assertNotEqual(extra_producer_mutation, EFFECTS)
+        self.assertTrue(
+            task10_display_cache_producer_issues(extra_producer_mutation)
+        )
+
+        third_path = ROOT / "common" / "ideas" / "ADISCORD_economy_ideas.txt"
+        third_file_mutation = ECONOMY_IDEAS + """
+ADISCORD_task10_forbidden_cache_consumer = {
+    check_variable = { var = ADISCORD_economy_deficit_runway value = 10 compare = less_than }
+}
+"""
+        self.assertTrue(
+            task10_gameplay_cache_reference_issues(
+                {third_path: third_file_mutation}
+            )
+        )
+
         for text in (ECONOMY_LOC, ECONOMY_LOC_EN):
             self.assertIn(
                 "ADISCORD_economy_deficit_runway",
@@ -5928,11 +6433,23 @@ ADISCORD_bad_assistance_owner = {
                 "ADISCORD_economy_inflation_expense_multiplier",
                 localisation_value(text, "ADISCORD_economy_inflation_delayed_tt"),
             )
+            self.assertIn(
+                "ADISCORD_economy_weekly_inflation_change",
+                localisation_value(text, "ADISCORD_economy_inflation_delayed_tt"),
+            )
 
     def test_task10_docs_describe_current_schema_and_remove_stale_debt_capacity(self):
         player_doc = PLAYER_RUNTIME_DOC.read_text(encoding="utf-8-sig")
         modifier_doc = MODIFIER_DOC.read_text(encoding="utf-8-sig")
         combined = f"{player_doc}\n{modifier_doc}"
+        self.assertEqual(task10_doc_schema_contract_issues(player_doc), [])
+        schema_mutation = player_doc.replace(
+            "ADISCORD_economy_weekly_source_cache_ready",
+            "ADISCORD_economy_deficit_runway",
+            1,
+        )
+        self.assertNotEqual(schema_mutation, player_doc)
+        self.assertTrue(task10_doc_schema_contract_issues(schema_mutation))
         for required in (
             "schema 15",
             "schema 12",

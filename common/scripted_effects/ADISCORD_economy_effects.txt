@@ -1483,6 +1483,12 @@ ADISCORD_economy_calculate_weekly_budget = {
 	divide_variable = { var = ADISCORD_economy_weekly_expenses value = 13 }
 	set_variable = { var = ADISCORD_economy_weekly_balance value = ADISCORD_economy_weekly_income }
 	subtract_from_variable = { var = ADISCORD_economy_weekly_balance value = ADISCORD_economy_weekly_expenses }
+	# Display-only weekly equivalent of the last macro inflation change. The source
+	# remains authoritative; 3/13 is the same exact month-to-week conversion used
+	# by the cash forecast, and this value has no gameplay consumer.
+	set_variable = { var = ADISCORD_economy_weekly_inflation_change value = ADISCORD_economy_inflation_delta_temp }
+	multiply_variable = { var = ADISCORD_economy_weekly_inflation_change value = 3 }
+	divide_variable = { var = ADISCORD_economy_weekly_inflation_change value = 13 }
 	# Four weeks of ordinary spending is a readable player target, not a new
 	# subsystem. It reuses an already-calculated scalar and adds no scan.
 	set_variable = { var = ADISCORD_economy_safe_reserve value = ADISCORD_economy_weekly_expenses }

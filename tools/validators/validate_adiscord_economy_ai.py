@@ -3147,8 +3147,11 @@ def validate(root: Path = ROOT) -> list[str]:
     }
     require(visible_actions == expected_actions,
             "economy UI must expose exactly six focused treasury operations")
-    require('pdx_tooltip = "ADISCORD_economy_budget_breakdown_tt"' in gui,
-            "balance KPI lacks the requested income/expense breakdown tooltip")
+    require(
+        'pdx_tooltip = "ADISCORD_economy_balance_tt"' in gui
+        and 'pdx_tooltip_delayed = "ADISCORD_economy_balance_delayed_tt"' in gui,
+        "balance KPI lacks the requested short/delayed income and expense breakdown",
+    )
     require('name = "ADISCORD_economy_topbar_icon"' in gui
             and 'spriteType = "GFX_ADISCORD_treasury_icon"' in gui,
             "topbar lacks the compact treasury icon")

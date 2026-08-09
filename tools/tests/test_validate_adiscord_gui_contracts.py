@@ -1096,9 +1096,23 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                 'ADISCORD_economy_inflation_delayed_tt',
                 (
                     'ADISCORD_economy_inflation',
-                    'ADISCORD_economy_inflation_delta_temp',
+                    'ADISCORD_economy_weekly_inflation_change',
                     'ADISCORD_economy_inflation_expense_multiplier',
                     'GetADISCORDInflationEffectsLoc',
+                ),
+            ),
+            'ADISCORD_economy_kpi_balance': (
+                'ADISCORD_economy_balance_tt',
+                'ADISCORD_economy_balance_delayed_tt',
+                (
+                    'ADISCORD_economy_treasury',
+                    'ADISCORD_economy_weekly_income',
+                    'ADISCORD_economy_weekly_expenses',
+                    'ADISCORD_economy_weekly_balance',
+                    'ADISCORD_economy_safe_reserve',
+                    'ADISCORD_economy_deficit_runway',
+                    'ADISCORD_economy_resource_income',
+                    'ADISCORD_economy_debt_service',
                 ),
             ),
         }
@@ -1536,7 +1550,7 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             ('ADISCORD_economy_kpi_treasury', 'ADISCORD_economy_kpi_treasury', 'ADISCORD_economy_treasury_tt'),
             ('ADISCORD_economy_kpi_income', 'ADISCORD_economy_kpi_income', 'ADISCORD_economy_income_tt'),
             ('ADISCORD_economy_kpi_expenses', 'ADISCORD_economy_kpi_expenses', 'ADISCORD_economy_expenses_tt'),
-            ('ADISCORD_economy_kpi_balance', 'ADISCORD_economy_kpi_balance', 'ADISCORD_economy_budget_breakdown_tt'),
+            ('ADISCORD_economy_kpi_balance', 'ADISCORD_economy_kpi_balance', 'ADISCORD_economy_balance_tt'),
         ):
             line = next(
                 line for line in self.gui.splitlines() if f'name = "{node}"' in line
@@ -1590,7 +1604,7 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         ).group(1)
         for required in (
             '?ADISCORD_economy_inflation|1',
-            '?ADISCORD_economy_inflation_delta_temp|=+2',
+            '?ADISCORD_economy_weekly_inflation_change|=+2',
             '[GetADISCORDInflationEffectsLoc]',
             '10/25/50/75%',
         ):

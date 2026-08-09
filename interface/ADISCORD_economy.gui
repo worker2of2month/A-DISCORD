@@ -110,7 +110,7 @@ guiTypes = {
 			position = { x = 620 y = 58 }
 			size = { width = 200 height = 44 }
 			background = { name = "ADISCORD_economy_kpi_balance_bg" quadTextureSprite = "GFX_tiled_window2_1b_border" }
-			instantTextboxType = { name = "ADISCORD_economy_kpi_balance" position = { x = 6 y = 10 } font = "hoi_16mbs" text = "ADISCORD_economy_kpi_balance" maxWidth = 188 maxHeight = 24 format = center pdx_tooltip = "ADISCORD_economy_budget_breakdown_tt" }
+			instantTextboxType = { name = "ADISCORD_economy_kpi_balance" position = { x = 6 y = 10 } font = "hoi_16mbs" text = "ADISCORD_economy_kpi_balance" maxWidth = 188 maxHeight = 24 format = center pdx_tooltip = "ADISCORD_economy_balance_tt" pdx_tooltip_delayed = "ADISCORD_economy_balance_delayed_tt" }
 		}
 
 		containerWindowType = {
