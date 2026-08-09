@@ -43,7 +43,7 @@ ideas = {
 			modifier = {
 				ADISCORD_economy_trade_income_factor = 0.15
 				ADISCORD_economy_resource_rent_income_factor = 0.10
-				ADISCORD_economy_debt_capacity_factor = 0.10
+				ADISCORD_economy_creditworthiness_factor = 0.10
 			}
 		}
 
@@ -64,7 +64,7 @@ ideas = {
 			modifier = {
 				ADISCORD_economy_trade_income_factor = -0.15
 				ADISCORD_economy_resource_rent_income_factor = -0.10
-				ADISCORD_economy_debt_capacity_factor = -0.10
+				ADISCORD_economy_creditworthiness_factor = -0.10
 				ADISCORD_economy_debt_service_factor = 0.15
 			}
 		}
@@ -76,7 +76,7 @@ ideas = {
 			modifier = {
 				ADISCORD_economy_trade_income_factor = -0.40
 				ADISCORD_economy_resource_rent_income_factor = -0.30
-				ADISCORD_economy_debt_capacity_factor = -0.25
+				ADISCORD_economy_creditworthiness_factor = -0.25
 				ADISCORD_economy_debt_service_factor = 0.35
 				stability_factor = -0.10
 			}

@@ -78,7 +78,6 @@ ADISCORD_example_focus = {
 
 | Ключ | Что меняет | Плюс означает | Обычная сила |
 |---|---|---|---:|
-| `ADISCORD_economy_debt_capacity_factor` | Максимальную долговую ёмкость | больше доступного долга | 5–15% |
 | `ADISCORD_economy_interest_rate_factor` | Процентную ставку | более дорогой долг, штраф | 5–15% |
 | `ADISCORD_economy_creditworthiness_factor` | Итоговую кредитоспособность | более надёжный заёмщик | 5–15% |
 | `ADISCORD_economy_inflation_pressure_factor` | Прирост инфляционного давления | больше инфляции, штраф | 5–15% |
@@ -117,6 +116,6 @@ ADISCORD_example_focus = {
 
 ## Практические сочетания
 
-Ресурсная концессия может дать `ADISCORD_economy_resource_rent_income_factor = 0.15` вместе с небольшим ростом перегрузки. Военная реформа обычно сочетает снижение `ADISCORD_economy_army_expense_factor` с меньшим бонусом к `ADISCORD_economy_debt_capacity_factor`. Социальная программа может повысить `ADISCORD_economy_social_expense_factor`, но ускорить `ADISCORD_country_development_social_system_growth_factor`.
+Ресурсная концессия может дать `ADISCORD_economy_resource_rent_income_factor = 0.15` вместе с небольшим ростом перегрузки. Военная реформа обычно сочетает снижение `ADISCORD_economy_army_expense_factor` с меньшим бонусом к `ADISCORD_economy_creditworthiness_factor`. Социальная программа может повысить `ADISCORD_economy_social_expense_factor`, но ускорить `ADISCORD_country_development_social_system_growth_factor`.
 
 Не используйте общий доход как универсальную награду каждого фокуса: узкие модификаторы лучше объясняют игроку источник эффекта и создают различимые экономические специализации.

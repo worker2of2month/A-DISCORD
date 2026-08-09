@@ -155,15 +155,6 @@ ADISCORD_economy_debt_service_factor = {
 	category = politics
 }
 
-ADISCORD_economy_debt_capacity_factor = {
-	color_type = good
-	value_type = percentage
-	precision = 1
-	postfix = none
-	category = country
-	category = politics
-}
-
 ADISCORD_economy_interest_rate_factor = {
 	color_type = bad
 	value_type = percentage

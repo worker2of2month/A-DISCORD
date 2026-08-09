@@ -1409,15 +1409,11 @@ def validate() -> list[str]:
             "treasury is snapshotted before cap overflow is recorded")
     require("value = ADISCORD_economy_last_period_cap_writeoff" in apply_balance,
             "cap writeoff is missing from the accounting identity")
-    require("ADISCORD_economy_last_period_unfunded_deficit" in apply_balance,
-            "unfunded deficit is not recorded in the weekly ledger")
-    require("value = ADISCORD_economy_last_period_unfunded_deficit" in apply_balance,
-            "treasury-floor adjustment is missing from the accounting identity")
-    require(apply_balance.find("value = ADISCORD_economy_last_period_unfunded_deficit")
-            < apply_balance.find("ADISCORD_economy_last_period_unexplained_delta"),
-            "unexplained delta is calculated before the treasury-floor adjustment")
-    require("ADISCORD_economy_final_deficit_pressure_factor_bp" in apply_balance,
-            "unfunded-deficit pressure ignores its custom modifier")
+    # Full-deficit funding is owned by automatic_borrow_flow_issues above. Its
+    # parsed data-flow contract requires one exact uncovered amount, one direct
+    # addition to debt and treasury, and rejects caps, rewrites, nested funding,
+    # or a hidden remainder. A separate unfunded ledger adjustment would now
+    # invent cash that cannot exist after the exact transfer.
 
     timed_actions = {
         "ADISCORD_economy_expand_money_emission": "ADISCORD_economy_money_printing",

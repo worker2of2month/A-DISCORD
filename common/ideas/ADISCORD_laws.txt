@@ -18,8 +18,7 @@ ideas = {
 				mobilization_speed = -0.05
 				factory_energy_consumption = -0.10
 				ADISCORD_economy_admin_expense_factor = -0.10
-				ADISCORD_economy_debt_capacity_factor = -0.05
-				ADISCORD_economy_creditworthiness_factor = -0.05
+				ADISCORD_economy_creditworthiness_factor = -0.10
 				ADISCORD_economy_overload_resistance_factor = 0.05
 				ADISCORD_country_development_global_growth_factor = -0.05
 				ADISCORD_country_development_economic_growth_factor = -0.05
@@ -54,8 +53,7 @@ ideas = {
 				ADISCORD_economy_population_tax_income_factor = 0.05
 				ADISCORD_economy_resource_rent_income_factor = 0.10
 				ADISCORD_economy_military_industry_income_factor = -0.05
-				ADISCORD_economy_debt_capacity_factor = -0.05
-				ADISCORD_economy_creditworthiness_factor = -0.05
+				ADISCORD_economy_creditworthiness_factor = -0.10
 				ADISCORD_country_development_economic_growth_factor = -0.03
 			}
 

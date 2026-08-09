@@ -292,30 +292,11 @@ ADISCORD_economy_has_treasury_room_50 = {
 	}
 	check_variable = { var = ADISCORD_economy_treasury_room_trigger_temp value = 50 compare = greater_than_or_equals }
 }
-ADISCORD_economy_has_debt_room_58 = {
-	set_temp_variable = {
-		ADISCORD_economy_debt_room_trigger_temp = {
-			value = ADISCORD_economy_debt_capacity
-			subtract = ADISCORD_economy_debt
-		}
-	}
-	check_variable = { var = ADISCORD_economy_debt_room_trigger_temp value = 58 compare = greater_than_or_equals }
-}
-ADISCORD_economy_has_debt_room_64 = {
-	set_temp_variable = {
-		ADISCORD_economy_debt_room_trigger_temp = {
-			value = ADISCORD_economy_debt_capacity
-			subtract = ADISCORD_economy_debt
-		}
-	}
-	check_variable = { var = ADISCORD_economy_debt_room_trigger_temp value = 64 compare = greater_than_or_equals }
-}
-
 ADISCORD_economy_has_debt = { check_variable = { var = ADISCORD_economy_debt value = 1 compare = greater_than_or_equals } }
 ADISCORD_economy_has_high_debt = {
 	OR = {
 		check_variable = { var = ADISCORD_economy_debt value = 300 compare = greater_than_or_equals }
-		check_variable = { var = ADISCORD_economy_debt_ratio value = 60 compare = greater_than_or_equals }
+		check_variable = { var = ADISCORD_economy_debt_income_ratio value = 60 compare = greater_than_or_equals }
 	}
 }
 ADISCORD_economy_has_high_inflation = { check_variable = { var = ADISCORD_economy_inflation value = 25 compare = greater_than_or_equals } }
@@ -431,10 +412,12 @@ ADISCORD_economy_can_take_debt = {
 		NOT = { ADISCORD_economy_model_is_fragmented = yes }
 		ADISCORD_economy_model_allows_oligarchic_deals = yes
 	}
-	check_variable = { var = ADISCORD_economy_debt_ratio value = 100 compare = less_than }
 	check_variable = { var = ADISCORD_economy_recent_debt value = 1 compare = less_than }
 	ADISCORD_economy_has_treasury_room_50 = yes
-	ADISCORD_economy_has_debt_room_58 = yes
+	check_variable = { var = ADISCORD_economy_creditworthiness value = 25 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_interest_share_income value = 25 compare = less_than }
+	check_variable = { var = ADISCORD_economy_debt_pressure value = 75 compare = less_than }
+	check_variable = { var = ADISCORD_economy_debt_crisis_level value = 4 compare = less_than }
 }
 
 ADISCORD_economy_can_issue_internal_bonds = {
@@ -442,10 +425,16 @@ ADISCORD_economy_can_issue_internal_bonds = {
 }
 
 ADISCORD_economy_can_take_external_loan = {
-	ADISCORD_economy_can_take_debt = yes
+	OR = {
+		NOT = { ADISCORD_economy_model_is_fragmented = yes }
+		ADISCORD_economy_model_allows_oligarchic_deals = yes
+	}
+	check_variable = { var = ADISCORD_economy_recent_debt value = 1 compare = less_than }
+	ADISCORD_economy_has_treasury_room_50 = yes
 	check_variable = { var = ADISCORD_economy_creditworthiness value = 35 compare = greater_than_or_equals }
-	check_variable = { var = ADISCORD_economy_debt_crisis_level value = 4 compare = less_than }
-	ADISCORD_economy_has_debt_room_64 = yes
+	check_variable = { var = ADISCORD_economy_interest_share_income value = 20 compare = less_than }
+	check_variable = { var = ADISCORD_economy_debt_pressure value = 75 compare = less_than }
+	check_variable = { var = ADISCORD_economy_debt_crisis_level value = 3 compare = less_than }
 }
 
 ADISCORD_economy_can_print_money = {
@@ -478,13 +467,14 @@ ADISCORD_economy_can_stabilize_macro = {
 }
 
 ADISCORD_economy_can_restructure_debt = {
-	has_tech = ADISCORD_tech_strategic_digital_twins
 	ADISCORD_economy_has_debt = yes
 	check_variable = { var = ADISCORD_economy_debt value = 100 compare = greater_than_or_equals }
 	check_variable = { var = ADISCORD_economy_recent_debt value = 1 compare = less_than }
 	OR = {
-		check_variable = { var = ADISCORD_economy_debt_ratio value = 80 compare = greater_than_or_equals }
-		ADISCORD_economy_has_debt_crisis = yes
+		check_variable = { var = ADISCORD_economy_interest_share_income value = 10 compare = greater_than_or_equals }
+		check_variable = { var = ADISCORD_economy_debt_pressure value = 50 compare = greater_than_or_equals }
+		check_variable = { var = ADISCORD_economy_debt_crisis_level value = 2 compare = greater_than_or_equals }
+		check_variable = { var = ADISCORD_economy_creditworthiness value = 35 compare = less_than }
 	}
 }
 

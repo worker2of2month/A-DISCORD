@@ -21,7 +21,6 @@ ADISCORD_economy_initialize_modifier_variables = {
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_static_research_expense_bonus_bp } } set_variable = { var = ADISCORD_economy_static_research_expense_bonus_bp value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_static_admin_expense_bonus_bp } } set_variable = { var = ADISCORD_economy_static_admin_expense_bonus_bp value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_static_debt_service_bonus_bp } } set_variable = { var = ADISCORD_economy_static_debt_service_bonus_bp value = 0 } }
-	if = { limit = { NOT = { has_variable = ADISCORD_economy_static_debt_capacity_bonus_bp } } set_variable = { var = ADISCORD_economy_static_debt_capacity_bonus_bp value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_static_interest_rate_bonus_bp } } set_variable = { var = ADISCORD_economy_static_interest_rate_bonus_bp value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_static_creditworthiness_bonus_bp } } set_variable = { var = ADISCORD_economy_static_creditworthiness_bonus_bp value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_static_overall_expense_bonus_bp } } set_variable = { var = ADISCORD_economy_static_overall_expense_bonus_bp value = 0 } }
@@ -68,7 +67,6 @@ ADISCORD_economy_reset_static_modifier_variables = {
 	set_variable = { var = ADISCORD_economy_static_research_expense_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_static_admin_expense_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_static_debt_service_bonus_bp value = 0 }
-	set_variable = { var = ADISCORD_economy_static_debt_capacity_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_static_interest_rate_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_static_creditworthiness_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_static_overall_expense_bonus_bp value = 0 }
@@ -121,7 +119,6 @@ ADISCORD_economy_reset_policy_modifier_variables = {
 	set_variable = { var = ADISCORD_economy_policy_research_expense_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_policy_admin_expense_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_policy_debt_service_bonus_bp value = 0 }
-	set_variable = { var = ADISCORD_economy_policy_debt_capacity_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_policy_interest_rate_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_policy_creditworthiness_bonus_bp value = 0 }
 	set_variable = { var = ADISCORD_economy_policy_overall_expense_bonus_bp value = 0 }
@@ -166,7 +163,6 @@ ADISCORD_economy_reset_final_factor_variables = {
 	set_variable = { var = ADISCORD_economy_final_research_expense_factor_bp value = 100 }
 	set_variable = { var = ADISCORD_economy_final_admin_expense_factor_bp value = 100 }
 	set_variable = { var = ADISCORD_economy_final_debt_service_factor_bp value = 100 }
-	set_variable = { var = ADISCORD_economy_final_debt_capacity_factor_bp value = 100 }
 	set_variable = { var = ADISCORD_economy_final_interest_rate_factor_bp value = 100 }
 	set_variable = { var = ADISCORD_economy_final_creditworthiness_factor_bp value = 100 }
 	set_variable = { var = ADISCORD_economy_final_overall_expense_factor_bp value = 100 }
@@ -263,8 +259,6 @@ ADISCORD_economy_calculate_final_modifier_factors = {
 	add_to_variable = { var = ADISCORD_economy_final_admin_expense_factor_bp value = ADISCORD_economy_policy_admin_expense_bonus_bp }
 	add_to_variable = { var = ADISCORD_economy_final_debt_service_factor_bp value = ADISCORD_economy_static_debt_service_bonus_bp }
 	add_to_variable = { var = ADISCORD_economy_final_debt_service_factor_bp value = ADISCORD_economy_policy_debt_service_bonus_bp }
-	add_to_variable = { var = ADISCORD_economy_final_debt_capacity_factor_bp value = ADISCORD_economy_static_debt_capacity_bonus_bp }
-	add_to_variable = { var = ADISCORD_economy_final_debt_capacity_factor_bp value = ADISCORD_economy_policy_debt_capacity_bonus_bp }
 	add_to_variable = { var = ADISCORD_economy_final_interest_rate_factor_bp value = ADISCORD_economy_static_interest_rate_bonus_bp }
 	add_to_variable = { var = ADISCORD_economy_final_interest_rate_factor_bp value = ADISCORD_economy_policy_interest_rate_bonus_bp }
 	add_to_variable = { var = ADISCORD_economy_final_creditworthiness_factor_bp value = ADISCORD_economy_static_creditworthiness_bonus_bp }
@@ -371,9 +365,6 @@ ADISCORD_economy_apply_visible_modifier_definition_factors = {
 	set_variable = { var = ADISCORD_economy_visible_modifier_temp value = modifier@ADISCORD_economy_debt_service_factor }
 	multiply_variable = { var = ADISCORD_economy_visible_modifier_temp value = 100 }
 	add_to_variable = { var = ADISCORD_economy_final_debt_service_factor_bp value = ADISCORD_economy_visible_modifier_temp }
-	set_variable = { var = ADISCORD_economy_visible_modifier_temp value = modifier@ADISCORD_economy_debt_capacity_factor }
-	multiply_variable = { var = ADISCORD_economy_visible_modifier_temp value = 100 }
-	add_to_variable = { var = ADISCORD_economy_final_debt_capacity_factor_bp value = ADISCORD_economy_visible_modifier_temp }
 	set_variable = { var = ADISCORD_economy_visible_modifier_temp value = modifier@ADISCORD_economy_interest_rate_factor }
 	multiply_variable = { var = ADISCORD_economy_visible_modifier_temp value = 100 }
 	add_to_variable = { var = ADISCORD_economy_final_interest_rate_factor_bp value = ADISCORD_economy_visible_modifier_temp }
@@ -467,7 +458,6 @@ ADISCORD_economy_clamp_modifier_factors = {
 	clamp_variable = { var = ADISCORD_economy_final_research_expense_factor_bp min = 25 max = 250 }
 	clamp_variable = { var = ADISCORD_economy_final_admin_expense_factor_bp min = 25 max = 250 }
 	clamp_variable = { var = ADISCORD_economy_final_debt_service_factor_bp min = 25 max = 250 }
-	clamp_variable = { var = ADISCORD_economy_final_debt_capacity_factor_bp min = 25 max = 250 }
 	clamp_variable = { var = ADISCORD_economy_final_interest_rate_factor_bp min = 25 max = 250 }
 	clamp_variable = { var = ADISCORD_economy_final_creditworthiness_factor_bp min = 25 max = 250 }
 	clamp_variable = { var = ADISCORD_economy_final_overall_expense_factor_bp min = 25 max = 250 }

@@ -12,7 +12,9 @@ from tools.validators.validate_adiscord_economy_ai import (
     reachable_script_entries,
     research_policy_flow_issues,
     retired_capacity_boundary_issues,
+    validate as validate_economy_ai,
 )
+from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -264,6 +266,395 @@ def tax_refresh_macro_flow_issues(text):
     return issues
 
 
+def _parsed_definition(text, name):
+    matches = [
+        entry
+        for entry in parse_clausewitz(text)
+        if entry.key == name and isinstance(entry.value, list)
+    ]
+    if len(matches) != 1:
+        raise AssertionError(f"expected one parsed definition {name}, found {len(matches)}")
+    return matches[0]
+
+
+def _walk_parsed(entries, ancestors=()):
+    for entry in entries:
+        yield ancestors, entry
+        if isinstance(entry.value, list):
+            yield from _walk_parsed(entry.value, ancestors + (entry,))
+
+
+def _entry_scalar(entries, key):
+    return next(
+        (
+            entry.value
+            for entry in entries
+            if entry.key == key and isinstance(entry.value, str)
+        ),
+        None,
+    )
+
+
+def duplicate_direct_key_blocks(text, key):
+    """Return parsed block paths that declare ``key`` more than once directly."""
+
+    offenders = []
+    for ancestors, entry in _walk_parsed(parse_clausewitz(text)):
+        if not isinstance(entry.value, list):
+            continue
+        if sum(child.key == key for child in entry.value) > 1:
+            offenders.append("/".join(node.key for node in ancestors + (entry,)))
+    return offenders
+
+
+def debt_metric_flow_issues(text):
+    """Validate the exact interest-pressure arithmetic and its data-flow order."""
+
+    try:
+        definition = _parsed_definition(text, "ADISCORD_economy_calculate_debt_metrics")
+    except AssertionError as error:
+        return [str(error)]
+
+    walked = list(_walk_parsed(definition.value))
+    writes = []
+    write_keys = {
+        "set_variable",
+        "add_to_variable",
+        "subtract_from_variable",
+        "multiply_variable",
+        "divide_variable",
+        "clamp_variable",
+    }
+    for position, (ancestors, entry) in enumerate(walked):
+        if entry.key not in write_keys or not isinstance(entry.value, list):
+            continue
+        writes.append(
+            (
+                position,
+                ancestors,
+                entry,
+                _entry_scalar(entry.value, "var"),
+                _entry_scalar(entry.value, "value"),
+                _entry_scalar(entry.value, "min"),
+                _entry_scalar(entry.value, "max"),
+            )
+        )
+
+    def signatures(variable):
+        return [
+            (entry.key, value, minimum, maximum)
+            for _, _, entry, target, value, minimum, maximum in writes
+            if target == variable
+        ]
+
+    expected = {
+        "ADISCORD_economy_debt_income_denominator_temp": [
+            ("set_variable", "ADISCORD_economy_monthly_income", None, None),
+            ("multiply_variable", "12", None, None),
+            ("set_variable", "1", None, None),
+        ],
+        "ADISCORD_economy_debt_income_ratio": [
+            ("set_variable", "ADISCORD_economy_debt", None, None),
+            ("multiply_variable", "100", None, None),
+            (
+                "divide_variable",
+                "ADISCORD_economy_debt_income_denominator_temp",
+                None,
+                None,
+            ),
+        ],
+        "ADISCORD_economy_weekly_interest": [
+            ("set_variable", "ADISCORD_economy_debt_service", None, None),
+            ("multiply_variable", "3", None, None),
+            ("divide_variable", "13", None, None),
+        ],
+        "ADISCORD_economy_interest_income_denominator_temp": [
+            ("set_variable", "ADISCORD_economy_monthly_income", None, None),
+            ("multiply_variable", "3", None, None),
+            ("divide_variable", "13", None, None),
+            ("set_variable", "0.1", None, None),
+        ],
+        "ADISCORD_economy_interest_share_income": [
+            ("set_variable", "ADISCORD_economy_weekly_interest", None, None),
+            ("multiply_variable", "100", None, None),
+            (
+                "divide_variable",
+                "ADISCORD_economy_interest_income_denominator_temp",
+                None,
+                None,
+            ),
+        ],
+        "ADISCORD_economy_interest_pressure_temp": [
+            ("set_variable", "ADISCORD_economy_interest_share_income", None, None),
+            ("multiply_variable", "1.50", None, None),
+        ],
+        "ADISCORD_economy_debt_streak_pressure_temp": [
+            ("set_variable", "ADISCORD_economy_deficit_streak", None, None),
+            ("multiply_variable", "2", None, None),
+        ],
+        "ADISCORD_economy_debt_pressure": [
+            ("set_variable", "ADISCORD_economy_debt_income_ratio", None, None),
+            ("multiply_variable", "0.20", None, None),
+            (
+                "add_to_variable",
+                "ADISCORD_economy_interest_pressure_temp",
+                None,
+                None,
+            ),
+            (
+                "add_to_variable",
+                "ADISCORD_economy_debt_streak_pressure_temp",
+                None,
+                None,
+            ),
+            ("clamp_variable", None, "0", "100"),
+        ],
+    }
+
+    issues = []
+    for variable, wanted in expected.items():
+        found = signatures(variable)
+        if found != wanted:
+            issues.append(f"{variable}: expected {wanted}, found {found}")
+
+    def floor_is_exact(variable, threshold):
+        floor_writes = [
+            (ancestors, entry)
+            for _, ancestors, entry, target, value, _, _ in writes
+            if target == variable and entry.key == "set_variable" and value == threshold
+        ]
+        if len(floor_writes) != 1:
+            return False
+        ancestors, _ = floor_writes[0]
+        if not ancestors or ancestors[-1].key != "if":
+            return False
+        branch = ancestors[-1]
+        limit = next(
+            (
+                child
+                for child in branch.value
+                if child.key == "limit" and isinstance(child.value, list)
+            ),
+            None,
+        )
+        if limit is None:
+            return False
+        limit_tokens = [
+            entry.key
+            for _, entry in _walk_parsed(limit.value)
+        ] + [
+            entry.value
+            for _, entry in _walk_parsed(limit.value)
+            if isinstance(entry.value, str)
+        ]
+        checks = [
+            entry
+            for _, entry in _walk_parsed(limit.value)
+            if entry.key == "check_variable" and isinstance(entry.value, list)
+        ]
+        return (
+            len(checks) == 1
+            and _entry_scalar(checks[0].value, "var") == variable
+            and _entry_scalar(checks[0].value, "value") == threshold
+            and _entry_scalar(checks[0].value, "compare") == "less_than"
+            and "NOT" not in limit_tokens
+            and not ("always" in limit_tokens and "no" in limit_tokens)
+        )
+
+    for variable, threshold in (
+        ("ADISCORD_economy_debt_income_denominator_temp", "1"),
+        ("ADISCORD_economy_interest_income_denominator_temp", "0.1"),
+    ):
+        if not floor_is_exact(variable, threshold):
+            issues.append(f"{variable}: denominator floor is missing, reversed, or dead")
+
+    calls = {}
+    for name in (
+        "ADISCORD_economy_calculate_creditworthiness",
+        "ADISCORD_economy_calculate_interest_rate",
+        "ADISCORD_economy_calculate_debt_service_amount",
+        "ADISCORD_economy_update_debt_crisis_level",
+    ):
+        found = [
+            (position, ancestors)
+            for position, (ancestors, entry) in enumerate(walked)
+            if entry.key == name and entry.value == "yes"
+        ]
+        if len(found) != 1 or found[0][1]:
+            issues.append(f"{name}: expected one direct call")
+        else:
+            calls[name] = found[0][0]
+
+    def first_write(variable, operation):
+        return next(
+            (
+                position
+                for position, _, entry, target, _, _, _ in writes
+                if target == variable and entry.key == operation
+            ),
+            None,
+        )
+
+    order = [
+        first_write("ADISCORD_economy_debt_income_ratio", "divide_variable"),
+        calls.get("ADISCORD_economy_calculate_creditworthiness"),
+        calls.get("ADISCORD_economy_calculate_interest_rate"),
+        calls.get("ADISCORD_economy_calculate_debt_service_amount"),
+        first_write("ADISCORD_economy_weekly_interest", "set_variable"),
+        first_write("ADISCORD_economy_interest_share_income", "set_variable"),
+        first_write("ADISCORD_economy_debt_pressure", "set_variable"),
+        calls.get("ADISCORD_economy_update_debt_crisis_level"),
+    ]
+    if any(position is None for position in order) or order != sorted(order):
+        issues.append("debt metric order is not ratio -> credit/rate -> interest/share -> pressure -> tier")
+
+    if signatures("ADISCORD_economy_debt"):
+        issues.append("debt metrics may not write or clamp stored principal")
+    return issues
+
+
+def manual_borrowing_availability_issues(triggers_text, scripted_loc_text):
+    """Match each visible loan-block reason to the ordered runtime gate."""
+
+    def condition_signatures(entries, negated=False):
+        signatures = []
+        for entry in entries:
+            if entry.key == "NOT" and isinstance(entry.value, list):
+                signatures.extend(condition_signatures(entry.value, not negated))
+            elif entry.key in {"OR", "AND"} and isinstance(entry.value, list):
+                signatures.append(
+                    (
+                        entry.key,
+                        negated,
+                        tuple(condition_signatures(entry.value)),
+                    )
+                )
+            elif entry.key == "check_variable" and isinstance(entry.value, list):
+                signatures.append(
+                    (
+                        "check_variable",
+                        negated,
+                        _entry_scalar(entry.value, "var"),
+                        _entry_scalar(entry.value, "value"),
+                        _entry_scalar(entry.value, "compare"),
+                    )
+                )
+            elif isinstance(entry.value, str):
+                signatures.append((entry.key, negated, entry.value))
+        return signatures
+
+    model_allowed = (
+        "OR",
+        False,
+        (
+            ("ADISCORD_economy_model_is_fragmented", True, "yes"),
+            ("ADISCORD_economy_model_allows_oligarchic_deals", False, "yes"),
+        ),
+    )
+    model_blocked = (
+        ("ADISCORD_economy_model_is_fragmented", False, "yes"),
+        ("ADISCORD_economy_model_allows_oligarchic_deals", True, "yes"),
+    )
+    expected = {
+        "internal": (
+            "ADISCORD_economy_can_take_debt",
+            "GetADISCORDInternalBondsAvailabilityLoc",
+            (
+                model_allowed,
+                ("check_variable", False, "ADISCORD_economy_recent_debt", "1", "less_than"),
+                ("ADISCORD_economy_has_treasury_room_50", False, "yes"),
+                ("check_variable", False, "ADISCORD_economy_creditworthiness", "25", "greater_than_or_equals"),
+                ("check_variable", False, "ADISCORD_economy_interest_share_income", "25", "less_than"),
+                ("check_variable", False, "ADISCORD_economy_debt_pressure", "75", "less_than"),
+                ("check_variable", False, "ADISCORD_economy_debt_crisis_level", "4", "less_than"),
+            ),
+            (
+                (model_blocked, "ADISCORD_economy_loan_blocked_model"),
+                ((("check_variable", False, "ADISCORD_economy_recent_debt", "1", "greater_than_or_equals"),), "ADISCORD_economy_loan_blocked_cooldown"),
+                ((("ADISCORD_economy_has_treasury_room_50", True, "yes"),), "ADISCORD_economy_loan_blocked_treasury_room"),
+                ((("check_variable", False, "ADISCORD_economy_creditworthiness", "25", "less_than"),), "ADISCORD_economy_loan_blocked_internal_creditworthiness"),
+                ((("check_variable", False, "ADISCORD_economy_interest_share_income", "25", "greater_than_or_equals"),), "ADISCORD_economy_loan_blocked_interest_share_internal"),
+                ((("check_variable", False, "ADISCORD_economy_debt_pressure", "75", "greater_than_or_equals"),), "ADISCORD_economy_loan_blocked_pressure"),
+                ((("check_variable", False, "ADISCORD_economy_debt_crisis_level", "4", "greater_than_or_equals"),), "ADISCORD_economy_loan_blocked_default"),
+            ),
+            "ADISCORD_economy_loan_available_internal",
+        ),
+        "external": (
+            "ADISCORD_economy_can_take_external_loan",
+            "GetADISCORDExternalLoanAvailabilityLoc",
+            (
+                model_allowed,
+                ("check_variable", False, "ADISCORD_economy_recent_debt", "1", "less_than"),
+                ("ADISCORD_economy_has_treasury_room_50", False, "yes"),
+                ("check_variable", False, "ADISCORD_economy_creditworthiness", "35", "greater_than_or_equals"),
+                ("check_variable", False, "ADISCORD_economy_interest_share_income", "20", "less_than"),
+                ("check_variable", False, "ADISCORD_economy_debt_pressure", "75", "less_than"),
+                ("check_variable", False, "ADISCORD_economy_debt_crisis_level", "3", "less_than"),
+            ),
+            (
+                (model_blocked, "ADISCORD_economy_loan_blocked_model"),
+                ((("check_variable", False, "ADISCORD_economy_recent_debt", "1", "greater_than_or_equals"),), "ADISCORD_economy_loan_blocked_cooldown"),
+                ((("ADISCORD_economy_has_treasury_room_50", True, "yes"),), "ADISCORD_economy_loan_blocked_treasury_room"),
+                ((("check_variable", False, "ADISCORD_economy_creditworthiness", "35", "less_than"),), "ADISCORD_economy_loan_blocked_creditworthiness"),
+                ((("check_variable", False, "ADISCORD_economy_interest_share_income", "20", "greater_than_or_equals"),), "ADISCORD_economy_loan_blocked_interest_share_external"),
+                ((("check_variable", False, "ADISCORD_economy_debt_pressure", "75", "greater_than_or_equals"),), "ADISCORD_economy_loan_blocked_pressure"),
+                ((("check_variable", False, "ADISCORD_economy_debt_crisis_level", "3", "greater_than_or_equals"),), "ADISCORD_economy_loan_blocked_external_risk"),
+            ),
+            "ADISCORD_economy_loan_available_external",
+        ),
+    }
+
+    issues = []
+    parsed_loc = parse_clausewitz(scripted_loc_text)
+    for label, (trigger_name, selector_name, gates, reasons, available) in expected.items():
+        try:
+            trigger = _parsed_definition(triggers_text, trigger_name)
+        except AssertionError as error:
+            issues.append(str(error))
+            continue
+        found_gates = tuple(condition_signatures(trigger.value))
+        if found_gates != gates:
+            issues.append(f"{label}: runtime gates expected {gates}, found {found_gates}")
+
+        selectors = [
+            entry
+            for entry in parsed_loc
+            if entry.key == "defined_text"
+            and isinstance(entry.value, list)
+            and _entry_scalar(entry.value, "name") == selector_name
+        ]
+        if len(selectors) != 1:
+            issues.append(f"{label}: expected one selector {selector_name}")
+            continue
+        found_reasons = []
+        for entry in selectors[0].value:
+            if entry.key != "text" or not isinstance(entry.value, list):
+                continue
+            trigger_block = next(
+                (
+                    child
+                    for child in entry.value
+                    if child.key == "trigger" and isinstance(child.value, list)
+                ),
+                None,
+            )
+            reason = _entry_scalar(entry.value, "localization_key")
+            found_reasons.append(
+                (
+                    tuple(condition_signatures(trigger_block.value))
+                    if trigger_block is not None
+                    else (),
+                    reason,
+                )
+            )
+        wanted_reasons = reasons + (((), available),)
+        if tuple(found_reasons) != wanted_reasons:
+            issues.append(
+                f"{label}: selector reason order expected {wanted_reasons}, found {tuple(found_reasons)}"
+            )
+    return issues
+
+
 def localisation_key_set(text):
     return set(re.findall(r"(?m)^\s*([A-Za-z0-9_.-]+):\d*\s+", text))
 
@@ -313,6 +704,43 @@ ADISCORD_economy_refresh_ai_assistance = {
  }
 }
 """
+    DEBT_METRICS = """
+ADISCORD_economy_calculate_debt_metrics = {
+ set_variable = { var = ADISCORD_economy_debt_income_denominator_temp value = ADISCORD_economy_monthly_income }
+ multiply_variable = { var = ADISCORD_economy_debt_income_denominator_temp value = 12 }
+ if = { limit = { check_variable = { var = ADISCORD_economy_debt_income_denominator_temp value = 1 compare = less_than } }
+  set_variable = { var = ADISCORD_economy_debt_income_denominator_temp value = 1 }
+ }
+ set_variable = { var = ADISCORD_economy_debt_income_ratio value = ADISCORD_economy_debt }
+ multiply_variable = { var = ADISCORD_economy_debt_income_ratio value = 100 }
+ divide_variable = { var = ADISCORD_economy_debt_income_ratio value = ADISCORD_economy_debt_income_denominator_temp }
+ ADISCORD_economy_calculate_creditworthiness = yes
+ ADISCORD_economy_calculate_interest_rate = yes
+ ADISCORD_economy_calculate_debt_service_amount = yes
+ set_variable = { var = ADISCORD_economy_weekly_interest value = ADISCORD_economy_debt_service }
+ multiply_variable = { var = ADISCORD_economy_weekly_interest value = 3 }
+ divide_variable = { var = ADISCORD_economy_weekly_interest value = 13 }
+ set_variable = { var = ADISCORD_economy_interest_income_denominator_temp value = ADISCORD_economy_monthly_income }
+ multiply_variable = { var = ADISCORD_economy_interest_income_denominator_temp value = 3 }
+ divide_variable = { var = ADISCORD_economy_interest_income_denominator_temp value = 13 }
+ if = { limit = { check_variable = { var = ADISCORD_economy_interest_income_denominator_temp value = 0.1 compare = less_than } }
+  set_variable = { var = ADISCORD_economy_interest_income_denominator_temp value = 0.1 }
+ }
+ set_variable = { var = ADISCORD_economy_interest_share_income value = ADISCORD_economy_weekly_interest }
+ multiply_variable = { var = ADISCORD_economy_interest_share_income value = 100 }
+ divide_variable = { var = ADISCORD_economy_interest_share_income value = ADISCORD_economy_interest_income_denominator_temp }
+ set_variable = { var = ADISCORD_economy_interest_pressure_temp value = ADISCORD_economy_interest_share_income }
+ multiply_variable = { var = ADISCORD_economy_interest_pressure_temp value = 1.50 }
+ set_variable = { var = ADISCORD_economy_debt_streak_pressure_temp value = ADISCORD_economy_deficit_streak }
+ multiply_variable = { var = ADISCORD_economy_debt_streak_pressure_temp value = 2 }
+ set_variable = { var = ADISCORD_economy_debt_pressure value = ADISCORD_economy_debt_income_ratio }
+ multiply_variable = { var = ADISCORD_economy_debt_pressure value = 0.20 }
+ add_to_variable = { var = ADISCORD_economy_debt_pressure value = ADISCORD_economy_interest_pressure_temp }
+ add_to_variable = { var = ADISCORD_economy_debt_pressure value = ADISCORD_economy_debt_streak_pressure_temp }
+ clamp_variable = { var = ADISCORD_economy_debt_pressure min = 0 max = 100 }
+ ADISCORD_economy_update_debt_crisis_level = yes
+}
+"""
 
     def test_schema_migration_exception_is_exact_and_live_legacy_use_is_rejected(self):
         self.assertEqual(migration_contract_issues(self.MIGRATION), [])
@@ -334,6 +762,89 @@ ADISCORD_economy_migrate_schema = {
         self.assertTrue(retired_capacity_boundary_issues({
             "common/scripted_effects/ADISCORD_economy_effects.txt": mixed
         }))
+
+    def test_creditworthiness_modifier_migration_has_no_duplicate_block_keys(self):
+        paths = (
+            ROOT / "common" / "ideas" / "_economic.txt",
+            ROOT / "common" / "ideas" / "ADISCORD_laws.txt",
+            ROOT / "common" / "ideas" / "ADISCORD_VAL_rework_ideas.txt",
+        )
+        for path in paths:
+            text = path.read_text(encoding="utf-8-sig")
+            self.assertFalse(
+                duplicate_direct_key_blocks(
+                    text, "ADISCORD_economy_creditworthiness_factor"
+                ),
+                path.name,
+            )
+
+        economic = paths[0].read_text(encoding="utf-8-sig")
+        migrated_line = "ADISCORD_economy_creditworthiness_factor = -0.10"
+        duplicate = economic.replace(
+            migrated_line,
+            migrated_line + "\n\t\t\t" + migrated_line,
+            1,
+        )
+        self.assertNotEqual(duplicate, economic)
+        self.assertTrue(
+            duplicate_direct_key_blocks(
+                duplicate, "ADISCORD_economy_creditworthiness_factor"
+            )
+        )
+
+    def test_validator_accepts_full_deficit_ledger_without_obsolete_unfunded_state(self):
+        self.assertEqual(automatic_borrow_flow_issues(EFFECTS), [])
+        issues = validate_economy_ai()
+        for obsolete in (
+            "unfunded deficit is not recorded in the weekly ledger",
+            "treasury-floor adjustment is missing from the accounting identity",
+            "unfunded-deficit pressure ignores its custom modifier",
+        ):
+            self.assertNotIn(obsolete, issues)
+
+    def test_debt_metric_fixture_rejects_formula_floor_order_and_principal_mutations(self):
+        self.assertEqual(debt_metric_flow_issues(self.DEBT_METRICS), [])
+        mutations = {
+            "reversed annual-income floor": self.DEBT_METRICS.replace(
+                "value = 1 compare = less_than",
+                "value = 1 compare = greater_than",
+                1,
+            ),
+            "missing weekly-income floor": self.DEBT_METRICS.replace(
+                "  set_variable = { var = ADISCORD_economy_interest_income_denominator_temp value = 0.1 }\n",
+                "",
+                1,
+            ),
+            "dead weekly-income floor": self.DEBT_METRICS.replace(
+                "limit = { check_variable = { var = ADISCORD_economy_interest_income_denominator_temp value = 0.1 compare = less_than } }",
+                "limit = { check_variable = { var = ADISCORD_economy_interest_income_denominator_temp value = 0.1 compare = less_than } always = no }",
+                1,
+            ),
+            "reordered ratio arithmetic": self.DEBT_METRICS.replace(
+                " multiply_variable = { var = ADISCORD_economy_debt_income_ratio value = 100 }\n divide_variable = { var = ADISCORD_economy_debt_income_ratio value = ADISCORD_economy_debt_income_denominator_temp }",
+                " divide_variable = { var = ADISCORD_economy_debt_income_ratio value = ADISCORD_economy_debt_income_denominator_temp }\n multiply_variable = { var = ADISCORD_economy_debt_income_ratio value = 100 }",
+                1,
+            ),
+            "pressure coefficient changed": self.DEBT_METRICS.replace(
+                "ADISCORD_economy_interest_pressure_temp value = 1.50",
+                "ADISCORD_economy_interest_pressure_temp value = 1.25",
+                1,
+            ),
+            "duplicate weekly-interest calculation": self.DEBT_METRICS.replace(
+                " multiply_variable = { var = ADISCORD_economy_weekly_interest value = 3 }",
+                " multiply_variable = { var = ADISCORD_economy_weekly_interest value = 3 }\n multiply_variable = { var = ADISCORD_economy_weekly_interest value = 3 }",
+                1,
+            ),
+            "stored principal clamp": self.DEBT_METRICS.replace(
+                " ADISCORD_economy_update_debt_crisis_level = yes",
+                " clamp_variable = { var = ADISCORD_economy_debt min = 0 max = 5000 }\n ADISCORD_economy_update_debt_crisis_level = yes",
+                1,
+            ),
+        }
+        for name, mutation in mutations.items():
+            with self.subTest(mutation=name):
+                self.assertNotEqual(mutation, self.DEBT_METRICS)
+                self.assertTrue(debt_metric_flow_issues(mutation))
 
     def test_structural_call_graph_handles_parameter_blocks_decoys_duplicates_and_cycles(self):
         graph = """
@@ -1199,9 +1710,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
         def weekly_tax_delta(current_income, target_income, debt):
             def monthly_balance(income):
                 fiscal_stress = 50
-                capacity_factor = (125 - fiscal_stress / 2) / 100
-                capacity = (150 + income * 24) * capacity_factor
-                debt_ratio = debt * 100 / capacity
+                debt_ratio = debt * 100 / max(income * 12, 1)
                 creditworthiness = 60 - fiscal_stress / 2 - debt_ratio / 3
                 interest_rate = 3
                 interest_rate += 1 if debt_ratio >= 40 else 0
@@ -1214,25 +1723,25 @@ class WeeklyEconomyContracts(unittest.TestCase):
             return (monthly_balance(target_income) - monthly_balance(current_income)) * 3 / 13
 
         # Personal-only tax base: adjacent level 3 (1.00) -> level 4 (1.15).
-        tier_crossing = weekly_tax_delta(100, 115, 1100)
+        tier_crossing = weekly_tax_delta(100, 115, 500)
         income_only = (115 - 100) * 3 / 13
-        self.assertAlmostEqual(tier_crossing, 3.673076923076923, places=10)
+        self.assertAlmostEqual(tier_crossing, 3.5576923076923075, places=10)
         self.assertNotAlmostEqual(tier_crossing, income_only, places=10)
         self.assertAlmostEqual(weekly_tax_delta(100, 115, 0), income_only, places=10)
 
-        capacity = unique_block(EFFECTS, "ADISCORD_economy_calculate_debt_capacity")
+        metrics = unique_block(EFFECTS, "ADISCORD_economy_calculate_debt_metrics")
         interest = unique_block(EFFECTS, "ADISCORD_economy_calculate_interest_rate")
         debt_service = unique_block(
             EFFECTS, "ADISCORD_economy_calculate_debt_service_amount"
         )
         self.assertRegex(
-            capacity,
+            metrics,
             r"value\s*=\s*ADISCORD_economy_monthly_income\s*\}\s*"
-            r"multiply_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_capacity_temp\s+value\s*=\s*24",
+            r"multiply_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_debt_income_denominator_temp\s+value\s*=\s*12",
         )
         self.assertRegex(
             interest,
-            r"ADISCORD_economy_debt_ratio\s+value\s*=\s*40\s+compare\s*=\s*"
+            r"ADISCORD_economy_debt_income_ratio\s+value\s*=\s*40\s+compare\s*=\s*"
             r"greater_than_or_equals\s*\}\s*\}\s*add_to_variable\s*=\s*\{\s*"
             r"var\s*=\s*ADISCORD_economy_interest_rate\s+value\s*=\s*1",
         )
@@ -1418,12 +1927,14 @@ class WeeklyEconomyContracts(unittest.TestCase):
         tax_macro_restored = {
             variable: f"ADISCORD_economy_policy_preview_saved_{variable.removeprefix('ADISCORD_economy_')}_temp"
             for variable in (
-                "ADISCORD_economy_debt_capacity",
-                "ADISCORD_economy_capacity_temp",
-                "ADISCORD_economy_capacity_factor_temp",
-                "ADISCORD_economy_debt_ratio",
+                "ADISCORD_economy_debt_income_denominator_temp",
+                "ADISCORD_economy_debt_income_ratio",
+                "ADISCORD_economy_weekly_interest",
+                "ADISCORD_economy_interest_income_denominator_temp",
+                "ADISCORD_economy_interest_share_income",
+                "ADISCORD_economy_interest_pressure_temp",
+                "ADISCORD_economy_debt_streak_pressure_temp",
                 "ADISCORD_economy_debt_pressure",
-                "ADISCORD_economy_pressure_temp",
                 "ADISCORD_economy_creditworthiness",
                 "ADISCORD_economy_credit_temp",
                 "ADISCORD_economy_debt_crisis_level",
@@ -1529,6 +2040,18 @@ class WeeklyEconomyContracts(unittest.TestCase):
         self.assertFalse(retired_capacity_boundary_issues(scanned_boundary))
 
         migration = unique_block(EFFECTS, "ADISCORD_economy_migrate_schema")
+        for retired_cache in (
+            "ADISCORD_economy_capacity_factor_temp",
+            "ADISCORD_economy_capacity_temp",
+            "ADISCORD_economy_policy_preview_saved_capacity_factor_temp_temp",
+            "ADISCORD_economy_policy_preview_saved_capacity_temp_temp",
+            "ADISCORD_economy_policy_preview_saved_debt_capacity_temp",
+        ):
+            self.assertRegex(
+                migration,
+                rf"clear_variable\s*=\s*{retired_cache}\b",
+                retired_cache,
+            )
         for line in migration.splitlines():
             if "debt_capacity" in line.casefold():
                 self.assertRegex(
@@ -1573,6 +2096,188 @@ class WeeklyEconomyContracts(unittest.TestCase):
             if forbidden.search(text)
         }
         self.assertFalse(offenders, f"retired debt-capacity boundary: {offenders}")
+
+    def test_task45_debt_metrics_use_exact_interest_pressure_flow(self):
+        self.assertFalse(debt_metric_flow_issues(EFFECTS))
+        risk_clamp = (
+            "clamp_variable = { var = ADISCORD_economy_debt_crisis_level min = 0 max = 4 }"
+        )
+        self.assertEqual(EFFECTS.count(risk_clamp), 2)
+        self.assertNotIn(
+            "clamp_variable = { var = ADISCORD_economy_debt_crisis_level min = 0 max = 5 }",
+            EFFECTS,
+        )
+        macro = unique_block(EFFECTS, "ADISCORD_economy_calculate_macro_indicators")
+        self.assertEqual(
+            macro.count("ADISCORD_economy_calculate_debt_metrics = yes"),
+            1,
+        )
+        for retired in (
+            "ADISCORD_economy_calculate_debt_capacity",
+            "ADISCORD_economy_calculate_debt_pressure",
+            "ADISCORD_economy_debt_ratio",
+        ):
+            self.assertNotIn(retired, macro)
+
+        metrics = unique_block(EFFECTS, "ADISCORD_economy_calculate_debt_metrics")
+        self.assertNotRegex(
+            metrics,
+            r"(?:set|add_to|subtract_from|multiply|divide|clamp)_variable\s*=\s*\{\s*"
+            r"var\s*=\s*ADISCORD_economy_debt\b",
+        )
+
+    def test_task45_automatic_borrowing_refreshes_metrics_without_a_hidden_cap(self):
+        self.assertFalse(automatic_borrow_flow_issues(EFFECTS))
+        for settlement_name in (
+            "ADISCORD_economy_apply_weekly_balance",
+            "ADISCORD_economy_apply_monthly_balance",
+        ):
+            settlement = unique_block(EFFECTS, settlement_name)
+            self.assertNotIn("debt_capacity", settlement, settlement_name)
+            self.assertNotIn("auto_borrow_over_cap", settlement, settlement_name)
+            self.assertNotIn(
+                "ADISCORD_economy_refresh_spending_ideas = yes",
+                settlement,
+                settlement_name,
+            )
+            self.assertEqual(
+                settlement.count("ADISCORD_economy_calculate_debt_metrics = yes"),
+                1,
+                settlement_name,
+            )
+
+    def test_task45_repayment_refreshes_metrics_without_advancing_settlement_state(self):
+        for effect_name in (
+            "ADISCORD_economy_repay_debt",
+            "ADISCORD_economy_early_repay_debt",
+            "ADISCORD_economy_restructure_debt",
+        ):
+            repayment = unique_block(EFFECTS, effect_name)
+            self.assertEqual(
+                repayment.count("ADISCORD_economy_calculate_debt_metrics = yes"),
+                1,
+                effect_name,
+            )
+            debt_change = repayment.index(
+                "subtract_from_variable = { var = ADISCORD_economy_debt"
+            )
+            metric_refresh = repayment.index(
+                "ADISCORD_economy_calculate_debt_metrics = yes"
+            )
+            self.assertLess(debt_change, metric_refresh, effect_name)
+            for forbidden in (
+                "ADISCORD_economy_update_debt_state_after_settlement",
+                "ADISCORD_economy_debt_emergency_streak",
+                "ADISCORD_economy_debt_default_streak",
+            ):
+                self.assertNotIn(forbidden, repayment, effect_name)
+
+        targeted = unique_block(EFFECTS, "ADISCORD_economy_refresh_after_debt_action")
+        for required in (
+            "ADISCORD_economy_calculate_expenses = yes",
+            "ADISCORD_economy_calculate_monthly_balance = yes",
+            "ADISCORD_economy_calculate_weekly_budget = yes",
+            "ADISCORD_economy_refresh_policy_previews = yes",
+        ):
+            self.assertIn(required, targeted)
+        for forbidden in (
+            "ADISCORD_economy_calculate_debt_metrics",
+            "ADISCORD_economy_calculate_macro_indicators",
+            "ADISCORD_economy_light_update",
+            "ADISCORD_economy_full_refresh",
+            "ADISCORD_economy_refresh_spending_ideas",
+        ):
+            self.assertNotIn(forbidden, targeted)
+
+        gui_actions = {
+            "ADISCORD_economy_gui_try_issue_internal_bonds": "ADISCORD_economy_issue_internal_bonds = yes",
+            "ADISCORD_economy_gui_try_take_external_loan": "ADISCORD_economy_take_external_loan = yes",
+            "ADISCORD_economy_gui_try_repay_debt": "ADISCORD_economy_repay_debt = yes",
+            "ADISCORD_economy_gui_try_restructure_debt": "ADISCORD_economy_restructure_debt = yes",
+        }
+        for gui_name, action_call in gui_actions.items():
+            gui = unique_block(EFFECTS, gui_name)
+            targeted_call = "ADISCORD_economy_refresh_after_debt_action = yes"
+            self.assertIn(targeted_call, gui, gui_name)
+            self.assertNotIn("ADISCORD_economy_light_update = yes", gui, gui_name)
+            self.assertLess(gui.index(action_call), gui.index(targeted_call), gui_name)
+
+    def test_task45_manual_borrowing_reasons_match_visible_ordered_gates(self):
+        self.assertFalse(
+            manual_borrowing_availability_issues(TRIGGERS, SCRIPTED_LOC)
+        )
+        for tooltip_key in (
+            "ADISCORD_economy_action_internal_bonds_tt",
+            "ADISCORD_economy_action_external_loan_tt",
+        ):
+            tooltip = localisation_value(ECONOMY_LOC, tooltip_key)
+            for visible_metric in (
+                "?ADISCORD_economy_interest_rate|1",
+                "?ADISCORD_economy_weekly_interest|2",
+                "?ADISCORD_economy_interest_share_income|1",
+                "?ADISCORD_economy_debt_pressure|0",
+            ):
+                self.assertIn(visible_metric, tooltip, tooltip_key)
+        internal_risk_reason = localisation_value(
+            ECONOMY_LOC, "ADISCORD_economy_loan_blocked_default"
+        )
+        self.assertIn("четвёрт", internal_risk_reason.casefold())
+        self.assertNotIn("фактическом дефолте", internal_risk_reason.casefold())
+        for tier_name in ("warning", "burden", "crisis", "default"):
+            tier_effect = localisation_value(
+                ECONOMY_LOC, f"ADISCORD_economy_debt_effect_{tier_name}"
+            )
+            self.assertIn("ступень", tier_effect.casefold(), tier_name)
+            for retired_threshold in ("40–69%", "70–99%", "100–139%", "140%"):
+                self.assertNotIn(retired_threshold, tier_effect, tier_name)
+        no_tier_effect = localisation_value(
+            ECONOMY_LOC, "ADISCORD_economy_debt_effect_none"
+        )
+        self.assertIn("нулевая ступень", no_tier_effect.casefold())
+        self.assertNotIn("40%", no_tier_effect)
+        self.assertIn(
+            "?ADISCORD_economy_debt_crisis_level|0",
+            localisation_value(ECONOMY_LOC, "ADISCORD_economy_debt_tt"),
+        )
+        self.assertIn(
+            "?ADISCORD_economy_debt_crisis_level|0]/4",
+            localisation_value(ECONOMY_LOC, "ADISCORD_economy_debt_tt"),
+        )
+        mutations = {
+            "reversed interest comparison": TRIGGERS.replace(
+                "var = ADISCORD_economy_interest_share_income value = 25 compare = less_than",
+                "var = ADISCORD_economy_interest_share_income value = 25 compare = greater_than",
+                1,
+            ),
+            "dead pressure gate": TRIGGERS.replace(
+                "check_variable = { var = ADISCORD_economy_debt_pressure value = 75 compare = less_than }",
+                "AND = { check_variable = { var = ADISCORD_economy_debt_pressure value = 75 compare = less_than } always = no }",
+                1,
+            ),
+        }
+        for name, mutation in mutations.items():
+            with self.subTest(mutation=name):
+                self.assertNotEqual(mutation, TRIGGERS)
+                self.assertTrue(
+                    manual_borrowing_availability_issues(mutation, SCRIPTED_LOC)
+                )
+
+        first = (
+            "\ttext = { trigger = { check_variable = { var = ADISCORD_economy_recent_debt "
+            "value = 1 compare = greater_than_or_equals } } localization_key = "
+            "ADISCORD_economy_loan_blocked_cooldown }"
+        )
+        second = (
+            "\ttext = { trigger = { NOT = { ADISCORD_economy_has_treasury_room_50 = yes } } "
+            "localization_key = ADISCORD_economy_loan_blocked_treasury_room }"
+        )
+        reordered = SCRIPTED_LOC.replace(
+            first + "\n" + second,
+            second + "\n" + first,
+            1,
+        )
+        self.assertNotEqual(reordered, SCRIPTED_LOC)
+        self.assertTrue(manual_borrowing_availability_issues(TRIGGERS, reordered))
 
     def test_automatic_borrowing_covers_full_uncovered_deficit_without_capacity_gate(self):
         self.assertFalse(automatic_borrow_flow_issues(EFFECTS))
@@ -2591,6 +3296,17 @@ class WeeklyEconomyContracts(unittest.TestCase):
         settlement = block(EFFECTS, "ADISCORD_economy_apply_weekly_balance")
         self.assertNotIn("ADISCORD_economy_last_period_unfunded_deficit", settlement)
         self.assertNotIn("ADISCORD_economy_last_uncovered_deficit", settlement)
+        migration = unique_block(EFFECTS, "ADISCORD_economy_migrate_schema")
+        live_effects = EFFECTS.replace(migration, "")
+        for retired_unfunded_state in (
+            "ADISCORD_economy_last_period_unfunded_deficit",
+            "ADISCORD_economy_last_uncovered_deficit",
+        ):
+            self.assertNotIn(retired_unfunded_state, live_effects)
+            self.assertRegex(
+                migration,
+                rf"clear_variable\s*=\s*{retired_unfunded_state}\b",
+            )
 
     def test_automatic_borrowing_does_not_add_unfunded_deficit_pressure(self):
         settlement = block(EFFECTS, "ADISCORD_economy_apply_weekly_balance")

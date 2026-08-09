@@ -16,7 +16,6 @@
  ADISCORD_economy_research_expense_factor: "Расходы на образование и науку"
  ADISCORD_economy_admin_expense_factor: "Административные расходы"
  ADISCORD_economy_debt_service_factor: "Обслуживание долга"
- ADISCORD_economy_debt_capacity_factor: "Долговая ёмкость"
  ADISCORD_economy_interest_rate_factor: "Процентная ставка"
  ADISCORD_economy_creditworthiness_factor: "Кредитоспособность"
  ADISCORD_economy_overall_expense_factor: "Общие расходы казны"
