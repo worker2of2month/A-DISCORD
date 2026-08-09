@@ -12,6 +12,7 @@
     "map_buildings",
     "strategic_regions",
     "terrain_snow",
+    "minimap",
     "technology_system",
     "doctrine_system",
     "val_operations_map",
@@ -395,6 +396,23 @@
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_terrain_snow"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_terrain_snow", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "minimap",
+      "owner_module": "tools.builders.build_adiscord_minimap",
+      "output_globs": [
+        "gfx/minimap/minimap.dds"
+      ],
+      "source_inputs": [
+        "tools/build_adiscord_minimap.py",
+        "tools/builders/build_adiscord_minimap.py",
+        "map/terrain.bmp",
+        "map/heightmap.bmp"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_minimap"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_minimap", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },

@@ -1,0 +1,12 @@
+spriteTypes = {
+	spriteType = {
+		name = "GFX_minimap"
+		texturefile = "gfx/minimap/minimap.dds"
+	}
+
+	# Newer map UI uses a separate registry name for the same world overview.
+	spriteType = {
+		name = "GFX_minimap_world"
+		texturefile = "gfx/minimap/minimap.dds"
+	}
+}

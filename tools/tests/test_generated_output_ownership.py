@@ -30,6 +30,7 @@ REQUIRED_FAMILIES = {
     "doctrine_system",
     "exclusion_zone_boundaries",
     "inner_frontier_countries",
+    "minimap",
     "map_buildings",
     "state_history",
     "northern_countries",
