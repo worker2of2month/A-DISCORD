@@ -2,6 +2,8 @@ import re
 import unittest
 from pathlib import Path
 
+from tools.validators.validate_adiscord_economy_ai import policy_selector_issues
+
 
 ROOT = Path(__file__).resolve().parents[2]
 GUI_NODE_RE = re.compile(
@@ -215,6 +217,49 @@ class NationalFocusGuiContractTests(unittest.TestCase):
         )
 
 
+class EconomyDefinedTextFixtureTests(unittest.TestCase):
+    VALID = """
+defined_text = {
+ name = GetADISCORDEconomyTaxDecreasePreviewLoc
+ text = { trigger = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_policy_blocked_minimum }
+ text = { trigger = { check_variable = { var = ADISCORD_economy_tax_change_cooldown value = 0 compare = greater_than } } localization_key = ADISCORD_economy_policy_blocked_cooldown }
+ text = { trigger = { NOT = { ADISCORD_economy_should_show_player_ui = yes } } localization_key = ADISCORD_economy_policy_blocked_scope }
+ text = { localization_key = ADISCORD_economy_policy_preview_available }
+}
+"""
+
+    def issues(self, text):
+        return policy_selector_issues(
+            text,
+            "GetADISCORDEconomyTaxDecreasePreviewLoc",
+            "ADISCORD_economy_tax_burden_mode",
+            "ADISCORD_economy_tax_change_cooldown",
+            "decrease",
+        )
+
+    def test_defined_text_requires_ordered_trigger_to_reason_mapping(self):
+        self.assertEqual(self.issues(self.VALID), [])
+        swapped = self.VALID.replace(
+            "ADISCORD_economy_policy_blocked_minimum",
+            "ADISCORD_economy_policy_blocked_maximum",
+        )
+        wrong_trigger = self.VALID.replace(
+            "var = ADISCORD_economy_tax_change_cooldown value = 0 compare = greater_than",
+            "NOT = { ADISCORD_economy_should_show_player_ui = yes }",
+        )
+        dead = self.VALID.replace(
+            " text = { trigger = { check_variable",
+            " text = { localization_key = ADISCORD_economy_policy_preview_available }\n text = { trigger = { check_variable",
+            1,
+        )
+        disconnected = self.VALID.replace(
+            "name = GetADISCORDEconomyTaxDecreasePreviewLoc",
+            "name = DisconnectedSelector",
+        ) + "\ndefined_text = { name = GetADISCORDEconomyTaxDecreasePreviewLoc text = { localization_key = ADISCORD_economy_policy_preview_available } }"
+        for invalid in (swapped, wrong_trigger, dead, disconnected):
+            self.assertTrue(self.issues(invalid))
+
+
 class EconomyDashboardGuiContractTests(unittest.TestCase):
     def setUp(self):
         self.gui = (ROOT / 'interface' / 'ADISCORD_economy.gui').read_text(
@@ -291,6 +336,12 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             'research': 'Research',
             'social': 'Social',
         }
+        policy_variables = {
+            'tax': ('ADISCORD_economy_tax_burden_mode', 'ADISCORD_economy_tax_change_cooldown'),
+            'army': ('ADISCORD_economy_army_spending_mode', 'ADISCORD_economy_army_budget_change_cooldown'),
+            'research': ('ADISCORD_economy_research_spending_mode', 'ADISCORD_economy_research_budget_change_cooldown'),
+            'social': ('ADISCORD_economy_social_spending_mode', 'ADISCORD_economy_social_budget_change_cooldown'),
+        }
         for policy, title in title_names.items():
             for level in range(1, 6):
                 step = gui_node_body(
@@ -317,6 +368,16 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                 self.assertIn(f'[{selector}]', tooltip)
                 selector_block = named_assignment_body(
                     self.scripted_loc, 'defined_text', selector
+                )
+                mode_var, cooldown_var = policy_variables[policy]
+                self.assertFalse(
+                    policy_selector_issues(
+                        self.scripted_loc,
+                        selector,
+                        mode_var,
+                        cooldown_var,
+                        direction,
+                    )
                 )
                 boundary_reason = (
                     'ADISCORD_economy_policy_blocked_minimum'

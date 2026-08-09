@@ -2,6 +2,18 @@ import re
 import unittest
 from pathlib import Path
 
+from tools.validators.validate_adiscord_economy_ai import (
+    ai_assistance_contract_issues,
+    automatic_borrow_flow_issues,
+    debt_notification_flow_issues,
+    debt_reconciler_issues,
+    debt_transition_flow_issues,
+    migration_contract_issues,
+    reachable_script_entries,
+    research_policy_flow_issues,
+    retired_capacity_boundary_issues,
+)
+
 
 ROOT = Path(__file__).resolve().parents[2]
 ON_ACTIONS = (ROOT / "common" / "on_actions" / "00_ADISCORD_on_actions.txt").read_text(
@@ -125,31 +137,24 @@ def top_level_blocks(text):
 
 
 def reachable_script_blocks(texts, roots):
-    definitions = {}
-    for text in texts:
-        for name, bodies in top_level_blocks(re.sub(r"#.*", "", text)).items():
-            definitions.setdefault(name, []).extend(bodies)
+    def flatten(entry):
+        values = []
 
-    duplicates = {name: len(bodies) for name, bodies in definitions.items() if len(bodies) != 1}
-    if duplicates:
-        raise AssertionError(f"duplicate scripted definitions: {duplicates}")
+        def visit(entries):
+            for child in entries:
+                values.append(child.key)
+                if isinstance(child.value, list):
+                    visit(child.value)
+                else:
+                    values.append(child.value)
 
-    missing = [root for root in roots if root not in definitions]
-    if missing:
-        raise AssertionError(f"missing weekly roots: {missing}")
+        visit(entry.value)
+        return " ".join(values)
 
-    reachable = set()
-    pending = list(roots)
-    while pending:
-        name = pending.pop()
-        if name in reachable:
-            continue
-        reachable.add(name)
-        body = definitions[name][0]
-        for called in re.findall(r"\b(ADISCORD_[A-Za-z0-9_.@-]+)\s*=\s*yes\b", body):
-            if called in definitions and called not in reachable:
-                pending.append(called)
-    return {name: definitions[name][0] for name in sorted(reachable)}
+    return {
+        name: flatten(entry)
+        for name, entry in reachable_script_entries(tuple(texts), tuple(roots)).items()
+    }
 
 
 def numeric_values(text, key):
@@ -166,8 +171,186 @@ def localisation_key_set(text):
     return set(re.findall(r"(?m)^\s*([A-Za-z0-9_.-]+):\d*\s+", text))
 
 
+class EconomySemanticFixtureTests(unittest.TestCase):
+    MIGRATION = """
+ADISCORD_economy_migrate_schema = {
+    set_variable = { var = ADISCORD_economy_research_spending_mode value = ADISCORD_economy_construction_spending_mode }
+    clear_variable = ADISCORD_economy_construction_spending_mode
+    clear_variable = ADISCORD_economy_construction_budget_change_cooldown
+    remove_ideas = {
+        ADISCORD_economy_construction_spending_1
+        ADISCORD_economy_construction_spending_2
+        ADISCORD_economy_construction_spending_3
+        ADISCORD_economy_construction_spending_4
+        ADISCORD_economy_construction_spending_5
+    }
+}
+"""
+    ASSISTANCE_IDEAS = """
+ideas = { hidden_ideas = {
+ ADISCORD_economy_ai_assistance_base = { modifier = { ADISCORD_economy_overall_income_factor = 0.05 industrial_capacity_factory = 0.05 } }
+ ADISCORD_economy_ai_assistance_civil_war = { modifier = { supply_consumption_factor = -0.10 } }
+ ADISCORD_economy_ai_assistance_retreat = { modifier = { army_defence_factor = 0.05 } }
+} }
+"""
+    ASSISTANCE_EFFECT = """
+ADISCORD_economy_refresh_ai_assistance = {
+ remove_ideas = ADISCORD_economy_ai_assistance_base
+ remove_ideas = ADISCORD_economy_ai_assistance_civil_war
+ remove_ideas = ADISCORD_economy_ai_assistance_retreat
+ if = {
+  limit = { is_ai = yes }
+  if = { limit = { check_variable = { var = ADISCORD_economy_simulation_tier value = 1 compare = greater_than_or_equals } } add_ideas = ADISCORD_economy_ai_assistance_base }
+  if = { limit = { check_variable = { var = ADISCORD_vorkerland_collapse_phase value = 1 compare = greater_than_or_equals } has_war = yes } add_ideas = ADISCORD_economy_ai_assistance_civil_war }
+  if = { limit = { check_variable = { var = surrender_progress value = 0.35 compare = greater_than } } add_ideas = ADISCORD_economy_ai_assistance_retreat }
+ }
+}
+"""
+
+    def test_schema_migration_exception_is_exact_and_live_legacy_use_is_rejected(self):
+        self.assertEqual(migration_contract_issues(self.MIGRATION), [])
+        injected = self.MIGRATION + "\nADISCORD_live = { ADISCORD_economy_construction_spending_mode = yes }"
+        self.assertTrue(migration_contract_issues(injected))
+
+    def test_capacity_boundary_covers_omitted_common_surfaces_and_mixed_migration_operations(self):
+        for path in (
+            "common/ai_strategy/injected.txt",
+            "common/dynamic_modifiers/injected.txt",
+        ):
+            self.assertTrue(retired_capacity_boundary_issues({path: "replacement_debt_capacity = yes"}), path)
+        mixed = """
+ADISCORD_economy_migrate_schema = {
+ clear_variable = ADISCORD_economy_debt_capacity
+ set_variable = { var = ADISCORD_economy_debt_capacity value = 10 }
+}
+"""
+        self.assertTrue(retired_capacity_boundary_issues({
+            "common/scripted_effects/ADISCORD_economy_effects.txt": mixed
+        }))
+
+    def test_structural_call_graph_handles_parameter_blocks_decoys_duplicates_and_cycles(self):
+        graph = """
+ADISCORD_root = { ADISCORD_scalar = yes # ADISCORD_comment = yes
+                 ADISCORD_parameter = { ARG = value } decoy = "ADISCORD_quote = yes" }
+ADISCORD_scalar = { ADISCORD_root = yes }
+ADISCORD_parameter = { ADISCORD_heavy = { OTHER = value } }
+ADISCORD_heavy = { has_idea = forbidden }
+"""
+        reachable = reachable_script_entries((graph,), ("ADISCORD_root",))
+        self.assertEqual(set(reachable), {
+            "ADISCORD_root", "ADISCORD_scalar", "ADISCORD_parameter", "ADISCORD_heavy"
+        })
+        self.assertNotIn("ADISCORD_comment", reachable)
+        self.assertNotIn("ADISCORD_quote", reachable)
+        with self.assertRaisesRegex(AssertionError, "duplicate"):
+            reachable_script_entries((graph + "\nADISCORD_heavy = { always = yes }",), ("ADISCORD_root",))
+
+    def test_ai_assistance_requires_remove_first_ai_gate_and_exact_conditions(self):
+        self.assertEqual(
+            ai_assistance_contract_issues(self.ASSISTANCE_IDEAS, self.ASSISTANCE_EFFECT),
+            [],
+        )
+        mutations = (
+            self.ASSISTANCE_EFFECT.replace(
+                "  limit = { is_ai = yes }",
+                "  limit = { always = yes }\n  is_ai = yes",
+                1,
+            ),
+            self.ASSISTANCE_EFFECT.replace(
+                " remove_ideas = ADISCORD_economy_ai_assistance_civil_war\n", "", 1
+            ).replace(
+                "add_ideas = ADISCORD_economy_ai_assistance_civil_war",
+                "remove_ideas = ADISCORD_economy_ai_assistance_civil_war add_ideas = ADISCORD_economy_ai_assistance_civil_war",
+            ),
+            self.ASSISTANCE_EFFECT.replace(
+                "ADISCORD_vorkerland_collapse_phase", "surrender_progress", 1
+            ).replace("var = surrender_progress value = 0.35", "var = ADISCORD_vorkerland_collapse_phase value = 1", 1),
+            self.ASSISTANCE_EFFECT.replace(
+                " remove_ideas = ADISCORD_economy_ai_assistance_retreat\n", "", 1
+            ),
+        )
+        for mutation in mutations:
+            self.assertTrue(ai_assistance_contract_issues(self.ASSISTANCE_IDEAS, mutation))
+
+    def test_core_policy_and_debt_flow_negative_fixtures(self):
+        research = "\n".join(
+            ["ADISCORD_economy_calculate_research_expenses = {"]
+            + [
+                f"if = {{ limit = {{ check_variable = {{ var = ADISCORD_economy_research_spending_mode value = {level} compare = equals }} }} multiply_variable = {{ var = ADISCORD_economy_research_expenses value = {factor} }} }}"
+                for level, factor in enumerate(("0.60", "0.80", "1.00", "1.30", "1.60"), 1)
+            ]
+            + ["}"]
+        )
+        self.assertEqual(research_policy_flow_issues(research), [])
+        unconditional = re.sub(r"if = \{ limit = \{[^{}]*\{[^{}]*\} \} (multiply_variable = \{[^{}]*\}) \}", r"\1", research)
+        self.assertTrue(research_policy_flow_issues(unconditional))
+
+        settlement = """
+ADISCORD_economy_apply_weekly_balance = {
+ set_variable = { var = ADISCORD_economy_auto_borrow_temp value = ADISCORD_economy_uncovered_deficit_temp }
+ add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp }
+ add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp }
+}
+ADISCORD_economy_apply_monthly_balance = {
+ set_variable = { var = ADISCORD_economy_auto_borrow_temp value = ADISCORD_economy_uncovered_deficit_temp }
+ add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp }
+ add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp }
+}
+"""
+        self.assertEqual(automatic_borrow_flow_issues(settlement), [])
+        capped = settlement.replace(
+            " add_to_variable = { var = ADISCORD_economy_debt",
+            " clamp_variable = { var = ADISCORD_economy_auto_borrow_temp min = 0 max = ADISCORD_hidden_borrow_cap }\n add_to_variable = { var = ADISCORD_economy_debt",
+            1,
+        )
+        self.assertTrue(automatic_borrow_flow_issues(capped))
+
+    def test_transition_notification_and_reconciler_negative_fixtures(self):
+        transition = """
+ADISCORD_economy_update_debt_state_after_settlement = {
+ if = { limit = { check_variable = { var = ADISCORD_economy_interest_share_income value = 40 compare = greater_than_or_equals } }
+  add_to_variable = { var = ADISCORD_economy_debt_emergency_streak value = 1 }
+ } else = { set_variable = { var = ADISCORD_economy_debt_emergency_streak value = 0 } }
+ if = { limit = {
+  check_variable = { var = ADISCORD_economy_interest_share_income value = 40 compare = greater_than_or_equals }
+  check_variable = { var = ADISCORD_economy_weekly_balance value = 0 compare = less_than }
+ } add_to_variable = { var = ADISCORD_economy_debt_default_streak value = 1 }
+ } else = { set_variable = { var = ADISCORD_economy_debt_default_streak value = 0 } }
+}
+"""
+        self.assertEqual(debt_transition_flow_issues(transition), [])
+        self.assertTrue(debt_transition_flow_issues(transition.replace(
+            "check_variable = { var = ADISCORD_economy_weekly_balance value = 0 compare = less_than }", "always = yes"
+        )))
+        self.assertTrue(debt_transition_flow_issues(transition.replace(
+            " } else = { set_variable = { var = ADISCORD_economy_debt_emergency_streak value = 0 } }",
+            " } set_variable = { var = ADISCORD_economy_debt_emergency_streak value = 0 }",
+        )))
+
+        notification = """
+ADISCORD_economy_queue_debt_notification = { set_country_flag = queued }
+ADISCORD_first_loan = { if = { limit = { NOT = { has_variable = ADISCORD_economy_first_loan_notified } } ADISCORD_economy_queue_debt_notification = yes } }
+ADISCORD_transition = { if = { limit = { check_variable = { var = ADISCORD_economy_debt_state value = ADISCORD_economy_last_notified_debt_state compare = greater_than } } ADISCORD_economy_queue_debt_notification = yes } }
+"""
+        self.assertEqual(debt_notification_flow_issues(notification), [])
+        self.assertTrue(debt_notification_flow_issues(notification + "\nADISCORD_routine = { ADISCORD_economy_queue_debt_notification = yes }"))
+
+        reconciler = """
+ADISCORD_economy_reconcile_debt_state_after_action = {
+ if = { limit = { check_variable = { var = ADISCORD_economy_interest_share_income value = 10 compare = less_than } }
+  set_variable = { var = ADISCORD_economy_debt_state value = 0 }
+  remove_ideas = ADISCORD_economy_debt_crisis
+  add_ideas = ADISCORD_economy_debt_strain
+ }
+}
+"""
+        self.assertEqual(debt_reconciler_issues(reconciler), [])
+        self.assertTrue(debt_reconciler_issues("ADISCORD_economy_reconcile_debt_state_after_action = {}"))
+
+
 class WeeklyEconomyContracts(unittest.TestCase):
     def test_schema_twelve_maps_construction_policy_to_research_without_resetting_ledger(self):
+        self.assertFalse(migration_contract_issues(EFFECTS))
         migration = unique_block(EFFECTS, "ADISCORD_economy_migrate_schema")
         self.assertRegex(
             migration,
@@ -227,20 +410,18 @@ class WeeklyEconomyContracts(unittest.TestCase):
             )
 
     def test_construction_policy_is_retired_and_construction_spend_tracks_real_activity(self):
-        runtime = "\n".join(
-            (EFFECTS, TRIGGERS, ECONOMY_IDEAS, SCRIPTED_GUI, SCRIPTED_LOC, ECONOMY_AI)
+        retirement_issues = migration_contract_issues(
+            EFFECTS,
+            {
+                "triggers": TRIGGERS,
+                "ideas": ECONOMY_IDEAS,
+                "scripted_gui": SCRIPTED_GUI,
+                "scripted_loc": SCRIPTED_LOC,
+                "economy_ai": ECONOMY_AI,
+            },
         )
-        retired = set(
-            re.findall(
-                r"ADISCORD_economy_(?:"
-                r"construction_spending_mode|construction_budget_change_cooldown|"
-                r"(?:increase|decrease|set|can_increase|can_decrease)_construction_spending|"
-                r"construction_spending_[1-5]"
-                r")\b",
-                runtime,
-            )
-        )
-        self.assertFalse(retired, f"live construction-policy API: {sorted(retired)}")
+        live_issues = [issue for issue in retirement_issues if "outside migration" in issue]
+        self.assertFalse(live_issues, f"live construction-policy API: {live_issues}")
 
         construction = unique_block(
             EFFECTS, "ADISCORD_economy_calculate_construction_expenses"
@@ -262,6 +443,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
         self.assertNotIn("construction_spending", development)
 
     def test_research_policy_has_five_levels_and_level_five_construction_bonus_is_bounded(self):
+        self.assertFalse(research_policy_flow_issues(EFFECTS))
         research = unique_block(EFFECTS, "ADISCORD_economy_calculate_research_expenses")
         self.assertIn("ADISCORD_economy_research_spending_mode", research)
         multipliers = {
@@ -309,6 +491,16 @@ class WeeklyEconomyContracts(unittest.TestCase):
         self.assertTrue(all(value <= 0.03 for value in all_construction_bonuses))
 
     def test_debt_capacity_is_absent_from_runtime_and_public_modifier_api(self):
+        scanned_boundary = {}
+        text_suffixes = {".txt", ".gui", ".gfx", ".yml", ".yaml", ".md", ".py"}
+        for directory in ("common", "interface", "events", "localisation", "docs", "tools"):
+            for path in (ROOT / directory).rglob("*"):
+                if path.is_file() and path.suffix.casefold() in text_suffixes:
+                    scanned_boundary[path.relative_to(ROOT).as_posix()] = path.read_text(
+                        encoding="utf-8-sig", errors="replace"
+                    )
+        self.assertFalse(retired_capacity_boundary_issues(scanned_boundary))
+
         migration = unique_block(EFFECTS, "ADISCORD_economy_migrate_schema")
         for line in migration.splitlines():
             if "debt_capacity" in line.casefold():
@@ -356,6 +548,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
         self.assertFalse(offenders, f"retired debt-capacity boundary: {offenders}")
 
     def test_automatic_borrowing_covers_full_uncovered_deficit_without_capacity_gate(self):
+        self.assertFalse(automatic_borrow_flow_issues(EFFECTS))
         for settlement_name in (
             "ADISCORD_economy_apply_weekly_balance",
             "ADISCORD_economy_apply_monthly_balance",
@@ -388,6 +581,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
             )
 
     def test_debt_tiers_use_interest_share_and_four_thirteen_settlement_streaks(self):
+        self.assertFalse(debt_transition_flow_issues(EFFECTS))
         metrics = unique_block(EFFECTS, "ADISCORD_economy_calculate_debt_metrics")
         for variable in (
             "ADISCORD_economy_weekly_interest",
@@ -472,6 +666,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 self.assertEqual(numeric_values(idea, modifier), [value], idea_name)
 
     def test_debt_notifications_are_first_loan_and_upward_transitions_only(self):
+        self.assertFalse(debt_notification_flow_issues(EFFECTS))
         queue = unique_block(EFFECTS, "ADISCORD_economy_queue_debt_notification")
         transition = unique_block(
             EFFECTS, "ADISCORD_economy_update_debt_state_after_settlement"
@@ -503,6 +698,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
         self.assertNotIn("ADISCORD_economy_refresh_spending_ideas", queue)
 
     def test_repayment_recalculates_interest_and_can_lower_debuff_immediately(self):
+        self.assertFalse(debt_reconciler_issues(EFFECTS))
         for effect_name in (
             "ADISCORD_economy_repay_debt",
             "ADISCORD_economy_early_repay_debt",
@@ -577,15 +773,31 @@ class WeeklyEconomyContracts(unittest.TestCase):
         self.assertFalse(offenders, f"heavy weekly reachability: {offenders}")
 
     def test_ai_assistance_is_bounded_reversible_and_never_player_visible(self):
-        minor_ideas = (
-            ROOT / "common" / "ideas" / "ADISCORD_minor_optimization_ideas.txt"
-        ).read_text(encoding="utf-8-sig")
-        minor_effects = (
+        for relative in (
+            "common/on_actions/00_ADISCORD_minor_optimization_on_actions.txt",
+            "common/scripted_triggers/ADISCORD_minor_optimization_triggers.txt",
+        ):
+            self.assertTrue((ROOT / relative).is_file(), f"missing future-owned source: {relative}")
+        minor_ideas_path = ROOT / "common" / "ideas" / "ADISCORD_minor_optimization_ideas.txt"
+        minor_effects_path = (
             ROOT
             / "common"
             / "scripted_effects"
             / "ADISCORD_minor_optimization_effects.txt"
-        ).read_text(encoding="utf-8-sig")
+        )
+        self.assertTrue(
+            minor_ideas_path.is_file(),
+            "missing future-owned source: common/ideas/ADISCORD_minor_optimization_ideas.txt",
+        )
+        self.assertTrue(
+            minor_effects_path.is_file(),
+            "missing future-owned source: common/scripted_effects/ADISCORD_minor_optimization_effects.txt",
+        )
+        minor_ideas = minor_ideas_path.read_text(encoding="utf-8-sig")
+        minor_effects = minor_effects_path.read_text(encoding="utf-8-sig")
+        self.assertFalse(
+            ai_assistance_contract_issues(minor_ideas, minor_effects + "\n" + EFFECTS)
+        )
         assistance = {
             "ADISCORD_economy_ai_assistance_base": {
                 "ADISCORD_economy_overall_income_factor": 0.05,

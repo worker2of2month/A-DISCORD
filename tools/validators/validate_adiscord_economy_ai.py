@@ -7,6 +7,11 @@ import re
 import sys
 from pathlib import Path
 
+try:
+    from tools.validators.validate_adiscord_division_templates import Entry, parse_clausewitz
+except ModuleNotFoundError:  # Direct ``python tools/validators/...`` invocation.
+    from validate_adiscord_division_templates import Entry, parse_clausewitz
+
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -52,8 +57,447 @@ def scalar_assignments(text: str, key: str) -> list[float]:
     ]
 
 
+LEGACY_CONSTRUCTION = (
+    "ADISCORD_economy_construction_spending_mode",
+    "ADISCORD_economy_construction_budget_change_cooldown",
+    *(f"ADISCORD_economy_construction_spending_{level}" for level in range(1, 6)),
+)
+ASSISTANCE_IDEAS = (
+    "ADISCORD_economy_ai_assistance_base",
+    "ADISCORD_economy_ai_assistance_civil_war",
+    "ADISCORD_economy_ai_assistance_retreat",
+)
+
+
+def _walk_entries(
+    entries: list[Entry], ancestors: tuple[Entry, ...] = ()
+):
+    for entry in entries:
+        yield ancestors, entry
+        if isinstance(entry.value, list):
+            yield from _walk_entries(entry.value, ancestors + (entry,))
+
+
+def _tokens_in(entries: list[Entry]) -> list[str]:
+    result: list[str] = []
+    for _, entry in _walk_entries(entries):
+        if entry.key:
+            result.append(entry.key)
+        if isinstance(entry.value, str):
+            result.append(entry.value)
+    return result
+
+
+def _direct_scalar(entries: list[Entry], key: str) -> str | None:
+    return next(
+        (entry.value for entry in entries if entry.key == key and isinstance(entry.value, str)),
+        None,
+    )
+
+
+def _definitions(texts: tuple[str, ...]) -> dict[str, Entry]:
+    definitions: dict[str, Entry] = {}
+    duplicates: set[str] = set()
+    for text in texts:
+        for entry in parse_clausewitz(text):
+            if not entry.key.startswith("ADISCORD_") or not isinstance(entry.value, list):
+                continue
+            if entry.key in definitions:
+                duplicates.add(entry.key)
+            definitions[entry.key] = entry
+    if duplicates:
+        raise AssertionError(f"duplicate scripted definitions: {sorted(duplicates)}")
+    return definitions
+
+
+def reachable_script_entries(texts: tuple[str, ...], roots: tuple[str, ...]) -> dict[str, Entry]:
+    """Return structurally reachable scripted definitions.
+
+    Both scalar calls (``helper = yes``) and parameter blocks
+    (``helper = { ARG = value }``) are edges.  The Clausewitz tokenizer keeps
+    comments and quoted decoys out of the graph.
+    """
+
+    definitions = _definitions(texts)
+    missing = sorted(set(roots) - definitions.keys())
+    if missing:
+        raise AssertionError(f"missing scripted roots: {missing}")
+    reachable: dict[str, Entry] = {}
+    pending = list(roots)
+    while pending:
+        name = pending.pop()
+        if name in reachable:
+            continue
+        definition = definitions[name]
+        reachable[name] = definition
+        for _, candidate in _walk_entries(definition.value):
+            if candidate.key not in definitions:
+                continue
+            if candidate.value == "yes" or isinstance(candidate.value, list):
+                pending.append(candidate.key)
+    return dict(sorted(reachable.items()))
+
+
+def migration_contract_issues(effects: str, other_runtime: dict[str, str] | None = None) -> list[str]:
+    """Validate the sole schema-12 exception to construction-policy retirement."""
+
+    issues: list[str] = []
+    definitions = _definitions((effects,))
+    migration = definitions.get("ADISCORD_economy_migrate_schema")
+    if migration is None:
+        return ["missing unique ADISCORD_economy_migrate_schema"]
+    body = migration.value
+    assert isinstance(body, list)
+    copy_ok = any(
+        entry.key == "set_variable"
+        and isinstance(entry.value, list)
+        and _direct_scalar(entry.value, "var") == "ADISCORD_economy_research_spending_mode"
+        and _direct_scalar(entry.value, "value") == "ADISCORD_economy_construction_spending_mode"
+        for _, entry in _walk_entries(body)
+    )
+    if not copy_ok:
+        issues.append("schema 12 lacks the exact construction-to-research copy")
+    required_counts = {
+        "ADISCORD_economy_construction_spending_mode": 2,
+        "ADISCORD_economy_construction_budget_change_cooldown": 1,
+        **{f"ADISCORD_economy_construction_spending_{level}": 1 for level in range(1, 6)},
+    }
+    tokens = _tokens_in(body)
+    for token, count in required_counts.items():
+        if tokens.count(token) != count:
+            issues.append(f"migration has non-exact legacy use {token}: {tokens.count(token)}")
+    for variable in LEGACY_CONSTRUCTION[:2]:
+        if not any(
+            entry.key == "clear_variable" and entry.value == variable
+            for _, entry in _walk_entries(body)
+        ):
+            issues.append(f"migration does not clear {variable}")
+    removed: set[str] = set()
+    for _, entry in _walk_entries(body):
+        if entry.key != "remove_ideas":
+            continue
+        if isinstance(entry.value, str):
+            removed.add(entry.value)
+        else:
+            removed.update(value for value in _tokens_in(entry.value) if value.startswith("ADISCORD_"))
+    for idea in LEGACY_CONSTRUCTION[2:]:
+        if idea not in removed:
+            issues.append(f"migration does not remove {idea}")
+    outside_tokens: list[str] = []
+    for name, definition in definitions.items():
+        if name != migration.key:
+            outside_tokens.extend(_tokens_in([definition]))
+    for path, text in (other_runtime or {}).items():
+        try:
+            outside_tokens.extend(_tokens_in(parse_clausewitz(text)))
+        except ValueError as error:
+            issues.append(f"{path}: Clausewitz parse error: {error}")
+    for token in LEGACY_CONSTRUCTION:
+        if token in outside_tokens:
+            issues.append(f"live construction-policy token outside migration: {token}")
+    return issues
+
+
+def retired_capacity_boundary_issues(sources: dict[str, str]) -> list[str]:
+    """Scan the complete public/runtime boundary with exact historical exceptions."""
+
+    historical = {
+        "docs/superpowers/plans/2026-08-02-adiscord-weekly-economy-dashboard.md",
+        "docs/superpowers/plans/2026-08-08-adiscord-economy-recovery.md",
+        "docs/superpowers/plans/2026-08-08-adiscord-integration-and-runtime-acceptance.md",
+        "docs/superpowers/specs/2026-08-08-adiscord-recovery-design.md",
+        "tools/tests/test_adiscord_economy_weekly_contracts.py",
+        "tools/tests/test_validate_adiscord_gui_contracts.py",
+    }
+    issues: list[str] = []
+    forbidden = re.compile(
+        "debt" + r"_capacity|debt" + r"\s+capacity|долгов\w*\s+[её]мк", re.I
+    )
+    effects_path = "common/scripted_effects/ADISCORD_economy_effects.txt"
+    for path, text in sources.items():
+        if path in historical:
+            continue
+        if path != effects_path:
+            if forbidden.search(text):
+                issues.append(f"{path}: retired debt-capacity API")
+            continue
+        try:
+            definitions = _definitions((text,))
+        except (AssertionError, ValueError) as error:
+            issues.append(f"{path}: Clausewitz parse error: {error}")
+            continue
+        migration = definitions.get("ADISCORD_economy_migrate_schema")
+        for name, definition in definitions.items():
+            if definition is migration:
+                for _, entry in _walk_entries(definition.value):
+                    refs = [entry.key] + ([entry.value] if isinstance(entry.value, str) else [])
+                    if not any(forbidden.search(ref) for ref in refs):
+                        continue
+                    if not (entry.key == "clear_variable" and isinstance(entry.value, str)):
+                        issues.append(f"{path}:{entry.line}: capacity migration operation is not a clear")
+            elif forbidden.search(" ".join(_tokens_in([definition]))):
+                issues.append(f"{path}:{definition.line}: retired debt-capacity API")
+    return issues
+
+
+def _operand_values(entry: Entry) -> set[str]:
+    if isinstance(entry.value, str):
+        return {entry.value}
+    return {token for token in _tokens_in(entry.value) if token.startswith("ADISCORD_")}
+
+
+def _branch_condition_tokens(ancestors: tuple[Entry, ...]) -> list[str]:
+    tokens: list[str] = []
+    for ancestor in ancestors:
+        if ancestor.key not in {"if", "else_if"} or not isinstance(ancestor.value, list):
+            continue
+        for entry in ancestor.value:
+            if entry.key == "limit" and isinstance(entry.value, list):
+                tokens.extend(_tokens_in(entry.value))
+    return tokens
+
+
+def ai_assistance_contract_issues(ideas_text: str, effects_text: str) -> list[str]:
+    issues: list[str] = []
+    idea_ast = parse_clausewitz(ideas_text)
+    effect_ast = parse_clausewitz(effects_text)
+    found_ideas = {
+        entry.key: entry for _, entry in _walk_entries(idea_ast) if entry.key in ASSISTANCE_IDEAS
+    }
+    expected = {
+        ASSISTANCE_IDEAS[0]: {"ADISCORD_economy_overall_income_factor": (0.05, 0.05), "industrial_capacity_factory": (0.05, 0.05)},
+        ASSISTANCE_IDEAS[1]: {"supply_consumption_factor": (-0.10, 0.0)},
+        ASSISTANCE_IDEAS[2]: {"army_defence_factor": (0.05, 0.05)},
+    }
+    for name, bounds in expected.items():
+        idea = found_ideas.get(name)
+        if idea is None or not isinstance(idea.value, list):
+            issues.append(f"missing assistance idea {name}")
+            continue
+        for modifier, (low, high) in bounds.items():
+            values = []
+            for _, entry in _walk_entries(idea.value):
+                if entry.key == modifier and isinstance(entry.value, str):
+                    try:
+                        values.append(float(entry.value))
+                    except ValueError:
+                        pass
+            if len(values) != 1 or not low <= values[0] <= high:
+                issues.append(f"{name}: invalid exact bound for {modifier}")
+    refreshes = [entry for _, entry in _walk_entries(effect_ast) if entry.key == "ADISCORD_economy_refresh_ai_assistance"]
+    if len(refreshes) != 1 or not isinstance(refreshes[0].value, list):
+        return issues + ["missing unique AI-assistance refresh"]
+    refresh = refreshes[0]
+    direct = refresh.value
+    gates = [entry for entry in direct if entry.key == "if" and isinstance(entry.value, list)
+             and any(candidate.key == "limit" and isinstance(candidate.value, list)
+                     and _direct_scalar(candidate.value, "is_ai") == "yes" for candidate in entry.value)]
+    if len(gates) != 1:
+        return issues + ["assistance additions lack one direct is_ai gate"]
+    gate = gates[0]
+    gate_index = direct.index(gate)
+    removed: set[str] = set()
+    for entry in direct[:gate_index]:
+        if entry.key == "remove_ideas":
+            removed.update(_operand_values(entry))
+    for idea in ASSISTANCE_IDEAS:
+        if idea not in removed:
+            issues.append(f"{idea}: removal is not unconditional and remove-first")
+    additions: dict[str, list[tuple[Entry, ...]]] = {idea: [] for idea in ASSISTANCE_IDEAS}
+    assert isinstance(gate.value, list)
+    for ancestors, entry in _walk_entries(gate.value):
+        if entry.key == "add_ideas":
+            for idea in _operand_values(entry) & set(ASSISTANCE_IDEAS):
+                additions[idea].append(ancestors)
+    all_adds = [entry for _, entry in _walk_entries(direct) if entry.key == "add_ideas"]
+    gated_adds = [entry for _, entry in _walk_entries(gate.value) if entry.key == "add_ideas"]
+    if len(all_adds) != len(gated_adds):
+        issues.append("assistance add_ideas escapes the is_ai gate")
+    signatures = {
+        ASSISTANCE_IDEAS[0]: ("ADISCORD_economy_simulation_tier",),
+        ASSISTANCE_IDEAS[1]: ("ADISCORD_vorkerland_collapse_phase", "has_war", "yes"),
+        ASSISTANCE_IDEAS[2]: ("surrender_progress", "0.35"),
+    }
+    for idea, required in signatures.items():
+        if len(additions[idea]) != 1:
+            issues.append(f"{idea}: expected one AI-only conditional addition")
+            continue
+        ancestors = additions[idea][0]
+        branch = next((ancestor for ancestor in reversed(ancestors)
+                       if ancestor.key in {"if", "else_if"} and isinstance(ancestor.value, list)), None)
+        limit = next((entry for entry in (branch.value if branch else [])
+                      if entry.key == "limit" and isinstance(entry.value, list)), None)
+        condition = _tokens_in(limit.value) if limit else []
+        if not all(token in condition for token in required):
+            issues.append(f"{idea}: wrong or disconnected application condition")
+    return issues
+
+
+def research_policy_flow_issues(text: str) -> list[str]:
+    definitions = _definitions((text,))
+    effect = definitions.get("ADISCORD_economy_calculate_research_expenses")
+    if effect is None or not isinstance(effect.value, list):
+        return ["missing research expense calculation"]
+    expected = {"1": 0.60, "2": 0.80, "3": 1.00, "4": 1.30, "5": 1.60}
+    found: dict[str, float] = {}
+    for entry in effect.value:
+        if entry.key not in {"if", "else_if"} or not isinstance(entry.value, list):
+            continue
+        limit = next((item for item in entry.value if item.key == "limit" and isinstance(item.value, list)), None)
+        if limit is None:
+            continue
+        checks = [item for _, item in _walk_entries(limit.value) if item.key == "check_variable" and isinstance(item.value, list)]
+        level = next((_direct_scalar(item.value, "value") for item in checks
+                      if _direct_scalar(item.value, "var") == "ADISCORD_economy_research_spending_mode"), None)
+        multipliers = [item for _, item in _walk_entries(entry.value)
+                       if item.key == "multiply_variable" and isinstance(item.value, list)
+                       and _direct_scalar(item.value, "var") == "ADISCORD_economy_research_expenses"]
+        if level and len(multipliers) == 1:
+            try:
+                found[level] = float(_direct_scalar(multipliers[0].value, "value") or "nan")
+            except ValueError:
+                pass
+    return [] if found == expected else [f"research multipliers are not bound one-to-one to levels: {found}"]
+
+
+def automatic_borrow_flow_issues(text: str) -> list[str]:
+    issues: list[str] = []
+    for name in ("ADISCORD_economy_apply_weekly_balance", "ADISCORD_economy_apply_monthly_balance"):
+        definition = _definitions((text,)).get(name)
+        if definition is None or not isinstance(definition.value, list):
+            issues.append(f"missing {name}")
+            continue
+        operations = [(entry.key, entry) for _, entry in _walk_entries(definition.value)
+                      if entry.key in {"set_variable", "add_to_variable", "subtract_from_variable", "multiply_variable", "divide_variable", "clamp_variable"}
+                      and isinstance(entry.value, list)]
+        writes = [(key, entry) for key, entry in operations
+                  if _direct_scalar(entry.value, "var") == "ADISCORD_economy_auto_borrow_temp"]
+        valid_copy = [(key, entry) for key, entry in writes
+                      if key == "set_variable" and _direct_scalar(entry.value, "value") == "ADISCORD_economy_uncovered_deficit_temp"]
+        if len(writes) != 1 or len(valid_copy) != 1:
+            issues.append(f"{name}: automatic borrow is capped, clamped, or rewritten")
+        for account in ("ADISCORD_economy_debt", "ADISCORD_economy_treasury"):
+            if not any(key == "add_to_variable" and _direct_scalar(entry.value, "var") == account
+                       and _direct_scalar(entry.value, "value") == "ADISCORD_economy_auto_borrow_temp"
+                       for key, entry in operations):
+                issues.append(f"{name}: automatic borrow does not fully fund {account}")
+    return issues
+
+
+def debt_transition_flow_issues(text: str) -> list[str]:
+    definition = _definitions((text,)).get("ADISCORD_economy_update_debt_state_after_settlement")
+    if definition is None or not isinstance(definition.value, list):
+        return ["missing debt transition"]
+    issues: list[str] = []
+    for streak, needs_negative in (("ADISCORD_economy_debt_emergency_streak", False), ("ADISCORD_economy_debt_default_streak", True)):
+        increments = []
+        resets = []
+        for ancestors, entry in _walk_entries(definition.value):
+            if entry.key not in {"add_to_variable", "set_variable"} or not isinstance(entry.value, list):
+                continue
+            if _direct_scalar(entry.value, "var") != streak:
+                continue
+            target = increments if entry.key == "add_to_variable" and _direct_scalar(entry.value, "value") == "1" else resets
+            target.append(ancestors)
+        if len(increments) != 1 or len(resets) != 1:
+            issues.append(f"{streak}: requires one conditional increment and one reset")
+            continue
+        increment_tokens = _branch_condition_tokens(increments[0])
+        reset_ancestors = resets[0]
+        has_interest = "ADISCORD_economy_interest_share_income" in increment_tokens and "40" in increment_tokens
+        has_negative = "ADISCORD_economy_weekly_balance" in increment_tokens and "0" in increment_tokens
+        reset_in_else = any(ancestor.key == "else" for ancestor in reset_ancestors)
+        if not has_interest or (needs_negative and not has_negative) or not reset_in_else:
+            issues.append(f"{streak}: streak branch/reset conditions are disconnected")
+    return issues
+
+
+def debt_notification_flow_issues(text: str) -> list[str]:
+    definitions = _definitions((text,))
+    issues: list[str] = []
+    for name, definition in definitions.items():
+        if name == "ADISCORD_economy_queue_debt_notification":
+            continue
+        for ancestors, entry in _walk_entries(definition.value):
+            if entry.key != "ADISCORD_economy_queue_debt_notification":
+                continue
+            condition_tokens = _branch_condition_tokens(ancestors)
+            first_loan = "ADISCORD_economy_first_loan_notified" in condition_tokens
+            upward = ("ADISCORD_economy_debt_state" in condition_tokens
+                      and "ADISCORD_economy_last_notified_debt_state" in condition_tokens
+                      and "greater_than" in condition_tokens)
+            if not (first_loan or upward):
+                issues.append(f"{name}: routine debt notification call")
+    return issues
+
+
+def debt_reconciler_issues(text: str) -> list[str]:
+    definition = _definitions((text,)).get("ADISCORD_economy_reconcile_debt_state_after_action")
+    if definition is None or not isinstance(definition.value, list):
+        return ["missing debt reconciler"]
+    tokens = _tokens_in(definition.value)
+    required = {
+        "ADISCORD_economy_interest_share_income", "ADISCORD_economy_debt_state",
+        "set_variable", "remove_ideas", "add_ideas",
+    }
+    issues = [] if required.issubset(tokens) else ["debt reconciler does not recompute and apply a lower state"]
+    if any("streak" in token for token in tokens if token.startswith("ADISCORD_")):
+        issues.append("debt reconciler mutates settlement streaks")
+    return issues
+
+
+def policy_selector_issues(text: str, selector: str, mode_var: str, cooldown_var: str, direction: str) -> list[str]:
+    ast = parse_clausewitz(text)
+    matches = [entry for _, entry in _walk_entries(ast)
+               if entry.key == "defined_text" and isinstance(entry.value, list)
+               and _direct_scalar(entry.value, "name") == selector]
+    if len(matches) != 1:
+        return [f"{selector}: missing unique defined_text"]
+    branches = [entry for entry in matches[0].value if entry.key == "text" and isinstance(entry.value, list)]
+    boundary = "ADISCORD_economy_policy_blocked_minimum" if direction == "decrease" else "ADISCORD_economy_policy_blocked_maximum"
+    expected = [boundary, "ADISCORD_economy_policy_blocked_cooldown", "ADISCORD_economy_policy_blocked_scope"]
+    reasons = [_direct_scalar(branch.value, "localization_key") for branch in branches]
+    if reasons[:3] != expected:
+        return [f"{selector}: disabled reasons are missing, swapped, or unreachable"]
+    issues: list[str] = []
+    boundary_limit = next((entry for entry in branches[0].value if entry.key == "trigger" and isinstance(entry.value, list)), None)
+    cooldown_limit = next((entry for entry in branches[1].value if entry.key == "trigger" and isinstance(entry.value, list)), None)
+    scope_limit = next((entry for entry in branches[2].value if entry.key == "trigger" and isinstance(entry.value, list)), None)
+    boundary_tokens = _tokens_in(boundary_limit.value) if boundary_limit else []
+    cooldown_tokens = _tokens_in(cooldown_limit.value) if cooldown_limit else []
+    scope_tokens = _tokens_in(scope_limit.value) if scope_limit else []
+    boundary_value = "1" if direction == "decrease" else "5"
+    boundary_compare = "less_than_or_equals" if direction == "decrease" else "greater_than_or_equals"
+    if not {mode_var, boundary_value, boundary_compare}.issubset(boundary_tokens):
+        issues.append(f"{selector}: boundary reason is disconnected")
+    if not {cooldown_var, "0", "greater_than"}.issubset(cooldown_tokens):
+        issues.append(f"{selector}: cooldown reason is disconnected")
+    if not {"NOT", "ADISCORD_economy_should_show_player_ui", "yes"}.issubset(scope_tokens):
+        issues.append(f"{selector}: country-scope reason is disconnected")
+    if len(branches) < 4 or any(
+        not any(entry.key == "trigger" for entry in branch.value) for branch in branches[:3]
+    ):
+        issues.append(f"{selector}: required branch is dead")
+    elif (
+        any(entry.key == "trigger" for entry in branches[3].value)
+        or not (_direct_scalar(branches[3].value, "localization_key") or "").startswith(
+            "ADISCORD_economy_policy_preview_"
+        )
+    ):
+        issues.append(f"{selector}: available preview is not the final fallback")
+    return issues
+
+
 def validate() -> list[str]:
     issues: list[str] = []
+
+    def read_required(path: str) -> str:
+        source = ROOT / path
+        if not source.is_file():
+            issues.append(f"missing required future-owned source: {path}")
+            return ""
+        return source.read_text(encoding="utf-8-sig")
+
     effects = strip_comments(read("common/scripted_effects/ADISCORD_economy_effects.txt"))
     modifier_effects = strip_comments(
         read("common/scripted_effects/ADISCORD_economy_modifier_effects.txt")
@@ -67,10 +511,14 @@ def validate() -> list[str]:
     scripted_gui = strip_comments(read("common/scripted_guis/ADISCORD_economy_scripted_gui.txt"))
     scripted_loc = strip_comments(read("common/scripted_localisation/ADISCORD_economy_scripted_loc.txt"))
     ideas = strip_comments(read("common/ideas/ADISCORD_economy_ideas.txt"))
-    minor_ideas = strip_comments(read("common/ideas/ADISCORD_minor_optimization_ideas.txt"))
-    minor_effects = strip_comments(
-        read("common/scripted_effects/ADISCORD_minor_optimization_effects.txt")
+    minor_ideas = strip_comments(
+        read_required("common/ideas/ADISCORD_minor_optimization_ideas.txt")
     )
+    minor_effects = strip_comments(
+        read_required("common/scripted_effects/ADISCORD_minor_optimization_effects.txt")
+    )
+    read_required("common/on_actions/00_ADISCORD_minor_optimization_on_actions.txt")
+    read_required("common/scripted_triggers/ADISCORD_minor_optimization_triggers.txt")
     buildings = strip_comments(read("common/buildings/00_buildings.txt"))
     dynamic_modifiers = strip_comments(
         read("common/dynamic_modifiers/ADISCORD_economy_dynamic_modifiers.txt")
@@ -80,6 +528,49 @@ def validate() -> list[str]:
     def require(condition: bool, message: str) -> None:
         if not condition:
             issues.append(message)
+
+    issues.extend(
+        migration_contract_issues(
+            effects,
+            {
+                "triggers": triggers,
+                "ideas": ideas,
+                "scripted_gui": scripted_gui,
+                "scripted_loc": scripted_loc,
+                "economy_ai": economy_ai,
+            },
+        )
+    )
+    if minor_ideas and minor_effects:
+        issues.extend(ai_assistance_contract_issues(minor_ideas, minor_effects + "\n" + effects))
+    issues.extend(research_policy_flow_issues(effects))
+    issues.extend(automatic_borrow_flow_issues(effects))
+    issues.extend(debt_transition_flow_issues(effects))
+    issues.extend(debt_notification_flow_issues(effects))
+    issues.extend(debt_reconciler_issues(effects))
+    boundary_sources: dict[str, str] = {}
+    text_suffixes = {".txt", ".gui", ".gfx", ".yml", ".yaml", ".md", ".py"}
+    for directory in ("common", "interface", "events", "localisation", "docs", "tools"):
+        for path in (ROOT / directory).rglob("*"):
+            if path.is_file() and path.suffix.casefold() in text_suffixes:
+                boundary_sources[path.relative_to(ROOT).as_posix()] = path.read_text(
+                    encoding="utf-8-sig", errors="replace"
+                )
+    issues.extend(retired_capacity_boundary_issues(boundary_sources))
+    selector_policies = {
+        "Tax": ("ADISCORD_economy_tax_burden_mode", "ADISCORD_economy_tax_change_cooldown"),
+        "Army": ("ADISCORD_economy_army_spending_mode", "ADISCORD_economy_army_budget_change_cooldown"),
+        "Research": ("ADISCORD_economy_research_spending_mode", "ADISCORD_economy_research_budget_change_cooldown"),
+        "Social": ("ADISCORD_economy_social_spending_mode", "ADISCORD_economy_social_budget_change_cooldown"),
+    }
+    for title, (mode_var, cooldown_var) in selector_policies.items():
+        for direction in ("decrease", "increase"):
+            selector = f"GetADISCORDEconomy{title}{direction.title()}PreviewLoc"
+            issues.extend(
+                policy_selector_issues(
+                    scripted_loc, selector, mode_var, cooldown_var, direction
+                )
+            )
 
     require("ADISCORD_economy_schema_version" in effects, "economy lacks a schema-versioned migration")
     require("ADISCORD_economy_migrate_schema" in effects, "economy lacks ADISCORD_economy_migrate_schema")
