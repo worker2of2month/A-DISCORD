@@ -1855,9 +1855,9 @@ ADISCORD_economy_migrate_schema = {
 """
     ASSISTANCE_IDEAS = """
 ideas = { hidden_ideas = {
- ADISCORD_economy_ai_assistance_base = { modifier = { ADISCORD_economy_overall_income_factor = 0.05 industrial_capacity_factory = 0.05 } }
- ADISCORD_economy_ai_assistance_civil_war = { modifier = { supply_consumption_factor = -0.10 } }
- ADISCORD_economy_ai_assistance_retreat = { modifier = { army_defence_factor = 0.05 } }
+ ADISCORD_economy_ai_assistance_base = { allowed = { always = no } allowed_civil_war = { always = yes } removal_cost = -1 modifier = { ADISCORD_economy_overall_income_factor = 0.05 industrial_capacity_factory = 0.05 } }
+ ADISCORD_economy_ai_assistance_civil_war = { allowed = { always = no } allowed_civil_war = { always = yes } removal_cost = -1 modifier = { supply_consumption_factor = -0.10 } }
+ ADISCORD_economy_ai_assistance_retreat = { allowed = { always = no } allowed_civil_war = { always = yes } removal_cost = -1 modifier = { army_defence_factor = 0.05 } }
 } }
 """
     ASSISTANCE_EFFECT = """
@@ -2182,6 +2182,16 @@ ADISCORD_cycle = { ADISCORD_root = yes }
                 "compare = equals",
                 1,
             ),
+            "signature owner uses AND": self.ASSISTANCE_EFFECT.replace(
+                "limit = { OR = { NOT = { has_variable = ADISCORD_economy_ai_assistance_signature }",
+                "limit = { AND = { NOT = { has_variable = ADISCORD_economy_ai_assistance_signature }",
+                1,
+            ),
+            "signature missing arm inverted": self.ASSISTANCE_EFFECT.replace(
+                "NOT = { has_variable = ADISCORD_economy_ai_assistance_signature }",
+                "has_variable = ADISCORD_economy_ai_assistance_signature",
+                1,
+            ),
             "missing civil removal": self.ASSISTANCE_EFFECT.replace(
                 "  remove_ideas = ADISCORD_economy_ai_assistance_civil_war\n",
                 "",
@@ -2272,6 +2282,16 @@ ADISCORD_cycle = { ADISCORD_root = yes }
                 "industrial_capacity_factory = 0.06",
                 1,
             ),
+            "political power on add": self.ASSISTANCE_IDEAS.replace(
+                "modifier = { ADISCORD_economy_overall_income_factor = 0.05 industrial_capacity_factory = 0.05 }",
+                "modifier = { ADISCORD_economy_overall_income_factor = 0.05 industrial_capacity_factory = 0.05 } on_add = { add_political_power = 100 }",
+                1,
+            ),
+            "equipment attack bonus": self.ASSISTANCE_IDEAS.replace(
+                "modifier = { army_defence_factor = 0.05 }",
+                "modifier = { army_defence_factor = 0.05 } equipment_bonus = { infantry_equipment = { soft_attack = 0.10 } }",
+                1,
+            ),
         }
         for name, mutation in idea_mutations.items():
             with self.subTest(mutation=name):
@@ -2283,6 +2303,40 @@ ADISCORD_cycle = { ADISCORD_root = yes }
                     )
                 )
 
+        external_owner = self.ASSISTANCE_EFFECT + """
+ADISCORD_bad_assistance_owner = {
+ add_ideas = ADISCORD_economy_ai_assistance_base
+ remove_ideas = ADISCORD_economy_ai_assistance_retreat
+}
+"""
+        self.assertTrue(
+            ai_assistance_contract_issues(
+                self.ASSISTANCE_IDEAS,
+                external_owner,
+                self.ASSISTANCE_TRIGGERS,
+            )
+        )
+
+        shadow_ideas = self.ASSISTANCE_IDEAS.replace(
+            "} }\n",
+            " ADISCORD_ai_helper_shadow = { allowed = { always = no } allowed_civil_war = { always = yes } removal_cost = -1 modifier = { ADISCORD_economy_overall_income_factor = 0.05 industrial_capacity_factory = 0.05 } }\n} }\n",
+            1,
+        )
+        shadow_effect = self.ASSISTANCE_EFFECT.replace(
+            "add_ideas = ADISCORD_economy_ai_assistance_base }",
+            "add_ideas = ADISCORD_economy_ai_assistance_base add_ideas = ADISCORD_ai_helper_shadow }",
+            1,
+        )
+        self.assertNotEqual(shadow_ideas, self.ASSISTANCE_IDEAS)
+        self.assertNotEqual(shadow_effect, self.ASSISTANCE_EFFECT)
+        self.assertTrue(
+            ai_assistance_contract_issues(
+                shadow_ideas,
+                shadow_effect,
+                self.ASSISTANCE_TRIGGERS,
+            )
+        )
+
     def test_ai_policy_is_one_reserved_ordered_research_decision(self):
         policy = """
 ADISCORD_economy_ai_monthly_policy = {
@@ -2290,28 +2344,28 @@ ADISCORD_economy_ai_monthly_policy = {
   limit = { is_ai = yes has_political_power > 50 }
   if = {
    limit = { ADISCORD_economy_ai_is_crisis = yes }
-   if = { limit = { always = yes } ADISCORD_economy_increase_tax_burden = yes }
-   else_if = { limit = { always = yes } ADISCORD_economy_decrease_social_spending = yes }
-   else_if = { limit = { always = yes } ADISCORD_economy_decrease_army_spending = yes }
-   else_if = { limit = { always = yes } ADISCORD_economy_decrease_research_spending = yes }
+   if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_increase_tax_burden = yes } ADISCORD_economy_increase_tax_burden = yes }
+   else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } check_variable = { var = ADISCORD_economy_social_spending_mode value = 2 compare = greater_than } ADISCORD_economy_can_decrease_social_spending = yes } ADISCORD_economy_decrease_social_spending = yes }
+   else_if = { limit = { has_war = no check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_decrease_army_spending = yes } ADISCORD_economy_decrease_army_spending = yes }
+   else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_decrease_research_spending = yes } ADISCORD_economy_decrease_research_spending = yes }
   }
   else_if = {
    limit = { ADISCORD_economy_ai_is_stressed = yes }
-   if = { limit = { always = yes } ADISCORD_economy_increase_tax_burden = yes }
-   else_if = { limit = { always = yes } ADISCORD_economy_decrease_social_spending = yes }
-   else_if = { limit = { always = yes } ADISCORD_economy_decrease_army_spending = yes }
-   else_if = { limit = { always = yes } ADISCORD_economy_decrease_research_spending = yes }
+   if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_increase_tax_burden = yes } ADISCORD_economy_increase_tax_burden = yes }
+   else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } check_variable = { var = ADISCORD_economy_social_spending_mode value = 3 compare = greater_than } ADISCORD_economy_can_decrease_social_spending = yes } ADISCORD_economy_decrease_social_spending = yes }
+   else_if = { limit = { has_war = no check_variable = { var = ADISCORD_economy_fiscal_stress value = 55 compare = greater_than_or_equals } ADISCORD_economy_can_decrease_army_spending = yes } ADISCORD_economy_decrease_army_spending = yes }
+   else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_decrease_research_spending = yes } ADISCORD_economy_decrease_research_spending = yes }
   }
   else_if = {
    limit = { ADISCORD_economy_ai_is_recovery = yes }
-   if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = greater_than } } ADISCORD_economy_decrease_research_spending = yes }
-   else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = less_than } } ADISCORD_economy_increase_research_spending = yes }
+   if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = greater_than } ADISCORD_economy_can_decrease_research_spending = yes } ADISCORD_economy_decrease_research_spending = yes }
+   else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_research_spending = yes } ADISCORD_economy_increase_research_spending = yes }
   }
   else = {
-   if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 4 compare = greater_than } } ADISCORD_economy_decrease_research_spending = yes }
-   else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = greater_than } check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than_or_equals } } ADISCORD_economy_decrease_research_spending = yes }
-   else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = less_than } } ADISCORD_economy_increase_research_spending = yes }
-   else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = equals } check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = greater_than } check_variable = { var = ADISCORD_economy_debt_state value = 0 compare = equals } check_variable = { var = ADISCORD_economy_interest_share_income value = 10 compare = less_than } } ADISCORD_economy_increase_research_spending = yes }
+   if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 4 compare = greater_than } ADISCORD_economy_can_decrease_research_spending = yes } ADISCORD_economy_decrease_research_spending = yes }
+   else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = greater_than } OR = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than_or_equals } check_variable = { var = ADISCORD_economy_debt_state value = 0 compare = greater_than } check_variable = { var = ADISCORD_economy_interest_share_income value = 10 compare = greater_than_or_equals } } ADISCORD_economy_can_decrease_research_spending = yes } ADISCORD_economy_decrease_research_spending = yes }
+   else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_research_spending = yes } ADISCORD_economy_increase_research_spending = yes }
+   else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = equals } check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = greater_than } check_variable = { var = ADISCORD_economy_debt_state value = 0 compare = equals } check_variable = { var = ADISCORD_economy_interest_share_income value = 10 compare = less_than } ADISCORD_economy_can_increase_research_spending = yes } ADISCORD_economy_increase_research_spending = yes }
   }
  }
 }
@@ -2329,9 +2383,29 @@ ADISCORD_economy_ai_monthly_policy = {
                 "limit = { is_ai = yes has_political_power > 50 always = no }",
                 1,
             ),
+            "wrong crisis state owner": policy.replace(
+                "ADISCORD_economy_ai_is_crisis = yes",
+                "ADISCORD_economy_ai_is_healthy = yes",
+                1,
+            ),
+            "reversed crisis deficit": policy.replace(
+                "ADISCORD_economy_monthly_balance value = 0 compare = less_than",
+                "ADISCORD_economy_monthly_balance value = 0 compare = greater_than",
+                1,
+            ),
+            "unconditional crisis tax": policy.replace(
+                "limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_increase_tax_burden = yes }",
+                "limit = { always = yes }",
+                1,
+            ),
+            "negated crisis tax": policy.replace(
+                "limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_increase_tax_burden = yes }",
+                "limit = { NOT = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } } ADISCORD_economy_can_increase_tax_burden = yes }",
+                1,
+            ),
             "multiple sibling actions": policy.replace(
-                "   else_if = { limit = { always = yes } ADISCORD_economy_decrease_social_spending = yes }",
-                "   if = { limit = { always = yes } ADISCORD_economy_decrease_social_spending = yes }",
+                "   else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } check_variable = { var = ADISCORD_economy_social_spending_mode value = 2",
+                "   if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } check_variable = { var = ADISCORD_economy_social_spending_mode value = 2",
                 1,
             ),
             "action outside reserve": policy.replace(
@@ -2375,6 +2449,16 @@ ADISCORD_economy_ai_monthly_policy = {
             "automatic research five": policy.replace(
                 "ADISCORD_economy_research_spending_mode value = 3 compare = equals",
                 "ADISCORD_economy_research_spending_mode value = 4 compare = equals",
+                1,
+            ),
+            "unsafe fallback unconditional": policy.replace(
+                "OR = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than_or_equals } check_variable = { var = ADISCORD_economy_debt_state value = 0 compare = greater_than } check_variable = { var = ADISCORD_economy_interest_share_income value = 10 compare = greater_than_or_equals } }",
+                "always = yes",
+                1,
+            ),
+            "level five not normalized": policy.replace(
+                "ADISCORD_economy_research_spending_mode value = 4 compare = greater_than",
+                "ADISCORD_economy_research_spending_mode value = 5 compare = greater_than",
                 1,
             ),
             "construction alias": policy.replace(
@@ -5056,6 +5140,194 @@ class WeeklyEconomyContracts(unittest.TestCase):
 
     def test_ai_policy_uses_one_reserved_ordered_research_action(self):
         self.assertFalse(ai_policy_contract_issues(EFFECTS))
+
+    def test_ai_policy_review_mutations_reject_live_predicate_drift(self):
+        policy = unique_block(EFFECTS, "ADISCORD_economy_ai_monthly_policy")
+        unsafe_fallback = (
+            "OR = { check_variable = { var = ADISCORD_economy_monthly_balance "
+            "value = 0 compare = less_than_or_equals } check_variable = { var = "
+            "ADISCORD_economy_debt_state value = 0 compare = greater_than } "
+            "check_variable = { var = ADISCORD_economy_interest_share_income "
+            "value = 10 compare = greater_than_or_equals } }"
+        )
+        mutations = {
+            "wrong crisis state owner": policy.replace(
+                "ADISCORD_economy_ai_is_crisis = yes",
+                "ADISCORD_economy_ai_is_healthy = yes",
+                1,
+            ),
+            "reversed crisis tax deficit": policy.replace(
+                "ADISCORD_economy_monthly_balance value = 0 compare = less_than",
+                "ADISCORD_economy_monthly_balance value = 0 compare = greater_than",
+                1,
+            ),
+            "negated crisis state": policy.replace(
+                "limit = { ADISCORD_economy_ai_is_crisis = yes }",
+                "limit = { NOT = { ADISCORD_economy_ai_is_crisis = yes } }",
+                1,
+            ),
+            "dead reserve owner": policy.replace(
+                "limit = { is_ai = yes has_political_power > 50 }",
+                "limit = { is_ai = yes has_political_power > 50 always = no }",
+                1,
+            ),
+            "unconditional unsafe fallback": policy.replace(
+                unsafe_fallback,
+                "always = yes",
+                1,
+            ),
+            "level five retained": policy.replace(
+                "ADISCORD_economy_research_spending_mode value = 4 compare = greater_than",
+                "ADISCORD_economy_research_spending_mode value = 5 compare = greater_than",
+                1,
+            ),
+            "construction policy alias": policy.replace(
+                "ADISCORD_economy_decrease_research_spending = yes",
+                "ADISCORD_economy_construction_spending_mode = yes",
+                1,
+            ),
+        }
+        for name, mutated_policy in mutations.items():
+            with self.subTest(review_policy_mutation=name):
+                self.assertNotEqual(mutated_policy, policy)
+                mutated_effects = EFFECTS.replace(policy, mutated_policy, 1)
+                self.assertNotEqual(mutated_effects, EFFECTS)
+                self.assertTrue(ai_policy_contract_issues(mutated_effects), name)
+
+    def test_ai_assistance_review_mutations_reject_live_owner_and_payload_drift(self):
+        minor_ideas = (
+            ROOT / "common/ideas/ADISCORD_minor_optimization_ideas.txt"
+        ).read_text(encoding="utf-8-sig")
+        minor_effects = (
+            ROOT / "common/scripted_effects/ADISCORD_minor_optimization_effects.txt"
+        ).read_text(encoding="utf-8-sig")
+        minor_triggers = (
+            ROOT / "common/scripted_triggers/ADISCORD_minor_optimization_triggers.txt"
+        ).read_text(encoding="utf-8-sig")
+        minor_on_actions = (
+            ROOT / "common/on_actions/00_ADISCORD_minor_optimization_on_actions.txt"
+        ).read_text(encoding="utf-8-sig")
+        effects_bundle = minor_effects + "\n" + EFFECTS
+        refresh = unique_block(
+            effects_bundle, "ADISCORD_economy_refresh_ai_assistance"
+        )
+        base_idea = unique_block(
+            minor_ideas, "ADISCORD_economy_ai_assistance_base"
+        )
+
+        signature_mutations = {
+            "signature OR changed to AND": refresh.replace(
+                "\t\t\tOR = {",
+                "\t\t\tAND = {",
+                1,
+            ),
+            "missing-signature arm inverted": refresh.replace(
+                "NOT = { has_variable = ADISCORD_economy_ai_assistance_signature }",
+                "has_variable = ADISCORD_economy_ai_assistance_signature",
+                1,
+            ),
+        }
+        for name, mutated_refresh in signature_mutations.items():
+            with self.subTest(review_assistance_mutation=name):
+                self.assertNotEqual(mutated_refresh, refresh)
+                mutated_effects = effects_bundle.replace(refresh, mutated_refresh, 1)
+                self.assertTrue(
+                    ai_assistance_contract_issues(
+                        minor_ideas, mutated_effects, minor_triggers
+                    ),
+                    name,
+                )
+
+        payload_mutations = {
+            "on-add political power": base_idea
+            + "\n\t\t\ton_add = { add_political_power = 100 }",
+            "equipment attack bonus": base_idea
+            + "\n\t\t\tequipment_bonus = { infantry_equipment = { soft_attack = 0.10 } }",
+        }
+        for name, mutated_idea in payload_mutations.items():
+            with self.subTest(review_assistance_mutation=name):
+                self.assertNotEqual(mutated_idea, base_idea)
+                mutated_ideas = minor_ideas.replace(base_idea, mutated_idea, 1)
+                self.assertTrue(
+                    ai_assistance_contract_issues(
+                        mutated_ideas, effects_bundle, minor_triggers
+                    ),
+                    name,
+                )
+
+        external_owner = effects_bundle + """
+ADISCORD_bad_assistance_owner = {
+ add_ideas = ADISCORD_economy_ai_assistance_base
+ remove_ideas = ADISCORD_economy_ai_assistance_retreat
+}
+"""
+        with self.subTest(review_assistance_mutation="second effect owns stack"):
+            self.assertTrue(
+                ai_assistance_contract_issues(
+                    minor_ideas, external_owner, minor_triggers
+                )
+            )
+
+        shadow_idea = (
+            "\t\tADISCORD_ai_helper_shadow = {\n"
+            "\t\t\tallowed = { always = no }\n"
+            "\t\t\tallowed_civil_war = { always = yes }\n"
+            "\t\t\tremoval_cost = -1\n"
+            "\t\t\tmodifier = {\n"
+            "\t\t\t\tADISCORD_economy_overall_income_factor = 0.05\n"
+            "\t\t\t\tindustrial_capacity_factory = 0.05\n"
+            "\t\t\t}\n"
+            "\t\t}\n"
+        )
+        shadow_ideas = minor_ideas.replace("\t}\n}\n", shadow_idea + "\t}\n}\n", 1)
+        shadow_refresh = refresh.replace(
+            "\t\t\tadd_ideas = ADISCORD_economy_ai_assistance_base",
+            "\t\t\tadd_ideas = ADISCORD_economy_ai_assistance_base\n"
+            "\t\t\tadd_ideas = ADISCORD_ai_helper_shadow",
+            1,
+        )
+        with self.subTest(review_assistance_mutation="differently named shadow stack"):
+            self.assertNotEqual(shadow_ideas, minor_ideas)
+            self.assertNotEqual(shadow_refresh, refresh)
+            self.assertTrue(
+                ai_assistance_contract_issues(
+                    shadow_ideas,
+                    effects_bundle.replace(refresh, shadow_refresh, 1),
+                    minor_triggers,
+                )
+            )
+
+        guarded_monthly = (
+            "\t\t\tif = {\n"
+            "\t\t\t\tlimit = { ADISCORD_economy_ai_assistance_needs_monthly_evaluation = yes }\n"
+            "\t\t\t\tADISCORD_economy_refresh_ai_assistance = yes\n"
+            "\t\t\t}"
+        )
+        lifecycle_mutations = {
+            "monthly refresh escapes owner": minor_on_actions.replace(
+                guarded_monthly,
+                "\t\t\tif = {\n"
+                "\t\t\t\tlimit = { ADISCORD_economy_ai_assistance_needs_monthly_evaluation = yes }\n"
+                "\t\t\t\talways = yes\n"
+                "\t\t\t}\n"
+                "\t\t\tADISCORD_economy_refresh_ai_assistance = yes",
+                1,
+            ),
+            "monthly owner is dead": minor_on_actions.replace(
+                "limit = { ADISCORD_economy_ai_assistance_needs_monthly_evaluation = yes }",
+                "limit = { ADISCORD_economy_ai_assistance_needs_monthly_evaluation = yes always = no }",
+                1,
+            ),
+        }
+        for name, mutation in lifecycle_mutations.items():
+            with self.subTest(review_lifecycle_mutation=name):
+                self.assertNotEqual(mutation, minor_on_actions)
+                self.assertTrue(
+                    ai_assistance_lifecycle_issues(
+                        EFFECTS, minor_effects, mutation
+                    ),
+                    name,
+                )
 
     def test_ai_assistance_is_bounded_reversible_and_never_player_visible(self):
         for relative in (
