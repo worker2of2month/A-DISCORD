@@ -86,7 +86,6 @@ ADISCORD_economy_migrate_schema = {
 		}
 		if = { limit = { NOT = { has_variable = ADISCORD_economy_tax_change_cooldown } } set_variable = { var = ADISCORD_economy_tax_change_cooldown value = 0 } }
 		if = { limit = { NOT = { has_variable = ADISCORD_economy_army_budget_change_cooldown } } set_variable = { var = ADISCORD_economy_army_budget_change_cooldown value = 0 } }
-		if = { limit = { NOT = { has_variable = ADISCORD_economy_construction_budget_change_cooldown } } set_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 0 } }
 		if = { limit = { NOT = { has_variable = ADISCORD_economy_social_budget_change_cooldown } } set_variable = { var = ADISCORD_economy_social_budget_change_cooldown value = 0 } }
 		if = {
 			limit = { NOT = { has_variable = ADISCORD_economy_was_at_war } }
@@ -101,6 +100,26 @@ ADISCORD_economy_migrate_schema = {
 		set_variable = { var = ADISCORD_economy_schema_version value = 11 }
 		set_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 }
 	}
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_schema_version value = 12 compare = less_than } }
+		# Schema 12 retires construction as a policy without touching the ledger.
+		# The previous policy level becomes the initial research course 1:1.
+		set_variable = { var = ADISCORD_economy_research_spending_mode value = ADISCORD_economy_construction_spending_mode }
+		clamp_variable = { var = ADISCORD_economy_research_spending_mode min = 1 max = 5 }
+		set_variable = { var = ADISCORD_economy_research_budget_change_cooldown value = 0 }
+		remove_ideas = {
+			ADISCORD_economy_construction_spending_1
+			ADISCORD_economy_construction_spending_2
+			ADISCORD_economy_construction_spending_3
+			ADISCORD_economy_construction_spending_4
+			ADISCORD_economy_construction_spending_5
+		}
+		clear_variable = ADISCORD_economy_construction_spending_mode
+		clear_variable = ADISCORD_economy_construction_budget_change_cooldown
+		set_variable = { var = ADISCORD_economy_last_idea_signature value = -1 }
+		set_variable = { var = ADISCORD_economy_schema_version value = 12 }
+		set_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 }
+	}
 }
 
 ADISCORD_economy_initialize_variables = {
@@ -112,7 +131,7 @@ ADISCORD_economy_initialize_variables = {
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_monthly_development_multiplier } } set_variable = { var = ADISCORD_economy_monthly_development_multiplier value = 100 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_tax_burden_mode } } set_variable = { var = ADISCORD_economy_tax_burden_mode value = 3 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_army_spending_mode } } set_variable = { var = ADISCORD_economy_army_spending_mode value = 3 } }
-	if = { limit = { NOT = { has_variable = ADISCORD_economy_construction_spending_mode } } set_variable = { var = ADISCORD_economy_construction_spending_mode value = 3 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_research_spending_mode } } set_variable = { var = ADISCORD_economy_research_spending_mode value = 3 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_social_spending_mode } } set_variable = { var = ADISCORD_economy_social_spending_mode value = 3 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_debt_capacity } } set_variable = { var = ADISCORD_economy_debt_capacity value = 250 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_debt_ratio } } set_variable = { var = ADISCORD_economy_debt_ratio value = 0 } }
@@ -187,7 +206,7 @@ ADISCORD_economy_initialize_variables = {
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_building_recount_months } } set_variable = { var = ADISCORD_economy_building_recount_months value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_tax_change_cooldown } } set_variable = { var = ADISCORD_economy_tax_change_cooldown value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_army_budget_change_cooldown } } set_variable = { var = ADISCORD_economy_army_budget_change_cooldown value = 0 } }
-	if = { limit = { NOT = { has_variable = ADISCORD_economy_construction_budget_change_cooldown } } set_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_research_budget_change_cooldown } } set_variable = { var = ADISCORD_economy_research_budget_change_cooldown value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_social_budget_change_cooldown } } set_variable = { var = ADISCORD_economy_social_budget_change_cooldown value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_recent_building_project } } set_variable = { var = ADISCORD_economy_recent_building_project value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_business_center_count } } set_variable = { var = ADISCORD_business_center_count value = 0 } }
@@ -205,7 +224,7 @@ ADISCORD_economy_initialize_variables = {
 
 ADISCORD_economy_set_default_values = {
 	set_variable = { var = ADISCORD_economy_initialized value = 1 }
-	set_variable = { var = ADISCORD_economy_schema_version value = 11 }
+	set_variable = { var = ADISCORD_economy_schema_version value = 12 }
 	set_variable = { var = ADISCORD_economy_treasury value = 100 }
 	set_variable = { var = ADISCORD_economy_treasury_cap value = 500 }
 	set_variable = { var = ADISCORD_economy_monthly_income value = 0 }
@@ -291,7 +310,7 @@ ADISCORD_economy_set_default_values = {
 	set_variable = { var = ADISCORD_economy_building_recount_months value = 0 }
 	set_variable = { var = ADISCORD_economy_tax_change_cooldown value = 0 }
 	set_variable = { var = ADISCORD_economy_army_budget_change_cooldown value = 0 }
-	set_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 0 }
+	set_variable = { var = ADISCORD_economy_research_budget_change_cooldown value = 0 }
 	set_variable = { var = ADISCORD_economy_social_budget_change_cooldown value = 0 }
 	set_variable = { var = ADISCORD_economy_gui_update_var value = 0 }
 	set_variable = { var = ADISCORD_economy_show_window value = 0 }
@@ -339,7 +358,7 @@ ADISCORD_economy_set_default_values = {
 	set_variable = { var = ADISCORD_economy_last_month_cap_writeoff value = 0 }
 	set_variable = { var = ADISCORD_economy_tax_burden_mode value = 3 }
 	set_variable = { var = ADISCORD_economy_army_spending_mode value = 3 }
-	set_variable = { var = ADISCORD_economy_construction_spending_mode value = 3 }
+	set_variable = { var = ADISCORD_economy_research_spending_mode value = 3 }
 	set_variable = { var = ADISCORD_economy_social_spending_mode value = 3 }
 	# Static economy modifiers come from focuses/ideas/events and must not be wiped by ordinary initialization.
 	ADISCORD_economy_reset_policy_modifier_variables = yes
@@ -929,6 +948,11 @@ ADISCORD_economy_calculate_research_expenses = {
 	multiply_temp_variable = { var = ADISCORD_economy_research_building_temp value = 0.35 }
 	add_to_variable = { var = ADISCORD_economy_research_expenses value = ADISCORD_economy_research_building_temp }
 	if = { limit = { ADISCORD_economy_model_is_technocratic = yes } add_to_variable = { var = ADISCORD_economy_research_expenses value = 1.5 } }
+	if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 1 compare = equals } } multiply_variable = { var = ADISCORD_economy_research_expenses value = 0.60 } }
+	else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 2 compare = equals } } multiply_variable = { var = ADISCORD_economy_research_expenses value = 0.80 } }
+	else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = equals } } multiply_variable = { var = ADISCORD_economy_research_expenses value = 1.00 } }
+	else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 4 compare = equals } } multiply_variable = { var = ADISCORD_economy_research_expenses value = 1.30 } }
+	else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 5 compare = equals } } multiply_variable = { var = ADISCORD_economy_research_expenses value = 1.60 } }
 	clamp_variable = { var = ADISCORD_economy_research_expenses min = 0 max = 5000 }
 }
 
@@ -945,10 +969,6 @@ ADISCORD_economy_calculate_construction_expenses = {
 	clamp_temp_variable = { var = ADISCORD_economy_active_construction_temp min = 0 max = 5000 }
 	multiply_temp_variable = { var = ADISCORD_economy_active_construction_temp value = 0.08 }
 	add_to_variable = { var = ADISCORD_economy_construction_expenses value = ADISCORD_economy_active_construction_temp }
-	if = { limit = { check_variable = { var = ADISCORD_economy_construction_spending_mode value = 1 compare = less_than_or_equals } } multiply_variable = { var = ADISCORD_economy_construction_expenses value = 0.55 } }
-	else_if = { limit = { check_variable = { var = ADISCORD_economy_construction_spending_mode value = 2 compare = less_than_or_equals } } multiply_variable = { var = ADISCORD_economy_construction_expenses value = 0.75 } }
-	else_if = { limit = { check_variable = { var = ADISCORD_economy_construction_spending_mode value = 4 compare = greater_than_or_equals } check_variable = { var = ADISCORD_economy_construction_spending_mode value = 5 compare = less_than } } multiply_variable = { var = ADISCORD_economy_construction_expenses value = 1.45 } }
-	else_if = { limit = { check_variable = { var = ADISCORD_economy_construction_spending_mode value = 5 compare = greater_than_or_equals } } multiply_variable = { var = ADISCORD_economy_construction_expenses value = 2.10 } }
 	if = { limit = { ADISCORD_economy_model_is_state_coordinated = yes } multiply_variable = { var = ADISCORD_economy_construction_expenses value = 1.05 } }
 	if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes } multiply_variable = { var = ADISCORD_economy_construction_expenses value = 1.10 } }
 	clamp_variable = { var = ADISCORD_economy_construction_expenses min = 0 max = 5000 }
@@ -1660,7 +1680,6 @@ ADISCORD_economy_calculate_development_multiplier = {
 	else_if = { limit = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 4 compare = greater_than_or_equals } check_variable = { var = ADISCORD_economy_tax_burden_mode value = 5 compare = less_than } } add_to_variable = { var = ADISCORD_economy_monthly_development_multiplier value = -4 } }
 	else_if = { limit = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 5 compare = greater_than_or_equals } } add_to_variable = { var = ADISCORD_economy_monthly_development_multiplier value = -10 } }
 	if = { limit = { check_variable = { var = ADISCORD_economy_army_spending_mode value = 5 compare = greater_than_or_equals } } add_to_variable = { var = ADISCORD_economy_monthly_development_multiplier value = -5 } }
-	if = { limit = { check_variable = { var = ADISCORD_economy_construction_spending_mode value = 4 compare = greater_than_or_equals } } add_to_variable = { var = ADISCORD_economy_monthly_development_multiplier value = 10 } }
 	ADISCORD_economy_apply_development_modifier_factors_to_economic_growth = yes
 	clamp_variable = { var = ADISCORD_economy_monthly_development_multiplier min = 25 max = 200 }
 	set_variable = { var = ADISCORD_economy_monthly_development_gain value = ADISCORD_economy_base_monthly_development_gain }
@@ -2514,11 +2533,11 @@ ADISCORD_economy_clamp_all_variables = {
 	clamp_variable = { var = ADISCORD_economy_cluster_factory_output_factor min = 0 max = 0.15 }
 	clamp_variable = { var = ADISCORD_economy_tax_burden_mode min = 1 max = 5 }
 	clamp_variable = { var = ADISCORD_economy_army_spending_mode min = 1 max = 5 }
-	clamp_variable = { var = ADISCORD_economy_construction_spending_mode min = 1 max = 5 }
+	clamp_variable = { var = ADISCORD_economy_research_spending_mode min = 1 max = 5 }
 	clamp_variable = { var = ADISCORD_economy_social_spending_mode min = 1 max = 5 }
 	clamp_variable = { var = ADISCORD_economy_tax_change_cooldown min = 0 max = 3 }
 	clamp_variable = { var = ADISCORD_economy_army_budget_change_cooldown min = 0 max = 3 }
-	clamp_variable = { var = ADISCORD_economy_construction_budget_change_cooldown min = 0 max = 3 }
+	clamp_variable = { var = ADISCORD_economy_research_budget_change_cooldown min = 0 max = 3 }
 	clamp_variable = { var = ADISCORD_economy_social_budget_change_cooldown min = 0 max = 3 }
 	clamp_variable = { var = ADISCORD_economy_cycle_phase min = 0 max = 3 }
 	clamp_variable = { var = ADISCORD_economy_last_idea_signature min = -1 max = 500000000 }
@@ -2553,7 +2572,7 @@ ADISCORD_economy_refresh_spending_ideas = {
 	# expensive modifier recalculation. Build a signature from discrete tiers
 	# and touch ideas only when a player course or visible pressure tier changes.
 	set_temp_variable = { var = ADISCORD_economy_idea_signature_temp value = ADISCORD_economy_army_spending_mode }
-	set_temp_variable = { var = ADISCORD_economy_idea_component_temp value = ADISCORD_economy_construction_spending_mode }
+	set_temp_variable = { var = ADISCORD_economy_idea_component_temp value = ADISCORD_economy_research_spending_mode }
 	multiply_temp_variable = { var = ADISCORD_economy_idea_component_temp value = 10 }
 	add_to_temp_variable = { var = ADISCORD_economy_idea_signature_temp value = ADISCORD_economy_idea_component_temp }
 	set_temp_variable = { var = ADISCORD_economy_idea_component_temp value = ADISCORD_economy_social_spending_mode }
@@ -2601,11 +2620,11 @@ ADISCORD_economy_refresh_spending_ideas = {
 	remove_ideas = ADISCORD_economy_army_spending_3
 	remove_ideas = ADISCORD_economy_army_spending_4
 	remove_ideas = ADISCORD_economy_army_spending_5
-	remove_ideas = ADISCORD_economy_construction_spending_1
-	remove_ideas = ADISCORD_economy_construction_spending_2
-	remove_ideas = ADISCORD_economy_construction_spending_3
-	remove_ideas = ADISCORD_economy_construction_spending_4
-	remove_ideas = ADISCORD_economy_construction_spending_5
+	remove_ideas = ADISCORD_economy_research_spending_1
+	remove_ideas = ADISCORD_economy_research_spending_2
+	remove_ideas = ADISCORD_economy_research_spending_3
+	remove_ideas = ADISCORD_economy_research_spending_4
+	remove_ideas = ADISCORD_economy_research_spending_5
 	remove_ideas = ADISCORD_economy_social_spending_1
 	remove_ideas = ADISCORD_economy_social_spending_2
 	remove_ideas = ADISCORD_economy_social_spending_3
@@ -2639,11 +2658,11 @@ ADISCORD_economy_refresh_spending_ideas = {
 	else_if = { limit = { check_variable = { var = ADISCORD_economy_army_spending_mode value = 3 compare = less_than_or_equals } } add_ideas = ADISCORD_economy_army_spending_3 }
 	else_if = { limit = { check_variable = { var = ADISCORD_economy_army_spending_mode value = 4 compare = less_than_or_equals } } add_ideas = ADISCORD_economy_army_spending_4 }
 	else = { add_ideas = ADISCORD_economy_army_spending_5 }
-	if = { limit = { check_variable = { var = ADISCORD_economy_construction_spending_mode value = 1 compare = less_than_or_equals } } add_ideas = ADISCORD_economy_construction_spending_1 }
-	else_if = { limit = { check_variable = { var = ADISCORD_economy_construction_spending_mode value = 2 compare = less_than_or_equals } } add_ideas = ADISCORD_economy_construction_spending_2 }
-	else_if = { limit = { check_variable = { var = ADISCORD_economy_construction_spending_mode value = 3 compare = less_than_or_equals } } add_ideas = ADISCORD_economy_construction_spending_3 }
-	else_if = { limit = { check_variable = { var = ADISCORD_economy_construction_spending_mode value = 4 compare = less_than_or_equals } } add_ideas = ADISCORD_economy_construction_spending_4 }
-	else = { add_ideas = ADISCORD_economy_construction_spending_5 }
+	if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 1 compare = less_than_or_equals } } add_ideas = ADISCORD_economy_research_spending_1 }
+	else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 2 compare = less_than_or_equals } } add_ideas = ADISCORD_economy_research_spending_2 }
+	else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = less_than_or_equals } } add_ideas = ADISCORD_economy_research_spending_3 }
+	else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 4 compare = less_than_or_equals } } add_ideas = ADISCORD_economy_research_spending_4 }
+	else = { add_ideas = ADISCORD_economy_research_spending_5 }
 	if = { limit = { check_variable = { var = ADISCORD_economy_social_spending_mode value = 1 compare = less_than_or_equals } } add_ideas = ADISCORD_economy_social_spending_1 }
 	else_if = { limit = { check_variable = { var = ADISCORD_economy_social_spending_mode value = 2 compare = less_than_or_equals } } add_ideas = ADISCORD_economy_social_spending_2 }
 	else_if = { limit = { check_variable = { var = ADISCORD_economy_social_spending_mode value = 3 compare = less_than_or_equals } } add_ideas = ADISCORD_economy_social_spending_3 }
@@ -2695,13 +2714,13 @@ ADISCORD_economy_tick_budget_cooldowns = {
 		limit = { check_variable = { var = ADISCORD_economy_tick_scale value = 6 compare = greater_than_or_equals } }
 		set_variable = { var = ADISCORD_economy_tax_change_cooldown value = 0 }
 		set_variable = { var = ADISCORD_economy_army_budget_change_cooldown value = 0 }
-		set_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 0 }
+		set_variable = { var = ADISCORD_economy_research_budget_change_cooldown value = 0 }
 		set_variable = { var = ADISCORD_economy_social_budget_change_cooldown value = 0 }
 	}
 	else = {
 		if = { limit = { check_variable = { var = ADISCORD_economy_tax_change_cooldown value = 0 compare = greater_than } } add_to_variable = { var = ADISCORD_economy_tax_change_cooldown value = -1 } }
 		if = { limit = { check_variable = { var = ADISCORD_economy_army_budget_change_cooldown value = 0 compare = greater_than } } add_to_variable = { var = ADISCORD_economy_army_budget_change_cooldown value = -1 } }
-		if = { limit = { check_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 0 compare = greater_than } } add_to_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = -1 } }
+		if = { limit = { check_variable = { var = ADISCORD_economy_research_budget_change_cooldown value = 0 compare = greater_than } } add_to_variable = { var = ADISCORD_economy_research_budget_change_cooldown value = -1 } }
 		if = { limit = { check_variable = { var = ADISCORD_economy_social_budget_change_cooldown value = 0 compare = greater_than } } add_to_variable = { var = ADISCORD_economy_social_budget_change_cooldown value = -1 } }
 	}
 }
@@ -2765,25 +2784,25 @@ ADISCORD_economy_set_army_spending_5 = {
 	if = { limit = { check_variable = { var = ADISCORD_economy_army_budget_change_cooldown value = 1 compare = less_than } } set_variable = { var = ADISCORD_economy_army_spending_mode value = 5 } set_variable = { var = ADISCORD_economy_army_budget_change_cooldown value = 3 } ADISCORD_economy_refresh_after_budget_control_change = yes }
 }
 
-ADISCORD_economy_set_construction_spending_1 = {
+ADISCORD_economy_set_research_spending_1 = {
 	ADISCORD_economy_initialize_country = yes
-	if = { limit = { check_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 1 compare = less_than } } set_variable = { var = ADISCORD_economy_construction_spending_mode value = 1 } set_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 3 } ADISCORD_economy_refresh_after_budget_control_change = yes }
+	if = { limit = { check_variable = { var = ADISCORD_economy_research_budget_change_cooldown value = 1 compare = less_than } } set_variable = { var = ADISCORD_economy_research_spending_mode value = 1 } set_variable = { var = ADISCORD_economy_research_budget_change_cooldown value = 3 } ADISCORD_economy_refresh_after_budget_control_change = yes }
 }
-ADISCORD_economy_set_construction_spending_2 = {
+ADISCORD_economy_set_research_spending_2 = {
 	ADISCORD_economy_initialize_country = yes
-	if = { limit = { check_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 1 compare = less_than } } set_variable = { var = ADISCORD_economy_construction_spending_mode value = 2 } set_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 3 } ADISCORD_economy_refresh_after_budget_control_change = yes }
+	if = { limit = { check_variable = { var = ADISCORD_economy_research_budget_change_cooldown value = 1 compare = less_than } } set_variable = { var = ADISCORD_economy_research_spending_mode value = 2 } set_variable = { var = ADISCORD_economy_research_budget_change_cooldown value = 3 } ADISCORD_economy_refresh_after_budget_control_change = yes }
 }
-ADISCORD_economy_set_construction_spending_3 = {
+ADISCORD_economy_set_research_spending_3 = {
 	ADISCORD_economy_initialize_country = yes
-	if = { limit = { check_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 1 compare = less_than } } set_variable = { var = ADISCORD_economy_construction_spending_mode value = 3 } set_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 3 } ADISCORD_economy_refresh_after_budget_control_change = yes }
+	if = { limit = { check_variable = { var = ADISCORD_economy_research_budget_change_cooldown value = 1 compare = less_than } } set_variable = { var = ADISCORD_economy_research_spending_mode value = 3 } set_variable = { var = ADISCORD_economy_research_budget_change_cooldown value = 3 } ADISCORD_economy_refresh_after_budget_control_change = yes }
 }
-ADISCORD_economy_set_construction_spending_4 = {
+ADISCORD_economy_set_research_spending_4 = {
 	ADISCORD_economy_initialize_country = yes
-	if = { limit = { check_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 1 compare = less_than } } set_variable = { var = ADISCORD_economy_construction_spending_mode value = 4 } set_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 3 } ADISCORD_economy_refresh_after_budget_control_change = yes }
+	if = { limit = { check_variable = { var = ADISCORD_economy_research_budget_change_cooldown value = 1 compare = less_than } } set_variable = { var = ADISCORD_economy_research_spending_mode value = 4 } set_variable = { var = ADISCORD_economy_research_budget_change_cooldown value = 3 } ADISCORD_economy_refresh_after_budget_control_change = yes }
 }
-ADISCORD_economy_set_construction_spending_5 = {
+ADISCORD_economy_set_research_spending_5 = {
 	ADISCORD_economy_initialize_country = yes
-	if = { limit = { check_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 1 compare = less_than } } set_variable = { var = ADISCORD_economy_construction_spending_mode value = 5 } set_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 3 } ADISCORD_economy_refresh_after_budget_control_change = yes }
+	if = { limit = { check_variable = { var = ADISCORD_economy_research_budget_change_cooldown value = 1 compare = less_than } } set_variable = { var = ADISCORD_economy_research_spending_mode value = 5 } set_variable = { var = ADISCORD_economy_research_budget_change_cooldown value = 3 } ADISCORD_economy_refresh_after_budget_control_change = yes }
 }
 
 ADISCORD_economy_increase_army_spending = {
@@ -2794,13 +2813,13 @@ ADISCORD_economy_decrease_army_spending = {
 	ADISCORD_economy_initialize_country = yes
 	if = { limit = { ADISCORD_economy_can_decrease_army_spending = yes } add_to_variable = { var = ADISCORD_economy_army_spending_mode value = -1 } set_variable = { var = ADISCORD_economy_army_budget_change_cooldown value = 3 } ADISCORD_economy_refresh_after_budget_control_change = yes }
 }
-ADISCORD_economy_increase_construction_spending = {
+ADISCORD_economy_increase_research_spending = {
 	ADISCORD_economy_initialize_country = yes
-	if = { limit = { ADISCORD_economy_can_increase_construction_spending = yes } add_to_variable = { var = ADISCORD_economy_construction_spending_mode value = 1 } set_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 3 } ADISCORD_economy_refresh_after_budget_control_change = yes }
+	if = { limit = { ADISCORD_economy_can_increase_research_spending = yes } add_to_variable = { var = ADISCORD_economy_research_spending_mode value = 1 } set_variable = { var = ADISCORD_economy_research_budget_change_cooldown value = 3 } ADISCORD_economy_refresh_after_budget_control_change = yes }
 }
-ADISCORD_economy_decrease_construction_spending = {
+ADISCORD_economy_decrease_research_spending = {
 	ADISCORD_economy_initialize_country = yes
-	if = { limit = { ADISCORD_economy_can_decrease_construction_spending = yes } add_to_variable = { var = ADISCORD_economy_construction_spending_mode value = -1 } set_variable = { var = ADISCORD_economy_construction_budget_change_cooldown value = 3 } ADISCORD_economy_refresh_after_budget_control_change = yes }
+	if = { limit = { ADISCORD_economy_can_decrease_research_spending = yes } add_to_variable = { var = ADISCORD_economy_research_spending_mode value = -1 } set_variable = { var = ADISCORD_economy_research_budget_change_cooldown value = 3 } ADISCORD_economy_refresh_after_budget_control_change = yes }
 }
 
 ADISCORD_economy_increase_social_spending = {
@@ -3009,7 +3028,7 @@ ADISCORD_economy_ai_monthly_policy = {
 		else_if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 15 compare = greater_than_or_equals } ADISCORD_economy_can_stabilize_macro = yes } ADISCORD_economy_stabilization_package = yes }
 		else_if = { limit = { has_war = yes ADISCORD_economy_can_use_war_taxes = yes } ADISCORD_economy_war_taxes_action = yes }
 		else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_increase_tax_burden = yes } ADISCORD_economy_increase_tax_burden = yes }
-		else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_decrease_construction_spending = yes } ADISCORD_economy_decrease_construction_spending = yes }
+		else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_decrease_research_spending = yes } ADISCORD_economy_decrease_research_spending = yes }
 		else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } check_variable = { var = ADISCORD_economy_social_spending_mode value = 2 compare = greater_than } ADISCORD_economy_can_decrease_social_spending = yes } ADISCORD_economy_decrease_social_spending = yes }
 		else_if = { limit = { has_war = no check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_decrease_army_spending = yes } ADISCORD_economy_decrease_army_spending = yes }
 		else_if = { limit = { ADISCORD_economy_can_issue_internal_bonds = yes ADISCORD_economy_has_low_treasury = yes } ADISCORD_economy_issue_internal_bonds = yes }
@@ -3020,7 +3039,7 @@ ADISCORD_economy_ai_monthly_policy = {
 		if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 15 compare = greater_than_or_equals } ADISCORD_economy_can_stabilize_macro = yes } ADISCORD_economy_stabilization_package = yes }
 		else_if = { limit = { has_war = yes ADISCORD_economy_can_use_war_taxes = yes } ADISCORD_economy_war_taxes_action = yes }
 		else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_increase_tax_burden = yes } ADISCORD_economy_increase_tax_burden = yes }
-		else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_decrease_construction_spending = yes } ADISCORD_economy_decrease_construction_spending = yes }
+		else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_decrease_research_spending = yes } ADISCORD_economy_decrease_research_spending = yes }
 		else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } check_variable = { var = ADISCORD_economy_social_spending_mode value = 3 compare = greater_than } ADISCORD_economy_can_decrease_social_spending = yes } ADISCORD_economy_decrease_social_spending = yes }
 		else_if = { limit = { has_war = no check_variable = { var = ADISCORD_economy_fiscal_stress value = 55 compare = greater_than_or_equals } ADISCORD_economy_can_decrease_army_spending = yes } ADISCORD_economy_decrease_army_spending = yes }
 		else_if = { limit = { ADISCORD_economy_can_stabilize_macro = yes } ADISCORD_economy_stabilization_package = yes }
@@ -3030,14 +3049,14 @@ ADISCORD_economy_ai_monthly_policy = {
 		if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 15 compare = greater_than_or_equals } ADISCORD_economy_can_stabilize_macro = yes } ADISCORD_economy_stabilization_package = yes }
 		else_if = { limit = { ADISCORD_economy_can_early_repay_debt = yes } ADISCORD_economy_early_repay_debt = yes }
 		else_if = { limit = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 3 compare = greater_than } ADISCORD_economy_can_decrease_tax_burden = yes } ADISCORD_economy_decrease_tax_burden = yes }
-		else_if = { limit = { check_variable = { var = ADISCORD_economy_construction_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_construction_spending = yes } ADISCORD_economy_increase_construction_spending = yes }
+		else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_research_spending = yes } ADISCORD_economy_increase_research_spending = yes }
 		else_if = { limit = { check_variable = { var = ADISCORD_economy_social_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_social_spending = yes } ADISCORD_economy_increase_social_spending = yes }
 		else_if = { limit = { check_variable = { var = ADISCORD_economy_army_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_army_spending = yes } ADISCORD_economy_increase_army_spending = yes }
 	}
 	else = {
 		if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 15 compare = greater_than_or_equals } ADISCORD_economy_can_stabilize_macro = yes } ADISCORD_economy_stabilization_package = yes }
 		else_if = { limit = { ADISCORD_economy_can_early_repay_debt = yes check_variable = { var = ADISCORD_economy_surplus_streak value = 3 compare = greater_than_or_equals } } ADISCORD_economy_early_repay_debt = yes }
-		else_if = { limit = { check_variable = { var = ADISCORD_economy_construction_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_construction_spending = yes } ADISCORD_economy_increase_construction_spending = yes }
+		else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_research_spending = yes } ADISCORD_economy_increase_research_spending = yes }
 		else_if = { limit = { check_variable = { var = ADISCORD_economy_social_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_social_spending = yes } ADISCORD_economy_increase_social_spending = yes }
 		else_if = { limit = { check_variable = { var = ADISCORD_economy_army_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_army_spending = yes } ADISCORD_economy_increase_army_spending = yes }
 		else_if = { limit = { ADISCORD_economy_can_expand_public_capital = yes check_variable = { var = ADISCORD_economy_surplus_streak value = 4 compare = greater_than_or_equals } } ADISCORD_economy_invest_reserves = yes }

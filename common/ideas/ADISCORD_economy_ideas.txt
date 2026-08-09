@@ -58,53 +58,50 @@ ideas = {
 			}
 		}
 
-		ADISCORD_economy_construction_spending_1 = {
+		ADISCORD_economy_research_spending_1 = {
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_production_bonus
+			picture = generic_research_bonus
 			modifier = {
-				production_speed_buildings_factor = -0.12
-				production_speed_industrial_complex_factor = -0.10
-				production_speed_arms_factory_factor = -0.08
+				research_speed_factor = -0.08
 			}
 		}
-		ADISCORD_economy_construction_spending_2 = {
+		ADISCORD_economy_research_spending_2 = {
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_production_bonus
+			picture = generic_research_bonus
 			modifier = {
-				production_speed_buildings_factor = -0.05
-				production_speed_industrial_complex_factor = -0.04
+				research_speed_factor = -0.03
 			}
 		}
-		ADISCORD_economy_construction_spending_3 = {
+		ADISCORD_economy_research_spending_3 = {
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_production_bonus
-		}
-		ADISCORD_economy_construction_spending_4 = {
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			picture = generic_production_bonus
+			picture = generic_research_bonus
 			modifier = {
-				production_speed_buildings_factor = 0.05
-				production_speed_industrial_complex_factor = 0.03
+				research_speed_factor = 0.00
 			}
 		}
-		ADISCORD_economy_construction_spending_5 = {
+		ADISCORD_economy_research_spending_4 = {
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			picture = generic_production_bonus
+			picture = generic_research_bonus
 			modifier = {
-				production_speed_buildings_factor = 0.08
-				production_speed_industrial_complex_factor = 0.05
-				production_speed_arms_factory_factor = 0.03
-				stability_factor = -0.03
+				research_speed_factor = 0.03
+			}
+		}
+		ADISCORD_economy_research_spending_5 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_research_bonus
+			modifier = {
+				research_speed_factor = 0.05
+				production_speed_buildings_factor = 0.02
 			}
 		}
 
