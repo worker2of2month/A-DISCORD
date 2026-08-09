@@ -2083,7 +2083,15 @@ def task10_material_numeric_surface_issues(russian_text, english_text):
     for phrase in ("в этом месяце ещё не брали заём", "хотя бы один сигнал риска"):
         if phrase not in restructure_ru:
             issues.append(f"Russian restructuring omits exact condition: {phrase}")
-    for phrase in ("no loan has been taken this month", "at least one risk signal"):
+    for phrase in (
+        "no loan has been taken this month",
+        "at least one risk signal:",
+        "interest share at least §y10%§!",
+        "debt pressure at least §y50§!",
+        "risk state at least §y2§!",
+        "creditworthiness below §y35§!",
+        ", or creditworthiness below §y35§!",
+    ):
         if phrase not in restructure_en:
             issues.append(f"English restructuring omits exact condition: {phrase}")
     return issues
@@ -6341,6 +6349,24 @@ ADISCORD_bad_assistance_owner = {
                 "monthly loan guard",
                 restructure_value.replace(
                     "no loan has been taken this month", "", 1
+                ),
+            ),
+            (
+                "positive threshold polarity",
+                restructure_value.replace(
+                    "interest share at least", "interest share below", 1
+                ),
+            ),
+            (
+                "credit threshold polarity",
+                restructure_value.replace(
+                    "creditworthiness below", "creditworthiness at least", 1
+                ),
+            ),
+            (
+                "positive OR connective",
+                restructure_value.replace(
+                    ", or creditworthiness", ", and creditworthiness", 1
                 ),
             ),
         ):
