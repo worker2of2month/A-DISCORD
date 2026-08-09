@@ -180,6 +180,16 @@ ADISCORD_economy_migrate_schema = {
 		set_variable = { var = ADISCORD_economy_schema_version value = 14 }
 		set_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 }
 	}
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_schema_version value = 15 compare = less_than } }
+		# Task 7 adds weekly source caches. Existing schema-14 saves must become
+		# ineligible before one bounded rebuild publishes the readiness marker.
+		set_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 0 }
+		set_variable = { var = ADISCORD_economy_weekly_ready value = 0 }
+		set_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 }
+		ADISCORD_economy_full_refresh_if_needed = yes
+		set_variable = { var = ADISCORD_economy_schema_version value = 15 }
+	}
 	# A schema branch or a bounded dirty hook requests one heavy rebuild. Weekly
 	# accounting never calls migration, so consuming it here cannot leak source
 	# queries into the weekly graph.
@@ -293,7 +303,7 @@ ADISCORD_economy_initialize_variables = {
 
 ADISCORD_economy_set_default_values = {
 	set_variable = { var = ADISCORD_economy_initialized value = 1 }
-	set_variable = { var = ADISCORD_economy_schema_version value = 14 }
+	set_variable = { var = ADISCORD_economy_schema_version value = 15 }
 	set_variable = { var = ADISCORD_economy_treasury value = 100 }
 	set_variable = { var = ADISCORD_economy_treasury_cap value = 500 }
 	set_variable = { var = ADISCORD_economy_monthly_income value = 0 }
@@ -668,7 +678,7 @@ ADISCORD_economy_prepare_weekly_country = {
 		limit = {
 			has_variable = ADISCORD_economy_initialized
 			has_variable = ADISCORD_economy_weekly_source_cache_ready
-			check_variable = { var = ADISCORD_economy_schema_version value = 14 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_schema_version value = 15 compare = greater_than_or_equals }
 			check_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 1 compare = greater_than_or_equals }
 		}
 		set_variable = { var = ADISCORD_economy_weekly_ready value = 1 }
@@ -681,7 +691,6 @@ ADISCORD_economy_weekly_update = {
 		limit = { check_variable = { var = ADISCORD_economy_weekly_ready value = 1 compare = greater_than_or_equals } }
 		ADISCORD_economy_light_update = yes
 		ADISCORD_economy_apply_weekly_balance = yes
-		ADISCORD_economy_update_gui = yes
 	}
 }
 
@@ -2814,6 +2823,8 @@ ADISCORD_economy_close_window = {
 }
 
 ADISCORD_economy_mark_dirty = {
+	set_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 0 }
+	set_variable = { var = ADISCORD_economy_weekly_ready value = 0 }
 	set_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 }
 	ADISCORD_economy_update_gui = yes
 }

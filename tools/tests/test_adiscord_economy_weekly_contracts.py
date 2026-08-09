@@ -179,6 +179,7 @@ def reachable_script_blocks(texts, roots):
 
 
 WEEKLY_ACCOUNTING_ROOTS = (
+    "ADISCORD_economy_weekly_update",
     "ADISCORD_economy_prepare_weekly_country",
     "ADISCORD_economy_light_update",
     "ADISCORD_economy_apply_weekly_balance",
@@ -265,6 +266,256 @@ def weekly_reachability_issues(texts, roots=WEEKLY_ACCOUNTING_ROOTS):
         )
         if offenders:
             issues.append(f"{name}: {', '.join(offenders)}")
+    return issues
+
+
+def task7_schema_fifteen_cache_migration_issues(text):
+    """Bind the one-shot Task 7 cache upgrade after the Task 6 migration."""
+
+    try:
+        migration = _parsed_definition(text, "ADISCORD_economy_migrate_schema")
+        defaults = _parsed_definition(text, "ADISCORD_economy_set_default_values")
+    except (AssertionError, ValueError) as error:
+        return [f"schema 15 cache migration is missing: {error}"]
+
+    issues = []
+    schema_fourteen = [
+        entry
+        for entry in migration.value
+        if entry.key == "if"
+        and _exact_direct_check_set(
+            entry,
+            [("ADISCORD_economy_schema_version", "14", "less_than")],
+        )
+    ]
+    schema_fifteen = [
+        entry
+        for entry in migration.value
+        if entry.key == "if"
+        and _exact_direct_check_set(
+            entry,
+            [("ADISCORD_economy_schema_version", "15", "less_than")],
+        )
+    ]
+    if len(schema_fourteen) != 1 or len(schema_fifteen) != 1:
+        return [
+            "schema 15 cache upgrade requires one exact owner after one schema 14 owner"
+        ]
+    owner = schema_fifteen[0]
+    if migration.value.index(schema_fourteen[0]) >= migration.value.index(owner):
+        issues.append("schema 15 cache upgrade runs before the Task 6 schema 14 migration")
+
+    def signature(entry):
+        if entry.key == "set_variable" and isinstance(entry.value, list):
+            return (
+                entry.key,
+                _entry_scalar(entry.value, "var"),
+                _entry_scalar(entry.value, "value"),
+            )
+        return (entry.key, entry.value)
+
+    actual_sequence = [
+        signature(entry) for entry in owner.value if entry.key != "limit"
+    ]
+    expected_sequence = [
+        (
+            "set_variable",
+            "ADISCORD_economy_weekly_source_cache_ready",
+            "0",
+        ),
+        ("set_variable", "ADISCORD_economy_weekly_ready", "0"),
+        ("set_variable", "ADISCORD_economy_needs_full_refresh", "1"),
+        ("ADISCORD_economy_full_refresh_if_needed", "yes"),
+        ("set_variable", "ADISCORD_economy_schema_version", "15"),
+    ]
+    if actual_sequence != expected_sequence:
+        issues.append(
+            "schema 15 cache upgrade is not invalidate, request, refresh, then complete"
+        )
+
+    schema_fifteen_checks = [
+        entry
+        for _, entry in _walk_parsed(migration.value)
+        if entry.key == "check_variable"
+        and isinstance(entry.value, list)
+        and _entry_scalar(entry.value, "var") == "ADISCORD_economy_schema_version"
+        and _entry_scalar(entry.value, "value") == "15"
+    ]
+    schema_fifteen_writes = [
+        entry
+        for _, entry in _walk_parsed(migration.value)
+        if entry.key == "set_variable"
+        and isinstance(entry.value, list)
+        and _entry_scalar(entry.value, "var") == "ADISCORD_economy_schema_version"
+        and _entry_scalar(entry.value, "value") == "15"
+    ]
+    if len(schema_fifteen_checks) != 1 or len(schema_fifteen_writes) != 1:
+        issues.append("schema 15 guard or completion watermark is duplicated or missing")
+
+    direct_fallbacks = [
+        entry
+        for entry in migration.value
+        if entry.key == "ADISCORD_economy_full_refresh_if_needed"
+        and entry.value == "yes"
+    ]
+    if (
+        len(direct_fallbacks) != 1
+        or migration.value.index(direct_fallbacks[0]) <= migration.value.index(owner)
+    ):
+        issues.append("schema migration lacks one final bounded dirty-refresh fallback")
+
+    default_schema = [
+        entry
+        for entry in defaults.value
+        if entry.key == "set_variable"
+        and isinstance(entry.value, list)
+        and _entry_scalar(entry.value, "var") == "ADISCORD_economy_schema_version"
+    ]
+    if not (
+        len(default_schema) == 1
+        and _entry_scalar(default_schema[0].value, "value") == "15"
+    ):
+        issues.append("new countries do not start at schema 15")
+    return issues
+
+
+def task7_cache_invalidation_issues(effects_text, modifier_effects_text):
+    """Require stale weekly sources to become ineligible until a full rebuild."""
+
+    try:
+        dirty = _parsed_definition(effects_text, "ADISCORD_economy_mark_dirty")
+        full = _parsed_definition(effects_text, "ADISCORD_economy_full_refresh")
+        factory = _parsed_definition(
+            effects_text, "ADISCORD_economy_cache_weekly_factory_sources"
+        )
+        recalculate = _parsed_definition(
+            modifier_effects_text, "ADISCORD_economy_recalculate_policy_modifiers"
+        )
+        policy = _parsed_definition(
+            modifier_effects_text, "ADISCORD_economy_cache_weekly_policy_sources"
+        )
+    except (AssertionError, ValueError) as error:
+        return [f"weekly cache invalidation owner is missing: {error}"]
+
+    issues = []
+
+    def signature(entry):
+        if entry.key == "set_variable" and isinstance(entry.value, list):
+            return (
+                entry.key,
+                _entry_scalar(entry.value, "var"),
+                _entry_scalar(entry.value, "value"),
+            )
+        return (entry.key, entry.value)
+
+    dirty_sequence = [signature(entry) for entry in dirty.value]
+    if dirty_sequence != [
+        (
+            "set_variable",
+            "ADISCORD_economy_weekly_source_cache_ready",
+            "0",
+        ),
+        ("set_variable", "ADISCORD_economy_weekly_ready", "0"),
+        ("set_variable", "ADISCORD_economy_needs_full_refresh", "1"),
+        ("ADISCORD_economy_update_gui", "yes"),
+    ]:
+        issues.append("dirty invalidation does not disable weekly caches before requesting refresh")
+
+    full_sequence = [signature(entry) for entry in full.value]
+    if full_sequence != [
+        ("ADISCORD_economy_recount_economic_buildings", "yes"),
+        ("ADISCORD_economy_cache_weekly_factory_sources", "yes"),
+        ("ADISCORD_economy_recalculate_policy_modifiers", "yes"),
+        ("ADISCORD_economy_recalculate_treasury_cap", "yes"),
+        (
+            "set_variable",
+            "ADISCORD_economy_weekly_source_cache_ready",
+            "1",
+        ),
+        ("ADISCORD_economy_clear_dirty", "yes"),
+    ]:
+        issues.append("full refresh exposes readiness before every source and factor rebuild")
+
+    factory_sources = {
+        "ADISCORD_economy_cached_civilian_factories": "num_of_civilian_factories",
+        "ADISCORD_economy_cached_available_civilian_factories": "num_of_available_civilian_factories",
+        "ADISCORD_economy_cached_military_factories": "num_of_military_factories",
+        "ADISCORD_economy_cached_available_military_factories": "num_of_available_military_factories",
+        "ADISCORD_economy_cached_naval_factories": "num_of_naval_factories",
+    }
+    actual_factory_sources = {
+        _entry_scalar(entry.value, "var"): _entry_scalar(entry.value, "value")
+        for entry in factory.value
+        if entry.key == "set_variable" and isinstance(entry.value, list)
+    }
+    if actual_factory_sources != factory_sources or len(factory.value) != 5:
+        issues.append("factory source refresh is not the exact five-source rebuild")
+
+    policy_source_calls = [
+        entry
+        for _, entry in _walk_parsed(policy.value)
+        if entry.key.startswith("ADISCORD_economy_has_") and entry.value == "yes"
+    ]
+    policy_zeroes = [
+        entry
+        for entry in policy.value
+        if entry.key == "set_variable"
+        and isinstance(entry.value, list)
+        and str(_entry_scalar(entry.value, "var") or "").startswith(
+            "ADISCORD_economy_cached_"
+        )
+        and _entry_scalar(entry.value, "value") == "0"
+    ]
+    if len(policy_source_calls) != 19 or len(policy_zeroes) != 19:
+        issues.append("policy/law source refresh is not the exact nineteen-source rebuild")
+
+    recalculate_calls = [
+        entry
+        for entry in recalculate.value
+        if entry.key
+        in {
+            "ADISCORD_economy_cache_weekly_policy_sources",
+            "ADISCORD_economy_calculate_final_modifier_factors",
+        }
+        and entry.value == "yes"
+    ]
+    if not (
+        [entry.key for entry in recalculate_calls]
+        == [
+            "ADISCORD_economy_cache_weekly_policy_sources",
+            "ADISCORD_economy_calculate_final_modifier_factors",
+        ]
+        and recalculate.value[-1] is recalculate_calls[-1]
+    ):
+        issues.append("policy source cache and final factors do not rebuild before readiness")
+
+    for name in (
+        "ADISCORD_economy_finish_targeted_policy_refresh",
+        "ADISCORD_economy_refresh_tax_policy",
+        "ADISCORD_economy_refresh_army_policy",
+        "ADISCORD_economy_refresh_research_policy",
+        "ADISCORD_economy_refresh_social_policy",
+    ):
+        try:
+            targeted = _parsed_definition(effects_text, name)
+        except AssertionError as error:
+            issues.append(str(error))
+            continue
+        for _, entry in _walk_parsed(targeted.value):
+            if entry.key == "set_variable" and isinstance(entry.value, list):
+                if _entry_scalar(entry.value, "var") in {
+                    "ADISCORD_economy_weekly_source_cache_ready",
+                    "ADISCORD_economy_weekly_ready",
+                }:
+                    issues.append(f"{name} overwrites source readiness")
+            if entry.key in {
+                "ADISCORD_economy_mark_dirty",
+                "ADISCORD_economy_full_refresh",
+                "ADISCORD_economy_full_refresh_if_needed",
+                "ADISCORD_economy_cache_weekly_factory_sources",
+                "ADISCORD_economy_recalculate_policy_modifiers",
+            }:
+                issues.append(f"{name} escapes its targeted dependency refresh")
     return issues
 
 
@@ -3846,6 +4097,16 @@ class WeeklyEconomyContracts(unittest.TestCase):
     def test_weekly_path_has_no_idea_query_building_recount_or_country_iteration(self):
         sources = (EFFECTS, MODIFIER_EFFECTS, TRIGGERS)
         self.assertFalse(weekly_reachability_issues(sources))
+        on_weekly = block(block(ON_ACTIONS, "on_actions"), "on_weekly")
+        self.assertEqual(on_weekly.count("ADISCORD_economy_weekly_update = yes"), 1)
+        self.assertEqual(
+            on_weekly.count("ADISCORD_economy_should_weekly_update = yes"), 1
+        )
+        self.assertFalse(
+            weekly_reachability_issues(
+                sources, ("ADISCORD_economy_weekly_update",)
+            )
+        )
 
         settlement_anchor = "\tADISCORD_economy_clamp_treasury = yes"
         self.assertIn(settlement_anchor, EFFECTS)
@@ -3883,7 +4144,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
             self.assertRegex(
                 body,
                 r"check_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_schema_version"
-                r"\s+value\s*=\s*14\s+compare\s*=\s*greater_than_or_equals\s*\}",
+                r"\s+value\s*=\s*15\s+compare\s*=\s*greater_than_or_equals\s*\}",
             )
         self.assertEqual(
             prepare.count(
@@ -3909,7 +4170,53 @@ class WeeklyEconomyContracts(unittest.TestCase):
             r"ADISCORD_economy_apply_weekly_balance\s*=\s*yes",
         )
 
+    def test_schema_fifteen_bootstraps_task_seven_caches_after_task_six(self):
+        self.assertFalse(task6_schema_fourteen_migration_issues(EFFECTS))
+        self.assertFalse(task7_schema_fifteen_cache_migration_issues(EFFECTS))
+
+        migration = unique_block(EFFECTS, "ADISCORD_economy_migrate_schema")
+        invalidate = (
+            "\t\tset_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 0 }\n"
+            "\t\tset_variable = { var = ADISCORD_economy_weekly_ready value = 0 }\n"
+            "\t\tset_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 }"
+        )
+        refresh = "\t\tADISCORD_economy_full_refresh_if_needed = yes"
+        completion = (
+            "\t\tset_variable = { var = ADISCORD_economy_schema_version value = 15 }"
+        )
+        for anchor in (invalidate, refresh, completion):
+            self.assertIn(anchor, migration)
+
+        migration_mutations = {
+            "schema 14 cache readiness is not invalidated": migration.replace(
+                invalidate.splitlines()[0] + "\n", "", 1
+            ),
+            "schema 14 cache rebuild is skipped": migration.replace(
+                refresh + "\n", "", 1
+            ),
+            "schema completion watermark is missing": migration.replace(
+                completion + "\n", "", 1
+            ),
+            "schema completes before the cache rebuild": migration.replace(
+                refresh + "\n" + completion,
+                completion + "\n" + refresh,
+                1,
+            ),
+        }
+        for name, mutated_migration in migration_mutations.items():
+            with self.subTest(schema15_mutation=name):
+                self.assertNotEqual(mutated_migration, migration)
+                mutated_effects = EFFECTS.replace(migration, mutated_migration, 1)
+                self.assertTrue(parse_clausewitz(mutated_effects))
+                self.assertTrue(
+                    task7_schema_fifteen_cache_migration_issues(mutated_effects),
+                    name,
+                )
+
     def test_weekly_query_caches_have_bounded_refresh_and_invalidation_owners(self):
+        self.assertFalse(
+            task7_cache_invalidation_issues(EFFECTS, MODIFIER_EFFECTS)
+        )
         factory_cache = unique_block(
             EFFECTS, "ADISCORD_economy_cache_weekly_factory_sources"
         )
@@ -4003,6 +4310,96 @@ class WeeklyEconomyContracts(unittest.TestCase):
             "set_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 0 }",
             defaults,
         )
+
+        dirty_source = unique_block(EFFECTS, "ADISCORD_economy_mark_dirty")
+        full_source = unique_block(EFFECTS, "ADISCORD_economy_full_refresh")
+        targeted_anchor = "\tADISCORD_economy_finish_targeted_policy_refresh = yes"
+        self.assertIn(targeted_anchor, EFFECTS)
+        mutations = {
+            "dirty cache remains eligible": (
+                EFFECTS.replace(
+                    dirty_source,
+                    dirty_source.replace(
+                        "ADISCORD_economy_weekly_source_cache_ready value = 0",
+                        "ADISCORD_economy_weekly_source_cache_ready value = 1",
+                        1,
+                    ),
+                    1,
+                ),
+                MODIFIER_EFFECTS,
+            ),
+            "dirty request precedes invalidation": (
+                EFFECTS.replace(
+                    dirty_source,
+                    dirty_source.replace(
+                        "\tset_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 0 }\n"
+                        "\tset_variable = { var = ADISCORD_economy_weekly_ready value = 0 }\n"
+                        "\tset_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 }",
+                        "\tset_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 }\n"
+                        "\tset_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 0 }\n"
+                        "\tset_variable = { var = ADISCORD_economy_weekly_ready value = 0 }",
+                        1,
+                    ),
+                    1,
+                ),
+                MODIFIER_EFFECTS,
+            ),
+            "full refresh omits readiness watermark": (
+                EFFECTS.replace(
+                    full_source,
+                    full_source.replace(
+                        "\tset_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 1 }\n",
+                        "",
+                        1,
+                    ),
+                    1,
+                ),
+                MODIFIER_EFFECTS,
+            ),
+            "full refresh exposes readiness before factor sources": (
+                EFFECTS.replace(
+                    full_source,
+                    full_source.replace(
+                        "\tADISCORD_economy_recalculate_policy_modifiers = yes\n"
+                        "\tADISCORD_economy_recalculate_treasury_cap = yes\n"
+                        "\tset_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 1 }",
+                        "\tset_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 1 }\n"
+                        "\tADISCORD_economy_recalculate_policy_modifiers = yes\n"
+                        "\tADISCORD_economy_recalculate_treasury_cap = yes",
+                        1,
+                    ),
+                    1,
+                ),
+                MODIFIER_EFFECTS,
+            ),
+            "final factor rebuild is skipped": (
+                EFFECTS,
+                MODIFIER_EFFECTS.replace(
+                    "\tADISCORD_economy_calculate_final_modifier_factors = yes\n",
+                    "",
+                    1,
+                ),
+            ),
+            "targeted policy refresh falsely restores global readiness": (
+                EFFECTS.replace(
+                    targeted_anchor,
+                    "\tset_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 1 }\n"
+                    + targeted_anchor,
+                    1,
+                ),
+                MODIFIER_EFFECTS,
+            ),
+        }
+        for name, (mutated_effects, mutated_modifiers) in mutations.items():
+            with self.subTest(cache_mutation=name):
+                self.assertTrue(parse_clausewitz(mutated_effects))
+                self.assertTrue(parse_clausewitz(mutated_modifiers))
+                self.assertTrue(
+                    task7_cache_invalidation_issues(
+                        mutated_effects, mutated_modifiers
+                    ),
+                    name,
+                )
 
     def test_weekly_forecast_reprices_live_debt_and_inflation_from_cached_sources(self):
         reachable = reachable_script_entries(
@@ -4311,6 +4708,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
         for forbidden in (
             "ADISCORD_economy_full_refresh",
             "ADISCORD_economy_recount_economic_buildings",
+            "ADISCORD_economy_update_gui",
             "every_country",
             "every_owned_state",
             "all_owned_state",
@@ -4896,7 +5294,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
             r"(?s:.*?)set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_first_loan_notified\s+value\s*=\s*1\s*\}",
         )
         defaults = unique_block(EFFECTS, "ADISCORD_economy_set_default_values")
-        self.assertIn("ADISCORD_economy_schema_version value = 14", defaults)
+        self.assertIn("ADISCORD_economy_schema_version value = 15", defaults)
         self.assertNotIn("ADISCORD_economy_first_loan_notified", defaults)
 
         migration_mutations = {
