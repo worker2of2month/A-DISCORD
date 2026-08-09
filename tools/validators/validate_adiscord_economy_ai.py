@@ -42,6 +42,16 @@ def numeric_assignments(text: str, variable: str) -> list[float]:
     return [float(value) for value in re.findall(pattern, text)]
 
 
+def scalar_assignments(text: str, key: str) -> list[float]:
+    return [
+        float(value)
+        for value in re.findall(
+            rf"\b{re.escape(key)}\s*=\s*(-?\d+(?:\.\d+)?)\b",
+            text,
+        )
+    ]
+
+
 def validate() -> list[str]:
     issues: list[str] = []
     effects = strip_comments(read("common/scripted_effects/ADISCORD_economy_effects.txt"))
@@ -57,6 +67,10 @@ def validate() -> list[str]:
     scripted_gui = strip_comments(read("common/scripted_guis/ADISCORD_economy_scripted_gui.txt"))
     scripted_loc = strip_comments(read("common/scripted_localisation/ADISCORD_economy_scripted_loc.txt"))
     ideas = strip_comments(read("common/ideas/ADISCORD_economy_ideas.txt"))
+    minor_ideas = strip_comments(read("common/ideas/ADISCORD_minor_optimization_ideas.txt"))
+    minor_effects = strip_comments(
+        read("common/scripted_effects/ADISCORD_minor_optimization_effects.txt")
+    )
     buildings = strip_comments(read("common/buildings/00_buildings.txt"))
     dynamic_modifiers = strip_comments(
         read("common/dynamic_modifiers/ADISCORD_economy_dynamic_modifiers.txt")
@@ -186,24 +200,68 @@ def validate() -> list[str]:
 
     macro = block(effects, "ADISCORD_economy_calculate_macro_indicators")
     ordered_steps = [
-        "ADISCORD_economy_calculate_debt_capacity",
-        "ADISCORD_economy_calculate_debt_ratio",
-        "ADISCORD_economy_calculate_creditworthiness",
-        "ADISCORD_economy_calculate_interest_rate",
-        "ADISCORD_economy_calculate_debt_service_amount",
+        "ADISCORD_economy_calculate_debt_metrics",
         "ADISCORD_economy_update_macro_confidence",
     ]
     positions = [macro.find(step) for step in ordered_steps]
     require(all(position >= 0 for position in positions), "macro pass is missing a required derived calculation")
     require(positions == sorted(positions), "macro pass is not ordered deterministically")
     for step in ordered_steps:
-        require(macro.count(step) == 1, f"macro pass calls {step} more than once")
+        require(macro.count(step) == 1, f"macro pass must call {step} exactly once")
 
     policy = block(effects, "ADISCORD_economy_ai_monthly_policy")
     require("else_if" in policy, "AI monthly policy is not an exclusive ordered decision chain")
     require("ADISCORD_economy_increase_army_spending" in policy, "AI never restores army spending")
-    require("ADISCORD_economy_increase_construction_spending" in policy, "AI never restores construction spending")
+    require("ADISCORD_economy_increase_research_spending" in policy, "AI never restores research spending")
+    require("ADISCORD_economy_decrease_research_spending" in policy, "AI never reduces research during fiscal stress")
     require("ADISCORD_economy_increase_social_spending" in policy, "AI never restores social spending")
+    require("ADISCORD_economy_construction_spending" not in policy,
+            "AI still treats automatic construction expense as a policy")
+
+    assistance_specs = {
+        "ADISCORD_economy_ai_assistance_base": {
+            "ADISCORD_economy_overall_income_factor": 0.05,
+            "industrial_capacity_factory": 0.05,
+        },
+        "ADISCORD_economy_ai_assistance_civil_war": {
+            "supply_consumption_factor": -0.10,
+        },
+        "ADISCORD_economy_ai_assistance_retreat": {
+            "army_defence_factor": 0.05,
+        },
+    }
+    assistance_refresh = block(
+        minor_effects + "\n" + effects, "ADISCORD_economy_refresh_ai_assistance"
+    )
+    require(bool(assistance_refresh), "economy lacks a cached AI-assistance refresh")
+    if assistance_refresh:
+        require("is_ai = yes" in assistance_refresh,
+                "economy assistance can be applied to a player")
+        require("ADISCORD_economy_simulation_tier" in assistance_refresh,
+                "economy assistance ignores the simulation tier")
+        require("surrender_progress" in assistance_refresh and "> 0.35" in assistance_refresh,
+                "retreat assistance lacks the bounded surrender threshold")
+    for idea_name, expected_modifiers in assistance_specs.items():
+        idea = block(minor_ideas, idea_name)
+        require(bool(idea), f"minor optimization lacks {idea_name}")
+        if idea:
+            require("allowed = { always = no }" in idea,
+                    f"{idea_name} is visible instead of hidden")
+            require(idea_name not in ideas,
+                    f"{idea_name} is duplicated in the economy idea file")
+            for modifier, expected in expected_modifiers.items():
+                values = scalar_assignments(idea, modifier)
+                if modifier == "supply_consumption_factor":
+                    require(len(values) == 1 and expected <= values[0] <= 0,
+                            f"{idea_name} violates the {modifier} assistance bound")
+                else:
+                    require(values == [expected],
+                            f"{idea_name} violates the {modifier} assistance bound")
+        if assistance_refresh:
+            require(f"remove_ideas = {idea_name}" in assistance_refresh,
+                    f"{idea_name} has no immediate removal path")
+            require(f"add_ideas = {idea_name}" in assistance_refresh,
+                    f"{idea_name} is never applied under its bounded condition")
 
     emission = block(effects, "ADISCORD_economy_expand_money_emission")
     require("ADISCORD_economy_treasury" in emission, "money emission creates no liquidity")
@@ -213,10 +271,8 @@ def validate() -> list[str]:
             "emission can be expanded and reversed in the same accounting month")
     require("ADISCORD_economy_has_treasury_room_35" in block(triggers, "ADISCORD_economy_can_expand_money_emission"),
             "money emission can charge penalties when the treasury has no room")
-    require("ADISCORD_economy_has_debt_room_58" in block(triggers, "ADISCORD_economy_can_take_debt"),
-            "internal borrowing can charge penalties for a zero-sized loan")
-    require("ADISCORD_economy_has_debt_room_64" in block(triggers, "ADISCORD_economy_can_take_external_loan"),
-            "external borrowing can charge penalties for a zero-sized loan")
+    require("ADISCORD_economy_has_debt_room_" not in triggers,
+            "loan availability still uses a retired room gate")
 
     apply_balance = block(effects, "ADISCORD_economy_apply_weekly_balance")
     require("ADISCORD_economy_last_period_cap_writeoff" in apply_balance,
@@ -271,11 +327,28 @@ def validate() -> list[str]:
     restructure = block(effects, "ADISCORD_economy_restructure_debt")
     require("ADISCORD_economy_recent_debt" in restructure,
             "debt restructuring has no accounting-period lock")
+    for effect_name in (
+        "ADISCORD_economy_calculate_debt_metrics",
+        "ADISCORD_economy_update_debt_state_after_settlement",
+        "ADISCORD_economy_reconcile_debt_state_after_action",
+        "ADISCORD_economy_queue_debt_notification",
+    ):
+        require(bool(block(effects, effect_name)), f"schema 12 lacks {effect_name}")
+    for repayment_name in (
+        "ADISCORD_economy_repay_debt",
+        "ADISCORD_economy_early_repay_debt",
+        "ADISCORD_economy_restructure_debt",
+    ):
+        repayment = block(effects, repayment_name)
+        require("ADISCORD_economy_calculate_debt_metrics = yes" in repayment,
+                f"{repayment_name} leaves interest metrics stale")
+        require("ADISCORD_economy_reconcile_debt_state_after_action = yes" in repayment,
+                f"{repayment_name} cannot lower the debt debuff immediately")
 
     for cooldown in (
         "ADISCORD_economy_tax_change_cooldown",
         "ADISCORD_economy_army_budget_change_cooldown",
-        "ADISCORD_economy_construction_budget_change_cooldown",
+        "ADISCORD_economy_research_budget_change_cooldown",
         "ADISCORD_economy_social_budget_change_cooldown",
     ):
         require(cooldown in effects and cooldown in triggers, f"budget control lacks cooldown {cooldown}")
@@ -396,19 +469,28 @@ def validate() -> list[str]:
             "economy still churns all national spirits every regular refresh")
     require("ADISCORD_economy_social_spending_mode" in idea_refresh,
             "social budget changes do not invalidate the optimized idea signature")
+    require("ADISCORD_economy_research_spending_mode" in idea_refresh,
+            "research budget changes do not invalidate the optimized idea signature")
+    require("ADISCORD_economy_construction_spending_mode" not in idea_refresh,
+            "retired construction policy remains in the idea signature")
 
     migration = block(effects, "ADISCORD_economy_migrate_schema")
-    require("value = 11 compare = less_than" in migration,
-            "economy save migration was not advanced to schema 11")
+    require("value = 12 compare = less_than" in migration,
+            "economy save migration was not advanced to schema 12")
+    require("ADISCORD_economy_research_spending_mode" in migration
+            and "value = ADISCORD_economy_construction_spending_mode" in migration,
+            "schema 12 does not map the former construction setting to research")
+    require("ADISCORD_economy_research_budget_change_cooldown value = 0" in migration,
+            "schema 12 does not release the new research-policy cooldown")
     require("ADISCORD_economy_recalculate_policy_modifiers = yes" in migration,
-            "schema 11 does not initialize weekly policy caches for existing saves")
+            "schema 12 does not initialize weekly policy caches for existing saves")
     require("ADISCORD_economy_was_at_war" in migration
             and "ADISCORD_economy_postwar_demobilization_months" in migration,
-            "schema 11 does not initialize postwar demobilization state")
+            "schema 12 does not preserve postwar demobilization state")
     weekly_budget = block(effects, "ADISCORD_economy_calculate_weekly_budget")
     require("ADISCORD_economy_safe_reserve value = ADISCORD_economy_weekly_expenses" in weekly_budget
             and "ADISCORD_economy_safe_reserve min = 50 max = 250" in weekly_budget,
-            "schema 11 reserve target does not reuse the O(1) weekly forecast")
+            "schema 12 reserve target does not reuse the O(1) weekly forecast")
     for settlement_name in ("ADISCORD_economy_apply_weekly_balance", "ADISCORD_economy_apply_monthly_balance"):
         settlement = block(effects, settlement_name)
         require("ADISCORD_economy_auto_borrow_temp" in settlement
@@ -418,7 +500,8 @@ def validate() -> list[str]:
         "ADISCORD_economy_auto_loan_enabled",
         "ADISCORD_economy_toggle_auto_loan",
         "ADISCORD_economy_gui_page",
-        "ADISCORD_economy_research_spending_mode",
+        "ADISCORD_economy_construction_spending_mode",
+        "ADISCORD_economy_construction_budget_change_cooldown",
         "ADISCORD_economy_admin_spending_mode",
         "ADISCORD_economy_weekly_player_refresh",
         "ADISCORD_economy_gui_try_early_repay_debt",
@@ -447,9 +530,9 @@ def validate() -> list[str]:
             "economy dashboard no longer fits the supported 1366x768 layout envelope")
     require("ADISCORD_economy_header_art" not in gui,
             "economy dashboard still uses the broken decorative header sprite")
-    require(len(re.findall(r'name\s*=\s*"ADISCORD_economy_(?:tax|army|construction|social)_step_[1-5]"', gui)) == 20,
+    require(len(re.findall(r'name\s*=\s*"ADISCORD_economy_(?:tax|army|research|social)_step_[1-5]"', gui)) == 20,
             "economy dashboard does not expose four complete five-step scales")
-    require(len(re.findall(r'name\s*=\s*"ADISCORD_economy_(?:tax|army|construction|social)_active_marker"', gui)) == 4,
+    require(len(re.findall(r'name\s*=\s*"ADISCORD_economy_(?:tax|army|research|social)_active_marker"', gui)) == 4,
             "economy dashboard does not expose one active marker per budget scale")
     require(re.search(r'buttonText\s*=\s*"[+-]"', gui) is None,
             "economy dashboard still uses blank text +/- controls")
@@ -489,16 +572,16 @@ def validate() -> list[str]:
     require("ADISCORD_economy_course_" not in gui,
             "economy UI still exposes preset courses instead of direct compact controls")
     visible_regulators = set(re.findall(
-        r'name\s*=\s*"(ADISCORD_economy_(?:tax|army|construction|social)_(?:decrease|increase))"', gui
+        r'name\s*=\s*"(ADISCORD_economy_(?:tax|army|research|social)_(?:decrease|increase))"', gui
     ))
     expected_regulators = {
         f"ADISCORD_economy_{category}_{direction}"
-        for category in ("tax", "army", "construction", "social")
+        for category in ("tax", "army", "research", "social")
         for direction in ("decrease", "increase")
     }
     require(visible_regulators == expected_regulators,
             "economy UI must expose exactly eight compact arrow budget controls")
-    for category in ("tax", "army", "construction", "social"):
+    for category in ("tax", "army", "research", "social"):
         require(re.search(
             rf'name\s*=\s*"ADISCORD_economy_{category}_decrease"[\s\S]{{0,200}}spriteType\s*=\s*"button_left"',
             gui,

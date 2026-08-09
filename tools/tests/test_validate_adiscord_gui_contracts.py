@@ -37,6 +37,66 @@ def named_gui_nodes(text):
     return nodes
 
 
+def gui_node_body(text, name):
+    """Return one balanced GUI type block whose own name matches *name*."""
+
+    bodies = []
+    for match in re.finditer(r"[A-Za-z_][A-Za-z0-9_]*Type\s*=\s*\{", text):
+        opening = text.find("{", match.start())
+        depth = 0
+        for index in range(opening, len(text)):
+            if text[index] == "{":
+                depth += 1
+            elif text[index] == "}":
+                depth -= 1
+                if depth == 0:
+                    body = text[opening + 1 : index]
+                    own_name = re.search(r'\bname\s*=\s*"([^"]+)"', body)
+                    if own_name and own_name.group(1) == name:
+                        bodies.append(body)
+                    break
+        else:
+            raise AssertionError(f"unclosed GUI node while looking for {name}")
+    if len(bodies) != 1:
+        raise AssertionError(f"expected one GUI node {name}, found {len(bodies)}")
+    return bodies[0]
+
+
+def localisation_value(text, key):
+    match = re.search(
+        rf'(?m)^\s*{re.escape(key)}:\d*\s+"((?:[^"\\]|\\.)*)"\s*$',
+        text,
+    )
+    if not match:
+        raise AssertionError(f"missing localisation key {key}")
+    return match.group(1)
+
+
+def named_assignment_body(text, assignment, name):
+    bodies = []
+    for match in re.finditer(rf"(?m)^\s*{re.escape(assignment)}\s*=\s*\{{", text):
+        opening = text.find("{", match.start())
+        depth = 0
+        for index in range(opening, len(text)):
+            if text[index] == "{":
+                depth += 1
+            elif text[index] == "}":
+                depth -= 1
+                if depth == 0:
+                    body = text[opening + 1 : index]
+                    assigned_name = re.search(r"\bname\s*=\s*([A-Za-z0-9_.-]+)", body)
+                    if assigned_name and assigned_name.group(1) == name:
+                        bodies.append(body)
+                    break
+        else:
+            raise AssertionError(f"unclosed {assignment} while looking for {name}")
+    if len(bodies) != 1:
+        raise AssertionError(
+            f"expected one {assignment} named {name}, found {len(bodies)}"
+        )
+    return bodies[0]
+
+
 class CountryPoliticsGuiContractTests(unittest.TestCase):
     def test_hoi4_119_faction_widgets_have_required_types_and_parents(self):
         text = (ROOT / 'interface' / 'countrypoliticsview.gui').read_text(
@@ -177,6 +237,207 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         ).read_text(encoding='utf-8-sig')
         self.nodes = set(named_gui_nodes(self.gui))
 
+    def test_schema_twelve_policy_rows_are_tax_military_research_social(self):
+        rows = re.findall(
+            r'name\s*=\s*"ADISCORD_economy_(tax|army|construction|research|social)_row"',
+            self.gui,
+        )
+        self.assertEqual(rows, ['tax', 'army', 'research', 'social'])
+        regulators = set(
+            re.findall(
+                r'name\s*=\s*"(ADISCORD_economy_(?:tax|army|research|social)_(?:decrease|increase))"',
+                self.gui,
+            )
+        )
+        expected = {
+            f'ADISCORD_economy_{policy}_{direction}'
+            for policy in ('tax', 'army', 'research', 'social')
+            for direction in ('decrease', 'increase')
+        }
+        self.assertEqual(regulators, expected)
+        self.assertNotIn('ADISCORD_economy_construction_row', self.gui)
+        for regulator in expected:
+            self.assertEqual(self.scripted_gui.count(f'{regulator}_click ='), 1)
+            self.assertEqual(self.scripted_gui.count(f'{regulator}_click_enabled ='), 1)
+
+    def test_policy_rows_and_arrows_have_usable_hitboxes(self):
+        for policy in ('tax', 'army', 'research', 'social'):
+            row = gui_node_body(self.gui, f'ADISCORD_economy_{policy}_row')
+            width = re.search(r'\bmaxWidth\s*=\s*(\d+)', row)
+            height = re.search(r'\bmaxHeight\s*=\s*(\d+)', row)
+            self.assertIsNotNone(width, policy)
+            self.assertIsNotNone(height, policy)
+            self.assertGreaterEqual(int(width.group(1)), 330, policy)
+            self.assertGreaterEqual(int(height.group(1)), 36, policy)
+            self.assertRegex(row, r'\bpdx_tooltip\s*=\s*"ADISCORD_economy_[^"]+"')
+
+            for direction in ('decrease', 'increase'):
+                arrow = gui_node_body(
+                    self.gui, f'ADISCORD_economy_{policy}_{direction}'
+                )
+                size = re.search(
+                    r'\bsize\s*=\s*\{\s*(?:x|width)\s*=\s*(\d+)\s+'
+                    r'(?:y|height)\s*=\s*(\d+)\s*\}',
+                    arrow,
+                )
+                self.assertIsNotNone(size, f'{policy} {direction} lacks explicit hitbox')
+                self.assertGreaterEqual(int(size.group(1)), 32, f'{policy} {direction}')
+                self.assertGreaterEqual(int(size.group(2)), 28, f'{policy} {direction}')
+
+    def test_policy_arrows_preview_next_level_and_precise_disabled_reason(self):
+        title_names = {
+            'tax': 'Tax',
+            'army': 'Army',
+            'research': 'Research',
+            'social': 'Social',
+        }
+        for policy, title in title_names.items():
+            for level in range(1, 6):
+                step = gui_node_body(
+                    self.gui, f'ADISCORD_economy_{policy}_step_{level}'
+                )
+                self.assertIn(
+                    f'pdx_tooltip = "ADISCORD_economy_{policy}_level_{level}_tt"',
+                    step,
+                )
+            for direction in ('decrease', 'increase'):
+                key = f'ADISCORD_economy_{policy}_{direction}_tt'
+                tooltip = localisation_value(self.localisation, key)
+                self.assertIn(
+                    f'?ADISCORD_economy_{policy}_{direction}_target_level|0',
+                    tooltip,
+                )
+                self.assertIn(
+                    f'?ADISCORD_economy_{policy}_{direction}_weekly_balance_delta|=+1',
+                    tooltip,
+                )
+                selector = (
+                    f'GetADISCORDEconomy{title}{direction.title()}PreviewLoc'
+                )
+                self.assertIn(f'[{selector}]', tooltip)
+                selector_block = named_assignment_body(
+                    self.scripted_loc, 'defined_text', selector
+                )
+                boundary_reason = (
+                    'ADISCORD_economy_policy_blocked_minimum'
+                    if direction == 'decrease'
+                    else 'ADISCORD_economy_policy_blocked_maximum'
+                )
+                for reason in (
+                    boundary_reason,
+                    'ADISCORD_economy_policy_blocked_cooldown',
+                    'ADISCORD_economy_policy_blocked_scope',
+                ):
+                    self.assertIn(reason, selector_block)
+                    self.assertRegex(self.localisation, rf'(?m)^\s*{reason}:')
+
+    def test_primary_economy_values_have_short_and_delayed_explanations(self):
+        contracts = {
+            'ADISCORD_economy_kpi_treasury': (
+                'ADISCORD_economy_treasury_tt',
+                'ADISCORD_economy_treasury_delayed_tt',
+                (
+                    'ADISCORD_economy_weekly_income',
+                    'ADISCORD_economy_weekly_expenses',
+                    'ADISCORD_economy_safe_reserve',
+                    'ADISCORD_economy_deficit_runway',
+                ),
+            ),
+            'ADISCORD_economy_risk_debt': (
+                'ADISCORD_economy_debt_tt',
+                'ADISCORD_economy_debt_delayed_tt',
+                (
+                    'ADISCORD_economy_debt',
+                    'ADISCORD_economy_weekly_interest',
+                    'ADISCORD_economy_interest_share_income',
+                    'ADISCORD_economy_debt_state',
+                    'ADISCORD_economy_debt_emergency_streak',
+                    'ADISCORD_economy_debt_default_streak',
+                ),
+            ),
+            'ADISCORD_economy_risk_inflation': (
+                'ADISCORD_economy_inflation_tt',
+                'ADISCORD_economy_inflation_delayed_tt',
+                (
+                    'ADISCORD_economy_inflation',
+                    'ADISCORD_economy_inflation_delta_temp',
+                    'ADISCORD_economy_inflation_expense_multiplier',
+                    'GetADISCORDInflationEffectsLoc',
+                ),
+            ),
+        }
+        for node_name, (short_key, delayed_key, required) in contracts.items():
+            node = gui_node_body(self.gui, node_name)
+            self.assertIn(f'pdx_tooltip = "{short_key}"', node)
+            self.assertIn(f'pdx_tooltip_delayed = "{delayed_key}"', node)
+            delayed = localisation_value(self.localisation, delayed_key)
+            for token in required:
+                self.assertIn(token, delayed, delayed_key)
+        self.assertIn('4', localisation_value(self.localisation, 'ADISCORD_economy_debt_delayed_tt'))
+        self.assertIn('13', localisation_value(self.localisation, 'ADISCORD_economy_debt_delayed_tt'))
+
+    def test_debt_notification_is_dynamic_and_replaces_auto_loan_popup(self):
+        for obsolete in (
+            'ADISCORD_economy_auto_loan_popup_window',
+            'ADISCORD_economy_auto_loan_popup_script',
+            'ADISCORD_economy_auto_loan_popup_ok_click',
+        ):
+            self.assertNotIn(obsolete, self.gui + self.scripted_gui)
+        self.assertIn(
+            (
+                'containerWindowType',
+                'ADISCORD_economy_debt_notification_window',
+                (),
+            ),
+            self.nodes,
+        )
+        self.assertIn('ADISCORD_economy_debt_notification_script', self.scripted_gui)
+        self.assertIn(
+            'ADISCORD_economy_pending_debt_notification_kind', self.scripted_gui
+        )
+        description = localisation_value(
+            self.localisation, 'ADISCORD_economy_debt_notification_desc'
+        )
+        for selector in (
+            'GetADISCORDEconomyDebtNotificationCauseLoc',
+            'GetADISCORDEconomyDebtNotificationStateLoc',
+            'GetADISCORDEconomyDebtNotificationNextRiskLoc',
+        ):
+            self.assertIn(f'[{selector}]', description)
+            self.assertIn(f'name = {selector}', self.scripted_loc)
+        for variable in (
+            'ADISCORD_economy_pending_debt_notification_amount',
+            'ADISCORD_economy_weekly_interest',
+            'ADISCORD_economy_interest_share_income',
+        ):
+            self.assertIn(variable, description)
+
+    def test_visible_diagnostic_money_slogan_is_absent(self):
+        visible_keys = set(
+            re.findall(
+                r'(?:text|buttonText)\s*=\s*"(ADISCORD_economy_[^"]+)"',
+                self.gui,
+            )
+        )
+        visible_text = []
+        for key in visible_keys:
+            match = re.search(
+                rf'(?m)^\s*{re.escape(key)}:\d*\s+"((?:[^"\\]|\\.)*)"\s*$',
+                self.localisation,
+            )
+            if match:
+                normalized = re.sub(
+                    r'[^a-zа-яё]+', ' ', match.group(1).casefold()
+                ).strip()
+                visible_text.append((key, normalized))
+        slogan = re.compile(
+            r'(?:деньги\s+считаются\s+(?:автоматически|сами)|'
+            r'money\s+is\s+calculated\s+automatically)',
+            re.IGNORECASE,
+        )
+        offenders = {key: text for key, text in visible_text if slogan.search(text)}
+        self.assertFalse(offenders, f'visible diagnostic slogans: {offenders}')
+
     def test_topbar_uses_icon_and_numeric_value(self):
         self.assertIn(
             (
@@ -216,7 +477,7 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         )
 
     def test_four_budget_rows_use_arrows_and_five_step_markers(self):
-        for policy in ('tax', 'army', 'construction', 'social'):
+        for policy in ('tax', 'army', 'research', 'social'):
             self.assertRegex(
                 self.gui,
                 rf'name\s*=\s*"ADISCORD_economy_{policy}_decrease"'
@@ -233,7 +494,7 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         self.assertNotRegex(self.gui, r'buttonText\s*=\s*"[+-]"')
 
     def test_active_markers_bind_to_all_five_mode_positions(self):
-        for policy in ('tax', 'army', 'construction', 'social'):
+        for policy in ('tax', 'army', 'research', 'social'):
             self.assertIn(
                 f'ADISCORD_economy_{policy}_active_marker_visible',
                 self.scripted_gui,
@@ -259,9 +520,9 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                 'ADISCORD_economy_army_spending_mode',
                 'GetADISCORDArmySpendingEffectsLoc',
             ),
-            'construction': (
-                'ADISCORD_economy_construction_spending_mode',
-                'GetADISCORDConstructionSpendingEffectsLoc',
+            'research': (
+                'ADISCORD_economy_research_spending_mode',
+                'GetADISCORDResearchSpendingEffectsLoc',
             ),
             'social': (
                 'ADISCORD_economy_social_spending_mode',
@@ -271,11 +532,7 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         for policy, (mode_var, effect_loc) in contracts.items():
             for level in range(1, 6):
                 step_name = f'ADISCORD_economy_{policy}_step_{level}'
-                step_line = next(
-                    line
-                    for line in self.gui.splitlines()
-                    if f'name = "{step_name}"' in line
-                )
+                step_line = gui_node_body(self.gui, step_name)
                 self.assertNotIn('alwaystransparent = yes', step_line)
                 self.assertIn(
                     f'pdx_tooltip = "ADISCORD_economy_{policy}_level_{level}_tt"',
@@ -294,9 +551,7 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                 self.assertIn('§W', tooltip_match.group(1))
 
             marker_name = f'ADISCORD_economy_{policy}_active_marker'
-            marker_line = next(
-                line for line in self.gui.splitlines() if f'name = "{marker_name}"' in line
-            )
+            marker_line = gui_node_body(self.gui, marker_name)
             self.assertNotIn('alwaystransparent = yes', marker_line)
             self.assertIn(
                 f'pdx_tooltip = "ADISCORD_economy_{policy}_controls_tt"',
@@ -315,11 +570,9 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             self.assertIn(f'name = {effect_loc}', self.scripted_loc)
 
     def test_increase_arrows_use_visible_absolute_positioning(self):
-        for policy in ('tax', 'army', 'construction', 'social'):
-            increase_line = next(
-                line
-                for line in self.gui.splitlines()
-                if f'name = "ADISCORD_economy_{policy}_increase"' in line
+        for policy in ('tax', 'army', 'research', 'social'):
+            increase_line = gui_node_body(
+                self.gui, f'ADISCORD_economy_{policy}_increase'
             )
             self.assertIn('spriteType = "button_right"', increase_line)
             self.assertIn('position = { x = 424 ', increase_line)
@@ -368,11 +621,11 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             self.assertIn('?ADISCORD_economy_treasury|0', tooltip)
             self.assertIn('?ADISCORD_economy_treasury_cap|0', tooltip)
             self.assertIn('?ADISCORD_economy_debt|0', tooltip)
-            self.assertIn('?ADISCORD_economy_debt_capacity|0', tooltip)
-            self.assertIn('?ADISCORD_economy_debt_ratio|0', tooltip)
             self.assertIn('?ADISCORD_economy_interest_rate|1', tooltip)
-            self.assertIn('?ADISCORD_economy_debt_service|2', tooltip)
-            self.assertIn('40/70/100/140%', tooltip)
+            self.assertIn('?ADISCORD_economy_weekly_interest|2', tooltip)
+            self.assertIn('?ADISCORD_economy_interest_share_income|1', tooltip)
+            self.assertIn('?ADISCORD_economy_debt_state|0', tooltip)
+            self.assertNotIn('debt_capacity', tooltip)
             self.assertIn('инфляц', tooltip.lower())
         self.assertIn('?ADISCORD_economy_creditworthiness|0', external_loan_tt)
         self.assertIn('[GetADISCORDInternalBondsAvailabilityLoc]', internal_bonds_tt)
@@ -383,10 +636,9 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         ):
             self.assertIn(f'name = {name}', self.scripted_loc)
         for key in (
-            'ADISCORD_economy_loan_blocked_ratio',
+            'ADISCORD_economy_loan_blocked_interest_share',
             'ADISCORD_economy_loan_blocked_cooldown',
             'ADISCORD_economy_loan_blocked_treasury_room',
-            'ADISCORD_economy_loan_blocked_debt_room',
             'ADISCORD_economy_loan_blocked_creditworthiness',
             'ADISCORD_economy_loan_blocked_default',
             'ADISCORD_economy_loan_available_internal',
@@ -518,14 +770,16 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         ).group(1)
         for required in (
             '?ADISCORD_economy_debt|0',
-            '?ADISCORD_economy_debt_capacity|0',
-            '?ADISCORD_economy_debt_ratio|0',
             '?ADISCORD_economy_interest_rate|1',
-            '?ADISCORD_economy_debt_service|2',
+            '?ADISCORD_economy_weekly_interest|2',
+            '?ADISCORD_economy_interest_share_income|1',
+            '?ADISCORD_economy_debt_state|0',
             '[GetADISCORDDebtEffectsLoc]',
-            '40/70/100/140%',
+            '10/25/40%',
+            '4/13',
         ):
             self.assertIn(required, debt_tt)
+        self.assertNotIn('debt_capacity', debt_tt)
 
         inflation_tt = re.search(
             r'(?m)^\s*ADISCORD_economy_inflation_tt:\d*\s+"([^"]*)"',

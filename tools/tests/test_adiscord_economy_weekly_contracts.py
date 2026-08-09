@@ -46,6 +46,15 @@ DYNAMIC_MODIFIERS = (
 ECONOMY_AI = (
     ROOT / "common" / "ai_strategy" / "ADISCORD_economy_ai.txt"
 ).read_text(encoding="utf-8-sig")
+SCRIPTED_GUI = (
+    ROOT / "common" / "scripted_guis" / "ADISCORD_economy_scripted_gui.txt"
+).read_text(encoding="utf-8-sig")
+SCRIPTED_LOC = (
+    ROOT
+    / "common"
+    / "scripted_localisation"
+    / "ADISCORD_economy_scripted_loc.txt"
+).read_text(encoding="utf-8-sig")
 BUILDING_DOC = ROOT / "docs" / "economy" / "economic-buildings.md"
 MODIFIER_DOC = ROOT / "docs" / "economy" / "economic-modifiers.md"
 
@@ -66,7 +75,598 @@ def block(text, name):
     raise AssertionError(f"unclosed block: {name}")
 
 
+def assignment_blocks(text, name):
+    """Return every balanced Clausewitz assignment block with *name*."""
+
+    matches = re.finditer(rf"(?m)^\s*{re.escape(name)}\s*=\s*\{{", text)
+    bodies = []
+    for match in matches:
+        opening = text.find("{", match.start())
+        depth = 0
+        for index in range(opening, len(text)):
+            if text[index] == "{":
+                depth += 1
+            elif text[index] == "}":
+                depth -= 1
+                if depth == 0:
+                    bodies.append(text[opening + 1 : index])
+                    break
+        else:
+            raise AssertionError(f"unclosed block: {name}")
+    return bodies
+
+
+def unique_block(text, name):
+    bodies = assignment_blocks(text, name)
+    if len(bodies) != 1:
+        raise AssertionError(f"expected one block {name}, found {len(bodies)}")
+    return bodies[0]
+
+
+def top_level_blocks(text):
+    """Parse top-level scripted definitions without accepting shadow copies."""
+
+    definitions = {}
+    for match in re.finditer(r"(?m)^([A-Za-z_][A-Za-z0-9_.@-]*)\s*=\s*\{", text):
+        name = match.group(1)
+        opening = text.find("{", match.start())
+        depth = 0
+        for index in range(opening, len(text)):
+            if text[index] == "{":
+                depth += 1
+            elif text[index] == "}":
+                depth -= 1
+                if depth == 0:
+                    definitions.setdefault(name, []).append(text[opening + 1 : index])
+                    break
+        else:
+            raise AssertionError(f"unclosed top-level block: {name}")
+    return definitions
+
+
+def reachable_script_blocks(texts, roots):
+    definitions = {}
+    for text in texts:
+        for name, bodies in top_level_blocks(re.sub(r"#.*", "", text)).items():
+            definitions.setdefault(name, []).extend(bodies)
+
+    duplicates = {name: len(bodies) for name, bodies in definitions.items() if len(bodies) != 1}
+    if duplicates:
+        raise AssertionError(f"duplicate scripted definitions: {duplicates}")
+
+    missing = [root for root in roots if root not in definitions]
+    if missing:
+        raise AssertionError(f"missing weekly roots: {missing}")
+
+    reachable = set()
+    pending = list(roots)
+    while pending:
+        name = pending.pop()
+        if name in reachable:
+            continue
+        reachable.add(name)
+        body = definitions[name][0]
+        for called in re.findall(r"\b(ADISCORD_[A-Za-z0-9_.@-]+)\s*=\s*yes\b", body):
+            if called in definitions and called not in reachable:
+                pending.append(called)
+    return {name: definitions[name][0] for name in sorted(reachable)}
+
+
+def numeric_values(text, key):
+    return [
+        float(value)
+        for value in re.findall(
+            rf"\b{re.escape(key)}\s*=\s*(-?\d+(?:\.\d+)?)\b",
+            text,
+        )
+    ]
+
+
+def localisation_key_set(text):
+    return set(re.findall(r"(?m)^\s*([A-Za-z0-9_.-]+):\d*\s+", text))
+
+
 class WeeklyEconomyContracts(unittest.TestCase):
+    def test_schema_twelve_maps_construction_policy_to_research_without_resetting_ledger(self):
+        migration = unique_block(EFFECTS, "ADISCORD_economy_migrate_schema")
+        self.assertRegex(
+            migration,
+            r"check_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_schema_version"
+            r"\s+value\s*=\s*12\s+compare\s*=\s*less_than\s*\}",
+        )
+        self.assertEqual(
+            len(
+                re.findall(
+                    r"set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_schema_version"
+                    r"\s+value\s*=\s*12\s*\}",
+                    migration,
+                )
+            ),
+            1,
+        )
+        self.assertRegex(
+            migration,
+            r"set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_research_spending_mode"
+            r"\s+value\s*=\s*ADISCORD_economy_construction_spending_mode\s*\}",
+        )
+        self.assertRegex(
+            migration,
+            r"set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_research_budget_change_cooldown"
+            r"\s+value\s*=\s*0\s*\}",
+        )
+        for obsolete in (
+            "ADISCORD_economy_construction_spending_mode",
+            "ADISCORD_economy_construction_budget_change_cooldown",
+        ):
+            self.assertRegex(migration, rf"clear_variable\s*=\s*{obsolete}\b")
+        for idea in range(1, 6):
+            self.assertIn(f"ADISCORD_economy_construction_spending_{idea}", migration)
+
+        protected_ledger = (
+            "treasury",
+            "debt",
+            "accounting_period_treasury_start",
+            "last_period_treasury_before",
+            "last_period_treasury_after",
+            "last_period_income",
+            "last_period_expenses",
+            "last_period_balance",
+            "last_period_debt_added",
+            "last_period_debt_paid",
+            "current_month_action_income",
+            "current_month_action_costs",
+            "current_month_debt_added",
+            "current_month_debt_paid",
+        )
+        for suffix in protected_ledger:
+            variable = f"ADISCORD_economy_{suffix}"
+            self.assertNotRegex(
+                migration,
+                rf"(?:set_variable|clear_variable)\s*=\s*(?:\{{[^{{}}]*var\s*=\s*)?{variable}\b",
+                variable,
+            )
+
+    def test_construction_policy_is_retired_and_construction_spend_tracks_real_activity(self):
+        runtime = "\n".join(
+            (EFFECTS, TRIGGERS, ECONOMY_IDEAS, SCRIPTED_GUI, SCRIPTED_LOC, ECONOMY_AI)
+        )
+        retired = set(
+            re.findall(
+                r"ADISCORD_economy_(?:"
+                r"construction_spending_mode|construction_budget_change_cooldown|"
+                r"(?:increase|decrease|set|can_increase|can_decrease)_construction_spending|"
+                r"construction_spending_[1-5]"
+                r")\b",
+                runtime,
+            )
+        )
+        self.assertFalse(retired, f"live construction-policy API: {sorted(retired)}")
+
+        construction = unique_block(
+            EFFECTS, "ADISCORD_economy_calculate_construction_expenses"
+        )
+        for activity_scalar in (
+            "num_of_civilian_factories",
+            "num_of_available_civilian_factories",
+        ):
+            self.assertIn(activity_scalar, construction)
+        self.assertRegex(
+            construction,
+            r"subtract_from_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_active_construction_temp"
+            r"\s+value\s*=\s*num_of_available_civilian_factories\s*\}",
+        )
+        self.assertNotIn("spending_mode", construction)
+        development = unique_block(
+            EFFECTS, "ADISCORD_economy_calculate_development_multiplier"
+        )
+        self.assertNotIn("construction_spending", development)
+
+    def test_research_policy_has_five_levels_and_level_five_construction_bonus_is_bounded(self):
+        research = unique_block(EFFECTS, "ADISCORD_economy_calculate_research_expenses")
+        self.assertIn("ADISCORD_economy_research_spending_mode", research)
+        multipliers = {
+            float(value)
+            for value in re.findall(
+                r"multiply_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_research_expenses"
+                r"\s+value\s*=\s*(-?\d+(?:\.\d+)?)\s*\}",
+                research,
+            )
+        }
+        self.assertEqual(multipliers, {0.60, 0.80, 1.00, 1.30, 1.60})
+        self.assertRegex(
+            EFFECTS,
+            r"clamp_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_research_spending_mode"
+            r"\s+min\s*=\s*1\s+max\s*=\s*5\s*\}",
+        )
+        self.assertRegex(
+            EFFECTS,
+            r"clamp_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_research_budget_change_cooldown"
+            r"\s+min\s*=\s*0\s+max\s*=\s*3\s*\}",
+        )
+
+        expected_research = {1: -0.08, 2: -0.03, 3: 0.0, 4: 0.03, 5: 0.05}
+        for level, expected in expected_research.items():
+            idea = unique_block(
+                ECONOMY_IDEAS, f"ADISCORD_economy_research_spending_{level}"
+            )
+            self.assertEqual(numeric_values(idea, "research_speed_factor"), [expected])
+            construction_bonuses = numeric_values(
+                idea, "production_speed_buildings_factor"
+            )
+            if level == 5:
+                self.assertEqual(construction_bonuses, [0.02])
+            else:
+                self.assertEqual(construction_bonuses, [])
+        all_construction_bonuses = numeric_values(
+            "\n".join(
+                unique_block(
+                    ECONOMY_IDEAS, f"ADISCORD_economy_research_spending_{level}"
+                )
+                for level in range(1, 6)
+            ),
+            "production_speed_buildings_factor",
+        )
+        self.assertTrue(all(value <= 0.03 for value in all_construction_bonuses))
+
+    def test_debt_capacity_is_absent_from_runtime_and_public_modifier_api(self):
+        migration = unique_block(EFFECTS, "ADISCORD_economy_migrate_schema")
+        for line in migration.splitlines():
+            if "debt_capacity" in line.casefold():
+                self.assertRegex(
+                    line,
+                    r"clear_variable\s*=\s*ADISCORD_[A-Za-z0-9_]*debt_capacity[A-Za-z0-9_]*",
+                    "schema migration may only delete the retired API",
+                )
+
+        scanned = {
+            "common/scripted_effects/ADISCORD_economy_effects.txt": EFFECTS.replace(
+                migration, ""
+            ),
+        }
+        patterns = (
+            "common/scripted_effects/*.txt",
+            "common/scripted_triggers/*.txt",
+            "common/modifier_definitions/*.txt",
+            "common/synchronized_dynamic_tokens/*.txt",
+            "common/ideas/*.txt",
+            "common/scripted_guis/*.txt",
+            "common/scripted_localisation/*.txt",
+            "interface/*.gui",
+            "events/*.txt",
+            "localisation/**/*.yml",
+            "docs/economy/*.md",
+            "tools/validators/*.py",
+        )
+        for pattern in patterns:
+            for path in ROOT.glob(pattern):
+                relative = path.relative_to(ROOT).as_posix()
+                if relative == "common/scripted_effects/ADISCORD_economy_effects.txt":
+                    continue
+                scanned[relative] = path.read_text(encoding="utf-8-sig")
+
+        forbidden = re.compile(
+            r"debt_capacity|debt\s+capacity|долгов\w*\s+[её]мк",
+            re.IGNORECASE,
+        )
+        offenders = {
+            path: sorted({match.group(0) for match in forbidden.finditer(text)})
+            for path, text in scanned.items()
+            if forbidden.search(text)
+        }
+        self.assertFalse(offenders, f"retired debt-capacity boundary: {offenders}")
+
+    def test_automatic_borrowing_covers_full_uncovered_deficit_without_capacity_gate(self):
+        for settlement_name in (
+            "ADISCORD_economy_apply_weekly_balance",
+            "ADISCORD_economy_apply_monthly_balance",
+        ):
+            settlement = unique_block(EFFECTS, settlement_name)
+            self.assertNotIn("debt_capacity", settlement, settlement_name)
+            self.assertNotIn("auto_borrow_over_cap", settlement, settlement_name)
+            self.assertRegex(
+                settlement,
+                r"set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_auto_borrow_temp"
+                r"\s+value\s*=\s*ADISCORD_economy_uncovered_deficit_temp\s*\}",
+                settlement_name,
+            )
+            for account in ("debt", "treasury"):
+                self.assertRegex(
+                    settlement,
+                    rf"add_to_variable\s*=\s*\{{\s*var\s*=\s*ADISCORD_economy_{account}"
+                    r"\s+value\s*=\s*ADISCORD_economy_auto_borrow_temp\s*\}",
+                    settlement_name,
+                )
+            self.assertNotIn(
+                "ADISCORD_economy_refresh_spending_ideas = yes",
+                settlement,
+                settlement_name,
+            )
+            self.assertIn("ADISCORD_economy_calculate_debt_metrics = yes", settlement)
+            self.assertIn(
+                "ADISCORD_economy_update_debt_state_after_settlement = yes",
+                settlement,
+            )
+
+    def test_debt_tiers_use_interest_share_and_four_thirteen_settlement_streaks(self):
+        metrics = unique_block(EFFECTS, "ADISCORD_economy_calculate_debt_metrics")
+        for variable in (
+            "ADISCORD_economy_weekly_interest",
+            "ADISCORD_economy_interest_share_income",
+            "ADISCORD_economy_debt_income_ratio",
+            "ADISCORD_economy_debt_pressure",
+        ):
+            self.assertIn(variable, metrics)
+        weekly_interest = metrics.index("ADISCORD_economy_weekly_interest")
+        interest_share = metrics.index("ADISCORD_economy_interest_share_income")
+        debt_ratio = metrics.index("ADISCORD_economy_debt_income_ratio")
+        pressure = metrics.index("ADISCORD_economy_debt_pressure")
+        self.assertLess(debt_ratio, interest_share)
+        self.assertLess(weekly_interest, interest_share)
+        self.assertLess(interest_share, pressure)
+        for value in ("value = 3", "value = 13", "value = 100"):
+            self.assertIn(value, metrics)
+        for coefficient in ("value = 0.20", "value = 1.50", "value = 2"):
+            self.assertIn(coefficient, metrics)
+        self.assertRegex(
+            metrics,
+            r"clamp_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_debt_pressure"
+            r"\s+min\s*=\s*0\s+max\s*=\s*100\s*\}",
+        )
+
+        transition = unique_block(
+            EFFECTS, "ADISCORD_economy_update_debt_state_after_settlement"
+        )
+        for threshold in (10, 25, 40):
+            self.assertRegex(
+                transition,
+                rf"check_variable\s*=\s*\{{\s*var\s*=\s*ADISCORD_economy_interest_share_income"
+                rf"\s+value\s*=\s*{threshold}\s+compare\s*=\s*greater_than_or_equals\s*\}}",
+            )
+        for streak, required, state in (
+            ("emergency_streak", 4, 3),
+            ("default_streak", 13, 4),
+        ):
+            variable = f"ADISCORD_economy_debt_{streak}"
+            self.assertRegex(
+                transition,
+                rf"add_to_variable\s*=\s*\{{\s*var\s*=\s*{variable}\s+value\s*=\s*1\s*\}}",
+            )
+            self.assertRegex(
+                transition,
+                rf"check_variable\s*=\s*\{{\s*var\s*=\s*{variable}\s+value\s*=\s*{required}"
+                r"\s+compare\s*=\s*greater_than_or_equals\s*\}",
+            )
+            self.assertRegex(
+                transition,
+                rf"set_variable\s*=\s*\{{\s*var\s*=\s*ADISCORD_economy_debt_state\s+value\s*=\s*{state}\s*\}}",
+            )
+            self.assertRegex(
+                transition,
+                rf"set_variable\s*=\s*\{{\s*var\s*=\s*{variable}\s+value\s*=\s*0\s*\}}",
+            )
+        self.assertIn("ADISCORD_economy_weekly_balance", transition)
+
+        exact_debuffs = {
+            "ADISCORD_economy_debt_strain": {"political_power_gain": -0.02},
+            "ADISCORD_economy_debt_crisis": {
+                "political_power_gain": -0.05,
+                "research_speed_factor": -0.01,
+            },
+            "ADISCORD_economy_debt_emergency": {
+                "political_power_gain": -0.10,
+                "research_speed_factor": -0.03,
+                "production_speed_buildings_factor": -0.04,
+                "stability_factor": -0.03,
+            },
+            "ADISCORD_economy_debt_default": {
+                "political_power_gain": -0.18,
+                "research_speed_factor": -0.07,
+                "production_speed_buildings_factor": -0.08,
+                "industrial_capacity_factory": -0.05,
+                "stability_factor": -0.08,
+            },
+        }
+        for idea_name, expected in exact_debuffs.items():
+            idea = unique_block(ECONOMY_IDEAS, idea_name)
+            for modifier, value in expected.items():
+                self.assertEqual(numeric_values(idea, modifier), [value], idea_name)
+
+    def test_debt_notifications_are_first_loan_and_upward_transitions_only(self):
+        queue = unique_block(EFFECTS, "ADISCORD_economy_queue_debt_notification")
+        transition = unique_block(
+            EFFECTS, "ADISCORD_economy_update_debt_state_after_settlement"
+        )
+        combined = queue + "\n" + transition
+        for variable in (
+            "ADISCORD_economy_pending_debt_notification_kind",
+            "ADISCORD_economy_pending_debt_notification_amount",
+            "ADISCORD_economy_pending_debt_notification_previous_state",
+            "ADISCORD_economy_pending_debt_notification_new_state",
+            "ADISCORD_economy_first_loan_notified",
+            "ADISCORD_economy_last_notified_debt_state",
+        ):
+            self.assertIn(variable, combined)
+        kinds = {
+            int(value)
+            for value in re.findall(
+                r"ADISCORD_economy_pending_debt_notification_kind\s+value\s*=\s*([1-5])\b",
+                combined,
+            )
+        }
+        self.assertEqual(kinds, {1, 2, 3, 4, 5})
+        self.assertRegex(
+            combined,
+            r"ADISCORD_economy_debt_state\s+value\s*=\s*ADISCORD_economy_last_notified_debt_state"
+            r"\s+compare\s*=\s*greater_than",
+        )
+        self.assertIn("is_ai = no", queue)
+        self.assertNotIn("ADISCORD_economy_refresh_spending_ideas", queue)
+
+    def test_repayment_recalculates_interest_and_can_lower_debuff_immediately(self):
+        for effect_name in (
+            "ADISCORD_economy_repay_debt",
+            "ADISCORD_economy_early_repay_debt",
+            "ADISCORD_economy_restructure_debt",
+        ):
+            repayment = unique_block(EFFECTS, effect_name)
+            self.assertIn(
+                "ADISCORD_economy_calculate_debt_metrics = yes",
+                repayment,
+                effect_name,
+            )
+            self.assertIn(
+                "ADISCORD_economy_reconcile_debt_state_after_action = yes",
+                repayment,
+                effect_name,
+            )
+            debt_change = repayment.index(
+                "subtract_from_variable = { var = ADISCORD_economy_debt"
+            )
+            metric_refresh = repayment.index(
+                "ADISCORD_economy_calculate_debt_metrics = yes"
+            )
+            reconciliation = repayment.index(
+                "ADISCORD_economy_reconcile_debt_state_after_action = yes"
+            )
+            self.assertLess(debt_change, metric_refresh, effect_name)
+            self.assertLess(metric_refresh, reconciliation, effect_name)
+            self.assertNotIn(
+                "ADISCORD_economy_update_debt_state_after_settlement",
+                repayment,
+                effect_name,
+            )
+        reconciler = unique_block(
+            EFFECTS, "ADISCORD_economy_reconcile_debt_state_after_action"
+        )
+        self.assertIn("ADISCORD_economy_debt_state", reconciler)
+        self.assertIn("ADISCORD_economy_last_notified_debt_state", reconciler)
+        self.assertNotRegex(reconciler, r"add_to_variable[^{]*\{[^{}]*_streak")
+
+    def test_weekly_path_has_no_idea_query_building_recount_or_country_iteration(self):
+        reachable = reachable_script_blocks(
+            (EFFECTS, MODIFIER_EFFECTS, TRIGGERS),
+            (
+                "ADISCORD_economy_prepare_weekly_country",
+                "ADISCORD_economy_light_update",
+                "ADISCORD_economy_apply_weekly_balance",
+            ),
+        )
+        forbidden_tokens = (
+            "has_idea",
+            "every_country",
+            "any_country",
+            "every_owned_state",
+            "all_owned_state",
+            "num_of_civilian_factories",
+            "num_of_available_civilian_factories",
+            "num_of_military_factories",
+            "num_of_available_military_factories",
+            "ADISCORD_economy_recount_economic_buildings",
+            "ADISCORD_economy_full_refresh",
+            "ADISCORD_economy_full_refresh_if_needed",
+            "ADISCORD_economy_recalculate_policy_modifiers",
+            "ADISCORD_economy_apply_visible_modifier_definition_factors",
+            "ADISCORD_economy_refresh_spending_ideas",
+            "ADISCORD_economy_update_gui",
+        )
+        offenders = {
+            name: [token for token in forbidden_tokens if token in body]
+            for name, body in reachable.items()
+            if any(token in body for token in forbidden_tokens)
+        }
+        self.assertFalse(offenders, f"heavy weekly reachability: {offenders}")
+
+    def test_ai_assistance_is_bounded_reversible_and_never_player_visible(self):
+        minor_ideas = (
+            ROOT / "common" / "ideas" / "ADISCORD_minor_optimization_ideas.txt"
+        ).read_text(encoding="utf-8-sig")
+        minor_effects = (
+            ROOT
+            / "common"
+            / "scripted_effects"
+            / "ADISCORD_minor_optimization_effects.txt"
+        ).read_text(encoding="utf-8-sig")
+        assistance = {
+            "ADISCORD_economy_ai_assistance_base": {
+                "ADISCORD_economy_overall_income_factor": 0.05,
+                "industrial_capacity_factory": 0.05,
+            },
+            "ADISCORD_economy_ai_assistance_civil_war": {
+                "supply_consumption_factor": -0.10,
+            },
+            "ADISCORD_economy_ai_assistance_retreat": {
+                "army_defence_factor": 0.05,
+            },
+        }
+        for idea_name, expected in assistance.items():
+            idea = unique_block(minor_ideas, idea_name)
+            self.assertIn("allowed = { always = no }", idea)
+            for modifier, value in expected.items():
+                actual = numeric_values(idea, modifier)
+                if modifier == "supply_consumption_factor":
+                    self.assertEqual(len(actual), 1, idea_name)
+                    self.assertGreaterEqual(actual[0], value, idea_name)
+                    self.assertLessEqual(actual[0], 0, idea_name)
+                else:
+                    self.assertEqual(actual, [value], idea_name)
+            self.assertNotIn(idea_name, ECONOMY_IDEAS)
+
+        refresh = unique_block(
+            minor_effects + "\n" + EFFECTS,
+            "ADISCORD_economy_refresh_ai_assistance",
+        )
+        self.assertIn("is_ai = yes", refresh)
+        self.assertIn("ADISCORD_economy_simulation_tier", refresh)
+        self.assertIn("surrender_progress", refresh)
+        self.assertRegex(refresh, r"surrender_progress\s*>\s*0\.35")
+        for idea_name in assistance:
+            self.assertRegex(refresh, rf"remove_ideas\s*=\s*{idea_name}\b")
+            self.assertRegex(refresh, rf"add_ideas\s*=\s*{idea_name}\b")
+        for forbidden in (
+            "attack_bonus",
+            "army_attack_factor",
+            "add_tech",
+            "set_technology",
+            "add_equipment_to_stockpile",
+            "ADISCORD_economy_treasury",
+            "ADISCORD_economy_inflation",
+            "debt_capacity",
+        ):
+            self.assertNotIn(forbidden, refresh)
+
+    def test_recovery_owned_economy_localisation_has_bilingual_keys_and_russian_bom(self):
+        russian_path = (
+            ROOT / "localisation" / "russian" / "ADISCORD_economy_l_russian.yml"
+        )
+        english_path = (
+            ROOT / "localisation" / "english" / "ADISCORD_economy_l_english.yml"
+        )
+        self.assertTrue(english_path.is_file(), "schema-12 economy English file is missing")
+        self.assertTrue(
+            russian_path.read_bytes().startswith(b"\xef\xbb\xbf"),
+            "Russian economy localisation lost its UTF-8 BOM",
+        )
+        russian = russian_path.read_text(encoding="utf-8-sig")
+        english = english_path.read_text(encoding="utf-8-sig")
+        owned = re.compile(
+            r"^ADISCORD_economy_(?:research_|debt_state_|debt_notification_|"
+            r"policy_(?:blocked|preview)_|(?:inflation|debt|treasury)_delayed_tt$)"
+        )
+        russian_keys = {key for key in localisation_key_set(russian) if owned.match(key)}
+        english_keys = {key for key in localisation_key_set(english) if owned.match(key)}
+        self.assertTrue(russian_keys, "no recovery-owned schema-12 keys were found")
+        self.assertEqual(russian_keys, english_keys)
+        for required in (
+            "ADISCORD_economy_inflation_delayed_tt",
+            "ADISCORD_economy_debt_delayed_tt",
+            "ADISCORD_economy_treasury_delayed_tt",
+            "ADISCORD_economy_policy_blocked_minimum",
+            "ADISCORD_economy_policy_blocked_maximum",
+            "ADISCORD_economy_policy_blocked_cooldown",
+            "ADISCORD_economy_policy_blocked_scope",
+        ):
+            self.assertIn(required, russian_keys)
+
     def test_val_and_stp_start_with_distinct_macroeconomic_profiles(self):
         initialization = block(EFFECTS, "ADISCORD_economy_initialize_country")
         profile_call = "ADISCORD_economy_apply_country_starting_profile = yes"
@@ -202,7 +802,6 @@ class WeeklyEconomyContracts(unittest.TestCase):
     def test_removed_dashboard_state_has_no_runtime_consumers(self):
         for retired_name in (
             "ADISCORD_economy_gui_page",
-            "ADISCORD_economy_research_spending_mode",
             "ADISCORD_economy_admin_spending_mode",
         ):
             self.assertNotIn(retired_name, EFFECTS)
@@ -676,36 +1275,31 @@ class WeeklyEconomyContracts(unittest.TestCase):
         ):
             action = block(EFFECTS, effect_name)
             self.assertIn("ADISCORD_economy_update_stretched = yes", action)
-            self.assertIn("ADISCORD_economy_refresh_spending_ideas = yes", action)
+            self.assertNotIn("ADISCORD_economy_refresh_spending_ideas = yes", action)
 
-    def test_player_gets_a_persistent_popup_when_a_deficit_triggers_automatic_borrowing(self):
-        settlement = block(EFFECTS, "ADISCORD_economy_apply_weekly_balance")
-        auto_borrow = settlement[
-            settlement.index("ADISCORD_economy_auto_borrow_temp value = 0.1") :
-        ]
-        self.assertIn("is_ai = no", auto_borrow)
-        self.assertIn("ADISCORD_economy_show_auto_loan_popup value = 1", auto_borrow)
-        self.assertIn("ADISCORD_economy_auto_loan_popup_amount", auto_borrow)
-        self.assertNotIn("country_event = { id = ADISCORD_economy.1 }", auto_borrow)
+    def test_player_gets_one_cached_notification_when_debt_state_changes(self):
+        reachable = reachable_script_blocks(
+            (EFFECTS, TRIGGERS), ("ADISCORD_economy_apply_weekly_balance",)
+        )
+        self.assertIn("ADISCORD_economy_queue_debt_notification", reachable)
+        self.assertTrue(
+            all("country_event =" not in body for body in reachable.values())
+        )
 
         gui = (ROOT / "interface" / "ADISCORD_economy.gui").read_text(encoding="utf-8-sig")
-        scripted_gui = (
-            ROOT / "common" / "scripted_guis" / "ADISCORD_economy_scripted_gui.txt"
-        ).read_text(encoding="utf-8-sig")
-        self.assertIn('name = "ADISCORD_economy_auto_loan_popup_window"', gui)
-        self.assertIn("ADISCORD_economy_auto_loan_popup_script", scripted_gui)
-        self.assertIn("ADISCORD_economy_auto_loan_popup_ok_click", scripted_gui)
+        self.assertIn('name = "ADISCORD_economy_debt_notification_window"', gui)
+        self.assertIn("ADISCORD_economy_debt_notification_script", SCRIPTED_GUI)
         for key in (
-            "ADISCORD_economy_auto_loan_popup_title",
-            "ADISCORD_economy_auto_loan_popup_desc",
-            "ADISCORD_economy_auto_loan_popup_ok",
+            "ADISCORD_economy_debt_notification_title",
+            "ADISCORD_economy_debt_notification_desc",
+            "ADISCORD_economy_debt_notification_ok",
         ):
             self.assertRegex(ECONOMY_LOC, rf"(?m)^\s*{re.escape(key)}:\d*\s+")
-        self.assertIn("ADISCORD_economy_auto_loan_popup_amount", ECONOMY_LOC)
+        self.assertIn("ADISCORD_economy_pending_debt_notification_amount", ECONOMY_LOC)
 
-    def test_schema_eleven_initializes_reserve_and_postwar_state_without_resetting_treasury(self):
+    def test_schema_twelve_initializes_reserve_and_postwar_state_without_resetting_treasury(self):
         migration = block(EFFECTS, "ADISCORD_economy_migrate_schema")
-        self.assertIn("value = 11", migration)
+        self.assertIn("value = 12", migration)
         self.assertIn("ADISCORD_economy_was_at_war", migration)
         self.assertIn("ADISCORD_economy_postwar_demobilization_months", migration)
         self.assertIn("ADISCORD_economy_initialize_variables = yes", migration)
@@ -736,24 +1330,15 @@ class WeeklyEconomyContracts(unittest.TestCase):
             "Фактическое изменение казны происходит раз в месяц", ECONOMY_LOC
         )
 
-    def test_unfunded_deficit_is_a_known_accounting_adjustment(self):
+    def test_full_deficit_borrowing_has_no_unfunded_accounting_adjustment(self):
         settlement = block(EFFECTS, "ADISCORD_economy_apply_weekly_balance")
-        field = "ADISCORD_economy_last_period_unfunded_deficit"
-        self.assertIn(f"var = {field} value = 0", settlement)
-        self.assertIn(f"var = {field} value = ADISCORD_economy_last_uncovered_deficit", settlement)
-        expected_start = settlement.find("ADISCORD_economy_accounting_expected_treasury_after_temp")
-        adjustment = settlement.find(f"value = {field}", expected_start)
-        unexplained = settlement.find("ADISCORD_economy_last_period_unexplained_delta", expected_start)
-        self.assertGreater(adjustment, expected_start)
-        self.assertGreater(unexplained, adjustment)
+        self.assertNotIn("ADISCORD_economy_last_period_unfunded_deficit", settlement)
+        self.assertNotIn("ADISCORD_economy_last_uncovered_deficit", settlement)
 
-    def test_unfunded_deficit_pressure_respects_modifier_factor(self):
+    def test_automatic_borrowing_does_not_add_unfunded_deficit_pressure(self):
         settlement = block(EFFECTS, "ADISCORD_economy_apply_weekly_balance")
-        uncovered = settlement.find("ADISCORD_economy_last_uncovered_deficit value = 0")
-        pressure_factor = settlement.find(
-            "ADISCORD_economy_final_deficit_pressure_factor_bp", uncovered
-        )
-        self.assertGreater(pressure_factor, uncovered)
+        self.assertNotIn("ADISCORD_economy_unfunded_pressure_temp", settlement)
+        self.assertNotIn("ADISCORD_economy_final_deficit_pressure_factor_bp", settlement)
 
     def test_budget_breakdown_leads_with_the_weekly_forecast(self):
         match = re.search(
@@ -911,7 +1496,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 MODIFIER_DEFINITIONS,
             )
         )
-        self.assertEqual(len(modifier_keys), 42)
+        self.assertEqual(len(modifier_keys), 41)
         self.assertTrue(MODIFIER_DOC.is_file())
         documentation = MODIFIER_DOC.read_text(encoding="utf-8-sig")
         for key in modifier_keys:
