@@ -1,0 +1,23 @@
+spriteTypes = {
+	# The vanilla strip has 31 frames.  Frames 32-42 are A-DISCORD buildings.
+	spriteType = {
+		name = "GFX_buildings_strip"
+		textureFile = "gfx/interface/buildings/building_icon_strip.dds"
+		noOfFrames = 42
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_build_slot_bg"
+		textureFile = "gfx/interface/buildings/ADISCORD_build_slot_bg.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_constructions_panel_bg"
+		textureFile = "gfx/interface/buildings/ADISCORD_constructions_panel_bg.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_constructions_panel_fill"
+		textureFile = "gfx/interface/buildings/ADISCORD_constructions_panel_fill.dds"
+	}
+}
