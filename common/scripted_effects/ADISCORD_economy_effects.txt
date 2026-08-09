@@ -1488,6 +1488,26 @@ ADISCORD_economy_calculate_weekly_budget = {
 	set_variable = { var = ADISCORD_economy_safe_reserve value = ADISCORD_economy_weekly_expenses }
 	multiply_variable = { var = ADISCORD_economy_safe_reserve value = 4 }
 	clamp_variable = { var = ADISCORD_economy_safe_reserve min = 50 max = 250 }
+	# Display-only runway: 260 means at least five years, including a non-negative
+	# current balance. The denominator floor prevents a near-zero deficit from
+	# producing an unstable UI value; neither cache is consumed by gameplay.
+	set_variable = { var = ADISCORD_economy_deficit_runway value = 260 }
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_weekly_balance value = 0 compare = less_than } }
+		set_temp_variable = { var = ADISCORD_economy_deficit_runway_denominator_temp value = 0 }
+		subtract_from_temp_variable = { var = ADISCORD_economy_deficit_runway_denominator_temp value = ADISCORD_economy_weekly_balance }
+		clamp_temp_variable = { var = ADISCORD_economy_deficit_runway_denominator_temp min = 0.01 max = 5000 }
+		set_variable = { var = ADISCORD_economy_deficit_runway value = ADISCORD_economy_treasury }
+		divide_variable = { var = ADISCORD_economy_deficit_runway value = ADISCORD_economy_deficit_runway_denominator_temp }
+	}
+	clamp_variable = { var = ADISCORD_economy_deficit_runway min = 0 max = 260 }
+	# Mirrors the live inflation ideas' consumer-goods burden bands. This is a
+	# display multiplier, not an additional expense or modifier source.
+	set_variable = { var = ADISCORD_economy_inflation_expense_multiplier value = 1 }
+	if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 10 compare = greater_than_or_equals } } set_variable = { var = ADISCORD_economy_inflation_expense_multiplier value = 1.01 } }
+	if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 25 compare = greater_than_or_equals } } set_variable = { var = ADISCORD_economy_inflation_expense_multiplier value = 1.04 } }
+	if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 50 compare = greater_than_or_equals } } set_variable = { var = ADISCORD_economy_inflation_expense_multiplier value = 1.08 } }
+	if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 75 compare = greater_than_or_equals } } set_variable = { var = ADISCORD_economy_inflation_expense_multiplier value = 1.15 } }
 }
 
 # Shared expense-preview arithmetic only touches temporary variables. Category

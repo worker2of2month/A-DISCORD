@@ -1438,7 +1438,8 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         ):
             self.assertIn(f'name = {name}', self.scripted_loc)
         for key in (
-            'ADISCORD_economy_loan_blocked_interest_share',
+            'ADISCORD_economy_loan_blocked_interest_share_internal',
+            'ADISCORD_economy_loan_blocked_interest_share_external',
             'ADISCORD_economy_loan_blocked_cooldown',
             'ADISCORD_economy_loan_blocked_treasury_room',
             'ADISCORD_economy_loan_blocked_creditworthiness',
@@ -1590,13 +1591,20 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         for required in (
             '?ADISCORD_economy_inflation|1',
             '?ADISCORD_economy_inflation_delta_temp|=+2',
-            'эмиссия',
-            'дефицитное давление',
-            'ценовые шоки',
             '[GetADISCORDInflationEffectsLoc]',
             '10/25/50/75%',
         ):
             self.assertIn(required, inflation_tt)
+
+        inflation_delayed_tt = localisation_value(
+            self.localisation, 'ADISCORD_economy_inflation_delayed_tt'
+        )
+        for required in (
+            'ADISCORD_economy_emission_pressure',
+            'ADISCORD_economy_deficit_pressure',
+            'ADISCORD_economy_price_shock',
+        ):
+            self.assertIn(required, inflation_delayed_tt)
 
         self.assertIn('name = GetADISCORDDebtEffectsLoc', self.scripted_loc)
         self.assertIn('name = GetADISCORDInflationEffectsLoc', self.scripted_loc)

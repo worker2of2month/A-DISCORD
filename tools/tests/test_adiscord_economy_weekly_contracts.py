@@ -86,8 +86,12 @@ SCRIPTED_LOC = (
     / "scripted_localisation"
     / "ADISCORD_economy_scripted_loc.txt"
 ).read_text(encoding="utf-8-sig")
+ECONOMY_GUI = (ROOT / "interface" / "ADISCORD_economy.gui").read_text(
+    encoding="utf-8-sig"
+)
 BUILDING_DOC = ROOT / "docs" / "economy" / "economic-buildings.md"
 MODIFIER_DOC = ROOT / "docs" / "economy" / "economic-modifiers.md"
+PLAYER_RUNTIME_DOC = ROOT / "docs" / "economy" / "economy-player-and-runtime.md"
 
 
 def block(text, name):
@@ -1832,7 +1836,7 @@ def manual_borrowing_availability_issues(triggers_text, scripted_loc_text):
 
 
 def localisation_key_set(text):
-    return set(re.findall(r"(?m)^\s*([A-Za-z0-9_.-]+):\d*\s+", text))
+    return set(re.findall(r"(?m)^[ \t]*([A-Za-z0-9_.-]+):\d*[ \t]+", text))
 
 
 def localisation_value(text, key):
@@ -1843,6 +1847,116 @@ def localisation_value(text, key):
     if not match:
         raise AssertionError(f"missing localisation value: {key}")
     return match.group(1)
+
+
+TASK10_LIVE_SELECTORS = frozenset(
+    {
+        "GetADISCORDEconomyModelLoc",
+        "GetADISCORDEconomyCycleLoc",
+        "GetADISCORDEconomyAdviceLoc",
+        "GetADISCORDTaxBurdenModeLoc",
+        "GetADISCORDArmySpendingModeLoc",
+        "GetADISCORDResearchSpendingModeLoc",
+        "GetADISCORDSocialSpendingModeLoc",
+        "GetADISCORDTaxBurdenEffectsLoc",
+        "GetADISCORDArmySpendingEffectsLoc",
+        "GetADISCORDResearchSpendingEffectsLoc",
+        "GetADISCORDSocialSpendingEffectsLoc",
+        "GetADISCORDTreasuryOperationsHintLoc",
+        "GetADISCORDInternalBondsAvailabilityLoc",
+        "GetADISCORDExternalLoanAvailabilityLoc",
+        "GetADISCORDDebtEffectsLoc",
+        "GetADISCORDInflationEffectsLoc",
+        "GetADISCORDStateLoadEffectsLoc",
+        "GetADISCORDWarFatigueEffectsLoc",
+        "GetADISCORDDemobilizationStatusLoc",
+        "GetADISCORDEconomyDebtNotificationKindLoc",
+        "GetADISCORDEconomyDebtNotificationCauseLoc",
+        "GetADISCORDEconomyDebtNotificationStateLoc",
+        "GetADISCORDEconomyDebtNotificationNextRiskLoc",
+    }
+    | {
+        f"GetADISCORDEconomy{policy}{direction}{suffix}Loc"
+        for policy in ("Tax", "Army", "Research", "Social")
+        for direction in ("Increase", "Decrease")
+        for suffix in ("Effect", "Preview")
+    }
+)
+
+TASK10_STALE_CONSTRUCTION_LOC_KEYS = frozenset(
+    {
+        "ADISCORD_economy_budget_construction_row",
+        "ADISCORD_economy_construction_controls_tt",
+        "ADISCORD_economy_construction_decrease_tt",
+        "ADISCORD_economy_construction_increase_tt",
+    }
+    | {
+        f"ADISCORD_economy_construction_{surface}_{level}"
+        for surface in ("effects", "funding_mode")
+        for level in range(1, 6)
+    }
+    | {
+        f"ADISCORD_economy_construction_level_{level}_tt"
+        for level in range(1, 6)
+    }
+)
+
+
+def localisation_key_counts(text):
+    counts = {}
+    for key in re.findall(r"(?m)^[ \t]*([A-Za-z0-9_.-]+):\d*[ \t]+", text):
+        counts[key] = counts.get(key, 0) + 1
+    return counts
+
+
+def task10_selector_output_keys(scripted_loc_text):
+    found = set()
+    keys = set()
+    for definition in parse_clausewitz(scripted_loc_text):
+        if definition.key != "defined_text" or not isinstance(definition.value, list):
+            continue
+        names = [
+            child.value
+            for child in definition.value
+            if child.key == "name" and isinstance(child.value, str)
+        ]
+        if len(names) != 1 or names[0] not in TASK10_LIVE_SELECTORS:
+            continue
+        found.add(names[0])
+        keys.update(
+            entry.value
+            for _, entry in _walk_parsed(definition.value)
+            if entry.key == "localization_key" and isinstance(entry.value, str)
+        )
+    if found != TASK10_LIVE_SELECTORS:
+        raise AssertionError(
+            f"Task 10 selector closure mismatch: missing {sorted(TASK10_LIVE_SELECTORS - found)}"
+        )
+    return keys
+
+
+def task10_live_localisation_keys(gui_text, scripted_loc_text):
+    keys = set(
+        re.findall(
+            r'(?:\btext|\bbuttonText|\bpdx_tooltip(?:_delayed)?)\s*=\s*"(ADISCORD_economy_[^"]+)"',
+            gui_text,
+        )
+    )
+    keys.update(
+        {
+            "ADISCORD_economy_treasury_delayed_tt",
+            "ADISCORD_economy_debt_delayed_tt",
+            "ADISCORD_economy_inflation_delayed_tt",
+            "ADISCORD_economy.3.t",
+            "ADISCORD_economy.3.d",
+            "ADISCORD_economy.3.a",
+        }
+    )
+    keys.update(task10_selector_output_keys(scripted_loc_text))
+    for level in range(1, 6):
+        keys.add(f"ADISCORD_economy_research_spending_{level}")
+        keys.add(f"ADISCORD_economy_research_spending_{level}_desc")
+    return keys
 
 
 class EconomySemanticFixtureTests(unittest.TestCase):
@@ -5596,26 +5710,250 @@ ADISCORD_bad_assistance_owner = {
             russian_path.read_bytes().startswith(b"\xef\xbb\xbf"),
             "Russian economy localisation lost its UTF-8 BOM",
         )
+        self.assertTrue(
+            english_path.read_bytes().startswith(b"\xef\xbb\xbf"),
+            "English recovery-owned economy localisation lost its UTF-8 BOM",
+        )
         russian = russian_path.read_text(encoding="utf-8-sig")
         english = english_path.read_text(encoding="utf-8-sig")
-        owned = re.compile(
-            r"^ADISCORD_economy_(?:research_|debt_state_|debt_notification_|"
-            r"policy_(?:blocked|preview)_|(?:inflation|debt|treasury)_delayed_tt$)"
+        for language, text in (("Russian", russian), ("English", english)):
+            duplicates = {
+                key: count
+                for key, count in localisation_key_counts(text).items()
+                if count != 1
+            }
+            self.assertEqual(duplicates, {}, f"{language} duplicate economy keys")
+
+        owned = task10_live_localisation_keys(ECONOMY_GUI, SCRIPTED_LOC)
+        russian_keys = localisation_key_set(russian)
+        english_keys = localisation_key_set(english)
+        self.assertEqual(owned - russian_keys, set(), "Russian live UI keys are missing")
+        self.assertEqual(owned - english_keys, set(), "English live UI keys are missing")
+        self.assertEqual(russian_keys & owned, english_keys & owned)
+        self.assertEqual(russian_keys & owned, owned)
+
+        for key in sorted(owned):
+            russian_value = localisation_value(russian, key)
+            english_value = localisation_value(english, key)
+            self.assertTrue(russian_value.strip(), f"empty Russian live UI key: {key}")
+            self.assertTrue(english_value.strip(), f"empty English live UI key: {key}")
+            self.assertNotIn("$ADISCORD_", russian_value, key)
+            self.assertNotIn("$ADISCORD_", english_value, key)
+            self.assertIsNone(
+                re.search(r"[\u0400-\u04ff]", english_value),
+                f"English live UI key contains Cyrillic: {key}",
+            )
+
+    def test_task10_removes_unreachable_construction_policy_localisation_aliases(self):
+        consumers = "\n".join(
+            (ECONOMY_GUI, SCRIPTED_GUI, SCRIPTED_LOC, ECONOMY_EVENTS, ECONOMY_IDEAS)
         )
-        russian_keys = {key for key in localisation_key_set(russian) if owned.match(key)}
-        english_keys = {key for key in localisation_key_set(english) if owned.match(key)}
-        self.assertTrue(russian_keys, "no recovery-owned schema-12 keys were found")
-        self.assertEqual(russian_keys, english_keys)
-        for required in (
-            "ADISCORD_economy_inflation_delayed_tt",
-            "ADISCORD_economy_debt_delayed_tt",
-            "ADISCORD_economy_treasury_delayed_tt",
-            "ADISCORD_economy_policy_blocked_minimum",
-            "ADISCORD_economy_policy_blocked_maximum",
-            "ADISCORD_economy_policy_blocked_cooldown",
-            "ADISCORD_economy_policy_blocked_scope",
+        russian_keys = localisation_key_set(ECONOMY_LOC)
+        english_keys = localisation_key_set(ECONOMY_LOC_EN)
+        self.assertEqual(len(TASK10_STALE_CONSTRUCTION_LOC_KEYS), 19)
+        for key in sorted(TASK10_STALE_CONSTRUCTION_LOC_KEYS):
+            self.assertNotRegex(consumers, rf"\b{re.escape(key)}\b")
+            self.assertNotIn(key, russian_keys)
+            self.assertNotIn(key, english_keys)
+
+    def test_task10_short_and_delayed_tooltips_have_distinct_bilingual_semantics(self):
+        language_files = {
+            "Russian": ECONOMY_LOC,
+            "English": ECONOMY_LOC_EN,
+        }
+        contracts = {
+            "treasury": {
+                "short": (
+                    "ADISCORD_economy_treasury",
+                    "ADISCORD_economy_weekly_balance",
+                    "ADISCORD_economy_safe_reserve",
+                ),
+                "delayed": (
+                    "ADISCORD_economy_weekly_income",
+                    "ADISCORD_economy_weekly_expenses",
+                    "ADISCORD_economy_deficit_runway",
+                    "ADISCORD_economy_personal_income",
+                    "ADISCORD_economy_research_expenses",
+                    "ADISCORD_economy_construction_expenses",
+                    "3/13",
+                    "260",
+                ),
+            },
+            "debt": {
+                "short": (
+                    "ADISCORD_economy_debt",
+                    "ADISCORD_economy_weekly_interest",
+                    "ADISCORD_economy_interest_share_income",
+                    "ADISCORD_economy_debt_state",
+                    "GetADISCORDDebtEffectsLoc",
+                    "10/25/40%",
+                    "4/13",
+                ),
+                "delayed": (
+                    "ADISCORD_economy_debt",
+                    "ADISCORD_economy_weekly_interest",
+                    "ADISCORD_economy_interest_share_income",
+                    "ADISCORD_economy_debt_state",
+                    "ADISCORD_economy_debt_emergency_streak",
+                    "ADISCORD_economy_debt_default_streak",
+                    "10%",
+                    "25%",
+                    "40%",
+                    "4",
+                    "13",
+                ),
+            },
+            "inflation": {
+                "short": (
+                    "ADISCORD_economy_inflation",
+                    "ADISCORD_economy_inflation_delta_temp",
+                    "GetADISCORDInflationEffectsLoc",
+                    "10/25/50/75%",
+                ),
+                "delayed": (
+                    "ADISCORD_economy_inflation",
+                    "ADISCORD_economy_inflation_delta_temp",
+                    "ADISCORD_economy_inflation_expense_multiplier",
+                    "ADISCORD_economy_emission_pressure",
+                    "ADISCORD_economy_deficit_pressure",
+                    "ADISCORD_economy_price_shock",
+                    "GetADISCORDInflationEffectsLoc",
+                    "10/25/50/75%",
+                ),
+            },
+        }
+        for language, text in language_files.items():
+            for metric, required in contracts.items():
+                short = localisation_value(text, f"ADISCORD_economy_{metric}_tt")
+                delayed = localisation_value(
+                    text, f"ADISCORD_economy_{metric}_delayed_tt"
+                )
+                self.assertLessEqual(short.count(r"\n"), 8, (language, metric))
+                self.assertGreater(delayed.count(r"\n"), short.count(r"\n"))
+                self.assertGreater(len(delayed), len(short))
+                for token in required["short"]:
+                    self.assertIn(token, short, (language, metric, "short"))
+                for token in required["delayed"]:
+                    self.assertIn(token, delayed, (language, metric, "delayed"))
+                self.assertNotIn("debt_capacity", short.lower())
+                self.assertNotIn("debt_capacity", delayed.lower())
+
+            for policy, title in (
+                ("tax", "Tax"),
+                ("army", "Army"),
+                ("research", "Research"),
+                ("social", "Social"),
+            ):
+                for direction in ("decrease", "increase"):
+                    tooltip = localisation_value(
+                        text, f"ADISCORD_economy_{policy}_{direction}_tt"
+                    )
+                    self.assertIn(
+                        f"ADISCORD_economy_{policy}_{direction}_target_level",
+                        tooltip,
+                    )
+                    self.assertIn(
+                        f"ADISCORD_economy_{policy}_{direction}_weekly_balance_delta",
+                        tooltip,
+                    )
+                    self.assertIn(
+                        f"[GetADISCORDEconomy{title}{direction.title()}EffectLoc]",
+                        tooltip,
+                    )
+                    self.assertIn(
+                        f"[GetADISCORDEconomy{title}{direction.title()}PreviewLoc]",
+                        tooltip,
+                    )
+
+    def test_task10_display_caches_have_one_bounded_non_gameplay_owner(self):
+        weekly = unique_block(EFFECTS, "ADISCORD_economy_calculate_weekly_budget")
+        parsed = parse_clausewitz(EFFECTS)
+        cache_names = (
+            "ADISCORD_economy_deficit_runway",
+            "ADISCORD_economy_inflation_expense_multiplier",
+        )
+        for cache in cache_names:
+            owners = {
+                definition.key
+                for definition in parsed
+                if isinstance(definition.value, list)
+                and any(
+                    entry.value == cache
+                    for _, entry in _walk_parsed(definition.value)
+                    if entry.key == "var" and isinstance(entry.value, str)
+                )
+            }
+            self.assertEqual(
+                owners,
+                {"ADISCORD_economy_calculate_weekly_budget"},
+                f"{cache} must have one bounded display-cache owner",
+            )
+
+        for token in (
+            "set_variable = { var = ADISCORD_economy_deficit_runway value = 260 }",
+            "check_variable = { var = ADISCORD_economy_weekly_balance value = 0 compare = less_than }",
+            "set_temp_variable = { var = ADISCORD_economy_deficit_runway_denominator_temp value = 0 }",
+            "subtract_from_temp_variable = { var = ADISCORD_economy_deficit_runway_denominator_temp value = ADISCORD_economy_weekly_balance }",
+            "clamp_temp_variable = { var = ADISCORD_economy_deficit_runway_denominator_temp min = 0.01 max = 5000 }",
+            "set_variable = { var = ADISCORD_economy_deficit_runway value = ADISCORD_economy_treasury }",
+            "divide_variable = { var = ADISCORD_economy_deficit_runway value = ADISCORD_economy_deficit_runway_denominator_temp }",
+            "clamp_variable = { var = ADISCORD_economy_deficit_runway min = 0 max = 260 }",
         ):
-            self.assertIn(required, russian_keys)
+            self.assertIn(token, weekly)
+
+        multiplier_writes = re.findall(
+            r"set_variable\s*=\s*\{\s*var\s*=\s*"
+            r"ADISCORD_economy_inflation_expense_multiplier\s+value\s*=\s*"
+            r"(\d+(?:\.\d+)?)\s*\}",
+            weekly,
+        )
+        self.assertEqual(multiplier_writes, ["1", "1.01", "1.04", "1.08", "1.15"])
+        for threshold, value in ((10, "1.01"), (25, "1.04"), (50, "1.08"), (75, "1.15")):
+            self.assertRegex(
+                weekly,
+                rf"check_variable\s*=\s*\{{\s*var\s*=\s*ADISCORD_economy_inflation\s+"
+                rf"value\s*=\s*{threshold}\s+compare\s*=\s*greater_than_or_equals\s*\}}\s*\}}\s*"
+                rf"set_variable\s*=\s*\{{\s*var\s*=\s*ADISCORD_economy_inflation_expense_multiplier\s+value\s*=\s*{re.escape(value)}\s*\}}",
+            )
+
+        non_display_consumers = "\n".join((TRIGGERS, ECONOMY_AI, SCRIPTED_GUI, ECONOMY_EVENTS))
+        for cache in cache_names:
+            self.assertNotIn(cache, non_display_consumers)
+        for text in (ECONOMY_LOC, ECONOMY_LOC_EN):
+            self.assertIn(
+                "ADISCORD_economy_deficit_runway",
+                localisation_value(text, "ADISCORD_economy_treasury_delayed_tt"),
+            )
+            self.assertIn(
+                "ADISCORD_economy_inflation_expense_multiplier",
+                localisation_value(text, "ADISCORD_economy_inflation_delayed_tt"),
+            )
+
+    def test_task10_docs_describe_current_schema_and_remove_stale_debt_capacity(self):
+        player_doc = PLAYER_RUNTIME_DOC.read_text(encoding="utf-8-sig")
+        modifier_doc = MODIFIER_DOC.read_text(encoding="utf-8-sig")
+        combined = f"{player_doc}\n{modifier_doc}"
+        for required in (
+            "schema 15",
+            "schema 12",
+            "10%",
+            "25%",
+            "40%",
+            "4",
+            "13",
+            "ADISCORD_economy_research_spending_mode",
+            "ADISCORD_economy_creditworthiness_factor",
+        ):
+            self.assertIn(required, combined)
+        self.assertNotIn("следующему этапу", player_doc.lower())
+        for stale_claim in (
+            "debt capacity",
+            "debt limit",
+            "лимит долга",
+            "ёмкость долга",
+            "емкость долга",
+        ):
+            self.assertNotIn(stale_claim, combined.lower())
 
     def test_val_and_stp_start_with_distinct_macroeconomic_profiles(self):
         initialization = block(EFFECTS, "ADISCORD_economy_initialize_country")
