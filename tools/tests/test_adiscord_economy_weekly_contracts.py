@@ -269,6 +269,144 @@ def weekly_reachability_issues(texts, roots=WEEKLY_ACCOUNTING_ROOTS):
     return issues
 
 
+def task7_weekly_on_action_issues(
+    on_actions_text, effects_text, modifier_effects_text, triggers_text
+):
+    """Require the live weekly hook to expose only the guarded accounting facade."""
+
+    try:
+        parsed_on_actions = parse_clausewitz(on_actions_text)
+        source_texts = (effects_text, modifier_effects_text, triggers_text)
+        parsed_sources = tuple(parse_clausewitz(text) for text in source_texts)
+    except ValueError as error:
+        return [f"weekly hook parse failure: {error}"]
+
+    issues = []
+    on_action_owners = [
+        entry
+        for entry in parsed_on_actions
+        if entry.key == "on_actions" and isinstance(entry.value, list)
+    ]
+    if len(on_action_owners) != 1:
+        return [f"weekly hook requires one on_actions owner, found {len(on_action_owners)}"]
+    weekly_hooks = [
+        entry
+        for entry in on_action_owners[0].value
+        if entry.key == "on_weekly" and isinstance(entry.value, list)
+    ]
+    if len(weekly_hooks) != 1:
+        return [f"weekly hook requires one on_weekly body, found {len(weekly_hooks)}"]
+    weekly_hook = weekly_hooks[0]
+    effects = [
+        entry
+        for entry in weekly_hook.value
+        if entry.key == "effect" and isinstance(entry.value, list)
+    ]
+    if len(effects) != 1 or len(weekly_hook.value) != 1:
+        issues.append("on_weekly does not have one country-scoped effect owner")
+
+    hook_entries = list(_walk_parsed(weekly_hook.value))
+    weekly_calls = [
+        entry
+        for _, entry in hook_entries
+        if entry.key == "ADISCORD_economy_weekly_update" and entry.value == "yes"
+    ]
+    gate_calls = [
+        entry
+        for _, entry in hook_entries
+        if entry.key == "ADISCORD_economy_should_weekly_update"
+        and entry.value == "yes"
+    ]
+    if len(weekly_calls) != 1:
+        issues.append(
+            f"on_weekly must call the weekly facade exactly once, found {len(weekly_calls)}"
+        )
+    if len(gate_calls) != 1:
+        issues.append(
+            f"on_weekly must call the weekly gate exactly once, found {len(gate_calls)}"
+        )
+
+    guarded_facades = []
+    if effects:
+        for conditional in effects[0].value:
+            if conditional.key != "if" or not isinstance(conditional.value, list):
+                continue
+            direct_limits = [
+                entry
+                for entry in conditional.value
+                if entry.key == "limit" and isinstance(entry.value, list)
+            ]
+            direct_facades = [
+                entry
+                for entry in conditional.value
+                if entry.key == "ADISCORD_economy_weekly_update"
+                and entry.value == "yes"
+            ]
+            if len(direct_limits) != 1 or len(direct_facades) != 1:
+                continue
+            direct_gates = [
+                entry
+                for entry in direct_limits[0].value
+                if entry.key == "ADISCORD_economy_should_weekly_update"
+                and entry.value == "yes"
+            ]
+            if len(direct_gates) == 1 and len(direct_limits[0].value) == 1:
+                guarded_facades.append(direct_facades[0])
+    if len(guarded_facades) != 1 or (
+        weekly_calls and guarded_facades[0] is not weekly_calls[0]
+    ):
+        issues.append("weekly facade is not owned by its exact country gate")
+
+    source_definitions = {
+        entry.key
+        for parsed in parsed_sources
+        for entry in parsed
+        if isinstance(entry.value, list)
+    }
+    hook_roots = sorted(
+        {
+            entry.key
+            for _, entry in hook_entries
+            if entry.key in source_definitions
+            and (entry.value == "yes" or isinstance(entry.value, list))
+        }
+    )
+    allowed_roots = {
+        "ADISCORD_economy_should_weekly_update",
+        "ADISCORD_economy_weekly_update",
+    }
+    unexpected_roots = sorted(set(hook_roots) - allowed_roots)
+    if unexpected_roots:
+        issues.append(
+            "on_weekly contains an extra scripted sibling: "
+            + ", ".join(unexpected_roots)
+        )
+
+    direct_offenders = sorted(
+        {
+            entry.key
+            for _, entry in hook_entries
+            if entry.key in WEEKLY_FORBIDDEN_EXACT_TOKENS
+            or any(
+                entry.key.startswith(prefix)
+                for prefix in WEEKLY_FORBIDDEN_TOKEN_PREFIXES
+            )
+        }
+    )
+    if direct_offenders:
+        issues.append(
+            "on_weekly contains a forbidden direct operation: "
+            + ", ".join(direct_offenders)
+        )
+
+    if hook_roots:
+        try:
+            issues.extend(weekly_reachability_issues(source_texts, tuple(hook_roots)))
+        except AssertionError as error:
+            issues.append(f"weekly hook graph is incomplete: {error}")
+    return issues
+
+
 def task7_schema_fifteen_cache_migration_issues(text):
     """Bind the one-shot Task 7 cache upgrade after the Task 6 migration."""
 
@@ -379,7 +517,9 @@ def task7_schema_fifteen_cache_migration_issues(text):
     return issues
 
 
-def task7_cache_invalidation_issues(effects_text, modifier_effects_text):
+def task7_cache_invalidation_issues(
+    effects_text, modifier_effects_text, triggers_text=TRIGGERS
+):
     """Require stale weekly sources to become ineligible until a full rebuild."""
 
     try:
@@ -489,33 +629,53 @@ def task7_cache_invalidation_issues(effects_text, modifier_effects_text):
     ):
         issues.append("policy source cache and final factors do not rebuild before readiness")
 
-    for name in (
+    targeted_roots = (
         "ADISCORD_economy_finish_targeted_policy_refresh",
         "ADISCORD_economy_refresh_tax_policy",
         "ADISCORD_economy_refresh_army_policy",
         "ADISCORD_economy_refresh_research_policy",
         "ADISCORD_economy_refresh_social_policy",
-    ):
+    )
+    forbidden_targeted_descendants = {
+        "ADISCORD_economy_mark_dirty",
+        "ADISCORD_economy_full_refresh",
+        "ADISCORD_economy_full_refresh_if_needed",
+        "ADISCORD_economy_cache_weekly_factory_sources",
+        "ADISCORD_economy_cache_weekly_policy_sources",
+        "ADISCORD_economy_recalculate_policy_modifiers",
+        "ADISCORD_economy_calculate_final_modifier_factors",
+        "ADISCORD_economy_recount_economic_buildings",
+        "ADISCORD_economy_clear_dirty",
+    }
+    targeted_sources = (effects_text, modifier_effects_text, triggers_text)
+    for name in targeted_roots:
         try:
-            targeted = _parsed_definition(effects_text, name)
+            reachable = reachable_script_entries(targeted_sources, (name,))
         except AssertionError as error:
             issues.append(str(error))
             continue
-        for _, entry in _walk_parsed(targeted.value):
-            if entry.key == "set_variable" and isinstance(entry.value, list):
+        escaped = sorted(set(reachable) & forbidden_targeted_descendants)
+        if escaped:
+            issues.append(
+                f"{name} escapes its targeted dependency refresh through "
+                + ", ".join(escaped)
+            )
+        readiness_writers = []
+        for definition_name, definition in reachable.items():
+            for _, entry in _walk_parsed(definition.value):
+                if entry.key != "set_variable" or not isinstance(entry.value, list):
+                    continue
                 if _entry_scalar(entry.value, "var") in {
                     "ADISCORD_economy_weekly_source_cache_ready",
                     "ADISCORD_economy_weekly_ready",
                 }:
-                    issues.append(f"{name} overwrites source readiness")
-            if entry.key in {
-                "ADISCORD_economy_mark_dirty",
-                "ADISCORD_economy_full_refresh",
-                "ADISCORD_economy_full_refresh_if_needed",
-                "ADISCORD_economy_cache_weekly_factory_sources",
-                "ADISCORD_economy_recalculate_policy_modifiers",
-            }:
-                issues.append(f"{name} escapes its targeted dependency refresh")
+                    readiness_writers.append(definition_name)
+                    break
+        if readiness_writers:
+            issues.append(
+                f"{name} reaches source-readiness writers: "
+                + ", ".join(sorted(readiness_writers))
+            )
     return issues
 
 
@@ -4097,6 +4257,11 @@ class WeeklyEconomyContracts(unittest.TestCase):
     def test_weekly_path_has_no_idea_query_building_recount_or_country_iteration(self):
         sources = (EFFECTS, MODIFIER_EFFECTS, TRIGGERS)
         self.assertFalse(weekly_reachability_issues(sources))
+        self.assertFalse(
+            task7_weekly_on_action_issues(
+                ON_ACTIONS, EFFECTS, MODIFIER_EFFECTS, TRIGGERS
+            )
+        )
         on_weekly = block(block(ON_ACTIONS, "on_actions"), "on_weekly")
         self.assertEqual(on_weekly.count("ADISCORD_economy_weekly_update = yes"), 1)
         self.assertEqual(
@@ -4133,6 +4298,56 @@ class WeeklyEconomyContracts(unittest.TestCase):
                     weekly_reachability_issues((mutation, MODIFIER_EFFECTS, TRIGGERS)),
                     name,
                 )
+
+        weekly_call = "\t\t\t\tADISCORD_economy_weekly_update = yes"
+        self.assertIn(weekly_call, ON_ACTIONS)
+        on_action_mutations = {
+            "weekly hook calls GUI beside the accounting facade": (
+                ON_ACTIONS.replace(
+                    weekly_call,
+                    weekly_call + "\n\t\t\t\tADISCORD_economy_update_gui = yes",
+                    1,
+                ),
+                EFFECTS,
+            ),
+            "weekly hook reaches GUI through a parameter wrapper": (
+                ON_ACTIONS.replace(
+                    weekly_call,
+                    weekly_call
+                    + "\n\t\t\t\tADISCORD_task7_weekly_wrapper = { SOURCE = weekly }",
+                    1,
+                ),
+                EFFECTS
+                + "\nADISCORD_task7_weekly_wrapper = {\n"
+                + "\tADISCORD_economy_update_gui = yes\n}\n",
+            ),
+        }
+        for name, (mutated_on_actions, mutated_effects) in on_action_mutations.items():
+            with self.subTest(on_action_mutation=name):
+                self.assertTrue(parse_clausewitz(mutated_on_actions))
+                self.assertTrue(parse_clausewitz(mutated_effects))
+                self.assertTrue(
+                    task7_weekly_on_action_issues(
+                        mutated_on_actions,
+                        mutated_effects,
+                        MODIFIER_EFFECTS,
+                        TRIGGERS,
+                    ),
+                    name,
+                )
+
+        decoy_on_actions = ON_ACTIONS.replace(
+            weekly_call,
+            '# ADISCORD_economy_update_gui = yes\n'
+            + weekly_call
+            + '\n\t\t\t\tlog = "ADISCORD_task7_weekly_wrapper = yes"',
+            1,
+        )
+        self.assertFalse(
+            task7_weekly_on_action_issues(
+                decoy_on_actions, EFFECTS, MODIFIER_EFFECTS, TRIGGERS
+            )
+        )
 
     def test_weekly_ready_gate_prevents_uninitialized_or_unmigrated_settlement(self):
         prepare = unique_block(EFFECTS, "ADISCORD_economy_prepare_weekly_country")
@@ -4315,6 +4530,18 @@ class WeeklyEconomyContracts(unittest.TestCase):
         full_source = unique_block(EFFECTS, "ADISCORD_economy_full_refresh")
         targeted_anchor = "\tADISCORD_economy_finish_targeted_policy_refresh = yes"
         self.assertIn(targeted_anchor, EFFECTS)
+        army_idea_source = unique_block(
+            EFFECTS, "ADISCORD_economy_refresh_army_policy_idea"
+        )
+        army_idea_anchor = (
+            "\tset_variable = { var = ADISCORD_economy_last_idea_signature value = -1 }"
+        )
+        self.assertIn(army_idea_anchor, army_idea_source)
+        army_policy_source = unique_block(
+            EFFECTS, "ADISCORD_economy_refresh_army_policy"
+        )
+        army_policy_idea_call = "\tADISCORD_economy_refresh_army_policy_idea = yes"
+        self.assertIn(army_policy_idea_call, army_policy_source)
         mutations = {
             "dirty cache remains eligible": (
                 EFFECTS.replace(
@@ -4389,6 +4616,66 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 ),
                 MODIFIER_EFFECTS,
             ),
+            "targeted descendant falsely restores global readiness": (
+                EFFECTS.replace(
+                    army_idea_source,
+                    army_idea_source.replace(
+                        army_idea_anchor,
+                        "\tset_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 1 }\n"
+                        + army_idea_anchor,
+                        1,
+                    ),
+                    1,
+                ),
+                MODIFIER_EFFECTS,
+            ),
+            "targeted scalar wrapper falsely restores global readiness": (
+                EFFECTS.replace(
+                    army_policy_source,
+                    army_policy_source.replace(
+                        army_policy_idea_call,
+                        "\tADISCORD_task7_bad_ready_wrapper = yes",
+                        1,
+                    ),
+                    1,
+                )
+                + "\nADISCORD_task7_bad_ready_wrapper = {\n"
+                + "\tADISCORD_economy_refresh_army_policy_idea = yes\n"
+                + "\tset_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 1 }\n}\n",
+                MODIFIER_EFFECTS,
+            ),
+            "targeted parameter wrapper falsely restores global readiness": (
+                EFFECTS.replace(
+                    army_policy_source,
+                    army_policy_source.replace(
+                        army_policy_idea_call,
+                        "\tADISCORD_task7_bad_ready_wrapper = { SOURCE = army }",
+                        1,
+                    ),
+                    1,
+                )
+                + "\nADISCORD_task7_bad_ready_wrapper = {\n"
+                + "\tADISCORD_economy_refresh_army_policy_idea = yes\n"
+                + "\tset_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 1 }\n}\n",
+                MODIFIER_EFFECTS,
+            ),
+            "targeted cycle hides a false global readiness restore": (
+                EFFECTS.replace(
+                    army_policy_source,
+                    army_policy_source.replace(
+                        army_policy_idea_call,
+                        "\tADISCORD_task7_bad_ready_wrapper_a = yes",
+                        1,
+                    ),
+                    1,
+                )
+                + "\nADISCORD_task7_bad_ready_wrapper_a = {\n"
+                + "\tADISCORD_task7_bad_ready_wrapper_b = { SOURCE = army }\n}\n"
+                + "ADISCORD_task7_bad_ready_wrapper_b = {\n"
+                + "\tADISCORD_task7_bad_ready_wrapper_a = yes\n"
+                + "\tset_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 1 }\n}\n",
+                MODIFIER_EFFECTS,
+            ),
         }
         for name, (mutated_effects, mutated_modifiers) in mutations.items():
             with self.subTest(cache_mutation=name):
@@ -4400,6 +4687,17 @@ class WeeklyEconomyContracts(unittest.TestCase):
                     ),
                     name,
                 )
+
+        decoy_effects = EFFECTS.replace(
+            army_policy_idea_call,
+            '# set_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 1 }\n'
+            + army_policy_idea_call
+            + '\n\tlog = "ADISCORD_task7_bad_ready_wrapper = yes"',
+            1,
+        )
+        self.assertFalse(
+            task7_cache_invalidation_issues(decoy_effects, MODIFIER_EFFECTS)
+        )
 
     def test_weekly_forecast_reprices_live_debt_and_inflation_from_cached_sources(self):
         reachable = reachable_script_entries(
