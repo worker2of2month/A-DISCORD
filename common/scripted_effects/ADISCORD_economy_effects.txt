@@ -1230,6 +1230,50 @@ ADISCORD_economy_update_debt_crisis_level = {
 	clamp_variable = { var = ADISCORD_economy_debt_crisis_level min = 0 max = 4 }
 }
 
+# Repayment actions may immediately lower an already-persistent debt state and
+# its debuff. Task 6 owns every upward transition, settlement streak, and
+# notification; this reconciler deliberately cannot create states 3 or 4.
+ADISCORD_economy_reconcile_debt_state_after_action = {
+	if = {
+		limit = {
+			check_variable = { var = ADISCORD_economy_interest_share_income value = 10 compare = less_than }
+			check_variable = { var = ADISCORD_economy_debt_state value = 0 compare = greater_than }
+		}
+		set_variable = { var = ADISCORD_economy_debt_state value = 0 }
+		if = {
+			limit = { check_variable = { var = ADISCORD_economy_last_notified_debt_state value = 0 compare = greater_than } }
+			set_variable = { var = ADISCORD_economy_last_notified_debt_state value = 0 }
+		}
+		remove_ideas = { ADISCORD_economy_debt_strain ADISCORD_economy_debt_crisis ADISCORD_economy_debt_emergency ADISCORD_economy_debt_default }
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = ADISCORD_economy_interest_share_income value = 25 compare = less_than }
+			check_variable = { var = ADISCORD_economy_debt_state value = 1 compare = greater_than }
+		}
+		set_variable = { var = ADISCORD_economy_debt_state value = 1 }
+		if = {
+			limit = { check_variable = { var = ADISCORD_economy_last_notified_debt_state value = 1 compare = greater_than } }
+			set_variable = { var = ADISCORD_economy_last_notified_debt_state value = 1 }
+		}
+		remove_ideas = { ADISCORD_economy_debt_strain ADISCORD_economy_debt_crisis ADISCORD_economy_debt_emergency ADISCORD_economy_debt_default }
+		add_ideas = ADISCORD_economy_debt_strain
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = ADISCORD_economy_interest_share_income value = 40 compare = less_than }
+			check_variable = { var = ADISCORD_economy_debt_state value = 2 compare = greater_than }
+		}
+		set_variable = { var = ADISCORD_economy_debt_state value = 2 }
+		if = {
+			limit = { check_variable = { var = ADISCORD_economy_last_notified_debt_state value = 2 compare = greater_than } }
+			set_variable = { var = ADISCORD_economy_last_notified_debt_state value = 2 }
+		}
+		remove_ideas = { ADISCORD_economy_debt_strain ADISCORD_economy_debt_crisis ADISCORD_economy_debt_emergency ADISCORD_economy_debt_default }
+		add_ideas = ADISCORD_economy_debt_crisis
+	}
+}
+
 ADISCORD_economy_calculate_monthly_balance = {
 	set_variable = { var = ADISCORD_economy_monthly_balance value = ADISCORD_economy_monthly_income }
 	subtract_from_variable = { var = ADISCORD_economy_monthly_balance value = ADISCORD_economy_monthly_expenses }
@@ -2182,6 +2226,7 @@ ADISCORD_economy_repay_debt = {
 		add_to_variable = { var = ADISCORD_economy_current_month_debt_paid value = ADISCORD_economy_repay_cash_temp }
 		add_to_variable = { var = ADISCORD_economy_fiscal_stress value = -3 }
 		ADISCORD_economy_calculate_debt_metrics = yes
+		ADISCORD_economy_reconcile_debt_state_after_action = yes
 		ADISCORD_economy_update_macro_confidence = yes
 		ADISCORD_economy_mark_dirty = yes
 	}
@@ -2308,6 +2353,7 @@ ADISCORD_economy_restructure_debt = {
 		add_to_variable = { var = ADISCORD_economy_action_overload_residue value = 4 }
 		set_variable = { var = ADISCORD_economy_recent_debt value = 1 }
 		ADISCORD_economy_calculate_debt_metrics = yes
+		ADISCORD_economy_reconcile_debt_state_after_action = yes
 		ADISCORD_economy_update_macro_confidence = yes
 		ADISCORD_economy_mark_dirty = yes
 	}
@@ -2330,6 +2376,7 @@ ADISCORD_economy_early_repay_debt = {
 		add_to_variable = { var = ADISCORD_economy_fiscal_stress value = -6 }
 		add_to_variable = { var = ADISCORD_economy_deficit_pressure value = -6 }
 		ADISCORD_economy_calculate_debt_metrics = yes
+		ADISCORD_economy_reconcile_debt_state_after_action = yes
 		ADISCORD_economy_update_macro_confidence = yes
 		ADISCORD_economy_mark_dirty = yes
 	}
@@ -2846,9 +2893,9 @@ ADISCORD_economy_refresh_spending_ideas = {
 	remove_ideas = ADISCORD_economy_high_inflation
 	remove_ideas = ADISCORD_economy_severe_inflation
 	remove_ideas = ADISCORD_economy_hyperinflation
-	remove_ideas = ADISCORD_economy_debt_warning
-	remove_ideas = ADISCORD_economy_debt_burden
+	remove_ideas = ADISCORD_economy_debt_strain
 	remove_ideas = ADISCORD_economy_debt_crisis
+	remove_ideas = ADISCORD_economy_debt_emergency
 	remove_ideas = ADISCORD_economy_debt_default
 	remove_ideas = ADISCORD_economy_war_fatigue_2
 	remove_ideas = ADISCORD_economy_war_fatigue_3
@@ -2885,9 +2932,9 @@ ADISCORD_economy_refresh_spending_ideas = {
 	else_if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 25 compare = greater_than_or_equals } } add_ideas = ADISCORD_economy_high_inflation }
 	else_if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 10 compare = greater_than_or_equals } } add_ideas = ADISCORD_economy_rising_inflation }
 	if = { limit = { check_variable = { var = ADISCORD_economy_debt_crisis_level value = 4 compare = greater_than_or_equals } } add_ideas = ADISCORD_economy_debt_default }
-	else_if = { limit = { check_variable = { var = ADISCORD_economy_debt_crisis_level value = 3 compare = greater_than_or_equals } } add_ideas = ADISCORD_economy_debt_crisis }
-	else_if = { limit = { check_variable = { var = ADISCORD_economy_debt_crisis_level value = 2 compare = greater_than_or_equals } } add_ideas = ADISCORD_economy_debt_burden }
-	else_if = { limit = { check_variable = { var = ADISCORD_economy_debt_crisis_level value = 1 compare = greater_than_or_equals } } add_ideas = ADISCORD_economy_debt_warning }
+	else_if = { limit = { check_variable = { var = ADISCORD_economy_debt_crisis_level value = 3 compare = greater_than_or_equals } } add_ideas = ADISCORD_economy_debt_emergency }
+	else_if = { limit = { check_variable = { var = ADISCORD_economy_debt_crisis_level value = 2 compare = greater_than_or_equals } } add_ideas = ADISCORD_economy_debt_crisis }
+	else_if = { limit = { check_variable = { var = ADISCORD_economy_debt_crisis_level value = 1 compare = greater_than_or_equals } } add_ideas = ADISCORD_economy_debt_strain }
 	if = { limit = { check_variable = { var = ADISCORD_economy_war_fatigue_level value = 4 compare = greater_than_or_equals } } add_ideas = ADISCORD_economy_war_fatigue_4 }
 	else_if = { limit = { check_variable = { var = ADISCORD_economy_war_fatigue_level value = 3 compare = greater_than_or_equals } } add_ideas = ADISCORD_economy_war_fatigue_3 }
 	else_if = { limit = { check_variable = { var = ADISCORD_economy_war_fatigue_level value = 2 compare = greater_than_or_equals } } add_ideas = ADISCORD_economy_war_fatigue_2 }

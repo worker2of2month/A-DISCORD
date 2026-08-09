@@ -439,26 +439,18 @@ def debt_metric_flow_issues(text):
         )
         if limit is None:
             return False
-        limit_tokens = [
-            entry.key
-            for _, entry in _walk_parsed(limit.value)
-        ] + [
-            entry.value
-            for _, entry in _walk_parsed(limit.value)
-            if isinstance(entry.value, str)
-        ]
-        checks = [
-            entry
-            for _, entry in _walk_parsed(limit.value)
-            if entry.key == "check_variable" and isinstance(entry.value, list)
-        ]
+        if len(limit.value) != 1:
+            return False
+        check = limit.value[0]
+        if check.key != "check_variable" or not isinstance(check.value, list):
+            return False
+        fields = [entry.key for entry in check.value]
         return (
-            len(checks) == 1
-            and _entry_scalar(checks[0].value, "var") == variable
-            and _entry_scalar(checks[0].value, "value") == threshold
-            and _entry_scalar(checks[0].value, "compare") == "less_than"
-            and "NOT" not in limit_tokens
-            and not ("always" in limit_tokens and "no" in limit_tokens)
+            len(fields) == 3
+            and set(fields) == {"var", "value", "compare"}
+            and _entry_scalar(check.value, "var") == variable
+            and _entry_scalar(check.value, "value") == threshold
+            and _entry_scalar(check.value, "compare") == "less_than"
         )
 
     for variable, threshold in (
@@ -845,6 +837,35 @@ ADISCORD_economy_migrate_schema = {
             with self.subTest(mutation=name):
                 self.assertNotEqual(mutation, self.DEBT_METRICS)
                 self.assertTrue(debt_metric_flow_issues(mutation))
+
+        for variable, threshold in (
+            ("ADISCORD_economy_debt_income_denominator_temp", "1"),
+            ("ADISCORD_economy_interest_income_denominator_temp", "0.1"),
+        ):
+            exact_limit = (
+                "limit = { check_variable = { var = "
+                f"{variable} value = {threshold} compare = less_than }} }}"
+            )
+            for mutation_name, extra_predicate in (
+                ("extra scalar predicate", "has_country_flag = hidden_floor_gate "),
+                (
+                    "extra compound predicate",
+                    "AND = { has_country_flag = hidden_floor_gate } ",
+                ),
+            ):
+                mutation = self.DEBT_METRICS.replace(
+                    exact_limit,
+                    exact_limit.replace(
+                        "limit = { ", f"limit = {{ {extra_predicate}", 1
+                    ),
+                    1,
+                )
+                with self.subTest(
+                    floor=variable,
+                    mutation=mutation_name,
+                ):
+                    self.assertNotEqual(mutation, self.DEBT_METRICS)
+                    self.assertTrue(debt_metric_flow_issues(mutation))
 
     def test_structural_call_graph_handles_parameter_blocks_decoys_duplicates_and_cycles(self):
         graph = """
@@ -2279,6 +2300,23 @@ class WeeklyEconomyContracts(unittest.TestCase):
         self.assertNotEqual(reordered, SCRIPTED_LOC)
         self.assertTrue(manual_borrowing_availability_issues(TRIGGERS, reordered))
 
+    def test_treasury_operations_debt_hint_names_its_pressure_trigger(self):
+        selector = unique_defined_text(
+            SCRIPTED_LOC, "GetADISCORDTreasuryOperationsHintLoc"
+        )
+        self.assertRegex(
+            selector,
+            r"check_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_debt_pressure"
+            r"\s+value\s*=\s*50\s+compare\s*=\s*greater_than_or_equals\s*\}"
+            r"\s*\}\s*localization_key\s*=\s*ADISCORD_economy_operations_hint_debt",
+        )
+        hint = localisation_value(
+            ECONOMY_LOC, "ADISCORD_economy_operations_hint_debt"
+        ).casefold()
+        self.assertIn("давление долга", hint)
+        self.assertIn("50", hint)
+        self.assertNotIn("долг выше 70%", hint)
+
     def test_automatic_borrowing_covers_full_uncovered_deficit_without_capacity_gate(self):
         self.assertFalse(automatic_borrow_flow_issues(EFFECTS))
         for settlement_name in (
@@ -2437,14 +2475,16 @@ class WeeklyEconomyContracts(unittest.TestCase):
             "ADISCORD_economy_restructure_debt",
         ):
             repayment = unique_block(EFFECTS, effect_name)
-            self.assertIn(
-                "ADISCORD_economy_calculate_debt_metrics = yes",
-                repayment,
+            self.assertEqual(
+                repayment.count("ADISCORD_economy_calculate_debt_metrics = yes"),
+                1,
                 effect_name,
             )
-            self.assertIn(
-                "ADISCORD_economy_reconcile_debt_state_after_action = yes",
-                repayment,
+            self.assertEqual(
+                repayment.count(
+                    "ADISCORD_economy_reconcile_debt_state_after_action = yes"
+                ),
+                1,
                 effect_name,
             )
             debt_change = repayment.index(
@@ -2469,6 +2509,55 @@ class WeeklyEconomyContracts(unittest.TestCase):
         self.assertIn("ADISCORD_economy_debt_state", reconciler)
         self.assertIn("ADISCORD_economy_last_notified_debt_state", reconciler)
         self.assertNotRegex(reconciler, r"add_to_variable[^{]*\{[^{}]*_streak")
+        self.assertNotRegex(
+            reconciler,
+            r"set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_debt_state"
+            r"\s+value\s*=\s*[34]\b",
+        )
+        for forbidden in (
+            "ADISCORD_economy_update_debt_state_after_settlement",
+            "ADISCORD_economy_queue_debt_notification",
+            "ADISCORD_economy_debt_emergency_streak",
+            "ADISCORD_economy_debt_default_streak",
+            "country_event",
+            "news_event",
+        ):
+            self.assertNotIn(forbidden, reconciler)
+
+    def test_debt_debuff_ideas_use_canonical_state_ids(self):
+        expected = {
+            "ADISCORD_economy_debt_strain": {
+                "political_power_gain": -0.02,
+            },
+            "ADISCORD_economy_debt_crisis": {
+                "political_power_gain": -0.05,
+                "research_speed_factor": -0.01,
+            },
+            "ADISCORD_economy_debt_emergency": {
+                "political_power_gain": -0.10,
+                "research_speed_factor": -0.03,
+                "production_speed_buildings_factor": -0.04,
+                "stability_factor": -0.03,
+            },
+            "ADISCORD_economy_debt_default": {
+                "political_power_gain": -0.18,
+                "research_speed_factor": -0.07,
+                "production_speed_buildings_factor": -0.08,
+                "industrial_capacity_factory": -0.05,
+                "stability_factor": -0.08,
+            },
+        }
+        for idea_name, modifiers in expected.items():
+            idea = unique_block(ECONOMY_IDEAS, idea_name)
+            localisation_value(ECONOMY_LOC, idea_name)
+            for modifier, value in modifiers.items():
+                self.assertEqual(numeric_values(idea, modifier), [value], idea_name)
+        for retired_id in (
+            "ADISCORD_economy_debt_warning",
+            "ADISCORD_economy_debt_burden",
+        ):
+            self.assertEqual(assignment_blocks(ECONOMY_IDEAS, retired_id), [])
+            self.assertNotIn(retired_id, localisation_key_set(ECONOMY_LOC))
 
     def test_weekly_path_has_no_idea_query_building_recount_or_country_iteration(self):
         reachable = reachable_script_blocks(
