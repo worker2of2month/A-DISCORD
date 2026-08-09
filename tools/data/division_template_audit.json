@@ -7104,14 +7104,14 @@
       }
     },
     {
-      "key": "oob_tmr_northern_line_brigade",
+      "key": "oob_tmr_northern_militia",
       "source": {
         "kind": "oob",
         "path": "history/units/TMR.txt",
         "owner": "TMR"
       },
-      "technical_name": "Northern Line Brigade",
-      "display_name": "Northern Line Brigade",
+      "technical_name": "Northern Militia",
+      "display_name": "Northern Militia",
       "legacy_names": [
         "Северная дружина"
       ],
@@ -7144,10 +7144,10 @@
       "equipment_availability": {
         "infantry_equipment": true
       },
-      "ai_role": "line",
+      "ai_role": "territorial",
       "replacement_path": {
         "kind": "retain",
-        "target": "oob_tmr_northern_line_brigade"
+        "target": "oob_tmr_northern_militia"
       }
     },
     {

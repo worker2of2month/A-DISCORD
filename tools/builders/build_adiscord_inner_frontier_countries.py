@@ -39,6 +39,18 @@ VP_LOCALISATION = ROOT / "localisation" / "russian" / "ADISCORD_inner_frontier_v
 POPULATION_MARKER = "# Populated by tools/build_adiscord_inner_frontier_countries.py"
 PROTECTORATE_TAG = "WCG"
 PROTECTORATE_SUCCESSORS = {"KRM", "LMN"}
+DIVISION_TEMPLATE_NAMES = (
+    "Palatine Line Division",
+    "Filtration Battalion",
+    "Frontier Brigade",
+    "Settler Militia",
+)
+(
+    PALATINE_LINE_TEMPLATE,
+    FILTRATION_TEMPLATE,
+    FRONTIER_TEMPLATE,
+    SETTLER_MILITIA_TEMPLATE,
+) = DIVISION_TEMPLATE_NAMES
 
 
 COUNTRIES: dict[str, dict[str, object]] = {
@@ -278,7 +290,7 @@ def render_state(state_id: int, profile: dict[str, object]) -> str:
 def render_oob(tag: str, country: dict[str, object], principal_provinces: dict[int, int]) -> str:
     states = [int(country["capital"])] + [int(state_id) for state_id in country["states"] if state_id != country["capital"]]
     unit_type = str(country["unit_type"])
-    template = "Палатинская линейная дивизия" if tag == "RIN" else "Фильтрационный батальон" if tag == PROTECTORATE_TAG else "Пограничная бригада" if unit_type == "infantry" else "Поселенческая дружина"
+    template = PALATINE_LINE_TEMPLATE if tag == "RIN" else FILTRATION_TEMPLATE if tag == PROTECTORATE_TAG else FRONTIER_TEMPLATE if unit_type == "infantry" else SETTLER_MILITIA_TEMPLATE
     regiment_count = 5 if tag == "RIN" else 4 if unit_type == "infantry" else 3
     lines = [
         "division_template = {",

@@ -15,6 +15,7 @@ STATE_DIR = ROOT / "history" / "states"
 UNIT_PATH = ROOT / "history" / "units" / "AIN.txt"
 LOCALISATION_PATH = ROOT / "localisation" / "russian" / "ADISCORD_ainholm_l_russian.yml"
 FLAG_DIR = ROOT / "gfx" / "flags"
+DIVISION_TEMPLATE_NAMES = ("Licensed Security Battalion",)
 
 STATE_PROFILES = {
     118: {
@@ -108,8 +109,9 @@ def render_state(state_id: int, profile: dict[str, object]) -> str:
 
 
 def render_oob() -> str:
+    template = DIVISION_TEMPLATE_NAMES[0]
     return """division_template = {
-\tname = "Лицензионная охрана"
+\tname = "%s"
 \tregiments = {
 \t\tinfantry = { x = 0 y = 0 }
 \t\tinfantry = { x = 0 y = 1 }
@@ -118,10 +120,10 @@ def render_oob() -> str:
 \t}
 }
 units = {
-\tdivision = { division_name = { is_name_ordered = yes name_order = 1 } location = 147 division_template = "Лицензионная охрана" start_experience_factor = 0.10 start_equipment_factor = 0.72 }
-\tdivision = { division_name = { is_name_ordered = yes name_order = 2 } location = 16348 division_template = "Лицензионная охрана" start_experience_factor = 0.10 start_equipment_factor = 0.68 }
+\tdivision = { division_name = { is_name_ordered = yes name_order = 1 } location = 147 division_template = "%s" start_experience_factor = 0.10 start_equipment_factor = 0.72 }
+\tdivision = { division_name = { is_name_ordered = yes name_order = 2 } location = 16348 division_template = "%s" start_experience_factor = 0.10 start_equipment_factor = 0.68 }
 }
-"""
+""" % (template, template, template)
 
 
 def render_flag() -> Image.Image:
