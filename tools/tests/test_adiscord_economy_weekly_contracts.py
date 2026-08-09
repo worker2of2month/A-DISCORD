@@ -210,6 +210,60 @@ def policy_multiplier_rows(text, target_variable, output_variables):
     return rows
 
 
+def tax_refresh_macro_flow_issues(text):
+    """Validate that tax macro work is owned by an actual income-change branch."""
+
+    issues = []
+    refresh = unique_block(text, "ADISCORD_economy_refresh_tax_policy")
+    saved_income = "ADISCORD_economy_tax_refresh_saved_income_temp"
+    save_pattern = (
+        r"set_temp_variable\s*=\s*\{\s*var\s*=\s*"
+        + re.escape(saved_income)
+        + r"\s+value\s*=\s*ADISCORD_economy_monthly_income\s*\}"
+    )
+    save_matches = list(re.finditer(save_pattern, refresh))
+    if len(save_matches) != 1:
+        issues.append("tax refresh must cache old monthly income exactly once")
+
+    macro_call = "ADISCORD_economy_calculate_macro_indicators = yes"
+    recalculate_call = "ADISCORD_economy_recalculate_tax_dependent_income = yes"
+    finish_call = "ADISCORD_economy_finish_targeted_policy_refresh = yes"
+    if refresh.count(macro_call) != 1:
+        issues.append("tax refresh must contain exactly one macro call")
+    if refresh.count(recalculate_call) != 1:
+        issues.append("tax refresh must recalculate tax-dependent income exactly once")
+    if refresh.count(finish_call) != 1:
+        issues.append("tax refresh must reach the targeted tail exactly once")
+
+    owners = [
+        body
+        for body in assignment_blocks(refresh, "if")
+        if macro_call in body
+    ]
+    if len(owners) != 1:
+        issues.append("macro call must be owned by exactly one if branch")
+    else:
+        exact_changed_limit = (
+            r"limit\s*=\s*\{\s*NOT\s*=\s*\{\s*check_variable\s*=\s*\{\s*"
+            r"var\s*=\s*ADISCORD_economy_monthly_income\s+value\s*=\s*"
+            + re.escape(saved_income)
+            + r"\s+compare\s*=\s*equals\s*\}\s*\}\s*\}"
+        )
+        if not re.search(exact_changed_limit, owners[0]):
+            issues.append("macro branch must test current income NOT equals cached old income")
+
+    ordered_tokens = (
+        save_matches[0].group(0) if len(save_matches) == 1 else "__missing_save__",
+        recalculate_call,
+        macro_call,
+        finish_call,
+    )
+    positions = [refresh.find(token) for token in ordered_tokens]
+    if any(position < 0 for position in positions) or positions != sorted(positions):
+        issues.append("tax refresh must save, recalculate, conditionally update macro, then finish")
+    return issues
+
+
 def localisation_key_set(text):
     return set(re.findall(r"(?m)^\s*([A-Za-z0-9_.-]+):\d*\s+", text))
 
@@ -1093,6 +1147,35 @@ class WeeklyEconomyContracts(unittest.TestCase):
             self.assertNotIn("every_owned_state", preview_graph)
             if policy == "tax":
                 self.assertIn("ADISCORD_economy_recalculate_tax_dependent_income = yes", preview)
+                self.assertIn("ADISCORD_economy_save_tax_policy_preview_macro_state = yes", preview)
+                self.assertIn("ADISCORD_economy_calculate_macro_indicators = yes", preview)
+                self.assertIn("ADISCORD_economy_sum_expenses = yes", preview)
+                self.assertIn("ADISCORD_economy_calculate_monthly_balance = yes", preview)
+                macro_owners = [
+                    body
+                    for body in assignment_blocks(preview, "if")
+                    if "ADISCORD_economy_calculate_macro_indicators = yes" in body
+                ]
+                self.assertEqual(len(macro_owners), 1)
+                self.assertRegex(
+                    macro_owners[0],
+                    r"limit\s*=\s*\{\s*NOT\s*=\s*\{\s*check_variable\s*=\s*\{\s*"
+                    r"var\s*=\s*ADISCORD_economy_monthly_income\s+value\s*=\s*"
+                    r"ADISCORD_economy_policy_preview_current_monthly_temp\s+"
+                    r"compare\s*=\s*equals\s*\}\s*\}\s*\}",
+                )
+                self.assertRegex(
+                    preview,
+                    r"set_temp_variable\s*=\s*\{\s*var\s*=\s*"
+                    r"ADISCORD_economy_policy_preview_weekly_delta_temp\s+value\s*=\s*"
+                    r"ADISCORD_economy_monthly_balance\s*\}",
+                )
+                self.assertRegex(
+                    preview,
+                    r"subtract_from_temp_variable\s*=\s*\{\s*var\s*=\s*"
+                    r"ADISCORD_economy_policy_preview_weekly_delta_temp\s+value\s*=\s*"
+                    r"ADISCORD_economy_policy_preview_saved_monthly_balance_temp\s*\}",
+                )
                 self.assertIn("value = 3", preview)
                 self.assertIn("value = 13", preview)
             else:
@@ -1110,6 +1193,57 @@ class WeeklyEconomyContracts(unittest.TestCase):
         self.assertIn("value = 3", expense_finish)
         self.assertIn("value = 13", expense_finish)
 
+        # Controlled debt-tier fixture: an income change alters both revenue and
+        # the interest-derived debt-service expense. The preview must report the
+        # exact balance delta rather than the tempting income-only shortcut.
+        def weekly_tax_delta(current_income, target_income, debt):
+            def monthly_balance(income):
+                fiscal_stress = 50
+                capacity_factor = (125 - fiscal_stress / 2) / 100
+                capacity = (150 + income * 24) * capacity_factor
+                debt_ratio = debt * 100 / capacity
+                creditworthiness = 60 - fiscal_stress / 2 - debt_ratio / 3
+                interest_rate = 3
+                interest_rate += 1 if debt_ratio >= 40 else 0
+                interest_rate += 1 if fiscal_stress >= 30 else 0
+                interest_rate += 2 if creditworthiness < 40 else 0
+                interest_rate += 4 if creditworthiness < 25 else 0
+                debt_service = debt * interest_rate / 1200
+                return income - (90 + debt_service)
+
+            return (monthly_balance(target_income) - monthly_balance(current_income)) * 3 / 13
+
+        # Personal-only tax base: adjacent level 3 (1.00) -> level 4 (1.15).
+        tier_crossing = weekly_tax_delta(100, 115, 1100)
+        income_only = (115 - 100) * 3 / 13
+        self.assertAlmostEqual(tier_crossing, 3.673076923076923, places=10)
+        self.assertNotAlmostEqual(tier_crossing, income_only, places=10)
+        self.assertAlmostEqual(weekly_tax_delta(100, 115, 0), income_only, places=10)
+
+        capacity = unique_block(EFFECTS, "ADISCORD_economy_calculate_debt_capacity")
+        interest = unique_block(EFFECTS, "ADISCORD_economy_calculate_interest_rate")
+        debt_service = unique_block(
+            EFFECTS, "ADISCORD_economy_calculate_debt_service_amount"
+        )
+        self.assertRegex(
+            capacity,
+            r"value\s*=\s*ADISCORD_economy_monthly_income\s*\}\s*"
+            r"multiply_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_capacity_temp\s+value\s*=\s*24",
+        )
+        self.assertRegex(
+            interest,
+            r"ADISCORD_economy_debt_ratio\s+value\s*=\s*40\s+compare\s*=\s*"
+            r"greater_than_or_equals\s*\}\s*\}\s*add_to_variable\s*=\s*\{\s*"
+            r"var\s*=\s*ADISCORD_economy_interest_rate\s+value\s*=\s*1",
+        )
+        self.assertRegex(
+            debt_service,
+            r"value\s*=\s*ADISCORD_economy_debt\s*\}\s*"
+            r"multiply_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_debt_service\s+"
+            r"value\s*=\s*ADISCORD_economy_interest_rate\s*\}\s*"
+            r"divide_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_debt_service\s+value\s*=\s*1200",
+        )
+
     def test_each_policy_click_reaches_only_its_targeted_refresh_path(self):
         expected = {
             "tax": "ADISCORD_economy_refresh_tax_policy",
@@ -1126,6 +1260,13 @@ class WeeklyEconomyContracts(unittest.TestCase):
             "ADISCORD_economy_calculate_expenses",
             "ADISCORD_economy_recalculate_policy_modifiers",
             "ADISCORD_economy_refresh_spending_ideas",
+            "ADISCORD_economy_calculate_development_multiplier",
+            "ADISCORD_economy_apply_development_modifier_factors_to_economic_growth",
+            "ADISCORD_economy_base_monthly_development_gain",
+            "ADISCORD_economy_monthly_development_multiplier",
+            "ADISCORD_economy_development_building_temp",
+            "ADISCORD_economy_monthly_development_gain",
+            "ADISCORD_economy_development_progress",
             "every_country",
             "every_owned_state",
         )
@@ -1146,7 +1287,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 "ADISCORD_economy_finish_targeted_policy_refresh = yes", refresh
             )
             if policy == "tax":
-                self.assertIn("ADISCORD_economy_calculate_macro_indicators = yes", refresh)
+                self.assertEqual(tax_refresh_macro_flow_issues(EFFECTS), [])
             else:
                 self.assertIn(f"ADISCORD_economy_calculate_{policy}_expenses = yes", refresh)
                 self.assertNotIn("ADISCORD_economy_calculate_macro_indicators", refresh)
@@ -1164,6 +1305,10 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 "ADISCORD_economy_update_gui",
             },
         )
+        self.assertLess(
+            targeted_tail.index("ADISCORD_economy_sum_expenses = yes"),
+            targeted_tail.index("ADISCORD_economy_calculate_monthly_balance = yes"),
+        )
 
         facade = unique_block(
             EFFECTS, "ADISCORD_economy_refresh_after_budget_control_change"
@@ -1179,6 +1324,42 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 construction.strip(),
                 f"ADISCORD_economy_{direction}_research_spending = yes",
             )
+
+    def test_tax_targeted_refresh_updates_macro_only_when_income_changes(self):
+        self.assertEqual(tax_refresh_macro_flow_issues(EFFECTS), [])
+
+        refresh = unique_block(EFFECTS, "ADISCORD_economy_refresh_tax_policy")
+        mutations = {
+            "comparison is not negated": refresh.replace(
+                "NOT = { check_variable = { var = ADISCORD_economy_monthly_income value = ADISCORD_economy_tax_refresh_saved_income_temp compare = equals } }",
+                "check_variable = { var = ADISCORD_economy_monthly_income value = ADISCORD_economy_tax_refresh_saved_income_temp compare = equals }",
+                1,
+            ),
+            "wrong comparator": refresh.replace(
+                "compare = equals",
+                "compare = greater_than",
+                1,
+            ),
+            "dead self-comparison": refresh.replace(
+                "value = ADISCORD_economy_monthly_income",
+                "value = ADISCORD_economy_tax_refresh_saved_income_temp",
+                1,
+            ),
+            "macro call is unconditional": re.sub(
+                r"if\s*=\s*\{\s*limit\s*=\s*\{\s*NOT\s*=\s*\{\s*check_variable\s*=\s*\{\s*"
+                r"var\s*=\s*ADISCORD_economy_monthly_income\s+value\s*=\s*"
+                r"ADISCORD_economy_tax_refresh_saved_income_temp\s+compare\s*=\s*equals\s*"
+                r"\}\s*\}\s*\}\s*ADISCORD_economy_calculate_macro_indicators\s*=\s*yes\s*\}",
+                "ADISCORD_economy_calculate_macro_indicators = yes",
+                refresh,
+                count=1,
+            ),
+        }
+        for name, mutation in mutations.items():
+            with self.subTest(mutation=name):
+                self.assertNotEqual(mutation, refresh, "mutation fixture did not change source")
+                wrapped = f"ADISCORD_economy_refresh_tax_policy = {{{mutation}}}"
+                self.assertTrue(tax_refresh_macro_flow_issues(wrapped))
 
     def test_policy_preview_selectors_use_cached_directional_targets(self):
         effect_prefixes = {
@@ -1234,6 +1415,66 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 "ADISCORD_economy_social_expenses": "ADISCORD_economy_policy_preview_current_expense_temp",
             },
         }
+        tax_macro_restored = {
+            variable: f"ADISCORD_economy_policy_preview_saved_{variable.removeprefix('ADISCORD_economy_')}_temp"
+            for variable in (
+                "ADISCORD_economy_debt_capacity",
+                "ADISCORD_economy_capacity_temp",
+                "ADISCORD_economy_capacity_factor_temp",
+                "ADISCORD_economy_debt_ratio",
+                "ADISCORD_economy_debt_pressure",
+                "ADISCORD_economy_pressure_temp",
+                "ADISCORD_economy_creditworthiness",
+                "ADISCORD_economy_credit_temp",
+                "ADISCORD_economy_debt_crisis_level",
+                "ADISCORD_economy_interest_rate",
+                "ADISCORD_economy_debt_service",
+                "ADISCORD_economy_investment_confidence",
+                "ADISCORD_economy_confidence_temp",
+                "ADISCORD_economy_state_financial_control",
+                "ADISCORD_economy_control_temp",
+                "ADISCORD_economy_austerity_level",
+                "ADISCORD_economy_monthly_expenses",
+                "ADISCORD_economy_monthly_balance",
+            )
+        }
+        macro_mutator_graph = "\n".join(
+            reachable_script_blocks(
+                (EFFECTS, MODIFIER_EFFECTS),
+                (
+                    "ADISCORD_economy_calculate_macro_indicators",
+                    "ADISCORD_economy_sum_expenses",
+                    "ADISCORD_economy_calculate_monthly_balance",
+                ),
+            ).values()
+        )
+        macro_mutated_variables = set(
+            re.findall(
+                r"(?:set_variable|add_to_variable|subtract_from_variable|"
+                r"multiply_variable|divide_variable|clamp_variable)\s+var\s+"
+                r"(ADISCORD_economy_[A-Za-z0-9_]+)",
+                macro_mutator_graph,
+            )
+        )
+        self.assertEqual(macro_mutated_variables, set(tax_macro_restored))
+        save_macro = unique_block(
+            EFFECTS, "ADISCORD_economy_save_tax_policy_preview_macro_state"
+        )
+        restore_macro = unique_block(
+            EFFECTS, "ADISCORD_economy_restore_tax_policy_preview_macro_state"
+        )
+        for variable, saved in tax_macro_restored.items():
+            self.assertRegex(
+                save_macro,
+                rf"set_temp_variable\s*=\s*\{{\s*var\s*=\s*{re.escape(saved)}\s+"
+                rf"value\s*=\s*{re.escape(variable)}\s*\}}",
+            )
+            self.assertRegex(
+                restore_macro,
+                rf"set_variable\s*=\s*\{{\s*var\s*=\s*{re.escape(variable)}\s+"
+                rf"value\s*=\s*{re.escape(saved)}\s*\}}",
+            )
+
         for policy, assignments in restored.items():
             preview_name = f"ADISCORD_economy_preview_{policy}_policy"
             preview = unique_block(EFFECTS, preview_name)
@@ -1241,11 +1482,30 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 reachable_script_blocks((EFFECTS,), (preview_name,)).values()
             )
             for variable, saved in assignments.items():
+                self.assertIn(f"var = {saved} value = {variable}", preview)
                 self.assertIn(f"var = {variable} value = {saved}", preview)
-            self.assertNotIn("ADISCORD_economy_update_gui", preview_graph)
-            self.assertNotIn("ADISCORD_economy_refresh_spending_ideas", preview_graph)
-            self.assertNotIn("add_ideas", preview_graph)
-            self.assertNotIn("remove_ideas", preview_graph)
+            for forbidden in (
+                "ADISCORD_economy_update_gui",
+                "ADISCORD_economy_refresh_spending_ideas",
+                "ADISCORD_economy_apply_weekly_balance",
+                "ADISCORD_economy_apply_monthly_balance",
+                "ADISCORD_economy_take_debt",
+                "add_ideas",
+                "remove_ideas",
+                "every_country",
+                "every_owned_state",
+            ):
+                self.assertNotIn(forbidden, preview_graph)
+
+            if policy == "tax":
+                self.assertLess(
+                    preview.index("ADISCORD_economy_save_tax_policy_preview_macro_state = yes"),
+                    preview.index("ADISCORD_economy_calculate_macro_indicators = yes"),
+                )
+                self.assertLess(
+                    preview.index("ADISCORD_economy_calculate_monthly_balance = yes"),
+                    preview.index("ADISCORD_economy_restore_tax_policy_preview_macro_state = yes"),
+                )
 
             if policy != "tax":
                 self.assertIn(

@@ -1263,6 +1263,51 @@ ADISCORD_economy_finish_expense_policy_preview = {
 	divide_temp_variable = { var = ADISCORD_economy_policy_preview_weekly_delta_temp value = 13 }
 }
 
+# The tax preview must run the same income-sensitive macro arithmetic as a real
+# click. These paired helpers make that temporary pass reversible without
+# rebuilding ideas, touching the ledger, or scanning countries/states.
+ADISCORD_economy_save_tax_policy_preview_macro_state = {
+	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_debt_capacity_temp value = ADISCORD_economy_debt_capacity }
+	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_capacity_temp_temp value = ADISCORD_economy_capacity_temp }
+	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_capacity_factor_temp_temp value = ADISCORD_economy_capacity_factor_temp }
+	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_debt_ratio_temp value = ADISCORD_economy_debt_ratio }
+	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_debt_pressure_temp value = ADISCORD_economy_debt_pressure }
+	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_pressure_temp_temp value = ADISCORD_economy_pressure_temp }
+	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_creditworthiness_temp value = ADISCORD_economy_creditworthiness }
+	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_credit_temp_temp value = ADISCORD_economy_credit_temp }
+	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_debt_crisis_level_temp value = ADISCORD_economy_debt_crisis_level }
+	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_interest_rate_temp value = ADISCORD_economy_interest_rate }
+	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_debt_service_temp value = ADISCORD_economy_debt_service }
+	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_investment_confidence_temp value = ADISCORD_economy_investment_confidence }
+	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_confidence_temp_temp value = ADISCORD_economy_confidence_temp }
+	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_state_financial_control_temp value = ADISCORD_economy_state_financial_control }
+	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_control_temp_temp value = ADISCORD_economy_control_temp }
+	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_austerity_level_temp value = ADISCORD_economy_austerity_level }
+	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_monthly_expenses_temp value = ADISCORD_economy_monthly_expenses }
+	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_monthly_balance_temp value = ADISCORD_economy_monthly_balance }
+}
+
+ADISCORD_economy_restore_tax_policy_preview_macro_state = {
+	set_variable = { var = ADISCORD_economy_debt_capacity value = ADISCORD_economy_policy_preview_saved_debt_capacity_temp }
+	set_variable = { var = ADISCORD_economy_capacity_temp value = ADISCORD_economy_policy_preview_saved_capacity_temp_temp }
+	set_variable = { var = ADISCORD_economy_capacity_factor_temp value = ADISCORD_economy_policy_preview_saved_capacity_factor_temp_temp }
+	set_variable = { var = ADISCORD_economy_debt_ratio value = ADISCORD_economy_policy_preview_saved_debt_ratio_temp }
+	set_variable = { var = ADISCORD_economy_debt_pressure value = ADISCORD_economy_policy_preview_saved_debt_pressure_temp }
+	set_variable = { var = ADISCORD_economy_pressure_temp value = ADISCORD_economy_policy_preview_saved_pressure_temp_temp }
+	set_variable = { var = ADISCORD_economy_creditworthiness value = ADISCORD_economy_policy_preview_saved_creditworthiness_temp }
+	set_variable = { var = ADISCORD_economy_credit_temp value = ADISCORD_economy_policy_preview_saved_credit_temp_temp }
+	set_variable = { var = ADISCORD_economy_debt_crisis_level value = ADISCORD_economy_policy_preview_saved_debt_crisis_level_temp }
+	set_variable = { var = ADISCORD_economy_interest_rate value = ADISCORD_economy_policy_preview_saved_interest_rate_temp }
+	set_variable = { var = ADISCORD_economy_debt_service value = ADISCORD_economy_policy_preview_saved_debt_service_temp }
+	set_variable = { var = ADISCORD_economy_investment_confidence value = ADISCORD_economy_policy_preview_saved_investment_confidence_temp }
+	set_variable = { var = ADISCORD_economy_confidence_temp value = ADISCORD_economy_policy_preview_saved_confidence_temp_temp }
+	set_variable = { var = ADISCORD_economy_state_financial_control value = ADISCORD_economy_policy_preview_saved_state_financial_control_temp }
+	set_variable = { var = ADISCORD_economy_control_temp value = ADISCORD_economy_policy_preview_saved_control_temp_temp }
+	set_variable = { var = ADISCORD_economy_austerity_level value = ADISCORD_economy_policy_preview_saved_austerity_level_temp }
+	set_variable = { var = ADISCORD_economy_monthly_expenses value = ADISCORD_economy_policy_preview_saved_monthly_expenses_temp }
+	set_variable = { var = ADISCORD_economy_monthly_balance value = ADISCORD_economy_policy_preview_saved_monthly_balance_temp }
+}
+
 ADISCORD_economy_preview_tax_policy = {
 	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_mode_temp value = ADISCORD_economy_tax_burden_mode }
 	set_temp_variable = { var = ADISCORD_economy_policy_preview_current_monthly_temp value = ADISCORD_economy_monthly_income }
@@ -1270,10 +1315,17 @@ ADISCORD_economy_preview_tax_policy = {
 	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_business_temp value = ADISCORD_economy_business_income }
 	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_consumer_goods_temp value = ADISCORD_economy_consumer_goods_income }
 	set_temp_variable = { var = ADISCORD_economy_policy_preview_saved_factory_temp value = ADISCORD_economy_factory_income }
+	ADISCORD_economy_save_tax_policy_preview_macro_state = yes
 	set_variable = { var = ADISCORD_economy_tax_burden_mode value = ADISCORD_economy_policy_preview_target_temp }
 	ADISCORD_economy_recalculate_tax_dependent_income = yes
-	set_temp_variable = { var = ADISCORD_economy_policy_preview_weekly_delta_temp value = ADISCORD_economy_monthly_income }
-	subtract_from_temp_variable = { var = ADISCORD_economy_policy_preview_weekly_delta_temp value = ADISCORD_economy_policy_preview_current_monthly_temp }
+	if = {
+		limit = { NOT = { check_variable = { var = ADISCORD_economy_monthly_income value = ADISCORD_economy_policy_preview_current_monthly_temp compare = equals } } }
+		ADISCORD_economy_calculate_macro_indicators = yes
+		ADISCORD_economy_sum_expenses = yes
+		ADISCORD_economy_calculate_monthly_balance = yes
+	}
+	set_temp_variable = { var = ADISCORD_economy_policy_preview_weekly_delta_temp value = ADISCORD_economy_monthly_balance }
+	subtract_from_temp_variable = { var = ADISCORD_economy_policy_preview_weekly_delta_temp value = ADISCORD_economy_policy_preview_saved_monthly_balance_temp }
 	multiply_temp_variable = { var = ADISCORD_economy_policy_preview_weekly_delta_temp value = 3 }
 	divide_temp_variable = { var = ADISCORD_economy_policy_preview_weekly_delta_temp value = 13 }
 	set_variable = { var = ADISCORD_economy_tax_burden_mode value = ADISCORD_economy_policy_preview_saved_mode_temp }
@@ -1282,6 +1334,7 @@ ADISCORD_economy_preview_tax_policy = {
 	set_variable = { var = ADISCORD_economy_business_income value = ADISCORD_economy_policy_preview_saved_business_temp }
 	set_variable = { var = ADISCORD_economy_consumer_goods_income value = ADISCORD_economy_policy_preview_saved_consumer_goods_temp }
 	set_variable = { var = ADISCORD_economy_factory_income value = ADISCORD_economy_policy_preview_saved_factory_temp }
+	ADISCORD_economy_restore_tax_policy_preview_macro_state = yes
 }
 
 ADISCORD_economy_preview_army_policy = {
@@ -3001,6 +3054,7 @@ ADISCORD_economy_finish_targeted_policy_refresh = {
 
 ADISCORD_economy_refresh_tax_policy = {
 	clamp_variable = { var = ADISCORD_economy_tax_burden_mode min = 1 max = 5 }
+	set_temp_variable = { var = ADISCORD_economy_tax_refresh_saved_income_temp value = ADISCORD_economy_monthly_income }
 	ADISCORD_economy_calculate_personal_income = yes
 	ADISCORD_economy_calculate_business_income = yes
 	ADISCORD_economy_calculate_consumer_goods_income = yes
@@ -3013,8 +3067,10 @@ ADISCORD_economy_refresh_tax_policy = {
 		add_to_variable = { var = ADISCORD_economy_nontax_income value = ADISCORD_economy_building_income }
 	}
 	ADISCORD_economy_recalculate_tax_dependent_income = yes
-	ADISCORD_economy_calculate_macro_indicators = yes
-	ADISCORD_economy_calculate_development_multiplier = yes
+	if = {
+		limit = { NOT = { check_variable = { var = ADISCORD_economy_monthly_income value = ADISCORD_economy_tax_refresh_saved_income_temp compare = equals } } }
+		ADISCORD_economy_calculate_macro_indicators = yes
+	}
 	ADISCORD_economy_finish_targeted_policy_refresh = yes
 }
 
@@ -3025,7 +3081,6 @@ ADISCORD_economy_refresh_army_policy = {
 	multiply_variable = { var = ADISCORD_economy_army_expenses value = ADISCORD_economy_final_army_expense_factor_bp }
 	divide_variable = { var = ADISCORD_economy_army_expenses value = 100 }
 	ADISCORD_economy_refresh_army_policy_idea = yes
-	ADISCORD_economy_calculate_development_multiplier = yes
 	ADISCORD_economy_finish_targeted_policy_refresh = yes
 }
 
