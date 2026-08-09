@@ -292,6 +292,14 @@ ADISCORD_heavy = { has_idea = forbidden }
                 "var = surrender_progress value = 0.35",
                 "var = surrender_progress value = 0.50",
             ),
+            self.ASSISTANCE_EFFECT.replace(
+                "limit = { is_ai = yes }",
+                "limit = { is_ai = yes always = no }",
+            ),
+            self.ASSISTANCE_EFFECT.replace(
+                "var = surrender_progress value = 0.35 compare = greater_than } }",
+                "var = surrender_progress value = 0.35 compare = greater_than } always = no }",
+            ),
         )
         for mutation in mutations:
             self.assertTrue(ai_assistance_contract_issues(self.ASSISTANCE_IDEAS, mutation))
@@ -310,31 +318,65 @@ ADISCORD_heavy = { has_idea = forbidden }
         self.assertTrue(research_policy_flow_issues(unconditional))
         overlapping = research.replace("compare = equals", "compare = greater_than")
         self.assertTrue(research_policy_flow_issues(overlapping))
+        level_one_branch = (
+            "if = { limit = { check_variable = { var = "
+            "ADISCORD_economy_research_spending_mode value = 1 compare = equals } } "
+            "multiply_variable = { var = ADISCORD_economy_research_expenses value = 0.60 } }"
+        )
+        duplicate_level = research.rsplit("}", 1)[0] + level_one_branch + "\n}"
+        self.assertTrue(research_policy_flow_issues(duplicate_level))
+        extra_multiplier = research.rsplit("}", 1)[0] + (
+            "multiply_variable = { var = ADISCORD_economy_research_expenses value = 1.00 }\n}"
+        )
+        self.assertTrue(research_policy_flow_issues(extra_multiplier))
 
         settlement = """
 ADISCORD_economy_apply_weekly_balance = {
- set_variable = { var = ADISCORD_economy_auto_borrow_temp value = ADISCORD_economy_uncovered_deficit_temp }
- add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp }
- add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp }
+ if = { limit = { check_variable = { var = ADISCORD_economy_treasury value = 0 compare = less_than } }
+  set_variable = { var = ADISCORD_economy_uncovered_deficit_temp value = 0 }
+  subtract_from_variable = { var = ADISCORD_economy_uncovered_deficit_temp value = ADISCORD_economy_treasury }
+  set_variable = { var = ADISCORD_economy_auto_borrow_temp value = ADISCORD_economy_uncovered_deficit_temp }
+  add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp }
+  add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp }
+ }
 }
 ADISCORD_economy_apply_monthly_balance = {
- set_variable = { var = ADISCORD_economy_auto_borrow_temp value = ADISCORD_economy_uncovered_deficit_temp }
- add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp }
- add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp }
+ if = { limit = { check_variable = { var = ADISCORD_economy_treasury value = 0 compare = less_than } }
+  set_variable = { var = ADISCORD_economy_uncovered_deficit_temp value = 0 }
+  subtract_from_variable = { var = ADISCORD_economy_uncovered_deficit_temp value = ADISCORD_economy_treasury }
+  set_variable = { var = ADISCORD_economy_auto_borrow_temp value = ADISCORD_economy_uncovered_deficit_temp }
+  add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp }
+  add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp }
+ }
 }
 """
         self.assertEqual(automatic_borrow_flow_issues(settlement), [])
         dead_funding = settlement.replace(
-            " add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp }\n add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp }",
-            " if = { limit = { always = no } add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp } add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp } }",
+            "  add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp }\n  add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp }",
+            "  if = { limit = { always = no } add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp } add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp } }",
         )
         self.assertTrue(automatic_borrow_flow_issues(dead_funding))
+        conditional_funding = settlement.replace(
+            "  add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp }\n  add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp }",
+            "  if = { limit = { has_country_flag = hidden_gate } add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp } add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp } }",
+        )
+        self.assertTrue(automatic_borrow_flow_issues(conditional_funding))
         capped = settlement.replace(
             " add_to_variable = { var = ADISCORD_economy_debt",
             " clamp_variable = { var = ADISCORD_economy_auto_borrow_temp min = 0 max = ADISCORD_hidden_borrow_cap }\n add_to_variable = { var = ADISCORD_economy_debt",
             1,
         )
         self.assertTrue(automatic_borrow_flow_issues(capped))
+        for source_mutation in (
+            "clamp_variable = { var = ADISCORD_economy_uncovered_deficit_temp min = 0 max = ADISCORD_hidden_cap }",
+            "subtract_from_variable = { var = ADISCORD_economy_uncovered_deficit_temp value = ADISCORD_hidden_cap }",
+            "set_variable = { var = ADISCORD_economy_uncovered_deficit_temp value = ADISCORD_hidden_cap }",
+        ):
+            hidden_source_cap = settlement.replace(
+                "  set_variable = { var = ADISCORD_economy_auto_borrow_temp value = ADISCORD_economy_uncovered_deficit_temp }",
+                f"  {source_mutation}\n  set_variable = {{ var = ADISCORD_economy_auto_borrow_temp value = ADISCORD_economy_uncovered_deficit_temp }}",
+            )
+            self.assertTrue(automatic_borrow_flow_issues(hidden_source_cap))
 
     def test_transition_notification_and_reconciler_negative_fixtures(self):
         transition = """
@@ -384,6 +426,15 @@ ADISCORD_economy_update_debt_state_after_settlement = {
                 "ADISCORD_economy_debt_default_streak value = 13 compare = greater_than_or_equals",
                 "ADISCORD_economy_debt_default_streak value = 12 compare = greater_than_or_equals",
             ),
+            transition.replace(
+                "ADISCORD_economy_interest_share_income value = 40 compare = greater_than_or_equals } }",
+                "ADISCORD_economy_interest_share_income value = 40 compare = greater_than_or_equals } always = no }",
+                1,
+            ),
+            transition.replace(
+                "ADISCORD_economy_debt_emergency_streak value = 4 compare = greater_than_or_equals } }",
+                "ADISCORD_economy_debt_emergency_streak value = 4 compare = greater_than_or_equals } always = no }",
+            ),
         ):
             self.assertTrue(debt_transition_flow_issues(invalid))
 
@@ -399,6 +450,17 @@ ADISCORD_transition = { if = { limit = { check_variable = { var = ADISCORD_econo
             "has_variable = ADISCORD_economy_first_loan_notified",
         )
         self.assertTrue(debt_notification_flow_issues(positive_first_loan))
+        double_negated = notification.replace(
+            "NOT = { has_variable = ADISCORD_economy_first_loan_notified }",
+            "NOT = { NOT = { has_variable = ADISCORD_economy_first_loan_notified } }",
+        )
+        self.assertTrue(debt_notification_flow_issues(double_negated))
+        duplicate_queue = notification.replace(
+            "ADISCORD_economy_queue_debt_notification = yes } }",
+            "ADISCORD_economy_queue_debt_notification = yes ADISCORD_economy_queue_debt_notification = yes } }",
+            1,
+        )
+        self.assertTrue(debt_notification_flow_issues(duplicate_queue))
 
         reconciler = """
 ADISCORD_economy_reconcile_debt_state_after_action = {
@@ -431,6 +493,11 @@ ADISCORD_economy_reconcile_debt_state_after_action = {
             "ADISCORD_economy_debt_state value = 1 compare = greater_than_or_equals",
         )
         self.assertTrue(debt_reconciler_issues(preserved_tier))
+        dead_reconciler = reconciler.replace(
+            "check_variable = { var = ADISCORD_economy_debt_state value = 1 compare = greater_than }",
+            "check_variable = { var = ADISCORD_economy_debt_state value = 1 compare = greater_than }\n  always = no",
+        )
+        self.assertTrue(debt_reconciler_issues(dead_reconciler))
 
 
 class WeeklyEconomyContracts(unittest.TestCase):

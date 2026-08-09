@@ -310,6 +310,29 @@ def _branch_is_statically_dead(ancestors: tuple[Entry, ...]) -> bool:
     return False
 
 
+def _limit_is_satisfiable(entries: list[Entry]) -> bool:
+    if any(entry.key == "always" and entry.value == "no" for entry in entries):
+        return False
+    ai_values = {
+        entry.value
+        for entry in entries
+        if entry.key == "is_ai" and isinstance(entry.value, str)
+    }
+    if ai_values == {"yes", "no"}:
+        return False
+    direct_ai = next(iter(ai_values), None) if len(ai_values) == 1 else None
+    negated_ai = {
+        entry.value
+        for entry in entries
+        if entry.key == "NOT" and isinstance(entry.value, list)
+        for _, nested in _walk_entries(entry.value)
+        if nested.key == "is_ai" and isinstance(nested.value, str)
+    }
+    if direct_ai is not None and direct_ai in negated_ai:
+        return False
+    return True
+
+
 def _conditional_else_pairs(entries: list[Entry]):
     for index, branch in enumerate(entries):
         if branch.key in {"if", "else_if"} and isinstance(branch.value, list):
@@ -347,14 +370,28 @@ def ai_assistance_contract_issues(ideas_text: str, effects_text: str) -> list[st
                         pass
             if len(values) != 1 or not low <= values[0] <= high:
                 issues.append(f"{name}: invalid exact bound for {modifier}")
-    refreshes = [entry for _, entry in _walk_entries(effect_ast) if entry.key == "ADISCORD_economy_refresh_ai_assistance"]
+    refreshes = [
+        entry
+        for entry in effect_ast
+        if entry.key == "ADISCORD_economy_refresh_ai_assistance"
+    ]
     if len(refreshes) != 1 or not isinstance(refreshes[0].value, list):
         return issues + ["missing unique AI-assistance refresh"]
     refresh = refreshes[0]
     direct = refresh.value
-    gates = [entry for entry in direct if entry.key == "if" and isinstance(entry.value, list)
-             and any(candidate.key == "limit" and isinstance(candidate.value, list)
-                     and _direct_scalar(candidate.value, "is_ai") == "yes" for candidate in entry.value)]
+    gates = [
+        entry
+        for entry in direct
+        if entry.key == "if"
+        and isinstance(entry.value, list)
+        and any(
+            candidate.key == "limit"
+            and isinstance(candidate.value, list)
+            and _direct_scalar(candidate.value, "is_ai") == "yes"
+            and _limit_is_satisfiable(candidate.value)
+            for candidate in entry.value
+        )
+    ]
     if len(gates) != 1:
         return issues + ["assistance additions lack one direct is_ai gate"]
     gate = gates[0]
@@ -386,16 +423,16 @@ def ai_assistance_contract_issues(ideas_text: str, effects_text: str) -> list[st
         limit = next((entry for entry in (branch.value if branch else [])
                       if entry.key == "limit" and isinstance(entry.value, list)), None)
         condition = limit.value if limit else []
-        valid_condition = False
+        valid_condition = _limit_is_satisfiable(condition)
         if idea == ASSISTANCE_IDEAS[0]:
-            valid_condition = _exact_check(
+            valid_condition = valid_condition and _exact_check(
                 condition,
                 "ADISCORD_economy_simulation_tier",
                 "1",
                 "greater_than_or_equals",
             )
         elif idea == ASSISTANCE_IDEAS[1]:
-            valid_condition = (
+            valid_condition = valid_condition and (
                 _exact_check(
                     condition,
                     "ADISCORD_vorkerland_collapse_phase",
@@ -405,7 +442,7 @@ def ai_assistance_contract_issues(ideas_text: str, effects_text: str) -> list[st
                 and _direct_scalar(condition, "has_war") == "yes"
             )
         else:
-            valid_condition = _exact_check(
+            valid_condition = valid_condition and _exact_check(
                 condition, "surrender_progress", "0.35", "greater_than"
             )
         if not valid_condition:
@@ -419,7 +456,15 @@ def research_policy_flow_issues(text: str) -> list[str]:
     if effect is None or not isinstance(effect.value, list):
         return ["missing research expense calculation"]
     expected = {"1": 0.60, "2": 0.80, "3": 1.00, "4": 1.30, "5": 1.60}
-    found: dict[str, float] = {}
+    found: dict[str, list[float]] = {}
+    all_multipliers = [
+        entry
+        for _, entry in _walk_entries(effect.value)
+        if entry.key == "multiply_variable"
+        and isinstance(entry.value, list)
+        and _direct_scalar(entry.value, "var")
+        == "ADISCORD_economy_research_expenses"
+    ]
     for entry in effect.value:
         if entry.key not in {"if", "else_if"} or not isinstance(entry.value, list):
             continue
@@ -439,13 +484,27 @@ def research_policy_flow_issues(text: str) -> list[str]:
             and signatures[0][0] is not None
             and signatures[0][1] == "equals"
             and len(multipliers) == 1
+            and _limit_is_satisfiable(limit.value)
         ):
             level = signatures[0][0]
             try:
-                found[level] = float(_direct_scalar(multipliers[0].value, "value") or "nan")
+                found.setdefault(level, []).append(
+                    float(_direct_scalar(multipliers[0].value, "value") or "nan")
+                )
             except (TypeError, ValueError):
                 pass
-    return [] if found == expected else [f"research multipliers are not bound one-to-one to levels: {found}"]
+    exact_found = {
+        level: values[0]
+        for level, values in found.items()
+        if len(values) == 1
+    }
+    return (
+        []
+        if len(all_multipliers) == 5
+        and sum(len(values) for values in found.values()) == 5
+        and exact_found == expected
+        else [f"research multipliers are not bound one-to-one to levels: {found}"]
+    )
 
 
 def automatic_borrow_flow_issues(text: str) -> list[str]:
@@ -455,27 +514,112 @@ def automatic_borrow_flow_issues(text: str) -> list[str]:
         if definition is None or not isinstance(definition.value, list):
             issues.append(f"missing {name}")
             continue
-        operations = [(entry.key, entry) for _, entry in _walk_entries(definition.value)
-                      if entry.key in {"set_variable", "add_to_variable", "subtract_from_variable", "multiply_variable", "divide_variable", "clamp_variable"}
-                      and isinstance(entry.value, list)]
-        writes = [(key, entry) for key, entry in operations
-                  if _direct_scalar(entry.value, "var") == "ADISCORD_economy_auto_borrow_temp"]
-        valid_copy = [(key, entry) for key, entry in writes
-                      if key == "set_variable" and _direct_scalar(entry.value, "value") == "ADISCORD_economy_uncovered_deficit_temp"]
-        if len(writes) != 1 or len(valid_copy) != 1:
-            issues.append(f"{name}: automatic borrow is capped, clamped, or rewritten")
+        owners: list[Entry] = []
+        for branch, _ in _conditional_else_pairs(definition.value):
+            assert isinstance(branch.value, list)
+            limit = next(
+                (
+                    entry
+                    for entry in branch.value
+                    if entry.key == "limit" and isinstance(entry.value, list)
+                ),
+                None,
+            )
+            copies = _direct_variable_operation(
+                branch.value,
+                "set_variable",
+                "ADISCORD_economy_auto_borrow_temp",
+                "ADISCORD_economy_uncovered_deficit_temp",
+            )
+            if (
+                limit is not None
+                and _limit_is_satisfiable(limit.value)
+                and _exact_check(
+                    limit.value,
+                    "ADISCORD_economy_treasury",
+                    "0",
+                    "less_than",
+                )
+                and len(copies) == 1
+            ):
+                owners.append(branch)
+        if len(owners) != 1:
+            issues.append(f"{name}: automatic borrow lacks one approved negative-treasury path")
+            continue
+        owner = owners[0]
+        assert isinstance(owner.value, list)
+        copy = _direct_variable_operation(
+            owner.value,
+            "set_variable",
+            "ADISCORD_economy_auto_borrow_temp",
+            "ADISCORD_economy_uncovered_deficit_temp",
+        )[0]
+        automatic_writes = [
+            entry
+            for _, entry in _walk_entries(definition.value)
+            if entry.key
+            in {
+                "set_variable",
+                "add_to_variable",
+                "subtract_from_variable",
+                "multiply_variable",
+                "divide_variable",
+                "clamp_variable",
+            }
+            and isinstance(entry.value, list)
+            and _direct_scalar(entry.value, "var")
+            == "ADISCORD_economy_auto_borrow_temp"
+        ]
+        source_writes = [
+            entry
+            for entry in owner.value
+            if entry.key
+            in {
+                "set_variable",
+                "add_to_variable",
+                "subtract_from_variable",
+                "multiply_variable",
+                "divide_variable",
+                "clamp_variable",
+            }
+            and isinstance(entry.value, list)
+            and _direct_scalar(entry.value, "var")
+            == "ADISCORD_economy_uncovered_deficit_temp"
+        ]
+        source_ok = (
+            len(source_writes) == 2
+            and source_writes[0].key == "set_variable"
+            and _direct_scalar(source_writes[0].value, "value") == "0"
+            and source_writes[1].key == "subtract_from_variable"
+            and _direct_scalar(source_writes[1].value, "value")
+            == "ADISCORD_economy_treasury"
+            and owner.value.index(source_writes[1]) < owner.value.index(copy)
+        )
+        flow_is_exact = len(automatic_writes) == 1 and source_ok
         for account in ("ADISCORD_economy_debt", "ADISCORD_economy_treasury"):
-            additions = [
-                (ancestors, entry)
-                for ancestors, entry in _walk_entries(definition.value)
+            direct_additions = _direct_variable_operation(
+                owner.value,
+                "add_to_variable",
+                account,
+                "ADISCORD_economy_auto_borrow_temp",
+            )
+            all_additions = [
+                entry
+                for _, entry in _walk_entries(definition.value)
                 if entry.key == "add_to_variable"
                 and isinstance(entry.value, list)
                 and _direct_scalar(entry.value, "var") == account
                 and _direct_scalar(entry.value, "value")
                 == "ADISCORD_economy_auto_borrow_temp"
             ]
-            if len(additions) != 1 or _branch_is_statically_dead(additions[0][0]):
+            if len(direct_additions) != 1 or len(all_additions) != 1:
+                flow_is_exact = False
+            if len(all_additions) != 1:
                 issues.append(f"{name}: automatic borrow does not fully fund {account}")
+        if not flow_is_exact:
+            issues.append(
+                f"{name}: uncovered deficit is capped, rewritten, or conditionally funded"
+            )
     return issues
 
 
@@ -514,7 +658,7 @@ def debt_transition_flow_issues(text: str) -> list[str]:
             None,
         )
         condition = limit.value if limit else []
-        condition_ok = _exact_check(
+        condition_ok = _limit_is_satisfiable(condition) and _exact_check(
             condition,
             "ADISCORD_economy_interest_share_income",
             "40",
@@ -546,7 +690,7 @@ def debt_transition_flow_issues(text: str) -> list[str]:
             )
             if threshold_limit is None:
                 continue
-            if _exact_check(
+            if _limit_is_satisfiable(threshold_limit.value) and _exact_check(
                 threshold_limit.value,
                 streak,
                 threshold,
@@ -571,38 +715,49 @@ def debt_notification_flow_issues(text: str) -> list[str]:
     for name, definition in definitions.items():
         if name == "ADISCORD_economy_queue_debt_notification":
             continue
+        owner_calls: dict[int, int] = {}
         for ancestors, entry in _walk_entries(definition.value):
             if entry.key != "ADISCORD_economy_queue_debt_notification":
                 continue
-            limits = []
-            for ancestor in ancestors:
-                if ancestor.key not in {"if", "else_if"} or not isinstance(
-                    ancestor.value, list
-                ):
-                    continue
-                limits.extend(
-                    candidate.value
-                    for candidate in ancestor.value
-                    if candidate.key == "limit" and isinstance(candidate.value, list)
-                )
-            first_loan = False
-            upward = False
-            for limit in limits:
-                notified_occurrences = [
-                    any(ancestor.key == "NOT" for ancestor in nested_ancestors)
-                    for nested_ancestors, candidate in _walk_entries(limit)
-                    if candidate.key == "has_variable"
-                    and candidate.value == "ADISCORD_economy_first_loan_notified"
-                ]
-                first_loan = first_loan or notified_occurrences == [True]
-                upward = upward or _exact_check(
-                    limit,
-                    "ADISCORD_economy_debt_state",
-                    "ADISCORD_economy_last_notified_debt_state",
-                    "greater_than",
-                )
+            owner = next(
+                (
+                    ancestor
+                    for ancestor in reversed(ancestors)
+                    if ancestor.key in {"if", "else_if"}
+                    and isinstance(ancestor.value, list)
+                ),
+                None,
+            )
+            if owner is None or not ancestors or ancestors[-1] is not owner:
+                issues.append(f"{name}: routine debt notification call")
+                continue
+            owner_calls[id(owner)] = owner_calls.get(id(owner), 0) + 1
+            limits = [
+                candidate.value
+                for candidate in owner.value
+                if candidate.key == "limit" and isinstance(candidate.value, list)
+            ]
+            if len(limits) != 1 or not _limit_is_satisfiable(limits[0]):
+                issues.append(f"{name}: routine debt notification call")
+                continue
+            limit = limits[0]
+            notified_occurrences = [
+                sum(ancestor.key == "NOT" for ancestor in nested_ancestors)
+                for nested_ancestors, candidate in _walk_entries(limit)
+                if candidate.key == "has_variable"
+                and candidate.value == "ADISCORD_economy_first_loan_notified"
+            ]
+            first_loan = notified_occurrences == [1]
+            upward = _exact_check(
+                limit,
+                "ADISCORD_economy_debt_state",
+                "ADISCORD_economy_last_notified_debt_state",
+                "greater_than",
+            )
             if not (first_loan or upward):
                 issues.append(f"{name}: routine debt notification call")
+        if any(count != 1 for count in owner_calls.values()):
+            issues.append(f"{name}: duplicate debt notification call in one branch")
     return issues
 
 
@@ -690,7 +845,8 @@ def debt_reconciler_issues(text: str) -> list[str]:
                 not add_positions or max(remove_positions) < min(add_positions)
             )
             if not (
-                lowers_only
+                _limit_is_satisfiable(condition)
+                and lowers_only
                 and uses_lower_interest_band
                 and removed == debuffs
                 and additions_ok
