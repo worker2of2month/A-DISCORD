@@ -569,26 +569,115 @@ def task6_schema_fourteen_migration_issues(text):
     """Validate safe migration without manufacturing old streak evidence."""
 
     try:
-        migration = unique_block(text, "ADISCORD_economy_migrate_schema")
-        start = migration.index("value = 14 compare = less_than")
+        migration = _parsed_definition(text, "ADISCORD_economy_migrate_schema")
     except (AssertionError, ValueError) as error:
         return [f"schema 14 migration is missing: {error}"]
-    schema = migration[start:]
     issues = []
-    state_writes = re.findall(
-        r"set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_debt_state"
-        r"\s+value\s*=\s*([^\s}]+)\s*\}",
-        schema,
-    )
-    if state_writes != ["0", "2", "1"]:
-        issues.append(f"schema 14 unsafe debt-state mapping: {state_writes}")
-    for legacy, state in ((2, 2), (1, 1)):
-        required = (
-            "check_variable = { var = ADISCORD_economy_debt_crisis_level "
-            f"value = {legacy} compare = greater_than_or_equals }}"
+    owners = [
+        entry
+        for entry in migration.value
+        if entry.key == "if"
+        and _exact_direct_check_set(
+            entry,
+            [("ADISCORD_economy_schema_version", "14", "less_than")],
         )
-        if schema.count(required) != 1:
-            issues.append(f"legacy level {legacy} does not map exactly to state {state}")
+    ]
+    if len(owners) != 1:
+        return [f"schema 14 requires one exact top-level owner, found {len(owners)}"]
+    owner = owners[0]
+    assert isinstance(owner.value, list)
+    schema_fourteen_checks = [
+        (ancestors, entry)
+        for ancestors, entry in _walk_parsed(migration.value)
+        if entry.key == "check_variable"
+        and isinstance(entry.value, list)
+        and _entry_scalar(entry.value, "var") == "ADISCORD_economy_schema_version"
+        and _entry_scalar(entry.value, "value") == "14"
+    ]
+    if len(schema_fourteen_checks) != 1:
+        issues.append("schema 14 guard is duplicated or has a second unowned check")
+
+    variable_write_operations = {
+        "set_variable", "add_to_variable", "subtract_from_variable",
+        "multiply_variable", "divide_variable", "clamp_variable", "clear_variable",
+    }
+    state_operations = [
+        (ancestors, entry)
+        for ancestors, entry in _walk_parsed(owner.value)
+        if entry.key in variable_write_operations
+        and (
+            entry.value == "ADISCORD_economy_debt_state"
+            or (
+                isinstance(entry.value, list)
+                and _entry_scalar(entry.value, "var") == "ADISCORD_economy_debt_state"
+            )
+        )
+    ]
+    global_state_operations = [
+        (ancestors, entry)
+        for ancestors, entry in _walk_parsed(migration.value)
+        if entry.key in variable_write_operations
+        and (
+            entry.value == "ADISCORD_economy_debt_state"
+            or (
+                isinstance(entry.value, list)
+                and _entry_scalar(entry.value, "var") == "ADISCORD_economy_debt_state"
+            )
+        )
+    ]
+    direct_state_zero = [
+        entry
+        for entry in owner.value
+        if entry.key == "set_variable"
+        and isinstance(entry.value, list)
+        and len(entry.value) == 2
+        and _entry_scalar(entry.value, "var") == "ADISCORD_economy_debt_state"
+        and _entry_scalar(entry.value, "value") == "0"
+    ]
+    mapping_branches = [
+        entry
+        for entry in owner.value
+        if entry.key in {"if", "else_if"}
+        and isinstance(entry.value, list)
+        and any(
+            child.key == "set_variable"
+            and isinstance(child.value, list)
+            and _entry_scalar(child.value, "var") == "ADISCORD_economy_debt_state"
+            for child in entry.value
+        )
+    ]
+    mapping_ok = bool(
+        len(direct_state_zero) == 1
+        and len(mapping_branches) == 2
+        and [branch.key for branch in mapping_branches] == ["if", "else_if"]
+        and owner.value.index(direct_state_zero[0]) < owner.value.index(mapping_branches[0])
+        and owner.value.index(mapping_branches[0]) + 1 == owner.value.index(mapping_branches[1])
+        and _exact_direct_check_set(
+            mapping_branches[0],
+            [("ADISCORD_economy_debt_crisis_level", "2", "greater_than_or_equals")],
+        )
+        and _exact_direct_variable_write(
+            mapping_branches[0], "set_variable", "ADISCORD_economy_debt_state", 2
+        )
+        and _exact_direct_check_set(
+            mapping_branches[1],
+            [("ADISCORD_economy_debt_crisis_level", "1", "greater_than_or_equals")],
+        )
+        and _exact_direct_variable_write(
+            mapping_branches[1], "set_variable", "ADISCORD_economy_debt_state", 1
+        )
+        and len(state_operations) == 3
+        and len(global_state_operations) == 3
+        and all(ancestors and ancestors[0] is owner for ancestors, _ in global_state_operations)
+        and sorted(
+            _entry_scalar(entry.value, "value")
+            for _, entry in state_operations
+            if entry.key == "set_variable" and isinstance(entry.value, list)
+        ) == ["0", "1", "2"]
+    )
+    if not mapping_ok:
+        issues.append("schema 14 safe state 0/1/2 mapping lacks exact branch ownership")
+
     exact_writes = {
         "ADISCORD_economy_debt_emergency_streak": "0",
         "ADISCORD_economy_debt_default_streak": "0",
@@ -602,24 +691,133 @@ def task6_schema_fourteen_migration_issues(text):
         ),
         "ADISCORD_economy_last_notified_debt_state": "ADISCORD_economy_debt_state",
     }
+    initialization_entries = []
+    initialization_by_variable = {}
     for variable, value in exact_writes.items():
-        token = f"set_variable = {{ var = {variable} value = {value} }}"
-        if schema.count(token) != 1:
+        direct = [
+            entry
+            for entry in owner.value
+            if entry.key == "set_variable"
+            and isinstance(entry.value, list)
+            and _entry_scalar(entry.value, "var") == variable
+        ]
+        all_owned = [
+            (ancestors, entry)
+            for ancestors, entry in _walk_parsed(migration.value)
+            if entry.key in variable_write_operations
+            and (
+                entry.value == variable
+                or (
+                    isinstance(entry.value, list)
+                    and _entry_scalar(entry.value, "var") == variable
+                )
+            )
+        ]
+        if not (
+            len(direct) == len(all_owned) == 1
+            and all_owned[0][0]
+            and all_owned[0][0][0] is owner
+            and all_owned[0][1] is direct[0]
+            and len(direct[0].value) == 2
+            and _entry_scalar(direct[0].value, "value") == value
+        ):
             issues.append(f"schema 14 does not initialize {variable} exactly to {value}")
-    clear_first = "clear_variable = ADISCORD_economy_first_loan_notified"
-    mark_first = (
-        "set_variable = { var = ADISCORD_economy_first_loan_notified value = 1 }"
-    )
-    debt_positive = (
-        "check_variable = { var = ADISCORD_economy_debt value = 0 compare = greater_than }"
+        else:
+            initialization_entries.append(direct[0])
+            initialization_by_variable[variable] = direct[0]
+    last_notified = initialization_by_variable.get(
+        "ADISCORD_economy_last_notified_debt_state"
     )
     if not (
-        schema.count(clear_first) == 1
-        and schema.count(mark_first) == 1
-        and schema.count(debt_positive) == 1
-        and schema.index(clear_first) < schema.index(debt_positive) < schema.index(mark_first)
+        mapping_branches
+        and last_notified is not None
+        and owner.value.index(mapping_branches[-1]) < owner.value.index(last_notified)
     ):
+        issues.append("schema 14 notification watermark is not initialized after mapping")
+
+    clear_first = [
+        (ancestors, entry)
+        for ancestors, entry in _walk_parsed(migration.value)
+        if entry.key == "clear_variable"
+        and entry.value == "ADISCORD_economy_first_loan_notified"
+    ]
+    marker_owners = [
+        entry
+        for entry in owner.value
+        if entry.key == "if"
+        and isinstance(entry.value, list)
+        and _exact_direct_variable_write(
+            entry, "set_variable", "ADISCORD_economy_first_loan_notified", 1
+        )
+    ]
+    all_first_markers = [
+        (ancestors, entry)
+        for ancestors, entry in _walk_parsed(migration.value)
+        if entry.key in variable_write_operations
+        and isinstance(entry.value, list)
+        and _entry_scalar(entry.value, "var") == "ADISCORD_economy_first_loan_notified"
+    ]
+    first_loan_ok = bool(
+        len(clear_first) == 1
+        and clear_first[0][0]
+        and clear_first[0][0][0] is owner
+        and len(marker_owners) == 1
+        and len(all_first_markers) == 1
+        and all_first_markers[0][0]
+        and all_first_markers[0][0][0] is owner
+        and _exact_direct_check_set(
+            marker_owners[0],
+            [("ADISCORD_economy_debt", "0", "greater_than")],
+        )
+        and owner.value.index(clear_first[0][1]) < owner.value.index(marker_owners[0])
+    )
+    if not first_loan_ok:
         issues.append("schema 14 first-loan marker does not preserve existing debt safely")
+
+    completion = [
+        entry
+        for _, entry in _walk_parsed(migration.value)
+        if entry.key == "set_variable"
+        and isinstance(entry.value, list)
+        and len(entry.value) == 2
+        and _entry_scalar(entry.value, "var") == "ADISCORD_economy_schema_version"
+        and _entry_scalar(entry.value, "value") == "14"
+    ]
+    direct_completion = [
+        entry
+        for entry in owner.value
+        if entry.key == "set_variable"
+        and isinstance(entry.value, list)
+        and len(entry.value) == 2
+        and _entry_scalar(entry.value, "var") == "ADISCORD_economy_schema_version"
+        and _entry_scalar(entry.value, "value") == "14"
+    ]
+    completion_ok = len(completion) == len(direct_completion) == 1
+    if completion_ok:
+        completion_position = owner.value.index(direct_completion[0])
+        required_before_completion = list(initialization_entries)
+        if mapping_branches:
+            required_before_completion.append(mapping_branches[-1])
+        if marker_owners:
+            required_before_completion.append(marker_owners[0])
+        completion_ok = bool(
+            required_before_completion
+            and max(owner.value.index(entry) for entry in required_before_completion)
+            < completion_position
+            and completion_position == len(owner.value) - 2
+            and _exact_direct_variable_write(
+                owner,
+                "set_variable",
+                "ADISCORD_economy_needs_full_refresh",
+                1,
+            )
+            and owner.value[-1].key == "set_variable"
+            and isinstance(owner.value[-1].value, list)
+            and _entry_scalar(owner.value[-1].value, "var")
+            == "ADISCORD_economy_needs_full_refresh"
+        )
+    if not completion_ok:
+        issues.append("schema 14 completion write is missing, unowned, duplicated, or early")
     return issues
 
 
@@ -1557,8 +1755,10 @@ ADISCORD_economy_update_debt_state_after_settlement = {
    set_variable = { var = ADISCORD_economy_debt_state value = 1 }
   } else = { set_variable = { var = ADISCORD_economy_debt_state value = 0 } }
  }
- clamp_variable = { var = ADISCORD_economy_debt_emergency_streak min = 0 max = 4 }
- clamp_variable = { var = ADISCORD_economy_debt_default_streak min = 0 max = 13 }
+  clamp_variable = { var = ADISCORD_economy_debt_emergency_streak min = 0 max = 4 }
+  clamp_variable = { var = ADISCORD_economy_debt_default_streak min = 0 max = 13 }
+  set_variable = { var = ADISCORD_economy_debt_crisis_level value = ADISCORD_economy_debt_state }
+  ADISCORD_economy_sync_debt_state_idea = yes
 }
 """
         self.assertEqual(task6_debt_state_sequence_issues(transition), [])
@@ -1635,8 +1835,44 @@ ADISCORD_economy_update_debt_state_after_settlement = {
                 "  } else_if = { limit = { always = yes }\n"
                 "   set_variable = { var = ADISCORD_economy_debt_state value = 1 }",
             ),
+            transition.replace(
+                "  set_variable = { var = ADISCORD_economy_debt_crisis_level value = ADISCORD_economy_debt_state }\n",
+                "",
+                1,
+            ),
+            transition.replace(
+                "  ADISCORD_economy_sync_debt_state_idea = yes\n",
+                "",
+                1,
+            ),
+            transition.replace(
+                "  ADISCORD_economy_sync_debt_state_idea = yes\n",
+                "  ADISCORD_economy_sync_debt_state_idea = yes\n"
+                "  ADISCORD_economy_sync_debt_state_idea = yes\n",
+                1,
+            ),
+            transition.replace(
+                "  ADISCORD_economy_sync_debt_state_idea = yes\n",
+                "  if = { limit = { always = yes } ADISCORD_economy_sync_debt_state_idea = yes }\n",
+                1,
+            ),
+            transition.replace(
+                "  set_variable = { var = ADISCORD_economy_debt_crisis_level value = ADISCORD_economy_debt_state }\n"
+                "  ADISCORD_economy_sync_debt_state_idea = yes\n",
+                "",
+                1,
+            ).replace(
+                "  if = { limit = {\n"
+                "   check_variable = { var = ADISCORD_economy_debt_default_streak value = 13 compare = less_than }",
+                "  set_variable = { var = ADISCORD_economy_debt_crisis_level value = ADISCORD_economy_debt_state }\n"
+                "  ADISCORD_economy_sync_debt_state_idea = yes\n"
+                "  if = { limit = {\n"
+                "   check_variable = { var = ADISCORD_economy_debt_default_streak value = 13 compare = less_than }",
+                1,
+            ),
         )):
             with self.subTest(transition_mutation=index):
+                self.assertTrue(parse_clausewitz(invalid))
                 self.assertTrue(task6_debt_state_sequence_issues(invalid))
 
         queue_notification = """
@@ -1672,6 +1908,31 @@ ADISCORD_economy_queue_debt_notification = {
 }
 """
         self.assertEqual(task6_notification_queue_issues(queue_notification), [])
+        severity_mapping = (
+            "  if = { limit = { check_variable = { var = ADISCORD_economy_debt_state value = 4 compare = equals } } set_variable = { var = ADISCORD_economy_pending_debt_notification_kind value = 5 } }\n"
+            "  else_if = { limit = { check_variable = { var = ADISCORD_economy_debt_state value = 3 compare = equals } } set_variable = { var = ADISCORD_economy_pending_debt_notification_kind value = 4 } }\n"
+            "  else_if = { limit = { check_variable = { var = ADISCORD_economy_debt_state value = 2 compare = equals } } set_variable = { var = ADISCORD_economy_pending_debt_notification_kind value = 3 } }\n"
+            "  else_if = { limit = { check_variable = { var = ADISCORD_economy_debt_state value = 1 compare = equals } } set_variable = { var = ADISCORD_economy_pending_debt_notification_kind value = 2 } }\n"
+        )
+        human_dispatch = (
+            " if = { limit = { is_ai = no check_variable = { var = ADISCORD_economy_pending_debt_notification_kind value = 0 compare = greater_than } }\n"
+            "  country_event = { id = ADISCORD_economy.3 }\n"
+            " }\n"
+        )
+        upward_marker = (
+            " if = { limit = {\n"
+            "  check_variable = { var = ADISCORD_economy_debt_state value = ADISCORD_economy_pending_debt_notification_previous_state compare = greater_than }"
+        )
+        mapping_outside_upward = queue_notification.replace(severity_mapping, "", 1).replace(
+            upward_marker,
+            severity_mapping + upward_marker,
+            1,
+        )
+        dispatch_before_severity = queue_notification.replace(human_dispatch, "", 1).replace(
+            upward_marker,
+            human_dispatch + upward_marker,
+            1,
+        )
         queue_mutations = {
             "already-notified first loan": queue_notification.replace(
                 "NOT = { has_variable = ADISCORD_economy_first_loan_notified }",
@@ -1696,11 +1957,15 @@ ADISCORD_economy_queue_debt_notification = {
             "legacy popup": queue_notification.replace(
                 "country_event = { id = ADISCORD_economy.3 }",
                 "country_event = { id = ADISCORD_economy.3 }\n"
-                "  set_variable = { var = ADISCORD_economy_show_auto_loan_popup value = 1 }",
+                 "  set_variable = { var = ADISCORD_economy_show_auto_loan_popup value = 1 }",
             ),
+            "severity mappings moved outside upward owner": mapping_outside_upward,
+            "human dispatch moved before severity override": dispatch_before_severity,
         }
         for name, invalid in queue_mutations.items():
             with self.subTest(notification_mutation=name):
+                self.assertNotEqual(invalid, queue_notification)
+                self.assertTrue(parse_clausewitz(invalid))
                 self.assertTrue(task6_notification_queue_issues(invalid))
 
         settlement_notification_flow = queue_notification + """
@@ -1743,6 +2008,7 @@ ADISCORD_economy_apply_monthly_balance = {
         }
         for name, invalid in settlement_mutations.items():
             with self.subTest(settlement_notification_mutation=name):
+                self.assertTrue(parse_clausewitz(invalid))
                 self.assertTrue(debt_notification_flow_issues(invalid))
 
         branches = {
@@ -1791,6 +2057,7 @@ ADISCORD_economy_apply_monthly_balance = {
         reconciler = (
             "ADISCORD_economy_reconcile_debt_state_after_action = {\n"
             + "".join(branches.values())
+            + " set_variable = { var = ADISCORD_economy_debt_crisis_level value = ADISCORD_economy_debt_state }\n"
             + "}\n"
         )
 
@@ -1908,10 +2175,42 @@ ADISCORD_economy_apply_monthly_balance = {
             "country event": append_to_reconciler(
                 " country_event = { id = ADISCORD_economy.999 }\n"
             ),
+            "missing compatibility mirror": reconciler.replace(
+                " set_variable = { var = ADISCORD_economy_debt_crisis_level value = ADISCORD_economy_debt_state }\n",
+                "",
+                1,
+            ),
+            "wrong compatibility mirror value": reconciler.replace(
+                "ADISCORD_economy_debt_crisis_level value = ADISCORD_economy_debt_state",
+                "ADISCORD_economy_debt_crisis_level value = 0",
+                1,
+            ),
+            "compatibility mirror before state branches": reconciler.replace(
+                " set_variable = { var = ADISCORD_economy_debt_crisis_level value = ADISCORD_economy_debt_state }\n",
+                "",
+                1,
+            ).replace(
+                "ADISCORD_economy_reconcile_debt_state_after_action = {\n",
+                "ADISCORD_economy_reconcile_debt_state_after_action = {\n"
+                " set_variable = { var = ADISCORD_economy_debt_crisis_level value = ADISCORD_economy_debt_state }\n",
+                1,
+            ),
+            "duplicate compatibility mirror": reconciler.replace(
+                " set_variable = { var = ADISCORD_economy_debt_crisis_level value = ADISCORD_economy_debt_state }\n",
+                " set_variable = { var = ADISCORD_economy_debt_crisis_level value = ADISCORD_economy_debt_state }\n"
+                " set_variable = { var = ADISCORD_economy_debt_crisis_level value = ADISCORD_economy_debt_state }\n",
+                1,
+            ),
+            "conditional compatibility mirror": reconciler.replace(
+                " set_variable = { var = ADISCORD_economy_debt_crisis_level value = ADISCORD_economy_debt_state }\n",
+                " if = { limit = { always = yes } set_variable = { var = ADISCORD_economy_debt_crisis_level value = ADISCORD_economy_debt_state } }\n",
+                1,
+            ),
         }
         for name, invalid in mutations.items():
             with self.subTest(reconciler_mutation=name):
                 self.assertNotEqual(invalid, reconciler)
+                self.assertTrue(parse_clausewitz(invalid))
                 self.assertTrue(debt_reconciler_issues(invalid))
 
 
@@ -4236,11 +4535,73 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 "check_variable = { var = ADISCORD_economy_debt value = 0 compare = less_than }",
                 1,
             ),
+            "schema completion removed": migration.replace(
+                "set_variable = { var = ADISCORD_economy_schema_version value = 14 }",
+                "",
+                1,
+            ),
+            "state two write moved outside legacy owner": migration.replace(
+                "\t\tif = {\n"
+                "\t\t\tlimit = { check_variable = { var = ADISCORD_economy_debt_crisis_level value = 2 compare = greater_than_or_equals } }\n"
+                "\t\t\tset_variable = { var = ADISCORD_economy_debt_state value = 2 }\n"
+                "\t\t}",
+                "\t\tset_variable = { var = ADISCORD_economy_debt_state value = 2 }\n"
+                "\t\tif = {\n"
+                "\t\t\tlimit = { check_variable = { var = ADISCORD_economy_debt_crisis_level value = 2 compare = greater_than_or_equals } }\n"
+                "\t\t}",
+                1,
+            ),
+            "schema owner guard reversed": migration.replace(
+                "ADISCORD_economy_schema_version value = 14 compare = less_than",
+                "ADISCORD_economy_schema_version value = 14 compare = greater_than_or_equals",
+                1,
+            ),
+            "schema owner made dead": migration.replace(
+                "limit = { check_variable = { var = ADISCORD_economy_schema_version value = 14 compare = less_than } }",
+                "limit = { check_variable = { var = ADISCORD_economy_schema_version value = 14 compare = less_than } always = no }",
+                1,
+            ),
+            "watermark moved before legacy mapping": migration.replace(
+                "\t\tset_variable = { var = ADISCORD_economy_last_notified_debt_state value = ADISCORD_economy_debt_state }\n",
+                "",
+                1,
+            ).replace(
+                "\t\tset_variable = { var = ADISCORD_economy_debt_state value = 0 }\n",
+                "\t\tset_variable = { var = ADISCORD_economy_last_notified_debt_state value = ADISCORD_economy_debt_state }\n"
+                "\t\tset_variable = { var = ADISCORD_economy_debt_state value = 0 }\n",
+                1,
+            ),
+            "schema completion moved outside owner": migration.replace(
+                "\t\tset_variable = { var = ADISCORD_economy_schema_version value = 14 }\n",
+                "",
+                1,
+            ).replace(
+                "\t}\n}",
+                "\t}\n\tset_variable = { var = ADISCORD_economy_schema_version value = 14 }\n}",
+                1,
+            ),
+            "schema completion before final debuff refresh": migration.replace(
+                "\t\tset_variable = { var = ADISCORD_economy_schema_version value = 14 }\n",
+                "",
+                1,
+            ).replace(
+                "\t\tset_variable = { var = ADISCORD_economy_debt_crisis_level value = ADISCORD_economy_debt_state }\n"
+                "\t\tremove_ideas = {",
+                "\t\tset_variable = { var = ADISCORD_economy_debt_crisis_level value = ADISCORD_economy_debt_state }\n"
+                "\t\tset_variable = { var = ADISCORD_economy_schema_version value = 14 }\n"
+                "\t\tremove_ideas = {",
+                1,
+            ),
+            "unowned duplicate state write": migration
+            + "\n\tset_variable = { var = ADISCORD_economy_debt_state value = 2 }",
+            "unowned duplicate streak reset": migration
+            + "\n\tset_variable = { var = ADISCORD_economy_debt_emergency_streak value = 0 }",
         }
         for name, mutated_migration in migration_mutations.items():
             with self.subTest(schema14_mutation=name):
                 self.assertNotEqual(mutated_migration, migration)
                 mutated_effects = EFFECTS.replace(migration, mutated_migration, 1)
+                self.assertTrue(parse_clausewitz(mutated_effects))
                 self.assertTrue(task6_schema_fourteen_migration_issues(mutated_effects))
 
     def test_schema_twelve_initializes_reserve_and_postwar_state_without_resetting_treasury(self):

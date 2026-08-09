@@ -485,6 +485,30 @@ def _direct_variable_operation(
     return matches
 
 
+def _is_exact_variable_write(
+    entry: Entry, operation: str, variable: str, value: str
+) -> bool:
+    return (
+        entry.key == operation
+        and isinstance(entry.value, list)
+        and len(entry.value) == 2
+        and sorted(child.key for child in entry.value) == ["value", "var"]
+        and _direct_scalar(entry.value, "var") == variable
+        and _direct_scalar(entry.value, "value") == value
+    )
+
+
+def _direct_limit(branch: Entry) -> list[Entry] | None:
+    if not isinstance(branch.value, list):
+        return None
+    limits = [
+        entry.value
+        for entry in branch.value
+        if entry.key == "limit" and isinstance(entry.value, list)
+    ]
+    return limits[0] if len(limits) == 1 else None
+
+
 def _limit_is_satisfiable(entries: list[Entry]) -> bool:
     return bool(_boolean_entries_paths(entries))
 
@@ -919,6 +943,56 @@ def debt_transition_flow_issues(text: str) -> list[str]:
                 threshold_ok = True
         if not condition_ok or not reset_ok or not threshold_ok:
             issues.append(f"{streak}: transition condition, reset, or threshold is invalid")
+    variable_write_operations = {
+        "set_variable", "add_to_variable", "subtract_from_variable",
+        "multiply_variable", "divide_variable", "clamp_variable", "clear_variable",
+    }
+
+    def writes_variable(entry: Entry, variable: str) -> bool:
+        if entry.key not in variable_write_operations:
+            return False
+        return entry.value == variable or (
+            isinstance(entry.value, list)
+            and _direct_scalar(entry.value, "var") == variable
+        )
+
+    state_owner_positions: list[int] = []
+    for ancestors, entry in _walk_entries(definition.value):
+        if not writes_variable(entry, "ADISCORD_economy_debt_state"):
+            continue
+        top_level_owner = ancestors[0] if ancestors else entry
+        if top_level_owner in definition.value:
+            state_owner_positions.append(definition.value.index(top_level_owner))
+    mirrors = [
+        (ancestors, entry)
+        for ancestors, entry in _walk_entries(definition.value)
+        if writes_variable(entry, "ADISCORD_economy_debt_crisis_level")
+    ]
+    sync_calls = [
+        (ancestors, entry)
+        for ancestors, entry in _walk_entries(definition.value)
+        if entry.key == "ADISCORD_economy_sync_debt_state_idea"
+    ]
+    authority_ok = bool(
+        state_owner_positions
+        and len(mirrors) == 1
+        and not mirrors[0][0]
+        and _is_exact_variable_write(
+            mirrors[0][1],
+            "set_variable",
+            "ADISCORD_economy_debt_crisis_level",
+            "ADISCORD_economy_debt_state",
+        )
+        and len(sync_calls) == 1
+        and not sync_calls[0][0]
+        and sync_calls[0][1].value == "yes"
+    )
+    if authority_ok:
+        mirror_position = definition.value.index(mirrors[0][1])
+        sync_position = definition.value.index(sync_calls[0][1])
+        authority_ok = max(state_owner_positions) < mirror_position < sync_position
+    if not authority_ok:
+        issues.append("debt transition does not mirror state and sync its idea after all state writes")
     return issues
 
 
@@ -981,147 +1055,175 @@ def debt_notification_flow_issues(text: str) -> list[str]:
         if max(positions[:2]) >= positions[2] or positions[2] >= positions[3]:
             issues.append(f"{name}: notification cache/update/queue order is invalid")
 
-    def direct_limits(branch: Entry) -> list[list[Entry]]:
-        if not isinstance(branch.value, list):
-            return []
-        return [
-            entry.value
-            for entry in branch.value
-            if entry.key == "limit" and isinstance(entry.value, list)
-        ]
-
     kind_variable = "ADISCORD_economy_pending_debt_notification_kind"
-    direct_kind_reset = _direct_variable_operation(
-        queue.value, "set_variable", kind_variable, "0"
-    )
-    new_state_cache = _direct_variable_operation(
-        queue.value,
-        "set_variable",
-        "ADISCORD_economy_pending_debt_notification_new_state",
-        "ADISCORD_economy_debt_state",
-    )
-    if len(direct_kind_reset) != 1 or len(new_state_cache) != 1:
-        issues.append("notification queue does not reset kind and cache new state once")
-
-    first_branch: Entry | None = None
-    upward_branch: Entry | None = None
-    improvement_branch: Entry | None = None
-    for branch in queue.value:
-        if branch.key not in {"if", "else_if"} or not isinstance(branch.value, list):
-            continue
-        limits = direct_limits(branch)
-        if len(limits) != 1 or not _limit_is_satisfiable(limits[0]):
-            continue
-        limit = limits[0]
-        if (
-            len(_direct_variable_operation(branch.value, "set_variable", kind_variable, "1"))
-            == 1
+    if len(queue.value) != 6:
+        issues.append("notification queue is not the exact reset/first/upward/improvement/dispatch sequence")
+    if len(queue.value) >= 2:
+        if not _is_exact_variable_write(
+            queue.value[0], "set_variable", kind_variable, "0"
         ):
-            first_branch = branch
-            if not (
-                len(limit) == 2
-                and _exact_check(
-                    limit,
-                    "ADISCORD_economy_pending_debt_notification_amount",
-                    "0",
-                    "greater_than",
-                )
-                and _exact_scalar(
-                    limit,
-                    "has_variable",
-                    "ADISCORD_economy_first_loan_notified",
-                    positive=False,
-                )
-                and len(
-                    _direct_variable_operation(
-                        branch.value,
-                        "set_variable",
-                        "ADISCORD_economy_first_loan_notified",
-                        "1",
-                    )
-                )
-                == 1
-            ):
-                issues.append("first-loan notification owner is invalid")
-        if (
-            _exact_check(
-                limit,
+            issues.append("notification queue does not directly reset kind first")
+        if not _is_exact_variable_write(
+            queue.value[1],
+            "set_variable",
+            "ADISCORD_economy_pending_debt_notification_new_state",
+            "ADISCORD_economy_debt_state",
+        ):
+            issues.append("notification queue does not directly cache new state second")
+
+    first_branch = queue.value[2] if len(queue.value) > 2 else None
+    first_ok = bool(
+        first_branch
+        and first_branch.key == "if"
+        and isinstance(first_branch.value, list)
+        and len(first_branch.value) == 3
+    )
+    if first_ok:
+        first_limit = _direct_limit(first_branch)
+        first_ok = bool(
+            first_limit is not None
+            and len(first_limit) == 2
+            and _limit_is_satisfiable(first_limit)
+            and _exact_check(
+                first_limit,
+                "ADISCORD_economy_pending_debt_notification_amount",
+                "0",
+                "greater_than",
+            )
+            and _exact_scalar(
+                first_limit,
+                "has_variable",
+                "ADISCORD_economy_first_loan_notified",
+                positive=False,
+            )
+            and _is_exact_variable_write(
+                first_branch.value[1], "set_variable", kind_variable, "1"
+            )
+            and _is_exact_variable_write(
+                first_branch.value[2],
+                "set_variable",
+                "ADISCORD_economy_first_loan_notified",
+                "1",
+            )
+        )
+    if not first_ok:
+        issues.append("first-loan notification kind 1 lacks its exact direct owner")
+
+    upward_branch = queue.value[3] if len(queue.value) > 3 else None
+    upward_ok = bool(
+        upward_branch
+        and upward_branch.key == "if"
+        and isinstance(upward_branch.value, list)
+        and len(upward_branch.value) == 6
+    )
+    if upward_ok:
+        upward_limit = _direct_limit(upward_branch)
+        upward_ok = bool(
+            upward_limit is not None
+            and len(upward_limit) == 2
+            and _limit_is_satisfiable(upward_limit)
+            and _exact_check(
+                upward_limit,
                 "ADISCORD_economy_debt_state",
                 "ADISCORD_economy_pending_debt_notification_previous_state",
                 "greater_than",
             )
-            or _exact_check(
-                limit,
+            and _exact_check(
+                upward_limit,
                 "ADISCORD_economy_debt_state",
                 "ADISCORD_economy_last_notified_debt_state",
                 "greater_than",
             )
-        ):
-            upward_branch = branch
-            if not (
-                len(limit) == 2
+        )
+        mapping_entries = upward_branch.value[1:5]
+        expected_mapping = (("if", "4", "5"), ("else_if", "3", "4"), ("else_if", "2", "3"), ("else_if", "1", "2"))
+        for mapping, (branch_key, state, kind) in zip(mapping_entries, expected_mapping):
+            mapping_limit = _direct_limit(mapping)
+            mapping_ok = bool(
+                mapping.key == branch_key
+                and isinstance(mapping.value, list)
+                and len(mapping.value) == 2
+                and mapping_limit is not None
+                and len(mapping_limit) == 1
+                and _limit_is_satisfiable(mapping_limit)
                 and _exact_check(
-                    limit,
+                    mapping_limit,
                     "ADISCORD_economy_debt_state",
-                    "ADISCORD_economy_pending_debt_notification_previous_state",
-                    "greater_than",
+                    state,
+                    "equals",
                 )
-                and _exact_check(
-                    limit,
-                    "ADISCORD_economy_debt_state",
-                    "ADISCORD_economy_last_notified_debt_state",
-                    "greater_than",
+                and _is_exact_variable_write(
+                    mapping.value[1], "set_variable", kind_variable, kind
                 )
-                and len(
-                    _direct_variable_operation(
-                        branch.value,
-                        "set_variable",
-                        "ADISCORD_economy_last_notified_debt_state",
-                        "ADISCORD_economy_debt_state",
-                    )
-                )
-                == 1
-            ):
-                issues.append("upward debt notification owner is invalid")
-        if _exact_check(
-            limit,
+            )
+            upward_ok = upward_ok and mapping_ok
+        upward_ok = upward_ok and _is_exact_variable_write(
+            upward_branch.value[5],
+            "set_variable",
+            "ADISCORD_economy_last_notified_debt_state",
             "ADISCORD_economy_debt_state",
-            "ADISCORD_economy_pending_debt_notification_previous_state",
-            "less_than",
-        ):
-            improvement_branch = branch
-            if not (
-                len(limit) == 2
-                and _exact_check(
-                    limit,
-                    "ADISCORD_economy_last_notified_debt_state",
-                    "ADISCORD_economy_debt_state",
-                    "greater_than",
-                )
-                and len(
-                    _direct_variable_operation(
-                        branch.value,
-                        "set_variable",
-                        "ADISCORD_economy_last_notified_debt_state",
-                        "ADISCORD_economy_debt_state",
-                    )
-                )
-                == 1
-            ):
-                issues.append("improvement does not lower notification state exactly")
+        )
+    if not upward_ok:
+        issues.append("upward owner lacks the exact ordered state 4..1 severity mapping")
 
-    if first_branch is None:
-        issues.append("missing first-loan notification owner")
-    if upward_branch is None:
-        issues.append("missing upward debt-state notification owner")
-    if improvement_branch is None:
-        issues.append("missing debt-state improvement owner")
-    if (
-        first_branch is not None
-        and upward_branch is not None
-        and queue.value.index(first_branch) >= queue.value.index(upward_branch)
-    ):
-        issues.append("first-loan kind is not overridden by later state severity")
+    improvement_branch = queue.value[4] if len(queue.value) > 4 else None
+    improvement_ok = bool(
+        improvement_branch
+        and improvement_branch.key == "if"
+        and isinstance(improvement_branch.value, list)
+        and len(improvement_branch.value) == 2
+    )
+    if improvement_ok:
+        improvement_limit = _direct_limit(improvement_branch)
+        improvement_ok = bool(
+            improvement_limit is not None
+            and len(improvement_limit) == 2
+            and _limit_is_satisfiable(improvement_limit)
+            and _exact_check(
+                improvement_limit,
+                "ADISCORD_economy_debt_state",
+                "ADISCORD_economy_pending_debt_notification_previous_state",
+                "less_than",
+            )
+            and _exact_check(
+                improvement_limit,
+                "ADISCORD_economy_last_notified_debt_state",
+                "ADISCORD_economy_debt_state",
+                "greater_than",
+            )
+            and _is_exact_variable_write(
+                improvement_branch.value[1],
+                "set_variable",
+                "ADISCORD_economy_last_notified_debt_state",
+                "ADISCORD_economy_debt_state",
+            )
+        )
+    if not improvement_ok:
+        issues.append("improvement does not lower notification state exactly")
+
+    dispatch_branch = queue.value[5] if len(queue.value) > 5 else None
+    dispatch_ok = bool(
+        dispatch_branch
+        and dispatch_branch.key == "if"
+        and isinstance(dispatch_branch.value, list)
+        and len(dispatch_branch.value) == 2
+    )
+    if dispatch_ok:
+        dispatch_limit = _direct_limit(dispatch_branch)
+        event = dispatch_branch.value[1]
+        dispatch_ok = bool(
+            dispatch_limit is not None
+            and len(dispatch_limit) == 2
+            and _limit_is_satisfiable(dispatch_limit)
+            and _exact_scalar(dispatch_limit, "is_ai", "no")
+            and _exact_check(dispatch_limit, kind_variable, "0", "greater_than")
+            and event.key == "country_event"
+            and isinstance(event.value, list)
+            and len(event.value) == 1
+            and _direct_scalar(event.value, "id") == "ADISCORD_economy.3"
+        )
+    if not dispatch_ok:
+        issues.append("debt modal is not the final direct human-only pending dispatch")
 
     kind_writes = [
         entry
@@ -1131,7 +1233,10 @@ def debt_notification_flow_issues(text: str) -> list[str]:
         and _direct_scalar(entry.value, "var") == kind_variable
     ]
     for kind in range(6):
-        if sum(_direct_scalar(entry.value, "value") == str(kind) for entry in kind_writes) != 1:
+        if sum(
+            _is_exact_variable_write(entry, "set_variable", kind_variable, str(kind))
+            for entry in kind_writes
+        ) != 1:
             issues.append(f"notification kind {kind} does not have one exact owner")
 
     all_debt_events: list[tuple[str, tuple[Entry, ...], Entry]] = []
@@ -1146,24 +1251,13 @@ def debt_notification_flow_issues(text: str) -> list[str]:
     if len(all_debt_events) != 1 or all_debt_events[0][0] != queue_name:
         issues.append("debt modal is not dispatched exactly once by the queue")
     else:
-        _, ancestors, _ = all_debt_events[0]
-        owner = next(
-            (
-                entry
-                for entry in reversed(ancestors)
-                if entry.key in {"if", "else_if"} and isinstance(entry.value, list)
-            ),
-            None,
-        )
-        limits = direct_limits(owner) if owner is not None else []
-        if (
-            owner is None
-            or not ancestors
-            or ancestors[-1] is not owner
-            or len(limits) != 1
-            or len(limits[0]) != 2
-            or not _exact_scalar(limits[0], "is_ai", "no")
-            or not _exact_check(limits[0], kind_variable, "0", "greater_than")
+        _, ancestors, event = all_debt_events[0]
+        if not (
+            dispatch_ok
+            and len(ancestors) == 1
+            and ancestors[0] is dispatch_branch
+            and isinstance(dispatch_branch.value, list)
+            and dispatch_branch.value[1] is event
         ):
             issues.append("debt modal dispatch is not exactly human-only and pending")
     return issues
@@ -1397,6 +1491,131 @@ def debt_reconciler_issues(text: str) -> list[str]:
         for _, entry in _walk_entries(definition.value)
     ):
         issues.append("debt reconciler fires events")
+    mirrors = [
+        (ancestors, entry)
+        for ancestors, entry in _walk_entries(definition.value)
+        if writes_variable(entry, "ADISCORD_economy_debt_crisis_level")
+    ]
+    mirror_ok = bool(
+        branches
+        and len(mirrors) == 1
+        and not mirrors[0][0]
+        and _is_exact_variable_write(
+            mirrors[0][1],
+            "set_variable",
+            "ADISCORD_economy_debt_crisis_level",
+            "ADISCORD_economy_debt_state",
+        )
+        and max(definition.value.index(branch) for branch in branches)
+        < definition.value.index(mirrors[0][1])
+    )
+    if not mirror_ok:
+        issues.append("debt reconciler does not mirror state after its branch chain")
+    return issues
+
+
+def debt_notification_selector_issues(text: str) -> list[str]:
+    """Bind every debt-notification selector to its exact ordered meaning."""
+
+    try:
+        ast = parse_clausewitz(text)
+    except ValueError as error:
+        return [f"debt notification selectors do not parse: {error}"]
+    contracts = {
+        "GetADISCORDEconomyDebtNotificationKindLoc": (
+            (
+                "ADISCORD_economy_pending_debt_notification_kind",
+                (("5", "equals", "ADISCORD_economy_debt_notification_kind_default"),
+                 ("4", "equals", "ADISCORD_economy_debt_notification_kind_emergency"),
+                 ("3", "equals", "ADISCORD_economy_debt_notification_kind_crisis"),
+                 ("2", "equals", "ADISCORD_economy_debt_notification_kind_strain"),
+                 ("1", "equals", "ADISCORD_economy_debt_notification_kind_first_loan")),
+            ),
+            "ADISCORD_economy_debt_notification_kind_fallback",
+        ),
+        "GetADISCORDEconomyDebtNotificationCauseLoc": (
+            (
+                None,
+                (("ADISCORD_economy_pending_debt_notification_amount", "0", "greater_than", "ADISCORD_economy_debt_notification_cause_auto_loan"),
+                 ("ADISCORD_economy_pending_debt_notification_new_state", "1", "greater_than_or_equals", "ADISCORD_economy_debt_notification_cause_interest")),
+            ),
+            "ADISCORD_economy_debt_notification_cause_fallback",
+        ),
+        "GetADISCORDEconomyDebtNotificationStateLoc": (
+            (
+                "ADISCORD_economy_pending_debt_notification_new_state",
+                (("4", "greater_than_or_equals", "ADISCORD_economy_debt_notification_state_default"),
+                 ("3", "greater_than_or_equals", "ADISCORD_economy_debt_notification_state_emergency"),
+                 ("2", "greater_than_or_equals", "ADISCORD_economy_debt_notification_state_crisis"),
+                 ("1", "greater_than_or_equals", "ADISCORD_economy_debt_notification_state_strain")),
+            ),
+            "ADISCORD_economy_debt_notification_state_healthy",
+        ),
+        "GetADISCORDEconomyDebtNotificationNextRiskLoc": (
+            (
+                "ADISCORD_economy_pending_debt_notification_new_state",
+                (("4", "greater_than_or_equals", "ADISCORD_economy_debt_notification_next_default"),
+                 ("3", "greater_than_or_equals", "ADISCORD_economy_debt_notification_next_emergency"),
+                 ("2", "greater_than_or_equals", "ADISCORD_economy_debt_notification_next_crisis"),
+                 ("1", "greater_than_or_equals", "ADISCORD_economy_debt_notification_next_strain")),
+            ),
+            "ADISCORD_economy_debt_notification_next_healthy",
+        ),
+    }
+    issues: list[str] = []
+    for selector, ((shared_variable, raw_branches), fallback) in contracts.items():
+        matches = [
+            entry
+            for entry in ast
+            if entry.key == "defined_text"
+            and isinstance(entry.value, list)
+            and _direct_scalar(entry.value, "name") == selector
+        ]
+        if len(matches) != 1:
+            issues.append(f"{selector}: expected one top-level defined_text, found {len(matches)}")
+            continue
+        selector_body = matches[0].value
+        assert isinstance(selector_body, list)
+        branches = [
+            entry
+            for entry in selector_body
+            if entry.key == "text" and isinstance(entry.value, list)
+        ]
+        if shared_variable is None:
+            expected = [tuple(branch) for branch in raw_branches]
+        else:
+            expected = [
+                (shared_variable, value, compare, key)
+                for value, compare, key in raw_branches
+            ]
+        if len(branches) != len(expected) + 1:
+            issues.append(f"{selector}: wrong number of ordered selector branches")
+            continue
+        for branch, (variable, value, compare, key) in zip(branches[:-1], expected):
+            triggers = [
+                entry
+                for entry in branch.value
+                if entry.key == "trigger" and isinstance(entry.value, list)
+            ]
+            branch_ok = bool(
+                len(branch.value) == 2
+                and [entry.key for entry in branch.value] == ["trigger", "localization_key"]
+                and len(triggers) == 1
+                and len(triggers[0].value) == 1
+                and _limit_is_satisfiable(triggers[0].value)
+                and _check_matches(triggers[0].value[0], variable, value, compare)
+                and len(triggers[0].value[0].value) == 3
+                and _direct_scalar(branch.value, "localization_key") == key
+            )
+            if not branch_ok:
+                issues.append(f"{selector}: selector branch {key} has wrong semantics or owner")
+        terminal = branches[-1]
+        if not (
+            len(terminal.value) == 1
+            and terminal.value[0].key == "localization_key"
+            and terminal.value[0].value == fallback
+        ):
+            issues.append(f"{selector}: terminal fallback is conditional, missing, or wrong")
     return issues
 
 
@@ -1506,6 +1725,7 @@ def validate() -> list[str]:
     issues.extend(debt_transition_flow_issues(effects))
     issues.extend(debt_notification_flow_issues(effects))
     issues.extend(debt_reconciler_issues(effects))
+    issues.extend(debt_notification_selector_issues(scripted_loc))
     boundary_sources: dict[str, str] = {}
     text_suffixes = {".txt", ".gui", ".gfx", ".yml", ".yaml", ".md", ".py"}
     for directory in ("common", "interface", "events", "localisation", "docs", "tools"):

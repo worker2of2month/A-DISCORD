@@ -2,6 +2,7 @@ import re
 import unittest
 from pathlib import Path
 
+from tools.validators import validate_adiscord_economy_ai as economy_validator
 from tools.validators.validate_adiscord_economy_ai import policy_selector_issues
 
 
@@ -471,6 +472,53 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             'ADISCORD_economy_interest_share_income',
         ):
             self.assertIn(variable, description)
+
+    def test_debt_notification_selectors_bind_exact_state_semantics(self):
+        analyzer = getattr(economy_validator, 'debt_notification_selector_issues', None)
+        self.assertIsNotNone(analyzer, 'missing parsed debt-notification selector validator')
+        if analyzer is None:
+            return
+        self.assertEqual(analyzer(self.scripted_loc), [])
+        mutations = {
+            'kind five uses first-loan text': self.scripted_loc.replace(
+                'value = 5 compare = equals } } localization_key = ADISCORD_economy_debt_notification_kind_default',
+                'value = 5 compare = equals } } localization_key = ADISCORD_economy_debt_notification_kind_first_loan',
+                1,
+            ),
+            'state four comparator reversed': self.scripted_loc.replace(
+                'ADISCORD_economy_pending_debt_notification_new_state value = 4 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_notification_state_default',
+                'ADISCORD_economy_pending_debt_notification_new_state value = 4 compare = less_than } } localization_key = ADISCORD_economy_debt_notification_state_default',
+                1,
+            ),
+            'next state four falls back to healthy': self.scripted_loc.replace(
+                'ADISCORD_economy_pending_debt_notification_new_state value = 4 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_notification_next_default',
+                'ADISCORD_economy_pending_debt_notification_new_state value = 4 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_notification_next_healthy',
+                1,
+            ),
+            'kind fallback made conditional': self.scripted_loc.replace(
+                'text = { localization_key = ADISCORD_economy_debt_notification_kind_fallback }',
+                'text = { trigger = { always = yes } localization_key = ADISCORD_economy_debt_notification_kind_fallback }',
+                1,
+            ),
+            'state branches swapped': self.scripted_loc.replace(
+                'text = { trigger = { check_variable = { var = ADISCORD_economy_pending_debt_notification_new_state value = 4 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_notification_state_default }\n'
+                '\ttext = { trigger = { check_variable = { var = ADISCORD_economy_pending_debt_notification_new_state value = 3 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_notification_state_emergency }',
+                'text = { trigger = { check_variable = { var = ADISCORD_economy_pending_debt_notification_new_state value = 3 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_notification_state_emergency }\n'
+                '\ttext = { trigger = { check_variable = { var = ADISCORD_economy_pending_debt_notification_new_state value = 4 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_debt_notification_state_default }',
+                1,
+            ),
+            'next selector duplicated': self.scripted_loc.replace(
+                'defined_text = {\n\tname = GetADISCORDEconomyDebtNotificationNextRiskLoc',
+                'defined_text = { name = GetADISCORDEconomyDebtNotificationNextRiskLoc text = { localization_key = ADISCORD_economy_debt_notification_next_healthy } }\n\n'
+                'defined_text = {\n\tname = GetADISCORDEconomyDebtNotificationNextRiskLoc',
+                1,
+            ),
+        }
+        for name, invalid in mutations.items():
+            with self.subTest(selector_mutation=name):
+                self.assertNotEqual(invalid, self.scripted_loc)
+                self.assertTrue(economy_validator.parse_clausewitz(invalid))
+                self.assertTrue(analyzer(invalid))
 
     def test_visible_diagnostic_money_slogan_is_absent(self):
         visible_keys = set(
