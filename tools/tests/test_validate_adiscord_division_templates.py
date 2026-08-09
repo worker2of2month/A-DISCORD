@@ -1,11 +1,38 @@
 from __future__ import annotations
 
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
 
-from tools.validators.validate_adiscord_division_templates import validate
+from tools.validators.validate_adiscord_division_templates import (
+    collect_templates_and_references,
+    validate,
+)
+
+
+class RepositoryDivisionTemplateAsciiTests(unittest.TestCase):
+    def test_active_technical_names_and_references_are_ascii(self) -> None:
+        root_override = os.environ.get("ADISCORD_DIVISION_AUDIT_ROOT")
+        root = Path(root_override) if root_override else Path(__file__).parents[2]
+        templates, references, parse_issues = collect_templates_and_references(root)
+        technical_names = [
+            (template.path, template.line, template.name) for template in templates
+        ] + [
+            (reference.path, reference.line, reference.name)
+            for reference in references
+        ]
+
+        self.assertEqual(parse_issues, [])
+        self.assertEqual(
+            [
+                entry
+                for entry in technical_names
+                if not all(" " <= character <= "~" for character in entry[2])
+            ],
+            [],
+        )
 
 
 class DivisionTemplateAuditTests(unittest.TestCase):

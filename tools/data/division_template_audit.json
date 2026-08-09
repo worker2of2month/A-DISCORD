@@ -4370,8 +4370,8 @@
         "path": "history/units/NDN_vorkerland_collapse.txt",
         "owner": "NDN"
       },
-      "technical_name": "NDN Collapse Militia",
-      "display_name": "NDN Collapse Militia",
+      "technical_name": "Norden Militia",
+      "display_name": "Norden Militia",
       "legacy_names": [
         "Норденское ополчение"
       ],
@@ -4817,8 +4817,8 @@
         "path": "history/units/OSV_vorkerland_collapse.txt",
         "owner": "OSV"
       },
-      "technical_name": "OSV Collapse Militia",
-      "display_name": "OSV Collapse Militia",
+      "technical_name": "Ostvin Militia",
+      "display_name": "Ostvin Militia",
       "legacy_names": [
         "Оствинское ополчение"
       ],
@@ -5323,8 +5323,8 @@
         "path": "history/units/REV_vorkerland_collapse.txt",
         "owner": "REV"
       },
-      "technical_name": "REV Collapse Militia",
-      "display_name": "REV Collapse Militia",
+      "technical_name": "Revel Militia",
+      "display_name": "Revel Militia",
       "legacy_names": [
         "Ревельское ополчение"
       ],
@@ -5476,8 +5476,8 @@
         "path": "history/units/RIV_vorkerland_collapse.txt",
         "owner": "RIV"
       },
-      "technical_name": "RIV Collapse Militia",
-      "display_name": "RIV Collapse Militia",
+      "technical_name": "Riven Militia",
+      "display_name": "Riven Militia",
       "legacy_names": [
         "Ополчение Ривена"
       ],
@@ -6811,8 +6811,8 @@
         "path": "history/units/SWB_vorkerland_collapse.txt",
         "owner": "SWB"
       },
-      "technical_name": "SWB Collapse Militia",
-      "display_name": "SWB Collapse Militia",
+      "technical_name": "Old Vorkensberg Militia",
+      "display_name": "Old Vorkensberg Militia",
       "legacy_names": [
         "Ополчение Старого Воркенсберга"
       ],
@@ -8135,8 +8135,8 @@
         "path": "history/units/VHV_vorkerland_collapse.txt",
         "owner": "VHV"
       },
-      "technical_name": "VHV Collapse Militia",
-      "display_name": "VHV Collapse Militia",
+      "technical_name": "Upper Reaches Militia",
+      "display_name": "Upper Reaches Militia",
       "legacy_names": [
         "Ополчение Верховья"
       ],
@@ -9143,8 +9143,8 @@
         "path": "history/units/YOR_vorkerland_collapse.txt",
         "owner": "YOR"
       },
-      "technical_name": "YOR Collapse Militia",
-      "display_name": "YOR Collapse Militia",
+      "technical_name": "Yor Militia",
+      "display_name": "Yor Militia",
       "legacy_names": [
         "Йорское ополчение"
       ],
@@ -9604,8 +9604,8 @@
         "path": "history/units/ZTA_vorkerland_collapse.txt",
         "owner": "ZTA"
       },
-      "technical_name": "ZTA Collapse Militia",
-      "display_name": "ZTA Collapse Militia",
+      "technical_name": "Zlatarech Militia",
+      "display_name": "Zlatarech Militia",
       "legacy_names": [
         "Златореченское ополчение"
       ],
@@ -10993,7 +10993,7 @@
       "key": "ndn_vorkerland_collapse_oob_ndn_collapse_militia_xp_0_1_eq_0_7",
       "path": "history/units/NDN_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "NDN Collapse Militia",
+      "technical_name": "Norden Militia",
       "legacy_names": [
         "Норденское ополчение"
       ],
@@ -11005,7 +11005,7 @@
       "key": "ndn_vorkerland_collapse_oob_ndn_collapse_militia_xp_0_1_eq_0_75",
       "path": "history/units/NDN_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "NDN Collapse Militia",
+      "technical_name": "Norden Militia",
       "legacy_names": [
         "Норденское ополчение"
       ],
@@ -11101,7 +11101,7 @@
       "key": "osv_vorkerland_collapse_oob_osv_collapse_militia_xp_0_1_eq_0_7",
       "path": "history/units/OSV_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "OSV Collapse Militia",
+      "technical_name": "Ostvin Militia",
       "legacy_names": [
         "Оствинское ополчение"
       ],
@@ -11113,7 +11113,7 @@
       "key": "osv_vorkerland_collapse_oob_osv_collapse_militia_xp_0_1_eq_0_75",
       "path": "history/units/OSV_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "OSV Collapse Militia",
+      "technical_name": "Ostvin Militia",
       "legacy_names": [
         "Оствинское ополчение"
       ],
@@ -11185,7 +11185,7 @@
       "key": "rev_vorkerland_collapse_oob_rev_collapse_militia_xp_0_1_eq_0_7",
       "path": "history/units/REV_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "REV Collapse Militia",
+      "technical_name": "Revel Militia",
       "legacy_names": [
         "Ревельское ополчение"
       ],
@@ -11197,7 +11197,7 @@
       "key": "rev_vorkerland_collapse_oob_rev_collapse_militia_xp_0_1_eq_0_75",
       "path": "history/units/REV_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "REV Collapse Militia",
+      "technical_name": "Revel Militia",
       "legacy_names": [
         "Ревельское ополчение"
       ],
@@ -11231,7 +11231,7 @@
       "key": "riv_vorkerland_collapse_oob_riv_collapse_militia_xp_0_1_eq_0_7",
       "path": "history/units/RIV_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "RIV Collapse Militia",
+      "technical_name": "Riven Militia",
       "legacy_names": [
         "Ополчение Ривена"
       ],
@@ -11243,7 +11243,7 @@
       "key": "riv_vorkerland_collapse_oob_riv_collapse_militia_xp_0_1_eq_0_75",
       "path": "history/units/RIV_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "RIV Collapse Militia",
+      "technical_name": "Riven Militia",
       "legacy_names": [
         "Ополчение Ривена"
       ],
@@ -11469,7 +11469,7 @@
       "key": "swb_vorkerland_collapse_oob_swb_collapse_militia_xp_0_1_eq_0_7",
       "path": "history/units/SWB_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "SWB Collapse Militia",
+      "technical_name": "Old Vorkensberg Militia",
       "legacy_names": [
         "Ополчение Старого Воркенсберга"
       ],
@@ -11481,7 +11481,7 @@
       "key": "swb_vorkerland_collapse_oob_swb_collapse_militia_xp_0_1_eq_0_75",
       "path": "history/units/SWB_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "SWB Collapse Militia",
+      "technical_name": "Old Vorkensberg Militia",
       "legacy_names": [
         "Ополчение Старого Воркенсберга"
       ],
@@ -11677,7 +11677,7 @@
       "key": "vhv_vorkerland_collapse_oob_vhv_collapse_militia_xp_0_1_eq_0_7",
       "path": "history/units/VHV_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "VHV Collapse Militia",
+      "technical_name": "Upper Reaches Militia",
       "legacy_names": [
         "Ополчение Верховья"
       ],
@@ -11689,7 +11689,7 @@
       "key": "vhv_vorkerland_collapse_oob_vhv_collapse_militia_xp_0_1_eq_0_75",
       "path": "history/units/VHV_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "VHV Collapse Militia",
+      "technical_name": "Upper Reaches Militia",
       "legacy_names": [
         "Ополчение Верховья"
       ],
@@ -11863,7 +11863,7 @@
       "key": "yor_vorkerland_collapse_oob_yor_collapse_militia_xp_0_1_eq_0_7",
       "path": "history/units/YOR_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "YOR Collapse Militia",
+      "technical_name": "Yor Militia",
       "legacy_names": [
         "Йорское ополчение"
       ],
@@ -11875,7 +11875,7 @@
       "key": "yor_vorkerland_collapse_oob_yor_collapse_militia_xp_0_1_eq_0_75",
       "path": "history/units/YOR_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "YOR Collapse Militia",
+      "technical_name": "Yor Militia",
       "legacy_names": [
         "Йорское ополчение"
       ],
@@ -11937,7 +11937,7 @@
       "key": "zta_vorkerland_collapse_oob_zta_collapse_militia_xp_0_1_eq_0_75",
       "path": "history/units/ZTA_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "ZTA Collapse Militia",
+      "technical_name": "Zlatarech Militia",
       "legacy_names": [
         "Златореченское ополчение"
       ],

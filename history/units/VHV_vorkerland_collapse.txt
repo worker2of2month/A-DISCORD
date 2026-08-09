@@ -1,5 +1,5 @@
 division_template = {
-	name = "Ополчение Верховья"
+	name = "Upper Reaches Militia"
 	regiments = {
 		ADISCORD_militia = { x = 0 y = 0 }
 		ADISCORD_militia = { x = 0 y = 1 }
@@ -10,24 +10,24 @@ units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 1 }
 		location = 8803
-		division_template = "Ополчение Верховья"
+		division_template = "Upper Reaches Militia"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.70
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 2 }
 		location = 4080
-		division_template = "Ополчение Верховья"
+		division_template = "Upper Reaches Militia"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.70
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 3 }
 		location = 2883
-		division_template = "Ополчение Верховья"
+		division_template = "Upper Reaches Militia"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.70
 	}
-	division = { division_name = { is_name_ordered = yes name_order = 4 } location = 8803 division_template = "Ополчение Верховья" start_experience_factor = 0.10 start_equipment_factor = 0.75 }
-	division = { division_name = { is_name_ordered = yes name_order = 5 } location = 4080 division_template = "Ополчение Верховья" start_experience_factor = 0.10 start_equipment_factor = 0.75 }
+	division = { division_name = { is_name_ordered = yes name_order = 4 } location = 8803 division_template = "Upper Reaches Militia" start_experience_factor = 0.10 start_equipment_factor = 0.75 }
+	division = { division_name = { is_name_ordered = yes name_order = 5 } location = 4080 division_template = "Upper Reaches Militia" start_experience_factor = 0.10 start_equipment_factor = 0.75 }
 }

@@ -488,7 +488,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         for token in (
             "add_manpower = 1800",
             "amount = 360 producer = ROOT",
-            'division_template = \\"Чрезвычайное ополчение\\"',
+            'division_template = \\"Emergency Militia\\"',
             "count = 2",
         ):
             self.assertIn(token, levies)

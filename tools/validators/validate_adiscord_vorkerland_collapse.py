@@ -1621,7 +1621,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
     levies = named_block(effects, "ADISCORD_vorkerland_raise_emergency_levies")
     for token in (
         "add_manpower = 1800", "amount = 360 producer = ROOT",
-        'division_template = \\"Чрезвычайное ополчение\\"', "count = 2",
+        'division_template = \\"Emergency Militia\\"', "count = 2",
     ):
         if token not in levies:
             issues.append(f"bounded emergency levy is missing {token}")
