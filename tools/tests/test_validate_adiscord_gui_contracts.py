@@ -256,7 +256,8 @@ defined_text = {
             "name = GetADISCORDEconomyTaxDecreasePreviewLoc",
             "name = DisconnectedSelector",
         ) + "\ndefined_text = { name = GetADISCORDEconomyTaxDecreasePreviewLoc text = { localization_key = ADISCORD_economy_policy_preview_available } }"
-        for invalid in (swapped, wrong_trigger, dead, disconnected):
+        nested_dead_wrapper = f"ADISCORD_dead = {{ {self.VALID} }}"
+        for invalid in (swapped, wrong_trigger, dead, disconnected, nested_dead_wrapper):
             self.assertTrue(self.issues(invalid))
 
 

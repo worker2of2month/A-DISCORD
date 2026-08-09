@@ -268,6 +268,30 @@ ADISCORD_heavy = { has_idea = forbidden }
             self.ASSISTANCE_EFFECT.replace(
                 " remove_ideas = ADISCORD_economy_ai_assistance_retreat\n", "", 1
             ),
+            self.ASSISTANCE_EFFECT.replace(
+                "var = ADISCORD_economy_simulation_tier value = 1 compare = greater_than_or_equals",
+                "var = ADISCORD_economy_simulation_tier value = 1 compare = less_than",
+            ),
+            self.ASSISTANCE_EFFECT.replace(
+                "var = ADISCORD_economy_simulation_tier value = 1",
+                "var = ADISCORD_economy_simulation_tier value = 2",
+            ),
+            self.ASSISTANCE_EFFECT.replace(
+                "var = ADISCORD_vorkerland_collapse_phase value = 1 compare = greater_than_or_equals",
+                "var = ADISCORD_vorkerland_collapse_phase value = 1 compare = less_than",
+            ),
+            self.ASSISTANCE_EFFECT.replace(
+                "var = ADISCORD_vorkerland_collapse_phase value = 1",
+                "var = ADISCORD_vorkerland_collapse_phase value = 2",
+            ),
+            self.ASSISTANCE_EFFECT.replace(
+                "var = surrender_progress value = 0.35 compare = greater_than",
+                "var = surrender_progress value = 0.35 compare = less_than",
+            ),
+            self.ASSISTANCE_EFFECT.replace(
+                "var = surrender_progress value = 0.35",
+                "var = surrender_progress value = 0.50",
+            ),
         )
         for mutation in mutations:
             self.assertTrue(ai_assistance_contract_issues(self.ASSISTANCE_IDEAS, mutation))
@@ -284,6 +308,8 @@ ADISCORD_heavy = { has_idea = forbidden }
         self.assertEqual(research_policy_flow_issues(research), [])
         unconditional = re.sub(r"if = \{ limit = \{[^{}]*\{[^{}]*\} \} (multiply_variable = \{[^{}]*\}) \}", r"\1", research)
         self.assertTrue(research_policy_flow_issues(unconditional))
+        overlapping = research.replace("compare = equals", "compare = greater_than")
+        self.assertTrue(research_policy_flow_issues(overlapping))
 
         settlement = """
 ADISCORD_economy_apply_weekly_balance = {
@@ -298,6 +324,11 @@ ADISCORD_economy_apply_monthly_balance = {
 }
 """
         self.assertEqual(automatic_borrow_flow_issues(settlement), [])
+        dead_funding = settlement.replace(
+            " add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp }\n add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp }",
+            " if = { limit = { always = no } add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_auto_borrow_temp } add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_auto_borrow_temp } }",
+        )
+        self.assertTrue(automatic_borrow_flow_issues(dead_funding))
         capped = settlement.replace(
             " add_to_variable = { var = ADISCORD_economy_debt",
             " clamp_variable = { var = ADISCORD_economy_auto_borrow_temp min = 0 max = ADISCORD_hidden_borrow_cap }\n add_to_variable = { var = ADISCORD_economy_debt",
@@ -310,11 +341,13 @@ ADISCORD_economy_apply_monthly_balance = {
 ADISCORD_economy_update_debt_state_after_settlement = {
  if = { limit = { check_variable = { var = ADISCORD_economy_interest_share_income value = 40 compare = greater_than_or_equals } }
   add_to_variable = { var = ADISCORD_economy_debt_emergency_streak value = 1 }
+  if = { limit = { check_variable = { var = ADISCORD_economy_debt_emergency_streak value = 4 compare = greater_than_or_equals } } set_variable = { var = ADISCORD_economy_debt_state value = 3 } }
  } else = { set_variable = { var = ADISCORD_economy_debt_emergency_streak value = 0 } }
  if = { limit = {
   check_variable = { var = ADISCORD_economy_interest_share_income value = 40 compare = greater_than_or_equals }
   check_variable = { var = ADISCORD_economy_weekly_balance value = 0 compare = less_than }
  } add_to_variable = { var = ADISCORD_economy_debt_default_streak value = 1 }
+  if = { limit = { check_variable = { var = ADISCORD_economy_debt_default_streak value = 13 compare = greater_than_or_equals } } set_variable = { var = ADISCORD_economy_debt_state value = 4 } }
  } else = { set_variable = { var = ADISCORD_economy_debt_default_streak value = 0 } }
 }
 """
@@ -326,6 +359,33 @@ ADISCORD_economy_update_debt_state_after_settlement = {
             " } else = { set_variable = { var = ADISCORD_economy_debt_emergency_streak value = 0 } }",
             " } set_variable = { var = ADISCORD_economy_debt_emergency_streak value = 0 }",
         )))
+        for invalid in (
+            transition.replace(
+                "ADISCORD_economy_interest_share_income value = 40 compare = greater_than_or_equals",
+                "ADISCORD_economy_interest_share_income value = 40 compare = less_than",
+            ),
+            transition.replace(
+                "ADISCORD_economy_weekly_balance value = 0 compare = less_than",
+                "ADISCORD_economy_weekly_balance value = 0 compare = greater_than",
+            ),
+            transition.replace(
+                "ADISCORD_economy_debt_emergency_streak value = 0",
+                "ADISCORD_economy_debt_emergency_streak value = 999",
+            ),
+            transition.replace(
+                "ADISCORD_economy_debt_default_streak value = 0",
+                "ADISCORD_economy_debt_default_streak value = 999",
+            ),
+            transition.replace(
+                "ADISCORD_economy_debt_emergency_streak value = 4 compare = greater_than_or_equals",
+                "ADISCORD_economy_debt_emergency_streak value = 5 compare = greater_than_or_equals",
+            ),
+            transition.replace(
+                "ADISCORD_economy_debt_default_streak value = 13 compare = greater_than_or_equals",
+                "ADISCORD_economy_debt_default_streak value = 12 compare = greater_than_or_equals",
+            ),
+        ):
+            self.assertTrue(debt_transition_flow_issues(invalid))
 
         notification = """
 ADISCORD_economy_queue_debt_notification = { set_country_flag = queued }
@@ -334,18 +394,43 @@ ADISCORD_transition = { if = { limit = { check_variable = { var = ADISCORD_econo
 """
         self.assertEqual(debt_notification_flow_issues(notification), [])
         self.assertTrue(debt_notification_flow_issues(notification + "\nADISCORD_routine = { ADISCORD_economy_queue_debt_notification = yes }"))
+        positive_first_loan = notification.replace(
+            "NOT = { has_variable = ADISCORD_economy_first_loan_notified }",
+            "has_variable = ADISCORD_economy_first_loan_notified",
+        )
+        self.assertTrue(debt_notification_flow_issues(positive_first_loan))
 
         reconciler = """
 ADISCORD_economy_reconcile_debt_state_after_action = {
- if = { limit = { check_variable = { var = ADISCORD_economy_interest_share_income value = 10 compare = less_than } }
-  set_variable = { var = ADISCORD_economy_debt_state value = 0 }
-  remove_ideas = ADISCORD_economy_debt_crisis
+ if = { limit = {
+  check_variable = { var = ADISCORD_economy_interest_share_income value = 25 compare = less_than }
+  check_variable = { var = ADISCORD_economy_debt_state value = 1 compare = greater_than }
+ }
+  set_variable = { var = ADISCORD_economy_debt_state value = 1 }
+  remove_ideas = { ADISCORD_economy_debt_strain ADISCORD_economy_debt_crisis ADISCORD_economy_debt_emergency ADISCORD_economy_debt_default }
   add_ideas = ADISCORD_economy_debt_strain
  }
 }
 """
         self.assertEqual(debt_reconciler_issues(reconciler), [])
         self.assertTrue(debt_reconciler_issues("ADISCORD_economy_reconcile_debt_state_after_action = {}"))
+        forced_default = reconciler.replace(
+            "ADISCORD_economy_debt_state value = 1 compare = greater_than",
+            "ADISCORD_economy_debt_state value = 4 compare = greater_than_or_equals",
+        ).replace(
+            "ADISCORD_economy_debt_state value = 1",
+            "ADISCORD_economy_debt_state value = 4",
+            1,
+        ).replace(
+            "add_ideas = ADISCORD_economy_debt_strain",
+            "add_ideas = ADISCORD_economy_debt_default",
+        )
+        self.assertTrue(debt_reconciler_issues(forced_default))
+        preserved_tier = reconciler.replace(
+            "ADISCORD_economy_debt_state value = 1 compare = greater_than",
+            "ADISCORD_economy_debt_state value = 1 compare = greater_than_or_equals",
+        )
+        self.assertTrue(debt_reconciler_issues(preserved_tier))
 
 
 class WeeklyEconomyContracts(unittest.TestCase):

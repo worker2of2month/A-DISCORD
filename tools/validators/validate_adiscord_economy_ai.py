@@ -257,6 +257,69 @@ def _branch_condition_tokens(ancestors: tuple[Entry, ...]) -> list[str]:
     return tokens
 
 
+def _check_variable_signatures(entries: list[Entry], variable: str) -> list[tuple[str | None, str | None]]:
+    return [
+        (_direct_scalar(entry.value, "value"), _direct_scalar(entry.value, "compare"))
+        for _, entry in _walk_entries(entries)
+        if entry.key == "check_variable"
+        and isinstance(entry.value, list)
+        and _direct_scalar(entry.value, "var") == variable
+    ]
+
+
+def _exact_check(entries: list[Entry], variable: str, value: str, compare: str) -> bool:
+    signatures = _check_variable_signatures(entries, variable)
+    if len(signatures) != 1:
+        return False
+    actual_value, actual_compare = signatures[0]
+    if actual_compare != compare or actual_value is None:
+        return False
+    if value.replace(".", "", 1).isdigit():
+        try:
+            return float(actual_value) == float(value)
+        except ValueError:
+            return False
+    return actual_value == value
+
+
+def _direct_variable_operation(
+    entries: list[Entry], operation: str, variable: str, value: str | None = None
+) -> list[Entry]:
+    matches = [
+        entry
+        for entry in entries
+        if entry.key == operation
+        and isinstance(entry.value, list)
+        and _direct_scalar(entry.value, "var") == variable
+    ]
+    if value is not None:
+        matches = [entry for entry in matches if _direct_scalar(entry.value, "value") == value]
+    return matches
+
+
+def _branch_is_statically_dead(ancestors: tuple[Entry, ...]) -> bool:
+    for ancestor in ancestors:
+        if ancestor.key not in {"if", "else_if"} or not isinstance(ancestor.value, list):
+            continue
+        limit = next(
+            (entry for entry in ancestor.value if entry.key == "limit" and isinstance(entry.value, list)),
+            None,
+        )
+        if limit is not None and _direct_scalar(limit.value, "always") == "no":
+            return True
+    return False
+
+
+def _conditional_else_pairs(entries: list[Entry]):
+    for index, branch in enumerate(entries):
+        if branch.key in {"if", "else_if"} and isinstance(branch.value, list):
+            following = entries[index + 1] if index + 1 < len(entries) else None
+            paired_else = following if following and following.key == "else" and isinstance(following.value, list) else None
+            yield branch, paired_else
+        if isinstance(branch.value, list):
+            yield from _conditional_else_pairs(branch.value)
+
+
 def ai_assistance_contract_issues(ideas_text: str, effects_text: str) -> list[str]:
     issues: list[str] = []
     idea_ast = parse_clausewitz(ideas_text)
@@ -313,12 +376,7 @@ def ai_assistance_contract_issues(ideas_text: str, effects_text: str) -> list[st
     gated_adds = [entry for _, entry in _walk_entries(gate.value) if entry.key == "add_ideas"]
     if len(all_adds) != len(gated_adds):
         issues.append("assistance add_ideas escapes the is_ai gate")
-    signatures = {
-        ASSISTANCE_IDEAS[0]: ("ADISCORD_economy_simulation_tier",),
-        ASSISTANCE_IDEAS[1]: ("ADISCORD_vorkerland_collapse_phase", "has_war", "yes"),
-        ASSISTANCE_IDEAS[2]: ("surrender_progress", "0.35"),
-    }
-    for idea, required in signatures.items():
+    for idea in ASSISTANCE_IDEAS:
         if len(additions[idea]) != 1:
             issues.append(f"{idea}: expected one AI-only conditional addition")
             continue
@@ -327,8 +385,30 @@ def ai_assistance_contract_issues(ideas_text: str, effects_text: str) -> list[st
                        if ancestor.key in {"if", "else_if"} and isinstance(ancestor.value, list)), None)
         limit = next((entry for entry in (branch.value if branch else [])
                       if entry.key == "limit" and isinstance(entry.value, list)), None)
-        condition = _tokens_in(limit.value) if limit else []
-        if not all(token in condition for token in required):
+        condition = limit.value if limit else []
+        valid_condition = False
+        if idea == ASSISTANCE_IDEAS[0]:
+            valid_condition = _exact_check(
+                condition,
+                "ADISCORD_economy_simulation_tier",
+                "1",
+                "greater_than_or_equals",
+            )
+        elif idea == ASSISTANCE_IDEAS[1]:
+            valid_condition = (
+                _exact_check(
+                    condition,
+                    "ADISCORD_vorkerland_collapse_phase",
+                    "1",
+                    "greater_than_or_equals",
+                )
+                and _direct_scalar(condition, "has_war") == "yes"
+            )
+        else:
+            valid_condition = _exact_check(
+                condition, "surrender_progress", "0.35", "greater_than"
+            )
+        if not valid_condition:
             issues.append(f"{idea}: wrong or disconnected application condition")
     return issues
 
@@ -346,16 +426,24 @@ def research_policy_flow_issues(text: str) -> list[str]:
         limit = next((item for item in entry.value if item.key == "limit" and isinstance(item.value, list)), None)
         if limit is None:
             continue
-        checks = [item for _, item in _walk_entries(limit.value) if item.key == "check_variable" and isinstance(item.value, list)]
-        level = next((_direct_scalar(item.value, "value") for item in checks
-                      if _direct_scalar(item.value, "var") == "ADISCORD_economy_research_spending_mode"), None)
-        multipliers = [item for _, item in _walk_entries(entry.value)
-                       if item.key == "multiply_variable" and isinstance(item.value, list)
-                       and _direct_scalar(item.value, "var") == "ADISCORD_economy_research_expenses"]
-        if level and len(multipliers) == 1:
+        signatures = _check_variable_signatures(
+            limit.value, "ADISCORD_economy_research_spending_mode"
+        )
+        multipliers = _direct_variable_operation(
+            entry.value,
+            "multiply_variable",
+            "ADISCORD_economy_research_expenses",
+        )
+        if (
+            len(signatures) == 1
+            and signatures[0][0] is not None
+            and signatures[0][1] == "equals"
+            and len(multipliers) == 1
+        ):
+            level = signatures[0][0]
             try:
                 found[level] = float(_direct_scalar(multipliers[0].value, "value") or "nan")
-            except ValueError:
+            except (TypeError, ValueError):
                 pass
     return [] if found == expected else [f"research multipliers are not bound one-to-one to levels: {found}"]
 
@@ -377,9 +465,16 @@ def automatic_borrow_flow_issues(text: str) -> list[str]:
         if len(writes) != 1 or len(valid_copy) != 1:
             issues.append(f"{name}: automatic borrow is capped, clamped, or rewritten")
         for account in ("ADISCORD_economy_debt", "ADISCORD_economy_treasury"):
-            if not any(key == "add_to_variable" and _direct_scalar(entry.value, "var") == account
-                       and _direct_scalar(entry.value, "value") == "ADISCORD_economy_auto_borrow_temp"
-                       for key, entry in operations):
+            additions = [
+                (ancestors, entry)
+                for ancestors, entry in _walk_entries(definition.value)
+                if entry.key == "add_to_variable"
+                and isinstance(entry.value, list)
+                and _direct_scalar(entry.value, "var") == account
+                and _direct_scalar(entry.value, "value")
+                == "ADISCORD_economy_auto_borrow_temp"
+            ]
+            if len(additions) != 1 or _branch_is_statically_dead(additions[0][0]):
                 issues.append(f"{name}: automatic borrow does not fully fund {account}")
     return issues
 
@@ -389,26 +484,84 @@ def debt_transition_flow_issues(text: str) -> list[str]:
     if definition is None or not isinstance(definition.value, list):
         return ["missing debt transition"]
     issues: list[str] = []
-    for streak, needs_negative in (("ADISCORD_economy_debt_emergency_streak", False), ("ADISCORD_economy_debt_default_streak", True)):
-        increments = []
-        resets = []
-        for ancestors, entry in _walk_entries(definition.value):
-            if entry.key not in {"add_to_variable", "set_variable"} or not isinstance(entry.value, list):
-                continue
-            if _direct_scalar(entry.value, "var") != streak:
-                continue
-            target = increments if entry.key == "add_to_variable" and _direct_scalar(entry.value, "value") == "1" else resets
-            target.append(ancestors)
-        if len(increments) != 1 or len(resets) != 1:
-            issues.append(f"{streak}: requires one conditional increment and one reset")
+    specs = (
+        ("ADISCORD_economy_debt_emergency_streak", False, "4", "3"),
+        ("ADISCORD_economy_debt_default_streak", True, "13", "4"),
+    )
+    for streak, needs_negative, threshold, target_state in specs:
+        owners = []
+        for branch, paired_else in _conditional_else_pairs(definition.value):
+            assert isinstance(branch.value, list)
+            increments = _direct_variable_operation(
+                branch.value, "add_to_variable", streak, "1"
+            )
+            if increments:
+                owners.append((branch, paired_else, increments))
+        all_writes = [
+            entry
+            for _, entry in _walk_entries(definition.value)
+            if entry.key in {"add_to_variable", "set_variable"}
+            and isinstance(entry.value, list)
+            and _direct_scalar(entry.value, "var") == streak
+        ]
+        if len(owners) != 1 or len(owners[0][2]) != 1 or len(all_writes) != 2:
+            issues.append(f"{streak}: requires one owned increment and paired reset")
             continue
-        increment_tokens = _branch_condition_tokens(increments[0])
-        reset_ancestors = resets[0]
-        has_interest = "ADISCORD_economy_interest_share_income" in increment_tokens and "40" in increment_tokens
-        has_negative = "ADISCORD_economy_weekly_balance" in increment_tokens and "0" in increment_tokens
-        reset_in_else = any(ancestor.key == "else" for ancestor in reset_ancestors)
-        if not has_interest or (needs_negative and not has_negative) or not reset_in_else:
-            issues.append(f"{streak}: streak branch/reset conditions are disconnected")
+        branch, paired_else, _ = owners[0]
+        assert isinstance(branch.value, list)
+        limit = next(
+            (entry for entry in branch.value if entry.key == "limit" and isinstance(entry.value, list)),
+            None,
+        )
+        condition = limit.value if limit else []
+        condition_ok = _exact_check(
+            condition,
+            "ADISCORD_economy_interest_share_income",
+            "40",
+            "greater_than_or_equals",
+        )
+        if needs_negative:
+            condition_ok = condition_ok and _exact_check(
+                condition,
+                "ADISCORD_economy_weekly_balance",
+                "0",
+                "less_than",
+            )
+        reset_ok = bool(
+            paired_else
+            and isinstance(paired_else.value, list)
+            and len(_direct_variable_operation(paired_else.value, "set_variable", streak, "0"))
+            == 1
+        )
+        threshold_ok = False
+        for threshold_branch, _ in _conditional_else_pairs(branch.value):
+            assert isinstance(threshold_branch.value, list)
+            threshold_limit = next(
+                (
+                    entry
+                    for entry in threshold_branch.value
+                    if entry.key == "limit" and isinstance(entry.value, list)
+                ),
+                None,
+            )
+            if threshold_limit is None:
+                continue
+            if _exact_check(
+                threshold_limit.value,
+                streak,
+                threshold,
+                "greater_than_or_equals",
+            ) and len(
+                _direct_variable_operation(
+                    threshold_branch.value,
+                    "set_variable",
+                    "ADISCORD_economy_debt_state",
+                    target_state,
+                )
+            ) == 1:
+                threshold_ok = True
+        if not condition_ok or not reset_ok or not threshold_ok:
+            issues.append(f"{streak}: transition condition, reset, or threshold is invalid")
     return issues
 
 
@@ -421,11 +574,33 @@ def debt_notification_flow_issues(text: str) -> list[str]:
         for ancestors, entry in _walk_entries(definition.value):
             if entry.key != "ADISCORD_economy_queue_debt_notification":
                 continue
-            condition_tokens = _branch_condition_tokens(ancestors)
-            first_loan = "ADISCORD_economy_first_loan_notified" in condition_tokens
-            upward = ("ADISCORD_economy_debt_state" in condition_tokens
-                      and "ADISCORD_economy_last_notified_debt_state" in condition_tokens
-                      and "greater_than" in condition_tokens)
+            limits = []
+            for ancestor in ancestors:
+                if ancestor.key not in {"if", "else_if"} or not isinstance(
+                    ancestor.value, list
+                ):
+                    continue
+                limits.extend(
+                    candidate.value
+                    for candidate in ancestor.value
+                    if candidate.key == "limit" and isinstance(candidate.value, list)
+                )
+            first_loan = False
+            upward = False
+            for limit in limits:
+                notified_occurrences = [
+                    any(ancestor.key == "NOT" for ancestor in nested_ancestors)
+                    for nested_ancestors, candidate in _walk_entries(limit)
+                    if candidate.key == "has_variable"
+                    and candidate.value == "ADISCORD_economy_first_loan_notified"
+                ]
+                first_loan = first_loan or notified_occurrences == [True]
+                upward = upward or _exact_check(
+                    limit,
+                    "ADISCORD_economy_debt_state",
+                    "ADISCORD_economy_last_notified_debt_state",
+                    "greater_than",
+                )
             if not (first_loan or upward):
                 issues.append(f"{name}: routine debt notification call")
     return issues
@@ -436,11 +611,94 @@ def debt_reconciler_issues(text: str) -> list[str]:
     if definition is None or not isinstance(definition.value, list):
         return ["missing debt reconciler"]
     tokens = _tokens_in(definition.value)
-    required = {
-        "ADISCORD_economy_interest_share_income", "ADISCORD_economy_debt_state",
-        "set_variable", "remove_ideas", "add_ideas",
+    issues: list[str] = []
+    debuffs = {
+        "ADISCORD_economy_debt_strain",
+        "ADISCORD_economy_debt_crisis",
+        "ADISCORD_economy_debt_emergency",
+        "ADISCORD_economy_debt_default",
     }
-    issues = [] if required.issubset(tokens) else ["debt reconciler does not recompute and apply a lower state"]
+    target_ideas = {
+        0: None,
+        1: "ADISCORD_economy_debt_strain",
+        2: "ADISCORD_economy_debt_crisis",
+        3: "ADISCORD_economy_debt_emergency",
+    }
+    state_writes = [
+        entry
+        for _, entry in _walk_entries(definition.value)
+        if entry.key == "set_variable"
+        and isinstance(entry.value, list)
+        and _direct_scalar(entry.value, "var") == "ADISCORD_economy_debt_state"
+    ]
+    owned_writes = 0
+    for branch, _ in _conditional_else_pairs(definition.value):
+        assert isinstance(branch.value, list)
+        writes = _direct_variable_operation(
+            branch.value, "set_variable", "ADISCORD_economy_debt_state"
+        )
+        for write in writes:
+            owned_writes += 1
+            target_text = _direct_scalar(write.value, "value")
+            try:
+                target = int(target_text or "")
+            except ValueError:
+                issues.append("debt reconciler writes a non-numeric state")
+                continue
+            limit = next(
+                (
+                    entry
+                    for entry in branch.value
+                    if entry.key == "limit" and isinstance(entry.value, list)
+                ),
+                None,
+            )
+            condition = limit.value if limit else []
+            interest_checks = _check_variable_signatures(
+                condition, "ADISCORD_economy_interest_share_income"
+            )
+            lowers_only = target in target_ideas and _exact_check(
+                condition,
+                "ADISCORD_economy_debt_state",
+                str(target),
+                "greater_than",
+            )
+            uses_lower_interest_band = len(interest_checks) == 1 and interest_checks[0][1] in {
+                "less_than",
+                "less_than_or_equals",
+            }
+            removed: set[str] = set()
+            for operation in branch.value:
+                if operation.key == "remove_ideas":
+                    removed.update(_operand_values(operation))
+            additions = [
+                idea
+                for operation in branch.value
+                if operation.key == "add_ideas"
+                for idea in _operand_values(operation)
+                if idea in debuffs
+            ]
+            expected_idea = target_ideas.get(target)
+            additions_ok = additions == ([] if expected_idea is None else [expected_idea])
+            remove_positions = [
+                index for index, operation in enumerate(branch.value) if operation.key == "remove_ideas"
+            ]
+            add_positions = [
+                index for index, operation in enumerate(branch.value) if operation.key == "add_ideas"
+            ]
+            order_ok = bool(remove_positions) and (
+                not add_positions or max(remove_positions) < min(add_positions)
+            )
+            if not (
+                lowers_only
+                and uses_lower_interest_band
+                and removed == debuffs
+                and additions_ok
+                and order_ok
+            ):
+                issues.append("debt reconciler can raise/preserve state or misapply debuffs")
+    if not state_writes or owned_writes != len(state_writes):
+        issues.append("debt reconciler lacks condition-owned downward state writes")
     if any("streak" in token for token in tokens if token.startswith("ADISCORD_")):
         issues.append("debt reconciler mutates settlement streaks")
     return issues
@@ -448,9 +706,13 @@ def debt_reconciler_issues(text: str) -> list[str]:
 
 def policy_selector_issues(text: str, selector: str, mode_var: str, cooldown_var: str, direction: str) -> list[str]:
     ast = parse_clausewitz(text)
-    matches = [entry for _, entry in _walk_entries(ast)
-               if entry.key == "defined_text" and isinstance(entry.value, list)
-               and _direct_scalar(entry.value, "name") == selector]
+    matches = [
+        entry
+        for entry in ast
+        if entry.key == "defined_text"
+        and isinstance(entry.value, list)
+        and _direct_scalar(entry.value, "name") == selector
+    ]
     if len(matches) != 1:
         return [f"{selector}: missing unique defined_text"]
     branches = [entry for entry in matches[0].value if entry.key == "text" and isinstance(entry.value, list)]
