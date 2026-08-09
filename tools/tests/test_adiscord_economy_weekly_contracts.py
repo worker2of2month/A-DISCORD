@@ -1221,54 +1221,174 @@ ADISCORD_transition = { if = { limit = { check_variable = { var = ADISCORD_econo
         with self.subTest(mutation="negated upward notification"):
             self.assertTrue(debt_notification_flow_issues(negated_upward))
 
-        reconciler = """
-ADISCORD_economy_reconcile_debt_state_after_action = {
- if = { limit = {
-  check_variable = { var = ADISCORD_economy_interest_share_income value = 25 compare = less_than }
-  check_variable = { var = ADISCORD_economy_debt_state value = 1 compare = greater_than }
+        branches = {
+            0: """ if = {
+  limit = {
+   check_variable = { var = ADISCORD_economy_interest_share_income value = 10 compare = less_than }
+   check_variable = { var = ADISCORD_economy_debt_state value = 0 compare = greater_than }
+  }
+  set_variable = { var = ADISCORD_economy_debt_state value = 0 }
+  if = {
+   limit = { check_variable = { var = ADISCORD_economy_last_notified_debt_state value = 0 compare = greater_than } }
+   set_variable = { var = ADISCORD_economy_last_notified_debt_state value = 0 }
+  }
+  remove_ideas = { ADISCORD_economy_debt_strain ADISCORD_economy_debt_crisis ADISCORD_economy_debt_emergency ADISCORD_economy_debt_default }
  }
+""",
+            1: """ else_if = {
+  limit = {
+   check_variable = { var = ADISCORD_economy_interest_share_income value = 25 compare = less_than }
+   check_variable = { var = ADISCORD_economy_debt_state value = 1 compare = greater_than }
+  }
   set_variable = { var = ADISCORD_economy_debt_state value = 1 }
+  if = {
+   limit = { check_variable = { var = ADISCORD_economy_last_notified_debt_state value = 1 compare = greater_than } }
+   set_variable = { var = ADISCORD_economy_last_notified_debt_state value = 1 }
+  }
   remove_ideas = { ADISCORD_economy_debt_strain ADISCORD_economy_debt_crisis ADISCORD_economy_debt_emergency ADISCORD_economy_debt_default }
   add_ideas = ADISCORD_economy_debt_strain
  }
-}
-"""
+""",
+            2: """ else_if = {
+  limit = {
+   check_variable = { var = ADISCORD_economy_interest_share_income value = 40 compare = less_than }
+   check_variable = { var = ADISCORD_economy_debt_state value = 2 compare = greater_than }
+  }
+  set_variable = { var = ADISCORD_economy_debt_state value = 2 }
+  if = {
+   limit = { check_variable = { var = ADISCORD_economy_last_notified_debt_state value = 2 compare = greater_than } }
+   set_variable = { var = ADISCORD_economy_last_notified_debt_state value = 2 }
+  }
+  remove_ideas = { ADISCORD_economy_debt_strain ADISCORD_economy_debt_crisis ADISCORD_economy_debt_emergency ADISCORD_economy_debt_default }
+  add_ideas = ADISCORD_economy_debt_crisis
+ }
+""",
+        }
+        reconciler = (
+            "ADISCORD_economy_reconcile_debt_state_after_action = {\n"
+            + "".join(branches.values())
+            + "}\n"
+        )
+
+        def append_to_reconciler(addition: str) -> str:
+            self.assertTrue(reconciler.endswith("}\n"))
+            return reconciler[:-2] + addition + "}\n"
+
         self.assertEqual(debt_reconciler_issues(reconciler), [])
         self.assertTrue(debt_reconciler_issues("ADISCORD_economy_reconcile_debt_state_after_action = {}"))
-        forced_default = reconciler.replace(
-            "ADISCORD_economy_debt_state value = 1 compare = greater_than",
-            "ADISCORD_economy_debt_state value = 4 compare = greater_than_or_equals",
-        ).replace(
-            "ADISCORD_economy_debt_state value = 1",
-            "ADISCORD_economy_debt_state value = 4",
+        metadata_zero = """  if = {
+   limit = { check_variable = { var = ADISCORD_economy_last_notified_debt_state value = 0 compare = greater_than } }
+   set_variable = { var = ADISCORD_economy_last_notified_debt_state value = 0 }
+  }
+"""
+        metadata_check_without_write = metadata_zero.replace(
+            "   set_variable = { var = ADISCORD_economy_last_notified_debt_state value = 0 }\n",
+            "",
             1,
-        ).replace(
-            "add_ideas = ADISCORD_economy_debt_strain",
-            "add_ideas = ADISCORD_economy_debt_default",
         )
-        self.assertTrue(debt_reconciler_issues(forced_default))
-        preserved_tier = reconciler.replace(
-            "ADISCORD_economy_debt_state value = 1 compare = greater_than",
-            "ADISCORD_economy_debt_state value = 1 compare = greater_than_or_equals",
-        )
-        self.assertTrue(debt_reconciler_issues(preserved_tier))
-        dead_reconciler = reconciler.replace(
-            "check_variable = { var = ADISCORD_economy_debt_state value = 1 compare = greater_than }",
-            "check_variable = { var = ADISCORD_economy_debt_state value = 1 compare = greater_than }\n  always = no",
-        )
-        self.assertTrue(debt_reconciler_issues(dead_reconciler))
-        negated_reconciler = reconciler.replace(
-            "check_variable = { var = ADISCORD_economy_debt_state value = 1 compare = greater_than }",
-            "NOT = { check_variable = { var = ADISCORD_economy_debt_state value = 1 compare = greater_than } }",
-        )
-        with self.subTest(mutation="negated reconciler owner"):
-            self.assertTrue(debt_reconciler_issues(negated_reconciler))
-        nested_dead_reconciler = reconciler.replace(
-            "check_variable = { var = ADISCORD_economy_debt_state value = 1 compare = greater_than }",
-            "check_variable = { var = ADISCORD_economy_debt_state value = 1 compare = greater_than } AND = { always = no }",
-        )
-        with self.subTest(mutation="nested dead reconciler owner"):
-            self.assertTrue(debt_reconciler_issues(nested_dead_reconciler))
+        state_three = """ else_if = {
+  limit = {
+   check_variable = { var = ADISCORD_economy_interest_share_income value = 50 compare = less_than }
+   check_variable = { var = ADISCORD_economy_debt_state value = 3 compare = greater_than }
+  }
+  set_variable = { var = ADISCORD_economy_debt_state value = 3 }
+  if = {
+   limit = { check_variable = { var = ADISCORD_economy_last_notified_debt_state value = 3 compare = greater_than } }
+   set_variable = { var = ADISCORD_economy_last_notified_debt_state value = 3 }
+  }
+  remove_ideas = { ADISCORD_economy_debt_strain ADISCORD_economy_debt_crisis ADISCORD_economy_debt_emergency ADISCORD_economy_debt_default }
+  add_ideas = ADISCORD_economy_debt_emergency
+ }
+"""
+        mutations = {
+            "missing target zero": reconciler.replace(branches[0], "", 1),
+            "duplicate target zero": append_to_reconciler(branches[0]),
+            "wrong target zero band": reconciler.replace(
+                "value = 10 compare = less_than",
+                "value = 11 compare = less_than",
+                1,
+            ),
+            "wrong target one band": reconciler.replace(
+                "value = 25 compare = less_than",
+                "value = 24 compare = less_than",
+                1,
+            ),
+            "wrong target two band": reconciler.replace(
+                "value = 40 compare = less_than",
+                "value = 39 compare = less_than",
+                1,
+            ),
+            "extra state predicate": reconciler.replace(
+                "check_variable = { var = ADISCORD_economy_debt_state value = 0 compare = greater_than }",
+                "check_variable = { var = ADISCORD_economy_debt_state value = 0 compare = greater_than }\n   has_country_flag = hidden_reconcile_gate",
+                1,
+            ),
+            "preserving state comparator": reconciler.replace(
+                "ADISCORD_economy_debt_state value = 1 compare = greater_than",
+                "ADISCORD_economy_debt_state value = 1 compare = greater_than_or_equals",
+                1,
+            ),
+            "reversed metadata comparator": reconciler.replace(
+                "ADISCORD_economy_last_notified_debt_state value = 0 compare = greater_than",
+                "ADISCORD_economy_last_notified_debt_state value = 0 compare = less_than",
+                1,
+            ),
+            "wrong metadata write target": reconciler.replace(
+                "set_variable = { var = ADISCORD_economy_last_notified_debt_state value = 0 }",
+                "set_variable = { var = ADISCORD_economy_last_notified_debt_state value = 4 }",
+                1,
+            ),
+            "missing metadata owner": reconciler.replace(metadata_zero, "", 1),
+            "duplicate metadata owner": reconciler.replace(
+                metadata_zero, metadata_zero + metadata_zero, 1
+            ),
+            "extra metadata condition without write": reconciler.replace(
+                metadata_zero, metadata_zero + metadata_check_without_write, 1
+            ),
+            "unowned metadata write": reconciler.replace(
+                metadata_zero,
+                "  set_variable = { var = ADISCORD_economy_last_notified_debt_state value = 0 }\n",
+                1,
+            ),
+            "extra unowned metadata write": reconciler.replace(
+                metadata_zero,
+                metadata_zero
+                + "  set_variable = { var = ADISCORD_economy_last_notified_debt_state value = 0 }\n",
+                1,
+            ),
+            "dead metadata owner": reconciler.replace(
+                "check_variable = { var = ADISCORD_economy_last_notified_debt_state value = 0 compare = greater_than }",
+                "check_variable = { var = ADISCORD_economy_last_notified_debt_state value = 0 compare = greater_than } always = no",
+                1,
+            ),
+            "negated metadata owner": reconciler.replace(
+                "check_variable = { var = ADISCORD_economy_last_notified_debt_state value = 0 compare = greater_than }",
+                "NOT = { check_variable = { var = ADISCORD_economy_last_notified_debt_state value = 0 compare = greater_than } }",
+                1,
+            ),
+            "extra metadata predicate": reconciler.replace(
+                "check_variable = { var = ADISCORD_economy_last_notified_debt_state value = 0 compare = greater_than }",
+                "check_variable = { var = ADISCORD_economy_last_notified_debt_state value = 0 compare = greater_than } has_country_flag = hidden_metadata_gate",
+                1,
+            ),
+            "extra state write": append_to_reconciler(
+                " add_to_variable = { var = ADISCORD_economy_debt_state value = -1 }\n"
+            ),
+            "state three branch": append_to_reconciler(state_three),
+            "settlement streak": append_to_reconciler(
+                " set_variable = { var = ADISCORD_economy_debt_emergency_streak value = 0 }\n"
+            ),
+            "notification queue": append_to_reconciler(
+                " ADISCORD_economy_queue_debt_notification = yes\n"
+            ),
+            "country event": append_to_reconciler(
+                " country_event = { id = ADISCORD_economy.999 }\n"
+            ),
+        }
+        for name, invalid in mutations.items():
+            with self.subTest(reconciler_mutation=name):
+                self.assertNotEqual(invalid, reconciler)
+                self.assertTrue(debt_reconciler_issues(invalid))
 
 
 class WeeklyEconomyContracts(unittest.TestCase):

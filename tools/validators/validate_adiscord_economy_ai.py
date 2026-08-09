@@ -979,6 +979,17 @@ def debt_reconciler_issues(text: str) -> list[str]:
         return ["missing debt reconciler"]
     tokens = _tokens_in(definition.value)
     issues: list[str] = []
+    state_variable = "ADISCORD_economy_debt_state"
+    notified_variable = "ADISCORD_economy_last_notified_debt_state"
+    variable_write_operations = {
+        "set_variable",
+        "add_to_variable",
+        "subtract_from_variable",
+        "multiply_variable",
+        "divide_variable",
+        "clamp_variable",
+        "clear_variable",
+    }
     debuffs = {
         "ADISCORD_economy_debt_strain",
         "ADISCORD_economy_debt_crisis",
@@ -989,93 +1000,207 @@ def debt_reconciler_issues(text: str) -> list[str]:
         0: None,
         1: "ADISCORD_economy_debt_strain",
         2: "ADISCORD_economy_debt_crisis",
-        3: "ADISCORD_economy_debt_emergency",
     }
-    state_writes = [
+
+    def writes_variable(entry: Entry, variable: str) -> bool:
+        if entry.key not in variable_write_operations:
+            return False
+        if entry.key == "clear_variable":
+            return entry.value == variable or (
+                isinstance(entry.value, list)
+                and _direct_scalar(entry.value, "var") == variable
+            )
+        return (
+            isinstance(entry.value, list)
+            and _direct_scalar(entry.value, "var") == variable
+        )
+
+    def exact_variable_set(entry: Entry, variable: str, value: int) -> bool:
+        if entry.key != "set_variable" or not isinstance(entry.value, list):
+            return False
+        actual_value = _direct_scalar(entry.value, "value")
+        try:
+            value_matches = actual_value is not None and float(actual_value) == float(value)
+        except ValueError:
+            value_matches = False
+        return (
+            len(entry.value) == 2
+            and sorted(child.key for child in entry.value) == ["value", "var"]
+            and _direct_scalar(entry.value, "var") == variable
+            and value_matches
+        )
+
+    def exact_check(entry: Entry, variable: str, value: int, compare: str) -> bool:
+        return (
+            isinstance(entry.value, list)
+            and len(entry.value) == 3
+            and sorted(child.key for child in entry.value) == ["compare", "value", "var"]
+            and _check_matches(entry, variable, str(value), compare)
+        )
+
+    state_operations = [
         entry
         for _, entry in _walk_entries(definition.value)
-        if entry.key == "set_variable"
-        and isinstance(entry.value, list)
-        and _direct_scalar(entry.value, "var") == "ADISCORD_economy_debt_state"
+        if writes_variable(entry, state_variable)
     ]
-    owned_writes = 0
-    for branch, _ in _conditional_else_pairs(definition.value):
+    notified_operations = [
+        entry
+        for _, entry in _walk_entries(definition.value)
+        if writes_variable(entry, notified_variable)
+    ]
+    branches = [
+        entry
+        for entry in definition.value
+        if entry.key in {"if", "else_if"} and isinstance(entry.value, list)
+    ]
+    if len(branches) != 3 or [branch.key for branch in branches] != ["if", "else_if", "else_if"]:
+        issues.append("debt reconciler must have exactly three ordered state branches")
+
+    found_targets: set[int] = set()
+    claimed_state_writes: set[int] = set()
+    claimed_notified_writes: set[int] = set()
+    expected_bands = {0: 10, 1: 25, 2: 40}
+    for branch in branches:
         assert isinstance(branch.value, list)
-        writes = _direct_variable_operation(
-            branch.value, "set_variable", "ADISCORD_economy_debt_state"
+        direct_state_operations = [
+            entry for entry in branch.value if writes_variable(entry, state_variable)
+        ]
+        if len(direct_state_operations) != 1:
+            issues.append("debt reconciler branch must own exactly one state write")
+            continue
+        write = direct_state_operations[0]
+        target_text = (
+            _direct_scalar(write.value, "value")
+            if isinstance(write.value, list)
+            else None
         )
-        for write in writes:
-            owned_writes += 1
-            target_text = _direct_scalar(write.value, "value")
-            try:
-                target = int(target_text or "")
-            except ValueError:
-                issues.append("debt reconciler writes a non-numeric state")
-                continue
-            limit = next(
-                (
-                    entry
-                    for entry in branch.value
-                    if entry.key == "limit" and isinstance(entry.value, list)
-                ),
-                None,
-            )
-            condition = limit.value if limit else []
-            interest_checks = _check_variable_signatures(
-                condition, "ADISCORD_economy_interest_share_income"
-            )
-            lowers_only = target in target_ideas and _exact_check(
-                condition,
-                "ADISCORD_economy_debt_state",
-                str(target),
-                "greater_than",
-            )
-            uses_lower_interest_band = (
-                len(interest_checks) == 1
-                and interest_checks[0][0] is not None
-                and interest_checks[0][1] in {"less_than", "less_than_or_equals"}
-                and _exact_check(
-                    condition,
-                    "ADISCORD_economy_interest_share_income",
-                    interest_checks[0][0],
-                    interest_checks[0][1],
+        try:
+            target = int(target_text or "")
+        except ValueError:
+            issues.append("debt reconciler writes a non-numeric state")
+            continue
+        if target not in expected_bands or not exact_variable_set(write, state_variable, target):
+            issues.append("debt reconciler writes an invalid state target")
+            continue
+        found_targets.add(target)
+        claimed_state_writes.add(id(write))
+
+        limits = [
+            entry
+            for entry in branch.value
+            if entry.key == "limit" and isinstance(entry.value, list)
+        ]
+        condition_ok = False
+        if len(limits) == 1:
+            condition = limits[0].value
+            assert isinstance(condition, list)
+            condition_ok = (
+                len(condition) == 2
+                and sum(
+                    exact_check(
+                        entry,
+                        "ADISCORD_economy_interest_share_income",
+                        expected_bands[target],
+                        "less_than",
+                    )
+                    for entry in condition
                 )
+                == 1
+                and sum(
+                    exact_check(entry, state_variable, target, "greater_than")
+                    for entry in condition
+                )
+                == 1
+                and _limit_is_satisfiable(condition)
             )
-            removed: set[str] = set()
-            for operation in branch.value:
-                if operation.key == "remove_ideas":
-                    removed.update(_operand_values(operation))
-            additions = [
-                idea
-                for operation in branch.value
-                if operation.key == "add_ideas"
-                for idea in _operand_values(operation)
-                if idea in debuffs
+        if not condition_ok:
+            issues.append("debt reconciler branch has the wrong state band or predicate")
+
+        nested_conditions = [
+            candidate
+            for candidate in branch.value
+            if candidate.key in {"if", "else_if"}
+            and isinstance(candidate.value, list)
+        ]
+        metadata_ok = len(nested_conditions) == 1
+        if metadata_ok:
+            owner = nested_conditions[0]
+            assert isinstance(owner.value, list)
+            owner_writes = [
+                entry
+                for entry in owner.value
+                if writes_variable(entry, notified_variable)
             ]
-            expected_idea = target_ideas.get(target)
-            additions_ok = additions == ([] if expected_idea is None else [expected_idea])
-            remove_positions = [
-                index for index, operation in enumerate(branch.value) if operation.key == "remove_ideas"
+            owner_limits = [
+                entry
+                for entry in owner.value
+                if entry.key == "limit" and isinstance(entry.value, list)
             ]
-            add_positions = [
-                index for index, operation in enumerate(branch.value) if operation.key == "add_ideas"
-            ]
-            order_ok = bool(remove_positions) and (
-                not add_positions or max(remove_positions) < min(add_positions)
+            metadata_ok = len(owner_writes) == 1 and exact_variable_set(
+                owner_writes[0], notified_variable, target
             )
-            if not (
-                _limit_is_satisfiable(condition)
-                and lowers_only
-                and uses_lower_interest_band
-                and removed == debuffs
-                and additions_ok
-                and order_ok
-            ):
-                issues.append("debt reconciler can raise/preserve state or misapply debuffs")
-    if not state_writes or owned_writes != len(state_writes):
-        issues.append("debt reconciler lacks condition-owned downward state writes")
+            if metadata_ok and len(owner_limits) == 1:
+                owner_condition = owner_limits[0].value
+                assert isinstance(owner_condition, list)
+                metadata_ok = (
+                    len(owner_condition) == 1
+                    and exact_check(
+                        owner_condition[0], notified_variable, target, "greater_than"
+                    )
+                    and _limit_is_satisfiable(owner_condition)
+                    and owner.value.index(owner_limits[0]) < owner.value.index(owner_writes[0])
+                )
+            else:
+                metadata_ok = False
+            if metadata_ok:
+                claimed_notified_writes.add(id(owner_writes[0]))
+        if not metadata_ok:
+            issues.append("debt reconciler branch has invalid notification-state ownership")
+
+        removed: set[str] = set()
+        for operation in branch.value:
+            if operation.key == "remove_ideas":
+                removed.update(_operand_values(operation))
+        additions = [
+            idea
+            for operation in branch.value
+            if operation.key == "add_ideas"
+            for idea in _operand_values(operation)
+            if idea in debuffs
+        ]
+        expected_idea = target_ideas[target]
+        additions_ok = additions == ([] if expected_idea is None else [expected_idea])
+        remove_positions = [
+            index for index, operation in enumerate(branch.value) if operation.key == "remove_ideas"
+        ]
+        add_positions = [
+            index for index, operation in enumerate(branch.value) if operation.key == "add_ideas"
+        ]
+        order_ok = bool(remove_positions) and (
+            not add_positions or max(remove_positions) < min(add_positions)
+        )
+        if removed != debuffs or not additions_ok or not order_ok:
+            issues.append("debt reconciler branch misapplies debt debuffs")
+
+    if found_targets != set(expected_bands):
+        issues.append("debt reconciler lacks the exact state targets 0, 1, and 2")
+    if len(state_operations) != 3 or claimed_state_writes != {
+        id(entry) for entry in state_operations
+    }:
+        issues.append("debt reconciler has extra or unowned state writes")
+    if len(notified_operations) != 3 or claimed_notified_writes != {
+        id(entry) for entry in notified_operations
+    }:
+        issues.append("debt reconciler has extra or unowned notification-state writes")
     if any("streak" in token for token in tokens if token.startswith("ADISCORD_")):
         issues.append("debt reconciler mutates settlement streaks")
+    if "ADISCORD_economy_queue_debt_notification" in tokens:
+        issues.append("debt reconciler queues notifications")
+    if any(
+        entry.key == "event" or entry.key.endswith("_event")
+        for _, entry in _walk_entries(definition.value)
+    ):
+        issues.append("debt reconciler fires events")
     return issues
 
 
