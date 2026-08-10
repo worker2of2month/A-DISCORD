@@ -14,6 +14,8 @@ if str(_REPOSITORY_ROOT) not in sys.path:
 try:
     from tools.builders.build_adiscord_exclusion_zone_boundaries import (
         CITY_EXCEPTION_STATES,
+        CONTAMINATED_FRINGE_STATES,
+        FOREST_EXCEPTION_STATES,
         GEOGRAPHIC_EXCEPTION_STATES,
         NEW_OWNERS,
         ROOT,
@@ -30,6 +32,8 @@ try:
 except ModuleNotFoundError:
     from builders.build_adiscord_exclusion_zone_boundaries import (
         CITY_EXCEPTION_STATES,
+        CONTAMINATED_FRINGE_STATES,
+        FOREST_EXCEPTION_STATES,
         GEOGRAPHIC_EXCEPTION_STATES,
         NEW_OWNERS,
         ROOT,
@@ -72,6 +76,8 @@ def validate() -> list[str]:
                 allowed.add("urban")
             if state_id in GEOGRAPHIC_EXCEPTION_STATES:
                 allowed.update({"hills", "urban"})
+            if state_id in FOREST_EXCEPTION_STATES:
+                allowed.add("forest")
             if not terrains <= allowed:
                 issues.append(f"EXZ state {state_id} retains non-contaminated terrain {sorted(terrains-allowed)}")
             if (
@@ -81,7 +87,11 @@ def validate() -> list[str]:
             ):
                 issues.append(f"EXZ state {state_id} has an unapproved city exception")
 
-    reassigned = set(NEW_OWNERS) - {156}
+    reassigned = {
+        state_id
+        for state_id, owner in NEW_OWNERS.items()
+        if state_id != 156 and owner != "EXZ"
+    }
     dirty_successors = set().union(*(set(states) for states in DIRTY_GROUPS.values()))
     dirty_remainders = set().union(*(set(states) for states in EXZ_REMAINDER_GROUPS.values()))
     for state_id in sorted(reassigned):
@@ -91,8 +101,41 @@ def validate() -> list[str]:
     actual_retained = {state_id for state_id in original_exz if final_owners[state_id] == "EXZ"}
     if actual_retained != expected_retained or len(actual_retained) != 56:
         issues.append("EXZ must retain exactly 56 compact terrain-aligned state ids")
+    planned_exz = {state_id for state_id, owner in final_owners.items() if owner == "EXZ"}
+    if len(planned_exz) != 57 or 461 not in planned_exz:
+        issues.append("EXZ must contain its 56 terrain-aligned core states plus state 461")
     if set(planned) & set(range(474, 551)):
         issues.append("western-continent states entered the Exclusion Zone boundary plan")
+
+    # Country ownership is the player-visible zone mask.  A state containing
+    # even one contaminated province must therefore start under EXZ; this also
+    # catches future generated fringe states omitted from the source snapshot.
+    contaminated_states: set[int] = set()
+    for path in (ROOT / "history" / "states").glob("*.txt"):
+        source = path.read_text(encoding="utf-8-sig", errors="strict")
+        state_match = re.search(r"(?m)^\s*id\s*=\s*(\d+)", source)
+        province_match = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", source, re.DOTALL)
+        owner_match = re.search(r"(?m)^\s*owner\s*=\s*([A-Z0-9]{3})", source)
+        if not state_match or not province_match:
+            continue
+        state_id = int(state_match.group(1))
+        provinces = {int(value) for value in re.findall(r"\d+", province_match.group(1))}
+        if any(details[province_id]["terrain"] == "contaminated" for province_id in provinces):
+            contaminated_states.add(state_id)
+            owner = owner_match.group(1) if owner_match else ""
+            if owner != "EXZ":
+                issues.append(f"contaminated state {state_id} starts outside EXZ under {owner or 'no owner'}")
+    if not CONTAMINATED_FRINGE_STATES <= set(planned):
+        issues.append("contaminated fringe states are missing from the boundary source snapshot")
+    if not contaminated_states:
+        issues.append("no contaminated states were found")
+
+    localisation_path = ROOT / "localisation" / "russian" / "ZZ_ADISCORD_exclusion_zone_l_russian.yml"
+    localisation = localisation_path.read_text(encoding="utf-8-sig", errors="strict")
+    for key in ("EXZ", "EXZ_pragmatism"):
+        match = re.search(rf'(?m)^\s*{key}:\s*"([^"]*)"\s*$', localisation)
+        if not match or match.group(1) != "":
+            issues.append(f"{key} must remain deliberately blank")
     if (ROOT / "gfx" / "leaders" / "WRK CONTROL ZONE.png").exists():
         issues.append("the unscoped source portrait name still exists")
     return issues
@@ -105,7 +148,7 @@ def main() -> int:
         for issue in issues:
             print(f"- {issue}")
         return 1
-    print("Exclusion Zone boundary validation passed: 56 EXZ states and 3 reassigned fringe states.")
+    print("Exclusion Zone boundary validation passed: 57 EXZ states, no contaminated state outside EXZ, and a blank EXZ map label.")
     return 0
 
 

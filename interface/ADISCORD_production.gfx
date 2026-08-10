@@ -1,0 +1,58 @@
+spriteTypes = {
+
+	corneredTileSpriteType = {
+		name = "GFX_ADISCORD_production_window_bg"
+		size = { x = 192 y = 192 }
+		textureFile = "gfx/interface/production/ui/ADISCORD_production_window_tile.dds"
+		borderSize = { x = 64 y = 64 }
+		tilingCenter = yes
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ADISCORD_production_lines_bg"
+		size = { x = 192 y = 192 }
+		textureFile = "gfx/interface/production/ui/ADISCORD_production_lines_tile.dds"
+		borderSize = { x = 64 y = 64 }
+		tilingCenter = yes
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ADISCORD_production_lines_overlay"
+		size = { x = 549 y = 600 }
+		textureFile = "gfx/interface/production/ui/ADISCORD_production_lines_overlay.dds"
+		borderSize = { x = 268 y = 268 }
+		tilingCenter = yes
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+		alwaystransparent = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_production_top_panel"
+		textureFile = "gfx/interface/production/ui/ADISCORD_production_top_panel.dds"
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_production_military_item"
+		textureFile = "gfx/interface/production/ui/ADISCORD_production_military_item.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_production_collapsed_item"
+		textureFile = "gfx/interface/production/ui/ADISCORD_production_collapsed_item.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_production_naval_item_strip"
+		textureFile = "gfx/interface/production/ui/ADISCORD_production_naval_item_strip.dds"
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+		noOfFrames = 3
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_production_consumer_item"
+		textureFile = "gfx/interface/production/ui/ADISCORD_production_consumer_item.dds"
+	}
+}

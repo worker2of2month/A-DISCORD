@@ -1,14 +1,36 @@
 # The External Gate is only a pre-collapse WRK dependency. When the unified
 # command chain vanishes, its industrial and quarantine halves immediately
 # materialise as the Kremen and Leman administrations that already hold cores.
+ADISCORD_vorkerland_delete_external_gate_formations = {
+	# The Gate has one generated starting template. Delete it explicitly so the
+	# same cleanup can repair saves where WCG is already landless and can no
+	# longer be reached by annex_country.
+	delete_unit_template_and_units = {
+		division_template = "Filtration Battalion"
+		disband = no
+	}
+}
+
 ADISCORD_vorkerland_split_external_gate = {
 	if = {
 		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_external_gate_split } }
 		set_global_flag = ADISCORD_vorkerland_external_gate_split
 
+		# Remove the generated Gate battalions while their country scope is still
+		# unquestionably live. State 161 then materialises Kremen, which annexes
+		# the still-landed WCG before the remainder of the territorial split. The
+		# old order transferred every state first, so exists = yes became false and
+		# the annex cleanup was skipped, leaving landless WCG units on the map.
+		WCG = { ADISCORD_vorkerland_delete_external_gate_formations = yes }
+		set_global_flag = ADISCORD_vorkerland_external_gate_formations_removed_v4
+		161 = { add_core_of = KRM set_state_owner_to = KRM set_state_controller_to = KRM }
+		if = {
+			limit = { WCG = { exists = yes } KRM = { exists = yes } }
+			KRM = { annex_country = { target = WCG transfer_troops = no } }
+		}
+
 		151 = { add_core_of = KRM set_state_owner_to = KRM set_state_controller_to = KRM }
 		156 = { add_core_of = KRM set_state_owner_to = KRM set_state_controller_to = KRM }
-		161 = { add_core_of = KRM set_state_owner_to = KRM set_state_controller_to = KRM }
 		162 = { add_core_of = KRM set_state_owner_to = KRM set_state_controller_to = KRM }
 		163 = { add_core_of = KRM set_state_owner_to = KRM set_state_controller_to = KRM }
 
@@ -44,12 +66,6 @@ ADISCORD_vorkerland_split_external_gate = {
 			load_oob = "LMN"
 			add_manpower = 3500
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 550 producer = LMN }
-		}
-
-		if = {
-			limit = { WCG = { exists = yes } }
-			# Gate formations belong to the dissolved command, not either successor.
-			KRM = { annex_country = { target = WCG transfer_troops = no } }
 		}
 	}
 }

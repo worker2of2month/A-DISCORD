@@ -3,6 +3,9 @@ capital = 71
 oob = "PWR"
 ####### Characters
 
+recruit_character = WRK_Zack_Wither
+# Lange remains dormant until the Vorkerland civil war installs the Rimat
+# technocratic directorate.
 recruit_character = PWR_Alexey_Lange
 
 ####### Basic shit

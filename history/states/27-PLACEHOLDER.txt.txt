@@ -14,9 +14,9 @@ state={
 	provinces={
 		524 904 2643 4568 4878 5090 6435 6451 6850 7564 9525 10215 11842 12618 16598 16601 16614 
 	}
-	manpower=1850000
-	buildings_max_level_factor=1
+	manpower = 2000000
+	buildings_max_level_factor = 1.000
 	# Three shared factories require at least three local building slots.
-	state_category=town
-	local_supplies=2.5
+	state_category = town
+	local_supplies = 3.0
 }

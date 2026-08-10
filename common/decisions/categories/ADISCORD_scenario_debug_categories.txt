@@ -2,6 +2,7 @@ ADISCORD_scenario_debug_category = {
 	allowed = {
 		OR = {
 			tag = WRK
+			tag = WKR
 			tag = VAD
 			tag = TVA
 			tag = IVN

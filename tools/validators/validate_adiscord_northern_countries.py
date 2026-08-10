@@ -67,18 +67,24 @@ EXPECTED_TRAITS = {
 LEADERS = {
     "BRN": "BRN_Emilia_Brandt",
     "KRL": "KRL_Edvard_Karel",
+    "VRA": "VRA_Alrik_Varn",
     "FRS": "FRS_Mikael_Frost",
     "KHV": "KHV_Ilva_Havren",
+    "SRV": "SRV_Eira_Sarven",
     "ELN": "ELN_Taal_Elander",
     "AUR": "AUR_Sofia_Aurell",
     "HON": "HON_Honter_Woke",
+    "SVL": "SVL_Marta_Seval",
     "NVR": "NVR_Leif_Norven",
     "SKN": "SKN_Ren_Skad",
     "TMR": "TMR_Mira_Timer",
     "LYS": "LYS_Cassian_Lys",
+    "KDL": "KDL_Oren_Kadel",
     "VES": "VES_Oskar_Vest",
     "DRV": "DRV_Council_of_Free_Valleys",
     "ORV": "ORV_Anton_Orval",
+    "ARS": "ARS_Lina_Arsal",
+    "VLD": "VLD_Irma_Vald",
     "MON": "MON_Marius_II_Arken",
 }
 
@@ -114,6 +120,43 @@ def validate() -> list[str]:
     profiles, principal_provinces = build_profiles()
     if set(profiles) != EXPECTED_STATES:
         issues.append("generated profile coverage does not match states 331-473")
+
+    expected_split_territories = {
+        "KRL": {335, 336, 339, 345, 349, 353, 362},
+        "VRA": {341, 347},
+        "HON": {376, 382, 388, 392, 396, 397, 400},
+        "SVL": {360},
+        "KHV": {346, 348, 354, 355},
+        "SRV": {364, 368, 375, 386, 405},
+        "LYS": {394, 402, 408, 412, 415, 420, 422, 424, 432, 435, 437, 442, 447, 452},
+        "KDL": {427, 446, 457},
+        "ORV": {426, 436, 454, 455},
+        "ARS": {441, 449},
+        "VLD": {460, 467, 472},
+    }
+    for tag, expected_states in expected_split_territories.items():
+        actual_states = set(COUNTRIES[tag]["states"])
+        if actual_states != expected_states:
+            issues.append(f"{tag} expected states {sorted(expected_states)}, found {sorted(actual_states)}")
+
+    preserved_split_totals = {
+        ("KRL", "VRA"): (3_800_000, 7, 4, 4),
+        ("HON", "SVL"): (4_200_000, 8, 4, 5),
+        ("KHV", "SRV"): (2_400_000, 4, 3, 3),
+        ("LYS", "KDL"): (3_500_000, 7, 3, 4),
+        ("ORV", "ARS", "VLD"): (2_455_204, 5, 3, 3),
+    }
+    for tags, expected in preserved_split_totals.items():
+        actual = (
+            sum(int(COUNTRIES[tag]["population"]) for tag in tags),
+            sum(int(COUNTRIES[tag]["civilian"]) for tag in tags),
+            sum(int(COUNTRIES[tag]["military"]) for tag in tags),
+            sum(int(COUNTRIES[tag]["divisions"]) for tag in tags),
+        )
+        if actual != expected:
+            issues.append(f"split balance for {'/'.join(tags)} expected {expected}, found {actual}")
+    if 457 in set(COUNTRIES["MON"]["states"]) or 457 not in set(COUNTRIES["KDL"]["states"]):
+        issues.append("state 457 must belong to KDL rather than MON")
 
     tags_source = read("common/country_tags/04_ADISCORD_northern_countries_tags.txt")
     characters = read("common/characters/ADISCORD_northern_characters.txt")

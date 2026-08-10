@@ -1,5 +1,24 @@
 ideas = {
 	country = {
+		VAL_big_buyers = {
+			picture = GFX_idea_VAL_big_buyers
+			allowed = { original_tag = VAL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				ADISCORD_economy_weekly_income = 20
+				ADISCORD_economy_trade_income_factor = 0.20
+				ADISCORD_economy_civilian_factory_income_factor = 0.10
+				ADISCORD_economy_military_industry_income_factor = 0.08
+				ADISCORD_economy_investment_confidence_factor = 0.08
+				production_factory_efficiency_gain_factor = 0.05
+				ADISCORD_economy_social_expense_factor = 0.05
+				ADISCORD_economy_state_overload_gain_factor = 0.05
+				ADISCORD_economy_creditworthiness_factor = -0.05
+				stability_factor = -0.03
+			}
+		}
+
 		VAL_westerholm_concession_income = {
 			picture = VAL_contract_state
 			allowed = { original_tag = VAL }

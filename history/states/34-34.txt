@@ -4,18 +4,17 @@ state={
 	provinces={
 		6300 10834 16408 16421 16426 
 	}
-	manpower=3152561
-	buildings_max_level_factor=1.000
-	local_supplies=10
-
+	manpower = 3000000
+	buildings_max_level_factor = 1.000
+	local_supplies = 5.0
 	state_category = megalopolis
-
 	history = {
         owner = WRK
         add_core_of = WRK
         buildings = {
+			arms_factory = 1
             infrastructure = 5
-            industrial_complex = 1
+            industrial_complex = 2
             fuel_silo = 6
             synthetic_refinery = 3
         }

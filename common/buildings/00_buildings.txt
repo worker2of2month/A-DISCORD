@@ -742,8 +742,9 @@ buildings = {
 			state_max = 3
 		}
 		state_modifiers = {
-			state_production_speed_buildings_factor = 0.02
-			local_building_slots_factor = 0.05
+			state_production_speed_buildings_factor = 0.05
+			local_building_slots_factor = 0.10
+			state_resources_factor = 0.05
 		}
 	}
 
@@ -760,8 +761,10 @@ buildings = {
 			state_max = 2
 		}
 		state_modifiers = {
-			state_production_speed_buildings_factor = 0.02
-			local_building_slots_factor = 0.02
+			state_production_speed_buildings_factor = 0.05
+			local_building_slots_factor = 0.06
+			local_factory_energy_consumption = -0.05
+			state_resources_factor = 0.03
 		}
 	}
 
@@ -778,9 +781,10 @@ buildings = {
 			state_max = 3
 		}
 		state_modifiers = {
-			state_production_speed_buildings_factor = 0.05
-			local_building_slots_factor = 0.04
-			local_factory_energy_consumption = 0.20
+			state_production_speed_buildings_factor = 0.10
+			local_building_slots_factor = 0.08
+			local_factory_energy_consumption = 0.10
+			state_resources_factor = 0.05
 		}
 	}
 
@@ -799,7 +803,7 @@ buildings = {
 		refinery = yes
 		value = 5
 		infrastructure_construction_effect = yes
-		repair_speed_factor = 0.60
+		repair_speed_factor = 0.75
 		show_modifier = yes
 		level_cap = {
 			shares_slots = yes
@@ -809,7 +813,8 @@ buildings = {
 		state_modifiers = {
 			state_production_speed_buildings_factor = -0.05
 			local_building_slots_factor = -0.05
-			local_factory_energy_consumption = 0.20
+			local_factory_energy_consumption = 0.10
+			state_resources_factor = 0.15
 		}
 	}
 
@@ -823,7 +828,7 @@ buildings = {
 		refinery = yes
 		value = 5
 		infrastructure_construction_effect = yes
-		repair_speed_factor = 0.55
+		repair_speed_factor = 0.70
 		show_modifier = yes
 		level_cap = {
 			shares_slots = yes
@@ -833,7 +838,8 @@ buildings = {
 		state_modifiers = {
 			state_production_speed_buildings_factor = -0.06
 			local_building_slots_factor = -0.05
-			local_factory_energy_consumption = 0.30
+			local_factory_energy_consumption = 0.20
+			state_resources_factor = 0.12
 		}
 	}
 
@@ -847,7 +853,7 @@ buildings = {
 		refinery = yes
 		value = 6
 		infrastructure_construction_effect = yes
-		repair_speed_factor = 0.50
+		repair_speed_factor = 0.65
 		show_modifier = yes
 		level_cap = {
 			shares_slots = yes
@@ -857,8 +863,9 @@ buildings = {
 		state_modifiers = {
 			state_production_speed_buildings_factor = -0.08
 			local_building_slots_factor = -0.06
-			local_factory_energy_consumption = 0.25
-			local_manpower = -0.03
+			local_factory_energy_consumption = 0.20
+			state_resources_factor = 0.15
+			local_manpower = -0.01
 		}
 	}
 
@@ -873,7 +880,7 @@ buildings = {
 		affects_energy = yes
 		value = 5
 		infrastructure_construction_effect = yes
-		repair_speed_factor = 0.55
+		repair_speed_factor = 0.70
 		show_modifier = yes
 		level_cap = {
 			shares_slots = yes
@@ -883,8 +890,61 @@ buildings = {
 		state_modifiers = {
 			state_production_speed_buildings_factor = -0.05
 			local_building_slots_factor = -0.04
-			local_factory_energy_consumption = -0.10
-			local_manpower = -0.03
+			local_factory_energy_consumption = -0.20
+			state_resources_factor = 0.10
+			local_manpower = -0.01
+		}
+	}
+
+	#### A-DISCORD advanced-material factories
+	#### Deliberately not placed in state history. A later technology pass will
+	#### give them a dedicated unlock/upgrade branch without changing these IDs.
+
+	ADISCORD_rare_components_plant = {
+		show_on_map = 0
+		base_cost = 18000
+		per_controlled_building_extra_cost = 3500
+		icon_frame = 39
+		local_resources_rare_components = 4
+		refinery = yes
+		value = 4
+		infrastructure_construction_effect = yes
+		repair_speed_factor = 0.80
+		show_modifier = yes
+		level_cap = {
+			shares_slots = yes
+			state_max = 1
+			group_by = ADISCORD_advanced_material_plants
+		}
+		state_modifiers = {
+			state_production_speed_buildings_factor = -0.03
+			local_building_slots_factor = -0.03
+			local_factory_energy_consumption = 0.10
+			state_resources_factor = 0.10
+		}
+	}
+
+	ADISCORD_rare_alloy_foundry = {
+		show_on_map = 0
+		base_cost = 22000
+		per_controlled_building_extra_cost = 4500
+		icon_frame = 40
+		local_resources_rare_alloys = 3
+		refinery = yes
+		value = 5
+		infrastructure_construction_effect = yes
+		repair_speed_factor = 0.70
+		show_modifier = yes
+		level_cap = {
+			shares_slots = yes
+			state_max = 1
+			group_by = ADISCORD_advanced_material_plants
+		}
+		state_modifiers = {
+			state_production_speed_buildings_factor = -0.04
+			local_building_slots_factor = -0.04
+			local_factory_energy_consumption = 0.18
+			state_resources_factor = 0.08
 		}
 	}
 }

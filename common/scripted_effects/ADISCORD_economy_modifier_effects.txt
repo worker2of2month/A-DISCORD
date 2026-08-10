@@ -38,6 +38,7 @@ ADISCORD_economy_initialize_modifier_variables = {
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_static_demobilization_pressure_gain_bonus_bp } } set_variable = { var = ADISCORD_economy_static_demobilization_pressure_gain_bonus_bp value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_static_bombing_disruption_resistance_bonus_bp } } set_variable = { var = ADISCORD_economy_static_bombing_disruption_resistance_bonus_bp value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_static_overload_resistance_bonus_bp } } set_variable = { var = ADISCORD_economy_static_overload_resistance_bonus_bp value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_final_weekly_income_bonus } } set_variable = { var = ADISCORD_economy_final_weekly_income_bonus value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_country_development_static_global_growth_bonus_bp } } set_variable = { var = ADISCORD_country_development_static_global_growth_bonus_bp value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_country_development_static_society_growth_bonus_bp } } set_variable = { var = ADISCORD_country_development_static_society_growth_bonus_bp value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_country_development_static_social_system_growth_bonus_bp } } set_variable = { var = ADISCORD_country_development_static_social_system_growth_bonus_bp value = 0 } }
@@ -180,6 +181,7 @@ ADISCORD_economy_reset_final_factor_variables = {
 	set_variable = { var = ADISCORD_economy_final_demobilization_pressure_gain_factor_bp value = 100 }
 	set_variable = { var = ADISCORD_economy_final_bombing_disruption_resistance_factor_bp value = 100 }
 	set_variable = { var = ADISCORD_economy_final_overload_resistance_factor_bp value = 100 }
+	set_variable = { var = ADISCORD_economy_final_weekly_income_bonus value = 0 }
 	set_variable = { var = ADISCORD_country_development_final_global_growth_factor_bp value = 100 }
 	set_variable = { var = ADISCORD_country_development_final_society_growth_factor_bp value = 100 }
 	set_variable = { var = ADISCORD_country_development_final_social_system_growth_factor_bp value = 100 }
@@ -479,6 +481,7 @@ ADISCORD_economy_apply_visible_modifier_definition_factors = {
 	set_variable = { var = ADISCORD_economy_visible_modifier_temp value = modifier@ADISCORD_country_development_economic_growth_factor }
 	multiply_variable = { var = ADISCORD_economy_visible_modifier_temp value = 100 }
 	add_to_variable = { var = ADISCORD_country_development_final_economic_growth_factor_bp value = ADISCORD_economy_visible_modifier_temp }
+	set_variable = { var = ADISCORD_economy_final_weekly_income_bonus value = modifier@ADISCORD_economy_weekly_income }
 	set_variable = { var = ADISCORD_economy_visible_modifier_temp value = 0 }
 }
 

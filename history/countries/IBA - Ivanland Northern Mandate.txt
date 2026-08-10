@@ -1,4 +1,4 @@
-set_politics = { ruling_party = pragmatism elections_allowed = yes }
-set_popularities = { etatism = 10 chauvinism = 5 humanism = 20 pragmatism = 60 technocracy = 5 }
+set_politics = { ruling_party = humanism elections_allowed = yes }
+set_popularities = { etatism = 10 chauvinism = 5 humanism = 65 pragmatism = 15 technocracy = 5 }
 recruit_character = IBA_Matvey_Mateusk
 set_research_slots = 2

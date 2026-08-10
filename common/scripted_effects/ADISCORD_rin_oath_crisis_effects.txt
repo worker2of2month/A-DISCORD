@@ -1,0 +1,211 @@
+ADISCORD_rin_begin_oath_crisis = {
+	set_global_flag = ADISCORD_rin_oath_crisis_split_pending
+	if = {
+		limit = { is_subject = yes }
+		overlord = {
+			set_autonomy = {
+				target = RIN
+				autonomy_state = autonomy_free
+			}
+		}
+	}
+	if = { limit = { is_in_faction = yes } leave_faction = yes }
+	country_event = { id = ADISCORD_rin_crisis.2 days = 1 }
+}
+
+ADISCORD_rin_start_oath_civil_war = {
+	clr_global_flag = ADISCORD_rin_oath_crisis_split_pending
+	start_civil_war = {
+		ideology = chauvinism
+		size = 0
+		army_ratio = 0.40
+		navy_ratio = 0
+		air_ratio = 0
+		capital = 147
+		states = { 134 147 }
+	}
+	if = {
+		limit = {
+			any_other_country = {
+				original_tag = RIN
+				has_government = chauvinism
+			}
+		}
+			random_other_country = {
+			limit = {
+				original_tag = RIN
+				has_government = chauvinism
+			}
+			save_global_event_target_as = ADISCORD_rin_northern_court
+			set_country_flag = ADISCORD_rin_northern_crown_side
+			set_cosmetic_tag = RIN_northern_court
+			add_ideas = RIN_northern_crown_columns
+			add_manpower = 1000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment_0
+				amount = 400
+				producer = MON
+				}
+			}
+			# ROOT remains the southern civil-war country. Cache that concrete country
+			# object instead of resolving the original RIN tag after a dynamic D01 exists.
+			save_global_event_target_as = ADISCORD_rin_southern_charter
+			set_country_flag = ADISCORD_rin_southern_charter_side
+			clr_country_flag = ADISCORD_rin_northern_crown_side
+			add_ideas = RIN_southern_charter_mobilization
+			set_global_flag = ADISCORD_rin_oath_crisis_active
+			activate_mission = ADISCORD_rin_palatin_breakup_mission
+		}
+	else = {
+		set_global_flag = ADISCORD_rin_oath_crisis_terminal_failure
+		set_global_flag = ADISCORD_rin_oath_crisis_resolved
+		clr_global_flag = ADISCORD_rin_oath_crisis_active
+		add_stability = -0.05
+	}
+}
+
+ADISCORD_rin_clear_oath_crisis_runtime = {
+	clr_global_flag = ADISCORD_rin_oath_crisis_scheduled
+	clr_global_flag = ADISCORD_rin_oath_crisis_split_pending
+	clr_global_flag = ADISCORD_rin_oath_crisis_active
+	clr_global_flag = ADISCORD_rin_oath_crisis_settlement_in_progress
+	set_global_flag = ADISCORD_rin_oath_crisis_resolved
+}
+
+ADISCORD_rin_complete_southern_victory = {
+	remove_mission = ADISCORD_rin_palatin_breakup_mission
+	remove_ideas = RIN_two_oaths
+	remove_ideas = RIN_southern_charter_mobilization
+	remove_ideas = RIN_northern_crown_columns
+	remove_ideas = RIN_crown_palatin
+	add_ideas = RIN_charter_compact
+	clr_country_flag = ADISCORD_rin_crown_palatin_victorious
+	clr_country_flag = ADISCORD_rin_crown_palatin_survived
+	set_country_flag = ADISCORD_rin_charter_compact_victorious
+	clr_country_flag = ADISCORD_rin_charter_compact_survived
+	clr_global_flag = ADISCORD_rin_oath_crisis_northern_victory
+	clr_global_flag = ADISCORD_rin_oath_crisis_partition_armistice
+	clr_global_flag = ADISCORD_rin_oath_crisis_loyalty_outcome
+	clr_global_flag = ADISCORD_rin_oath_crisis_terminal_failure
+	set_global_flag = ADISCORD_rin_oath_crisis_southern_victory
+	ADISCORD_rin_clear_oath_crisis_runtime = yes
+}
+
+ADISCORD_rin_complete_northern_victory = {
+	remove_mission = ADISCORD_rin_palatin_breakup_mission
+	remove_ideas = RIN_two_oaths
+	remove_ideas = RIN_southern_charter_mobilization
+	remove_ideas = RIN_northern_crown_columns
+	remove_ideas = RIN_charter_compact
+	add_ideas = RIN_crown_palatin
+	clr_country_flag = ADISCORD_rin_charter_compact_victorious
+	clr_country_flag = ADISCORD_rin_charter_compact_survived
+	set_country_flag = ADISCORD_rin_crown_palatin_victorious
+	clr_country_flag = ADISCORD_rin_crown_palatin_survived
+	save_global_event_target_as = ADISCORD_rin_northern_court
+	if = {
+		limit = { MON = { exists = yes } }
+		MON = {
+			puppet = event_target:ADISCORD_rin_northern_court
+			set_autonomy = {
+				target = event_target:ADISCORD_rin_northern_court
+				autonomy_state = autonomy_puppet
+				freedom_level = 0.40
+			}
+		}
+	}
+	clr_global_flag = ADISCORD_rin_oath_crisis_southern_victory
+	clr_global_flag = ADISCORD_rin_oath_crisis_partition_armistice
+	clr_global_flag = ADISCORD_rin_oath_crisis_loyalty_outcome
+	clr_global_flag = ADISCORD_rin_oath_crisis_terminal_failure
+	set_global_flag = ADISCORD_rin_oath_crisis_northern_victory
+	ADISCORD_rin_clear_oath_crisis_runtime = yes
+}
+
+# Idempotent partition repair. The caller is always the cached southern country;
+# never resolve the RIN original tag here because a live civil-war D01 shares it.
+ADISCORD_rin_apply_partition_armistice = {
+	remove_mission = ADISCORD_rin_palatin_breakup_mission
+	remove_ideas = RIN_two_oaths
+	remove_ideas = RIN_southern_charter_mobilization
+	remove_ideas = RIN_northern_crown_columns
+	remove_ideas = RIN_crown_palatin
+	add_ideas = RIN_charter_compact
+	set_country_flag = ADISCORD_rin_southern_charter_side
+	clr_country_flag = ADISCORD_rin_northern_crown_side
+	set_country_flag = ADISCORD_rin_charter_compact_survived
+	clr_country_flag = ADISCORD_rin_charter_compact_victorious
+	clr_country_flag = ADISCORD_rin_crown_palatin_survived
+	clr_country_flag = ADISCORD_rin_crown_palatin_victorious
+
+	# White peace can convert the occupied civil-war front into ownership. Restore
+	# the authored border explicitly and its controller cache in the same pass.
+	transfer_state = 146
+	transfer_state = 148
+	transfer_state = 149
+	transfer_state = 150
+	146 = { set_state_controller_to = event_target:ADISCORD_rin_southern_charter }
+	148 = { set_state_controller_to = event_target:ADISCORD_rin_southern_charter }
+	149 = { set_state_controller_to = event_target:ADISCORD_rin_southern_charter }
+	150 = { set_state_controller_to = event_target:ADISCORD_rin_southern_charter }
+	event_target:ADISCORD_rin_northern_court = {
+		remove_mission = ADISCORD_rin_palatin_breakup_mission
+		remove_ideas = RIN_two_oaths
+		remove_ideas = RIN_southern_charter_mobilization
+		remove_ideas = RIN_northern_crown_columns
+		remove_ideas = RIN_charter_compact
+		add_ideas = RIN_crown_palatin
+		set_country_flag = ADISCORD_rin_northern_crown_side
+		clr_country_flag = ADISCORD_rin_southern_charter_side
+		set_country_flag = ADISCORD_rin_crown_palatin_survived
+		clr_country_flag = ADISCORD_rin_crown_palatin_victorious
+		clr_country_flag = ADISCORD_rin_charter_compact_survived
+		clr_country_flag = ADISCORD_rin_charter_compact_victorious
+		transfer_state = 134
+		transfer_state = 147
+	}
+	134 = { set_state_controller_to = event_target:ADISCORD_rin_northern_court }
+	147 = { set_state_controller_to = event_target:ADISCORD_rin_northern_court }
+	if = {
+		limit = {
+			MON = { exists = yes }
+			event_target:ADISCORD_rin_northern_court = { exists = yes }
+		}
+		MON = {
+			puppet = event_target:ADISCORD_rin_northern_court
+			set_autonomy = {
+				target = event_target:ADISCORD_rin_northern_court
+				autonomy_state = autonomy_puppet
+				freedom_level = 0.40
+			}
+		}
+	}
+}
+
+ADISCORD_rin_complete_partition_armistice = {
+	ADISCORD_rin_apply_partition_armistice = yes
+	clr_global_flag = ADISCORD_rin_oath_crisis_southern_victory
+	clr_global_flag = ADISCORD_rin_oath_crisis_northern_victory
+	clr_global_flag = ADISCORD_rin_oath_crisis_loyalty_outcome
+	clr_global_flag = ADISCORD_rin_oath_crisis_terminal_failure
+	set_global_flag = ADISCORD_rin_oath_crisis_partition_armistice
+	ADISCORD_rin_clear_oath_crisis_runtime = yes
+	set_country_flag = ADISCORD_rin_partition_verification_pending
+	clr_country_flag = ADISCORD_rin_partition_verification_retry
+	country_event = { id = ADISCORD_rin_crisis.3 days = 1 }
+}
+
+ADISCORD_rin_force_partition_armistice = {
+	save_global_event_target_as = ADISCORD_rin_southern_charter
+	if = {
+		limit = {
+			event_target:ADISCORD_rin_northern_court = {
+				exists = yes
+				has_war_with = ROOT
+			}
+		}
+		set_global_flag = ADISCORD_rin_oath_crisis_settlement_in_progress
+		event_target:ADISCORD_rin_northern_court = { white_peace = ROOT }
+	}
+	ADISCORD_rin_complete_partition_armistice = yes
+}

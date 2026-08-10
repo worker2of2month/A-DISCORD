@@ -35,9 +35,23 @@ resources = {
 		cic = 0.125
 		convoys = 0.1
 	}
+	# HOI4 1.19 hard-codes the power-grid resource as `coal`; all player-facing
+	# localisation and artwork deliberately present this engine ID as Energy.
 	coal = {
 		icon_frame = 7
 		cic = 0.0625
 		convoys = 0.05
+	}
+
+	rare_components = {
+		icon_frame = 8
+		cic = 0.25
+		convoys = 0.1
+	}
+
+	rare_alloys = {
+		icon_frame = 9
+		cic = 0.25
+		convoys = 0.1
 	}
 }

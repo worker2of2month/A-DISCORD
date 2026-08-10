@@ -1,0 +1,19 @@
+ADISCORD_rin_oath_crisis_category = {
+	ADISCORD_rin_palatin_breakup_mission = {
+		icon = generic_border_conflict
+		allowed = { original_tag = RIN }
+		activation = { always = no }
+		available = { always = no }
+		visible = {
+			has_country_flag = ADISCORD_rin_southern_charter_side
+			has_global_flag = ADISCORD_rin_oath_crisis_active
+			NOT = { has_global_flag = ADISCORD_rin_oath_crisis_resolved }
+		}
+		selectable_mission = no
+		fire_only_once = yes
+		days_mission_timeout = 180
+		is_good = no
+		timeout_effect = { ADISCORD_rin_force_partition_armistice = yes }
+		ai_will_do = { factor = 0 }
+	}
+}

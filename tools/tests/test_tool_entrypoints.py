@@ -21,9 +21,11 @@ BUILDER_NAMES = (
     "build_adiscord_northern_countries",
     "build_adiscord_outer_states",
     "build_adiscord_remainder_states",
+    "build_adiscord_resource_assets",
     "build_adiscord_strategic_regions",
     "build_adiscord_technology_system",
     "build_adiscord_terrain_snow",
+    "build_adiscord_trade_regions",
     "build_adiscord_val_operations_map",
     "build_adiscord_vorkerland_original_flags",
 )
@@ -48,7 +50,13 @@ READ_ONLY_BUILDERS = (
     "build_adiscord_northern_countries",
     "build_adiscord_outer_states",
     "build_adiscord_remainder_states",
+    "build_adiscord_resource_assets",
     "build_adiscord_terrain_snow",
+    "build_adiscord_trade_regions",
+)
+
+READ_ONLY_VALIDATORS = (
+    "validate_adiscord_event_ids",
 )
 
 
@@ -164,6 +172,35 @@ class ToolEntrypointCompatibilityTests(unittest.TestCase):
                 )
                 facade = importlib.import_module(f"tools.{validator_name}")
                 self.assertIs(facade.main, implementation.main)
+
+        for validator_name in READ_ONLY_VALIDATORS:
+            with self.subTest(validator=validator_name, arguments=()):
+                facade = subprocess.run(
+                    [
+                        sys.executable,
+                        "-B",
+                        str(REPOSITORY_ROOT / "tools" / f"{validator_name}.py"),
+                    ],
+                    cwd=REPOSITORY_ROOT,
+                    capture_output=True,
+                    text=True,
+                    timeout=60,
+                )
+                package = subprocess.run(
+                    [
+                        sys.executable,
+                        "-B",
+                        "-m",
+                        f"tools.validators.{validator_name}",
+                    ],
+                    cwd=REPOSITORY_ROOT,
+                    capture_output=True,
+                    text=True,
+                    timeout=60,
+                )
+                self.assertEqual(facade.returncode, package.returncode)
+                self.assertEqual(facade.stdout, package.stdout)
+                self.assertEqual(facade.stderr, package.stderr)
 
     def test_library_modules_and_canonical_test_discovery_are_importable(self) -> None:
         """Libraries and tests must live in their importable package directories."""

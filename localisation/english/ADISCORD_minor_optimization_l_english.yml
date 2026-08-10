@@ -1,0 +1,3 @@
+﻿l_english:
+ ADISCORD_non_participating_minor_optimization: "Dormant Minor Optimization"
+ ADISCORD_non_participating_minor_optimization_desc: "This AI country has no role in the active conflict graph. Its starting forces remain available, while further research, production, and division training are suspended to reduce simulation load. The restriction is removed automatically if the country enters a war."

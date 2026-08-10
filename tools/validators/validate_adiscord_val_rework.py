@@ -411,6 +411,24 @@ def main() -> int:
         if token not in shared_effects:
             issues.append(f"shared action API is missing {token}")
 
+    foreign_operations = read(
+        "common/scripted_effects/ADISCORD_VAL_foreign_operation_effects.txt"
+    )
+    if re.search(
+        r"\bVAL_recalculate_stp_campaign_readiness\s*=\s*yes\b",
+        mask_comments(foreign_operations),
+    ):
+        issues.append(
+            "independent foreign operations still call the removed STP campaign readiness effect"
+        )
+    for target in ("cin", "osf", "aph"):
+        effect_id = f"VAL_resolve_{target}_operation"
+        resolvers = named_blocks(foreign_operations, effect_id)
+        if len(resolvers) != 1:
+            issues.append(f"foreign operation resolver must be declared once: {effect_id}")
+        elif "VAL_clear_foreign_operation = yes" not in resolvers[0]:
+            issues.append(f"{effect_id} does not release the shared foreign-operation slot")
+
     decisions = read("common/decisions/ADISCORD_VAL_rework_decisions.txt")
     for token in (
         "days_mission_timeout = 90",

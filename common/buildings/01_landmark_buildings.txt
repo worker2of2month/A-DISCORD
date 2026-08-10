@@ -1,2 +1,50 @@
 buildings = {
+	ADISCORD_unity_tower_complex = {
+		show_on_map = 0
+		base_cost = 25000
+		damage_factor = -1
+		is_buildable = no
+		only_display_if_exists = yes
+		icon_frame = 41
+		value = 5
+		show_modifier = yes
+		country_modifiers = {
+			modifiers = {
+				political_power_gain = 0.05
+				research_speed_factor = 0.03
+			}
+		}
+		state_modifiers = {
+			state_production_speed_buildings_factor = 0.15
+			local_building_slots_factor = 0.15
+			local_factory_energy_consumption = 0.05
+			state_resources_factor = 0.05
+		}
+		level_cap = {
+			state_max = 1
+		}
+	}
+
+	ADISCORD_techlar_metallurgical_combine = {
+		show_on_map = 0
+		base_cost = 32000
+		damage_factor = -1
+		is_buildable = no
+		only_display_if_exists = yes
+		icon_frame = 42
+		local_resources_steel = 48
+		refinery = yes
+		value = 8
+		show_modifier = yes
+		repair_speed_factor = 0.50
+		state_modifiers = {
+			state_resources_factor = 0.20
+			state_production_speed_buildings_factor = -0.05
+			local_building_slots_factor = -0.02
+			local_factory_energy_consumption = 0.15
+		}
+		level_cap = {
+			state_max = 1
+		}
+	}
 }

@@ -17,7 +17,20 @@ ideas = {
 
 			removal_cost = -1
 
-			modifier = { }
+			modifier = {
+				send_volunteer_size = 10
+				army_defence_factor = 0.1
+				army_core_defence_factor = -0.1
+				army_attack_factor = 0.15
+				army_core_attack_factor = -0.15
+				army_org_factor = 0.15
+				recon_factor = 0.2
+				planning_speed = -0.2
+				equipment_capture_factor = 0.1
+				war_stability_factor = 0.3
+				political_power_gain = -0.2
+				consumer_goods_factor = -0.1
+			}
 		}
 
 		VAL_worldwide_famous_weponry = {

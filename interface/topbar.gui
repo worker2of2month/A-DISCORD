@@ -82,25 +82,33 @@ guiTypes = {
 		iconType = {
 			name ="armyoverview_buttons_bg"
 			spriteType = "GFX_armyoverview_buttons_bg"
-			position = { x= -399 y = -2 }
+			position = { x= -344 y = -2 }
 			Orientation = "UPPER_RIGHT"
 			alwaystransparent = yes
 		}
 		
 		buttonType = {
 			name = "player_flag"
-			quadTextureSprite ="GFX_shield_medium"
+			quadTextureSprite ="GFX_ADISCORD_topbar_flag"
 			position = { x= 12 y = 14 }
 			Orientation = "UPPER_LEFT"
 			clicksound = click_close
 			oversound = ui_menu_over
 			shortcut = "q"
 		}
-		
+
 		iconType = {
 			name = "observer_flag_overlay"
 			spriteType = "GFX_observer_flag_overlay"
 			position = { x= 11 y = 15 }
+			Orientation = "UPPER_LEFT"
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "ADISCORD_player_flag_frame"
+			spriteType = "GFX_ADISCORD_flag_frame_overlay"
+			position = { x= 9 y = 11 }
 			Orientation = "UPPER_LEFT"
 			alwaystransparent = yes
 		}
@@ -207,7 +215,7 @@ guiTypes = {
 
 		containerWindowType = {
 			name = "land"
-			position = { x= 796 y = 5}
+			position = { x= 845 y = 5}
 			clipping = no
 			size = { width=56 height=28 }
 			Orientation = UPPER_LEFT
@@ -240,7 +248,7 @@ guiTypes = {
 
 		containerWindowType = {
 			name = "navy"
-			position = { x= 854 y = 5}
+			position = { x= 903 y = 5}
 			clipping = no
 			size = { width=56 height=28 }
 			Orientation = UPPER_LEFT
@@ -273,7 +281,7 @@ guiTypes = {
 
 		containerWindowType = {
 			name = "air"
-			position = { x= 912 y = 5}
+			position = { x= 961 y = 5}
 			clipping = no
 			size = { width=56 height=28 }
 			Orientation = UPPER_LEFT
@@ -306,7 +314,7 @@ guiTypes = {
 
 		containerWindowType = {
 			name = "nukes"
-			position = { x= 970 y = 5}
+			position = { x= 1019 y = 5}
 			clipping = no
 			size = { width=56 height=30 }
 			Orientation = UPPER_LEFT
@@ -339,7 +347,7 @@ guiTypes = {
 
 		containerWindowType = {
 			name = "cp"
-			position = { x= 732 y = 5}
+			position = { x= 781 y = 5}
 			clipping = no
 			size = { width=62 height=28 }
 			Orientation = UPPER_LEFT
@@ -514,7 +522,7 @@ guiTypes = {
 		buttonType ={
 			name ="threat_button"
 			spriteType = "GFX_world_tension_icon_big_strip"
-			position = { x=-96 y=20 }
+			position = { x=-91 y=20 }
 			Orientation = "UPPER_RIGHT"
 			clicksound = click_default
 		}
@@ -522,7 +530,7 @@ guiTypes = {
 		iconType ={
 			name ="threat_icon_glow"
 			spriteType = "GFX_WT_anim_strip"
-			position = { x=-111 y=5 }
+			position = { x=-106 y=5 }
 			Orientation = "UPPER_RIGHT"
 			alwaystransparent = yes
 		}
@@ -530,7 +538,7 @@ guiTypes = {
 		buttonType ={
 			name ="threat_value_button"
 			spriteType = "GFX_world_tension_icon_big_strip"
-			position = { x=-98 y=74 }
+			position = { x=-93 y=70 }
 			Orientation = "UPPER_RIGHT"
 			clicksound = click_default
 			size = { x=50 y=20 }
@@ -539,7 +547,7 @@ guiTypes = {
 		
 		instantTextBoxType = {
 			name ="threat_value"
-			position = { x=-98 y=74 }
+			position = { x=-93 y=70 }
 			font = "hoi_18mbs"
 			text = "50%"
 			format = center
@@ -646,7 +654,7 @@ guiTypes = {
 
 		buttonType = {
 			name = "menu_button"
-			position = { x = -35 y = 7 }
+			position = { x = -32 y = 7 }
 			quadTextureSprite ="GFX_menu_button"
 			buttonText = ""
 			buttonFont = "Main_14_black"
@@ -658,7 +666,7 @@ guiTypes = {
 		
 		buttonType = {
 			name = "help_button"
-			position = { x = -29 y = 34 }
+			position = { x = -32 y = 34 }
 			quadTextureSprite ="GFX_help_button"
 			buttonText = ""
 			buttonFont = "Main_14_black"
@@ -671,7 +679,7 @@ guiTypes = {
 
 		buttonType = {
 			name = "achievements_button"
-			position = { x = -131 y = 62 }
+			position = { x = -274 y = 52 }
 			quadTextureSprite ="GFX_achievements_button"
 			buttonText = ""
 			buttonFont = "Main_14_black"
@@ -694,7 +702,7 @@ guiTypes = {
 		
 		buttonType = {
 			name = "dismissed_alerts_button"
-			position = { x = -35 y = 62 }
+			position = { x = -32 y = 62 }
 			quadTextureSprite ="GFX_show_dismissed_alerts_icon"
 			buttonText = ""
 			buttonFont = "Main_14_black"
@@ -955,9 +963,17 @@ guiTypes = {
 						oversound = ui_menu_over
 					}	
 
+					# Scripted GUI anchor: unlike an absolute top_bar coordinate, this
+					# follows the DLC-dependent after_intel_agency_button container.
+					containerWindowType = {
+						name = "ADISCORD_economy_topbar_anchor"
+						position = { x = 116 y = 0 }
+						size = { width = 55 height = 41 }
+					}
+
 					buttonType = {
 						name = "construction_button"
-						position = { x = 116 y = 0 }
+						position = { x = 171 y = 0 }
 						quadTextureSprite ="GFX_construction_button"
 						Orientation = "UPPER_LEFT"
 						shortcut = "t"
@@ -967,14 +983,14 @@ guiTypes = {
 
 					iconType = {
 						name = "production_button_glow"
-						position = { x = 171 y = 0 }
+						position = { x = 226 y = 0 }
 						spriteType = "GFX_decisions_glow_yellow"
 						alwaystransparent = yes
 					}
 
 					buttonType = {
 						name = "production_button"
-						position = { x = 171 y = 0 }
+						position = { x = 226 y = 0 }
 						quadTextureSprite ="GFX_topbar_production"
 						Orientation = "UPPER_LEFT"
 						shortcut = "y"
@@ -984,7 +1000,7 @@ guiTypes = {
 
 					buttonType = {
 						name = "deployment_button"
-						position = { x = 226 y = 0 }
+						position = { x = 281 y = 0 }
 						quadTextureSprite ="GFX_deployment_button"
 						Orientation = "UPPER_LEFT"
 						shortcut = "u"
@@ -994,7 +1010,7 @@ guiTypes = {
 
 					buttonType = {
 						name = "logistics_button"
-						position = { x = 281 y = 0 }
+						position = { x = 336 y = 0 }
 						quadTextureSprite ="GFX_ledger_button"
 						Orientation = "UPPER_LEFT"
 						shortcut = "i"
@@ -1004,7 +1020,7 @@ guiTypes = {
 
 					buttonType = {
 						name = "officer_corp_button"
-						position = { x = 336 y = 0 }
+						position = { x = 391 y = 0 }
 						quadTextureSprite ="GFX_staff_office_button"
 						Orientation = "UPPER_LEFT"
 						shortcut = "shift+e"
@@ -1016,7 +1032,7 @@ guiTypes = {
 			
 			buttonType = {
 				name = "army_button"
-				position = { x = -275 y = 8 }
+				position = { x = -238 y = 8 }
 				quadTextureSprite ="GFX_armyoverview_button"
 				Orientation = "UPPER_right"
 				shortcut = "o"
@@ -1026,7 +1042,7 @@ guiTypes = {
 			
 			buttonType = {
 				name = "navy_button"
-				position = { x = -226 y = 8 }
+				position = { x = -189 y = 8 }
 				quadTextureSprite ="GFX_navyoverview_button"
 				Orientation = "UPPER_right"
 				shortcut = "p"
@@ -1036,7 +1052,7 @@ guiTypes = {
 			
 			buttonType = {
 				name = "air_button"
-				position = { x = -180 y = 8 }
+				position = { x = -143 y = 8 }
 				quadTextureSprite ="GFX_airoverview_button"
 				Orientation = "UPPER_right"
 				shortcut = "l"

@@ -34,6 +34,50 @@ ideas = {
 				consumer_goods_factor = 0.02
 			}
 		}
+		RIN_southern_charter_mobilization = {
+			picture = generic_prepare_civil_war
+			allowed = { original_tag = RIN }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.08
+				mobilization_speed = 0.10
+				stability_factor = -0.05
+			}
+		}
+		RIN_northern_crown_columns = {
+			picture = generic_prepare_civil_war
+			allowed = { original_tag = RIN }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = 0.05
+				army_attack_factor = 0.05
+				war_support_factor = 0.05
+			}
+		}
+		RIN_charter_compact = {
+			picture = AFG_helmand_adopted_treaty
+			allowed = { original_tag = RIN }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.08
+				political_power_gain = 0.05
+				consumer_goods_factor = -0.01
+			}
+		}
+		RIN_crown_palatin = {
+			picture = generic_fortify_the_borders
+			allowed = { original_tag = RIN }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = 0.05
+				war_support_factor = 0.06
+				political_power_gain = 0.04
+			}
+		}
 		KRM_slag_road_compact = {
 			picture = generic_production_bonus
 			allowed = { original_tag = KRM }

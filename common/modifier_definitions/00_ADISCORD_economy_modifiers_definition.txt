@@ -2,6 +2,15 @@
 # These modifiers are real displayable country modifiers and are read by the economy calculation via modifier@<key>.
 # Use them in idea modifier blocks when the effect should be visible in the normal national-spirit modifier list.
 
+ADISCORD_economy_weekly_income = {
+	color_type = good
+	value_type = number
+	precision = 0
+	postfix = none
+	category = country
+	category = politics
+}
+
 ADISCORD_economy_tax_collection_factor = {
 	color_type = good
 	value_type = percentage

@@ -4,12 +4,12 @@
 state = {
 	id = 455
 	name = "STATE_455"
-	manpower = 509329
+	manpower = 436060
 	state_category = town
 	history = {
 		owner = ORV
 		add_core_of = ORV
-		victory_points = { 10579 5 }
+		victory_points = { 1757 5 }
 		buildings = {
 			infrastructure = 4
 			industrial_complex = 1
@@ -18,8 +18,7 @@ state = {
 		}
 	}
 	provinces = {
-		896 912 1399 1757 2008 2126 2714 2792 2814 3305 3327 4573 4820 4867 7065 7256
-		7336 9124 9738 10579 11249 11593 11733 11749 12230 12300
+		896 912 1757 2008 2126 2792 2814 4573 4820 4867 9124 11593 11749 12230 12300
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 3.3

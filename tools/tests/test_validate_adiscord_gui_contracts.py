@@ -440,11 +440,18 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
             if not (
                 len(gate) == 1
                 and isinstance(gate[0].value, list)
-                and len(gate[0].value) == 1
-                and gate[0].value[0].key == enabled[(policy, direction)]
-                and gate[0].value[0].value == 'yes'
+                and [
+                    (entry.key, entry.value)
+                    for entry in gate[0].value
+                ]
+                == [
+                    ('ADISCORD_economy_should_show_player_ui', 'yes'),
+                    (enabled[(policy, direction)], 'yes'),
+                ]
             ):
-                issues.append(f'{button} has the wrong direct availability owner')
+                issues.append(
+                    f'{button} lacks the observer read-only guard or has the wrong direct availability owner'
+                )
 
             title = 'Army' if policy == 'army' else policy.title()
             reason_selector = (
@@ -838,8 +845,8 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             ),
             'wrong availability trigger': replace_once(
                 self.scripted_gui,
-                'ADISCORD_economy_tax_decrease_click_enabled = { ADISCORD_economy_can_decrease_tax_burden = yes }',
-                'ADISCORD_economy_tax_decrease_click_enabled = { ADISCORD_economy_can_decrease_army_spending = yes }',
+                'ADISCORD_economy_tax_decrease_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_decrease_tax_burden = yes }',
+                'ADISCORD_economy_tax_decrease_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_decrease_army_spending = yes }',
             ),
             'ninth construction action': replace_once(
                 self.scripted_gui,
@@ -963,6 +970,20 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             self.gui,
         )
         self.assertEqual(rows, ['tax', 'army', 'research', 'social'])
+        display_selectors = {
+            'tax': 'GetADISCORDTaxBurdenModeLoc',
+            'army': 'GetADISCORDArmySpendingModeLoc',
+            'research': 'GetADISCORDResearchSpendingModeLoc',
+            'social': 'GetADISCORDSocialSpendingModeLoc',
+        }
+        for policy, selector in display_selectors.items():
+            row = re.search(
+                rf'(?m)^\s*ADISCORD_economy_budget_{policy}_row:\d*\s*"([^"]*)"',
+                self.localisation,
+            )
+            self.assertIsNotNone(row, policy)
+            self.assertIn(f'[{selector}]', row.group(1), policy)
+            self.assertNotIn('construction', row.group(1).casefold(), policy)
         regulators = set(
             re.findall(
                 r'name\s*=\s*"(ADISCORD_economy_(?:tax|army|research|social)_(?:decrease|increase))"',
@@ -1254,27 +1275,19 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         offenders = {key: text for key, text in visible_text if slogan.search(text)}
         self.assertFalse(offenders, f'visible diagnostic slogans: {offenders}')
 
-    def test_topbar_uses_icon_and_numeric_value(self):
+    def test_topbar_uses_a_dedicated_economy_button(self):
         self.assertIn(
             (
-                'iconType',
-                'ADISCORD_economy_topbar_icon',
+                'buttonType',
+                'ADISCORD_economy_topbar_button',
                 ('ADISCORD_economy_topbar_window',),
             ),
             self.nodes,
         )
-        self.assertIn(
-            (
-                'instantTextboxType',
-                'ADISCORD_economy_topbar_value',
-                ('ADISCORD_economy_topbar_window',),
-            ),
-            self.nodes,
-        )
-        self.assertNotRegex(
-            self.gui,
-            r'buttonText\s*=\s*"ADISCORD_economy_topbar_treasury_text"',
-        )
+        button_body = gui_node_body(self.gui, 'ADISCORD_economy_topbar_button')
+        self.assertIn('quadTextureSprite = "GFX_ADISCORD_economy_topbar_button"', button_body)
+        self.assertNotIn('name = "ADISCORD_economy_topbar_icon"', self.gui)
+        self.assertNotIn('name = "ADISCORD_economy_topbar_value"', self.gui)
 
     def test_treasury_sprite_has_a_real_temporary_asset(self):
         self.assertIn('name = "GFX_ADISCORD_treasury_icon"', self.gfx)
@@ -1291,6 +1304,37 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                 / 'treasury_icon.dds'
             ).is_file()
         )
+
+    def test_dashboard_uses_dedicated_economy_backgrounds(self):
+        textures = {
+            'dashboard': 'economy_dashboard_bg.dds',
+            'kpi_treasury': 'economy_kpi_treasury_bg.dds',
+            'kpi_income': 'economy_kpi_income_bg.dds',
+            'kpi_expenses': 'economy_kpi_expenses_bg.dds',
+            'kpi_balance': 'economy_kpi_balance_bg.dds',
+            'status': 'economy_status_bg.dds',
+            'command': 'economy_command_bg.dds',
+        }
+        for role, filename in textures.items():
+            sprite = f'GFX_ADISCORD_economy_{role}_bg'
+            self.assertIn(f'quadTextureSprite = "{sprite}"', self.gui)
+            self.assertRegex(
+                self.gfx,
+                rf'name\s*=\s*"{sprite}"[\s\S]*?'
+                rf'texturefile\s*=\s*"gfx/interface/ADISCORD_economy_gui/{filename}"',
+            )
+            self.assertTrue(
+                (ROOT / 'gfx' / 'interface' / 'ADISCORD_economy_gui' / filename).is_file()
+            )
+
+    def test_economy_menu_values_do_not_embed_decorative_texticons(self):
+        for key in (
+            'ADISCORD_economy_kpi_treasury',
+            'ADISCORD_economy_risk_debt',
+            'ADISCORD_economy_risk_inflation',
+            'ADISCORD_economy_operations_snapshot',
+        ):
+            self.assertNotIn('£ADISCORD_', localisation_value(self.localisation, key))
 
     def test_four_budget_rows_use_arrows_and_five_step_markers(self):
         for policy in ('tax', 'army', 'research', 'social'):
@@ -1385,16 +1429,25 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             self.assertNotIn('Сравнение 1–5', tooltip)
             self.assertIn(f'name = {effect_loc}', self.scripted_loc)
 
-    def test_increase_arrows_use_visible_absolute_positioning(self):
+    def test_budget_scales_are_centered_between_visible_arrows(self):
         for policy in ('tax', 'army', 'research', 'social'):
+            decrease_line = gui_node_body(
+                self.gui, f'ADISCORD_economy_{policy}_decrease'
+            )
+            scale_line = gui_node_body(
+                self.gui, f'ADISCORD_economy_{policy}_scale'
+            )
             increase_line = gui_node_body(
                 self.gui, f'ADISCORD_economy_{policy}_increase'
             )
+            self.assertIn('spriteType = "button_left"', decrease_line)
+            self.assertIn('position = { x = 244 ', decrease_line)
+            self.assertIn('position = { x = 292 ', scale_line)
             self.assertIn('spriteType = "button_right"', increase_line)
             self.assertIn('position = { x = 424 ', increase_line)
             self.assertNotIn('orientation = upper_right', increase_line)
 
-    def test_compact_dashboard_keeps_manual_borrowing_in_treasury_operations(self):
+    def test_compact_dashboard_keeps_manual_borrowing_in_integrated_treasury_actions(self):
         contracts = {
             'internal_bonds': (
                 'ADISCORD_economy_gui_try_issue_internal_bonds',
@@ -1411,13 +1464,14 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                 (
                     'buttonType',
                     node_name,
-                    ('ADISCORD_economy_dashboard_window', 'ADISCORD_economy_operations_panel'),
+                    ('ADISCORD_economy_dashboard_window', 'ADISCORD_economy_command_panel'),
                 ),
                 self.nodes,
             )
             self.assertIn(f'{node_name}_click = {{ {effect} = yes }}', self.scripted_gui)
             self.assertIn(
-                f'{node_name}_click_enabled = {{ {trigger} = yes }}',
+                f'{node_name}_click_enabled = {{ '
+                f'ADISCORD_economy_should_show_player_ui = yes {trigger} = yes }}',
                 self.scripted_gui,
             )
             self.assertIn(
@@ -1482,24 +1536,7 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             r'(?m)^\s*ADISCORD_economy_loan_blocked_technology:',
         )
 
-    def test_rare_treasury_actions_are_hidden_behind_one_explicit_second_layer(self):
-        self.assertIn(
-            (
-                'buttonType',
-                'ADISCORD_economy_operations_open',
-                ('ADISCORD_economy_dashboard_window', 'ADISCORD_economy_command_panel'),
-            ),
-            self.nodes,
-        )
-        self.assertIn(
-            (
-                'containerWindowType',
-                'ADISCORD_economy_operations_panel',
-                ('ADISCORD_economy_dashboard_window',),
-            ),
-            self.nodes,
-        )
-
+    def test_treasury_actions_are_integrated_without_a_second_layer(self):
         actions = (
             'internal_bonds',
             'external_loan',
@@ -1514,36 +1551,16 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                 (
                     'buttonType',
                     node_name,
-                    ('ADISCORD_economy_dashboard_window', 'ADISCORD_economy_operations_panel'),
-                ),
-                self.nodes,
-            )
-            self.assertNotIn(
-                (
-                    'buttonType',
-                    node_name,
                     ('ADISCORD_economy_dashboard_window', 'ADISCORD_economy_command_panel'),
                 ),
                 self.nodes,
             )
-
-        self.assertRegex(
-            self.scripted_gui,
-            r'ADISCORD_economy_operations_open_click\s*=\s*\{'
-            r'[\s\S]*?ADISCORD_economy_show_operations\s+value\s*=\s*1'
-            r'[\s\S]*?ADISCORD_economy_update_gui\s*=\s*yes',
-        )
-        self.assertRegex(
-            self.scripted_gui,
-            r'ADISCORD_economy_operations_close_click\s*=\s*\{'
-            r'[\s\S]*?ADISCORD_economy_show_operations\s+value\s*=\s*0'
-            r'[\s\S]*?ADISCORD_economy_update_gui\s*=\s*yes',
-        )
-        self.assertRegex(
-            self.scripted_gui,
-            r'ADISCORD_economy_operations_panel_visible\s*=\s*\{'
-            r'[\s\S]*?ADISCORD_economy_show_operations\s+value\s*=\s*1',
-        )
+        self.assertNotIn('ADISCORD_economy_operations_open', self.gui)
+        self.assertNotIn('ADISCORD_economy_operations_panel', self.gui)
+        self.assertNotIn('ADISCORD_economy_operations_open_click', self.scripted_gui)
+        self.assertNotIn('ADISCORD_economy_operations_close_click', self.scripted_gui)
+        self.assertNotIn('ADISCORD_economy_operations_panel_visible', self.scripted_gui)
+        self.assertNotIn('ADISCORD_economy_show_operations', self.scripted_gui)
 
     def test_headline_kpis_show_cash_flow_before_secondary_risks(self):
         for node, text_key, tooltip in (
@@ -1698,7 +1715,6 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
     def test_treasury_guidance_uses_cyrillic_capable_fonts(self):
         for hint_name in (
             'ADISCORD_economy_main_help',
-            'ADISCORD_economy_operations_main_hint',
             'ADISCORD_economy_operations_hint',
         ):
             hint_line = next(
@@ -1708,6 +1724,14 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             )
             self.assertIn('font = "hoi_16mbs"', hint_line)
             self.assertNotIn('font = "hoi_14mbs"', hint_line)
+        operations_line = next(
+            line
+            for line in self.gui.splitlines()
+            if 'name = "ADISCORD_economy_operations_hint"' in line
+        )
+        self.assertIn('text = "ADISCORD_economy_operations_main_hint"', operations_line)
+        self.assertIn('maxHeight = 34', operations_line)
+        self.assertIn('fixedsize = yes', operations_line)
 
     def test_treasury_operations_hint_is_actionable_and_read_only(self):
         self.assertRegex(

@@ -6,6 +6,7 @@ import unittest
 from pathlib import Path
 
 from tools.builders import build_adiscord_technology_system as generator
+from tools.validators import validate_adiscord_tech_doctrine as validator
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -151,7 +152,7 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
 
     def test_starting_profile_manifest_is_machine_readable_and_bounded(self) -> None:
         payload = json.loads(STARTING_PROFILE_MANIFEST.read_text(encoding="utf-8"))
-        self.assertEqual(payload["active_country_count"], 62)
+        self.assertEqual(payload["active_country_count"], 68)
         self.assertEqual(set(payload["countries"]), set(generator.STARTING_COUNTRY_TECH_PROFILES))
         self.assertEqual(
             set(generator.STARTING_COUNTRY_TECH_PROFILE_RATIONALE),
@@ -168,6 +169,36 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
             len(generator.STARTING_TECH_PROFILES["late_2183"]),
             len({tech.id for branch in generator.BRANCHES for tech in branch.techs}) // 4,
         )
+
+    def test_starting_profile_manifest_evidence_matches_live_sources(self) -> None:
+        payload = json.loads(STARTING_PROFILE_MANIFEST.read_text(encoding="utf-8"))
+        observed = generator.collect_starting_country_profile_evidence()
+        self.assertEqual(
+            {tag: entry["evidence"] for tag, entry in payload["countries"].items()},
+            observed,
+        )
+
+    def test_resource_building_icon_strip_matches_gfx_and_dds_capacity(self) -> None:
+        capacity, issues = validator.building_icon_strip_capacity()
+        self.assertEqual(issues, [])
+        self.assertEqual(capacity, 42)
+        buildings = validator.collect_building_blocks()
+        frames = {
+            building: int(re.search(r"\bicon_frame\s*=\s*(\d+)", buildings[building]).group(1))
+            for building in (
+                "ADISCORD_metallurgical_complex",
+                "ADISCORD_electrolysis_complex",
+                "ADISCORD_strategic_mining_complex",
+                "ADISCORD_thermal_power_complex",
+            )
+        }
+        self.assertEqual(frames, {
+            "ADISCORD_metallurgical_complex": 35,
+            "ADISCORD_electrolysis_complex": 36,
+            "ADISCORD_strategic_mining_complex": 37,
+            "ADISCORD_thermal_power_complex": 38,
+        })
+        self.assertLessEqual(max(frames.values()), capacity)
 
     def test_land_profile_is_not_an_automatic_armor_package(self) -> None:
         land = set(generator.STARTING_TECH_PROFILES["land"])

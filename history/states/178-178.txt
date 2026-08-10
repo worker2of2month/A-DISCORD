@@ -4,13 +4,16 @@ state={
 	provinces={
 		6151 6377 8187 16475 16486 16516
 	}
-	manpower=9000
-	buildings_max_level_factor=1
-	state_category=rural
-	local_supplies=0.25
+	manpower = 60000
+	buildings_max_level_factor = 1.000
+	state_category = rural
+	local_supplies = 1.0
 	history = {
 		owner = EXZ
 		add_core_of = EXZ
 		victory_points = { 16516 1 }
+		buildings = {
+			infrastructure = 1
+		}
 	}
 }

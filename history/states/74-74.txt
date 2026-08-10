@@ -4,10 +4,13 @@ state={
 	provinces={
 		2197 2402 2516 2583 3492 5408 5666 5799 6543 8497 8704 12316 12541 12947 16585
 	}
-	manpower = 1100000
+	manpower = 1300000
 	state_category = large_town
 	buildings_max_level_factor = 1.000
 	local_supplies = 4.5
+	resources = {
+		steel = 8
+	}
 	history = {
         owner = VLA
         buildings = {

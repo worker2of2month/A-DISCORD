@@ -1,4 +1,4 @@
-set_politics = { ruling_party = chauvinism elections_allowed = no }
-set_popularities = { etatism = 15 chauvinism = 70 humanism = 0 pragmatism = 10 technocracy = 5 }
+set_politics = { ruling_party = humanism elections_allowed = yes }
+set_popularities = { etatism = 10 chauvinism = 10 humanism = 65 pragmatism = 10 technocracy = 5 }
 recruit_character = IBL_Anton_Selevyostrov
 set_research_slots = 2

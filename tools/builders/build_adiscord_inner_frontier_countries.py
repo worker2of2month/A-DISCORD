@@ -34,11 +34,15 @@ from tools.lib.paths import repository_root
 ROOT = repository_root()
 STATE_DIR = ROOT / "history" / "states"
 UNIT_DIR = ROOT / "history" / "units"
+COUNTRY_DIR = ROOT / "common" / "countries"
+COUNTRY_HISTORY_DIR = ROOT / "history" / "countries"
 FLAG_DIR = ROOT / "gfx" / "flags"
 VP_LOCALISATION = ROOT / "localisation" / "russian" / "ADISCORD_inner_frontier_victory_points_l_russian.yml"
+EXZ_LOCALISATION = ROOT / "localisation" / "russian" / "ZZ_ADISCORD_exclusion_zone_l_russian.yml"
 POPULATION_MARKER = "# Populated by tools/build_adiscord_inner_frontier_countries.py"
 PROTECTORATE_TAG = "WCG"
 PROTECTORATE_SUCCESSORS = {"KRM", "LMN"}
+PROTECTORATE_COLORS = ((40, 43, 39), (190, 145, 48), (112, 44, 38))
 DIVISION_TEMPLATE_NAMES = (
     "Palatine Line Division",
     "Filtration Battalion",
@@ -103,6 +107,69 @@ COUNTRIES: dict[str, dict[str, object]] = {
         "resources": {"aluminium": 3, "oil": 2, "coal": 2},
         "divisions": 1, "unit_type": "ADISCORD_militia",
         "colors": ((45, 78, 73), (210, 198, 150), (156, 68, 50)),
+    },
+}
+
+
+# RIN's history is owned by the separate oath-crisis system.  The remaining
+# inner-frontier country histories and their common country definitions are
+# deterministic outputs of this builder.  Keeping the visual culture and color
+# exclusively in common/countries prevents HOI4 from parsing them as history
+# effects during scenario initialization.
+COUNTRY_HISTORY_PROFILES: dict[str, dict[str, object]] = {
+    "BOR": {
+        "filename": "BOR - Boreyan Republic.txt",
+        "leader": "BOR_Elena_Borey",
+        "ruling_party": "humanism",
+        "elections_allowed": True,
+        "popularities": {"humanism": 65, "pragmatism": 20, "etatism": 10, "chauvinism": 5},
+        "stability": "0.70", "war_support": "0.35", "research_slots": 3,
+        "ideas": ("BOR_itoran_relief_charter",),
+    },
+    "DOL": {
+        "filename": "DOL - Doln Union.txt",
+        "leader": "DOL_Marko_Doln",
+        "ruling_party": "pragmatism",
+        "elections_allowed": True,
+        "popularities": {"pragmatism": 60, "humanism": 20, "utilitarism": 15, "etatism": 5},
+        "stability": "0.58", "war_support": "0.35", "research_slots": 3,
+        "ideas": (),
+    },
+    "KRM": {
+        "filename": "KRM - Kremen Industrial Chamber.txt",
+        "leader": "KRM_Ivo_Kremen",
+        "ruling_party": "utilitarism",
+        "elections_allowed": True,
+        "popularities": {"utilitarism": 65, "pragmatism": 20, "technocracy": 10, "humanism": 5},
+        "stability": "0.61", "war_support": "0.48", "research_slots": 3,
+        "ideas": ("KRM_slag_road_compact",),
+    },
+    "LMN": {
+        "filename": "LMN - Leman Cordon.txt",
+        "leader": "LMN_Vera_Lemann",
+        "ruling_party": "etatism",
+        "elections_allowed": False,
+        "popularities": {"etatism": 70, "pragmatism": 15, "chauvinism": 10, "humanism": 5},
+        "stability": "0.52", "war_support": "0.72", "research_slots": 2,
+        "ideas": ("LMN_permanent_quarantine",),
+    },
+    "RLY": {
+        "filename": "RLY - Relay Enclave.txt",
+        "leader": "RLY_Relay_Assembly_17",
+        "ruling_party": "technocracy",
+        "elections_allowed": False,
+        "popularities": {"technocracy": 75, "pragmatism": 20, "etatism": 5},
+        "stability": "0.48", "war_support": "0.20", "research_slots": 2,
+        "ideas": ("RLY_closed_circuit",),
+    },
+    PROTECTORATE_TAG: {
+        "filename": "WCG - Vorkerland External Gate.txt",
+        "leader": "WCG_Edgar_Raut",
+        "ruling_party": "etatism",
+        "elections_allowed": False,
+        "popularities": {"etatism": 78, "chauvinism": 12, "pragmatism": 7, "humanism": 3},
+        "stability": "0.34", "war_support": "0.76", "research_slots": 2,
+        "ideas": ("WCG_living_filter",),
     },
 }
 
@@ -216,14 +283,14 @@ def build_profiles() -> tuple[dict[int, dict[str, object]], dict[int, int]]:
 
         for state_id in states:
             population = populations[state_id]
+            factories = civilians[state_id] + military[state_id]
             if state_id == capital:
                 category = "large_town" if population >= 750_000 else "town"
-            elif population >= 650_000:
+            elif population >= 650_000 or factories > 2:
                 category = "town"
             else:
                 category = "rural"
             infrastructure = min(5, int(country["infrastructure"]) + (1 if state_id == capital else 0))
-            factories = civilians[state_id] + military[state_id]
             profiles[state_id] = {
                 "owner": STARTING_OWNER[state_id],
                 "successor": tag,
@@ -287,6 +354,56 @@ def render_state(state_id: int, profile: dict[str, object]) -> str:
     ])
 
 
+def generated_country_profile(tag: str) -> dict[str, object]:
+    if tag == PROTECTORATE_TAG:
+        return {
+            "capital": int(COUNTRIES["LMN"]["capital"]),
+            "colors": PROTECTORATE_COLORS,
+        }
+    return COUNTRIES[tag]
+
+
+def render_common_country(tag: str) -> str:
+    country = generated_country_profile(tag)
+    red, green, blue = country["colors"][0]
+    return "\n".join((
+        "graphical_culture = western_european_gfx",
+        "graphical_culture_2d = western_european_2d",
+        f"color = rgb {{ {red} {green} {blue} }}",
+        "",
+    ))
+
+
+def render_country_history(tag: str) -> str:
+    country = generated_country_profile(tag)
+    history = COUNTRY_HISTORY_PROFILES[tag]
+    lines = [
+        f"capital = {country['capital']}",
+        f'oob = "{tag}"',
+        "",
+        f"recruit_character = {history['leader']}",
+        "",
+        "set_politics = {",
+        f"\truling_party = {history['ruling_party']}",
+        f"\telections_allowed = {'yes' if history['elections_allowed'] else 'no'}",
+        "}",
+        "set_popularities = {",
+    ]
+    lines.extend(
+        f"\t{ideology} = {popularity}"
+        for ideology, popularity in history["popularities"].items()
+    )
+    lines.extend((
+        "}",
+        f"set_stability = {history['stability']}",
+        f"set_war_support = {history['war_support']}",
+        f"set_research_slots = {history['research_slots']}",
+    ))
+    lines.extend(f"add_ideas = {idea}" for idea in history["ideas"])
+    lines.append("")
+    return "\n".join(lines)
+
+
 def render_oob(tag: str, country: dict[str, object], principal_provinces: dict[int, int]) -> str:
     states = [int(country["capital"])] + [int(state_id) for state_id in country["states"] if state_id != country["capital"]]
     unit_type = str(country["unit_type"])
@@ -299,7 +416,9 @@ def render_oob(tag: str, country: dict[str, object], principal_provinces: dict[i
         *regiment_block(unit_type, regiment_count),
     ]
     if tag == "RIN":
-        lines.append("\t\tartillery = { x = 2 y = 1 }")
+        # RIN's crisis-owned OOB uses the mod's line battalion; vanilla
+        # artillery is support-only in this total conversion and fails parsing.
+        lines.append("\t\tADISCORD_line_artillery = { x = 2 y = 1 }")
     lines.extend(("\t}", "}", "units = {"))
     for index in range(int(country["divisions"])):
         lines.append(
@@ -321,6 +440,18 @@ def protectorate_profile() -> dict[str, object]:
     }
 
 
+def render_exz_localisation() -> str:
+    """Keep the terrain-mask country deliberately nameless on the map."""
+    return "\n".join((
+        "\ufeffl_russian:",
+        ' EXZ: ""',
+        ' EXZ_DEF: ""',
+        ' EXZ_ADJ: ""',
+        ' EXZ_pragmatism: ""',
+        "",
+    ))
+
+
 def write_flags() -> None:
     sizes = ((FLAG_DIR, (82, 52)), (FLAG_DIR / "medium", (41, 26)), (FLAG_DIR / "small", (10, 7)))
     for style, (tag, country) in enumerate(COUNTRIES.items()):
@@ -329,11 +460,20 @@ def write_flags() -> None:
             directory.mkdir(parents=True, exist_ok=True)
             image = base if size == base.size else base.resize(size, Image.Resampling.LANCZOS)
             image.save(directory / f"{tag}.tga")
-    gate_colors = ((40, 43, 39), (190, 145, 48), (112, 44, 38))
-    gate = render_flag(PROTECTORATE_TAG, gate_colors, 5)
+    gate = render_flag(PROTECTORATE_TAG, PROTECTORATE_COLORS, 5)
     for directory, size in sizes:
         image = gate if size == gate.size else gate.resize(size, Image.Resampling.LANCZOS)
         image.save(directory / f"{PROTECTORATE_TAG}.tga")
+
+
+def write_country_sources() -> None:
+    for tag, history in COUNTRY_HISTORY_PROFILES.items():
+        (COUNTRY_DIR / f"{tag}.txt").write_text(
+            render_common_country(tag), encoding="utf-8", newline="\n"
+        )
+        (COUNTRY_HISTORY_DIR / str(history["filename"])).write_text(
+            render_country_history(tag), encoding="utf-8", newline="\n"
+        )
 
 
 def apply() -> None:
@@ -342,6 +482,7 @@ def apply() -> None:
         state_path(state_id).write_text(render_state(state_id, profile), encoding="utf-8", newline="\n")
     for tag, country in COUNTRIES.items():
         (UNIT_DIR / f"{tag}.txt").write_text(render_oob(tag, country, principal_provinces), encoding="utf-8", newline="\n")
+    write_country_sources()
     gate_country = protectorate_profile()
     (UNIT_DIR / f"{PROTECTORATE_TAG}.txt").write_text(
         render_oob(PROTECTORATE_TAG, gate_country, principal_provinces),
@@ -355,8 +496,13 @@ def apply() -> None:
         for state_id, name, _value in country.get("secondary_vps", ()):
             localisation.append(f' VICTORY_POINTS_{principal_provinces[int(state_id)]}: "{name}"')
     VP_LOCALISATION.write_text("\n".join(localisation) + "\n", encoding="utf-8", newline="\n")
+    EXZ_LOCALISATION.write_text(render_exz_localisation(), encoding="utf-8", newline="\n")
     write_flags()
-    print(f"Applied {len(profiles)} populated inner-frontier states, {len(COUNTRIES) + 1} OOBs and {(len(COUNTRIES) + 1) * 3} flags.")
+    print(
+        f"Applied {len(profiles)} populated inner-frontier states, "
+        f"{len(COUNTRIES) + 1} OOBs, {len(COUNTRY_HISTORY_PROFILES)} country histories "
+        f"and {(len(COUNTRIES) + 1) * 3} flags."
+    )
 
 
 def print_summary() -> None:
@@ -378,11 +524,32 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--check", action="store_true", help="validate current generated outputs (default)")
-    actions.add_argument("--apply", action="store_true", help="write states, OOBs, victory-point localisation and flags")
+    actions.add_argument("--apply", action="store_true", help="write all generated inner-frontier outputs")
+    actions.add_argument(
+        "--apply-country-sources",
+        action="store_true",
+        help="write only the six builder-owned country definitions and histories (never RIN)",
+    )
+    actions.add_argument(
+        "--apply-exz-localisation",
+        action="store_true",
+        help="write only the builder-owned deliberately blank EXZ localisation",
+    )
     args = parser.parse_args()
     if args.apply:
         print_summary()
         apply()
+        return 0
+    elif args.apply_country_sources:
+        write_country_sources()
+        print(
+            f"Applied {len(COUNTRY_HISTORY_PROFILES)} inner-frontier country definitions "
+            "and histories; RIN remains owned by its oath-crisis system."
+        )
+        return 0
+    elif args.apply_exz_localisation:
+        EXZ_LOCALISATION.write_text(render_exz_localisation(), encoding="utf-8", newline="\n")
+        print("Applied the deliberately blank EXZ country localisation.")
         return 0
     from tools.validators.validate_adiscord_inner_frontier_countries import main as validate_main
 

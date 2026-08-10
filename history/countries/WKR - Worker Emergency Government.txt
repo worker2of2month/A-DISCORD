@@ -1,0 +1,19 @@
+capital = 32
+
+recruit_character = WKR_Worker_Emergency_Presidium
+
+# WKR is materialised from prewar WRK with change_tag_from, so the live country
+# retains WRK's characters, technologies, units and politics. This lightweight
+# history prevents HOI4 from constructing an unrelated generic placeholder for
+# the registered destination tag before that handoff occurs.
+set_politics = {
+	ruling_party = pragmatism
+	elections_allowed = no
+}
+
+set_popularities = {
+	pragmatism = 55
+	technocracy = 25
+	chauvinism = 15
+	humanism = 5
+}

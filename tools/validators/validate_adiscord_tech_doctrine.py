@@ -130,6 +130,16 @@ REQUIRED_AIR_MAP_ICON_FRAMES = {
     "ADISCORD_cas_archetype": 2,
     "ADISCORD_rocket_strike_archetype": 6,
 }
+REQUIRED_AIR_ARCHETYPE_MANPOWER = {
+    "ADISCORD_fighter_archetype": 20,
+    "ADISCORD_cas_archetype": 20,
+    "ADISCORD_rocket_strike_archetype": 40,
+}
+REQUIRED_AIR_MODEL_MISSIONS = {
+    "ADISCORD_fighter_airframe_2163": {"air_superiority", "interception"},
+    "ADISCORD_cas_airframe_2170": {"cas", "attack_logistics"},
+    "ADISCORD_rocket_strike_platform_2183": {"strategic_bomber"},
+}
 
 VALID_DOCTRINE_MASTERY_EQUIPMENT = {
     "capital_ship",
@@ -1199,6 +1209,31 @@ def check_equipment_parser_constraints() -> list[str]:
             block = extract_block(air_text, match.start())
             if not re.search(rf"\bair_map_icon_frame\s*=\s*{frame}\b", block):
                 issues.append(f"{equipment} must use air_map_icon_frame = {frame}")
+        for archetype, manpower in REQUIRED_AIR_ARCHETYPE_MANPOWER.items():
+            match = re.search(rf"\b{re.escape(archetype)}\s*=\s*\{{", air_text)
+            if not match:
+                continue
+            block = extract_block(air_text, match.start())
+            if not re.search(rf"\bmanpower\s*=\s*{manpower}\b", block):
+                issues.append(f"{archetype} must use manpower = {manpower}")
+            if not re.search(r"\ballow_mission_type\s*=\s*training\b", block):
+                issues.append(f"{archetype} must allow the training mission")
+        for model, expected_missions in REQUIRED_AIR_MODEL_MISSIONS.items():
+            match = re.search(rf"\b{re.escape(model)}\s*=\s*\{{", air_text)
+            if not match:
+                continue
+            block = extract_block(air_text, match.start())
+            mission_match = re.search(r"\ballow_mission_type\s*=\s*\{([^{}]*)\}", block)
+            actual_missions = (
+                set(re.findall(r"\b[A-Za-z_]+\b", mission_match.group(1)))
+                if mission_match
+                else set()
+            )
+            if actual_missions != expected_missions:
+                issues.append(
+                    f"{model} missions must be {sorted(expected_missions)}, "
+                    f"found {sorted(actual_missions)}"
+                )
     return issues
 
 
@@ -1251,6 +1286,8 @@ def check_platform_equipment_architecture() -> list[str]:
 def check_resource_building_architecture(tech_blocks: dict[str, str]) -> list[str]:
     issues: list[str] = []
     buildings = collect_building_blocks()
+    icon_capacity, icon_issues = building_icon_strip_capacity()
+    issues.extend(icon_issues)
     required = {
         "ADISCORD_metallurgical_complex": (28000, "steel"),
         "ADISCORD_electrolysis_complex": (30000, "aluminium"),
@@ -1278,7 +1315,7 @@ def check_resource_building_architecture(tech_blocks: dict[str, str]) -> list[st
             if not re.search(pattern, block):
                 issues.append(f"{building} is missing {label}")
         icon_match = re.search(r"\bicon_frame\s*=\s*(\d+)", block)
-        if icon_match and int(icon_match.group(1)) > 31:
+        if icon_match and int(icon_match.group(1)) > icon_capacity:
             issues.append(f"{building} uses out-of-range building icon frame {icon_match.group(1)}")
 
     expected_unlocks = {
@@ -1317,6 +1354,56 @@ def check_resource_building_architecture(tech_blocks: dict[str, str]) -> list[st
         if actual != expected:
             issues.append(f"{tech} resource upgrades are {sorted(actual)}; expected {sorted(expected)}")
     return issues
+
+
+def building_icon_strip_capacity() -> tuple[int, list[str]]:
+    """Return the capacity proven by both GFX metadata and the DDS geometry."""
+    issues: list[str] = []
+    declarations: list[tuple[Path, int]] = []
+    for gfx_path in (ROOT / "interface").rglob("*.gfx"):
+        text = strip_comments(read_text(gfx_path))
+        for block in re.findall(r"spriteType\s*=\s*\{([^{}]*)\}", text, re.DOTALL):
+            if not re.search(r'\bname\s*=\s*"GFX_buildings_strip"', block):
+                continue
+            texture = re.search(r'\btexture[Ff]ile\s*=\s*"([^"]+)"', block)
+            frames = re.search(r"\bnoOfFrames\s*=\s*(\d+)", block)
+            if not texture or texture.group(1).replace("\\", "/") != "gfx/interface/buildings/building_icon_strip.dds":
+                issues.append(f"{gfx_path.relative_to(ROOT)} points GFX_buildings_strip at the wrong texture")
+            if not frames:
+                issues.append(f"{gfx_path.relative_to(ROOT)} gives GFX_buildings_strip no frame count")
+                continue
+            declarations.append((gfx_path, int(frames.group(1))))
+
+    if not declarations:
+        return 0, ["GFX_buildings_strip has no interface declaration"]
+    declared_counts = {frames for _, frames in declarations}
+    if len(declared_counts) != 1:
+        details = ", ".join(
+            f"{path.relative_to(ROOT)}={frames}" for path, frames in declarations
+        )
+        issues.append(f"GFX_buildings_strip declarations disagree: {details}")
+    declared_capacity = min(declared_counts)
+
+    texture_path = ROOT / "gfx" / "interface" / "buildings" / "building_icon_strip.dds"
+    if not texture_path.exists():
+        return 0, [*issues, "building_icon_strip.dds is missing"]
+    header = texture_path.read_bytes()[:20]
+    if len(header) < 20 or header[:4] != b"DDS ":
+        return 0, [*issues, "building_icon_strip.dds has an invalid DDS header"]
+    height = int.from_bytes(header[12:16], "little")
+    width = int.from_bytes(header[16:20], "little")
+    if height <= 0 or width <= 0 or width % height:
+        return 0, [
+            *issues,
+            f"building_icon_strip.dds geometry {width}x{height} is not a horizontal square-frame strip",
+        ]
+    texture_capacity = width // height
+    if declared_capacity != texture_capacity:
+        issues.append(
+            "GFX_buildings_strip declares "
+            f"{declared_capacity} frames but building_icon_strip.dds contains {texture_capacity}"
+        )
+    return min(declared_capacity, texture_capacity), issues
 
 
 def check_infantry_visual_model_chain() -> list[str]:

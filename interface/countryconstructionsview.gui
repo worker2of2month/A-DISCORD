@@ -15,19 +15,19 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			quadTextureSprite ="GFX_tiled_window_thin_border"
+			quadTextureSprite ="GFX_ADISCORD_constructions_window_bg"
 		}
 
 		iconType ={
 			name ="construction_screen_top_bg"
-			spriteType = "GFX_construction_screen_top_bg"
+			spriteType = "GFX_ADISCORD_construction_screen_top_bg"
 			position = { x= 5 y = 37 }
 			Orientation = "UPPER_LEFT"
 		}
 
 		iconType ={
 			name ="production_header_bg"
-			spriteType = "GFX_construction_header_bg"
+			spriteType = "GFX_ADISCORD_construction_header_bg"
 			position = { x= 10 y = 5 }
 			Orientation = "UPPER_LEFT"
 		}
@@ -316,12 +316,7 @@ guiTypes = {
 
 			background = {
 				name = "Background"
-				quadTextureSprite ="GFX_tiled_window2_1b_border"
-			}
-
-			background = {
-				name = "Background"
-				quadTextureSprite ="GFX_tiled_generic_overlay_bg1_small"
+				quadTextureSprite ="GFX_ADISCORD_constructions_queue_bg"
 			}
 
 			gridBoxType = {
@@ -347,19 +342,7 @@ guiTypes = {
 			background = {
 				position = { x=0 y=0 }
 				name = "Construction_Background"
-				quadTextureSprite ="GFX_tiled_plain_bg"
-			}
-			
-			background = {
-				position = { x=0 y=0 }
-				name = "Construction_Background"
-				quadTextureSprite ="GFX_tiled_window2_1b_border"
-			}
-
-			background = {
-				position = { x = 0 y = 0 }
-				name = "ADISCORD_constructions_panel_fill"
-				quadTextureSprite = "GFX_ADISCORD_constructions_panel_fill"
+				quadTextureSprite ="GFX_ADISCORD_constructions_panel_bg"
 			}
 
 			containerWindowType = {
@@ -370,7 +353,7 @@ guiTypes = {
 				background = {
 					name = "state_buildings_background"
 					position = { x = 5 y = 9 }
-					quadTextureSprite = "GFX_diplo_details_header"
+					quadTextureSprite = "GFX_ADISCORD_constructions_category_header"
 					pdx_tooltip = "STATE_BUILDINGS_BACKGROUND_TOOLTIP"
 				}
 
@@ -410,7 +393,7 @@ guiTypes = {
 				background = {
 					name = "shared_buildings_background"
 					position = { x = 5 y = 9 }
-					quadTextureSprite = "GFX_diplo_details_header"
+					quadTextureSprite = "GFX_ADISCORD_constructions_category_header"
 					pdx_tooltip = "SHARED_BUILDINGS_BACKGROUND_TOOLTIP"
 				}
 
@@ -451,7 +434,7 @@ guiTypes = {
 				background = {
 					name = "province_buildings_background"
 					position = { x = 5 y = 9 }
-					quadTextureSprite = "GFX_diplo_details_header"
+					quadTextureSprite = "GFX_ADISCORD_constructions_category_header"
 					pdx_tooltip = "PROVINCE_BUILDINGS_BACKGROUND_TOOLTIP"
 				}
 
@@ -491,7 +474,7 @@ guiTypes = {
 				background = {
 					name = "facility_buildings_background"
 					position = { x = 5 y = 9 }
-					quadTextureSprite = "GFX_diplo_details_header"
+					quadTextureSprite = "GFX_ADISCORD_constructions_category_header"
 					pdx_tooltip = "FACILITY_BUILDINGS_BACKGROUND_TOOLTIP"
 				}
 
@@ -622,7 +605,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			quadTextureSprite ="GFX_construction_entry_bg"
+			quadTextureSprite ="GFX_ADISCORD_construction_entry_bg"
 			pdx_tooltip = "PRODUCTION_DRAG_N_DROP"
 		}
 
@@ -768,7 +751,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			quadTextureSprite ="GFX_construction_entry_bg"
+			quadTextureSprite ="GFX_ADISCORD_construction_entry_bg"
 			pdx_tooltip = "PRODUCTION_DRAG_N_DROP"
 		}
 
@@ -883,7 +866,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			quadTextureSprite ="GFX_construction_special_entry_bg"
+			quadTextureSprite ="GFX_ADISCORD_construction_special_entry_bg"
 		}
 
 		instantTextboxType = {
@@ -931,7 +914,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			quadTextureSprite ="GFX_construction_special_entry_bg"
+			quadTextureSprite ="GFX_ADISCORD_construction_special_entry_bg"
 		}
 
 		instantTextboxType = {
@@ -979,7 +962,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			quadTextureSprite ="GFX_construction_special_entry_bg"
+			quadTextureSprite ="GFX_ADISCORD_construction_special_entry_bg"
 		}
 
 		instantTextboxType = {
@@ -1027,7 +1010,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			quadTextureSprite ="GFX_construction_special_entry_bg"
+			quadTextureSprite ="GFX_ADISCORD_construction_special_entry_bg"
 		}
 
 		instantTextboxType = {

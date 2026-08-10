@@ -5,6 +5,47 @@ spriteTypes = {
 		legacy_lazy_load = no
 	}
 	spriteType = {
+		name = "GFX_ADISCORD_economy_topbar_button"
+		texturefile = "gfx/interface/ADISCORD_economy_gui/economy_topbar_button.dds"
+		noOfFrames = 2
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_economy_dashboard_bg"
+		texturefile = "gfx/interface/ADISCORD_economy_gui/economy_dashboard_bg.dds"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_economy_kpi_treasury_bg"
+		texturefile = "gfx/interface/ADISCORD_economy_gui/economy_kpi_treasury_bg.dds"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_economy_kpi_income_bg"
+		texturefile = "gfx/interface/ADISCORD_economy_gui/economy_kpi_income_bg.dds"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_economy_kpi_expenses_bg"
+		texturefile = "gfx/interface/ADISCORD_economy_gui/economy_kpi_expenses_bg.dds"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_economy_kpi_balance_bg"
+		texturefile = "gfx/interface/ADISCORD_economy_gui/economy_kpi_balance_bg.dds"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_economy_status_bg"
+		texturefile = "gfx/interface/ADISCORD_economy_gui/economy_status_bg.dds"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_economy_command_bg"
+		texturefile = "gfx/interface/ADISCORD_economy_gui/economy_command_bg.dds"
+		legacy_lazy_load = no
+	}
+	spriteType = {
 		name = "GFX_ADISCORD_economy_header_bg"
 		texturefile = "gfx/interface/ADISCORD_economy_gui/economy_header_bg.dds"
 	}

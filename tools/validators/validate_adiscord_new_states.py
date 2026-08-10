@@ -12,9 +12,12 @@ _REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 if str(_REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPOSITORY_ROOT))
 
+from tools.lib.adiscord_core_state_balance_manifest import NON_URBAN_SETTLEMENT_VPS
 from tools.builders.build_adiscord_new_states import (
     AFRELA_LEGACY_VICTORY_POINTS,
     CAPITALS,
+    EXACT_LEGACY_FACTORY_STATE_IDS,
+    LEGACY_STATE_PROFILES,
     LEGACY_OWNER_GAPS,
     LEGACY_OWNER_OVERRIDES,
     MINOR_VPS,
@@ -29,7 +32,6 @@ from tools.builders.build_adiscord_new_states import (
     render_state,
     state_path,
 )
-from tools.lib.adiscord_core_state_balance_manifest import NON_URBAN_SETTLEMENT_VPS
 from tools.builders.build_adiscord_ainholm_mandate import STATE_PROFILES as AINHOLM_STATE_PROFILES
 from tools.builders.build_adiscord_northern_countries import COUNTRIES as NORTHERN_COUNTRIES, build_profiles as build_northern_profiles
 from tools.builders.build_adiscord_inner_frontier_countries import (
@@ -91,11 +93,11 @@ EBA_EXPECTED_VP_NAMES = {
 }
 
 EBA_EXPECTED_STATE_PROFILES = {
-    197: {"population": 1_050_000, "category": "large_town", "infrastructure": 4, "civilian": 3, "military": 1, "air_base": 1, "supplies": 4.5},
-    311: {"population": 750_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 0, "air_base": 0, "supplies": 2.5},
-    312: {"population": 650_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "air_base": 0, "supplies": 3.0},
-    313: {"population": 550_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 0, "air_base": 0, "supplies": 3.0},
-    314: {"population": 550_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 0, "air_base": 0, "supplies": 3.0},
+    197: {"population": 1_400_000, "category": "large_town", "infrastructure": 4, "civilian": 3, "military": 1, "air_base": 1, "supplies": 4.5},
+    311: {"population": 950_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 0, "air_base": 0, "supplies": 2.5},
+    312: {"population": 850_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "air_base": 0, "supplies": 3.0},
+    313: {"population": 750_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 0, "air_base": 0, "supplies": 3.0},
+    314: {"population": 750_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 0, "air_base": 0, "supplies": 3.0},
 }
 
 
@@ -130,6 +132,29 @@ def block(source: str, name: str) -> str:
     return ""
 
 
+def event_block(source: str, event_id: str) -> str:
+    match = re.search(
+        rf"(?m)^\s*country_event\s*=\s*\{{\s*$"
+        rf"(?:(?!^\s*country_event\s*=).)*?^\s*id\s*=\s*{re.escape(event_id)}\s*$",
+        source,
+        re.DOTALL,
+    )
+    if not match:
+        ERRORS.append(f"missing country event {event_id}")
+        return ""
+    start = source.find("{", match.start())
+    depth = 0
+    for index in range(start, len(source)):
+        if source[index] == "{":
+            depth += 1
+        elif source[index] == "}":
+            depth -= 1
+            if depth == 0:
+                return source[start + 1:index]
+    ERRORS.append(f"unterminated country event {event_id}")
+    return ""
+
+
 def building_level(source: str, name: str) -> int:
     match = re.search(rf"(?m)^\s*{re.escape(name)}\s*=\s*(\d+)", source)
     return int(match.group(1)) if match else 0
@@ -151,8 +176,8 @@ def state_profile(source: str) -> dict[str, int | float | str]:
 
 def normalized_builder_profile(state_id: int) -> dict[str, int | float | str]:
     profile = (
-        VORKERLAND_LEGACY_PROFILES[state_id]
-        if state_id in VORKERLAND_LEGACY_PROFILES
+        LEGACY_STATE_PROFILES[state_id]
+        if state_id in LEGACY_STATE_PROFILES
         else STATE_PROFILES[state_id]
     )
     return {
@@ -210,6 +235,20 @@ def validate_states() -> None:
         check(bool(re.search(rf"(?m)^\s*owner\s*=\s*{owner}\s*$", source)), f"legacy state {state_id}: expected owner {owner}")
         check(bool(re.search(rf"(?m)^\s*add_core_of\s*=\s*{owner}\s*$", source)), f"legacy state {state_id}: missing {owner} core")
 
+    for state_id in sorted(EXACT_LEGACY_FACTORY_STATE_IDS):
+        source = text(state_path(state_id))
+        actual = state_profile(source)
+        expected = normalized_builder_profile(state_id)
+        check(
+            actual["category"] == expected["category"],
+            f"legacy state {state_id}: expected exact category {expected['category']}, found {actual['category']}",
+        )
+        for key in ("civilian", "military"):
+            check(
+                actual[key] == expected[key],
+                f"legacy state {state_id}: expected exact {key} level {expected[key]}, found {actual[key]}",
+            )
+
     for state_id, expected_vps in EBA_EXPECTED_VPS.items():
         source = text(state_path(state_id))
         actual_vps = {
@@ -259,8 +298,8 @@ def validate_states() -> None:
             )
 
     check(
-        sum(int(profile["population"]) for profile in actual_profiles.values()) == 3_550_000,
-        "EBA: expected total population 3550000",
+        sum(int(profile["population"]) for profile in actual_profiles.values()) == 4_700_000,
+        "EBA: expected total population 4700000",
     )
     check(
         sum(int(profile["civilian"]) for profile in actual_profiles.values()) == 7,
@@ -503,6 +542,8 @@ def validate_news_settings() -> None:
 def validate_vorkerland_expansion() -> None:
     effects = text(ROOT / "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
     maps = text(ROOT / "common/scripted_effects/ADISCORD_vorkerland_collapse_map_effects.txt")
+    phase_effects = text(ROOT / "common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
+    phase_events = text(ROOT / "events/ADISCORD_vorkerland_phase_events.txt")
     expansion_assignments = {
         "tva": ("TVA", {324}),
         "riv": ("RIV", {308}),
@@ -521,22 +562,82 @@ def validate_vorkerland_expansion() -> None:
                 f"{tag} setup: missing core for state {state_id}",
             )
 
-    # A central victory now unlocks the next, border-by-border phase instead of
-    # swallowing every successor state in one scripted effect. Keep this gate
-    # here so the state generator cannot accidentally reintroduce the old map
-    # paint while all generated expansion states remain assigned at setup.
-    for map_name, winner_tag in (
-        ("ADISCORD_vorkerland_apply_worker_map", "WRK"),
-        ("ADISCORD_vorkerland_apply_vlad_map", "VAD"),
-        ("ADISCORD_vorkerland_apply_dorian_map", "TVA"),
-    ):
+    # A central victory records the surviving wartime claimant, then the guarded
+    # phase controller forms final WRK. Keep direct map-paint forbidden here so
+    # generated expansion-state assignments cannot be bypassed by an outcome.
+    winner_paths = (
+        (
+            "ADISCORD_vorkerland_apply_worker_map",
+            "WKR",
+            "ADISCORD_vorkerland_worker_won",
+            "ADISCORD_vorkerland_form_wrk_from_wkr",
+        ),
+        (
+            "ADISCORD_vorkerland_apply_vlad_map",
+            "VAD",
+            "ADISCORD_vorkerland_vlad_won",
+            "ADISCORD_vorkerland_form_wrk_from_vad",
+        ),
+        (
+            "ADISCORD_vorkerland_apply_dorian_map",
+            "TVA",
+            "ADISCORD_vorkerland_dorian_won",
+            "ADISCORD_vorkerland_form_wrk_from_tva",
+        ),
+    )
+    for map_name, winner_tag, victory_flag, formation_effect in winner_paths:
         winner = block(maps, map_name)
+        for required in (
+            "set_global_flag = ADISCORD_vorkerland_central_war_finished",
+            f"set_global_flag = {victory_flag}",
+            "ADISCORD_vorkerland_begin_reunification = yes",
+        ):
+            check(required in winner, f"{map_name}: missing phase handoff token {required}")
         check(
-            bool(re.search(rf"\b{winner_tag}\s*=\s*\{{.*?set_country_flag\s*=\s*ADISCORD_vorkerland_central_unifier", winner, re.DOTALL)),
-            f"{map_name}: missing central-unifier marker for {winner_tag}",
+            bool(
+                re.search(
+                    rf"\b{winner_tag}\s*=\s*\{{.*?"
+                    r"set_country_flag\s*=\s*ADISCORD_vorkerland_central_unifier",
+                    winner,
+                    re.DOTALL,
+                )
+            ),
+            f"{map_name}: missing central-unifier marker for wartime {winner_tag}",
         )
+        formation = block(phase_effects, formation_effect)
+        for required in (
+            f"change_tag_from = {winner_tag}",
+            "ADISCORD_vorkerland_finalize_wrk_formation = yes",
+        ):
+            check(required in formation, f"{formation_effect}: missing final-WRK token {required}")
         for forbidden in ("transfer_state", "annex_country", "puppet =", "set_autonomy"):
             check(forbidden not in winner, f"{map_name}: central victory must not use {forbidden}")
+
+    begin_reunification = block(phase_effects, "ADISCORD_vorkerland_begin_reunification")
+    for required in (
+        "has_global_flag = ADISCORD_vorkerland_phase_central_showdown",
+        "has_global_flag = ADISCORD_vorkerland_central_showdown_started",
+        "ADISCORD_vorkerland_central_showdown_edges_verified = yes",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_launch_failed }",
+        "ADISCORD_vorkerland_has_single_surviving_claimant = yes",
+        "ADISCORD_vorkerland_set_phase_reunification = yes",
+        "country_event = { id = ADISCORD_vorkerland_phase.6 days = 1 }",
+    ):
+        check(required in begin_reunification, f"reunification phase handoff is missing {required}")
+
+    phase_six = event_block(phase_events, "ADISCORD_vorkerland_phase.6")
+    for _map_name, winner_tag, _victory_flag, formation_effect in winner_paths:
+        check(
+            bool(
+                re.search(
+                    rf"\b{winner_tag}\s*=\s*\{{.*?{re.escape(formation_effect)}\s*=\s*yes"
+                    r".*?country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_phase\.7\s+days\s*=\s*1\s*\}",
+                    phase_six,
+                    re.DOTALL,
+                )
+            ),
+            f"phase.6 does not form and verify final WRK from surviving {winner_tag}",
+        )
 
 
 def main() -> int:

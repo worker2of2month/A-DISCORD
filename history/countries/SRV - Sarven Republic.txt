@@ -1,0 +1,18 @@
+capital = 364
+oob = "SRV"
+
+recruit_character = SRV_Eira_Sarven
+
+set_politics = {
+	ruling_party = technocracy
+	elections_allowed = no
+}
+set_popularities = {
+	technocracy = 55
+	utilitarism = 20
+	pragmatism = 15
+	etatism = 10
+}
+set_stability = 0.57
+set_war_support = 0.32
+set_research_slots = 2

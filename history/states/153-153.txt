@@ -2,14 +2,18 @@ state={
 	id=153
 	name="STATE_153"
 	provinces={
-		3103 3217 3574 4438 5534 8431 9907 12413
+		3103 3217 3574 3597 4438 5534 8431 9907 12413
 	}
-	manpower=45000
+	manpower = 120000
 	state_category = rural
-	buildings_max_level_factor=1
-	local_supplies=0.25
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
 	history = {
 		owner = EXZ
 		add_core_of = EXZ
+		buildings = {
+			industrial_complex = 1
+			infrastructure = 2
+		}
 	}
 }

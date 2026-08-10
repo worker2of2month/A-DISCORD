@@ -1,0 +1,83 @@
+# Only a real central Vorkerland war edge can open the Palatinate crisis.
+# The generic on_war hook may run in both belligerent scopes; the global
+# scheduled flag in the companion on_action keeps the producer one-shot.
+ADISCORD_rin_is_vorkerland_war_actor = {
+	OR = {
+		tag = WKR
+		tag = VAD
+		tag = TVA
+	}
+}
+
+ADISCORD_rin_oath_crisis_can_schedule = {
+	has_global_flag = ADISCORD_vorkerland_collapse_started
+	NOT = { has_global_flag = ADISCORD_rin_oath_crisis_scheduled }
+	NOT = { has_global_flag = ADISCORD_rin_oath_crisis_opened }
+	NOT = { has_global_flag = ADISCORD_rin_oath_crisis_active }
+	NOT = { has_global_flag = ADISCORD_rin_oath_crisis_resolved }
+	RIN = { exists = yes }
+	MON = { exists = yes }
+}
+
+ADISCORD_rin_oath_crisis_legacy_needs_schedule = {
+	tag = RIN
+	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+	NOT = { has_global_flag = ADISCORD_rin_oath_crisis_scheduled }
+	NOT = { has_global_flag = ADISCORD_rin_oath_crisis_opened }
+	NOT = { has_global_flag = ADISCORD_rin_oath_crisis_active }
+	NOT = { has_global_flag = ADISCORD_rin_oath_crisis_resolved }
+	MON = { exists = yes }
+}
+
+ADISCORD_rin_is_oath_crisis_side = {
+	original_tag = RIN
+	OR = {
+		has_country_flag = ADISCORD_rin_southern_charter_side
+		has_country_flag = ADISCORD_rin_northern_crown_side
+	}
+}
+
+# Runtime assertion for the authored 2/4 armistice. Dynamic civil-war tags are
+# identified by their side flags and cached event targets, never by original_tag.
+ADISCORD_rin_partition_armistice_is_valid = {
+	has_country_flag = ADISCORD_rin_southern_charter_side
+	NOT = { has_country_flag = ADISCORD_rin_northern_crown_side }
+	has_country_flag = ADISCORD_rin_charter_compact_survived
+	NOT = { has_country_flag = ADISCORD_rin_crown_palatin_survived }
+	has_idea = RIN_charter_compact
+	NOT = { has_idea = RIN_two_oaths }
+	NOT = { has_idea = RIN_southern_charter_mobilization }
+	NOT = { has_idea = RIN_northern_crown_columns }
+	NOT = { has_idea = RIN_crown_palatin }
+	owns_state = 146
+	owns_state = 148
+	owns_state = 149
+	owns_state = 150
+	NOT = { owns_state = 134 }
+	NOT = { owns_state = 147 }
+	controls_state = 146
+	controls_state = 148
+	controls_state = 149
+	controls_state = 150
+	event_target:ADISCORD_rin_northern_court = {
+		exists = yes
+		has_country_flag = ADISCORD_rin_northern_crown_side
+		NOT = { has_country_flag = ADISCORD_rin_southern_charter_side }
+		has_country_flag = ADISCORD_rin_crown_palatin_survived
+		NOT = { has_country_flag = ADISCORD_rin_charter_compact_survived }
+		has_idea = RIN_crown_palatin
+		NOT = { has_idea = RIN_two_oaths }
+		NOT = { has_idea = RIN_southern_charter_mobilization }
+		NOT = { has_idea = RIN_northern_crown_columns }
+		NOT = { has_idea = RIN_charter_compact }
+		owns_state = 134
+		owns_state = 147
+		NOT = { owns_state = 146 }
+		NOT = { owns_state = 148 }
+		NOT = { owns_state = 149 }
+		NOT = { owns_state = 150 }
+		controls_state = 134
+		controls_state = 147
+		is_subject_of = MON
+	}
+}

@@ -22,20 +22,20 @@ TARGET_STATES = {
     44: ("history/states/44-Iron-Shield.txt", "STP", 500_000, "town"),
     45: ("history/states/45-Livonn.txt", "STP", 900_000, "town"),
     46: ("history/states/46-Hosheit.txt", "STP", 300_000, "town"),
-    48: ("history/states/48-Depoitodron.txt", "VAL", 8_000_000, "large_city"),
+    48: ("history/states/48-Depoitodron.txt", "VAL", 8_000_000, "megalopolis"),
     53: ("history/states/53-Old-Fada.txt", "STP", 180_000, "pastoral"),
     54: ("history/states/54-Spastlant.txt", "VAL", 1_300_000, "city"),
     55: ("history/states/55-Erstantpeo.txt", "VAL", 90_000, "pastoral"),
     56: ("history/states/56-Zeigen.txt", "VAL", 320_000, "town"),
     57: ("history/states/57-Zoilong.txt", "VAL", 1_200_000, "town"),
     88: ("history/states/88-Shahterskiy-Poselok.txt", "STP", 150_000, "town"),
-    168: ("history/states/168-168.txt", "VAL", 180_000, "town"),
+    168: ("history/states/168-168.txt", "VAL", 160_000, "town"),
 }
 
 EXPECTED_POPULATION_TOTALS = {
     "NOD": 11_010_000,
     "STP": 16_380_000,
-    "VAL": 11_290_000,
+    "VAL": 11_270_000,
 }
 
 SETTLEMENT_VPS = {
@@ -120,13 +120,13 @@ EXPECTED_DIRECT_BUILDINGS = {
     56: {"infrastructure": 2, "industrial_complex": 1, "arms_factory": 1},
     57: {"infrastructure": 3, "industrial_complex": 3, "arms_factory": 1},
     88: {"infrastructure": 4, "industrial_complex": 3},
-    168: {},
+    168: {"industrial_complex": 1, "infrastructure": 2},
 }
 
 EXPECTED_INDUSTRY_TOTALS = {
     "NOD": {"industrial_complex": 8, "arms_factory": 6, "dockyard": 1},
     "STP": {"industrial_complex": 20, "arms_factory": 7, "dockyard": 3},
-    "VAL": {"industrial_complex": 10, "arms_factory": 12, "dockyard": 0},
+    "VAL": {"industrial_complex": 11, "arms_factory": 12, "dockyard": 0},
 }
 
 EXPECTED_RESOURCES = {

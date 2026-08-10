@@ -20,6 +20,21 @@ if str(_REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPOSITORY_ROOT))
 
 from tools.validators.validate_adiscord_economy_ai import validate as validate_adiscord_economy_ai
+from tools.validators.validate_adiscord_event_ids import validate as validate_adiscord_event_ids
+from tools.validators.validate_adiscord_strategic_resources_ui import validate as validate_adiscord_strategic_resources_ui
+from tools.validators.validate_adiscord_trade_regions import validate as validate_adiscord_trade_regions
+from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
+    collect_issues as validate_adiscord_vorkerland_civil_war_focus,
+)
+from tools.validators.validate_adiscord_vorkerland_diplomacy import (
+    collect_issues as validate_adiscord_vorkerland_diplomacy,
+)
+from tools.validators.validate_adiscord_vorkerland_focus_decisions import (
+    collect_issues as validate_adiscord_vorkerland_focus_decisions,
+)
+from tools.validators.validate_adiscord_vorkerland_recovery import (
+    collect_issues as validate_adiscord_vorkerland_recovery,
+)
 from tools.validators.validate_adiscord_division_templates import validate as validate_adiscord_division_templates
 from tools.builders.build_adiscord_map_buildings import validate as validate_adiscord_map_buildings
 from tools.builders.build_adiscord_terrain_snow import validate as validate_adiscord_terrain_snow
@@ -286,7 +301,10 @@ def check_countries(tags, dynamic_tags, ideology_groups, ideology_types, limit):
             if m:
                 tag_to_history[m.group(1)] = path
     for tag in sorted(tags):
-        if tag not in dynamic_tags and tag not in tag_to_history:
+        if (
+            tag not in dynamic_tags
+            and tag not in tag_to_history
+        ):
             issues.append(f"missing history/countries for tag {tag}")
     for tag, path in sorted(tag_to_history.items()):
         if tag not in tags:
@@ -847,6 +865,13 @@ def main():
     )
     print_section("Countries and ideologies", country_issues, country_total)
 
+    event_id_issues = validate_adiscord_event_ids()
+    print_section(
+        "Event ID registry",
+        event_id_issues[: args.limit],
+        len(event_id_issues),
+    )
+
     state_issues, state_total = check_states(tags, provinces, args.limit)
     print_section("Map and states", state_issues, state_total)
 
@@ -885,6 +910,48 @@ def main():
 
     economy_ai_issues = validate_adiscord_economy_ai()
     print_section("Economy and AI semantics", economy_ai_issues, len(economy_ai_issues))
+
+    strategic_resource_issues = validate_adiscord_strategic_resources_ui()
+    print_section(
+        "Strategic resources and economy UI",
+        strategic_resource_issues[: args.limit],
+        len(strategic_resource_issues),
+    )
+
+    trade_region_issues = validate_adiscord_trade_regions()
+    print_section(
+        "Lore trade-region geography",
+        trade_region_issues[: args.limit],
+        len(trade_region_issues),
+    )
+
+    vorkerland_recovery_issues = validate_adiscord_vorkerland_recovery()
+    print_section(
+        "Vorkerland three-claimant recovery",
+        vorkerland_recovery_issues[: args.limit],
+        len(vorkerland_recovery_issues),
+    )
+
+    vorkerland_focus_issues = validate_adiscord_vorkerland_civil_war_focus()
+    print_section(
+        "Vorkerland civil-war focus skeleton",
+        vorkerland_focus_issues[: args.limit],
+        len(vorkerland_focus_issues),
+    )
+
+    vorkerland_focus_decision_issues = validate_adiscord_vorkerland_focus_decisions()
+    print_section(
+        "Vorkerland focus-unlocked operations",
+        vorkerland_focus_decision_issues[: args.limit],
+        len(vorkerland_focus_decision_issues),
+    )
+
+    vorkerland_diplomacy_issues = validate_adiscord_vorkerland_diplomacy()
+    print_section(
+        "Vorkerland regional diplomacy",
+        vorkerland_diplomacy_issues[: args.limit],
+        len(vorkerland_diplomacy_issues),
+    )
 
     division_template_issues = validate_adiscord_division_templates()
     print_section(

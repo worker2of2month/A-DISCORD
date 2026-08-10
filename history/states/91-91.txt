@@ -4,7 +4,7 @@ state={
 	provinces={
 		1175 2149 3743 4007 4210 4952 5075 5500 10400
 	}
-	manpower = 340000
+	manpower = 450000
 	state_category = rural
 	buildings_max_level_factor = 1.000
 	local_supplies = 2.5
@@ -15,5 +15,6 @@ state={
 			industrial_complex = 1
 			infrastructure = 2
 		}
+		set_demilitarized_zone = yes
 	}
 }

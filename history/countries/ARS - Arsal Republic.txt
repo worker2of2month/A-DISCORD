@@ -1,0 +1,19 @@
+capital = 441
+oob = "ARS"
+
+recruit_character = ARS_Lina_Arsal
+
+set_politics = {
+	ruling_party = utilitarism
+	last_election = "2159.6.20"
+	elections_allowed = yes
+}
+set_popularities = {
+	utilitarism = 55
+	pragmatism = 25
+	humanism = 15
+	etatism = 5
+}
+set_stability = 0.58
+set_war_support = 0.26
+set_research_slots = 2

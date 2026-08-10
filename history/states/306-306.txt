@@ -1,8 +1,11 @@
 state = {
 	id = 306
 	name = "STATE_306"
-	manpower = 1180000
+	manpower = 1400000
 	state_category = large_town
+	resources = {
+		steel = 6
+	}
 	history = {
 		owner = WRK
 		add_core_of = WRK

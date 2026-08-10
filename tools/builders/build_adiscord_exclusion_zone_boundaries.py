@@ -3,9 +3,10 @@
 
 The source snapshot preserves the pre-realignment province allocation.  The
 planner removes exposed ordinary terrain from EXZ, while keeping contaminated
-land, mountain massifs, established cities, and compact enclosed foothills.
-No artificial access corridor, province colour, state id, or western-continent
-state is changed.
+land, mountain massifs, established cities, and compact enclosed foothills.  It
+also pulls every contaminated fringe province out of WCG/ORV so no starting
+state outside EXZ contains the custom terrain.  No artificial access corridor,
+province colour, state id, or western-continent state is changed.
 """
 
 from __future__ import annotations
@@ -42,14 +43,31 @@ CITY_EXCEPTION_STATES = {
 # the compact geographic exception inside the wasteland.
 GEOGRAPHIC_EXCEPTION_STATES = {51, 206, 329}
 
-# Three former EXZ state ids survive as ordinary neighbouring territory.  The
-# empty-state ids are intentionally reused so strategic-region references and
-# saved state indexes remain stable.
+# State 461 is intentionally admitted to EXZ as a complete mountain/forest
+# carrier state instead of being split a second time along terrain borders.
+FOREST_EXCEPTION_STATES = {461}
+
+# These generated fringe states used to retain contaminated provinces after
+# the core dirty-zone realignment. Their contaminated pieces are folded into
+# adjacent EXZ states before the explicit owner policy below is applied.
+CONTAMINATED_FRINGE_STATES = {160, 454, 455, 460, 461, 472}
+
+# Removing the contaminated belt exposes three small ordinary components.  The
+# destinations share a land border with each component and keep both source and
+# destination states connected.
+FRINGE_COMPONENT_MOVES = {
+    (455, 11249): 461,
+    (461, 1472): 460,
+}
+
+# Explicit owners for surviving boundary carriers and fringe states. Reusing
+# the state ids keeps strategic-region references and saved state indexes stable.
 NEW_OWNERS = {
     160: "WCG",
     218: "BTL",
     223: "WCG",
     156: "WCG",
+    461: "EXZ",
 }
 SUCCESSOR_CORES = {
     156: "KRM",
@@ -143,7 +161,8 @@ def seeded_partition(
 def plan_boundaries() -> tuple[dict[int, set[int]], set[int], dict[int, str]]:
     source = load_source()
     owners = load_current_owners()
-    original_exz = {state_id for state_id in source if state_id not in {156, 179}}
+    external_sources = {156, 179} | CONTAMINATED_FRINGE_STATES
+    original_exz = {state_id for state_id in source if state_id not in external_sources}
     province_to_state = load_current_province_states()
     # Internal provenance must always come from the immutable source snapshot;
     # current state borders are the output and must not influence a rerun.
@@ -156,7 +175,10 @@ def plan_boundaries() -> tuple[dict[int, set[int]], set[int], dict[int, str]]:
         province_types, color_to_province, include_special_adjacencies=False
     )
 
-    planned = {state_id: set() for state_id in source}
+    planned = {
+        state_id: set(provinces) if state_id in external_sources else set()
+        for state_id, provinces in source.items()
+    }
     protected: set[int] = set()
     for state_id in original_exz:
         for province_id in source[state_id]:
@@ -197,7 +219,9 @@ def plan_boundaries() -> tuple[dict[int, set[int]], set[int], dict[int, str]]:
             planned[223].update(partitions[223])
         elif 330 in source_states:
             planned[179].update(component)
-        elif 160 in source_states:
+        elif source_states == {154}:
+            # Plain province 5173 belongs to WCG's connected state 160 after
+            # the dirty-zone edge is stripped back to contaminated terrain.
             planned[160].update(component)
         elif 206 in source_states:
             planned[206].update(component)
@@ -209,10 +233,58 @@ def plan_boundaries() -> tuple[dict[int, set[int]], set[int], dict[int, str]]:
         else:
             raise RuntimeError(f"unclassified ordinary-terrain component: {sorted(source_states)}")
 
-    # State 156 and the Relay Enclave predate the realignment and keep their
-    # original provinces in addition to their assigned fringe land.
-    planned[156].update(source[156])
-    planned[179].update(source[179])
+    # Pull every contaminated province from the populated WCG/ORV fringe into
+    # the adjacent dirty-zone state.  Multi-state components are partitioned
+    # from their actual EXZ border, so each enlarged EXZ state stays connected.
+    fringe_contaminated = {
+        province_id
+        for state_id in CONTAMINATED_FRINGE_STATES
+        for province_id in source[state_id]
+        if details[province_id]["terrain"] == "contaminated"
+    }
+    for state_id in CONTAMINATED_FRINGE_STATES:
+        planned[state_id].difference_update(fringe_contaminated)
+    for component in connected_components(fringe_contaminated, adjacency):
+        targets = sorted({
+            province_to_state[neighbour]
+            for province_id in component
+            for neighbour in adjacency[province_id]
+            if province_to_state.get(neighbour) in original_exz
+            and province_to_state[neighbour] not in NEW_OWNERS
+        })
+        if not targets:
+            raise RuntimeError(
+                f"contaminated fringe component {min(component)} has no EXZ border"
+            )
+        partitions = seeded_partition(
+            component,
+            tuple(
+                (target, lambda state, _owner, target=target: state == target)
+                for target in targets
+            ),
+            province_to_state,
+            owners,
+            adjacency,
+        )
+        for target, provinces in partitions.items():
+            planned[target].update(provinces)
+
+    # Restore connectivity of the ordinary fringe after the contaminated belt
+    # has been removed.  Component keys are stable province ids from the source
+    # snapshot, not results derived from the current generated output.
+    for (source_state, component_key), target_state in FRINGE_COMPONENT_MOVES.items():
+        components = connected_components(planned[source_state], adjacency)
+        component = next(
+            (candidate for candidate in components if component_key in candidate),
+            None,
+        )
+        if component is None:
+            raise RuntimeError(
+                f"fringe component {component_key} is missing from state {source_state}"
+            )
+        planned[source_state].difference_update(component)
+        planned[target_state].update(component)
+
     final_owners = {state_id: "EXZ" for state_id in original_exz}
     final_owners.update(NEW_OWNERS)
 
@@ -241,6 +313,8 @@ def plan_boundaries() -> tuple[dict[int, set[int]], set[int], dict[int, str]]:
                 allowed.add("urban")
             if state_id in GEOGRAPHIC_EXCEPTION_STATES:
                 allowed.update({"hills", "urban"})
+            if state_id in FOREST_EXCEPTION_STATES:
+                allowed.add("forest")
             if not terrains <= allowed:
                 raise RuntimeError(f"EXZ state {state_id} retains forbidden terrain: {sorted(terrains-allowed)}")
     return planned, original_exz, final_owners
@@ -303,6 +377,7 @@ def apply() -> None:
             newline="\n",
         )
     print(f"Realigned {len(planned)} states around the Exclusion Zone.")
+    print("Run tools/build_adiscord_northern_countries.py --apply next to refresh dependent northern data.")
 
 
 def print_summary() -> None:

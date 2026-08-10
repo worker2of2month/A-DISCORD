@@ -1,0 +1,19 @@
+capital = 460
+oob = "VLD"
+
+recruit_character = VLD_Irma_Vald
+
+set_politics = {
+	ruling_party = pragmatism
+	last_election = "2158.9.14"
+	elections_allowed = yes
+}
+set_popularities = {
+	pragmatism = 50
+	etatism = 20
+	humanism = 20
+	utilitarism = 10
+}
+set_stability = 0.56
+set_war_support = 0.34
+set_research_slots = 2

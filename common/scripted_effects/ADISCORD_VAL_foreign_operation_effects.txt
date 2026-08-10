@@ -38,7 +38,6 @@ VAL_resolve_cin_operation = {
 	else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 5 } NOT = { has_country_flag = VAL_CIN_success_terms } } set_country_flag = VAL_CIN_success_terms add_to_variable = { var = VAL_CIN_influence value = 1 } }
 	clamp_variable = { var = VAL_CIN_influence min = 0 max = 3 }
 	set_country_flag = { flag = VAL_CIN_target_cooldown days = 70 value = 1 }
-	VAL_recalculate_stp_campaign_readiness = yes
 	VAL_clear_foreign_operation = yes
 }
 
@@ -61,7 +60,6 @@ VAL_resolve_osf_operation = {
 	else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 5 } NOT = { has_country_flag = VAL_OSF_success_terms } } set_country_flag = VAL_OSF_success_terms add_to_variable = { var = VAL_OSF_influence value = 1 } }
 	clamp_variable = { var = VAL_OSF_influence min = 0 max = 3 }
 	set_country_flag = { flag = VAL_OSF_target_cooldown days = 70 value = 1 }
-	VAL_recalculate_stp_campaign_readiness = yes
 	VAL_clear_foreign_operation = yes
 }
 
@@ -84,7 +82,6 @@ VAL_resolve_aph_operation = {
 	else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 5 } NOT = { has_country_flag = VAL_APH_success_terms } } set_country_flag = VAL_APH_success_terms add_to_variable = { var = VAL_APH_influence value = 1 } }
 	clamp_variable = { var = VAL_APH_influence min = 0 max = 3 }
 	set_country_flag = { flag = VAL_APH_target_cooldown days = 70 value = 1 }
-	VAL_recalculate_stp_campaign_readiness = yes
 	VAL_clear_foreign_operation = yes
 }
 

@@ -73,7 +73,7 @@ class VorkerlandForceDesignTests(unittest.TestCase):
         templates = read("common/ai_templates/ADISCORD_land_templates.txt")
         block = named_block(templates, "ADISCORD_vorkerland_mobile_reserve")
         for token in (
-            "tag = WRK",
+            "tag = WKR",
             "tag = VAD",
             "tag = TVA",
             "has_global_flag = ADISCORD_vorkerland_collapse_wars_started",
@@ -137,7 +137,7 @@ class VorkerlandForceDesignTests(unittest.TestCase):
     def test_collapse_deliveries_can_equip_the_armored_groups(self) -> None:
         effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
         setup = named_block(effects, "ADISCORD_vorkerland_prepare_initial_combatants")
-        for tag in ("WRK", "VAD"):
+        for tag in ("WKR", "VAD"):
             claimant = named_block(setup, tag)
             for delivery in (
                 f"type = ADISCORD_combat_platform_2170 amount = 180 producer = {tag}",
@@ -168,7 +168,7 @@ class VorkerlandForceDesignTests(unittest.TestCase):
         operations = named_block(
             strategies, "ADISCORD_vorkerland_active_air_operations"
         )
-        for tag in ("WRK", "VAD", "TVA"):
+        for tag in ("WKR", "VAD", "TVA"):
             self.assertIn(f"tag = {tag}", armor)
             self.assertIn(f"tag = {tag}", air)
             self.assertIn(f"tag = {tag}", operations)
@@ -178,6 +178,7 @@ class VorkerlandForceDesignTests(unittest.TestCase):
             armor,
         )
         self.assertIn("equipment_production_min_factories id = fighter value = 1", air)
+        self.assertIn("equipment_production_min_factories id = cas value = 1", air)
         self.assertIn(
             "equipment_variant_production_factor id = ADISCORD_fighter_archetype",
             air,
@@ -205,35 +206,87 @@ class VorkerlandForceDesignTests(unittest.TestCase):
             self.assertRegex(block, rf"(?m)^\s*type\s*=\s*{role}\s*$")
             self.assertNotRegex(block, rf"type\s*=\s*\{{\s*{role}\s*\}}")
 
+    def test_custom_aircraft_have_personnel_and_combat_missions(self) -> None:
+        equipment = read("common/units/equipment/ADISCORD_air_equipment.txt")
+        archetypes = {
+            "ADISCORD_fighter_archetype": 20,
+            "ADISCORD_cas_archetype": 20,
+            "ADISCORD_rocket_strike_archetype": 40,
+        }
+        for archetype, manpower in archetypes.items():
+            block = named_block(equipment, archetype)
+            self.assertRegex(block, rf"(?m)^\s*manpower\s*=\s*{manpower}\s*$")
+            self.assertRegex(
+                block, r"(?m)^\s*allow_mission_type\s*=\s*training\s*$"
+            )
+
+        missions = {
+            "ADISCORD_fighter_airframe_2163": {"air_superiority", "interception"},
+            "ADISCORD_cas_airframe_2170": {"cas", "attack_logistics"},
+            "ADISCORD_rocket_strike_platform_2183": {"strategic_bomber"},
+        }
+        for model, expected in missions.items():
+            mission_block = named_block(
+                named_block(equipment, model), "allow_mission_type"
+            )
+            self.assertEqual(set(re.findall(r"\b[A-Za-z_]+\b", mission_block)), expected)
+
     def test_claimants_receive_visible_fighter_and_cas_wings(self) -> None:
         expected = {
-            "WRK": ("history/units/WRK_vorkerland_collapse_air.txt", "32"),
-            "VAD": ("history/units/VAD_vorkerland_collapse_air.txt", "75"),
-            "TVA": ("history/units/TVA_vorkerland_collapse_air.txt", "38"),
+            "WKR": (
+                "history/units/WRK_vorkerland_collapse_air.txt",
+                "WRK_vorkerland_collapse_air",
+                "32",
+                2,
+                2,
+            ),
+            "VAD": (
+                "history/units/VAD_vorkerland_collapse_air.txt",
+                "VAD_vorkerland_collapse_air",
+                "75",
+                1,
+                1,
+            ),
+            "TVA": (
+                "history/units/TVA_vorkerland_collapse_air.txt",
+                "TVA_vorkerland_collapse_air",
+                "38",
+                1,
+                1,
+            ),
         }
-        for tag, (relative, state) in expected.items():
+        for tag, (relative, _, state, fighter_wings, cas_wings) in expected.items():
             wings = named_block(read(relative), "air_wings")
             airfield = named_block(wings, state)
-            self.assertIn(
-                f'ADISCORD_fighter_airframe_2163 = {{ owner = "{tag}" amount = 100 }}',
-                airfield,
+            self.assertEqual(
+                airfield.count(
+                    f'ADISCORD_fighter_airframe_2163 = {{ owner = "{tag}" amount = 100 }}'
+                ),
+                fighter_wings,
             )
-            self.assertIn(
-                f'ADISCORD_cas_airframe_2170 = {{ owner = "{tag}" amount = 50 }}',
-                airfield,
+            self.assertEqual(
+                airfield.count(
+                    f'ADISCORD_cas_airframe_2170 = {{ owner = "{tag}" amount = 50 }}'
+                ),
+                cas_wings,
             )
 
         collapse = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
         initial = named_block(collapse, "ADISCORD_vorkerland_prepare_initial_combatants")
-        wrk = named_block(initial, "WRK")
+        wkr = named_block(initial, "WKR")
         vad = named_block(initial, "VAD")
-        self.assertIn('load_oob = "WRK_vorkerland_collapse_air"', wrk)
+        self.assertIn('load_oob = "WRK_vorkerland_collapse_air"', wkr)
         self.assertIn('load_oob = "VAD_vorkerland_collapse_air"', vad)
-        self.assertIn("add_fuel = 7500", wrk)
+        self.assertIn("add_fuel = 7500", wkr)
         self.assertIn("add_fuel = 7500", vad)
         tva_setup = named_block(collapse, "ADISCORD_vorkerland_setup_tva")
         self.assertIn('load_oob = "TVA_vorkerland_collapse_air"', tva_setup)
         self.assertIn("add_fuel = 7500", tva_setup)
+        for setup in (wkr, vad, tva_setup):
+            self.assertIn(
+                "set_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied",
+                setup,
+            )
 
         repair = named_block(
             read("common/scripted_effects/ADISCORD_vorkerland_force_design_effects.txt"),
@@ -243,10 +296,39 @@ class VorkerlandForceDesignTests(unittest.TestCase):
             "NOT = { has_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed }",
             repair,
         )
-        for tag, (_, state) in expected.items():
+        manpower = {"WKR": 6000, "VAD": 3000, "TVA": 3000}
+        for tag, (_, oob_name, state, _, _) in expected.items():
             self.assertIn(f"tag = {tag} controls_state = {state}", repair)
-            self.assertIn(f'load_oob = "{tag}_vorkerland_collapse_air"', repair)
+            self.assertIn(f'load_oob = "{oob_name}"', repair)
+            branch_start = repair.index(f"tag = {tag} controls_state = {state}")
+            load = repair.index(f'load_oob = "{oob_name}"', branch_start)
+            personnel = repair.index(f"add_manpower = {manpower[tag]}", branch_start)
+            success = repair.index(
+                "set_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed",
+                branch_start,
+            )
+            self.assertLess(personnel, load)
+            self.assertLess(load, success)
         self.assertEqual(repair.count("add_fuel = 7500"), 3)
+
+        migration = named_block(
+            read("common/scripted_effects/ADISCORD_vorkerland_force_design_effects.txt"),
+            "ADISCORD_vorkerland_redeploy_air_wings_after_mission_fix",
+        )
+        self.assertIn(
+            "NOT = { has_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied }",
+            migration,
+        )
+        self.assertNotIn("load_oob", migration)
+        for tag, (_, _, state, _, _) in expected.items():
+            self.assertIn(f"tag = {tag} controls_state = {state}", migration)
+            self.assertIn(f"add_manpower = {manpower[tag]}", migration)
+        self.assertEqual(
+            migration.count(
+                "set_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied"
+            ),
+            3,
+        )
 
     def test_old_saves_receive_a_bounded_one_time_bootstrap(self) -> None:
         effects = read(
@@ -266,6 +348,7 @@ class VorkerlandForceDesignTests(unittest.TestCase):
         )
         self.assertIn("ADISCORD_tech_semi_autonomous_combat_modules = 1", block)
         self.assertIn("ADISCORD_tech_reclaimed_jet_platforms = 1", block)
+        self.assertIn("ADISCORD_tech_battlefield_attack_aircraft = 1", block)
         self.assertIn("type = ADISCORD_combat_platform_2170", block)
         self.assertIn("ADISCORD_combat_platform_archetype < 120", block)
         self.assertIn("amount = 160", block)
@@ -278,6 +361,7 @@ class VorkerlandForceDesignTests(unittest.TestCase):
             self.assertIn(f"type = {equipment_id}", block)
             self.assertIn(f"amount = {amount}", block)
         self.assertIn("type = ADISCORD_fighter_airframe_2163", block)
+        self.assertIn("type = ADISCORD_cas_airframe_2170", block)
         on_actions = read(
             "common/on_actions/02_ADISCORD_vorkerland_force_design_on_actions.txt"
         )
@@ -289,8 +373,22 @@ class VorkerlandForceDesignTests(unittest.TestCase):
             1,
         )
         self.assertEqual(
+            on_actions.count(
+                "ADISCORD_vorkerland_redeploy_air_wings_after_mission_fix = yes"
+            ),
+            1,
+        )
+        self.assertEqual(
             on_actions.count("ADISCORD_vorkerland_bootstrap_ai_force_designs = yes"),
             1,
+        )
+        self.assertLess(
+            on_actions.index("ADISCORD_vorkerland_bootstrap_ai_force_designs = yes"),
+            on_actions.index("ADISCORD_vorkerland_redeploy_air_wings_after_mission_fix = yes"),
+        )
+        self.assertLess(
+            on_actions.index("ADISCORD_vorkerland_redeploy_air_wings_after_mission_fix = yes"),
+            on_actions.index("ADISCORD_vorkerland_deploy_missing_claimant_air_wings = yes"),
         )
 
 
@@ -391,6 +489,14 @@ class EquipmentPictureTests(unittest.TestCase):
             "economy_income_bg.dds",
             "economy_loans_bg.dds",
             "economy_slider_button.dds",
+            "economy_topbar_button.dds",
+            "economy_command_bg.dds",
+            "economy_dashboard_bg.dds",
+            "economy_kpi_balance_bg.dds",
+            "economy_kpi_expenses_bg.dds",
+            "economy_kpi_income_bg.dds",
+            "economy_kpi_treasury_bg.dds",
+            "economy_status_bg.dds",
             "treasury_icon.dds",
         }
         self.assertEqual({path.name for path in directory.glob("*.dds")}, expected)

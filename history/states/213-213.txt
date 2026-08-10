@@ -5,12 +5,16 @@ state={
 		169 1994 3602 3642 4900 5014 5210 5294 5750 6915 7399 7593 8451 8806 9431 10131
 		10779 11747 11802 11906
 	}
-	manpower=30000
-	buildings_max_level_factor=1
-	state_category=rural
-	local_supplies=0.25
+	manpower = 100000
+	buildings_max_level_factor = 1.000
+	state_category = rural
+	local_supplies = 1.5
 	history = {
 		owner = EXZ
 		add_core_of = EXZ
+		buildings = {
+			industrial_complex = 1
+			infrastructure = 2
+		}
 	}
 }

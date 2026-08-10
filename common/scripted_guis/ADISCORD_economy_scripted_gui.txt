@@ -1,10 +1,24 @@
 scripted_gui = {
+	ADISCORD_economy_treasury_topbar_script = {
+		context_type = player_context
+		window_name = "ADISCORD_economy_treasury_topbar_window"
+		parent_window_token = top_bar
+		dirty = ADISCORD_economy_gui_update_var
+		# Keep the readout available in observer mode, matching Darkest Hour.
+		visible = { always = yes }
+		effects = {
+			ADISCORD_economy_treasury_topbar_open_click = { ADISCORD_economy_open_window = yes }
+		}
+	}
+
 	ADISCORD_economy_topbar_script = {
 		context_type = player_context
 		window_name = "ADISCORD_economy_topbar_window"
 		parent_window_token = top_bar
 		dirty = ADISCORD_economy_gui_update_var
-		visible = { ADISCORD_economy_should_show_player_ui = yes }
+		# Observer mode may inspect and open the dashboard; mutation buttons are
+		# separately gated to the human-controlled country below.
+		visible = { always = yes }
 		effects = {
 			ADISCORD_economy_topbar_button_click = { ADISCORD_economy_open_window = yes }
 		}
@@ -17,14 +31,6 @@ scripted_gui = {
 		visible = { ADISCORD_economy_window_is_open = yes }
 		effects = {
 			ADISCORD_economy_dashboard_close_click = { ADISCORD_economy_close_window = yes }
-			ADISCORD_economy_operations_open_click = {
-				set_variable = { var = ADISCORD_economy_show_operations value = 1 }
-				ADISCORD_economy_update_gui = yes
-			}
-			ADISCORD_economy_operations_close_click = {
-				set_variable = { var = ADISCORD_economy_show_operations value = 0 }
-				ADISCORD_economy_update_gui = yes
-			}
 			ADISCORD_economy_tax_decrease_click = { ADISCORD_economy_decrease_tax_burden = yes }
 			ADISCORD_economy_tax_increase_click = { ADISCORD_economy_increase_tax_burden = yes }
 			ADISCORD_economy_army_decrease_click = { ADISCORD_economy_decrease_army_spending = yes }
@@ -41,17 +47,14 @@ scripted_gui = {
 			ADISCORD_economy_action_war_taxes_click = { ADISCORD_economy_gui_try_war_taxes = yes }
 		}
 		triggers = {
-			ADISCORD_economy_operations_panel_visible = {
-				check_variable = { var = ADISCORD_economy_show_operations value = 1 compare = greater_than_or_equals }
-			}
-			ADISCORD_economy_tax_decrease_click_enabled = { ADISCORD_economy_can_decrease_tax_burden = yes }
-			ADISCORD_economy_tax_increase_click_enabled = { ADISCORD_economy_can_increase_tax_burden = yes }
-			ADISCORD_economy_army_decrease_click_enabled = { ADISCORD_economy_can_decrease_army_spending = yes }
-			ADISCORD_economy_army_increase_click_enabled = { ADISCORD_economy_can_increase_army_spending = yes }
-			ADISCORD_economy_research_decrease_click_enabled = { ADISCORD_economy_can_decrease_research_spending = yes }
-			ADISCORD_economy_research_increase_click_enabled = { ADISCORD_economy_can_increase_research_spending = yes }
-			ADISCORD_economy_social_decrease_click_enabled = { ADISCORD_economy_can_decrease_social_spending = yes }
-			ADISCORD_economy_social_increase_click_enabled = { ADISCORD_economy_can_increase_social_spending = yes }
+			ADISCORD_economy_tax_decrease_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_decrease_tax_burden = yes }
+			ADISCORD_economy_tax_increase_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_increase_tax_burden = yes }
+			ADISCORD_economy_army_decrease_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_decrease_army_spending = yes }
+			ADISCORD_economy_army_increase_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_increase_army_spending = yes }
+			ADISCORD_economy_research_decrease_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_decrease_research_spending = yes }
+			ADISCORD_economy_research_increase_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_increase_research_spending = yes }
+			ADISCORD_economy_social_decrease_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_decrease_social_spending = yes }
+			ADISCORD_economy_social_increase_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_increase_social_spending = yes }
 			ADISCORD_economy_tax_active_marker_visible = {
 				set_temp_variable = { var = ADISCORD_economy_tax_active_marker_x_position value = 48 }
 				if = {
@@ -120,12 +123,12 @@ scripted_gui = {
 				}
 				else = { set_temp_variable = { var = ADISCORD_economy_social_active_marker_x_position value = 96 } }
 			}
-			ADISCORD_economy_action_internal_bonds_click_enabled = { ADISCORD_economy_can_issue_internal_bonds = yes }
-			ADISCORD_economy_action_external_loan_click_enabled = { ADISCORD_economy_can_take_external_loan = yes }
-			ADISCORD_economy_action_repay_debt_click_enabled = { ADISCORD_economy_has_treasury_50 = yes ADISCORD_economy_has_debt = yes }
-			ADISCORD_economy_action_restructure_debt_click_enabled = { ADISCORD_economy_can_restructure_debt = yes }
-			ADISCORD_economy_action_stabilization_click_enabled = { ADISCORD_economy_can_stabilize_macro = yes }
-			ADISCORD_economy_action_war_taxes_click_enabled = { ADISCORD_economy_can_use_war_taxes = yes }
+			ADISCORD_economy_action_internal_bonds_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_issue_internal_bonds = yes }
+			ADISCORD_economy_action_external_loan_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_take_external_loan = yes }
+			ADISCORD_economy_action_repay_debt_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_has_treasury_50 = yes ADISCORD_economy_has_debt = yes }
+			ADISCORD_economy_action_restructure_debt_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_restructure_debt = yes }
+			ADISCORD_economy_action_stabilization_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_stabilize_macro = yes }
+			ADISCORD_economy_action_war_taxes_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_use_war_taxes = yes }
 		}
 		properties = {
 			ADISCORD_economy_tax_active_marker = { x = ADISCORD_economy_tax_active_marker_x_position }
