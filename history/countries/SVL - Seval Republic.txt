@@ -1,0 +1,19 @@
+capital = 360
+oob = "SVL"
+
+recruit_character = SVL_Marta_Seval
+
+set_politics = {
+	ruling_party = humanism
+	last_election = "2159.4.18"
+	elections_allowed = yes
+}
+set_popularities = {
+	humanism = 55
+	pragmatism = 20
+	etatism = 15
+	utilitarism = 10
+}
+set_stability = 0.60
+set_war_support = 0.30
+set_research_slots = 2
