@@ -711,7 +711,7 @@ def apply_plan(
     localisation.extend(f' STATE_{state.state_id}: "{state.name}"' for state in planned)
     LOCALISATION.write_text("\n".join(localisation) + "\n", encoding="utf-8", newline="\n")
     print(f"Applied {len(planned)} generated state shells; state 23 now keeps {len(remaining_outer)} provinces.")
-    print("Run tools/build_adiscord_northern_countries.py --apply next to restore northern owners and balance data.")
+    print("Run northern countries --apply, exclusion boundaries --apply, then northern countries --apply again.")
 
 
 def main() -> int:

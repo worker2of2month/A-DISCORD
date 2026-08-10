@@ -4,12 +4,15 @@ state={
 	provinces={
 		5444 6790 9958 16387 16398 16402 16425 
 	}
-	manpower = 1650000
+	manpower = 1800000
 	buildings_max_level_factor = 1.000
 	local_supplies = 6.0
 	local_supplies=10
 
-	state_category = metropolis
+	state_category = large_city
+	resources = {
+		steel = 10
+	}
 	history = {
         owner = WRK
         add_core_of = WRK

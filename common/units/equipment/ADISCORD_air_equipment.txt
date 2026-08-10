@@ -11,6 +11,8 @@ equipments = {
 		interface_category = interface_category_air
 		interface_overview_category_index = 1
 		active = yes
+		allow_mission_type = training
+		manpower = 20
 		reliability = 0.72
 		air_superiority = 1
 		air_attack = 12
@@ -29,6 +31,10 @@ equipments = {
 		picture = archetype_fighter_equipment
 		priority = 20
 		visual_level = 0
+		allow_mission_type = {
+			air_superiority
+			interception
+		}
 	}
 
 	ADISCORD_interceptor_airframe_2183 = {
@@ -59,6 +65,8 @@ equipments = {
 		interface_category = interface_category_air
 		interface_overview_category_index = 0
 		active = yes
+		allow_mission_type = training
+		manpower = 20
 		reliability = 0.74
 		air_attack = 4
 		air_defence = 6
@@ -77,6 +85,10 @@ equipments = {
 		picture = archetype_CAS_equipment
 		priority = 20
 		visual_level = 0
+		allow_mission_type = {
+			cas
+			attack_logistics
+		}
 		air_ground_attack = 18
 		build_cost_ic = 18
 	}
@@ -125,6 +137,8 @@ equipments = {
 		interface_category = interface_category_air
 		interface_overview_category_index = 4
 		active = yes
+		allow_mission_type = training
+		manpower = 40
 		reliability = 0.62
 		air_attack = 2
 		air_defence = 4
@@ -142,6 +156,9 @@ equipments = {
 		picture = rocket_interceptor_equipment_1
 		priority = 40
 		visual_level = 0
+		allow_mission_type = {
+			strategic_bomber
+		}
 	}
 
 	ADISCORD_orbital_tracking_platform_2200 = {

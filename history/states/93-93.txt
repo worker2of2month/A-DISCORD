@@ -4,7 +4,7 @@ state={
 	provinces={
 		1296 3729 4706 4858 6245 8611
 	}
-	manpower = 310000
+	manpower = 500000
 	state_category = rural
 	buildings_max_level_factor = 1.000
 	local_supplies = 2.5
@@ -12,8 +12,10 @@ state={
         owner = PWR
         add_core_of = PWR
 		buildings = {
+			arms_factory = 1
 			industrial_complex = 1
 			infrastructure = 2
 		}
+		set_demilitarized_zone = yes
 	}
 }

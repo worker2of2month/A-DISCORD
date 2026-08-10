@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Populate the generated northern/right-continent state shells.
 
-``build_adiscord_outer_states.py`` owns the province split for states 331-473.
-This follow-up owns their starting countries, population, industry, resources,
-victory points, OOB placement and flags.  Run the outer-state builder first if
-the province split changes, then run this tool with ``--apply``.
+``build_adiscord_outer_states.py`` owns the base province split for states
+331-473. This tool first gives those shells the data needed by the Exclusion
+Zone boundary builder; after boundary realignment, rerun it to refresh dependent
+population, industry, resources, victory points, OOB placement and flags. Run
+outer states, northern countries, exclusion boundaries, then northern countries.
 
 The political identities, characters, national spirits and country histories
 remain hand-authored game files.  This script only generates data whose values
@@ -56,11 +57,18 @@ COUNTRIES: dict[str, dict[str, object]] = {
         "unit_type": "infantry", "colors": ((45, 70, 91), (222, 229, 226), (183, 154, 72)),
     },
     "KRL": {
-        "states": (335, 336, 339, 341, 345, 347, 349, 353, 362), "capital": 345,
-        "capital_name": "Карлёд", "population": 3_800_000,
-        "civilian": 7, "military": 4, "infrastructure": 2, "air_bases": 1,
-        "resources": {"steel": 7, "chromium": 4, "coal": 5}, "divisions": 4,
+        "states": (335, 336, 339, 345, 349, 353, 362), "capital": 345,
+        "capital_name": "Карлёд", "population": 2_974_819,
+        "civilian": 5, "military": 3, "infrastructure": 2, "air_bases": 1,
+        "resources": {"steel": 7, "chromium": 4, "coal": 5}, "divisions": 3,
         "unit_type": "infantry", "colors": ((96, 35, 47), (224, 203, 157), (52, 57, 67)),
+    },
+    "VRA": {
+        "states": (341, 347), "capital": 347,
+        "capital_name": "Варна", "population": 825_181,
+        "civilian": 2, "military": 1, "infrastructure": 2, "air_bases": 0,
+        "resources": {}, "divisions": 1,
+        "unit_type": "ADISCORD_militia", "colors": ((52, 112, 133), (222, 218, 174), (116, 53, 61)),
     },
     "FRS": {
         "states": (338, 340, 342, 343, 344, 350, 351, 352, 356, 357, 358, 363, 367), "capital": 350,
@@ -70,11 +78,18 @@ COUNTRIES: dict[str, dict[str, object]] = {
         "unit_type": "ADISCORD_militia", "colors": ((107, 137, 153), (234, 239, 235), (61, 84, 107)),
     },
     "KHV": {
-        "states": (346, 348, 354, 355, 364, 368, 375, 386, 405), "capital": 364,
-        "capital_name": "Хаврен", "population": 2_400_000,
-        "civilian": 4, "military": 3, "infrastructure": 2, "air_bases": 1,
-        "resources": {"aluminium": 6, "coal": 6}, "divisions": 3,
+        "states": (346, 348, 354, 355), "capital": 355,
+        "capital_name": "Хаврен", "population": 892_900,
+        "civilian": 1, "military": 1, "infrastructure": 2, "air_bases": 0,
+        "resources": {"aluminium": 6, "coal": 6}, "divisions": 1,
         "unit_type": "infantry", "colors": ((68, 91, 78), (211, 220, 194), (151, 103, 61)),
+    },
+    "SRV": {
+        "states": (364, 368, 375, 386, 405), "capital": 364,
+        "capital_name": "Сарвен", "population": 1_507_100,
+        "civilian": 3, "military": 2, "infrastructure": 2, "air_bases": 1,
+        "resources": {}, "divisions": 2,
+        "unit_type": "infantry", "colors": ((111, 92, 64), (213, 205, 164), (55, 88, 96)),
     },
     "ELN": {
         "states": (359, 361, 365, 366, 369, 370, 374, 378, 379, 390), "capital": 378,
@@ -91,11 +106,18 @@ COUNTRIES: dict[str, dict[str, object]] = {
         "unit_type": "infantry", "colors": ((202, 151, 62), (244, 231, 187), (72, 109, 139)),
     },
     "HON": {
-        "states": (360, 376, 382, 388, 392, 396, 397, 400), "capital": 396,
-        "capital_name": "Хонория", "secondary_vps": ((382, "Ровен", 3),), "population": 4_200_000,
-        "civilian": 8, "military": 4, "infrastructure": 3, "air_bases": 1,
-        "resources": {"steel": 8, "coal": 5, "oil": 2}, "divisions": 5,
+        "states": (376, 382, 388, 392, 396, 397, 400), "capital": 396,
+        "capital_name": "Хонория", "secondary_vps": ((382, "Ровен", 3),), "population": 3_707_290,
+        "civilian": 7, "military": 3, "infrastructure": 3, "air_bases": 1,
+        "resources": {"steel": 4, "oil": 2}, "divisions": 4,
         "unit_type": "infantry", "colors": ((35, 91, 137), (234, 238, 229), (151, 54, 55)),
+    },
+    "SVL": {
+        "states": (360,), "capital": 360,
+        "capital_name": "Севаль", "population": 492_710,
+        "civilian": 1, "military": 1, "infrastructure": 3, "air_bases": 0,
+        "resources": {"steel": 4, "coal": 5}, "divisions": 1,
+        "unit_type": "ADISCORD_militia", "colors": ((74, 126, 153), (226, 225, 202), (74, 72, 91)),
     },
     "NVR": {
         "states": (380, 381, 383, 385, 389, 398, 399, 403), "capital": 389,
@@ -119,11 +141,18 @@ COUNTRIES: dict[str, dict[str, object]] = {
         "unit_type": "ADISCORD_militia", "colors": ((119, 65, 62), (220, 190, 141), (62, 85, 76)),
     },
     "LYS": {
-        "states": (394, 402, 408, 412, 415, 420, 422, 424, 427, 432, 435, 437, 442, 446, 447, 452),
+        "states": (394, 402, 408, 412, 415, 420, 422, 424, 432, 435, 437, 442, 447, 452),
         "capital": 420, "capital_name": "Лисмар", "secondary_vps": ((437, "Вейль", 3),),
-        "population": 3_500_000, "civilian": 7, "military": 3, "infrastructure": 3, "air_bases": 1,
-        "resources": {"oil": 5, "aluminium": 5}, "divisions": 4,
+        "population": 2_909_096, "civilian": 6, "military": 2, "infrastructure": 3, "air_bases": 1,
+        "resources": {"aluminium": 5}, "divisions": 3,
         "unit_type": "infantry", "colors": ((74, 50, 96), (206, 177, 133), (57, 116, 126)),
+    },
+    "KDL": {
+        "states": (427, 446, 457), "capital": 427,
+        "capital_name": "Кадель", "population": 590_904,
+        "civilian": 1, "military": 1, "infrastructure": 3, "air_bases": 0,
+        "resources": {"oil": 5}, "divisions": 1,
+        "unit_type": "ADISCORD_militia", "colors": ((111, 63, 104), (224, 204, 168), (49, 92, 104)),
     },
     "VES": {
         "states": (407, 411, 430, 433), "capital": 411,
@@ -140,19 +169,62 @@ COUNTRIES: dict[str, dict[str, object]] = {
         "unit_type": "ADISCORD_militia", "colors": ((139, 70, 59), (217, 181, 132), (57, 93, 77)),
     },
     "ORV": {
-        "states": (426, 436, 441, 449, 454, 455, 460, 461, 467, 472), "capital": 455,
-        "capital_name": "Орваль", "population": 2_600_000,
-        "civilian": 5, "military": 3, "infrastructure": 3, "air_bases": 1,
-        "resources": {"oil": 4, "steel": 5}, "divisions": 3,
+        "states": (426, 436, 454, 455), "capital": 455,
+        "capital_name": "Орваль", "population": 1_235_595,
+        "civilian": 3, "military": 2, "infrastructure": 3, "air_bases": 1,
+        "resources": {"steel": 5}, "divisions": 1,
         "unit_type": "infantry", "colors": ((91, 112, 75), (213, 204, 158), (71, 72, 93)),
     },
+    "ARS": {
+        "states": (441, 449), "capital": 441,
+        "capital_name": "Арсаль", "population": 528_141,
+        "civilian": 1, "military": 0, "infrastructure": 3, "air_bases": 0,
+        "resources": {}, "divisions": 1,
+        "unit_type": "ADISCORD_militia", "colors": ((124, 92, 67), (218, 207, 173), (58, 84, 92)),
+    },
+    "VLD": {
+        "states": (460, 467, 472), "capital": 460,
+        "capital_name": "Вальд", "population": 691_468,
+        "civilian": 1, "military": 1, "infrastructure": 3, "air_bases": 0,
+        "resources": {"oil": 4}, "divisions": 1,
+        "unit_type": "ADISCORD_militia", "colors": ((76, 104, 83), (214, 199, 152), (111, 58, 54)),
+    },
     "MON": {
-        "states": (425, 438, 444, 445, 448, 453, 456, 457, 459, 462, 464, 466, 468, 469, 470, 471, 473),
+        "states": (425, 438, 444, 445, 448, 453, 456, 459, 462, 464, 466, 468, 469, 470, 471, 473),
         "capital": 469, "capital_name": "Монтера",
         "secondary_vps": ((459, "Аркен", 5), (471, "Валтор", 3)), "population": 12_200_000,
         "civilian": 28, "military": 18, "infrastructure": 4, "air_bases": 3,
         "resources": {"steel": 26, "coal": 20, "oil": 8, "aluminium": 10, "tungsten": 6, "chromium": 4},
         "divisions": 14, "unit_type": "infantry", "colors": ((32, 82, 48), (224, 202, 115), (108, 32, 38)),
+    },
+}
+
+# Keep existing flag layouts stable when new countries are inserted beside
+# their former parent states. New polities receive new style slots instead of
+# shifting every later country's generated flag.
+FLAG_STYLES = {
+    "BRN": 0, "KRL": 1, "FRS": 2, "KHV": 3, "ELN": 4,
+    "AUR": 5, "HON": 6, "NVR": 7, "SKN": 8, "TMR": 9,
+    "LYS": 10, "VES": 11, "DRV": 12, "ORV": 13, "MON": 14,
+    "VRA": 15, "SVL": 16, "SRV": 17, "KDL": 18,
+    "ARS": 19, "VLD": 20,
+}
+if set(FLAG_STYLES) != set(COUNTRIES):
+    raise RuntimeError("northern flag-style manifest differs from country manifest")
+
+
+# State 461 keeps its existing populated profile, but starts as the eastern
+# mountain/forest carrier of the Exclusion Zone rather than as ORV territory.
+EXZ_FRINGE_STATE_PROFILES = {
+    461: {
+        "population": 144_796,
+        "category": "rural",
+        "infrastructure": 3,
+        "civilian": 0,
+        "military": 0,
+        "air_base": 0,
+        "resources": {},
+        "local_supplies": 2.4,
     },
 }
 
@@ -163,12 +235,13 @@ STATE_OWNER = {
     for tag, profile in COUNTRIES.items()
     for state_id in profile["states"]
 }
+STATE_OWNER.update({state_id: "EXZ" for state_id in EXZ_FRINGE_STATE_PROFILES})
 if set(STATE_OWNER) != EXPECTED_STATES:
     raise RuntimeError(
         f"northern country coverage mismatch: missing={sorted(EXPECTED_STATES-set(STATE_OWNER))}, "
         f"unexpected={sorted(set(STATE_OWNER)-EXPECTED_STATES)}"
     )
-if len(STATE_OWNER) != sum(len(profile["states"]) for profile in COUNTRIES.values()):
+if len(STATE_OWNER) != sum(len(profile["states"]) for profile in COUNTRIES.values()) + len(EXZ_FRINGE_STATE_PROFILES):
     raise RuntimeError("a northern state is assigned to more than one country")
 
 
@@ -350,6 +423,15 @@ def build_profiles() -> tuple[dict[int, dict[str, object]], dict[int, int]]:
                 "climate": shells[state_id][2],
                 "provinces": shells[state_id][1],
             }
+    for state_id, fixed in EXZ_FRINGE_STATE_PROFILES.items():
+        profiles[state_id] = {
+            "owner": "EXZ",
+            **fixed,
+            "vp": None,
+            "vp_province": principal_provinces[state_id],
+            "climate": shells[state_id][2],
+            "provinces": shells[state_id][1],
+        }
     return profiles, principal_provinces
 
 
@@ -502,8 +584,8 @@ def render_flag(tag: str, colors: tuple[tuple[int, int, int], ...], style: int) 
 
 def write_flags() -> None:
     sizes = ((FLAG_DIR, (82, 52)), (FLAG_DIR / "medium", (41, 26)), (FLAG_DIR / "small", (10, 7)))
-    for style, (tag, country) in enumerate(COUNTRIES.items()):
-        base = render_flag(tag, country["colors"], style)
+    for tag, country in COUNTRIES.items():
+        base = render_flag(tag, country["colors"], FLAG_STYLES[tag])
         for directory, size in sizes:
             directory.mkdir(parents=True, exist_ok=True)
             image = base if size == base.size else base.resize(size, Image.Resampling.LANCZOS)

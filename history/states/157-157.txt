@@ -2,7 +2,7 @@
 state = {
 	id = 157
 	name = "STATE_157"
-	manpower = 221374
+	manpower = 223714
 	state_category = rural
 	history = {
 		owner = WCG

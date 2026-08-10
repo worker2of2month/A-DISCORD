@@ -17,6 +17,10 @@ try:
     from tools.builders.build_adiscord_inner_frontier_countries import (
         CLAIMS_BY_STATE,
         COUNTRIES,
+        COUNTRY_DIR,
+        COUNTRY_HISTORY_DIR,
+        COUNTRY_HISTORY_PROFILES,
+        EXZ_LOCALISATION,
         EXPECTED_STATES,
         FLAG_DIR,
         POPULATION_MARKER,
@@ -26,7 +30,10 @@ try:
         VP_LOCALISATION,
         build_profiles,
         protectorate_profile,
+        render_common_country,
+        render_country_history,
         render_oob,
+        render_exz_localisation,
         render_state,
         state_path,
     )
@@ -40,6 +47,10 @@ except ModuleNotFoundError:
     from builders.build_adiscord_inner_frontier_countries import (
         CLAIMS_BY_STATE,
         COUNTRIES,
+        COUNTRY_DIR,
+        COUNTRY_HISTORY_DIR,
+        COUNTRY_HISTORY_PROFILES,
+        EXZ_LOCALISATION,
         EXPECTED_STATES,
         FLAG_DIR,
         POPULATION_MARKER,
@@ -49,7 +60,10 @@ except ModuleNotFoundError:
         VP_LOCALISATION,
         build_profiles,
         protectorate_profile,
+        render_common_country,
+        render_country_history,
         render_oob,
+        render_exz_localisation,
         render_state,
         state_path,
     )
@@ -95,6 +109,38 @@ def named_history(tag: str) -> Path | None:
     return matches[0] if len(matches) == 1 else None
 
 
+def validate_external_gate_cleanup(split_effect: str, collapse_on_actions: str) -> list[str]:
+    issues: list[str] = []
+    krm_states = {151, 156, 161, 162, 163}
+    lmn_states = {157, 158, 159, 160, 223}
+    annex_token = "annex_country = { target = WCG transfer_troops = no }"
+    if annex_token not in split_effect:
+        issues.append("dissolved WCG formations are transferred to a successor instead of being removed")
+    cleanup_tokens = (
+        "ADISCORD_vorkerland_delete_external_gate_formations = {",
+        'division_template = "Filtration Battalion"',
+        "disband = no",
+    )
+    if any(token not in split_effect for token in cleanup_tokens):
+        issues.append("External Gate split lacks explicit generated-formation cleanup")
+    cleanup_call = "WCG = { ADISCORD_vorkerland_delete_external_gate_formations = yes }"
+    anchor_token = "161 = { add_core_of = KRM set_state_owner_to = KRM set_state_controller_to = KRM }"
+    cleanup_pos = split_effect.find(cleanup_call)
+    anchor_pos = split_effect.find(anchor_token)
+    annex_pos = split_effect.find(annex_token)
+    if not 0 <= cleanup_pos < anchor_pos < annex_pos:
+        issues.append("WCG formations must be deleted and KRM materialised before WCG is annexed")
+    for state_id in sorted((krm_states | lmn_states) - {161}):
+        successor = "KRM" if state_id in krm_states else "LMN"
+        transfer_token = f"{state_id} = {{ add_core_of = {successor} set_state_owner_to"
+        if split_effect.find(transfer_token) < annex_pos:
+            issues.append(f"state {state_id} is transferred before the still-landed WCG annex cleanup")
+    migration_flag = "ADISCORD_vorkerland_external_gate_formations_removed_v4"
+    if collapse_on_actions.count(cleanup_call) != 1 or collapse_on_actions.count(migration_flag) != 2:
+        issues.append("old collapse saves lack a one-shot landless WCG formation cleanup")
+    return issues
+
+
 def validate() -> list[str]:
     issues: list[str] = []
     profiles, principal_provinces = build_profiles()
@@ -122,9 +168,37 @@ def validate() -> list[str]:
     collapse_effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
     collapse_on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
 
-    for localisation_path in (country_loc_path, VP_LOCALISATION):
+    for localisation_path in (country_loc_path, VP_LOCALISATION, EXZ_LOCALISATION):
         if not localisation_path.exists() or not localisation_path.read_bytes().startswith(b"\xef\xbb\xbf"):
             issues.append(f"{localisation_path.relative_to(ROOT)} must retain a UTF-8 BOM")
+
+    for tag, history_profile in COUNTRY_HISTORY_PROFILES.items():
+        common_path = COUNTRY_DIR / f"{tag}.txt"
+        expected_common = render_common_country(tag)
+        if (
+            not common_path.exists()
+            or common_path.read_text(encoding="utf-8-sig", errors="strict") != expected_common
+        ):
+            issues.append(
+                f"{common_path.relative_to(ROOT)} is not synchronized with the inner-frontier builder"
+            )
+
+        history_path = COUNTRY_HISTORY_DIR / str(history_profile["filename"])
+        expected_history = render_country_history(tag)
+        if (
+            not history_path.exists()
+            or history_path.read_text(encoding="utf-8-sig", errors="strict") != expected_history
+        ):
+            issues.append(
+                f"{history_path.relative_to(ROOT)} is not synchronized with the inner-frontier builder"
+            )
+        elif re.search(
+            r"(?m)^\s*(?:graphical_culture|graphical_culture_2d|color)\s*=",
+            expected_history,
+        ):
+            issues.append(
+                f"{history_path.relative_to(ROOT)} contains common-country fields in history scope"
+            )
 
     state_sets: dict[int, set[int]] = {}
     for state_id in sorted(EXPECTED_STATES):
@@ -333,8 +407,7 @@ def validate() -> list[str]:
         issues.append("the initial Vorkerland collapse must split the External Gate immediately")
     if collapse_on_actions.count("ADISCORD_vorkerland_split_external_gate = yes") != 1:
         issues.append("old collapse saves lack a one-shot External Gate split repair")
-    if "annex_country = { target = WCG transfer_troops = no }" not in split_effect:
-        issues.append("dissolved WCG formations are transferred to a successor instead of being removed")
+    issues.extend(validate_external_gate_cleanup(split_effect, collapse_on_actions))
 
     for country in COUNTRIES.values():
         settlement_states = {int(country["capital"])} | {
@@ -361,8 +434,10 @@ def validate() -> list[str]:
     if "Реле-17" in country_loc or "Реле-17" in vp_loc or "Релейный анклав №17" in country_loc:
         issues.append("obsolete RLY player-facing name remains in Russian localisation")
 
-    if not re.search(r'(?m)^\s*EXZ:\s*"Зона отчуждения"\s*$', read("localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml")):
-        issues.append("EXZ must be visibly labelled as the Exclusion Zone")
+    if not EXZ_LOCALISATION.exists() or EXZ_LOCALISATION.read_text(encoding="utf-8", errors="strict") != render_exz_localisation():
+        issues.append("generated EXZ localisation is not synchronized with the inner-frontier builder")
+    elif not re.search(r'(?m)^\s*EXZ:\s*""\s*$', EXZ_LOCALISATION.read_text(encoding="utf-8-sig", errors="strict")):
+        issues.append("EXZ must remain deliberately blank on the map")
     damage_marker = "?" * 4
     if damage_marker in country_loc or damage_marker in vp_loc:
         issues.append("inner-frontier Russian localisation contains encoding damage")

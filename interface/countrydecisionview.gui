@@ -14,12 +14,12 @@ guiTypes = {
 		
 		background = {
 			name = "Background"
-			quadTextureSprite ="GFX_tiled_window2_1b_border"
+			quadTextureSprite ="GFX_ADISCORD_decisions_window_bg"
 		}
 
 		iconType = {
 			name ="production_header_bg"
-			spriteType = "GFX_header_bg"
+			spriteType = "GFX_ADISCORD_decisions_title_bg"
 			position = { x= 5 y = 07 }
 			Orientation = "UPPER_LEFT"
 		}	
@@ -87,7 +87,7 @@ guiTypes = {
 		buttonType = {
 			name = "icon_header_bg"
 			position = {x=-4 y=8}
-			spriteType = "GFX_category_header_bg"
+			spriteType = "GFX_ADISCORD_decisions_category_header_bg"
 			clicksound = decisions_ui_tab
 		}
 		
@@ -139,7 +139,7 @@ guiTypes = {
 		background = {
 			name = "Background"
 			position = { x=0 y=-1 }
-			quadTextureSprite="GFX_tiled_decisions_bg_small"
+			quadTextureSprite="GFX_ADISCORD_decisions_category_desc_bg"
 			clicksound = click_default
 		}
 		
@@ -219,14 +219,14 @@ guiTypes = {
 		iconType = {
 			name = "icon_header_bg"
 			position = {x=0 y=0}
-			spriteType = "GFX_event_header_bg"
+			spriteType = "GFX_ADISCORD_decisions_event_header_bg"
 		}
 
 		instantTextboxType = {
 			name = "name_text"
 			position = { x = 35 y = 29}
 			textureFile = ""
-			font = "hoi4_typewriter22"
+			font = "hoi_20b"
 			borderSize = { x = 0 y = 0 }
 			text = "DECISIONSVIEW_EVENT_HEADER"
 			maxWidth = 240
@@ -329,7 +329,7 @@ guiTypes = {
 		iconType = {
 			name = "icon_end_bg"
 			position = {x=0 y=0}
-			spriteType = "GFX_category_end_bg"			
+			spriteType = "GFX_ADISCORD_decisions_category_end_bg"
 		}
 	}
 
@@ -352,7 +352,7 @@ guiTypes = {
 		buttonType = {
 			name = "btn_bg"
 			position = {x=-1 y=0}
-			spriteType = "GFX_event_item_bg"
+			spriteType = "GFX_ADISCORD_decisions_event_item_bg"
 			clicksound = click_default
 		}
 		
@@ -367,7 +367,7 @@ guiTypes = {
 			name = "name_text"
 			position = { x = 50 y = 8 }
 			textureFile = ""
-			font = "hoi4_typewriter16"
+			font = "hoi_16mbs"
 			borderSize = { x = 0 y = 0 }
 			text = "event name"
 			maxWidth = 450
@@ -379,7 +379,7 @@ guiTypes = {
 			name = "timer_text"
 			position = { x = 350 y = 9 }
 			textureFile = ""
-			font = "hoi4_typewriter16"
+			font = "hoi_16mbs"
 			borderSize = { x = 0 y = 0 }
 			text = "999"
 			maxWidth = 150
@@ -401,19 +401,19 @@ guiTypes = {
 		iconType = {
 			name = "btn_bg"
 			position = {x=0 y=0}
-			spriteType = "GFX_decision_item_bg"
+			spriteType = "GFX_ADISCORD_decisions_item_bg"
 		}
 
 		iconType = {
 			name = "btn_progress_good"
 			position = {x=9 y=28}
-			spriteType = "GFX_decision_item_progress_good"
+			spriteType = "GFX_ADISCORD_decisions_item_progress_good"
 		}
 
 		iconType = {
 			name = "btn_progress_bad"
 			position = {x=9 y=28}
-			spriteType = "GFX_decision_item_progress_bad"
+			spriteType = "GFX_ADISCORD_decisions_item_progress_bad"
 		}
 
 		iconType = {
@@ -473,7 +473,7 @@ guiTypes = {
 		buttonType = {
 			name = "btn_select"
 			position = {x=465 y=6}
-			spriteType = "GFX_decision_select_icon_strip"
+			spriteType = "GFX_ADISCORD_decisions_select_icon_strip"
 			clicksound = decisions_ui_checkbox
 			frame = 2
 		}
@@ -488,19 +488,19 @@ guiTypes = {
 		iconType = {
 			name = "btn_bg"
 			position = {x=0 y=0}
-			spriteType = "GFX_decision_item_bg"
+			spriteType = "GFX_ADISCORD_decisions_item_bg"
 		}
 
 		iconType = {
 			name = "btn_progress_good"
 			position = {x=9 y=28}
-			spriteType = "GFX_decision_item_progress_good"
+			spriteType = "GFX_ADISCORD_decisions_item_progress_good"
 		}
 
 		iconType = {
 			name = "btn_progress_bad"
 			position = {x=9 y=28}
-			spriteType = "GFX_decision_item_progress_bad"
+			spriteType = "GFX_ADISCORD_decisions_item_progress_bad"
 		}
 	
 		iconType = {
@@ -572,7 +572,7 @@ guiTypes = {
 		buttonType = {
 			name = "btn_select"
 			position = {x=465 y=4}
-			spriteType = "GFX_decision_select_icon_strip"
+			spriteType = "GFX_ADISCORD_decisions_select_icon_strip"
 			clicksound = click_default
 			frame = 2
 		}
@@ -588,19 +588,19 @@ guiTypes = {
 		iconType = {
 			name = "btn_bg"
 			position = {x=0 y=0}
-			spriteType = "GFX_decision_item_bg"
+			spriteType = "GFX_ADISCORD_decisions_item_bg"
 		}
 
 		iconType = {
 			name = "btn_progress_good"
 			position = {x=9 y=28}
-			spriteType = "GFX_decision_item_progress_good"
+			spriteType = "GFX_ADISCORD_decisions_item_progress_good"
 		}
 
 		iconType = {
 			name = "btn_progress_bad"
 			position = {x=9 y=28}
-			spriteType = "GFX_decision_item_progress_bad"
+			spriteType = "GFX_ADISCORD_decisions_item_progress_bad"
 		}
 
 		iconType = {
@@ -673,7 +673,7 @@ guiTypes = {
 		buttonType = {
 			name = "btn_select"
 			position = {x=465 y=6}
-			spriteType = "GFX_decision_select_icon_strip"
+			spriteType = "GFX_ADISCORD_decisions_select_icon_strip"
 			clicksound = decisions_ui_checkbox
 			frame = 2
 		}
@@ -689,7 +689,7 @@ guiTypes = {
 		iconType = {
 			name = "btn_bg"
 			position = {x=0 y=0}
-			spriteType = "GFX_decision_item_bg"
+			spriteType = "GFX_ADISCORD_decisions_item_bg"
 			frame = 2
 		}
 

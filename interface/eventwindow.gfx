@@ -1,4 +1,23 @@
 spriteTypes = {
+	spriteType = {
+		name = "GFX_event_popup_top"
+		texturefile = "gfx/interface/event_popup_top.png"
+		alwaystransparent = yes
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_event_popup_middle"
+		size = { x = 615 y = 64 }
+		textureFile = "gfx/interface/event_popup_middle.png"
+		borderSize = { x = 36 y = 16 }
+		alwaystransparent = yes
+	}
+
+	spriteType = {
+		name = "GFX_event_popup_bottom"
+		texturefile = "gfx/interface/event_popup_bottom.png"
+		alwaystransparent = yes
+	}
 
 	spriteType = {
 		name = "GFX_event_news_pic_overlay"
@@ -17,7 +36,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_event_option_entry"
-		texturefile = "gfx/interface/event_option_entry.dds"
+		texturefile = "gfx/interface/event_option_entry_adiscord.png"
 	}
 
 	corneredTileSpriteType = {

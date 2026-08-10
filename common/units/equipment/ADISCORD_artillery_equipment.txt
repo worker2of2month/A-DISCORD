@@ -53,7 +53,7 @@ equipments = {
 		hard_attack = 4
 		ap_attack = 20
 		build_cost_ic = 5.1
-		resources = { tungsten = 2 steel = 3 aluminium = 1 }
+		resources = { tungsten = 2 steel = 3 aluminium = 1 rare_alloys = 1 }
 	}
 
 	anti_tank_equipment = {
@@ -131,6 +131,6 @@ equipments = {
 		ap_attack = 80
 		air_attack = 34
 		build_cost_ic = 5.8
-		resources = { steel = 3 aluminium = 1 }
+		resources = { steel = 3 aluminium = 1 rare_components = 1 }
 	}
 }

@@ -12,7 +12,7 @@
  ADISCORD_debug_force_vorkerland_central_victory: "§RDEBUG:§! Закрепить победу центрального претендента"
  ADISCORD_debug_force_vorkerland_central_victory_desc: "Выдаёт текущему WRK, VAD или TVA только статус объединителя центра. Штаты окраин не переносятся."
  ADISCORD_debug_open_ivanland_intervention: "§RDEBUG:§! Открыть интервенцию Иванланда"
- ADISCORD_debug_open_ivanland_intervention_desc: "При необходимости сначала запускает распад Воркерланда, затем открывает единственное timed-решение Иванланда."
+ ADISCORD_debug_open_ivanland_intervention_desc: "При необходимости сначала запускает распад Воркерланда, затем автоматически открывает единственную 240-дневную миссию Иванланда."
  ADISCORD_debug_resolve_ivanland_success: "§RDEBUG:§! Завершить интервенцию успехом"
  ADISCORD_debug_resolve_ivanland_success_desc: "Немедленно завершает интервенцию успехом и создаёт Норвейн во главе с Матвеем Матеуском. Повторный вызов не создаёт вторую армию или войну."
  ADISCORD_debug_resolve_ivanland_failure: "§RDEBUG:§! Завершить интервенцию провалом"

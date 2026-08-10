@@ -15,6 +15,7 @@ from unittest.mock import patch
 from PIL import Image
 
 from tools.builders import build_adiscord_val_operations_map as val_operations_map
+from tools.builders.build_adiscord_resource_assets import expected_outputs as resource_asset_outputs
 from tools.lib.generated_outputs import (
     load_registry,
     run_apply_pipeline,
@@ -27,6 +28,8 @@ from tools.lib.generated_outputs import (
 ROOT = Path(__file__).resolve().parents[2]
 REQUIRED_FAMILIES = {
     "ainholm_mandate",
+    "decision_ui_assets",
+    "production_ui_assets",
     "doctrine_system",
     "exclusion_zone_boundaries",
     "inner_frontier_countries",
@@ -36,7 +39,9 @@ REQUIRED_FAMILIES = {
     "northern_countries",
     "outer_states",
     "remainder_states",
+    "resource_assets",
     "strategic_regions",
+    "trade_regions",
     "technology_system",
     "terrain_snow",
     "val_operations_map",
@@ -93,6 +98,28 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
         self.assertTrue(
             {"map/buildings.txt", "history/states/*.txt"}
             <= set(self.entries["state_history"]["source_inputs"]),
+        )
+
+    def test_resource_asset_registry_owns_every_exact_generated_path_and_source(self) -> None:
+        entry = self.entries["resource_assets"]
+        expected_paths = {
+            path.relative_to(ROOT).as_posix()
+            for path in resource_asset_outputs()
+        }
+        self.assertEqual(set(entry["output_globs"]), expected_paths)
+        self.assertTrue(all("*" not in path for path in entry["output_globs"]))
+        self.assertTrue(
+            {
+                "gfx/interface/ADISCORD_trade_gui/source/strategic_resources_source.png",
+                "gfx/interface/ADISCORD_trade_gui/source/country_trade_entry_source.png",
+                "gfx/interface/ADISCORD_trade_gui/source/topbar_glyphs_source.png",
+                "gfx/interface/ADISCORD_trade_gui/source/topbar_indicators_source.png",
+                "gfx/interface/ADISCORD_trade_gui/source/international_market_source.png",
+                "gfx/interface/ADISCORD_trade_gui/source/command_power_phone_source.png",
+                "gfx/interface/ADISCORD_trade_gui/source/topbar_background_extended_source.png",
+                "gfx/interface/ADISCORD_economy_gui/source/treasury_topbar_source.png",
+            }
+            <= set(entry["source_inputs"])
         )
 
     def test_val_check_rejects_an_unexpected_owned_png(self) -> None:

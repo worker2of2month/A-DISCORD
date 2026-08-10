@@ -42,6 +42,10 @@ spriteTypes = {
 	  	texturefile = "gfx/interface/ideas/STP/idea_STP_hidden_slaves_trade.png"
 	}
 	spriteType = {
+		name = "GFX_idea_VAL_big_buyers"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_deadman_rulling_the_country.png"
+	}
+	spriteType = {
 	  	name = "GFX_idea_STP_legalize"
 	  	texturefile = "gfx/interface/ideas/STP/idea_STP_legalize.png"
 	}

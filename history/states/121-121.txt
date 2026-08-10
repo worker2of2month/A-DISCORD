@@ -4,10 +4,13 @@ state={
 	provinces={
 		5245 16560 16611 16612 
 	}
-	manpower = 1650000
+	manpower = 2400000
 	buildings_max_level_factor = 1.000
 	local_supplies = 5.0
 	state_category = large_city
+	resources = {
+		steel = 12
+	}
 	history={
 		owner = VAD
 		add_core_of = VAD

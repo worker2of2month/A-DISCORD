@@ -757,7 +757,7 @@ ADISCORD_economy_calculate_business_income = {
 	set_variable = { var = ADISCORD_economy_business_income value = ADISCORD_economy_cached_civilian_factories }
 	multiply_variable = { var = ADISCORD_economy_business_income value = 0.075 }
 	set_temp_variable = { var = ADISCORD_economy_business_building_temp value = ADISCORD_business_center_count }
-	multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 0.85 }
+	multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 1.05 }
 	if = { limit = { ADISCORD_economy_model_is_decentralized_market = yes } multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 1.20 } }
 	if = { limit = { ADISCORD_economy_model_is_mixed = yes } multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 1.10 } }
 	if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes } multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 0.70 } }
@@ -781,7 +781,7 @@ ADISCORD_economy_calculate_consumer_goods_income = {
 	multiply_variable = { var = ADISCORD_economy_consumer_goods_income value = 0.035 }
 	# Industrial clusters mainly support civilian taxable output. They are not a default money printer for military factories.
 	set_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = ADISCORD_industrial_cluster_count }
-	multiply_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = 0.30 }
+	multiply_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = 0.45 }
 	if = { limit = { ADISCORD_economy_model_is_state_coordinated = yes } multiply_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = 1.15 } }
 	if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes ADISCORD_state_development_at_least_4 = yes } multiply_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = 1.25 } }
 	if = { limit = { ADISCORD_economy_model_is_mobilization = yes } multiply_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = 0.70 } }
@@ -829,7 +829,7 @@ ADISCORD_economy_calculate_factory_income = {
 			}
 		}
 		set_temp_variable = { var = ADISCORD_economy_factory_income_temp value = ADISCORD_industrial_cluster_count }
-		multiply_temp_variable = { var = ADISCORD_economy_factory_income_temp value = 0.08 }
+		multiply_temp_variable = { var = ADISCORD_economy_factory_income_temp value = 0.12 }
 		add_to_variable = { var = ADISCORD_economy_factory_income value = ADISCORD_economy_factory_income_temp }
 	}
 	# Mobilization economy converts arms output into war capacity, not normal treasury profit.
@@ -867,16 +867,16 @@ ADISCORD_economy_calculate_building_income = {
 	# Direct building income is small; buildings mostly improve the specific buckets below and development/pressure.
 	set_variable = { var = ADISCORD_economy_building_income value = 0 }
 	set_temp_variable = { var = ADISCORD_economy_building_income_temp value = ADISCORD_business_center_count }
-	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.15 }
+	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.25 }
 	add_to_variable = { var = ADISCORD_economy_building_income value = ADISCORD_economy_building_income_temp }
 	set_temp_variable = { var = ADISCORD_economy_building_income_temp value = ADISCORD_economy_public_investment_stock }
 	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.60 }
 	add_to_variable = { var = ADISCORD_economy_building_income value = ADISCORD_economy_building_income_temp }
 	set_temp_variable = { var = ADISCORD_economy_building_income_temp value = ADISCORD_science_center_count }
-	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.05 }
+	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.20 }
 	add_to_variable = { var = ADISCORD_economy_building_income value = ADISCORD_economy_building_income_temp }
 	set_temp_variable = { var = ADISCORD_economy_building_income_temp value = ADISCORD_industrial_cluster_count }
-	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.08 }
+	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.16 }
 	add_to_variable = { var = ADISCORD_economy_building_income value = ADISCORD_economy_building_income_temp }
 	if = { limit = { ADISCORD_economy_model_is_fragmented = yes } multiply_variable = { var = ADISCORD_economy_building_income value = 0.70 } }
 	clamp_variable = { var = ADISCORD_economy_building_income min = 0 max = 50 }
@@ -1478,6 +1478,8 @@ ADISCORD_economy_calculate_weekly_budget = {
 	set_variable = { var = ADISCORD_economy_weekly_income value = ADISCORD_economy_monthly_income }
 	multiply_variable = { var = ADISCORD_economy_weekly_income value = 3 }
 	divide_variable = { var = ADISCORD_economy_weekly_income value = 13 }
+	# Flat country modifiers are applied after the 3/13 conversion: +20 is exactly +20 per week.
+	add_to_variable = { var = ADISCORD_economy_weekly_income value = ADISCORD_economy_final_weekly_income_bonus }
 	set_variable = { var = ADISCORD_economy_weekly_expenses value = ADISCORD_economy_monthly_expenses }
 	multiply_variable = { var = ADISCORD_economy_weekly_expenses value = 3 }
 	divide_variable = { var = ADISCORD_economy_weekly_expenses value = 13 }
@@ -2677,6 +2679,10 @@ ADISCORD_economy_recount_economic_buildings = {
 		if = { limit = { check_variable = { resource@chromium > 9 } } ROOT = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
 		if = { limit = { check_variable = { resource@coal > 0 } } ROOT = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 0.5 } } }
 		if = { limit = { check_variable = { resource@coal > 19 } } ROOT = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 0.5 } } }
+		if = { limit = { check_variable = { resource@rare_components > 0 } } ROOT = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+		if = { limit = { check_variable = { resource@rare_components > 7 } } ROOT = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+		if = { limit = { check_variable = { resource@rare_alloys > 0 } } ROOT = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+		if = { limit = { check_variable = { resource@rare_alloys > 7 } } ROOT = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
 
 		set_temp_variable = { ADISCORD_economy_state_damage_temp = damaged_building_level@infrastructure }
 		add_to_temp_variable = { ADISCORD_economy_state_damage_temp = damaged_building_level@arms_factory }
@@ -2846,20 +2852,24 @@ ADISCORD_economy_update_gui = {
 	else = { add_to_variable = { var = ADISCORD_economy_gui_update_var value = 1 } }
 }
 ADISCORD_economy_open_window = {
-	ADISCORD_economy_initialize_country = yes
-	ADISCORD_economy_full_refresh = yes
-	ADISCORD_economy_update_model_and_cycle = yes
-	ADISCORD_economy_recalculate_policy_modifiers = yes
-	ADISCORD_economy_light_update = yes
-	ADISCORD_economy_refresh_policy_previews = yes
-	ADISCORD_economy_calculate_development_multiplier = yes
-	set_variable = { var = ADISCORD_economy_show_operations value = 0 }
+	# In observer mode the selected country is AI-controlled.  The dashboard is
+	# inspectable there, but opening it must not initialize, reprice or rewrite
+	# the observed country's economy.
+	if = {
+		limit = { ADISCORD_economy_should_show_player_ui = yes }
+		ADISCORD_economy_initialize_country = yes
+		ADISCORD_economy_full_refresh = yes
+		ADISCORD_economy_update_model_and_cycle = yes
+		ADISCORD_economy_recalculate_policy_modifiers = yes
+		ADISCORD_economy_light_update = yes
+		ADISCORD_economy_refresh_policy_previews = yes
+		ADISCORD_economy_calculate_development_multiplier = yes
+	}
 	set_variable = { var = ADISCORD_economy_show_window value = 1 }
 	ADISCORD_economy_update_gui = yes
 }
 
 ADISCORD_economy_close_window = {
-	set_variable = { var = ADISCORD_economy_show_operations value = 0 }
 	set_variable = { var = ADISCORD_economy_show_window value = 0 }
 	ADISCORD_economy_update_gui = yes
 }

@@ -5442,21 +5442,21 @@
           "y": 1
         },
         {
-          "type": "artillery",
+          "type": "ADISCORD_line_artillery",
           "x": 2,
           "y": 1
         }
       ],
       "support": [],
       "computed": {
-        "organization": 46.458333,
-        "manpower": 5300.0,
+        "organization": 47.291667,
+        "manpower": 5500.0,
         "equipment": {
           "ADISCORD_squad_weapons_equipment": 40.0,
-          "artillery_equipment": 12.0,
+          "artillery_equipment": 24.0,
           "infantry_equipment": 500.0
         },
-        "supply": 0.46
+        "supply": 0.54
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
@@ -9798,16 +9798,31 @@
           "type": "ADISCORD_militia",
           "x": 0,
           "y": 2
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 1,
+          "y": 2
         }
       ],
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 6000.0,
         "equipment": {
-          "infantry_equipment": 240.0
+          "infantry_equipment": 480.0
         },
-        "supply": 0.12
+        "supply": 0.24
       },
       "equipment_availability": {
         "infantry_equipment": true
@@ -10130,10 +10145,10 @@
       "count": 2
     },
     {
-      "key": "adiscord_vorkerland_collapse_decisions_create_unit_tva_infiltration_cell_xp_0_25_eq_0_75",
+      "key": "adiscord_vorkerland_collapse_decisions_create_unit_tva_collapse_militia_xp_0_25_eq_0_75",
       "path": "common/decisions/ADISCORD_vorkerland_collapse_decisions.txt",
       "kind": "create_unit",
-      "technical_name": "TVA Infiltration Cell",
+      "technical_name": "TVA Collapse Militia",
       "legacy_names": [],
       "start_experience_factor": 0.25,
       "start_equipment_factor": 0.75,
@@ -10213,6 +10228,66 @@
       ],
       "start_experience_factor": 0.05,
       "start_equipment_factor": 0.75,
+      "count": 1
+    },
+    {
+      "key": "adiscord_vorkerland_focus_decision_effects_create_unit_workerland_militia_xp_0_05_eq_0_55",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Workerland Militia",
+      "legacy_names": [],
+      "start_experience_factor": 0.05,
+      "start_equipment_factor": 0.55,
+      "count": 1
+    },
+    {
+      "key": "adiscord_vorkerland_focus_decision_effects_create_unit_workerland_militia_xp_0_02_eq_0_45",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Workerland Militia",
+      "legacy_names": [],
+      "start_experience_factor": 0.02,
+      "start_equipment_factor": 0.45,
+      "count": 1
+    },
+    {
+      "key": "adiscord_vorkerland_focus_decision_effects_create_unit_armi_security_detachment_xp_0_05_eq_0_55",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Armi Security Detachment",
+      "legacy_names": [],
+      "start_experience_factor": 0.05,
+      "start_equipment_factor": 0.55,
+      "count": 1
+    },
+    {
+      "key": "adiscord_vorkerland_focus_decision_effects_create_unit_armi_security_detachment_xp_0_02_eq_0_45",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Armi Security Detachment",
+      "legacy_names": [],
+      "start_experience_factor": 0.02,
+      "start_equipment_factor": 0.45,
+      "count": 1
+    },
+    {
+      "key": "adiscord_vorkerland_focus_decision_effects_create_unit_tva_collapse_militia_xp_0_05_eq_0_55",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "TVA Collapse Militia",
+      "legacy_names": [],
+      "start_experience_factor": 0.05,
+      "start_equipment_factor": 0.55,
+      "count": 1
+    },
+    {
+      "key": "adiscord_vorkerland_focus_decision_effects_create_unit_tva_collapse_militia_xp_0_02_eq_0_45",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "TVA Collapse Militia",
+      "legacy_names": [],
+      "start_experience_factor": 0.02,
+      "start_equipment_factor": 0.45,
       "count": 1
     },
     {
@@ -10653,7 +10728,7 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 5
+      "count": 4
     },
     {
       "key": "iba_vorkerland_collapse_oob_iba_border_rifles_xp_0_15_eq_0_8",
@@ -10825,7 +10900,7 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 3
+      "count": 1
     },
     {
       "key": "krl_oob_northern_line_brigade_xp_0_15_eq_0_72",
@@ -10837,7 +10912,7 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 4
+      "count": 3
     },
     {
       "key": "krm_oob_frontier_brigade_xp_0_15_eq_0_72",
@@ -10883,7 +10958,7 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 4
+      "count": 3
     },
     {
       "key": "mlr_vorkerland_collapse_oob_mlr_collapse_militia_xp_0_1_eq_0_7",
@@ -11065,7 +11140,7 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 3
+      "count": 1
     },
     {
       "key": "osf_oob_marrow_guard_xp_0_18_eq_0_32",
@@ -11944,6 +12019,84 @@
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.75,
       "count": 3
+    },
+    {
+      "key": "ars_oob_northern_militia_xp_0_15_eq_0_72",
+      "path": "history/units/ARS.txt",
+      "kind": "oob",
+      "technical_name": "Northern Militia",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.72,
+      "count": 1
+    },
+    {
+      "key": "kdl_oob_northern_militia_xp_0_15_eq_0_72",
+      "path": "history/units/KDL.txt",
+      "kind": "oob",
+      "technical_name": "Northern Militia",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.72,
+      "count": 1
+    },
+    {
+      "key": "srv_oob_northern_line_brigade_xp_0_15_eq_0_72",
+      "path": "history/units/SRV.txt",
+      "kind": "oob",
+      "technical_name": "Northern Line Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.72,
+      "count": 2
+    },
+    {
+      "key": "svl_oob_northern_militia_xp_0_15_eq_0_72",
+      "path": "history/units/SVL.txt",
+      "kind": "oob",
+      "technical_name": "Northern Militia",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.72,
+      "count": 1
+    },
+    {
+      "key": "vld_oob_northern_militia_xp_0_15_eq_0_72",
+      "path": "history/units/VLD.txt",
+      "kind": "oob",
+      "technical_name": "Northern Militia",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.72,
+      "count": 1
+    },
+    {
+      "key": "vra_oob_northern_militia_xp_0_15_eq_0_72",
+      "path": "history/units/VRA.txt",
+      "kind": "oob",
+      "technical_name": "Northern Militia",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.72,
+      "count": 1
+    },
+    {
+      "key": "adiscord_inner_frontier_effects_technical_reference_filtration_battalion",
+      "path": "common/scripted_effects/ADISCORD_inner_frontier_effects.txt",
+      "kind": "technical_reference",
+      "technical_name": "Filtration Battalion",
+      "legacy_names": [],
+      "count": 1
+    },
+    {
+      "key": "adiscord_vorkerland_rom_tru_effects_create_unit_line_infantry_brigade_xp_0_15_eq_0_7",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_rom_tru_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Line Infantry Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.7,
+      "count": 2
     }
   ]
 }

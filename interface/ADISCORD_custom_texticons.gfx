@@ -1,0 +1,37 @@
+spriteTypes = {
+    spriteType = {
+        name = "GFX_ADISCORD_economy_treasury_texticon"
+        texturefile = "gfx/texticons/adiscord/custom/treasury.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_economy_tax_texticon"
+        texturefile = "gfx/texticons/adiscord/custom/tax.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_economy_trade_texticon"
+        texturefile = "gfx/texticons/adiscord/custom/trade.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_economy_debt_texticon"
+        texturefile = "gfx/texticons/adiscord/custom/debt.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_economy_inflation_texticon"
+        texturefile = "gfx/texticons/adiscord/custom/inflation.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_country_development_texticon"
+        texturefile = "gfx/texticons/adiscord/custom/development.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_economy_burden_texticon"
+        texturefile = "gfx/texticons/adiscord/custom/burden.png"
+        legacy_lazy_load = no
+    }
+}

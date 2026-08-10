@@ -11,13 +11,58 @@ spriteTypes = {
 		textureFile = "gfx/interface/buildings/ADISCORD_build_slot_bg.dds"
 	}
 
-	spriteType = {
+	corneredTileSpriteType = {
+		name = "GFX_ADISCORD_constructions_window_bg"
+		size = { x = 192 y = 192 }
+		textureFile = "gfx/interface/buildings/ADISCORD_constructions_window_tile.dds"
+		borderSize = { x = 64 y = 64 }
+		tilingCenter = yes
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ADISCORD_constructions_queue_bg"
+		size = { x = 192 y = 192 }
+		textureFile = "gfx/interface/buildings/ADISCORD_constructions_queue_tile.dds"
+		borderSize = { x = 64 y = 64 }
+		tilingCenter = yes
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+
+	corneredTileSpriteType = {
 		name = "GFX_ADISCORD_constructions_panel_bg"
-		textureFile = "gfx/interface/buildings/ADISCORD_constructions_panel_bg.dds"
+		size = { x = 192 y = 192 }
+		textureFile = "gfx/interface/buildings/ADISCORD_constructions_panel_tile.dds"
+		borderSize = { x = 64 y = 64 }
+		tilingCenter = yes
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
 	}
 
 	spriteType = {
-		name = "GFX_ADISCORD_constructions_panel_fill"
-		textureFile = "gfx/interface/buildings/ADISCORD_constructions_panel_fill.dds"
+		name = "GFX_ADISCORD_construction_header_bg"
+		textureFile = "gfx/interface/buildings/ADISCORD_construction_header_bg.dds"
 	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_construction_screen_top_bg"
+		textureFile = "gfx/interface/buildings/ADISCORD_construction_screen_top.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_constructions_category_header"
+		textureFile = "gfx/interface/buildings/ADISCORD_constructions_category_header.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_construction_entry_bg"
+		textureFile = "gfx/interface/buildings/ADISCORD_construction_entry_bg.dds"
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_construction_special_entry_bg"
+		textureFile = "gfx/interface/buildings/ADISCORD_construction_special_entry_bg.dds"
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+
 }

@@ -8,6 +8,9 @@ ROOT = Path(__file__).resolve().parents[2]
 EFFECTS_PATH = ROOT / "common" / "scripted_effects" / "ADISCORD_VAL_rework_effects.txt"
 IDEAS_PATH = ROOT / "common" / "ideas" / "ADISCORD_VAL_rework_ideas.txt"
 FOCUSES_PATH = ROOT / "common" / "national_focus" / "ADISCORD_national_focus_VAL.txt"
+FOREIGN_EFFECTS_PATH = (
+    ROOT / "common" / "scripted_effects" / "ADISCORD_VAL_foreign_operation_effects.txt"
+)
 
 FAMILIES = {
     "administration": tuple(f"VAL_contract_administration_{n}" for n in range(1, 4)),
@@ -206,6 +209,7 @@ class ValTierTransitionContractTests(unittest.TestCase):
         cls.effects = EFFECTS_PATH.read_text(encoding="utf-8-sig")
         cls.ideas = IDEAS_PATH.read_text(encoding="utf-8-sig")
         cls.focuses = FOCUSES_PATH.read_text(encoding="utf-8-sig")
+        cls.foreign_effects = FOREIGN_EFFECTS_PATH.read_text(encoding="utf-8-sig")
 
     def effect(self, family: str, tier: int) -> str:
         return only_named_block(self, self.effects, f"VAL_apply_contract_{family}_{tier}")
@@ -343,6 +347,7 @@ class ValTierTransitionContractTests(unittest.TestCase):
             (EFFECTS_PATH, self.effects),
             (IDEAS_PATH, self.ideas),
             (FOCUSES_PATH, self.focuses),
+            (FOREIGN_EFFECTS_PATH, self.foreign_effects),
         ):
             with self.subTest(path=path):
                 masked = mask_comments(text)
@@ -354,6 +359,21 @@ class ValTierTransitionContractTests(unittest.TestCase):
                         depth -= 1
                         self.assertGreaterEqual(depth, 0, f"unexpected closing brace at {index}")
                 self.assertEqual(depth, 0, "unclosed Clausewitz block")
+
+    def test_independent_foreign_operations_do_not_call_removed_stp_campaign_effects(self) -> None:
+        engine_effects = mask_comments(self.foreign_effects)
+        self.assertNotRegex(
+            engine_effects,
+            r"\bVAL_recalculate_stp_campaign_readiness\s*=\s*yes\b",
+        )
+        for target in ("cin", "osf", "aph"):
+            resolver = only_named_block(
+                self, self.foreign_effects, f"VAL_resolve_{target}_operation"
+            )
+            self.assertRegex(
+                mask_comments(resolver),
+                r"\bVAL_clear_foreign_operation\s*=\s*yes\b",
+            )
 
     def test_each_contract_tier_is_declared_once_and_apply_effects_use_only_it(self) -> None:
         hidden_ideas = only_named_block(self, self.ideas, "hidden_ideas")

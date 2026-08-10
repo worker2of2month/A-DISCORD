@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "default_continent": 7,
+  "fully_overridden_strategic_regions": [8, 13, 17, 24, 25],
+  "continents": [
+    {
+      "id": 1,
+      "key": "europe",
+      "name": "Eastern Forul",
+      "strategic_regions": [14, 15, 16, 18],
+      "states": [43, 44, 45, 46, 68, 70, 88, 218]
+    },
+    {
+      "id": 2,
+      "key": "north_america",
+      "name": "Exclusion Zone",
+      "strategic_regions": [19, 20, 21, 22, 23],
+      "states": [179, 461]
+    },
+    {
+      "id": 3,
+      "key": "south_america",
+      "name": "Southern Deserts",
+      "strategic_regions": [40, 41, 42],
+      "states": [69, 174, 175]
+    },
+    {
+      "id": 4,
+      "key": "australia",
+      "name": "Tribal Arc",
+      "strategic_regions": [],
+      "states": [58, 59, 60, 61, 62, 63, 64, 65]
+    },
+    {
+      "id": 5,
+      "key": "africa",
+      "name": "Vorkerland",
+      "strategic_regions": [9, 10, 11, 12],
+      "states": [
+        67,
+        71,
+        74,
+        76,
+        90,
+        91,
+        93,
+        94,
+        194,
+        197,
+        198,
+        200,
+        202,
+        225,
+        226,
+        227,
+        228,
+        229,
+        230,
+        231,
+        310,
+        311,
+        312,
+        313,
+        314,
+        328,
+        688,
+        689
+      ]
+    },
+    {
+      "id": 6,
+      "key": "asia",
+      "name": "Western Forul",
+      "strategic_regions": [6, 7],
+      "states": [26, 52, 96, 99, 100, 101, 103, 113, 114, 232, 326]
+    },
+    {
+      "id": 7,
+      "key": "middle_east",
+      "name": "Outer Lands",
+      "strategic_regions": [],
+      "states": []
+    }
+  ]
+}

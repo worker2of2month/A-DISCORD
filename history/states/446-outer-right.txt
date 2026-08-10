@@ -4,11 +4,11 @@
 state = {
 	id = 446
 	name = "STATE_446"
-	manpower = 164629
+	manpower = 68838
 	state_category = rural
 	history = {
-		owner = LYS
-		add_core_of = LYS
+		owner = KDL
+		add_core_of = KDL
 		buildings = {
 			infrastructure = 3
 		}

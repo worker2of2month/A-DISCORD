@@ -1,8 +1,16 @@
 spriteTypes = {
-	# The contaminated terrain is an A-Discord map type. Reuse the desert card
-	# until dedicated artwork exists so stateview never requests a missing sprite.
+	# A-Discord terrain cards. Custom city terrain follows the TFR convention:
+	# the category name maps directly to GFX_terrain_<category>.
 	spriteType = {
 		name = "GFX_terrain_contaminated"
-		textureFile = "gfx/interface/terrains/terrain_desert.dds"
+		textureFile = "gfx/interface/terrains/terrain_contaminated.dds"
+	}
+	spriteType = {
+		name = "GFX_terrain_vorkernsberg"
+		textureFile = "gfx/interface/terrains/vorkernsberg.dds"
+	}
+	spriteType = {
+		name = "GFX_terrain_vorkernsberg_winter"
+		textureFile = "gfx/interface/terrains/vorkernsberg_winter.dds"
 	}
 }

@@ -4,16 +4,20 @@ state={
 	provinces={
 		470 894 2952 3485 7227 7539 8387 9994 10309 16313
 	}
-	manpower=18000
-	buildings_max_level_factor=1
-	state_category=town
-	local_supplies=0.5
+	manpower = 220000
+	buildings_max_level_factor = 1.000
+	state_category = town
+	local_supplies = 2.5
+	resources = {
+		steel = 4
+	}
 	history={
 		owner = EXZ
 		add_core_of = EXZ
 		buildings={
-			infrastructure=1
-			arms_factory=1
+			industrial_complex = 2
+			infrastructure = 3
+			arms_factory = 1
 		}
 	}
 }

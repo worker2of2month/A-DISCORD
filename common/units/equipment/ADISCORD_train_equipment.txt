@@ -45,7 +45,7 @@ equipments = {
 		visual_level = 2
 		armor_value = 60
 		build_cost_ic = 95
-		resources = { steel = 1 aluminium = 1 }
+		resources = { steel = 1 aluminium = 1 rare_components = 1 }
 	}
 
 	ADISCORD_hardened_train_equipment_2183 = {
@@ -57,6 +57,6 @@ equipments = {
 		armor_value = 360
 		air_attack = 24
 		build_cost_ic = 130
-		resources = { steel = 3 chromium = 1 }
+		resources = { steel = 3 chromium = 1 rare_alloys = 1 }
 	}
 }

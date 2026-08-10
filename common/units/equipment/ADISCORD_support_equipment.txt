@@ -29,7 +29,7 @@ equipments = {
 		visual_level = 1
 		reliability = 0.86
 		build_cost_ic = 4.8
-		resources = { aluminium = 2 steel = 2 }
+		resources = { aluminium = 2 steel = 2 rare_components = 1 }
 	}
 
 	ADISCORD_support_equipment_2183 = {
@@ -51,6 +51,6 @@ equipments = {
 		visual_level = 3
 		reliability = 0.82
 		build_cost_ic = 6.4
-		resources = { aluminium = 3 steel = 2 tungsten = 1 }
+		resources = { aluminium = 3 steel = 2 tungsten = 1 rare_components = 2 }
 	}
 }

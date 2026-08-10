@@ -33,6 +33,6 @@ set_popularities = {
 	technocracy = 2
 }
 
-set_stability = -0.11
+set_stability = 0.25
 
 set_research_slots = 2

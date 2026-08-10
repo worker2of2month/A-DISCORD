@@ -1,0 +1,13 @@
+spriteTypes = {
+	maskedShieldType = {
+		name = "GFX_ADISCORD_topbar_flag"
+		textureFile1 = "gfx/interface/topbar/ADISCORD_flag_overlay.dds"
+		textureFile2 = "gfx/interface/topbar/ADISCORD_flag_alpha_mask.tga"
+		effectFile = "gfx/FX/maskedflag.lua"
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_flag_frame_overlay"
+		texturefile = "gfx/interface/topbar/ADISCORD_flag_frame_overlay.dds"
+		legacy_lazy_load = no
+	}
+}

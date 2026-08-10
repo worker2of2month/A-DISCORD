@@ -1,5 +1,25 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_portrait_FRS_Mikael_Frost"
+		texturefile = "gfx/leaders/FRS/portrait_FRS_Mikael_Frost.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_VRA_Alrik_Varn"
+		texturefile = "gfx/leaders/VRA/portrait_VRA_Alrik_Varn.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_SRV_Eira_Sarven"
+		texturefile = "gfx/leaders/SRV/portrait_SRV_Eira_Sarven.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_SVL_Marta_Seval"
+		texturefile = "gfx/leaders/SVL/portrait_SVL_Marta_Seval.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_KDL_Oren_Kadel"
+		texturefile = "gfx/leaders/KDL/portrait_KDL_Oren_Kadel.png"
+	}
+	spriteType = {
 		name = "GFX_portrait_MON_Marius_II_Arken"
 		texturefile = "gfx/leaders/MON/portrait_MON_mongol_monarchy.png"
 	}

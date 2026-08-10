@@ -20,9 +20,19 @@ characters = {
 			traits = { KRL_winter_crown }
 		}
 	}
+	VRA_Alrik_Varn = {
+		name = VRA_Alrik_Varn
+		portraits = { civilian = { large = GFX_portrait_VRA_Alrik_Varn } }
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = VRA_Alrik_Varn_desc
+		}
+	}
 	FRS_Mikael_Frost = {
 		name = FRS_Mikael_Frost
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_5 } }
+		portraits = { civilian = { large = GFX_portrait_FRS_Mikael_Frost } }
 		country_leader = {
 			ideology = pragmatism_ideology
 			expire = "2200.1.1.1"
@@ -38,6 +48,16 @@ characters = {
 			expire = "2200.1.1.1"
 			id = -1
 			desc = KHV_Ilva_Havren_desc
+		}
+	}
+	SRV_Eira_Sarven = {
+		name = SRV_Eira_Sarven
+		portraits = { civilian = { large = GFX_portrait_SRV_Eira_Sarven } }
+		country_leader = {
+			ideology = technocracy_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = SRV_Eira_Sarven_desc
 		}
 	}
 	ELN_Taal_Elander = {
@@ -69,6 +89,16 @@ characters = {
 			id = -1
 			desc = HON_Honter_Woke_desc
 			traits = { HON_first_citizen }
+		}
+	}
+	SVL_Marta_Seval = {
+		name = SVL_Marta_Seval
+		portraits = { civilian = { large = GFX_portrait_SVL_Marta_Seval } }
+		country_leader = {
+			ideology = humanism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = SVL_Marta_Seval_desc
 		}
 	}
 	NVR_Leif_Norven = {
@@ -112,6 +142,16 @@ characters = {
 			desc = LYS_Cassian_Lys_desc
 		}
 	}
+	KDL_Oren_Kadel = {
+		name = KDL_Oren_Kadel
+		portraits = { civilian = { large = GFX_portrait_KDL_Oren_Kadel } }
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = KDL_Oren_Kadel_desc
+		}
+	}
 	VES_Oskar_Vest = {
 		name = VES_Oskar_Vest
 		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_2 } }
@@ -141,6 +181,26 @@ characters = {
 			expire = "2200.1.1.1"
 			id = -1
 			desc = ORV_Anton_Orval_desc
+		}
+	}
+	ARS_Lina_Arsal = {
+		name = ARS_Lina_Arsal
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_7 } }
+		country_leader = {
+			ideology = utilitarism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = ARS_Lina_Arsal_desc
+		}
+	}
+	VLD_Irma_Vald = {
+		name = VLD_Irma_Vald
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_3 } }
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = VLD_Irma_Vald_desc
 		}
 	}
 	MON_Marius_II_Arken = {

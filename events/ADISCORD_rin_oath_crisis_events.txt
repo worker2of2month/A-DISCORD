@@ -1,0 +1,106 @@
+add_namespace = ADISCORD_rin_crisis
+
+country_event = {
+	id = ADISCORD_rin_crisis.1
+	title = ADISCORD_rin_crisis.1.t
+	desc = ADISCORD_rin_crisis.1.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = RIN
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_collapse_started
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		}
+		NOT = { has_global_flag = ADISCORD_rin_oath_crisis_opened }
+		NOT = { has_global_flag = ADISCORD_rin_oath_crisis_resolved }
+	}
+	immediate = {
+		clr_global_flag = ADISCORD_rin_oath_crisis_scheduled
+		set_global_flag = ADISCORD_rin_oath_crisis_opened
+	}
+	option = {
+		name = ADISCORD_rin_crisis.1.a
+		ai_chance = { base = 100 }
+		ADISCORD_rin_begin_oath_crisis = yes
+	}
+	option = {
+		name = ADISCORD_rin_crisis.1.b
+		trigger = { is_subject_of = MON }
+		ai_chance = { base = 0 }
+		remove_ideas = RIN_two_oaths
+		add_ideas = RIN_crown_palatin
+		add_stability = -0.05
+		add_political_power = -50
+		set_country_flag = ADISCORD_rin_oath_crisis_loyal_to_montar
+		set_global_flag = ADISCORD_rin_oath_crisis_loyalty_outcome
+		set_global_flag = ADISCORD_rin_oath_crisis_resolved
+	}
+}
+
+# The one-day barrier lets subject and faction caches settle before the civil
+# war allocates the two northern states and forty percent of RIN's formations.
+country_event = {
+	id = ADISCORD_rin_crisis.2
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = RIN
+		has_global_flag = ADISCORD_rin_oath_crisis_split_pending
+		NOT = { has_global_flag = ADISCORD_rin_oath_crisis_active }
+		NOT = { has_global_flag = ADISCORD_rin_oath_crisis_resolved }
+	}
+	immediate = { ADISCORD_rin_start_oath_civil_war = yes }
+}
+
+# First bounded assertion after white peace and state/controller transfers have
+# crossed one daily cache boundary. A bad result receives exactly one repair.
+country_event = {
+	id = ADISCORD_rin_crisis.3
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = ADISCORD_rin_southern_charter_side
+		has_country_flag = ADISCORD_rin_partition_verification_pending
+		has_global_flag = ADISCORD_rin_oath_crisis_partition_armistice
+	}
+	immediate = {
+		if = {
+			limit = { ADISCORD_rin_partition_armistice_is_valid = yes }
+			clr_country_flag = ADISCORD_rin_partition_verification_pending
+			clr_country_flag = ADISCORD_rin_partition_verification_retry
+		}
+		else = {
+			set_country_flag = ADISCORD_rin_partition_verification_retry
+			ADISCORD_rin_apply_partition_armistice = yes
+			country_event = { id = ADISCORD_rin_crisis.4 days = 1 }
+		}
+	}
+}
+
+# Terminal assertion for the single repair above. It records drift for logs and
+# old saves but never polls or schedules another event.
+country_event = {
+	id = ADISCORD_rin_crisis.4
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = ADISCORD_rin_southern_charter_side
+		has_country_flag = ADISCORD_rin_partition_verification_pending
+		has_country_flag = ADISCORD_rin_partition_verification_retry
+		has_global_flag = ADISCORD_rin_oath_crisis_partition_armistice
+	}
+	immediate = {
+		if = {
+			limit = { NOT = { ADISCORD_rin_partition_armistice_is_valid = yes } }
+			set_global_flag = ADISCORD_rin_oath_crisis_terminal_failure
+			log = "[ADISCORD][RIN] Partition verification failed after the single bounded repair."
+		}
+		clr_country_flag = ADISCORD_rin_partition_verification_pending
+		clr_country_flag = ADISCORD_rin_partition_verification_retry
+	}
+}

@@ -1,0 +1,89 @@
+on_actions = {
+	on_startup = {
+		effect = {
+			# One bounded bridge for campaigns already inside the Vorkerland wars.
+			# Fresh campaigns wait for the first actual claimant war edge below.
+			RIN = {
+				if = {
+					limit = { ADISCORD_rin_oath_crisis_legacy_needs_schedule = yes }
+					set_global_flag = ADISCORD_rin_oath_crisis_scheduled
+					MON = { ADISCORD_release_non_participating_minor_optimization = yes }
+					ADISCORD_release_non_participating_minor_optimization = yes
+					country_event = { id = ADISCORD_rin_crisis.1 days = 1 }
+				}
+			}
+		}
+	}
+
+	on_war = {
+		effect = {
+			if = {
+				limit = {
+					ADISCORD_rin_is_vorkerland_war_actor = yes
+					ADISCORD_rin_oath_crisis_can_schedule = yes
+				}
+				set_global_flag = ADISCORD_rin_oath_crisis_scheduled
+				MON = { ADISCORD_release_non_participating_minor_optimization = yes }
+				RIN = {
+					ADISCORD_release_non_participating_minor_optimization = yes
+					country_event = { id = ADISCORD_rin_crisis.1 days = 7 }
+				}
+			}
+		}
+	}
+
+	# This file sorts before ZZ_ADISCORD_default_capitulation_on_actions. Reserve
+	# the two-sided RIN war here, settle it explicitly, then clear the reservation
+	# in the generic handler just like every other bespoke capitulation.
+	on_capitulation = {
+		effect = {
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_rin_oath_crisis_active
+					ROOT = { has_country_flag = ADISCORD_rin_northern_crown_side }
+					FROM = { has_country_flag = ADISCORD_rin_southern_charter_side }
+				}
+				set_global_flag = skip_default_capitulation
+				set_global_flag = ADISCORD_rin_oath_crisis_settlement_in_progress
+				FROM = {
+					if = { limit = { has_war_with = ROOT } white_peace = ROOT }
+					annex_country = { target = ROOT transfer_troops = yes }
+					ADISCORD_rin_complete_southern_victory = yes
+				}
+			}
+			else_if = {
+				limit = {
+					has_global_flag = ADISCORD_rin_oath_crisis_active
+					ROOT = { has_country_flag = ADISCORD_rin_southern_charter_side }
+					FROM = { has_country_flag = ADISCORD_rin_northern_crown_side }
+				}
+				set_global_flag = skip_default_capitulation
+				set_global_flag = ADISCORD_rin_oath_crisis_settlement_in_progress
+				FROM = {
+					if = { limit = { has_war_with = ROOT } white_peace = ROOT }
+					annex_country = { target = ROOT transfer_troops = yes }
+					ADISCORD_rin_complete_northern_victory = yes
+				}
+			}
+		}
+	}
+
+	on_peace = {
+		effect = {
+			# Fallback for console peace or another external peace effect. Bespoke
+			# capitulation and mission timeout raise settlement_in_progress first.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_rin_oath_crisis_active
+					NOT = { has_global_flag = ADISCORD_rin_oath_crisis_settlement_in_progress }
+					event_target:ADISCORD_rin_southern_charter = { exists = yes has_war = no }
+					event_target:ADISCORD_rin_northern_court = { exists = yes has_war = no }
+				}
+				set_global_flag = ADISCORD_rin_oath_crisis_settlement_in_progress
+				event_target:ADISCORD_rin_southern_charter = {
+					ADISCORD_rin_complete_partition_armistice = yes
+				}
+			}
+		}
+	}
+}

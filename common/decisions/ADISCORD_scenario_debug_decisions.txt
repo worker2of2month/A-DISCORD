@@ -8,7 +8,7 @@ ADISCORD_scenario_debug_category = {
 	}
 
 	ADISCORD_debug_add_vorkerland_war_exhaustion = {
-		allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
+		allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
 		visible = { has_global_flag = ADISCORD_vorkerland_collapse_started }
 		cost = 0
 		complete_effect = {
@@ -27,7 +27,7 @@ ADISCORD_scenario_debug_category = {
 	}
 
 	ADISCORD_debug_reset_vorkerland_war_exhaustion = {
-		allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
+		allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
 		visible = { has_global_flag = ADISCORD_vorkerland_collapse_started }
 		cost = 0
 		complete_effect = { ADISCORD_vorkerland_reset_civil_war_exhaustion = yes }
@@ -47,14 +47,14 @@ ADISCORD_scenario_debug_category = {
 	}
 
 	ADISCORD_debug_force_vorkerland_central_victory = {
-		allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
+		allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
 		visible = {
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 		}
 		cost = 0
 		complete_effect = {
-			if = { limit = { tag = WRK } ADISCORD_vorkerland_apply_worker_map = yes }
+			if = { limit = { tag = WKR } ADISCORD_vorkerland_apply_worker_map = yes }
 			else_if = { limit = { tag = VAD } ADISCORD_vorkerland_apply_vlad_map = yes }
 			else_if = { limit = { tag = TVA } ADISCORD_vorkerland_apply_dorian_map = yes }
 		}

@@ -2051,8 +2051,8 @@ def task10_material_numeric_surface_issues(russian_text, english_text):
             "english": ("10%", "100", "15%", "2", "35", "50"),
         },
         "ADISCORD_economy_buildings_tt": {
-            "russian": ("+0.90", "+5%", "0.42", "1", "2", "4", "6"),
-            "english": ("+0.90", "+5%", "-0.42", "1", "2", "4", "6"),
+            "russian": ("+1.20", "+5%", "0.27", "1", "2", "4", "6"),
+            "english": ("+1.20", "+5%", "-0.27", "1", "2", "4", "6"),
         },
         "ADISCORD_economy_war_fatigue_tt": {
             "russian": (
@@ -6386,7 +6386,7 @@ ADISCORD_bad_assistance_owner = {
         )
         buildings_mutation = ECONOMY_LOC_EN.replace(
             buildings_value,
-            buildings_value.replace("+0.90", "", 1),
+            buildings_value.replace("+1.20", "", 1),
             1,
         )
         self.assertNotEqual(buildings_mutation, ECONOMY_LOC_EN)
@@ -6941,29 +6941,8 @@ ADISCORD_task10_forbidden_cache_consumer = {
         ):
             self.assertIn(cache, policy_refresh)
 
-    def test_treasury_operations_overlay_is_click_only_and_resets_with_window(self):
-        for window_effect in (
-            "ADISCORD_economy_open_window",
-            "ADISCORD_economy_close_window",
-        ):
-            body = block(EFFECTS, window_effect)
-            self.assertRegex(
-                body,
-                r"set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_show_operations"
-                r"\s+value\s*=\s*0\s*\}",
-            )
-
-        for recurring_effect in (
-            "ADISCORD_economy_weekly_update",
-            "ADISCORD_economy_monthly_update",
-            "ADISCORD_economy_yearly_update",
-            "ADISCORD_economy_light_update",
-        ):
-            self.assertNotIn(
-                "ADISCORD_economy_show_operations",
-                block(EFFECTS, recurring_effect),
-                recurring_effect,
-            )
+    def test_treasury_actions_need_no_overlay_state(self):
+        self.assertNotIn("ADISCORD_economy_show_operations", EFFECTS)
 
     def test_peacetime_war_fatigue_always_decays(self):
         fatigue = block(EFFECTS, "ADISCORD_economy_update_war_fatigue")
@@ -7571,6 +7550,7 @@ ADISCORD_task10_forbidden_cache_consumer = {
     def test_treasury_tooltip_uses_weekly_and_period_values(self):
         self.assertIn("ADISCORD_economy_weekly_balance", ECONOMY_LOC)
         self.assertIn("ADISCORD_economy_weekly_income", ECONOMY_LOC)
+        self.assertIn("ADISCORD_economy_final_weekly_income_bonus", ECONOMY_LOC)
         self.assertIn("ADISCORD_economy_weekly_expenses", ECONOMY_LOC)
         self.assertNotIn("ADISCORD_economy_last_period_unexplained_delta", ECONOMY_LOC)
         self.assertNotIn(
@@ -7615,19 +7595,19 @@ ADISCORD_task10_forbidden_cache_consumer = {
                 "5500",
                 "750",
                 "3",
-                "local_building_slots_factor = 0.05",
+                "local_building_slots_factor = 0.10",
             ),
             "ADISCORD_science_center": (
                 "7000",
                 "1250",
                 "2",
-                "local_building_slots_factor = 0.02",
+                "local_building_slots_factor = 0.06",
             ),
             "ADISCORD_industrial_cluster": (
                 "8000",
                 "1500",
                 "3",
-                "local_factory_energy_consumption = 0.20",
+                "local_factory_energy_consumption = 0.10",
             ),
         }
         for name, (cost, extra_cost, state_cap, signature) in specs.items():
@@ -7719,12 +7699,12 @@ ADISCORD_task10_forbidden_cache_consumer = {
     def test_building_tooltips_lead_with_role_and_budget_impact(self):
         self.assertNotIn("Строятся в обычном меню", ECONOMY_LOC)
         for key, role, budget in (
-            ("ADISCORD_business_center_desc", "Роль: доход", "+0,90"),
-            ("ADISCORD_science_center_desc", "Роль: исследования", "-0,42"),
+            ("ADISCORD_business_center_desc", "Роль: доход", "+1,20"),
+            ("ADISCORD_science_center_desc", "Роль: исследования", "-0,27"),
             (
                 "ADISCORD_industrial_cluster_desc",
                 "Роль: местное военное производство",
-                "+0,08",
+                "+0,31",
             ),
         ):
             match = re.search(rf'(?m)^\s*{key}:\d*\s+"([^"]*)"', ECONOMY_LOC)
@@ -7739,9 +7719,9 @@ ADISCORD_task10_forbidden_cache_consumer = {
             "Деловой центр",
             "Научный центр",
             "Промышленный кластер",
-            "0.85 + 0.15 - 0.10 = +0.90",
-            "0.05 - 0.35 - 0.12 = -0.42",
-            "0.30 + 0.08 - 0.18 - 0.12 = +0.08",
+            "1.05 + 0.25 - 0.10 = +1.20",
+            "0.20 - 0.35 - 0.12 = -0.27",
+            "0.45 + 0.16 - 0.18 - 0.12 = +0.31",
             "5% × сумма(исправные военные заводы региона × уровень кластера)",
             "3 / 13",
         ):
@@ -7754,7 +7734,7 @@ ADISCORD_task10_forbidden_cache_consumer = {
                 MODIFIER_DEFINITIONS,
             )
         )
-        self.assertEqual(len(modifier_keys), 41)
+        self.assertEqual(len(modifier_keys), 42)
         self.assertTrue(MODIFIER_DOC.is_file())
         documentation = MODIFIER_DOC.read_text(encoding="utf-8-sig")
         for key in modifier_keys:

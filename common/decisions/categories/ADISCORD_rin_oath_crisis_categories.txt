@@ -1,0 +1,9 @@
+ADISCORD_rin_oath_crisis_category = {
+	icon = generic_border_conflict
+	allowed = { original_tag = RIN }
+	visible = {
+		has_country_flag = ADISCORD_rin_southern_charter_side
+		has_global_flag = ADISCORD_rin_oath_crisis_active
+		NOT = { has_global_flag = ADISCORD_rin_oath_crisis_resolved }
+	}
+}

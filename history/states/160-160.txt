@@ -2,7 +2,7 @@
 state = {
 	id = 160
 	name = "STATE_160"
-	manpower = 199138
+	manpower = 188029
 	state_category = rural
 	history = {
 		owner = WCG
@@ -13,7 +13,7 @@ state = {
 		}
 	}
 	provinces = {
-		391 1520 3597 4041 4221 4297 5173 5398 8893 10483
+		391 1520 4041 4221 4297 5173 5398 8893 10483
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 1.9

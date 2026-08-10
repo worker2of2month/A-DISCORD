@@ -22,3 +22,10 @@ add_ideas = {
 	MON_arsenal_belt
 	MON_hierarchy_of_peoples
 }
+
+# The Rhine Palatinate keeps its own court and army, but the northern oath
+# makes it a Montar dependency until the Vorkerland collapse breaks the pact.
+set_autonomy = {
+	target = RIN
+	autonomous_state = autonomy_puppet
+}

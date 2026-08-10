@@ -2960,12 +2960,16 @@ def validate(root: Path = ROOT) -> list[str]:
         require(bool(building), f"missing economic building {building_name}")
         require(f"per_controlled_building_extra_cost = {extra_cost}" in building,
                 f"{building_name} does not become progressively more expensive")
-    require("local_building_slots_factor = 0.05" in block(buildings, "ADISCORD_business_center"),
+    require("state_production_speed_buildings_factor = 0.05" in block(buildings, "ADISCORD_business_center"),
             "business center lacks its distinct commercial-slot role")
-    require("local_building_slots_factor = 0.02" in block(buildings, "ADISCORD_science_center"),
+    require("local_building_slots_factor = 0.10" in block(buildings, "ADISCORD_business_center"),
+            "business center lacks its stronger regional slot bonus")
+    require("local_building_slots_factor = 0.06" in block(buildings, "ADISCORD_science_center"),
             "science center still duplicates the stronger commercial/industrial state role")
-    require("local_factory_energy_consumption = 0.20" in block(buildings, "ADISCORD_industrial_cluster"),
+    require("local_factory_energy_consumption = 0.10" in block(buildings, "ADISCORD_industrial_cluster"),
             "industrial cluster lacks its visible heavy-industry energy burden")
+    require("state_production_speed_buildings_factor = 0.10" in block(buildings, "ADISCORD_industrial_cluster"),
+            "industrial cluster lacks its stronger regional construction bonus")
     cluster_output = block(dynamic_modifiers, "ADISCORD_economy_cluster_local_factory_output")
     require("industrial_capacity_factory = ADISCORD_economy_cluster_factory_output_factor" in cluster_output,
             "industrial cluster lacks its location-weighted military-factory output modifier")
@@ -3046,8 +3050,10 @@ def validate(root: Path = ROOT) -> list[str]:
         "ADISCORD_economy_auto_loan_enabled",
         "ADISCORD_economy_toggle_auto_loan",
         "ADISCORD_economy_gui_page",
-        "ADISCORD_economy_construction_spending_mode",
-        "ADISCORD_economy_construction_budget_change_cooldown",
+        # The two retired construction variables have one exact schema-12
+        # migration exception, validated structurally by
+        # migration_contract_issues() above.  Do not reject that migration via
+        # this coarse whole-file substring guard.
         "ADISCORD_economy_admin_spending_mode",
         "ADISCORD_economy_weekly_player_refresh",
         "ADISCORD_economy_gui_try_early_repay_debt",
@@ -3070,8 +3076,8 @@ def validate(root: Path = ROOT) -> list[str]:
             "scripted localisation exposes more than four economy-cycle states")
 
     require('name = "ADISCORD_economy_dashboard_window"' in gui, "economy dashboard window is missing")
-    require('position = { x = -420 y = -280 }' in gui and re.search(r"Orientation\s*=\s*CENTER", gui, re.I),
-            "economy dashboard is not centered for common screen resolutions")
+    require('position = { x = 6 y = 78 }' in gui and re.search(r"Orientation\s*=\s*UPPER_LEFT", gui, re.I),
+            "economy dashboard is not docked beside the native top-bar windows")
     require("size = { width = 840 height = 560 }" in gui,
             "economy dashboard no longer fits the supported 1366x768 layout envelope")
     require("ADISCORD_economy_header_art" not in gui,
@@ -3107,6 +3113,17 @@ def validate(root: Path = ROOT) -> list[str]:
     require('window_name = "ADISCORD_economy_dashboard_window"' in dashboard_script
             and "ADISCORD_economy_window_is_open = yes" in dashboard_script,
             "single economy window is not bound to the open-state trigger")
+    open_window = block(effects, "ADISCORD_economy_open_window")
+    require(
+        re.search(
+            r"if\s*=\s*\{\s*limit\s*=\s*\{\s*"
+            r"ADISCORD_economy_should_show_player_ui\s*=\s*yes\s*\}"
+            r"[\s\S]*?ADISCORD_economy_initialize_country\s*=\s*yes",
+            open_window,
+        )
+        is not None,
+        "observer opening the economy dashboard can mutate the selected AI country",
+    )
 
     for removed_control in (
         "ADISCORD_economy_tax_burden_1", "ADISCORD_economy_army_budget_1",
@@ -3152,14 +3169,14 @@ def validate(root: Path = ROOT) -> list[str]:
         and 'pdx_tooltip_delayed = "ADISCORD_economy_balance_delayed_tt"' in gui,
         "balance KPI lacks the requested short/delayed income and expense breakdown",
     )
-    require('name = "ADISCORD_economy_topbar_icon"' in gui
-            and 'spriteType = "GFX_ADISCORD_treasury_icon"' in gui,
-            "topbar lacks the compact treasury icon")
-    require('name = "ADISCORD_economy_topbar_value"' in gui
-            and 'text = "ADISCORD_economy_topbar_treasury_value"' in gui,
-            "topbar lacks the numeric-only treasury value")
-    require('name = "GFX_ADISCORD_treasury_icon"' in interface_gfx,
-            "temporary treasury icon sprite is not registered")
+    require('name = "ADISCORD_economy_topbar_button"' in gui
+            and 'quadTextureSprite = "GFX_ADISCORD_economy_topbar_button"' in gui,
+            "topbar lacks the dedicated economy button")
+    require('name = "ADISCORD_economy_topbar_icon"' not in gui
+            and 'name = "ADISCORD_economy_topbar_value"' not in gui,
+            "topbar still overlays the retired treasury icon/value composition")
+    require('name = "GFX_ADISCORD_economy_topbar_button"' in interface_gfx,
+            "economy topbar button sprite is not registered")
 
     gui_buttons = set(re.findall(r'buttonType\s*=\s*\{.*?name\s*=\s*"(ADISCORD_economy_[^"]+)"', gui, re.S))
     require(bool(gui_buttons), "economy dashboard contains no discoverable interactive buttons")

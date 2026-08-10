@@ -5,12 +5,10 @@ state={
 		706 5655 9967 10146 12985 16389 16391 16396 16397 16404 16418 
 	}
 
-	state_category = megalopolis
-
-	manpower=11487156
-	buildings_max_level_factor=1.000
-	local_supplies=10
-
+	state_category = metropolis
+	manpower = 5500000
+	buildings_max_level_factor = 1.000
+	local_supplies = 7.0
 	history = {
         owner = WRK
         add_core_of = WRK
