@@ -1,0 +1,159 @@
+ADISCORD_vorkerland_is_temporary_claimant = {
+	OR = {
+		tag = WKR
+		tag = VAD
+		tag = TVA
+	}
+}
+
+ADISCORD_vorkerland_collapse_materialized = {
+	country_exists = WKR
+	NOT = { country_exists = WRK }
+	country_exists = VAD
+	country_exists = TVA
+	WKR = {
+		is_subject = no
+		NOT = { has_capitulated = yes }
+		num_divisions > 0
+		controls_state = 32
+		controls_state = 33
+		controls_state = 40
+		controls_state = 200
+		controls_state = 201
+	}
+	VAD = {
+		is_subject = no
+		NOT = { has_capitulated = yes }
+		num_divisions > 0
+		controls_state = 75
+		controls_state = 106
+		controls_state = 107
+		controls_state = 121
+	}
+	TVA = {
+		is_subject = no
+		NOT = { has_capitulated = yes }
+		num_divisions > 0
+		controls_state = 36
+		controls_state = 37
+		controls_state = 38
+		controls_state = 39
+		controls_state = 324
+	}
+	OR = {
+		AND = {
+			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+			WKR = {
+				has_country_leader = {
+					character = WRK_Nikita_Worcker
+					ruling_only = yes
+				}
+			}
+		}
+		AND = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+			WKR = {
+				has_country_leader = {
+					character = WRK_Anton_Bagley
+					ruling_only = yes
+				}
+			}
+		}
+	}
+	32 = { is_owned_by = WKR is_controlled_by = WKR }
+	33 = { is_owned_by = WKR is_controlled_by = WKR }
+	40 = { is_owned_by = WKR is_controlled_by = WKR }
+	200 = { is_owned_by = WKR is_controlled_by = WKR }
+	201 = { is_owned_by = WKR is_controlled_by = WKR }
+	75 = { is_owned_by = VAD is_controlled_by = VAD }
+	106 = { is_owned_by = VAD is_controlled_by = VAD }
+	107 = { is_owned_by = VAD is_controlled_by = VAD }
+	121 = { is_owned_by = VAD is_controlled_by = VAD }
+	36 = { is_owned_by = TVA is_controlled_by = TVA }
+	37 = { is_owned_by = TVA is_controlled_by = TVA }
+	38 = { is_owned_by = TVA is_controlled_by = TVA }
+	39 = { is_owned_by = TVA is_controlled_by = TVA }
+	324 = { is_owned_by = TVA is_controlled_by = TVA }
+}
+
+# Regional resolution is checked only from one-shot peace/capitulation routes.
+# It is deliberately country-explicit: no monthly pulse and no world scan.
+ADISCORD_vorkerland_regional_consolidation_complete = {
+	has_global_flag = ADISCORD_vorkerland_northern_wars_began
+	OR = { NOT = { country_exists = ZAO } ZAO = { has_capitulated = yes } ZAO = { is_subject = yes } ZAO = { has_war = no } }
+	OR = { NOT = { country_exists = WPA } WPA = { has_capitulated = yes } WPA = { is_subject = yes } WPA = { has_war = no } }
+	OR = { NOT = { country_exists = WPS } WPS = { has_capitulated = yes } WPS = { is_subject = yes } WPS = { has_war = no } }
+	OR = { NOT = { country_exists = PSD } PSD = { has_capitulated = yes } PSD = { is_subject = yes } PSD = { has_war = no } }
+	OR = { NOT = { country_exists = PWR } PWR = { has_capitulated = yes } PWR = { is_subject = yes } PWR = { has_war = no } }
+	OR = { NOT = { country_exists = VLA } VLA = { has_capitulated = yes } VLA = { is_subject = yes } VLA = { has_war = no } }
+	OR = { NOT = { country_exists = EBA } EBA = { has_capitulated = yes } EBA = { is_subject = yes } EBA = { has_war = no } }
+	OR = { NOT = { country_exists = TGD } TGD = { has_capitulated = yes } TGD = { is_subject = yes } TGD = { has_war = no } }
+	OR = { NOT = { country_exists = ROM } ROM = { has_capitulated = yes } ROM = { is_subject = yes } ROM = { has_war = no } }
+	OR = { NOT = { country_exists = DVA } DVA = { has_capitulated = yes } DVA = { is_subject = yes } DVA = { has_war = no } }
+	OR = { NOT = { country_exists = SOL } SOL = { has_capitulated = yes } SOL = { is_subject = yes } SOL = { has_war = no } }
+	OR = { NOT = { country_exists = SRA } SRA = { has_capitulated = yes } SRA = { is_subject = yes } SRA = { has_war = no } }
+	OR = { NOT = { country_exists = CSL } CSL = { has_capitulated = yes } CSL = { is_subject = yes } CSL = { has_war = no } }
+	OR = { NOT = { country_exists = TRU } TRU = { has_capitulated = yes } TRU = { is_subject = yes } TRU = { has_war = no } }
+	OR = { NOT = { country_exists = ZTA } ZTA = { has_capitulated = yes } ZTA = { is_subject = yes } ZTA = { has_war = no } }
+}
+
+ADISCORD_vorkerland_central_showdown_required = {
+	OR = {
+		AND = { country_exists = WKR country_exists = VAD }
+		AND = { country_exists = WKR country_exists = TVA }
+		AND = { country_exists = VAD country_exists = TVA }
+	}
+}
+
+ADISCORD_vorkerland_central_showdown_edges_verified = {
+	OR = {
+		NOT = { has_global_flag = ADISCORD_vorkerland_showdown_edge_wkr_vad_required }
+		has_global_flag = ADISCORD_vorkerland_showdown_edge_wkr_vad_verified
+	}
+	OR = {
+		NOT = { has_global_flag = ADISCORD_vorkerland_showdown_edge_wkr_tva_required }
+		has_global_flag = ADISCORD_vorkerland_showdown_edge_wkr_tva_verified
+	}
+	OR = {
+		NOT = { has_global_flag = ADISCORD_vorkerland_showdown_edge_vad_tva_required }
+		has_global_flag = ADISCORD_vorkerland_showdown_edge_vad_tva_verified
+	}
+}
+
+ADISCORD_vorkerland_has_single_surviving_claimant = {
+	OR = {
+		AND = {
+			WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+			OR = { NOT = { country_exists = VAD } VAD = { has_capitulated = yes } VAD = { is_subject = yes } }
+			OR = { NOT = { country_exists = TVA } TVA = { has_capitulated = yes } TVA = { is_subject = yes } }
+		}
+		AND = {
+			VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+			OR = { NOT = { country_exists = WKR } WKR = { has_capitulated = yes } WKR = { is_subject = yes } }
+			OR = { NOT = { country_exists = TVA } TVA = { has_capitulated = yes } TVA = { is_subject = yes } }
+		}
+		AND = {
+			TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+			OR = { NOT = { country_exists = WKR } WKR = { has_capitulated = yes } WKR = { is_subject = yes } }
+			OR = { NOT = { country_exists = VAD } VAD = { has_capitulated = yes } VAD = { is_subject = yes } }
+		}
+	}
+}
+
+ADISCORD_vorkerland_reunification_verified = {
+	country_exists = WRK
+	WRK = {
+		is_subject = no
+		NOT = { has_capitulated = yes }
+		controls_state = 32
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_route_worker
+			has_country_flag = ADISCORD_vorkerland_route_joint
+			has_country_flag = ADISCORD_vorkerland_route_utilitarian
+		}
+	}
+	32 = { is_owned_by = WRK is_controlled_by = WRK }
+	NOT = { country_exists = WKR }
+	NOT = { country_exists = VAD }
+	NOT = { country_exists = TVA }
+}

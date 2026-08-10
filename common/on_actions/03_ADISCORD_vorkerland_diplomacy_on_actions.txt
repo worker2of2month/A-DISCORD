@@ -1,0 +1,86 @@
+on_actions = {
+	on_startup = {
+		effect = {
+			# One bounded save-repair assertion; normal outcome recording is event-driven
+			# from regional capitulations below.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+					OR = {
+						NOT = { has_global_flag = ADISCORD_vorkerland_solar_terminal_verified }
+						NOT = { has_global_flag = ADISCORD_vorkerland_volnograd_terminal_verified }
+					}
+					NOT = { has_global_flag = ADISCORD_vorkerland_regional_diplomacy_repair_scheduled }
+				}
+				set_global_flag = {
+					flag = ADISCORD_vorkerland_regional_diplomacy_repair_scheduled
+					days = 7
+				}
+				if = {
+					limit = { country_exists = WKR }
+					WKR = { country_event = { id = ADISCORD_vorkerland_diplomacy.1 days = 1 } }
+				}
+				else_if = {
+					limit = { country_exists = VAD }
+					VAD = { country_event = { id = ADISCORD_vorkerland_diplomacy.1 days = 1 } }
+				}
+				else_if = {
+					limit = { country_exists = TVA }
+					TVA = { country_event = { id = ADISCORD_vorkerland_diplomacy.1 days = 1 } }
+				}
+			}
+		}
+	}
+
+	on_capitulation = {
+		effect = {
+			if = {
+				limit = {
+					ROOT = { OR = { tag = SOL tag = SRA tag = CSL tag = VLA tag = EBA tag = TGD } }
+					NOT = { has_global_flag = ADISCORD_vorkerland_regional_diplomacy_check_scheduled }
+				}
+				set_global_flag = {
+					flag = ADISCORD_vorkerland_regional_diplomacy_check_scheduled
+					days = 3
+				}
+				if = {
+					limit = { country_exists = WKR }
+					WKR = { country_event = { id = ADISCORD_vorkerland_diplomacy.1 days = 1 } }
+				}
+				else_if = {
+					limit = { country_exists = VAD }
+					VAD = { country_event = { id = ADISCORD_vorkerland_diplomacy.1 days = 1 } }
+				}
+				else_if = {
+					limit = { country_exists = TVA }
+					TVA = { country_event = { id = ADISCORD_vorkerland_diplomacy.1 days = 1 } }
+				}
+			}
+
+			# VAD's intervention has an exact settlement instead of a peace
+			# conference: only the five Solar states are rebuilt as loyalist SOL.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+					ROOT = {
+						OR = {
+							AND = { tag = SRA has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_sra }
+							AND = { tag = CSL has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_csl }
+						}
+					}
+					FROM = { tag = VAD NOT = { has_capitulated = yes } }
+				}
+				set_global_flag = skip_default_capitulation
+				FROM = {
+					annex_country = { target = ROOT transfer_troops = no }
+					transfer_state = 76
+					transfer_state = 104
+					transfer_state = 198
+					transfer_state = 307
+					transfer_state = 310
+					country_event = { id = ADISCORD_vorkerland_diplomacy.4 days = 1 }
+				}
+			}
+		}
+	}
+}

@@ -120,6 +120,7 @@ class WrkIdeologyContractTests(unittest.TestCase):
             claimant_cosmetics.group(1),
         )
         self.assertIsNotNone(worker_survives)
+        self.assertNotIn("WKR_Worker_Emergency_Presidium", claimant_cosmetics.group(1))
         self.assertRegex(
             on_actions,
             r"(?s)has_global_flag\s*=\s*ADISCORD_vorkerland_collapse_started.*?"

@@ -1,0 +1,298 @@
+ADISCORD_vorkerland_record_regional_diplomacy_outcomes = {
+	if = {
+		limit = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_solar_terminal_verified }
+			ADISCORD_vorkerland_solar_terminal_sol = yes
+		}
+		clr_global_flag = ADISCORD_vorkerland_solar_winner_sra
+		clr_global_flag = ADISCORD_vorkerland_solar_winner_csl
+		set_global_flag = ADISCORD_vorkerland_solar_winner_sol
+		set_global_flag = ADISCORD_vorkerland_solar_terminal_verified
+	}
+	else_if = {
+		limit = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_solar_terminal_verified }
+			ADISCORD_vorkerland_solar_terminal_sra = yes
+		}
+		clr_global_flag = ADISCORD_vorkerland_solar_winner_sol
+		clr_global_flag = ADISCORD_vorkerland_solar_winner_csl
+		set_global_flag = ADISCORD_vorkerland_solar_winner_sra
+		set_global_flag = ADISCORD_vorkerland_solar_terminal_verified
+	}
+	else_if = {
+		limit = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_solar_terminal_verified }
+			ADISCORD_vorkerland_solar_terminal_csl = yes
+		}
+		clr_global_flag = ADISCORD_vorkerland_solar_winner_sol
+		clr_global_flag = ADISCORD_vorkerland_solar_winner_sra
+		set_global_flag = ADISCORD_vorkerland_solar_winner_csl
+		set_global_flag = ADISCORD_vorkerland_solar_terminal_verified
+	}
+
+	if = {
+		limit = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_volnograd_terminal_verified }
+			ADISCORD_vorkerland_volnograd_terminal_vla = yes
+		}
+		clr_global_flag = ADISCORD_vorkerland_volnograd_winner_eba
+		clr_global_flag = ADISCORD_vorkerland_volnograd_winner_tgd
+		set_global_flag = ADISCORD_vorkerland_volnograd_winner_vla
+		set_global_flag = ADISCORD_vorkerland_volnograd_terminal_verified
+	}
+	else_if = {
+		limit = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_volnograd_terminal_verified }
+			ADISCORD_vorkerland_volnograd_terminal_eba = yes
+		}
+		clr_global_flag = ADISCORD_vorkerland_volnograd_winner_vla
+		clr_global_flag = ADISCORD_vorkerland_volnograd_winner_tgd
+		set_global_flag = ADISCORD_vorkerland_volnograd_winner_eba
+		set_global_flag = ADISCORD_vorkerland_volnograd_terminal_verified
+	}
+	else_if = {
+		limit = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_volnograd_terminal_verified }
+			ADISCORD_vorkerland_volnograd_terminal_tgd = yes
+		}
+		clr_global_flag = ADISCORD_vorkerland_volnograd_winner_vla
+		clr_global_flag = ADISCORD_vorkerland_volnograd_winner_eba
+		set_global_flag = ADISCORD_vorkerland_volnograd_winner_tgd
+		set_global_flag = ADISCORD_vorkerland_volnograd_terminal_verified
+	}
+}
+
+ADISCORD_vorkerland_offer_vad_sol_alliance = {
+	if = {
+		limit = {
+			tag = VAD
+			country_exists = VAD
+			country_exists = SOL
+			has_country_flag = ADISCORD_vorkerland_focus_vad_sol_invitation_intent
+			has_global_flag = ADISCORD_vorkerland_solar_winner_sol
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted }
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+			NOT = { has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending }
+			NOT = { has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_resolved }
+			SOL = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+		}
+		set_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending
+		SOL = { country_event = { id = ADISCORD_vorkerland_diplomacy.2 days = 1 } }
+	}
+}
+
+ADISCORD_vorkerland_offer_wkr_vla_alliance = {
+	if = {
+		limit = {
+			tag = WKR
+			country_exists = WKR
+			country_exists = VLA
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_vla_invitation_intent
+			has_global_flag = ADISCORD_vorkerland_volnograd_winner_vla
+			NOT = { has_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_accepted }
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+			NOT = { has_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending }
+			NOT = { has_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_resolved }
+			VLA = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+		}
+		set_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending
+		VLA = { country_event = { id = ADISCORD_vorkerland_diplomacy.3 days = 1 } }
+	}
+}
+
+ADISCORD_vorkerland_attempt_vad_solar_intervention = {
+	if = {
+		limit = {
+			tag = VAD
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
+			ADISCORD_vorkerland_vad_has_solar_intervention_border = yes
+		}
+		set_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+		set_country_flag = ADISCORD_vorkerland_vad_solar_intervention_attempted
+		if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_solar_winner_sra country_exists = SRA }
+			set_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_sra
+			SRA = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = SRA type = take_state_focus generator = { 76 104 198 307 310 } }
+		}
+		else_if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_solar_winner_csl country_exists = CSL }
+			set_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_csl
+			CSL = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = CSL type = take_state_focus generator = { 76 104 198 307 310 } }
+		}
+	}
+}
+
+ADISCORD_vorkerland_restore_sol_as_vad_puppet = {
+	if = {
+		limit = {
+			tag = VAD
+			has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+			owns_state = 76 controls_state = 76
+			owns_state = 104 controls_state = 104
+			owns_state = 198 controls_state = 198
+			owns_state = 307 controls_state = 307
+			owns_state = 310 controls_state = 310
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_verified }
+		}
+		76 = { add_core_of = SOL }
+		104 = { add_core_of = SOL }
+		198 = { add_core_of = SOL }
+		307 = { add_core_of = SOL }
+		310 = { add_core_of = SOL }
+		if = {
+			limit = { NOT = { country_exists = SOL } }
+			set_global_flag = ADISCORD_vorkerland_sol_restoration_fresh_release
+			release_autonomy = {
+				target = SOL
+				autonomy_state = autonomy_puppet
+				freedom_level = 0.10
+			}
+		}
+		else = {
+			SOL = {
+				if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = SOL autonomy_state = autonomy_free } } }
+				if = { limit = { is_in_faction = yes } leave_faction = yes }
+			}
+			puppet = SOL
+			set_autonomy = { target = SOL autonomy_state = autonomy_puppet freedom_level = 0.10 }
+			SOL = {
+				transfer_state = 76
+				transfer_state = 104
+				transfer_state = 198
+				transfer_state = 307
+				transfer_state = 310
+			}
+		}
+		country_event = { id = ADISCORD_vorkerland_diplomacy.5 days = 1 }
+	}
+}
+
+ADISCORD_vorkerland_verify_sol_restoration = {
+	if = {
+		limit = {
+			tag = VAD
+			SOL = {
+				exists = yes
+				is_subject_of = VAD
+				owns_state = 76 controls_state = 76
+				owns_state = 104 controls_state = 104
+				owns_state = 198 controls_state = 198
+				owns_state = 307 controls_state = 307
+				owns_state = 310 controls_state = 310
+			}
+		}
+		if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_sol_restoration_fresh_release }
+			SOL = {
+				if = {
+					limit = { NOT = { has_country_flag = ADISCORD_vorkerland_sol_restoration_initialized } }
+					ADISCORD_grant_2150_technology_baseline = yes
+					ADISCORD_grant_technology_profile_fragment_low_tech = yes
+					ADISCORD_economy_initialize_country = yes
+					load_oob = "SOL"
+					set_country_flag = ADISCORD_vorkerland_sol_restoration_initialized
+				}
+			}
+		}
+		SOL = {
+			set_capital = { state = 76 }
+			set_country_flag = ADISCORD_vorkerland_restored_by_vad
+		}
+		set_country_flag = ADISCORD_vorkerland_preserve_wartime_faction
+		set_global_flag = ADISCORD_vorkerland_sol_restoration_verified
+		set_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted
+		clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+		clr_global_flag = ADISCORD_vorkerland_sol_restoration_fresh_release
+	}
+	else_if = {
+		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_retry } }
+		set_global_flag = ADISCORD_vorkerland_sol_restoration_retry
+		country_event = { id = ADISCORD_vorkerland_diplomacy.5 days = 1 }
+	}
+	else = {
+		set_global_flag = ADISCORD_vorkerland_sol_restoration_failed
+		log = "[ADISCORD][VORKERLAND][DIPLOMACY] SOL restoration failed after one retry."
+	}
+}
+
+ADISCORD_vorkerland_arm_wkr_solar_counter_intervention = {
+	if = {
+		limit = {
+			tag = WKR
+			has_global_flag = ADISCORD_vorkerland_sol_restoration_verified
+			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+			ADISCORD_vorkerland_wkr_has_solar_counter_border = yes
+		}
+		set_global_flag = ADISCORD_vorkerland_wkr_solar_counter_intervention_ready
+		set_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested
+		add_timed_idea = { idea = ADISCORD_vorkerland_solar_counter_preparation days = 35 }
+		create_wargoal = { type = annex_everything target = VAD expire = 30 }
+		country_event = { id = ADISCORD_vorkerland_phase.4 days = 21 }
+	}
+}
+
+ADISCORD_vorkerland_join_regional_allies_to_showdown = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			ADISCORD_vorkerland_central_showdown_edges_verified = yes
+			OR = {
+				has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted
+				has_global_flag = ADISCORD_vorkerland_sol_restoration_verified
+			}
+			country_exists = SOL
+			country_exists = VAD
+		}
+		SOL = {
+			if = { limit = { VAD = { has_war_with = WKR } NOT = { has_war_with = WKR } } add_to_war = { targeted_alliance = VAD enemy = WKR hostility_reason = asked_to_join } }
+			if = { limit = { VAD = { has_war_with = TVA } NOT = { has_war_with = TVA } } add_to_war = { targeted_alliance = VAD enemy = TVA hostility_reason = asked_to_join } }
+		}
+	}
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			ADISCORD_vorkerland_central_showdown_edges_verified = yes
+			has_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_accepted
+			country_exists = VLA
+			country_exists = WKR
+		}
+		VLA = {
+			if = { limit = { WKR = { has_war_with = VAD } NOT = { has_war_with = VAD } } add_to_war = { targeted_alliance = WKR enemy = VAD hostility_reason = asked_to_join } }
+			if = { limit = { WKR = { has_war_with = TVA } NOT = { has_war_with = TVA } } add_to_war = { targeted_alliance = WKR enemy = TVA hostility_reason = asked_to_join } }
+		}
+	}
+}
+
+ADISCORD_vorkerland_disengage_regional_allies_before_formation = {
+	if = {
+		limit = { country_exists = SOL }
+		SOL = {
+			if = { limit = { country_exists = WKR has_war_with = WKR } white_peace = WKR }
+			if = { limit = { country_exists = VAD has_war_with = VAD } white_peace = VAD }
+			if = { limit = { country_exists = TVA has_war_with = TVA } white_peace = TVA }
+		}
+	}
+	if = {
+		limit = { country_exists = VLA }
+		VLA = {
+			if = { limit = { country_exists = WKR has_war_with = WKR } white_peace = WKR }
+			if = { limit = { country_exists = VAD has_war_with = VAD } white_peace = VAD }
+			if = { limit = { country_exists = TVA has_war_with = TVA } white_peace = TVA }
+		}
+	}
+}
+
+ADISCORD_vorkerland_restore_independent_wrk_core_packages = {
+	# Public no-op hook used by the postwar decisions. The decisions themselves
+	# verify complete ownership/control and add only their explicit package.
+	if = {
+		limit = { tag = WRK has_global_flag = ADISCORD_vorkerland_reunification_verified }
+		clr_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
+	}
+}

@@ -459,10 +459,25 @@
         "gfx/interface/production/ui/ADISCORD_production_military_item.dds",
         "gfx/interface/production/ui/ADISCORD_production_collapsed_item.dds",
         "gfx/interface/production/ui/ADISCORD_production_naval_item_strip.dds",
-        "gfx/interface/production/ui/ADISCORD_production_consumer_item.dds"
+        "gfx/interface/production/ui/ADISCORD_production_consumer_item.dds",
+        "gfx/interface/production/ui/ADISCORD_production_equipment_card.dds",
+        "gfx/interface/production/ui/ADISCORD_production_factory_icon_strip.dds",
+        "gfx/interface/production/ui/ADISCORD_production_factory_half_strip.dds",
+        "gfx/interface/production/ui/ADISCORD_production_factory_slot_bg.dds",
+        "gfx/interface/production/ui/ADISCORD_production_add_infantry_button.dds",
+        "gfx/interface/production/ui/ADISCORD_production_add_armour_button.dds",
+        "gfx/interface/production/ui/ADISCORD_production_add_aircraft_button.dds",
+        "gfx/interface/production/ui/ADISCORD_production_add_naval_button.dds",
+        "gfx/interface/production/ui/ADISCORD_production_naval_repair_button.dds"
       ],
       "source_inputs": [
-        "gfx/interface/production/source/production_surface_source.png"
+        "gfx/interface/production/source/production_surface_source.png",
+        "gfx/interface/production/source/factory_glyph_source.png",
+        "gfx/interface/production/source/infantry_artillery_glyph_source.png",
+        "gfx/interface/production/source/armour_glyph_source.png",
+        "gfx/interface/production/source/aircraft_glyph_source.png",
+        "gfx/interface/production/source/naval_glyph_source.png",
+        "gfx/interface/production/source/repair_glyph_source.png"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_production_ui_assets"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_production_ui_assets", "--apply"],

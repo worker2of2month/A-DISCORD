@@ -1,0 +1,59 @@
+on_actions = {
+	on_war = {
+		effect = {
+			if = {
+				limit = {
+					tag = ROM
+					has_war_with = DVA
+					NOT = { has_country_flag = ADISCORD_vorkerland_rom_war_content_initialized }
+				}
+				country_event = { id = ADISCORD_vorkerland_rom_tru.1 }
+			}
+			if = {
+				limit = {
+					tag = TRU
+					has_war_with = ZTA
+					NOT = { has_country_flag = ADISCORD_vorkerland_tru_war_content_initialized }
+				}
+				country_event = { id = ADISCORD_vorkerland_rom_tru.2 }
+			}
+		}
+	}
+
+	on_startup = {
+		effect = {
+			if = {
+				limit = { ROM = { exists = yes has_war_with = DVA } }
+				ROM = {
+					if = {
+						limit = { NOT = { has_country_flag = ADISCORD_vorkerland_rom_war_content_initialized } }
+						country_event = { id = ADISCORD_vorkerland_rom_tru.1 days = 1 }
+					}
+					else_if = {
+						limit = {
+							NOT = { has_country_flag = ADISCORD_vorkerland_rom_valley_offensive_resolved }
+							NOT = { has_active_mission = ADISCORD_vorkerland_rom_break_valley_administration }
+						}
+						activate_mission = ADISCORD_vorkerland_rom_break_valley_administration
+					}
+				}
+			}
+			if = {
+				limit = { TRU = { exists = yes has_war_with = ZTA } }
+				TRU = {
+					if = {
+						limit = { NOT = { has_country_flag = ADISCORD_vorkerland_tru_war_content_initialized } }
+						country_event = { id = ADISCORD_vorkerland_rom_tru.2 days = 1 }
+					}
+					else_if = {
+						limit = {
+							NOT = { has_country_flag = ADISCORD_vorkerland_tru_zlatorech_offensive_resolved }
+							NOT = { has_active_mission = ADISCORD_vorkerland_tru_break_zlatorech_administration }
+						}
+						activate_mission = ADISCORD_vorkerland_tru_break_zlatorech_administration
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,142 @@
+ADISCORD_vorkerland_rom_initialize_war_content = {
+	if = {
+		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_rom_war_content_initialized } }
+		set_country_flag = ADISCORD_vorkerland_rom_war_content_initialized
+		if = {
+			limit = { NOT = { has_idea = ADISCORD_vorkerland_rom_desert_eagle_staff } }
+			add_ideas = ADISCORD_vorkerland_rom_desert_eagle_staff
+		}
+		set_popularities = {
+			etatism = 45
+			pragmatism = 30
+			humanism = 15
+			chauvinism = 5
+			utilitarism = 5
+		}
+		# The shared collapse setup already grants 6,000 men, 1,200 rifles and
+		# 100 support sets. These finite deltas bring ROM to the approved total.
+		add_manpower = 3000
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 400 producer = ROM }
+		add_equipment_to_stockpile = { type = support_equipment_1 amount = 20 producer = ROM }
+		add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 48 producer = ROM }
+	}
+}
+
+ADISCORD_vorkerland_tru_initialize_war_content = {
+	if = {
+		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_tru_war_content_initialized } }
+		set_country_flag = ADISCORD_vorkerland_tru_war_content_initialized
+		if = {
+			limit = { NOT = { has_idea = ADISCORD_vorkerland_tru_emergency_river_council } }
+			add_ideas = ADISCORD_vorkerland_tru_emergency_river_council
+		}
+		set_popularities = {
+			chauvinism = 42
+			pragmatism = 25
+			humanism = 18
+			etatism = 8
+			utilitarism = 5
+			technocracy = 2
+		}
+		# The shared collapse setup already grants 7,000 men, 1,400 rifles and
+		# 120 support sets. These finite deltas bring TRU to the approved total.
+		add_manpower = 3000
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 400 producer = TRU }
+		add_equipment_to_stockpile = { type = support_equipment_1 amount = 24 producer = TRU }
+		add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 48 producer = TRU }
+	}
+}
+
+ADISCORD_vorkerland_rom_assemble_valley_columns = {
+	if = {
+		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_rom_valley_columns_raised } }
+		set_country_flag = ADISCORD_vorkerland_rom_valley_columns_raised
+		add_manpower = 2500
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 720 producer = ROM }
+		add_equipment_to_stockpile = { type = support_equipment_1 amount = 36 producer = ROM }
+		capital_scope = {
+			create_unit = {
+				division = "division_template = \"Line Infantry Brigade\" start_experience_factor = 0.15 start_equipment_factor = 0.70"
+				owner = PREV
+			}
+		}
+		add_timed_idea = { idea = ADISCORD_vorkerland_rom_valley_columns days = 90 }
+	}
+}
+
+ADISCORD_vorkerland_tru_arm_river_battalions = {
+	if = {
+		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_tru_river_battalions_raised } }
+		set_country_flag = ADISCORD_vorkerland_tru_river_battalions_raised
+		add_manpower = 3000
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 720 producer = TRU }
+		add_equipment_to_stockpile = { type = support_equipment_1 amount = 48 producer = TRU }
+		capital_scope = {
+			create_unit = {
+				division = "division_template = \"Line Infantry Brigade\" start_experience_factor = 0.15 start_equipment_factor = 0.70"
+				owner = PREV
+			}
+		}
+		add_timed_idea = { idea = ADISCORD_vorkerland_tru_crossing_columns days = 90 }
+	}
+}
+
+ADISCORD_vorkerland_rom_valley_offensive_success = {
+	if = {
+		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_rom_valley_offensive_resolved } }
+		set_country_flag = ADISCORD_vorkerland_rom_valley_offensive_resolved
+		set_country_flag = ADISCORD_vorkerland_rom_valley_offensive_won
+		add_political_power = 40
+		add_stability = 0.05
+	}
+}
+
+ADISCORD_vorkerland_rom_valley_offensive_failure = {
+	if = {
+		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_rom_valley_offensive_resolved } }
+		set_country_flag = ADISCORD_vorkerland_rom_valley_offensive_resolved
+		set_country_flag = ADISCORD_vorkerland_rom_valley_offensive_timed_out
+		add_timed_idea = { idea = ADISCORD_vorkerland_rom_stalled_offensive days = 60 }
+	}
+}
+
+ADISCORD_vorkerland_tru_zlatorech_offensive_success = {
+	if = {
+		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_tru_zlatorech_offensive_resolved } }
+		set_country_flag = ADISCORD_vorkerland_tru_zlatorech_offensive_resolved
+		set_country_flag = ADISCORD_vorkerland_tru_zlatorech_offensive_won
+		add_political_power = 40
+		add_stability = 0.05
+	}
+}
+
+ADISCORD_vorkerland_tru_zlatorech_offensive_failure = {
+	if = {
+		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_tru_zlatorech_offensive_resolved } }
+		set_country_flag = ADISCORD_vorkerland_tru_zlatorech_offensive_resolved
+		set_country_flag = ADISCORD_vorkerland_tru_zlatorech_offensive_timed_out
+		add_timed_idea = { idea = ADISCORD_vorkerland_tru_stalled_offensive days = 60 }
+	}
+}
+
+ADISCORD_vorkerland_rom_integrate_valley_councils = {
+	if = {
+		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_rom_valley_councils_integrated } }
+		set_country_flag = ADISCORD_vorkerland_rom_valley_councils_integrated
+		remove_ideas = ADISCORD_vorkerland_rom_desert_eagle_staff
+		add_ideas = ADISCORD_vorkerland_rom_valley_compact
+		add_stability = 0.05
+		add_political_power = 25
+	}
+}
+
+ADISCORD_vorkerland_tru_convene_river_congress = {
+	if = {
+		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_tru_river_congress_convened } }
+		set_country_flag = ADISCORD_vorkerland_tru_river_congress_convened
+		remove_ideas = ADISCORD_vorkerland_tru_emergency_river_council
+		add_ideas = ADISCORD_vorkerland_tru_river_congress
+		add_stability = 0.05
+		add_political_power = 25
+	}
+}

@@ -405,8 +405,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
         issues.append("player-facing geography still renames Vorkensberg to Techgrad")
     for token in (
         'TGD: "Фирнов-Техлар"',
-        'STATE_40: "Воркенсбергская агломерация"',
-        'VICTORY_POINTS_16428: "Воркенсберг"',
+        'STATE_40: "Башня Единства"',
+        'VICTORY_POINTS_16428: "Башня Единства"',
+        'VICTORY_POINTS_6713: "Гранд-Воркенсберг"',
     ):
         if token not in geography_loc:
             issues.append(f"Vorkensberg/Firnov-Tehlar geography is missing {token}")

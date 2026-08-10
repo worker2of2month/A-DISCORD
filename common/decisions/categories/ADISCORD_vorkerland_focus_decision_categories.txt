@@ -1,0 +1,56 @@
+ADISCORD_vorkerland_focus_operations_category = {
+	allowed = {
+		OR = {
+			tag = WKR
+			tag = VAD
+			tag = TVA
+			tag = WRK
+		}
+	}
+
+	visible = {
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
+			has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked
+			has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_retreat_levies_unlocked
+			has_country_flag = ADISCORD_vorkerland_focus_vad_retreat_levies_unlocked
+			has_country_flag = ADISCORD_vorkerland_focus_tva_retreat_levies_unlocked
+			AND = {
+				tag = WRK
+				has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+				has_global_flag = ADISCORD_vorkerland_reunification_verified
+			}
+		}
+	}
+}
+
+ADISCORD_vorkerland_allied_support_category = {
+	allowed = { OR = { tag = WKR tag = VAD } }
+	visible = {
+		OR = {
+			AND = {
+				tag = WKR
+				has_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_accepted
+				VLA = {
+					exists = yes
+					NOT = { has_capitulated = yes }
+					has_war = yes
+				}
+			}
+			AND = {
+				tag = VAD
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted
+					has_global_flag = ADISCORD_vorkerland_sol_restoration_verified
+				}
+				SOL = {
+					exists = yes
+					NOT = { has_capitulated = yes }
+					has_war = yes
+					OR = { is_in_faction_with = ROOT is_subject_of = ROOT }
+				}
+			}
+		}
+	}
+}

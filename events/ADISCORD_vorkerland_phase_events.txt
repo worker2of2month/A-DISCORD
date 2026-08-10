@@ -1,0 +1,134 @@
+add_namespace = ADISCORD_vorkerland_phase
+
+country_event = {
+	id = ADISCORD_vorkerland_phase.1
+	title = ADISCORD_vorkerland_phase.1.t
+	desc = ADISCORD_vorkerland_phase.1.d
+	picture = GFX_report_event_generic_political_reform
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_vorkerland_phase.1.a
+		set_global_flag = ADISCORD_vorkerland_preference_worker
+		ai_chance = { factor = 45 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_phase.1.b
+		set_global_flag = ADISCORD_vorkerland_preference_joint
+		ai_chance = { factor = 30 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_phase.1.c
+		set_global_flag = ADISCORD_vorkerland_preference_utilitarian
+		ai_chance = { factor = 25 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_phase.2
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_vorkerland_verify_collapse_materialized = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_phase.3
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_vorkerland_verify_regional_consolidation = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_phase.4
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+				NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+			}
+			set_global_flag = ADISCORD_vorkerland_central_preparation_expired
+			ADISCORD_vorkerland_initialize_showdown_edge_queue = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_phase.5
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_vorkerland_advance_showdown_launch = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_phase.6
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = ADISCORD_vorkerland_phase_reunification
+		has_global_flag = ADISCORD_vorkerland_central_showdown_started
+		ADISCORD_vorkerland_central_showdown_edges_verified = yes
+		NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_launch_failed }
+		ADISCORD_vorkerland_has_single_surviving_claimant = yes
+	}
+
+	immediate = {
+		if = {
+			limit = { WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+			WRK = {
+				ADISCORD_vorkerland_form_wrk_from_wkr = yes
+				country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }
+			}
+		}
+		else_if = {
+			limit = { VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+			WRK = {
+				ADISCORD_vorkerland_form_wrk_from_vad = yes
+				country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }
+			}
+		}
+		else_if = {
+			limit = { TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+			WRK = {
+				ADISCORD_vorkerland_form_wrk_from_tva = yes
+				country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_phase.7
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_vorkerland_verify_reunified_wrk = yes
+		if = {
+			limit = {
+				NOT = { ADISCORD_vorkerland_reunification_verified = yes }
+				NOT = { has_global_flag = ADISCORD_vorkerland_reunification_retry }
+			}
+			set_global_flag = ADISCORD_vorkerland_reunification_retry
+			country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }
+		}
+		else_if = {
+			limit = { NOT = { ADISCORD_vorkerland_reunification_verified = yes } }
+			set_global_flag = ADISCORD_vorkerland_reunification_failed
+			log = "[ADISCORD][VORKERLAND][RECOVERY] Reunified WRK failed formation postconditions after one retry."
+		}
+	}
+}

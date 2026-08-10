@@ -1,0 +1,646 @@
+# The focus-unlocked consolidation stage exposes one named minor at a time.
+# Each launch has a one-day faction-detachment gap before the declaration.
+ADISCORD_vorkerland_focus_launch_minor_eyr = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
+			OR = { tag = WKR tag = VAD tag = TVA }
+			is_subject = no
+			NOT = { has_capitulated = yes }
+			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
+			any_neighbor_country = { tag = EYR }
+			EYR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } }
+		}
+		declare_war_on = { target = EYR type = annex_everything }
+		activate_mission = ADISCORD_vorkerland_focus_central_minor_launch_check
+	}
+	else = { ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes }
+}
+
+ADISCORD_vorkerland_focus_launch_minor_egc = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
+			OR = { tag = WKR tag = VAD tag = TVA }
+			is_subject = no
+			NOT = { has_capitulated = yes }
+			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
+			any_neighbor_country = { tag = EGC }
+			EGC = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } }
+		}
+		declare_war_on = { target = EGC type = annex_everything }
+		activate_mission = ADISCORD_vorkerland_focus_central_minor_launch_check
+	}
+	else = { ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes }
+}
+
+ADISCORD_vorkerland_focus_launch_minor_riv = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
+			OR = { tag = WKR tag = VAD tag = TVA }
+			is_subject = no
+			NOT = { has_capitulated = yes }
+			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
+			any_neighbor_country = { tag = RIV }
+			RIV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } }
+		}
+		declare_war_on = { target = RIV type = annex_everything }
+		activate_mission = ADISCORD_vorkerland_focus_central_minor_launch_check
+	}
+	else = { ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes }
+}
+
+ADISCORD_vorkerland_focus_launch_minor_rev = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
+			OR = { tag = WKR tag = VAD tag = TVA }
+			is_subject = no
+			NOT = { has_capitulated = yes }
+			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
+			any_neighbor_country = { tag = REV }
+			REV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } }
+		}
+		declare_war_on = { target = REV type = annex_everything }
+		activate_mission = ADISCORD_vorkerland_focus_central_minor_launch_check
+	}
+	else = { ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes }
+}
+
+ADISCORD_vorkerland_focus_launch_minor_yor = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
+			OR = { tag = WKR tag = VAD tag = TVA }
+			is_subject = no
+			NOT = { has_capitulated = yes }
+			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
+			any_neighbor_country = { tag = YOR }
+			YOR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } }
+		}
+		declare_war_on = { target = YOR type = annex_everything }
+		activate_mission = ADISCORD_vorkerland_focus_central_minor_launch_check
+	}
+	else = { ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes }
+}
+
+ADISCORD_vorkerland_focus_launch_minor_ndn = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
+			OR = { tag = WKR tag = VAD tag = TVA }
+			is_subject = no
+			NOT = { has_capitulated = yes }
+			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
+			any_neighbor_country = { tag = NDN }
+			NDN = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } }
+		}
+		declare_war_on = { target = NDN type = annex_everything }
+		activate_mission = ADISCORD_vorkerland_focus_central_minor_launch_check
+	}
+	else = { ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes }
+}
+
+ADISCORD_vorkerland_focus_launch_minor_swb = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
+			OR = { tag = WKR tag = VAD tag = TVA }
+			is_subject = no
+			NOT = { has_capitulated = yes }
+			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
+			any_neighbor_country = { tag = SWB }
+			SWB = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } }
+		}
+		declare_war_on = { target = SWB type = annex_everything }
+		activate_mission = ADISCORD_vorkerland_focus_central_minor_launch_check
+	}
+	else = { ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes }
+}
+
+ADISCORD_vorkerland_focus_launch_minor_vhv = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
+			OR = { tag = WKR tag = VAD tag = TVA }
+			is_subject = no
+			NOT = { has_capitulated = yes }
+			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
+			any_neighbor_country = { tag = VHV }
+			VHV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } }
+		}
+		declare_war_on = { target = VHV type = annex_everything }
+		activate_mission = ADISCORD_vorkerland_focus_central_minor_launch_check
+	}
+	else = { ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes }
+}
+
+ADISCORD_vorkerland_focus_launch_minor_osv = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
+			OR = { tag = WKR tag = VAD tag = TVA }
+			is_subject = no
+			NOT = { has_capitulated = yes }
+			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
+			any_neighbor_country = { tag = OSV }
+			OSV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } }
+		}
+		declare_war_on = { target = OSV type = annex_everything }
+		activate_mission = ADISCORD_vorkerland_focus_central_minor_launch_check
+	}
+	else = { ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes }
+}
+
+ADISCORD_vorkerland_focus_clear_central_minor_assignment = {
+	clr_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr
+	clr_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc
+	clr_country_flag = ADISCORD_vorkerland_focus_central_minor_target_riv
+	clr_country_flag = ADISCORD_vorkerland_focus_central_minor_target_rev
+	clr_country_flag = ADISCORD_vorkerland_focus_central_minor_target_yor
+	clr_country_flag = ADISCORD_vorkerland_focus_central_minor_target_ndn
+	clr_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb
+	clr_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv
+	clr_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv
+}
+
+ADISCORD_vorkerland_focus_cleanup_central_minor_front = {
+	clr_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
+	clr_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_retry
+	clr_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active
+	remove_mission = ADISCORD_vorkerland_focus_central_minor_launch_check
+	remove_mission = ADISCORD_vorkerland_focus_central_minor_retry_check
+	remove_mission = ADISCORD_vorkerland_focus_central_minor_front_deadline
+	ADISCORD_vorkerland_focus_clear_central_minor_assignment = yes
+}
+
+ADISCORD_vorkerland_focus_arm_central_minor_deadline = {
+	clr_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
+	clr_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_retry
+	set_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active
+	activate_mission = ADISCORD_vorkerland_focus_central_minor_front_deadline
+}
+
+# The first check never assumes that declare_war_on succeeded. It either arms
+# the verified 240-day campaign or spends the launch's single retry.
+ADISCORD_vorkerland_focus_confirm_central_minor_launch = {
+	if = {
+		limit = {
+			OR = {
+				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr has_war_with = EYR }
+				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc has_war_with = EGC }
+				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_riv has_war_with = RIV }
+				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_rev has_war_with = REV }
+				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_yor has_war_with = YOR }
+				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_ndn has_war_with = NDN }
+				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb has_war_with = SWB }
+				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv has_war_with = VHV }
+				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv has_war_with = OSV }
+			}
+		}
+		ADISCORD_vorkerland_focus_arm_central_minor_deadline = yes
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
+			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_retry }
+			OR = { tag = WKR tag = VAD tag = TVA }
+			is_subject = no
+			NOT = { has_capitulated = yes }
+			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
+		}
+		set_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_retry
+		if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr any_neighbor_country = { tag = EYR } EYR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
+			declare_war_on = { target = EYR type = annex_everything }
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc any_neighbor_country = { tag = EGC } EGC = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
+			declare_war_on = { target = EGC type = annex_everything }
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_riv any_neighbor_country = { tag = RIV } RIV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
+			declare_war_on = { target = RIV type = annex_everything }
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_rev any_neighbor_country = { tag = REV } REV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
+			declare_war_on = { target = REV type = annex_everything }
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_yor any_neighbor_country = { tag = YOR } YOR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
+			declare_war_on = { target = YOR type = annex_everything }
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_ndn any_neighbor_country = { tag = NDN } NDN = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
+			declare_war_on = { target = NDN type = annex_everything }
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb any_neighbor_country = { tag = SWB } SWB = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
+			declare_war_on = { target = SWB type = annex_everything }
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv any_neighbor_country = { tag = VHV } VHV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
+			declare_war_on = { target = VHV type = annex_everything }
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv any_neighbor_country = { tag = OSV } OSV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
+			declare_war_on = { target = OSV type = annex_everything }
+		}
+		activate_mission = ADISCORD_vorkerland_focus_central_minor_retry_check
+	}
+	else = { ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes }
+}
+
+ADISCORD_vorkerland_focus_confirm_central_minor_retry = {
+	if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_retry
+			OR = {
+				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr has_war_with = EYR }
+				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc has_war_with = EGC }
+				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_riv has_war_with = RIV }
+				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_rev has_war_with = REV }
+				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_yor has_war_with = YOR }
+				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_ndn has_war_with = NDN }
+				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb has_war_with = SWB }
+				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv has_war_with = VHV }
+				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv has_war_with = OSV }
+			}
+		}
+		ADISCORD_vorkerland_focus_arm_central_minor_deadline = yes
+	}
+	else = {
+		set_country_flag = {
+			flag = ADISCORD_vorkerland_focus_central_minor_recovery_cooldown
+			days = 14
+		}
+		ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes
+	}
+}
+
+# If a verified front survives for 240 days, settle only its recorded minor.
+# This resolver never schedules a second front and never touches a claimant.
+ADISCORD_vorkerland_focus_resolve_central_minor_deadline = {
+	if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active }
+		if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr has_war_with = EYR }
+			EYR = { every_owned_state = { ROOT = { transfer_state = PREV } } }
+			white_peace = EYR
+			annex_country = { target = EYR transfer_troops = no }
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc has_war_with = EGC }
+			EGC = { every_owned_state = { ROOT = { transfer_state = PREV } } }
+			white_peace = EGC
+			annex_country = { target = EGC transfer_troops = no }
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_riv has_war_with = RIV }
+			RIV = { every_owned_state = { ROOT = { transfer_state = PREV } } }
+			white_peace = RIV
+			annex_country = { target = RIV transfer_troops = no }
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_rev has_war_with = REV }
+			REV = { every_owned_state = { ROOT = { transfer_state = PREV } } }
+			white_peace = REV
+			annex_country = { target = REV transfer_troops = no }
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_yor has_war_with = YOR }
+			YOR = { every_owned_state = { ROOT = { transfer_state = PREV } } }
+			white_peace = YOR
+			annex_country = { target = YOR transfer_troops = no }
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_ndn has_war_with = NDN }
+			NDN = { every_owned_state = { ROOT = { transfer_state = PREV } } }
+			white_peace = NDN
+			annex_country = { target = NDN transfer_troops = no }
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb has_war_with = SWB }
+			SWB = { every_owned_state = { ROOT = { transfer_state = PREV } } }
+			white_peace = SWB
+			annex_country = { target = SWB transfer_troops = no }
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv has_war_with = VHV }
+			VHV = { every_owned_state = { ROOT = { transfer_state = PREV } } }
+			white_peace = VHV
+			annex_country = { target = VHV transfer_troops = no }
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv has_war_with = OSV }
+			OSV = { every_owned_state = { ROOT = { transfer_state = PREV } } }
+			white_peace = OSV
+			annex_country = { target = OSV transfer_troops = no }
+		}
+	}
+	ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes
+}
+
+# Exact handoff hook from the visible consolidation stage to the existing
+# simultaneous WKR-VAD-TVA edge queue. No central minor may remain live.
+ADISCORD_vorkerland_focus_schedule_final_showdown = {
+	if = {
+		limit = {
+			OR = {
+				AND = { tag = WKR has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked }
+				AND = { tag = VAD has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked }
+				AND = { tag = TVA has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked }
+			}
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending }
+			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active }
+			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
+			OR = { NOT = { country_exists = EYR } EYR = { is_subject = yes } EYR = { has_capitulated = yes } }
+			OR = { NOT = { country_exists = EGC } EGC = { is_subject = yes } EGC = { has_capitulated = yes } }
+			OR = { NOT = { country_exists = RIV } RIV = { is_subject = yes } RIV = { has_capitulated = yes } }
+			OR = { NOT = { country_exists = REV } REV = { is_subject = yes } REV = { has_capitulated = yes } }
+			OR = { NOT = { country_exists = YOR } YOR = { is_subject = yes } YOR = { has_capitulated = yes } }
+			OR = { NOT = { country_exists = NDN } NDN = { is_subject = yes } NDN = { has_capitulated = yes } }
+			OR = { NOT = { country_exists = SWB } SWB = { is_subject = yes } SWB = { has_capitulated = yes } }
+			OR = { NOT = { country_exists = VHV } VHV = { is_subject = yes } VHV = { has_capitulated = yes } }
+			OR = { NOT = { country_exists = OSV } OSV = { is_subject = yes } OSV = { has_capitulated = yes } }
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
+			NOT = {
+				AND = {
+					has_global_flag = ADISCORD_vorkerland_sol_restoration_verified
+					NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solar_counter_intervention_ready }
+					WKR = { exists = yes ADISCORD_vorkerland_wkr_has_solar_counter_border = yes }
+				}
+			}
+			NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
+			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+		}
+		set_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested
+		country_event = { id = ADISCORD_vorkerland_phase.4 days = 1 }
+	}
+}
+
+ADISCORD_vorkerland_raise_wkr_retreat_levy_1 = {
+	if = {
+		limit = {
+			tag = WKR
+			has_war = yes
+			NOT = { has_capitulated = yes }
+			surrender_progress > 0.20
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_retreat_levies_unlocked
+			NOT = { has_country_flag = ADISCORD_vorkerland_wkr_retreat_levy_1_raised }
+			has_manpower > 999
+			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
+		}
+		set_country_flag = ADISCORD_vorkerland_wkr_retreat_levy_1_raised
+		capital_scope = {
+			create_unit = {
+				division = "name = \"First Retreat Levy\" division_template = \"Workerland Militia\" start_experience_factor = 0.05 start_equipment_factor = 0.55"
+				owner = PREV
+			}
+		}
+	}
+}
+
+ADISCORD_vorkerland_raise_wkr_retreat_levy_2 = {
+	if = {
+		limit = {
+			tag = WKR
+			has_war = yes
+			NOT = { has_capitulated = yes }
+			surrender_progress > 0.45
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_retreat_levies_unlocked
+			has_country_flag = ADISCORD_vorkerland_wkr_retreat_levy_1_raised
+			NOT = { has_country_flag = ADISCORD_vorkerland_wkr_retreat_levy_2_raised }
+			has_manpower > 749
+			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
+		}
+		set_country_flag = ADISCORD_vorkerland_wkr_retreat_levy_2_raised
+		capital_scope = {
+			create_unit = {
+				division = "name = \"Last Worker Reserve\" division_template = \"Workerland Militia\" start_experience_factor = 0.02 start_equipment_factor = 0.45"
+				owner = PREV
+			}
+		}
+	}
+}
+
+ADISCORD_vorkerland_raise_vad_retreat_levy_1 = {
+	if = {
+		limit = {
+			tag = VAD
+			has_war = yes
+			NOT = { has_capitulated = yes }
+			surrender_progress > 0.20
+			has_country_flag = ADISCORD_vorkerland_focus_vad_retreat_levies_unlocked
+			NOT = { has_country_flag = ADISCORD_vorkerland_vad_retreat_levy_1_raised }
+			has_manpower > 999
+			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
+		}
+		set_country_flag = ADISCORD_vorkerland_vad_retreat_levy_1_raised
+		capital_scope = {
+			create_unit = {
+				division = "name = \"First Chancery Levy\" division_template = \"Armi Security Detachment\" start_experience_factor = 0.05 start_equipment_factor = 0.55"
+				owner = PREV
+			}
+		}
+	}
+}
+
+ADISCORD_vorkerland_raise_vad_retreat_levy_2 = {
+	if = {
+		limit = {
+			tag = VAD
+			has_war = yes
+			NOT = { has_capitulated = yes }
+			surrender_progress > 0.45
+			has_country_flag = ADISCORD_vorkerland_focus_vad_retreat_levies_unlocked
+			has_country_flag = ADISCORD_vorkerland_vad_retreat_levy_1_raised
+			NOT = { has_country_flag = ADISCORD_vorkerland_vad_retreat_levy_2_raised }
+			has_manpower > 749
+			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
+		}
+		set_country_flag = ADISCORD_vorkerland_vad_retreat_levy_2_raised
+		capital_scope = {
+			create_unit = {
+				division = "name = \"Last Chancery Reserve\" division_template = \"Armi Security Detachment\" start_experience_factor = 0.02 start_equipment_factor = 0.45"
+				owner = PREV
+			}
+		}
+	}
+}
+
+ADISCORD_vorkerland_raise_tva_retreat_levy_1 = {
+	if = {
+		limit = {
+			tag = TVA
+			has_war = yes
+			NOT = { has_capitulated = yes }
+			surrender_progress > 0.20
+			has_country_flag = ADISCORD_vorkerland_focus_tva_retreat_levies_unlocked
+			NOT = { has_country_flag = ADISCORD_vorkerland_tva_retreat_levy_1_raised }
+			has_manpower > 999
+			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
+		}
+		set_country_flag = ADISCORD_vorkerland_tva_retreat_levy_1_raised
+		capital_scope = {
+			create_unit = {
+				division = "name = \"First Technical Levy\" division_template = \"TVA Collapse Militia\" start_experience_factor = 0.05 start_equipment_factor = 0.55"
+				owner = PREV
+			}
+		}
+	}
+}
+
+ADISCORD_vorkerland_raise_tva_retreat_levy_2 = {
+	if = {
+		limit = {
+			tag = TVA
+			has_war = yes
+			NOT = { has_capitulated = yes }
+			surrender_progress > 0.45
+			has_country_flag = ADISCORD_vorkerland_focus_tva_retreat_levies_unlocked
+			has_country_flag = ADISCORD_vorkerland_tva_retreat_levy_1_raised
+			NOT = { has_country_flag = ADISCORD_vorkerland_tva_retreat_levy_2_raised }
+			has_manpower > 749
+			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
+		}
+		set_country_flag = ADISCORD_vorkerland_tva_retreat_levy_2_raised
+		capital_scope = {
+			create_unit = {
+				division = "name = \"Last Technical Reserve\" division_template = \"TVA Collapse Militia\" start_experience_factor = 0.02 start_equipment_factor = 0.45"
+				owner = PREV
+			}
+		}
+	}
+}
+
+ADISCORD_vorkerland_send_vla_support_tranche_1 = {
+	if = {
+		limit = {
+			tag = WKR
+			has_war = yes
+			has_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_accepted
+			has_manpower > 2999
+			has_equipment = { infantry_equipment > 1499 support_equipment > 149 }
+			NOT = { has_country_flag = ADISCORD_vorkerland_vla_support_tranche_1_sent }
+			VLA = {
+				exists = yes
+				NOT = { has_capitulated = yes }
+				has_war = yes
+			}
+		}
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -300 producer = WKR }
+		add_equipment_to_stockpile = { type = support_equipment amount = -30 producer = WKR }
+		VLA = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 300 producer = WKR }
+			add_equipment_to_stockpile = { type = support_equipment amount = 30 producer = WKR }
+			add_timed_idea = { idea = ADISCORD_vorkerland_allied_supply_advisers days = 60 }
+		}
+		set_country_flag = ADISCORD_vorkerland_vla_support_tranche_1_sent
+		set_country_flag = { flag = ADISCORD_vorkerland_vla_support_cooldown days = 90 value = 1 }
+	}
+}
+
+ADISCORD_vorkerland_send_vla_support_tranche_2 = {
+	if = {
+		limit = {
+			tag = WKR
+			has_war = yes
+			has_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_accepted
+			has_manpower > 2999
+			has_equipment = { infantry_equipment > 1499 support_equipment > 149 }
+			has_country_flag = ADISCORD_vorkerland_vla_support_tranche_1_sent
+			NOT = { has_country_flag = ADISCORD_vorkerland_vla_support_tranche_2_sent }
+			NOT = { has_country_flag = ADISCORD_vorkerland_vla_support_cooldown }
+			VLA = {
+				exists = yes
+				NOT = { has_capitulated = yes }
+				has_war = yes
+			}
+		}
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -300 producer = WKR }
+		add_equipment_to_stockpile = { type = support_equipment amount = -30 producer = WKR }
+		VLA = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 300 producer = WKR }
+			add_equipment_to_stockpile = { type = support_equipment amount = 30 producer = WKR }
+			add_timed_idea = { idea = ADISCORD_vorkerland_allied_supply_advisers days = 60 }
+		}
+		set_country_flag = ADISCORD_vorkerland_vla_support_tranche_2_sent
+	}
+}
+
+ADISCORD_vorkerland_send_sol_support_tranche_1 = {
+	if = {
+		limit = {
+			tag = VAD
+			has_war = yes
+			OR = {
+				has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted
+				has_global_flag = ADISCORD_vorkerland_sol_restoration_verified
+			}
+			has_manpower > 2999
+			has_equipment = { infantry_equipment > 1499 support_equipment > 149 }
+			NOT = { has_country_flag = ADISCORD_vorkerland_sol_support_tranche_1_sent }
+			SOL = {
+				exists = yes
+				NOT = { has_capitulated = yes }
+				has_war = yes
+				OR = { is_in_faction_with = ROOT is_subject_of = ROOT }
+			}
+		}
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -300 producer = VAD }
+		add_equipment_to_stockpile = { type = support_equipment amount = -30 producer = VAD }
+		SOL = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 300 producer = VAD }
+			add_equipment_to_stockpile = { type = support_equipment amount = 30 producer = VAD }
+			add_timed_idea = { idea = ADISCORD_vorkerland_allied_supply_advisers days = 60 }
+		}
+		set_country_flag = ADISCORD_vorkerland_sol_support_tranche_1_sent
+		set_country_flag = { flag = ADISCORD_vorkerland_sol_support_cooldown days = 90 value = 1 }
+	}
+}
+
+ADISCORD_vorkerland_send_sol_support_tranche_2 = {
+	if = {
+		limit = {
+			tag = VAD
+			has_war = yes
+			OR = {
+				has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted
+				has_global_flag = ADISCORD_vorkerland_sol_restoration_verified
+			}
+			has_manpower > 2999
+			has_equipment = { infantry_equipment > 1499 support_equipment > 149 }
+			has_country_flag = ADISCORD_vorkerland_sol_support_tranche_1_sent
+			NOT = { has_country_flag = ADISCORD_vorkerland_sol_support_tranche_2_sent }
+			NOT = { has_country_flag = ADISCORD_vorkerland_sol_support_cooldown }
+			SOL = {
+				exists = yes
+				NOT = { has_capitulated = yes }
+				has_war = yes
+				OR = { is_in_faction_with = ROOT is_subject_of = ROOT }
+			}
+		}
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -300 producer = VAD }
+		add_equipment_to_stockpile = { type = support_equipment amount = -30 producer = VAD }
+		SOL = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 300 producer = VAD }
+			add_equipment_to_stockpile = { type = support_equipment amount = 30 producer = VAD }
+			add_timed_idea = { idea = ADISCORD_vorkerland_allied_supply_advisers days = 60 }
+		}
+		set_country_flag = ADISCORD_vorkerland_sol_support_tranche_2_sent
+	}
+}

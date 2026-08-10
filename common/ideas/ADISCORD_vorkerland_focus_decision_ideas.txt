@@ -1,0 +1,16 @@
+ideas = {
+	country = {
+		ADISCORD_vorkerland_allied_supply_advisers = {
+			picture = generic_volunteer_expedition_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				supply_consumption_factor = -0.06
+				planning_speed = 0.08
+				land_reinforce_rate = 0.01
+			}
+			ai_will_do = { factor = 0 }
+		}
+	}
+}

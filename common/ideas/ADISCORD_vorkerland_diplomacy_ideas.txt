@@ -1,0 +1,13 @@
+ideas = {
+	country = {
+		ADISCORD_vorkerland_solar_counter_preparation = {
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				planning_speed = 0.15
+				max_planning = 0.05
+				army_org_factor = 0.05
+			}
+		}
+	}
+}

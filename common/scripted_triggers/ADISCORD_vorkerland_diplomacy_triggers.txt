@@ -1,0 +1,179 @@
+ADISCORD_vorkerland_solar_terminal_sol = {
+	country_exists = SOL
+	SOL = {
+		is_subject = no
+		NOT = { has_capitulated = yes }
+		owns_state = 76
+		controls_state = 76
+		owns_state = 104
+		controls_state = 104
+		owns_state = 198
+		controls_state = 198
+		owns_state = 307
+		controls_state = 307
+		owns_state = 310
+		controls_state = 310
+		NOT = { has_war_with = SRA }
+		NOT = { has_war_with = CSL }
+	}
+	OR = { NOT = { country_exists = SRA } SRA = { has_capitulated = yes } SRA = { is_subject_of = SOL } }
+	OR = { NOT = { country_exists = CSL } CSL = { has_capitulated = yes } CSL = { is_subject_of = SOL } }
+}
+
+ADISCORD_vorkerland_solar_terminal_sra = {
+	country_exists = SRA
+	SRA = {
+		is_subject = no
+		NOT = { has_capitulated = yes }
+		owns_state = 76
+		controls_state = 76
+		owns_state = 104
+		controls_state = 104
+		owns_state = 198
+		controls_state = 198
+		owns_state = 307
+		controls_state = 307
+		owns_state = 310
+		controls_state = 310
+		NOT = { has_war_with = SOL }
+		NOT = { has_war_with = CSL }
+	}
+	OR = { NOT = { country_exists = SOL } SOL = { has_capitulated = yes } SOL = { is_subject_of = SRA } }
+	OR = { NOT = { country_exists = CSL } CSL = { has_capitulated = yes } CSL = { is_subject_of = SRA } }
+}
+
+ADISCORD_vorkerland_solar_terminal_csl = {
+	country_exists = CSL
+	CSL = {
+		is_subject = no
+		NOT = { has_capitulated = yes }
+		owns_state = 76
+		controls_state = 76
+		owns_state = 104
+		controls_state = 104
+		owns_state = 198
+		controls_state = 198
+		owns_state = 307
+		controls_state = 307
+		owns_state = 310
+		controls_state = 310
+		NOT = { has_war_with = SOL }
+		NOT = { has_war_with = SRA }
+	}
+	OR = { NOT = { country_exists = SOL } SOL = { has_capitulated = yes } SOL = { is_subject_of = CSL } }
+	OR = { NOT = { country_exists = SRA } SRA = { has_capitulated = yes } SRA = { is_subject_of = CSL } }
+}
+
+ADISCORD_vorkerland_volnograd_terminal_vla = {
+	country_exists = VLA
+	VLA = {
+		is_subject = no
+		NOT = { has_capitulated = yes }
+		owns_state = 74
+		controls_state = 74
+		owns_state = 105
+		controls_state = 105
+		owns_state = 197
+		controls_state = 197
+		owns_state = 311
+		controls_state = 311
+		owns_state = 312
+		controls_state = 312
+		owns_state = 313
+		controls_state = 313
+		owns_state = 314
+		controls_state = 314
+		NOT = { has_war_with = EBA }
+		NOT = { has_war_with = TGD }
+	}
+	OR = { NOT = { country_exists = EBA } EBA = { has_capitulated = yes } EBA = { is_subject_of = VLA } }
+	OR = { NOT = { country_exists = TGD } TGD = { has_capitulated = yes } TGD = { is_subject_of = VLA } }
+}
+
+ADISCORD_vorkerland_volnograd_terminal_eba = {
+	country_exists = EBA
+	EBA = {
+		is_subject = no
+		NOT = { has_capitulated = yes }
+		owns_state = 74
+		controls_state = 74
+		owns_state = 105
+		controls_state = 105
+		owns_state = 197
+		controls_state = 197
+		owns_state = 311
+		controls_state = 311
+		owns_state = 312
+		controls_state = 312
+		owns_state = 313
+		controls_state = 313
+		owns_state = 314
+		controls_state = 314
+		NOT = { has_war_with = VLA }
+		NOT = { has_war_with = TGD }
+	}
+	OR = { NOT = { country_exists = VLA } VLA = { has_capitulated = yes } VLA = { is_subject_of = EBA } }
+	OR = { NOT = { country_exists = TGD } TGD = { has_capitulated = yes } TGD = { is_subject_of = EBA } }
+}
+
+ADISCORD_vorkerland_volnograd_terminal_tgd = {
+	country_exists = TGD
+	TGD = {
+		is_subject = no
+		NOT = { has_capitulated = yes }
+		owns_state = 74
+		controls_state = 74
+		owns_state = 105
+		controls_state = 105
+		owns_state = 197
+		controls_state = 197
+		owns_state = 311
+		controls_state = 311
+		owns_state = 312
+		controls_state = 312
+		owns_state = 313
+		controls_state = 313
+		owns_state = 314
+		controls_state = 314
+		NOT = { has_war_with = VLA }
+		NOT = { has_war_with = EBA }
+	}
+	OR = { NOT = { country_exists = VLA } VLA = { has_capitulated = yes } VLA = { is_subject_of = TGD } }
+	OR = { NOT = { country_exists = EBA } EBA = { has_capitulated = yes } EBA = { is_subject_of = TGD } }
+}
+
+# The Solar intervention remains unavailable until VAD has physically opened a
+# front through the former EGC belt. This prevents an unreachable remote war.
+ADISCORD_vorkerland_vad_has_solar_intervention_border = {
+	OR = {
+		AND = {
+			owns_state = 81
+			controls_state = 81
+			OR = {
+				AND = { has_global_flag = ADISCORD_vorkerland_solar_winner_sra SRA = { owns_state = 307 controls_state = 307 } }
+				AND = { has_global_flag = ADISCORD_vorkerland_solar_winner_csl CSL = { owns_state = 307 controls_state = 307 } }
+			}
+		}
+		AND = {
+			owns_state = 110
+			controls_state = 110
+			OR = {
+				AND = { has_global_flag = ADISCORD_vorkerland_solar_winner_sra SRA = { OR = { AND = { owns_state = 198 controls_state = 198 } AND = { owns_state = 307 controls_state = 307 } } } }
+				AND = { has_global_flag = ADISCORD_vorkerland_solar_winner_csl CSL = { OR = { AND = { owns_state = 198 controls_state = 198 } AND = { owns_state = 307 controls_state = 307 } } } }
+			}
+		}
+	}
+}
+
+ADISCORD_vorkerland_wkr_has_solar_counter_border = {
+	country_exists = SOL
+	SOL = { is_subject_of = VAD }
+	OR = {
+		AND = { owns_state = 79 controls_state = 79 SOL = { owns_state = 310 controls_state = 310 } }
+		AND = { owns_state = 308 controls_state = 308 SOL = { owns_state = 307 controls_state = 307 } }
+		AND = { owns_state = 309 controls_state = 309 SOL = { OR = { AND = { owns_state = 307 controls_state = 307 } AND = { owns_state = 310 controls_state = 310 } } } }
+		AND = { owns_state = 327 controls_state = 327 SOL = { owns_state = 310 controls_state = 310 } }
+		AND = { owns_state = 81 controls_state = 81 SOL = { owns_state = 307 controls_state = 307 } }
+		AND = { owns_state = 110 controls_state = 110 SOL = { OR = { AND = { owns_state = 198 controls_state = 198 } AND = { owns_state = 307 controls_state = 307 } } } }
+	}
+}

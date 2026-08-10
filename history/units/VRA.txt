@@ -1,0 +1,11 @@
+division_template = {
+	name = "Northern Militia"
+	regiments = {
+		ADISCORD_militia = { x = 0 y = 0 }
+		ADISCORD_militia = { x = 1 y = 0 }
+		ADISCORD_militia = { x = 2 y = 0 }
+	}
+}
+units = {
+	division = { division_name = { is_name_ordered = yes name_order = 1 } location = 7205 division_template = "Northern Militia" start_experience_factor = 0.15 start_equipment_factor = 0.72 }
+}

@@ -1,0 +1,29 @@
+# Higher-priority, pair-scoped offensive orders override the generic careful
+# profiles without changing any other Vorkerland front.
+ADISCORD_vorkerland_rom_tru_rom_offensive = {
+	allowed = { tag = ROM }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		country_exists = DVA
+		has_war_with = DVA
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = DVA value = 100 }
+	ai_strategy = { type = front_control tag = DVA ratio = 1.00 priority = 1400 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = conquer id = DVA value = 200 }
+}
+
+ADISCORD_vorkerland_rom_tru_tru_offensive = {
+	allowed = { tag = TRU }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		country_exists = ZTA
+		has_war_with = ZTA
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = ZTA value = 100 }
+	ai_strategy = { type = front_control tag = ZTA ratio = 1.00 priority = 1400 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = conquer id = ZTA value = 200 }
+}

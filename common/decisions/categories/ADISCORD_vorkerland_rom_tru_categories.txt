@@ -1,0 +1,7 @@
+ADISCORD_vorkerland_rom_tru_category = {
+	allowed = { OR = { tag = ROM tag = TRU } }
+	visible = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+	}
+}

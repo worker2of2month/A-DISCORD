@@ -1812,12 +1812,20 @@ ADISCORD_vorkerland_appoint_joint_council = {
 }
 
 ADISCORD_vorkerland_form_joint_government = {
-	set_global_flag = ADISCORD_vorkerland_joint_government_formed
-	WRK = {
-		annex_country = { target = VAD transfer_troops = yes }
-		set_cosmetic_tag = WRK_vorkerland_joint_government
-		ADISCORD_vorkerland_appoint_joint_council = yes
-		country_event = { id = ADISCORD_vorkerland_collapse.62 days = 1 }
+	# Rare wartime rescue route: the council belongs to VAD while VAD and WKR
+	# remain separate. Ordinary VAD victory must keep Vlad and never consume WKR.
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+			country_exists = VAD
+			country_exists = WKR
+		}
+		set_global_flag = ADISCORD_vorkerland_joint_government_formed
+		VAD = {
+			set_cosmetic_tag = WRK_vorkerland_joint_government
+			ADISCORD_vorkerland_appoint_joint_council = yes
+			country_event = { id = ADISCORD_vorkerland_collapse.62 days = 1 }
+		}
 	}
 }
 
@@ -1827,6 +1835,7 @@ ADISCORD_vorkerland_form_joint_government = {
 ADISCORD_vorkerland_relocate_legacy_armies = {
 	every_state = {
 		teleport_armies = { limit = { tag = WRK } to_state = 32 }
+		teleport_armies = { limit = { tag = WKR } to_state = 32 }
 		teleport_armies = { limit = { tag = VAD } to_state = 75 }
 		teleport_armies = { limit = { tag = ZAO } to_state = 72 }
 		teleport_armies = { limit = { tag = PWR } to_state = 71 }

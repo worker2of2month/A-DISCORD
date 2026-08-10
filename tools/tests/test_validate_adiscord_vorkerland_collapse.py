@@ -1107,7 +1107,8 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
         joint = named_block(effects, "ADISCORD_vorkerland_form_joint_government")
 
-        self.assertIn("annex_country = { target = VAD transfer_troops = yes }", joint)
+        self.assertIn("has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad", joint)
+        self.assertNotIn("annex_country = { target = VAD transfer_troops = yes }", joint)
         self.assertNotIn("transfer_state = 27", joint)
         self.assertNotIn("transfer_state = 82", joint)
         self.assertNotIn("transfer_state = 123", joint)
@@ -1861,8 +1862,9 @@ class InterventionAndVisualTests(unittest.TestCase):
             )
         )
         self.assertNotIn("Техград", geography)
-        self.assertIn('STATE_40: "Воркенсбергская агломерация"', geography)
-        self.assertIn('VICTORY_POINTS_16428: "Воркенсберг"', geography)
+        self.assertIn('STATE_40: "Башня Единства"', geography)
+        self.assertIn('VICTORY_POINTS_16428: "Башня Единства"', geography)
+        self.assertIn('VICTORY_POINTS_6713: "Гранд-Воркенсберг"', geography)
 
 
 if __name__ == "__main__":

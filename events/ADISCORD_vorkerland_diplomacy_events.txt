@@ -1,0 +1,115 @@
+add_namespace = ADISCORD_vorkerland_diplomacy
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.1
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = { ADISCORD_vorkerland_record_regional_diplomacy_outcomes = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.2
+	title = ADISCORD_vorkerland_diplomacy.2.t
+	desc = ADISCORD_vorkerland_diplomacy.2.d
+	picture = GFX_report_event_generic_diplomatic_treaty
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = ADISCORD_vorkerland_solar_winner_sol
+		VAD = { exists = yes NOT = { has_capitulated = yes } }
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_diplomacy.2.a
+		ai_chance = { factor = 85 }
+		ADISCORD_vorkerland_leave_inherited_faction = yes
+		set_country_flag = ADISCORD_vorkerland_allied_with_vad
+		VAD = {
+			ADISCORD_vorkerland_leave_inherited_faction = yes
+			if = {
+				limit = { is_in_faction = no }
+				create_faction_from_template = {
+					template = faction_template_ADISCORD_standard
+					name = ADISCORD_vorkerland_solar_restoration_alliance
+				}
+			}
+			add_to_faction = SOL
+			clr_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending
+			set_country_flag = ADISCORD_vorkerland_vad_sol_invitation_resolved
+			set_country_flag = ADISCORD_vorkerland_preserve_wartime_faction
+		}
+		set_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_diplomacy.2.b
+		ai_chance = { factor = 15 }
+		VAD = {
+			clr_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending
+			set_country_flag = ADISCORD_vorkerland_vad_sol_invitation_resolved
+		}
+		set_global_flag = ADISCORD_vorkerland_vad_sol_alliance_declined
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.3
+	title = ADISCORD_vorkerland_diplomacy.3.t
+	desc = ADISCORD_vorkerland_diplomacy.3.d
+	picture = GFX_report_event_generic_diplomatic_treaty
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = ADISCORD_vorkerland_volnograd_winner_vla
+		WKR = { exists = yes NOT = { has_capitulated = yes } }
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_diplomacy.3.a
+		ai_chance = { factor = 80 }
+		ADISCORD_vorkerland_leave_inherited_faction = yes
+		set_country_flag = ADISCORD_vorkerland_allied_with_wkr
+		WKR = {
+			ADISCORD_vorkerland_leave_inherited_faction = yes
+			if = {
+				limit = { is_in_faction = no }
+				create_faction_from_template = {
+					template = faction_template_ADISCORD_standard
+					name = ADISCORD_vorkerland_free_republics_alliance
+				}
+			}
+			add_to_faction = VLA
+			clr_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending
+			set_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_resolved
+			set_country_flag = ADISCORD_vorkerland_preserve_wartime_faction
+		}
+		set_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_accepted
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_diplomacy.3.b
+		ai_chance = { factor = 20 }
+		WKR = {
+			clr_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending
+			set_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_resolved
+		}
+		set_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_declined
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.4
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = { ADISCORD_vorkerland_restore_sol_as_vad_puppet = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.5
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = { ADISCORD_vorkerland_verify_sol_restoration = yes }
+}

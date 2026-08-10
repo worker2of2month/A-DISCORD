@@ -1,0 +1,140 @@
+ADISCORD_vorkerland_rom_tru_category = {
+	ADISCORD_vorkerland_rom_assemble_valley_columns = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = ROM }
+		visible = {
+			has_country_flag = ADISCORD_vorkerland_rom_war_content_initialized
+			NOT = { has_country_flag = ADISCORD_vorkerland_rom_valley_columns_raised }
+			NOT = { has_country_flag = ADISCORD_vorkerland_rom_valley_offensive_resolved }
+		}
+		available = {
+			has_war_with = DVA
+			capital_scope = { is_controlled_by = ROOT }
+		}
+		cost = 25
+		days_remove = 21
+		fire_only_once = yes
+		remove_effect = { ADISCORD_vorkerland_rom_assemble_valley_columns = yes }
+		ai_will_do = { base = 300 }
+	}
+
+	ADISCORD_vorkerland_rom_break_valley_administration = {
+		icon = generic_attack
+		allowed = { tag = ROM }
+		activation = { always = no }
+		available = { always = no }
+		visible = {
+			has_country_flag = ADISCORD_vorkerland_rom_war_content_initialized
+			NOT = { has_country_flag = ADISCORD_vorkerland_rom_valley_offensive_resolved }
+		}
+		selectable_mission = no
+		fire_only_once = yes
+		is_good = yes
+		days_mission_timeout = 180
+		cancel_trigger = {
+			OR = {
+				NOT = { country_exists = DVA }
+				DVA = { has_capitulated = yes }
+				has_capitulated = yes
+				has_global_flag = ADISCORD_vorkerland_collapse_finished
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { OR = { NOT = { country_exists = DVA } DVA = { has_capitulated = yes } } }
+				ADISCORD_vorkerland_rom_valley_offensive_success = yes
+			}
+			else = { ADISCORD_vorkerland_rom_valley_offensive_failure = yes }
+		}
+		timeout_effect = { ADISCORD_vorkerland_rom_valley_offensive_failure = yes }
+	}
+
+	ADISCORD_vorkerland_rom_charter_valley_councils = {
+		icon = generic_constitutional_guarantees
+		allowed = { tag = ROM }
+		visible = {
+			has_country_flag = ADISCORD_vorkerland_rom_valley_offensive_won
+			NOT = { has_country_flag = ADISCORD_vorkerland_rom_valley_councils_integrated }
+		}
+		available = {
+			has_war = no
+			controls_state = 144
+			controls_state = 145
+			controls_state = 319
+			controls_state = 321
+		}
+		cost = 40
+		days_remove = 30
+		fire_only_once = yes
+		remove_effect = { ADISCORD_vorkerland_rom_integrate_valley_councils = yes }
+		ai_will_do = { base = 200 }
+	}
+
+	ADISCORD_vorkerland_tru_arm_river_battalions = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = TRU }
+		visible = {
+			has_country_flag = ADISCORD_vorkerland_tru_war_content_initialized
+			NOT = { has_country_flag = ADISCORD_vorkerland_tru_river_battalions_raised }
+			NOT = { has_country_flag = ADISCORD_vorkerland_tru_zlatorech_offensive_resolved }
+		}
+		available = {
+			has_war_with = ZTA
+			capital_scope = { is_controlled_by = ROOT }
+		}
+		cost = 25
+		days_remove = 21
+		fire_only_once = yes
+		remove_effect = { ADISCORD_vorkerland_tru_arm_river_battalions = yes }
+		ai_will_do = { base = 300 }
+	}
+
+	ADISCORD_vorkerland_tru_break_zlatorech_administration = {
+		icon = generic_attack
+		allowed = { tag = TRU }
+		activation = { always = no }
+		available = { always = no }
+		visible = {
+			has_country_flag = ADISCORD_vorkerland_tru_war_content_initialized
+			NOT = { has_country_flag = ADISCORD_vorkerland_tru_zlatorech_offensive_resolved }
+		}
+		selectable_mission = no
+		fire_only_once = yes
+		is_good = yes
+		days_mission_timeout = 150
+		cancel_trigger = {
+			OR = {
+				NOT = { country_exists = ZTA }
+				ZTA = { has_capitulated = yes }
+				has_capitulated = yes
+				has_global_flag = ADISCORD_vorkerland_collapse_finished
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { OR = { NOT = { country_exists = ZTA } ZTA = { has_capitulated = yes } } }
+				ADISCORD_vorkerland_tru_zlatorech_offensive_success = yes
+			}
+			else = { ADISCORD_vorkerland_tru_zlatorech_offensive_failure = yes }
+		}
+		timeout_effect = { ADISCORD_vorkerland_tru_zlatorech_offensive_failure = yes }
+	}
+
+	ADISCORD_vorkerland_tru_convene_river_congress = {
+		icon = generic_constitutional_guarantees
+		allowed = { tag = TRU }
+		visible = {
+			has_country_flag = ADISCORD_vorkerland_tru_zlatorech_offensive_won
+			NOT = { has_country_flag = ADISCORD_vorkerland_tru_river_congress_convened }
+		}
+		available = {
+			has_war = no
+			controls_state = 199
+		}
+		cost = 40
+		days_remove = 30
+		fire_only_once = yes
+		remove_effect = { ADISCORD_vorkerland_tru_convene_river_congress = yes }
+		ai_will_do = { base = 200 }
+	}
+}

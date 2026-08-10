@@ -1,0 +1,114 @@
+ideas = {
+	country = {
+		ADISCORD_vorkerland_rom_desert_eagle_staff = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = 0.05
+				planning_speed = 0.10
+				army_org_regain = 0.05
+				supply_consumption_factor = -0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_rom_valley_columns = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.10
+				breakthrough_factor = 0.15
+				army_speed_factor = 0.05
+				land_reinforce_rate = 0.02
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_rom_stalled_offensive = {
+			picture = generic_oppression
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				war_support_factor = -0.03
+				planning_speed = -0.10
+				army_org_regain = -0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_rom_valley_compact = {
+			picture = generic_constitutional_guarantees
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.08
+				army_org_factor = 0.05
+				industrial_capacity_factory = 0.05
+				planning_speed = 0.10
+				supply_consumption_factor = -0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_tru_emergency_river_council = {
+			picture = generic_central_management
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				recruitable_population_factor = 0.02
+				mobilization_speed = 0.15
+				industrial_capacity_factory = 0.05
+				army_org_regain = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_tru_crossing_columns = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.08
+				breakthrough_factor = 0.12
+				army_speed_factor = 0.08
+				planning_speed = 0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_tru_stalled_offensive = {
+			picture = generic_oppression
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				war_support_factor = -0.03
+				planning_speed = -0.10
+				army_org_regain = -0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_tru_river_congress = {
+			picture = generic_constitutional_guarantees
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.08
+				recruitable_population_factor = 0.02
+				industrial_capacity_factory = 0.08
+				army_org_regain = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+	}
+}

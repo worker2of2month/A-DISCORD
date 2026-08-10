@@ -87,7 +87,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         self.assertGreaterEqual(int(scalar(source, "manpower")), 10_000_000)
         self.assertLessEqual(int(scalar(source, "manpower")), 13_000_000)
         self.assertEqual(scalar(source, "state_category"), "megalopolis")
-        self.assertNotIn("impassable = yes", source)
+        self.assertIn("impassable = yes", source)
         self.assertNotRegex(source, r"buildings_max_level_factor\s*=\s*0(?:\.0+)?\b")
         self.assertNotRegex(source, r"state_category\s*=\s*wasteland\b")
 
@@ -434,7 +434,10 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
                 source = state_source(state_id)
                 self.assertGreater(int(scalar(source, "manpower")), 0)
                 self.assertGreaterEqual(float(scalar(source, "local_supplies")), 1.5)
-                self.assertNotIn("impassable = yes", source)
+                if state_id == 40:
+                    self.assertIn("impassable = yes", source)
+                else:
+                    self.assertNotIn("impassable = yes", source)
                 self.assertNotRegex(source, r"state_category\s*=\s*wasteland\b")
         for state_id in sorted(builder.VORKERLAND_INITIAL_MAP_LEGACY_STATES):
             with self.subTest(initial_map_state=state_id):

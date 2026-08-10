@@ -1,0 +1,37 @@
+add_namespace = ADISCORD_vorkerland_rom_tru
+
+country_event = {
+	id = ADISCORD_vorkerland_rom_tru.1
+	title = ADISCORD_vorkerland_rom_tru.1.t
+	desc = ADISCORD_vorkerland_rom_tru.1.d
+	is_triggered_only = yes
+	trigger = {
+		tag = ROM
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		has_war_with = DVA
+		NOT = { has_country_flag = ADISCORD_vorkerland_rom_war_content_initialized }
+	}
+	immediate = {
+		ADISCORD_vorkerland_rom_initialize_war_content = yes
+		activate_mission = ADISCORD_vorkerland_rom_break_valley_administration
+	}
+	option = { name = ADISCORD_vorkerland_rom_tru.1.a }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_rom_tru.2
+	title = ADISCORD_vorkerland_rom_tru.2.t
+	desc = ADISCORD_vorkerland_rom_tru.2.d
+	is_triggered_only = yes
+	trigger = {
+		tag = TRU
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		has_war_with = ZTA
+		NOT = { has_country_flag = ADISCORD_vorkerland_tru_war_content_initialized }
+	}
+	immediate = {
+		ADISCORD_vorkerland_tru_initialize_war_content = yes
+		activate_mission = ADISCORD_vorkerland_tru_break_zlatorech_administration
+	}
+	option = { name = ADISCORD_vorkerland_rom_tru.2.a }
+}

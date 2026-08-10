@@ -55,4 +55,58 @@ spriteTypes = {
 		name = "GFX_ADISCORD_production_consumer_item"
 		textureFile = "gfx/interface/production/ui/ADISCORD_production_consumer_item.dds"
 	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_production_equipment_card"
+		textureFile = "gfx/interface/production/ui/ADISCORD_production_equipment_card.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_production_factory_icon"
+		textureFile = "gfx/interface/production/ui/ADISCORD_production_factory_icon_strip.dds"
+		noOfFrames = 15
+		alwaystransparent = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_production_factory_half_icon"
+		textureFile = "gfx/interface/production/ui/ADISCORD_production_factory_half_strip.dds"
+		noOfFrames = 15
+		alwaystransparent = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_production_factory_slot_bg"
+		textureFile = "gfx/interface/production/ui/ADISCORD_production_factory_slot_bg.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_production_add_infantry_button"
+		textureFile = "gfx/interface/production/ui/ADISCORD_production_add_infantry_button.dds"
+		noOfFrames = 3
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_production_add_armour_button"
+		textureFile = "gfx/interface/production/ui/ADISCORD_production_add_armour_button.dds"
+		noOfFrames = 3
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_production_add_aircraft_button"
+		textureFile = "gfx/interface/production/ui/ADISCORD_production_add_aircraft_button.dds"
+		noOfFrames = 3
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_production_add_naval_button"
+		textureFile = "gfx/interface/production/ui/ADISCORD_production_add_naval_button.dds"
+		noOfFrames = 3
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_production_naval_repair_button"
+		textureFile = "gfx/interface/production/ui/ADISCORD_production_naval_repair_button.dds"
+		noOfFrames = 3
+	}
 }

@@ -12,6 +12,7 @@ country_event = {
 	}
 
 	immediate = {
+		ADISCORD_vorkerland_begin_collapse = yes
 		set_global_flag = ADISCORD_vorkerland_collapse_started
 		goto_province = 6713
 		launch_nuke = {
@@ -40,9 +41,34 @@ country_event = {
 		}
 		ADISCORD_vorkerland_apply_initial_map = yes
 		ADISCORD_vorkerland_teardown_confederation = yes
+		ADISCORD_vorkerland_prepare_claimant_characters = yes
 		ADISCORD_vorkerland_align_wtd_with_worx = yes
-		ADISCORD_vorkerland_apply_claimant_cosmetics = yes
-		WRK = { country_event = { id = ADISCORD_vorkerland_collapse.41 days = 1 } }
+		# Only the human player follows the live country tag. Observers and AI
+		# keep WRK as an AI-side legacy object; both paths still materialize WKR.
+		if = {
+			limit = { is_ai = no country_exists = WKR }
+			WKR = { change_tag_from = WRK }
+		}
+		if = {
+			limit = { country_exists = WKR country_exists = WRK }
+			WKR = {
+				inherit_technology = WRK
+				load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes copy_completed_from = WRK }
+				annex_country = { target = WRK transfer_troops = yes }
+				ADISCORD_vorkerland_relocate_legacy_armies = yes
+				ADISCORD_vorkerland_apply_claimant_cosmetics = yes
+				country_event = { id = ADISCORD_vorkerland_collapse.41 days = 1 }
+				country_event = { id = ADISCORD_vorkerland_collapse.2 days = 1 }
+				country_event = { id = ADISCORD_vorkerland_phase.2 days = 1 }
+			}
+		}
+		else = {
+			WRK = {
+				ADISCORD_vorkerland_apply_claimant_cosmetics = yes
+				country_event = { id = ADISCORD_vorkerland_collapse.41 days = 1 }
+				country_event = { id = ADISCORD_vorkerland_collapse.2 days = 1 }
+			}
+		}
 		random_list = {
 			7 = { ADISCORD_vorkerland_form_joint_government = yes }
 			93 = { }
@@ -54,10 +80,6 @@ country_event = {
 			limit = { NOT = { has_global_flag = ADISCORD_vorkerland_collapse_news_shown } }
 			set_global_flag = ADISCORD_vorkerland_collapse_news_shown
 			news_event = { id = news.0 }
-		}
-		country_event = {
-			id = ADISCORD_vorkerland_collapse.2
-			days = 1
 		}
 		if = {
 			limit = { RUS = { exists = yes } }
@@ -95,6 +117,10 @@ country_event = {
 			WRK = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }
 		}
 		if = {
+			limit = { WKR = { exists = yes } }
+			WKR = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }
+		}
+		if = {
 			limit = { TVA = { exists = yes } }
 			TVA = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }
 		}
@@ -104,14 +130,18 @@ country_event = {
 			VAL = { VAL_handle_vorkerland_war_outbreak = yes }
 		}
 		if = {
-			limit = { WRK = { exists = yes } }
-			WRK = {
+			limit = { WKR = { exists = yes } }
+			WKR = {
 				country_event = {
 					id = ADISCORD_vorkerland_collapse.31
 					days = 21
 					random_days = 14
 				}
 			}
+		}
+		else_if = {
+			limit = { WRK = { exists = yes } }
+			WRK = { country_event = { id = ADISCORD_vorkerland_collapse.31 days = 21 random_days = 14 } }
 		}
 	}
 }
@@ -163,7 +193,7 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
-		tag = WRK
+		OR = { tag = WRK tag = WKR }
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_claim_wars_authorized }
 	}
@@ -427,7 +457,7 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
-		tag = WRK
+		OR = { tag = WRK tag = WKR }
 		has_global_flag = ADISCORD_vorkerland_collapse_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_conflict_spirits_finalized }
 	}
@@ -549,8 +579,9 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	trigger = {
-		tag = WRK
+		tag = VAD
 		has_global_flag = ADISCORD_vorkerland_joint_government_formed
+		has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
 		NOT = {
 			has_country_leader = {
 				character = WRK_VAD_Joint_Council

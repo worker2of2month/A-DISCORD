@@ -1,0 +1,84 @@
+# The deterministic capitulation fallback still needs a single country to
+# receive unoccupied land and dissolve the defeated tag. Before that happens,
+# preserve the front line: every independent co-belligerent keeps states that
+# it actually controls. Subjects leave their gains to their overlord, matching
+# normal peace-conference ownership and protecting scripted subject borders.
+ADISCORD_distribute_occupied_states_to_cobelligerents = {
+	every_owned_state = {
+		limit = {
+			CONTROLLER = {
+				exists = yes
+				is_subject = no
+				NOT = { has_capitulated = yes }
+				NOT = { tag = FROM }
+				has_war_together_with = FROM
+			}
+		}
+		CONTROLLER = { transfer_state = PREV }
+	}
+}
+
+# Central Vorkerland outcomes require all central states to remain reachable by
+# the claimant war graph. Restrict the same occupation split to central actors;
+# an unrelated regional intervention cannot strand a required victory state.
+ADISCORD_vorkerland_distribute_central_states_to_cobelligerents = {
+	every_owned_state = {
+		limit = {
+			CONTROLLER = {
+				exists = yes
+				is_subject = no
+				NOT = { has_capitulated = yes }
+				NOT = { tag = FROM }
+				has_war_together_with = FROM
+				ADISCORD_vorkerland_is_central_claimant = yes
+			}
+		}
+		CONTROLLER = { transfer_state = PREV }
+	}
+}
+
+# Run in the normalized central winner's country scope. ROOT remains the
+# capitulated central claimant from on_capitulation. A subject credited as FROM
+# therefore settles through its surviving main-claimant overlord instead.
+ADISCORD_vorkerland_settle_central_capitulation = {
+	if = {
+		limit = { ROOT = { ADISCORD_vorkerland_is_temporary_claimant = yes } }
+		# A defeated central claimant must survive as a diagnostic shell until the
+		# phase controller has one verified winner. Its subjects and armed forces
+		# are released/transferred by postwar formation, never by this fallback.
+		ROOT = { set_country_flag = ADISCORD_vorkerland_claimant_cleanup_reserved }
+		country_event = { id = ADISCORD_vorkerland_phase.6 days = 1 }
+	}
+	else = {
+	# Set recovery before any white peace, because on_peace can fire
+	# synchronously and must not schedule a new front during settlement.
+	set_country_flag = {
+		flag = ADISCORD_vorkerland_central_recovery
+		days = 35
+		value = 1
+	}
+	add_manpower = 500
+	if = {
+		limit = {
+			WTD = {
+				exists = yes
+				has_country_flag = ADISCORD_vorkerland_wtd_cleanup_reserved
+			}
+		}
+		WTD = {
+			clr_country_flag = ADISCORD_vorkerland_wtd_cleanup_reserved
+			ADISCORD_vorkerland_distribute_central_states_to_cobelligerents = yes
+		}
+		if = {
+			limit = { WTD = { exists = yes } }
+			if = { limit = { has_war_with = WTD } white_peace = WTD }
+			annex_country = { target = WTD transfer_troops = no }
+		}
+	}
+	if = {
+		limit = { ROOT = { exists = yes } }
+		if = { limit = { has_war_with = ROOT } white_peace = ROOT }
+		annex_country = { target = ROOT transfer_troops = no }
+	}
+	}
+}

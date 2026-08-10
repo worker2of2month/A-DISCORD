@@ -228,7 +228,7 @@ guiTypes = {
 				buttonType = {
 					name = "infantry_button"
 					position = { x=25 y=122 }
-					quadTextureSprite ="GFX_add_prod_inf_art_line"
+					quadTextureSprite ="GFX_ADISCORD_production_add_infantry_button"
 					#pdx_tooltip = "PRODUCTION_INFANTRY_BUTTON"
 					clicksound = click_checkbox
 				}
@@ -243,7 +243,7 @@ guiTypes = {
 				buttonType = {
 					name = "tank_button"
 					position = { x=105 y=122 }
-					quadTextureSprite ="GFX_add_prod_armour_line"
+					quadTextureSprite ="GFX_ADISCORD_production_add_armour_button"
 					#pdx_tooltip = "PRODUCTION_VEHICLES_BUTTON"
 					clicksound = click_checkbox
 				}
@@ -258,7 +258,7 @@ guiTypes = {
 				buttonType = {
 					name = "aircraft_button"
 					position = { x=185 y=122 }
-					quadTextureSprite ="GFX_add_prod_aircraft_line"
+					quadTextureSprite ="GFX_ADISCORD_production_add_aircraft_button"
 					#pdx_tooltip = "PRODUCTION_AIRCRAFT_BUTTON"
 					clicksound = click_checkbox
 				}
@@ -273,7 +273,7 @@ guiTypes = {
 				buttonType = {
 					name = "naval_button"
 					position = { x=350 y=122 }
-					spriteType ="GFX_add_prod_naval_line"
+					spriteType ="GFX_ADISCORD_production_add_naval_button"
 					#pdx_tooltip = "PRODUCTION_SHIPS_BUTTON"
 					clicksound = click_checkbox
 				}
@@ -288,7 +288,7 @@ guiTypes = {
 				buttonType = {
 					name = "naval_repair_button"
 					position = { x=430 y=122 }
-					spriteType ="GFX_toggle_naval_repair_window"
+					spriteType ="GFX_ADISCORD_production_naval_repair_button"
 					clicksound = click_checkbox
 					frame = 1
 				}
@@ -1579,7 +1579,7 @@ guiTypes = {
 		buttonType = {
 			name = "equipment_button"
 			position = { x=1 y=27 }
-			quadTextureSprite = "GFX_prod_land_equipment_item_large"
+			quadTextureSprite = "GFX_ADISCORD_production_equipment_card"
 			clicksound = click_default
 		}
 
@@ -1764,7 +1764,7 @@ guiTypes = {
 		iconType = {
 			name = "factories_used"
 			position = { x=@prod_icon_pos_x y=7 }
-			spriteType = "GFX_factory_item"
+			spriteType = "GFX_ADISCORD_production_factory_icon"
 			frame = 1
 			scale = 0.9
 			alwaystransparent = yes
@@ -2101,7 +2101,7 @@ guiTypes = {
 		iconType = {
 			name = "factories_used"
 			position = { x=358 y=7 }
-			spriteType = "GFX_factory_item"
+			spriteType = "GFX_ADISCORD_production_factory_icon"
 			frame = 1
 			scale = 0.9
 			alwaystransparent = yes
@@ -2218,7 +2218,7 @@ guiTypes = {
 		iconType = {
 			name = "equipment_button"
 			position = { x=1 y=27 }
-			spriteType = "GFX_prod_land_equipment_item_large"
+			spriteType = "GFX_ADISCORD_production_equipment_card"
 		}
 
 		iconType = {
@@ -3499,7 +3499,7 @@ guiTypes = {
 		buttonType = {
 			name = "equipment_button"
 			position = { x=1 y=27 }
-			quadTextureSprite = "GFX_prod_land_equipment_item_large"
+			quadTextureSprite = "GFX_ADISCORD_production_equipment_card"
 			clicksound = click_default
 		}
 
@@ -3619,7 +3619,7 @@ guiTypes = {
 		iconType = {
 			name = "factories_used"
 			position = { x=@prod_icon_pos_x y=7 }
-			spriteType = "GFX_factory_item"
+			spriteType = "GFX_ADISCORD_production_factory_icon"
 			frame = 1
 			scale = 0.9
 			alwaystransparent = yes
@@ -3911,7 +3911,7 @@ guiTypes = {
 		iconType = {
 			name = "factories_used"
 			position = { x=@prod_icon_pos_x y=7 }
-			spriteType = "GFX_factory_item"
+			spriteType = "GFX_ADISCORD_production_factory_icon"
 			frame = 1
 			scale = 0.9
 			alwaystransparent = yes
@@ -4702,20 +4702,20 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			quadTextureSprite ="GFX_factory_bg"
+			quadTextureSprite ="GFX_ADISCORD_production_factory_slot_bg"
 			clicksound = click_scroll
 		}
 
 		iconType = {
 			name = "icon"
 			position = { x=3 y=2 }
-			spriteType = "GFX_factory_item"
+			spriteType = "GFX_ADISCORD_production_factory_icon"
 		}
 
 		iconType = {
 			name = "icon_overlay"
 			position = { x=3 y=2 }
-			spriteType = "GFX_factory_item_half"
+			spriteType = "GFX_ADISCORD_production_factory_half_icon"
 		}
 	}
 
@@ -4727,7 +4727,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			quadTextureSprite ="GFX_factory_bg"
+			quadTextureSprite ="GFX_ADISCORD_production_factory_slot_bg"
 			clicksound = click_scroll
 		}
 
@@ -4746,7 +4746,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			quadTextureSprite ="GFX_factory_bg"
+			quadTextureSprite ="GFX_ADISCORD_production_factory_slot_bg"
 			clicksound = click_scroll
 		}
 

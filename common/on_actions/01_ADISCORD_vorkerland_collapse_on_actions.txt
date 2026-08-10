@@ -127,12 +127,13 @@ on_actions = {
 			if = {
 				limit = {
 					has_global_flag = ADISCORD_vorkerland_joint_government_formed
-					WRK = {
+					has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+					VAD = {
 						exists = yes
 						NOT = { has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes } }
 					}
 				}
-				WRK = { country_event = { id = ADISCORD_vorkerland_collapse.62 days = 1 } }
+				VAD = { country_event = { id = ADISCORD_vorkerland_collapse.62 days = 1 } }
 			}
 			# Save-compatible one-shot cleanup for collapses created before the
 			# deferred political-cache pass existed.

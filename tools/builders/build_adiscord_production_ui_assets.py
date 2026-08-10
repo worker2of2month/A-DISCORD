@@ -13,13 +13,22 @@ import argparse
 from io import BytesIO
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageEnhance, ImageOps
+from PIL import Image, ImageChops, ImageDraw, ImageEnhance, ImageFilter, ImageOps
 
 from tools.lib.paths import repository_root
 
 
 ROOT = repository_root()
 SOURCE = ROOT / "gfx/interface/production/source/production_surface_source.png"
+SOURCE_DIR = ROOT / "gfx/interface/production/source"
+FACTORY_GLYPH_SOURCE = SOURCE_DIR / "factory_glyph_source.png"
+BUTTON_GLYPH_SOURCES = {
+    "infantry_artillery": SOURCE_DIR / "infantry_artillery_glyph_source.png",
+    "armour": SOURCE_DIR / "armour_glyph_source.png",
+    "aircraft": SOURCE_DIR / "aircraft_glyph_source.png",
+    "naval": SOURCE_DIR / "naval_glyph_source.png",
+    "repair": SOURCE_DIR / "repair_glyph_source.png",
+}
 OUTPUT_DIR = ROOT / "gfx/interface/production/ui"
 
 WINDOW_TILE = OUTPUT_DIR / "ADISCORD_production_window_tile.dds"
@@ -30,6 +39,15 @@ MILITARY_ITEM = OUTPUT_DIR / "ADISCORD_production_military_item.dds"
 COLLAPSED_ITEM = OUTPUT_DIR / "ADISCORD_production_collapsed_item.dds"
 NAVAL_ITEM_STRIP = OUTPUT_DIR / "ADISCORD_production_naval_item_strip.dds"
 CONSUMER_ITEM = OUTPUT_DIR / "ADISCORD_production_consumer_item.dds"
+EQUIPMENT_CARD = OUTPUT_DIR / "ADISCORD_production_equipment_card.dds"
+FACTORY_ICON_STRIP = OUTPUT_DIR / "ADISCORD_production_factory_icon_strip.dds"
+FACTORY_HALF_STRIP = OUTPUT_DIR / "ADISCORD_production_factory_half_strip.dds"
+FACTORY_SLOT_BG = OUTPUT_DIR / "ADISCORD_production_factory_slot_bg.dds"
+ADD_INFANTRY_BUTTON = OUTPUT_DIR / "ADISCORD_production_add_infantry_button.dds"
+ADD_ARMOUR_BUTTON = OUTPUT_DIR / "ADISCORD_production_add_armour_button.dds"
+ADD_AIRCRAFT_BUTTON = OUTPUT_DIR / "ADISCORD_production_add_aircraft_button.dds"
+ADD_NAVAL_BUTTON = OUTPUT_DIR / "ADISCORD_production_add_naval_button.dds"
+NAVAL_REPAIR_BUTTON = OUTPUT_DIR / "ADISCORD_production_naval_repair_button.dds"
 
 INK = (3, 5, 6, 255)
 DEEP = (8, 11, 12, 255)
@@ -51,6 +69,30 @@ def _source_image() -> Image.Image:
     if source.width < 1024 or source.height < 1024:
         raise RuntimeError(f"production source must be at least 1024x1024, got {source.size}")
     return source
+
+
+def _glyph_source(path: Path, max_size: tuple[int, int]) -> Image.Image:
+    if not path.is_file():
+        raise RuntimeError(f"missing production glyph source: {path.relative_to(ROOT)}")
+    with Image.open(path) as source_image:
+        source = source_image.convert("RGBA")
+    alpha = source.getchannel("A")
+    bbox = alpha.getbbox()
+    if bbox is None:
+        raise RuntimeError(f"production glyph source is fully transparent: {path.relative_to(ROOT)}")
+    if any(
+        alpha.getpixel(point) != 0
+        for point in (
+            (0, 0),
+            (source.width - 1, 0),
+            (0, source.height - 1),
+            (source.width - 1, source.height - 1),
+        )
+    ):
+        raise RuntimeError(f"production glyph source corners must be transparent: {path.relative_to(ROOT)}")
+    glyph = source.crop(bbox)
+    glyph.thumbnail(max_size, Image.Resampling.LANCZOS)
+    return glyph
 
 
 def _surface(
@@ -223,23 +265,23 @@ def _item_base(
     draw.rectangle((7, 36, 284, 101), outline=(65, 75, 70, 255), width=1)
     draw.line((8, 37, 283, 37), fill=(147, 153, 132, 60), width=1)
 
-    draw.rectangle((290, 33, 507, 104), fill=(8, 11, 12, 245), outline=INK, width=2)
-    _recess(output, (292, 35, 317, 102), (10, 13, 14, 255))
+    draw.rectangle((276, 31, 510, 105), fill=(8, 11, 12, 245), outline=INK, width=2)
+    _recess(output, (278, 33, 315, 103), (10, 13, 14, 255))
     if factory_rows == 1:
-        grid_box = (320, 44, 475, 69)
+        grid_box = (317, 44, 461, 66)
     elif factory_rows == 2:
-        grid_box = (320, 36, 475, 86)
+        grid_box = (317, 36, 461, 81)
     else:
-        grid_box = (320, 35, 475, 102)
+        grid_box = (317, 33, 461, 101)
     _cell_grid(output, grid_box, 5, factory_rows)
-    _cell_grid(output, (478, 35, 507, 102), 1, 3)
+    _cell_grid(output, (462, 31, 510, 103), 1, 3)
     for point in ((7, 8), (503, 8), (7, 100), (503, 100)):
         _rivet(draw, *point)
     return output
 
 
 def _military_item() -> Image.Image:
-    return _item_base((7, 13, 9), (63, 76, 43), 3)
+    return _item_base((6, 10, 11), (47, 56, 56), 3)
 
 
 def _consumer_item() -> Image.Image:
@@ -268,6 +310,152 @@ def _naval_item_strip() -> Image.Image:
     return output
 
 
+def _equipment_card() -> Image.Image:
+    output = _tinted_surface((279, 81), (0.31, 0.56), 0.80, (5, 9, 10), (45, 56, 58))
+    draw = ImageDraw.Draw(output, "RGBA")
+    draw.rectangle((0, 0, 278, 80), outline=INK, width=3)
+    draw.rectangle((3, 3, 275, 77), outline=(65, 75, 74, 255), width=1)
+    draw.line((5, 5, 273, 5), fill=(133, 143, 137, 70), width=1)
+    draw.line((5, 75, 273, 75), fill=(121, 84, 38, 125), width=1)
+    # Subtle drafting marks preserve the technical-card identity without green fill.
+    draw.line((28, 15, 28, 65), fill=(91, 107, 108, 36), width=1)
+    draw.line((18, 53, 250, 53), fill=(91, 107, 108, 30), width=1)
+    draw.arc((15, 18, 75, 78), 190, 312, fill=(111, 125, 123, 34), width=1)
+    draw.line((48, 53, 75, 30), fill=(111, 125, 123, 28), width=1)
+    for point in ((7, 7), (271, 7), (7, 73), (271, 73)):
+        _rivet(draw, *point)
+    return output
+
+
+PIXEL_FONT = {
+    "0": ("111", "101", "101", "101", "111"),
+    "1": ("010", "110", "010", "010", "111"),
+    "5": ("111", "100", "111", "001", "111"),
+    "x": ("000", "101", "010", "101", "000"),
+}
+
+
+def _draw_pixel_text(
+    draw: ImageDraw.ImageDraw,
+    text: str,
+    position: tuple[int, int],
+    fill: tuple[int, int, int, int],
+) -> None:
+    x, y = position
+    cursor = x
+    for character in text:
+        pattern = PIXEL_FONT[character]
+        for row, pixels in enumerate(pattern):
+            for column, pixel in enumerate(pixels):
+                if pixel == "1":
+                    draw.point((cursor + column, y + row), fill=fill)
+        cursor += 4
+
+
+def _factory_frame(index: int, half: bool) -> Image.Image:
+    colours = (
+        (188, 147, 68, 255),
+        (169, 179, 175, 255),
+        (150, 67, 56, 255),
+        (72, 79, 78, 235),
+        (151, 107, 69, 255),
+    )
+    glyph = _glyph_source(FACTORY_GLYPH_SOURCE, (20, 16))
+    frame = Image.new("RGBA", (22, 18), (0, 0, 0, 0))
+    x = (frame.width - glyph.width) // 2
+    y = frame.height - glyph.height - 1
+    alpha = Image.new("L", frame.size, 0)
+    alpha.paste(glyph.getchannel("A"), (x, y))
+    if half:
+        stripes = Image.new("L", frame.size, 0)
+        stripe_draw = ImageDraw.Draw(stripes)
+        for offset in range(-18, 40, 6):
+            stripe_draw.line((offset, 17, offset + 18, -1), fill=190, width=2)
+        alpha = ImageChops.multiply(alpha, stripes)
+    outline = alpha.filter(ImageFilter.MaxFilter(3))
+    frame.paste((3, 5, 5, 225), (0, 0), outline)
+    frame.paste(colours[index % 5], (0, 0), alpha)
+    draw = ImageDraw.Draw(frame, "RGBA")
+    multiplier = index // 5
+    if multiplier:
+        label = "x5" if multiplier == 1 else "x10"
+        start_x = 12 if multiplier == 1 else 8
+        _draw_pixel_text(draw, label, (start_x + 1, 2), (2, 3, 3, 240))
+        _draw_pixel_text(draw, label, (start_x, 1), (213, 211, 187, 255))
+    return frame
+
+
+def _factory_strip(half: bool) -> Image.Image:
+    output = Image.new("RGBA", (22 * 15, 18), (0, 0, 0, 0))
+    for index in range(15):
+        output.alpha_composite(_factory_frame(index, half), (index * 22, 0))
+    return output
+
+
+def _factory_slot_bg() -> Image.Image:
+    # The line texture now owns the exact 29x23 slot geometry.  Keep only a
+    # near-transparent click target here so the old per-slot plate cannot fight it.
+    return Image.new("RGBA", (28, 22), (0, 0, 0, 2))
+
+
+def _button_surface(state: int) -> Image.Image:
+    brightness = (0.80, 1.00, 0.61)[state]
+    output = _surface((81, 41), (0.34 + state * 0.18, 0.48), brightness)
+    if state == 2:
+        output = ImageOps.grayscale(output.convert("RGB")).convert("RGBA")
+        output.putalpha(255)
+    draw = ImageDraw.Draw(output, "RGBA")
+    draw.rounded_rectangle((0, 0, 80, 40), radius=2, outline=INK, width=3)
+    edge = BRASS_LIGHT if state == 1 else EDGE
+    draw.rounded_rectangle((3, 3, 77, 37), radius=1, outline=edge, width=1)
+    draw.line((6, 5, 74, 5), fill=(143, 152, 144, 82), width=1)
+    draw.line((6, 35, 74, 35), fill=(126, 88, 40, 135), width=1)
+    for point in ((6, 6), (74, 6), (6, 34), (74, 34)):
+        draw.ellipse((point[0] - 2, point[1] - 2, point[0] + 2, point[1] + 2), fill=INK, outline=EDGE, width=1)
+    return output
+
+
+def _state_glyph(glyph: Image.Image, state: int) -> Image.Image:
+    if state == 0:
+        return ImageEnhance.Brightness(glyph).enhance(0.88)
+    if state == 1:
+        return ImageEnhance.Brightness(glyph).enhance(1.15)
+    alpha = glyph.getchannel("A").point(lambda value: round(value * 0.52))
+    disabled = ImageOps.grayscale(glyph.convert("RGB")).convert("RGBA")
+    disabled = ImageEnhance.Brightness(disabled).enhance(0.68)
+    disabled.putalpha(alpha)
+    return disabled
+
+
+def _button_frame(key: str, state: int) -> Image.Image:
+    frame = _button_surface(state)
+    draw = ImageDraw.Draw(frame, "RGBA")
+    if key == "repair":
+        anchor = _state_glyph(_glyph_source(BUTTON_GLYPH_SOURCES["naval"], (28, 29)), state)
+        wrench = _state_glyph(_glyph_source(BUTTON_GLYPH_SOURCES["repair"], (29, 27)), state)
+        frame.alpha_composite(anchor, (7, (41 - anchor.height) // 2))
+        frame.alpha_composite(wrench, (43, (41 - wrench.height) // 2))
+    else:
+        glyph = _state_glyph(_glyph_source(BUTTON_GLYPH_SOURCES[key], (50, 29)), state)
+        frame.alpha_composite(glyph, (5 + (50 - glyph.width) // 2, (41 - glyph.height) // 2))
+        plus = (193, 151, 67, 255) if state != 2 else (100, 103, 99, 220)
+        draw.line((67, 11, 67, 29), fill=(3, 4, 4, 255), width=5)
+        draw.line((58, 20, 76, 20), fill=(3, 4, 4, 255), width=5)
+        draw.line((67, 11, 67, 29), fill=plus, width=3)
+        draw.line((58, 20, 76, 20), fill=plus, width=3)
+    if state == 2:
+        draw.ellipse((57, 10, 76, 29), outline=(126, 48, 44, 235), width=2)
+        draw.line((59, 28, 74, 12), fill=(126, 48, 44, 245), width=2)
+    return frame
+
+
+def _button_strip(key: str) -> Image.Image:
+    output = Image.new("RGBA", (81 * 3, 41), (0, 0, 0, 0))
+    for state in range(3):
+        output.alpha_composite(_button_frame(key, state), (state * 81, 0))
+    return output
+
+
 def _dds_bytes(image: Image.Image) -> bytes:
     stream = BytesIO()
     image.save(stream, format="DDS")
@@ -284,6 +472,15 @@ def expected_outputs() -> dict[Path, bytes]:
         COLLAPSED_ITEM: _dds_bytes(_collapsed_item()),
         NAVAL_ITEM_STRIP: _dds_bytes(_naval_item_strip()),
         CONSUMER_ITEM: _dds_bytes(_consumer_item()),
+        EQUIPMENT_CARD: _dds_bytes(_equipment_card()),
+        FACTORY_ICON_STRIP: _dds_bytes(_factory_strip(False)),
+        FACTORY_HALF_STRIP: _dds_bytes(_factory_strip(True)),
+        FACTORY_SLOT_BG: _dds_bytes(_factory_slot_bg()),
+        ADD_INFANTRY_BUTTON: _dds_bytes(_button_strip("infantry_artillery")),
+        ADD_ARMOUR_BUTTON: _dds_bytes(_button_strip("armour")),
+        ADD_AIRCRAFT_BUTTON: _dds_bytes(_button_strip("aircraft")),
+        ADD_NAVAL_BUTTON: _dds_bytes(_button_strip("naval")),
+        NAVAL_REPAIR_BUTTON: _dds_bytes(_button_strip("repair")),
     }
 
 

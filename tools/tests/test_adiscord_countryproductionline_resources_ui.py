@@ -57,6 +57,15 @@ class CountryProductionLineResourceUiTests(unittest.TestCase):
             ("GFX_ADISCORD_production_collapsed_item", "GFX_production_item_collapsed"),
             ("GFX_ADISCORD_production_naval_item_strip", "GFX_naval_production_item_bg_strip"),
             ("GFX_ADISCORD_production_consumer_item", "GFX_consumer_goods"),
+            ("GFX_ADISCORD_production_equipment_card", "GFX_prod_land_equipment_item_large"),
+            ("GFX_ADISCORD_production_factory_icon", "GFX_factory_item"),
+            ("GFX_ADISCORD_production_factory_half_icon", "GFX_factory_item_half"),
+            ("GFX_ADISCORD_production_factory_slot_bg", "GFX_factory_bg"),
+            ("GFX_ADISCORD_production_add_infantry_button", "GFX_add_prod_inf_art_line"),
+            ("GFX_ADISCORD_production_add_armour_button", "GFX_add_prod_armour_line"),
+            ("GFX_ADISCORD_production_add_aircraft_button", "GFX_add_prod_aircraft_line"),
+            ("GFX_ADISCORD_production_add_naval_button", "GFX_add_prod_naval_line"),
+            ("GFX_ADISCORD_production_naval_repair_button", "GFX_toggle_naval_repair_window"),
         ):
             vanilla_shape = vanilla_shape.replace(custom, vanilla)
         for widget_type, name in (

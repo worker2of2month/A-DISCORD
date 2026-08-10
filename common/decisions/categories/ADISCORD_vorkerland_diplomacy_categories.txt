@@ -1,0 +1,11 @@
+ADISCORD_vorkerland_regional_diplomacy_category = {
+	icon = generic_diplomatic_treaty
+	allowed = { OR = { tag = WKR tag = VAD } }
+	visible = {
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+		}
+		NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+	}
+}

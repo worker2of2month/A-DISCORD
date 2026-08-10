@@ -1,3 +1,4 @@
+WKR = "countries/WKR.txt"
 TVA = "countries/TVA.txt"
 WTD = "countries/WTD.txt"
 EYR = "countries/EYR.txt"

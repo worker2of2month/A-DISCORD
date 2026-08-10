@@ -4,12 +4,17 @@ state={
 	provinces={
 		16428 
 	}
+	impassable = yes
+	resources = {
+		steel = 24
+	}
 
 	history = {
         owner = WRK
         add_core_of = WRK
         victory_points = { 16428 150 }
 		buildings = {
+			ADISCORD_science_center = 1
 			air_base = 3
 			arms_factory = 4
 			industrial_complex = 6
@@ -19,7 +24,7 @@ state={
 
 
 
-	manpower = 12500000
+	manpower = 11500000
 	buildings_max_level_factor = 1.000
 	local_supplies = 10.0
 	state_category = megalopolis
