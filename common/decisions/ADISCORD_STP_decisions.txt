@@ -1,0 +1,22 @@
+STP_elections_in_the_party = {
+
+	STP_test = {
+		icon = generic_political_pressure
+		allowed = { tag = STP }
+		visible = {
+		}
+		available = {
+		}
+		cost = 0
+		days_remove = 0
+		days_re_enable = 0
+		complete_effect = {
+			add_dynamic_modifier = { modifier = STP_party_suspicion_dynamic_modifier }
+			add_dynamic_modifier = { modifier = STP_fading_father }
+			STP_change_party_suspicion = yes
+			STP_leader_health = yes
+		}
+		remove_effect = {
+		}
+	}
+}

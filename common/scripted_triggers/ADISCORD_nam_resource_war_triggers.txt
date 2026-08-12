@@ -10,17 +10,20 @@ ADISCORD_nam_resource_war_ready = {
 		controls_state = 67
 		controls_state = 688
 		controls_state = 689
+		controls_state = 690
 	}
 	EFL = {
 		is_subject = no
 		has_war = no
 		controls_state = 68
 		controls_state = 70
+		controls_state = 691
 	}
 	AZH = {
 		is_subject = no
 		has_war = no
 		controls_state = 69
+		controls_state = 692
 	}
 }
 

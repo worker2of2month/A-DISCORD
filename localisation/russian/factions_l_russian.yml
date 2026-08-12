@@ -1095,3 +1095,15 @@
  faction_divider_dashes: "--------------"
  TRIGGER_HAS_ACTIVE_FACTION_RULE: "$COUNTRY_OR_FACTION|H$ с действующим правилом «$RULE|H$»"
  TRIGGER_HAS_NOT_ACTIVE_FACTION_RULE: "$COUNTRY_OR_FACTION|H$ без действующего правила «$RULE|H$»"
+
+# BEGIN CONSOLIDATED: ADISCORD_factions_l_russian.yml
+ ADISCORD_faction_generic_name: "Военно-политический союз"
+ ADISCORD_faction_manifest_continuity: "Сохранение союза"
+ ADISCORD_faction_manifest_continuity_desc: "Участники обязуются сохранять общее командование и взаимную защиту, пока действует учредительный договор союза."
+ ADISCORD_faction_goal_operational_continuity: "Непрерывность командования"
+ ADISCORD_faction_goal_operational_continuity_desc: "Союз сохраняет постоянные каналы связи и совместный порядок оперативного командования."
+ ADISCORD_faction_goal_strategic_coordination: "Стратегическая координация"
+ ADISCORD_faction_goal_strategic_coordination_desc: "Участники согласуют долгосрочное военное планирование и распределение ответственности."
+ ADISCORD_faction_goal_long_term_security: "Общая безопасность"
+ ADISCORD_faction_goal_long_term_security_desc: "Учредительный договор остаётся основой взаимной защиты и политической устойчивости союза."
+# END CONSOLIDATED: ADISCORD_factions_l_russian.yml

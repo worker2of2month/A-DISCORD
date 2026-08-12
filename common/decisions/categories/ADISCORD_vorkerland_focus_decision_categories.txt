@@ -10,6 +10,9 @@ ADISCORD_vorkerland_focus_operations_category = {
 
 	visible = {
 		OR = {
+			# Central district campaigns open with the verified regional war graph;
+			# claimant capstones are required only for the final showdown.
+			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
 			has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
 			has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked
 			has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
@@ -36,6 +39,7 @@ ADISCORD_vorkerland_allied_support_category = {
 					exists = yes
 					NOT = { has_capitulated = yes }
 					has_war = yes
+					OR = { is_in_faction_with = ROOT is_subject_of = ROOT }
 				}
 			}
 			AND = {

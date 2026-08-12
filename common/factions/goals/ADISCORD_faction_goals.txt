@@ -1,8 +1,10 @@
 # A-Discord replaces the complete NCNS faction database. Keep one stable goal
 # in every duration slot: an entirely empty selectable-goal pool makes the
 # HOI4 1.19 faction AI enqueue a set-goal command with an invalid database
-# pointer. These permanent goals preserve the mod's legacy alliance behavior
-# while giving the engine valid objects for all three slots.
+# pointer. The faction view also scans active goals for the native unlock
+# effects when it builds the locked research and military tab tooltips. Keep
+# those effects on the stable, already-serialized goals so existing saves have
+# valid lookup targets without changing when the permanent goals complete.
 ADISCORD_faction_goal_operational_continuity = {
 	name = ADISCORD_faction_goal_operational_continuity
 	description = ADISCORD_faction_goal_operational_continuity_desc
@@ -11,6 +13,9 @@ ADISCORD_faction_goal_operational_continuity = {
 	visible = { always = yes }
 	available = { always = yes }
 	completed = { always = no }
+	complete_effect = {
+		set_faction_research_unlocked = yes
+	}
 	ai_will_do = { factor = 0 }
 }
 
@@ -22,6 +27,9 @@ ADISCORD_faction_goal_strategic_coordination = {
 	visible = { always = yes }
 	available = { always = yes }
 	completed = { always = no }
+	complete_effect = {
+		set_faction_military_unlocked = yes
+	}
 	ai_will_do = { factor = 0 }
 }
 

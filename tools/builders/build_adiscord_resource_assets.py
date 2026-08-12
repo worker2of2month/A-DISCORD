@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Build the strategic-resource, trade-list and topbar assets.
+"""Build the strategic-resource, topbar and core map-interface assets.
 
 The builder owns one coherent nine-resource icon set, its deficit treatment,
-the widened three-state trade-entry background and the complete topbar skin.
+the widened trade-entry background, the topbar skin and the state-view shell.
 Use ``--check`` before ``--apply``.
 """
 
@@ -51,6 +51,17 @@ DISMISSED_ALERTS_BUTTON = ROOT / "gfx/interface/topbar/show_dismissed_alerts_ico
 TOPBAR_FLAG_FRAME = ROOT / "gfx/interface/topbar/ADISCORD_flag_frame_overlay.dds"
 TOPBAR_FLAG_OVERLAY = ROOT / "gfx/interface/topbar/ADISCORD_flag_overlay.dds"
 TOPBAR_FLAG_MASK = ROOT / "gfx/interface/topbar/ADISCORD_flag_alpha_mask.tga"
+STATEVIEW_WW_BACKGROUND = ROOT / "gfx/interface/stateview/ww_stateview_bg.dds"
+STATEVIEW_BACKGROUND = ROOT / "gfx/interface/stateview/stateview_bg.dds"
+STATEVIEW_WW_ENTRY = ROOT / "gfx/interface/stateview/ww_building_standing_entry_stateview.dds"
+STATEVIEW_ENTRY = ROOT / "gfx/interface/stateview/building_standing_entry_stateview.dds"
+STATEVIEW_BUILDING_ENTRY = ROOT / "gfx/interface/stateview/building_entry_stateview.dds"
+STATEVIEW_LANDMARK_ENTRY = ROOT / "gfx/interface/stateview/province_landmark_bg.dds"
+STATEVIEW_BUILD_SLOT = ROOT / "gfx/interface/buildings/build_slot_bg.dds"
+STATEVIEW_PROVINCE_HEADER = ROOT / "gfx/interface/province_header.dds"
+STATEVIEW_POPULATION_ICON = ROOT / "gfx/interface/population_icon.dds"
+STATEVIEW_VALUE_BG = ROOT / "gfx/interface/victorypoint_stateview_bg.dds"
+STATEVIEW_RESOURCE_BG = ROOT / "gfx/interface/stateview_resource_transp_bg.dds"
 
 FRAME_WIDTH = 26
 TOTAL_FRAMES = 9
@@ -68,6 +79,20 @@ DATE_CONTROL_SIZE = (206, 28)
 TOPBAR_FLAG_FRAME_SIZE = (88, 58)
 TOPBAR_FLAG_OVERLAY_SIZE = (82, 52)
 TOPBAR_FLAG_MASK_SIZE = (82, 52)
+
+STATEVIEW_OUTPUT_SIZES = {
+    STATEVIEW_WW_BACKGROUND: (463, 653),
+    STATEVIEW_BACKGROUND: (463, 542),
+    STATEVIEW_WW_ENTRY: (62, 84),
+    STATEVIEW_ENTRY: (61, 100),
+    STATEVIEW_BUILDING_ENTRY: (110, 50),
+    STATEVIEW_LANDMARK_ENTRY: (50, 43),
+    STATEVIEW_BUILD_SLOT: (56, 46),
+    STATEVIEW_PROVINCE_HEADER: (417, 29),
+    STATEVIEW_POPULATION_ICON: (32, 33),
+    STATEVIEW_VALUE_BG: (44, 26),
+    STATEVIEW_RESOURCE_BG: (155, 63),
+}
 
 # The approved source sheet contains a deliberately irregular 5x3 icon grid.
 # Explicit content boxes keep the generator deterministic and avoid treating
@@ -669,6 +694,247 @@ def _gunmetal_from_mask(mask: Image.Image) -> Image.Image:
     return output
 
 
+def _stateview_chamfered_mask(size: tuple[int, int], chamfer: int) -> Image.Image:
+    width, height = size
+    mask = Image.new("L", size, 0)
+    ImageDraw.Draw(mask).polygon(
+        (
+            (chamfer, 0),
+            (width - chamfer - 1, 0),
+            (width - 1, chamfer),
+            (width - 1, height - chamfer - 1),
+            (width - chamfer - 1, height - 1),
+            (chamfer, height - 1),
+            (0, height - chamfer - 1),
+            (0, chamfer),
+        ),
+        fill=255,
+    )
+    return mask
+
+
+def _stateview_panel(
+    draw: ImageDraw.ImageDraw,
+    box: tuple[int, int, int, int],
+    *,
+    accent: tuple[int, int, int, int] = (18, 63, 67, 255),
+    fill: tuple[int, int, int, int] = (10, 15, 17, 248),
+) -> None:
+    left, top, right, bottom = box
+    draw.rectangle(box, fill=fill, outline=(4, 6, 7, 255), width=2)
+    draw.line((left + 3, top + 2, right - 3, top + 2), fill=(67, 79, 81, 255), width=1)
+    draw.line((left + 3, bottom - 2, right - 3, bottom - 2), fill=accent, width=1)
+
+
+def _stateview_background(size: tuple[int, int]) -> Image.Image:
+    """Build one legible instrument panel around the unchanged state-view layout."""
+    width, height = size
+    mask = _stateview_chamfered_mask(size, 7)
+    output = _gunmetal_from_mask(mask)
+    draw = ImageDraw.Draw(output)
+    black = (4, 6, 7, 255)
+    deep = (8, 12, 14, 255)
+    steel = (78, 90, 92, 255)
+    steel_soft = (43, 54, 56, 255)
+    cyan = (39, 124, 128, 240)
+    cyan_dark = (17, 59, 63, 255)
+    brass = (166, 125, 43, 255)
+
+    outer = (
+        (7, 1),
+        (width - 8, 1),
+        (width - 2, 7),
+        (width - 2, height - 8),
+        (width - 8, height - 2),
+        (7, height - 2),
+        (1, height - 8),
+        (1, 7),
+        (7, 1),
+    )
+    draw.line(outer, fill=black, width=3)
+    draw.line((10, 3, width - 11, 3), fill=steel, width=1)
+    draw.line((3, 10, 3, height - 11), fill=cyan_dark, width=2)
+    draw.line((5, 14, 5, height - 15), fill=cyan, width=1)
+    draw.line((10, height - 4, width - 11, height - 4), fill=cyan_dark, width=2)
+    draw.line((15, height - 5, width - 16, height - 5), fill=cyan, width=1)
+
+    # Title rail: a quiet machined header instead of the vanilla antlers.
+    _stateview_panel(draw, (7, 6, width - 8, 35), accent=cyan_dark, fill=(7, 11, 13, 255))
+    draw.line((75, 31, width - 52, 31), fill=cyan, width=1)
+    draw.line((18, 12, 67, 12), fill=steel_soft, width=1)
+    draw.line((width - 75, 12, width - 45, 12), fill=steel_soft, width=1)
+    for x in (14, width - 15):
+        draw.ellipse((x - 2, 17, x + 2, 21), fill=black)
+        draw.point((x, 19), fill=brass)
+
+    # Owner/claims rail and the compact state statistics bay.
+    _stateview_panel(draw, (8, 37, 144, 116), accent=steel_soft)
+    draw.line((11, 83, 141, 83), fill=steel_soft, width=1)
+    _stateview_panel(draw, (8, 118, 144, 398), accent=cyan_dark, fill=(11, 18, 19, 250))
+    draw.rounded_rectangle((17, 151, 137, 185), radius=4, fill=deep, outline=steel_soft, width=1)
+    draw.line((20, 183, 134, 183), fill=cyan_dark, width=1)
+    for y in (205, 263):
+        draw.line((13, y, 139, y), fill=(31, 43, 45, 255), width=1)
+    # State resources are emitted by a hard-coded grid whose nominal
+    # transparent background is not actually rendered.  Bake a quiet two-by-
+    # four instrument bay underneath its unchanged icon/value positions.
+    _stateview_panel(draw, (13, 267, 140, 396), accent=cyan_dark, fill=(7, 12, 14, 252))
+    draw.line((18, 273, 135, 273), fill=brass, width=1)
+    draw.line((76, 278, 76, 391), fill=(30, 42, 44, 255), width=1)
+    for y in (303, 333, 363):
+        draw.line((18, y, 135, y), fill=(30, 42, 44, 255), width=1)
+
+    # Fixed state buildings, slot counter and the five-by-five shared grid.
+    _stateview_panel(draw, (146, 37, width - 8, 119), accent=cyan_dark)
+    for x in range(153, 454, 60):
+        draw.line((x, 42, x, 114), fill=(26, 36, 38, 255), width=1)
+    _stateview_panel(draw, (146, 120, width - 8, 151), accent=brass, fill=(8, 13, 15, 255))
+    draw.rounded_rectangle((390, 123, 449, 148), radius=4, fill=deep, outline=steel_soft, width=1)
+    draw.line((394, 146, 445, 146), fill=cyan_dark, width=1)
+    _stateview_panel(draw, (146, 152, width - 8, 398), accent=cyan_dark, fill=(8, 13, 15, 252))
+    for column in range(1, 5):
+        x = 149 + column * 61
+        draw.line((x, 157, x, 393), fill=(23, 32, 34, 255), width=1)
+    for row in range(1, 5):
+        y = 157 + row * 48
+        draw.line((151, y, width - 13, y), fill=(23, 32, 34, 255), width=1)
+
+    # State modifiers remain a distinct rail instead of a loose label on black.
+    _stateview_panel(draw, (8, 400, width - 8, 447), accent=cyan_dark)
+    draw.line((17, 423, width - 18, 423), fill=(27, 39, 41, 255), width=1)
+    draw.rectangle((421, 407, 451, 439), fill=deep, outline=steel_soft, width=1)
+
+    if height >= 600:
+        # Expanded province module used by the current game version.
+        _stateview_panel(draw, (8, 449, width - 8, 480), accent=brass, fill=(8, 13, 15, 255))
+        draw.line((18, 477, width - 18, 477), fill=cyan_dark, width=1)
+        _stateview_panel(draw, (23, 481, width - 13, 555), accent=cyan_dark, fill=(5, 9, 11, 255))
+        _stateview_panel(draw, (8, 557, width - 8, height - 7), accent=cyan_dark, fill=(5, 8, 10, 255))
+        draw.line((16, 563, width - 16, 563), fill=steel_soft, width=1)
+    else:
+        _stateview_panel(draw, (8, 449, width - 8, height - 7), accent=cyan_dark, fill=(6, 10, 12, 255))
+
+    output.putalpha(mask)
+    return output
+
+
+def _stateview_standing_entry(size: tuple[int, int]) -> Image.Image:
+    width, height = size
+    # The current five-column grid advances by only 60x52 while the engine
+    # retains 62x84/61x100 canvases.  Keep those native canvases, but leave a
+    # real alpha gutter around the visible card so neighbouring entries and
+    # the shared-slot header never paint over one another.
+    visible_bottom = 80 if height == 84 else 96
+    mask = Image.new("L", size, 0)
+    mask_draw = ImageDraw.Draw(mask)
+    # The building strip already supplies its own 46x46 framed icon at x=12.
+    # Only retain two mounting brackets and the level shelf beneath it.
+    mask_draw.rectangle((7, 5, 11, 49), fill=255)
+    mask_draw.rectangle((width - 4, 5, width - 3, 49), fill=255)
+    mask_draw.polygon(
+        (
+            (6, 50),
+            (width - 7, 50),
+            (width - 3, 54),
+            (width - 3, visible_bottom - 5),
+            (width - 7, visible_bottom - 1),
+            (6, visible_bottom - 1),
+            (2, visible_bottom - 5),
+            (2, 54),
+        ),
+        fill=255,
+    )
+    output = _gunmetal_from_mask(mask)
+    draw = ImageDraw.Draw(output)
+    draw.line((8, 6, 8, 48), fill=(56, 69, 71, 255), width=1)
+    draw.line((width - 3, 7, width - 3, 47), fill=(18, 68, 72, 255), width=1)
+    shelf_outline = (
+        (6, 50),
+        (width - 7, 50),
+        (width - 3, 54),
+        (width - 3, visible_bottom - 5),
+        (width - 7, visible_bottom - 1),
+        (6, visible_bottom - 1),
+        (2, visible_bottom - 5),
+        (2, 54),
+        (6, 50),
+    )
+    draw.line(shelf_outline, fill=(4, 6, 7, 255), width=2)
+    draw.rectangle((8, 52, width - 7, visible_bottom - 6), fill=(8, 12, 14, 255), outline=(39, 49, 51, 255), width=1)
+    draw.line((11, visible_bottom - 5, width - 10, visible_bottom - 5), fill=(156, 117, 39, 255), width=1)
+    output.putalpha(mask)
+    return output
+
+
+def _stateview_building_entry() -> Image.Image:
+    size = STATEVIEW_OUTPUT_SIZES[STATEVIEW_BUILDING_ENTRY]
+    output = Image.new("RGBA", size, (0, 0, 0, 0))
+    draw = ImageDraw.Draw(output)
+    for left, right in ((0, 54), (55, 109)):
+        draw.rounded_rectangle((left + 1, 1, right - 1, 48), radius=4, fill=(6, 10, 12, 255), outline=(48, 61, 63, 255), width=1)
+        draw.line((left + 6, 45, right - 6, 45), fill=(18, 67, 71, 255), width=1)
+    return output
+
+
+def _stateview_slot(size: tuple[int, int], *, brass: bool = False) -> Image.Image:
+    width, height = size
+    mask = _stateview_chamfered_mask(size, 4)
+    output = _gunmetal_from_mask(mask)
+    draw = ImageDraw.Draw(output)
+    draw.line(((4, 1), (width - 5, 1), (width - 2, 4), (width - 2, height - 5), (width - 5, height - 2), (4, height - 2), (1, height - 5), (1, 4), (4, 1)), fill=(4, 6, 7, 255), width=2)
+    # No second inner frame here: occupied slots receive the already framed
+    # building-strip art, while empty and locked slots keep this backing.
+    draw.line((5, 4, width - 6, 4), fill=(49, 61, 63, 255), width=1)
+    draw.line((4, 7, 4, height - 9), fill=(31, 43, 45, 255), width=1)
+    accent = (159, 119, 39, 255) if brass else (22, 83, 87, 255)
+    draw.line((8, height - 5, width - 9, height - 5), fill=accent, width=1)
+    return output
+
+
+def _stateview_province_header() -> Image.Image:
+    width, height = STATEVIEW_OUTPUT_SIZES[STATEVIEW_PROVINCE_HEADER]
+    output = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(output)
+    draw.polygon(((5, 0), (width - 6, 0), (width - 1, 5), (width - 1, height - 3), (2, height - 3), (2, 3)), fill=(7, 12, 14, 246))
+    draw.line((7, 1, width - 8, 1), fill=(70, 82, 84, 255), width=1)
+    draw.line((8, height - 4, width - 8, height - 4), fill=(27, 102, 106, 240), width=1)
+    draw.point((8, 8), fill=(164, 123, 42, 255))
+    return output
+
+
+def _stateview_population_icon() -> Image.Image:
+    output = Image.new("RGBA", STATEVIEW_OUTPUT_SIZES[STATEVIEW_POPULATION_ICON], (0, 0, 0, 0))
+    draw = ImageDraw.Draw(output)
+    draw.ellipse((1, 1, 30, 30), fill=(4, 7, 8, 255), outline=(74, 87, 89, 255), width=1)
+    draw.ellipse((4, 4, 27, 27), fill=(9, 15, 17, 255), outline=(20, 72, 76, 255), width=1)
+    pale = (201, 210, 207, 255)
+    draw.ellipse((8, 8, 13, 13), fill=pale)
+    draw.ellipse((18, 8, 23, 13), fill=pale)
+    draw.polygon(((5, 24), (7, 15), (14, 15), (16, 24)), fill=pale)
+    draw.polygon(((16, 24), (18, 15), (25, 15), (27, 24)), fill=(126, 140, 139, 255))
+    draw.line((7, 27, 25, 27), fill=(39, 127, 131, 255), width=1)
+    return output
+
+
+def _stateview_value_background() -> Image.Image:
+    output = Image.new("RGBA", STATEVIEW_OUTPUT_SIZES[STATEVIEW_VALUE_BG], (0, 0, 0, 0))
+    draw = ImageDraw.Draw(output)
+    draw.rounded_rectangle((1, 2, 42, 23), radius=7, fill=(4, 7, 8, 255), outline=(62, 74, 76, 255), width=1)
+    draw.rounded_rectangle((4, 5, 39, 20), radius=5, fill=(9, 14, 16, 255), outline=(26, 56, 59, 255), width=1)
+    draw.line((8, 21, 35, 21), fill=(39, 124, 128, 230), width=1)
+    return output
+
+
+def _stateview_resource_background() -> Image.Image:
+    size = STATEVIEW_OUTPUT_SIZES[STATEVIEW_RESOURCE_BG]
+    mask = _stateview_chamfered_mask(size, 5)
+    output = _gunmetal_from_mask(mask)
+    draw = ImageDraw.Draw(output)
+    draw.line(((5, 1), (149, 1), (153, 5), (153, 57), (149, 61), (5, 61), (1, 57), (1, 5), (5, 1)), fill=(4, 6, 7, 255), width=2)
+    draw.line((7, 58, 147, 58), fill=(18, 67, 71, 255), width=1)
+    return output
+
+
 def _right_cluster_background() -> Image.Image:
     """Replace the ornate vanilla right cluster with an A-Discord instrument dock."""
     mask = Image.new("L", RIGHT_CLUSTER_SIZE, 0)
@@ -980,6 +1246,21 @@ def expected_outputs() -> dict[Path, bytes]:
         outputs[ROOT / relative_path] = _dds_bytes(_indicator_icon(index, size))
     outputs[INDUSTRY_ICON] = _dds_bytes(_industry_icon_strip())
     outputs[FUEL_ICON] = _dds_bytes(_fuel_icon_strip())
+    outputs.update(
+        {
+            STATEVIEW_WW_BACKGROUND: _dds_bytes(_stateview_background((463, 653))),
+            STATEVIEW_BACKGROUND: _dds_bytes(_stateview_background((463, 542))),
+            STATEVIEW_WW_ENTRY: _dds_bytes(_stateview_standing_entry((62, 84))),
+            STATEVIEW_ENTRY: _dds_bytes(_stateview_standing_entry((61, 100))),
+            STATEVIEW_BUILDING_ENTRY: _dds_bytes(_stateview_building_entry()),
+            STATEVIEW_LANDMARK_ENTRY: _dds_bytes(_stateview_slot((50, 43), brass=True)),
+            STATEVIEW_BUILD_SLOT: _dds_bytes(_stateview_slot((56, 46))),
+            STATEVIEW_PROVINCE_HEADER: _dds_bytes(_stateview_province_header()),
+            STATEVIEW_POPULATION_ICON: _dds_bytes(_stateview_population_icon()),
+            STATEVIEW_VALUE_BG: _dds_bytes(_stateview_value_background()),
+            STATEVIEW_RESOURCE_BG: _dds_bytes(_stateview_resource_background()),
+        }
+    )
     return outputs
 
 
@@ -1018,7 +1299,7 @@ def main() -> int:
         for issue in issues:
             print(f"ERROR: {issue}")
         return 1
-    print("Strategic resource and trade UI assets are current (9 resource frames, widened trade row, complete custom topbar set).")
+    print("Strategic resources and core UI assets are current (trade, topbar and state-view skins).")
     return 0
 
 

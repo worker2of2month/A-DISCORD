@@ -96,14 +96,28 @@ class NorthernEscalationTests(unittest.TestCase):
 
     def test_timers_are_one_shot_from_graph_launch_and_have_no_forced_outcome(self) -> None:
         effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
+        phase_effects = read("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
         schedule = named_block(effects, "ADISCORD_vorkerland_schedule_northern_escalation")
-        launch = named_block(effects, "ADISCORD_vorkerland_open_regional_fronts_after_detach")
+        launch_verifier = named_block(
+            phase_effects, "ADISCORD_vorkerland_verify_regional_war_launch"
+        )
         select = named_block(effects, "ADISCORD_vorkerland_select_northern_escalation_front")
         intensify = named_block(effects, "ADISCORD_vorkerland_intensify_surviving_northern_fronts")
         self.assertEqual(schedule.count("ADISCORD_vorkerland_collapse.83 days = 730"), 2)
         self.assertEqual(schedule.count("ADISCORD_vorkerland_collapse.84 days = 1095"), 2)
         self.assertIn("NOT = { has_global_flag = ADISCORD_vorkerland_northern_escalation_scheduled }", schedule)
-        self.assertIn("ADISCORD_vorkerland_schedule_northern_escalation = yes", launch)
+        self.assertIn(
+            "ADISCORD_vorkerland_regional_war_graph_active_or_terminal = yes",
+            launch_verifier,
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_schedule_northern_escalation = yes",
+            launch_verifier,
+        )
+        self.assertNotIn(
+            "ADISCORD_vorkerland_schedule_northern_escalation = yes",
+            named_block(effects, "ADISCORD_vorkerland_open_regional_fronts_after_detach"),
+        )
         self.assertEqual(select.count("ADISCORD_vorkerland_northern_escalation_stage_1"), 9)
         self.assertEqual(select.count("add_timed_idea = { idea = ADISCORD_vorkerland_northern_operational_initiative"), 9)
         self.assertEqual(intensify.count("set_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2"), 1)

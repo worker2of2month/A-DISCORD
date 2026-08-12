@@ -4,7 +4,7 @@
     "candidate_active_oobs": 98,
     "candidate_oob_templates": 161,
     "candidate_script_templates": 3,
-    "candidate_oob_references": 368,
+    "candidate_oob_references": 374,
     "candidate_create_unit_references": 31,
     "candidate_technical_references": 10,
     "optional_protected_oob_templates": 6
@@ -9798,31 +9798,16 @@
           "type": "ADISCORD_militia",
           "x": 0,
           "y": 2
-        },
-        {
-          "type": "ADISCORD_militia",
-          "x": 1,
-          "y": 0
-        },
-        {
-          "type": "ADISCORD_militia",
-          "x": 1,
-          "y": 1
-        },
-        {
-          "type": "ADISCORD_militia",
-          "x": 1,
-          "y": 2
         }
       ],
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 6000.0,
+        "manpower": 3000.0,
         "equipment": {
-          "infantry_equipment": 480.0
+          "infantry_equipment": 240.0
         },
-        "supply": 0.24
+        "supply": 0.12
       },
       "equipment_availability": {
         "infantry_equipment": true
@@ -10145,10 +10130,10 @@
       "count": 2
     },
     {
-      "key": "adiscord_vorkerland_collapse_decisions_create_unit_tva_collapse_militia_xp_0_25_eq_0_75",
+      "key": "adiscord_vorkerland_collapse_decisions_create_unit_tva_infiltration_cell_xp_0_25_eq_0_75",
       "path": "common/decisions/ADISCORD_vorkerland_collapse_decisions.txt",
       "kind": "create_unit",
-      "technical_name": "TVA Collapse Militia",
+      "technical_name": "TVA Infiltration Cell",
       "legacy_names": [],
       "start_experience_factor": 0.25,
       "start_equipment_factor": 0.75,
@@ -10375,6 +10360,16 @@
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.45,
       "count": 1
+    },
+    {
+      "key": "azh_oob_basin_levy_xp_0_1_eq_0_4",
+      "path": "history/units/AZH.txt",
+      "kind": "oob",
+      "technical_name": "Basin Levy",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 0.4,
+      "count": 2
     },
     {
       "key": "azh_nam_resource_war_oob_azh_basin_levy_xp_0_25_eq_0_85",
@@ -10612,6 +10607,16 @@
       "legacy_names": [],
       "start_experience_factor": 0.17,
       "start_equipment_factor": 0.32,
+      "count": 2
+    },
+    {
+      "key": "efl_oob_local_security_detachment_xp_0_1_eq_0_4",
+      "path": "history/units/EFL.txt",
+      "kind": "oob",
+      "technical_name": "Local Security Detachment",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 0.4,
       "count": 2
     },
     {
@@ -11023,6 +11028,16 @@
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.29,
       "count": 1
+    },
+    {
+      "key": "nam_oob_local_security_detachment_xp_0_1_eq_0_38",
+      "path": "history/units/NAM.txt",
+      "kind": "oob",
+      "technical_name": "Local Security Detachment",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 0.38,
+      "count": 2
     },
     {
       "key": "nam_resource_war_oob_nam_resource_guard_xp_0_4_eq_0_9",

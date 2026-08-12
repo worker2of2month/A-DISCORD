@@ -51,6 +51,15 @@ class NcnsFactionCompatibilityTests(unittest.TestCase):
                 r"group\s*=\s*FOCUS_FILTER_POLITICAL_CHARACTER",
             )
         self.assertEqual(3, template.count("ADISCORD_faction_goal_"))
+        for goal_id, unlock_effect in (
+            ("ADISCORD_faction_goal_operational_continuity", "set_faction_research_unlocked"),
+            ("ADISCORD_faction_goal_strategic_coordination", "set_faction_military_unlocked"),
+        ):
+            self.assertRegex(
+                goals,
+                rf"(?s){goal_id}\s*=\s*\{{.*?complete_effect\s*=\s*\{{.*?"
+                rf"{unlock_effect}\s*=\s*yes",
+            )
         self.assertIn("change_leader_rule_influence", leadership_rule)
         self.assertIn("change_leader_rule_influence", rule_group)
         self.assertNotRegex(template + manifest + leadership_rule + rule_group, r"\b(?:democratic|fascism|communism|neutrality)\b")

@@ -3,10 +3,12 @@ state={
 	id=689
 	name="STATE_689"
 	resources = {
-		oil = 20
-		chromium = 2
+		oil = 36
+		chromium = 5
 	}
-	provinces={ 176 2038 2299 7618 7639 8358 }
+	provinces={
+		176 2038 2299 7618 7639 8358
+	}
 	manpower = 120000
 	buildings_max_level_factor = 1.000
 	state_category = town

@@ -52,6 +52,20 @@ units = {
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.29
 	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 2 }
+		location = 6099
+		division_template = "Local Security Detachment"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.38
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 3 }
+		location = 8058
+		division_template = "Local Security Detachment"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.38
+	}
 	fleet = {
 		name = "Svetlogorsk Patrol Flotilla"
 		naval_base = 2038

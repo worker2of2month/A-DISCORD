@@ -84,23 +84,27 @@ ADISCORD_vorkerland_show_dirty_opening_superevent = {
 
 ADISCORD_vorkerland_show_worker_victory_superevent = {
 	ADISCORD_vorkerland_clear_superevent_flags = yes
+	set_global_flag = ADISCORD_vorkerland_central_victory_announced
 	set_global_flag = { flag = superevent_vorkerland_worker_victory value = 1 days = 20 }
 	ADISCORD_vorkerland_play_local_superevent_audio = yes
 }
 
 ADISCORD_vorkerland_show_vlad_victory_superevent = {
 	ADISCORD_vorkerland_clear_superevent_flags = yes
+	set_global_flag = ADISCORD_vorkerland_central_victory_announced
 	set_global_flag = { flag = superevent_vorkerland_vlad_victory value = 1 days = 20 }
 	ADISCORD_vorkerland_play_local_superevent_audio = yes
 }
 
 ADISCORD_vorkerland_show_dorian_victory_superevent = {
 	ADISCORD_vorkerland_clear_superevent_flags = yes
+	set_global_flag = ADISCORD_vorkerland_central_victory_announced
 	set_global_flag = { flag = superevent_vorkerland_dorian_victory value = 1 days = 20 }
 	ADISCORD_vorkerland_play_local_superevent_audio = yes
 }
 
 ADISCORD_vorkerland_finish_civil_war_exhaustion = {
+	WKR = { ADISCORD_vorkerland_reset_civil_war_exhaustion = yes }
 	WRK = { ADISCORD_vorkerland_reset_civil_war_exhaustion = yes }
 	VAD = { ADISCORD_vorkerland_reset_civil_war_exhaustion = yes }
 	TVA = { ADISCORD_vorkerland_reset_civil_war_exhaustion = yes }
@@ -110,37 +114,21 @@ ADISCORD_vorkerland_finish_civil_war_exhaustion = {
 # reunification decisions. Normal capitulation and peace mechanics retain all
 # actual state transfers; these effects deliberately annex and puppet nobody.
 ADISCORD_vorkerland_apply_worker_map = {
-	set_global_flag = ADISCORD_vorkerland_central_war_finished
-	set_global_flag = ADISCORD_vorkerland_worker_won
-	clr_global_flag = ADISCORD_vorkerland_central_outcome_pending
-	WRK = { set_country_flag = ADISCORD_vorkerland_central_unifier }
-	ADISCORD_vorkerland_finish_civil_war_exhaustion = yes
-	ADISCORD_vorkerland_split_external_gate = yes
-	ADISCORD_vorkerland_resolve_unguaranteed_free_republics = yes
-	ADISCORD_vorkerland_show_worker_victory_superevent = yes
+	WKR = { set_country_flag = ADISCORD_vorkerland_central_unifier }
+	ADISCORD_vorkerland_begin_reunification = yes
 }
 
 ADISCORD_vorkerland_apply_vlad_map = {
-	set_global_flag = ADISCORD_vorkerland_central_war_finished
-	set_global_flag = ADISCORD_vorkerland_vlad_won
-	clr_global_flag = ADISCORD_vorkerland_central_outcome_pending
 	VAD = {
 		set_country_flag = ADISCORD_vorkerland_central_unifier
 		if = { limit = { has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad } set_country_flag = ADISCORD_vorkerland_worker_preserved }
 		if = { limit = { has_global_flag = ADISCORD_vorkerland_worker_missing } set_country_flag = ADISCORD_vorkerland_worker_unaccounted_for }
 		if = { limit = { has_global_flag = ADISCORD_vorkerland_worker_killed } set_country_flag = ADISCORD_vorkerland_worker_martyr }
 	}
-	ADISCORD_vorkerland_finish_civil_war_exhaustion = yes
-	ADISCORD_vorkerland_split_external_gate = yes
-	ADISCORD_vorkerland_show_vlad_victory_superevent = yes
+	ADISCORD_vorkerland_begin_reunification = yes
 }
 
 ADISCORD_vorkerland_apply_dorian_map = {
-	set_global_flag = ADISCORD_vorkerland_central_war_finished
-	set_global_flag = ADISCORD_vorkerland_dorian_won
-	clr_global_flag = ADISCORD_vorkerland_central_outcome_pending
 	TVA = { set_country_flag = ADISCORD_vorkerland_central_unifier }
-	ADISCORD_vorkerland_finish_civil_war_exhaustion = yes
-	ADISCORD_vorkerland_split_external_gate = yes
-	ADISCORD_vorkerland_show_dorian_victory_superevent = yes
+	ADISCORD_vorkerland_begin_reunification = yes
 }

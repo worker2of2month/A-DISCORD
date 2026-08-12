@@ -1,2 +1,23 @@
 ﻿l_russian:
  MINIMIZE_EVENT: "§GЩёлкните§!, чтобы свернуть. Событие будет размещено в разделе §H«События и решения»§! области событий."
+ # BEGIN CONSOLIDATED: ADISCORD_inner_frontier_countries_l_russian
+ ADISCORD_rin_crisis.1.t: "Две присяги требуют ответа"
+ ADISCORD_rin_crisis.1.d: "Война в Воркерланде разорвала торговые договоры, на которых держался юг, и одновременно убедила Монтеру потребовать исполнения северной присяги. Дворяне Палатинского Двора уже поднимают коронные знамёна; городские советы Рины отвечают, что ни один чужой престол не отменит их хартии. Аларик IV должен выбрать — или признать, что единого палатината больше нет."
+ ADISCORD_rin_crisis.1.a: "Хартии переживут корону"
+ ADISCORD_rin_crisis.1.b: "Присяга Монтере остаётся в силе"
+ # END CONSOLIDATED: ADISCORD_inner_frontier_countries_l_russian
+
+# BEGIN CONSOLIDATED: ADISORD_news_l_russian.yml
+  news.0.t: "Конец единого Воркерланда"
+  news.0.d: "Центральный комплекс уничтожен. Связь с руководством конфедерации потеряна, окружные администрации вводят чрезвычайное положение, а единая система командования распадается."
+  news.0.a: "Конфедерация распадается."
+  ADISCORD_vorkerland_news.1.t: "Провозглашён Норвейн"
+  ADISCORD_vorkerland_news.1.d: "Иванланд завершил северную операцию и распустил временный оборонительный фронт. Норвейн Матвея Матеуска получил штаты 90 и 91, а Крайтская директория Антона Селевёстрова — штаты 93 и 94. Оба режима зависят от Иторы, а уцелевшие северные республики уже возобновляют прерванную войну."
+  ADISCORD_vorkerland_news.1.a: "На границе появился новый режим."
+  ADISCORD_vorkerland_news.2.t: "Иванланд отступает из Норвейна"
+  ADISCORD_vorkerland_news.2.d: "Операция Иванланда сорвалась. Ни Норвейн, ни зависимая Крайтская директория не были созданы: штаты 90–91 вернулись Грейну, а штаты 93–94 — Ривенделлу. Временный Северный оборонительный фронт распущен, северные администрации возобновили междоусобные войны. Правительство Вадима Иванчика объявило чрезвычайный курс после поражения."
+  ADISCORD_vorkerland_news.2.a: "Север снова воюет сам с собой."
+  news.1.t: "Историческая речь Максима Шабрата."
+  news.1.d: "Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!Erm, what the sigma?!"
+  news.1.a: "Тревожно."
+# END CONSOLIDATED: ADISORD_news_l_russian.yml

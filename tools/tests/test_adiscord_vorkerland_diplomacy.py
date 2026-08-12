@@ -21,6 +21,7 @@ from tools.validators.validate_adiscord_vorkerland_diplomacy import (
     validate_peaceful_invitations,
     validate_showdown_allies,
     validate_terminal_outcomes,
+    validate_vad_egc_route_priority,
     validate_vad_intervention_and_restoration,
 )
 
@@ -100,6 +101,18 @@ class SolarInterventionTests(unittest.TestCase):
         issues = validate_vad_intervention_and_restoration()
         self.assertEqual(issues, [], issue_report(issues))
 
+    def test_vad_solar_route_prioritizes_only_the_reachable_egc_belt(self) -> None:
+        issues = validate_vad_egc_route_priority()
+        self.assertEqual(issues, [], issue_report(issues))
+
+    def test_startup_cleanup_enters_vad_country_scope(self) -> None:
+        issues = validate_vad_intervention_and_restoration()
+        self.assertNotIn(
+            "VAD intervention startup cleanup must enter exactly one explicit VAD country scope",
+            issues,
+            issue_report(issues),
+        )
+
     def test_wkr_counter_uses_exact_edges_and_only_accelerates_phase_four(self) -> None:
         self.assertEqual(len(WKR_SOLAR_BORDER_PAIRS), 8)
         self.assertEqual(
@@ -122,7 +135,7 @@ class SolarInterventionTests(unittest.TestCase):
 class IndependentCorePackageTests(unittest.TestCase):
     def test_manifest_is_disjoint_complete_and_excludes_live_allies(self) -> None:
         states = [state for package in CORE_PACKAGES.values() for state in package]
-        self.assertEqual(len(CORE_PACKAGES), 6)
+        self.assertEqual(len(CORE_PACKAGES), 7)
         self.assertEqual(len(states), len(set(states)))
         self.assertEqual(frozenset(states), HISTORICAL_WRK_VAD_STATES)
         self.assertFalse(set(states) & LIVE_ALLY_OR_FOREIGN_STATES)

@@ -110,6 +110,8 @@ def main() -> int:
         "common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt",
         "common/decisions/categories/ADISCORD_scenario_debug_categories.txt",
         "common/decisions/ADISCORD_scenario_debug_decisions.txt",
+        "common/decisions/categories/ADISCORD_nam_resource_war_categories.txt",
+        "common/decisions/ADISCORD_nam_resource_war_decisions.txt",
         "common/ai_strategy/ADISCORD_nam_resource_war_ai.txt",
         "events/ADISCORD_nam_resource_war_events.txt",
         "history/countries/SLF - Svetlogorsk Uprising.txt",
@@ -165,6 +167,8 @@ def main() -> int:
     on_actions = sources["common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt"]
     debug_categories = sources["common/decisions/categories/ADISCORD_scenario_debug_categories.txt"]
     debug_decisions = sources["common/decisions/ADISCORD_scenario_debug_decisions.txt"]
+    prewar_categories = sources["common/decisions/categories/ADISCORD_nam_resource_war_categories.txt"]
+    prewar_decisions = sources["common/decisions/ADISCORD_nam_resource_war_decisions.txt"]
     news = sources["events/ADISCORD_nam_resource_war_events.txt"]
     ideas = sources["common/ideas/ADISCORD_nam_resource_war_ideas.txt"]
     equipment_source = sources["common/units/equipment/ADISCORD_convoy_equipment.txt"]
@@ -194,14 +198,19 @@ def main() -> int:
         "NAM = {\n\t\tif = {\n\t\t\tlimit = { is_subject = yes }\n\t\t\toverlord = { set_autonomy = { target = NAM autonomy_state = autonomy_free } }\n\t\t}\n\t\tif = { limit = { is_in_faction = yes } leave_faction = yes }\n\t}" in effects,
         "resource-war start does not free NAM from an arbitrary overlord before leaving its faction",
     )
-    check(
-        "NAM = {\n\t\thas_war = no\n\t\tcontrols_state = 67\n\t\tcontrols_state = 688\n\t\tcontrols_state = 689\n\t}" in triggers,
-        "resource-war scheduling still blocks before the start effect can free a subject NAM",
-    )
+    nam_readiness = named_block(named_block(triggers, "ADISCORD_nam_resource_war_ready"), "NAM")
+    check("has_war = no" in nam_readiness and "is_subject = no" not in nam_readiness,
+          "resource-war scheduling still blocks before the start effect can free a subject NAM")
     readiness = named_block(triggers, "ADISCORD_nam_resource_war_ready")
-    for state_id in (67, 688, 689):
+    for state_id in (67, 688, 689, 690):
         check(f"controls_state = {state_id}" in readiness,
               f"resource-war readiness must require NAM control of state {state_id}")
+    efl_readiness = named_block(readiness, "EFL")
+    azh_readiness = named_block(readiness, "AZH")
+    check(all(f"controls_state = {state_id}" in efl_readiness for state_id in (68, 70, 691)),
+          "resource-war readiness must require EFL control of all three mainland states")
+    check(all(f"controls_state = {state_id}" in azh_readiness for state_id in (69, 692)),
+          "resource-war readiness must require AZH control of both mainland states")
     start = named_block(effects, "ADISCORD_nam_resource_war_start")
     faction_creation = re.compile(
         r"create_faction_from_template\s*=\s*\{\s*"
@@ -259,8 +268,47 @@ def main() -> int:
             f"type = {equipment_id} amount = {amount} producer = {producer}" in effects,
             f"incorrect resource-war stockpile for {producer}: expected {amount} {equipment_id}",
         )
-    check(ai.count("manual_attack = yes") >= 5 and ai.count("priority = 1500") >= 5,
-          "front AI is not configured for decisive attacks")
+    check(ai.count("manual_attack = yes") == 3 and ai.count("priority = 1500") >= 6,
+          "coalition attack or NAM three-front defence AI is incomplete")
+    for strategy_suffix, tag, ratio in (
+        ("eflor", "EFL", "0.40"),
+        ("azhar", "AZH", "0.35"),
+        ("rebel", "SLF", "0.25"),
+    ):
+        strategy_name = f"ADISCORD_nam_resource_war_nam_{strategy_suffix}_front"
+        strategy = named_block(ai, strategy_name)
+        check(
+            f"tag = {tag} ratio = {ratio}" in strategy
+            and "execution_type = careful" in strategy
+            and "manual_attack = no" in strategy,
+            f"{strategy_name} is not a cautious NAM defence allocation",
+        )
+    check("country_event = { id = ADISCORD_nam_resource_war.2 days = 45 random_days = 30 }" in effects,
+          "Svetlogorsk uprising does not leave NAM the intended 45-75 day response window")
+
+    prewar_category = named_block(prewar_categories, "ADISCORD_nam_prewar_defence_category")
+    check("tag = NAM" in prewar_category
+          and "ADISCORD_vorkerland_collapse_wars_started" in prewar_category
+          and "ADISCORD_nam_resource_war_started" in prewar_category,
+          "NAM prewar-defence category is not scoped to the warning window")
+    expected_forts = {
+        "ADISCORD_nam_fortify_extraction_line": {1015: 1, 4912: 1, 8058: 2},
+        "ADISCORD_nam_fortify_azhar_approaches": {461: 1, 6961: 1, 2299: 2},
+    }
+    for decision_name, forts in expected_forts.items():
+        decision = named_block(prewar_decisions, decision_name)
+        check("cost = 20" in decision and "days_remove = 35" in decision
+              and "fire_only_once = yes" in decision and "base = 1000" in decision,
+              f"{decision_name} lacks the bounded player/AI preparation contract")
+        actual = {
+            int(province): int(level)
+            for level, province in re.findall(
+                r"add_building_construction\s*=\s*\{\s*type\s*=\s*bunker\s+level\s*=\s*(\d+)\s+"
+                r"instant_build\s*=\s*yes\s+province\s*=\s*(\d+)\s*\}",
+                decision,
+            )
+        }
+        check(actual == forts, f"{decision_name} fort line drifted: {actual}")
     check("tag = RHM" in ai and "id = EFL" in ai and "tag = MZR" in ai and "id = AZH" in ai,
           "the two profitable volunteer routes are incomplete")
     check("tag = KDR" not in ai and "tag = SDR" not in ai,
@@ -345,7 +393,7 @@ def main() -> int:
         r"\btag\s*=\s*([A-Z0-9]{3})\b",
         named_block(scenario_debug_category, "allowed"),
     ))
-    check(shared_debug_tags == {"WRK", "VAD", "TVA", "IVN", "NAM", "EFL", "AZH", "SLF"},
+    check(shared_debug_tags == {"WRK", "WKR", "VAD", "TVA", "IVN", "NAM", "EFL", "AZH", "SLF"},
           f"shared scenario debug category has wrong allowed tags: {sorted(shared_debug_tags)}")
     for decision_name in (
         "ADISCORD_nam_debug_start_resource_war",
@@ -389,7 +437,7 @@ def main() -> int:
     efl_settlement = named_block(coalition_victory, "EFL")
     coalition_allocations = {
         "EFL": {"67", "225", "228", "230", "231", "688"},
-        "AZH": {"226", "227", "229", "689"},
+        "AZH": {"226", "227", "229", "689", "690"},
     }
     for recipient, expected_states in coalition_allocations.items():
         recipient_settlement = named_block(coalition_victory, recipient)
@@ -410,6 +458,8 @@ def main() -> int:
           in coalition_victory, "state 688 cleanup is incomplete")
     check("689 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }"
           in coalition_victory, "state 689 cleanup is incomplete")
+    check("690 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }"
+          in coalition_victory, "state 690 cleanup is incomplete")
 
     nam_victory = named_block(effects, "ADISCORD_nam_resource_war_resolve_nam_victory")
     check("annex_country = { target = SLF transfer_troops = no }" in nam_victory,
@@ -505,7 +555,7 @@ def main() -> int:
     fleet_contracts = (
         ("NAM", "history/units/NAM.txt", 4, 30, 2038, 689, 1, 688),
         ("EFL", "history/units/EFL.txt", 3, 20, 6495, 70, 2, 70),
-        ("AZH", "history/units/AZH.txt", 2, 15, 493, 69, 1, 69),
+        ("AZH", "history/units/AZH.txt", 2, 15, 493, 692, 1, 692),
     )
     for tag, relative, ships, convoys, port, state_id, port_level, dockyard_state_id in fleet_contracts:
         oob = sources[relative]
@@ -528,6 +578,24 @@ def main() -> int:
           "state 688 lacks the level-2 Svetlogorsk port at spawn province 689")
     check(slf_oob.count("location = 689") == 3,
           "all three SLF divisions must spawn at Svetlogorsk province 689")
+
+    starting_armies = {
+        "NAM": ("history/units/NAM.txt", [176, 6099, 8058], 3),
+        "EFL": ("history/units/EFL.txt", [259, 8057, 6495, 6331], 4),
+        "AZH": ("history/units/AZH.txt", [367, 493, 8234], 3),
+    }
+    for tag, (relative, expected_locations, expected_divisions) in starting_armies.items():
+        units = named_block(sources[relative], "units")
+        locations = [
+            int(value)
+            for value in re.findall(
+                r"division\s*=\s*\{.*?\blocation\s*=\s*(\d+)", units, re.DOTALL
+            )
+        ]
+        check(units.count("division = {") == expected_divisions,
+              f"{tag} must begin with {expected_divisions} deliberately weak divisions")
+        check(locations == expected_locations,
+              f"{tag} starting divisions are not distributed across owned states: {locations}")
 
     fleet_oobs = {
         path.name
@@ -557,11 +625,72 @@ def main() -> int:
     check(owner_of_state(67) == "NAM", "state 67 is no longer the NAM resource basin")
     check(owner_of_state(688) == "NAM", "state 688 must begin as a NAM core before the internal uprising")
     check(owner_of_state(689) == "NAM", "state 689 must begin as NAM's residual port city")
+    check(owner_of_state(690) == "NAM", "state 690 must begin as NAM's Dryriver district")
     check(re.search(r"(?m)^\s*capital\s*=\s*689\s*$", sources[
         "history/countries/NAM - NamestnikLand.txt"
     ]) is not None, "NAM history capital must be residual port state 689")
-    check(owner_of_state(68) == "EFL" and owner_of_state(70) == "EFL", "EFL is not NAM's actual western neighbour")
-    check(owner_of_state(69) == "AZH", "AZH is not NAM's actual eastern neighbour")
+    check(owner_of_state(68) == "EFL" and owner_of_state(70) == "EFL" and owner_of_state(691) == "EFL",
+          "EFL is not NAM's actual western neighbour")
+    check(owner_of_state(69) == "AZH" and owner_of_state(692) == "AZH",
+          "AZH is not NAM's actual eastern neighbour")
+    expected_resources = {
+        67: {"oil": 80, "chromium": 6},
+        688: {"oil": 12, "chromium": 1},
+        689: {"oil": 36, "chromium": 5},
+        690: {"oil": 36, "chromium": 3},
+    }
+    for state_id, resources in expected_resources.items():
+        state = state_source(state_id)
+        for resource, amount in resources.items():
+            check(re.search(rf"(?m)^\s*{resource}\s*=\s*{amount}\s*$", state) is not None,
+                  f"state {state_id} must contain {amount} {resource}")
+    check(sum(resources["oil"] for resources in expected_resources.values()) == 164
+          and sum(resources["chromium"] for resources in expected_resources.values()) == 15,
+          "NAM resource redistribution changed the theatre's total deposits")
+    azh_resources = {69: {"oil": 2, "chromium": 1}, 692: {"oil": 1, "chromium": 1}}
+    for state_id, resources in azh_resources.items():
+        state = state_source(state_id)
+        for resource, amount in resources.items():
+            check(re.search(rf"(?m)^\s*{resource}\s*=\s*{amount}\s*$", state) is not None,
+                  f"state {state_id} must contain {amount} {resource}")
+    check(re.search(r"(?m)^\s*arms_factory\s*=\s*1\s*$", state_source(67)) is not None
+          and re.search(r"(?m)^\s*arms_factory\s*=", state_source(688)) is None,
+          "NAM military industry was not moved out of the uprising district")
+
+    nam_war_oob = sources["history/units/NAM_resource_war.txt"]
+    check([int(value) for value in re.findall(r"(?m)^\s*location\s*=\s*(\d+)\s*$", nam_war_oob)]
+          == [4912, 8058, 6961, 2299, 4912, 6961],
+          "NAM wartime divisions are not distributed across the western and eastern fronts")
+
+    expected_victory_points = {
+        67: {1710: 2, 6099: 3},
+        68: {259: 5, 6150: 2},
+        69: {367: 5, 8234: 2},
+        70: {2986: 2, 6495: 4},
+        688: {689: 3},
+        689: {2038: 5},
+        690: {8058: 2, 9016: 2},
+        691: {8057: 3},
+        692: {493: 3, 5039: 2},
+    }
+    for state_id, points in expected_victory_points.items():
+        state = state_source(state_id)
+        for province_id, value in points.items():
+            check(
+                re.search(rf"victory_points\s*=\s*\{{\s*{province_id}\s+{value}\s*\}}", state) is not None,
+                f"state {state_id} lacks VP {province_id} with value {value}",
+            )
+    check(
+        sum(expected_victory_points[67].values())
+        + sum(expected_victory_points[688].values())
+        + sum(expected_victory_points[689].values())
+        + sum(expected_victory_points[690].values()) == 17,
+        "NAM mainland VP total must be 17",
+    )
+    check(sum(sum(expected_victory_points[state].values()) for state in (68, 70, 691)) == 16,
+          "EFL mainland VP total must be 16")
+    check(sum(sum(expected_victory_points[state].values()) for state in (69, 692)) == 12,
+          "AZH mainland VP total must be 12")
 
     localisation = ROOT / "localisation" / "russian" / "ADISCORD_nam_resource_war_l_russian.yml"
     raw_loc = localisation.read_bytes() if localisation.exists() else b""
@@ -597,6 +726,12 @@ def main() -> int:
         "ADISCORD_nam_debug_start_resource_war",
         "ADISCORD_nam_debug_resolve_coalition_victory",
         "ADISCORD_nam_debug_resolve_nam_victory",
+        "ADISCORD_nam_prewar_defence_category",
+        "ADISCORD_nam_prewar_defence_category_desc",
+        "ADISCORD_nam_fortify_extraction_line",
+        "ADISCORD_nam_fortify_extraction_line_desc",
+        "ADISCORD_nam_fortify_azhar_approaches",
+        "ADISCORD_nam_fortify_azhar_approaches_desc",
     ):
         check(re.search(rf"(?m)^\s*{re.escape(key)}:", loc) is not None,
               f"missing localisation key {key}")

@@ -5,7 +5,7 @@
 # fragment an expensive mechanised army.
 
 ADISCORD_vorkerland_armored_reserve_program = {
-	allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
 	enable = {
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -22,7 +22,7 @@ ADISCORD_vorkerland_armored_reserve_program = {
 }
 
 ADISCORD_vorkerland_air_denial_program = {
-	allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
 	enable = {
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -39,6 +39,7 @@ ADISCORD_vorkerland_air_denial_program = {
 	ai_strategy = { type = equipment_variant_production_factor id = ADISCORD_fighter_archetype value = 35 }
 	ai_strategy = { type = equipment_variant_production_factor id = ADISCORD_cas_archetype value = 12 }
 	ai_strategy = { type = equipment_production_min_factories id = fighter value = 1 }
+	ai_strategy = { type = equipment_production_min_factories id = cas value = 1 }
 }
 
 # Air employment must not disappear when a claimant drops below the factory
@@ -46,7 +47,7 @@ ADISCORD_vorkerland_air_denial_program = {
 # central and eastern collapse fronts; this wartime-only score deliberately
 # dominates the ordinary front score so the deployed wings are assigned there.
 ADISCORD_vorkerland_active_air_operations = {
-	allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
 	enable = {
 		is_ai = yes
 		has_war = yes

@@ -1,0 +1,9 @@
+ADISCORD_nam_prewar_defence_category = {
+	icon = generic_fortify_the_borders
+	allowed = { tag = NAM }
+	visible = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_nam_resource_war_started }
+		NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
+	}
+}

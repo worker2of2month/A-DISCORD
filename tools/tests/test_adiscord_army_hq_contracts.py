@@ -173,7 +173,7 @@ class ArmyHeadquartersContractTests(unittest.TestCase):
         stp = named_block(startup, "STP")
         self.assertIn("ADISCORD_STP_migrate_army_template_lock = yes", stp)
 
-        localisation = read("localisation/russian/ADISCORD_STP_ideas_l_russian.yml")
+        localisation = read("localisation/russian/ADISCORD_ideas_l_russian.yml")
         self.assertIn("Армейские штабы не подпадают под это ограничение", localisation)
 
 

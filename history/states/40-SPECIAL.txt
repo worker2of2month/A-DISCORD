@@ -5,10 +5,6 @@ state={
 		16428 
 	}
 	impassable = yes
-	resources = {
-		steel = 24
-	}
-
 	history = {
         owner = WRK
         add_core_of = WRK
@@ -24,7 +20,7 @@ state={
 
 
 
-	manpower = 11500000
+	manpower = 20000
 	buildings_max_level_factor = 1.000
 	local_supplies = 10.0
 	state_category = megalopolis

@@ -10,6 +10,7 @@ state = {
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1
+			ADISCORD_rare_alloy_foundry = 1
 		}
 	}
 	provinces = {

@@ -2,7 +2,13 @@
 state={
 	id=688
 	name="STATE_688"
-	provinces={ 689 3127 4025 8635 9211 10967 }
+	resources = {
+		oil = 12
+		chromium = 1
+	}
+	provinces={
+		689 3127 4025 8635 9211 10967
+	}
 	manpower = 90000
 	buildings_max_level_factor = 1.000
 	state_category = town
@@ -14,7 +20,6 @@ state={
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1
-			arms_factory = 1
 			air_base = 1
 			dockyard = 1
 			689 = { naval_base = 2 }

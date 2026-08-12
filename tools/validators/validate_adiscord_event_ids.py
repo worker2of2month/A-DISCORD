@@ -54,6 +54,7 @@ REQUIRED_ACTIVE_COLLAPSE_IDS = {
     "ADISCORD_vorkerland_collapse.64",
     "ADISCORD_vorkerland_collapse.83",
     "ADISCORD_vorkerland_collapse.84",
+    "ADISCORD_vorkerland_collapse.85",
 }
 PLANNED_RECOVERY_IDS = {
     **{

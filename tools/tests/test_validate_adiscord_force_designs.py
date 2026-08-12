@@ -279,6 +279,22 @@ class VorkerlandForceDesignTests(unittest.TestCase):
         self.assertIn('load_oob = "VAD_vorkerland_collapse_air"', vad)
         self.assertIn("add_fuel = 7500", wkr)
         self.assertIn("add_fuel = 7500", vad)
+        for technology in (
+            "ADISCORD_tech_semi_autonomous_combat_modules = 1",
+            "ADISCORD_tech_reclaimed_jet_platforms = 1",
+            "ADISCORD_tech_battlefield_attack_aircraft = 1",
+        ):
+            self.assertIn(technology, wkr)
+            self.assertLess(
+                wkr.index(technology),
+                wkr.index(
+                    "type = ADISCORD_fighter_airframe_2163 amount = 24 producer = WKR"
+                ),
+            )
+            self.assertLess(
+                wkr.index(technology),
+                wkr.index('load_oob = "WRK_vorkerland_collapse_air"'),
+            )
         tva_setup = named_block(collapse, "ADISCORD_vorkerland_setup_tva")
         self.assertIn('load_oob = "TVA_vorkerland_collapse_air"', tva_setup)
         self.assertIn("add_fuel = 7500", tva_setup)

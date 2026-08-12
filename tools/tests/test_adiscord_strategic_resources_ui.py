@@ -290,8 +290,8 @@ class StrategicResourcesUIContracts(unittest.TestCase):
             path.read_text(encoding="utf-8-sig")
             for path in (ROOT / "history/states").glob("*.txt")
         )
-        self.assertNotIn("ADISCORD_rare_components_plant", state_history)
-        self.assertNotIn("ADISCORD_rare_alloy_foundry", state_history)
+        self.assertEqual(state_history.count("ADISCORD_rare_components_plant = 1"), 3)
+        self.assertEqual(state_history.count("ADISCORD_rare_alloy_foundry = 1"), 3)
 
         technology_plan = read(RESOURCE_DOC)
         self.assertIn("ADISCORD_tech_rare_components_industry", technology_plan)

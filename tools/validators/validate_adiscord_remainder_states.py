@@ -134,14 +134,12 @@ def main() -> int:
             errors.append(f"state {state_id}: technical Roman suffix in {strategic_name}")
 
     generated_localisation = load_localisation(LOCALISATION, errors)
-    base_localisation = load_localisation(BASE_STATE_LOCALISATION, errors)
     names: list[str] = []
     for state_id in sorted(rows):
-        source = base_localisation if state_id == 23 else generated_localisation
-        if state_id not in source:
+        if state_id not in generated_localisation:
             errors.append(f"state {state_id}: missing Russian localisation")
             continue
-        name = source[state_id]
+        name = generated_localisation[state_id]
         names.append(name)
         if re.search(r"\s[IVXLCDM]+$", name):
             errors.append(f"state {state_id}: technical Roman suffix in localisation {name}")

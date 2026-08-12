@@ -28,10 +28,10 @@ units = {
 	division = { division_name = { is_name_ordered = yes name_order = 6 } location = 8865 division_template = "Imperial Line Division" start_experience_factor = 0.30 start_equipment_factor = 0.90 }
 	division = { division_name = { is_name_ordered = yes name_order = 7 } location = 6835 division_template = "Imperial Line Division" start_experience_factor = 0.30 start_equipment_factor = 0.90 }
 	division = { division_name = { is_name_ordered = yes name_order = 8 } location = 3859 division_template = "Imperial Line Division" start_experience_factor = 0.30 start_equipment_factor = 0.90 }
-	division = { division_name = { is_name_ordered = yes name_order = 9 } location = 11936 division_template = "Imperial Line Division" start_experience_factor = 0.30 start_equipment_factor = 0.90 }
-	division = { division_name = { is_name_ordered = yes name_order = 10 } location = 9899 division_template = "Imperial Frontier Brigade" start_experience_factor = 0.20 start_equipment_factor = 0.90 }
-	division = { division_name = { is_name_ordered = yes name_order = 11 } location = 9049 division_template = "Imperial Frontier Brigade" start_experience_factor = 0.20 start_equipment_factor = 0.90 }
-	division = { division_name = { is_name_ordered = yes name_order = 12 } location = 10504 division_template = "Imperial Frontier Brigade" start_experience_factor = 0.20 start_equipment_factor = 0.90 }
-	division = { division_name = { is_name_ordered = yes name_order = 13 } location = 6959 division_template = "Imperial Frontier Brigade" start_experience_factor = 0.20 start_equipment_factor = 0.90 }
-	division = { division_name = { is_name_ordered = yes name_order = 14 } location = 3953 division_template = "Imperial Frontier Brigade" start_experience_factor = 0.20 start_equipment_factor = 0.90 }
+	division = { division_name = { is_name_ordered = yes name_order = 9 } location = 9899 division_template = "Imperial Line Division" start_experience_factor = 0.30 start_equipment_factor = 0.90 }
+	division = { division_name = { is_name_ordered = yes name_order = 10 } location = 9049 division_template = "Imperial Frontier Brigade" start_experience_factor = 0.20 start_equipment_factor = 0.90 }
+	division = { division_name = { is_name_ordered = yes name_order = 11 } location = 10504 division_template = "Imperial Frontier Brigade" start_experience_factor = 0.20 start_equipment_factor = 0.90 }
+	division = { division_name = { is_name_ordered = yes name_order = 12 } location = 6959 division_template = "Imperial Frontier Brigade" start_experience_factor = 0.20 start_equipment_factor = 0.90 }
+	division = { division_name = { is_name_ordered = yes name_order = 13 } location = 3953 division_template = "Imperial Frontier Brigade" start_experience_factor = 0.20 start_equipment_factor = 0.90 }
+	division = { division_name = { is_name_ordered = yes name_order = 14 } location = 1895 division_template = "Imperial Frontier Brigade" start_experience_factor = 0.20 start_equipment_factor = 0.90 }
 }

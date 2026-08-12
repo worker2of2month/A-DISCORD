@@ -71,7 +71,7 @@ ADISCORD_nam_resource_war_start = {
 		}
 
 		NAM = {
-			country_event = { id = ADISCORD_nam_resource_war.2 days = 24 random_days = 18 }
+			country_event = { id = ADISCORD_nam_resource_war.2 days = 45 random_days = 30 }
 			country_event = { id = ADISCORD_nam_resource_war.50 days = 420 }
 			news_event = { id = ADISCORD_nam_resource_news.1 hours = 1 }
 		}
@@ -149,11 +149,13 @@ ADISCORD_nam_resource_war_resolve_coalition_victory = {
 			transfer_state = 227
 			transfer_state = 229
 			transfer_state = 689
+			transfer_state = 690
 		}
 		226 = { add_core_of = AZH set_state_controller_to = AZH }
 		227 = { add_core_of = AZH set_state_controller_to = AZH }
 		229 = { add_core_of = AZH set_state_controller_to = AZH }
 		689 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }
+		690 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }
 
 		if = {
 			limit = { NAM = { exists = yes } }

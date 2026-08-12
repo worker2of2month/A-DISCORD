@@ -186,3 +186,62 @@
  TOPBAR_OFFICER_CORP_DESC: "Управление советниками и теоретиками, выбор духов для армии, флота и ВВС, а также разблокировка доктрин."
  IDEA_COST_NAVY_XP: "Стоимость (£navy_experience): $VALUE|-0$"
  IDEA_COST_COMPACT_NAVY_XP: "£navy_experience $VALUE|0$"
+ # BEGIN CONSOLIDATED: ADISCORD_inner_frontier_countries_l_russian
+ ADISCORD_rin_oath_crisis_category: "Две присяги Рины"
+ ADISCORD_rin_oath_crisis_category_desc: "Распад Воркерланда лишил палатинский двор возможности одновременно служить северной короне и южным хартиям."
+ ADISCORD_rin_palatin_breakup_mission: "Распад Ринского палатината"
+ ADISCORD_rin_palatin_breakup_mission_desc: "Северный двор удерживает Палатинский Двор и старые владения короны, а южные города защищают воркерландские хартии. Если ни одна сторона не победит за 180 дней, граница раскола станет основой вынужденного перемирия."
+ # END CONSOLIDATED: ADISCORD_inner_frontier_countries_l_russian
+
+# BEGIN CONSOLIDATED: ADISCORD_shared_actions_l_russian.yml
+ ADISCORD_action_cost_treasury_25: "§Y25 казны§!"
+ ADISCORD_action_cost_treasury_25_blocked: "§R25 казны§!"
+ ADISCORD_action_cost_2500_infantry_equipment: "£infantry_equipment_text_icon §Y2500§!"
+ ADISCORD_action_cost_2500_infantry_equipment_blocked: "£infantry_equipment_text_icon §R2500§!"
+ ADISCORD_action_cost_treasury_50_and_5000_infantry_equipment: "§Y50 казны§!  £infantry_equipment_text_icon §Y5000§!"
+ ADISCORD_action_cost_treasury_50_and_5000_infantry_equipment_blocked: "§R50 казны§!  £infantry_equipment_text_icon §R5000§!"
+ ADISCORD_action_cost_4000_infantry_equipment: "£infantry_equipment_text_icon §Y4000§!"
+ ADISCORD_action_cost_4000_infantry_equipment_blocked: "£infantry_equipment_text_icon §R4000§!"
+ ADISCORD_cost_t25: "§Y25 казны§!"
+ ADISCORD_cost_t25_blocked: "§R25 казны§!"
+ ADISCORD_cost_r2500: "£infantry_equipment_text_icon §Y2500§!"
+ ADISCORD_cost_r2500_blocked: "£infantry_equipment_text_icon §R2500§!"
+ ADISCORD_cost_t50_r5000: "§Y50 казны§! £infantry_equipment_text_icon §Y5000§!"
+ ADISCORD_cost_t50_r5000_blocked: "§R50 казны§! £infantry_equipment_text_icon §R5000§!"
+ ADISCORD_cost_r4000: "£infantry_equipment_text_icon §Y4000§!"
+ ADISCORD_cost_r4000_blocked: "£infantry_equipment_text_icon §R4000§!"
+# END CONSOLIDATED: ADISCORD_shared_actions_l_russian.yml
+
+# BEGIN CONSOLIDATED: ADISORD_modifiers_l_russian.yml: ideology
+#ideology stuff
+ chauvinism_drift: "£boost_popularity_texticon  Ежедневная поддержка шовинизма"
+ chauvinism_drift_tt: " $chauvinism_drift$: $RIGHT|+=2$"
+ chauvinism_acceptance: "£ai_acceptance_texticon  Шовинизм: согласие с дипломатическими действиями"
+ hedonism_drift: "£boost_popularity_texticon  Ежедневная поддержка гедонизма"
+ hedonism_drift_tt: " $hedonism_drift$: $RIGHT|+=2$"
+ hedonism_acceptance: "£ai_acceptance_texticon  Гедонизм: согласие с дипломатическими действиями"
+ etatism_drift: "£boost_popularity_texticon  Ежедневная поддержка этатизма"
+ etatism_drift_tt: " $etatism_drift$: $RIGHT|+=2$"
+ etatism_acceptance: "£ai_acceptance_texticon  Этатизм: согласие с дипломатическими действиями"
+ humanism_drift: "£boost_popularity_texticon  Ежедневная поддержка гуманизма"
+ humanism_drift_tt: " $humanism_drift$: $RIGHT|+=2$"
+ humanism_acceptance: "£ai_acceptance_texticon  Гуманизм: согласие с дипломатическими действиями"
+ utilitarism_drift: "£boost_popularity_texticon  Ежедневная поддержка утилитаризма"
+ utilitarism_drift_tt: " $utilitarism_drift$: $RIGHT|+=2$"
+ utilitarism_acceptance: "£ai_acceptance_texticon  Утилитаризм: согласие с дипломатическими действиями"
+ pragmatism_drift: "£boost_popularity_texticon  Ежедневная поддержка прагматизма"
+ pragmatism_drift_tt: " $pragmatism_drift$: $RIGHT|+=2$"
+ pragmatism_acceptance: "£ai_acceptance_texticon  Прагматизм: согласие с дипломатическими действиями"
+ anarchism_drift: "£boost_popularity_texticon  Ежедневная поддержка анархизма"
+ anarchism_drift_tt: " $anarchism_drift$: $RIGHT|+=2$"
+ anarchism_acceptance: "£ai_acceptance_texticon  Анархизм: согласие с дипломатическими действиями"
+ technocracy_drift: "£boost_popularity_texticon  Ежедневная поддержка технократии"
+ technocracy_drift_tt: " $technocracy_drift$: $RIGHT|+=2$"
+ technocracy_acceptance: "£ai_acceptance_texticon  Технократия: согласие с дипломатическими действиями"
+# END CONSOLIDATED: ADISORD_modifiers_l_russian.yml: ideology
+
+# BEGIN CONSOLIDATED: ADISCORD_menu_tooltips_l_russian.yml: generic UI
+  A_DISCORD_menu_tooltip_1: "Мысль летит, а слова идут шагом. В этом вся драма писателя."
+  focus_unlock_tooltip: "Это §GРазблокирует§! §YНовые Фокусы§!"
+  completed_by_event_tooltip: "Этот фокус разблокируется только по §Yивенту§!"
+# END CONSOLIDATED: ADISCORD_menu_tooltips_l_russian.yml: generic UI

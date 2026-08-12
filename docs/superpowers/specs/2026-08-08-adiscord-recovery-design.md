@@ -148,13 +148,9 @@ Militia prolongs a losing front; it must not create an infinite unit stream or b
 
 ## 8. Dirty-zone opening
 
-The dirty zone opens progressively during January 2163 through three linked, one-shot events:
+The dirty zone remains closed for exactly 1095 days after the Vorkerland collapse. A persistent one-shot schedule then fires the opening superevent and materialises SLA, MLR, RZA, SCA, ERT, and IRT one at a time over the following 11 days so ownership, supply, and front caches can settle between countries.
 
-1. **2163-01-01:** perimeter failures, initial warnings, and opening of fringe sectors;
-2. **2163-01-12:** a second territorial group opens and local forces emerge;
-3. **2163-01-27:** the remaining planned sectors open and their conflicts become active.
-
-Each event sets its completion flag and schedules the next event. Old-save migration reconstructs the correct stage from date and existing ownership. There is no monthly world poll.
+The legacy 60–90-day reveal event remains defined only as a no-op so serialized old timers cannot open the zone early. An unopened old save receives one new 1095-day schedule on startup; an already opened save is never rolled back. There is no monthly world poll.
 
 ## 9. Coring and integration
 

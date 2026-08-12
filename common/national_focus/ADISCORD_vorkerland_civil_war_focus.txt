@@ -35,6 +35,7 @@ focus_tree = {
 			add_political_power = 10
 			add_stability = 0.01
 			set_country_flag = ADISCORD_vorkerland_focus_wrk_fault_lines_measured
+			custom_effect_tooltip = ADISCORD_vorkerland_wrk_preparations_carry_over_tt
 		}
 		ai_will_do = { base = 12 }
 	}
@@ -53,6 +54,7 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 20
 			set_country_flag = ADISCORD_vorkerland_focus_wrk_republics_consulted
+			custom_effect_tooltip = ADISCORD_vorkerland_wrk_preparations_carry_over_tt
 		}
 		ai_will_do = { base = 11 }
 	}
@@ -71,6 +73,7 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = WRK }
 			set_country_flag = ADISCORD_vorkerland_focus_wrk_emergency_stores_counted
+			custom_effect_tooltip = ADISCORD_vorkerland_wrk_preparations_carry_over_tt
 		}
 		ai_will_do = { base = 10 }
 	}
@@ -89,6 +92,7 @@ focus_tree = {
 			add_stability = 0.02
 			add_command_power = 5
 			set_country_flag = ADISCORD_vorkerland_focus_wrk_charter_reaffirmed
+			custom_effect_tooltip = ADISCORD_vorkerland_wrk_preparations_carry_over_tt
 		}
 		ai_will_do = { base = 11 }
 	}
@@ -107,6 +111,7 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = WRK }
 			army_experience = 3
 			set_country_flag = ADISCORD_vorkerland_focus_wrk_reserves_distributed
+			custom_effect_tooltip = ADISCORD_vorkerland_wrk_preparations_carry_over_tt
 		}
 		ai_will_do = { base = 10 }
 	}
@@ -128,6 +133,7 @@ focus_tree = {
 			add_command_power = 10
 			army_experience = 5
 			set_country_flag = ADISCORD_vorkerland_focus_wrk_continuity_orders
+			custom_effect_tooltip = ADISCORD_vorkerland_wrk_preparations_carry_over_tt
 		}
 		ai_will_do = { base = 12 }
 	}
@@ -353,6 +359,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			add_command_power = 5
 			if = {
 				limit = { tag = WKR controls_state = 32 }
 				32 = { add_building_construction = { type = bunker level = 1 instant_build = yes province = 6713 } }
@@ -444,7 +451,6 @@ focus_tree = {
 			}
 			add_political_power = 15
 			set_country_flag = ADISCORD_vorkerland_focus_wkr_front_soviets
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_vla_invitation_intent
 		}
 		ai_will_do = { base = 12 }
 	}
@@ -656,7 +662,7 @@ focus_tree = {
 
 	focus = {
 		id = WKR_republic_fights_as_one
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_goal_generic_allies_build_infantry
 		x = 6
 		y = 12
 		cost = 5
@@ -693,7 +699,7 @@ focus_tree = {
 
 	focus = {
 		id = VAD_proclaim_joint_charter
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_goal_generic_military_sphere
 		x = 6
 		y = 7
 		cost = 3
@@ -758,7 +764,15 @@ focus_tree = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_imperial_registers days = 35 }
 			set_country_flag = ADISCORD_vorkerland_focus_vad_registers_opened
 		}
-		ai_will_do = { base = 12 }
+		ai_will_do = {
+			base = 10
+			# The rare emergency council leans on legal continuity and the
+			# chancery; ordinary Vlad prefers the field-command route below.
+			modifier = {
+				factor = 2
+				has_global_flag = ADISCORD_vorkerland_joint_government_formed
+			}
+		}
 	}
 
 	focus = {
@@ -792,7 +806,13 @@ focus_tree = {
 			army_experience = 5
 			set_country_flag = ADISCORD_vorkerland_focus_vad_commandantures_formed
 		}
-		ai_will_do = { base = 10 }
+		ai_will_do = {
+			base = 12
+			modifier = {
+				factor = 0.5
+				has_global_flag = ADISCORD_vorkerland_joint_government_formed
+			}
+		}
 	}
 
 	focus = {
@@ -997,13 +1017,13 @@ focus_tree = {
 	}
 
 	# ---------------------------------------------------------------------
-	# TVA: industrial rerouting versus field research, both converging on a
-	# fully closed operational system.
+	# TVA: Worx's technical directorate. Power, field engineering and public
+	# administration remain separate lines of work; neither excludes the other.
 	# ---------------------------------------------------------------------
 
 	focus = {
 		id = TVA_codify_utilitarian_directorate
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_goal_generic_production
 		x = 6
 		y = 7
 		cost = 3
@@ -1031,7 +1051,9 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			add_political_power = 20
 			add_stability = 0.02
+			custom_effect_tooltip = TVA_technocratic_directorate_tt
 			set_country_flag = ADISCORD_vorkerland_focus_utilitarian_directorate
 		}
 		ai_will_do = { base = 14 }
@@ -1044,7 +1066,6 @@ focus_tree = {
 		y = 8
 		cost = 3
 		prerequisite = { focus = TVA_codify_utilitarian_directorate }
-		mutually_exclusive = { focus = TVA_deploy_field_laboratories }
 		allow_branch = {
 			tag = TVA
 			OR = {
@@ -1082,7 +1103,6 @@ focus_tree = {
 		y = 8
 		cost = 3
 		prerequisite = { focus = TVA_codify_utilitarian_directorate }
-		mutually_exclusive = { focus = TVA_reroute_city_grid }
 		allow_branch = {
 			tag = TVA
 			OR = {
@@ -1215,6 +1235,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = TVA }
+			add_timed_idea = { idea = ADISCORD_vorkerland_tva_emergency_output_board days = 70 }
 			add_political_power = 10
 			set_country_flag = ADISCORD_vorkerland_focus_tva_output_norms
 		}
@@ -1249,6 +1270,7 @@ focus_tree = {
 		completion_reward = {
 			army_experience = 5
 			add_command_power = 5
+			add_timed_idea = { idea = ADISCORD_vorkerland_tva_mobile_repair_trains days = 35 }
 			set_country_flag = ADISCORD_vorkerland_focus_tva_mobile_repair_trains
 		}
 		ai_will_do = { base = 12 }
@@ -1285,6 +1307,7 @@ focus_tree = {
 		completion_reward = {
 			add_stability = 0.01
 			add_political_power = 10
+			add_timed_idea = { idea = ADISCORD_vorkerland_tva_operational_audit days = 70 }
 			set_country_flag = ADISCORD_vorkerland_focus_tva_operational_metrics
 		}
 		ai_will_do = { base = 13 }
@@ -1292,7 +1315,7 @@ focus_tree = {
 
 	focus = {
 		id = TVA_close_operational_loop
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_goal_generic_scientific_exchange
 		x = 6
 		y = 12
 		cost = 5
@@ -1316,8 +1339,10 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_command_power = 5
+			add_command_power = 10
 			add_war_support = 0.02
+			army_experience = 5
+			add_equipment_to_stockpile = { type = support_equipment_1 amount = 50 producer = TVA }
 			set_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
 		}
 		ai_will_do = { base = 15 }
@@ -1326,10 +1351,13 @@ focus_tree = {
 	# Shared wartime convergence follows any completed claimant capstone.
 	focus = {
 		id = ADISCORD_vorkerland_prepare_central_front
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_goal_generic_construct_infrastructure
 		x = 6
 		y = 13
 		cost = 4
+		# Multiple focus entries in one prerequisite block are an OR in HOI4.
+		# Keep graph arrows from every claimant capstone; available below still
+		# requires the current tag's own gameplay hook.
 		prerequisite = {
 			focus = WKR_republic_fights_as_one
 			focus = VAD_assemble_joint_general_staff
@@ -1345,6 +1373,11 @@ focus_tree = {
 			}
 		}
 		available = {
+			OR = {
+				AND = { tag = WKR has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked }
+				AND = { tag = VAD has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked }
+				AND = { tag = TVA has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked }
+			}
 			custom_trigger_tooltip = {
 				tooltip = ADISCORD_vorkerland_claimant_focus_phase_tt
 				OR = {
@@ -1357,9 +1390,12 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_command_power = 5
-			add_war_support = 0.01
+			add_command_power = 10
+			add_war_support = 0.02
+			army_experience = 5
+			add_equipment_to_stockpile = { type = support_equipment amount = 75 producer = ROOT }
 			set_country_flag = ADISCORD_vorkerland_focus_central_front_prepared
+			custom_effect_tooltip = ADISCORD_vorkerland_prepare_central_front_tt
 		}
 		ai_will_do = { base = 16 }
 	}
@@ -1425,6 +1461,7 @@ focus_tree = {
 		prerequisite = { focus = WRK_worker_convene_reunification_congress }
 		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_worker }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+		bypass = { NOT = { has_idea = ADISCORD_vorkerland_erased_nations } }
 		cancel_if_invalid = yes
 		completion_reward = {
 			if = {
@@ -1451,6 +1488,7 @@ focus_tree = {
 			add_political_power = 20
 			add_stability = 0.01
 			set_country_flag = ADISCORD_vorkerland_focus_worker_free_republics
+			custom_effect_tooltip = WRK_worker_recognize_free_republics_tt
 		}
 		ai_will_do = { base = 12 }
 	}
@@ -1467,8 +1505,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			if = {
-				limit = { controls_state = 32 }
-				32 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+				limit = { controls_state = 200 }
+				200 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
 			}
 			add_political_power = 10
 			set_country_flag = ADISCORD_vorkerland_focus_worker_cooperative_reconstruction
@@ -1485,6 +1523,7 @@ focus_tree = {
 		prerequisite = { focus = WRK_worker_open_erased_nations_archives }
 		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_worker }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+		bypass = { NOT = { has_idea = ADISCORD_vorkerland_erased_nations_relief_1 } }
 		cancel_if_invalid = yes
 		completion_reward = {
 			if = {
@@ -1514,6 +1553,7 @@ focus_tree = {
 			add_stability = 0.01
 			set_country_flag = ADISCORD_vorkerland_focus_worker_homecoming_commissions
 			set_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked
+			custom_effect_tooltip = ADISCORD_vorkerland_unlock_core_restoration_decisions_tt
 		}
 		ai_will_do = { base = 14 }
 	}
@@ -1533,8 +1573,12 @@ focus_tree = {
 				limit = { has_idea = ADISCORD_vorkerland_erased_nations_relief_2 }
 				remove_ideas = ADISCORD_vorkerland_erased_nations_relief_2
 			}
+			remove_ideas = ADISCORD_vorkerland_reunification_settlement
+			remove_ideas = ADISCORD_vorkerland_measurable_republic
+			add_ideas = ADISCORD_vorkerland_worker_constitutional_settlement
 			add_stability = 0.03
 			set_country_flag = ADISCORD_vorkerland_focus_worker_constitutional_guarantees
+			custom_effect_tooltip = WRK_worker_write_constitutional_guarantees_tt
 		}
 		ai_will_do = { base = 16 }
 	}
@@ -1612,8 +1656,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			if = {
-				limit = { controls_state = 75 }
-				75 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+				limit = { controls_state = 107 }
+				107 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
 			}
 			add_command_power = 5
 			set_country_flag = ADISCORD_vorkerland_focus_joint_rail_commands
@@ -1637,6 +1681,7 @@ focus_tree = {
 			add_stability = 0.01
 			set_country_flag = ADISCORD_vorkerland_focus_joint_integration_warrants
 			set_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked
+			custom_effect_tooltip = ADISCORD_vorkerland_unlock_core_restoration_decisions_tt
 		}
 		ai_will_do = { base = 14 }
 	}
@@ -1661,7 +1706,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_joint_impose_reunification_settlement
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_goal_generic_political_pressure
 		x = 6
 		y = 19
 		cost = 10
@@ -1670,6 +1715,12 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
+			remove_ideas = ADISCORD_vorkerland_worker_constitutional_settlement
+			remove_ideas = ADISCORD_vorkerland_measurable_republic
+			add_ideas = ADISCORD_vorkerland_reunification_settlement
+			# The settlement ends both Vlad's military restoration and the rare
+			# emergency council as temporary constitutional arrangements.
+			drop_cosmetic_tag = yes
 			add_stability = 0.03
 			add_war_support = 0.03
 			set_country_flag = ADISCORD_vorkerland_focus_joint_order_settlement
@@ -1678,7 +1729,8 @@ focus_tree = {
 	}
 
 	# ---------------------------------------------------------------------
-	# Postwar Utilitarian route: power, laboratories, districts, metrics.
+	# Postwar Worx route: technical reconstruction, public engineering and a
+	# permanent technocratic settlement. Legacy IDs remain save-compatible.
 	# ---------------------------------------------------------------------
 
 	focus = {
@@ -1697,6 +1749,8 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 25
 			add_stability = 0.02
+			add_ideas = ADISCORD_vorkerland_technical_reconstruction_mandate
+			custom_effect_tooltip = WRK_technocratic_reconstruction_mandate_tt
 			set_country_flag = ADISCORD_vorkerland_focus_utilitarian_postwar_directorate
 		}
 		ai_will_do = { base = 15 }
@@ -1714,9 +1768,11 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			if = {
-				limit = { controls_state = 32 }
-				32 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+				limit = { controls_state = 36 }
+				36 = { add_building_construction = { type = energy_infrastructure level = 1 instant_build = yes } }
 			}
+			add_ideas = ADISCORD_vorkerland_national_power_standard
+			add_political_power = 10
 			set_country_flag = ADISCORD_vorkerland_focus_utilitarian_power_standard
 		}
 		ai_will_do = { base = 13 }
@@ -1737,6 +1793,12 @@ focus_tree = {
 				limit = { controls_state = 36 }
 				36 = { add_building_construction = { type = industrial_complex level = 1 instant_build = yes } }
 			}
+			add_tech_bonus = {
+				name = ADISCORD_vorkerland_machine_tool_reconstruction_bonus
+				bonus = 0.50
+				uses = 1
+				category = industry
+			}
 			add_political_power = 10
 			set_country_flag = ADISCORD_vorkerland_focus_utilitarian_machine_tools
 		}
@@ -1754,7 +1816,13 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_timed_idea = { idea = ADISCORD_vorkerland_tva_field_laboratories days = 70 }
+			add_ideas = ADISCORD_vorkerland_public_engineering_service
+			add_tech_bonus = {
+				name = ADISCORD_vorkerland_public_engineering_bonus
+				bonus = 0.50
+				uses = 1
+				category = electronics
+			}
 			add_political_power = 15
 			set_country_flag = ADISCORD_vorkerland_focus_utilitarian_national_laboratories
 		}
@@ -1777,6 +1845,7 @@ focus_tree = {
 			add_stability = 0.01
 			set_country_flag = ADISCORD_vorkerland_focus_utilitarian_integration_metrics
 			set_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked
+			custom_effect_tooltip = ADISCORD_vorkerland_unlock_core_restoration_decisions_tt
 		}
 		ai_will_do = { base = 14 }
 	}
@@ -1794,6 +1863,7 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 20
 			add_stability = 0.02
+			add_ideas = ADISCORD_vorkerland_statistical_administration
 			set_country_flag = ADISCORD_vorkerland_focus_utilitarian_rationalized_districts
 		}
 		ai_will_do = { base = 14 }
@@ -1801,7 +1871,7 @@ focus_tree = {
 
 	focus = {
 		id = WRK_utilitarian_build_measurable_republic
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_goal_generic_production
 		x = 12
 		y = 19
 		cost = 10
@@ -1810,8 +1880,16 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
+			remove_ideas = ADISCORD_vorkerland_worker_constitutional_settlement
+			remove_ideas = ADISCORD_vorkerland_reunification_settlement
+			remove_ideas = ADISCORD_vorkerland_technical_reconstruction_mandate
+			remove_ideas = ADISCORD_vorkerland_national_power_standard
+			remove_ideas = ADISCORD_vorkerland_public_engineering_service
+			remove_ideas = ADISCORD_vorkerland_statistical_administration
+			add_ideas = ADISCORD_vorkerland_measurable_republic
 			add_stability = 0.03
 			add_political_power = 25
+			custom_effect_tooltip = WRK_technocratic_republic_settlement_tt
 			set_country_flag = ADISCORD_vorkerland_focus_utilitarian_measurable_republic
 		}
 		ai_will_do = { base = 16 }

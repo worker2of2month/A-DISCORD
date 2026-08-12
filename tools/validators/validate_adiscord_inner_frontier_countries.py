@@ -157,8 +157,21 @@ def validate() -> list[str]:
     characters = read("common/characters/ADISCORD_inner_frontier_characters.txt")
     traits = read("common/country_leader/ADISCORD_inner_frontier_traits.txt")
     ideas = read("common/ideas/ADISCORD_inner_frontier_ideas.txt")
-    country_loc_path = ROOT / "localisation" / "russian" / "ADISCORD_inner_frontier_countries_l_russian.yml"
-    country_loc = country_loc_path.read_text(encoding="utf-8-sig", errors="strict")
+    country_loc_paths = tuple(
+        ROOT / "localisation" / "russian" / filename
+        for filename in (
+            "countries_l_russian.yml",
+            "parties_l_russian.yml",
+            "nsb_characters_l_russian.yml",
+            "ADISCORD_traits_l_russian.yml",
+            "ADISCORD_ideas_l_russian.yml",
+            "politics_l_russian.yml",
+            "events_l_russian.yml",
+        )
+    )
+    country_loc = "\n".join(
+        path.read_text(encoding="utf-8-sig", errors="strict") for path in country_loc_paths
+    )
     vp_loc = VP_LOCALISATION.read_text(encoding="utf-8-sig", errors="strict") if VP_LOCALISATION.exists() else ""
     adjacency_source = read("map/adjacencies.csv")
     tech_builder = read("tools/builders/build_adiscord_technology_system.py")
@@ -166,9 +179,10 @@ def validate() -> list[str]:
     split_effect = read("common/scripted_effects/ADISCORD_inner_frontier_effects.txt")
     collapse_maps = read("common/scripted_effects/ADISCORD_vorkerland_collapse_map_effects.txt")
     collapse_effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
+    phase_effects = read("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
     collapse_on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
 
-    for localisation_path in (country_loc_path, VP_LOCALISATION, EXZ_LOCALISATION):
+    for localisation_path in (*country_loc_paths, VP_LOCALISATION, EXZ_LOCALISATION):
         if not localisation_path.exists() or not localisation_path.read_bytes().startswith(b"\xef\xbb\xbf"):
             issues.append(f"{localisation_path.relative_to(ROOT)} must retain a UTF-8 BOM")
 
@@ -376,7 +390,7 @@ def validate() -> list[str]:
     if "GFX_portrait_WCG_Edgar_Raut" not in portrait_gfx or not portrait_path.exists():
         issues.append("renamed External Gate portrait is not wired")
     for localisation_key in ("WCG", "WCG_DEF", "WCG_ADJ", "WCG_Edgar_Raut", "autonomy_vorkerland_sanitary_gate"):
-        localisation_source = country_loc if localisation_key != "autonomy_vorkerland_sanitary_gate" else read("localisation/russian/ADISCORD_autonomy_l_russian.yml")
+        localisation_source = country_loc if localisation_key != "autonomy_vorkerland_sanitary_gate" else read("localisation/russian/autonomy_l_russian.yml")
         if not re.search(rf'(?m)^\s*{re.escape(localisation_key)}:\s*"', localisation_source):
             issues.append(f"missing Russian localisation key {localisation_key}")
     if '"WCG"' not in tech_data or '"WCG":' not in tech_builder:
@@ -401,10 +415,12 @@ def validate() -> list[str]:
         for token in (f"{state_id} = {{ add_core_of = {successor}", f"set_state_owner_to = {successor}"):
             if token not in split_effect:
                 issues.append(f"External Gate split effect lacks {successor} transfer for state {state_id}")
-    if collapse_maps.count("ADISCORD_vorkerland_split_external_gate = yes") != 3:
-        issues.append("all three Vorkerland central outcomes must split the External Gate")
+    if "ADISCORD_vorkerland_split_external_gate = yes" in collapse_maps:
+        issues.append("legacy outcome maps must not own External Gate lifecycle cleanup")
     if collapse_effects.count("ADISCORD_vorkerland_split_external_gate = yes") != 1:
         issues.append("the initial Vorkerland collapse must split the External Gate immediately")
+    if phase_effects.count("ADISCORD_vorkerland_split_external_gate = yes") != 1:
+        issues.append("the terminal phase finalizer must idempotently verify the External Gate split")
     if collapse_on_actions.count("ADISCORD_vorkerland_split_external_gate = yes") != 1:
         issues.append("old collapse saves lack a one-shot External Gate split repair")
     issues.extend(validate_external_gate_cleanup(split_effect, collapse_on_actions))

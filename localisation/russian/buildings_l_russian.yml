@@ -213,3 +213,12 @@
  industrial_infrastructure: "Высокоемкая энергосеть"
  energy_infrastructure_desc: "Усиленные линии электропередачи и многоступенчатое дублирование системы гарантируют бесперебойное снабжение наших фабрик энергией."
  industrial_infrastructure_desc: "Модернизация существующей гражданской энергосети позволит нам задействовать большие мощности для более энергоёмких производств."
+
+# BEGIN CONSOLIDATED: ADISCORD_vorkerland_buildings_l_russian.yml
+ ADISCORD_unity_tower_complex: "Комплекс Башни Единства"
+ ADISCORD_unity_tower_complex_plural: "Комплексы Башни Единства"
+ ADISCORD_unity_tower_complex_desc: "Административное, исследовательское и связное ядро конфедерации. Башня ускоряет координацию и застройку Центрального дистрикта, но её вычислительные контуры и защищённые архивы заметно нагружают энергосеть."
+ ADISCORD_techlar_metallurgical_combine: "Техларский энергометаллургический комбинат"
+ ADISCORD_techlar_metallurgical_combine_plural: "Техларские энергометаллургические комбинаты"
+ ADISCORD_techlar_metallurgical_combine_desc: "Единая цепочка разборки старых машин, обогащения руды и электрической выплавки. Комбинат остаётся крупнейшим источником стали региона, но забирает строительные мощности, энергетику и свободные площадки Фирновской агломерации."
+# END CONSOLIDATED: ADISCORD_vorkerland_buildings_l_russian.yml

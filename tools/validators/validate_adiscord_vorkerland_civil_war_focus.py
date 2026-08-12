@@ -17,11 +17,22 @@ ENGLISH_LOCALISATION = Path(
 RUSSIAN_LOCALISATION = Path(
     "localisation/russian/ADISCORD_vorkerland_civil_war_focus_l_russian.yml"
 )
+ENGLISH_POSTWAR_IDEA_LOCALISATION = Path(
+    "localisation/english/ADISCORD_vorkerland_postwar_ideas_l_english.yml"
+)
+RUSSIAN_POSTWAR_IDEA_LOCALISATION = Path(
+    "localisation/russian/ADISCORD_vorkerland_postwar_ideas_l_russian.yml"
+)
+CHARACTER_FILE = Path("common/characters/ADISCORD_vorkerland_collapse_characters.txt")
 SHINE_FILE = Path("interface/goals_shine.gfx")
 FOCUS_DECISIONS_FILE = Path("common/decisions/ADISCORD_vorkerland_focus_decisions.txt")
 DIPLOMACY_DECISIONS_FILE = Path(
     "common/decisions/ADISCORD_vorkerland_diplomacy_decisions.txt"
 )
+PHASE_EFFECTS_FILE = Path(
+    "common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt"
+)
+COLLAPSE_IDEAS_FILE = Path("common/ideas/ADISCORD_vorkerland_collapse_ideas.txt")
 
 PREWAR_WRK_FOCUSES = (
     "WRK_measure_confederation_fault_lines",
@@ -168,6 +179,101 @@ WARTIME_CONVERGENCE = {
     "TVA": ("TVA_publish_operational_metrics", "TVA_close_operational_loop"),
 }
 
+PREWAR_CARRYOVER_EFFECT = "ADISCORD_vorkerland_inherit_wrk_prewar_preparations"
+PREWAR_CARRYOVER_FLAG = "ADISCORD_vorkerland_wrk_prewar_preparations_inherited_v1"
+DORMANT_WRK_SCRUB_EFFECT = "ADISCORD_vorkerland_scrub_dormant_wrk_crisis"
+WORKER_REFORM_INHERIT_EFFECT = "ADISCORD_vorkerland_inherit_worker_reform_spirits"
+WORKER_REFORM_STAGE_IDEAS = (
+    "WRK_birthplace_of_the_first_revolution_renewed_mandate",
+    "WRK_birthplace_of_the_first_revolution_front_republic",
+    "WRK_birthplace_of_the_first_revolution",
+    "ADISCORD_vorkerland_erased_nations_relief_2",
+    "ADISCORD_vorkerland_erased_nations_relief_1",
+    "ADISCORD_vorkerland_erased_nations",
+)
+DORMANT_WRK_CRISIS_IDEAS = (
+    "WRK_ashes_of_the_crown",
+    "WRK_hourglass_of_discord",
+    "WRK_constitution_of_the_republic",
+    *WORKER_REFORM_STAGE_IDEAS,
+)
+WRK_FORMATION_EFFECTS = {
+    "WKR": "ADISCORD_vorkerland_form_wrk_from_wkr",
+    "VAD": "ADISCORD_vorkerland_form_wrk_from_vad",
+    "TVA": "ADISCORD_vorkerland_form_wrk_from_tva",
+}
+
+POSTWAR_SETTLEMENT_IDEAS = {
+    "WRK_worker_write_constitutional_guarantees": (
+        "ADISCORD_vorkerland_worker_constitutional_settlement",
+        {
+            "ADISCORD_vorkerland_reunification_settlement",
+            "ADISCORD_vorkerland_measurable_republic",
+        },
+    ),
+    "WRK_joint_impose_reunification_settlement": (
+        "ADISCORD_vorkerland_reunification_settlement",
+        {
+            "ADISCORD_vorkerland_worker_constitutional_settlement",
+            "ADISCORD_vorkerland_measurable_republic",
+        },
+    ),
+    "WRK_utilitarian_build_measurable_republic": (
+        "ADISCORD_vorkerland_measurable_republic",
+        {
+            "ADISCORD_vorkerland_worker_constitutional_settlement",
+            "ADISCORD_vorkerland_reunification_settlement",
+        },
+    ),
+}
+
+CENTRAL_PREPARED_FLAG = "ADISCORD_vorkerland_focus_central_front_prepared"
+CENTRAL_PREPARED_TOOLTIP = "ADISCORD_vorkerland_prepare_central_front_tt"
+MOBILE_REPAIR_IDEA = "ADISCORD_vorkerland_tva_mobile_repair_trains"
+LAND_REPAIR_IDEAS = (
+    "ADISCORD_vorkerland_wrk_rail_requisition",
+    "ADISCORD_vorkerland_tva_grid_rerouting",
+    MOBILE_REPAIR_IDEA,
+)
+
+WORX_WARTIME_TIMED_IDEAS = {
+    "TVA_issue_emergency_output_norms": (
+        "ADISCORD_vorkerland_tva_emergency_output_board",
+        70,
+    ),
+    "TVA_publish_operational_metrics": (
+        "ADISCORD_vorkerland_tva_operational_audit",
+        70,
+    ),
+}
+
+WORX_POSTWAR_PROVISIONAL_IDEAS = {
+    "WRK_utilitarian_form_reconstruction_directorate": (
+        "ADISCORD_vorkerland_technical_reconstruction_mandate"
+    ),
+    "WRK_utilitarian_standardize_power_grid": (
+        "ADISCORD_vorkerland_national_power_standard"
+    ),
+    "WRK_utilitarian_expand_national_laboratories": (
+        "ADISCORD_vorkerland_public_engineering_service"
+    ),
+    "WRK_utilitarian_rationalize_districts": (
+        "ADISCORD_vorkerland_statistical_administration"
+    ),
+}
+
+IVANLAND_EXPEDITIONARY_IDEA = "ADISCORD_vorkerland_ivanland_expeditionary_command"
+
+POSTWAR_IDEA_LOCALISATION_IDS = {
+    "ADISCORD_vorkerland_worker_constitutional_settlement",
+    "ADISCORD_vorkerland_reunification_settlement",
+    "ADISCORD_vorkerland_measurable_republic",
+    MOBILE_REPAIR_IDEA,
+    *(idea_id for idea_id, _days in WORX_WARTIME_TIMED_IDEAS.values()),
+    *WORX_POSTWAR_PROVISIONAL_IDEAS.values(),
+    IVANLAND_EXPEDITIONARY_IDEA,
+}
+
 POSTWAR_CORE_UNLOCK_FOCUSES = {
     "WRK_worker_authorize_homecoming_commissions",
     "WRK_joint_issue_integration_warrants",
@@ -177,6 +283,7 @@ POSTWAR_CORE_UNLOCK_FOCUSES = {
 CORE_DECISIONS = {
     "ADISCORD_vorkerland_restore_core_claimant_homes",
     "ADISCORD_vorkerland_restore_core_central_historical",
+    "ADISCORD_vorkerland_restore_core_oitfort",
     "ADISCORD_vorkerland_restore_core_rimat",
     "ADISCORD_vorkerland_restore_core_techlar",
     "ADISCORD_vorkerland_restore_core_ebern",
@@ -219,6 +326,16 @@ KNOWN_SHINED_ICONS = {
     "GFX_goal_generic_positive_trade_relations",
     "GFX_goal_generic_production",
     "GFX_goal_generic_scientific_exchange",
+}
+
+SIGNATURE_ICONS = {
+    "WKR_republic_fights_as_one": "GFX_goal_generic_allies_build_infantry",
+    "VAD_proclaim_joint_charter": "GFX_goal_generic_military_sphere",
+    "TVA_codify_utilitarian_directorate": "GFX_goal_generic_production",
+    "TVA_close_operational_loop": "GFX_goal_generic_scientific_exchange",
+    "ADISCORD_vorkerland_prepare_central_front": "GFX_goal_generic_construct_infrastructure",
+    "WRK_joint_impose_reunification_settlement": "GFX_goal_generic_political_pressure",
+    "WRK_utilitarian_build_measurable_republic": "GFX_goal_generic_production",
 }
 
 
@@ -275,6 +392,14 @@ def expected_localisation_keys() -> set[str]:
         *(f"{focus_id}_desc" for focus_id in FOCUS_IDS),
         "ADISCORD_vorkerland_claimant_focus_phase_tt",
         "ADISCORD_vorkerland_central_showdown_phase_tt",
+        "ADISCORD_vorkerland_wrk_preparations_carry_over_tt",
+        "ADISCORD_vorkerland_unlock_core_restoration_decisions_tt",
+        "ADISCORD_vorkerland_prepare_central_front_tt",
+        "WRK_worker_recognize_free_republics_tt",
+        "WRK_worker_write_constitutional_guarantees_tt",
+        "TVA_technocratic_directorate_tt",
+        "WRK_technocratic_reconstruction_mandate_tt",
+        "WRK_technocratic_republic_settlement_tt",
     }
 
 
@@ -336,9 +461,14 @@ def collect_issues() -> list[str]:
         FOCUS_FILE,
         ENGLISH_LOCALISATION,
         RUSSIAN_LOCALISATION,
+        ENGLISH_POSTWAR_IDEA_LOCALISATION,
+        RUSSIAN_POSTWAR_IDEA_LOCALISATION,
+        CHARACTER_FILE,
         SHINE_FILE,
         FOCUS_DECISIONS_FILE,
         DIPLOMACY_DECISIONS_FILE,
+        PHASE_EFFECTS_FILE,
+        COLLAPSE_IDEAS_FILE,
     )
     for relative in required_paths:
         if not (ROOT / relative).is_file():
@@ -350,6 +480,9 @@ def collect_issues() -> list[str]:
     shine_source = read(SHINE_FILE)
     focus_decisions = read(FOCUS_DECISIONS_FILE)
     diplomacy_decisions = read(DIPLOMACY_DECISIONS_FILE)
+    phase_effects = read(PHASE_EFFECTS_FILE)
+    collapse_ideas = read(COLLAPSE_IDEAS_FILE)
+    characters = read(CHARACTER_FILE)
     try:
         trees = _blocks(source, "focus_tree")
         blocks = focus_blocks(source)
@@ -386,6 +519,99 @@ def collect_issues() -> list[str]:
     if len(FOCUS_IDS) != 65:
         issues.append(f"validator manifest must contain 65 definitions, found {len(FOCUS_IDS)}")
     issues.extend(_check_graph(blocks))
+
+    lifecycle_effect_names = (
+        PREWAR_CARRYOVER_EFFECT,
+        DORMANT_WRK_SCRUB_EFFECT,
+        WORKER_REFORM_INHERIT_EFFECT,
+        "ADISCORD_vorkerland_verify_collapse_materialized",
+        *WRK_FORMATION_EFFECTS.values(),
+    )
+    lifecycle_effects: dict[str, str] = {}
+    try:
+        for effect_name in lifecycle_effect_names:
+            definitions = _blocks(phase_effects, effect_name)
+            if len(definitions) != 1:
+                issues.append(
+                    f"phase lifecycle effect {effect_name} must have one definition, "
+                    f"found {len(definitions)}"
+                )
+            else:
+                lifecycle_effects[effect_name] = definitions[0]
+    except ValueError as exc:
+        issues.append(f"phase lifecycle effects could not be parsed: {exc}")
+
+    carryover = lifecycle_effects.get(PREWAR_CARRYOVER_EFFECT, "")
+    if carryover:
+        carryover_guard = re.search(
+            rf"NOT\s*=\s*\{{\s*has_country_flag\s*=\s*{PREWAR_CARRYOVER_FLAG}\s*\}}",
+            carryover,
+        )
+        if "tag = WKR" not in carryover or carryover_guard is None:
+            issues.append("WRK prewar carryover must be WKR-only and guarded by its idempotence flag")
+        if carryover.count(f"set_country_flag = {PREWAR_CARRYOVER_FLAG}") != 1:
+            issues.append("WRK prewar carryover must set its idempotence flag exactly once")
+        for focus_id in PREWAR_WRK_FOCUSES:
+            if carryover.count(f"has_completed_focus = {focus_id}") != 1:
+                issues.append(f"WRK prewar carryover must derive {focus_id} from completed-focus truth")
+
+    verify_collapse = lifecycle_effects.get(
+        "ADISCORD_vorkerland_verify_collapse_materialized", ""
+    )
+    if verify_collapse:
+        wkr_tree_scopes = [
+            scope
+            for scope in _blocks(verify_collapse, "WKR")
+            if "load_focus_tree" in scope
+        ]
+        if len(wkr_tree_scopes) != 1 or (
+            f"{PREWAR_CARRYOVER_EFFECT} = yes" not in wkr_tree_scopes[0]
+        ):
+            issues.append("verified WKR tree installation must invoke the idempotent prewar carryover")
+
+    dormant_scrub = lifecycle_effects.get(DORMANT_WRK_SCRUB_EFFECT, "")
+    if dormant_scrub:
+        scrubbed_ideas = Counter(
+            re.findall(r"\bremove_ideas\s*=\s*([A-Za-z0-9_]+)", dormant_scrub)
+        )
+        for idea_id in DORMANT_WRK_CRISIS_IDEAS:
+            if scrubbed_ideas[idea_id] != 1:
+                issues.append(f"dormant WRK crisis scrub must remove {idea_id} exactly once")
+
+    worker_inheritance = lifecycle_effects.get(WORKER_REFORM_INHERIT_EFFECT, "")
+    if worker_inheritance:
+        if worker_inheritance.count(f"{DORMANT_WRK_SCRUB_EFFECT} = yes") != 1:
+            issues.append("worker reform inheritance must begin from the common dormant-WRK scrub")
+        if len(_blocks(worker_inheritance, "if")) != 2 or len(
+            _blocks(worker_inheritance, "else_if")
+        ) != 4:
+            issues.append("worker reform inheritance must keep two exact three-stage fallback chains")
+        inherited_ideas = re.findall(
+            r"\badd_ideas\s*=\s*([A-Za-z0-9_]+)", worker_inheritance
+        )
+        if Counter(inherited_ideas) != Counter(WORKER_REFORM_STAGE_IDEAS):
+            issues.append("worker reform inheritance must add only the six exact reform stages")
+        for idea_id in WORKER_REFORM_STAGE_IDEAS:
+            if worker_inheritance.count(f"WKR = {{ has_idea = {idea_id} }}") != 1:
+                issues.append(f"worker reform inheritance must read {idea_id} from WKR exactly once")
+
+    for winner_tag, formation_name in WRK_FORMATION_EFFECTS.items():
+        formation = lifecycle_effects.get(formation_name, "")
+        if not formation:
+            continue
+        route_bridge = (
+            WORKER_REFORM_INHERIT_EFFECT
+            if winner_tag == "WKR"
+            else DORMANT_WRK_SCRUB_EFFECT
+        )
+        bridge_token = f"{route_bridge} = yes"
+        annex_token = f"annex_country = {{ target = {winner_tag} transfer_troops = yes }}"
+        if formation.count(bridge_token) != 1:
+            issues.append(f"{formation_name} must invoke {route_bridge} exactly once")
+        if formation.count(annex_token) != 1:
+            issues.append(f"{formation_name} must annex its winner {winner_tag} exactly once")
+        elif formation.find(bridge_token) > formation.find(annex_token):
+            issues.append(f"{formation_name} must preserve/scrub dormant WRK before annexing {winner_tag}")
 
     category_by_focus: dict[str, tuple[str, str | None]] = {}
     for focus_id in PREWAR_WRK_FOCUSES:
@@ -459,6 +685,9 @@ def collect_issues() -> list[str]:
             issues.append(f"{focus_id} must use one known generic shined icon, found {icon_matches}")
         elif f'name = "{icon_matches[0]}_shine"' not in shine_source:
             issues.append(f"{focus_id} icon {icon_matches[0]} lacks an explicit local shine sprite")
+        expected_icon = SIGNATURE_ICONS.get(focus_id)
+        if expected_icon and icon_matches != [expected_icon]:
+            issues.append(f"{focus_id} signature icon {icon_matches} != {expected_icon}")
         ai = _blocks(block, "ai_will_do")
         if len(ai) != 1 or not re.search(r"\bbase\s*=\s*(?:[1-9]|1\d|20)\b", ai[0]):
             issues.append(f"{focus_id} must define a bounded positive AI weight")
@@ -480,7 +709,6 @@ def collect_issues() -> list[str]:
         ("VAD_open_continuity_registers", "VAD_drill_district_guard"),
         ("WKR_convene_front_soviets", "WKR_organize_factory_battalions"),
         ("VAD_open_imperial_registers", "VAD_form_field_commandantures"),
-        ("TVA_reroute_city_grid", "TVA_deploy_field_laboratories"),
     )
     for left, right in mex_pairs:
         if f"focus = {right}" not in "\n".join(_blocks(blocks.get(left, ""), "mutually_exclusive")):
@@ -488,13 +716,48 @@ def collect_issues() -> list[str]:
         if f"focus = {left}" not in "\n".join(_blocks(blocks.get(right, ""), "mutually_exclusive")):
             issues.append(f"{right} must be mutually exclusive with {left}")
 
+    for left, right in (
+        ("TVA_reroute_city_grid", "TVA_deploy_field_laboratories"),
+        ("TVA_raise_technical_battalions", "TVA_seal_the_approaches"),
+    ):
+        if "mutually_exclusive" in blocks.get(left, "") or "mutually_exclusive" in blocks.get(
+            right, ""
+        ):
+            issues.append(f"Worx technical programmes {left}/{right} must remain jointly completable")
+
     prepare = blocks.get("ADISCORD_vorkerland_prepare_central_front", "")
     for tag, (capstone, flag) in CENTRAL_CAPSTONES.items():
-        if f"focus = {capstone}" not in prepare:
-            issues.append(f"central-front preparation lacks the {tag} capstone {capstone}")
         capstone_block = blocks.get(capstone, "")
         if f"set_country_flag = {flag}" not in capstone_block:
             issues.append(f"{capstone} must set gameplay hook {flag}")
+        if f"AND = {{ tag = {tag} has_country_flag = {flag} }}" not in prepare:
+            issues.append(f"central-front preparation does not accept {tag}'s own capstone hook {flag}")
+
+    capstone_prerequisites = [
+        block
+        for block in _blocks(prepare, "prerequisite")
+        if any(f"focus = {capstone}" in block for capstone, _ in CENTRAL_CAPSTONES.values())
+    ]
+    if len(capstone_prerequisites) != 1:
+        issues.append("central-front preparation must expose one OR prerequisite block for all claimant capstones")
+    else:
+        prerequisite = capstone_prerequisites[0]
+        for tag, (capstone, _) in CENTRAL_CAPSTONES.items():
+            if prerequisite.count(f"focus = {capstone}") != 1:
+                issues.append(f"central-front OR prerequisite lacks exactly one {tag} capstone {capstone}")
+
+    for token in (
+        "add_command_power = 10",
+        "add_war_support = 0.02",
+        "army_experience = 5",
+        "type = support_equipment amount = 75",
+    ):
+        if token not in prepare:
+            issues.append(f"central-front preparation is missing useful wartime payload: {token}")
+    if prepare.count(f"set_country_flag = {CENTRAL_PREPARED_FLAG}") != 1:
+        issues.append("central-front preparation must set its downstream decision gate exactly once")
+    if prepare.count(f"custom_effect_tooltip = {CENTRAL_PREPARED_TOOLTIP}") != 1:
+        issues.append("central-front preparation must explain its downstream decision unlock")
 
     final = blocks.get(FINAL_FOCUS, "")
     if "focus = ADISCORD_vorkerland_prepare_central_front" not in final:
@@ -511,6 +774,30 @@ def collect_issues() -> list[str]:
         if _prerequisites(blocks.get(capstone, "")) != {convergence}:
             issues.append(f"{tag} capstone {capstone} must follow expanded convergence {convergence}")
 
+    # Parallel wartime programmes converge through one prerequisite block (OR),
+    # allowing the claimant to advance after one programme and return to the
+    # second later. Flattening focus IDs alone cannot distinguish those semantics.
+    convergence_tails = {
+        "WKR_open_free_republics_channel": {
+            "WKR_form_revolutionary_supply_commission",
+            "WKR_train_shopfloor_officers",
+        },
+        "VAD_balance_council_and_command": {
+            "VAD_dispatch_solland_liaison_mission",
+            "VAD_standardize_district_logistics",
+        },
+        "TVA_publish_operational_metrics": {
+            "TVA_issue_emergency_output_norms",
+            "TVA_build_mobile_repair_trains",
+        },
+    }
+    for focus_id, tails in convergence_tails.items():
+        prerequisites = _blocks(blocks.get(focus_id, ""), "prerequisite")
+        if len(prerequisites) != 1 or set(
+            re.findall(r"\bfocus\s*=\s*([A-Za-z0-9_]+)", prerequisites[0])
+        ) != tails:
+            issues.append(f"{focus_id} must OR-converge both alternate wartime tails in one prerequisite block")
+
     reward_classes = {
         "political": ("add_political_power", "add_stability"),
         "military": ("army_experience", "add_command_power", "add_manpower", "add_war_support"),
@@ -521,6 +808,21 @@ def collect_issues() -> list[str]:
         for reward_class, tokens in reward_classes.items():
             if not any(token in route_source for token in tokens):
                 issues.append(f"{tag} wartime route lacks a {reward_class} reward")
+
+    mobile_repair = blocks.get("TVA_build_mobile_repair_trains", "")
+    mobile_repair_reward = (
+        f"add_timed_idea = {{ idea = {MOBILE_REPAIR_IDEA} days = 35 }}"
+    )
+    if mobile_repair.count(mobile_repair_reward) != 1:
+        issues.append("TVA mobile repair trains must grant its concrete 35-day repair spirit")
+
+    for focus_id, (idea_id, days) in WORX_WARTIME_TIMED_IDEAS.items():
+        reward = f"add_timed_idea = {{ idea = {idea_id} days = {days} }}"
+        if blocks.get(focus_id, "").count(reward) != 1:
+            issues.append(f"{focus_id} must grant the bounded {days}-day spirit {idea_id}")
+        definitions = _blocks(collapse_ideas, idea_id)
+        if len(definitions) != 1:
+            issues.append(f"Worx wartime spirit {idea_id} must have one definition")
 
     sol_hook = "ADISCORD_vorkerland_focus_vad_sol_invitation_intent"
     sol_focus = blocks.get("VAD_invite_sol_delegation", "")
@@ -551,6 +853,71 @@ def collect_issues() -> list[str]:
     for hook in POSTWAR_HOOKS:
         if postwar_source.count(f"set_country_flag = {hook}") != 1:
             issues.append(f"postwar hook {hook} must have exactly one route focus owner")
+
+    for capstone_id, (settlement_idea, incompatible_ideas) in POSTWAR_SETTLEMENT_IDEAS.items():
+        capstone = blocks.get(capstone_id, "")
+        if capstone.count(f"add_ideas = {settlement_idea}") != 1:
+            issues.append(f"postwar capstone {capstone_id} must add lasting idea {settlement_idea}")
+        if f"remove_ideas = {settlement_idea}" in capstone:
+            issues.append(f"postwar capstone {capstone_id} must not remove its own settlement idea")
+        for incompatible_idea in incompatible_ideas:
+            if capstone.count(f"remove_ideas = {incompatible_idea}") != 1:
+                issues.append(
+                    f"postwar capstone {capstone_id} must replace incompatible idea "
+                    f"{incompatible_idea}"
+                )
+
+        idea_definitions = _blocks(collapse_ideas, settlement_idea)
+        if len(idea_definitions) != 1:
+            issues.append(
+                f"lasting postwar idea {settlement_idea} must have one definition, "
+                f"found {len(idea_definitions)}"
+            )
+        elif not re.search(r"\bremoval_cost\s*=\s*-1\b", idea_definitions[0]):
+            issues.append(f"lasting postwar idea {settlement_idea} must be non-removable")
+
+    worx_capstone = blocks.get("WRK_utilitarian_build_measurable_republic", "")
+    for focus_id, idea_id in WORX_POSTWAR_PROVISIONAL_IDEAS.items():
+        if blocks.get(focus_id, "").count(f"add_ideas = {idea_id}") != 1:
+            issues.append(f"{focus_id} must install concrete provisional institution {idea_id}")
+        if worx_capstone.count(f"remove_ideas = {idea_id}") != 1:
+            issues.append(f"Worx capstone must consolidate provisional institution {idea_id}")
+        definitions = _blocks(collapse_ideas, idea_id)
+        if len(definitions) != 1:
+            issues.append(f"Worx provisional institution {idea_id} must have one definition")
+        elif not re.search(r"\bremoval_cost\s*=\s*-1\b", definitions[0]):
+            issues.append(f"Worx provisional institution {idea_id} must be focus-controlled")
+
+    expedition_definitions = _blocks(collapse_ideas, IVANLAND_EXPEDITIONARY_IDEA)
+    if len(expedition_definitions) != 1:
+        issues.append(f"Ivanland expedition spirit {IVANLAND_EXPEDITIONARY_IDEA} must have one definition")
+    else:
+        expedition = expedition_definitions[0]
+        for token in (
+            "army_attack_factor = 0.08",
+            "army_org_regain = 0.08",
+            "planning_speed = 0.10",
+            "supply_consumption_factor = -0.08",
+        ):
+            if token not in expedition:
+                issues.append(f"Ivanland expedition spirit is missing bounded modifier {token}")
+
+    mobile_idea_definitions = _blocks(collapse_ideas, MOBILE_REPAIR_IDEA)
+    if len(mobile_idea_definitions) != 1:
+        issues.append(
+            f"mobile repair spirit {MOBILE_REPAIR_IDEA} must have one definition, "
+            f"found {len(mobile_idea_definitions)}"
+        )
+
+    for idea_id in LAND_REPAIR_IDEAS:
+        definitions = _blocks(collapse_ideas, idea_id)
+        if len(definitions) != 1:
+            issues.append(f"land repair spirit {idea_id} must have one definition")
+            continue
+        if definitions[0].count("industry_repair_factor = 0.20") != 1:
+            issues.append(f"land repair spirit {idea_id} must repair industry at +20 percent")
+        if re.search(r"\brepair_speed_factor\s*=", definitions[0]):
+            issues.append(f"land repair spirit {idea_id} must not use the ship repair modifier")
 
     core_unlock = "ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked"
     if postwar_source.count(f"set_country_flag = {core_unlock}") != 3:
@@ -600,7 +967,6 @@ def collect_issues() -> list[str]:
         "create_unit",
         "release =",
         "add_offsite_building",
-        "add_tech_bonus",
         "set_global_flag",
         "ADISCORD_vorkerland_set_phase_",
         "country_event",
@@ -639,14 +1005,29 @@ def collect_issues() -> list[str]:
         if not level or int(level.group(1)) != 1:
             issues.append(f"focus construction must add exactly one level: {construction}")
 
+    for bonus in _blocks(source, "add_tech_bonus"):
+        amount = re.search(r"\bbonus\s*=\s*(\d+(?:\.\d+)?)", bonus)
+        uses = re.search(r"\buses\s*=\s*(\d+)", bonus)
+        category = re.search(r"\bcategory\s*=\s*([A-Za-z0-9_]+)", bonus)
+        if amount is None or float(amount.group(1)) > 0.50:
+            issues.append(f"focus technology bonus exceeds the bounded 50 percent reward: {bonus}")
+        if uses is None or int(uses.group(1)) != 1:
+            issues.append(f"focus technology bonus must have exactly one use: {bonus}")
+        if category is None or category.group(1) not in {"industry", "electronics"}:
+            issues.append(f"focus technology bonus uses an unsupported category: {bonus}")
+
     english = read(ENGLISH_LOCALISATION)
     russian = read(RUSSIAN_LOCALISATION)
+    english_ideas = read(ENGLISH_POSTWAR_IDEA_LOCALISATION)
+    russian_ideas = read(RUSSIAN_POSTWAR_IDEA_LOCALISATION)
     if not english.startswith("l_english:\n"):
         issues.append("English lifecycle focus localisation has the wrong header")
     if not russian.startswith("l_russian:\n"):
         issues.append("Russian lifecycle focus localisation has the wrong header")
     if not (ROOT / RUSSIAN_LOCALISATION).read_bytes().startswith(b"\xef\xbb\xbf"):
         issues.append("Russian lifecycle focus localisation must use UTF-8 BOM")
+    if not (ROOT / RUSSIAN_POSTWAR_IDEA_LOCALISATION).read_bytes().startswith(b"\xef\xbb\xbf"):
+        issues.append("Russian Vorkerland idea localisation must use UTF-8 BOM")
 
     expected_keys = expected_localisation_keys()
     for language, text in (("English", english), ("Russian", russian)):
@@ -662,6 +1043,55 @@ def collect_issues() -> list[str]:
         empty = sorted(key for key, value in entries.items() if not value.strip())
         if empty:
             issues.append(f"{language} localisation has empty values: {empty}")
+
+    referenced_tooltips = set(
+        re.findall(
+            r"\b(?:custom_effect_tooltip|tooltip)\s*=\s*([A-Za-z0-9_]+)", source
+        )
+    )
+    for language, text in (("English", english), ("Russian", russian)):
+        entries = localisation_entries(text)
+        missing = sorted(referenced_tooltips - set(entries))
+        if missing:
+            issues.append(f"{language} localisation lacks exact focus tooltip keys: {missing}")
+
+    expected_idea_keys = {
+        key
+        for idea_id in POSTWAR_IDEA_LOCALISATION_IDS
+        for key in (idea_id, f"{idea_id}_desc")
+    }
+    for language, text in (("English", english_ideas), ("Russian", russian_ideas)):
+        entries = localisation_entries(text)
+        if set(entries) != expected_idea_keys:
+            missing = sorted(expected_idea_keys - set(entries))
+            extra = sorted(set(entries) - expected_idea_keys)
+            issues.append(
+                f"{language} Vorkerland idea localisation mismatch: missing={missing}, extra={extra}"
+            )
+
+    character_definitions = _blocks(characters, "TVA_Dorian_Worx")
+    if len(character_definitions) != 1:
+        issues.append("Dorian Worx must have exactly one character definition")
+    else:
+        worx = character_definitions[0]
+        for token in (
+            "ideology = technocracy_ideology",
+            "large = GFX_portrait_WRK_Dorian_Worx",
+        ):
+            if token not in worx:
+                issues.append(f"Dorian Worx identity is missing {token}")
+
+    english_focus_entries = localisation_entries(english)
+    russian_focus_entries = localisation_entries(russian)
+    identity_expectations = (
+        (english_focus_entries, "TVA_codify_utilitarian_directorate", "Technical Directorate"),
+        (english_focus_entries, "WRK_utilitarian_build_measurable_republic", "Technocratic Republic"),
+        (russian_focus_entries, "TVA_codify_utilitarian_directorate", "техническую директорию"),
+        (russian_focus_entries, "WRK_utilitarian_build_measurable_republic", "технократическую республику"),
+    )
+    for entries, key, expected in identity_expectations:
+        if expected not in entries.get(key, ""):
+            issues.append(f"Worx player-facing identity {key} must contain {expected!r}")
 
     return issues
 

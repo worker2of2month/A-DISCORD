@@ -9,6 +9,9 @@ hedonism
 ADISCORD_business_center
 ADISCORD_science_center
 ADISCORD_industrial_cluster
+rare_components
+rare_alloys
+ADISCORD_economy_weekly_income
 ADISCORD_economy_tax_collection_factor
 ADISCORD_economy_population_tax_income_factor
 ADISCORD_economy_trade_income_factor

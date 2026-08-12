@@ -37,42 +37,42 @@ division_template = {
 units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 20 }
-		location = 176
+		location = 4912
 		division_template = "NAM Resource Guard"
 		start_experience_factor = 0.45
 		start_equipment_factor = 0.90
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 21 }
-		location = 176
+		location = 8058
 		division_template = "NAM Resource Guard"
 		start_experience_factor = 0.40
 		start_equipment_factor = 0.90
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 22 }
-		location = 176
+		location = 6961
 		division_template = "NAM Resource Infantry"
 		start_experience_factor = 0.35
 		start_equipment_factor = 0.95
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 23 }
-		location = 176
+		location = 2299
 		division_template = "NAM Resource Infantry"
 		start_experience_factor = 0.35
 		start_equipment_factor = 0.95
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 24 }
-		location = 176
+		location = 4912
 		division_template = "NAM Resource Infantry"
 		start_experience_factor = 0.30
 		start_equipment_factor = 0.90
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 25 }
-		location = 176
+		location = 6961
 		division_template = "NAM Resource Infantry"
 		start_experience_factor = 0.30
 		start_equipment_factor = 0.90

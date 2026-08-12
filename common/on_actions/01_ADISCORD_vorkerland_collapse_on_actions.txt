@@ -1,9 +1,20 @@
 on_actions = {
 	on_startup = {
-		effect = {
+			effect = {
+			# Saves from before the dedicated Tower guard already passed the only
+			# legitimate explosion. Record that fact before any other recovery path.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_collapse_started
+					NOT = { has_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved }
+				}
+				set_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved
+			}
 			if = {
 				limit = {
 					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_scheduled }
+					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_started }
+					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
 				}
 				set_global_flag = ADISCORD_vorkerland_collapse_scheduled
 				if = {
@@ -12,13 +23,29 @@ on_actions = {
 				}
 				if = {
 					limit = { WRK = { exists = yes } }
+					WRK = { ADISCORD_vorkerland_set_phase_prewar = yes }
 					WRK = {
 						country_event = {
-							id = ADISCORD_vorkerland_collapse.1
+							id = ADISCORD_vorkerland_phase.1
 							days = 120
 							random_days = 60
 						}
 					}
+				}
+			}
+			# Versioned replacement for the obsolete 60-90 day reveal. Old queued
+			# collapse.10 events are inert; a closed-zone save receives one fresh
+			# three-year timer without any monthly or country-wide polling.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_collapse_started
+					NOT = { has_global_flag = ADISCORD_vorkerland_dirty_opened }
+					NOT = { has_global_flag = ADISCORD_vorkerland_dirty_reveal_v2_scheduled }
+					RUS = { exists = yes }
+				}
+				set_global_flag = ADISCORD_vorkerland_dirty_reveal_v2_scheduled
+				RUS = {
+					country_event = { id = ADISCORD_vorkerland_collapse.85 days = 1095 }
 				}
 			}
 			# Save-compatible recovery for an interrupted exclusion-zone reveal.
@@ -60,6 +87,87 @@ on_actions = {
 					}
 				}
 				IBA = { country_event = { id = ADISCORD_vorkerland_collapse.40 days = 1 } }
+			}
+			# Saves created before the seven-phase controller can already contain all
+			# three temporary claimants while lacking its materialization assertion and
+			# shared focus tree. Restore the trees immediately, then run the same strict
+			# next-day verifier as a fresh split. The permanent version guard makes this
+			# a single migration, never a recurring startup poll.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_materialized_verified }
+					NOT = { has_global_flag = ADISCORD_vorkerland_materialization_bridge_v1_scheduled }
+					country_exists = WKR
+					country_exists = VAD
+					country_exists = TVA
+					NOT = { country_exists = WRK }
+				}
+				set_global_flag = ADISCORD_vorkerland_materialization_bridge_v1_scheduled
+				WKR = {
+					load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes }
+					focus_unlock = yes
+					mark_focus_tree_layout_dirty = yes
+					country_event = { id = ADISCORD_vorkerland_phase.2 days = 1 }
+				}
+				VAD = {
+					load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes }
+					focus_unlock = yes
+					mark_focus_tree_layout_dirty = yes
+				}
+				TVA = {
+					load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes }
+					focus_unlock = yes
+					mark_focus_tree_layout_dirty = yes
+				}
+			}
+			# Recover a missing delayed controller event without polling. The timed
+			# guard coalesces startup calls; phase.4 and phase.5 remain idempotent.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+					has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested
+					NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
+					NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+					NOT = { has_global_flag = ADISCORD_vorkerland_showdown_startup_repair_scheduled }
+					OR = { country_exists = WKR country_exists = VAD country_exists = TVA }
+				}
+				set_global_flag = {
+					flag = ADISCORD_vorkerland_showdown_startup_repair_scheduled
+					days = 3
+				}
+				if = {
+					limit = { country_exists = WKR }
+					WKR = { country_event = { id = ADISCORD_vorkerland_phase.4 days = 1 } }
+				}
+				else_if = {
+					limit = { country_exists = VAD }
+					VAD = { country_event = { id = ADISCORD_vorkerland_phase.4 days = 1 } }
+				}
+				else = { TVA = { country_event = { id = ADISCORD_vorkerland_phase.4 days = 1 } } }
+			}
+			else_if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+					has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized
+					NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+					NOT = { has_global_flag = ADISCORD_vorkerland_showdown_startup_repair_scheduled }
+					OR = { country_exists = WKR country_exists = VAD country_exists = TVA }
+				}
+				set_global_flag = {
+					flag = ADISCORD_vorkerland_showdown_startup_repair_scheduled
+					days = 3
+				}
+				if = {
+					limit = { country_exists = WKR }
+					WKR = { country_event = { id = ADISCORD_vorkerland_phase.5 days = 1 } }
+				}
+				else_if = {
+					limit = { country_exists = VAD }
+					VAD = { country_event = { id = ADISCORD_vorkerland_phase.5 days = 1 } }
+				}
+				else = { TVA = { country_event = { id = ADISCORD_vorkerland_phase.5 days = 1 } } }
 			}
 			# Krait used to retain a generated humanist leader after the collapse or
 			# after a puppet rebuild. Schedule one targeted assertion on load.
@@ -135,15 +243,89 @@ on_actions = {
 				}
 				VAD = { country_event = { id = ADISCORD_vorkerland_collapse.62 days = 1 } }
 			}
+			# One-shot activation bridge for unresolved saves made before the northern
+			# expedition received its versioned event-driven mission handoff.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+					has_global_flag = ADISCORD_vorkerland_northern_wars_began
+					NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_mission_activation_v3 }
+					NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_mission_activation_pending_v3 }
+					NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active }
+					NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_succeeded }
+					NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_failed }
+					IVN = { exists = yes }
+				}
+				clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved
+				clr_global_flag = ADISCORD_vorkerland_ivanland_stayed_out
+				set_global_flag = ADISCORD_vorkerland_ivanland_mission_activation_pending_v3
+				IVN = { country_event = { id = ADISCORD_vorkerland_collapse.75 days = 2 } }
+			}
+			# An active intervention must retain one visible deadline. Resolve a
+			# physically complete/defeated operation immediately; otherwise restore
+			# only the missing mission object on this load.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
+					NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }
+					IVN = { exists = yes }
+				}
+				set_global_flag = ADISCORD_vorkerland_ivanland_mission_guaranteed_v2
+				set_global_flag = ADISCORD_vorkerland_ivanland_mission_activation_v3
+				IVN = {
+					if = {
+						limit = {
+							controls_state = 90
+							controls_state = 91
+							controls_state = 93
+							controls_state = 94
+						}
+						ADISCORD_vorkerland_ivanland_intervention_success = yes
+					}
+					else_if = {
+						limit = { has_capitulated = yes }
+						ADISCORD_vorkerland_ivanland_intervention_failure = yes
+					}
+					else_if = {
+						limit = { NOT = { has_active_mission = ADISCORD_ivanland_limited_intervention } }
+						set_global_flag = ADISCORD_vorkerland_ivanland_intervention_available
+						activate_mission = ADISCORD_ivanland_limited_intervention
+					}
+					if = {
+						limit = {
+							NOT = { has_country_flag = ADISCORD_vorkerland_ivanland_front_verified_v1 }
+							NOT = { has_country_flag = ADISCORD_vorkerland_ivanland_front_launch_pending }
+							NOT = { has_country_flag = ADISCORD_vorkerland_ivanland_front_verification_pending }
+						}
+						set_country_flag = { flag = ADISCORD_vorkerland_ivanland_front_verification_pending days = 3 }
+						country_event = { id = ADISCORD_vorkerland_collapse.82 days = 1 }
+					}
+				}
+			}
+			# If intervention completion paused the regional launch, resume it exactly
+			# once through IVN's bounded event after the resolution cache settles.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved
+					has_global_flag = ADISCORD_vorkerland_regional_war_launch_scheduled
+					NOT = { has_global_flag = ADISCORD_vorkerland_northern_wars_began }
+					NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active }
+					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+					NOT = { has_global_flag = ADISCORD_vorkerland_regional_war_resume_after_ivanland_v1 }
+					IVN = { exists = yes }
+				}
+				set_global_flag = ADISCORD_vorkerland_regional_war_resume_after_ivanland_v1
+				IVN = { country_event = { id = ADISCORD_vorkerland_collapse.76 days = 1 } }
+			}
 			# Save-compatible one-shot cleanup for collapses created before the
 			# deferred political-cache pass existed.
 			if = {
 				limit = {
 					has_global_flag = ADISCORD_vorkerland_collapse_started
 					NOT = { has_global_flag = ADISCORD_vorkerland_conflict_spirits_finalized }
-					WRK = { exists = yes }
+					WKR = { exists = yes }
 				}
-				WRK = { country_event = { id = ADISCORD_vorkerland_collapse.41 days = 1 } }
+				WKR = { country_event = { id = ADISCORD_vorkerland_collapse.41 days = 1 } }
 			}
 			# One-time v2 restoration for regional spirits that an older deferred
 			# political rebuild could clear after their setup effect had finished.
@@ -171,8 +353,8 @@ on_actions = {
 					NOT = { has_global_flag = ADISCORD_vorkerland_claimant_spirit_progression_v3 }
 				}
 				if = {
-					limit = { WRK = { exists = yes } }
-					WRK = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }
+					limit = { WKR = { exists = yes } }
+					WKR = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }
 				}
 				if = {
 					limit = { TVA = { exists = yes } }
@@ -190,6 +372,17 @@ on_actions = {
 				}
 				ADISCORD_vorkerland_split_external_gate = yes
 			}
+			# The live split removes Gate formations before WCG loses its final state.
+			# Older saves can already be landless, so address the tag directly instead
+			# of relying on exists/annex_country and retire this migration permanently.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_collapse_started
+					NOT = { has_global_flag = ADISCORD_vorkerland_external_gate_formations_removed_v4 }
+				}
+				WCG = { ADISCORD_vorkerland_delete_external_gate_formations = yes }
+				set_global_flag = ADISCORD_vorkerland_external_gate_formations_removed_v4
+			}
 			# One-shot subject-spirit migration for saves made before the puppet hook.
 			VLA = { ADISCORD_vorkerland_sync_republics_from_ruins = yes }
 			ZAO = { ADISCORD_vorkerland_sync_republics_from_ruins = yes }
@@ -197,6 +390,41 @@ on_actions = {
 			ROM = { ADISCORD_vorkerland_sync_republics_from_ruins = yes }
 			SOL = { ADISCORD_vorkerland_sync_republics_from_ruins = yes }
 			TRU = { ADISCORD_vorkerland_sync_republics_from_ruins = yes }
+			# Save-compatible repair for the finite ROM intervention. A vanished UI
+			# mission resolves from physical control; a live mission receives one
+			# watchdog and one near-term lifecycle assertion, never a recurring pulse.
+			if = {
+				limit = {
+					OR = {
+						has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_active
+						ROM = { has_country_flag = ADISCORD_vorkerland_rom_northern_cleanup_pending }
+					}
+				}
+				if = {
+					limit = { has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_resolved }
+					clr_global_flag = ADISCORD_vorkerland_rom_northern_intervention_active
+					ADISCORD_vorkerland_end_rom_northern_intervention_wars = yes
+					ADISCORD_vorkerland_schedule_rom_northern_cleanup_verification = yes
+				}
+				else_if = {
+					limit = { NOT = { country_exists = ROM } }
+					ADISCORD_vorkerland_rom_northern_intervention_failure = yes
+				}
+				else_if = {
+					limit = { ROM = { NOT = { has_active_mission = ADISCORD_vorkerland_rom_northern_intervention } } }
+					ADISCORD_vorkerland_resolve_rom_northern_intervention_timeout = yes
+				}
+				else = {
+					ADISCORD_vorkerland_schedule_rom_northern_intervention_check = yes
+					if = {
+						limit = { ROM = { NOT = { has_country_flag = ADISCORD_vorkerland_rom_northern_watchdog_scheduled } } }
+						ROM = {
+							set_country_flag = { flag = ADISCORD_vorkerland_rom_northern_watchdog_scheduled days = 241 }
+							country_event = { id = ADISCORD_vorkerland_collapse.45 days = 240 }
+						}
+					}
+				}
+			}
 			# State 202 was incorrectly retained by WRK in early collapse saves.
 			if = {
 				limit = {
@@ -207,8 +435,13 @@ on_actions = {
 				PWR = { transfer_state = 202 }
 				202 = { add_core_of = PWR set_state_controller_to = PWR }
 			}
-			# Rejoin Volnograd to WRK's live wars in saves made after the puppet
-			# relationship but before the auxiliary-war contract existed.
+			# Rejoin Volnograd to its claimant's live wars in saves made after the
+			# relationship but before the auxiliary-war contract existed. WKR is the
+			# wartime claimant; WRK remains the postwar compatibility path.
+			if = {
+				limit = { WKR = { exists = yes VLA = { exists = yes is_subject_of = WKR } } }
+				WKR = { ADISCORD_vorkerland_wrk_activate_vla_auxiliaries = yes }
+			}
 			if = {
 				limit = { WRK = { exists = yes VLA = { exists = yes is_subject_of = WRK } } }
 				WRK = { ADISCORD_vorkerland_wrk_activate_vla_auxiliaries = yes }
@@ -223,15 +456,13 @@ on_actions = {
 				}
 				ADISCORD_vorkerland_ivanland_secure_zaozersk = yes
 			}
-			# Upgrade successful intervention saves made before the final 90/91 and
-			# 93/94 split. Reusing the setup also reasserts both puppet governments.
+			# Upgrade successful saves to the ordered postwar clients: IBA receives
+			# 90-91 first and IBL receives 93-94. The setup is idempotent.
 			if = {
 				limit = {
 					has_global_flag = ADISCORD_vorkerland_ivanland_intervention_succeeded
-					NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_krait_frontier_secured }
+					NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_client_order_v2 }
 					IVN = { exists = yes }
-					IBL = { exists = yes }
-					IBA = { exists = yes }
 				}
 				ADISCORD_vorkerland_setup_ivanland_mandate = yes
 			}
@@ -239,6 +470,9 @@ on_actions = {
 				limit = {
 					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+					NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+					NOT = { has_global_flag = ADISCORD_vorkerland_reunification_verified }
+					NOT = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 					NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active }
 				}
 				# Regional tags from old saves can still share the pre-collapse faction.
@@ -250,28 +484,6 @@ on_actions = {
 					limit = { RUS = { exists = yes } }
 					RUS = { country_event = { id = ADISCORD_vorkerland_collapse.64 days = 1 } }
 				}
-			}
-			# Save repair for the old completion path, which set the showdown flag
-			# before a same-faction declaration failed and then hid the decision.
-			if = {
-				limit = {
-					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-					NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
-					WRK = {
-						exists = yes
-						is_subject = no
-						NOT = { has_capitulated = yes }
-						NOT = { has_war_with = TVA }
-					}
-					TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
-					OR = {
-						has_global_flag = ADISCORD_vorkerland_worker_doctor_front_preparation
-						has_global_flag = ADISCORD_vorkerland_worker_doctor_showdown_started
-					}
-				}
-				ADISCORD_vorkerland_detach_worker_doctor_factions = yes
-				set_global_flag = ADISCORD_vorkerland_worker_doctor_front_preparation
-				WRK = { country_event = { id = ADISCORD_vorkerland_collapse.48 days = 1 } }
 			}
 			# Older saves that already recorded a Worker victory receive the same
 			# one-shot free-republic settlement as a new campaign.
@@ -343,6 +555,13 @@ on_actions = {
 	on_war = {
 		effect = {
 			if = {
+				limit = {
+					ADISCORD_vorkerland_is_main_claimant = yes
+					NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				}
+				ADISCORD_vorkerland_update_civil_war_exhaustion = yes
+			}
+			if = {
 				limit = { tag = EBA }
 				PIV = {
 					if = {
@@ -359,6 +578,20 @@ on_actions = {
 	on_peace = {
 		effect = {
 			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_active
+					NOT = { has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_resolved }
+				}
+				ADISCORD_vorkerland_schedule_rom_northern_intervention_check = yes
+			}
+			if = {
+				limit = {
+					ADISCORD_vorkerland_is_main_claimant = yes
+					NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				}
+				ADISCORD_vorkerland_update_civil_war_exhaustion = yes
+			}
+			if = {
 				limit = { tag = EBA has_war = no }
 				PIV = {
 					if = {
@@ -374,6 +607,28 @@ on_actions = {
 	}
 	on_capitulation = {
 		effect = {
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_active
+					NOT = { has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_resolved }
+					ROOT = { tag = ROM }
+				}
+				ADISCORD_vorkerland_rom_northern_intervention_failure = yes
+			}
+			else_if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_active
+					NOT = { has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_resolved }
+				}
+				ADISCORD_vorkerland_schedule_rom_northern_intervention_check = yes
+			}
+			if = {
+				limit = {
+					ROOT = { ADISCORD_vorkerland_is_main_claimant = yes }
+					NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				}
+				ROOT = { ADISCORD_vorkerland_update_civil_war_exhaustion = yes }
+			}
 			if = {
 				limit = { ROOT = { tag = EBA } }
 				PIV = {
@@ -398,7 +653,8 @@ on_actions = {
 				FROM = { ADISCORD_vorkerland_wrk_complete_protectorate_enforcement = yes }
 			}
 			# No northern-front member may be consumed by the normal peace fallback.
-			# Krait is already an Ivanland subject and keeps state 91 during the war.
+			# IVN must physically control the complete 90/91/93/94 objective package;
+			# the postwar client order is materialized only after this succeeds.
 			if = {
 				limit = {
 					has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
@@ -408,8 +664,12 @@ on_actions = {
 				set_global_flag = skip_default_capitulation
 				if = {
 					limit = {
-						IVN = { controls_state = 90 controls_state = 93 controls_state = 94 }
-						IBL = { exists = yes is_subject_of = IVN controls_state = 91 }
+						IVN = {
+							controls_state = 90
+							controls_state = 91
+							controls_state = 93
+							controls_state = 94
+						}
 					}
 					IVN = { ADISCORD_vorkerland_ivanland_intervention_success = yes }
 				}
@@ -445,50 +705,104 @@ on_actions = {
 				}
 				IVN = { white_peace = ROOT }
 			}
-			# A victorious claimant receives one month to reorganise the captured
-			# territory before opening the next central front. Capitulation already
-			# transfers captured equipment, so only a small manpower reserve is added.
+			# Reserve every central defeat from the generic same-tick fallback, even
+			# when the engine credits a sovereign/subject co-belligerent. Normalise the
+			# settlement to that ally's live main claimant before preserving the shell.
 			if = {
 				limit = {
 					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-					NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+					OR = {
+						NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+						AND = {
+							FROM = { tag = WRK }
+							has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+							has_global_flag = ADISCORD_vorkerland_reunification_verified
+						}
+					}
 					ROOT = { ADISCORD_vorkerland_is_central_claimant = yes }
 					FROM = {
-						ADISCORD_vorkerland_is_main_claimant = yes
-						NOT = { has_capitulated = yes }
+						OR = {
+							AND = {
+								ADISCORD_vorkerland_is_main_claimant = yes
+								NOT = { has_capitulated = yes }
+							}
+							AND = {
+								is_subject = yes
+								NOT = { has_capitulated = yes }
+								OVERLORD = {
+									exists = yes
+									ADISCORD_vorkerland_is_main_claimant = yes
+									NOT = { has_capitulated = yes }
+								}
+							}
+							AND = {
+								tag = WTD
+								has_war_together_with = TVA
+								TVA = { exists = yes NOT = { has_capitulated = yes } }
+							}
+							AND = {
+								tag = VLA
+								has_war_together_with = WKR
+								WKR = { exists = yes NOT = { has_capitulated = yes } }
+							}
+							AND = {
+								tag = SOL
+								has_war_together_with = VAD
+								VAD = { exists = yes NOT = { has_capitulated = yes } }
+							}
+							AND = {
+								tag = WRK
+								has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+								has_global_flag = ADISCORD_vorkerland_reunification_verified
+							}
+						}
 					}
 				}
-				FROM = {
-					set_country_flag = {
-						flag = ADISCORD_vorkerland_central_recovery
-						days = 35
-						value = 1
+				set_global_flag = skip_default_capitulation
+				# Keep occupation gains inside the central claimant graph before the
+				# defeated shell is reserved from the generic peace fallback.
+				ROOT = { ADISCORD_vorkerland_distribute_central_states_to_cobelligerents = yes }
+				if = {
+					limit = { FROM = { tag = WTD } }
+					TVA = { ADISCORD_vorkerland_settle_central_capitulation = yes }
+				}
+				else_if = {
+					limit = { FROM = { tag = VLA } }
+					WKR = { ADISCORD_vorkerland_settle_central_capitulation = yes }
+				}
+				else_if = {
+					limit = { FROM = { tag = SOL } }
+					VAD = { ADISCORD_vorkerland_settle_central_capitulation = yes }
+				}
+				else = {
+					FROM = {
+						if = {
+							limit = {
+								tag = WRK
+								has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+								has_global_flag = ADISCORD_vorkerland_reunification_verified
+							}
+							ADISCORD_vorkerland_settle_central_capitulation = yes
+						}
+						else_if = {
+							limit = { is_subject = yes }
+							OVERLORD = { ADISCORD_vorkerland_settle_central_capitulation = yes }
+						}
+						else = { ADISCORD_vorkerland_settle_central_capitulation = yes }
 					}
-					add_manpower = 1500
 				}
 			}
 			ADISCORD_vorkerland_check_central_outcome = yes
-		}
-	}
-	on_monthly = {
-		effect = {
-			if = {
-				limit = {
-					OR = { tag = WRK tag = VAD tag = TVA }
-					NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
-					OR = {
-						has_global_flag = ADISCORD_vorkerland_collapse_started
-						has_variable = ADISCORD_vorkerland_civil_war_exhaustion
-					}
-				}
-				ADISCORD_vorkerland_update_civil_war_exhaustion = yes
-			}
 		}
 	}
 	on_puppet = {
 		effect = {
 			ADISCORD_vorkerland_sync_republics_from_ruins = yes
 			if = {
+				limit = { tag = VLA is_subject_of = WKR }
+				WKR = { ADISCORD_vorkerland_wrk_activate_vla_auxiliaries = yes }
+			}
+			else_if = {
 				limit = { tag = VLA is_subject_of = WRK }
 				WRK = { ADISCORD_vorkerland_wrk_activate_vla_auxiliaries = yes }
 			}
@@ -521,10 +835,34 @@ on_actions = {
 			if = {
 				limit = {
 					has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
-					IVN = { controls_state = 90 controls_state = 93 controls_state = 94 }
-					IBL = { exists = yes is_subject_of = IVN controls_state = 91 }
+					IVN = {
+						controls_state = 90
+						controls_state = 91
+						controls_state = 93
+						controls_state = 94
+					}
 				}
 				IVN = { ADISCORD_vorkerland_ivanland_intervention_success = yes }
+			}
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_active
+					NOT = { has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_resolved }
+					ROM = {
+						exists = yes
+						controls_state = 72
+						controls_state = 196
+						controls_state = 322
+					}
+				}
+				ADISCORD_vorkerland_rom_northern_intervention_success = yes
+			}
+			else_if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_active
+					NOT = { has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_resolved }
+				}
+				ADISCORD_vorkerland_schedule_rom_northern_intervention_check = yes
 			}
 			ADISCORD_vorkerland_check_central_outcome = yes
 		}

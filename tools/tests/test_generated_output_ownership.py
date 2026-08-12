@@ -15,6 +15,7 @@ from unittest.mock import patch
 from PIL import Image
 
 from tools.builders import build_adiscord_val_operations_map as val_operations_map
+from tools.builders.build_adiscord_diplomacy_ui_assets import expected_outputs as diplomacy_ui_asset_outputs
 from tools.builders.build_adiscord_resource_assets import expected_outputs as resource_asset_outputs
 from tools.lib.generated_outputs import (
     load_registry,
@@ -29,6 +30,7 @@ ROOT = Path(__file__).resolve().parents[2]
 REQUIRED_FAMILIES = {
     "ainholm_mandate",
     "decision_ui_assets",
+    "diplomacy_ui_assets",
     "production_ui_assets",
     "doctrine_system",
     "exclusion_zone_boundaries",
@@ -120,6 +122,23 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
                 "gfx/interface/ADISCORD_economy_gui/source/treasury_topbar_source.png",
             }
             <= set(entry["source_inputs"])
+        )
+
+    def test_diplomacy_ui_asset_registry_owns_every_exact_generated_path_and_source(self) -> None:
+        entry = self.entries["diplomacy_ui_assets"]
+        expected_paths = {
+            path.relative_to(ROOT).as_posix()
+            for path in diplomacy_ui_asset_outputs()
+        }
+        self.assertEqual(set(entry["output_globs"]), expected_paths)
+        self.assertTrue(all("*" not in path for path in entry["output_globs"]))
+        self.assertEqual(
+            set(entry["source_inputs"]),
+            {
+                "gfx/interface/diplomacy/source/ADISCORD_diplomacy_leader_overlay_master.png",
+                "gfx/interface/diplomacy/source/ADISCORD_diplomacy_parties_overlay_master.png",
+                "gfx/interface/diplomacy/source/ADISCORD_diplomacy_flag_overlay_master.png",
+            },
         )
 
     def test_val_check_rejects_an_unexpected_owned_png(self) -> None:

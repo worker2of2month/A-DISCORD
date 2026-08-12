@@ -1,13 +1,46 @@
-add_namespace = news
+add_namespace = ADISCORD_superevent_news
+add_namespace = ADISCORD_superevent_audio
+
+# Audio proxies for superevents raised from global scripted effects. The
+# dispatching effect selects the human country; playback then happens inside
+# that player's own country-event scope, matching the original working route.
+country_event = {
+	id = ADISCORD_superevent_audio.1
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { is_ai = no }
+			scoped_sound_effect = superevent_vorkerland_civilwar_sound_e
+			scoped_play_song = "one_minute_of_silence"
+		}
+	}
+}
+country_event = {
+	id = ADISCORD_superevent_audio.2
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { is_ai = no }
+			scoped_sound_effect = superevent_stelander_empire_sound_e
+			scoped_play_song = "one_minute_of_silence"
+		}
+	}
+}
 
 news_event = { #vorkerland civilwar
-	id = news.0
+	id = ADISCORD_superevent_news.1
 	title = news.0.t
 	desc = news.0.d
 
 	major = yes
 	
-	fire_only_once = yes
+	# The collapse caller owns the save-safe one-shot guard. Keeping the event
+	# reusable also permits a deterministic console/runtime audio check.
+	fire_only_once = no
 
 	is_triggered_only = yes
 
@@ -15,19 +48,24 @@ news_event = { #vorkerland civilwar
 
 	option = {
 		name = news.0.a
-		hidden_effect = {
+			hidden_effect = {
 			set_global_flag = {
 				flag = superevent_vorkerland_civilwar
 				value = 1
 				days = 20
 			}
-			ADISCORD_vorkerland_play_collapse_superevent_audio = yes
+			# A major news event keeps the country that fired it as ROOT. Dispatch
+			# to the actual human country before using the scoped audio effects.
+			every_country = {
+				limit = { is_ai = no }
+				country_event = { id = ADISCORD_superevent_audio.1 }
+			}
 		}
 	}
 }
 
 news_event = { #stelander empire
-	id = news.1
+	id = ADISCORD_superevent_news.2
 	title = news.1.t
 	desc = news.1.d
 
@@ -110,11 +148,8 @@ news_event = { #stelander empire
 				days = 20
 			}
 			every_country = {
-				limit = {
-					is_ai = no
-				}
-				scoped_sound_effect = superevent_stelander_empire_sound_e
-				scoped_play_song = "one_minute_of_silence"
+				limit = { is_ai = no }
+				country_event = { id = ADISCORD_superevent_audio.2 }
 			}
 		}
 	}

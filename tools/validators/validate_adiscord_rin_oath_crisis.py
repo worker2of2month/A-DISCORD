@@ -17,7 +17,14 @@ EFFECTS = Path("common/scripted_effects/ADISCORD_rin_oath_crisis_effects.txt")
 TRIGGERS = Path("common/scripted_triggers/ADISCORD_rin_oath_crisis_triggers.txt")
 ON_ACTIONS = Path("common/on_actions/02_ADISCORD_rin_oath_crisis_on_actions.txt")
 IDEAS = Path("common/ideas/ADISCORD_inner_frontier_ideas.txt")
-LOCALISATION = Path("localisation/russian/ADISCORD_inner_frontier_countries_l_russian.yml")
+LOCALISATION_PATHS = tuple(
+    Path("localisation/russian") / filename
+    for filename in (
+        "countries_l_russian.yml",
+        "politics_l_russian.yml",
+        "events_l_russian.yml",
+    )
+)
 MON_HISTORY = Path("history/countries/MON - Montar Empire.txt")
 RIN_HISTORY = Path("history/countries/RIN - Rhine Palatinate.txt")
 RIN_COUNTRY = Path("common/countries/RIN.txt")
@@ -74,7 +81,7 @@ def collect_issues() -> list[str]:
         path: read(path)
         for path in (
             EVENTS, DECISIONS, CATEGORIES, EFFECTS, TRIGGERS, ON_ACTIONS,
-            IDEAS, LOCALISATION, MON_HISTORY, RIN_HISTORY, RIN_COUNTRY, RIN_OOB,
+            IDEAS, MON_HISTORY, RIN_HISTORY, RIN_COUNTRY, RIN_OOB,
         )
     }
 
@@ -391,7 +398,7 @@ def collect_issues() -> list[str]:
     ):
         if f"{idea} = {{" not in ideas:
             issues.append(f"missing RIN crisis idea {idea}")
-    localisation = texts[LOCALISATION]
+    localisation = "\n".join(read(path) for path in LOCALISATION_PATHS)
     for key in (
         "RIN_northern_court",
         "ADISCORD_rin_oath_crisis_category",

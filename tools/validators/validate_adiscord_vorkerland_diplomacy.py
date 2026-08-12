@@ -19,6 +19,9 @@ DIPLOMACY_TRIGGERS = Path("common/scripted_triggers/ADISCORD_vorkerland_diplomac
 DIPLOMACY_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_diplomacy_effects.txt")
 DIPLOMACY_DECISIONS = Path("common/decisions/ADISCORD_vorkerland_diplomacy_decisions.txt")
 FOCUS_DECISIONS = Path("common/decisions/ADISCORD_vorkerland_focus_decisions.txt")
+FOCUS_DECISION_EFFECTS = Path(
+    "common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt"
+)
 DIPLOMACY_EVENTS = Path("events/ADISCORD_vorkerland_diplomacy_events.txt")
 DIPLOMACY_ON_ACTIONS = Path("common/on_actions/03_ADISCORD_vorkerland_diplomacy_on_actions.txt")
 PHASE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
@@ -79,6 +82,12 @@ WKR_VLA_OFFER = "ADISCORD_vorkerland_offer_wkr_vla_alliance"
 VAD_INTERVENTION_BORDER = "ADISCORD_vorkerland_vad_has_solar_intervention_border"
 WKR_COUNTER_BORDER = "ADISCORD_vorkerland_wkr_has_solar_counter_border"
 VAD_INTERVENTION = "ADISCORD_vorkerland_attempt_vad_solar_intervention"
+RESERVE_VAD_INTERVENTION = "ADISCORD_vorkerland_reserve_vad_solar_intervention"
+CANCEL_VAD_INTERVENTION_RESERVATION = (
+    "ADISCORD_vorkerland_cancel_vad_solar_intervention_reservation"
+)
+VERIFY_VAD_INTERVENTION = "ADISCORD_vorkerland_verify_vad_solar_intervention"
+CLEAR_FAILED_VAD_INTERVENTION = "ADISCORD_vorkerland_clear_failed_vad_solar_intervention"
 RESTORE_SOL = "ADISCORD_vorkerland_restore_sol_as_vad_puppet"
 VERIFY_SOL = "ADISCORD_vorkerland_verify_sol_restoration"
 ARM_WKR_COUNTER = "ADISCORD_vorkerland_arm_wkr_solar_counter_intervention"
@@ -107,9 +116,10 @@ CORE_PACKAGES = {
         32, 33, 36, 37, 38, 39, 75, 106, 107, 121, 200, 201, 324,
     ),
     "ADISCORD_vorkerland_restore_core_central_historical": (
-        27, 34, 35, 40, 79, 81, 82, 102, 108, 109, 110, 111,
+        27, 35, 40, 79, 81, 82, 102, 108, 109, 110, 111,
         122, 123, 124, 306, 308, 309, 320, 323, 325, 327,
     ),
+    "ADISCORD_vorkerland_restore_core_oitfort": (34,),
     "ADISCORD_vorkerland_restore_core_rimat": (202,),
     "ADISCORD_vorkerland_restore_core_techlar": (105,),
     "ADISCORD_vorkerland_restore_core_ebern": (311,),
@@ -422,6 +432,9 @@ def validate_peaceful_invitations() -> list[str]:
     effects = _load(DIPLOMACY_EFFECTS, issues)
     events = _load(DIPLOMACY_EVENTS, issues)
     decisions = _load(DIPLOMACY_DECISIONS, issues)
+    on_actions = _load(DIPLOMACY_ON_ACTIONS, issues)
+    focus_decisions = _load(FOCUS_DECISIONS, issues)
+    focus_effects = _load(FOCUS_DECISION_EFFECTS, issues)
     collapse_effects = _load(COLLAPSE_EFFECTS, issues)
     contracts = (
         (
@@ -431,6 +444,7 @@ def validate_peaceful_invitations() -> list[str]:
             "SOL",
             VAD_SOL_ACCEPTED,
             "ADISCORD_vorkerland_vad_sol_invitation_pending",
+            "ADISCORD_vorkerland_vad_sol_invitation_dispatch_guard",
             "ADISCORD_vorkerland_vad_sol_invitation_resolved",
             "ADISCORD_vorkerland_diplomacy.2",
             "ADISCORD_vorkerland_vad_invite_victorious_sol",
@@ -443,6 +457,7 @@ def validate_peaceful_invitations() -> list[str]:
             "VLA",
             WKR_VLA_ACCEPTED,
             "ADISCORD_vorkerland_wkr_vla_invitation_pending",
+            "ADISCORD_vorkerland_wkr_vla_invitation_dispatch_guard",
             "ADISCORD_vorkerland_wkr_vla_invitation_resolved",
             "ADISCORD_vorkerland_diplomacy.3",
             "ADISCORD_vorkerland_wkr_invite_victorious_vla",
@@ -456,6 +471,7 @@ def validate_peaceful_invitations() -> list[str]:
         invitee,
         accepted_flag,
         pending_flag,
+        dispatch_flag,
         resolved_flag,
         event_id,
         decision_id,
@@ -469,7 +485,10 @@ def validate_peaceful_invitations() -> list[str]:
             f"tag = {inviter}",
             f"NOT = {{ has_country_flag = {pending_flag} }}",
             f"NOT = {{ has_country_flag = {resolved_flag} }}",
+            "NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }",
+            "NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }",
             f"set_country_flag = {pending_flag}",
+            f"flag = {dispatch_flag} days = 3",
             f"id = {event_id} days = 1",
         ):
             if token not in block:
@@ -501,28 +520,73 @@ def validate_peaceful_invitations() -> list[str]:
             "template = faction_template_ADISCORD_standard",
             f"add_to_faction = {invitee}",
             f"clr_country_flag = {pending_flag}",
+            f"clr_country_flag = {dispatch_flag}",
             f"set_country_flag = {resolved_flag}",
             "set_country_flag = ADISCORD_vorkerland_preserve_wartime_faction",
             f"set_global_flag = {accepted_flag}",
             f"set_global_flag = {accepted_flag.replace('_accepted', '_declined')}",
+            "NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }",
+            "NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }",
+            "NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }",
         ):
             if token not in acceptance:
                 issues.append(f"{event_id} lacks bounded acceptance/decline token {token}")
         for forbidden in ("declare_war_on", "add_to_war", "puppet =", "set_autonomy"):
             if forbidden in acceptance:
                 issues.append(f"{event_id} must not start or merge a war during acceptance; found {forbidden}")
+        event_trigger = named_block(acceptance, "trigger")
+        if f"has_country_flag = {pending_flag}" not in event_trigger:
+            issues.append(f"{event_id} event trigger must retain the inviter pending fallback")
+        if acceptance.count(f"clr_country_flag = {dispatch_flag}") < 2:
+            issues.append(f"{event_id} must clear its dispatch guard on accept and decline")
 
         decision = _unique_block(decisions, decision_id, "public alliance decision", issues)
         for token in (
             f"allowed = {{ tag = {inviter} }}",
             f"has_country_flag = {intent_flag}",
             f"has_global_flag = {winner_flag}",
+            "NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }",
+            "NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }",
             "NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }",
             f"complete_effect = {{ {effect_name} = yes }}",
             "fire_only_once = yes",
         ):
             if token not in compact(decision):
                 issues.append(f"{decision_id} lacks public invitation contract {token}")
+
+        startup = named_block(on_actions, "on_startup")
+        for token in (
+            f"has_country_flag = {pending_flag}",
+            f"clr_country_flag = {pending_flag}",
+            f"flag = {dispatch_flag} days = 3",
+            f"clr_country_flag = {dispatch_flag}",
+            f"set_country_flag = {resolved_flag}",
+            f"id = {event_id} days = 1",
+        ):
+            if token not in compact(startup):
+                issues.append(f"startup invitation repair for {inviter}/{invitee} lacks {token}")
+
+    commit = _unique_block(
+        focus_decisions,
+        "ADISCORD_vorkerland_commit_to_central_showdown",
+        "central-showdown commit decision",
+        issues,
+    )
+    scheduler = _unique_block(
+        focus_effects,
+        "ADISCORD_vorkerland_focus_schedule_final_showdown",
+        "central-showdown scheduler effect",
+        issues,
+    )
+    for inviter, pending_flag in (
+        ("VAD", "ADISCORD_vorkerland_vad_sol_invitation_pending"),
+        ("WKR", "ADISCORD_vorkerland_wkr_vla_invitation_pending"),
+    ):
+        gate = f"NOT = {{ {inviter} = {{ exists = yes has_country_flag = {pending_flag} }} }}"
+        if compact(commit).count(gate) < 2:
+            issues.append(f"central-showdown commit must gate {pending_flag} in visible and available")
+        if gate not in compact(scheduler):
+            issues.append(f"central-showdown scheduler must gate {pending_flag}")
 
     detach = named_block(collapse_effects, "ADISCORD_vorkerland_leave_inherited_faction")
     if "ADISCORD_vorkerland_preserve_wartime_faction" not in detach:
@@ -581,6 +645,8 @@ def validate_vad_intervention_and_restoration() -> list[str]:
     events = _load(DIPLOMACY_EVENTS, issues)
     decisions = _load(DIPLOMACY_DECISIONS, issues)
     on_actions = _load(DIPLOMACY_ON_ACTIONS, issues)
+    focus_decisions = _load(FOCUS_DECISIONS, issues)
+    focus_effects = _load(FOCUS_DECISION_EFFECTS, issues)
 
     _validate_border_trigger(
         triggers,
@@ -596,7 +662,9 @@ def validate_vad_intervention_and_restoration() -> list[str]:
         intervention_compact = compact(intervention)
         for token in (
             "tag = VAD",
+            "has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved",
             "has_global_flag = ADISCORD_vorkerland_phase_central_preparation",
+            "NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }",
             "NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }",
             "NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }",
             f"{VAD_INTERVENTION_BORDER} = yes",
@@ -604,6 +672,9 @@ def validate_vad_intervention_and_restoration() -> list[str]:
             "has_global_flag = ADISCORD_vorkerland_solar_winner_csl",
             "set_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active",
             "set_country_flag = ADISCORD_vorkerland_vad_solar_intervention_attempted",
+            "set_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending",
+            "country_event = { id = ADISCORD_vorkerland_diplomacy.6 days = 1 }",
+            f"{CANCEL_VAD_INTERVENTION_RESERVATION} = yes",
             "declare_war_on = { target = SRA type = take_state_focus generator = { 76 104 198 307 310 } }",
             "declare_war_on = { target = CSL type = take_state_focus generator = { 76 104 198 307 310 } }",
         ):
@@ -615,6 +686,65 @@ def validate_vad_intervention_and_restoration() -> list[str]:
             if forbidden in intervention:
                 issues.append(f"{VAD_INTERVENTION} contains forbidden {forbidden}")
 
+    reserve = _unique_block(
+        effects, RESERVE_VAD_INTERVENTION, "intervention reservation effect", issues
+    )
+    for token in (
+        "set_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved",
+        "clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_failed",
+        "clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_sra",
+        "clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_csl",
+        "clr_global_flag = ADISCORD_vorkerland_sol_restoration_materialized",
+        "clr_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry",
+        "clr_global_flag = ADISCORD_vorkerland_sol_restoration_retry",
+        "clr_global_flag = ADISCORD_vorkerland_sol_restoration_failed",
+        "clr_global_flag = ADISCORD_vorkerland_sol_restoration_fresh_release",
+        "clr_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending",
+        "clr_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_retry",
+    ):
+        if token not in compact(reserve):
+            issues.append(f"{RESERVE_VAD_INTERVENTION} lacks attempt reset token {token}")
+    cancel_reservation = _unique_block(
+        effects,
+        CANCEL_VAD_INTERVENTION_RESERVATION,
+        "intervention reservation cleanup effect",
+        issues,
+    )
+    if "clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved" not in compact(
+        cancel_reservation
+    ):
+        issues.append(f"{CANCEL_VAD_INTERVENTION_RESERVATION} must clear the reservation")
+
+    verifier = _unique_block(
+        effects, VERIFY_VAD_INTERVENTION, "intervention verification effect", issues
+    )
+    verifier_compact = compact(verifier)
+    for token in (
+        "has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active",
+        "has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_sra",
+        "has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_csl",
+        "has_war_with = SRA",
+        "has_war_with = CSL",
+        "has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_retry",
+        "country_event = { id = ADISCORD_vorkerland_diplomacy.9 days = 1 }",
+        "ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes",
+    ):
+        if token not in verifier_compact:
+            issues.append(f"{VERIFY_VAD_INTERVENTION} lacks bounded verifier token {token}")
+    for event_id, retry_token in (
+        ("ADISCORD_vorkerland_diplomacy.6", "NOT = { has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_retry }"),
+        ("ADISCORD_vorkerland_diplomacy.9", "has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_retry"),
+    ):
+        verifier_event = event_block(events, event_id)
+        for token in (
+            "is_triggered_only = yes",
+            f"{VERIFY_VAD_INTERVENTION} = yes",
+            "has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending",
+            retry_token,
+        ):
+            if token not in verifier_event:
+                issues.append(f"{event_id} lacks bounded verifier token {token}")
+
     intervention_decision = _unique_block(
         decisions,
         "ADISCORD_vorkerland_vad_restore_sol_by_force",
@@ -625,13 +755,83 @@ def validate_vad_intervention_and_restoration() -> list[str]:
         "allowed = { tag = VAD }",
         f"{VAD_INTERVENTION_BORDER} = yes",
         "NOT = { has_war = yes }",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_failed }",
+        f"complete_effect = {{ {RESERVE_VAD_INTERVENTION} = yes }}",
+        f"cancel_effect = {{ {CANCEL_VAD_INTERVENTION_RESERVATION} = yes }}",
         f"remove_effect = {{ {VAD_INTERVENTION} = yes }}",
-        "fire_only_once = yes",
+        "fire_only_once = no",
     ):
         if token not in compact(intervention_decision):
             issues.append(f"public VAD intervention decision lacks {token}")
+    if "cancel_trigger = {" not in intervention_decision:
+        issues.append("public VAD intervention decision lacks reservation-safe cancellation")
+
+    cleanup_effect = _unique_block(
+        effects, CLEAR_FAILED_VAD_INTERVENTION, "intervention cleanup effect", issues
+    )
+    cleanup_compact = compact(cleanup_effect)
+    for token in (
+        "has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_sra",
+        "has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_csl",
+        "VAD = { NOT = { has_war_with = SRA } }",
+        "VAD = { NOT = { has_war_with = CSL } }",
+        "NOT = { has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending }",
+        "clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved",
+        "clr_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry",
+        "clr_global_flag = ADISCORD_vorkerland_sol_restoration_retry",
+        "set_global_flag = ADISCORD_vorkerland_vad_solar_intervention_failed",
+    ):
+        if token not in cleanup_compact:
+            issues.append(f"{CLEAR_FAILED_VAD_INTERVENTION} lacks target-aware cleanup token {token}")
+    if "has_war = yes" in cleanup_effect:
+        issues.append(f"{CLEAR_FAILED_VAD_INTERVENTION} must not use unrelated VAD wars as its liveness test")
 
     on_capitulation = named_block(on_actions, "on_capitulation")
+    on_startup = named_block(on_actions, "on_startup")
+    startup_effect = named_block(on_startup, "effect")
+    on_peace = named_block(on_actions, "on_peace")
+    cleanup = "ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes"
+    for event_id in (
+        "ADISCORD_vorkerland_diplomacy.4",
+        "ADISCORD_vorkerland_diplomacy.5",
+        "ADISCORD_vorkerland_diplomacy.6",
+        "ADISCORD_vorkerland_diplomacy.7",
+        "ADISCORD_vorkerland_diplomacy.8",
+        "ADISCORD_vorkerland_diplomacy.9",
+    ):
+        if event_id not in on_startup:
+            issues.append(f"VAD intervention startup recovery does not requeue {event_id}")
+    startup_cleanup_scopes = [
+        block for block in direct_named_blocks(startup_effect, "VAD") if cleanup in block
+    ]
+    if len(startup_cleanup_scopes) != 1:
+        issues.append(
+            "VAD intervention startup cleanup must enter exactly one explicit VAD country scope"
+        )
+    if cleanup in startup_effect and not startup_cleanup_scopes:
+        issues.append("VAD intervention startup cleanup must not execute from the global startup scope")
+    if cleanup not in on_capitulation or cleanup not in on_peace:
+        issues.append("VAD intervention failure state must unwind on capitulation and peace")
+
+    commit = _unique_block(
+        focus_decisions,
+        "ADISCORD_vorkerland_commit_to_central_showdown",
+        "central-showdown commit decision",
+        issues,
+    )
+    scheduler = _unique_block(
+        focus_effects,
+        "ADISCORD_vorkerland_focus_schedule_final_showdown",
+        "central-showdown scheduler effect",
+        issues,
+    )
+    reservation_gate = (
+        "NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }"
+    )
+    if compact(commit).count(reservation_gate) < 2:
+        issues.append("central-showdown commit must gate the VAD reservation in visible and available")
+    if reservation_gate not in compact(scheduler):
+        issues.append("central-showdown scheduler must gate the VAD reservation")
     settlement = next(
         (
             block
@@ -646,6 +846,8 @@ def validate_vad_intervention_and_restoration() -> list[str]:
         "AND = { tag = CSL",
         "FROM = { tag = VAD NOT = { has_capitulated = yes } }",
         "set_global_flag = skip_default_capitulation",
+        "set_global_flag = ADISCORD_vorkerland_sol_restoration_pending",
+        "clr_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry",
         "annex_country = { target = ROOT transfer_troops = no }",
         "country_event = { id = ADISCORD_vorkerland_diplomacy.4 days = 1 }",
     ):
@@ -660,10 +862,26 @@ def validate_vad_intervention_and_restoration() -> list[str]:
             f"VAD intervention settlement must transfer exactly {list(SOLAR_STATES)}, "
             f"found {sorted(settlement_states)}"
         )
-    restoration_event = event_block(events, "ADISCORD_vorkerland_diplomacy.4")
-    for token in ("is_triggered_only = yes", f"{RESTORE_SOL} = yes"):
-        if token not in restoration_event:
-            issues.append(f"ADISCORD_vorkerland_diplomacy.4 lacks {token}")
+    for event_id, retry_token in (
+        (
+            "ADISCORD_vorkerland_diplomacy.4",
+            "NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry }",
+        ),
+        (
+            "ADISCORD_vorkerland_diplomacy.7",
+            "has_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry",
+        ),
+    ):
+        restoration_event = event_block(events, event_id)
+        for token in (
+            "is_triggered_only = yes",
+            f"{RESTORE_SOL} = yes",
+            "has_global_flag = ADISCORD_vorkerland_sol_restoration_pending",
+            "NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_materialized }",
+            retry_token,
+        ):
+            if token not in restoration_event:
+                issues.append(f"{event_id} lacks bounded materialization token {token}")
 
     restore = _unique_block(effects, RESTORE_SOL, "SOL restoration effect", issues)
     if restore:
@@ -686,6 +904,11 @@ def validate_vad_intervention_and_restoration() -> list[str]:
             "puppet = SOL",
             "set_autonomy = { target = SOL autonomy_state = autonomy_puppet",
             f"NOT = {{ has_global_flag = {SOL_RESTORATION_VERIFIED} }}",
+            "set_global_flag = ADISCORD_vorkerland_sol_restoration_materialized",
+            "set_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry",
+            "country_event = { id = ADISCORD_vorkerland_diplomacy.7 days = 1 }",
+            "set_global_flag = ADISCORD_vorkerland_sol_restoration_failed",
+            f"{CLEAR_FAILED_VAD_INTERVENTION} = yes",
             "country_event = { id = ADISCORD_vorkerland_diplomacy.5 days = 1 }",
         ):
             if token not in restore_compact:
@@ -707,8 +930,13 @@ def validate_vad_intervention_and_restoration() -> list[str]:
             f"NOT = {{ has_country_flag = {SOL_RESTORATION_INITIALIZED} }}",
             f"set_country_flag = {SOL_RESTORATION_INITIALIZED}",
             f"set_global_flag = {SOL_RESTORATION_VERIFIED}",
+            "has_global_flag = ADISCORD_vorkerland_sol_restoration_materialized",
             "set_global_flag = ADISCORD_vorkerland_sol_restoration_retry",
-            "country_event = { id = ADISCORD_vorkerland_diplomacy.5 days = 1 }",
+            "country_event = { id = ADISCORD_vorkerland_diplomacy.8 days = 1 }",
+            "clr_global_flag = ADISCORD_vorkerland_sol_restoration_materialized",
+            "clr_global_flag = ADISCORD_vorkerland_sol_restoration_retry",
+            "set_global_flag = ADISCORD_vorkerland_sol_restoration_failed",
+            f"{CLEAR_FAILED_VAD_INTERVENTION} = yes",
         ):
             if token not in verify_compact:
                 issues.append(f"{VERIFY_SOL} lacks postcondition token {token}")
@@ -725,10 +953,25 @@ def validate_vad_intervention_and_restoration() -> list[str]:
             if forbidden in verify and forbidden != "load_oob":
                 issues.append(f"{VERIFY_SOL} must be postcondition-only; found {forbidden}")
 
-    verify_event = event_block(events, "ADISCORD_vorkerland_diplomacy.5")
-    for token in ("is_triggered_only = yes", f"{VERIFY_SOL} = yes"):
-        if token not in verify_event:
-            issues.append(f"ADISCORD_vorkerland_diplomacy.5 lacks {token}")
+    for event_id, retry_token in (
+        (
+            "ADISCORD_vorkerland_diplomacy.5",
+            "NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_retry }",
+        ),
+        (
+            "ADISCORD_vorkerland_diplomacy.8",
+            "has_global_flag = ADISCORD_vorkerland_sol_restoration_retry",
+        ),
+    ):
+        verify_event = event_block(events, event_id)
+        for token in (
+            "is_triggered_only = yes",
+            f"{VERIFY_SOL} = yes",
+            "has_global_flag = ADISCORD_vorkerland_sol_restoration_materialized",
+            retry_token,
+        ):
+            if token not in verify_event:
+                issues.append(f"{event_id} lacks bounded postcondition token {token}")
     return list(dict.fromkeys(issues))
 
 
@@ -736,6 +979,7 @@ def validate_counter_intervention() -> list[str]:
     issues: list[str] = []
     triggers = _load(DIPLOMACY_TRIGGERS, issues)
     effects = _load(DIPLOMACY_EFFECTS, issues)
+    decisions = _load(DIPLOMACY_DECISIONS, issues)
     phase_events = _load(PHASE_EVENTS, issues)
     _validate_border_trigger(
         triggers,
@@ -746,6 +990,15 @@ def validate_counter_intervention() -> list[str]:
         issues,
     )
     counter = _unique_block(effects, ARM_WKR_COUNTER, "counter-intervention effect", issues)
+    counter_decision = _unique_block(
+        decisions,
+        "ADISCORD_vorkerland_wkr_counter_solar_restoration",
+        "counter-intervention decision",
+        issues,
+    )
+    for token in ("days_remove = 7", "fire_only_once = no", f"remove_effect = {{ {ARM_WKR_COUNTER} = yes }}"):
+        if token not in compact(counter_decision):
+            issues.append(f"public WKR counter-intervention decision lacks retry-safe token {token}")
     if counter:
         counter_compact = compact(counter)
         for token in (
@@ -823,6 +1076,52 @@ def validate_showdown_allies() -> list[str]:
     return list(dict.fromkeys(issues))
 
 
+def validate_vad_egc_route_priority() -> list[str]:
+    issues: list[str] = []
+    decisions = _load(FOCUS_DECISIONS, issues)
+    decision_ids = (
+        "ADISCORD_vorkerland_consolidate_eyr",
+        "ADISCORD_vorkerland_consolidate_egc",
+        "ADISCORD_vorkerland_consolidate_riv",
+        "ADISCORD_vorkerland_consolidate_rev",
+        "ADISCORD_vorkerland_consolidate_yor",
+        "ADISCORD_vorkerland_consolidate_ndn",
+        "ADISCORD_vorkerland_consolidate_swb",
+        "ADISCORD_vorkerland_consolidate_vhv",
+        "ADISCORD_vorkerland_consolidate_osv",
+    )
+    blocks = {
+        decision_id: _unique_block(
+            decisions, decision_id, "central-minor consolidation decision", issues
+        )
+        for decision_id in decision_ids
+    }
+    egc = blocks["ADISCORD_vorkerland_consolidate_egc"]
+    ai = named_block(egc, "ai_will_do")
+    modifier = named_block(ai, "modifier")
+    for token in (
+        "tag = VAD",
+        "has_country_flag = ADISCORD_vorkerland_focus_vad_sol_invitation_intent",
+        "has_country_flag = ADISCORD_vorkerland_focus_vad_solland_liaison_prepared",
+        "has_global_flag = ADISCORD_vorkerland_solar_winner_sra",
+        "has_global_flag = ADISCORD_vorkerland_solar_winner_csl",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_verified }",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_failed }",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_failed }",
+    ):
+        if token not in compact(modifier):
+            issues.append(f"VAD EGC route priority lacks {token}")
+    factor = re.search(r"\bfactor\s*=\s*(\d+)\b", modifier)
+    if not factor or not 2 <= int(factor.group(1)) <= 10:
+        issues.append("VAD EGC route priority modifier must be bounded to factor 2-10")
+
+    marker = "ADISCORD_vorkerland_focus_vad_solland_liaison_prepared"
+    for decision_id, block in blocks.items():
+        if decision_id != "ADISCORD_vorkerland_consolidate_egc" and marker in block:
+            issues.append(f"VAD Solar route priority leaked into unrelated {decision_id}")
+    return list(dict.fromkeys(issues))
+
+
 def validate_core_packages() -> list[str]:
     issues: list[str] = []
     decisions = _load(FOCUS_DECISIONS, issues)
@@ -890,6 +1189,7 @@ def collect_issues() -> list[str]:
         validate_vad_intervention_and_restoration,
         validate_counter_intervention,
         validate_showdown_allies,
+        validate_vad_egc_route_priority,
         validate_core_packages,
     ):
         issues.extend(validator())

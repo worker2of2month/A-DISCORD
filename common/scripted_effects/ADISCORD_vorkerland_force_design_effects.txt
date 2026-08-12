@@ -11,25 +11,64 @@ ADISCORD_vorkerland_deploy_missing_claimant_air_wings = {
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
 			NOT = { has_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed }
-			OR = { tag = WRK tag = VAD tag = TVA }
+			OR = { tag = WKR tag = VAD tag = TVA }
 		}
 		if = {
-			limit = { tag = WRK controls_state = 32 }
+			limit = { tag = WKR controls_state = 32 }
+			add_manpower = 6000
 			add_fuel = 7500
 			load_oob = "WRK_vorkerland_collapse_air"
 			set_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed
+			set_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied
 		}
 		else_if = {
 			limit = { tag = VAD controls_state = 75 }
+			add_manpower = 3000
 			add_fuel = 7500
 			load_oob = "VAD_vorkerland_collapse_air"
 			set_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed
+			set_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied
 		}
 		else_if = {
 			limit = { tag = TVA controls_state = 38 }
+			add_manpower = 3000
 			add_fuel = 7500
 			load_oob = "TVA_vorkerland_collapse_air"
 			set_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed
+			set_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied
+		}
+	}
+}
+
+# Saves created before the aircraft personnel contract was repaired already
+# contain their wings.  Give those wings the missing personnel and fuel once;
+# reloading their OOB here would duplicate every wing in the save.
+ADISCORD_vorkerland_redeploy_air_wings_after_mission_fix = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+			has_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed
+			NOT = { has_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied }
+			OR = { tag = WKR tag = VAD tag = TVA }
+		}
+		if = {
+			limit = { tag = WKR controls_state = 32 }
+			add_manpower = 6000
+			add_fuel = 7500
+			set_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied
+		}
+		else_if = {
+			limit = { tag = VAD controls_state = 75 }
+			add_manpower = 3000
+			add_fuel = 7500
+			set_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied
+		}
+		else_if = {
+			limit = { tag = TVA controls_state = 38 }
+			add_manpower = 3000
+			add_fuel = 7500
+			set_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied
 		}
 	}
 }
@@ -41,12 +80,13 @@ ADISCORD_vorkerland_bootstrap_ai_force_designs = {
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
 			NOT = { has_country_flag = ADISCORD_vorkerland_force_designs_bootstrapped }
-			OR = { tag = WRK tag = VAD tag = TVA }
+			OR = { tag = WKR tag = VAD tag = TVA }
 		}
 		set_country_flag = ADISCORD_vorkerland_force_designs_bootstrapped
 		set_technology = {
 			ADISCORD_tech_semi_autonomous_combat_modules = 1
 			ADISCORD_tech_reclaimed_jet_platforms = 1
+			ADISCORD_tech_battlefield_attack_aircraft = 1
 		}
 		# Old saves still contain the obsolete 2+2 mobile group.  One bounded
 		# delivery lets the AI rebuild it into the current 4+6 armoured group and
@@ -96,6 +136,14 @@ ADISCORD_vorkerland_bootstrap_ai_force_designs = {
 			add_equipment_to_stockpile = {
 				type = ADISCORD_fighter_airframe_2163
 				amount = 12
+				producer = ROOT
+			}
+		}
+		if = {
+			limit = { has_equipment = { ADISCORD_cas_archetype < 6 } }
+			add_equipment_to_stockpile = {
+				type = ADISCORD_cas_airframe_2170
+				amount = 6
 				producer = ROOT
 			}
 		}

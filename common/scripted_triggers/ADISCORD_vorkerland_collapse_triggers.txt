@@ -92,7 +92,7 @@ ADISCORD_vorkerland_osv_defeated = {
 
 ADISCORD_vorkerland_is_central_claimant = {
 	OR = {
-		tag = WRK
+		tag = WKR
 		tag = VAD
 		tag = TVA
 		tag = EYR
@@ -109,7 +109,7 @@ ADISCORD_vorkerland_is_central_claimant = {
 
 ADISCORD_vorkerland_is_main_claimant = {
 	OR = {
-		tag = WRK
+		tag = WKR
 		tag = VAD
 		tag = TVA
 	}
@@ -128,8 +128,8 @@ ADISCORD_vorkerland_is_main_claimant_rival_for_ROOT = {
 	ROOT = { ADISCORD_vorkerland_is_main_claimant = yes }
 	NOT = {
 		OR = {
-			AND = { tag = TVA ROOT = { tag = WRK } }
-			AND = { tag = WRK ROOT = { tag = TVA } }
+			AND = { tag = TVA ROOT = { tag = WKR } }
+			AND = { tag = WKR ROOT = { tag = TVA } }
 		}
 	}
 }
@@ -152,6 +152,109 @@ ADISCORD_vorkerland_is_regional_combatant = {
 		tag = VLA tag = EBA tag = TGD tag = ROM tag = DVA
 		tag = SOL tag = SRA tag = TRU tag = ZTA tag = CSL
 	}
+}
+
+# Every authored regional rivalry must either exist in the diplomatic cache or
+# be terminal because one participant no longer exists, capitulated, or became
+# a subject. This is checked only by the bounded delayed launch verifier.
+ADISCORD_vorkerland_regional_war_graph_active_or_terminal = {
+	OR = { NOT = { country_exists = ZAO } NOT = { country_exists = WPA } ZAO = { has_capitulated = yes } WPA = { has_capitulated = yes } ZAO = { is_subject = yes } WPA = { is_subject = yes } ZAO = { has_war_with = WPA } }
+	OR = { NOT = { country_exists = ZAO } NOT = { country_exists = WPS } ZAO = { has_capitulated = yes } WPS = { has_capitulated = yes } ZAO = { is_subject = yes } WPS = { is_subject = yes } ZAO = { has_war_with = WPS } }
+	OR = { NOT = { country_exists = ZAO } NOT = { country_exists = PSD } ZAO = { has_capitulated = yes } PSD = { has_capitulated = yes } ZAO = { is_subject = yes } PSD = { is_subject = yes } ZAO = { has_war_with = PSD } }
+	OR = { NOT = { country_exists = ZAO } NOT = { country_exists = PWR } ZAO = { has_capitulated = yes } PWR = { has_capitulated = yes } ZAO = { is_subject = yes } PWR = { is_subject = yes } ZAO = { has_war_with = PWR } }
+	OR = { NOT = { country_exists = WPA } NOT = { country_exists = PSD } WPA = { has_capitulated = yes } PSD = { has_capitulated = yes } WPA = { is_subject = yes } PSD = { is_subject = yes } WPA = { has_war_with = PSD } }
+	OR = { NOT = { country_exists = WPA } NOT = { country_exists = PWR } WPA = { has_capitulated = yes } PWR = { has_capitulated = yes } WPA = { is_subject = yes } PWR = { is_subject = yes } WPA = { has_war_with = PWR } }
+	OR = { NOT = { country_exists = WPS } NOT = { country_exists = PSD } WPS = { has_capitulated = yes } PSD = { has_capitulated = yes } WPS = { is_subject = yes } PSD = { is_subject = yes } WPS = { has_war_with = PSD } }
+	OR = { NOT = { country_exists = WPS } NOT = { country_exists = PWR } WPS = { has_capitulated = yes } PWR = { has_capitulated = yes } WPS = { is_subject = yes } PWR = { is_subject = yes } WPS = { has_war_with = PWR } }
+	OR = { NOT = { country_exists = PWR } NOT = { country_exists = PSD } PWR = { has_capitulated = yes } PSD = { has_capitulated = yes } PWR = { is_subject = yes } PSD = { is_subject = yes } PWR = { has_war_with = PSD } }
+	OR = { NOT = { country_exists = VLA } NOT = { country_exists = EBA } VLA = { has_capitulated = yes } EBA = { has_capitulated = yes } VLA = { is_subject = yes } EBA = { is_subject = yes } VLA = { has_war_with = EBA } }
+	OR = { NOT = { country_exists = VLA } NOT = { country_exists = TGD } VLA = { has_capitulated = yes } TGD = { has_capitulated = yes } VLA = { is_subject = yes } TGD = { is_subject = yes } VLA = { has_war_with = TGD } }
+	OR = { NOT = { country_exists = TGD } NOT = { country_exists = EBA } TGD = { has_capitulated = yes } EBA = { has_capitulated = yes } TGD = { is_subject = yes } EBA = { is_subject = yes } TGD = { has_war_with = EBA } }
+	OR = { NOT = { country_exists = SOL } NOT = { country_exists = SRA } SOL = { has_capitulated = yes } SRA = { has_capitulated = yes } SOL = { is_subject = yes } SRA = { is_subject = yes } SOL = { has_war_with = SRA } }
+	OR = { NOT = { country_exists = SOL } NOT = { country_exists = CSL } SOL = { has_capitulated = yes } CSL = { has_capitulated = yes } SOL = { is_subject = yes } CSL = { is_subject = yes } SOL = { has_war_with = CSL } }
+	OR = { NOT = { country_exists = SRA } NOT = { country_exists = CSL } SRA = { has_capitulated = yes } CSL = { has_capitulated = yes } SRA = { is_subject = yes } CSL = { is_subject = yes } SRA = { has_war_with = CSL } }
+	OR = { NOT = { country_exists = ROM } NOT = { country_exists = DVA } ROM = { has_capitulated = yes } DVA = { has_capitulated = yes } ROM = { is_subject = yes } DVA = { is_subject = yes } ROM = { has_war_with = DVA } }
+	OR = { NOT = { country_exists = TRU } NOT = { country_exists = ZTA } TRU = { has_capitulated = yes } ZTA = { has_capitulated = yes } TRU = { is_subject = yes } ZTA = { is_subject = yes } TRU = { has_war_with = ZTA } }
+}
+
+ADISCORD_vorkerland_rom_dva_edge_initialized_or_terminal = {
+	OR = {
+		NOT = { country_exists = ROM }
+		ROM = { has_capitulated = yes }
+		ROM = { is_subject = yes }
+		ROM = { has_country_flag = ADISCORD_vorkerland_rom_war_content_initialized }
+	}
+}
+
+# The foreign northern operation follows, rather than overlaps, ROM's local
+# DVA campaign. Active war is deliberately not terminal here.
+ADISCORD_vorkerland_rom_dva_edge_terminal = {
+	OR = {
+		NOT = { country_exists = DVA }
+		DVA = { has_capitulated = yes }
+		DVA = { is_subject = yes }
+	}
+}
+
+ADISCORD_vorkerland_rom_northern_intervention_start_ready = {
+	tag = ROM
+	has_global_flag = ADISCORD_vorkerland_northern_wars_began
+	has_country_flag = ADISCORD_vorkerland_rom_war_content_initialized
+	ADISCORD_vorkerland_rom_dva_edge_terminal = yes
+}
+
+# Unlike the restore graph, intervention readiness needs a real surviving war.
+# A terminal northern map cannot be used to justify a late foreign invasion.
+ADISCORD_vorkerland_northern_live_war_edge = {
+	OR = {
+		ZAO = { has_war_with = WPA }
+		ZAO = { has_war_with = WPS }
+		ZAO = { has_war_with = PSD }
+		ZAO = { has_war_with = PWR }
+		WPA = { has_war_with = PSD }
+		WPA = { has_war_with = PWR }
+		WPS = { has_war_with = PSD }
+		WPS = { has_war_with = PWR }
+		PWR = { has_war_with = PSD }
+	}
+}
+
+ADISCORD_ivanland_intervention_start_ready = {
+	tag = IVN
+	has_global_flag = ADISCORD_vorkerland_ivanland_planning_unlocked_v4
+	NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }
+	NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active }
+	is_subject = no
+	NOT = { has_capitulated = yes }
+	has_war = no
+	num_divisions > 13
+	has_manpower > 10000
+	has_stability > 0.20
+	has_war_support > 0.35
+	PWR = {
+		exists = yes
+		is_subject = no
+		NOT = { has_capitulated = yes }
+		NOT = { has_war_with = ROOT }
+	}
+	ADISCORD_vorkerland_northern_live_war_edge = yes
+}
+
+# The expedition is viable only when its target war exists and the current
+# controller of every settlement state is either Ivanland or a participant in
+# that same war. This remains correct when the 120-day preparation lets another
+# northern republic annex PSD and inherit states 93-94.
+ADISCORD_vorkerland_ivanland_intervention_front_verified = {
+	tag = IVN
+	has_war_with = PWR
+	OR = { NOT = { country_exists = ZAO } ZAO = { is_subject = yes } ZAO = { has_capitulated = yes } ZAO = { has_war_with = IVN } }
+	OR = { NOT = { country_exists = WPA } WPA = { is_subject = yes } WPA = { has_capitulated = yes } WPA = { has_war_with = IVN } }
+	OR = { NOT = { country_exists = WPS } WPS = { is_subject = yes } WPS = { has_capitulated = yes } WPS = { has_war_with = IVN } }
+	OR = { NOT = { country_exists = PSD } PSD = { is_subject = yes } PSD = { has_capitulated = yes } PSD = { has_war_with = IVN } }
+	90 = { controller = { OR = { tag = IVN has_war_with = IVN } } }
+	91 = { controller = { OR = { tag = IVN has_war_with = IVN } } }
+	93 = { controller = { OR = { tag = IVN has_war_with = IVN } } }
+	94 = { controller = { OR = { tag = IVN has_war_with = IVN } } }
 }
 
 # TFR's American civil war gives even small factions a field OOB and a bounded

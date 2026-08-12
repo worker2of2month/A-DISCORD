@@ -4,7 +4,7 @@
 ADISCORD_vorkerland_collapse_war_economy = {
 	allowed = {
 		OR = {
-			tag = WRK tag = VAD tag = TVA tag = TGD tag = EYR tag = EGC
+			tag = WKR tag = VAD tag = TVA tag = TGD tag = EYR tag = EGC
 			tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV
 			tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD
 			tag = VLA tag = EBA tag = ROM tag = DVA
@@ -24,64 +24,55 @@ ADISCORD_vorkerland_collapse_war_economy = {
 	ai_strategy = { type = force_concentration_factor value = 35 }
 }
 
-# During the 45-day Worker-Doctor mobilisation both AIs treat the common border
-# as their highest-priority front, but neither receives an order to attack
-# before the decision timer expires.
-ADISCORD_vorkerland_prepare_wrk_front_against_tva = {
-	allowed = { tag = WRK }
-	enable = {
-		has_global_flag = ADISCORD_vorkerland_worker_doctor_front_preparation
-		country_exists = TVA
-		TVA = { is_subject = no NOT = { has_capitulated = yes } }
-		NOT = { has_war_with = TVA }
-	}
-	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = TVA value = 100 }
-	ai_strategy = { type = front_control tag = TVA ratio = 1.00 priority = 1500 ordertype = front execution_type = careful execute_order = no manual_attack = no }
-}
-
-ADISCORD_vorkerland_prepare_tva_front_against_wrk = {
-	allowed = { tag = TVA }
-	enable = {
-		has_global_flag = ADISCORD_vorkerland_worker_doctor_front_preparation
-		country_exists = WRK
-		WRK = { is_subject = no NOT = { has_capitulated = yes } }
-		NOT = { has_war_with = WRK }
-	}
-	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = WRK value = 100 }
-	ai_strategy = { type = front_control tag = WRK ratio = 1.00 priority = 1500 ordertype = front execution_type = careful execute_order = no manual_attack = no }
-}
-
 # Central wars are selected dynamically from live borders. These profiles keep
 # the AI committed to the war it actually entered without forcing supply-blind
 # manual attacks.
 ADISCORD_vorkerland_front_central_against_wrk = {
-	allowed = { OR = { tag = VAD tag = TVA tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV } }
-	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = WRK has_war_with = WRK }
+	allowed = { OR = { tag = VAD tag = TVA tag = WTD tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV } }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = WKR has_war_with = WKR }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = WRK value = 100 }
-	ai_strategy = { type = front_control tag = WRK ratio = 1.00 priority = 1250 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = WKR value = 100 }
+	ai_strategy = { type = front_control tag = WKR ratio = 1.00 priority = 1250 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_central_against_vad = {
-	allowed = { OR = { tag = WRK tag = TVA tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV } }
+	allowed = { OR = { tag = WKR tag = TVA tag = WTD tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV } }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = VAD has_war_with = VAD }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = VAD value = 100 }
-	ai_strategy = { type = front_control tag = VAD ratio = 1.00 priority = 1250 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = VAD value = 65 }
+	ai_strategy = { type = front_control tag = VAD ratio = 0.65 priority = 1250 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = conquer id = VAD value = 200 }
 }
 
 ADISCORD_vorkerland_front_central_against_tva = {
-	allowed = { OR = { tag = WRK tag = VAD tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV } }
+	allowed = { OR = { tag = WKR tag = VAD tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV } }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = TVA has_war_with = TVA }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = TVA value = 100 }
-	ai_strategy = { type = front_control tag = TVA ratio = 1.00 priority = 1250 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_control tag = TVA ratio = 1.00 priority = 1250 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+}
+
+# The first Ivanland operation now has explicit operational ownership. The
+# invader attacks decisively; the five northern republics keep a careful defense.
+ADISCORD_vorkerland_ivanland_front_against_pwr = {
+	allowed = { tag = IVN }
+	enable = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active country_exists = PWR has_war_with = PWR }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = PWR value = 100 }
+	ai_strategy = { type = front_control tag = PWR ratio = 1.00 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = conquer id = PWR value = 250 }
+}
+
+ADISCORD_vorkerland_northern_defense_against_ivanland = {
+	allowed = { OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD } }
+	enable = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active country_exists = IVN has_war_with = IVN }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = IVN value = 100 }
+	ai_strategy = { type = front_control tag = IVN ratio = 1.00 priority = 1250 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 
 ADISCORD_vorkerland_front_central_against_eyr = {
-	allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = EYR has_war_with = EYR }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = EYR value = 100 }
@@ -89,7 +80,7 @@ ADISCORD_vorkerland_front_central_against_eyr = {
 }
 
 ADISCORD_vorkerland_front_central_against_egc = {
-	allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = EGC has_war_with = EGC }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = EGC value = 100 }
@@ -97,7 +88,7 @@ ADISCORD_vorkerland_front_central_against_egc = {
 }
 
 ADISCORD_vorkerland_front_central_against_riv = {
-	allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = RIV has_war_with = RIV }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = RIV value = 100 }
@@ -105,7 +96,7 @@ ADISCORD_vorkerland_front_central_against_riv = {
 }
 
 ADISCORD_vorkerland_front_central_against_rev = {
-	allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = REV has_war_with = REV }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = REV value = 100 }
@@ -113,7 +104,7 @@ ADISCORD_vorkerland_front_central_against_rev = {
 }
 
 ADISCORD_vorkerland_front_central_against_yor = {
-	allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = YOR has_war_with = YOR }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = YOR value = 100 }
@@ -121,7 +112,7 @@ ADISCORD_vorkerland_front_central_against_yor = {
 }
 
 ADISCORD_vorkerland_front_central_against_ndn = {
-	allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = NDN has_war_with = NDN }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = NDN value = 100 }
@@ -129,7 +120,7 @@ ADISCORD_vorkerland_front_central_against_ndn = {
 }
 
 ADISCORD_vorkerland_front_central_against_swb = {
-	allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = SWB has_war_with = SWB }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SWB value = 100 }
@@ -137,7 +128,7 @@ ADISCORD_vorkerland_front_central_against_swb = {
 }
 
 ADISCORD_vorkerland_front_central_against_vhv = {
-	allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = VHV has_war_with = VHV }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = VHV value = 100 }
@@ -145,7 +136,7 @@ ADISCORD_vorkerland_front_central_against_vhv = {
 }
 
 ADISCORD_vorkerland_front_central_against_osv = {
-	allowed = { OR = { tag = WRK tag = VAD tag = TVA } }
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = OSV has_war_with = OSV }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = OSV value = 100 }
@@ -157,115 +148,206 @@ ADISCORD_vorkerland_front_central_against_osv = {
 # the same army to every possible successor at once.
 ADISCORD_vorkerland_front_zao_wpa = {
 	allowed = { tag = ZAO }
-	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = WPA has_war_with = WPA }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = WPA has_war_with = WPA NOT = { OR = { has_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2 has_global_flag = ADISCORD_vorkerland_northern_escalation_zao_wpa } } }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = WPA value = 80 }
-	ai_strategy = { type = front_control tag = WPA ratio = 1.00 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = WPA value = 25 }
+	ai_strategy = { type = front_control tag = WPA ratio = 0.25 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 ADISCORD_vorkerland_front_wpa_zao = {
 	allowed = { tag = WPA }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = ZAO has_war_with = ZAO }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = ZAO value = 80 }
-	ai_strategy = { type = front_control tag = ZAO ratio = 1.00 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = ZAO value = 33 }
+	ai_strategy = { type = front_control tag = ZAO ratio = 0.33 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 ADISCORD_vorkerland_front_wps_zao = {
 	allowed = { tag = WPS }
-	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = ZAO has_war_with = ZAO }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = ZAO has_war_with = ZAO NOT = { OR = { has_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2 has_global_flag = ADISCORD_vorkerland_northern_escalation_wps_zao } } }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = ZAO value = 80 }
-	ai_strategy = { type = front_control tag = ZAO ratio = 1.00 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = ZAO value = 33 }
+	ai_strategy = { type = front_control tag = ZAO ratio = 0.33 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 ADISCORD_vorkerland_front_zao_wps = {
 	allowed = { tag = ZAO }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = WPS has_war_with = WPS }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = WPS value = 80 }
-	ai_strategy = { type = front_control tag = WPS ratio = 1.00 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = WPS value = 25 }
+	ai_strategy = { type = front_control tag = WPS ratio = 0.25 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 ADISCORD_vorkerland_front_zao_psd = {
 	allowed = { tag = ZAO }
-	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = PSD has_war_with = PSD }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = PSD has_war_with = PSD NOT = { OR = { has_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2 has_global_flag = ADISCORD_vorkerland_northern_escalation_zao_psd } } }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = PSD value = 80 }
-	ai_strategy = { type = front_control tag = PSD ratio = 1.00 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = PSD value = 25 }
+	ai_strategy = { type = front_control tag = PSD ratio = 0.25 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 ADISCORD_vorkerland_front_psd_zao = {
 	allowed = { tag = PSD }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = ZAO has_war_with = ZAO }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = ZAO value = 80 }
-	ai_strategy = { type = front_control tag = ZAO ratio = 1.00 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = ZAO value = 25 }
+	ai_strategy = { type = front_control tag = ZAO ratio = 0.25 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 ADISCORD_vorkerland_front_zao_pwr = {
 	allowed = { tag = ZAO }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = PWR has_war_with = PWR }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = PWR value = 80 }
-	ai_strategy = { type = front_control tag = PWR ratio = 1.00 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = PWR value = 25 }
+	ai_strategy = { type = front_control tag = PWR ratio = 0.25 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 ADISCORD_vorkerland_front_pwr_zao = {
 	allowed = { tag = PWR }
-	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = ZAO has_war_with = ZAO }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = ZAO has_war_with = ZAO NOT = { OR = { has_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2 has_global_flag = ADISCORD_vorkerland_northern_escalation_pwr_zao } } }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = ZAO value = 80 }
-	ai_strategy = { type = front_control tag = ZAO ratio = 1.00 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = ZAO value = 25 }
+	ai_strategy = { type = front_control tag = ZAO ratio = 0.25 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 ADISCORD_vorkerland_front_wpa_psd = {
 	allowed = { tag = WPA }
-	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = PSD has_war_with = PSD }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = PSD has_war_with = PSD NOT = { OR = { has_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2 has_global_flag = ADISCORD_vorkerland_northern_escalation_wpa_psd } } }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = PSD value = 80 }
-	ai_strategy = { type = front_control tag = PSD ratio = 1.00 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = PSD value = 33 }
+	ai_strategy = { type = front_control tag = PSD ratio = 0.33 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 ADISCORD_vorkerland_front_psd_wpa = {
 	allowed = { tag = PSD }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = WPA has_war_with = WPA }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = WPA value = 80 }
-	ai_strategy = { type = front_control tag = WPA ratio = 1.00 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = WPA value = 25 }
+	ai_strategy = { type = front_control tag = WPA ratio = 0.25 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 ADISCORD_vorkerland_front_wpa_pwr = {
 	allowed = { tag = WPA }
-	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = PWR has_war_with = PWR }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = PWR has_war_with = PWR NOT = { OR = { has_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2 has_global_flag = ADISCORD_vorkerland_northern_escalation_wpa_pwr } } }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = PWR value = 80 }
-	ai_strategy = { type = front_control tag = PWR ratio = 1.00 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = PWR value = 33 }
+	ai_strategy = { type = front_control tag = PWR ratio = 0.33 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 ADISCORD_vorkerland_front_pwr_wpa = {
 	allowed = { tag = PWR }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = WPA has_war_with = WPA }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = WPA value = 80 }
-	ai_strategy = { type = front_control tag = WPA ratio = 1.00 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = WPA value = 25 }
+	ai_strategy = { type = front_control tag = WPA ratio = 0.25 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 ADISCORD_vorkerland_front_wps_psd = {
 	allowed = { tag = WPS }
-	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = PSD has_war_with = PSD }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = PSD has_war_with = PSD NOT = { OR = { has_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2 has_global_flag = ADISCORD_vorkerland_northern_escalation_wps_psd } } }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = PSD value = 80 }
-	ai_strategy = { type = front_control tag = PSD ratio = 1.00 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = PSD value = 33 }
+	ai_strategy = { type = front_control tag = PSD ratio = 0.33 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 ADISCORD_vorkerland_front_psd_wps = {
 	allowed = { tag = PSD }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = WPS has_war_with = WPS }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = WPS value = 80 }
-	ai_strategy = { type = front_control tag = WPS ratio = 1.00 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = WPS value = 25 }
+	ai_strategy = { type = front_control tag = WPS ratio = 0.25 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 ADISCORD_vorkerland_front_wps_pwr = {
 	allowed = { tag = WPS }
-	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = PWR has_war_with = PWR }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = PWR has_war_with = PWR NOT = { OR = { has_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2 has_global_flag = ADISCORD_vorkerland_northern_escalation_wps_pwr } } }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = PWR value = 80 }
-	ai_strategy = { type = front_control tag = PWR ratio = 1.00 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = PWR value = 33 }
+	ai_strategy = { type = front_control tag = PWR ratio = 0.33 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 ADISCORD_vorkerland_front_pwr_wps = {
 	allowed = { tag = PWR }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = WPS has_war_with = WPS }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = WPS value = 80 }
-	ai_strategy = { type = front_control tag = WPS ratio = 1.00 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = WPS value = 25 }
+	ai_strategy = { type = front_control tag = WPS ratio = 0.25 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+}
+ADISCORD_vorkerland_front_pwr_psd = {
+	allowed = { tag = PWR }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = PSD has_war_with = PSD NOT = { OR = { has_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2 has_global_flag = ADISCORD_vorkerland_northern_escalation_pwr_psd } } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = PSD value = 25 }
+	ai_strategy = { type = front_control tag = PSD ratio = 0.25 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+}
+ADISCORD_vorkerland_front_psd_pwr = {
+	allowed = { tag = PSD }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = PWR has_war_with = PWR }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = PWR value = 25 }
+	ai_strategy = { type = front_control tag = PWR ratio = 0.25 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+}
+
+# Day-730 selects one verified canonical front and renews the operational-
+# initiative idea on its attacker. Day-1095 opens the same consumers on every
+# canonical front that still exists. Each block replaces, rather than stacks
+# with, its bounded careful profile above.
+ADISCORD_vorkerland_escalation_zao_wpa = {
+	allowed = { tag = ZAO }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = WPA has_war_with = WPA OR = { AND = { has_global_flag = ADISCORD_vorkerland_northern_escalation_zao_wpa has_idea = ADISCORD_vorkerland_northern_operational_initiative } has_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2 } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = WPA value = 25 }
+	ai_strategy = { type = front_control tag = WPA ratio = 0.25 priority = 1600 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = conquer id = WPA value = 200 }
+}
+ADISCORD_vorkerland_escalation_wps_zao = {
+	allowed = { tag = WPS }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = ZAO has_war_with = ZAO OR = { AND = { has_global_flag = ADISCORD_vorkerland_northern_escalation_wps_zao has_idea = ADISCORD_vorkerland_northern_operational_initiative } has_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2 } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = ZAO value = 33 }
+	ai_strategy = { type = front_control tag = ZAO ratio = 0.33 priority = 1600 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = conquer id = ZAO value = 200 }
+}
+ADISCORD_vorkerland_escalation_zao_psd = {
+	allowed = { tag = ZAO }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = PSD has_war_with = PSD OR = { AND = { has_global_flag = ADISCORD_vorkerland_northern_escalation_zao_psd has_idea = ADISCORD_vorkerland_northern_operational_initiative } has_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2 } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = PSD value = 25 }
+	ai_strategy = { type = front_control tag = PSD ratio = 0.25 priority = 1600 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = conquer id = PSD value = 200 }
+}
+ADISCORD_vorkerland_escalation_pwr_zao = {
+	allowed = { tag = PWR }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = ZAO has_war_with = ZAO OR = { AND = { has_global_flag = ADISCORD_vorkerland_northern_escalation_pwr_zao has_idea = ADISCORD_vorkerland_northern_operational_initiative } has_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2 } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = ZAO value = 25 }
+	ai_strategy = { type = front_control tag = ZAO ratio = 0.25 priority = 1600 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = conquer id = ZAO value = 200 }
+}
+ADISCORD_vorkerland_escalation_wpa_psd = {
+	allowed = { tag = WPA }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = PSD has_war_with = PSD OR = { AND = { has_global_flag = ADISCORD_vorkerland_northern_escalation_wpa_psd has_idea = ADISCORD_vorkerland_northern_operational_initiative } has_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2 } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = PSD value = 33 }
+	ai_strategy = { type = front_control tag = PSD ratio = 0.33 priority = 1600 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = conquer id = PSD value = 200 }
+}
+ADISCORD_vorkerland_escalation_wpa_pwr = {
+	allowed = { tag = WPA }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = PWR has_war_with = PWR OR = { AND = { has_global_flag = ADISCORD_vorkerland_northern_escalation_wpa_pwr has_idea = ADISCORD_vorkerland_northern_operational_initiative } has_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2 } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = PWR value = 33 }
+	ai_strategy = { type = front_control tag = PWR ratio = 0.33 priority = 1600 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = conquer id = PWR value = 200 }
+}
+ADISCORD_vorkerland_escalation_wps_psd = {
+	allowed = { tag = WPS }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = PSD has_war_with = PSD OR = { AND = { has_global_flag = ADISCORD_vorkerland_northern_escalation_wps_psd has_idea = ADISCORD_vorkerland_northern_operational_initiative } has_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2 } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = PSD value = 33 }
+	ai_strategy = { type = front_control tag = PSD ratio = 0.33 priority = 1600 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = conquer id = PSD value = 200 }
+}
+ADISCORD_vorkerland_escalation_wps_pwr = {
+	allowed = { tag = WPS }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = PWR has_war_with = PWR OR = { AND = { has_global_flag = ADISCORD_vorkerland_northern_escalation_wps_pwr has_idea = ADISCORD_vorkerland_northern_operational_initiative } has_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2 } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = PWR value = 33 }
+	ai_strategy = { type = front_control tag = PWR ratio = 0.33 priority = 1600 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = conquer id = PWR value = 200 }
+}
+ADISCORD_vorkerland_escalation_pwr_psd = {
+	allowed = { tag = PWR }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = PSD has_war_with = PSD OR = { AND = { has_global_flag = ADISCORD_vorkerland_northern_escalation_pwr_psd has_idea = ADISCORD_vorkerland_northern_operational_initiative } has_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2 } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = PSD value = 25 }
+	ai_strategy = { type = front_control tag = PSD ratio = 0.25 priority = 1600 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = conquer id = PSD value = 200 }
 }
 ADISCORD_vorkerland_front_vla_eba = {
 	allowed = { tag = VLA }
@@ -352,6 +434,64 @@ ADISCORD_vorkerland_wps_defend_rom_intervention = {
 	ai_strategy = { type = front_unit_request tag = ROM value = 80 }
 	ai_strategy = { type = front_control tag = ROM ratio = 1.00 priority = 1250 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
+
+# VAD commits its mobile command only to the one Solar restoration target that
+# the bounded intervention actually opened. The profiles disappear with the
+# live war or its target flag, so they cannot leak into the regional war graph.
+ADISCORD_vorkerland_vad_solar_intervention_front_sra = {
+	allowed = { tag = VAD }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+		has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_sra
+		country_exists = SRA
+		has_war_with = SRA
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = SRA value = 100 }
+	ai_strategy = { type = front_control tag = SRA ratio = 1.00 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = conquer id = SRA value = 250 }
+}
+
+ADISCORD_vorkerland_sra_defend_vad_intervention = {
+	allowed = { tag = SRA }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+		has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_sra
+		country_exists = VAD
+		has_war_with = VAD
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = VAD value = 100 }
+	ai_strategy = { type = front_control tag = VAD ratio = 1.00 priority = 1400 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+}
+
+ADISCORD_vorkerland_vad_solar_intervention_front_csl = {
+	allowed = { tag = VAD }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+		has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_csl
+		country_exists = CSL
+		has_war_with = CSL
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = CSL value = 100 }
+	ai_strategy = { type = front_control tag = CSL ratio = 1.00 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = conquer id = CSL value = 250 }
+}
+
+ADISCORD_vorkerland_csl_defend_vad_intervention = {
+	allowed = { tag = CSL }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+		has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_csl
+		country_exists = VAD
+		has_war_with = VAD
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = VAD value = 100 }
+	ai_strategy = { type = front_control tag = VAD ratio = 1.00 priority = 1400 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+}
+
 ADISCORD_vorkerland_front_sol_sra = {
 	allowed = { tag = SOL }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = SRA has_war_with = SRA }
@@ -409,31 +549,51 @@ ADISCORD_vorkerland_front_zta_tru = {
 	ai_strategy = { type = front_control tag = TRU ratio = 1.00 priority = 1000 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 
-# WRK's Volnograd dependency is an auxiliary combatant, not a neutral home
-# guard. These profiles become active only after the special puppet is created.
+# A sovereign Volnograd ally follows WKR into the verified shared showdown.
 ADISCORD_vorkerland_vla_auxiliary_front_vad = {
 	allowed = { tag = VLA }
-	enable = { is_subject_of = WRK country_exists = VAD has_war_with = VAD }
+	enable = { has_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_accepted country_exists = VAD has_war_with = VAD }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = VAD value = 100 }
 	ai_strategy = { type = front_control tag = VAD ratio = 1.00 priority = 1250 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 ADISCORD_vorkerland_vla_auxiliary_front_tva = {
 	allowed = { tag = VLA }
-	enable = { is_subject_of = WRK country_exists = TVA has_war_with = TVA }
+	enable = { has_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_accepted country_exists = TVA has_war_with = TVA }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = TVA value = 100 }
 	ai_strategy = { type = front_control tag = TVA ratio = 1.00 priority = 1250 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
-# A victorious SOL remains independent but fights the enemy named in its pact
-# with Vlad instead of guarding the empty southern frontier.
+# Victorious or restored SOL fights only inside VAD's verified shared wars.
 ADISCORD_vorkerland_sol_allied_front_wrk = {
 	allowed = { tag = SOL }
-	enable = { has_country_flag = ADISCORD_vorkerland_independence_recognized_by_vad country_exists = WRK has_war_with = WRK }
+	enable = {
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted
+			has_global_flag = ADISCORD_vorkerland_sol_restoration_verified
+		}
+		country_exists = WKR
+		has_war_with = WKR
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = WRK value = 100 }
-	ai_strategy = { type = front_control tag = WRK ratio = 1.00 priority = 1250 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = WKR value = 100 }
+	ai_strategy = { type = front_control tag = WKR ratio = 1.00 priority = 1250 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
+}
+
+ADISCORD_vorkerland_sol_allied_front_tva = {
+	allowed = { tag = SOL }
+	enable = {
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted
+			has_global_flag = ADISCORD_vorkerland_sol_restoration_verified
+		}
+		country_exists = TVA
+		has_war_with = TVA
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = TVA value = 100 }
+	ai_strategy = { type = front_control tag = TVA ratio = 1.00 priority = 1250 ordertype = front execution_type = rush execute_order = yes manual_attack = no }
 }
 
 # Ivanland's second intervention uses separate wars against the two northern
@@ -467,9 +627,9 @@ ADISCORD_vorkerland_ivn_second_front_pwr = {
 # The chosen BTL contract now has an executable volunteer target.
 ADISCORD_vorkerland_btl_volunteers_wrk = {
 	allowed = { tag = BTL }
-	enable = { has_global_flag = ADISCORD_vorkerland_btl_supports_wrk country_exists = WRK WRK = { has_war = yes NOT = { has_capitulated = yes } } }
+	enable = { has_global_flag = ADISCORD_vorkerland_btl_supports_wrk country_exists = WKR WKR = { has_war = yes NOT = { has_capitulated = yes } } }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = send_volunteers_desire id = WRK value = 2000 }
+	ai_strategy = { type = send_volunteers_desire id = WKR value = 2000 }
 }
 ADISCORD_vorkerland_btl_volunteers_vad = {
 	allowed = { tag = BTL }

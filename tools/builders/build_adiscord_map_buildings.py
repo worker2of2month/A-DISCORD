@@ -37,9 +37,10 @@ REQUIRED_STATE_SPAWN_COUNTS = {
     "synthetic_refinery": 1,
 }
 
-# The deliberate NAM mainland split assigns the original state 67 positions to
-# their physical provinces. Both resulting states still need the complete set
+# The deliberate resource-war split assigns the original state positions to
+# their physical provinces. Every resulting state still needs the complete set
 # of 1.19 spawn anchors even when a building is not present at game start.
+NAM_RESOURCE_WAR_SPAWN_STATES = {67, 68, 69, 70, 688, 689, 690, 691, 692}
 NAM_SPLIT_SPAWN_POSITION_CANDIDATES = {
     (67, "air_base"): (
         "67;air_base;3701.00;10.25;548.00;0.66;0",
@@ -210,7 +211,7 @@ def synchronize_buildings(root: Path = ROOT, *, apply: bool = False) -> list[Bui
 
 
 def ensure_nam_split_spawn_positions(root: Path = ROOT) -> int:
-    """Add only spawn anchors lost when states 688/689 were carved from 67."""
+    """Restore construction anchors across the split resource-war theatre."""
     path = root / "map" / "buildings.txt"
     lines = path.read_text(encoding="utf-8-sig", errors="strict").splitlines()
     counts: dict[tuple[int, str], int] = {}
@@ -221,19 +222,30 @@ def ensure_nam_split_spawn_positions(root: Path = ROOT) -> int:
             counts[key] = counts.get(key, 0) + 1
 
     added = 0
-    for key, candidates in NAM_SPLIT_SPAWN_POSITION_CANDIDATES.items():
-        minimum = REQUIRED_STATE_SPAWN_COUNTS[key[1]]
-        for candidate in candidates:
-            if counts.get(key, 0) >= minimum:
-                break
-            if candidate not in lines:
-                lines.append(candidate)
+    state_by_province = load_state_by_province(root)
+    positions = load_unitstack_positions(root)
+    provinces_by_state: dict[int, list[int]] = {}
+    for province_id, state_id in state_by_province.items():
+        if state_id in NAM_RESOURCE_WAR_SPAWN_STATES and province_id in positions:
+            provinces_by_state.setdefault(state_id, []).append(province_id)
+
+    for state_id in sorted(NAM_RESOURCE_WAR_SPAWN_STATES):
+        candidates = sorted(provinces_by_state.get(state_id, ()))
+        if not candidates:
+            raise RuntimeError(f"state {state_id} has no unitstack position for spawn repair")
+        cursor = 0
+        for building_type, minimum in REQUIRED_STATE_SPAWN_COUNTS.items():
+            key = (state_id, building_type)
+            while counts.get(key, 0) < minimum:
+                province_id = candidates[cursor % len(candidates)]
+                cursor += 1
+                x, height, z = positions[province_id]
+                rotation = ((state_id * 37 + cursor * 53) % 628) / 100.0
+                line = f"{state_id};{building_type};{x};{height};{z};{rotation:.2f};0"
+                if line not in lines:
+                    lines.append(line)
+                    added += 1
                 counts[key] = counts.get(key, 0) + 1
-                added += 1
-        if counts.get(key, 0) < minimum:
-            raise RuntimeError(
-                f"state {key[0]} still lacks {key[1]} spawn positions after NAM split repair"
-            )
 
     if added:
         path.write_bytes("\r\n".join(lines).encode("utf-8"))

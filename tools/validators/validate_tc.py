@@ -544,6 +544,20 @@ def check_gfx_entity_ownership(limit):
         issues.append(
             f'{rel(terrain_path)} is missing sprite GFX_terrain_contaminated for the custom terrain'
         )
+    if not re.search(
+        r'\bname\s*=\s*"GFX_terrain_contaminated_winter"'
+        r'(?:(?!\n\s*spriteType\s*=).)*?'
+        r'\btextureFile\s*=\s*"gfx/interface/terrains/terrain_contaminated_winter\.dds"',
+        terrain,
+        re.DOTALL,
+    ):
+        issues.append(
+            f'{rel(terrain_path)} is missing winter sprite GFX_terrain_contaminated_winter '
+            'for the custom terrain'
+        )
+    winter_terrain_texture = ROOT / "gfx" / "interface" / "terrains" / "terrain_contaminated_winter.dds"
+    if not winter_terrain_texture.is_file():
+        issues.append(f'{rel(winter_terrain_texture)} is missing winter contaminated terrain texture')
 
     music_station = ROOT / "music" / "one_minute.txt"
     music_gui_path = ROOT / "interface" / "ADISCORD_musicplayer_compat.gui"
@@ -768,10 +782,12 @@ def check_ncns_and_campaign_compatibility(limit):
 
     template_path = ROOT / "common" / "factions" / "templates" / "ADISCORD_faction_templates.txt"
     manifest_path = ROOT / "common" / "factions" / "goals" / "ADISCORD_faction_manifests.txt"
+    goals_path = ROOT / "common" / "factions" / "goals" / "ADISCORD_faction_goals.txt"
     leadership_rule_path = ROOT / "common" / "factions" / "rules" / "ADISCORD_change_leader_rules.txt"
     rule_group_path = ROOT / "common" / "factions" / "rules" / "groups" / "ADISCORD_rule_groups.txt"
     template_text = strip_comments(read_text(template_path)) if template_path.exists() else ""
     manifest_text = strip_comments(read_text(manifest_path)) if manifest_path.exists() else ""
+    goals_text = strip_comments(read_text(goals_path)) if goals_path.exists() else ""
     leadership_rule_text = strip_comments(read_text(leadership_rule_path)) if leadership_rule_path.exists() else ""
     rule_group_text = strip_comments(read_text(rule_group_path)) if rule_group_path.exists() else ""
     if "faction_template_ADISCORD_standard" not in template_text:
@@ -784,6 +800,19 @@ def check_ncns_and_campaign_compatibility(limit):
         issues.append(f"{rel(leadership_rule_path)}: missing NCNS leadership rule definition")
     if "change_leader_rule_influence" not in rule_group_text:
         issues.append(f"{rel(rule_group_path)}: NCNS leadership rule is not assigned to a rule group")
+
+    for goal_id, unlock_effect in (
+        ("ADISCORD_faction_goal_operational_continuity", "set_faction_research_unlocked"),
+        ("ADISCORD_faction_goal_strategic_coordination", "set_faction_military_unlocked"),
+    ):
+        if not re.search(
+            rf"(?s)\b{goal_id}\s*=\s*\{{.*?\bcomplete_effect\s*=\s*\{{.*?"
+            rf"\b{unlock_effect}\s*=\s*yes\b",
+            goals_text,
+        ):
+            issues.append(
+                f"{rel(goals_path)}: {goal_id} must expose {unlock_effect} for locked faction-tab lookup"
+            )
 
     faction_histories = {
         "WRK - WorkerLand.txt": "faction_vorkerland_confederation",

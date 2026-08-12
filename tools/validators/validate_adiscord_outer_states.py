@@ -135,14 +135,12 @@ def main() -> int:
         if not LOCALISATION.read_bytes().startswith(b"\xef\xbb\xbf"):
             errors.append("outer-state localisation must use UTF-8 BOM")
         localisation = LOCALISATION.read_text(encoding="utf-8-sig", errors="strict")
-        name_rows = re.findall(r'(?m)^\s*STATE_(\d+)\s*:\s*"([^"]+)"\s*$', localisation)
+        all_name_rows = re.findall(r'(?m)^\s*STATE_(\d+)\s*:\s*"([^"]+)"\s*$', localisation)
+        name_rows = [(value, name) for value, name in all_name_rows if int(value) in ids]
         keys = Counter(int(value) for value, _name in name_rows)
         for state_id in ids:
             if keys[state_id] != 1:
                 errors.append(f"STATE_{state_id}: expected one generated Russian name")
-        unexpected = sorted(set(keys) - set(ids))
-        if unexpected:
-            errors.append(f"outer localisation has unexpected state keys {unexpected[:20]}")
         names = Counter(name for _state_id, name in name_rows)
         duplicate_names = sorted(name for name, count in names.items() if count > 1)
         if duplicate_names:

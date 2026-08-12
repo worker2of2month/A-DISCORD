@@ -530,16 +530,16 @@
       "common_only": false,
       "rationale": "Black Basin levy couples a small field formation with an operating dockyard and coastal flotilla.",
       "evidence": {
-        "states": 1,
-        "civilian_factories": 2,
+        "states": 2,
+        "civilian_factories": 3,
         "military_factories": 1,
         "dockyards": 1,
         "air_bases": 1,
         "power_sites": 0,
-        "infrastructure_levels": 3,
+        "infrastructure_levels": 6,
         "research_slots": 2,
         "convoys": 0,
-        "oob_divisions": 1,
+        "oob_divisions": 3,
         "starting_doctrines": []
       },
       "technologies_2160": [
@@ -1368,16 +1368,16 @@
       "common_only": false,
       "rationale": "Small regional state maintains a standing army, an operating dockyard, and a coastal flotilla despite limited industrial depth.",
       "evidence": {
-        "states": 2,
-        "civilian_factories": 4,
+        "states": 3,
+        "civilian_factories": 5,
         "military_factories": 2,
         "dockyards": 1,
         "air_bases": 0,
         "power_sites": 0,
-        "infrastructure_levels": 6,
+        "infrastructure_levels": 9,
         "research_slots": 2,
         "convoys": 0,
-        "oob_divisions": 2,
+        "oob_divisions": 4,
         "starting_doctrines": []
       },
       "technologies_2160": [
@@ -2286,16 +2286,16 @@
       "common_only": false,
       "rationale": "Thinly industrialized regional administration retains an operating dockyard and coastal fleet beside its small field force.",
       "evidence": {
-        "states": 10,
-        "civilian_factories": 12,
+        "states": 11,
+        "civilian_factories": 13,
         "military_factories": 6,
         "dockyards": 1,
         "air_bases": 2,
         "power_sites": 0,
-        "infrastructure_levels": 26,
+        "infrastructure_levels": 29,
         "research_slots": 2,
         "convoys": 0,
-        "oob_divisions": 1,
+        "oob_divisions": 3,
         "starting_doctrines": []
       },
       "technologies_2160": [
@@ -4330,7 +4330,7 @@
       "rationale": "Largest surviving industrial state with five research slots, power sites, air bases, and convoy capacity.",
       "evidence": {
         "states": 23,
-        "civilian_factories": 63,
+        "civilian_factories": 61,
         "military_factories": 30,
         "dockyards": 0,
         "air_bases": 18,

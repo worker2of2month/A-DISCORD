@@ -134,9 +134,15 @@ def validate(root: Path = ROOT) -> list[str]:
         path.read_text(encoding="utf-8-sig")
         for path in (root / "history/states").glob("*.txt")
     )
-    for building in ("ADISCORD_rare_components_plant", "ADISCORD_rare_alloy_foundry"):
-        if building in state_history:
-            issues.append(f"history/states: {building} is placed before its technology integration")
+    for building, expected_count in (
+        ("ADISCORD_rare_components_plant", 3),
+        ("ADISCORD_rare_alloy_foundry", 3),
+    ):
+        actual_count = len(re.findall(rf"(?m)^\s*{building}\s*=\s*1\s*$", state_history))
+        if actual_count != expected_count:
+            issues.append(
+                f"history/states: expected {expected_count} starting {building} buildings, found {actual_count}"
+            )
 
     equipment_sources = (
         "common/units/equipment/ADISCORD_support_equipment.txt",

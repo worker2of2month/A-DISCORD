@@ -7,15 +7,45 @@ import argparse
 from pathlib import Path
 
 from PIL import Image, ImageDraw
+from tools.lib.localisation import replace_generated_localisation_block
 from tools.lib.paths import repository_root
 
 
 ROOT = repository_root()
 STATE_DIR = ROOT / "history" / "states"
 UNIT_PATH = ROOT / "history" / "units" / "AIN.txt"
-LOCALISATION_PATH = ROOT / "localisation" / "russian" / "ADISCORD_ainholm_l_russian.yml"
+COUNTRY_LOCALISATION_PATH = ROOT / "localisation" / "russian" / "countries_l_russian.yml"
+PARTY_LOCALISATION_PATH = ROOT / "localisation" / "russian" / "parties_l_russian.yml"
+CHARACTER_LOCALISATION_PATH = ROOT / "localisation" / "russian" / "nsb_characters_l_russian.yml"
+TRAIT_LOCALISATION_PATH = ROOT / "localisation" / "russian" / "ADISCORD_traits_l_russian.yml"
+IDEA_LOCALISATION_PATH = ROOT / "localisation" / "russian" / "ADISCORD_ideas_l_russian.yml"
+VP_LOCALISATION_PATH = ROOT / "localisation" / "russian" / "victory_points_l_russian.yml"
 FLAG_DIR = ROOT / "gfx" / "flags"
 DIVISION_TEMPLATE_NAMES = ("Licensed Security Battalion",)
+
+AIN_LOCALISATION = {
+    COUNTRY_LOCALISATION_PATH: {
+        "AIN": "Айнхольмский мандат",
+        "AIN_DEF": "Айнхольмский мандат",
+        "AIN_ADJ": "Айнхольмск.",
+    },
+    PARTY_LOCALISATION_PATH: {
+        "AIN_hedonism_party": "Лицензионная палата",
+        "AIN_hedonism_party_long": "Палата нодрульских лицензий и местных концессионеров",
+    },
+    CHARACTER_LOCALISATION_PATH: {
+        "AIN_Elias_Marven": "Элиас Марвен",
+        "AIN_Elias_Marven_desc": "Нодрульский юрист и управляющий концессиями Марвен превратил временный договор об охране Айнхольма в бессрочный мандат. Выборы здесь проходят регулярно, но право попасть в бюллетень, открыть предприятие или покинуть долину выдаёт одна и та же лицензионная палата.",
+    },
+    TRAIT_LOCALISATION_PATH: {
+        "AIN_concessionary_director": "Концессионный директор",
+        "AIN_concessionary_director_desc": "Умеет превращать зависимость в аккуратный договор, а изъятие ресурсов — в платную государственную услугу.",
+    },
+    IDEA_LOCALISATION_PATH: {
+        "AIN_concession_economy": "Концессионная экономика",
+        "AIN_concession_economy_desc": "Промышленность, добыча и основные дороги Айнхольма переданы компаниям, связанным с Нодрульской республикой. В обмен колониальная администрация получает инвестиции и доступ к рынкам, однако значительная часть доходов и ресурсов уходит метрополии.",
+    },
+}
 
 STATE_PROFILES = {
     118: {
@@ -142,34 +172,25 @@ def render_flag() -> Image.Image:
     return image
 
 
-def render_localisation() -> str:
-    return "\n".join(
-        (
-            "\ufeffl_russian:",
-            ' AIN: "Айнхольмский мандат"',
-            ' AIN_DEF: "Айнхольмский мандат"',
-            ' AIN_ADJ: "Айнхольмск."',
-            ' AIN_hedonism_party: "Лицензионная палата"',
-            ' AIN_hedonism_party_long: "Палата нодрульских лицензий и местных концессионеров"',
-            ' AIN_Elias_Marven: "Элиас Марвен"',
-            ' AIN_Elias_Marven_desc: "Нодрульский юрист и управляющий концессиями Марвен превратил временный договор об охране Айнхольма в бессрочный мандат. Выборы здесь проходят регулярно, но право попасть в бюллетень, открыть предприятие или покинуть долину выдаёт одна и та же лицензионная палата."',
-            ' AIN_concessionary_director: "Концессионный директор"',
-            ' AIN_concessionary_director_desc: "Умеет превращать зависимость в аккуратный договор, а изъятие ресурсов — в платную государственную услугу."',
-            ' AIN_concession_economy: "Концессионная экономика"',
-            ' AIN_concession_economy_desc: "Промышленность, добыча и основные дороги Айнхольма переданы компаниям, связанным с Нодрульской республикой. В обмен колониальная администрация получает инвестиции и доступ к рынкам, однако значительная часть доходов и ресурсов уходит метрополии."',
-            ' VICTORY_POINTS_147: "Айнхольм"',
-            ' VICTORY_POINTS_16348: "Крейнский пост"',
-            ' VICTORY_POINTS_16314: "Верхние ворота"',
-            "",
-        )
-    )
-
-
 def apply() -> None:
     for state_id, profile in STATE_PROFILES.items():
         state_path(state_id).write_text(render_state(state_id, profile), encoding="utf-8", newline="\n")
     UNIT_PATH.write_text(render_oob(), encoding="utf-8", newline="\n")
-    LOCALISATION_PATH.write_text(render_localisation(), encoding="utf-8", newline="\n")
+    for path, entries in AIN_LOCALISATION.items():
+        replace_generated_localisation_block(
+            path,
+            "tools.builders.build_adiscord_ainholm_mandate",
+            entries,
+        )
+    replace_generated_localisation_block(
+        VP_LOCALISATION_PATH,
+        "tools.builders.build_adiscord_ainholm_mandate",
+        {
+            "VICTORY_POINTS_147": "Айнхольм",
+            "VICTORY_POINTS_16348": "Крейнский пост",
+            "VICTORY_POINTS_16314": "Верхние ворота",
+        },
+    )
     # HOI4 expects 32-bit TGA flags; retaining alpha here avoids a runtime
     # loader warning even though the artwork itself is fully opaque.
     base = render_flag().convert("RGBA")

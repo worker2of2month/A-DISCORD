@@ -1,14 +1,3 @@
-soundeffect = {
-	name = "superevent_vorkerland_civilwar_sound_e"
-	sounds = {
-		sound = superevent_vorkerland_civilwar_sound
-	}
-	volume = 1.0
-}
-soundeffect = {
-	name = "superevent_stelander_empire_sound_e"
-	sounds = {
-		sound = superevent_stelander_empire_sound
-	}
-	volume = 1.0
-}
+# Compatibility filename retained intentionally. The canonical soundeffect
+# definitions live in superevents_effects.asset; defining them here as well
+# registers each ID twice at startup.

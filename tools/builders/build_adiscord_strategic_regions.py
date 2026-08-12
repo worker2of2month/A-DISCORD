@@ -111,7 +111,7 @@ BASE_REGIONS = (
     Region(21, "western-reactor-zone", "Западная реакторная зона", "arid", (152, 153, 154, 155, 156, 160, 223, 224)),
     Region(22, "loren-corridor", "Лоренский коридор", "arid", (167, 169, 170, 171, 172, 173, 203, 204, 205, 211, 216, 217)),
     Region(23, "southern-reactor-zone", "Южная реакторная зона", "hot_arid", (165, 166, 209, 210, 212, 213, 214, 215, 218, 219, 222)),
-    Region(24, "mardar-lowlands", "Мардарская низина", "hot_arid", (67, 68, 69, 70, 174, 175, 688, 689)),
+    Region(24, "mardar-lowlands", "Мардарская низина", "hot_arid", (67, 68, 69, 70, 174, 175, 688, 689, 690, 691, 692)),
     Region(25, "southern-islands", "Южные острова", "tropical_maritime", (200, 225, 226, 227, 228, 229, 230, 231, 232)),
     Region(40, "kadir-coast", "Кадирское побережье", "hot_arid", tuple(range(234, 265))),
     Region(41, "mazar-oases", "Мазарские оазисы", "hot_arid", tuple(range(265, 287))),

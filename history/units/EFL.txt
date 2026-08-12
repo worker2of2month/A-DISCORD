@@ -54,10 +54,24 @@ units = {
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 2 }
-		location = 158
+		location = 8057
 		division_template = "Line Infantry Brigade"
 		start_experience_factor = 0.17
 		start_equipment_factor = 0.32
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 3 }
+		location = 6495
+		division_template = "Local Security Detachment"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.40
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 4 }
+		location = 6331
+		division_template = "Local Security Detachment"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.40
 	}
 	fleet = {
 		name = "Loren Restitution Flotilla"

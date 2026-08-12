@@ -1,0 +1,162 @@
+STP_initialize_party_suspicion = {
+	if = {
+		limit = { NOT = { has_variable = STP_party_suspicion_rate } }
+		set_variable = { var = STP_party_suspicion_rate value = 0.05 }
+	}
+	clamp_variable = { var = STP_party_suspicion_rate min = 0 max = 1 }
+	set_temp_variable = { var = STP_party_suspicion_rate_temp value = 0 }
+	STP_change_party_suspicion = yes
+}
+
+STP_change_party_suspicion = {
+	add_to_variable = {
+		var = STP_party_suspicion_rate
+		value = STP_party_suspicion_rate_temp
+	}
+	clamp_variable = {
+		var = STP_party_suspicion_rate
+		min = 0
+		max = 1
+	}
+	set_variable = {
+		var = STP_party_suspicion
+		value = STP_party_suspicion_rate
+	}
+	multiply_variable = {
+		var = STP_party_suspicion
+		value = 100
+	}
+	set_temp_variable = {
+		var = STP_party_suspicion_rate_temp
+		value = STP_party_suspicion_rate
+	}
+	add_to_temp_variable = {
+		var = STP_party_suspicion_rate_temp
+		value = -0.25
+	}
+	set_variable = {
+		var = STP_sus_political_power_gain
+		value = STP_party_suspicion_rate_temp
+	}
+	multiply_variable = {
+		var = STP_sus_political_power_gain
+		value = -0.75
+	}
+	clamp_variable = {
+		var = STP_sus_political_power_gain
+		min = -1
+		max = 0
+	}
+}
+
+STP_initialize_leader_health = {
+	if = {
+		limit = { NOT = { has_variable = STP_leader_health_rate } }
+		set_variable = { var = STP_leader_health_rate value = 1 }
+	}
+	clamp_variable = { var = STP_leader_health_rate min = 0 max = 1 }
+	set_temp_variable = { var = STP_leader_health_rate_temp value = 0 }
+	STP_leader_health = yes
+}
+
+STP_leader_health = {
+	add_to_variable = {
+		var = STP_leader_health_rate
+		value = STP_leader_health_rate_temp
+	}
+
+	clamp_variable = {
+		var = STP_leader_health_rate
+		min = 0
+		max = 1
+	}
+	set_variable = {
+		var = STP_leader_health
+		value = STP_leader_health_rate
+	}
+	multiply_variable = {
+		var = STP_leader_health
+		value = 100
+	}
+	#Stability
+	set_temp_variable = {
+		var = STP_leader_health_temp
+		value = STP_leader_health_rate
+	}
+	add_to_temp_variable = {
+		var = STP_leader_health_temp
+		value = -1
+	}
+	set_variable = {
+		var = STP_fading_father_stability_factor
+		value = STP_leader_health_temp
+	}
+	multiply_variable = {
+		var = STP_fading_father_stability_factor
+		value = 0.10
+	}
+
+	#Portrait stage
+	if = {
+		limit = {
+			check_variable = {
+				var = STP_leader_health_rate
+				value = 0.75
+				compare = greater_than_or_equals
+			}
+		}
+		set_variable = {
+			var = STP_state_face_stage
+			value = 1
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				var = STP_leader_health_rate
+				value = 0.45
+				compare = greater_than_or_equals
+			}
+		}
+		set_variable = {
+			var = STP_state_face_stage
+			value = 2
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				var = STP_leader_health_rate
+				value = 0.15
+				compare = greater_than_or_equals
+			}
+		}
+		set_variable = {
+			var = STP_state_face_stage
+			value = 3
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				var = STP_leader_health_rate
+				value = 0
+				compare = greater_than
+			}
+		}
+		set_variable = {
+			var = STP_state_face_stage
+			value = 4
+		}
+	}
+	else = {
+		set_variable = {
+			var = STP_state_face_stage
+			value = 5
+		}
+		set_country_flag = STP_ivanov_dead
+		remove_dynamic_modifier = {
+			modifier = STP_fading_father
+		}
+	}
+}

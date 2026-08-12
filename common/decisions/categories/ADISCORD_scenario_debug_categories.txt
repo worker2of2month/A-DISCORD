@@ -14,3 +14,13 @@ ADISCORD_scenario_debug_category = {
 	}
 	visible = { is_debug = yes }
 }
+
+# BEGIN CONSOLIDATED: ADISCORD_test_wars_categories.txt
+ADISCORD_test_wars_category = {
+	allowed = {
+		tag = APH
+	}
+
+	visible_when_empty = yes
+}
+# END CONSOLIDATED: ADISCORD_test_wars_categories.txt

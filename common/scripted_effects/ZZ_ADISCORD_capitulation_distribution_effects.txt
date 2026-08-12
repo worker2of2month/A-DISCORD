@@ -37,9 +37,9 @@ ADISCORD_vorkerland_distribute_central_states_to_cobelligerents = {
 	}
 }
 
-# Run in the normalized central winner's country scope. ROOT remains the
-# capitulated central claimant from on_capitulation. A subject credited as FROM
-# therefore settles through its surviving main-claimant overlord instead.
+# Run in the central winner's country scope. ROOT remains the capitulated
+# country from on_capitulation. Temporary claimants are reserved for phase.6;
+# minor tags are marked for the delayed post-peace-cache finalizer.
 ADISCORD_vorkerland_settle_central_capitulation = {
 	if = {
 		limit = { ROOT = { ADISCORD_vorkerland_is_temporary_claimant = yes } }
@@ -47,38 +47,79 @@ ADISCORD_vorkerland_settle_central_capitulation = {
 		# phase controller has one verified winner. Its subjects and armed forces
 		# are released/transferred by postwar formation, never by this fallback.
 		ROOT = { set_country_flag = ADISCORD_vorkerland_claimant_cleanup_reserved }
-		country_event = { id = ADISCORD_vorkerland_phase.6 days = 1 }
+		ADISCORD_vorkerland_begin_reunification = yes
 	}
 	else = {
-	# Set recovery before any white peace, because on_peace can fire
-	# synchronously and must not schedule a new front during settlement.
-	set_country_flag = {
-		flag = ADISCORD_vorkerland_central_recovery
-		days = 35
-		value = 1
-	}
-	add_manpower = 500
-	if = {
-		limit = {
-			WTD = {
-				exists = yes
-				has_country_flag = ADISCORD_vorkerland_wtd_cleanup_reserved
-			}
+		set_country_flag = {
+			flag = ADISCORD_vorkerland_central_recovery
+			days = 35
+			value = 1
 		}
-		WTD = {
-			clr_country_flag = ADISCORD_vorkerland_wtd_cleanup_reserved
-			ADISCORD_vorkerland_distribute_central_states_to_cobelligerents = yes
-		}
+		add_manpower = 1500
+		if = { limit = { tag = WKR } ROOT = { set_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } }
+		if = { limit = { tag = VAD } ROOT = { set_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } }
+		if = { limit = { tag = TVA } ROOT = { set_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } }
 		if = {
-			limit = { WTD = { exists = yes } }
-			if = { limit = { has_war_with = WTD } white_peace = WTD }
-			annex_country = { target = WTD transfer_troops = no }
+			limit = {
+				tag = WRK
+				has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+				has_global_flag = ADISCORD_vorkerland_reunification_verified
+			}
+			ROOT = { set_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk }
+		}
+		ROOT = {
+			set_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending
+			country_event = { id = ADISCORD_vorkerland_collapse.65 days = 1 }
 		}
 	}
+}
+
+# Run in the defeated central minor's scope from events .65/.66. The explicit
+# winner flags survive the native peace-conference tick and let the claimant
+# annex a puppet or released remnant deterministically.
+ADISCORD_vorkerland_finalize_central_minor_settlement = {
 	if = {
-		limit = { ROOT = { exists = yes } }
-		if = { limit = { has_war_with = ROOT } white_peace = ROOT }
-		annex_country = { target = ROOT transfer_troops = no }
+		limit = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+		if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_central_minor_settlement_force_transfer }
+			every_owned_state = { WKR = { transfer_state = PREV } }
+		}
+		WKR = {
+			if = { limit = { has_war_with = ROOT } white_peace = ROOT }
+			annex_country = { target = ROOT transfer_troops = no }
+		}
 	}
+	else_if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+		if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_central_minor_settlement_force_transfer }
+			every_owned_state = { VAD = { transfer_state = PREV } }
+		}
+		VAD = {
+			if = { limit = { has_war_with = ROOT } white_peace = ROOT }
+			annex_country = { target = ROOT transfer_troops = no }
+		}
+	}
+	else_if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+		if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_central_minor_settlement_force_transfer }
+			every_owned_state = { TVA = { transfer_state = PREV } }
+		}
+		TVA = {
+			if = { limit = { has_war_with = ROOT } white_peace = ROOT }
+			annex_country = { target = ROOT transfer_troops = no }
+		}
+	}
+	else_if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk WRK = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+		if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_central_minor_settlement_force_transfer }
+			every_owned_state = { WRK = { transfer_state = PREV } }
+		}
+		WRK = {
+			if = { limit = { has_war_with = ROOT } white_peace = ROOT }
+			annex_country = { target = ROOT transfer_troops = no }
+		}
 	}
 }

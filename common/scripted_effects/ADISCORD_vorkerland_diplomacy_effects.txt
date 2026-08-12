@@ -68,15 +68,21 @@ ADISCORD_vorkerland_offer_vad_sol_alliance = {
 			tag = VAD
 			country_exists = VAD
 			country_exists = SOL
+			is_subject = no
+			NOT = { has_capitulated = yes }
 			has_country_flag = ADISCORD_vorkerland_focus_vad_sol_invitation_intent
+			has_country_flag = ADISCORD_vorkerland_focus_vad_solland_liaison_prepared
 			has_global_flag = ADISCORD_vorkerland_solar_winner_sol
 			NOT = { has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted }
+			NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
+			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 			NOT = { has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending }
 			NOT = { has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_resolved }
-			SOL = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+			SOL = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } }
 		}
 		set_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending
+		set_country_flag = { flag = ADISCORD_vorkerland_vad_sol_invitation_dispatch_guard days = 3 }
 		SOL = { country_event = { id = ADISCORD_vorkerland_diplomacy.2 days = 1 } }
 	}
 }
@@ -87,43 +93,191 @@ ADISCORD_vorkerland_offer_wkr_vla_alliance = {
 			tag = WKR
 			country_exists = WKR
 			country_exists = VLA
+			is_subject = no
+			NOT = { has_capitulated = yes }
 			has_country_flag = ADISCORD_vorkerland_focus_wkr_vla_invitation_intent
 			has_global_flag = ADISCORD_vorkerland_volnograd_winner_vla
 			NOT = { has_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_accepted }
+			NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
+			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 			NOT = { has_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending }
 			NOT = { has_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_resolved }
-			VLA = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+			VLA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } }
 		}
 		set_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending
+		set_country_flag = { flag = ADISCORD_vorkerland_wkr_vla_invitation_dispatch_guard days = 3 }
 		VLA = { country_event = { id = ADISCORD_vorkerland_diplomacy.3 days = 1 } }
 	}
+}
+
+# The seven-day public decision reserves the diplomacy lane immediately. Its
+# remove/cancel effects then hand the lane either to the active war or back to
+# the central-showdown controller without leaving stale attempt state behind.
+ADISCORD_vorkerland_reserve_vad_solar_intervention = {
+	set_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved
+	clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_failed
+	clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_sra
+	clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_csl
+	clr_global_flag = ADISCORD_vorkerland_sol_restoration_pending
+	clr_global_flag = ADISCORD_vorkerland_sol_restoration_materialized
+	clr_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry
+	clr_global_flag = ADISCORD_vorkerland_sol_restoration_retry
+	clr_global_flag = ADISCORD_vorkerland_sol_restoration_failed
+	clr_global_flag = ADISCORD_vorkerland_sol_restoration_fresh_release
+	clr_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending
+	clr_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_retry
+}
+
+ADISCORD_vorkerland_cancel_vad_solar_intervention_reservation = {
+	clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved
 }
 
 ADISCORD_vorkerland_attempt_vad_solar_intervention = {
 	if = {
 		limit = {
 			tag = VAD
+			has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved
 			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
 			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
+			is_subject = no
+			NOT = { has_capitulated = yes }
+			NOT = { has_war = yes }
 			ADISCORD_vorkerland_vad_has_solar_intervention_border = yes
 		}
-		set_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
 		set_country_flag = ADISCORD_vorkerland_vad_solar_intervention_attempted
 		if = {
 			limit = { has_global_flag = ADISCORD_vorkerland_solar_winner_sra country_exists = SRA }
+			set_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
 			set_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_sra
+			SRA = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = SRA type = take_state_focus generator = { 76 104 198 307 310 } }
+			set_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending
+			country_event = { id = ADISCORD_vorkerland_diplomacy.6 days = 1 }
+		}
+		else_if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_solar_winner_csl country_exists = CSL }
+			set_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+			set_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_csl
+			CSL = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = CSL type = take_state_focus generator = { 76 104 198 307 310 } }
+			set_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending
+			country_event = { id = ADISCORD_vorkerland_diplomacy.6 days = 1 }
+		}
+	}
+	ADISCORD_vorkerland_cancel_vad_solar_intervention_reservation = yes
+}
+
+ADISCORD_vorkerland_verify_vad_solar_intervention = {
+	if = {
+		limit = {
+			tag = VAD
+			has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+			has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
+			OR = {
+				AND = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_sra has_war_with = SRA }
+				AND = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_csl has_war_with = CSL }
+			}
+		}
+		clr_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending
+		clr_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_retry
+	}
+	else_if = {
+		limit = {
+			tag = VAD
+			has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+			has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
+			NOT = { has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_retry }
+		}
+		set_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_retry
+		if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_sra country_exists = SRA }
 			SRA = { ADISCORD_vorkerland_leave_inherited_faction = yes }
 			declare_war_on = { target = SRA type = take_state_focus generator = { 76 104 198 307 310 } }
 		}
 		else_if = {
-			limit = { has_global_flag = ADISCORD_vorkerland_solar_winner_csl country_exists = CSL }
-			set_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_csl
+			limit = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_csl country_exists = CSL }
 			CSL = { ADISCORD_vorkerland_leave_inherited_faction = yes }
 			declare_war_on = { target = CSL type = take_state_focus generator = { 76 104 198 307 310 } }
 		}
+		country_event = { id = ADISCORD_vorkerland_diplomacy.9 days = 1 }
+	}
+	else_if = {
+		limit = {
+			tag = VAD
+			has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+			has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending
+			has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_retry
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
+		}
+		clr_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending
+		ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes
+		log = "[ADISCORD][VORKERLAND][DIPLOMACY] VAD Solar intervention failed after one retry."
+	}
+}
+
+# A failed claimant cannot leave the central-preparation gate permanently
+# occupied. This is safe from capitulation, peace, and old-save repair hooks.
+ADISCORD_vorkerland_clear_failed_vad_solar_intervention = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+			OR = {
+				has_global_flag = ADISCORD_vorkerland_sol_restoration_failed
+				NOT = { country_exists = VAD }
+				VAD = { has_capitulated = yes }
+				AND = {
+					VAD = {
+						exists = yes
+						NOT = { has_capitulated = yes }
+						NOT = { has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending }
+					}
+					NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_verified }
+					NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
+					OR = {
+						AND = {
+							has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_sra
+							OR = {
+								NOT = { country_exists = SRA }
+								VAD = { NOT = { has_war_with = SRA } }
+							}
+						}
+						AND = {
+							has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_csl
+							OR = {
+								NOT = { country_exists = CSL }
+								VAD = { NOT = { has_war_with = CSL } }
+							}
+						}
+						NOT = {
+							OR = {
+								has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_sra
+								has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_csl
+							}
+						}
+					}
+				}
+			}
+		}
+		clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+		clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_sra
+		clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_csl
+		clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved
+		clr_global_flag = ADISCORD_vorkerland_sol_restoration_pending
+		clr_global_flag = ADISCORD_vorkerland_sol_restoration_materialized
+		clr_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry
+		clr_global_flag = ADISCORD_vorkerland_sol_restoration_retry
+		clr_global_flag = ADISCORD_vorkerland_sol_restoration_fresh_release
+		VAD = {
+			clr_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending
+			clr_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_retry
+		}
+		set_global_flag = ADISCORD_vorkerland_vad_solar_intervention_failed
 	}
 }
 
@@ -132,6 +286,8 @@ ADISCORD_vorkerland_restore_sol_as_vad_puppet = {
 		limit = {
 			tag = VAD
 			has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+			has_global_flag = ADISCORD_vorkerland_sol_restoration_pending
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_materialized }
 			owns_state = 76 controls_state = 76
 			owns_state = 104 controls_state = 104
 			owns_state = 198 controls_state = 198
@@ -168,7 +324,35 @@ ADISCORD_vorkerland_restore_sol_as_vad_puppet = {
 				transfer_state = 310
 			}
 		}
+		set_global_flag = ADISCORD_vorkerland_sol_restoration_materialized
+		clr_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry
 		country_event = { id = ADISCORD_vorkerland_diplomacy.5 days = 1 }
+	}
+	else_if = {
+		limit = {
+			tag = VAD
+			has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+			has_global_flag = ADISCORD_vorkerland_sol_restoration_pending
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_materialized }
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry }
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_failed }
+		}
+		set_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry
+		country_event = { id = ADISCORD_vorkerland_diplomacy.7 days = 1 }
+	}
+	else_if = {
+		limit = {
+			tag = VAD
+			has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+			has_global_flag = ADISCORD_vorkerland_sol_restoration_pending
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_materialized }
+			has_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry
+		}
+		set_global_flag = ADISCORD_vorkerland_sol_restoration_failed
+		clr_global_flag = ADISCORD_vorkerland_sol_restoration_pending
+		clr_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry
+		ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes
+		log = "[ADISCORD][VORKERLAND][DIPLOMACY] SOL materialization failed after one retry."
 	}
 }
 
@@ -176,9 +360,13 @@ ADISCORD_vorkerland_verify_sol_restoration = {
 	if = {
 		limit = {
 			tag = VAD
+			has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+			has_global_flag = ADISCORD_vorkerland_sol_restoration_pending
+			has_global_flag = ADISCORD_vorkerland_sol_restoration_materialized
 			SOL = {
 				exists = yes
 				is_subject_of = VAD
+				NOT = { has_capitulated = yes }
 				owns_state = 76 controls_state = 76
 				owns_state = 104 controls_state = 104
 				owns_state = 198 controls_state = 198
@@ -207,15 +395,42 @@ ADISCORD_vorkerland_verify_sol_restoration = {
 		set_global_flag = ADISCORD_vorkerland_sol_restoration_verified
 		set_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted
 		clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+		clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_sra
+		clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_csl
+		clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved
+		clr_global_flag = ADISCORD_vorkerland_sol_restoration_pending
+		clr_global_flag = ADISCORD_vorkerland_sol_restoration_materialized
+		clr_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry
+		clr_global_flag = ADISCORD_vorkerland_sol_restoration_retry
+		clr_global_flag = ADISCORD_vorkerland_sol_restoration_failed
+		clr_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending
+		clr_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_retry
 		clr_global_flag = ADISCORD_vorkerland_sol_restoration_fresh_release
 	}
 	else_if = {
-		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_retry } }
+		limit = {
+			tag = VAD
+			has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+			has_global_flag = ADISCORD_vorkerland_sol_restoration_pending
+			has_global_flag = ADISCORD_vorkerland_sol_restoration_materialized
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_retry }
+		}
 		set_global_flag = ADISCORD_vorkerland_sol_restoration_retry
-		country_event = { id = ADISCORD_vorkerland_diplomacy.5 days = 1 }
+		country_event = { id = ADISCORD_vorkerland_diplomacy.8 days = 1 }
 	}
-	else = {
+	else_if = {
+		limit = {
+			tag = VAD
+			has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+			has_global_flag = ADISCORD_vorkerland_sol_restoration_pending
+			has_global_flag = ADISCORD_vorkerland_sol_restoration_materialized
+			has_global_flag = ADISCORD_vorkerland_sol_restoration_retry
+		}
 		set_global_flag = ADISCORD_vorkerland_sol_restoration_failed
+		clr_global_flag = ADISCORD_vorkerland_sol_restoration_pending
+		clr_global_flag = ADISCORD_vorkerland_sol_restoration_materialized
+		clr_global_flag = ADISCORD_vorkerland_sol_restoration_retry
+		ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes
 		log = "[ADISCORD][VORKERLAND][DIPLOMACY] SOL restoration failed after one retry."
 	}
 }

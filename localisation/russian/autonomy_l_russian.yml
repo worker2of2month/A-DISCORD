@@ -75,3 +75,15 @@
  AUTONOMY_NOT_ENOUGH_TIME: "§RУровень автономии можно менять не чаще одного раза в §Y$DURATION$ дн.§! (§Yосталось: $REMAINDER$ дн.§!)§!"
  autonomy_sea_warlord_subject: "Полевой командир-марионетка"
  autonomy_sea_integrated_warlord_subject: "Интегрированный полевой командир-марионетка"
+
+# BEGIN CONSOLIDATED: ADISCORD_autonomy_l_russian.yml
+ autonomy_shadow_state: "Подконтрольное правительство"
+ autonomy_republic_in_Vorkerland: "Республика в составе Воркерланда"
+ autonomy_district_in_Vorkerland: "Дистрикт в составе Воркеланда"
+ autonomy_vorkerland_sanitary_gate: "Санитарно-пограничное управление"
+ autonomy_feodal_baronage: "Феодальное баронство"
+ autonomy_feodal_comitatus: "Феодальный комитат"
+ autonomy_feodal_ducatus: "Феодальное герцогство"
+ autonomy_contract_protectorate: "Договорный протекторат"
+ autonomy_contract_client: "Договорное клиентское государство"
+# END CONSOLIDATED: ADISCORD_autonomy_l_russian.yml

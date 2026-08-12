@@ -1,0 +1,73 @@
+# BEGIN CONSOLIDATED: ADISCORD_event_ui_test_events.txt
+add_namespace = ADISCORD_event_ui_test
+
+country_event = {
+	id = ADISCORD_event_ui_test.1
+	title = ADISCORD_event_ui_test.1.t
+	desc = ADISCORD_event_ui_test.1.desc
+	picture = GFX_event_china_civil_war_1
+	is_triggered_only = yes
+
+	option = { name = ADISCORD_event_ui_test.1.a }
+	option = { name = ADISCORD_event_ui_test.1.b }
+	option = { name = ADISCORD_event_ui_test.1.c }
+	option = { name = ADISCORD_event_ui_test.1.d }
+}
+
+country_event = {
+	id = ADISCORD_event_ui_test.2
+	title = ADISCORD_event_ui_test.2.t
+	desc = ADISCORD_event_ui_test.2.desc
+	picture = GFX_event_china_civil_war_1
+	is_triggered_only = yes
+
+	option = { name = ADISCORD_event_ui_test.2.a }
+}
+
+country_event = {
+	id = ADISCORD_event_ui_test.3
+	title = ADISCORD_event_ui_test.3.t
+	desc = ADISCORD_event_ui_test.3.desc
+	picture = GFX_event_china_civil_war_1
+	is_triggered_only = yes
+
+	option = { name = ADISCORD_event_ui_test.3.a }
+	option = { name = ADISCORD_event_ui_test.3.b }
+	option = { name = ADISCORD_event_ui_test.3.c }
+	option = { name = ADISCORD_event_ui_test.3.d }
+}
+
+country_event = {
+	id = ADISCORD_event_ui_test.4
+	title = ADISCORD_event_ui_test.4.t
+	desc = ADISCORD_event_ui_test.4.desc
+	picture = GFX_event_china_civil_war_1
+	is_triggered_only = yes
+
+	option = { name = ADISCORD_event_ui_test.4.a }
+}
+
+country_event = {
+	id = ADISCORD_event_ui_test.5
+	title = ADISCORD_event_ui_test.5.t
+	desc = ADISCORD_event_ui_test.5.desc
+	picture = GFX_event_china_civil_war_1
+	is_triggered_only = yes
+
+	option = { name = ADISCORD_event_ui_test.5.a }
+}
+# END CONSOLIDATED: ADISCORD_event_ui_test_events.txt
+
+# BEGIN CONSOLIDATED: ADISCORD_test_wars_events.txt
+add_namespace = ADISCORD_test_wars
+
+country_event = {
+	id = ADISCORD_test_wars.1
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = ADISCORD_aph_osf_test_war_decision_unlocked
+	}
+}
+# END CONSOLIDATED: ADISCORD_test_wars_events.txt

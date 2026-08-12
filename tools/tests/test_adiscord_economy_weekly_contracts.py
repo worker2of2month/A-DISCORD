@@ -49,7 +49,7 @@ TOKENS = (
     ROOT / "common" / "synchronized_dynamic_tokens" / "ADISCORD_tokens.txt"
 ).read_text(encoding="utf-8-sig")
 MODIFIER_LOC = (
-    ROOT / "localisation" / "russian" / "ADISCORD_economy_modifiers_l_russian.yml"
+    ROOT / "localisation" / "russian" / "ADISCORD_economy_l_russian.yml"
 ).read_text(encoding="utf-8-sig")
 ECONOMY_LOC = (
     ROOT / "localisation" / "russian" / "ADISCORD_economy_l_russian.yml"

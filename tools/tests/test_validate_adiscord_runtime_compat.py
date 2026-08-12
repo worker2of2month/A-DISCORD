@@ -60,7 +60,7 @@ class RuntimeCompatibilityTests(unittest.TestCase):
     def test_state_27_shared_factories_fit_its_category(self):
         state = next((ROOT / "history" / "states").glob("27-*.txt"))
         text = state.read_text(encoding="utf-8-sig")
-        self.assertRegex(text, r"(?m)^\s*state_category\s*=\s*town\s*$")
+        self.assertRegex(text, r"(?m)^\s*state_category\s*=\s*large_town\s*$")
         self.assertEqual(
             sum(
                 int(level)

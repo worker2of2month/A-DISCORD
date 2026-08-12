@@ -2,6 +2,7 @@ ADISCORD_vorkerland_collapse_category = {
 	allowed = {
 		OR = {
 			tag = WRK
+			tag = WKR
 			tag = TVA
 			tag = VAD
 			tag = EYR

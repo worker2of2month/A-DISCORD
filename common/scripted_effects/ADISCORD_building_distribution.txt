@@ -1,8 +1,0 @@
-# common/scripted_effects/ADISCORD_building_distribution.txt
-# V19 TDA-core cleanup.
-# Disabled: the old startup distribution spawned hidden pseudo-buildings and maintained separate
-# country counters. That made the economy panel disagree with actual owned states.
-
-ADISCORD_distribute_starting_buildings_by_country = {
-	# Intentionally empty. Existing map buildings can still be counted by ADISCORD_economy_count_buildings.
-}

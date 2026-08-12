@@ -8,7 +8,7 @@
       "key": "europe",
       "name": "Eastern Forul",
       "strategic_regions": [14, 15, 16, 18],
-      "states": [43, 44, 45, 46, 68, 70, 88, 218]
+      "states": [43, 44, 45, 46, 68, 70, 88, 218, 691]
     },
     {
       "id": 2,
@@ -22,7 +22,7 @@
       "key": "south_america",
       "name": "Southern Deserts",
       "strategic_regions": [40, 41, 42],
-      "states": [69, 174, 175]
+      "states": [69, 174, 175, 692]
     },
     {
       "id": 4,
@@ -64,7 +64,8 @@
         314,
         328,
         688,
-        689
+        689,
+        690
       ]
     },
     {

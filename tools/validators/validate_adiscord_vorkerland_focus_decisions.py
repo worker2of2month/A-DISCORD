@@ -16,6 +16,12 @@ DECISION_FILE = Path("common/decisions/ADISCORD_vorkerland_focus_decisions.txt")
 EFFECT_FILE = Path(
     "common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt"
 )
+PHASE_EFFECT_FILE = Path(
+    "common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt"
+)
+PHASE_TRIGGER_FILE = Path(
+    "common/scripted_triggers/ADISCORD_vorkerland_phase_triggers.txt"
+)
 IDEA_FILE = Path("common/ideas/ADISCORD_vorkerland_focus_decision_ideas.txt")
 ENGLISH_LOCALISATION = Path(
     "localisation/english/ADISCORD_vorkerland_focus_decisions_l_english.yml"
@@ -38,6 +44,20 @@ CENTRAL_TARGETS = {
     "VHV": "ADISCORD_vorkerland_consolidate_vhv",
     "OSV": "ADISCORD_vorkerland_consolidate_osv",
 }
+
+CENTRAL_INTEGRATION_PACKAGES = {
+    "EYR": ("ADISCORD_vorkerland_integrate_eyr_district", (102, 109, 111, 325), 21),
+    "EGC": ("ADISCORD_vorkerland_integrate_egc_district", (81, 110, 124), 21),
+    "RIV": ("ADISCORD_vorkerland_integrate_riv_district", (79, 306, 308, 309, 327), 21),
+    "REV": ("ADISCORD_vorkerland_integrate_rev_district", (82, 323), 21),
+    "YOR": ("ADISCORD_vorkerland_integrate_yor_district", (108, 122, 123), 21),
+    "NDN": ("ADISCORD_vorkerland_integrate_ndn_district", (27,), 14),
+    "SWB": ("ADISCORD_vorkerland_integrate_swb_district", (35,), 14),
+    "VHV": ("ADISCORD_vorkerland_integrate_vhv_district", (315, 316, 317), 21),
+    "OSV": ("ADISCORD_vorkerland_integrate_osv_district", (318, 320), 21),
+}
+
+CLAIMANT_HOME_STATES = (32, 33, 36, 37, 38, 39, 40, 75, 106, 107, 121, 200, 201, 324)
 
 LEVY_DECISIONS = {
     "ADISCORD_vorkerland_wkr_retreat_levy_1": ("WKR", "0.20", "Workerland Militia", "0.55"),
@@ -76,7 +96,6 @@ CORE_PACKAGES = {
     ),
     "ADISCORD_vorkerland_restore_core_central_historical": (
         27,
-        34,
         35,
         40,
         79,
@@ -98,6 +117,7 @@ CORE_PACKAGES = {
         325,
         327,
     ),
+    "ADISCORD_vorkerland_restore_core_oitfort": (34,),
     "ADISCORD_vorkerland_restore_core_rimat": (202,),
     "ADISCORD_vorkerland_restore_core_techlar": (105,),
     "ADISCORD_vorkerland_restore_core_ebern": (311,),
@@ -118,11 +138,18 @@ LOCALISED_IDS = (
     "ADISCORD_vorkerland_allied_support_category",
     "ADISCORD_vorkerland_focus_central_minor_front_deadline",
     *CENTRAL_TARGETS.values(),
+    *(package[0] for package in CENTRAL_INTEGRATION_PACKAGES.values()),
     CENTRAL_DECISION,
     *LEVY_DECISIONS,
     *CORE_PACKAGES,
+    "ADISCORD_vorkerland_recognize_free_republics",
     *SUPPORT_DECISIONS,
     "ADISCORD_vorkerland_allied_supply_advisers",
+)
+
+TOOLTIP_IDS = (
+    "ADISCORD_vorkerland_integrate_central_district_tt",
+    "ADISCORD_vorkerland_central_districts_integrated_tt",
 )
 
 
@@ -159,6 +186,19 @@ def named_block(text: str, name: str) -> str:
     raise ValueError(f"unterminated block {name}")
 
 
+def named_blocks(text: str, name: str) -> list[str]:
+    blocks: list[str] = []
+    cursor = 0
+    pattern = re.compile(rf"(?m)^\s*{re.escape(name)}\s*=\s*\{{")
+    while match := pattern.search(text, cursor):
+        block = named_block(text[match.start() :], name)
+        if not block:
+            break
+        blocks.append(block)
+        cursor = match.start() + len(block)
+    return blocks
+
+
 def localisation_entries(text: str) -> dict[str, str]:
     return {
         match.group(1): match.group(2)
@@ -172,6 +212,7 @@ def expected_localisation_keys() -> set[str]:
     return {
         *LOCALISED_IDS,
         *(f"{entry}_desc" for entry in LOCALISED_IDS),
+        *TOOLTIP_IDS,
     }
 
 
@@ -181,6 +222,8 @@ def collect_issues() -> list[str]:
         CATEGORY_FILE,
         DECISION_FILE,
         EFFECT_FILE,
+        PHASE_EFFECT_FILE,
+        PHASE_TRIGGER_FILE,
         IDEA_FILE,
         ENGLISH_LOCALISATION,
         RUSSIAN_LOCALISATION,
@@ -194,7 +237,53 @@ def collect_issues() -> list[str]:
     categories = read(CATEGORY_FILE)
     decisions = read(DECISION_FILE)
     effects = read(EFFECT_FILE)
+    phase_effects = read(PHASE_EFFECT_FILE)
+    phase_triggers = read(PHASE_TRIGGER_FILE)
     ideas = read(IDEA_FILE)
+
+    minor_phase_trigger = named_block(
+        phase_triggers, "ADISCORD_vorkerland_central_minor_campaign_phase_available"
+    )
+    for token in (
+        "has_global_flag = ADISCORD_vorkerland_phase_central_preparation",
+        "has_global_flag = ADISCORD_vorkerland_phase_central_showdown",
+        "has_global_flag = ADISCORD_vorkerland_phase_reunification",
+        "ADISCORD_vorkerland_has_single_surviving_claimant = yes",
+        "tag = WRK",
+        "has_global_flag = ADISCORD_vorkerland_phase_postwar_integration",
+        "has_global_flag = ADISCORD_vorkerland_reunification_verified",
+        "has_country_flag = ADISCORD_vorkerland_route_worker",
+        "has_country_flag = ADISCORD_vorkerland_route_joint",
+        "has_country_flag = ADISCORD_vorkerland_route_utilitarian",
+    ):
+        if token not in minor_phase_trigger:
+            issues.append(f"central minor campaign phase trigger lacks {token}")
+    district_control_trigger = named_block(
+        phase_triggers, "ADISCORD_vorkerland_central_districts_owned_and_controlled"
+    )
+    claimant_graph_trigger = named_block(
+        phase_triggers, "ADISCORD_vorkerland_central_districts_inside_claimant_graph"
+    )
+    for state in sorted(
+        state
+        for _, states, _ in CENTRAL_INTEGRATION_PACKAGES.values()
+        for state in states
+    ):
+        if district_control_trigger.count(f"controls_state = {state}") != 1:
+            issues.append(f"terminal district controller does not require control of state {state}")
+        owner_gate = (
+            f"{state} = {{ OR = {{ is_owned_by = WKR is_owned_by = VAD "
+            "is_owned_by = TVA } }"
+        )
+        if owner_gate not in district_control_trigger:
+            issues.append(f"terminal district controller accepts an external owner in state {state}")
+        graph_state = named_block(claimant_graph_trigger, str(state))
+        for token in (
+            "OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA }",
+            "OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA }",
+        ):
+            if token not in graph_state:
+                issues.append(f"pre-showdown claimant graph state {state} lacks {token}")
 
     for category in (
         "ADISCORD_vorkerland_focus_operations_category",
@@ -213,10 +302,10 @@ def collect_issues() -> list[str]:
         effect = named_block(effects, effect_id)
         for tag in ("WKR", "VAD", "TVA"):
             hook = f"ADISCORD_vorkerland_focus_{tag.lower()}_central_war_unlocked"
-            if hook not in block:
-                issues.append(f"{decision_id} lacks exact claimant unlock {hook}")
+            if hook in block or hook in effect:
+                issues.append(f"{decision_id} retains late claimant unlock {hook}")
         for token in (
-            "ADISCORD_vorkerland_phase_central_preparation",
+            "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes",
             f"{target} = {{ exists = yes is_subject = no",
             f"any_neighbor_country = {{ tag = {target} }}",
             "ADISCORD_vorkerland_focus_central_minor_launch_pending",
@@ -228,17 +317,41 @@ def collect_issues() -> list[str]:
             "ADISCORD_vorkerland_leave_inherited_faction = yes",
             f"{target} = {{ ADISCORD_vorkerland_leave_inherited_faction = yes }}",
             f"remove_effect = {{ {effect_id} = yes }}",
-            "ai_will_do = { factor = 900 }",
         ):
             if token not in block:
                 issues.append(f"{decision_id} lacks bounded named-front token {token}")
+        if target != "EGC":
+            if "ai_will_do = { factor = 900 }" not in block:
+                issues.append(f"{decision_id} lacks exact base AI priority")
+        else:
+            ai = named_block(block, "ai_will_do")
+            modifiers = named_blocks(ai, "modifier")
+            if "factor = 900" not in ai:
+                issues.append(f"{decision_id} lacks base AI priority factor 900")
+            if len(modifiers) != 1:
+                issues.append(f"{decision_id} must have exactly one bounded VAD Solar modifier")
+            else:
+                modifier = modifiers[0]
+                for token in (
+                    "factor = 8",
+                    "tag = VAD",
+                    "has_country_flag = ADISCORD_vorkerland_focus_vad_sol_invitation_intent",
+                    "has_country_flag = ADISCORD_vorkerland_focus_vad_solland_liaison_prepared",
+                    "has_global_flag = ADISCORD_vorkerland_solar_winner_sra",
+                    "has_global_flag = ADISCORD_vorkerland_solar_winner_csl",
+                    "NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_verified }",
+                    "NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_failed }",
+                    "NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_failed }",
+                ):
+                    if token not in modifier:
+                        issues.append(f"{decision_id} VAD Solar modifier lacks {token}")
         if not effect:
             issues.append(f"{decision_id} lacks delayed launch effect {effect_id}")
             continue
         for token in (
-            "ADISCORD_vorkerland_phase_central_preparation",
+            "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes",
             "ADISCORD_vorkerland_focus_central_minor_launch_pending",
-            "OR = { tag = WKR tag = VAD tag = TVA }",
+            "OR = { tag = WKR tag = VAD tag = TVA tag = WRK }",
             f"{target} = {{ exists = yes is_subject = no",
             f"any_neighbor_country = {{ tag = {target} }}",
             f"declare_war_on = {{ target = {target} type = annex_everything }}",
@@ -246,6 +359,10 @@ def collect_issues() -> list[str]:
         ):
             if token not in effect:
                 issues.append(f"{effect_id} lacks safe delayed-front token {token}")
+        if "ADISCORD_vorkerland_focus_central_front_prepared" in block or (
+            "ADISCORD_vorkerland_focus_central_front_prepared" in effect
+        ):
+            issues.append(f"{decision_id} is still delayed by the final-front focus")
         if effect.count("declare_war_on = {") != 1:
             issues.append(f"{effect_id} must declare exactly its one named front")
         for front_token in central_front_tokens:
@@ -303,14 +420,19 @@ def collect_issues() -> list[str]:
         effects, "ADISCORD_vorkerland_focus_resolve_central_minor_deadline"
     )
     for token in (
+        "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes",
         "ADISCORD_vorkerland_focus_central_minor_launch_retry",
         "activate_mission = ADISCORD_vorkerland_focus_central_minor_retry_check",
         "ADISCORD_vorkerland_focus_arm_central_minor_deadline = yes",
     ):
         if token not in first_confirmation:
             issues.append(f"central minor first confirmation lacks one-retry token {token}")
-    if "ADISCORD_vorkerland_focus_arm_central_minor_deadline = yes" not in retry_confirmation:
-        issues.append("central minor retry confirmation cannot arm the verified deadline")
+    for token in (
+        "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes",
+        "ADISCORD_vorkerland_focus_arm_central_minor_deadline = yes",
+    ):
+        if token not in retry_confirmation:
+            issues.append(f"central minor retry confirmation lacks prepared-front token {token}")
     for token in (
         "ADISCORD_vorkerland_focus_central_minor_recovery_cooldown",
         "days = 14",
@@ -329,6 +451,46 @@ def collect_issues() -> list[str]:
             if token not in resolver:
                 issues.append(f"central minor deadline resolver lacks {target} token {token}")
 
+    integrated_states: list[int] = []
+    for target, (decision_id, states, duration) in CENTRAL_INTEGRATION_PACKAGES.items():
+        block = named_block(decisions, decision_id)
+        integrated_states.extend(states)
+        for token in (
+            "allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }",
+            "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes",
+            f"NOT = {{ country_exists = {target} }}",
+            f"days_remove = {duration}",
+            "days_re_enable = 7",
+            "fire_only_once = no",
+            "custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt",
+            "ADISCORD_vorkerland_begin_reunification = yes",
+            "ai_will_do = { factor = 600 }",
+        ):
+            if token not in block:
+                issues.append(f"{decision_id} lacks bounded civil-integration token {token}")
+        if "complete_effect =" in block or "remove_effect =" not in block:
+            issues.append(f"{decision_id} must award cores only after its timed work finishes")
+        expected_cost = 10 if len(states) == 1 else 15
+        if f"cost = {expected_cost}" not in block:
+            issues.append(f"{decision_id} has wrong proportional cost")
+        for state in states:
+            if block.count(f"owns_state = {state}") < 3:
+                issues.append(f"{decision_id} must recheck ownership of state {state} at completion")
+            if block.count(f"controls_state = {state}") < 2:
+                issues.append(f"{decision_id} must recheck control of state {state} at completion")
+            if not re.search(
+                rf"\b{state}\s*=\s*\{{\s*add_core_of\s*=\s*ROOT\s*\}}", block
+            ):
+                issues.append(f"{decision_id} does not core exactly secured state {state}")
+            if not re.search(
+                rf"\b{state}\s*=\s*\{{\s*NOT\s*=\s*\{{\s*is_core_of\s*=\s*ROOT", block
+            ):
+                issues.append(f"{decision_id} lacks already-integrated visibility guard for {state}")
+        if "every_owned_state" in block or "every_state" in block:
+            issues.append(f"{decision_id} must not use bulk coring")
+    if len(integrated_states) != len(set(integrated_states)) or len(integrated_states) != 24:
+        issues.append("central civil-integration packages must be disjoint and cover exactly 24 states")
+
     central = named_block(decisions, CENTRAL_DECISION)
     central_effect = named_block(effects, CENTRAL_EFFECT)
     for tag in ("WKR", "VAD", "TVA"):
@@ -345,14 +507,19 @@ def collect_issues() -> list[str]:
     if "country_event = { id = ADISCORD_vorkerland_phase.4 days = 1 }" not in central_effect:
         issues.append("final showdown must explicitly schedule the shared phase.4 controller hook")
     for target in target_tags:
-        terminal = (
-            f"OR = {{ NOT = {{ country_exists = {target} }} "
-            f"{target} = {{ is_subject = yes }} {target} = {{ has_capitulated = yes }} }}"
-        )
+        terminal = f"NOT = {{ country_exists = {target} }}"
         if terminal not in central or terminal not in central_effect:
             issues.append(f"final showdown lacks terminal gate for {target}")
+        if f"{target} = {{ is_subject = yes }}" in central or f"{target} = {{ is_subject = yes }}" in central_effect:
+            issues.append(f"final showdown incorrectly accepts a live {target} puppet as terminal")
         if f"has_war_with = {target}" not in central or f"has_war_with = {target}" not in central_effect:
             issues.append(f"final showdown ignores live consolidation front {target}")
+    for state in integrated_states:
+        core_gate = f"{state} = {{ OR = {{ is_core_of = WKR is_core_of = VAD is_core_of = TVA }} }}"
+        if core_gate not in central or core_gate not in central_effect:
+            issues.append(f"final showdown can bypass civil integration of state {state}")
+    if "tooltip = ADISCORD_vorkerland_central_districts_integrated_tt" not in central:
+        issues.append("final showdown lacks the readable civil-integration tooltip")
     for token in (
         "ADISCORD_vorkerland_phase_central_preparation",
         "ADISCORD_vorkerland_focus_central_minor_launch_pending",
@@ -360,11 +527,73 @@ def collect_issues() -> list[str]:
     ):
         if token not in central or token not in central_effect:
             issues.append(f"final showdown lacks consolidation-stage guard {token}")
-    if "fire_only_once = yes" not in central or "ai_will_do = { factor = 1000 }" not in central:
-        issues.append("central decision must be one-shot with high AI priority")
+    for token in (
+        "fire_only_once = no",
+        "days_re_enable = 7",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_showdown_retry_cooldown }",
+        "ai_will_do = { factor = 1000 }",
+    ):
+        if token not in central:
+            issues.append(f"repeatable central decision lacks retry contract {token}")
+    if "NOT = { has_global_flag = ADISCORD_vorkerland_showdown_retry_cooldown }" not in central_effect:
+        issues.append("central showdown scheduler lacks retry cooldown guard")
     for forbidden in ("declare_war_on", "start_civil_war", "create_wargoal"):
         if forbidden in central or forbidden in central_effect:
             issues.append(f"central focus decision contains forbidden private-war effect {forbidden}")
+
+    reunification = named_block(phase_effects, "ADISCORD_vorkerland_begin_reunification")
+    inherit_cores = named_block(
+        phase_effects, "ADISCORD_vorkerland_inherit_integrated_claimant_cores"
+    )
+    formation = named_block(phase_effects, "ADISCORD_vorkerland_finalize_wrk_formation")
+    for target in target_tags:
+        if f"NOT = {{ country_exists = {target} }}" not in reunification:
+            issues.append(f"reunification lacks terminal government gate for {target}")
+    for phase in (
+        "ADISCORD_vorkerland_phase_central_showdown",
+        "ADISCORD_vorkerland_phase_reunification",
+    ):
+        if phase not in reunification:
+            issues.append(f"reunification old-save recovery lacks phase {phase}")
+    if reunification.count(
+        "ADISCORD_vorkerland_central_districts_owned_and_controlled = yes"
+    ) != 3:
+        issues.append("reunification must evaluate district ownership/control in each live claimant")
+    for flag in (
+        "ADISCORD_vorkerland_focus_central_minor_launch_pending",
+        "ADISCORD_vorkerland_focus_central_minor_deadline_active",
+    ):
+        if reunification.count(flag) != 3:
+            issues.append(f"reunification must check {flag} for all three claimants")
+    inherited_states = sorted(set(integrated_states).union(CLAIMANT_HOME_STATES))
+    for state in integrated_states:
+        gate = f"{state} = {{ OR = {{ is_core_of = WKR is_core_of = VAD is_core_of = TVA }} }}"
+        if gate not in reunification:
+            issues.append(f"reunification can skip integration of state {state}")
+    for state in inherited_states:
+        state_block = named_block(inherit_cores, str(state))
+        for token in (
+            "is_owned_by = WRK",
+            "OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA }",
+            "add_core_of = WRK",
+            "remove_core_of = WKR",
+            "remove_core_of = VAD",
+            "remove_core_of = TVA",
+        ):
+            if token not in state_block:
+                issues.append(f"inherited core state {state} lacks safe token {token}")
+        if "is_controlled_by = WRK" in state_block:
+            issues.append(
+                f"inherited core state {state} can lose earned integration to transient control"
+            )
+    inherited_block_states = sorted(
+        int(value)
+        for value in re.findall(r"(?m)^\s*(\d+)\s*=\s*\{", inherit_cores)
+    )
+    if inherited_block_states != inherited_states:
+        issues.append("claimant-core inheritance must contain exactly its 38 explicit states")
+    if "ADISCORD_vorkerland_inherit_integrated_claimant_cores = yes" not in formation:
+        issues.append("WRK formation does not inherit verified claimant cores")
 
     for decision_id, (tag, threshold, template, equipment_factor) in LEVY_DECISIONS.items():
         block = named_block(decisions, decision_id)
@@ -380,7 +609,7 @@ def collect_issues() -> list[str]:
             "has_manpower >",
             "capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }",
             "days_remove =",
-            "fire_only_once = yes",
+            "fire_only_once = no",
             "ai_will_do = { factor =",
         ):
             if token not in block:
@@ -473,7 +702,7 @@ def collect_issues() -> list[str]:
             "has_political_power > 49",
             "has_equipment = { infantry_equipment > 1499 support_equipment > 149 }",
             "days_remove = 5",
-            "fire_only_once = yes",
+            "fire_only_once = no",
             "ai_will_do = { factor = 500",
         ):
             if token not in block:
@@ -482,10 +711,7 @@ def collect_issues() -> list[str]:
             handshake = "ADISCORD_vorkerland_wkr_vla_alliance_accepted"
             if block.count(handshake) < 2 or handshake not in effect:
                 issues.append(f"{decision_id} must recheck the accepted WKR-VLA alliance")
-            for stale in (
-                "ADISCORD_vorkerland_joined_worker_republic",
-                "is_subject_of = ROOT",
-            ):
+            for stale in ("ADISCORD_vorkerland_joined_worker_republic",):
                 if stale in block or stale in effect:
                     issues.append(f"{decision_id} retains stale VLA gate {stale}")
         else:
@@ -502,12 +728,20 @@ def collect_issues() -> list[str]:
                 "ADISCORD_vorkerland_independence_recognized_by_vad" in effect
             ):
                 issues.append(f"{decision_id} retains the stale SOL recognition gate")
+        if ally == "VLA":
+            relation = "OR = { is_in_faction_with = ROOT is_subject_of = ROOT }"
+            if block.count(relation) < 2 or relation not in effect:
+                issues.append(f"{decision_id} must require a live VLA alliance or subject relation")
         if not effect:
             issues.append(f"missing support effect {decision_id}")
             continue
+        for cost_line in (
+            "add_equipment_to_stockpile = { type = infantry_equipment amount = -300 }",
+            "add_equipment_to_stockpile = { type = support_equipment amount = -30 }",
+        ):
+            if cost_line not in effect:
+                issues.append(f"{decision_id} must deduct equipment without a producer filter: {cost_line}")
         for token in (
-            "amount = -300",
-            "amount = -30",
             "amount = 300",
             "amount = 30",
             "ADISCORD_vorkerland_allied_supply_advisers days = 60",

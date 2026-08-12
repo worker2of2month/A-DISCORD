@@ -1,8 +1,5 @@
 capital = 28 
 
-# Retained only as the visibility contract for the STP State Face UI.
-set_country_flag = STP_main_campaign_side
-
 ####### Characters
 
 recruit_character = STP_Petr_Ivanov

@@ -1,7 +1,0 @@
-ADISCORD_test_wars_category = {
-	allowed = {
-		tag = APH
-	}
-
-	visible_when_empty = yes
-}

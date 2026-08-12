@@ -6,6 +6,10 @@ spriteTypes = {
 		textureFile = "gfx/interface/terrains/terrain_contaminated.dds"
 	}
 	spriteType = {
+		name = "GFX_terrain_contaminated_winter"
+		textureFile = "gfx/interface/terrains/terrain_contaminated_winter.dds"
+	}
+	spriteType = {
 		name = "GFX_terrain_vorkernsberg"
 		textureFile = "gfx/interface/terrains/vorkernsberg.dds"
 	}

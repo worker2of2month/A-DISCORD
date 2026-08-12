@@ -15,7 +15,7 @@ from tools.builders.build_adiscord_trade_regions import (
 )
 
 
-EXPECTED_STATE_COUNTS = {1: 57, 2: 62, 3: 74, 4: 8, 5: 97, 6: 31, 7: 360}
+EXPECTED_STATE_COUNTS = {1: 58, 2: 62, 3: 75, 4: 8, 5: 98, 6: 31, 7: 360}
 EXPECTED_PROVINCE_COUNTS = {
     1: 607,
     2: 752,
@@ -37,6 +37,9 @@ GEOGRAPHIC_STATE_ANCHORS = {
     160: (21, 2),
     218: (23, 1),  # BTL enclave is an explicit Eastern Forul boundary override.
     223: (21, 2),
+    690: (24, 5),  # NAM's split resource district remains in Vorkerland.
+    691: (24, 1),  # EFL's split district remains in Eastern Forul.
+    692: (24, 3),  # AZH's split coast remains in the Southern Deserts.
     461: (67, 2),  # Deliberately realigned Exclusion Zone fringe.
 }
 

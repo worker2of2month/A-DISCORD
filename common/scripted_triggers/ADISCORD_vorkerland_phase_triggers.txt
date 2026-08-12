@@ -14,7 +14,6 @@ ADISCORD_vorkerland_collapse_materialized = {
 	WKR = {
 		is_subject = no
 		NOT = { has_capitulated = yes }
-		num_divisions > 0
 		controls_state = 32
 		controls_state = 33
 		controls_state = 40
@@ -24,7 +23,6 @@ ADISCORD_vorkerland_collapse_materialized = {
 	VAD = {
 		is_subject = no
 		NOT = { has_capitulated = yes }
-		num_divisions > 0
 		controls_state = 75
 		controls_state = 106
 		controls_state = 107
@@ -33,7 +31,6 @@ ADISCORD_vorkerland_collapse_materialized = {
 	TVA = {
 		is_subject = no
 		NOT = { has_capitulated = yes }
-		num_divisions > 0
 		controls_state = 36
 		controls_state = 37
 		controls_state = 38
@@ -99,10 +96,111 @@ ADISCORD_vorkerland_regional_consolidation_complete = {
 
 ADISCORD_vorkerland_central_showdown_required = {
 	OR = {
-		AND = { country_exists = WKR country_exists = VAD }
-		AND = { country_exists = WKR country_exists = TVA }
-		AND = { country_exists = VAD country_exists = TVA }
+		AND = {
+			WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+			VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+		}
+		AND = {
+			WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+			TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+		}
+		AND = {
+			VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+			TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+		}
 	}
+}
+
+# Normal campaigns open the nine district campaigns as soon as central
+# preparation begins. A single surviving claimant may use the same controller
+# in showdown/reunification only as an old-save recovery path; this prevents a
+# serialized victory from stranding live district governments on the map.
+ADISCORD_vorkerland_central_minor_campaign_phase_available = {
+	OR = {
+		has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+		AND = {
+			OR = {
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				has_global_flag = ADISCORD_vorkerland_phase_reunification
+			}
+			ADISCORD_vorkerland_has_single_surviving_claimant = yes
+		}
+		# Save repair for builds which announced a winner and materialised WRK
+		# before the nine central administrations had been removed. This branch
+		# reopens only the bounded district controller, never the claimant war.
+		AND = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_global_flag = ADISCORD_vorkerland_reunification_verified
+			OR = {
+				has_country_flag = ADISCORD_vorkerland_route_worker
+				has_country_flag = ADISCORD_vorkerland_route_joint
+				has_country_flag = ADISCORD_vorkerland_route_utilitarian
+			}
+		}
+	}
+}
+
+# The terminal materialisation gate is evaluated in the surviving claimant's
+# scope. A core held by a temporary claimant is not enough: the survivor must
+# control every district, while ownership may still belong to a claimant shell
+# that phase.6 is about to absorb.
+ADISCORD_vorkerland_central_districts_owned_and_controlled = {
+	controls_state = 102 102 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 109 109 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 111 111 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 325 325 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 81 81 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 110 110 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 124 124 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 79 79 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 306 306 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 308 308 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 309 309 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 327 327 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 82 82 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 323 323 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 108 108 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 122 122 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 123 123 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 27 27 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 35 35 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 315 315 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 316 316 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 317 317 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 318 318 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+	controls_state = 320 320 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } }
+}
+
+
+# Before the claimant war starts, every integrated district must remain inside
+# the three-claimant ownership and control graph. This prevents an external
+# occupier or peace settlement from creating an unrecoverable postwar hole.
+ADISCORD_vorkerland_central_districts_inside_claimant_graph = {
+	102 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	109 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	111 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	325 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	81 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	110 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	124 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	79 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	306 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	308 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	309 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	327 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	82 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	323 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	108 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	122 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	123 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	27 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	35 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	315 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	316 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	317 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	318 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
+	320 = { OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA } OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA } }
 }
 
 ADISCORD_vorkerland_central_showdown_edges_verified = {

@@ -11,8 +11,8 @@
 
 ## Dirty Zone
 
-1. After the collapse begins, wait 60–90 days for the Dirty Zone opening superevent.
-2. Confirm that SLA and MLR appear first, RZA and SCA after 45 days, and ERT and IRT after another 45 days.
+1. After the collapse begins, confirm that the Dirty Zone remains closed for exactly 1095 days.
+2. Confirm that the opening superevent fires once, then SLA, MLR, RZA, SCA, ERT, and IRT appear one at a time over the following 11 days.
 3. Confirm that every contaminated state keeps the permanent contaminated modifier.
 4. Confirm that state 23 remains untouched and that no Dirty Zone country enters the Vorkerland war automatically.
 
@@ -28,7 +28,7 @@
 Use the console command `event ADISCORD_vorkerland_collapse.<id>` with:
 
 - `1` — start the collapse sequence.
-- `10` — open the Dirty Zone sequence.
+- `85` — open the Dirty Zone sequence after its three-year scheduling flag has been set.
 - `20` — Worker victory.
 - `21` — Vlad victory.
 - `22` — Dorian victory.

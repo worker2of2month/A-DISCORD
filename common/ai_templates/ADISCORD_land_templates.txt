@@ -2,6 +2,28 @@
 # groups, specialists, and tanks use separate roles so the AI keeps a balanced
 # army instead of converting every formation to the most expensive design.
 
+# The northern collapse OOBs deliberately use the same cheap four-battalion
+# levy as local garrisons. During the regional war graph those formations are
+# line infantry; keep them out of the garrison role so the AI assigns them to
+# fronts instead of leaving the theatre empty.
+ADISCORD_vorkerland_northern_militia_templates = {
+	role = infantry
+	upgrade_prio = { base = 14 }
+
+	ADISCORD_vorkerland_northern_line_militia = {
+		enable = {
+			is_ai = yes
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+			OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD }
+		}
+		reinforce_prio = 1
+		upgrade_prio = { base = 14 }
+		can_upgrade_in_field = { always = yes }
+		target_template = { regiments = { ADISCORD_militia = 4 } }
+	}
+}
+
 ADISCORD_garrison_templates = {
 	role = garrison
 	upgrade_prio = {
@@ -9,6 +31,15 @@ ADISCORD_garrison_templates = {
 		modifier = { factor = 15 NOT = { ai_has_role_template = garrison } }
 	}
 	ADISCORD_garrison_levy = {
+		enable = {
+			NOT = {
+				AND = {
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+					OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD }
+				}
+			}
+		}
 		reinforce_prio = 0
 		custom_icon = 7
 		upgrade_prio = { base = 2 }
@@ -83,7 +114,6 @@ ADISCORD_infantry_templates = {
 		}
 	}
 }
-
 # Assault formations use the mobile role.  This keeps them as a limited
 # offensive reserve rather than replacing every ordinary infantry division.
 ADISCORD_assault_templates = {
@@ -196,7 +226,7 @@ ADISCORD_tank_templates = {
 			is_ai = yes
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-			OR = { tag = WRK tag = VAD tag = TVA }
+			OR = { tag = WKR tag = VAD tag = TVA }
 			has_tech = ADISCORD_tech_semi_autonomous_combat_modules
 			num_of_military_factories > 2
 			has_equipment = { ADISCORD_combat_platform_archetype > 100 }

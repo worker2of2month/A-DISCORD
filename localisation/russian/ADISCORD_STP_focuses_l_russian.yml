@@ -205,3 +205,12 @@
 
  STP_SOTNIKOV_TAKES_COMMAND: "Сотников принимает командование"
  STP_SOTNIKOV_TAKES_COMMAND_desc: "Когда политический план рушится, остаются офицеры, склады и человек, готовый превратить их в новую цепочку приказов."
+
+# BEGIN CONSOLIDATED: ADISCORD_national_focuses_l_russian.yml: live STP bookmark focuses
+  STP_Side_With_Maksim_bm: "Поддержать сопротивление"
+  STP_Side_With_Maksim_bm_desc: "Шабрат и его сторонники ещё слабы, но именно слабые силы чаще всего первыми видят трещины в системе. Поддержать их - значит поставить будущее Стеланда выше удобной лжи настоящего."
+  STP_Operation_Last_Banquette_bm: "Операция «Последний банкет»"
+  STP_Operation_Last_Banquette_bm_desc: "Когда политический переход невозможно оформить законом, его оформляют заговором. Последний банкет может стать не праздником, а точкой, где старая элита перестанет быть неприкасаемой."
+  STP_Side_With_The_Party_bm: "Поддержать партию"
+  STP_Side_With_The_Party_bm_desc: "Партия знает все кабинеты, списки, деньги и слабости страны. Поддержать её - значит выбрать управляемую гниль вместо неизвестного падения."
+# END CONSOLIDATED: ADISCORD_national_focuses_l_russian.yml: live STP bookmark focuses

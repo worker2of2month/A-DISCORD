@@ -1,14 +1,55 @@
 guiTypes = {
-	# Temporary presentation adapted from TNO's Siberian anarchy diplomacy
-	# overlay. All tokens are namespaced so the art can be replaced later.
+	# The Exclusion Zone replaces the selected-country page with a deliberately
+	# non-interactive quarantine dossier. Only the engine-owned diplomacy title
+	# bar and close button remain outside this full-size quarantine layer.
 	containerWindowType = {
 		name = "ADISCORD_Dirty_Zone_Diplomacy_Container"
 		position = { x = 0 y = 0 }
-		size = { width = 540 height = -11 }
+		size = { width = 680 height = 100%% }
+		clipping = yes
+
+		background = {
+			name = "ADISCORD_Dirty_Zone_Background"
+			quadTextureSprite = "GFX_ADISCORD_constructions_window_bg"
+		}
+
+		containerWindowType = {
+			name = "ADISCORD_Dirty_Zone_Header"
+			position = { x = 12 y = 0 }
+			size = { width = 656 height = 53 }
+			clipping = yes
+
+			background = {
+				name = "ADISCORD_Dirty_Zone_Header_Background"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_header_bg"
+			}
+
+			instantTextboxType = {
+				name = "ADISCORD_Dirty_Zone_Header_Title"
+				position = { x = 18 y = 15 }
+				font = "hoi_20b"
+				text = "ADISCORD_DIRTY_ZONE_SCREEN_TITLE"
+				maxWidth = 370
+				maxHeight = 24
+				fixedsize = yes
+			}
+
+			instantTextboxType = {
+				name = "ADISCORD_Dirty_Zone_Header_Status"
+				position = { x = 438 y = 16 }
+				font = "hoi_16mbs"
+				text = "ADISCORD_DIRTY_ZONE_SCREEN_STATUS"
+				maxWidth = 180
+				maxHeight = 20
+				format = right
+				fixedsize = yes
+			}
+		}
 
 		containerWindowType = {
 			name = "ADISCORD_Dirty_Zone_Wallpaper_Container"
-			position = { x = 12 y = -12 }
+			position = { x = 76 y = 61 }
+			size = { width = 528 height = 278 }
 
 			iconType = {
 				name = "ADISCORD_Dirty_Zone_Wallpaper"
@@ -20,24 +61,116 @@ guiTypes = {
 		}
 
 		containerWindowType = {
-			name = "ADISCORD_Dirty_Zone_Animation_Clip"
-			position = { x = 265 y = 365 }
-			size = { width = 265 height = -11 }
-			verticalScrollbar = "right_vertical_slider"
+			name = "ADISCORD_Dirty_Zone_Protocol"
+			position = { x = 12 y = 347 }
+			size = { width = 656 height = 104 }
 
 			background = {
-				name = "ADISCORD_Dirty_Zone_Animation_Clip_Background"
-				quadTextureSprite = "GFX_tiled_window_transparent"
+				name = "ADISCORD_Dirty_Zone_Protocol_Background"
+				quadTextureSprite = "GFX_ADISCORD_constructions_panel_bg"
 			}
-			iconType = {
-				name = "ADISCORD_Dirty_Zone_Scrollbar_Block"
-				position = { x = 250 y = 0 }
-				spriteType = "GFX_ADISCORD_Dirty_Zone_Scrollbar_Block"
+
+			instantTextboxType = {
+				name = "ADISCORD_Dirty_Zone_Protocol_Title"
+				position = { x = 18 y = 10 }
+				font = "hoi_18mbs"
+				text = "ADISCORD_DIRTY_ZONE_PROTOCOL_TITLE"
+				maxWidth = 620
+				maxHeight = 24
+				fixedsize = yes
 			}
-			iconType = {
-				name = "ADISCORD_Dirty_Zone_Animation"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_Dirty_Zone_Animation"
+
+			instantTextboxType = {
+				name = "ADISCORD_Dirty_Zone_Protocol_Description"
+				position = { x = 18 y = 38 }
+				font = "hoi_16mbs"
+				text = "ADISCORD_DIRTY_ZONE_PROTOCOL_DESC"
+				maxWidth = 620
+				maxHeight = 56
+				fixedsize = yes
+			}
+		}
+
+		containerWindowType = {
+			name = "ADISCORD_Dirty_Zone_Signal_Panel"
+			position = { x = 12 y = 459 }
+			size = { width = 656 height = -56 }
+
+			background = {
+				name = "ADISCORD_Dirty_Zone_Signal_Background"
+				quadTextureSprite = "GFX_ADISCORD_constructions_queue_bg"
+			}
+
+			containerWindowType = {
+				name = "ADISCORD_Dirty_Zone_Terminal_Frame"
+				position = { x = 387 y = 8 }
+				size = { width = 257 height = 530 }
+
+				background = {
+					name = "ADISCORD_Dirty_Zone_Terminal_Frame_Background"
+					quadTextureSprite = "GFX_tiled_window_1b_border_adiscord"
+				}
+
+				containerWindowType = {
+					name = "ADISCORD_Dirty_Zone_Animation_Clip"
+					position = { x = 8 y = 8 }
+					size = { width = 241 height = 514 }
+					clipping = yes
+
+					background = {
+						name = "ADISCORD_Dirty_Zone_Animation_Background"
+						quadTextureSprite = "GFX_ADISCORD_constructions_queue_bg"
+					}
+
+					iconType = {
+						name = "ADISCORD_Dirty_Zone_Animation"
+						position = { x = 0 y = 0 }
+						quadTextureSprite = "GFX_ADISCORD_Dirty_Zone_Animation"
+						pdx_tooltip = ADISCORD_dirty_zone_diplomacy_tt
+					}
+				}
+			}
+
+			instantTextboxType = {
+				name = "ADISCORD_Dirty_Zone_Signal_Title"
+				position = { x = 20 y = 18 }
+				font = "hoi_20b"
+				text = "ADISCORD_DIRTY_ZONE_SIGNAL_TITLE"
+				maxWidth = 355
+				maxHeight = 24
+				fixedsize = yes
+			}
+
+			instantTextboxType = {
+				name = "ADISCORD_Dirty_Zone_Signal_Status"
+				position = { x = 20 y = 54 }
+				font = "hoi_18mbs"
+				text = "ADISCORD_DIRTY_ZONE_SIGNAL_STATUS"
+				maxWidth = 355
+				maxHeight = 120
+				fixedsize = yes
+			}
+
+			instantTextboxType = {
+				name = "ADISCORD_Dirty_Zone_Signal_Explanation"
+				position = { x = 20 y = 112 }
+				font = "hoi_16mbs"
+				text = "ADISCORD_DIRTY_ZONE_SIGNAL_DESC"
+				maxWidth = 355
+				maxHeight = 200
+				fixedsize = yes
+			}
+
+			instantTextboxType = {
+				name = "ADISCORD_Dirty_Zone_Lock_Status"
+				position = { x = 20 y = -42 }
+				Orientation = "LOWER_LEFT"
+				font = "hoi_18mbs"
+				text = "ADISCORD_DIRTY_ZONE_LOCK_STATUS"
+				maxWidth = 616
+				maxHeight = 26
+				format = center
+				fixedsize = yes
 				pdx_tooltip = ADISCORD_dirty_zone_diplomacy_tt
 			}
 		}

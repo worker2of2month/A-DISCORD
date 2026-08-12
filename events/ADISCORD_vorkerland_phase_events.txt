@@ -6,20 +6,38 @@ country_event = {
 	desc = ADISCORD_vorkerland_phase.1.d
 	picture = GFX_report_event_generic_political_reform
 	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		tag = WRK
+		ADISCORD_vorkerland_collapse_not_started = yes
+	}
 
 	option = {
 		name = ADISCORD_vorkerland_phase.1.a
+		clr_global_flag = ADISCORD_vorkerland_preference_worker
+		clr_global_flag = ADISCORD_vorkerland_preference_joint
+		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
 		set_global_flag = ADISCORD_vorkerland_preference_worker
+		country_event = { id = ADISCORD_vorkerland_collapse.1 }
 		ai_chance = { factor = 45 }
 	}
 	option = {
 		name = ADISCORD_vorkerland_phase.1.b
+		clr_global_flag = ADISCORD_vorkerland_preference_worker
+		clr_global_flag = ADISCORD_vorkerland_preference_joint
+		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
 		set_global_flag = ADISCORD_vorkerland_preference_joint
+		country_event = { id = ADISCORD_vorkerland_collapse.1 }
 		ai_chance = { factor = 30 }
 	}
 	option = {
 		name = ADISCORD_vorkerland_phase.1.c
+		clr_global_flag = ADISCORD_vorkerland_preference_worker
+		clr_global_flag = ADISCORD_vorkerland_preference_joint
+		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
 		set_global_flag = ADISCORD_vorkerland_preference_utilitarian
+		country_event = { id = ADISCORD_vorkerland_collapse.1 }
 		ai_chance = { factor = 25 }
 	}
 }
@@ -83,6 +101,51 @@ country_event = {
 		ADISCORD_vorkerland_central_showdown_edges_verified = yes
 		NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_launch_failed }
 		ADISCORD_vorkerland_has_single_surviving_claimant = yes
+		OR = {
+			WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } ADISCORD_vorkerland_central_districts_owned_and_controlled = yes }
+			VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } ADISCORD_vorkerland_central_districts_owned_and_controlled = yes }
+			TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } ADISCORD_vorkerland_central_districts_owned_and_controlled = yes }
+		}
+		# Re-evaluate the district terminal contract at execution time. This is
+		# deliberately repeated after the one-day queue so an old serialized .6,
+		# a changed controller, or a newly restored minor cannot materialize WRK
+		# over an unfinished central map.
+		NOT = { country_exists = EYR }
+		NOT = { country_exists = EGC }
+		NOT = { country_exists = RIV }
+		NOT = { country_exists = REV }
+		NOT = { country_exists = YOR }
+		NOT = { country_exists = NDN }
+		NOT = { country_exists = SWB }
+		NOT = { country_exists = VHV }
+		NOT = { country_exists = OSV }
+		NOT = { WKR = { exists = yes OR = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active } } }
+		NOT = { VAD = { exists = yes OR = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active } } }
+		NOT = { TVA = { exists = yes OR = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active } } }
+		102 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		109 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		111 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		325 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		81 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		110 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		124 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		79 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		306 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		308 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		309 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		327 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		82 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		323 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		108 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		122 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		123 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		27 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		35 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		315 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		316 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		317 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		318 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		320 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
 	}
 
 	immediate = {

@@ -15,20 +15,22 @@ if str(_REPOSITORY_ROOT) not in sys.path:
 
 try:
     from tools.builders.build_adiscord_ainholm_mandate import (
+        AIN_LOCALISATION,
         FLAG_DIR,
-        LOCALISATION_PATH,
         ROOT,
         STATE_PROFILES,
         UNIT_PATH,
+        VP_LOCALISATION_PATH,
         state_path,
     )
 except ModuleNotFoundError:
     from builders.build_adiscord_ainholm_mandate import (
+        AIN_LOCALISATION,
         FLAG_DIR,
-        LOCALISATION_PATH,
         ROOT,
         STATE_PROFILES,
         UNIT_PATH,
+        VP_LOCALISATION_PATH,
         state_path,
     )
 
@@ -115,23 +117,28 @@ def validate() -> list[str]:
         if not path.exists() or token not in path.read_text(encoding="utf-8-sig"):
             issues.append(f"{path.name} lacks {token}")
 
-    if not LOCALISATION_PATH.exists():
-        issues.append("AIN Russian localisation is missing")
-    else:
-        raw = LOCALISATION_PATH.read_bytes()
+    for localisation_path, expected_entries in AIN_LOCALISATION.items():
+        if not localisation_path.exists():
+            issues.append(f"shared AIN localisation is missing: {localisation_path.relative_to(ROOT)}")
+            continue
+        raw = localisation_path.read_bytes()
         source = raw.decode("utf-8-sig")
         if not raw.startswith(b"\xef\xbb\xbf"):
-            issues.append("AIN Russian localisation lost its UTF-8 BOM")
-        for key in (
-            "AIN:",
-            "AIN_Elias_Marven:",
-            "AIN_concession_economy:",
-            "VICTORY_POINTS_147:",
-            "VICTORY_POINTS_16348:",
-            "VICTORY_POINTS_16314:",
-        ):
+            issues.append(f"shared AIN localisation lost its UTF-8 BOM: {localisation_path.relative_to(ROOT)}")
+        for key, value in expected_entries.items():
+            if not re.search(rf'(?m)^\s*{re.escape(key)}:\s*"{re.escape(value)}"\s*$', source):
+                issues.append(f"AIN localisation lacks synchronized key {key}")
+
+    if not VP_LOCALISATION_PATH.exists():
+        issues.append("shared Russian victory-point localisation is missing")
+    else:
+        raw = VP_LOCALISATION_PATH.read_bytes()
+        source = raw.decode("utf-8-sig")
+        if not raw.startswith(b"\xef\xbb\xbf"):
+            issues.append("shared Russian victory-point localisation lost its UTF-8 BOM")
+        for key in ("VICTORY_POINTS_147:", "VICTORY_POINTS_16348:", "VICTORY_POINTS_16314:"):
             if key not in source:
-                issues.append(f"AIN localisation lacks {key[:-1]}")
+                issues.append(f"AIN victory-point localisation lacks {key[:-1]}")
 
     for directory, expected_size in (
         (FLAG_DIR, (82, 52)),

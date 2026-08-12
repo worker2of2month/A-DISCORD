@@ -19,19 +19,29 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
         self.assertIn("exhaustion", SECTIONS)
         self.assertEqual(validate(ROOT, "exhaustion"), [])
 
-    def test_monthly_update_is_country_scoped_to_the_three_claimants(self) -> None:
+    def test_updates_are_event_driven_without_monthly_polling(self) -> None:
         on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
         monthly = named_block(on_actions, "on_monthly")
-        self.assertIn("tag = WRK", monthly)
-        self.assertIn("tag = VAD", monthly)
-        self.assertIn("tag = TVA", monthly)
-        self.assertIn("ADISCORD_vorkerland_update_civil_war_exhaustion = yes", monthly)
-        self.assertNotIn("ADISCORD_vorkerland_piv_macri_volunteer_mission", monthly)
-        self.assertNotIn("every_country", monthly)
-        self.assertNotIn("every_state", monthly)
+        update = "ADISCORD_vorkerland_update_civil_war_exhaustion = yes"
+        self.assertNotIn(update, monthly)
+        for hook_name in ("on_war", "on_peace"):
+            hook = named_block(on_actions, hook_name)
+            self.assertIn("ADISCORD_vorkerland_is_main_claimant = yes", hook)
+            self.assertIn(
+                "NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }",
+                hook,
+            )
+            self.assertIn(update, hook)
+        capitulation = named_block(on_actions, "on_capitulation")
+        self.assertIn("ROOT = { ADISCORD_vorkerland_is_main_claimant = yes }", capitulation)
+        self.assertIn(
+            "ROOT = { ADISCORD_vorkerland_update_civil_war_exhaustion = yes }",
+            capitulation,
+        )
+        self.assertEqual(on_actions.count(update), 3)
         self.assertNotIn("on_daily", on_actions)
 
-    def test_each_country_uses_new_casualties_and_duration_once_per_month(self) -> None:
+    def test_each_update_uses_new_casualties_and_one_bounded_increment(self) -> None:
         effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
         update = named_block(effects, "ADISCORD_vorkerland_update_civil_war_exhaustion")
         self.assertIn("ADISCORD_vorkerland_civil_war_casualties_snapshot_k", update)
@@ -70,6 +80,21 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
             update,
             r"clamp_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_vorkerland_civil_war_casualties_delta_k\s+min\s*=\s*0\s+max\s*=\s*10000\s*\}",
         )
+        maps = read("common/scripted_effects/ADISCORD_vorkerland_collapse_map_effects.txt")
+        finish = named_block(maps, "ADISCORD_vorkerland_finish_civil_war_exhaustion")
+        for tag in ("WKR", "WRK", "VAD", "TVA"):
+            self.assertIn(
+                f"{tag} = {{ ADISCORD_vorkerland_reset_civil_war_exhaustion = yes }}",
+                finish,
+            )
+        for outcome in ("worker", "vlad", "dorian"):
+            outcome_map = named_block(maps, f"ADISCORD_vorkerland_apply_{outcome}_map")
+            self.assertIn("ADISCORD_vorkerland_begin_reunification = yes", outcome_map)
+            self.assertNotIn("ADISCORD_vorkerland_finish_civil_war_exhaustion = yes", outcome_map)
+        phase = read("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
+        terminal = named_block(phase, "ADISCORD_vorkerland_finalize_reunified_wrk")
+        self.assertIn("set_global_flag = ADISCORD_vorkerland_central_war_finished", terminal)
+        self.assertIn("ADISCORD_vorkerland_finish_civil_war_exhaustion = yes", terminal)
 
     def test_piv_volunteer_mission_uses_war_edges_not_monthly_polling(self) -> None:
         on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
@@ -123,8 +148,9 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
         add = named_block(decisions, "ADISCORD_debug_add_vorkerland_war_exhaustion")
         reset = named_block(decisions, "ADISCORD_debug_reset_vorkerland_war_exhaustion")
         for block in (add, reset):
-            self.assertIn("tag = WRK", block)
+            self.assertIn("tag = WKR", block)
             self.assertIn("tag = VAD", block)
+            self.assertIn("tag = TVA", block)
             self.assertIn("ai_will_do = { factor = 0 }", block)
         self.assertIn("value = 25", add)
         self.assertIn("ADISCORD_vorkerland_refresh_civil_war_exhaustion = yes", add)

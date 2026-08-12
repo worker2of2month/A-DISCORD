@@ -16,12 +16,26 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		has_global_flag = ADISCORD_vorkerland_solar_winner_sol
-		VAD = { exists = yes NOT = { has_capitulated = yes } }
+		VAD = { exists = yes has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending }
 	}
 
 	option = {
 		name = ADISCORD_vorkerland_diplomacy.2.a
+		trigger = {
+			has_global_flag = ADISCORD_vorkerland_solar_winner_sol
+			NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
+			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+			is_subject = no
+			NOT = { has_capitulated = yes }
+			VAD = {
+				exists = yes
+				is_subject = no
+				NOT = { has_capitulated = yes }
+				has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending
+				NOT = { has_war_with = ROOT }
+			}
+		}
 		ai_chance = { factor = 85 }
 		ADISCORD_vorkerland_leave_inherited_faction = yes
 		set_country_flag = ADISCORD_vorkerland_allied_with_vad
@@ -36,6 +50,7 @@ country_event = {
 			}
 			add_to_faction = SOL
 			clr_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending
+			clr_country_flag = ADISCORD_vorkerland_vad_sol_invitation_dispatch_guard
 			set_country_flag = ADISCORD_vorkerland_vad_sol_invitation_resolved
 			set_country_flag = ADISCORD_vorkerland_preserve_wartime_faction
 		}
@@ -47,6 +62,7 @@ country_event = {
 		ai_chance = { factor = 15 }
 		VAD = {
 			clr_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending
+			clr_country_flag = ADISCORD_vorkerland_vad_sol_invitation_dispatch_guard
 			set_country_flag = ADISCORD_vorkerland_vad_sol_invitation_resolved
 		}
 		set_global_flag = ADISCORD_vorkerland_vad_sol_alliance_declined
@@ -61,12 +77,26 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		has_global_flag = ADISCORD_vorkerland_volnograd_winner_vla
-		WKR = { exists = yes NOT = { has_capitulated = yes } }
+		WKR = { exists = yes has_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending }
 	}
 
 	option = {
 		name = ADISCORD_vorkerland_diplomacy.3.a
+		trigger = {
+			has_global_flag = ADISCORD_vorkerland_volnograd_winner_vla
+			NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
+			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+			is_subject = no
+			NOT = { has_capitulated = yes }
+			WKR = {
+				exists = yes
+				is_subject = no
+				NOT = { has_capitulated = yes }
+				has_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending
+				NOT = { has_war_with = ROOT }
+			}
+		}
 		ai_chance = { factor = 80 }
 		ADISCORD_vorkerland_leave_inherited_faction = yes
 		set_country_flag = ADISCORD_vorkerland_allied_with_wkr
@@ -81,6 +111,7 @@ country_event = {
 			}
 			add_to_faction = VLA
 			clr_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending
+			clr_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_dispatch_guard
 			set_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_resolved
 			set_country_flag = ADISCORD_vorkerland_preserve_wartime_faction
 		}
@@ -92,6 +123,7 @@ country_event = {
 		ai_chance = { factor = 20 }
 		WKR = {
 			clr_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending
+			clr_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_dispatch_guard
 			set_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_resolved
 		}
 		set_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_declined
@@ -102,6 +134,13 @@ country_event = {
 	id = ADISCORD_vorkerland_diplomacy.4
 	hidden = yes
 	is_triggered_only = yes
+	trigger = {
+		tag = VAD
+		has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+		has_global_flag = ADISCORD_vorkerland_sol_restoration_pending
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_materialized }
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry }
+	}
 
 	immediate = { ADISCORD_vorkerland_restore_sol_as_vad_puppet = yes }
 }
@@ -110,6 +149,73 @@ country_event = {
 	id = ADISCORD_vorkerland_diplomacy.5
 	hidden = yes
 	is_triggered_only = yes
+	trigger = {
+		tag = VAD
+		has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+		has_global_flag = ADISCORD_vorkerland_sol_restoration_pending
+		has_global_flag = ADISCORD_vorkerland_sol_restoration_materialized
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_retry }
+	}
 
 	immediate = { ADISCORD_vorkerland_verify_sol_restoration = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.6
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = VAD
+		has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+		has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending
+		NOT = { has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_retry }
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
+	}
+
+	immediate = { ADISCORD_vorkerland_verify_vad_solar_intervention = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.7
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = VAD
+		has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+		has_global_flag = ADISCORD_vorkerland_sol_restoration_pending
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_materialized }
+		has_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry
+	}
+
+	immediate = { ADISCORD_vorkerland_restore_sol_as_vad_puppet = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.8
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = VAD
+		has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+		has_global_flag = ADISCORD_vorkerland_sol_restoration_pending
+		has_global_flag = ADISCORD_vorkerland_sol_restoration_materialized
+		has_global_flag = ADISCORD_vorkerland_sol_restoration_retry
+	}
+
+	immediate = { ADISCORD_vorkerland_verify_sol_restoration = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.9
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = VAD
+		has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+		has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending
+		has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_retry
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
+	}
+
+	immediate = { ADISCORD_vorkerland_verify_vad_solar_intervention = yes }
 }

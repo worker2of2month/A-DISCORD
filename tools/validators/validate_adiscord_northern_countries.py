@@ -163,13 +163,24 @@ def validate() -> list[str]:
     traits = read("common/country_leader/ADISCORD_northern_traits.txt")
     ideas = read("common/ideas/ADISCORD_northern_ideas.txt")
     portraits = read("interface/ADISCORD_northern_portraits.gfx")
-    country_loc_path = ROOT / "localisation" / "russian" / "ADISCORD_northern_countries_l_russian.yml"
-    country_loc = country_loc_path.read_text(encoding="utf-8-sig", errors="strict")
+    country_loc_paths = tuple(
+        ROOT / "localisation" / "russian" / filename
+        for filename in (
+            "countries_l_russian.yml",
+            "parties_l_russian.yml",
+            "nsb_characters_l_russian.yml",
+            "ADISCORD_traits_l_russian.yml",
+            "ADISCORD_ideas_l_russian.yml",
+        )
+    )
+    country_loc = "\n".join(
+        path.read_text(encoding="utf-8-sig", errors="strict") for path in country_loc_paths
+    )
     vp_loc = VP_LOCALISATION.read_text(encoding="utf-8-sig", errors="strict") if VP_LOCALISATION.exists() else ""
     tech_builder = read("tools/builders/build_adiscord_technology_system.py")
     tech_data = read("tools/data/adiscord_starting_technology_profiles.json")
 
-    for localisation_path in (country_loc_path, VP_LOCALISATION):
+    for localisation_path in (*country_loc_paths, VP_LOCALISATION):
         if not localisation_path.exists() or not localisation_path.read_bytes().startswith(b"\xef\xbb\xbf"):
             issues.append(f"{localisation_path.relative_to(ROOT)} must retain a UTF-8 BOM")
 

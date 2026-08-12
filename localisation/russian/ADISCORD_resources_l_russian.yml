@@ -31,3 +31,7 @@
  ADISCORD_rare_alloy_foundry: "Завод редких сплавов"
  ADISCORD_rare_alloy_foundry_plural: "Заводы редких сплавов"
  ADISCORD_rare_alloy_foundry_desc: "Специализированное литейно-металлургическое предприятие для жаропрочных и сверхтвёрдых сплавов. Производит §Y3§! ед. редких сплавов, занимает строительный слот и заметно нагружает энергосеть региона."
+
+# BEGIN CONSOLIDATED: ADISCORD_menu_tooltips_l_russian.yml: energy
+  dam_add_energy_tt: "£GFX_energy_consumption_texticon добавляет 10 энергии по дефолту"
+# END CONSOLIDATED: ADISCORD_menu_tooltips_l_russian.yml: energy

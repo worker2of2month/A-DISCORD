@@ -45,12 +45,12 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
         "WRK_constitution_of_the_republic",
     )
 
-    def test_wrk_keeps_only_the_revolutionary_starting_spirit(self) -> None:
+    def test_wkr_keeps_only_the_revolutionary_starting_spirit(self) -> None:
         effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
         repair = named_block(
             effects, "ADISCORD_vorkerland_repair_claimant_spirit_progression"
         )
-        self.assertIn("limit = { tag = WRK }", repair)
+        self.assertIn("limit = { OR = { tag = WRK tag = WKR } }", repair)
         for spirit in self.OBSOLETE_WRK_SPIRITS:
             self.assertIn(f"remove_ideas = {spirit}", repair)
         self.assertIn(f"add_ideas = {self.WRK_CHAIN[0]}", repair)
@@ -72,7 +72,7 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
             with self.subTest(spirit=spirit):
                 self.assertIn(f'name = "GFX_idea_{spirit}"', gfx)
 
-    def test_wrk_decisions_upgrade_one_spirit_in_order(self) -> None:
+    def test_wkr_decisions_upgrade_one_spirit_in_order(self) -> None:
         decisions = read("common/decisions/ADISCORD_vorkerland_collapse_decisions.txt")
         chain = (
             ("ADISCORD_vorkerland_wrk_convene_front_soviets", self.WRK_CHAIN[0], self.WRK_CHAIN[1], "60"),
@@ -81,7 +81,7 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
         for decision, old, new, days in chain:
             with self.subTest(decision=decision):
                 block = named_block(decisions, decision)
-                self.assertIn("allowed = { tag = WRK }", block)
+                self.assertIn("allowed = { tag = WKR }", block)
                 self.assertIn("ADISCORD_vorkerland_collapse_wars_started", block)
                 self.assertIn("ADISCORD_vorkerland_central_war_finished", block)
                 self.assertIn("available = { has_war = yes }", block)
@@ -117,7 +117,7 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
             events,
         )
         self.assertIsNotNone(outbreak)
-        self.assertIn("WRK = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }", outbreak.group(1))
+        self.assertIn("WKR = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }", outbreak.group(1))
         self.assertIn("TVA = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }", outbreak.group(1))
         self.assertIn("ADISCORD_vorkerland_claimant_spirit_progression_v3", outbreak.group(1))
 
@@ -125,7 +125,7 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
         for token in (
             "ADISCORD_vorkerland_collapse_wars_started",
             "ADISCORD_vorkerland_claimant_spirit_progression_v3",
-            "WRK = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }",
+            "WKR = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }",
             "TVA = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }",
         ):
             self.assertIn(token, on_actions)

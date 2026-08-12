@@ -1,11 +1,12 @@
-# The focus-unlocked consolidation stage exposes one named minor at a time.
-# Each launch has a one-day faction-detachment gap before the declaration.
+# The verified regional war graph opens these campaigns before the claimant
+# capstones. Each launch still has a one-day faction-detachment gap, and the
+# final claimant showdown remains locked behind the focus-owned preparation.
 ADISCORD_vorkerland_focus_launch_minor_eyr = {
 	if = {
 		limit = {
-			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
 			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
-			OR = { tag = WKR tag = VAD tag = TVA }
+			OR = { tag = WKR tag = VAD tag = TVA tag = WRK }
 			is_subject = no
 			NOT = { has_capitulated = yes }
 			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
@@ -21,9 +22,9 @@ ADISCORD_vorkerland_focus_launch_minor_eyr = {
 ADISCORD_vorkerland_focus_launch_minor_egc = {
 	if = {
 		limit = {
-			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
 			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
-			OR = { tag = WKR tag = VAD tag = TVA }
+			OR = { tag = WKR tag = VAD tag = TVA tag = WRK }
 			is_subject = no
 			NOT = { has_capitulated = yes }
 			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
@@ -39,9 +40,9 @@ ADISCORD_vorkerland_focus_launch_minor_egc = {
 ADISCORD_vorkerland_focus_launch_minor_riv = {
 	if = {
 		limit = {
-			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
 			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
-			OR = { tag = WKR tag = VAD tag = TVA }
+			OR = { tag = WKR tag = VAD tag = TVA tag = WRK }
 			is_subject = no
 			NOT = { has_capitulated = yes }
 			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
@@ -57,9 +58,9 @@ ADISCORD_vorkerland_focus_launch_minor_riv = {
 ADISCORD_vorkerland_focus_launch_minor_rev = {
 	if = {
 		limit = {
-			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
 			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
-			OR = { tag = WKR tag = VAD tag = TVA }
+			OR = { tag = WKR tag = VAD tag = TVA tag = WRK }
 			is_subject = no
 			NOT = { has_capitulated = yes }
 			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
@@ -75,9 +76,9 @@ ADISCORD_vorkerland_focus_launch_minor_rev = {
 ADISCORD_vorkerland_focus_launch_minor_yor = {
 	if = {
 		limit = {
-			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
 			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
-			OR = { tag = WKR tag = VAD tag = TVA }
+			OR = { tag = WKR tag = VAD tag = TVA tag = WRK }
 			is_subject = no
 			NOT = { has_capitulated = yes }
 			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
@@ -93,9 +94,9 @@ ADISCORD_vorkerland_focus_launch_minor_yor = {
 ADISCORD_vorkerland_focus_launch_minor_ndn = {
 	if = {
 		limit = {
-			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
 			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
-			OR = { tag = WKR tag = VAD tag = TVA }
+			OR = { tag = WKR tag = VAD tag = TVA tag = WRK }
 			is_subject = no
 			NOT = { has_capitulated = yes }
 			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
@@ -111,9 +112,9 @@ ADISCORD_vorkerland_focus_launch_minor_ndn = {
 ADISCORD_vorkerland_focus_launch_minor_swb = {
 	if = {
 		limit = {
-			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
 			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
-			OR = { tag = WKR tag = VAD tag = TVA }
+			OR = { tag = WKR tag = VAD tag = TVA tag = WRK }
 			is_subject = no
 			NOT = { has_capitulated = yes }
 			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
@@ -129,9 +130,9 @@ ADISCORD_vorkerland_focus_launch_minor_swb = {
 ADISCORD_vorkerland_focus_launch_minor_vhv = {
 	if = {
 		limit = {
-			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
 			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
-			OR = { tag = WKR tag = VAD tag = TVA }
+			OR = { tag = WKR tag = VAD tag = TVA tag = WRK }
 			is_subject = no
 			NOT = { has_capitulated = yes }
 			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
@@ -147,9 +148,9 @@ ADISCORD_vorkerland_focus_launch_minor_vhv = {
 ADISCORD_vorkerland_focus_launch_minor_osv = {
 	if = {
 		limit = {
-			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
 			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
-			OR = { tag = WKR tag = VAD tag = TVA }
+			OR = { tag = WKR tag = VAD tag = TVA tag = WRK }
 			is_subject = no
 			NOT = { has_capitulated = yes }
 			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
@@ -196,6 +197,7 @@ ADISCORD_vorkerland_focus_arm_central_minor_deadline = {
 ADISCORD_vorkerland_focus_confirm_central_minor_launch = {
 	if = {
 		limit = {
+			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
 			OR = {
 				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr has_war_with = EYR }
 				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc has_war_with = EGC }
@@ -212,10 +214,10 @@ ADISCORD_vorkerland_focus_confirm_central_minor_launch = {
 	}
 	else_if = {
 		limit = {
-			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
 			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
 			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_retry }
-			OR = { tag = WKR tag = VAD tag = TVA }
+			OR = { tag = WKR tag = VAD tag = TVA tag = WRK }
 			is_subject = no
 			NOT = { has_capitulated = yes }
 			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
@@ -265,6 +267,7 @@ ADISCORD_vorkerland_focus_confirm_central_minor_launch = {
 ADISCORD_vorkerland_focus_confirm_central_minor_retry = {
 	if = {
 		limit = {
+			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
 			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_retry
 			OR = {
 				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr has_war_with = EYR }
@@ -362,20 +365,50 @@ ADISCORD_vorkerland_focus_schedule_final_showdown = {
 				AND = { tag = VAD has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked }
 				AND = { tag = TVA has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked }
 			}
+			has_country_flag = ADISCORD_vorkerland_focus_central_front_prepared
 			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_retry_cooldown }
 			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending }
 			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active }
 			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
-			OR = { NOT = { country_exists = EYR } EYR = { is_subject = yes } EYR = { has_capitulated = yes } }
-			OR = { NOT = { country_exists = EGC } EGC = { is_subject = yes } EGC = { has_capitulated = yes } }
-			OR = { NOT = { country_exists = RIV } RIV = { is_subject = yes } RIV = { has_capitulated = yes } }
-			OR = { NOT = { country_exists = REV } REV = { is_subject = yes } REV = { has_capitulated = yes } }
-			OR = { NOT = { country_exists = YOR } YOR = { is_subject = yes } YOR = { has_capitulated = yes } }
-			OR = { NOT = { country_exists = NDN } NDN = { is_subject = yes } NDN = { has_capitulated = yes } }
-			OR = { NOT = { country_exists = SWB } SWB = { is_subject = yes } SWB = { has_capitulated = yes } }
-			OR = { NOT = { country_exists = VHV } VHV = { is_subject = yes } VHV = { has_capitulated = yes } }
-			OR = { NOT = { country_exists = OSV } OSV = { is_subject = yes } OSV = { has_capitulated = yes } }
+			NOT = { country_exists = EYR }
+			NOT = { country_exists = EGC }
+			NOT = { country_exists = RIV }
+			NOT = { country_exists = REV }
+			NOT = { country_exists = YOR }
+			NOT = { country_exists = NDN }
+			NOT = { country_exists = SWB }
+			NOT = { country_exists = VHV }
+			NOT = { country_exists = OSV }
+			ADISCORD_vorkerland_central_districts_inside_claimant_graph = yes
+			102 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			109 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			111 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			325 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			81 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			110 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			124 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			79 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			306 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			308 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			309 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			327 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			82 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			323 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			108 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			122 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			123 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			27 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			35 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			315 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			316 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			317 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			318 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			320 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }
 			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
+			NOT = { VAD = { exists = yes has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending } }
+			NOT = { WKR = { exists = yes has_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending } }
 			NOT = {
 				AND = {
 					has_global_flag = ADISCORD_vorkerland_sol_restoration_verified
@@ -540,10 +573,11 @@ ADISCORD_vorkerland_send_vla_support_tranche_1 = {
 				exists = yes
 				NOT = { has_capitulated = yes }
 				has_war = yes
+				OR = { is_in_faction_with = ROOT is_subject_of = ROOT }
 			}
 		}
-		add_equipment_to_stockpile = { type = infantry_equipment amount = -300 producer = WKR }
-		add_equipment_to_stockpile = { type = support_equipment amount = -30 producer = WKR }
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -300 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -30 }
 		VLA = {
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 300 producer = WKR }
 			add_equipment_to_stockpile = { type = support_equipment amount = 30 producer = WKR }
@@ -569,10 +603,11 @@ ADISCORD_vorkerland_send_vla_support_tranche_2 = {
 				exists = yes
 				NOT = { has_capitulated = yes }
 				has_war = yes
+				OR = { is_in_faction_with = ROOT is_subject_of = ROOT }
 			}
 		}
-		add_equipment_to_stockpile = { type = infantry_equipment amount = -300 producer = WKR }
-		add_equipment_to_stockpile = { type = support_equipment amount = -30 producer = WKR }
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -300 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -30 }
 		VLA = {
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 300 producer = WKR }
 			add_equipment_to_stockpile = { type = support_equipment amount = 30 producer = WKR }
@@ -601,8 +636,8 @@ ADISCORD_vorkerland_send_sol_support_tranche_1 = {
 				OR = { is_in_faction_with = ROOT is_subject_of = ROOT }
 			}
 		}
-		add_equipment_to_stockpile = { type = infantry_equipment amount = -300 producer = VAD }
-		add_equipment_to_stockpile = { type = support_equipment amount = -30 producer = VAD }
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -300 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -30 }
 		SOL = {
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 300 producer = VAD }
 			add_equipment_to_stockpile = { type = support_equipment amount = 30 producer = VAD }
@@ -634,8 +669,8 @@ ADISCORD_vorkerland_send_sol_support_tranche_2 = {
 				OR = { is_in_faction_with = ROOT is_subject_of = ROOT }
 			}
 		}
-		add_equipment_to_stockpile = { type = infantry_equipment amount = -300 producer = VAD }
-		add_equipment_to_stockpile = { type = support_equipment amount = -30 producer = VAD }
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -300 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -30 }
 		SOL = {
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 300 producer = VAD }
 			add_equipment_to_stockpile = { type = support_equipment amount = 30 producer = VAD }

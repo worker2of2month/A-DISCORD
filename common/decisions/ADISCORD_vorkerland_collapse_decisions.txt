@@ -20,86 +20,38 @@ ADISCORD_vorkerland_collapse_category = {
 		}
 	}
 
-	ADISCORD_vorkerland_consolidate_central_border = {
+	# Northern fighting unlocks a visible industrial mobilisation, not an unseen
+	# war timer. The invasion mission begins only after this 120-day preparation
+	# still satisfies the material readiness contract.
+	ADISCORD_ivanland_prepare_northern_expedition = {
 		icon = generic_prepare_civil_war
-		allowed = { ADISCORD_vorkerland_is_main_claimant = yes }
+		allowed = { tag = IVN }
 		visible = {
-			has_global_flag = ADISCORD_vorkerland_claim_wars_authorized
-			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
-			any_neighbor_country = {
-				OR = {
-					ADISCORD_vorkerland_is_central_target_for_ROOT = yes
-					ADISCORD_vorkerland_is_main_claimant_rival_for_ROOT = yes
-				}
-			}
+			has_global_flag = ADISCORD_vorkerland_ivanland_planning_unlocked_v4
+			NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }
+			NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active }
+			NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_stood_down_v4 }
 		}
-		available = {
-			NOT = { has_country_flag = ADISCORD_vorkerland_central_recovery }
-			any_neighbor_country = {
-				OR = {
-					ADISCORD_vorkerland_is_central_target_for_ROOT = yes
-					ADISCORD_vorkerland_is_main_claimant_rival_for_ROOT = yes
-				}
-			}
-		}
-		cost = 0
-		fire_only_once = no
-		days_re_enable = 3
-		complete_effect = {
-			ADISCORD_vorkerland_detach_central_war_factions = yes
-			every_neighbor_country = {
-				limit = {
-					OR = {
-						ADISCORD_vorkerland_is_central_target_for_ROOT = yes
-						ADISCORD_vorkerland_is_main_claimant_rival_for_ROOT = yes
-					}
-				}
-				ROOT = { declare_war_on = { target = PREV type = annex_everything } }
-			}
-		}
-		ai_will_do = { factor = 1000 }
-	}
-
-	# Worker and Doctor Worx first fight their own opening campaigns. As soon as
-	# either side is at peace, that side can begin a visible mobilisation period.
-	# The global flag lets both AIs occupy the common border before WRK opens the
-	# final war 45 days later.
-	ADISCORD_vorkerland_prepare_worker_doctor_showdown = {
-		icon = generic_fortify_the_borders
-		allowed = { OR = { tag = WRK tag = TVA } }
-		visible = {
-			has_global_flag = ADISCORD_vorkerland_claim_wars_authorized
-			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
-			NOT = { has_global_flag = ADISCORD_vorkerland_worker_doctor_showdown_started }
-			WRK = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
-			TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_worker_doctor_front_preparation
-				WRK = { has_war = no }
-				TVA = { has_war = no }
-			}
-		}
-		available = {
-			NOT = { has_global_flag = ADISCORD_vorkerland_worker_doctor_front_preparation }
-			has_war = no
-			OR = {
-				AND = { tag = WRK NOT = { has_war_with = TVA } any_neighbor_country = { tag = TVA } }
-				AND = { tag = TVA NOT = { has_war_with = WRK } any_neighbor_country = { tag = WRK } }
-			}
-		}
-		cost = 0
-		days_remove = 45
+		available = { ADISCORD_ivanland_intervention_start_ready = yes }
+		cost = 75
+		days_remove = 120
 		fire_only_once = yes
-		complete_effect = {
-			ADISCORD_vorkerland_detach_worker_doctor_factions = yes
-			set_global_flag = ADISCORD_vorkerland_worker_doctor_front_preparation
-		}
+		modifier = { civilian_factory_use = 2 }
 		remove_effect = {
-			# Resolve through a country event so the diplomatic cache is checked
-			# again after the visible 45-day preparation timer has elapsed.
-			WRK = { country_event = { id = ADISCORD_vorkerland_collapse.48 hours = 1 } }
+			if = {
+				limit = { ADISCORD_ivanland_intervention_start_ready = yes }
+				ADISCORD_vorkerland_activate_ivanland_intervention_mission = yes
+			}
+			else = {
+				set_global_flag = ADISCORD_vorkerland_ivanland_stood_down_v4
+				country_event = { id = ADISCORD_vorkerland_collapse.80 }
+			}
 		}
-		ai_will_do = { factor = 1000 }
+		ai_will_do = {
+			base = 200
+			modifier = { factor = 0 ADISCORD_ivanland_intervention_start_ready = no }
+			modifier = { factor = 2 num_divisions > 17 has_war_support > 0.50 }
+		}
 	}
 
 	# One shared decision opens every still-valid peripheral rivalry after a
@@ -155,12 +107,16 @@ ADISCORD_vorkerland_collapse_category = {
 	ADISCORD_vorkerland_rom_northern_intervention = {
 		icon = generic_border_conflict
 		allowed = { tag = ROM }
+		# Keep this player/AI-selected mission from auto-starting on a transient
+		# availability tick; its click remains the only 240-day timer authority.
+		activation = { always = no }
 		visible = {
-			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			ADISCORD_vorkerland_rom_northern_intervention_start_ready = yes
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 			NOT = { has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_resolved }
 		}
 		available = {
+			ADISCORD_vorkerland_rom_northern_intervention_start_ready = yes
 			is_subject = no
 			has_war = no
 			ZAO = { exists = yes is_subject = no controls_state = 72 }
@@ -172,6 +128,9 @@ ADISCORD_vorkerland_collapse_category = {
 		days_mission_timeout = 240
 		complete_effect = {
 			set_global_flag = ADISCORD_vorkerland_rom_northern_intervention_active
+			clr_global_flag = ADISCORD_vorkerland_rom_northern_intervention_resolved
+			clr_global_flag = ADISCORD_vorkerland_rom_northern_intervention_succeeded
+			clr_global_flag = ADISCORD_vorkerland_rom_northern_intervention_failed
 			declare_war_on = {
 				target = ZAO
 				type = take_state_focus
@@ -182,6 +141,12 @@ ADISCORD_vorkerland_collapse_category = {
 				type = take_state_focus
 				generator = { 196 322 }
 			}
+			# The mission UI is not the lifecycle authority. A one-day assertion catches
+			# rejected declarations, while the bounded watchdog guarantees a terminal
+			# outcome even if Clausewitz drops the selectable-mission timeout effect.
+			set_country_flag = { flag = ADISCORD_vorkerland_rom_northern_watchdog_scheduled days = 241 }
+			country_event = { id = ADISCORD_vorkerland_collapse.46 days = 1 }
+			country_event = { id = ADISCORD_vorkerland_collapse.45 days = 240 }
 		}
 		cancel_trigger = {
 			OR = {
@@ -196,13 +161,13 @@ ADISCORD_vorkerland_collapse_category = {
 			}
 			else = { ADISCORD_vorkerland_rom_northern_intervention_failure = yes }
 		}
-		timeout_effect = { ADISCORD_vorkerland_rom_northern_intervention_failure = yes }
+		timeout_effect = { ADISCORD_vorkerland_resolve_rom_northern_intervention_timeout = yes }
 		ai_will_do = { factor = 225 }
 	}
 
 	ADISCORD_vorkerland_wrk_activate_front_committees = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { tag = WKR }
 		visible = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished } }
 		available = { has_war = yes NOT = { has_idea = ADISCORD_vorkerland_wrk_front_committees } }
 		cost = 20
@@ -218,7 +183,7 @@ ADISCORD_vorkerland_collapse_category = {
 
 	ADISCORD_vorkerland_wrk_requisition_rail_stock = {
 		icon = generic_production
-		allowed = { tag = WRK }
+		allowed = { tag = WKR }
 		visible = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished } }
 		available = { has_war = yes NOT = { has_idea = ADISCORD_vorkerland_wrk_rail_requisition } }
 		cost = 15
@@ -226,7 +191,7 @@ ADISCORD_vorkerland_collapse_category = {
 		days_re_enable = 40
 		complete_effect = {
 			add_war_support = -0.01
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 120 producer = WRK }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 120 producer = ROOT }
 			add_timed_idea = { idea = ADISCORD_vorkerland_wrk_rail_requisition days = 30 }
 		}
 		ai_will_do = { factor = 250 }
@@ -235,8 +200,18 @@ ADISCORD_vorkerland_collapse_category = {
 	ADISCORD_vorkerland_vad_open_imperial_registers = {
 		icon = generic_political_pressure
 		allowed = { tag = VAD }
-		visible = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished } }
-		available = { has_war = yes NOT = { has_idea = ADISCORD_vorkerland_vad_imperial_registers } }
+		visible = {
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+			has_country_flag = ADISCORD_vorkerland_focus_vad_registers_opened
+			NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_commandantures_formed }
+		}
+		available = {
+			has_war = yes
+			has_country_flag = ADISCORD_vorkerland_focus_vad_registers_opened
+			NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_commandantures_formed }
+			NOT = { has_idea = ADISCORD_vorkerland_vad_imperial_registers }
+		}
 		cost = 20
 		fire_only_once = no
 		days_re_enable = 45
@@ -250,8 +225,18 @@ ADISCORD_vorkerland_collapse_category = {
 	ADISCORD_vorkerland_vad_form_field_commandantures = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = VAD }
-		visible = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished } }
-		available = { has_war = yes NOT = { has_idea = ADISCORD_vorkerland_vad_field_commandantures } }
+		visible = {
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+			has_country_flag = ADISCORD_vorkerland_focus_vad_commandantures_formed
+			NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_registers_opened }
+		}
+		available = {
+			has_war = yes
+			has_country_flag = ADISCORD_vorkerland_focus_vad_commandantures_formed
+			NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_registers_opened }
+			NOT = { has_idea = ADISCORD_vorkerland_vad_field_commandantures }
+		}
 		cost = 25
 		fire_only_once = no
 		days_re_enable = 45
@@ -355,17 +340,17 @@ ADISCORD_vorkerland_collapse_category = {
 		allowed = { tag = TVA }
 		visible = {
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-			WRK = { exists = yes has_war_with = ROOT }
+			WKR = { exists = yes has_war_with = ROOT }
 		}
 		available = {
-			WRK = { has_war_with = ROOT OR = { controls_state = 33 controls_state = 34 } }
+			WKR = { exists = yes has_war_with = ROOT OR = { controls_state = 33 controls_state = 34 } }
 		}
 		cost = 35
 		fire_only_once = yes
 		complete_effect = {
 			33 = {
 				if = {
-					limit = { is_controlled_by = WRK }
+					limit = { is_controlled_by = WKR }
 					create_unit = {
 						division = "name = \"Southeastern Cell\" division_template = \"TVA Infiltration Cell\" start_experience_factor = 0.25 start_equipment_factor = 0.75"
 						owner = TVA
@@ -375,7 +360,7 @@ ADISCORD_vorkerland_collapse_category = {
 			}
 			34 = {
 				if = {
-					limit = { is_controlled_by = WRK }
+					limit = { is_controlled_by = WKR }
 					create_unit = {
 						division = "name = \"Oil District Cell\" division_template = \"TVA Infiltration Cell\" start_experience_factor = 0.25 start_equipment_factor = 0.75"
 						owner = TVA
@@ -460,7 +445,7 @@ ADISCORD_vorkerland_collapse_category = {
 
 	ADISCORD_vorkerland_wrk_convene_front_soviets = {
 		icon = generic_political_pressure
-		allowed = { tag = WRK }
+		allowed = { tag = WKR }
 		visible = {
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
@@ -479,7 +464,7 @@ ADISCORD_vorkerland_collapse_category = {
 
 	ADISCORD_vorkerland_wrk_adopt_front_charter = {
 		icon = generic_political_pressure
-		allowed = { tag = WRK }
+		allowed = { tag = WKR }
 		visible = {
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
@@ -536,7 +521,7 @@ ADISCORD_vorkerland_collapse_category = {
 
 	ADISCORD_vorkerland_wrk_open_erased_archives = {
 		icon = generic_political_pressure
-		allowed = { tag = WRK }
+		allowed = { tag = WKR }
 		visible = { has_idea = ADISCORD_vorkerland_erased_nations }
 		available = { has_global_flag = ADISCORD_vorkerland_collapse_started }
 		cost = 50
@@ -551,7 +536,7 @@ ADISCORD_vorkerland_collapse_category = {
 
 	ADISCORD_vorkerland_wrk_restore_displaced_councils = {
 		icon = generic_political_pressure
-		allowed = { tag = WRK }
+		allowed = { tag = WKR }
 		visible = { has_idea = ADISCORD_vorkerland_erased_nations_relief_1 }
 		available = { has_global_flag = ADISCORD_vorkerland_collapse_started }
 		cost = 75
@@ -566,7 +551,7 @@ ADISCORD_vorkerland_collapse_category = {
 
 	ADISCORD_vorkerland_wrk_enact_constitutional_guarantees = {
 		icon = generic_political_pressure
-		allowed = { tag = WRK }
+		allowed = { tag = WKR }
 		visible = { has_idea = ADISCORD_vorkerland_erased_nations_relief_2 }
 		available = { has_global_flag = ADISCORD_vorkerland_collapse_started }
 		cost = 100
@@ -620,85 +605,21 @@ ADISCORD_vorkerland_collapse_category = {
 		ai_will_do = { factor = 250 }
 	}
 
-	ADISCORD_vorkerland_wrk_integrate_vla = {
-		icon = generic_diplomatic_treaty
-		allowed = { tag = WRK }
-		visible = {
-			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-			VLA = { exists = yes is_subject = no controls_state = 74 }
-			NOT = { country_exists = EBA }
-		}
-		available = { VLA = { NOT = { has_war_with = ROOT } } }
-		cost = 50
-		fire_only_once = yes
-		complete_effect = {
-			if = {
-				limit = { has_global_flag = ADISCORD_vorkerland_worker_killed }
-				# Without Worker as a personal guarantor, the Volnograd AI refuses.
-				# Its capitulation is converted into the same special WRK dependency.
-				VLA = { set_country_flag = ADISCORD_vorkerland_wrk_protectorate_enforcement }
-				declare_war_on = { target = VLA type = annex_everything }
-			}
-			else = {
-				puppet = VLA
-				set_autonomy = { target = VLA autonomy_state = autonomy_district_in_Vorkerland freedom_level = 0.10 }
-				VLA = {
-					set_country_flag = ADISCORD_vorkerland_joined_worker_republic
-					ADISCORD_vorkerland_sync_republics_from_ruins = yes
-				}
-				ADISCORD_vorkerland_wrk_activate_vla_auxiliaries = yes
-			}
-		}
-		ai_will_do = { factor = 220 }
-	}
-
-	ADISCORD_vorkerland_vad_recognize_sol = {
-		icon = generic_diplomatic_treaty
-		allowed = { tag = VAD }
-		visible = {
-			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-			SOL = { exists = yes is_subject = no controls_state = 76 }
-			NOT = { country_exists = SRA }
-			NOT = { country_exists = CSL }
-		}
-		available = {
-			has_war_with = WRK
-			SOL = { NOT = { has_war_with = ROOT } }
-		}
-		cost = 50
-		fire_only_once = yes
-		complete_effect = {
-			if = {
-				limit = { is_in_faction = no }
-				create_faction_from_template = {
-					template = faction_template_ADISCORD_standard
-					name = ADISCORD_vorkerland_restoration_coalition
-				}
-			}
-			add_to_faction = SOL
-			SOL = {
-				set_country_flag = ADISCORD_vorkerland_independence_recognized_by_vad
-				# A separate declaration survives VAD's possible capitulation instead
-				# of tying SOL to the life cycle of another country's war instance.
-				declare_war_on = { target = WRK type = annex_everything }
-			}
-		}
-		ai_will_do = { factor = 300 }
-	}
-
 	ADISCORD_vorkerland_btl_support_wrk = {
 		icon = generic_allies_build_infantry
 		allowed = { tag = BTL }
-		visible = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started NOT = { has_global_flag = ADISCORD_vorkerland_btl_contract_signed } WRK = { exists = yes NOT = { has_capitulated = yes } } }
+		visible = {
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_btl_contract_signed }
+			WKR = { exists = yes NOT = { has_capitulated = yes } }
+		}
 		cost = 25
 		fire_only_once = yes
 		complete_effect = {
 			set_global_flag = ADISCORD_vorkerland_btl_contract_signed
 			set_global_flag = ADISCORD_vorkerland_btl_supports_wrk
 			add_ideas = ADISCORD_vorkerland_btl_volunteer_contract
-			WRK = { add_ideas = ADISCORD_vorkerland_btl_contract_support add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 250 producer = BTL } }
+			WKR = { add_ideas = ADISCORD_vorkerland_btl_contract_support add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 250 producer = BTL } }
 		}
 		ai_will_do = { factor = 100 }
 	}
@@ -736,10 +657,17 @@ ADISCORD_vorkerland_collapse_category = {
 	ADISCORD_vorkerland_val_support_wrk = {
 		icon = generic_production
 		allowed = { tag = VAL }
-		visible = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started NOT = { has_global_flag = ADISCORD_vorkerland_val_contract_signed } WRK = { exists = yes NOT = { has_capitulated = yes } } }
+		visible = {
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_val_contract_signed }
+			WKR = { exists = yes NOT = { has_capitulated = yes } }
+		}
 		cost = 35
 		fire_only_once = yes
-		complete_effect = { set_global_flag = ADISCORD_vorkerland_val_contract_signed WRK = { add_ideas = ADISCORD_vorkerland_val_contract_support add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 400 producer = VAL } add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = VAL } } }
+		complete_effect = {
+			set_global_flag = ADISCORD_vorkerland_val_contract_signed
+			WKR = { add_ideas = ADISCORD_vorkerland_val_contract_support add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 400 producer = VAL } add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = VAL } }
+		}
 		ai_will_do = { factor = 100 }
 	}
 
@@ -823,31 +751,6 @@ ADISCORD_vorkerland_collapse_category = {
 		ai_will_do = { factor = 300 }
 	}
 
-	ADISCORD_vorkerland_recognize_free_republics = {
-		icon = generic_diplomatic_treaty
-		allowed = { tag = WRK }
-		visible = {
-			has_country_flag = ADISCORD_vorkerland_central_unifier
-			NOT = { has_country_flag = ADISCORD_vorkerland_free_republics_recognized }
-			OR = { ROM = { exists = yes } TRU = { exists = yes } }
-		}
-		available = { has_war = no }
-		cost = 0
-		fire_only_once = yes
-		complete_effect = {
-			if = {
-				limit = { ROM = { exists = yes NOT = { has_war_with = ROOT } } }
-				diplomatic_relation = { country = ROM relation = non_aggression_pact active = yes }
-			}
-			if = {
-				limit = { TRU = { exists = yes NOT = { has_war_with = ROOT } } }
-				diplomatic_relation = { country = TRU relation = non_aggression_pact active = yes }
-			}
-			set_country_flag = ADISCORD_vorkerland_free_republics_recognized
-		}
-		ai_will_do = { factor = 300 }
-	}
-
 	# Zaozersk is the only northern administration that may return to WRK.
 	# Volnograd keeps its separate western loyalist route; technocratic Rimat does
 	# not receive this decision at all.
@@ -889,56 +792,35 @@ ADISCORD_vorkerland_collapse_category = {
 		ai_will_do = { factor = 350 }
 	}
 
-	# Krait accepts Ivanland protection immediately. Ivanland then has to break the
-	# remaining northern emergency front and occupy states 90, 93 and 94; state 91
-	# remains in the hands of its new Krait client until the final settlement.
+	# Both client administrations are postwar creations. Ivanland first has to
+	# occupy all four settlement states; IBA is then created before IBL.
 	ADISCORD_ivanland_limited_intervention = {
 		icon = generic_border_conflict
 		allowed = { tag = IVN }
+		# Non-selectable missions otherwise auto-activate from their `activation`
+		# trigger. Keep it permanently false so the post-war event's
+		# `activate_mission` call is the only authority for the 240-day deadline.
+		activation = { always = no }
 		visible = {
-			has_global_flag = ADISCORD_vorkerland_ivanland_intervention_available
-			has_global_flag = ADISCORD_vorkerland_northern_wars_began
+			has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
 			NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }
 		}
-		available = {
-			has_war = no
-			ZAO = { exists = yes is_subject = no }
-			WPA = { exists = yes is_subject = no }
-			WPS = { exists = yes is_subject = no }
-			IBL = {
-				exists = yes
-				is_subject = no
-				controls_state = 91
-			}
-			PWR = {
-				exists = yes
-				is_subject = no
-				is_neighbor_of = ROOT
-				controls_state = 90
-			}
-			PSD = {
-				exists = yes
-				is_subject = no
-				controls_state = 93
-				controls_state = 94
-			}
-		}
-		cost = 0
-		selectable_mission = yes
+		# The preparation decision activates this mission directly. `always = no`
+		# prevents a second, player-clicked deadline from diverging from the one
+		# authoritative 240-day timer.
+		available = { always = no }
+		selectable_mission = no
 		fire_only_once = yes
 		days_mission_timeout = 240
-		complete_effect = {
-			set_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
-			ADISCORD_vorkerland_begin_ivanland_intervention = yes
-		}
+		is_good = yes
 		cancel_trigger = {
 			has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
 			OR = {
 				AND = {
 					controls_state = 90
+					controls_state = 91
 					controls_state = 93
 					controls_state = 94
-					IBL = { exists = yes is_subject_of = ROOT controls_state = 91 }
 				}
 				has_capitulated = yes
 			}
@@ -947,9 +829,9 @@ ADISCORD_vorkerland_collapse_category = {
 			if = {
 				limit = {
 					controls_state = 90
+					controls_state = 91
 					controls_state = 93
 					controls_state = 94
-					IBL = { exists = yes is_subject_of = ROOT controls_state = 91 }
 				}
 				ADISCORD_vorkerland_ivanland_intervention_success = yes
 			}
@@ -975,7 +857,7 @@ ADISCORD_vorkerland_collapse_category = {
 		}
 		available = {
 			has_war = no
-			WRK = {
+			WKR = {
 				exists = yes
 				has_war_with = VAD
 				check_variable = {
@@ -986,7 +868,7 @@ ADISCORD_vorkerland_collapse_category = {
 			}
 			VAD = {
 				exists = yes
-				has_war_with = WRK
+				has_war_with = WKR
 				check_variable = {
 					var = ADISCORD_vorkerland_civil_war_exhaustion
 					value = 100
@@ -1016,7 +898,7 @@ ADISCORD_vorkerland_collapse_category = {
 		ai_will_do = { factor = 350 }
 	}
 
-	# The two offshore WRK garrisons can be isolated and occupied without opening
+	# The worker claimant's two offshore garrisons can be isolated and occupied without opening
 	# another full war. This is a one-time political settlement, not a recurring
 	# state-repair pulse.
 	ADISCORD_ivanland_occupy_wrk_islands = {
@@ -1025,12 +907,12 @@ ADISCORD_vorkerland_collapse_category = {
 		visible = {
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_wrk_islands_occupied }
-			WRK = { exists = yes }
+			WKR = { exists = yes }
 		}
 		available = {
-			NOT = { has_war_with = WRK }
-			200 = { is_owned_by = WRK is_controlled_by = WRK }
-			201 = { is_owned_by = WRK is_controlled_by = WRK }
+			NOT = { has_war_with = WKR }
+			200 = { is_owned_by = WKR is_controlled_by = WKR }
+			201 = { is_owned_by = WKR is_controlled_by = WKR }
 		}
 		cost = 50
 		fire_only_once = yes

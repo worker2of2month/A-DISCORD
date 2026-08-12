@@ -6,6 +6,7 @@ state={
 		owner = WRK
 		add_core_of = WRK
 		buildings = {
+			ADISCORD_rare_components_plant = 1
 			infrastructure = 3
 			industrial_complex = 2
 			arms_factory = 1
@@ -16,7 +17,7 @@ state={
 	}
 	manpower = 2000000
 	buildings_max_level_factor = 1.000
-	# Three shared factories require at least three local building slots.
-	state_category = town
+	# Five base slots retain four shared buildings after the plant slot penalty.
+	state_category = large_town
 	local_supplies = 3.0
 }

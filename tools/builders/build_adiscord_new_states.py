@@ -27,6 +27,15 @@ NAM_SVETLOGORSK_STATE_ID = 688
 NAM_SVETLOGORSK_PROVINCES = (689, 3127, 4025, 8635, 9211, 10967)
 NAM_RESIDUAL_CITY_STATE_ID = 689
 NAM_RESIDUAL_CITY_PROVINCES = (176, 2038, 2299, 7618, 7639, 8358)
+NAM_DRYRIVER_STATE_ID = 690
+EFL_MIDDLE_LOREN_STATE_ID = 691
+AZH_BLACK_COAST_STATE_ID = 692
+NAM_MAINLAND_STATE_RESOURCES = {
+    67: {"oil": 80, "chromium": 6},
+    NAM_SVETLOGORSK_STATE_ID: {"oil": 12, "chromium": 1},
+    NAM_RESIDUAL_CITY_STATE_ID: {"oil": 36, "chromium": 5},
+    NAM_DRYRIVER_STATE_ID: {"oil": 36, "chromium": 3},
+}
 NAM_ORIGINAL_MAINLAND_PROVINCES = (
     176, 334, 461, 689, 1015, 1710, 2038, 2231, 2299, 2935,
     3127, 4025, 4287, 4321, 4912, 6099, 6961, 7324, 7618, 7639,
@@ -36,13 +45,43 @@ NAM_ORIGINAL_MAINLAND_PROVINCES = (
 NAM_PRE_CITY_MAINLAND_PROVINCES = tuple(
     sorted(set(NAM_ORIGINAL_MAINLAND_PROVINCES) - set(NAM_SVETLOGORSK_PROVINCES))
 )
-NAM_RESIDUAL_MAINLAND_PROVINCES = tuple(
+NAM_MAINLAND_AFTER_CITY_SPLIT_PROVINCES = tuple(
     sorted(
         set(NAM_ORIGINAL_MAINLAND_PROVINCES)
         - set(NAM_SVETLOGORSK_PROVINCES)
         - set(NAM_RESIDUAL_CITY_PROVINCES)
     )
 )
+NAM_RESOURCE_BASIN_PROVINCES = (
+    334, 1710, 2935, 4287, 4321, 4912, 6099, 7324, 8351,
+    8445, 8888, 9116, 10909, 11069, 11696, 11942, 12480, 12668,
+)
+NAM_DRYRIVER_PROVINCES = (461, 1015, 2231, 6961, 8058, 9016, 9641, 11926, 12982)
+EFL_UPPER_LOREN_PROVINCES = (
+    259, 324, 865, 1658, 1950, 2254, 2734, 2822, 3089, 3226,
+    3977, 4014, 4096, 4175, 4237, 4339, 4717, 5651, 5766, 6150,
+    6438, 7139, 7199, 7750, 7859, 8087, 8425, 9637, 9731, 10258,
+    10759, 10806, 10866, 10932, 11744, 12109, 12135,
+)
+EFL_MIDDLE_LOREN_PROVINCES = (
+    786, 797, 1411, 2473, 3046, 3176, 3730, 3833, 3916, 4060,
+    4424, 5260, 5579, 6331, 7502, 8057, 8194, 8904, 9390, 9609,
+    9694, 10113, 10454, 10722, 11083, 11652, 12131, 12218, 12306, 12830,
+)
+AZH_CORE_PROVINCES = (
+    367, 643, 687, 729, 826, 1568, 2338, 2411, 2443, 4380, 5156,
+    5288, 5305, 5483, 5555, 5594, 5683, 6184, 6505, 6577, 7079,
+    7193, 7413, 7637, 7692, 7737, 8234, 8452, 8758, 8821, 8836,
+    8958, 8990, 8997, 9013, 9119, 9633, 9798, 9909, 10077, 12458,
+    12482, 12601, 12837, 12937, 13019,
+)
+AZH_BLACK_COAST_PROVINCES = (
+    493, 601, 1360, 2264, 2362, 2802, 2804, 3464, 4089, 4678,
+    5039, 5527, 5837, 6193, 6768, 7033, 7777, 8114, 8441, 8829,
+    9264, 9375, 9758, 10489, 10626, 11445, 11630, 11734, 12498,
+)
+EFL_ORIGINAL_UPPER_LOREN_PROVINCES = tuple(sorted((*EFL_UPPER_LOREN_PROVINCES, *EFL_MIDDLE_LOREN_PROVINCES)))
+AZH_ORIGINAL_PROVINCES = tuple(sorted((*AZH_CORE_PROVINCES, *AZH_BLACK_COAST_PROVINCES)))
 
 KDR_STATES = tuple(range(234, 248))
 RHM_STATES = (248, 249, 250, *range(252, 259))
@@ -86,7 +125,7 @@ LEGACY_OWNER_OVERRIDES = {
 }
 
 CAPITALS = {
-    69: (367, 10),
+    69: (367, 5),
     174: (158, 10),
     241: (971, 10),
     253: (443, 10),
@@ -112,7 +151,7 @@ MINOR_VPS = {
 # Sparse deposits give every southern country something to extract and trade
 # without turning the desert into a self-sufficient industrial heartland.
 STATE_RESOURCES = {
-    69: {"oil": 3, "chromium": 2},
+    69: {"oil": 2, "chromium": 1},
     175: {"steel": 2, "aluminium": 2},
     236: {"steel": 3, "oil": 1},
     255: {"aluminium": 3, "oil": 1},
@@ -122,15 +161,19 @@ STATE_RESOURCES = {
     291: {"steel": 3, "chromium": 1},
     299: {"aluminium": 3, "chromium": 1},
 }
+NAM_COALITION_FRONT_RESOURCES = {
+    69: STATE_RESOURCES[69],
+    AZH_BLACK_COAST_STATE_ID: {"oil": 1, "chromium": 1},
+}
 
 # The central Vorkerland theatre used to have only one steel-bearing state,
 # which then passes to PWR during the opening map setup.  Keep deposits scarce
 # and concentrated, but give each major industrial bloc one real supply source.
-# The two WRK landmarks add their own building output on top of these deposits.
+# The Unity Tower is a sealed administrative ruin rather than an extractive
+# site, so its former steel deposit is deliberately absent.
 VORKERLAND_STATE_RESOURCES = {
     33: {"steel": 16},
     38: {"steel": 10},
-    40: {"steel": 24},
     72: {"steel": 8},
     73: {"steel": 6},
     74: {"steel": 8},
@@ -172,10 +215,10 @@ ALL_STATE_RESOURCES = {
 # Generated naval OOBs require these real coastal bases. Keeping them in this
 # builder prevents a state regeneration from silently deleting the fleets' ports.
 GENERATED_STATE_BUILDINGS = {
-    69: {"dockyard": 1},
+    AZH_BLACK_COAST_STATE_ID: {"dockyard": 1},
 }
 GENERATED_PROVINCE_BUILDINGS = {
-    69: ((493, "naval_base", 1),),
+    AZH_BLACK_COAST_STATE_ID: ((493, "naval_base", 1),),
 }
 
 # Cities that were victory points before the Vorkerland state split. Keep the
@@ -203,7 +246,7 @@ VORKERLAND_MINOR_VPS = {
 # Explicit profiles replace the old pseudo-random 24-72k population formula
 # around the densely populated Vorkernsberg conurbation.
 STATE_PROFILES = {
-    306: {"population": 1_400_000, "category": "large_town", "infrastructure": 3, "industry": 2, "military": 1, "supplies": 3.0},
+    306: {"population": 1_400_000, "category": "large_town", "infrastructure": 3, "industry": 2, "military": 1, "supplies": 3.0, "custom_buildings": {"ADISCORD_rare_components_plant": 1}},
     307: {"population": 800_000, "category": "town", "infrastructure": 2, "industry": 1, "supplies": 2.0},
     308: {"population": 1_100_000, "category": "large_town", "infrastructure": 3, "industry": 1, "supplies": 2.5},
     309: {"population": 800_000, "category": "town", "infrastructure": 3, "industry": 1, "supplies": 2.0},
@@ -223,7 +266,7 @@ STATE_PROFILES = {
     323: {"population": 750_000, "category": "town", "infrastructure": 2, "industry": 1, "supplies": 2.0},
     324: {"population": 700_000, "category": "town", "infrastructure": 3, "industry": 2, "supplies": 3.0},
     325: {"population": 450_000, "category": "rural", "infrastructure": 2, "industry": 1, "supplies": 2.0},
-    327: {"population": 600_000, "category": "town", "infrastructure": 3, "industry": 1, "supplies": 2.0},
+    327: {"population": 600_000, "category": "town", "infrastructure": 3, "industry": 1, "supplies": 2.0, "custom_buildings": {"ADISCORD_rare_alloy_foundry": 1}},
     328: {"population": 500_000, "category": "rural", "infrastructure": 2, "industry": 1, "supplies": 2.0},
 }
 
@@ -231,7 +274,7 @@ STATE_PROFILES = {
 # every civil-war front inhabited and supplied without flattening the old
 # resources, victory points, bunkers and state ownership into generated data.
 VORKERLAND_LEGACY_PROFILES = {
-    40: {"population": 11_500_000, "category": "megalopolis", "infrastructure": 5, "civilian": 6, "military": 4, "air_base": 3, "supplies": 10.0, "custom_buildings": {"ADISCORD_science_center": 1}},
+    40: {"population": 20_000, "category": "megalopolis", "infrastructure": 5, "civilian": 6, "military": 4, "air_base": 3, "supplies": 10.0, "custom_buildings": {"ADISCORD_science_center": 1}},
     71: {"population": 800_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
     72: {"population": 850_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 2, "supplies": 3.0},
     73: {"population": 1_300_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
@@ -252,16 +295,15 @@ VORKERLAND_LEGACY_PROFILES = {
     199: {"population": 750_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
 }
 
-# The western recovery administration is not allowed to militarize the former
-# Ivanland border corridor while the Vorkerland confederation still exists.
-# The collapse effect explicitly lifts this restriction before opening wars.
-PWR_PRE_COLLAPSE_DMZ_STATES = frozenset({90, 91, 93})
+# These border states must remain mobilizable when the collapse fronts open;
+# a history-level DMZ survives the ownership transfer and freezes those wars.
+PWR_PRE_COLLAPSE_DMZ_STATES = frozenset()
 
 # NAM begins with one mainland split into the Svetlogorsk uprising district,
 # the broad resource basin, and a compact southern port which survives the SLF
 # victory settlement. Totals stay unchanged across the three states.
 NAM_STATE_PROFILES = {
-    67: {"population": 430_000, "category": "large_city", "infrastructure": 4, "civilian": 2, "military": 0, "air_base": 1, "supplies": 5.0},
+    67: {"population": 480_000, "category": "large_city", "infrastructure": 4, "civilian": 2, "military": 1, "air_base": 1, "supplies": 5.0},
     225: {"population": 220_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
     226: {"population": 140_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
     227: {"population": 180_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
@@ -269,16 +311,19 @@ NAM_STATE_PROFILES = {
     229: {"population": 120_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
     230: {"population": 100_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
     231: {"population": 160_000, "category": "rural", "infrastructure": 2, "civilian": 1, "military": 1, "supplies": 2.5},
-    NAM_SVETLOGORSK_STATE_ID: {"population": 90_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "air_base": 1, "supplies": 3.0},
+    NAM_SVETLOGORSK_STATE_ID: {"population": 90_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 0, "air_base": 1, "supplies": 3.0, "custom_buildings": {"dockyard": 1}},
     NAM_RESIDUAL_CITY_STATE_ID: {"population": 120_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 2, "supplies": 3.5},
+    NAM_DRYRIVER_STATE_ID: {"population": 270_000, "category": "town", "infrastructure": 3, "civilian": 1, "supplies": 3.5},
 }
 
 # The three states facing NAM's resource basin need enough population and
 # local logistics for the restoration coalition to launch a real offensive.
 NAM_COALITION_FRONT_PROFILES = {
-    68: {"population": 300_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 4.0},
-    69: {"population": 320_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "air_base": 1, "supplies": 4.0},
+    68: {"population": 520_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 4.0},
+    69: {"population": 380_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "air_base": 1, "supplies": 4.0},
     70: {"population": 350_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 4.0},
+    EFL_MIDDLE_LOREN_STATE_ID: {"population": 280_000, "category": "town", "infrastructure": 3, "civilian": 1, "supplies": 3.5},
+    AZH_BLACK_COAST_STATE_ID: {"population": 240_000, "category": "town", "infrastructure": 3, "civilian": 1, "supplies": 3.5, "custom_buildings": {"dockyard": 1}},
 }
 
 # Every state owned and cored by Ivanland at game start receives a coherent
@@ -373,26 +418,32 @@ DIRTY_REPUBLIC_STATE_PROFILES = {
 }
 
 # Legacy states moved by ADISCORD_vorkerland_apply_initial_map and its setup
-# effects must support the armies spawned there.  Existing sensible population
-# figures are retained; empty shells and obviously under-classified cities get
-# explicit demographic and industrial profiles.
+# effects must support the armies spawned there. The Unity Tower is a sealed
+# complex with a 20k custodial population; its former 11.48m residents are
+# evenly dispersed across the six adjacent metropolitan districts, with the
+# two surplus people assigned to states 33 and 34. Empty shells and obviously
+# under-classified cities otherwise get explicit demographic and industrial
+# profiles.  Advanced-material plants share state slots and reduce
+# local_building_slots_factor themselves.  buildings_max_level_factor does not
+# add shared slots, so their host category and starting factory count must fit
+# the post-modifier category capacity directly.
 VORKERLAND_INITIAL_MAP_LEGACY_PROFILES = {
-    27: {"population": 2_000_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.0},
+    27: {"population": 2_000_000, "category": "large_town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.0, "custom_buildings": {"ADISCORD_rare_components_plant": 1}},
     32: {"population": 7_000_000, "category": "megalopolis", "infrastructure": 5, "civilian": 2, "military": 3, "air_base": 3, "supplies": 10.0, "custom_buildings": {"ADISCORD_unity_tower_complex": 1, "ADISCORD_business_center": 1}},
-    33: {"population": 9_000_000, "category": "megalopolis", "infrastructure": 5, "civilian": 9, "military": 3, "supplies": 10.0},
-    34: {"population": 3_000_000, "category": "megalopolis", "infrastructure": 4, "civilian": 2, "military": 1, "supplies": 5.0},
-    35: {"population": 4_200_000, "category": "large_city", "infrastructure": 5, "civilian": 5, "military": 2, "supplies": 6.0},
-    36: {"population": 6_500_000, "category": "metropolis", "infrastructure": 5, "civilian": 4, "supplies": 7.0},
+    33: {"population": 10_913_334, "category": "megalopolis", "infrastructure": 5, "civilian": 7, "military": 3, "supplies": 10.0, "custom_buildings": {"ADISCORD_rare_alloy_foundry": 1}},
+    34: {"population": 4_913_334, "category": "megalopolis", "infrastructure": 4, "civilian": 2, "military": 1, "supplies": 5.0},
+    35: {"population": 6_113_333, "category": "large_city", "infrastructure": 5, "civilian": 5, "military": 2, "supplies": 6.0},
+    36: {"population": 8_413_333, "category": "metropolis", "infrastructure": 5, "civilian": 4, "supplies": 7.0},
     37: {"population": 3_200_000, "category": "large_city", "infrastructure": 5, "civilian": 6, "supplies": 5.0},
-    38: {"population": 1_800_000, "category": "large_city", "infrastructure": 5, "civilian": 6, "military": 2, "air_base": 2, "supplies": 6.0},
-    39: {"population": 5_500_000, "category": "metropolis", "infrastructure": 5, "civilian": 2, "military": 7, "supplies": 7.0},
+    38: {"population": 3_713_333, "category": "metropolis", "infrastructure": 5, "civilian": 6, "military": 2, "air_base": 2, "supplies": 6.0, "custom_buildings": {"ADISCORD_rare_components_plant": 1}},
+    39: {"population": 7_413_333, "category": "metropolis", "infrastructure": 5, "civilian": 2, "military": 7, "supplies": 7.0},
     75: {"population": 8_000_000, "category": "megalopolis", "infrastructure": 5, "civilian": 5, "military": 3, "air_base": 3, "supplies": 8.0},
-    79: {"population": 1_200_000, "category": "large_town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.0},
+    79: {"population": 1_200_000, "category": "large_town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.0, "custom_buildings": {"ADISCORD_rare_alloy_foundry": 1}},
     81: {"population": 2_200_000, "category": "large_city", "infrastructure": 5, "civilian": 3, "military": 2, "air_base": 2, "supplies": 5.0},
     82: {"population": 800_000, "category": "town", "infrastructure": 2, "civilian": 1, "military": 1, "supplies": 4.0},
     102: {"population": 11_500_000, "category": "megalopolis", "infrastructure": 5, "civilian": 7, "military": 5, "air_base": 3, "supplies": 10.0},
     104: {"population": 3_500_000, "category": "metropolis", "infrastructure": 4, "civilian": 4, "military": 2, "air_base": 2, "supplies": 6.0},
-    105: {"population": 8_500_000, "category": "megalopolis", "infrastructure": 5, "civilian": 6, "military": 4, "air_base": 3, "supplies": 10.0, "custom_buildings": {"ADISCORD_techlar_metallurgical_combine": 1, "ADISCORD_industrial_cluster": 1}},
+    105: {"population": 9_800_000, "category": "megalopolis", "infrastructure": 5, "civilian": 6, "military": 4, "air_base": 3, "supplies": 10.0, "custom_buildings": {"ADISCORD_techlar_metallurgical_combine": 1, "ADISCORD_industrial_cluster": 1}},
     106: {"population": 3_000_000, "category": "large_city", "infrastructure": 4, "civilian": 3, "military": 2, "air_base": 2, "supplies": 5.0},
     107: {"population": 700_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
     108: {"population": 650_000, "category": "rural", "infrastructure": 3, "civilian": 1, "supplies": 2.5},
@@ -455,8 +506,15 @@ AFRELA_LEGACY_VICTORY_POINTS = {
 }
 
 NAM_LEGACY_VICTORY_POINTS = {
+    67: ((1710, 2), (6099, 3)),
+    68: ((259, 5), (6150, 2)),
+    69: ((367, 5), (8234, 2)),
+    70: ((2986, 2), (6495, 4)),
     NAM_SVETLOGORSK_STATE_ID: ((689, 3),),
     NAM_RESIDUAL_CITY_STATE_ID: ((2038, 5),),
+    NAM_DRYRIVER_STATE_ID: ((8058, 2), (9016, 2)),
+    EFL_MIDDLE_LOREN_STATE_ID: ((8057, 3),),
+    AZH_BLACK_COAST_STATE_ID: ((493, 3), (5039, 2)),
 }
 
 AFRELA_VICTORY_POINT_NAMES = {
@@ -468,6 +526,19 @@ AFRELA_VICTORY_POINT_NAMES = {
 }
 
 NAM_VICTORY_POINT_NAMES = {
+    1710: "Высокое",
+    6099: "Ключевск",
+    8058: "Рудный",
+    9016: "Сухоречье",
+    259: "Эфлор",
+    6150: "Высокий Лорен",
+    367: "Ажар",
+    493: "Чёрная гавань",
+    8234: "Карас",
+    2986: "Фенн",
+    6495: "Лорен",
+    8057: "Морен",
+    5039: "Сайр",
     689: "Светлогорск",
     2038: "Южная гавань",
 }
@@ -499,6 +570,9 @@ GENERATED_STATE_NAMES = {
     **VORKERLAND_STATE_NAMES,
     NAM_SVETLOGORSK_STATE_ID: "Светлогорский округ",
     NAM_RESIDUAL_CITY_STATE_ID: "Южнобережный округ",
+    NAM_DRYRIVER_STATE_ID: "Сухоречье",
+    EFL_MIDDLE_LOREN_STATE_ID: "Средний Лорен",
+    AZH_BLACK_COAST_STATE_ID: "Чёрное побережье",
 }
 
 VORKERLAND_INITIAL_MAP_LEGACY_STATES = {
@@ -520,6 +594,11 @@ LEGACY_STATE_PROFILES = {
     # theatre audit. Country-specific profiles intentionally take precedence.
     **AFRELA_STATE_PROFILES,
 }
+
+# Sealed landmarks remain physically impassable even when their surrounding
+# legacy-state metadata is refreshed. State 125 is the reactor exclusion zone;
+# RZA uses state 177, not the sealed reactor site, as its capital.
+IMPASSABLE_LEGACY_STATE_IDS = frozenset({40, 125})
 
 # These dense legacy states already contain other slot-sharing buildings.  Their
 # factory values are exact budgets, not minima: retaining higher historical
@@ -863,6 +942,24 @@ def ensure_state_resources(source: str, resources: dict[str, int]) -> str:
     return source[:opening] + block + source[closing + 1:]
 
 
+def remove_state_resource(source: str, resource: str) -> str:
+    """Remove one exhausted state deposit, retaining all other resources."""
+    resource_match = re.search(r"(?m)^\s*resources\s*=\s*\{", source)
+    if not resource_match:
+        return source
+    opening = source.find("{", resource_match.start(), resource_match.end())
+    closing = matching_brace(source, opening)
+    block = source[opening:closing + 1]
+    block = re.sub(
+        rf"(?m)^[ \t]*{re.escape(resource)}\s*=\s*-?\d+\s*\r?\n?",
+        "",
+        block,
+    )
+    if not re.search(r"(?m)^\s*[A-Za-z_]+\s*=", block):
+        return source[:resource_match.start()] + source[closing + 1:]
+    return source[:opening] + block + source[closing + 1:]
+
+
 def set_history_building_level(source: str, building: str, level: int) -> str:
     """Set one state building exactly while preserving province buildings."""
     history_open, history_close = named_block(source, "history")
@@ -885,152 +982,137 @@ def set_history_building_level(source: str, building: str, level: int) -> str:
     return source[:history_open] + history + source[history_close + 1:]
 
 
-def split_svetlogorsk_from_nam() -> None:
-    """Carve the uprising and residual city states without changing NAM totals."""
-    mainland_path = state_path(67)
-    source = mainland_path.read_text(encoding="utf-8-sig", errors="strict")
-    province_match = re.search(r"provinces\s*=\s*\{([^}]*)\}", source, re.DOTALL)
-    if not province_match:
-        raise RuntimeError("state 67: missing provinces block")
-    current = set(map(int, re.findall(r"\d+", province_match.group(1))))
-    allowed = (
-        set(NAM_ORIGINAL_MAINLAND_PROVINCES),
-        set(NAM_PRE_CITY_MAINLAND_PROVINCES),
-        set(NAM_RESIDUAL_MAINLAND_PROVINCES),
-    )
-    if current not in allowed:
-        raise RuntimeError("state 67: province manifest drifted from the Svetlogorsk split")
+def write_resource_war_state(
+    state_id: int,
+    filename: str,
+    provinces: tuple[int, ...],
+    owner: str,
+    profile: dict[str, object],
+    resources: dict[str, int] | None,
+    victory_points: tuple[tuple[int, int], ...],
+    province_buildings: tuple[tuple[int, str, int], ...] = (),
+) -> None:
+    """Write one generated NAM-war state from its explicit, reviewed manifest."""
+    target = STATE_DIR / filename
+    matches = sorted(STATE_DIR.glob(f"{state_id}-*.txt"))
+    if matches and matches != [target]:
+        raise RuntimeError(f"state {state_id}: id is already occupied by {matches}")
 
     province_lines = [
-        "\t\t" + " ".join(map(str, NAM_RESIDUAL_MAINLAND_PROVINCES[start:start + 12]))
-        for start in range(0, len(NAM_RESIDUAL_MAINLAND_PROVINCES), 12)
+        "\t\t" + " ".join(map(str, provinces[start:start + 12]))
+        for start in range(0, len(provinces), 12)
     ]
-    replacement = "provinces={\n" + "\n".join(province_lines) + "\n\t}"
-    source = source[:province_match.start()] + replacement + source[province_match.end():]
+    lines = [
+        "# Generated by tools/build_adiscord_new_states.py",
+        "state={",
+        f"\tid={state_id}",
+        f'\tname="STATE_{state_id}"',
+    ]
+    if resources:
+        lines.append("\tresources = {")
+        lines.extend(f"\t\t{resource} = {amount}" for resource, amount in resources.items())
+        lines.append("\t}")
+    lines.extend([
+        "\tprovinces={",
+        *province_lines,
+        "\t}",
+        f"\tmanpower = {int(profile['population'])}",
+        "\tbuildings_max_level_factor = 1.000",
+        f"\tstate_category = {profile['category']}",
+        f"\tlocal_supplies = {float(profile['supplies']):.1f}",
+        "\thistory = {",
+        f"\t\towner = {owner}",
+        f"\t\tadd_core_of = {owner}",
+    ])
+    lines.extend(
+        f"\t\tvictory_points = {{ {province_id} {value} }}"
+        for province_id, value in victory_points
+    )
+    state_buildings = {
+        "infrastructure": int(profile["infrastructure"]),
+        "industrial_complex": int(profile.get("civilian", 0)),
+        "arms_factory": int(profile.get("military", 0)),
+        "air_base": int(profile.get("air_base", 0)),
+        **{
+            str(building): int(level)
+            for building, level in profile.get("custom_buildings", {}).items()
+        },
+    }
+    lines.append("\t\tbuildings = {")
+    lines.extend(
+        f"\t\t\t{building} = {level}"
+        for building, level in state_buildings.items()
+        if level
+    )
+    lines.extend(
+        f"\t\t\t{province_id} = {{ {building} = {level} }}"
+        for province_id, building, level in province_buildings
+    )
+    lines.extend(["\t\t}", "\t}", "}", ""])
+    target.write_text("\n".join(lines), encoding="utf-8", newline="\n")
 
-    # Both physical ports leave state 67: 689 belongs to Svetlogorsk and 2038
-    # becomes the harbour of the small residual NAM city-state.
-    for port in (689, 2038):
-        source = re.sub(
-            rf"(?m)^\s*{port}\s*=\s*\{{\s*naval_base\s*=\s*\d+\s*\}}\s*$\n?",
-            "",
-            source,
-            count=1,
+
+def split_svetlogorsk_from_nam() -> None:
+    """Create the connected nine-state NAM resource-war theatre."""
+    current_manifests = {
+        67: {
+            frozenset(NAM_ORIGINAL_MAINLAND_PROVINCES),
+            frozenset(NAM_PRE_CITY_MAINLAND_PROVINCES),
+            frozenset(NAM_MAINLAND_AFTER_CITY_SPLIT_PROVINCES),
+            frozenset(NAM_RESOURCE_BASIN_PROVINCES),
+        },
+        68: {frozenset(EFL_ORIGINAL_UPPER_LOREN_PROVINCES), frozenset(EFL_UPPER_LOREN_PROVINCES)},
+        69: {frozenset(AZH_ORIGINAL_PROVINCES), frozenset(AZH_CORE_PROVINCES)},
+    }
+    for state_id, allowed in current_manifests.items():
+        source = state_path(state_id).read_text(encoding="utf-8-sig", errors="strict")
+        match = re.search(r"provinces\s*=\s*\{([^}]*)\}", source, re.DOTALL)
+        if not match:
+            raise RuntimeError(f"state {state_id}: missing provinces block")
+        current = frozenset(map(int, re.findall(r"\d+", match.group(1))))
+        if current not in allowed:
+            raise RuntimeError(f"state {state_id}: resource-war split manifest drifted")
+
+    definitions = (
+        (67, "67-67.txt", NAM_RESOURCE_BASIN_PROVINCES, "NAM", NAM_STATE_PROFILES[67], NAM_MAINLAND_STATE_RESOURCES[67]),
+        (68, "68-68.txt", EFL_UPPER_LOREN_PROVINCES, "EFL", NAM_COALITION_FRONT_PROFILES[68], None),
+        (69, "69-69.txt", AZH_CORE_PROVINCES, "AZH", NAM_COALITION_FRONT_PROFILES[69], STATE_RESOURCES[69]),
+        (NAM_SVETLOGORSK_STATE_ID, "688-Svetlogorsk.txt", NAM_SVETLOGORSK_PROVINCES, "NAM", NAM_STATE_PROFILES[NAM_SVETLOGORSK_STATE_ID], NAM_MAINLAND_STATE_RESOURCES[NAM_SVETLOGORSK_STATE_ID]),
+        (NAM_RESIDUAL_CITY_STATE_ID, "689-South-Coast.txt", NAM_RESIDUAL_CITY_PROVINCES, "NAM", NAM_STATE_PROFILES[NAM_RESIDUAL_CITY_STATE_ID], NAM_MAINLAND_STATE_RESOURCES[NAM_RESIDUAL_CITY_STATE_ID]),
+        (NAM_DRYRIVER_STATE_ID, "690-Dryriver.txt", NAM_DRYRIVER_PROVINCES, "NAM", NAM_STATE_PROFILES[NAM_DRYRIVER_STATE_ID], NAM_MAINLAND_STATE_RESOURCES[NAM_DRYRIVER_STATE_ID]),
+        (EFL_MIDDLE_LOREN_STATE_ID, "691-Middle-Loren.txt", EFL_MIDDLE_LOREN_PROVINCES, "EFL", NAM_COALITION_FRONT_PROFILES[EFL_MIDDLE_LOREN_STATE_ID], None),
+        (AZH_BLACK_COAST_STATE_ID, "692-Black-Coast.txt", AZH_BLACK_COAST_PROVINCES, "AZH", NAM_COALITION_FRONT_PROFILES[AZH_BLACK_COAST_STATE_ID], NAM_COALITION_FRONT_RESOURCES[AZH_BLACK_COAST_STATE_ID]),
+    )
+    province_buildings = {
+        NAM_SVETLOGORSK_STATE_ID: ((689, "naval_base", 2),),
+        NAM_RESIDUAL_CITY_STATE_ID: ((2038, "naval_base", 1),),
+        AZH_BLACK_COAST_STATE_ID: GENERATED_PROVINCE_BUILDINGS[AZH_BLACK_COAST_STATE_ID],
+    }
+    for state_id, filename, provinces, owner, profile, resources in definitions:
+        write_resource_war_state(
+            state_id,
+            filename,
+            tuple(provinces),
+            owner,
+            profile,
+            resources,
+            NAM_LEGACY_VICTORY_POINTS[state_id],
+            province_buildings.get(state_id, ()),
         )
 
-    for building, level in {
-        "industrial_complex": 2,
-        "arms_factory": 0,
-        "air_base": 1,
-        "dockyard": 0,
-    }.items():
-        source = set_history_building_level(source, building, level)
-    source, oil_count = re.subn(
-        r"(?m)^(\s*)oil\s*=\s*\d+\s*$", r"\1oil = 144", source, count=1
-    )
-    source, chromium_count = re.subn(
-        r"(?m)^(\s*)chromium\s*=\s*\d+\s*$", r"\1chromium = 13", source, count=1
-    )
-    if oil_count != 1 or chromium_count != 1:
-        raise RuntimeError("state 67: expected one oil and one chromium resource entry")
-    mainland_path.write_text(source, encoding="utf-8", newline="\n")
-
-    target = STATE_DIR / f"{NAM_SVETLOGORSK_STATE_ID}-Svetlogorsk.txt"
-    matches = sorted(STATE_DIR.glob(f"{NAM_SVETLOGORSK_STATE_ID}-*.txt"))
-    if matches and matches != [target]:
-        raise RuntimeError(f"state {NAM_SVETLOGORSK_STATE_ID}: id is already occupied")
-    provinces = " ".join(map(str, NAM_SVETLOGORSK_PROVINCES))
-    target.write_text(
-        "\n".join([
-            "# Generated by tools/build_adiscord_new_states.py",
-            "state={",
-            f"\tid={NAM_SVETLOGORSK_STATE_ID}",
-            f'\tname=\"STATE_{NAM_SVETLOGORSK_STATE_ID}\"',
-            f"\tprovinces={{ {provinces} }}",
-            "\tmanpower = 90000",
-            "\tbuildings_max_level_factor = 1.000",
-            "\tstate_category = town",
-            "\tlocal_supplies = 3.0",
-            "\thistory = {",
-            "\t\towner = NAM",
-            "\t\tadd_core_of = NAM",
-            "\t\tvictory_points = { 689 3 }",
-            "\t\tbuildings = {",
-            "\t\t\tinfrastructure = 3",
-            "\t\t\tindustrial_complex = 1",
-            "\t\t\tarms_factory = 1",
-            "\t\t\tair_base = 1",
-            "\t\t\tdockyard = 1",
-            "\t\t\t689 = { naval_base = 2 }",
-            "\t\t}",
-            "\t}",
-            "}",
-            "",
-        ]),
-        encoding="utf-8",
-        newline="\n",
-    )
-
-    residual_target = STATE_DIR / f"{NAM_RESIDUAL_CITY_STATE_ID}-South-Coast.txt"
-    residual_matches = sorted(STATE_DIR.glob(f"{NAM_RESIDUAL_CITY_STATE_ID}-*.txt"))
-    if residual_matches and residual_matches != [residual_target]:
-        raise RuntimeError(f"state {NAM_RESIDUAL_CITY_STATE_ID}: id is already occupied")
-    residual_provinces = " ".join(map(str, NAM_RESIDUAL_CITY_PROVINCES))
-    residual_target.write_text(
-        "\n".join([
-            "# Generated by tools/build_adiscord_new_states.py",
-            "state={",
-            f"\tid={NAM_RESIDUAL_CITY_STATE_ID}",
-            f'\tname="STATE_{NAM_RESIDUAL_CITY_STATE_ID}"',
-            "\tresources = {",
-            "\t\toil = 20",
-            "\t\tchromium = 2",
-            "\t}",
-            f"\tprovinces={{ {residual_provinces} }}",
-            "\tmanpower = 120000",
-            "\tbuildings_max_level_factor = 1.000",
-            "\tstate_category = town",
-            "\tlocal_supplies = 3.5",
-            "\thistory = {",
-            "\t\towner = NAM",
-            "\t\tadd_core_of = NAM",
-            "\t\tvictory_points = { 2038 5 }",
-            "\t\tbuildings = {",
-            "\t\t\tinfrastructure = 3",
-            "\t\t\tindustrial_complex = 1",
-            "\t\t\tarms_factory = 2",
-            "\t\t\t2038 = { naval_base = 1 }",
-            "\t\t}",
-            "\t}",
-            "}",
-            "",
-        ]),
-        encoding="utf-8",
-        newline="\n",
-    )
-
     _, mismatches = audit_buildings(ROOT)
+    expected_moves = {
+        (67, NAM_SVETLOGORSK_STATE_ID): set(NAM_SVETLOGORSK_PROVINCES),
+        (67, NAM_RESIDUAL_CITY_STATE_ID): set(NAM_RESIDUAL_CITY_PROVINCES),
+        (67, NAM_DRYRIVER_STATE_ID): set(NAM_DRYRIVER_PROVINCES),
+        (68, EFL_MIDDLE_LOREN_STATE_ID): set(EFL_MIDDLE_LOREN_PROVINCES),
+        (69, AZH_BLACK_COAST_STATE_ID): set(AZH_BLACK_COAST_PROVINCES),
+        (71, 91): {3743},
+    }
     unexpected = [
         mismatch for mismatch in mismatches
-        if not (
-            (
-                mismatch.recorded_state == 67
-                and (
-                    (
-                        mismatch.actual_state == NAM_SVETLOGORSK_STATE_ID
-                        and mismatch.province in NAM_SVETLOGORSK_PROVINCES
-                    )
-                    or (
-                        mismatch.actual_state == NAM_RESIDUAL_CITY_STATE_ID
-                        and mismatch.province in NAM_RESIDUAL_CITY_PROVINCES
-                    )
-                )
-            )
-            or (
-                mismatch.recorded_state == 71
-                and mismatch.actual_state == 91
-                and mismatch.province == 3743
-            )
+        if mismatch.province not in expected_moves.get(
+            (mismatch.recorded_state, mismatch.actual_state), set()
         )
     ]
     if unexpected:
@@ -1088,9 +1170,18 @@ def apply_legacy_state_profiles(state_ids: set[int] | None = None) -> None:
         source = path.read_text(encoding="utf-8-sig", errors="strict")
         source = set_scalar(source, "manpower", str(profile["population"]))
         source = set_scalar(source, "state_category", str(profile["category"]))
-        source = set_scalar(source, "buildings_max_level_factor", "1.000")
+        source = set_scalar(
+            source,
+            "buildings_max_level_factor",
+            f"{float(profile.get('buildings_max_level_factor', 1.0)):.3f}",
+        )
+        if state_id == 27:
+            source = source.replace(
+                "# Three shared factories require at least three local building slots.",
+                "# Five base slots retain four shared buildings after the plant slot penalty.",
+            )
         source = set_scalar(source, "local_supplies", f"{float(profile['supplies']):.1f}")
-        if state_id == 40:
+        if state_id in IMPASSABLE_LEGACY_STATE_IDS:
             source = set_scalar(source, "impassable", "yes")
         else:
             source = re.sub(r"(?m)^\s*impassable\s*=\s*yes\s*$\n?", "", source)
@@ -1109,6 +1200,8 @@ def apply_legacy_state_profiles(state_ids: set[int] | None = None) -> None:
             )
         if state_id in REGIONAL_STATE_RESOURCES:
             source = ensure_state_resources(source, REGIONAL_STATE_RESOURCES[state_id])
+        if state_id == 40:
+            source = remove_state_resource(source, "steel")
         if state_id in GENERATED_LEGACY_VICTORY_POINTS:
             source = ensure_history_victory_points(
                 source, GENERATED_LEGACY_VICTORY_POINTS[state_id]
@@ -1162,11 +1255,29 @@ def apply() -> None:
     print(f"Built metadata for {len(STARTING_OWNERS)} states; hand-authored flags were left untouched.")
 
 
+def apply_nam_resource_war_states() -> None:
+    """Regenerate only NAM-war mainland data and its generated VP names."""
+    split_svetlogorsk_from_nam()
+    apply_legacy_state_profiles({67, 68, 69, 70, 690, 691, 692})
+    apply_generated_victory_point_localisation()
+    apply_generated_state_name_localisation()
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Generate A-Discord state metadata.")
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--check", action="store_true", help="validate current generated outputs (default)")
     actions.add_argument("--apply", action="store_true", help="write generated state metadata and localisation")
+    actions.add_argument(
+        "--apply-nam-split",
+        action="store_true",
+        help="regenerate only the NAM mainland split and its state-owned data",
+    )
+    actions.add_argument(
+        "--apply-nam-resource-war",
+        action="store_true",
+        help="regenerate NAM-war mainland states and their generated VP names",
+    )
     actions.add_argument(
         "--apply-legacy-state",
         action="append",
@@ -1177,6 +1288,14 @@ def main() -> int:
     args = parser.parse_args()
     if args.apply:
         apply()
+        return 0
+    if args.apply_nam_split:
+        split_svetlogorsk_from_nam()
+        print("Regenerated the NAM mainland split without touching unrelated states.")
+        return 0
+    if args.apply_nam_resource_war:
+        apply_nam_resource_war_states()
+        print("Regenerated NAM-war mainland states and victory-point names.")
         return 0
     if args.apply_legacy_state:
         state_ids = set(args.apply_legacy_state)

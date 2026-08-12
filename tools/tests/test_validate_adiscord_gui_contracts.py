@@ -611,35 +611,35 @@ class DiplomacyGuiContractTests(unittest.TestCase):
         self.assertRegex(
             text,
             r'(?s)name\s*=\s*"national_spirit_info"'
-            r'.{0,200}?position\s*=\s*\{\s*x\s*=\s*17\s+y\s*=\s*285\s*\}'
-            r'.{0,100}?size\s*=\s*\{\s*width\s*=\s*530\s+height\s*=\s*80\s*\}',
+            r'.{0,200}?position\s*=\s*\{\s*x\s*=\s*11\s+y\s*=\s*361\s*\}'
+            r'.{0,100}?size\s*=\s*\{\s*width\s*=\s*669\s+height\s*=\s*105\s*\}',
         )
         self.assertRegex(
             text,
             r'(?s)name\s*=\s*"national_spirit_container"'
-            r'.{0,200}?position\s*=\s*\{\s*x\s*=\s*-380\s+y\s*=\s*-5\s*\}'
-            r'.{0,100}?size\s*=\s*\{\s*width\s*=\s*375\s+height\s*=\s*84\s*\}',
+            r'.{0,200}?position\s*=\s*\{\s*x\s*=\s*8\s+y\s*=\s*32\s*\}'
+            r'.{0,100}?size\s*=\s*\{\s*width\s*=\s*653\s+height\s*=\s*70\s*\}',
         )
         self.assertRegex(
             text,
             r'(?s)name\s*=\s*"national_spirit_ideas_grid"'
-            r'.{0,200}?position\s*=\s*\{\s*x\s*=\s*3\s+y\s*=\s*2\s*\}',
+            r'.{0,200}?position\s*=\s*\{\s*x\s*=\s*5\s+y\s*=\s*4\s*\}',
         )
-        for grid_name, width in (
-            ('national_spirit_ideas_grid', 360),
-            ('nat_spirit_ideas_grid_over_defined', 330),
+        for grid_name in (
+            'national_spirit_ideas_grid',
+            'nat_spirit_ideas_grid_over_defined',
         ):
             self.assertRegex(
                 text,
                 rf'(?s)name\s*=\s*"{grid_name}"'
-                rf'.{{0,200}}?size\s*=\s*\{{\s*width\s*=\s*{width}\s+height\s*=\s*80\s*\}}',
+                rf'.{{0,200}}?size\s*=\s*\{{\s*width\s*=\s*635\s+height\s*=\s*68\s*\}}',
             )
 
-        for pane_name, x in (('relations_info', 11), ('diplomatic_actions', 272)):
+        for pane_name, x in (('relations_info', 11), ('diplomatic_actions', 260)):
             self.assertRegex(
                 text,
                 rf'(?s)name\s*=\s*"{pane_name}"'
-                rf'.{{0,200}}?position\s*=\s*\{{\s*x\s*=\s*{x}\s+y\s*=\s*365\s*\}}',
+                rf'.{{0,200}}?position\s*=\s*\{{\s*x\s*=\s*{x}\s+y\s*=\s*466\s*\}}',
             )
 
 

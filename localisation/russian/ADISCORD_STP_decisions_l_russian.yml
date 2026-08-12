@@ -1,8 +1,8 @@
 ﻿l_russian:
- # Партийные выборы и подозрение спецслужб
+#STP's sussy rate
  STP_elections_in_the_party: "Выборы в партии"
- STP_elections_in_the_party_desc: "Партийный аппарат сохраняет внешнее единство, однако здоровье Петра Иванова и внимание спецслужб определяют, насколько свободно могут действовать участники будущей борьбы за власть.[PeterHealth][STP_display_party_suspicion]"
- STP_display_party_suspicion_loc: "\n\n§YОперативная сводка§!\n £STP_suspicion §YПодозрение спецслужб§!: [STPGetSuspicionValue] — [STPGetSuspicionBand].\n[STPGetSuspicionExplanation]"
+ STP_elections_in_the_party_desc: "[STP_display_party_suspicion][PeterHealth]"
+ STP_display_party_suspicion_loc: "\n\n§YОперативная сводка§!\n\n £STP_suspicion §YПодозрение спецслужб§!: [STPGetSuspicionValue] (£political_power_texticon [?STP_sus_political_power_gain|=+1%]) - [STPGetSuspicionBand].\n[STPGetSuspicionExplanation]"
  stp_party_suspicion: "[stp_party_suspicion_loc]"
  stp_party_suspicion_loc_bad: "Высокий уровень подозрения спецслужб"
  stp_party_suspicion_loc_good: "Низкий уровень подозрения спецслужб"
@@ -20,24 +20,17 @@
  STP_SUSPICION_EXPLANATION_COMPROMISED: "§gЧасть сети уже установлена. Службы сопоставляют имена, маршруты и источники финансирования, приближаясь к организаторам.§!"
  STP_SUSPICION_EXPLANATION_MANHUNT: "§gСпецслужбы ведут активный розыск. Сеть действует в условиях почти полного раскрытия, а каждый следующий шаг может привести силовиков к её руководству.§!"
 
- # Динамическая сводка о здоровье Иванова внутри категории решений
- STP_PETER_HEALTH_STAGE_1_DESC:0 "\n\n§YЗдоровье лидера§!: §G[?STP_leader_health|0]%§! — устойчивое.\n§YТекущие эффекты§!: [STPGetLeaderHealthEffects]"
- STP_PETER_HEALTH_STAGE_2_DESC:0 "\n\n§YЗдоровье лидера§!: §Y[?STP_leader_health|0]%§! — нарастающая усталость.\n§YТекущие эффекты§!: [STPGetLeaderHealthEffects]"
- STP_PETER_HEALTH_STAGE_3_DESC:0 "\n\n§YЗдоровье лидера§!: §O[?STP_leader_health|0]%§! — ослабленное состояние.\n§YТекущие эффекты§!: [STPGetLeaderHealthEffects]"
- STP_PETER_HEALTH_STAGE_4_DESC:0 "\n\n§YЗдоровье лидера§!: §R[?STP_leader_health|0]%§! — критическое состояние.\n§YТекущие эффекты§!: [STPGetLeaderHealthEffects]"
- STP_PETER_HEALTH_STAGE_5_DESC:0 "\n\n§YЗдоровье лидера§!: §R0%§! — смерть лидера.\n§YТекущие эффекты§!: [STPGetLeaderHealthEffects]"
+#Peter's health
+ STP_PETER_HEALTH_STAGE_1_DESC:0 "\n\n§YЗдоровье лидера§!: §G[?STP_leader_health|0]%§! - устойчивое.\n(£stability_texticon [?STP_fading_father_stability_factor|=+1%])"
+ STP_PETER_HEALTH_STAGE_2_DESC:0 "\n\n§YЗдоровье лидера§!: §Y[?STP_leader_health|0]%§! - нарастающая усталость.\n(£stability_texticon [?STP_fading_father_stability_factor|=+1%])"
+ STP_PETER_HEALTH_STAGE_3_DESC:0 "\n\n§YЗдоровье лидера§!: §O[?STP_leader_health|0]%§! - ослабленное состояние.\n(£stability_texticon [?STP_fading_father_stability_factor|=+1%])"
+ STP_PETER_HEALTH_STAGE_4_DESC:0 "\n\n§YЗдоровье лидера§!: §R[?STP_leader_health|0]%§! - критическое состояние.\n(£stability_texticon [?STP_fading_father_stability_factor|=+1%])"
+ STP_PETER_HEALTH_STAGE_5_DESC:0 "\n\n§YЗдоровье лидера§!: §R0%§! - смерть лидера.\n(£stability_texticon [?STP_fading_father_stability_factor|=+1%])"
 
- STP_LEADER_HEALTH_EFFECTS_1:0 "штрафов нет"
- STP_LEADER_HEALTH_EFFECTS_2:0 "£political_power_texticon §R-5%§! прирост политвласти, £stability_texticon §R-2%§! стабильность, £command_power §R-5%§! прирост командного ресурса"
- STP_LEADER_HEALTH_EFFECTS_3:0 "£political_power_texticon §R-10%§! прирост политвласти, £stability_texticon §R-5%§! стабильность, £command_power §R-10%§! командный ресурс, £planning_speed_texticon §R-5%§! скорость планирования"
- STP_LEADER_HEALTH_EFFECTS_4:0 "£political_power_texticon §R-20%§! прирост политвласти, £stability_texticon §R-10%§! стабильность, £command_power §R-20%§! командный ресурс, £planning_speed_texticon §R-10%§! планирование, §R-5%§! организация армии"
- STP_LEADER_HEALTH_EFFECTS_5:0 "личные модификаторы Иванова сняты; дальнейшие последствия задаются новым контентом STP"
-
- # Сохранённые решения интерфейса здоровья для последующего STP-контента
  STP_state_face_public_speech: "Устойчивое состояние"
  STP_state_face_public_speech_desc: "Иванов ещё способен лично работать и удерживать аппарат. Дальнейшее изменение состояния задаётся контентом STP."
  STP_state_face_order_speech: "Воля порядка"
- STP_state_face_order_speech_desc: "Речь становится жёстче. Толпа больше не просто слушает — её организуют."
+ STP_state_face_order_speech_desc: "Речь становится жёстче. Толпа больше не просто слушает - её организуют."
  STP_state_face_state_myth: "Государственный миф"
  STP_state_face_state_myth_desc: "Лидер становится не столько политиком, сколько носителем государственного нарратива."
  STP_state_face_new_war: "Тень новой войны"

@@ -21,6 +21,7 @@ from tools.builders.build_adiscord_new_states import (
     LEGACY_OWNER_GAPS,
     LEGACY_OWNER_OVERRIDES,
     MINOR_VPS,
+    NAM_COALITION_FRONT_RESOURCES,
     NAM_LEGACY_VICTORY_POINTS,
     SECONDARY_CENTRES,
     STATE_PROFILES,
@@ -58,7 +59,6 @@ INNER_FRONTIER_SETTLEMENT_STATES = {
     for country in INNER_FRONTIER_COUNTRIES.values()
     for state_id, _name, _value in country.get("secondary_vps", ())
 }
-
 
 APPROVED_NON_URBAN_SETTLEMENT_VPS = NON_URBAN_SETTLEMENT_VPS | frozenset(
     province_id
@@ -103,6 +103,7 @@ EBA_EXPECTED_STATE_PROFILES = {
 
 ROOT = Path(__file__).resolve().parents[2]
 ERRORS: list[str] = []
+SETTLEMENT_TERRAINS = frozenset({"urban", "vorkernsberg"})
 
 
 def check(condition: bool, message: str) -> None:
@@ -112,6 +113,22 @@ def check(condition: bool, message: str) -> None:
 
 def text(path: Path) -> str:
     return path.read_text(encoding="utf-8-sig", errors="strict")
+
+
+SOUTHERN_LOCALISATION_PATHS = tuple(
+    ROOT / "localisation" / "russian" / filename
+    for filename in (
+        "countries_l_russian.yml",
+        "parties_l_russian.yml",
+        "nsb_characters_l_russian.yml",
+        "ADISCORD_traits_l_russian.yml",
+        "ADISCORD_ideas_l_russian.yml",
+    )
+)
+
+
+def southern_localisation() -> str:
+    return "\n".join(text(path) for path in SOUTHERN_LOCALISATION_PATHS)
 
 
 def block(source: str, name: str) -> str:
@@ -222,6 +239,17 @@ def validate_states() -> None:
         check("coal" not in resources, f"{owner}: southern starting deposit must not use coal")
         if owner in resource_totals:
             resource_totals[owner] += sum(resources.values())
+    for state_id, resources in NAM_COALITION_FRONT_RESOURCES.items():
+        if state_id in STATE_RESOURCES:
+            continue
+        source = text(state_path(state_id))
+        resource_block = block(source, "resources")
+        actual_resources = {
+            resource: int(value)
+            for resource, value in re.findall(r"(?m)^\s*([a-z_]+)\s*=\s*(\d+)\s*$", resource_block)
+        }
+        check(actual_resources == resources, f"state {state_id}: wrong resource deposit")
+        resource_totals["AZH"] += sum(resources.values())
     for tag, amount in resource_totals.items():
         check(4 <= amount <= 6, f"{tag}: expected a modest 4-6 starting resources, found {amount}")
 
@@ -342,7 +370,7 @@ def validate_states() -> None:
         source = text(state_path(state_id))
         vp_pattern = rf"victory_points\s*=\s*\{{\s*{province_id}\s+{value}\s*\}}"
         if (
-            province_terrain.get(province_id) == "urban"
+            province_terrain.get(province_id) in SETTLEMENT_TERRAINS
             or province_id in APPROVED_NON_URBAN_SETTLEMENT_VPS
         ):
             check(bool(re.search(vp_pattern, source)), f"state {state_id}: missing urban VP {province_id}")
@@ -355,7 +383,7 @@ def validate_states() -> None:
         source = text(path)
         for province_id in map(int, re.findall(r"victory_points\s*=\s*\{\s*(\d+)", source)):
             check(
-                province_terrain.get(province_id) == "urban"
+                province_terrain.get(province_id) in SETTLEMENT_TERRAINS
                 or province_id in APPROVED_NON_URBAN_SETTLEMENT_VPS,
                 f"{path.name}: VP {province_id} is not urban or an approved settlement",
             )
@@ -367,9 +395,12 @@ def validate_countries() -> None:
     ideas = text(ROOT / "common/ideas/ADISCORD_southern_desert_ideas.txt")
     traits = text(ROOT / "common/country_leader/ADISCORD_southern_desert_traits.txt")
     portraits_gfx = text(ROOT / "interface/ADISCORD_southern_desert_portraits.gfx")
-    localisation_path = ROOT / "localisation/russian/ADISCORD_southern_desert_l_russian.yml"
-    localisation = text(localisation_path)
-    check(localisation_path.read_bytes().startswith(b"\xef\xbb\xbf"), "southern desert localisation must use UTF-8 BOM")
+    localisation = southern_localisation()
+    for localisation_path in SOUTHERN_LOCALISATION_PATHS:
+        check(
+            localisation_path.read_bytes().startswith(b"\xef\xbb\xbf"),
+            f"shared southern localisation must use UTF-8 BOM: {localisation_path.name}",
+        )
     for retired_name in (
         "Кадирский Караванный Союз",
         "Рахмийская Лига Колодцев",
@@ -517,7 +548,7 @@ def validate_news_settings() -> None:
     superevents = text(ROOT / "common/scripted_guis/superevents.txt")
     effects = text(ROOT / "common/scripted_effects/ADISCORD_vorkerland_collapse_map_effects.txt")
     news = text(ROOT / "events/ADISCORD_news.txt")
-    localisation = text(ROOT / "localisation/russian/ADISCORD_southern_desert_l_russian.yml")
+    localisation = southern_localisation()
 
     for obsolete in (
         "common/decisions/categories/ADISCORD_news_settings_categories.txt",
@@ -585,14 +616,21 @@ def validate_vorkerland_expansion() -> None:
             "ADISCORD_vorkerland_form_wrk_from_tva",
         ),
     )
+    finalizer = block(phase_effects, "ADISCORD_vorkerland_finalize_reunified_wrk")
     for map_name, winner_tag, victory_flag, formation_effect in winner_paths:
         winner = block(maps, map_name)
-        for required in (
+        for required in ("ADISCORD_vorkerland_begin_reunification = yes",):
+            check(required in winner, f"{map_name}: missing phase handoff token {required}")
+        for forbidden in (
             "set_global_flag = ADISCORD_vorkerland_central_war_finished",
             f"set_global_flag = {victory_flag}",
-            "ADISCORD_vorkerland_begin_reunification = yes",
+            "victory_superevent = yes",
         ):
-            check(required in winner, f"{map_name}: missing phase handoff token {required}")
+            check(forbidden not in winner, f"{map_name}: premature victory token {forbidden}")
+        check(
+            f"set_global_flag = {victory_flag}" in finalizer,
+            f"verified finalizer does not record {victory_flag}",
+        )
         check(
             bool(
                 re.search(

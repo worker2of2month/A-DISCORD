@@ -15,6 +15,7 @@
     "terrain_snow",
     "minimap",
     "decision_ui_assets",
+    "diplomacy_ui_assets",
     "production_ui_assets",
     "resource_assets",
     "technology_system",
@@ -31,11 +32,17 @@
         "history/states/119-*.txt",
         "history/states/120-*.txt",
         "history/units/AIN.txt",
-        "localisation/russian/ADISCORD_ainholm_l_russian.yml",
+        "localisation/russian/countries_l_russian.yml",
+        "localisation/russian/parties_l_russian.yml",
+        "localisation/russian/nsb_characters_l_russian.yml",
+        "localisation/russian/ADISCORD_traits_l_russian.yml",
+        "localisation/russian/ADISCORD_ideas_l_russian.yml",
+        "localisation/russian/victory_points_l_russian.yml",
         "gfx/flags/**/AIN.tga"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_ainholm_mandate.py",
+        "tools/lib/localisation.py",
         "map/definition.csv",
         "map/provinces.bmp"
       ],
@@ -43,7 +50,7 @@
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_ainholm_mandate", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "Ainholm owns metadata inside state history and flag directories shared with the state and regional country pipelines."
+      "overlap_explanation": "Ainholm owns metadata inside state history plus generated blocks in shared country, party, character, trait, idea, and victory-point localisation; flag directories are shared with the state and regional country pipelines."
     },
     {
       "id": "doctrine_system",
@@ -137,7 +144,7 @@
         "history/countries/LMN - *.txt",
         "history/countries/RLY - *.txt",
         "history/countries/WCG - *.txt",
-        "localisation/russian/ADISCORD_inner_frontier_victory_points_l_russian.yml",
+        "localisation/russian/victory_points_l_russian.yml",
         "localisation/russian/ZZ_ADISCORD_exclusion_zone_l_russian.yml",
         "gfx/flags/**/BOR.tga",
         "gfx/flags/**/DOL.tga",
@@ -149,6 +156,7 @@
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_inner_frontier_countries.py",
+        "tools/lib/localisation.py",
         "map/definition.csv",
         "map/provinces.bmp",
         "map/unitstacks.txt"
@@ -157,7 +165,7 @@
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_inner_frontier_countries", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "Inner-frontier population and owner metadata layers onto existing state shells; its flags share engine flag directories with other regional builders."
+      "overlap_explanation": "Inner-frontier population and owner metadata layers onto existing state shells; its generated victory-point block and flag directories share engine files with other regional builders."
     },
     {
       "id": "map_buildings",
@@ -215,6 +223,7 @@
         "history/states/3[0-2]?-*.txt",
         "history/states/330-*.txt",
         "history/states/68[8-9]-*.txt",
+        "history/states/69[0-2]-*.txt",
         "localisation/russian/victory_points_l_russian.yml",
         "localisation/russian/state_names_l_russian.yml",
         "map/buildings.txt"
@@ -260,7 +269,7 @@
         "history/units/ARS.txt",
         "history/units/VLD.txt",
         "history/units/MON.txt",
-        "localisation/russian/ADISCORD_northern_victory_points_l_russian.yml",
+        "localisation/russian/victory_points_l_russian.yml",
         "gfx/flags/**/ARS.tga",
         "gfx/flags/**/AUR.tga",
         "gfx/flags/**/BRN.tga",
@@ -285,6 +294,7 @@
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_northern_countries.py",
+        "tools/lib/localisation.py",
         "map/definition.csv",
         "map/provinces.bmp",
         "map/unitstacks.txt"
@@ -293,7 +303,7 @@
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_northern_countries", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "Northern metadata populates outer state shells and must be reapplied after exclusion-zone repartitioning; its flags share the engine flag tree with other generators."
+      "overlap_explanation": "Northern metadata populates outer state shells and must be reapplied after exclusion-zone repartitioning; its generated victory-point block and flag directories share engine files with other generators."
     },
     {
       "id": "outer_states",
@@ -304,11 +314,12 @@
         "history/states/4??-outer-*.txt",
         "history/states/5[0-4]?-outer-*.txt",
         "history/states/550-outer-*.txt",
-        "localisation/russian/ADISCORD_outer_states_l_russian.yml",
+        "localisation/russian/state_names_l_russian.yml",
         "map/buildings.txt"
       ],
       "source_inputs": [
         "history/states/23-*.txt",
+        "tools/lib/localisation.py",
         "map/definition.csv",
         "map/provinces.bmp",
         "map/heightmap.bmp",
@@ -318,7 +329,7 @@
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_outer_states", "--apply"],
       "may_delete_outputs": true,
       "ownership_mode": "layered",
-      "overlap_explanation": "Outer state shells are later populated by northern and exclusion passes, and the builder invokes the shared building synchronizer after repartitioning."
+      "overlap_explanation": "Outer state shells are later populated by northern and exclusion passes; their generated name block shares the canonical state localisation, and the builder invokes the shared building synchronizer after repartitioning."
     },
     {
       "id": "remainder_states",
@@ -326,12 +337,12 @@
       "output_globs": [
         "history/states/23-*.txt",
         "history/states/*-outer-remainder.txt",
-        "localisation/russian/ADISCORD_remainder_states_l_russian.yml",
         "localisation/russian/state_names_l_russian.yml",
         "map/buildings.txt"
       ],
       "source_inputs": [
         "history/states/23-*.txt",
+        "tools/lib/localisation.py",
         "map/definition.csv",
         "map/provinces.bmp",
         "map/heightmap.bmp",
@@ -341,7 +352,7 @@
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_remainder_states", "--apply"],
       "may_delete_outputs": true,
       "ownership_mode": "layered",
-      "overlap_explanation": "Remainder shells share state 23 and state-name localisation with other state builders and invoke the shared building synchronizer."
+      "overlap_explanation": "Remainder shells share state 23 and a generated block in the canonical state-name localisation with other state builders and invoke the shared building synchronizer."
     },
     {
       "id": "strategic_regions",
@@ -485,6 +496,24 @@
       "ownership_mode": "exclusive"
     },
     {
+      "id": "diplomacy_ui_assets",
+      "owner_module": "tools.builders.build_adiscord_diplomacy_ui_assets",
+      "output_globs": [
+        "gfx/interface/diplomacy/ADISCORD_diplomacy_leader_overlay.dds",
+        "gfx/interface/diplomacy/ADISCORD_diplomacy_parties_overlay.dds",
+        "gfx/interface/diplomacy/ADISCORD_diplomacy_flag_overlay.dds"
+      ],
+      "source_inputs": [
+        "gfx/interface/diplomacy/source/ADISCORD_diplomacy_leader_overlay_master.png",
+        "gfx/interface/diplomacy/source/ADISCORD_diplomacy_parties_overlay_master.png",
+        "gfx/interface/diplomacy/source/ADISCORD_diplomacy_flag_overlay_master.png"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_diplomacy_ui_assets"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_diplomacy_ui_assets", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
+    },
+    {
       "id": "resource_assets",
       "owner_module": "tools.builders.build_adiscord_resource_assets",
       "output_globs": [
@@ -533,6 +562,17 @@
         "gfx/interface/topbar/topbar_convoys.dds",
         "gfx/interface/topbar/fuel_state_icon.dds",
         "gfx/interface/topbar/nuke_icon.dds",
+        "gfx/interface/stateview/ww_stateview_bg.dds",
+        "gfx/interface/stateview/stateview_bg.dds",
+        "gfx/interface/stateview/ww_building_standing_entry_stateview.dds",
+        "gfx/interface/stateview/building_standing_entry_stateview.dds",
+        "gfx/interface/stateview/building_entry_stateview.dds",
+        "gfx/interface/stateview/province_landmark_bg.dds",
+        "gfx/interface/buildings/build_slot_bg.dds",
+        "gfx/interface/province_header.dds",
+        "gfx/interface/population_icon.dds",
+        "gfx/interface/victorypoint_stateview_bg.dds",
+        "gfx/interface/stateview_resource_transp_bg.dds",
         "gfx/texticons/command_power.dds",
         "gfx/texticons/army_experience_20x20.dds",
         "gfx/texticons/navy_experience_20x20.dds",

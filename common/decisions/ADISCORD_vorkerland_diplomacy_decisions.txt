@@ -4,12 +4,17 @@ ADISCORD_vorkerland_regional_diplomacy_category = {
 		allowed = { tag = VAD }
 		visible = {
 			has_country_flag = ADISCORD_vorkerland_focus_vad_sol_invitation_intent
+			has_country_flag = ADISCORD_vorkerland_focus_vad_solland_liaison_prepared
 			has_global_flag = ADISCORD_vorkerland_solar_terminal_verified
 			has_global_flag = ADISCORD_vorkerland_solar_winner_sol
 			NOT = { has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_resolved }
+			NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
+			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 		}
 		available = {
+			is_subject = no
+			NOT = { has_capitulated = yes }
 			SOL = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } }
 			NOT = { has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending }
 		}
@@ -27,9 +32,13 @@ ADISCORD_vorkerland_regional_diplomacy_category = {
 			has_global_flag = ADISCORD_vorkerland_volnograd_terminal_verified
 			has_global_flag = ADISCORD_vorkerland_volnograd_winner_vla
 			NOT = { has_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_resolved }
+			NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
+			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 		}
 		available = {
+			is_subject = no
+			NOT = { has_capitulated = yes }
 			VLA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } }
 			NOT = { has_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending }
 		}
@@ -44,6 +53,7 @@ ADISCORD_vorkerland_regional_diplomacy_category = {
 		allowed = { tag = VAD }
 		visible = {
 			has_country_flag = ADISCORD_vorkerland_focus_vad_sol_invitation_intent
+			has_country_flag = ADISCORD_vorkerland_focus_vad_solland_liaison_prepared
 			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
 			has_global_flag = ADISCORD_vorkerland_solar_terminal_verified
 			OR = {
@@ -51,7 +61,9 @@ ADISCORD_vorkerland_regional_diplomacy_category = {
 				has_global_flag = ADISCORD_vorkerland_solar_winner_csl
 			}
 			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_failed }
 			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_verified }
+			NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
 			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 		}
@@ -63,7 +75,30 @@ ADISCORD_vorkerland_regional_diplomacy_category = {
 		}
 		cost = 50
 		days_remove = 7
-		fire_only_once = yes
+		fire_only_once = no
+		complete_effect = { ADISCORD_vorkerland_reserve_vad_solar_intervention = yes }
+		cancel_trigger = {
+			OR = {
+				NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }
+				NOT = { has_global_flag = ADISCORD_vorkerland_phase_central_preparation }
+				has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested
+				has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized
+				has_global_flag = ADISCORD_vorkerland_central_showdown_started
+				has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+				has_global_flag = ADISCORD_vorkerland_sol_restoration_verified
+				is_subject = yes
+				has_capitulated = yes
+				has_war = yes
+				NOT = { ADISCORD_vorkerland_vad_has_solar_intervention_border = yes }
+				NOT = {
+					OR = {
+						AND = { has_global_flag = ADISCORD_vorkerland_solar_winner_sra country_exists = SRA }
+						AND = { has_global_flag = ADISCORD_vorkerland_solar_winner_csl country_exists = CSL }
+					}
+				}
+			}
+		}
+		cancel_effect = { ADISCORD_vorkerland_cancel_vad_solar_intervention_reservation = yes }
 		remove_effect = { ADISCORD_vorkerland_attempt_vad_solar_intervention = yes }
 		ai_will_do = { factor = 800 }
 	}
@@ -94,7 +129,7 @@ ADISCORD_vorkerland_regional_diplomacy_category = {
 		}
 		cost = 40
 		days_remove = 7
-		fire_only_once = yes
+		fire_only_once = no
 		remove_effect = { ADISCORD_vorkerland_arm_wkr_solar_counter_intervention = yes }
 		ai_will_do = { factor = 1000 }
 	}

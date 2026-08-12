@@ -1,0 +1,8 @@
+l_english:
+ ADISCORD_vorkerland_tva_field_laboratories:0 "Field Laboratories"
+ ADISCORD_vorkerland_tva_field_laboratories_desc:0 "Engineering teams test communications, ammunition, and assault equipment directly with formations in the field."
+ IBA_organize_transitional_council:0 "Organise the Transitional Council"
+ IBA_organize_transitional_council_desc:0 "Mateusk must turn the corridor's provisional administration into a functioning cabinet and divide authority among its local communities."
+ ADISCORD_vorkerland_civil_war_exhaustion:0 "Civil War Exhaustion"
+ ADISCORD_vorkerland_civil_war_exhaustion_desc:0 "The prolonged struggle for central Vorkerland and each new wave of losses exhaust this side of the conflict. Exhaustion does not recede between fronts and disappears only after the central struggle is conclusively settled."
+ ADISCORD_vorkerland_civil_war_exhaustion_score_tt:0 "Current exhaustion: §Y[?ADISCORD_vorkerland_civil_war_exhaustion|0]/100§!"

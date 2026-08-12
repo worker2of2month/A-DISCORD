@@ -1,0 +1,63 @@
+spriteTypes = {
+	# The source atlas contains three 512x40 button states. A cornered tile keeps
+	# the A-Discord chrome while allowing diplomacy controls to use their real
+	# interaction widths instead of drawing the native 512-pixel frame.
+	corneredTileSpriteType = {
+		name = "GFX_ADISCORD_diplomacy_item_bg"
+		size = { x = 512 y = 40 }
+		textureFile = "gfx/interface/decisions/ui/ADISCORD_decisions_item_bg.dds"
+		borderSize = { x = 64 y = 12 }
+		tilingCenter = yes
+		noOfFrames = 3
+	}
+
+	# Dedicated fixed-width atlas for the active-focus button. Unlike a
+	# cornered tile, each 388x40 interaction frame is swapped as one image, so
+	# hover and pressed states cannot be split into coloured border segments.
+	spriteType = {
+		name = "GFX_ADISCORD_diplomacy_focus_button"
+		textureFile = "gfx/interface/diplomacy/ADISCORD_diplomacy_focus_button.dds"
+		noOfFrames = 3
+	}
+
+	# Transparent, click-through overlays for the engine-owned diplomacy art.
+	# They remain separate sprites so flag, portrait and party widgets can keep
+	# the direct parents required by Clausewitz.
+	spriteType = {
+		name = "GFX_ADISCORD_diplomacy_leader_overlay"
+		textureFile = "gfx/interface/diplomacy/ADISCORD_diplomacy_leader_overlay.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_diplomacy_parties_overlay"
+		textureFile = "gfx/interface/diplomacy/ADISCORD_diplomacy_parties_overlay.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_diplomacy_flag_overlay"
+		textureFile = "gfx/interface/diplomacy/ADISCORD_diplomacy_flag_overlay.dds"
+	}
+
+	# The construction header atlas is narrower than the diplomacy window.
+	# Expose it as a cornered tile so long section dividers reach both borders.
+	corneredTileSpriteType = {
+		name = "GFX_ADISCORD_diplomacy_header_bg"
+		size = { x = 512 y = 32 }
+		textureFile = "gfx/interface/buildings/ADISCORD_construction_header_bg.dds"
+		borderSize = { x = 32 y = 8 }
+		tilingCenter = yes
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+
+	# A restrained dossier bezel made from the mod's own construction tile.
+	# The smaller border avoids the oversized ornamental corners of the generic
+	# A-Discord window frame when used around 60-100 px diplomacy widgets.
+	corneredTileSpriteType = {
+		name = "GFX_ADISCORD_diplomacy_thin_frame"
+		size = { x = 192 y = 192 }
+		textureFile = "gfx/interface/buildings/ADISCORD_constructions_queue_tile.dds"
+		borderSize = { x = 16 y = 16 }
+		tilingCenter = yes
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+}

@@ -29,6 +29,7 @@ from tools.builders.build_adiscord_northern_countries import (
     render_flag,
 )
 from tools.lib.paths import repository_root
+from tools.lib.localisation import replace_generated_localisation_block
 
 
 ROOT = repository_root()
@@ -37,7 +38,7 @@ UNIT_DIR = ROOT / "history" / "units"
 COUNTRY_DIR = ROOT / "common" / "countries"
 COUNTRY_HISTORY_DIR = ROOT / "history" / "countries"
 FLAG_DIR = ROOT / "gfx" / "flags"
-VP_LOCALISATION = ROOT / "localisation" / "russian" / "ADISCORD_inner_frontier_victory_points_l_russian.yml"
+VP_LOCALISATION = ROOT / "localisation" / "russian" / "victory_points_l_russian.yml"
 EXZ_LOCALISATION = ROOT / "localisation" / "russian" / "ZZ_ADISCORD_exclusion_zone_l_russian.yml"
 POPULATION_MARKER = "# Populated by tools/build_adiscord_inner_frontier_countries.py"
 PROTECTORATE_TAG = "WCG"
@@ -489,13 +490,17 @@ def apply() -> None:
         encoding="utf-8",
         newline="\n",
     )
-    localisation = ["\ufeffl_russian:"]
+    localisation: dict[str, str] = {}
     for country in COUNTRIES.values():
         capital_state = int(country["capital"])
-        localisation.append(f' VICTORY_POINTS_{principal_provinces[capital_state]}: "{country["capital_name"]}"')
+        localisation[f"VICTORY_POINTS_{principal_provinces[capital_state]}"] = str(country["capital_name"])
         for state_id, name, _value in country.get("secondary_vps", ()):
-            localisation.append(f' VICTORY_POINTS_{principal_provinces[int(state_id)]}: "{name}"')
-    VP_LOCALISATION.write_text("\n".join(localisation) + "\n", encoding="utf-8", newline="\n")
+            localisation[f"VICTORY_POINTS_{principal_provinces[int(state_id)]}"] = str(name)
+    replace_generated_localisation_block(
+        VP_LOCALISATION,
+        "tools.builders.build_adiscord_inner_frontier_countries",
+        localisation,
+    )
     EXZ_LOCALISATION.write_text(render_exz_localisation(), encoding="utf-8", newline="\n")
     write_flags()
     print(
