@@ -23,9 +23,6 @@ country_event = {
 		name = ADISCORD_vorkerland_diplomacy.2.a
 		trigger = {
 			has_global_flag = ADISCORD_vorkerland_solar_winner_sol
-			NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
-			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
-			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 			is_subject = no
 			NOT = { has_capitulated = yes }
 			VAD = {
@@ -55,6 +52,9 @@ country_event = {
 			set_country_flag = ADISCORD_vorkerland_preserve_wartime_faction
 		}
 		set_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted
+		# If the three claimant wars are already verified, join only VAD's live
+		# edges. Before that point the normal phase verifier performs the same call.
+		ADISCORD_vorkerland_join_regional_allies_to_showdown = yes
 	}
 
 	option = {
@@ -84,9 +84,6 @@ country_event = {
 		name = ADISCORD_vorkerland_diplomacy.3.a
 		trigger = {
 			has_global_flag = ADISCORD_vorkerland_volnograd_winner_vla
-			NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
-			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
-			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 			is_subject = no
 			NOT = { has_capitulated = yes }
 			WKR = {
@@ -116,6 +113,8 @@ country_event = {
 			set_country_flag = ADISCORD_vorkerland_preserve_wartime_faction
 		}
 		set_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_accepted
+		# A late answer reconciles Volnograd with WKR's surviving showdown fronts.
+		ADISCORD_vorkerland_join_regional_allies_to_showdown = yes
 	}
 
 	option = {

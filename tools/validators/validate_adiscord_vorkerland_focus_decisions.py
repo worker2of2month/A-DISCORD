@@ -33,17 +33,8 @@ RUSSIAN_LOCALISATION = Path(
 CENTRAL_DECISION = "ADISCORD_vorkerland_commit_to_central_showdown"
 CENTRAL_EFFECT = "ADISCORD_vorkerland_focus_schedule_final_showdown"
 
-CENTRAL_TARGETS = {
-    "EYR": "ADISCORD_vorkerland_consolidate_eyr",
-    "EGC": "ADISCORD_vorkerland_consolidate_egc",
-    "RIV": "ADISCORD_vorkerland_consolidate_riv",
-    "REV": "ADISCORD_vorkerland_consolidate_rev",
-    "YOR": "ADISCORD_vorkerland_consolidate_yor",
-    "NDN": "ADISCORD_vorkerland_consolidate_ndn",
-    "SWB": "ADISCORD_vorkerland_consolidate_swb",
-    "VHV": "ADISCORD_vorkerland_consolidate_vhv",
-    "OSV": "ADISCORD_vorkerland_consolidate_osv",
-}
+CENTRAL_TARGETS = ("EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV")
+CENTRAL_WAVE_DECISION = "ADISCORD_vorkerland_launch_central_minor_wave"
 
 CENTRAL_INTEGRATION_PACKAGES = {
     "EYR": ("ADISCORD_vorkerland_integrate_eyr_district", (102, 109, 111, 325), 21),
@@ -137,7 +128,7 @@ LOCALISED_IDS = (
     "ADISCORD_vorkerland_focus_operations_category",
     "ADISCORD_vorkerland_allied_support_category",
     "ADISCORD_vorkerland_focus_central_minor_front_deadline",
-    *CENTRAL_TARGETS.values(),
+    CENTRAL_WAVE_DECISION,
     *(package[0] for package in CENTRAL_INTEGRATION_PACKAGES.values()),
     CENTRAL_DECISION,
     *LEVY_DECISIONS,
@@ -149,7 +140,10 @@ LOCALISED_IDS = (
 
 TOOLTIP_IDS = (
     "ADISCORD_vorkerland_integrate_central_district_tt",
+    "ADISCORD_vorkerland_central_showdown_command_ready_tt",
+    "ADISCORD_vorkerland_central_showdown_campaigns_closed_tt",
     "ADISCORD_vorkerland_central_districts_integrated_tt",
+    "ADISCORD_vorkerland_central_showdown_no_live_intervention_tt",
 )
 
 
@@ -295,79 +289,50 @@ def collect_issues() -> list[str]:
             issues.append(f"missing decision group {category}")
 
     target_tags = tuple(CENTRAL_TARGETS)
-    central_front_tokens = tuple(f"has_war_with = {target}" for target in target_tags)
-    for target, decision_id in CENTRAL_TARGETS.items():
-        block = named_block(decisions, decision_id)
-        effect_id = f"ADISCORD_vorkerland_focus_launch_minor_{target.lower()}"
-        effect = named_block(effects, effect_id)
-        for tag in ("WKR", "VAD", "TVA"):
-            hook = f"ADISCORD_vorkerland_focus_{tag.lower()}_central_war_unlocked"
-            if hook in block or hook in effect:
-                issues.append(f"{decision_id} retains late claimant unlock {hook}")
+    wave = named_block(decisions, CENTRAL_WAVE_DECISION)
+    launcher = named_block(effects, "ADISCORD_vorkerland_focus_launch_central_minor_wave")
+    for token in (
+        "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes",
+        "ADISCORD_vorkerland_focus_central_minor_launch_pending",
+        "ADISCORD_vorkerland_focus_central_minor_recovery_cooldown",
+        "days_remove = 1",
+        "fire_only_once = no",
+        "ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes",
+        "remove_effect = { ADISCORD_vorkerland_focus_launch_central_minor_wave = yes }",
+        "ai_will_do = { factor = 900 }",
+    ):
+        if token not in wave:
+            issues.append(f"central minor wave decision lacks {token}")
+    for target in target_tags:
         for token in (
-            "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes",
-            f"{target} = {{ exists = yes is_subject = no",
             f"any_neighbor_country = {{ tag = {target} }}",
-            "ADISCORD_vorkerland_focus_central_minor_launch_pending",
-            "ADISCORD_vorkerland_focus_central_minor_recovery_cooldown",
-            "days_remove = 1",
-            "fire_only_once = no",
-            "ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes",
+            f"{target} = {{ exists = yes is_subject = no",
             f"set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_{target.lower()}",
-            "ADISCORD_vorkerland_leave_inherited_faction = yes",
             f"{target} = {{ ADISCORD_vorkerland_leave_inherited_faction = yes }}",
-            f"remove_effect = {{ {effect_id} = yes }}",
         ):
-            if token not in block:
-                issues.append(f"{decision_id} lacks bounded named-front token {token}")
-        if target != "EGC":
-            if "ai_will_do = { factor = 900 }" not in block:
-                issues.append(f"{decision_id} lacks exact base AI priority")
-        else:
-            ai = named_block(block, "ai_will_do")
-            modifiers = named_blocks(ai, "modifier")
-            if "factor = 900" not in ai:
-                issues.append(f"{decision_id} lacks base AI priority factor 900")
-            if len(modifiers) != 1:
-                issues.append(f"{decision_id} must have exactly one bounded VAD Solar modifier")
-            else:
-                modifier = modifiers[0]
-                for token in (
-                    "factor = 8",
-                    "tag = VAD",
-                    "has_country_flag = ADISCORD_vorkerland_focus_vad_sol_invitation_intent",
-                    "has_country_flag = ADISCORD_vorkerland_focus_vad_solland_liaison_prepared",
-                    "has_global_flag = ADISCORD_vorkerland_solar_winner_sra",
-                    "has_global_flag = ADISCORD_vorkerland_solar_winner_csl",
-                    "NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_verified }",
-                    "NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_failed }",
-                    "NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_failed }",
-                ):
-                    if token not in modifier:
-                        issues.append(f"{decision_id} VAD Solar modifier lacks {token}")
-        if not effect:
-            issues.append(f"{decision_id} lacks delayed launch effect {effect_id}")
-            continue
-        for token in (
-            "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes",
-            "ADISCORD_vorkerland_focus_central_minor_launch_pending",
-            "OR = { tag = WKR tag = VAD tag = TVA tag = WRK }",
-            f"{target} = {{ exists = yes is_subject = no",
-            f"any_neighbor_country = {{ tag = {target} }}",
-            f"declare_war_on = {{ target = {target} type = annex_everything }}",
-            "activate_mission = ADISCORD_vorkerland_focus_central_minor_launch_check",
-        ):
-            if token not in effect:
-                issues.append(f"{effect_id} lacks safe delayed-front token {token}")
-        if "ADISCORD_vorkerland_focus_central_front_prepared" in block or (
-            "ADISCORD_vorkerland_focus_central_front_prepared" in effect
-        ):
-            issues.append(f"{decision_id} is still delayed by the final-front focus")
-        if effect.count("declare_war_on = {") != 1:
-            issues.append(f"{effect_id} must declare exactly its one named front")
-        for front_token in central_front_tokens:
-            if front_token not in block or front_token not in effect:
-                issues.append(f"{decision_id}/{effect_id} lacks one-front exclusion {front_token}")
+            if token not in wave:
+                issues.append(f"central minor wave decision lacks {target} token {token}")
+        declaration = f"declare_war_on = {{ target = {target} type = annex_everything }}"
+        if launcher.count(declaration) != 1:
+            issues.append(f"central minor wave launcher must declare {target} exactly once")
+    if launcher.count("declare_war_on = {") != len(target_tags):
+        issues.append("central minor wave launcher must contain all nine independent declarations")
+    if "else_if =" in launcher:
+        issues.append("central minor wave launcher must not serialize targets with else_if")
+    for legacy in (
+        "ADISCORD_vorkerland_consolidate_eyr",
+        "ADISCORD_vorkerland_consolidate_egc",
+        "ADISCORD_vorkerland_consolidate_riv",
+        "ADISCORD_vorkerland_consolidate_rev",
+        "ADISCORD_vorkerland_consolidate_yor",
+        "ADISCORD_vorkerland_consolidate_ndn",
+        "ADISCORD_vorkerland_consolidate_swb",
+        "ADISCORD_vorkerland_consolidate_vhv",
+        "ADISCORD_vorkerland_consolidate_osv",
+        "ADISCORD_vorkerland_focus_launch_minor_",
+    ):
+        if legacy in decisions or legacy in effects:
+            issues.append(f"legacy serialized central-front producer remains: {legacy}")
 
     launch_check = named_block(
         decisions, "ADISCORD_vorkerland_focus_central_minor_launch_check"
@@ -382,12 +347,12 @@ def collect_issues() -> list[str]:
         (
             "launch check",
             launch_check,
-            "ADISCORD_vorkerland_focus_confirm_central_minor_launch = yes",
+            "ADISCORD_vorkerland_focus_confirm_central_minor_wave_launch = yes",
         ),
         (
             "retry check",
             retry_check,
-            "ADISCORD_vorkerland_focus_confirm_central_minor_retry = yes",
+            "ADISCORD_vorkerland_focus_confirm_central_minor_wave_retry = yes",
         ),
     ):
         for token in (
@@ -404,20 +369,20 @@ def collect_issues() -> list[str]:
         "selectable_mission = no",
         "fire_only_once = no",
         "days_mission_timeout = 240",
-        "ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes",
-        "ADISCORD_vorkerland_focus_resolve_central_minor_deadline = yes",
+        "ADISCORD_vorkerland_focus_finish_central_minor_wave = yes",
+        "ADISCORD_vorkerland_focus_resolve_central_minor_wave_deadline = yes",
     ):
         if token not in deadline:
             issues.append(f"central minor deadline lacks hard-bound token {token}")
 
     first_confirmation = named_block(
-        effects, "ADISCORD_vorkerland_focus_confirm_central_minor_launch"
+        effects, "ADISCORD_vorkerland_focus_confirm_central_minor_wave_launch"
     )
     retry_confirmation = named_block(
-        effects, "ADISCORD_vorkerland_focus_confirm_central_minor_retry"
+        effects, "ADISCORD_vorkerland_focus_confirm_central_minor_wave_retry"
     )
     resolver = named_block(
-        effects, "ADISCORD_vorkerland_focus_resolve_central_minor_deadline"
+        effects, "ADISCORD_vorkerland_focus_resolve_central_minor_wave_deadline"
     )
     for token in (
         "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes",
@@ -433,17 +398,22 @@ def collect_issues() -> list[str]:
     ):
         if token not in retry_confirmation:
             issues.append(f"central minor retry confirmation lacks prepared-front token {token}")
+    finish_wave = named_block(
+        effects, "ADISCORD_vorkerland_focus_finish_central_minor_wave"
+    )
     for token in (
         "ADISCORD_vorkerland_focus_central_minor_recovery_cooldown",
         "days = 14",
         "ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes",
     ):
-        if token not in retry_confirmation:
-            issues.append(f"central minor failed retry lacks visible recovery token {token}")
+        if token not in finish_wave:
+            issues.append(f"central minor wave finish lacks regroup token {token}")
+    if "ADISCORD_vorkerland_focus_finish_central_minor_wave = yes" not in retry_confirmation:
+        issues.append("central minor failed retry does not enter wave regrouping")
     for target in target_tags:
         declaration = f"declare_war_on = {{ target = {target} type = annex_everything }}"
         if effects.count(declaration) != 2:
-            issues.append(f"{target} must have exactly one initial declaration and one retry")
+            issues.append(f"{target} must have exactly one wave declaration and one retry")
         for token in (
             f"ADISCORD_vorkerland_focus_central_minor_target_{target.lower()}",
             f"annex_country = {{ target = {target} transfer_troops = no }}",
@@ -518,8 +488,14 @@ def collect_issues() -> list[str]:
         core_gate = f"{state} = {{ OR = {{ is_core_of = WKR is_core_of = VAD is_core_of = TVA }} }}"
         if core_gate not in central or core_gate not in central_effect:
             issues.append(f"final showdown can bypass civil integration of state {state}")
-    if "tooltip = ADISCORD_vorkerland_central_districts_integrated_tt" not in central:
-        issues.append("final showdown lacks the readable civil-integration tooltip")
+    for tooltip in (
+        "ADISCORD_vorkerland_central_showdown_command_ready_tt",
+        "ADISCORD_vorkerland_central_showdown_campaigns_closed_tt",
+        "ADISCORD_vorkerland_central_districts_integrated_tt",
+        "ADISCORD_vorkerland_central_showdown_no_live_intervention_tt",
+    ):
+        if f"tooltip = {tooltip}" not in central:
+            issues.append(f"final showdown lacks the readable blocker tooltip {tooltip}")
     for token in (
         "ADISCORD_vorkerland_phase_central_preparation",
         "ADISCORD_vorkerland_focus_central_minor_launch_pending",
@@ -537,6 +513,21 @@ def collect_issues() -> list[str]:
             issues.append(f"repeatable central decision lacks retry contract {token}")
     if "NOT = { has_global_flag = ADISCORD_vorkerland_showdown_retry_cooldown }" not in central_effect:
         issues.append("central showdown scheduler lacks retry cooldown guard")
+    live_intervention = (
+        "NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }"
+    )
+    if live_intervention not in central or live_intervention not in central_effect:
+        issues.append("final showdown must wait only for an actually active Solar restoration war")
+    for optional_blocker in (
+        "ADISCORD_vorkerland_vad_solar_intervention_reserved",
+        "ADISCORD_vorkerland_vad_sol_invitation_pending",
+        "ADISCORD_vorkerland_wkr_vla_invitation_pending",
+        "ADISCORD_vorkerland_wkr_solar_counter_intervention_ready",
+        "ADISCORD_vorkerland_wkr_has_solar_counter_border",
+        "ADISCORD_vorkerland_sol_restoration_verified",
+    ):
+        if optional_blocker in central or optional_blocker in central_effect:
+            issues.append(f"optional diplomacy still blocks the final showdown: {optional_blocker}")
     for forbidden in ("declare_war_on", "start_civil_war", "create_wargoal"):
         if forbidden in central or forbidden in central_effect:
             issues.append(f"central focus decision contains forbidden private-war effect {forbidden}")
@@ -802,8 +793,8 @@ def main() -> int:
             print(f"- {issue}")
         return 1
     print(
-        "A-Discord Vorkerland focus-decision validation passed: named one-front central "
-        "consolidation, shared showdown handoff, finite retreat levies, explicit core "
+        "A-Discord Vorkerland focus-decision validation passed: adjacent-wave central "
+        "campaigns, shared showdown handoff, finite retreat levies, explicit core "
         "packages, and bounded allied support are coherent."
     )
     return 0

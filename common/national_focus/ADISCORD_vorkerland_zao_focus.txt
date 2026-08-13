@@ -1,0 +1,99 @@
+focus_tree = {
+	id = ADISCORD_vorkerland_zao_focus
+
+	country = {
+		factor = 0
+		modifier = {
+			add = 100
+			tag = ZAO
+			has_global_flag = ADISCORD_vorkerland_collapse_started
+		}
+	}
+	default = no
+
+	focus = {
+		id = ZAO_keep_the_western_registers_running
+		icon = GFX_goal_generic_political_pressure
+		x = 2
+		y = 0
+		cost = 5
+		available = {
+			has_global_flag = ADISCORD_vorkerland_collapse_started
+			NOT = { has_capitulated = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 20
+			add_stability = 0.02
+			set_country_flag = ADISCORD_vorkerland_zao_registers_secured
+		}
+		ai_will_do = { base = 15 }
+	}
+
+	focus = {
+		id = ZAO_open_the_railway_storehouses
+		icon = GFX_goal_generic_production
+		x = 1
+		y = 1
+		cost = 6
+		prerequisite = { focus = ZAO_keep_the_western_registers_running }
+		available = {
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_capitulated = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment_0
+				amount = 240
+				producer = ZAO
+			}
+			add_command_power = 5
+			set_country_flag = ADISCORD_vorkerland_zao_storehouses_opened
+		}
+		ai_will_do = { base = 13 }
+	}
+
+	focus = {
+		id = ZAO_form_municipal_defence_boards
+		icon = GFX_goal_generic_allies_build_infantry
+		x = 3
+		y = 1
+		cost = 6
+		prerequisite = { focus = ZAO_keep_the_western_registers_running }
+		available = {
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_capitulated = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = 1200
+			army_experience = 5
+			set_country_flag = ADISCORD_vorkerland_zao_defence_boards_formed
+		}
+		ai_will_do = { base = 14 }
+	}
+
+	focus = {
+		id = ZAO_keep_zaozersk_sovereign
+		icon = GFX_goal_generic_national_unity
+		x = 2
+		y = 2
+		cost = 7
+		prerequisite = { focus = ZAO_open_the_railway_storehouses }
+		prerequisite = { focus = ZAO_form_municipal_defence_boards }
+		available = {
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			is_subject = no
+			NOT = { has_capitulated = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_war_support = 0.04
+			add_stability = 0.02
+			add_political_power = 25
+			set_country_flag = ADISCORD_vorkerland_zao_sovereignty_declared
+		}
+		ai_will_do = { base = 16 }
+	}
+}

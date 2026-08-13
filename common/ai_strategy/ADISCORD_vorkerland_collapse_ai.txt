@@ -28,7 +28,7 @@ ADISCORD_vorkerland_collapse_war_economy = {
 # the AI committed to the war it actually entered without forcing supply-blind
 # manual attacks.
 ADISCORD_vorkerland_front_central_against_wrk = {
-	allowed = { OR = { tag = VAD tag = TVA tag = WTD tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV } }
+	allowed = { OR = { tag = VAD tag = TVA tag = WTD } }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = WKR has_war_with = WKR }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = WKR value = 100 }
@@ -36,7 +36,7 @@ ADISCORD_vorkerland_front_central_against_wrk = {
 }
 
 ADISCORD_vorkerland_front_central_against_vad = {
-	allowed = { OR = { tag = WKR tag = TVA tag = WTD tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV } }
+	allowed = { OR = { tag = WKR tag = TVA tag = WTD } }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = VAD has_war_with = VAD }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = VAD value = 65 }
@@ -45,7 +45,35 @@ ADISCORD_vorkerland_front_central_against_vad = {
 }
 
 ADISCORD_vorkerland_front_central_against_tva = {
-	allowed = { OR = { tag = WKR tag = VAD tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV } }
+	allowed = { OR = { tag = WKR tag = VAD } }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = TVA has_war_with = TVA }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = TVA value = 100 }
+	ai_strategy = { type = front_control tag = TVA ratio = 1.00 priority = 1250 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+}
+
+# Central district governments begin cautiously but remain real belligerents:
+# they execute a careful plan and may exploit a failed claimant front. They do
+# not receive a scripted conquest/rush bonus; claimant survival comes from its
+# authored deployment and reserves, not from making the districts inert.
+ADISCORD_vorkerland_central_minor_defense_against_wkr = {
+	allowed = { OR = { tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV } }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = WKR has_war_with = WKR }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = WKR value = 100 }
+	ai_strategy = { type = front_control tag = WKR ratio = 1.00 priority = 1250 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+}
+
+ADISCORD_vorkerland_central_minor_defense_against_vad = {
+	allowed = { OR = { tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV } }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = VAD has_war_with = VAD }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = VAD value = 100 }
+	ai_strategy = { type = front_control tag = VAD ratio = 1.00 priority = 1250 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+}
+
+ADISCORD_vorkerland_central_minor_defense_against_tva = {
+	allowed = { OR = { tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV } }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = TVA has_war_with = TVA }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = TVA value = 100 }

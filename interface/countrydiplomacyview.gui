@@ -117,17 +117,6 @@ guiTypes = {
 				}
 			}
 
-			instantTextboxType = {
-				name = "leader_name"
-				position = { x = 235 y = 51 }
-				font = "hoi_16mbs"
-				text = "Rudolf Kittler"
-				maxWidth = 173
-				maxHeight = 20
-				format = left
-				fixedsize = yes
-			}
-
 			containerWindowType = {
 				name = "opinion_info"
 				position = { x = 414 y = 3 }
@@ -454,7 +443,8 @@ guiTypes = {
 					iconType = {
 						name = "goal_icon"
 						position = { x = 66 y = 80 }
-						spriteType = "GFX_goal_unknown"
+						# Neutral no-focus fallback; active focuses replace it at runtime.
+						spriteType = "GFX_goal_generic_political_pressure"
 						centerposition = yes
 						scale = 0.9
 					}
@@ -493,6 +483,21 @@ guiTypes = {
 						alwaystransparent = yes
 					}
 				}
+			}
+
+			# Engine-bound selected-country leader name. Keep this as a direct
+			# country_info child and after diplomacy_tab_top so the dynamic label
+			# is drawn above the decorative portrait overlay and into its plate.
+			instantTextboxType = {
+				name = "leader_name"
+				position = { x = 10 y = 318 }
+				font = "hoi_16mbs"
+				text = "Rudolf Kittler"
+				maxWidth = 124
+				maxHeight = 20
+				format = center
+				fixedsize = yes
+				alwaystransparent = yes
 			}
 
 

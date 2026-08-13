@@ -105,6 +105,51 @@ ADISCORD_vorkerland_raise_emergency_levies = {
 	}
 }
 
+# WKR normally inherits WRK's armed forces, but a failed or delayed annexation
+# must not leave the worker claimant without a land army. This one-shot reserve
+# is deliberately small: two border guards in state 33 and two formations in
+# the state 32 capital reserve. Its own manpower and rifle package makes the
+# result independent from whatever the inherited army consumed.
+ADISCORD_vorkerland_ensure_wkr_home_guard = {
+	if = {
+		limit = {
+			tag = WKR
+			NOT = { has_country_flag = ADISCORD_vorkerland_wkr_home_guard_deployed_v1 }
+			owns_state = 32
+			controls_state = 32
+			owns_state = 33
+			controls_state = 33
+		}
+		set_country_flag = ADISCORD_vorkerland_wkr_home_guard_deployed_v1
+		division_template = {
+			name = "Worker Home Guard"
+			is_locked = yes
+			force_allow_recruiting = yes
+			regiments = {
+				ADISCORD_militia = { x = 0 y = 0 }
+				ADISCORD_militia = { x = 0 y = 1 }
+				ADISCORD_militia = { x = 0 y = 2 }
+			}
+		}
+		add_manpower = 12000
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 960 producer = WKR }
+		33 = {
+			create_unit = {
+				division = "division_template = \"Worker Home Guard\" start_experience_factor = 0.10 start_equipment_factor = 0.85"
+				owner = WKR
+				count = 2
+			}
+		}
+		32 = {
+			create_unit = {
+				division = "division_template = \"Worker Home Guard\" start_experience_factor = 0.10 start_equipment_factor = 0.85"
+				owner = WKR
+				count = 2
+			}
+		}
+	}
+}
+
 # Political caches and subject status finish rebuilding after the initial map
 # effect. This explicit, idempotent second pass is called once by event .41; it
 # replaces the old monthly repair idea without scanning every country.
@@ -331,6 +376,7 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 		add_equipment_to_stockpile = { type = ADISCORD_combat_platform_2170 amount = 180 producer = WKR }
 		add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 24 producer = WKR }
 		add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 12 producer = WKR }
+		ADISCORD_vorkerland_ensure_wkr_home_guard = yes
 		add_fuel = 7500
 		load_oob = "WRK_vorkerland_collapse_air"
 		set_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed
@@ -1484,6 +1530,22 @@ ADISCORD_vorkerland_appoint_tru_chauvinist = {
 	set_country_flag = ADISCORD_vorkerland_tru_chauvinist_repair_v1
 }
 
+# Zogby is ZAO's authored administrator from campaign history. Reasserting the
+# predeclared role after the confederation teardown prevents Clausewitz from
+# replacing him with a generated pragmatist when subject caches are rebuilt.
+ADISCORD_vorkerland_appoint_zao_administrator = {
+	set_politics = { ruling_party = pragmatism elections_allowed = yes }
+	promote_character = {
+		character = WRK_Bassam_Zogby
+		ideology = pragmatism_ideology
+	}
+	set_country_leader_portrait = {
+		ideology = pragmatism
+		portrait = GFX_portrait_WRK_Bassam_Zogby
+	}
+	set_country_flag = ADISCORD_vorkerland_zao_administrator_repair_v1
+}
+
 ADISCORD_vorkerland_setup_ibl = {
 	IBL = {
 		transfer_state = 93
@@ -1824,48 +1886,30 @@ ADISCORD_vorkerland_open_ivanland_intervention_front = {
 	}
 }
 
-# A successful Ivanland operation also secures Zaozersk. When the republic has
-# already been eliminated, state 72 is detached from its current holder and the
-# historical tag is released there before the subject relationship is applied.
-ADISCORD_vorkerland_ivanland_secure_zaozersk = {
+# One-shot migration for saves created while the Ivanland settlement
+# incorrectly made Zaozersk a protectorate. The authored country flag is the
+# provenance guard: only that exact IVN relationship is dissolved. A ZAO subject
+# of any other country is left untouched, while both obsolete markers are
+# retired so the bad settlement cannot be reconstructed on a later load.
+ADISCORD_vorkerland_migrate_legacy_ivanland_zaozersk_protectorate = {
 	if = {
-		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_zaozersk_secured } }
+		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_zaozersk_independence_migration_v1 } }
 		if = {
-			limit = { NOT = { country_exists = ZAO } }
-			IVN = { transfer_state = 72 }
-			72 = { add_core_of = ZAO set_state_controller_to = IVN }
-			IVN = {
-				release_autonomy = {
-					target = ZAO
-					autonomy_state = autonomy_puppet
-					freedom_level = 0.10
+			limit = {
+				ZAO = {
+					has_country_flag = ADISCORD_vorkerland_ivanland_protectorate
+					is_subject_of = IVN
 				}
 			}
-		}
-		else = {
 			ZAO = {
-				if = { limit = { country_exists = WPA has_war_with = WPA } white_peace = WPA }
-				if = { limit = { country_exists = WPS has_war_with = WPS } white_peace = WPS }
-				if = { limit = { country_exists = PSD has_war_with = PSD } white_peace = PSD }
-				if = { limit = { country_exists = PWR has_war_with = PWR } white_peace = PWR }
-				if = { limit = { country_exists = ROM has_war_with = ROM } white_peace = ROM }
-				if = {
-					limit = { is_subject = yes }
-					overlord = { set_autonomy = { target = ZAO autonomy_state = autonomy_free } }
-				}
-				if = { limit = { is_in_faction = yes } leave_faction = yes }
-			}
-			IVN = {
-				puppet = ZAO
-				set_autonomy = { target = ZAO autonomy_state = autonomy_puppet freedom_level = 0.10 }
+				overlord = { set_autonomy = { target = ZAO autonomy_state = autonomy_free } }
+				ADISCORD_vorkerland_sync_independence_cosmetic = yes
+				ADISCORD_vorkerland_sync_republics_from_ruins = yes
 			}
 		}
-		ZAO = {
-			ADISCORD_vorkerland_sync_independence_cosmetic = yes
-			ADISCORD_vorkerland_sync_republics_from_ruins = yes
-			set_country_flag = ADISCORD_vorkerland_ivanland_protectorate
-		}
-		set_global_flag = ADISCORD_vorkerland_ivanland_zaozersk_secured
+		ZAO = { clr_country_flag = ADISCORD_vorkerland_ivanland_protectorate }
+		clr_global_flag = ADISCORD_vorkerland_ivanland_zaozersk_secured
+		set_global_flag = ADISCORD_vorkerland_ivanland_zaozersk_independence_migration_v1
 	}
 }
 
@@ -2070,7 +2114,6 @@ ADISCORD_vorkerland_ivanland_intervention_success = {
 		log = "[ADISCORD][VORKERLAND] Ivanland intervention resolved: SUCCESS; IBA receives states 90-91 first, then IBL receives states 93-94."
 		ADISCORD_vorkerland_end_ivanland_intervention_wars = yes
 		ADISCORD_vorkerland_setup_ivanland_mandate = yes
-		ADISCORD_vorkerland_ivanland_secure_zaozersk = yes
 		ADISCORD_vorkerland_end_ivanland_intervention_wars = yes
 		# Keep the active guard through white peace and postwar materialisation so a
 		# same-tick capitulation cannot fall into the generic annexation fallback.
@@ -2289,7 +2332,13 @@ ADISCORD_vorkerland_apply_claimant_cosmetics = {
 		ADISCORD_vorkerland_appoint_tru_chauvinist = yes
 		country_event = { id = ADISCORD_vorkerland_collapse.61 days = 1 }
 	}
-	ZAO = { ADISCORD_vorkerland_sync_independence_cosmetic = yes }
+	ZAO = {
+		ADISCORD_vorkerland_sync_independence_cosmetic = yes
+		ADISCORD_vorkerland_appoint_zao_administrator = yes
+		load_focus_tree = { tree = ADISCORD_vorkerland_zao_focus keep_completed = yes }
+		mark_focus_tree_layout_dirty = yes
+		country_event = { id = ADISCORD_vorkerland_collapse.68 days = 1 }
+	}
 	PWR = {
 		set_cosmetic_tag = PWR_rimat_republic
 		ADISCORD_vorkerland_appoint_pwr_technocrat = yes
@@ -2336,8 +2385,10 @@ ADISCORD_vorkerland_form_joint_government = {
 # owner, capital and OOB has been established.
 ADISCORD_vorkerland_relocate_legacy_armies = {
 	every_state = {
+		# WRK's legacy formations move before transfer_troops hands them to WKR.
+		# Do not teleport WKR itself: its new state-33 home guard must keep the
+		# border deployment authored by ensure_wkr_home_guard.
 		teleport_armies = { limit = { tag = WRK } to_state = 32 }
-		teleport_armies = { limit = { tag = WKR } to_state = 32 }
 		teleport_armies = { limit = { tag = VAD } to_state = 75 }
 		teleport_armies = { limit = { tag = ZAO } to_state = 72 }
 		teleport_armies = { limit = { tag = PWR } to_state = 71 }

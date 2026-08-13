@@ -46,6 +46,10 @@ country_event = {
 	id = ADISCORD_vorkerland_phase.2
 	hidden = yes
 	is_triggered_only = yes
+	trigger = {
+		has_global_flag = ADISCORD_vorkerland_collapse_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+	}
 
 	immediate = {
 		ADISCORD_vorkerland_verify_collapse_materialized = yes

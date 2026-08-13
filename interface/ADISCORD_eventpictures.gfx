@@ -12,6 +12,11 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_event_vorkerland_northern_settlement"
+		texturefile = "gfx/event_pictures/event_vorkerland_civilwar_is_over.png"
+	}
+
+	spriteType = {
 		name = "GFX_event_china_civil_war_1"
 		texturefile = "gfx/event_pictures/country/default/china_civil_war_1.png"
 	}

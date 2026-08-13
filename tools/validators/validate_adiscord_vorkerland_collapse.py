@@ -633,6 +633,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
         issues.append("collapse outbreak must record the Unity Tower destruction exactly once")
     if events.count("launch_nuke = {") != 1:
         issues.append("Unity Tower must have exactly one physical explosion producer")
+    if outbreak.count("launch_nuke = {") != 1:
+        issues.append("the sole physical explosion producer must remain inside collapse.1")
     if outbreak.find(f"set_global_flag = {tower_guard}") > outbreak.find("launch_nuke = {"):
         issues.append("Unity Tower one-shot guard is recorded after the explosion")
     if not all(
@@ -786,27 +788,24 @@ def validate_events(root: Path, issues: list[str]) -> None:
             "collapse decisions still own a broad central-minor target producer"
         )
 
-    expected_central_decisions = {
-        f"ADISCORD_vorkerland_consolidate_{target.lower()}"
-        for target in CENTRAL_MINOR_TARGETS
-    }
+    expected_central_decisions = {"ADISCORD_vorkerland_launch_central_minor_wave"}
     actual_central_decisions = set(
         re.findall(
-            r"(?m)^\s*(ADISCORD_vorkerland_consolidate_[a-z0-9_]+)\s*=\s*\{",
+            r"(?m)^\s*(ADISCORD_vorkerland_launch_central_minor_wave)\s*=\s*\{",
             focus_decisions,
         )
     )
     if actual_central_decisions != expected_central_decisions:
         issues.append(
-            "focus decisions do not exclusively own the nine named central-minor fronts"
+            "focus decisions do not exclusively own the shared central-minor wave"
         )
+    decision_id = "ADISCORD_vorkerland_launch_central_minor_wave"
+    decision = named_block(focus_decisions, decision_id)
+    visible = named_block(decision, "visible")
+    complete = named_block(decision, "complete_effect")
+    remove = named_block(decision, "remove_effect")
     for target in CENTRAL_MINOR_TARGETS:
         suffix = target.lower()
-        decision_id = f"ADISCORD_vorkerland_consolidate_{suffix}"
-        decision = named_block(focus_decisions, decision_id)
-        visible = named_block(decision, "visible")
-        complete = named_block(decision, "complete_effect")
-        remove = named_block(decision, "remove_effect")
         for token in (
             "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes",
             f"any_neighbor_country = {{ tag = {target} }}",
@@ -826,15 +825,15 @@ def validate_events(root: Path, issues: list[str]) -> None:
         )
         if target_flag not in complete:
             issues.append(f"{decision_id}: does not own its named target flag")
-        launch = f"ADISCORD_vorkerland_focus_launch_minor_{suffix} = yes"
+        launch = "ADISCORD_vorkerland_focus_launch_central_minor_wave = yes"
         if launch not in remove:
-            issues.append(f"{decision_id}: does not own its named launch effect")
+            issues.append(f"{decision_id}: does not own the shared wave launch effect")
         if "declare_war_on" in decision:
-            issues.append(f"{decision_id}: bypasses the delayed one-front launch effect")
-        if decision.count("set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_") != 1:
-            issues.append(f"{decision_id}: must select exactly one central-minor target")
-        if decision.count("ADISCORD_vorkerland_focus_launch_minor_") != 1:
-            issues.append(f"{decision_id}: must call exactly one named launch effect")
+            issues.append(f"{decision_id}: bypasses the delayed shared-wave launch effect")
+    if decision.count("set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_") != 9:
+        issues.append(f"{decision_id}: must record all nine possible central-minor targets")
+    if decision.count("ADISCORD_vorkerland_focus_launch_central_minor_wave") != 1:
+        issues.append(f"{decision_id}: must call exactly one shared wave launch effect")
 
     claimant_rival = named_block(triggers, "ADISCORD_vorkerland_is_main_claimant_rival_for_ROOT")
     for token in (
@@ -1087,6 +1086,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         if token not in capitulation:
             issues.append(f"central capitulation routing is missing {token}")
+    # Central districts are real belligerents: when one defeats a main claimant,
+    # the normal capitulation fallback is allowed to eliminate that claimant.
+    # Only claimant/co-belligerent victories over a central tag are reserved for
+    # the bounded district-settlement controller below.
+    reverse_marker = "# A temporary main claimant defeated by a central minor"
+    if reverse_marker in capitulation:
+        issues.append("central-minor victory is still intercepted by the retired claimant-shell reservation")
     central_settlement = named_block(
         capitulation_effects, "ADISCORD_vorkerland_settle_central_capitulation"
     )
@@ -1584,6 +1590,10 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append(f"{news_id}: expected exactly one world-news definition")
             continue
         body = definition.group(1)
+        if "picture = GFX_event_vorkerland_northern_settlement" not in body:
+            issues.append(f"{news_id}: Ivanland outcome must use the northern-settlement picture")
+        if "picture = GFX_event_vorkerland_explosion" in body:
+            issues.append(f"{news_id}: Ivanland outcome still reuses the Unity Tower explosion")
         for token in (
             "major = yes", "is_triggered_only = yes", "fire_only_once = yes",
             f"title = {news_id}.t", f"desc = {news_id}.d",
@@ -1990,20 +2000,46 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if f"transfer_state = {state}" not in rom_success or f"{state} = {{ add_claim_by = ROM" not in rom_success:
             issues.append(f"Frealor intervention success does not award claimed state {state}")
 
-    zao_security = named_block(effects, "ADISCORD_vorkerland_ivanland_secure_zaozersk")
+    zao_migration = named_block(
+        effects, "ADISCORD_vorkerland_migrate_legacy_ivanland_zaozersk_protectorate"
+    )
     for token in (
-        "NOT = { country_exists = ZAO }", "transfer_state = 72",
-        "release_autonomy =", "target = ZAO", "puppet = ZAO",
-        "autonomy_state = autonomy_puppet",
-        "ADISCORD_vorkerland_ivanland_zaozersk_secured",
+        "has_country_flag = ADISCORD_vorkerland_ivanland_protectorate",
+        "is_subject_of = IVN",
+        "overlord = { set_autonomy = { target = ZAO autonomy_state = autonomy_free } }",
+        "clr_country_flag = ADISCORD_vorkerland_ivanland_protectorate",
+        "clr_global_flag = ADISCORD_vorkerland_ivanland_zaozersk_secured",
+        "set_global_flag = ADISCORD_vorkerland_ivanland_zaozersk_independence_migration_v1",
     ):
-        if token not in zao_security:
-            issues.append(f"successful Ivanland intervention cannot secure Zaozersk: {token}")
+        if token not in zao_migration:
+            issues.append(f"legacy Ivanland-Zaozersk migration is missing {token}")
+    for forbidden in (
+        "puppet = ZAO", "release_autonomy =", "transfer_state = 72",
+        "autonomy_state = autonomy_puppet", "white_peace =", "leave_faction = yes",
+    ):
+        if forbidden in zao_migration:
+            issues.append(f"legacy Ivanland-Zaozersk migration is over-broad: {forbidden}")
     ivn_success = named_block(effects, "ADISCORD_vorkerland_ivanland_intervention_success")
-    if "ADISCORD_vorkerland_ivanland_secure_zaozersk = yes" not in ivn_success:
-        issues.append("Ivanland success does not invoke the Zaozersk protectorate effect")
-    if "ADISCORD_vorkerland_ivanland_secure_zaozersk = yes" not in named_block(on_actions, "on_startup"):
-        issues.append("successful old saves do not complete the Zaozersk protectorate")
+    for forbidden in (
+        "ADISCORD_vorkerland_ivanland_secure_zaozersk",
+        "puppet = ZAO", "transfer_state = 72", "target = ZAO",
+    ):
+        if forbidden in ivn_success:
+            issues.append(f"Ivanland success still changes sovereign Zaozersk: {forbidden}")
+    startup = named_block(on_actions, "on_startup")
+    for token in (
+        "NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_zaozersk_independence_migration_v1 }",
+        "ADISCORD_vorkerland_migrate_legacy_ivanland_zaozersk_protectorate = yes",
+    ):
+        if token not in startup:
+            issues.append(f"startup does not schedule the versioned Ivanland-Zaozersk migration: {token}")
+    for forbidden in (
+        "ADISCORD_vorkerland_ivanland_secure_zaozersk",
+        "set_global_flag = ADISCORD_vorkerland_ivanland_zaozersk_secured",
+        "set_country_flag = ADISCORD_vorkerland_ivanland_protectorate",
+    ):
+        if forbidden in effects + "\n" + startup:
+            issues.append(f"retired Ivanland-Zaozersk protectorate producer remains: {forbidden}")
 
     guarantee = named_block(decisions, "ADISCORD_ivanland_guarantee_free_republics")
     for token in (
@@ -2186,6 +2222,43 @@ def validate_events(root: Path, issues: list[str]) -> None:
     wkr_air_oob = 'load_oob = "WRK_vorkerland_collapse_air"'
     if wkr_air_stockpile not in wkr_initial or wkr_air_oob not in wkr_initial:
         issues.append("WKR: claimant air stockpile or OOB load is missing")
+    wkr_home_guard = named_block(effects, "ADISCORD_vorkerland_ensure_wkr_home_guard")
+    for token in (
+        "tag = WKR",
+        "NOT = { has_country_flag = ADISCORD_vorkerland_wkr_home_guard_deployed_v1 }",
+        "set_country_flag = ADISCORD_vorkerland_wkr_home_guard_deployed_v1",
+        'name = "Worker Home Guard"',
+        "is_locked = yes",
+        "add_manpower = 12000",
+        "amount = 960 producer = WKR",
+        "33 = {",
+        "32 = {",
+    ):
+        if token not in wkr_home_guard:
+            issues.append(f"WKR annex-independent home guard is missing {token}")
+    if wkr_home_guard.count("ADISCORD_militia =") != 3:
+        issues.append("WKR home-guard template must contain exactly three militia battalions")
+    if wkr_home_guard.count("create_unit =") != 2 or wkr_home_guard.count("count = 2") != 2:
+        issues.append("WKR home guard must deploy exactly two formations in state 33 and two in state 32")
+    for forbidden in ("annex_country", "every_country", "every_state"):
+        if forbidden in wkr_home_guard:
+            issues.append(f"WKR home-guard effect is not bounded: {forbidden}")
+    relocation = named_block(effects, "ADISCORD_vorkerland_relocate_legacy_armies")
+    if "tag = WRK" not in relocation:
+        issues.append("legacy WRK formations are not evacuated before transfer_troops")
+    if "tag = WKR" in relocation:
+        issues.append("legacy relocation erases WKR's authored state-33 home-guard deployment")
+    if "ADISCORD_vorkerland_ensure_wkr_home_guard = yes" not in wkr_initial:
+        issues.append("fresh WKR split does not deploy its annex-independent home guard")
+    startup = named_block(on_actions, "on_startup")
+    for token in (
+        "ADISCORD_vorkerland_ensure_wkr_home_guard = yes",
+        "ADISCORD_vorkerland_wkr_home_guard_deployed_v1",
+    ):
+        if token not in startup:
+            issues.append(f"old collapse saves lack the one-shot WKR home-guard bridge: {token}")
+    if "ADISCORD_vorkerland_ensure_wkr_home_guard = yes" in named_block(on_actions, "on_monthly"):
+        issues.append("WKR home guard must not use monthly polling")
     for technology in (
         "ADISCORD_tech_semi_autonomous_combat_modules = 1",
         "ADISCORD_tech_reclaimed_jet_platforms = 1",
@@ -2440,6 +2513,136 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if f"{effect_id} = yes" in monthly:
             issues.append(f"{tag} wartime government still polls on_monthly")
 
+    zao_history = read(root, "history/countries/ZAO - WestAutonomicZone.txt", issues)
+    wrk_characters = read(root, "common/characters/WRK.txt", issues)
+    portraits = read(root, "interface/ADISCORD_leader_portraits.gfx", issues)
+    zao_appointment = named_block(
+        effects, "ADISCORD_vorkerland_appoint_zao_administrator"
+    )
+    zao_cosmetics = named_block(cosmetics, "ZAO")
+    zao_focus_path = "common/national_focus/ADISCORD_vorkerland_zao_focus.txt"
+    zao_focus = read(root, zao_focus_path, issues)
+    english_loc = read(
+        root, "localisation/english/ADISCORD_vorkerland_collapse_l_english.yml", issues
+    )
+    russian_loc_path = (
+        root / "localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml"
+    )
+    english_characters = read(root, "localisation/english/nsb_characters_l_english.yml", issues)
+    bassam = named_block(wrk_characters, "WRK_Bassam_Zogby")
+    zao_repair = re.search(
+        r"(?ms)^country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.68\b"
+        r"(.*?)(?=^country_event\s*=\s*\{|^add_namespace\s*=|\Z)",
+        events,
+    )
+    for token in (
+        "recruit_character = WRK_Bassam_Zogby",
+        "promote_character = WRK_Bassam_Zogby",
+    ):
+        if token not in zao_history:
+            issues.append(f"ZAO history does not deterministically appoint Bassam: {token}")
+    for token in (
+        "country_leader",
+        "ideology = pragmatism_ideology",
+        "GFX_portrait_WRK_Bassam_Zogby",
+        "traits = { An_Ordinary_Bureaucrat }",
+    ):
+        if token not in bassam:
+            issues.append(f"Bassam Zogby character contract is missing {token}")
+    for token in (
+        "ruling_party = pragmatism",
+        "character = WRK_Bassam_Zogby",
+        "ideology = pragmatism_ideology",
+        "portrait = GFX_portrait_WRK_Bassam_Zogby",
+    ):
+        if token not in zao_appointment:
+            issues.append(f"ZAO administrator repair is missing {token}")
+    if "recruit_character" in zao_appointment or "create_country_leader" in zao_appointment:
+        issues.append("ZAO administrator repair must promote its history-recruited character")
+    for token in (
+        "ADISCORD_vorkerland_appoint_zao_administrator = yes",
+        "tree = ADISCORD_vorkerland_zao_focus",
+        "ADISCORD_vorkerland_collapse.68 days = 1",
+    ):
+        if token not in zao_cosmetics:
+            issues.append(f"ZAO collapse setup is missing {token}")
+    if not zao_repair:
+        issues.append("ZAO administrator/focus repair event 68 is missing")
+    else:
+        for token in (
+            "character = WRK_Bassam_Zogby",
+            "ruling_only = yes",
+            "ADISCORD_vorkerland_appoint_zao_administrator = yes",
+            "tree = ADISCORD_vorkerland_zao_focus",
+            "ADISCORD_vorkerland_zao_startup_repair_v1_applied",
+        ):
+            if token not in zao_repair.group(1):
+                issues.append(f"ZAO repair event 68 is missing {token}")
+    for token in (
+        "has_focus_tree = ADISCORD_vorkerland_zao_focus",
+        "ADISCORD_vorkerland_collapse.68 days = 1",
+        "ADISCORD_vorkerland_zao_startup_repair_v1_applied",
+    ):
+        if token not in startup:
+            issues.append(f"ZAO one-shot startup repair is missing {token}")
+    if "ADISCORD_vorkerland_collapse.68" in monthly:
+        issues.append("ZAO administrator/focus repair still polls on_monthly")
+    if "GFX_portrait_WRK_Bassam_Zogby" not in portraits or not (
+        root / "gfx/leaders/WRK/portrait_WRK_Bassam_Zogby.png"
+    ).is_file():
+        issues.append("Bassam Zogby's authored portrait is not wired to an existing asset")
+    if "WRK_Bassam_Zogby:" not in english_characters:
+        issues.append("Bassam Zogby lacks English localisation")
+
+    expected_zao_focuses = {
+        "ZAO_keep_the_western_registers_running",
+        "ZAO_open_the_railway_storehouses",
+        "ZAO_form_municipal_defence_boards",
+        "ZAO_keep_zaozersk_sovereign",
+    }
+    actual_zao_focuses = set(
+        re.findall(r"(?m)^\s*id\s*=\s*(ZAO_[a-z0-9_]+)\s*$", zao_focus)
+    )
+    if actual_zao_focuses != expected_zao_focuses:
+        issues.append(
+            f"ZAO wartime focus programme drifted: expected {sorted(expected_zao_focuses)}, "
+            f"got {sorted(actual_zao_focuses)}"
+        )
+    if zao_focus.count("focus = {") != 4 or not balanced(zao_focus):
+        issues.append("ZAO wartime focus tree must contain four balanced focuses")
+    for token in (
+        "tag = ZAO",
+        "has_global_flag = ADISCORD_vorkerland_collapse_started",
+        "has_global_flag = ADISCORD_vorkerland_collapse_wars_started",
+        "add_political_power = 20",
+        "amount = 240",
+        "add_manpower = 1200",
+        "add_war_support = 0.04",
+    ):
+        if token not in zao_focus:
+            issues.append(f"ZAO wartime focus programme is missing bounded reward/guard {token}")
+    for forbidden in (
+        "GFX_goal_unknown",
+        "declare_war_on",
+        "annex_country",
+        "puppet =",
+        "set_autonomy",
+    ):
+        if forbidden in zao_focus:
+            issues.append(f"ZAO wartime focus programme contains forbidden token {forbidden}")
+    russian_loc = read(
+        root, "localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml", issues
+    )
+    for focus_id in expected_zao_focuses:
+        for suffix in ("", "_desc"):
+            key = f"{focus_id}{suffix}"
+            if f" {key}:0 " not in english_loc:
+                issues.append(f"ZAO focus lacks English localisation: {key}")
+            if f" {key}: " not in russian_loc:
+                issues.append(f"ZAO focus lacks Russian localisation: {key}")
+    if russian_loc_path.exists() and not russian_loc_path.read_bytes().startswith(b"\xef\xbb\xbf"):
+        issues.append("Russian Vorkerland collapse localisation lost its UTF-8 BOM")
+
     if "recruit_character = WRK_Anton_Bagley" in effects or "recruit_character = WRK_VAD_Joint_Council" in effects:
         issues.append("collapse runtime effects still recruit WRK characters outside history")
     wrk_history = read(root, "history/countries/WRK - WorkerLand.txt", issues)
@@ -2483,9 +2686,9 @@ def validate_ai(root: Path, issues: list[str]) -> None:
 
     central_minors = {"EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"}
     central_fronts = {
-        "wrk": ("WKR", {"VAD", "TVA", *central_minors}, {"WTD"}, 100, "careful", "no"),
-        "vad": ("VAD", {"WKR", "TVA", *central_minors}, {"WTD"}, 65, "rush", "yes"),
-        "tva": ("TVA", {"WKR", "VAD", *central_minors}, set(), 100, "careful", "no"),
+        "wrk": ("WKR", {"VAD", "TVA"}, {"WTD"}, 100, "careful", "no"),
+        "vad": ("VAD", {"WKR", "TVA"}, {"WTD"}, 65, "rush", "yes"),
+        "tva": ("TVA", {"WKR", "VAD"}, set(), 100, "careful", "no"),
         **{
             tag.lower(): (tag, {"WKR", "VAD", "TVA"}, set(), 100, "rush", "no")
             for tag in central_minors
@@ -2509,6 +2712,27 @@ def validate_ai(root: Path, issues: list[str]) -> None:
         ):
             if token not in front:
                 issues.append(f"central front against {defender} is missing {token}")
+
+    for slug, claimant in (("wkr", "WKR"), ("vad", "VAD"), ("tva", "TVA")):
+        defense = named_block(
+            ai, f"ADISCORD_vorkerland_central_minor_defense_against_{slug}"
+        )
+        actual_defenders = set(
+            re.findall(r"tag\s*=\s*([A-Z]{3})", named_block(defense, "allowed"))
+        )
+        if actual_defenders != central_minors:
+            issues.append(f"central-minor defense against {claimant} has the wrong allowlist")
+        for token in (
+            f"front_unit_request tag = {claimant} value = 100",
+            f"front_control tag = {claimant}",
+            "execution_type = careful",
+            "execute_order = yes",
+            "manual_attack = no",
+        ):
+            if token not in defense:
+                issues.append(f"central-minor defense against {claimant} is missing {token}")
+        if "type = conquer" in defense:
+            issues.append(f"central-minor defense against {claimant} still contains a conquest strategy")
 
     regional_pairs = (
         ("ZAO", "WPA"), ("WPA", "ZAO"), ("WPS", "ZAO"), ("ZAO", "WPS"),

@@ -13,9 +13,6 @@ on_actions = {
 					limit = {
 						OR = {
 							NOT = { has_global_flag = ADISCORD_vorkerland_solar_winner_sol }
-							has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested
-							has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized
-							has_global_flag = ADISCORD_vorkerland_central_showdown_started
 							has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted
 							has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_declined
 							NOT = { country_exists = SOL }
@@ -51,9 +48,6 @@ on_actions = {
 					limit = {
 						OR = {
 							NOT = { has_global_flag = ADISCORD_vorkerland_volnograd_winner_vla }
-							has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested
-							has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized
-							has_global_flag = ADISCORD_vorkerland_central_showdown_started
 							has_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_accepted
 							has_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_declined
 							NOT = { country_exists = VLA }
@@ -154,6 +148,19 @@ on_actions = {
 			# on_startup has no country ROOT. Enter the claimant tag explicitly so
 			# the country-scoped lifecycle effect is valid even during save repair.
 			VAD = { ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes }
+			# Acceptance normally reconciles immediately. This one-shot load assertion
+			# covers a save made between the accepted flag and the bounded war joins.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_central_showdown_started
+					ADISCORD_vorkerland_central_showdown_edges_verified = yes
+					OR = {
+						has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted
+						has_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_accepted
+					}
+				}
+				ADISCORD_vorkerland_join_regional_allies_to_showdown = yes
+			}
 			# One bounded save-repair assertion; normal outcome recording is event-driven
 			# from regional capitulations below.
 			if = {

@@ -88,6 +88,27 @@ on_actions = {
 				}
 				IBA = { country_event = { id = ADISCORD_vorkerland_collapse.40 days = 1 } }
 			}
+			# A split that exhausted both bounded repair passes before any war began
+			# is safe to reopen once on load. This versioned bridge never overlaps the
+			# normal queued verifier and never rewrites an active front.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_collapse_started
+					has_global_flag = ADISCORD_vorkerland_collapse_materialization_failed
+					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
+					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_materialized_verified }
+					NOT = { has_global_flag = ADISCORD_vorkerland_materialization_prewar_failed_bridge_v1_scheduled }
+					country_exists = WKR
+					country_exists = VAD
+					country_exists = TVA
+				}
+				set_global_flag = ADISCORD_vorkerland_materialization_prewar_failed_bridge_v1_scheduled
+				clr_global_flag = ADISCORD_vorkerland_collapse_materialization_failed
+				clr_global_flag = ADISCORD_vorkerland_collapse_materialization_retry
+				clr_global_flag = ADISCORD_vorkerland_collapse_materialization_final_retry
+				WKR = { country_event = { id = ADISCORD_vorkerland_phase.2 days = 1 } }
+			}
 			# Saves created before the seven-phase controller can already contain all
 			# three temporary claimants while lacking its materialization assertion and
 			# shared focus tree. Restore the trees immediately, then run the same strict
@@ -121,6 +142,27 @@ on_actions = {
 					focus_unlock = yes
 					mark_focus_tree_layout_dirty = yes
 				}
+			}
+			# Builds which consumed the original v1 bridge could still fail solely on
+			# the same-tick ruling-party cache. Give those saves one new bounded entry
+			# into the shared verifier; the verifier itself owns all repair attempts.
+			else_if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_collapse_started
+					has_global_flag = ADISCORD_vorkerland_materialization_bridge_v1_scheduled
+					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_materialized_verified }
+					NOT = { has_global_flag = ADISCORD_vorkerland_materialization_bridge_v2_scheduled }
+					country_exists = WKR
+					country_exists = VAD
+					country_exists = TVA
+					NOT = { country_exists = WRK }
+				}
+				set_global_flag = ADISCORD_vorkerland_materialization_bridge_v2_scheduled
+				clr_global_flag = ADISCORD_vorkerland_collapse_materialization_failed
+				clr_global_flag = ADISCORD_vorkerland_collapse_materialization_retry
+				clr_global_flag = ADISCORD_vorkerland_collapse_materialization_final_retry
+				WKR = { country_event = { id = ADISCORD_vorkerland_phase.2 days = 1 } }
 			}
 			# Recover a missing delayed controller event without polling. The timed
 			# guard coalesces startup calls; phase.4 and phase.5 remain idempotent.
@@ -232,6 +274,24 @@ on_actions = {
 				}
 				TRU = { country_event = { id = ADISCORD_vorkerland_collapse.61 days = 1 } }
 			}
+			# Older collapse saves can retain the generated fallback visible in the
+			# diplomacy screen and the empty replacement generic tree. Schedule one
+			# country-scoped repair; event .68 records success and never polls.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_collapse_started
+					ZAO = {
+						exists = yes
+						NOT = { has_country_flag = ADISCORD_vorkerland_zao_startup_repair_v1_applied }
+						OR = {
+							NOT = { has_focus_tree = ADISCORD_vorkerland_zao_focus }
+							NOT = { has_government = pragmatism }
+							NOT = { has_country_leader = { character = WRK_Bassam_Zogby ruling_only = yes } }
+						}
+					}
+				}
+				ZAO = { country_event = { id = ADISCORD_vorkerland_collapse.68 days = 1 } }
+			}
 			if = {
 				limit = {
 					has_global_flag = ADISCORD_vorkerland_joint_government_formed
@@ -326,6 +386,26 @@ on_actions = {
 					WKR = { exists = yes }
 				}
 				WKR = { country_event = { id = ADISCORD_vorkerland_collapse.41 days = 1 } }
+			}
+			# One-shot bridge for collapse saves created before WKR received an
+			# annex-independent home guard. Fresh campaigns deploy it during the split;
+			# an active old claimant receives the same exact 2+2 package on load.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+					NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+					WKR = {
+						exists = yes
+						NOT = { has_capitulated = yes }
+						NOT = { has_country_flag = ADISCORD_vorkerland_wkr_home_guard_deployed_v1 }
+						owns_state = 32
+						controls_state = 32
+						owns_state = 33
+						controls_state = 33
+					}
+				}
+				WKR = { ADISCORD_vorkerland_ensure_wkr_home_guard = yes }
 			}
 			# One-time v2 restoration for regional spirits that an older deferred
 			# political rebuild could clear after their setup effect had finished.
@@ -446,15 +526,14 @@ on_actions = {
 				limit = { WRK = { exists = yes VLA = { exists = yes is_subject_of = WRK } } }
 				WRK = { ADISCORD_vorkerland_wrk_activate_vla_auxiliaries = yes }
 			}
-			# Complete the Zaozersk protectorate in successful saves created before
-			# that part of the Ivanland settlement was added.
+			# One-shot repair for saves created while Ivanland's successful settlement
+			# incorrectly puppeted Zaozersk. The effect's authored country flag guard
+			# preserves every unrelated ZAO subject relationship.
 			if = {
 				limit = {
-					has_global_flag = ADISCORD_vorkerland_ivanland_intervention_succeeded
-					NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_zaozersk_secured }
-					IVN = { exists = yes }
+					NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_zaozersk_independence_migration_v1 }
 				}
-				ADISCORD_vorkerland_ivanland_secure_zaozersk = yes
+				ADISCORD_vorkerland_migrate_legacy_ivanland_zaozersk_protectorate = yes
 			}
 			# Upgrade successful saves to the ordered postwar clients: IBA receives
 			# 90-91 first and IBL receives 93-94. The setup is idempotent.

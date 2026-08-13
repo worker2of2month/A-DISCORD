@@ -107,7 +107,6 @@ country_event = {
 			focus_unlock = yes
 			mark_focus_tree_layout_dirty = yes
 			country_event = { id = ADISCORD_vorkerland_collapse.41 days = 1 }
-			country_event = { id = ADISCORD_vorkerland_collapse.2 days = 1 }
 			country_event = { id = ADISCORD_vorkerland_phase.2 days = 1 }
 			# The end of the unified state is the opening news of the collapse, not
 			# a verdict delivered years into its wars.
@@ -141,6 +140,9 @@ country_event = {
 
 	trigger = {
 		ADISCORD_vorkerland_collapse_wars_not_started = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_materialized_verified
+		ADISCORD_vorkerland_collapse_materialized = yes
+		ADISCORD_vorkerland_claimant_identities_materialized = yes
 	}
 
 	immediate = {
@@ -1000,6 +1002,38 @@ country_event = {
 	}
 }
 
+# ZAO's subject cache settles after the initial partition. This bounded
+# assertion restores both the authored administrator and the regional wartime
+# programme if either was lost during the same-tick confederation teardown.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.68
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = ZAO
+		has_global_flag = ADISCORD_vorkerland_collapse_started
+	}
+	immediate = {
+		set_country_flag = ADISCORD_vorkerland_zao_startup_repair_v1_applied
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_government = pragmatism }
+					NOT = {
+						has_country_leader = {
+							character = WRK_Bassam_Zogby
+							ruling_only = yes
+						}
+					}
+				}
+			}
+			ADISCORD_vorkerland_appoint_zao_administrator = yes
+		}
+		load_focus_tree = { tree = ADISCORD_vorkerland_zao_focus keep_completed = yes }
+		mark_focus_tree_layout_dirty = yes
+	}
+}
+
 # Visible failure of the preparation contract. No hidden retry or second timer
 # is armed; the northern conflict simply continues without a foreign invasion.
 country_event = {
@@ -1053,7 +1087,7 @@ news_event = {
 	id = ADISCORD_vorkerland_news.1
 	title = ADISCORD_vorkerland_news.1.t
 	desc = ADISCORD_vorkerland_news.1.d
-	picture = GFX_event_vorkerland_explosion
+	picture = GFX_event_vorkerland_northern_settlement
 	major = yes
 	is_triggered_only = yes
 	fire_only_once = yes
@@ -1064,7 +1098,7 @@ news_event = {
 	id = ADISCORD_vorkerland_news.2
 	title = ADISCORD_vorkerland_news.2.t
 	desc = ADISCORD_vorkerland_news.2.d
-	picture = GFX_event_vorkerland_explosion
+	picture = GFX_event_vorkerland_northern_settlement
 	major = yes
 	is_triggered_only = yes
 	fire_only_once = yes

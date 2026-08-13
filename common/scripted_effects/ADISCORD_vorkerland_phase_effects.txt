@@ -115,9 +115,32 @@ ADISCORD_vorkerland_reset_temporary_claimant_cores = {
 	327 = { remove_core_of = WRK remove_core_of = WKR }
 }
 
+# Safe in both a fresh partition and an active old save: this only reasserts the
+# fourteen immutable claimant homelands and never strips cores earned later.
+ADISCORD_vorkerland_ensure_claimant_home_cores = {
+	32 = { add_core_of = WKR }
+	33 = { add_core_of = WKR }
+	40 = { add_core_of = WKR }
+	200 = { add_core_of = WKR }
+	201 = { add_core_of = WKR }
+	75 = { add_core_of = VAD }
+	106 = { add_core_of = VAD }
+	107 = { add_core_of = VAD }
+	121 = { add_core_of = VAD }
+	36 = { add_core_of = TVA }
+	37 = { add_core_of = TVA }
+	38 = { add_core_of = TVA }
+	39 = { add_core_of = TVA }
+	324 = { add_core_of = TVA }
+}
+
 ADISCORD_vorkerland_begin_collapse = {
 	ADISCORD_vorkerland_set_phase_collapse = yes
 	clr_global_flag = ADISCORD_vorkerland_collapse_materialization_failed
+	clr_global_flag = ADISCORD_vorkerland_collapse_materialization_retry
+	clr_global_flag = ADISCORD_vorkerland_collapse_materialization_final_retry
+	clr_global_flag = ADISCORD_vorkerland_collapse_materialized_verified
+	clr_global_flag = ADISCORD_vorkerland_collapse_war_outbreak_scheduled
 	ADISCORD_vorkerland_reset_temporary_claimant_cores = yes
 }
 
@@ -169,21 +192,224 @@ ADISCORD_vorkerland_inherit_wrk_prewar_preparations = {
 	}
 }
 
+ADISCORD_vorkerland_repair_claimant_identities = {
+	if = {
+		limit = { country_exists = WKR }
+		WKR = {
+			if = {
+				limit = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+				set_cosmetic_tag = WRK_vorkerland_emergency
+				set_politics = { ruling_party = pragmatism elections_allowed = no }
+				promote_character = { character = WRK_Nikita_Worcker ideology = neo_vorkerism }
+				set_country_leader_ideology = neo_vorkerism
+				set_country_leader_portrait = {
+					ideology = pragmatism
+					portrait = GFX_portrait_WRK_Nikita_Worcker_civilwar
+				}
+			}
+			else = {
+				set_cosmetic_tag = WRK_vorkerland_utilitarian_republic
+				set_politics = { ruling_party = utilitarism elections_allowed = no }
+				if = {
+					limit = {
+						NOT = {
+							has_country_leader = { character = WRK_Anton_Bagley }
+						}
+					}
+					ADISCORD_vorkerland_promote_anton_bagley = yes
+				}
+				else = {
+					promote_character = {
+						character = WRK_Anton_Bagley
+						ideology = utilitarism_ideology
+					}
+				}
+				set_country_leader_portrait = {
+					ideology = utilitarism
+					portrait = GFX_portrait_WRK_Anton_Bagley
+				}
+			}
+		}
+	}
+	if = {
+		limit = { country_exists = VAD }
+		VAD = {
+			if = {
+				limit = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+				set_cosmetic_tag = WRK_vorkerland_joint_government
+				ADISCORD_vorkerland_appoint_joint_council = yes
+			}
+			else = {
+				set_cosmetic_tag = VAD_vorkerland_restoration
+				set_politics = { ruling_party = pragmatism elections_allowed = no }
+				promote_character = {
+					character = WRK_Vlad_Petrichev
+					ideology = pragmatism_ideology
+				}
+				set_country_leader_portrait = {
+					ideology = pragmatism
+					portrait = GFX_portrait_WRK_Vlad_Petrichev_civilwar
+				}
+			}
+		}
+	}
+	if = {
+		limit = { country_exists = TVA }
+		TVA = {
+			set_politics = { ruling_party = technocracy elections_allowed = no }
+			promote_character = {
+				character = TVA_Dorian_Worx
+				ideology = technocracy_ideology
+			}
+			set_country_leader_portrait = {
+				ideology = technocracy
+				portrait = GFX_portrait_WRK_Dorian_Worx
+			}
+		}
+	}
+}
+
+# Repair only the fixed claimant materialization contract. The wider regional
+# split and its OOBs are deliberately not replayed, so a retry cannot duplicate
+# countries, divisions or equipment. Before wars begin the home-state transfer
+# also rematerializes a missing dormant claimant tag; old mid-war saves never
+# receive territorial rewrites from this bridge.
+ADISCORD_vorkerland_repair_collapse_materialization = {
+	if = {
+		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started } }
+		if = {
+			limit = { country_exists = WRK country_exists = WKR }
+			WKR = { annex_country = { target = WRK transfer_troops = yes } }
+		}
+		ADISCORD_vorkerland_reset_temporary_claimant_cores = yes
+		WKR = {
+			transfer_state = 32
+			transfer_state = 33
+			transfer_state = 40
+			transfer_state = 200
+			transfer_state = 201
+			set_capital = { state = 32 }
+		}
+		32 = { set_state_controller_to = WKR }
+		33 = { set_state_controller_to = WKR }
+		40 = { set_state_controller_to = WKR }
+		200 = { set_state_controller_to = WKR }
+		201 = { set_state_controller_to = WKR }
+		VAD = {
+			transfer_state = 75
+			transfer_state = 106
+			transfer_state = 107
+			transfer_state = 121
+			set_capital = { state = 75 }
+		}
+		75 = { set_state_controller_to = VAD }
+		106 = { set_state_controller_to = VAD }
+		107 = { set_state_controller_to = VAD }
+		121 = { set_state_controller_to = VAD }
+		TVA = {
+			transfer_state = 36
+			transfer_state = 37
+			transfer_state = 38
+			transfer_state = 39
+			transfer_state = 324
+			set_capital = { state = 36 }
+		}
+		36 = { set_state_controller_to = TVA }
+		37 = { set_state_controller_to = TVA }
+		38 = { set_state_controller_to = TVA }
+		39 = { set_state_controller_to = TVA }
+		324 = { set_state_controller_to = TVA }
+	}
+	ADISCORD_vorkerland_ensure_claimant_home_cores = yes
+	WKR = {
+		load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes }
+		focus_unlock = yes
+		mark_focus_tree_layout_dirty = yes
+	}
+	VAD = {
+		load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes }
+		focus_unlock = yes
+		mark_focus_tree_layout_dirty = yes
+	}
+	TVA = {
+		load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes }
+		focus_unlock = yes
+		mark_focus_tree_layout_dirty = yes
+	}
+	# Independence/faction cleanup and army relocation are part of the fresh
+	# partition only. A v2 bridge may run after wars have begun; in that case it
+	# must repair lifecycle metadata without moving fronts or breaking alliances.
+	if = {
+		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started } }
+		WKR = {
+			if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = WKR autonomy_state = autonomy_free } } }
+			if = { limit = { is_in_faction = yes } leave_faction = yes }
+		}
+		VAD = {
+			if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = VAD autonomy_state = autonomy_free } } }
+			if = { limit = { is_in_faction = yes } leave_faction = yes }
+		}
+		TVA = {
+			if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = TVA autonomy_state = autonomy_free } } }
+			if = { limit = { is_in_faction = yes } leave_faction = yes }
+		}
+		WKR = { ADISCORD_vorkerland_relocate_legacy_armies = yes }
+	}
+	ADISCORD_vorkerland_repair_claimant_identities = yes
+}
+
+ADISCORD_vorkerland_log_materialization_failure = {
+	if = {
+		limit = {
+			NOT = {
+				OR = {
+					ADISCORD_vorkerland_collapse_materialized = yes
+					ADISCORD_vorkerland_collapse_materialized_for_active_war_recovery = yes
+				}
+			}
+		}
+		log = "[ADISCORD][VORKERLAND][RECOVERY] Structural split failed: claimant existence, independence, or one of the fourteen home-state ownership/controller postconditions is false."
+	}
+	if = {
+		limit = {
+			OR = {
+				ADISCORD_vorkerland_collapse_materialized = yes
+				ADISCORD_vorkerland_collapse_materialized_for_active_war_recovery = yes
+			}
+			NOT = { ADISCORD_vorkerland_claimant_identities_materialized = yes }
+		}
+		log = "[ADISCORD][VORKERLAND][RECOVERY] Political split failed: the WKR route leader, Vlad/joint VAD government, or Doctor Worx technocracy is not ruling after the daily cache rebuild."
+	}
+	if = {
+		limit = { country_exists = WRK }
+		log = "[ADISCORD][VORKERLAND][RECOVERY] Dormant WRK still exists after the WKR handoff."
+	}
+	if = {
+		limit = { NOT = { country_exists = WKR } }
+		log = "[ADISCORD][VORKERLAND][RECOVERY] WKR did not materialize."
+	}
+	if = {
+		limit = { NOT = { country_exists = VAD } }
+		log = "[ADISCORD][VORKERLAND][RECOVERY] VAD did not materialize."
+	}
+	if = {
+		limit = { NOT = { country_exists = TVA } }
+		log = "[ADISCORD][VORKERLAND][RECOVERY] TVA did not materialize."
+	}
+}
+
 ADISCORD_vorkerland_verify_collapse_materialized = {
 	if = {
 		limit = {
-			country_exists = WKR
-			WKR = {
-				controls_state = 32
-				controls_state = 33
-				controls_state = 40
-				controls_state = 200
-				controls_state = 201
+			OR = {
+				ADISCORD_vorkerland_collapse_materialized = yes
+				ADISCORD_vorkerland_collapse_materialized_for_active_war_recovery = yes
 			}
-			ADISCORD_vorkerland_collapse_materialized = yes
+			ADISCORD_vorkerland_claimant_identities_materialized = yes
 		}
 		clr_global_flag = ADISCORD_vorkerland_collapse_materialization_failed
 		clr_global_flag = ADISCORD_vorkerland_collapse_materialization_retry
+		clr_global_flag = ADISCORD_vorkerland_collapse_materialization_final_retry
 		set_global_flag = ADISCORD_vorkerland_collapse_materialized_verified
 		# Dynamic/materialized claimants do not reliably run the country selector.
 		# Install the shared tree only after the daily tag cache and all claimant
@@ -198,30 +424,34 @@ ADISCORD_vorkerland_verify_collapse_materialized = {
 		TVA = {
 			load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes }
 		}
-		ADISCORD_vorkerland_set_phase_regional_consolidation = yes
+		if = {
+			limit = {
+				NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
+				NOT = { has_global_flag = ADISCORD_vorkerland_collapse_war_outbreak_scheduled }
+			}
+			ADISCORD_vorkerland_set_phase_regional_consolidation = yes
+			set_global_flag = ADISCORD_vorkerland_collapse_war_outbreak_scheduled
+			WKR = { country_event = { id = ADISCORD_vorkerland_collapse.2 days = 1 } }
+		}
 	}
 	else_if = {
 		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_collapse_materialization_retry } }
 		set_global_flag = ADISCORD_vorkerland_collapse_materialization_retry
-		# Recover old or cache-raced splits explicitly. In particular, impassable
-		# state 40 is not guaranteed to follow the dormant WRK annex operation.
-		if = {
-			limit = { country_exists = WKR }
-			WKR = { transfer_state = 40 }
-			40 = { set_state_controller_to = WKR }
-		}
-		if = {
-			limit = { country_exists = WRK country_exists = WKR }
-			WKR = {
-				annex_country = { target = WRK transfer_troops = yes }
-				ADISCORD_vorkerland_relocate_legacy_armies = yes
-			}
-		}
+		ADISCORD_vorkerland_log_materialization_failure = yes
+		ADISCORD_vorkerland_repair_collapse_materialization = yes
+		WKR = { country_event = { id = ADISCORD_vorkerland_phase.2 days = 1 } }
+	}
+	else_if = {
+		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_collapse_materialization_final_retry } }
+		set_global_flag = ADISCORD_vorkerland_collapse_materialization_final_retry
+		ADISCORD_vorkerland_log_materialization_failure = yes
+		ADISCORD_vorkerland_repair_collapse_materialization = yes
 		WKR = { country_event = { id = ADISCORD_vorkerland_phase.2 days = 1 } }
 	}
 	else = {
 		set_global_flag = ADISCORD_vorkerland_collapse_materialization_failed
-		log = "[ADISCORD][VORKERLAND][RECOVERY] Collapse materialization failed after one retry."
+		ADISCORD_vorkerland_log_materialization_failure = yes
+		log = "[ADISCORD][VORKERLAND][RECOVERY] Collapse materialization stopped after two bounded repair passes; regional and claimant wars remain locked."
 	}
 }
 

@@ -485,8 +485,6 @@ def validate_peaceful_invitations() -> list[str]:
             f"tag = {inviter}",
             f"NOT = {{ has_country_flag = {pending_flag} }}",
             f"NOT = {{ has_country_flag = {resolved_flag} }}",
-            "NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }",
-            "NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }",
             f"set_country_flag = {pending_flag}",
             f"flag = {dispatch_flag} days = 3",
             f"id = {event_id} days = 1",
@@ -525,9 +523,7 @@ def validate_peaceful_invitations() -> list[str]:
             "set_country_flag = ADISCORD_vorkerland_preserve_wartime_faction",
             f"set_global_flag = {accepted_flag}",
             f"set_global_flag = {accepted_flag.replace('_accepted', '_declined')}",
-            "NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }",
-            "NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }",
-            "NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }",
+            f"{JOIN_ALLIES} = yes",
         ):
             if token not in acceptance:
                 issues.append(f"{event_id} lacks bounded acceptance/decline token {token}")
@@ -539,15 +535,16 @@ def validate_peaceful_invitations() -> list[str]:
             issues.append(f"{event_id} event trigger must retain the inviter pending fallback")
         if acceptance.count(f"clr_country_flag = {dispatch_flag}") < 2:
             issues.append(f"{event_id} must clear its dispatch guard on accept and decline")
+        accepted_at = compact(acceptance).find(f"set_global_flag = {accepted_flag}")
+        reconciled_at = compact(acceptance).find(f"{JOIN_ALLIES} = yes")
+        if accepted_at < 0 or reconciled_at < accepted_at:
+            issues.append(f"{event_id} must record acceptance before reconciling live showdown wars")
 
         decision = _unique_block(decisions, decision_id, "public alliance decision", issues)
         for token in (
             f"allowed = {{ tag = {inviter} }}",
             f"has_country_flag = {intent_flag}",
             f"has_global_flag = {winner_flag}",
-            "NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }",
-            "NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }",
-            "NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }",
             f"complete_effect = {{ {effect_name} = yes }}",
             "fire_only_once = yes",
         ):
@@ -555,6 +552,7 @@ def validate_peaceful_invitations() -> list[str]:
                 issues.append(f"{decision_id} lacks public invitation contract {token}")
 
         startup = named_block(on_actions, "on_startup")
+        startup_effect = named_block(startup, "effect")
         for token in (
             f"has_country_flag = {pending_flag}",
             f"clr_country_flag = {pending_flag}",
@@ -565,6 +563,33 @@ def validate_peaceful_invitations() -> list[str]:
         ):
             if token not in compact(startup):
                 issues.append(f"startup invitation repair for {inviter}/{invitee} lacks {token}")
+
+        showdown_guards = (
+            "ADISCORD_vorkerland_focus_central_showdown_requested",
+            "ADISCORD_vorkerland_showdown_queue_initialized",
+            "ADISCORD_vorkerland_central_showdown_started",
+        )
+        for owner, source in (
+            (effect_name, block),
+            (event_id, acceptance),
+            (decision_id, decision),
+        ):
+            for guard in showdown_guards:
+                if guard in source:
+                    issues.append(f"optional invitation {owner} still depends on showdown flag {guard}")
+        pending_repairs = [
+            branch
+            for branch in direct_named_blocks(startup_effect, "if")
+            if f"has_country_flag = {pending_flag}" in branch
+        ]
+        if len(pending_repairs) != 1:
+            issues.append(f"startup must expose one bounded repair for pending invitation {pending_flag}")
+        else:
+            for guard in showdown_guards:
+                if guard in pending_repairs[0]:
+                    issues.append(
+                        f"pending invitation {pending_flag} is incorrectly declined by showdown flag {guard}"
+                    )
 
     commit = _unique_block(
         focus_decisions,
@@ -578,15 +603,12 @@ def validate_peaceful_invitations() -> list[str]:
         "central-showdown scheduler effect",
         issues,
     )
-    for inviter, pending_flag in (
-        ("VAD", "ADISCORD_vorkerland_vad_sol_invitation_pending"),
-        ("WKR", "ADISCORD_vorkerland_wkr_vla_invitation_pending"),
+    for pending_flag in (
+        "ADISCORD_vorkerland_vad_sol_invitation_pending",
+        "ADISCORD_vorkerland_wkr_vla_invitation_pending",
     ):
-        gate = f"NOT = {{ {inviter} = {{ exists = yes has_country_flag = {pending_flag} }} }}"
-        if compact(commit).count(gate) < 2:
-            issues.append(f"central-showdown commit must gate {pending_flag} in visible and available")
-        if gate not in compact(scheduler):
-            issues.append(f"central-showdown scheduler must gate {pending_flag}")
+        if pending_flag in commit or pending_flag in scheduler:
+            issues.append(f"optional pending invitation still blocks central showdown: {pending_flag}")
 
     detach = named_block(collapse_effects, "ADISCORD_vorkerland_leave_inherited_faction")
     if "ADISCORD_vorkerland_preserve_wartime_faction" not in detach:
@@ -825,13 +847,12 @@ def validate_vad_intervention_and_restoration() -> list[str]:
         "central-showdown scheduler effect",
         issues,
     )
-    reservation_gate = (
-        "NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }"
-    )
-    if compact(commit).count(reservation_gate) < 2:
-        issues.append("central-showdown commit must gate the VAD reservation in visible and available")
-    if reservation_gate not in compact(scheduler):
-        issues.append("central-showdown scheduler must gate the VAD reservation")
+    reservation = "ADISCORD_vorkerland_vad_solar_intervention_reserved"
+    if reservation in commit or reservation in scheduler:
+        issues.append("an inactive VAD intervention reservation still blocks central showdown")
+    active_gate = "NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }"
+    if active_gate not in compact(commit) or active_gate not in compact(scheduler):
+        issues.append("central showdown must wait for the actually active VAD intervention only")
     settlement = next(
         (
             block
@@ -980,6 +1001,8 @@ def validate_counter_intervention() -> list[str]:
     triggers = _load(DIPLOMACY_TRIGGERS, issues)
     effects = _load(DIPLOMACY_EFFECTS, issues)
     decisions = _load(DIPLOMACY_DECISIONS, issues)
+    focus_decisions = _load(FOCUS_DECISIONS, issues)
+    focus_effects = _load(FOCUS_DECISION_EFFECTS, issues)
     phase_events = _load(PHASE_EVENTS, issues)
     _validate_border_trigger(
         triggers,
@@ -1036,6 +1059,17 @@ def validate_counter_intervention() -> list[str]:
     ):
         if token not in phase_four:
             issues.append(f"shared ADISCORD_vorkerland_phase.4 guard lacks {token}")
+    commit = named_block(focus_decisions, "ADISCORD_vorkerland_commit_to_central_showdown")
+    scheduler = named_block(focus_effects, "ADISCORD_vorkerland_focus_schedule_final_showdown")
+    for optional_counter_gate in (
+        WKR_COUNTER_READY,
+        WKR_COUNTER_BORDER,
+        SOL_RESTORATION_VERIFIED,
+    ):
+        if optional_counter_gate in commit or optional_counter_gate in scheduler:
+            issues.append(
+                f"optional WKR counter-intervention still blocks central showdown: {optional_counter_gate}"
+            )
     return list(dict.fromkeys(issues))
 
 
@@ -1079,46 +1113,19 @@ def validate_showdown_allies() -> list[str]:
 def validate_vad_egc_route_priority() -> list[str]:
     issues: list[str] = []
     decisions = _load(FOCUS_DECISIONS, issues)
-    decision_ids = (
-        "ADISCORD_vorkerland_consolidate_eyr",
-        "ADISCORD_vorkerland_consolidate_egc",
-        "ADISCORD_vorkerland_consolidate_riv",
-        "ADISCORD_vorkerland_consolidate_rev",
-        "ADISCORD_vorkerland_consolidate_yor",
-        "ADISCORD_vorkerland_consolidate_ndn",
-        "ADISCORD_vorkerland_consolidate_swb",
-        "ADISCORD_vorkerland_consolidate_vhv",
-        "ADISCORD_vorkerland_consolidate_osv",
+    wave = _unique_block(
+        decisions,
+        "ADISCORD_vorkerland_launch_central_minor_wave",
+        "central-minor campaign wave decision",
+        issues,
     )
-    blocks = {
-        decision_id: _unique_block(
-            decisions, decision_id, "central-minor consolidation decision", issues
-        )
-        for decision_id in decision_ids
-    }
-    egc = blocks["ADISCORD_vorkerland_consolidate_egc"]
-    ai = named_block(egc, "ai_will_do")
-    modifier = named_block(ai, "modifier")
-    for token in (
-        "tag = VAD",
-        "has_country_flag = ADISCORD_vorkerland_focus_vad_sol_invitation_intent",
-        "has_country_flag = ADISCORD_vorkerland_focus_vad_solland_liaison_prepared",
-        "has_global_flag = ADISCORD_vorkerland_solar_winner_sra",
-        "has_global_flag = ADISCORD_vorkerland_solar_winner_csl",
-        "NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_verified }",
-        "NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_failed }",
-        "NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_failed }",
-    ):
-        if token not in compact(modifier):
-            issues.append(f"VAD EGC route priority lacks {token}")
-    factor = re.search(r"\bfactor\s*=\s*(\d+)\b", modifier)
-    if not factor or not 2 <= int(factor.group(1)) <= 10:
-        issues.append("VAD EGC route priority modifier must be bounded to factor 2-10")
-
+    if "ai_will_do = { factor = 900 }" not in compact(wave):
+        issues.append("central-minor campaign wave lacks base AI priority 900")
     marker = "ADISCORD_vorkerland_focus_vad_solland_liaison_prepared"
-    for decision_id, block in blocks.items():
-        if decision_id != "ADISCORD_vorkerland_consolidate_egc" and marker in block:
-            issues.append(f"VAD Solar route priority leaked into unrelated {decision_id}")
+    if marker in wave:
+        issues.append("central-minor campaign wave still serializes the EGC/Solar route")
+    if "ADISCORD_vorkerland_consolidate_egc" in decisions:
+        issues.append("legacy EGC-only consolidation decision survived the wave migration")
     return list(dict.fromkeys(issues))
 
 

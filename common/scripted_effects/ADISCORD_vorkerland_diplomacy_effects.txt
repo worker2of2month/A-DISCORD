@@ -74,9 +74,6 @@ ADISCORD_vorkerland_offer_vad_sol_alliance = {
 			has_country_flag = ADISCORD_vorkerland_focus_vad_solland_liaison_prepared
 			has_global_flag = ADISCORD_vorkerland_solar_winner_sol
 			NOT = { has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted }
-			NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
-			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
-			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 			NOT = { has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending }
 			NOT = { has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_resolved }
 			SOL = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } }
@@ -98,9 +95,6 @@ ADISCORD_vorkerland_offer_wkr_vla_alliance = {
 			has_country_flag = ADISCORD_vorkerland_focus_wkr_vla_invitation_intent
 			has_global_flag = ADISCORD_vorkerland_volnograd_winner_vla
 			NOT = { has_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_accepted }
-			NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
-			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
-			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 			NOT = { has_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending }
 			NOT = { has_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_resolved }
 			VLA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } }

@@ -5,6 +5,7 @@ import unittest
 from tools.validators.validate_adiscord_vorkerland_focus_decisions import (
     CENTRAL_INTEGRATION_PACKAGES,
     CENTRAL_TARGETS,
+    CENTRAL_WAVE_DECISION,
     CLAIMANT_HOME_STATES,
     CORE_FOCUS_UNLOCK,
     CORE_PACKAGES,
@@ -90,32 +91,49 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
         self.assertIn(cooldown, block)
         self.assertIn(cooldown, effect)
         self.assertIn("ai_will_do = { factor = 1000 }", block)
-        for target, decision_id in CENTRAL_TARGETS.items():
-            minor = named_block(decisions, decision_id)
-            launch = named_block(
-                effects, f"ADISCORD_vorkerland_focus_launch_minor_{target.lower()}"
-            )
-            self.assertNotIn("ADISCORD_vorkerland_focus_central_front_prepared", minor)
-            self.assertNotIn("ADISCORD_vorkerland_focus_central_front_prepared", launch)
+        for tooltip in (
+            "ADISCORD_vorkerland_central_showdown_command_ready_tt",
+            "ADISCORD_vorkerland_central_showdown_campaigns_closed_tt",
+            "ADISCORD_vorkerland_central_districts_integrated_tt",
+            "ADISCORD_vorkerland_central_showdown_no_live_intervention_tt",
+        ):
+            self.assertIn(f"tooltip = {tooltip}", block)
+        active_intervention = (
+            "NOT = { has_global_flag = "
+            "ADISCORD_vorkerland_vad_solar_intervention_active }"
+        )
+        self.assertIn(active_intervention, block)
+        self.assertIn(active_intervention, effect)
+        for optional_blocker in (
+            "ADISCORD_vorkerland_vad_solar_intervention_reserved",
+            "ADISCORD_vorkerland_vad_sol_invitation_pending",
+            "ADISCORD_vorkerland_wkr_vla_invitation_pending",
+            "ADISCORD_vorkerland_wkr_solar_counter_intervention_ready",
+            "ADISCORD_vorkerland_wkr_has_solar_counter_border",
+            "ADISCORD_vorkerland_sol_restoration_verified",
+        ):
+            self.assertNotIn(optional_blocker, block)
+            self.assertNotIn(optional_blocker, effect)
+        minor = named_block(decisions, CENTRAL_WAVE_DECISION)
+        launch = named_block(
+            effects, "ADISCORD_vorkerland_focus_launch_central_minor_wave"
+        )
+        self.assertNotIn("ADISCORD_vorkerland_focus_central_front_prepared", minor)
+        self.assertNotIn("ADISCORD_vorkerland_focus_central_front_prepared", launch)
+        self.assertIn("tag = WRK", named_block(minor, "allowed"))
+        self.assertIn("fire_only_once = no", minor)
+        self.assertEqual(launch.count("declare_war_on = {"), 9)
+        self.assertNotIn("else_if =", launch)
+        for target in CENTRAL_TARGETS:
+            self.assertIn(f"any_neighbor_country = {{ tag = {target} }}", minor)
             self.assertIn(
-                "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes",
+                f"set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_{target.lower()}",
                 minor,
             )
             self.assertIn(
-                "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes",
+                f"declare_war_on = {{ target = {target} type = annex_everything }}",
                 launch,
             )
-            self.assertIn("tag = WRK", named_block(minor, "allowed"))
-            self.assertIn("tag = WRK", launch)
-            for tag in ("wkr", "vad", "tva"):
-                self.assertNotIn(
-                    f"ADISCORD_vorkerland_focus_{tag}_central_war_unlocked", minor
-                )
-            self.assertIn(f"any_neighbor_country = {{ tag = {target} }}", minor)
-            self.assertIn("fire_only_once = no", minor)
-            self.assertIn("ADISCORD_vorkerland_focus_central_minor_recovery_cooldown", minor)
-            self.assertEqual(launch.count("declare_war_on = {"), 1)
-            self.assertIn(f"target = {target}", launch)
             self.assertIn(f"NOT = {{ country_exists = {target} }}", block)
             self.assertIn(f"NOT = {{ country_exists = {target} }}", effect)
             self.assertNotIn(f"{target} = {{ is_subject = yes }}", block)
@@ -124,23 +142,13 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
             self.assertNotIn(forbidden, block)
             self.assertNotIn(forbidden, effect)
 
-    def test_only_egc_has_the_bounded_vad_solar_route_modifier(self) -> None:
+    def test_wave_ai_no_longer_serializes_a_solarino_target(self) -> None:
         decisions = read(DECISION_FILE)
         marker = "ADISCORD_vorkerland_focus_vad_solland_liaison_prepared"
-        for target, decision_id in CENTRAL_TARGETS.items():
-            block = named_block(decisions, decision_id)
-            ai = named_block(block, "ai_will_do")
-            if target == "EGC":
-                modifiers = named_blocks(ai, "modifier")
-                self.assertEqual(len(modifiers), 1)
-                self.assertIn("factor = 900", ai)
-                self.assertIn("factor = 8", modifiers[0])
-                self.assertIn(marker, modifiers[0])
-                self.assertIn("ADISCORD_vorkerland_solar_winner_sra", modifiers[0])
-                self.assertIn("ADISCORD_vorkerland_solar_winner_csl", modifiers[0])
-            else:
-                self.assertIn("ai_will_do = { factor = 900 }", block)
-                self.assertNotIn(marker, block)
+        block = named_block(decisions, CENTRAL_WAVE_DECISION)
+        self.assertIn("ai_will_do = { factor = 900 }", block)
+        self.assertNotIn(marker, block)
+        self.assertNotIn("ADISCORD_vorkerland_consolidate_egc", decisions)
 
     def test_minor_fronts_have_one_retry_and_a_240_day_bound(self) -> None:
         decisions = read(DECISION_FILE)
@@ -150,30 +158,26 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
         )
         self.assertIn("days_mission_timeout = 240", deadline)
         self.assertIn(
-            "ADISCORD_vorkerland_focus_resolve_central_minor_deadline = yes", deadline
+            "ADISCORD_vorkerland_focus_resolve_central_minor_wave_deadline = yes", deadline
         )
         first_check = named_block(
-            effects, "ADISCORD_vorkerland_focus_confirm_central_minor_launch"
+            effects, "ADISCORD_vorkerland_focus_confirm_central_minor_wave_launch"
         )
-        self.assertGreaterEqual(
-            first_check.count(
-                "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes"
-            ),
-            2,
-        )
+        self.assertIn("ADISCORD_vorkerland_central_minor_campaign_phase_available = yes", first_check)
         self.assertIn(
             "activate_mission = ADISCORD_vorkerland_focus_central_minor_retry_check",
             first_check,
         )
         retry_check = named_block(
-            effects, "ADISCORD_vorkerland_focus_confirm_central_minor_retry"
+            effects, "ADISCORD_vorkerland_focus_confirm_central_minor_wave_retry"
         )
         self.assertIn(
             "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes",
             retry_check,
         )
-        self.assertIn("ADISCORD_vorkerland_focus_central_minor_recovery_cooldown", retry_check)
-        self.assertIn("days = 14", retry_check)
+        finish = named_block(effects, "ADISCORD_vorkerland_focus_finish_central_minor_wave")
+        self.assertIn("ADISCORD_vorkerland_focus_central_minor_recovery_cooldown", finish)
+        self.assertIn("days = 14", finish)
         for target in CENTRAL_TARGETS:
             declaration = f"declare_war_on = {{ target = {target} type = annex_everything }}"
             self.assertEqual(effects.count(declaration), 2)

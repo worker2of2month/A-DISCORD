@@ -3,9 +3,9 @@
   "inventory_baseline": {
     "candidate_active_oobs": 98,
     "candidate_oob_templates": 161,
-    "candidate_script_templates": 3,
+    "candidate_script_templates": 4,
     "candidate_oob_references": 374,
-    "candidate_create_unit_references": 31,
+    "candidate_create_unit_references": 33,
     "candidate_technical_references": 10,
     "optional_protected_oob_templates": 6
   },
@@ -9819,6 +9819,51 @@
       }
     },
     {
+      "key": "script_adiscord_vorkerland_collapse_effects_worker_home_guard",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Worker Home Guard",
+      "display_name": "Worker Home Guard",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_militia",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 40.75,
+        "manpower": 3000.0,
+        "equipment": {
+          "infantry_equipment": 240.0
+        },
+        "supply": 0.12
+      },
+      "equipment_availability": {
+        "infantry_equipment": true
+      },
+      "ai_role": "emergency_militia",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_adiscord_vorkerland_collapse_effects_worker_home_guard"
+      }
+    },
+    {
       "key": "oob_ars_northern_militia",
       "source": {
         "kind": "oob",
@@ -10214,6 +10259,16 @@
       "start_experience_factor": 0.05,
       "start_equipment_factor": 0.75,
       "count": 1
+    },
+    {
+      "key": "adiscord_vorkerland_collapse_effects_create_unit_worker_home_guard_xp_0_1_eq_0_85",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Worker Home Guard",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 0.85,
+      "count": 2
     },
     {
       "key": "adiscord_vorkerland_focus_decision_effects_create_unit_workerland_militia_xp_0_05_eq_0_55",

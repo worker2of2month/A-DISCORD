@@ -137,6 +137,14 @@ class DiplomacyLayoutContractTests(unittest.TestCase):
             r'{0,180}?scale\s*=\s*0\.9',
         )
 
+    def test_no_focus_state_does_not_expose_the_error_placeholder(self) -> None:
+        start, end = named_block_span(self.gui, "goal_icon")
+        block = self.gui[start : end + 1]
+        self.assertIn(
+            'spriteType = "GFX_goal_generic_political_pressure"', block
+        )
+        self.assertNotIn("GFX_goal_unknown", block)
+
     def test_engine_bound_widgets_keep_their_required_direct_parents(self) -> None:
         for parent_name, child_names in (
             ("country_info", ("diplo_country_flag", "ideology_icon")),
@@ -233,6 +241,30 @@ class DiplomacyLayoutContractTests(unittest.TestCase):
                 rf'position\s*=\s*\{{\s*x\s*=\s*{x}\s+y\s*=\s*{y}\s*\}}',
             )
             self.assertIn("alwaystransparent = yes", block)
+
+    def test_native_leader_name_sits_in_the_portrait_dossier_plate(self) -> None:
+        start, end = named_block_span(self.gui, "leader_name")
+        block = self.gui[start : end + 1]
+        self.assertRegex(
+            block,
+            r'position\s*=\s*\{\s*x\s*=\s*10\s+y\s*=\s*318\s*\}',
+        )
+        self.assertIn('font = "hoi_16mbs"', block)
+        self.assertRegex(block, r'maxWidth\s*=\s*124')
+        self.assertRegex(block, r'format\s*=\s*center')
+        self.assertIn("alwaystransparent = yes", block)
+
+        # Keep the binding in country_info even though it is drawn over the
+        # lower plate of the nested diplomacy_tab_top card.
+        parent_start, parent_end = named_block_span(self.gui, "country_info")
+        self.assertLess(parent_start, start)
+        self.assertLess(end, parent_end)
+        between = re.sub(
+            r"(?m)#.*$",
+            lambda match: " " * len(match.group()),
+            self.gui[parent_start + 1 : start],
+        )
+        self.assertEqual(between.count("{") - between.count("}"), 0)
 
     def test_custom_art_overlays_are_current_and_keep_clear_viewports(self) -> None:
         outputs = expected_outputs()

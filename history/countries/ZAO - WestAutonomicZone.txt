@@ -4,6 +4,7 @@ oob = "ZAO"
 ####### Characters
 
 recruit_character = WRK_Bassam_Zogby
+promote_character = WRK_Bassam_Zogby
 
 ####### Basic shit
 

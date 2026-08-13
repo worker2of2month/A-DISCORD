@@ -101,7 +101,7 @@ class SolarInterventionTests(unittest.TestCase):
         issues = validate_vad_intervention_and_restoration()
         self.assertEqual(issues, [], issue_report(issues))
 
-    def test_vad_solar_route_prioritizes_only_the_reachable_egc_belt(self) -> None:
+    def test_vad_solar_route_does_not_serialize_the_central_wave(self) -> None:
         issues = validate_vad_egc_route_priority()
         self.assertEqual(issues, [], issue_report(issues))
 

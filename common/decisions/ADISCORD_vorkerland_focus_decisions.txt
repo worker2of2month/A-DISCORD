@@ -9,7 +9,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 		selectable_mission = no
 		fire_only_once = no
 		days_mission_timeout = 1
-		timeout_effect = { ADISCORD_vorkerland_focus_confirm_central_minor_launch = yes }
+		timeout_effect = { ADISCORD_vorkerland_focus_confirm_central_minor_wave_launch = yes }
 	}
 
 	ADISCORD_vorkerland_focus_central_minor_retry_check = {
@@ -20,7 +20,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 		selectable_mission = no
 		fire_only_once = no
 		days_mission_timeout = 1
-		timeout_effect = { ADISCORD_vorkerland_focus_confirm_central_minor_retry = yes }
+		timeout_effect = { ADISCORD_vorkerland_focus_confirm_central_minor_wave_retry = yes }
 	}
 
 	ADISCORD_vorkerland_focus_central_minor_front_deadline = {
@@ -37,300 +37,67 @@ ADISCORD_vorkerland_focus_operations_category = {
 		is_good = yes
 		days_mission_timeout = 240
 		cancel_trigger = {
-			OR = {
-				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr NOT = { has_war_with = EYR } }
-				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc NOT = { has_war_with = EGC } }
-				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_riv NOT = { has_war_with = RIV } }
-				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_rev NOT = { has_war_with = REV } }
-				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_yor NOT = { has_war_with = YOR } }
-				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_ndn NOT = { has_war_with = NDN } }
-				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb NOT = { has_war_with = SWB } }
-				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv NOT = { has_war_with = VHV } }
-				AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv NOT = { has_war_with = OSV } }
-				NOT = {
-					OR = {
-						has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr
-						has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc
-						has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_riv
-						has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_rev
-						has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_yor
-						has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_ndn
-						has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb
-						has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv
-						has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv
-					}
-				}
+			AND = {
+				OR = { NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr } NOT = { has_war_with = EYR } }
+				OR = { NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc } NOT = { has_war_with = EGC } }
+				OR = { NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_riv } NOT = { has_war_with = RIV } }
+				OR = { NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_rev } NOT = { has_war_with = REV } }
+				OR = { NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_yor } NOT = { has_war_with = YOR } }
+				OR = { NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_ndn } NOT = { has_war_with = NDN } }
+				OR = { NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb } NOT = { has_war_with = SWB } }
+				OR = { NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv } NOT = { has_war_with = VHV } }
+				OR = { NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv } NOT = { has_war_with = OSV } }
 			}
 		}
-		cancel_effect = { ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes }
-		timeout_effect = { ADISCORD_vorkerland_focus_resolve_central_minor_deadline = yes }
+		cancel_effect = { ADISCORD_vorkerland_focus_finish_central_minor_wave = yes }
+		timeout_effect = { ADISCORD_vorkerland_focus_resolve_central_minor_wave_deadline = yes }
 	}
 
-	ADISCORD_vorkerland_consolidate_eyr = {
+	# One operational order opens every viable adjacent front at once. The
+	# recorded target set remains stable until the whole wave has ended.
+	ADISCORD_vorkerland_launch_central_minor_wave = {
 		icon = generic_territory_or_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
 		visible = {
 			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
-			EYR = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
-			any_neighbor_country = { tag = EYR }
+			OR = {
+				AND = { any_neighbor_country = { tag = EYR } EYR = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+				AND = { any_neighbor_country = { tag = EGC } EGC = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+				AND = { any_neighbor_country = { tag = RIV } RIV = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+				AND = { any_neighbor_country = { tag = REV } REV = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+				AND = { any_neighbor_country = { tag = YOR } YOR = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+				AND = { any_neighbor_country = { tag = NDN } NDN = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+				AND = { any_neighbor_country = { tag = SWB } SWB = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+				AND = { any_neighbor_country = { tag = VHV } VHV = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+				AND = { any_neighbor_country = { tag = OSV } OSV = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+			}
 		}
 		available = {
 			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_recovery_cooldown }
 			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending }
 			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active }
 			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
-			EYR = { NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } }
+			is_subject = no
+			NOT = { has_capitulated = yes }
 		}
 		cost = 5
 		days_remove = 1
 		fire_only_once = no
 		complete_effect = {
 			ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes
-			set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr
 			set_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
 			ADISCORD_vorkerland_leave_inherited_faction = yes
-			EYR = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			if = { limit = { any_neighbor_country = { tag = EYR } EYR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr EYR = { ADISCORD_vorkerland_leave_inherited_faction = yes } }
+			if = { limit = { any_neighbor_country = { tag = EGC } EGC = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc EGC = { ADISCORD_vorkerland_leave_inherited_faction = yes } }
+			if = { limit = { any_neighbor_country = { tag = RIV } RIV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_riv RIV = { ADISCORD_vorkerland_leave_inherited_faction = yes } }
+			if = { limit = { any_neighbor_country = { tag = REV } REV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_rev REV = { ADISCORD_vorkerland_leave_inherited_faction = yes } }
+			if = { limit = { any_neighbor_country = { tag = YOR } YOR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_yor YOR = { ADISCORD_vorkerland_leave_inherited_faction = yes } }
+			if = { limit = { any_neighbor_country = { tag = NDN } NDN = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_ndn NDN = { ADISCORD_vorkerland_leave_inherited_faction = yes } }
+			if = { limit = { any_neighbor_country = { tag = SWB } SWB = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb SWB = { ADISCORD_vorkerland_leave_inherited_faction = yes } }
+			if = { limit = { any_neighbor_country = { tag = VHV } VHV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv VHV = { ADISCORD_vorkerland_leave_inherited_faction = yes } }
+			if = { limit = { any_neighbor_country = { tag = OSV } OSV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv OSV = { ADISCORD_vorkerland_leave_inherited_faction = yes } }
 		}
-		remove_effect = { ADISCORD_vorkerland_focus_launch_minor_eyr = yes }
-		ai_will_do = { factor = 900 }
-	}
-
-	ADISCORD_vorkerland_consolidate_egc = {
-		icon = generic_territory_or_war
-		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
-		visible = {
-			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
-			EGC = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
-			any_neighbor_country = { tag = EGC }
-		}
-		available = {
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_recovery_cooldown }
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending }
-			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
-			EGC = { NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } }
-		}
-		cost = 5
-		days_remove = 1
-		fire_only_once = no
-		complete_effect = {
-			ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes
-			set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc
-			set_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
-			ADISCORD_vorkerland_leave_inherited_faction = yes
-			EGC = { ADISCORD_vorkerland_leave_inherited_faction = yes }
-		}
-		remove_effect = { ADISCORD_vorkerland_focus_launch_minor_egc = yes }
-		ai_will_do = {
-			factor = 900
-			modifier = {
-				factor = 8
-				tag = VAD
-				has_country_flag = ADISCORD_vorkerland_focus_vad_sol_invitation_intent
-				has_country_flag = ADISCORD_vorkerland_focus_vad_solland_liaison_prepared
-				OR = {
-					has_global_flag = ADISCORD_vorkerland_solar_winner_sra
-					has_global_flag = ADISCORD_vorkerland_solar_winner_csl
-				}
-				NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_verified }
-				NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_failed }
-				NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_failed }
-			}
-		}
-	}
-
-	ADISCORD_vorkerland_consolidate_riv = {
-		icon = generic_territory_or_war
-		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
-		visible = {
-			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
-			RIV = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
-			any_neighbor_country = { tag = RIV }
-		}
-		available = {
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_recovery_cooldown }
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending }
-			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
-			RIV = { NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } }
-		}
-		cost = 5
-		days_remove = 1
-		fire_only_once = no
-		complete_effect = {
-			ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes
-			set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_riv
-			set_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
-			ADISCORD_vorkerland_leave_inherited_faction = yes
-			RIV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
-		}
-		remove_effect = { ADISCORD_vorkerland_focus_launch_minor_riv = yes }
-		ai_will_do = { factor = 900 }
-	}
-
-	ADISCORD_vorkerland_consolidate_rev = {
-		icon = generic_territory_or_war
-		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
-		visible = {
-			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
-			REV = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
-			any_neighbor_country = { tag = REV }
-		}
-		available = {
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_recovery_cooldown }
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending }
-			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
-			REV = { NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } }
-		}
-		cost = 5
-		days_remove = 1
-		fire_only_once = no
-		complete_effect = {
-			ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes
-			set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_rev
-			set_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
-			ADISCORD_vorkerland_leave_inherited_faction = yes
-			REV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
-		}
-		remove_effect = { ADISCORD_vorkerland_focus_launch_minor_rev = yes }
-		ai_will_do = { factor = 900 }
-	}
-
-	ADISCORD_vorkerland_consolidate_yor = {
-		icon = generic_territory_or_war
-		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
-		visible = {
-			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
-			YOR = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
-			any_neighbor_country = { tag = YOR }
-		}
-		available = {
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_recovery_cooldown }
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending }
-			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
-			YOR = { NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } }
-		}
-		cost = 5
-		days_remove = 1
-		fire_only_once = no
-		complete_effect = {
-			ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes
-			set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_yor
-			set_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
-			ADISCORD_vorkerland_leave_inherited_faction = yes
-			YOR = { ADISCORD_vorkerland_leave_inherited_faction = yes }
-		}
-		remove_effect = { ADISCORD_vorkerland_focus_launch_minor_yor = yes }
-		ai_will_do = { factor = 900 }
-	}
-
-	ADISCORD_vorkerland_consolidate_ndn = {
-		icon = generic_territory_or_war
-		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
-		visible = {
-			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
-			NDN = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
-			any_neighbor_country = { tag = NDN }
-		}
-		available = {
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_recovery_cooldown }
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending }
-			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
-			NDN = { NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } }
-		}
-		cost = 5
-		days_remove = 1
-		fire_only_once = no
-		complete_effect = {
-			ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes
-			set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_ndn
-			set_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
-			ADISCORD_vorkerland_leave_inherited_faction = yes
-			NDN = { ADISCORD_vorkerland_leave_inherited_faction = yes }
-		}
-		remove_effect = { ADISCORD_vorkerland_focus_launch_minor_ndn = yes }
-		ai_will_do = { factor = 900 }
-	}
-
-	ADISCORD_vorkerland_consolidate_swb = {
-		icon = generic_territory_or_war
-		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
-		visible = {
-			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
-			SWB = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
-			any_neighbor_country = { tag = SWB }
-		}
-		available = {
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_recovery_cooldown }
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending }
-			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
-			SWB = { NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } }
-		}
-		cost = 5
-		days_remove = 1
-		fire_only_once = no
-		complete_effect = {
-			ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes
-			set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb
-			set_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
-			ADISCORD_vorkerland_leave_inherited_faction = yes
-			SWB = { ADISCORD_vorkerland_leave_inherited_faction = yes }
-		}
-		remove_effect = { ADISCORD_vorkerland_focus_launch_minor_swb = yes }
-		ai_will_do = { factor = 900 }
-	}
-
-	ADISCORD_vorkerland_consolidate_vhv = {
-		icon = generic_territory_or_war
-		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
-		visible = {
-			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
-			VHV = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
-			any_neighbor_country = { tag = VHV }
-		}
-		available = {
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_recovery_cooldown }
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending }
-			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
-			VHV = { NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } }
-		}
-		cost = 5
-		days_remove = 1
-		fire_only_once = no
-		complete_effect = {
-			ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes
-			set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv
-			set_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
-			ADISCORD_vorkerland_leave_inherited_faction = yes
-			VHV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
-		}
-		remove_effect = { ADISCORD_vorkerland_focus_launch_minor_vhv = yes }
-		ai_will_do = { factor = 900 }
-	}
-
-	ADISCORD_vorkerland_consolidate_osv = {
-		icon = generic_territory_or_war
-		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
-		visible = {
-			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
-			OSV = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
-			any_neighbor_country = { tag = OSV }
-		}
-		available = {
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_recovery_cooldown }
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending }
-			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
-			OSV = { NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } }
-		}
-		cost = 5
-		days_remove = 1
-		fire_only_once = no
-		complete_effect = {
-			ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes
-			set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv
-			set_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
-			ADISCORD_vorkerland_leave_inherited_faction = yes
-			OSV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
-		}
-		remove_effect = { ADISCORD_vorkerland_focus_launch_minor_osv = yes }
+		remove_effect = { ADISCORD_vorkerland_focus_launch_central_minor_wave = yes }
 		ai_will_do = { factor = 900 }
 	}
 
@@ -603,53 +370,37 @@ ADISCORD_vorkerland_focus_operations_category = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
 		visible = {
-			OR = {
-				AND = { tag = WKR has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked }
-				AND = { tag = VAD has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked }
-				AND = { tag = TVA has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked }
-			}
-			has_country_flag = ADISCORD_vorkerland_focus_central_front_prepared
-			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }
-			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
-			NOT = { VAD = { exists = yes has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending } }
-			NOT = { WKR = { exists = yes has_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending } }
-			NOT = {
-				AND = {
-					has_global_flag = ADISCORD_vorkerland_sol_restoration_verified
-					NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solar_counter_intervention_ready }
-					WKR = { exists = yes ADISCORD_vorkerland_wkr_has_solar_counter_border = yes }
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_central_showdown_command_ready_tt
+				OR = {
+					AND = { tag = WKR has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked }
+					AND = { tag = VAD has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked }
+					AND = { tag = TVA has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked }
 				}
+				has_country_flag = ADISCORD_vorkerland_focus_central_front_prepared
+				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+				NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
+				NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 			}
-			NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
-			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
-			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 		}
 		available = {
-			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_retry_cooldown }
-			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }
-			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
-			NOT = { VAD = { exists = yes has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending } }
-			NOT = { WKR = { exists = yes has_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending } }
-			NOT = {
-				AND = {
-					has_global_flag = ADISCORD_vorkerland_sol_restoration_verified
-					NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solar_counter_intervention_ready }
-					WKR = { exists = yes ADISCORD_vorkerland_wkr_has_solar_counter_border = yes }
-				}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_central_showdown_campaigns_closed_tt
+				NOT = { has_global_flag = ADISCORD_vorkerland_showdown_retry_cooldown }
+				NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending }
+				NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active }
+				NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
+				NOT = { country_exists = EYR }
+				NOT = { country_exists = EGC }
+				NOT = { country_exists = RIV }
+				NOT = { country_exists = REV }
+				NOT = { country_exists = YOR }
+				NOT = { country_exists = NDN }
+				NOT = { country_exists = SWB }
+				NOT = { country_exists = VHV }
+				NOT = { country_exists = OSV }
 			}
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending }
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active }
-			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
-			NOT = { country_exists = EYR }
-			NOT = { country_exists = EGC }
-			NOT = { country_exists = RIV }
-			NOT = { country_exists = REV }
-			NOT = { country_exists = YOR }
-			NOT = { country_exists = NDN }
-			NOT = { country_exists = SWB }
-			NOT = { country_exists = VHV }
-			NOT = { country_exists = OSV }
 			custom_trigger_tooltip = {
 				tooltip = ADISCORD_vorkerland_central_districts_integrated_tt
 				ADISCORD_vorkerland_central_districts_inside_claimant_graph = yes
@@ -678,8 +429,10 @@ ADISCORD_vorkerland_focus_operations_category = {
 				318 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
 				320 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
 			}
-			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
-			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_central_showdown_no_live_intervention_tt
+				NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
+			}
 		}
 		cost = 0
 		days_re_enable = 7
