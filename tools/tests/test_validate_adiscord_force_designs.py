@@ -379,7 +379,7 @@ class VorkerlandForceDesignTests(unittest.TestCase):
         self.assertIn("type = ADISCORD_fighter_airframe_2163", block)
         self.assertIn("type = ADISCORD_cas_airframe_2170", block)
         on_actions = read(
-            "common/on_actions/02_ADISCORD_vorkerland_force_design_on_actions.txt"
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"
         )
         self.assertIn("on_weekly =", on_actions)
         self.assertEqual(

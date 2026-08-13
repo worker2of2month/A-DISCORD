@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 EFFECTS = ROOT / "common/scripted_effects/ADISCORD_scripted_effects_STP.txt"
-ON_ACTIONS = ROOT / "common/on_actions/01_ADISCORD_STP_suspicion_on_actions.txt"
+ON_ACTIONS = ROOT / "common/on_actions/00_ADISCORD_on_actions.txt"
 
 
 def named_block(text: str, name: str) -> str:
@@ -72,11 +72,13 @@ class STPStartupContractTests(unittest.TestCase):
     def test_startup_calls_both_initializers_in_stp_scope(self) -> None:
         source = ON_ACTIONS.read_text(encoding="utf-8-sig")
         startup = named_block(source, "on_actions")
-        self.assertIn("limit = { STP = { exists = yes } }", startup)
         self.assertRegex(
             startup,
             r"STP\s*=\s*\{[^{}]*STP_initialize_party_suspicion\s*=\s*yes"
             r"[^{}]*STP_initialize_leader_health\s*=\s*yes[^{}]*\}",
+        )
+        self.assertFalse(
+            (ROOT / "common/on_actions/01_ADISCORD_STP_suspicion_on_actions.txt").exists()
         )
 
 

@@ -18,3 +18,26 @@ STP_sided_with_Hedersett_trigger = {
 		has_completed_focus = STP_Side_With_The_Party_bm
 	}
 }
+
+# Used for hands-off testing.
+test_game_reached_1948 = {
+	date > 1948.1.1
+}
+
+can_lose_unity = {
+	has_stability > 60
+	OR = {
+		has_war = no
+		AND = {
+			has_war = yes
+			surrender_progress < 0.1
+		}
+	}
+}
+
+can_lose_democracy_support = {
+	humanism > 0.65
+	utilitarism < 0.18
+	chauvinism < 0.18
+	etatism < 0.18
+}

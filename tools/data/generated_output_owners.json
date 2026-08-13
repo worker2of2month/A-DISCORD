@@ -145,7 +145,7 @@
         "history/countries/RLY - *.txt",
         "history/countries/WCG - *.txt",
         "localisation/russian/victory_points_l_russian.yml",
-        "localisation/russian/ZZ_ADISCORD_exclusion_zone_l_russian.yml",
+        "localisation/russian/countries_l_russian.yml",
         "gfx/flags/**/BOR.tga",
         "gfx/flags/**/DOL.tga",
         "gfx/flags/**/RIN.tga",

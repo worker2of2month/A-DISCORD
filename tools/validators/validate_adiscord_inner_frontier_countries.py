@@ -21,6 +21,7 @@ try:
         COUNTRY_HISTORY_DIR,
         COUNTRY_HISTORY_PROFILES,
         EXZ_LOCALISATION,
+        EXZ_LOCALISATION_ENTRIES,
         EXPECTED_STATES,
         FLAG_DIR,
         POPULATION_MARKER,
@@ -33,7 +34,6 @@ try:
         render_common_country,
         render_country_history,
         render_oob,
-        render_exz_localisation,
         render_state,
         state_path,
     )
@@ -51,6 +51,7 @@ except ModuleNotFoundError:
         COUNTRY_HISTORY_DIR,
         COUNTRY_HISTORY_PROFILES,
         EXZ_LOCALISATION,
+        EXZ_LOCALISATION_ENTRIES,
         EXPECTED_STATES,
         FLAG_DIR,
         POPULATION_MARKER,
@@ -63,7 +64,6 @@ except ModuleNotFoundError:
         render_common_country,
         render_country_history,
         render_oob,
-        render_exz_localisation,
         render_state,
         state_path,
     )
@@ -450,10 +450,10 @@ def validate() -> list[str]:
     if "Реле-17" in country_loc or "Реле-17" in vp_loc or "Релейный анклав №17" in country_loc:
         issues.append("obsolete RLY player-facing name remains in Russian localisation")
 
-    if not EXZ_LOCALISATION.exists() or EXZ_LOCALISATION.read_text(encoding="utf-8", errors="strict") != render_exz_localisation():
-        issues.append("generated EXZ localisation is not synchronized with the inner-frontier builder")
-    elif not re.search(r'(?m)^\s*EXZ:\s*""\s*$', EXZ_LOCALISATION.read_text(encoding="utf-8-sig", errors="strict")):
-        issues.append("EXZ must remain deliberately blank on the map")
+    exz_localisation = EXZ_LOCALISATION.read_text(encoding="utf-8-sig", errors="strict")
+    for key, value in EXZ_LOCALISATION_ENTRIES.items():
+        if not re.search(rf'(?m)^\s*{re.escape(key)}:\s*"{re.escape(value)}"\s*$', exz_localisation):
+            issues.append(f"generated EXZ localisation {key} is not synchronized with the inner-frontier builder")
     damage_marker = "?" * 4
     if damage_marker in country_loc or damage_marker in vp_loc:
         issues.append("inner-frontier Russian localisation contains encoding damage")

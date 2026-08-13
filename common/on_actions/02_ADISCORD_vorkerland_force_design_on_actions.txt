@@ -1,9 +1,0 @@
-on_actions = {
-	on_weekly = {
-		effect = {
-			ADISCORD_vorkerland_bootstrap_ai_force_designs = yes
-			ADISCORD_vorkerland_redeploy_air_wings_after_mission_fix = yes
-			ADISCORD_vorkerland_deploy_missing_claimant_air_wings = yes
-		}
-	}
-}

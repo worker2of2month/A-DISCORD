@@ -377,45 +377,14 @@ EXPECTED_DESCRIPTOR_REPLACE_PATHS = [
     'replace_path="common/country_leader"',
     'replace_path="common/focus_inlay_windows"',
     'replace_path="common/factions"',
-    'replace_path="common/factions/goals"',
-    'replace_path="common/factions/icons"',
-    'replace_path="common/factions/member_upgrades"',
-    'replace_path="common/factions/member_upgrades/member_groups"',
-    'replace_path="common/factions/rules"',
-    'replace_path="common/factions/rules/groups"',
-    'replace_path="common/factions/templates"',
-    'replace_path="common/factions/upgrades"',
-    'replace_path="common/factions/upgrades/groups"',
     'replace_path="common/ideas"',
     'replace_path="common/unit_leader"',
     'replace_path="common/technologies"',
     'replace_path="common/units"',
-    'replace_path="common/units/codenames_operatives"',
-    'replace_path="common/units/critical_parts"',
-    'replace_path="common/units/equipment"',
-    'replace_path="common/units/equipment/modules"',
-    'replace_path="common/units/equipment/upgrades"',
-    'replace_path="common/units/names"',
-    'replace_path="common/units/names_divisions"',
-    'replace_path="common/units/names_railway_guns"',
-    'replace_path="common/units/names_ships"',
-    'replace_path="common/units/unit_modifiers"',
     'replace_path="common/raids"',
-    'replace_path="common/raids/categories"',
     'replace_path="common/operations"',
     'replace_path="common/peace_conference"',
-    'replace_path="common/peace_conference/ai_peace"',
-    'replace_path="common/peace_conference/categories"',
-    'replace_path="common/peace_conference/cost_modifiers"',
     'replace_path="common/doctrines"',
-    'replace_path="common/doctrines/folders"',
-    'replace_path="common/doctrines/grand_doctrines"',
-    'replace_path="common/doctrines/subdoctrines"',
-    'replace_path="common/doctrines/subdoctrines/air"',
-    'replace_path="common/doctrines/subdoctrines/land"',
-    'replace_path="common/doctrines/subdoctrines/sea"',
-    'replace_path="common/doctrines/subdoctrines/special_forces"',
-    'replace_path="common/doctrines/tracks"',
     'replace_path="common/resistance_compliance_modifiers"',
     'replace_path="gfx/interface/equipmentdesigner/graphic_db"',
 ]
@@ -1854,6 +1823,19 @@ def check_technology_replace_path() -> list[str]:
             if required not in text:
                 issues.append(
                     f"{rel(path) if path.is_relative_to(ROOT) else path.name} is missing {required}"
+                )
+        replace_paths = re.findall(r'(?m)^replace_path="([^"]+)"\s*$', text)
+        for child in replace_paths:
+            parents = sorted(
+                parent
+                for parent in replace_paths
+                if child.startswith(f"{parent}/")
+            )
+            if parents:
+                descriptor_name = rel(path) if path.is_relative_to(ROOT) else path.name
+                issues.append(
+                    f'{descriptor_name} has redundant replace_path="{child}" '
+                    f'already covered by replace_path="{parents[0]}"'
                 )
     return issues
 

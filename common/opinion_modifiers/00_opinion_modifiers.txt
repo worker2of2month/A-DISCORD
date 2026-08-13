@@ -557,4 +557,32 @@ opinion_modifiers = {
 		trade = yes
 		value = 5
 	}
+
+	##### A-DISCORD DIPLOMACY
+	faction_traitor = {
+		value = -75
+	}
+
+	faction_traitor_trade = {
+		trade = yes
+		value = -40
+	}
+
+	our_liberators = {
+		value = 40
+		months = 18
+		decay = 1
+	}
+
+	##### VAL RELATIONS
+	VAL_trading_partners = {
+		trade = yes
+		value = 75
+	}
+	VAL_october_of_2160 = {
+		value = -50
+	}
+	VAL_different_views_on_freedom = {
+		value = -25
+	}
 }

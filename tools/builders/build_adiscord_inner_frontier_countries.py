@@ -39,7 +39,14 @@ COUNTRY_DIR = ROOT / "common" / "countries"
 COUNTRY_HISTORY_DIR = ROOT / "history" / "countries"
 FLAG_DIR = ROOT / "gfx" / "flags"
 VP_LOCALISATION = ROOT / "localisation" / "russian" / "victory_points_l_russian.yml"
-EXZ_LOCALISATION = ROOT / "localisation" / "russian" / "ZZ_ADISCORD_exclusion_zone_l_russian.yml"
+EXZ_LOCALISATION = ROOT / "localisation" / "russian" / "countries_l_russian.yml"
+EXZ_LOCALISATION_MARKER = "tools.builders.build_adiscord_inner_frontier_countries:exz"
+EXZ_LOCALISATION_ENTRIES = {
+    "EXZ": "",
+    "EXZ_DEF": "",
+    "EXZ_ADJ": "",
+    "EXZ_pragmatism": "",
+}
 POPULATION_MARKER = "# Populated by tools/build_adiscord_inner_frontier_countries.py"
 PROTECTORATE_TAG = "WCG"
 PROTECTORATE_SUCCESSORS = {"KRM", "LMN"}
@@ -441,18 +448,6 @@ def protectorate_profile() -> dict[str, object]:
     }
 
 
-def render_exz_localisation() -> str:
-    """Keep the terrain-mask country deliberately nameless on the map."""
-    return "\n".join((
-        "\ufeffl_russian:",
-        ' EXZ: ""',
-        ' EXZ_DEF: ""',
-        ' EXZ_ADJ: ""',
-        ' EXZ_pragmatism: ""',
-        "",
-    ))
-
-
 def write_flags() -> None:
     sizes = ((FLAG_DIR, (82, 52)), (FLAG_DIR / "medium", (41, 26)), (FLAG_DIR / "small", (10, 7)))
     for style, (tag, country) in enumerate(COUNTRIES.items()):
@@ -501,7 +496,11 @@ def apply() -> None:
         "tools.builders.build_adiscord_inner_frontier_countries",
         localisation,
     )
-    EXZ_LOCALISATION.write_text(render_exz_localisation(), encoding="utf-8", newline="\n")
+    replace_generated_localisation_block(
+        EXZ_LOCALISATION,
+        EXZ_LOCALISATION_MARKER,
+        EXZ_LOCALISATION_ENTRIES,
+    )
     write_flags()
     print(
         f"Applied {len(profiles)} populated inner-frontier states, "
@@ -553,7 +552,11 @@ def main() -> int:
         )
         return 0
     elif args.apply_exz_localisation:
-        EXZ_LOCALISATION.write_text(render_exz_localisation(), encoding="utf-8", newline="\n")
+        replace_generated_localisation_block(
+            EXZ_LOCALISATION,
+            EXZ_LOCALISATION_MARKER,
+            EXZ_LOCALISATION_ENTRIES,
+        )
         print("Applied the deliberately blank EXZ country localisation.")
         return 0
     from tools.validators.validate_adiscord_inner_frontier_countries import main as validate_main

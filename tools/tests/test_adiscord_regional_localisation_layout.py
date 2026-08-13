@@ -28,12 +28,14 @@ REMOVED_TYPED_FILES = (
     "ADISCORD_shared_actions_l_russian.yml",
     "ADISCORD_STP_ideas_l_russian.yml",
     "ADISCORD_test_wars_l_russian.yml",
+    "ADISCORD_terrain_l_russian.yml",
     "ADISCORD_vorkerland_buildings_l_russian.yml",
     "ADISORD_minister_names_l_russian.yml",
     "ADISORD_minister_traits_l_russian.yml",
     "ADISORD_modifiers_l_russian.yml",
     "ADISORD_news_l_russian.yml",
     "countries_cosmetic_l_russian.yml",
+    "ZZ_ADISCORD_exclusion_zone_l_russian.yml",
 )
 CONSOLIDATED_COUNTS = {
     "ADISCORD_inner_frontier_countries_l_russian": 93,
@@ -51,6 +53,7 @@ CONSOLIDATED_COUNTS = {
     "ADISCORD_shared_actions_l_russian.yml": 16,
     "ADISCORD_STP_ideas_l_russian.yml": 12,
     "ADISCORD_test_wars_l_russian.yml": 4,
+    "ADISCORD_terrain_l_russian.yml": 4,
     "ADISCORD_vorkerland_buildings_l_russian.yml": 6,
     "ADISORD_minister_names_l_russian.yml": 168,
     "ADISORD_minister_traits_l_russian.yml": 168,

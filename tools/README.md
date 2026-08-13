@@ -93,8 +93,7 @@ Update reference files only as a reviewed, attributable asset change: record
 source, purpose, and replacement SHA256 in this table. Do not treat the
 guidance as a licence for its visual content.
 
-The following `tools/` binaries were examined and intentionally left in place
-because their names or embedded project content identify them as active or
-ambiguous A-Discord editable sources rather than reference material:
-`decisions.psd`, `portrait.psd`, `STP_Operation_Last_Banquette.psd`,
+`tools/assets/source/` holds editable A-Discord working sources rather than
+runtime files or third-party reference material: `decisions.psd`,
+`portrait.psd`, `STP_Operation_Last_Banquette.psd`, `terrain_view.psd`,
 `val_ideology.psd`, `wrk_ideology.psd`, and `wrk_ideology_2.psd`.

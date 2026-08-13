@@ -130,7 +130,7 @@ def validate() -> list[str]:
     if not contaminated_states:
         issues.append("no contaminated states were found")
 
-    localisation_path = ROOT / "localisation" / "russian" / "ZZ_ADISCORD_exclusion_zone_l_russian.yml"
+    localisation_path = ROOT / "localisation" / "russian" / "countries_l_russian.yml"
     localisation = localisation_path.read_text(encoding="utf-8-sig", errors="strict")
     for key in ("EXZ", "EXZ_pragmatism"):
         match = re.search(rf'(?m)^\s*{key}:\s*"([^"]*)"\s*$', localisation)

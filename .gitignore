@@ -10,6 +10,14 @@ htmlcov/
 # Local console history
 console_history.txt
 
+# Local agent workspaces and generated planning state
+.agents/
+.superpowers/
+.worktrees/
+
+# Local distribution archives
+/*.7z
+
 # Clausewitz runtime logs, crashes, and dumps
 logs/
 crashes/

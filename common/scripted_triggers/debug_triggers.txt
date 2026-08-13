@@ -1,4 +1,0 @@
-# Used for hands-off testing
-test_game_reached_1948 = {
-    date > 1948.1.1
-}

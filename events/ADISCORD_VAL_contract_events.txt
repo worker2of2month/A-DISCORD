@@ -42,6 +42,24 @@ country_event = {
 	option = { name = val_contract.300.b ai_chance = { base = 2 } VAL = { set_country_flag = { flag = VAL_CIN_target_cooldown days = 70 value = 1 } VAL_clear_foreign_operation = yes } }
 }
 
+# BEGIN CONSOLIDATED: ADISCORD_VAL_rework_events.txt
+add_namespace = val_rework
+
+country_event = {
+	id = val_rework.1
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag = VAL
+		has_completed_focus = VAL_Quarterly_Contract_Norm
+		NOT = { has_country_flag = VAL_quarterly_contract_active }
+	}
+
+	immediate = { VAL_start_quarterly_contract_norm = yes }
+}
+# END CONSOLIDATED: ADISCORD_VAL_rework_events.txt
+
 country_event = {
 	id = val_contract.301
 	title = val_contract.301.t
