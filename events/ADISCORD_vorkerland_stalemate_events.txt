@@ -1,0 +1,23 @@
+add_namespace = ADISCORD_vorkerland_stalemate
+
+# One delayed event per attacker. There is no retry or recurring fallback: a
+# completed front simply consumes its already-scheduled deadline.
+country_event = {
+	id = ADISCORD_vorkerland_stalemate.1
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_vorkerland_resolve_central_stalemate_deadline = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_stalemate.2
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_vorkerland_resolve_solarino_stalemate_deadline = yes
+	}
+}

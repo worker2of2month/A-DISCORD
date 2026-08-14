@@ -16,7 +16,7 @@ ADISCORD_STP_lock_regular_army_templates = {
 		force_allow_recruiting = no
 	}
 
-	# The guard is permanently unique; reassert its OOB restrictions for old saves.
+	# The guard is permanently unique; reassert its authored OOB restrictions.
 	set_division_template_lock = {
 		division_template = "Capital Guard"
 		is_locked = yes

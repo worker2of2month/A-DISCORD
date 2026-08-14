@@ -19,16 +19,6 @@ ADISCORD_rin_oath_crisis_can_schedule = {
 	MON = { exists = yes }
 }
 
-ADISCORD_rin_oath_crisis_legacy_needs_schedule = {
-	tag = RIN
-	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-	NOT = { has_global_flag = ADISCORD_rin_oath_crisis_scheduled }
-	NOT = { has_global_flag = ADISCORD_rin_oath_crisis_opened }
-	NOT = { has_global_flag = ADISCORD_rin_oath_crisis_active }
-	NOT = { has_global_flag = ADISCORD_rin_oath_crisis_resolved }
-	MON = { exists = yes }
-}
-
 ADISCORD_rin_is_oath_crisis_side = {
 	original_tag = RIN
 	OR = {

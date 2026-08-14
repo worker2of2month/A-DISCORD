@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[2]
 EFFECTS_PATH = ROOT / "common" / "scripted_effects" / "ADISCORD_VAL_rework_effects.txt"
 IDEAS_PATH = ROOT / "common" / "ideas" / "ADISCORD_VAL_rework_ideas.txt"
 FOCUSES_PATH = ROOT / "common" / "national_focus" / "ADISCORD_national_focus_VAL.txt"
+ON_ACTIONS_PATH = ROOT / "common" / "on_actions" / "02_ADISCORD_VAL_rework_on_actions.txt"
 FOREIGN_EFFECTS_PATH = (
     ROOT / "common" / "scripted_effects" / "ADISCORD_VAL_foreign_operation_effects.txt"
 )
@@ -20,6 +21,9 @@ FAMILIES = {
 }
 
 UPWARD_FAMILIES = ("administration", "industry", "army")
+FRESH_CAMPAIGN_FLAG = "ADISCORD_fresh_campaign_contract_v1"
+VAL_FRESH_FEATURE_FLAG = "ADISCORD_val_rework_fresh_campaign_v1"
+TIER_MIGRATION_EFFECT = "VAL_migrate_contract_tier_levels"
 LEVEL_VARIABLES = {
     "administration": "VAL_contract_administration_level",
     "industry": "VAL_contract_industry_level",
@@ -209,6 +213,7 @@ class ValTierTransitionContractTests(unittest.TestCase):
         cls.effects = EFFECTS_PATH.read_text(encoding="utf-8-sig")
         cls.ideas = IDEAS_PATH.read_text(encoding="utf-8-sig")
         cls.focuses = FOCUSES_PATH.read_text(encoding="utf-8-sig")
+        cls.on_actions = ON_ACTIONS_PATH.read_text(encoding="utf-8-sig")
         cls.foreign_effects = FOREIGN_EFFECTS_PATH.read_text(encoding="utf-8-sig")
 
     def effect(self, family: str, tier: int) -> str:
@@ -460,7 +465,32 @@ class ValTierTransitionContractTests(unittest.TestCase):
                 self.assert_hidden_rebuild(effect, "reputation", target)
         self.assert_reputation_refresh_selection(refresh)
 
-    def test_old_save_migration_replays_every_completed_tier_focus_in_descending_order(self) -> None:
+    def test_startup_initialization_is_fresh_only_and_one_shot(self) -> None:
+        startup = only_named_block(self, self.on_actions, "on_startup")
+        branch = only_named_block(self, startup, "if")
+        limit = only_named_block(self, branch, "limit")
+
+        fresh_guard = f"has_global_flag = {FRESH_CAMPAIGN_FLAG}"
+        feature_guard = f"NOT = {{ has_global_flag = {VAL_FRESH_FEATURE_FLAG} }}"
+        feature_set = f"set_global_flag = {VAL_FRESH_FEATURE_FLAG}"
+        initialize_call = "VAL_initialize_rework = yes"
+        for token in (fresh_guard, feature_guard, "VAL = { exists = yes }"):
+            self.assertEqual(limit.count(token), 1)
+        for token in (feature_set, initialize_call):
+            self.assertEqual(branch.count(token), 1)
+        self.assertRegex(
+            mask_comments(branch),
+            r"VAL\s*=\s*\{\s*VAL_initialize_rework\s*=\s*yes\s*\}",
+        )
+
+        positions = tuple(
+            branch.index(token)
+            for token in (fresh_guard, feature_guard, feature_set, initialize_call)
+        )
+        self.assertEqual(positions, tuple(sorted(positions)))
+        self.assertEqual(mask_comments(self.on_actions).count(initialize_call), 1)
+
+    def test_dead_tier_migration_definition_covers_completed_focus_tiers(self) -> None:
         caller_focuses: dict[tuple[str, int], set[str]] = {
             (family, tier): set()
             for family in UPWARD_FAMILIES
@@ -482,11 +512,7 @@ class ValTierTransitionContractTests(unittest.TestCase):
                 f"expected a focus caller for VAL_apply_contract_{family}_{tier}",
             )
 
-        migration = only_named_block(self, self.effects, "VAL_migrate_contract_tier_levels")
-        initialize = only_named_block(self, self.effects, "VAL_initialize_rework")
-        self.assertRegex(
-            mask_comments(initialize), r"\bVAL_migrate_contract_tier_levels\s*=\s*yes\b"
-        )
+        migration = only_named_block(self, self.effects, TIER_MIGRATION_EFFECT)
 
         for family in UPWARD_FAMILIES:
             tier_positions: dict[int, int] = {}
@@ -528,6 +554,18 @@ class ValTierTransitionContractTests(unittest.TestCase):
             with self.subTest(family=family, order="descending"):
                 self.assertLess(tier_positions[3], tier_positions[2])
                 self.assertLess(tier_positions[2], tier_positions[1])
+
+    def test_dead_tier_migration_has_zero_runtime_callers(self) -> None:
+        call = re.compile(
+            rf"(?m)^\s*{re.escape(TIER_MIGRATION_EFFECT)}\s*=\s*yes\b"
+        )
+        callers: list[str] = []
+        for runtime_root in ("common", "events", "history"):
+            for path in sorted((ROOT / runtime_root).rglob("*.txt")):
+                source = path.read_text(encoding="utf-8-sig", errors="replace")
+                if call.search(mask_comments(source)):
+                    callers.append(path.relative_to(ROOT).as_posix())
+        self.assertEqual(callers, [])
 
 
 if __name__ == "__main__":

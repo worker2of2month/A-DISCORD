@@ -122,8 +122,9 @@ ADISCORD_grant_starting_technology_profile = {
         )
         self._write(
             "common/on_actions/00_ADISCORD_on_actions.txt",
-            "on_actions = { on_startup = { effect = { every_country = { "
-            "ADISCORD_grant_starting_technology_profile = yes } } } }\n",
+            "on_actions = { on_startup = { effect = { if = { limit = { "
+            "has_global_flag = ADISCORD_fresh_campaign_contract_v1 } every_country = { "
+            "ADISCORD_grant_starting_technology_profile = yes } } } } }\n",
         )
         self._write(
             "tools/data/generated_output_owners.json",
@@ -367,6 +368,17 @@ ADISCORD_grant_starting_technology_profile = {
         )
         self.assertTrue(
             any("starting technology profile is not routed" in issue for issue in self._issues()),
+            self._issues(),
+        )
+
+    def test_starting_technology_profile_requires_fresh_campaign_guard(self) -> None:
+        self._write(
+            "common/on_actions/00_ADISCORD_on_actions.txt",
+            "on_actions = { on_startup = { effect = { every_country = { "
+            "ADISCORD_grant_starting_technology_profile = yes } } } }\n",
+        )
+        self.assertTrue(
+            any("fresh-guarded" in issue for issue in self._issues()),
             self._issues(),
         )
 

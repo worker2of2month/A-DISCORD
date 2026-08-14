@@ -536,16 +536,34 @@ def _starting_organization_modifiers(root: Path) -> tuple[dict[str, float], list
     except (OSError, ValueError) as error:
         issues.append(f"{_relative(root, on_actions_path)}: cannot trace starting technology route: {error}")
     else:
-        routed = any(
-            entry.key == "ADISCORD_grant_starting_technology_profile"
-            and entry.value == "yes"
-            and "on_startup" in ancestors
-            and "every_country" in ancestors
-            for ancestors, entry in _walk(on_actions)
-        )
+        fresh_contract = "ADISCORD_fresh_campaign_contract_v1"
+        routed = False
+        for ancestors, candidate in _walk(on_actions):
+            if (
+                candidate.key != "if"
+                or not isinstance(candidate.value, list)
+                or "on_startup" not in ancestors
+            ):
+                continue
+            limits = _entries(candidate.value, "limit")
+            has_fresh_guard = any(
+                entry.key == "has_global_flag" and entry.value == fresh_contract
+                for limit in limits
+                if isinstance(limit.value, list)
+                for _, entry in _walk(limit.value)
+            )
+            has_country_route = any(
+                entry.key == "ADISCORD_grant_starting_technology_profile"
+                and entry.value == "yes"
+                and "every_country" in child_ancestors
+                for child_ancestors, entry in _walk(candidate.value)
+            )
+            if has_fresh_guard and has_country_route:
+                routed = True
+                break
         if not routed:
             issues.append(
-                f"{_relative(root, on_actions_path)}: starting technology profile is not routed through on_startup every_country"
+                f"{_relative(root, on_actions_path)}: starting technology profile is not routed through fresh-guarded on_startup every_country"
             )
 
     def profile_technologies(block: list[Entry]) -> set[str]:

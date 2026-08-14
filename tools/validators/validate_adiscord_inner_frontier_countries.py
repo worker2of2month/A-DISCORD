@@ -136,8 +136,10 @@ def validate_external_gate_cleanup(split_effect: str, collapse_on_actions: str) 
         if split_effect.find(transfer_token) < annex_pos:
             issues.append(f"state {state_id} is transferred before the still-landed WCG annex cleanup")
     migration_flag = "ADISCORD_vorkerland_external_gate_formations_removed_v4"
-    if collapse_on_actions.count(cleanup_call) != 1 or collapse_on_actions.count(migration_flag) != 2:
-        issues.append("old collapse saves lack a one-shot landless WCG formation cleanup")
+    for forbidden in (cleanup_call, migration_flag):
+        if forbidden in collapse_on_actions:
+            issues.append("collapse on_actions must not repair landless WCG formations from old saves")
+            break
     return issues
 
 
@@ -421,8 +423,8 @@ def validate() -> list[str]:
         issues.append("the initial Vorkerland collapse must split the External Gate immediately")
     if phase_effects.count("ADISCORD_vorkerland_split_external_gate = yes") != 1:
         issues.append("the terminal phase finalizer must idempotently verify the External Gate split")
-    if collapse_on_actions.count("ADISCORD_vorkerland_split_external_gate = yes") != 1:
-        issues.append("old collapse saves lack a one-shot External Gate split repair")
+    if "ADISCORD_vorkerland_split_external_gate = yes" in collapse_on_actions:
+        issues.append("collapse on_actions must not repair the External Gate split from old saves")
     issues.extend(validate_external_gate_cleanup(split_effect, collapse_on_actions))
 
     for country in COUNTRIES.values():

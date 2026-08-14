@@ -13,6 +13,19 @@ if str(_REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPOSITORY_ROOT))
 
 from tools.lib.adiscord_core_state_balance_manifest import NON_URBAN_SETTLEMENT_VPS
+from tools.lib.adiscord_vorkerland_theatre_manifest import (
+    UNITY_TOWER_NAME,
+    UNITY_TOWER_PROVINCE,
+    UNITY_TOWER_STATE,
+    UNITY_TOWER_VALUE,
+    VORKERLAND_PROTECTED_LANDMARK_VPS,
+    VORKERLAND_THEATRE_PACKAGES,
+    VORKERLAND_THEATRE_PACKAGE_TOTALS,
+    VORKERLAND_THEATRE_RETIRED_VP_IDS,
+    VORKERLAND_THEATRE_VICTORY_POINTS,
+    VORKERLAND_THEATRE_VP_NAME_OVERRIDES,
+    VORKERLAND_THEATRE_VP_PROVINCES,
+)
 from tools.builders.build_adiscord_new_states import (
     AFRELA_LEGACY_VICTORY_POINTS,
     CAPITALS,
@@ -28,6 +41,7 @@ from tools.builders.build_adiscord_new_states import (
     STATE_RESOURCES,
     STARTING_OWNERS,
     VORKERLAND_CENTRES,
+    VORKERLAND_LEGACY_VICTORY_POINTS,
     VORKERLAND_LEGACY_PROFILES,
     VORKERLAND_MINOR_VPS,
     render_state,
@@ -74,7 +88,7 @@ APPROVED_NON_URBAN_SETTLEMENT_VPS = NON_URBAN_SETTLEMENT_VPS | frozenset(
     _NORTHERN_PRINCIPAL_PROVINCES[state_id] for state_id in NORTHERN_SETTLEMENT_STATES
 ) | frozenset(
     _INNER_FRONTIER_PRINCIPAL_PROVINCES[state_id] for state_id in INNER_FRONTIER_SETTLEMENT_STATES
-)
+) | VORKERLAND_THEATRE_VP_PROVINCES
 
 EBA_EXPECTED_VPS = {
     197: {16623: 10},
@@ -211,11 +225,13 @@ def normalized_builder_profile(state_id: int) -> dict[str, int | float | str]:
 def validate_states() -> None:
     localisation = "\n".join(text(path) for path in (ROOT / "localisation/russian").glob("*.yml"))
     province_terrain: dict[int, str] = {}
+    province_kind: dict[int, str] = {}
     with (ROOT / "map/definition.csv").open(encoding="utf-8-sig") as handle:
         for line in handle:
             fields = line.rstrip("\r\n").split(";")
             if len(fields) >= 7 and fields[0].isdigit():
                 province_terrain[int(fields[0])] = fields[6]
+                province_kind[int(fields[0])] = fields[4]
     for state_id, owner in sorted(STARTING_OWNERS.items()):
         source = text(state_path(state_id))
         owner_match = re.search(r"(?m)^\s*owner\s*=\s*([A-Z0-9]{3})", source)
@@ -262,6 +278,157 @@ def validate_states() -> None:
         source = text(state_path(state_id))
         check(bool(re.search(rf"(?m)^\s*owner\s*=\s*{owner}\s*$", source)), f"legacy state {state_id}: expected owner {owner}")
         check(bool(re.search(rf"(?m)^\s*add_core_of\s*=\s*{owner}\s*$", source)), f"legacy state {state_id}: missing {owner} core")
+
+    for state_id in sorted(LEGACY_STATE_PROFILES):
+        source = text(state_path(state_id))
+        for scalar_name in (
+            "manpower",
+            "state_category",
+            "buildings_max_level_factor",
+            "local_supplies",
+        ):
+            declarations = re.findall(
+                rf"(?m)^[ \t]*{re.escape(scalar_name)}[ \t]*=[ \t]*[^\s#]+[ \t]*$",
+                source,
+            )
+            check(
+                len(declarations) == 1,
+                f"legacy state {state_id}: expected one {scalar_name} declaration, found {len(declarations)}",
+            )
+
+    for state_id, expected_vps in sorted(VORKERLAND_LEGACY_VICTORY_POINTS.items()):
+        source = text(state_path(state_id))
+        actual_vps = {
+            int(province_id): int(value)
+            for province_id, value in re.findall(
+                r"victory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}", source
+            )
+        }
+        for province_id, value in expected_vps:
+            check(
+                actual_vps.get(province_id) == value,
+                f"Vorkerland legacy state {state_id}: expected VP {province_id}:{value}",
+            )
+
+    vp_localisation_path = ROOT / "localisation/russian/victory_points_l_russian.yml"
+    vp_localisation = text(vp_localisation_path)
+    check(
+        vp_localisation_path.read_bytes().startswith(b"\xef\xbb\xbf"),
+        "Vorkerland VP localisation must use UTF-8 BOM",
+    )
+    package_states = {
+        state_id
+        for states in VORKERLAND_THEATRE_PACKAGES.values()
+        for state_id in states
+    }
+    check(
+        package_states == set(VORKERLAND_THEATRE_VICTORY_POINTS),
+        "Vorkerland VP package states do not exactly cover the manifest",
+    )
+    for state_id, expected_vps in sorted(VORKERLAND_THEATRE_VICTORY_POINTS.items()):
+        source = text(state_path(state_id))
+        actual_vps = tuple(
+            (int(province_id), int(value))
+            for province_id, value in re.findall(
+                r"victory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}", source
+            )
+        )
+        check(
+            actual_vps == expected_vps,
+            f"Vorkerland theatre state {state_id}: expected exact VPs {expected_vps}, found {actual_vps}",
+        )
+        province_match = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", source, re.DOTALL)
+        state_provinces = (
+            {int(value) for value in re.findall(r"\d+", province_match.group(1))}
+            if province_match
+            else set()
+        )
+        check(bool(province_match), f"Vorkerland theatre state {state_id}: missing provinces")
+        for province_id, _value in expected_vps:
+            check(
+                province_id in state_provinces,
+                f"Vorkerland theatre state {state_id}: VP {province_id} is outside the state",
+            )
+            check(
+                province_kind.get(province_id) == "land",
+                f"Vorkerland theatre state {state_id}: VP {province_id} is not land",
+            )
+            matches = re.findall(
+                rf'(?m)^\s*VICTORY_POINTS_{province_id}:(?:\d+)?\s*"([^"]*)"\s*$',
+                vp_localisation,
+            )
+            check(
+                len(matches) == 1,
+                f"Vorkerland theatre VP {province_id}: expected one Russian name",
+            )
+        if state_id in STARTING_OWNERS:
+            rendered_vps = tuple(
+                (int(province_id), int(value))
+                for province_id, value in re.findall(
+                    r"victory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}",
+                    render_state(state_id, STARTING_OWNERS[state_id]),
+                )
+            )
+            check(
+                rendered_vps == expected_vps,
+                f"Vorkerland theatre generator state {state_id}: expected exact VPs {expected_vps}, found {rendered_vps}",
+            )
+
+    for package, states in VORKERLAND_THEATRE_PACKAGES.items():
+        actual_total = sum(
+            value
+            for state_id in states
+            for _province_id, value in VORKERLAND_THEATRE_VICTORY_POINTS[state_id]
+        )
+        check(
+            actual_total == VORKERLAND_THEATRE_PACKAGE_TOTALS[package],
+            f"Vorkerland package {package}: expected VP total {VORKERLAND_THEATRE_PACKAGE_TOTALS[package]}, found {actual_total}",
+        )
+
+    for province_id, expected_name in VORKERLAND_THEATRE_VP_NAME_OVERRIDES.items():
+        matches = re.findall(
+            rf'(?m)^\s*VICTORY_POINTS_{province_id}:(?:\d+)?\s*"([^"]*)"\s*$',
+            vp_localisation,
+        )
+        check(
+            matches == [expected_name],
+            f"Vorkerland theatre VP {province_id}: expected Russian name {expected_name!r}, found {matches}",
+        )
+    for province_id in VORKERLAND_THEATRE_RETIRED_VP_IDS:
+        check(
+            not re.search(rf"(?m)^\s*VICTORY_POINTS_{province_id}:", vp_localisation),
+            f"retired Vorkerland VP localisation remains: {province_id}",
+        )
+    state_40 = text(state_path(40))
+    check("impassable = yes" in state_40, "Vorkerland state 40 must remain impassable")
+    check(
+        VORKERLAND_PROTECTED_LANDMARK_VPS
+        == {UNITY_TOWER_STATE: ((UNITY_TOWER_PROVINCE, UNITY_TOWER_VALUE),)},
+        "Unity Tower protected-landmark contract changed",
+    )
+    check(
+        VORKERLAND_THEATRE_VICTORY_POINTS.get(UNITY_TOWER_STATE)
+        == VORKERLAND_PROTECTED_LANDMARK_VPS[UNITY_TOWER_STATE],
+        "Unity Tower must remain in the exact Vorkerland theatre VP manifest",
+    )
+    check(
+        UNITY_TOWER_PROVINCE not in VORKERLAND_THEATRE_RETIRED_VP_IDS,
+        "Unity Tower cannot be retired from the Vorkerland theatre",
+    )
+    check(
+        VORKERLAND_THEATRE_VP_NAME_OVERRIDES.get(UNITY_TOWER_PROVINCE)
+        == UNITY_TOWER_NAME,
+        "Unity Tower must retain its protected Russian name",
+    )
+    check(
+        re.findall(
+            rf"victory_points\s*=\s*\{{\s*{UNITY_TOWER_PROVINCE}\s+(\d+)\s*\}}",
+            state_40,
+        )
+        == [str(UNITY_TOWER_VALUE)],
+        f"Vorkerland state {UNITY_TOWER_STATE} must retain Unity Tower VP "
+        f"{UNITY_TOWER_PROVINCE}:{UNITY_TOWER_VALUE}",
+    )
 
     for state_id in sorted(EXACT_LEGACY_FACTORY_STATE_IDS):
         source = text(state_path(state_id))
@@ -688,7 +855,7 @@ def main() -> int:
         for error in ERRORS:
             print(f"- {error}")
         return 1
-    print("New-state validation passed: 100 rebuilt states, 9 microstates with unique spirits/leader traits, obsolete news settings removed, 5 legacy owner gaps and 5-state Doctor Work expansion.")
+    print("New-state validation passed: 100 rebuilt states, 9 microstates with unique spirits/leader traits, obsolete news settings removed, 5 legacy owner gaps and 5-state Doctor Worx expansion.")
     return 0
 
 

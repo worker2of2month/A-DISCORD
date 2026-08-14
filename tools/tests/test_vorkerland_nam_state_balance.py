@@ -8,6 +8,16 @@ from pathlib import Path
 from tools.builders import build_adiscord_map_buildings as map_buildings
 from tools.builders import build_adiscord_new_states as builder
 from tools.builders import build_adiscord_strategic_regions as regions
+from tools.lib.adiscord_vorkerland_theatre_manifest import (
+    UNITY_TOWER_NAME,
+    UNITY_TOWER_PROVINCE,
+    UNITY_TOWER_STATE,
+    UNITY_TOWER_VALUE,
+    VORKERLAND_PROTECTED_LANDMARK_VPS,
+    VORKERLAND_THEATRE_RETIRED_VP_IDS,
+    VORKERLAND_THEATRE_VICTORY_POINTS,
+    VORKERLAND_THEATRE_VP_NAME_OVERRIDES,
+)
 
 
 VORKERLAND_GENERATED_STATES = set(range(306, 329)) - {326}
@@ -59,6 +69,15 @@ def named_block(source: str, name: str, occurrence: int = 0) -> str:
             if depth == 0:
                 return source[opening + 1:index]
     raise AssertionError(f"unclosed block {name}")
+
+
+def block_with_id(source: str, block_type: str, identifier: str) -> str:
+    matches = list(re.finditer(rf"(?m)^\s*{re.escape(block_type)}\s*=\s*\{{", source))
+    for occurrence in range(len(matches)):
+        block = named_block(source, block_type, occurrence)
+        if re.search(rf"(?m)^\s*id\s*=\s*{re.escape(identifier)}\s*$", block):
+            return block
+    raise AssertionError(f"missing {block_type} {identifier}")
 
 
 class VorkerlandNamStateBalanceTests(unittest.TestCase):
@@ -311,6 +330,138 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             self.assertIn(f"tag = {tag} ratio = {ratio}", strategy)
             self.assertIn("execution_type = careful", strategy)
             self.assertIn("manual_attack = no", strategy)
+
+    def test_nam_resource_war_entry_is_fresh_event_driven_and_bounded(self) -> None:
+        root = builder.ROOT
+        on_actions = (root / "common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt").read_text(
+            encoding="utf-8-sig"
+        )
+        triggers = (root / "common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt").read_text(
+            encoding="utf-8-sig"
+        )
+        effects = (root / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt").read_text(
+            encoding="utf-8-sig"
+        )
+        events = (root / "events/ADISCORD_nam_resource_war_events.txt").read_text(
+            encoding="utf-8-sig"
+        )
+        collapse_events = (root / "events/ADISCORD_vorkerland_collapse_events.txt").read_text(
+            encoding="utf-8-sig"
+        )
+
+        for recurring in (
+            "on_startup",
+            "on_daily",
+            "on_weekly",
+            "on_monthly",
+            "on_yearly",
+            "every_country",
+        ):
+            self.assertNotRegex(on_actions, rf"(?m)^\s*{recurring}\s*=")
+        self.assertNotIn("ADISCORD_nam_resource_war.1", on_actions)
+
+        readiness = named_block(triggers, "ADISCORD_nam_resource_war_ready")
+        self.assertEqual(
+            readiness.count("has_global_flag = ADISCORD_fresh_campaign_contract_v1"),
+            1,
+        )
+
+        schedule = named_block(effects, "ADISCORD_nam_resource_war_schedule")
+        for token in (
+            "has_global_flag = ADISCORD_fresh_campaign_contract_v1",
+            "has_global_flag = ADISCORD_vorkerland_collapse_wars_started",
+            "NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }",
+            "NOT = { has_global_flag = ADISCORD_nam_resource_war_started }",
+            "NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }",
+            "NOT = { has_global_flag = ADISCORD_nam_resource_war_retry_used }",
+            "country_exists = NAM",
+            "country_exists = EFL",
+            "country_exists = AZH",
+            "set_global_flag = ADISCORD_nam_resource_war_scheduled",
+            "id = ADISCORD_nam_resource_war.1",
+            "days = 120",
+            "random_days = 90",
+        ):
+            self.assertEqual(schedule.count(token), 1, token)
+        self.assertLess(
+            schedule.find("set_global_flag = ADISCORD_nam_resource_war_scheduled"),
+            schedule.find("id = ADISCORD_nam_resource_war.1"),
+        )
+
+        collapse_two = block_with_id(
+            collapse_events,
+            "country_event",
+            "ADISCORD_vorkerland_collapse.2",
+        )
+        producer = "ADISCORD_nam_resource_war_schedule = yes"
+        self.assertEqual(collapse_events.count(producer), 1)
+        self.assertEqual(collapse_two.count(producer), 1)
+        self.assertLess(
+            collapse_two.find("set_global_flag = ADISCORD_vorkerland_collapse_wars_started"),
+            collapse_two.find(producer),
+        )
+
+        entry_event = block_with_id(
+            events,
+            "country_event",
+            "ADISCORD_nam_resource_war.1",
+        )
+        immediate = named_block(entry_event, "immediate")
+        self.assertEqual(
+            len(
+                re.findall(
+                    r"country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_nam_resource_war\.1\b",
+                    immediate,
+                )
+            ),
+            1,
+        )
+        self.assertEqual(
+            immediate.count("NOT = { has_global_flag = ADISCORD_nam_resource_war_retry_used }"),
+            1,
+        )
+        self.assertEqual(
+            immediate.count("set_global_flag = ADISCORD_nam_resource_war_retry_used"),
+            1,
+        )
+        self.assertEqual(
+            immediate.count("clr_global_flag = ADISCORD_nam_resource_war_scheduled"),
+            1,
+        )
+        self.assertNotIn("ADISCORD_nam_resource_war_schedule = yes", immediate)
+        runtime_entry = "\n".join((effects, events, on_actions, collapse_events))
+        self.assertEqual(
+            runtime_entry.count("set_global_flag = ADISCORD_nam_resource_war_retry_used"),
+            1,
+        )
+        self.assertNotIn("clr_global_flag = ADISCORD_nam_resource_war_retry_used", runtime_entry)
+        self.assertEqual(
+            runtime_entry.count("set_global_flag = ADISCORD_nam_resource_war_scheduled"),
+            1,
+        )
+
+        start = named_block(effects, "ADISCORD_nam_resource_war_start")
+        outer_guard = named_block(start, "if")
+        self.assertRegex(start, r"^\s*if\s*=\s*\{")
+        self.assertIn("ADISCORD_nam_resource_war_ready = yes", outer_guard)
+        for mutation in (
+            "set_autonomy",
+            "leave_faction",
+            "set_global_flag",
+            "clr_global_flag",
+            "add_ideas",
+            "add_war_support",
+            "load_oob",
+            "add_equipment_to_stockpile",
+            "create_faction_from_template",
+            "add_to_faction",
+            "add_claim_by",
+            "declare_war_on",
+            "add_to_war",
+            "country_event",
+            "news_event",
+        ):
+            self.assertEqual(start.count(mutation), outer_guard.count(mutation), mutation)
 
     def test_nam_resource_war_has_distributed_named_victory_points(self) -> None:
         expected = {
@@ -631,33 +782,38 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         }
         self.assertEqual(terrain_by_province.get(10016), "mountain")
 
-    def test_new_city_vps_use_urban_provinces_and_bom_localisation(self) -> None:
-        settlement_provinces = {
+    def test_theatre_vps_are_exact_land_provinces_with_bom_localisation(self) -> None:
+        land_provinces = {
             int(fields[0])
             for line in (builder.ROOT / "map" / "definition.csv").read_text(
                 encoding="utf-8-sig"
             ).splitlines()
-            if len(fields := line.split(";")) > 6
+            if len(fields := line.split(";")) > 4
             and fields[0].isdigit()
-            and fields[6] in {"urban", "vorkernsberg"}
+            and fields[4] == "land"
         }
-        for state_id, points in builder.VORKERLAND_LEGACY_VICTORY_POINTS.items():
+        for state_id, points in VORKERLAND_THEATRE_VICTORY_POINTS.items():
             source = state_source(state_id)
+            actual = tuple(
+                (int(province_id), int(value))
+                for province_id, value in re.findall(
+                    r"victory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}", source
+                )
+            )
+            self.assertEqual(actual, points, state_id)
             for province_id, value in points:
                 with self.subTest(state=state_id, province=province_id):
                     self.assertIn(province_id, self.states[state_id])
-                    self.assertIn(province_id, settlement_provinces)
-                    self.assertRegex(
-                        source,
-                        rf"victory_points\s*=\s*\{{\s*{province_id}\s+{value}\s*\}}",
-                    )
+                    self.assertIn(province_id, land_provinces)
         localisation_path = (
             builder.ROOT / "localisation" / "russian" / "victory_points_l_russian.yml"
         )
         self.assertTrue(localisation_path.read_bytes().startswith(codecs.BOM_UTF8))
         localisation = localisation_path.read_text(encoding="utf-8-sig")
-        for province_id, name in builder.VORKERLAND_VICTORY_POINT_NAMES.items():
+        for province_id, name in VORKERLAND_THEATRE_VP_NAME_OVERRIDES.items():
             self.assertIn(f'VICTORY_POINTS_{province_id}: "{name}"', localisation)
+        for province_id in VORKERLAND_THEATRE_RETIRED_VP_IDS:
+            self.assertNotRegex(localisation, rf"(?m)^\s*VICTORY_POINTS_{province_id}:")
         state_names_path = (
             builder.ROOT / "localisation" / "russian" / "state_names_l_russian.yml"
         )
@@ -974,7 +1130,24 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         self.assertNotIn(".tga", generator_source.lower())
 
     def test_special_legacy_map_data_survives_rebalance(self) -> None:
-        self.assertIn("victory_points = { 16428 150 }", state_source(40))
+        unity_tower_state = state_source(UNITY_TOWER_STATE)
+        self.assertIn("impassable = yes", unity_tower_state)
+        self.assertEqual(
+            VORKERLAND_PROTECTED_LANDMARK_VPS,
+            {UNITY_TOWER_STATE: ((UNITY_TOWER_PROVINCE, UNITY_TOWER_VALUE),)},
+        )
+        self.assertEqual(
+            re.findall(
+                rf"victory_points\s*=\s*\{{\s*{UNITY_TOWER_PROVINCE}\s+(\d+)\s*\}}",
+                unity_tower_state,
+            ),
+            [str(UNITY_TOWER_VALUE)],
+        )
+        self.assertNotIn(UNITY_TOWER_PROVINCE, VORKERLAND_THEATRE_RETIRED_VP_IDS)
+        self.assertEqual(
+            VORKERLAND_THEATRE_VP_NAME_OVERRIDES[UNITY_TOWER_PROVINCE],
+            UNITY_TOWER_NAME,
+        )
         self.assertIn("bunker = 1", state_source(72))
         self.assertIn("owner = NAM", state_source(67))
 

@@ -1,78 +1,5 @@
-# Save-safe repair for AI countries created by the collapse.  It runs once per
-# claimant from a country-scoped weekly pulse, so old saves receive the same
-# unlocks without reloading ground OOB files or duplicating divisions.
-
-# New campaigns deploy these wings during the collapse setup.  This guarded
-# fallback gives pre-fix saves the same visible air force once the relevant
-# claimant again controls its designated airfield.
-ADISCORD_vorkerland_deploy_missing_claimant_air_wings = {
-	if = {
-		limit = {
-			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-			NOT = { has_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed }
-			OR = { tag = WKR tag = VAD tag = TVA }
-		}
-		if = {
-			limit = { tag = WKR controls_state = 32 }
-			add_manpower = 6000
-			add_fuel = 7500
-			load_oob = "WRK_vorkerland_collapse_air"
-			set_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed
-			set_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied
-		}
-		else_if = {
-			limit = { tag = VAD controls_state = 75 }
-			add_manpower = 3000
-			add_fuel = 7500
-			load_oob = "VAD_vorkerland_collapse_air"
-			set_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed
-			set_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied
-		}
-		else_if = {
-			limit = { tag = TVA controls_state = 38 }
-			add_manpower = 3000
-			add_fuel = 7500
-			load_oob = "TVA_vorkerland_collapse_air"
-			set_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed
-			set_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied
-		}
-	}
-}
-
-# Saves created before the aircraft personnel contract was repaired already
-# contain their wings.  Give those wings the missing personnel and fuel once;
-# reloading their OOB here would duplicate every wing in the save.
-ADISCORD_vorkerland_redeploy_air_wings_after_mission_fix = {
-	if = {
-		limit = {
-			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-			has_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed
-			NOT = { has_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied }
-			OR = { tag = WKR tag = VAD tag = TVA }
-		}
-		if = {
-			limit = { tag = WKR controls_state = 32 }
-			add_manpower = 6000
-			add_fuel = 7500
-			set_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied
-		}
-		else_if = {
-			limit = { tag = VAD controls_state = 75 }
-			add_manpower = 3000
-			add_fuel = 7500
-			set_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied
-		}
-		else_if = {
-			limit = { tag = TVA controls_state = 38 }
-			add_manpower = 3000
-			add_fuel = 7500
-			set_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied
-		}
-	}
-}
-
+# Fresh-campaign AI bootstrap. collapse.2 calls this once for each main
+# claimant immediately after the verified partition enters the wartime phase.
 ADISCORD_vorkerland_bootstrap_ai_force_designs = {
 	if = {
 		limit = {
@@ -88,9 +15,8 @@ ADISCORD_vorkerland_bootstrap_ai_force_designs = {
 			ADISCORD_tech_reclaimed_jet_platforms = 1
 			ADISCORD_tech_battlefield_attack_aircraft = 1
 		}
-		# Old saves still contain the obsolete 2+2 mobile group.  One bounded
-		# delivery lets the AI rebuild it into the current 4+6 armoured group and
-		# leaves a small reinforcement reserve while production ramps up.
+		# One bounded delivery lets the AI build the authored 4+6 armoured group
+		# and leaves a small reinforcement reserve while production ramps up.
 		if = {
 			limit = { has_equipment = { ADISCORD_combat_platform_archetype < 120 } }
 			add_equipment_to_stockpile = {

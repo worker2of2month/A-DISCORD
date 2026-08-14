@@ -1,10 +1,18 @@
 on_actions = {
 	on_startup = {
 		effect = {
-			# A single load/start scan replaces any recurring global country poll.
-			every_country = {
-				ADISCORD_apply_non_participating_minor_optimization = yes
-				ADISCORD_economy_refresh_ai_assistance = yes
+			# General history raises the contract only while creating a fresh campaign.
+			# This module records its own one-shot initialization before scanning.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_fresh_campaign_contract_v1
+					NOT = { has_global_flag = ADISCORD_minor_optimization_fresh_campaign_v1 }
+				}
+				set_global_flag = ADISCORD_minor_optimization_fresh_campaign_v1
+				every_country = {
+					ADISCORD_apply_non_participating_minor_optimization = yes
+					ADISCORD_economy_refresh_ai_assistance = yes
+				}
 			}
 		}
 	}
@@ -25,13 +33,19 @@ on_actions = {
 		}
 	}
 
-	on_monthly = {
+	on_state_control_changed = {
 		effect = {
-			# There is no surrender-progress edge on_action. Evaluate the strict
-			# threshold in this existing country pulse; the signature skips no-op work.
+			# State-control edges are the bounded territorial input for surrender
+			# progress. Refresh only the new and former controllers; never scan.
 			if = {
-				limit = { ADISCORD_economy_ai_assistance_needs_monthly_evaluation = yes }
+				limit = { ADISCORD_economy_ai_assistance_needs_edge_evaluation = yes }
 				ADISCORD_economy_refresh_ai_assistance = yes
+			}
+			FROM = {
+				if = {
+					limit = { ADISCORD_economy_ai_assistance_needs_edge_evaluation = yes }
+					ADISCORD_economy_refresh_ai_assistance = yes
+				}
 			}
 		}
 	}

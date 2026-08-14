@@ -146,14 +146,15 @@ def collect_issues() -> list[str]:
 
     on_actions = texts[ON_ACTIONS]
     try:
-        startup = named_block(on_actions, "on_startup")
         war = named_block(on_actions, "on_war")
         capitulation = named_block(on_actions, "on_capitulation")
         peace = named_block(on_actions, "on_peace")
     except ValueError as exc:
         issues.append(str(exc))
-        startup = war = capitulation = peace = ""
-    for block_name, block, delay in (("startup", startup, 1), ("on_war", war, 7)):
+        war = capitulation = peace = ""
+    if re.search(r"(?m)^\s*on_startup\s*=", on_actions):
+        issues.append("RIN crisis must start only from a fresh Vorkerland on_war edge")
+    for block_name, block, delay in (("on_war", war, 7),):
         for token in (
             "set_global_flag = ADISCORD_rin_oath_crisis_scheduled",
             "RIN = {",
@@ -196,37 +197,26 @@ def collect_issues() -> list[str]:
     try:
         actor = named_block(triggers, "ADISCORD_rin_is_vorkerland_war_actor")
         schedule = named_block(triggers, "ADISCORD_rin_oath_crisis_can_schedule")
-        legacy = named_block(triggers, "ADISCORD_rin_oath_crisis_legacy_needs_schedule")
         partition_valid = named_block(triggers, "ADISCORD_rin_partition_armistice_is_valid")
     except ValueError as exc:
         issues.append(str(exc))
-        actor = schedule = legacy = partition_valid = ""
+        actor = schedule = partition_valid = ""
     actor_tags = set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", actor))
     if actor_tags != {"WKR", "VAD", "TVA"}:
         issues.append(f"war producer actor set is {sorted(actor_tags)}, expected WKR/VAD/TVA")
-    for block_name, block in (("fresh", schedule), ("legacy", legacy)):
-        for token in (
-            "ADISCORD_rin_oath_crisis_scheduled",
-            "ADISCORD_rin_oath_crisis_opened",
-            "ADISCORD_rin_oath_crisis_active",
-            "ADISCORD_rin_oath_crisis_resolved",
-            "MON = { exists = yes }",
-        ):
-            if token not in block:
-                issues.append(f"{block_name} schedule guard lacks {token}")
+    for token in (
+        "ADISCORD_rin_oath_crisis_scheduled",
+        "ADISCORD_rin_oath_crisis_opened",
+        "ADISCORD_rin_oath_crisis_active",
+        "ADISCORD_rin_oath_crisis_resolved",
+        "MON = { exists = yes }",
+    ):
+        if token not in schedule:
+            issues.append(f"fresh schedule guard lacks {token}")
     if "RIN = { exists = yes }" not in schedule:
         issues.append("fresh schedule guard does not confirm that RIN exists")
-    if "tag = RIN" not in legacy or "RIN = {" in legacy:
-        issues.append("startup legacy trigger is not a country-scoped RIN trigger")
-    try:
-        startup_rin = named_block(startup, "RIN")
-    except ValueError as exc:
-        issues.append(str(exc))
-        startup_rin = ""
-    if "ADISCORD_rin_oath_crisis_legacy_needs_schedule = yes" not in startup_rin:
-        issues.append("startup invokes the legacy country trigger outside explicit RIN scope")
-    if "ADISCORD_vorkerland_collapse_wars_started" not in legacy:
-        issues.append("startup migration can manufacture the crisis before the collapse wars")
+    if "ADISCORD_rin_oath_crisis_legacy_needs_schedule" in triggers + on_actions:
+        issues.append("retired RIN startup migration trigger remains reachable")
     for state_id in (134, 146, 147, 148, 149, 150):
         if f"owns_state = {state_id}" not in partition_valid:
             issues.append(f"partition runtime assertion does not check ownership of state {state_id}")

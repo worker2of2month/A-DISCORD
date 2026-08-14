@@ -22,7 +22,7 @@ ADISCORD_vorkerland_armored_reserve_program = {
 }
 
 ADISCORD_vorkerland_air_denial_program = {
-	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	allowed = { OR = { tag = VAD tag = TVA } }
 	enable = {
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -39,6 +39,29 @@ ADISCORD_vorkerland_air_denial_program = {
 	ai_strategy = { type = equipment_variant_production_factor id = ADISCORD_fighter_archetype value = 35 }
 	ai_strategy = { type = equipment_variant_production_factor id = ADISCORD_cas_archetype value = 12 }
 	ai_strategy = { type = equipment_production_min_factories id = fighter value = 1 }
+	ai_strategy = { type = equipment_production_min_factories id = cas value = 1 }
+}
+
+# WKR faces both central rivals with one industrial base. Keep its deployed OOB
+# unchanged, but reserve one additional factory for fighter replacement.
+ADISCORD_vorkerland_wkr_air_denial_program = {
+	allowed = { tag = WKR }
+	enable = {
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		has_tech = ADISCORD_tech_reclaimed_jet_platforms
+		num_of_military_factories > 2
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = unit_ratio id = fighter value = 90 }
+	ai_strategy = { type = unit_ratio id = cas value = 25 }
+	ai_strategy = { type = equipment_production_factor id = fighter value = 28 }
+	ai_strategy = { type = equipment_production_factor id = cas value = 10 }
+	ai_strategy = { type = equipment_variant_production_factor id = ADISCORD_fighter_archetype value = 35 }
+	ai_strategy = { type = equipment_variant_production_factor id = ADISCORD_cas_archetype value = 12 }
+	ai_strategy = { type = equipment_production_min_factories id = fighter value = 2 }
 	ai_strategy = { type = equipment_production_min_factories id = cas value = 1 }
 }
 

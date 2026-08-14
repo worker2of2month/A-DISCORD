@@ -713,3 +713,70 @@ ADISCORD_vorkerland_khan_border_offensive = {
 	ai_strategy = { type = consider_weak id = SLA value = 100 }
 	ai_strategy = { type = conquer id = SLA value = 150 }
 }
+
+# WKR's optional air-command focus keeps the explicit production lines fed and
+# gives the AI enough weighting to replace losses in a prolonged multi-front
+# war. It supplements, rather than replaces, the shared claimant air profile.
+ADISCORD_vorkerland_wkr_focus_air_sustainment = {
+	allowed = { tag = WKR }
+	enable = {
+		is_ai = yes
+		has_country_flag = ADISCORD_vorkerland_focus_wkr_air_sustainment
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = unit_ratio id = fighter value = 110 }
+	ai_strategy = { type = unit_ratio id = cas value = 35 }
+	ai_strategy = { type = equipment_production_factor id = fighter value = 45 }
+	ai_strategy = { type = equipment_production_factor id = cas value = 20 }
+	ai_strategy = { type = equipment_variant_production_factor id = ADISCORD_fighter_archetype value = 45 }
+	ai_strategy = { type = equipment_variant_production_factor id = ADISCORD_cas_archetype value = 20 }
+	ai_strategy = { type = equipment_production_min_factories id = fighter value = 2 }
+	ai_strategy = { type = equipment_production_min_factories id = cas value = 1 }
+}
+
+# Each flag is written before its declaration attempt and survives the bounded
+# verifier. Three simultaneous fronts therefore receive a finite share instead
+# of each demanding the entire WKR army.
+ADISCORD_vorkerland_wkr_solyarino_front_sol = {
+	allowed = { tag = WKR }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sol
+		country_exists = SOL
+		has_war_with = SOL
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = SOL value = 40 }
+	ai_strategy = { type = front_control tag = SOL ratio = 0.40 priority = 1550 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = conquer id = SOL value = 250 }
+}
+
+ADISCORD_vorkerland_wkr_solyarino_front_sra = {
+	allowed = { tag = WKR }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sra
+		country_exists = SRA
+		has_war_with = SRA
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = SRA value = 40 }
+	ai_strategy = { type = front_control tag = SRA ratio = 0.40 priority = 1550 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = conquer id = SRA value = 250 }
+}
+
+ADISCORD_vorkerland_wkr_solyarino_front_csl = {
+	allowed = { tag = WKR }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_csl
+		country_exists = CSL
+		has_war_with = CSL
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = CSL value = 40 }
+	ai_strategy = { type = front_control tag = CSL ratio = 0.40 priority = 1550 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = conquer id = CSL value = 250 }
+}

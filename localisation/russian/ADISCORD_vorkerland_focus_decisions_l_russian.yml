@@ -4,8 +4,8 @@
  ADISCORD_vorkerland_allied_support_category:0 "Поддержка союзного фронта"
  ADISCORD_vorkerland_allied_support_category_desc:0 "Ограниченные поставки уже существующему военному союзнику. Эти меры не создают альянсы и не втягивают нейтральные страны в войну."
 
- ADISCORD_vorkerland_focus_central_minor_front_deadline:0 "Завершить текущую волну кампании"
- ADISCORD_vorkerland_focus_central_minor_front_deadline_desc:0 "Командование учитывает каждую войну, открытую этой волной. Если хотя бы один записанный фронт продержится 240 дней, претендент завершит все такие войны на чрезвычайных условиях."
+ ADISCORD_vorkerland_focus_central_minor_front_deadline:0 "Затянувшаяся волна кампании"
+ ADISCORD_vorkerland_focus_central_minor_front_deadline_desc:0 "Командование учитывает каждую войну, открытую этой волной. Через 240 дней оперативная запись будет закрыта, но каждый действующий фронт продолжится до настоящей капитуляции или мира."
 
  ADISCORD_vorkerland_launch_central_minor_wave:0 "Открыть центральную волну кампании"
  ADISCORD_vorkerland_launch_central_minor_wave_desc:0 "После однодневной оперативной паузы одновременно объявить войну всем жизнеспособным центральным правительствам на нашей нынешней границе. Следующая волна начнётся лишь после завершения всех записанных фронтов и перегруппировки армии."
@@ -31,7 +31,7 @@
  ADISCORD_vorkerland_central_showdown_command_ready_tt:0 "Претендент санкционировал решающую войну и подготовил центральный фронт"
  ADISCORD_vorkerland_central_showdown_campaigns_closed_tt:0 "Все девять окружных кампаний завершены, а семидневная задержка повторного приказа истекла"
  ADISCORD_vorkerland_central_districts_integrated_tt:0 "Все девять центральных округов интегрированы и остаются во владении и под контролем трёх претендентов"
- ADISCORD_vorkerland_central_showdown_no_live_intervention_tt:0 "В Солярино не продолжается отдельная реставрационная война"
+ ADISCORD_vorkerland_central_showdown_no_live_intervention_tt:0 "В Солярино не продолжается отдельная война одного из претендентов"
  ADISCORD_vorkerland_commit_to_central_showdown:0 "Вступить в центральную схватку"
  ADISCORD_vorkerland_commit_to_central_showdown_desc:0 "Девять центральных правительств ликвидированы, округа прошли гражданскую интеграцию, и ни одна кампания не остаётся открытой. Отдать окончательный приказ о начале войны между тремя претендентами. Необязательные союзы с Солярино и Вольноградом заключаются отдельно и не задерживают этот приказ."
  ADISCORD_vorkerland_wkr_retreat_levy_1:0 "Созвать первый рабочий резерв"

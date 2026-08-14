@@ -115,8 +115,8 @@ ADISCORD_vorkerland_reset_temporary_claimant_cores = {
 	327 = { remove_core_of = WRK remove_core_of = WKR }
 }
 
-# Safe in both a fresh partition and an active old save: this only reasserts the
-# fourteen immutable claimant homelands and never strips cores earned later.
+# A bounded fresh-partition retry only reasserts the fourteen immutable claimant
+# homelands and never strips cores earned later.
 ADISCORD_vorkerland_ensure_claimant_home_cores = {
 	32 = { add_core_of = WKR }
 	33 = { add_core_of = WKR }
@@ -141,13 +141,18 @@ ADISCORD_vorkerland_begin_collapse = {
 	clr_global_flag = ADISCORD_vorkerland_collapse_materialization_final_retry
 	clr_global_flag = ADISCORD_vorkerland_collapse_materialized_verified
 	clr_global_flag = ADISCORD_vorkerland_collapse_war_outbreak_scheduled
+	clr_global_flag = ADISCORD_vorkerland_claimant_identity_assertion_started_v2
+	clr_global_flag = ADISCORD_vorkerland_claimant_identities_verified_v2
+	clr_global_flag = ADISCORD_vorkerland_claimant_identity_check_pending_v2
+	clr_global_flag = ADISCORD_vorkerland_claimant_identity_retry_v2
+	clr_global_flag = ADISCORD_vorkerland_claimant_identity_degraded_v2
 	ADISCORD_vorkerland_reset_temporary_claimant_cores = yes
 }
 
 # WRK is annexed after the split, so completed prewar focuses alone cannot
 # carry its country-scoped rewards into the wartime claimant. Regrant the
 # bounded preparation package once from completed-focus truth; the country
-# flag makes the bridge idempotent for cache retries and old saves.
+# flag makes the bridge idempotent across the bounded cache retries.
 ADISCORD_vorkerland_inherit_wrk_prewar_preparations = {
 	if = {
 		limit = {
@@ -200,8 +205,7 @@ ADISCORD_vorkerland_repair_claimant_identities = {
 				limit = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
 				set_cosmetic_tag = WRK_vorkerland_emergency
 				set_politics = { ruling_party = pragmatism elections_allowed = no }
-				promote_character = { character = WRK_Nikita_Worcker ideology = neo_vorkerism }
-				set_country_leader_ideology = neo_vorkerism
+				ADISCORD_vorkerland_promote_nikita_worcker = yes
 				set_country_leader_portrait = {
 					ideology = pragmatism
 					portrait = GFX_portrait_WRK_Nikita_Worcker_civilwar
@@ -266,6 +270,18 @@ ADISCORD_vorkerland_repair_claimant_identities = {
 				portrait = GFX_portrait_WRK_Dorian_Worx
 			}
 		}
+	}
+	# Certify only a complete three-country pass initiated from the canonical WKR
+	# controller. Exact leader-cache verification is retried separately and may
+	# never block the structural war lifecycle.
+	if = {
+		limit = {
+			tag = WKR
+			country_exists = WKR
+			country_exists = VAD
+			country_exists = TVA
+		}
+		set_global_flag = ADISCORD_vorkerland_claimant_identity_assertion_started_v2
 	}
 }
 
@@ -361,21 +377,13 @@ ADISCORD_vorkerland_repair_collapse_materialization = {
 ADISCORD_vorkerland_log_materialization_failure = {
 	if = {
 		limit = {
-			NOT = {
-				OR = {
-					ADISCORD_vorkerland_collapse_materialized = yes
-					ADISCORD_vorkerland_collapse_materialized_for_active_war_recovery = yes
-				}
-			}
+			NOT = { ADISCORD_vorkerland_collapse_materialized = yes }
 		}
 		log = "[ADISCORD][VORKERLAND][RECOVERY] Structural split failed: claimant existence, independence, or one of the fourteen home-state ownership/controller postconditions is false."
 	}
 	if = {
 		limit = {
-			OR = {
-				ADISCORD_vorkerland_collapse_materialized = yes
-				ADISCORD_vorkerland_collapse_materialized_for_active_war_recovery = yes
-			}
+			ADISCORD_vorkerland_collapse_materialized = yes
 			NOT = { ADISCORD_vorkerland_claimant_identities_materialized = yes }
 		}
 		log = "[ADISCORD][VORKERLAND][RECOVERY] Political split failed: the WKR route leader, Vlad/joint VAD government, or Doctor Worx technocracy is not ruling after the daily cache rebuild."
@@ -398,14 +406,64 @@ ADISCORD_vorkerland_log_materialization_failure = {
 	}
 }
 
+ADISCORD_vorkerland_log_claimant_identity_mismatches = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+			NOT = {
+				WKR = {
+					has_government = pragmatism
+					has_country_leader_ideology = neo_vorkerism
+					has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+				}
+			}
+		}
+		log = "[ADISCORD][VORKERLAND][IDENTITY] WKR failed to activate Nikita Worcker's transferred neo-vorkerist leader role. The war lifecycle will continue."
+	}
+	if = {
+		limit = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+			NOT = {
+				WKR = {
+					has_government = utilitarism
+					has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+				}
+			}
+		}
+		log = "[ADISCORD][VORKERLAND][IDENTITY] WKR failed to activate Anton Bagley's utilitarian leader role. The war lifecycle will continue."
+	}
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_joint_government_formed
+			NOT = { VAD = { has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes } } }
+		}
+		log = "[ADISCORD][VORKERLAND][IDENTITY] VAD failed to activate the joint council. The war lifecycle will continue."
+	}
+	if = {
+		limit = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			NOT = { VAD = { has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes } } }
+		}
+		log = "[ADISCORD][VORKERLAND][IDENTITY] VAD failed to activate Vlad Petrichev. The war lifecycle will continue."
+	}
+	if = {
+		limit = {
+			NOT = {
+				TVA = {
+					has_government = technocracy
+					has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }
+				}
+			}
+		}
+		log = "[ADISCORD][VORKERLAND][IDENTITY] TVA failed to activate Doctor Dorian Worx. The war lifecycle will continue."
+	}
+}
+
 ADISCORD_vorkerland_verify_collapse_materialized = {
 	if = {
 		limit = {
-			OR = {
-				ADISCORD_vorkerland_collapse_materialized = yes
-				ADISCORD_vorkerland_collapse_materialized_for_active_war_recovery = yes
-			}
-			ADISCORD_vorkerland_claimant_identities_materialized = yes
+			ADISCORD_vorkerland_collapse_materialized = yes
+			has_global_flag = ADISCORD_vorkerland_claimant_identity_assertion_started_v2
 		}
 		clr_global_flag = ADISCORD_vorkerland_collapse_materialization_failed
 		clr_global_flag = ADISCORD_vorkerland_collapse_materialization_retry
@@ -423,6 +481,14 @@ ADISCORD_vorkerland_verify_collapse_materialized = {
 		}
 		TVA = {
 			load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes }
+		}
+		if = {
+			limit = {
+				NOT = { has_global_flag = ADISCORD_vorkerland_claimant_identities_verified_v2 }
+				NOT = { has_global_flag = ADISCORD_vorkerland_claimant_identity_check_pending_v2 }
+			}
+			set_global_flag = ADISCORD_vorkerland_claimant_identity_check_pending_v2
+			WKR = { country_event = { id = ADISCORD_vorkerland_phase.14 days = 1 } }
 		}
 		if = {
 			limit = {
@@ -465,7 +531,6 @@ ADISCORD_vorkerland_verify_regional_war_launch = {
 			ADISCORD_vorkerland_rom_dva_edge_initialized_or_terminal = yes
 		}
 		clr_global_flag = ADISCORD_vorkerland_regional_war_launch_final_retry
-		clr_global_flag = ADISCORD_vorkerland_regional_war_resume_after_ivanland_v1
 		set_global_flag = ADISCORD_vorkerland_northern_wars_began
 		# Northern escalation is a consequence of a verified live/terminal graph,
 		# never of the declaration attempt itself.
@@ -481,17 +546,6 @@ ADISCORD_vorkerland_verify_regional_war_launch = {
 				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 			}
 			ADISCORD_vorkerland_begin_central_preparation = yes
-		}
-	}
-	else_if = {
-		limit = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active }
-		clr_global_flag = ADISCORD_vorkerland_regional_war_launch_final_retry
-		if = {
-			limit = {
-				has_global_flag = ADISCORD_vorkerland_regional_war_launch_scheduled
-				NOT = { has_global_flag = ADISCORD_vorkerland_northern_wars_began }
-			}
-			set_global_flag = ADISCORD_vorkerland_regional_war_resume_after_ivanland_v1
 		}
 	}
 	else_if = {
@@ -719,8 +773,8 @@ ADISCORD_vorkerland_verify_showdown_edge_wkr_tva = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_edge_wkr_tva_verified }
 		}
 		set_global_flag = ADISCORD_vorkerland_showdown_edge_wkr_tva_verified
-		# This verifies only the WKR-TVA edge. WTD is sovereign and may join a
-		# temporary faction only if its own WKR war is already visible as well.
+		# This verifies only the WKR-TVA edge. TVA's WTD protectorate is called
+		# separately once its own WKR war is visible in the diplomatic cache.
 		ADISCORD_vorkerland_schedule_wtd_tva_temporary_alliance_check = yes
 	}
 	else_if = {
@@ -741,15 +795,15 @@ ADISCORD_vorkerland_verify_showdown_edge_wkr_tva = {
 	}
 }
 
-# WTD remains an independent country. Once the live WKR-TVA war has entered the
-# diplomatic cache, schedule one country-scoped join attempt; event .47 performs
-# the actual add_to_war and has no recurring fallback.
+# Once the live WKR-TVA war has entered the diplomatic cache, schedule one
+# country-scoped call for TVA's WTD protectorate. Event .47 performs the actual
+# add_to_war and has no recurring fallback.
 ADISCORD_vorkerland_schedule_wtd_tva_temporary_alliance_check = {
 	if = {
 		limit = {
 			WTD = {
 				exists = yes
-				is_subject = no
+				is_subject_of = TVA
 				NOT = { has_capitulated = yes }
 				NOT = { has_war_with = WKR }
 			}
@@ -858,6 +912,7 @@ ADISCORD_vorkerland_verify_central_showdown = {
 		set_global_flag = ADISCORD_vorkerland_central_showdown_started
 		ADISCORD_vorkerland_set_phase_central_showdown = yes
 		ADISCORD_vorkerland_join_regional_allies_to_showdown = yes
+		ADISCORD_vorkerland_story_announce_verified_showdown = yes
 		if = {
 			# Recovery/single-survivor path: with no live pair to fight, advance
 			# through the same guarded reunification pipeline instead of stalling.
@@ -945,9 +1000,9 @@ ADISCORD_vorkerland_release_losing_claimant_subjects = {
 
 ADISCORD_vorkerland_prepare_claimants_for_formation = {
 	ADISCORD_vorkerland_disengage_regional_allies_before_formation = yes
-	# Oitfort joined TVA's WKR war as a sovereign co-belligerent. Remove every
-	# possible internal-war edge before a claimant is consumed, and repair the
-	# legacy subject case so WTD can never be inherited by reunited WRK.
+	# Detach Oitfort from every temporary civil-war relation before a claimant is
+	# consumed. The TVA winner path explicitly restores its authored protectorate
+	# after WRK is formed; the other winners leave Oitfort sovereign.
 	if = {
 		limit = { country_exists = WTD }
 		WTD = {
@@ -1308,6 +1363,43 @@ ADISCORD_vorkerland_form_wrk_from_tva = {
 		character = TVA_Dorian_Worx
 		ideology = technocracy_ideology
 	}
+	# Level three is the reward for Doctor Worx's verified central victory; the
+	# wartime capstone itself remains bounded at level two.
+	remove_ideas = ADISCORD_vorkerland_tva_field_directorate
+	remove_ideas = ADISCORD_vorkerland_tva_field_directorate_2
+	if = {
+		limit = { NOT = { has_idea = ADISCORD_vorkerland_tva_field_directorate_3 } }
+		add_ideas = ADISCORD_vorkerland_tva_field_directorate_3
+	}
+	# TGD is already the successful Firnov-Tekhlar protectorate. Rebind it to
+	# the terminal WRK country explicitly because annexing TVA need not transfer
+	# the engine's subject cache.
+	if = {
+		limit = {
+			country_exists = TGD
+			TGD = { has_country_flag = ADISCORD_vorkerland_joined_worx_directorate }
+		}
+		TGD = {
+			if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = TGD autonomy_state = autonomy_free } } }
+			if = { limit = { is_in_faction = yes } leave_faction = yes }
+		}
+		puppet = TGD
+		set_autonomy = { target = TGD autonomy_state = autonomy_puppet freedom_level = 0.10 }
+	}
+	# Oitfort followed Worx as TVA's technical protectorate. Formation consumes
+	# TVA, so rebind that authored relationship explicitly to the new WRK object.
+	if = {
+		limit = {
+			country_exists = WTD
+			WTD = { has_country_flag = ADISCORD_vorkerland_worx_aligned_technocrats }
+		}
+		WTD = {
+			if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = WTD autonomy_state = autonomy_free } } }
+			if = { limit = { is_in_faction = yes } leave_faction = yes }
+		}
+		puppet = WTD
+		set_autonomy = { target = WTD autonomy_state = autonomy_puppet freedom_level = 0.15 }
+	}
 	focus_unlock = yes
 	mark_focus_tree_layout_dirty = yes
 }
@@ -1362,6 +1454,7 @@ ADISCORD_vorkerland_finalize_reunified_wrk = {
 		}
 		set_global_flag = ADISCORD_vorkerland_central_war_finished
 		set_global_flag = ADISCORD_vorkerland_collapse_finished
+		ADISCORD_economy_refresh_vorkerland_terminal_assistance = yes
 		clr_global_flag = ADISCORD_vorkerland_central_outcome_pending
 		clr_global_flag = ADISCORD_vorkerland_central_preparation_expired
 		clr_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested
@@ -1369,7 +1462,6 @@ ADISCORD_vorkerland_finalize_reunified_wrk = {
 		clr_global_flag = ADISCORD_vorkerland_showdown_launch_round_started
 		clr_global_flag = ADISCORD_vorkerland_regional_war_launch_scheduled
 		clr_global_flag = ADISCORD_vorkerland_regional_war_launch_final_retry
-		clr_global_flag = ADISCORD_vorkerland_regional_war_resume_after_ivanland_v1
 		clr_global_flag = ADISCORD_vorkerland_regional_consolidation_check_scheduled
 		clr_global_flag = ADISCORD_vorkerland_reunification_retry
 		clr_global_flag = ADISCORD_vorkerland_reunification_failed

@@ -1,5 +1,6 @@
 division_template = {
 	name = "Revel Militia"
+	division_names_group = REV_COLLAPSE_INF_01
 	regiments = {
 		ADISCORD_militia = { x = 0 y = 0 }
 		ADISCORD_militia = { x = 0 y = 1 }

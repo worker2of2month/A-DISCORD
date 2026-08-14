@@ -367,6 +367,9 @@ EQUIPMENT_FILES = [
     "common/units/equipment/ADISCORD_convoy_equipment.txt",
 ]
 
+# Clausewitz replace_path is not recursive for these databases in observed
+# HOI4 1.19 runtime loading. Keep the child paths even when their parent is
+# also owned by the total conversion.
 EXPECTED_DESCRIPTOR_REPLACE_PATHS = [
     'replace_path="history/general"',
     'replace_path="common/autonomous_states"',
@@ -377,14 +380,45 @@ EXPECTED_DESCRIPTOR_REPLACE_PATHS = [
     'replace_path="common/country_leader"',
     'replace_path="common/focus_inlay_windows"',
     'replace_path="common/factions"',
+    'replace_path="common/factions/goals"',
+    'replace_path="common/factions/icons"',
+    'replace_path="common/factions/member_upgrades"',
+    'replace_path="common/factions/member_upgrades/member_groups"',
+    'replace_path="common/factions/rules"',
+    'replace_path="common/factions/rules/groups"',
+    'replace_path="common/factions/templates"',
+    'replace_path="common/factions/upgrades"',
+    'replace_path="common/factions/upgrades/groups"',
     'replace_path="common/ideas"',
     'replace_path="common/unit_leader"',
     'replace_path="common/technologies"',
     'replace_path="common/units"',
+    'replace_path="common/units/codenames_operatives"',
+    'replace_path="common/units/critical_parts"',
+    'replace_path="common/units/equipment"',
+    'replace_path="common/units/equipment/modules"',
+    'replace_path="common/units/equipment/upgrades"',
+    'replace_path="common/units/names"',
+    'replace_path="common/units/names_divisions"',
+    'replace_path="common/units/names_railway_guns"',
+    'replace_path="common/units/names_ships"',
+    'replace_path="common/units/unit_modifiers"',
     'replace_path="common/raids"',
+    'replace_path="common/raids/categories"',
     'replace_path="common/operations"',
     'replace_path="common/peace_conference"',
+    'replace_path="common/peace_conference/ai_peace"',
+    'replace_path="common/peace_conference/categories"',
+    'replace_path="common/peace_conference/cost_modifiers"',
     'replace_path="common/doctrines"',
+    'replace_path="common/doctrines/folders"',
+    'replace_path="common/doctrines/grand_doctrines"',
+    'replace_path="common/doctrines/subdoctrines"',
+    'replace_path="common/doctrines/subdoctrines/air"',
+    'replace_path="common/doctrines/subdoctrines/land"',
+    'replace_path="common/doctrines/subdoctrines/sea"',
+    'replace_path="common/doctrines/subdoctrines/special_forces"',
+    'replace_path="common/doctrines/tracks"',
     'replace_path="common/resistance_compliance_modifiers"',
     'replace_path="gfx/interface/equipmentdesigner/graphic_db"',
 ]
@@ -1824,19 +1858,6 @@ def check_technology_replace_path() -> list[str]:
                 issues.append(
                     f"{rel(path) if path.is_relative_to(ROOT) else path.name} is missing {required}"
                 )
-        replace_paths = re.findall(r'(?m)^replace_path="([^"]+)"\s*$', text)
-        for child in replace_paths:
-            parents = sorted(
-                parent
-                for parent in replace_paths
-                if child.startswith(f"{parent}/")
-            )
-            if parents:
-                descriptor_name = rel(path) if path.is_relative_to(ROOT) else path.name
-                issues.append(
-                    f'{descriptor_name} has redundant replace_path="{child}" '
-                    f'already covered by replace_path="{parents[0]}"'
-                )
     return issues
 
 
@@ -2301,6 +2322,9 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
 
     on_action = ROOT / "common" / "on_actions" / "00_ADISCORD_on_actions.txt"
     on_action_text = read_text(on_action) if on_action.exists() else ""
+    general_history = ROOT / "history" / "general" / "ADISCORD_general_history.txt"
+    general_history_text = read_text(general_history) if general_history.exists() else ""
+    issues.extend(fresh_campaign_startup_contract_issues(general_history_text, on_action_text))
     if "ADISCORD_grant_starting_technology_profile = yes" not in on_action_text:
         issues.append("on_startup does not apply generated country technology profiles")
     flag = "ADISCORD_starting_technology_profiles_applied"
@@ -2392,6 +2416,52 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
             issues.append(
                 f"{tech} uses ship repair_speed_factor; land reconstruction must use industry_repair_factor"
             )
+    return issues
+
+
+def fresh_campaign_startup_contract_issues(
+    general_history_text: str, on_action_text: str
+) -> list[str]:
+    """Require scenario provenance around all shared one-time gameplay setup."""
+
+    issues: list[str] = []
+    fresh_flag = "ADISCORD_fresh_campaign_contract_v1"
+    completed_flag = "ADISCORD_starting_technology_profiles_applied"
+    producer = f"set_global_flag = {fresh_flag}"
+    if strip_comments(general_history_text).count(producer) != 1:
+        issues.append("history/general must produce the fresh-campaign contract exactly once")
+
+    source = strip_comments(on_action_text)
+    startup_match = re.search(r"(?m)^\s*on_startup\s*=\s*\{", source)
+    startup = extract_block(source, startup_match.start()) if startup_match else ""
+    ordered = (
+        f"has_global_flag = {fresh_flag}",
+        f"NOT = {{ has_global_flag = {completed_flag} }}",
+        "ADISCORD_grant_starting_technology_profile = yes",
+        "ADISCORD_initialize_default_country_development = yes",
+        "ADISCORD_economy_initialize_country = yes",
+        f"set_global_flag = {completed_flag}",
+    )
+    positions = [startup.find(token) for token in ordered]
+    if any(position < 0 for position in positions) or positions != sorted(positions):
+        issues.append(
+            "shared startup must guard fresh provenance, initialize in order, then set completion"
+        )
+    if startup.count(f"set_global_flag = {completed_flag}") != 1:
+        issues.append("shared startup completion sentinel must have exactly one writer")
+    if "ADISCORD_STP_migrate_army_template_lock" in startup:
+        issues.append("shared fresh startup must not call the STP old-save migration")
+    if "ADISCORD_STP_lock_regular_army_templates = yes" not in startup:
+        issues.append("shared fresh startup must apply STP per-template locks directly")
+
+    for hook_name, tick in (
+        ("on_monthly", "ADISCORD_tick_all_society_development_monthly = yes"),
+        ("on_yearly", "ADISCORD_tick_all_society_development_yearly = yes"),
+    ):
+        hook_match = re.search(rf"(?m)^\s*{hook_name}\s*=\s*\{{", source)
+        hook = extract_block(source, hook_match.start()) if hook_match else ""
+        if tick not in hook or f"has_global_flag = {fresh_flag}" not in hook:
+            issues.append(f"{hook_name} development tick lacks fresh-campaign provenance")
     return issues
 
 

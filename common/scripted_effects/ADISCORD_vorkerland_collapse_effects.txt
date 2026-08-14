@@ -75,6 +75,7 @@ ADISCORD_vorkerland_prepare_conflict_country = {
 		limit = { ADISCORD_vorkerland_is_minor_combatant = yes }
 		division_template = {
 			name = "Emergency Militia"
+			division_names_group = VORKERLAND_EMERGENCY_INF_01
 			is_locked = yes
 			force_allow_recruiting = yes
 			regiments = {
@@ -123,6 +124,7 @@ ADISCORD_vorkerland_ensure_wkr_home_guard = {
 		set_country_flag = ADISCORD_vorkerland_wkr_home_guard_deployed_v1
 		division_template = {
 			name = "Worker Home Guard"
+			division_names_group = WRK_INF_01
 			is_locked = yes
 			force_allow_recruiting = yes
 			regiments = {
@@ -374,13 +376,14 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 		add_equipment_to_stockpile = { type = support_equipment_1 amount = 100 producer = WKR }
 		add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 24 producer = WKR }
 		add_equipment_to_stockpile = { type = ADISCORD_combat_platform_2170 amount = 180 producer = WKR }
-		add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 24 producer = WKR }
-		add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 12 producer = WKR }
+		add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 60 producer = WKR }
+		add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 30 producer = WKR }
 		ADISCORD_vorkerland_ensure_wkr_home_guard = yes
-		add_fuel = 7500
+		add_fuel = 15000
 		load_oob = "WRK_vorkerland_collapse_air"
 		set_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed
 		set_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied
+		set_country_flag = ADISCORD_vorkerland_wkr_air_sustainment_v1_applied
 	}
 	VAD = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
@@ -675,16 +678,10 @@ ADISCORD_vorkerland_teardown_confederation = {
 		if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = IBL autonomy_state = autonomy_free } } }
 		if = { limit = { is_in_faction = yes } leave_faction = yes }
 	}
-	# IBA is normally absent here, but an interrupted save must not carry an old
-	# mandate into a fresh collapse. The intervention may puppet it again only on success.
-	IBA = {
-		if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = IBA autonomy_state = autonomy_free } } }
-		if = { limit = { is_in_faction = yes } leave_faction = yes }
-	}
 	if = { limit = { WKR = { is_faction_leader = yes } } WKR = { dismantle_faction = yes } }
 }
 
-# Shared builder and save repair for independent regional war instances. It is
+# Shared builder and postcondition repair for independent regional war instances. It is
 # called only by one-day delayed events and restores only a live canonical
 # rivalry; an eliminated country can never be respawned by it.
 ADISCORD_vorkerland_repair_regional_wars = {
@@ -954,30 +951,6 @@ ADISCORD_vorkerland_intensify_surviving_northern_fronts = {
 	}
 }
 
-# Re-arm a regional launch that an already-active legacy Ivanland operation had
-# temporarily blocked. This bridge is reached only by the bounded event .76.
-ADISCORD_vorkerland_resume_pending_regional_war_launch_after_ivanland = {
-	if = {
-		limit = {
-			has_global_flag = ADISCORD_vorkerland_regional_war_launch_scheduled
-			NOT = { has_global_flag = ADISCORD_vorkerland_northern_wars_began }
-			NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active }
-			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-		}
-		ADISCORD_vorkerland_detach_regional_war_factions = yes
-		clr_global_flag = ADISCORD_vorkerland_regional_war_launch_final_retry
-		if = { limit = { ZAO = { exists = yes } } ZAO = { country_event = { id = ADISCORD_vorkerland_collapse.63 days = 1 } } }
-		else_if = { limit = { VLA = { exists = yes } } VLA = { country_event = { id = ADISCORD_vorkerland_collapse.63 days = 1 } } }
-		else_if = { limit = { ROM = { exists = yes } } ROM = { country_event = { id = ADISCORD_vorkerland_collapse.63 days = 1 } } }
-		else_if = { limit = { SOL = { exists = yes } } SOL = { country_event = { id = ADISCORD_vorkerland_collapse.63 days = 1 } } }
-		else_if = { limit = { TRU = { exists = yes } } TRU = { country_event = { id = ADISCORD_vorkerland_collapse.63 days = 1 } } }
-		else = {
-			clr_global_flag = ADISCORD_vorkerland_regional_war_launch_scheduled
-			log = "[ADISCORD][VORKERLAND] Pending regional war launch terminated after Ivanland: no launcher country survives."
-		}
-	}
-}
-
 ADISCORD_vorkerland_setup_tva = {
 	TVA = {
 		transfer_state = 36
@@ -1049,9 +1022,9 @@ ADISCORD_vorkerland_setup_wtd = {
 	}
 }
 
-# The committee sympathises with Doctor Worx but remains sovereign. Its later
-# entry into the common war is handled by one bounded event after the WKR-TVA
-# edge is visible; no subject relation is created during the partition.
+# The Oitfort committee is Doctor Worx's technical protectorate. Normalize any
+# stale subject/faction relation first, then bind it directly to TVA so the
+# regional outcome is visible before the central showdown begins.
 ADISCORD_vorkerland_align_wtd_with_worx = {
 	if = {
 		limit = { country_exists = WTD country_exists = TVA }
@@ -1059,6 +1032,10 @@ ADISCORD_vorkerland_align_wtd_with_worx = {
 			if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = WTD autonomy_state = autonomy_free } } }
 			if = { limit = { is_in_faction = yes } leave_faction = yes }
 			set_country_flag = ADISCORD_vorkerland_worx_aligned_technocrats
+		}
+		TVA = {
+			puppet = WTD
+			set_autonomy = { target = WTD autonomy_state = autonomy_puppet freedom_level = 0.15 }
 		}
 	}
 }
@@ -1684,22 +1661,11 @@ ADISCORD_vorkerland_restore_northern_wars = {
 ADISCORD_vorkerland_restore_surviving_northern_war_fallback = {
 	if = {
 		limit = {
-			OR = {
-				AND = {
-					has_global_flag = ADISCORD_vorkerland_ivanland_intervention_succeeded
-					has_global_flag = ADISCORD_vorkerland_restore_wpa_pwr
-					has_global_flag = ADISCORD_vorkerland_restore_wps_pwr
-					OR = { NOT = { country_exists = PWR } PWR = { is_subject = yes } PWR = { has_capitulated = yes } }
-					NOT = { PWR = { has_war_with = PSD } }
-				}
-				AND = {
-					has_global_flag = ADISCORD_vorkerland_legacy_northern_fallback_repair_v1
-					has_global_flag = ADISCORD_vorkerland_ivanland_intervention_succeeded
-					NOT = { PWR = { has_war_with = PSD } }
-					NOT = { WPA = { has_war_with = PSD } }
-					NOT = { WPS = { has_war_with = PSD } }
-				}
-			}
+			has_global_flag = ADISCORD_vorkerland_ivanland_intervention_succeeded
+			has_global_flag = ADISCORD_vorkerland_restore_wpa_pwr
+			has_global_flag = ADISCORD_vorkerland_restore_wps_pwr
+			OR = { NOT = { country_exists = PWR } PWR = { is_subject = yes } PWR = { has_capitulated = yes } }
+			NOT = { PWR = { has_war_with = PSD } }
 			country_exists = WPA
 			country_exists = WPS
 			WPA = { is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WPS } NOT = { has_war_with = PWR } }
@@ -1715,15 +1681,11 @@ ADISCORD_vorkerland_verify_northern_war_restore = {
 	set_global_flag = ADISCORD_vorkerland_northern_war_restore_attempted_v2
 	if = {
 		limit = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_ivanland_intervention_succeeded
-				has_global_flag = ADISCORD_vorkerland_legacy_northern_fallback_repair_v1
-			}
+			has_global_flag = ADISCORD_vorkerland_ivanland_intervention_succeeded
 			WPA = { has_war_with = WPS }
 		}
 		clr_global_flag = ADISCORD_vorkerland_restore_wpa_pwr
 		clr_global_flag = ADISCORD_vorkerland_restore_wps_pwr
-		clr_global_flag = ADISCORD_vorkerland_legacy_northern_fallback_repair_v1
 	}
 	if = { limit = { has_global_flag = ADISCORD_vorkerland_restore_zao_wpa OR = { ZAO = { has_war_with = WPA } NOT = { country_exists = ZAO } NOT = { country_exists = WPA } ZAO = { is_subject = yes } WPA = { is_subject = yes } } } clr_global_flag = ADISCORD_vorkerland_restore_zao_wpa }
 	if = { limit = { has_global_flag = ADISCORD_vorkerland_restore_zao_wps OR = { ZAO = { has_war_with = WPS } NOT = { country_exists = ZAO } NOT = { country_exists = WPS } ZAO = { is_subject = yes } WPS = { is_subject = yes } } } clr_global_flag = ADISCORD_vorkerland_restore_zao_wps }
@@ -1747,7 +1709,6 @@ ADISCORD_vorkerland_verify_northern_war_restore = {
 					has_global_flag = ADISCORD_vorkerland_restore_wps_psd
 					has_global_flag = ADISCORD_vorkerland_restore_wps_pwr
 					has_global_flag = ADISCORD_vorkerland_restore_pwr_psd
-					has_global_flag = ADISCORD_vorkerland_legacy_northern_fallback_repair_v1
 				}
 			}
 		}
@@ -1883,33 +1844,6 @@ ADISCORD_vorkerland_open_ivanland_intervention_front = {
 		clr_country_flag = ADISCORD_vorkerland_ivanland_front_launch_pending
 		set_country_flag = { flag = ADISCORD_vorkerland_ivanland_front_verification_pending days = 3 }
 		country_event = { id = ADISCORD_vorkerland_collapse.82 days = 1 }
-	}
-}
-
-# One-shot migration for saves created while the Ivanland settlement
-# incorrectly made Zaozersk a protectorate. The authored country flag is the
-# provenance guard: only that exact IVN relationship is dissolved. A ZAO subject
-# of any other country is left untouched, while both obsolete markers are
-# retired so the bad settlement cannot be reconstructed on a later load.
-ADISCORD_vorkerland_migrate_legacy_ivanland_zaozersk_protectorate = {
-	if = {
-		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_zaozersk_independence_migration_v1 } }
-		if = {
-			limit = {
-				ZAO = {
-					has_country_flag = ADISCORD_vorkerland_ivanland_protectorate
-					is_subject_of = IVN
-				}
-			}
-			ZAO = {
-				overlord = { set_autonomy = { target = ZAO autonomy_state = autonomy_free } }
-				ADISCORD_vorkerland_sync_independence_cosmetic = yes
-				ADISCORD_vorkerland_sync_republics_from_ruins = yes
-			}
-		}
-		ZAO = { clr_country_flag = ADISCORD_vorkerland_ivanland_protectorate }
-		clr_global_flag = ADISCORD_vorkerland_ivanland_zaozersk_secured
-		set_global_flag = ADISCORD_vorkerland_ivanland_zaozersk_independence_migration_v1
 	}
 }
 
@@ -2120,15 +2054,6 @@ ADISCORD_vorkerland_ivanland_intervention_success = {
 		clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
 		country_event = { id = ADISCORD_vorkerland_collapse.43 days = 2 }
 		if = {
-			limit = {
-				has_global_flag = ADISCORD_vorkerland_regional_war_launch_scheduled
-				NOT = { has_global_flag = ADISCORD_vorkerland_northern_wars_began }
-				NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-			}
-			set_global_flag = ADISCORD_vorkerland_regional_war_resume_after_ivanland_v1
-			country_event = { id = ADISCORD_vorkerland_collapse.76 days = 6 }
-		}
-		if = {
 			limit = { NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_success_news_shown } }
 			set_global_flag = ADISCORD_vorkerland_ivanland_success_news_shown
 			news_event = { id = ADISCORD_vorkerland_news.1 }
@@ -2158,7 +2083,7 @@ ADISCORD_vorkerland_ivanland_intervention_failure = {
 			limit = { country_exists = IBA }
 			IVN = { annex_country = { target = IBA transfer_troops = yes } }
 		}
-		# Compatibility: an interrupted settlement can already contain Krait.
+		# A bounded settlement retry can already find the Krait client materialized.
 		if = {
 			limit = { country_exists = IBL }
 			IVN = { annex_country = { target = IBL transfer_troops = yes } }
@@ -2183,15 +2108,6 @@ ADISCORD_vorkerland_ivanland_intervention_failure = {
 		ADISCORD_vorkerland_end_ivanland_intervention_wars = yes
 		clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
 		country_event = { id = ADISCORD_vorkerland_collapse.43 days = 2 }
-		if = {
-			limit = {
-				has_global_flag = ADISCORD_vorkerland_regional_war_launch_scheduled
-				NOT = { has_global_flag = ADISCORD_vorkerland_northern_wars_began }
-				NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-			}
-			set_global_flag = ADISCORD_vorkerland_regional_war_resume_after_ivanland_v1
-			country_event = { id = ADISCORD_vorkerland_collapse.76 days = 6 }
-		}
 		IVN = {
 			set_politics = {
 				ruling_party = etatism
@@ -2230,6 +2146,32 @@ ADISCORD_vorkerland_promote_anton_bagley = {
 			ideology = utilitarism_ideology
 			expire = "2200.1.1.1"
 			traits = { Emergency_Powers }
+		}
+	}
+}
+
+# A transferred character keeps the leader role authored for the old country.
+# Re-promoting that role with another ideology can make the engine generate a
+# fallback leader instead of activating the exact character. Add Nikita's WKR
+# role explicitly, following the vanilla transfer-then-add-role pattern.
+ADISCORD_vorkerland_promote_nikita_worcker = {
+	if = {
+		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_nikita_wkr_role_added_v2 } }
+		add_country_leader_role = {
+			character = WRK_Nikita_Worcker
+			promote_leader = yes
+			country_leader = {
+				ideology = neo_vorkerism
+				expire = "2200.1.1.1"
+				traits = { Emergency_Powers }
+			}
+		}
+		set_country_flag = ADISCORD_vorkerland_nikita_wkr_role_added_v2
+	}
+	else = {
+		promote_character = {
+			character = WRK_Nikita_Worcker
+			ideology = neo_vorkerism
 		}
 	}
 }
@@ -2290,9 +2232,8 @@ ADISCORD_vorkerland_apply_claimant_cosmetics = {
 		if = {
 			limit = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
 			set_politics = { ruling_party = pragmatism elections_allowed = no }
-			promote_character = { character = WRK_Nikita_Worcker ideology = neo_vorkerism }
+			ADISCORD_vorkerland_promote_nikita_worcker = yes
 			set_cosmetic_tag = WRK_vorkerland_emergency
-			set_country_leader_ideology = neo_vorkerism
 			set_country_leader_portrait = {
 				ideology = pragmatism
 				portrait = GFX_portrait_WRK_Nikita_Worcker_civilwar

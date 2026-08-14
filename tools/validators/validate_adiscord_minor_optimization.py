@@ -25,6 +25,17 @@ EFFECT_FILE = ROOT / "common/scripted_effects/ADISCORD_minor_optimization_effect
 IDEA_FILE = ROOT / "common/ideas/ADISCORD_minor_optimization_ideas.txt"
 ON_ACTION_FILE = ROOT / "common/on_actions/00_ADISCORD_minor_optimization_on_actions.txt"
 ECONOMY_EFFECT_FILE = ROOT / "common/scripted_effects/ADISCORD_economy_effects.txt"
+PHASE_EFFECT_FILE = ROOT / "common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt"
+GENERAL_HISTORY_FILE = ROOT / "history/general/ADISCORD_general_history.txt"
+
+FRESH_CONTRACT = "ADISCORD_fresh_campaign_contract_v1"
+FEATURE_FLAG = "ADISCORD_minor_optimization_fresh_campaign_v1"
+TERMINAL_TAGS = {
+    "WRK", "WKR", "VAD", "TVA", "WTD", "EYR", "EGC", "RIV", "REV",
+    "YOR", "NDN", "SWB", "VHV", "OSV", "ZAO", "PWR", "VLA", "ROM",
+    "SOL", "TRU", "WPA", "WPS", "PSD", "EBA", "DVA", "SRA", "ZTA",
+    "TGD", "IBL", "IBA", "CSL",
+}
 
 EXPECTED_SLOTS = {
     "AIN": 1,
@@ -186,6 +197,12 @@ def validate(root: Path = ROOT) -> list[str]:
     economy_effect_text = read(
         root / "common/scripted_effects/ADISCORD_economy_effects.txt"
     )
+    phase_effect_text = read(
+        root / "common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt"
+    )
+    general_history_text = read(
+        root / "history/general/ADISCORD_general_history.txt"
+    )
 
     try:
         dormant_block = named_block(trigger_text, "ADISCORD_is_non_participating_minor")
@@ -203,6 +220,7 @@ def validate(root: Path = ROOT) -> list[str]:
 
     eligibility = named_block(trigger_text, "ADISCORD_can_optimize_non_participating_minor")
     for required in (
+        f"has_global_flag = {FEATURE_FLAG}",
         "is_ai = yes",
         "has_war = no",
         "ADISCORD_is_non_participating_minor = yes",
@@ -268,15 +286,82 @@ def validate(root: Path = ROOT) -> list[str]:
 
     startup = named_block(on_action_text, "on_startup")
     war = named_block(on_action_text, "on_war")
+    state_control = named_block(on_action_text, "on_state_control_changed")
     if startup.count("every_country") != 1:
-        issues.append("startup must perform exactly one country scan")
+        issues.append("fresh startup must perform exactly one country scan")
     if "ADISCORD_apply_non_participating_minor_optimization = yes" not in startup:
         issues.append("startup does not apply minor optimization")
+    if startup.count("ADISCORD_economy_refresh_ai_assistance = yes") != 1:
+        issues.append("fresh startup does not initialize assistance exactly once per scanned country")
+    startup_order = [
+        startup.find(f"has_global_flag = {FRESH_CONTRACT}"),
+        startup.find(f"NOT = {{ has_global_flag = {FEATURE_FLAG} }}"),
+        startup.find(f"set_global_flag = {FEATURE_FLAG}"),
+        startup.find("every_country"),
+    ]
+    if any(position < 0 for position in startup_order) or startup_order != sorted(startup_order):
+        issues.append("startup lacks ordered fresh-contract guard, feature guard, activation, and scan")
+    if general_history_text.count(f"set_global_flag = {FRESH_CONTRACT}") != 1:
+        issues.append("general history does not seed the fresh-campaign contract exactly once")
     if "ADISCORD_release_non_participating_minor_optimization = yes" not in war:
         issues.append("on_war does not release an involved minor")
-    for forbidden in ("on_daily", "on_weekly", "on_yearly"):
+    if state_control.count("ADISCORD_economy_ai_assistance_needs_edge_evaluation = yes") != 2:
+        issues.append("state-control assistance edge does not guard ROOT and FROM exactly once")
+    if state_control.count("ADISCORD_economy_refresh_ai_assistance = yes") != 2:
+        issues.append("state-control assistance edge does not refresh ROOT and FROM exactly once")
+    if state_control.count("FROM =") != 1:
+        issues.append("state-control assistance edge lacks one former-controller scope")
+    if any(token in state_control for token in ("every_country", "any_country")):
+        issues.append("state-control assistance edge scans countries")
+    for forbidden in ("on_daily", "on_weekly", "on_monthly", "on_yearly"):
         if re.search(rf"(?m)^\s*{forbidden}\s*=", on_action_text):
             issues.append(f"optimization uses recurring poll {forbidden}")
+
+    refresh_block = named_block(effect_text, "ADISCORD_economy_refresh_ai_assistance")
+    if refresh_block.count(f"has_global_flag = {FEATURE_FLAG}") != 1:
+        issues.append("assistance refresh lacks one fresh-campaign feature gate")
+
+    terminal_country = named_block(
+        effect_text, "ADISCORD_economy_refresh_terminal_assistance_country"
+    )
+    if "exists = yes" not in terminal_country or terminal_country.count(
+        "ADISCORD_economy_refresh_ai_assistance = yes"
+    ) != 1:
+        issues.append("terminal assistance country helper is not existence-guarded and singular")
+    terminal = named_block(
+        effect_text, "ADISCORD_economy_refresh_vorkerland_terminal_assistance"
+    )
+    terminal_tags = set(
+        re.findall(r"(?m)^\s*([A-Z0-9]{3})\s*=\s*\{", terminal)
+    )
+    if terminal_tags != TERMINAL_TAGS:
+        issues.append(
+            "terminal assistance tag set mismatch: "
+            f"missing={sorted(TERMINAL_TAGS - terminal_tags)} "
+            f"extra={sorted(terminal_tags - TERMINAL_TAGS)}"
+        )
+    if terminal.count("ADISCORD_economy_refresh_terminal_assistance_country = yes") != len(
+        TERMINAL_TAGS
+    ):
+        issues.append("terminal assistance fanout is not exactly one call per authored tag")
+    if any(token in terminal for token in ("every_country", "any_country")):
+        issues.append("terminal assistance fanout scans countries")
+    finalizer = named_block(phase_effect_text, "ADISCORD_vorkerland_finalize_reunified_wrk")
+    finish_position = finalizer.find(
+        "set_global_flag = ADISCORD_vorkerland_collapse_finished"
+    )
+    refresh_position = finalizer.find(
+        "ADISCORD_economy_refresh_vorkerland_terminal_assistance = yes"
+    )
+    if (
+        finish_position < 0
+        or refresh_position < 0
+        or finish_position >= refresh_position
+        or finalizer.count(
+            "ADISCORD_economy_refresh_vorkerland_terminal_assistance = yes"
+        ) != 1
+    ):
+        issues.append("terminal assistance refresh is not called once after collapse_finished")
 
     issues.extend(
         ai_assistance_contract_issues(all_idea_text, all_effect_text, trigger_text)

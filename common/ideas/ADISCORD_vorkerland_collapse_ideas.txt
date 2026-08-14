@@ -183,6 +183,94 @@ ideas = {
 			ai_will_do = { factor = 0 }
 		}
 
+		ADISCORD_vorkerland_vad_standardized_logistics = {
+			picture = generic_fortify_the_borders
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				supply_consumption_factor = -0.08
+				industry_repair_factor = 0.15
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_vad_prefectural_discipline = {
+			picture = generic_central_management
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				planning_speed = 0.10
+				mobilization_speed = 0.10
+				max_planning_factor = 0.03
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_vad_restoration_war_cabinet = {
+			picture = generic_central_management
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				political_power_gain = 0.10
+				planning_speed = 0.15
+				max_planning_factor = 0.05
+				army_org_factor = 0.07
+				mobilization_speed = 0.10
+				stability_factor = -0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_vad_dual_authority_protocol = {
+			picture = generic_central_management
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				political_power_gain = 0.04
+				stability_factor = 0.02
+				planning_speed = 0.12
+				army_org_factor = 0.07
+				land_reinforce_rate = 0.02
+				supply_consumption_factor = -0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_vad_solar_corridor_intelligence = {
+			picture = generic_army_support
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			targeted_modifier = {
+				tag = SRA
+				attack_bonus_against = 0.08
+				defense_bonus_against = 0.08
+			}
+			targeted_modifier = {
+				tag = CSL
+				attack_bonus_against = 0.08
+				defense_bonus_against = 0.08
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_vad_restoration_columns = {
+			picture = generic_fortify_the_borders
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_speed_factor = 0.05
+				supply_consumption_factor = -0.08
+				planning_speed = 0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
 		ADISCORD_vorkerland_tva_grid_rerouting = {
 			picture = generic_production_bonus
 			allowed = { always = no }
@@ -397,6 +485,158 @@ ideas = {
 			ai_will_do = { factor = 0 }
 		}
 
+		# Postwar route institutions evolve through focus-controlled stages. The
+		# route capstones remove these provisional bodies and install one lasting
+		# constitutional settlement.
+		ADISCORD_vorkerland_worker_reconstruction_compact_1 = {
+			picture = generic_constitutional_guarantees
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				production_speed_buildings_factor = 0.06
+				industry_repair_factor = 0.10
+				consumer_goods_factor = 0.02
+				political_power_gain = -0.03
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_worker_reconstruction_compact_2 = {
+			picture = generic_constitutional_guarantees
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				production_speed_buildings_factor = 0.08
+				industry_repair_factor = 0.15
+				stability_factor = 0.02
+				compliance_growth = 0.01
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_worker_housing_guarantee = {
+			picture = generic_constitutional_guarantees
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.03
+				compliance_growth = 0.02
+				consumer_goods_factor = 0.02
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_worker_local_reconstruction_grants = {
+			picture = generic_constitutional_guarantees
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				political_power_gain = 0.05
+				production_speed_buildings_factor = 0.05
+				compliance_growth = 0.01
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_joint_restoration_authority_1 = {
+			picture = generic_central_management
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				political_power_gain = -0.05
+				planning_speed = 0.05
+				army_org_factor = 0.02
+				stability_factor = 0.01
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_joint_restoration_authority_2 = {
+			picture = generic_central_management
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				political_power_gain = 0.03
+				planning_speed = 0.08
+				army_org_factor = 0.03
+				stability_factor = 0.02
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_joint_civilian_transition = {
+			picture = generic_central_management
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.03
+				compliance_growth = 0.02
+				army_org_factor = -0.02
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_joint_emergency_inspectorate = {
+			picture = generic_central_management
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.05
+				planning_speed = 0.05
+				consumer_goods_factor = 0.01
+				stability_factor = -0.01
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_technical_reconstruction_mandate_2 = {
+			picture = generic_central_management
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				production_speed_buildings_factor = 0.10
+				industry_repair_factor = 0.15
+				research_speed_factor = 0.03
+				consumer_goods_factor = 0.01
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_public_utility_priority = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.02
+				consumer_goods_factor = 0.02
+				supply_consumption_factor = -0.04
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_industrial_recovery_priority = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				industrial_capacity_factory = 0.05
+				production_factory_efficiency_gain_factor = 0.05
+				consumer_goods_factor = 0.03
+			}
+			ai_will_do = { factor = 0 }
+		}
+
 		# Worx's reconstruction bodies are concrete but provisional. The route
 		# capstone removes all four and consolidates their work into the lasting
 		# technocratic settlement above.
@@ -485,6 +725,7 @@ ideas = {
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
+				recruitable_population_factor = -1.00
 				industrial_capacity_factory = -0.35
 				production_factory_efficiency_gain_factor = -0.30
 				army_org_factor = -0.15
@@ -500,6 +741,7 @@ ideas = {
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
+				recruitable_population_factor = -1.00
 				industrial_capacity_factory = 0.08
 				production_factory_efficiency_gain_factor = 0.08
 				repair_speed_factor = 0.15
@@ -589,6 +831,141 @@ ideas = {
 				planning_speed = 0.08
 				political_power_gain = -0.10
 				consumer_goods_factor = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		# Bounded TVA second-iteration packages. Durations remain owned by their
+		# focus callers, so the experimental layers cannot become permanent buffs.
+		ADISCORD_vorkerland_tva_unattended_shifts = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				industrial_capacity_factory = 0.08
+				production_factory_efficiency_gain_factor = 0.06
+				stability_factor = -0.02
+				consumer_goods_factor = 0.02
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_tva_algorithmic_fire_plans = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				planning_speed = 0.12
+				max_planning_factor = 0.05
+				army_attack_factor = 0.05
+				supply_consumption_factor = -0.03
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_tva_bunker_specialist_cadres = {
+			picture = generic_fortify_the_borders
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.08
+				army_org_factor = 0.03
+				max_dig_in = 1
+				dig_in_speed = 0.15
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_tva_standardized_assault_teams = {
+			picture = generic_manpower_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.05
+				breakthrough_factor = 0.08
+				army_org_regain = 0.04
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_tva_networked_observation_posts = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.06
+				land_reinforce_rate = 0.02
+				planning_speed = 0.08
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_tva_modular_repair_mandate = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				industry_repair_factor = 0.15
+				supply_consumption_factor = -0.06
+				attrition = -0.03
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_tva_interchangeable_repair_modules = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				industry_repair_factor = 0.12
+				production_factory_efficiency_gain_factor = 0.04
+				attrition = -0.02
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_tva_prepositioned_switching_crews = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_speed_factor = 0.04
+				supply_consumption_factor = -0.06
+				industry_repair_factor = 0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_worx_adaptive_logistics_trial = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				industry_repair_factor = 0.15
+				supply_consumption_factor = -0.08
+				army_speed_factor = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_worx_second_protocol = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				planning_speed = 0.10
+				supply_consumption_factor = -0.08
+				industry_repair_factor = 0.15
 			}
 			ai_will_do = { factor = 0 }
 		}

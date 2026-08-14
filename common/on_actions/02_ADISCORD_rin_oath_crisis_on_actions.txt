@@ -1,20 +1,4 @@
 on_actions = {
-	on_startup = {
-		effect = {
-			# One bounded bridge for campaigns already inside the Vorkerland wars.
-			# Fresh campaigns wait for the first actual claimant war edge below.
-			RIN = {
-				if = {
-					limit = { ADISCORD_rin_oath_crisis_legacy_needs_schedule = yes }
-					set_global_flag = ADISCORD_rin_oath_crisis_scheduled
-					MON = { ADISCORD_release_non_participating_minor_optimization = yes }
-					ADISCORD_release_non_participating_minor_optimization = yes
-					country_event = { id = ADISCORD_rin_crisis.1 days = 1 }
-				}
-			}
-		}
-	}
-
 	on_war = {
 		effect = {
 			if = {

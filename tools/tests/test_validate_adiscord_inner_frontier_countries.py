@@ -40,6 +40,12 @@ class InnerFrontierCountryContractsTest(unittest.TestCase):
             ROOT / "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"
         ).read_text(encoding="utf-8-sig")
         self.assertEqual([], validate_external_gate_cleanup(split_effect, collapse_on_actions))
+        for forbidden in (
+            "ADISCORD_vorkerland_split_external_gate = yes",
+            "WCG = { ADISCORD_vorkerland_delete_external_gate_formations = yes }",
+            "ADISCORD_vorkerland_external_gate_formations_removed_v4",
+        ):
+            self.assertNotIn(forbidden, collapse_on_actions)
 
     def test_inner_frontier_country_contract(self):
         self.assertEqual([], validate())

@@ -109,7 +109,7 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
                 self.assertIn(f"remove_ideas = {old}", block)
                 self.assertIn(f"add_ideas = {new}", block)
 
-    def test_outbreak_and_save_migration_run_the_versioned_repair(self) -> None:
+    def test_outbreak_runs_the_versioned_repair_without_startup_migration(self) -> None:
         events = read("events/ADISCORD_vorkerland_collapse_events.txt")
         outbreak = re.search(
             r"(?ms)^country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.2\b"
@@ -121,14 +121,17 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
         self.assertIn("TVA = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }", outbreak.group(1))
         self.assertIn("ADISCORD_vorkerland_claimant_spirit_progression_v3", outbreak.group(1))
 
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        startup = named_block(
+            read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
+            "on_startup",
+        )
         for token in (
             "ADISCORD_vorkerland_collapse_wars_started",
             "ADISCORD_vorkerland_claimant_spirit_progression_v3",
             "WKR = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }",
             "TVA = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }",
         ):
-            self.assertIn(token, on_actions)
+            self.assertNotIn(token, startup)
 
     def test_russian_localisation_is_complete_and_keeps_bom(self) -> None:
         paths = (

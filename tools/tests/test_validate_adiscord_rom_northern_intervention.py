@@ -154,15 +154,19 @@ class RomNorthernInterventionRegressionTests(unittest.TestCase):
         self.assertIn("ADISCORD_vorkerland_rom_northern_intervention_failure = yes", self.timeout)
         self.assertNotIn("transfer_state", timeout)
 
-    def test_resolution_is_driven_by_bounded_edges_and_repairs_old_saves(self) -> None:
+    def test_resolution_is_driven_by_bounded_edges_without_startup_repair(self) -> None:
         startup = named_block(self.on_actions, "on_startup")
         on_peace = named_block(self.on_actions, "on_peace")
         capitulation = named_block(self.on_actions, "on_capitulation")
         state_control = named_block(self.on_actions, "on_state_control_changed")
         cleanup_event = self.event(46)
 
-        self.assertIn("has_active_mission = ADISCORD_vorkerland_rom_northern_intervention", startup)
-        self.assertIn("ADISCORD_vorkerland_resolve_rom_northern_intervention_timeout = yes", startup)
+        for forbidden in (
+            "has_active_mission = ADISCORD_vorkerland_rom_northern_intervention",
+            "ADISCORD_vorkerland_resolve_rom_northern_intervention_timeout = yes",
+            "ADISCORD_vorkerland_schedule_rom_northern_intervention_check = yes",
+        ):
+            self.assertNotIn(forbidden, startup)
         self.assertIn("ADISCORD_vorkerland_schedule_rom_northern_intervention_check = yes", on_peace)
         self.assertIn("ROOT = { tag = ROM }", capitulation)
         self.assertIn("ADISCORD_vorkerland_rom_northern_intervention_failure = yes", capitulation)

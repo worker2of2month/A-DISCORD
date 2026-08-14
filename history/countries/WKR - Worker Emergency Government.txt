@@ -1,8 +1,9 @@
 capital = 32
 
-# WKR is dormant before the collapse. The outbreak event transfers the authored
-# route leader from WRK before it consumes the old tag; no generic or placeholder
-# leader is allowed to become the wartime government.
+# WKR is dormant before the collapse. This generic committee keeps the tag from
+# displaying a blank generated leader if it is inspected before route setup.
+# The outbreak effect still transfers and promotes Nikita or Anton as the real
+# wartime leader.
 set_politics = {
 	ruling_party = pragmatism
 	elections_allowed = no
@@ -14,3 +15,5 @@ set_popularities = {
 	chauvinism = 15
 	humanism = 5
 }
+
+recruit_character = WKR_Emergency_Coordination_Committee

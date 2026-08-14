@@ -1,16 +1,21 @@
 from __future__ import annotations
 
+import json
 import unittest
 
 from tools.validators.validate_adiscord_vorkerland_focus_decisions import (
     CENTRAL_INTEGRATION_PACKAGES,
     CENTRAL_TARGETS,
     CENTRAL_WAVE_DECISION,
+    CENTRAL_WAVE_VERIFIER_EVENTS,
     CLAIMANT_HOME_STATES,
     CORE_FOCUS_UNLOCK,
     CORE_PACKAGES,
     DECISION_FILE,
     EFFECT_FILE,
+    EVENT_REGISTRY_FILE,
+    LEGACY_CONTROLLER_MISSIONS,
+    PHASE_EVENT_FILE,
     PHASE_EFFECT_FILE,
     PHASE_TRIGGER_FILE,
     LEVY_DECISIONS,
@@ -35,8 +40,8 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
         recovery_phase = named_block(
             phase_triggers, "ADISCORD_vorkerland_central_minor_campaign_phase_available"
         )
+        self.assertIn("ADISCORD_vorkerland_phase_central_preparation", recovery_phase)
         for token in (
-            "ADISCORD_vorkerland_phase_central_preparation",
             "ADISCORD_vorkerland_phase_central_showdown",
             "ADISCORD_vorkerland_phase_reunification",
             "ADISCORD_vorkerland_has_single_surviving_claimant = yes",
@@ -47,7 +52,7 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
             "ADISCORD_vorkerland_route_joint",
             "ADISCORD_vorkerland_route_utilitarian",
         ):
-            self.assertIn(token, recovery_phase)
+            self.assertNotIn(token, recovery_phase)
         district_control = named_block(
             phase_triggers, "ADISCORD_vorkerland_central_districts_owned_and_controlled"
         )
@@ -150,7 +155,152 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
         self.assertNotIn(marker, block)
         self.assertNotIn("ADISCORD_vorkerland_consolidate_egc", decisions)
 
-    def test_minor_fronts_have_one_retry_and_a_240_day_bound(self) -> None:
+    def test_minor_wave_requires_a_viable_target_before_recording_pending(self) -> None:
+        decisions = read(DECISION_FILE)
+        effects = read(EFFECT_FILE)
+        phase_triggers = read(PHASE_TRIGGER_FILE)
+        wave = named_block(decisions, CENTRAL_WAVE_DECISION)
+        viability_name = "ADISCORD_vorkerland_has_adjacent_viable_central_minor"
+        self.assertEqual(named_block(wave, "visible").count(f"{viability_name} = yes"), 1)
+        self.assertEqual(named_block(wave, "available").count(f"{viability_name} = yes"), 1)
+
+        viability = named_block(phase_triggers, viability_name)
+        for target in CENTRAL_TARGETS:
+            viable_branch = (
+                f"AND = {{ any_neighbor_country = {{ tag = {target} }} "
+                f"{target} = {{ exists = yes is_subject = no "
+                "NOT = { has_capitulated = yes } "
+                "NOT = { OR = { has_war_with = WKR has_war_with = VAD "
+                "has_war_with = TVA } } } }"
+            )
+            self.assertEqual(viability.count(viable_branch), 1)
+
+        complete_effect = named_block(wave, "complete_effect")
+        pending_setter = (
+            "set_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending"
+        )
+        pending_branches = [
+            branch
+            for branch in named_blocks(complete_effect, "if")
+            if pending_setter in branch
+        ]
+        self.assertEqual(len(pending_branches), 1)
+        for target in CENTRAL_TARGETS:
+            self.assertIn(
+                "has_country_flag = "
+                f"ADISCORD_vorkerland_focus_central_minor_target_{target.lower()}",
+                pending_branches[0],
+            )
+        self.assertEqual(decisions.count(pending_setter) + effects.count(pending_setter), 1)
+        self.assertTrue(
+            any(
+                "ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes" in branch
+                for branch in named_blocks(complete_effect, "else")
+            )
+        )
+
+    def test_minor_front_controller_uses_registered_hidden_delayed_events(self) -> None:
+        decisions = read(DECISION_FILE)
+        effects = read(EFFECT_FILE)
+        phase_triggers = read(PHASE_TRIGGER_FILE)
+        phase_events = read(PHASE_EVENT_FILE)
+        launcher = named_block(
+            effects, "ADISCORD_vorkerland_focus_launch_central_minor_wave"
+        )
+        launch_call = "country_event = { id = ADISCORD_vorkerland_phase.8 days = 1 }"
+        self.assertEqual(launcher.count(launch_call), 1)
+        launch_branches = [
+            branch for branch in named_blocks(launcher, "if") if launch_call in branch
+        ]
+        self.assertEqual(len(launch_branches), 1)
+        for target in CENTRAL_TARGETS:
+            self.assertIn(
+                f"ADISCORD_vorkerland_focus_central_minor_target_{target.lower()}",
+                launch_branches[0],
+            )
+
+        first_confirmation = named_block(
+            effects, "ADISCORD_vorkerland_focus_confirm_central_minor_wave_launch"
+        )
+        retry_call = "country_event = { id = ADISCORD_vorkerland_phase.9 days = 1 }"
+        self.assertEqual(effects.count(retry_call), 1)
+        retry_branches = [
+            branch
+            for branch in named_blocks(first_confirmation, "else_if")
+            if retry_call in branch
+        ]
+        self.assertEqual(len(retry_branches), 1)
+        self.assertIn(
+            "ADISCORD_vorkerland_has_retryable_recorded_central_minor_front = yes",
+            retry_branches[0],
+        )
+        self.assertIn(
+            "NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_retry }",
+            retry_branches[0],
+        )
+        self.assertEqual(
+            first_confirmation.count(
+                "set_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_retry"
+            ),
+            1,
+        )
+        self.assertEqual(first_confirmation.count(retry_call), 1)
+
+        retry_confirmation = named_block(
+            effects, "ADISCORD_vorkerland_focus_confirm_central_minor_wave_retry"
+        )
+        for forbidden in (
+            "country_event = { id = ADISCORD_vorkerland_phase.8",
+            "country_event = { id = ADISCORD_vorkerland_phase.9",
+            "set_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_retry",
+            "ADISCORD_vorkerland_focus_retry_central_minor_wave_declarations = yes",
+        ):
+            self.assertNotIn(forbidden, retry_confirmation)
+
+        retryable = named_block(
+            phase_triggers, "ADISCORD_vorkerland_has_retryable_recorded_central_minor_front"
+        )
+        for target in CENTRAL_TARGETS:
+            retryable_branch = (
+                "AND = { has_country_flag = "
+                f"ADISCORD_vorkerland_focus_central_minor_target_{target.lower()} "
+                f"NOT = {{ has_war_with = {target} }} "
+                f"any_neighbor_country = {{ tag = {target} }} "
+                f"{target} = {{ exists = yes is_subject = no "
+                "NOT = { has_capitulated = yes } "
+                "NOT = { OR = { has_war_with = WKR has_war_with = VAD "
+                "has_war_with = TVA } } } }"
+            )
+            self.assertEqual(retryable.count(retryable_branch), 1)
+
+        controller_sources = decisions + effects + phase_triggers + phase_events
+        for mission_id in LEGACY_CONTROLLER_MISSIONS:
+            self.assertNotIn(mission_id, controller_sources)
+            self.assertNotIn(f"activate_mission = {mission_id}", controller_sources)
+            self.assertNotIn(f"remove_mission = {mission_id}", controller_sources)
+
+        event_blocks = named_blocks(phase_events, "country_event")
+        registry = json.loads(read(EVENT_REGISTRY_FILE))["events"]
+        for number, callback in CENTRAL_WAVE_VERIFIER_EVENTS.items():
+            event_id = f"ADISCORD_vorkerland_phase.{number}"
+            matching_events = [
+                block for block in event_blocks if f"id = {event_id}" in block
+            ]
+            self.assertEqual(len(matching_events), 1)
+            self.assertIn("hidden = yes", matching_events[0])
+            self.assertIn("is_triggered_only = yes", matching_events[0])
+            self.assertEqual(named_block(matching_events[0], "immediate").count(callback), 1)
+            expected = {
+                "id": event_id,
+                "namespace": "ADISCORD_vorkerland_phase",
+                "number": number,
+                "owner": PHASE_EVENT_FILE.as_posix(),
+                "subsystem": "vorkerland_phase",
+                "status": "active",
+            }
+            self.assertEqual([entry for entry in registry if entry.get("id") == event_id], [expected])
+
+    def test_minor_fronts_have_one_retry_and_a_non_forcing_240_day_marker(self) -> None:
         decisions = read(DECISION_FILE)
         effects = read(EFFECT_FILE)
         deadline = named_block(
@@ -160,12 +310,22 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
         self.assertIn(
             "ADISCORD_vorkerland_focus_resolve_central_minor_wave_deadline = yes", deadline
         )
+        resolver = named_block(
+            effects, "ADISCORD_vorkerland_focus_resolve_central_minor_wave_deadline"
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_focus_central_minor_front_protracted", resolver
+        )
+        self.assertIn("days = 180", resolver)
+        self.assertIn("live war remains unresolved", resolver)
+        for forbidden in ("transfer_state", "white_peace", "annex_country"):
+            self.assertNotIn(forbidden, resolver)
         first_check = named_block(
             effects, "ADISCORD_vorkerland_focus_confirm_central_minor_wave_launch"
         )
         self.assertIn("ADISCORD_vorkerland_central_minor_campaign_phase_available = yes", first_check)
         self.assertIn(
-            "activate_mission = ADISCORD_vorkerland_focus_central_minor_retry_check",
+            "country_event = { id = ADISCORD_vorkerland_phase.9 days = 1 }",
             first_check,
         )
         retry_check = named_block(

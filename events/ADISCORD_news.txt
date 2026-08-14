@@ -46,9 +46,10 @@ news_event = { #vorkerland civilwar
 
 	picture = GFX_event_vorkerland_explosion
 
-	option = {
-		name = news.0.a
-			hidden_effect = {
+	# Presentation must begin when the news is raised. Keeping this in the
+	# option made the superevent flag and audio wait for a player click.
+	immediate = {
+		hidden_effect = {
 			set_global_flag = {
 				flag = superevent_vorkerland_civilwar
 				value = 1
@@ -62,6 +63,8 @@ news_event = { #vorkerland civilwar
 			}
 		}
 	}
+
+	option = { name = news.0.a }
 }
 
 news_event = { #stelander empire

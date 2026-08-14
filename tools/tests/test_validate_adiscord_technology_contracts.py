@@ -30,6 +30,42 @@ class TechnologyValidatorNegativeTests(unittest.TestCase):
             issues,
         )
 
+    def test_shared_startup_requires_history_provenance_and_completion_order(self) -> None:
+        history = "set_global_flag = ADISCORD_fresh_campaign_contract_v1\n"
+        startup = """
+on_actions = {
+    on_startup = { effect = { if = {
+        limit = {
+            has_global_flag = ADISCORD_fresh_campaign_contract_v1
+            NOT = { has_global_flag = ADISCORD_starting_technology_profiles_applied }
+        }
+        every_country = { ADISCORD_grant_starting_technology_profile = yes }
+        every_country = { ADISCORD_initialize_default_country_development = yes }
+        STP = { ADISCORD_STP_lock_regular_army_templates = yes }
+        every_country = { ADISCORD_economy_initialize_country = yes }
+        set_global_flag = ADISCORD_starting_technology_profiles_applied
+    } } }
+    on_monthly = { effect = { if = { limit = { has_global_flag = ADISCORD_fresh_campaign_contract_v1 } ADISCORD_tick_all_society_development_monthly = yes } } }
+    on_yearly = { effect = { if = { limit = { has_global_flag = ADISCORD_fresh_campaign_contract_v1 } ADISCORD_tick_all_society_development_yearly = yes } } }
+}
+"""
+        self.assertEqual(
+            validator.fresh_campaign_startup_contract_issues(history, startup), []
+        )
+        self.assertTrue(
+            validator.fresh_campaign_startup_contract_issues("", startup)
+        )
+        self.assertTrue(
+            validator.fresh_campaign_startup_contract_issues(
+                history,
+                startup.replace(
+                    "has_global_flag = ADISCORD_fresh_campaign_contract_v1\n",
+                    "",
+                    1,
+                ),
+            )
+        )
+
     def test_missing_energy_price_is_reported(self) -> None:
         tech_id = "ADISCORD_tech_concentrated_industrial_zones"
         broken = dict(self.tech_blocks)

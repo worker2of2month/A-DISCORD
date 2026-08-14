@@ -1,0 +1,572 @@
+add_namespace = ADISCORD_vorkerland_claimant
+
+# -----------------------------------------------------------------------------
+# WKR: arguments inside the worker front
+# -----------------------------------------------------------------------------
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.1
+	title = ADISCORD_vorkerland_claimant.1.t
+	desc = ADISCORD_vorkerland_claimant.1.d
+	picture = GFX_report_event_generic_political_reform
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = WKR }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.1.a
+		ai_chance = { base = 55 modifier = { factor = 1.5 has_stability < 0.50 } }
+		add_political_power = 5
+		add_stability = 0.01
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.1.b
+		ai_chance = { base = 45 modifier = { factor = 1.5 has_war = yes } }
+		army_experience = 5
+		add_command_power = 5
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.2
+	title = ADISCORD_vorkerland_claimant.2.t
+	desc = ADISCORD_vorkerland_claimant.2.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = WKR }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.2.a
+		ai_chance = { base = 55 }
+		add_stability = 0.01
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.2.b
+		ai_chance = { base = 45 modifier = { factor = 1.5 has_war = yes } }
+		add_political_power = 5
+		add_command_power = 5
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.3
+	title = ADISCORD_vorkerland_claimant.3.t
+	desc = ADISCORD_vorkerland_claimant.3.d
+	picture = GFX_report_event_generic_political_reform
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = WKR }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.3.a
+		ai_chance = { base = 65 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 75 producer = WKR }
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.3.b
+		ai_chance = { base = 35 }
+		add_command_power = 5
+		add_stability = 0.005
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.4
+	title = ADISCORD_vorkerland_claimant.4.t
+	desc = {
+		trigger = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+		text = ADISCORD_vorkerland_claimant.4.nikita.d
+	}
+	desc = {
+		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists } }
+		text = ADISCORD_vorkerland_claimant.4.anton.d
+	}
+	picture = GFX_report_event_generic_political_reform
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = WKR }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.4.nikita.a
+		trigger = {
+			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+			has_government = pragmatism
+			has_country_leader_ideology = neo_vorkerism
+			has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+		}
+		ai_chance = { base = 60 modifier = { factor = 1.5 has_stability < 0.50 } }
+		add_stability = 0.01
+		add_political_power = 10
+		set_country_flag = ADISCORD_vorkerland_wkr_public_mandate
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.4.nikita.b
+		trigger = {
+			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+			has_government = pragmatism
+			has_country_leader_ideology = neo_vorkerism
+			has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+		}
+		ai_chance = { base = 40 modifier = { factor = 1.5 has_war = yes } }
+		add_command_power = 5
+		army_experience = 5
+		set_country_flag = ADISCORD_vorkerland_wkr_delegate_review
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.4.anton.a
+		trigger = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+			has_government = utilitarism
+			has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+		}
+		ai_chance = { base = 60 modifier = { factor = 1.5 has_war = yes } }
+		add_command_power = 5
+		add_political_power = 5
+		set_country_flag = ADISCORD_vorkerland_wkr_directive_council
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.4.anton.b
+		trigger = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+			has_government = utilitarism
+			has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+		}
+		ai_chance = { base = 40 modifier = { factor = 1.5 has_equipment = { infantry_equipment < 500 } } }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 50 producer = WKR }
+		set_country_flag = ADISCORD_vorkerland_wkr_reserve_authority
+	}
+}
+
+# -----------------------------------------------------------------------------
+# VAD: law, command, and the eastern depots
+# -----------------------------------------------------------------------------
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.10
+	title = ADISCORD_vorkerland_claimant.10.t
+	desc = ADISCORD_vorkerland_claimant.10.d
+	picture = GFX_report_event_generic_political_reform
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = VAD }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.10.a
+		ai_chance = { base = 55 modifier = { factor = 1.5 has_stability < 0.50 } }
+		add_political_power = 5
+		add_stability = 0.01
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.10.b
+		ai_chance = { base = 45 modifier = { factor = 1.5 has_war = yes } }
+		add_command_power = 5
+		army_experience = 5
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.11
+	title = ADISCORD_vorkerland_claimant.11.t
+	desc = ADISCORD_vorkerland_claimant.11.d
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = VAD }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.11.a
+		ai_chance = { base = 55 }
+		add_stability = 0.01
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.11.b
+		ai_chance = { base = 45 modifier = { factor = 1.5 has_war = yes } }
+		army_experience = 5
+		add_command_power = 5
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.12
+	title = ADISCORD_vorkerland_claimant.12.t
+	desc = ADISCORD_vorkerland_claimant.12.d
+	picture = GFX_report_event_generic_political_reform
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = VAD }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.12.a
+		ai_chance = { base = 65 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 75 producer = VAD }
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.12.b
+		ai_chance = { base = 35 }
+		add_command_power = 5
+		add_stability = 0.005
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.13
+	title = ADISCORD_vorkerland_claimant.13.t
+	desc = {
+		trigger = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+		text = ADISCORD_vorkerland_claimant.13.joint.d
+	}
+	desc = {
+		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed } }
+		text = ADISCORD_vorkerland_claimant.13.vlad.d
+	}
+	picture = GFX_report_event_generic_political_reform
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = VAD }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.13.joint.a
+		trigger = {
+			has_global_flag = ADISCORD_vorkerland_joint_government_formed
+			has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+			has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+		}
+		ai_chance = { base = 60 modifier = { factor = 1.5 has_stability < 0.50 } }
+		add_stability = 0.01
+		add_political_power = 10
+		set_country_flag = ADISCORD_vorkerland_vad_joint_civil_guarantees
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.13.joint.b
+		trigger = {
+			has_global_flag = ADISCORD_vorkerland_joint_government_formed
+			has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+			has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+		}
+		ai_chance = { base = 40 modifier = { factor = 1.5 has_war = yes } }
+		add_command_power = 5
+		army_experience = 5
+		set_country_flag = ADISCORD_vorkerland_vad_joint_staff_primacy
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.13.vlad.a
+		trigger = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+		}
+		ai_chance = { base = 60 modifier = { factor = 1.5 has_stability < 0.50 } }
+		add_stability = 0.01
+		add_political_power = 5
+		set_country_flag = ADISCORD_vorkerland_vad_crown_warrants
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.13.vlad.b
+		trigger = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+		}
+		ai_chance = { base = 40 modifier = { factor = 1.5 has_war = yes } }
+		add_command_power = 5
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 50 producer = VAD }
+		set_country_flag = ADISCORD_vorkerland_vad_chancery_command
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.14
+	title = ADISCORD_vorkerland_claimant.14.t
+	desc = {
+		trigger = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+		text = ADISCORD_vorkerland_claimant.14.joint.d
+	}
+	desc = {
+		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed } }
+		text = ADISCORD_vorkerland_claimant.14.vlad.d
+	}
+	picture = GFX_report_event_generic_diplomacy
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = VAD
+		has_country_flag = ADISCORD_vorkerland_focus_vad_solar_settlement_defined
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.14.vlad.a
+		trigger = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+		}
+		ai_chance = { base = 100 }
+		add_political_power = 20
+		add_war_support = 0.01
+		set_country_flag = ADISCORD_vorkerland_vad_solar_restoration_mandate
+		if = {
+			limit = {
+				has_global_flag = ADISCORD_vorkerland_solar_winner_sol
+				NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active }
+			}
+			ADISCORD_vorkerland_offer_vad_sol_alliance = yes
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_solar_winner_sra
+					has_global_flag = ADISCORD_vorkerland_solar_winner_csl
+				}
+				NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active }
+				NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }
+				NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
+			}
+			ADISCORD_vorkerland_reserve_vad_solar_intervention = yes
+			ADISCORD_vorkerland_attempt_vad_solar_intervention = yes
+		}
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.14.joint.a
+		trigger = {
+			has_global_flag = ADISCORD_vorkerland_joint_government_formed
+			has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+			has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+		}
+		ai_chance = { base = 100 }
+		add_political_power = 15
+		add_stability = 0.01
+		add_command_power = 5
+		set_country_flag = ADISCORD_vorkerland_vad_solar_compact_mandate
+		if = {
+			limit = {
+				has_global_flag = ADISCORD_vorkerland_solar_winner_sol
+				NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active }
+			}
+			ADISCORD_vorkerland_offer_vad_sol_alliance = yes
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_solar_winner_sra
+					has_global_flag = ADISCORD_vorkerland_solar_winner_csl
+				}
+				NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active }
+				NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }
+				NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
+			}
+			ADISCORD_vorkerland_reserve_vad_solar_intervention = yes
+			ADISCORD_vorkerland_attempt_vad_solar_intervention = yes
+		}
+	}
+}
+
+# -----------------------------------------------------------------------------
+# TVA: measured administration under battlefield pressure
+# -----------------------------------------------------------------------------
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.20
+	title = ADISCORD_vorkerland_claimant.20.t
+	desc = ADISCORD_vorkerland_claimant.20.d
+	picture = GFX_report_event_generic_political_reform
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = TVA }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.20.a
+		ai_chance = { base = 55 modifier = { factor = 1.5 has_stability < 0.50 } }
+		add_stability = 0.01
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.20.b
+		ai_chance = { base = 45 modifier = { factor = 1.5 has_war = yes } }
+		add_political_power = 5
+		add_command_power = 5
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.21
+	title = ADISCORD_vorkerland_claimant.21.t
+	desc = ADISCORD_vorkerland_claimant.21.d
+	picture = GFX_report_event_generic_political_reform
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = TVA }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.21.a
+		ai_chance = { base = 60 }
+		add_stability = 0.01
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.21.b
+		ai_chance = { base = 40 modifier = { factor = 1.5 has_war = yes } }
+		army_experience = 5
+		add_command_power = 5
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.22
+	title = ADISCORD_vorkerland_claimant.22.t
+	desc = ADISCORD_vorkerland_claimant.22.d
+	picture = GFX_report_event_generic_political_reform
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = TVA }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.22.a
+		ai_chance = { base = 65 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 75 producer = TVA }
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.22.b
+		ai_chance = { base = 35 }
+		add_stability = 0.01
+		add_command_power = 5
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.23
+	title = ADISCORD_vorkerland_claimant.23.t
+	desc = ADISCORD_vorkerland_claimant.23.d
+	picture = GFX_report_event_generic_political_reform
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = TVA
+		has_government = technocracy
+		has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.23.a
+		ai_chance = { base = 40 modifier = { factor = 1.5 has_war = yes } }
+		add_manpower = 150
+		set_country_flag = ADISCORD_vorkerland_tva_trial_technical_battalions
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.23.b
+		ai_chance = { base = 30 modifier = { factor = 1.5 command_power < 20 } }
+		add_command_power = 5
+		set_country_flag = ADISCORD_vorkerland_tva_trial_remote_fire_control
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.23.c
+		ai_chance = { base = 30 modifier = { factor = 1.5 has_equipment = { support_equipment < 150 } } }
+		add_equipment_to_stockpile = { type = support_equipment_1 amount = 25 producer = TVA }
+		set_country_flag = ADISCORD_vorkerland_tva_trial_adaptive_logistics
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.24
+	title = ADISCORD_vorkerland_claimant.24.t
+	desc = ADISCORD_vorkerland_claimant.24.d
+	picture = GFX_report_event_generic_political_reform
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = TVA
+		has_government = technocracy
+		has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.24.a
+		ai_chance = { base = 35 modifier = { factor = 1.5 has_stability < 0.50 } }
+		add_political_power = 10
+		add_stability = 0.01
+		set_country_flag = ADISCORD_vorkerland_tva_iteration_audit_precision
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.24.b
+		ai_chance = { base = 35 modifier = { factor = 1.5 command_power < 20 } }
+		army_experience = 5
+		add_command_power = 5
+		set_country_flag = ADISCORD_vorkerland_tva_iteration_field_variance
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.24.c
+		ai_chance = { base = 30 modifier = { factor = 1.5 has_equipment = { support_equipment < 150 } } }
+		add_equipment_to_stockpile = { type = support_equipment_1 amount = 50 producer = TVA }
+		add_war_support = 0.01
+		set_country_flag = ADISCORD_vorkerland_tva_iteration_production_variance
+	}
+}
+
+# -----------------------------------------------------------------------------
+# Claimant capstones. These report readiness; they never start or settle a war.
+# -----------------------------------------------------------------------------
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.30
+	title = ADISCORD_vorkerland_claimant.30.t
+	desc = ADISCORD_vorkerland_claimant.30.d
+	picture = GFX_report_event_generic_political_reform
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = WKR }
+	immediate = { news_event = { id = ADISCORD_vorkerland_claimant.100 hours = 1 } }
+	option = { name = ADISCORD_vorkerland_claimant.30.a }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.31
+	title = ADISCORD_vorkerland_claimant.31.t
+	desc = ADISCORD_vorkerland_claimant.31.d
+	picture = GFX_report_event_generic_political_reform
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = VAD }
+	immediate = { news_event = { id = ADISCORD_vorkerland_claimant.101 hours = 1 } }
+	option = { name = ADISCORD_vorkerland_claimant.31.a }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.32
+	title = ADISCORD_vorkerland_claimant.32.t
+	desc = ADISCORD_vorkerland_claimant.32.d
+	picture = GFX_report_event_generic_political_reform
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = TVA }
+	immediate = { news_event = { id = ADISCORD_vorkerland_claimant.102 hours = 1 } }
+	option = { name = ADISCORD_vorkerland_claimant.32.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_claimant.100
+	title = ADISCORD_vorkerland_claimant.100.t
+	desc = ADISCORD_vorkerland_claimant.100.d
+	picture = GFX_event_vorkerland_northern_settlement
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_claimant.100.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_claimant.101
+	title = ADISCORD_vorkerland_claimant.101.t
+	desc = ADISCORD_vorkerland_claimant.101.d
+	picture = GFX_event_vorkerland_northern_settlement
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_claimant.101.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_claimant.102
+	title = ADISCORD_vorkerland_claimant.102.t
+	desc = ADISCORD_vorkerland_claimant.102.d
+	picture = GFX_event_vorkerland_northern_settlement
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_claimant.102.a }
+}

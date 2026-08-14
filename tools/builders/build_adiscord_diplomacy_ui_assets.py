@@ -12,7 +12,7 @@ import argparse
 from io import BytesIO
 from pathlib import Path
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageChops, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE_DIR = ROOT / "gfx/interface/diplomacy/source"
@@ -47,10 +47,19 @@ def _leader_overlay() -> Image.Image:
 
 
 def _parties_overlay() -> Image.Image:
-    overlay = _resample_source(PARTIES_SOURCE, (115, 90, 1578, 835), (124, 68))
-    draw = ImageDraw.Draw(overlay)
-    # The native political chart has a 60-pixel diameter and must not be masked.
-    draw.ellipse((31, 3, 93, 65), fill=(0, 0, 0, 0))
+    # Isolate the circular teal/brass instrument bezel from the approved
+    # generated master. The heavy rectangular cassette is deliberately dropped.
+    overlay = _resample_source(PARTIES_SOURCE, (535, 155, 1155, 775), (63, 63))
+    source_alpha = overlay.getchannel("A")
+    annulus = Image.new("L", overlay.size, 0)
+    draw = ImageDraw.Draw(annulus)
+    draw.ellipse((0, 0, 62, 62), fill=255)
+    draw.ellipse((8, 8, 54, 54), fill=0)
+    alpha = ImageChops.multiply(source_alpha, annulus)
+    # Keep the oxidised teal body legible at 63 px without restoring the old
+    # opaque cassette: only the annulus receives a low-alpha floor.
+    alpha = ImageChops.lighter(alpha, annulus.point(lambda value: value * 72 // 255))
+    overlay.putalpha(alpha)
     return overlay
 
 

@@ -48,6 +48,8 @@ REQUIRED_FAMILIES = {
     "terrain_snow",
     "val_operations_map",
     "vorkerland_flags",
+    "vorkerland_cities",
+    "vorkerland_theatre",
 }
 
 

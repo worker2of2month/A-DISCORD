@@ -5,13 +5,16 @@ import unittest
 from pathlib import Path
 
 from tools.validators.validate_adiscord_vorkerland_recovery import (
+    PHASE_FLAGS,
     PLAYER_PREFERENCE_FLAGS,
     collect_issues,
     event_block,
+    event_blocks,
     named_block,
     named_blocks,
     validate_bounded_retry,
     validate_new_save_materialization,
+    validate_premature_wrk_recovery,
     validate_retired_legacy_events,
     validate_phase_controller,
     validate_reunification_formation,
@@ -165,14 +168,14 @@ class NewSaveMaterializationTests(unittest.TestCase):
         for preference_flag in PLAYER_PREFERENCE_FLAGS:
             self.assertNotIn(preference_flag, fate_rolls[0])
 
-    def test_wars_wait_for_structural_and_political_materialization(self) -> None:
+    def test_wars_wait_for_structure_and_a_completed_identity_assertion(self) -> None:
         collapse_events = read("events/ADISCORD_vorkerland_collapse_events.txt")
         outbreak = event_block(collapse_events, "ADISCORD_vorkerland_collapse.2")
         outbreak_trigger = named_block(outbreak, "trigger")
         for token in (
             "has_global_flag = ADISCORD_vorkerland_collapse_materialized_verified",
             "ADISCORD_vorkerland_collapse_materialized = yes",
-            "ADISCORD_vorkerland_claimant_identities_materialized = yes",
+            "has_global_flag = ADISCORD_vorkerland_claimant_identity_assertion_started_v2",
         ):
             self.assertIn(token, outbreak_trigger)
 
@@ -192,6 +195,10 @@ class NewSaveMaterializationTests(unittest.TestCase):
                 "country_event = { id = ADISCORD_vorkerland_collapse.2 days = 1 }"
             ),
             1,
+        )
+        self.assertNotIn(
+            "ADISCORD_vorkerland_claimant_identities_materialized = yes",
+            outbreak_trigger,
         )
 
     def test_bounded_materialization_repair_is_complete_and_war_safe(self) -> None:
@@ -254,10 +261,78 @@ class NewSaveMaterializationTests(unittest.TestCase):
             "character = WRK_VAD_Joint_Council",
             "character = TVA_Dorian_Worx",
             "has_government = pragmatism",
+            "has_country_leader_ideology = neo_vorkerism",
             "has_government = utilitarism",
             "has_government = technocracy",
         ):
             self.assertIn(token, identities)
+
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
+        verifier = named_block(effects, "ADISCORD_vorkerland_verify_collapse_materialized")
+        self.assertIn(
+            "has_global_flag = ADISCORD_vorkerland_claimant_identity_assertion_started_v2",
+            verifier,
+        )
+        self.assertNotIn(
+            "ADISCORD_vorkerland_claimant_identities_materialized = yes",
+            verifier,
+        )
+
+    def test_identity_cache_has_bounded_non_blocking_repair(self) -> None:
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
+        events = read("events/ADISCORD_vorkerland_phase_events.txt")
+        identity_event = event_block(events, "ADISCORD_vorkerland_phase.14")
+        for token in (
+            "ADISCORD_vorkerland_repair_claimant_identities = yes",
+            "ADISCORD_vorkerland_claimant_identities_materialized = yes",
+            "set_global_flag = ADISCORD_vorkerland_claimant_identities_verified_v2",
+            "set_global_flag = ADISCORD_vorkerland_claimant_identity_retry_v2",
+            "set_global_flag = ADISCORD_vorkerland_claimant_identity_degraded_v2",
+            "country_event = { id = ADISCORD_vorkerland_phase.14 days = 2 }",
+        ):
+            self.assertIn(token, identity_event)
+        self.assertNotIn("ADISCORD_vorkerland_collapse_materialization_failed", identity_event)
+
+        identity_repair = named_block(
+            effects, "ADISCORD_vorkerland_repair_claimant_identities"
+        )
+        self.assertEqual(
+            identity_repair.count(
+                "set_global_flag = ADISCORD_vorkerland_claimant_identity_assertion_started_v2"
+            ),
+            1,
+        )
+        certificate = [
+            block
+            for block in named_blocks(identity_repair, "if")
+            if "set_global_flag = ADISCORD_vorkerland_claimant_identity_assertion_started_v2"
+            in block
+        ]
+        self.assertEqual(len(certificate), 1)
+        certificate_limit = named_block(certificate[0], "limit")
+        for token in (
+            "tag = WKR",
+            "country_exists = WKR",
+            "country_exists = VAD",
+            "country_exists = TVA",
+        ):
+            self.assertIn(token, certificate_limit)
+
+    def test_nikita_uses_an_explicit_transferred_country_leader_role(self) -> None:
+        collapse_effects = read(
+            "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt"
+        )
+        helper = named_block(
+            collapse_effects, "ADISCORD_vorkerland_promote_nikita_worcker"
+        )
+        for token in (
+            "add_country_leader_role = {",
+            "character = WRK_Nikita_Worcker",
+            "promote_leader = yes",
+            "ideology = neo_vorkerism",
+            "set_country_flag = ADISCORD_vorkerland_nikita_wkr_role_added_v2",
+        ):
+            self.assertIn(token, helper)
 
     def test_choice_localisation_explains_control_only_and_names_vlad_and_armi(self) -> None:
         english = read("localisation/english/ADISCORD_vorkerland_recovery_l_english.yml")
@@ -272,124 +347,80 @@ class NewSaveMaterializationTests(unittest.TestCase):
 
 class PhaseControllerTests(unittest.TestCase):
     def test_exact_seven_phase_and_wartime_claimant_contract(self) -> None:
+        self.assertEqual(len(PHASE_FLAGS), 7)
+        self.assertNotIn(
+            "ADISCORD_vorkerland_phase_worx_client_administration", PHASE_FLAGS
+        )
+        self.assertNotIn(
+            "ADISCORD_vorkerland_phase_worx_fragmentation", PHASE_FLAGS
+        )
         issues = validate_phase_controller()
         self.assertEqual(issues, [], issue_report(issues))
 
-    def test_startup_bridge_restores_three_trees_and_one_wkr_phase_two_check(self) -> None:
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
-        startup = named_block(on_actions, "on_startup")
-        bridge_flag = "ADISCORD_vorkerland_materialization_bridge_v1_scheduled"
-        focus_tree_load = (
-            "load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus "
-            "keep_completed = yes }"
-        )
-        bridges = [
-            block
-            for block in named_blocks(startup, "if")
-            if f"set_global_flag = {bridge_flag}" in block
-            and focus_tree_load in block
-        ]
-        self.assertEqual(len(bridges), 1)
-        bridge = bridges[0]
-        bridge_limit = named_block(bridge, "limit")
-        for token in (
-            "has_global_flag = ADISCORD_vorkerland_collapse_wars_started",
-            "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }",
-            "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_materialized_verified }",
-            f"NOT = {{ has_global_flag = {bridge_flag} }}",
-            "country_exists = WKR",
-            "country_exists = VAD",
-            "country_exists = TVA",
-            "NOT = { country_exists = WRK }",
-        ):
-            self.assertIn(token, bridge_limit)
-        self.assertEqual(bridge.count(f"set_global_flag = {bridge_flag}"), 1)
+    def test_phase_event_file_owns_hidden_wave_verifiers_in_exact_id_set(self) -> None:
+        events = read("events/ADISCORD_vorkerland_phase_events.txt")
+        actual_ids = [event_id for event_id, _ in event_blocks(events)]
+        expected_ids = {
+            *(f"ADISCORD_vorkerland_phase.{number}" for number in range(1, 10)),
+            "ADISCORD_vorkerland_phase.14",
+        }
+        self.assertEqual(set(actual_ids), expected_ids)
+        self.assertEqual(len(actual_ids), len(expected_ids))
 
-        phase_two = "country_event = { id = ADISCORD_vorkerland_phase.2 days = 1 }"
-        for claimant in ("WKR", "VAD", "TVA"):
-            scopes = [
-                scope
-                for scope in named_blocks(bridge, claimant)
-                if focus_tree_load in scope
-            ]
-            self.assertEqual(len(scopes), 1, claimant)
-            claimant_scope = scopes[0]
-            self.assertIn(focus_tree_load, claimant_scope)
-            self.assertIn("focus_unlock = yes", claimant_scope)
-            self.assertIn("mark_focus_tree_layout_dirty = yes", claimant_scope)
-            if claimant == "WKR":
-                self.assertIn(phase_two, claimant_scope)
-            else:
-                self.assertNotIn(phase_two, claimant_scope)
-        self.assertEqual(bridge.count(focus_tree_load), 3)
-        self.assertEqual(bridge.count(phase_two), 1)
-
-    def test_v2_startup_bridge_reopens_failed_materialization_once(self) -> None:
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
-        startup = named_block(on_actions, "on_startup")
-        bridge_flag = "ADISCORD_vorkerland_materialization_bridge_v2_scheduled"
-        bridges = [
-            block
-            for kind in ("if", "else_if")
-            for block in named_blocks(startup, kind)
-            if f"set_global_flag = {bridge_flag}" in block
-        ]
-        self.assertEqual(len(bridges), 1)
-        bridge = bridges[0]
-        bridge_limit = named_block(bridge, "limit")
-        for token in (
-            "has_global_flag = ADISCORD_vorkerland_collapse_started",
-            "has_global_flag = ADISCORD_vorkerland_materialization_bridge_v1_scheduled",
-            "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }",
-            "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_materialized_verified }",
-            f"NOT = {{ has_global_flag = {bridge_flag} }}",
-            "country_exists = WKR",
-            "country_exists = VAD",
-            "country_exists = TVA",
-            "NOT = { country_exists = WRK }",
+        for event_number, callback in (
+            (8, "ADISCORD_vorkerland_focus_confirm_central_minor_wave_launch = yes"),
+            (9, "ADISCORD_vorkerland_focus_confirm_central_minor_wave_retry = yes"),
         ):
-            self.assertIn(token, bridge_limit)
-        for token in (
-            "clr_global_flag = ADISCORD_vorkerland_collapse_materialization_failed",
-            "clr_global_flag = ADISCORD_vorkerland_collapse_materialization_retry",
-            "clr_global_flag = ADISCORD_vorkerland_collapse_materialization_final_retry",
-            "WKR = { country_event = { id = ADISCORD_vorkerland_phase.2 days = 1 } }",
-        ):
-            self.assertEqual(bridge.count(token), 1)
+            verifier = event_block(
+                events, f"ADISCORD_vorkerland_phase.{event_number}"
+            )
+            self.assertEqual(verifier.count("hidden = yes"), 1)
+            self.assertEqual(verifier.count("is_triggered_only = yes"), 1)
+            self.assertEqual(named_block(verifier, "immediate").count(callback), 1)
 
-    def test_prewar_terminal_materialization_failure_gets_one_versioned_reload(self) -> None:
+    def test_startup_has_no_old_materialization_bridges(self) -> None:
         startup = named_block(
             read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
             "on_startup",
         )
-        flag = "ADISCORD_vorkerland_materialization_prewar_failed_bridge_v1_scheduled"
-        bridges = [
-            block
-            for block in named_blocks(startup, "if")
-            if f"set_global_flag = {flag}" in block
-        ]
-        self.assertEqual(len(bridges), 1)
-        bridge = bridges[0]
-        limit = named_block(bridge, "limit")
         for token in (
-            "has_global_flag = ADISCORD_vorkerland_collapse_started",
-            "has_global_flag = ADISCORD_vorkerland_collapse_materialization_failed",
-            "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }",
-            "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }",
-            "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_materialized_verified }",
-            f"NOT = {{ has_global_flag = {flag} }}",
-            "country_exists = WKR",
-            "country_exists = VAD",
-            "country_exists = TVA",
+            "ADISCORD_vorkerland_materialization_bridge_v1_scheduled",
+            "ADISCORD_vorkerland_materialization_bridge_v2_scheduled",
+            "ADISCORD_vorkerland_materialization_prewar_failed_bridge_v1_scheduled",
+            "ADISCORD_vorkerland_materialized_outbreak_bridge_v1_scheduled",
+            "load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus",
         ):
-            self.assertIn(token, limit)
+            self.assertNotIn(token, startup)
+
+    def test_startup_does_not_requeue_failed_or_dropped_materialization(self) -> None:
+        startup = named_block(
+            read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
+            "on_startup",
+        )
         for token in (
+            "ADISCORD_vorkerland_phase.2",
             "clr_global_flag = ADISCORD_vorkerland_collapse_materialization_failed",
             "clr_global_flag = ADISCORD_vorkerland_collapse_materialization_retry",
             "clr_global_flag = ADISCORD_vorkerland_collapse_materialization_final_retry",
-            "WKR = { country_event = { id = ADISCORD_vorkerland_phase.2 days = 1 } }",
+            "clr_global_flag = ADISCORD_vorkerland_collapse_war_outbreak_scheduled",
         ):
-            self.assertEqual(bridge.count(token), 1)
+            self.assertNotIn(token, startup)
+
+    def test_materialization_verifier_cannot_run_after_wars_start(self) -> None:
+        triggers = read("common/scripted_triggers/ADISCORD_vorkerland_phase_triggers.txt")
+        self.assertNotIn(
+            "ADISCORD_vorkerland_collapse_materialized_for_active_war_recovery",
+            triggers,
+        )
+        phase_two = event_block(
+            read("events/ADISCORD_vorkerland_phase_events.txt"),
+            "ADISCORD_vorkerland_phase.2",
+        )
+        phase_two_trigger = named_block(phase_two, "trigger")
+        self.assertIn(
+            "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }",
+            phase_two_trigger,
+        )
 
 
 class BoundedRetryTests(unittest.TestCase):
@@ -402,6 +433,107 @@ class ReunificationFormationTests(unittest.TestCase):
     def test_winner_forms_wrk_only_after_loser_subject_release(self) -> None:
         issues = validate_reunification_formation()
         self.assertEqual(issues, [], issue_report(issues))
+
+    def test_phase_six_forms_wrk_immediately_from_all_three_claimants(self) -> None:
+        phase_six = event_block(
+            read("events/ADISCORD_vorkerland_phase_events.txt"),
+            "ADISCORD_vorkerland_phase.6",
+        )
+        for winner in ("WKR", "VAD", "TVA"):
+            with self.subTest(winner=winner):
+                self.assertRegex(
+                    phase_six,
+                    rf"(?s)\b{winner}\s*=\s*\{{.*?"
+                    rf"ADISCORD_vorkerland_form_wrk_from_{winner.lower()}\s*=\s*yes"
+                    r".*?country_event\s*=\s*\{\s*id\s*=\s*"
+                    r"ADISCORD_vorkerland_phase\.7\s+days\s*=\s*1\s*\}",
+                )
+
+
+class PrematureWrkRecoveryTests(unittest.TestCase):
+    def test_release_guards_and_package_routing_are_coherent(self) -> None:
+        issues = validate_premature_wrk_recovery()
+        self.assertEqual(issues, [], issue_report(issues))
+
+    def test_fresh_release_with_mixed_winners_restores_exact_packages(self) -> None:
+        effects = read(
+            "common/scripted_effects/ZZ_ADISCORD_capitulation_distribution_effects.txt"
+        )
+        wkr_router = named_block(
+            effects, "ADISCORD_vorkerland_restore_premature_wrk_packages_to_wkr"
+        )
+        tva_router = named_block(
+            effects, "ADISCORD_vorkerland_restore_premature_wrk_packages_to_tva"
+        )
+        for district, states in (
+            ("RIV", (79, 306, 308, 309, 327)),
+            ("SWB", (35,)),
+        ):
+            with self.subTest(winner="WKR", district=district):
+                self.assertIn(
+                    f"{district} = {{ has_country_flag = "
+                    "ADISCORD_vorkerland_central_minor_winner_wkr }",
+                    wkr_router,
+                )
+                for state_id in states:
+                    self.assertRegex(
+                        wkr_router,
+                        rf"(?s){state_id}\s*=\s*\{{\s*is_owned_by\s*=\s*WRK\s*\}}"
+                        rf".*?transfer_state\s*=\s*{state_id}\b"
+                        rf".*?set_state_controller_to\s*=\s*WKR",
+                    )
+        for district, states in (("REV", (82, 323)), ("OSV", (318, 320))):
+            with self.subTest(winner="TVA", district=district):
+                self.assertIn(
+                    f"{district} = {{ has_country_flag = "
+                    "ADISCORD_vorkerland_central_minor_winner_tva }",
+                    tva_router,
+                )
+                for state_id in states:
+                    self.assertRegex(
+                        tva_router,
+                        rf"(?s){state_id}\s*=\s*\{{\s*is_owned_by\s*=\s*WRK\s*\}}"
+                        rf".*?transfer_state\s*=\s*{state_id}\b"
+                        rf".*?set_state_controller_to\s*=\s*TVA",
+                    )
+
+    def test_human_handoff_precedes_false_wrk_annex(self) -> None:
+        effects = read(
+            "common/scripted_effects/ZZ_ADISCORD_capitulation_distribution_effects.txt"
+        )
+        dissolve = named_block(
+            effects, "ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant"
+        )
+        route_end = max(
+            dissolve.index(
+                f"ADISCORD_vorkerland_restore_premature_wrk_packages_to_{tag} = yes"
+            )
+            for tag in ("wkr", "vad", "tva")
+        )
+        handoff = dissolve.index("change_tag_from = WRK")
+        annex = dissolve.index("annex_country = { target = WRK transfer_troops = yes }")
+        self.assertLess(route_end, handoff)
+        self.assertLess(handoff, annex)
+
+    def test_old_save_claimant_inference_is_absent(self) -> None:
+        combined = "\n".join(
+            (
+                read("common/scripted_triggers/ADISCORD_vorkerland_collapse_triggers.txt"),
+                read("common/scripted_effects/ZZ_ADISCORD_capitulation_distribution_effects.txt"),
+                read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
+            )
+        )
+        for token in (
+            "ADISCORD_vorkerland_repair_premature_wrk",
+            "ADISCORD_vorkerland_premature_wrk_records_wkr_claimant",
+            "ADISCORD_vorkerland_premature_wrk_records_vad_claimant",
+            "ADISCORD_vorkerland_premature_wrk_records_tva_claimant",
+            "ADISCORD_vorkerland_premature_wrk_recorded_wkr",
+            "ADISCORD_vorkerland_premature_wrk_recorded_vad",
+            "ADISCORD_vorkerland_premature_wrk_recorded_tva",
+        ):
+            with self.subTest(token=token):
+                self.assertNotIn(token, combined)
 
 
 class RetiredLegacyEventTests(unittest.TestCase):

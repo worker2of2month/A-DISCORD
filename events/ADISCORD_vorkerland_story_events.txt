@@ -1,0 +1,205 @@
+add_namespace = ADISCORD_vorkerland_story
+
+# The central war is not announced until all required claimant war edges have
+# been verified. These news events are presentation-only; permanent guards live
+# in the owning story effects.
+news_event = {
+	id = ADISCORD_vorkerland_story.1
+	title = ADISCORD_vorkerland_story.1.t
+	desc = ADISCORD_vorkerland_story.1.d
+	picture = GFX_event_china_civil_war_1
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.1.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.2
+	title = ADISCORD_vorkerland_story.2.t
+	desc = ADISCORD_vorkerland_story.2.d
+	picture = GFX_report_event_generic_diplomacy
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.2.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.3
+	title = ADISCORD_vorkerland_story.3.t
+	desc = ADISCORD_vorkerland_story.3.d
+	picture = GFX_report_event_generic_diplomacy
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.3.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.4
+	title = ADISCORD_vorkerland_story.4.t
+	desc = ADISCORD_vorkerland_story.4.d
+	picture = GFX_report_event_generic_diplomacy
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.4.a }
+}
+
+# Fired in the already-normalized winning claimant's scope when the first rival
+# claimant capitulates. Neither choice owns peace processing or the map.
+country_event = {
+	id = ADISCORD_vorkerland_story.5
+	title = ADISCORD_vorkerland_story.5.t
+	desc = ADISCORD_vorkerland_story.5.d
+	picture = GFX_report_event_generic_political_reform
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		OR = { tag = WKR tag = VAD tag = TVA tag = WRK }
+		has_global_flag = ADISCORD_vorkerland_story_first_claimant_capitulated
+		NOT = { has_country_flag = ADISCORD_vorkerland_story_command_choice_resolved }
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_story.5.a
+		set_country_flag = ADISCORD_vorkerland_story_rival_headquarters_integrated
+		set_country_flag = ADISCORD_vorkerland_story_command_choice_resolved
+		add_command_power = 10
+		army_experience = 5
+		add_war_support = 0.01
+		ai_chance = { factor = 55 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_story.5.b
+		set_country_flag = ADISCORD_vorkerland_story_rival_apparatus_dissolved
+		set_country_flag = ADISCORD_vorkerland_story_command_choice_resolved
+		add_political_power = 25
+		add_stability = 0.02
+		add_war_support = -0.01
+		ai_chance = { factor = 45 }
+	}
+}
+
+# The route flag remains the technical compatibility contract. The visible
+# descriptions and choices deliberately name the actual postwar regimes.
+country_event = {
+	id = ADISCORD_vorkerland_story.6
+	title = ADISCORD_vorkerland_story.6.t
+	desc = {
+		trigger = { has_country_flag = ADISCORD_vorkerland_route_worker }
+		text = ADISCORD_vorkerland_story.6.worker.d
+	}
+	desc = {
+		trigger = { has_country_flag = ADISCORD_vorkerland_route_joint }
+		text = ADISCORD_vorkerland_story.6.joint.d
+	}
+	desc = {
+		trigger = { has_country_flag = ADISCORD_vorkerland_route_utilitarian }
+		text = ADISCORD_vorkerland_story.6.worx.d
+	}
+	picture = GFX_report_event_generic_political_reform
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		tag = WRK
+		has_global_flag = ADISCORD_vorkerland_reunification_verified
+		NOT = { has_country_flag = ADISCORD_vorkerland_story_postwar_choice_resolved }
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_route_worker
+			has_country_flag = ADISCORD_vorkerland_route_joint
+			has_country_flag = ADISCORD_vorkerland_route_utilitarian
+		}
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_story.6.worker.a
+		trigger = { has_country_flag = ADISCORD_vorkerland_route_worker }
+		set_country_flag = ADISCORD_vorkerland_story_worker_emergency_staff_retained
+		add_command_power = 10
+		army_experience = 5
+		ADISCORD_vorkerland_story_finish_reunification = yes
+		ai_chance = { factor = 55 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_story.6.worker.b
+		trigger = { has_country_flag = ADISCORD_vorkerland_route_worker }
+		set_country_flag = ADISCORD_vorkerland_story_worker_civil_ministries_restored
+		add_political_power = 30
+		add_stability = 0.02
+		ADISCORD_vorkerland_story_finish_reunification = yes
+		ai_chance = { factor = 45 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_story.6.joint.a
+		trigger = { has_country_flag = ADISCORD_vorkerland_route_joint }
+		set_country_flag = ADISCORD_vorkerland_story_joint_council_command_link
+		add_command_power = 8
+		add_stability = 0.01
+		ADISCORD_vorkerland_story_finish_reunification = yes
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_story.6.joint.b
+		trigger = { has_country_flag = ADISCORD_vorkerland_route_joint }
+		set_country_flag = ADISCORD_vorkerland_story_joint_provincial_charter
+		add_political_power = 30
+		add_stability = 0.02
+		ADISCORD_vorkerland_story_finish_reunification = yes
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_story.6.worx.a
+		trigger = { has_country_flag = ADISCORD_vorkerland_route_utilitarian }
+		set_country_flag = ADISCORD_vorkerland_story_worx_wartime_directorates_retained
+		add_command_power = 10
+		army_experience = 5
+		ADISCORD_vorkerland_story_finish_reunification = yes
+		ai_chance = { factor = 60 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_story.6.worx.b
+		trigger = { has_country_flag = ADISCORD_vorkerland_route_utilitarian }
+		set_country_flag = ADISCORD_vorkerland_story_worx_emergency_labs_audited
+		add_political_power = 30
+		add_stability = 0.02
+		ADISCORD_vorkerland_story_finish_reunification = yes
+		ai_chance = { factor = 40 }
+	}
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.7
+	title = ADISCORD_vorkerland_story.7.t
+	desc = ADISCORD_vorkerland_story.7.d
+	picture = GFX_report_event_generic_political_reform
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.7.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.8
+	title = ADISCORD_vorkerland_story.8.t
+	desc = ADISCORD_vorkerland_story.8.d
+	picture = GFX_report_event_generic_political_reform
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.8.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.9
+	title = ADISCORD_vorkerland_story.9.t
+	desc = ADISCORD_vorkerland_story.9.d
+	picture = GFX_report_event_generic_political_reform
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.9.a }
+}

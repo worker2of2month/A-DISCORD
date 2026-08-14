@@ -1,0 +1,73 @@
+# on_war_relation_added calls these schedulers only for the attacking side.
+# Permanent schedule/resolution guards make each window one-shot per country.
+ADISCORD_vorkerland_schedule_central_stalemate_deadline = {
+	if = {
+		limit = {
+			ADISCORD_vorkerland_stalemate_campaign_active = yes
+			ADISCORD_vorkerland_is_central_claimant = yes
+			ADISCORD_vorkerland_has_live_central_minor_war = yes
+			NOT = { has_country_flag = ADISCORD_vorkerland_central_stalemate_deadline_scheduled }
+			NOT = { has_country_flag = ADISCORD_vorkerland_central_stalemate_deadline_resolved }
+		}
+		set_country_flag = ADISCORD_vorkerland_central_stalemate_deadline_scheduled
+		country_event = { id = ADISCORD_vorkerland_stalemate.1 days = 240 }
+	}
+}
+
+# The regional declarations precede the central-preparation flag by a day, so
+# scheduling uses the collapse-war gate. The deadline itself requires the full
+# phase trigger before it can grant anything.
+ADISCORD_vorkerland_schedule_solarino_stalemate_deadline = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_collapse_started
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+			ADISCORD_vorkerland_has_live_solarino_war = yes
+			NOT = { has_country_flag = ADISCORD_vorkerland_solarino_stalemate_deadline_scheduled }
+			NOT = { has_country_flag = ADISCORD_vorkerland_solarino_stalemate_deadline_resolved }
+		}
+		set_country_flag = ADISCORD_vorkerland_solarino_stalemate_deadline_scheduled
+		country_event = { id = ADISCORD_vorkerland_stalemate.2 days = 300 }
+	}
+}
+
+# Resolution flags are written before the payload. A dead or completed front
+# consumes its deadline without granting a buff and cannot be re-armed later.
+ADISCORD_vorkerland_resolve_central_stalemate_deadline = {
+	if = {
+		limit = {
+			ADISCORD_vorkerland_is_central_claimant = yes
+			has_country_flag = ADISCORD_vorkerland_central_stalemate_deadline_scheduled
+			NOT = { has_country_flag = ADISCORD_vorkerland_central_stalemate_deadline_resolved }
+		}
+		set_country_flag = ADISCORD_vorkerland_central_stalemate_deadline_resolved
+		if = {
+			limit = {
+				ADISCORD_vorkerland_stalemate_campaign_active = yes
+				ADISCORD_vorkerland_has_live_central_minor_war = yes
+			}
+			set_country_flag = { flag = ADISCORD_vorkerland_central_breakthrough_window_active days = 75 }
+			add_timed_idea = { idea = ADISCORD_vorkerland_ai_breakthrough_window days = 75 }
+		}
+	}
+}
+
+ADISCORD_vorkerland_resolve_solarino_stalemate_deadline = {
+	if = {
+		limit = {
+			tag = SOL
+			has_country_flag = ADISCORD_vorkerland_solarino_stalemate_deadline_scheduled
+			NOT = { has_country_flag = ADISCORD_vorkerland_solarino_stalemate_deadline_resolved }
+		}
+		set_country_flag = ADISCORD_vorkerland_solarino_stalemate_deadline_resolved
+		if = {
+			limit = {
+				ADISCORD_vorkerland_stalemate_campaign_active = yes
+				ADISCORD_vorkerland_has_live_solarino_war = yes
+			}
+			set_country_flag = { flag = ADISCORD_vorkerland_solarino_breakthrough_window_active days = 75 }
+			add_timed_idea = { idea = ADISCORD_vorkerland_ai_breakthrough_window days = 75 }
+		}
+	}
+}

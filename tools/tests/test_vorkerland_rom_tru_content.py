@@ -137,11 +137,17 @@ class RomTruContentTests(unittest.TestCase):
 
         on_actions = read("common/on_actions/02_ADISCORD_vorkerland_rom_tru_on_actions.txt")
         self.assertIn("on_war = {", on_actions)
-        self.assertIn("on_startup = {", on_actions)
-        for forbidden in ("on_monthly", "on_daily", "every_country", "every_state", "random_country"):
+        for forbidden in (
+            "on_startup",
+            "on_monthly",
+            "on_daily",
+            "every_country",
+            "every_state",
+            "random_country",
+        ):
             self.assertNotIn(forbidden, on_actions)
-        self.assertEqual(on_actions.count("ADISCORD_vorkerland_rom_tru.1"), 2)
-        self.assertEqual(on_actions.count("ADISCORD_vorkerland_rom_tru.2"), 2)
+        self.assertEqual(on_actions.count("ADISCORD_vorkerland_rom_tru.1"), 1)
+        self.assertEqual(on_actions.count("ADISCORD_vorkerland_rom_tru.2"), 1)
 
     def test_pair_scoped_ai_overrides_are_offensive(self) -> None:
         ai = read("common/ai_strategy/ADISCORD_vorkerland_rom_tru_ai.txt")

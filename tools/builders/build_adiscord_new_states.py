@@ -18,6 +18,14 @@ from tools.builders.build_adiscord_map_buildings import (
     ensure_nam_split_spawn_positions,
     synchronize_buildings,
 )
+from tools.lib.adiscord_vorkerland_theatre_manifest import (
+    UNITY_TOWER_NAME,
+    UNITY_TOWER_PROVINCE,
+    VORKERLAND_PROTECTED_LANDMARK_VPS,
+    VORKERLAND_THEATRE_RETIRED_VP_IDS,
+    VORKERLAND_THEATRE_VICTORY_POINTS,
+    VORKERLAND_THEATRE_VP_NAME_OVERRIDES,
+)
 from tools.lib.paths import repository_root
 
 ROOT = repository_root()
@@ -224,7 +232,7 @@ GENERATED_PROVINCE_BUILDINGS = {
 # Cities that were victory points before the Vorkerland state split. Keep the
 # points on their actual urban provinces instead of losing them during rebuild.
 VORKERLAND_CENTRES = {
-    306: (16643, 3),
+    306: (16643, 5),
     307: (16584, 3),
     308: (16615, 3),
     309: (11795, 5),
@@ -469,7 +477,8 @@ VORKERLAND_INITIAL_MAP_LEGACY_PROFILES = {
 }
 
 VORKERLAND_LEGACY_VICTORY_POINTS = {
-    82: ((8059, 3),),
+    27: ((16614, 3),),
+    82: ((8059, 5),),
     74: ((16585, 5),),
     197: ((16623, 10),),
     104: ((7778, 8), (16564, 3), (16583, 2)),
@@ -477,7 +486,6 @@ VORKERLAND_LEGACY_VICTORY_POINTS = {
 }
 
 VORKERLAND_VICTORY_POINT_NAMES = {
-    16428: "Башня Единства",
     6713: "Гранд-Воркенсберг",
     8803: "Верховье",
     16642: "Оствин",
@@ -553,6 +561,7 @@ GENERATED_VICTORY_POINT_NAMES = {
     **VORKERLAND_VICTORY_POINT_NAMES,
     **AFRELA_VICTORY_POINT_NAMES,
     **NAM_VICTORY_POINT_NAMES,
+    **VORKERLAND_THEATRE_VP_NAME_OVERRIDES,
 }
 
 VORKERLAND_STATE_NAMES = {
@@ -732,7 +741,14 @@ def render_state(state_id: int, owner: str) -> str:
         **VORKERLAND_CENTRES,
         **VORKERLAND_MINOR_VPS,
     }
-    if state_id in centres:
+    if state_id in VORKERLAND_THEATRE_VICTORY_POINTS:
+        for province, value in VORKERLAND_THEATRE_VICTORY_POINTS[state_id]:
+            if province not in provinces:
+                raise RuntimeError(
+                    f"state {state_id}: theatre VP {province} is outside the state"
+                )
+            history.append(f"\t\tvictory_points = {{ {province} {value} }}")
+    elif state_id in centres:
         province, value = centres[state_id]
         if province not in provinces:
             raise RuntimeError(f"state {state_id}: city VP {province} is outside the state")
@@ -852,14 +868,19 @@ def named_block(source: str, name: str) -> tuple[int, int]:
 
 
 def set_scalar(source: str, key: str, value: str) -> str:
-    """Set a top-level state scalar, inserting it before history if absent."""
-    updated, count = re.subn(
-        rf"(?m)^(\s*){re.escape(key)}\s*=\s*[^\s#]+\s*$",
-        rf"\1{key} = {value}",
-        source,
-        count=1,
-    )
-    if count:
+    """Set one top-level state scalar and remove stale duplicate declarations."""
+    pattern = rf"(?m)^([ \t]*){re.escape(key)}[ \t]*=[ \t]*[^\s#]+[ \t]*$"
+    seen = False
+
+    def replace(match: re.Match[str]) -> str:
+        nonlocal seen
+        if seen:
+            return ""
+        seen = True
+        return f"{match.group(1)}{key} = {value}"
+
+    updated = re.sub(pattern, replace, source)
+    if seen:
         return updated
     history = re.search(r"(?m)^\s*history\s*=", source)
     if not history:
@@ -1125,6 +1146,37 @@ def split_svetlogorsk_from_nam() -> None:
         raise RuntimeError(f"NAM split spawn-position repair drifted: {remaining[:5]}")
 
 
+def replace_history_victory_points(
+    source: str, points: tuple[tuple[int, int], ...]
+) -> str:
+    """Replace every history VP with one exact ordered manifest block."""
+    history_open, history_close = named_block(source, "history")
+    history = source[history_open:history_close + 1]
+    pattern = re.compile(
+        r"(?m)^([ \t]*)victory_points[ \t]*=[ \t]*\{[ \t]*"
+        r"\d+[ \t]+\d+[ \t]*\}[ \t]*(?:\n|$)"
+    )
+    matches = list(pattern.finditer(history))
+    if matches:
+        insertion = matches[0].start()
+        indent = matches[0].group(1)
+        history = pattern.sub("", history)
+    else:
+        closing_line = history.rfind("\n", 0, len(history) - 1)
+        insertion = closing_line + 1 if closing_line >= 0 else len(history) - 1
+        closing_indent = history[insertion:-1]
+        indent = f"{closing_indent}\t"
+
+    if points:
+        block = "".join(
+            f"{indent}victory_points = {{ {province_id} {value} }}\n"
+            for province_id, value in points
+        )
+        history = history[:insertion] + block + history[insertion:]
+
+    return source[:history_open] + history + source[history_close + 1:]
+
+
 def ensure_history_victory_points(
     source: str, points: tuple[tuple[int, int], ...]
 ) -> str:
@@ -1202,26 +1254,100 @@ def apply_legacy_state_profiles(state_ids: set[int] | None = None) -> None:
             source = ensure_state_resources(source, REGIONAL_STATE_RESOURCES[state_id])
         if state_id == 40:
             source = remove_state_resource(source, "steel")
-        if state_id in GENERATED_LEGACY_VICTORY_POINTS:
+        if state_id in VORKERLAND_THEATRE_VICTORY_POINTS:
+            source = replace_history_victory_points(
+                source, VORKERLAND_THEATRE_VICTORY_POINTS[state_id]
+            )
+        elif state_id in GENERATED_LEGACY_VICTORY_POINTS:
             source = ensure_history_victory_points(
                 source, GENERATED_LEGACY_VICTORY_POINTS[state_id]
             )
         path.write_text(source, encoding="utf-8", newline="\n")
 
 
+def replace_localisation_value(source: str, key: str, value: str) -> str:
+    """Set one localisation value while removing stale duplicate keys."""
+    pattern = re.compile(
+        rf'(?m)^([ \t]*){re.escape(key)}:[ \t]*"[^"]*"[ \t]*(?:\n|$)'
+    )
+    seen = False
+
+    def replace(match: re.Match[str]) -> str:
+        nonlocal seen
+        if seen:
+            return ""
+        seen = True
+        return f'{match.group(1)}{key}: "{value}"\n'
+
+    source = pattern.sub(replace, source)
+    if not seen:
+        source = source.rstrip() + f'\n {key}: "{value}"\n'
+    return source
+
+
+def remove_localisation_key(source: str, key: str) -> str:
+    pattern = re.compile(
+        rf'(?m)^[ \t]*{re.escape(key)}:[ \t]*"[^"]*"[ \t]*(?:\n|$)'
+    )
+    return pattern.sub("", source)
+
+
+def update_vorkerland_vp_localisation(source: str) -> str:
+    for province_id in VORKERLAND_THEATRE_RETIRED_VP_IDS:
+        source = remove_localisation_key(source, f"VICTORY_POINTS_{province_id}")
+    for province_id, name in VORKERLAND_THEATRE_VP_NAME_OVERRIDES.items():
+        source = replace_localisation_value(
+            source, f"VICTORY_POINTS_{province_id}", name
+        )
+    return source
+
+
 def apply_generated_victory_point_localisation() -> None:
     """Keep generated Russian VP names BOM-safe and duplicate-free."""
     path = ROOT / "localisation" / "russian" / "victory_points_l_russian.yml"
-    source = path.read_text(encoding="utf-8-sig", errors="strict")
+    source = update_vorkerland_vp_localisation(
+        path.read_text(encoding="utf-8-sig", errors="strict")
+    )
     for province_id, name in GENERATED_VICTORY_POINT_NAMES.items():
-        key = f"VICTORY_POINTS_{province_id}"
-        pattern = rf'(?m)^([ \t]*){re.escape(key)}:[ \t]*"[^"]*"[ \t]*$'
-        replacement = rf'\1{key}: "{name}"'
-        if re.search(pattern, source):
-            source = re.sub(pattern, replacement, source, count=1)
-        else:
-            source = source.rstrip() + f'\n {key}: "{name}"\n'
+        source = replace_localisation_value(
+            source, f"VICTORY_POINTS_{province_id}", name
+        )
     path.write_text(source.rstrip() + "\n", encoding="utf-8-sig", newline="\n")
+
+
+def apply_vorkerland_victory_points() -> None:
+    """Apply only the exact central-theatre VP and Russian-name manifest."""
+    for state_id, protected_points in VORKERLAND_PROTECTED_LANDMARK_VPS.items():
+        if VORKERLAND_THEATRE_VICTORY_POINTS.get(state_id) != protected_points:
+            raise RuntimeError(
+                f"protected Vorkerland landmark state {state_id} changed or disappeared"
+            )
+    if UNITY_TOWER_PROVINCE in VORKERLAND_THEATRE_RETIRED_VP_IDS:
+        raise RuntimeError("Unity Tower cannot be retired from the Vorkerland theatre")
+    if VORKERLAND_THEATRE_VP_NAME_OVERRIDES.get(UNITY_TOWER_PROVINCE) != UNITY_TOWER_NAME:
+        raise RuntimeError("Unity Tower must retain its protected Russian name")
+
+    for state_id, points in VORKERLAND_THEATRE_VICTORY_POINTS.items():
+        path = state_path(state_id)
+        source = path.read_text(encoding="utf-8-sig", errors="strict")
+        province_match = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", source, re.DOTALL)
+        if not province_match:
+            raise RuntimeError(f"state {state_id}: missing provinces block")
+        provinces = {int(value) for value in re.findall(r"\d+", province_match.group(1))}
+        wrong = sorted(province_id for province_id, _value in points if province_id not in provinces)
+        if wrong:
+            raise RuntimeError(f"state {state_id}: theatre VPs outside state: {wrong}")
+        updated = replace_history_victory_points(source, points)
+        if updated != source:
+            path.write_text(updated, encoding="utf-8", newline="\n")
+
+    localisation_path = ROOT / "localisation" / "russian" / "victory_points_l_russian.yml"
+    localisation = localisation_path.read_text(encoding="utf-8-sig", errors="strict")
+    updated_localisation = update_vorkerland_vp_localisation(localisation).rstrip() + "\n"
+    if updated_localisation != localisation:
+        localisation_path.write_text(
+            updated_localisation, encoding="utf-8-sig", newline="\n"
+        )
 
 
 def apply_generated_state_name_localisation() -> None:
@@ -1279,6 +1405,11 @@ def main() -> int:
         help="regenerate NAM-war mainland states and their generated VP names",
     )
     actions.add_argument(
+        "--apply-vorkerland-vps",
+        action="store_true",
+        help="apply only the exact central Vorkerland VP and Russian-name manifest",
+    )
+    actions.add_argument(
         "--apply-legacy-state",
         action="append",
         type=int,
@@ -1296,6 +1427,10 @@ def main() -> int:
     if args.apply_nam_resource_war:
         apply_nam_resource_war_states()
         print("Regenerated NAM-war mainland states and victory-point names.")
+        return 0
+    if args.apply_vorkerland_vps:
+        apply_vorkerland_victory_points()
+        print("Applied the exact central Vorkerland victory-point manifest.")
         return 0
     if args.apply_legacy_state:
         state_ids = set(args.apply_legacy_state)

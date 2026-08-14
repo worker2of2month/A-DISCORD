@@ -42,84 +42,89 @@ on_actions = {
 			#    min_zoom = 5555.0
 			#    #visible = scripted_trigger_name
 			#}
-			# Starting technology profiles are a new-campaign migration.  The global
-			# flag prevents a save reload from overwriting later player research.
+			# Scenario history is the sole provenance producer. A pre-contract save
+			# cannot enter this branch, while the completion sentinel prevents a
+			# fresh campaign reload from overwriting research or development.
 			if = {
-				limit = { NOT = { has_global_flag = ADISCORD_starting_technology_profiles_applied } }
-				set_global_flag = ADISCORD_starting_technology_profiles_applied
+				limit = {
+					has_global_flag = ADISCORD_fresh_campaign_contract_v1
+					NOT = { has_global_flag = ADISCORD_starting_technology_profiles_applied }
+				}
 				every_country = {
 					ADISCORD_grant_starting_technology_profile = yes
 				}
-			}
-			every_country = {
-				if = {
-					limit = { OR = { ADISCORD_is_playable_development_country = yes is_ai = no } }
-					ADISCORD_initialize_default_country_development = yes
-				}
-			}
-			STP = {
-				# STP startup state belongs with the rest of the country's initialization.
-				STP_initialize_party_suspicion = yes
-				STP_initialize_leader_health = yes
-
-				# Convert the legacy country-wide template lock so Army HQs remain usable.
-				ADISCORD_STP_migrate_army_template_lock = yes
-
-				# Starting society development levels for StepanLand.
-				ADISCORD_set_society_development_2 = yes
-				ADISCORD_set_social_system_development_2 = yes
-				ADISCORD_set_army_development_2 = yes
-				ADISCORD_set_cultural_development_1 = yes
-				ADISCORD_set_state_development_3 = yes
-				ADISCORD_set_economic_development_4 = yes
-				ADISCORD_initialize_society_development_variables = yes
-				ADISCORD_update_total_country_development = yes
-			}
-			VAL = {
-				# Starting society development levels for ValeraLand.
-				# Contract state: strong mercenary army, strong arms economy,
-				# weak social base, harsh culture, decent but not excellent state apparatus.
-				ADISCORD_set_society_development_2 = yes
-				ADISCORD_set_social_system_development_1 = yes
-				ADISCORD_set_army_development_4 = yes
-				ADISCORD_set_cultural_development_2 = yes
-				ADISCORD_set_state_development_2 = yes
-				ADISCORD_set_economic_development_4 = yes
-				ADISCORD_initialize_society_development_variables = yes
-				ADISCORD_update_total_country_development = yes
-			}
-			WRK = {
-				# Ruined great-power baseline: substantial institutions and army,
-				# but only middling post-collapse economic capacity. This prevents
-				# the large inherited factory base from entering an automatic debt spiral.
-				ADISCORD_set_society_development_2 = yes
-				ADISCORD_set_social_system_development_2 = yes
-				ADISCORD_set_army_development_3 = yes
-				ADISCORD_set_cultural_development_2 = yes
-				ADISCORD_set_state_development_3 = yes
-				ADISCORD_set_economic_development_3 = yes
-				ADISCORD_initialize_society_development_variables = yes
-				ADISCORD_update_total_country_development = yes
-			}
-			every_country = {
-				limit = {
-					OR = {
-						ADISCORD_economy_should_monthly_update = yes
-						ADISCORD_economy_should_yearly_update = yes
+				every_country = {
+					if = {
+						limit = { OR = { ADISCORD_is_playable_development_country = yes is_ai = no } }
+						ADISCORD_initialize_default_country_development = yes
 					}
 				}
-				ADISCORD_economy_initialize_country = yes
-				# V19 TDA-core: disabled hidden startup economic pseudo-building distribution.
-				# ADISCORD_distribute_starting_buildings_by_country = yes
+				STP = {
+					# STP startup state belongs with the rest of the country's initialization.
+					STP_initialize_party_suspicion = yes
+					STP_initialize_leader_health = yes
+
+					# Fresh history starts with per-template locks; Army HQ remains usable.
+					ADISCORD_STP_lock_regular_army_templates = yes
+
+					# Starting society development levels for StepanLand.
+					ADISCORD_set_society_development_2 = yes
+					ADISCORD_set_social_system_development_2 = yes
+					ADISCORD_set_army_development_2 = yes
+					ADISCORD_set_cultural_development_1 = yes
+					ADISCORD_set_state_development_3 = yes
+					ADISCORD_set_economic_development_4 = yes
+					ADISCORD_initialize_society_development_variables = yes
+					ADISCORD_update_total_country_development = yes
+				}
+				VAL = {
+					# Starting society development levels for ValeraLand.
+					# Contract state: strong mercenary army, strong arms economy,
+					# weak social base, harsh culture, decent but not excellent state apparatus.
+					ADISCORD_set_society_development_2 = yes
+					ADISCORD_set_social_system_development_1 = yes
+					ADISCORD_set_army_development_4 = yes
+					ADISCORD_set_cultural_development_2 = yes
+					ADISCORD_set_state_development_2 = yes
+					ADISCORD_set_economic_development_4 = yes
+					ADISCORD_initialize_society_development_variables = yes
+					ADISCORD_update_total_country_development = yes
+				}
+				WRK = {
+					# Ruined great-power baseline: substantial institutions and army,
+					# but only middling post-collapse economic capacity. This prevents
+					# the large inherited factory base from entering an automatic debt spiral.
+					ADISCORD_set_society_development_2 = yes
+					ADISCORD_set_social_system_development_2 = yes
+					ADISCORD_set_army_development_3 = yes
+					ADISCORD_set_cultural_development_2 = yes
+					ADISCORD_set_state_development_3 = yes
+					ADISCORD_set_economic_development_3 = yes
+					ADISCORD_initialize_society_development_variables = yes
+					ADISCORD_update_total_country_development = yes
+				}
+				every_country = {
+					limit = {
+						OR = {
+							ADISCORD_economy_is_player_tier_country = yes
+							ADISCORD_economy_is_primary_tier_country = yes
+							ADISCORD_economy_is_secondary_tier_country = yes
+						}
+					}
+					ADISCORD_economy_initialize_country = yes
+					# V19 TDA-core: disabled hidden startup economic pseudo-building distribution.
+					# ADISCORD_distribute_starting_buildings_by_country = yes
+				}
+				set_global_flag = ADISCORD_starting_technology_profiles_applied
 			}
 		}
 	}
 	# Event-driven war-state edges keep demobilization responsive without adding
-	# a daily poll. The monthly/yearly economy update remains a save-safe fallback.
+	# a daily poll. Only an already current-schema country can enter these paths.
 	on_war = {
 		effect = {
 			if = {
-				limit = { has_variable = ADISCORD_economy_initialized }
+				limit = { ADISCORD_economy_has_current_schema = yes }
 				ADISCORD_economy_update_postwar_demobilization = yes
 				ADISCORD_economy_update_gui = yes
 			}
@@ -129,7 +134,7 @@ on_actions = {
 		effect = {
 			if = {
 				limit = {
-					has_variable = ADISCORD_economy_initialized
+					ADISCORD_economy_has_current_schema = yes
 					has_war = no
 				}
 				ADISCORD_economy_update_postwar_demobilization = yes
@@ -158,12 +163,12 @@ on_actions = {
 		# the single owned-state recount.
 		effect = {
 			if = {
-				limit = { has_variable = ADISCORD_economy_initialized }
+				limit = { ADISCORD_economy_has_current_schema = yes }
 				ADISCORD_economy_mark_dirty = yes
 			}
 			FROM = {
 				if = {
-					limit = { has_variable = ADISCORD_economy_initialized }
+					limit = { ADISCORD_economy_has_current_schema = yes }
 					ADISCORD_economy_mark_dirty = yes
 				}
 			}
@@ -177,7 +182,10 @@ on_actions = {
 				ADISCORD_economy_monthly_update = yes
 			}
 			if = {
-				limit = { OR = { ADISCORD_is_playable_development_country = yes is_ai = no } }
+				limit = {
+					has_global_flag = ADISCORD_fresh_campaign_contract_v1
+					OR = { ADISCORD_is_playable_development_country = yes is_ai = no }
+				}
 				ADISCORD_tick_all_society_development_monthly = yes
 			}
 		}
@@ -191,6 +199,7 @@ on_actions = {
 			}
 			if = {
 				limit = {
+					has_global_flag = ADISCORD_fresh_campaign_contract_v1
 					ADISCORD_is_secondary_development_country = yes
 					is_ai = yes
 				}

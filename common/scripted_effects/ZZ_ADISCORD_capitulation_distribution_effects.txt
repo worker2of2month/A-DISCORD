@@ -37,6 +37,283 @@ ADISCORD_vorkerland_distribute_central_states_to_cobelligerents = {
 	}
 }
 
+# These three bounded routers run in a living main claimant's scope. A native
+# peace action can rematerialize dormant WRK cores before the next-day central
+# settlement pass. Restore only WRK-owned states whose defeated district
+# recorded this exact winner, and repair the controller after each transfer.
+ADISCORD_vorkerland_restore_premature_wrk_packages_to_wkr = {
+	if = {
+		limit = { tag = WKR exists = yes is_subject = no NOT = { has_capitulated = yes } }
+		if = {
+			limit = { EYR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } }
+			if = { limit = { 102 = { is_owned_by = WRK } } transfer_state = 102 }
+			if = { limit = { 109 = { is_owned_by = WRK } } transfer_state = 109 }
+			if = { limit = { 111 = { is_owned_by = WRK } } transfer_state = 111 }
+			if = { limit = { 325 = { is_owned_by = WRK } } transfer_state = 325 }
+			102 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+			109 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+			111 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+			325 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+		}
+		if = {
+			limit = { EGC = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } }
+			if = { limit = { 81 = { is_owned_by = WRK } } transfer_state = 81 }
+			if = { limit = { 110 = { is_owned_by = WRK } } transfer_state = 110 }
+			if = { limit = { 124 = { is_owned_by = WRK } } transfer_state = 124 }
+			81 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+			110 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+			124 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+		}
+		if = {
+			limit = { RIV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } }
+			if = { limit = { 79 = { is_owned_by = WRK } } transfer_state = 79 }
+			if = { limit = { 306 = { is_owned_by = WRK } } transfer_state = 306 }
+			if = { limit = { 308 = { is_owned_by = WRK } } transfer_state = 308 }
+			if = { limit = { 309 = { is_owned_by = WRK } } transfer_state = 309 }
+			if = { limit = { 327 = { is_owned_by = WRK } } transfer_state = 327 }
+			79 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+			306 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+			308 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+			309 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+			327 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+		}
+		if = {
+			limit = { REV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } }
+			if = { limit = { 82 = { is_owned_by = WRK } } transfer_state = 82 }
+			if = { limit = { 323 = { is_owned_by = WRK } } transfer_state = 323 }
+			82 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+			323 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+		}
+		if = {
+			limit = { YOR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } }
+			if = { limit = { 108 = { is_owned_by = WRK } } transfer_state = 108 }
+			if = { limit = { 122 = { is_owned_by = WRK } } transfer_state = 122 }
+			if = { limit = { 123 = { is_owned_by = WRK } } transfer_state = 123 }
+			108 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+			122 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+			123 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+		}
+		if = {
+			limit = { NDN = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } }
+			if = { limit = { 27 = { is_owned_by = WRK } } transfer_state = 27 }
+			27 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+		}
+		if = {
+			limit = { SWB = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } }
+			if = { limit = { 35 = { is_owned_by = WRK } } transfer_state = 35 }
+			35 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+		}
+		if = {
+			limit = { VHV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } }
+			if = { limit = { 315 = { is_owned_by = WRK } } transfer_state = 315 }
+			if = { limit = { 316 = { is_owned_by = WRK } } transfer_state = 316 }
+			if = { limit = { 317 = { is_owned_by = WRK } } transfer_state = 317 }
+			315 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+			316 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+			317 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+		}
+		if = {
+			limit = { OSV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } }
+			if = { limit = { 318 = { is_owned_by = WRK } } transfer_state = 318 }
+			if = { limit = { 320 = { is_owned_by = WRK } } transfer_state = 320 }
+			318 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+			320 = { if = { limit = { is_owned_by = WKR } set_state_controller_to = WKR } }
+		}
+	}
+}
+
+ADISCORD_vorkerland_restore_premature_wrk_packages_to_vad = {
+	if = {
+		limit = { tag = VAD exists = yes is_subject = no NOT = { has_capitulated = yes } }
+		if = {
+			limit = { EYR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } }
+			if = { limit = { 102 = { is_owned_by = WRK } } transfer_state = 102 }
+			if = { limit = { 109 = { is_owned_by = WRK } } transfer_state = 109 }
+			if = { limit = { 111 = { is_owned_by = WRK } } transfer_state = 111 }
+			if = { limit = { 325 = { is_owned_by = WRK } } transfer_state = 325 }
+			102 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+			109 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+			111 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+			325 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+		}
+		if = {
+			limit = { EGC = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } }
+			if = { limit = { 81 = { is_owned_by = WRK } } transfer_state = 81 }
+			if = { limit = { 110 = { is_owned_by = WRK } } transfer_state = 110 }
+			if = { limit = { 124 = { is_owned_by = WRK } } transfer_state = 124 }
+			81 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+			110 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+			124 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+		}
+		if = {
+			limit = { RIV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } }
+			if = { limit = { 79 = { is_owned_by = WRK } } transfer_state = 79 }
+			if = { limit = { 306 = { is_owned_by = WRK } } transfer_state = 306 }
+			if = { limit = { 308 = { is_owned_by = WRK } } transfer_state = 308 }
+			if = { limit = { 309 = { is_owned_by = WRK } } transfer_state = 309 }
+			if = { limit = { 327 = { is_owned_by = WRK } } transfer_state = 327 }
+			79 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+			306 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+			308 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+			309 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+			327 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+		}
+		if = {
+			limit = { REV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } }
+			if = { limit = { 82 = { is_owned_by = WRK } } transfer_state = 82 }
+			if = { limit = { 323 = { is_owned_by = WRK } } transfer_state = 323 }
+			82 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+			323 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+		}
+		if = {
+			limit = { YOR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } }
+			if = { limit = { 108 = { is_owned_by = WRK } } transfer_state = 108 }
+			if = { limit = { 122 = { is_owned_by = WRK } } transfer_state = 122 }
+			if = { limit = { 123 = { is_owned_by = WRK } } transfer_state = 123 }
+			108 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+			122 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+			123 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+		}
+		if = {
+			limit = { NDN = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } }
+			if = { limit = { 27 = { is_owned_by = WRK } } transfer_state = 27 }
+			27 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+		}
+		if = {
+			limit = { SWB = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } }
+			if = { limit = { 35 = { is_owned_by = WRK } } transfer_state = 35 }
+			35 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+		}
+		if = {
+			limit = { VHV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } }
+			if = { limit = { 315 = { is_owned_by = WRK } } transfer_state = 315 }
+			if = { limit = { 316 = { is_owned_by = WRK } } transfer_state = 316 }
+			if = { limit = { 317 = { is_owned_by = WRK } } transfer_state = 317 }
+			315 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+			316 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+			317 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+		}
+		if = {
+			limit = { OSV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } }
+			if = { limit = { 318 = { is_owned_by = WRK } } transfer_state = 318 }
+			if = { limit = { 320 = { is_owned_by = WRK } } transfer_state = 320 }
+			318 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+			320 = { if = { limit = { is_owned_by = VAD } set_state_controller_to = VAD } }
+		}
+	}
+}
+
+ADISCORD_vorkerland_restore_premature_wrk_packages_to_tva = {
+	if = {
+		limit = { tag = TVA exists = yes is_subject = no NOT = { has_capitulated = yes } }
+		if = {
+			limit = { EYR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } }
+			if = { limit = { 102 = { is_owned_by = WRK } } transfer_state = 102 }
+			if = { limit = { 109 = { is_owned_by = WRK } } transfer_state = 109 }
+			if = { limit = { 111 = { is_owned_by = WRK } } transfer_state = 111 }
+			if = { limit = { 325 = { is_owned_by = WRK } } transfer_state = 325 }
+			102 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+			109 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+			111 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+			325 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+		}
+		if = {
+			limit = { EGC = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } }
+			if = { limit = { 81 = { is_owned_by = WRK } } transfer_state = 81 }
+			if = { limit = { 110 = { is_owned_by = WRK } } transfer_state = 110 }
+			if = { limit = { 124 = { is_owned_by = WRK } } transfer_state = 124 }
+			81 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+			110 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+			124 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+		}
+		if = {
+			limit = { RIV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } }
+			if = { limit = { 79 = { is_owned_by = WRK } } transfer_state = 79 }
+			if = { limit = { 306 = { is_owned_by = WRK } } transfer_state = 306 }
+			if = { limit = { 308 = { is_owned_by = WRK } } transfer_state = 308 }
+			if = { limit = { 309 = { is_owned_by = WRK } } transfer_state = 309 }
+			if = { limit = { 327 = { is_owned_by = WRK } } transfer_state = 327 }
+			79 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+			306 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+			308 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+			309 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+			327 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+		}
+		if = {
+			limit = { REV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } }
+			if = { limit = { 82 = { is_owned_by = WRK } } transfer_state = 82 }
+			if = { limit = { 323 = { is_owned_by = WRK } } transfer_state = 323 }
+			82 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+			323 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+		}
+		if = {
+			limit = { YOR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } }
+			if = { limit = { 108 = { is_owned_by = WRK } } transfer_state = 108 }
+			if = { limit = { 122 = { is_owned_by = WRK } } transfer_state = 122 }
+			if = { limit = { 123 = { is_owned_by = WRK } } transfer_state = 123 }
+			108 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+			122 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+			123 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+		}
+		if = {
+			limit = { NDN = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } }
+			if = { limit = { 27 = { is_owned_by = WRK } } transfer_state = 27 }
+			27 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+		}
+		if = {
+			limit = { SWB = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } }
+			if = { limit = { 35 = { is_owned_by = WRK } } transfer_state = 35 }
+			35 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+		}
+		if = {
+			limit = { VHV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } }
+			if = { limit = { 315 = { is_owned_by = WRK } } transfer_state = 315 }
+			if = { limit = { 316 = { is_owned_by = WRK } } transfer_state = 316 }
+			if = { limit = { 317 = { is_owned_by = WRK } } transfer_state = 317 }
+			315 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+			316 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+			317 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+		}
+		if = {
+			limit = { OSV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } }
+			if = { limit = { 318 = { is_owned_by = WRK } } transfer_state = 318 }
+			if = { limit = { 320 = { is_owned_by = WRK } } transfer_state = 320 }
+			318 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+			320 = { if = { limit = { is_owned_by = TVA } set_state_controller_to = TVA } }
+		}
+	}
+}
+
+# Run in the legitimate living claimant's scope. The package routers execute
+# before the human handoff and final annex, so mixed historic settlements keep
+# their recorded owners (for example RIV/SWB -> WKR and REV/OSV -> TVA).
+ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = {
+	if = {
+		limit = {
+			ADISCORD_vorkerland_is_main_claimant = yes
+			exists = yes
+			is_subject = no
+			NOT = { has_capitulated = yes }
+			WRK = { exists = yes ADISCORD_vorkerland_is_premature_wrk = yes }
+		}
+		set_global_flag = ADISCORD_vorkerland_premature_wrk_recovery_v1_attempted
+		if = { limit = { WKR = { exists = yes } } WKR = { ADISCORD_vorkerland_restore_premature_wrk_packages_to_wkr = yes } }
+		if = { limit = { VAD = { exists = yes } } VAD = { ADISCORD_vorkerland_restore_premature_wrk_packages_to_vad = yes } }
+		if = { limit = { TVA = { exists = yes } } TVA = { ADISCORD_vorkerland_restore_premature_wrk_packages_to_tva = yes } }
+		if = {
+			limit = { WRK = { exists = yes is_ai = no } }
+			change_tag_from = WRK
+		}
+		if = {
+			limit = { country_exists = WRK }
+			annex_country = { target = WRK transfer_troops = yes }
+		}
+		set_global_flag = ADISCORD_vorkerland_premature_wrk_recovery_v1_completed
+		clr_global_flag = ADISCORD_vorkerland_premature_wrk_recovery_v1_failed
+		log = "[ADISCORD][VORKERLAND][RECOVERY] Premature WRK release dissolved after package-aware owner/controller repair."
+	}
+}
+
 # Run in the central winner's country scope. ROOT remains the capitulated
 # country from on_capitulation. Temporary claimants are reserved for phase.6;
 # minor tags are marked for the delayed post-peace-cache finalizer.
@@ -71,6 +348,84 @@ ADISCORD_vorkerland_settle_central_capitulation = {
 			set_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending
 			country_event = { id = ADISCORD_vorkerland_collapse.65 days = 1 }
 		}
+		# Capitulated zero-state countries may discard their own delayed events.
+		# Mirror the controller onto the living winner so both new and old saves
+		# receive a bounded, country-scoped settlement pass.
+		ADISCORD_vorkerland_schedule_central_minor_settlement_recovery = yes
+	}
+}
+
+ADISCORD_vorkerland_schedule_central_minor_settlement_recovery = {
+	if = {
+		limit = {
+			ADISCORD_vorkerland_has_matching_pending_central_minor_settlement = yes
+			NOT = { has_country_flag = ADISCORD_vorkerland_central_minor_settlement_controller_scheduled }
+		}
+		set_country_flag = {
+			flag = ADISCORD_vorkerland_central_minor_settlement_controller_scheduled
+			days = 5
+			value = 1
+		}
+		country_event = { id = ADISCORD_vorkerland_collapse.69 days = 1 }
+	}
+}
+
+# Run only from the living winner's .69/.70 event root. Each explicit district
+# transfers any stale owned states first, then dissolves even a zero-state shell.
+ADISCORD_vorkerland_sweep_pending_central_minor_settlements = {
+	if = {
+		limit = { EYR = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending } OR = { AND = { tag = WKR EYR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } } AND = { tag = VAD EYR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } } AND = { tag = TVA EYR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } } AND = { tag = WRK EYR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk } } } }
+		EYR = { every_owned_state = { ROOT = { transfer_state = PREV } } }
+		if = { limit = { has_war_with = EYR } white_peace = EYR }
+		annex_country = { target = EYR transfer_troops = no }
+	}
+	if = {
+		limit = { EGC = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending } OR = { AND = { tag = WKR EGC = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } } AND = { tag = VAD EGC = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } } AND = { tag = TVA EGC = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } } AND = { tag = WRK EGC = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk } } } }
+		EGC = { every_owned_state = { ROOT = { transfer_state = PREV } } }
+		if = { limit = { has_war_with = EGC } white_peace = EGC }
+		annex_country = { target = EGC transfer_troops = no }
+	}
+	if = {
+		limit = { RIV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending } OR = { AND = { tag = WKR RIV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } } AND = { tag = VAD RIV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } } AND = { tag = TVA RIV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } } AND = { tag = WRK RIV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk } } } }
+		RIV = { every_owned_state = { ROOT = { transfer_state = PREV } } }
+		if = { limit = { has_war_with = RIV } white_peace = RIV }
+		annex_country = { target = RIV transfer_troops = no }
+	}
+	if = {
+		limit = { REV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending } OR = { AND = { tag = WKR REV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } } AND = { tag = VAD REV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } } AND = { tag = TVA REV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } } AND = { tag = WRK REV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk } } } }
+		REV = { every_owned_state = { ROOT = { transfer_state = PREV } } }
+		if = { limit = { has_war_with = REV } white_peace = REV }
+		annex_country = { target = REV transfer_troops = no }
+	}
+	if = {
+		limit = { YOR = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending } OR = { AND = { tag = WKR YOR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } } AND = { tag = VAD YOR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } } AND = { tag = TVA YOR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } } AND = { tag = WRK YOR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk } } } }
+		YOR = { every_owned_state = { ROOT = { transfer_state = PREV } } }
+		if = { limit = { has_war_with = YOR } white_peace = YOR }
+		annex_country = { target = YOR transfer_troops = no }
+	}
+	if = {
+		limit = { NDN = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending } OR = { AND = { tag = WKR NDN = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } } AND = { tag = VAD NDN = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } } AND = { tag = TVA NDN = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } } AND = { tag = WRK NDN = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk } } } }
+		NDN = { every_owned_state = { ROOT = { transfer_state = PREV } } }
+		if = { limit = { has_war_with = NDN } white_peace = NDN }
+		annex_country = { target = NDN transfer_troops = no }
+	}
+	if = {
+		limit = { SWB = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending } OR = { AND = { tag = WKR SWB = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } } AND = { tag = VAD SWB = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } } AND = { tag = TVA SWB = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } } AND = { tag = WRK SWB = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk } } } }
+		SWB = { every_owned_state = { ROOT = { transfer_state = PREV } } }
+		if = { limit = { has_war_with = SWB } white_peace = SWB }
+		annex_country = { target = SWB transfer_troops = no }
+	}
+	if = {
+		limit = { VHV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending } OR = { AND = { tag = WKR VHV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } } AND = { tag = VAD VHV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } } AND = { tag = TVA VHV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } } AND = { tag = WRK VHV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk } } } }
+		VHV = { every_owned_state = { ROOT = { transfer_state = PREV } } }
+		if = { limit = { has_war_with = VHV } white_peace = VHV }
+		annex_country = { target = VHV transfer_troops = no }
+	}
+	if = {
+		limit = { OSV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending } OR = { AND = { tag = WKR OSV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } } AND = { tag = VAD OSV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } } AND = { tag = TVA OSV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } } AND = { tag = WRK OSV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk } } } }
+		OSV = { every_owned_state = { ROOT = { transfer_state = PREV } } }
+		if = { limit = { has_war_with = OSV } white_peace = OSV }
+		annex_country = { target = OSV transfer_troops = no }
 	}
 }
 

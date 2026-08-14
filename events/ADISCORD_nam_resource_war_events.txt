@@ -1,7 +1,7 @@
 add_namespace = ADISCORD_nam_resource_war
 
-# The daily router schedules this after the Vorkerland confederation collapses;
-# the start effect also normalises any lingering NAM overlord or faction tie.
+# The fresh collapse edge schedules this once. A temporary third-party war gets
+# one delayed retry; the second failed check terminates the bounded entry path.
 country_event = {
 	id = ADISCORD_nam_resource_war.1
 	hidden = yes
@@ -12,9 +12,27 @@ country_event = {
 			limit = { ADISCORD_nam_resource_war_ready = yes }
 			ADISCORD_nam_resource_war_start = yes
 		}
+		else_if = {
+			limit = {
+				has_global_flag = ADISCORD_fresh_campaign_contract_v1
+				has_global_flag = ADISCORD_nam_resource_war_scheduled
+				NOT = { has_global_flag = ADISCORD_nam_resource_war_retry_used }
+				NOT = { has_global_flag = ADISCORD_nam_resource_war_started }
+				NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
+				country_exists = NAM
+				country_exists = EFL
+				country_exists = AZH
+			}
+			set_global_flag = ADISCORD_nam_resource_war_retry_used
+			country_event = {
+				id = ADISCORD_nam_resource_war.1
+				days = 120
+				random_days = 90
+			}
+		}
 		else = {
-			# A temporary third-party war should delay the scenario, not delete it.
 			clr_global_flag = ADISCORD_nam_resource_war_scheduled
+			log = "[ADISCORD][NAM][ENTRY] Resource-war entry stopped after its bounded readiness checks."
 		}
 	}
 }

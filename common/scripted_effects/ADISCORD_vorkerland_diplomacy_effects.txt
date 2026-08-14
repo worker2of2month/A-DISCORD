@@ -74,6 +74,7 @@ ADISCORD_vorkerland_offer_vad_sol_alliance = {
 			has_country_flag = ADISCORD_vorkerland_focus_vad_solland_liaison_prepared
 			has_global_flag = ADISCORD_vorkerland_solar_winner_sol
 			NOT = { has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted }
+			NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active }
 			NOT = { has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending }
 			NOT = { has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_resolved }
 			SOL = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } }
@@ -137,6 +138,7 @@ ADISCORD_vorkerland_attempt_vad_solar_intervention = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
+			NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active }
 			is_subject = no
 			NOT = { has_capitulated = yes }
 			NOT = { has_war = yes }
@@ -216,7 +218,7 @@ ADISCORD_vorkerland_verify_vad_solar_intervention = {
 }
 
 # A failed claimant cannot leave the central-preparation gate permanently
-# occupied. This is safe from capitulation, peace, and old-save repair hooks.
+# occupied. This is safe from capitulation, peace, and bounded verifier hooks.
 ADISCORD_vorkerland_clear_failed_vad_solar_intervention = {
 	if = {
 		limit = {
@@ -503,5 +505,263 @@ ADISCORD_vorkerland_restore_independent_wrk_core_packages = {
 	if = {
 		limit = { tag = WRK has_global_flag = ADISCORD_vorkerland_reunification_verified }
 		clr_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
+	}
+}
+
+# The WKR air programme follows the TFR-style OOB/production contract without
+# granting a second oversized starting air force. Focus completion can be
+# invoked again by debugging or a duplicated effect call, so the production
+# bootstrap is explicitly idempotent.
+ADISCORD_vorkerland_bootstrap_wkr_air_sustainment = {
+	if = {
+		limit = {
+			tag = WKR
+			NOT = { has_country_flag = ADISCORD_vorkerland_wkr_air_sustainment_bootstrap_applied }
+		}
+		add_equipment_production = {
+			equipment = { type = ADISCORD_fighter_airframe_2163 creator = "WKR" }
+			requested_factories = 2
+			progress = 0.30
+			efficiency = 55
+		}
+		add_equipment_production = {
+			equipment = { type = ADISCORD_cas_airframe_2170 creator = "WKR" }
+			requested_factories = 1
+			progress = 0.25
+			efficiency = 50
+		}
+		add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 24 producer = WKR }
+		add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 12 producer = WKR }
+		set_country_flag = ADISCORD_vorkerland_wkr_air_sustainment_bootstrap_applied
+	}
+}
+
+# Build a shallow redoubt in one live-front state when the focus lands. The
+# bounded random state keeps the focus useful without sealing the entire front
+# behind an instant fort belt. Before a front exists, one fixed southern home
+# redoubt guarantees that the early AI focus still has a physical reward.
+ADISCORD_vorkerland_build_wkr_live_frontline_fortifications = {
+	if = {
+		limit = { tag = WKR }
+		if = {
+			limit = {
+				any_controlled_state = {
+					any_neighbor_state = {
+						controller = { has_war_with = WKR }
+					}
+				}
+			}
+			random_controlled_state = {
+				limit = {
+					any_neighbor_state = {
+						controller = { has_war_with = WKR }
+					}
+				}
+				add_building_construction = {
+					type = bunker
+					level = 1
+					instant_build = yes
+					province = {
+						all_provinces = yes
+						limit_to_border = yes
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = { controls_state = 33 }
+			33 = {
+				add_building_construction = {
+					type = bunker
+					level = 1
+					instant_build = yes
+					province = 3248
+				}
+			}
+		}
+	}
+}
+
+# Launch every still-valid Solarino war independently. The next-day verifier
+# retries only missing edges once; no pulse or country-wide polling owns this
+# operation.
+ADISCORD_vorkerland_attempt_wkr_solyarino_intervention = {
+	clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sol
+	clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sra
+	clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_csl
+	clr_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+	clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_pending
+	clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_retry
+	clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_verified
+	clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_failed
+
+	if = {
+		limit = {
+			tag = WKR
+			is_subject = no
+			NOT = { has_capitulated = yes }
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
+			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted }
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
+			ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = yes
+		}
+		if = {
+			limit = { ADISCORD_vorkerland_wkr_valid_sol_target = yes }
+			set_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sol
+			SOL = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = SOL type = annex_everything }
+		}
+		if = {
+			limit = { ADISCORD_vorkerland_wkr_valid_sra_target = yes }
+			set_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sra
+			SRA = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = SRA type = annex_everything }
+		}
+		if = {
+			limit = { ADISCORD_vorkerland_wkr_valid_csl_target = yes }
+			set_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_csl
+			CSL = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = CSL type = annex_everything }
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sol
+					has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sra
+					has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_csl
+				}
+			}
+			set_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+			set_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_pending
+			country_event = { id = ADISCORD_vorkerland_diplomacy.10 days = 1 }
+		}
+		else = {
+			set_country_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_failed
+		}
+	}
+}
+
+ADISCORD_vorkerland_verify_wkr_solyarino_intervention = {
+	if = {
+		limit = {
+			tag = WKR
+			has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+			has_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_pending
+			OR = {
+				NOT = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sol }
+				NOT = { country_exists = SOL }
+				SOL = { has_capitulated = yes }
+				SOL = { is_subject = yes }
+				has_war_with = SOL
+			}
+			OR = {
+				NOT = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sra }
+				NOT = { country_exists = SRA }
+				SRA = { has_capitulated = yes }
+				SRA = { is_subject = yes }
+				has_war_with = SRA
+			}
+			OR = {
+				NOT = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_csl }
+				NOT = { country_exists = CSL }
+				CSL = { has_capitulated = yes }
+				CSL = { is_subject = yes }
+				has_war_with = CSL
+			}
+		}
+		clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_pending
+		clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_retry
+		set_country_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_verified
+	}
+	else_if = {
+		limit = {
+			tag = WKR
+			has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+			has_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_pending
+			NOT = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_retry }
+		}
+		set_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_retry
+		if = {
+			limit = {
+				has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sol
+				ADISCORD_vorkerland_wkr_valid_sol_target = yes
+			}
+			SOL = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = SOL type = annex_everything }
+		}
+		if = {
+			limit = {
+				has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sra
+				ADISCORD_vorkerland_wkr_valid_sra_target = yes
+			}
+			SRA = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = SRA type = annex_everything }
+		}
+		if = {
+			limit = {
+				has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_csl
+				ADISCORD_vorkerland_wkr_valid_csl_target = yes
+			}
+			CSL = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = CSL type = annex_everything }
+		}
+		country_event = { id = ADISCORD_vorkerland_diplomacy.11 days = 1 }
+	}
+	else_if = {
+		limit = {
+			tag = WKR
+			has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+			has_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_pending
+			has_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_retry
+		}
+		clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_pending
+		set_country_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_failed
+		ADISCORD_vorkerland_clear_wkr_solyarino_intervention = yes
+		log = "[ADISCORD][VORKERLAND][DIPLOMACY] WKR Solarino intervention failed after one retry."
+	}
+}
+
+ADISCORD_vorkerland_clear_wkr_solyarino_intervention = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+			OR = {
+				NOT = { country_exists = WKR }
+				WKR = { OR = { is_subject = yes has_capitulated = yes } }
+				WKR = {
+					OR = {
+						NOT = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sol }
+						NOT = { country_exists = SOL }
+						NOT = { has_war_with = SOL }
+					}
+					OR = {
+						NOT = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sra }
+						NOT = { country_exists = SRA }
+						NOT = { has_war_with = SRA }
+					}
+					OR = {
+						NOT = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_csl }
+						NOT = { country_exists = CSL }
+						NOT = { has_war_with = CSL }
+					}
+				}
+			}
+		}
+		clr_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		if = {
+			limit = { country_exists = WKR }
+			WKR = {
+				clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sol
+				clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sra
+				clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_csl
+				clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_pending
+				clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_retry
+			}
+		}
 	}
 }

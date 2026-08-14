@@ -1,4 +1,5 @@
 ADISCORD_nam_resource_war_ready = {
+	has_global_flag = ADISCORD_fresh_campaign_contract_v1
 	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 	NOT = { has_global_flag = ADISCORD_nam_resource_war_started }
 	NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }

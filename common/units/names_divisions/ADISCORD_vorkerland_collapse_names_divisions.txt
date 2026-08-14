@@ -1,0 +1,235 @@
+# Consolidated naming pools for the non-playable Vorkerland collapse states.
+# Keep these together: the tags are short-lived AI participants and do not need
+# one names_divisions file each.
+
+VORKERLAND_EMERGENCY_INF_01 = {
+	name = "Emergency formations"
+	for_countries = { CSL DVA EBA EGC ERT EYR IBA IBL IRT MLR NDN OSV PSD REV RIV RZA SCA SLA SRA SWB TGD TVA VHV WPA WPS WTD YOR ZTA }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Emergency Militia Brigade"
+}
+
+CSL_COLLAPSE_INF_01 = {
+	name = "Central Sloboda formations"
+	for_countries = { CSL }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Central Sloboda City Guard"
+}
+
+DVA_COLLAPSE_INF_01 = {
+	name = "Valley formations"
+	for_countries = { DVA }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Valley Defence Brigade"
+}
+
+EBA_COLLAPSE_INF_01 = {
+	name = "Eastern Bridgehead formations"
+	for_countries = { EBA }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Eastern Bridgehead Militia"
+}
+
+EGC_COLLAPSE_INF_01 = {
+	name = "Eyrmian Garrison formations"
+	for_countries = { EGC }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Eyrmian Garrison Regiment"
+}
+
+ERT_COLLAPSE_INF_01 = {
+	name = "Eastern Restoration formations"
+	for_countries = { ERT }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Eastern Restoration Brigade"
+}
+
+EYR_COLLAPSE_INF_01 = {
+	name = "Eyrmian formations"
+	for_countries = { EYR }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Eyrmian Civic Brigade"
+}
+
+IBA_COLLAPSE_INF_01 = {
+	name = "Ivanland Northern formations"
+	for_countries = { IBA }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Itoran Border Rifles"
+}
+
+IBL_COLLAPSE_INF_01 = {
+	name = "Ivanland Eastern formations"
+	for_countries = { IBL }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Krait Frontier Brigade"
+}
+
+IRT_COLLAPSE_INF_01 = {
+	name = "Interior Restoration formations"
+	for_countries = { IRT }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Interior Republican Brigade"
+}
+
+MLR_COLLAPSE_INF_01 = {
+	name = "Lowland formations"
+	for_countries = { MLR }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Lowland Defence Brigade"
+}
+
+NDN_COLLAPSE_INF_01 = {
+	name = "Norden formations"
+	for_countries = { NDN }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Norden Territorial Brigade"
+}
+
+OSV_COLLAPSE_INF_01 = {
+	name = "Ostvin formations"
+	for_countries = { OSV }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Ostvin Defence Brigade"
+}
+
+PSD_COLLAPSE_INF_01 = {
+	name = "Ash Sector formations"
+	for_countries = { PSD }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Ash Sector Security Brigade"
+}
+
+REV_COLLAPSE_INF_01 = {
+	name = "Revel formations"
+	for_countries = { REV }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Revel Council Brigade"
+}
+
+RIV_COLLAPSE_INF_01 = {
+	name = "Riven formations"
+	for_countries = { RIV }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Riven Defence Brigade"
+}
+
+RZA_COLLAPSE_INF_01 = {
+	name = "Reactor formations"
+	for_countries = { RZA }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Reactor Security Brigade"
+}
+
+SCA_COLLAPSE_INF_01 = {
+	name = "Southern Corridor formations"
+	for_countries = { SCA }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Southern Corridor Brigade"
+}
+
+SLA_COLLAPSE_INF_01 = {
+	name = "Starolesye formations"
+	for_countries = { SLA }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Starolesye District Brigade"
+}
+
+SRA_COLLAPSE_INF_01 = {
+	name = "Solar Plain formations"
+	for_countries = { SRA }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Solar Plain Defence Brigade"
+}
+
+SWB_COLLAPSE_INF_01 = {
+	name = "Old Vorkernsberg formations"
+	for_countries = { SWB }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Old Vorkernsberg Militia"
+}
+
+TGD_COLLAPSE_INF_01 = {
+	name = "Technograd formations"
+	for_countries = { TGD }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Technograd Municipal Guard"
+}
+
+TVA_COLLAPSE_INF_01 = {
+	name = "Technical Directorate formations"
+	for_countries = { TVA }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Technical Field Group"
+}
+
+VHV_COLLAPSE_INF_01 = {
+	name = "Verkhovye formations"
+	for_countries = { VHV }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Verkhovye Territorial Brigade"
+}
+
+WPA_COLLAPSE_INF_01 = {
+	name = "Western Perimeter formations"
+	for_countries = { WPA }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Western Perimeter Guard"
+}
+
+WPS_COLLAPSE_INF_01 = {
+	name = "Western Supply formations"
+	for_countries = { WPS }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Western Supply Defence Brigade"
+}
+
+WTD_COLLAPSE_INF_01 = {
+	name = "Central Technical formations"
+	for_countries = { WTD }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Central Technical Guard"
+}
+
+YOR_COLLAPSE_INF_01 = {
+	name = "Yor formations"
+	for_countries = { YOR }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Yor Republican Brigade"
+}
+
+ZTA_COLLAPSE_INF_01 = {
+	name = "Zlatorechye formations"
+	for_countries = { ZTA }
+	can_use = { always = yes }
+	division_types = { infantry }
+	fallback_name = "%d. Zlatorechye River Guard"
+}

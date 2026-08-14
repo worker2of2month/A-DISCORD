@@ -42,6 +42,7 @@ ADISCORD_is_non_participating_minor = {
 }
 
 ADISCORD_can_optimize_non_participating_minor = {
+	has_global_flag = ADISCORD_minor_optimization_fresh_campaign_v1
 	is_ai = yes
 	has_war = no
 	ADISCORD_is_non_participating_minor = yes
@@ -51,6 +52,7 @@ ADISCORD_can_optimize_non_participating_minor = {
 # Base help is limited to simulated AI countries that receive monthly or yearly
 # economy updates. Dormant tier 3 countries and every player are excluded.
 ADISCORD_economy_ai_assistance_is_eligible = {
+	has_global_flag = ADISCORD_minor_optimization_fresh_campaign_v1
 	is_ai = yes
 	check_variable = { var = ADISCORD_economy_simulation_tier value = 1 compare = greater_than_or_equals }
 	check_variable = { var = ADISCORD_economy_simulation_tier value = 2 compare = less_than_or_equals }
@@ -69,9 +71,10 @@ ADISCORD_economy_ai_assistance_retreat_active = {
 	surrender_progress > 0.35
 }
 
-# Eligible AI needs the retreat-threshold fallback. A player switch or tier
-# downgrade remains eligible only while an assistance idea needs cleanup.
-ADISCORD_economy_ai_assistance_needs_monthly_evaluation = {
+# State-control, war, peace and tier-change edges refresh eligible AI. A country
+# which just lost eligibility remains owned only while its stale idea is cleaned.
+ADISCORD_economy_ai_assistance_needs_edge_evaluation = {
+	has_global_flag = ADISCORD_minor_optimization_fresh_campaign_v1
 	OR = {
 		ADISCORD_economy_ai_assistance_is_eligible = yes
 		has_idea = ADISCORD_economy_ai_assistance_base

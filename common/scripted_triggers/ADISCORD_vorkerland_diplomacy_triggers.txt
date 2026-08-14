@@ -177,3 +177,94 @@ ADISCORD_vorkerland_wkr_has_solar_counter_border = {
 		AND = { owns_state = 110 controls_state = 110 SOL = { OR = { AND = { owns_state = 198 controls_state = 198 } AND = { owns_state = 307 controls_state = 307 } } } }
 	}
 }
+
+# These target predicates deliberately exclude puppets, capitulated shells,
+# allies, and wars WKR has already opened. The aggregate trigger is used by
+# both the public focus gate and the atomic completion effect.
+ADISCORD_vorkerland_wkr_valid_sol_target = {
+	SOL = {
+		exists = yes
+		is_subject = no
+		NOT = { has_capitulated = yes }
+		NOT = { has_war_with = WKR }
+		NOT = { is_in_faction_with = WKR }
+	}
+}
+
+ADISCORD_vorkerland_wkr_valid_sra_target = {
+	SRA = {
+		exists = yes
+		is_subject = no
+		NOT = { has_capitulated = yes }
+		NOT = { has_war_with = WKR }
+		NOT = { is_in_faction_with = WKR }
+	}
+}
+
+ADISCORD_vorkerland_wkr_valid_csl_target = {
+	CSL = {
+		exists = yes
+		is_subject = no
+		NOT = { has_capitulated = yes }
+		NOT = { has_war_with = WKR }
+		NOT = { is_in_faction_with = WKR }
+	}
+}
+
+ADISCORD_vorkerland_wkr_has_valid_solyarino_target = {
+	tag = WKR
+	is_subject = no
+	NOT = { has_capitulated = yes }
+	OR = {
+		ADISCORD_vorkerland_wkr_valid_sol_target = yes
+		ADISCORD_vorkerland_wkr_valid_sra_target = yes
+		ADISCORD_vorkerland_wkr_valid_csl_target = yes
+	}
+}
+
+# Exact physical approach routes from WKR's possible central holdings into the
+# five-state Solarino package. A remote surviving government is not enough.
+ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = {
+	OR = {
+		AND = {
+			owns_state = 79
+			controls_state = 79
+			OR = { SOL = { owns_state = 310 controls_state = 310 } SRA = { owns_state = 310 controls_state = 310 } CSL = { owns_state = 310 controls_state = 310 } }
+		}
+		AND = {
+			owns_state = 308
+			controls_state = 308
+			OR = { SOL = { owns_state = 307 controls_state = 307 } SRA = { owns_state = 307 controls_state = 307 } CSL = { owns_state = 307 controls_state = 307 } }
+		}
+		AND = {
+			owns_state = 309
+			controls_state = 309
+			OR = { SOL = { owns_state = 307 controls_state = 307 } SRA = { owns_state = 307 controls_state = 307 } CSL = { owns_state = 307 controls_state = 307 } }
+		}
+		AND = {
+			owns_state = 309
+			controls_state = 309
+			OR = { SOL = { owns_state = 310 controls_state = 310 } SRA = { owns_state = 310 controls_state = 310 } CSL = { owns_state = 310 controls_state = 310 } }
+		}
+		AND = {
+			owns_state = 327
+			controls_state = 327
+			OR = { SOL = { owns_state = 310 controls_state = 310 } SRA = { owns_state = 310 controls_state = 310 } CSL = { owns_state = 310 controls_state = 310 } }
+		}
+		AND = {
+			owns_state = 81
+			controls_state = 81
+			OR = { SOL = { owns_state = 307 controls_state = 307 } SRA = { owns_state = 307 controls_state = 307 } CSL = { owns_state = 307 controls_state = 307 } }
+		}
+		AND = {
+			owns_state = 110
+			controls_state = 110
+			OR = { SOL = { owns_state = 198 controls_state = 198 } SRA = { owns_state = 198 controls_state = 198 } CSL = { owns_state = 198 controls_state = 198 } }
+		}
+		AND = {
+			owns_state = 110
+			controls_state = 110
+			OR = { SOL = { owns_state = 307 controls_state = 307 } SRA = { owns_state = 307 controls_state = 307 } CSL = { owns_state = 307 controls_state = 307 } }
+		}
+	}
+}

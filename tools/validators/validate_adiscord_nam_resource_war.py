@@ -85,6 +85,10 @@ def typed_blocks(source: str, block_type: str) -> list[str]:
     return blocks
 
 
+def without_comments(source: str) -> str:
+    return "\n".join(line.split("#", 1)[0] for line in source.splitlines())
+
+
 def state_source(state_id: int) -> str:
     candidates = list((ROOT / "history" / "states").glob(f"{state_id}-*.txt"))
     if len(candidates) != 1:
@@ -114,6 +118,7 @@ def main() -> int:
         "common/decisions/ADISCORD_nam_resource_war_decisions.txt",
         "common/ai_strategy/ADISCORD_nam_resource_war_ai.txt",
         "events/ADISCORD_nam_resource_war_events.txt",
+        "events/ADISCORD_vorkerland_collapse_events.txt",
         "history/countries/SLF - Svetlogorsk Uprising.txt",
         "history/units/NAM_resource_war.txt",
         "history/units/EFL_nam_resource_war.txt",
@@ -170,6 +175,7 @@ def main() -> int:
     prewar_categories = sources["common/decisions/categories/ADISCORD_nam_resource_war_categories.txt"]
     prewar_decisions = sources["common/decisions/ADISCORD_nam_resource_war_decisions.txt"]
     news = sources["events/ADISCORD_nam_resource_war_events.txt"]
+    collapse_events = sources["events/ADISCORD_vorkerland_collapse_events.txt"]
     ideas = sources["common/ideas/ADISCORD_nam_resource_war_ideas.txt"]
     equipment_source = sources["common/units/equipment/ADISCORD_convoy_equipment.txt"]
     naval_units = sources["common/units/ADISCORD_naval_units.txt"]
@@ -194,14 +200,12 @@ def main() -> int:
     )), "merged NAM effects are missing compact debug entry points")
     check("ADISCORD_nam_resource_war_prepare_independence" not in effects,
           "one-shot NAM independence wrapper must be inlined into resource-war start")
-    check(
-        "NAM = {\n\t\tif = {\n\t\t\tlimit = { is_subject = yes }\n\t\t\toverlord = { set_autonomy = { target = NAM autonomy_state = autonomy_free } }\n\t\t}\n\t\tif = { limit = { is_in_faction = yes } leave_faction = yes }\n\t}" in effects,
-        "resource-war start does not free NAM from an arbitrary overlord before leaving its faction",
-    )
     nam_readiness = named_block(named_block(triggers, "ADISCORD_nam_resource_war_ready"), "NAM")
     check("has_war = no" in nam_readiness and "is_subject = no" not in nam_readiness,
           "resource-war scheduling still blocks before the start effect can free a subject NAM")
     readiness = named_block(triggers, "ADISCORD_nam_resource_war_ready")
+    check(readiness.count("has_global_flag = ADISCORD_fresh_campaign_contract_v1") == 1,
+          "resource-war readiness is not restricted to a fresh campaign")
     for state_id in (67, 688, 689, 690):
         check(f"controls_state = {state_id}" in readiness,
               f"resource-war readiness must require NAM control of state {state_id}")
@@ -212,6 +216,101 @@ def main() -> int:
     check(all(f"controls_state = {state_id}" in azh_readiness for state_id in (69, 692)),
           "resource-war readiness must require AZH control of both mainland states")
     start = named_block(effects, "ADISCORD_nam_resource_war_start")
+    start_outer_open = start.find("{")
+    start_outer_close = start.rfind("}")
+    start_guard = re.search(r"\bif\s*=\s*\{", start[start_outer_open + 1:])
+    if start_guard is None:
+        check(False, "resource-war start lacks its outer readiness guard")
+    else:
+        guard_header = start_outer_open + 1 + start_guard.start()
+        guard_open = start.find("{", guard_header)
+        guard_close = matching_brace(start, guard_open)
+        check(not without_comments(start[start_outer_open + 1:guard_header]).strip()
+              and guard_close >= 0
+              and not without_comments(start[guard_close + 1:start_outer_close]).strip(),
+              "resource-war start has mutations outside its sole readiness guard")
+    readiness_position = start.find("ADISCORD_nam_resource_war_ready = yes")
+    for mutation in (
+        "set_autonomy = { target = NAM autonomy_state = autonomy_free }",
+        "leave_faction = yes",
+        "set_global_flag = ADISCORD_nam_resource_war_started",
+        'load_oob = "NAM_resource_war"',
+        "create_faction_from_template = {",
+        "declare_war_on = { target = NAM type = annex_everything }",
+    ):
+        check(readiness_position >= 0 and start.find(mutation) > readiness_position,
+              f"resource-war start mutation escapes readiness: {mutation}")
+    schedule = named_block(effects, "ADISCORD_nam_resource_war_schedule")
+    for token in (
+        "has_global_flag = ADISCORD_fresh_campaign_contract_v1",
+        "has_global_flag = ADISCORD_vorkerland_collapse_wars_started",
+        "NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }",
+        "NOT = { has_global_flag = ADISCORD_nam_resource_war_started }",
+        "NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }",
+        "NOT = { has_global_flag = ADISCORD_nam_resource_war_retry_used }",
+        "country_exists = NAM",
+        "country_exists = EFL",
+        "country_exists = AZH",
+        "set_global_flag = ADISCORD_nam_resource_war_scheduled",
+        "id = ADISCORD_nam_resource_war.1",
+        "days = 120",
+        "random_days = 90",
+    ):
+        check(schedule.count(token) == 1, f"bounded resource-war schedule lacks exact token: {token}")
+    check(schedule.find("set_global_flag = ADISCORD_nam_resource_war_scheduled")
+          < schedule.find("id = ADISCORD_nam_resource_war.1"),
+          "resource-war schedule does not record its one-shot guard before queueing .1")
+
+    collapse_two = next(
+        (block for block in typed_blocks(collapse_events, "country_event")
+         if re.search(r"\bid\s*=\s*ADISCORD_vorkerland_collapse\.2\b", block)),
+        "",
+    )
+    producer = "ADISCORD_nam_resource_war_schedule = yes"
+    check(bool(collapse_two), "collapse event .2 is missing")
+    check(collapse_events.count(producer) == 1 and collapse_two.count(producer) == 1,
+          "fresh collapse .2 must be the unique resource-war schedule producer")
+    check(collapse_two.find("set_global_flag = ADISCORD_vorkerland_collapse_wars_started")
+          < collapse_two.find(producer),
+          "collapse .2 queues the resource war before recording wars_started")
+
+    entry_event = next(
+        (block for block in typed_blocks(news, "country_event")
+         if re.search(r"\bid\s*=\s*ADISCORD_nam_resource_war\.1\b", block)),
+        "",
+    )
+    entry_immediate = named_block(entry_event, "immediate")
+    retry_calls = re.findall(
+        r"country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_nam_resource_war\.1\b",
+        entry_immediate,
+    )
+    check(len(retry_calls) == 1, "resource-war .1 must contain exactly one delayed self-retry")
+    for token, expected in (
+        ("NOT = { has_global_flag = ADISCORD_nam_resource_war_retry_used }", 1),
+        ("set_global_flag = ADISCORD_nam_resource_war_retry_used", 1),
+        ("clr_global_flag = ADISCORD_nam_resource_war_scheduled", 1),
+        ("days = 120", 1),
+        ("random_days = 90", 1),
+    ):
+        check(entry_immediate.count(token) == expected,
+              f"resource-war .1 has non-exact bounded retry token: {token}")
+    check(entry_immediate.find("NOT = { has_global_flag = ADISCORD_nam_resource_war_retry_used }")
+          < entry_immediate.find("set_global_flag = ADISCORD_nam_resource_war_retry_used")
+          < entry_immediate.find("id = ADISCORD_nam_resource_war.1"),
+          "resource-war .1 self-retry is not protected by its permanent one-retry guard")
+    runtime_entry = "\n".join((effects, news, on_actions, collapse_events))
+    check(runtime_entry.count("set_global_flag = ADISCORD_nam_resource_war_retry_used") == 1
+          and "clr_global_flag = ADISCORD_nam_resource_war_retry_used" not in runtime_entry,
+          "resource-war retry guard is not a single permanent setter")
+    check(runtime_entry.count("set_global_flag = ADISCORD_nam_resource_war_scheduled") == 1,
+          "resource-war scheduled guard has multiple producers")
+    check("ADISCORD_nam_resource_war_schedule = yes" not in entry_event,
+          "resource-war .1 recursively calls the initial schedule effect")
+    for recurring in ("on_startup", "on_daily", "on_weekly", "on_monthly", "on_yearly", "every_country"):
+        check(re.search(rf"(?m)^\s*{recurring}\s*=", on_actions) is None,
+              f"resource-war entry retains recurring hook {recurring}")
+    check("ADISCORD_nam_resource_war.1" not in on_actions,
+          "resource-war .1 remains scheduled from on_actions")
     faction_creation = re.compile(
         r"create_faction_from_template\s*=\s*\{\s*"
         r"template\s*=\s*faction_template_ADISCORD_standard\s+"

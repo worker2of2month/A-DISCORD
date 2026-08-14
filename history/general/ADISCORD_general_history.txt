@@ -1,5 +1,4 @@
-# Keep the replaced history/general database non-empty without importing
-# vanilla shared advisors or country-specific history.
-if = {
-	limit = { always = no }
-}
+# Persistent provenance: scenario history runs only while a new campaign is
+# being constructed. Saves created before this contract never acquire the flag,
+# so newly added systems can decline initialization instead of migrating them.
+set_global_flag = ADISCORD_fresh_campaign_contract_v1

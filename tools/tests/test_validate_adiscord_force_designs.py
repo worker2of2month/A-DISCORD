@@ -68,6 +68,13 @@ def named_blocks(text: str, name: str) -> list[str]:
     return blocks
 
 
+def event_block(text: str, event_id: str) -> str:
+    for block in named_blocks(text, "country_event"):
+        if re.search(rf"\bid\s*=\s*{re.escape(event_id)}\b", block):
+            return block
+    raise AssertionError(f"missing event {event_id}")
+
+
 class VorkerlandForceDesignTests(unittest.TestCase):
     def test_collapse_has_a_reachable_20_width_armored_template(self) -> None:
         templates = read("common/ai_templates/ADISCORD_land_templates.txt")
@@ -165,13 +172,21 @@ class VorkerlandForceDesignTests(unittest.TestCase):
             strategies, "ADISCORD_vorkerland_armored_reserve_program"
         )
         air = named_block(strategies, "ADISCORD_vorkerland_air_denial_program")
+        wkr_air = named_block(
+            strategies, "ADISCORD_vorkerland_wkr_air_denial_program"
+        )
         operations = named_block(
             strategies, "ADISCORD_vorkerland_active_air_operations"
         )
         for tag in ("WKR", "VAD", "TVA"):
             self.assertIn(f"tag = {tag}", armor)
-            self.assertIn(f"tag = {tag}", air)
             self.assertIn(f"tag = {tag}", operations)
+        self.assertNotIn("tag = WKR", air)
+        for tag in ("VAD", "TVA"):
+            self.assertIn(f"tag = {tag}", air)
+        self.assertIn("allowed = { tag = WKR }", wkr_air)
+        self.assertNotIn("tag = VAD", wkr_air)
+        self.assertNotIn("tag = TVA", wkr_air)
         self.assertIn(
             "equipment_production_min_factories_archetype id = "
             "ADISCORD_combat_platform_archetype value = 1",
@@ -180,8 +195,18 @@ class VorkerlandForceDesignTests(unittest.TestCase):
         self.assertIn("equipment_production_min_factories id = fighter value = 1", air)
         self.assertIn("equipment_production_min_factories id = cas value = 1", air)
         self.assertIn(
+            "equipment_production_min_factories id = fighter value = 2", wkr_air
+        )
+        self.assertIn(
+            "equipment_production_min_factories id = cas value = 1", wkr_air
+        )
+        self.assertIn(
             "equipment_variant_production_factor id = ADISCORD_fighter_archetype",
             air,
+        )
+        self.assertIn(
+            "equipment_variant_production_factor id = ADISCORD_fighter_archetype",
+            wkr_air,
         )
         self.assertIn(
             "type = strategic_air_importance id = 12 value = 100000", operations
@@ -277,8 +302,21 @@ class VorkerlandForceDesignTests(unittest.TestCase):
         vad = named_block(initial, "VAD")
         self.assertIn('load_oob = "WRK_vorkerland_collapse_air"', wkr)
         self.assertIn('load_oob = "VAD_vorkerland_collapse_air"', vad)
-        self.assertIn("add_fuel = 7500", wkr)
+        self.assertIn("add_fuel = 15000", wkr)
         self.assertIn("add_fuel = 7500", vad)
+        self.assertIn(
+            "type = ADISCORD_fighter_airframe_2163 amount = 60 producer = WKR",
+            wkr,
+        )
+        self.assertIn(
+            "type = ADISCORD_cas_airframe_2170 amount = 30 producer = WKR",
+            wkr,
+        )
+        self.assertIn(
+            "set_country_flag = ADISCORD_vorkerland_wkr_air_sustainment_v1_applied",
+            wkr,
+        )
+        self.assertNotIn("add_equipment_production", wkr)
         for technology in (
             "ADISCORD_tech_semi_autonomous_combat_modules = 1",
             "ADISCORD_tech_reclaimed_jet_platforms = 1",
@@ -288,7 +326,7 @@ class VorkerlandForceDesignTests(unittest.TestCase):
             self.assertLess(
                 wkr.index(technology),
                 wkr.index(
-                    "type = ADISCORD_fighter_airframe_2163 amount = 24 producer = WKR"
+                    "type = ADISCORD_fighter_airframe_2163 amount = 60 producer = WKR"
                 ),
             )
             self.assertLess(
@@ -304,49 +342,16 @@ class VorkerlandForceDesignTests(unittest.TestCase):
                 setup,
             )
 
-        repair = named_block(
-            read("common/scripted_effects/ADISCORD_vorkerland_force_design_effects.txt"),
+        force_design_effects = read(
+            "common/scripted_effects/ADISCORD_vorkerland_force_design_effects.txt"
+        )
+        for legacy_repair in (
             "ADISCORD_vorkerland_deploy_missing_claimant_air_wings",
-        )
-        self.assertIn(
-            "NOT = { has_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed }",
-            repair,
-        )
-        manpower = {"WKR": 6000, "VAD": 3000, "TVA": 3000}
-        for tag, (_, oob_name, state, _, _) in expected.items():
-            self.assertIn(f"tag = {tag} controls_state = {state}", repair)
-            self.assertIn(f'load_oob = "{oob_name}"', repair)
-            branch_start = repair.index(f"tag = {tag} controls_state = {state}")
-            load = repair.index(f'load_oob = "{oob_name}"', branch_start)
-            personnel = repair.index(f"add_manpower = {manpower[tag]}", branch_start)
-            success = repair.index(
-                "set_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed",
-                branch_start,
-            )
-            self.assertLess(personnel, load)
-            self.assertLess(load, success)
-        self.assertEqual(repair.count("add_fuel = 7500"), 3)
-
-        migration = named_block(
-            read("common/scripted_effects/ADISCORD_vorkerland_force_design_effects.txt"),
             "ADISCORD_vorkerland_redeploy_air_wings_after_mission_fix",
-        )
-        self.assertIn(
-            "NOT = { has_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied }",
-            migration,
-        )
-        self.assertNotIn("load_oob", migration)
-        for tag, (_, _, state, _, _) in expected.items():
-            self.assertIn(f"tag = {tag} controls_state = {state}", migration)
-            self.assertIn(f"add_manpower = {manpower[tag]}", migration)
-        self.assertEqual(
-            migration.count(
-                "set_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied"
-            ),
-            3,
-        )
+        ):
+            self.assertNotIn(legacy_repair, force_design_effects)
 
-    def test_old_saves_receive_a_bounded_one_time_bootstrap(self) -> None:
+    def test_fresh_outbreak_runs_one_bounded_ai_bootstrap_per_claimant(self) -> None:
         effects = read(
             "common/scripted_effects/ADISCORD_vorkerland_force_design_effects.txt"
         )
@@ -381,31 +386,18 @@ class VorkerlandForceDesignTests(unittest.TestCase):
         on_actions = read(
             "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"
         )
-        self.assertIn("on_weekly =", on_actions)
-        self.assertEqual(
-            on_actions.count(
-                "ADISCORD_vorkerland_deploy_missing_claimant_air_wings = yes"
-            ),
-            1,
+        self.assertNotIn("on_weekly =", on_actions)
+        events = read("events/ADISCORD_vorkerland_collapse_events.txt")
+        outbreak = event_block(events, "ADISCORD_vorkerland_collapse.2")
+        wartime = outbreak.index(
+            "set_global_flag = ADISCORD_vorkerland_collapse_wars_started"
         )
-        self.assertEqual(
-            on_actions.count(
-                "ADISCORD_vorkerland_redeploy_air_wings_after_mission_fix = yes"
-            ),
-            1,
-        )
-        self.assertEqual(
-            on_actions.count("ADISCORD_vorkerland_bootstrap_ai_force_designs = yes"),
-            1,
-        )
-        self.assertLess(
-            on_actions.index("ADISCORD_vorkerland_bootstrap_ai_force_designs = yes"),
-            on_actions.index("ADISCORD_vorkerland_redeploy_air_wings_after_mission_fix = yes"),
-        )
-        self.assertLess(
-            on_actions.index("ADISCORD_vorkerland_redeploy_air_wings_after_mission_fix = yes"),
-            on_actions.index("ADISCORD_vorkerland_deploy_missing_claimant_air_wings = yes"),
-        )
+        for tag in ("WKR", "VAD", "TVA"):
+            call = (
+                f"{tag} = {{ ADISCORD_vorkerland_bootstrap_ai_force_designs = yes }}"
+            )
+            self.assertEqual(outbreak.count(call), 1)
+            self.assertLess(wartime, outbreak.index(call))
 
 
 class EquipmentPictureTests(unittest.TestCase):

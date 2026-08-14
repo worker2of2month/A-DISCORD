@@ -1,4 +1,5 @@
 characters = {
+	WKR_Emergency_Coordination_Committee = { name = WKR_Emergency_Coordination_Committee portraits = { civilian = { large = GFX_Portrait_Forul_Generic_3 } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
 	TVA_Dorian_Worx = { name = TVA_Dorian_Worx portraits = { civilian = { large = GFX_portrait_WRK_Dorian_Worx } } country_leader = { ideology = technocracy_ideology expire = "2200.1.1.1" id = -1 } }
 	WTD_Central_Engineering_Council = { name = WTD_Central_Engineering_Council portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } } country_leader = { ideology = technocracy_ideology expire = "2200.1.1.1" id = -1 } }
 	EYR_Irina_Koval = { name = EYR_Irina_Koval portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = humanism_ideology expire = "2200.1.1.1" id = -1 } }

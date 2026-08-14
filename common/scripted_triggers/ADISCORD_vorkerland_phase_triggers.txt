@@ -53,45 +53,17 @@ ADISCORD_vorkerland_collapse_materialized = {
 	324 = { is_owned_by = TVA is_controlled_by = TVA }
 }
 
-# Once an older save has already opened the regional wars, occupations are
-# mutable and can no longer prove the original controller handoff. Ownership is
-# still stable until a peace settlement, so this compatibility postcondition can
-# restore lifecycle metadata without moving a single front-line province.
-ADISCORD_vorkerland_collapse_materialized_for_active_war_recovery = {
-	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-	country_exists = WKR
-	NOT = { country_exists = WRK }
-	country_exists = VAD
-	country_exists = TVA
-	WKR = { is_subject = no NOT = { has_capitulated = yes } }
-	VAD = { is_subject = no NOT = { has_capitulated = yes } }
-	TVA = { is_subject = no NOT = { has_capitulated = yes } }
-	32 = { is_owned_by = WKR }
-	33 = { is_owned_by = WKR }
-	40 = { is_owned_by = WKR }
-	200 = { is_owned_by = WKR }
-	201 = { is_owned_by = WKR }
-	75 = { is_owned_by = VAD }
-	106 = { is_owned_by = VAD }
-	107 = { is_owned_by = VAD }
-	121 = { is_owned_by = VAD }
-	36 = { is_owned_by = TVA }
-	37 = { is_owned_by = TVA }
-	38 = { is_owned_by = TVA }
-	39 = { is_owned_by = TVA }
-	324 = { is_owned_by = TVA }
-}
-
 # Country-leader and ruling-party changes enter a separate daily cache from
-# state ownership. Keeping this identity contract separate from the structural
-# split makes failures diagnosable while still requiring both contracts before
-# any collapse war can be authorized.
+# state ownership. This exact identity contract is diagnostic and drives a
+# bounded presentation repair; territorial materialization alone owns whether
+# the civil war may begin.
 ADISCORD_vorkerland_claimant_identities_materialized = {
 	OR = {
 		AND = {
 			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
 			WKR = {
 				has_government = pragmatism
+				has_country_leader_ideology = neo_vorkerism
 				has_country_leader = {
 					character = WRK_Nikita_Worcker
 					ruling_only = yes
@@ -178,34 +150,10 @@ ADISCORD_vorkerland_central_showdown_required = {
 	}
 }
 
-# Normal campaigns open the nine district campaigns as soon as central
-# preparation begins. A single surviving claimant may use the same controller
-# in showdown/reunification only as an old-save recovery path; this prevents a
-# serialized victory from stranding live district governments on the map.
+# The nine district campaigns exist only during central preparation. Later
+# lifecycle phases never reopen military decisions from a serialized save.
 ADISCORD_vorkerland_central_minor_campaign_phase_available = {
-	OR = {
-		has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-		AND = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-				has_global_flag = ADISCORD_vorkerland_phase_reunification
-			}
-			ADISCORD_vorkerland_has_single_surviving_claimant = yes
-		}
-		# Save repair for builds which announced a winner and materialised WRK
-		# before the nine central administrations had been removed. This branch
-		# reopens only the bounded district controller, never the claimant war.
-		AND = {
-			tag = WRK
-			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-			has_global_flag = ADISCORD_vorkerland_reunification_verified
-			OR = {
-				has_country_flag = ADISCORD_vorkerland_route_worker
-				has_country_flag = ADISCORD_vorkerland_route_joint
-				has_country_flag = ADISCORD_vorkerland_route_utilitarian
-			}
-		}
-	}
+	has_global_flag = ADISCORD_vorkerland_phase_central_preparation
 }
 
 # A consolidation wave is built from the real border on the day it is

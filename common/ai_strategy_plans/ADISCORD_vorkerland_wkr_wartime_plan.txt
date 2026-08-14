@@ -1,0 +1,175 @@
+ADISCORD_vorkerland_wkr_pragmatist_core_plan = {
+	name = "WKR pragmatist wartime core"
+	desc = ""
+
+	allowed = {
+		OR = {
+			original_tag = WRK
+			original_tag = WKR
+		}
+	}
+
+	enable = {
+		tag = WKR
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+		has_government = pragmatism
+		has_country_leader_ideology = neo_vorkerism
+		has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = WKR }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+			NOT = { has_government = pragmatism }
+			NOT = { has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes } }
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
+		}
+	}
+
+	ai_national_focuses = {
+		WKR_affirm_worker_mandate
+		WKR_establish_workers_air_command
+		WKR_raise_mobile_fortification_crews
+		WKR_organize_factory_battalions
+		WKR_put_railways_under_councils
+		WKR_keep_frontline_sorties_flying
+		WKR_convene_front_soviets
+		WKR_train_shopfloor_officers
+		WKR_form_revolutionary_supply_commission
+		WKR_secure_the_southern_corridor
+		WKR_open_free_republics_channel
+		WKR_authorize_retreat_levies
+		WKR_reopen_collective_workshops
+		WKR_rehearse_operation_southbound
+		WKR_publish_emergency_constitution
+		WKR_coordinate_counterattack_cells
+		WKR_stockpile_interchange_reserves
+		WKR_settle_front_authority
+		WKR_republic_fights_as_one
+	}
+
+	weight = { factor = 3 }
+}
+
+ADISCORD_vorkerland_wkr_utilitarian_core_plan = {
+	name = "WKR utilitarian wartime core"
+	desc = ""
+
+	allowed = {
+		OR = {
+			original_tag = WRK
+			original_tag = WKR
+		}
+	}
+
+	enable = {
+		tag = WKR
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+		has_government = utilitarism
+		has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = WKR }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+			NOT = { has_government = utilitarism }
+			NOT = { has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes } }
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
+		}
+	}
+
+	ai_national_focuses = {
+		WKR_affirm_worker_mandate
+		WKR_establish_workers_air_command
+		WKR_raise_mobile_fortification_crews
+		WKR_organize_factory_battalions
+		WKR_put_railways_under_councils
+		WKR_keep_frontline_sorties_flying
+		WKR_empower_front_executive
+		WKR_train_shopfloor_officers
+		WKR_form_revolutionary_supply_commission
+		WKR_secure_the_southern_corridor
+		WKR_authorize_normative_command
+		WKR_authorize_retreat_levies
+		WKR_reopen_collective_workshops
+		WKR_rehearse_operation_southbound
+		WKR_bind_workshops_to_directive
+		WKR_coordinate_counterattack_cells
+		WKR_stockpile_interchange_reserves
+		WKR_settle_front_authority
+		WKR_republic_fights_as_one
+	}
+
+	weight = { factor = 3 }
+}
+
+ADISCORD_vorkerland_wkr_solyarino_operation_plan = {
+	name = "WKR Solarino intervention"
+	desc = ""
+
+	allowed = {
+		OR = {
+			original_tag = WRK
+			original_tag = WKR
+		}
+	}
+
+	enable = {
+		tag = WKR
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+		has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
+		NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
+		NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
+		NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+		NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }
+		NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
+		NOT = { has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted }
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_solyarino_intervention }
+		ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = yes
+		ADISCORD_vorkerland_wkr_has_valid_solyarino_target = yes
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = WKR }
+			NOT = { has_global_flag = ADISCORD_vorkerland_phase_central_preparation }
+			NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked }
+			has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested
+			has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_solyarino_intervention
+		}
+	}
+
+	ai_national_focuses = {
+		WKR_intervene_in_solyarino
+	}
+
+	weight = { factor = 5 }
+}

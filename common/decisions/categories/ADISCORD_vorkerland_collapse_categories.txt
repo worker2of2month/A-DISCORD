@@ -37,5 +37,10 @@ ADISCORD_vorkerland_collapse_category = {
 	visible = {
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		OR = {
+			NOT = { ADISCORD_vorkerland_is_main_claimant = yes }
+			has_war = yes
+			has_country_flag = ADISCORD_vorkerland_central_unifier
+		}
 	}
 }

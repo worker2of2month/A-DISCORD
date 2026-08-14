@@ -4,8 +4,8 @@ l_english:
  ADISCORD_vorkerland_allied_support_category:0 "Support the Allied Front"
  ADISCORD_vorkerland_allied_support_category_desc:0 "Limited deliveries to an existing wartime ally. These measures neither create alliances nor pull neutral countries into a war."
 
- ADISCORD_vorkerland_focus_central_minor_front_deadline:0 "Conclude the Current Campaign Wave"
- ADISCORD_vorkerland_focus_central_minor_front_deadline_desc:0 "The command tracks every war opened by this wave. If any recorded front remains active after 240 days, the claimant will close all of them under emergency terms."
+ ADISCORD_vorkerland_focus_central_minor_front_deadline:0 "A Protracted Campaign Wave"
+ ADISCORD_vorkerland_focus_central_minor_front_deadline_desc:0 "The command tracks every war opened by this wave. After 240 days the operational record is retired, but every live front continues until a real capitulation or peace."
 
  ADISCORD_vorkerland_launch_central_minor_wave:0 "Open the Central Campaign Wave"
  ADISCORD_vorkerland_launch_central_minor_wave_desc:0 "After a one-day operational pause, declare war simultaneously on every viable central government along our present border. A new wave can begin only after all recorded fronts end and the army regroups."
@@ -31,7 +31,7 @@ l_english:
  ADISCORD_vorkerland_central_showdown_command_ready_tt:0 "The claimant has authorised the final war and prepared its central front"
  ADISCORD_vorkerland_central_showdown_campaigns_closed_tt:0 "All nine district campaigns are closed and the seven-day launch cooldown has expired"
  ADISCORD_vorkerland_central_districts_integrated_tt:0 "All nine central districts are integrated and remain owned and controlled by the three claimants"
- ADISCORD_vorkerland_central_showdown_no_live_intervention_tt:0 "No separate restoration war is still active in Solarino"
+ ADISCORD_vorkerland_central_showdown_no_live_intervention_tt:0 "No separate claimant intervention is still active in Solarino"
  ADISCORD_vorkerland_commit_to_central_showdown:0 "Commit to the Central Showdown"
  ADISCORD_vorkerland_commit_to_central_showdown_desc:0 "The nine central governments are gone, their districts have completed civil integration, and no campaign remains open. Give the final order for war between the three claimants. Optional alliances with Solarino or Volnograd may be concluded separately and never delay this order."
  ADISCORD_vorkerland_wkr_retreat_levy_1:0 "Call the First Worker Retreat Levy"

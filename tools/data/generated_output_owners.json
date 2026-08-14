@@ -10,9 +10,11 @@
     "inner_frontier_countries",
     "ainholm_mandate",
     "map_buildings",
+    "vorkerland_theatre",
     "strategic_regions",
     "trade_regions",
     "terrain_snow",
+    "vorkerland_cities",
     "minimap",
     "decision_ui_assets",
     "diplomacy_ui_assets",
@@ -185,6 +187,24 @@
       "overlap_explanation": "State-history, outer, and remainder state builders invoke the same building synchronizer after repartitioning provinces; this dedicated owner is the canonical standalone pass."
     },
     {
+      "id": "vorkerland_theatre",
+      "owner_module": "tools.builders.build_adiscord_vorkerland_theatre",
+      "output_globs": ["map/railways.txt", "map/supply_nodes.txt"],
+      "source_inputs": [
+        "tools/builders/build_adiscord_vorkerland_theatre.py",
+        "map/railways.txt",
+        "map/supply_nodes.txt",
+        "map/definition.csv",
+        "map/provinces.bmp",
+        "history/states/*.txt"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_vorkerland_theatre"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_vorkerland_theatre", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "layered",
+      "overlap_explanation": "The theatre builder owns only the exact OSV capital-spur and four supply-hub records declared in its manifest; existing Nudge railway and supply records remain hand-authored map data."
+    },
+    {
       "id": "state_history",
       "owner_module": "tools.builders.build_adiscord_new_states",
       "output_globs": [
@@ -230,6 +250,7 @@
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_new_states.py",
+        "tools/lib/adiscord_vorkerland_theatre_manifest.py",
         "history/states/*.txt",
         "map/buildings.txt",
         "map/definition.csv",
@@ -426,10 +447,27 @@
       "source_inputs": [
         "map/terrain.bmp",
         "map/heightmap.bmp",
+        "map/provinces.bmp",
+        "map/definition.csv",
         "common/terrain/00_terrain.txt"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_terrain_snow"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_terrain_snow", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "vorkerland_cities",
+      "owner_module": "tools.builders.build_adiscord_vorkerland_cities",
+      "output_globs": ["map/cities.bmp"],
+      "source_inputs": [
+        "tools/builders/build_adiscord_vorkerland_cities.py",
+        "map/cities.bmp",
+        "map/provinces.bmp",
+        "map/definition.csv"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_vorkerland_cities"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_vorkerland_cities", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },

@@ -2,7 +2,12 @@ on_actions = {
 	on_startup = {
 		effect = {
 			if = {
-				limit = { VAL = { exists = yes } }
+				limit = {
+					has_global_flag = ADISCORD_fresh_campaign_contract_v1
+					NOT = { has_global_flag = ADISCORD_val_rework_fresh_campaign_v1 }
+					VAL = { exists = yes }
+				}
+				set_global_flag = ADISCORD_val_rework_fresh_campaign_v1
 				VAL = { VAL_initialize_rework = yes }
 			}
 		}

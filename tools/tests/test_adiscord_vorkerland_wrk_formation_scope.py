@@ -101,14 +101,31 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
         self.assertIn("character = WRK_VAD_Joint_Council", vad)
         self.assertIn("character = TVA_Dorian_Worx", tva)
 
-    def test_phase_six_runs_formation_and_verification_from_wrk(self) -> None:
+    def test_phase_six_runs_all_three_formations_from_wrk_scope(self) -> None:
         phase_six = event_block(self.events, "ADISCORD_vorkerland_phase.6")
-        self.assertEqual(phase_six.count("country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }"), 3)
+        self.assertEqual(
+            phase_six.count(
+                "country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }"
+            ),
+            3,
+        )
         for suffix, old_scope in (("wkr", "WKR"), ("vad", "VAD"), ("tva", "TVA")):
             effect = f"ADISCORD_vorkerland_form_wrk_from_{suffix} = yes"
             with self.subTest(winner=old_scope):
                 self.assertIn(f"WRK = {{\n\t\t\t\t{effect}", phase_six)
                 self.assertNotIn(f"{old_scope} = {{\n\t\t\t\t{effect}", phase_six)
+
+    def test_tva_formation_rebinds_both_authored_protectorates(self) -> None:
+        tva = named_block(self.effects, "ADISCORD_vorkerland_form_wrk_from_tva")
+        for tag, flag, freedom in (
+            ("TGD", "ADISCORD_vorkerland_joined_worx_directorate", "0.10"),
+            ("WTD", "ADISCORD_vorkerland_worx_aligned_technocrats", "0.15"),
+        ):
+            with self.subTest(tag=tag):
+                self.assertIn(f"country_exists = {tag}", tva)
+                self.assertIn(flag, tva)
+                self.assertIn(f"puppet = {tag}", tva)
+                self.assertIn(f"freedom_level = {freedom}", tva)
 
     def test_no_random_lucas_contract_leaks_into_formation(self) -> None:
         self.assertNotIn("Lucas", self.effects)

@@ -67,6 +67,7 @@ ASSISTANCE_IDEAS = (
     "ADISCORD_economy_ai_assistance_civil_war",
     "ADISCORD_economy_ai_assistance_retreat",
 )
+FRESH_ASSISTANCE_FLAG = "ADISCORD_minor_optimization_fresh_campaign_v1"
 
 
 def _walk_entries(
@@ -605,6 +606,125 @@ def _branch_direct_call(branch: Entry) -> str | None:
     return calls[0] if len(calls) == 1 else None
 
 
+def fresh_economy_initialization_issues(
+    effects: str,
+    triggers: str,
+    general_history: str,
+    shared_on_actions: str,
+    war_on_actions: str,
+    runtime_sources: dict[str, str] | None = None,
+) -> list[str]:
+    """Keep economy initialization fresh-only and schema migration unreachable."""
+
+    issues: list[str] = []
+    fresh_flag = "ADISCORD_fresh_campaign_contract_v1"
+    current_schema = "ADISCORD_economy_has_current_schema"
+    migration_call = "ADISCORD_economy_migrate_schema = yes"
+
+    try:
+        definitions = _definitions((effects,))
+    except (AssertionError, ValueError) as error:
+        return [f"economy initialization parse error: {error}"]
+    initializer = definitions.get("ADISCORD_economy_initialize_country")
+    if initializer is None or not isinstance(initializer.value, list):
+        return ["missing unique ADISCORD_economy_initialize_country"]
+    branches = initializer.value
+    if [entry.key for entry in branches] != ["if", "else_if"]:
+        issues.append("economy initializer is not an exclusive fresh/current-schema pair")
+    else:
+        fresh_branch, current_branch = branches
+        fresh_limit = _direct_limit(fresh_branch)
+        if fresh_limit is None or not _matches_exact_body(
+            fresh_limit,
+            f"has_global_flag = {fresh_flag} "
+            "NOT = { has_variable = ADISCORD_economy_initialized }",
+        ):
+            issues.append("economy first initialization is not exactly fresh and uninitialized")
+        fresh_body = [entry for entry in fresh_branch.value if entry.key != "limit"]
+        required_prefix = [
+            "ADISCORD_initialize_society_development_variables",
+            "ADISCORD_economy_set_default_values",
+            "ADISCORD_economy_initialize_from_development",
+            "ADISCORD_economy_apply_country_starting_profile",
+        ]
+        if [entry.key for entry in fresh_body[: len(required_prefix)]] != required_prefix:
+            issues.append("fresh economy initialization no longer owns its ordered defaults")
+        current_limit = _direct_limit(current_branch)
+        current_body = [entry for entry in current_branch.value if entry.key != "limit"]
+        if (
+            current_limit is None
+            or not _matches_exact_body(current_limit, f"{current_schema} = yes")
+            or len(current_body) != 1
+            or current_body[0].key != "ADISCORD_economy_set_simulation_tier"
+            or current_body[0].value != "yes"
+        ):
+            issues.append("current-schema economy maintenance is not limited to tier refresh")
+    if migration_call in strip_comments(block(effects, "ADISCORD_economy_initialize_country")):
+        issues.append("economy initializer still invokes save migration")
+
+    if strip_comments(general_history).count(f"set_global_flag = {fresh_flag}") != 1:
+        issues.append("history/general must produce the fresh economy provenance exactly once")
+
+    try:
+        trigger_definitions = _definitions((triggers,))
+    except (AssertionError, ValueError) as error:
+        issues.append(f"economy trigger parse error: {error}")
+        trigger_definitions = {}
+    schema_trigger = trigger_definitions.get(current_schema)
+    if (
+        schema_trigger is None
+        or not isinstance(schema_trigger.value, list)
+        or not _matches_exact_body(
+            schema_trigger.value,
+            "has_variable = ADISCORD_economy_initialized "
+            "has_variable = ADISCORD_economy_schema_version "
+            "check_variable = { var = ADISCORD_economy_schema_version value = 15 "
+            "compare = greater_than_or_equals }",
+        )
+    ):
+        issues.append("current-schema trigger is missing or widened")
+    for gate_name in (
+        "ADISCORD_economy_should_monthly_update",
+        "ADISCORD_economy_should_yearly_update",
+        "ADISCORD_economy_should_show_player_ui",
+    ):
+        gate = trigger_definitions.get(gate_name)
+        if (
+            gate is None
+            or not isinstance(gate.value, list)
+            or not _exact_scalar(gate.value, current_schema, "yes")
+        ):
+            issues.append(f"{gate_name} does not require current schema")
+
+    for hook_name, expected in (
+        ("on_war", 1),
+        ("on_peace", 1),
+        ("on_state_control_changed", 2),
+    ):
+        hook = block(shared_on_actions, hook_name)
+        if hook.count(f"{current_schema} = yes") != expected:
+            issues.append(f"{hook_name} is not guarded by current schema exactly {expected} time(s)")
+    declare_war = block(war_on_actions, "on_declare_war")
+    declare_counts = {
+        f"has_global_flag = {fresh_flag}": 2,
+        f"{current_schema} = yes": 4,
+        "ADISCORD_economy_initialize_country = yes": 2,
+        "ADISCORD_economy_mark_dirty = yes": 2,
+    }
+    for token, expected in declare_counts.items():
+        if declare_war.count(token) != expected:
+            issues.append(f"on_declare_war has non-exact fresh/current route for {token}")
+
+    callers = sorted(
+        path
+        for path, text in (runtime_sources or {}).items()
+        if migration_call in strip_comments(text)
+    )
+    if callers:
+        issues.append(f"economy save migration remains runtime-callable from: {callers}")
+    return issues
+
+
 def _direct_decision_branches(entries: list[Entry]) -> list[Entry]:
     return [entry for entry in entries if entry.key in {"if", "else_if"}]
 
@@ -932,6 +1052,21 @@ def ai_assistance_contract_issues(
         return issues + ["missing unique AI-assistance refresh"]
     refresh_definition = refreshes[0]
     direct = refresh_definition.value
+    fresh_gates = [
+        entry
+        for entry in direct
+        if entry.key == "if" and isinstance(entry.value, list)
+    ]
+    if len(direct) != 1 or len(fresh_gates) != 1:
+        issues.append("assistance refresh is not wholly owned by one fresh-campaign gate")
+    else:
+        fresh_limit = _direct_limit(fresh_gates[0])
+        if fresh_limit is None or not _matches_exact_body(
+            fresh_limit, f"has_global_flag = {FRESH_ASSISTANCE_FLAG}"
+        ):
+            issues.append("assistance refresh fresh-campaign gate is missing or widened")
+        else:
+            direct = [entry for entry in fresh_gates[0].value if entry.key != "limit"]
     assistance_references: list[tuple[str, str, set[str]]] = []
     for definition in effect_ast:
         if not isinstance(definition.value, list):
@@ -1103,9 +1238,10 @@ def ai_assistance_contract_issues(
         eligible = trigger_definitions.get("ADISCORD_economy_ai_assistance_is_eligible")
         civil = trigger_definitions.get("ADISCORD_economy_ai_assistance_civil_war_active")
         retreat = trigger_definitions.get("ADISCORD_economy_ai_assistance_retreat_active")
-        monthly = trigger_definitions.get("ADISCORD_economy_ai_assistance_needs_monthly_evaluation")
+        edge = trigger_definitions.get("ADISCORD_economy_ai_assistance_needs_edge_evaluation")
         if eligible is None or not isinstance(eligible.value, list) or not all(
             (
+                _exact_scalar(eligible.value, "has_global_flag", FRESH_ASSISTANCE_FLAG),
                 _exact_scalar(eligible.value, "is_ai", "yes"),
                 _exact_check(eligible.value, "ADISCORD_economy_simulation_tier", "1", "greater_than_or_equals"),
                 _exact_check(eligible.value, "ADISCORD_economy_simulation_tier", "2", "less_than_or_equals"),
@@ -1129,28 +1265,31 @@ def ai_assistance_contract_issues(
             )
         ):
             issues.append("retreat assistance lacks strict surrender_progress > 0.35")
-        monthly_or = (
-            [entry for entry in monthly.value if entry.key == "OR" and isinstance(entry.value, list)]
-            if monthly is not None and isinstance(monthly.value, list)
+        edge_or = (
+            [entry for entry in edge.value if entry.key == "OR" and isinstance(entry.value, list)]
+            if edge is not None and isinstance(edge.value, list)
             else []
         )
-        expected_monthly_gate = [
+        expected_edge_gate = [
             ("ADISCORD_economy_ai_assistance_is_eligible", "yes"),
             *(("has_idea", idea) for idea in ASSISTANCE_IDEAS),
         ]
         if (
-            monthly is None
-            or not isinstance(monthly.value, list)
-            or len(monthly_or) != 1
-            or len(monthly.value) != 1
+            edge is None
+            or not isinstance(edge.value, list)
+            or len(edge_or) != 1
+            or len(edge.value) != 2
+            or not _exact_scalar(edge.value, "has_global_flag", FRESH_ASSISTANCE_FLAG)
             or [
                 (entry.key, entry.value)
-                for entry in monthly_or[0].value
+                for entry in edge_or[0].value
                 if isinstance(entry.value, str)
             ]
-            != expected_monthly_gate
+            != expected_edge_gate
         ):
-            issues.append("monthly assistance evaluation is not limited to eligible AI or stale ideas")
+            issues.append("edge assistance evaluation is not fresh-only eligible AI or stale ideas")
+        if "ADISCORD_economy_ai_assistance_needs_monthly_evaluation" in trigger_definitions:
+            issues.append("retired monthly assistance evaluation trigger still exists")
     forbidden = (
         "attack_bonus",
         "army_attack_factor",
@@ -1192,6 +1331,54 @@ def ai_assistance_lifecycle_issues(
     )
     if tier.count("ADISCORD_economy_refresh_ai_assistance = yes") != 1:
         issues.append("simulation-tier changes do not refresh assistance exactly once")
+    tier_definition = _definitions((economy_effects,)).get(
+        "ADISCORD_economy_set_simulation_tier"
+    )
+    tier_target = "ADISCORD_economy_simulation_tier_target_temp"
+    if tier_definition is None or not isinstance(tier_definition.value, list):
+        issues.append("simulation-tier setter is missing")
+    else:
+        target_writes = [
+            _direct_scalar(entry.value, "value")
+            for _, entry in _walk_entries(tier_definition.value)
+            if entry.key == "set_temp_variable"
+            and isinstance(entry.value, list)
+            and _direct_scalar(entry.value, "var") == tier_target
+        ]
+        if len(target_writes) != 4 or sorted(
+            value for value in target_writes if value is not None
+        ) != ["0", "1", "2", "3"]:
+            issues.append("simulation-tier target does not have exact 0/1/2/3 ownership")
+        refresh_calls = [
+            (ancestors, entry)
+            for ancestors, entry in _walk_entries(tier_definition.value)
+            if entry.key == "ADISCORD_economy_refresh_ai_assistance"
+            and entry.value == "yes"
+        ]
+        exact_change_owner = False
+        if len(refresh_calls) == 1 and len(refresh_calls[0][0]) == 1:
+            owner = refresh_calls[0][0][0]
+            owner_limit = _direct_limit(owner)
+            exact_change_owner = bool(
+                owner.key == "if"
+                and isinstance(owner.value, list)
+                and [entry.key for entry in owner.value]
+                == ["limit", "set_variable", "ADISCORD_economy_refresh_ai_assistance"]
+                and owner_limit is not None
+                and _matches_exact_body(
+                    owner_limit,
+                    "OR = { NOT = { has_variable = ADISCORD_economy_simulation_tier } "
+                    "check_variable = { var = ADISCORD_economy_simulation_tier "
+                    "value = ADISCORD_economy_simulation_tier_target_temp "
+                    "compare = not_equals } }",
+                )
+                and _direct_operation_value(
+                    owner.value, "set_variable", "ADISCORD_economy_simulation_tier"
+                )
+                == [tier_target]
+            )
+        if not exact_change_owner:
+            issues.append("assistance refresh is not owned by an actual simulation-tier change")
     if full_if_needed.count("ADISCORD_economy_refresh_ai_assistance = yes") != 1:
         issues.append("bounded dirty/full refresh does not refresh assistance exactly once")
     if not income or any(
@@ -1200,13 +1387,16 @@ def ai_assistance_lifecycle_issues(
     ):
         issues.append("economy-owned assistance input refresh is missing or unbounded")
 
-    for hook in ("on_startup", "on_war", "on_peace", "on_monthly"):
+    for hook in ("on_startup", "on_war", "on_peace", "on_state_control_changed"):
         body = block(minor_on_actions, hook)
         if not body:
             issues.append(f"minor optimization lacks {hook} assistance hook")
             continue
-        if body.count("ADISCORD_economy_refresh_ai_assistance = yes") != 1:
-            issues.append(f"{hook} does not route assistance exactly once")
+        expected_refreshes = 2 if hook == "on_state_control_changed" else 1
+        if body.count("ADISCORD_economy_refresh_ai_assistance = yes") != expected_refreshes:
+            issues.append(
+                f"{hook} does not route assistance exactly {expected_refreshes} time(s)"
+            )
         if hook != "on_startup" and any(
             token in body for token in ("every_country", "any_country")
         ):
@@ -1220,49 +1410,60 @@ def ai_assistance_lifecycle_issues(
         for entry in parsed_on_actions
         if entry.key == "on_actions" and isinstance(entry.value, list)
     ]
-    monthly_hooks: list[Entry] = []
+    state_hooks: list[Entry] = []
     if len(on_action_roots) == 1:
-        monthly_hooks = [
+        state_hooks = [
             entry
             for entry in on_action_roots[0].value
-            if entry.key == "on_monthly" and isinstance(entry.value, list)
+            if entry.key == "on_state_control_changed" and isinstance(entry.value, list)
         ]
-    if len(monthly_hooks) != 1:
-        issues.append("monthly assistance lifecycle lacks one parsed owner")
+    if len(state_hooks) != 1:
+        issues.append("state-control assistance lifecycle lacks one parsed owner")
     else:
-        monthly_hook = monthly_hooks[0]
-        monthly_effects = [
+        state_hook = state_hooks[0]
+        state_effects = [
             entry
-            for entry in monthly_hook.value
+            for entry in state_hook.value
             if entry.key == "effect" and isinstance(entry.value, list)
         ]
-        exact_monthly_owner = False
+        exact_state_owner = False
         if (
-            [entry.key for entry in monthly_hook.value] == ["effect"]
-            and len(monthly_effects) == 1
-            and [entry.key for entry in monthly_effects[0].value] == ["if"]
+            [entry.key for entry in state_hook.value] == ["effect"]
+            and len(state_effects) == 1
+            and [entry.key for entry in state_effects[0].value] == ["if", "FROM"]
         ):
-            owner = monthly_effects[0].value[0]
-            if isinstance(owner.value, list):
+            root_owner, from_scope = state_effects[0].value
+
+            def exact_edge_owner(owner: Entry) -> bool:
+                if owner.key != "if" or not isinstance(owner.value, list):
+                    return False
                 limit = _direct_limit(owner)
-                exact_monthly_owner = (
+                return bool(
                     [entry.key for entry in owner.value]
                     == ["limit", "ADISCORD_economy_refresh_ai_assistance"]
                     and limit is not None
                     and _matches_exact_body(
                         limit,
-                        "ADISCORD_economy_ai_assistance_needs_monthly_evaluation = yes",
+                        "ADISCORD_economy_ai_assistance_needs_edge_evaluation = yes",
                     )
                     and _direct_scalar(
                         owner.value, "ADISCORD_economy_refresh_ai_assistance"
                     )
                     == "yes"
                 )
-        if not exact_monthly_owner:
-            issues.append(
-                "monthly refresh is not nested in the exact eligible-AI-or-stale owner"
+
+            exact_state_owner = bool(
+                exact_edge_owner(root_owner)
+                and from_scope.key == "FROM"
+                and isinstance(from_scope.value, list)
+                and len(from_scope.value) == 1
+                and exact_edge_owner(from_scope.value[0])
             )
-    for forbidden_hook in ("on_daily", "on_weekly", "on_yearly"):
+        if not exact_state_owner:
+            issues.append(
+                "state-control refresh is not exactly owned by ROOT and FROM edge guards"
+            )
+    for forbidden_hook in ("on_daily", "on_weekly", "on_monthly", "on_yearly"):
         if block(minor_on_actions, forbidden_hook):
             issues.append(f"assistance uses forbidden recurring hook {forbidden_hook}")
     return issues
@@ -2518,6 +2719,12 @@ def validate(root: Path = ROOT) -> list[str]:
     on_actions = strip_comments(
         read_at_root("common/on_actions/00_ADISCORD_on_actions.txt")
     )
+    war_on_actions = strip_comments(
+        read_at_root("common/on_actions/00_on_actions.txt")
+    )
+    general_history = strip_comments(
+        read_at_root("history/general/ADISCORD_general_history.txt")
+    )
     default_ai = strip_comments(read_at_root("common/ai_strategy/default.txt"))
     economy_ai = strip_comments(
         read_at_root("common/ai_strategy/ADISCORD_economy_ai.txt")
@@ -2571,6 +2778,25 @@ def validate(root: Path = ROOT) -> list[str]:
                 "scripted_loc": scripted_loc,
                 "economy_ai": economy_ai,
             },
+        )
+    )
+    runtime_sources: dict[str, str] = {}
+    for directory in ("common", "events", "history"):
+        source_root = root / directory
+        if not source_root.exists():
+            continue
+        for path in source_root.rglob("*.txt"):
+            runtime_sources[path.relative_to(root).as_posix()] = path.read_text(
+                encoding="utf-8-sig", errors="replace"
+            )
+    issues.extend(
+        fresh_economy_initialization_issues(
+            effects,
+            triggers,
+            general_history,
+            on_actions,
+            war_on_actions,
+            runtime_sources,
         )
     )
     if minor_ideas and minor_effects:
@@ -2727,7 +2953,7 @@ def validate(root: Path = ROOT) -> list[str]:
             "weekly preparation recalculates the tier or scans countries/states")
     control_change = block(on_actions, "on_state_control_changed")
     require(control_change.count("ADISCORD_economy_mark_dirty = yes") == 2
-            and control_change.count("has_variable = ADISCORD_economy_initialized") == 2,
+            and control_change.count("ADISCORD_economy_has_current_schema = yes") == 2,
             "state control changes do not invalidate both existing economy caches")
     require("every_country" not in control_change and "every_owned_state" not in control_change,
             "state control cache invalidation performs a global or state scan")
@@ -3065,6 +3291,33 @@ def validate(root: Path = ROOT) -> list[str]:
     ):
         require(retired_name not in effects, f"retired economy state is still live: {retired_name}")
     cycle = block(effects, "ADISCORD_economy_update_model_and_cycle")
+    for system in (
+        "agrarian", "industrializing", "free_market", "mixed",
+        "state_coordinated", "planned_bureaucratic", "mobilization",
+        "oligarchic_clan", "technocratic",
+    ):
+        wrapper = f"ADISCORD_economy_has_idea_economic_system_{system} = yes"
+        require(cycle.count(wrapper) == 1,
+                f"economy model refresh does not query {system} exactly once")
+    for legacy_inference in (
+        "ADISCORD_economy_has_industrial_artisan_markets",
+        "ADISCORD_state_development_at_most_2",
+        "ADISCORD_economy_has_taxation_light_dues",
+        "ADISCORD_economy_has_labor_loose_contracts",
+        "ADISCORD_economy_has_industrial_state_planning",
+        "ADISCORD_state_development_at_least_3",
+        "ADISCORD_state_development_at_least_4",
+        "ADISCORD_economy_has_taxation_extraction_quotas",
+        "ADISCORD_economy_has_industrial_military_prioritization",
+        "ADISCORD_state_development_at_most_1",
+        "ADISCORD_economy_has_taxation_industrial_tariffs",
+        "has_government = technocracy",
+        "ADISCORD_economy_has_labor_technocratic_work_norms",
+    ):
+        require(legacy_inference not in cycle,
+                f"economy model refresh retains old-save inference {legacy_inference}")
+    require("else =" not in cycle,
+            "economy model refresh retains an implicit no-law save backfill")
     require("ADISCORD_economy_cycle_phase value = 4" not in cycle
             and "ADISCORD_economy_cycle_phase value = 5" not in cycle
             and "ADISCORD_economy_cycle_phase value = 6" not in cycle

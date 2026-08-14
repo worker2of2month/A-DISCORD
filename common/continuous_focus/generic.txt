@@ -1,6 +1,96 @@
 continuous_focus_palette = {
 	id = generic_focus
+	country = { factor = 1 }
 	default = yes
+	reset_on_civilwar = no
+	position = { x = 50 y = 1000 }
 
-	#position = { x = 5000 y = 5000 }
+	focus = {
+		id = ADISCORD_vorkerland_continuous_emergency_production
+		icon = GFX_goal_generic_production
+		available = {
+			OR = {
+				AND = { tag = WKR has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked }
+				AND = { tag = VAD has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked }
+				AND = { tag = TVA has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked }
+				AND = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+			}
+		}
+		enable = {
+			OR = {
+				AND = { tag = WKR has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked }
+				AND = { tag = VAD has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked }
+				AND = { tag = TVA has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked }
+				AND = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+			}
+		}
+		modifier = {
+			industrial_capacity_factory = 0.05
+			production_factory_efficiency_gain_factor = 0.05
+		}
+		ai_will_do = { factor = 0.25 modifier = { factor = 2 has_war = yes } }
+		supports_ai_strategy = ai_focus_military_advancements
+		daily_cost = 1
+		available_if_capitulated = no
+	}
+
+	focus = {
+		id = ADISCORD_vorkerland_continuous_front_repair
+		icon = GFX_goal_continuous_repairments
+		available = {
+			OR = {
+				AND = { tag = WKR has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked }
+				AND = { tag = VAD has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked }
+				AND = { tag = TVA has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked }
+				AND = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+			}
+		}
+		enable = {
+			OR = {
+				AND = { tag = WKR has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked }
+				AND = { tag = VAD has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked }
+				AND = { tag = TVA has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked }
+				AND = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+			}
+		}
+		modifier = {
+			industry_repair_factor = 0.25
+			production_speed_infrastructure_factor = 0.10
+			production_speed_rail_way_factor = 0.10
+			production_speed_supply_node_factor = 0.10
+		}
+		ai_will_do = {
+			factor = 0.25
+			modifier = { factor = 0 has_damaged_buildings = no }
+		}
+		supports_ai_strategy = ai_focus_defense
+		daily_cost = 1
+		available_if_capitulated = no
+	}
+
+	focus = {
+		id = ADISCORD_vorkerland_continuous_field_training
+		icon = GFX_goal_continuous_reduce_training_time
+		available = {
+			OR = {
+				AND = { tag = WKR has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked }
+				AND = { tag = VAD has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked }
+				AND = { tag = TVA has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked }
+				AND = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+			}
+		}
+		enable = {
+			OR = {
+				AND = { tag = WKR has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked }
+				AND = { tag = VAD has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked }
+				AND = { tag = TVA has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked }
+				AND = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+			}
+		}
+		modifier = { training_time_army_factor = -0.15 }
+		ai_will_do = { factor = 0.20 }
+		supports_ai_strategy = ai_focus_defense
+		daily_cost = 1
+		available_if_capitulated = no
+	}
 }

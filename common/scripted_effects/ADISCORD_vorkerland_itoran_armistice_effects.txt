@@ -1,0 +1,57 @@
+# The authored pre-collapse map records Itora's earlier border victory through
+# PWR ownership of the three treaty states. Only that intact fresh-start
+# arrangement receives the armistice; collapse expires it permanently.
+ADISCORD_vorkerland_apply_precollapse_itoran_armistice = {
+	if = {
+		limit = {
+			tag = PWR
+			country_exists = IVN
+			country_exists = WRK
+			owns_state = 90
+			owns_state = 91
+			owns_state = 93
+			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_started }
+			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
+			NOT = { has_global_flag = ADISCORD_vorkerland_precollapse_itoran_armistice_expired }
+		}
+		set_global_flag = ADISCORD_vorkerland_precollapse_itoran_armistice_active
+		90 = {
+			set_state_flag = ADISCORD_vorkerland_precollapse_itoran_armistice_dmz
+			set_demilitarized_zone = yes
+		}
+		91 = {
+			set_state_flag = ADISCORD_vorkerland_precollapse_itoran_armistice_dmz
+			set_demilitarized_zone = yes
+		}
+		93 = {
+			set_state_flag = ADISCORD_vorkerland_precollapse_itoran_armistice_dmz
+			set_demilitarized_zone = yes
+		}
+	}
+}
+
+# collapse.1 calls this immediately after recording collapse_started. The
+# permanent guard prevents every later startup or intervention from restoring
+# the treaty, while the explicit states keep ownership transfers irrelevant.
+ADISCORD_vorkerland_expire_precollapse_itoran_armistice = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_collapse_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_precollapse_itoran_armistice_expired }
+		}
+		set_global_flag = ADISCORD_vorkerland_precollapse_itoran_armistice_expired
+		clr_global_flag = ADISCORD_vorkerland_precollapse_itoran_armistice_active
+		90 = {
+			set_demilitarized_zone = no
+			clr_state_flag = ADISCORD_vorkerland_precollapse_itoran_armistice_dmz
+		}
+		91 = {
+			set_demilitarized_zone = no
+			clr_state_flag = ADISCORD_vorkerland_precollapse_itoran_armistice_dmz
+		}
+		93 = {
+			set_demilitarized_zone = no
+			clr_state_flag = ADISCORD_vorkerland_precollapse_itoran_armistice_dmz
+		}
+	}
+}

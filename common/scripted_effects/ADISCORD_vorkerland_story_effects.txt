@@ -1,0 +1,271 @@
+# Compact story layer for the background Vorkerland civil war. These effects
+# may change only narrative flags and small country resources. They do not own
+# wars, peace, state transfer, annexation, subjects, or phase progression.
+
+ADISCORD_vorkerland_story_announce_verified_showdown = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			ADISCORD_vorkerland_central_showdown_edges_verified = yes
+			ADISCORD_vorkerland_central_showdown_required = yes
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_launch_failed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_story_showdown_announced }
+		}
+		set_global_flag = ADISCORD_vorkerland_story_showdown_announced
+		news_event = { id = ADISCORD_vorkerland_story.1 }
+	}
+}
+
+ADISCORD_vorkerland_story_reward_capital_winner = {
+	add_war_support = 0.02
+	add_command_power = 8
+}
+
+ADISCORD_vorkerland_story_dispatch_wkr_capital_fall = {
+	if = {
+		limit = { tag = WTD TVA = { exists = yes } }
+		TVA = {
+			ADISCORD_vorkerland_story_reward_capital_winner = yes
+			news_event = { id = ADISCORD_vorkerland_story.2 }
+		}
+	}
+	else_if = {
+		limit = { tag = VLA WKR = { exists = yes } }
+		WKR = {
+			ADISCORD_vorkerland_story_reward_capital_winner = yes
+			news_event = { id = ADISCORD_vorkerland_story.2 }
+		}
+	}
+	else_if = {
+		limit = { tag = SOL VAD = { exists = yes } }
+		VAD = {
+			ADISCORD_vorkerland_story_reward_capital_winner = yes
+			news_event = { id = ADISCORD_vorkerland_story.2 }
+		}
+	}
+	else_if = {
+		limit = { is_subject = yes }
+		OVERLORD = {
+			ADISCORD_vorkerland_story_reward_capital_winner = yes
+			news_event = { id = ADISCORD_vorkerland_story.2 }
+		}
+	}
+	else = {
+		ADISCORD_vorkerland_story_reward_capital_winner = yes
+		news_event = { id = ADISCORD_vorkerland_story.2 }
+	}
+}
+
+ADISCORD_vorkerland_story_dispatch_vad_capital_fall = {
+	if = {
+		limit = { tag = WTD TVA = { exists = yes } }
+		TVA = {
+			ADISCORD_vorkerland_story_reward_capital_winner = yes
+			news_event = { id = ADISCORD_vorkerland_story.3 }
+		}
+	}
+	else_if = {
+		limit = { tag = VLA WKR = { exists = yes } }
+		WKR = {
+			ADISCORD_vorkerland_story_reward_capital_winner = yes
+			news_event = { id = ADISCORD_vorkerland_story.3 }
+		}
+	}
+	else_if = {
+		limit = { tag = SOL VAD = { exists = yes } }
+		VAD = {
+			ADISCORD_vorkerland_story_reward_capital_winner = yes
+			news_event = { id = ADISCORD_vorkerland_story.3 }
+		}
+	}
+	else_if = {
+		limit = { is_subject = yes }
+		OVERLORD = {
+			ADISCORD_vorkerland_story_reward_capital_winner = yes
+			news_event = { id = ADISCORD_vorkerland_story.3 }
+		}
+	}
+	else = {
+		ADISCORD_vorkerland_story_reward_capital_winner = yes
+		news_event = { id = ADISCORD_vorkerland_story.3 }
+	}
+}
+
+ADISCORD_vorkerland_story_dispatch_tva_capital_fall = {
+	if = {
+		limit = { tag = WTD TVA = { exists = yes } }
+		TVA = {
+			ADISCORD_vorkerland_story_reward_capital_winner = yes
+			news_event = { id = ADISCORD_vorkerland_story.4 }
+		}
+	}
+	else_if = {
+		limit = { tag = VLA WKR = { exists = yes } }
+		WKR = {
+			ADISCORD_vorkerland_story_reward_capital_winner = yes
+			news_event = { id = ADISCORD_vorkerland_story.4 }
+		}
+	}
+	else_if = {
+		limit = { tag = SOL VAD = { exists = yes } }
+		VAD = {
+			ADISCORD_vorkerland_story_reward_capital_winner = yes
+			news_event = { id = ADISCORD_vorkerland_story.4 }
+		}
+	}
+	else_if = {
+		limit = { is_subject = yes }
+		OVERLORD = {
+			ADISCORD_vorkerland_story_reward_capital_winner = yes
+			news_event = { id = ADISCORD_vorkerland_story.4 }
+		}
+	}
+	else = {
+		ADISCORD_vorkerland_story_reward_capital_winner = yes
+		news_event = { id = ADISCORD_vorkerland_story.4 }
+	}
+}
+
+# ROOT is the new controller and FROM is the old controller in
+# on_state_control_changed. Requiring the changed controller to hold the exact
+# capital prevents an unrelated state change from naming the wrong victor.
+ADISCORD_vorkerland_story_check_first_claimant_capital_fall = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			ADISCORD_vorkerland_central_showdown_edges_verified = yes
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_launch_failed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_story_first_claimant_capital_fell }
+			FROM = { tag = WKR }
+			32 = { is_controlled_by = ROOT }
+			NOT = { tag = WKR }
+		}
+		set_global_flag = ADISCORD_vorkerland_story_first_claimant_capital_fell
+		set_global_flag = ADISCORD_vorkerland_story_wkr_capital_fell_first
+		WKR = {
+			if = {
+				limit = { exists = yes }
+				add_war_support = -0.02
+				add_command_power = -5
+			}
+		}
+		ADISCORD_vorkerland_story_dispatch_wkr_capital_fall = yes
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			ADISCORD_vorkerland_central_showdown_edges_verified = yes
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_launch_failed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_story_first_claimant_capital_fell }
+			FROM = { tag = VAD }
+			75 = { is_controlled_by = ROOT }
+			NOT = { tag = VAD }
+		}
+		set_global_flag = ADISCORD_vorkerland_story_first_claimant_capital_fell
+		set_global_flag = ADISCORD_vorkerland_story_vad_capital_fell_first
+		VAD = {
+			if = {
+				limit = { exists = yes }
+				add_war_support = -0.02
+				add_command_power = -5
+			}
+		}
+		ADISCORD_vorkerland_story_dispatch_vad_capital_fall = yes
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			ADISCORD_vorkerland_central_showdown_edges_verified = yes
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_launch_failed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_story_first_claimant_capital_fell }
+			FROM = { tag = TVA }
+			36 = { is_controlled_by = ROOT }
+			NOT = { tag = TVA }
+		}
+		set_global_flag = ADISCORD_vorkerland_story_first_claimant_capital_fell
+		set_global_flag = ADISCORD_vorkerland_story_tva_capital_fell_first
+		TVA = {
+			if = {
+				limit = { exists = yes }
+				add_war_support = -0.02
+				add_command_power = -5
+			}
+		}
+		ADISCORD_vorkerland_story_dispatch_tva_capital_fall = yes
+	}
+}
+
+ADISCORD_vorkerland_story_offer_first_claimant_command_choice = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+			NOT = { has_global_flag = ADISCORD_vorkerland_reunification_verified }
+			NOT = { has_global_flag = ADISCORD_vorkerland_story_first_claimant_capitulated }
+			NOT = { tag = WRK }
+			ROOT = { ADISCORD_vorkerland_is_central_claimant = yes }
+		}
+		set_global_flag = ADISCORD_vorkerland_story_first_claimant_capitulated
+		if = {
+			limit = { tag = WTD TVA = { exists = yes } }
+			TVA = { country_event = { id = ADISCORD_vorkerland_story.5 } }
+		}
+		else_if = {
+			limit = { tag = VLA WKR = { exists = yes } }
+			WKR = { country_event = { id = ADISCORD_vorkerland_story.5 } }
+		}
+		else_if = {
+			limit = { tag = SOL VAD = { exists = yes } }
+			VAD = { country_event = { id = ADISCORD_vorkerland_story.5 } }
+		}
+		else_if = {
+			limit = { is_subject = yes }
+			OVERLORD = { country_event = { id = ADISCORD_vorkerland_story.5 } }
+		}
+		else = {
+			country_event = { id = ADISCORD_vorkerland_story.5 }
+		}
+	}
+}
+
+ADISCORD_vorkerland_story_offer_post_reunification = {
+	if = {
+		limit = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_reunification_verified
+			NOT = { has_global_flag = ADISCORD_vorkerland_story_postwar_event_offered }
+			OR = {
+				has_country_flag = ADISCORD_vorkerland_route_worker
+				has_country_flag = ADISCORD_vorkerland_route_joint
+				has_country_flag = ADISCORD_vorkerland_route_utilitarian
+			}
+		}
+		set_global_flag = ADISCORD_vorkerland_story_postwar_event_offered
+		country_event = { id = ADISCORD_vorkerland_story.6 }
+	}
+}
+
+ADISCORD_vorkerland_story_finish_reunification = {
+	if = {
+		limit = {
+			tag = WRK
+			NOT = { has_country_flag = ADISCORD_vorkerland_story_postwar_choice_resolved }
+		}
+		set_country_flag = ADISCORD_vorkerland_story_postwar_choice_resolved
+		if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_route_worker }
+			set_global_flag = ADISCORD_vorkerland_story_worker_finale_reported
+			news_event = { id = ADISCORD_vorkerland_story.7 }
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_route_joint }
+			set_global_flag = ADISCORD_vorkerland_story_joint_finale_reported
+			news_event = { id = ADISCORD_vorkerland_story.8 }
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_route_utilitarian }
+			set_global_flag = ADISCORD_vorkerland_story_worx_finale_reported
+			news_event = { id = ADISCORD_vorkerland_story.9 }
+		}
+	}
+}

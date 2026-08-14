@@ -436,7 +436,6 @@ VAL_migrate_contract_tier_levels = {
 }
 
 VAL_initialize_rework = {
-	VAL_migrate_contract_tier_levels = yes
 	VAL_initialize_contract_authority = yes
 	ADISCORD_economy_initialize_country = yes
 	if = {

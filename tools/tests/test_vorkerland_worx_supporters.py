@@ -67,7 +67,7 @@ class VorkerlandWorxSupporterTests(unittest.TestCase):
         )
         self.assertIn("set_capital = { state = 32 }", wkr)
 
-    def test_oitfort_committee_takes_only_state_34_and_never_annexes_wrk(self) -> None:
+    def test_oitfort_committee_takes_only_state_34_and_becomes_tva_subject(self) -> None:
         effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
         setup = named_block(effects, "ADISCORD_vorkerland_setup_wtd")
         self.assertEqual(
@@ -78,12 +78,34 @@ class VorkerlandWorxSupporterTests(unittest.TestCase):
         self.assertNotIn("annex_country = { target = WRK", effects)
 
         alignment = named_block(effects, "ADISCORD_vorkerland_align_wtd_with_worx")
-        self.assertNotIn("puppet = WTD", alignment)
+        self.assertIn("puppet = WTD", alignment)
         self.assertIn("is_subject = yes", alignment)
         self.assertIn("autonomy_state = autonomy_free", alignment)
         self.assertIn("is_in_faction = yes", alignment)
         self.assertIn("leave_faction = yes", alignment)
+        self.assertIn("autonomy_state = autonomy_puppet", alignment)
+        self.assertIn("freedom_level = 0.15", alignment)
         self.assertIn("ADISCORD_vorkerland_worx_aligned_technocrats", alignment)
+
+        collapse_events = read("events/ADISCORD_vorkerland_collapse_events.txt")
+        outbreak = event_block(collapse_events, "ADISCORD_vorkerland_collapse.1")
+        self.assertIn("ADISCORD_vorkerland_align_wtd_with_worx = yes", outbreak)
+        self.assertNotRegex(
+            collapse_events,
+            r"(?m)^\s*id\s*=\s*ADISCORD_vorkerland_collapse\.86\b",
+        )
+
+        startup = named_block(
+            read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
+            "on_startup",
+        )
+        for token in (
+            "ADISCORD_vorkerland_wtd_subject_migration_v1_scheduled",
+            "has_country_flag = ADISCORD_vorkerland_worx_aligned_technocrats",
+            "NOT = { is_subject_of = TVA }",
+            "TVA = { country_event = { id = ADISCORD_vorkerland_collapse.86 days = 1 } }",
+        ):
+            self.assertNotIn(token, startup)
 
     def test_retired_worker_doctor_events_are_absent_and_wtd_joins_live_war(self) -> None:
         events = read("events/ADISCORD_vorkerland_collapse_events.txt")
@@ -124,7 +146,7 @@ class VorkerlandWorxSupporterTests(unittest.TestCase):
             phase_effects, "ADISCORD_vorkerland_schedule_wtd_tva_temporary_alliance_check"
         )
         for token in (
-            "is_subject = no",
+            "is_subject_of = TVA",
             "TVA = { exists = yes has_war_with = WKR }",
             "NOT = { has_war_with = WKR }",
             "WTD = { country_event = { id = ADISCORD_vorkerland_collapse.47 days = 1 } }",
@@ -134,7 +156,7 @@ class VorkerlandWorxSupporterTests(unittest.TestCase):
         join = event_block(events, "ADISCORD_vorkerland_collapse.47")
         for token in (
             "tag = WTD",
-            "is_subject = no",
+            "is_subject_of = TVA",
             "TVA = { exists = yes has_war_with = WKR }",
             "NOT = { has_war_with = WKR }",
             "targeted_alliance = TVA",

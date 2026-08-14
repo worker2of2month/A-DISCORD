@@ -1,0 +1,22 @@
+on_actions = {
+	# ROOT is the attacking side and FROM is the defending side. This event-only
+	# hook replaces recurring checks and cannot repair an already-running save.
+	on_war_relation_added = {
+		effect = {
+			if = {
+				limit = {
+					ROOT = { ADISCORD_vorkerland_is_central_claimant = yes }
+					FROM = { ADISCORD_vorkerland_is_central_minor = yes }
+				}
+				ROOT = { ADISCORD_vorkerland_schedule_central_stalemate_deadline = yes }
+			}
+			if = {
+				limit = {
+					ROOT = { tag = SOL }
+					FROM = { OR = { tag = SRA tag = CSL } }
+				}
+				ROOT = { ADISCORD_vorkerland_schedule_solarino_stalemate_deadline = yes }
+			}
+		}
+	}
+}

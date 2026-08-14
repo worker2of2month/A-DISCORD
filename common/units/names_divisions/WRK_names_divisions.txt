@@ -1,34 +1,34 @@
 WRK_INF_01 = {
 	name = "Infantry Divisions"
 
-	for_countries = { WRK }
+	for_countries = { WRK WKR }
 
 	can_use = { always = yes }
 
 	division_types = { infantry }
 
-	fallback_name = "%da Division de Infanteria"
+	fallback_name = "%d. Workerland Rifle Division"
 
 	ordered = {
-		1 = { "1a Division de Infanteria" }
-		2 = { "2a Division de Infanteria" }
-		3 = { "3a Division de Infanteria" }
+		1 = { "1st Workers' Rifle Division" }
+		2 = { "2nd Workers' Rifle Division" }
+		3 = { "3rd Workers' Rifle Division" }
 	}
 }
 
 WRK_CAV_01 = {
 	name = "Cavalry Divisions"
 
-	for_countries = { WRK }
+	for_countries = { WRK WKR }
 
 	can_use = { always = yes }
 
 	division_types = { infantry }
 
-	fallback_name = "%da Division de Caballeria"
+	fallback_name = "%d. Workerland Mobile Division"
 
 	ordered = {
-		1 = { "1a Division de Caballeria" }
-		2 = { "2a Division de Caballeria" }
+		1 = { "1st Workerland Mobile Division" }
+		2 = { "2nd Workerland Mobile Division" }
 	}
 }

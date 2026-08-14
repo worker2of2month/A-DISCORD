@@ -2,13 +2,35 @@ on_actions = {
 	on_declare_war = {
 		effect = {
 			ROOT = {
-				ADISCORD_economy_initialize_country = yes
-				ADISCORD_economy_mark_dirty = yes
+				if = {
+					limit = {
+						OR = {
+							has_global_flag = ADISCORD_fresh_campaign_contract_v1
+							ADISCORD_economy_has_current_schema = yes
+						}
+					}
+					ADISCORD_economy_initialize_country = yes
+					if = {
+						limit = { ADISCORD_economy_has_current_schema = yes }
+						ADISCORD_economy_mark_dirty = yes
+					}
+				}
 			}
 
 			FROM = {
-				ADISCORD_economy_initialize_country = yes
-				ADISCORD_economy_mark_dirty = yes
+				if = {
+					limit = {
+						OR = {
+							has_global_flag = ADISCORD_fresh_campaign_contract_v1
+							ADISCORD_economy_has_current_schema = yes
+						}
+					}
+					ADISCORD_economy_initialize_country = yes
+					if = {
+						limit = { ADISCORD_economy_has_current_schema = yes }
+						ADISCORD_economy_mark_dirty = yes
+					}
+				}
 			}
 		}
 	}

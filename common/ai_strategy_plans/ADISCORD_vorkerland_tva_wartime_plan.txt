@@ -1,0 +1,385 @@
+ADISCORD_vorkerland_tva_experimental_core_plan = {
+	name = "TVA experimental wartime core"
+	desc = ""
+
+	allowed = { original_tag = TVA }
+
+	enable = {
+		tag = TVA
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		NOT = {
+			AND = {
+				OR = {
+					has_country_flag = ADISCORD_vorkerland_focus_tva_throughput_priority
+					has_country_flag = ADISCORD_vorkerland_focus_tva_algorithmic_board
+					has_country_flag = ADISCORD_vorkerland_focus_tva_specialist_priority
+				}
+				OR = {
+					has_country_flag = ADISCORD_vorkerland_focus_tva_technical_battalions
+					has_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control
+					has_country_flag = ADISCORD_vorkerland_focus_tva_adaptive_logistics
+				}
+			}
+		}
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = TVA }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			AND = {
+				OR = {
+					has_country_flag = ADISCORD_vorkerland_focus_tva_throughput_priority
+					has_country_flag = ADISCORD_vorkerland_focus_tva_algorithmic_board
+					has_country_flag = ADISCORD_vorkerland_focus_tva_specialist_priority
+				}
+				OR = {
+					has_country_flag = ADISCORD_vorkerland_focus_tva_technical_battalions
+					has_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control
+					has_country_flag = ADISCORD_vorkerland_focus_tva_adaptive_logistics
+				}
+			}
+		}
+	}
+
+	ai_national_focuses = {
+		TVA_codify_utilitarian_directorate
+		TVA_publish_operational_metrics
+		TVA_deploy_field_laboratories
+		TVA_select_trial_protocol
+	}
+
+	weight = { factor = 3 }
+}
+
+ADISCORD_vorkerland_tva_throughput_technical_depth_plan = {
+	name = "TVA throughput technical iteration"
+	desc = ""
+	allowed = { original_tag = TVA }
+	enable = {
+		tag = TVA
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		has_country_flag = ADISCORD_vorkerland_focus_tva_throughput_priority
+		has_country_flag = ADISCORD_vorkerland_focus_tva_technical_battalions
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+	abort = {
+		OR = {
+			NOT = { tag = TVA }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			has_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized
+		}
+	}
+	ai_national_focuses = {
+		TVA_unattended_shifts
+		TVA_standardize_assault_teams
+		TVA_print_interchangeable_repair_modules
+		TVA_preposition_switching_crews
+		TVA_cross_validate_trial_logs
+		TVA_authorize_iteration_two
+	}
+	weight = { factor = 5 }
+}
+
+ADISCORD_vorkerland_tva_throughput_remote_depth_plan = {
+	name = "TVA throughput remote-fire iteration"
+	desc = ""
+	allowed = { original_tag = TVA }
+	enable = {
+		tag = TVA
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		has_country_flag = ADISCORD_vorkerland_focus_tva_throughput_priority
+		has_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+	abort = {
+		OR = {
+			NOT = { tag = TVA }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			has_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized
+		}
+	}
+	ai_national_focuses = {
+		TVA_unattended_shifts
+		TVA_network_observation_posts
+		TVA_print_interchangeable_repair_modules
+		TVA_preposition_switching_crews
+		TVA_cross_validate_trial_logs
+		TVA_authorize_iteration_two
+	}
+	weight = { factor = 5 }
+}
+
+ADISCORD_vorkerland_tva_throughput_adaptive_depth_plan = {
+	name = "TVA throughput adaptive iteration"
+	desc = ""
+	allowed = { original_tag = TVA }
+	enable = {
+		tag = TVA
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		has_country_flag = ADISCORD_vorkerland_focus_tva_throughput_priority
+		has_country_flag = ADISCORD_vorkerland_focus_tva_adaptive_logistics
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+	abort = {
+		OR = {
+			NOT = { tag = TVA }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			has_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized
+		}
+	}
+	ai_national_focuses = {
+		TVA_unattended_shifts
+		TVA_mandate_modular_repair
+		TVA_print_interchangeable_repair_modules
+		TVA_preposition_switching_crews
+		TVA_cross_validate_trial_logs
+		TVA_authorize_iteration_two
+	}
+	weight = { factor = 5 }
+}
+
+ADISCORD_vorkerland_tva_algorithm_technical_depth_plan = {
+	name = "TVA algorithmic technical iteration"
+	desc = ""
+	allowed = { original_tag = TVA }
+	enable = {
+		tag = TVA
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		has_country_flag = ADISCORD_vorkerland_focus_tva_algorithmic_board
+		has_country_flag = ADISCORD_vorkerland_focus_tva_technical_battalions
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+	abort = {
+		OR = {
+			NOT = { tag = TVA }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			has_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized
+		}
+	}
+	ai_national_focuses = {
+		TVA_delegate_fire_plans_to_board
+		TVA_standardize_assault_teams
+		TVA_print_interchangeable_repair_modules
+		TVA_preposition_switching_crews
+		TVA_cross_validate_trial_logs
+		TVA_authorize_iteration_two
+	}
+	weight = { factor = 5 }
+}
+
+ADISCORD_vorkerland_tva_algorithm_remote_depth_plan = {
+	name = "TVA algorithmic remote-fire iteration"
+	desc = ""
+	allowed = { original_tag = TVA }
+	enable = {
+		tag = TVA
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		has_country_flag = ADISCORD_vorkerland_focus_tva_algorithmic_board
+		has_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+	abort = {
+		OR = {
+			NOT = { tag = TVA }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			has_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized
+		}
+	}
+	ai_national_focuses = {
+		TVA_delegate_fire_plans_to_board
+		TVA_network_observation_posts
+		TVA_print_interchangeable_repair_modules
+		TVA_preposition_switching_crews
+		TVA_cross_validate_trial_logs
+		TVA_authorize_iteration_two
+	}
+	weight = { factor = 5 }
+}
+
+ADISCORD_vorkerland_tva_algorithm_adaptive_depth_plan = {
+	name = "TVA algorithmic adaptive iteration"
+	desc = ""
+	allowed = { original_tag = TVA }
+	enable = {
+		tag = TVA
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		has_country_flag = ADISCORD_vorkerland_focus_tva_algorithmic_board
+		has_country_flag = ADISCORD_vorkerland_focus_tva_adaptive_logistics
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+	abort = {
+		OR = {
+			NOT = { tag = TVA }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			has_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized
+		}
+	}
+	ai_national_focuses = {
+		TVA_delegate_fire_plans_to_board
+		TVA_mandate_modular_repair
+		TVA_print_interchangeable_repair_modules
+		TVA_preposition_switching_crews
+		TVA_cross_validate_trial_logs
+		TVA_authorize_iteration_two
+	}
+	weight = { factor = 5 }
+}
+
+ADISCORD_vorkerland_tva_specialist_technical_depth_plan = {
+	name = "TVA specialist technical iteration"
+	desc = ""
+	allowed = { original_tag = TVA }
+	enable = {
+		tag = TVA
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		has_country_flag = ADISCORD_vorkerland_focus_tva_specialist_priority
+		has_country_flag = ADISCORD_vorkerland_focus_tva_technical_battalions
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+	abort = {
+		OR = {
+			NOT = { tag = TVA }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			has_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized
+		}
+	}
+	ai_national_focuses = {
+		TVA_bunker_specialist_cadres
+		TVA_standardize_assault_teams
+		TVA_print_interchangeable_repair_modules
+		TVA_preposition_switching_crews
+		TVA_cross_validate_trial_logs
+		TVA_authorize_iteration_two
+	}
+	weight = { factor = 5 }
+}
+
+ADISCORD_vorkerland_tva_specialist_remote_depth_plan = {
+	name = "TVA specialist remote-fire iteration"
+	desc = ""
+	allowed = { original_tag = TVA }
+	enable = {
+		tag = TVA
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		has_country_flag = ADISCORD_vorkerland_focus_tva_specialist_priority
+		has_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+	abort = {
+		OR = {
+			NOT = { tag = TVA }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			has_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized
+		}
+	}
+	ai_national_focuses = {
+		TVA_bunker_specialist_cadres
+		TVA_network_observation_posts
+		TVA_print_interchangeable_repair_modules
+		TVA_preposition_switching_crews
+		TVA_cross_validate_trial_logs
+		TVA_authorize_iteration_two
+	}
+	weight = { factor = 5 }
+}
+
+ADISCORD_vorkerland_tva_specialist_adaptive_depth_plan = {
+	name = "TVA specialist adaptive iteration"
+	desc = ""
+	allowed = { original_tag = TVA }
+	enable = {
+		tag = TVA
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		has_country_flag = ADISCORD_vorkerland_focus_tva_specialist_priority
+		has_country_flag = ADISCORD_vorkerland_focus_tva_adaptive_logistics
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+	abort = {
+		OR = {
+			NOT = { tag = TVA }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			has_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized
+		}
+	}
+	ai_national_focuses = {
+		TVA_bunker_specialist_cadres
+		TVA_mandate_modular_repair
+		TVA_print_interchangeable_repair_modules
+		TVA_preposition_switching_crews
+		TVA_cross_validate_trial_logs
+		TVA_authorize_iteration_two
+	}
+	weight = { factor = 5 }
+}

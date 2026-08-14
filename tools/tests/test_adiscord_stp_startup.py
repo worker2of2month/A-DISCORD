@@ -77,6 +77,15 @@ class STPStartupContractTests(unittest.TestCase):
             r"STP\s*=\s*\{[^{}]*STP_initialize_party_suspicion\s*=\s*yes"
             r"[^{}]*STP_initialize_leader_health\s*=\s*yes[^{}]*\}",
         )
+        fresh_guard = startup.index(
+            "has_global_flag = ADISCORD_fresh_campaign_contract_v1"
+        )
+        stp_scope = startup.index("STP = {")
+        completion = startup.index(
+            "set_global_flag = ADISCORD_starting_technology_profiles_applied"
+        )
+        self.assertLess(fresh_guard, stp_scope)
+        self.assertLess(stp_scope, completion)
         self.assertFalse(
             (ROOT / "common/on_actions/01_ADISCORD_STP_suspicion_on_actions.txt").exists()
         )

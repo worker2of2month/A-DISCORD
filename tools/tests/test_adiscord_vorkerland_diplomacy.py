@@ -23,6 +23,7 @@ from tools.validators.validate_adiscord_vorkerland_diplomacy import (
     validate_terminal_outcomes,
     validate_vad_egc_route_priority,
     validate_vad_intervention_and_restoration,
+    validate_wkr_solyarino_intervention,
 )
 
 
@@ -129,6 +130,10 @@ class SolarInterventionTests(unittest.TestCase):
             },
         )
         issues = validate_counter_intervention()
+        self.assertEqual(issues, [], issue_report(issues))
+
+    def test_wkr_solyarino_intervention_is_bounded_multi_target_and_ai_driven(self) -> None:
+        issues = validate_wkr_solyarino_intervention()
         self.assertEqual(issues, [], issue_report(issues))
 
 

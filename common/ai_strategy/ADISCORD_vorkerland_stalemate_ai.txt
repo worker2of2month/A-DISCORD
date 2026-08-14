@@ -1,0 +1,111 @@
+# The idea supplies the temporary operational advantage; these plans ensure
+# that the AI actually spends its single window on the surviving front.
+ADISCORD_vorkerland_central_breakthrough_eyr = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = { is_ai = yes has_country_flag = ADISCORD_vorkerland_central_breakthrough_window_active country_exists = EYR has_war_with = EYR EYR = { NOT = { has_capitulated = yes } } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = EYR value = 100 }
+	ai_strategy = { type = front_control tag = EYR ratio = 1.00 priority = 2000 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = consider_weak id = EYR value = 100 }
+	ai_strategy = { type = conquer id = EYR value = 300 }
+}
+
+ADISCORD_vorkerland_central_breakthrough_egc = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = { is_ai = yes has_country_flag = ADISCORD_vorkerland_central_breakthrough_window_active country_exists = EGC has_war_with = EGC EGC = { NOT = { has_capitulated = yes } } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = EGC value = 100 }
+	ai_strategy = { type = front_control tag = EGC ratio = 1.00 priority = 2000 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = consider_weak id = EGC value = 100 }
+	ai_strategy = { type = conquer id = EGC value = 300 }
+}
+
+ADISCORD_vorkerland_central_breakthrough_riv = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = { is_ai = yes has_country_flag = ADISCORD_vorkerland_central_breakthrough_window_active country_exists = RIV has_war_with = RIV RIV = { NOT = { has_capitulated = yes } } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = RIV value = 100 }
+	ai_strategy = { type = front_control tag = RIV ratio = 1.00 priority = 2000 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = consider_weak id = RIV value = 100 }
+	ai_strategy = { type = conquer id = RIV value = 300 }
+}
+
+ADISCORD_vorkerland_central_breakthrough_rev = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = { is_ai = yes has_country_flag = ADISCORD_vorkerland_central_breakthrough_window_active country_exists = REV has_war_with = REV REV = { NOT = { has_capitulated = yes } } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = REV value = 100 }
+	ai_strategy = { type = front_control tag = REV ratio = 1.00 priority = 2000 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = consider_weak id = REV value = 100 }
+	ai_strategy = { type = conquer id = REV value = 300 }
+}
+
+ADISCORD_vorkerland_central_breakthrough_yor = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = { is_ai = yes has_country_flag = ADISCORD_vorkerland_central_breakthrough_window_active country_exists = YOR has_war_with = YOR YOR = { NOT = { has_capitulated = yes } } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = YOR value = 100 }
+	ai_strategy = { type = front_control tag = YOR ratio = 1.00 priority = 2000 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = consider_weak id = YOR value = 100 }
+	ai_strategy = { type = conquer id = YOR value = 300 }
+}
+
+ADISCORD_vorkerland_central_breakthrough_ndn = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = { is_ai = yes has_country_flag = ADISCORD_vorkerland_central_breakthrough_window_active country_exists = NDN has_war_with = NDN NDN = { NOT = { has_capitulated = yes } } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = NDN value = 100 }
+	ai_strategy = { type = front_control tag = NDN ratio = 1.00 priority = 2000 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = consider_weak id = NDN value = 100 }
+	ai_strategy = { type = conquer id = NDN value = 300 }
+}
+
+ADISCORD_vorkerland_central_breakthrough_swb = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = { is_ai = yes has_country_flag = ADISCORD_vorkerland_central_breakthrough_window_active country_exists = SWB has_war_with = SWB SWB = { NOT = { has_capitulated = yes } } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = SWB value = 100 }
+	ai_strategy = { type = front_control tag = SWB ratio = 1.00 priority = 2000 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = consider_weak id = SWB value = 100 }
+	ai_strategy = { type = conquer id = SWB value = 300 }
+}
+
+ADISCORD_vorkerland_central_breakthrough_vhv = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = { is_ai = yes has_country_flag = ADISCORD_vorkerland_central_breakthrough_window_active country_exists = VHV has_war_with = VHV VHV = { NOT = { has_capitulated = yes } } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = VHV value = 100 }
+	ai_strategy = { type = front_control tag = VHV ratio = 1.00 priority = 2000 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = consider_weak id = VHV value = 100 }
+	ai_strategy = { type = conquer id = VHV value = 300 }
+}
+
+ADISCORD_vorkerland_central_breakthrough_osv = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = { is_ai = yes has_country_flag = ADISCORD_vorkerland_central_breakthrough_window_active country_exists = OSV has_war_with = OSV OSV = { NOT = { has_capitulated = yes } } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = OSV value = 100 }
+	ai_strategy = { type = front_control tag = OSV ratio = 1.00 priority = 2000 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = consider_weak id = OSV value = 100 }
+	ai_strategy = { type = conquer id = OSV value = 300 }
+}
+
+ADISCORD_vorkerland_solarino_breakthrough_sra = {
+	allowed = { tag = SOL }
+	enable = { is_ai = yes has_country_flag = ADISCORD_vorkerland_solarino_breakthrough_window_active country_exists = SRA has_war_with = SRA SRA = { NOT = { has_capitulated = yes } } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = SRA value = 50 }
+	ai_strategy = { type = front_control tag = SRA ratio = 0.50 priority = 2000 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = consider_weak id = SRA value = 100 }
+	ai_strategy = { type = conquer id = SRA value = 300 }
+}
+
+ADISCORD_vorkerland_solarino_breakthrough_csl = {
+	allowed = { tag = SOL }
+	enable = { is_ai = yes has_country_flag = ADISCORD_vorkerland_solarino_breakthrough_window_active country_exists = CSL has_war_with = CSL CSL = { NOT = { has_capitulated = yes } } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = CSL value = 50 }
+	ai_strategy = { type = front_control tag = CSL ratio = 0.50 priority = 2000 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = consider_weak id = CSL value = 100 }
+	ai_strategy = { type = conquer id = CSL value = 300 }
+}

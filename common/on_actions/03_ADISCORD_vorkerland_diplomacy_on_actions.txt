@@ -1,197 +1,4 @@
 on_actions = {
-	on_startup = {
-		effect = {
-			# Pending invitations are either re-dispatched once or resolved as an
-			# invalid decline. The short dispatch guard avoids duplicate visible
-			# events when a normal one-day event survives the reload.
-			if = {
-				limit = {
-					country_exists = VAD
-					VAD = { has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending }
-				}
-				if = {
-					limit = {
-						OR = {
-							NOT = { has_global_flag = ADISCORD_vorkerland_solar_winner_sol }
-							has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted
-							has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_declined
-							NOT = { country_exists = SOL }
-							VAD = { OR = { is_subject = yes has_capitulated = yes has_war_with = SOL } }
-							SOL = { OR = { is_subject = yes has_capitulated = yes } }
-						}
-					}
-					VAD = {
-						clr_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending
-						clr_country_flag = ADISCORD_vorkerland_vad_sol_invitation_dispatch_guard
-						set_country_flag = ADISCORD_vorkerland_vad_sol_invitation_resolved
-					}
-					if = {
-						limit = {
-							NOT = { has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted }
-							NOT = { has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_declined }
-						}
-						set_global_flag = ADISCORD_vorkerland_vad_sol_alliance_declined
-					}
-				}
-				else_if = {
-					limit = { VAD = { NOT = { has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_dispatch_guard } } }
-					VAD = { set_country_flag = { flag = ADISCORD_vorkerland_vad_sol_invitation_dispatch_guard days = 3 } }
-					SOL = { country_event = { id = ADISCORD_vorkerland_diplomacy.2 days = 1 } }
-				}
-			}
-			if = {
-				limit = {
-					country_exists = WKR
-					WKR = { has_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending }
-				}
-				if = {
-					limit = {
-						OR = {
-							NOT = { has_global_flag = ADISCORD_vorkerland_volnograd_winner_vla }
-							has_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_accepted
-							has_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_declined
-							NOT = { country_exists = VLA }
-							WKR = { OR = { is_subject = yes has_capitulated = yes has_war_with = VLA } }
-							VLA = { OR = { is_subject = yes has_capitulated = yes } }
-						}
-					}
-					WKR = {
-						clr_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending
-						clr_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_dispatch_guard
-						set_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_resolved
-					}
-					if = {
-						limit = {
-							NOT = { has_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_accepted }
-							NOT = { has_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_declined }
-						}
-						set_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_declined
-					}
-				}
-				else_if = {
-					limit = { WKR = { NOT = { has_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_dispatch_guard } } }
-					WKR = { set_country_flag = { flag = ADISCORD_vorkerland_wkr_vla_invitation_dispatch_guard days = 3 } }
-					VLA = { country_event = { id = ADISCORD_vorkerland_diplomacy.3 days = 1 } }
-				}
-			}
-
-			# A reservation may survive only while its public seven-day decision is
-			# still a coherent path. Invalid old-save reservations are released.
-			if = {
-				limit = {
-					has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved
-					OR = {
-						NOT = { has_global_flag = ADISCORD_vorkerland_phase_central_preparation }
-						has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested
-						has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized
-						has_global_flag = ADISCORD_vorkerland_central_showdown_started
-						has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
-						has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_failed
-						has_global_flag = ADISCORD_vorkerland_sol_restoration_verified
-						NOT = { country_exists = VAD }
-						VAD = { OR = { is_subject = yes has_capitulated = yes has_war = yes } }
-						NOT = { VAD = { ADISCORD_vorkerland_vad_has_solar_intervention_border = yes } }
-					}
-				}
-				ADISCORD_vorkerland_cancel_vad_solar_intervention_reservation = yes
-			}
-
-			# Requeue exactly the current asynchronous stage. Separate initial/retry
-			# events make duplicate events after a reload harmless and still bounded.
-			if = {
-				limit = {
-					has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
-					NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_failed }
-					country_exists = VAD
-					VAD = { NOT = { has_capitulated = yes } }
-				}
-				if = {
-					limit = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
-					if = {
-						limit = {
-							OR = {
-								has_global_flag = ADISCORD_vorkerland_sol_restoration_materialized
-								SOL = {
-									exists = yes
-									is_subject_of = VAD
-									NOT = { has_capitulated = yes }
-									owns_state = 76 controls_state = 76
-									owns_state = 104 controls_state = 104
-									owns_state = 198 controls_state = 198
-									owns_state = 307 controls_state = 307
-									owns_state = 310 controls_state = 310
-								}
-							}
-						}
-						set_global_flag = ADISCORD_vorkerland_sol_restoration_materialized
-						if = {
-							limit = { has_global_flag = ADISCORD_vorkerland_sol_restoration_retry }
-							VAD = { country_event = { id = ADISCORD_vorkerland_diplomacy.8 days = 1 } }
-						}
-						else = { VAD = { country_event = { id = ADISCORD_vorkerland_diplomacy.5 days = 1 } } }
-					}
-					else_if = {
-						limit = { has_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry }
-						VAD = { country_event = { id = ADISCORD_vorkerland_diplomacy.7 days = 1 } }
-					}
-					else = { VAD = { country_event = { id = ADISCORD_vorkerland_diplomacy.4 days = 1 } } }
-				}
-				else = {
-					VAD = { set_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending }
-					if = {
-						limit = { VAD = { has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_retry } }
-						VAD = { country_event = { id = ADISCORD_vorkerland_diplomacy.9 days = 1 } }
-					}
-					else = { VAD = { country_event = { id = ADISCORD_vorkerland_diplomacy.6 days = 1 } } }
-				}
-			}
-			# on_startup has no country ROOT. Enter the claimant tag explicitly so
-			# the country-scoped lifecycle effect is valid even during save repair.
-			VAD = { ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes }
-			# Acceptance normally reconciles immediately. This one-shot load assertion
-			# covers a save made between the accepted flag and the bounded war joins.
-			if = {
-				limit = {
-					has_global_flag = ADISCORD_vorkerland_central_showdown_started
-					ADISCORD_vorkerland_central_showdown_edges_verified = yes
-					OR = {
-						has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted
-						has_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_accepted
-					}
-				}
-				ADISCORD_vorkerland_join_regional_allies_to_showdown = yes
-			}
-			# One bounded save-repair assertion; normal outcome recording is event-driven
-			# from regional capitulations below.
-			if = {
-				limit = {
-					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-					OR = {
-						NOT = { has_global_flag = ADISCORD_vorkerland_solar_terminal_verified }
-						NOT = { has_global_flag = ADISCORD_vorkerland_volnograd_terminal_verified }
-					}
-					NOT = { has_global_flag = ADISCORD_vorkerland_regional_diplomacy_repair_scheduled }
-				}
-				set_global_flag = {
-					flag = ADISCORD_vorkerland_regional_diplomacy_repair_scheduled
-					days = 7
-				}
-				if = {
-					limit = { country_exists = WKR }
-					WKR = { country_event = { id = ADISCORD_vorkerland_diplomacy.1 days = 1 } }
-				}
-				else_if = {
-					limit = { country_exists = VAD }
-					VAD = { country_event = { id = ADISCORD_vorkerland_diplomacy.1 days = 1 } }
-				}
-				else_if = {
-					limit = { country_exists = TVA }
-					TVA = { country_event = { id = ADISCORD_vorkerland_diplomacy.1 days = 1 } }
-				}
-			}
-		}
-	}
-
 	on_capitulation = {
 		effect = {
 			if = {
@@ -249,11 +56,23 @@ on_actions = {
 					country_event = { id = ADISCORD_vorkerland_diplomacy.4 days = 1 }
 				}
 			}
+
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+					country_exists = WKR
+					ROOT = { OR = { tag = SOL tag = SRA tag = CSL } }
+				}
+				WKR = { country_event = { id = ADISCORD_vorkerland_diplomacy.12 days = 1 } }
+			}
 			ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes
 		}
 	}
 
 	on_peace = {
-		effect = { ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes }
+		effect = {
+			ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes
+			ADISCORD_vorkerland_clear_wkr_solyarino_intervention = yes
+		}
 	}
 }

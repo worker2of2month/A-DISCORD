@@ -1,0 +1,61 @@
+# A fresh-campaign anti-stalemate window is valid only during the claimant
+# preparation phase. It never follows the campaign into the showdown or the
+# terminal formation sequence.
+ADISCORD_vorkerland_stalemate_campaign_active = {
+	has_global_flag = ADISCORD_vorkerland_collapse_started
+	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+	has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+	NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+}
+
+ADISCORD_vorkerland_is_central_claimant = {
+	OR = { tag = WKR tag = VAD tag = TVA }
+}
+
+ADISCORD_vorkerland_is_central_minor = {
+	OR = {
+		tag = EYR
+		tag = EGC
+		tag = RIV
+		tag = REV
+		tag = YOR
+		tag = NDN
+		tag = SWB
+		tag = VHV
+		tag = OSV
+	}
+}
+
+# The operational window is AI-only and requires at least one surviving
+# central minor that is still in a real war with this claimant.
+ADISCORD_vorkerland_has_live_central_minor_war = {
+	is_ai = yes
+	is_subject = no
+	NOT = { has_capitulated = yes }
+	OR = {
+		AND = { country_exists = EYR has_war_with = EYR EYR = { NOT = { has_capitulated = yes } } }
+		AND = { country_exists = EGC has_war_with = EGC EGC = { NOT = { has_capitulated = yes } } }
+		AND = { country_exists = RIV has_war_with = RIV RIV = { NOT = { has_capitulated = yes } } }
+		AND = { country_exists = REV has_war_with = REV REV = { NOT = { has_capitulated = yes } } }
+		AND = { country_exists = YOR has_war_with = YOR YOR = { NOT = { has_capitulated = yes } } }
+		AND = { country_exists = NDN has_war_with = NDN NDN = { NOT = { has_capitulated = yes } } }
+		AND = { country_exists = SWB has_war_with = SWB SWB = { NOT = { has_capitulated = yes } } }
+		AND = { country_exists = VHV has_war_with = VHV VHV = { NOT = { has_capitulated = yes } } }
+		AND = { country_exists = OSV has_war_with = OSV OSV = { NOT = { has_capitulated = yes } } }
+	}
+}
+
+# SOL is the authored aggressor against both southern rivals. The third
+# SRA-CSL war already exists, so the deadline must never create another front.
+ADISCORD_vorkerland_has_live_solarino_war = {
+	tag = SOL
+	is_ai = yes
+	is_subject = no
+	NOT = { has_capitulated = yes }
+	NOT = { has_global_flag = ADISCORD_vorkerland_solar_terminal_verified }
+	OR = {
+		AND = { country_exists = SRA has_war_with = SRA SRA = { NOT = { has_capitulated = yes } } }
+		AND = { country_exists = CSL has_war_with = CSL CSL = { NOT = { has_capitulated = yes } } }
+	}
+}

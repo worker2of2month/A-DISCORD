@@ -23,10 +23,10 @@ state={
 		}
 		add_core_of = VAD
 
-		victory_points = { 16594 25 }
-		victory_points = { 16580 10 }
-		victory_points = { 16575 10 }
-		victory_points = { 16570 10 }
-		victory_points = { 4841 10 }
+		victory_points = { 16594 10 }
+		victory_points = { 16580 5 }
+		victory_points = { 16575 5 }
+		victory_points = { 16570 5 }
+		victory_points = { 4841 5 }
 	}
 }

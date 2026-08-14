@@ -38,16 +38,20 @@ class RinOathCrisisContractTests(unittest.TestCase):
             war.find("ADISCORD_rin_crisis.1 days = 7"),
         )
 
-    def test_startup_is_bounded_legacy_repair_not_a_poll(self) -> None:
+    def test_startup_migration_is_absent(self) -> None:
         on_actions = read(ON_ACTIONS)
-        startup = named_block(on_actions, "on_startup")
-        rin_scope = named_block(startup, "RIN")
-        self.assertIn("ADISCORD_rin_oath_crisis_legacy_needs_schedule = yes", rin_scope)
-        self.assertEqual(startup.count("ADISCORD_rin_crisis.1 days = 1"), 1)
-        legacy = named_block(read(TRIGGERS), "ADISCORD_rin_oath_crisis_legacy_needs_schedule")
-        self.assertIn("tag = RIN", legacy)
-        self.assertNotIn("RIN = {", legacy)
-        for recurring in ("on_daily", "on_weekly", "on_monthly", "on_yearly", "every_country"):
+        self.assertNotIn("on_startup", on_actions)
+        self.assertNotIn(
+            "ADISCORD_rin_oath_crisis_legacy_needs_schedule",
+            read(TRIGGERS) + on_actions,
+        )
+        for recurring in (
+            "on_daily",
+            "on_weekly",
+            "on_monthly",
+            "on_yearly",
+            "every_country",
+        ):
             self.assertNotIn(recurring, on_actions)
 
     def test_starting_oob_uses_line_artillery_not_support_in_regiments(self) -> None:

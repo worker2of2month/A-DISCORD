@@ -9,32 +9,38 @@ country_event = {
 	trigger = {
 		tag = WRK
 		ADISCORD_vorkerland_collapse_not_started = yes
-		NOT = { has_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved }
 	}
 
 	immediate = {
 		ADISCORD_vorkerland_begin_collapse = yes
 		set_global_flag = ADISCORD_vorkerland_collapse_started
-		# A dedicated permanent guard protects the physical Tower sequence even
-		# if an old save loses or migrates the wider phase flags.
-		set_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved
-		goto_province = 6713
-		launch_nuke = {
-			province = 6713
-			use_nuke = no
-		}
-		32 = {
-			damage_building = {
-				type = infrastructure
-				damage = 0.1
+		ADISCORD_vorkerland_expire_precollapse_itoran_armistice = yes
+		# Recheck the permanent guard inside the executing immediate block. Two
+		# already-admitted event instances can otherwise both pass the outer event
+		# trigger before the first one records the destruction.
+		if = {
+			limit = {
+				NOT = { has_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved }
 			}
-			damage_building = {
-				type = rail_way
-				damage = 0.1
+			set_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved
+			goto_province = 16428
+			launch_nuke = {
+				province = 16428
+				use_nuke = no
 			}
-			damage_building = {
-				type = anti_air_building
-				damage = 0.1
+			40 = {
+				damage_building = {
+					type = infrastructure
+					damage = 0.1
+				}
+				damage_building = {
+					type = rail_way
+					damage = 0.1
+				}
+				damage_building = {
+					type = anti_air_building
+					damage = 0.1
+				}
 			}
 		}
 		random_list = {
@@ -104,6 +110,7 @@ country_event = {
 			ADISCORD_vorkerland_teardown_confederation = yes
 			ADISCORD_vorkerland_align_wtd_with_worx = yes
 			ADISCORD_vorkerland_apply_claimant_cosmetics = yes
+			ADISCORD_vorkerland_repair_claimant_identities = yes
 			focus_unlock = yes
 			mark_focus_tree_layout_dirty = yes
 			country_event = { id = ADISCORD_vorkerland_collapse.41 days = 1 }
@@ -142,7 +149,7 @@ country_event = {
 		ADISCORD_vorkerland_collapse_wars_not_started = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_materialized_verified
 		ADISCORD_vorkerland_collapse_materialized = yes
-		ADISCORD_vorkerland_claimant_identities_materialized = yes
+		has_global_flag = ADISCORD_vorkerland_claimant_identity_assertion_started_v2
 	}
 
 	immediate = {
@@ -150,6 +157,10 @@ country_event = {
 		# day later, after released-country faction membership has entered the cache.
 		ADISCORD_vorkerland_teardown_confederation = yes
 		set_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		ADISCORD_nam_resource_war_schedule = yes
+		WKR = { ADISCORD_vorkerland_bootstrap_ai_force_designs = yes }
+		VAD = { ADISCORD_vorkerland_bootstrap_ai_force_designs = yes }
+		TVA = { ADISCORD_vorkerland_bootstrap_ai_force_designs = yes }
 		# The claimant spirits are asserted at the actual war-outbreak stage,
 		# after the initial partition and political cache rebuild. This prevents
 		# WRK's three obsolete starting spirits from resurfacing in live play.
@@ -217,18 +228,6 @@ country_event = {
 		ADISCORD_vorkerland_teardown_confederation = yes
 		set_global_flag = ADISCORD_vorkerland_claim_wars_authorized
 	}
-}
-
-country_event = {
-	id = ADISCORD_vorkerland_collapse.10
-	hidden = yes
-	is_triggered_only = yes
-	fire_only_once = yes
-	# Legacy discard. Builds before the three-year contract serialized this
-	# event with a 60-90 day delay. It must remain defined so those saves load,
-	# but it may no longer reveal the zone when their old timer expires.
-	trigger = { always = no }
-	immediate = { }
 }
 
 country_event = {
@@ -477,7 +476,7 @@ country_event = {
 }
 
 # The political state is asserted only after the initial partition and subject
-# rebuild have completed. Explicit tag scopes keep this O(1) and save-compatible.
+# rebuild have completed. Explicit tag scopes keep this fresh assertion O(1).
 country_event = {
 	id = ADISCORD_vorkerland_collapse.41
 	hidden = yes
@@ -524,8 +523,8 @@ country_event = {
 }
 
 # PWR is freed after the initial partition, so its political cache receives one
-# deferred assertion just like the two Ivanland clients. The event is reusable
-# for a one-shot save repair on load.
+# deferred assertion just like the two Ivanland clients. Bounded verification
+# may call the same assertion again without changing its scope.
 country_event = {
 	id = ADISCORD_vorkerland_collapse.44
 	hidden = yes
@@ -791,46 +790,6 @@ country_event = {
 	immediate = { ADISCORD_vorkerland_verify_northern_war_restore = yes }
 }
 
-# Save-only bridge for campaigns created while the visible preparation decision
-# existed but the non-selectable mission still lacked an activation producer.
-# Fresh campaigns unlock planning through .30 and never need this event.
-country_event = {
-	id = ADISCORD_vorkerland_collapse.75
-	hidden = yes
-	is_triggered_only = yes
-	trigger = {
-		tag = IVN
-		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-		has_global_flag = ADISCORD_vorkerland_northern_wars_began
-		has_global_flag = ADISCORD_vorkerland_ivanland_mission_activation_pending_v3
-		NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }
-		NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active }
-		NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_mission_activation_v3 }
-	}
-	immediate = {
-		set_global_flag = ADISCORD_vorkerland_ivanland_planning_unlocked_v4
-		clr_global_flag = ADISCORD_vorkerland_ivanland_mission_activation_pending_v3
-	}
-}
-
-# A bounded bridge for old saves where an already-active Ivanland operation
-# paused the initial regional-war verification. The outcome schedules this once
-# after the diplomatic cache has settled; it never polls a finished campaign.
-country_event = {
-	id = ADISCORD_vorkerland_collapse.76
-	hidden = yes
-	is_triggered_only = yes
-	trigger = {
-		tag = IVN
-		has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved
-		has_global_flag = ADISCORD_vorkerland_regional_war_launch_scheduled
-		NOT = { has_global_flag = ADISCORD_vorkerland_northern_wars_began }
-		NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active }
-		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-	}
-	immediate = { ADISCORD_vorkerland_resume_pending_regional_war_launch_after_ivanland = yes }
-}
-
 # One delayed assertion replaces the former monthly joint-council repair.
 country_event = {
 	id = ADISCORD_vorkerland_collapse.62
@@ -938,8 +897,51 @@ country_event = {
 	}
 }
 
-# The Oitfort technocrats remain sovereign. They enter TVA's WKR war one day
-# after the edge is verified, without subject call-to-arms or permanent polling.
+# Living-winner controller for capitulated zero-state district shells. It
+# cooperates with the loser-scoped .65/.66 events and never polls.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.69
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = { tag = WKR tag = VAD tag = TVA tag = WRK }
+		is_subject = no
+		NOT = { has_capitulated = yes }
+	}
+	immediate = {
+		clr_country_flag = ADISCORD_vorkerland_central_minor_settlement_controller_scheduled
+		clr_country_flag = ADISCORD_vorkerland_central_minor_settlement_controller_failed
+		ADISCORD_vorkerland_sweep_pending_central_minor_settlements = yes
+		if = {
+			limit = { ADISCORD_vorkerland_has_matching_pending_central_minor_settlement = yes }
+			country_event = { id = ADISCORD_vorkerland_collapse.70 days = 1 }
+		}
+		else = { ADISCORD_vorkerland_focus_schedule_final_showdown = yes }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.70
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = { tag = WKR tag = VAD tag = TVA tag = WRK }
+		is_subject = no
+		NOT = { has_capitulated = yes }
+	}
+	immediate = {
+		ADISCORD_vorkerland_sweep_pending_central_minor_settlements = yes
+		if = {
+			limit = { ADISCORD_vorkerland_has_matching_pending_central_minor_settlement = yes }
+			set_country_flag = ADISCORD_vorkerland_central_minor_settlement_controller_failed
+			log = "[ADISCORD][VORKERLAND][RECOVERY] Living winner could not dissolve a pending central district shell after one retry."
+		}
+		else = { ADISCORD_vorkerland_focus_schedule_final_showdown = yes }
+	}
+}
+
+# TVA's Oitfort protectorate enters the WKR war one day after the edge is
+# verified, without permanent polling.
 country_event = {
 	id = ADISCORD_vorkerland_collapse.47
 	hidden = yes
@@ -947,7 +949,7 @@ country_event = {
 
 	trigger = {
 		tag = WTD
-		is_subject = no
+		is_subject_of = TVA
 		NOT = { has_capitulated = yes }
 		TVA = { exists = yes has_war_with = WKR }
 		NOT = { has_war_with = WKR }
@@ -963,7 +965,7 @@ country_event = {
 	}
 }
 
-# Postcondition and one bounded retry for sovereign WTD joining TVA's live war.
+# Postcondition and one bounded retry for WTD joining TVA's live war.
 country_event = {
 	id = ADISCORD_vorkerland_collapse.67
 	hidden = yes
@@ -971,7 +973,7 @@ country_event = {
 
 	trigger = {
 		tag = WTD
-		is_subject = no
+		is_subject_of = TVA
 		NOT = { has_capitulated = yes }
 	}
 
@@ -997,7 +999,7 @@ country_event = {
 		else = {
 			clr_country_flag = ADISCORD_vorkerland_wtd_join_retry
 			set_country_flag = ADISCORD_vorkerland_wtd_join_failed
-			log = "[ADISCORD][VORKERLAND][RECOVERY] Sovereign WTD failed to join the verified TVA-WKR war after one retry."
+			log = "[ADISCORD][VORKERLAND][RECOVERY] TVA subject WTD failed to join the verified TVA-WKR war after one retry."
 		}
 	}
 }

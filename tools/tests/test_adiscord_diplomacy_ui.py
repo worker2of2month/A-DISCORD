@@ -195,12 +195,7 @@ class DiplomacyLayoutContractTests(unittest.TestCase):
             r'(?s)name\s*=\s*"ADISCORD_politics_card".{0,180}?'
             r'size\s*=\s*\{\s*width\s*=\s*527\s+height\s*=\s*76\s*\}',
         )
-        self.assertRegex(
-            self.gui,
-            r'(?s)name\s*=\s*"ADISCORD_party_popularity_frame".{0,180}?'
-            r'position\s*=\s*\{\s*x\s*=\s*149\s+y\s*=\s*10\s*\}.'
-            r'{0,100}?size\s*=\s*\{\s*width\s*=\s*124\s+height\s*=\s*68\s*\}',
-        )
+        self.assertNotIn('name = "ADISCORD_party_popularity_frame"', self.gui)
         self.assertRegex(
             self.gui,
             r'(?s)name\s*=\s*"ADISCORD_ruling_party_frame".{0,180}?'
@@ -211,7 +206,7 @@ class DiplomacyLayoutContractTests(unittest.TestCase):
             self.gui.count(
                 'quadTextureSprite = "GFX_ADISCORD_diplomacy_thin_frame"'
             ),
-            6,
+            5,
         )
         self.assertRegex(
             self.diplomacy_gfx,
@@ -230,7 +225,7 @@ class DiplomacyLayoutContractTests(unittest.TestCase):
         for name, sprite, x, y in (
             ("ADISCORD_diplo_flag_overlay", "GFX_ADISCORD_diplomacy_flag_overlay", 14, 2),
             ("ADISCORD_diplo_leader_overlay", "GFX_ADISCORD_diplomacy_leader_overlay", 10, 0),
-            ("ADISCORD_party_popularity_overlay", "GFX_ADISCORD_diplomacy_parties_overlay", 149, 10),
+            ("ADISCORD_party_popularity_overlay", "GFX_ADISCORD_diplomacy_parties_overlay", 179, 12),
         ):
             start, end = named_block_span(self.gui, name)
             block = self.gui[start : end + 1]
@@ -242,20 +237,20 @@ class DiplomacyLayoutContractTests(unittest.TestCase):
             )
             self.assertIn("alwaystransparent = yes", block)
 
-    def test_native_leader_name_sits_in_the_portrait_dossier_plate(self) -> None:
+    def test_single_diplomacy_leader_name_is_in_dossier_plate(self) -> None:
         start, end = named_block_span(self.gui, "leader_name")
-        block = self.gui[start : end + 1]
+        caption = self.gui[start : end + 1]
         self.assertRegex(
-            block,
+            caption,
             r'position\s*=\s*\{\s*x\s*=\s*10\s+y\s*=\s*318\s*\}',
         )
-        self.assertIn('font = "hoi_16mbs"', block)
-        self.assertRegex(block, r'maxWidth\s*=\s*124')
-        self.assertRegex(block, r'format\s*=\s*center')
-        self.assertIn("alwaystransparent = yes", block)
+        self.assertIn('text = "Rudolf Kittler"', caption)
+        self.assertRegex(caption, r'maxWidth\s*=\s*124')
+        self.assertRegex(caption, r'format\s*=\s*center')
+        self.assertIn("alwaystransparent = yes", caption)
+        scripted_loc = read("common/scripted_localisation/ADISCORD_ideologies.txt")
+        self.assertNotIn("ADISCORDGetDiplomacyLeaderName", scripted_loc)
 
-        # Keep the binding in country_info even though it is drawn over the
-        # lower plate of the nested diplomacy_tab_top card.
         parent_start, parent_end = named_block_span(self.gui, "country_info")
         self.assertLess(parent_start, start)
         self.assertLess(end, parent_end)
@@ -270,7 +265,7 @@ class DiplomacyLayoutContractTests(unittest.TestCase):
         outputs = expected_outputs()
         expected_sizes = {
             LEADER_OVERLAY: (128, 216),
-            PARTIES_OVERLAY: (124, 68),
+            PARTIES_OVERLAY: (63, 63),
             FLAG_OVERLAY: (126, 80),
         }
         for path, size in expected_sizes.items():
@@ -280,10 +275,14 @@ class DiplomacyLayoutContractTests(unittest.TestCase):
             with Image.open(path) as image:
                 rgba = image.convert("RGBA")
             self.assertEqual(rgba.size, size)
-            self.assertEqual(rgba.getpixel((size[0] // 2, size[1] // 4))[3], 0)
+            if path != PARTIES_OVERLAY:
+                self.assertEqual(rgba.getpixel((size[0] // 2, size[1] // 4))[3], 0)
 
         with Image.open(PARTIES_OVERLAY) as image:
-            self.assertEqual(image.convert("RGBA").getpixel((62, 34))[3], 0)
+            parties = image.convert("RGBA")
+            self.assertEqual(parties.getpixel((31, 31))[3], 0)
+            self.assertGreater(parties.getpixel((31, 1))[3], 0)
+            self.assertLess(parties.getpixel((0, 0))[3], 32)
         with Image.open(FLAG_OVERLAY) as image:
             self.assertEqual(image.convert("RGBA").getpixel((63, 40))[3], 0)
 

@@ -1,0 +1,17 @@
+on_actions = {
+	on_startup = {
+		effect = {
+			# Country history seeds this marker only for a newly created campaign.
+			# Consume it before applying the authored pre-collapse treaty map.
+			PWR = {
+				if = {
+					limit = {
+						has_country_flag = ADISCORD_vorkerland_fresh_start_armistice_pending_v1
+					}
+					clr_country_flag = ADISCORD_vorkerland_fresh_start_armistice_pending_v1
+					ADISCORD_vorkerland_apply_precollapse_itoran_armistice = yes
+				}
+			}
+		}
+	}
+}

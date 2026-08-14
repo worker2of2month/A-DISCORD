@@ -12,6 +12,7 @@ ADISCORD_vorkerland_regional_diplomacy_category = {
 		available = {
 			is_subject = no
 			NOT = { has_capitulated = yes }
+			NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active }
 			SOL = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = ROOT } }
 			NOT = { has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending }
 		}
@@ -60,6 +61,7 @@ ADISCORD_vorkerland_regional_diplomacy_category = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
 			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+			NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active }
 		}
 		available = {
 			is_subject = no
@@ -79,6 +81,7 @@ ADISCORD_vorkerland_regional_diplomacy_category = {
 				has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized
 				has_global_flag = ADISCORD_vorkerland_central_showdown_started
 				has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+				has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
 				has_global_flag = ADISCORD_vorkerland_sol_restoration_verified
 				is_subject = yes
 				has_capitulated = yes

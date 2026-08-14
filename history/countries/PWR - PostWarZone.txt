@@ -1,5 +1,9 @@
 capital = 71
 
+# Consumed once by the pre-collapse Itoran armistice startup. Saves created
+# before this fresh-campaign contract never receive the marker.
+set_country_flag = ADISCORD_vorkerland_fresh_start_armistice_pending_v1
+
 oob = "PWR"
 ####### Characters
 

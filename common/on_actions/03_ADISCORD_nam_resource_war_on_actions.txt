@@ -1,23 +1,4 @@
 on_actions = {
-	on_daily = {
-		effect = {
-			if = {
-				limit = {
-					ADISCORD_nam_resource_war_ready = yes
-					NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
-				}
-				set_global_flag = ADISCORD_nam_resource_war_scheduled
-				NAM = {
-					country_event = {
-						id = ADISCORD_nam_resource_war.1
-						days = 120
-						random_days = 90
-					}
-				}
-			}
-		}
-	}
-
 	on_capitulation = {
 		effect = {
 			if = {

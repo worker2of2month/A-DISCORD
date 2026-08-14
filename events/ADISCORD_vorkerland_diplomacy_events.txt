@@ -218,3 +218,43 @@ country_event = {
 
 	immediate = { ADISCORD_vorkerland_verify_vad_solar_intervention = yes }
 }
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.10
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = WKR
+		has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		has_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_pending
+		NOT = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_retry }
+	}
+
+	immediate = { ADISCORD_vorkerland_verify_wkr_solyarino_intervention = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.11
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = WKR
+		has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		has_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_pending
+		has_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_retry
+	}
+
+	immediate = { ADISCORD_vorkerland_verify_wkr_solyarino_intervention = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.12
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = WKR
+		has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+	}
+
+	immediate = { ADISCORD_vorkerland_clear_wkr_solyarino_intervention = yes }
+}

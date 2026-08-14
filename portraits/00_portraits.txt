@@ -104,6 +104,18 @@ WRK = {
 	}
 }
 
+# WKR is the live Worker claimant during the civil war. Without an explicit
+# tag pool, newly recruited commanders fall back to the continental portraits.
+WKR = {
+	army = {
+		male = {
+			"GFX_Portrait_WRK_Generic_land_1"
+			"GFX_Portrait_WRK_Generic_land_2"
+			"GFX_Portrait_WRK_Generic_land_3"
+		}
+	}
+}
+
 VAD = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
 ZAO = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
 PWR = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }

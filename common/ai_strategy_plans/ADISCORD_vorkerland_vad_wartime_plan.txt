@@ -1,0 +1,189 @@
+ADISCORD_vorkerland_vad_vlad_core_plan = {
+	name = "VAD Vlad restoration core"
+	desc = ""
+
+	allowed = { original_tag = VAD }
+
+	enable = {
+		tag = VAD
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+		has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = VAD }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			has_global_flag = ADISCORD_vorkerland_joint_government_formed
+			has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked
+		}
+	}
+
+	ai_national_focuses = {
+		VAD_proclaim_joint_charter
+		VAD_open_imperial_registers
+		VAD_establish_mobile_headquarters
+		VAD_inventory_eastern_works
+		VAD_restore_crown_commissions
+		VAD_invite_sol_delegation
+		VAD_reconstitute_district_guard
+		VAD_standardize_district_logistics
+		VAD_bind_officers_to_chancery
+		VAD_dispatch_solland_liaison_mission
+		VAD_assemble_joint_general_staff
+		VAD_reopen_armament_depots
+		VAD_settle_restoration_authority
+		VAD_balance_council_and_command
+	}
+
+	weight = { factor = 3 }
+}
+
+ADISCORD_vorkerland_vad_joint_core_plan = {
+	name = "VAD joint restoration core"
+	desc = ""
+
+	allowed = { original_tag = VAD }
+
+	enable = {
+		tag = VAD
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		has_global_flag = ADISCORD_vorkerland_joint_government_formed
+		has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+		has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = VAD }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked
+		}
+	}
+
+	ai_national_focuses = {
+		VAD_proclaim_joint_charter
+		VAD_form_field_commandantures
+		VAD_establish_mobile_headquarters
+		VAD_inventory_eastern_works
+		VAD_guarantee_worker_committees
+		VAD_invite_sol_delegation
+		VAD_reconstitute_district_guard
+		VAD_standardize_district_logistics
+		VAD_ratify_joint_command
+		VAD_dispatch_solland_liaison_mission
+		VAD_assemble_joint_general_staff
+		VAD_reopen_armament_depots
+		VAD_settle_restoration_authority
+		VAD_balance_council_and_command
+	}
+
+	weight = { factor = 3 }
+}
+
+ADISCORD_vorkerland_vad_vlad_depth_plan = {
+	name = "VAD Vlad wartime depth"
+	desc = ""
+
+	allowed = { original_tag = VAD }
+
+	enable = {
+		tag = VAD
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+		NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+		has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+		has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_solar_settlement_defined }
+		NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = VAD }
+			NOT = { has_global_flag = ADISCORD_vorkerland_phase_central_preparation }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			has_global_flag = ADISCORD_vorkerland_joint_government_formed
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			has_country_flag = ADISCORD_vorkerland_focus_vad_solar_settlement_defined
+		}
+	}
+
+	ai_national_focuses = {
+		VAD_restore_prefectural_courts
+		VAD_issue_crown_mobilization_warrants
+		VAD_turn_the_chancery_into_a_war_cabinet
+		VAD_map_the_solar_corridors
+		VAD_preposition_restoration_columns
+		VAD_define_the_solar_settlement
+		VAD_reconcile_emergency_district_rolls
+		VAD_restore_eastern_supply_corridors
+		VAD_convert_emergency_workshops
+		VAD_publish_interim_restoration_register
+	}
+
+	weight = { factor = 4 }
+}
+
+ADISCORD_vorkerland_vad_joint_depth_plan = {
+	name = "VAD joint wartime depth"
+	desc = ""
+
+	allowed = { original_tag = VAD }
+
+	enable = {
+		tag = VAD
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+		has_global_flag = ADISCORD_vorkerland_joint_government_formed
+		has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+		has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+		has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_solar_settlement_defined }
+		NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = VAD }
+			NOT = { has_global_flag = ADISCORD_vorkerland_phase_central_preparation }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			has_country_flag = ADISCORD_vorkerland_focus_vad_solar_settlement_defined
+		}
+	}
+
+	ai_national_focuses = {
+		VAD_elect_district_commissars
+		VAD_merge_guard_and_worker_rolls
+		VAD_sign_the_dual_authority_protocol
+		VAD_map_the_solar_corridors
+		VAD_preposition_restoration_columns
+		VAD_define_the_solar_settlement
+		VAD_reconcile_emergency_district_rolls
+		VAD_restore_eastern_supply_corridors
+		VAD_convert_emergency_workshops
+		VAD_publish_interim_restoration_register
+	}
+
+	weight = { factor = 4 }
+}

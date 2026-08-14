@@ -35,6 +35,9 @@ from tools.validators.validate_adiscord_vorkerland_focus_decisions import (
 from tools.validators.validate_adiscord_vorkerland_recovery import (
     collect_issues as validate_adiscord_vorkerland_recovery,
 )
+from tools.validators.validate_adiscord_vorkerland_story import (
+    collect_issues as validate_adiscord_vorkerland_story,
+)
 from tools.validators.validate_adiscord_division_templates import validate as validate_adiscord_division_templates
 from tools.builders.build_adiscord_map_buildings import validate as validate_adiscord_map_buildings
 from tools.builders.build_adiscord_terrain_snow import validate as validate_adiscord_terrain_snow
@@ -980,6 +983,13 @@ def main():
         "Vorkerland regional diplomacy",
         vorkerland_diplomacy_issues[: args.limit],
         len(vorkerland_diplomacy_issues),
+    )
+
+    vorkerland_story_issues = validate_adiscord_vorkerland_story()
+    print_section(
+        "Vorkerland civil-war story and news",
+        vorkerland_story_issues[: args.limit],
+        len(vorkerland_story_issues),
     )
 
     division_template_issues = validate_adiscord_division_templates()

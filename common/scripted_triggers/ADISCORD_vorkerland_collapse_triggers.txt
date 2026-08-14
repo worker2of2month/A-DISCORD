@@ -115,6 +115,20 @@ ADISCORD_vorkerland_is_main_claimant = {
 	}
 }
 
+# The historical WRK tag is dormant between the initial split and the verified
+# phase.6 formation. Native peace actions can otherwise release that dormant
+# core holder for one tick and recreate the old country beside its claimants.
+ADISCORD_vorkerland_is_premature_wrk = {
+	tag = WRK
+	exists = yes
+	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+	NOT = { has_global_flag = ADISCORD_vorkerland_phase_reunification }
+	NOT = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+	NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+	NOT = { has_global_flag = ADISCORD_vorkerland_reunification_verified }
+	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+}
+
 # Main claimants fight only across a live border. An unrelated current war must
 # not freeze the centre: the collapse is explicitly allowed to become a
 # multi-front conflict. Worker and Doctor Worx are the exception: their direct
@@ -362,4 +376,68 @@ ADISCORD_vorkerland_dorian_victory_candidate = {
 	controls_state = 37
 	controls_state = 38
 	controls_state = 39
+}
+
+# Evaluated in the living central winner's country scope. The nine explicit
+# district scopes keep save recovery bounded and ensure that one claimant can
+# never consume a shell recorded for another winner.
+ADISCORD_vorkerland_has_matching_pending_central_minor_settlement = {
+	OR = {
+		AND = {
+			tag = WKR
+			OR = {
+				EYR = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr }
+				EGC = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr }
+				RIV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr }
+				REV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr }
+				YOR = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr }
+				NDN = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr }
+				SWB = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr }
+				VHV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr }
+				OSV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr }
+			}
+		}
+		AND = {
+			tag = VAD
+			OR = {
+				EYR = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad }
+				EGC = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad }
+				RIV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad }
+				REV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad }
+				YOR = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad }
+				NDN = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad }
+				SWB = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad }
+				VHV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad }
+				OSV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad }
+			}
+		}
+		AND = {
+			tag = TVA
+			OR = {
+				EYR = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva }
+				EGC = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva }
+				RIV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva }
+				REV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva }
+				YOR = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva }
+				NDN = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva }
+				SWB = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva }
+				VHV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva }
+				OSV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva }
+			}
+		}
+		AND = {
+			tag = WRK
+			OR = {
+				EYR = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk }
+				EGC = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk }
+				RIV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk }
+				REV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk }
+				YOR = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk }
+				NDN = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk }
+				SWB = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk }
+				VHV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk }
+				OSV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk }
+			}
+		}
+	}
 }

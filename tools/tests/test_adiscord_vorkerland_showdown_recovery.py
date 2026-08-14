@@ -123,70 +123,16 @@ class CentralShowdownRecoveryTests(unittest.TestCase):
                 phase_six,
             )
 
-    def test_startup_repairs_each_missing_controller_event_once_in_claimant_priority(self) -> None:
+    def test_startup_does_not_requeue_old_showdown_controller_events(self) -> None:
         on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
         startup = named_block(on_actions, "on_startup")
         repair_flag = "ADISCORD_vorkerland_showdown_startup_repair_scheduled"
-
-        phase_branches: dict[str, tuple[str, str]] = {}
-        for branch_type in ("if", "else_if"):
-            for branch in named_blocks(startup, branch_type):
-                for phase_id in ("4", "5"):
-                    if (
-                        f"ADISCORD_vorkerland_phase.{phase_id} days = 1" in branch
-                        and f"flag = {repair_flag}" in branch
-                    ):
-                        self.assertNotIn(phase_id, phase_branches)
-                        phase_branches[phase_id] = (branch_type, branch)
-
-        self.assertEqual(set(phase_branches), {"4", "5"})
-        self.assertEqual(phase_branches["4"][0], "if")
-        self.assertEqual(phase_branches["5"][0], "else_if")
-
-        for phase_id, (_, branch) in phase_branches.items():
-            branch_limit = named_block(branch, "limit")
-            for guard in (
-                "has_global_flag = ADISCORD_vorkerland_phase_central_preparation",
-                "NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }",
-                f"NOT = {{ has_global_flag = {repair_flag} }}",
-                "OR = { country_exists = WKR country_exists = VAD country_exists = TVA }",
-            ):
-                self.assertIn(guard, branch_limit)
-            schedules = [
-                block
-                for block in named_blocks(branch, "set_global_flag")
-                if f"flag = {repair_flag}" in block
-            ]
-            self.assertEqual(len(schedules), 1)
-            self.assertEqual(schedules[0].count("days = 3"), 1)
-
-            dispatch = (
-                f"country_event = {{ id = ADISCORD_vorkerland_phase.{phase_id} days = 1 }}"
-            )
-            claimant_dispatches = [
-                f"WKR = {{ {dispatch} }}",
-                f"VAD = {{ {dispatch} }}",
-                f"TVA = {{ {dispatch} }}",
-            ]
-            positions = [branch.find(token) for token in claimant_dispatches]
-            self.assertTrue(all(position >= 0 for position in positions))
-            self.assertEqual(positions, sorted(positions))
-            self.assertEqual(branch.count(dispatch), 3)
-
-        phase_four_limit = named_block(phase_branches["4"][1], "limit")
-        self.assertIn(
-            "has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested",
-            phase_four_limit,
-        )
-        self.assertIn(
-            "NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }",
-            phase_four_limit,
-        )
-        phase_five_limit = named_block(phase_branches["5"][1], "limit")
-        self.assertIn(
-            "has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized",
-            phase_five_limit,
-        )
+        for token in (
+            repair_flag,
+            "ADISCORD_vorkerland_phase.4",
+            "ADISCORD_vorkerland_phase.5",
+        ):
+            self.assertNotIn(token, startup)
 
         for monthly in named_blocks(on_actions, "on_monthly"):
             self.assertNotIn(repair_flag, monthly)

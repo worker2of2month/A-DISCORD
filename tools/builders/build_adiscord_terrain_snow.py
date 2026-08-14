@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate permanent polar and high-altitude snow in ``map/terrain.bmp``.
+"""Generate permanent snow and the bounded Vorkerland urban overlay.
 
 HOI4's accumulated weather snow always melts when temperatures rise.  Vanilla
 keeps ice caps and glaciers visible through graphical terrain entries carrying
@@ -9,7 +9,9 @@ such pixels.
 
 The pass is deliberately conservative: it preserves seasonal snow as weather,
 while reserving permanent snow for the extreme polar cap, northern mountains,
-and the highest mountain pixels worldwide.
+and the highest mountain pixels worldwide.  It also repairs four provinces
+which are already ``urban`` in ``map/definition.csv`` but whose graphical
+terrain was still plains or desert.  No new combat terrain is introduced.
 """
 
 from __future__ import annotations
@@ -27,6 +29,8 @@ from tools.lib.paths import repository_root
 ROOT = repository_root()
 TERRAIN_PATH = ROOT / "map" / "terrain.bmp"
 HEIGHTMAP_PATH = ROOT / "map" / "heightmap.bmp"
+PROVINCES_PATH = ROOT / "map" / "provinces.bmp"
+DEFINITION_PATH = ROOT / "map" / "definition.csv"
 TERRAIN_DEFINITION_PATH = ROOT / "common" / "terrain" / "00_terrain.txt"
 
 POLAR_CAP_Y = 300
@@ -42,6 +46,12 @@ MOUNTAIN_TERRAIN = frozenset({6, 10, 11, 16, 31})
 SNOW_MOUNTAIN = 16
 SNOW_PLAIN = 19
 RESTORE_SNOW = {SNOW_MOUNTAIN: 11, SNOW_PLAIN: 0}
+URBAN_TERRAIN = 13
+
+# These are existing combat-urban provinces whose complete graphical masks
+# were missing or partial.  Keeping the set explicit prevents a global
+# definition.csv-to-bitmap rewrite from swallowing intentional terrain blends.
+VORKERLAND_GRAPHICAL_URBAN_PROVINCES = frozenset({16616, 16635, 8803, 16642})
 
 
 def classify_terrain(terrain: int, y: int, height: int) -> int:
@@ -57,20 +67,95 @@ def classify_terrain(terrain: int, y: int, height: int) -> int:
     return base
 
 
-def generated_pixels(terrain: Image.Image, heightmap: Image.Image) -> list[int]:
+def province_color_contract() -> dict[tuple[int, int, int], int]:
+    """Return RGB -> province ID for the exact urban-repair province set."""
+    selected: dict[tuple[int, int, int], int] = {}
+    definition_ids: set[int] = set()
+    for line in DEFINITION_PATH.read_text(
+        encoding="utf-8-sig", errors="strict"
+    ).splitlines():
+        fields = line.split(";")
+        if len(fields) < 7 or not fields[0].isdigit():
+            continue
+        province_id = int(fields[0])
+        if province_id not in VORKERLAND_GRAPHICAL_URBAN_PROVINCES:
+            continue
+        definition_ids.add(province_id)
+        if fields[4] != "land":
+            raise RuntimeError(
+                f"province {province_id}: Vorkerland graphical urban target is not land"
+            )
+        if fields[6] != "urban":
+            raise RuntimeError(
+                f"province {province_id}: graphical urban repair requires definition terrain urban"
+            )
+        color = tuple(map(int, fields[1:4]))
+        if color in selected:
+            raise RuntimeError(
+                f"definition.csv: duplicate RGB {color} for graphical urban targets"
+            )
+        selected[color] = province_id
+    missing = sorted(VORKERLAND_GRAPHICAL_URBAN_PROVINCES - definition_ids)
+    if missing:
+        raise RuntimeError(f"definition.csv: missing graphical urban provinces {missing}")
+    return selected
+
+
+def generated_pixels(
+    terrain: Image.Image,
+    heightmap: Image.Image,
+    provinces: Image.Image,
+    selected_colors: dict[tuple[int, int, int], int] | None = None,
+) -> list[int]:
     if terrain.mode != "P":
         raise RuntimeError(f"terrain.bmp must be paletted, found {terrain.mode}")
-    if terrain.size != heightmap.size:
+    if terrain.size != heightmap.size or terrain.size != provinces.size:
         raise RuntimeError(
-            f"terrain/heightmap size mismatch: {terrain.size} != {heightmap.size}"
+            "terrain/heightmap/provinces size mismatch: "
+            f"{terrain.size} != {heightmap.size} != {provinces.size}"
         )
+    selected_colors = selected_colors or province_color_contract()
+    selected_rgb = set(selected_colors)
     width, _height = terrain.size
     terrain_pixels = list(terrain.get_flattened_data())
     height_pixels = list(heightmap.convert("L").get_flattened_data())
+    province_pixels = provinces.convert("RGB").tobytes()
     return [
-        classify_terrain(value, index // width, height_pixels[index])
+        (
+            URBAN_TERRAIN
+            if tuple(province_pixels[index * 3:index * 3 + 3]) in selected_rgb
+            else classify_terrain(value, index // width, height_pixels[index])
+        )
         for index, value in enumerate(terrain_pixels)
     ]
+
+
+def urban_coverage_issues(
+    pixels: list[int],
+    provinces: Image.Image,
+    selected_colors: dict[tuple[int, int, int], int],
+) -> list[str]:
+    """Require every pixel of every explicit repair province to be urban."""
+    issues: list[str] = []
+    province_pixels = provinces.convert("RGB").tobytes()
+    counts = {province_id: [0, 0] for province_id in selected_colors.values()}
+    id_by_color = selected_colors
+    for index, terrain_value in enumerate(pixels):
+        color = tuple(province_pixels[index * 3:index * 3 + 3])
+        province_id = id_by_color.get(color)
+        if province_id is None:
+            continue
+        counts[province_id][0] += 1
+        if terrain_value == URBAN_TERRAIN:
+            counts[province_id][1] += 1
+    for province_id, (total, urban) in sorted(counts.items()):
+        if not total:
+            issues.append(f"map/provinces.bmp: province {province_id} has no pixels")
+        elif urban != total:
+            issues.append(
+                f"map/terrain.bmp: province {province_id} has {urban}/{total} graphical urban pixels"
+            )
+    return issues
 
 
 def snow_counts(pixels: list[int]) -> tuple[int, int]:
@@ -125,11 +210,24 @@ def validate() -> list[str]:
             encoding="utf-8-sig", errors="strict"
         )
         issues.extend(definition_issues(definition))
-    if not TERRAIN_PATH.exists() or not HEIGHTMAP_PATH.exists():
-        return ["map/terrain.bmp or map/heightmap.bmp is missing"]
-    with Image.open(TERRAIN_PATH) as terrain, Image.open(HEIGHTMAP_PATH) as heightmap:
+    if (
+        not TERRAIN_PATH.exists()
+        or not HEIGHTMAP_PATH.exists()
+        or not PROVINCES_PATH.exists()
+    ):
+        return ["map/terrain.bmp, map/heightmap.bmp, or map/provinces.bmp is missing"]
+    try:
+        selected_colors = province_color_contract()
+    except (OSError, RuntimeError, ValueError) as error:
+        return [str(error)]
+    with (
+        Image.open(TERRAIN_PATH) as terrain,
+        Image.open(HEIGHTMAP_PATH) as heightmap,
+        Image.open(PROVINCES_PATH) as provinces,
+    ):
         current = list(terrain.get_flattened_data())
-        expected = generated_pixels(terrain, heightmap)
+        expected = generated_pixels(terrain, heightmap, provinces, selected_colors)
+        issues.extend(urban_coverage_issues(current, provinces, selected_colors))
     differences = sum(first != second for first, second in zip(current, expected))
     if differences:
         issues.append(
@@ -148,12 +246,16 @@ def apply() -> None:
     if problems:
         raise RuntimeError("\n".join(problems))
 
-    with Image.open(BytesIO(TERRAIN_PATH.read_bytes())) as source, Image.open(
-        BytesIO(HEIGHTMAP_PATH.read_bytes())
-    ) as heightmap:
+    selected_colors = province_color_contract()
+    with (
+        Image.open(BytesIO(TERRAIN_PATH.read_bytes())) as source,
+        Image.open(BytesIO(HEIGHTMAP_PATH.read_bytes())) as heightmap,
+        Image.open(BytesIO(PROVINCES_PATH.read_bytes())) as provinces,
+    ):
         terrain = source.copy()
-        pixels = generated_pixels(source, heightmap)
-    problems = coverage_issues(pixels)
+        pixels = generated_pixels(source, heightmap, provinces, selected_colors)
+        problems.extend(urban_coverage_issues(pixels, provinces, selected_colors))
+    problems.extend(coverage_issues(pixels))
     if problems:
         raise RuntimeError("\n".join(problems))
 

@@ -301,8 +301,20 @@ ADISCORD_vorkerland_collapse_category = {
 				196 = { create_unit = { division = "name = \"Holden Technical Battalion\" division_template = \"WPS Collapse Militia\" start_experience_factor = 0.10 start_equipment_factor = 0.70" owner = WPS } }
 			}
 			if = {
-				limit = { TGD = { exists = yes has_war = yes NOT = { has_capitulated = yes } controls_state = 105 } }
-				TGD = { add_manpower = 600 add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 120 producer = TVA } }
+				limit = {
+					TGD = {
+						exists = yes
+						has_war = yes
+						NOT = { has_capitulated = yes }
+						controls_state = 105
+						NOT = { has_country_flag = ADISCORD_vorkerland_tgd_technical_aid_received }
+					}
+				}
+				TGD = {
+					set_country_flag = ADISCORD_vorkerland_tgd_technical_aid_received
+					add_manpower = 600
+					add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 120 producer = TVA }
+				}
 				105 = { create_unit = { division = "name = \"Tehlar Technical Battalion\" division_template = \"TGD Urban Guard\" start_experience_factor = 0.10 start_equipment_factor = 0.70" owner = TGD } }
 			}
 		}

@@ -81,8 +81,8 @@ country_event = {
 	}
 }
 
-# Terminal assertion for the single repair above. It records drift for logs and
-# old saves but never polls or schedules another event.
+# Terminal assertion for the single bounded retry above. It records remaining
+# drift for logs but never polls or schedules another event.
 country_event = {
 	id = ADISCORD_rin_crisis.4
 	hidden = yes

@@ -1,0 +1,22 @@
+ideas = {
+	country = {
+		# Granted only by the two AI-gated one-shot deadline effects and always
+		# removed by the engine after seventy-five days.
+		ADISCORD_vorkerland_ai_breakthrough_window = {
+			picture = generic_army_support
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.08
+				breakthrough_factor = 0.10
+				army_org_factor = 0.08
+				planning_speed = 0.20
+				land_reinforce_rate = 0.02
+				supply_consumption_factor = -0.15
+				army_speed_factor = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+	}
+}

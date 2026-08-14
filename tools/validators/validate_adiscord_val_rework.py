@@ -11,6 +11,10 @@ from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[2]
+VAL_ON_ACTIONS_FILE = "common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt"
+FRESH_CAMPAIGN_FLAG = "ADISCORD_fresh_campaign_contract_v1"
+VAL_FRESH_FEATURE_FLAG = "ADISCORD_val_rework_fresh_campaign_v1"
+TIER_MIGRATION_EFFECT = "VAL_migrate_contract_tier_levels"
 
 
 def read(relative: str) -> str:
@@ -512,6 +516,60 @@ def main() -> int:
             issues.append(f"{decision_id} is not gated by its world-reactive focus")
 
     effects = read("common/scripted_effects/ADISCORD_VAL_rework_effects.txt")
+    on_actions = read(VAL_ON_ACTIONS_FILE)
+    startup_blocks = named_blocks(on_actions, "on_startup")
+    if len(startup_blocks) != 1:
+        issues.append(f"VAL rework must define exactly one on_startup, found {len(startup_blocks)}")
+    else:
+        startup = mask_comments(startup_blocks[0])
+        startup_branches = named_blocks(startup, "if")
+        if len(startup_branches) != 1:
+            issues.append(
+                "VAL rework startup must contain one fresh-campaign initialization branch"
+            )
+        else:
+            startup_branch = startup_branches[0]
+            limits = named_blocks(startup_branch, "limit")
+            if len(limits) != 1:
+                issues.append("VAL rework startup branch must contain exactly one limit")
+            else:
+                limit = limits[0]
+                fresh_guard = f"has_global_flag = {FRESH_CAMPAIGN_FLAG}"
+                feature_guard = (
+                    f"NOT = {{ has_global_flag = {VAL_FRESH_FEATURE_FLAG} }}"
+                )
+                for token in (fresh_guard, feature_guard, "VAL = { exists = yes }"):
+                    if limit.count(token) != 1:
+                        issues.append(f"VAL rework startup limit must contain {token} exactly once")
+
+            feature_set = f"set_global_flag = {VAL_FRESH_FEATURE_FLAG}"
+            initialize_call = "VAL_initialize_rework = yes"
+            for token in (feature_set, initialize_call):
+                if startup_branch.count(token) != 1:
+                    issues.append(f"VAL rework startup must contain {token} exactly once")
+            if not re.search(
+                r"VAL\s*=\s*\{\s*VAL_initialize_rework\s*=\s*yes\s*\}",
+                startup_branch,
+            ):
+                issues.append("VAL rework initializer must execute in VAL scope")
+
+            ordered_tokens = (
+                f"has_global_flag = {FRESH_CAMPAIGN_FLAG}",
+                f"NOT = {{ has_global_flag = {VAL_FRESH_FEATURE_FLAG} }}",
+                feature_set,
+                initialize_call,
+            )
+            if all(startup_branch.count(token) == 1 for token in ordered_tokens):
+                positions = tuple(startup_branch.index(token) for token in ordered_tokens)
+                if positions != tuple(sorted(positions)):
+                    issues.append(
+                        "VAL rework startup must check fresh provenance and one-shot guard "
+                        "before setting its feature flag and initializing VAL"
+                    )
+
+    initialize_call = "VAL_initialize_rework = yes"
+    if mask_comments(on_actions).count(initialize_call) != 1:
+        issues.append("VAL rework initializer must have exactly one guarded runtime caller")
     for token in (
         "amount = -4000",
         "VAL_contract_reputation_level",
@@ -802,7 +860,7 @@ def main() -> int:
             "VAL_Company_Service_Code",
         },
     }
-    migration_blocks = named_block_spans(effects, "VAL_migrate_contract_tier_levels")
+    migration_blocks = named_block_spans(effects, TIER_MIGRATION_EFFECT)
     if len(migration_blocks) != 1:
         issues.append("expected exactly one VAL_migrate_contract_tier_levels effect")
     else:
@@ -889,11 +947,20 @@ def main() -> int:
                                 f"{effect_id} migration OR alternatives do not exactly cover callers"
                             )
 
-    if not initialize or not re.search(
-        r"VAL_initialize_rework\s*=\s*\{\s*VAL_migrate_contract_tier_levels\s*=\s*yes\b",
-        mask_comments(initialize[0]),
-    ):
-        issues.append("VAL_initialize_rework does not begin with tier-level migration")
+    migration_call_pattern = re.compile(
+        rf"(?m)^\s*{re.escape(TIER_MIGRATION_EFFECT)}\s*=\s*yes\b"
+    )
+    migration_callers: list[str] = []
+    for runtime_root in ("common", "events", "history"):
+        for path in sorted((ROOT / runtime_root).rglob("*.txt")):
+            source = path.read_text(encoding="utf-8-sig", errors="replace")
+            if migration_call_pattern.search(mask_comments(source)):
+                migration_callers.append(path.relative_to(ROOT).as_posix())
+    if migration_callers:
+        issues.append(
+            f"{TIER_MIGRATION_EFFECT} must have zero runtime callers, found "
+            f"{migration_callers}"
+        )
 
     ideas_text = read("common/ideas/ADISCORD_VAL_rework_ideas.txt")
     hidden_ideas = named_blocks(ideas_text, "hidden_ideas")

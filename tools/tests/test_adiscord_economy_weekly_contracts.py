@@ -12,6 +12,7 @@ from tools.validators.validate_adiscord_economy_ai import (
     debt_notification_flow_issues,
     debt_reconciler_issues,
     debt_transition_flow_issues,
+    fresh_economy_initialization_issues,
     migration_contract_issues,
     policy_effect_selector_issues,
     policy_selector_issues,
@@ -30,6 +31,12 @@ ROOT = Path(__file__).resolve().parents[2]
 ON_ACTIONS = (ROOT / "common" / "on_actions" / "00_ADISCORD_on_actions.txt").read_text(
     encoding="utf-8-sig"
 )
+WAR_ON_ACTIONS = (ROOT / "common" / "on_actions" / "00_on_actions.txt").read_text(
+    encoding="utf-8-sig"
+)
+GENERAL_HISTORY = (
+    ROOT / "history" / "general" / "ADISCORD_general_history.txt"
+).read_text(encoding="utf-8-sig")
 TRIGGERS = (
     ROOT / "common" / "scripted_triggers" / "ADISCORD_economy_triggers.txt"
 ).read_text(encoding="utf-8-sig")
@@ -2515,6 +2522,8 @@ ideas = { hidden_ideas = {
 """
     ASSISTANCE_EFFECT = """
 ADISCORD_economy_refresh_ai_assistance = {
+ if = {
+  limit = { has_global_flag = ADISCORD_minor_optimization_fresh_campaign_v1 }
  set_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = 0 }
  if = { limit = { has_variable = ADISCORD_economy_simulation_tier } set_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = ADISCORD_economy_simulation_tier } }
  if = { limit = { is_ai = yes } add_to_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = 10 } }
@@ -2535,9 +2544,11 @@ ADISCORD_economy_refresh_ai_assistance = {
   set_variable = { var = ADISCORD_economy_ai_assistance_signature value = ADISCORD_economy_ai_assistance_signature_temp }
  }
 }
+}
 """
     ASSISTANCE_TRIGGERS = """
 ADISCORD_economy_ai_assistance_is_eligible = {
+ has_global_flag = ADISCORD_minor_optimization_fresh_campaign_v1
  is_ai = yes
  check_variable = { var = ADISCORD_economy_simulation_tier value = 1 compare = greater_than_or_equals }
  check_variable = { var = ADISCORD_economy_simulation_tier value = 2 compare = less_than_or_equals }
@@ -2553,7 +2564,8 @@ ADISCORD_economy_ai_assistance_retreat_active = {
  ADISCORD_economy_ai_assistance_civil_war_active = yes
  surrender_progress > 0.35
 }
-ADISCORD_economy_ai_assistance_needs_monthly_evaluation = {
+ADISCORD_economy_ai_assistance_needs_edge_evaluation = {
+ has_global_flag = ADISCORD_minor_optimization_fresh_campaign_v1
  OR = {
   ADISCORD_economy_ai_assistance_is_eligible = yes
   has_idea = ADISCORD_economy_ai_assistance_base
@@ -5906,6 +5918,11 @@ class WeeklyEconomyContracts(unittest.TestCase):
         )
 
         signature_mutations = {
+            "fresh gate widened": refresh.replace(
+                "limit = { has_global_flag = ADISCORD_minor_optimization_fresh_campaign_v1 }",
+                "limit = { always = yes }",
+                1,
+            ),
             "signature OR changed to AND": refresh.replace(
                 "\t\t\tOR = {",
                 "\t\t\tAND = {",
@@ -5987,25 +6004,25 @@ ADISCORD_bad_assistance_owner = {
                 )
             )
 
-        guarded_monthly = (
+        guarded_edge = (
             "\t\t\tif = {\n"
-            "\t\t\t\tlimit = { ADISCORD_economy_ai_assistance_needs_monthly_evaluation = yes }\n"
+            "\t\t\t\tlimit = { ADISCORD_economy_ai_assistance_needs_edge_evaluation = yes }\n"
             "\t\t\t\tADISCORD_economy_refresh_ai_assistance = yes\n"
             "\t\t\t}"
         )
         lifecycle_mutations = {
-            "monthly refresh escapes owner": minor_on_actions.replace(
-                guarded_monthly,
+            "state refresh escapes owner": minor_on_actions.replace(
+                guarded_edge,
                 "\t\t\tif = {\n"
-                "\t\t\t\tlimit = { ADISCORD_economy_ai_assistance_needs_monthly_evaluation = yes }\n"
+                "\t\t\t\tlimit = { ADISCORD_economy_ai_assistance_needs_edge_evaluation = yes }\n"
                 "\t\t\t\talways = yes\n"
                 "\t\t\t}\n"
                 "\t\t\tADISCORD_economy_refresh_ai_assistance = yes",
                 1,
             ),
-            "monthly owner is dead": minor_on_actions.replace(
-                "limit = { ADISCORD_economy_ai_assistance_needs_monthly_evaluation = yes }",
-                "limit = { ADISCORD_economy_ai_assistance_needs_monthly_evaluation = yes always = no }",
+            "state owner is dead": minor_on_actions.replace(
+                "limit = { ADISCORD_economy_ai_assistance_needs_edge_evaluation = yes }",
+                "limit = { ADISCORD_economy_ai_assistance_needs_edge_evaluation = yes always = no }",
                 1,
             ),
         }
@@ -6029,6 +6046,10 @@ ADISCORD_bad_assistance_owner = {
             shutil.copytree(
                 ROOT / "history" / "countries",
                 temporary_root / "history" / "countries",
+            )
+            shutil.copytree(
+                ROOT / "history" / "general",
+                temporary_root / "history" / "general",
             )
             third_effect_file = (
                 temporary_root
@@ -6132,6 +6153,59 @@ ADISCORD_bad_assistance_owner = {
         self.assertFalse(
             ai_assistance_lifecycle_issues(EFFECTS, minor_effects, minor_on_actions)
         )
+        startup = unique_block(minor_on_actions, "on_startup")
+        self.assertIn(
+            "has_global_flag = ADISCORD_fresh_campaign_contract_v1", startup
+        )
+        self.assertIn(
+            "NOT = { has_global_flag = ADISCORD_minor_optimization_fresh_campaign_v1 }",
+            startup,
+        )
+        self.assertLess(
+            startup.find("set_global_flag = ADISCORD_minor_optimization_fresh_campaign_v1"),
+            startup.find("every_country"),
+        )
+        self.assertNotIn("on_monthly", minor_on_actions)
+        state_control = unique_block(minor_on_actions, "on_state_control_changed")
+        self.assertEqual(
+            state_control.count(
+                "ADISCORD_economy_ai_assistance_needs_edge_evaluation = yes"
+            ),
+            2,
+        )
+        self.assertEqual(
+            state_control.count("ADISCORD_economy_refresh_ai_assistance = yes"),
+            2,
+        )
+        self.assertEqual(state_control.count("FROM ="), 1)
+
+        terminal = unique_block(
+            minor_effects,
+            "ADISCORD_economy_refresh_vorkerland_terminal_assistance",
+        )
+        self.assertNotIn("every_country", terminal)
+        self.assertNotIn("any_country", terminal)
+        self.assertEqual(
+            terminal.count(
+                "ADISCORD_economy_refresh_terminal_assistance_country = yes"
+            ),
+            31,
+        )
+        phase_effects = (
+            ROOT
+            / "common"
+            / "scripted_effects"
+            / "ADISCORD_vorkerland_phase_effects.txt"
+        ).read_text(encoding="utf-8-sig")
+        finalizer = unique_block(
+            phase_effects, "ADISCORD_vorkerland_finalize_reunified_wrk"
+        )
+        self.assertLess(
+            finalizer.find("set_global_flag = ADISCORD_vorkerland_collapse_finished"),
+            finalizer.find(
+                "ADISCORD_economy_refresh_vorkerland_terminal_assistance = yes"
+            ),
+        )
         assistance = {
             "ADISCORD_economy_ai_assistance_base": {
                 "ADISCORD_economy_overall_income_factor": 0.05,
@@ -6181,14 +6255,14 @@ ADISCORD_bad_assistance_owner = {
             self.assertNotIn(forbidden, refresh)
 
         lifecycle_mutations = {
-            "monthly world scan": minor_on_actions.replace(
-                "on_monthly = {",
-                "on_monthly = { effect = { every_country = { always = yes } }",
+            "state-control world scan": minor_on_actions.replace(
+                "on_state_control_changed = {",
+                "on_state_control_changed = { effect = { every_country = { always = yes } }",
                 1,
             ),
-            "weekly rebuild": minor_on_actions.replace(
-                "on_monthly = {",
-                "on_weekly = { effect = { ADISCORD_economy_refresh_ai_assistance = yes } }\non_monthly = {",
+            "monthly rebuild": minor_on_actions.replace(
+                "on_state_control_changed = {",
+                "on_monthly = { effect = { ADISCORD_economy_refresh_ai_assistance = yes } }\non_state_control_changed = {",
                 1,
             ),
             "war removal omitted": minor_on_actions.replace(
@@ -6206,8 +6280,16 @@ ADISCORD_bad_assistance_owner = {
 
         economy_lifecycle_mutations = {
             "tier hook omitted": EFFECTS.replace(
-                "\tADISCORD_economy_refresh_ai_assistance = yes\n}\n\n# Keep newly introduced transition effects",
-                "}\n\n# Keep newly introduced transition effects",
+                "\t\tset_variable = { var = ADISCORD_economy_simulation_tier value = ADISCORD_economy_simulation_tier_target_temp }\n"
+                "\t\tADISCORD_economy_refresh_ai_assistance = yes",
+                "\t\tset_variable = { var = ADISCORD_economy_simulation_tier value = ADISCORD_economy_simulation_tier_target_temp }",
+                1,
+            ),
+            "tier unchanged refresh": EFFECTS.replace(
+                "value = ADISCORD_economy_simulation_tier_target_temp\n"
+                "\t\t\t\t\tcompare = not_equals",
+                "value = ADISCORD_economy_simulation_tier_target_temp\n"
+                "\t\t\t\t\tcompare = equals",
                 1,
             ),
             "dirty full-refresh hook omitted": EFFECTS.replace(
@@ -6692,7 +6774,7 @@ ADISCORD_task10_forbidden_cache_consumer = {
         initialization = block(EFFECTS, "ADISCORD_economy_initialize_country")
         profile_call = "ADISCORD_economy_apply_country_starting_profile = yes"
         self.assertEqual(initialization.count(profile_call), 1)
-        self.assertLess(initialization.index(profile_call), initialization.index("else ="))
+        self.assertLess(initialization.index(profile_call), initialization.index("else_if ="))
         self.assertIn("ADISCORD_economy_update_stretched = yes", initialization)
         self.assertIn("ADISCORD_economy_calculate_macro_indicators = yes", initialization)
 
@@ -6984,7 +7066,7 @@ ADISCORD_task10_forbidden_cache_consumer = {
         on_peace = block(ON_ACTIONS, "on_peace")
 
         for edge in (on_war, on_peace):
-            self.assertIn("has_variable = ADISCORD_economy_initialized", edge)
+            self.assertIn("ADISCORD_economy_has_current_schema = yes", edge)
             self.assertEqual(
                 edge.count("ADISCORD_economy_update_postwar_demobilization = yes"),
                 1,
@@ -7100,7 +7182,7 @@ ADISCORD_task10_forbidden_cache_consumer = {
         ):
             self.assertRegex(ECONOMY_LOC, rf"(?m)^\s*{re.escape(key)}:\d*\s+")
 
-    def test_monthly_model_refresh_checks_each_system_law_only_once(self):
+    def test_monthly_model_refresh_uses_only_explicit_system_laws(self):
         model_refresh = block(EFFECTS, "ADISCORD_economy_update_model_and_cycle")
         for suffix in (
             "agrarian",
@@ -7117,6 +7199,23 @@ ADISCORD_task10_forbidden_cache_consumer = {
                 f"ADISCORD_economy_has_idea_economic_system_{suffix} = yes"
             )
             self.assertEqual(model_refresh.count(trigger_call), 1, trigger_call)
+        for legacy_inference in (
+            "ADISCORD_economy_has_industrial_artisan_markets",
+            "ADISCORD_state_development_at_most_2",
+            "ADISCORD_economy_has_taxation_light_dues",
+            "ADISCORD_economy_has_labor_loose_contracts",
+            "ADISCORD_economy_has_industrial_state_planning",
+            "ADISCORD_state_development_at_least_3",
+            "ADISCORD_state_development_at_least_4",
+            "ADISCORD_economy_has_taxation_extraction_quotas",
+            "ADISCORD_economy_has_industrial_military_prioritization",
+            "ADISCORD_state_development_at_most_1",
+            "ADISCORD_economy_has_taxation_industrial_tariffs",
+            "has_government = technocracy",
+            "ADISCORD_economy_has_labor_technocratic_work_norms",
+        ):
+            self.assertNotIn(legacy_inference, model_refresh)
+        self.assertNotIn("else =", model_refresh)
 
         monthly = block(EFFECTS, "ADISCORD_economy_monthly_update")
         self.assertEqual(
@@ -7178,7 +7277,7 @@ ADISCORD_task10_forbidden_cache_consumer = {
         control_change = block(ON_ACTIONS, "on_state_control_changed")
         self.assertEqual(control_change.count("ADISCORD_economy_mark_dirty = yes"), 2)
         self.assertEqual(
-            control_change.count("has_variable = ADISCORD_economy_initialized"), 2
+            control_change.count("ADISCORD_economy_has_current_schema = yes"), 2
         )
         self.assertIn("FROM =", control_change)
         for forbidden in ("every_country", "every_owned_state", "full_refresh"):
@@ -7772,6 +7871,65 @@ ADISCORD_task10_forbidden_cache_consumer = {
             "ADISCORD_economy_final_bombing_disruption_resistance_factor_bp",
             bombing,
         )
+
+
+class FreshEconomyInitializationTests(unittest.TestCase):
+    def _issues(
+        self,
+        effects=EFFECTS,
+        triggers=TRIGGERS,
+        general_history=GENERAL_HISTORY,
+        shared_on_actions=ON_ACTIONS,
+        war_on_actions=WAR_ON_ACTIONS,
+        runtime_sources=None,
+    ):
+        return fresh_economy_initialization_issues(
+            effects,
+            triggers,
+            general_history,
+            shared_on_actions,
+            war_on_actions,
+            runtime_sources or {"common/scripted_effects/economy.txt": effects},
+        )
+
+    def test_fresh_only_initializer_and_current_schema_routes_are_valid(self):
+        self.assertEqual(self._issues(), [])
+
+    def test_initializer_rejects_missing_provenance_or_live_migration(self):
+        missing_fresh = EFFECTS.replace(
+            "\t\thas_global_flag = ADISCORD_fresh_campaign_contract_v1\n",
+            "",
+            1,
+        )
+        self.assertTrue(self._issues(effects=missing_fresh))
+
+        live_migration = EFFECTS.replace(
+            "\t\tADISCORD_economy_set_simulation_tier = yes\n\t}\n}\n",
+            "\t\tADISCORD_economy_migrate_schema = yes\n"
+            "\t\tADISCORD_economy_set_simulation_tier = yes\n\t}\n}\n",
+            1,
+        )
+        issues = self._issues(
+            effects=live_migration,
+            runtime_sources={"common/scripted_effects/economy.txt": live_migration},
+        )
+        self.assertTrue(any("migration" in issue for issue in issues), issues)
+
+    def test_scheduled_gate_and_external_migration_caller_are_rejected(self):
+        widened = TRIGGERS.replace(
+            "ADISCORD_economy_should_monthly_update = {\n"
+            "\tADISCORD_economy_has_current_schema = yes\n",
+            "ADISCORD_economy_should_monthly_update = {\n",
+            1,
+        )
+        self.assertTrue(self._issues(triggers=widened))
+        issues = self._issues(
+            runtime_sources={
+                "common/scripted_effects/economy.txt": EFFECTS,
+                "events/legacy.txt": "ADISCORD_economy_migrate_schema = yes\n",
+            }
+        )
+        self.assertTrue(any("runtime-callable" in issue for issue in issues), issues)
 
 
 if __name__ == "__main__":

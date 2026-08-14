@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 
@@ -22,6 +23,8 @@ PHASE_EFFECT_FILE = Path(
 PHASE_TRIGGER_FILE = Path(
     "common/scripted_triggers/ADISCORD_vorkerland_phase_triggers.txt"
 )
+PHASE_EVENT_FILE = Path("events/ADISCORD_vorkerland_phase_events.txt")
+EVENT_REGISTRY_FILE = Path("tools/data/adiscord_event_ids.json")
 IDEA_FILE = Path("common/ideas/ADISCORD_vorkerland_focus_decision_ideas.txt")
 ENGLISH_LOCALISATION = Path(
     "localisation/english/ADISCORD_vorkerland_focus_decisions_l_english.yml"
@@ -35,6 +38,14 @@ CENTRAL_EFFECT = "ADISCORD_vorkerland_focus_schedule_final_showdown"
 
 CENTRAL_TARGETS = ("EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV")
 CENTRAL_WAVE_DECISION = "ADISCORD_vorkerland_launch_central_minor_wave"
+LEGACY_CONTROLLER_MISSIONS = (
+    "ADISCORD_vorkerland_focus_central_minor_launch_check",
+    "ADISCORD_vorkerland_focus_central_minor_retry_check",
+)
+CENTRAL_WAVE_VERIFIER_EVENTS = {
+    8: "ADISCORD_vorkerland_focus_confirm_central_minor_wave_launch = yes",
+    9: "ADISCORD_vorkerland_focus_confirm_central_minor_wave_retry = yes",
+}
 
 CENTRAL_INTEGRATION_PACKAGES = {
     "EYR": ("ADISCORD_vorkerland_integrate_eyr_district", (102, 109, 111, 325), 21),
@@ -218,6 +229,8 @@ def collect_issues() -> list[str]:
         EFFECT_FILE,
         PHASE_EFFECT_FILE,
         PHASE_TRIGGER_FILE,
+        PHASE_EVENT_FILE,
+        EVENT_REGISTRY_FILE,
         IDEA_FILE,
         ENGLISH_LOCALISATION,
         RUSSIAN_LOCALISATION,
@@ -233,13 +246,16 @@ def collect_issues() -> list[str]:
     effects = read(EFFECT_FILE)
     phase_effects = read(PHASE_EFFECT_FILE)
     phase_triggers = read(PHASE_TRIGGER_FILE)
+    phase_events = read(PHASE_EVENT_FILE)
+    event_registry = read(EVENT_REGISTRY_FILE)
     ideas = read(IDEA_FILE)
 
     minor_phase_trigger = named_block(
         phase_triggers, "ADISCORD_vorkerland_central_minor_campaign_phase_available"
     )
-    for token in (
-        "has_global_flag = ADISCORD_vorkerland_phase_central_preparation",
+    if "has_global_flag = ADISCORD_vorkerland_phase_central_preparation" not in minor_phase_trigger:
+        issues.append("central minor campaign phase trigger lacks central preparation")
+    for forbidden in (
         "has_global_flag = ADISCORD_vorkerland_phase_central_showdown",
         "has_global_flag = ADISCORD_vorkerland_phase_reunification",
         "ADISCORD_vorkerland_has_single_surviving_claimant = yes",
@@ -250,8 +266,10 @@ def collect_issues() -> list[str]:
         "has_country_flag = ADISCORD_vorkerland_route_joint",
         "has_country_flag = ADISCORD_vorkerland_route_utilitarian",
     ):
-        if token not in minor_phase_trigger:
-            issues.append(f"central minor campaign phase trigger lacks {token}")
+        if forbidden in minor_phase_trigger:
+            issues.append(
+                f"central minor campaign phase trigger reopens after preparation: {forbidden}"
+            )
     district_control_trigger = named_block(
         phase_triggers, "ADISCORD_vorkerland_central_districts_owned_and_controlled"
     )
@@ -291,6 +309,15 @@ def collect_issues() -> list[str]:
     target_tags = tuple(CENTRAL_TARGETS)
     wave = named_block(decisions, CENTRAL_WAVE_DECISION)
     launcher = named_block(effects, "ADISCORD_vorkerland_focus_launch_central_minor_wave")
+    wave_visible = named_block(wave, "visible")
+    wave_available = named_block(wave, "available")
+    viability_trigger_name = "ADISCORD_vorkerland_has_adjacent_viable_central_minor"
+    viability_trigger = named_block(phase_triggers, viability_trigger_name)
+    for scope_name, scope in (("visible", wave_visible), ("available", wave_available)):
+        if scope.count(f"{viability_trigger_name} = yes") != 1:
+            issues.append(
+                f"central minor wave {scope_name} must require exactly one viable-target trigger"
+            )
     for token in (
         "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes",
         "ADISCORD_vorkerland_focus_central_minor_launch_pending",
@@ -304,6 +331,17 @@ def collect_issues() -> list[str]:
         if token not in wave:
             issues.append(f"central minor wave decision lacks {token}")
     for target in target_tags:
+        viable_branch = (
+            f"AND = {{ any_neighbor_country = {{ tag = {target} }} "
+            f"{target} = {{ exists = yes is_subject = no "
+            "NOT = { has_capitulated = yes } "
+            "NOT = { OR = { has_war_with = WKR has_war_with = VAD "
+            "has_war_with = TVA } } } }"
+        )
+        if viability_trigger.count(viable_branch) != 1:
+            issues.append(
+                f"central minor viable-target trigger must define {target} exactly once"
+            )
         for token in (
             f"any_neighbor_country = {{ tag = {target} }}",
             f"{target} = {{ exists = yes is_subject = no",
@@ -319,6 +357,46 @@ def collect_issues() -> list[str]:
         issues.append("central minor wave launcher must contain all nine independent declarations")
     if "else_if =" in launcher:
         issues.append("central minor wave launcher must not serialize targets with else_if")
+
+    complete_effect = named_block(wave, "complete_effect")
+    pending_setter = (
+        "set_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending"
+    )
+    pending_guards = [
+        block for block in named_blocks(complete_effect, "if") if pending_setter in block
+    ]
+    if len(pending_guards) != 1:
+        issues.append("central minor wave must set launch pending in exactly one guarded branch")
+    else:
+        pending_guard = pending_guards[0]
+        if "OR = {" not in pending_guard:
+            issues.append("central minor launch-pending branch lacks recorded-target OR guard")
+        for target in target_tags:
+            flag = (
+                "has_country_flag = "
+                f"ADISCORD_vorkerland_focus_central_minor_target_{target.lower()}"
+            )
+            if flag not in pending_guard:
+                issues.append(f"central minor launch-pending guard lacks recorded target {target}")
+    if decisions.count(pending_setter) + effects.count(pending_setter) != 1:
+        issues.append("central minor launch pending may only be set by its recorded-target guard")
+    if not any(
+        "ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes" in block
+        for block in named_blocks(complete_effect, "else")
+    ):
+        issues.append("central minor wave lacks empty-target cleanup fallback")
+
+    launch_event_call = "country_event = { id = ADISCORD_vorkerland_phase.8 days = 1 }"
+    launcher_event_guards = [
+        block for block in named_blocks(launcher, "if") if launch_event_call in block
+    ]
+    if launcher.count(launch_event_call) != 1 or len(launcher_event_guards) != 1:
+        issues.append("central minor launcher must schedule phase.8 once from its guarded branch")
+    elif not all(
+        f"ADISCORD_vorkerland_focus_central_minor_target_{target.lower()}" in launcher_event_guards[0]
+        for target in target_tags
+    ):
+        issues.append("central minor phase.8 scheduling branch lacks the recorded target set")
     for legacy in (
         "ADISCORD_vorkerland_consolidate_eyr",
         "ADISCORD_vorkerland_consolidate_egc",
@@ -334,36 +412,58 @@ def collect_issues() -> list[str]:
         if legacy in decisions or legacy in effects:
             issues.append(f"legacy serialized central-front producer remains: {legacy}")
 
-    launch_check = named_block(
-        decisions, "ADISCORD_vorkerland_focus_central_minor_launch_check"
-    )
-    retry_check = named_block(
-        decisions, "ADISCORD_vorkerland_focus_central_minor_retry_check"
-    )
     deadline = named_block(
         decisions, "ADISCORD_vorkerland_focus_central_minor_front_deadline"
     )
-    for mission_id, block, callback in (
-        (
-            "launch check",
-            launch_check,
-            "ADISCORD_vorkerland_focus_confirm_central_minor_wave_launch = yes",
-        ),
-        (
-            "retry check",
-            retry_check,
-            "ADISCORD_vorkerland_focus_confirm_central_minor_wave_retry = yes",
-        ),
-    ):
-        for token in (
-            "activation = { always = no }",
-            "visible = { always = no }",
-            "selectable_mission = no",
-            "days_mission_timeout = 1",
-            callback,
-        ):
-            if token not in block:
-                issues.append(f"central minor {mission_id} lacks cache-check token {token}")
+    controller_sources = {
+        DECISION_FILE.as_posix(): decisions,
+        EFFECT_FILE.as_posix(): effects,
+        PHASE_TRIGGER_FILE.as_posix(): phase_triggers,
+        PHASE_EVENT_FILE.as_posix(): phase_events,
+    }
+    for mission_id in LEGACY_CONTROLLER_MISSIONS:
+        for source_name, source in controller_sources.items():
+            if mission_id in source:
+                issues.append(f"legacy controller mission remains in {source_name}: {mission_id}")
+            for operation in ("activate_mission", "remove_mission"):
+                if f"{operation} = {mission_id}" in source:
+                    issues.append(
+                        f"legacy controller {operation} remains in {source_name}: {mission_id}"
+                    )
+
+    event_blocks = named_blocks(phase_events, "country_event")
+    for number, callback in CENTRAL_WAVE_VERIFIER_EVENTS.items():
+        event_id = f"ADISCORD_vorkerland_phase.{number}"
+        matching = [block for block in event_blocks if f"id = {event_id}" in block]
+        if len(matching) != 1:
+            issues.append(f"central minor verifier event {event_id} must be defined exactly once")
+            continue
+        event = matching[0]
+        for token in ("hidden = yes", "is_triggered_only = yes"):
+            if token not in event:
+                issues.append(f"central minor verifier event {event_id} lacks {token}")
+        immediate = named_block(event, "immediate")
+        if immediate.count(callback) != 1:
+            issues.append(f"central minor verifier event {event_id} must call {callback} once")
+
+    try:
+        registry_events = json.loads(event_registry).get("events", [])
+    except (json.JSONDecodeError, AttributeError):
+        issues.append("event registry is not valid JSON with an events list")
+        registry_events = []
+    for number in CENTRAL_WAVE_VERIFIER_EVENTS:
+        event_id = f"ADISCORD_vorkerland_phase.{number}"
+        matches = [entry for entry in registry_events if entry.get("id") == event_id]
+        expected = {
+            "id": event_id,
+            "namespace": "ADISCORD_vorkerland_phase",
+            "number": number,
+            "owner": PHASE_EVENT_FILE.as_posix(),
+            "subsystem": "vorkerland_phase",
+            "status": "active",
+        }
+        if matches != [expected]:
+            issues.append(f"event registry entry for {event_id} is missing or not canonical")
     for token in (
         "ADISCORD_vorkerland_focus_central_minor_deadline_active",
         "selectable_mission = no",
@@ -373,7 +473,7 @@ def collect_issues() -> list[str]:
         "ADISCORD_vorkerland_focus_resolve_central_minor_wave_deadline = yes",
     ):
         if token not in deadline:
-            issues.append(f"central minor deadline lacks hard-bound token {token}")
+            issues.append(f"central minor deadline lacks protracted-front token {token}")
 
     first_confirmation = named_block(
         effects, "ADISCORD_vorkerland_focus_confirm_central_minor_wave_launch"
@@ -386,18 +486,80 @@ def collect_issues() -> list[str]:
     )
     for token in (
         "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes",
+        "has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending",
+        "NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_retry }",
+        "ADISCORD_vorkerland_has_retryable_recorded_central_minor_front = yes",
         "ADISCORD_vorkerland_focus_central_minor_launch_retry",
-        "activate_mission = ADISCORD_vorkerland_focus_central_minor_retry_check",
+        "ADISCORD_vorkerland_focus_retry_central_minor_wave_declarations = yes",
+        "country_event = { id = ADISCORD_vorkerland_phase.9 days = 1 }",
         "ADISCORD_vorkerland_focus_arm_central_minor_deadline = yes",
     ):
         if token not in first_confirmation:
             issues.append(f"central minor first confirmation lacks one-retry token {token}")
+    retry_event_call = "country_event = { id = ADISCORD_vorkerland_phase.9 days = 1 }"
+    retry_branches = [
+        block
+        for block in named_blocks(first_confirmation, "else_if")
+        if retry_event_call in block
+    ]
+    if len(retry_branches) != 1:
+        issues.append("central minor first confirmation must contain one guarded retry branch")
+    else:
+        for token in (
+            "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes",
+            "has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending",
+            "NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_retry }",
+            "ADISCORD_vorkerland_has_retryable_recorded_central_minor_front = yes",
+            "is_subject = no",
+            "NOT = { has_capitulated = yes }",
+            "set_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_retry",
+            "ADISCORD_vorkerland_focus_retry_central_minor_wave_declarations = yes",
+            retry_event_call,
+        ):
+            if token not in retry_branches[0]:
+                issues.append(f"central minor guarded retry branch lacks {token}")
+    for token in (
+        "set_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_retry",
+        "ADISCORD_vorkerland_focus_retry_central_minor_wave_declarations = yes",
+        retry_event_call,
+    ):
+        if first_confirmation.count(token) != 1:
+            issues.append(f"central minor first confirmation must contain {token} exactly once")
     for token in (
         "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes",
         "ADISCORD_vorkerland_focus_arm_central_minor_deadline = yes",
     ):
         if token not in retry_confirmation:
             issues.append(f"central minor retry confirmation lacks prepared-front token {token}")
+    if effects.count(retry_event_call) != 1:
+        issues.append("central minor retry verifier must be scheduled exactly once")
+    for forbidden in (
+        "country_event = { id = ADISCORD_vorkerland_phase.8",
+        "country_event = { id = ADISCORD_vorkerland_phase.9",
+        "set_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_retry",
+        "ADISCORD_vorkerland_focus_retry_central_minor_wave_declarations = yes",
+    ):
+        if forbidden in retry_confirmation:
+            issues.append(f"central minor retry confirmation may not recurse through {forbidden}")
+
+    retryable_trigger = named_block(
+        phase_triggers, "ADISCORD_vorkerland_has_retryable_recorded_central_minor_front"
+    )
+    for target in target_tags:
+        retryable_branch = (
+            "AND = { has_country_flag = "
+            f"ADISCORD_vorkerland_focus_central_minor_target_{target.lower()} "
+            f"NOT = {{ has_war_with = {target} }} "
+            f"any_neighbor_country = {{ tag = {target} }} "
+            f"{target} = {{ exists = yes is_subject = no "
+            "NOT = { has_capitulated = yes } "
+            "NOT = { OR = { has_war_with = WKR has_war_with = VAD "
+            "has_war_with = TVA } } } }"
+        )
+        if retryable_trigger.count(retryable_branch) != 1:
+            issues.append(
+                f"central minor retryable trigger must define recorded target {target} exactly once"
+            )
     finish_wave = named_block(
         effects, "ADISCORD_vorkerland_focus_finish_central_minor_wave"
     )
@@ -410,16 +572,23 @@ def collect_issues() -> list[str]:
             issues.append(f"central minor wave finish lacks regroup token {token}")
     if "ADISCORD_vorkerland_focus_finish_central_minor_wave = yes" not in retry_confirmation:
         issues.append("central minor failed retry does not enter wave regrouping")
+    for forbidden in ("transfer_state", "white_peace", "annex_country"):
+        if forbidden in resolver:
+            issues.append(
+                f"central minor deadline may not force a genuine belligerent outcome: {forbidden}"
+            )
+    for token in (
+        "ADISCORD_vorkerland_focus_central_minor_front_protracted",
+        "days = 180",
+        "ADISCORD_vorkerland_focus_finish_central_minor_wave = yes",
+        "live war remains unresolved",
+    ):
+        if token not in resolver:
+            issues.append(f"central minor deadline diagnostic lacks {token}")
     for target in target_tags:
         declaration = f"declare_war_on = {{ target = {target} type = annex_everything }}"
         if effects.count(declaration) != 2:
             issues.append(f"{target} must have exactly one wave declaration and one retry")
-        for token in (
-            f"ADISCORD_vorkerland_focus_central_minor_target_{target.lower()}",
-            f"annex_country = {{ target = {target} transfer_troops = no }}",
-        ):
-            if token not in resolver:
-                issues.append(f"central minor deadline resolver lacks {target} token {token}")
 
     integrated_states: list[int] = []
     for target, (decision_id, states, duration) in CENTRAL_INTEGRATION_PACKAGES.items():
@@ -545,7 +714,7 @@ def collect_issues() -> list[str]:
         "ADISCORD_vorkerland_phase_reunification",
     ):
         if phase not in reunification:
-            issues.append(f"reunification old-save recovery lacks phase {phase}")
+            issues.append(f"reunification entry gate lacks phase {phase}")
     if reunification.count(
         "ADISCORD_vorkerland_central_districts_owned_and_controlled = yes"
     ) != 3:

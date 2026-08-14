@@ -19,7 +19,7 @@ ADISCORD_vorkerland_focus_launch_central_minor_wave = {
 		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb any_neighbor_country = { tag = SWB } SWB = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = SWB type = annex_everything } }
 		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv any_neighbor_country = { tag = VHV } VHV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = VHV type = annex_everything } }
 		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv any_neighbor_country = { tag = OSV } OSV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = OSV type = annex_everything } }
-		activate_mission = ADISCORD_vorkerland_focus_central_minor_launch_check
+		country_event = { id = ADISCORD_vorkerland_phase.8 days = 1 }
 	}
 	else = { ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes }
 }
@@ -40,8 +40,6 @@ ADISCORD_vorkerland_focus_cleanup_central_minor_front = {
 	clr_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
 	clr_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_retry
 	clr_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active
-	remove_mission = ADISCORD_vorkerland_focus_central_minor_launch_check
-	remove_mission = ADISCORD_vorkerland_focus_central_minor_retry_check
 	remove_mission = ADISCORD_vorkerland_focus_central_minor_front_deadline
 	ADISCORD_vorkerland_focus_clear_central_minor_assignment = yes
 }
@@ -118,12 +116,13 @@ ADISCORD_vorkerland_focus_confirm_central_minor_wave_launch = {
 			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
 			has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
 			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_retry }
+			ADISCORD_vorkerland_has_retryable_recorded_central_minor_front = yes
 			is_subject = no
 			NOT = { has_capitulated = yes }
 		}
 		set_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_retry
 		ADISCORD_vorkerland_focus_retry_central_minor_wave_declarations = yes
-		activate_mission = ADISCORD_vorkerland_focus_central_minor_retry_check
+		country_event = { id = ADISCORD_vorkerland_phase.9 days = 1 }
 	}
 	else = { ADISCORD_vorkerland_focus_finish_central_minor_wave = yes }
 }
@@ -151,8 +150,10 @@ ADISCORD_vorkerland_focus_confirm_central_minor_wave_retry = {
 	else = { ADISCORD_vorkerland_focus_finish_central_minor_wave = yes }
 }
 
-# The 240-day safety bound closes every still-live front in the recorded wave.
-# Independent blocks matter here: resolving one target must never skip another.
+# The 240-day bound is diagnostic only. Central districts are genuine
+# belligerents, so a long campaign must end through normal capitulation rather
+# than a scripted state transfer, white peace, or annexation. Retire only this
+# wave's bookkeeping; the live war itself continues and blocks the next wave.
 ADISCORD_vorkerland_focus_resolve_central_minor_wave_deadline = {
 	if = {
 		limit = {
@@ -160,15 +161,12 @@ ADISCORD_vorkerland_focus_resolve_central_minor_wave_deadline = {
 			is_subject = no
 			NOT = { has_capitulated = yes }
 		}
-		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr has_war_with = EYR } EYR = { every_owned_state = { ROOT = { transfer_state = PREV } } } white_peace = EYR annex_country = { target = EYR transfer_troops = no } }
-		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc has_war_with = EGC } EGC = { every_owned_state = { ROOT = { transfer_state = PREV } } } white_peace = EGC annex_country = { target = EGC transfer_troops = no } }
-		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_riv has_war_with = RIV } RIV = { every_owned_state = { ROOT = { transfer_state = PREV } } } white_peace = RIV annex_country = { target = RIV transfer_troops = no } }
-		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_rev has_war_with = REV } REV = { every_owned_state = { ROOT = { transfer_state = PREV } } } white_peace = REV annex_country = { target = REV transfer_troops = no } }
-		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_yor has_war_with = YOR } YOR = { every_owned_state = { ROOT = { transfer_state = PREV } } } white_peace = YOR annex_country = { target = YOR transfer_troops = no } }
-		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_ndn has_war_with = NDN } NDN = { every_owned_state = { ROOT = { transfer_state = PREV } } } white_peace = NDN annex_country = { target = NDN transfer_troops = no } }
-		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb has_war_with = SWB } SWB = { every_owned_state = { ROOT = { transfer_state = PREV } } } white_peace = SWB annex_country = { target = SWB transfer_troops = no } }
-		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv has_war_with = VHV } VHV = { every_owned_state = { ROOT = { transfer_state = PREV } } } white_peace = VHV annex_country = { target = VHV transfer_troops = no } }
-		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv has_war_with = OSV } OSV = { every_owned_state = { ROOT = { transfer_state = PREV } } } white_peace = OSV annex_country = { target = OSV transfer_troops = no } }
+		set_country_flag = {
+			flag = ADISCORD_vorkerland_focus_central_minor_front_protracted
+			days = 180
+			value = 1
+		}
+		log = "[ADISCORD][VORKERLAND] Central district campaign exceeded 240 days; the live war remains unresolved."
 	}
 	ADISCORD_vorkerland_focus_finish_central_minor_wave = yes
 }
@@ -224,6 +222,7 @@ ADISCORD_vorkerland_focus_schedule_final_showdown = {
 			318 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
 			320 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
 			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
+			NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active }
 			NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
 			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }

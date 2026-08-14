@@ -1,5 +1,9 @@
 capital = 32
 
+# Consumed by the collapse startup hook. A loaded pre-feature save never has
+# this history-only marker and therefore cannot be migrated into the campaign.
+set_country_flag = ADISCORD_vorkerland_fresh_start_collapse_pending_v1
+
 oob = "WRK"
 
 ####### Characters

@@ -334,19 +334,6 @@ guiTypes = {
 					}
 				}
 
-				# Separate instrument bezels keep party popularity and the textual
-				# government readout visually distinct inside the politics card.
-				containerWindowType = {
-					name = "ADISCORD_party_popularity_frame"
-					position = { x = 149 y = 10 }
-					size = { width = 124 height = 68 }
-
-					background = {
-						name = "Background"
-						quadTextureSprite = "GFX_ADISCORD_diplomacy_thin_frame"
-					}
-				}
-
 				# Engine-bound: must remain an immediate child of diplomacy_tab_top.
 				containerWindowType = {
 					name = "political_pie_chart"
@@ -361,12 +348,12 @@ guiTypes = {
 					}
 				}
 
-				# Custom replacement for the vanilla political-chart overlay. It is a
-				# click-through sibling, keeping political_pie_chart engine-bound here.
+				# Restrained circular lens; kept as a sibling so the pie chart remains
+				# an immediate, engine-bound child of diplomacy_tab_top.
 				iconType = {
 					name = "ADISCORD_party_popularity_overlay"
 					spriteType = "GFX_ADISCORD_diplomacy_parties_overlay"
-					position = { x = 149 y = 10 }
+					position = { x = 179 y = 12 }
 					alwaystransparent = yes
 				}
 
@@ -485,9 +472,7 @@ guiTypes = {
 				}
 			}
 
-			# Engine-bound selected-country leader name. Keep this as a direct
-			# country_info child and after diplomacy_tab_top so the dynamic label
-			# is drawn above the decorative portrait overlay and into its plate.
+			# Keep the single native leader-name binding in the portrait dossier plate.
 			instantTextboxType = {
 				name = "leader_name"
 				position = { x = 10 y = 318 }

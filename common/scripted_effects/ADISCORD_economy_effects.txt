@@ -1,9 +1,12 @@
 # A-DISCORD strategic economy MVP.
 # The economy is a budget layer. It feeds the existing ADISCORD_economic_development progress and ideas.
 ADISCORD_economy_initialize_country = {
-	ADISCORD_initialize_society_development_variables = yes
 	if = {
-		limit = { NOT = { has_variable = ADISCORD_economy_initialized } }
+		limit = {
+			has_global_flag = ADISCORD_fresh_campaign_contract_v1
+			NOT = { has_variable = ADISCORD_economy_initialized }
+		}
+		ADISCORD_initialize_society_development_variables = yes
 		ADISCORD_economy_set_default_values = yes
 		ADISCORD_economy_initialize_from_development = yes
 		ADISCORD_economy_apply_country_starting_profile = yes
@@ -19,15 +22,15 @@ ADISCORD_economy_initialize_country = {
 		ADISCORD_economy_refresh_spending_ideas = yes
 		ADISCORD_economy_update_gui = yes
 	}
-	else = {
-		ADISCORD_economy_migrate_schema = yes
+	else_if = {
+		limit = { ADISCORD_economy_has_current_schema = yes }
 		ADISCORD_economy_set_simulation_tier = yes
 	}
 }
 
-# Country flavour is applied only on first initialization. Existing saves keep
-# their live economy, while a new campaign receives its intended starting
-# pressure without adding work to weekly or monthly pulses.
+# Country flavour is applied only during fresh-campaign initialization. Saves
+# without the provenance marker remain untouched; current-schema saves only
+# retain ordinary tier maintenance and never enter a migration path.
 ADISCORD_economy_apply_country_starting_profile = {
 	if = {
 		limit = { tag = VAL }
@@ -70,8 +73,8 @@ ADISCORD_economy_sync_starting_accounting = {
 }
 
 ADISCORD_economy_migrate_schema = {
-	# Versioned, one-shot save migration. Ordinary ticks must not repeat the
-	# full has_variable/clamp initialization path.
+	# Quarantined legacy reference: validators require zero runtime callers.
+	# Fresh initialization writes schema 15 directly and never enters this body.
 	if = {
 		limit = {
 			OR = {
@@ -470,11 +473,24 @@ ADISCORD_economy_refresh_ai_assistance_income_cache = {
 }
 
 ADISCORD_economy_set_simulation_tier = {
-	if = { limit = { ADISCORD_economy_is_player_tier_country = yes } set_variable = { var = ADISCORD_economy_simulation_tier value = 0 } }
-	else_if = { limit = { ADISCORD_economy_is_primary_tier_country = yes } set_variable = { var = ADISCORD_economy_simulation_tier value = 1 } }
-	else_if = { limit = { ADISCORD_economy_is_secondary_tier_country = yes } set_variable = { var = ADISCORD_economy_simulation_tier value = 2 } }
-	else = { set_variable = { var = ADISCORD_economy_simulation_tier value = 3 } }
-	ADISCORD_economy_refresh_ai_assistance = yes
+	set_temp_variable = { var = ADISCORD_economy_simulation_tier_target_temp value = 3 }
+	if = { limit = { ADISCORD_economy_is_player_tier_country = yes } set_temp_variable = { var = ADISCORD_economy_simulation_tier_target_temp value = 0 } }
+	else_if = { limit = { ADISCORD_economy_is_primary_tier_country = yes } set_temp_variable = { var = ADISCORD_economy_simulation_tier_target_temp value = 1 } }
+	else_if = { limit = { ADISCORD_economy_is_secondary_tier_country = yes } set_temp_variable = { var = ADISCORD_economy_simulation_tier_target_temp value = 2 } }
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_variable = ADISCORD_economy_simulation_tier }
+				check_variable = {
+					var = ADISCORD_economy_simulation_tier
+					value = ADISCORD_economy_simulation_tier_target_temp
+					compare = not_equals
+				}
+			}
+		}
+		set_variable = { var = ADISCORD_economy_simulation_tier value = ADISCORD_economy_simulation_tier_target_temp }
+		ADISCORD_economy_refresh_ai_assistance = yes
+	}
 }
 
 # Keep newly introduced transition effects above their first caller. Full game
@@ -3665,7 +3681,8 @@ ADISCORD_economy_ai_yearly_policy = {
 
 ADISCORD_economy_update_model_and_cycle = {
 	# V7: explicit economic-system laws are authoritative when present.
-	# If an old save has no ADISCORD_economic_system_* law, fall back to the old inferred model logic.
+	# Fresh initialization already assigns model 2; a current-schema country
+	# without a law keeps its existing model instead of entering a save backfill.
 	# The category is a law list, so exactly one branch can be active. A single
 	# if/else_if chain avoids querying the same nine idea IDs a second time.
 	if = { limit = { ADISCORD_economy_has_idea_economic_system_agrarian = yes } set_variable = { var = ADISCORD_economy_model value = 0 } }
@@ -3677,16 +3694,6 @@ ADISCORD_economy_update_model_and_cycle = {
 	else_if = { limit = { ADISCORD_economy_has_idea_economic_system_mobilization = yes } set_variable = { var = ADISCORD_economy_model value = 5 } }
 	else_if = { limit = { ADISCORD_economy_has_idea_economic_system_oligarchic_clan = yes } set_variable = { var = ADISCORD_economy_model value = 6 } }
 	else_if = { limit = { ADISCORD_economy_has_idea_economic_system_technocratic = yes } set_variable = { var = ADISCORD_economy_model value = 7 } }
-	else = {
-		set_variable = { var = ADISCORD_economy_model value = 2 }
-		if = { limit = { ADISCORD_economy_has_industrial_artisan_markets = yes ADISCORD_state_development_at_most_2 = yes } set_variable = { var = ADISCORD_economy_model value = 0 } }
-		if = { limit = { ADISCORD_economy_has_taxation_light_dues = yes ADISCORD_economy_has_labor_loose_contracts = yes } set_variable = { var = ADISCORD_economy_model value = 1 } }
-		if = { limit = { ADISCORD_economy_has_industrial_state_planning = yes ADISCORD_state_development_at_least_3 = yes } set_variable = { var = ADISCORD_economy_model value = 3 } }
-		if = { limit = { ADISCORD_economy_has_industrial_state_planning = yes ADISCORD_state_development_at_least_4 = yes } set_variable = { var = ADISCORD_economy_model value = 4 } }
-		if = { limit = { ADISCORD_economy_has_taxation_extraction_quotas = yes ADISCORD_economy_has_industrial_military_prioritization = yes } set_variable = { var = ADISCORD_economy_model value = 5 } }
-		if = { limit = { ADISCORD_state_development_at_most_1 = yes ADISCORD_economy_has_taxation_industrial_tariffs = yes } set_variable = { var = ADISCORD_economy_model value = 6 } }
-		if = { limit = { has_government = technocracy ADISCORD_economy_has_labor_technocratic_work_norms = yes } set_variable = { var = ADISCORD_economy_model value = 7 } }
-	}
 
 	set_variable = { var = ADISCORD_economy_cycle_phase value = 1 }
 	if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } } set_variable = { var = ADISCORD_economy_cycle_phase value = 0 } }

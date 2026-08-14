@@ -8,7 +8,6 @@ state={
 	history = {
         owner = WRK
         add_core_of = WRK
-        victory_points = { 16428 150 }
 		buildings = {
 			ADISCORD_science_center = 1
 			air_base = 3
@@ -16,6 +15,7 @@ state={
 			industrial_complex = 6
 			infrastructure = 5
 		}
+		victory_points = { 16428 5 }
 	}
 
 

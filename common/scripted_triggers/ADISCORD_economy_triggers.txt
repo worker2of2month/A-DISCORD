@@ -42,6 +42,14 @@ ADISCORD_economy_is_player_tier_country = {
 	is_ai = no
 }
 
+# Old or pre-feature saves are unsupported and remain inert. Ordinary economy
+# updates may continue only for countries already initialized on schema 15.
+ADISCORD_economy_has_current_schema = {
+	has_variable = ADISCORD_economy_initialized
+	has_variable = ADISCORD_economy_schema_version
+	check_variable = { var = ADISCORD_economy_schema_version value = 15 compare = greater_than_or_equals }
+}
+
 ADISCORD_economy_is_primary_tier_country = {
 	OR = {
 		ADISCORD_is_playable_development_country = yes
@@ -76,6 +84,7 @@ ADISCORD_economy_is_dormant = {
 }
 
 ADISCORD_economy_should_monthly_update = {
+	ADISCORD_economy_has_current_schema = yes
 	OR = {
 		ADISCORD_economy_is_player_tier_country = yes
 		ADISCORD_economy_is_primary_tier_country = yes
@@ -97,11 +106,13 @@ ADISCORD_economy_should_weekly_update = {
 }
 
 ADISCORD_economy_should_yearly_update = {
+	ADISCORD_economy_has_current_schema = yes
 	ADISCORD_economy_is_secondary_tier_country = yes
 	NOT = { ADISCORD_economy_should_monthly_update = yes }
 }
 
 ADISCORD_economy_should_show_player_ui = {
+	ADISCORD_economy_has_current_schema = yes
 	is_ai = no
 }
 

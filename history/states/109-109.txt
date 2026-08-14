@@ -12,7 +12,7 @@ state={
 		owner = VAD
 		add_core_of = VAD
 
-		victory_points = { 16574 5 }
+		victory_points = { 16574 3 }
 
 		buildings = {
 			arms_factory = 1
