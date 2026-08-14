@@ -43,6 +43,9 @@ PHASE_EFFECTS_FILE = Path(
     "common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt"
 )
 COLLAPSE_IDEAS_FILE = Path("common/ideas/ADISCORD_vorkerland_collapse_ideas.txt")
+FOCUS_EXPANSION_IDEAS_FILE = Path(
+    "common/ideas/ADISCORD_vorkerland_focus_expansion_ideas.txt"
+)
 CLAIMANT_EVENTS_FILE = Path("events/ADISCORD_vorkerland_claimant_events.txt")
 WKR_AI_PLAN_FILE = Path(
     "common/ai_strategy_plans/ADISCORD_vorkerland_wkr_wartime_plan.txt"
@@ -54,7 +57,7 @@ TVA_AI_PLAN_FILE = Path(
     "common/ai_strategy_plans/ADISCORD_vorkerland_tva_wartime_plan.txt"
 )
 
-PREWAR_WRK_FOCUSES = (
+PREWAR_WRK_BASE_FOCUSES = (
     "WRK_measure_confederation_fault_lines",
     "WRK_convene_council_of_republics",
     "WRK_inventory_emergency_stores",
@@ -63,7 +66,16 @@ PREWAR_WRK_FOCUSES = (
     "WRK_issue_continuity_orders",
 )
 
-PREWAR_VAD_FOCUSES = (
+PREWAR_WRK_EXPANSION_FOCUSES = (
+    "WRK_open_worker_vadl_backchannel",
+    "WRK_offer_emergency_compact",
+    "WRK_mobilize_loyal_republics",
+    "WRK_place_reserves_under_worker",
+)
+
+PREWAR_WRK_FOCUSES = (*PREWAR_WRK_BASE_FOCUSES, *PREWAR_WRK_EXPANSION_FOCUSES)
+
+PREWAR_VAD_BASE_FOCUSES = (
     "VAD_review_district_obligations",
     "VAD_open_continuity_registers",
     "VAD_drill_district_guard",
@@ -77,6 +89,15 @@ RETIRED_WARTIME_FOCUSES = (
     "ADISCORD_vorkerland_mobilize_field_forces",
     "ADISCORD_vorkerland_fortify_home_region",
 )
+
+PREWAR_VAD_EXPANSION_FOCUSES = (
+    "VAD_prepare_vadl_worker_terms",
+    "VAD_ratify_emergency_compact",
+    "VAD_activate_eastern_mandate",
+    "VAD_seal_district_arsenals",
+)
+
+PREWAR_VAD_FOCUSES = (*PREWAR_VAD_BASE_FOCUSES, *PREWAR_VAD_EXPANSION_FOCUSES)
 
 WARTIME_ROUTE_FOCUSES = {
     "WKR": (
@@ -180,6 +201,228 @@ TVA_OPTIONAL_WARTIME_FOCUSES = (
     "TVA_authorize_iteration_two",
 )
 
+SHOWDOWN_FOCUSES = {
+    "WKR": (
+        "WKR_establish_front_operations_bureau",
+        "WKR_authorize_republican_mission_commands",
+        "WKR_issue_normative_campaign_tables",
+        "WKR_form_rolling_factory_groups",
+        "WKR_reopen_night_freight_corridors",
+        "WKR_arm_the_mobile_reserve",
+        "WKR_coordinate_the_rolling_front",
+    ),
+    "VAD": (
+        "VAD_convene_campaign_directorate",
+        "VAD_issue_prefectural_field_decrees",
+        "VAD_seat_front_commissars",
+        "VAD_standardize_restoration_columns",
+        "VAD_advance_under_one_register",
+    ),
+    "TVA": (
+        "TVA_merge_iteration_with_field_command",
+        "TVA_mass_produce_assault_modules",
+        "TVA_link_observers_to_fire_control",
+        "TVA_turn_repair_trains_into_supply_web",
+        "TVA_run_live_front_validation",
+    ),
+}
+
+PREWAR_EXPANSION_POSITIONS = {
+    "WRK_open_worker_vadl_backchannel": (0, 4),
+    "WRK_offer_emergency_compact": (0, 5),
+    "WRK_mobilize_loyal_republics": (4, 4),
+    "WRK_place_reserves_under_worker": (4, 5),
+    "VAD_prepare_vadl_worker_terms": (9, 4),
+    "VAD_ratify_emergency_compact": (9, 5),
+    "VAD_activate_eastern_mandate": (14, 4),
+    "VAD_seal_district_arsenals": (14, 5),
+}
+
+PREWAR_EXPANSION_COSTS = {
+    focus_id: 1 if focus_id in {
+        "WRK_open_worker_vadl_backchannel",
+        "WRK_mobilize_loyal_republics",
+        "VAD_prepare_vadl_worker_terms",
+        "VAD_activate_eastern_mandate",
+    } else 2
+    for focus_id in PREWAR_EXPANSION_POSITIONS
+}
+
+PREWAR_EXPANSION_PREREQUISITES = {
+    "WRK_open_worker_vadl_backchannel": (frozenset({"WRK_issue_continuity_orders"}),),
+    "WRK_offer_emergency_compact": (frozenset({"WRK_open_worker_vadl_backchannel"}),),
+    "WRK_mobilize_loyal_republics": (frozenset({"WRK_issue_continuity_orders"}),),
+    "WRK_place_reserves_under_worker": (frozenset({"WRK_mobilize_loyal_republics"}),),
+    "VAD_prepare_vadl_worker_terms": (frozenset({"VAD_form_emergency_chancery"}),),
+    "VAD_ratify_emergency_compact": (frozenset({"VAD_prepare_vadl_worker_terms"}),),
+    "VAD_activate_eastern_mandate": (frozenset({"VAD_form_emergency_chancery"}),),
+    "VAD_seal_district_arsenals": (frozenset({"VAD_activate_eastern_mandate"}),),
+}
+
+PREWAR_COURSE_SELECTIONS = {
+    "WRK_open_worker_vadl_backchannel": (
+        "ADISCORD_vorkerland_prewar_wrk_compact_course",
+        "ADISCORD_vorkerland_prewar_wrk_hardline_course",
+    ),
+    "WRK_mobilize_loyal_republics": (
+        "ADISCORD_vorkerland_prewar_wrk_hardline_course",
+        "ADISCORD_vorkerland_prewar_wrk_compact_course",
+    ),
+    "VAD_prepare_vadl_worker_terms": (
+        "ADISCORD_vorkerland_prewar_vad_compact_course",
+        "ADISCORD_vorkerland_prewar_vad_hardline_course",
+    ),
+    "VAD_activate_eastern_mandate": (
+        "ADISCORD_vorkerland_prewar_vad_hardline_course",
+        "ADISCORD_vorkerland_prewar_vad_compact_course",
+    ),
+}
+
+PREWAR_WRK_CARRYOVER_FOCUSES = (
+    *PREWAR_WRK_BASE_FOCUSES,
+    "WRK_place_reserves_under_worker",
+)
+
+SHOWDOWN_POSITIONS = {
+    "WKR_establish_front_operations_bureau": (3, 11),
+    "WKR_authorize_republican_mission_commands": (1, 12),
+    "WKR_issue_normative_campaign_tables": (5, 12),
+    "WKR_form_rolling_factory_groups": (2, 13),
+    "WKR_reopen_night_freight_corridors": (4, 13),
+    "WKR_arm_the_mobile_reserve": (1, 14),
+    "WKR_coordinate_the_rolling_front": (4, 15),
+    "VAD_convene_campaign_directorate": (14, 14),
+    "VAD_issue_prefectural_field_decrees": (12, 15),
+    "VAD_seat_front_commissars": (16, 15),
+    "VAD_standardize_restoration_columns": (14, 16),
+    "VAD_advance_under_one_register": (14, 17),
+    "TVA_merge_iteration_with_field_command": (23, 16),
+    "TVA_mass_produce_assault_modules": (21, 17),
+    "TVA_link_observers_to_fire_control": (23, 17),
+    "TVA_turn_repair_trains_into_supply_web": (25, 17),
+    "TVA_run_live_front_validation": (23, 18),
+}
+
+SHOWDOWN_COSTS = {
+    "WKR_establish_front_operations_bureau": 2,
+    "WKR_authorize_republican_mission_commands": 2,
+    "WKR_issue_normative_campaign_tables": 2,
+    "WKR_form_rolling_factory_groups": 3,
+    "WKR_reopen_night_freight_corridors": 3,
+    "WKR_arm_the_mobile_reserve": 2,
+    "WKR_coordinate_the_rolling_front": 4,
+    "VAD_convene_campaign_directorate": 2,
+    "VAD_issue_prefectural_field_decrees": 3,
+    "VAD_seat_front_commissars": 3,
+    "VAD_standardize_restoration_columns": 3,
+    "VAD_advance_under_one_register": 4,
+    "TVA_merge_iteration_with_field_command": 2,
+    "TVA_mass_produce_assault_modules": 3,
+    "TVA_link_observers_to_fire_control": 3,
+    "TVA_turn_repair_trains_into_supply_web": 3,
+    "TVA_run_live_front_validation": 4,
+}
+
+SHOWDOWN_PREREQUISITES = {
+    "WKR_establish_front_operations_bureau": (frozenset({"WKR_republic_fights_as_one"}),),
+    "WKR_authorize_republican_mission_commands": (frozenset({"WKR_establish_front_operations_bureau"}),),
+    "WKR_issue_normative_campaign_tables": (frozenset({"WKR_establish_front_operations_bureau"}),),
+    "WKR_form_rolling_factory_groups": (frozenset({"WKR_authorize_republican_mission_commands", "WKR_issue_normative_campaign_tables"}),),
+    "WKR_reopen_night_freight_corridors": (frozenset({"WKR_authorize_republican_mission_commands", "WKR_issue_normative_campaign_tables"}),),
+    "WKR_arm_the_mobile_reserve": (frozenset({"WKR_form_rolling_factory_groups"}),),
+    "WKR_coordinate_the_rolling_front": (
+        frozenset({"WKR_arm_the_mobile_reserve"}),
+        frozenset({"WKR_reopen_night_freight_corridors"}),
+    ),
+    "VAD_convene_campaign_directorate": (frozenset({"VAD_publish_interim_restoration_register"}),),
+    "VAD_issue_prefectural_field_decrees": (frozenset({"VAD_convene_campaign_directorate"}),),
+    "VAD_seat_front_commissars": (frozenset({"VAD_convene_campaign_directorate"}),),
+    "VAD_standardize_restoration_columns": (frozenset({"VAD_issue_prefectural_field_decrees", "VAD_seat_front_commissars"}),),
+    "VAD_advance_under_one_register": (frozenset({"VAD_standardize_restoration_columns"}),),
+    "TVA_merge_iteration_with_field_command": (
+        frozenset({"TVA_close_operational_loop"}),
+        frozenset({"TVA_authorize_iteration_two"}),
+    ),
+    "TVA_mass_produce_assault_modules": (frozenset({"TVA_merge_iteration_with_field_command"}),),
+    "TVA_link_observers_to_fire_control": (frozenset({"TVA_merge_iteration_with_field_command"}),),
+    "TVA_turn_repair_trains_into_supply_web": (frozenset({"TVA_merge_iteration_with_field_command"}),),
+    "TVA_run_live_front_validation": (frozenset({"TVA_mass_produce_assault_modules", "TVA_link_observers_to_fire_control", "TVA_turn_repair_trains_into_supply_web"}),),
+}
+
+FOCUS_EXPANSION_IDEAS = (
+    "ADISCORD_vorkerland_wrk_loyal_republics_mobilized",
+    "ADISCORD_vorkerland_vad_eastern_mandate",
+    "ADISCORD_vorkerland_wkr_front_operations_bureau",
+    "ADISCORD_vorkerland_wkr_republican_mission_commands",
+    "ADISCORD_vorkerland_wkr_normative_campaign_tables",
+    "ADISCORD_vorkerland_wkr_rolling_factory_groups",
+    "ADISCORD_vorkerland_wkr_night_freight_corridors",
+    "ADISCORD_vorkerland_wkr_rolling_front",
+    "ADISCORD_vorkerland_vad_campaign_directorate",
+    "ADISCORD_vorkerland_vad_restoration_war_cabinet_2",
+    "ADISCORD_vorkerland_vad_dual_authority_protocol_2",
+    "ADISCORD_vorkerland_vad_standardized_restoration_columns",
+    "ADISCORD_vorkerland_vad_joint_front_operation",
+    "ADISCORD_vorkerland_vad_prefectural_offensive",
+    "ADISCORD_vorkerland_tva_integrated_second_protocol",
+    "ADISCORD_vorkerland_tva_assault_modules",
+    "ADISCORD_vorkerland_tva_linked_fire_control",
+    "ADISCORD_vorkerland_tva_supply_web",
+    "ADISCORD_vorkerland_tva_live_front_validated",
+)
+
+SHOWDOWN_AI_PLANS = {
+    "WKR": {
+        "ADISCORD_vorkerland_wkr_pragmatist_showdown_plan": (
+            "WKR_establish_front_operations_bureau",
+            "WKR_authorize_republican_mission_commands",
+            "WKR_form_rolling_factory_groups",
+            "WKR_reopen_night_freight_corridors",
+            "WKR_arm_the_mobile_reserve",
+            "WKR_coordinate_the_rolling_front",
+        ),
+        "ADISCORD_vorkerland_wkr_utilitarian_showdown_plan": (
+            "WKR_establish_front_operations_bureau",
+            "WKR_issue_normative_campaign_tables",
+            "WKR_form_rolling_factory_groups",
+            "WKR_reopen_night_freight_corridors",
+            "WKR_arm_the_mobile_reserve",
+            "WKR_coordinate_the_rolling_front",
+        ),
+    },
+    "VAD": {
+        "ADISCORD_vorkerland_vad_vlad_showdown_plan": (
+            "VAD_convene_campaign_directorate",
+            "VAD_issue_prefectural_field_decrees",
+            "VAD_standardize_restoration_columns",
+            "VAD_advance_under_one_register",
+        ),
+        "ADISCORD_vorkerland_vad_joint_showdown_plan": (
+            "VAD_convene_campaign_directorate",
+            "VAD_seat_front_commissars",
+            "VAD_standardize_restoration_columns",
+            "VAD_advance_under_one_register",
+        ),
+    },
+    "TVA": {
+        "ADISCORD_vorkerland_tva_technical_validation_plan": (
+            "TVA_merge_iteration_with_field_command",
+            "TVA_mass_produce_assault_modules",
+            "TVA_run_live_front_validation",
+        ),
+        "ADISCORD_vorkerland_tva_remote_validation_plan": (
+            "TVA_merge_iteration_with_field_command",
+            "TVA_link_observers_to_fire_control",
+            "TVA_run_live_front_validation",
+        ),
+        "ADISCORD_vorkerland_tva_adaptive_validation_plan": (
+            "TVA_merge_iteration_with_field_command",
+            "TVA_turn_repair_trains_into_supply_web",
+            "TVA_run_live_front_validation",
+        ),
+    },
+}
+
 POSTWAR_ROUTE_FOCUSES = {
     "ADISCORD_vorkerland_route_worker": (
         "WRK_worker_convene_reunification_congress",
@@ -220,24 +463,30 @@ POSTWAR_ROUTE_FOCUSES = {
 }
 
 FOCUS_IDS = (
-    *PREWAR_WRK_FOCUSES,
-    *PREWAR_VAD_FOCUSES,
+    *PREWAR_WRK_BASE_FOCUSES,
+    *PREWAR_WRK_EXPANSION_FOCUSES,
+    *PREWAR_VAD_BASE_FOCUSES,
+    *PREWAR_VAD_EXPANSION_FOCUSES,
     RETIRED_WARTIME_FOCUSES[0],
     RETIRED_WARTIME_FOCUSES[1],
     RETIRED_WARTIME_FOCUSES[2],
     *WARTIME_ROUTE_FOCUSES["WKR"],
+    *SHOWDOWN_FOCUSES["WKR"],
     *WKR_OPTIONAL_WARTIME_FOCUSES,
     *WARTIME_ROUTE_FOCUSES["VAD"],
     *VAD_OPTIONAL_WARTIME_FOCUSES,
     *VAD_LATE_WAR_BRIDGE_FOCUSES,
+    *SHOWDOWN_FOCUSES["VAD"],
     *WARTIME_ROUTE_FOCUSES["TVA"],
     *TVA_OPTIONAL_WARTIME_FOCUSES,
+    *SHOWDOWN_FOCUSES["TVA"],
     *POSTWAR_ROUTE_FOCUSES["ADISCORD_vorkerland_route_worker"],
     *POSTWAR_ROUTE_FOCUSES["ADISCORD_vorkerland_route_joint"],
     *POSTWAR_ROUTE_FOCUSES["ADISCORD_vorkerland_route_utilitarian"],
 )
 
 PREWAR_PHASE = "ADISCORD_vorkerland_phase_prewar"
+SHOWDOWN_PHASE = "ADISCORD_vorkerland_phase_central_showdown"
 ACTIVE_PHASE_FLAGS = {
     "ADISCORD_vorkerland_phase_collapse",
     "ADISCORD_vorkerland_phase_regional_consolidation",
@@ -1095,6 +1344,10 @@ def expected_localisation_keys() -> set[str]:
         "WRK_technocratic_republic_settlement_tt",
         "WKR_intervene_in_solyarino_available_tt",
         "WKR_intervene_in_solyarino_effect_tt",
+        "ADISCORD_vorkerland_prewar_compact_requires_both_tt",
+        "ADISCORD_vorkerland_showdown_focus_live_war_tt",
+        *FOCUS_EXPANSION_IDEAS,
+        *(f"{idea_id}_desc" for idea_id in FOCUS_EXPANSION_IDEAS),
         *(
             f"{event_id}.{suffix}"
             for event_id in (*CLAIMANT_FOCUS_EVENT_IDS, *CLAIMANT_NEWS_EVENT_IDS)
@@ -1386,6 +1639,7 @@ def collect_issues() -> list[str]:
         DIPLOMACY_EFFECTS_FILE,
         PHASE_EFFECTS_FILE,
         COLLAPSE_IDEAS_FILE,
+        FOCUS_EXPANSION_IDEAS_FILE,
         CLAIMANT_EVENTS_FILE,
         WKR_AI_PLAN_FILE,
         VAD_AI_PLAN_FILE,
@@ -1405,6 +1659,7 @@ def collect_issues() -> list[str]:
     diplomacy_effects = read(DIPLOMACY_EFFECTS_FILE)
     phase_effects = read(PHASE_EFFECTS_FILE)
     collapse_ideas = read(COLLAPSE_IDEAS_FILE)
+    focus_expansion_ideas = read(FOCUS_EXPANSION_IDEAS_FILE)
     claimant_events = read(CLAIMANT_EVENTS_FILE)
     wkr_ai_plans = read(WKR_AI_PLAN_FILE)
     vad_ai_plans = read(VAD_AI_PLAN_FILE)
@@ -1447,9 +1702,9 @@ def collect_issues() -> list[str]:
             issues.append("country selector must add weight 100 for lifecycle tags")
 
     if tuple(blocks) != FOCUS_IDS:
-        issues.append(f"focus IDs/order differ from the 126-focus lifecycle manifest: {tuple(blocks)}")
-    if len(FOCUS_IDS) != 126:
-        issues.append(f"validator manifest must contain 126 definitions, found {len(FOCUS_IDS)}")
+        issues.append(f"focus IDs/order differ from the 151-focus lifecycle manifest: {tuple(blocks)}")
+    if len(FOCUS_IDS) != 151:
+        issues.append(f"validator manifest must contain 151 definitions, found {len(FOCUS_IDS)}")
     issues.extend(_check_graph(blocks))
 
     if len(continuous_palettes) != 1:
@@ -1581,7 +1836,7 @@ def collect_issues() -> list[str]:
             issues.append("WRK prewar carryover must be WKR-only and guarded by its idempotence flag")
         if carryover.count(f"set_country_flag = {PREWAR_CARRYOVER_FLAG}") != 1:
             issues.append("WRK prewar carryover must set its idempotence flag exactly once")
-        for focus_id in PREWAR_WRK_FOCUSES:
+        for focus_id in PREWAR_WRK_CARRYOVER_FOCUSES:
             if carryover.count(f"has_completed_focus = {focus_id}") != 1:
                 issues.append(f"WRK prewar carryover must derive {focus_id} from completed-focus truth")
 
@@ -1661,6 +1916,9 @@ def collect_issues() -> list[str]:
         category_by_focus[focus_id] = ("late_war_bridge", "VAD")
     for focus_id in TVA_OPTIONAL_WARTIME_FOCUSES:
         category_by_focus[focus_id] = ("optional_wartime", "TVA")
+    for tag, focus_ids in SHOWDOWN_FOCUSES.items():
+        for focus_id in focus_ids:
+            category_by_focus[focus_id] = ("showdown", tag)
     for route_flag, focus_ids in POSTWAR_ROUTE_FOCUSES.items():
         for focus_id in focus_ids:
             category_by_focus[focus_id] = ("postwar", route_flag)
@@ -1680,7 +1938,7 @@ def collect_issues() -> list[str]:
                 issues.append(f"{focus_id} allow_branch must hide outside the prewar phase")
             if set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", allow)) != {gate}:
                 issues.append(f"{focus_id} must expose only the prewar {gate} block")
-            cost_expected = {5} if gate == "WRK" else {1, 2, 3, 4}
+            cost_expected = {1, 2, 3, 4, 5}
         elif category == "retired":
             if flags:
                 issues.append(f"retired focus {focus_id} must not keep lifecycle phase gates")
@@ -1743,6 +2001,27 @@ def collect_issues() -> list[str]:
                 issues.append(
                     f"{focus_id} must define one idempotent late-war bridge bypass"
                 )
+        elif category == "showdown":
+            if flags != {SHOWDOWN_PHASE}:
+                issues.append(
+                    f"{focus_id} must be showdown-only, found phases {sorted(flags)}"
+                )
+            if _phase_flags(allow) != {SHOWDOWN_PHASE}:
+                issues.append(
+                    f"{focus_id} allow_branch must hide outside the central showdown"
+                )
+            branch_tags = set(
+                re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", allow)
+            )
+            if branch_tags != {gate}:
+                issues.append(
+                    f"{focus_id} showdown branch tags {sorted(branch_tags)} != {[gate]}"
+                )
+            cost_expected = {2, 3, 4}
+            if len(_blocks(block, "bypass")) != 1:
+                issues.append(
+                    f"{focus_id} must define one idempotent showdown bypass"
+                )
         elif category == "postwar":
             if flags != {POSTWAR_PHASE}:
                 issues.append(f"{focus_id} must be postwar-only, found phases {sorted(flags)}")
@@ -1782,16 +2061,270 @@ def collect_issues() -> list[str]:
         if ai_base is None or not 1 <= int(ai_base.group(1)) <= 250:
             issues.append(f"{focus_id} must define a bounded positive AI weight")
 
+    if len(PREWAR_WRK_EXPANSION_FOCUSES) != 4 or len(PREWAR_VAD_EXPANSION_FOCUSES) != 4:
+        issues.append("prewar Worker-Vadl expansion must contain exactly eight definitions")
+    for focus_id in (*PREWAR_WRK_EXPANSION_FOCUSES, *PREWAR_VAD_EXPANSION_FOCUSES):
+        block = blocks.get(focus_id, "")
+        position = tuple(
+            int(re.search(rf"(?m)^\s*{axis}\s*=\s*(-?\d+)\s*$", block).group(1))
+            for axis in ("x", "y")
+        )
+        if position != PREWAR_EXPANSION_POSITIONS[focus_id]:
+            issues.append(
+                f"{focus_id} position {position} != {PREWAR_EXPANSION_POSITIONS[focus_id]}"
+            )
+        if _focus_cost(block) != PREWAR_EXPANSION_COSTS[focus_id]:
+            issues.append(
+                f"{focus_id} cost {_focus_cost(block)} != {PREWAR_EXPANSION_COSTS[focus_id]}"
+            )
+        if _prerequisite_groups(block) != PREWAR_EXPANSION_PREREQUISITES[focus_id]:
+            issues.append(
+                f"{focus_id} prerequisites {_prerequisite_groups(block)} != "
+                f"{PREWAR_EXPANSION_PREREQUISITES[focus_id]}"
+            )
+
+    prewar_choice_pairs = (
+        ("WRK_open_worker_vadl_backchannel", "WRK_mobilize_loyal_republics"),
+        ("VAD_prepare_vadl_worker_terms", "VAD_activate_eastern_mandate"),
+    )
+    for left, right in prewar_choice_pairs:
+        if _mutually_exclusive_focuses(blocks.get(left, "")) != {right}:
+            issues.append(f"{left} must be mutually exclusive with {right}")
+        if _mutually_exclusive_focuses(blocks.get(right, "")) != {left}:
+            issues.append(f"{right} must be mutually exclusive with {left}")
+
+    for focus_id, (set_flag, clear_flag) in PREWAR_COURSE_SELECTIONS.items():
+        selections = _blocks(blocks.get(focus_id, ""), "select_effect")
+        if len(selections) != 1:
+            issues.append(f"{focus_id} must define one course select_effect")
+            continue
+        selection = selections[0]
+        if selection.count(f"set_country_flag = {set_flag}") != 1:
+            issues.append(f"{focus_id} must set course flag {set_flag} exactly once")
+        if selection.count(f"clr_country_flag = {clear_flag}") != 1:
+            issues.append(f"{focus_id} must clear opposite course flag {clear_flag} exactly once")
+
+    for focus_id, expected_base in {
+        "WRK_open_worker_vadl_backchannel": 35,
+        "WRK_mobilize_loyal_republics": 65,
+    }.items():
+        ai_blocks = _blocks(blocks.get(focus_id, ""), "ai_will_do")
+        ai_base = (
+            re.search(r"\bbase\s*=\s*(\d+)\b", ai_blocks[0])
+            if len(ai_blocks) == 1
+            else None
+        )
+        if ai_base is None or int(ai_base.group(1)) != expected_base:
+            issues.append(
+                f"{focus_id} AI base must be {expected_base} to keep compact optional"
+            )
+
+    compact_finals = {
+        "WRK_offer_emergency_compact": "ADISCORD_vorkerland_wrk_compact_committed",
+        "VAD_ratify_emergency_compact": "ADISCORD_vorkerland_vad_compact_committed",
+    }
+    for focus_id, final_flag in compact_finals.items():
+        reward_blocks = _blocks(blocks.get(focus_id, ""), "completion_reward")
+        reward = reward_blocks[0] if len(reward_blocks) == 1 else ""
+        if reward.count("ADISCORD_vorkerland_resolve_prewar_compact = yes") != 1:
+            issues.append(f"{focus_id} must invoke the compact resolver exactly once")
+        if reward.count(f"set_country_flag = {final_flag}") != 1:
+            issues.append(f"{focus_id} must set final compact flag {final_flag}")
+
+    hardline_rewards = {
+        "WRK_place_reserves_under_worker": (
+            "add_manpower = 250",
+            "type = infantry_equipment_0 amount = 150 producer = WRK",
+            "idea = ADISCORD_vorkerland_wrk_loyal_republics_mobilized days = 70",
+            "set_country_flag = ADISCORD_vorkerland_wrk_hardline_committed",
+        ),
+        "VAD_seal_district_arsenals": (
+            "add_manpower = 250",
+            "type = infantry_equipment_0 amount = 150 producer = VAD",
+            "idea = ADISCORD_vorkerland_vad_eastern_mandate days = 70",
+            "set_country_flag = ADISCORD_vorkerland_vad_hardline_committed",
+        ),
+    }
+    for focus_id, tokens in hardline_rewards.items():
+        reward_blocks = _blocks(blocks.get(focus_id, ""), "completion_reward")
+        reward = reward_blocks[0] if len(reward_blocks) == 1 else ""
+        for token in tokens:
+            if reward.count(token) != 1:
+                issues.append(f"{focus_id} must contain hardline reward {token} exactly once")
+
+    if carryover:
+        hardline_scopes = [
+            scope
+            for scope in _blocks(carryover, "if")
+            if "has_completed_focus = WRK_place_reserves_under_worker" in scope
+            and scope.count("has_completed_focus = ") == 1
+        ]
+        if len(hardline_scopes) != 1:
+            issues.append("WRK hardline preparation must have one completed-focus carryover scope")
+        else:
+            for token in (
+                "add_manpower = 250",
+                "type = infantry_equipment_0 amount = 150 producer = WKR",
+                "idea = ADISCORD_vorkerland_wrk_loyal_republics_mobilized days = 70",
+                "set_country_flag = ADISCORD_vorkerland_wrk_hardline_committed",
+                "set_country_flag = ADISCORD_vorkerland_focus_wrk_reserves_under_worker",
+            ):
+                if hardline_scopes[0].count(token) != 1:
+                    issues.append(f"WRK hardline carryover must contain {token} exactly once")
+
+    if {tag: len(focuses) for tag, focuses in SHOWDOWN_FOCUSES.items()} != {
+        "WKR": 7,
+        "VAD": 5,
+        "TVA": 5,
+    }:
+        issues.append("live-showdown expansion must contain exactly 7 WKR, 5 VAD, and 5 TVA focuses")
+
+    showdown_opponents = {
+        "WKR": {"EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV", "VAD", "TVA"},
+        "VAD": {"EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV", "WKR", "TVA"},
+        "TVA": {"EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV", "WKR", "VAD"},
+    }
+    for tag, focus_ids in SHOWDOWN_FOCUSES.items():
+        positions: set[tuple[int, int]] = set()
+        for focus_id in focus_ids:
+            block = blocks.get(focus_id, "")
+            position = tuple(
+                int(re.search(rf"(?m)^\s*{axis}\s*=\s*(-?\d+)\s*$", block).group(1))
+                for axis in ("x", "y")
+            )
+            if position != SHOWDOWN_POSITIONS[focus_id]:
+                issues.append(f"{focus_id} position {position} != {SHOWDOWN_POSITIONS[focus_id]}")
+            if position in positions:
+                issues.append(f"{tag} showdown focus position {position} is duplicated")
+            positions.add(position)
+            if _focus_cost(block) != SHOWDOWN_COSTS[focus_id]:
+                issues.append(f"{focus_id} cost {_focus_cost(block)} != {SHOWDOWN_COSTS[focus_id]}")
+            if _prerequisite_groups(block) != SHOWDOWN_PREREQUISITES[focus_id]:
+                issues.append(
+                    f"{focus_id} prerequisites {_prerequisite_groups(block)} != "
+                    f"{SHOWDOWN_PREREQUISITES[focus_id]}"
+                )
+            allow = _allow_branch(block)
+            for token in (
+                "has_global_flag = ADISCORD_vorkerland_phase_central_showdown",
+                "has_global_flag = ADISCORD_vorkerland_central_showdown_started",
+                "NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }",
+            ):
+                if token not in allow:
+                    issues.append(f"{focus_id} showdown allow_branch lacks {token}")
+            available_blocks = _blocks(block, "available")
+            available = available_blocks[0] if len(available_blocks) == 1 else ""
+            if "tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt" not in available:
+                issues.append(f"{focus_id} must expose the live-war tooltip")
+            opponents = set(re.findall(r"\bhas_war_with\s*=\s*([A-Z0-9]{3})\b", available))
+            if opponents != showdown_opponents[tag]:
+                issues.append(
+                    f"{focus_id} live-war opponents {sorted(opponents)} != "
+                    f"{sorted(showdown_opponents[tag])}"
+                )
+
+    night_freight = blocks.get("WKR_reopen_night_freight_corridors", "")
+    night_rewards = _blocks(night_freight, "completion_reward")
+    night_reward = night_rewards[0] if len(night_rewards) == 1 else ""
+    for state_id in (200, 201):
+        for token in (
+            f"owns_state = {state_id}",
+            f"controls_state = {state_id}",
+            f"{state_id} = {{ infrastructure < 5 }}",
+            f"{state_id} = {{ add_building_construction = {{ type = infrastructure level = 1 instant_build = yes }} }}",
+        ):
+            if token not in night_reward:
+                issues.append(f"WKR night freight reward lacks bounded state {state_id} token {token}")
+    for dead_state_id in (32, 33):
+        if re.search(rf"\b{dead_state_id}\b", night_reward):
+            issues.append(f"WKR night freight must not target maxed state {dead_state_id}")
+    if night_reward.count(
+        "type = support_equipment amount = 50 producer = WKR"
+    ) != 1:
+        issues.append("WKR night freight must grant one support-equipment fallback")
+
+    expansion_source = "\n".join(
+        blocks.get(focus_id, "")
+        for focus_id in (
+            *PREWAR_WRK_EXPANSION_FOCUSES,
+            *PREWAR_VAD_EXPANSION_FOCUSES,
+            *(focus_id for focus_ids in SHOWDOWN_FOCUSES.values() for focus_id in focus_ids),
+        )
+    )
+    for forbidden in (
+        "activate_mission",
+        "declare_war_on",
+        "create_wargoal",
+        "annex_country",
+        "white_peace",
+        "transfer_state",
+        "every_country",
+        "random_country",
+        "on_daily",
+        "on_weekly",
+        "on_monthly",
+        "set_global_flag",
+    ):
+        if forbidden in expansion_source:
+            issues.append(f"focus expansion must not contain {forbidden}")
+
+    for idea_id in FOCUS_EXPANSION_IDEAS:
+        definitions = _blocks(focus_expansion_ideas, idea_id)
+        if len(definitions) != 1:
+            issues.append(f"focus expansion idea {idea_id} must have one definition")
+            continue
+        idea = definitions[0]
+        for token in (
+            "allowed = { always = no }",
+            "allowed_civil_war = { always = yes }",
+            "removal_cost = -1",
+            "ai_will_do = { factor = 0 }",
+        ):
+            if idea.count(token) != 1:
+                issues.append(f"focus expansion idea {idea_id} must contain {token} exactly once")
+        if expansion_source.count(idea_id) < 1:
+            issues.append(f"focus expansion idea {idea_id} is not earned by an expansion focus")
+
+    ai_sources = {"WKR": wkr_ai_plans, "VAD": vad_ai_plans, "TVA": tva_ai_plans}
+    for tag, plans in SHOWDOWN_AI_PLANS.items():
+        for plan_id, expected_focuses in plans.items():
+            definitions = _blocks(ai_sources[tag], plan_id)
+            if len(definitions) != 1:
+                issues.append(f"showdown AI plan {plan_id} must have one definition")
+                continue
+            plan = definitions[0]
+            focus_lists = _blocks(plan, "ai_national_focuses")
+            actual_focuses = (
+                tuple(re.findall(r"(?m)^\s*([A-Za-z0-9_]+)\s*$", focus_lists[0]))
+                if len(focus_lists) == 1
+                else ()
+            )
+            if actual_focuses != expected_focuses:
+                issues.append(
+                    f"showdown AI plan {plan_id} focus order {actual_focuses} != {expected_focuses}"
+                )
+            for token in (
+                f"tag = {tag}",
+                "is_ai = yes",
+                "has_global_flag = ADISCORD_vorkerland_phase_central_showdown",
+                "has_global_flag = ADISCORD_vorkerland_central_showdown_started",
+                "NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }",
+                "has_war = yes",
+                "weight = { factor = 5 }",
+            ):
+                if token not in plan:
+                    issues.append(f"showdown AI plan {plan_id} lacks {token}")
+
     vad_prewar_terminal = "VAD_form_emergency_chancery"
     vad_prewar_paths = _postwar_completion_paths(
-        blocks, PREWAR_VAD_FOCUSES, vad_prewar_terminal
+        blocks, PREWAR_VAD_BASE_FOCUSES, vad_prewar_terminal
     )
     if len(vad_prewar_paths) != 2:
         issues.append(
             "VAD prewar continuity programme must expose two terminal paths, "
             f"found {len(vad_prewar_paths)}"
         )
-    if vad_prewar_paths and set().union(*vad_prewar_paths) != set(PREWAR_VAD_FOCUSES):
+    if vad_prewar_paths and set().union(*vad_prewar_paths) != set(PREWAR_VAD_BASE_FOCUSES):
         issues.append("VAD prewar programme has focuses outside every terminal path")
     for path in vad_prewar_paths:
         if len(path) != 4:
@@ -1804,7 +2337,7 @@ def collect_issues() -> list[str]:
                 f"VAD prewar terminal path costs {cost_units} units ({cost_units * 7} days), "
                 "expected 56 days"
             )
-    for focus_id in PREWAR_VAD_FOCUSES:
+    for focus_id in PREWAR_VAD_BASE_FOCUSES:
         block = blocks.get(focus_id, "")
         cost = _focus_cost(block)
         payload = _postwar_reward_categories(block)
@@ -1933,6 +2466,7 @@ def collect_issues() -> list[str]:
     terminal = blocks.get("WKR_intervene_in_solyarino", "")
     for token in (
         "has_global_flag = ADISCORD_vorkerland_phase_central_preparation",
+        "has_global_flag = ADISCORD_vorkerland_phase_central_showdown",
         "ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = yes",
         "ADISCORD_vorkerland_wkr_has_valid_solyarino_target = yes",
         "NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }",
@@ -1940,6 +2474,18 @@ def collect_issues() -> list[str]:
     ):
         if token not in terminal:
             issues.append(f"WKR Solarino terminal lacks gate {token}")
+    terminal_available_blocks = _blocks(terminal, "available")
+    terminal_available = terminal_available_blocks[0] if len(terminal_available_blocks) == 1 else ""
+    for obsolete_blocker in (
+        "ADISCORD_vorkerland_focus_central_showdown_requested",
+        "ADISCORD_vorkerland_showdown_queue_initialized",
+        "ADISCORD_vorkerland_central_showdown_started",
+        "ADISCORD_vorkerland_vad_sol_alliance_accepted",
+    ):
+        if obsolete_blocker in terminal_available:
+            issues.append(
+                f"WKR Solarino terminal must not retain obsolete blocker {obsolete_blocker}"
+            )
     if set(WKR_OPTIONAL_WARTIME_FOCUSES) & set(_prerequisites(blocks.get("WKR_republic_fights_as_one", ""))):
         issues.append("WKR central capstone must not depend on the optional southern branch")
 
@@ -2049,11 +2595,22 @@ def collect_issues() -> list[str]:
             )
         for token in (
             "has_global_flag = ADISCORD_vorkerland_phase_central_preparation",
+            "has_global_flag = ADISCORD_vorkerland_phase_central_showdown",
             "has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked",
             "weight = { factor = 5 }",
         ):
             if token not in solarino_plan:
                 issues.append(f"WKR Solarino AI plan lacks {token}")
+        for obsolete_blocker in (
+            "ADISCORD_vorkerland_focus_central_showdown_requested",
+            "ADISCORD_vorkerland_showdown_queue_initialized",
+            "ADISCORD_vorkerland_central_showdown_started",
+            "ADISCORD_vorkerland_vad_sol_alliance_accepted",
+        ):
+            if obsolete_blocker in solarino_plan:
+                issues.append(
+                    f"WKR Solarino AI plan must not retain obsolete blocker {obsolete_blocker}"
+                )
 
     southern_corridor = blocks.get("WKR_secure_the_southern_corridor", "")
     corridor_reward_blocks = _blocks(southern_corridor, "completion_reward")
@@ -3367,7 +3924,11 @@ def collect_issues() -> list[str]:
             issues.append(f"focus technology bonus exceeds the bounded 50 percent reward: {bonus}")
         if uses is None or int(uses.group(1)) != 1:
             issues.append(f"focus technology bonus must have exactly one use: {bonus}")
-        if category is None or category.group(1) not in {"industry", "electronics"}:
+        if category is None or category.group(1) not in {
+            "industry",
+            "electronics",
+            "infantry_weapons",
+        }:
             issues.append(f"focus technology bonus uses an unsupported category: {bonus}")
 
     english = read(ENGLISH_LOCALISATION)

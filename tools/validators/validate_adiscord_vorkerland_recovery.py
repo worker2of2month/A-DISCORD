@@ -440,9 +440,10 @@ def validate_new_save_materialization() -> list[str]:
             ("ADISCORD_vorkerland_phase.1.a", PLAYER_PREFERENCE_FLAGS[0]),
             ("ADISCORD_vorkerland_phase.1.b", PLAYER_PREFERENCE_FLAGS[1]),
             ("ADISCORD_vorkerland_phase.1.c", PLAYER_PREFERENCE_FLAGS[2]),
+            ("ADISCORD_vorkerland_phase.1.e", PLAYER_PREFERENCE_FLAGS[1]),
         )
         if len(options) != len(expected_options):
-            issues.append("phase event .1 must expose exactly three claimant options")
+            issues.append("phase event .1 must expose three ordinary claimant options and one compact option")
         else:
             collapse_dispatch = "country_event = { id = ADISCORD_vorkerland_collapse.1 }"
             for option, (name, selected_flag) in zip(options, expected_options):
@@ -461,8 +462,15 @@ def validate_new_save_materialization() -> list[str]:
                     issues.append(f"{name} must set only {selected_flag}, found {selected}")
                 if option.count(collapse_dispatch) != 1:
                     issues.append(f"{name} must invoke hidden collapse.1 immediately and exactly once")
-        if choice.count("country_event = { id = ADISCORD_vorkerland_collapse.1 }") != 3:
-            issues.append("all three phase event .1 options must invoke collapse.1 exactly once")
+        if choice.count("country_event = { id = ADISCORD_vorkerland_collapse.1 }") != 4:
+            issues.append("all four phase event .1 options must invoke collapse.1 exactly once")
+        for option in options[:3]:
+            if "NOT = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }" not in option:
+                issues.append("ordinary phase.1 claimant options must be hidden after compact ratification")
+        if len(options) == 4:
+            compact_option = options[3]
+            if "trigger = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }" not in compact_option:
+                issues.append("phase.1 compact option must require the ratified Worker-Vadl compact")
         if any(
             fate_token in choice
             for fate_token in (
@@ -485,7 +493,7 @@ def validate_new_save_materialization() -> list[str]:
         issues.append("startup must produce exactly one delayed phase.1 claimant choice")
     else:
         startup_choice = startup_choice_dispatches[0]
-        for token in ("days = 120", "random_days = 60"):
+        for token in ("days = 175", "random_days = 21"):
             if startup_choice.count(token) != 1:
                 issues.append(f"startup phase.1 claimant choice must retain {token}")
         wrk_producers = [
@@ -507,6 +515,18 @@ def validate_new_save_materialization() -> list[str]:
         issues.append("begin_collapse must enter collapse through the centralized phase setter")
     if begin_collapse.count("ADISCORD_vorkerland_reset_temporary_claimant_cores = yes") != 1:
         issues.append("begin_collapse must reset temporary claimant cores exactly once")
+
+    compact_resolver = named_block(effects, "ADISCORD_vorkerland_resolve_prewar_compact")
+    for token in (
+        "NOT = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }",
+        "WRK = { has_country_flag = ADISCORD_vorkerland_wrk_compact_committed }",
+        "VAD = { has_country_flag = ADISCORD_vorkerland_vad_compact_committed }",
+        "set_global_flag = ADISCORD_vorkerland_prewar_compact_ratified",
+    ):
+        if compact_resolver.count(token) != 1:
+            issues.append(f"prewar compact resolver must contain exactly one {token}")
+    if any(token in compact_resolver for token in ("country_event", "on_daily", "on_weekly", "on_monthly")):
+        issues.append("prewar compact resolver must be immediate and non-polling")
 
     collapse = event_block(collapse_events, "ADISCORD_vorkerland_collapse.1")
     if not collapse:
@@ -605,6 +625,12 @@ def validate_new_save_materialization() -> list[str]:
         issues.append("collapse event .1 must retain exactly one independent Worker-fate roll")
     elif any(preference_flag in fate_lists[0] for preference_flag in PLAYER_PREFERENCE_FLAGS):
         issues.append("Worker's random fate must not read the player's claimant preference")
+    if immediate.count("has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified") != 2:
+        issues.append("collapse event .1 must consume compact ratification once for fate and once for government")
+    if immediate.count("set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad") != 2:
+        issues.append("compact fate and the ordinary fate roll must each retain one Worker rescue path")
+    if immediate.count("ADISCORD_vorkerland_form_joint_government = yes") != 2:
+        issues.append("compact must form the joint government directly while preserving the ordinary bounded roll")
 
     materialization_scopes = [
         block
@@ -1772,6 +1798,9 @@ def validate_premature_wrk_recovery() -> list[str]:
     )
     route_positions = [dissolve.find(token) for token in route_tokens]
     handoff_position = dissolve.find("change_tag_from = WRK")
+    subject_release_position = dissolve.find(
+        "WRK = { ADISCORD_vorkerland_release_losing_claimant_subjects = yes }"
+    )
     annex_position = dissolve.find(
         "annex_country = { target = WRK transfer_troops = yes }"
     )
@@ -1781,14 +1810,42 @@ def validate_premature_wrk_recovery() -> list[str]:
         issues.append(
             "premature WRK dissolve must route packages, hand off the human, then annex WRK"
         )
+    if not max(route_positions, default=-1) < subject_release_position < handoff_position:
+        issues.append(
+            "premature WRK dissolve must release every false-WRK subject before handoff/annex"
+        )
     for token in (
         "ADISCORD_vorkerland_is_main_claimant = yes",
         "WRK = { exists = yes ADISCORD_vorkerland_is_premature_wrk = yes }",
         "WRK = { exists = yes is_ai = no }",
+        "set_global_flag = ADISCORD_vorkerland_premature_wrk_subject_cleanup_active",
+        "clr_global_flag = ADISCORD_vorkerland_premature_wrk_subject_cleanup_active",
         "set_global_flag = ADISCORD_vorkerland_premature_wrk_recovery_v1_completed",
     ):
         if token not in dissolve:
             issues.append(f"premature WRK claimant dissolve is missing {token}")
+
+    dispatcher = named_block(
+        effects, "ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant"
+    )
+    dispatcher_positions: list[int] = []
+    for claimant in ("WKR", "VAD", "TVA"):
+        guard = (
+            f"{claimant} = {{ exists = yes is_subject = no "
+            "NOT = { has_capitulated = yes } }"
+        )
+        call = (
+            f"{claimant} = {{ "
+            "ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = yes }"
+        )
+        for token in (guard, call):
+            if token not in dispatcher:
+                issues.append(f"inverse premature WRK dispatcher lacks {claimant} token {token}")
+        dispatcher_positions.append(dispatcher.find(call))
+    if min(dispatcher_positions, default=-1) < 0 or dispatcher_positions != sorted(
+        dispatcher_positions
+    ):
+        issues.append("inverse premature WRK dispatcher priority must remain WKR -> VAD -> TVA")
 
     for hook_name in ("on_puppet", "on_release_as_puppet", "on_release_as_free"):
         hook = named_block(on_actions, hook_name)
@@ -1798,6 +1855,9 @@ def validate_premature_wrk_recovery() -> list[str]:
             "FROM = {",
             "ADISCORD_vorkerland_is_main_claimant = yes",
             "FROM = { ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = yes }",
+            "FROM = { ADISCORD_vorkerland_is_premature_wrk = yes }",
+            "NOT = { has_global_flag = ADISCORD_vorkerland_premature_wrk_subject_cleanup_active }",
+            "ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = yes",
         ):
             if token not in hook:
                 issues.append(f"{hook_name} premature WRK hard guard is missing {token}")

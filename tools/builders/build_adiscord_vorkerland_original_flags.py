@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import math
+import shutil
 from pathlib import Path
 
 from PIL import Image, ImageChops, ImageDraw, ImageOps
@@ -216,6 +217,7 @@ SUPPLIED_FLAGS = {
 
 COPIED_FLAG_TRIPLETS = {
     "WRK_vorkerland_joint_government": "WRK",
+    "SOL_vorkerland_worker_protectorate": "SOL",
 }
 
 
@@ -267,6 +269,15 @@ def apply_outputs(outputs: dict[Path, Image.Image]) -> None:
     for path, image in outputs.items():
         path.parent.mkdir(parents=True, exist_ok=True)
         image.save(path)
+    # Cosmetic aliases intentionally reuse the canonical flag byte-for-byte.
+    # Pillow normalizes the TGA header when saving an opened image, so restore
+    # these triplets with a real file copy after rendering the authored flags.
+    for target_flag_id, source_flag_id in COPIED_FLAG_TRIPLETS.items():
+        for directory in (FLAG_ROOT, FLAG_ROOT / "medium", FLAG_ROOT / "small"):
+            shutil.copyfile(
+                directory / f"{source_flag_id}.tga",
+                directory / f"{target_flag_id}.tga",
+            )
 
 
 def main() -> int:

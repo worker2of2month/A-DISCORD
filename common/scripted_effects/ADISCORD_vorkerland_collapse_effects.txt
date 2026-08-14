@@ -163,6 +163,10 @@ ADISCORD_vorkerland_finalize_conflict_spirits = {
 		remove_ideas = WRK_constitution_of_the_republic
 		add_ideas = ADISCORD_vorkerland_erased_nations
 		if = {
+			limit = { tag = WKR }
+			add_ideas = ADISCORD_vorkerland_last_stand
+		}
+		if = {
 			limit = {
 				OR = {
 					has_country_leader_ideology = vorkerism
@@ -185,6 +189,7 @@ ADISCORD_vorkerland_finalize_conflict_spirits = {
 		remove_ideas = WRK_hourglass_of_discord
 		remove_ideas = WRK_constitution_of_the_republic
 		add_ideas = ADISCORD_vorkerland_vad_imperial_chancery
+		add_ideas = ADISCORD_vorkerland_last_stand
 	}
 	else_if = {
 		limit = { tag = VLA }
@@ -202,6 +207,7 @@ ADISCORD_vorkerland_finalize_conflict_spirits = {
 		add_ideas = ADISCORD_vorkerland_mobilized_periphery
 		add_ideas = ADISCORD_vorkerland_tva_field_directorate
 		add_ideas = ADISCORD_vorkerland_tva_ideological_fanaticism
+		add_ideas = ADISCORD_vorkerland_last_stand
 	}
 	else_if = {
 		limit = { tag = WTD }
@@ -226,9 +232,9 @@ ADISCORD_vorkerland_finalize_conflict_spirits = {
 }
 
 # A versioned, idempotent assertion for the main claimant spirits. The initial
-# partition and the deferred political-cache rebuild already clean WRK, but old
-# saves and the actual war-outbreak tick need a later pass after those systems
-# have finished. Progress already bought through decisions is never downgraded.
+# partition and deferred political-cache rebuild already clean WRK; the fresh
+# war-outbreak tick makes one final pass after those systems have finished.
+# Progress already bought through decisions is never downgraded.
 ADISCORD_vorkerland_repair_claimant_spirit_progression = {
 	if = {
 		limit = { OR = { tag = WRK tag = WKR } }
@@ -251,6 +257,14 @@ ADISCORD_vorkerland_repair_claimant_spirit_progression = {
 			}
 			add_ideas = WRK_birthplace_of_the_first_revolution
 		}
+		if = {
+			limit = { tag = WKR }
+			add_ideas = ADISCORD_vorkerland_last_stand
+		}
+	}
+	else_if = {
+		limit = { tag = VAD }
+		add_ideas = ADISCORD_vorkerland_last_stand
 	}
 	else_if = {
 		limit = { tag = TVA }
@@ -266,6 +280,7 @@ ADISCORD_vorkerland_repair_claimant_spirit_progression = {
 			}
 			add_ideas = ADISCORD_vorkerland_tva_field_directorate
 		}
+		add_ideas = ADISCORD_vorkerland_last_stand
 	}
 }
 
@@ -360,6 +375,7 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 	WKR = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		add_ideas = ADISCORD_vorkerland_erased_nations
+		add_ideas = ADISCORD_vorkerland_last_stand
 		# WKR is dormant at campaign start, so it is outside the initial
 		# every_country technology pass. Grant only the three variants consumed
 		# below before adding equipment or loading the claimant air OOB.
@@ -388,6 +404,7 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 	VAD = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		add_ideas = ADISCORD_vorkerland_vad_imperial_chancery
+		add_ideas = ADISCORD_vorkerland_last_stand
 		ADISCORD_vorkerland_initialize_civil_war_exhaustion = yes
 		add_manpower = 8000
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 600 producer = VAD }
@@ -410,6 +427,7 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 	}
 	TVA = {
 		ADISCORD_vorkerland_initialize_civil_war_exhaustion = yes
+		add_ideas = ADISCORD_vorkerland_last_stand
 	}
 	TGD = { ADISCORD_vorkerland_prepare_conflict_country = yes }
 	ZAO = {

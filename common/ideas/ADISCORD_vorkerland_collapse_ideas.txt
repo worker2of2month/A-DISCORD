@@ -18,6 +18,19 @@ ideas = {
 			ai_will_do = { factor = 0 }
 		}
 
+		# Shared only by the three live central claimants. It is deliberately not
+		# inherited by reunified WRK: the emergency vow ends with the civil war.
+		ADISCORD_vorkerland_last_stand = {
+			picture = generic_manpower_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				surrender_limit = 0.90
+			}
+			ai_will_do = { factor = 0 }
+		}
+
 		ADISCORD_vorkerland_erased_nations_relief_1 = {
 			picture = generic_oppression
 			allowed = { always = no }
@@ -124,7 +137,6 @@ ideas = {
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
-				surrender_limit = 0.25
 				war_support_factor = 0.10
 				army_org_regain = 0.05
 			}

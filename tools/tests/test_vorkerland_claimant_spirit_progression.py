@@ -45,6 +45,32 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
         "WRK_constitution_of_the_republic",
     )
 
+    def test_all_three_claimants_share_the_same_last_stand(self) -> None:
+        ideas = read("common/ideas/ADISCORD_vorkerland_collapse_ideas.txt")
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
+        last_stand = named_block(ideas, "ADISCORD_vorkerland_last_stand")
+        self.assertIn("allowed = { always = no }", last_stand)
+        self.assertIn("allowed_civil_war = { always = yes }", last_stand)
+        self.assertIn("removal_cost = -1", last_stand)
+        self.assertEqual(last_stand.count("surrender_limit = 0.90"), 1)
+
+        initial = named_block(effects, "ADISCORD_vorkerland_prepare_initial_combatants")
+        finalizer = named_block(effects, "ADISCORD_vorkerland_finalize_conflict_spirits")
+        repair = named_block(effects, "ADISCORD_vorkerland_repair_claimant_spirit_progression")
+        for tag in ("WKR", "VAD", "TVA"):
+            with self.subTest(tag=tag):
+                self.assertRegex(
+                    initial,
+                    rf"(?s)\b{tag}\s*=\s*\{{.*?add_ideas\s*=\s*ADISCORD_vorkerland_last_stand",
+                )
+                self.assertIn(f"tag = {tag}", finalizer)
+                self.assertIn("add_ideas = ADISCORD_vorkerland_last_stand", finalizer)
+                self.assertIn(f"tag = {tag}", repair)
+        fanaticism = named_block(
+            ideas, "ADISCORD_vorkerland_tva_ideological_fanaticism"
+        )
+        self.assertNotIn("surrender_limit", fanaticism)
+
     def test_wkr_keeps_only_the_revolutionary_starting_spirit(self) -> None:
         effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
         repair = named_block(
@@ -118,6 +144,7 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
         )
         self.assertIsNotNone(outbreak)
         self.assertIn("WKR = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }", outbreak.group(1))
+        self.assertIn("VAD = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }", outbreak.group(1))
         self.assertIn("TVA = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }", outbreak.group(1))
         self.assertIn("ADISCORD_vorkerland_claimant_spirit_progression_v3", outbreak.group(1))
 
@@ -129,6 +156,7 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
             "ADISCORD_vorkerland_collapse_wars_started",
             "ADISCORD_vorkerland_claimant_spirit_progression_v3",
             "WKR = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }",
+            "VAD = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }",
             "TVA = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }",
         ):
             self.assertNotIn(token, startup)
@@ -143,6 +171,7 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"), path)
             localisation += path.read_text(encoding="utf-8-sig")
         keys = self.WRK_CHAIN[1:] + self.TVA_CHAIN[1:] + (
+            "ADISCORD_vorkerland_last_stand",
             "ADISCORD_vorkerland_wrk_convene_front_soviets",
             "ADISCORD_vorkerland_wrk_adopt_front_charter",
             "ADISCORD_vorkerland_tva_unify_front_bureaus",

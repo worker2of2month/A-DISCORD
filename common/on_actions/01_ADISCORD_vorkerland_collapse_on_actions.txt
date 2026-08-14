@@ -20,8 +20,8 @@ on_actions = {
 					ADISCORD_vorkerland_set_phase_prewar = yes
 					country_event = {
 						id = ADISCORD_vorkerland_phase.1
-						days = 120
-						random_days = 60
+						days = 175
+						random_days = 21
 					}
 				}
 			}
@@ -288,6 +288,14 @@ on_actions = {
 					FROM = { ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = yes }
 				}
 			}
+			else_if = {
+				limit = {
+					NOT = { has_global_flag = ADISCORD_vorkerland_premature_wrk_subject_cleanup_active }
+					FROM = { ADISCORD_vorkerland_is_premature_wrk = yes }
+				}
+				set_global_flag = ADISCORD_vorkerland_premature_wrk_release_intercepted_v1
+				ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = yes
+			}
 			else = {
 				ADISCORD_vorkerland_sync_republics_from_ruins = yes
 				if = {
@@ -322,6 +330,14 @@ on_actions = {
 					FROM = { ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = yes }
 				}
 			}
+			else_if = {
+				limit = {
+					NOT = { has_global_flag = ADISCORD_vorkerland_premature_wrk_subject_cleanup_active }
+					FROM = { ADISCORD_vorkerland_is_premature_wrk = yes }
+				}
+				set_global_flag = ADISCORD_vorkerland_premature_wrk_release_intercepted_v1
+				ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = yes
+			}
 			else = {
 				ADISCORD_vorkerland_sync_republics_from_ruins = yes
 				if = {
@@ -347,6 +363,14 @@ on_actions = {
 					}
 					FROM = { ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = yes }
 				}
+			}
+			else_if = {
+				limit = {
+					NOT = { has_global_flag = ADISCORD_vorkerland_premature_wrk_subject_cleanup_active }
+					FROM = { ADISCORD_vorkerland_is_premature_wrk = yes }
+				}
+				set_global_flag = ADISCORD_vorkerland_premature_wrk_release_intercepted_v1
+				ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = yes
 			}
 			else = {
 				if = {

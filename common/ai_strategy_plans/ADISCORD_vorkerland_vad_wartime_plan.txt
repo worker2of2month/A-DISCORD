@@ -187,3 +187,87 @@ ADISCORD_vorkerland_vad_joint_depth_plan = {
 
 	weight = { factor = 4 }
 }
+
+ADISCORD_vorkerland_vad_vlad_showdown_plan = {
+	name = "VAD prefectural showdown programme"
+	desc = ""
+
+	allowed = { original_tag = VAD }
+
+	enable = {
+		tag = VAD
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		has_global_flag = ADISCORD_vorkerland_central_showdown_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		has_country_flag = ADISCORD_vorkerland_focus_vad_interim_restoration_register
+		NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+		has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_one_register_advance }
+		has_war = yes
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = VAD }
+			NOT = { has_global_flag = ADISCORD_vorkerland_phase_central_showdown }
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+			has_global_flag = ADISCORD_vorkerland_central_war_finished
+			has_global_flag = ADISCORD_vorkerland_joint_government_formed
+			NOT = { has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes } }
+			has_country_flag = ADISCORD_vorkerland_focus_vad_one_register_advance
+		}
+	}
+
+	ai_national_focuses = {
+		VAD_convene_campaign_directorate
+		VAD_issue_prefectural_field_decrees
+		VAD_standardize_restoration_columns
+		VAD_advance_under_one_register
+	}
+
+	weight = { factor = 5 }
+}
+
+ADISCORD_vorkerland_vad_joint_showdown_plan = {
+	name = "VAD joint-authority showdown programme"
+	desc = ""
+
+	allowed = { original_tag = VAD }
+
+	enable = {
+		tag = VAD
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		has_global_flag = ADISCORD_vorkerland_central_showdown_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		has_country_flag = ADISCORD_vorkerland_focus_vad_interim_restoration_register
+		has_global_flag = ADISCORD_vorkerland_joint_government_formed
+		has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+		has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_one_register_advance }
+		has_war = yes
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = VAD }
+			NOT = { has_global_flag = ADISCORD_vorkerland_phase_central_showdown }
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+			has_global_flag = ADISCORD_vorkerland_central_war_finished
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad }
+			NOT = { has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes } }
+			has_country_flag = ADISCORD_vorkerland_focus_vad_one_register_advance
+		}
+	}
+
+	ai_national_focuses = {
+		VAD_convene_campaign_directorate
+		VAD_seat_front_commissars
+		VAD_standardize_restoration_columns
+		VAD_advance_under_one_register
+	}
+
+	weight = { factor = 5 }
+}

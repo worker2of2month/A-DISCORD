@@ -24,13 +24,21 @@ DEFINITION_PATH = ROOT / "map" / "definition.csv"
 CITY_PALETTE_INDEX = 15
 TARGET_PROVINCES = frozenset(
     {
+        4443,   # Remmel
+        6192,   # Isaiah
         8059,   # Revel
+        8243,   # Old Isaiah
         8803,   # Verkhovye
         11795,  # Langar
+        11944,  # Sutritsa
+        12443,  # Kairholm
+        16560,  # Severin
         16587,  # Zshatsk
+        16593,  # Zatern
         16614,  # Norden
         16616,  # Old Zshat
         16635,  # Lower Orvin
+        16640,  # East Orvin
         16641,  # Kern Ford
         16642,  # Ostvin
         16643,  # Riven

@@ -445,6 +445,7 @@
       "owner_module": "tools.builders.build_adiscord_terrain_snow",
       "output_globs": ["map/terrain.bmp"],
       "source_inputs": [
+        "tools/builders/build_adiscord_terrain_snow.py",
         "map/terrain.bmp",
         "map/heightmap.bmp",
         "map/provinces.bmp",
@@ -718,6 +719,7 @@
         "gfx/flags/**/ROM_frealor_republic.tga",
         "gfx/flags/**/SLF.tga",
         "gfx/flags/**/SLF_svetlogorsk_republic.tga",
+        "gfx/flags/**/SOL_vorkerland_worker_protectorate.tga",
         "gfx/flags/**/TGD.tga",
         "gfx/flags/**/TRU.tga",
         "gfx/flags/**/TRU_zolotorevsk_republic.tga",
@@ -734,6 +736,9 @@
         "gfx/flags/source/IBA.png",
         "gfx/flags/source/TRU_zolotorevsk_republic.png",
         "gfx/flags/source/WRK_vorkerland_utilitarian_republic.png",
+        "gfx/flags/SOL.tga",
+        "gfx/flags/medium/SOL.tga",
+        "gfx/flags/small/SOL.tga",
         "gfx/flags/WRK.tga",
         "gfx/flags/medium/WRK.tga",
         "gfx/flags/small/WRK.tga"

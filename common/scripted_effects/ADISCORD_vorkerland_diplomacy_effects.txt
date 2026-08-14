@@ -594,19 +594,27 @@ ADISCORD_vorkerland_attempt_wkr_solyarino_intervention = {
 	clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_retry
 	clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_verified
 	clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_failed
+	clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_outcome_check_pending
+	clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_gordon_carried
+	clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_gordon_returned
+	clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending
+	clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized
+	clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialization_retry
+	clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verify_retry
+	clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_fresh_release
+	clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_failed
 
 	if = {
 		limit = {
 			tag = WKR
 			is_subject = no
 			NOT = { has_capitulated = yes }
-			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-			NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
-			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
-			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+			OR = {
+				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			}
 			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }
 			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
-			NOT = { has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted }
 			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
 			ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = yes
 		}
@@ -733,26 +741,16 @@ ADISCORD_vorkerland_clear_wkr_solyarino_intervention = {
 			OR = {
 				NOT = { country_exists = WKR }
 				WKR = { OR = { is_subject = yes has_capitulated = yes } }
-				WKR = {
-					OR = {
-						NOT = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sol }
-						NOT = { country_exists = SOL }
-						NOT = { has_war_with = SOL }
-					}
-					OR = {
-						NOT = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sra }
-						NOT = { country_exists = SRA }
-						NOT = { has_war_with = SRA }
-					}
-					OR = {
-						NOT = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_csl }
-						NOT = { country_exists = CSL }
-						NOT = { has_war_with = CSL }
-					}
-				}
+				WKR = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_failed }
+				has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_failed
 			}
 		}
 		clr_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending
+		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized
+		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialization_retry
+		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verify_retry
+		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_fresh_release
 		if = {
 			limit = { country_exists = WKR }
 			WKR = {
@@ -761,7 +759,253 @@ ADISCORD_vorkerland_clear_wkr_solyarino_intervention = {
 				clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_csl
 				clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_pending
 				clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_retry
+				clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_outcome_check_pending
+				clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_gordon_carried
+				clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_gordon_returned
 			}
 		}
+		if = {
+			limit = { WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+			WKR = { ADISCORD_vorkerland_begin_reunification = yes }
+		}
+		else_if = {
+			limit = { VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+			VAD = { ADISCORD_vorkerland_begin_reunification = yes }
+		}
+		else_if = {
+			limit = { TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+			TVA = { ADISCORD_vorkerland_begin_reunification = yes }
+		}
+	}
+}
+
+# A capitulation or peace callback schedules this only once until the next-day
+# event consumes the guard. It is deliberately country-scoped and pulse-free.
+ADISCORD_vorkerland_queue_wkr_solyarino_outcome_check = {
+	if = {
+		limit = {
+			tag = WKR
+			has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+			NOT = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_outcome_check_pending }
+		}
+		set_country_flag = ADISCORD_vorkerland_wkr_solyarino_outcome_check_pending
+		country_event = { id = ADISCORD_vorkerland_diplomacy.12 days = 1 }
+	}
+}
+
+ADISCORD_vorkerland_check_wkr_solyarino_outcome = {
+	clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_outcome_check_pending
+	if = {
+		limit = {
+			tag = WKR
+			has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+			ADISCORD_vorkerland_wkr_solyarino_target_wars_finished = yes
+			owns_state = 76 controls_state = 76
+			owns_state = 104 controls_state = 104
+			owns_state = 198 controls_state = 198
+			owns_state = 307 controls_state = 307
+			owns_state = 310 controls_state = 310
+		}
+		set_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending
+		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized
+		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialization_retry
+		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verify_retry
+		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_fresh_release
+		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_failed
+		country_event = { id = ADISCORD_vorkerland_diplomacy.13 days = 1 }
+	}
+	else_if = {
+		limit = {
+			tag = WKR
+			has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+			ADISCORD_vorkerland_wkr_solyarino_target_wars_finished = yes
+		}
+		set_country_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_failed
+		set_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_failed
+		ADISCORD_vorkerland_clear_wkr_solyarino_intervention = yes
+		log = "[ADISCORD][VORKERLAND][DIPLOMACY] WKR Solarino peace ended without the complete five-state package."
+	}
+}
+
+ADISCORD_vorkerland_materialize_sol_worker_protectorate = {
+	if = {
+		limit = {
+			tag = WKR
+			has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+			has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized }
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verified }
+			owns_state = 76 controls_state = 76
+			owns_state = 104 controls_state = 104
+			owns_state = 198 controls_state = 198
+			owns_state = 307 controls_state = 307
+			owns_state = 310 controls_state = 310
+		}
+		# Gordon belongs to the canonical SOL history object. If WKR defeated a
+		# splinter after SOL had already disappeared, explicitly recover him from
+		# that dormant object before releasing the canonical shell.
+		if = {
+			limit = { NOT = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_gordon_carried } }
+			SOL = {
+				set_nationality = {
+					target_country = WKR
+					character = WRK_Richard_Gordon
+				}
+			}
+			set_country_flag = ADISCORD_vorkerland_wkr_solyarino_gordon_carried
+		}
+		76 = { add_core_of = SOL }
+		104 = { add_core_of = SOL }
+		198 = { add_core_of = SOL }
+		307 = { add_core_of = SOL }
+		310 = { add_core_of = SOL }
+		if = {
+			limit = { NOT = { country_exists = SOL } }
+			set_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_fresh_release
+			release_autonomy = {
+				target = SOL
+				autonomy_state = autonomy_district_in_Vorkerland
+				freedom_level = 0.10
+			}
+		}
+		else = {
+			SOL = {
+				if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = SOL autonomy_state = autonomy_free } } }
+				if = { limit = { is_in_faction = yes } leave_faction = yes }
+			}
+			puppet = SOL
+			set_autonomy = { target = SOL autonomy_state = autonomy_district_in_Vorkerland freedom_level = 0.10 }
+			SOL = {
+				transfer_state = 76
+				transfer_state = 104
+				transfer_state = 198
+				transfer_state = 307
+				transfer_state = 310
+			}
+		}
+		if = {
+			limit = {
+				country_exists = SOL
+				has_country_flag = ADISCORD_vorkerland_wkr_solyarino_gordon_carried
+				NOT = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_gordon_returned }
+			}
+			set_nationality = {
+				target_country = SOL
+				character = WRK_Richard_Gordon
+			}
+			set_country_flag = ADISCORD_vorkerland_wkr_solyarino_gordon_returned
+		}
+		set_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized
+		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialization_retry
+		country_event = { id = ADISCORD_vorkerland_diplomacy.15 days = 1 }
+	}
+	else_if = {
+		limit = {
+			tag = WKR
+			has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized }
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialization_retry }
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_failed }
+		}
+		set_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialization_retry
+		country_event = { id = ADISCORD_vorkerland_diplomacy.14 days = 1 }
+	}
+	else_if = {
+		limit = {
+			tag = WKR
+			has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized }
+			has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialization_retry
+		}
+		set_country_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_failed
+		set_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_failed
+		ADISCORD_vorkerland_clear_wkr_solyarino_intervention = yes
+		log = "[ADISCORD][VORKERLAND][DIPLOMACY] SOL worker protectorate materialization failed after one retry."
+	}
+}
+
+ADISCORD_vorkerland_verify_sol_worker_protectorate = {
+	if = {
+		limit = {
+			tag = WKR
+			has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+			has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending
+			has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized
+			has_country_flag = ADISCORD_vorkerland_wkr_solyarino_gordon_returned
+			SOL = {
+				exists = yes
+				is_subject_of = WKR
+				NOT = { has_capitulated = yes }
+				owns_state = 76 controls_state = 76
+				owns_state = 104 controls_state = 104
+				owns_state = 198 controls_state = 198
+				owns_state = 307 controls_state = 307
+				owns_state = 310 controls_state = 310
+			}
+		}
+		if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_fresh_release }
+			SOL = {
+				if = {
+					limit = { NOT = { has_country_flag = ADISCORD_vorkerland_sol_worker_protectorate_initialized } }
+					ADISCORD_grant_2150_technology_baseline = yes
+					ADISCORD_grant_technology_profile_fragment_low_tech = yes
+					ADISCORD_economy_initialize_country = yes
+					load_oob = "SOL"
+					set_country_flag = ADISCORD_vorkerland_sol_worker_protectorate_initialized
+				}
+			}
+		}
+		SOL = {
+			set_capital = { state = 76 }
+			set_politics = { ruling_party = pragmatism elections_allowed = no }
+			if = {
+				limit = { NOT = { has_country_flag = ADISCORD_vorkerland_sol_worker_protectorate_government_installed } }
+				promote_character = {
+					character = WRK_Richard_Gordon
+					ideology = pragmatism_ideology
+				}
+				set_country_flag = ADISCORD_vorkerland_sol_worker_protectorate_government_installed
+			}
+			set_cosmetic_tag = SOL_vorkerland_worker_protectorate
+			set_country_flag = ADISCORD_vorkerland_worker_protectorate
+		}
+		set_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verified
+		clr_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending
+		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized
+		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialization_retry
+		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verify_retry
+		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_fresh_release
+		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_failed
+		clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sol
+		clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sra
+		clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_csl
+		clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_pending
+		clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_retry
+		clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_outcome_check_pending
+		ADISCORD_vorkerland_begin_reunification = yes
+	}
+	else_if = {
+		limit = {
+			tag = WKR
+			has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending
+			has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verify_retry }
+		}
+		set_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verify_retry
+		country_event = { id = ADISCORD_vorkerland_diplomacy.16 days = 1 }
+	}
+	else_if = {
+		limit = {
+			tag = WKR
+			has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending
+			has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized
+			has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verify_retry
+		}
+		set_country_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_failed
+		set_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_failed
+		ADISCORD_vorkerland_clear_wkr_solyarino_intervention = yes
+		log = "[ADISCORD][VORKERLAND][DIPLOMACY] SOL worker protectorate verification failed after one retry."
 	}
 }

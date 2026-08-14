@@ -57,20 +57,59 @@ on_actions = {
 				}
 			}
 
+			# WKR's selected Solarino shells bypass the native peace conference.
+			# Every defeated shell is annexed immediately; a guarded next-day event
+			# waits until all selected fronts are gone before building one SOL client.
 			if = {
 				limit = {
 					has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
-					country_exists = WKR
-					ROOT = { OR = { tag = SOL tag = SRA tag = CSL } }
+					FROM = { tag = WKR NOT = { has_capitulated = yes } }
+					OR = {
+						AND = { ROOT = { tag = SOL } WKR = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sol } }
+						AND = { ROOT = { tag = SRA } WKR = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sra } }
+						AND = { ROOT = { tag = CSL } WKR = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_csl } }
+					}
 				}
-				WKR = { country_event = { id = ADISCORD_vorkerland_diplomacy.12 days = 1 } }
+				if = {
+					limit = { ROOT = { tag = SOL } }
+					ROOT = {
+						set_nationality = {
+							target_country = WKR
+							character = WRK_Richard_Gordon
+						}
+					}
+					FROM = { set_country_flag = ADISCORD_vorkerland_wkr_solyarino_gordon_carried }
+				}
+				set_global_flag = skip_default_capitulation
+				FROM = {
+					annex_country = { target = ROOT transfer_troops = no }
+					ADISCORD_vorkerland_queue_wkr_solyarino_outcome_check = yes
+				}
 			}
 			ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes
+			ADISCORD_vorkerland_clear_wkr_solyarino_intervention = yes
 		}
 	}
 
 	on_peace = {
 		effect = {
+			ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+					country_exists = WKR
+				}
+				WKR = { ADISCORD_vorkerland_queue_wkr_solyarino_outcome_check = yes }
+			}
+			ADISCORD_vorkerland_clear_wkr_solyarino_intervention = yes
+		}
+	}
+
+	on_puppet = {
+		effect = {
+			# A claimant made subject by an external settlement is no longer a valid
+			# operation owner. Reuse the same terminal cleanup; it only fires when
+			# the tracked claimant is actually gone, capitulated, subject, or failed.
 			ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes
 			ADISCORD_vorkerland_clear_wkr_solyarino_intervention = yes
 		}

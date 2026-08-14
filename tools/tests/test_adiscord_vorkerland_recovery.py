@@ -93,9 +93,10 @@ class NewSaveMaterializationTests(unittest.TestCase):
         self.assertIn("ADISCORD_vorkerland_collapse_not_started = yes", choice_trigger)
 
         options = named_blocks(choice, "option")
-        self.assertEqual(len(options), 3)
+        self.assertEqual(len(options), 4)
         collapse_dispatch = "country_event = { id = ADISCORD_vorkerland_collapse.1 }"
-        for option, selected_flag in zip(options, PLAYER_PREFERENCE_FLAGS):
+        expected_flags = (*PLAYER_PREFERENCE_FLAGS, PLAYER_PREFERENCE_FLAGS[1])
+        for option, selected_flag in zip(options, expected_flags):
             for preference_flag in PLAYER_PREFERENCE_FLAGS:
                 self.assertEqual(
                     option.count(f"clr_global_flag = {preference_flag}"),
@@ -104,6 +105,15 @@ class NewSaveMaterializationTests(unittest.TestCase):
                 )
             self.assertEqual(option.count(f"set_global_flag = {selected_flag}"), 1)
             self.assertEqual(option.count(collapse_dispatch), 1)
+        for option in options[:3]:
+            self.assertIn(
+                "NOT = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }",
+                option,
+            )
+        self.assertIn(
+            "trigger = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }",
+            options[3],
+        )
 
         startup = named_block(
             read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
@@ -115,14 +125,45 @@ class NewSaveMaterializationTests(unittest.TestCase):
             if "id = ADISCORD_vorkerland_phase.1" in block
         ]
         self.assertEqual(len(delayed_choices), 1)
-        self.assertIn("days = 120", delayed_choices[0])
-        self.assertIn("random_days = 60", delayed_choices[0])
+        self.assertIn("days = 175", delayed_choices[0])
+        self.assertIn("random_days = 21", delayed_choices[0])
         direct_collapses = [
             block
             for block in named_blocks(startup, "country_event")
             if re.search(r"\bid\s*=\s*ADISCORD_vorkerland_collapse\.1\b", block)
         ]
         self.assertEqual(direct_collapses, [])
+
+    def test_prewar_compact_resolves_immediately_and_binds_the_joint_route(self) -> None:
+        phase_effects = read("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
+        resolver = named_block(
+            phase_effects, "ADISCORD_vorkerland_resolve_prewar_compact"
+        )
+        for token in (
+            "WRK = { has_country_flag = ADISCORD_vorkerland_wrk_compact_committed }",
+            "VAD = { has_country_flag = ADISCORD_vorkerland_vad_compact_committed }",
+            "set_global_flag = ADISCORD_vorkerland_prewar_compact_ratified",
+        ):
+            self.assertEqual(resolver.count(token), 1)
+        self.assertNotIn("country_event", resolver)
+
+        collapse = event_block(
+            read("events/ADISCORD_vorkerland_collapse_events.txt"),
+            "ADISCORD_vorkerland_collapse.1",
+        )
+        immediate = named_block(collapse, "immediate")
+        self.assertEqual(
+            immediate.count("has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified"),
+            2,
+        )
+        self.assertEqual(
+            immediate.count("set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad"),
+            2,
+        )
+        self.assertEqual(
+            immediate.count("ADISCORD_vorkerland_form_joint_government = yes"),
+            2,
+        )
 
     def test_human_handoff_is_exact_ai_safe_and_clears_preferences_before_annex(self) -> None:
         collapse_events = read("events/ADISCORD_vorkerland_collapse_events.txt")
@@ -510,10 +551,37 @@ class PrematureWrkRecoveryTests(unittest.TestCase):
             )
             for tag in ("wkr", "vad", "tva")
         )
+        release_subjects = dissolve.index(
+            "WRK = { ADISCORD_vorkerland_release_losing_claimant_subjects = yes }"
+        )
         handoff = dissolve.index("change_tag_from = WRK")
         annex = dissolve.index("annex_country = { target = WRK transfer_troops = yes }")
-        self.assertLess(route_end, handoff)
+        self.assertLess(route_end, release_subjects)
+        self.assertLess(release_subjects, handoff)
         self.assertLess(handoff, annex)
+
+    def test_inverse_subject_hook_routes_to_one_living_claimant(self) -> None:
+        effects = read(
+            "common/scripted_effects/ZZ_ADISCORD_capitulation_distribution_effects.txt"
+        )
+        dispatcher = named_block(
+            effects, "ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant"
+        )
+        calls = [
+            dispatcher.index(
+                f"{tag} = {{ ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = yes }}"
+            )
+            for tag in ("WKR", "VAD", "TVA")
+        ]
+        self.assertEqual(calls, sorted(calls))
+        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        for hook_name in ("on_puppet", "on_release_as_puppet", "on_release_as_free"):
+            hook = named_block(on_actions, hook_name)
+            self.assertIn("FROM = { ADISCORD_vorkerland_is_premature_wrk = yes }", hook)
+            self.assertIn(
+                "ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = yes",
+                hook,
+            )
 
     def test_old_save_claimant_inference_is_absent(self) -> None:
         combined = "\n".join(

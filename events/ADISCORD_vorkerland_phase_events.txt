@@ -15,6 +15,7 @@ country_event = {
 
 	option = {
 		name = ADISCORD_vorkerland_phase.1.a
+		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified } }
 		clr_global_flag = ADISCORD_vorkerland_preference_worker
 		clr_global_flag = ADISCORD_vorkerland_preference_joint
 		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
@@ -24,6 +25,7 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_vorkerland_phase.1.b
+		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified } }
 		clr_global_flag = ADISCORD_vorkerland_preference_worker
 		clr_global_flag = ADISCORD_vorkerland_preference_joint
 		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
@@ -33,12 +35,23 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_vorkerland_phase.1.c
+		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified } }
 		clr_global_flag = ADISCORD_vorkerland_preference_worker
 		clr_global_flag = ADISCORD_vorkerland_preference_joint
 		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
 		set_global_flag = ADISCORD_vorkerland_preference_utilitarian
 		country_event = { id = ADISCORD_vorkerland_collapse.1 }
 		ai_chance = { factor = 25 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_phase.1.e
+		trigger = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }
+		clr_global_flag = ADISCORD_vorkerland_preference_worker
+		clr_global_flag = ADISCORD_vorkerland_preference_joint
+		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
+		set_global_flag = ADISCORD_vorkerland_preference_joint
+		country_event = { id = ADISCORD_vorkerland_collapse.1 }
+		ai_chance = { factor = 100 }
 	}
 }
 
@@ -141,6 +154,7 @@ country_event = {
 		has_global_flag = ADISCORD_vorkerland_central_showdown_started
 		ADISCORD_vorkerland_central_showdown_edges_verified = yes
 		NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_launch_failed }
+		NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active }
 		ADISCORD_vorkerland_has_single_surviving_claimant = yes
 		OR = {
 			WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } ADISCORD_vorkerland_central_districts_owned_and_controlled = yes }

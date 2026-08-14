@@ -71,6 +71,25 @@ class TerrainSnowTests(unittest.TestCase):
         self.assertEqual(pixels, [4, snow.URBAN_TERRAIN, 4])
 
     def test_graphical_urban_contract_is_exact_on_current_map(self) -> None:
+        self.assertEqual(
+            snow.VORKERLAND_GRAPHICAL_URBAN_PROVINCES,
+            frozenset(
+                {
+                    4443,
+                    6192,
+                    8243,
+                    8803,
+                    11944,
+                    12443,
+                    16560,
+                    16593,
+                    16616,
+                    16635,
+                    16640,
+                    16642,
+                }
+            ),
+        )
         selected = snow.province_color_contract()
         self.assertEqual(
             set(selected.values()), snow.VORKERLAND_GRAPHICAL_URBAN_PROVINCES

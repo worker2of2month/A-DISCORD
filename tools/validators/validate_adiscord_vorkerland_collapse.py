@@ -518,6 +518,40 @@ def validate_countries(root: Path, issues: list[str]) -> None:
         if token not in worker_formation:
             issues.append(f"Anton Bagley's restored-WRK succession is missing {token}")
 
+    for formation_name, source_tag, wartime_ideas in (
+        (
+            "ADISCORD_vorkerland_form_wrk_from_wkr",
+            "WKR",
+            (
+                "ADISCORD_vorkerland_wkr_front_operations_bureau",
+                "ADISCORD_vorkerland_wkr_republican_mission_commands",
+                "ADISCORD_vorkerland_wkr_normative_campaign_tables",
+            ),
+        ),
+        (
+            "ADISCORD_vorkerland_form_wrk_from_vad",
+            "VAD",
+            (
+                "ADISCORD_vorkerland_vad_restoration_war_cabinet_2",
+                "ADISCORD_vorkerland_vad_dual_authority_protocol_2",
+            ),
+        ),
+    ):
+        formation = named_block(phase_effects, formation_name)
+        source_scope = named_block(formation, source_tag)
+        for idea in wartime_ideas:
+            token = f"remove_ideas = {idea}"
+            if token not in source_scope:
+                issues.append(
+                    f"{formation_name} must remove terminal wartime spirit {idea} "
+                    f"inside the surviving {source_tag} scope"
+                )
+            elif formation.find(token) >= formation.find(f"change_tag_from = {source_tag}"):
+                issues.append(
+                    f"{formation_name} must remove terminal wartime spirit {idea} "
+                    "before the player-tag handoff"
+                )
+
     vad_setup = named_block(claimant_setup, "VAD")
     joint_vad = named_block(vad_setup, "if")
     imperial_vad = named_block(vad_setup, "else")
@@ -775,8 +809,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "RUS = { ADISCORD_vorkerland_apply_dirty_modifiers = yes }",
         "ADISCORD_vorkerland_set_phase_prewar = yes",
         "id = ADISCORD_vorkerland_phase.1",
-        "days = 120",
-        "random_days = 60",
+        "days = 175",
+        "random_days = 21",
     ):
         if token not in startup:
             issues.append(f"fresh-campaign startup lacks {token}")
@@ -2254,12 +2288,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
 
     fanaticism = named_block(ideas, "ADISCORD_vorkerland_tva_ideological_fanaticism")
     for modifier in (
-        "surrender_limit = 0.25",
         "war_support_factor = 0.10",
         "army_org_regain = 0.05",
     ):
         if modifier not in fanaticism:
             issues.append(f"Doctor Worx ideological fanaticism is missing {modifier}")
+    if "surrender_limit" in fanaticism:
+        issues.append("Doctor Worx fanaticism must not stack surrender limit above shared last stand")
     state_36_paths = list((root / "history" / "states").glob("36-*.txt"))
     state_36 = state_36_paths[0].read_text(encoding="utf-8-sig") if len(state_36_paths) == 1 else ""
     if not re.search(r"victory_points\s*=\s*\{\s*12227\s+10\s*\}", state_36):
@@ -2608,6 +2643,38 @@ def validate_events(root: Path, issues: list[str]) -> None:
     if "add_ideas = ADISCORD_vorkerland_erased_nations" in prepare:
         issues.append("cultural-erasure spirit still leaks to every successor")
     finalizer = named_block(effects, "ADISCORD_vorkerland_finalize_conflict_spirits")
+
+    last_stand = named_block(ideas, "ADISCORD_vorkerland_last_stand")
+    for token in (
+        "allowed = { always = no }",
+        "allowed_civil_war = { always = yes }",
+        "removal_cost = -1",
+        "surrender_limit = 0.90",
+    ):
+        if token not in last_stand:
+            issues.append(f"shared claimant last-stand spirit is missing {token}")
+    if last_stand.count("surrender_limit = 0.90") != 1:
+        issues.append("shared claimant last-stand spirit must grant exactly +0.90 surrender limit")
+    for tag in ("WKR", "VAD", "TVA"):
+        if "add_ideas = ADISCORD_vorkerland_last_stand" not in named_block(initial, tag):
+            issues.append(f"{tag}: initial materialization does not grant the shared last-stand spirit")
+        if f"tag = {tag}" not in finalizer:
+            issues.append(f"{tag}: deferred finalizer lacks a claimant branch for last stand")
+    if finalizer.count("add_ideas = ADISCORD_vorkerland_last_stand") != 3:
+        issues.append("deferred finalizer must assert last stand exactly once for WKR, VAD and TVA")
+    progression = named_block(effects, "ADISCORD_vorkerland_repair_claimant_spirit_progression")
+    if progression.count("add_ideas = ADISCORD_vorkerland_last_stand") != 3:
+        issues.append("outbreak progression must preserve last stand for all three claimants")
+    fanaticism = named_block(ideas, "ADISCORD_vorkerland_tva_ideological_fanaticism")
+    if "surrender_limit" in fanaticism:
+        issues.append("TVA ideological fanaticism must not stack surrender limit above the shared +0.90")
+    for loc_key in (
+        "ADISCORD_vorkerland_last_stand",
+        "ADISCORD_vorkerland_last_stand_desc",
+    ):
+        if f" {loc_key}:" not in loc:
+            issues.append(f"shared claimant last-stand spirit lacks Russian localisation key {loc_key}")
+
     if effects.count("add_ideas = ADISCORD_vorkerland_erased_nations") != 2 or not re.search(
         r"WKR\s*=\s*\{[^{}]*add_ideas\s*=\s*ADISCORD_vorkerland_erased_nations",
         initial,
@@ -2961,6 +3028,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
     for token in (
         "is_subject = no", "has_war = no", "is_subject = no", "target = ROOT",
         "autonomy_state = autonomy_district_in_Vorkerland", "drop_cosmetic_tag = yes", "factor = 350",
+        "has_global_flag = ADISCORD_vorkerland_phase_postwar_integration",
+        "has_global_flag = ADISCORD_vorkerland_reunification_verified",
+        "owns_state = 32", "controls_state = 32",
     ):
         if token not in loyalist:
             issues.append(f"loyalist restoration decision is missing {token}")

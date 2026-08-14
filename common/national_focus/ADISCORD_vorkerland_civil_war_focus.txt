@@ -138,6 +138,102 @@ focus_tree = {
 		ai_will_do = { base = 12 }
 	}
 
+	# Worker and Vadl can still attempt a narrow emergency compact before the
+	# collapse. The alternative preserves the same time window but spends it on
+	# reserves and district authority. Course flags are written on selection so
+	# the two countries can react to one another without a polling event.
+	focus = {
+		id = WRK_open_worker_vadl_backchannel
+		icon = GFX_goal_generic_positive_trade_relations
+		x = 0
+		y = 4
+		cost = 1
+		prerequisite = { focus = WRK_issue_continuity_orders }
+		mutually_exclusive = { focus = WRK_mobilize_loyal_republics }
+		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		cancel_if_invalid = yes
+		select_effect = {
+			clr_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course
+			set_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course
+		}
+		completion_reward = {
+			add_political_power = 5
+			add_stability = 0.005
+			set_country_flag = ADISCORD_vorkerland_focus_wrk_worker_vadl_backchannel
+		}
+		ai_will_do = { base = 35 }
+	}
+
+	focus = {
+		id = WRK_offer_emergency_compact
+		icon = GFX_goal_generic_national_unity
+		x = 0
+		y = 5
+		cost = 2
+		prerequisite = { focus = WRK_open_worker_vadl_backchannel }
+		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		available = {
+			has_global_flag = ADISCORD_vorkerland_phase_prewar
+			has_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			set_country_flag = ADISCORD_vorkerland_wrk_compact_committed
+			set_country_flag = ADISCORD_vorkerland_focus_wrk_emergency_compact_offered
+			ADISCORD_vorkerland_resolve_prewar_compact = yes
+			custom_effect_tooltip = ADISCORD_vorkerland_prewar_compact_requires_both_tt
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	focus = {
+		id = WRK_mobilize_loyal_republics
+		icon = GFX_goal_generic_allies_build_infantry
+		x = 4
+		y = 4
+		cost = 1
+		prerequisite = { focus = WRK_issue_continuity_orders }
+		mutually_exclusive = { focus = WRK_open_worker_vadl_backchannel }
+		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		cancel_if_invalid = yes
+		select_effect = {
+			clr_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course
+			set_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course
+		}
+		completion_reward = {
+			add_command_power = 5
+			army_experience = 3
+			set_country_flag = ADISCORD_vorkerland_focus_wrk_loyal_republics_mobilized
+		}
+		ai_will_do = { base = 65 }
+	}
+
+	focus = {
+		id = WRK_place_reserves_under_worker
+		icon = GFX_goal_generic_production
+		x = 4
+		y = 5
+		cost = 2
+		prerequisite = { focus = WRK_mobilize_loyal_republics }
+		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		available = {
+			has_global_flag = ADISCORD_vorkerland_phase_prewar
+			has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = 250
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = WRK }
+			add_timed_idea = { idea = ADISCORD_vorkerland_wrk_loyal_republics_mobilized days = 70 }
+			set_country_flag = ADISCORD_vorkerland_wrk_hardline_committed
+			set_country_flag = ADISCORD_vorkerland_focus_wrk_reserves_under_worker
+			custom_effect_tooltip = ADISCORD_vorkerland_wrk_preparations_carry_over_tt
+		}
+		ai_will_do = { base = 100 }
+	}
+
 	# ---------------------------------------------------------------------
 	# Prewar VAD: the autonomous district prepares its own continuity chain.
 	# ---------------------------------------------------------------------
@@ -254,6 +350,129 @@ focus_tree = {
 			set_country_flag = ADISCORD_vorkerland_focus_vad_emergency_chancery
 		}
 		ai_will_do = { base = 12 }
+	}
+
+	focus = {
+		id = VAD_prepare_vadl_worker_terms
+		icon = GFX_goal_generic_positive_trade_relations
+		x = 9
+		y = 4
+		cost = 1
+		prerequisite = { focus = VAD_form_emergency_chancery }
+		mutually_exclusive = { focus = VAD_activate_eastern_mandate }
+		allow_branch = { tag = VAD has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		available = {
+			has_global_flag = ADISCORD_vorkerland_phase_prewar
+			OR = {
+				WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course }
+				WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course }
+			}
+		}
+		cancel_if_invalid = yes
+		select_effect = {
+			clr_country_flag = ADISCORD_vorkerland_prewar_vad_hardline_course
+			set_country_flag = ADISCORD_vorkerland_prewar_vad_compact_course
+		}
+		completion_reward = {
+			add_political_power = 5
+			add_stability = 0.005
+			set_country_flag = ADISCORD_vorkerland_focus_vad_worker_terms_prepared
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 100
+				WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course }
+			}
+			modifier = {
+				factor = 0
+				WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course }
+			}
+		}
+	}
+
+	focus = {
+		id = VAD_ratify_emergency_compact
+		icon = GFX_goal_generic_national_unity
+		x = 9
+		y = 5
+		cost = 2
+		prerequisite = { focus = VAD_prepare_vadl_worker_terms }
+		allow_branch = { tag = VAD has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		available = {
+			has_global_flag = ADISCORD_vorkerland_phase_prewar
+			has_country_flag = ADISCORD_vorkerland_prewar_vad_compact_course
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			set_country_flag = ADISCORD_vorkerland_vad_compact_committed
+			set_country_flag = ADISCORD_vorkerland_focus_vad_emergency_compact_ratified
+			ADISCORD_vorkerland_resolve_prewar_compact = yes
+			custom_effect_tooltip = ADISCORD_vorkerland_prewar_compact_requires_both_tt
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	focus = {
+		id = VAD_activate_eastern_mandate
+		icon = GFX_goal_generic_military_sphere
+		x = 14
+		y = 4
+		cost = 1
+		prerequisite = { focus = VAD_form_emergency_chancery }
+		mutually_exclusive = { focus = VAD_prepare_vadl_worker_terms }
+		allow_branch = { tag = VAD has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		available = {
+			has_global_flag = ADISCORD_vorkerland_phase_prewar
+			OR = {
+				WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course }
+				WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course }
+			}
+		}
+		cancel_if_invalid = yes
+		select_effect = {
+			clr_country_flag = ADISCORD_vorkerland_prewar_vad_compact_course
+			set_country_flag = ADISCORD_vorkerland_prewar_vad_hardline_course
+		}
+		completion_reward = {
+			add_command_power = 5
+			army_experience = 3
+			set_country_flag = ADISCORD_vorkerland_focus_vad_eastern_mandate_activated
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 100
+				WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course }
+			}
+			modifier = {
+				factor = 0
+				WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course }
+			}
+		}
+	}
+
+	focus = {
+		id = VAD_seal_district_arsenals
+		icon = GFX_goal_generic_production
+		x = 14
+		y = 5
+		cost = 2
+		prerequisite = { focus = VAD_activate_eastern_mandate }
+		allow_branch = { tag = VAD has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		available = {
+			has_global_flag = ADISCORD_vorkerland_phase_prewar
+			has_country_flag = ADISCORD_vorkerland_prewar_vad_hardline_course
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = 250
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = VAD }
+			add_timed_idea = { idea = ADISCORD_vorkerland_vad_eastern_mandate days = 70 }
+			set_country_flag = ADISCORD_vorkerland_vad_hardline_committed
+			set_country_flag = ADISCORD_vorkerland_focus_vad_district_arsenals_sealed
+		}
+		ai_will_do = { base = 100 }
 	}
 
 	# ---------------------------------------------------------------------
@@ -1044,6 +1263,371 @@ focus_tree = {
 		ai_will_do = { base = 200 }
 	}
 
+	# Once the central showdown is a live war, the western claimant can extend
+	# its political settlement into a bounded operational programme. These
+	# focuses strengthen an existing front; they never create or resolve wars.
+	focus = {
+		id = WKR_establish_front_operations_bureau
+		icon = GFX_goal_generic_army_doctrines
+		x = 3
+		y = 11
+		cost = 2
+		prerequisite = { focus = WKR_republic_fights_as_one }
+		allow_branch = {
+			tag = WKR
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				has_global_flag = ADISCORD_vorkerland_central_showdown_started
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				OR = {
+					has_war_with = EYR
+					has_war_with = EGC
+					has_war_with = RIV
+					has_war_with = REV
+					has_war_with = YOR
+					has_war_with = NDN
+					has_war_with = SWB
+					has_war_with = VHV
+					has_war_with = OSV
+					has_war_with = VAD
+					has_war_with = TVA
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_front_operations_bureau }
+		completion_reward = {
+			add_ideas = ADISCORD_vorkerland_wkr_front_operations_bureau
+			army_experience = 5
+			set_country_flag = ADISCORD_vorkerland_focus_wkr_front_operations_bureau
+		}
+		ai_will_do = { base = 120 modifier = { factor = 2 has_war = yes } }
+	}
+
+	focus = {
+		id = WKR_authorize_republican_mission_commands
+		icon = GFX_goal_generic_national_unity
+		x = 1
+		y = 12
+		cost = 2
+		prerequisite = { focus = WKR_establish_front_operations_bureau }
+		allow_branch = {
+			tag = WKR
+			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+			has_government = pragmatism
+			has_country_leader_ideology = neo_vorkerism
+			has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		available = {
+			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+			has_government = pragmatism
+			has_country_leader_ideology = neo_vorkerism
+			has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				has_global_flag = ADISCORD_vorkerland_central_showdown_started
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				OR = {
+					has_war_with = EYR
+					has_war_with = EGC
+					has_war_with = RIV
+					has_war_with = REV
+					has_war_with = YOR
+					has_war_with = NDN
+					has_war_with = SWB
+					has_war_with = VHV
+					has_war_with = OSV
+					has_war_with = VAD
+					has_war_with = TVA
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_republican_mission_commands }
+		completion_reward = {
+			add_ideas = ADISCORD_vorkerland_wkr_republican_mission_commands
+			add_stability = 0.01
+			set_country_flag = ADISCORD_vorkerland_focus_wkr_republican_mission_commands
+		}
+		ai_will_do = { base = 110 }
+	}
+
+	focus = {
+		id = WKR_issue_normative_campaign_tables
+		icon = GFX_goal_generic_political_pressure
+		x = 5
+		y = 12
+		cost = 2
+		prerequisite = { focus = WKR_establish_front_operations_bureau }
+		allow_branch = {
+			tag = WKR
+			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+			has_government = utilitarism
+			has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		available = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+			has_government = utilitarism
+			has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				has_global_flag = ADISCORD_vorkerland_central_showdown_started
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				OR = {
+					has_war_with = EYR
+					has_war_with = EGC
+					has_war_with = RIV
+					has_war_with = REV
+					has_war_with = YOR
+					has_war_with = NDN
+					has_war_with = SWB
+					has_war_with = VHV
+					has_war_with = OSV
+					has_war_with = VAD
+					has_war_with = TVA
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_normative_campaign_tables }
+		completion_reward = {
+			add_ideas = ADISCORD_vorkerland_wkr_normative_campaign_tables
+			add_command_power = 5
+			set_country_flag = ADISCORD_vorkerland_focus_wkr_normative_campaign_tables
+		}
+		ai_will_do = { base = 110 }
+	}
+
+	focus = {
+		id = WKR_form_rolling_factory_groups
+		icon = GFX_goal_generic_production
+		x = 2
+		y = 13
+		cost = 3
+		prerequisite = {
+			focus = WKR_authorize_republican_mission_commands
+			focus = WKR_issue_normative_campaign_tables
+		}
+		allow_branch = {
+			tag = WKR
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				has_global_flag = ADISCORD_vorkerland_central_showdown_started
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				OR = {
+					has_war_with = EYR
+					has_war_with = EGC
+					has_war_with = RIV
+					has_war_with = REV
+					has_war_with = YOR
+					has_war_with = NDN
+					has_war_with = SWB
+					has_war_with = VHV
+					has_war_with = OSV
+					has_war_with = VAD
+					has_war_with = TVA
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_rolling_factory_groups }
+		completion_reward = {
+			add_manpower = 250
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = WKR }
+			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_rolling_factory_groups days = 70 }
+			set_country_flag = ADISCORD_vorkerland_focus_wkr_rolling_factory_groups
+		}
+		ai_will_do = { base = 130 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
+	}
+
+	focus = {
+		id = WKR_reopen_night_freight_corridors
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 4
+		y = 13
+		cost = 3
+		prerequisite = {
+			focus = WKR_authorize_republican_mission_commands
+			focus = WKR_issue_normative_campaign_tables
+		}
+		allow_branch = {
+			tag = WKR
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				has_global_flag = ADISCORD_vorkerland_central_showdown_started
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				OR = {
+					has_war_with = EYR
+					has_war_with = EGC
+					has_war_with = RIV
+					has_war_with = REV
+					has_war_with = YOR
+					has_war_with = NDN
+					has_war_with = SWB
+					has_war_with = VHV
+					has_war_with = OSV
+					has_war_with = VAD
+					has_war_with = TVA
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_night_freight_corridors }
+		completion_reward = {
+			if = {
+				limit = {
+					owns_state = 200
+					controls_state = 200
+					200 = { infrastructure < 5 }
+				}
+				200 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+			}
+			if = {
+				limit = {
+					owns_state = 201
+					controls_state = 201
+					201 = { infrastructure < 5 }
+				}
+				201 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+			}
+			if = {
+				limit = {
+					NOT = {
+						owns_state = 200
+						controls_state = 200
+						200 = { infrastructure < 5 }
+					}
+					NOT = {
+						owns_state = 201
+						controls_state = 201
+						201 = { infrastructure < 5 }
+					}
+				}
+				add_equipment_to_stockpile = { type = support_equipment amount = 50 producer = WKR }
+			}
+			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_night_freight_corridors days = 70 }
+			set_country_flag = ADISCORD_vorkerland_focus_wkr_night_freight_corridors
+		}
+		ai_will_do = { base = 130 modifier = { factor = 2 has_war = yes } }
+	}
+
+	focus = {
+		id = WKR_arm_the_mobile_reserve
+		icon = GFX_goal_generic_allies_build_infantry
+		x = 1
+		y = 14
+		cost = 2
+		prerequisite = { focus = WKR_form_rolling_factory_groups }
+		allow_branch = {
+			tag = WKR
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				has_global_flag = ADISCORD_vorkerland_central_showdown_started
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				OR = {
+					has_war_with = EYR
+					has_war_with = EGC
+					has_war_with = RIV
+					has_war_with = REV
+					has_war_with = YOR
+					has_war_with = NDN
+					has_war_with = SWB
+					has_war_with = VHV
+					has_war_with = OSV
+					has_war_with = VAD
+					has_war_with = TVA
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_mobile_reserve_armed }
+		completion_reward = {
+			army_experience = 10
+			add_command_power = 10
+			add_equipment_to_stockpile = { type = support_equipment amount = 50 producer = WKR }
+			set_country_flag = ADISCORD_vorkerland_focus_wkr_mobile_reserve_armed
+		}
+		ai_will_do = { base = 135 modifier = { factor = 2 has_war = yes } }
+	}
+
+	focus = {
+		id = WKR_coordinate_the_rolling_front
+		icon = GFX_goal_generic_military_sphere
+		x = 4
+		y = 15
+		cost = 4
+		prerequisite = { focus = WKR_arm_the_mobile_reserve }
+		prerequisite = { focus = WKR_reopen_night_freight_corridors }
+		allow_branch = {
+			tag = WKR
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				has_global_flag = ADISCORD_vorkerland_central_showdown_started
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				OR = {
+					has_war_with = EYR
+					has_war_with = EGC
+					has_war_with = RIV
+					has_war_with = REV
+					has_war_with = YOR
+					has_war_with = NDN
+					has_war_with = SWB
+					has_war_with = VHV
+					has_war_with = OSV
+					has_war_with = VAD
+					has_war_with = TVA
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_rolling_front_coordinated }
+		completion_reward = {
+			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_rolling_front days = 56 }
+			add_command_power = 10
+			add_war_support = 0.01
+			set_country_flag = ADISCORD_vorkerland_focus_wkr_rolling_front_coordinated
+		}
+		ai_will_do = { base = 170 modifier = { factor = 2 has_war = yes } }
+	}
+
 	# ---------------------------------------------------------------------
 	# Optional WKR southern theatre. This branch supports the live war and
 	# can open a bounded Solarino intervention, but it never gates the shared
@@ -1272,13 +1856,12 @@ focus_tree = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = WKR_intervene_in_solyarino_available_tt
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
-				NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
-				NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+					has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				}
 				NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }
 				NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
-				NOT = { has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted }
 				NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
 				ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = yes
 				ADISCORD_vorkerland_wkr_has_valid_solyarino_target = yes
@@ -2572,6 +3155,254 @@ focus_tree = {
 		ai_will_do = { base = 80 }
 	}
 
+	# The restoration claimant carries its constitutional outcome into the live
+	# showdown. This programme strengthens an existing campaign and never owns
+	# a declaration, peace, or phase transition.
+	focus = {
+		id = VAD_convene_campaign_directorate
+		icon = GFX_goal_generic_army_doctrines
+		x = 14
+		y = 14
+		cost = 2
+		prerequisite = { focus = VAD_publish_interim_restoration_register }
+		allow_branch = {
+			tag = VAD
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				has_global_flag = ADISCORD_vorkerland_central_showdown_started
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				OR = {
+					has_war_with = EYR
+					has_war_with = EGC
+					has_war_with = RIV
+					has_war_with = REV
+					has_war_with = YOR
+					has_war_with = NDN
+					has_war_with = SWB
+					has_war_with = VHV
+					has_war_with = OSV
+					has_war_with = WKR
+					has_war_with = TVA
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_campaign_directorate }
+		completion_reward = {
+			add_timed_idea = { idea = ADISCORD_vorkerland_vad_campaign_directorate days = 70 }
+			add_command_power = 5
+			set_country_flag = ADISCORD_vorkerland_focus_vad_campaign_directorate
+		}
+		ai_will_do = { base = 120 modifier = { factor = 2 has_war = yes } }
+	}
+
+	focus = {
+		id = VAD_issue_prefectural_field_decrees
+		icon = GFX_goal_generic_military_sphere
+		x = 12
+		y = 15
+		cost = 3
+		prerequisite = { focus = VAD_convene_campaign_directorate }
+		allow_branch = {
+			tag = VAD
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		available = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				has_global_flag = ADISCORD_vorkerland_central_showdown_started
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				OR = {
+					has_war_with = EYR
+					has_war_with = EGC
+					has_war_with = RIV
+					has_war_with = REV
+					has_war_with = YOR
+					has_war_with = NDN
+					has_war_with = SWB
+					has_war_with = VHV
+					has_war_with = OSV
+					has_war_with = WKR
+					has_war_with = TVA
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_prefectural_field_decrees }
+		completion_reward = {
+			remove_ideas = ADISCORD_vorkerland_vad_restoration_war_cabinet
+			remove_ideas = ADISCORD_vorkerland_vad_dual_authority_protocol
+			remove_ideas = ADISCORD_vorkerland_vad_dual_authority_protocol_2
+			add_ideas = ADISCORD_vorkerland_vad_restoration_war_cabinet_2
+			army_experience = 5
+			set_country_flag = ADISCORD_vorkerland_focus_vad_prefectural_field_decrees
+		}
+		ai_will_do = { base = 130 modifier = { factor = 2 has_war = yes } }
+	}
+
+	focus = {
+		id = VAD_seat_front_commissars
+		icon = GFX_goal_generic_national_unity
+		x = 16
+		y = 15
+		cost = 3
+		prerequisite = { focus = VAD_convene_campaign_directorate }
+		allow_branch = {
+			tag = VAD
+			has_global_flag = ADISCORD_vorkerland_joint_government_formed
+			has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+			has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		available = {
+			has_global_flag = ADISCORD_vorkerland_joint_government_formed
+			has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+			has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				has_global_flag = ADISCORD_vorkerland_central_showdown_started
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				OR = {
+					has_war_with = EYR
+					has_war_with = EGC
+					has_war_with = RIV
+					has_war_with = REV
+					has_war_with = YOR
+					has_war_with = NDN
+					has_war_with = SWB
+					has_war_with = VHV
+					has_war_with = OSV
+					has_war_with = WKR
+					has_war_with = TVA
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_front_commissars }
+		completion_reward = {
+			remove_ideas = ADISCORD_vorkerland_vad_dual_authority_protocol
+			remove_ideas = ADISCORD_vorkerland_vad_restoration_war_cabinet
+			remove_ideas = ADISCORD_vorkerland_vad_restoration_war_cabinet_2
+			add_ideas = ADISCORD_vorkerland_vad_dual_authority_protocol_2
+			army_experience = 5
+			set_country_flag = ADISCORD_vorkerland_focus_vad_front_commissars
+		}
+		ai_will_do = { base = 130 modifier = { factor = 2 has_war = yes } }
+	}
+
+	focus = {
+		id = VAD_standardize_restoration_columns
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 14
+		y = 16
+		cost = 3
+		prerequisite = {
+			focus = VAD_issue_prefectural_field_decrees
+			focus = VAD_seat_front_commissars
+		}
+		allow_branch = {
+			tag = VAD
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				has_global_flag = ADISCORD_vorkerland_central_showdown_started
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				OR = {
+					has_war_with = EYR
+					has_war_with = EGC
+					has_war_with = RIV
+					has_war_with = REV
+					has_war_with = YOR
+					has_war_with = NDN
+					has_war_with = SWB
+					has_war_with = VHV
+					has_war_with = OSV
+					has_war_with = WKR
+					has_war_with = TVA
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_restoration_columns_standardized }
+		completion_reward = {
+			add_timed_idea = { idea = ADISCORD_vorkerland_vad_standardized_restoration_columns days = 70 }
+			add_equipment_to_stockpile = { type = support_equipment amount = 50 producer = VAD }
+			set_country_flag = ADISCORD_vorkerland_focus_vad_restoration_columns_standardized
+		}
+		ai_will_do = { base = 145 modifier = { factor = 2 has_war = yes } }
+	}
+
+	focus = {
+		id = VAD_advance_under_one_register
+		icon = GFX_goal_generic_major_war
+		x = 14
+		y = 17
+		cost = 4
+		prerequisite = { focus = VAD_standardize_restoration_columns }
+		allow_branch = {
+			tag = VAD
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				has_global_flag = ADISCORD_vorkerland_central_showdown_started
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				OR = {
+					has_war_with = EYR
+					has_war_with = EGC
+					has_war_with = RIV
+					has_war_with = REV
+					has_war_with = YOR
+					has_war_with = NDN
+					has_war_with = SWB
+					has_war_with = VHV
+					has_war_with = OSV
+					has_war_with = WKR
+					has_war_with = TVA
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_one_register_advance }
+		completion_reward = {
+			if = {
+				limit = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+				add_timed_idea = { idea = ADISCORD_vorkerland_vad_joint_front_operation days = 70 }
+			}
+			else = {
+				add_timed_idea = { idea = ADISCORD_vorkerland_vad_prefectural_offensive days = 70 }
+			}
+			add_command_power = 10
+			set_country_flag = ADISCORD_vorkerland_focus_vad_one_register_advance
+		}
+		ai_will_do = { base = 175 modifier = { factor = 2 has_war = yes } }
+	}
+
 	# ---------------------------------------------------------------------
 	# TVA: Worx's technical directorate. Power, field engineering and public
 	# administration remain separate lines of work; neither excludes the other.
@@ -3754,6 +4585,258 @@ focus_tree = {
 			set_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized
 		}
 		ai_will_do = { base = 150 }
+	}
+
+	# Worx's second iteration becomes a live-front validation programme only
+	# after both the core operational loop and the bounded optional iteration
+	# have been completed.
+	focus = {
+		id = TVA_merge_iteration_with_field_command
+		icon = GFX_goal_generic_scientific_exchange
+		x = 23
+		y = 16
+		cost = 2
+		prerequisite = { focus = TVA_close_operational_loop }
+		prerequisite = { focus = TVA_authorize_iteration_two }
+		allow_branch = {
+			tag = TVA
+			has_government = technocracy
+			has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				has_global_flag = ADISCORD_vorkerland_central_showdown_started
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				OR = {
+					has_war_with = EYR
+					has_war_with = EGC
+					has_war_with = RIV
+					has_war_with = REV
+					has_war_with = YOR
+					has_war_with = NDN
+					has_war_with = SWB
+					has_war_with = VHV
+					has_war_with = OSV
+					has_war_with = WKR
+					has_war_with = VAD
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_field_iteration_merged }
+		completion_reward = {
+			remove_ideas = ADISCORD_vorkerland_worx_second_protocol
+			add_timed_idea = { idea = ADISCORD_vorkerland_tva_integrated_second_protocol days = 70 }
+			add_command_power = 5
+			set_country_flag = ADISCORD_vorkerland_focus_tva_field_iteration_merged
+		}
+		ai_will_do = { base = 120 modifier = { factor = 2 has_war = yes } }
+	}
+
+	focus = {
+		id = TVA_mass_produce_assault_modules
+		icon = GFX_goal_generic_production
+		x = 21
+		y = 17
+		cost = 3
+		prerequisite = { focus = TVA_merge_iteration_with_field_command }
+		allow_branch = {
+			tag = TVA
+			has_country_flag = ADISCORD_vorkerland_focus_tva_technical_battalions
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		available = {
+			has_country_flag = ADISCORD_vorkerland_focus_tva_technical_battalions
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				has_global_flag = ADISCORD_vorkerland_central_showdown_started
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				OR = {
+					has_war_with = EYR
+					has_war_with = EGC
+					has_war_with = RIV
+					has_war_with = REV
+					has_war_with = YOR
+					has_war_with = NDN
+					has_war_with = SWB
+					has_war_with = VHV
+					has_war_with = OSV
+					has_war_with = WKR
+					has_war_with = VAD
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_assault_modules_mass_produced }
+		completion_reward = {
+			add_timed_idea = { idea = ADISCORD_vorkerland_tva_assault_modules days = 70 }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = TVA }
+			add_equipment_to_stockpile = { type = support_equipment amount = 40 producer = TVA }
+			set_country_flag = ADISCORD_vorkerland_focus_tva_assault_modules_mass_produced
+		}
+		ai_will_do = { base = 145 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
+	}
+
+	focus = {
+		id = TVA_link_observers_to_fire_control
+		icon = GFX_goal_generic_army_doctrines
+		x = 23
+		y = 17
+		cost = 3
+		prerequisite = { focus = TVA_merge_iteration_with_field_command }
+		allow_branch = {
+			tag = TVA
+			has_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		available = {
+			has_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				has_global_flag = ADISCORD_vorkerland_central_showdown_started
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				OR = {
+					has_war_with = EYR
+					has_war_with = EGC
+					has_war_with = RIV
+					has_war_with = REV
+					has_war_with = YOR
+					has_war_with = NDN
+					has_war_with = SWB
+					has_war_with = VHV
+					has_war_with = OSV
+					has_war_with = WKR
+					has_war_with = VAD
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_observers_linked }
+		completion_reward = {
+			add_timed_idea = { idea = ADISCORD_vorkerland_tva_linked_fire_control days = 70 }
+			add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = TVA }
+			add_command_power = 5
+			set_country_flag = ADISCORD_vorkerland_focus_tva_observers_linked
+		}
+		ai_will_do = { base = 145 modifier = { factor = 2 has_war = yes } }
+	}
+
+	focus = {
+		id = TVA_turn_repair_trains_into_supply_web
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 25
+		y = 17
+		cost = 3
+		prerequisite = { focus = TVA_merge_iteration_with_field_command }
+		allow_branch = {
+			tag = TVA
+			has_country_flag = ADISCORD_vorkerland_focus_tva_adaptive_logistics
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		available = {
+			has_country_flag = ADISCORD_vorkerland_focus_tva_adaptive_logistics
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				has_global_flag = ADISCORD_vorkerland_central_showdown_started
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				OR = {
+					has_war_with = EYR
+					has_war_with = EGC
+					has_war_with = RIV
+					has_war_with = REV
+					has_war_with = YOR
+					has_war_with = NDN
+					has_war_with = SWB
+					has_war_with = VHV
+					has_war_with = OSV
+					has_war_with = WKR
+					has_war_with = VAD
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_supply_web }
+		completion_reward = {
+			add_timed_idea = { idea = ADISCORD_vorkerland_tva_supply_web days = 70 }
+			add_equipment_to_stockpile = { type = support_equipment amount = 50 producer = TVA }
+			army_experience = 5
+			set_country_flag = ADISCORD_vorkerland_focus_tva_supply_web
+		}
+		ai_will_do = { base = 145 modifier = { factor = 2 has_war = yes } }
+	}
+
+	focus = {
+		id = TVA_run_live_front_validation
+		icon = GFX_goal_generic_scientific_exchange
+		x = 23
+		y = 18
+		cost = 4
+		prerequisite = {
+			focus = TVA_mass_produce_assault_modules
+			focus = TVA_link_observers_to_fire_control
+			focus = TVA_turn_repair_trains_into_supply_web
+		}
+		allow_branch = {
+			tag = TVA
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				has_global_flag = ADISCORD_vorkerland_central_showdown_started
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				OR = {
+					has_war_with = EYR
+					has_war_with = EGC
+					has_war_with = RIV
+					has_war_with = REV
+					has_war_with = YOR
+					has_war_with = NDN
+					has_war_with = SWB
+					has_war_with = VHV
+					has_war_with = OSV
+					has_war_with = WKR
+					has_war_with = VAD
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_live_front_validated }
+		completion_reward = {
+			add_timed_idea = { idea = ADISCORD_vorkerland_tva_live_front_validated days = 70 }
+			if = {
+				limit = { has_country_flag = ADISCORD_vorkerland_focus_tva_technical_battalions }
+				add_tech_bonus = { name = TVA_live_front_infantry_bonus bonus = 0.50 uses = 1 category = infantry_weapons }
+			}
+			else_if = {
+				limit = { has_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control }
+				add_tech_bonus = { name = TVA_live_front_electronics_bonus bonus = 0.50 uses = 1 category = electronics }
+			}
+			else = {
+				add_tech_bonus = { name = TVA_live_front_industry_bonus bonus = 0.50 uses = 1 category = industry }
+			}
+			add_command_power = 10
+			army_experience = 5
+			set_country_flag = ADISCORD_vorkerland_focus_tva_live_front_validated
+		}
+		ai_will_do = { base = 180 modifier = { factor = 2 has_war = yes } }
 	}
 
 	# ---------------------------------------------------------------------

@@ -25,6 +25,11 @@ WRK_vorkerland_joint_government = {
 	color_ui = rgb { 214 180 102 }
 }
 
+SOL_vorkerland_worker_protectorate = {
+	color = rgb { 191 143 35 }
+	color_ui = rgb { 231 183 75 }
+}
+
 PWR_rimat_republic = {
 	color = rgb { 55 92 109 }
 	color_ui = rgb { 194 126 84 }

@@ -254,7 +254,68 @@ country_event = {
 	trigger = {
 		tag = WKR
 		has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		has_country_flag = ADISCORD_vorkerland_wkr_solyarino_outcome_check_pending
 	}
 
-	immediate = { ADISCORD_vorkerland_clear_wkr_solyarino_intervention = yes }
+	immediate = { ADISCORD_vorkerland_check_wkr_solyarino_outcome = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.13
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = WKR
+		has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized }
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialization_retry }
+	}
+
+	immediate = { ADISCORD_vorkerland_materialize_sol_worker_protectorate = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.14
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = WKR
+		has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized }
+		has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialization_retry
+	}
+
+	immediate = { ADISCORD_vorkerland_materialize_sol_worker_protectorate = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.15
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = WKR
+		has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending
+		has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verify_retry }
+	}
+
+	immediate = { ADISCORD_vorkerland_verify_sol_worker_protectorate = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.16
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = WKR
+		has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending
+		has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized
+		has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verify_retry
+	}
+
+	immediate = { ADISCORD_vorkerland_verify_sol_worker_protectorate = yes }
 }

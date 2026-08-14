@@ -80,6 +80,15 @@ class VorkerlandCitiesTests(unittest.TestCase):
                 )
             )
 
+    def test_current_target_contract_covers_vad_and_new_wkr_cities(self) -> None:
+        required = frozenset(
+            {4443, 6192, 8243, 11944, 12443, 16560, 16593, 16635, 16640}
+        )
+        self.assertLessEqual(required, cities.TARGET_PROVINCES)
+        colours, issues = cities.target_colours()
+        self.assertEqual(issues, [])
+        self.assertLessEqual(required, frozenset(colours.values()))
+
     def test_apply_preserves_mode_size_palette_and_is_byte_idempotent(self) -> None:
         with TemporaryDirectory() as directory:
             root = Path(directory)

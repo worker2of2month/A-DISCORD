@@ -84,5 +84,13 @@ class SuppliedSuccessorFlagTests(unittest.TestCase):
                     (directory / "WRK.tga").read_bytes(),
                 )
 
+    def test_worker_protectorate_uses_base_solarino_flag_triplet(self) -> None:
+        for directory in (FLAG_ROOT, FLAG_ROOT / "medium", FLAG_ROOT / "small"):
+            with self.subTest(directory=directory.name):
+                self.assertEqual(
+                    (directory / "SOL_vorkerland_worker_protectorate.tga").read_bytes(),
+                    (directory / "SOL.tga").read_bytes(),
+                )
+
 if __name__ == "__main__":
     unittest.main()

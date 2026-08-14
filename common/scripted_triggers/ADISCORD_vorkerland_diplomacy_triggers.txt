@@ -222,6 +222,28 @@ ADISCORD_vorkerland_wkr_has_valid_solyarino_target = {
 	}
 }
 
+# All originally selected Solarino fronts have left the diplomatic cache. A
+# surviving shell is acceptable only after its exact WKR war has ended; the
+# outcome effect separately proves ownership and control of the five states.
+ADISCORD_vorkerland_wkr_solyarino_target_wars_finished = {
+	tag = WKR
+	OR = {
+		NOT = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sol }
+		NOT = { country_exists = SOL }
+		NOT = { has_war_with = SOL }
+	}
+	OR = {
+		NOT = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sra }
+		NOT = { country_exists = SRA }
+		NOT = { has_war_with = SRA }
+	}
+	OR = {
+		NOT = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_csl }
+		NOT = { country_exists = CSL }
+		NOT = { has_war_with = CSL }
+	}
+}
+
 # Exact physical approach routes from WKR's possible central holdings into the
 # five-state Solarino package. A remote surviving government is not enough.
 ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = {

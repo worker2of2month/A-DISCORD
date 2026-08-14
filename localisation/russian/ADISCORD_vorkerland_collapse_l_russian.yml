@@ -1,4 +1,6 @@
 ﻿l_russian:
+ ADISCORD_vorkerland_last_stand: "До последнего"
+ ADISCORD_vorkerland_last_stand_desc: "Каждый претендент поклялся не сдавать столицы, архивы и полевые штабы, пока сохраняется хотя бы один организованный рубеж. Поражение наступит только тогда, когда само государство будет сломлено."
  ADISCORD_vorkerland_tva_unattended_shifts: "Приборные безлюдные смены"
  ADISCORD_vorkerland_tva_unattended_shifts_desc: "Автоматические датчики и строгие допуски позволяют отдельным линиям работать ночью сокращённым составом, повышая выпуск ценой аварий и нагрузки на город."
  ADISCORD_vorkerland_tva_algorithmic_fire_plans: "Алгоритмические огневые планы"

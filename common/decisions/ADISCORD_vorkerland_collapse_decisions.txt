@@ -772,7 +772,13 @@ ADISCORD_vorkerland_collapse_category = {
 		visible = {
 			is_subject = no
 			NOT = { has_country_flag = ADISCORD_vorkerland_loyalist_district_restored }
-			WRK = { exists = yes }
+			WRK = {
+				exists = yes
+				has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+				has_global_flag = ADISCORD_vorkerland_reunification_verified
+				owns_state = 32
+				controls_state = 32
+			}
 			OR = {
 				AND = { tag = ZAO NOT = { country_exists = WPA } NOT = { country_exists = WPS } }
 				AND = { tag = VLA NOT = { country_exists = EBA } NOT = { country_exists = TGD } }
@@ -786,6 +792,10 @@ ADISCORD_vorkerland_collapse_category = {
 				is_subject = no
 				NOT = { has_capitulated = yes }
 				NOT = { has_war_with = ROOT }
+				has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+				has_global_flag = ADISCORD_vorkerland_reunification_verified
+				owns_state = 32
+				controls_state = 32
 			}
 		}
 		cost = 0

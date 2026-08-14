@@ -296,6 +296,63 @@ def validate_states() -> None:
                 f"legacy state {state_id}: expected one {scalar_name} declaration, found {len(declarations)}",
             )
 
+    vad_population_contract = {
+        75: (9_500_000, "megalopolis", 5, 5, 3, 8.0),
+        106: (3_800_000, "large_city", 3, 2, 2, 5.0),
+        107: (1_200_000, "town", 1, 0, 0, 2.5),
+        121: (3_000_000, "large_city", 3, 2, 0, 5.0),
+    }
+    check(
+        sum(profile[0] for profile in vad_population_contract.values())
+        == 17_500_000,
+        "VAD: expected exact 17500000 population package",
+    )
+    for state_id, (
+        population,
+        category,
+        civilian,
+        military,
+        air_base,
+        supplies,
+    ) in vad_population_contract.items():
+        actual = state_profile(text(state_path(state_id)))
+        check(
+            (actual["population"], actual["category"]) == (population, category),
+            f"VAD state {state_id}: expected population/category {population}/{category}",
+        )
+        check(
+            (
+                actual["civilian"],
+                actual["military"],
+                actual["air_base"],
+                actual["supplies"],
+            )
+            == (civilian, military, air_base, supplies),
+            f"VAD state {state_id}: factory, air-base, or supply package changed",
+        )
+        expected = normalized_builder_profile(state_id)
+        check(
+            (expected["population"], expected["category"], expected["supplies"])
+            == (population, category, supplies),
+            f"VAD state {state_id}: builder population/category/supply contract changed",
+        )
+
+    for state_id, province_id in ((200, 4443), (201, 12443)):
+        actual = state_profile(text(state_path(state_id)))
+        expected = normalized_builder_profile(state_id)
+        check(
+            actual == expected,
+            f"WKR regional city state {state_id}: generated profile differs from its builder profile",
+        )
+        check(
+            actual["category"] == "town",
+            f"WKR regional city state {state_id}: expected town category",
+        )
+        check(
+            province_terrain.get(province_id) == "urban",
+            f"WKR regional city province {province_id}: expected urban terrain",
+        )
+
     for state_id, expected_vps in sorted(VORKERLAND_LEGACY_VICTORY_POINTS.items()):
         source = text(state_path(state_id))
         actual_vps = {

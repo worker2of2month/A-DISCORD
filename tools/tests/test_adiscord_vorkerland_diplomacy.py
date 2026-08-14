@@ -4,17 +4,24 @@ import unittest
 
 from tools.validators.validate_adiscord_vorkerland_diplomacy import (
     CORE_PACKAGES,
+    DIPLOMACY_EFFECTS,
+    DIPLOMACY_ON_ACTIONS,
     HISTORICAL_WRK_VAD_STATES,
     LIVE_ALLY_OR_FOREIGN_STATES,
+    MATERIALIZE_WKR_PROTECTORATE,
     SOLAR_STATES,
     TERMINAL_CONTRACTS,
     VAD_SOLAR_BORDER_PAIRS,
+    VERIFY_WKR_PROTECTORATE,
     VOLNOGRAD_STATES,
     WKR_SOLAR_BORDER_PAIRS,
     collect_issues,
+    compact,
     direct_named_blocks,
     event_block,
     named_block,
+    named_blocks,
+    read,
     validate_bounded_outcome_hook,
     validate_core_packages,
     validate_counter_intervention,
@@ -132,9 +139,46 @@ class SolarInterventionTests(unittest.TestCase):
         issues = validate_counter_intervention()
         self.assertEqual(issues, [], issue_report(issues))
 
-    def test_wkr_solyarino_intervention_is_bounded_multi_target_and_ai_driven(self) -> None:
+    def test_wkr_solyarino_intervention_and_protectorate_are_bounded(self) -> None:
+        self.assertEqual(SOLAR_STATES, (76, 104, 198, 307, 310))
         issues = validate_wkr_solyarino_intervention()
         self.assertEqual(issues, [], issue_report(issues))
+
+    def test_gordon_is_carried_across_annex_and_returned_before_promotion(self) -> None:
+        on_capitulation = named_block(read(DIPLOMACY_ON_ACTIONS), "on_capitulation")
+        settlement = next(
+            block
+            for block in named_blocks(on_capitulation, "if")
+            if "ADISCORD_vorkerland_wkr_solyarino_intervention_active" in block
+            and "set_global_flag = skip_default_capitulation" in block
+            and "tag = WKR" in block
+        )
+        settlement = compact(settlement)
+        self.assertLess(
+            settlement.index("target_country = WKR"),
+            settlement.index("annex_country = { target = ROOT transfer_troops = no }"),
+        )
+
+        effects = read(DIPLOMACY_EFFECTS)
+        materialize = compact(named_block(effects, MATERIALIZE_WKR_PROTECTORATE))
+        self.assertLess(
+            materialize.index("target_country = WKR"),
+            materialize.index("target_country = SOL"),
+        )
+        self.assertLess(
+            materialize.index("target_country = SOL"),
+            materialize.index(
+                "country_event = { id = ADISCORD_vorkerland_diplomacy.15 days = 1 }"
+            ),
+        )
+
+        verify = compact(named_block(effects, VERIFY_WKR_PROTECTORATE))
+        self.assertLess(
+            verify.index(
+                "has_country_flag = ADISCORD_vorkerland_wkr_solyarino_gordon_returned"
+            ),
+            verify.index("promote_character = { character = WRK_Richard_Gordon"),
+        )
 
 
 class IndependentCorePackageTests(unittest.TestCase):

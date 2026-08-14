@@ -141,14 +141,13 @@ ADISCORD_vorkerland_wkr_solyarino_operation_plan = {
 	enable = {
 		tag = WKR
 		is_ai = yes
-		has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
 		has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
-		NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
-		NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
-		NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 		NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }
 		NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
-		NOT = { has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted }
 		NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
 		NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_solyarino_intervention }
 		ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = yes
@@ -158,17 +157,120 @@ ADISCORD_vorkerland_wkr_solyarino_operation_plan = {
 	abort = {
 		OR = {
 			NOT = { tag = WKR }
-			NOT = { has_global_flag = ADISCORD_vorkerland_phase_central_preparation }
+			NOT = {
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+					has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				}
+			}
 			NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked }
-			has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested
-			has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized
-			has_global_flag = ADISCORD_vorkerland_central_showdown_started
 			has_country_flag = ADISCORD_vorkerland_focus_wkr_solyarino_intervention
 		}
 	}
 
 	ai_national_focuses = {
 		WKR_intervene_in_solyarino
+	}
+
+	weight = { factor = 5 }
+}
+
+ADISCORD_vorkerland_wkr_pragmatist_showdown_plan = {
+	name = "WKR pragmatist rolling-front programme"
+	desc = ""
+
+	allowed = {
+		OR = {
+			original_tag = WRK
+			original_tag = WKR
+		}
+	}
+
+	enable = {
+		tag = WKR
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		has_global_flag = ADISCORD_vorkerland_central_showdown_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
+		has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+		has_government = pragmatism
+		has_country_leader_ideology = neo_vorkerism
+		has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_rolling_front_coordinated }
+		has_war = yes
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = WKR }
+			NOT = { has_global_flag = ADISCORD_vorkerland_phase_central_showdown }
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+			has_global_flag = ADISCORD_vorkerland_central_war_finished
+			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+			NOT = { has_government = pragmatism }
+			NOT = { has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes } }
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_rolling_front_coordinated
+		}
+	}
+
+	ai_national_focuses = {
+		WKR_establish_front_operations_bureau
+		WKR_authorize_republican_mission_commands
+		WKR_form_rolling_factory_groups
+		WKR_reopen_night_freight_corridors
+		WKR_arm_the_mobile_reserve
+		WKR_coordinate_the_rolling_front
+	}
+
+	weight = { factor = 5 }
+}
+
+ADISCORD_vorkerland_wkr_utilitarian_showdown_plan = {
+	name = "WKR utilitarian rolling-front programme"
+	desc = ""
+
+	allowed = {
+		OR = {
+			original_tag = WRK
+			original_tag = WKR
+		}
+	}
+
+	enable = {
+		tag = WKR
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		has_global_flag = ADISCORD_vorkerland_central_showdown_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
+		NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+		has_government = utilitarism
+		has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_rolling_front_coordinated }
+		has_war = yes
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = WKR }
+			NOT = { has_global_flag = ADISCORD_vorkerland_phase_central_showdown }
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+			has_global_flag = ADISCORD_vorkerland_central_war_finished
+			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+			NOT = { has_government = utilitarism }
+			NOT = { has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes } }
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_rolling_front_coordinated
+		}
+	}
+
+	ai_national_focuses = {
+		WKR_establish_front_operations_bureau
+		WKR_issue_normative_campaign_tables
+		WKR_form_rolling_factory_groups
+		WKR_reopen_night_freight_corridors
+		WKR_arm_the_mobile_reserve
+		WKR_coordinate_the_rolling_front
 	}
 
 	weight = { factor = 5 }

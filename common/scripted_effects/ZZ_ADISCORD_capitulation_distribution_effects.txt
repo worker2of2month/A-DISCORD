@@ -300,6 +300,8 @@ ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = {
 		if = { limit = { WKR = { exists = yes } } WKR = { ADISCORD_vorkerland_restore_premature_wrk_packages_to_wkr = yes } }
 		if = { limit = { VAD = { exists = yes } } VAD = { ADISCORD_vorkerland_restore_premature_wrk_packages_to_vad = yes } }
 		if = { limit = { TVA = { exists = yes } } TVA = { ADISCORD_vorkerland_restore_premature_wrk_packages_to_tva = yes } }
+		set_global_flag = ADISCORD_vorkerland_premature_wrk_subject_cleanup_active
+		WRK = { ADISCORD_vorkerland_release_losing_claimant_subjects = yes }
 		if = {
 			limit = { WRK = { exists = yes is_ai = no } }
 			change_tag_from = WRK
@@ -310,7 +312,31 @@ ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = {
 		}
 		set_global_flag = ADISCORD_vorkerland_premature_wrk_recovery_v1_completed
 		clr_global_flag = ADISCORD_vorkerland_premature_wrk_recovery_v1_failed
+		clr_global_flag = ADISCORD_vorkerland_premature_wrk_subject_cleanup_active
 		log = "[ADISCORD][VORKERLAND][RECOVERY] Premature WRK release dissolved after package-aware owner/controller repair."
+	}
+}
+
+# Run from the released subject's on_action scope when dormant WRK appeared as
+# its overlord. Only one living claimant receives the package-aware dissolve,
+# in a fixed priority order; the dissolve itself releases every other WRK
+# subject behind a same-tick recursion guard before annexing the false shell.
+ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = {
+	if = {
+		limit = { WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+		WKR = { ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = yes }
+	}
+	else_if = {
+		limit = { VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+		VAD = { ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = yes }
+	}
+	else_if = {
+		limit = { TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+		TVA = { ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = yes }
+	}
+	else = {
+		set_global_flag = ADISCORD_vorkerland_premature_wrk_recovery_v1_failed
+		log = "[ADISCORD][VORKERLAND][RECOVERY] Premature WRK subject relation had no living claimant receiver."
 	}
 }
 

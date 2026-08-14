@@ -95,7 +95,7 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
             VORKERLAND_THEATRE_VP_NAME_OVERRIDES[UNITY_TOWER_PROVINCE],
             UNITY_TOWER_NAME,
         )
-        self.assertEqual(VORKERLAND_THEATRE_PACKAGE_TOTALS["WKR"], 58)
+        self.assertEqual(VORKERLAND_THEATRE_PACKAGE_TOTALS["WKR"], 62)
 
         state = builder.state_path(UNITY_TOWER_STATE).read_text(encoding="utf-8-sig")
         self.assertIn("impassable = yes", state)

@@ -101,6 +101,33 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
         self.assertIn("character = WRK_VAD_Joint_Council", vad)
         self.assertIn("character = TVA_Dorian_Worx", tva)
 
+    def test_claimant_war_command_spirits_expire_before_formation_handoff(self) -> None:
+        contracts = {
+            "WKR": (
+                "ADISCORD_vorkerland_wkr_front_operations_bureau",
+                "ADISCORD_vorkerland_wkr_republican_mission_commands",
+                "ADISCORD_vorkerland_wkr_normative_campaign_tables",
+            ),
+            "VAD": (
+                "ADISCORD_vorkerland_vad_restoration_war_cabinet_2",
+                "ADISCORD_vorkerland_vad_dual_authority_protocol_2",
+            ),
+        }
+        for tag, ideas in contracts.items():
+            with self.subTest(tag=tag):
+                formation = named_block(
+                    self.effects,
+                    f"ADISCORD_vorkerland_form_wrk_from_{tag.lower()}",
+                )
+                source_scope = named_block(formation, tag)
+                for idea in ideas:
+                    token = f"remove_ideas = {idea}"
+                    self.assertIn(token, source_scope)
+                    self.assertLess(
+                        formation.index(token),
+                        formation.index(f"change_tag_from = {tag}"),
+                    )
+
     def test_phase_six_runs_all_three_formations_from_wrk_scope(self) -> None:
         phase_six = event_block(self.events, "ADISCORD_vorkerland_phase.6")
         self.assertEqual(

@@ -43,11 +43,17 @@ country_event = {
 				}
 			}
 		}
-		random_list = {
-			60 = { set_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
-			25 = { set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad }
-			10 = { set_global_flag = ADISCORD_vorkerland_worker_missing }
-			5 = { set_global_flag = ADISCORD_vorkerland_worker_killed }
+		if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }
+			set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+		}
+		else = {
+			random_list = {
+				60 = { set_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+				25 = { set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad }
+				10 = { set_global_flag = ADISCORD_vorkerland_worker_missing }
+				5 = { set_global_flag = ADISCORD_vorkerland_worker_killed }
+			}
 		}
 		ADISCORD_vorkerland_apply_initial_map = yes
 		ADISCORD_vorkerland_prepare_claimant_characters = yes
@@ -94,9 +100,15 @@ country_event = {
 		clr_global_flag = ADISCORD_vorkerland_preference_worker
 		clr_global_flag = ADISCORD_vorkerland_preference_joint
 		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
-		random_list = {
-			7 = { ADISCORD_vorkerland_form_joint_government = yes }
-			93 = { }
+		if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }
+			ADISCORD_vorkerland_form_joint_government = yes
+		}
+		else = {
+			random_list = {
+				7 = { ADISCORD_vorkerland_form_joint_government = yes }
+				93 = { }
+			}
 		}
 		WKR = {
 			inherit_technology = WRK
@@ -167,6 +179,10 @@ country_event = {
 		if = {
 			limit = { WKR = { exists = yes } }
 			WKR = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }
+		}
+		if = {
+			limit = { VAD = { exists = yes } }
+			VAD = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }
 		}
 		if = {
 			limit = { TVA = { exists = yes } }

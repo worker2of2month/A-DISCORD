@@ -102,8 +102,8 @@ country_event = {
             "RUS = { ADISCORD_vorkerland_apply_dirty_modifiers = yes }",
             "ADISCORD_vorkerland_set_phase_prewar = yes",
             "id = ADISCORD_vorkerland_phase.1",
-            "days = 120",
-            "random_days = 60",
+            "days = 175",
+            "random_days = 21",
         ):
             self.assertIn(token, startup)
         self.assertLess(
@@ -1539,6 +1539,10 @@ class FrontAndSupplyTests(unittest.TestCase):
             self.assertNotIn(f"tag = {excluded}", allowed)
         self.assertIn("autonomy_state = autonomy_district_in_Vorkerland", decision)
         self.assertIn("drop_cosmetic_tag = yes", decision)
+        self.assertIn("has_global_flag = ADISCORD_vorkerland_phase_postwar_integration", decision)
+        self.assertIn("has_global_flag = ADISCORD_vorkerland_reunification_verified", decision)
+        self.assertIn("owns_state = 32", decision)
+        self.assertIn("controls_state = 32", decision)
         on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
         self.assertNotIn("ADISCORD_vorkerland_northern_loyalist_district_restored", decisions + on_actions)
 
@@ -2045,11 +2049,11 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             self.assertIn(modifier, directorate)
         fanaticism = named_block(ideas, "ADISCORD_vorkerland_tva_ideological_fanaticism")
         for modifier in (
-            "surrender_limit = 0.25",
             "war_support_factor = 0.10",
             "army_org_regain = 0.05",
         ):
             self.assertIn(modifier, fanaticism)
+        self.assertNotIn("surrender_limit", fanaticism)
         state_36 = read("history/states/36-36.txt")
         self.assertRegex(state_36, r"victory_points\s*=\s*\{\s*12227\s+10\s*\}")
 

@@ -51,7 +51,22 @@ URBAN_TERRAIN = 13
 # These are existing combat-urban provinces whose complete graphical masks
 # were missing or partial.  Keeping the set explicit prevents a global
 # definition.csv-to-bitmap rewrite from swallowing intentional terrain blends.
-VORKERLAND_GRAPHICAL_URBAN_PROVINCES = frozenset({16616, 16635, 8803, 16642})
+VORKERLAND_GRAPHICAL_URBAN_PROVINCES = frozenset(
+    {
+        4443,   # Remmel
+        6192,   # Isaiah
+        8243,   # Old Isaiah
+        8803,   # Verkhovye
+        11944,  # Sutritsa
+        12443,  # Kairholm
+        16560,  # Severin
+        16593,  # Zatern
+        16616,  # Old Zshat
+        16635,  # Lower Orvin
+        16640,  # East Orvin
+        16642,  # Ostvin
+    }
+)
 
 
 def classify_terrain(terrain: int, y: int, height: int) -> int:

@@ -445,15 +445,15 @@ VORKERLAND_INITIAL_MAP_LEGACY_PROFILES = {
     37: {"population": 3_200_000, "category": "large_city", "infrastructure": 5, "civilian": 6, "supplies": 5.0},
     38: {"population": 3_713_333, "category": "metropolis", "infrastructure": 5, "civilian": 6, "military": 2, "air_base": 2, "supplies": 6.0, "custom_buildings": {"ADISCORD_rare_components_plant": 1}},
     39: {"population": 7_413_333, "category": "metropolis", "infrastructure": 5, "civilian": 2, "military": 7, "supplies": 7.0},
-    75: {"population": 8_000_000, "category": "megalopolis", "infrastructure": 5, "civilian": 5, "military": 3, "air_base": 3, "supplies": 8.0},
+    75: {"population": 9_500_000, "category": "megalopolis", "infrastructure": 5, "civilian": 5, "military": 3, "air_base": 3, "supplies": 8.0},
     79: {"population": 1_200_000, "category": "large_town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.0, "custom_buildings": {"ADISCORD_rare_alloy_foundry": 1}},
     81: {"population": 2_200_000, "category": "large_city", "infrastructure": 5, "civilian": 3, "military": 2, "air_base": 2, "supplies": 5.0},
     82: {"population": 800_000, "category": "town", "infrastructure": 2, "civilian": 1, "military": 1, "supplies": 4.0},
     102: {"population": 11_500_000, "category": "megalopolis", "infrastructure": 5, "civilian": 7, "military": 5, "air_base": 3, "supplies": 10.0},
     104: {"population": 3_500_000, "category": "metropolis", "infrastructure": 4, "civilian": 4, "military": 2, "air_base": 2, "supplies": 6.0},
     105: {"population": 9_800_000, "category": "megalopolis", "infrastructure": 5, "civilian": 6, "military": 4, "air_base": 3, "supplies": 10.0, "custom_buildings": {"ADISCORD_techlar_metallurgical_combine": 1, "ADISCORD_industrial_cluster": 1}},
-    106: {"population": 3_000_000, "category": "large_city", "infrastructure": 4, "civilian": 3, "military": 2, "air_base": 2, "supplies": 5.0},
-    107: {"population": 700_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
+    106: {"population": 3_800_000, "category": "large_city", "infrastructure": 4, "civilian": 3, "military": 2, "air_base": 2, "supplies": 5.0},
+    107: {"population": 1_200_000, "category": "town", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
     108: {"population": 650_000, "category": "rural", "infrastructure": 3, "civilian": 1, "supplies": 2.5},
     109: {"population": 900_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
     110: {"population": 1_500_000, "category": "large_town", "infrastructure": 4, "civilian": 3, "military": 1, "air_base": 1, "supplies": 4.5},
@@ -467,12 +467,12 @@ VORKERLAND_INITIAL_MAP_LEGACY_PROFILES = {
     # States 118-120 are now owned by the Ainholm mandate/Orval setup. Their
     # complete profiles belong to build_adiscord_ainholm_mandate.py; keeping
     # old theatre defaults here would silently overwrite that generator.
-    121: {"population": 2_400_000, "category": "large_city", "infrastructure": 4, "civilian": 3, "military": 2, "supplies": 5.0},
+    121: {"population": 3_000_000, "category": "large_city", "infrastructure": 4, "civilian": 3, "military": 2, "supplies": 5.0},
     122: {"population": 1_500_000, "category": "large_town", "infrastructure": 4, "civilian": 2, "military": 1, "supplies": 4.0},
     123: {"population": 2_400_000, "category": "large_city", "infrastructure": 4, "civilian": 3, "military": 2, "supplies": 5.0},
     124: {"population": 650_000, "category": "rural", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 2.5},
-    200: {"population": 700_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.0},
-    201: {"population": 800_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.0},
+    200: {"population": 700_000, "category": "town", "infrastructure": 2, "civilian": 1, "supplies": 2.0},
+    201: {"population": 800_000, "category": "town", "infrastructure": 2, "civilian": 1, "supplies": 2.0},
     202: {"population": 650_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.0},
 }
 

@@ -12,6 +12,8 @@ import re
 import sys
 from pathlib import Path
 
+from PIL import Image
+
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -32,6 +34,10 @@ COLLAPSE_AI = Path("common/ai_strategy/ADISCORD_vorkerland_collapse_ai.txt")
 WKR_AI_PLANS = Path(
     "common/ai_strategy_plans/ADISCORD_vorkerland_wkr_wartime_plan.txt"
 )
+COUNTRY_COSMETICS = Path("common/countries/cosmetic.txt")
+DIPLOMACY_ENGLISH = Path("localisation/english/ADISCORD_vorkerland_diplomacy_l_english.yml")
+DIPLOMACY_RUSSIAN = Path("localisation/russian/ADISCORD_vorkerland_diplomacy_l_russian.yml")
+EVENT_ID_REGISTRY = Path("tools/data/adiscord_event_ids.json")
 
 SOLAR_STATES = (76, 104, 198, 307, 310)
 VOLNOGRAD_STATES = (74, 105, 197, 311, 312, 313, 314)
@@ -107,6 +113,11 @@ WKR_INTERVENTION_BORDER = "ADISCORD_vorkerland_wkr_has_solyarino_intervention_bo
 WKR_INTERVENTION = "ADISCORD_vorkerland_attempt_wkr_solyarino_intervention"
 VERIFY_WKR_INTERVENTION = "ADISCORD_vorkerland_verify_wkr_solyarino_intervention"
 CLEAR_WKR_INTERVENTION = "ADISCORD_vorkerland_clear_wkr_solyarino_intervention"
+WKR_OUTCOME_TRIGGER = "ADISCORD_vorkerland_wkr_solyarino_target_wars_finished"
+QUEUE_WKR_OUTCOME = "ADISCORD_vorkerland_queue_wkr_solyarino_outcome_check"
+CHECK_WKR_OUTCOME = "ADISCORD_vorkerland_check_wkr_solyarino_outcome"
+MATERIALIZE_WKR_PROTECTORATE = "ADISCORD_vorkerland_materialize_sol_worker_protectorate"
+VERIFY_WKR_PROTECTORATE = "ADISCORD_vorkerland_verify_sol_worker_protectorate"
 WKR_AIR_BOOTSTRAP = "ADISCORD_vorkerland_bootstrap_wkr_air_sustainment"
 WKR_DYNAMIC_FORTS = "ADISCORD_vorkerland_build_wkr_live_frontline_fortifications"
 
@@ -1154,6 +1165,12 @@ def validate_wkr_solyarino_intervention() -> list[str]:
     focus_source = _load(FOCUS_FILE, issues)
     ai = _load(COLLAPSE_AI, issues)
     plans = _load(WKR_AI_PLANS, issues)
+    phase_effects = _load(PHASE_EFFECTS, issues)
+    phase_events = _load(PHASE_EVENTS, issues)
+    cosmetics = _load(COUNTRY_COSMETICS, issues)
+    english = _load(DIPLOMACY_ENGLISH, issues)
+    russian = _load(DIPLOMACY_RUSSIAN, issues)
+    event_registry = _load(EVENT_ID_REGISTRY, issues)
     if issues:
         return issues
 
@@ -1209,6 +1226,8 @@ def validate_wkr_solyarino_intervention() -> list[str]:
     for token in (
         "cost = 3",
         "focus = WKR_rehearse_operation_southbound",
+        "has_global_flag = ADISCORD_vorkerland_phase_central_preparation",
+        "has_global_flag = ADISCORD_vorkerland_phase_central_showdown",
         "ADISCORD_vorkerland_wkr_has_valid_solyarino_target = yes",
         f"{WKR_INTERVENTION_BORDER} = yes",
         f"{WKR_INTERVENTION} = yes",
@@ -1220,6 +1239,14 @@ def validate_wkr_solyarino_intervention() -> list[str]:
     for forbidden in ("declare_war_on", "every_country", "random_country"):
         if forbidden in terminal:
             issues.append(f"WKR Solarino focus must delegate world effects; found {forbidden}")
+    for stale_gate in (
+        "NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted }",
+    ):
+        if stale_gate in terminal:
+            issues.append(f"WKR Solarino focus still blocks the live-showdown route: {stale_gate}")
 
     attempt = _unique_block(effects, WKR_INTERVENTION, "WKR intervention effect", issues)
     for token in (
@@ -1227,6 +1254,7 @@ def validate_wkr_solyarino_intervention() -> list[str]:
         "is_subject = no",
         "NOT = { has_capitulated = yes }",
         "has_global_flag = ADISCORD_vorkerland_phase_central_preparation",
+        "has_global_flag = ADISCORD_vorkerland_phase_central_showdown",
         f"{WKR_INTERVENTION_BORDER} = yes",
         "set_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active",
         "set_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_pending",
@@ -1245,6 +1273,17 @@ def validate_wkr_solyarino_intervention() -> list[str]:
         ):
             if token not in attempt:
                 issues.append(f"{WKR_INTERVENTION} lacks {tag} declaration token {token}")
+    for forbidden in (
+        "NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted }",
+        "NOT = { has_war = yes }",
+        "NOT = { has_war_with = VAD }",
+        "declare_war_on = { target = VAD",
+    ):
+        if forbidden in attempt:
+            issues.append(f"{WKR_INTERVENTION} must remain usable during the VAD war: {forbidden}")
 
     verify = _unique_block(
         effects, VERIFY_WKR_INTERVENTION, "WKR intervention verifier", issues
@@ -1270,12 +1309,14 @@ def validate_wkr_solyarino_intervention() -> list[str]:
     )
     for token in (
         "clr_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active",
-        "NOT = { has_war_with = SOL }",
-        "NOT = { has_war_with = SRA }",
-        "NOT = { has_war_with = CSL }",
+        "has_country_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_failed",
+        "has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_failed",
+        "ADISCORD_vorkerland_begin_reunification = yes",
     ):
         if token not in cleanup:
-            issues.append(f"{CLEAR_WKR_INTERVENTION} lacks war-aware cleanup token {token}")
+            issues.append(f"{CLEAR_WKR_INTERVENTION} lacks terminal cleanup token {token}")
+    if "ADISCORD_vorkerland_wkr_solyarino_target_wars_finished = yes" in cleanup:
+        issues.append("WKR cleanup must not erase a successful peace before the outcome verifier")
 
     for event_id, retry_token, effect_name in (
         (
@@ -1287,11 +1328,6 @@ def validate_wkr_solyarino_intervention() -> list[str]:
             "ADISCORD_vorkerland_diplomacy.11",
             "has_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_retry",
             VERIFY_WKR_INTERVENTION,
-        ),
-        (
-            "ADISCORD_vorkerland_diplomacy.12",
-            "has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active",
-            CLEAR_WKR_INTERVENTION,
         ),
     ):
         block = event_block(events, event_id)
@@ -1305,12 +1341,261 @@ def validate_wkr_solyarino_intervention() -> list[str]:
             if token not in block:
                 issues.append(f"{event_id} lacks bounded event token {token}")
 
+    outcome_trigger = _unique_block(
+        triggers, WKR_OUTCOME_TRIGGER, "WKR intervention terminal trigger", issues
+    )
+    for tag in ("sol", "sra", "csl"):
+        upper = tag.upper()
+        for token in (
+            f"has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_{tag}",
+            f"NOT = {{ country_exists = {upper} }}",
+            f"NOT = {{ has_war_with = {upper} }}",
+        ):
+            if token not in outcome_trigger:
+                issues.append(f"{WKR_OUTCOME_TRIGGER} lacks {upper} terminal token {token}")
+    for forbidden in ("has_capitulated = yes", "is_subject = yes"):
+        if forbidden in outcome_trigger:
+            issues.append(
+                f"{WKR_OUTCOME_TRIGGER} must wait for each exact war edge, not accept {forbidden}"
+            )
+
+    queue = _unique_block(effects, QUEUE_WKR_OUTCOME, "WKR outcome queue", issues)
     for token in (
-        "ADISCORD_vorkerland_diplomacy.12 days = 1",
+        "tag = WKR",
+        "has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active",
+        "NOT = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_outcome_check_pending }",
+        "set_country_flag = ADISCORD_vorkerland_wkr_solyarino_outcome_check_pending",
+        "country_event = { id = ADISCORD_vorkerland_diplomacy.12 days = 1 }",
+    ):
+        if token not in queue:
+            issues.append(f"{QUEUE_WKR_OUTCOME} lacks bounded queue token {token}")
+
+    on_capitulation = named_block(on_actions, "on_capitulation")
+    on_peace = named_block(on_actions, "on_peace")
+    settlement = next(
+        (
+            block
+            for block in named_blocks(on_capitulation, "if")
+            if "ADISCORD_vorkerland_wkr_solyarino_intervention_active" in block
+            and "set_global_flag = skip_default_capitulation" in block
+            and "tag = WKR" in block
+        ),
+        "",
+    )
+    settlement_compact = compact(settlement)
+    for token in (
+        "FROM = { tag = WKR NOT = { has_capitulated = yes } }",
+        "has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sol",
+        "has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sra",
+        "has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_csl",
+        "limit = { ROOT = { tag = SOL } }",
+        "target_country = WKR",
+        "character = WRK_Richard_Gordon",
+        "set_country_flag = ADISCORD_vorkerland_wkr_solyarino_gordon_carried",
+        "set_global_flag = skip_default_capitulation",
+        "annex_country = { target = ROOT transfer_troops = no }",
+        f"{QUEUE_WKR_OUTCOME} = yes",
+    ):
+        if token not in settlement_compact:
+            issues.append(f"WKR Solarino capitulation settlement lacks {token}")
+    carry_to_wkr = settlement_compact.find("target_country = WKR")
+    annex_sol_shell = settlement_compact.find(
+        "annex_country = { target = ROOT transfer_troops = no }"
+    )
+    if carry_to_wkr < 0 or annex_sol_shell < 0 or carry_to_wkr >= annex_sol_shell:
+        issues.append(
+            "WKR Solarino capitulation must carry Richard Gordon from SOL to WKR "
+            "before annexing the SOL shell"
+        )
+    if f"{QUEUE_WKR_OUTCOME} = yes" not in on_peace:
+        issues.append("on_peace must queue the bounded WKR Solarino outcome check")
+    puppet_hook = named_block(on_actions, "on_puppet")
+    if f"{CLEAR_WKR_INTERVENTION} = yes" not in puppet_hook:
+        issues.append("on_puppet must unwind an invalid WKR Solarino operation owner")
+
+    outcome_event = event_block(events, "ADISCORD_vorkerland_diplomacy.12")
+    for token in (
+        "hidden = yes",
+        "is_triggered_only = yes",
+        "tag = WKR",
+        "has_country_flag = ADISCORD_vorkerland_wkr_solyarino_outcome_check_pending",
+        f"{CHECK_WKR_OUTCOME} = yes",
+    ):
+        if token not in outcome_event:
+            issues.append(f"ADISCORD_vorkerland_diplomacy.12 lacks outcome token {token}")
+
+    outcome = _unique_block(effects, CHECK_WKR_OUTCOME, "WKR outcome verifier", issues)
+    for token in (
+        f"{WKR_OUTCOME_TRIGGER} = yes",
+        "set_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending",
+        "country_event = { id = ADISCORD_vorkerland_diplomacy.13 days = 1 }",
+        "set_country_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_failed",
+        "set_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_failed",
         f"{CLEAR_WKR_INTERVENTION} = yes",
     ):
-        if token not in on_actions:
-            issues.append(f"WKR intervention on_actions lack live lifecycle token {token}")
+        if token not in outcome:
+            issues.append(f"{CHECK_WKR_OUTCOME} lacks terminal outcome token {token}")
+    for state in SOLAR_STATES:
+        if not _assignment(outcome, "owns_state", str(state)) or not _assignment(
+            outcome, "controls_state", str(state)
+        ):
+            issues.append(f"{CHECK_WKR_OUTCOME} must prove WKR ownership/control of state {state}")
+
+    materialize = _unique_block(
+        effects, MATERIALIZE_WKR_PROTECTORATE, "SOL worker protectorate materializer", issues
+    )
+    materialize_compact = compact(materialize)
+    for state in SOLAR_STATES:
+        if not _assignment(materialize, "owns_state", str(state)) or not _assignment(
+            materialize, "controls_state", str(state)
+        ):
+            issues.append(f"{MATERIALIZE_WKR_PROTECTORATE} must require state {state}")
+        if not re.search(rf"\btransfer_state\s*=\s*{state}\b", materialize):
+            issues.append(f"{MATERIALIZE_WKR_PROTECTORATE} must transfer state {state} to SOL")
+        if not _state_block_has(materialize, state, (("add_core_of", "SOL"),)):
+            issues.append(f"{MATERIALIZE_WKR_PROTECTORATE} must add the SOL core to state {state}")
+    for token in (
+        "tag = WKR",
+        "NOT = { country_exists = SOL }",
+        "release_autonomy = { target = SOL autonomy_state = autonomy_district_in_Vorkerland",
+        "puppet = SOL",
+        "set_autonomy = { target = SOL autonomy_state = autonomy_district_in_Vorkerland freedom_level = 0.10 }",
+        "set_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_fresh_release",
+        "target_country = WKR",
+        "target_country = SOL",
+        "character = WRK_Richard_Gordon",
+        "set_country_flag = ADISCORD_vorkerland_wkr_solyarino_gordon_carried",
+        "set_country_flag = ADISCORD_vorkerland_wkr_solyarino_gordon_returned",
+        "set_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized",
+        "set_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialization_retry",
+        "country_event = { id = ADISCORD_vorkerland_diplomacy.14 days = 1 }",
+        "country_event = { id = ADISCORD_vorkerland_diplomacy.15 days = 1 }",
+        "set_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_failed",
+    ):
+        if token not in materialize_compact:
+            issues.append(f"{MATERIALIZE_WKR_PROTECTORATE} lacks bounded materialization token {token}")
+    recover_gordon = materialize_compact.find("target_country = WKR")
+    return_gordon = materialize_compact.find("target_country = SOL")
+    queue_verification = materialize_compact.find(
+        "country_event = { id = ADISCORD_vorkerland_diplomacy.15 days = 1 }"
+    )
+    if not (
+        0 <= recover_gordon < return_gordon < queue_verification
+    ):
+        issues.append(
+            "SOL worker protectorate materialization must recover Gordon to WKR, "
+            "return him to the released SOL shell, then queue verification"
+        )
+    if "set_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verified" in materialize:
+        issues.append("SOL worker protectorate materializer must not declare success before verification")
+
+    protectorate_verify = _unique_block(
+        effects, VERIFY_WKR_PROTECTORATE, "SOL worker protectorate verifier", issues
+    )
+    protectorate_verify_compact = compact(protectorate_verify)
+    sol_scope = named_block(named_block(protectorate_verify, "limit"), "SOL")
+    for state in SOLAR_STATES:
+        if not _assignment(sol_scope, "owns_state", str(state)) or not _assignment(
+            sol_scope, "controls_state", str(state)
+        ):
+            issues.append(f"{VERIFY_WKR_PROTECTORATE} must verify SOL state {state}")
+    for token in (
+        "is_subject_of = WKR",
+        "has_country_flag = ADISCORD_vorkerland_wkr_solyarino_gordon_returned",
+        "has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_fresh_release",
+        "NOT = { has_country_flag = ADISCORD_vorkerland_sol_worker_protectorate_initialized }",
+        "ADISCORD_grant_2150_technology_baseline = yes",
+        "ADISCORD_grant_technology_profile_fragment_low_tech = yes",
+        "ADISCORD_economy_initialize_country = yes",
+        'load_oob = "SOL"',
+        "set_capital = { state = 76 }",
+        "ruling_party = pragmatism",
+        "character = WRK_Richard_Gordon",
+        "set_cosmetic_tag = SOL_vorkerland_worker_protectorate",
+        "set_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verified",
+        "set_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verify_retry",
+        "country_event = { id = ADISCORD_vorkerland_diplomacy.16 days = 1 }",
+        "ADISCORD_vorkerland_begin_reunification = yes",
+    ):
+        if token not in protectorate_verify_compact:
+            issues.append(f"{VERIFY_WKR_PROTECTORATE} lacks postcondition token {token}")
+    if protectorate_verify.count('load_oob = "SOL"') != 1:
+        issues.append("SOL worker protectorate must load its OOB exactly once behind fresh-release guard")
+    gordon_returned = protectorate_verify_compact.find(
+        "has_country_flag = ADISCORD_vorkerland_wkr_solyarino_gordon_returned"
+    )
+    promote_gordon = protectorate_verify_compact.find(
+        "promote_character = { character = WRK_Richard_Gordon"
+    )
+    if gordon_returned < 0 or promote_gordon < 0 or gordon_returned >= promote_gordon:
+        issues.append(
+            "SOL worker protectorate verification must prove Gordon returned before promotion"
+        )
+
+    for event_id, retry_token, effect_name in (
+        ("ADISCORD_vorkerland_diplomacy.13", "NOT = { has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialization_retry }", MATERIALIZE_WKR_PROTECTORATE),
+        ("ADISCORD_vorkerland_diplomacy.14", "has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialization_retry", MATERIALIZE_WKR_PROTECTORATE),
+        ("ADISCORD_vorkerland_diplomacy.15", "NOT = { has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verify_retry }", VERIFY_WKR_PROTECTORATE),
+        ("ADISCORD_vorkerland_diplomacy.16", "has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verify_retry", VERIFY_WKR_PROTECTORATE),
+    ):
+        block = event_block(events, event_id)
+        for token in (
+            "hidden = yes",
+            "is_triggered_only = yes",
+            "tag = WKR",
+            retry_token,
+            f"{effect_name} = yes",
+        ):
+            if token not in block:
+                issues.append(f"{event_id} lacks bounded protectorate token {token}")
+
+    begin_reunification = named_block(phase_effects, "ADISCORD_vorkerland_begin_reunification")
+    phase_six = event_block(phase_events, "ADISCORD_vorkerland_phase.6")
+    phase_active_gate = (
+        "NOT = { has_global_flag = "
+        "ADISCORD_vorkerland_wkr_solyarino_intervention_active }"
+    )
+    if phase_active_gate not in begin_reunification or phase_active_gate not in phase_six:
+        issues.append("reunification queue and phase.6 must both wait for WKR Solarino resolution")
+    formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr")
+    for token in (
+        "has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verified",
+        "autonomy_state = autonomy_free",
+        "puppet = SOL",
+        "autonomy_state = autonomy_district_in_Vorkerland",
+        "set_cosmetic_tag = SOL_vorkerland_worker_protectorate",
+        "set_country_flag = ADISCORD_vorkerland_sol_worker_protectorate_rebound_to_wrk",
+    ):
+        if token not in formation:
+            issues.append(f"WKR-to-WRK formation does not preserve the SOL protectorate: {token}")
+
+    cosmetic = named_block(cosmetics, "SOL_vorkerland_worker_protectorate")
+    if "color = rgb" not in cosmetic or "color_ui = rgb" not in cosmetic:
+        issues.append("SOL worker protectorate cosmetic tag lacks map/UI colours")
+    for directory, size in (("", (82, 52)), ("medium", (41, 26)), ("small", (10, 7))):
+        flag_path = ROOT / "gfx" / "flags" / directory / "SOL_vorkerland_worker_protectorate.tga"
+        if not flag_path.is_file():
+            issues.append(f"SOL worker protectorate flag is missing: {flag_path.relative_to(ROOT)}")
+            continue
+        try:
+            with Image.open(flag_path) as image:
+                if image.size != size:
+                    issues.append(
+                        f"SOL worker protectorate flag {flag_path.relative_to(ROOT)} "
+                        f"has {image.size}, expected {size}"
+                    )
+        except OSError as exc:
+            issues.append(f"cannot read SOL worker protectorate flag: {exc}")
+    for source, label in ((english, "English"), (russian, "Russian")):
+        for suffix in ("", "_DEF", "_ADJ"):
+            if f"SOL_vorkerland_worker_protectorate{suffix}:" not in source:
+                issues.append(f"{label} SOL worker protectorate localisation lacks {suffix or 'name'}")
+    if not (ROOT / DIPLOMACY_RUSSIAN).read_bytes().startswith(b"\xef\xbb\xbf"):
+        issues.append("Russian diplomacy localisation lost its UTF-8 BOM")
+    for number in range(13, 17):
+        if f'"id": "ADISCORD_vorkerland_diplomacy.{number}"' not in event_registry:
+            issues.append(f"event registry lacks ADISCORD_vorkerland_diplomacy.{number}")
+
     for forbidden in (
         "ADISCORD_vorkerland_diplomacy.10 days = 1",
         "ADISCORD_vorkerland_diplomacy.11 days = 1",
@@ -1433,6 +1718,7 @@ def validate_wkr_solyarino_intervention() -> list[str]:
                 issues.append(f"WKR core focus plan omits {token}")
     for token in (
         "has_global_flag = ADISCORD_vorkerland_phase_central_preparation",
+        "has_global_flag = ADISCORD_vorkerland_phase_central_showdown",
         "has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked",
         f"{WKR_INTERVENTION_BORDER} = yes",
         "ADISCORD_vorkerland_wkr_has_valid_solyarino_target = yes",
@@ -1440,8 +1726,30 @@ def validate_wkr_solyarino_intervention() -> list[str]:
     ):
         if token not in operation_plan:
             issues.append(f"WKR intervention focus plan omits {token}")
+    for stale_gate in (
+        "has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested",
+        "has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized",
+        "has_global_flag = ADISCORD_vorkerland_central_showdown_started",
+        "has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted",
+    ):
+        if stale_gate in operation_plan:
+            issues.append(f"WKR intervention AI plan still aborts for live showdown state: {stale_gate}")
 
-    new_contract = "\n".join((attempt, verify, cleanup, air, forts))
+    new_contract = "\n".join(
+        (
+            attempt,
+            verify,
+            cleanup,
+            queue,
+            outcome,
+            materialize,
+            protectorate_verify,
+            settlement,
+            outcome_event,
+            air,
+            forts,
+        )
+    )
     for forbidden in (
         "every_country",
         "random_country",
@@ -1483,8 +1791,8 @@ def main() -> int:
     print(
         "A-Discord Vorkerland diplomacy validation passed: exact regional winners, "
         "bounded peaceful invitations, reachable SOL restoration, shared-showdown "
-        "allies/counter-intervention, bounded WKR Solarino intervention, and independent "
-        "WRK core packages are coherent."
+        "allies/counter-intervention, bounded WKR Solarino worker protectorate, and "
+        "independent WRK core packages are coherent."
     )
     return 0
 

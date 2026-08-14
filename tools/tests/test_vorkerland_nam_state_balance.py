@@ -740,6 +740,53 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
                 self.assertGreater(int(scalar(source, "manpower")), 0)
                 self.assertGreater(float(scalar(source, "local_supplies")), 0.0)
 
+    def test_vad_population_and_wkr_regional_city_contracts(self) -> None:
+        vad_populations = {
+            75: 9_500_000,
+            106: 3_800_000,
+            107: 1_200_000,
+            121: 3_000_000,
+        }
+        self.assertEqual(sum(vad_populations.values()), 17_500_000)
+        for state_id, expected_population in vad_populations.items():
+            with self.subTest(vad_state=state_id):
+                self.assertEqual(
+                    int(scalar(state_source(state_id), "manpower")),
+                    expected_population,
+                )
+        expected_support_packages = {
+            75: (5, 5, 3, 8.0),
+            106: (3, 2, 2, 5.0),
+            107: (1, 0, 0, 2.5),
+            121: (3, 2, 0, 5.0),
+        }
+        for state_id, (civilian, military, air_base, supplies) in expected_support_packages.items():
+            with self.subTest(vad_support_state=state_id):
+                source = state_source(state_id)
+                self.assertEqual(building_level(source, "industrial_complex"), civilian)
+                self.assertEqual(building_level(source, "arms_factory"), military)
+                self.assertEqual(building_level(source, "air_base"), air_base)
+                self.assertEqual(float(scalar(source, "local_supplies")), supplies)
+        self.assertEqual(scalar(state_source(107), "state_category"), "town")
+
+        for state_id, province_id, name in (
+            (200, 4443, "Реммель"),
+            (201, 12443, "Кайрхольм"),
+        ):
+            with self.subTest(wkr_state=state_id):
+                self.assertEqual(scalar(state_source(state_id), "state_category"), "town")
+                self.assertEqual(
+                    VORKERLAND_THEATRE_VICTORY_POINTS[state_id],
+                    ((province_id, 2),),
+                )
+                self.assertEqual(
+                    VORKERLAND_THEATRE_VP_NAME_OVERRIDES[province_id],
+                    name,
+                )
+                self.assertEqual(building_level(state_source(state_id), "industrial_complex"), 1)
+                self.assertEqual(building_level(state_source(state_id), "arms_factory"), 0)
+                self.assertEqual(float(scalar(state_source(state_id), "local_supplies")), 2.0)
+
     def test_central_sloboda_and_techlar_are_real_cities(self) -> None:
         central = state_source(104)
         techlar = state_source(105)
