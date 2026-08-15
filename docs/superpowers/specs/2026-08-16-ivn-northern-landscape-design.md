@@ -144,6 +144,12 @@ The splitter must prove all of the following before apply:
   generated map-building output is resynchronized;
 - each new land province receives deterministic valid entries in
   `map/unitstacks.txt`, with its primary anchor placed on an interior pixel;
+- existing unitstack rows whose coordinates fall outside their retained city
+  core are deterministically repositioned to interior core pixels while their
+  province ID, position kind, rotation, and scale metadata remain unchanged;
+- province `6905` receives a new low-slope coastal presentation anchor because
+  its former anchor lies on the height-175 summit; this moves no VP, OOB,
+  building, port, railway, or supply reference;
 - the strategic-region owner regenerates region 6 so every new province ID is
   assigned to the same air region as its source state;
 - the final province bitmap has a new exact SHA-256 regression contract and a
