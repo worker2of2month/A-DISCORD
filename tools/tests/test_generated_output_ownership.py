@@ -40,6 +40,7 @@ REQUIRED_FAMILIES = {
     "state_history",
     "northern_countries",
     "outer_states",
+    "party_texticons",
     "remainder_states",
     "resource_assets",
     "strategic_regions",

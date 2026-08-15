@@ -23,6 +23,7 @@
     "technology_system",
     "doctrine_system",
     "val_operations_map",
+    "party_texticons",
     "vorkerland_flags"
   ],
   "families": [
@@ -688,6 +689,39 @@
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_val_operations_map"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_val_operations_map", "--apply"],
       "may_delete_outputs": true,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "party_texticons",
+      "owner_module": "tools.builders.build_adiscord_party_texticons",
+      "output_globs": [
+        "gfx/texticons/adiscord/parties/IVN/IVN_roar_of_freedom_party.png",
+        "gfx/texticons/adiscord/parties/IVN/IVN_emergency_committee_party.png",
+        "gfx/texticons/adiscord/parties/TVA/TVA_wartime_technocratic_worker_party.png",
+        "gfx/texticons/adiscord/parties/VAD/VAD_vorkerland_imperial_party.png",
+        "gfx/texticons/adiscord/parties/ZAO/ZAO_independent_party.png",
+        "gfx/texticons/adiscord/parties/PWR/PWR_independent_party.png",
+        "gfx/texticons/adiscord/parties/VLA/VLA_independent_party.png",
+        "gfx/texticons/adiscord/parties/ROM/ROM_independent_party.png",
+        "gfx/texticons/adiscord/parties/SOL/SOL_independent_party.png",
+        "gfx/texticons/adiscord/parties/TRU/TRU_independent_party.png"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_party_texticons.py",
+        "tools/assets/source/party_texticons/IVN_roar_of_freedom_source.png",
+        "tools/assets/source/party_texticons/IVN_emergency_committee_source.png",
+        "tools/assets/source/party_texticons/TVA_wartime_technocratic_worker_source.png",
+        "tools/assets/source/party_texticons/VAD_vorkerland_imperial_source.png",
+        "tools/assets/source/party_texticons/ZAO_independent_party_source.png",
+        "tools/assets/source/party_texticons/PWR_independent_party_source.png",
+        "tools/assets/source/party_texticons/VLA_independent_party_source.png",
+        "tools/assets/source/party_texticons/ROM_independent_party_source.png",
+        "tools/assets/source/party_texticons/SOL_independent_party_source.png",
+        "tools/assets/source/party_texticons/TRU_independent_party_source.png"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_party_texticons"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_party_texticons", "--apply"],
+      "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },
     {
