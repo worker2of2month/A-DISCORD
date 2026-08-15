@@ -4,6 +4,19 @@
 **Status:** Approved direction; implementation plan pending user review
 **Selected approach:** Deterministic, scoped landscape generation
 
+## Province-editor handoff amendment
+
+The automated nine-city province split was withdrawn at the user's request.
+`map/provinces.bmp`, `map/unitstacks.txt`, and `map/buildings.txt` remain at the
+pre-split repository geometry. The user will author the province cuts in the
+map editor and provide that result for a later synchronization pass.
+
+Until that handoff, the active landscape pass must not write province geometry,
+unitstack positions, building positions, reserved province IDs, state
+membership, or strategic-region membership. The current generated urban
+terrain footprints may remain in `map/terrain.bmp`; height, normals, terrain,
+and trees may still be refined against the unsplit province map.
+
 ## Goal
 
 Give the IIA island a readable three-dimensional landform, expand northern
