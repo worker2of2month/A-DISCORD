@@ -122,6 +122,7 @@ country_event = {
 			ADISCORD_vorkerland_teardown_confederation = yes
 			ADISCORD_vorkerland_align_wtd_with_worx = yes
 			ADISCORD_vorkerland_apply_claimant_cosmetics = yes
+			ADISCORD_vorkerland_sync_all_party_identities = yes
 			ADISCORD_vorkerland_repair_claimant_identities = yes
 			focus_unlock = yes
 			mark_focus_tree_layout_dirty = yes

@@ -106,4 +106,7 @@ set_autonomy = {
 	autonomous_state = autonomy_vorkerland_sanitary_gate
 }
 
+# Party texticons are initialized only while country history creates a fresh campaign.
+ADISCORD_vorkerland_sync_all_party_identities = yes
+
 set_convoys = 533

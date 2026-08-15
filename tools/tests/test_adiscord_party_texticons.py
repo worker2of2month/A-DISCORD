@@ -24,6 +24,21 @@ def read(relative: str) -> str:
     return (ROOT / relative).read_text(encoding="utf-8-sig")
 
 
+def named_block(text: str, name: str) -> str:
+    match = re.search(rf"(?m)^\s*{re.escape(name)}\s*=\s*\{{", text)
+    if match is None:
+        raise AssertionError(f"missing block {name}")
+    depth = 0
+    for index in range(match.end() - 1, len(text)):
+        if text[index] == "{":
+            depth += 1
+        elif text[index] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[match.start():index + 1]
+    raise AssertionError(f"unclosed block {name}")
+
+
 class PartyTexticonContractTests(unittest.TestCase):
     def test_all_new_sprites_resolve_to_generated_icons(self) -> None:
         gfx = read("interface/parties_texticons.gfx")
@@ -76,6 +91,37 @@ class PartyTexticonContractTests(unittest.TestCase):
             "localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml",
         ):
             self.assertTrue((ROOT / relative).read_bytes().startswith(b"\xef\xbb\xbf"), relative)
+
+
+class PartyIdentityLifecycleTests(unittest.TestCase):
+    def test_sync_effect_covers_exact_successors_and_never_changes_politics(self) -> None:
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_party_identity_effects.txt")
+        sync = named_block(effects, "ADISCORD_vorkerland_sync_party_identity")
+        self.assertEqual(set(re.findall(r"\btag\s*=\s*([A-Z]{3})", sync)), {"VAD", "ZAO", "PWR", "VLA", "ROM", "SOL", "TRU"})
+        self.assertIn("OR = { is_subject_of = WRK is_subject_of = WKR }", sync)
+        self.assertIn("has_global_flag = ADISCORD_vorkerland_collapse_started", sync)
+        for ideology in ("pragmatism", "technocracy", "etatism", "chauvinism"):
+            self.assertIn(f"ideology = {ideology}", sync)
+        for forbidden in ("set_politics", "set_popularities", "add_popularity", "elections_allowed", "promote_character", "country_leader"):
+            self.assertNotIn(forbidden, sync)
+        self.assertNotIn("tag = NAM", sync)
+        self.assertNotIn("tag = DAN", sync)
+
+    def test_fresh_collapse_and_autonomy_entry_points_are_bounded(self) -> None:
+        history = read("history/countries/WRK - WorkerLand.txt")
+        events = read("events/ADISCORD_vorkerland_collapse_events.txt")
+        on_actions = read("common/on_actions/05_ADISCORD_vorkerland_party_identity_on_actions.txt")
+        self.assertIn("ADISCORD_vorkerland_sync_all_party_identities = yes", history)
+        apply_cosmetics = events.index("ADISCORD_vorkerland_apply_claimant_cosmetics = yes")
+        sync_parties = events.index("ADISCORD_vorkerland_sync_all_party_identities = yes", apply_cosmetics)
+        repair_identities = events.index("ADISCORD_vorkerland_repair_claimant_identities = yes", apply_cosmetics)
+        self.assertLess(apply_cosmetics, sync_parties)
+        self.assertLess(sync_parties, repair_identities)
+        for hook in ("on_puppet", "on_release_as_puppet", "on_release_as_free"):
+            block = named_block(on_actions, hook)
+            self.assertIn("ADISCORD_vorkerland_sync_party_identity = yes", block)
+        for recurring in ("on_daily", "on_weekly", "on_monthly"):
+            self.assertNotIn(recurring, on_actions)
 
 
 if __name__ == "__main__":
