@@ -142,6 +142,10 @@ The splitter must prove all of the following before apply:
 - no province colour is duplicated and all new IDs/colours are deterministic;
 - state membership is updated through the state-history owner and subsequent
   generated map-building output is resynchronized;
+- each new land province receives deterministic valid entries in
+  `map/unitstacks.txt`, with its primary anchor placed on an interior pixel;
+- the strategic-region owner regenerates region 6 so every new province ID is
+  assigned to the same air region as its source state;
 - the final province bitmap has a new exact SHA-256 regression contract and a
   second apply is byte-identical.
 
@@ -195,7 +199,8 @@ ASCII/English.
 
 Add a narrow province-split pass before the landscape pass. It owns only the
 nine approved source colours in `map/provinces.bmp`, their appended definition
-rows, and the corresponding generated state province-list additions. The
+rows, deterministic position records for the generated IDs, and the
+corresponding generated state province-list additions. The
 existing `tools.builders.build_adiscord_ivn_geography` then owns:
 
 - island pixels in `map/heightmap.bmp`;
