@@ -14,6 +14,10 @@ from PIL import Image
 from tools.builders import build_adiscord_ivn_geography as builder
 
 
+HEIGHT_OUTSIDE_ISLAND_SHA256 = "4BF5E6E4DC65377E0979EE4BA6E5240A603947FCA7E2CE82453BCB36CC668D93"
+NORMAL_OUTSIDE_FEATHER_SHA256 = "8D39567B4CC990FC1A34AAFD5FE9023301454582C5018C386851EE8430C01076"
+
+
 @dataclass(frozen=True)
 class LandscapeFixture:
     provinces: Image.Image
@@ -158,8 +162,8 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         self.assertEqual(changed, [12])
 
     def test_height_slope_does_not_wrap_rows(self) -> None:
-        pixels = [0, 0, 100, 200, 0, 0]
-        self.assertEqual(builder.height_slope(pixels, 3, 2, 2), 100)
+        pixels = [0, 0, 0, 200, 0, 0]
+        self.assertEqual(builder.height_slope(pixels, 3, 2, 2), 0)
 
     def test_normal_channels_follow_existing_orientation(self) -> None:
         flat = Image.new("L", (6, 6), 120)
@@ -259,6 +263,109 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
             if not included
         )
         self.assertEqual(changed_normal_outside_feathered_mask, 0)
+
+    def test_generated_height_has_downstream_terrain_eligibility(self) -> None:
+        outputs = builder.expected()
+        _lines, _newline, _bom, definition_colors, _declared = builder.definition_contract()
+        with Image.open(builder.PROVINCES_PATH) as provinces_source:
+            masks = builder.landscape_masks(provinces_source, definition_colors)
+        height_bytes = outputs.heightmap.tobytes()
+        island_indices = [index for index, included in enumerate(masks.island) if included]
+        island_values = [height_bytes[index] for index in island_indices]
+        slopes = [
+            builder.height_slope(
+                height_bytes,
+                outputs.heightmap.width,
+                outputs.heightmap.height,
+                index,
+            )
+            for index in island_indices
+        ]
+        self.assertGreaterEqual(max(slopes), 12)
+        self.assertGreaterEqual(sum(slope >= 8 for slope in slopes), 250)
+        self.assertGreaterEqual(sum(slope >= 12 for slope in slopes), 40)
+        self.assertGreaterEqual(sum(value >= 158 for value in island_values), 150)
+        self.assertLess(max(island_values), 180)
+
+    def test_steep_height_cells_form_coherent_ridge_shoulders(self) -> None:
+        outputs = builder.expected()
+        _lines, _newline, _bom, definition_colors, _declared = builder.definition_contract()
+        with Image.open(builder.PROVINCES_PATH) as provinces_source:
+            masks = builder.landscape_masks(provinces_source, definition_colors)
+        height_bytes = outputs.heightmap.tobytes()
+        width = outputs.heightmap.width
+        height = outputs.heightmap.height
+        slopes = {
+            index: builder.height_slope(height_bytes, width, height, index)
+            for index, included in enumerate(masks.island)
+            if included
+        }
+        steep = {index for index, slope in slopes.items() if slope >= 12}
+        shoulders = {index for index, slope in slopes.items() if slope >= 8}
+        self.assertGreaterEqual(len(steep), 40)
+        for index in steep:
+            x = index % width
+            y = index // width
+            neighbours = {
+                (y + dy) * width + x + dx
+                for dy in (-1, 0, 1)
+                for dx in (-1, 0, 1)
+                if (dx or dy) and 0 <= x + dx < width and 0 <= y + dy < height
+            }
+            self.assertTrue(neighbours & shoulders, f"steep height pixel {index} is an isolated spike")
+
+    def test_generated_maps_preserve_stable_outside_scope_streams(self) -> None:
+        _lines, _newline, _bom, definition_colors, _declared = builder.definition_contract()
+        with Image.open(builder.PROVINCES_PATH) as provinces_source:
+            masks = builder.landscape_masks(provinces_source, definition_colors)
+        with Image.open(builder.HEIGHTMAP_PATH) as height_source:
+            height_bytes = height_source.tobytes()
+            height_width = height_source.width
+            height_height = height_source.height
+        height_outside = bytes(
+            value for index, value in enumerate(height_bytes) if not masks.island[index]
+        )
+        self.assertEqual(
+            hashlib.sha256(height_outside).hexdigest().upper(),
+            HEIGHT_OUTSIDE_ISLAND_SHA256,
+        )
+
+        normal_width = height_width // 2
+        normal_height = height_height // 2
+        coarse_island = bytearray(normal_width * normal_height)
+        for ny in range(normal_height):
+            top = ny * 2 * height_width
+            bottom = top + height_width
+            for nx in range(normal_width):
+                left = nx * 2
+                coarse_island[ny * normal_width + nx] = any(
+                    masks.island[index]
+                    for index in (top + left, top + left + 1, bottom + left, bottom + left + 1)
+                )
+        feathered = bytearray(coarse_island)
+        for index, included in enumerate(coarse_island):
+            if not included:
+                continue
+            nx = index % normal_width
+            ny = index // normal_width
+            for neighbour in (
+                index - 1 if nx else None,
+                index + 1 if nx + 1 < normal_width else None,
+                index - normal_width if ny else None,
+                index + normal_width if ny + 1 < normal_height else None,
+            ):
+                if neighbour is not None:
+                    feathered[neighbour] = 1
+        with Image.open(builder.WORLD_NORMAL_PATH) as normal_source:
+            normal_bytes = normal_source.tobytes()
+        normal_outside = bytearray()
+        for index, included in enumerate(feathered):
+            if not included:
+                normal_outside.extend(normal_bytes[index * 3:index * 3 + 3])
+        self.assertEqual(
+            hashlib.sha256(normal_outside).hexdigest().upper(),
+            NORMAL_OUTSIDE_FEATHER_SHA256,
+        )
 
     def test_atomic_save_bmp_replaces_target_without_leaving_temporary_file(self) -> None:
         with TemporaryDirectory() as temporary_directory:

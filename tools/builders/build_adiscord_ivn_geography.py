@@ -184,11 +184,20 @@ def island_height_value(u: float, v: float, coast_distance: int) -> int:
     coast = min(1.0, coast_distance / 11.0)
     ridge_x = 0.50 + 0.12 * sin((v - 0.12) * pi * 1.35)
     ridge = exp(-((u - ridge_x) / 0.17) ** 2)
+    ridge_spine = exp(-((u - ridge_x) / 0.026) ** 2)
     north_lobe = exp(-(((u - 0.43) / 0.25) ** 2 + ((v - 0.27) / 0.19) ** 2))
     south_lobe = exp(-(((u - 0.57) / 0.24) ** 2 + ((v - 0.73) / 0.22) ** 2))
     valley = exp(-(((u - 0.67) / 0.13) ** 2 + ((v - 0.52) / 0.26) ** 2))
     texture = 0.5 + 0.25 * sin(7.0 * u + 4.0 * v) + 0.25 * cos(5.0 * u - 6.0 * v)
-    raw = 97.0 + coast * (12.0 + 43.0 * ridge + 13.0 * north_lobe + 10.0 * south_lobe - 8.0 * valley + 6.0 * texture)
+    raw = 97.0 + coast * (
+        12.0
+        + 43.0 * ridge
+        + 60.0 * ridge_spine
+        + 13.0 * north_lobe
+        + 10.0 * south_lobe
+        - 8.0 * valley
+        + 6.0 * texture
+    )
     return max(HEIGHT_MIN, min(HEIGHT_MAX, round(raw)))
 
 
