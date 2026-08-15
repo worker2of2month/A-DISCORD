@@ -1,0 +1,181 @@
+# Phase hand-off and final-contract runtime for Kefreite.
+
+VAL_remove_contract_route_ideas = {
+	remove_ideas = VAL_route_state_ledger_idea
+	remove_ideas = VAL_route_state_ledger_final_idea
+	remove_ideas = VAL_route_captains_compact_idea
+	remove_ideas = VAL_route_captains_compact_final_idea
+	remove_ideas = VAL_route_war_directorate_idea
+	remove_ideas = VAL_route_war_directorate_final_idea
+}
+
+VAL_finalize_contract_route = {
+	VAL_remove_contract_route_ideas = yes
+	if = {
+		limit = { has_country_flag = VAL_route_state_ledger }
+		add_ideas = VAL_route_state_ledger_final_idea
+		VAL_apply_contract_administration_3 = yes
+	}
+	else_if = {
+		limit = { has_country_flag = VAL_route_captains_compact }
+		add_ideas = VAL_route_captains_compact_final_idea
+		VAL_apply_contract_administration_2 = yes
+		VAL_apply_contract_army_2 = yes
+	}
+	else_if = {
+		limit = { has_country_flag = VAL_route_war_directorate }
+		add_ideas = VAL_route_war_directorate_final_idea
+		VAL_apply_contract_army_3 = yes
+	}
+	set_country_flag = VAL_contract_route_finalized
+	ADISCORD_economy_mark_dirty = yes
+}
+
+VAL_remove_final_contract_countdowns = {
+	if = {
+		limit = { has_active_mission = VAL_mountain_contract_countdown }
+		remove_mission = VAL_mountain_contract_countdown
+	}
+	if = {
+		limit = { has_active_mission = VAL_resource_corridor_countdown }
+		remove_mission = VAL_resource_corridor_countdown
+	}
+	if = {
+		limit = { has_active_mission = VAL_deferred_invoice_countdown }
+		remove_mission = VAL_deferred_invoice_countdown
+	}
+	if = {
+		limit = { has_active_mission = VAL_nodrul_war_countdown }
+		remove_mission = VAL_nodrul_war_countdown
+	}
+}
+
+VAL_start_final_contract_countdown = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = VAL_final_contract_countdown_active }
+			NOT = { has_country_flag = VAL_final_contract_war_started }
+		}
+		clr_country_flag = VAL_countdown_extension_used
+		set_country_flag = VAL_final_contract_countdown_active
+		if = {
+			limit = { has_country_flag = VAL_final_strategy_mountain_contract }
+			activate_mission = VAL_mountain_contract_countdown
+		}
+		else_if = {
+			limit = { has_country_flag = VAL_final_strategy_resource_corridor }
+			activate_mission = VAL_resource_corridor_countdown
+		}
+		else_if = {
+			limit = { has_country_flag = VAL_final_strategy_deferred_invoice }
+			activate_mission = VAL_deferred_invoice_countdown
+		}
+		else_if = {
+			limit = { has_country_flag = VAL_final_strategy_nodrul_bleeds }
+			activate_mission = VAL_nodrul_war_countdown
+		}
+		country_event = { id = adiscord_val_campaign.4 hours = 12 }
+	}
+}
+
+VAL_extend_final_contract_countdown = {
+	if = {
+		limit = { has_active_mission = VAL_mountain_contract_countdown }
+		add_days_mission_timeout = { mission = VAL_mountain_contract_countdown days = 30 }
+	}
+	if = {
+		limit = { has_active_mission = VAL_resource_corridor_countdown }
+		add_days_mission_timeout = { mission = VAL_resource_corridor_countdown days = 30 }
+	}
+	if = {
+		limit = { has_active_mission = VAL_deferred_invoice_countdown }
+		add_days_mission_timeout = { mission = VAL_deferred_invoice_countdown days = 30 }
+	}
+	if = {
+		limit = { has_active_mission = VAL_nodrul_war_countdown }
+		add_days_mission_timeout = { mission = VAL_nodrul_war_countdown days = 30 }
+	}
+	set_country_flag = VAL_countdown_extension_used
+}
+
+VAL_apply_final_contract_assets = {
+	if = {
+		limit = {
+			has_country_flag = VAL_asset_contractor_depot
+			NOT = { has_country_flag = VAL_asset_contractor_depot_consumed }
+		}
+		add_timed_idea = { idea = VAL_asset_contractor_depot_idea days = 365 }
+		set_country_flag = VAL_asset_contractor_depot_consumed
+	}
+	if = {
+		limit = {
+			has_country_flag = VAL_asset_pass_maps
+			NOT = { has_country_flag = VAL_asset_pass_maps_consumed }
+		}
+		add_timed_idea = { idea = VAL_asset_pass_maps_idea days = 365 }
+		set_country_flag = VAL_asset_pass_maps_consumed
+	}
+	if = {
+		limit = {
+			has_country_flag = VAL_asset_border_officers
+			NOT = { has_country_flag = VAL_asset_border_officers_consumed }
+		}
+		add_timed_idea = { idea = VAL_asset_border_officers_idea days = 365 }
+		set_country_flag = VAL_asset_border_officers_consumed
+	}
+	if = {
+		limit = {
+			has_country_flag = VAL_asset_nodrul_reaction
+			NOT = { has_country_flag = VAL_asset_nodrul_reaction_consumed }
+		}
+		add_timed_idea = { idea = VAL_asset_nodrul_reaction_idea days = 365 }
+		set_country_flag = VAL_asset_nodrul_reaction_consumed
+	}
+}
+
+VAL_begin_final_contract_war = {
+	if = {
+		limit = { NOT = { has_country_flag = VAL_final_contract_war_started } }
+		VAL_remove_final_contract_countdowns = yes
+		clr_country_flag = VAL_final_contract_countdown_active
+		clr_country_flag = VAL_final_preparation_active
+		set_country_flag = VAL_final_contract_war_started
+		set_country_flag = VAL_final_contract_war_phase
+		VAL_apply_final_contract_assets = yes
+		add_war_support = 0.05
+		if = {
+			limit = {
+				STP = { exists = yes }
+				NOT = { has_war_with = STP }
+			}
+			declare_war_on = { target = STP type = annex_everything }
+		}
+		if = {
+			limit = {
+				has_country_flag = VAL_final_strategy_nodrul_bleeds
+				NOD = { exists = yes }
+				NOT = { has_war_with = NOD }
+			}
+			declare_war_on = { target = NOD type = annex_everything }
+			set_country_flag = VAL_nodrul_intervention_expected
+		}
+		mark_focus_tree_layout_dirty = yes
+		country_event = { id = adiscord_val_campaign.5 hours = 6 }
+	}
+}
+
+VAL_close_final_contract_account = {
+	if = {
+		limit = { NOT = { has_country_flag = VAL_final_contract_war_won } }
+		set_country_flag = VAL_final_contract_war_won
+		clr_country_flag = VAL_final_contract_war_phase
+		ADISCORD_economy_receive_50 = yes
+		add_stability = 0.05
+		custom_effect_tooltip = VAL_campaign_authority_plus_10_tt
+		hidden_effect = {
+			set_temp_variable = { var = ADISCORD_VAL_effect_value value = 10 }
+			VAL_change_contract_authority = yes
+			country_event = { id = adiscord_val_campaign.6 hours = 6 }
+		}
+	}
+}

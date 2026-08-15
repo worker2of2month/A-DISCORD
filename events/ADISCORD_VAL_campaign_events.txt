@@ -1,0 +1,67 @@
+add_namespace = adiscord_val_campaign
+
+country_event = {
+	id = adiscord_val_campaign.1
+	title = adiscord_val_campaign.1.t
+	desc = adiscord_val_campaign.1.d
+	is_triggered_only = yes
+	option = {
+		name = adiscord_val_campaign.1.a
+		set_country_flag = VAL_first_accounting_announced
+	}
+}
+
+country_event = {
+	id = adiscord_val_campaign.2
+	title = adiscord_val_campaign.2.t
+	desc = adiscord_val_campaign.2.d
+	is_triggered_only = yes
+	option = {
+		name = adiscord_val_campaign.2.a
+		set_country_flag = VAL_weaponry_baron_confirmed
+	}
+}
+
+country_event = {
+	id = adiscord_val_campaign.3
+	title = adiscord_val_campaign.3.t
+	desc = adiscord_val_campaign.3.d
+	is_triggered_only = yes
+	option = {
+		name = adiscord_val_campaign.3.a
+		set_country_flag = VAL_state_contract_announced
+	}
+}
+
+country_event = {
+	id = adiscord_val_campaign.4
+	title = adiscord_val_campaign.4.t
+	desc = adiscord_val_campaign.4.d
+	is_triggered_only = yes
+	option = {
+		name = adiscord_val_campaign.4.a
+		set_country_flag = VAL_final_strategy_announced
+	}
+}
+
+country_event = {
+	id = adiscord_val_campaign.5
+	title = adiscord_val_campaign.5.t
+	desc = adiscord_val_campaign.5.d
+	is_triggered_only = yes
+	option = {
+		name = adiscord_val_campaign.5.a
+		set_country_flag = VAL_final_contract_war_acknowledged
+	}
+}
+
+country_event = {
+	id = adiscord_val_campaign.6
+	title = adiscord_val_campaign.6.t
+	desc = adiscord_val_campaign.6.d
+	is_triggered_only = yes
+	option = {
+		name = adiscord_val_campaign.6.a
+		set_country_flag = VAL_final_contract_account_closed
+	}
+}
