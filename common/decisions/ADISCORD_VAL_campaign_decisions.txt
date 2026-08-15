@@ -1,0 +1,309 @@
+# VAL campaign decisions: preparations, countdowns, and wartime actions.
+
+VAL_final_contract_preparations = {
+	# Assets are granted only after the timed operation finishes.
+	VAL_prepare_contractor_depot = {
+		icon = generic_production
+		allowed = { tag = VAL }
+		visible = { NOT = { has_country_flag = VAL_asset_contractor_depot } }
+		available = {
+			ADISCORD_economy_can_spend_50 = yes
+			NOT = { has_country_flag = VAL_final_preparation_active }
+		}
+		custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes }
+		custom_cost_text = VAL_cost_t50
+		cost = 10
+		days_remove = 21
+		fire_only_once = yes
+		complete_effect = {
+			ADISCORD_economy_spend_50 = yes
+			set_country_flag = VAL_final_preparation_active
+			set_country_flag = VAL_preparation_contractor_depot_active
+		}
+		remove_effect = {
+			clr_country_flag = VAL_final_preparation_active
+			clr_country_flag = VAL_preparation_contractor_depot_active
+			if = {
+				limit = { NOT = { has_country_flag = VAL_final_contract_war_started } }
+				set_country_flag = VAL_asset_contractor_depot
+			}
+		}
+		cancel_effect = {
+			clr_country_flag = VAL_final_preparation_active
+			clr_country_flag = VAL_preparation_contractor_depot_active
+		}
+		ai_will_do = {
+			base = 5
+			modifier = { factor = 0 NOT = { ADISCORD_economy_can_spend_50 = yes } }
+		}
+	}
+
+	VAL_purchase_stelander_pass_maps = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = {
+			NOT = { has_country_flag = VAL_asset_pass_maps }
+			OR = {
+				has_country_flag = VAL_stelander_pass_maps
+				has_country_flag = VAL_final_strategy_mountain_contract
+				has_country_flag = VAL_final_strategy_resource_corridor
+				has_country_flag = VAL_final_strategy_nodrul_bleeds
+			}
+		}
+		available = {
+			ADISCORD_economy_can_spend_25 = yes
+			NOT = { has_country_flag = VAL_final_preparation_active }
+		}
+		custom_cost_trigger = { ADISCORD_economy_can_spend_25 = yes }
+		custom_cost_text = ADISCORD_cost_t25
+		cost = 10
+		days_remove = 14
+		fire_only_once = yes
+		complete_effect = {
+			ADISCORD_economy_spend_25 = yes
+			set_country_flag = VAL_final_preparation_active
+			set_country_flag = VAL_preparation_pass_maps_active
+		}
+		remove_effect = {
+			clr_country_flag = VAL_final_preparation_active
+			clr_country_flag = VAL_preparation_pass_maps_active
+			if = {
+				limit = { NOT = { has_country_flag = VAL_final_contract_war_started } }
+				set_country_flag = VAL_asset_pass_maps
+			}
+		}
+		cancel_effect = {
+			clr_country_flag = VAL_final_preparation_active
+			clr_country_flag = VAL_preparation_pass_maps_active
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	VAL_recruit_border_officers = {
+		icon = generic_army_doctrines
+		allowed = { tag = VAL }
+		visible = { NOT = { has_country_flag = VAL_asset_border_officers } }
+		available = {
+			ADISCORD_has_2500_infantry_equipment = yes
+			NOT = { has_country_flag = VAL_final_preparation_active }
+		}
+		custom_cost_trigger = { ADISCORD_has_2500_infantry_equipment = yes }
+		custom_cost_text = ADISCORD_cost_r2500
+		cost = 10
+		days_remove = 21
+		fire_only_once = yes
+		complete_effect = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = -2500 producer = VAL }
+			set_country_flag = VAL_final_preparation_active
+			set_country_flag = VAL_preparation_border_officers_active
+		}
+		remove_effect = {
+			clr_country_flag = VAL_final_preparation_active
+			clr_country_flag = VAL_preparation_border_officers_active
+			if = {
+				limit = { NOT = { has_country_flag = VAL_final_contract_war_started } }
+				set_country_flag = VAL_asset_border_officers
+			}
+		}
+		cancel_effect = {
+			clr_country_flag = VAL_final_preparation_active
+			clr_country_flag = VAL_preparation_border_officers_active
+		}
+		ai_will_do = {
+			base = 5
+			modifier = { factor = 0 NOT = { has_equipment = { infantry_equipment > 11999 } } }
+		}
+	}
+
+	VAL_test_nodrul_reaction = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = {
+			NOD = { exists = yes }
+			NOT = { has_country_flag = VAL_asset_nodrul_reaction }
+			OR = {
+				has_country_flag = VAL_final_strategy_nodrul_bleeds
+				has_country_flag = VAL_stelander_coercion_channel
+			}
+		}
+		available = { NOT = { has_country_flag = VAL_final_preparation_active } }
+		cost = 50
+		days_remove = 14
+		fire_only_once = yes
+		complete_effect = {
+			set_country_flag = VAL_final_preparation_active
+			set_country_flag = VAL_preparation_nodrul_reaction_active
+		}
+		remove_effect = {
+			clr_country_flag = VAL_final_preparation_active
+			clr_country_flag = VAL_preparation_nodrul_reaction_active
+			if = {
+				limit = { NOT = { has_country_flag = VAL_final_contract_war_started } }
+				set_country_flag = VAL_asset_nodrul_reaction
+			}
+		}
+		cancel_effect = {
+			clr_country_flag = VAL_final_preparation_active
+			clr_country_flag = VAL_preparation_nodrul_reaction_active
+		}
+		ai_will_do = {
+			base = 3
+			modifier = { factor = 3 has_country_flag = VAL_final_strategy_nodrul_bleeds }
+		}
+	}
+
+	VAL_mountain_contract_countdown = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_final_strategy_mountain_contract }
+		available = { always = no }
+		selectable_mission = no
+		days_mission_timeout = 300
+		timeout_effect = { VAL_begin_final_contract_war = yes }
+	}
+
+	VAL_resource_corridor_countdown = {
+		icon = generic_resources
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_final_strategy_resource_corridor }
+		available = { always = no }
+		selectable_mission = no
+		days_mission_timeout = 180
+		timeout_effect = { VAL_begin_final_contract_war = yes }
+	}
+
+	VAL_deferred_invoice_countdown = {
+		icon = generic_trade
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_final_strategy_deferred_invoice }
+		available = { always = no }
+		selectable_mission = no
+		days_mission_timeout = 300
+		timeout_effect = { VAL_begin_final_contract_war = yes }
+	}
+
+	VAL_nodrul_war_countdown = {
+		icon = generic_major_war
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_final_strategy_nodrul_bleeds }
+		available = { always = no }
+		selectable_mission = no
+		days_mission_timeout = 450
+		timeout_effect = { VAL_begin_final_contract_war = yes }
+	}
+
+	VAL_buy_thirty_days = {
+		icon = generic_trade
+		allowed = { tag = VAL }
+		visible = {
+			has_country_flag = VAL_final_contract_countdown_active
+			NOT = { has_country_flag = VAL_countdown_extension_used }
+		}
+		available = { ADISCORD_economy_can_spend_50 = yes }
+		custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes }
+		custom_cost_text = VAL_cost_t50
+		cost = 10
+		fire_only_once = yes
+		complete_effect = {
+			ADISCORD_economy_spend_50 = yes
+			VAL_extend_final_contract_countdown = yes
+		}
+		ai_will_do = {
+			base = 1
+			modifier = { factor = 2 has_stability < 0.60 }
+		}
+	}
+
+	VAL_force_early_collection = {
+		icon = generic_major_war
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_final_contract_countdown_active }
+		available = { VAL_contract_authority_at_least_75 = yes }
+		cost = 100
+		fire_only_once = yes
+		complete_effect = { VAL_begin_final_contract_war = yes }
+		ai_will_do = {
+			base = 0
+			modifier = { factor = 10 has_country_flag = VAL_route_war_directorate }
+		}
+	}
+}
+
+VAL_final_contract_war_decisions = {
+	VAL_install_mountain_bureaus = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_final_strategy_mountain_contract }
+		cost = 75
+		fire_only_once = yes
+		complete_effect = {
+			set_country_flag = VAL_war_client_bureaus
+			add_timed_idea = { idea = VAL_asset_border_officers_idea days = 180 }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	VAL_strip_corridor_warehouses = {
+		icon = generic_resources
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_final_strategy_resource_corridor }
+		cost = 50
+		fire_only_once = yes
+		complete_effect = {
+			set_country_flag = VAL_war_corridor_warehouses
+			add_equipment_to_stockpile = { type = support_equipment amount = 500 producer = VAL }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	VAL_sell_the_future_notes = {
+		icon = generic_trade
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_final_strategy_deferred_invoice }
+		cost = 50
+		days_re_enable = 120
+		complete_effect = {
+			ADISCORD_economy_receive_50 = yes
+			add_stability = -0.03
+		}
+		ai_will_do = { base = 3 }
+	}
+
+	VAL_hire_the_northern_companies = {
+		icon = generic_army_doctrines
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_final_strategy_nodrul_bleeds }
+		available = { ADISCORD_economy_can_spend_50 = yes }
+		custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes }
+		custom_cost_text = VAL_cost_t50
+		cost = 10
+		fire_only_once = yes
+		complete_effect = {
+			ADISCORD_economy_spend_50 = yes
+			add_manpower = 2500
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = VAL }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	VAL_close_the_stelander_account = {
+		icon = generic_national_unity
+		allowed = { tag = VAL }
+		visible = {
+			OR = {
+				NOT = { country_exists = STP }
+				STP = { has_capitulated = yes }
+			}
+		}
+		available = {
+			OR = {
+				NOT = { country_exists = STP }
+				STP = { has_capitulated = yes }
+			}
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = { VAL_close_final_contract_account = yes }
+		ai_will_do = { base = 100 }
+	}
+}
