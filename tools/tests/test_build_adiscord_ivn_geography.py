@@ -18,6 +18,35 @@ HEIGHT_OUTSIDE_ISLAND_SHA256 = "4BF5E6E4DC65377E0979EE4BA6E5240A603947FCA7E2CE82
 NORMAL_OUTSIDE_FEATHER_SHA256 = "8D39567B4CC990FC1A34AAFD5FE9023301454582C5018C386851EE8430C01076"
 
 
+def island_height_slopes(
+    pixels: bytes | bytearray,
+    width: int,
+    height: int,
+    island_mask: bytearray,
+) -> dict[int, int]:
+    slopes: dict[int, int] = {}
+    for index, included in enumerate(island_mask):
+        if not included:
+            continue
+        x = index % width
+        y = index // width
+        neighbours = (
+            index - 1 if x else None,
+            index + 1 if x + 1 < width else None,
+            index - width if y else None,
+            index + width if y + 1 < height else None,
+        )
+        slopes[index] = max(
+            (
+                abs(pixels[index] - pixels[neighbour])
+                for neighbour in neighbours
+                if neighbour is not None and island_mask[neighbour]
+            ),
+            default=0,
+        )
+    return slopes
+
+
 @dataclass(frozen=True)
 class LandscapeFixture:
     provinces: Image.Image
@@ -165,6 +194,17 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         pixels = [0, 0, 0, 200, 0, 0]
         self.assertEqual(builder.height_slope(pixels, 3, 2, 2), 0)
 
+    def test_island_slope_gate_ignores_coastline_to_water(self) -> None:
+        mask = bytearray([
+            0, 0, 0, 0, 0,
+            0, 1, 1, 1, 0,
+            0, 1, 1, 1, 0,
+            0, 1, 1, 1, 0,
+            0, 0, 0, 0, 0,
+        ])
+        pixels = bytearray(100 if included else 0 for included in mask)
+        self.assertEqual(set(island_height_slopes(pixels, 5, 5, mask).values()), {0})
+
     def test_normal_channels_follow_existing_orientation(self) -> None:
         flat = Image.new("L", (6, 6), 120)
         normal = builder.normal_from_height(
@@ -272,15 +312,14 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         height_bytes = outputs.heightmap.tobytes()
         island_indices = [index for index, included in enumerate(masks.island) if included]
         island_values = [height_bytes[index] for index in island_indices]
-        slopes = [
-            builder.height_slope(
+        slopes = list(
+            island_height_slopes(
                 height_bytes,
                 outputs.heightmap.width,
                 outputs.heightmap.height,
-                index,
-            )
-            for index in island_indices
-        ]
+                masks.island,
+            ).values()
+        )
         self.assertGreaterEqual(max(slopes), 12)
         self.assertGreaterEqual(sum(slope >= 8 for slope in slopes), 250)
         self.assertGreaterEqual(sum(slope >= 12 for slope in slopes), 40)
@@ -295,11 +334,7 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         height_bytes = outputs.heightmap.tobytes()
         width = outputs.heightmap.width
         height = outputs.heightmap.height
-        slopes = {
-            index: builder.height_slope(height_bytes, width, height, index)
-            for index, included in enumerate(masks.island)
-            if included
-        }
+        slopes = island_height_slopes(height_bytes, width, height, masks.island)
         steep = {index for index, slope in slopes.items() if slope >= 12}
         shoulders = {index for index, slope in slopes.items() if slope >= 8}
         self.assertGreaterEqual(len(steep), 40)
@@ -310,7 +345,12 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
                 (y + dy) * width + x + dx
                 for dy in (-1, 0, 1)
                 for dx in (-1, 0, 1)
-                if (dx or dy) and 0 <= x + dx < width and 0 <= y + dy < height
+                if (
+                    (dx or dy)
+                    and 0 <= x + dx < width
+                    and 0 <= y + dy < height
+                    and masks.island[(y + dy) * width + x + dx]
+                )
             }
             self.assertTrue(neighbours & shoulders, f"steep height pixel {index} is an isolated spike")
 
