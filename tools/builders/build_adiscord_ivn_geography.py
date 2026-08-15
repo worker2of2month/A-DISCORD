@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import os
 import re
+from array import array
 from collections import Counter, deque
 from dataclasses import dataclass
 from io import BytesIO
@@ -18,6 +19,8 @@ ROOT = Path(__file__).resolve().parents[2]
 TERRAIN_PATH = ROOT / "map/terrain.bmp"
 PROVINCES_PATH = ROOT / "map/provinces.bmp"
 DEFINITION_PATH = ROOT / "map/definition.csv"
+HEIGHTMAP_PATH = ROOT / "map/heightmap.bmp"
+WORLD_NORMAL_PATH = ROOT / "map/world_normal.bmp"
 TERRAIN_CONFIG_PATH = ROOT / "common/terrain/00_terrain.txt"
 STATE_DIR = ROOT / "history/states"
 
@@ -33,6 +36,11 @@ URBAN_PALETTE = 13
 MIN_URBAN_PIXELS = 24
 URBAN_SHARE = 0.12
 MAX_URBAN_SHARE = 0.65
+HEIGHT_MIN = 97
+HEIGHT_MAX = 175
+NORMAL_CENTER = 127
+NORMAL_SCALE = 1.65
+NORMAL_BLUE = 253
 
 
 @dataclass(frozen=True)
@@ -40,6 +48,18 @@ class LandscapeMasks:
     island: bytearray
     north: bytearray
     island_bbox: tuple[int, int, int, int]
+
+
+@dataclass
+class GeographyOutputs:
+    terrain: Image.Image
+    definition: bytes
+    heightmap: Image.Image
+    world_normal: Image.Image
+    trees: Image.Image | None
+    desired: dict[int, str]
+    counts: dict[int, Counter[str]]
+    footprints: dict[int, set[int]]
 
 
 def state_path(state_id: int) -> Path:
@@ -169,7 +189,121 @@ def island_height_value(u: float, v: float, coast_distance: int) -> int:
     valley = exp(-(((u - 0.67) / 0.13) ** 2 + ((v - 0.52) / 0.26) ** 2))
     texture = 0.5 + 0.25 * sin(7.0 * u + 4.0 * v) + 0.25 * cos(5.0 * u - 6.0 * v)
     raw = 97.0 + coast * (12.0 + 43.0 * ridge + 13.0 * north_lobe + 10.0 * south_lobe - 8.0 * valley + 6.0 * texture)
-    return max(97, min(175, round(raw)))
+    return max(HEIGHT_MIN, min(HEIGHT_MAX, round(raw)))
+
+
+def render_heightmap(
+    source: Image.Image,
+    island_mask: bytearray,
+    bbox: tuple[int, int, int, int],
+) -> Image.Image:
+    if source.mode != "L":
+        raise ValueError("heightmap source must use mode L")
+    width, height = source.size
+    if len(island_mask) != width * height:
+        raise ValueError("island mask dimensions do not match heightmap")
+    min_x, min_y, max_x, max_y = bbox
+    if not (0 <= min_x <= max_x < width and 0 <= min_y <= max_y < height):
+        raise ValueError("island bounding box lies outside heightmap")
+
+    x_span = max(1, max_x - min_x)
+    y_span = max(1, max_y - min_y)
+    distances = distance_from_edge(island_mask, width, height)
+    pixels = bytearray(source.tobytes())
+    for index, included in enumerate(island_mask):
+        if not included:
+            continue
+        x = index % width
+        y = index // width
+        u = (x - min_x) / x_span
+        v = (y - min_y) / y_span
+        pixels[index] = island_height_value(u, v, distances[index])
+    return Image.frombytes("L", source.size, bytes(pixels))
+
+
+def height_slope(pixels: list[int] | bytes | bytearray, width: int, height: int, index: int) -> int:
+    if len(pixels) != width * height:
+        raise ValueError("height pixels do not match dimensions")
+    if not 0 <= index < len(pixels):
+        raise IndexError("height pixel index is outside dimensions")
+    x = index % width
+    y = index // width
+    neighbours: list[int] = []
+    if x:
+        neighbours.append(index - 1)
+    if x + 1 < width:
+        neighbours.append(index + 1)
+    if y:
+        neighbours.append(index - width)
+    if y + 1 < height:
+        neighbours.append(index + width)
+    value = pixels[index]
+    return max((abs(value - pixels[neighbour]) for neighbour in neighbours), default=0)
+
+
+def normal_from_height(
+    heightmap: Image.Image,
+    source: Image.Image,
+    island_mask: bytearray,
+) -> Image.Image:
+    if heightmap.mode != "L":
+        raise ValueError("heightmap must use mode L")
+    if source.mode != "RGB":
+        raise ValueError("world normal source must use mode RGB")
+    width, height = heightmap.size
+    normal_width, normal_height = source.size
+    if (normal_width * 2, normal_height * 2) != (width, height):
+        raise ValueError("world normal dimensions must equal half the heightmap dimensions")
+    if len(island_mask) != width * height:
+        raise ValueError("island mask dimensions do not match heightmap")
+
+    heights = heightmap.tobytes()
+    cell_count = normal_width * normal_height
+    means = array("f", [0.0]) * cell_count
+    island_cells = bytearray(cell_count)
+    for ny in range(normal_height):
+        top = (ny * 2) * width
+        bottom = top + width
+        for nx in range(normal_width):
+            left = nx * 2
+            full_indices = (top + left, top + left + 1, bottom + left, bottom + left + 1)
+            normal_index = ny * normal_width + nx
+            means[normal_index] = sum(heights[index] for index in full_indices) / 4.0
+            island_cells[normal_index] = any(island_mask[index] for index in full_indices)
+
+    affected = bytearray(cell_count)
+    for index, included in enumerate(island_cells):
+        if not included:
+            continue
+        nx = index % normal_width
+        ny = index // normal_width
+        affected[index] = 1
+        if nx:
+            affected[index - 1] = 1
+        if nx + 1 < normal_width:
+            affected[index + 1] = 1
+        if ny:
+            affected[index - normal_width] = 1
+        if ny + 1 < normal_height:
+            affected[index + normal_width] = 1
+
+    pixels = bytearray(source.tobytes())
+    for index, included in enumerate(affected):
+        if not included:
+            continue
+        nx = index % normal_width
+        ny = index // normal_width
+        west = index - 1 if nx else index
+        east = index + 1 if nx + 1 < normal_width else index
+        north = index - normal_width if ny else index
+        south = index + normal_width if ny + 1 < normal_height else index
+        dx = (means[east] - means[west]) / 2.0
+        dy = (means[south] - means[north]) / 2.0
+        red = max(0, min(255, round(NORMAL_CENTER - NORMAL_SCALE * dx)))
+        green = max(0, min(255, round(NORMAL_CENTER + NORMAL_SCALE * dy)))
+        offset = index * 3
+        pixels[offset:offset + 3] = bytes((red, green, NORMAL_BLUE))
+    return Image.frombytes("RGB", source.size, bytes(pixels))
 
 
 def moisture_value(u: float, v: float, x: int, y: int) -> float:
@@ -245,7 +379,7 @@ def compact_footprint(indices: list[int], width: int) -> set[int]:
     return selected
 
 
-def expected() -> tuple[Image.Image, bytes, dict[int, str], dict[int, Counter[str]], dict[int, set[int]]]:
+def expected() -> GeographyOutputs:
     lines, newline, bom, province_colors, _declared = definition_contract()
     palette = palette_types()
     color_to_id = {color: province_id for province_id, color in province_colors.items()}
@@ -258,6 +392,16 @@ def expected() -> tuple[Image.Image, bytes, dict[int, str], dict[int, Counter[st
         terrain = terrain_source.copy()
         terrain_pixels = list(terrain_source.get_flattened_data())
         province_bytes = provinces_source.convert("RGB").tobytes()
+        masks = landscape_masks(provinces_source, province_colors)
+
+    with Image.open(BytesIO(HEIGHTMAP_PATH.read_bytes())) as height_source:
+        if height_source.mode != "L" or height_source.size != terrain.size:
+            raise RuntimeError("heightmap.bmp must use mode L and match provinces.bmp dimensions")
+        heightmap = render_heightmap(height_source, masks.island, masks.island_bbox)
+    with Image.open(BytesIO(WORLD_NORMAL_PATH.read_bytes())) as normal_source:
+        if normal_source.mode != "RGB":
+            raise RuntimeError("world_normal.bmp must use mode RGB")
+        world_normal = normal_from_height(heightmap, normal_source, masks.island)
 
     counts = {province_id: Counter() for province_id in province_colors}
     settlement_indices = {province_id: [] for province_id in SETTLEMENT_PROVINCES}
@@ -309,41 +453,73 @@ def expected() -> tuple[Image.Image, bytes, dict[int, str], dict[int, Counter[st
     definition = newline.join(updated_lines)
     if lines:
         definition += newline
-    return terrain, bom + definition.encode("utf-8"), desired, counts, footprints
+    return GeographyOutputs(
+        terrain=terrain,
+        definition=bom + definition.encode("utf-8"),
+        heightmap=heightmap,
+        world_normal=world_normal,
+        trees=None,
+        desired=desired,
+        counts=counts,
+        footprints=footprints,
+    )
 
 
 def validate() -> list[str]:
-    terrain, definition, desired, counts, footprints = expected()
+    outputs = expected()
     issues: list[str] = []
     with Image.open(BytesIO(TERRAIN_PATH.read_bytes())) as current:
-        differences = sum(a != b for a, b in zip(current.get_flattened_data(), terrain.get_flattened_data()))
+        differences = sum(
+            before != after
+            for before, after in zip(current.get_flattened_data(), outputs.terrain.get_flattened_data())
+        )
     if differences:
         issues.append(f"map/terrain.bmp: {differences} IVN/IIA urban-footprint pixels drifted")
-    if DEFINITION_PATH.read_bytes() != definition:
+    with Image.open(BytesIO(HEIGHTMAP_PATH.read_bytes())) as current:
+        differences = sum(
+            before != after
+            for before, after in zip(current.get_flattened_data(), outputs.heightmap.get_flattened_data())
+        )
+    if differences:
+        issues.append(f"map/heightmap.bmp: {differences} island height pixels drifted")
+    with Image.open(BytesIO(WORLD_NORMAL_PATH.read_bytes())) as current:
+        differences = sum(
+            before != after
+            for before, after in zip(current.get_flattened_data(), outputs.world_normal.get_flattened_data())
+        )
+    if differences:
+        issues.append(f"map/world_normal.bmp: {differences} island normal cells drifted")
+    if DEFINITION_PATH.read_bytes() != outputs.definition:
         issues.append("map/definition.csv: IVN/IIA declared terrain drifted")
-    for province_id, footprint in footprints.items():
+    for province_id, footprint in outputs.footprints.items():
         if len(footprint) < MIN_URBAN_PIXELS:
             issues.append(f"province {province_id}: urban footprint has only {len(footprint)} pixels")
-        total = sum(counts[province_id].values())
+        total = sum(outputs.counts[province_id].values())
         if len(footprint) > total * MAX_URBAN_SHARE:
             issues.append(f"province {province_id}: urban footprint erases too much biome")
-        if desired[province_id] != "urban":
+        if outputs.desired[province_id] != "urban":
             issues.append(f"province {province_id}: settlement is not declared urban")
     return issues
 
 
-def apply() -> None:
-    terrain, definition, _desired, _counts, _footprints = expected()
-    temporary = TERRAIN_PATH.with_suffix(".bmp.tmp")
+def atomic_save_bmp(image: Image.Image, path: Path) -> None:
+    temporary = path.with_suffix(".bmp.tmp")
     try:
-        terrain.save(temporary, format="BMP")
+        image.save(temporary, format="BMP")
         with temporary.open("r+b") as generated:
             generated.flush()
             os.fsync(generated.fileno())
-        os.replace(temporary, TERRAIN_PATH)
+        os.replace(temporary, path)
     finally:
         temporary.unlink(missing_ok=True)
-    DEFINITION_PATH.write_bytes(definition)
+
+
+def apply() -> None:
+    outputs = expected()
+    atomic_save_bmp(outputs.terrain, TERRAIN_PATH)
+    atomic_save_bmp(outputs.heightmap, HEIGHTMAP_PATH)
+    atomic_save_bmp(outputs.world_normal, WORLD_NORMAL_PATH)
+    DEFINITION_PATH.write_bytes(outputs.definition)
 
 
 def main() -> int:
