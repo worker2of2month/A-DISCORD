@@ -322,4 +322,9 @@ spriteTypes = {
 		name = "GFX_portrait_IBL_Anton_Selevyostrov"
 		texturefile = "gfx/leaders/IBL/portrait_IBL_Anton_Selevyostrov.png"
 	}
+	### IIA
+	spriteType = {
+		name = "GFX_portrait_IIA_Artem_Severin"
+		texturefile = "gfx/leaders/IIA/portrait_IIA_Artem_Severin.png"
+	}
 }
