@@ -89,6 +89,7 @@ def landscape_masks(
 
     island = bytearray(provinces.width * provinces.height)
     north = bytearray(provinces.width * provinces.height)
+    seen_northern_provinces: set[int] = set()
     min_x = provinces.width
     min_y = provinces.height
     max_x = -1
@@ -98,6 +99,7 @@ def landscape_masks(
         province_id = color_to_id.get(color)
         if province_id in north_provinces:
             north[index] = 1
+            seen_northern_provinces.add(province_id)
         if province_id in island_provinces:
             island[index] = 1
             x = index % provinces.width
@@ -108,6 +110,9 @@ def landscape_masks(
             max_y = max(max_y, y)
     if max_x < 0:
         raise RuntimeError("provinces bitmap has no island landscape pixels")
+    missing_pixels = sorted(north_provinces - seen_northern_provinces)
+    if missing_pixels:
+        raise RuntimeError(f"provinces bitmap: missing northern landscape bitmap provinces {missing_pixels}")
     return LandscapeMasks(island, north, (min_x, min_y, max_x, max_y))
 
 
