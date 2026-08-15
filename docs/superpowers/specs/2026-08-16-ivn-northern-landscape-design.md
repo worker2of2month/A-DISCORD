@@ -8,8 +8,8 @@
 
 Give the IIA island a readable three-dimensional landform, expand northern
 forest coverage, synchronize the low-resolution tree map with painted terrain,
-and replace repeated `March` state names while preserving the existing province
-geometry and unrelated map content.
+replace repeated `March` state names, and enforce the mod's approximate
+one-province/one-dominant-texture rule around all nine northern VP settlements.
 
 ## Approved scope
 
@@ -25,8 +25,12 @@ geometry and unrelated map content.
 - Rename state 127, states 695-698, victory point 595, and strategic region 6.
 - Leave state 25 and victory point 16568 named `Старая марка`.
 - Do not change BOR state 89 even though it shares strategic region 6.
-- Do not change `map/provinces.bmp`, province adjacency, coastlines, state
-  province membership, railways, supply nodes, or buildings.
+- Split the nine northern settlement provinces `595`, `579`, `1971`, `3447`,
+  `2262`, `423`, `4217`, `6905`, and `11841`. The existing ID remains the
+  compact city core; deterministic new IDs are assigned to the surrounding
+  land and added to the same state.
+- Preserve coastlines, VP/OOB/rail/supply references, and ports. Coastal city
+  cores that host naval infrastructure remain coastal.
 
 ## Baseline evidence
 
@@ -91,7 +95,18 @@ deterministic broad-scale moisture field.
   lowlands.
 - State 164's existing marsh is preserved except for small deterministic
   boundary blends where necessary.
-- Existing compact urban footprints remain unchanged.
+- Each of the nine northern settlements is a compact urban province, not a
+  partial urban texture painted across a much larger rural province. The old
+  province ID is retained for the city core so existing VP, unit, railway,
+  supply, and building references remain valid.
+- City boundaries are deterministic, connected, organic, and never rectangular
+  blocks or long straight horizontal/vertical cuts. The surrounding remainder
+  is connected wherever possible; disconnected meaningful components receive
+  separate new province IDs rather than producing invalid enclaves.
+- Province `6905` is special-cased by terrain fitness: its urban core is selected
+  on low-slope lowland and may not overlap the generated mountain mask. Its
+  principal ridge is kept outside the city province and may receive a separate
+  mountain-dominant province ID when required for the one-texture rule.
 - Water terrain is never modified.
 
 Coverage targets are measured after excluding water and urban footprints:
@@ -103,9 +118,32 @@ Coverage targets are measured after excluding water and urban footprints:
   height field.
 
 After painting, the existing IVN geography plurality logic updates column 6 of
-`map/definition.csv` for affected provinces. Settlement provinces remain
-declared `urban`; other declarations must match their dominant painted combat
-terrain.
+`map/definition.csv` for affected provinces. Settlement cores are entirely
+palette-13 and declared `urban`; every new rural province receives one dominant
+painted combat terrain and a matching declaration. Small transition shoulders
+may cross a province only where needed to avoid an abrupt mountain/plains edge.
+
+## Province split contract
+
+The province split is generated and reviewable rather than hand-painted. It
+owns the exact pixel transfers from the nine source provinces and appends new
+rows to `map/definition.csv` using unused IDs beginning at `16654` and unique
+RGB colours. It also updates only the nine owning state province lists.
+
+The splitter must prove all of the following before apply:
+
+- every source pixel is assigned exactly once to its retained core or a new
+  same-state province, with no changes outside the nine source colours;
+- all resulting land provinces are four-neighbour connected;
+- each retained old ID contains its intended VP location and every required
+  building/port anchor; coastal flags match actual coastline contact;
+- no VP value, OOB placement, railway, supply-node, or building definition is
+  silently moved to a new ID;
+- no province colour is duplicated and all new IDs/colours are deterministic;
+- state membership is updated through the state-history owner and subsequent
+  generated map-building output is resynchronized;
+- the final province bitmap has a new exact SHA-256 regression contract and a
+  second apply is byte-identical.
 
 ## Tree map synchronization
 
@@ -155,23 +193,29 @@ ASCII/English.
 
 ## Ownership and build order
 
-Extend `tools.builders.build_adiscord_ivn_geography` into the single scoped
-landscape owner rather than adding an unrelated hand-painted pass. It owns:
+Add a narrow province-split pass before the landscape pass. It owns only the
+nine approved source colours in `map/provinces.bmp`, their appended definition
+rows, and the corresponding generated state province-list additions. The
+existing `tools.builders.build_adiscord_ivn_geography` then owns:
 
 - island pixels in `map/heightmap.bmp`;
 - corresponding cells in `map/world_normal.bmp`;
 - terrain pixels inside the approved northern IVN/IIA mask;
 - tree cells inside the downsampled approved mask;
 - terrain column 6 for affected rows of `map/definition.csv`;
-- existing compact urban footprints for IVN/IIA settlements.
+- full palette-13 coverage of the nine retained northern city-core provinces;
+- deterministic organic urban footprints for other existing IVN/IIA
+  settlements outside this nine-province split.
 
 Ownership remains layered because terrain snow also writes `terrain.bmp` and
 other builders write different `definition.csv` fields. Apply order is:
 
-1. state history and naming builders;
-2. IVN northern landscape;
-3. permanent-snow terrain pass;
-4. minimap generation.
+1. northern city province split and state-membership update;
+2. state history and naming builders;
+3. IVN northern landscape;
+4. map-building synchronization;
+5. permanent-snow terrain pass;
+6. minimap generation.
 
 The landscape height ceiling intentionally prevents new permanent-snow pixels,
 but the snow pass is still rerun and checked because it consumes height and
@@ -179,7 +223,8 @@ terrain.
 
 ## Safety and verification contracts
 
-- Preserve the existing SHA-256 contract for `map/provinces.bmp`.
+- Replace the former province SHA-256 with the deterministic post-split hash and
+  require zero changes outside the nine approved source provinces.
 - Preserve image dimensions, modes, and palettes for every modified BMP.
 - Require zero changed `heightmap.bmp` pixels outside island land.
 - Require zero changed `terrain.bmp` pixels outside the approved north mask,
@@ -204,9 +249,11 @@ terrain.
 
 ## Out of scope
 
-- New province cuts or coastline edits.
+- Province cuts outside the nine approved northern settlement provinces or any
+  coastline edit.
 - Mainland heightmap changes.
-- New rivers, railways, supply hubs, buildings, or victory points.
+- New rivers, railways, supply hubs, buildings, or victory points; existing
+  generated building positions may only be resynchronized to retained city IDs.
 - Changes to BOR state 89.
 - Permanent snow on the island.
 - A new leader portrait or changes to the island-administration autonomy icon.
