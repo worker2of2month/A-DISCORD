@@ -493,6 +493,32 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/laws/economic_system/ADISCORD_economic_system_technocratic.png"
 	}
 
+### A-DISCORD economic mobilization law icons
+	spriteType = {
+		name = "GFX_idea_ADISCORD_civilian_oriented_economy"
+		texturefile = "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_1_civilian_oriented.png"
+	}
+	spriteType = {
+		name = "GFX_idea_civilian_economy"
+		texturefile = "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_2_civilian.png"
+	}
+	spriteType = {
+		name = "GFX_idea_low_economic_mobilisation"
+		texturefile = "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_3_early_mobilization.png"
+	}
+	spriteType = {
+		name = "GFX_idea_partial_economic_mobilisation"
+		texturefile = "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_4_partial_mobilization.png"
+	}
+	spriteType = {
+		name = "GFX_idea_war_economy"
+		texturefile = "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_5_war_economy.png"
+	}
+	spriteType = {
+		name = "GFX_idea_tot_economic_mobilisation"
+		texturefile = "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_6_total_mobilization.png"
+	}
+
 ### A-DISCORD society type fallback icons
 	spriteType = {
 		name = "GFX_idea_ADISCORD_society_type_traditional"

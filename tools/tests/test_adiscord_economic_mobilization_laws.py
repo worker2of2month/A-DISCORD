@@ -1,6 +1,9 @@
+import hashlib
 import re
 import unittest
 from pathlib import Path
+
+from PIL import Image
 
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
@@ -53,6 +56,22 @@ EXPECTED_NEW_LAW_MODIFIERS = {
     "ADISCORD_economy_creditworthiness_factor": "0.05",
     "ADISCORD_economy_state_overload_gain_factor": "-0.08",
     "ADISCORD_country_development_economic_growth_factor": "0.05",
+}
+EXPECTED_TEXTURES = {
+    "GFX_idea_ADISCORD_civilian_oriented_economy": "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_1_civilian_oriented.png",
+    "GFX_idea_civilian_economy": "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_2_civilian.png",
+    "GFX_idea_low_economic_mobilisation": "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_3_early_mobilization.png",
+    "GFX_idea_partial_economic_mobilisation": "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_4_partial_mobilization.png",
+    "GFX_idea_war_economy": "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_5_war_economy.png",
+    "GFX_idea_tot_economic_mobilisation": "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_6_total_mobilization.png",
+}
+EXPECTED_SHA256 = {
+    "GFX_idea_ADISCORD_civilian_oriented_economy": "330E254423F2BC672C63EBEED2E47F24227CF3318F52D9F81837663EAD8517C4",
+    "GFX_idea_civilian_economy": "6589B6A13380D6EA36E349DED05FFDE2E1942110FAE3002DAF5AB9DD33F55DB1",
+    "GFX_idea_low_economic_mobilisation": "D38526A25FFA3D5CEE1412CB331546241DF9CBD5BA60994A5DAE5AE9990218ED",
+    "GFX_idea_partial_economic_mobilisation": "FF677EEF383F90170CECA442776C645DBB586D4E5A6E6DD6B98F90B7DC17A2F5",
+    "GFX_idea_war_economy": "2AE5F8D3E02407763583BC0DB867B2CB567981F1519C78567560CEAEB141E1AE",
+    "GFX_idea_tot_economic_mobilisation": "98934F65323573D1C63990078FD8F8C3BC09BA5202F410A546EFD8614C18C5C8",
 }
 
 
@@ -170,6 +189,30 @@ class EconomicMobilizationLawContracts(unittest.TestCase):
             list(ACTIVE_LAWS[1:]),
             re.findall(r"\badd_ideas\s*=\s*([A-Za-z0-9_]+)", upgrade),
         )
+
+    def test_six_law_sprites_resolve_to_byte_preserved_pngs(self):
+        parsed = parse_clausewitz(GFX_PATH.read_text(encoding="utf-8-sig"))
+        sprite_types = unique_child(parsed, "spriteTypes")
+        matching = []
+        for entry in sprite_types:
+            if entry.key != "spriteType" or not isinstance(entry.value, list):
+                continue
+            name = scalar(entry.value, "name")
+            if name in EXPECTED_TEXTURES:
+                matching.append((name, scalar(entry.value, "texturefile")))
+
+        self.assertEqual(len(EXPECTED_TEXTURES), len(matching))
+        self.assertEqual(EXPECTED_TEXTURES, dict(matching))
+        for sprite_name, relative_path in EXPECTED_TEXTURES.items():
+            path = ROOT / relative_path
+            self.assertEqual(
+                EXPECTED_SHA256[sprite_name],
+                hashlib.sha256(path.read_bytes()).hexdigest().upper(),
+            )
+            with self.subTest(sprite_name=sprite_name), Image.open(path) as image:
+                self.assertEqual("PNG", image.format)
+                self.assertEqual((64, 64), image.size)
+                self.assertIn("A", image.getbands())
 
 
 if __name__ == "__main__":
