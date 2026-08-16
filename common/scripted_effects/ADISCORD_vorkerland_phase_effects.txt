@@ -1262,6 +1262,7 @@ ADISCORD_vorkerland_form_wrk_from_wkr = {
 		puppet = SOL
 		set_autonomy = { target = SOL autonomy_state = autonomy_district_in_Vorkerland freedom_level = 0.10 }
 		SOL = {
+			ADISCORD_vorkerland_sync_party_identity = yes
 			set_cosmetic_tag = SOL_vorkerland_worker_protectorate
 			set_country_flag = ADISCORD_vorkerland_worker_protectorate
 		}
@@ -1367,6 +1368,7 @@ ADISCORD_vorkerland_form_wrk_from_vad = {
 		}
 		puppet = SOL
 		set_autonomy = { target = SOL autonomy_state = autonomy_puppet freedom_level = 0.10 }
+		SOL = { ADISCORD_vorkerland_sync_party_identity = yes }
 		create_faction_from_template = { template = faction_template_ADISCORD_standard name = ADISCORD_vorkerland_solar_restoration_alliance }
 		add_to_faction = SOL
 	}

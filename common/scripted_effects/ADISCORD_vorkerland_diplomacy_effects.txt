@@ -304,6 +304,7 @@ ADISCORD_vorkerland_restore_sol_as_vad_puppet = {
 				autonomy_state = autonomy_puppet
 				freedom_level = 0.10
 			}
+			SOL = { ADISCORD_vorkerland_sync_party_identity = yes }
 		}
 		else = {
 			SOL = {
@@ -313,6 +314,7 @@ ADISCORD_vorkerland_restore_sol_as_vad_puppet = {
 			puppet = SOL
 			set_autonomy = { target = SOL autonomy_state = autonomy_puppet freedom_level = 0.10 }
 			SOL = {
+				ADISCORD_vorkerland_sync_party_identity = yes
 				transfer_state = 76
 				transfer_state = 104
 				transfer_state = 198
@@ -867,6 +869,7 @@ ADISCORD_vorkerland_materialize_sol_worker_protectorate = {
 				autonomy_state = autonomy_district_in_Vorkerland
 				freedom_level = 0.10
 			}
+			SOL = { ADISCORD_vorkerland_sync_party_identity = yes }
 		}
 		else = {
 			SOL = {
@@ -876,6 +879,7 @@ ADISCORD_vorkerland_materialize_sol_worker_protectorate = {
 			puppet = SOL
 			set_autonomy = { target = SOL autonomy_state = autonomy_district_in_Vorkerland freedom_level = 0.10 }
 			SOL = {
+				ADISCORD_vorkerland_sync_party_identity = yes
 				transfer_state = 76
 				transfer_state = 104
 				transfer_state = 198

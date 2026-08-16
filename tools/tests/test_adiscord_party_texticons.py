@@ -39,6 +39,21 @@ def named_block(text: str, name: str) -> str:
     raise AssertionError(f"unclosed block {name}")
 
 
+def block_at(text: str, start: int) -> tuple[str, int]:
+    opening = text.find("{", start)
+    if opening == -1:
+        raise AssertionError(f"missing opening brace at {start}")
+    depth = 0
+    for index in range(opening, len(text)):
+        if text[index] == "{":
+            depth += 1
+        elif text[index] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[start:index + 1], index + 1
+    raise AssertionError(f"unclosed block at {start}")
+
+
 class PartyTexticonContractTests(unittest.TestCase):
     def test_all_new_sprites_resolve_to_generated_icons(self) -> None:
         gfx = read("interface/parties_texticons.gfx")
@@ -117,11 +132,59 @@ class PartyIdentityLifecycleTests(unittest.TestCase):
         repair_identities = events.index("ADISCORD_vorkerland_repair_claimant_identities = yes", apply_cosmetics)
         self.assertLess(apply_cosmetics, sync_parties)
         self.assertLess(sync_parties, repair_identities)
-        for hook in ("on_puppet", "on_release_as_puppet", "on_release_as_free"):
+        for hook in ("on_puppet", "on_release_as_puppet", "on_release_as_free", "on_subject_free"):
             block = named_block(on_actions, hook)
             self.assertIn("ADISCORD_vorkerland_sync_party_identity = yes", block)
         for recurring in ("on_daily", "on_weekly", "on_monthly"):
             self.assertNotIn(recurring, on_actions)
+
+    def test_scripted_subject_creation_sites_resync_immediately(self) -> None:
+        successors = "VAD|ZAO|PWR|VLA|ROM|SOL|TRU"
+        relatives = (
+            "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt",
+            "common/scripted_effects/ADISCORD_vorkerland_diplomacy_effects.txt",
+            "common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt",
+        )
+        puppet_sites: list[tuple[str, str]] = []
+        release_sites: list[tuple[str, str]] = []
+        for relative in relatives:
+            text = read(relative)
+            for match in re.finditer(rf"(?m)^\s*puppet\s*=\s*({successors})\s*$", text):
+                tag = match.group(1)
+                puppet_sites.append((relative, tag))
+                transition = re.compile(
+                    rf"(?ms)^\s*puppet\s*=\s*{tag}\s*$"
+                    rf"\s*^\s*set_autonomy\s*=\s*\{{[^\n]*\btarget\s*=\s*{tag}\b[^\n]*\}}\s*$"
+                    rf"\s*^\s*{tag}\s*=\s*\{{\s*ADISCORD_vorkerland_sync_party_identity\s*=\s*yes"
+                )
+                self.assertIsNotNone(transition.match(text, match.start()), f"unsynchronized scripted puppet: {relative}:{tag}")
+            for match in re.finditer(r"(?m)^\s*release_autonomy\s*=\s*\{", text):
+                block, end = block_at(text, match.start())
+                target = re.search(rf"\btarget\s*=\s*({successors})\b", block)
+                if target is None:
+                    continue
+                tag = target.group(1)
+                release_sites.append((relative, tag))
+                self.assertRegex(
+                    text[end:end + 200],
+                    rf"(?s)^\s*{tag}\s*=\s*\{{\s*ADISCORD_vorkerland_sync_party_identity\s*=\s*yes",
+                    f"unsynchronized scripted release: {relative}:{tag}",
+                )
+        self.assertEqual(
+            sorted(puppet_sites),
+            sorted(
+                (
+                    (relatives[0], "VLA"),
+                    (relatives[0], "ROM"),
+                    (relatives[0], "TRU"),
+                    (relatives[1], "SOL"),
+                    (relatives[1], "SOL"),
+                    (relatives[2], "SOL"),
+                    (relatives[2], "SOL"),
+                )
+            ),
+        )
+        self.assertEqual(release_sites, [(relatives[1], "SOL"), (relatives[1], "SOL")])
 
 
 if __name__ == "__main__":
