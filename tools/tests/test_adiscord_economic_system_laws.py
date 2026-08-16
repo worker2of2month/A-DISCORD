@@ -52,6 +52,14 @@ EXPECTED_SYNDICALIST_MODIFIERS = {
     "ADISCORD_economy_investment_confidence_factor": "-0.10",
     "ADISCORD_country_development_economic_growth_factor": "0.05",
 }
+STARTING_SYSTEMS = {
+    "STP - StepanLand.txt": "ADISCORD_economic_system_oligarchic_clan",
+    "NOD - Nodral.txt": "ADISCORD_economic_system_oligarchic_clan",
+    "VAL - ValeraLand.txt": "ADISCORD_economic_system_state_coordinated",
+    "APH - Anthropophagorum.txt": "ADISCORD_economic_system_agrarian",
+    "OSF - FoedusOssifractorum.txt": "ADISCORD_economic_system_agrarian",
+    "CIN - AshTribe.txt": "ADISCORD_economic_system_agrarian",
+}
 
 
 def unique_child(entries, key):
@@ -272,6 +280,21 @@ class EconomicSystemLawContracts(unittest.TestCase):
             ),
             80,
         )
+
+    def test_requested_countries_start_with_exactly_one_approved_system(self):
+        for filename, expected in STARTING_SYSTEMS.items():
+            with self.subTest(filename=filename):
+                path = ROOT / "history" / "countries" / filename
+                parsed = parse_clausewitz(path.read_text(encoding="utf-8-sig"))
+                add_ideas = unique_child(parsed, "add_ideas")
+                assigned = [
+                    entry.value
+                    for entry in add_ideas
+                    if entry.key == ""
+                    and isinstance(entry.value, str)
+                    and entry.value in SYSTEM_IDS
+                ]
+                self.assertEqual([expected], assigned)
 
 
 if __name__ == "__main__":

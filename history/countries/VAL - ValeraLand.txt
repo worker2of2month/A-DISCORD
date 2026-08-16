@@ -36,6 +36,7 @@ add_ideas = {
 	VAL_worldwide_famous_weponry
 	VAL_harvest_of_ash
 	VAL_big_buyers
+	ADISCORD_economic_system_state_coordinated
 
 	#ministers
 	minister_VAL_Valerian_Kraith

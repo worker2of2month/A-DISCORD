@@ -37,6 +37,7 @@ add_ideas = {
 	NOD_home_of_hedonist_revolution
 	NOD_hedonism_with_no_bondaries
 	STP_hidden_slaves_trade
+	ADISCORD_economic_system_oligarchic_clan
 
 	#ministers
 	minister_NOD_Avren_Lusk
