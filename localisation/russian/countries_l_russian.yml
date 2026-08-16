@@ -310,6 +310,10 @@
  OSF_latin_DEF: "Foedus Ossifractorum"
  OSF_latin_ADJ: "Ossifractian"
 # END CONSOLIDATED: countries_cosmetic_l_russian.yml
+ IIA: "Иторское островное управление"
+ IIA_DEF: "Иторское островное управление"
+ IIA_ADJ: "Иторск."
+ IIA_humanism: "Иторское островное управление"
  # BEGIN GENERATED: tools.builders.build_adiscord_inner_frontier_countries:exz
  EXZ: ""
  EXZ_DEF: ""

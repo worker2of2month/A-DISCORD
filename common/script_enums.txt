@@ -207,11 +207,15 @@ script_enum_equipment_bonus_type = {
 	ADISCORD_combat_platform_archetype
 	ADISCORD_heavy_platform_archetype
 	ADISCORD_recovery_platform_archetype
+	ADISCORD_armored_carrier_archetype
 	ADISCORD_light_combat_platform_2163
+	ADISCORD_armored_carrier_2163
 	ADISCORD_combat_platform_2170
 	ADISCORD_recon_drone_carrier_2170
+	ADISCORD_ifv_2170
 	ADISCORD_combat_platform_2183
 	ADISCORD_repair_platform_2183
+	ADISCORD_networked_ifv_2183
 	ADISCORD_heavy_combat_platform_2183
 	ADISCORD_combat_platform_2200
 	ADISCORD_heavy_combat_platform_2200
@@ -227,13 +231,23 @@ script_enum_equipment_bonus_type = {
 	ADISCORD_anti_air_equipment_2183
 	infantry_equipment
 	infantry_equipment_0
+	ADISCORD_infantry_equipment_2156
+	ADISCORD_infantry_equipment_2163
+	ADISCORD_infantry_equipment_2168
 	ADISCORD_infantry_equipment_2170
+	ADISCORD_infantry_equipment_2178
 	ADISCORD_infantry_equipment_2183
+	ADISCORD_infantry_equipment_2193
 	ADISCORD_infantry_equipment_2200
 	ADISCORD_squad_weapons_equipment
 	ADISCORD_squad_weapons_equipment_0
+	ADISCORD_squad_weapons_equipment_2156
+	ADISCORD_squad_weapons_equipment_2163
+	ADISCORD_squad_weapons_equipment_2168
 	ADISCORD_squad_weapons_equipment_2170
+	ADISCORD_squad_weapons_equipment_2178
 	ADISCORD_squad_weapons_equipment_2183
+	ADISCORD_squad_weapons_equipment_2193
 	ADISCORD_squad_weapons_equipment_2200
 	railway_gun_equipment
 	railway_gun_equipment_1

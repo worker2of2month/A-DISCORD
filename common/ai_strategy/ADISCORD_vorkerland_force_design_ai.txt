@@ -10,6 +10,7 @@ ADISCORD_vorkerland_armored_reserve_program = {
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		has_tech = ADISCORD_tech_armored_carrier_program
 		has_tech = ADISCORD_tech_semi_autonomous_combat_modules
 		num_of_military_factories > 2
 	}
@@ -19,6 +20,8 @@ ADISCORD_vorkerland_armored_reserve_program = {
 	ai_strategy = { type = equipment_production_factor id = armor value = 30 }
 	ai_strategy = { type = equipment_variant_production_factor id = ADISCORD_combat_platform_archetype value = 35 }
 	ai_strategy = { type = equipment_production_min_factories_archetype id = ADISCORD_combat_platform_archetype value = 1 }
+	ai_strategy = { type = equipment_variant_production_factor id = ADISCORD_armored_carrier_archetype value = 35 }
+	ai_strategy = { type = equipment_production_min_factories_archetype id = ADISCORD_armored_carrier_archetype value = 1 }
 }
 
 ADISCORD_vorkerland_air_denial_program = {

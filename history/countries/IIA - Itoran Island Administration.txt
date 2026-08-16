@@ -1,0 +1,19 @@
+capital = 693
+oob = "IIA"
+
+recruit_character = IIA_Artem_Severin
+
+set_politics = {
+	ruling_party = humanism
+	elections_allowed = no
+}
+set_popularities = {
+	humanism = 55
+	etatism = 25
+	pragmatism = 15
+	technocracy = 5
+}
+
+set_stability = 0.50
+set_war_support = 0.35
+set_research_slots = 2

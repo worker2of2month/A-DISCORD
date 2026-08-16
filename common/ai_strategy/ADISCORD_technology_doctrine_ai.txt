@@ -280,6 +280,24 @@ ADISCORD_ai_platform_battlegroups = {
 	}
 }
 
+ADISCORD_produce_armored_carriers = {
+	enable = {
+		has_tech = ADISCORD_tech_armored_carrier_program
+		num_of_military_factories > 6
+		ADISCORD_economy_ai_can_fund_advanced_forces = yes
+		has_equipment = { ADISCORD_armored_carrier_archetype < 900 }
+	}
+	abort = {
+		OR = {
+			num_of_military_factories < 7
+			has_equipment = { ADISCORD_armored_carrier_archetype > 1500 }
+		}
+	}
+	ai_strategy = { type = role_ratio id = mobile value = 8 }
+	ai_strategy = { type = equipment_variant_production_factor id = ADISCORD_armored_carrier_archetype value = 24 }
+	ai_strategy = { type = equipment_production_min_factories_archetype id = ADISCORD_armored_carrier_archetype value = 1 }
+}
+
 ADISCORD_ai_heavy_platforms = {
 	enable = {
 		has_tech = ADISCORD_tech_heavy_platform_cores

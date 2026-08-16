@@ -632,9 +632,26 @@ def collect_issues() -> list[str]:
 
     central = named_block(decisions, CENTRAL_DECISION)
     central_effect = named_block(effects, CENTRAL_EFFECT)
+    central_visible = named_block(central, "visible")
+    central_available = named_block(central, "available")
+    command_ready_tooltip = (
+        "tooltip = ADISCORD_vorkerland_central_showdown_command_ready_tt"
+    )
+    if "ADISCORD_vorkerland_phase_central_preparation" not in central_visible:
+        issues.append("final showdown must become visible during central preparation")
+    if (
+        "ADISCORD_vorkerland_focus_central_front_prepared" in central_visible
+        or "central_war_unlocked" in central_visible
+    ):
+        issues.append("final showdown hides its command-readiness blocker")
+    if (
+        command_ready_tooltip not in central_available
+        or "ADISCORD_vorkerland_focus_central_front_prepared" not in central_available
+    ):
+        issues.append("final showdown must explain command readiness in available")
     for tag in ("WKR", "VAD", "TVA"):
         hook = f"ADISCORD_vorkerland_focus_{tag.lower()}_central_war_unlocked"
-        if hook not in central or hook not in central_effect:
+        if hook not in central_available or hook not in central_effect:
             issues.append(f"central controller request lacks exact {tag} hook {hook}")
     for token in (
         "ADISCORD_vorkerland_focus_central_showdown_requested",

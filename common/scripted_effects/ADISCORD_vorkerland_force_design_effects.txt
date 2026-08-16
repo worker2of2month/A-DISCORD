@@ -11,6 +11,7 @@ ADISCORD_vorkerland_bootstrap_ai_force_designs = {
 		}
 		set_country_flag = ADISCORD_vorkerland_force_designs_bootstrapped
 		set_technology = {
+			ADISCORD_tech_armored_carrier_program = 1
 			ADISCORD_tech_semi_autonomous_combat_modules = 1
 			ADISCORD_tech_reclaimed_jet_platforms = 1
 			ADISCORD_tech_battlefield_attack_aircraft = 1
@@ -62,6 +63,14 @@ ADISCORD_vorkerland_bootstrap_ai_force_designs = {
 			add_equipment_to_stockpile = {
 				type = ADISCORD_fighter_airframe_2163
 				amount = 12
+				producer = ROOT
+			}
+		}
+		if = {
+			limit = { has_equipment = { ADISCORD_armored_carrier_archetype < 200 } }
+			add_equipment_to_stockpile = {
+				type = ADISCORD_armored_carrier_2163
+				amount = 260
 				producer = ROOT
 			}
 		}

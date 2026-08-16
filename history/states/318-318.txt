@@ -7,6 +7,7 @@ state = {
 		owner = TRU
 		add_core_of = TRU
 		victory_points = { 16642 3 }
+		victory_points = { 16624 1 }
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1

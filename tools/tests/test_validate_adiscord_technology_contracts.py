@@ -16,6 +16,51 @@ class TechnologyValidatorNegativeTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.defined_techs, cls.tech_blocks = validator.collect_technologies()
 
+    def test_generated_horizontal_tree_positions_match_the_validator_contract(self) -> None:
+        issues = validator.check_technology_parser_constraints(self.tech_blocks)
+        self.assertFalse(
+            any("grid position" in issue for issue in issues),
+            issues,
+        )
+
+    def test_transposed_horizontal_grid_position_is_reported(self) -> None:
+        tech_id = "ADISCORD_tech_postwar_weapon_standardization"
+        broken = dict(self.tech_blocks)
+        broken[tech_id] = broken[tech_id].replace(
+            "position = { x = 1 y = 0 }",
+            "position = { x = 0 y = 1 }",
+            1,
+        )
+        issues = validator.check_technology_parser_constraints(broken)
+        self.assertTrue(
+            any(tech_id in issue and "grid position (0, 1)" in issue for issue in issues),
+            issues,
+        )
+
+    def test_horizontal_gridbox_using_up_format_is_reported(self) -> None:
+        gui_path = validator.ROOT / "interface" / "countrytechtreeview.gui"
+        gui = validator.read_text(gui_path)
+        broken_gui = gui.replace('format = "LEFT"', 'format = "UP"', 1)
+        with patch.object(validator, "read_text", return_value=broken_gui):
+            issues = validator.check_technology_gridboxes(self.tech_blocks)
+        self.assertTrue(
+            any("infantry_folder" in issue and "horizontal LEFT" in issue for issue in issues),
+            issues,
+        )
+
+    def test_mechanized_upgrades_target_the_custom_mechanized_battalion(self) -> None:
+        for tech_id in (
+            "ADISCORD_tech_armored_carrier_program",
+            "ADISCORD_tech_infantry_combat_vehicle_program",
+            "ADISCORD_tech_networked_mechanized_cells",
+        ):
+            block = self.tech_blocks[tech_id]
+            self.assertNotRegex(block, r"(?m)^\s*mechanized\s*=\s*\{")
+            self.assertRegex(
+                block,
+                r"(?m)^\s*ADISCORD_mechanized_infantry\s*=\s*\{",
+            )
+
     def test_missing_generated_dependency_is_reported(self) -> None:
         tech_id = "ADISCORD_tech_teleoperated_scout_carts"
         broken = dict(self.tech_blocks)
@@ -79,6 +124,192 @@ on_actions = {
             any(tech_id in issue and "energy" in issue for issue in issues),
             issues,
         )
+
+    def test_ai_force_progression_accepts_reachable_field_baseline(self) -> None:
+        check = getattr(validator, "ai_force_progression_contract_issues", None)
+        self.assertIsNotNone(
+            check,
+            "AI progression validator must expose its source contract for fixture tests",
+        )
+        templates = """
+ADISCORD_infantry_templates = {
+    role = infantry
+    ADISCORD_reconstruction_brigade = {
+        can_upgrade_in_field = { always = yes }
+        target_min_match = 0.65
+        target_template = { regiments = { infantry = 6 } }
+    }
+    ADISCORD_line_brigade = {
+        enable = {
+            is_ai = yes
+        }
+        target_min_match = 0.75
+        target_template = {
+            regiments = { infantry = 8 ADISCORD_line_artillery = 1 }
+        }
+    }
+}
+"""
+        default_strategy = """
+ADISCORD_produce_support_equipment_low_stock = {
+    enable = { num_of_military_factories > 1 }
+    ai_strategy = {
+        type = equipment_production_min_factories_archetype
+        id = support_equipment
+        value = 1
+    }
+}
+ADISCORD_produce_artillery_low_stock = {
+    enable = { num_of_military_factories > 2 }
+    ai_strategy = {
+        type = equipment_production_min_factories_archetype
+        id = artillery_equipment
+        value = 1
+    }
+}
+"""
+        self.assertEqual(check(templates, default_strategy), [])
+
+    def test_ai_force_progression_rejects_unreachable_four_battalion_loop(self) -> None:
+        check = getattr(validator, "ai_force_progression_contract_issues", None)
+        self.assertIsNotNone(
+            check,
+            "AI progression validator must expose its source contract for fixture tests",
+        )
+        templates = """
+ADISCORD_infantry_templates = {
+    role = infantry
+    ADISCORD_reconstruction_brigade = {
+        target_template = { regiments = { infantry = 4 } }
+    }
+    ADISCORD_line_brigade = {
+        enable = {
+            num_of_military_factories > 3
+            has_equipment = { support_equipment > 400 }
+            has_equipment = { artillery_equipment > 250 }
+        }
+        target_template = { regiments = { infantry = 6 } }
+    }
+}
+"""
+        default_strategy = """
+ADISCORD_produce_support_equipment_low_stock = {
+    enable = { num_of_military_factories > 3 }
+    ai_strategy = {
+        type = equipment_production_min_factories_archetype
+        id = support_equipment
+        value = 1
+    }
+}
+"""
+        issues = check(templates, default_strategy)
+        self.assertTrue(any("at least six battalions" in issue for issue in issues), issues)
+        self.assertTrue(any("target_min_match" in issue for issue in issues), issues)
+        self.assertTrue(any("supported line template" in issue for issue in issues), issues)
+        self.assertTrue(any("eight infantry" in issue for issue in issues), issues)
+        self.assertTrue(any("line artillery" in issue for issue in issues), issues)
+        self.assertTrue(any("support production" in issue for issue in issues), issues)
+        self.assertTrue(any("artillery production" in issue for issue in issues), issues)
+
+    def test_modern_land_warfare_contract_accepts_mechanized_armored_force(self) -> None:
+        check = getattr(validator, "modern_land_warfare_contract_issues", None)
+        self.assertIsNotNone(check)
+        equipment = """
+equipments = {
+    ADISCORD_armored_carrier_archetype = {
+        is_archetype = yes
+        type = { mechanized }
+        is_buildable = no
+    }
+    ADISCORD_armored_carrier_2163 = {
+        archetype = ADISCORD_armored_carrier_archetype
+    }
+    ADISCORD_ifv_2170 = {
+        archetype = ADISCORD_armored_carrier_archetype
+        parent = ADISCORD_armored_carrier_2163
+    }
+    ADISCORD_networked_ifv_2183 = {
+        archetype = ADISCORD_armored_carrier_archetype
+        parent = ADISCORD_ifv_2170
+    }
+}
+"""
+        units = """
+sub_units = {
+    ADISCORD_mechanized_infantry = {
+        active = no
+        type = { mechanized }
+        transport = ADISCORD_armored_carrier_archetype
+        essential = { infantry_equipment ADISCORD_armored_carrier_archetype }
+        need = {
+            infantry_equipment = 100
+            ADISCORD_squad_weapons_equipment = 8
+            ADISCORD_armored_carrier_archetype = 40
+        }
+    }
+}
+"""
+        technology = """
+ADISCORD_tech_armored_carrier_program = {
+    enable_equipments = { ADISCORD_armored_carrier_2163 }
+    enable_subunits = { ADISCORD_mechanized_infantry }
+}
+ADISCORD_tech_infantry_combat_vehicle_program = {
+    enable_equipments = { ADISCORD_ifv_2170 }
+}
+ADISCORD_tech_networked_mechanized_cells = {
+    enable_equipments = { ADISCORD_networked_ifv_2183 }
+}
+"""
+        templates = """
+ADISCORD_tank_battlegroup = {
+    enable = {
+        has_equipment = { ADISCORD_armored_carrier_archetype > 240 }
+    }
+    target_template = {
+        regiments = {
+            ADISCORD_mechanized_infantry = 6
+            ADISCORD_combat_platform = 4
+        }
+    }
+}
+"""
+        strategy = """
+ADISCORD_produce_armored_carriers = {
+    enable = {
+        has_tech = ADISCORD_tech_armored_carrier_program
+        num_of_military_factories > 6
+    }
+    ai_strategy = {
+        type = equipment_production_min_factories_archetype
+        id = ADISCORD_armored_carrier_archetype
+        value = 1
+    }
+}
+"""
+        self.assertEqual(
+            check(equipment, units, technology, templates, strategy), []
+        )
+
+    def test_modern_land_warfare_contract_rejects_foot_tank_force(self) -> None:
+        check = getattr(validator, "modern_land_warfare_contract_issues", None)
+        self.assertIsNotNone(check)
+        issues = check(
+            "equipments = { ADISCORD_armored_carrier_archetype = { is_archetype = yes } }",
+            "sub_units = { ADISCORD_mechanized_infantry = { active = no } }",
+            "ADISCORD_tech_armored_carrier_program = { }",
+            "ADISCORD_tank_battlegroup = { target_template = { regiments = { infantry = 6 ADISCORD_combat_platform = 4 } } }",
+            "ADISCORD_produce_armored_carriers = { enable = { num_of_military_factories > 12 } }",
+        )
+        for fragment in (
+            "three carrier generations",
+            "carrier archetype transport",
+            "unlock generations",
+            "six mechanized battalions",
+            "carrier stock gate",
+            "carrier production floor",
+        ):
+            self.assertTrue(any(fragment in issue for issue in issues), issues)
 
     def test_missing_equipment_unlock_is_reported(self) -> None:
         tech_id = "ADISCORD_tech_postwar_weapon_standardization"

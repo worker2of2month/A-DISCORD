@@ -86,4 +86,5 @@
  autonomy_feodal_ducatus: "Феодальное герцогство"
  autonomy_contract_protectorate: "Договорный протекторат"
  autonomy_contract_client: "Договорное клиентское государство"
+ autonomy_island_administration: "Островное управление"
 # END CONSOLIDATED: ADISCORD_autonomy_l_russian.yml

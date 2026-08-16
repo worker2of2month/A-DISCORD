@@ -307,7 +307,7 @@ on_actions = {
 					WRK = { ADISCORD_vorkerland_wrk_activate_vla_auxiliaries = yes }
 				}
 				if = {
-					limit = { OR = { tag = ROM tag = TRU tag = ZAO } }
+					limit = { OR = { tag = ROM tag = TRU tag = ZAO tag = SOL } }
 					ADISCORD_vorkerland_sync_independence_cosmetic = yes
 				}
 			}
@@ -341,7 +341,7 @@ on_actions = {
 			else = {
 				ADISCORD_vorkerland_sync_republics_from_ruins = yes
 				if = {
-					limit = { OR = { tag = ROM tag = TRU tag = ZAO } }
+					limit = { OR = { tag = ROM tag = TRU tag = ZAO tag = SOL } }
 					ADISCORD_vorkerland_sync_independence_cosmetic = yes
 				}
 			}
@@ -374,7 +374,7 @@ on_actions = {
 			}
 			else = {
 				if = {
-					limit = { OR = { tag = ROM tag = TRU tag = ZAO } }
+					limit = { OR = { tag = ROM tag = TRU tag = ZAO tag = SOL } }
 					ADISCORD_vorkerland_sync_independence_cosmetic = yes
 				}
 			}

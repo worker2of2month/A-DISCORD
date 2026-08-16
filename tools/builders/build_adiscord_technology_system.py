@@ -35,15 +35,22 @@ MILESTONE_YEARS = tuple(
     LEGACY_TO_CAMPAIGN_YEAR[year]
     for year in (2100, 2120, 2140, 2160, 2170, 2182, 2200)
 )
-# Darkest Hour lays time out vertically and uses horizontal space for parallel
-# weapon families and specialisations. One 70px row per represented year keeps
-# the playable window dense without the old 2,800px horizontal runway.
+# Most tabs retain the compact vertical timeline. Infantry weapons and armor
+# use a horizontal timeline so development reads left-to-right while each
+# capability family keeps a stable row, matching their wider equipment cards.
 YEAR_TO_Y = {year: index for index, year in enumerate(YEARS)}
 GRID_X = 150
 GRID_Y = 130
 GRID_SLOT = 70
+HORIZONTAL_LANE_SLOT = 96
 LANE_SLOT_MULTIPLIER = 3
 BRANCH_GAP = 90
+HORIZONTAL_YEAR_SLOT_MULTIPLIER = 3
+HORIZONTAL_FOLDERS = frozenset({
+    "infantry_folder",
+    "armour_folder",
+    "nsb_armour_folder",
+})
 
 
 @dataclass(frozen=True)
@@ -387,7 +394,7 @@ autonomous_recon_screen|Автономное разведывательное о
         "Основные боевые танки", "Main Battle Tanks", "combat_armor",
         techs("""
 recovered_medium_chassis|Восстановленное среднее шасси|Recovered Medium Chassis|basic_medium_tank
-remote_weapon_stations|Дистанционные боевые модули|Remote Weapon Stations|improved_medium_tank
+remote_weapon_stations|Дистанционно управляемые башенные установки|Remote-controlled Turret Mounts|improved_medium_tank
 composite_armor_arrays|Массивы композитной брони|Composite Armor Arrays|advanced_medium_tank
 semi_autonomous_combat_modules|Полуавтономное управление танком|Semi-autonomous Tank Control|basic_modern_tank
 adaptive_fire_control|Адаптивное управление огнём|Adaptive Fire Control|improved_modern_tank
@@ -545,6 +552,36 @@ BRANCHES = tuple(expand_dense_branch(branch) for branch in BRANCHES)
 # is corrected, which is safe because equipment models are keyed by equipment
 # visual_level rather than technology localisation.
 TECH_TEXT_OVERRIDES = {
+    "drone_recon_swarms": (
+        "Программа Р-63 «След»", "R-63 “Trace” Programme",
+    ),
+    "active_scouting_suites": (
+        "Контур Р-66 «Эхо»", "R-66 “Echo” Reconnaissance Loop",
+    ),
+    "semi_autonomous_combat_modules": (
+        "Контур БТ-62 «Вожак»", "BT-62 “Lead” Control Loop",
+    ),
+    "autonomous_breakthrough_platforms": (
+        "Программа Т-71 «Таран»", "T-71 “Ram” Programme",
+    ),
+    "siege_platform_networks": (
+        "Контур Т-80 «Жернов»", "T-80 “Millstone” Siege Loop",
+    ),
+    "reclaimed_jet_platforms": (
+        "Программа А-50 «Искра»", "A-50 “Spark” Programme",
+    ),
+    "battlefield_attack_aircraft": (
+        "Программа АШ-50 «Коршун»", "AS-50 “Kite” Programme",
+    ),
+    "drone_air_wings": (
+        "Контур А-65 «Стая»", "A-65 “Flock” Air-control Loop",
+    ),
+    "directed_energy_defensive_suites": (
+        "Контур А-73 «Призма»", "A-73 “Prism” Defensive Loop",
+    ),
+    "suborbital_strike_systems": (
+        "Программа Р-80 «Стрела»", "R-80 “Arrow” Programme",
+    ),
     "refinery_catalyst_recovery": (
         "Сейсмическая томография залежей", "Seismic Deposit Tomography",
     ),
@@ -582,6 +619,14 @@ APPLIED_DESCRIPTION_RU_BY_BRANCH = {
 APPLIED_DESCRIPTION_EN_BY_BRANCH = {
     programme["key"]: programme["description_en"] for programme in APPLIED_PROGRAMMES
 }
+APPLIED_DESCRIPTION_RU_BY_BRANCH["mechanized_mobility"] = (
+    "развивает защищённую перевозку пехоты, боевые машины сопровождения и "
+    "сетевое управление механизированными группами"
+)
+APPLIED_DESCRIPTION_EN_BY_BRANCH["mechanized_mobility"] = (
+    "develops protected infantry transport, infantry fighting vehicles, and "
+    "networked control of mechanized groups"
+)
 APPLIED_PROGRAMME_KEYS = {programme["key"] for programme in APPLIED_PROGRAMMES}
 
 
@@ -854,55 +899,67 @@ POWER_BRANCH = compact_legacy_branch(
 
 
 LINEAR_COMPACT_INDICES = {
-    "small_arms": (0, 1, 2, 3, 4, 6, 8, 9, 13, 15, 18, 19),
-    "squad_weapons": (0, 1, 2, 3, 4, 6, 8, 9, 10, 13, 15, 18, 19),
-    "protection": (0, 1, 2, 4, 6, 8, 9, 10, 13, 16, 18, 19),
-    "special_forces": (0, 1, 2, 3, 4, 6, 7, 9, 10, 13, 15, 16, 19),
-    "field_support": (0, 1, 2, 3, 4, 5, 8, 9, 12, 13, 16, 18, 19),
-    "logistics": (0, 1, 2, 3, 4, 8, 9, 10, 11, 13, 16, 18, 19),
-    "rail": (0, 1, 2, 3, 4, 6, 9, 12, 13, 14, 15, 18, 19),
-    "anti_tank": (0, 1, 2, 3, 4, 6, 8, 9, 11, 13, 14, 15, 17, 19),
-    "anti_air": (0, 1, 2, 3, 4, 5, 8, 9, 11, 12, 14, 16, 18, 19),
-    "recon_armor": (0, 1, 2, 3, 4, 7, 9, 12, 13, 15, 17, 19),
-    "heavy_armor": (0, 1, 2, 3, 4, 6, 9, 10, 11, 13, 15, 18, 19),
-    "air_support": (0, 1, 2, 3, 4, 6, 9, 11, 12, 13, 16, 18, 19),
-    "strategic_air": (0, 1, 2, 3, 4, 6, 9, 10, 11, 13, 16, 17, 18, 19),
-    "naval_support": (0, 1, 2, 3, 4, 5, 9, 11, 12, 13, 15, 18, 19),
-    "surface_fleet": (0, 1, 2, 3, 4, 6, 9, 10, 12, 13, 15, 16, 18, 19),
-    "subsurface": (0, 1, 2, 3, 4, 6, 9, 11, 12, 13, 15, 17, 19),
+    "small_arms": (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 15, 18, 19),
+    "squad_weapons": (0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 13, 15, 17, 18, 19),
+    "protection": (0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 13, 15, 16, 18, 19),
+    "special_forces": (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 15, 16, 18, 19),
+    "field_support": tuple(range(20)),
+    "logistics": tuple(range(20)),
+    "rail": tuple(range(20)),
+    "anti_tank": tuple(range(20)),
+    "anti_air": tuple(range(20)),
+    "recon_armor": tuple(range(20)),
+    "heavy_armor": tuple(range(20)),
+    "air_support": tuple(range(20)),
+    "strategic_air": tuple(range(20)),
+    "naval_support": tuple(range(20)),
+    "surface_fleet": tuple(range(20)),
+    "subsurface": tuple(range(20)),
+}
+AUTHORED_YEAR_COMPACT_BRANCHES = {
+    "small_arms",
+    "squad_weapons",
+    "protection",
+    "special_forces",
+    "recon_armor",
+    "heavy_armor",
+    "field_support",
+    "logistics",
+    "rail",
+    "anti_tank",
+    "anti_air",
+    "air_support",
+    "strategic_air",
+    "naval_support",
+    "surface_fleet",
+    "subsurface",
 }
 
 
 def compact_linear_branch(key: str) -> Branch:
     source = LEGACY_BRANCH_BY_KEY[key]
-    keys = tuple(source.techs[index].key for index in LINEAR_COMPACT_INDICES[key])
-    return compact_legacy_branch(key, keys)
+    indices = LINEAR_COMPACT_INDICES[key]
+    keys = tuple(source.techs[index].key for index in indices)
+    years = (
+        tuple(source.years[index] for index in indices)
+        if key in AUTHORED_YEAR_COMPACT_BRANCHES
+        else None
+    )
+    return compact_legacy_branch(key, keys, years=years)
 
 
-ARTILLERY_BRANCH = compact_legacy_branch(
-    "artillery",
-    (
-        "restored_field_artillery",
-        "recoil_recovery",
-        "modular_gun_carriages",
-        "electrohydraulic_gun_laying",
-        "smart_fire_control",
-        "solid_state_ballistic_computers",
-        "counterbattery_radar_links",
-        "inertial_battery_survey",
-        "assisted_projectiles",
-        "course_correcting_fuzes",
-        "multispectral_spotter_drones",
-        "robotic_shell_handling",
-        "drone_spotted_batteries",
-        "distributed_counterbattery_mesh",
-        "electromagnetic_recoil_brakes",
-        "loitering_artillery_observers",
-        "predictive_fire_mission_control",
-        "autonomous_battery_network",
-    ),
-    years=(2150, 2155, 2158, 2160, 2161, 2162, 2163, 2164, 2165, 2166, 2167, 2168, 2169, 2171, 2173, 2173, 2180, 2180),
-)
+def full_authored_legacy_branch(key: str) -> Branch:
+    """Restore every authored node and its original campaign chronology."""
+
+    source = LEGACY_BRANCH_BY_KEY[key]
+    return compact_legacy_branch(
+        key,
+        tuple(tech.key for tech in source.techs),
+        years=source.years,
+    )
+
+
+ARTILLERY_BRANCH = full_authored_legacy_branch("artillery")
 
 COMBAT_ARMOR_BRANCH = compact_legacy_branch(
     "combat_armor",
@@ -910,41 +967,124 @@ COMBAT_ARMOR_BRANCH = compact_legacy_branch(
         "recovered_medium_chassis",
         "remote_weapon_stations",
         "composite_armor_arrays",
+        "modular_ceramic_armor_blocks",
         "electric_turret_drives",
         "semi_autonomous_combat_modules",
         "digital_fire_control_buses",
         "hard_kill_protection_arrays",
+        "distributed_crew_stations",
         "adaptive_fire_control",
         "multispectral_gunner_sights",
+        "unmanned_turret_capsules",
+        "armored_platoon_target_handoff",
+        "self_healing_armor_matrices",
+        "autonomous_platoon_control",
         "limited_battle_ai",
         "electromagnetic_main_guns",
         "adaptive_suspension_control",
         "distributed_battlegroup",
         "resilient_combat_cloud_nodes",
     ),
-    years=(2150, 2155, 2158, 2160, 2161, 2162, 2164, 2166, 2168, 2171, 2173, 2173, 2180, 2180),
+    years=(2150, 2155, 2158, 2160, 2161, 2162, 2163, 2164, 2165, 2166, 2167, 2168, 2169, 2170, 2171, 2172, 2173, 2173, 2180, 2180),
 )
 
-FIGHTER_BRANCH = compact_legacy_branch(
-    "fighter",
+MECHANIZED_MOBILITY_BRANCH = Branch(
+    "mechanized_mobility",
+    "ADISCORD_armor.txt",
+    ("armour_folder", "nsb_armour_folder"),
+    "Механизированные войска",
+    "Mechanized Forces",
+    "recon_armor",
+    techs("""
+armored_carrier_program|Программа М-63 «Ковчег»|M-63 “Ark” Programme|mechanized_equipment_1
+protected_transport_standards|Стандарты защищённой перевозки|Protected Transport Standards|basic_light_tank
+sealed_dismount_compartments|Герметичные десантные отсеки|Sealed Dismount Compartments|nsb_armor_tech_1
+escort_protection_arrays|Комплексы защиты машин сопровождения|Escort Protection Arrays|nsb_armor_tech_2
+dismount_sensor_suites|Сенсорные комплексы десанта|Dismount Sensor Suites|centimetric_radar
+infantry_combat_vehicle_program|Контур М-70 «Рубеж»|M-70 “Rampart” Combat Loop|mechanized_equipment_2
+unmanned_weapon_stations|Необитаемые башенные установки|Uncrewed Turret Mounts|improved_medium_tank
+hybrid_cross_country_drives|Гибридные маршевые приводы|Hybrid Cross-country Drives|nsb_engine_tech_2
+drone_screen_coordination|Координация беспилотного охранения|Drone Screen Coordination|radio
+cooperative_dismount_control|Совместное управление спешиванием|Cooperative Dismount Control|improved_computing_machine
+mechanized_battle_cloud|Механизированное боевое облако|Mechanized Battle Cloud|advanced_computing_machine
+networked_mechanized_cells|Контур М-83 «Свод»|M-83 “Vault” Mechanized Loop|mechanized_equipment_3
+"""),
+    years=(2160, 2162, 2164, 2166, 2166, 2168, 2170, 2170, 2172, 2172, 2174, 2175),
+)
+
+FIGHTER_BRANCH = full_authored_legacy_branch("fighter")
+
+SMALL_ARMS_BRANCH = new_branch(
+    "small_arms",
+    "ADISCORD_infantry.txt",
+    ("infantry_folder",),
+    "Винтовки и индивидуальное оружие",
+    "Rifles and Individual Weapons",
+    "infantry",
     (
-        "reclaimed_jet_platforms",
-        "standardized_airframes",
-        "pulse_doppler_radar",
-        "composite_wing_spars",
-        "high_altitude_interceptors",
-        "digital_flight_controls",
-        "electronically_scanned_fighter_radar",
-        "helmet_cued_targeting",
-        "low_observable_inlet_geometry",
-        "cooperative_fighter_sensor_fusion",
-        "loyal_wingmen",
-        "autonomous_dogfight_controller",
-        "directed_energy_defensive_suites",
-        "aerospace_interceptors",
-        "distributed_interceptor_swarms",
+        ("postwar_weapon_standardization", "Прецизионная нарезка каналов стволов", "Precision Rifling of Barrel Bores", "infantry_equipment_0", 2150),
+        ("refurbished_receivers", "Обтюрация казённой части", "Breech Obturation", "infantry_weapons", 2155),
+        ("standardized_cartridges", "Унитарный металлический патрон", "Metallic Self-contained Cartridge", "infantry_weapons2", 2158),
+        ("caseless_ammunition_trials", "Нитроцеллюлозные метательные составы", "Nitrocellulose Propellant Formulations", "infantry_weapons2", 2160),
+        ("smart_optics", "Лазерное измерение дальности", "Laser Rangefinding", "night_vision1", 2161),
+        ("sealed_receiver_assemblies", "Промежуточные патроны", "Intermediate Cartridges", "infantry_weapons", 2162),
+        ("electrothermal_ignition", "Высокопрочные ствольные стали", "High-strength Barrel Steels", "infantry_weapons3", 2163),
+        ("smart_recoil_compensators", "Самозарядная автоматика", "Self-loading Action", "infantry_weapons3", 2164),
+        ("networked_weapon_sights", "Вычислительное определение баллистической поправки", "Computerized Ballistic Correction", "night_vision", 2165),
+        ("modular_rifle_kits", "Газоотводная автоматика", "Gas-operated Action", "infantry_weapons3", 2166),
+        ("biometric_trigger_locks", "Запирание поворотным затвором", "Rotating-bolt Locking", "infantry_weapons3", 2167),
+        ("integrated_target_designation", "Интегрированные электронно-оптические прицелы", "Integrated Electro-optical Sights", "night_vision2", 2169),
+        ("programmable_ammunition", "Хромирование и износостойкие покрытия ствола", "Chrome Lining and Wear-resistant Bore Coatings", "infantry_at2", 2170),
+        ("coil_assisted_service_rifles", "Оптимизация импульса отдачи", "Recoil Impulse Optimization", "infantry_weapons3", 2172),
+        ("hybrid_kinetic_energy_carbines", "Полимерные и гибридные гильзы", "Polymer and Hybrid Cartridge Cases", "infantry_weapons3", 2175),
+        ("networked_service_rifles", "Программируемые боеприпасы", "Programmable Small-arms Ammunition", "night_vision2", 2180),
     ),
-    years=(2150, 2155, 2158, 2160, 2161, 2162, 2163, 2164, 2166, 2168, 2171, 2173, 2173, 2180, 2180),
+)
+
+INFANTRY_ANTI_TANK_BRANCH = new_branch(
+    "anti_tank_infantry",
+    "ADISCORD_infantry.txt",
+    ("infantry_folder",),
+    "Индивидуальные противотанковые средства",
+    "Individual Anti-tank Weapons",
+    "anti_tank",
+    (
+        ("recovered_shaped_charge_cells", "Бутылочные зажигательные смеси", "Bottle Incendiary Mixtures", "ADISCORD_antitank_01_incendiary_bottle", 2150),
+        ("disposable_launcher_standards", "Динамитные и ранцевые подрывные заряды", "Dynamite and Satchel Demolition Charges", "ADISCORD_antitank_02_satchel_charge", 2155),
+        ("tandem_penetrator_packages", "Ручные кумулятивные противотанковые гранаты", "Hand-thrown Shaped-charge Anti-tank Grenades", "ADISCORD_antitank_03_shaped_charge_grenade", 2158),
+        ("wire_guided_hunter_teams", "Крупнокалиберные противотанковые ружья", "Large-calibre Anti-tank Rifles", "ADISCORD_antitank_04_antitank_rifle", 2161),
+        ("recoilless_overmatch_cells", "Командное наведение по проводной линии", "Command Guidance over Wire", "ADISCORD_antitank_05_wire_guidance", 2161),
+        ("fire_and_forget_seekers", "Безоткатные противотанковые системы", "Recoilless Anti-tank Systems", "ADISCORD_antitank_06_recoilless_launcher", 2164),
+        ("programmable_anti_armor_fuzes", "Полуавтоматическое наведение по линии визирования", "Semi-automatic Command to Line of Sight", "ADISCORD_antitank_07_saclos_guidance", 2164),
+        ("top_attack_profiles", "Реактивные гранатомёты с кумулятивной боевой частью", "Shaped-charge Rocket Launchers", "ADISCORD_antitank_08_rocket_launcher", 2168),
+        ("loitering_armor_hunters", "Инфракрасное самонаведение верхней атаки", "Imaging-infrared Top-attack Homing", "ADISCORD_antitank_09_top_attack_seeker", 2168),
+        ("cooperative_hunter_cells", "Тандемные кумулятивные боевые части", "Tandem Shaped-charge Warheads", "ADISCORD_antitank_10_tandem_warhead", 2172),
+        ("terminal_overmatch_packages", "Барражирующие противотанковые боеприпасы", "Loitering Anti-armor Munitions", "ADISCORD_antitank_11_loitering_munition", 2172),
+        ("distributed_anti_armor_net", "Кооперативное мультиспектральное целеуказание", "Cooperative Multispectral Targeting", "ADISCORD_antitank_12_multispectral_targeting", 2180),
+    ),
+)
+
+NIGHT_COMBAT_BRANCH = new_branch(
+    "night_combat",
+    "ADISCORD_infantry.txt",
+    ("infantry_folder",),
+    "Ночной бой",
+    "Night Combat",
+    "special_forces",
+    (
+        ("passive_intensifier_cells", "Ячейки пассивного усиления", "Passive Intensifier Cells", "ADISCORD_night_01_passive_intensifier", 2150),
+        ("sealed_night_mounts", "Герметичные ночные крепления", "Sealed Night Mounts", "ADISCORD_night_02_thermal_channel", 2155),
+        ("thermal_observation_channels", "Тепловизионные каналы наблюдения", "Thermal Observation Channels", "ADISCORD_night_03_fused_sight", 2158),
+        ("fused_low_light_sights", "Совмещённые прицелы слабого света", "Fused Low-light Sights", "ADISCORD_night_04_squad_target_sharing", 2161),
+        ("low_signature_illumination", "Малозаметная подсветка", "Low-signature Illumination", "ADISCORD_night_05_counter_illumination", 2161),
+        ("squad_target_sharing", "Обмен целями внутри отделения", "Squad Target Sharing", "ADISCORD_night_06_distributed_engagement", 2164),
+        ("counter_illumination_warnings", "Предупреждение о встречной подсветке", "Counter-illumination Warnings", "ADISCORD_night_01_passive_intensifier", 2164),
+        ("thermal_target_libraries", "Тепловые библиотеки целей", "Thermal Target Libraries", "ADISCORD_night_02_thermal_channel", 2168),
+        ("nocturnal_sensor_discipline", "Ночная сенсорная дисциплина", "Nocturnal Sensor Discipline", "ADISCORD_night_03_fused_sight", 2168),
+        ("distributed_night_engagements", "Распределённое ночное поражение", "Distributed Night Engagements", "ADISCORD_night_04_squad_target_sharing", 2172),
+        ("adaptive_spectrum_concealment", "Адаптивное спектральное скрытие", "Adaptive Spectrum Concealment", "ADISCORD_night_05_counter_illumination", 2172),
+        ("nocturnal_combat_mesh", "Ночной боевой контур", "Nocturnal Combat Mesh", "ADISCORD_night_06_distributed_engagement", 2180),
+    ),
 )
 
 
@@ -978,8 +1118,10 @@ BRANCHES = (
     POWER_BRANCH,
     LEGACY_BRANCH_BY_KEY["forbidden_energy"],
     LEGACY_BRANCH_BY_KEY["forbidden_automation"],
-    compact_linear_branch("small_arms"),
+    SMALL_ARMS_BRANCH,
     compact_linear_branch("squad_weapons"),
+    INFANTRY_ANTI_TANK_BRANCH,
+    NIGHT_COMBAT_BRANCH,
     compact_linear_branch("protection"),
     compact_linear_branch("special_forces"),
     compact_side_branch("combat_medicine"),
@@ -992,6 +1134,7 @@ BRANCHES = (
     compact_linear_branch("anti_tank"),
     compact_linear_branch("anti_air"),
     compact_linear_branch("recon_armor"),
+    MECHANIZED_MOBILITY_BRANCH,
     COMBAT_ARMOR_BRANCH,
     compact_linear_branch("heavy_armor"),
     compact_side_branch("unmanned_ground_systems"),
@@ -1009,7 +1152,10 @@ BRANCHES = (
 MAIN_BRANCH_KEYS_BY_FOLDER = {
     "industry_folder": {"production", "industry_organization", "reconstruction", "resources"},
     "electronics_folder": {"signals", "computing", "power"},
-    "infantry_folder": {"small_arms", "squad_weapons", "protection", "special_forces"},
+    "infantry_folder": {
+        "small_arms", "squad_weapons", "anti_tank_infantry", "night_combat",
+        "protection", "special_forces",
+    },
     "support_folder": {"field_support", "logistics", "rail"},
     "artillery_folder": {"artillery", "anti_tank", "anti_air"},
     "armour_folder": {"recon_armor", "combat_armor", "heavy_armor"},
@@ -1183,67 +1329,179 @@ def applied_dual_choice_graph() -> BranchGraph:
 def infantry_integration_graph() -> BranchGraph:
     """Rifle mechanisms, ammunition, and optics form three real programmes."""
 
-    ammunition = (2, 3, 6, 11, 13, 14, 16)
-    rifles = (2, 5, 7, 9, 10, 15, 18)
-    optics = (2, 4, 8, 12, 17)
+    ammunition = (2, 3, 6, 12, 14)
+    rifles = (2, 5, 7, 9, 10, 13)
+    optics = (2, 4, 8, 11)
     edges = chain_edges((0, 1, 2))
     edges += chain_edges(ammunition) + chain_edges(rifles) + chain_edges(optics)
-    edges += [(16, 19), (17, 19), (18, 19)]
-    lanes = [1] * 20
+    edges += [(ammunition[-1], 15), (rifles[-1], 15), (optics[-1], 15)]
+    lanes = [1] * 16
     for index in rifles[1:]:
         lanes[index] = 0
     for index in ammunition[1:]:
         lanes[index] = 2
-    return make_graph(tuple(lanes), edges, (19,))
+    return make_graph(tuple(lanes), edges, (15,))
 
 
 def squad_integration_graph() -> BranchGraph:
     """Integrate automatic weapons, guided launchers, and squad C2."""
 
-    explosive = (0, 1, 2, 3, 5, 11, 16)
-    command = (0, 4, 6, 8, 9, 12, 15)
-    automatic = (0, 7, 10)
-    edges = chain_edges(explosive) + chain_edges(command) + chain_edges(automatic)
-    edges += [(10, 13), (12, 13), (13, 14), (14, 17)]
-    edges += [(16, 18), (15, 18), (17, 18), (18, 19)]
-    lanes = [1] * 20
-    for index in automatic[1:] + (13, 14, 17):
+    firepower = (0, 1, 2, 3, 5, 7, 10)
+    command = (0, 4, 6, 8, 9, 12)
+    edges = chain_edges(firepower) + chain_edges(command)
+    edges += [(firepower[-1], 11), (9, 11), (11, 13)]
+    edges += [(13, 14), (command[-1], 14), (14, 15)]
+    lanes = [1] * 16
+    for index in firepower[1:]:
         lanes[index] = 0
-    for index in explosive[1:]:
+    for index in command[1:]:
         lanes[index] = 2
-    return make_graph(tuple(lanes), edges, (13, 18))
+    return make_graph(tuple(lanes), edges, (11, 14))
+
+
+def compact_dual_synthesis_graph() -> BranchGraph:
+    """Two five-project field schools converging on one operational mesh."""
+
+    left = (2, 3, 5, 7, 9)
+    right = (2, 4, 6, 8, 10)
+    edges = chain_edges((0, 1, 2))
+    edges += chain_edges(left) + chain_edges(right)
+    edges += [(left[-1], 11), (right[-1], 11)]
+    lanes = [1] * 12
+    for index in left[1:]:
+        lanes[index] = 0
+    for index in right[1:]:
+        lanes[index] = 2
+    return make_graph(tuple(lanes), edges, (11,))
+
+
+def compact_two_row_synthesis_graph() -> BranchGraph:
+    """Keep the same two routes inside one compact two-row programme band."""
+
+    graph = compact_dual_synthesis_graph()
+    lanes = tuple(0 if lane < 2 else 1 for lane in graph.lanes)
+    return BranchGraph(lanes, graph.successors, graph.dependencies)
+
+
+def variable_dual_synthesis_graph(count: int) -> BranchGraph:
+    """Fit a two-route programme to a compact branch of at least seven nodes."""
+
+    if count < 7:
+        raise ValueError("A variable dual programme needs at least seven nodes")
+    body = tuple(range(3, count - 1))
+    left = body[::2]
+    right = body[1::2]
+    if not left or not right:
+        raise ValueError("A variable dual programme needs two non-empty routes")
+    capstone = count - 1
+    edges = chain_edges((0, 1, 2))
+    edges += [(2, left[0]), (2, right[0])]
+    edges += chain_edges(left) + chain_edges(right)
+    edges += [(left[-1], capstone), (right[-1], capstone)]
+    lanes = [1] * count
+    for index in left:
+        lanes[index] = 0
+    for index in right:
+        lanes[index] = 2
+    return make_graph(tuple(lanes), edges, (capstone,))
 
 
 def protection_programmes_graph() -> BranchGraph:
     """Body systems, combat medicine, and environmental protection."""
 
-    body = (0, 1, 3, 6, 8, 9, 14)
-    medicine = (0, 4, 10, 11, 15)
-    environment = (0, 2, 5, 7, 12, 13, 16)
+    body = (0, 1, 3, 6, 8, 14)
+    medicine = (0, 4, 9, 10, 12)
+    environment = (0, 2, 5, 7, 11, 13)
     edges = chain_edges(body) + chain_edges(medicine) + chain_edges(environment)
-    edges += [(15, 17), (16, 17), (14, 18), (17, 18), (18, 19)]
-    lanes = [1] * 20
+    edges += [(body[-1], 15), (medicine[-1], 15), (environment[-1], 15)]
+    lanes = [1] * 16
     for index in body[1:]:
         lanes[index] = 0
     for index in environment[1:]:
         lanes[index] = 2
-    return make_graph(tuple(lanes), edges, (17, 18))
+    return make_graph(tuple(lanes), edges, (15,))
 
 
 def special_forces_programmes_graph() -> BranchGraph:
     """Urban assault, deep reconnaissance, and airborne insertion."""
 
-    urban = (0, 1, 3, 5, 16)
-    reconnaissance = (0, 2, 4, 6, 7, 8, 11, 13, 14, 15)
-    airborne = (0, 9, 10, 12, 17)
+    urban = (0, 1, 3, 5, 13)
+    reconnaissance = (0, 2, 4, 6, 7, 8, 11, 12, 14)
+    airborne = (0, 9, 10)
     edges = chain_edges(urban) + chain_edges(reconnaissance) + chain_edges(airborne)
-    edges += [(16, 18), (15, 18), (17, 18), (18, 19)]
-    lanes = [1] * 20
+    edges += [(urban[-1], 15), (reconnaissance[-1], 15), (airborne[-1], 15)]
+    lanes = [1] * 16
     for index in urban[1:]:
         lanes[index] = 0
     for index in airborne[1:]:
         lanes[index] = 2
-    return make_graph(tuple(lanes), edges, (18,))
+    return make_graph(tuple(lanes), edges, (15,))
+
+
+def reconnaissance_armor_programmes_graph() -> BranchGraph:
+    """Mobility, sensors, and autonomy converge on a reconnaissance screen."""
+
+    mobility = (2, 3, 6, 8, 9, 12, 15)
+    sensors = (2, 4, 5, 7, 10, 14, 17)
+    autonomy = (2, 11, 13, 16, 18)
+    edges = chain_edges((0, 1, 2))
+    edges += chain_edges(mobility) + chain_edges(sensors) + chain_edges(autonomy)
+    edges += [(mobility[-1], 19), (sensors[-1], 19), (autonomy[-1], 19)]
+    lanes = [1] * 20
+    for index in mobility[1:]:
+        lanes[index] = 0
+    for index in autonomy[1:]:
+        lanes[index] = 2
+    return make_graph(tuple(lanes), edges, (19,))
+
+
+def combat_armor_programmes_graph() -> BranchGraph:
+    """Protection, fire control, and autonomy precede the late armor choice."""
+
+    protection = (2, 3, 7, 13)
+    fire_control = (2, 4, 6, 9, 10, 12)
+    autonomy = (2, 5, 8, 11, 14)
+    edges = chain_edges((0, 1, 2))
+    edges += chain_edges(protection) + chain_edges(fire_control) + chain_edges(autonomy)
+    edges += [(protection[-1], 15), (fire_control[-1], 15), (autonomy[-1], 15)]
+    edges += [(15, 16), (15, 17), (16, 18), (17, 19)]
+    lanes = [1] * 20
+    for index in protection[1:] + (16, 18):
+        lanes[index] = 0
+    for index in autonomy[1:] + (17, 19):
+        lanes[index] = 2
+    return make_graph(tuple(lanes), edges, (15,))
+
+
+def heavy_armor_programmes_graph() -> BranchGraph:
+    """Survivability, power, and engineering converge into siege warfare."""
+
+    survivability = (2, 3, 6, 7, 8, 12, 16)
+    power = (2, 5, 9, 10, 14, 17)
+    engineering = (2, 4, 11, 13, 15, 18)
+    edges = chain_edges((0, 1, 2))
+    edges += chain_edges(survivability) + chain_edges(power) + chain_edges(engineering)
+    edges += [(survivability[-1], 19), (power[-1], 19), (engineering[-1], 19)]
+    lanes = [1] * 20
+    for index in survivability[1:]:
+        lanes[index] = 0
+    for index in engineering[1:]:
+        lanes[index] = 2
+    return make_graph(tuple(lanes), edges, (19,))
+
+
+def mechanized_mobility_programmes_graph() -> BranchGraph:
+    """Protection and dismount integration lead into a networked IFV force."""
+
+    edges = chain_edges((0, 1, 2))
+    edges += [(2, 3), (2, 4), (3, 5), (4, 5)]
+    edges += [(5, 6), (5, 7), (6, 8), (7, 9)]
+    edges += [(8, 10), (9, 10), (10, 11)]
+    return make_graph(
+        (1, 1, 1, 0, 2, 1, 0, 2, 0, 2, 1, 1),
+        edges,
+        (5, 10),
+    )
 
 
 def linear_graph(count: int) -> BranchGraph:
@@ -1318,7 +1576,35 @@ def graph_for_branch(branch: Branch) -> BranchGraph:
         graph = industry_organization_graph()
     elif branch.key == "computing":
         graph = compact_computing_graph()
-    elif branch.key in {"artillery", "combat_armor", "fighter"}:
+    elif branch.key in {"reconstruction", "resources", "signals", "power"}:
+        graph = variable_dual_synthesis_graph(len(branch.techs))
+    elif branch.key == "small_arms":
+        graph = infantry_integration_graph()
+    elif branch.key == "squad_weapons":
+        graph = squad_integration_graph()
+    elif branch.key == "anti_tank_infantry":
+        graph = compact_two_row_synthesis_graph()
+    elif branch.key == "night_combat":
+        graph = compact_dual_synthesis_graph()
+    elif branch.key == "protection":
+        graph = protection_programmes_graph()
+    elif branch.key == "special_forces":
+        graph = special_forces_programmes_graph()
+    elif branch.key in {"field_support", "anti_tank", "strategic_air", "subsurface"}:
+        graph = double_diamond_graph()
+    elif branch.key in {"logistics", "anti_air", "naval_support"}:
+        graph = alternating_diamonds_graph()
+    elif branch.key in {"rail", "air_support", "surface_fleet"}:
+        graph = dual_synthesis_graph()
+    elif branch.key == "recon_armor":
+        graph = reconnaissance_armor_programmes_graph()
+    elif branch.key == "mechanized_mobility":
+        graph = mechanized_mobility_programmes_graph()
+    elif branch.key == "combat_armor":
+        graph = combat_armor_programmes_graph()
+    elif branch.key == "heavy_armor":
+        graph = heavy_armor_programmes_graph()
+    elif branch.key in {"artillery", "fighter"}:
         graph = permanent_tail_choice_graph(len(branch.techs))
     elif branch.key == "forbidden_energy":
         graph = make_graph(
@@ -1411,12 +1697,22 @@ FORBIDDEN_IDS = {
 
 ENABLE_EQUIPMENT = {
     "ADISCORD_tech_postwar_weapon_standardization": ("infantry_equipment_0",),
-    "ADISCORD_tech_modular_rifle_kits": ("ADISCORD_infantry_equipment_2170",),
+    "ADISCORD_tech_refurbished_receivers": ("ADISCORD_infantry_equipment_2156",),
+    "ADISCORD_tech_sealed_receiver_assemblies": ("ADISCORD_infantry_equipment_2163",),
+    "ADISCORD_tech_smart_recoil_compensators": ("ADISCORD_infantry_equipment_2168",),
+    "ADISCORD_tech_smart_optics": ("ADISCORD_infantry_equipment_2170",),
+    "ADISCORD_tech_modular_rifle_kits": ("ADISCORD_infantry_equipment_2178",),
     "ADISCORD_tech_programmable_ammunition": ("ADISCORD_infantry_equipment_2183",),
+    "ADISCORD_tech_coil_assisted_service_rifles": ("ADISCORD_infantry_equipment_2193",),
     "ADISCORD_tech_networked_service_rifles": ("ADISCORD_infantry_equipment_2200",),
     "ADISCORD_tech_belt_fed_recovery": ("ADISCORD_squad_weapons_equipment_0",),
-    "ADISCORD_tech_remote_weapon_tripods": ("ADISCORD_squad_weapons_equipment_2170",),
+    "ADISCORD_tech_squad_grenade_launchers": ("ADISCORD_squad_weapons_equipment_2156",),
+    "ADISCORD_tech_portable_at_cells": ("ADISCORD_squad_weapons_equipment_2163",),
+    "ADISCORD_tech_recoilless_squad_launchers": ("ADISCORD_squad_weapons_equipment_2168",),
+    "ADISCORD_tech_field_ew_units": ("ADISCORD_squad_weapons_equipment_2170",),
+    "ADISCORD_tech_remote_weapon_tripods": ("ADISCORD_squad_weapons_equipment_2178",),
     "ADISCORD_tech_autonomous_support_weapons": ("ADISCORD_squad_weapons_equipment_2183",),
+    "ADISCORD_tech_robotic_heavy_weapon_teams": ("ADISCORD_squad_weapons_equipment_2193",),
     "ADISCORD_tech_swarm_fireteams": ("ADISCORD_squad_weapons_equipment_2200",),
     "ADISCORD_tech_field_workshop_tools": ("support_equipment_1",),
     "ADISCORD_tech_drone_delivered_repair_spares": ("ADISCORD_support_equipment_2170",),
@@ -1446,6 +1742,9 @@ ENABLE_EQUIPMENT = {
     "ADISCORD_tech_drone_recon_swarms": ("ADISCORD_light_combat_platform_2163",),
     "ADISCORD_tech_unmanned_recon_vehicles": ("ADISCORD_recon_drone_carrier_2170",),
     "ADISCORD_tech_signature_management_skins": ("ADISCORD_recon_drone_carrier_2170",),
+    "ADISCORD_tech_armored_carrier_program": ("ADISCORD_armored_carrier_2163",),
+    "ADISCORD_tech_infantry_combat_vehicle_program": ("ADISCORD_ifv_2170",),
+    "ADISCORD_tech_networked_mechanized_cells": ("ADISCORD_networked_ifv_2183",),
     "ADISCORD_tech_semi_autonomous_combat_modules": ("ADISCORD_combat_platform_2170",),
     "ADISCORD_tech_remote_repair_sections": ("ADISCORD_repair_platform_2183",),
     "ADISCORD_tech_limited_battle_ai": ("ADISCORD_combat_platform_2183",),
@@ -1495,6 +1794,10 @@ EXTRA_TECH_DEPENDENCIES = {
     "ADISCORD_tech_teleoperated_scout_carts": (
         "ADISCORD_tech_sealed_electric_scout_drives",
         "ADISCORD_tech_hardened_computers",
+    ),
+    "ADISCORD_tech_armored_carrier_program": (
+        "ADISCORD_tech_sealed_electric_scout_drives",
+        "ADISCORD_tech_remote_weapon_stations",
     ),
     "ADISCORD_tech_reconstituted_staff_academies": (
         "ADISCORD_tech_hardened_computers",
@@ -1609,6 +1912,13 @@ STARTING_TECH_PROFILE_SEEDS = {
         )
         for tech_id in branch_technology_ids_through(branch_key, 2158)
     ),
+    # Recovered armored doctrine is deliberately not part of the generic land
+    # profile.  Only the major industrial powers begin with enough preserved
+    # drivetrain, turret and carrier knowledge to field a modern armored core.
+    "armored_core": (
+        "ADISCORD_tech_armored_carrier_program",
+        "ADISCORD_tech_semi_autonomous_combat_modules",
+    ),
     "air": tuple(
         tech_id
         for branch_key in ("fighter", "air_support", "strategic_air")
@@ -1675,7 +1985,8 @@ STARTING_COUNTRY_TECH_PROFILES = {
     "FRS": ("fragment_low_tech",),
     "GLP": ("fragment_low_tech", "naval"),
     "HON": ("institutional", "land"),
-    "IVN": ("institutional", "land", "air"),
+    "IIA": ("fragment_low_tech",),
+    "IVN": ("institutional", "land", "air", "armored_core"),
     "KDR": ("fragment_low_tech",),
     "KDL": ("fragment_low_tech",),
     "KHV": ("fragment_low_tech",),
@@ -1706,7 +2017,7 @@ STARTING_COUNTRY_TECH_PROFILES = {
     "TFF": ("fragment_low_tech",),
     "TMR": ("industrial",),
     "TRU": ("industrial", "institutional", "land"),
-    "VAD": ("industrial", "energy", "institutional", "land", "air", "naval"),
+    "VAD": ("industrial", "energy", "institutional", "land", "air", "naval", "armored_core"),
     "VAL": ("industrial", "energy", "institutional", "land", "air", "naval"),
     "VES": ("fragment_low_tech", "land"),
     "VLD": ("fragment_low_tech",),
@@ -1714,7 +2025,7 @@ STARTING_COUNTRY_TECH_PROFILES = {
     "VLA": ("institutional", "land", "air"),
     "WEF": ("institutional", "land", "air"),
     "WIT": ("institutional", "land", "naval"),
-    "WRK": ("industrial", "energy", "institutional", "land", "air", "naval"),
+    "WRK": ("industrial", "energy", "institutional", "land", "air", "naval", "armored_core"),
     "WCG": ("fragment_low_tech", "land"),
     "YPR": ("fragment_low_tech", "land"),
     "ZAO": ("fragment_low_tech",),
@@ -1746,6 +2057,7 @@ STARTING_COUNTRY_TECH_PROFILE_RATIONALE = {
     "FRS": "Sparse northern federation maintains basic workshops without specialized institutions.",
     "GLP": "Glass Ports trade compact retains maritime practice despite its fragmentary workshop economy.",
     "HON": "Stable civic republic supports institutional research and a trained territorial army.",
+    "IIA": "Small island administration retains basic workshops and militia practice without the institutions for an advanced package.",
     "IVN": "Large territory with five research slots, an organized army, and operating air bases.",
     "KDR": "Caravan union relies on mobile low-technology logistics rather than fixed institutions.",
     "KDL": "Island port republic retains basic workshops and militia organization without a heavy industrial base.",
@@ -1820,6 +2132,9 @@ ENABLE_SUBUNITS = {
     "ADISCORD_tech_drone_recon_swarms": (
         "ADISCORD_recon_platform",
         "hq_light_armor",
+    ),
+    "ADISCORD_tech_armored_carrier_program": (
+        "ADISCORD_mechanized_infantry",
     ),
     "ADISCORD_tech_semi_autonomous_combat_modules": (
         "ADISCORD_combat_platform",
@@ -2625,6 +2940,16 @@ def themed_programme_effects(
 # stable technology keys rather than list positions so later layout tweaks do
 # not silently change the economic model.
 COMPACT_EFFECTS_BY_TECH_KEY = {
+    "armored_carrier_program": (
+        "ADISCORD_mechanized_infantry = { defense = 0.03 reliability = 0.03 }",
+    ),
+    "infantry_combat_vehicle_program": (
+        "ADISCORD_mechanized_infantry = { breakthrough = 0.05 soft_attack = 0.05 hard_attack = 0.03 }",
+    ),
+    "networked_mechanized_cells": (
+        "ADISCORD_mechanized_infantry = { maximum_speed = 0.05 reliability = 0.05 }",
+        "coordination_bonus = 0.02",
+    ),
     "standardized_machine_tools": (
         "production_factory_max_efficiency_factor = 0.03",
         "production_factory_efficiency_gain_factor = 0.02",
@@ -2930,6 +3255,58 @@ def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
     """
 
     tech = branch.techs[tier]
+    if branch.key == "small_arms":
+        packages = (
+            ("category_all_infantry = { soft_attack = 0.012 }",),
+            ("category_all_infantry = { defense = 0.012 }",),
+            ("category_all_infantry = { soft_attack = 0.014 }",),
+            ("category_all_infantry = { soft_attack = 0.014 breakthrough = 0.004 }",),
+            ("coordination_bonus = 0.006", "category_all_infantry = { soft_attack = 0.006 }"),
+            ("category_all_infantry = { breakthrough = 0.012 soft_attack = 0.006 }",),
+            ("category_all_infantry = { defense = 0.014 breakthrough = 0.004 }",),
+            ("category_all_infantry = { soft_attack = 0.016 breakthrough = 0.008 }",),
+            ("coordination_bonus = 0.008", "category_all_infantry = { soft_attack = 0.008 }"),
+            ("category_all_infantry = { soft_attack = 0.018 breakthrough = 0.01 }",),
+            ("category_all_infantry = { defense = 0.014 breakthrough = 0.01 }",),
+            ("land_night_attack = 0.006", "coordination_bonus = 0.008"),
+            ("category_all_infantry = { defense = 0.016 soft_attack = 0.006 }",),
+            ("category_all_infantry = { breakthrough = 0.016 defense = 0.006 }",),
+            ("category_all_infantry = { defense = 0.012 soft_attack = 0.012 }",),
+            ("category_all_infantry = { soft_attack = 0.02 }", "coordination_bonus = 0.012"),
+        )
+        return packages[tier]
+    if branch.key == "anti_tank_infantry":
+        packages = (
+            ("category_all_infantry = { hard_attack = 0.006 ap_attack = 0.004 }",),
+            ("category_all_infantry = { hard_attack = 0.008 breakthrough = 0.004 }",),
+            ("category_all_infantry = { hard_attack = 0.01 ap_attack = 0.008 }",),
+            ("category_all_infantry = { hard_attack = 0.014 ap_attack = 0.01 }",),
+            ("category_all_infantry = { ap_attack = 0.014 }", "coordination_bonus = 0.004"),
+            ("category_all_infantry = { hard_attack = 0.016 breakthrough = 0.01 }",),
+            ("category_all_infantry = { ap_attack = 0.016 }", "coordination_bonus = 0.006"),
+            ("category_all_infantry = { hard_attack = 0.018 ap_attack = 0.016 }",),
+            ("category_all_infantry = { ap_attack = 0.018 }", "coordination_bonus = 0.008"),
+            ("category_all_infantry = { hard_attack = 0.02 ap_attack = 0.018 }",),
+            ("category_all_infantry = { ap_attack = 0.02 }", "coordination_bonus = 0.01"),
+            ("category_all_infantry = { hard_attack = 0.024 ap_attack = 0.024 breakthrough = 0.012 }", "coordination_bonus = 0.012"),
+        )
+        return packages[tier]
+    if branch.key == "night_combat":
+        packages = (
+            ("land_night_attack = 0.005",),
+            ("land_night_attack = 0.005", "category_all_infantry = { defense = 0.006 }"),
+            ("land_night_attack = 0.006", "category_recon = { recon = 0.12 }"),
+            ("land_night_attack = 0.007", "category_all_infantry = { soft_attack = 0.006 }"),
+            ("land_night_attack = 0.006", "category_all_infantry = { breakthrough = 0.006 }"),
+            ("land_night_attack = 0.007", "coordination_bonus = 0.005"),
+            ("land_night_attack = 0.007", "category_all_infantry = { defense = 0.007 }"),
+            ("land_night_attack = 0.008", "category_recon = { recon = 0.15 }"),
+            ("land_night_attack = 0.008", "category_all_infantry = { defense = 0.008 }"),
+            ("land_night_attack = 0.009", "coordination_bonus = 0.007"),
+            ("land_night_attack = 0.009", "category_all_infantry = { breakthrough = 0.009 }"),
+            ("land_night_attack = 0.012", "coordination_bonus = 0.01", "category_all_infantry = { defense = 0.012 breakthrough = 0.012 }"),
+        )
+        return packages[tier]
     if tech.key in APPLIED_EFFECTS:
         return tuple(APPLIED_EFFECTS[tech.key])
     compact_effects = COMPACT_EFFECTS_BY_TECH_KEY.get(tech.key)
@@ -3491,11 +3868,24 @@ BRANCH_ICON_PALETTES = {
 # can actually put on a production line. Give those cards the corresponding
 # equipment silhouette instead of a 64px support-company badge.
 EQUIPMENT_UNLOCK_ICONS = {
-    "ADISCORD_tech_modular_rifle_kits": "infantry1",
-    "ADISCORD_tech_programmable_ammunition": "infantry2",
-    "ADISCORD_tech_networked_service_rifles": "infantry3",
-    "ADISCORD_tech_remote_weapon_tripods": "support_weapons2",
-    "ADISCORD_tech_swarm_fireteams": "support_weapons4",
+    "ADISCORD_tech_postwar_weapon_standardization": "ADISCORD_weapon_01_reclaimed_arsenal",
+    "ADISCORD_tech_refurbished_receivers": "ADISCORD_weapon_02_recovered_service_rifle",
+    "ADISCORD_tech_sealed_receiver_assemblies": "ADISCORD_weapon_03_standardized_battle_rifle",
+    "ADISCORD_tech_smart_recoil_compensators": "ADISCORD_weapon_04_transitional_modular_weapon",
+    "ADISCORD_tech_smart_optics": "ADISCORD_weapon_05_suppressed_assault_system",
+    "ADISCORD_tech_modular_rifle_kits": "ADISCORD_weapon_06_networked_smart_rifle",
+    "ADISCORD_tech_programmable_ammunition": "ADISCORD_weapon_07_programmable_munition_weapon",
+    "ADISCORD_tech_coil_assisted_service_rifles": "ADISCORD_weapon_08_advanced_impulse_weapon",
+    "ADISCORD_tech_networked_service_rifles": "ADISCORD_weapon_09_resilient_combat_network_weapon",
+    "ADISCORD_tech_belt_fed_recovery": "ADISCORD_squad_01_recovered_fire_support",
+    "ADISCORD_tech_squad_grenade_launchers": "ADISCORD_squad_02_belt_fed_sections",
+    "ADISCORD_tech_portable_at_cells": "ADISCORD_squad_03_standardized_heavy_weapons",
+    "ADISCORD_tech_recoilless_squad_launchers": "ADISCORD_squad_04_modular_support_weapons",
+    "ADISCORD_tech_field_ew_units": "ADISCORD_squad_05_sensor_linked_fireteams",
+    "ADISCORD_tech_remote_weapon_tripods": "ADISCORD_squad_06_programmable_support_systems",
+    "ADISCORD_tech_autonomous_support_weapons": "ADISCORD_squad_07_networked_precision_support",
+    "ADISCORD_tech_robotic_heavy_weapon_teams": "ADISCORD_squad_08_autonomous_fire_control",
+    "ADISCORD_tech_swarm_fireteams": "ADISCORD_squad_09_swarm_coordinated_support",
     "ADISCORD_tech_field_workshop_tools": "support_equipment_1",
     "ADISCORD_tech_drone_delivered_repair_spares": "support_equipment_1",
     "ADISCORD_tech_predictive_parts_prepositioning": "support_equipment_1",
@@ -3599,6 +3989,8 @@ BRANCH_DESCRIPTION_RU = {
     "forbidden_automation": "передаёт производство и управление запрещённым автономным системам",
     "infantry": "повышает огневую мощь и пробивную способность линейной пехоты",
     "squad": "усиливает отделение коллективным оружием и сетевым управлением",
+    "anti_tank_infantry": "развивает переносные средства поражения бронетехники и связывает охотничьи расчёты в единый контур",
+    "night_combat": "развивает пассивное наблюдение, тепловизионное обнаружение и скрытую координацию боя ночью",
     "protection": "улучшает защиту, выживаемость и медицинское обеспечение бойцов",
     "special_forces": "повышает мобильность и эффективность разведки и специальных сил",
     "support": "усиливает инженерные, ремонтные и медицинские подразделения",
@@ -3634,6 +4026,8 @@ BRANCH_DESCRIPTION_EN = {
         "forbidden_automation": "hands production and command to prohibited autonomous systems",
         "infantry": "improves the firepower and penetration of line infantry",
         "squad": "strengthens squads with support weapons and networked command",
+        "anti_tank_infantry": "develops portable anti-armor weapons and links hunter teams into one engagement mesh",
+        "night_combat": "develops passive observation, thermal detection, and concealed coordination in darkness",
         "protection": "improves soldier protection, survival, and battlefield medicine",
         "special_forces": "improves the mobility and effectiveness of recon and special forces",
         "support": "strengthens engineering, repair, and medical units",
@@ -3653,6 +4047,122 @@ BRANCH_DESCRIPTION_EN = {
         "subsurface": "develops underwater detection, stealth, and maritime denial",
     }[key]
     for key in BRANCH_DESCRIPTION_RU
+}
+
+
+TECHNICAL_TECH_DESCRIPTIONS = {
+    "postwar_weapon_standardization": (
+        "Восстановленные нарезные станки и измерительный контроль обеспечивают повторяемую геометрию канала ствола, шаг нарезов и соосность патронника",
+        "Restored rifling machinery and inspection gauges make bore geometry, twist rate, and chamber alignment repeatable",
+    ),
+    "refurbished_receivers": (
+        "Контроль размеров патронника и зеркального зазора удерживает пороховые газы в казённой части и предотвращает разрыв гильзы",
+        "Controlled chamber dimensions and headspace keep propellant gases sealed at the breech and prevent case rupture",
+    ),
+    "standardized_cartridges": (
+        "Гильза, капсюль, метательный заряд и пуля объединяются в взаимозаменяемый патрон единого производственного стандарта",
+        "Case, primer, propellant, and projectile are combined into an interchangeable cartridge built to one production standard",
+    ),
+    "caseless_ammunition_trials": (
+        "Форма зерна, стабилизаторы и состав нитроцеллюлозного пороха задают воспроизводимую скорость горения и давление в канале ствола",
+        "Grain geometry, stabilizers, and nitrocellulose composition provide a repeatable burn rate and bore-pressure curve",
+    ),
+    "smart_optics": (
+        "Импульсный лазерный дальномер измеряет дистанцию до цели и передаёт её в прицельный канал без ручной оценки",
+        "A pulsed laser rangefinder measures target distance and passes it to the sight without manual estimation",
+    ),
+    "sealed_receiver_assemblies": (
+        "Промежуточный патрон сочетает достаточную энергию у цели с импульсом, допускающим управляемый автоматический огонь из индивидуального оружия",
+        "An intermediate cartridge balances useful terminal energy with an impulse that permits controllable automatic fire from an individual weapon",
+    ),
+    "electrothermal_ignition": (
+        "Легирование, термообработка и неразрушающий контроль ствольных сталей позволяют безопасно выдерживать повышенное давление и нагрев",
+        "Alloying, heat treatment, and non-destructive inspection let barrel steels withstand greater pressure and heat safely",
+    ),
+    "smart_recoil_compensators": (
+        "Часть энергии выстрела приводит механизм экстракции, досылания и взведения, сокращая задержку между прицельными выстрелами",
+        "Part of the firing energy powers extraction, feeding, and cocking, reducing the delay between aimed shots",
+    ),
+    "networked_weapon_sights": (
+        "Вычислитель объединяет дальность, параметры патрона, угол места и атмосферные данные в готовую баллистическую поправку",
+        "A computer combines range, cartridge data, sight angle, and atmospheric inputs into an immediate ballistic correction",
+    ),
+    "modular_rifle_kits": (
+        "Дозированный отвод пороховых газов приводит затворную группу и обеспечивает устойчивый цикл автоматики при загрязнении и нагреве",
+        "Metered propellant gas drives the bolt group and maintains a stable operating cycle under fouling and heat",
+    ),
+    "biometric_trigger_locks": (
+        "Поворотный затвор вводит боевые упоры в зацепление со ствольной коробкой, удерживая давление до безопасного извлечения гильзы",
+        "A rotating bolt locks multiple lugs into the receiver and contains pressure until the case can be extracted safely",
+    ),
+    "integrated_target_designation": (
+        "Дневной, малосветовой и тепловизионный каналы сводятся к общей оптической оси и одной рассчитанной точке прицеливания",
+        "Daylight, low-light, and thermal channels share one optical axis and one computed point of aim",
+    ),
+    "programmable_ammunition": (
+        "Твёрдое покрытие канала ствола снижает коррозию и эрозию, сохраняя геометрию при интенсивной стрельбе",
+        "A hard bore coating limits corrosion and erosion, preserving barrel geometry during sustained fire",
+    ),
+    "coil_assisted_service_rifles": (
+        "Массы подвижных частей, газовый импульс, буфер и геометрия оружия согласуются для уменьшения подброса и рассеивания очереди",
+        "Moving mass, gas impulse, buffer, and weapon geometry are tuned together to reduce muzzle rise and burst dispersion",
+    ),
+    "hybrid_kinetic_energy_carbines": (
+        "Полимерный корпус с металлическим донцем уменьшает массу боекомплекта, сохраняя обтюрацию и прочность при экстракции",
+        "A polymer body with a metallic case head reduces ammunition mass while preserving obturation and extraction strength",
+    ),
+    "networked_service_rifles": (
+        "Электронный взрыватель получает от прицела дальность или режим подрыва и реализует его после выстрела",
+        "An electronic fuze receives range or function data from the sight and executes the programmed effect after firing",
+    ),
+    "recovered_shaped_charge_cells": (
+        "Стеклянная ёмкость с загущённой горючей смесью разбивается о броню и воспламеняет наружное оборудование, воздухозаборники и моторный отсек",
+        "A glass vessel filled with thickened fuel breaks against armor and ignites external equipment, air intakes, and the engine deck",
+    ),
+    "disposable_launcher_standards": (
+        "Динамит или пластичный заряд в переносной сумке сосредотачивает взрыв у гусеницы, днища или неподвижного узла машины",
+        "Dynamite or plastic explosive carried in a satchel concentrates blast against a track, belly plate, or fixed vehicle component",
+    ),
+    "tandem_penetrator_packages": (
+        "Ручная граната с кумулятивной воронкой формирует направленную струю при подрыве на броне, не полагаясь на кинетическую скорость",
+        "A hand-thrown grenade with a shaped-charge liner forms a focused jet on armor without relying on impact velocity",
+    ),
+    "wire_guided_hunter_teams": (
+        "Крупнокалиберный ствол и высокоскоростной бронебойный сердечник поражают раннюю бронетехнику прямым кинетическим пробитием",
+        "A large-calibre barrel and high-velocity armor-piercing core defeat early armored vehicles by direct kinetic penetration",
+    ),
+    "recoilless_overmatch_cells": (
+        "Команды оператора передаются ракете по разматываемому проводу, устойчивому к радиопомехам и не требующему бортовой головки самонаведения",
+        "Operator commands reach the missile through a payed-out wire, resisting radio jamming without an onboard seeker",
+    ),
+    "fire_and_forget_seekers": (
+        "Истечение части пороховых газов назад уравновешивает отдачу и позволяет переносному стволу метать боеприпас достаточного калибра",
+        "Rearward venting of propellant gas balances recoil and lets a portable tube fire a sufficiently large projectile",
+    ),
+    "programmable_anti_armor_fuzes": (
+        "Оператор удерживает перекрестие на цели, а аппаратура автоматически вычисляет команды наведения ракеты относительно линии визирования",
+        "The operator keeps the sight on target while the control unit automatically computes missile corrections relative to the line of sight",
+    ),
+    "top_attack_profiles": (
+        "Реактивный двигатель разгоняет гранату с кумулятивной боевой частью после выхода из пусковой трубы, сохраняя переносимость оружия",
+        "A rocket motor accelerates a shaped-charge grenade after it leaves the launch tube, preserving weapon portability",
+    ),
+    "loitering_armor_hunters": (
+        "Матричная инфракрасная головка распознаёт тепловой образ цели и направляет ракету в менее защищённую верхнюю полусферу",
+        "An imaging-infrared seeker recognizes the target heat signature and guides the missile into the less protected upper hemisphere",
+    ),
+    "cooperative_hunter_cells": (
+        "Предзаряд разрушает динамическую защиту, после чего основной кумулятивный заряд формирует струю против основной брони",
+        "A precursor charge disrupts reactive armor before the main shaped charge forms its jet against the base armor",
+    ),
+    "terminal_overmatch_packages": (
+        "Переносной беспилотный боеприпас длительно ищет цель, передаёт изображение оператору и атакует после подтверждения",
+        "A portable unmanned munition searches for a target, relays imagery to the operator, and attacks after confirmation",
+    ),
+    "distributed_anti_armor_net": (
+        "Тепловизионные, телевизионные и лазерные наблюдатели передают единую координату разнесённым пусковым расчётам и барражирующим боеприпасам",
+        "Thermal, television, and laser observers pass one target solution to separated launch teams and loitering munitions",
+    ),
 }
 
 
@@ -3934,6 +4444,160 @@ def render_leader_training_effect(tech: Tech) -> list[str]:
     return lines
 
 
+def folder_grid_format(folder: str) -> str:
+    """Return the Clausewitz grid direction matching the folder time axis."""
+
+    return "LEFT" if folder in HORIZONTAL_FOLDERS else "UP"
+
+
+def chronological_grid_slot(year: int, *, horizontal: bool) -> int:
+    """Map a research year to the single slot used by nodes and year labels."""
+
+    slot = YEAR_TO_Y[year]
+    return slot * HORIZONTAL_YEAR_SLOT_MULTIPLIER if horizontal else slot
+
+
+def graph_distances(
+    start: int,
+    adjacency: tuple[tuple[int, ...], ...],
+) -> dict[int, int]:
+    """Return shortest edge distances from one node in a small acyclic graph."""
+
+    distances = {start: 0}
+    frontier = [start]
+    while frontier:
+        source = frontier.pop(0)
+        for target in adjacency[source]:
+            distance = distances[source] + 1
+            if target in distances and distances[target] <= distance:
+                continue
+            distances[target] = distance
+            frontier.append(target)
+    return distances
+
+
+def balanced_binary_pairs(graph: BranchGraph) -> tuple[tuple[int, int], ...]:
+    """Find symmetric fork entries and merge exits that should share a column.
+
+    Clausewitz draws every path independently. If the two arms of a balanced
+    diamond start or end in different chronological columns, their elbows
+    overlap without sharing a centrepiece and leave the visible breaks seen in
+    horizontal trees. Unequal arms remain staggered because aligning those
+    would create backwards or misleading routes.
+    """
+
+    reverse: list[list[int]] = [[] for _ in graph.lanes]
+    for source, targets in enumerate(graph.successors):
+        for target in targets:
+            reverse[target].append(source)
+    reverse_adjacency = tuple(tuple(parents) for parents in reverse)
+
+    pairs: set[tuple[int, int]] = set()
+    for targets in graph.successors:
+        if len(targets) != 2:
+            continue
+        left, right = targets
+        left_distances = graph_distances(left, graph.successors)
+        right_distances = graph_distances(right, graph.successors)
+        common = set(left_distances).intersection(right_distances)
+        if common:
+            meeting = min(
+                common,
+                key=lambda node: (
+                    max(left_distances[node], right_distances[node]),
+                    left_distances[node] + right_distances[node],
+                    node,
+                ),
+            )
+            if left_distances[meeting] == right_distances[meeting]:
+                pairs.add(tuple(sorted((left, right))))
+
+    for parents in reverse_adjacency:
+        if len(parents) != 2:
+            continue
+        left, right = parents
+        left_distances = graph_distances(left, reverse_adjacency)
+        right_distances = graph_distances(right, reverse_adjacency)
+        common = set(left_distances).intersection(right_distances)
+        if common:
+            meeting = min(
+                common,
+                key=lambda node: (
+                    max(left_distances[node], right_distances[node]),
+                    left_distances[node] + right_distances[node],
+                    node,
+                ),
+            )
+            if left_distances[meeting] == right_distances[meeting]:
+                pairs.add(tuple(sorted((left, right))))
+    return tuple(sorted(pairs))
+
+
+def horizontal_visual_slots(branch: Branch) -> tuple[int, ...]:
+    """Align balanced diamonds without changing their gameplay start years."""
+
+    graph = BRANCH_GRAPHS[branch.key]
+    base = tuple(
+        chronological_grid_slot(year, horizontal=True)
+        for year in branch.years
+    )
+    slots = list(base)
+    reverse: list[list[int]] = [[] for _ in graph.lanes]
+    for source, targets in enumerate(graph.successors):
+        for target in targets:
+            reverse[target].append(source)
+    multi_arm_groups = {
+        tuple(sorted(group))
+        for group in (*graph.successors, *(tuple(parents) for parents in reverse))
+        if len(group) >= 3
+    }
+    alignment_groups = {
+        *balanced_binary_pairs(graph),
+        *multi_arm_groups,
+    }
+
+    for group in sorted(alignment_groups):
+        candidate = max(base[index] for index in group)
+        neighbours = tuple(
+            source
+            for source, targets in enumerate(graph.successors)
+            if any(index in targets for index in group)
+        )
+        successors = tuple(
+            target
+            for index in group
+            for target in graph.successors[index]
+        )
+        if neighbours and candidate <= max(base[index] for index in neighbours):
+            continue
+        if successors and candidate >= min(base[index] for index in successors):
+            continue
+        for index in group:
+            slots[index] = candidate
+
+    for source, targets in enumerate(graph.successors):
+        for target in targets:
+            if slots[source] >= slots[target]:
+                raise ValueError(
+                    f"{branch.key}: non-chronological visual edge {source}->{target}"
+                )
+    return tuple(slots)
+
+
+def technology_grid_position(branch: Branch, index: int) -> tuple[int, int]:
+    """Keep the lane in x; grid direction maps chronological y to screen time."""
+
+    graph = BRANCH_GRAPHS[branch.key]
+    horizontal = bool(HORIZONTAL_FOLDERS.intersection(branch.folders))
+    lane = graph.lanes[index]
+    if not horizontal:
+        lane *= LANE_SLOT_MULTIPLIER
+        chronological_slot = chronological_grid_slot(branch.years[index], horizontal=False)
+    else:
+        chronological_slot = horizontal_visual_slots(branch)[index]
+    return lane, chronological_slot
+
+
 def render_technology(branch: Branch, index: int) -> str:
     tech = branch.techs[index]
     year = branch.years[index]
@@ -4008,11 +4672,12 @@ def render_technology(branch: Branch, index: int) -> str:
         f"\t\tresearch_cost = {n(research_cost)}",
         f"\t\tstart_year = {year}",
     ))
+    position_x, position_y = technology_grid_position(branch, index)
     for folder in sorted(branch.folders):
         lines.extend((
             "\t\tfolder = {",
             f"\t\t\tname = {folder}",
-            f"\t\t\tposition = {{ x = {graph.lanes[index] * LANE_SLOT_MULTIPLIER} y = {YEAR_TO_Y[year]} }}",
+            f"\t\t\tposition = {{ x = {position_x} y = {position_y} }}",
             "\t\t}",
         ))
     lines.append("\t\tai_will_do = {")
@@ -4268,6 +4933,103 @@ ACCESS_REQUIREMENT_LOCALISATION = {
 }
 
 
+# Names for equipment generations shown in production and logistics screens.
+# These are generated alongside the technology tree so newly unlocked series
+# cannot silently fall back to raw technical IDs.
+LAND_EQUIPMENT_LOCALISATION = {
+    "infantry_equipment_0": (
+        "КС-40 «Лом»", "KS-40 “Crowbar”", "КС-40", "KS-40",
+        "Восстановленный комплект винтовок с заново нарезанными стволами, едиными калибрами и измерительным контролем.",
+        "A recovered rifle set rebuilt with newly rifled barrels, common calibres, and gauged inspection.",
+    ),
+    "ADISCORD_infantry_equipment_2156": (
+        "КВ-56 «Шов»", "KV-56 “Seam”", "КВ-56", "KV-56",
+        "Первая серийная винтовка новой сборки с контролируемой обтюрацией казённой части и взаимозаменяемым затвором.",
+        "The first newly manufactured service rifle with controlled breech obturation and an interchangeable bolt.",
+    ),
+    "ADISCORD_infantry_equipment_2163": (
+        "БТ-63 «Рёв»", "BT-63 “Roar”", "БТ-63", "BT-63",
+        "Автоматическое оружие под промежуточный патрон, рассчитанный на управляемый огонь короткими очередями.",
+        "An automatic weapon chambered for an intermediate cartridge intended for controllable short bursts.",
+    ),
+    "ADISCORD_infantry_equipment_2168": (
+        "БТ-68 «Срез»", "BT-68 “Cut”", "БТ-68", "BT-68",
+        "Самозарядная винтовка с серийным механизмом экстракции, досылания и взведения от энергии выстрела.",
+        "A self-loading rifle with a production-standard mechanism for extraction, feeding, and cocking from firing energy.",
+    ),
+    "ADISCORD_infantry_equipment_2170": (
+        "БТ-70 «Контур»", "BT-70 “Contour”", "БТ-70", "BT-70",
+        "Автоматическая винтовка с лазерным дальномером и прицельной сеткой, рассчитанной под штатную баллистику патрона.",
+        "An automatic rifle with a laser rangefinder and reticle calibrated to the service cartridge trajectory.",
+    ),
+    "ADISCORD_infantry_equipment_2178": (
+        "БТ-78 «Клык»", "BT-78 “Fang”", "БТ-78", "BT-78",
+        "Газоотводная автоматическая винтовка с регулируемым узлом отвода газов и устойчивым циклом при загрязнении.",
+        "A gas-operated automatic rifle with an adjustable gas system and a stable cycle under fouling.",
+    ),
+    "ADISCORD_infantry_equipment_2183": (
+        "БТ-83 «Призма»", "BT-83 “Prism”", "БТ-83", "BT-83",
+        "Автоматическая винтовка с хромированным каналом ствола, сохраняющим ресурс при высоком темпе огня.",
+        "An automatic rifle with a chrome-lined bore that preserves barrel life under a high rate of fire.",
+    ),
+    "ADISCORD_infantry_equipment_2193": (
+        "БТ-93 «Игла»", "BT-93 “Needle”", "БТ-93", "BT-93",
+        "Автоматическая винтовка с согласованным импульсом отдачи, буфером затворной группы и уменьшенным подбросом.",
+        "An automatic rifle with tuned recoil impulse, a buffered bolt group, and reduced muzzle rise.",
+    ),
+    "ADISCORD_infantry_equipment_2200": (
+        "БТ-00 «Предел»", "BT-00 “Limit”", "БТ-00", "BT-00",
+        "Индивидуальная система под программируемый боеприпас, получающий дальность и режим подрыва от прицела.",
+        "An individual weapon for programmable ammunition that receives range and fuze mode from the sight.",
+    ),
+    "ADISCORD_squad_weapons_equipment_0": (
+        "КГ-40 «Скат»", "KG-40 “Ray”", "КГ-40", "KG-40",
+        "Восстановленные пулемёты, оптика и боеприпасы для тяжёлой группы отделения.",
+        "Recovered machine guns, optics, and ammunition issued to the squad heavy group.",
+    ),
+    "ADISCORD_squad_weapons_equipment_2156": (
+        "КГ-56 «Жгут»", "KG-56 “Cord”", "КГ-56", "KG-56",
+        "Единый ленточный комплекс с серийными коробами и переносным запасом стволов.",
+        "A common belt-fed system with standardized boxes and portable spare barrels.",
+    ),
+    "ADISCORD_squad_weapons_equipment_2163": (
+        "КГ-63 «Зуб»", "KG-63 “Tooth”", "КГ-63", "KG-63",
+        "Групповой комплект с усиленным пулемётом, точной винтовкой и лёгкими пусковыми средствами.",
+        "A group kit combining a reinforced machine gun, precision rifle, and light launchers.",
+    ),
+    "ADISCORD_squad_weapons_equipment_2168": (
+        "КГ-68 «Вал»", "KG-68 “Shaft”", "КГ-68", "KG-68",
+        "Модульное групповое оружие с общей оптикой, дальномерами и корректируемыми зарядами.",
+        "Modular group weapons sharing optics, rangefinding, and corrected charges.",
+    ),
+    "ADISCORD_squad_weapons_equipment_2170": (
+        "КГ-70 «Гул»", "KG-70 “Rumble”", "КГ-70", "KG-70",
+        "Сенсорно-связанный комплект для подавления, точного огня и пристрелки отделения.",
+        "A sensor-linked kit for suppression, precision fire, and squad ranging.",
+    ),
+    "ADISCORD_squad_weapons_equipment_2178": (
+        "КГ-78 «Узел»", "KG-78 “Knot”", "КГ-78", "KG-78",
+        "Программируемый огневой узел с электронными взрывателями и защищённым обменом целями.",
+        "A programmable fire node with electronic fuzes and protected target exchange.",
+    ),
+    "ADISCORD_squad_weapons_equipment_2183": (
+        "КГ-83 «Маяк»", "KG-83 “Beacon”", "КГ-83", "KG-83",
+        "Сетевая система точной поддержки с мультиспектральной разведкой и удалённым наведением.",
+        "A networked precision-support system with multispectral scouting and remote guidance.",
+    ),
+    "ADISCORD_squad_weapons_equipment_2193": (
+        "КГ-93 «Рой»", "KG-93 “Swarm”", "КГ-93", "KG-93",
+        "Полуавтономный комплект управления тяжёлым оружием и распределёнными сенсорами.",
+        "A semi-autonomous controller for heavy weapons and distributed sensors.",
+    ),
+    "ADISCORD_squad_weapons_equipment_2200": (
+        "КГ-00 «Хор»", "KG-00 “Chorus”", "КГ-00", "KG-00",
+        "Поздняя сеть группового огня, сводящая пулемёты, точные системы и роботизированные носители.",
+        "A late group-fire network combining machine guns, precision systems, and robotic carriers.",
+    ),
+}
+
+
 def generated_localisation(language: str) -> list[str]:
     is_ru = language == "russian"
     lines = [
@@ -4275,26 +5037,43 @@ def generated_localisation(language: str) -> list[str]:
         for key, names in ACCESS_REQUIREMENT_LOCALISATION.items()
     ]
     lines.append("")
+    for equipment_id, values in LAND_EQUIPMENT_LOCALISATION.items():
+        if is_ru:
+            name, short, description = values[0], values[2], values[4]
+        else:
+            name, short, description = values[1], values[3], values[5]
+        lines.extend((
+            f' {equipment_id}:0 "{name}"',
+            f' {equipment_id}_short:0 "{short}"',
+            f' {equipment_id}_desc:0 "{description}"',
+        ))
+    lines.append("")
     for branch in BRANCHES:
         key = f"ADISCORD_TECH_BRANCH_{branch.key.upper()}"
         lines.append(f" {key}:0 \"{branch.ru if is_ru else branch.en}\"")
     lines.append("")
     for branch in BRANCHES:
         if is_ru:
-            description = APPLIED_DESCRIPTION_RU_BY_BRANCH.get(
+            branch_description = APPLIED_DESCRIPTION_RU_BY_BRANCH.get(
                 branch.key, BRANCH_DESCRIPTION_RU[branch.profile]
             )
         else:
-            description = APPLIED_DESCRIPTION_EN_BY_BRANCH.get(
+            branch_description = APPLIED_DESCRIPTION_EN_BY_BRANCH.get(
                 branch.key, BRANCH_DESCRIPTION_EN[branch.profile]
             )
         for index, tech in enumerate(branch.techs):
             name = tech.ru if is_ru else tech.en
             year = branch.years[index]
+            technical = TECHNICAL_TECH_DESCRIPTIONS.get(tech.key)
+            description = (
+                technical[0 if is_ru else 1]
+                if technical
+                else branch_description
+            )
             if is_ru:
-                desc = f"{name}: {description}. Технологический уровень {year} года."
+                desc = f"{description}. Технологический уровень {year} года."
             else:
-                desc = f"{name}: {description}. Technology level: {year}."
+                desc = f"{description}. Technology level: {year}."
             notes = technology_description_notes(branch, index, is_ru)
             if notes:
                 desc += " " + " ".join(notes)
@@ -4326,7 +5105,12 @@ def write_localisation() -> None:
         "russian": ROOT / "localisation" / "russian" / "ADISCORD_technology_doctrine_l_russian.yml",
         "english": ROOT / "localisation" / "english" / "ADISCORD_technology_doctrine_l_english.yml",
     }
-    generated_key = re.compile(r"^\s+(ADISCORD_[A-Za-z0-9_]+)\s*:")
+    generated_key = re.compile(r"^\s+([A-Za-z0-9_]+)\s*:")
+    generated_equipment_keys = {
+        suffix
+        for equipment_id in LAND_EQUIPMENT_LOCALISATION
+        for suffix in (equipment_id, f"{equipment_id}_short", f"{equipment_id}_desc")
+    }
     for language, path in targets.items():
         if path.exists():
             original = path.read_text(encoding="utf-8-sig").splitlines()
@@ -4340,6 +5124,7 @@ def write_localisation() -> None:
                 key.startswith("ADISCORD_tech_")
                 or key.startswith("ADISCORD_TECH_BRANCH_")
                 or key in ACCESS_REQUIREMENT_LOCALISATION
+                or key in generated_equipment_keys
             ):
                 continue
             preserved.append(line)
@@ -4383,18 +5168,33 @@ def find_block_end(text: str, open_brace: int) -> int:
 
 def render_folder(folder: str) -> str:
     branches = [branch for branch in BRANCHES if folder in branch.folders]
-    branch_layouts: list[tuple[Branch, int, int]] = []
-    cursor_x = GRID_X
-    for branch in branches:
-        graph = BRANCH_GRAPHS[branch.key]
+    horizontal = folder in HORIZONTAL_FOLDERS
+    branch_layouts: list[tuple[Branch, int, int, int, int]] = []
+    if horizontal:
         grid_width = (
-            max(graph.lanes) * LANE_SLOT_MULTIPLIER + LANE_SLOT_MULTIPLIER
+            max(YEAR_TO_Y.values()) * HORIZONTAL_YEAR_SLOT_MULTIPLIER
+            + HORIZONTAL_YEAR_SLOT_MULTIPLIER
         ) * GRID_SLOT
-        branch_layouts.append((branch, cursor_x, grid_width))
-        cursor_x += grid_width + BRANCH_GAP
-    content_width = max(1180, cursor_x + 80)
-    grid_height = (max(YEAR_TO_Y.values()) + 1) * GRID_SLOT
-    height = max(700, GRID_Y + grid_height + 100)
+        cursor_y = GRID_Y
+        for branch in branches:
+            graph = BRANCH_GRAPHS[branch.key]
+            grid_height = (max(graph.lanes) + 1) * HORIZONTAL_LANE_SLOT
+            branch_layouts.append((branch, GRID_X, cursor_y, grid_width, grid_height))
+            cursor_y += grid_height + BRANCH_GAP
+        content_width = max(1180, GRID_X + grid_width + 80)
+        height = max(700, cursor_y + 80)
+    else:
+        cursor_x = GRID_X
+        grid_height = (max(YEAR_TO_Y.values()) + 1) * GRID_SLOT
+        for branch in branches:
+            graph = BRANCH_GRAPHS[branch.key]
+            grid_width = (
+                max(graph.lanes) * LANE_SLOT_MULTIPLIER + LANE_SLOT_MULTIPLIER
+            ) * GRID_SLOT
+            branch_layouts.append((branch, cursor_x, GRID_Y, grid_width, grid_height))
+            cursor_x += grid_width + BRANCH_GAP
+        content_width = max(1180, cursor_x + 80)
+        height = max(700, GRID_Y + grid_height + 100)
     background = FOLDER_BACKGROUNDS[folder]
     lines = [
         "\t\tcontainerWindowType = {",
@@ -4421,10 +5221,20 @@ def render_folder(folder: str) -> str:
         "\t\t\t\t}",
     ]
     for index, year in enumerate(YEARS):
+        if horizontal:
+            year_x = (
+                GRID_X
+                + chronological_grid_slot(year, horizontal=True) * GRID_SLOT
+                + 18
+            )
+            year_y = 84
+        else:
+            year_x = 24
+            year_y = GRID_Y + index * GRID_SLOT + 18
         lines.extend((
             "\t\t\t\tinstantTextBoxType = {",
             f"\t\t\t\t\tname = \"ADISCORD_{folder}_year_{year}\"",
-            f"\t\t\t\t\tposition = {{ x = 24 y = {GRID_Y + index * GRID_SLOT + 18} }}",
+            f"\t\t\t\t\tposition = {{ x = {year_x} y = {year_y} }}",
             "\t\t\t\t\tfont = \"hoi_18b\"",
             f"\t\t\t\t\ttext = \"{year}\"",
             "\t\t\t\t\tmaxWidth = 94",
@@ -4438,24 +5248,35 @@ def render_folder(folder: str) -> str:
     # ``techtree_stripes`` container and reports every technology as having
     # no grid box even when the grid name itself is correct.
     lines.append("\t\t\t}")
-    for branch, grid_x, grid_width in branch_layouts:
+    for branch, grid_x, grid_y, grid_width, grid_height in branch_layouts:
+        slot_height = HORIZONTAL_LANE_SLOT if horizontal else GRID_SLOT
+        if horizontal:
+            title_x = grid_x
+            title_y = grid_y - 30
+            title_width = min(900, grid_width)
+            title_format = "left"
+        else:
+            title_x = grid_x
+            title_y = 76
+            title_width = grid_width
+            title_format = "center"
         lines.extend((
             "\t\t\tinstantTextBoxType = {",
             f"\t\t\t\tname = \"ADISCORD_branch_{branch.key}\"",
-            f"\t\t\t\tposition = {{ x = {grid_x} y = 76 }}",
+            f"\t\t\t\tposition = {{ x = {title_x} y = {title_y} }}",
             "\t\t\t\tfont = \"hoi_18b\"",
             f"\t\t\t\ttext = \"ADISCORD_TECH_BRANCH_{branch.key.upper()}\"",
-            f"\t\t\t\tmaxWidth = {grid_width}",
+            f"\t\t\t\tmaxWidth = {title_width}",
             "\t\t\t\tmaxHeight = 24",
-            "\t\t\t\tformat = center",
+            f"\t\t\t\tformat = {title_format}",
             "\t\t\t\tOrientation = \"UPPER_LEFT\"",
             "\t\t\t}",
             "\t\t\tgridboxtype = {",
             f"\t\t\t\tname = \"{branch.techs[0].id}_tree\"",
-            f"\t\t\t\tposition = {{ x = {grid_x} y = {GRID_Y} }}",
+            f"\t\t\t\tposition = {{ x = {grid_x} y = {grid_y} }}",
             f"\t\t\t\tsize = {{ width = {grid_width} height = {grid_height} }}",
-            f"\t\t\t\tslotsize = {{ width = {GRID_SLOT} height = {GRID_SLOT} }}",
-            "\t\t\t\tformat = \"UP\"",
+            f"\t\t\t\tslotsize = {{ width = {GRID_SLOT} height = {slot_height} }}",
+            f"\t\t\t\tformat = \"{folder_grid_format(folder)}\"",
             "\t\t\t}",
         ))
     lines.append("\t\t}")

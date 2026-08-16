@@ -1,8 +1,9 @@
 state={
 	id=132
 	name="STATE_132"
-	provinces={
-		423 1090 1157 2537 3630 4061 4739 5781 7693 8272 8284 8338 10752 12641 
+	provinces = {
+		423 1090 1157 2537 3630 4061 4739 5781 7693 8272 8284 8338
+		10752 12641
 	}
 	manpower = 500000
 	state_category = rural
@@ -16,5 +17,6 @@ state={
 			industrial_complex = 1
 			infrastructure = 3
 		}
+		victory_points = { 423 2 }
 	}
 }

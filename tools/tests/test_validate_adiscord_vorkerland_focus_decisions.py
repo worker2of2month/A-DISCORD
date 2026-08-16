@@ -33,6 +33,35 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
     def test_integrated_contract(self) -> None:
         self.assertEqual(collect_issues(), [])
 
+    def test_central_showdown_stays_visible_while_command_readiness_is_explained(self) -> None:
+        decisions = read(DECISION_FILE)
+        showdown = named_block(
+            decisions, "ADISCORD_vorkerland_commit_to_central_showdown"
+        )
+        visible = named_block(showdown, "visible")
+        available = named_block(showdown, "available")
+
+        self.assertIn(
+            "has_global_flag = ADISCORD_vorkerland_phase_central_preparation",
+            visible,
+        )
+        self.assertNotIn("ADISCORD_vorkerland_focus_central_front_prepared", visible)
+        self.assertNotIn("central_war_unlocked", visible)
+
+        self.assertIn(
+            "tooltip = ADISCORD_vorkerland_central_showdown_command_ready_tt",
+            available,
+        )
+        self.assertIn(
+            "has_country_flag = ADISCORD_vorkerland_focus_central_front_prepared",
+            available,
+        )
+        for tag in ("wkr", "vad", "tva"):
+            self.assertIn(
+                f"ADISCORD_vorkerland_focus_{tag}_central_war_unlocked",
+                available,
+            )
+
     def test_named_minor_fronts_precede_shared_final_showdown(self) -> None:
         decisions = read(DECISION_FILE)
         effects = read(EFFECT_FILE)

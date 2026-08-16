@@ -1,5 +1,9 @@
 capital = 76
 
+# SOL begins as WRK's autonomous worker protectorate. The collapse autonomy
+# hooks remove this cosmetic when Solarino becomes sovereign.
+set_cosmetic_tag = SOL_vorkerland_worker_protectorate
+
 oob = "SOL"
 ####### Characters
 

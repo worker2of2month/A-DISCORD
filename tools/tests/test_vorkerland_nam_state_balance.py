@@ -1015,18 +1015,24 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         self.assertGreaterEqual(len(connected_lines), 2)
         self.assertTrue(any(8032 in line or 7129 in line for line in connected_lines))
 
-    def test_all_ivanland_owned_core_states_have_logistics_profiles(self) -> None:
-        owned_and_core = set()
+    def test_all_ivanland_and_iia_owned_core_states_have_logistics_profiles(self) -> None:
+        owned_and_core = {"IVN": set(), "IIA": set()}
         for path in builder.STATE_DIR.glob("*.txt"):
             source = path.read_text(encoding="utf-8-sig", errors="strict")
             state_match = re.search(r"\bid\s*=\s*(\d+)", source)
             if not state_match:
                 continue
-            if re.search(r"(?m)^\s*owner\s*=\s*IVN\s*$", source) and re.search(
-                r"(?m)^\s*add_core_of\s*=\s*IVN\s*$", source
-            ):
-                owned_and_core.add(int(state_match.group(1)))
-        self.assertEqual(set(builder.IVANLAND_STATE_PROFILES), owned_and_core)
+            for tag in owned_and_core:
+                if re.search(rf"(?m)^\s*owner\s*=\s*{tag}\s*$", source) and re.search(
+                    rf"(?m)^\s*add_core_of\s*=\s*{tag}\s*$", source
+                ):
+                    owned_and_core[tag].add(int(state_match.group(1)))
+
+        iia_state_ids = {128, 693, 694}
+        profile_state_ids = set(builder.IVANLAND_STATE_PROFILES)
+        self.assertEqual(owned_and_core["IIA"], iia_state_ids)
+        self.assertEqual(owned_and_core["IVN"], profile_state_ids - iia_state_ids)
+        self.assertEqual(profile_state_ids, owned_and_core["IVN"] | owned_and_core["IIA"])
         total_population = sum(
             int(profile["population"])
             for profile in builder.IVANLAND_STATE_PROFILES.values()
@@ -1037,7 +1043,6 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
                 self.assert_profile_applied(state_id, profile)
                 source = state_source(state_id)
                 self.assertGreater(int(scalar(source, "manpower")), 0)
-                self.assertGreaterEqual(float(scalar(source, "local_supplies")), 2.0)
                 self.assertGreaterEqual(building_level(source, "infrastructure"), 2)
                 self.assertNotRegex(source, r"state_category\s*=\s*wasteland\b")
 

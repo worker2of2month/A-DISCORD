@@ -58,6 +58,27 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
             VORKERLAND_THEATRE_VICTORY_POINTS[27],
         )
 
+    def test_disconnected_urban_settlements_receive_victory_points(self) -> None:
+        expected = {
+            310: ((16588, 1),),
+            318: ((16642, 3), (16624, 1)),
+        }
+        for state_id, expected_vps in expected.items():
+            with self.subTest(state=state_id):
+                self.assertEqual(
+                    VORKERLAND_THEATRE_VICTORY_POINTS.get(state_id),
+                    expected_vps,
+                )
+                state = builder.state_path(state_id).read_text(encoding="utf-8-sig")
+                actual_vps = tuple(
+                    (int(province_id), int(value))
+                    for province_id, value in re.findall(
+                        r"victory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}",
+                        state,
+                    )
+                )
+                self.assertEqual(actual_vps, expected_vps)
+
     def test_exact_vp_replacement_removes_extras_and_is_idempotent(self) -> None:
         source = (
             "state={\n\tprovinces={ 10 20 }\n\thistory={\n"

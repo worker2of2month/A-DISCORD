@@ -51,7 +51,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
-				size = { width = 2780 height = 1630 min = { width = 100%% height = 100%% } }
+				size = { width = 4430 height = 2664 min = { width = 100%% height = 100%% } }
 				clipping = no
 				background = { name = "Background" quadTextureSprite = "GFX_techtree_stripes" }
 				iconType = {
@@ -62,7 +62,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_infantry_folder_year_2150"
-					position = { x = 24 y = 148 }
+					position = { x = 168 y = 84 }
 					font = "hoi_18b"
 					text = "2150"
 					maxWidth = 94
@@ -72,7 +72,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_infantry_folder_year_2155"
-					position = { x = 24 y = 218 }
+					position = { x = 378 y = 84 }
 					font = "hoi_18b"
 					text = "2155"
 					maxWidth = 94
@@ -82,7 +82,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_infantry_folder_year_2158"
-					position = { x = 24 y = 288 }
+					position = { x = 588 y = 84 }
 					font = "hoi_18b"
 					text = "2158"
 					maxWidth = 94
@@ -92,7 +92,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_infantry_folder_year_2160"
-					position = { x = 24 y = 358 }
+					position = { x = 798 y = 84 }
 					font = "hoi_18b"
 					text = "2160"
 					maxWidth = 94
@@ -102,7 +102,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_infantry_folder_year_2161"
-					position = { x = 24 y = 428 }
+					position = { x = 1008 y = 84 }
 					font = "hoi_18b"
 					text = "2161"
 					maxWidth = 94
@@ -112,7 +112,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_infantry_folder_year_2162"
-					position = { x = 24 y = 498 }
+					position = { x = 1218 y = 84 }
 					font = "hoi_18b"
 					text = "2162"
 					maxWidth = 94
@@ -122,7 +122,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_infantry_folder_year_2163"
-					position = { x = 24 y = 568 }
+					position = { x = 1428 y = 84 }
 					font = "hoi_18b"
 					text = "2163"
 					maxWidth = 94
@@ -132,7 +132,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_infantry_folder_year_2164"
-					position = { x = 24 y = 638 }
+					position = { x = 1638 y = 84 }
 					font = "hoi_18b"
 					text = "2164"
 					maxWidth = 94
@@ -142,7 +142,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_infantry_folder_year_2165"
-					position = { x = 24 y = 708 }
+					position = { x = 1848 y = 84 }
 					font = "hoi_18b"
 					text = "2165"
 					maxWidth = 94
@@ -152,7 +152,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_infantry_folder_year_2166"
-					position = { x = 24 y = 778 }
+					position = { x = 2058 y = 84 }
 					font = "hoi_18b"
 					text = "2166"
 					maxWidth = 94
@@ -162,7 +162,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_infantry_folder_year_2167"
-					position = { x = 24 y = 848 }
+					position = { x = 2268 y = 84 }
 					font = "hoi_18b"
 					text = "2167"
 					maxWidth = 94
@@ -172,7 +172,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_infantry_folder_year_2168"
-					position = { x = 24 y = 918 }
+					position = { x = 2478 y = 84 }
 					font = "hoi_18b"
 					text = "2168"
 					maxWidth = 94
@@ -182,7 +182,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_infantry_folder_year_2169"
-					position = { x = 24 y = 988 }
+					position = { x = 2688 y = 84 }
 					font = "hoi_18b"
 					text = "2169"
 					maxWidth = 94
@@ -192,7 +192,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_infantry_folder_year_2170"
-					position = { x = 24 y = 1058 }
+					position = { x = 2898 y = 84 }
 					font = "hoi_18b"
 					text = "2170"
 					maxWidth = 94
@@ -202,7 +202,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_infantry_folder_year_2171"
-					position = { x = 24 y = 1128 }
+					position = { x = 3108 y = 84 }
 					font = "hoi_18b"
 					text = "2171"
 					maxWidth = 94
@@ -212,7 +212,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_infantry_folder_year_2172"
-					position = { x = 24 y = 1198 }
+					position = { x = 3318 y = 84 }
 					font = "hoi_18b"
 					text = "2172"
 					maxWidth = 94
@@ -222,7 +222,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_infantry_folder_year_2173"
-					position = { x = 24 y = 1268 }
+					position = { x = 3528 y = 84 }
 					font = "hoi_18b"
 					text = "2173"
 					maxWidth = 94
@@ -232,7 +232,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_infantry_folder_year_2174"
-					position = { x = 24 y = 1338 }
+					position = { x = 3738 y = 84 }
 					font = "hoi_18b"
 					text = "2174"
 					maxWidth = 94
@@ -242,7 +242,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_infantry_folder_year_2175"
-					position = { x = 24 y = 1408 }
+					position = { x = 3948 y = 84 }
 					font = "hoi_18b"
 					text = "2175"
 					maxWidth = 94
@@ -252,7 +252,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_infantry_folder_year_2180"
-					position = { x = 24 y = 1478 }
+					position = { x = 4158 y = 84 }
 					font = "hoi_18b"
 					text = "2180"
 					maxWidth = 94
@@ -263,88 +263,122 @@ guiTypes = {
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_small_arms"
-				position = { x = 150 y = 76 }
+				position = { x = 150 y = 100 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_SMALL_ARMS"
-				maxWidth = 420
+				maxWidth = 900
 				maxHeight = 24
-				format = center
+				format = left
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_postwar_weapon_standardization_tree"
 				position = { x = 150 y = 130 }
-				size = { width = 420 height = 1400 }
-				slotsize = { width = 70 height = 70 }
-				format = "UP"
+				size = { width = 4200 height = 288 }
+				slotsize = { width = 70 height = 96 }
+				format = "LEFT"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_squad_weapons"
-				position = { x = 660 y = 76 }
+				position = { x = 150 y = 478 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_SQUAD_WEAPONS"
-				maxWidth = 420
+				maxWidth = 900
 				maxHeight = 24
-				format = center
+				format = left
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_belt_fed_recovery_tree"
-				position = { x = 660 y = 130 }
-				size = { width = 420 height = 1400 }
-				slotsize = { width = 70 height = 70 }
-				format = "UP"
+				position = { x = 150 y = 508 }
+				size = { width = 4200 height = 288 }
+				slotsize = { width = 70 height = 96 }
+				format = "LEFT"
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_branch_anti_tank_infantry"
+				position = { x = 150 y = 856 }
+				font = "hoi_18b"
+				text = "ADISCORD_TECH_BRANCH_ANTI_TANK_INFANTRY"
+				maxWidth = 900
+				maxHeight = 24
+				format = left
+				Orientation = "UPPER_LEFT"
+			}
+			gridboxtype = {
+				name = "ADISCORD_tech_recovered_shaped_charge_cells_tree"
+				position = { x = 150 y = 886 }
+				size = { width = 4200 height = 192 }
+				slotsize = { width = 70 height = 96 }
+				format = "LEFT"
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_branch_night_combat"
+				position = { x = 150 y = 1138 }
+				font = "hoi_18b"
+				text = "ADISCORD_TECH_BRANCH_NIGHT_COMBAT"
+				maxWidth = 900
+				maxHeight = 24
+				format = left
+				Orientation = "UPPER_LEFT"
+			}
+			gridboxtype = {
+				name = "ADISCORD_tech_passive_intensifier_cells_tree"
+				position = { x = 150 y = 1168 }
+				size = { width = 4200 height = 288 }
+				slotsize = { width = 70 height = 96 }
+				format = "LEFT"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_protection"
-				position = { x = 1170 y = 76 }
+				position = { x = 150 y = 1516 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_PROTECTION"
-				maxWidth = 420
+				maxWidth = 900
 				maxHeight = 24
-				format = center
+				format = left
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_composite_protection_kits_tree"
-				position = { x = 1170 y = 130 }
-				size = { width = 420 height = 1400 }
-				slotsize = { width = 70 height = 70 }
-				format = "UP"
+				position = { x = 150 y = 1546 }
+				size = { width = 4200 height = 288 }
+				slotsize = { width = 70 height = 96 }
+				format = "LEFT"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_special_forces"
-				position = { x = 1680 y = 76 }
+				position = { x = 150 y = 1894 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_SPECIAL_FORCES"
-				maxWidth = 420
+				maxWidth = 900
 				maxHeight = 24
-				format = center
+				format = left
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_fieldcraft_manuals_tree"
-				position = { x = 1680 y = 130 }
-				size = { width = 420 height = 1400 }
-				slotsize = { width = 70 height = 70 }
-				format = "UP"
+				position = { x = 150 y = 1924 }
+				size = { width = 4200 height = 288 }
+				slotsize = { width = 70 height = 96 }
+				format = "LEFT"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_combat_medicine"
-				position = { x = 2190 y = 76 }
+				position = { x = 150 y = 2272 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_COMBAT_MEDICINE"
-				maxWidth = 420
+				maxWidth = 900
 				maxHeight = 24
-				format = center
+				format = left
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_trauma_registry_networks_tree"
-				position = { x = 2190 y = 130 }
-				size = { width = 420 height = 1400 }
-				slotsize = { width = 70 height = 70 }
-				format = "UP"
+				position = { x = 150 y = 2302 }
+				size = { width = 4200 height = 192 }
+				slotsize = { width = 70 height = 96 }
+				format = "LEFT"
 			}
 		}
 
@@ -361,7 +395,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
-				size = { width = 2780 height = 1630 min = { width = 100%% height = 100%% } }
+				size = { width = 3410 height = 1630 min = { width = 100%% height = 100%% } }
 				clipping = no
 				background = { name = "Background" quadTextureSprite = "GFX_techtree_stripes" }
 				iconType = {
@@ -576,7 +610,7 @@ guiTypes = {
 				position = { x = 150 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_FIELD_SUPPORT"
-				maxWidth = 420
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
@@ -584,47 +618,47 @@ guiTypes = {
 			gridboxtype = {
 				name = "ADISCORD_tech_field_workshop_tools_tree"
 				position = { x = 150 y = 130 }
-				size = { width = 420 height = 1400 }
+				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_logistics"
-				position = { x = 660 y = 76 }
+				position = { x = 870 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_LOGISTICS"
-				maxWidth = 420
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_pack_transport_tree"
-				position = { x = 660 y = 130 }
-				size = { width = 420 height = 1400 }
+				position = { x = 870 y = 130 }
+				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_rail"
-				position = { x = 1170 y = 76 }
+				position = { x = 1590 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_RAIL"
-				maxWidth = 420
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_restored_rail_stock_tree"
-				position = { x = 1170 y = 130 }
-				size = { width = 420 height = 1400 }
+				position = { x = 1590 y = 130 }
+				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_combat_engineering"
-				position = { x = 1680 y = 76 }
+				position = { x = 2310 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_COMBAT_ENGINEERING"
 				maxWidth = 420
@@ -634,14 +668,14 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_battle_damage_survey_teams_tree"
-				position = { x = 1680 y = 130 }
+				position = { x = 2310 y = 130 }
 				size = { width = 420 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_officer_training"
-				position = { x = 2190 y = 76 }
+				position = { x = 2820 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_OFFICER_TRAINING"
 				maxWidth = 420
@@ -651,7 +685,7 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_reconstituted_staff_academies_tree"
-				position = { x = 2190 y = 130 }
+				position = { x = 2820 y = 130 }
 				size = { width = 420 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
@@ -671,7 +705,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
-				size = { width = 2480 height = 1630 min = { width = 100%% height = 100%% } }
+				size = { width = 4430 height = 2004 min = { width = 100%% height = 100%% } }
 				clipping = no
 				background = { name = "Background" quadTextureSprite = "GFX_techtree_stripes" }
 				iconType = {
@@ -682,7 +716,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_armour_folder_year_2150"
-					position = { x = 24 y = 148 }
+					position = { x = 168 y = 84 }
 					font = "hoi_18b"
 					text = "2150"
 					maxWidth = 94
@@ -692,7 +726,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_armour_folder_year_2155"
-					position = { x = 24 y = 218 }
+					position = { x = 378 y = 84 }
 					font = "hoi_18b"
 					text = "2155"
 					maxWidth = 94
@@ -702,7 +736,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_armour_folder_year_2158"
-					position = { x = 24 y = 288 }
+					position = { x = 588 y = 84 }
 					font = "hoi_18b"
 					text = "2158"
 					maxWidth = 94
@@ -712,7 +746,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_armour_folder_year_2160"
-					position = { x = 24 y = 358 }
+					position = { x = 798 y = 84 }
 					font = "hoi_18b"
 					text = "2160"
 					maxWidth = 94
@@ -722,7 +756,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_armour_folder_year_2161"
-					position = { x = 24 y = 428 }
+					position = { x = 1008 y = 84 }
 					font = "hoi_18b"
 					text = "2161"
 					maxWidth = 94
@@ -732,7 +766,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_armour_folder_year_2162"
-					position = { x = 24 y = 498 }
+					position = { x = 1218 y = 84 }
 					font = "hoi_18b"
 					text = "2162"
 					maxWidth = 94
@@ -742,7 +776,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_armour_folder_year_2163"
-					position = { x = 24 y = 568 }
+					position = { x = 1428 y = 84 }
 					font = "hoi_18b"
 					text = "2163"
 					maxWidth = 94
@@ -752,7 +786,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_armour_folder_year_2164"
-					position = { x = 24 y = 638 }
+					position = { x = 1638 y = 84 }
 					font = "hoi_18b"
 					text = "2164"
 					maxWidth = 94
@@ -762,7 +796,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_armour_folder_year_2165"
-					position = { x = 24 y = 708 }
+					position = { x = 1848 y = 84 }
 					font = "hoi_18b"
 					text = "2165"
 					maxWidth = 94
@@ -772,7 +806,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_armour_folder_year_2166"
-					position = { x = 24 y = 778 }
+					position = { x = 2058 y = 84 }
 					font = "hoi_18b"
 					text = "2166"
 					maxWidth = 94
@@ -782,7 +816,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_armour_folder_year_2167"
-					position = { x = 24 y = 848 }
+					position = { x = 2268 y = 84 }
 					font = "hoi_18b"
 					text = "2167"
 					maxWidth = 94
@@ -792,7 +826,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_armour_folder_year_2168"
-					position = { x = 24 y = 918 }
+					position = { x = 2478 y = 84 }
 					font = "hoi_18b"
 					text = "2168"
 					maxWidth = 94
@@ -802,7 +836,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_armour_folder_year_2169"
-					position = { x = 24 y = 988 }
+					position = { x = 2688 y = 84 }
 					font = "hoi_18b"
 					text = "2169"
 					maxWidth = 94
@@ -812,7 +846,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_armour_folder_year_2170"
-					position = { x = 24 y = 1058 }
+					position = { x = 2898 y = 84 }
 					font = "hoi_18b"
 					text = "2170"
 					maxWidth = 94
@@ -822,7 +856,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_armour_folder_year_2171"
-					position = { x = 24 y = 1128 }
+					position = { x = 3108 y = 84 }
 					font = "hoi_18b"
 					text = "2171"
 					maxWidth = 94
@@ -832,7 +866,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_armour_folder_year_2172"
-					position = { x = 24 y = 1198 }
+					position = { x = 3318 y = 84 }
 					font = "hoi_18b"
 					text = "2172"
 					maxWidth = 94
@@ -842,7 +876,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_armour_folder_year_2173"
-					position = { x = 24 y = 1268 }
+					position = { x = 3528 y = 84 }
 					font = "hoi_18b"
 					text = "2173"
 					maxWidth = 94
@@ -852,7 +886,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_armour_folder_year_2174"
-					position = { x = 24 y = 1338 }
+					position = { x = 3738 y = 84 }
 					font = "hoi_18b"
 					text = "2174"
 					maxWidth = 94
@@ -862,7 +896,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_armour_folder_year_2175"
-					position = { x = 24 y = 1408 }
+					position = { x = 3948 y = 84 }
 					font = "hoi_18b"
 					text = "2175"
 					maxWidth = 94
@@ -872,7 +906,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_armour_folder_year_2180"
-					position = { x = 24 y = 1478 }
+					position = { x = 4158 y = 84 }
 					font = "hoi_18b"
 					text = "2180"
 					maxWidth = 94
@@ -883,71 +917,88 @@ guiTypes = {
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_recon_armor"
-				position = { x = 150 y = 76 }
+				position = { x = 150 y = 100 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_RECON_ARMOR"
-				maxWidth = 420
+				maxWidth = 900
 				maxHeight = 24
-				format = center
+				format = left
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_restored_armored_chassis_tree"
 				position = { x = 150 y = 130 }
-				size = { width = 420 height = 1400 }
-				slotsize = { width = 70 height = 70 }
-				format = "UP"
+				size = { width = 4200 height = 288 }
+				slotsize = { width = 70 height = 96 }
+				format = "LEFT"
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_branch_mechanized_mobility"
+				position = { x = 150 y = 478 }
+				font = "hoi_18b"
+				text = "ADISCORD_TECH_BRANCH_MECHANIZED_MOBILITY"
+				maxWidth = 900
+				maxHeight = 24
+				format = left
+				Orientation = "UPPER_LEFT"
+			}
+			gridboxtype = {
+				name = "ADISCORD_tech_armored_carrier_program_tree"
+				position = { x = 150 y = 508 }
+				size = { width = 4200 height = 288 }
+				slotsize = { width = 70 height = 96 }
+				format = "LEFT"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_combat_armor"
-				position = { x = 660 y = 76 }
+				position = { x = 150 y = 856 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_COMBAT_ARMOR"
-				maxWidth = 630
+				maxWidth = 900
 				maxHeight = 24
-				format = center
+				format = left
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_recovered_medium_chassis_tree"
-				position = { x = 660 y = 130 }
-				size = { width = 630 height = 1400 }
-				slotsize = { width = 70 height = 70 }
-				format = "UP"
+				position = { x = 150 y = 886 }
+				size = { width = 4200 height = 288 }
+				slotsize = { width = 70 height = 96 }
+				format = "LEFT"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_heavy_armor"
-				position = { x = 1380 y = 76 }
+				position = { x = 150 y = 1234 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_HEAVY_ARMOR"
-				maxWidth = 420
+				maxWidth = 900
 				maxHeight = 24
-				format = center
+				format = left
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_heavy_recovery_frames_tree"
-				position = { x = 1380 y = 130 }
-				size = { width = 420 height = 1400 }
-				slotsize = { width = 70 height = 70 }
-				format = "UP"
+				position = { x = 150 y = 1264 }
+				size = { width = 4200 height = 288 }
+				slotsize = { width = 70 height = 96 }
+				format = "LEFT"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_unmanned_ground_systems"
-				position = { x = 1890 y = 76 }
+				position = { x = 150 y = 1612 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_UNMANNED_GROUND_SYSTEMS"
-				maxWidth = 420
+				maxWidth = 900
 				maxHeight = 24
-				format = center
+				format = left
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_teleoperated_scout_carts_tree"
-				position = { x = 1890 y = 130 }
-				size = { width = 420 height = 1400 }
-				slotsize = { width = 70 height = 70 }
-				format = "UP"
+				position = { x = 150 y = 1642 }
+				size = { width = 4200 height = 192 }
+				slotsize = { width = 70 height = 96 }
+				format = "LEFT"
 			}
 		}
 
@@ -964,7 +1015,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
-				size = { width = 2480 height = 1630 min = { width = 100%% height = 100%% } }
+				size = { width = 4430 height = 2004 min = { width = 100%% height = 100%% } }
 				clipping = no
 				background = { name = "Background" quadTextureSprite = "GFX_techtree_stripes" }
 				iconType = {
@@ -975,7 +1026,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_nsb_armour_folder_year_2150"
-					position = { x = 24 y = 148 }
+					position = { x = 168 y = 84 }
 					font = "hoi_18b"
 					text = "2150"
 					maxWidth = 94
@@ -985,7 +1036,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_nsb_armour_folder_year_2155"
-					position = { x = 24 y = 218 }
+					position = { x = 378 y = 84 }
 					font = "hoi_18b"
 					text = "2155"
 					maxWidth = 94
@@ -995,7 +1046,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_nsb_armour_folder_year_2158"
-					position = { x = 24 y = 288 }
+					position = { x = 588 y = 84 }
 					font = "hoi_18b"
 					text = "2158"
 					maxWidth = 94
@@ -1005,7 +1056,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_nsb_armour_folder_year_2160"
-					position = { x = 24 y = 358 }
+					position = { x = 798 y = 84 }
 					font = "hoi_18b"
 					text = "2160"
 					maxWidth = 94
@@ -1015,7 +1066,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_nsb_armour_folder_year_2161"
-					position = { x = 24 y = 428 }
+					position = { x = 1008 y = 84 }
 					font = "hoi_18b"
 					text = "2161"
 					maxWidth = 94
@@ -1025,7 +1076,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_nsb_armour_folder_year_2162"
-					position = { x = 24 y = 498 }
+					position = { x = 1218 y = 84 }
 					font = "hoi_18b"
 					text = "2162"
 					maxWidth = 94
@@ -1035,7 +1086,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_nsb_armour_folder_year_2163"
-					position = { x = 24 y = 568 }
+					position = { x = 1428 y = 84 }
 					font = "hoi_18b"
 					text = "2163"
 					maxWidth = 94
@@ -1045,7 +1096,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_nsb_armour_folder_year_2164"
-					position = { x = 24 y = 638 }
+					position = { x = 1638 y = 84 }
 					font = "hoi_18b"
 					text = "2164"
 					maxWidth = 94
@@ -1055,7 +1106,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_nsb_armour_folder_year_2165"
-					position = { x = 24 y = 708 }
+					position = { x = 1848 y = 84 }
 					font = "hoi_18b"
 					text = "2165"
 					maxWidth = 94
@@ -1065,7 +1116,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_nsb_armour_folder_year_2166"
-					position = { x = 24 y = 778 }
+					position = { x = 2058 y = 84 }
 					font = "hoi_18b"
 					text = "2166"
 					maxWidth = 94
@@ -1075,7 +1126,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_nsb_armour_folder_year_2167"
-					position = { x = 24 y = 848 }
+					position = { x = 2268 y = 84 }
 					font = "hoi_18b"
 					text = "2167"
 					maxWidth = 94
@@ -1085,7 +1136,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_nsb_armour_folder_year_2168"
-					position = { x = 24 y = 918 }
+					position = { x = 2478 y = 84 }
 					font = "hoi_18b"
 					text = "2168"
 					maxWidth = 94
@@ -1095,7 +1146,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_nsb_armour_folder_year_2169"
-					position = { x = 24 y = 988 }
+					position = { x = 2688 y = 84 }
 					font = "hoi_18b"
 					text = "2169"
 					maxWidth = 94
@@ -1105,7 +1156,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_nsb_armour_folder_year_2170"
-					position = { x = 24 y = 1058 }
+					position = { x = 2898 y = 84 }
 					font = "hoi_18b"
 					text = "2170"
 					maxWidth = 94
@@ -1115,7 +1166,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_nsb_armour_folder_year_2171"
-					position = { x = 24 y = 1128 }
+					position = { x = 3108 y = 84 }
 					font = "hoi_18b"
 					text = "2171"
 					maxWidth = 94
@@ -1125,7 +1176,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_nsb_armour_folder_year_2172"
-					position = { x = 24 y = 1198 }
+					position = { x = 3318 y = 84 }
 					font = "hoi_18b"
 					text = "2172"
 					maxWidth = 94
@@ -1135,7 +1186,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_nsb_armour_folder_year_2173"
-					position = { x = 24 y = 1268 }
+					position = { x = 3528 y = 84 }
 					font = "hoi_18b"
 					text = "2173"
 					maxWidth = 94
@@ -1145,7 +1196,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_nsb_armour_folder_year_2174"
-					position = { x = 24 y = 1338 }
+					position = { x = 3738 y = 84 }
 					font = "hoi_18b"
 					text = "2174"
 					maxWidth = 94
@@ -1155,7 +1206,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_nsb_armour_folder_year_2175"
-					position = { x = 24 y = 1408 }
+					position = { x = 3948 y = 84 }
 					font = "hoi_18b"
 					text = "2175"
 					maxWidth = 94
@@ -1165,7 +1216,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_nsb_armour_folder_year_2180"
-					position = { x = 24 y = 1478 }
+					position = { x = 4158 y = 84 }
 					font = "hoi_18b"
 					text = "2180"
 					maxWidth = 94
@@ -1176,71 +1227,88 @@ guiTypes = {
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_recon_armor"
-				position = { x = 150 y = 76 }
+				position = { x = 150 y = 100 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_RECON_ARMOR"
-				maxWidth = 420
+				maxWidth = 900
 				maxHeight = 24
-				format = center
+				format = left
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_restored_armored_chassis_tree"
 				position = { x = 150 y = 130 }
-				size = { width = 420 height = 1400 }
-				slotsize = { width = 70 height = 70 }
-				format = "UP"
+				size = { width = 4200 height = 288 }
+				slotsize = { width = 70 height = 96 }
+				format = "LEFT"
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_branch_mechanized_mobility"
+				position = { x = 150 y = 478 }
+				font = "hoi_18b"
+				text = "ADISCORD_TECH_BRANCH_MECHANIZED_MOBILITY"
+				maxWidth = 900
+				maxHeight = 24
+				format = left
+				Orientation = "UPPER_LEFT"
+			}
+			gridboxtype = {
+				name = "ADISCORD_tech_armored_carrier_program_tree"
+				position = { x = 150 y = 508 }
+				size = { width = 4200 height = 288 }
+				slotsize = { width = 70 height = 96 }
+				format = "LEFT"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_combat_armor"
-				position = { x = 660 y = 76 }
+				position = { x = 150 y = 856 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_COMBAT_ARMOR"
-				maxWidth = 630
+				maxWidth = 900
 				maxHeight = 24
-				format = center
+				format = left
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_recovered_medium_chassis_tree"
-				position = { x = 660 y = 130 }
-				size = { width = 630 height = 1400 }
-				slotsize = { width = 70 height = 70 }
-				format = "UP"
+				position = { x = 150 y = 886 }
+				size = { width = 4200 height = 288 }
+				slotsize = { width = 70 height = 96 }
+				format = "LEFT"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_heavy_armor"
-				position = { x = 1380 y = 76 }
+				position = { x = 150 y = 1234 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_HEAVY_ARMOR"
-				maxWidth = 420
+				maxWidth = 900
 				maxHeight = 24
-				format = center
+				format = left
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_heavy_recovery_frames_tree"
-				position = { x = 1380 y = 130 }
-				size = { width = 420 height = 1400 }
-				slotsize = { width = 70 height = 70 }
-				format = "UP"
+				position = { x = 150 y = 1264 }
+				size = { width = 4200 height = 288 }
+				slotsize = { width = 70 height = 96 }
+				format = "LEFT"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_unmanned_ground_systems"
-				position = { x = 1890 y = 76 }
+				position = { x = 150 y = 1612 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_UNMANNED_GROUND_SYSTEMS"
-				maxWidth = 420
+				maxWidth = 900
 				maxHeight = 24
-				format = center
+				format = left
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_teleoperated_scout_carts_tree"
-				position = { x = 1890 y = 130 }
-				size = { width = 420 height = 1400 }
-				slotsize = { width = 70 height = 70 }
-				format = "UP"
+				position = { x = 150 y = 1642 }
+				size = { width = 4200 height = 192 }
+				slotsize = { width = 70 height = 96 }
+				format = "LEFT"
 			}
 		}
 
@@ -1257,7 +1325,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
-				size = { width = 1970 height = 1630 min = { width = 100%% height = 100%% } }
+				size = { width = 2390 height = 1630 min = { width = 100%% height = 100%% } }
 				clipping = no
 				background = { name = "Background" quadTextureSprite = "GFX_techtree_stripes" }
 				iconType = {
@@ -1489,7 +1557,7 @@ guiTypes = {
 				position = { x = 870 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_ANTI_TANK"
-				maxWidth = 420
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
@@ -1497,24 +1565,24 @@ guiTypes = {
 			gridboxtype = {
 				name = "ADISCORD_tech_salvaged_at_guns_tree"
 				position = { x = 870 y = 130 }
-				size = { width = 420 height = 1400 }
+				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_anti_air"
-				position = { x = 1380 y = 76 }
+				position = { x = 1590 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_ANTI_AIR"
-				maxWidth = 420
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_improvised_air_defense_tree"
-				position = { x = 1380 y = 130 }
-				size = { width = 420 height = 1400 }
+				position = { x = 1590 y = 130 }
+				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
@@ -1533,7 +1601,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
-				size = { width = 2270 height = 1630 min = { width = 100%% height = 100%% } }
+				size = { width = 2900 height = 1630 min = { width = 100%% height = 100%% } }
 				clipping = no
 				background = { name = "Background" quadTextureSprite = "GFX_techtree_stripes" }
 				iconType = {
@@ -1748,7 +1816,7 @@ guiTypes = {
 				position = { x = 150 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_NAVAL_SUPPORT"
-				maxWidth = 420
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
@@ -1756,47 +1824,47 @@ guiTypes = {
 			gridboxtype = {
 				name = "ADISCORD_tech_restored_dockyards_tree"
 				position = { x = 150 y = 130 }
-				size = { width = 420 height = 1400 }
+				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_surface_fleet"
-				position = { x = 660 y = 76 }
+				position = { x = 870 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_SURFACE_FLEET"
-				maxWidth = 420
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_recovered_fire_control_tree"
-				position = { x = 660 y = 130 }
-				size = { width = 420 height = 1400 }
+				position = { x = 870 y = 130 }
+				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_subsurface"
-				position = { x = 1170 y = 76 }
+				position = { x = 1590 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_SUBSURFACE"
-				maxWidth = 420
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_sonar_archives_tree"
-				position = { x = 1170 y = 130 }
-				size = { width = 420 height = 1400 }
+				position = { x = 1590 y = 130 }
+				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_riverine_warfare"
-				position = { x = 1680 y = 76 }
+				position = { x = 2310 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_RIVERINE_WARFARE"
 				maxWidth = 420
@@ -1806,7 +1874,7 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_shallow_water_navigation_tables_tree"
-				position = { x = 1680 y = 130 }
+				position = { x = 2310 y = 130 }
 				size = { width = 420 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
@@ -1826,7 +1894,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
-				size = { width = 1760 height = 1630 min = { width = 100%% height = 100%% } }
+				size = { width = 2180 height = 1630 min = { width = 100%% height = 100%% } }
 				clipping = no
 				background = { name = "Background" quadTextureSprite = "GFX_techtree_stripes" }
 				iconType = {
@@ -2041,7 +2109,7 @@ guiTypes = {
 				position = { x = 150 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_SURFACE_FLEET"
-				maxWidth = 420
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
@@ -2049,30 +2117,30 @@ guiTypes = {
 			gridboxtype = {
 				name = "ADISCORD_tech_recovered_fire_control_tree"
 				position = { x = 150 y = 130 }
-				size = { width = 420 height = 1400 }
+				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_subsurface"
-				position = { x = 660 y = 76 }
+				position = { x = 870 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_SUBSURFACE"
-				maxWidth = 420
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_sonar_archives_tree"
-				position = { x = 660 y = 130 }
-				size = { width = 420 height = 1400 }
+				position = { x = 870 y = 130 }
+				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_riverine_warfare"
-				position = { x = 1170 y = 76 }
+				position = { x = 1590 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_RIVERINE_WARFARE"
 				maxWidth = 420
@@ -2082,7 +2150,7 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_shallow_water_navigation_tables_tree"
-				position = { x = 1170 y = 130 }
+				position = { x = 1590 y = 130 }
 				size = { width = 420 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
@@ -2102,7 +2170,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
-				size = { width = 1250 height = 1630 min = { width = 100%% height = 100%% } }
+				size = { width = 1460 height = 1630 min = { width = 100%% height = 100%% } }
 				clipping = no
 				background = { name = "Background" quadTextureSprite = "GFX_techtree_stripes" }
 				iconType = {
@@ -2317,7 +2385,7 @@ guiTypes = {
 				position = { x = 150 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_NAVAL_SUPPORT"
-				maxWidth = 420
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
@@ -2325,13 +2393,13 @@ guiTypes = {
 			gridboxtype = {
 				name = "ADISCORD_tech_restored_dockyards_tree"
 				position = { x = 150 y = 130 }
-				size = { width = 420 height = 1400 }
+				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_riverine_warfare"
-				position = { x = 660 y = 76 }
+				position = { x = 870 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_RIVERINE_WARFARE"
 				maxWidth = 420
@@ -2341,7 +2409,7 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_shallow_water_navigation_tables_tree"
-				position = { x = 660 y = 130 }
+				position = { x = 870 y = 130 }
 				size = { width = 420 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
@@ -2361,7 +2429,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
-				size = { width = 2480 height = 1630 min = { width = 100%% height = 100%% } }
+				size = { width = 2900 height = 1630 min = { width = 100%% height = 100%% } }
 				clipping = no
 				background = { name = "Background" quadTextureSprite = "GFX_techtree_stripes" }
 				iconType = {
@@ -2593,7 +2661,7 @@ guiTypes = {
 				position = { x = 870 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_AIR_SUPPORT"
-				maxWidth = 420
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
@@ -2601,30 +2669,30 @@ guiTypes = {
 			gridboxtype = {
 				name = "ADISCORD_tech_battlefield_attack_aircraft_tree"
 				position = { x = 870 y = 130 }
-				size = { width = 420 height = 1400 }
+				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_strategic_air"
-				position = { x = 1380 y = 76 }
+				position = { x = 1590 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_STRATEGIC_AIR"
-				maxWidth = 420
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_rocket_test_stands_tree"
-				position = { x = 1380 y = 130 }
-				size = { width = 420 height = 1400 }
+				position = { x = 1590 y = 130 }
+				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_air_mobility"
-				position = { x = 1890 y = 76 }
+				position = { x = 2310 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_AIR_MOBILITY"
 				maxWidth = 420
@@ -2634,7 +2702,7 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_restored_airlift_planning_tree"
-				position = { x = 1890 y = 130 }
+				position = { x = 2310 y = 130 }
 				size = { width = 420 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
@@ -2655,7 +2723,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
-				size = { width = 2480 height = 1630 min = { width = 100%% height = 100%% } }
+				size = { width = 2900 height = 1630 min = { width = 100%% height = 100%% } }
 				clipping = no
 				background = { name = "Background" quadTextureSprite = "GFX_techtree_stripes" }
 				iconType = {
@@ -2887,7 +2955,7 @@ guiTypes = {
 				position = { x = 870 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_AIR_SUPPORT"
-				maxWidth = 420
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
@@ -2895,30 +2963,30 @@ guiTypes = {
 			gridboxtype = {
 				name = "ADISCORD_tech_battlefield_attack_aircraft_tree"
 				position = { x = 870 y = 130 }
-				size = { width = 420 height = 1400 }
+				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_strategic_air"
-				position = { x = 1380 y = 76 }
+				position = { x = 1590 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_STRATEGIC_AIR"
-				maxWidth = 420
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_rocket_test_stands_tree"
-				position = { x = 1380 y = 130 }
-				size = { width = 420 height = 1400 }
+				position = { x = 1590 y = 130 }
+				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_air_mobility"
-				position = { x = 1890 y = 76 }
+				position = { x = 2310 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_AIR_MOBILITY"
 				maxWidth = 420
@@ -2928,7 +2996,7 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_restored_airlift_planning_tree"
-				position = { x = 1890 y = 130 }
+				position = { x = 2310 y = 130 }
 				size = { width = 420 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
@@ -2948,7 +3016,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
-				size = { width = 2690 height = 1630 min = { width = 100%% height = 100%% } }
+				size = { width = 3110 height = 1630 min = { width = 100%% height = 100%% } }
 				clipping = no
 				background = { name = "Background" quadTextureSprite = "GFX_techtree_stripes" }
 				iconType = {
@@ -3197,7 +3265,7 @@ guiTypes = {
 				position = { x = 1590 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_RECONSTRUCTION"
-				maxWidth = 420
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
@@ -3205,24 +3273,24 @@ guiTypes = {
 			gridboxtype = {
 				name = "ADISCORD_tech_salvage_standards_tree"
 				position = { x = 1590 y = 130 }
-				size = { width = 420 height = 1400 }
+				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_resources"
-				position = { x = 2100 y = 76 }
+				position = { x = 2310 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_RESOURCES"
-				maxWidth = 420
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_salvage_metallurgy_tree"
-				position = { x = 2100 y = 130 }
-				size = { width = 420 height = 1400 }
+				position = { x = 2310 y = 130 }
+				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
@@ -3241,7 +3309,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
-				size = { width = 3920 height = 1630 min = { width = 100%% height = 100%% } }
+				size = { width = 4340 height = 1630 min = { width = 100%% height = 100%% } }
 				clipping = no
 				background = { name = "Background" quadTextureSprite = "GFX_techtree_stripes" }
 				iconType = {
@@ -3456,7 +3524,7 @@ guiTypes = {
 				position = { x = 150 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_SIGNALS"
-				maxWidth = 420
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
@@ -3464,13 +3532,13 @@ guiTypes = {
 			gridboxtype = {
 				name = "ADISCORD_tech_mesh_command_networks_tree"
 				position = { x = 150 y = 130 }
-				size = { width = 420 height = 1400 }
+				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_computing"
-				position = { x = 660 y = 76 }
+				position = { x = 870 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_COMPUTING"
 				maxWidth = 630
@@ -3480,31 +3548,31 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_electromechanical_relays_tree"
-				position = { x = 660 y = 130 }
+				position = { x = 870 y = 130 }
 				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_power"
-				position = { x = 1380 y = 76 }
+				position = { x = 1590 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_POWER"
-				maxWidth = 420
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_local_grid_restoration_tree"
-				position = { x = 1380 y = 130 }
-				size = { width = 420 height = 1400 }
+				position = { x = 1590 y = 130 }
+				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_forbidden_energy"
-				position = { x = 1890 y = 76 }
+				position = { x = 2310 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_FORBIDDEN_ENERGY"
 				maxWidth = 630
@@ -3514,14 +3582,14 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_old_generator_fragments_tree"
-				position = { x = 1890 y = 130 }
+				position = { x = 2310 y = 130 }
 				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_forbidden_automation"
-				position = { x = 2610 y = 76 }
+				position = { x = 3030 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_FORBIDDEN_AUTOMATION"
 				maxWidth = 630
@@ -3531,14 +3599,14 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_self_repairing_industrial_swarms_tree"
-				position = { x = 2610 y = 130 }
+				position = { x = 3030 y = 130 }
 				size = { width = 630 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_counter_drone_warfare"
-				position = { x = 3330 y = 76 }
+				position = { x = 3750 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_COUNTER_DRONE_WARFARE"
 				maxWidth = 420
@@ -3548,7 +3616,7 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_spectrum_threat_libraries_tree"
-				position = { x = 3330 y = 130 }
+				position = { x = 3750 y = 130 }
 				size = { width = 420 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"

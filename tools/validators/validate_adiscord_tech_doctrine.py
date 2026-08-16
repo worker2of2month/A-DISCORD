@@ -25,6 +25,9 @@ try:
         EXTRA_TECH_DEPENDENCIES as GENERATED_EXTRA_TECH_DEPENDENCIES,
         FOLDER_BACKGROUNDS as GENERATED_FOLDERS,
         FORBIDDEN_IDS as GENERATED_FORBIDDEN_IDS,
+        HORIZONTAL_FOLDERS as GENERATED_HORIZONTAL_FOLDERS,
+        HORIZONTAL_LANE_SLOT as GENERATED_HORIZONTAL_LANE_SLOT,
+        HORIZONTAL_YEAR_SLOT_MULTIPLIER as GENERATED_HORIZONTAL_YEAR_SLOT_MULTIPLIER,
         LANE_SLOT_MULTIPLIER as GENERATED_LANE_SLOT_MULTIPLIER,
         MAIN_BRANCH_KEYS_BY_FOLDER as GENERATED_MAIN_BRANCH_KEYS_BY_FOLDER,
         SIDE_PROGRAMME_KEYS as GENERATED_SIDE_PROGRAMME_KEYS,
@@ -35,6 +38,7 @@ try:
         XOR_INDEX_GROUPS_BY_BRANCH as GENERATED_XOR_INDEX_GROUPS_BY_BRANCH,
         YEARS as GENERATED_YEARS,
         YEAR_TO_Y as GENERATED_YEAR_TO_Y,
+        technology_grid_position as generated_technology_grid_position,
     )
     from tools.builders.build_adiscord_doctrine_system import (
         GRANDS as GENERATED_GRANDS,
@@ -60,6 +64,9 @@ except ModuleNotFoundError:
         EXTRA_TECH_DEPENDENCIES as GENERATED_EXTRA_TECH_DEPENDENCIES,
         FOLDER_BACKGROUNDS as GENERATED_FOLDERS,
         FORBIDDEN_IDS as GENERATED_FORBIDDEN_IDS,
+        HORIZONTAL_FOLDERS as GENERATED_HORIZONTAL_FOLDERS,
+        HORIZONTAL_LANE_SLOT as GENERATED_HORIZONTAL_LANE_SLOT,
+        HORIZONTAL_YEAR_SLOT_MULTIPLIER as GENERATED_HORIZONTAL_YEAR_SLOT_MULTIPLIER,
         LANE_SLOT_MULTIPLIER as GENERATED_LANE_SLOT_MULTIPLIER,
         MAIN_BRANCH_KEYS_BY_FOLDER as GENERATED_MAIN_BRANCH_KEYS_BY_FOLDER,
         SIDE_PROGRAMME_KEYS as GENERATED_SIDE_PROGRAMME_KEYS,
@@ -70,6 +77,7 @@ except ModuleNotFoundError:
         XOR_INDEX_GROUPS_BY_BRANCH as GENERATED_XOR_INDEX_GROUPS_BY_BRANCH,
         YEARS as GENERATED_YEARS,
         YEAR_TO_Y as GENERATED_YEAR_TO_Y,
+        technology_grid_position as generated_technology_grid_position,
     )
     from builders.build_adiscord_doctrine_system import (
         GRANDS as GENERATED_GRANDS,
@@ -93,10 +101,7 @@ TEXT_EXTS = {".txt", ".gfx", ".gui", ".yml"}
 BRACE_EXTS = {".txt", ".gfx", ".gui"}
 
 EXPECTED_TECH_GRID_POSITIONS = {
-    tech.id: (
-        GENERATED_BRANCH_GRAPHS[branch.key].lanes[index] * GENERATED_LANE_SLOT_MULTIPLIER,
-        GENERATED_YEAR_TO_Y[branch.years[index]],
-    )
+    tech.id: generated_technology_grid_position(branch, index)
     for branch in GENERATED_BRANCHES
     for index, tech in enumerate(branch.techs)
 }
@@ -826,6 +831,7 @@ def check_technology_parser_constraints(tech_blocks: dict[str, str]) -> list[str
             "artillery_equipment": "artillery",
             "anti_tank_equipment": "category_anti_tank",
             "anti_air_equipment": "anti_air",
+            "mechanized": "ADISCORD_mechanized_infantry",
         }
         for invalid, replacement in invalid_equipment_scopes.items():
             if re.search(rf"\b{invalid}\s*=\s*\{{", block):
@@ -1266,6 +1272,9 @@ def check_platform_equipment_architecture() -> list[str]:
         "ADISCORD_heavy_combat_platform_2183": "ADISCORD_heavy_platform_archetype",
         "ADISCORD_heavy_combat_platform_2200": "ADISCORD_heavy_platform_archetype",
         "ADISCORD_repair_platform_2183": "ADISCORD_recovery_platform_archetype",
+        "ADISCORD_armored_carrier_2163": "ADISCORD_armored_carrier_archetype",
+        "ADISCORD_ifv_2170": "ADISCORD_armored_carrier_archetype",
+        "ADISCORD_networked_ifv_2183": "ADISCORD_armored_carrier_archetype",
     }
     for archetype in sorted(set(expected_archetypes.values())):
         block = blocks.get(archetype, "")
@@ -1434,8 +1443,13 @@ def check_infantry_visual_model_chain() -> list[str]:
     text = strip_comments(read_text(equipment_path))
     expected_levels = {
         "infantry_equipment_0": 0,
-        "ADISCORD_infantry_equipment_2170": 1,
-        "ADISCORD_infantry_equipment_2183": 2,
+        "ADISCORD_infantry_equipment_2156": 1,
+        "ADISCORD_infantry_equipment_2163": 2,
+        "ADISCORD_infantry_equipment_2168": 2,
+        "ADISCORD_infantry_equipment_2170": 2,
+        "ADISCORD_infantry_equipment_2178": 3,
+        "ADISCORD_infantry_equipment_2183": 3,
+        "ADISCORD_infantry_equipment_2193": 3,
         "ADISCORD_infantry_equipment_2200": 3,
     }
     for equipment, expected_level in expected_levels.items():
@@ -1480,10 +1494,13 @@ def check_infantry_visual_model_chain() -> list[str]:
         for entity in (
             "STP_infantry_entity",
             "STP_infantry_2_entity",
+            "STP_infantry_3_entity",
             "NOD_infantry_entity",
             "NOD_infantry_2_entity",
+            "NOD_infantry_3_entity",
             "VAL_infantry_entity",
             "VAL_infantry_2_entity",
+            "VAL_infantry_3_entity",
             "CIN_infantry_entity",
             "CIN_infantry_2_entity",
             "CIN_infantry_3_entity",
@@ -1499,6 +1516,33 @@ def check_infantry_visual_model_chain() -> list[str]:
         ):
             if not re.search(rf'\bname\s*=\s*"{entity}"', asset_text):
                 issues.append(f"A-Discord infantry asset is missing {entity}")
+
+        expected_clones = {
+            "STP_infantry_3_entity": "STP_infantry_2_entity",
+            "NOD_infantry_3_entity": "STP_infantry_3_entity",
+            "VAL_infantry_3_entity": "VAL_infantry_2_entity",
+        }
+        for entity, expected_parent in expected_clones.items():
+            entity_match = next(
+                (
+                    match
+                    for match in re.finditer(r"(?m)^\s*entity\s*=\s*\{", asset_text)
+                    if re.search(
+                        rf'\bname\s*=\s*"{re.escape(entity)}"',
+                        extract_block(asset_text, match.start()),
+                    )
+                ),
+                None,
+            )
+            if not entity_match:
+                continue
+            entity_block = extract_block(asset_text, entity_match.start())
+            clone_match = re.search(r'\bclone\s*=\s*"([^"]+)"', entity_block)
+            actual_parent = clone_match.group(1) if clone_match else None
+            if actual_parent != expected_parent:
+                issues.append(
+                    f"{entity} clones {actual_parent}; expected {expected_parent}"
+                )
     return issues
 
 
@@ -2081,10 +2125,21 @@ def check_technology_gridboxes(tech_blocks: dict[str, str]) -> list[str]:
             if position in positions:
                 issues.append(f"{folder} gridboxes {positions[position]} and {name} overlap at {position}")
             positions[position] = name
-            if not re.search(r'\bformat\s*=\s*"UP"', grid_block):
-                issues.append(f"{folder} gridbox {name} must use vertical UP format")
-            if not re.search(r"\bslotsize\s*=\s*\{\s*width\s*=\s*70\s*height\s*=\s*70\s*\}", grid_block):
-                issues.append(f"{folder} gridbox {name} must use stable 70x70 slots")
+            horizontal = folder in GENERATED_HORIZONTAL_FOLDERS
+            expected_format = "LEFT" if horizontal else "UP"
+            orientation = "horizontal" if horizontal else "vertical"
+            if not re.search(rf'\bformat\s*=\s*"{expected_format}"', grid_block):
+                issues.append(
+                    f"{folder} gridbox {name} must use {orientation} {expected_format} format"
+                )
+            expected_height = GENERATED_HORIZONTAL_LANE_SLOT if horizontal else 70
+            if not re.search(
+                rf"\bslotsize\s*=\s*\{{\s*width\s*=\s*70\s*height\s*=\s*{expected_height}\s*\}}",
+                grid_block,
+            ):
+                issues.append(
+                    f"{folder} gridbox {name} must use stable 70x{expected_height} slots"
+                )
 
     return issues
 
@@ -2815,17 +2870,222 @@ def check_technology_graph_quality(tech_blocks: dict[str, str]) -> list[str]:
     return issues
 
 
+def _named_clausewitz_block(source: str, name: str) -> str:
+    match = re.search(rf"(?m)^\s*{re.escape(name)}\s*=\s*\{{", source)
+    return extract_block(source, match.start()) if match else ""
+
+
+def ai_force_progression_contract_issues(
+    templates: str,
+    default_strategy: str,
+) -> list[str]:
+    """Validate that the first field upgrade is reachable before stock gates.
+
+    This is intentionally a source-to-contract boundary: HOI4 runtime behavior
+    still needs an observer campaign, while fixtures can prove that the static
+    gate rejects the circular four-battalion/production configuration.
+    """
+
+    issues: list[str] = []
+    baseline = _named_clausewitz_block(templates, "ADISCORD_reconstruction_brigade")
+    if not baseline:
+        issues.append("AI field progression is missing ADISCORD_reconstruction_brigade")
+    else:
+        target = _named_clausewitz_block(baseline, "target_template")
+        battalions = re.search(r"\binfantry\s*=\s*(\d+)", target)
+        if not battalions or int(battalions.group(1)) < 6:
+            issues.append("AI field baseline must contain at least six battalions")
+        if "num_of_military_factories" in baseline or "has_equipment" in baseline:
+            issues.append("AI field baseline must not depend on factories or equipment stock")
+        match = re.search(r"\btarget_min_match\s*=\s*([0-9.]+)", baseline)
+        if not match or not 0.5 <= float(match.group(1)) <= 0.9:
+            issues.append("AI field baseline requires target_min_match between 0.5 and 0.9")
+
+    supported_line = _named_clausewitz_block(templates, "ADISCORD_line_brigade")
+    if not supported_line:
+        issues.append("AI progression is missing the supported line template")
+    else:
+        enable = _named_clausewitz_block(supported_line, "enable")
+        if "is_ai = yes" not in enable:
+            issues.append("AI supported line template must be limited to AI countries")
+        if "num_of_military_factories" in enable or "has_equipment" in enable:
+            issues.append("AI supported line template must be available before factory and stock gates")
+        match = re.search(r"\btarget_min_match\s*=\s*([0-9.]+)", supported_line)
+        if not match or not 0.5 <= float(match.group(1)) <= 0.9:
+            issues.append("AI supported line template requires gradual target_min_match")
+        target = _named_clausewitz_block(supported_line, "target_template")
+        infantry = re.search(r"\binfantry\s*=\s*(\d+)", target)
+        if not infantry or int(infantry.group(1)) < 8:
+            issues.append("AI supported line template must contain at least eight infantry battalions")
+        line_artillery = re.search(r"\bADISCORD_line_artillery\s*=\s*(\d+)", target)
+        if not line_artillery or int(line_artillery.group(1)) < 1:
+            issues.append("AI supported line template must contain line artillery")
+
+    production_contracts = (
+        (
+            "support production",
+            "ADISCORD_produce_support_equipment_low_stock",
+            "support_equipment",
+            1,
+        ),
+        (
+            "artillery production",
+            "ADISCORD_produce_artillery_low_stock",
+            "artillery_equipment",
+            2,
+        ),
+    )
+    for label, block_name, equipment_id, maximum_factory_floor in production_contracts:
+        block = _named_clausewitz_block(default_strategy, block_name)
+        if not block:
+            issues.append(f"AI {label} floor is missing")
+            continue
+        threshold = re.search(r"\bnum_of_military_factories\s*>\s*(\d+)", block)
+        if not threshold or int(threshold.group(1)) > maximum_factory_floor:
+            issues.append(
+                f"AI {label} starts above the reachable factory threshold "
+                f"{maximum_factory_floor}"
+            )
+        if (
+            "equipment_production_min_factories_archetype" not in block
+            or not re.search(rf"\bid\s*=\s*{re.escape(equipment_id)}\b", block)
+        ):
+            issues.append(f"AI {label} lacks a one-factory archetype floor")
+    return issues
+
+
+def modern_land_warfare_contract_issues(
+    equipment: str,
+    units: str,
+    technology: str,
+    templates: str,
+    strategy: str,
+) -> list[str]:
+    """Validate the playable APC/IFV-to-mechanized-armor dependency chain."""
+
+    issues: list[str] = []
+    archetype_id = "ADISCORD_armored_carrier_archetype"
+    variants = (
+        "ADISCORD_armored_carrier_2163",
+        "ADISCORD_ifv_2170",
+        "ADISCORD_networked_ifv_2183",
+    )
+    archetype = _named_clausewitz_block(equipment, archetype_id)
+    if not (
+        archetype
+        and re.search(r"\bis_archetype\s*=\s*yes\b", archetype)
+        and re.search(r"\bmechanized\b", archetype)
+    ):
+        issues.append("modern land warfare needs a mechanized carrier archetype")
+
+    valid_variants = 0
+    for index, variant in enumerate(variants):
+        block = _named_clausewitz_block(equipment, variant)
+        if not re.search(
+            rf"\barchetype\s*=\s*{re.escape(archetype_id)}\b", block
+        ):
+            continue
+        if index:
+            parent = variants[index - 1]
+            if not re.search(rf"\bparent\s*=\s*{re.escape(parent)}\b", block):
+                continue
+        valid_variants += 1
+    if valid_variants != len(variants):
+        issues.append("modern land warfare must define three carrier generations")
+
+    mechanized = _named_clausewitz_block(units, "ADISCORD_mechanized_infantry")
+    if not (
+        re.search(
+            rf"\btransport\s*=\s*{re.escape(archetype_id)}\b", mechanized
+        )
+        and re.search(r"\binfantry_equipment\s*=\s*[1-9]\d*", mechanized)
+        and re.search(
+            rf"\b{re.escape(archetype_id)}\s*=\s*[1-9]\d*", mechanized
+        )
+    ):
+        issues.append("mechanized infantry must use the carrier archetype transport and needs")
+
+    unlocks = (
+        ("ADISCORD_tech_armored_carrier_program", variants[0], True),
+        ("ADISCORD_tech_infantry_combat_vehicle_program", variants[1], False),
+        ("ADISCORD_tech_networked_mechanized_cells", variants[2], False),
+    )
+    unlocks_valid = True
+    for tech_id, variant, needs_subunit in unlocks:
+        block = _named_clausewitz_block(technology, tech_id)
+        if not re.search(rf"\b{re.escape(variant)}\b", block):
+            unlocks_valid = False
+        if needs_subunit and "ADISCORD_mechanized_infantry" not in block:
+            unlocks_valid = False
+    if not unlocks_valid:
+        issues.append("mechanized technologies must unlock generations and the battalion")
+
+    tank = _named_clausewitz_block(templates, "ADISCORD_tank_battlegroup")
+    target = _named_clausewitz_block(tank, "target_template")
+    mechanized_count = re.search(
+        r"\bADISCORD_mechanized_infantry\s*=\s*(\d+)", target
+    )
+    if not mechanized_count or int(mechanized_count.group(1)) < 6:
+        issues.append("armored battlegroups require six mechanized battalions")
+    if not re.search(
+        rf"has_equipment\s*=\s*\{{\s*{re.escape(archetype_id)}\s*>", tank
+    ):
+        issues.append("armored battlegroups require a carrier stock gate")
+
+    production = _named_clausewitz_block(
+        strategy, "ADISCORD_produce_armored_carriers"
+    )
+    threshold = re.search(r"\bnum_of_military_factories\s*>\s*(\d+)", production)
+    if not (
+        threshold
+        and int(threshold.group(1)) <= 6
+        and "equipment_production_min_factories_archetype" in production
+        and re.search(rf"\bid\s*=\s*{re.escape(archetype_id)}\b", production)
+    ):
+        issues.append("AI needs a reachable carrier production floor")
+    return issues
+
+
+def check_modern_land_warfare() -> list[str]:
+    paths = {
+        "equipment": ROOT / "common/units/equipment/ADISCORD_armor_equipment.txt",
+        "units": ROOT / "common/units/ADISCORD_land_units.txt",
+        "templates": ROOT / "common/ai_templates/ADISCORD_land_templates.txt",
+        "strategy": ROOT / "common/ai_strategy/ADISCORD_technology_doctrine_ai.txt",
+    }
+    if any(not path.exists() for path in paths.values()):
+        return ["modern land warfare source files are incomplete"]
+    technology = "\n".join(
+        strip_comments(read_text(path))
+        for path in sorted((ROOT / "common/technologies").glob("ADISCORD_*.txt"))
+    )
+    return modern_land_warfare_contract_issues(
+        strip_comments(read_text(paths["equipment"])),
+        strip_comments(read_text(paths["units"])),
+        technology,
+        strip_comments(read_text(paths["templates"])),
+        strip_comments(read_text(paths["strategy"])),
+    )
+
+
 def check_ai_force_progression() -> list[str]:
     issues: list[str] = []
     templates_path = ROOT / "common" / "ai_templates" / "ADISCORD_land_templates.txt"
     strategy_path = ROOT / "common" / "ai_strategy" / "ADISCORD_technology_doctrine_ai.txt"
+    default_strategy_path = ROOT / "common" / "ai_strategy" / "default.txt"
     icon_path = ROOT / "interface" / "modifiericons_texticons.gfx"
-    if not templates_path.exists() or not strategy_path.exists():
+    if (
+        not templates_path.exists()
+        or not strategy_path.exists()
+        or not default_strategy_path.exists()
+    ):
         return ["A-DISCORD AI template/strategy framework is missing"]
 
     templates = strip_comments(read_text(templates_path))
     strategies = strip_comments(read_text(strategy_path))
+    default_strategies = strip_comments(read_text(default_strategy_path))
     icons = strip_comments(read_text(icon_path)) if icon_path.exists() else ""
+    issues.extend(ai_force_progression_contract_issues(templates, default_strategies))
     required_template_fragments = {
         "separate mobile assault role": "role = mobile",
         "line artillery template": "ADISCORD_line_artillery = 1",
@@ -3079,6 +3339,7 @@ def main() -> int:
     issues.extend(check_post_2160_research_balance(tech_blocks))
     issues.extend(check_technology_graph_quality(tech_blocks))
     issues.extend(check_ai_force_progression())
+    issues.extend(check_modern_land_warfare())
     issues.extend(check_local_doctrine_references(grand, tracks, subdoctrines, top_level_doctrines))
     issues.extend(check_braces())
     issues.extend(check_economy_spending())

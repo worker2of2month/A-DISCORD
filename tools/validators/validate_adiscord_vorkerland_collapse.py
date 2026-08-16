@@ -756,6 +756,11 @@ def validate_events(root: Path, issues: list[str]) -> None:
         issues,
     )
     on_actions = read(root, "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", issues)
+    template_migration_on_actions = read(
+        root,
+        "common/on_actions/03_ADISCORD_vorkerland_force_template_migration_on_actions.txt",
+        issues,
+    )
     rom_tru_on_actions = read(
         root,
         "common/on_actions/02_ADISCORD_vorkerland_rom_tru_on_actions.txt",
@@ -2807,6 +2812,24 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         if token not in wkr_air_ai:
             issues.append(f"WKR air denial AI is missing {token}")
+    wkr_force_templates = named_block(
+        effects, "ADISCORD_vorkerland_ensure_wkr_force_templates_v2"
+    )
+    for token in (
+        "tag = WKR",
+        "NOT = { has_country_flag = ADISCORD_vorkerland_wkr_force_templates_v2_applied }",
+        "set_country_flag = ADISCORD_vorkerland_wkr_force_templates_v2_applied",
+        'name = "Worker Rifle Division"',
+        'name = "Workerland Mobile Group"',
+        "force_allow_recruiting = yes",
+        "ADISCORD_line_artillery = {",
+        "ADISCORD_mechanized_infantry = {",
+        "ADISCORD_combat_platform = {",
+    ):
+        if token not in wkr_force_templates:
+            issues.append(f"WKR force-template v2 migration is missing {token}")
+    if wkr_force_templates.count("division_template =") != 2:
+        issues.append("WKR force-template v2 migration must create exactly two templates")
     wkr_home_guard = named_block(effects, "ADISCORD_vorkerland_ensure_wkr_home_guard")
     for token in (
         "tag = WKR",
@@ -2835,6 +2858,21 @@ def validate_events(root: Path, issues: list[str]) -> None:
         issues.append("legacy relocation erases WKR's authored state-33 home-guard deployment")
     if "ADISCORD_vorkerland_ensure_wkr_home_guard = yes" not in wkr_initial:
         issues.append("fresh WKR split does not deploy its annex-independent home guard")
+    if "ADISCORD_vorkerland_ensure_wkr_force_templates_v2 = yes" not in wkr_home_guard:
+        issues.append("fresh WKR split does not apply the force-template v2 package")
+    template_migration_startup = named_block(
+        template_migration_on_actions, "on_startup"
+    )
+    if (
+        "ADISCORD_vorkerland_ensure_wkr_force_templates_v2 = yes"
+        not in template_migration_startup
+    ):
+        issues.append("older WKR saves do not receive the force-template v2 migration")
+    if "ADISCORD_vorkerland_ensure_wkr_home_guard = yes" in template_migration_startup:
+        issues.append("old-save template migration must not duplicate the WKR Home Guard")
+    for cadence in ("on_daily", "on_weekly", "on_monthly"):
+        if cadence in template_migration_on_actions:
+            issues.append(f"WKR force-template migration must not poll through {cadence}")
     if "ADISCORD_vorkerland_ensure_wkr_home_guard = yes" in named_block(on_actions, "on_monthly"):
         issues.append("WKR home guard must not use monthly polling")
     for technology in (
@@ -2934,9 +2972,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
     equipment_factors = [float(value) for value in re.findall(r"start_equipment_factor\s*=\s*([0-9.]+)", ivn_units)]
     if len(equipment_factors) != 16 or min(equipment_factors, default=0.0) < 0.70:
         issues.append("IVN field formations must start at 70 percent equipment or better")
-    ivn_locations = {int(value) for value in re.findall(r"location\s*=\s*(\d+)", ivn_units)}
-    if ivn_locations != {16568, 9327, 3462, 3318, 888, 838, 2448, 882, 702, 595, 1971, 3447, 579, 2262, 423, 4217}:
-        issues.append("IVN field formations are not distributed across all sixteen home states")
+    ivn_locations = [int(value) for value in re.findall(r"location\s*=\s*(\d+)", ivn_units)]
+    if ivn_locations != [16568, 9327, 3462, 3318, 888, 838, 2448, 882, 702, 595, 1971, 3447, 595, 2262, 423, 4217]:
+        issues.append("IVN field formations do not match the post-island-administration deployment")
     intervention_start = named_block(effects, "ADISCORD_vorkerland_begin_ivanland_intervention")
     for token in (
         "ADISCORD_vorkerland_ivanland_expedition_supplied", "add_manpower = 8000",
@@ -2995,7 +3033,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append(f"{tag}: capital supply hub {hub} is missing from the rail network")
 
     cosmetics = named_block(effects, "ADISCORD_vorkerland_apply_claimant_cosmetics")
-    for tag in ("ROM", "TRU", "ZAO"):
+    for tag in ("ROM", "TRU", "ZAO", "SOL"):
         if "ADISCORD_vorkerland_sync_independence_cosmetic = yes" not in named_block(cosmetics, tag):
             issues.append(f"{tag}: collapse independence cosmetic is not synchronized")
     for token in (
@@ -3012,14 +3050,23 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "set_cosmetic_tag = ROM_frealor_republic",
         "set_cosmetic_tag = TRU_zolotorevsk_republic",
         "set_cosmetic_tag = ZAO_zaozersk_republic",
+        "OR = { is_subject_of = WKR is_subject_of = WRK }",
+        "set_cosmetic_tag = SOL_vorkerland_worker_protectorate",
+        "else = { drop_cosmetic_tag = yes }",
     ):
         if token not in cosmetic_sync:
             issues.append(f"independence cosmetic synchronizer is missing {token}")
     for hook in ("on_puppet", "on_release_as_puppet", "on_release_as_free"):
-        if "ADISCORD_vorkerland_sync_independence_cosmetic = yes" not in named_block(on_actions, hook):
+        hook_block = named_block(on_actions, hook)
+        if "ADISCORD_vorkerland_sync_independence_cosmetic = yes" not in hook_block:
             issues.append(f"{hook} does not synchronize republic/dependency cosmetics")
+        if "OR = { tag = ROM tag = TRU tag = ZAO tag = SOL }" not in hook_block:
+            issues.append(f"{hook} does not include SOL in dependency cosmetic synchronization")
     if "ADISCORD_vorkerland_sync_independence_cosmetic = yes" in named_block(on_actions, "on_monthly"):
         issues.append("republic cosmetic synchronization still polls on_monthly")
+    sol_history = read(root, "history/countries/SOL - Solarino.txt", issues)
+    if "set_cosmetic_tag = SOL_vorkerland_worker_protectorate" not in sol_history:
+        issues.append("SOL does not start with its WRK worker-protectorate cosmetic")
     loyalist = named_block(decisions, "ADISCORD_vorkerland_restore_loyalist_district")
     if set(re.findall(r"tag\s*=\s*([A-Z]{3})", named_block(loyalist, "allowed"))) != {"ZAO", "VLA"}:
         issues.append("only ZAO/VLA may voluntarily restore loyalist district status")
@@ -3223,11 +3270,75 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append(f"WRK history does not recruit {character}")
 
 
+def claimant_decision_spending_contract_issues(
+    default_ai: str,
+    collapse_ai: str,
+) -> list[str]:
+    """Validate a bounded PP preference without bypassing normal decisions."""
+
+    issues: list[str] = []
+    reserve = named_block(default_ai, "ADISCORD_default_pp_reserve")
+    baseline = re.search(
+        r"type\s*=\s*pp_spend_amount\s+id\s*=\s*decision\s+value\s*=\s*(\d+)",
+        reserve,
+    )
+    if not baseline or int(baseline.group(1)) < 100:
+        issues.append("collapse AI baseline decision budget must be at least 100 PP")
+
+    spending = named_block(
+        collapse_ai,
+        "ADISCORD_vorkerland_claimant_decision_spending",
+    )
+    if not spending:
+        issues.append("collapse AI claimant decision spending strategy is missing")
+        return issues
+
+    allowed = named_block(spending, "allowed")
+    enable = named_block(spending, "enable")
+    required_bounds = (
+        "is_ai = yes",
+        "has_war = yes",
+        "has_global_flag = ADISCORD_vorkerland_collapse_wars_started",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }",
+    )
+    tags = set(re.findall(r"\btag\s*=\s*([A-Z]{3})", allowed))
+    if any(token not in enable for token in required_bounds) or tags != {
+        "WKR",
+        "VAD",
+        "TVA",
+    }:
+        issues.append("collapse AI claimant decision spending must stay war-bounded")
+    if "abort_when_not_enabled = yes" not in spending:
+        issues.append("collapse AI claimant decision spending must abort outside its bounds")
+
+    strategy_values: dict[tuple[str, str], int] = {}
+    for strategy in named_blocks(spending, "ai_strategy"):
+        match = re.search(
+            r"type\s*=\s*([a-z_]+)\s+id\s*=\s*([a-z_]+)\s+value\s*=\s*(-?\d+)",
+            strategy,
+        )
+        if match:
+            strategy_values[(match.group(1), match.group(2))] = int(match.group(3))
+    if strategy_values.get(("pp_spend_priority", "decision"), 0) < 100:
+        issues.append("collapse AI claimant decision priority must be at least 100")
+    if strategy_values.get(("pp_spend_amount", "decision"), 0) < 125:
+        issues.append("collapse AI claimant wartime decision amount must be at least 125")
+
+    for forbidden in ("complete_effect", "country_event", "every_country", "on_monthly"):
+        if forbidden in spending:
+            issues.append(
+                f"collapse AI claimant decision strategy must not force {forbidden}"
+            )
+    return issues
+
+
 def validate_ai(root: Path, issues: list[str]) -> None:
     ai = read(root, "common/ai_strategy/ADISCORD_vorkerland_collapse_ai.txt", issues)
+    default_ai = read(root, "common/ai_strategy/default.txt", issues)
     defines = read(root, "common/defines/ADISCORD_defines_changes.lua", issues)
     if not balanced(ai):
         issues.append("collapse AI: unbalanced braces or quote")
+    issues.extend(claimant_decision_spending_contract_issues(default_ai, ai))
     for stale in STALE_SYSTEM_TOKENS:
         if stale in ai:
             issues.append(f"collapse AI still contains dead token {stale}")

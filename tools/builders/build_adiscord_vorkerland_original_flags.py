@@ -215,9 +215,12 @@ SUPPLIED_FLAGS = {
     "WRK_vorkerland_utilitarian_republic": SOURCE_ROOT / "WRK_vorkerland_utilitarian_republic.png",
 }
 
+SUPPLIED_RUNTIME_FLAGS = {
+    "SOL_vorkerland_worker_protectorate": SOURCE_ROOT / "SOL_vorkerland_worker_protectorate.png",
+}
+
 COPIED_FLAG_TRIPLETS = {
     "WRK_vorkerland_joint_government": "WRK",
-    "SOL_vorkerland_worker_protectorate": "SOL",
 }
 
 
@@ -226,6 +229,15 @@ def add_triplet(outputs: dict[Path, Image.Image], flag_id: str, image: Image.Ima
     for directory, size in (("", (82, 52)), ("medium", (41, 26)), ("small", (10, 7))):
         resized = image.resize(size, Image.Resampling.LANCZOS).convert("RGBA")
         outputs[FLAG_ROOT / directory / f"{flag_id}.tga"] = resized
+
+
+def add_runtime_triplet(outputs: dict[Path, Image.Image], flag_id: str, image: Image.Image) -> None:
+    prepared = image.convert("RGBA")
+    if prepared.size != (82, 52):
+        raise ValueError(f"{flag_id} runtime master must be 82x52, got {prepared.size}")
+    for directory, size in (("", (82, 52)), ("medium", (41, 26)), ("small", (10, 7))):
+        rendered = prepared.copy() if prepared.size == size else prepared.resize(size, Image.Resampling.LANCZOS)
+        outputs[FLAG_ROOT / directory / f"{flag_id}.tga"] = rendered
 
 
 def expected_outputs() -> dict[Path, Image.Image]:
@@ -237,6 +249,10 @@ def expected_outputs() -> dict[Path, Image.Image]:
         with Image.open(supplied) as source:
             prepared = ImageOps.fit(source.convert("RGB"), CANVAS, method=Image.Resampling.LANCZOS)
         add_triplet(outputs, flag_id, prepared)
+
+    for flag_id, supplied in SUPPLIED_RUNTIME_FLAGS.items():
+        with Image.open(supplied) as source:
+            add_runtime_triplet(outputs, flag_id, source)
 
     for target_flag_id, source_flag_id in COPIED_FLAG_TRIPLETS.items():
         for directory in (FLAG_ROOT, FLAG_ROOT / "medium", FLAG_ROOT / "small"):
@@ -289,7 +305,10 @@ def main() -> int:
     outputs = expected_outputs()
     if args.apply:
         apply_outputs(outputs)
-        print(f"Built {len(BUILDERS) + len(SUPPLIED_FLAGS) + len(COPIED_FLAG_TRIPLETS)} original flag triplets.")
+        print(
+            f"Built {len(BUILDERS) + len(SUPPLIED_FLAGS) + len(SUPPLIED_RUNTIME_FLAGS) + len(COPIED_FLAG_TRIPLETS)} "
+            "original flag triplets."
+        )
     issues = validate_outputs(outputs)
     if issues:
         for issue in issues:

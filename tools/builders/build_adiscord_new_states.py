@@ -195,8 +195,12 @@ VORKERLAND_STATE_RESOURCES = {
 }
 
 IVANLAND_STATE_RESOURCES = {
-    25: {"steel": 24},
+    25: {"steel": 8},
     99: {"steel": 16},
+    695: {"steel": 4},
+    696: {"steel": 4},
+    697: {"steel": 4},
+    698: {"steel": 4},
 }
 
 AFRELA_STATE_RESOURCES = {
@@ -339,7 +343,7 @@ NAM_COALITION_FRONT_PROFILES = {
 # spur through states 100 and 99 remain authoritative, so the frontier relies
 # on infrastructure plus local supply rather than a redundant second hub.
 IVANLAND_STATE_PROFILES = {
-    25: {"population": 4_000_000, "category": "metropolis", "infrastructure": 5, "civilian": 6, "military": 4, "air_base": 3, "supplies": 8.0},
+    25: {"population": 1_300_000, "category": "large_city", "infrastructure": 5, "civilian": 2, "military": 2, "air_base": 2, "supplies": 2.0},
     92: {"population": 480_000, "category": "rural", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 4.0},
     95: {"population": 780_000, "category": "town", "infrastructure": 4, "civilian": 2, "military": 2, "air_base": 1, "supplies": 5.0},
     96: {"population": 720_000, "category": "town", "infrastructure": 4, "civilian": 2, "military": 2, "supplies": 5.0},
@@ -349,12 +353,70 @@ IVANLAND_STATE_PROFILES = {
     100: {"population": 1_200_000, "category": "large_town", "infrastructure": 4, "civilian": 3, "military": 2, "supplies": 4.0},
     101: {"population": 600_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.0},
     127: {"population": 750_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.0},
-    128: {"population": 360_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.0},
+    128: {"population": 90_000, "category": "rural", "infrastructure": 2, "supplies": 1.0},
     129: {"population": 550_000, "category": "rural", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
     130: {"population": 650_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
     131: {"population": 680_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
     132: {"population": 500_000, "category": "rural", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
     164: {"population": 400_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
+    693: {"population": 190_000, "category": "town", "infrastructure": 3, "civilian": 1, "supplies": 1.5},
+    694: {"population": 80_000, "category": "rural", "infrastructure": 2, "supplies": 1.5},
+    695: {"population": 750_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 1.5},
+    696: {"population": 700_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 1.5},
+    697: {"population": 600_000, "category": "town", "infrastructure": 3, "civilian": 1, "supplies": 1.5},
+    698: {"population": 650_000, "category": "town", "infrastructure": 3, "civilian": 1, "air_base": 1, "supplies": 1.5},
+}
+
+IVANLAND_OVERHAUL_PROVINCES = {
+    128: (579, 7125, 8423, 9072),
+    693: (1191, 1744, 2219, 2991, 4334, 6905, 6928, 7678, 8048, 10730),
+    694: (2553, 5448, 11841, 12189),
+    695: (157, 217, 482, 1105, 1763, 2736, 3038, 3181, 3304, 3541, 3579, 4572, 5016, 6146, 6345, 8068, 8505, 8615, 9608, 10158, 10668, 10769, 10810, 10879, 11487, 12017, 12054),
+    696: (722, 1304, 2025, 2157, 2211, 3847, 4037, 5521, 5540, 5573, 5729, 6622, 7911, 8515, 9133, 9344, 11115, 11132, 12317, 12880, 12914),
+    697: (401, 1385, 1429, 3273, 4277, 4646, 5055, 5273, 6350, 6827, 6979, 6991, 7263, 8885, 9037, 9132, 9150, 9160, 9418, 9778, 11000, 12383),
+    25: (694, 932, 1634, 1861, 1862, 3017, 3302, 3503, 3648, 3714, 4503, 4534, 4909, 5611, 6580, 7508, 7654, 8717, 9066, 9236, 9598, 9614, 10539, 10675, 10835, 10885, 11124, 11612, 11653, 12313, 12410, 12790, 12899, 16568),
+    698: (1768, 1890, 2380, 3828, 3919, 5798, 6971, 8328, 8371, 9611, 10313, 10357, 10403, 10548, 12076, 12122),
+}
+
+IVANLAND_OVERHAUL_FILENAMES = {
+    25: "25-PLACEHOLDER.txt",
+    128: "128-128.txt",
+    693: "693-Raidal.txt",
+    694: "694-Kair-Coast.txt",
+    695: "695-Upper-March.txt",
+    696: "696-Eastern-March.txt",
+    697: "697-Western-March.txt",
+    698: "698-Southern-March.txt",
+}
+
+IVANLAND_OVERHAUL_VICTORY_POINTS = {
+    25: ((16568, 10),),
+    92: ((3462, 1),),
+    95: ((3318, 3),),
+    96: ((888, 3),),
+    97: ((838, 3),),
+    98: ((2448, 5),),
+    99: ((882, 7),),
+    100: ((702, 5),),
+    101: ((9327, 3),),
+    127: ((595, 3),),
+    128: ((579, 1),),
+    129: ((1971, 1),),
+    130: ((3447, 2),),
+    131: ((2262, 2),),
+    132: ((423, 2),),
+    164: ((4217, 1),),
+    693: ((6905, 5),),
+    694: ((11841, 3),),
+    695: ((1763, 3),),
+    696: ((5573, 3),),
+    697: ((9160, 3),),
+    698: ((12076, 3),),
+}
+
+IVANLAND_OVERHAUL_PROVINCE_BUILDINGS = {
+    25: ((16568, "naval_base", 1),),
+    694: ((11841, "naval_base", 2),),
 }
 
 # Afrela is populous enough to sustain its regional diplomacy and volunteer
@@ -555,12 +617,39 @@ GENERATED_LEGACY_VICTORY_POINTS = {
     **VORKERLAND_LEGACY_VICTORY_POINTS,
     **AFRELA_LEGACY_VICTORY_POINTS,
     **NAM_LEGACY_VICTORY_POINTS,
+    **IVANLAND_OVERHAUL_VICTORY_POINTS,
+}
+
+IVANLAND_VICTORY_POINT_NAMES = {
+    16568: "Старая марка",
+    3462: "Серенга",
+    3318: "Ведрина",
+    888: "Талара",
+    838: "Кантория",
+    2448: "Моресса",
+    882: "Лакора",
+    702: "Ильван",
+    9327: "Ольсия",
+    595: "Северная Марка",
+    579: "Нордхольм",
+    1971: "Старый Кордон",
+    3447: "Дальняя Застава",
+    2262: "Пыльный Тракт",
+    423: "Западная Серенга",
+    4217: "Восточная Итора",
+    6905: "Рейдаль",
+    11841: "Кайрхольм",
+    1763: "Верхнемарск",
+    5573: "Лонгар",
+    9160: "Ринваль",
+    12076: "Салемар",
 }
 
 GENERATED_VICTORY_POINT_NAMES = {
     **VORKERLAND_VICTORY_POINT_NAMES,
     **AFRELA_VICTORY_POINT_NAMES,
     **NAM_VICTORY_POINT_NAMES,
+    **IVANLAND_VICTORY_POINT_NAMES,
     **VORKERLAND_THEATRE_VP_NAME_OVERRIDES,
 }
 
@@ -582,6 +671,13 @@ GENERATED_STATE_NAMES = {
     NAM_DRYRIVER_STATE_ID: "Сухоречье",
     EFL_MIDDLE_LOREN_STATE_ID: "Средний Лорен",
     AZH_BLACK_COAST_STATE_ID: "Чёрное побережье",
+    128: "Иванские нагорья",
+    693: "Рейдаль",
+    694: "Кайрский берег",
+    695: "Верхняя Марка",
+    696: "Восточная Марка",
+    697: "Западная Марка",
+    698: "Южная Марка",
 }
 
 VORKERLAND_INITIAL_MAP_LEGACY_STATES = {
@@ -1146,6 +1242,61 @@ def split_svetlogorsk_from_nam() -> None:
         raise RuntimeError(f"NAM split spawn-position repair drifted: {remaining[:5]}")
 
 
+def validate_ivanland_split_inputs() -> None:
+    """Reject unreviewed province drift before writing any Ivanland state."""
+    original_groups = {
+        25: frozenset().union(
+            *(frozenset(IVANLAND_OVERHAUL_PROVINCES[state_id]) for state_id in (25, 695, 696, 697, 698))
+        ),
+        128: frozenset().union(
+            *(frozenset(IVANLAND_OVERHAUL_PROVINCES[state_id]) for state_id in (128, 693, 694))
+        ),
+    }
+    for state_id in (25, 128):
+        source = state_path(state_id).read_text(encoding="utf-8-sig", errors="strict")
+        match = re.search(r"provinces\s*=\s*\{([^}]*)\}", source, re.DOTALL)
+        if not match:
+            raise RuntimeError(f"state {state_id}: missing provinces block")
+        current = frozenset(map(int, re.findall(r"\d+", match.group(1))))
+        if current not in {
+            original_groups[state_id],
+            frozenset(IVANLAND_OVERHAUL_PROVINCES[state_id]),
+        }:
+            raise RuntimeError(f"state {state_id}: Ivanland split manifest drifted")
+    for state_id, filename in IVANLAND_OVERHAUL_FILENAMES.items():
+        target = STATE_DIR / filename
+        matches = sorted(STATE_DIR.glob(f"{state_id}-*.txt"))
+        if matches and matches != [target]:
+            raise RuntimeError(f"state {state_id}: id is already occupied by {matches}")
+
+
+def split_ivanland_overhaul_states() -> None:
+    """Split Ivanland's island and Old March using the reviewed province manifest."""
+    validate_ivanland_split_inputs()
+
+    for state_id, province_ids in IVANLAND_OVERHAUL_PROVINCES.items():
+        owner = "IIA" if state_id in {128, 693, 694} else "IVN"
+        write_resource_war_state(
+            state_id,
+            IVANLAND_OVERHAUL_FILENAMES[state_id],
+            tuple(province_ids),
+            owner,
+            IVANLAND_STATE_PROFILES[state_id],
+            IVANLAND_STATE_RESOURCES.get(state_id),
+            IVANLAND_OVERHAUL_VICTORY_POINTS[state_id],
+            IVANLAND_OVERHAUL_PROVINCE_BUILDINGS.get(state_id, ()),
+        )
+
+    for state_id, points in IVANLAND_OVERHAUL_VICTORY_POINTS.items():
+        if state_id in IVANLAND_OVERHAUL_PROVINCES:
+            continue
+        path = state_path(state_id)
+        source = path.read_text(encoding="utf-8-sig", errors="strict")
+        updated = replace_history_victory_points(source, points)
+        if updated != source:
+            path.write_text(updated, encoding="utf-8", newline="\n")
+
+
 def replace_history_victory_points(
     source: str, points: tuple[tuple[int, int], ...]
 ) -> str:
@@ -1373,6 +1524,7 @@ def apply() -> None:
     fill_legacy_owner_gaps()
     apply_legacy_owner_overrides()
     split_svetlogorsk_from_nam()
+    split_ivanland_overhaul_states()
     for state_id, owner in sorted(STARTING_OWNERS.items()):
         state_path(state_id).write_text(render_state(state_id, owner), encoding="utf-8", newline="\n")
     apply_legacy_state_profiles()
@@ -1410,6 +1562,16 @@ def main() -> int:
         help="apply only the exact central Vorkerland VP and Russian-name manifest",
     )
     actions.add_argument(
+        "--apply-ivn-overhaul",
+        action="store_true",
+        help="apply only the reviewed Ivanland island/Old March split and VP manifest",
+    )
+    actions.add_argument(
+        "--check-ivn-overhaul",
+        action="store_true",
+        help="validate Ivanland split inputs without writing files",
+    )
+    actions.add_argument(
         "--apply-legacy-state",
         action="append",
         type=int,
@@ -1431,6 +1593,16 @@ def main() -> int:
     if args.apply_vorkerland_vps:
         apply_vorkerland_victory_points()
         print("Applied the exact central Vorkerland victory-point manifest.")
+        return 0
+    if args.apply_ivn_overhaul:
+        split_ivanland_overhaul_states()
+        apply_generated_victory_point_localisation()
+        apply_generated_state_name_localisation()
+        print("Applied the reviewed Ivanland island/Old March split and victory points.")
+        return 0
+    if args.check_ivn_overhaul:
+        validate_ivanland_split_inputs()
+        print("Ivanland split inputs match the reviewed province manifest.")
         return 0
     if args.apply_legacy_state:
         state_ids = set(args.apply_legacy_state)

@@ -32,6 +32,12 @@ EXPECTED = {
         "medium": (41, 26, "7a9fbb40d0829f7f050420fc36b49b49becdb5385432c2d80fcc2cd031e347cb"),
         "small": (10, 7, "c4dd1da11baf31287dd8f6804dcc1131e7a4a282b8c6a3f5feeb16b385b99bf2"),
     },
+    "SOL_vorkerland_worker_protectorate": {
+        "source": (82, 52, "e0390928257c0d2453375700868a37fffd885d44182a32a7990b7ab85a1a0929"),
+        "regular": (82, 52, "1d4bec8ce1e7bc2cbd5d0c0617a4d0697ae59f20a8d1dc1f0b0fdff0f0d75c2a"),
+        "medium": (41, 26, "6e633b04502e7d15c3c6ea05d0066fee481e11e3cab1d9b9e9139f7ffbf9449f"),
+        "small": (10, 7, "76c89e8ae0bbc7f464c131bf3c6c9cd38fc5eae1849da77e7d3a553669e64c04"),
+    },
 }
 
 
@@ -76,20 +82,12 @@ class SuppliedSuccessorFlagTests(unittest.TestCase):
             with self.subTest(filename=filename):
                 self.assertFalse((FLAG_ROOT / filename).exists())
 
-    def test_joint_government_uses_base_wrk_flag_triplet(self) -> None:
+    def test_joint_government_visually_uses_base_wrk_flag_triplet(self) -> None:
         for directory in (FLAG_ROOT, FLAG_ROOT / "medium", FLAG_ROOT / "small"):
             with self.subTest(directory=directory.name):
                 self.assertEqual(
-                    (directory / "WRK_vorkerland_joint_government.tga").read_bytes(),
-                    (directory / "WRK.tga").read_bytes(),
-                )
-
-    def test_worker_protectorate_uses_base_solarino_flag_triplet(self) -> None:
-        for directory in (FLAG_ROOT, FLAG_ROOT / "medium", FLAG_ROOT / "small"):
-            with self.subTest(directory=directory.name):
-                self.assertEqual(
-                    (directory / "SOL_vorkerland_worker_protectorate.tga").read_bytes(),
-                    (directory / "SOL.tga").read_bytes(),
+                    image_digest(directory / "WRK_vorkerland_joint_government.tga", "RGBA"),
+                    image_digest(directory / "WRK.tga", "RGBA"),
                 )
 
 if __name__ == "__main__":

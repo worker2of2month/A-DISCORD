@@ -35,6 +35,8 @@ REQUIRED_FAMILIES = {
     "doctrine_system",
     "exclusion_zone_boundaries",
     "inner_frontier_countries",
+    "island_administration_icon",
+    "ivn_geography",
     "minimap",
     "map_buildings",
     "state_history",
@@ -45,6 +47,7 @@ REQUIRED_FAMILIES = {
     "strategic_regions",
     "trade_regions",
     "technology_system",
+    "technology_ui_assets",
     "terrain_snow",
     "val_operations_map",
     "vorkerland_flags",
@@ -194,6 +197,10 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
             sequence.index("technology_system"),
             sequence.index("doctrine_system"),
             "technology localisation must be generated before doctrine removes migrated keys",
+        )
+        self.assertLess(
+            sequence.index("ivn_geography"),
+            sequence.index("map_buildings"),
         )
 
     def test_registry_rejects_unsafe_or_empty_paths(self) -> None:

@@ -34,4 +34,9 @@ spriteTypes = {
 		name = "GFX_autonomy_vorkerland_sanitary_gate_icon"
 		textureFile = "gfx/interface/autonomy/autonomy_vorkerland_sanitary_gate_icon.png"
 	}
+
+	spriteType = {
+		name = "GFX_autonomy_island_administration_icon"
+		textureFile = "gfx/interface/autonomy/autonomy_island_administration_icon.png"
+	}
 }

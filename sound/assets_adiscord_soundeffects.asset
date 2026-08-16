@@ -1,1 +1,18 @@
-# V19: intentionally empty; overrides malformed live asset that used unsupported top-level category tokens.
+# V19: keep only supported soundeffect declarations in this asset.
+soundeffect = {
+	name = ADISCORD_pol_menu_open_sound
+	sounds = {
+		sound = ADISCORD_pol_menu_open_sound
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+}
+
+soundeffect = {
+	name = ADISCORD_pol_menu_close_sound
+	sounds = {
+		sound = ADISCORD_pol_menu_close_sound
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+}

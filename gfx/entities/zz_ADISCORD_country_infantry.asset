@@ -35,6 +35,11 @@ entity = {
 	attach = { name = "cigarette2" Root_node_1 = "cigarette_entity" }
 }
 
+entity = {
+	clone = "STP_infantry_2_entity"
+	name = "STP_infantry_3_entity"
+}
+
 # Nodrul shares Stelander's infantry set.
 entity = {
 	clone = "STP_infantry_entity"
@@ -47,6 +52,11 @@ entity = {
 }
 
 entity = {
+	clone = "STP_infantry_3_entity"
+	name = "NOD_infantry_3_entity"
+}
+
+entity = {
 	clone = "infantry_rifle_entity"
 	name = "VAL_infantry_entity"
 	pdxmesh = "VAL_infantry_mesh"
@@ -56,6 +66,11 @@ entity = {
 	clone = "infantry_2_entity"
 	name = "VAL_infantry_2_entity"
 	pdxmesh = "VAL_infantry_mesh"
+}
+
+entity = {
+	clone = "VAL_infantry_2_entity"
+	name = "VAL_infantry_3_entity"
 }
 
 entity = {

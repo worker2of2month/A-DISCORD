@@ -31,7 +31,7 @@ ADISCORD_default_pp_reserve = {
 	enable = { always = yes }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = pp_spend_amount id = idea value = 100 }
-	ai_strategy = { type = pp_spend_amount id = decision value = 75 }
+	ai_strategy = { type = pp_spend_amount id = decision value = 100 }
 }
 
 ADISCORD_produce_squad_weapons_low_stock = {
@@ -51,16 +51,30 @@ ADISCORD_produce_squad_weapons_low_stock = {
 
 ADISCORD_produce_support_equipment_low_stock = {
 	enable = {
-		num_of_military_factories > 3
+		num_of_military_factories > 1
 		has_equipment = { support_equipment < 400 }
 	}
 	abort = {
 		OR = {
-			num_of_military_factories < 4
-			has_equipment = { support_equipment > 900 }
+			num_of_military_factories < 2
+			has_equipment = { support_equipment > 700 }
 		}
 	}
 	ai_strategy = { type = equipment_production_min_factories_archetype id = support_equipment value = 1 }
+}
+
+ADISCORD_produce_artillery_low_stock = {
+	enable = {
+		num_of_military_factories > 2
+		has_equipment = { artillery_equipment < 180 }
+	}
+	abort = {
+		OR = {
+			num_of_military_factories < 3
+			has_equipment = { artillery_equipment > 450 }
+		}
+	}
+	ai_strategy = { type = equipment_production_min_factories_archetype id = artillery_equipment value = 1 }
 }
 
 ADISCORD_limited_air_program = {

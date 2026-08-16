@@ -353,6 +353,12 @@ ADISCORD_vorkerland_focus_operations_category = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
+			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+		}
+		available = {
 			custom_trigger_tooltip = {
 				tooltip = ADISCORD_vorkerland_central_showdown_command_ready_tt
 				OR = {
@@ -361,13 +367,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 					AND = { tag = TVA has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked }
 				}
 				has_country_flag = ADISCORD_vorkerland_focus_central_front_prepared
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
-				NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
-				NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 			}
-		}
-		available = {
 			custom_trigger_tooltip = {
 				tooltip = ADISCORD_vorkerland_central_showdown_campaigns_closed_tt
 				NOT = { has_global_flag = ADISCORD_vorkerland_showdown_retry_cooldown }

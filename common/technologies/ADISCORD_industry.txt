@@ -403,6 +403,7 @@ technologies = {
 		production_speed_buildings_factor = 0.013
 		industry_repair_factor = 0.023
 		path = { leads_to_tech = ADISCORD_tech_drone_construction_cartography research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_modular_rebuilding research_cost_coeff = 1 }
 		research_cost = 0.55
 		start_year = 2158
 		folder = {
@@ -419,12 +420,12 @@ technologies = {
 	ADISCORD_tech_drone_construction_cartography = {
 		production_speed_buildings_factor = 0.014
 		industry_repair_factor = 0.025
-		path = { leads_to_tech = ADISCORD_tech_modular_rebuilding research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_prefabricated_districts research_cost_coeff = 1 }
 		research_cost = 1.2
 		start_year = 2160
 		folder = {
 			name = industry_folder
-			position = { x = 3 y = 3 }
+			position = { x = 0 y = 3 }
 		}
 		ai_will_do = {
 			factor = 37.5
@@ -436,12 +437,12 @@ technologies = {
 	ADISCORD_tech_modular_rebuilding = {
 		production_speed_buildings_factor = 0.015
 		industry_repair_factor = 0.026
-		path = { leads_to_tech = ADISCORD_tech_prefabricated_districts research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_public_repair_corps research_cost_coeff = 1 }
 		research_cost = 1.282
 		start_year = 2163
 		folder = {
 			name = industry_folder
-			position = { x = 3 y = 6 }
+			position = { x = 6 y = 6 }
 		}
 		ai_will_do = {
 			factor = 30
@@ -452,12 +453,12 @@ technologies = {
 	ADISCORD_tech_prefabricated_districts = {
 		production_speed_buildings_factor = 0.016
 		industry_repair_factor = 0.028
-		path = { leads_to_tech = ADISCORD_tech_public_repair_corps research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_automated_civil_works research_cost_coeff = 1 }
 		research_cost = 1.365
 		start_year = 2166
 		folder = {
 			name = industry_folder
-			position = { x = 3 y = 9 }
+			position = { x = 0 y = 9 }
 		}
 		ai_will_do = {
 			factor = 30
@@ -468,12 +469,12 @@ technologies = {
 	ADISCORD_tech_public_repair_corps = {
 		production_speed_buildings_factor = 0.017
 		industry_repair_factor = 0.029
-		path = { leads_to_tech = ADISCORD_tech_automated_civil_works research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_civil_defense_networks research_cost_coeff = 1 }
 		research_cost = 1.475
 		start_year = 2170
 		folder = {
 			name = industry_folder
-			position = { x = 3 y = 13 }
+			position = { x = 6 y = 13 }
 		}
 		ai_will_do = {
 			factor = 30
@@ -489,7 +490,7 @@ technologies = {
 		start_year = 2173
 		folder = {
 			name = industry_folder
-			position = { x = 3 y = 16 }
+			position = { x = 0 y = 16 }
 		}
 		ai_will_do = {
 			factor = 30
@@ -500,6 +501,10 @@ technologies = {
 	ADISCORD_tech_civil_defense_networks = {
 		production_speed_buildings_factor = 0.026
 		industry_repair_factor = 0.046
+		dependencies = {
+			ADISCORD_tech_public_repair_corps = 1
+			ADISCORD_tech_automated_civil_works = 1
+		}
 		enable_building = {
 			building = stronghold_network
 			level = 1
@@ -558,6 +563,7 @@ technologies = {
 		local_resources_factor = 0.021
 		fuel_gain_factor = 0.013
 		path = { leads_to_tech = ADISCORD_tech_spectral_ore_sorting research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_logistics_hub_networks research_cost_coeff = 1 }
 		research_cost = 0.55
 		start_year = 2158
 		folder = {
@@ -574,12 +580,12 @@ technologies = {
 	ADISCORD_tech_spectral_ore_sorting = {
 		local_resources_factor = 0.022
 		fuel_gain_factor = 0.013
-		path = { leads_to_tech = ADISCORD_tech_logistics_hub_networks research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_borehole_sensor_grids research_cost_coeff = 1 }
 		research_cost = 1.35
 		start_year = 2160
 		folder = {
 			name = industry_folder
-			position = { x = 3 y = 3 }
+			position = { x = 0 y = 3 }
 		}
 		ai_will_do = {
 			factor = 35
@@ -591,7 +597,7 @@ technologies = {
 	ADISCORD_tech_logistics_hub_networks = {
 		local_resources_factor = 0.023
 		fuel_gain_factor = 0.013
-		path = { leads_to_tech = ADISCORD_tech_borehole_sensor_grids research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_plasma_scrap_separation research_cost_coeff = 1 }
 		enable_building = {
 			building = ADISCORD_thermal_power_complex
 			level = 1
@@ -600,7 +606,7 @@ technologies = {
 		start_year = 2161
 		folder = {
 			name = industry_folder
-			position = { x = 3 y = 4 }
+			position = { x = 6 y = 4 }
 		}
 		ai_will_do = {
 			factor = 33.6
@@ -612,7 +618,7 @@ technologies = {
 	ADISCORD_tech_borehole_sensor_grids = {
 		local_resources_factor = 0.024
 		fuel_gain_factor = 0.014
-		path = { leads_to_tech = ADISCORD_tech_plasma_scrap_separation research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_microbial_tailings_leaching research_cost_coeff = 1 }
 		enable_building = {
 			building = ADISCORD_strategic_mining_complex
 			level = 1
@@ -621,7 +627,7 @@ technologies = {
 		start_year = 2162
 		folder = {
 			name = industry_folder
-			position = { x = 3 y = 5 }
+			position = { x = 0 y = 5 }
 		}
 		ai_will_do = {
 			factor = 33.6
@@ -633,7 +639,7 @@ technologies = {
 	ADISCORD_tech_plasma_scrap_separation = {
 		production_lack_of_resource_penalty_factor = -0.024
 		industry_repair_factor = 0.014
-		path = { leads_to_tech = ADISCORD_tech_microbial_tailings_leaching research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_synthetic_resource_cycles research_cost_coeff = 1 }
 		enable_building = {
 			building = ADISCORD_electrolysis_complex
 			level = 1
@@ -642,7 +648,7 @@ technologies = {
 		start_year = 2163
 		folder = {
 			name = industry_folder
-			position = { x = 3 y = 6 }
+			position = { x = 6 y = 6 }
 		}
 		ai_will_do = {
 			factor = 33.6
@@ -654,7 +660,7 @@ technologies = {
 	ADISCORD_tech_microbial_tailings_leaching = {
 		local_resources_factor = 0.031
 		production_lack_of_resource_penalty_factor = -0.007
-		path = { leads_to_tech = ADISCORD_tech_synthetic_resource_cycles research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_high_pressure_polymer_synthesis research_cost_coeff = 1 }
 		enable_building = {
 			building = ADISCORD_metallurgical_complex
 			level = 1
@@ -663,7 +669,7 @@ technologies = {
 		start_year = 2165
 		folder = {
 			name = industry_folder
-			position = { x = 3 y = 8 }
+			position = { x = 0 y = 8 }
 		}
 		ai_will_do = {
 			factor = 33.6
@@ -675,7 +681,7 @@ technologies = {
 	ADISCORD_tech_synthetic_resource_cycles = {
 		local_resources_factor = 0.015
 		fuel_gain_factor = 0.026
-		path = { leads_to_tech = ADISCORD_tech_high_pressure_polymer_synthesis research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_rare_earth_solvent_loops research_cost_coeff = 1 }
 		enable_building = {
 			building = synthetic_refinery
 			level = 1
@@ -684,7 +690,7 @@ technologies = {
 		start_year = 2166
 		folder = {
 			name = industry_folder
-			position = { x = 3 y = 9 }
+			position = { x = 6 y = 9 }
 		}
 		ai_will_do = {
 			factor = 33.6
@@ -696,7 +702,7 @@ technologies = {
 	ADISCORD_tech_high_pressure_polymer_synthesis = {
 		local_resources_factor = 0.026
 		fuel_gain_factor = 0.015
-		path = { leads_to_tech = ADISCORD_tech_rare_earth_solvent_loops research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_closed_loop_smelting research_cost_coeff = 1 }
 		on_research_complete = {
 			modify_building_resources = {
 				building = ADISCORD_metallurgical_complex
@@ -709,7 +715,7 @@ technologies = {
 		start_year = 2167
 		folder = {
 			name = industry_folder
-			position = { x = 3 y = 10 }
+			position = { x = 0 y = 10 }
 		}
 		ai_will_do = {
 			factor = 28
@@ -721,7 +727,7 @@ technologies = {
 	ADISCORD_tech_rare_earth_solvent_loops = {
 		production_lack_of_resource_penalty_factor = -0.027
 		industry_repair_factor = 0.016
-		path = { leads_to_tech = ADISCORD_tech_closed_loop_smelting research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_automated_deep_mining research_cost_coeff = 1 }
 		enable_building = {
 			building = synthetic_refinery
 			level = 2
@@ -743,7 +749,7 @@ technologies = {
 		start_year = 2168
 		folder = {
 			name = industry_folder
-			position = { x = 3 y = 11 }
+			position = { x = 6 y = 11 }
 		}
 		ai_will_do = {
 			factor = 33.6
@@ -755,12 +761,12 @@ technologies = {
 	ADISCORD_tech_closed_loop_smelting = {
 		local_resources_factor = 0.028
 		fuel_gain_factor = 0.016
-		path = { leads_to_tech = ADISCORD_tech_automated_deep_mining research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_carbon_feedstock_cracking research_cost_coeff = 1 }
 		research_cost = 1.598
 		start_year = 2169
 		folder = {
 			name = industry_folder
-			position = { x = 3 y = 12 }
+			position = { x = 0 y = 12 }
 		}
 		ai_will_do = {
 			factor = 28
@@ -772,7 +778,7 @@ technologies = {
 	ADISCORD_tech_automated_deep_mining = {
 		local_resources_factor = 0.028
 		fuel_gain_factor = 0.016
-		path = { leads_to_tech = ADISCORD_tech_carbon_feedstock_cracking research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_isotope_selective_refining research_cost_coeff = 1 }
 		on_research_complete = {
 			modify_building_resources = {
 				building = ADISCORD_strategic_mining_complex
@@ -785,7 +791,7 @@ technologies = {
 		start_year = 2170
 		folder = {
 			name = industry_folder
-			position = { x = 3 y = 13 }
+			position = { x = 6 y = 13 }
 		}
 		ai_will_do = {
 			factor = 28
@@ -797,7 +803,7 @@ technologies = {
 	ADISCORD_tech_carbon_feedstock_cracking = {
 		production_lack_of_resource_penalty_factor = -0.029
 		industry_repair_factor = 0.017
-		path = { leads_to_tech = ADISCORD_tech_isotope_selective_refining research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_urban_mine_cartography research_cost_coeff = 1 }
 		enable_building = {
 			building = synthetic_refinery
 			level = 3
@@ -806,7 +812,7 @@ technologies = {
 		start_year = 2171
 		folder = {
 			name = industry_folder
-			position = { x = 3 y = 14 }
+			position = { x = 0 y = 14 }
 		}
 		ai_will_do = {
 			factor = 33.6
@@ -818,7 +824,7 @@ technologies = {
 	ADISCORD_tech_isotope_selective_refining = {
 		local_resources_factor = 0.037
 		production_lack_of_resource_penalty_factor = -0.008
-		path = { leads_to_tech = ADISCORD_tech_urban_mine_cartography research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_strategic_element_reclamation research_cost_coeff = 1 }
 		on_research_complete = {
 			modify_building_resources = {
 				building = ADISCORD_metallurgical_complex
@@ -831,7 +837,7 @@ technologies = {
 		start_year = 2173
 		folder = {
 			name = industry_folder
-			position = { x = 3 y = 16 }
+			position = { x = 6 y = 16 }
 		}
 		ai_will_do = {
 			factor = 28
@@ -843,7 +849,7 @@ technologies = {
 	ADISCORD_tech_urban_mine_cartography = {
 		local_resources_factor = 0.017
 		fuel_gain_factor = 0.031
-		path = { leads_to_tech = ADISCORD_tech_strategic_element_reclamation research_cost_coeff = 1 }
+		path = { leads_to_tech = ADISCORD_tech_strategic_material_recovery research_cost_coeff = 1 }
 		on_research_complete = {
 			modify_building_resources = {
 				building = ADISCORD_strategic_mining_complex
@@ -856,7 +862,7 @@ technologies = {
 		start_year = 2174
 		folder = {
 			name = industry_folder
-			position = { x = 3 y = 17 }
+			position = { x = 0 y = 17 }
 		}
 		ai_will_do = {
 			factor = 28
@@ -886,7 +892,7 @@ technologies = {
 		start_year = 2175
 		folder = {
 			name = industry_folder
-			position = { x = 3 y = 18 }
+			position = { x = 6 y = 18 }
 		}
 		ai_will_do = {
 			factor = 28
@@ -899,6 +905,10 @@ technologies = {
 		local_resources_factor = 0.046
 		fuel_gain_factor = 0.026
 		production_lack_of_resource_penalty_factor = -0.026
+		dependencies = {
+			ADISCORD_tech_urban_mine_cartography = 1
+			ADISCORD_tech_strategic_element_reclamation = 1
+		}
 		research_cost = 2.55
 		start_year = 2180
 		folder = {

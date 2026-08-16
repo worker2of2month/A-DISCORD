@@ -1,5 +1,6 @@
 import re
 import unittest
+import wave
 from pathlib import Path
 
 from tools.validators import validate_adiscord_economy_ai as economy_validator
@@ -539,6 +540,68 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
 
 
 class CountryPoliticsGuiContractTests(unittest.TestCase):
+    def test_politics_window_uses_custom_open_and_close_sounds(self):
+        gui_text = (
+            ROOT / 'interface' / 'countrypoliticsview.gui'
+        ).read_text(encoding='utf-8-sig')
+        sound_text = (
+            ROOT / 'sound' / 'assets_adiscord_sounds.asset'
+        ).read_text(encoding='utf-8-sig')
+        soundeffect_text = (
+            ROOT / 'sound' / 'assets_adiscord_soundeffects.asset'
+        ).read_text(encoding='utf-8-sig')
+        politics_window = gui_node_body(gui_text, 'countrypoliticsview')
+
+        self.assertRegex(
+            politics_window,
+            r'\bshow_sound\s*=\s*ADISCORD_pol_menu_open_sound\b',
+        )
+        self.assertRegex(
+            politics_window,
+            r'\bhide_sound\s*=\s*ADISCORD_pol_menu_close_sound\b',
+        )
+        self.assertRegex(
+            sound_text,
+            r'(?s)\bname\s*=\s*"ADISCORD_pol_menu_open_sound"'
+            r'.*?\bfile\s*=\s*"adiscord_ui_click\.wav"',
+        )
+        self.assertRegex(
+            sound_text,
+            r'(?s)\bname\s*=\s*"ADISCORD_pol_menu_close_sound"'
+            r'.*?\bfile\s*=\s*"adiscord_ui_return\.wav"',
+        )
+        for sound_name in (
+            'ADISCORD_pol_menu_open_sound',
+            'ADISCORD_pol_menu_close_sound',
+        ):
+            self.assertRegex(
+                soundeffect_text,
+                rf'(?s)\bsoundeffect\s*=\s*\{{.*?'
+                rf'\bname\s*=\s*{sound_name}\b.*?'
+                rf'\bsounds\s*=\s*\{{.*?\bsound\s*=\s*{sound_name}\b',
+            )
+
+    def test_vanilla_menu_sound_overrides_use_hoi4_pcm_profile(self):
+        menu_directory = ROOT / 'sound' / 'menu'
+        expected_names = {
+            'complete_focus_01.wav',
+            'event_popup_01.wav',
+            'research_complete_01.wav',
+        }
+
+        self.assertEqual(
+            {path.name for path in menu_directory.glob('*.wav')},
+            expected_names,
+        )
+        self.assertEqual(list(menu_directory.glob('*.mp3')), [])
+        for name in sorted(expected_names):
+            with self.subTest(name=name), wave.open(
+                str(menu_directory / name), 'rb'
+            ) as sound_file:
+                self.assertEqual(sound_file.getcomptype(), 'NONE')
+                self.assertEqual(sound_file.getsampwidth(), 2)
+                self.assertEqual(sound_file.getframerate(), 44100)
+
     def test_hoi4_119_faction_widgets_have_required_types_and_parents(self):
         text = (ROOT / 'interface' / 'countrypoliticsview.gui').read_text(
             encoding='utf-8-sig'

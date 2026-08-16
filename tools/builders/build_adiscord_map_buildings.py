@@ -98,14 +98,14 @@ NAM_SPLIT_SPAWN_POSITION_CANDIDATES = {
     ),
 }
 
-# States that lost ordinary-terrain provinces when the Exclusion Zone was
-# aligned to contaminated terrain.  Existing building coordinates follow the
-# moved provinces; compact EXZ remnants still need one complete set of 1.19
-# construction anchors of their own.
+# States created by reviewed province repartitions. Existing building
+# coordinates follow the moved provinces; every resulting state still needs
+# one complete set of HOI4 1.19 construction anchors of its own.
 EXCLUSION_BOUNDARY_SPAWN_STATES = {
     49, 51, 153, 154, 155, 165, 166, 169, 173, 180, 184, 185, 187,
     189, 193, 210, 211, 213, 214, 215, 222, 223, 224, 329, 330,
     160, 454, 455, 460, 461, 472,
+    25, 128, 693, 694, 695, 696, 697, 698,
 }
 
 

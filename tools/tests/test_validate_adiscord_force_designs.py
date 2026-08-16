@@ -76,6 +76,21 @@ def event_block(text: str, event_id: str) -> str:
 
 
 class VorkerlandForceDesignTests(unittest.TestCase):
+    def test_ai_has_an_immediately_reachable_eight_plus_one_line_template(self) -> None:
+        templates = read("common/ai_templates/ADISCORD_land_templates.txt")
+        block = named_block(templates, "ADISCORD_line_brigade")
+        enable = named_block(block, "enable")
+        target = named_block(block, "target_template")
+
+        self.assertIn("is_ai = yes", enable)
+        self.assertNotIn("num_of_military_factories", enable)
+        self.assertNotIn("has_equipment", enable)
+        self.assertRegex(target, r"regiments\s*=\s*\{[^{}]*infantry\s*=\s*8")
+        self.assertRegex(
+            target,
+            r"regiments\s*=\s*\{[^{}]*ADISCORD_line_artillery\s*=\s*1",
+        )
+
     def test_collapse_has_a_reachable_20_width_armored_template(self) -> None:
         templates = read("common/ai_templates/ADISCORD_land_templates.txt")
         block = named_block(templates, "ADISCORD_vorkerland_mobile_reserve")
@@ -90,7 +105,10 @@ class VorkerlandForceDesignTests(unittest.TestCase):
         ):
             self.assertIn(token, block)
         target = named_block(block, "target_template")
-        self.assertRegex(target, r"regiments\s*=\s*\{[^{}]*infantry\s*=\s*6")
+        self.assertRegex(
+            target,
+            r"regiments\s*=\s*\{[^{}]*ADISCORD_mechanized_infantry\s*=\s*6",
+        )
         self.assertRegex(
             target,
             r"regiments\s*=\s*\{[^{}]*ADISCORD_combat_platform\s*=\s*4",
@@ -108,7 +126,10 @@ class VorkerlandForceDesignTests(unittest.TestCase):
         }
         for design, platform in expected.items():
             target = named_block(named_block(templates, design), "target_template")
-            self.assertRegex(target, r"regiments\s*=\s*\{[^{}]*infantry\s*=\s*6")
+            self.assertRegex(
+                target,
+                r"regiments\s*=\s*\{[^{}]*ADISCORD_mechanized_infantry\s*=\s*6",
+            )
             self.assertRegex(
                 target,
                 rf"regiments\s*=\s*\{{[^{{}}]*{platform}\s*=\s*4",
@@ -132,7 +153,7 @@ class VorkerlandForceDesignTests(unittest.TestCase):
             )
             self.assertIsNotNone(block, f"missing {template_name} in {relative}")
             self.assertEqual(block.count("ADISCORD_combat_platform = {"), 4)
-            self.assertEqual(block.count("infantry = {"), 6)
+            self.assertEqual(block.count("ADISCORD_mechanized_infantry = {"), 6)
             for support in (
                 "engineer",
                 "artillery",
@@ -148,6 +169,7 @@ class VorkerlandForceDesignTests(unittest.TestCase):
             claimant = named_block(setup, tag)
             for delivery in (
                 f"type = ADISCORD_combat_platform_2170 amount = 180 producer = {tag}",
+                f"type = ADISCORD_armored_carrier_2163 amount = 260 producer = {tag}",
                 f"type = ADISCORD_squad_weapons_equipment_0 amount = 60 producer = {tag}",
                 f"type = support_equipment_1 amount = 100 producer = {tag}",
                 f"type = artillery_equipment_1 amount = 24 producer = {tag}",
@@ -157,6 +179,10 @@ class VorkerlandForceDesignTests(unittest.TestCase):
         tva = named_block(effects, "ADISCORD_vorkerland_setup_tva")
         self.assertIn(
             "type = ADISCORD_combat_platform_2170 amount = 180 producer = TVA",
+            tva,
+        )
+        self.assertIn(
+            "type = ADISCORD_armored_carrier_2163 amount = 260 producer = TVA",
             tva,
         )
         self.assertIn(
@@ -190,6 +216,11 @@ class VorkerlandForceDesignTests(unittest.TestCase):
         self.assertIn(
             "equipment_production_min_factories_archetype id = "
             "ADISCORD_combat_platform_archetype value = 1",
+            armor,
+        )
+        self.assertIn(
+            "equipment_production_min_factories_archetype id = "
+            "ADISCORD_armored_carrier_archetype value = 1",
             armor,
         )
         self.assertIn("equipment_production_min_factories id = fighter value = 1", air)
@@ -368,11 +399,15 @@ class VorkerlandForceDesignTests(unittest.TestCase):
             1,
         )
         self.assertIn("ADISCORD_tech_semi_autonomous_combat_modules = 1", block)
+        self.assertIn("ADISCORD_tech_armored_carrier_program = 1", block)
         self.assertIn("ADISCORD_tech_reclaimed_jet_platforms = 1", block)
         self.assertIn("ADISCORD_tech_battlefield_attack_aircraft = 1", block)
         self.assertIn("type = ADISCORD_combat_platform_2170", block)
         self.assertIn("ADISCORD_combat_platform_archetype < 120", block)
         self.assertIn("amount = 160", block)
+        self.assertIn("type = ADISCORD_armored_carrier_2163", block)
+        self.assertIn("ADISCORD_armored_carrier_archetype < 200", block)
+        self.assertIn("amount = 260", block)
         for equipment_id, amount in (
             ("infantry_equipment_0", 500),
             ("ADISCORD_squad_weapons_equipment_0", 40),

@@ -1,0 +1,17 @@
+on_actions = {
+	on_startup = {
+		effect = {
+			# One bounded schema pass for WKR countries created under the v1 Home
+			# Guard contract. The country flag makes later loads no-ops.
+			WKR = {
+				if = {
+					limit = {
+						exists = yes
+						NOT = { has_country_flag = ADISCORD_vorkerland_wkr_force_templates_v2_applied }
+					}
+					ADISCORD_vorkerland_ensure_wkr_force_templates_v2 = yes
+				}
+			}
+		}
+	}
+}

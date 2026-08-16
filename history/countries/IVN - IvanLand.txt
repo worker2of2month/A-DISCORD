@@ -52,3 +52,9 @@ add_ideas = {
 }
 
 set_research_slots = 5
+
+set_autonomy = {
+	target = IIA
+	autonomy_state = autonomy_island_administration
+	freedom_level = 0.00
+}

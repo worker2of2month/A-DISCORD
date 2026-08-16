@@ -4,6 +4,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 import hashlib
 from io import BytesIO
+from math import floor, sqrt
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import Iterator
@@ -176,6 +177,179 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         self.assertLess(first, 180)
         self.assertEqual(builder.stable_unit_hash(41, 73, 19), builder.stable_unit_hash(41, 73, 19))
 
+    def test_tree_probabilities_are_ordered(self) -> None:
+        self.assertEqual(builder.tree_probability("mountain"), 0.0)
+        self.assertEqual(builder.tree_probability("urban"), 0.0)
+        self.assertEqual(builder.tree_probability("ocean"), 0.0)
+        self.assertLess(builder.tree_probability("hills"), builder.tree_probability("plains"))
+        self.assertLess(builder.tree_probability("plains"), builder.tree_probability("forest"))
+
+    def test_tree_probability_values(self) -> None:
+        self.assertEqual(builder.tree_probability("forest"), 0.62)
+        self.assertEqual(builder.tree_probability("plains"), 0.11)
+        self.assertEqual(builder.tree_probability("hills"), 0.04)
+        self.assertEqual(builder.tree_probability("marsh"), 0.08)
+
+    def test_render_northern_terrain_uses_relief_shoulders_forests_and_preserves_specials(self) -> None:
+        width = height = 6
+        source = Image.new("P", (width, height), 0)
+        source.putpalette([value for index in range(256) for value in (index, index, index)])
+        source_pixels = [0] * (width * height)
+        urban = 5 * width
+        marsh = 5 * width + 5
+        source_pixels[urban] = 13
+        source_pixels[marsh] = 9
+        source.putdata(source_pixels)
+
+        heights = [125] * (width * height)
+        summit = 2 * width + 2
+        heights[summit] = 160
+        heightmap = Image.new("L", (width, height))
+        heightmap.putdata(heights)
+        north = bytearray([1] * (width * height))
+        island = bytearray([1] * (width * height))
+        island[marsh] = 0
+        state_by_pixel = [128] * (width * height)
+        state_by_pixel[marsh] = 164
+
+        rendered = builder.render_northern_terrain(
+            source,
+            heightmap,
+            north,
+            island,
+            state_by_pixel,
+            {},
+        )
+        pixels = list(rendered.get_flattened_data())
+        self.assertEqual(pixels[summit], 20)
+        self.assertEqual(pixels[urban], 13)
+        self.assertEqual(pixels[marsh], 9)
+        self.assertIn(17, pixels)
+        self.assertEqual(pixels.count(4), 9)
+
+    def test_generated_mountains_have_connected_hill_shoulders_and_no_interior_plain_edge(self) -> None:
+        width = height = 9
+        source = Image.new("P", (width, height), 0)
+        source.putpalette([value for index in range(256) for value in (index, index, index)])
+        heightmap = Image.new("L", (width, height), 125)
+        summit = 4 * width + 4
+        heights = [125] * (width * height)
+        heights[summit] = 160
+        heightmap.putdata(heights)
+        north = bytearray([1] * (width * height))
+        rendered = builder.render_northern_terrain(
+            source,
+            heightmap,
+            north,
+            bytearray(north),
+            [128] * (width * height),
+            {},
+        )
+        pixels = list(rendered.get_flattened_data())
+        mountains = {index for index, value in enumerate(pixels) if value == 20}
+        shoulders = {index for index, value in enumerate(pixels) if value == 17}
+        self.assertTrue(mountains)
+        self.assertTrue(shoulders)
+
+        def neighbours(index: int) -> set[int]:
+            x = index % width
+            y = index // width
+            return {
+                (y + dy) * width + x + dx
+                for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1))
+                if 0 <= x + dx < width and 0 <= y + dy < height
+            }
+
+        for index in mountains:
+            for neighbour in neighbours(index):
+                self.assertIn(pixels[neighbour], (17, 20))
+
+        connected = {next(iter(shoulders))}
+        frontier = list(connected)
+        while frontier:
+            index = frontier.pop()
+            for neighbour in neighbours(index) & shoulders - connected:
+                connected.add(neighbour)
+                frontier.append(neighbour)
+        self.assertEqual(connected, shoulders)
+
+    def test_compact_footprint_is_deterministic_connected_and_organic(self) -> None:
+        width = 15
+        province = list(range(width * 10))
+        first = builder.compact_footprint(province, width, 4242)
+        second = builder.compact_footprint(province, width, 4242)
+        self.assertEqual(first, second)
+        self.assertTrue(first <= set(province))
+        self.assertGreaterEqual(len(first), builder.MIN_URBAN_PIXELS)
+        self.assertLessEqual(len(first), floor(len(province) * builder.MAX_URBAN_SHARE))
+
+        connected = {next(iter(first))}
+        frontier = list(connected)
+        while frontier:
+            index = frontier.pop()
+            x = index % width
+            neighbours = {
+                index - 1 if x else -1,
+                index + 1 if x + 1 < width else -1,
+                index - width,
+                index + width,
+            }
+            for neighbour in neighbours & first - connected:
+                connected.add(neighbour)
+                frontier.append(neighbour)
+        self.assertEqual(connected, first)
+
+        xs = [index % width for index in first]
+        ys = [index // width for index in first]
+        bounding_area = (max(xs) - min(xs) + 1) * (max(ys) - min(ys) + 1)
+        self.assertNotEqual(len(first), bounding_area)
+        maximum_run = floor(round(sqrt(len(first))) / 2)
+        self.assertLessEqual(builder.straight_boundary_run(first, width), maximum_run)
+
+    def test_tree_cell_sampling_uses_full_rectangles_strict_majority_and_priority(self) -> None:
+        width = height = 8
+        terrain = Image.new("P", (width, height), 0)
+        terrain.putpalette([value for index in range(256) for value in (index, index, index)])
+        terrain_pixels = [0] * (width * height)
+        state_by_pixel = [0] * (width * height)
+
+        cells = {
+            (0, 0): [(x, y) for y in range(4) for x in range(4)],
+            (1, 0): [(x, y) for y in range(4) for x in range(4, 8)],
+            (0, 1): [(x, y) for y in range(4, 8) for x in range(4)],
+            (1, 1): [(x, y) for y in range(4, 8) for x in range(4, 8)],
+        }
+        for offset, (x, y) in enumerate(cells[(0, 0)]):
+            state_by_pixel[y * width + x] = 128 if offset >= 7 else 0
+            terrain_pixels[y * width + x] = 4 if offset % 2 == 0 else 0
+        for offset, (x, y) in enumerate(cells[(1, 0)]):
+            state_by_pixel[y * width + x] = 129 if offset >= 8 else 0
+            terrain_pixels[y * width + x] = 4
+        for offset, (x, y) in enumerate(cells[(0, 1)]):
+            state_by_pixel[y * width + x] = 130 if offset >= 7 else 0
+            terrain_pixels[y * width + x] = 15
+        for offset, (x, y) in enumerate(cells[(1, 1)]):
+            state_by_pixel[y * width + x] = 131 if offset >= 7 else 0
+            terrain_pixels[y * width + x] = 13 if offset < 9 else 0
+        terrain.putdata(terrain_pixels)
+        palette = {0: "plains", 4: "forest", 13: "urban", 15: "ocean"}
+
+        forest = builder.tree_cell_sample(0, 0, 2, 2, terrain, state_by_pixel, palette)
+        tied_scope = builder.tree_cell_sample(1, 0, 2, 2, terrain, state_by_pixel, palette)
+        water = builder.tree_cell_sample(0, 1, 2, 2, terrain, state_by_pixel, palette)
+        urban = builder.tree_cell_sample(1, 1, 2, 2, terrain, state_by_pixel, palette)
+        self.assertEqual((forest.state_id, forest.terrain_type), (128, "forest"))
+        self.assertIsNone(tied_scope.state_id)
+        self.assertEqual(water.terrain_type, "ocean")
+        self.assertEqual(urban.terrain_type, "urban")
+
+        tree_source = Image.new("P", (2, 2))
+        tree_source.putpalette([value for index in range(256) for value in (index, 0, 255 - index)])
+        tree_source.putdata([1, 2, 3, 4])
+        rendered = builder.render_trees(tree_source, terrain, state_by_pixel, palette)
+        self.assertEqual(list(rendered.get_flattened_data()), [6, 2, 0, 0])
+        self.assertEqual(rendered.getpalette(), tree_source.getpalette())
+
     def test_render_heightmap_changes_only_island_mask(self) -> None:
         source = Image.new("L", (5, 5), 110)
         mask = bytearray(25)
@@ -237,10 +411,36 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
     def test_generated_geography_is_current(self) -> None:
         self.assertEqual(builder.validate(), [])
 
-    def test_expected_returns_named_task_2_outputs(self) -> None:
+    def test_expected_returns_named_task_3_outputs(self) -> None:
         outputs = builder.expected()
         self.assertIsInstance(outputs, builder.GeographyOutputs)
-        self.assertIsNone(outputs.trees)
+        self.assertIsNotNone(outputs.trees)
+        self.assertEqual((outputs.trees.mode, outputs.trees.size), ("P", (1650, 600)))
+
+    def test_generated_forest_and_tree_coverage_meets_exact_contract(self) -> None:
+        metrics = builder.expected().metrics
+        self.assertGreaterEqual(metrics.island_forest_share, 0.25)
+        self.assertLessEqual(metrics.island_forest_share, 0.30)
+        self.assertEqual(
+            set(metrics.mainland_forest_shares),
+            set(builder.MAINLAND_FOREST_STATE_IDS),
+        )
+        for state_id, share in metrics.mainland_forest_shares.items():
+            with self.subTest(state=state_id):
+                self.assertGreaterEqual(share, 0.20)
+                self.assertLessEqual(share, 0.25)
+        occupancy = metrics.tree_occupancy
+        self.assertGreaterEqual(occupancy["forest"], 0.50)
+        self.assertLessEqual(occupancy["forest"], 0.72)
+        self.assertGreaterEqual(occupancy["plains"], 0.06)
+        self.assertLessEqual(occupancy["plains"], 0.16)
+        self.assertGreaterEqual(occupancy["hills"], 0.01)
+        self.assertLessEqual(occupancy["hills"], 0.07)
+        self.assertLess(occupancy["hills"], occupancy["plains"])
+        self.assertLessEqual(occupancy["hills"], occupancy["forest"] / 5)
+        self.assertEqual(metrics.forbidden_tree_cells, 0)
+        self.assertEqual(metrics.terrain_changes_outside_scope, 0)
+        self.assertEqual(metrics.tree_changes_outside_scope, 0)
 
     def test_generated_height_and_normals_are_scoped_and_distributed(self) -> None:
         outputs = builder.expected()

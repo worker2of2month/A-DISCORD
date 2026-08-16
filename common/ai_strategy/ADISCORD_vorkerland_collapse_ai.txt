@@ -24,6 +24,22 @@ ADISCORD_vorkerland_collapse_war_economy = {
 	ai_strategy = { type = force_concentration_factor value = 35 }
 }
 
+# Main claimants keep enough political authority available for the authored
+# wartime decisions. Individual decisions still decide their own availability
+# and weight; this block never invokes their effects directly.
+ADISCORD_vorkerland_claimant_decision_spending = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = {
+		is_ai = yes
+		has_war = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = pp_spend_priority id = decision value = 100 }
+	ai_strategy = { type = pp_spend_amount id = decision value = 125 }
+}
+
 # Central wars are selected dynamically from live borders. These profiles keep
 # the AI committed to the war it actually entered without forcing supply-blind
 # manual attacks.

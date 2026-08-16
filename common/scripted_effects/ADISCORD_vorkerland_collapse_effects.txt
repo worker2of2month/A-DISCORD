@@ -106,12 +106,66 @@ ADISCORD_vorkerland_raise_emergency_levies = {
 	}
 }
 
-# WKR normally inherits WRK's armed forces, but a failed or delayed annexation
-# must not leave the worker claimant without a land army. This one-shot reserve
-# is deliberately small: two border guards in state 33 and two formations in
-# the state 32 capital reserve. Its own manpower and rifle package makes the
-# result independent from whatever the inherited army consumed.
+# WKR normally inherits WRK's armed forces, but annexation transfers divisions
+# without copying WRK's recruitable template database. Materialize an editable
+# line division and mobile group alongside the locked emergency guard. The
+# one-shot reserve itself remains deliberately small: two border guards in
+# state 33 and two formations in the state 32 capital reserve.
+ADISCORD_vorkerland_ensure_wkr_force_templates_v2 = {
+	if = {
+		limit = {
+			tag = WKR
+			NOT = { has_country_flag = ADISCORD_vorkerland_wkr_force_templates_v2_applied }
+		}
+		set_country_flag = ADISCORD_vorkerland_wkr_force_templates_v2_applied
+		division_template = {
+			name = "Worker Rifle Division"
+			division_names_group = WRK_INF_01
+			is_locked = no
+			force_allow_recruiting = yes
+			regiments = {
+				infantry = { x = 0 y = 0 }
+				infantry = { x = 0 y = 1 }
+				infantry = { x = 0 y = 2 }
+				infantry = { x = 0 y = 3 }
+				infantry = { x = 1 y = 0 }
+				infantry = { x = 1 y = 1 }
+				infantry = { x = 1 y = 2 }
+				infantry = { x = 1 y = 3 }
+				ADISCORD_line_artillery = { x = 2 y = 0 }
+			}
+		}
+		division_template = {
+			name = "Workerland Mobile Group"
+			division_names_group = WRK_INF_01
+			is_locked = no
+			force_allow_recruiting = yes
+			regiments = {
+				ADISCORD_combat_platform = { x = 0 y = 0 }
+				ADISCORD_combat_platform = { x = 0 y = 1 }
+				ADISCORD_combat_platform = { x = 0 y = 2 }
+				ADISCORD_combat_platform = { x = 0 y = 3 }
+				ADISCORD_mechanized_infantry = { x = 1 y = 0 }
+				ADISCORD_mechanized_infantry = { x = 1 y = 1 }
+				ADISCORD_mechanized_infantry = { x = 1 y = 2 }
+				ADISCORD_mechanized_infantry = { x = 2 y = 0 }
+				ADISCORD_mechanized_infantry = { x = 2 y = 1 }
+				ADISCORD_mechanized_infantry = { x = 2 y = 2 }
+			}
+			support = {
+				engineer = { x = 0 y = 0 }
+				artillery = { x = 0 y = 1 }
+				maintenance_company = { x = 0 y = 2 }
+				signal_company = { x = 0 y = 3 }
+			}
+		}
+	}
+}
+
 ADISCORD_vorkerland_ensure_wkr_home_guard = {
+	# New campaigns apply this here; on_startup applies the same versioned
+	# template package to WKR countries loaded from older saves.
+	ADISCORD_vorkerland_ensure_wkr_force_templates_v2 = yes
 	if = {
 		limit = {
 			tag = WKR
@@ -380,6 +434,7 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 		# every_country technology pass. Grant only the three variants consumed
 		# below before adding equipment or loading the claimant air OOB.
 		set_technology = {
+			ADISCORD_tech_armored_carrier_program = 1
 			ADISCORD_tech_semi_autonomous_combat_modules = 1
 			ADISCORD_tech_reclaimed_jet_platforms = 1
 			ADISCORD_tech_battlefield_attack_aircraft = 1
@@ -392,6 +447,7 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 		add_equipment_to_stockpile = { type = support_equipment_1 amount = 100 producer = WKR }
 		add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 24 producer = WKR }
 		add_equipment_to_stockpile = { type = ADISCORD_combat_platform_2170 amount = 180 producer = WKR }
+		add_equipment_to_stockpile = { type = ADISCORD_armored_carrier_2163 amount = 260 producer = WKR }
 		add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 60 producer = WKR }
 		add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 30 producer = WKR }
 		ADISCORD_vorkerland_ensure_wkr_home_guard = yes
@@ -403,6 +459,7 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 	}
 	VAD = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
+		ADISCORD_grant_technology_profile_armored_core = yes
 		add_ideas = ADISCORD_vorkerland_vad_imperial_chancery
 		add_ideas = ADISCORD_vorkerland_last_stand
 		ADISCORD_vorkerland_initialize_civil_war_exhaustion = yes
@@ -412,6 +469,7 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 		add_equipment_to_stockpile = { type = support_equipment_1 amount = 100 producer = VAD }
 		add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 24 producer = VAD }
 		add_equipment_to_stockpile = { type = ADISCORD_combat_platform_2170 amount = 180 producer = VAD }
+		add_equipment_to_stockpile = { type = ADISCORD_armored_carrier_2163 amount = 260 producer = VAD }
 		add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 24 producer = VAD }
 		add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 12 producer = VAD }
 		add_fuel = 7500
@@ -996,6 +1054,7 @@ ADISCORD_vorkerland_setup_tva = {
 		ADISCORD_grant_technology_profile_institutional = yes
 		ADISCORD_grant_technology_profile_land = yes
 		ADISCORD_grant_technology_profile_air = yes
+		ADISCORD_grant_technology_profile_armored_core = yes
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		add_ideas = ADISCORD_vorkerland_tva_field_directorate
@@ -1006,6 +1065,7 @@ ADISCORD_vorkerland_setup_tva = {
 		add_equipment_to_stockpile = { type = artillery_equipment amount = 72 producer = TVA }
 		add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 60 producer = TVA }
 		add_equipment_to_stockpile = { type = ADISCORD_combat_platform_2170 amount = 180 producer = TVA }
+		add_equipment_to_stockpile = { type = ADISCORD_armored_carrier_2163 amount = 260 producer = TVA }
 		add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 36 producer = TVA }
 		add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 18 producer = TVA }
 		add_fuel = 7500
@@ -2227,9 +2287,17 @@ ADISCORD_vorkerland_sync_independence_cosmetic = {
 	if = {
 		limit = {
 			has_global_flag = ADISCORD_vorkerland_collapse_started
-			OR = { tag = ROM tag = TRU tag = ZAO }
+			OR = { tag = ROM tag = TRU tag = ZAO tag = SOL }
 		}
 		if = {
+			limit = { tag = SOL }
+			if = {
+				limit = { OR = { is_subject_of = WKR is_subject_of = WRK } }
+				set_cosmetic_tag = SOL_vorkerland_worker_protectorate
+			}
+			else = { drop_cosmetic_tag = yes }
+		}
+		else_if = {
 			limit = { is_subject = yes }
 			drop_cosmetic_tag = yes
 		}
@@ -2298,6 +2366,7 @@ ADISCORD_vorkerland_apply_claimant_cosmetics = {
 		mark_focus_tree_layout_dirty = yes
 		country_event = { id = ADISCORD_vorkerland_collapse.68 days = 1 }
 	}
+	SOL = { ADISCORD_vorkerland_sync_independence_cosmetic = yes }
 	PWR = {
 		set_cosmetic_tag = PWR_rimat_republic
 		ADISCORD_vorkerland_appoint_pwr_technocrat = yes

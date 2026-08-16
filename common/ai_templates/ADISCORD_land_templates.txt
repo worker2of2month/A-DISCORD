@@ -56,27 +56,24 @@ ADISCORD_infantry_templates = {
 		reinforce_prio = 1
 		upgrade_prio = { base = 5 }
 		can_upgrade_in_field = { always = yes }
-		target_template = { regiments = { infantry = 4 } }
+		target_min_match = 0.65
+		target_template = { regiments = { infantry = 6 } }
 		replace_at_match = 0.95
 		replace_with = ADISCORD_line_brigade
 	}
 
 	ADISCORD_line_brigade = {
 		enable = {
-			num_of_military_factories > 3
-			NOT = { ADISCORD_economy_ai_is_crisis = yes }
-			has_equipment = { support_equipment > 400 }
-			has_equipment = { artillery_equipment > 250 }
+			is_ai = yes
 		}
 		reinforce_prio = 1
 		upgrade_prio = { base = 6 }
 		can_upgrade_in_field = {
-			has_equipment = { support_equipment > 600 }
-			has_equipment = { artillery_equipment > 400 }
+			has_equipment = { artillery_equipment > 140 }
 		}
+		target_min_match = 0.75
 		target_template = {
-			support = { engineer = 1 artillery = 1 }
-			regiments = { infantry = 6 }
+			regiments = { infantry = 8 ADISCORD_line_artillery = 1 }
 		}
 		replace_at_match = 0.98
 		replace_with = ADISCORD_defensive_line_brigade
@@ -161,6 +158,26 @@ ADISCORD_assault_templates = {
 			}
 		}
 	}
+
+	ADISCORD_mechanized_brigade = {
+		enable = {
+			has_tech = ADISCORD_tech_armored_carrier_program
+			num_of_military_factories > 6
+			ADISCORD_economy_ai_can_fund_advanced_forces = yes
+			has_equipment = { ADISCORD_armored_carrier_archetype > 360 }
+		}
+		reinforce_prio = 2
+		upgrade_prio = { base = 8 }
+		can_upgrade_in_field = {
+			NOT = { ADISCORD_economy_ai_is_crisis = yes }
+			has_equipment = { ADISCORD_armored_carrier_archetype > 480 }
+		}
+		target_min_match = 0.75
+		target_template = {
+			support = { engineer = 1 artillery = 1 maintenance_company = 1 signal_company = 1 }
+			regiments = { ADISCORD_mechanized_infantry = 8 }
+		}
+	}
 }
 
 ADISCORD_mountaineer_templates = {
@@ -227,14 +244,17 @@ ADISCORD_tank_templates = {
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
 			OR = { tag = WKR tag = VAD tag = TVA }
+			has_tech = ADISCORD_tech_armored_carrier_program
 			has_tech = ADISCORD_tech_semi_autonomous_combat_modules
 			num_of_military_factories > 2
 			has_equipment = { ADISCORD_combat_platform_archetype > 100 }
+			has_equipment = { ADISCORD_armored_carrier_archetype > 200 }
 		}
 		reinforce_prio = 2
 		upgrade_prio = { base = 12 }
 		can_upgrade_in_field = {
 			has_equipment = { ADISCORD_combat_platform_archetype > 120 }
+			has_equipment = { ADISCORD_armored_carrier_archetype > 240 }
 		}
 		target_template = {
 			support = {
@@ -243,26 +263,29 @@ ADISCORD_tank_templates = {
 				maintenance_company = 1
 				signal_company = 1
 			}
-			regiments = { infantry = 6 ADISCORD_combat_platform = 4 }
+			regiments = { ADISCORD_mechanized_infantry = 6 ADISCORD_combat_platform = 4 }
 		}
 	}
 
 	ADISCORD_tank_battlegroup = {
 		enable = {
+			has_tech = ADISCORD_tech_armored_carrier_program
 			has_tech = ADISCORD_tech_semi_autonomous_combat_modules
 			num_of_military_factories > 7
 			ADISCORD_economy_ai_can_fund_advanced_forces = yes
 			has_equipment = { ADISCORD_combat_platform_archetype > 180 }
+			has_equipment = { ADISCORD_armored_carrier_archetype > 260 }
 		}
 		reinforce_prio = 2
 		upgrade_prio = { base = 8 }
 		can_upgrade_in_field = {
 			NOT = { ADISCORD_economy_ai_is_crisis = yes }
 			has_equipment = { ADISCORD_combat_platform_archetype > 300 }
+			has_equipment = { ADISCORD_armored_carrier_archetype > 400 }
 		}
 		target_template = {
 			support = { engineer = 1 ADISCORD_recon_platform = 1 maintenance_company = 1 }
-			regiments = { infantry = 6 ADISCORD_combat_platform = 4 }
+			regiments = { ADISCORD_mechanized_infantry = 6 ADISCORD_combat_platform = 4 }
 		}
 		replace_at_match = 0.98
 		replace_with = ADISCORD_networked_tank_battlegroup
@@ -275,6 +298,7 @@ ADISCORD_tank_templates = {
 			num_of_military_factories > 10
 			ADISCORD_economy_ai_can_fund_advanced_forces = yes
 			has_equipment = { ADISCORD_combat_platform_archetype > 320 }
+			has_equipment = { ADISCORD_armored_carrier_archetype > 360 }
 			has_equipment = { ADISCORD_recovery_platform_archetype > 24 }
 			has_equipment = { support_equipment > 600 }
 		}
@@ -283,6 +307,7 @@ ADISCORD_tank_templates = {
 		can_upgrade_in_field = {
 			ADISCORD_economy_ai_is_healthy = yes
 			has_equipment = { ADISCORD_combat_platform_archetype > 440 }
+			has_equipment = { ADISCORD_armored_carrier_archetype > 480 }
 			has_equipment = { ADISCORD_recovery_platform_archetype > 40 }
 		}
 		target_template = {
@@ -292,26 +317,29 @@ ADISCORD_tank_templates = {
 				ADISCORD_recovery_platform = 1
 				signal_company = 1
 			}
-			regiments = { infantry = 6 ADISCORD_combat_platform = 4 }
+			regiments = { ADISCORD_mechanized_infantry = 6 ADISCORD_combat_platform = 4 }
 		}
 	}
 
 ADISCORD_heavy_tank_battlegroup = {
 		enable = {
+			has_tech = ADISCORD_tech_armored_carrier_program
 			has_tech = ADISCORD_tech_heavy_platform_cores
 			num_of_military_factories > 14
 			ADISCORD_economy_ai_is_healthy = yes
 			has_equipment = { ADISCORD_heavy_platform_archetype > 120 }
+			has_equipment = { ADISCORD_armored_carrier_archetype > 260 }
 		}
 		reinforce_prio = 1
 		upgrade_prio = { base = 6 }
 		can_upgrade_in_field = {
 			ADISCORD_economy_ai_is_healthy = yes
 			has_equipment = { ADISCORD_heavy_platform_archetype > 220 }
+			has_equipment = { ADISCORD_armored_carrier_archetype > 400 }
 		}
 		target_template = {
 			support = { engineer = 1 maintenance_company = 1 logistics_company = 1 }
-			regiments = { infantry = 6 ADISCORD_heavy_platform = 4 }
+			regiments = { ADISCORD_mechanized_infantry = 6 ADISCORD_heavy_platform = 4 }
 		}
 	}
 }

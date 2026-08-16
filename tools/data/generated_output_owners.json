@@ -9,6 +9,7 @@
     "remainder_states",
     "inner_frontier_countries",
     "ainholm_mandate",
+    "ivn_geography",
     "map_buildings",
     "vorkerland_theatre",
     "strategic_regions",
@@ -20,9 +21,11 @@
     "diplomacy_ui_assets",
     "production_ui_assets",
     "resource_assets",
+    "technology_ui_assets",
     "technology_system",
     "doctrine_system",
     "val_operations_map",
+    "island_administration_icon",
     "vorkerland_flags"
   ],
   "families": [
@@ -243,7 +246,7 @@
         "history/states/3[0-2]?-*.txt",
         "history/states/330-*.txt",
         "history/states/68[8-9]-*.txt",
-        "history/states/69[0-2]-*.txt",
+        "history/states/69[0-8]-*.txt",
         "localisation/russian/victory_points_l_russian.yml",
         "localisation/russian/state_names_l_russian.yml",
         "map/buildings.txt"
@@ -416,6 +419,27 @@
       "overlap_explanation": "Trade-region generation owns only definition.csv continent field 7 and preserves the authoritative province ids, colours, types, coast flags, terrain, row order and line endings."
     },
     {
+      "id": "technology_ui_assets",
+      "owner_module": "tools.builders.build_adiscord_technology_icons",
+      "output_globs": [
+        "gfx/interface/technologies/ADISCORD_*.dds",
+        "gfx/interface/techtree/techtree_line_vertical.dds",
+        "gfx/interface/techtree/techtree_line_horisontal.dds",
+        "gfx/interface/techtree/techline_center_*_researched.dds",
+        "docs/superpowers/reports/2026-08-15-adiscord-technology-icon-contact-sheet.png"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_technology_icons.py",
+        "tools/data/adiscord_technology_weapon_icons.json",
+        "tools/assets/source/technology_weapons/*.png",
+        "tools/assets/source/technology_weapons/*.dds"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_technology_icons"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_technology_icons", "--apply"],
+      "may_delete_outputs": true,
+      "ownership_mode": "exclusive"
+    },
+    {
       "id": "technology_system",
       "owner_module": "tools.builders.build_adiscord_technology_system",
       "output_globs": [
@@ -455,7 +479,8 @@
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_terrain_snow"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_terrain_snow", "--apply"],
       "may_delete_outputs": false,
-      "ownership_mode": "exclusive"
+      "ownership_mode": "layered",
+      "overlap_explanation": "Permanent-snow generation owns polar/high-altitude palette conversion and preserves IVN/IIA urban palette 13; the IVN geography pass owns only compact settlement footprints."
     },
     {
       "id": "vorkerland_cities",
@@ -736,9 +761,7 @@
         "gfx/flags/source/IBA.png",
         "gfx/flags/source/TRU_zolotorevsk_republic.png",
         "gfx/flags/source/WRK_vorkerland_utilitarian_republic.png",
-        "gfx/flags/SOL.tga",
-        "gfx/flags/medium/SOL.tga",
-        "gfx/flags/small/SOL.tga",
+        "gfx/flags/source/SOL_vorkerland_worker_protectorate.png",
         "gfx/flags/WRK.tga",
         "gfx/flags/medium/WRK.tga",
         "gfx/flags/small/WRK.tga"
@@ -748,6 +771,45 @@
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "The successor flag pass shares the flat HOI4 flag directories with AIN and regional-country builders; exact generated identifiers are defined in its source manifest."
+    },
+    {
+      "id": "island_administration_icon",
+      "owner_module": "tools.builders.build_adiscord_island_administration_icon",
+      "output_globs": [
+        "gfx/interface/autonomy/autonomy_island_administration_icon.png",
+        "gfx/flags/IIA.tga",
+        "gfx/flags/medium/IIA.tga",
+        "gfx/flags/small/IIA.tga"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_island_administration_icon.py",
+        "tools/assets/source/autonomy_island_administration_source.png",
+        "gfx/flags/IVN.tga",
+        "gfx/flags/medium/IVN.tga",
+        "gfx/flags/small/IVN.tga"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_island_administration_icon"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_island_administration_icon", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "ivn_geography",
+      "owner_module": "tools.builders.build_adiscord_ivn_geography",
+      "output_globs": ["map/terrain.bmp", "map/definition.csv"],
+      "source_inputs": [
+        "tools/builders/build_adiscord_ivn_geography.py",
+        "history/states/*.txt",
+        "map/terrain.bmp",
+        "map/provinces.bmp",
+        "map/definition.csv",
+        "common/terrain/00_terrain.txt"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_ivn_geography"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_ivn_geography", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "layered",
+      "overlap_explanation": "This pass owns definition.csv terrain field 6 only for the explicit IVN/IIA province set and compact palette-13 footprints in their VP provinces; trade regions own continent field 7 and terrain_snow owns snow conversion."
     }
   ]
 }

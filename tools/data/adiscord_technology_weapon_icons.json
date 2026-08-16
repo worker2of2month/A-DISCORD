@@ -1,0 +1,424 @@
+{
+  "schema": 1,
+  "source_size": [
+    1893,
+    831
+  ],
+  "icons": [
+    {
+      "key": "reclaimed_arsenal",
+      "source": "01_reclaimed_arsenal.png",
+      "source_uuid": "64be3d7a-216b-4e7a-b700-81bab90b4963.png",
+      "source_sha256": "3ae6787812504e11c8e52d002fa3963492a0d733c9daa40d370e2a147da364f6",
+      "tier": 1,
+      "kind": "wide",
+      "output": "ADISCORD_weapon_01_reclaimed_arsenal.dds"
+    },
+    {
+      "key": "recovered_service_rifle",
+      "source": "02_recovered_service_rifle.png",
+      "source_uuid": "38a56c82-2c56-4bd4-ac5d-fa3eb7ecb0c6.png",
+      "source_sha256": "8138958bfc0604a44e2b4966dd9ce71a284d8d01ad8db6786fa9b26d9537b1e4",
+      "tier": 2,
+      "kind": "wide",
+      "output": "ADISCORD_weapon_02_recovered_service_rifle.dds"
+    },
+    {
+      "key": "standardized_battle_rifle",
+      "source": "03_standardized_battle_rifle.png",
+      "source_uuid": "8bc896f1-f59b-4033-81f1-0686f0190ec6.png",
+      "source_sha256": "a6cfde0fbcc9b89909733fc41db3df41876ba584af55881df639caecdac46510",
+      "tier": 3,
+      "kind": "wide",
+      "output": "ADISCORD_weapon_03_standardized_battle_rifle.dds"
+    },
+    {
+      "key": "transitional_modular_weapon",
+      "source": "04_transitional_modular_weapon.png",
+      "source_uuid": "98ce80ac-90bc-4af1-a9d4-3ba8f0132069.png",
+      "source_sha256": "62ea291a2b8d2918cbc95921b9ae3eccd8e228541558973f298de61c7b2f7c1f",
+      "tier": 4,
+      "kind": "wide",
+      "output": "ADISCORD_weapon_04_transitional_modular_weapon.dds"
+    },
+    {
+      "key": "suppressed_assault_system",
+      "source": "05_suppressed_assault_system.png",
+      "source_uuid": "1c351184-5837-48cc-aa0b-ccdc921476f8.png",
+      "source_sha256": "86c605c07863529485bf2f1c2553a5743e6ba5364fc263bc57c726f86b912a6a",
+      "tier": 5,
+      "kind": "wide",
+      "output": "ADISCORD_weapon_05_suppressed_assault_system.dds"
+    },
+    {
+      "key": "networked_smart_rifle",
+      "source": "06_networked_smart_rifle.png",
+      "source_uuid": "1b0ec7af-6f88-4910-91e6-3c20ce8ff8cb.png",
+      "source_sha256": "20e9db60b3bab891affc46248eff29b59628a1727936bb30ef48c27ce6b1a4b6",
+      "tier": 6,
+      "kind": "wide",
+      "output": "ADISCORD_weapon_06_networked_smart_rifle.dds"
+    },
+    {
+      "key": "programmable_munition_weapon",
+      "source": "07_programmable_munition_weapon.png",
+      "source_uuid": "64ecc162-8368-4a24-b0e7-7ce2ec6e0554.png",
+      "source_sha256": "22101339f907ee7442430db0ac638c7761c3a5e09f58396f91916e8229fbd928",
+      "tier": 7,
+      "kind": "wide",
+      "output": "ADISCORD_weapon_07_programmable_munition_weapon.dds"
+    },
+    {
+      "key": "advanced_impulse_weapon",
+      "source": "08_advanced_impulse_weapon.png",
+      "source_uuid": "53942e54-1065-498c-bad8-c123fa9925d7.png",
+      "source_sha256": "e6fc931dcefa0eb3822a6783e96186a9e562267691f78c178a18efd410ba7607",
+      "tier": 8,
+      "kind": "wide",
+      "output": "ADISCORD_weapon_08_advanced_impulse_weapon.dds"
+    },
+    {
+      "key": "resilient_combat_network_weapon",
+      "source": "09_resilient_combat_network_weapon.png",
+      "source_uuid": "b3efd823-cdcb-4fa1-8f07-52e8ecb71b37.png",
+      "source_sha256": "0e30ddc2a963495ebdc8349444be1af84f4ca7871e247e3e6aca7c44e3b66e2e",
+      "tier": 9,
+      "kind": "wide",
+      "output": "ADISCORD_weapon_09_resilient_combat_network_weapon.dds"
+    },
+    {
+      "key": "recovered_fire_support",
+      "family": "squad",
+      "source": "squad_01_recovered_fire_support.png",
+      "source_uuid": "0e9653c9-9084-40a4-9f1a-73a6519c8dee.png",
+      "source_sha256": "15fef8b7b53253314e5ff9e21350219f4af82440ddd9d4df66c551f0b4ad28d4",
+      "tier": 1,
+      "kind": "wide",
+      "output": "ADISCORD_squad_01_recovered_fire_support.dds"
+    },
+    {
+      "key": "belt_fed_sections",
+      "family": "squad",
+      "source": "squad_02_belt_fed_sections.png",
+      "source_uuid": "65ab5e7f-0625-475e-a505-a7123d7d8cad.png",
+      "source_sha256": "17de8f09cefba17b2bf5f4253f5fb2a68f2031f7fd299cc95687da2372bf1419",
+      "tier": 2,
+      "kind": "wide",
+      "output": "ADISCORD_squad_02_belt_fed_sections.dds"
+    },
+    {
+      "key": "standardized_heavy_weapons",
+      "family": "squad",
+      "source": "squad_07_networked_precision_support.png",
+      "source_uuid": "cf21a446-fd35-4d86-8535-e43e39863723.png",
+      "source_sha256": "fdcd33cff87f608f1daab813f097d23681dadb6bf4b4240c0a5fdcdb9008d076",
+      "tier": 3,
+      "kind": "wide",
+      "output": "ADISCORD_squad_03_standardized_heavy_weapons.dds"
+    },
+    {
+      "key": "modular_support_weapons",
+      "family": "squad",
+      "source": "squad_04_modular_support_weapons.png",
+      "source_uuid": "78079a6f-a90c-4c31-9ca5-6ae4b852f064.png",
+      "source_sha256": "0f3a80fcc340658cadefbb517f47d4b048670730aa3e07db7564bb8045be2365",
+      "tier": 4,
+      "kind": "wide",
+      "output": "ADISCORD_squad_04_modular_support_weapons.dds"
+    },
+    {
+      "key": "sensor_linked_fireteams",
+      "family": "squad",
+      "source": "squad_05_sensor_linked_fireteams.png",
+      "source_uuid": "90013d40-3603-4518-b5af-984c92dd7552.png",
+      "source_sha256": "ba0d4500e4676bcf375f42e66e24755d3183763a30ac02d278a957ffd4ac7f20",
+      "tier": 5,
+      "kind": "wide",
+      "output": "ADISCORD_squad_05_sensor_linked_fireteams.dds"
+    },
+    {
+      "key": "programmable_support_systems",
+      "family": "squad",
+      "source": "squad_06_programmable_support_systems.png",
+      "source_uuid": "cbb4a129-caad-4b26-867b-54f53400be74.png",
+      "source_sha256": "a502378f38d1441095676b1fa29d12e862a320b6a8b59666ec378841a0d31339",
+      "tier": 6,
+      "kind": "wide",
+      "output": "ADISCORD_squad_06_programmable_support_systems.dds"
+    },
+    {
+      "key": "networked_precision_support",
+      "family": "squad",
+      "source": "squad_03_standardized_heavy_weapons.png",
+      "source_uuid": "e5f74228-df2b-487b-8f56-d35033a92f9b.png",
+      "source_sha256": "db59df6af1e6280ab6e4432b373e90f85735bbd8fdc91318ff5741c3d4eb3b66",
+      "tier": 7,
+      "kind": "wide",
+      "output": "ADISCORD_squad_07_networked_precision_support.dds"
+    },
+    {
+      "key": "autonomous_fire_control",
+      "family": "squad",
+      "source": "squad_08_autonomous_fire_control.png",
+      "source_uuid": "f8cab7a0-cb3c-403b-bc1e-f6cffa429bdb.png",
+      "source_sha256": "8564c0276795b8eeca238632f420ca28333c8d9d2f9f7c1e0de3a0490ec0d2e4",
+      "tier": 8,
+      "kind": "wide",
+      "output": "ADISCORD_squad_08_autonomous_fire_control.dds"
+    },
+    {
+      "key": "swarm_coordinated_support",
+      "family": "squad",
+      "source": "squad_09_swarm_coordinated_support.png",
+      "source_uuid": "fc1e9ff8-2d82-4fa2-a030-4760ea1589f5.png",
+      "source_sha256": "20fa597d880f8895076ac738013971b6ca3bb1c0a1200d27defd0daa3c562b15",
+      "tier": 9,
+      "kind": "wide",
+      "output": "ADISCORD_squad_09_swarm_coordinated_support.dds"
+    },
+    {
+      "key": "passive_intensifier",
+      "source": "night_operations_generated_sheet.png",
+      "source_uuid": "imagegen:exec-5e9e5ec9-b8cf-4ef7-95bf-4277c8f5437f.png",
+      "source_sha256": "800ef614db6916e0ab7cdd8a87cb30164187cee845ffcfab5ffe1bd89bdc95fd",
+      "source_size": [1536, 1024],
+      "tier": 1,
+      "kind": "compact",
+      "crop": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "output": "ADISCORD_night_01_passive_intensifier.dds"
+    },
+    {
+      "key": "thermal_channel",
+      "source": "night_operations_generated_sheet.png",
+      "source_uuid": "imagegen:exec-5e9e5ec9-b8cf-4ef7-95bf-4277c8f5437f.png",
+      "source_sha256": "800ef614db6916e0ab7cdd8a87cb30164187cee845ffcfab5ffe1bd89bdc95fd",
+      "source_size": [1536, 1024],
+      "tier": 2,
+      "kind": "compact",
+      "crop": [
+        512,
+        0,
+        1024,
+        512
+      ],
+      "output": "ADISCORD_night_02_thermal_channel.dds"
+    },
+    {
+      "key": "fused_sight",
+      "source": "night_operations_generated_sheet.png",
+      "source_uuid": "imagegen:exec-5e9e5ec9-b8cf-4ef7-95bf-4277c8f5437f.png",
+      "source_sha256": "800ef614db6916e0ab7cdd8a87cb30164187cee845ffcfab5ffe1bd89bdc95fd",
+      "source_size": [1536, 1024],
+      "tier": 3,
+      "kind": "compact",
+      "crop": [
+        1024,
+        0,
+        1536,
+        512
+      ],
+      "output": "ADISCORD_night_03_fused_sight.dds"
+    },
+    {
+      "key": "squad_target_sharing",
+      "source": "night_operations_generated_sheet.png",
+      "source_uuid": "imagegen:exec-5e9e5ec9-b8cf-4ef7-95bf-4277c8f5437f.png",
+      "source_sha256": "800ef614db6916e0ab7cdd8a87cb30164187cee845ffcfab5ffe1bd89bdc95fd",
+      "source_size": [1536, 1024],
+      "tier": 4,
+      "kind": "compact",
+      "crop": [
+        0,
+        512,
+        512,
+        1024
+      ],
+      "output": "ADISCORD_night_04_squad_target_sharing.dds"
+    },
+    {
+      "key": "counter_illumination",
+      "source": "night_operations_generated_sheet.png",
+      "source_uuid": "imagegen:exec-5e9e5ec9-b8cf-4ef7-95bf-4277c8f5437f.png",
+      "source_sha256": "800ef614db6916e0ab7cdd8a87cb30164187cee845ffcfab5ffe1bd89bdc95fd",
+      "source_size": [1536, 1024],
+      "tier": 5,
+      "kind": "compact",
+      "crop": [
+        512,
+        512,
+        1024,
+        1024
+      ],
+      "output": "ADISCORD_night_05_counter_illumination.dds"
+    },
+    {
+      "key": "distributed_night_engagement",
+      "source": "night_operations_generated_sheet.png",
+      "source_uuid": "imagegen:exec-5e9e5ec9-b8cf-4ef7-95bf-4277c8f5437f.png",
+      "source_sha256": "800ef614db6916e0ab7cdd8a87cb30164187cee845ffcfab5ffe1bd89bdc95fd",
+      "source_size": [1536, 1024],
+      "tier": 6,
+      "kind": "compact",
+      "crop": [
+        1024,
+        512,
+        1536,
+        1024
+      ],
+      "output": "ADISCORD_night_06_distributed_engagement.dds"
+    },
+    {
+      "key": "incendiary_bottle",
+      "family": "personal_antitank",
+      "source": "personal_antitank_01_incendiary_bottle.dds",
+      "source_uuid": "preserved-runtime:ADISCORD_antitank_01_incendiary_bottle.dds",
+      "source_sha256": "31565da97eae95426ea363fdb54b779175fc3a123895ec75c9727fc3f376169d",
+      "source_size": [72, 72],
+      "tier": 1,
+      "kind": "compact",
+      "runtime_master": true,
+      "output": "ADISCORD_antitank_01_incendiary_bottle.dds"
+    },
+    {
+      "key": "satchel_charge",
+      "family": "personal_antitank",
+      "source": "personal_antitank_generated_sheet.png",
+      "source_uuid": "imagegen:exec-d2783af6-bec4-4eb9-b711-89c5da67e4fe.png",
+      "source_sha256": "94a551e97b5a3aec5d38d26627d9711e054becd1be59d15fc71f6bb4cc74b6ce",
+      "source_size": [1536, 1024],
+      "tier": 2,
+      "kind": "compact",
+      "crop": [384, 0, 768, 341],
+      "output": "ADISCORD_antitank_02_satchel_charge.dds"
+    },
+    {
+      "key": "shaped_charge_grenade",
+      "family": "personal_antitank",
+      "source": "personal_antitank_03_shaped_charge_grenade.png",
+      "source_uuid": "imagegen:exec-a52b8843-b39a-4d09-90e3-00c6178428c7.png",
+      "source_sha256": "f7aee851ee9035a64a92686ac4b32938fdd5c37c6718fc5074043aa46be5e943",
+      "source_size": [1254, 1254],
+      "tier": 3,
+      "kind": "compact",
+      "output": "ADISCORD_antitank_03_shaped_charge_grenade.dds"
+    },
+    {
+      "key": "antitank_rifle",
+      "family": "personal_antitank",
+      "source": "personal_antitank_04_antitank_rifle.png",
+      "source_uuid": "imagegen:exec-327d87c4-9094-4430-bf48-94ba2701dbdd.png",
+      "source_sha256": "d2a1b771e5f344c7bc4d0a7149dd5e442ec5885712b201a921c35798cb6931df",
+      "source_size": [1254, 1254],
+      "tier": 4,
+      "kind": "compact",
+      "output": "ADISCORD_antitank_04_antitank_rifle.dds"
+    },
+    {
+      "key": "wire_guidance",
+      "family": "personal_antitank",
+      "source": "personal_antitank_05_wire_guidance.png",
+      "source_uuid": "imagegen:exec-12bee88d-abb5-46c1-8ed6-e9a2392cf7ac.png#crop-05",
+      "source_sha256": "980070b6f9b65fd94b0f67037d4e02322bcebb087ea86ac6c82977de19c42ab0",
+      "source_size": [400, 320],
+      "tier": 5,
+      "kind": "compact",
+      "output": "ADISCORD_antitank_05_wire_guidance.dds"
+    },
+    {
+      "key": "recoilless_launcher",
+      "family": "personal_antitank",
+      "source": "personal_antitank_06_recoilless_launcher.png",
+      "source_uuid": "imagegen:exec-12bee88d-abb5-46c1-8ed6-e9a2392cf7ac.png#crop-06",
+      "source_sha256": "ee85e9f1c9e78436525aa06b42b1f34276bbf1750527b0eda486def7b7da255d",
+      "source_size": [410, 335],
+      "tier": 6,
+      "kind": "compact",
+      "output": "ADISCORD_antitank_06_recoilless_launcher.dds"
+    },
+    {
+      "key": "saclos_guidance",
+      "family": "personal_antitank",
+      "source": "personal_antitank_07_saclos_guidance.png",
+      "source_uuid": "imagegen:exec-12bee88d-abb5-46c1-8ed6-e9a2392cf7ac.png#crop-07",
+      "source_sha256": "66053892a4ddcb5ac7ffe5b8f07f68f4c83eb99c5ad61708e4b857ae569d3322",
+      "source_size": [330, 340],
+      "tier": 7,
+      "kind": "compact",
+      "output": "ADISCORD_antitank_07_saclos_guidance.dds"
+    },
+    {
+      "key": "rocket_launcher",
+      "family": "personal_antitank",
+      "source": "personal_antitank_08_rocket_launcher.png",
+      "source_uuid": "imagegen:exec-12bee88d-abb5-46c1-8ed6-e9a2392cf7ac.png#crop-08",
+      "source_sha256": "c05dffe99d157e98924d492b0eaa62cf7c7a2ff41a693662cedb4c70febfba85",
+      "source_size": [426, 340],
+      "tier": 8,
+      "kind": "compact",
+      "output": "ADISCORD_antitank_08_rocket_launcher.dds"
+    },
+    {
+      "key": "top_attack_seeker",
+      "family": "personal_antitank",
+      "source": "personal_antitank_09_top_attack_seeker.png",
+      "source_uuid": "imagegen:exec-12bee88d-abb5-46c1-8ed6-e9a2392cf7ac.png#crop-09",
+      "source_sha256": "abe74835dd01738836fdbb263dff3f1525de6c18f8f731573484c266d3e6a744",
+      "source_size": [420, 374],
+      "tier": 9,
+      "kind": "compact",
+      "output": "ADISCORD_antitank_09_top_attack_seeker.dds"
+    },
+    {
+      "key": "tandem_warhead",
+      "family": "personal_antitank",
+      "source": "personal_antitank_generated_sheet.png",
+      "source_uuid": "imagegen:exec-d2783af6-bec4-4eb9-b711-89c5da67e4fe.png",
+      "source_sha256": "94a551e97b5a3aec5d38d26627d9711e054becd1be59d15fc71f6bb4cc74b6ce",
+      "source_size": [1536, 1024],
+      "tier": 10,
+      "kind": "compact",
+      "crop": [384, 682, 768, 1024],
+      "output": "ADISCORD_antitank_10_tandem_warhead.dds"
+    },
+    {
+      "key": "loitering_munition",
+      "family": "personal_antitank",
+      "source": "personal_antitank_generated_sheet.png",
+      "source_uuid": "imagegen:exec-d2783af6-bec4-4eb9-b711-89c5da67e4fe.png",
+      "source_sha256": "94a551e97b5a3aec5d38d26627d9711e054becd1be59d15fc71f6bb4cc74b6ce",
+      "source_size": [1536, 1024],
+      "tier": 11,
+      "kind": "compact",
+      "crop": [768, 682, 1152, 1024],
+      "output": "ADISCORD_antitank_11_loitering_munition.dds"
+    },
+    {
+      "key": "multispectral_targeting",
+      "family": "personal_antitank",
+      "source": "personal_antitank_12_multispectral_targeting.png",
+      "source_uuid": "imagegen:exec-12bee88d-abb5-46c1-8ed6-e9a2392cf7ac.png#crop-12",
+      "source_sha256": "c381b139f46d56a25c6fe1e017960f6ce7cb36a0f15628910f3b3359f11c6f98",
+      "source_size": [426, 389],
+      "tier": 12,
+      "kind": "compact",
+      "output": "ADISCORD_antitank_12_multispectral_targeting.dds"
+    }
+  ],
+  "alternates": [
+    {
+      "source": "alternate_early_a.png",
+      "source_uuid": "3eabf3d3-b69d-4bb9-b186-2cad9ff6b5de.png",
+      "source_sha256": "3b10a409e7303ea32334aa0a522f4255ae95fd0b1607a0173e8dca356c3ab18a"
+    },
+    {
+      "source": "alternate_early_b.png",
+      "source_uuid": "a0a12ff4-e484-4f53-97d0-b8c706feda24.png",
+      "source_sha256": "4ecb50356bbf541b7f5eae07ee2e28f60ef3cdb937b8c7655403dea056ec6fe2"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "legacy_count": 625,
-  "current_count": 368,
+  "current_count": 512,
   "migrations": {
     "ADISCORD_tech_active_hearing_protection": {
       "status": "preserved",
@@ -28,8 +28,8 @@
       "replacement": "ADISCORD_tech_adaptive_camouflage"
     },
     "ADISCORD_tech_adaptive_cycle_engines": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_loyal_wingmen"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_adaptive_cycle_engines"
     },
     "ADISCORD_tech_adaptive_deception_networks": {
       "status": "replaced",
@@ -52,8 +52,8 @@
       "replacement": "ADISCORD_tech_bounded_general_planning_cores"
     },
     "ADISCORD_tech_adaptive_laser_beam_directors": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_rail_accelerated_interceptors"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_adaptive_laser_beam_directors"
     },
     "ADISCORD_tech_adaptive_projectile_fuzing": {
       "status": "replaced",
@@ -120,16 +120,16 @@
       "replacement": "ADISCORD_tech_armed_recon_drones"
     },
     "ADISCORD_tech_armored_ammunition_tenders": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_recoil_braced_firing_sidings"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_armored_ammunition_tenders"
     },
     "ADISCORD_tech_armored_cockpits": {
       "status": "preserved",
       "replacement": "ADISCORD_tech_armored_cockpits"
     },
     "ADISCORD_tech_armored_platoon_target_handoff": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_multispectral_gunner_sights"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_armored_platoon_target_handoff"
     },
     "ADISCORD_tech_armored_rail_convoys": {
       "status": "preserved",
@@ -156,12 +156,12 @@
       "replacement": "ADISCORD_tech_assisted_projectiles"
     },
     "ADISCORD_tech_astro_inertial_navigation": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_hypersonic_glide_vehicles"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_astro_inertial_navigation"
     },
     "ADISCORD_tech_augmented_mission_rehearsal": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_robotic_breaching_companions"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_augmented_mission_rehearsal"
     },
     "ADISCORD_tech_augmented_special_forces": {
       "status": "preserved",
@@ -220,16 +220,16 @@
       "replacement": "ADISCORD_tech_assault_breaching_packages"
     },
     "ADISCORD_tech_autonomous_capital_ship_cores": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_distributed_horizon_targeting"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_autonomous_capital_ship_cores"
     },
     "ADISCORD_tech_autonomous_cargo_gliders": {
       "status": "replaced",
       "replacement": "ADISCORD_tech_restored_airlift_planning"
     },
     "ADISCORD_tech_autonomous_casualty_monitors": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_smart_tourniquet_systems"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_autonomous_casualty_monitors"
     },
     "ADISCORD_tech_autonomous_code_synthesis": {
       "status": "replaced",
@@ -264,8 +264,8 @@
       "replacement": "ADISCORD_tech_automated_civil_works"
     },
     "ADISCORD_tech_autonomous_interceptor_swarms": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_predictive_airspace_denial_grid"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_autonomous_interceptor_swarms"
     },
     "ADISCORD_tech_autonomous_intrusion_hunting": {
       "status": "replaced",
@@ -276,8 +276,8 @@
       "replacement": "ADISCORD_tech_offensive_jamming_cells"
     },
     "ADISCORD_tech_autonomous_last_mile_carriers": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_dynamic_supply_allocation"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_autonomous_last_mile_carriers"
     },
     "ADISCORD_tech_autonomous_littoral_fire_control": {
       "status": "replaced",
@@ -292,12 +292,12 @@
       "replacement": "ADISCORD_tech_autonomous_support_weapons"
     },
     "ADISCORD_tech_autonomous_obstacle_reduction": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_electromagnetic_siege_mortars"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_autonomous_obstacle_reduction"
     },
     "ADISCORD_tech_autonomous_platoon_control": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_adaptive_suspension_control"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_autonomous_platoon_control"
     },
     "ADISCORD_tech_autonomous_rail_dispatch": {
       "status": "preserved",
@@ -324,8 +324,8 @@
       "replacement": "ADISCORD_tech_teleoperated_scout_carts"
     },
     "ADISCORD_tech_autonomous_replenishment_craft": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_autonomous_escorts"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_autonomous_replenishment_craft"
     },
     "ADISCORD_tech_autonomous_route_clearance_scouts": {
       "status": "preserved",
@@ -352,16 +352,16 @@
       "replacement": "ADISCORD_tech_autonomous_support_weapons"
     },
     "ADISCORD_tech_autonomous_target_discrimination": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_autonomous_strike_wings"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_autonomous_target_discrimination"
     },
     "ADISCORD_tech_autonomous_theater_airlift": {
       "status": "replaced",
       "replacement": "ADISCORD_tech_precision_aerial_resupply"
     },
     "ADISCORD_tech_autonomous_triage_stations": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_autonomous_recovery"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_autonomous_triage_stations"
     },
     "ADISCORD_tech_autonomous_yard_shunting": {
       "status": "preserved",
@@ -400,8 +400,8 @@
       "replacement": "ADISCORD_tech_hardened_computers"
     },
     "ADISCORD_tech_biometric_trigger_locks": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_networked_weapon_sights"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_biometric_trigger_locks"
     },
     "ADISCORD_tech_black_grid_protocols": {
       "status": "preserved",
@@ -420,12 +420,12 @@
       "replacement": "ADISCORD_tech_hardened_computers"
     },
     "ADISCORD_tech_camouflage_defeat_radar": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_guided_hypervelocity_penetrators"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_camouflage_defeat_radar"
     },
     "ADISCORD_tech_capital_ship_integrated_electric_drive": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_modular_vertical_launch_cells"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_capital_ship_integrated_electric_drive"
     },
     "ADISCORD_tech_carbon_feedstock_cracking": {
       "status": "preserved",
@@ -444,8 +444,8 @@
       "replacement": "ADISCORD_tech_solid_state_grid_breakers"
     },
     "ADISCORD_tech_ceramic_trauma_inserts": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_battlefield_medical_drones"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_ceramic_trauma_inserts"
     },
     "ADISCORD_tech_civic_digital_twin": {
       "status": "replaced",
@@ -461,7 +461,7 @@
     },
     "ADISCORD_tech_closed_loop_combat_life_support": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_self_sealing_combat_skins"
+      "replacement": "ADISCORD_tech_adaptive_radiation_shielding"
     },
     "ADISCORD_tech_closed_loop_field_supply": {
       "status": "preserved",
@@ -496,8 +496,8 @@
       "replacement": "ADISCORD_tech_coil_at_systems"
     },
     "ADISCORD_tech_cold_chain_field_containers": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_automated_depot_manifests"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_cold_chain_field_containers"
     },
     "ADISCORD_tech_collaborative_industrial_swarms": {
       "status": "replaced",
@@ -512,16 +512,16 @@
       "replacement": "ADISCORD_tech_combat_recon_drones"
     },
     "ADISCORD_tech_compact_turbine_powerpacks": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_remote_repair_sections"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_compact_turbine_powerpacks"
     },
     "ADISCORD_tech_composite_armor_arrays": {
       "status": "preserved",
       "replacement": "ADISCORD_tech_composite_armor_arrays"
     },
     "ADISCORD_tech_composite_armor_belts": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_networked_task_groups"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_composite_armor_belts"
     },
     "ADISCORD_tech_composite_protection_kits": {
       "status": "preserved",
@@ -532,16 +532,16 @@
       "replacement": "ADISCORD_tech_composite_wing_spars"
     },
     "ADISCORD_tech_conformal_flank_sonars": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_wake_homing_torpedo_seekers"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_conformal_flank_sonars"
     },
     "ADISCORD_tech_containerized_escort_missile_cells": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_towed_array_sonar"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_containerized_escort_missile_cells"
     },
     "ADISCORD_tech_contested_zone_navigation": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_autonomous_scout_microdrones"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_contested_zone_navigation"
     },
     "ADISCORD_tech_continental_fire_control_relays": {
       "status": "preserved",
@@ -552,8 +552,8 @@
       "replacement": "ADISCORD_tech_continental_load_balancing"
     },
     "ADISCORD_tech_convoy_radio_beacons": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_forward_supply_hubs"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_convoy_radio_beacons"
     },
     "ADISCORD_tech_convoy_routing": {
       "status": "preserved",
@@ -564,8 +564,8 @@
       "replacement": "ADISCORD_tech_cooperative_close_air_control_links"
     },
     "ADISCORD_tech_cooperative_convoy_tracking": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_unmanned_mine_countermeasure_boats"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_cooperative_convoy_tracking"
     },
     "ADISCORD_tech_cooperative_engagement_links": {
       "status": "preserved",
@@ -585,11 +585,11 @@
     },
     "ADISCORD_tech_cooperative_target_handoff": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_remote_weapon_tripods"
+      "replacement": "ADISCORD_tech_loitering_munition_teams"
     },
     "ADISCORD_tech_counter_battery_relocation_tables": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_rail_repair_corps"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_counter_battery_relocation_tables"
     },
     "ADISCORD_tech_counter_uas_microwave_emitters": {
       "status": "preserved",
@@ -648,8 +648,8 @@
       "replacement": "ADISCORD_tech_lights_out_microfactories"
     },
     "ADISCORD_tech_deployable_microdrone_racks": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_active_scouting_suites"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_deployable_microdrone_racks"
     },
     "ADISCORD_tech_digital_fire_control_buses": {
       "status": "preserved",
@@ -664,8 +664,8 @@
       "replacement": "ADISCORD_tech_digital_tooling_libraries"
     },
     "ADISCORD_tech_digital_warhead_buses": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_orbital_tracking_relics"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_digital_warhead_buses"
     },
     "ADISCORD_tech_directed_energy_air_defense": {
       "status": "preserved",
@@ -676,8 +676,8 @@
       "replacement": "ADISCORD_tech_directed_energy_broadside_defense"
     },
     "ADISCORD_tech_directed_energy_countermeasures": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_electromagnetic_cannon_pods"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_directed_energy_countermeasures"
     },
     "ADISCORD_tech_directed_energy_defensive_suites": {
       "status": "preserved",
@@ -700,8 +700,8 @@
       "replacement": "ADISCORD_tech_distributed_abyssal_comm_relays"
     },
     "ADISCORD_tech_distributed_acoustic_pickets": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_directed_energy_point_defense"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_distributed_acoustic_pickets"
     },
     "ADISCORD_tech_distributed_ammunition_carriers": {
       "status": "replaced",
@@ -728,8 +728,8 @@
       "replacement": "ADISCORD_tech_distributed_counterbattery_mesh"
     },
     "ADISCORD_tech_distributed_crew_stations": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_hard_kill_protection_arrays"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_distributed_crew_stations"
     },
     "ADISCORD_tech_distributed_emergency_stockpiles": {
       "status": "replaced",
@@ -744,8 +744,8 @@
       "replacement": "ADISCORD_tech_distributed_horizon_targeting"
     },
     "ADISCORD_tech_distributed_hull_power_buses": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_remote_breaching_manipulators"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_distributed_hull_power_buses"
     },
     "ADISCORD_tech_distributed_interceptor_swarms": {
       "status": "preserved",
@@ -756,12 +756,12 @@
       "replacement": "ADISCORD_tech_distributed_manufacturing"
     },
     "ADISCORD_tech_distributed_microdepots": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_route_optimization_ai"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_distributed_microdepots"
     },
     "ADISCORD_tech_distributed_missile_ambush_nodes": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_loitering_anti_armor_munitions"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_distributed_missile_ambush_nodes"
     },
     "ADISCORD_tech_distributed_operational_caches": {
       "status": "replaced",
@@ -820,8 +820,8 @@
       "replacement": "ADISCORD_tech_drone_spotted_batteries"
     },
     "ADISCORD_tech_drone_track_survey": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_distributed_rail_traffic_control"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_drone_track_survey"
     },
     "ADISCORD_tech_dynamic_ration_credit": {
       "status": "replaced",
@@ -896,16 +896,16 @@
       "replacement": "ADISCORD_tech_escort_datalinks"
     },
     "ADISCORD_tech_escort_integrated_electric_propulsion": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_drone_pickets"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_escort_integrated_electric_propulsion"
     },
     "ADISCORD_tech_evacuation_route_beacons": {
       "status": "replaced",
       "replacement": "ADISCORD_tech_prefabricated_districts"
     },
     "ADISCORD_tech_exoatmospheric_boost_stages": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_autonomous_dogfight_controller"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_exoatmospheric_boost_stages"
     },
     "ADISCORD_tech_exoskeleton_load_frames": {
       "status": "preserved",
@@ -916,8 +916,8 @@
       "replacement": "ADISCORD_tech_adaptive_camouflage"
     },
     "ADISCORD_tech_expendable_sensor_carriers": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_cooperative_mapping_relays"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_expendable_sensor_carriers"
     },
     "ADISCORD_tech_explainable_command_models": {
       "status": "replaced",
@@ -952,8 +952,8 @@
       "replacement": "ADISCORD_tech_fieldcraft_manuals"
     },
     "ADISCORD_tech_fighter_infrared_search_track": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_helmet_cued_targeting"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_fighter_infrared_search_track"
     },
     "ADISCORD_tech_fiscal_administration_1": {
       "status": "replaced",
@@ -1020,8 +1020,8 @@
       "replacement": "ADISCORD_tech_hardened_logistics_nodes"
     },
     "ADISCORD_tech_hardened_mobile_launchers": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_terrain_contour_matching"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_hardened_mobile_launchers"
     },
     "ADISCORD_tech_heavy_composite_cores": {
       "status": "preserved",
@@ -1080,12 +1080,12 @@
       "replacement": "ADISCORD_tech_hybrid_kinetic_energy_carbines"
     },
     "ADISCORD_tech_hybrid_siege_powerplants": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_autonomous_breakthrough_platforms"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_hybrid_siege_powerplants"
     },
     "ADISCORD_tech_hybrid_silent_running": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_drone_recon_swarms"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_hybrid_silent_running"
     },
     "ADISCORD_tech_hydropneumatic_load_equalizers": {
       "status": "preserved",
@@ -1096,8 +1096,8 @@
       "replacement": "ADISCORD_tech_hypersonic_glide_vehicles"
     },
     "ADISCORD_tech_hypersonic_shell_telemetry": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_continental_fire_control_relays"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_hypersonic_shell_telemetry"
     },
     "ADISCORD_tech_hypervelocity_at_networks": {
       "status": "preserved",
@@ -1124,8 +1124,8 @@
       "replacement": "ADISCORD_tech_inertial_guidance"
     },
     "ADISCORD_tech_infrared_search_track_arrays": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_solid_state_air_search_radar"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_infrared_search_track_arrays"
     },
     "ADISCORD_tech_integrated_engineer_command": {
       "status": "preserved",
@@ -1140,8 +1140,8 @@
       "replacement": "ADISCORD_tech_integrated_short_range_missile_cells"
     },
     "ADISCORD_tech_integrated_target_designation": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_modular_rifle_kits"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_integrated_target_designation"
     },
     "ADISCORD_tech_interchangeable_components": {
       "status": "preserved",
@@ -1196,8 +1196,8 @@
       "replacement": "ADISCORD_tech_loitering_artillery_observers"
     },
     "ADISCORD_tech_loitering_munition_teams": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_networked_command_terminals"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_loitering_munition_teams"
     },
     "ADISCORD_tech_loitering_strike_drones": {
       "status": "preserved",
@@ -1236,16 +1236,16 @@
       "replacement": "ADISCORD_tech_autonomous_factory_cells"
     },
     "ADISCORD_tech_magnetohydrodynamic_silent_drive": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_autonomous_submarines"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_magnetohydrodynamic_silent_drive"
     },
     "ADISCORD_tech_man_portable_sensor_masts": {
       "status": "preserved",
       "replacement": "ADISCORD_tech_man_portable_sensor_masts"
     },
     "ADISCORD_tech_maneuvering_reentry_vehicles": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_orbital_relay_targeting"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_maneuvering_reentry_vehicles"
     },
     "ADISCORD_tech_memetic_security_protocols": {
       "status": "preserved",
@@ -1268,8 +1268,8 @@
       "replacement": "ADISCORD_tech_microreactor_blocks"
     },
     "ADISCORD_tech_millimeter_wave_ground_radar": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_vtol_assault_frames"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_millimeter_wave_ground_radar"
     },
     "ADISCORD_tech_missile_batteries": {
       "status": "preserved",
@@ -1280,16 +1280,16 @@
       "replacement": "ADISCORD_tech_battle_damage_survey_teams"
     },
     "ADISCORD_tech_modular_airframe_armor_pods": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_drone_air_wings"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_modular_airframe_armor_pods"
     },
     "ADISCORD_tech_modular_bridge_launch_kits": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_casualty_evacuation"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_modular_bridge_launch_kits"
     },
     "ADISCORD_tech_modular_ceramic_armor_blocks": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_hard_kill_protection_arrays"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_modular_ceramic_armor_blocks"
     },
     "ADISCORD_tech_modular_escort_combat_systems": {
       "status": "preserved",
@@ -1308,16 +1308,16 @@
       "replacement": "ADISCORD_tech_predictive_maintenance"
     },
     "ADISCORD_tech_modular_fuel_bladders": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_forward_supply_hubs"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_modular_fuel_bladders"
     },
     "ADISCORD_tech_modular_gun_carriages": {
       "status": "preserved",
       "replacement": "ADISCORD_tech_modular_gun_carriages"
     },
     "ADISCORD_tech_modular_heavy_armor_cassettes": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_spall_isolated_crew_citadels"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_modular_heavy_armor_cassettes"
     },
     "ADISCORD_tech_modular_hull_standards": {
       "status": "preserved",
@@ -1328,8 +1328,8 @@
       "replacement": "ADISCORD_tech_modular_landing_causeways"
     },
     "ADISCORD_tech_modular_propellant_charges": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_inertial_battery_survey"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_modular_propellant_charges"
     },
     "ADISCORD_tech_modular_rebuilding": {
       "status": "preserved",
@@ -1348,8 +1348,8 @@
       "replacement": "ADISCORD_tech_salvage_standards"
     },
     "ADISCORD_tech_modular_sleeper_casting": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_railway_gun_reactivation"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_modular_sleeper_casting"
     },
     "ADISCORD_tech_modular_support_kits": {
       "status": "preserved",
@@ -1368,16 +1368,16 @@
       "replacement": "ADISCORD_tech_superconducting_power_busbars"
     },
     "ADISCORD_tech_multispectral_armor_classifiers": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_top_attack_munitions"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_multispectral_armor_classifiers"
     },
     "ADISCORD_tech_multispectral_concealment_discipline": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_vertical_assault_training"
+      "replacement": "ADISCORD_tech_high_altitude_insertion_capsules"
     },
     "ADISCORD_tech_multispectral_drone_classifiers": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_networked_air_defense"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_multispectral_drone_classifiers"
     },
     "ADISCORD_tech_multispectral_gunner_sights": {
       "status": "preserved",
@@ -1400,8 +1400,8 @@
       "replacement": "ADISCORD_tech_drone_construction_cartography"
     },
     "ADISCORD_tech_nanofiber_wound_dressings": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_adaptive_radiation_shielding"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_nanofiber_wound_dressings"
     },
     "ADISCORD_tech_neighborhood_microgrids": {
       "status": "replaced",
@@ -1472,8 +1472,8 @@
       "replacement": "ADISCORD_tech_over_the_horizon_fire_control"
     },
     "ADISCORD_tech_overflight_attack_sensors": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_imaging_infrared_seekers"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_overflight_attack_sensors"
     },
     "ADISCORD_tech_pack_transport": {
       "status": "preserved",
@@ -1512,8 +1512,8 @@
       "replacement": "ADISCORD_tech_phase_synchronized_substations"
     },
     "ADISCORD_tech_phased_array_mast_complexes": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_missile_batteries"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_phased_array_mast_complexes"
     },
     "ADISCORD_tech_photonic_compute_arrays": {
       "status": "replaced",
@@ -1580,8 +1580,8 @@
       "replacement": "ADISCORD_tech_predictive_airspace_denial_grid"
     },
     "ADISCORD_tech_predictive_armor_route_interdiction": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_autonomous_anti_armor_sentries"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_predictive_armor_route_interdiction"
     },
     "ADISCORD_tech_predictive_blood_logistics": {
       "status": "replaced",
@@ -1636,28 +1636,28 @@
       "replacement": "ADISCORD_tech_operational_planning_exercises"
     },
     "ADISCORD_tech_predictive_wheelset_maintenance": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_distributed_rail_traffic_control"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_predictive_wheelset_maintenance"
     },
     "ADISCORD_tech_prefabricated_districts": {
       "status": "preserved",
       "replacement": "ADISCORD_tech_prefabricated_districts"
     },
     "ADISCORD_tech_pressure_tolerant_lithium_cells": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_seabed_sensor_webs"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_pressure_tolerant_lithium_cells"
     },
     "ADISCORD_tech_programmable_airburst_shells": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_solid_state_air_search_radar"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_programmable_airburst_shells"
     },
     "ADISCORD_tech_programmable_ammunition": {
       "status": "preserved",
       "replacement": "ADISCORD_tech_programmable_ammunition"
     },
     "ADISCORD_tech_programmable_grenade_fuzes": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_field_ew_units"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_programmable_grenade_fuzes"
     },
     "ADISCORD_tech_programmable_procurement_escrow": {
       "status": "replaced",
@@ -1676,16 +1676,16 @@
       "replacement": "ADISCORD_tech_pulse_doppler_radar"
     },
     "ADISCORD_tech_pumpjet_propulsors": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_air_independent_cells"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_pumpjet_propulsors"
     },
     "ADISCORD_tech_quantum_command_authentication": {
       "status": "replaced",
       "replacement": "ADISCORD_tech_self_healing_tactical_networks"
     },
     "ADISCORD_tech_quantum_magnetometer_arrays": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_supercavitating_interceptor_torpedoes"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_quantum_magnetometer_arrays"
     },
     "ADISCORD_tech_quiet_propulsion": {
       "status": "preserved",
@@ -1720,8 +1720,8 @@
       "replacement": "ADISCORD_tech_rail_accelerated_interceptors"
     },
     "ADISCORD_tech_rail_assisted_aa": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_cooperative_engagement_links"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_rail_assisted_aa"
     },
     "ADISCORD_tech_rail_repair_corps": {
       "status": "preserved",
@@ -1757,7 +1757,7 @@
     },
     "ADISCORD_tech_reactive_camouflage_textiles": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_smart_tourniquet_systems"
+      "replacement": "ADISCORD_tech_autonomous_casualty_monitors"
     },
     "ADISCORD_tech_reactor_safety_protocols": {
       "status": "preserved",
@@ -1845,15 +1845,15 @@
     },
     "ADISCORD_tech_remote_beacon_extraction": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_high_altitude_insertion_capsules"
+      "replacement": "ADISCORD_tech_deep_recon_cells"
     },
     "ADISCORD_tech_remote_breaching_manipulators": {
       "status": "preserved",
       "replacement": "ADISCORD_tech_remote_breaching_manipulators"
     },
     "ADISCORD_tech_remote_maintenance_telemetry": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_remote_repair_teams"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_remote_maintenance_telemetry"
     },
     "ADISCORD_tech_remote_repair_sections": {
       "status": "preserved",
@@ -1908,16 +1908,16 @@
       "replacement": "ADISCORD_tech_restored_truck_fleets"
     },
     "ADISCORD_tech_retractable_sensor_masts": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_drone_recon_swarms"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_retractable_sensor_masts"
     },
     "ADISCORD_tech_reusable_boost_stages": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_orbital_relay_targeting"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_reusable_boost_stages"
     },
     "ADISCORD_tech_ring_laser_gyroscopes": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_strategic_rocket_architecture"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_ring_laser_gyroscopes"
     },
     "ADISCORD_tech_robotic_breaching_companions": {
       "status": "preserved",
@@ -1936,20 +1936,20 @@
       "replacement": "ADISCORD_tech_prefabricated_districts"
     },
     "ADISCORD_tech_robotic_heavy_weapon_teams": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_swarm_coordinated_fire_support"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_robotic_heavy_weapon_teams"
     },
     "ADISCORD_tech_robotic_obstacle_clearance": {
       "status": "replaced",
       "replacement": "ADISCORD_tech_assault_breaching_packages"
     },
     "ADISCORD_tech_robotic_recovery_booms": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_heavy_platform_cores"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_robotic_recovery_booms"
     },
     "ADISCORD_tech_robotic_recovery_winches": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_remote_repair_teams"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_robotic_recovery_winches"
     },
     "ADISCORD_tech_robotic_shell_handling": {
       "status": "preserved",
@@ -2000,8 +2000,8 @@
       "replacement": "ADISCORD_tech_seabed_sensor_webs"
     },
     "ADISCORD_tech_seabed_terrain_navigation": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_fiber_optic_torpedo_control"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_seabed_terrain_navigation"
     },
     "ADISCORD_tech_sealed_combat_suits": {
       "status": "preserved",
@@ -2012,16 +2012,16 @@
       "replacement": "ADISCORD_tech_sealed_electric_scout_drives"
     },
     "ADISCORD_tech_sealed_receiver_assemblies": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_smart_optics"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_sealed_receiver_assemblies"
     },
     "ADISCORD_tech_sealed_recovery_wards": {
       "status": "replaced",
       "replacement": "ADISCORD_tech_forward_surgical_cells"
     },
     "ADISCORD_tech_sealed_respirator_interfaces": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_active_hearing_protection"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_sealed_respirator_interfaces"
     },
     "ADISCORD_tech_seismic_retrofit_frames": {
       "status": "replaced",
@@ -2032,16 +2032,16 @@
       "replacement": "ADISCORD_tech_autonomous_factory_cells"
     },
     "ADISCORD_tech_self_deploying_field_workshops": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_predictive_parts_prepositioning"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_self_deploying_field_workshops"
     },
     "ADISCORD_tech_self_deploying_floating_depots": {
       "status": "replaced",
       "replacement": "ADISCORD_tech_modular_landing_causeways"
     },
     "ADISCORD_tech_self_healing_armor_matrices": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_adaptive_suspension_control"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_self_healing_armor_matrices"
     },
     "ADISCORD_tech_self_healing_civil_lifelines": {
       "status": "replaced",
@@ -2052,16 +2052,16 @@
       "replacement": "ADISCORD_tech_self_healing_tactical_networks"
     },
     "ADISCORD_tech_self_organizing_scout_formations": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_autonomous_route_clearance_scouts"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_self_organizing_scout_formations"
     },
     "ADISCORD_tech_self_recovering_combat_vehicles": {
       "status": "replaced",
       "replacement": "ADISCORD_tech_armed_recon_drones"
     },
     "ADISCORD_tech_self_repairing_escort_hulls": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_predictive_convoy_defense_network"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_self_repairing_escort_hulls"
     },
     "ADISCORD_tech_self_repairing_field_depots": {
       "status": "replaced",
@@ -2072,16 +2072,16 @@
       "replacement": "ADISCORD_tech_self_repairing_industrial_swarms"
     },
     "ADISCORD_tech_self_repairing_pressure_hulls": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_distributed_abyssal_comm_relays"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_self_repairing_pressure_hulls"
     },
     "ADISCORD_tech_self_repairing_track_assemblies": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_networked_siege_coordination_cores"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_self_repairing_track_assemblies"
     },
     "ADISCORD_tech_self_routing_logistics_mesh": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_closed_loop_field_supply"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_self_routing_logistics_mesh"
     },
     "ADISCORD_tech_self_sealing_combat_skins": {
       "status": "preserved",
@@ -2144,12 +2144,12 @@
       "replacement": "ADISCORD_tech_smart_optics"
     },
     "ADISCORD_tech_smart_railbed_repair_swarms": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_active_suspension_gun_carriages"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_smart_railbed_repair_swarms"
     },
     "ADISCORD_tech_smart_recoil_compensators": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_electrothermal_ignition"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_smart_recoil_compensators"
     },
     "ADISCORD_tech_smart_tourniquet_systems": {
       "status": "preserved",
@@ -2200,8 +2200,8 @@
       "replacement": "ADISCORD_tech_stabilized_autocannon_mounts"
     },
     "ADISCORD_tech_stabilized_missile_launchers": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_scrap_at_launchers"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_stabilized_missile_launchers"
     },
     "ADISCORD_tech_stabilized_naval_gun_directors": {
       "status": "preserved",
@@ -2248,8 +2248,8 @@
       "replacement": "ADISCORD_tech_recovered_semiconductors"
     },
     "ADISCORD_tech_sterilized_casualty_modules": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_portable_diagnostic_benches"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_sterilized_casualty_modules"
     },
     "ADISCORD_tech_storable_liquid_propellants": {
       "status": "preserved",
@@ -2312,12 +2312,12 @@
       "replacement": "ADISCORD_tech_superconducting_power_busbars"
     },
     "ADISCORD_tech_superconducting_railgun_turrets": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_drone_carrier_deck_systems"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_superconducting_railgun_turrets"
     },
     "ADISCORD_tech_supercruise_turbofans": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_low_observable_inlet_geometry"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_supercruise_turbofans"
     },
     "ADISCORD_tech_swarm_coordinated_fire_support": {
       "status": "preserved",
@@ -2356,24 +2356,24 @@
       "replacement": "ADISCORD_tech_teleoperated_scout_carts"
     },
     "ADISCORD_tech_terrain_adaptive_cargo_carriers": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_predictive_convoy_scheduling"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_terrain_adaptive_cargo_carriers"
     },
     "ADISCORD_tech_terrain_contour_matching": {
       "status": "preserved",
       "replacement": "ADISCORD_tech_terrain_contour_matching"
     },
     "ADISCORD_tech_terrain_following_attack_controls": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_precision_glide_bomb_kits"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_terrain_following_attack_controls"
     },
     "ADISCORD_tech_terrain_following_autopilots": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_signature_management_skins"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_terrain_following_autopilots"
     },
     "ADISCORD_tech_terrain_mapping_suspension": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_multispectral_recon_suites"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_terrain_mapping_suspension"
     },
     "ADISCORD_tech_theater_logistics_wargames": {
       "status": "replaced",
@@ -2381,15 +2381,15 @@
     },
     "ADISCORD_tech_thermal_signature_liners": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_powered_load_bearing_harnesses"
+      "replacement": "ADISCORD_tech_active_hearing_protection"
     },
     "ADISCORD_tech_thrust_vectoring": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_low_observable_inlet_geometry"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_thrust_vectoring"
     },
     "ADISCORD_tech_tiltrotor_assault_propulsion": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_loitering_strike_drones"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_tiltrotor_assault_propulsion"
     },
     "ADISCORD_tech_top_attack_munitions": {
       "status": "preserved",
@@ -2412,8 +2412,8 @@
       "replacement": "ADISCORD_tech_ultrasonic_rail_inspection"
     },
     "ADISCORD_tech_uncrewed_howitzer_sections": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_electromagnetic_recoil_brakes"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_uncrewed_howitzer_sections"
     },
     "ADISCORD_tech_underwater_vehicle_deployment_bays": {
       "status": "preserved",
@@ -2424,12 +2424,12 @@
       "replacement": "ADISCORD_tech_hardened_computers"
     },
     "ADISCORD_tech_unmanned_damage_control_decks": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_long_range_railgun_fire_control"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_unmanned_damage_control_decks"
     },
     "ADISCORD_tech_unmanned_forward_air_controllers": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_persistent_sensor_strike_loops"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_unmanned_forward_air_controllers"
     },
     "ADISCORD_tech_unmanned_mine_countermeasure_boats": {
       "status": "preserved",
@@ -2440,16 +2440,16 @@
       "replacement": "ADISCORD_tech_unmanned_recon_vehicles"
     },
     "ADISCORD_tech_unmanned_recovery_convoys": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_regenerative_support_depots"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_unmanned_recovery_convoys"
     },
     "ADISCORD_tech_unmanned_scout_turrets": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_unmanned_recon_vehicles"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_unmanned_scout_turrets"
     },
     "ADISCORD_tech_unmanned_turret_capsules": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_multispectral_gunner_sights"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_unmanned_turret_capsules"
     },
     "ADISCORD_tech_urban_breaching": {
       "status": "preserved",
@@ -2468,20 +2468,20 @@
       "replacement": "ADISCORD_tech_reconstruction_bureaus"
     },
     "ADISCORD_tech_urban_vertical_access_rigs": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_combat_recon_drones"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_urban_vertical_access_rigs"
     },
     "ADISCORD_tech_vacuum_sealed_logic_restoration": {
       "status": "replaced",
       "replacement": "ADISCORD_tech_hardened_computers"
     },
     "ADISCORD_tech_variable_depth_sonar": {
-      "status": "replaced",
-      "replacement": "ADISCORD_tech_escort_datalinks"
+      "status": "preserved",
+      "replacement": "ADISCORD_tech_variable_depth_sonar"
     },
     "ADISCORD_tech_variable_velocity_ammunition": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_modular_rifle_kits"
+      "replacement": "ADISCORD_tech_biometric_trigger_locks"
     },
     "ADISCORD_tech_vertical_assault_training": {
       "status": "preserved",

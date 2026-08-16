@@ -1,0 +1,26 @@
+characters = {
+	IIA_Artem_Severin = {
+		name = IIA_Artem_Severin
+		portraits = {
+			civilian = { large = GFX_portrait_IIA_Artem_Severin }
+			army = {
+				large = GFX_portrait_IIA_Artem_Severin
+				small = GFX_Portrait_Europe_Generic_land_2_small
+			}
+		}
+		country_leader = {
+			ideology = humanism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = IIA_Artem_Severin_desc
+		}
+		corps_commander = {
+			skill = 2
+			attack_skill = 2
+			defense_skill = 1
+			planning_skill = 2
+			logistics_skill = 1
+			legacy_id = 2159001
+		}
+	}
+}

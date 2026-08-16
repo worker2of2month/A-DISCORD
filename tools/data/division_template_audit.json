@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "inventory_baseline": {
-    "candidate_active_oobs": 98,
-    "candidate_oob_templates": 161,
-    "candidate_script_templates": 4,
-    "candidate_oob_references": 374,
+    "candidate_active_oobs": 99,
+    "candidate_oob_templates": 162,
+    "candidate_script_templates": 6,
+    "candidate_oob_references": 375,
     "candidate_create_unit_references": 33,
     "candidate_technical_references": 10,
     "optional_protected_oob_templates": 6
@@ -3211,6 +3211,51 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_irt_vorkerland_collapse_irt_collapse_militia"
+      }
+    },
+    {
+      "key": "oob_iia_island_garrison",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/IIA.txt",
+        "owner": "IIA"
+      },
+      "technical_name": "Island Garrison",
+      "display_name": "Island Garrison",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_militia",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 1,
+          "y": 0
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 40.75,
+        "manpower": 3000.0,
+        "equipment": {
+          "infantry_equipment": 240.0
+        },
+        "supply": 0.12
+      },
+      "equipment_availability": {
+        "infantry_equipment": true
+      },
+      "ai_role": "territorial",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_iia_island_garrison"
       }
     },
     {
@@ -7474,32 +7519,32 @@
           "y": 3
         },
         {
-          "type": "infantry",
+          "type": "ADISCORD_mechanized_infantry",
           "x": 1,
           "y": 0
         },
         {
-          "type": "infantry",
+          "type": "ADISCORD_mechanized_infantry",
           "x": 1,
           "y": 1
         },
         {
-          "type": "infantry",
+          "type": "ADISCORD_mechanized_infantry",
           "x": 1,
           "y": 2
         },
         {
-          "type": "infantry",
+          "type": "ADISCORD_mechanized_infantry",
           "x": 2,
           "y": 0
         },
         {
-          "type": "infantry",
+          "type": "ADISCORD_mechanized_infantry",
           "x": 2,
           "y": 1
         },
         {
-          "type": "infantry",
+          "type": "ADISCORD_mechanized_infantry",
           "x": 2,
           "y": 2
         }
@@ -7527,18 +7572,20 @@
         }
       ],
       "computed": {
-        "organization": 32.464286,
+        "organization": 30.321429,
         "manpower": 8950.0,
         "equipment": {
+          "ADISCORD_armored_carrier_archetype": 240.0,
           "ADISCORD_combat_platform_archetype": 160.0,
           "ADISCORD_squad_weapons_equipment": 48.0,
           "artillery_equipment": 12.0,
           "infantry_equipment": 610.0,
           "support_equipment": 80.0
         },
-        "supply": 1.47
+        "supply": 2.07
       },
       "equipment_availability": {
+        "ADISCORD_armored_carrier_archetype": true,
         "ADISCORD_combat_platform_archetype": true,
         "ADISCORD_squad_weapons_equipment": true,
         "artillery_equipment": true,
@@ -7790,32 +7837,32 @@
           "y": 3
         },
         {
-          "type": "infantry",
+          "type": "ADISCORD_mechanized_infantry",
           "x": 1,
           "y": 0
         },
         {
-          "type": "infantry",
+          "type": "ADISCORD_mechanized_infantry",
           "x": 1,
           "y": 1
         },
         {
-          "type": "infantry",
+          "type": "ADISCORD_mechanized_infantry",
           "x": 1,
           "y": 2
         },
         {
-          "type": "infantry",
+          "type": "ADISCORD_mechanized_infantry",
           "x": 2,
           "y": 0
         },
         {
-          "type": "infantry",
+          "type": "ADISCORD_mechanized_infantry",
           "x": 2,
           "y": 1
         },
         {
-          "type": "infantry",
+          "type": "ADISCORD_mechanized_infantry",
           "x": 2,
           "y": 2
         }
@@ -7843,18 +7890,20 @@
         }
       ],
       "computed": {
-        "organization": 32.464286,
+        "organization": 30.321429,
         "manpower": 8950.0,
         "equipment": {
+          "ADISCORD_armored_carrier_archetype": 240.0,
           "ADISCORD_combat_platform_archetype": 160.0,
           "ADISCORD_squad_weapons_equipment": 48.0,
           "artillery_equipment": 12.0,
           "infantry_equipment": 610.0,
           "support_equipment": 80.0
         },
-        "supply": 1.47
+        "supply": 2.07
       },
       "equipment_availability": {
+        "ADISCORD_armored_carrier_archetype": true,
         "ADISCORD_combat_platform_archetype": true,
         "ADISCORD_squad_weapons_equipment": true,
         "artillery_equipment": true,
@@ -9014,32 +9063,32 @@
           "y": 3
         },
         {
-          "type": "infantry",
+          "type": "ADISCORD_mechanized_infantry",
           "x": 1,
           "y": 0
         },
         {
-          "type": "infantry",
+          "type": "ADISCORD_mechanized_infantry",
           "x": 1,
           "y": 1
         },
         {
-          "type": "infantry",
+          "type": "ADISCORD_mechanized_infantry",
           "x": 1,
           "y": 2
         },
         {
-          "type": "infantry",
+          "type": "ADISCORD_mechanized_infantry",
           "x": 2,
           "y": 0
         },
         {
-          "type": "infantry",
+          "type": "ADISCORD_mechanized_infantry",
           "x": 2,
           "y": 1
         },
         {
-          "type": "infantry",
+          "type": "ADISCORD_mechanized_infantry",
           "x": 2,
           "y": 2
         }
@@ -9067,18 +9116,20 @@
         }
       ],
       "computed": {
-        "organization": 32.464286,
+        "organization": 30.321429,
         "manpower": 8950.0,
         "equipment": {
+          "ADISCORD_armored_carrier_archetype": 240.0,
           "ADISCORD_combat_platform_archetype": 160.0,
           "ADISCORD_squad_weapons_equipment": 48.0,
           "artillery_equipment": 12.0,
           "infantry_equipment": 610.0,
           "support_equipment": 80.0
         },
-        "supply": 1.47
+        "supply": 2.07
       },
       "equipment_availability": {
+        "ADISCORD_armored_carrier_archetype": true,
         "ADISCORD_combat_platform_archetype": true,
         "ADISCORD_squad_weapons_equipment": true,
         "artillery_equipment": true,
@@ -9861,6 +9912,196 @@
       "replacement_path": {
         "kind": "retain",
         "target": "script_adiscord_vorkerland_collapse_effects_worker_home_guard"
+      }
+    },
+    {
+      "key": "script_adiscord_vorkerland_collapse_effects_worker_rifle_division",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Worker Rifle Division",
+      "display_name": "Worker Rifle Division",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 3
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 2
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 3
+        },
+        {
+          "type": "ADISCORD_line_artillery",
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 50.111111,
+        "manpower": 8500.0,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 64.0,
+          "artillery_equipment": 24.0,
+          "infantry_equipment": 800.0
+        },
+        "supply": 0.72
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_adiscord_vorkerland_collapse_effects_worker_rifle_division"
+      }
+    },
+    {
+      "key": "script_adiscord_vorkerland_collapse_effects_workerland_mobile_group",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Workerland Mobile Group",
+      "display_name": "Workerland Mobile Group",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_combat_platform",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_combat_platform",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_combat_platform",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_combat_platform",
+          "x": 0,
+          "y": 3
+        },
+        {
+          "type": "ADISCORD_mechanized_infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_mechanized_infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_mechanized_infantry",
+          "x": 1,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_mechanized_infantry",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_mechanized_infantry",
+          "x": 2,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_mechanized_infantry",
+          "x": 2,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "artillery",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "maintenance_company",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "signal_company",
+          "x": 0,
+          "y": 3
+        }
+      ],
+      "computed": {
+        "organization": 30.321429,
+        "manpower": 8950.0,
+        "equipment": {
+          "ADISCORD_armored_carrier_archetype": 240.0,
+          "ADISCORD_combat_platform_archetype": 160.0,
+          "ADISCORD_squad_weapons_equipment": 48.0,
+          "artillery_equipment": 12.0,
+          "infantry_equipment": 610.0,
+          "support_equipment": 80.0
+        },
+        "supply": 2.07
+      },
+      "equipment_availability": {
+        "ADISCORD_armored_carrier_archetype": true,
+        "ADISCORD_combat_platform_archetype": true,
+        "ADISCORD_squad_weapons_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_adiscord_vorkerland_collapse_effects_workerland_mobile_group"
       }
     },
     {
@@ -10838,6 +11079,16 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
+      "count": 1
+    },
+    {
+      "key": "iia_oob_island_garrison_xp_0_12_eq_0_72",
+      "path": "history/units/IIA.txt",
+      "kind": "oob",
+      "technical_name": "Island Garrison",
+      "legacy_names": [],
+      "start_experience_factor": 0.12,
+      "start_equipment_factor": 0.72,
       "count": 1
     },
     {

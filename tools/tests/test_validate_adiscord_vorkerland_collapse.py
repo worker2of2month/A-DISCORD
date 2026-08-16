@@ -7,6 +7,7 @@ from pathlib import Path
 
 from PIL import Image
 
+from tools.validators import validate_adiscord_vorkerland_collapse as collapse_validator
 from tools.validators.validate_adiscord_vorkerland_collapse import (
     CENTRAL_MINOR_TARGETS,
     SECTIONS,
@@ -57,6 +58,64 @@ def event_block(text: str, event_id: str, event_type: str = "country_event") -> 
 
 
 class VorkerlandCollapseValidatorTests(unittest.TestCase):
+    @staticmethod
+    def _claimant_pp_sources() -> tuple[str, str]:
+        default_ai = """
+ADISCORD_default_pp_reserve = {
+    ai_strategy = { type = pp_spend_amount id = idea value = 100 }
+    ai_strategy = { type = pp_spend_amount id = decision value = 100 }
+}
+"""
+        collapse_ai = """
+ADISCORD_vorkerland_claimant_decision_spending = {
+    allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+    enable = {
+        is_ai = yes
+        has_war = yes
+        has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+        NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+    }
+    abort_when_not_enabled = yes
+    ai_strategy = { type = pp_spend_priority id = decision value = 100 }
+    ai_strategy = { type = pp_spend_amount id = decision value = 125 }
+}
+"""
+        return default_ai, collapse_ai
+
+    def test_claimant_decision_spending_contract_accepts_bounded_strategy(self) -> None:
+        check = getattr(
+            collapse_validator, "claimant_decision_spending_contract_issues", None
+        )
+        self.assertIsNotNone(check, "collapse validator must expose the PP contract")
+        self.assertEqual(check(*self._claimant_pp_sources()), [])
+
+    def test_claimant_decision_spending_contract_rejects_low_baseline_budget(self) -> None:
+        check = getattr(
+            collapse_validator, "claimant_decision_spending_contract_issues", None
+        )
+        self.assertIsNotNone(check, "collapse validator must expose the PP contract")
+        default_ai, collapse_ai = self._claimant_pp_sources()
+        issues = check(default_ai.replace("decision value = 100", "decision value = 75"), collapse_ai)
+        self.assertTrue(any("baseline decision budget" in issue for issue in issues), issues)
+
+    def test_claimant_decision_spending_contract_rejects_unbounded_strategy(self) -> None:
+        check = getattr(
+            collapse_validator, "claimant_decision_spending_contract_issues", None
+        )
+        self.assertIsNotNone(check, "collapse validator must expose the PP contract")
+        default_ai, collapse_ai = self._claimant_pp_sources()
+        issues = check(default_ai, collapse_ai.replace("        has_war = yes\n", ""))
+        self.assertTrue(any("war-bounded" in issue for issue in issues), issues)
+
+    def test_claimant_decision_spending_contract_rejects_forced_completion(self) -> None:
+        check = getattr(
+            collapse_validator, "claimant_decision_spending_contract_issues", None
+        )
+        self.assertIsNotNone(check, "collapse validator must expose the PP contract")
+        default_ai, collapse_ai = self._claimant_pp_sources()
+        issues = check(default_ai, collapse_ai.replace("abort_when_not_enabled = yes", "complete_effect = { add_political_power = -25 }"))
+        self.assertTrue(any("must not force" in issue for issue in issues), issues)
+
     def test_event_helper_uses_the_declared_id_not_a_nested_scheduled_id(self) -> None:
         source = """
 country_event = {
@@ -668,6 +727,18 @@ class BorderWarArchitectureTests(unittest.TestCase):
         )
         self.assertNotIn("ADISCORD_vorkerland_ensure_wkr_home_guard = yes", startup)
         self.assertNotIn("ADISCORD_vorkerland_wkr_home_guard_deployed_v1", startup)
+        template_startup = named_block(
+            read(
+                "common/on_actions/03_ADISCORD_vorkerland_force_template_migration_on_actions.txt"
+            ),
+            "on_startup",
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_ensure_wkr_force_templates_v2 = yes",
+            template_startup,
+        )
+        for cadence in ("on_daily", "on_weekly", "on_monthly"):
+            self.assertNotIn(cadence, template_startup)
         self.assertNotIn(
             "ADISCORD_vorkerland_ensure_wkr_home_guard = yes",
             named_block(
@@ -675,6 +746,47 @@ class BorderWarArchitectureTests(unittest.TestCase):
                 "on_monthly",
             ),
         )
+
+    def test_wkr_materialization_creates_recruitable_line_and_mobile_templates(self) -> None:
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
+        package = named_block(
+            effects, "ADISCORD_vorkerland_ensure_wkr_force_templates_v2"
+        )
+        self.assertIn("tag = WKR", package)
+        self.assertIn(
+            "NOT = { has_country_flag = ADISCORD_vorkerland_wkr_force_templates_v2_applied }",
+            package,
+        )
+        self.assertIn(
+            "set_country_flag = ADISCORD_vorkerland_wkr_force_templates_v2_applied",
+            package,
+        )
+        templates = named_blocks(package, "division_template")
+
+        line = next(
+            (block for block in templates if 'name = "Worker Rifle Division"' in block),
+            None,
+        )
+        self.assertIsNotNone(line, "WKR must receive a recruitable line template")
+        self.assertIn("is_locked = no", line)
+        self.assertIn("force_allow_recruiting = yes", line)
+        self.assertEqual(line.count("infantry = {"), 8)
+        self.assertEqual(line.count("ADISCORD_line_artillery = {"), 1)
+
+        mobile = next(
+            (block for block in templates if 'name = "Workerland Mobile Group"' in block),
+            None,
+        )
+        self.assertIsNotNone(mobile, "WKR must receive its recruitable mobile template")
+        self.assertIn("is_locked = no", mobile)
+        self.assertIn("force_allow_recruiting = yes", mobile)
+        self.assertEqual(mobile.count("ADISCORD_mechanized_infantry = {"), 6)
+        self.assertEqual(mobile.count("ADISCORD_combat_platform = {"), 4)
+        for support in ("engineer", "artillery", "maintenance_company", "signal_company"):
+            self.assertEqual(mobile.count(f"{support} = {{"), 1)
+
+        home_guard = named_block(effects, "ADISCORD_vorkerland_ensure_wkr_home_guard")
+        self.assertIn("ADISCORD_vorkerland_ensure_wkr_force_templates_v2 = yes", home_guard)
 
     def test_minor_emergency_levies_are_bounded_and_decision_driven(self) -> None:
         triggers = read("common/scripted_triggers/ADISCORD_vorkerland_collapse_triggers.txt")
@@ -738,8 +850,8 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertEqual(units.count('division_template = "Line Infantry Brigade"'), 10)
         self.assertEqual(units.count('division_template = "Local Security Detachment"'), 4)
         self.assertEqual(
-            {int(value) for value in re.findall(r"location\s*=\s*(\d+)", units)},
-            {16568, 9327, 3462, 3318, 888, 838, 2448, 882, 702, 595, 1971, 3447, 579, 2262, 423, 4217},
+            [int(value) for value in re.findall(r"location\s*=\s*(\d+)", units)],
+            [16568, 9327, 3462, 3318, 888, 838, 2448, 882, 702, 595, 1971, 3447, 595, 2262, 423, 4217],
         )
         self.assertGreaterEqual(
             min(float(value) for value in re.findall(r"start_equipment_factor\s*=\s*([0-9.]+)", units)),
@@ -2832,6 +2944,40 @@ class InterventionAndVisualTests(unittest.TestCase):
         with Image.open(ROOT / "gfx/flags/PWR_rimat_republic.tga") as republic, Image.open(ROOT / "gfx/flags/PWR.tga") as administration:
             self.assertEqual(republic.size, (82, 52))
             self.assertNotEqual(republic.convert("RGB").tobytes(), administration.convert("RGB").tobytes())
+
+    def test_sol_worker_protectorate_cosmetic_tracks_worker_dependency(self) -> None:
+        history = read("history/countries/SOL - Solarino.txt")
+        self.assertIn(
+            "set_cosmetic_tag = SOL_vorkerland_worker_protectorate",
+            history,
+        )
+
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
+        sync = named_block(effects, "ADISCORD_vorkerland_sync_independence_cosmetic")
+        self.assertIn("OR = { tag = ROM tag = TRU tag = ZAO tag = SOL }", sync)
+        sol = named_block(sync, "if")
+        self.assertIn("limit = { tag = SOL }", sol)
+        self.assertIn("OR = { is_subject_of = WKR is_subject_of = WRK }", sol)
+        self.assertIn(
+            "set_cosmetic_tag = SOL_vorkerland_worker_protectorate",
+            sol,
+        )
+        self.assertIn("else = { drop_cosmetic_tag = yes }", sol)
+
+        cosmetics = named_block(effects, "ADISCORD_vorkerland_apply_claimant_cosmetics")
+        self.assertIn(
+            "ADISCORD_vorkerland_sync_independence_cosmetic = yes",
+            named_block(cosmetics, "SOL"),
+        )
+
+        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        sol_hook_limit = "OR = { tag = ROM tag = TRU tag = ZAO tag = SOL }"
+        for hook in ("on_puppet", "on_release_as_puppet", "on_release_as_free"):
+            self.assertIn(sol_hook_limit, named_block(on_actions, hook), hook)
+        self.assertNotIn(
+            "ADISCORD_vorkerland_sync_independence_cosmetic = yes",
+            named_block(on_actions, "on_monthly"),
+        )
 
     def test_claimant_map_colours_are_strongly_separated(self) -> None:
         cosmetics = read("common/countries/cosmetic.txt")

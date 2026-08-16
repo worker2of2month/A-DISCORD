@@ -23,6 +23,7 @@ from tools.validators.validate_adiscord_economy_ai import validate as validate_a
 from tools.validators.validate_adiscord_event_ids import validate as validate_adiscord_event_ids
 from tools.validators.validate_adiscord_strategic_resources_ui import validate as validate_adiscord_strategic_resources_ui
 from tools.validators.validate_adiscord_trade_regions import validate as validate_adiscord_trade_regions
+from tools.validators.validate_adiscord_ivn_overhaul import collect_issues as validate_adiscord_ivn_overhaul
 from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     collect_issues as validate_adiscord_vorkerland_civil_war_focus,
 )
@@ -912,6 +913,9 @@ def main():
 
     terrain_snow_issues = validate_adiscord_terrain_snow()
     print_section("Permanent snow terrain", terrain_snow_issues[: args.limit], len(terrain_snow_issues))
+
+    ivn_overhaul_issues = validate_adiscord_ivn_overhaul()
+    print_section("Ivanland island administration", ivn_overhaul_issues[: args.limit], len(ivn_overhaul_issues))
 
     loc_issues, loc_total = check_localisation(args.limit)
     print_section("Localisation headers", loc_issues, loc_total)
