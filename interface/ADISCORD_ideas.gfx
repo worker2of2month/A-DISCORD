@@ -455,42 +455,42 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/idea_ger_the_great_red_menace.dds"
 	}
 
-### A-DISCORD economic system fallback icons
+### A-DISCORD economic system icons
 	spriteType = {
 		name = "GFX_idea_ADISCORD_economic_system_agrarian"
-		texturefile = "gfx/interface/ideas/idea_ARG_economic_reactivation.dds"
+		texturefile = "gfx/interface/ideas/laws/economic_system/ADISCORD_economic_system_agrarian.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_economic_system_industrializing"
-		texturefile = "gfx/interface/ideas/idea_RAJ_private_military_complex.dds"
+		texturefile = "gfx/interface/ideas/laws/economic_system/ADISCORD_economic_system_industrializing.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_economic_system_free_market"
-		texturefile = "gfx/interface/ideas/joining_rule_all_the_world.dds"
+		texturefile = "gfx/interface/ideas/laws/economic_system/ADISCORD_economic_system_free_market.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_economic_system_mixed"
-		texturefile = "gfx/interface/ideas/change_leader_rule_influence.dds"
+		texturefile = "gfx/interface/ideas/laws/economic_system/ADISCORD_economic_system_mixed.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_economic_system_state_coordinated"
-		texturefile = "gfx/interface/ideas/war_declaration_rule_faction_leader_only.dds"
+		texturefile = "gfx/interface/ideas/laws/economic_system/ADISCORD_economic_system_state_coordinated.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_economic_system_planned_bureaucratic"
-		texturefile = "gfx/interface/ideas/idea_AFG_adopt_nufus.dds"
+		texturefile = "gfx/interface/ideas/laws/economic_system/ADISCORD_economic_system_planned_bureaucratic.png"
 	}
 	spriteType = {
-		name = "GFX_idea_ADISCORD_economic_system_mobilization"
-		texturefile = "gfx/interface/ideas/idea_generic_war_preparation.dds"
+		name = "GFX_idea_ADISCORD_economic_system_syndicalist"
+		texturefile = "gfx/interface/ideas/laws/economic_system/ADISCORD_economic_system_syndicalist.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_economic_system_oligarchic_clan"
-		texturefile = "gfx/interface/ideas/idea_ARG_anti_british_sentiment.dds"
+		texturefile = "gfx/interface/ideas/laws/economic_system/ADISCORD_economic_system_oligarchic_clan.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_economic_system_technocratic"
-		texturefile = "gfx/interface/ideas/idea_chi_wargaming_division.dds"
+		texturefile = "gfx/interface/ideas/laws/economic_system/ADISCORD_economic_system_technocratic.png"
 	}
 
 ### A-DISCORD society type fallback icons
