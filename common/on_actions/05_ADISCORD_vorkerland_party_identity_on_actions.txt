@@ -1,0 +1,34 @@
+on_actions = {
+	on_puppet = {
+		effect = {
+			if = {
+				limit = { OR = { tag = VAD tag = ZAO tag = PWR tag = VLA tag = ROM tag = SOL tag = TRU } }
+				ADISCORD_vorkerland_sync_party_identity = yes
+			}
+		}
+	}
+	on_release_as_puppet = {
+		effect = {
+			if = {
+				limit = { OR = { tag = VAD tag = ZAO tag = PWR tag = VLA tag = ROM tag = SOL tag = TRU } }
+				ADISCORD_vorkerland_sync_party_identity = yes
+			}
+		}
+	}
+	on_release_as_free = {
+		effect = {
+			if = {
+				limit = { OR = { tag = VAD tag = ZAO tag = PWR tag = VLA tag = ROM tag = SOL tag = TRU } }
+				ADISCORD_vorkerland_sync_party_identity = yes
+			}
+		}
+	}
+	on_subject_free = {
+		effect = {
+			if = {
+				limit = { OR = { tag = VAD tag = ZAO tag = PWR tag = VLA tag = ROM tag = SOL tag = TRU } }
+				ADISCORD_vorkerland_sync_party_identity = yes
+			}
+		}
+	}
+}

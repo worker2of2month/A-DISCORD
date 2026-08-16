@@ -417,6 +417,7 @@ ADISCORD_vorkerland_wrk_complete_protectorate_enforcement = {
 		puppet = VLA
 		set_autonomy = { target = VLA autonomy_state = autonomy_district_in_Vorkerland freedom_level = 0.10 }
 		VLA = {
+			ADISCORD_vorkerland_sync_party_identity = yes
 			clr_country_flag = ADISCORD_vorkerland_wrk_protectorate_enforcement
 			set_country_flag = ADISCORD_vorkerland_joined_worker_republic
 			ADISCORD_vorkerland_sync_republics_from_ruins = yes
@@ -2084,7 +2085,10 @@ ADISCORD_vorkerland_resolve_unguaranteed_free_republics = {
 						50 = {
 							puppet = ROM
 							set_autonomy = { target = ROM autonomy_state = autonomy_republic_in_Vorkerland freedom_level = 0.10 }
-							ROM = { ADISCORD_vorkerland_sync_republics_from_ruins = yes }
+							ROM = {
+								ADISCORD_vorkerland_sync_party_identity = yes
+								ADISCORD_vorkerland_sync_republics_from_ruins = yes
+							}
 						}
 						50 = {
 							if = { limit = { NOT = { has_war_with = ROM } } declare_war_on = { target = ROM type = annex_everything } }
@@ -2097,7 +2101,10 @@ ADISCORD_vorkerland_resolve_unguaranteed_free_republics = {
 						50 = {
 							puppet = TRU
 							set_autonomy = { target = TRU autonomy_state = autonomy_republic_in_Vorkerland freedom_level = 0.10 }
-							TRU = { ADISCORD_vorkerland_sync_republics_from_ruins = yes }
+							TRU = {
+								ADISCORD_vorkerland_sync_party_identity = yes
+								ADISCORD_vorkerland_sync_republics_from_ruins = yes
+							}
 						}
 						50 = {
 							if = { limit = { NOT = { has_war_with = TRU } } declare_war_on = { target = TRU type = annex_everything } }

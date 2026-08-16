@@ -9,11 +9,13 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from fnmatch import fnmatchcase
 from pathlib import Path
 from unittest.mock import patch
 
 from PIL import Image
 
+from tools.builders import build_adiscord_party_texticons as party_texticons
 from tools.builders import build_adiscord_val_operations_map as val_operations_map
 from tools.builders.build_adiscord_diplomacy_ui_assets import expected_outputs as diplomacy_ui_asset_outputs
 from tools.builders.build_adiscord_resource_assets import expected_outputs as resource_asset_outputs
@@ -42,6 +44,7 @@ REQUIRED_FAMILIES = {
     "state_history",
     "northern_countries",
     "outer_states",
+    "party_texticons",
     "remainder_states",
     "resource_assets",
     "strategic_regions",
@@ -145,6 +148,26 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
                 "gfx/interface/diplomacy/source/ADISCORD_diplomacy_flag_overlay_master.png",
             },
         )
+
+    def test_party_texticon_registry_exactly_matches_assets_and_is_exclusive(self) -> None:
+        entry = self.entries["party_texticons"]
+        expected_outputs = [asset.output.as_posix() for asset in party_texticons.ASSETS]
+        expected_sources = [
+            "tools/builders/build_adiscord_party_texticons.py",
+            *(asset.source.as_posix() for asset in party_texticons.ASSETS),
+        ]
+        self.assertEqual(entry["output_globs"], expected_outputs)
+        self.assertEqual(entry["source_inputs"], expected_sources)
+        self.assertEqual(self.registry["apply_sequence"].count("party_texticons"), 1)
+        self.assertEqual(entry["ownership_mode"], "exclusive")
+
+        for output in expected_outputs:
+            owners = {
+                family_id
+                for family_id, candidate in self.entries.items()
+                if any(fnmatchcase(output, pattern) for pattern in candidate["output_globs"])
+            }
+            self.assertEqual(owners, {"party_texticons"}, output)
 
     def test_val_check_rejects_an_unexpected_owned_png(self) -> None:
         self.assertTrue(self.entries["val_operations_map"]["may_delete_outputs"])

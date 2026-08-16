@@ -22,5 +22,64 @@ spriteTypes = {
 		texturefile = "gfx/texticons/adiscord/parties/VAL/VAL_etatist_party.png"
 		legacy_lazy_load = no
 	}
+	##IVN
+	spriteType = {
+		name = "GFX_IVN_roar_of_freedom_party_texticon"
+		texturefile = "gfx/texticons/adiscord/parties/IVN/IVN_roar_of_freedom_party.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_IVN_emergency_committee_party_texticon"
+		texturefile = "gfx/texticons/adiscord/parties/IVN/IVN_emergency_committee_party.png"
+		legacy_lazy_load = no
+	}
+	##TVA
+	spriteType = {
+		name = "GFX_TVA_wartime_technocratic_worker_party_texticon"
+		texturefile = "gfx/texticons/adiscord/parties/TVA/TVA_wartime_technocratic_worker_party.png"
+		legacy_lazy_load = no
+	}
+	##VAD
+	spriteType = {
+		name = "GFX_VAD_vorkerland_imperial_party_texticon"
+		texturefile = "gfx/texticons/adiscord/parties/VAD/VAD_vorkerland_imperial_party.png"
+		legacy_lazy_load = no
+	}
+	##ZAO
+	spriteType = {
+		name = "GFX_ZAO_independent_party_texticon"
+		texturefile = "gfx/texticons/adiscord/parties/ZAO/ZAO_independent_party.png"
+		legacy_lazy_load = no
+	}
+	##PWR
+	spriteType = {
+		name = "GFX_PWR_independent_party_texticon"
+		texturefile = "gfx/texticons/adiscord/parties/PWR/PWR_independent_party.png"
+		legacy_lazy_load = no
+	}
+	##VLA
+	spriteType = {
+		name = "GFX_VLA_independent_party_texticon"
+		texturefile = "gfx/texticons/adiscord/parties/VLA/VLA_independent_party.png"
+		legacy_lazy_load = no
+	}
+	##ROM
+	spriteType = {
+		name = "GFX_ROM_independent_party_texticon"
+		texturefile = "gfx/texticons/adiscord/parties/ROM/ROM_independent_party.png"
+		legacy_lazy_load = no
+	}
+	##SOL
+	spriteType = {
+		name = "GFX_SOL_independent_party_texticon"
+		texturefile = "gfx/texticons/adiscord/parties/SOL/SOL_independent_party.png"
+		legacy_lazy_load = no
+	}
+	##TRU
+	spriteType = {
+		name = "GFX_TRU_independent_party_texticon"
+		texturefile = "gfx/texticons/adiscord/parties/TRU/TRU_independent_party.png"
+		legacy_lazy_load = no
+	}
 
 }

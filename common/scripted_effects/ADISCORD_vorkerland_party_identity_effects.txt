@@ -1,0 +1,186 @@
+ADISCORD_vorkerland_sync_party_identity = {
+	if = {
+		limit = { tag = VAD }
+		if = {
+			limit = { OR = { is_subject_of = WRK is_subject_of = WKR } }
+			if = {
+				limit = { has_global_flag = ADISCORD_vorkerland_collapse_started }
+				set_party_name = {
+					ideology = pragmatism
+					name = VAD_vorkerland_imperial_party_wrk_subject
+					long_name = VAD_vorkerland_imperial_party_wrk_subject_long
+				}
+			}
+			else = {
+				set_party_name = {
+					ideology = pragmatism
+					name = VAD_pragmatism_party
+					long_name = VAD_pragmatism_party_long
+				}
+			}
+		}
+		else_if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_collapse_started }
+			set_party_name = {
+				ideology = pragmatism
+				name = VAD_vorkerland_imperial_party
+				long_name = VAD_vorkerland_imperial_party_long
+			}
+		}
+		else = {
+			set_party_name = {
+				ideology = pragmatism
+				name = VAD_pragmatism_party_independent
+				long_name = VAD_pragmatism_party_independent_long
+			}
+		}
+	}
+	else_if = {
+		limit = { tag = ZAO }
+		if = {
+			limit = { OR = { is_subject_of = WRK is_subject_of = WKR } }
+			set_party_name = {
+				ideology = pragmatism
+				name = ZAO_pragmatism_party
+				long_name = ZAO_pragmatism_party_long
+			}
+		}
+		else = {
+			set_party_name = {
+				ideology = pragmatism
+				name = ZAO_pragmatism_party_independent
+				long_name = ZAO_pragmatism_party_independent_long
+			}
+		}
+	}
+	else_if = {
+		limit = { tag = PWR }
+		if = {
+			limit = { OR = { is_subject_of = WRK is_subject_of = WKR } }
+			set_party_name = {
+				ideology = pragmatism
+				name = PWR_pragmatism_party
+				long_name = PWR_pragmatism_party_long
+			}
+			set_party_name = {
+				ideology = technocracy
+				name = PWR_technocracy_party_wrk_subject
+				long_name = PWR_technocracy_party_wrk_subject_long
+			}
+		}
+		else = {
+			set_party_name = {
+				ideology = pragmatism
+				name = PWR_pragmatism_party_independent
+				long_name = PWR_pragmatism_party_independent_long
+			}
+			set_party_name = {
+				ideology = technocracy
+				name = PWR_technocracy_party
+				long_name = PWR_technocracy_party_long
+			}
+		}
+	}
+	else_if = {
+		limit = { tag = VLA }
+		if = {
+			limit = { OR = { is_subject_of = WRK is_subject_of = WKR } }
+			set_party_name = {
+				ideology = pragmatism
+				name = VLA_pragmatism_party
+				long_name = VLA_pragmatism_party_long
+			}
+		}
+		else = {
+			set_party_name = {
+				ideology = pragmatism
+				name = VLA_pragmatism_party_independent
+				long_name = VLA_pragmatism_party_independent_long
+			}
+		}
+	}
+	else_if = {
+		limit = { tag = ROM }
+		if = {
+			limit = { OR = { is_subject_of = WRK is_subject_of = WKR } }
+			set_party_name = {
+				ideology = pragmatism
+				name = ROM_pragmatism_party
+				long_name = ROM_pragmatism_party_long
+			}
+			set_party_name = {
+				ideology = etatism
+				name = ROM_etatism_party_wrk_subject
+				long_name = ROM_etatism_party_wrk_subject_long
+			}
+		}
+		else = {
+			set_party_name = {
+				ideology = pragmatism
+				name = ROM_pragmatism_party_independent
+				long_name = ROM_pragmatism_party_independent_long
+			}
+			set_party_name = {
+				ideology = etatism
+				name = ROM_etatism_party
+				long_name = ROM_etatism_party_long
+			}
+		}
+	}
+	else_if = {
+		limit = { tag = SOL }
+		if = {
+			limit = { OR = { is_subject_of = WRK is_subject_of = WKR } }
+			set_party_name = {
+				ideology = pragmatism
+				name = SOL_pragmatism_party
+				long_name = SOL_pragmatism_party_long
+			}
+		}
+		else = {
+			set_party_name = {
+				ideology = pragmatism
+				name = SOL_pragmatism_party_independent
+				long_name = SOL_pragmatism_party_independent_long
+			}
+		}
+	}
+	else_if = {
+		limit = { tag = TRU }
+		if = {
+			limit = { OR = { is_subject_of = WRK is_subject_of = WKR } }
+			set_party_name = {
+				ideology = pragmatism
+				name = TRU_pragmatism_party
+				long_name = TRU_pragmatism_party_long
+			}
+			set_party_name = {
+				ideology = chauvinism
+				name = TRU_chauvinism_party_wrk_subject
+				long_name = TRU_chauvinism_party_wrk_subject_long
+			}
+		}
+		else = {
+			set_party_name = {
+				ideology = pragmatism
+				name = TRU_pragmatism_party_independent
+				long_name = TRU_pragmatism_party_independent_long
+			}
+			set_party_name = {
+				ideology = chauvinism
+				name = TRU_chauvinism_party
+				long_name = TRU_chauvinism_party_long
+			}
+		}
+	}
+}
+
+ADISCORD_vorkerland_sync_all_party_identities = {
+	VAD = { ADISCORD_vorkerland_sync_party_identity = yes }
+	ZAO = { ADISCORD_vorkerland_sync_party_identity = yes }
+	PWR = { ADISCORD_vorkerland_sync_party_identity = yes }
+	VLA = { ADISCORD_vorkerland_sync_party_identity = yes }
+	ROM = { ADISCORD_vorkerland_sync_party_identity = yes }
+	SOL = { ADISCORD_vorkerland_sync_party_identity = yes }
+	TRU = { ADISCORD_vorkerland_sync_party_identity = yes }
+}
