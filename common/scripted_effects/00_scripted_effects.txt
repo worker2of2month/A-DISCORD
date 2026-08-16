@@ -384,6 +384,12 @@ instantiate_collaboration_government = {
 upgrade_economy_law = {
 	if = {
 		limit = {
+			has_idea = ADISCORD_civilian_oriented_economy
+		}
+		add_ideas = civilian_economy
+	}
+	else_if = {
+		limit = {
 			has_idea = civilian_economy
 		}
 		add_ideas = low_economic_mobilisation

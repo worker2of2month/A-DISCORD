@@ -7191,7 +7191,7 @@ ADISCORD_task10_forbidden_cache_consumer = {
             "mixed",
             "state_coordinated",
             "planned_bureaucratic",
-            "mobilization",
+            "syndicalist",
             "oligarchic_clan",
             "technocratic",
         ):
@@ -7228,6 +7228,7 @@ ADISCORD_task10_forbidden_cache_consumer = {
         self.assertNotIn("has_idea =", MODIFIER_EFFECTS)
 
         wrappers = {
+            "ADISCORD_economy_has_idea_civilian_oriented_economy": "ADISCORD_civilian_oriented_economy",
             "ADISCORD_economy_has_idea_civilian_economy": "civilian_economy",
             "ADISCORD_economy_has_idea_low_economic_mobilisation": "low_economic_mobilisation",
             "ADISCORD_economy_has_idea_partial_economic_mobilisation": "partial_economic_mobilisation",
@@ -7251,7 +7252,7 @@ ADISCORD_task10_forbidden_cache_consumer = {
             "mixed",
             "state_coordinated",
             "planned_bureaucratic",
-            "mobilization",
+            "syndicalist",
             "oligarchic_clan",
             "technocratic",
         ):

@@ -23,7 +23,7 @@ set_research_slots = 1
 add_ideas = {
 	APH_national_spirit
 	ADISCORD_society_type_traditional
-	ADISCORD_economic_system_oligarchic_clan
+	ADISCORD_economic_system_agrarian
 	ADISCORD_taxation_extraction_quotas
 	ADISCORD_welfare_rationed_support
 	ADISCORD_education_informal_instruction

@@ -239,7 +239,8 @@ ADISCORD_economy_recalculate_policy_modifiers = {
 
 	# Cache mutually exclusive law effects once. Forecast and cash-settlement
 	# effects consume these scalar variables without repeated has_idea queries.
-	if = { limit = { ADISCORD_economy_has_idea_civilian_economy = yes } set_variable = { var = ADISCORD_economy_cached_consumer_goods_law_adjustment value = 0.7 } }
+	if = { limit = { ADISCORD_economy_has_idea_civilian_oriented_economy = yes } set_variable = { var = ADISCORD_economy_cached_consumer_goods_law_adjustment value = 1.0 } }
+	else_if = { limit = { ADISCORD_economy_has_idea_civilian_economy = yes } set_variable = { var = ADISCORD_economy_cached_consumer_goods_law_adjustment value = 0.7 } }
 	else_if = { limit = { ADISCORD_economy_has_idea_low_economic_mobilisation = yes } set_variable = { var = ADISCORD_economy_cached_consumer_goods_law_adjustment value = 0.4 } }
 	else_if = { limit = { ADISCORD_economy_has_idea_partial_economic_mobilisation = yes } set_variable = { var = ADISCORD_economy_cached_consumer_goods_law_adjustment value = -0.2 } }
 	else_if = { limit = { ADISCORD_economy_has_idea_war_economy = yes } set_variable = { var = ADISCORD_economy_cached_consumer_goods_law_adjustment value = -0.5 } }

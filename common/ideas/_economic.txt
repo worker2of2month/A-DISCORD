@@ -7,7 +7,7 @@ ideas = {
 		undisturbed_isolation = {
 			allowed = { always = no }
 			removal_cost = -1
-			level = 7
+			level = 8
 
 			modifier = {
 				consumer_goods_expected_value = 0.45
@@ -39,7 +39,7 @@ ideas = {
 		isolation = {
 			allowed = { always = no }
 			removal_cost = -1
-			level = 6
+			level = 7
 
 			modifier = {
 				consumer_goods_expected_value = 0.38
@@ -64,6 +64,42 @@ ideas = {
 				}
 			}
 
+			cancel_if_invalid = no
+		}
+
+		ADISCORD_civilian_oriented_economy = {
+			available = {
+				has_war = no
+			}
+
+			cost = 150
+			removal_cost = -1
+			level = 6
+
+			modifier = {
+				consumer_goods_expected_value = 0.38
+				stability_factor = 0.12
+				production_speed_industrial_complex_factor = 0.18
+				production_speed_arms_factory_factor = -0.40
+				production_speed_dockyard_factor = -0.35
+				conversion_cost_civ_to_mil_factor = 0.40
+				conversion_cost_mil_to_civ_factor = -0.15
+				production_factory_max_efficiency_factor = -0.08
+				industrial_capacity_factory = -0.10
+				max_fuel_factor = -0.35
+				fuel_gain_factor = -0.45
+				factory_energy_consumption = -0.30
+				ADISCORD_economy_civilian_factory_income_factor = 0.15
+				ADISCORD_economy_military_industry_income_factor = -0.15
+				ADISCORD_economy_army_expense_factor = -0.15
+				ADISCORD_economy_inflation_pressure_factor = -0.08
+				ADISCORD_economy_price_stability_factor = 0.08
+				ADISCORD_economy_creditworthiness_factor = 0.05
+				ADISCORD_economy_state_overload_gain_factor = -0.08
+				ADISCORD_country_development_economic_growth_factor = 0.05
+			}
+
+			default = yes
 			cancel_if_invalid = no
 		}
 
@@ -95,7 +131,6 @@ ideas = {
 				ADISCORD_country_development_economic_growth_factor = 0.03
 			}
 
-			default = yes
 			cancel_if_invalid = no
 		}
 
@@ -406,7 +441,6 @@ ideas = {
 				OR = {
 					has_idea = war_economy
 					has_idea = tot_economic_mobilisation
-					has_idea = ADISCORD_economic_system_mobilization
 				}
 			}
 
@@ -653,46 +687,39 @@ ideas = {
 			cancel_if_invalid = no
 		}
 
-		ADISCORD_economic_system_mobilization = {
-			picture = ADISCORD_economic_system_mobilization
+		ADISCORD_economic_system_syndicalist = {
+			picture = ADISCORD_economic_system_syndicalist
 			cost = 300
 			removal_cost = -1
 
 			available = {
 				OR = {
-					has_war = yes
-					has_war_support > 0.55
-					has_idea = ADISCORD_taxation_extraction_quotas
-					has_idea = ADISCORD_industrial_policy_military_prioritization
+					has_government = anarchism
+					has_government = utilitarism
+					has_idea = ADISCORD_labor_policy_guild_protections
 				}
 			}
 
 			modifier = {
-				consumer_goods_expected_value = 0.04
-				min_export = -0.15
-				stability_factor = -0.08
-				war_support_factor = 0.04
-				political_power_gain = -0.04
-				industrial_capacity_factory = 0.08
-				industrial_capacity_dockyard = 0.06
-				production_speed_industrial_complex_factor = -0.16
-				production_speed_arms_factory_factor = 0.10
-				production_speed_dockyard_factor = 0.08
-				conversion_cost_civ_to_mil_factor = -0.20
-				line_change_production_efficiency_factor = -0.08
-				factory_energy_consumption = 0.25
-				ADISCORD_economy_trade_income_factor = -0.10
-				ADISCORD_economy_civilian_factory_income_factor = -0.10
-				ADISCORD_economy_military_industry_income_factor = 0.15
-				ADISCORD_economy_army_expense_factor = 0.10
-				ADISCORD_economy_creditworthiness_factor = 0.15
-				ADISCORD_economy_inflation_pressure_factor = 0.10
-				ADISCORD_economy_deficit_pressure_factor = 0.10
-				ADISCORD_economy_fiscal_stress_gain_factor = 0.10
+				consumer_goods_expected_value = 0.05
+				min_export = -0.05
+				industrial_capacity_factory = 0.03
+				production_speed_industrial_complex_factor = 0.10
+				production_speed_infrastructure_factor = 0.05
+				line_change_production_efficiency_factor = -0.05
+				production_factory_max_efficiency_factor = 0.05
+				production_factory_efficiency_gain_factor = 0.05
+				political_power_gain = -0.03
+				stability_factor = 0.05
+				ADISCORD_economy_tax_collection_factor = 0.05
+				ADISCORD_economy_trade_income_factor = -0.05
+				ADISCORD_economy_civilian_factory_income_factor = 0.10
+				ADISCORD_economy_building_income_factor = 0.08
+				ADISCORD_economy_admin_expense_factor = 0.08
+				ADISCORD_economy_creditworthiness_factor = -0.05
+				ADISCORD_economy_price_stability_factor = 0.05
 				ADISCORD_economy_investment_confidence_factor = -0.10
-				ADISCORD_economy_state_overload_gain_factor = 0.15
-				ADISCORD_economy_war_fatigue_gain_factor = 0.10
-				ADISCORD_economy_demobilization_pressure_gain_factor = 0.10
+				ADISCORD_country_development_economic_growth_factor = 0.05
 			}
 
 			cancel_if_invalid = no

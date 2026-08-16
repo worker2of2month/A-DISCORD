@@ -44,6 +44,7 @@ add_ideas = {
 	STP_hidden_slaves_trade
 	STP_legalize
 	STP_worldwide_famous_tourist_destination
+	ADISCORD_economic_system_oligarchic_clan
 
 	#ministers
 	minister_STP_Ernest_Derlich
