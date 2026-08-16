@@ -516,7 +516,7 @@ APPROVED_RU_ECONOMIC_SYSTEM_NAMES = {
     "ADISCORD_economic_system_mixed": "Смешанная экономика",
     "ADISCORD_economic_system_state_coordinated": "Государственно регулируемая экономика",
     "ADISCORD_economic_system_planned_bureaucratic": "Административно-плановая экономика",
-    "ADISCORD_economic_system_mobilization": "Мобилизационная экономика",
+    "ADISCORD_economic_system_syndicalist": "Синдикалистская экономика",
     "ADISCORD_economic_system_oligarchic_clan": "Клановая экономика",
     "ADISCORD_economic_system_technocratic": "Технократическая экономика",
 }
@@ -529,7 +529,7 @@ APPROVED_EN_ECONOMIC_SYSTEM_NAMES = {
     "ADISCORD_economic_system_mixed": "Mixed Economy",
     "ADISCORD_economic_system_state_coordinated": "State-Regulated Economy",
     "ADISCORD_economic_system_planned_bureaucratic": "Administrative Command Economy",
-    "ADISCORD_economic_system_mobilization": "Mobilization Economy",
+    "ADISCORD_economic_system_syndicalist": "Syndicalist Economy",
     "ADISCORD_economic_system_oligarchic_clan": "Clan Economy",
     "ADISCORD_economic_system_technocratic": "Technocratic Economy",
 }
