@@ -495,27 +495,27 @@ spriteTypes = {
 
 ### A-DISCORD economic mobilization law icons
 	spriteType = {
-		name = "GFX_idea_ADISCORD_civilian_oriented_economy"
+		name = "GFX_idea_ADISCORD_economic_mobilization_1_civilian_oriented"
 		texturefile = "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_1_civilian_oriented.png"
 	}
 	spriteType = {
-		name = "GFX_idea_civilian_economy"
+		name = "GFX_idea_ADISCORD_economic_mobilization_2_civilian"
 		texturefile = "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_2_civilian.png"
 	}
 	spriteType = {
-		name = "GFX_idea_low_economic_mobilisation"
+		name = "GFX_idea_ADISCORD_economic_mobilization_3_early_mobilization"
 		texturefile = "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_3_early_mobilization.png"
 	}
 	spriteType = {
-		name = "GFX_idea_partial_economic_mobilisation"
+		name = "GFX_idea_ADISCORD_economic_mobilization_4_partial_mobilization"
 		texturefile = "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_4_partial_mobilization.png"
 	}
 	spriteType = {
-		name = "GFX_idea_war_economy"
+		name = "GFX_idea_ADISCORD_economic_mobilization_5_war_economy"
 		texturefile = "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_5_war_economy.png"
 	}
 	spriteType = {
-		name = "GFX_idea_tot_economic_mobilisation"
+		name = "GFX_idea_ADISCORD_economic_mobilization_6_total_mobilization"
 		texturefile = "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_6_total_mobilization.png"
 	}
 

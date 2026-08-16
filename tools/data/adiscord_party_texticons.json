@@ -1,0 +1,552 @@
+{
+  "schema": 1,
+  "generated_assets": [
+    {
+      "key": "ivn_roar_of_freedom",
+      "class": "existing",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/IVN_roar_of_freedom_source.png",
+      "output": "gfx/texticons/adiscord/parties/IVN/IVN_roar_of_freedom_party.png",
+      "sprite": "GFX_IVN_roar_of_freedom_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "ivn_emergency_committee",
+      "class": "existing",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/IVN_emergency_committee_source.png",
+      "output": "gfx/texticons/adiscord/parties/IVN/IVN_emergency_committee_party.png",
+      "sprite": "GFX_IVN_emergency_committee_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "tva_wartime_technocratic_worker",
+      "class": "existing",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/TVA_wartime_technocratic_worker_source.png",
+      "output": "gfx/texticons/adiscord/parties/TVA/TVA_wartime_technocratic_worker_party.png",
+      "sprite": "GFX_TVA_wartime_technocratic_worker_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "vad_vorkerland_imperial",
+      "class": "existing",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/VAD_vorkerland_imperial_source.png",
+      "output": "gfx/texticons/adiscord/parties/VAD/VAD_vorkerland_imperial_party.png",
+      "sprite": "GFX_VAD_vorkerland_imperial_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "zao_independent_party",
+      "class": "existing",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/ZAO_independent_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/ZAO/ZAO_independent_party.png",
+      "sprite": "GFX_ZAO_independent_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "pwr_independent_party",
+      "class": "existing",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/PWR_independent_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/PWR/PWR_independent_party.png",
+      "sprite": "GFX_PWR_independent_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "vla_independent_party",
+      "class": "existing",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/VLA_independent_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/VLA/VLA_independent_party.png",
+      "sprite": "GFX_VLA_independent_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "rom_independent_party",
+      "class": "existing",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/ROM_independent_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/ROM/ROM_independent_party.png",
+      "sprite": "GFX_ROM_independent_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "sol_independent_party",
+      "class": "existing",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/SOL_independent_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/SOL/SOL_independent_party.png",
+      "sprite": "GFX_SOL_independent_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "tru_independent_party",
+      "class": "existing",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/TRU_independent_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/TRU/TRU_independent_party.png",
+      "sprite": "GFX_TRU_independent_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "bbv_primary_party",
+      "class": "country",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/countries/BBV_primary_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/BBV/BBV_primary_party.png",
+      "sprite": "GFX_BBV_primary_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "bcm_primary_party",
+      "class": "country",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/countries/BCM_primary_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/BCM/BCM_primary_party.png",
+      "sprite": "GFX_BCM_primary_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "bgt_primary_party",
+      "class": "country",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/countries/BGT_primary_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/BGT/BGT_primary_party.png",
+      "sprite": "GFX_BGT_primary_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "bhg_primary_party",
+      "class": "country",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/countries/BHG_primary_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/BHG/BHG_primary_party.png",
+      "sprite": "GFX_BHG_primary_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "bjk_primary_party",
+      "class": "country",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/countries/BJK_primary_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/BJK/BJK_primary_party.png",
+      "sprite": "GFX_BJK_primary_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "bld_primary_party",
+      "class": "country",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/countries/BLD_primary_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/BLD/BLD_primary_party.png",
+      "sprite": "GFX_BLD_primary_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "btl_primary_party",
+      "class": "country",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/countries/BTL_primary_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/BTL/BTL_primary_party.png",
+      "sprite": "GFX_BTL_primary_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "cof_primary_party",
+      "class": "country",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/countries/COF_primary_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/COF/COF_primary_party.png",
+      "sprite": "GFX_COF_primary_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "dan_primary_party",
+      "class": "country",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/countries/DAN_primary_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/DAN/DAN_primary_party.png",
+      "sprite": "GFX_DAN_primary_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "efl_primary_party",
+      "class": "country",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/countries/EFL_primary_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/EFL/EFL_primary_party.png",
+      "sprite": "GFX_EFL_primary_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "nam_primary_party",
+      "class": "country",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/countries/NAM_primary_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/NAM/NAM_primary_party.png",
+      "sprite": "GFX_NAM_primary_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "piv_primary_party",
+      "class": "country",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/countries/PIV_primary_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/PIV/PIV_primary_party.png",
+      "sprite": "GFX_PIV_primary_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "rus_primary_party",
+      "class": "country",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/countries/RUS_primary_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/RUS/RUS_primary_party.png",
+      "sprite": "GFX_RUS_primary_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "tff_primary_party",
+      "class": "country",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/countries/TFF_primary_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/TFF/TFF_primary_party.png",
+      "sprite": "GFX_TFF_primary_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "wit_primary_party",
+      "class": "country",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/countries/WIT_primary_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/WIT/WIT_primary_party.png",
+      "sprite": "GFX_WIT_primary_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "ypr_primary_party",
+      "class": "country",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/countries/YPR_primary_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/YPR/YPR_primary_party.png",
+      "sprite": "GFX_YPR_primary_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
+      "key": "generic_humanism_civic",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/humanism/humanism_civic_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/humanism/humanism_civic_party.png",
+      "sprite": "GFX_generic_humanism_civic_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "humanism",
+      "archetype": "civic"
+    },
+    {
+      "key": "generic_humanism_reform",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/humanism/humanism_reform_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/humanism/humanism_reform_party.png",
+      "sprite": "GFX_generic_humanism_reform_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "humanism",
+      "archetype": "reform"
+    },
+    {
+      "key": "generic_humanism_solidarity",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/humanism/humanism_solidarity_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/humanism/humanism_solidarity_party.png",
+      "sprite": "GFX_generic_humanism_solidarity_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "humanism",
+      "archetype": "solidarity"
+    },
+    {
+      "key": "generic_utilitarism_planning",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/utilitarism/utilitarism_planning_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/utilitarism/utilitarism_planning_party.png",
+      "sprite": "GFX_generic_utilitarism_planning_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "utilitarism",
+      "archetype": "planning"
+    },
+    {
+      "key": "generic_utilitarism_productive_union",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/utilitarism/utilitarism_productive_union_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/utilitarism/utilitarism_productive_union_party.png",
+      "sprite": "GFX_generic_utilitarism_productive_union_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "utilitarism",
+      "archetype": "productive_union"
+    },
+    {
+      "key": "generic_utilitarism_public_benefit",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/utilitarism/utilitarism_public_benefit_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/utilitarism/utilitarism_public_benefit_party.png",
+      "sprite": "GFX_generic_utilitarism_public_benefit_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "utilitarism",
+      "archetype": "public_benefit"
+    },
+    {
+      "key": "generic_chauvinism_national_front",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/chauvinism/chauvinism_national_front_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/chauvinism/chauvinism_national_front_party.png",
+      "sprite": "GFX_generic_chauvinism_national_front_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "chauvinism",
+      "archetype": "national_front"
+    },
+    {
+      "key": "generic_chauvinism_martial_league",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/chauvinism/chauvinism_martial_league_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/chauvinism/chauvinism_martial_league_party.png",
+      "sprite": "GFX_generic_chauvinism_martial_league_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "chauvinism",
+      "archetype": "martial_league"
+    },
+    {
+      "key": "generic_chauvinism_traditional_order",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/chauvinism/chauvinism_traditional_order_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/chauvinism/chauvinism_traditional_order_party.png",
+      "sprite": "GFX_generic_chauvinism_traditional_order_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "chauvinism",
+      "archetype": "traditional_order"
+    },
+    {
+      "key": "generic_pragmatism_administrative_coalition",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/pragmatism/pragmatism_administrative_coalition_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/pragmatism/pragmatism_administrative_coalition_party.png",
+      "sprite": "GFX_generic_pragmatism_administrative_coalition_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "pragmatism",
+      "archetype": "administrative_coalition"
+    },
+    {
+      "key": "generic_pragmatism_commercial_bloc",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/pragmatism/pragmatism_commercial_bloc_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/pragmatism/pragmatism_commercial_bloc_party.png",
+      "sprite": "GFX_generic_pragmatism_commercial_bloc_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "pragmatism",
+      "archetype": "commercial_bloc"
+    },
+    {
+      "key": "generic_pragmatism_regional_establishment",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/pragmatism/pragmatism_regional_establishment_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/pragmatism/pragmatism_regional_establishment_party.png",
+      "sprite": "GFX_generic_pragmatism_regional_establishment_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "pragmatism",
+      "archetype": "regional_establishment"
+    },
+    {
+      "key": "generic_anarchism_communal_federation",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/anarchism/anarchism_communal_federation_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/anarchism/anarchism_communal_federation_party.png",
+      "sprite": "GFX_generic_anarchism_communal_federation_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "anarchism",
+      "archetype": "communal_federation"
+    },
+    {
+      "key": "generic_anarchism_artel_union",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/anarchism/anarchism_artel_union_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/anarchism/anarchism_artel_union_party.png",
+      "sprite": "GFX_generic_anarchism_artel_union_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "anarchism",
+      "archetype": "artel_union"
+    },
+    {
+      "key": "generic_anarchism_frontier_movement",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/anarchism/anarchism_frontier_movement_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/anarchism/anarchism_frontier_movement_party.png",
+      "sprite": "GFX_generic_anarchism_frontier_movement_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "anarchism",
+      "archetype": "frontier_movement"
+    },
+    {
+      "key": "generic_technocracy_scientific_collegium",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/technocracy/technocracy_scientific_collegium_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/technocracy/technocracy_scientific_collegium_party.png",
+      "sprite": "GFX_generic_technocracy_scientific_collegium_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "technocracy",
+      "archetype": "scientific_collegium"
+    },
+    {
+      "key": "generic_technocracy_engineering_directorate",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/technocracy/technocracy_engineering_directorate_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/technocracy/technocracy_engineering_directorate_party.png",
+      "sprite": "GFX_generic_technocracy_engineering_directorate_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "technocracy",
+      "archetype": "engineering_directorate"
+    },
+    {
+      "key": "generic_technocracy_systems_bureau",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/technocracy/technocracy_systems_bureau_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/technocracy/technocracy_systems_bureau_party.png",
+      "sprite": "GFX_generic_technocracy_systems_bureau_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "technocracy",
+      "archetype": "systems_bureau"
+    },
+    {
+      "key": "generic_etatism_state_party",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/etatism/etatism_state_party_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/etatism/etatism_state_party_party.png",
+      "sprite": "GFX_generic_etatism_state_party_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "etatism",
+      "archetype": "state_party"
+    },
+    {
+      "key": "generic_etatism_military_committee",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/etatism/etatism_military_committee_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/etatism/etatism_military_committee_party.png",
+      "sprite": "GFX_generic_etatism_military_committee_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "etatism",
+      "archetype": "military_committee"
+    },
+    {
+      "key": "generic_etatism_emergency_administration",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/etatism/etatism_emergency_administration_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/etatism/etatism_emergency_administration_party.png",
+      "sprite": "GFX_generic_etatism_emergency_administration_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "etatism",
+      "archetype": "emergency_administration"
+    },
+    {
+      "key": "generic_hedonism_aristocratic_houses",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/hedonism/hedonism_aristocratic_houses_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/hedonism/hedonism_aristocratic_houses_party.png",
+      "sprite": "GFX_generic_hedonism_aristocratic_houses_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "hedonism",
+      "archetype": "aristocratic_houses"
+    },
+    {
+      "key": "generic_hedonism_guild_elite",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/hedonism/hedonism_guild_elite_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/hedonism/hedonism_guild_elite_party.png",
+      "sprite": "GFX_generic_hedonism_guild_elite_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "hedonism",
+      "archetype": "guild_elite"
+    },
+    {
+      "key": "generic_hedonism_cultural_club",
+      "class": "generic",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/generic/hedonism/hedonism_cultural_club_source.png",
+      "output": "gfx/texticons/adiscord/parties/generic/hedonism/hedonism_cultural_club_party.png",
+      "sprite": "GFX_generic_hedonism_cultural_club_party_texticon",
+      "runtime_size": [32, 32],
+      "ideology": "hedonism",
+      "archetype": "cultural_club"
+    },
+    {
+      "key": "unknown_party",
+      "class": "fallback",
+      "source_kind": "procedural_white_flag",
+      "output": "gfx/texticons/adiscord/parties/unknown_party.png",
+      "sprite": "GFX_unknown_party_texticon",
+      "runtime_size": [32, 32]
+    }
+  ],
+  "protected_legacy": [
+    {
+      "key": "stp_hedonist_party",
+      "output": "gfx/texticons/adiscord/parties/STP/STP_hedonist_party.png",
+      "sprite": "GFX_STP_hedonist_party_texticon",
+      "sha256": "a0e2b87a270e50c91e568b9d915746367a4e81ad92f746e48e731530d8cc518f",
+      "runtime_size": [25, 25]
+    },
+    {
+      "key": "val_etatist_party",
+      "output": "gfx/texticons/adiscord/parties/VAL/VAL_etatist_party.png",
+      "sprite": "GFX_VAL_etatist_party_texticon",
+      "sha256": "f703bd763cd3e4bbf44b9d34b14256337e481333867e261127b7c11e7c74b552",
+      "runtime_size": [25, 25]
+    },
+    {
+      "key": "wrk_worker_revolutionary_party",
+      "output": "gfx/texticons/adiscord/parties/WRK/WRK_worker_revolutionary_party.png",
+      "sprite": "GFX_WRK_worker_revolutionary_party_texticon",
+      "sha256": "5fdd08f8522281ff6948e43dd58ddc982a47100528216885a9a895b61084c76f",
+      "runtime_size": [25, 25]
+    }
+  ],
+  "country_assignments": [
+    {"party_key": "BBV_chauvinism_party", "sprite": "GFX_BBV_primary_party_texticon"},
+    {"party_key": "BCM_chauvinism_party", "sprite": "GFX_BCM_primary_party_texticon"},
+    {"party_key": "BGT_chauvinism_party", "sprite": "GFX_BGT_primary_party_texticon"},
+    {"party_key": "BHG_chauvinism_party", "sprite": "GFX_BHG_primary_party_texticon"},
+    {"party_key": "BJK_chauvinism_party", "sprite": "GFX_BJK_primary_party_texticon"},
+    {"party_key": "BLD_chauvinism_party", "sprite": "GFX_BLD_primary_party_texticon"},
+    {"party_key": "BTL_etatism_party", "sprite": "GFX_BTL_primary_party_texticon"},
+    {"party_key": "COF_anarchism_party", "sprite": "GFX_COF_primary_party_texticon"},
+    {"party_key": "DAN_etatism_party", "sprite": "GFX_DAN_primary_party_texticon"},
+    {"party_key": "EFL_chauvinism_party", "sprite": "GFX_EFL_primary_party_texticon"},
+    {"party_key": "NAM_etatism_party", "sprite": "GFX_NAM_primary_party_texticon"},
+    {"party_key": "PIV_hedonism_party", "sprite": "GFX_PIV_primary_party_texticon"},
+    {"party_key": "RUS_anarchism_party", "sprite": "GFX_RUS_primary_party_texticon"},
+    {"party_key": "TFF_anarchism_party", "sprite": "GFX_TFF_primary_party_texticon"},
+    {"party_key": "WIT_hedonism_party", "sprite": "GFX_WIT_primary_party_texticon"},
+    {"party_key": "YPR_utilitarism_party", "sprite": "GFX_YPR_primary_party_texticon"}
+  ]
+}

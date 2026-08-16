@@ -1,85 +1,272 @@
-spriteTypes = {	
-	spriteType = {
-		name = "GFX_unknown_party_texticon"
-		texturefile = "gfx/texticons/adiscord/parties/unknown_party.png"
-		legacy_lazy_load = no
-	}
-	##WRK
-	spriteType = {
-		name = "GFX_WRK_worker_revolutionary_party_texticon"
-		texturefile = "gfx/texticons/adiscord/parties/WRK/WRK_worker_revolutionary_party.png"
-		legacy_lazy_load = no
-	}
-	##STP
-	spriteType = {
-		name = "GFX_STP_hedonist_party_texticon"
-		texturefile = "gfx/texticons/adiscord/parties/STP/STP_hedonist_party.png"
-		legacy_lazy_load = no
-	}
-	##VAL
-	spriteType = {
-		name = "GFX_VAL_etatist_party_texticon"
-		texturefile = "gfx/texticons/adiscord/parties/VAL/VAL_etatist_party.png"
-		legacy_lazy_load = no
-	}
-	##IVN
-	spriteType = {
-		name = "GFX_IVN_roar_of_freedom_party_texticon"
-		texturefile = "gfx/texticons/adiscord/parties/IVN/IVN_roar_of_freedom_party.png"
-		legacy_lazy_load = no
-	}
-	spriteType = {
-		name = "GFX_IVN_emergency_committee_party_texticon"
-		texturefile = "gfx/texticons/adiscord/parties/IVN/IVN_emergency_committee_party.png"
-		legacy_lazy_load = no
-	}
-	##TVA
-	spriteType = {
-		name = "GFX_TVA_wartime_technocratic_worker_party_texticon"
-		texturefile = "gfx/texticons/adiscord/parties/TVA/TVA_wartime_technocratic_worker_party.png"
-		legacy_lazy_load = no
-	}
-	##VAD
-	spriteType = {
-		name = "GFX_VAD_vorkerland_imperial_party_texticon"
-		texturefile = "gfx/texticons/adiscord/parties/VAD/VAD_vorkerland_imperial_party.png"
-		legacy_lazy_load = no
-	}
-	##ZAO
-	spriteType = {
-		name = "GFX_ZAO_independent_party_texticon"
-		texturefile = "gfx/texticons/adiscord/parties/ZAO/ZAO_independent_party.png"
-		legacy_lazy_load = no
-	}
-	##PWR
-	spriteType = {
-		name = "GFX_PWR_independent_party_texticon"
-		texturefile = "gfx/texticons/adiscord/parties/PWR/PWR_independent_party.png"
-		legacy_lazy_load = no
-	}
-	##VLA
-	spriteType = {
-		name = "GFX_VLA_independent_party_texticon"
-		texturefile = "gfx/texticons/adiscord/parties/VLA/VLA_independent_party.png"
-		legacy_lazy_load = no
-	}
-	##ROM
-	spriteType = {
-		name = "GFX_ROM_independent_party_texticon"
-		texturefile = "gfx/texticons/adiscord/parties/ROM/ROM_independent_party.png"
-		legacy_lazy_load = no
-	}
-	##SOL
-	spriteType = {
-		name = "GFX_SOL_independent_party_texticon"
-		texturefile = "gfx/texticons/adiscord/parties/SOL/SOL_independent_party.png"
-		legacy_lazy_load = no
-	}
-	##TRU
-	spriteType = {
-		name = "GFX_TRU_independent_party_texticon"
-		texturefile = "gfx/texticons/adiscord/parties/TRU/TRU_independent_party.png"
-		legacy_lazy_load = no
-	}
-
+spriteTypes = {
+    spriteType = {
+        name = "GFX_unknown_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/unknown_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_WRK_worker_revolutionary_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/WRK/WRK_worker_revolutionary_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_STP_hedonist_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/STP/STP_hedonist_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_VAL_etatist_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/VAL/VAL_etatist_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_IVN_roar_of_freedom_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/IVN/IVN_roar_of_freedom_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_IVN_emergency_committee_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/IVN/IVN_emergency_committee_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_TVA_wartime_technocratic_worker_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/TVA/TVA_wartime_technocratic_worker_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_VAD_vorkerland_imperial_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/VAD/VAD_vorkerland_imperial_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_ZAO_independent_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/ZAO/ZAO_independent_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_PWR_independent_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/PWR/PWR_independent_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_VLA_independent_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/VLA/VLA_independent_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_ROM_independent_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/ROM/ROM_independent_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_SOL_independent_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/SOL/SOL_independent_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_TRU_independent_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/TRU/TRU_independent_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_BBV_primary_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/BBV/BBV_primary_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_BCM_primary_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/BCM/BCM_primary_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_BGT_primary_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/BGT/BGT_primary_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_BHG_primary_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/BHG/BHG_primary_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_BJK_primary_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/BJK/BJK_primary_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_BLD_primary_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/BLD/BLD_primary_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_BTL_primary_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/BTL/BTL_primary_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_COF_primary_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/COF/COF_primary_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_DAN_primary_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/DAN/DAN_primary_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_EFL_primary_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/EFL/EFL_primary_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_NAM_primary_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/NAM/NAM_primary_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_PIV_primary_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/PIV/PIV_primary_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_RUS_primary_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/RUS/RUS_primary_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_TFF_primary_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/TFF/TFF_primary_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_WIT_primary_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/WIT/WIT_primary_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_YPR_primary_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/YPR/YPR_primary_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_humanism_civic_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/humanism/humanism_civic_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_humanism_reform_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/humanism/humanism_reform_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_humanism_solidarity_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/humanism/humanism_solidarity_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_utilitarism_planning_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/utilitarism/utilitarism_planning_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_utilitarism_productive_union_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/utilitarism/utilitarism_productive_union_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_utilitarism_public_benefit_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/utilitarism/utilitarism_public_benefit_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_chauvinism_national_front_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/chauvinism/chauvinism_national_front_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_chauvinism_martial_league_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/chauvinism/chauvinism_martial_league_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_chauvinism_traditional_order_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/chauvinism/chauvinism_traditional_order_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_pragmatism_administrative_coalition_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/pragmatism/pragmatism_administrative_coalition_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_pragmatism_commercial_bloc_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/pragmatism/pragmatism_commercial_bloc_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_pragmatism_regional_establishment_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/pragmatism/pragmatism_regional_establishment_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_anarchism_communal_federation_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/anarchism/anarchism_communal_federation_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_anarchism_artel_union_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/anarchism/anarchism_artel_union_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_anarchism_frontier_movement_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/anarchism/anarchism_frontier_movement_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_technocracy_scientific_collegium_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/technocracy/technocracy_scientific_collegium_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_technocracy_engineering_directorate_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/technocracy/technocracy_engineering_directorate_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_technocracy_systems_bureau_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/technocracy/technocracy_systems_bureau_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_etatism_state_party_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/etatism/etatism_state_party_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_etatism_military_committee_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/etatism/etatism_military_committee_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_etatism_emergency_administration_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/etatism/etatism_emergency_administration_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_hedonism_aristocratic_houses_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/hedonism/hedonism_aristocratic_houses_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_hedonism_guild_elite_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/hedonism/hedonism_guild_elite_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
+        name = "GFX_generic_hedonism_cultural_club_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/generic/hedonism/hedonism_cultural_club_party.png"
+        legacy_lazy_load = no
+    }
 }

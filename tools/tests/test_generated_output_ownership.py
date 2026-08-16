@@ -151,10 +151,15 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
 
     def test_party_texticon_registry_exactly_matches_assets_and_is_exclusive(self) -> None:
         entry = self.entries["party_texticons"]
-        expected_outputs = [asset.output.as_posix() for asset in party_texticons.ASSETS]
+        expected_outputs = [
+            path.relative_to(ROOT).as_posix()
+            for path in party_texticons.expected_outputs()
+        ]
         expected_sources = [
             "tools/builders/build_adiscord_party_texticons.py",
-            *(asset.source.as_posix() for asset in party_texticons.ASSETS),
+            "tools/data/adiscord_party_texticons.json",
+            *(asset.source.as_posix() for asset in party_texticons.ASSETS if asset.source is not None),
+            *(protected.output.as_posix() for protected in party_texticons.PROTECTED),
         ]
         self.assertEqual(entry["output_globs"], expected_outputs)
         self.assertEqual(entry["source_inputs"], expected_sources)
