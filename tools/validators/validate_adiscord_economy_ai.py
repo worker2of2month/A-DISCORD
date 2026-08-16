@@ -3293,7 +3293,7 @@ def validate(root: Path = ROOT) -> list[str]:
     cycle = block(effects, "ADISCORD_economy_update_model_and_cycle")
     for system in (
         "agrarian", "industrializing", "free_market", "mixed",
-        "state_coordinated", "planned_bureaucratic", "mobilization",
+        "state_coordinated", "planned_bureaucratic", "syndicalist",
         "oligarchic_clan", "technocratic",
     ):
         wrapper = f"ADISCORD_economy_has_idea_economic_system_{system} = yes"

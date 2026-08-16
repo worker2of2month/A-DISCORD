@@ -29,7 +29,7 @@ ADISCORD_economy_has_idea_economic_system_free_market = { has_idea = ADISCORD_ec
 ADISCORD_economy_has_idea_economic_system_mixed = { has_idea = ADISCORD_economic_system_mixed }
 ADISCORD_economy_has_idea_economic_system_state_coordinated = { has_idea = ADISCORD_economic_system_state_coordinated }
 ADISCORD_economy_has_idea_economic_system_planned_bureaucratic = { has_idea = ADISCORD_economic_system_planned_bureaucratic }
-ADISCORD_economy_has_idea_economic_system_mobilization = { has_idea = ADISCORD_economic_system_mobilization }
+ADISCORD_economy_has_idea_economic_system_syndicalist = { has_idea = ADISCORD_economic_system_syndicalist }
 ADISCORD_economy_has_idea_economic_system_oligarchic_clan = { has_idea = ADISCORD_economic_system_oligarchic_clan }
 ADISCORD_economy_has_idea_economic_system_technocratic = { has_idea = ADISCORD_economic_system_technocratic }
 
@@ -182,7 +182,7 @@ ADISCORD_economy_model_is_planned_bureaucratic = {
 	check_variable = { var = ADISCORD_economy_model value = 5 compare = less_than }
 }
 
-ADISCORD_economy_model_is_mobilization = {
+ADISCORD_economy_model_is_syndicalist = {
 	check_variable = { var = ADISCORD_economy_model value = 5 compare = greater_than_or_equals }
 	check_variable = { var = ADISCORD_economy_model value = 6 compare = less_than }
 }
@@ -201,7 +201,7 @@ ADISCORD_economy_model_allows_advanced_taxation = {
 		ADISCORD_economy_model_is_mixed = yes
 		ADISCORD_economy_model_is_state_coordinated = yes
 		ADISCORD_economy_model_is_planned_bureaucratic = yes
-		ADISCORD_economy_model_is_mobilization = yes
+		ADISCORD_economy_model_is_syndicalist = yes
 		ADISCORD_economy_model_is_technocratic = yes
 	}
 }
@@ -218,6 +218,7 @@ ADISCORD_economy_model_allows_market_expansion = {
 	OR = {
 		ADISCORD_economy_model_is_decentralized_market = yes
 		ADISCORD_economy_model_is_mixed = yes
+		ADISCORD_economy_model_is_syndicalist = yes
 		ADISCORD_economy_model_is_oligarchic_clan = yes
 		ADISCORD_economy_model_is_technocratic = yes
 	}
@@ -227,7 +228,6 @@ ADISCORD_economy_model_allows_mobilization_economy = {
 	OR = {
 		ADISCORD_economy_model_is_state_coordinated = yes
 		ADISCORD_economy_model_is_planned_bureaucratic = yes
-		ADISCORD_economy_model_is_mobilization = yes
 	}
 }
 
@@ -252,7 +252,6 @@ ADISCORD_economy_model_allows_emergency_extraction = {
 		has_war = yes
 		ADISCORD_economy_model_is_state_coordinated = yes
 		ADISCORD_economy_model_is_planned_bureaucratic = yes
-		ADISCORD_economy_model_is_mobilization = yes
 	}
 }
 

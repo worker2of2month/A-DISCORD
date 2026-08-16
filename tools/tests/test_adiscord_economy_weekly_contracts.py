@@ -7191,7 +7191,7 @@ ADISCORD_task10_forbidden_cache_consumer = {
             "mixed",
             "state_coordinated",
             "planned_bureaucratic",
-            "mobilization",
+            "syndicalist",
             "oligarchic_clan",
             "technocratic",
         ):
@@ -7251,7 +7251,7 @@ ADISCORD_task10_forbidden_cache_consumer = {
             "mixed",
             "state_coordinated",
             "planned_bureaucratic",
-            "mobilization",
+            "syndicalist",
             "oligarchic_clan",
             "technocratic",
         ):
