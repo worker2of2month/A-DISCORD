@@ -7,7 +7,7 @@ ideas = {
 		undisturbed_isolation = {
 			allowed = { always = no }
 			removal_cost = -1
-			level = 7
+			level = 8
 
 			modifier = {
 				consumer_goods_expected_value = 0.45
@@ -39,7 +39,7 @@ ideas = {
 		isolation = {
 			allowed = { always = no }
 			removal_cost = -1
-			level = 6
+			level = 7
 
 			modifier = {
 				consumer_goods_expected_value = 0.38
@@ -64,6 +64,42 @@ ideas = {
 				}
 			}
 
+			cancel_if_invalid = no
+		}
+
+		ADISCORD_civilian_oriented_economy = {
+			available = {
+				has_war = no
+			}
+
+			cost = 150
+			removal_cost = -1
+			level = 6
+
+			modifier = {
+				consumer_goods_expected_value = 0.38
+				stability_factor = 0.12
+				production_speed_industrial_complex_factor = 0.18
+				production_speed_arms_factory_factor = -0.40
+				production_speed_dockyard_factor = -0.35
+				conversion_cost_civ_to_mil_factor = 0.40
+				conversion_cost_mil_to_civ_factor = -0.15
+				production_factory_max_efficiency_factor = -0.08
+				industrial_capacity_factory = -0.10
+				max_fuel_factor = -0.35
+				fuel_gain_factor = -0.45
+				factory_energy_consumption = -0.30
+				ADISCORD_economy_civilian_factory_income_factor = 0.15
+				ADISCORD_economy_military_industry_income_factor = -0.15
+				ADISCORD_economy_army_expense_factor = -0.15
+				ADISCORD_economy_inflation_pressure_factor = -0.08
+				ADISCORD_economy_price_stability_factor = 0.08
+				ADISCORD_economy_creditworthiness_factor = 0.05
+				ADISCORD_economy_state_overload_gain_factor = -0.08
+				ADISCORD_country_development_economic_growth_factor = 0.05
+			}
+
+			default = yes
 			cancel_if_invalid = no
 		}
 
@@ -95,7 +131,6 @@ ideas = {
 				ADISCORD_country_development_economic_growth_factor = 0.03
 			}
 
-			default = yes
 			cancel_if_invalid = no
 		}
 

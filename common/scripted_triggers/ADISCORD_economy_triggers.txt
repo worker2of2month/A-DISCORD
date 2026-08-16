@@ -5,6 +5,7 @@
 # references when common/scripted_effects is hot-reloaded. Economy effects call
 # these precompiled triggers instead, so iterating on calculations cannot turn
 # every scheduled budget update into an error-log storm.
+ADISCORD_economy_has_idea_civilian_oriented_economy = { has_idea = ADISCORD_civilian_oriented_economy }
 ADISCORD_economy_has_idea_civilian_economy = { has_idea = civilian_economy }
 ADISCORD_economy_has_idea_low_economic_mobilisation = { has_idea = low_economic_mobilisation }
 ADISCORD_economy_has_idea_partial_economic_mobilisation = { has_idea = partial_economic_mobilisation }
