@@ -1,4 +1,6 @@
 ﻿l_english:
+ ADISCORD_civilian_oriented_economy: "Civilian-Oriented Economy"
+ ADISCORD_civilian_oriented_economy_desc: "Civilian consumption, housing, and infrastructure construction take priority over military orders. The policy supports stability and long-term development, but sharply slows military-industry expansion and the conversion of factories to wartime production."
  ADISCORD_economy.3.t: "[GetADISCORDEconomyDebtNotificationKindLoc]"
  ADISCORD_economy.3.d: "[GetADISCORDEconomyDebtNotificationCauseLoc]\n\nState: [GetADISCORDEconomyDebtNotificationStateLoc] ([?ADISCORD_economy_pending_debt_notification_previous_state|0] → [?ADISCORD_economy_pending_debt_notification_new_state|0]).\nAutomatic borrowing this settlement: [?ADISCORD_economy_pending_debt_notification_amount|1]\nPrincipal: [?ADISCORD_economy_debt|1]\nInterest: [?ADISCORD_economy_weekly_interest|2] per week — [?ADISCORD_economy_interest_share_income|1]% of weekly income.\n\nCURRENT EFFECT\n[GetADISCORDDebtEffectsLoc]\n\nNEXT RISK\n[GetADISCORDEconomyDebtNotificationNextRiskLoc]"
  ADISCORD_economy.3.a: "Acknowledge"

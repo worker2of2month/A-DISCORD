@@ -120,6 +120,13 @@ def law_entries():
     }
 
 
+def localisation_value(text, key):
+    match = re.search(rf'(?m)^\s*{re.escape(key)}:\d*\s+"([^"]*)"', text)
+    if not match:
+        raise AssertionError(f"missing localisation key: {key}")
+    return match.group(1)
+
+
 class EconomicMobilizationLawContracts(unittest.TestCase):
     def test_active_progression_has_six_unique_levels_and_new_default(self):
         laws = law_entries()
@@ -213,6 +220,38 @@ class EconomicMobilizationLawContracts(unittest.TestCase):
                 self.assertEqual("PNG", image.format)
                 self.assertEqual((64, 64), image.size)
                 self.assertIn("A", image.getbands())
+
+    def test_new_tier_is_bilingual_and_existing_russian_names_stay_stable(self):
+        self.assertTrue(RU_LOC_PATH.read_bytes().startswith(b"\xef\xbb\xbf"))
+        ru = RU_LOC_PATH.read_text(encoding="utf-8-sig")
+        en = EN_LOC_PATH.read_text(encoding="utf-8-sig")
+        self.assertEqual(
+            "Гражданско-ориентированная экономика",
+            localisation_value(ru, "ADISCORD_civilian_oriented_economy"),
+        )
+        self.assertEqual(
+            "Civilian-Oriented Economy",
+            localisation_value(en, "ADISCORD_civilian_oriented_economy"),
+        )
+        self.assertGreater(
+            len(localisation_value(ru, "ADISCORD_civilian_oriented_economy_desc")),
+            120,
+        )
+        self.assertGreater(
+            len(localisation_value(en, "ADISCORD_civilian_oriented_economy_desc")),
+            120,
+        )
+        expected_existing = {
+            "civilian_economy": "Гражданская экономика",
+            "low_economic_mobilisation": "Подготовительная мобилизация",
+            "partial_economic_mobilisation": "Частичная мобилизация",
+            "war_economy": "Военная экономика",
+            "tot_economic_mobilisation": "Тотальная мобилизация",
+        }
+        self.assertEqual(
+            expected_existing,
+            {key: localisation_value(ru, key) for key in expected_existing},
+        )
 
 
 if __name__ == "__main__":
