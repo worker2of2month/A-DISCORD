@@ -18,10 +18,16 @@ class AssetSpec:
     key: str
     source: Path
     output: Path
+    runtime_size: tuple[int, int] = (25, 25)
 
 
 ASSETS = (
-    AssetSpec("ivn_roar_of_freedom", Path("tools/assets/source/party_texticons/IVN_roar_of_freedom_source.png"), Path("gfx/texticons/adiscord/parties/IVN/IVN_roar_of_freedom_party.png")),
+    AssetSpec(
+        "ivn_roar_of_freedom",
+        Path("tools/assets/source/party_texticons/IVN_roar_of_freedom_source.png"),
+        Path("gfx/texticons/adiscord/parties/IVN/IVN_roar_of_freedom_party.png"),
+        runtime_size=(32, 32),
+    ),
     AssetSpec("ivn_emergency_committee", Path("tools/assets/source/party_texticons/IVN_emergency_committee_source.png"), Path("gfx/texticons/adiscord/parties/IVN/IVN_emergency_committee_party.png")),
     AssetSpec("tva_wartime_technocratic_worker", Path("tools/assets/source/party_texticons/TVA_wartime_technocratic_worker_source.png"), Path("gfx/texticons/adiscord/parties/TVA/TVA_wartime_technocratic_worker_party.png")),
     AssetSpec("vad_vorkerland_imperial", Path("tools/assets/source/party_texticons/VAD_vorkerland_imperial_source.png"), Path("gfx/texticons/adiscord/parties/VAD/VAD_vorkerland_imperial_party.png")),
@@ -34,7 +40,7 @@ ASSETS = (
 )
 
 
-def render_icon(source: Path) -> bytes:
+def render_icon(source: Path, runtime_size: tuple[int, int] = (25, 25)) -> bytes:
     with Image.open(source) as image:
         rgba = image.convert("RGBA")
         if min(rgba.size) < 512:
@@ -45,18 +51,25 @@ def render_icon(source: Path) -> bytes:
         bbox = alpha.getbbox()
         if bbox is None:
             raise RuntimeError(f"party texticon master is fully transparent: {source}")
+        artwork_size = (runtime_size[0] - 2, runtime_size[1] - 2)
         cropped = rgba.crop(bbox)
-        cropped.thumbnail((23, 23), Image.Resampling.LANCZOS)
+        cropped.thumbnail(artwork_size, Image.Resampling.LANCZOS)
         cropped = cropped.filter(ImageFilter.UnsharpMask(radius=0.55, percent=115, threshold=2))
-        canvas = Image.new("RGBA", (25, 25), (0, 0, 0, 0))
-        canvas.alpha_composite(cropped, ((25 - cropped.width) // 2, (25 - cropped.height) // 2))
+        canvas = Image.new("RGBA", runtime_size, (0, 0, 0, 0))
+        canvas.alpha_composite(
+            cropped,
+            ((runtime_size[0] - cropped.width) // 2, (runtime_size[1] - cropped.height) // 2),
+        )
         output = io.BytesIO()
         canvas.save(output, format="PNG", optimize=False, compress_level=9)
         return output.getvalue()
 
 
 def expected_outputs(root: Path = ROOT) -> dict[Path, bytes]:
-    return {root / asset.output: render_icon(root / asset.source) for asset in ASSETS}
+    return {
+        root / asset.output: render_icon(root / asset.source, asset.runtime_size)
+        for asset in ASSETS
+    }
 
 
 def drift(root: Path = ROOT) -> list[str]:
