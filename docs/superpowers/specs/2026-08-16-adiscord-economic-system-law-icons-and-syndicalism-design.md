@@ -140,6 +140,12 @@ technical rename and localisation. Each `spriteType` in
 remain exactly 64x64 with alpha; this task does not recreate or convert the
 user's artwork and does not modify `tools/assets/source/laws.psd`.
 
+Only the nine filenames listed in the table belong to this move. In particular,
+`gfx/interface/ideas/laws/Гражданско-ориентированная экономика ур1.png` and any
+other new artwork for the separate economic-mobilization progression remain at
+their current paths and are not renamed, moved, edited, declared, or otherwise
+incorporated into this task.
+
 ## Starting Economic Systems
 
 Country history must give exactly these requested starts:
@@ -178,6 +184,12 @@ design's non-goal boundary.
   path in this scope is currently identified as generator-owned.
 - Do not add compatibility aliases or startup migrations for the removed law.
 - Do not change other law categories, country ideas, or economic-system costs.
+- Do not change the existing `ADISCORD_economy_model_allows_mobilization_economy`
+  capability or the separate civilian-to-mobilized economy progression except
+  to remove the obsolete model-5 predicate from capability membership. The
+  state-coordinated and planned-bureaucratic members remain intact.
+- Do not touch `Гражданско-ориентированная экономика ур1.png` or later assets
+  being prepared for that separate progression.
 - Do not launch Hearts of Iron IV automatically.
 
 ## Verification
@@ -192,6 +204,8 @@ change must prove:
   modifiers;
 - none of the former mobilization-only model-5 effects remain;
 - all nine sprite paths resolve to 64x64 alpha-capable PNG files;
+- `Гражданско-ориентированная экономика ур1.png` remains at its original path
+  with unchanged content and is absent from the economic-system sprite changes;
 - the six selected tags have exactly the requested starting law;
 - Russian localisation retains its UTF-8 BOM;
 - focused economic-system and existing weekly economy tests pass;
