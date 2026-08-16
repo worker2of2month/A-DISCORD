@@ -41,7 +41,7 @@ CONSOLIDATED_COUNTS = {
     "ADISCORD_inner_frontier_countries_l_russian": 93,
     "ADISCORD_northern_countries_l_russian": 179,
     "ADISCORD_southern_desert_l_russian": 99,
-    "ADISCORD_autonomy_l_russian.yml": 9,
+    "ADISCORD_autonomy_l_russian.yml": 10,
     "ADISCORD_economy_modifiers_l_russian.yml": 42,
     "ADISCORD_event_ui_test_l_russian.yml": 21,
     "ADISCORD_factions_l_russian.yml": 9,

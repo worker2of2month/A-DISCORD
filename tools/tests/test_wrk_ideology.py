@@ -113,21 +113,23 @@ class WrkIdeologyContractTests(unittest.TestCase):
             r"(?s)ADISCORD_vorkerland_apply_claimant_cosmetics\s*=\s*\{(.*?)\n\}",
             effects,
         )
+        nikita_promotion = re.search(
+            r"(?s)ADISCORD_vorkerland_promote_nikita_worcker\s*=\s*\{(.*?)\n\}",
+            effects,
+        )
         self.assertIsNotNone(claimant_cosmetics)
+        self.assertIsNotNone(nikita_promotion)
         worker_survives = re.search(
             r"(?s)has_global_flag\s*=\s*ADISCORD_vorkerland_worker_safe_with_loyalists.*?"
-            r"set_country_leader_ideology\s*=\s*neo_vorkerism",
+            r"ADISCORD_vorkerland_promote_nikita_worcker\s*=\s*yes",
             claimant_cosmetics.group(1),
         )
         self.assertIsNotNone(worker_survives)
+        self.assertIn("character = WRK_Nikita_Worcker", nikita_promotion.group(1))
+        self.assertEqual(nikita_promotion.group(1).count("ideology = neo_vorkerism"), 2)
         self.assertNotIn("WKR_Worker_Emergency_Presidium", claimant_cosmetics.group(1))
-        self.assertRegex(
-            on_actions,
-            r"(?s)has_global_flag\s*=\s*ADISCORD_vorkerland_collapse_started.*?"
-            r"has_global_flag\s*=\s*ADISCORD_vorkerland_worker_safe_with_loyalists.*?"
-            r"has_country_leader_ideology\s*=\s*vorkerism.*?"
-            r"set_country_leader_ideology\s*=\s*neo_vorkerism",
-        )
+        self.assertNotIn("set_country_leader_ideology = neo_vorkerism", on_actions)
+        self.assertNotIn("Save-compatible ideology migration", on_actions)
 
     def test_russian_localisation_explains_structural_instability(self) -> None:
         localisation = read("localisation/russian/parties_l_russian.yml")
