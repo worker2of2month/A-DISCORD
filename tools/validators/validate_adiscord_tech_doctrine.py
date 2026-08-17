@@ -1443,14 +1443,14 @@ def check_infantry_visual_model_chain() -> list[str]:
     text = strip_comments(read_text(equipment_path))
     expected_levels = {
         "infantry_equipment_0": 0,
-        "ADISCORD_infantry_equipment_2156": 1,
-        "ADISCORD_infantry_equipment_2163": 2,
+        "ADISCORD_infantry_equipment_2156": 0,
+        "ADISCORD_infantry_equipment_2163": 1,
         "ADISCORD_infantry_equipment_2168": 2,
-        "ADISCORD_infantry_equipment_2170": 2,
-        "ADISCORD_infantry_equipment_2178": 3,
-        "ADISCORD_infantry_equipment_2183": 3,
-        "ADISCORD_infantry_equipment_2193": 3,
-        "ADISCORD_infantry_equipment_2200": 3,
+        "ADISCORD_infantry_equipment_2170": 3,
+        "ADISCORD_infantry_equipment_2178": 4,
+        "ADISCORD_infantry_equipment_2183": 5,
+        "ADISCORD_infantry_equipment_2193": 6,
+        "ADISCORD_infantry_equipment_2200": 7,
     }
     for equipment, expected_level in expected_levels.items():
         match = re.search(rf"(?m)^\s*{re.escape(equipment)}\s*=\s*\{{", text)
@@ -1473,6 +1473,41 @@ def check_infantry_visual_model_chain() -> list[str]:
     canonical_asset = (
         ROOT / "gfx" / "entities" / "zz_ADISCORD_country_infantry.asset"
     )
+    progression_asset = (
+        ROOT / "gfx" / "entities" / "zy_ADISCORD_infantry_weapon_progression.asset"
+    )
+    source_prefixes = (
+        "HOL_infantry_weapon_rifle",
+        "SHX_infantry_weapon_rifle",
+        "MEX_infantry_weapon_rifle",
+        "XSM_infantry_weapon_mg",
+        "HOL_infantry_weapon_mg",
+        "YUN_infantry_weapon_mg",
+        "PRC_infantry_weapon_mg",
+        "MEX_infantry_weapon_mg",
+    )
+    poses = ("right", "left", "long_idle")
+    attachments = (
+        ("rifle1", "Right_Hand_node", "right"),
+        ("rifle2", "Left_Hand_node", "left"),
+        ("rifle3", "mid_back_node", "long_idle"),
+        ("rifle4", "Root_node_2", "right"),
+    )
+    generic_body_attachments = (
+        ("lighter", "Right_Hand_node_4", "lighter_entity"),
+        ("cigarette1", "Right_Hand_node_2", "cigarette_entity"),
+        ("cigarette_package1", "Right_Hand_node_3", "cigarette_package_entity"),
+        ("cigarette_package2", "Left_Hand_node_2", "cigarette_package_entity"),
+        ("cigarette2", "Root_node_1", "cigarette_entity"),
+    )
+
+    def find_entity_block(asset_text: str, name: str) -> str:
+        for match in re.finditer(r"(?m)^\s*entity\s*=\s*\{", asset_text):
+            block = extract_block(asset_text, match.start())
+            if re.search(rf'\bname\s*=\s*"{re.escape(name)}"', block):
+                return block
+        return ""
+
     if legacy_asset.exists():
         issues.append("gfx/units_infantry.asset is an obsolete vanilla override")
     if vanilla_override.exists():
@@ -1487,62 +1522,156 @@ def check_infantry_visual_model_chain() -> list[str]:
         issues.append(
             "country infantry asset must load after vanilla units_infantry.asset"
         )
+    if not progression_asset.exists():
+        issues.append("global infantry weapon progression asset missing")
+    else:
+        progression_text = read_text(progression_asset)
+        if progression_asset.name.casefold() >= canonical_asset.name.casefold():
+            issues.append(
+                "weapon progression asset must load before country infantry asset"
+            )
+        forbidden_wrapper_fields = (
+            "pdxmesh",
+            "scale",
+            "transform",
+            "animation",
+            "state",
+        )
+        expected_wrapper_names = {
+            f"ADISCORD_infantry_weapon_{level}_{pose}_entity"
+            for level in range(8)
+            for pose in poses
+        }
+
+        actual_wrapper_names = []
+        for match in re.finditer(r"(?m)^\s*entity\s*=\s*\{", progression_text):
+            block = extract_block(progression_text, match.start())
+            name_match = re.search(r'\bname\s*=\s*"([A-Za-z0-9_]+)"', block)
+            if name_match and re.fullmatch(
+                r"ADISCORD_infantry_weapon_[A-Za-z0-9_]+_entity",
+                name_match.group(1),
+            ):
+                actual_wrapper_names.append(name_match.group(1))
+        if len(actual_wrapper_names) != 24 or set(actual_wrapper_names) != expected_wrapper_names:
+            issues.append("weapon progression asset must define exactly 24 wrapper entities")
+
+        for level, source_prefix in enumerate(source_prefixes):
+            for pose in poses:
+                wrapper = f"ADISCORD_infantry_weapon_{level}_{pose}_entity"
+                expected_parent = f"{source_prefix}_{pose}_entity"
+                wrapper_block = find_entity_block(progression_text, wrapper)
+                if not wrapper_block:
+                    issues.append(f"weapon progression asset is missing {wrapper}")
+                    continue
+                clone_match = re.search(r'\bclone\s*=\s*"([^"]+)"', wrapper_block)
+                actual_parent = clone_match.group(1) if clone_match else None
+                if actual_parent != expected_parent:
+                    issues.append(
+                        f"{wrapper} clones {actual_parent}; expected {expected_parent}"
+                    )
+                for field in forbidden_wrapper_fields:
+                    if re.search(rf"\b{field}\s*=", wrapper_block):
+                        issues.append(f"{wrapper} must not define {field}")
+
+        for level in range(8):
+            entity = (
+                "infantry_entity"
+                if level == 0
+                else f"generic_infantry_{level + 1}_entity"
+            )
+            entity_block = find_entity_block(progression_text, entity)
+            if not entity_block:
+                issues.append(f"weapon progression asset is missing {entity}")
+                continue
+            expected_parent = "infantry_rifle_entity" if level == 0 else "infantry_2_entity"
+            clone_match = re.search(r'\bclone\s*=\s*"([^"]+)"', entity_block)
+            actual_parent = clone_match.group(1) if clone_match else None
+            if actual_parent != expected_parent:
+                issues.append(f"{entity} must clone {expected_parent}")
+            scale_match = re.search(r"\bscale\s*=\s*([0-9.]+)", entity_block)
+            actual_scale = scale_match.group(1) if scale_match else None
+            if actual_scale != "0.8":
+                issues.append(f"{entity} scale is {actual_scale}; expected 0.8")
+            for attachment, node, pose in attachments:
+                wrapper = f"ADISCORD_infantry_weapon_{level}_{pose}_entity"
+                pattern = (
+                    rf'attach\s*=\s*\{{\s*name\s*=\s*"{attachment}"\s+'
+                    rf'{node}\s*=\s*"{wrapper}"\s*\}}'
+                )
+                if not re.search(pattern, entity_block):
+                    issues.append(
+                        f"{entity} must attach {wrapper} as {attachment}"
+                    )
+            for attachment, node, prop_entity in generic_body_attachments:
+                pattern = (
+                    rf'attach\s*=\s*\{{\s*name\s*=\s*"{attachment}"\s+'
+                    rf'{node}\s*=\s*"{prop_entity}"\s*\}}'
+                )
+                if not re.search(pattern, entity_block):
+                    issues.append(f"{entity} must preserve {attachment} attachment")
     if not canonical_asset.exists():
         issues.append("gfx/entities/zz_ADISCORD_country_infantry.asset missing")
     else:
         asset_text = read_text(canonical_asset)
-        for entity in (
-            "STP_infantry_entity",
-            "STP_infantry_2_entity",
-            "STP_infantry_3_entity",
-            "NOD_infantry_entity",
-            "NOD_infantry_2_entity",
-            "NOD_infantry_3_entity",
-            "VAL_infantry_entity",
-            "VAL_infantry_2_entity",
-            "VAL_infantry_3_entity",
-            "CIN_infantry_entity",
-            "CIN_infantry_2_entity",
-            "CIN_infantry_3_entity",
-            "OSF_infantry_entity",
-            "OSF_infantry_2_entity",
-            "OSF_infantry_3_entity",
-            "APH_infantry_entity",
-            "APH_infantry_2_entity",
-            "APH_infantry_3_entity",
-            "APH_mountaineers_entity",
-            "APH_mountaineers_2_entity",
-            "APH_mountaineers_3_entity",
-        ):
-            if not re.search(rf'\bname\s*=\s*"{entity}"', asset_text):
-                issues.append(f"A-Discord infantry asset is missing {entity}")
-
-        expected_clones = {
-            "STP_infantry_3_entity": "STP_infantry_2_entity",
-            "NOD_infantry_3_entity": "STP_infantry_3_entity",
-            "VAL_infantry_3_entity": "VAL_infantry_2_entity",
+        custom_prefixes = (
+            "STP_infantry",
+            "NOD_infantry",
+            "VAL_infantry",
+            "CIN_infantry",
+            "OSF_infantry",
+            "APH_infantry",
+            "APH_mountaineers",
+        )
+        expected_custom_body_meshes = {
+            "STP_infantry_2_entity": "STP_infantry_hedonist_mesh",
+            "VAL_infantry_2_entity": "VAL_infantry_mesh",
+            "CIN_infantry_2_entity": "ETH_irregular_infantry_mesh",
+            "OSF_infantry_2_entity": "ETH_irregular_infantry_mesh",
+            "APH_infantry_2_entity": "APH_irregular_infantry_mesh",
+            "APH_mountaineers_2_entity": "APH_afg_militia_mg_mesh",
         }
-        for entity, expected_parent in expected_clones.items():
-            entity_match = next(
-                (
-                    match
-                    for match in re.finditer(r"(?m)^\s*entity\s*=\s*\{", asset_text)
-                    if re.search(
-                        rf'\bname\s*=\s*"{re.escape(entity)}"',
-                        extract_block(asset_text, match.start()),
-                    )
-                ),
-                None,
+        if re.search(r'"(?:ENG|USA)_infantry_weapon_', asset_text):
+            issues.append(
+                "A-Discord infantry asset retains a legacy regional weapon attachment"
             )
-            if not entity_match:
-                continue
-            entity_block = extract_block(asset_text, entity_match.start())
-            clone_match = re.search(r'\bclone\s*=\s*"([^"]+)"', entity_block)
-            actual_parent = clone_match.group(1) if clone_match else None
-            if actual_parent != expected_parent:
-                issues.append(
-                    f"{entity} clones {actual_parent}; expected {expected_parent}"
-                )
+        for prefix in custom_prefixes:
+            for level in range(8):
+                suffix = "" if level == 0 else f"_{level + 1}"
+                entity = f"{prefix}{suffix}_entity"
+                entity_block = find_entity_block(asset_text, entity)
+                if not entity_block:
+                    issues.append(f"A-Discord infantry asset is missing {entity}")
+                    continue
+                expected_parent = None
+                if prefix == "NOD_infantry":
+                    expected_parent = f"STP_infantry{suffix}_entity"
+                elif level >= 2:
+                    expected_parent = f"{prefix}_2_entity"
+                if expected_parent and not re.search(
+                    rf'\bclone\s*=\s*"{re.escape(expected_parent)}"',
+                    entity_block,
+                ):
+                    issues.append(
+                        f"{entity} must clone {expected_parent} to preserve its body"
+                    )
+                expected_mesh = expected_custom_body_meshes.get(entity)
+                if expected_mesh:
+                    mesh_match = re.search(r'\bpdxmesh\s*=\s*"([^"]+)"', entity_block)
+                    actual_mesh = mesh_match.group(1) if mesh_match else None
+                    if actual_mesh != expected_mesh:
+                        issues.append(
+                            f"{entity} pdxmesh is {actual_mesh}; expected {expected_mesh}"
+                        )
+                for attachment, node, pose in attachments:
+                    wrapper = f"ADISCORD_infantry_weapon_{level}_{pose}_entity"
+                    pattern = (
+                        rf'attach\s*=\s*\{{\s*name\s*=\s*"{attachment}"\s+'
+                        rf'{node}\s*=\s*"{wrapper}"\s*\}}'
+                    )
+                    if not re.search(pattern, entity_block):
+                        issues.append(
+                            f"{entity} must attach {wrapper} as {attachment}"
+                        )
     return issues
 
 

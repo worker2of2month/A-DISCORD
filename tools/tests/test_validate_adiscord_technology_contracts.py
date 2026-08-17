@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+import shutil
 import tempfile
 import unittest
 from dataclasses import replace
@@ -417,6 +419,152 @@ ADISCORD_produce_armored_carriers = {
             issues = validator.check_campaign_technology_baseline(self.tech_blocks)
         self.assertTrue(
             any("grants both permanent XOR choices" in issue for issue in issues),
+            issues,
+        )
+
+    def test_infantry_visual_contract_rejects_regressed_equipment_level(self) -> None:
+        equipment_path = (
+            validator.ROOT
+            / "common/units/equipment/ADISCORD_infantry_equipment.txt"
+        )
+        equipment = validator.read_text(equipment_path)
+        match = re.search(
+            r"(?m)^\s*ADISCORD_infantry_equipment_2200\s*=\s*\{",
+            equipment,
+        )
+        self.assertIsNotNone(match)
+        start = match.start()
+        block = validator.extract_block(equipment, start)
+        self.assertIn("visual_level = 7", block)
+        broken_block = block.replace("visual_level = 7", "visual_level = 3", 1)
+        broken_equipment = (
+            equipment[:start] + broken_block + equipment[start + len(block):]
+        )
+
+        original_read = validator.read_text
+
+        def fake_read(path: Path) -> str:
+            return broken_equipment if path == equipment_path else original_read(path)
+
+        with patch.object(validator, "read_text", side_effect=fake_read):
+            issues = validator.check_infantry_visual_model_chain()
+        self.assertTrue(
+            any("ADISCORD_infantry_equipment_2200" in issue for issue in issues),
+            issues,
+        )
+
+    def test_infantry_visual_contract_rejects_missing_weapon_wrapper(self) -> None:
+        progression_path = (
+            validator.ROOT
+            / "gfx/entities/zy_ADISCORD_infantry_weapon_progression.asset"
+        )
+        progression = validator.read_text(progression_path)
+        broken_progression = progression.replace(
+            'name = "ADISCORD_infantry_weapon_7_right_entity"',
+            'name = "ADISCORD_infantry_weapon_7_right_entity_BROKEN"',
+            1,
+        )
+        self.assertNotEqual(progression, broken_progression)
+        original_read = validator.read_text
+
+        def fake_read(path: Path) -> str:
+            if path == progression_path:
+                return broken_progression
+            return original_read(path)
+
+        with patch.object(validator, "read_text", side_effect=fake_read):
+            issues = validator.check_infantry_visual_model_chain()
+        self.assertTrue(
+            any("ADISCORD_infantry_weapon_7_right_entity" in issue for issue in issues),
+            issues,
+        )
+
+    def test_infantry_visual_contract_reports_missing_progression_asset_without_throwing(self) -> None:
+        equipment_relative_path = Path(
+            "common/units/equipment/ADISCORD_infantry_equipment.txt"
+        )
+        country_asset_relative_path = Path(
+            "gfx/entities/zz_ADISCORD_country_infantry.asset"
+        )
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_root = Path(temp_dir)
+            for relative_path in (
+                equipment_relative_path,
+                country_asset_relative_path,
+            ):
+                target = temp_root / relative_path
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(validator.ROOT / relative_path, target)
+            with patch.object(validator, "ROOT", temp_root):
+                issues = validator.check_infantry_visual_model_chain()
+        self.assertTrue(
+            any("global infantry weapon progression asset missing" in issue for issue in issues),
+            issues,
+        )
+
+    def test_infantry_visual_contract_rejects_regressed_generic_body_contract(self) -> None:
+        progression_path = (
+            validator.ROOT
+            / "gfx/entities/zy_ADISCORD_infantry_weapon_progression.asset"
+        )
+        progression = validator.read_text(progression_path)
+        regressions = {
+            "parent": (
+                'clone = "infantry_rifle_entity"\n\tname = "infantry_entity"',
+                'clone = "infantry_2_entity"\n\tname = "infantry_entity"',
+                "infantry_entity must clone infantry_rifle_entity",
+            ),
+            "scale": (
+                'name = "infantry_entity"\n\tattach = { name = "rifle1"',
+                'name = "infantry_entity"\n\tscale = 1.0\n\tattach = { name = "rifle1"',
+                "infantry_entity scale is 1.0; expected 0.8",
+            ),
+            "prop": (
+                'attach = { name = "lighter" Right_Hand_node_4 = "lighter_entity" }',
+                'attach = { name = "lighter_BROKEN" Right_Hand_node_4 = "lighter_entity" }',
+                "infantry_entity must preserve lighter attachment",
+            ),
+        }
+        original_read = validator.read_text
+        for regression, (old, new, expected_issue) in regressions.items():
+            with self.subTest(regression=regression):
+                broken_progression = progression.replace(old, new, 1)
+                self.assertNotEqual(progression, broken_progression)
+
+                def fake_read(path: Path) -> str:
+                    return (
+                        broken_progression
+                        if path == progression_path
+                        else original_read(path)
+                    )
+
+                with patch.object(validator, "read_text", side_effect=fake_read):
+                    issues = validator.check_infantry_visual_model_chain()
+                self.assertIn(expected_issue, issues)
+
+    def test_infantry_visual_contract_rejects_regressed_custom_second_level_mesh(self) -> None:
+        country_asset_path = (
+            validator.ROOT / "gfx/entities/zz_ADISCORD_country_infantry.asset"
+        )
+        country_asset = validator.read_text(country_asset_path)
+        broken_country_asset = country_asset.replace(
+            'name = "STP_infantry_2_entity"\n\tpdxmesh = "STP_infantry_hedonist_mesh"',
+            'name = "STP_infantry_2_entity"\n\tpdxmesh = "STP_infantry_hedonist_mesh_BROKEN"',
+            1,
+        )
+        self.assertNotEqual(country_asset, broken_country_asset)
+        original_read = validator.read_text
+
+        def fake_read(path: Path) -> str:
+            return (
+                broken_country_asset if path == country_asset_path else original_read(path)
+            )
+
+        with patch.object(validator, "read_text", side_effect=fake_read):
+            issues = validator.check_infantry_visual_model_chain()
+        self.assertIn(
+            "STP_infantry_2_entity pdxmesh is STP_infantry_hedonist_mesh_BROKEN; "
+            "expected STP_infantry_hedonist_mesh",
             issues,
         )
 

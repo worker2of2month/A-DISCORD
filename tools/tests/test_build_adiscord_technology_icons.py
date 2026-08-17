@@ -94,13 +94,13 @@ class TechnologyIconSourceTests(unittest.TestCase):
         self.assertEqual([entry["tier"] for entry in antitank], list(range(1, 13)))
         self.assertEqual(len({entry["key"] for entry in antitank}), 12)
         self.assertEqual(len({entry["output"] for entry in antitank}), 12)
-        self.assertEqual(len({entry["source"] for entry in antitank}), 10)
+        self.assertEqual(len({entry["source"] for entry in antitank}), 12)
         self.assertTrue(all(entry["kind"] == "compact" for entry in antitank))
         self.assertTrue(
-            all(len(entry["crop"]) == 4 for entry in antitank if entry["tier"] in {2, 10, 11})
+            all(len(entry["crop"]) == 4 for entry in antitank if entry["tier"] == 2)
         )
         self.assertTrue(
-            all("crop" not in entry for entry in antitank if entry["tier"] in {1, 3, 4, 5, 6, 7, 8, 9, 12})
+            all("crop" not in entry for entry in antitank if entry["tier"] != 2)
         )
 
     def test_redrawn_personal_antitank_icons_use_individual_sources(self) -> None:
@@ -112,7 +112,7 @@ class TechnologyIconSourceTests(unittest.TestCase):
         }
 
         self.assertEqual(
-            {tier: antitank[tier]["source"] for tier in {3, 4, 5, 6, 7, 8, 9, 12}},
+            {tier: antitank[tier]["source"] for tier in range(3, 13)},
             {
                 3: "personal_antitank_03_shaped_charge_grenade.png",
                 4: "personal_antitank_04_antitank_rifle.png",
@@ -121,17 +121,14 @@ class TechnologyIconSourceTests(unittest.TestCase):
                 7: "personal_antitank_07_saclos_guidance.png",
                 8: "personal_antitank_08_rocket_launcher.png",
                 9: "personal_antitank_09_top_attack_seeker.png",
+                10: "personal_antitank_10_tandem_warhead.png",
+                11: "personal_antitank_11_loitering_munition.png",
                 12: "personal_antitank_12_multispectral_targeting.png",
             },
         )
         self.assertEqual(antitank[1]["source"], "personal_antitank_01_incendiary_bottle.dds")
         self.assertTrue(antitank[1]["runtime_master"])
-        self.assertTrue(
-            all(
-                antitank[tier]["source"] == "personal_antitank_generated_sheet.png"
-                for tier in {2, 10, 11}
-            )
-        )
+        self.assertEqual(antitank[2]["source"], "personal_antitank_generated_sheet.png")
 
 
 class TechnologyIconBuilderTests(unittest.TestCase):
@@ -174,6 +171,47 @@ class TechnologyIconBuilderTests(unittest.TestCase):
             with Image.open(BytesIO(payload)) as image:
                 self.assertEqual(image.size, (72, 72), path)
                 self.assertEqual(image.mode, "RGBA", path)
+
+    def test_rendered_personal_antitank_icons_are_clean_alpha_cutouts(self) -> None:
+        builder = self._builder()
+        outputs = builder.render_outputs(ROOT)
+        issues: list[str] = []
+
+        for path, payload in outputs.items():
+            if not path.name.startswith("ADISCORD_antitank_"):
+                continue
+            tier = int(path.name.split("_")[2])
+            if tier < 3:
+                continue
+            with Image.open(BytesIO(payload)) as image:
+                rgba = image.convert("RGBA")
+                alpha = rgba.getchannel("A")
+                histogram = alpha.histogram()
+                transparent_ratio = sum(histogram[:8]) / (72 * 72)
+                partial_alpha = sum(histogram[8:248])
+                bbox = alpha.getbbox()
+                magenta_pixels = sum(
+                    1
+                    for red, green, blue, opacity in rgba.get_flattened_data()
+                    if opacity >= 16
+                    and red >= 175
+                    and blue >= 175
+                    and green <= 110
+                    and abs(red - blue) <= 65
+                )
+
+            if transparent_ratio < 0.45:
+                issues.append(
+                    f"{path.name}: transparent_ratio={transparent_ratio:.3f}"
+                )
+            if partial_alpha < 16:
+                issues.append(f"{path.name}: partial_alpha={partial_alpha}")
+            if magenta_pixels:
+                issues.append(f"{path.name}: magenta_pixels={magenta_pixels}")
+            if bbox is None or bbox[0] < 3 or bbox[1] < 3 or bbox[2] > 69 or bbox[3] > 69:
+                issues.append(f"{path.name}: unsafe_bbox={bbox}")
+
+        self.assertEqual(issues, [])
 
     def test_icon_builder_does_not_override_vanilla_techtree_connectors(self) -> None:
         builder = self._builder()

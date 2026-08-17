@@ -684,7 +684,7 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
             for equipment in equipment_ids
         ]
 
-        self.assertEqual(actual_levels, [0, 1, 2, 2, 2, 3, 3, 3, 3])
+        self.assertEqual(actual_levels, [0, 0, 1, 2, 3, 4, 5, 6, 7])
 
     def test_custom_uniform_countries_have_late_automatic_entities(self) -> None:
         asset = (
@@ -785,8 +785,20 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 self.assertIn(f" {equipment_id}:0 ", rendered)
                 self.assertIn(f" {equipment_id}_short:0 ", rendered)
                 self.assertIn(f" {equipment_id}_desc:0 ", rendered)
-        self.assertIn("БТ-63 «Рёв»", "\n".join(generator.generated_localisation("russian")))
-        self.assertNotIn("Утильн", "\n".join(generator.generated_localisation("russian")))
+        russian = "\n".join(generator.generated_localisation("russian"))
+        english = "\n".join(generator.generated_localisation("english"))
+        self.assertIn("АВ-63 «Рёв»", russian)
+        self.assertIn("КОП-70 «Гул»", russian)
+        self.assertIn("AR-63 “Roar”", english)
+        self.assertIn("FSC-70 “Rumble”", english)
+        equipment_names = "\n".join(
+            value
+            for values in generator.LAND_EQUIPMENT_LOCALISATION.values()
+            for value in values[:4]
+        )
+        self.assertNotIn("БТ-", equipment_names)
+        self.assertNotIn("КГ-", equipment_names)
+        self.assertNotIn("Утильн", russian)
 
     def test_service_weapon_descriptions_name_their_engineering_change(self) -> None:
         expected_terms = {
