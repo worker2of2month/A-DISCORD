@@ -1,0 +1,49 @@
+ADISCORD_STP_lock_regular_army_templates = {
+	set_division_template_lock = {
+		division_template = "Police division"
+		is_locked = yes
+	}
+	set_division_force_allow_recruiting = {
+		division_template = "Police division"
+		force_allow_recruiting = no
+	}
+
+	set_division_template_lock = {
+		division_template = "Regular army"
+		is_locked = yes
+	}
+	set_division_force_allow_recruiting = {
+		division_template = "Regular army"
+		force_allow_recruiting = no
+	}
+
+	# The guard is permanently unique.
+	set_division_template_lock = {
+		division_template = "Capital Guard"
+		is_locked = yes
+	}
+	set_division_force_allow_recruiting = {
+		division_template = "Capital Guard"
+		force_allow_recruiting = no
+	}
+}
+
+ADISCORD_STP_unlock_regular_army_templates = {
+	set_division_template_lock = {
+		division_template = "Police division"
+		is_locked = no
+	}
+	set_division_force_allow_recruiting = {
+		division_template = "Police division"
+		force_allow_recruiting = yes
+	}
+
+	set_division_template_lock = {
+		division_template = "Regular army"
+		is_locked = no
+	}
+	set_division_force_allow_recruiting = {
+		division_template = "Regular army"
+		force_allow_recruiting = yes
+	}
+}
