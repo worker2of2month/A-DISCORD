@@ -54,7 +54,7 @@ class STPCoreContractTests(unittest.TestCase):
 
         history = read(HISTORY)
         self.assertRegex(history, r"set_variable\s*=\s*\{\s*var\s*=\s*STP_party_suspicion\s+value\s*=\s*5\s*\}")
-        self.assertRegex(history, r"set_variable\s*=\s*\{\s*var\s*=\s*STP_sus_political_power_factor\s+value\s*=\s*0\.315\s*\}")
+        self.assertNotIn("var = STP_sus_political_power_factor", history)
 
         modifier = named_block(read(DYNAMIC_MODIFIERS), "STP_party_suspicion_dynamic_modifier")
         self.assertIn("political_power_factor = STP_sus_political_power_factor", modifier)
@@ -76,6 +76,7 @@ class STPCoreContractTests(unittest.TestCase):
 
         history = read(HISTORY)
         self.assertRegex(history, r"set_variable\s*=\s*\{\s*var\s*=\s*STP_leader_health_stage\s+value\s*=\s*1\s*\}")
+        self.assertNotIn("var = STP_fading_father_stability_factor", history)
 
         inlay = read(INLAY)
         for stage in range(2, 6):
@@ -129,7 +130,7 @@ class STPCoreContractTests(unittest.TestCase):
         ):
             self.assertRegex(localisation, rf"(?m)^\s*{decision}:\s+\"§RDEBUG:§!")
 
-    def test_startup_uses_one_core_initializer_and_has_no_deleted_stp_army_hook(self) -> None:
+    def test_startup_initializes_core_and_reasserts_starting_army_restriction(self) -> None:
         effects = read(EFFECTS)
         initializer = named_block(effects, "STP_initialize_core_mechanics")
         self.assertIn("STP_refresh_party_suspicion = yes", initializer)
@@ -139,7 +140,7 @@ class STPCoreContractTests(unittest.TestCase):
 
         startup = read(ON_ACTIONS)
         self.assertIn("STP_initialize_core_mechanics = yes", startup)
-        self.assertNotIn("ADISCORD_STP_lock_regular_army_templates", startup)
+        self.assertIn("ADISCORD_STP_lock_regular_army_templates = yes", startup)
 
     def test_scripted_localisation_is_limited_to_status_and_inlay_contracts(self) -> None:
         scripted_loc = read(SCRIPTED_LOC)
