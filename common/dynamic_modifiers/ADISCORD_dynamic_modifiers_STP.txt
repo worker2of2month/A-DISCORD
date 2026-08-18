@@ -1,7 +1,6 @@
 STP_fading_father = {
 	enable = {
 		original_tag = STP
-		NOT = { has_country_flag = STP_ivanov_dead }
 	}
 	stability_factor = STP_fading_father_stability_factor
 }
