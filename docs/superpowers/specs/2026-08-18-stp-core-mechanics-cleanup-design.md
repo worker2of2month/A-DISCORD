@@ -19,7 +19,7 @@ Use exactly one persistent gameplay variable:
 - `STP_party_suspicion`: clamped to `0..100`.
 - default value: `5`.
 
-Use exactly one derived variable:
+Use exactly one derived modifier variable:
 
 - `STP_sus_political_power_factor`.
 
@@ -33,7 +33,7 @@ Thus:
 - suspicion 50 -> 0%;
 - suspicion 100 -> -35% political-power gain.
 
-`STP_change_party_suspicion` consumes `STP_party_suspicion_change`, clamps the persistent value, recalculates the PP factor, then clears the temporary input.
+`STP_change_party_suspicion` consumes temporary `STP_party_suspicion_change`, clamps the persistent value, recalculates the PP factor, then clears the temporary input.
 
 The suspicion dynamic modifier is permanent for STP and reads `STP_sus_political_power_factor`.
 
@@ -51,9 +51,9 @@ Stages:
 4. Critical condition.
 5. Death.
 
-There is no separate health percentage and no `*_rate` variable.
+There is no separate health percentage, `*_rate`, or mirrored portrait-stage variable.
 
-`STP_set_leader_health_stage` consumes `STP_requested_health_stage`, clamps it to `1..5`, updates `STP_leader_health_stage`, recalculates the stability modifier, and clears the temporary input.
+`STP_set_leader_health_stage` consumes temporary `STP_requested_health_stage`, clamps it to `1..5`, updates `STP_leader_health_stage`, recalculates the stability modifier, and clears the temporary input.
 
 Health penalties are deliberately simple:
 
@@ -64,6 +64,8 @@ Health penalties are deliberately simple:
 - stage 5 -> -30%.
 
 Ivanov health does not directly modify political-power gain. Low stability already applies the game's global low-stability PP penalty, so the causal chain remains readable: Ivanov deteriorates -> stability falls -> political work becomes harder.
+
+Existing focus content uses `STP_ivanov_dead`, so the flag is retained only as a derived compatibility/output state: stage 5 sets it and stages 1-4 clear it. The flag never drives the health stage and therefore is not a second source of truth.
 
 ### Focus-tree inlay
 
@@ -76,11 +78,11 @@ Keep only the scripted-localisation API required by the inlay:
 - `STPGetStateFaceStageName`
 - `STPGetStateFaceTooltip`
 
-The decisions category may keep suspicion text helpers because it is the player-facing status panel.
+The decisions category keeps suspicion text helpers because it is the player-facing status panel.
 
 ## Initialization
 
-Fresh STP country history owns the initial state:
+Fresh STP country history owns the initial scalar state:
 
 - `STP_party_suspicion = 5`
 - `STP_sus_political_power_factor = 0.315`
@@ -120,6 +122,17 @@ The two succession paths use the same scale but interact with it differently:
 
 Thresholds should primarily unlock consequences and decision variants rather than pile on extra arbitrary modifiers. Suggested bands remain 0-24 / 25-49 / 50-69 / 70-89 / 90-100.
 
+## Removed army-restriction leftovers
+
+The user removed the old STP army-restriction effect file before this cleanup. Runtime remnants must not survive that deletion:
+
+- startup must not call the deleted lock effect;
+- the hedonism idea must not call the deleted unlock effect or show its obsolete restriction tooltip;
+- ordinary Police and Regular Army templates must not remain permanently locked solely because the deleted system can no longer unlock them;
+- the authored one-copy Capital Guard remains locked and capped independently of the removed system.
+
 ## Cleanup scope
 
-Remove or rewrite STP-specific artifacts that only support the abandoned dual-rate architecture, including stale startup tests and dead references to deleted STP army-restriction effects. Do not refactor unrelated StepanLand focus content.
+Remove or rewrite STP-specific artifacts that only support the abandoned dual-rate architecture and the already-deleted army-restriction subsystem. Do not refactor unrelated StepanLand focus content.
+
+The historical machine snapshot `tools/data/division_template_audit.json` still contains three rows for the deleted army-restriction effect. Its validator is intentionally not weakened to ignore missing audited sources; regenerating or atomically editing that large snapshot is tracked separately from the runtime cleanup.
