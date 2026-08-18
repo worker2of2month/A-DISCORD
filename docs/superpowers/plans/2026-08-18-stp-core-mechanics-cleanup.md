@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace the conflicting STP suspicion/health scripts with one 0..100 suspicion scale, one five-stage Ivanov-health state, synchronized inlay presentation, and deterministic DEBUG decisions.
+**Goal:** Replace the conflicting STP suspicion/health scripts with one 0..100 suspicion scale, one five-stage Ivanov-health state, synchronized inlay presentation, deterministic DEBUG decisions, and the preserved starting division restriction.
 
-**Architecture:** `common/scripted_effects/ADISCORD_STP_scripted_effects.txt` owns all STP state transitions and derived modifiers. Decisions and focus inlay consume those canonical variables; dynamic modifiers only expose their mechanical effects. Fresh-campaign startup attaches the two modifiers once, while country history owns initial scalar values.
+**Architecture:** `common/scripted_effects/ADISCORD_STP_scripted_effects.txt` owns STP political state transitions and derived modifiers. Decisions and focus inlay consume those canonical variables; dynamic modifiers only expose their mechanical effects. Country history owns only persistent starting state. `ADISCORD_STP_army_restriction_effects.txt` remains a small independent lock/unlock API invoked by the single STP core initializer and by the starting hedonism idea when removed.
 
 **Tech Stack:** Hearts of Iron IV Clausewitz script, scripted localisation, decision localisation, Python contract tests.
 
@@ -14,30 +14,36 @@
 
 - Suspicion has exactly one persistent variable: `STP_party_suspicion` in `0..100`.
 - Suspicion PP mapping is exactly `0.35 - 0.007 * suspicion`.
+- `STP_sus_political_power_factor` is derived and must not be authored in country history.
 - Ivanov health has exactly one persistent state variable: `STP_leader_health_stage` in `1..5`.
+- `STP_fading_father_stability_factor` is derived and must not be authored in country history.
 - Health stages modify stability only; they do not directly modify PP.
 - Focus inlay reads `STP_leader_health_stage` directly.
+- Police and Regular Army start locked and are unlocked when `STP_hedonism_with_no_bondaries` is removed.
+- Capital Guard remains permanently locked and capped at one.
 - Existing STP focus content outside the inlay declaration remains untouched.
 - DEBUG decisions are explicitly red-labelled and have no gameplay costs.
 
 ---
 
-### Task 1: Replace stale STP contract test
+### Task 1: Replace stale STP contract tests
 
 **Files:**
 - Modify: `tools/tests/test_adiscord_stp_startup.py`
+- Modify: `tools/tests/test_adiscord_army_hq_contracts.py`
 
 **Interfaces:**
 - Consumes: current STP script paths.
-- Produces: contract checks for canonical suspicion, health, inlay, decisions, startup references, and absence of abandoned variables.
+- Produces: contract checks for canonical suspicion, health, inlay, decisions, initialization, and starting division locks.
 
-- [ ] Rewrite the test to reference `common/scripted_effects/ADISCORD_STP_scripted_effects.txt`.
 - [ ] Assert the effects file contains `STP_party_suspicion`, `STP_party_suspicion_change`, `STP_sus_political_power_factor`, and the constants `0.35` and `-0.007`.
+- [ ] Assert country history contains `STP_party_suspicion = 5` but not authored `STP_sus_political_power_factor`.
 - [ ] Assert the effects file contains `STP_leader_health_stage`, `STP_requested_health_stage`, and stage-specific stability values `0`, `-0.05`, `-0.10`, `-0.20`, `-0.30`.
-- [ ] Assert the STP effects/localisation/inlay/decisions do not contain `STP_party_suspicion_rate`, `STP_leader_health_rate`, or `STP_state_face_stage`.
+- [ ] Assert country history contains `STP_leader_health_stage = 1` but not authored `STP_fading_father_stability_factor`.
+- [ ] Assert the STP effects/localisation/inlay/decisions do not use `STP_party_suspicion_rate`, `STP_leader_health_rate`, or `STP_state_face_stage` as state variables.
 - [ ] Assert the inlay selects all portraits from `STP_leader_health_stage`.
 - [ ] Assert `STP_test` is absent and four `STP_debug_*` decisions exist.
-- [ ] Assert startup no longer references deleted `ADISCORD_STP_lock_regular_army_templates`.
+- [ ] Assert Police, Regular Army, and Capital Guard start locked; only Police and Regular Army are present in the unlock effect.
 
 ### Task 2: Implement canonical STP state effects
 
@@ -48,14 +54,13 @@
 - Consumes: temp variables `STP_party_suspicion_change`, `STP_requested_health_stage`.
 - Produces: effects `STP_initialize_core_mechanics`, `STP_refresh_party_suspicion`, `STP_change_party_suspicion`, `STP_refresh_leader_health`, `STP_set_leader_health_stage`.
 
-- [ ] Replace the file with the minimal canonical API.
 - [ ] `STP_refresh_party_suspicion` clamps `STP_party_suspicion` to `0..100`, computes `STP_sus_political_power_factor = 0.35 - 0.007 * suspicion`, and clamps the factor to `-0.35..0.35`.
 - [ ] `STP_change_party_suspicion` adds `STP_party_suspicion_change`, refreshes, then clears the temp input.
-- [ ] `STP_refresh_leader_health` clamps stage `1..5` and assigns stability factor by exact stage.
+- [ ] `STP_refresh_leader_health` clamps stage `1..5`, assigns stability factor by exact stage, and derives `STP_ivanov_dead` from stage 5.
 - [ ] `STP_set_leader_health_stage` copies the requested stage, refreshes, then clears the temp input.
-- [ ] `STP_initialize_core_mechanics` initializes missing persistent variables to `5` and `1`, refreshes both derived values, and attaches both dynamic modifiers only if they are missing.
+- [ ] `STP_initialize_core_mechanics` initializes missing persistent variables to `5` and `1`, refreshes both derived values, synchronizes the starting army restriction with the hedonism idea, and attaches both dynamic modifiers only if missing.
 
-### Task 3: Simplify modifiers and initialization
+### Task 3: Keep only canonical initial state
 
 **Files:**
 - Modify: `common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt`
@@ -67,11 +72,29 @@
 - Produces: permanent STP PP/stability effects and deterministic fresh-game state.
 
 - [ ] Keep only `STP_fading_father` with `stability_factor = STP_fading_father_stability_factor` and `STP_party_suspicion_dynamic_modifier` with `political_power_factor = STP_sus_political_power_factor`.
-- [ ] In STP country history, set `STP_party_suspicion = 5`, `STP_sus_political_power_factor = 0.315`, `STP_leader_health_stage = 1`, and `STP_fading_father_stability_factor = 0`.
-- [ ] In the existing fresh-campaign `STP = {}` startup scope, call `STP_initialize_core_mechanics = yes`.
-- [ ] Remove the stale call to deleted `ADISCORD_STP_lock_regular_army_templates`.
+- [ ] In STP country history, author only `STP_party_suspicion = 5` and `STP_leader_health_stage = 1`.
+- [ ] In the existing fresh-campaign `STP = {}` startup scope, call `STP_initialize_core_mechanics = yes` exactly once.
+- [ ] Do not add a second direct army-lock call to `on_startup`; the core initializer owns synchronization.
 
-### Task 4: Synchronize inlay and scripted localisation
+### Task 4: Preserve the starting army restriction with a minimal API
+
+**Files:**
+- Create/restore: `common/scripted_effects/ADISCORD_STP_army_restriction_effects.txt`
+- Modify: `history/units/STP.txt`
+- Modify: `common/ideas/steland.txt`
+
+**Interfaces:**
+- Produces: `ADISCORD_STP_lock_regular_army_templates`, `ADISCORD_STP_unlock_regular_army_templates`.
+- Consumed by: `STP_initialize_core_mechanics`, `STP_hedonism_with_no_bondaries.on_remove`.
+
+- [ ] Restore `is_locked = yes` and `force_allow_recruiting = no` on Police division and Regular army in the STP OOB.
+- [ ] Keep the same restrictions plus `division_cap = 1` on Capital Guard.
+- [ ] Implement a lock effect that reasserts restrictions on all three authored templates.
+- [ ] Implement an unlock effect that unlocks only Police and Regular Army.
+- [ ] Do not restore the old `ADISCORD_STP_migrate_army_template_lock` wrapper.
+- [ ] Restore `custom_modifier_tooltip = STP_hedonism_army_restriction_tt` and `on_remove = { ADISCORD_STP_unlock_regular_army_templates = yes }` on the hedonism idea.
+
+### Task 5: Synchronize inlay and scripted localisation
 
 **Files:**
 - Modify: `common/focus_inlay_windows/ADISCORD_STP_state_face_inlay_window.txt`
@@ -85,12 +108,11 @@
 
 - [ ] Keep portrait selection on `STP_leader_health_stage = 1..5`.
 - [ ] Remove `PeterHealth`, `STPGetLeaderHealthStageName`, and `STPGetLeaderHealthTooltip` scripted-localisation blocks.
-- [ ] Keep `STPGetStateFaceStageName` and `STPGetStateFaceTooltip`, rewritten to test `STP_leader_health_stage`.
-- [ ] Rewrite suspicion helpers to use thresholds 25/50/70/90 on `STP_party_suspicion`.
-- [ ] Simplify decision description to suspicion status only; leader-health detail lives on inlay hover.
-- [ ] Remove percentage-health and stale fading-factor text from decision localisation.
+- [ ] Keep `STPGetStateFaceStageName` and `STPGetStateFaceTooltip`, testing `STP_leader_health_stage` directly.
+- [ ] Keep suspicion helpers on thresholds 25/50/70/90 using `STP_party_suspicion`.
+- [ ] Keep leader-health detail on the inlay hover rather than the decisions category.
 
-### Task 5: Replace disposable test decision with DEBUG controls
+### Task 6: Replace disposable test decision with DEBUG controls
 
 **Files:**
 - Modify: `common/decisions/ADISCORD_STP_decisions.txt`
@@ -101,22 +123,25 @@
 - Produces: four deterministic testing controls.
 
 - [ ] Delete `STP_test`.
-- [ ] Add `STP_debug_increase_suspicion`: set temp change to `10`, call `STP_change_party_suspicion`.
-- [ ] Add `STP_debug_decrease_suspicion`: set temp change to `-10`, call `STP_change_party_suspicion`.
-- [ ] Add `STP_debug_worsen_ivanov`: derive requested stage as current stage + 1, call `STP_set_leader_health_stage`.
-- [ ] Add `STP_debug_improve_ivanov`: derive requested stage as current stage - 1, call `STP_set_leader_health_stage`.
+- [ ] Add `STP_debug_increase_suspicion`: +10 suspicion.
+- [ ] Add `STP_debug_decrease_suspicion`: -10 suspicion.
+- [ ] Add `STP_debug_worsen_ivanov`: current stage + 1.
+- [ ] Add `STP_debug_improve_ivanov`: current stage - 1.
 - [ ] Localize every title with `§RDEBUG:§!` followed by a normal Russian action name.
-- [ ] Give each DEBUG decision a concise description stating the exact test change.
 
-### Task 6: Verify the cleaned contract
+### Task 7: Verify the cleaned contract
 
 **Files:**
 - Test: `tools/tests/test_adiscord_stp_startup.py`
+- Test: `tools/tests/test_adiscord_army_hq_contracts.py`
+- Validate: `tools/validators/validate_adiscord_division_templates.py`
 
 **Interfaces:**
 - Consumes: all previous tasks.
-- Produces: evidence that no dual-state STP architecture remains.
+- Produces: evidence that no dual-state STP architecture remains and the starting-army restriction remains internally consistent.
 
 - [ ] Run `python -m unittest tools.tests.test_adiscord_stp_startup -v`.
-- [ ] Search the STP runtime files for `STP_party_suspicion_rate`, `STP_leader_health_rate`, `STP_state_face_stage`, `STP_test`, and `ADISCORD_STP_lock_regular_army_templates`; expect no runtime hits.
-- [ ] Inspect the final main diff for unrelated STP focus-tree changes; none are allowed.
+- [ ] Run the STP methods in `tools.tests.test_adiscord_army_hq_contracts -v`.
+- [ ] Run the division-template validator; the restored minimal lock/unlock file must satisfy its existing audited technical-reference counts without weakening validation.
+- [ ] Search runtime STP files for `STP_party_suspicion_rate`, `STP_leader_health_rate`, `STP_state_face_stage`, `STP_test`, and `ADISCORD_STP_migrate_army_template_lock`; expect no active-state/migration hits.
+- [ ] Inspect the final diff for unrelated STP focus-tree changes; none are allowed.
