@@ -101,11 +101,13 @@ class STPCoreContractTests(unittest.TestCase):
         for legacy in (
             "STP_party_suspicion_rate",
             "STP_leader_health_rate",
-            "STP_state_face_stage",
             "STP_leader_health_temp",
         ):
             with self.subTest(legacy=legacy):
                 self.assertNotIn(legacy, runtime_sources)
+
+        self.assertNotRegex(runtime_sources, r"\bvar\s*=\s*STP_state_face_stage\b")
+        self.assertNotIn("check_variable = { STP_state_face_stage =", runtime_sources)
 
     def test_debug_decisions_replace_disposable_test_decision(self) -> None:
         decisions = read(DECISIONS)
