@@ -1,30 +1,78 @@
 STP_elections_in_the_party = {
 
-	STP_test = {
+	STP_debug_increase_suspicion = {
 		icon = generic_political_pressure
 		allowed = { tag = STP }
-		visible = {
-		}
-		available = {
-		}
+		visible = { always = yes }
+		available = { always = yes }
 		cost = 0
-		days_remove = 0
+		days_remove = 1
 		days_re_enable = 0
 		complete_effect = {
-			add_dynamic_modifier = { modifier = STP_party_suspicion_dynamic_modifier }
-		}
-		remove_effect = {
-			set_variable = {
-				var = STP_party_suspicion_rate
-				value = 0.05
-			}
-
 			set_temp_variable = {
-				var = STP_party_suspicion_rate_temp
-				value = 0.05
+				var = STP_party_suspicion_change
+				value = 10
 			}
-
 			STP_change_party_suspicion = yes
+		}
+	}
+
+	STP_debug_decrease_suspicion = {
+		icon = generic_political_pressure
+		allowed = { tag = STP }
+		visible = { always = yes }
+		available = { always = yes }
+		cost = 0
+		days_remove = 1
+		days_re_enable = 0
+		complete_effect = {
+			set_temp_variable = {
+				var = STP_party_suspicion_change
+				value = -10
+			}
+			STP_change_party_suspicion = yes
+		}
+	}
+
+	STP_debug_worsen_ivanov = {
+		icon = generic_political_pressure
+		allowed = { tag = STP }
+		visible = { always = yes }
+		available = { always = yes }
+		cost = 0
+		days_remove = 1
+		days_re_enable = 0
+		complete_effect = {
+			set_temp_variable = {
+				var = STP_requested_health_stage
+				value = STP_leader_health_stage
+			}
+			add_to_temp_variable = {
+				var = STP_requested_health_stage
+				value = 1
+			}
+			STP_set_leader_health_stage = yes
+		}
+	}
+
+	STP_debug_improve_ivanov = {
+		icon = generic_political_pressure
+		allowed = { tag = STP }
+		visible = { always = yes }
+		available = { always = yes }
+		cost = 0
+		days_remove = 1
+		days_re_enable = 0
+		complete_effect = {
+			set_temp_variable = {
+				var = STP_requested_health_stage
+				value = STP_leader_health_stage
+			}
+			add_to_temp_variable = {
+				var = STP_requested_health_stage
+				value = -1
+			}
+			STP_set_leader_health_stage = yes
 		}
 	}
 }
