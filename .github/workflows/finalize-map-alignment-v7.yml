@@ -1,0 +1,41 @@
+name: Finalize map alignment v7
+
+on:
+  push:
+    branches:
+      - agent/map-alignment-verifier-20260819
+    paths:
+      - .github/workflows/finalize-map-alignment-v7.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: map-alignment-finalizer-v7
+  cancel-in-progress: true
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: python -m pip install --disable-pip-version-check numpy pillow
+
+      - name: Build, validate, commit, and update PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ADISCORD_TARGET_REPO: /tmp/adiscord-target-v7
+        run: python .github/scripts/finalize_map_alignment_v7.py
