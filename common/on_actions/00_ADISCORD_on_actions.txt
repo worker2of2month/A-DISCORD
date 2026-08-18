@@ -60,8 +60,7 @@ on_actions = {
 					}
 				}
 				STP = {
-					# Fresh history starts with per-template locks; Army HQ remains usable.
-					ADISCORD_STP_lock_regular_army_templates = yes
+					STP_initialize_core_mechanics = yes
 
 					# Starting society development levels for StepanLand.
 					ADISCORD_set_society_development_2 = yes
