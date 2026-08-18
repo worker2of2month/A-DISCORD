@@ -2,13 +2,13 @@
 
 ## Goal
 
-Reduce StepanLand's bespoke scripting to three connected systems:
+Reduce StepanLand's bespoke political scripting to three connected systems while preserving its authored starting-army restriction:
 
 1. Party suspicion controls political-power gain.
 2. Ivanov's health is a discrete five-stage state that controls stability.
 3. The focus-tree inlay visualizes that same health state and shows its tooltip on hover.
 
-Temporary DEBUG decisions provide deterministic test controls. Legacy variables, duplicate localisation APIs, dead scripted effects, stale startup hooks, and stale tests are removed.
+Temporary DEBUG decisions provide deterministic test controls. Legacy rate variables, duplicate localisation APIs, mirrored health state, stale migration code, and disposable test content are removed.
 
 ## Canonical state
 
@@ -37,6 +37,8 @@ Thus:
 
 The suspicion dynamic modifier is permanent for STP and reads `STP_sus_political_power_factor`.
 
+`STP_sus_political_power_factor` is never stored as authored country-history state. It is always recalculated from suspicion by `STP_refresh_party_suspicion`, preventing a stale cached value after balance changes.
+
 ### Ivanov health
 
 Use exactly one persistent gameplay variable:
@@ -53,7 +55,7 @@ Stages:
 
 There is no separate health percentage, `*_rate`, or mirrored portrait-stage variable.
 
-`STP_set_leader_health_stage` consumes temporary `STP_requested_health_stage`, clamps it to `1..5`, updates `STP_leader_health_stage`, recalculates the stability modifier, and clears the temporary input.
+`STP_set_leader_health_stage` consumes temporary `STP_requested_health_stage`, updates `STP_leader_health_stage`, refreshes and clamps the result to `1..5`, then clears the temporary input.
 
 Health penalties are deliberately simple:
 
@@ -62,6 +64,8 @@ Health penalties are deliberately simple:
 - stage 3 -> -10%;
 - stage 4 -> -20%;
 - stage 5 -> -30%.
+
+`STP_fading_father_stability_factor` is derived state and is not authored in country history.
 
 Ivanov health does not directly modify political-power gain. Low stability already applies the game's global low-stability PP penalty, so the causal chain remains readable: Ivanov deteriorates -> stability falls -> political work becomes harder.
 
@@ -82,14 +86,40 @@ The decisions category keeps suspicion text helpers because it is the player-fac
 
 ## Initialization
 
-Fresh STP country history owns the initial scalar state:
+Fresh STP country history owns only canonical persistent state:
 
 - `STP_party_suspicion = 5`
-- `STP_sus_political_power_factor = 0.315`
 - `STP_leader_health_stage = 1`
-- `STP_fading_father_stability_factor = 0`
 
-The two dynamic modifiers are attached once by a minimal STP initialization effect called from the existing fresh-campaign startup scope. No separate STP on_action file is added.
+`STP_initialize_core_mechanics` is the single startup entry point for this subsystem. It:
+
+1. initializes either persistent value if missing;
+2. recalculates both derived modifier values;
+3. synchronizes the starting army restriction with `STP_hedonism_with_no_bondaries`;
+4. attaches the suspicion and fading-father dynamic modifiers if missing.
+
+No separate STP on-action file is added and country history does not duplicate derived values.
+
+## Starting army restriction
+
+The starting division lock is authored gameplay and remains separate from suspicion/health state.
+
+At scenario start:
+
+- `Police division` is locked and cannot be recruited;
+- `Regular army` is locked and cannot be recruited;
+- `Capital Guard` is locked, cannot be recruited, and remains capped at one division.
+
+The OOB declares those starting restrictions directly. `STP_initialize_core_mechanics` reasserts them through `ADISCORD_STP_lock_regular_army_templates` while `STP_hedonism_with_no_bondaries` is active, so startup state is deterministic.
+
+The minimal army-restriction API contains only:
+
+- `ADISCORD_STP_lock_regular_army_templates`
+- `ADISCORD_STP_unlock_regular_army_templates`
+
+The old save-migration wrapper is removed.
+
+When `STP_hedonism_with_no_bondaries` is removed, its `on_remove` calls the unlock effect. That unlocks only Police and Regular Army; Capital Guard remains permanently unique and locked.
 
 ## DEBUG decisions
 
@@ -122,17 +152,6 @@ The two succession paths use the same scale but interact with it differently:
 
 Thresholds should primarily unlock consequences and decision variants rather than pile on extra arbitrary modifiers. Suggested bands remain 0-24 / 25-49 / 50-69 / 70-89 / 90-100.
 
-## Removed army-restriction leftovers
-
-The user removed the old STP army-restriction effect file before this cleanup. Runtime remnants must not survive that deletion:
-
-- startup must not call the deleted lock effect;
-- the hedonism idea must not call the deleted unlock effect or show its obsolete restriction tooltip;
-- ordinary Police and Regular Army templates must not remain permanently locked solely because the deleted system can no longer unlock them;
-- the authored one-copy Capital Guard remains locked and capped independently of the removed system.
-
 ## Cleanup scope
 
-Remove or rewrite STP-specific artifacts that only support the abandoned dual-rate architecture and the already-deleted army-restriction subsystem. Do not refactor unrelated StepanLand focus content.
-
-The historical machine snapshot `tools/data/division_template_audit.json` still contains three rows for the deleted army-restriction effect. Its validator is intentionally not weakened to ignore missing audited sources; regenerating or atomically editing that large snapshot is tracked separately from the runtime cleanup.
+Remove or rewrite STP-specific artifacts that support the abandoned dual-rate/mirrored-health architecture or obsolete army-lock migration logic. Preserve the authored starting division restriction, its player-facing tooltip, the minimal lock/unlock API, and the one-copy Capital Guard rule. Do not refactor unrelated StepanLand focus content.
