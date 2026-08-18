@@ -103,6 +103,20 @@ STP_refresh_leader_health = {
 		limit = {
 			check_variable = {
 				var = STP_leader_health_stage
+				value = 5
+				compare = equals
+			}
+		}
+		set_country_flag = STP_ivanov_dead
+	}
+	else = {
+		clr_country_flag = STP_ivanov_dead
+	}
+
+	if = {
+		limit = {
+			check_variable = {
+				var = STP_leader_health_stage
 				value = 2
 				compare = equals
 			}
