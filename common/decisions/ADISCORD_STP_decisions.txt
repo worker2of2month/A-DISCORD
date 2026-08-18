@@ -12,11 +12,19 @@ STP_elections_in_the_party = {
 		days_re_enable = 0
 		complete_effect = {
 			add_dynamic_modifier = { modifier = STP_party_suspicion_dynamic_modifier }
-			add_dynamic_modifier = { modifier = STP_fading_father }
-			STP_change_party_suspicion = yes
-			STP_leader_health = yes
 		}
 		remove_effect = {
+			set_variable = {
+				var = STP_party_suspicion_rate
+				value = 0.05
+			}
+
+			set_temp_variable = {
+				var = STP_party_suspicion_rate_temp
+				value = 0.05
+			}
+
+			STP_change_party_suspicion = yes
 		}
 	}
 }

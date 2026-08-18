@@ -9,9 +9,14 @@ focus_tree = {
 		}
 	}
 
+	continuous_focus_position = {
+		x = 100
+		y = 10000
+	}
+
 	inlay_window = {
 		id = STP_state_face_inlay_window
-		position = { x = 2222 y = 10 }
+		position = { x = 25 y = 1 }
 	}
 
 	#############################################

@@ -2,7 +2,6 @@
 
 defined_text = {
 	name = PeterHealth
-
 	text = {
 		trigger = { check_variable = { var = STP_state_face_stage value = 5 compare = equals } }
 		localization_key = STP_PETER_HEALTH_STAGE_5_DESC
