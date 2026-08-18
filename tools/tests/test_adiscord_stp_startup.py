@@ -69,6 +69,8 @@ class STPCoreContractTests(unittest.TestCase):
         self.assertIn("max = 5", refresh)
         for value in ("-0.05", "-0.10", "-0.20", "-0.30"):
             self.assertIn(f"value = {value}", refresh)
+        self.assertIn("set_country_flag = STP_ivanov_dead", refresh)
+        self.assertIn("clr_country_flag = STP_ivanov_dead", refresh)
         self.assertIn("value = STP_requested_health_stage", setter)
         self.assertIn("STP_refresh_leader_health = yes", setter)
 
