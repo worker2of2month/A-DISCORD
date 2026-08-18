@@ -1,34 +1,65 @@
-STP_change_party_suspicion = {
-	# Apply suspicion change
-	add_to_variable = {
-		var = STP_party_suspicion_rate
-		value = STP_party_suspicion_rate_temp
+STP_initialize_core_mechanics = {
+	if = {
+		limit = { NOT = { has_variable = STP_party_suspicion } }
+		set_variable = {
+			var = STP_party_suspicion
+			value = 5
+		}
 	}
+
+	if = {
+		limit = { NOT = { has_variable = STP_leader_health_stage } }
+		set_variable = {
+			var = STP_leader_health_stage
+			value = 1
+		}
+	}
+
+	STP_refresh_party_suspicion = yes
+	STP_refresh_leader_health = yes
+
+	if = {
+		limit = {
+			NOT = {
+				has_dynamic_modifier = {
+					modifier = STP_party_suspicion_dynamic_modifier
+				}
+			}
+		}
+		add_dynamic_modifier = {
+			modifier = STP_party_suspicion_dynamic_modifier
+		}
+	}
+
+	if = {
+		limit = {
+			NOT = {
+				has_dynamic_modifier = {
+					modifier = STP_fading_father
+				}
+			}
+		}
+		add_dynamic_modifier = {
+			modifier = STP_fading_father
+		}
+	}
+}
+
+STP_refresh_party_suspicion = {
 	clamp_variable = {
-		var = STP_party_suspicion_rate
+		var = STP_party_suspicion
 		min = 0
-		max = 1
+		max = 100
 	}
-	# Display value: 0–100
-	set_variable = {
-		var = STP_party_suspicion
-		value = STP_party_suspicion_rate
-	}
-	multiply_variable = {
-		var = STP_party_suspicion
-		value = 100
-	}
-	# Political Power Gain:
-	# +35% at 0 suspicion
-	#   0% at 50 suspicion
-	# -35% at 100 suspicion
+
+	# 0 suspicion -> +35% PP gain; 50 -> 0%; 100 -> -35%.
 	set_variable = {
 		var = STP_sus_political_power_factor
-		value = STP_party_suspicion_rate
+		value = STP_party_suspicion
 	}
 	multiply_variable = {
 		var = STP_sus_political_power_factor
-		value = -0.70
+		value = -0.007
 	}
 	add_to_variable = {
 		var = STP_sus_political_power_factor
@@ -41,104 +72,98 @@ STP_change_party_suspicion = {
 	}
 }
 
-STP_leader_health = {
+# Call with temporary variable STP_party_suspicion_change.
+STP_change_party_suspicion = {
 	add_to_variable = {
-		var = STP_leader_health_rate
-		value = STP_leader_health_rate_temp
+		var = STP_party_suspicion
+		value = STP_party_suspicion_change
 	}
 
-	clamp_variable = {
-		var = STP_leader_health_rate
-		min = 0
-		max = 1
-	}
-	set_variable = {
-		var = STP_leader_health
-		value = STP_leader_health_rate
-	}
-	multiply_variable = {
-		var = STP_leader_health
-		value = 100
-	}
-	#Stability
+	STP_refresh_party_suspicion = yes
+
 	set_temp_variable = {
-		var = STP_leader_health_temp
-		value = STP_leader_health_rate
+		var = STP_party_suspicion_change
+		value = 0
 	}
-	add_to_temp_variable = {
-		var = STP_leader_health_temp
-		value = -1
-	}
-	set_variable = {
-		var = STP_fading_father_stability_factor
-		value = STP_leader_health_temp
-	}
-	multiply_variable = {
-		var = STP_fading_father_stability_factor
-		value = 0.10
+}
+
+STP_refresh_leader_health = {
+	clamp_variable = {
+		var = STP_leader_health_stage
+		min = 1
+		max = 5
 	}
 
-	#Portrait stage
+	set_variable = {
+		var = STP_fading_father_stability_factor
+		value = 0
+	}
+
 	if = {
 		limit = {
 			check_variable = {
-				var = STP_leader_health_rate
-				value = 0.75
-				compare = greater_than_or_equals
+				var = STP_leader_health_stage
+				value = 2
+				compare = equals
 			}
 		}
 		set_variable = {
-			var = STP_state_face_stage
-			value = 1
+			var = STP_fading_father_stability_factor
+			value = -0.05
 		}
 	}
 	else_if = {
 		limit = {
 			check_variable = {
-				var = STP_leader_health_rate
-				value = 0.45
-				compare = greater_than_or_equals
+				var = STP_leader_health_stage
+				value = 3
+				compare = equals
 			}
 		}
 		set_variable = {
-			var = STP_state_face_stage
-			value = 2
+			var = STP_fading_father_stability_factor
+			value = -0.10
 		}
 	}
 	else_if = {
 		limit = {
 			check_variable = {
-				var = STP_leader_health_rate
-				value = 0.15
-				compare = greater_than_or_equals
+				var = STP_leader_health_stage
+				value = 4
+				compare = equals
 			}
 		}
 		set_variable = {
-			var = STP_state_face_stage
-			value = 3
+			var = STP_fading_father_stability_factor
+			value = -0.20
 		}
 	}
 	else_if = {
 		limit = {
 			check_variable = {
-				var = STP_leader_health_rate
-				value = 0
-				compare = greater_than
+				var = STP_leader_health_stage
+				value = 5
+				compare = equals
 			}
 		}
 		set_variable = {
-			var = STP_state_face_stage
-			value = 4
+			var = STP_fading_father_stability_factor
+			value = -0.30
 		}
 	}
-	else = {
-		set_variable = {
-			var = STP_state_face_stage
-			value = 5
-		}
-		set_country_flag = STP_ivanov_dead
-		remove_dynamic_modifier = {
-			modifier = STP_fading_father
-		}
+}
+
+# Call with temporary variable STP_requested_health_stage.
+STP_set_leader_health_stage = {
+	set_variable = {
+		var = STP_leader_health_stage
+		value = STP_requested_health_stage
+	}
+
+	STP_refresh_leader_health = yes
+
+	set_temp_variable = {
+		var = STP_requested_health_stage
+		value = 0
 	}
 }
