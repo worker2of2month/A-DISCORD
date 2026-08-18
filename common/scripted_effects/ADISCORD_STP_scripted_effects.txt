@@ -19,6 +19,14 @@ STP_initialize_core_mechanics = {
 	STP_refresh_leader_health = yes
 
 	if = {
+		limit = { has_idea = STP_hedonism_with_no_bondaries }
+		ADISCORD_STP_lock_regular_army_templates = yes
+	}
+	else = {
+		ADISCORD_STP_unlock_regular_army_templates = yes
+	}
+
+	if = {
 		limit = {
 			NOT = {
 				has_dynamic_modifier = {
