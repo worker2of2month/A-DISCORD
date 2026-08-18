@@ -150,7 +150,7 @@ class ArmyHeadquartersContractTests(unittest.TestCase):
         self.assertNotIn("ARMY_HQ_TEMPLATE_NAME", lock)
         self.assertNotIn("is_army_hq", lock)
 
-    def test_stp_startup_reasserts_locks_and_idea_removal_unlocks_regulars(self) -> None:
+    def test_stp_core_initializer_reasserts_locks_and_idea_removal_unlocks_regulars(self) -> None:
         effects = read(
             "common/scripted_effects/ADISCORD_STP_army_restriction_effects.txt"
         )
@@ -164,11 +164,17 @@ class ArmyHeadquartersContractTests(unittest.TestCase):
         self.assertIn("STP_hedonism_army_restriction_tt", idea)
         self.assertIn("ADISCORD_STP_unlock_regular_army_templates = yes", idea)
 
+        core = named_block(
+            read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
+            "STP_initialize_core_mechanics",
+        )
+        self.assertIn("ADISCORD_STP_lock_regular_army_templates = yes", core)
+
         startup = named_block(
             read("common/on_actions/00_ADISCORD_on_actions.txt"), "on_startup"
         )
-        stp = named_block(startup, "STP")
-        self.assertIn("ADISCORD_STP_lock_regular_army_templates = yes", stp)
+        self.assertIn("STP_initialize_core_mechanics = yes", startup)
+        self.assertNotIn("ADISCORD_STP_lock_regular_army_templates", startup)
         self.assertNotIn("ADISCORD_STP_migrate_army_template_lock", startup)
 
         localisation = read("localisation/russian/ADISCORD_ideas_l_russian.yml")
