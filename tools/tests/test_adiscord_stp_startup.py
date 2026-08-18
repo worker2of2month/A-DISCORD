@@ -130,17 +130,18 @@ class STPCoreContractTests(unittest.TestCase):
         ):
             self.assertRegex(localisation, rf"(?m)^\s*{decision}:\s+\"§RDEBUG:§!")
 
-    def test_startup_initializes_core_and_reasserts_starting_army_restriction(self) -> None:
+    def test_startup_uses_one_core_initializer_for_mechanics_and_army_lock(self) -> None:
         effects = read(EFFECTS)
         initializer = named_block(effects, "STP_initialize_core_mechanics")
         self.assertIn("STP_refresh_party_suspicion = yes", initializer)
         self.assertIn("STP_refresh_leader_health = yes", initializer)
         self.assertIn("STP_party_suspicion_dynamic_modifier", initializer)
         self.assertIn("STP_fading_father", initializer)
+        self.assertIn("ADISCORD_STP_lock_regular_army_templates = yes", initializer)
 
         startup = read(ON_ACTIONS)
-        self.assertIn("STP_initialize_core_mechanics = yes", startup)
-        self.assertIn("ADISCORD_STP_lock_regular_army_templates = yes", startup)
+        self.assertEqual(startup.count("STP_initialize_core_mechanics = yes"), 1)
+        self.assertNotIn("ADISCORD_STP_lock_regular_army_templates = yes", startup)
 
     def test_scripted_localisation_is_limited_to_status_and_inlay_contracts(self) -> None:
         scripted_loc = read(SCRIPTED_LOC)
