@@ -131,30 +131,48 @@ class ArmyHeadquartersContractTests(unittest.TestCase):
                 unlock = named_block(block, "enable_subunits")
                 self.assertRegex(unlock, rf"\b{re.escape(subunit)}\b")
 
-    def test_stp_removed_army_restriction_has_no_runtime_hooks(self) -> None:
-        restriction_effect = ROOT / "common/scripted_effects/ADISCORD_STP_army_restriction_effects.txt"
-        self.assertFalse(restriction_effect.exists())
+    def test_stp_restriction_locks_only_ordinary_starting_templates(self) -> None:
+        history = read("history/countries/STP - StepanLand.txt")
+        self.assertNotIn("country_lock_all_division_template", history)
 
         oob = read("history/units/STP.txt")
-        for template_name in ("Police division", "Regular army"):
+        for template_name in ("Police division", "Regular army", "Capital Guard"):
             with self.subTest(template=template_name):
                 template = division_template_block(oob, template_name)
-                self.assertNotIn("is_locked = yes", template)
-                self.assertNotIn("force_allow_recruiting = no", template)
+                self.assertIn("is_locked = yes", template)
+                self.assertIn("force_allow_recruiting = no", template)
 
-        guard = division_template_block(oob, "Capital Guard")
-        self.assertIn("division_cap = 1", guard)
-        self.assertIn("is_locked = yes", guard)
-        self.assertIn("force_allow_recruiting = no", guard)
+        effects = read(
+            "common/scripted_effects/ADISCORD_STP_army_restriction_effects.txt"
+        )
+        lock = named_block(effects, "ADISCORD_STP_lock_regular_army_templates")
+        self.assertNotIn("Army HQ", lock)
+        self.assertNotIn("ARMY_HQ_TEMPLATE_NAME", lock)
+        self.assertNotIn("is_army_hq", lock)
+
+    def test_stp_startup_reasserts_locks_and_idea_removal_unlocks_regulars(self) -> None:
+        effects = read(
+            "common/scripted_effects/ADISCORD_STP_army_restriction_effects.txt"
+        )
+        unlock = named_block(effects, "ADISCORD_STP_unlock_regular_army_templates")
+        self.assertIn('division_template = "Police division"', unlock)
+        self.assertIn('division_template = "Regular army"', unlock)
+        self.assertNotIn('division_template = "Capital Guard"', unlock)
+        self.assertNotIn("ADISCORD_STP_migrate_army_template_lock", effects)
 
         idea = named_block(read("common/ideas/steland.txt"), "STP_hedonism_with_no_bondaries")
-        self.assertNotIn("STP_hedonism_army_restriction_tt", idea)
-        self.assertNotIn("ADISCORD_STP_unlock_regular_army_templates", idea)
+        self.assertIn("STP_hedonism_army_restriction_tt", idea)
+        self.assertIn("ADISCORD_STP_unlock_regular_army_templates = yes", idea)
 
         startup = named_block(
             read("common/on_actions/00_ADISCORD_on_actions.txt"), "on_startup"
         )
-        self.assertNotIn("ADISCORD_STP_lock_regular_army_templates", startup)
+        stp = named_block(startup, "STP")
+        self.assertIn("ADISCORD_STP_lock_regular_army_templates = yes", stp)
+        self.assertNotIn("ADISCORD_STP_migrate_army_template_lock", startup)
+
+        localisation = read("localisation/russian/ADISCORD_ideas_l_russian.yml")
+        self.assertIn("Армейские штабы не подпадают под это ограничение", localisation)
 
 
 if __name__ == "__main__":
