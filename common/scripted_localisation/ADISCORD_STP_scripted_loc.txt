@@ -1,88 +1,14 @@
-#Leader health
-
-defined_text = {
-	name = PeterHealth
-	text = {
-		trigger = { check_variable = { var = STP_state_face_stage value = 5 compare = equals } }
-		localization_key = STP_PETER_HEALTH_STAGE_5_DESC
-	}
-	text = {
-		trigger = { check_variable = { var = STP_state_face_stage value = 4 compare = equals } }
-		localization_key = STP_PETER_HEALTH_STAGE_4_DESC
-	}
-	text = {
-		trigger = { check_variable = { var = STP_state_face_stage value = 3 compare = equals } }
-		localization_key = STP_PETER_HEALTH_STAGE_3_DESC
-	}
-	text = {
-		trigger = { check_variable = { var = STP_state_face_stage value = 2 compare = equals } }
-		localization_key = STP_PETER_HEALTH_STAGE_2_DESC
-	}
-	text = {
-		localization_key = STP_PETER_HEALTH_STAGE_1_DESC
-	}
-}
-
-defined_text = {
-	name = STPGetLeaderHealthStageName
-
-	text = {
-		trigger = { check_variable = { var = STP_state_face_stage value = 5 compare = equals } }
-		localization_key = STP_LEADER_HEALTH_STAGE_5
-	}
-	text = {
-		trigger = { check_variable = { var = STP_state_face_stage value = 4 compare = equals } }
-		localization_key = STP_LEADER_HEALTH_STAGE_4
-	}
-	text = {
-		trigger = { check_variable = { var = STP_state_face_stage value = 3 compare = equals } }
-		localization_key = STP_LEADER_HEALTH_STAGE_3
-	}
-	text = {
-		trigger = { check_variable = { var = STP_state_face_stage value = 2 compare = equals } }
-		localization_key = STP_LEADER_HEALTH_STAGE_2
-	}
-	text = {
-		localization_key = STP_LEADER_HEALTH_STAGE_1
-	}
-}
-
-defined_text = {
-	name = STPGetLeaderHealthTooltip
-
-	text = {
-		trigger = { check_variable = { var = STP_state_face_stage value = 5 compare = equals } }
-		localization_key = STP_LEADER_HEALTH_STAGE_5_TOOLTIP
-	}
-	text = {
-		trigger = { check_variable = { var = STP_state_face_stage value = 4 compare = equals } }
-		localization_key = STP_LEADER_HEALTH_STAGE_4_TOOLTIP
-	}
-	text = {
-		trigger = { check_variable = { var = STP_state_face_stage value = 3 compare = equals } }
-		localization_key = STP_LEADER_HEALTH_STAGE_3_TOOLTIP
-	}
-	text = {
-		trigger = { check_variable = { var = STP_state_face_stage value = 2 compare = equals } }
-		localization_key = STP_LEADER_HEALTH_STAGE_2_TOOLTIP
-	}
-	text = {
-		localization_key = STP_LEADER_HEALTH_STAGE_1_TOOLTIP
-	}
-}
-
-
-#Party suspicion
+# Party suspicion
 
 defined_text = {
 	name = STPGetSuspicionValue
 
 	text = {
-		trigger = { check_variable = { var = STP_party_suspicion_rate value = 0.70 compare = greater_than_or_equals } }
+		trigger = { check_variable = { var = STP_party_suspicion value = 70 compare = greater_than_or_equals } }
 		localization_key = STP_SUSPICION_VALUE_HIGH
 	}
 	text = {
-		trigger = { check_variable = { var = STP_party_suspicion_rate value = 0.35 compare = greater_than_or_equals } }
+		trigger = { check_variable = { var = STP_party_suspicion value = 35 compare = greater_than_or_equals } }
 		localization_key = STP_SUSPICION_VALUE_MEDIUM
 	}
 	text = {
@@ -94,19 +20,19 @@ defined_text = {
 	name = STPGetSuspicionBand
 
 	text = {
-		trigger = { check_variable = { var = STP_party_suspicion_rate value = 0.90 compare = greater_than_or_equals } }
+		trigger = { check_variable = { var = STP_party_suspicion value = 90 compare = greater_than_or_equals } }
 		localization_key = STP_SUSPICION_BAND_MANHUNT
 	}
 	text = {
-		trigger = { check_variable = { var = STP_party_suspicion_rate value = 0.70 compare = greater_than_or_equals } }
+		trigger = { check_variable = { var = STP_party_suspicion value = 70 compare = greater_than_or_equals } }
 		localization_key = STP_SUSPICION_BAND_COMPROMISED
 	}
 	text = {
-		trigger = { check_variable = { var = STP_party_suspicion_rate value = 0.50 compare = greater_than_or_equals } }
+		trigger = { check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } }
 		localization_key = STP_SUSPICION_BAND_WATCHED
 	}
 	text = {
-		trigger = { check_variable = { var = STP_party_suspicion_rate value = 0.25 compare = greater_than_or_equals } }
+		trigger = { check_variable = { var = STP_party_suspicion value = 25 compare = greater_than_or_equals } }
 		localization_key = STP_SUSPICION_BAND_NOTICED
 	}
 	text = {
@@ -118,19 +44,19 @@ defined_text = {
 	name = STPGetSuspicionExplanation
 
 	text = {
-		trigger = { check_variable = { var = STP_party_suspicion_rate value = 0.90 compare = greater_than_or_equals } }
+		trigger = { check_variable = { var = STP_party_suspicion value = 90 compare = greater_than_or_equals } }
 		localization_key = STP_SUSPICION_EXPLANATION_MANHUNT
 	}
 	text = {
-		trigger = { check_variable = { var = STP_party_suspicion_rate value = 0.70 compare = greater_than_or_equals } }
+		trigger = { check_variable = { var = STP_party_suspicion value = 70 compare = greater_than_or_equals } }
 		localization_key = STP_SUSPICION_EXPLANATION_COMPROMISED
 	}
 	text = {
-		trigger = { check_variable = { var = STP_party_suspicion_rate value = 0.50 compare = greater_than_or_equals } }
+		trigger = { check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } }
 		localization_key = STP_SUSPICION_EXPLANATION_WATCHED
 	}
 	text = {
-		trigger = { check_variable = { var = STP_party_suspicion_rate value = 0.25 compare = greater_than_or_equals } }
+		trigger = { check_variable = { var = STP_party_suspicion value = 25 compare = greater_than_or_equals } }
 		localization_key = STP_SUSPICION_EXPLANATION_NOTICED
 	}
 	text = {
@@ -142,45 +68,30 @@ defined_text = {
 	name = STP_display_party_suspicion
 
 	text = {
-		trigger = {
-			tag = STP
-		}
+		trigger = { tag = STP }
 		localization_key = STP_display_party_suspicion_loc
 	}
 }
 
-defined_text = {
-	name = stp_party_suspicion_loc
-
-	text = {
-		trigger = { check_variable = { var = STP_party_suspicion_rate value = 0.50 compare = greater_than_or_equals } }
-		localization_key = stp_party_suspicion_loc_bad
-	}
-	text = {
-		localization_key = stp_party_suspicion_loc_good
-	}
-}
-
-
-#State face
+# State-face inlay
 
 defined_text = {
 	name = STPGetStateFaceStageName
 
 	text = {
-		trigger = { check_variable = { var = STP_state_face_stage value = 5 compare = equals } }
+		trigger = { check_variable = { var = STP_leader_health_stage value = 5 compare = equals } }
 		localization_key = STP_STATE_FACE_STAGE_5_loc
 	}
 	text = {
-		trigger = { check_variable = { var = STP_state_face_stage value = 4 compare = equals } }
+		trigger = { check_variable = { var = STP_leader_health_stage value = 4 compare = equals } }
 		localization_key = STP_STATE_FACE_STAGE_4_loc
 	}
 	text = {
-		trigger = { check_variable = { var = STP_state_face_stage value = 3 compare = equals } }
+		trigger = { check_variable = { var = STP_leader_health_stage value = 3 compare = equals } }
 		localization_key = STP_STATE_FACE_STAGE_3_loc
 	}
 	text = {
-		trigger = { check_variable = { var = STP_state_face_stage value = 2 compare = equals } }
+		trigger = { check_variable = { var = STP_leader_health_stage value = 2 compare = equals } }
 		localization_key = STP_STATE_FACE_STAGE_2_loc
 	}
 	text = {
@@ -192,19 +103,19 @@ defined_text = {
 	name = STPGetStateFaceTooltip
 
 	text = {
-		trigger = { check_variable = { var = STP_state_face_stage value = 5 compare = equals } }
+		trigger = { check_variable = { var = STP_leader_health_stage value = 5 compare = equals } }
 		localization_key = STP_STATE_FACE_STAGE_5_TOOLTIP
 	}
 	text = {
-		trigger = { check_variable = { var = STP_state_face_stage value = 4 compare = equals } }
+		trigger = { check_variable = { var = STP_leader_health_stage value = 4 compare = equals } }
 		localization_key = STP_STATE_FACE_STAGE_4_TOOLTIP
 	}
 	text = {
-		trigger = { check_variable = { var = STP_state_face_stage value = 3 compare = equals } }
+		trigger = { check_variable = { var = STP_leader_health_stage value = 3 compare = equals } }
 		localization_key = STP_STATE_FACE_STAGE_3_TOOLTIP
 	}
 	text = {
-		trigger = { check_variable = { var = STP_state_face_stage value = 2 compare = equals } }
+		trigger = { check_variable = { var = STP_leader_health_stage value = 2 compare = equals } }
 		localization_key = STP_STATE_FACE_STAGE_2_TOOLTIP
 	}
 	text = {
