@@ -6,17 +6,28 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-EFFECTS = ROOT / "common/scripted_effects/ADISCORD_scripted_effects_STP.txt"
+EFFECTS = ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
+DECISIONS = ROOT / "common/decisions/ADISCORD_STP_decisions.txt"
+DYNAMIC_MODIFIERS = ROOT / "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt"
+INLAY = ROOT / "common/focus_inlay_windows/ADISCORD_STP_state_face_inlay_window.txt"
+SCRIPTED_LOC = ROOT / "common/scripted_localisation/ADISCORD_STP_scripted_loc.txt"
+DECISION_LOC = ROOT / "localisation/russian/ADISCORD_STP_decisions_l_russian.yml"
+HISTORY = ROOT / "history/countries/STP - StepanLand.txt"
 ON_ACTIONS = ROOT / "common/on_actions/00_ADISCORD_on_actions.txt"
 
 
+def read(path: Path) -> str:
+    return path.read_text(encoding="utf-8-sig")
+
+
 def named_block(text: str, name: str) -> str:
-    match = re.search(rf"(?m)^{re.escape(name)}\s*=\s*\{{", text)
+    match = re.search(rf"(?m)^\s*{re.escape(name)}\s*=\s*\{{", text)
     if match is None:
         raise AssertionError(f"missing block: {name}")
 
+    opening = text.find("{", match.start())
     depth = 0
-    for index in range(match.end() - 1, len(text)):
+    for index in range(opening, len(text)):
         if text[index] == "{":
             depth += 1
         elif text[index] == "}":
@@ -26,69 +37,124 @@ def named_block(text: str, name: str) -> str:
     raise AssertionError(f"unterminated block: {name}")
 
 
-class STPStartupContractTests(unittest.TestCase):
-    def test_startup_initializers_have_one_consolidated_definition_each(self) -> None:
-        definitions: dict[str, list[str]] = {
-            "STP_initialize_party_suspicion": [],
-            "STP_initialize_leader_health": [],
-        }
-        for path in sorted((ROOT / "common/scripted_effects").glob("*.txt")):
-            source = path.read_text(encoding="utf-8-sig")
-            for name in definitions:
-                matches = re.findall(rf"(?m)^{re.escape(name)}\s*=\s*\{{", source)
-                definitions[name].extend([path.name] * len(matches))
+class STPCoreContractTests(unittest.TestCase):
+    def test_suspicion_has_one_0_to_100_state_and_linear_pp_mapping(self) -> None:
+        effects = read(EFFECTS)
+        refresh = named_block(effects, "STP_refresh_party_suspicion")
+        change = named_block(effects, "STP_change_party_suspicion")
 
-        for name, paths in definitions.items():
-            self.assertEqual(
-                [EFFECTS.name],
-                paths,
-                f"{name} must have exactly one definition in the consolidated STP effects file",
+        self.assertIn("var = STP_party_suspicion", refresh)
+        self.assertIn("min = 0", refresh)
+        self.assertIn("max = 100", refresh)
+        self.assertIn("var = STP_sus_political_power_factor", refresh)
+        self.assertIn("value = -0.007", refresh)
+        self.assertIn("value = 0.35", refresh)
+        self.assertIn("value = STP_party_suspicion_change", change)
+        self.assertIn("STP_refresh_party_suspicion = yes", change)
+
+        history = read(HISTORY)
+        self.assertRegex(history, r"set_variable\s*=\s*\{\s*var\s*=\s*STP_party_suspicion\s+value\s*=\s*5\s*\}")
+        self.assertRegex(history, r"set_variable\s*=\s*\{\s*var\s*=\s*STP_sus_political_power_factor\s+value\s*=\s*0\.315\s*\}")
+
+        modifier = named_block(read(DYNAMIC_MODIFIERS), "STP_party_suspicion_dynamic_modifier")
+        self.assertIn("political_power_factor = STP_sus_political_power_factor", modifier)
+
+    def test_health_has_one_discrete_five_stage_state_shared_with_inlay(self) -> None:
+        effects = read(EFFECTS)
+        refresh = named_block(effects, "STP_refresh_leader_health")
+        setter = named_block(effects, "STP_set_leader_health_stage")
+
+        self.assertIn("var = STP_leader_health_stage", refresh)
+        self.assertIn("min = 1", refresh)
+        self.assertIn("max = 5", refresh)
+        for value in ("-0.05", "-0.10", "-0.20", "-0.30"):
+            self.assertIn(f"value = {value}", refresh)
+        self.assertIn("value = STP_requested_health_stage", setter)
+        self.assertIn("STP_refresh_leader_health = yes", setter)
+
+        history = read(HISTORY)
+        self.assertRegex(history, r"set_variable\s*=\s*\{\s*var\s*=\s*STP_leader_health_stage\s+value\s*=\s*1\s*\}")
+
+        inlay = read(INLAY)
+        for stage in range(2, 6):
+            self.assertIn(f"check_variable = {{ STP_leader_health_stage = {stage} }}", inlay)
+
+        stability = named_block(read(DYNAMIC_MODIFIERS), "STP_fading_father")
+        self.assertIn("stability_factor = STP_fading_father_stability_factor", stability)
+        self.assertNotIn("political_power", stability)
+
+    def test_runtime_has_no_abandoned_mirror_or_rate_variables(self) -> None:
+        runtime_sources = "\n".join(
+            read(path)
+            for path in (
+                EFFECTS,
+                DECISIONS,
+                DYNAMIC_MODIFIERS,
+                INLAY,
+                SCRIPTED_LOC,
+                DECISION_LOC,
+                HISTORY,
             )
+        )
+        for legacy in (
+            "STP_party_suspicion_rate",
+            "STP_leader_health_rate",
+            "STP_state_face_stage",
+            "STP_leader_health_temp",
+        ):
+            with self.subTest(legacy=legacy):
+                self.assertNotIn(legacy, runtime_sources)
 
-        self.assertFalse(
-            (ROOT / "common/scripted_effects/ADISCORD_scripted_effects_stelander.txt").exists()
-        )
-        self.assertFalse(
-            (ROOT / "common/scripted_effects/ADISCORD_stp_state_face_effects.txt").exists()
-        )
+    def test_debug_decisions_replace_disposable_test_decision(self) -> None:
+        decisions = read(DECISIONS)
+        self.assertNotIn("STP_test = {", decisions)
+        for decision in (
+            "STP_debug_increase_suspicion",
+            "STP_debug_decrease_suspicion",
+            "STP_debug_worsen_ivanov",
+            "STP_debug_improve_ivanov",
+        ):
+            self.assertIn(f"{decision} = {{", decisions)
 
-    def test_initializers_use_current_normalized_rate_schema(self) -> None:
-        source = EFFECTS.read_text(encoding="utf-8-sig")
-        suspicion = named_block(source, "STP_initialize_party_suspicion")
-        health = named_block(source, "STP_initialize_leader_health")
+        localisation = read(DECISION_LOC)
+        for decision in (
+            "STP_debug_increase_suspicion",
+            "STP_debug_decrease_suspicion",
+            "STP_debug_worsen_ivanov",
+            "STP_debug_improve_ivanov",
+        ):
+            self.assertRegex(localisation, rf"(?m)^\s*{decision}:\s+\"§RDEBUG:§!")
 
-        self.assertIn("has_variable = STP_party_suspicion_rate", suspicion)
-        self.assertIn("var = STP_party_suspicion_rate value = 0.05", suspicion)
-        self.assertIn("var = STP_party_suspicion_rate min = 0 max = 1", suspicion)
-        self.assertIn("var = STP_party_suspicion_rate_temp value = 0", suspicion)
-        self.assertIn("STP_change_party_suspicion = yes", suspicion)
+    def test_startup_uses_one_core_initializer_and_has_no_deleted_stp_army_hook(self) -> None:
+        effects = read(EFFECTS)
+        initializer = named_block(effects, "STP_initialize_core_mechanics")
+        self.assertIn("STP_refresh_party_suspicion = yes", initializer)
+        self.assertIn("STP_refresh_leader_health = yes", initializer)
+        self.assertIn("STP_party_suspicion_dynamic_modifier", initializer)
+        self.assertIn("STP_fading_father", initializer)
 
-        self.assertIn("has_variable = STP_leader_health_rate", health)
-        self.assertIn("var = STP_leader_health_rate value = 1", health)
-        self.assertIn("var = STP_leader_health_rate min = 0 max = 1", health)
-        self.assertIn("var = STP_leader_health_rate_temp value = 0", health)
-        self.assertIn("STP_leader_health = yes", health)
+        startup = read(ON_ACTIONS)
+        self.assertIn("STP_initialize_core_mechanics = yes", startup)
+        self.assertNotIn("ADISCORD_STP_lock_regular_army_templates", startup)
 
-    def test_startup_calls_both_initializers_in_stp_scope(self) -> None:
-        source = ON_ACTIONS.read_text(encoding="utf-8-sig")
-        startup = named_block(source, "on_actions")
-        self.assertRegex(
-            startup,
-            r"STP\s*=\s*\{[^{}]*STP_initialize_party_suspicion\s*=\s*yes"
-            r"[^{}]*STP_initialize_leader_health\s*=\s*yes[^{}]*\}",
-        )
-        fresh_guard = startup.index(
-            "has_global_flag = ADISCORD_fresh_campaign_contract_v1"
-        )
-        stp_scope = startup.index("STP = {")
-        completion = startup.index(
-            "set_global_flag = ADISCORD_starting_technology_profiles_applied"
-        )
-        self.assertLess(fresh_guard, stp_scope)
-        self.assertLess(stp_scope, completion)
-        self.assertFalse(
-            (ROOT / "common/on_actions/01_ADISCORD_STP_suspicion_on_actions.txt").exists()
-        )
+    def test_scripted_localisation_is_limited_to_status_and_inlay_contracts(self) -> None:
+        scripted_loc = read(SCRIPTED_LOC)
+        for retained in (
+            "STPGetSuspicionValue",
+            "STPGetSuspicionBand",
+            "STPGetSuspicionExplanation",
+            "STP_display_party_suspicion",
+            "STPGetStateFaceStageName",
+            "STPGetStateFaceTooltip",
+        ):
+            self.assertIn(f"name = {retained}", scripted_loc)
+
+        for removed in (
+            "name = PeterHealth",
+            "name = STPGetLeaderHealthStageName",
+            "name = STPGetLeaderHealthTooltip",
+        ):
+            self.assertNotIn(removed, scripted_loc)
 
 
 if __name__ == "__main__":
