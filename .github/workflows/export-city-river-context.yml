@@ -1,0 +1,37 @@
+name: Export city river context
+
+on:
+  push:
+    branches:
+      - agent/map-layer-alignment
+    paths:
+      - .github/workflows/export-city-river-context.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out alignment branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/map-layer-alignment
+          fetch-depth: 1
+
+      - name: Upload city and river map context
+        uses: actions/upload-artifact@v4
+        with:
+          name: city-river-map-context
+          path: |
+            map/cities.bmp
+            map/rivers.bmp
+            map/provinces.bmp
+            map/definition.csv
+            map/cities.txt
+            tools/builders/build_adiscord_vorkerland_cities.py
+            tools/tests/test_build_adiscord_vorkerland_cities.py
+          if-no-files-found: error
+          retention-days: 1
