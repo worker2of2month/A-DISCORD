@@ -31,10 +31,9 @@ jobs:
       - name: Install raster dependencies
         run: python -m pip install --disable-pip-version-check pillow numpy
 
-      - name: Measure city and river intersections
+      - name: Measure actual river channels against city masks
         run: |
           python - <<'PY'
-          from collections import Counter
           import csv
           from pathlib import Path
 
@@ -51,24 +50,17 @@ jobs:
                Image.open(root / 'map' / 'rivers.bmp') as rivers_image, \
                Image.open(root / 'map' / 'provinces.bmp') as provinces_image:
               if cities_image.size != rivers_image.size or cities_image.size != provinces_image.size:
-                  raise SystemExit(
-                      f'raster size mismatch: cities={cities_image.size}, '
-                      f'rivers={rivers_image.size}, provinces={provinces_image.size}'
-                  )
+                  raise SystemExit('cities/rivers/provinces dimensions differ')
               width, height = cities_image.size
               city_pixels = np.asarray(cities_image, dtype=np.uint8)
               river_pixels = np.asarray(rivers_image, dtype=np.uint8)
               province_rgb = np.asarray(provinces_image.convert('RGB'), dtype=np.uint32)
               river_palette = rivers_image.getpalette() or []
-              city_mode = cities_image.mode
-              river_mode = rivers_image.mode
 
-          city_counts = np.bincount(city_pixels.reshape(-1), minlength=256)
-          river_counts = np.bincount(river_pixels.reshape(-1), minlength=256)
-          river_background = int(river_counts.argmax())
-          river_mask = river_pixels != river_background
+          # HOI4 river channels and topology markers use palette indices 0..11.
+          # 254 and 255 are the non-river sea/land backgrounds and must both be excluded.
+          river_mask = river_pixels <= 11
           city_mask = city_pixels == city.CITY_PALETTE_INDEX
-
           packed_provinces = (
               (province_rgb[:, :, 0] << 16)
               | (province_rgb[:, :, 1] << 8)
@@ -100,19 +92,19 @@ jobs:
               if pid >= 0
           }
 
-          river_l = Image.fromarray((river_mask.astype(np.uint8) * 255), mode='L')
+          river_image = Image.fromarray((river_mask.astype(np.uint8) * 255), mode='L')
           dilated = {0: river_mask}
           for radius in (1, 2, 3, 4, 6):
               dilated[radius] = np.asarray(
-                  river_l.filter(ImageFilter.MaxFilter(radius * 2 + 1)),
+                  river_image.filter(ImageFilter.MaxFilter(radius * 2 + 1)),
                   dtype=np.uint8,
               ) > 0
 
-          target_colours, definition_issues = city.target_colours()
-          if definition_issues:
-              raise SystemExit('\n'.join(definition_issues))
+          target_colours, issues = city.target_colours()
+          if issues:
+              raise SystemExit('\n'.join(issues))
 
-          target_rows = []
+          rows = []
           for packed_colour, pid in sorted(target_colours.items(), key=lambda item: item[1]):
               province_mask = packed_provinces == packed_colour
               row = {
@@ -122,68 +114,46 @@ jobs:
                   'river_pixels': int((river_mask & province_mask).sum()),
               }
               for radius, clearance in dilated.items():
-                  row[f'city_within_r{radius}'] = int((city_mask & province_mask & clearance).sum())
-              target_rows.append(row)
+                  row[radius] = int((city_mask & province_mask & clearance).sum())
+              rows.append(row)
 
-          top_city_values = [
-              (value, int(count))
-              for value, count in sorted(enumerate(city_counts), key=lambda item: item[1], reverse=True)
-              if count
-          ][:12]
-          top_river_values = [
-              (value, int(count))
-              for value, count in sorted(enumerate(river_counts), key=lambda item: item[1], reverse=True)
-              if count
-          ][:24]
-
-          def palette_rgb(value: int):
+          channel_counts = np.bincount(river_pixels[river_mask].reshape(-1), minlength=12)
+          def palette_rgb(value):
               offset = value * 3
-              if offset + 2 >= len(river_palette):
-                  return None
-              return tuple(river_palette[offset:offset + 3])
+              return tuple(river_palette[offset:offset + 3]) if offset + 2 < len(river_palette) else None
 
           lines = [
               '# City–river overlap diagnostic',
               '',
               f'- Raster size: `{width}×{height}`.',
-              f'- `cities.bmp` mode: `{city_mode}`; city palette index: `{city.CITY_PALETTE_INDEX}`.',
-              f'- `rivers.bmp` mode: `{river_mode}`; inferred background index: `{river_background}`.',
+              '- River contract: palette indices `0..11` are channels/markers; `254` and `255` are backgrounds.',
               f'- Exact city/river overlap: **{int(exact_overlap.sum()):,} pixels** across **{len(all_overlap)} provinces**.',
               '',
-              '## Most common city indices',
-              '',
-              '| Index | Pixels |',
-              '|---:|---:|',
-          ]
-          lines.extend(f'| {value} | {count:,} |' for value, count in top_city_values)
-          lines.extend([
-              '',
-              '## Most common river indices',
+              '## River channel palette',
               '',
               '| Index | RGB | Pixels |',
               '|---:|---|---:|',
-          ])
+          ]
           lines.extend(
-              f'| {value} | `{palette_rgb(value)}` | {count:,} |'
-              for value, count in top_river_values
+              f'| {index} | `{palette_rgb(index)}` | {int(channel_counts[index]):,} |'
+              for index in range(12)
           )
           lines.extend([
               '',
               '## Managed Vorkerland city provinces',
               '',
-              '| Province | Province px | City px | River px | Exact overlap | Within 1px | Within 2px | Within 3px | Within 4px | Within 6px |',
+              '| Province | Province px | City px | River px | Exact | Within 1px | Within 2px | Within 3px | Within 4px | Within 6px |',
               '|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|',
           ])
-          for row in target_rows:
+          for row in rows:
               lines.append(
                   f"| {row['province']} | {row['province_pixels']:,} | {row['city_pixels']:,} | "
-                  f"{row['river_pixels']:,} | {row['city_within_r0']:,} | {row['city_within_r1']:,} | "
-                  f"{row['city_within_r2']:,} | {row['city_within_r3']:,} | {row['city_within_r4']:,} | "
-                  f"{row['city_within_r6']:,} |"
+                  f"{row['river_pixels']:,} | {row[0]:,} | {row[1]:,} | {row[2]:,} | "
+                  f"{row[3]:,} | {row[4]:,} | {row[6]:,} |"
               )
           lines.extend([
               '',
-              '## All provinces with exact overlap',
+              '## All provinces with exact city/river overlap',
               '',
               '| Province | Overlap pixels |',
               '|---:|---:|',
@@ -194,13 +164,17 @@ jobs:
           )
           lines.append('')
           report_path.write_text('\n'.join(lines), encoding='utf-8')
-          print('\n'.join(lines[:18]))
+          print('\n'.join(lines[:20]))
           PY
 
-      - name: Commit diagnostic report
+      - name: Commit corrected diagnostic report
         run: |
           git config user.name "A-DISCORD Map Bot"
           git config user.email "actions@users.noreply.github.com"
           git add -- docs/map/city-river-overlap-diagnostic.md
-          git commit -m "diagnostic(map): audit city river overlaps"
-          git push origin HEAD:agent/city-river-clearance
+          if git diff --cached --quiet; then
+            echo "diagnostic report unchanged"
+          else
+            git commit -m "diagnostic(map): correct city river overlap audit"
+            git push origin HEAD:agent/city-river-clearance
+          fi
