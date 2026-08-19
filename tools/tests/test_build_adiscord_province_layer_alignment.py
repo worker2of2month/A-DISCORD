@@ -1,12 +1,36 @@
 from __future__ import annotations
 
-from array import array
-from io import BytesIO
+import json
 import unittest
+from pathlib import Path
 
 from PIL import Image
 
+from tools.builders import build_adiscord_map_relief_readability as relief
 from tools.builders import build_adiscord_province_layer_alignment as builder
+
+
+ROOT = Path(__file__).resolve().parents[2]
+
+
+def _registry_entry() -> dict:
+    payload = json.loads(
+        (ROOT / "tools" / "data" / "generated_output_owners.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    for entry in payload["families"]:
+        if entry["id"] == "province_layer_alignment":
+            return entry
+    raise AssertionError("province_layer_alignment is not registered as an owner")
+
+
+def _declared_outputs() -> list[str]:
+    return _registry_entry()["output_globs"]
+
+
+def _declared_sources() -> list[str]:
+    return _registry_entry()["source_inputs"]
 
 
 PALETTE = {
@@ -100,55 +124,48 @@ class ProvinceLayerAlignmentTests(unittest.TestCase):
         self.assertFalse(second.changed_indices)
         self.assertTrue(first.changed_indices)
 
-    def test_low_mountain_height_is_raised_without_touching_boundary(self) -> None:
-        width = height = 7
-        indices = [y * width + x for y in range(1, 6) for x in range(1, 6)]
-        heights = bytearray([110] * (width * height))
-        before = bytes(heights)
-        changed = builder.align_province_height(
-            heights, width, height, indices, desired_type="mountain", province_id=16679
-        )
-        boundary = {
-            y * width + x
-            for y in range(1, 6)
-            for x in range(1, 6)
-            if x in (1, 5) or y in (1, 5)
-        }
-        self.assertTrue(changed)
-        self.assertTrue(all(heights[index] == before[index] for index in boundary))
-        self.assertGreater(heights[3 * width + 3], 145)
+    def test_relief_is_not_owned_here(self) -> None:
+        """This pass must never write relief again.
 
-    def test_extreme_plain_height_is_flattened_and_idempotent(self) -> None:
-        width = height = 7
-        indices = [y * width + x for y in range(1, 6) for x in range(1, 6)]
-        heights = bytearray([110] * (width * height))
-        for y in range(1, 6):
-            for x in range(1, 6):
-                heights[y * width + x] = 170 if (x + y) % 2 else 140
-        builder.align_province_height(
-            heights, width, height, indices, desired_type="plains", province_id=16688
-        )
-        interior = [heights[y * width + x] for y in range(2, 5) for x in range(2, 5)]
-        self.assertLess(max(interior) - min(interior), 25)
-        snapshot = bytes(heights)
-        second = builder.align_province_height(
-            heights, width, height, indices, desired_type="plains", province_id=16688
-        )
-        self.assertEqual(bytes(heights), snapshot)
-        self.assertFalse(second)
+        Every part of its old per-province height and normal-map pass was a defect
+        generator - a guaranteed 20 unit wall at each province rim, interiors that
+        saturated into a tabletop, and an axis-aligned sinusoid that printed a
+        cross-hatch mesh across the whole map.  Relief now belongs to
+        ``build_adiscord_map_relief_readability``, which sculpts continuously
+        across province borders, and these assertions keep it from creeping back.
+        """
 
-    def test_world_normal_patch_changes_only_affected_cells_and_neighbours(self) -> None:
-        heightmap = Image.new("L", (8, 8), 110)
-        pixels = list(heightmap.get_flattened_data())
-        pixels[4 * 8 + 4] = 160
-        heightmap.putdata(pixels)
-        source = Image.new("RGB", (4, 4), (127, 127, 253))
-        result, changed = builder.render_world_normal_patch(
-            heightmap, source, {4 * 8 + 4}
+        for removed in ("align_province_height", "render_world_normal_patch"):
+            self.assertFalse(hasattr(builder, removed), removed)
+        self.assertNotIn("map/heightmap.bmp", _declared_outputs())
+        self.assertNotIn("map/world_normal.bmp", _declared_outputs())
+        self.assertIn("map/heightmap.bmp", _declared_sources())
+
+    def test_urban_alignment_keeps_the_shared_river_corridor_clear(self) -> None:
+        terrain = bytearray([0, 4, 17, 3])
+        bank = relief.CATEGORY_PALETTE[relief.CORRIDOR_BANK_CATEGORY][0]
+        result = builder.align_province_terrain(
+            terrain,
+            bytes([100, 100, 100, 100]),
+            2,
+            2,
+            [0, 1, 2, 3],
+            desired_type="urban",
+            province_id=16698,
+            palette_types=PALETTE,
+            target_share=1.0,
+            corridor=frozenset({1, 2}),
         )
-        self.assertTrue(changed)
-        self.assertTrue(changed <= {6, 9, 10, 11, 14})
-        self.assertEqual(result.getpixel((0, 0)), (127, 127, 253))
+        self.assertEqual(terrain, bytearray([13, bank, bank, 13]))
+        self.assertEqual(result.changed_indices, {0, 1, 2, 3})
+
+        snapshot = bytes(terrain)
+        again = builder.align_province_terrain(
+            terrain, bytes([100] * 4), 2, 2, [0, 1, 2, 3], "urban", 16698,
+            PALETTE, 1.0, frozenset({1, 2}),
+        )
+        self.assertEqual(bytes(terrain), snapshot)
+        self.assertFalse(again.changed_indices)
 
     def test_tree_patch_preserves_cells_outside_target_footprint(self) -> None:
         terrain = paletted([

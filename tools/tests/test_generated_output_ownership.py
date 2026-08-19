@@ -41,6 +41,8 @@ REQUIRED_FAMILIES = {
     "ivn_geography",
     "minimap",
     "map_buildings",
+    "map_relief_readability",
+    "province_layer_alignment",
     "state_history",
     "northern_countries",
     "outer_states",
@@ -229,6 +231,22 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
         self.assertLess(
             sequence.index("ivn_geography"),
             sequence.index("map_buildings"),
+        )
+        # Relief has to be finished before the building synchroniser reads the
+        # heightmap for its stored z values, and before the permanent-snow pass
+        # classifies terrain indices from it.  The alignment pass writes the city
+        # pixels the two of them share, so it goes last of the pair.
+        self.assertLess(
+            sequence.index("map_relief_readability"),
+            sequence.index("province_layer_alignment"),
+        )
+        self.assertLess(
+            sequence.index("province_layer_alignment"),
+            sequence.index("map_buildings"),
+        )
+        self.assertLess(
+            sequence.index("map_relief_readability"),
+            sequence.index("terrain_snow"),
         )
 
     def test_registry_rejects_unsafe_or_empty_paths(self) -> None:

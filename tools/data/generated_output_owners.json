@@ -10,6 +10,8 @@
     "inner_frontier_countries",
     "ainholm_mandate",
     "ivn_geography",
+    "map_relief_readability",
+    "province_layer_alignment",
     "map_buildings",
     "vorkerland_theatre",
     "strategic_regions",
@@ -172,6 +174,59 @@
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "Inner-frontier population and owner metadata layers onto existing state shells; its generated victory-point block and flag directories share engine files with other regional builders."
+    },
+    {
+      "id": "map_relief_readability",
+      "owner_module": "tools.builders.build_adiscord_map_relief_readability",
+      "output_globs": [
+        "map/heightmap.bmp",
+        "map/world_normal.bmp",
+        "map/terrain.bmp",
+        "map/trees.bmp"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_map_relief_readability.py",
+        "tools/builders/build_adiscord_terrain_snow.py",
+        "tools/lib/map_raster.py",
+        "tools/lib/map_relief.py",
+        "tools/data/adiscord_map_readability_scope.json",
+        "tools/data/adiscord_relief_base_heightmap.png",
+        "tools/data/adiscord_relief_base_trees.png",
+        "common/terrain/00_terrain.txt",
+        "map/provinces.bmp",
+        "map/definition.csv",
+        "map/rivers.bmp",
+        "map/terrain.bmp",
+        "map/trees.bmp",
+        "map/world_normal.bmp"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_map_relief_readability"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_map_relief_readability", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "layered",
+      "overlap_explanation": "Owns map/heightmap.bmp and the derived map/world_normal.bmp outright, sculpting both from the committed pre-relief baselines in tools/data so an additive pass can never stack on its own output. In map/terrain.bmp it claims only the frozen province scope, the urban river corridor and the northern transition band, and hands every pixel it writes to the terrain_snow classifier so the result is a fixed point of both; province_layer_alignment owns 47 provinces of its own and writes them afterwards, and ivn_geography owns IVN/IIA settlement footprints. In map/trees.bmp it only clears cells that touch water, sharing that shoreline rule with province_layer_alignment."
+    },
+    {
+      "id": "province_layer_alignment",
+      "owner_module": "tools.builders.build_adiscord_province_layer_alignment",
+      "output_globs": ["map/terrain.bmp", "map/trees.bmp"],
+      "source_inputs": [
+        "tools/builders/build_adiscord_province_layer_alignment.py",
+        "tools/builders/build_adiscord_map_relief_readability.py",
+        "tools/lib/map_raster.py",
+        "tools/data/adiscord_map_readability_scope.json",
+        "map/provinces.bmp",
+        "map/definition.csv",
+        "map/heightmap.bmp",
+        "map/rivers.bmp",
+        "map/terrain.bmp",
+        "map/trees.bmp"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_province_layer_alignment"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_province_layer_alignment", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "layered",
+      "overlap_explanation": "Owns graphical terrain and tree occupancy for the 2026-08-18 province delta only, minus the northern island provinces it delegates to map_relief_readability. Relief is deliberately not owned here: it reads map/heightmap.bmp to score candidate pixels and never writes it. It honours the same river corridor as map_relief_readability in the four city provinces both cover, and writes base palette indices so the terrain_snow classifier stays free to decide which of them are white."
     },
     {
       "id": "map_buildings",

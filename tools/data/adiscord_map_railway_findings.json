@@ -1,0 +1,104 @@
+{
+  "schema": 1,
+  "comment": "Known map/railways.txt defects, measured by tools/validators/validate_adiscord_map_railways.py on 2026-08-19. Each adjacency break is a place where two consecutive provinces on a railway do not share a border, so supply stops flowing along the line. missing_provinces is the shortest all-land insertion that would repair it. Repairing one changes which provinces a supply line runs through, which is a gameplay decision, and map/railways.txt is generated output owned by tools/builders/build_adiscord_vorkerland_theatre.py, so the repair belongs in that builder rather than here. These entries exist so the tail stays visible and so any NEW break fails validation.",
+  "max_recorded_worst_step": 57.0,
+  "max_recorded_worst_step_comment": "The largest elevation change in height units between two consecutive provinces on any railway, using each province's median height. Line 129 sets it while crossing five declared-mountain provinces. Raising this number means a railway started climbing harder; the fix is to carve a saddle along the existing line in map/heightmap.bmp, not to reroute it.",
+  "adjacency_breaks": [
+    {
+      "line": 23,
+      "from": 16501,
+      "to": 9126,
+      "missing_provinces": [
+        4369
+      ]
+    },
+    {
+      "line": 38,
+      "from": 6104,
+      "to": 9478,
+      "missing_provinces": [
+        3043
+      ]
+    },
+    {
+      "line": 62,
+      "from": 9460,
+      "to": 9225,
+      "missing_provinces": [
+        16607
+      ]
+    },
+    {
+      "line": 65,
+      "from": 1477,
+      "to": 6104,
+      "missing_provinces": [
+        16655
+      ]
+    },
+    {
+      "line": 67,
+      "from": 2621,
+      "to": 10147,
+      "missing_provinces": [
+        16682
+      ]
+    },
+    {
+      "line": 67,
+      "from": 16576,
+      "to": 3321,
+      "missing_provinces": [
+        16602
+      ]
+    },
+    {
+      "line": 71,
+      "from": 12404,
+      "to": 12365,
+      "missing_provinces": [
+        284
+      ]
+    },
+    {
+      "line": 77,
+      "from": 2452,
+      "to": 11080,
+      "missing_provinces": [
+        9567
+      ]
+    },
+    {
+      "line": 77,
+      "from": 4571,
+      "to": 12367,
+      "missing_provinces": [
+        11999
+      ]
+    },
+    {
+      "line": 77,
+      "from": 12367,
+      "to": 2452,
+      "missing_provinces": [
+        16603
+      ]
+    },
+    {
+      "line": 112,
+      "from": 5245,
+      "to": 9159,
+      "missing_provinces": [
+        16563
+      ]
+    },
+    {
+      "line": 113,
+      "from": 8064,
+      "to": 2539,
+      "missing_provinces": [
+        16657
+      ]
+    }
+  ]
+}

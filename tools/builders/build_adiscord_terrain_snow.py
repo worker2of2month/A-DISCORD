@@ -12,6 +12,15 @@ while reserving permanent snow for the extreme polar cap, northern mountains,
 and the highest mountain pixels worldwide.  It also repairs four provinces
 which are already ``urban`` in ``map/definition.csv`` but whose graphical
 terrain was still plains or desert.  No new combat terrain is introduced.
+
+The cap edge is a *graded* band rather than a threshold.  An earlier pass gave
+the boundary an organic wiggle but still flipped every column from snow to
+vegetation in a single row, which read in-game as a hard painted edge where the
+green forest bands stop dead against grey tundra.  Snow now wins a per-pixel
+contest against fine noise inside a band whose width itself varies along the
+coast, so the two biomes interleave in tongues and pockets.  The northern
+mountain extension follows the same band instead of the old flat
+``y = 300`` floor, which used to leave a visible map-wide straight line.
 """
 
 from __future__ import annotations
@@ -23,6 +32,7 @@ import re
 from pathlib import Path
 
 from PIL import Image
+from tools.lib.map_raster import value_noise
 from tools.lib.paths import repository_root
 
 
@@ -44,9 +54,16 @@ POLAR_CAP_DETAIL_AMPLITUDE = 8
 POLAR_CAP_RELIEF_SCALE = 0.08
 POLAR_CAP_RELIEF_MIN = -7
 POLAR_CAP_RELIEF_MAX = 16
-POLAR_MOUNTAIN_Y = 300
 POLAR_MOUNTAIN_MARGIN = 22
 PERMANENT_PEAK_HEIGHT = 205
+
+# The permanent-snow edge is a band, not a line.  ``HALF_WIDTH`` is the widest
+# half-band in pixels, scaled per column so the transition narrows and widens
+# along the coast; ``DETAIL_CELL`` sets how chunky the interlocking tongues are.
+POLAR_TRANSITION_HALF_WIDTH = 15
+POLAR_TRANSITION_MIN_SCALE = 0.35
+POLAR_TRANSITION_WIDTH_CELL = 130
+POLAR_TRANSITION_DETAIL_CELL = 13
 
 MIN_PERMANENT_SNOW_PIXELS = 320_000
 MAX_PERMANENT_SNOW_PIXELS = 380_000
@@ -54,6 +71,8 @@ MIN_PERMANENT_MOUNTAIN_PIXELS = 5_000
 POLAR_SEAM_SCAN_MIN_Y = 220
 POLAR_SEAM_SCAN_MAX_Y = 380
 MAX_POLAR_ROW_TRANSITION_SHARE = 0.12
+MAX_POLAR_INDEX_ROW_CHANGE_SHARE = 0.22
+MIN_POLAR_SEAM_ROW_LAND = 400
 
 WATER_TERRAIN = frozenset({14, 15})
 MOUNTAIN_TERRAIN = frozenset({6, 10, 11, 16, 31})
@@ -100,11 +119,9 @@ def smooth_value_noise(x: int, cell_size: int, salt: int) -> float:
     return first + (second - first) * blend
 
 
-def polar_cap_boundary(x: int, height: int) -> int:
-    """Return an organic permanent-snow edge for one map column."""
-    if POLAR_CAP_Y <= 0:
-        return POLAR_CAP_Y
-    longitude = (
+def polar_cap_longitude(x: int) -> float:
+    """Return the column term of the permanent-snow edge, in pixels."""
+    return (
         POLAR_CAP_LONG_AMPLITUDE
         * smooth_value_noise(x, POLAR_CAP_LONG_CELL, 17)
         + POLAR_CAP_MEDIUM_AMPLITUDE
@@ -112,14 +129,59 @@ def polar_cap_boundary(x: int, height: int) -> int:
         + POLAR_CAP_DETAIL_AMPLITUDE
         * smooth_value_noise(x, POLAR_CAP_DETAIL_CELL, 47)
     )
-    relief = max(
+
+
+def polar_cap_relief(height: int) -> float:
+    """Return the elevation term of the permanent-snow edge, in pixels.
+
+    High ground holds snow further from the pole and valley floors lose it
+    earlier, so the cap edge reads as a snow *line* following the topography
+    rather than as a painted region boundary.
+    """
+    return max(
         POLAR_CAP_RELIEF_MIN,
-        min(
-            POLAR_CAP_RELIEF_MAX,
-            (height - 100) * POLAR_CAP_RELIEF_SCALE,
-        ),
+        min(POLAR_CAP_RELIEF_MAX, (height - 100) * POLAR_CAP_RELIEF_SCALE),
     )
-    return round(POLAR_CAP_Y + POLAR_CAP_GENERATED_OFFSET + longitude + relief)
+
+
+def polar_cap_boundary(x: int, height: int) -> int:
+    """Return an organic permanent-snow edge for one map column."""
+    if POLAR_CAP_Y <= 0:
+        return POLAR_CAP_Y
+    return round(
+        POLAR_CAP_Y
+        + POLAR_CAP_GENERATED_OFFSET
+        + polar_cap_longitude(x)
+        + polar_cap_relief(height)
+    )
+
+
+def polar_transition_half_width(x: int, y: int) -> float:
+    """Return the local half-width of the permanent-snow transition band."""
+    scale = POLAR_TRANSITION_MIN_SCALE + (1.0 - POLAR_TRANSITION_MIN_SCALE) * (
+        0.5 + 0.5 * value_noise(x, y, POLAR_TRANSITION_WIDTH_CELL, 61)
+    )
+    return max(1.0, POLAR_TRANSITION_HALF_WIDTH * scale)
+
+
+def polar_snow_signal(x: int, y: int, height: int, offset: int = 0) -> float:
+    """Return a positive value when a pixel falls inside the permanent cap.
+
+    ``offset`` pushes the boundary further from the pole, which is how the
+    northern mountain extension keeps snow a little south of the plains cap
+    without reintroducing a straight horizontal cutoff.
+
+    A non-positive :data:`POLAR_CAP_Y` switches the cap off entirely.  The band
+    has to honour that explicitly: it reaches up to
+    :data:`POLAR_TRANSITION_HALF_WIDTH` past the boundary in both directions, so
+    a boundary at row zero would still have painted snow on the first row.
+    """
+    if POLAR_CAP_Y <= 0:
+        return -1.0
+    boundary = polar_cap_boundary(x, height) + offset
+    half_width = polar_transition_half_width(x, y)
+    mix = (boundary - y) / half_width
+    return mix - value_noise(x, y, POLAR_TRANSITION_DETAIL_CELL, 73)
 
 
 def classify_terrain(
@@ -133,15 +195,18 @@ def classify_terrain(
     if base in WATER_TERRAIN:
         return base
     mountain = base in MOUNTAIN_TERRAIN
-    cap_y = POLAR_CAP_Y if x is None else polar_cap_boundary(x, height)
-    if y < cap_y:
+    if x is None:
+        if y < POLAR_CAP_Y:
+            return SNOW_MOUNTAIN if mountain else SNOW_PLAIN
+        if mountain and (y < POLAR_CAP_Y or height >= PERMANENT_PEAK_HEIGHT):
+            return SNOW_MOUNTAIN
+        return base
+    if polar_snow_signal(x, y, height) > 0.0:
         return SNOW_MOUNTAIN if mountain else SNOW_PLAIN
-    mountain_y = (
-        POLAR_MOUNTAIN_Y
-        if x is None
-        else max(POLAR_MOUNTAIN_Y, cap_y + POLAR_MOUNTAIN_MARGIN)
-    )
-    if mountain and (y < mountain_y or height >= PERMANENT_PEAK_HEIGHT):
+    if mountain and (
+        polar_snow_signal(x, y, height, POLAR_MOUNTAIN_MARGIN) > 0.0
+        or height >= PERMANENT_PEAK_HEIGHT
+    ):
         return SNOW_MOUNTAIN
     return base
 
@@ -319,6 +384,53 @@ def polar_seam_issues(
     return []
 
 
+def polar_index_seam_issues(
+    pixels: list[int],
+    width: int,
+    height: int,
+) -> list[str]:
+    """Reject a straight horizontal edge in any northern terrain index.
+
+    The snow-mask check above cannot see a seam that swaps one land index for
+    another, which is exactly how the old ``y = 300`` mountain floor showed up:
+    a single row where hundreds of grey mountain pixels became white snow
+    mountain.  This compares the full palette index row by row over the land.
+    """
+    if len(pixels) != width * height:
+        return ["map/terrain.bmp: pixel count does not match terrain dimensions"]
+    start_y = max(1, min(height, POLAR_SEAM_SCAN_MIN_Y))
+    end_y = max(start_y, min(height, POLAR_SEAM_SCAN_MAX_Y))
+    worst_share = 0.0
+    worst = (start_y, 0, 0)
+    for y in range(start_y, end_y):
+        previous = (y - 1) * width
+        current = y * width
+        land = 0
+        changed = 0
+        for x in range(width):
+            above = pixels[previous + x]
+            below = pixels[current + x]
+            if above in WATER_TERRAIN and below in WATER_TERRAIN:
+                continue
+            land += 1
+            if above != below:
+                changed += 1
+        if land < MIN_POLAR_SEAM_ROW_LAND:
+            continue
+        share = changed / land
+        if share > worst_share:
+            worst_share = share
+            worst = (y, changed, land)
+    if worst_share > MAX_POLAR_INDEX_ROW_CHANGE_SHARE:
+        seam_y, changed, land = worst
+        return [
+            "map/terrain.bmp: horizontal terrain-index seam at "
+            f"y={seam_y} changes {changed}/{land} land pixels "
+            f"({worst_share:.0%}, limit {MAX_POLAR_INDEX_ROW_CHANGE_SHARE:.0%})"
+        ]
+    return []
+
+
 def validate() -> list[str]:
     issues: list[str] = []
     if not TERRAIN_DEFINITION_PATH.exists():
@@ -354,6 +466,7 @@ def validate() -> list[str]:
         )
     issues.extend(coverage_issues(current))
     issues.extend(polar_seam_issues(current, *terrain_size))
+    issues.extend(polar_index_seam_issues(current, *terrain_size))
     return issues
 
 
@@ -377,6 +490,7 @@ def apply() -> None:
         problems.extend(urban_coverage_issues(pixels, provinces, selected_colors))
     problems.extend(coverage_issues(pixels))
     problems.extend(polar_seam_issues(pixels, *terrain.size))
+    problems.extend(polar_index_seam_issues(pixels, *terrain.size))
     if problems:
         raise RuntimeError("\n".join(problems))
 

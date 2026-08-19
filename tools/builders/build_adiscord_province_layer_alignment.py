@@ -19,7 +19,10 @@ continuously across province borders and covers a superset of this scope.
 
 Two rules here are shared with other owners of the same bitmaps.  Graphical
 urban never covers a river channel, because the channel has to stay readable
-through a town, and permanent snow is left entirely to
+through a town - and that is enforced by :func:`shared_river_corridor` rather
+than merely intended, because painting every land pixel urban put masonry back
+over the corridor the relief pass had just cleared in the four city provinces
+both cover.  Permanent snow is left entirely to
 :mod:`tools.builders.build_adiscord_terrain_snow`: this pass writes the base
 palette index for a category and lets the snow classifier decide whether that
 pixel is white.  Because the alignment only ever compares terrain *categories*,
@@ -42,6 +45,7 @@ import numpy as np
 from PIL import Image
 
 from tools.builders import build_adiscord_map_relief_readability as relief
+from tools.lib.map_raster import river_corridor_indices
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -50,6 +54,7 @@ DEFINITION_PATH = ROOT / "map" / "definition.csv"
 TERRAIN_PATH = ROOT / "map" / "terrain.bmp"
 TREES_PATH = ROOT / "map" / "trees.bmp"
 HEIGHTMAP_PATH = ROOT / "map" / "heightmap.bmp"
+RIVERS_PATH = ROOT / "map" / "rivers.bmp"
 
 READABILITY_SCOPE_PATH = ROOT / "tools" / "data" / "adiscord_map_readability_scope.json"
 
@@ -218,6 +223,7 @@ def align_province_terrain(
     province_id: int,
     palette_types: Mapping[int, str] = PALETTE_TYPES,
     target_share: float = 0.70,
+    corridor: frozenset[int] = frozenset(),
 ) -> TerrainChange:
     del height
     if not indices:
@@ -229,8 +235,19 @@ def align_province_terrain(
         raise RuntimeError(f"province {province_id}: no land terrain pixels")
 
     if desired_type == "urban":
+        # The river corridor is honoured here rather than merely documented.
+        # Painting every land pixel urban put masonry straight back over the
+        # channel that
+        # :mod:`tools.builders.build_adiscord_map_relief_readability` had just
+        # cleared, in the four city provinces both passes cover - which is
+        # exactly the 30 bytes that made the relief builder's ``--check`` report
+        # its own output as drift.
+        bank = relief.CATEGORY_PALETTE[relief.CORRIDOR_BANK_CATEGORY][0]
         for index in land:
-            value = _canonical_palette(desired_type, index, width)
+            if index in corridor:
+                value = bank
+            else:
+                value = _canonical_palette(desired_type, index, width)
             if terrain_pixels[index] != value:
                 terrain_pixels[index] = value
                 changed.add(index)
@@ -273,6 +290,7 @@ def render_tree_patch(
     terrain: Image.Image,
     target_mask: bytearray,
     palette_types: Mapping[int, str] = PALETTE_TYPES,
+    land: np.ndarray | None = None,
 ) -> tuple[Image.Image, set[int]]:
     """Repaint tree occupancy for the cells this pass's terrain changes touch.
 
@@ -281,6 +299,11 @@ def render_tree_patch(
     surf.  The shoreline rule is shared with
     :func:`tools.builders.build_adiscord_map_relief_readability.rejected_tree_cells`
     so both owners of ``map/trees.bmp`` agree regardless of apply order.
+
+    ``land`` must be the caller's land mask, because sharing the *rule* is not
+    enough if the two passes disagree about what land is.  Deriving it from the
+    water palette here while the relief pass derives it from ``definition.csv``
+    left seven shoreline cells that one owner rejected and the other planted.
     """
 
     if source.mode != "P" or terrain.mode != "P":
@@ -290,10 +313,13 @@ def render_tree_patch(
         raise ValueError("target mask does not match terrain dimensions")
     tree_width, tree_height = source.size
     terrain_pixels = list(terrain.get_flattened_data())
-    land = ~np.isin(
-        np.array(terrain_pixels, dtype=np.uint8).reshape(full_height, full_width),
-        np.array(sorted(WATER_PALETTE), dtype=np.uint8),
-    )
+    if land is None:
+        land = ~np.isin(
+            np.array(terrain_pixels, dtype=np.uint8).reshape(full_height, full_width),
+            np.array(sorted(WATER_PALETTE), dtype=np.uint8),
+        )
+    if land.shape != (full_height, full_width):
+        raise ValueError("land mask does not match terrain dimensions")
     rejected = relief.rejected_tree_cells(land, (tree_height, tree_width))
     pixels = bytearray(source.get_flattened_data())
     changed: set[int] = set()
@@ -360,6 +386,36 @@ def collect_target_indices(
     return result
 
 
+def shared_river_corridor(
+    provinces: Image.Image,
+    indices_by_province: Mapping[int, Sequence[int]],
+) -> frozenset[int]:
+    """Return the river corridor for the city provinces both builders cover.
+
+    The corridor is computed with the relief builder's own helper against the
+    same frozen scope, so both owners of ``map/terrain.bmp`` agree on which
+    pixels stay a readable bank in whichever order they are applied.
+    """
+
+    shared = set(indices_by_province) & set(
+        relief.load_scope()["urban_river_provinces"]
+    )
+    if not shared:
+        return frozenset()
+    width, height = provinces.size
+    pixel_count = width * height
+    with Image.open(BytesIO(RIVERS_PATH.read_bytes())) as rivers:
+        if rivers.size != provinces.size:
+            raise RuntimeError("rivers.bmp dimensions differ from provinces.bmp")
+        channel = frozenset(river_corridor_indices(rivers, 0))
+    corridor: set[int] = set()
+    for province_id in sorted(shared):
+        corridor |= relief.province_corridor(
+            channel, indices_by_province[province_id], width, pixel_count
+        )
+    return frozenset(corridor)
+
+
 def target_share(province_id: int, terrain_type: str) -> float:
     if terrain_type == "urban":
         return 1.0
@@ -393,6 +449,7 @@ def build_expected() -> BuildOutputs:
     # Relief is read-only here: the terrain scoring wants to know which pixels sit
     # high and steep, but the heightmap belongs to the relief builder.
     heights = heightmap.tobytes()
+    corridor = shared_river_corridor(provinces, indices_by_province)
 
     terrain_pixels = bytearray(terrain.get_flattened_data())
     terrain_changes: dict[int, TerrainChange] = {}
@@ -401,7 +458,7 @@ def build_expected() -> BuildOutputs:
         terrain_changes[province_id] = align_province_terrain(
             terrain_pixels, heights, terrain.width, terrain.height,
             indices_by_province[province_id], desired, province_id,
-            PALETTE_TYPES, target_share(province_id, desired),
+            PALETTE_TYPES, target_share(province_id, desired), corridor,
         )
     generated_terrain = terrain.copy()
     generated_terrain.putdata(terrain_pixels)
@@ -410,7 +467,15 @@ def build_expected() -> BuildOutputs:
     for indices in indices_by_province.values():
         for index in indices:
             target_mask[index] = 1
-    trees, tree_changes = render_tree_patch(trees, generated_terrain, target_mask)
+    # Read through the shared parser: ``terrain_code_field`` needs the library's
+    # row type, and its land flag comes from definition.csv rather than from the
+    # water palette.
+    _codes, land, _names = relief.terrain_code_field(
+        provinces, relief.read_definition(DEFINITION_PATH)
+    )
+    trees, tree_changes = render_tree_patch(
+        trees, generated_terrain, target_mask, PALETTE_TYPES, land
+    )
     return BuildOutputs(generated_terrain, trees, terrain_changes, tree_changes)
 
 

@@ -29,7 +29,7 @@ class TerrainSnowTests(unittest.TestCase):
 
     def test_northern_and_high_mountains_remain_snowy(self) -> None:
         self.assertEqual(
-            snow.classify_terrain(11, snow.POLAR_MOUNTAIN_Y - 1, 100),
+            snow.classify_terrain(11, snow.POLAR_CAP_Y - 1, 100),
             snow.SNOW_MOUNTAIN,
         )
         self.assertEqual(
@@ -58,10 +58,7 @@ class TerrainSnowTests(unittest.TestCase):
         heightmap = Image.new("L", (3, 1), color=100)
         provinces = Image.new("RGB", (3, 1), color=(1, 2, 3))
         provinces.putpixel((1, 0), (4, 5, 6))
-        with (
-            patch.object(snow, "POLAR_CAP_Y", 0),
-            patch.object(snow, "POLAR_MOUNTAIN_Y", 0),
-        ):
+        with patch.object(snow, "POLAR_CAP_Y", 0):
             pixels = snow.generated_pixels(
                 terrain,
                 heightmap,

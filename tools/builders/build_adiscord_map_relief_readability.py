@@ -28,7 +28,13 @@ This builder therefore owns four outputs:
   with the unnormalised Sobel encoding HOI4 actually expects (see
   :func:`tools.lib.map_relief.sobel_normal`).
 * ``map/terrain.bmp`` - relief-aware dominant-terrain repaint for the frozen
-  province scope plus the river corridor carved out of urban footprints.
+  province scope, the river corridor carved out of urban footprints, and the
+  northern transition band.  The band is not province-scoped because neither of
+  its defects is: the inherited art carries a single-row index seam at
+  ``y = 300`` crossing provinces nobody froze into a scope, and the warm
+  ``mountain_variation_grass`` and ``desert_mountain`` textures reach the ice cap
+  from everywhere.  See :data:`NORTHERN_SEAM_ROW` and
+  :data:`COLD_PALETTE_SUBSTITUTION`.
 * ``map/trees.bmp`` - a subtractive pass that pulls foliage back off the
   shoreline.
 
@@ -50,6 +56,7 @@ from __future__ import annotations
 
 import argparse
 import json
+from collections import Counter
 from dataclasses import dataclass, field
 from io import BytesIO
 from math import ceil
@@ -362,6 +369,70 @@ MOUNTAIN_PEAK_RANK = 0.68
 RIVER_CORRIDOR_RADIUS = 1
 CORRIDOR_BANK_CATEGORY = "plains"
 
+# --- the northern index seam -------------------------------------------------
+# The converted base art carries a single-row terrain-index seam at exactly this
+# row and nowhere else: 656 of the 2111 land pixels in the row change index in
+# one step against 7-12% in every neighbouring row, and the change is dominated
+# by 343 columns switching plains to ``hills_blend`` with unbroken runs of 89 and
+# 48 pixels.  That is the straight line visible across the northern continent.
+# No generator authored it - it predates every pass in this repository - so it is
+# dissolved here, because the province repaint above only covers its frozen
+# scope and the seam crosses provinces that are not in it.
+#
+# The dissolve reads the two indices the band's *outside* anchor rows carry and
+# redistributes the boundary between them over a band whose depth varies along x.
+# Reading the anchors from rows this pass never writes is what makes it a fixed
+# point: a second run derives the same pair, the same per-column depth and the
+# same per-pixel choice, so nothing moves.  Only pixels that already carry one of
+# the two anchor indices are eligible, so the local variety inside the band -
+# marsh pockets, rock outcrops, 7.6% of its area - survives untouched.
+NORTHERN_SEAM_ROW = 300
+NORTHERN_SEAM_DEPTH = 6           # widest half-band, and the anchor offset
+NORTHERN_SEAM_MIN_SCALE = 0.45    # narrowest local band as a share of the above
+NORTHERN_SEAM_WIDTH_CELL = 150    # how slowly the band depth varies along x
+NORTHERN_SEAM_EDGE_CELL = 34      # how slowly the boundary row itself wanders
+NORTHERN_SEAM_EDGE_SHAPE = 0.62   # <1 pushes the edge out towards the band limits
+NORTHERN_SEAM_DETAIL_CELL = 10    # size of the interlocking tongues and pockets
+# The pocket term is scaled by the local band depth, so a pocket can carry one
+# terrain a couple of rows across the edge; that is what makes the two
+# interdigitate rather than merely follow a wavy line.
+NORTHERN_SEAM_NOISE_WEIGHT = 0.5
+NOISE_SALT_SEAM_WIDTH = 5281
+NOISE_SALT_SEAM_EDGE = 7717
+NOISE_SALT_SEAM_DETAIL = 8663
+
+# --- northern palette temperature -------------------------------------------
+# ``mountain_variation_grass`` (palette 20) is a green pasture texture and it is
+# the *first* entry of ``CATEGORY_PALETTE["mountain"]``, so every mountain pixel
+# that is not steep enough to score as rock is painted lush green - including
+# 11,526 pixels within 160 px of the ice cap, 9,310 of them inside provinces that
+# ``definition.csv`` declares plains.  ``desert_mountain`` (palette 2) is a sandy
+# hills texture and puts 18,132 more warm pixels in the same band.  Next to white
+# snow and grey rock both read as absurd.
+#
+# Every substitution is category-preserving on purpose: 20, 18 and 27 are all
+# ``mountain`` in ``common/terrain/00_terrain.txt`` and so is 11, while 2 and 17
+# are both ``hills``.  Only the *texture* changes, so no province's declared
+# terrain readability share moves by a single pixel and no gameplay terrain is
+# touched.  ``00_terrain.txt`` defines no boreal forest entry - both forest
+# indices, 1 and 4, sit on textures 4 and 5 which jungle also uses - so forest is
+# deliberately left alone rather than recoloured into a category it is not.
+COLD_PALETTE_SUBSTITUTION: Mapping[int, int] = {
+    2: 17,     # desert_mountain, texture 3       -> hills_blend, texture 2
+    18: 11,    # mountain_variation_sand, tex 7   -> rocky mountain, texture 11
+    20: 11,    # mountain_variation_grass, tex 7  -> rocky mountain, texture 11
+    27: 11,    # mountain on texture 7            -> rocky mountain, texture 11
+}
+# How far south of the permanent-snow edge the substitution reaches, and the
+# noise that breaks its own boundary.  A hard cutoff here would simply trade one
+# straight line for another, so the swap is certain against the ice cap, even
+# odds two thirds of the way down and absent at the far edge.
+COLD_BAND_DEPTH = 200
+COLD_BAND_BIAS = 0.35
+COLD_BAND_NOISE_CELL = 26
+COLD_BAND_NOISE_WEIGHT = 0.35
+NOISE_SALT_COLD_BAND = 6421
+
 
 @dataclass
 class ReliefStats:
@@ -389,6 +460,10 @@ class TerrainStats:
     slope_after: dict[int, float] = field(default_factory=dict)
     corridor_cleared: int = 0
     corridor_provinces: set[int] = field(default_factory=set)
+    seam_interleaved: int = 0
+    seam_share_before: float = 0.0
+    seam_share_after: float = 0.0
+    cold_substituted: Counter[int] = field(default_factory=Counter)
 
 
 @dataclass
@@ -401,6 +476,13 @@ class BuildOutputs:
     terrain_stats: TerrainStats
     normal_changed: int
     trees_cleared: int
+    # The cells of ``map/terrain.bmp`` and ``map/trees.bmp`` this builder actually
+    # claims.  Comparing the whole of either file instead reported 30 terrain
+    # bytes and 7 tree cells that
+    # :mod:`tools.builders.build_adiscord_province_layer_alignment` legitimately
+    # owns and writes afterwards, so ``--check`` could not be trusted.
+    terrain_claim: np.ndarray | None = None
+    tree_claim: np.ndarray | None = None
 
 
 def load_relief_base(heightmap: Image.Image) -> np.ndarray:
@@ -970,12 +1052,19 @@ def rejected_tree_cells(land: np.ndarray, target: tuple[int, int]) -> np.ndarray
     return ~dry | (inland < TREE_COAST_SETBACK) | frayed
 
 
-def build_trees(trees: Image.Image, land: np.ndarray) -> tuple[Image.Image, int]:
+def build_trees(trees: Image.Image, land: np.ndarray) -> tuple[Image.Image, int, np.ndarray]:
     """Clear every tree cell that overlaps water or crowds the shoreline.
 
     The canopy is read from the committed pre-setback baseline, not from the layer
     a previous run wrote, so narrowing the setback restores the trees it had
     cleared instead of leaving the widest setback ever applied in place.
+
+    Returns the canopy, the number of cells cleared, and the rejection mask.  The
+    mask is the pass's actual claim on ``map/trees.bmp``: this is a purely
+    subtractive rule - no cell may carry foliage over water - so the cells it does
+    *not* reject are a baseline passthrough that
+    :mod:`tools.builders.build_adiscord_province_layer_alignment` is free to plant
+    inside its own province scope.
     """
 
     tree_width, tree_height = trees.size
@@ -997,7 +1086,7 @@ def build_trees(trees: Image.Image, land: np.ndarray) -> tuple[Image.Image, int]
         )
     result = trees.copy()
     result.putdata(pixels.reshape(-1).tolist())
-    return result, cleared
+    return result, cleared, rejected
 
 
 def _rank_signal(declared: str, elevation: float, slope: float) -> float:
@@ -1068,21 +1157,32 @@ def _fill_category(elevation: float, slope: float, noise: float, declared: str) 
 
 
 def _neighbour_category(
-    baseline: Sequence[int],
+    codes: np.ndarray,
+    names: Sequence[str],
     index: int,
     province: set[int],
     width: int,
     pixel_count: int,
 ) -> str | None:
-    """Return the land category of an adjacent province, if there is one."""
+    """Return the *declared* land category of an adjacent province, if any.
+
+    This reads ``definition.csv`` through the code field rather than the painted
+    neighbour pixel, and that distinction is what makes the repaint converge.
+    Reading the paint made two adjacent scope provinces each adopt whatever the
+    other had been given on the previous run, so 31 border pixels ping-ponged
+    between the two categories - plains and forest, hills and plains - and
+    ``map/terrain.bmp`` never reached a fixed point.  The declared terrain cannot
+    feed back, and it is also the honest answer to "what is the neighbour": the
+    whole point of this pass is that paint should follow the declaration.
+    """
 
     for neighbour in neighbours4(index, width, pixel_count):
         if neighbour in province:
             continue
-        value = baseline[neighbour]
-        if value in WATER_PALETTE:
+        code = int(codes[neighbour])
+        if code < 0:
             continue
-        category = PALETTE_TYPES.get(value)
+        category = names[code]
         if category in CATEGORY_PALETTE and category != "urban":
             return category
     return None
@@ -1090,7 +1190,8 @@ def _neighbour_category(
 
 def repaint_province(
     terrain_pixels: bytearray,
-    baseline: Sequence[int],
+    codes: np.ndarray,
+    names: Sequence[str],
     heights: Sequence[int],
     indices: Sequence[int],
     declared: str,
@@ -1158,7 +1259,9 @@ def repaint_province(
             # Minority pixels on a province seam adopt the neighbour's terrain
             # so the two provinces interleave instead of butting against a
             # clean polygon edge.
-            adopted = _neighbour_category(baseline, index, province, width, pixel_count)
+            adopted = _neighbour_category(
+                codes, names, index, province, width, pixel_count
+            )
             if adopted is not None and noise > -0.25:
                 category = adopted
             else:
@@ -1174,6 +1277,254 @@ def repaint_province(
         PALETTE_TYPES.get(terrain_pixels[index]) == declared for index in land
     ) / len(land)
     return changed, before_share, after_share, mean_slope
+
+
+def _declared_share(
+    terrain_pixels: Sequence[int], indices: Sequence[int], declared: str
+) -> float:
+    """Return the share of a province's visible land that reads as ``declared``."""
+
+    land = [index for index in indices if terrain_pixels[index] not in WATER_PALETTE]
+    if not land:
+        raise RuntimeError("province has no land terrain pixels")
+    return sum(
+        PALETTE_TYPES.get(terrain_pixels[index]) == declared for index in land
+    ) / len(land)
+
+
+def _seam_row_share(terrain_pixels: Sequence[int], width: int) -> float:
+    """Return the share of land pixels whose index changes across the seam row.
+
+    This is the number the straight line *is*: the neighbouring rows sit at 7-12%
+    and the seam row sat at 31%, so the metric says directly whether the boundary
+    still resolves in a single step.
+    """
+
+    above = NORTHERN_SEAM_ROW - 1
+    if above < 0:
+        return 0.0
+    changed = 0
+    land = 0
+    for column in range(width):
+        first = terrain_pixels[above * width + column]
+        second = terrain_pixels[NORTHERN_SEAM_ROW * width + column]
+        if first in WATER_PALETTE and second in WATER_PALETTE:
+            continue
+        land += 1
+        if first != second:
+            changed += 1
+    return changed / land if land else 0.0
+
+
+def cold_band_strength(heights: np.ndarray, land: np.ndarray) -> np.ndarray:
+    """Return how arctic each land pixel is: 1 at the ice cap, 0 south of the band.
+
+    The reference edge is
+    :func:`tools.builders.build_adiscord_terrain_snow.polar_cap_boundary`, split
+    into its column and elevation terms so this pass tracks the permanent-snow
+    line instead of a latitude of its own.  Because the elevation term is part of
+    it, the cold band bulges south over high ground and retreats up the valleys,
+    exactly like the snow line it follows.
+    """
+
+    map_height, width = heights.shape
+    rows = min(
+        map_height,
+        snow.POLAR_CAP_Y
+        + snow.POLAR_CAP_GENERATED_OFFSET
+        + snow.POLAR_CAP_LONG_AMPLITUDE
+        + snow.POLAR_CAP_MEDIUM_AMPLITUDE
+        + snow.POLAR_CAP_DETAIL_AMPLITUDE
+        + snow.POLAR_CAP_RELIEF_MAX
+        + COLD_BAND_DEPTH,
+    )
+    strength = np.zeros(heights.shape, dtype=np.float32)
+    if rows <= 0:
+        return strength
+    longitude = np.array(
+        [snow.polar_cap_longitude(x) for x in range(width)], dtype=np.float32
+    )
+    relief = np.clip(
+        (heights[:rows].astype(np.float32) - np.float32(100.0))
+        * np.float32(snow.POLAR_CAP_RELIEF_SCALE),
+        np.float32(snow.POLAR_CAP_RELIEF_MIN),
+        np.float32(snow.POLAR_CAP_RELIEF_MAX),
+    )
+    boundary = (
+        np.float32(snow.POLAR_CAP_Y + snow.POLAR_CAP_GENERATED_OFFSET)
+        + longitude[None, :]
+        + relief
+    )
+    depth = np.arange(rows, dtype=np.float32)[:, None] - boundary
+    strength[:rows] = np.clip(
+        np.float32(1.0) - depth / np.float32(COLD_BAND_DEPTH), 0.0, 1.0
+    )
+    return np.where(land, strength, np.float32(0.0))
+
+
+def cool_northern_palette(
+    terrain_pixels: bytearray, heights: np.ndarray, land: np.ndarray
+) -> tuple[set[int], Counter[int]]:
+    """Swap warm-reading textures for cold ones inside the arctic band.
+
+    Returns the pixels written and a count per substituted palette index.
+    Idempotent by construction: no value on the right-hand side of
+    :data:`COLD_PALETTE_SUBSTITUTION` is also a key, so a second run finds
+    nothing left to substitute.
+    """
+
+    strength = cold_band_strength(heights, land)
+    populated = np.nonzero(strength.any(axis=1))[0]
+    if populated.size == 0:
+        return set(), Counter()
+    rows = int(populated[-1]) + 1
+    width = strength.shape[1]
+    noise = relief_math.striped_field(
+        (rows, width),
+        lambda xs, ys: relief_math.warped_fbm(
+            xs, ys, COLD_BAND_NOISE_CELL, NOISE_SALT_COLD_BAND, octaves=2
+        ),
+    )
+    cold = strength[:rows] > (
+        np.float32(COLD_BAND_BIAS) + np.float32(COLD_BAND_NOISE_WEIGHT) * noise
+    )
+    strip = np.frombuffer(
+        bytes(terrain_pixels[: rows * width]), dtype=np.uint8
+    ).reshape(rows, width)
+    updated = strip.copy()
+    for warm, cool in sorted(COLD_PALETTE_SUBSTITUTION.items()):
+        updated[cold & (strip == warm)] = cool
+    flat_before = strip.reshape(-1)
+    flat_after = updated.reshape(-1)
+    moved = np.nonzero(flat_after != flat_before)[0]
+    substituted: Counter[int] = Counter()
+    for index in moved.tolist():
+        substituted[int(flat_before[index])] += 1
+        terrain_pixels[index] = int(flat_after[index])
+    return set(moved.tolist()), substituted
+
+
+def northern_seam_band(height: int) -> range:
+    """Return the rows the seam dissolve may write, widest band included."""
+
+    if NORTHERN_SEAM_ROW - NORTHERN_SEAM_DEPTH - 1 < 0:
+        return range(0)
+    if NORTHERN_SEAM_ROW + NORTHERN_SEAM_DEPTH >= height:
+        return range(0)
+    return range(
+        NORTHERN_SEAM_ROW - NORTHERN_SEAM_DEPTH,
+        NORTHERN_SEAM_ROW + NORTHERN_SEAM_DEPTH,
+    )
+
+
+def dissolve_northern_seam(
+    terrain_pixels: bytearray, heights: Sequence[int], width: int, height: int
+) -> set[int]:
+    """Interleave the inherited single-row index seam into tongues and pockets.
+
+    Snow indices are folded back to their base terrain before the comparison, so
+    a column whose northern anchor is currently permanent snow is matched against
+    the terrain underneath it rather than against the white paint on top.
+
+    Pixels the permanent-snow classifier would paint white are then skipped
+    outright, and that exclusion is what makes this pass a fixed point rather than
+    a mere convenience.  ``RESTORE_SNOW`` maps both snow indices back to a single
+    representative each - 19 to plains and 16 to rocky mountain - so a hills pixel
+    that snow covered would come back as plains on the next run and the dissolve
+    would keep moving it.  Inside the cap the visible boundary is the snow edge
+    anyway, and that belongs to
+    :mod:`tools.builders.build_adiscord_terrain_snow`, whose own graded transition
+    band handles it.
+    """
+
+    band = northern_seam_band(height)
+    if not band:
+        return set()
+    depth = NORTHERN_SEAM_DEPTH
+    first = band.start - 1
+    strip = np.frombuffer(
+        bytes(terrain_pixels[first * width : (band.stop + 1) * width]), dtype=np.uint8
+    ).reshape(2 * depth + 2, width)
+    base = strip.copy()
+    for snowy, restored in sorted(snow.RESTORE_SNOW.items()):
+        base[strip == snowy] = restored
+    north = base[0].astype(np.int16)
+    south = base[-1].astype(np.int16)
+    water = np.array(sorted(WATER_PALETTE), dtype=np.int16)
+    acting = (
+        (north != south)
+        & ~np.isin(north, water)
+        & ~np.isin(south, water)
+        & (north != np.int16(URBAN_PALETTE))
+        & (south != np.int16(URBAN_PALETTE))
+    )
+    if not acting.any():
+        return set()
+
+    # The boundary is placed explicitly rather than derived from a threshold
+    # ramp.  A ramp was the first attempt and it barely moved the line: the
+    # threshold climbs by 1/(2*depth) per row while the noise only deviates by
+    # about a quarter, so the crossing could never travel more than two rows from
+    # the centre and the seam row kept 31% of its changes.  Giving each column its
+    # own edge row spreads the crossings across the whole band instead, which is
+    # what stops any single row from carrying the transition.
+    columns = np.arange(width, dtype=np.float32)
+    zeros = np.zeros(width, dtype=np.float32)
+    scale = np.float32(NORTHERN_SEAM_MIN_SCALE) + np.float32(
+        1.0 - NORTHERN_SEAM_MIN_SCALE
+    ) * (
+        np.float32(0.5)
+        + np.float32(0.5)
+        * relief_math.value_noise(
+            columns, zeros, NORTHERN_SEAM_WIDTH_CELL, NOISE_SALT_SEAM_WIDTH
+        )
+    )
+    local = np.maximum(np.float32(1.0), np.float32(depth) * scale)
+    # ``value_noise`` interpolates uniform lattice hashes, so its own
+    # distribution is bell shaped and would pile the edges back up near the
+    # centre.  Reshaping it towards the band limits is what makes the residual at
+    # any one row roughly the band average rather than a spike.
+    wiggle = relief_math.value_noise(
+        columns, zeros, NORTHERN_SEAM_EDGE_CELL, NOISE_SALT_SEAM_EDGE
+    )
+    wiggle = np.sign(wiggle) * np.power(
+        np.abs(wiggle), np.float32(NORTHERN_SEAM_EDGE_SHAPE)
+    )
+    edge = np.float32(NORTHERN_SEAM_ROW) + (local - np.float32(0.5)) * wiggle
+    pocket = relief_math.striped_field(
+        (len(band), width),
+        lambda xs, ys: relief_math.warped_fbm(
+            xs,
+            ys + np.float32(band.start),
+            NORTHERN_SEAM_DETAIL_CELL,
+            NOISE_SALT_SEAM_DETAIL,
+            octaves=2,
+        ),
+    )
+
+    snowy = frozenset({snow.SNOW_MOUNTAIN, snow.SNOW_PLAIN})
+    changed: set[int] = set()
+    for offset, row in enumerate(band):
+        southward = (
+            np.float32(row) + np.float32(0.5) - edge
+            + local * np.float32(NORTHERN_SEAM_NOISE_WEIGHT) * pocket[offset]
+        ) > np.float32(0.0)
+        target = np.where(southward, south, north)
+        current = base[offset + 1].astype(np.int16)
+        eligible = (current == north) | (current == south)
+        write = acting & eligible & (target != current)
+        for column in np.nonzero(write)[0].tolist():
+            index = row * width + column
+            elevation = heights[index]
+            if any(
+                snow.classify_terrain(int(candidate[column]), row, elevation, column)
+                in snowy
+                for candidate in (north, south)
+            ):
+                continue
+            terrain_pixels[index] = int(target[column])
+            changed.add(index)
+    return changed
 
 
 def normalise_snow(
@@ -1321,8 +1672,19 @@ def build_expected() -> BuildOutputs:
     heights = height_array.tobytes()
 
     terrain_pixels = bytearray(terrain.tobytes())
-    baseline = bytes(terrain_pixels)
     stats = TerrainStats()
+    # The seam dissolve runs *before* the province repaint.  Running it after put
+    # province 959 below its declared-hills floor, because the dissolve was
+    # reassigning pixels the repaint had already counted towards the province's
+    # dominant share.  Ahead of the repaint the two cooperate instead: the
+    # dissolve breaks the inherited line everywhere, and each scope province then
+    # re-establishes its own dominance over the result.
+    stats.seam_share_before = _seam_row_share(terrain_pixels, width)
+    interleaved = dissolve_northern_seam(terrain_pixels, heights, width, height)
+    stats.seam_interleaved = len(interleaved)
+    stats.changed |= interleaved
+
+    neighbour_codes = codes.reshape(-1)
     for province_id in sorted(terrain_province_ids(scope)):
         declared = definition[province_id].terrain
         if declared in UNPAINTABLE_TERRAIN:
@@ -1332,8 +1694,9 @@ def build_expected() -> BuildOutputs:
                 f"province {province_id}: unsupported declared terrain {declared!r}"
             )
         changed, before, after, mean_slope = repaint_province(
-            terrain_pixels, baseline, heights, indices_by_province[province_id],
-            declared, corridor, water, width, pixel_count,
+            terrain_pixels, neighbour_codes, category_names, heights,
+            indices_by_province[province_id], declared, corridor, water,
+            width, pixel_count,
         )
         stats.changed |= changed
         stats.declared[province_id] = declared
@@ -1346,9 +1709,43 @@ def build_expected() -> BuildOutputs:
         if declared == "urban" and cleared:
             stats.corridor_cleared += cleared
             stats.corridor_provinces.add(province_id)
+
+    # The palette temperature pass runs last of the three, because the repaint's
+    # own ``_variant`` emits ``mountain_variation_grass`` and an earlier pass
+    # would leave that green in place.  It is safe there precisely because every
+    # substitution keeps the terrain category, so it cannot move a share the
+    # repaint just satisfied.
+    cooled, stats.cold_substituted = cool_northern_palette(
+        terrain_pixels, height_array, land
+    )
+    stats.changed |= cooled
+
+    # Shares are re-measured from the finished raster so the contract below is
+    # asserted against what actually ships, and *before* the snow classifier
+    # because a white polar pixel carries the category of the terrain under the
+    # paint rather than the biome its province declares.
+    for province_id in sorted(stats.share_after):
+        declared = stats.declared[province_id]
+        stats.share_after[province_id] = _declared_share(
+            terrain_pixels, indices_by_province[province_id], declared
+        )
+
     normalise_snow(terrain_pixels, heights, sorted(stats.changed), width)
+    # Measured on the finished band, because the white paint the classifier lays
+    # over the cap is part of what the player sees at the seam row.
+    stats.seam_share_after = _seam_row_share(terrain_pixels, width)
     generated_terrain = terrain.copy()
     generated_terrain.putdata(terrain_pixels)
+
+    claim = np.zeros(width * height, dtype=bool)
+    for province_id in sorted(terrain_province_ids(scope)):
+        for index in indices_by_province[province_id]:
+            claim[index] = True
+    northern = cold_band_strength(height_array, land) > 0.0
+    claim |= northern.reshape(-1)
+    for row in northern_seam_band(height):
+        claim[row * width:(row + 1) * width] = True
+    claim &= land.reshape(-1)
 
     normal_array = relief_math.encode_world_normal(
         height_array,
@@ -1360,7 +1757,7 @@ def build_expected() -> BuildOutputs:
     normal_changed = int(np.count_nonzero((previous_normal != normal_array).any(axis=2)))
     generated_normal = Image.fromarray(normal_array, mode="RGB")
 
-    generated_trees, trees_cleared = build_trees(trees, land)
+    generated_trees, trees_cleared, tree_claim = build_trees(trees, land)
     return BuildOutputs(
         heightmap,
         generated_normal,
@@ -1370,11 +1767,21 @@ def build_expected() -> BuildOutputs:
         stats,
         normal_changed,
         trees_cleared,
+        claim,
+        tree_claim.reshape(-1),
     )
 
 
 def _issues(outputs: BuildOutputs) -> list[str]:
     issues: list[str] = []
+    # ``heightmap`` and ``world_normal`` are rebuilt globally, so the whole file is
+    # this builder's to compare.  ``terrain`` and ``trees`` are not: the repaint
+    # covers a frozen province scope plus the northern band, the tree pass is a
+    # subtractive shoreline rule, and
+    # :mod:`tools.builders.build_adiscord_province_layer_alignment` owns 47
+    # provinces of its own and writes both layers after this pass.  Comparing
+    # every byte therefore reported that builder's legitimate output as our drift.
+    claims = {TERRAIN_PATH: outputs.terrain_claim, TREES_PATH: outputs.tree_claim}
     for path, image in (
         (HEIGHTMAP_PATH, outputs.heightmap),
         (WORLD_NORMAL_PATH, outputs.world_normal),
@@ -1385,14 +1792,19 @@ def _issues(outputs: BuildOutputs) -> list[str]:
             if current.mode != image.mode or current.size != image.size:
                 issues.append(f"{path.relative_to(ROOT).as_posix()}: mode or dimensions differ")
                 continue
-            current_bytes = current.tobytes()
-            expected_bytes = image.tobytes()
-            if current_bytes != expected_bytes:
-                differences = sum(
-                    1 for a, b in zip(current_bytes, expected_bytes) if a != b
-                )
+            current_bytes = np.frombuffer(current.tobytes(), dtype=np.uint8)
+            expected_bytes = np.frombuffer(image.tobytes(), dtype=np.uint8)
+            claim = claims.get(path)
+            if claim is None:
+                differing = current_bytes != expected_bytes
+            else:
+                differing = (current_bytes != expected_bytes) & claim
+            differences = int(np.count_nonzero(differing))
+            if differences:
+                scope = "" if claim is None else " claimed"
                 issues.append(
-                    f"{path.relative_to(ROOT).as_posix()}: {differences} generated bytes differ"
+                    f"{path.relative_to(ROOT).as_posix()}: {differences} generated"
+                    f"{scope} bytes differ"
                 )
             if current.mode == "P" and current.getpalette() != image.getpalette():
                 issues.append(f"{path.relative_to(ROOT).as_posix()}: palette differs")
@@ -1494,6 +1906,19 @@ def _report(outputs: BuildOutputs) -> None:
             f"  {label:22s} "
             f"{form.format(before[key])} -> {form.format(after[key])}"
         )
+    stats = outputs.terrain_stats
+    print(
+        "Northern band: "
+        f"seam row y={NORTHERN_SEAM_ROW} land index changes "
+        f"{stats.seam_share_before:.1%} -> {stats.seam_share_after:.1%} "
+        f"({stats.seam_interleaved} pixels interleaved)"
+    )
+    if stats.cold_substituted:
+        detail = ", ".join(
+            f"{warm}->{COLD_PALETTE_SUBSTITUTION[warm]}: {count}"
+            for warm, count in sorted(stats.cold_substituted.items())
+        )
+        print(f"  cold palette substitutions {sum(stats.cold_substituted.values())} ({detail})")
     print(f"  northern island max step   -> {outputs.relief.island_step}")
     print(f"  gradient cap moved         {outputs.relief.gradient_moved} pixels")
     print(

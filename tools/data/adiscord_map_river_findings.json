@@ -1,0 +1,197 @@
+{
+  "schema": 1,
+  "comment": "Measured river border-alignment baseline, produced by tools/validators/validate_adiscord_map_rivers.py on 2026-08-19. A HOI4 river only produces a river-crossing combat penalty where it lies on the border between two provinces, so border alignment is the correct target - but moving a channel onto a border CREATES a penalty that did not exist, which changes combat balance. These numbers are why no rerouting was done: the channel is already 97% border-aligned and the interior tail is 776 pixels across a handful of short systems, so a map-wide reroute would move far more combat modifiers than it fixed. The validator holds this line as a floor, so a future pass cannot silently push rivers off the borders, and worst_systems keeps the remaining tail visible.",
+  "on_border_share": 0.9702,
+  "within_one_pixel_share": 0.9805,
+  "interior_pixels": 508,
+  "max_border_depth": 13,
+  "channel_pixels": 26028,
+  "systems": 79,
+  "systems_without_source": [],
+  "systems_with_extra_sources": [
+    1158590
+  ],
+  "systems_with_extra_sources_comment": "A connected system carrying more than one palette-0 source marker. HOI4 wants exactly one source per system; the recorded entry is the flat pixel index of the system's first pixel. Left as found rather than guessed at, because deleting the wrong marker reverses a river's drawn flow.",
+  "worst_systems": [
+    {
+      "size": 66,
+      "sources": 1,
+      "mean_border_depth": 1.955,
+      "max_border_depth": 11,
+      "height_span": 23,
+      "x": 1300,
+      "y": 1332
+    },
+    {
+      "size": 46,
+      "sources": 1,
+      "mean_border_depth": 1.326,
+      "max_border_depth": 6,
+      "height_span": 27,
+      "x": 3714,
+      "y": 919
+    },
+    {
+      "size": 195,
+      "sources": 1,
+      "mean_border_depth": 1.149,
+      "max_border_depth": 13,
+      "height_span": 30,
+      "x": 2880,
+      "y": 1592
+    },
+    {
+      "size": 179,
+      "sources": 1,
+      "mean_border_depth": 0.497,
+      "max_border_depth": 9,
+      "height_span": 26,
+      "x": 2681,
+      "y": 1661
+    },
+    {
+      "size": 75,
+      "sources": 1,
+      "mean_border_depth": 0.387,
+      "max_border_depth": 4,
+      "height_span": 29,
+      "x": 2517,
+      "y": 1533
+    },
+    {
+      "size": 523,
+      "sources": 1,
+      "mean_border_depth": 0.365,
+      "max_border_depth": 11,
+      "height_span": 91,
+      "x": 3459,
+      "y": 1083
+    },
+    {
+      "size": 59,
+      "sources": 1,
+      "mean_border_depth": 0.305,
+      "max_border_depth": 3,
+      "height_span": 25,
+      "x": 3963,
+      "y": 275
+    },
+    {
+      "size": 67,
+      "sources": 1,
+      "mean_border_depth": 0.254,
+      "max_border_depth": 3,
+      "height_span": 32,
+      "x": 2361,
+      "y": 578
+    },
+    {
+      "size": 124,
+      "sources": 1,
+      "mean_border_depth": 0.25,
+      "max_border_depth": 7,
+      "height_span": 32,
+      "x": 2202,
+      "y": 659
+    },
+    {
+      "size": 202,
+      "sources": 1,
+      "mean_border_depth": 0.248,
+      "max_border_depth": 7,
+      "height_span": 25,
+      "x": 2289,
+      "y": 1632
+    },
+    {
+      "size": 218,
+      "sources": 1,
+      "mean_border_depth": 0.174,
+      "max_border_depth": 5,
+      "height_span": 24,
+      "x": 3682,
+      "y": 1406
+    },
+    {
+      "size": 605,
+      "sources": 1,
+      "mean_border_depth": 0.167,
+      "max_border_depth": 7,
+      "height_span": 42,
+      "x": 1661,
+      "y": 477
+    },
+    {
+      "size": 183,
+      "sources": 1,
+      "mean_border_depth": 0.164,
+      "max_border_depth": 4,
+      "height_span": 23,
+      "x": 2332,
+      "y": 641
+    },
+    {
+      "size": 140,
+      "sources": 1,
+      "mean_border_depth": 0.136,
+      "max_border_depth": 5,
+      "height_span": 18,
+      "x": 4396,
+      "y": 1539
+    },
+    {
+      "size": 753,
+      "sources": 1,
+      "mean_border_depth": 0.13,
+      "max_border_depth": 9,
+      "height_span": 62,
+      "x": 5207,
+      "y": 1053
+    },
+    {
+      "size": 110,
+      "sources": 1,
+      "mean_border_depth": 0.118,
+      "max_border_depth": 2,
+      "height_span": 24,
+      "x": 5271,
+      "y": 1213
+    },
+    {
+      "size": 616,
+      "sources": 1,
+      "mean_border_depth": 0.117,
+      "max_border_depth": 4,
+      "height_span": 40,
+      "x": 5078,
+      "y": 1194
+    },
+    {
+      "size": 332,
+      "sources": 1,
+      "mean_border_depth": 0.102,
+      "max_border_depth": 7,
+      "height_span": 54,
+      "x": 3677,
+      "y": 1073
+    },
+    {
+      "size": 442,
+      "sources": 1,
+      "mean_border_depth": 0.093,
+      "max_border_depth": 4,
+      "height_span": 42,
+      "x": 3264,
+      "y": 1312
+    },
+    {
+      "size": 2004,
+      "sources": 1,
+      "mean_border_depth": 0.086,
+      "max_border_depth": 5,
+      "height_span": 48,
+      "x": 1750,
+      "y": 638
+    }
+  ]
+}
