@@ -34,12 +34,26 @@ DEFINITION_PATH = ROOT / "map" / "definition.csv"
 TERRAIN_DEFINITION_PATH = ROOT / "common" / "terrain" / "00_terrain.txt"
 
 POLAR_CAP_Y = 300
+POLAR_CAP_GENERATED_OFFSET = 12
+POLAR_CAP_LONG_CELL = 700
+POLAR_CAP_MEDIUM_CELL = 180
+POLAR_CAP_DETAIL_CELL = 60
+POLAR_CAP_LONG_AMPLITUDE = 18
+POLAR_CAP_MEDIUM_AMPLITUDE = 16
+POLAR_CAP_DETAIL_AMPLITUDE = 8
+POLAR_CAP_RELIEF_SCALE = 0.08
+POLAR_CAP_RELIEF_MIN = -7
+POLAR_CAP_RELIEF_MAX = 16
 POLAR_MOUNTAIN_Y = 300
+POLAR_MOUNTAIN_MARGIN = 22
 PERMANENT_PEAK_HEIGHT = 205
 
 MIN_PERMANENT_SNOW_PIXELS = 320_000
 MAX_PERMANENT_SNOW_PIXELS = 380_000
 MIN_PERMANENT_MOUNTAIN_PIXELS = 5_000
+POLAR_SEAM_SCAN_MIN_Y = 220
+POLAR_SEAM_SCAN_MAX_Y = 380
+MAX_POLAR_ROW_TRANSITION_SHARE = 0.12
 
 WATER_TERRAIN = frozenset({14, 15})
 MOUNTAIN_TERRAIN = frozenset({6, 10, 11, 16, 31})
@@ -69,15 +83,65 @@ VORKERLAND_GRAPHICAL_URBAN_PROVINCES = frozenset(
 )
 
 
-def classify_terrain(terrain: int, y: int, height: int) -> int:
+def stable_unit_hash(value: int, salt: int) -> float:
+    """Return a deterministic unit interval value for one integer cell."""
+    mixed = (value * 73856093) ^ (salt * 19349663)
+    mixed = (mixed ^ (mixed >> 13)) * 1274126177
+    return ((mixed ^ (mixed >> 16)) & 0xFFFFFFFF) / 0xFFFFFFFF
+
+
+def smooth_value_noise(x: int, cell_size: int, salt: int) -> float:
+    """Return continuous deterministic value noise along the map's x-axis."""
+    left = x // cell_size
+    fraction = (x % cell_size) / cell_size
+    blend = fraction * fraction * (3.0 - 2.0 * fraction)
+    first = stable_unit_hash(left, salt) * 2.0 - 1.0
+    second = stable_unit_hash(left + 1, salt) * 2.0 - 1.0
+    return first + (second - first) * blend
+
+
+def polar_cap_boundary(x: int, height: int) -> int:
+    """Return an organic permanent-snow edge for one map column."""
+    if POLAR_CAP_Y <= 0:
+        return POLAR_CAP_Y
+    longitude = (
+        POLAR_CAP_LONG_AMPLITUDE
+        * smooth_value_noise(x, POLAR_CAP_LONG_CELL, 17)
+        + POLAR_CAP_MEDIUM_AMPLITUDE
+        * smooth_value_noise(x, POLAR_CAP_MEDIUM_CELL, 31)
+        + POLAR_CAP_DETAIL_AMPLITUDE
+        * smooth_value_noise(x, POLAR_CAP_DETAIL_CELL, 47)
+    )
+    relief = max(
+        POLAR_CAP_RELIEF_MIN,
+        min(
+            POLAR_CAP_RELIEF_MAX,
+            (height - 100) * POLAR_CAP_RELIEF_SCALE,
+        ),
+    )
+    return round(POLAR_CAP_Y + POLAR_CAP_GENERATED_OFFSET + longitude + relief)
+
+
+def classify_terrain(
+    terrain: int,
+    y: int,
+    height: int,
+    x: int | None = None,
+) -> int:
     """Return the generated terrain palette index for one map pixel."""
     base = RESTORE_SNOW.get(terrain, terrain)
     if base in WATER_TERRAIN:
         return base
     mountain = base in MOUNTAIN_TERRAIN
-    if y < POLAR_CAP_Y:
+    cap_y = POLAR_CAP_Y if x is None else polar_cap_boundary(x, height)
+    if y < cap_y:
         return SNOW_MOUNTAIN if mountain else SNOW_PLAIN
-    if mountain and (y < POLAR_MOUNTAIN_Y or height >= PERMANENT_PEAK_HEIGHT):
+    mountain_y = (
+        POLAR_MOUNTAIN_Y
+        if x is None
+        else max(POLAR_MOUNTAIN_Y, cap_y + POLAR_MOUNTAIN_MARGIN)
+    )
+    if mountain and (y < mountain_y or height >= PERMANENT_PEAK_HEIGHT):
         return SNOW_MOUNTAIN
     return base
 
@@ -139,7 +203,12 @@ def generated_pixels(
         (
             URBAN_TERRAIN
             if tuple(province_pixels[index * 3:index * 3 + 3]) in selected_rgb
-            else classify_terrain(value, index // width, height_pixels[index])
+            else classify_terrain(
+                value,
+                index // width,
+                height_pixels[index],
+                index % width,
+            )
         )
         for index, value in enumerate(terrain_pixels)
     ]
@@ -216,6 +285,40 @@ def coverage_issues(pixels: list[int]) -> list[str]:
     return issues
 
 
+def polar_seam_issues(
+    pixels: list[int],
+    width: int,
+    height: int,
+) -> list[str]:
+    """Reject a map-wide horizontal edge in the permanent-snow mask."""
+    if len(pixels) != width * height:
+        return ["map/terrain.bmp: pixel count does not match terrain dimensions"]
+    start_y = max(1, min(height, POLAR_SEAM_SCAN_MIN_Y))
+    end_y = max(start_y, min(height, POLAR_SEAM_SCAN_MAX_Y))
+    snow_values = {SNOW_MOUNTAIN, SNOW_PLAIN}
+    maximum = 0
+    maximum_y = start_y
+    for y in range(start_y, end_y):
+        previous = (y - 1) * width
+        current = y * width
+        transitions = sum(
+            (pixels[previous + x] in snow_values)
+            != (pixels[current + x] in snow_values)
+            for x in range(width)
+        )
+        if transitions > maximum:
+            maximum = transitions
+            maximum_y = y
+    allowed = round(width * MAX_POLAR_ROW_TRANSITION_SHARE)
+    if maximum > allowed:
+        return [
+            "map/terrain.bmp: horizontal permanent-snow seam at "
+            f"y={maximum_y} changes {maximum}/{width} columns "
+            f"(limit {allowed})"
+        ]
+    return []
+
+
 def validate() -> list[str]:
     issues: list[str] = []
     if not TERRAIN_DEFINITION_PATH.exists():
@@ -241,6 +344,7 @@ def validate() -> list[str]:
         Image.open(PROVINCES_PATH) as provinces,
     ):
         current = list(terrain.get_flattened_data())
+        terrain_size = terrain.size
         expected = generated_pixels(terrain, heightmap, provinces, selected_colors)
         issues.extend(urban_coverage_issues(current, provinces, selected_colors))
     differences = sum(first != second for first, second in zip(current, expected))
@@ -249,6 +353,7 @@ def validate() -> list[str]:
             f"map/terrain.bmp: {differences} pixels differ from permanent-snow generation"
         )
     issues.extend(coverage_issues(current))
+    issues.extend(polar_seam_issues(current, *terrain_size))
     return issues
 
 
@@ -271,6 +376,7 @@ def apply() -> None:
         pixels = generated_pixels(source, heightmap, provinces, selected_colors)
         problems.extend(urban_coverage_issues(pixels, provinces, selected_colors))
     problems.extend(coverage_issues(pixels))
+    problems.extend(polar_seam_issues(pixels, *terrain.size))
     if problems:
         raise RuntimeError("\n".join(problems))
 
