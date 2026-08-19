@@ -1,0 +1,180 @@
+name: Diagnose city river overlap
+
+on:
+  push:
+    branches:
+      - agent/city-river-clearance
+    paths:
+      - .github/workflows/diagnose-city-river-overlap.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out diagnostic branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/city-river-clearance
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install raster dependencies
+        run: python -m pip install --disable-pip-version-check pillow numpy
+
+      - name: Measure actual river channels against city masks
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+
+          import numpy as np
+          from PIL import Image, ImageFilter
+
+          from tools.builders import build_adiscord_vorkerland_cities as city
+
+          root = Path('.')
+          report_path = root / 'docs' / 'map' / 'city-river-overlap-diagnostic.md'
+          report_path.parent.mkdir(parents=True, exist_ok=True)
+
+          with Image.open(root / 'map' / 'cities.bmp') as cities_image, \
+               Image.open(root / 'map' / 'rivers.bmp') as rivers_image, \
+               Image.open(root / 'map' / 'provinces.bmp') as provinces_image:
+              if cities_image.size != rivers_image.size or cities_image.size != provinces_image.size:
+                  raise SystemExit('cities/rivers/provinces dimensions differ')
+              width, height = cities_image.size
+              city_pixels = np.asarray(cities_image, dtype=np.uint8)
+              river_pixels = np.asarray(rivers_image, dtype=np.uint8)
+              province_rgb = np.asarray(provinces_image.convert('RGB'), dtype=np.uint32)
+              river_palette = rivers_image.getpalette() or []
+
+          # HOI4 river channels and topology markers use palette indices 0..11.
+          # 254 and 255 are the non-river sea/land backgrounds and must both be excluded.
+          river_mask = river_pixels <= 11
+          city_mask = city_pixels == city.CITY_PALETTE_INDEX
+          packed_provinces = (
+              (province_rgb[:, :, 0] << 16)
+              | (province_rgb[:, :, 1] << 8)
+              | province_rgb[:, :, 2]
+          ).astype(np.uint32)
+
+          colour_to_province = {}
+          with (root / 'map' / 'definition.csv').open(encoding='utf-8-sig', newline='') as handle:
+              for fields in csv.reader(handle, delimiter=';'):
+                  if len(fields) < 4 or not fields[0].isdigit():
+                      continue
+                  pid = int(fields[0])
+                  red, green, blue = map(int, fields[1:4])
+                  colour_to_province[(red << 16) | (green << 8) | blue] = pid
+
+          sorted_colours = np.array(sorted(colour_to_province), dtype=np.uint32)
+          sorted_ids = np.array([colour_to_province[int(value)] for value in sorted_colours], dtype=np.int32)
+          flat_colours = packed_provinces.reshape(-1)
+          positions = np.searchsorted(sorted_colours, flat_colours)
+          positions = np.minimum(positions, len(sorted_colours) - 1)
+          exact = sorted_colours[positions] == flat_colours
+          province_ids = np.where(exact, sorted_ids[positions], -1).reshape(height, width)
+
+          exact_overlap = city_mask & river_mask
+          overlap_ids, overlap_counts = np.unique(province_ids[exact_overlap], return_counts=True)
+          all_overlap = {
+              int(pid): int(count)
+              for pid, count in zip(overlap_ids, overlap_counts)
+              if pid >= 0
+          }
+
+          river_image = Image.fromarray((river_mask.astype(np.uint8) * 255), mode='L')
+          dilated = {0: river_mask}
+          for radius in (1, 2, 3, 4, 6):
+              dilated[radius] = np.asarray(
+                  river_image.filter(ImageFilter.MaxFilter(radius * 2 + 1)),
+                  dtype=np.uint8,
+              ) > 0
+
+          target_colours, issues = city.target_colours()
+          if issues:
+              raise SystemExit('\n'.join(issues))
+
+          rows = []
+          for packed_colour, pid in sorted(target_colours.items(), key=lambda item: item[1]):
+              province_mask = packed_provinces == packed_colour
+              row = {
+                  'province': pid,
+                  'province_pixels': int(province_mask.sum()),
+                  'city_pixels': int((city_mask & province_mask).sum()),
+                  'river_pixels': int((river_mask & province_mask).sum()),
+              }
+              for radius, clearance in dilated.items():
+                  row[radius] = int((city_mask & province_mask & clearance).sum())
+              rows.append(row)
+
+          channel_counts = np.bincount(river_pixels[river_mask].reshape(-1), minlength=12)
+          def palette_rgb(value):
+              offset = value * 3
+              return tuple(river_palette[offset:offset + 3]) if offset + 2 < len(river_palette) else None
+
+          lines = [
+              '# City–river overlap diagnostic',
+              '',
+              f'- Raster size: `{width}×{height}`.',
+              '- River contract: palette indices `0..11` are channels/markers; `254` and `255` are backgrounds.',
+              f'- Exact city/river overlap: **{int(exact_overlap.sum()):,} pixels** across **{len(all_overlap)} provinces**.',
+              '',
+              '## River channel palette',
+              '',
+              '| Index | RGB | Pixels |',
+              '|---:|---|---:|',
+          ]
+          lines.extend(
+              f'| {index} | `{palette_rgb(index)}` | {int(channel_counts[index]):,} |'
+              for index in range(12)
+          )
+          lines.extend([
+              '',
+              '## Managed Vorkerland city provinces',
+              '',
+              '| Province | Province px | City px | River px | Exact | Within 1px | Within 2px | Within 3px | Within 4px | Within 6px |',
+              '|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|',
+          ])
+          for row in rows:
+              lines.append(
+                  f"| {row['province']} | {row['province_pixels']:,} | {row['city_pixels']:,} | "
+                  f"{row['river_pixels']:,} | {row[0]:,} | {row[1]:,} | {row[2]:,} | "
+                  f"{row[3]:,} | {row[4]:,} | {row[6]:,} |"
+              )
+          lines.extend([
+              '',
+              '## All provinces with exact city/river overlap',
+              '',
+              '| Province | Overlap pixels |',
+              '|---:|---:|',
+          ])
+          lines.extend(
+              f'| {pid} | {count:,} |'
+              for pid, count in sorted(all_overlap.items(), key=lambda item: (-item[1], item[0]))
+          )
+          lines.append('')
+          report_path.write_text('\n'.join(lines), encoding='utf-8')
+          print('\n'.join(lines[:20]))
+          PY
+
+      - name: Commit corrected diagnostic report
+        run: |
+          git config user.name "A-DISCORD Map Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- docs/map/city-river-overlap-diagnostic.md
+          if git diff --cached --quiet; then
+            echo "diagnostic report unchanged"
+          else
+            git commit -m "diagnostic(map): correct city river overlap audit"
+            git push origin HEAD:agent/city-river-clearance
+          fi
