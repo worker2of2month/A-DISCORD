@@ -1,26 +1,47 @@
 #!/usr/bin/env python3
 """Align the 2026-08-18 province delta across HOI4 map raster layers.
 
-This builder owns only the explicit province scope in ``NEW_PROVINCE_IDS`` and
-``TERRAIN_CHANGED_PROVINCE_IDS``.  It deliberately leaves legacy mixed-biome
-provinces outside that scope untouched.  The pass synchronizes graphical
-terrain, tree occupancy, selected relief contradictions, and the corresponding
-world-normal patch while preserving pixels outside the scoped masks.
+This builder owns graphical terrain and tree occupancy for the explicit province
+scope in ``NEW_PROVINCE_IDS`` and ``TERRAIN_CHANGED_PROVINCE_IDS``.  It
+deliberately leaves legacy mixed-biome provinces outside its scope untouched.
+
+Relief is *not* owned here.  This pass used to raise or flatten province
+interiors, and every part of that was a defect generator: it skipped the border
+ring and started the interior at ``ring_level + 20``, which ringed each raised
+province with a guaranteed 20 unit single-pixel wall; its ``sqrt`` falloff
+saturated within a quarter of the province depth, so interiors settled into a
+flat tabletop; and its "noise" was an axis-aligned sinusoid with fixed 14 and 18
+pixel periods, identical in every province, which showed up as a cross-hatch mesh
+across the whole map.  ``map/heightmap.bmp`` and the dependent
+``map/world_normal.bmp`` now belong to
+:mod:`tools.builders.build_adiscord_map_relief_readability`, which sculpts relief
+continuously across province borders and covers a superset of this scope.
+
+Two rules here are shared with other owners of the same bitmaps.  Graphical
+urban never covers a river channel, because the channel has to stay readable
+through a town, and permanent snow is left entirely to
+:mod:`tools.builders.build_adiscord_terrain_snow`: this pass writes the base
+palette index for a category and lets the snow classifier decide whether that
+pixel is white.  Because the alignment only ever compares terrain *categories*,
+that delegation is idempotent in either apply order.
 """
 
 from __future__ import annotations
 
 import argparse
-from collections import Counter, deque
+from collections import Counter
 from dataclasses import dataclass
 from io import BytesIO
-from math import ceil, cos, pi, sin, sqrt
+import json
+from math import ceil
 import os
 from pathlib import Path
-from statistics import median, pstdev
 from typing import Mapping, Sequence
 
+import numpy as np
 from PIL import Image
+
+from tools.builders import build_adiscord_map_relief_readability as relief
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -29,7 +50,8 @@ DEFINITION_PATH = ROOT / "map" / "definition.csv"
 TERRAIN_PATH = ROOT / "map" / "terrain.bmp"
 TREES_PATH = ROOT / "map" / "trees.bmp"
 HEIGHTMAP_PATH = ROOT / "map" / "heightmap.bmp"
-WORLD_NORMAL_PATH = ROOT / "map" / "world_normal.bmp"
+
+READABILITY_SCOPE_PATH = ROOT / "tools" / "data" / "adiscord_map_readability_scope.json"
 
 NEW_PROVINCE_IDS = frozenset(range(16654, 16707))
 TERRAIN_CHANGED_PROVINCE_IDS = frozenset({
@@ -37,13 +59,33 @@ TERRAIN_CHANGED_PROVINCE_IDS = frozenset({
     11209, 11392, 11443, 12189, 12250, 12296, 12955, 16563,
     16611, 16612,
 })
-TARGET_PROVINCE_IDS = NEW_PROVINCE_IDS | TERRAIN_CHANGED_PROVINCE_IDS
+
+
+def _delegated_province_ids() -> frozenset[int]:
+    """Return the northern-island provinces owned by the relief builder."""
+    payload = json.loads(READABILITY_SCOPE_PATH.read_text(encoding="utf-8"))
+    provinces = payload.get("northern_island_provinces")
+    if not isinstance(provinces, list) or not provinces:
+        raise RuntimeError(
+            "tools/data/adiscord_map_readability_scope.json: "
+            "northern_island_provinces must be a non-empty list"
+        )
+    return frozenset(int(province_id) for province_id in provinces)
+
+
+RELIEF_DELEGATED_PROVINCE_IDS = _delegated_province_ids()
+TARGET_PROVINCE_IDS = (
+    NEW_PROVINCE_IDS | TERRAIN_CHANGED_PROVINCE_IDS
+) - RELIEF_DELEGATED_PROVINCE_IDS
 
 CANONICAL_PALETTE = {
     "plains": 0,
     "forest": 4,
     "hills": 17,
-    "mountain": 20,
+    # Palette 20 is ``mountain_variation_grass`` on texture 7, so a province
+    # aligned to it renders as green pasture however high it is.  Index 11 is a
+    # rocky mountain texture, which is what a mountain province has to read as.
+    "mountain": 11,
     "marsh": 9,
     "desert": 3,
     "urban": 13,
@@ -57,10 +99,8 @@ PALETTE_TYPES = {
     22: "jungle", 27: "mountain", 31: "mountain",
 }
 WATER_TYPES = frozenset({"ocean", "lakes"})
+WATER_PALETTE = frozenset({14, 15})
 TREE_PROBABILITIES = {"forest": 0.62, "plains": 0.11, "hills": 0.04, "marsh": 0.08}
-NORMAL_CENTER = 127
-NORMAL_SCALE = 1.65
-NORMAL_BLUE = 253
 
 
 @dataclass(frozen=True)
@@ -116,10 +156,14 @@ def height_slope(heights: Sequence[int], width: int, index: int) -> int:
 
 
 def _canonical_palette(desired_type: str, index: int, width: int) -> int:
-    if desired_type == "mountain" and index // width < 300:
-        return 16
-    if desired_type == "plains" and index // width < 300:
-        return 19
+    # There is deliberately no latitude rule here.  Selecting the permanent-snow
+    # palettes above a bare ``y < 300`` drew a perfectly straight seam across the
+    # whole map at exactly that row.  Snow belongs to
+    # :mod:`tools.builders.build_adiscord_terrain_snow`, whose classifier picks it
+    # from a graded, noise-broken boundary; because this pass only ever compares
+    # terrain *categories* and both snow palettes share the category of their
+    # base index, that delegation stays idempotent in either apply order.
+    del index, width
     try:
         return CANONICAL_PALETTE[desired_type]
     except KeyError as exc:
@@ -220,143 +264,6 @@ def align_province_terrain(
     return TerrainChange(before, after, changed)
 
 
-def _inward_distances(indices: Sequence[int], width: int, pixel_count: int) -> dict[int, int]:
-    province = set(indices)
-    distances: dict[int, int] = {}
-    frontier: deque[int] = deque()
-    for index in province:
-        if any(neighbour not in province for neighbour in pixel_neighbours(index, width, pixel_count)):
-            distances[index] = 0
-            frontier.append(index)
-    while frontier:
-        index = frontier.popleft()
-        for neighbour in pixel_neighbours(index, width, pixel_count):
-            if neighbour in province and neighbour not in distances:
-                distances[neighbour] = distances[index] + 1
-                frontier.append(neighbour)
-    for index in province:
-        distances.setdefault(index, 0)
-    return distances
-
-
-def _outside_ring(indices: Sequence[int], width: int, pixel_count: int) -> set[int]:
-    province = set(indices)
-    return {
-        neighbour
-        for index in province
-        for neighbour in pixel_neighbours(index, width, pixel_count)
-        if neighbour not in province
-    }
-
-
-def align_province_height(
-    heights: bytearray,
-    width: int,
-    height: int,
-    indices: Sequence[int],
-    desired_type: str,
-    province_id: int,
-) -> set[int]:
-    del height
-    if not indices:
-        raise RuntimeError(f"province {province_id}: no height pixels")
-    values = [heights[index] for index in indices]
-    centre = float(median(values))
-    spread = float(pstdev(values))
-    policy: str | None = None
-    if desired_type == "mountain" and centre < 145:
-        policy = "raise"
-    elif desired_type == "hills" and centre < 112 and spread < 4:
-        policy = "roll"
-    elif desired_type == "plains" and (centre > 130 or spread > 18):
-        policy = "flatten"
-    elif desired_type == "marsh" and (centre > 120 or spread > 8):
-        policy = "flatten"
-    if policy is None:
-        return set()
-
-    distances = _inward_distances(indices, width, len(heights))
-    maximum = max(distances.values(), default=0)
-    if maximum <= 0:
-        return set()
-    ring = _outside_ring(indices, width, len(heights))
-    ring_level = float(median([heights[index] for index in ring])) if ring else centre
-    changed: set[int] = set()
-    for index in indices:
-        distance = distances[index]
-        if distance <= 0:
-            continue
-        weight = sqrt(distance / maximum)
-        x = index % width
-        y = index // width
-        wave = 0.5 * sin((x + province_id % 17) * pi / 7.0) + 0.5 * cos((y + province_id % 13) * pi / 9.0)
-        original = heights[index]
-        if policy == "raise":
-            target = round(ring_level + 20 + 40 * weight + 5 * wave)
-            value = max(original, target)
-        elif policy == "roll":
-            value = round(ring_level + 4 + 12 * weight + 5 * wave)
-        else:
-            value = round(ring_level + 3 * wave)
-        value = max(89, min(255, value))
-        if value != original:
-            heights[index] = value
-            changed.add(index)
-    return changed
-
-
-def _normal_cell_mean(heights: bytes, width: int, nx: int, ny: int) -> float:
-    left = nx * 2
-    top = ny * 2
-    first = top * width + left
-    second = first + width
-    return (heights[first] + heights[first + 1] + heights[second] + heights[second + 1]) / 4.0
-
-
-def render_world_normal_patch(
-    heightmap: Image.Image,
-    source: Image.Image,
-    changed_height_indices: set[int],
-) -> tuple[Image.Image, set[int]]:
-    if heightmap.mode != "L" or source.mode != "RGB":
-        raise ValueError("heightmap/world_normal modes must be L/RGB")
-    width, height = heightmap.size
-    normal_width, normal_height = source.size
-    if (normal_width * 2, normal_height * 2) != (width, height):
-        raise ValueError("world_normal dimensions must be half the heightmap dimensions")
-    if not changed_height_indices:
-        return source.copy(), set()
-    changed_cells = {
-        (index // width // 2) * normal_width + (index % width // 2)
-        for index in changed_height_indices
-    }
-    affected = set(changed_cells)
-    for index in tuple(changed_cells):
-        affected.update(pixel_neighbours(index, normal_width, normal_width * normal_height))
-    heights = heightmap.tobytes()
-    pixels = bytearray(source.tobytes())
-    changed: set[int] = set()
-    for index in affected:
-        nx = index % normal_width
-        ny = index // normal_width
-        west = index - 1 if nx else index
-        east = index + 1 if nx + 1 < normal_width else index
-        north = index - normal_width if ny else index
-        south = index + normal_width if ny + 1 < normal_height else index
-        dx = (_normal_cell_mean(heights, width, east % normal_width, east // normal_width) - _normal_cell_mean(heights, width, west % normal_width, west // normal_width)) / 2.0
-        dy = (_normal_cell_mean(heights, width, south % normal_width, south // normal_width) - _normal_cell_mean(heights, width, north % normal_width, north // normal_width)) / 2.0
-        value = (
-            max(0, min(255, round(NORMAL_CENTER - NORMAL_SCALE * dx))),
-            max(0, min(255, round(NORMAL_CENTER + NORMAL_SCALE * dy))),
-            NORMAL_BLUE,
-        )
-        offset = index * 3
-        if tuple(pixels[offset:offset + 3]) != value:
-            pixels[offset:offset + 3] = bytes(value)
-            changed.add(index)
-    return Image.frombytes("RGB", source.size, bytes(pixels)), changed
-
-
 def tree_probability(terrain_type: str) -> float:
     return TREE_PROBABILITIES.get(terrain_type, 0.0)
 
@@ -367,6 +274,15 @@ def render_tree_patch(
     target_mask: bytearray,
     palette_types: Mapping[int, str] = PALETTE_TYPES,
 ) -> tuple[Image.Image, set[int]]:
+    """Repaint tree occupancy for the cells this pass's terrain changes touch.
+
+    A tree cell covers 3.41 x 3.41 terrain pixels, so a majority vote alone let a
+    cell that was 49% ocean still grow trees and its canopy rendered over the
+    surf.  The shoreline rule is shared with
+    :func:`tools.builders.build_adiscord_map_relief_readability.rejected_tree_cells`
+    so both owners of ``map/trees.bmp`` agree regardless of apply order.
+    """
+
     if source.mode != "P" or terrain.mode != "P":
         raise ValueError("trees and terrain must remain paletted")
     full_width, full_height = terrain.size
@@ -374,6 +290,11 @@ def render_tree_patch(
         raise ValueError("target mask does not match terrain dimensions")
     tree_width, tree_height = source.size
     terrain_pixels = list(terrain.get_flattened_data())
+    land = ~np.isin(
+        np.array(terrain_pixels, dtype=np.uint8).reshape(full_height, full_width),
+        np.array(sorted(WATER_PALETTE), dtype=np.uint8),
+    )
+    rejected = relief.rejected_tree_cells(land, (tree_height, tree_width))
     pixels = bytearray(source.get_flattened_data())
     changed: set[int] = set()
     for ty in range(tree_height):
@@ -385,11 +306,14 @@ def render_tree_patch(
             full_indices = [y * full_width + x for y in range(y0, y1) for x in range(x0, x1)]
             if not any(target_mask[index] for index in full_indices):
                 continue
-            counts = Counter(palette_types.get(terrain_pixels[index], "unknown") for index in full_indices)
-            terrain_type = max(counts, key=lambda value: (counts[value], value))
-            probability = tree_probability(terrain_type)
-            value = 6 if stable_unit_hash(tx, ty, 23) < probability and stable_unit_hash(tx, ty, 29) < 0.65 else 5 if stable_unit_hash(tx, ty, 23) < probability else 0
             tree_index = ty * tree_width + tx
+            if rejected[ty, tx]:
+                value = 0
+            else:
+                counts = Counter(palette_types.get(terrain_pixels[index], "unknown") for index in full_indices)
+                terrain_type = max(counts, key=lambda value: (counts[value], value))
+                probability = tree_probability(terrain_type)
+                value = 6 if stable_unit_hash(tx, ty, 23) < probability and stable_unit_hash(tx, ty, 29) < 0.65 else 5 if stable_unit_hash(tx, ty, 23) < probability else 0
             if pixels[tree_index] != value:
                 pixels[tree_index] = value
                 changed.add(tree_index)
@@ -445,12 +369,8 @@ def target_share(province_id: int, terrain_type: str) -> float:
 @dataclass
 class BuildOutputs:
     terrain: Image.Image
-    heightmap: Image.Image
-    world_normal: Image.Image
     trees: Image.Image
     terrain_changes: dict[int, TerrainChange]
-    height_changes: dict[int, set[int]]
-    normal_changes: set[int]
     tree_changes: set[int]
 
 
@@ -462,28 +382,17 @@ def build_expected() -> BuildOutputs:
         terrain = terrain_source.copy()
     with Image.open(BytesIO(HEIGHTMAP_PATH.read_bytes())) as height_source:
         heightmap = height_source.copy()
-    with Image.open(BytesIO(WORLD_NORMAL_PATH.read_bytes())) as normal_source:
-        world_normal = normal_source.copy()
     with Image.open(BytesIO(TREES_PATH.read_bytes())) as tree_source:
         trees = tree_source.copy()
-    if terrain.mode != "P" or heightmap.mode != "L" or world_normal.mode != "RGB" or trees.mode != "P":
+    if terrain.mode != "P" or heightmap.mode != "L" or trees.mode != "P":
         raise RuntimeError("unexpected map bitmap modes")
     if terrain.size != provinces.size or heightmap.size != provinces.size:
         raise RuntimeError("terrain/heightmap/provinces dimensions differ")
 
     indices_by_province = collect_target_indices(provinces, definition)
-    heights = bytearray(heightmap.tobytes())
-    height_changes: dict[int, set[int]] = {}
-    all_height_changes: set[int] = set()
-    for province_id in sorted(TARGET_PROVINCE_IDS):
-        desired = definition[province_id].terrain
-        changed = align_province_height(
-            heights, heightmap.width, heightmap.height,
-            indices_by_province[province_id], desired, province_id,
-        )
-        height_changes[province_id] = changed
-        all_height_changes.update(changed)
-    heightmap = Image.frombytes("L", heightmap.size, bytes(heights))
+    # Relief is read-only here: the terrain scoring wants to know which pixels sit
+    # high and steep, but the heightmap belongs to the relief builder.
+    heights = heightmap.tobytes()
 
     terrain_pixels = bytearray(terrain.get_flattened_data())
     terrain_changes: dict[int, TerrainChange] = {}
@@ -497,18 +406,12 @@ def build_expected() -> BuildOutputs:
     generated_terrain = terrain.copy()
     generated_terrain.putdata(terrain_pixels)
 
-    world_normal, normal_changes = render_world_normal_patch(
-        heightmap, world_normal, all_height_changes
-    )
     target_mask = bytearray(terrain.width * terrain.height)
     for indices in indices_by_province.values():
         for index in indices:
             target_mask[index] = 1
     trees, tree_changes = render_tree_patch(trees, generated_terrain, target_mask)
-    return BuildOutputs(
-        generated_terrain, heightmap, world_normal, trees,
-        terrain_changes, height_changes, normal_changes, tree_changes,
-    )
+    return BuildOutputs(generated_terrain, trees, terrain_changes, tree_changes)
 
 
 def _save_atomic(image: Image.Image, path: Path) -> None:
@@ -525,9 +428,7 @@ def _save_atomic(image: Image.Image, path: Path) -> None:
 
 def apply() -> BuildOutputs:
     outputs = build_expected()
-    _save_atomic(outputs.heightmap, HEIGHTMAP_PATH)
     _save_atomic(outputs.terrain, TERRAIN_PATH)
-    _save_atomic(outputs.world_normal, WORLD_NORMAL_PATH)
     _save_atomic(outputs.trees, TREES_PATH)
     return outputs
 
@@ -536,8 +437,6 @@ def validate() -> list[str]:
     outputs = build_expected()
     expected = {
         TERRAIN_PATH: outputs.terrain,
-        HEIGHTMAP_PATH: outputs.heightmap,
-        WORLD_NORMAL_PATH: outputs.world_normal,
         TREES_PATH: outputs.trees,
     }
     issues: list[str] = []
@@ -562,11 +461,9 @@ def main() -> int:
     if args.apply:
         outputs = apply()
         terrain_pixels = sum(len(change.changed_indices) for change in outputs.terrain_changes.values())
-        height_pixels = sum(len(change) for change in outputs.height_changes.values())
         print(
             f"Aligned {len(TARGET_PROVINCE_IDS)} provinces: "
-            f"{terrain_pixels} terrain pixels, {height_pixels} height pixels, "
-            f"{len(outputs.tree_changes)} tree cells, {len(outputs.normal_changes)} normal cells."
+            f"{terrain_pixels} terrain pixels, {len(outputs.tree_changes)} tree cells."
         )
     issues = validate()
     if issues:
