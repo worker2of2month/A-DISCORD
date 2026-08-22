@@ -54,7 +54,7 @@ def render_gui() -> str:
     text = VANILLA_GUI.read_text(encoding="utf-8-sig")
     for old, (new, expected) in SPRITE_REPLACEMENTS.items():
         text = replace_counted(text, old, new, expected)
-    return text
+    return "\n".join(line.rstrip() for line in text.splitlines()) + "\n"
 
 
 def _cornered(name: str, filename: str, size: tuple[int, int], border: int) -> str:

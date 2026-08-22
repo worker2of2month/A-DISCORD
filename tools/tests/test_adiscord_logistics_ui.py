@@ -49,6 +49,10 @@ class LogisticsUiContractTests(unittest.TestCase):
         ):
             self.assertIn(f'"{sprite}"', gui)
 
+    def test_generated_gui_has_no_trailing_whitespace(self) -> None:
+        gui = GUI.read_text(encoding="utf-8-sig")
+        self.assertNotRegex(gui, r"(?m)[ \t]+$")
+
     def test_builder_outputs_are_byte_current_rgba_assets(self) -> None:
         outputs = expected_outputs()
         self.assertIn(GUI, outputs)
