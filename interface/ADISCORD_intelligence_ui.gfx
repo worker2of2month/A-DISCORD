@@ -1,0 +1,30 @@
+spriteTypes = {
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_intelligence_window"
+        size = { x = 192 y = 192 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_window.dds"
+        borderSize = { x = 32 y = 32 }
+        tilingCenter = yes
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_intelligence_panel"
+        size = { x = 192 y = 192 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_panel.dds"
+        borderSize = { x = 24 y = 24 }
+        tilingCenter = yes
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_intelligence_card"
+        size = { x = 256 y = 72 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_card.dds"
+        borderSize = { x = 12 y = 12 }
+        tilingCenter = yes
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_intelligence_selected"
+        size = { x = 256 y = 72 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_selected.dds"
+        borderSize = { x = 12 y = 12 }
+        tilingCenter = yes
+    }
+}
