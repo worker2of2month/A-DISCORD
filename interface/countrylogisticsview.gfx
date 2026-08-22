@@ -1,0 +1,30 @@
+spriteTypes = {
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_logistics_window"
+        size = { x = 192 y = 192 }
+        textureFile = "gfx/interface/logistics/ui/ADISCORD_logistics_window.dds"
+        borderSize = { x = 32 y = 32 }
+        tilingCenter = yes
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_logistics_panel"
+        size = { x = 192 y = 192 }
+        textureFile = "gfx/interface/logistics/ui/ADISCORD_logistics_panel.dds"
+        borderSize = { x = 24 y = 24 }
+        tilingCenter = yes
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_logistics_row"
+        size = { x = 256 y = 64 }
+        textureFile = "gfx/interface/logistics/ui/ADISCORD_logistics_row.dds"
+        borderSize = { x = 12 y = 12 }
+        tilingCenter = yes
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_logistics_graph"
+        size = { x = 512 y = 256 }
+        textureFile = "gfx/interface/logistics/ui/ADISCORD_logistics_graph.dds"
+        borderSize = { x = 24 y = 24 }
+        tilingCenter = yes
+    }
+}
