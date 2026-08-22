@@ -23,7 +23,7 @@ VANILLA_GUI = BASE_GAME / "interface/countrydeploymentview.gui"
 SOURCE = ROOT / "gfx/interface/production/source/production_surface_source.png"
 OUTPUT_DIR = ROOT / "gfx/interface/deployment/ui"
 GUI_OUTPUT = ROOT / "interface/countrydeploymentview.gui"
-GFX_OUTPUT = ROOT / "interface/countrydeploymentview.gfx"
+GFX_OUTPUT = ROOT / "interface/ADISCORD_deployment_ui.gfx"
 
 WINDOW = OUTPUT_DIR / "ADISCORD_deployment_window.dds"
 PANEL = OUTPUT_DIR / "ADISCORD_deployment_panel.dds"

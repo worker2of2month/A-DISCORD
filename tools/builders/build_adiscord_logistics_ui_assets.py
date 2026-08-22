@@ -23,7 +23,7 @@ VANILLA_GUI = BASE_GAME / "interface/countrylogisticsview.gui"
 SOURCE = ROOT / "gfx/interface/production/source/production_surface_source.png"
 OUTPUT_DIR = ROOT / "gfx/interface/logistics/ui"
 GUI_OUTPUT = ROOT / "interface/countrylogisticsview.gui"
-GFX_OUTPUT = ROOT / "interface/countrylogisticsview.gfx"
+GFX_OUTPUT = ROOT / "interface/ADISCORD_logistics_ui.gfx"
 
 WINDOW = OUTPUT_DIR / "ADISCORD_logistics_window.dds"
 PANEL = OUTPUT_DIR / "ADISCORD_logistics_panel.dds"

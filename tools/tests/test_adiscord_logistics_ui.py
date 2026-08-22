@@ -9,10 +9,14 @@ from tools.builders.build_adiscord_logistics_ui_assets import expected_outputs
 
 ROOT = Path(__file__).resolve().parents[2]
 GUI = ROOT / "interface/countrylogisticsview.gui"
-GFX = ROOT / "interface/countrylogisticsview.gfx"
+GFX = ROOT / "interface/ADISCORD_logistics_ui.gfx"
 
 
 class LogisticsUiContractTests(unittest.TestCase):
+    def test_custom_gfx_is_additive_not_a_vanilla_path_override(self) -> None:
+        self.assertTrue(GFX.is_file())
+        self.assertFalse((ROOT / "interface/countrylogisticsview.gfx").exists())
+
     def test_all_logistics_windows_remain_present(self) -> None:
         gui = GUI.read_text(encoding="utf-8-sig")
         for name in (

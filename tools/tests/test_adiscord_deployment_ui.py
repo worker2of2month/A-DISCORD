@@ -9,10 +9,14 @@ from tools.builders.build_adiscord_deployment_ui_assets import expected_outputs
 
 ROOT = Path(__file__).resolve().parents[2]
 GUI = ROOT / "interface/countrydeploymentview.gui"
-GFX = ROOT / "interface/countrydeploymentview.gfx"
+GFX = ROOT / "interface/ADISCORD_deployment_ui.gfx"
 
 
 class DeploymentUiContractTests(unittest.TestCase):
+    def test_custom_gfx_is_additive_not_a_vanilla_path_override(self) -> None:
+        self.assertTrue(GFX.is_file())
+        self.assertFalse((ROOT / "interface/countrydeploymentview.gfx").exists())
+
     def test_engine_bound_deployment_widgets_remain_unique(self) -> None:
         gui = GUI.read_text(encoding="utf-8-sig")
         for name in (
