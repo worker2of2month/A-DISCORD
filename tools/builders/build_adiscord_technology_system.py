@@ -7,6 +7,10 @@ import json
 import re
 
 from tools.lib.paths import repository_root
+from tools.builders.build_adiscord_technology_ui_assets import (
+    apply_tree_skin,
+    technology_tree_gfx_entries,
+)
 
 ROOT = repository_root()
 BASE_GAME = Path(r"Z:\SteamLibrary\steamapps\common\Hearts of Iron IV")
@@ -4901,7 +4905,12 @@ def write_gfx() -> None:
                 f"\t\ttextureFile = \"gfx/interface/technologies/{icon}.dds\"\n"
                 "\t}\n"
             )
-    content = "spriteTypes = {\n" + "\n".join(entries) + "}\n"
+    content = (
+        "spriteTypes = {\n"
+        + "\n".join(entries)
+        + technology_tree_gfx_entries()
+        + "}\n"
+    )
     (ROOT / "interface" / "ADISCORD_technologies.gfx").write_text(content, encoding="utf-8")
 
 
@@ -5334,6 +5343,7 @@ def write_gui() -> None:
         replacements.append((start, end, compact))
     for start, end, replacement in sorted(replacements, reverse=True):
         text = text[:start] + replacement + text[end:]
+    text = apply_tree_skin(text)
     (ROOT / "interface" / "countrytechtreeview.gui").write_text(text, encoding="utf-8")
 
 

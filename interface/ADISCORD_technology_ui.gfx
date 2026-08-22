@@ -1,0 +1,37 @@
+spriteTypes = {
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_technology_window"
+        size = { x = 192 y = 192 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_window.dds"
+        borderSize = { x = 32 y = 32 }
+        tilingCenter = yes
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_technology_panel"
+        size = { x = 192 y = 192 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_panel.dds"
+        borderSize = { x = 24 y = 24 }
+        tilingCenter = yes
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_technology_slot"
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_slot.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_technology_card"
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_card.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_technology_tab"
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_tab.dds"
+        noOfFrames = 2
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_technology_top"
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_top.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_technology_bottom"
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_bottom.dds"
+    }
+}

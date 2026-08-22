@@ -2558,4 +2558,28 @@ spriteTypes = {
 		name = "GFX_ADISCORD_tech_adaptive_spectrum_dominance_medium"
 		textureFile = "gfx/interface/technologies/advanced_encryption.dds"
 	}
+
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_technology_tree_panel"
+        size = { x = 192 y = 192 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_tree_panel.dds"
+        borderSize = { x = 32 y = 32 }
+        tilingCenter = yes
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_technology_tree_stripes"
+        size = { x = 122 y = 244 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_tree_stripes.dds"
+        borderSize = { x = 0 y = 0 }
+        tilingCenter = yes
+        alwaystransparent = yes
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_technology_tree_info_top"
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_tree_info_top.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_technology_tree_info"
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_tree_info.dds"
+    }
 }
