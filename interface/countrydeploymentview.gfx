@@ -1,0 +1,30 @@
+spriteTypes = {
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_deployment_window"
+        size = { x = 192 y = 192 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_window.dds"
+        borderSize = { x = 32 y = 32 }
+        tilingCenter = yes
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_deployment_panel"
+        size = { x = 192 y = 192 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_panel.dds"
+        borderSize = { x = 24 y = 24 }
+        tilingCenter = yes
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_deployment_template"
+        size = { x = 512 y = 64 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_template.dds"
+        borderSize = { x = 12 y = 12 }
+        tilingCenter = yes
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_deployment_line"
+        size = { x = 512 y = 96 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_line.dds"
+        borderSize = { x = 14 y = 14 }
+        tilingCenter = yes
+    }
+}
