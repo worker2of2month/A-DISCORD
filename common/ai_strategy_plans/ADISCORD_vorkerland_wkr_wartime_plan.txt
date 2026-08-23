@@ -275,3 +275,281 @@ ADISCORD_vorkerland_wkr_utilitarian_showdown_plan = {
 
 	weight = { factor = 5 }
 }
+
+# Variant settlements. These outrank the wartime core plan (weight 3) but sit
+# below the live showdown plans (weight 5), and they only switch on once the
+# claimant's political line has already been walked to its end, so the AI
+# finishes the shared war preparation before it commits to a constitution.
+
+ADISCORD_vorkerland_wkr_neo_vorkerist_variant_plan = {
+	name = "WKR neo-vorkerist emergency settlement"
+	desc = ""
+
+	allowed = {
+		OR = {
+			original_tag = WRK
+			original_tag = WKR
+		}
+	}
+
+	enable = {
+		tag = WKR
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+		has_government = pragmatism
+		has_country_leader_ideology = neo_vorkerism
+		has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+		has_country_flag = ADISCORD_vorkerland_focus_wkr_emergency_constitution
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_chairmans_mandate }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = WKR }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+			NOT = { has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes } }
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_chairmans_mandate
+		}
+	}
+
+	ai_national_focuses = {
+		WKR_declare_the_revolution_unfinished
+		WKR_raise_the_worker_levy
+		WKR_vest_all_power_in_the_chairman
+	}
+
+	weight = { factor = 4 }
+}
+
+ADISCORD_vorkerland_wkr_utilitarian_variant_plan = {
+	name = "WKR utilitarian delivery settlement"
+	desc = ""
+
+	allowed = {
+		OR = {
+			original_tag = WRK
+			original_tag = WKR
+		}
+	}
+
+	enable = {
+		tag = WKR
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+		has_government = utilitarism
+		has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+		has_country_flag = ADISCORD_vorkerland_focus_wkr_directed_workshops
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_normative_republic }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = WKR }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+			NOT = { has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes } }
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_normative_republic
+		}
+	}
+
+	ai_national_focuses = {
+		WKR_govern_by_delivered_results
+		WKR_publish_the_ration_ledger
+		WKR_bind_the_republic_to_its_norms
+	}
+
+	weight = { factor = 4 }
+}
+
+
+# ----------------------------------------------------------------------
+# The Chairman's republic strips the civil economy, raises the
+# largest and cheapest army it can, requisitions rather than
+# persuades, and throws the last levy straight at the line.
+# ----------------------------------------------------------------------
+ADISCORD_vorkerland_wkr_neo_vorkerist_depth_plan = {
+	name = "WKR neo-vorkerist war effort"
+	desc = ""
+
+	allowed = {
+		OR = {
+			original_tag = WRK
+			original_tag = WKR
+		}
+	}
+
+	enable = {
+		tag = WKR
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+		has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+		has_country_flag = ADISCORD_vorkerland_focus_wkr_chairmans_mandate
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_throw_the_reserves_forward }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = WKR }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+			NOT = { has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes } }
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_throw_the_reserves_forward
+		}
+	}
+
+	ai_national_focuses = {
+		WKR_convene_the_production_soviet
+		WKR_strip_the_civil_economy
+		WKR_doctrine_of_the_armed_people
+		WKR_break_them_with_numbers
+		WKR_seat_the_factory_councils
+		WKR_requisition_in_the_republics_name
+		WKR_arm_the_bracket_victors
+		WKR_form_the_republican_air_staff
+		WKR_commit_shopfloor_squadrons
+		WKR_open_the_external_desk
+		WKR_send_republican_volunteers
+		WKR_the_last_levy
+		WKR_throw_the_reserves_forward
+	}
+
+	weight = { factor = 3 }
+}
+
+# ----------------------------------------------------------------------
+# Bagley's republic keeps the ration, builds a smaller army that
+# holds ground, earns legitimacy by publishing real figures, and
+# buries the last levy in the interchange rather than spending it.
+# ----------------------------------------------------------------------
+ADISCORD_vorkerland_wkr_utilitarian_depth_plan = {
+	name = "WKR normative war effort"
+	desc = ""
+
+	allowed = {
+		OR = {
+			original_tag = WRK
+			original_tag = WKR
+		}
+	}
+
+	enable = {
+		tag = WKR
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+		has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+		has_country_flag = ADISCORD_vorkerland_focus_wkr_normative_republic
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_dig_in_along_the_interchange }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = WKR }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+			NOT = { has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes } }
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_dig_in_along_the_interchange
+		}
+	}
+
+	ai_national_focuses = {
+		WKR_convene_the_production_soviet
+		WKR_keep_the_bread_ration
+		WKR_doctrine_of_measured_force
+		WKR_replace_men_with_output
+		WKR_seat_the_factory_councils
+		WKR_publish_the_production_returns
+		WKR_seek_outside_recognition
+		WKR_form_the_republican_air_staff
+		WKR_screen_the_interchange_sky
+		WKR_open_the_external_desk
+		WKR_license_outside_patterns
+		WKR_the_last_levy
+		WKR_dig_in_along_the_interchange
+	}
+
+	weight = { factor = 3 }
+}
+
+ADISCORD_vorkerland_wkr_remaining_fronts_plan = {
+	name = "WKR remaining central fronts"
+	desc = ""
+
+	allowed = {
+		OR = {
+			original_tag = WRK
+			original_tag = WKR
+		}
+	}
+
+	enable = {
+		tag = WKR
+		is_ai = yes
+		is_subject = no
+		NOT = { has_capitulated = yes }
+		ADISCORD_vorkerland_claimant_has_remaining_central_targets = yes
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_remaining_fronts }
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_front_protracted
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_operation_southbound
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_solyarino_intervention
+			NOT = { ADISCORD_vorkerland_wkr_has_valid_solyarino_target = yes }
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = WKR }
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_remaining_fronts
+			NOT = { ADISCORD_vorkerland_claimant_has_remaining_central_targets = yes }
+		}
+	}
+
+	ai_national_focuses = {
+		WKR_open_the_remaining_fronts
+	}
+
+	weight = { factor = 5 }
+}

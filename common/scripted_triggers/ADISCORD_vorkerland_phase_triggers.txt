@@ -150,10 +150,32 @@ ADISCORD_vorkerland_central_showdown_required = {
 	}
 }
 
-# The nine district campaigns exist only during central preparation. Later
-# lifecycle phases never reopen military decisions from a serialized save.
+# An iconic objective only counts when it passes between two live claimants.
+# A minor changing hands, or a claimant recapturing from itself, is not a
+# political event and must not move the ledger.
+ADISCORD_vorkerland_objective_transfer_is_valid = {
+	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+	NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+	ROOT = { ADISCORD_vorkerland_is_main_claimant = yes }
+	FROM = { ADISCORD_vorkerland_is_main_claimant = yes }
+	NOT = { ROOT = { tag = FROM } }
+}
+
+ADISCORD_vorkerland_is_live_claimant = {
+	exists = yes
+	is_subject = no
+	NOT = { has_capitulated = yes }
+}
+
+# The nine district campaigns stay open through the central showdown. They are
+# the only source of the 24 central district cores that reunification requires,
+# so restricting them to the preparation phase makes the war unwinnable once the
+# showdown clears that flag. Reunification and postwar still never reopen them.
 ADISCORD_vorkerland_central_minor_campaign_phase_available = {
-	has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+	OR = {
+		has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+		has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+	}
 }
 
 # A consolidation wave is built from the real border on the day it is

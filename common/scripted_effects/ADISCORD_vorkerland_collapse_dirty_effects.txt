@@ -221,6 +221,14 @@ ADISCORD_vorkerland_finalize_dirty_cascade_if_ready = {
 		}
 		set_global_flag = ADISCORD_vorkerland_dirty_cascade_complete
 		clr_global_flag = ADISCORD_vorkerland_dirty_cascade_recovery_scheduled
+		# The closed zone is a political map, not a truce. One day after the last
+		# administration appears, the reactor perimeter and the eastern corridor
+		# open their own local rivalries.
+		if = {
+			limit = { NOT = { has_global_flag = ADISCORD_vorkerland_closed_zone_bracket_scheduled } }
+			set_global_flag = ADISCORD_vorkerland_closed_zone_bracket_scheduled
+			country_event = { id = ADISCORD_vorkerland_collapse.91 days = 1 }
+		}
 	}
 }
 

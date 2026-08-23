@@ -203,3 +203,299 @@ news_event = {
 	fire_only_once = yes
 	option = { name = ADISCORD_vorkerland_story.9.a }
 }
+
+# The fate of Nikita Worker. The collapse roll sets exactly one of the four
+# global outcome flags; ADISCORD_vorkerland_story_report_worker_fate reads them
+# and dispatches exactly one of these four, once. Each is a separate event
+# because the four outcomes are separate historical facts, not four phrasings of
+# one fact, and because each is guaranteed to fire at most once per campaign.
+news_event = {
+	id = ADISCORD_vorkerland_story.10
+	title = ADISCORD_vorkerland_story.10.t
+	desc = ADISCORD_vorkerland_story.10.d
+	picture = GFX_report_event_generic_political_reform
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.10.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.11
+	title = ADISCORD_vorkerland_story.11.t
+	desc = ADISCORD_vorkerland_story.11.d
+	picture = GFX_report_event_generic_political_reform
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.11.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.12
+	title = ADISCORD_vorkerland_story.12.t
+	desc = ADISCORD_vorkerland_story.12.d
+	picture = GFX_event_china_civil_war_1
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.12.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.13
+	title = ADISCORD_vorkerland_story.13.t
+	desc = ADISCORD_vorkerland_story.13.d
+	picture = GFX_event_china_civil_war_1
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.13.a }
+}
+
+# Twelve iconic objectives, twelve events. A shared major news item with
+# check_variable title/desc blocks painted the generic fallback: the GUI
+# scope that draws a major news item does not resolve var = global.X.
+# Each centre is fire_only_once; the objectives_taken array and the story
+# reported-array still own the once-per-campaign guard.
+news_event = {
+	id = ADISCORD_vorkerland_story.50
+	title = ADISCORD_vorkerland_story.50.t
+	desc = ADISCORD_vorkerland_story.50.d
+	picture = GFX_event_china_civil_war_1
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.50.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.51
+	title = ADISCORD_vorkerland_story.51.t
+	desc = ADISCORD_vorkerland_story.51.d
+	picture = GFX_event_china_civil_war_1
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.51.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.52
+	title = ADISCORD_vorkerland_story.52.t
+	desc = ADISCORD_vorkerland_story.52.d
+	picture = GFX_event_china_civil_war_1
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.52.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.53
+	title = ADISCORD_vorkerland_story.53.t
+	desc = ADISCORD_vorkerland_story.53.d
+	picture = GFX_event_china_civil_war_1
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.53.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.54
+	title = ADISCORD_vorkerland_story.54.t
+	desc = ADISCORD_vorkerland_story.54.d
+	picture = GFX_event_china_civil_war_1
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.54.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.55
+	title = ADISCORD_vorkerland_story.55.t
+	desc = ADISCORD_vorkerland_story.55.d
+	picture = GFX_event_china_civil_war_1
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.55.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.56
+	title = ADISCORD_vorkerland_story.56.t
+	desc = ADISCORD_vorkerland_story.56.d
+	picture = GFX_event_china_civil_war_1
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.56.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.57
+	title = ADISCORD_vorkerland_story.57.t
+	desc = ADISCORD_vorkerland_story.57.d
+	picture = GFX_event_china_civil_war_1
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.57.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.58
+	title = ADISCORD_vorkerland_story.58.t
+	desc = ADISCORD_vorkerland_story.58.d
+	picture = GFX_event_china_civil_war_1
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.58.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.59
+	title = ADISCORD_vorkerland_story.59.t
+	desc = ADISCORD_vorkerland_story.59.d
+	picture = GFX_event_china_civil_war_1
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.59.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.60
+	title = ADISCORD_vorkerland_story.60.t
+	desc = ADISCORD_vorkerland_story.60.d
+	picture = GFX_event_china_civil_war_1
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.60.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.61
+	title = ADISCORD_vorkerland_story.61.t
+	desc = ADISCORD_vorkerland_story.61.d
+	picture = GFX_event_china_civil_war_1
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.61.a }
+}
+
+# Six doctrine declarations, six events. A single major news event with
+# check_variable title/desc blocks silently falls through to the generic
+# fallback in this engine: the GUI scope that paints a major news item does
+# not resolve var = global.X. Worker's fate already uses one event per
+# outcome for the same reason. Each of these is fire_only_once; the
+# dispatching effect also owns a per-variant global flag so a duplicated
+# call cannot re-fire the news.
+news_event = {
+	id = ADISCORD_vorkerland_story.31
+	title = ADISCORD_vorkerland_story.31.t
+	desc = ADISCORD_vorkerland_story.31.d
+	picture = GFX_report_event_generic_political_reform
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.31.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.32
+	title = ADISCORD_vorkerland_story.32.t
+	desc = ADISCORD_vorkerland_story.32.d
+	picture = GFX_report_event_generic_political_reform
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.32.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.33
+	title = ADISCORD_vorkerland_story.33.t
+	desc = ADISCORD_vorkerland_story.33.d
+	picture = GFX_report_event_generic_political_reform
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.33.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.34
+	title = ADISCORD_vorkerland_story.34.t
+	desc = ADISCORD_vorkerland_story.34.d
+	picture = GFX_report_event_generic_political_reform
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.34.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.35
+	title = ADISCORD_vorkerland_story.35.t
+	desc = ADISCORD_vorkerland_story.35.d
+	picture = GFX_report_event_generic_political_reform
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.35.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.36
+	title = ADISCORD_vorkerland_story.36.t
+	desc = ADISCORD_vorkerland_story.36.d
+	picture = GFX_report_event_generic_political_reform
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.36.a }
+}
+
+# A main claimant drops out of the central war. Fired in the capitulating
+# claimant's own scope, so [ROOT.GetNameDef] names the side that fell.
+# One event per tag: the same check_variable title/desc path that failed
+# for doctrine news also failed here.
+news_event = {
+	id = ADISCORD_vorkerland_story.41
+	title = ADISCORD_vorkerland_story.41.t
+	desc = ADISCORD_vorkerland_story.41.d
+	picture = GFX_event_china_civil_war_1
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.41.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.42
+	title = ADISCORD_vorkerland_story.42.t
+	desc = ADISCORD_vorkerland_story.42.d
+	picture = GFX_event_china_civil_war_1
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.42.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.43
+	title = ADISCORD_vorkerland_story.43.t
+	desc = ADISCORD_vorkerland_story.43.d
+	picture = GFX_event_china_civil_war_1
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.43.a }
+}

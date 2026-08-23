@@ -16,6 +16,234 @@ ADISCORD_vorkerland_story_announce_verified_showdown = {
 	}
 }
 
+# The collapse roll decides what happened to Nikita Worker and records it in one
+# of four global flags. That roll lives in the collapse layer, which owns no
+# presentation, so the world would otherwise never learn the single most
+# consequential fact of the whole scenario. Call this once from the collapse
+# opening, after the fate flags are set.
+#
+# The guard is released again when no fate flag is present so that a call placed
+# too early cannot permanently silence the report.
+ADISCORD_vorkerland_story_report_worker_fate = {
+	if = {
+		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_story_worker_fate_reported } }
+		set_global_flag = ADISCORD_vorkerland_story_worker_fate_reported
+		if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+			set_global_flag = ADISCORD_vorkerland_story_worker_survival_reported
+			news_event = { id = ADISCORD_vorkerland_story.10 }
+		}
+		else_if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad }
+			set_global_flag = ADISCORD_vorkerland_story_worker_rescue_reported
+			news_event = { id = ADISCORD_vorkerland_story.11 }
+		}
+		else_if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_worker_missing }
+			set_global_flag = ADISCORD_vorkerland_story_worker_disappearance_reported
+			news_event = { id = ADISCORD_vorkerland_story.12 }
+		}
+		else_if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_worker_killed }
+			set_global_flag = ADISCORD_vorkerland_story_worker_death_reported
+			news_event = { id = ADISCORD_vorkerland_story.13 }
+		}
+		else = {
+			clr_global_flag = ADISCORD_vorkerland_story_worker_fate_reported
+		}
+	}
+}
+
+# Presentation for the twelve iconic objectives. The phase layer resolves the
+# capture and writes global.ADISCORD_vorkerland_objective_last; this reads that
+# id, records it so the same centre can never be reported twice, and fires the
+# single objective news event.
+#
+# Called from ADISCORD_vorkerland_story_check_first_claimant_capital_fall, which
+# on_state_control_changed already invokes after the twelve objective checks. It
+# therefore observes the completed result of the whole state change rather than
+# a half-applied one, and one control change can never queue several objective
+# reports that would all render with the last id.
+ADISCORD_vorkerland_story_report_iconic_objective = {
+	if = {
+		limit = {
+			check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 1 compare = greater_than_or_equals }
+			check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 12 compare = less_than_or_equals }
+			NOT = {
+				is_in_array = {
+					array = global.ADISCORD_vorkerland_story_objectives_reported
+					value = global.ADISCORD_vorkerland_objective_last
+				}
+			}
+			# The three claimant capitals already carry a dedicated first-fall
+			# report. Without these the same city would be announced twice on the
+			# same day by two different events.
+			NOT = {
+				AND = {
+					check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 1 compare = equals }
+					has_global_flag = ADISCORD_vorkerland_story_wkr_capital_fell_first
+				}
+			}
+			NOT = {
+				AND = {
+					check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 2 compare = equals }
+					has_global_flag = ADISCORD_vorkerland_story_vad_capital_fell_first
+				}
+			}
+			NOT = {
+				AND = {
+					check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 3 compare = equals }
+					has_global_flag = ADISCORD_vorkerland_story_tva_capital_fell_first
+				}
+			}
+		}
+		# A global array is the ordinary array argument with a global. prefix.
+		# The script API defines no separate global-array effect or trigger, and
+		# a mistyped one is accepted by the parser and then does nothing.
+		add_to_array = {
+			array = global.ADISCORD_vorkerland_story_objectives_reported
+			value = global.ADISCORD_vorkerland_objective_last
+		}
+		if = {
+			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 1 compare = equals } }
+			news_event = { id = ADISCORD_vorkerland_story.50 }
+		}
+		else_if = {
+			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 2 compare = equals } }
+			news_event = { id = ADISCORD_vorkerland_story.51 }
+		}
+		else_if = {
+			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 3 compare = equals } }
+			news_event = { id = ADISCORD_vorkerland_story.52 }
+		}
+		else_if = {
+			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 4 compare = equals } }
+			news_event = { id = ADISCORD_vorkerland_story.53 }
+		}
+		else_if = {
+			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 5 compare = equals } }
+			news_event = { id = ADISCORD_vorkerland_story.54 }
+		}
+		else_if = {
+			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 6 compare = equals } }
+			news_event = { id = ADISCORD_vorkerland_story.55 }
+		}
+		else_if = {
+			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 7 compare = equals } }
+			news_event = { id = ADISCORD_vorkerland_story.56 }
+		}
+		else_if = {
+			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 8 compare = equals } }
+			news_event = { id = ADISCORD_vorkerland_story.57 }
+		}
+		else_if = {
+			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 9 compare = equals } }
+			news_event = { id = ADISCORD_vorkerland_story.58 }
+		}
+		else_if = {
+			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 10 compare = equals } }
+			news_event = { id = ADISCORD_vorkerland_story.59 }
+		}
+		else_if = {
+			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 11 compare = equals } }
+			news_event = { id = ADISCORD_vorkerland_story.60 }
+		}
+		else_if = {
+			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 12 compare = equals } }
+			news_event = { id = ADISCORD_vorkerland_story.61 }
+		}
+	}
+}
+
+# Presentation for the six mutually exclusive doctrine branches. Called in the
+# declaring claimant's own scope from the focus completion reward that sets the
+# variant flag; the per-branch global flag makes a repeated or duplicated call
+# harmless. Each branch fires its own news event: a shared major news item
+# with check_variable title/desc blocks painted the generic fallback.
+ADISCORD_vorkerland_story_report_variant_declaration = {
+	if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_wkr_variant_neo_vorkerist
+			NOT = { has_global_flag = ADISCORD_vorkerland_story_variant_wkr_neo_vorkerist_reported }
+		}
+		set_global_flag = ADISCORD_vorkerland_story_variant_wkr_neo_vorkerist_reported
+		news_event = { id = ADISCORD_vorkerland_story.31 }
+	}
+	else_if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_wkr_variant_utilitarian
+			NOT = { has_global_flag = ADISCORD_vorkerland_story_variant_wkr_utilitarian_reported }
+		}
+		set_global_flag = ADISCORD_vorkerland_story_variant_wkr_utilitarian_reported
+		news_event = { id = ADISCORD_vorkerland_story.32 }
+	}
+	else_if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_vad_variant_imperial
+			NOT = { has_global_flag = ADISCORD_vorkerland_story_variant_vad_imperial_reported }
+		}
+		set_global_flag = ADISCORD_vorkerland_story_variant_vad_imperial_reported
+		news_event = { id = ADISCORD_vorkerland_story.33 }
+	}
+	else_if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_vad_variant_joint
+			NOT = { has_global_flag = ADISCORD_vorkerland_story_variant_vad_joint_reported }
+		}
+		set_global_flag = ADISCORD_vorkerland_story_variant_vad_joint_reported
+		news_event = { id = ADISCORD_vorkerland_story.34 }
+	}
+	else_if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_tva_variant_throughput
+			NOT = { has_global_flag = ADISCORD_vorkerland_story_variant_tva_throughput_reported }
+		}
+		set_global_flag = ADISCORD_vorkerland_story_variant_tva_throughput_reported
+		news_event = { id = ADISCORD_vorkerland_story.35 }
+	}
+	else_if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_tva_variant_preservation
+			NOT = { has_global_flag = ADISCORD_vorkerland_story_variant_tva_preservation_reported }
+		}
+		set_global_flag = ADISCORD_vorkerland_story_variant_tva_preservation_reported
+		news_event = { id = ADISCORD_vorkerland_story.36 }
+	}
+}
+
+# A main claimant leaving the central war is a world event, not only a prompt for
+# the victor. Each of the three is reported at most once, in its own scope, so
+# the news names the side that fell.
+ADISCORD_vorkerland_story_report_claimant_capitulation = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			tag = WKR
+			NOT = { has_global_flag = ADISCORD_vorkerland_story_wkr_capitulation_reported }
+		}
+		set_global_flag = ADISCORD_vorkerland_story_wkr_capitulation_reported
+		news_event = { id = ADISCORD_vorkerland_story.41 }
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			tag = VAD
+			NOT = { has_global_flag = ADISCORD_vorkerland_story_vad_capitulation_reported }
+		}
+		set_global_flag = ADISCORD_vorkerland_story_vad_capitulation_reported
+		news_event = { id = ADISCORD_vorkerland_story.42 }
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_central_showdown_started
+			tag = TVA
+			NOT = { has_global_flag = ADISCORD_vorkerland_story_tva_capitulation_reported }
+		}
+		set_global_flag = ADISCORD_vorkerland_story_tva_capitulation_reported
+		news_event = { id = ADISCORD_vorkerland_story.43 }
+	}
+}
+
 ADISCORD_vorkerland_story_reward_capital_winner = {
 	add_war_support = 0.02
 	add_command_power = 8
@@ -193,9 +421,18 @@ ADISCORD_vorkerland_story_check_first_claimant_capital_fall = {
 		}
 		ADISCORD_vorkerland_story_dispatch_tva_capital_fall = yes
 	}
+	# Runs after the capital chain above so the iconic-objective report can see
+	# which capital, if any, has just been announced separately. This effect is
+	# the story layer's single on_state_control_changed entry point, so the
+	# objective news needs no additional hook outside the story files.
+	ADISCORD_vorkerland_story_report_iconic_objective = yes
 }
 
 ADISCORD_vorkerland_story_offer_first_claimant_command_choice = {
+	# on_capitulation calls this inside FROM, the winner, so the report has to be
+	# scoped back to ROOT. Otherwise the news would name the side that won as the
+	# side that fell.
+	ROOT = { ADISCORD_vorkerland_story_report_claimant_capitulation = yes }
 	if = {
 		limit = {
 			has_global_flag = ADISCORD_vorkerland_central_showdown_started
@@ -203,7 +440,7 @@ ADISCORD_vorkerland_story_offer_first_claimant_command_choice = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_reunification_verified }
 			NOT = { has_global_flag = ADISCORD_vorkerland_story_first_claimant_capitulated }
 			NOT = { tag = WRK }
-			ROOT = { ADISCORD_vorkerland_is_central_claimant = yes }
+			ROOT = { ADISCORD_vorkerland_is_main_claimant = yes }
 		}
 		set_global_flag = ADISCORD_vorkerland_story_first_claimant_capitulated
 		if = {

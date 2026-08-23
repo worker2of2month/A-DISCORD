@@ -174,7 +174,10 @@ is_state_japan_wants = {
 }
 
 is_unlikely_country_tag = {
-	always = no
+	# Peace-conference AI uses this on a potential country that may not
+	# exist yet, so the gate cannot require exists = yes. Historical WRK
+	# stays dormant from the collapse until the verified postwar formation.
+	ADISCORD_vorkerland_wrk_release_is_forbidden = yes
 }
 
 JAP_army_faction_is_not_dominant = {

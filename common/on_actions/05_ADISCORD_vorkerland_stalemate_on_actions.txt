@@ -5,7 +5,7 @@ on_actions = {
 		effect = {
 			if = {
 				limit = {
-					ROOT = { ADISCORD_vorkerland_is_central_claimant = yes }
+					ROOT = { ADISCORD_vorkerland_is_main_claimant = yes }
 					FROM = { ADISCORD_vorkerland_is_central_minor = yes }
 				}
 				ROOT = { ADISCORD_vorkerland_schedule_central_stalemate_deadline = yes }

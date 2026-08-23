@@ -8,6 +8,78 @@ ADISCORD_vorkerland_dirty_state = {
 	local_supply_impact_factor = 0.35
 }
 
+# Regional autonomy is a defender's advantage inside its own district, on the
+# reference model: a local administration trades construction capacity for
+# supply, organisation and reserves in the terrain it actually governs. The
+# modifier is attached to the state, so a main claimant or a foreign expedition
+# that takes the ground does not inherit the defender's bonus with it.
+ADISCORD_vorkerland_regional_autonomy = {
+	enable = { always = yes }
+	icon = GFX_modifiers_generic_military_plans
+	remove_trigger = {
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			NOT = { owner = { ADISCORD_vorkerland_holds_regional_autonomy = yes } }
+		}
+	}
+	local_building_slots_factor = -0.25
+	state_production_speed_buildings_factor = -0.15
+	local_manpower = 0.30
+	local_supplies = 0.20
+	local_org_regain = 0.10
+	local_supply_impact_factor = -0.15
+}
+
+# Afrela's volunteer corps is the only foreign force Vlad Macri can receive, and
+# a single understrength division never changed the Ebern front. This makes the
+# expedition an actual contingent while Ebern is still fighting for survival.
+ADISCORD_vorkerland_macri_volunteer_corps = {
+	enable = { always = yes }
+	icon = GFX_modifiers_conscription_exemptions_granted
+	remove_trigger = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+	send_volunteer_size = 3
+	send_volunteer_divisions_required = -0.5
+	send_volunteer_factor = 0.25
+}
+
+# The master pacing dial of the whole civil war. Attached to every central state
+# for the duration, it slows offensives everywhere at once, which is what stops
+# the first claimant to gain momentum from running the table in a single year.
+# ground_attack_factor is the number to tune: raise the penalty and the war
+# lengthens, lower it and the war shortens; everything else follows from it.
+#
+# Calibrated to roughly 0.6 of the reference mod's values. Its penalties were set
+# for a front spanning twenty-plus states; our central theatre is seventeen
+# states and four to five deep, so copying them one to one would freeze the line
+# outright instead of merely slowing it.
+# The master pacing dial of the civil war: attached to every central state for
+# the duration, it slows offensives everywhere at once, which is what stops the
+# first claimant to gain momentum from running the table in a single year.
+# ground_attack_factor is the number to tune - raise the penalty and the war
+# lengthens, lower it and it shortens; everything else follows from it.
+#
+# Shaped after vanilla unplanned_offensive in 0_dynamic_modifiers.txt:425-434,
+# which is the only working attacker_modifier example available. An earlier
+# version added an enable block, a remove_trigger and a made-up
+# enemy_army_speed_factor; the engine rejected the definition outright and every
+# add_dynamic_modifier call then failed with "Invalid dynamic modifier". An
+# attacker modifier carries no enable or remove_trigger, and removal is
+# therefore explicit at the end of the war.
+#
+# Values are roughly 0.2 of vanilla's, which describes a catastrophically
+# unprepared assault rather than a pacing brake, and about 0.6 of the reference
+# mod's civil-war values, which were set for a front spanning twenty-plus states
+# against our seventeen.
+ADISCORD_vorkerland_civil_war_attrition = {
+	icon = GFX_modifiers_generic_military_plans
+	attacker_modifier = yes
+
+	air_cas_present_factor = -0.20
+	ground_attack_factor = -0.15
+	army_speed_factor = -0.15
+	local_org_regain = -0.08
+}
+
 ADISCORD_vorkerland_civil_war_exhaustion = {
 	icon = GFX_modifiers_sabotaged_resource
 	custom_modifier_tooltip = ADISCORD_vorkerland_civil_war_exhaustion_score_tt
@@ -17,4 +89,100 @@ ADISCORD_vorkerland_civil_war_exhaustion = {
 	industrial_capacity_factory = ADISCORD_vorkerland_civil_war_exhaustion_industrial_capacity_factory
 	army_morale_factor = ADISCORD_vorkerland_civil_war_exhaustion_army_morale_factor
 	surrender_limit = ADISCORD_vorkerland_civil_war_exhaustion_surrender_limit
+}
+
+# ---------------------------------------------------------------------
+# WAR ECONOMY
+# ---------------------------------------------------------------------
+# One modifier per claimant, replacing the pair of static spirits the branch
+# used to grant. Values come from variables written every month by
+# ADISCORD_vorkerland_refresh_doctrine_dynamic_state, so the strength tracks the
+# war instead of freezing at the moment the focus completed.
+#
+# The sign is the branch: positive for the claimant that stripped its civil
+# economy, negative for the one that protected it, zero for a claimant that
+# never took the fork. The gain axes are additionally scaled by how much of
+# the original industrial base is still in hand, while the cost axes are not.
+# Losing the districts that held the factories therefore turns a war economy
+# from a bargain into a bill.
+#
+# No enable and no remove_trigger: these are country modifiers applied and
+# removed explicitly by the focus tree, and every field below is a country
+# scope modifier. A state-scope field here would apply silently to nothing.
+ADISCORD_vorkerland_wkr_war_economy = {
+	icon = GFX_idea_generic_production_bonus
+	enable = { always = yes }
+
+	industrial_capacity_factory = ADISCORD_vorkerland_war_economy_output
+	consumer_goods_factor = ADISCORD_vorkerland_war_economy_goods
+	stability_factor = ADISCORD_vorkerland_war_economy_unrest
+	political_power_gain = ADISCORD_vorkerland_war_economy_authority
+}
+
+ADISCORD_vorkerland_vad_war_economy = {
+	icon = GFX_idea_generic_manpower_bonus
+	enable = { always = yes }
+
+	conscription = ADISCORD_vorkerland_war_economy_manpower
+	mobilization_speed = ADISCORD_vorkerland_war_economy_mobilization
+	stability_factor = ADISCORD_vorkerland_war_economy_unrest
+	political_power_gain = ADISCORD_vorkerland_war_economy_authority
+}
+
+ADISCORD_vorkerland_tva_war_economy = {
+	icon = GFX_idea_generic_central_management
+	enable = { always = yes }
+
+	industrial_capacity_factory = ADISCORD_vorkerland_war_economy_output
+	production_factory_max_efficiency_factor = ADISCORD_vorkerland_war_economy_efficiency
+	research_speed_factor = ADISCORD_vorkerland_war_economy_research
+	stability_factor = ADISCORD_vorkerland_war_economy_unrest
+	consumer_goods_factor = ADISCORD_vorkerland_war_economy_goods
+}
+
+# ---------------------------------------------------------------------
+# VARIANT DOCTRINE
+# ---------------------------------------------------------------------
+# Applied when a claimant publishes its programme. The static variant
+# spirits stay as the political statement; this overlay tracks the war.
+# Values are rewritten every month from the variant flags and the live
+# legitimacy score, so a programme that is winning the argument gets
+# sharper and one that is losing it goes hollow.
+#
+# No enable/remove_trigger: country modifiers, applied and cleared
+# explicitly. Every field is a country-scope modifier.
+ADISCORD_vorkerland_wkr_doctrine = {
+	icon = GFX_idea_generic_manpower_bonus
+	enable = { always = yes }
+
+	army_attack_factor = ADISCORD_vorkerland_doctrine_attack
+	army_defence_factor = ADISCORD_vorkerland_doctrine_defence
+	army_org_factor = ADISCORD_vorkerland_doctrine_org
+	conscription = ADISCORD_vorkerland_doctrine_manpower
+	stability_factor = ADISCORD_vorkerland_doctrine_stability
+	breakthrough_factor = ADISCORD_vorkerland_doctrine_breakthrough
+}
+
+ADISCORD_vorkerland_vad_doctrine = {
+	icon = GFX_idea_generic_production_bonus
+	enable = { always = yes }
+
+	army_attack_factor = ADISCORD_vorkerland_doctrine_attack
+	army_defence_factor = ADISCORD_vorkerland_doctrine_defence
+	army_org_factor = ADISCORD_vorkerland_doctrine_org
+	conscription = ADISCORD_vorkerland_doctrine_manpower
+	stability_factor = ADISCORD_vorkerland_doctrine_stability
+	breakthrough_factor = ADISCORD_vorkerland_doctrine_breakthrough
+}
+
+ADISCORD_vorkerland_tva_doctrine = {
+	icon = GFX_idea_generic_central_management
+	enable = { always = yes }
+
+	army_attack_factor = ADISCORD_vorkerland_doctrine_attack
+	army_defence_factor = ADISCORD_vorkerland_doctrine_defence
+	army_org_factor = ADISCORD_vorkerland_doctrine_org
+	conscription = ADISCORD_vorkerland_doctrine_manpower
+	stability_factor = ADISCORD_vorkerland_doctrine_stability
+	breakthrough_factor = ADISCORD_vorkerland_doctrine_breakthrough
 }

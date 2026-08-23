@@ -61,7 +61,7 @@ l_english:
  ADISCORD_vorkerland_restore_core_solar:0 "Integrate the Solar District"
  ADISCORD_vorkerland_restore_core_solar_desc:0 "Restore the three Solarino-district cores after all three states are owned and controlled; no surviving Solarino government is required."
  ADISCORD_vorkerland_recognize_free_republics:0 "Recognise the Free Republics"
- ADISCORD_vorkerland_recognize_free_republics_desc:0 "Formally recognise the surviving independent republics of Frealor and Golden River and conclude non-aggression pacts with them."
+ ADISCORD_vorkerland_recognize_free_republics_desc:0 "Formally recognise the surviving independent republics of Frealor and Zlatorech and conclude non-aggression pacts with them."
  ADISCORD_vorkerland_send_vla_support_tranche_1:0 "Supply the Volnograd Auxiliary Front"
  ADISCORD_vorkerland_send_vla_support_tranche_1_desc:0 "After concluding an alliance with Volnograd, transfer 300 infantry equipment and 30 support equipment to its active front. A second delivery cannot be prepared for 90 days."
  ADISCORD_vorkerland_send_vla_support_tranche_2:0 "Renew Volnograd Front Support"

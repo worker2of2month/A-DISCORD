@@ -9,10 +9,6 @@ ADISCORD_vorkerland_stalemate_campaign_active = {
 	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
 }
 
-ADISCORD_vorkerland_is_central_claimant = {
-	OR = { tag = WKR tag = VAD tag = TVA }
-}
-
 ADISCORD_vorkerland_is_central_minor = {
 	OR = {
 		tag = EYR

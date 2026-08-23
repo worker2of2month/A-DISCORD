@@ -1,0 +1,358 @@
+# Applied once, to the seventeen central states, when the wars open. The states
+# are listed rather than scanned because this sits in the phase layer, where a
+# world scan is forbidden. An attacker_modifier cannot carry remove_trigger;
+# ADISCORD_vorkerland_retire_civil_war_modifiers clears it at the end.
+ADISCORD_vorkerland_apply_central_attrition = {
+	if = {
+		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_central_attrition_applied } }
+		set_global_flag = ADISCORD_vorkerland_central_attrition_applied
+		32 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		33 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		35 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		36 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		37 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		38 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		39 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		40 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		75 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		81 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		102 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		104 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		106 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		121 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		122 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		123 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		124 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+	}
+}
+# Comeback valve. A claimant pushed to the brink digs in harder, which stops the
+# first side to lose momentum from simply dissolving and keeps all three alive
+# long enough for the war to be decided by play rather than by the opening
+# positions. Hysteresis between 0.65 and 0.55 prevents the idea from flickering.
+ADISCORD_vorkerland_refresh_organized_defence = {
+	if = {
+		limit = {
+			ADISCORD_vorkerland_is_main_claimant = yes
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+			has_war = yes
+			surrender_progress > 0.65
+			NOT = { has_idea = ADISCORD_vorkerland_organized_defence }
+		}
+		add_ideas = ADISCORD_vorkerland_organized_defence
+	}
+	else_if = {
+		limit = {
+			# The claimant guard leads deliberately. This effect is called from
+			# on_state_control_changed for both the gaining and the losing side,
+			# and opening the limit with has_idea evaluated it in every scope the
+			# hook produces, which logged 146 "is not A valid Idea" errors per
+			# collapse. The sibling branch above never did, because it tests the
+			# tag first and short-circuits.
+			ADISCORD_vorkerland_is_main_claimant = yes
+			has_idea = ADISCORD_vorkerland_organized_defence
+			OR = {
+				has_war = no
+				surrender_progress < 0.55
+				has_global_flag = ADISCORD_vorkerland_central_war_finished
+			}
+		}
+		remove_ideas = ADISCORD_vorkerland_organized_defence
+	}
+}
+
+# Iconic objectives. Twelve named centres each swing legitimacy once per
+# campaign when they change hands between claimants. One parameterised effect
+# serves all twelve; the caller supplies the identity and the value.
+#
+#	set_temp_variable = { ADISCORD_vorkerland_objective_id = 1 }
+#	set_temp_variable = { ADISCORD_vorkerland_objective_value = 0.15 }
+#	ADISCORD_vorkerland_resolve_iconic_objective = yes
+#
+# Called from on_state_control_changed, so ROOT is the new controller and FROM
+# is the previous one, matching the convention documented in
+# ADISCORD_vorkerland_story_check_first_claimant_capital_fall.
+#
+# The loser is deliberately not simply punished: it loses legitimacy, which is
+# combat power, but gains war support. Losing a symbol rallies the population
+# even as it discredits the government, and that keeps a losing claimant in the
+# war instead of collapsing the moment it is pushed off its own capital.
+ADISCORD_vorkerland_resolve_iconic_objective = {
+	ROOT = {
+		set_temp_variable = {
+			var = ADISCORD_vorkerland_legitimacy_delta
+			value = ADISCORD_vorkerland_objective_value
+		}
+		ADISCORD_vorkerland_add_legitimacy = yes
+		add_war_support = 0.04
+	}
+	FROM = {
+		set_temp_variable = {
+			var = ADISCORD_vorkerland_legitimacy_delta
+			value = ADISCORD_vorkerland_objective_value
+		}
+		multiply_temp_variable = { var = ADISCORD_vorkerland_legitimacy_delta value = -1 }
+		ADISCORD_vorkerland_add_legitimacy = yes
+		add_war_support = 0.05
+		add_stability = -0.02
+	}
+	# A global array is the ordinary array argument with a global. prefix. There
+	# is no separate global-array effect; a mistyped one parses cleanly and then
+	# silently does nothing, which would leave the once-per-campaign guard open.
+	add_to_array = {
+		array = global.ADISCORD_vorkerland_objectives_taken
+		value = ADISCORD_vorkerland_objective_id
+	}
+	set_variable = {
+		var = global.ADISCORD_vorkerland_objective_last
+		value = ADISCORD_vorkerland_objective_id
+	}
+}
+
+# Legitimacy ledger for the three claimants. The caller sets the temp parameter
+# and calls this; the parameter is never mutated here, so a caller may reuse it.
+#
+#	set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.08 }
+#	ADISCORD_vorkerland_add_legitimacy = yes
+#
+# _mod and _level are derived from the ledger on every write rather than being
+# accumulated separately, so they cannot drift out of step with it once the
+# ledger saturates at a clamp boundary.
+ADISCORD_vorkerland_add_legitimacy = {
+	add_to_variable = {
+		var = ADISCORD_vorkerland_legitimacy
+		value = ADISCORD_vorkerland_legitimacy_delta
+	}
+	clamp_variable = { var = ADISCORD_vorkerland_legitimacy min = -1 max = 1 }
+	ADISCORD_vorkerland_refresh_legitimacy_derived = yes
+	ADISCORD_vorkerland_refresh_doctrine_dynamic_state = yes
+	ADISCORD_vorkerland_refresh_legitimacy_leader = yes
+	if = { limit = { country_exists = WKR } WKR = { ADISCORD_vorkerland_refresh_claimant_coalition = yes } }
+	if = { limit = { country_exists = VAD } VAD = { ADISCORD_vorkerland_refresh_claimant_coalition = yes } }
+	if = { limit = { country_exists = TVA } TVA = { ADISCORD_vorkerland_refresh_claimant_coalition = yes } }
+}
+
+ADISCORD_vorkerland_refresh_legitimacy_derived = {
+	set_variable = {
+		var = ADISCORD_vorkerland_legitimacy_mod
+		value = ADISCORD_vorkerland_legitimacy
+	}
+	multiply_variable = { var = ADISCORD_vorkerland_legitimacy_mod value = 0.2 }
+	# [-1..1] mapped onto the integer band [0..5] used to gate events and decisions.
+	set_variable = {
+		var = ADISCORD_vorkerland_legitimacy_level
+		value = ADISCORD_vorkerland_legitimacy
+	}
+	add_to_variable = { var = ADISCORD_vorkerland_legitimacy_level value = 1 }
+	multiply_variable = { var = ADISCORD_vorkerland_legitimacy_level value = 2.5 }
+	round_variable = ADISCORD_vorkerland_legitimacy_level
+}
+
+ADISCORD_vorkerland_initialize_legitimacy = {
+	set_variable = { var = ADISCORD_vorkerland_legitimacy value = 0 }
+	set_variable = { var = ADISCORD_vorkerland_legitimacy_mod value = 0 }
+	set_variable = { var = ADISCORD_vorkerland_legitimacy_level value = 2 }
+	set_variable = { var = ADISCORD_vorkerland_central_control_score value = 0 }
+	add_dynamic_modifier = { modifier = ADISCORD_vorkerland_legitimacy_dynamic }
+}
+
+# Theatre priority follows the active central war, not elapsed calendar time.
+ADISCORD_vorkerland_refresh_theatre_priority = {
+	if = {
+		limit = {
+			ADISCORD_vorkerland_is_main_claimant = yes
+			is_ai = yes
+			has_war = yes
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+			NOT = { has_idea = ADISCORD_vorkerland_theatre_priority }
+		}
+		add_ideas = ADISCORD_vorkerland_theatre_priority
+	}
+	else_if = {
+		limit = {
+			ADISCORD_vorkerland_is_main_claimant = yes
+			has_idea = ADISCORD_vorkerland_theatre_priority
+			OR = {
+				is_ai = no
+				has_war = no
+				NOT = { has_global_flag = ADISCORD_vorkerland_phase_central_showdown }
+				has_global_flag = ADISCORD_vorkerland_central_war_finished
+			}
+		}
+		remove_ideas = ADISCORD_vorkerland_theatre_priority
+	}
+}
+
+# Preserve a live incumbent whenever neither rival has strictly greater
+# legitimacy. Only when there is no qualifying incumbent does the deterministic
+# WKR/VAD/TVA fallback elect a replacement.
+ADISCORD_vorkerland_refresh_legitimacy_leader = {
+	set_temp_variable = { ADISCORD_vorkerland_incumbent_leader = 0 }
+	if = {
+		limit = {
+			WKR = { has_country_flag = ADISCORD_vorkerland_legitimacy_leader ADISCORD_vorkerland_is_live_claimant = yes }
+			NOT = { VAD = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_legitimacy value = WKR.ADISCORD_vorkerland_legitimacy compare = greater_than } } }
+			NOT = { TVA = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_legitimacy value = WKR.ADISCORD_vorkerland_legitimacy compare = greater_than } } }
+		}
+		set_temp_variable = { ADISCORD_vorkerland_incumbent_leader = 1 }
+	}
+	if = {
+		limit = {
+			VAD = { has_country_flag = ADISCORD_vorkerland_legitimacy_leader ADISCORD_vorkerland_is_live_claimant = yes }
+			NOT = { WKR = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_legitimacy value = VAD.ADISCORD_vorkerland_legitimacy compare = greater_than } } }
+			NOT = { TVA = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_legitimacy value = VAD.ADISCORD_vorkerland_legitimacy compare = greater_than } } }
+		}
+		set_temp_variable = { ADISCORD_vorkerland_incumbent_leader = 2 }
+	}
+	if = {
+		limit = {
+			TVA = { has_country_flag = ADISCORD_vorkerland_legitimacy_leader ADISCORD_vorkerland_is_live_claimant = yes }
+			NOT = { WKR = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_legitimacy value = TVA.ADISCORD_vorkerland_legitimacy compare = greater_than } } }
+			NOT = { VAD = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_legitimacy value = TVA.ADISCORD_vorkerland_legitimacy compare = greater_than } } }
+		}
+		set_temp_variable = { ADISCORD_vorkerland_incumbent_leader = 3 }
+	}
+
+	if = { limit = { country_exists = WKR } WKR = { clr_country_flag = ADISCORD_vorkerland_legitimacy_leader } }
+	if = { limit = { country_exists = VAD } VAD = { clr_country_flag = ADISCORD_vorkerland_legitimacy_leader } }
+	if = { limit = { country_exists = TVA } TVA = { clr_country_flag = ADISCORD_vorkerland_legitimacy_leader } }
+
+	if = {
+		limit = { check_variable = { var = ADISCORD_vorkerland_incumbent_leader value = 1 } }
+		WKR = { set_country_flag = ADISCORD_vorkerland_legitimacy_leader }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_vorkerland_incumbent_leader value = 2 } }
+		VAD = { set_country_flag = ADISCORD_vorkerland_legitimacy_leader }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_vorkerland_incumbent_leader value = 3 } }
+		TVA = { set_country_flag = ADISCORD_vorkerland_legitimacy_leader }
+	}
+	else_if = {
+		limit = {
+			WKR = { ADISCORD_vorkerland_is_live_claimant = yes }
+			NOT = { VAD = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_legitimacy value = WKR.ADISCORD_vorkerland_legitimacy compare = greater_than } } }
+			NOT = { TVA = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_legitimacy value = WKR.ADISCORD_vorkerland_legitimacy compare = greater_than } } }
+		}
+		WKR = { set_country_flag = ADISCORD_vorkerland_legitimacy_leader }
+	}
+	else_if = {
+		limit = {
+			VAD = { ADISCORD_vorkerland_is_live_claimant = yes }
+			NOT = { TVA = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_legitimacy value = VAD.ADISCORD_vorkerland_legitimacy compare = greater_than } } }
+		}
+		VAD = { set_country_flag = ADISCORD_vorkerland_legitimacy_leader }
+	}
+	else_if = {
+		limit = { TVA = { ADISCORD_vorkerland_is_live_claimant = yes } }
+		TVA = { set_country_flag = ADISCORD_vorkerland_legitimacy_leader }
+	}
+}
+
+# Seventeen explicit checks keep campaign reconciliation bounded.
+ADISCORD_vorkerland_recount_central_control = {
+	set_variable = { var = ADISCORD_vorkerland_central_control_score value = 0 }
+	if = { limit = { controls_state = 32 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
+	if = { limit = { controls_state = 33 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
+	if = { limit = { controls_state = 35 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
+	if = { limit = { controls_state = 36 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
+	if = { limit = { controls_state = 37 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
+	if = { limit = { controls_state = 38 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
+	if = { limit = { controls_state = 39 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
+	if = { limit = { controls_state = 40 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
+	if = { limit = { controls_state = 75 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
+	if = { limit = { controls_state = 81 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
+	if = { limit = { controls_state = 102 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
+	if = { limit = { controls_state = 104 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
+	if = { limit = { controls_state = 106 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
+	if = { limit = { controls_state = 121 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
+	if = { limit = { controls_state = 122 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
+	if = { limit = { controls_state = 123 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
+	if = { limit = { controls_state = 124 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
+}
+
+# Clear all coalition overlays first, then add at most one against a living
+# legitimacy leader who controls a strict majority of the central theatre.
+ADISCORD_vorkerland_refresh_claimant_coalition = {
+	if = { limit = { has_idea = ADISCORD_vorkerland_coalition_against_wkr } remove_ideas = ADISCORD_vorkerland_coalition_against_wkr }
+	if = { limit = { has_idea = ADISCORD_vorkerland_coalition_against_vad } remove_ideas = ADISCORD_vorkerland_coalition_against_vad }
+	if = { limit = { has_idea = ADISCORD_vorkerland_coalition_against_tva } remove_ideas = ADISCORD_vorkerland_coalition_against_tva }
+
+	if = {
+		limit = {
+			ADISCORD_vorkerland_is_main_claimant = yes
+			is_ai = yes
+			has_war = yes
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+			NOT = { tag = WKR }
+			WKR = {
+				ADISCORD_vorkerland_is_live_claimant = yes
+				has_country_flag = ADISCORD_vorkerland_legitimacy_leader
+				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 8 compare = greater_than }
+			}
+		}
+		add_ideas = ADISCORD_vorkerland_coalition_against_wkr
+	}
+	else_if = {
+		limit = {
+			ADISCORD_vorkerland_is_main_claimant = yes
+			is_ai = yes
+			has_war = yes
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+			NOT = { tag = VAD }
+			VAD = {
+				ADISCORD_vorkerland_is_live_claimant = yes
+				has_country_flag = ADISCORD_vorkerland_legitimacy_leader
+				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 8 compare = greater_than }
+			}
+		}
+		add_ideas = ADISCORD_vorkerland_coalition_against_vad
+	}
+	else_if = {
+		limit = {
+			ADISCORD_vorkerland_is_main_claimant = yes
+			is_ai = yes
+			has_war = yes
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+			NOT = { tag = TVA }
+			TVA = {
+				ADISCORD_vorkerland_is_live_claimant = yes
+				has_country_flag = ADISCORD_vorkerland_legitimacy_leader
+				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 8 compare = greater_than }
+			}
+		}
+		add_ideas = ADISCORD_vorkerland_coalition_against_tva
+	}
+}
+
+ADISCORD_vorkerland_reconcile_campaign_state = {
+	if = { limit = { country_exists = WKR } WKR = { ADISCORD_vorkerland_recount_central_control = yes } }
+	if = { limit = { country_exists = VAD } VAD = { ADISCORD_vorkerland_recount_central_control = yes } }
+	if = { limit = { country_exists = TVA } TVA = { ADISCORD_vorkerland_recount_central_control = yes } }
+	ADISCORD_vorkerland_refresh_legitimacy_leader = yes
+	if = {
+		limit = { country_exists = WKR }
+		WKR = {
+			ADISCORD_vorkerland_refresh_theatre_priority = yes
+			ADISCORD_vorkerland_refresh_claimant_coalition = yes
+		}
+	}
+	if = {
+		limit = { country_exists = VAD }
+		VAD = {
+			ADISCORD_vorkerland_refresh_theatre_priority = yes
+			ADISCORD_vorkerland_refresh_claimant_coalition = yes
+		}
+	}
+	if = {
+		limit = { country_exists = TVA }
+		TVA = {
+			ADISCORD_vorkerland_refresh_theatre_priority = yes
+			ADISCORD_vorkerland_refresh_claimant_coalition = yes
+		}
+	}
+}

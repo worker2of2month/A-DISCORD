@@ -228,6 +228,73 @@ ADISCORD_grant_starting_technology_profile = {
             self._issues(),
         )
 
+    def test_identical_script_source_alias_reuses_canonical_template_metadata(self) -> None:
+        self._write(
+            "common/scripted_effects/ADISCORD_template_alias.txt",
+            '''ADISCORD_ensure_audit_line = {
+    if = {
+        limit = { NOT = { has_template = "Audit Line" } }
+        division_template = {
+            name = "Audit Line"
+            regiments = { infantry = { x = 0 y = 0 } }
+            support = { engineer = { x = 0 y = 0 } }
+        }
+    }
+}
+''',
+        )
+        audit = self._valid_audit()
+        audit["templates"][0]["source_aliases"] = [
+            {
+                "kind": "script",
+                "path": "common/scripted_effects/ADISCORD_template_alias.txt",
+                "owner": "script",
+            }
+        ]
+        self._write_audit(audit)
+
+        issues = self._issues()
+        self.assertFalse(any("template coverage" in issue for issue in issues), issues)
+        self.assertFalse(any("computed" in issue for issue in issues), issues)
+
+    def test_source_alias_cannot_drop_lock_or_recruitment_metadata(self) -> None:
+        oob = self.root / "history/units/AAA.txt"
+        oob.write_text(
+            oob.read_text(encoding="utf-8").replace(
+                'name = "Аудитная линия"',
+                'name = "Аудитная линия"\n    is_locked = no\n    force_allow_recruiting = yes',
+            ),
+            encoding="utf-8",
+        )
+        self._write(
+            "common/scripted_effects/ADISCORD_template_alias.txt",
+            '''ADISCORD_ensure_audit_line = {
+    division_template = {
+        name = "Audit Line"
+        is_locked = no
+        regiments = { infantry = { x = 0 y = 0 } }
+        support = { engineer = { x = 0 y = 0 } }
+    }
+}
+''',
+        )
+        audit = self._valid_audit()
+        audit["templates"][0]["definition_metadata"] = {
+            "is_locked": False,
+            "force_allow_recruiting": True,
+        }
+        audit["templates"][0]["source_aliases"] = [
+            {
+                "kind": "script",
+                "path": "common/scripted_effects/ADISCORD_template_alias.txt",
+                "owner": "script",
+            }
+        ]
+        self._write_audit(audit)
+
+        issues = self._issues()
+        self.assertTrue(any("definition metadata" in issue for issue in issues), issues)
+
     def test_create_unit_and_delete_references_are_semantic_and_covered(self) -> None:
         self._write(
             "common/scripted_effects/ADISCORD_refs.txt",

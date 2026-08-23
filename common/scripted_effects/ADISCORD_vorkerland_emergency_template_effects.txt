@@ -1,0 +1,57 @@
+# Idempotent runtime guarantees for every late-spawn civil-war template.
+# These effects run in country scope before any capital/state scope is entered.
+ADISCORD_vorkerland_ensure_emergency_militia_template = {
+	if = { limit = { NOT = { has_template = "Emergency Militia" } }
+		division_template = { name = "Emergency Militia" division_names_group = VORKERLAND_EMERGENCY_INF_01 is_locked = yes force_allow_recruiting = yes regiments = { ADISCORD_militia = { x = 0 y = 0 } ADISCORD_militia = { x = 0 y = 1 } ADISCORD_militia = { x = 0 y = 2 } } }
+	}
+}
+ADISCORD_vorkerland_ensure_worker_home_guard_template = {
+	if = { limit = { NOT = { has_template = "Worker Home Guard" } }
+		division_template = { name = "Worker Home Guard" division_names_group = WRK_INF_01 is_locked = yes force_allow_recruiting = yes regiments = { ADISCORD_militia = { x = 0 y = 0 } ADISCORD_militia = { x = 0 y = 1 } ADISCORD_militia = { x = 0 y = 2 } } }
+	}
+}
+ADISCORD_vorkerland_ensure_workerland_militia_template = {
+	if = { limit = { NOT = { has_template = "Workerland Militia" } }
+		division_template = { name = "Workerland Militia" division_names_group = WRK_INF_01 regiments = { ADISCORD_militia = { x = 0 y = 0 } ADISCORD_militia = { x = 0 y = 1 } ADISCORD_militia = { x = 1 y = 0 } } }
+	}
+}
+ADISCORD_vorkerland_ensure_workerland_mobile_group_template = {
+	if = { limit = { NOT = { has_template = "Workerland Mobile Group" } }
+		division_template = { name = "Workerland Mobile Group" division_names_group = WRK_INF_01 is_locked = no force_allow_recruiting = yes regiments = { ADISCORD_combat_platform = { x = 0 y = 0 } ADISCORD_combat_platform = { x = 0 y = 1 } ADISCORD_combat_platform = { x = 0 y = 2 } ADISCORD_combat_platform = { x = 0 y = 3 } ADISCORD_mechanized_infantry = { x = 1 y = 0 } ADISCORD_mechanized_infantry = { x = 1 y = 1 } ADISCORD_mechanized_infantry = { x = 1 y = 2 } ADISCORD_mechanized_infantry = { x = 2 y = 0 } ADISCORD_mechanized_infantry = { x = 2 y = 1 } ADISCORD_mechanized_infantry = { x = 2 y = 2 } } support = { engineer = { x = 0 y = 0 } artillery = { x = 0 y = 1 } maintenance_company = { x = 0 y = 2 } signal_company = { x = 0 y = 3 } } }
+	}
+}
+ADISCORD_vorkerland_ensure_armi_security_detachment_template = {
+	if = { limit = { NOT = { has_template = "Armi Security Detachment" } }
+		division_template = { name = "Armi Security Detachment" division_names_group = ADISCORD_INF_01 regiments = { ADISCORD_militia = { x = 0 y = 0 } ADISCORD_militia = { x = 0 y = 1 } ADISCORD_militia = { x = 1 y = 0 } } }
+	}
+}
+ADISCORD_vorkerland_ensure_armi_mobile_group_template = {
+	if = { limit = { NOT = { has_template = "Armi Mobile Group" } }
+		division_template = { name = "Armi Mobile Group" division_names_group = ADISCORD_INF_01 regiments = { ADISCORD_combat_platform = { x = 0 y = 0 } ADISCORD_combat_platform = { x = 0 y = 1 } ADISCORD_combat_platform = { x = 0 y = 2 } ADISCORD_combat_platform = { x = 0 y = 3 } ADISCORD_mechanized_infantry = { x = 1 y = 0 } ADISCORD_mechanized_infantry = { x = 1 y = 1 } ADISCORD_mechanized_infantry = { x = 1 y = 2 } ADISCORD_mechanized_infantry = { x = 2 y = 0 } ADISCORD_mechanized_infantry = { x = 2 y = 1 } ADISCORD_mechanized_infantry = { x = 2 y = 2 } } support = { engineer = { x = 0 y = 0 } artillery = { x = 0 y = 1 } maintenance_company = { x = 0 y = 2 } signal_company = { x = 0 y = 3 } } }
+	}
+}
+ADISCORD_vorkerland_ensure_tva_collapse_militia_template = {
+	if = { limit = { NOT = { has_template = "TVA Collapse Militia" } }
+		division_template = { name = "TVA Collapse Militia" division_names_group = TVA_COLLAPSE_INF_01 regiments = { ADISCORD_militia = { x = 0 y = 0 } ADISCORD_militia = { x = 0 y = 1 } ADISCORD_militia = { x = 0 y = 2 } } }
+	}
+}
+ADISCORD_vorkerland_ensure_tva_infiltration_cell_template = {
+	if = { limit = { NOT = { has_template = "TVA Infiltration Cell" } }
+		division_template = { name = "TVA Infiltration Cell" division_names_group = TVA_COLLAPSE_INF_01 regiments = { ADISCORD_militia = { x = 0 y = 0 } ADISCORD_militia = { x = 0 y = 1 } } }
+	}
+}
+ADISCORD_vorkerland_ensure_wps_collapse_militia_template = {
+	if = { limit = { NOT = { has_template = "WPS Collapse Militia" } }
+		division_template = { name = "WPS Collapse Militia" division_names_group = WPS_COLLAPSE_INF_01 regiments = { ADISCORD_militia = { x = 0 y = 0 } ADISCORD_militia = { x = 0 y = 1 } ADISCORD_militia = { x = 0 y = 2 } } }
+	}
+}
+ADISCORD_vorkerland_ensure_tgd_urban_guard_template = {
+	if = { limit = { NOT = { has_template = "TGD Urban Guard" } }
+		division_template = { name = "TGD Urban Guard" division_names_group = TGD_COLLAPSE_INF_01 regiments = { ADISCORD_militia = { x = 0 y = 0 } ADISCORD_militia = { x = 0 y = 1 } ADISCORD_militia = { x = 0 y = 2 } } }
+	}
+}
+ADISCORD_vorkerland_ensure_line_infantry_brigade_template = {
+	if = { limit = { NOT = { has_template = "Line Infantry Brigade" } }
+		division_template = { name = "Line Infantry Brigade" division_names_group = ADISCORD_INF_01 regiments = { infantry = { x = 0 y = 0 } infantry = { x = 0 y = 1 } infantry = { x = 0 y = 2 } infantry = { x = 1 y = 0 } infantry = { x = 1 y = 1 } infantry = { x = 1 y = 2 } } support = { engineer = { x = 0 y = 0 } } }
+	}
+}

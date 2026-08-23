@@ -30,7 +30,7 @@ ADISCORD_vorkerland_distribute_central_states_to_cobelligerents = {
 				NOT = { has_capitulated = yes }
 				NOT = { tag = FROM }
 				has_war_together_with = FROM
-				ADISCORD_vorkerland_is_central_claimant = yes
+				ADISCORD_vorkerland_is_main_claimant = yes
 			}
 		}
 		CONTROLLER = { transfer_state = PREV }

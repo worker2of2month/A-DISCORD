@@ -20,7 +20,11 @@ ROOT = Path(__file__).resolve().parents[2]
 DIPLOMACY_TRIGGERS = Path("common/scripted_triggers/ADISCORD_vorkerland_diplomacy_triggers.txt")
 DIPLOMACY_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_diplomacy_effects.txt")
 DIPLOMACY_DECISIONS = Path("common/decisions/ADISCORD_vorkerland_diplomacy_decisions.txt")
-FOCUS_DECISIONS = Path("common/decisions/ADISCORD_vorkerland_focus_decisions.txt")
+FOCUS_DECISION_FILES = (
+    Path("common/decisions/ADISCORD_vorkerland_focus_operations_decisions.txt"),
+    Path("common/decisions/ADISCORD_vorkerland_allied_support_decisions.txt"),
+)
+FOCUS_DECISIONS = FOCUS_DECISION_FILES
 FOCUS_DECISION_EFFECTS = Path(
     "common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt"
 )
@@ -33,6 +37,12 @@ FOCUS_FILE = Path("common/national_focus/ADISCORD_vorkerland_civil_war_focus.txt
 COLLAPSE_AI = Path("common/ai_strategy/ADISCORD_vorkerland_collapse_ai.txt")
 WKR_AI_PLANS = Path(
     "common/ai_strategy_plans/ADISCORD_vorkerland_wkr_wartime_plan.txt"
+)
+VAD_AI_PLANS = Path(
+    "common/ai_strategy_plans/ADISCORD_vorkerland_vad_wartime_plan.txt"
+)
+TVA_AI_PLANS = Path(
+    "common/ai_strategy_plans/ADISCORD_vorkerland_tva_wartime_plan.txt"
 )
 COUNTRY_COSMETICS = Path("common/countries/cosmetic.txt")
 DIPLOMACY_ENGLISH = Path("localisation/english/ADISCORD_vorkerland_diplomacy_l_english.yml")
@@ -113,6 +123,7 @@ WKR_INTERVENTION_BORDER = "ADISCORD_vorkerland_wkr_has_solyarino_intervention_bo
 WKR_INTERVENTION = "ADISCORD_vorkerland_attempt_wkr_solyarino_intervention"
 VERIFY_WKR_INTERVENTION = "ADISCORD_vorkerland_verify_wkr_solyarino_intervention"
 CLEAR_WKR_INTERVENTION = "ADISCORD_vorkerland_clear_wkr_solyarino_intervention"
+VAD_SOLYARINO_COUNTER = "ADISCORD_vorkerland_attempt_vad_solyarino_counter"
 WKR_OUTCOME_TRIGGER = "ADISCORD_vorkerland_wkr_solyarino_target_wars_finished"
 QUEUE_WKR_OUTCOME = "ADISCORD_vorkerland_queue_wkr_solyarino_outcome_check"
 CHECK_WKR_OUTCOME = "ADISCORD_vorkerland_check_wkr_solyarino_outcome"
@@ -120,6 +131,10 @@ MATERIALIZE_WKR_PROTECTORATE = "ADISCORD_vorkerland_materialize_sol_worker_prote
 VERIFY_WKR_PROTECTORATE = "ADISCORD_vorkerland_verify_sol_worker_protectorate"
 WKR_AIR_BOOTSTRAP = "ADISCORD_vorkerland_bootstrap_wkr_air_sustainment"
 WKR_DYNAMIC_FORTS = "ADISCORD_vorkerland_build_wkr_live_frontline_fortifications"
+REMAINING_FRONTS_TRIGGER = "ADISCORD_vorkerland_claimant_has_remaining_central_targets"
+REMAINING_FRONTS_EFFECT = "ADISCORD_vorkerland_attempt_remaining_central_fronts"
+CENTRAL_MINORS = ("EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV")
+CENTRAL_MAJORS = ("WKR", "VAD", "TVA")
 
 VAD_SOLAR_BORDER_PAIRS = ((81, 307), (110, 198), (110, 307))
 WKR_SOLAR_BORDER_PAIRS = (
@@ -162,7 +177,9 @@ LIVE_ALLY_OR_FOREIGN_STATES = frozenset(
 )
 
 
-def read(relative: Path) -> str:
+def read(relative: Path | tuple[Path, ...]) -> str:
+    if isinstance(relative, tuple):
+        return "\n".join(read(path) for path in relative)
     path = ROOT / relative
     if not path.is_file():
         return ""
@@ -254,7 +271,9 @@ def event_block(text: str, event_id: str) -> str:
     return ""
 
 
-def _load(relative: Path, issues: list[str]) -> str:
+def _load(relative: Path | tuple[Path, ...], issues: list[str]) -> str:
+    if isinstance(relative, tuple):
+        return "\n".join(_load(path, issues) for path in relative)
     path = ROOT / relative
     if not path.is_file():
         issues.append(f"missing required file {relative.as_posix()}")
@@ -1259,6 +1278,7 @@ def validate_wkr_solyarino_intervention() -> list[str]:
         "set_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active",
         "set_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_pending",
         "country_event = { id = ADISCORD_vorkerland_diplomacy.10 days = 1 }",
+        f"{VAD_SOLYARINO_COUNTER} = yes",
     ):
         if token not in attempt:
             issues.append(f"{WKR_INTERVENTION} lacks launch token {token}")
@@ -1295,6 +1315,7 @@ def validate_wkr_solyarino_intervention() -> list[str]:
         "set_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_retry",
         "country_event = { id = ADISCORD_vorkerland_diplomacy.11 days = 1 }",
         f"{CLEAR_WKR_INTERVENTION} = yes",
+        f"{VAD_SOLYARINO_COUNTER} = yes",
     ):
         if token not in verify:
             issues.append(f"{VERIFY_WKR_INTERVENTION} lacks bounded retry token {token}")
@@ -1309,12 +1330,31 @@ def validate_wkr_solyarino_intervention() -> list[str]:
     )
     for token in (
         "clr_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active",
+        "clr_global_flag = ADISCORD_vorkerland_vad_solyarino_counter_active",
         "has_country_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_failed",
         "has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_failed",
         "ADISCORD_vorkerland_begin_reunification = yes",
     ):
         if token not in cleanup:
             issues.append(f"{CLEAR_WKR_INTERVENTION} lacks terminal cleanup token {token}")
+
+    counter = _unique_block(effects, VAD_SOLYARINO_COUNTER, "VAD Solarino counter", issues)
+    for token in (
+        "has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_vad_solyarino_counter_active }",
+        "declare_war_on = { target = WKR type = annex_everything }",
+        "declare_war_on = { target = SOL type = annex_everything }",
+        "declare_war_on = { target = SRA type = annex_everything }",
+        "declare_war_on = { target = CSL type = annex_everything }",
+        "set_global_flag = ADISCORD_vorkerland_vad_solyarino_counter_active",
+    ):
+        if token not in counter:
+            issues.append(f"{VAD_SOLYARINO_COUNTER} lacks counter token {token}")
+    if counter.count("declare_war_on =") != 4:
+        issues.append(f"{VAD_SOLYARINO_COUNTER} must declare on WKR and the three Solarino targets")
+    for tag in ("sol", "sra", "csl"):
+        if f"has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_{tag}" not in counter:
+            issues.append(f"{VAD_SOLYARINO_COUNTER} must follow WKR's recorded {tag.upper()} target")
     if "ADISCORD_vorkerland_wkr_solyarino_target_wars_finished = yes" in cleanup:
         issues.append("WKR cleanup must not erase a successful peace before the outcome verifier")
 
@@ -1685,6 +1725,25 @@ def validate_wkr_solyarino_intervention() -> list[str]:
         ):
             if token not in profile:
                 issues.append(f"WKR {upper} front AI lacks {token}")
+    for tag in ("sol", "sra", "csl"):
+        profile = _unique_block(
+            ai,
+            f"ADISCORD_vorkerland_vad_solyarino_counter_front_{tag}",
+            "VAD Solarino counter front AI",
+            issues,
+        )
+        upper = tag.upper()
+        for token in (
+            "has_global_flag = ADISCORD_vorkerland_vad_solyarino_counter_active",
+            f"has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_{tag}",
+            f"has_war_with = {upper}",
+            f"front_unit_request tag = {upper} value = 40",
+            f"conquer id = {upper} value = 250",
+        ):
+            if token not in profile:
+                issues.append(f"VAD {upper} counter front AI lacks {token}")
+        if "has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active" in profile:
+            issues.append(f"VAD {upper} counter front must not reuse the authored solar flags")
 
     core_plans = (
         _unique_block(
@@ -1764,6 +1823,110 @@ def validate_wkr_solyarino_intervention() -> list[str]:
     return list(dict.fromkeys(issues))
 
 
+def validate_remaining_central_fronts() -> list[str]:
+    issues: list[str] = []
+    triggers = _load(DIPLOMACY_TRIGGERS, issues)
+    effects = _load(DIPLOMACY_EFFECTS, issues)
+    focus_source = _load(FOCUS_FILE, issues)
+    wkr_plans = _load(WKR_AI_PLANS, issues)
+    vad_plans = _load(VAD_AI_PLANS, issues)
+    tva_plans = _load(TVA_AI_PLANS, issues)
+    if issues:
+        return issues
+
+    trigger = _unique_block(
+        triggers, REMAINING_FRONTS_TRIGGER, "remaining-fronts trigger", issues
+    )
+    for token in (
+        "tag = WKR",
+        "tag = VAD",
+        "tag = TVA",
+        "is_subject = no",
+        "NOT = { has_capitulated = yes }",
+        "NOT = { has_war_with = ROOT }",
+        "NOT = { is_in_faction_with = ROOT }",
+    ):
+        if token not in trigger:
+            issues.append(f"{REMAINING_FRONTS_TRIGGER} lacks {token}")
+    if "any_neighbor_country" in trigger:
+        issues.append(f"{REMAINING_FRONTS_TRIGGER} must not require adjacency")
+    for tag in CENTRAL_MINORS:
+        if f"{tag} = {{" not in trigger:
+            issues.append(f"{REMAINING_FRONTS_TRIGGER} omits central minor {tag}")
+    for tag in CENTRAL_MAJORS:
+        if f"NOT = {{ tag = {tag} }}" not in trigger:
+            issues.append(f"{REMAINING_FRONTS_TRIGGER} must exclude self when testing {tag}")
+
+    attempt = _unique_block(
+        effects, REMAINING_FRONTS_EFFECT, "remaining-fronts effect", issues
+    )
+    for forbidden in ("every_country", "random_country", "any_neighbor_country"):
+        if forbidden in attempt:
+            issues.append(f"{REMAINING_FRONTS_EFFECT} contains forbidden {forbidden}")
+    expected_declarations = 3 * (len(CENTRAL_MINORS) + len(CENTRAL_MAJORS) - 1)
+    if attempt.count("declare_war_on =") != expected_declarations:
+        issues.append(
+            f"{REMAINING_FRONTS_EFFECT} must own exactly {expected_declarations} "
+            f"independent declaration blocks, found {attempt.count('declare_war_on =')}"
+        )
+    for claimant in CENTRAL_MAJORS:
+        if f"tag = {claimant}" not in attempt:
+            issues.append(f"{REMAINING_FRONTS_EFFECT} lacks claimant block {claimant}")
+        if f"declare_war_on = {{ target = {claimant} type = annex_everything }}" not in attempt:
+            issues.append(f"{REMAINING_FRONTS_EFFECT} never declares on rival {claimant}")
+    for tag in CENTRAL_MINORS:
+        leave = f"{tag} = {{ ADISCORD_vorkerland_leave_inherited_faction = yes }}"
+        declare = f"declare_war_on = {{ target = {tag} type = annex_everything }}"
+        if attempt.count(leave) != 3:
+            issues.append(f"{REMAINING_FRONTS_EFFECT} must break inherited {tag} factions per claimant")
+        if attempt.count(declare) != 3:
+            issues.append(f"{REMAINING_FRONTS_EFFECT} must declare on {tag} from each claimant")
+    for tag in CENTRAL_MAJORS:
+        leave = f"{tag} = {{ ADISCORD_vorkerland_leave_inherited_faction = yes }}"
+        if leave in attempt:
+            issues.append(f"{REMAINING_FRONTS_EFFECT} must not break rival major {tag} factions")
+
+    for focus_id, unique_token in (
+        ("WKR_open_the_remaining_fronts", "ADISCORD_vorkerland_focus_wkr_operation_southbound"),
+        ("VAD_open_the_remaining_fronts", "ADISCORD_vorkerland_focus_vad_imperial_mandate"),
+        ("TVA_open_the_remaining_fronts", "ADISCORD_vorkerland_focus_tva_iteration_two_authorized"),
+    ):
+        blocks = [
+            block
+            for block in named_blocks(focus_source, "focus")
+            if re.search(rf"(?m)^\s*id\s*=\s*{focus_id}\s*$", block)
+        ]
+        if len(blocks) != 1:
+            issues.append(f"{focus_id} must be defined exactly once, found {len(blocks)}")
+            continue
+        block = blocks[0]
+        for token in (
+            f"{REMAINING_FRONTS_TRIGGER} = yes",
+            f"{REMAINING_FRONTS_EFFECT} = yes",
+            unique_token,
+            "has_country_flag = ADISCORD_vorkerland_focus_central_minor_front_protracted",
+        ):
+            if token not in block:
+                issues.append(f"{focus_id} lacks remaining-fronts token {token}")
+        for forbidden in ("declare_war_on", "every_country", "random_country"):
+            if forbidden in block:
+                issues.append(f"{focus_id} must delegate world effects; found {forbidden}")
+
+    for plans, plan_id, focus_id in (
+        (wkr_plans, "ADISCORD_vorkerland_wkr_remaining_fronts_plan", "WKR_open_the_remaining_fronts"),
+        (vad_plans, "ADISCORD_vorkerland_vad_remaining_fronts_plan", "VAD_open_the_remaining_fronts"),
+        (tva_plans, "ADISCORD_vorkerland_tva_remaining_fronts_plan", "TVA_open_the_remaining_fronts"),
+    ):
+        plan = _unique_block(plans, plan_id, "remaining-fronts AI plan", issues)
+        if focus_id not in plan:
+            issues.append(f"{plan_id} omits {focus_id}")
+        if "weight = { factor = 5 }" not in plan:
+            issues.append(f"{plan_id} must outrank ordinary wartime plans")
+        if f"{REMAINING_FRONTS_TRIGGER} = yes" not in plan:
+            issues.append(f"{plan_id} lacks remaining-target enable")
+    return list(dict.fromkeys(issues))
+
+
 def collect_issues() -> list[str]:
     issues: list[str] = []
     for validator in (
@@ -1773,6 +1936,7 @@ def collect_issues() -> list[str]:
         validate_vad_intervention_and_restoration,
         validate_counter_intervention,
         validate_wkr_solyarino_intervention,
+        validate_remaining_central_fronts,
         validate_showdown_allies,
         validate_vad_egc_route_priority,
         validate_core_packages,

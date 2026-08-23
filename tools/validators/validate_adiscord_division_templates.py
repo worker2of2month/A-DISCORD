@@ -68,6 +68,8 @@ class ActualTemplate:
     name: str
     line: int
     slots: tuple[Slot, ...]
+    is_locked: bool | None
+    force_allow_recruiting: bool | None
 
 
 @dataclass(frozen=True)
@@ -222,6 +224,15 @@ def _number(entries: list[Entry], key: str, default: float | None = None) -> flo
         return default
 
 
+def _yes_no(entries: list[Entry], key: str) -> bool | None:
+    value = _scalar(entries, key)
+    if value == "yes":
+        return True
+    if value == "no":
+        return False
+    return None
+
+
 def _factor(
     entries: list[Entry],
     key: str,
@@ -313,7 +324,17 @@ def collect_templates_and_references(root: Path) -> tuple[list[ActualTemplate], 
                 issues.append(f"{relative}:{entry.line}: division template has no direct name")
                 continue
             templates.append(
-                ActualTemplate("oob", relative, owner, f"oob:{oob}", name, entry.line, _slots(entry.value))
+                ActualTemplate(
+                    "oob",
+                    relative,
+                    owner,
+                    f"oob:{oob}",
+                    name,
+                    entry.line,
+                    _slots(entry.value),
+                    _yes_no(entry.value, "is_locked"),
+                    _yes_no(entry.value, "force_allow_recruiting"),
+                )
             )
         for _, entry in _walk(ast):
             if entry.key != "division" or not isinstance(entry.value, list):
@@ -357,7 +378,17 @@ def collect_templates_and_references(root: Path) -> tuple[list[ActualTemplate], 
                 name = _scalar(entry.value, "name")
                 if name is not None:
                     templates.append(
-                        ActualTemplate("script", relative, "script", f"script:{relative}", name, entry.line, _slots(entry.value))
+                        ActualTemplate(
+                            "script",
+                            relative,
+                            "script",
+                            f"script:{relative}",
+                            name,
+                            entry.line,
+                            _slots(entry.value),
+                            _yes_no(entry.value, "is_locked"),
+                            _yes_no(entry.value, "force_allow_recruiting"),
+                        )
                     )
             elif entry.key == "division_template" and isinstance(entry.value, str):
                 references.append(
@@ -725,6 +756,22 @@ def _validate_computed_rows(
             issues.append(
                 f"{row.get('key')}: computed equipment availability {actual.availability} does not match audit"
             )
+        expected_metadata = row.get("definition_metadata")
+        if isinstance(expected_metadata, dict):
+            actual_metadata = {
+                "is_locked": template.is_locked,
+                "force_allow_recruiting": template.force_allow_recruiting,
+            }
+            mismatches = {
+                field: (expected, actual_metadata.get(field))
+                for field, expected in expected_metadata.items()
+                if actual_metadata.get(field) is not expected
+            }
+            if mismatches:
+                issues.append(
+                    f"{row.get('key')}: computed definition metadata {actual_metadata} "
+                    f"does not match audit {expected_metadata}"
+                )
         role = row.get("ai_role")
         floor = floors.get(role)
         if not isinstance(floor, (int, float)):
@@ -757,17 +804,49 @@ def _validate_schema(audit: dict[str, object]) -> list[str]:
             keys = seen
     for row in audit.get("templates", []):
         key = row.get("key")
-        source = row.get("source")
-        if not isinstance(source, dict):
-            issues.append(f"{key}: source must be an object")
-        else:
+        definition_metadata = row.get("definition_metadata")
+        if definition_metadata is not None:
+            if not isinstance(definition_metadata, dict):
+                issues.append(f"{key}: definition_metadata must be an object")
+            else:
+                unknown_metadata = set(definition_metadata) - {
+                    "is_locked",
+                    "force_allow_recruiting",
+                }
+                if unknown_metadata:
+                    issues.append(
+                        f"{key}: definition_metadata has unknown fields {sorted(unknown_metadata)}"
+                    )
+                for field, value in definition_metadata.items():
+                    if not isinstance(value, bool):
+                        issues.append(
+                            f"{key}: definition_metadata {field} must be boolean"
+                        )
+        source_aliases = row.get("source_aliases", [])
+        if not isinstance(source_aliases, list):
+            issues.append(f"{key}: source_aliases must be a list")
+            source_aliases = []
+        for label, source in (
+            ("source", row.get("source")),
+            *(
+                (f"source_aliases[{index}]", alias)
+                for index, alias in enumerate(source_aliases)
+            ),
+        ):
+            if not isinstance(source, dict):
+                issues.append(f"{key}: {label} must be an object")
+                continue
             source_kind = source.get("kind")
             if source_kind not in {"oob", "script"}:
-                issues.append(f"{key}: source kind must be oob or script, got {source_kind}")
+                issues.append(
+                    f"{key}: {label} kind must be oob or script, got {source_kind}"
+                )
             for field in ("path", "owner"):
                 value = source.get(field)
                 if not isinstance(value, str) or not value or not value.isascii():
-                    issues.append(f"{key}: source {field} must be a non-empty ASCII string")
+                    issues.append(
+                        f"{key}: {label} {field} must be a non-empty ASCII string"
+                    )
         replacement = row.get("replacement_path")
         if not isinstance(replacement, dict) or replacement.get("kind") not in {"retain", "replace"}:
             issues.append(f"{key}: invalid replacement_path")
@@ -825,54 +904,61 @@ def _validate_structural_coverage(
     row_by_actual: dict[int, dict[str, object]] = {}
     optional_paths = {entry["path"] for entry in audit.get("optional_sources", [])}
     for row in audit.get("templates", []):
-        source = row.get("source", {})
-        path = source.get("path")
-        if path in optional_paths:
-            if source.get("kind") != "oob":
-                issues.append(
-                    f"optional template row {row.get('key')} source kind "
-                    f"must be oob, got {source.get('kind')}"
-                )
-            expected_owner = Path(path).stem
-            if source.get("owner") != expected_owner:
-                issues.append(
-                    f"optional template row {row.get('key')} source owner "
-                    f"must match path tag {expected_owner}, got {source.get('owner')}"
-                )
-        path_and_name_candidates = [
-            index
-            for index, template in enumerate(templates)
-            if index not in matched_templates
-            and template.path == path
-            and _accepted_name(row, template.name)
-        ]
-        candidates = [
-            index
-            for index in path_and_name_candidates
-            if templates[index].source_kind == source.get("kind")
-            and templates[index].owner == source.get("owner")
-        ]
-        if not candidates:
-            if path in optional_paths and not (root / path).exists():
+        sources = [row.get("source", {}), *row.get("source_aliases", [])]
+        for source_index, source in enumerate(sources):
+            if not isinstance(source, dict):
                 continue
-            if path_and_name_candidates:
-                actual = templates[path_and_name_candidates[0]]
-                if source.get("kind") != actual.source_kind:
+            path = source.get("path")
+            source_label = "source" if source_index == 0 else f"source alias {source_index}"
+            if path in optional_paths:
+                if source.get("kind") != "oob":
                     issues.append(
-                        f"template coverage: audit row {row.get('key')} source kind "
-                        f"{source.get('kind')} does not match actual {actual.source_kind}"
+                        f"optional template row {row.get('key')} {source_label} kind "
+                        f"must be oob, got {source.get('kind')}"
                     )
-                if source.get("owner") != actual.owner:
+                expected_owner = Path(path).stem
+                if source.get("owner") != expected_owner:
                     issues.append(
-                        f"template coverage: audit row {row.get('key')} source owner "
-                        f"{source.get('owner')} does not match actual {actual.owner}"
+                        f"optional template row {row.get('key')} {source_label} owner "
+                        f"must match path tag {expected_owner}, got {source.get('owner')}"
                     )
+            path_and_name_candidates = [
+                index
+                for index, template in enumerate(templates)
+                if index not in matched_templates
+                and template.path == path
+                and _accepted_name(row, template.name)
+            ]
+            candidates = [
+                index
+                for index in path_and_name_candidates
+                if templates[index].source_kind == source.get("kind")
+                and templates[index].owner == source.get("owner")
+            ]
+            if not candidates:
+                if path in optional_paths and not (root / path).exists():
+                    continue
+                if path_and_name_candidates:
+                    actual = templates[path_and_name_candidates[0]]
+                    if source.get("kind") != actual.source_kind:
+                        issues.append(
+                            f"template coverage: audit row {row.get('key')} {source_label} kind "
+                            f"{source.get('kind')} does not match actual {actual.source_kind}"
+                        )
+                    if source.get("owner") != actual.owner:
+                        issues.append(
+                            f"template coverage: audit row {row.get('key')} {source_label} owner "
+                            f"{source.get('owner')} does not match actual {actual.owner}"
+                        )
+                    continue
+                issues.append(
+                    f"template coverage: audit row {row.get('key')} {source_label} "
+                    f"has no actual definition at {path}"
+                )
                 continue
-            issues.append(f"template coverage: audit row {row.get('key')} has no actual definition at {path}")
-            continue
-        index = candidates[0]
-        matched_templates.add(index)
-        row_by_actual[index] = row
+            index = candidates[0]
+            matched_templates.add(index)
+            row_by_actual[index] = row
     for index, template in enumerate(templates):
         if index not in matched_templates:
             issues.append(

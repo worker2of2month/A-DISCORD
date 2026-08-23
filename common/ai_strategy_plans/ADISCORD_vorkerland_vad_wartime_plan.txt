@@ -271,3 +271,277 @@ ADISCORD_vorkerland_vad_joint_showdown_plan = {
 
 	weight = { factor = 5 }
 }
+
+# Variant settlements. These outrank the wartime core plan (weight 3) but sit
+# below the live showdown plans (weight 5), and they only switch on once the
+# claimant's political line has already been walked to its end, so the AI
+# finishes the shared war preparation before it commits to a constitution.
+
+ADISCORD_vorkerland_vad_imperial_variant_plan = {
+	name = "VAD imperial restoration settlement"
+	desc = ""
+
+	allowed = {
+		OR = {
+			original_tag = WRK
+			original_tag = VAD
+		}
+	}
+
+	enable = {
+		tag = VAD
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+		has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+		has_country_flag = ADISCORD_vorkerland_focus_vad_chancery_officers
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_crowned_restoration }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = VAD }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			has_global_flag = ADISCORD_vorkerland_joint_government_formed
+			NOT = { has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes } }
+			has_country_flag = ADISCORD_vorkerland_focus_vad_crowned_restoration
+		}
+	}
+
+	ai_national_focuses = {
+		VAD_reclaim_the_imperial_mandate
+		VAD_recall_the_officer_estates
+		VAD_crown_the_restoration
+	}
+
+	weight = { factor = 4 }
+}
+
+ADISCORD_vorkerland_vad_joint_variant_plan = {
+	name = "VAD joint council settlement"
+	desc = ""
+
+	allowed = {
+		OR = {
+			original_tag = WRK
+			original_tag = VAD
+		}
+	}
+
+	enable = {
+		tag = VAD
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		has_global_flag = ADISCORD_vorkerland_joint_government_formed
+		has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+		has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+		has_country_flag = ADISCORD_vorkerland_focus_vad_joint_command_ratified
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_crown_and_council }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = VAD }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			NOT = { has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes } }
+			has_country_flag = ADISCORD_vorkerland_focus_vad_crown_and_council
+		}
+	}
+
+	ai_national_focuses = {
+		VAD_seat_the_dual_chamber
+		VAD_open_the_district_rolls
+		VAD_bind_crown_and_council
+	}
+
+	weight = { factor = 4 }
+}
+
+
+# ----------------------------------------------------------------------
+# The crowned restoration levies the estates, rebuilds an officer
+# caste and a guards corps, spends weeks on the coronation rites,
+# and finishes the war by marching on the old capital.
+# ----------------------------------------------------------------------
+ADISCORD_vorkerland_vad_imperial_depth_plan = {
+	name = "VAD imperial war effort"
+	desc = ""
+
+	allowed = {
+		OR = {
+			original_tag = WRK
+			original_tag = VAD
+		}
+	}
+
+	enable = {
+		tag = VAD
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+		has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+		has_country_flag = ADISCORD_vorkerland_focus_vad_crowned_restoration
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_march_on_the_old_capital }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = VAD }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			has_global_flag = ADISCORD_vorkerland_joint_government_formed
+			NOT = { has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes } }
+			has_country_flag = ADISCORD_vorkerland_focus_vad_march_on_the_old_capital
+		}
+	}
+
+	ai_national_focuses = {
+		VAD_convene_the_restoration_treasury
+		VAD_levy_the_crown_estates
+		VAD_doctrine_of_the_officer_estates
+		VAD_restore_the_guards_regiments
+		VAD_convene_the_court_of_honours
+		VAD_stage_the_coronation_rites
+		VAD_seek_legitimist_recognition
+		VAD_restore_the_restoration_air_arm
+		VAD_task_the_guards_for_close_support
+		VAD_open_the_foreign_chancery
+		VAD_issue_restoration_guarantees
+		VAD_hold_the_historic_capitals
+		VAD_march_on_the_old_capital
+	}
+
+	weight = { factor = 3 }
+}
+
+# ----------------------------------------------------------------------
+# The joint government protects the district markets, raises
+# council militias instead of a caste, mortgages the regalia when
+# it needs rifles now, and fortifies what it already holds.
+# ----------------------------------------------------------------------
+ADISCORD_vorkerland_vad_joint_depth_war_plan = {
+	name = "VAD joint war effort"
+	desc = ""
+
+	allowed = {
+		OR = {
+			original_tag = WRK
+			original_tag = VAD
+		}
+	}
+
+	enable = {
+		tag = VAD
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		has_global_flag = ADISCORD_vorkerland_joint_government_formed
+		has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+		has_country_flag = ADISCORD_vorkerland_focus_vad_crown_and_council
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_fortify_the_restoration_line }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = VAD }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			NOT = { has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes } }
+			has_country_flag = ADISCORD_vorkerland_focus_vad_fortify_the_restoration_line
+		}
+	}
+
+	ai_national_focuses = {
+		VAD_convene_the_restoration_treasury
+		VAD_protect_the_district_markets
+		VAD_doctrine_of_the_district_levies
+		VAD_train_the_council_militias
+		VAD_convene_the_court_of_honours
+		VAD_mortgage_the_regalia
+		VAD_court_the_bracket_victors
+		VAD_restore_the_restoration_air_arm
+		VAD_cover_the_district_capitals
+		VAD_open_the_foreign_chancery
+		VAD_seat_the_observer_missions
+		VAD_hold_the_historic_capitals
+		VAD_fortify_the_restoration_line
+	}
+
+	weight = { factor = 3 }
+}
+
+ADISCORD_vorkerland_vad_remaining_fronts_plan = {
+	name = "VAD remaining central fronts"
+	desc = ""
+
+	allowed = {
+		original_tag = VAD
+	}
+
+	enable = {
+		tag = VAD
+		is_ai = yes
+		is_subject = no
+		NOT = { has_capitulated = yes }
+		ADISCORD_vorkerland_claimant_has_remaining_central_targets = yes
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_remaining_fronts }
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_front_protracted
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked
+			has_country_flag = ADISCORD_vorkerland_focus_vad_dual_authority_protocol
+			has_country_flag = ADISCORD_vorkerland_focus_vad_solar_corridors_mapped
+			has_country_flag = ADISCORD_vorkerland_focus_vad_imperial_mandate
+			has_country_flag = ADISCORD_vorkerland_focus_vad_dual_chamber
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = VAD }
+			has_country_flag = ADISCORD_vorkerland_focus_vad_remaining_fronts
+			NOT = { ADISCORD_vorkerland_claimant_has_remaining_central_targets = yes }
+		}
+	}
+
+	ai_national_focuses = {
+		VAD_open_the_remaining_fronts
+	}
+
+	weight = { factor = 5 }
+}

@@ -90,22 +90,8 @@ ADISCORD_vorkerland_osv_defeated = {
 	}
 }
 
-ADISCORD_vorkerland_is_central_claimant = {
-	OR = {
-		tag = WKR
-		tag = VAD
-		tag = TVA
-		tag = EYR
-		tag = EGC
-		tag = RIV
-		tag = REV
-		tag = YOR
-		tag = NDN
-		tag = SWB
-		tag = VHV
-		tag = OSV
-	}
-}
+# The three successor governments share one canonical claimant interface.
+# District governments use ADISCORD_vorkerland_is_central_minor instead.
 
 ADISCORD_vorkerland_is_main_claimant = {
 	OR = {
@@ -115,18 +101,39 @@ ADISCORD_vorkerland_is_main_claimant = {
 	}
 }
 
-# The historical WRK tag is dormant between the initial split and the verified
-# phase.6 formation. Native peace actions can otherwise release that dormant
-# core holder for one tick and recreate the old country beside its claimants.
-ADISCORD_vorkerland_is_premature_wrk = {
-	tag = WRK
-	exists = yes
+# Peace-conference AI evaluates this on a potential country that may not exist
+# yet, so the gate cannot require exists = yes. Historical WRK stays dormant
+# from the collapse until the verified postwar formation.
+ADISCORD_vorkerland_wrk_release_is_forbidden = {
+	OR = {
+		original_tag = WRK
+		tag = WRK
+	}
 	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 	NOT = { has_global_flag = ADISCORD_vorkerland_phase_reunification }
 	NOT = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 	NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 	NOT = { has_global_flag = ADISCORD_vorkerland_reunification_verified }
 	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+}
+
+# The historical WRK tag is dormant between the initial split and the verified
+# phase.6 formation. Native peace actions can otherwise release that dormant
+# core holder for one tick and recreate the old country beside its claimants.
+ADISCORD_vorkerland_is_premature_wrk = {
+	tag = WRK
+	exists = yes
+	ADISCORD_vorkerland_wrk_release_is_forbidden = yes
+}
+
+ADISCORD_vorkerland_release_requires_interception = {
+	OR = {
+		ADISCORD_vorkerland_is_premature_wrk = yes
+		AND = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_premature_wrk_subject_cleanup_active }
+			FROM = { ADISCORD_vorkerland_is_premature_wrk = yes }
+		}
+	}
 }
 
 # Main claimants fight only across a live border. An unrelated current war must
@@ -165,6 +172,226 @@ ADISCORD_vorkerland_is_regional_combatant = {
 		tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD
 		tag = VLA tag = EBA tag = TGD tag = ROM tag = DVA
 		tag = SOL tag = SRA tag = TRU tag = ZTA tag = CSL
+	}
+}
+
+# A country can be spliced into a local rivalry only while it is a real, free
+# belligerent. One shared definition keeps the war builder, the bracket-cleared
+# check and the coalition decision from drifting apart.
+ADISCORD_vorkerland_can_open_local_war = {
+	exists = yes
+	is_subject = no
+	NOT = { has_capitulated = yes }
+}
+
+# The nine central district governments. They are the first bracket stage and
+# fight one another before any of them can be folded into a claimant coalition.
+ADISCORD_vorkerland_is_central_bracket_member = {
+	OR = {
+		tag = EYR tag = EGC tag = YOR
+		tag = SWB tag = NDN tag = OSV tag = REV
+		tag = RIV tag = VHV
+	}
+}
+
+# The closed-zone administrations. They materialise years later, so they form a
+# second bracket stage instead of sharing the central launch.
+ADISCORD_vorkerland_is_closed_zone_bracket_member = {
+	OR = { tag = RZA tag = MLR tag = IRT tag = ERT tag = SCA }
+}
+
+# Every tag that owns a seat in the local war graph. Used by the AI focus
+# strategies, the autonomy grant and the coalition decision allowlist.
+ADISCORD_vorkerland_is_local_bracket_member = {
+	OR = {
+		ADISCORD_vorkerland_is_central_bracket_member = yes
+		ADISCORD_vorkerland_is_closed_zone_bracket_member = yes
+		ADISCORD_vorkerland_is_regional_combatant = yes
+	}
+}
+
+# The authored rivalry table. Each edge is written exactly once, in its attacker
+# direction, and is evaluated in the candidate attacker's scope with PREV as the
+# candidate defender. This single list is the only definition of who fights whom
+# locally; the war builder, the undirected bracket check and the validator all
+# read it instead of repeating pairwise war blocks.
+ADISCORD_vorkerland_is_local_attacker_of_PREV = {
+	OR = {
+		# Western triangle and the Ash-country contract directorate.
+		AND = { tag = ZAO PREV = { tag = WPA } }
+		AND = { tag = WPS PREV = { tag = ZAO } }
+		AND = { tag = ZAO PREV = { tag = PSD } }
+		AND = { tag = PWR PREV = { tag = ZAO } }
+		AND = { tag = WPA PREV = { tag = PSD } }
+		AND = { tag = WPA PREV = { tag = PWR } }
+		AND = { tag = WPS PREV = { tag = PSD } }
+		AND = { tag = WPS PREV = { tag = PWR } }
+		AND = { tag = PWR PREV = { tag = PSD } }
+		# Volnograd, Firnov-Tehlar and Macri's Ebern.
+		AND = { tag = VLA PREV = { tag = EBA } }
+		AND = { tag = VLA PREV = { tag = TGD } }
+		AND = { tag = TGD PREV = { tag = EBA } }
+		# Solyarino plain and the isolated Sloboda city board.
+		AND = { tag = SOL PREV = { tag = SRA } }
+		AND = { tag = SOL PREV = { tag = CSL } }
+		AND = { tag = SRA PREV = { tag = CSL } }
+		# Frealor mountain roads and the Golden River order.
+		AND = { tag = ROM PREV = { tag = DVA } }
+		AND = { tag = TRU PREV = { tag = ZTA } }
+		# Eyrmi knot: the garrison staff strikes Koval's congress, and the
+		# congress refuses a second city assembly in the Yorsen belt.
+		AND = { tag = EGC PREV = { tag = EYR } }
+		AND = { tag = EYR PREV = { tag = YOR } }
+		# Vorkensberg ring: the old-city board claims the suburban councils,
+		# and the Revel okrug council reclaims Ostvin as its own district.
+		AND = { tag = SWB PREV = { tag = NDN } }
+		AND = { tag = SWB PREV = { tag = OSV } }
+		AND = { tag = REV PREV = { tag = OSV } }
+		# Riven board versus the Verkhovye zemstvo assembly.
+		AND = { tag = RIV PREV = { tag = VHV } }
+		# Reactor perimeter: the technical council imposes its power regime.
+		AND = { tag = RZA PREV = { tag = MLR } }
+		AND = { tag = RZA PREV = { tag = IRT } }
+		# Eastern corridor: the interior council links its land first, and the
+		# eastern council forces a southern outlet of its own.
+		AND = { tag = IRT PREV = { tag = ERT } }
+		AND = { tag = ERT PREV = { tag = SCA } }
+	}
+}
+
+# The same table read as an undirected graph, because who opened the war does not
+# matter when deciding whether a bracket has been cleared. Both orientations are
+# spelled out rather than derived through a nested PREV, which in Clausewitz walks
+# two steps up the scope chain instead of returning to the candidate. The
+# collapse validator asserts that this list is exactly the symmetric closure of
+# the directed table above, so the two cannot drift apart.
+ADISCORD_vorkerland_is_local_rival_of_PREV = {
+	OR = {
+		AND = { tag = ZAO PREV = { tag = WPA } }
+		AND = { tag = WPA PREV = { tag = ZAO } }
+		AND = { tag = WPS PREV = { tag = ZAO } }
+		AND = { tag = ZAO PREV = { tag = WPS } }
+		AND = { tag = ZAO PREV = { tag = PSD } }
+		AND = { tag = PSD PREV = { tag = ZAO } }
+		AND = { tag = PWR PREV = { tag = ZAO } }
+		AND = { tag = ZAO PREV = { tag = PWR } }
+		AND = { tag = WPA PREV = { tag = PSD } }
+		AND = { tag = PSD PREV = { tag = WPA } }
+		AND = { tag = WPA PREV = { tag = PWR } }
+		AND = { tag = PWR PREV = { tag = WPA } }
+		AND = { tag = WPS PREV = { tag = PSD } }
+		AND = { tag = PSD PREV = { tag = WPS } }
+		AND = { tag = WPS PREV = { tag = PWR } }
+		AND = { tag = PWR PREV = { tag = WPS } }
+		AND = { tag = PWR PREV = { tag = PSD } }
+		AND = { tag = PSD PREV = { tag = PWR } }
+		AND = { tag = VLA PREV = { tag = EBA } }
+		AND = { tag = EBA PREV = { tag = VLA } }
+		AND = { tag = VLA PREV = { tag = TGD } }
+		AND = { tag = TGD PREV = { tag = VLA } }
+		AND = { tag = TGD PREV = { tag = EBA } }
+		AND = { tag = EBA PREV = { tag = TGD } }
+		AND = { tag = SOL PREV = { tag = SRA } }
+		AND = { tag = SRA PREV = { tag = SOL } }
+		AND = { tag = SOL PREV = { tag = CSL } }
+		AND = { tag = CSL PREV = { tag = SOL } }
+		AND = { tag = SRA PREV = { tag = CSL } }
+		AND = { tag = CSL PREV = { tag = SRA } }
+		AND = { tag = ROM PREV = { tag = DVA } }
+		AND = { tag = DVA PREV = { tag = ROM } }
+		AND = { tag = TRU PREV = { tag = ZTA } }
+		AND = { tag = ZTA PREV = { tag = TRU } }
+		AND = { tag = EGC PREV = { tag = EYR } }
+		AND = { tag = EYR PREV = { tag = EGC } }
+		AND = { tag = EYR PREV = { tag = YOR } }
+		AND = { tag = YOR PREV = { tag = EYR } }
+		AND = { tag = SWB PREV = { tag = NDN } }
+		AND = { tag = NDN PREV = { tag = SWB } }
+		AND = { tag = SWB PREV = { tag = OSV } }
+		AND = { tag = OSV PREV = { tag = SWB } }
+		AND = { tag = REV PREV = { tag = OSV } }
+		AND = { tag = OSV PREV = { tag = REV } }
+		AND = { tag = RIV PREV = { tag = VHV } }
+		AND = { tag = VHV PREV = { tag = RIV } }
+		AND = { tag = RZA PREV = { tag = MLR } }
+		AND = { tag = MLR PREV = { tag = RZA } }
+		AND = { tag = RZA PREV = { tag = IRT } }
+		AND = { tag = IRT PREV = { tag = RZA } }
+		AND = { tag = IRT PREV = { tag = ERT } }
+		AND = { tag = ERT PREV = { tag = IRT } }
+		AND = { tag = ERT PREV = { tag = SCA } }
+		AND = { tag = SCA PREV = { tag = ERT } }
+	}
+}
+
+# Bracket stages are launched separately because the closed-zone tags do not
+# exist at the collapse. Neither stage lists a peripheral tag: those seventeen
+# rivalries keep their own verified decision-driven launch path.
+ADISCORD_vorkerland_is_staged_local_belligerent = {
+	OR = {
+		AND = {
+			has_global_flag = ADISCORD_vorkerland_local_bracket_stage_central
+			ADISCORD_vorkerland_is_central_bracket_member = yes
+		}
+		AND = {
+			has_global_flag = ADISCORD_vorkerland_local_bracket_stage_closed_zone
+			ADISCORD_vorkerland_is_closed_zone_bracket_member = yes
+		}
+	}
+}
+
+# Postcondition for a launched bracket stage. Every authored edge of the active
+# stage must either exist in the diplomatic cache or be terminal because one
+# participant no longer exists, capitulated, or became a subject. Checked only by
+# the bounded delayed verifier, never by a recurring pulse.
+ADISCORD_vorkerland_staged_local_war_graph_active_or_terminal = {
+	NOT = {
+		any_country = {
+			ADISCORD_vorkerland_can_open_local_war = yes
+			ADISCORD_vorkerland_is_staged_local_belligerent = yes
+			any_other_country = {
+				ADISCORD_vorkerland_can_open_local_war = yes
+				ADISCORD_vorkerland_is_staged_local_belligerent = yes
+				ADISCORD_vorkerland_is_local_attacker_of_PREV = yes
+				NOT = { has_war_with = PREV }
+			}
+		}
+	}
+}
+
+# Evaluated in the scope of a bracket member. A bracket is cleared only when no
+# authored rival of this country is still a free belligerent.
+ADISCORD_vorkerland_has_live_local_rival = {
+	any_country = {
+		ADISCORD_vorkerland_can_open_local_war = yes
+		ADISCORD_vorkerland_is_local_rival_of_PREV = yes
+	}
+}
+
+# Evaluated in a candidate host claimant's scope with ROOT as the regional
+# winner. Membership plus add_to_war splices the winner into the war the host is
+# already fighting, so the host must own a faction it can actually lead.
+ADISCORD_vorkerland_is_coalition_host_for_ROOT = {
+	ADISCORD_vorkerland_is_main_claimant = yes
+	exists = yes
+	is_subject = no
+	NOT = { has_capitulated = yes }
+	NOT = { has_war_with = ROOT }
+	has_war = yes
+	OR = {
+		is_in_faction = no
+		is_faction_leader = yes
+	}
+}
+
+# Regional autonomy is a defender's advantage held by a local administration in
+# its own district. Light-green settler country NAM shares the model: its
+# extraction war is opened by the collapse and is fought at home against two
+# foreign coalitions at once.
+ADISCORD_vorkerland_holds_regional_autonomy = {
+	OR = {
+		ADISCORD_vorkerland_is_local_bracket_member = yes
+		tag = NAM
 	}
 }
 

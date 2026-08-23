@@ -13,6 +13,7 @@ from tools.validators.validate_adiscord_vorkerland_recovery import (
     named_block,
     named_blocks,
     validate_bounded_retry,
+    validate_campaign_state,
     validate_new_save_materialization,
     validate_premature_wrk_recovery,
     validate_retired_legacy_events,
@@ -469,6 +470,55 @@ class BoundedRetryTests(unittest.TestCase):
         issues = validate_bounded_retry()
         self.assertEqual(issues, [], issue_report(issues))
 
+    def test_terminal_regional_failures_share_one_degraded_path(self) -> None:
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
+        call = "ADISCORD_vorkerland_degrade_regional_launch = yes"
+        self.assertEqual(effects.count(call), 2)
+        for owner in (
+            "ADISCORD_vorkerland_verify_regional_war_launch",
+            "ADISCORD_vorkerland_verify_regional_consolidation",
+        ):
+            self.assertEqual(named_block(effects, owner).count(call), 1, owner)
+
+        degrade = named_block(effects, "ADISCORD_vorkerland_degrade_regional_launch")
+        for flag in (
+            "ADISCORD_vorkerland_regional_war_launch_final_retry",
+            "ADISCORD_vorkerland_regional_war_launch_scheduled",
+        ):
+            self.assertEqual(degrade.count(f"clr_global_flag = {flag}"), 1)
+        for flag in (
+            "ADISCORD_vorkerland_regional_war_launch_failed",
+            "ADISCORD_vorkerland_regional_war_launch_degraded",
+        ):
+            self.assertEqual(degrade.count(f"set_global_flag = {flag}"), 1)
+        self.assertEqual(
+            degrade.count(
+                "WKR = { country_event = { id = ADISCORD_vorkerland_phase.3 days = 1 } }"
+            ),
+            1,
+        )
+
+        verify = named_block(effects, "ADISCORD_vorkerland_verify_regional_consolidation")
+        degraded_branch = named_blocks(verify, "if")[0]
+        degraded_limit = named_block(degraded_branch, "limit")
+        for guard in (
+            "has_global_flag = ADISCORD_vorkerland_regional_war_launch_failed",
+            "has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation",
+            "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }",
+        ):
+            self.assertIn(guard, degraded_limit)
+        for effect in (
+            "clr_global_flag = ADISCORD_vorkerland_regional_war_launch_failed",
+            "set_global_flag = ADISCORD_vorkerland_northern_wars_began",
+            "ADISCORD_vorkerland_schedule_northern_escalation = yes",
+            "ADISCORD_vorkerland_begin_central_preparation = yes",
+        ):
+            self.assertIn(effect, degraded_branch)
+        self.assertIn(
+            "ADISCORD_vorkerland_regional_consolidation_complete = yes",
+            named_blocks(verify, "else_if")[0],
+        )
+
 
 class ReunificationFormationTests(unittest.TestCase):
     def test_winner_forms_wrk_only_after_loser_subject_release(self) -> None:
@@ -577,11 +627,84 @@ class PrematureWrkRecoveryTests(unittest.TestCase):
         on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
         for hook_name in ("on_puppet", "on_release_as_puppet", "on_release_as_free"):
             hook = named_block(on_actions, hook_name)
-            self.assertIn("FROM = { ADISCORD_vorkerland_is_premature_wrk = yes }", hook)
-            self.assertIn(
-                "ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = yes",
+            self.assertIn("ADISCORD_vorkerland_release_requires_interception = yes", hook)
+            self.assertIn("ADISCORD_vorkerland_intercept_premature_wrk_release = yes", hook)
+        capitulation = named_block(on_actions, "on_capitulation")
+        self.assertIn("ROOT = { ADISCORD_vorkerland_is_premature_wrk = yes }", capitulation)
+        self.assertIn("set_global_flag = skip_default_capitulation", capitulation)
+        self.assertIn(
+            "ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = yes",
+            capitulation,
+        )
+    def test_release_hooks_delegate_once_to_shared_interceptor(self) -> None:
+        release_path = ROOT / "common/scripted_effects/ADISCORD_vorkerland_release_effects.txt"
+        self.assertTrue(release_path.is_file())
+        release_effects = release_path.read_text(encoding="utf-8-sig")
+        interceptor = named_block(
+            release_effects,
+            "ADISCORD_vorkerland_intercept_premature_wrk_release",
+        )
+        for token in (
+            "set_global_flag = ADISCORD_vorkerland_premature_wrk_release_intercepted_v1",
+            "FROM = { ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = yes }",
+            "ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = yes",
+        ):
+            self.assertIn(token, interceptor)
+
+        triggers = read("common/scripted_triggers/ADISCORD_vorkerland_collapse_triggers.txt")
+        release_guard = named_block(
+            triggers,
+            "ADISCORD_vorkerland_release_requires_interception",
+        )
+        self.assertIn("ADISCORD_vorkerland_is_premature_wrk = yes", release_guard)
+        self.assertIn(
+            "FROM = { ADISCORD_vorkerland_is_premature_wrk = yes }",
+            release_guard,
+        )
+
+        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        call = "ADISCORD_vorkerland_intercept_premature_wrk_release = yes"
+        for hook_name in ("on_puppet", "on_release_as_puppet", "on_release_as_free"):
+            hook = named_block(on_actions, hook_name)
+            self.assertEqual(hook.count(call), 1, hook_name)
+            self.assertIn("ADISCORD_vorkerland_release_requires_interception = yes", hook)
+            self.assertNotIn(
+                "set_global_flag = ADISCORD_vorkerland_premature_wrk_release_intercepted_v1",
                 hook,
             )
+
+        puppet = named_block(on_actions, "on_puppet")
+        release_puppet = named_block(on_actions, "on_release_as_puppet")
+        release_free = named_block(on_actions, "on_release_as_free")
+        puppet_normal = named_block(named_block(puppet, "effect"), "else")
+        release_puppet_normal = named_block(named_block(release_puppet, "effect"), "else")
+        release_free_normal = named_block(named_block(release_free, "effect"), "else")
+        for normal in (puppet_normal, release_puppet_normal, release_free_normal):
+            self.assertRegex(
+                normal,
+                r"limit = \{ OR = \{ tag = ROM tag = TRU tag = ZAO tag = SOL \} \}",
+            )
+            self.assertIn(
+                "ADISCORD_vorkerland_sync_independence_cosmetic = yes",
+                normal,
+            )
+        self.assertIn("ADISCORD_vorkerland_sync_republics_from_ruins = yes", puppet_normal)
+        self.assertIn("ADISCORD_vorkerland_wrk_activate_vla_auxiliaries = yes", puppet_normal)
+        self.assertIn("tag = VLA is_subject_of = WKR", puppet_normal)
+        self.assertIn("tag = VLA is_subject_of = WRK", puppet_normal)
+        self.assertLess(
+            puppet_normal.find("tag = VLA is_subject_of = WKR"),
+            puppet_normal.find("tag = VLA is_subject_of = WRK"),
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_sync_republics_from_ruins = yes",
+            release_puppet_normal,
+        )
+        self.assertNotIn(
+            "ADISCORD_vorkerland_wrk_activate_vla_auxiliaries = yes",
+            release_puppet_normal,
+        )
+        self.assertNotIn("ADISCORD_vorkerland_sync_republics_from_ruins = yes", release_free_normal)
 
     def test_old_save_claimant_inference_is_absent(self) -> None:
         combined = "\n".join(
@@ -602,6 +725,12 @@ class PrematureWrkRecoveryTests(unittest.TestCase):
         ):
             with self.subTest(token=token):
                 self.assertNotIn(token, combined)
+
+
+class CampaignStateOwnershipTests(unittest.TestCase):
+    def test_event_driven_campaign_state_contract_is_clean(self) -> None:
+        issues = validate_campaign_state()
+        self.assertEqual(issues, [], issue_report(issues))
 
 
 class RetiredLegacyEventTests(unittest.TestCase):

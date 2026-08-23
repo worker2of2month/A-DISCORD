@@ -1,0 +1,161 @@
+# Claimant factory scaling is the only recurring civil-war producer.
+# Called from the tag-specific monthly hooks for WKR, VAD and TVA.
+ADISCORD_vorkerland_refresh_war_economy_dynamic_state = {
+	set_variable = { var = ADISCORD_vorkerland_factory_count value = num_of_factories }
+
+	# Capture what this claimant started with on the first tick after it is
+	# created, then measure every later month against that. Re-captured while
+	# it is still below one so a claimant that somehow spawns with no industry
+	# does not divide by zero.
+	if = {
+		limit = {
+			check_variable = {
+				var = ADISCORD_vorkerland_war_economy_baseline
+				value = 1
+				compare = less_than
+			}
+		}
+		set_variable = {
+			var = ADISCORD_vorkerland_war_economy_baseline
+			value = ADISCORD_vorkerland_factory_count
+		}
+	}
+	clamp_variable = { var = ADISCORD_vorkerland_war_economy_baseline min = 1 max = 1000 }
+
+	set_variable = {
+		var = ADISCORD_vorkerland_war_economy_scale
+		value = ADISCORD_vorkerland_factory_count
+	}
+	divide_variable = {
+		ADISCORD_vorkerland_war_economy_scale = ADISCORD_vorkerland_war_economy_baseline
+	}
+	clamp_variable = { var = ADISCORD_vorkerland_war_economy_scale min = 0.25 max = 1 }
+
+	set_variable = { var = ADISCORD_vorkerland_war_economy_stance value = 0 }
+	if = {
+		limit = {
+			OR = {
+				has_country_flag = ADISCORD_vorkerland_focus_wkr_strip_the_civil_economy
+				has_country_flag = ADISCORD_vorkerland_focus_vad_levy_the_crown_estates
+				has_country_flag = ADISCORD_vorkerland_focus_tva_run_the_grid_at_war_load
+			}
+		}
+		set_variable = { var = ADISCORD_vorkerland_war_economy_stance value = 1 }
+	}
+	if = {
+		limit = {
+			OR = {
+				has_country_flag = ADISCORD_vorkerland_focus_wkr_keep_the_bread_ration
+				has_country_flag = ADISCORD_vorkerland_focus_vad_protect_the_district_markets
+				has_country_flag = ADISCORD_vorkerland_focus_tva_hold_back_civil_power
+			}
+		}
+		set_variable = { var = ADISCORD_vorkerland_war_economy_stance value = -1 }
+	}
+
+	# Stance weighted by retained industry. Gain axes use this, cost axes use
+	# the bare stance.
+	set_variable = {
+		var = ADISCORD_vorkerland_war_economy_bite
+		value = ADISCORD_vorkerland_war_economy_stance
+	}
+	multiply_variable = {
+		ADISCORD_vorkerland_war_economy_bite = ADISCORD_vorkerland_war_economy_scale
+	}
+
+	set_variable = { var = ADISCORD_vorkerland_war_economy_output value = 0 }
+	set_variable = { var = ADISCORD_vorkerland_war_economy_efficiency value = 0 }
+	set_variable = { var = ADISCORD_vorkerland_war_economy_manpower value = 0 }
+	set_variable = { var = ADISCORD_vorkerland_war_economy_mobilization value = 0 }
+	set_variable = { var = ADISCORD_vorkerland_war_economy_research value = 0 }
+	set_variable = { var = ADISCORD_vorkerland_war_economy_unrest value = 0 }
+	set_variable = { var = ADISCORD_vorkerland_war_economy_goods value = 0 }
+	set_variable = { var = ADISCORD_vorkerland_war_economy_authority value = 0 }
+
+	# The councils argue about the shop floor: output against the ration.
+	if = {
+		limit = { tag = WKR }
+		set_variable = {
+			var = ADISCORD_vorkerland_war_economy_output
+			value = ADISCORD_vorkerland_war_economy_bite
+		}
+		multiply_variable = { ADISCORD_vorkerland_war_economy_output = 0.10 }
+		set_variable = {
+			var = ADISCORD_vorkerland_war_economy_goods
+			value = ADISCORD_vorkerland_war_economy_stance
+		}
+		multiply_variable = { ADISCORD_vorkerland_war_economy_goods = -0.05 }
+		set_variable = {
+			var = ADISCORD_vorkerland_war_economy_unrest
+			value = ADISCORD_vorkerland_war_economy_stance
+		}
+		multiply_variable = { ADISCORD_vorkerland_war_economy_unrest = -0.05 }
+		set_variable = {
+			var = ADISCORD_vorkerland_war_economy_authority
+			value = ADISCORD_vorkerland_war_economy_stance
+		}
+		multiply_variable = { ADISCORD_vorkerland_war_economy_authority = -0.10 }
+	}
+
+	# The chancery argues about the warrants: men and haste against consent.
+	if = {
+		limit = { tag = VAD }
+		set_variable = {
+			var = ADISCORD_vorkerland_war_economy_manpower
+			value = ADISCORD_vorkerland_war_economy_bite
+		}
+		multiply_variable = { ADISCORD_vorkerland_war_economy_manpower = 0.015 }
+		set_variable = {
+			var = ADISCORD_vorkerland_war_economy_mobilization
+			value = ADISCORD_vorkerland_war_economy_bite
+		}
+		multiply_variable = { ADISCORD_vorkerland_war_economy_mobilization = 0.15 }
+		set_variable = {
+			var = ADISCORD_vorkerland_war_economy_unrest
+			value = ADISCORD_vorkerland_war_economy_stance
+		}
+		multiply_variable = { ADISCORD_vorkerland_war_economy_unrest = -0.04 }
+		set_variable = {
+			var = ADISCORD_vorkerland_war_economy_authority
+			value = ADISCORD_vorkerland_war_economy_stance
+		}
+		multiply_variable = { ADISCORD_vorkerland_war_economy_authority = -0.15 }
+	}
+
+	# The load board argues about the current: the front or the laboratories.
+	if = {
+		limit = { tag = TVA }
+		set_variable = {
+			var = ADISCORD_vorkerland_war_economy_output
+			value = ADISCORD_vorkerland_war_economy_bite
+		}
+		multiply_variable = { ADISCORD_vorkerland_war_economy_output = 0.12 }
+		set_variable = {
+			var = ADISCORD_vorkerland_war_economy_efficiency
+			value = ADISCORD_vorkerland_war_economy_bite
+		}
+		multiply_variable = { ADISCORD_vorkerland_war_economy_efficiency = 0.05 }
+		set_variable = {
+			var = ADISCORD_vorkerland_war_economy_research
+			value = ADISCORD_vorkerland_war_economy_stance
+		}
+		multiply_variable = { ADISCORD_vorkerland_war_economy_research = -0.05 }
+		set_variable = {
+			var = ADISCORD_vorkerland_war_economy_unrest
+			value = ADISCORD_vorkerland_war_economy_stance
+		}
+		multiply_variable = { ADISCORD_vorkerland_war_economy_unrest = -0.06 }
+		set_variable = {
+			var = ADISCORD_vorkerland_war_economy_goods
+			value = ADISCORD_vorkerland_war_economy_stance
+		}
+		multiply_variable = { ADISCORD_vorkerland_war_economy_goods = -0.06 }
+	}
+
+	# Percentage of the original industrial base still in hand, for the tooltip.
+	set_variable = {
+		var = ADISCORD_vorkerland_war_economy_scale_display
+		value = ADISCORD_vorkerland_war_economy_scale
+	}
+	multiply_variable = { ADISCORD_vorkerland_war_economy_scale_display = 100 }
+}

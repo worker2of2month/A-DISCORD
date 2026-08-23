@@ -28,6 +28,7 @@ ADISCORD_vorkerland_collapse_category = {
 			tag = TRU
 			tag = ZTA
 			tag = TGD
+			tag = CSL
 			tag = IBA
 			tag = IBL
 			tag = IVN

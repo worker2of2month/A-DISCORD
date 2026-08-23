@@ -485,3 +485,283 @@ ADISCORD_vorkerland_tva_adaptive_validation_plan = {
 	}
 	weight = { factor = 5 }
 }
+
+# Variant programmes. The directorate has no succession roll, so unlike WKR and
+# VAD the AI picks its variant from the state of the war rather than from a
+# collapse flag: a directorate that is already bleeding surrender progress
+# converts the civil grid, a directorate that is holding preserves its
+# specialists instead. The two enable blocks are complementary and each one
+# latches on its own variant flag, so the choice cannot oscillate once made.
+
+ADISCORD_vorkerland_tva_throughput_variant_plan = {
+	name = "TVA continuous mobilisation programme"
+	desc = ""
+
+	allowed = {
+		OR = {
+			original_tag = WRK
+			original_tag = TVA
+		}
+	}
+
+	enable = {
+		tag = TVA
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		has_government = technocracy
+		has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }
+		NOT = { has_country_flag = ADISCORD_vorkerland_tva_variant_preservation }
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_tva_single_process }
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_tva_variant_throughput
+			surrender_progress > 0.05
+		}
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = TVA }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			has_country_flag = ADISCORD_vorkerland_tva_variant_preservation
+			NOT = { has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes } }
+			has_country_flag = ADISCORD_vorkerland_focus_tva_single_process
+		}
+	}
+
+	ai_national_focuses = {
+		TVA_declare_continuous_mobilization
+		TVA_convert_the_civil_grid
+		TVA_run_the_republic_as_one_process
+	}
+
+	weight = { factor = 4 }
+}
+
+ADISCORD_vorkerland_tva_preservation_variant_plan = {
+	name = "TVA preservation protocol programme"
+	desc = ""
+
+	allowed = {
+		OR = {
+			original_tag = WRK
+			original_tag = TVA
+		}
+	}
+
+	enable = {
+		tag = TVA
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		has_government = technocracy
+		has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }
+		NOT = { has_country_flag = ADISCORD_vorkerland_tva_variant_throughput }
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_tva_certified_cadre }
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_tva_variant_preservation
+			surrender_progress < 0.05
+		}
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = TVA }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			has_country_flag = ADISCORD_vorkerland_tva_variant_throughput
+			NOT = { has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes } }
+			has_country_flag = ADISCORD_vorkerland_focus_tva_certified_cadre
+		}
+	}
+
+	ai_national_focuses = {
+		TVA_enact_the_preservation_protocol
+		TVA_evacuate_the_design_bureaus
+		TVA_certify_the_surviving_cadre
+	}
+
+	weight = { factor = 4 }
+}
+
+
+# ----------------------------------------------------------------------
+# Continuous mobilisation runs the grid at war load, attacks on a
+# schedule, replaces losses straight off the line, and spends the
+# reserve cadre to make the final iteration work.
+# ----------------------------------------------------------------------
+ADISCORD_vorkerland_tva_throughput_depth_plan = {
+	name = "TVA throughput war effort"
+	desc = ""
+
+	allowed = {
+		OR = {
+			original_tag = WRK
+			original_tag = TVA
+		}
+	}
+
+	enable = {
+		tag = TVA
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }
+		has_country_flag = ADISCORD_vorkerland_tva_variant_throughput
+		has_country_flag = ADISCORD_vorkerland_focus_tva_single_process
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_tva_spend_the_reserve_cadre }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = TVA }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			NOT = { has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes } }
+			NOT = { has_country_flag = ADISCORD_vorkerland_tva_variant_throughput }
+			has_country_flag = ADISCORD_vorkerland_focus_tva_spend_the_reserve_cadre
+		}
+	}
+
+	ai_national_focuses = {
+		TVA_convene_the_load_board
+		TVA_run_the_grid_at_war_load
+		TVA_doctrine_of_continuous_assault
+		TVA_replace_losses_from_the_line
+		TVA_certify_the_completed_programmes
+		TVA_divert_the_research_budget
+		TVA_hire_the_bracket_victors
+		TVA_stand_up_the_grid_air_staff
+		TVA_print_unattended_strike_packages
+		TVA_open_the_exchange_window
+		TVA_export_surplus_output
+		TVA_declare_the_final_iteration
+		TVA_spend_the_reserve_cadre
+	}
+
+	weight = { factor = 3 }
+}
+
+# ----------------------------------------------------------------------
+# The preservation protocol holds back civil power, fields fewer and
+# better crews, publishes a reconstruction index it can defend, and
+# seals the technical core rather than spend it.
+# ----------------------------------------------------------------------
+ADISCORD_vorkerland_tva_preservation_depth_plan = {
+	name = "TVA preservation war effort"
+	desc = ""
+
+	allowed = {
+		OR = {
+			original_tag = WRK
+			original_tag = TVA
+		}
+	}
+
+	enable = {
+		tag = TVA
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }
+		has_country_flag = ADISCORD_vorkerland_tva_variant_preservation
+		has_country_flag = ADISCORD_vorkerland_focus_tva_certified_cadre
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_tva_seal_the_technical_core }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = TVA }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			NOT = { has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes } }
+			NOT = { has_country_flag = ADISCORD_vorkerland_tva_variant_preservation }
+			has_country_flag = ADISCORD_vorkerland_focus_tva_seal_the_technical_core
+		}
+	}
+
+	ai_national_focuses = {
+		TVA_convene_the_load_board
+		TVA_hold_back_civil_power
+		TVA_doctrine_of_the_measured_front
+		TVA_hold_with_fewer_better_crews
+		TVA_certify_the_completed_programmes
+		TVA_publish_the_reconstruction_index
+		TVA_open_the_technical_exchange
+		TVA_stand_up_the_grid_air_staff
+		TVA_keep_the_interdictors_on_station
+		TVA_open_the_exchange_window
+		TVA_import_surviving_specialists
+		TVA_declare_the_final_iteration
+		TVA_seal_the_technical_core
+	}
+
+	weight = { factor = 3 }
+}
+
+ADISCORD_vorkerland_tva_remaining_fronts_plan = {
+	name = "TVA remaining central fronts"
+	desc = ""
+
+	allowed = {
+		original_tag = TVA
+	}
+
+	enable = {
+		tag = TVA
+		is_ai = yes
+		is_subject = no
+		NOT = { has_capitulated = yes }
+		ADISCORD_vorkerland_claimant_has_remaining_central_targets = yes
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_tva_remaining_fronts }
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_front_protracted
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
+			has_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = TVA }
+			has_country_flag = ADISCORD_vorkerland_focus_tva_remaining_fronts
+			NOT = { ADISCORD_vorkerland_claimant_has_remaining_central_targets = yes }
+		}
+	}
+
+	ai_national_focuses = {
+		TVA_open_the_remaining_fronts
+	}
+
+	weight = { factor = 5 }
+}

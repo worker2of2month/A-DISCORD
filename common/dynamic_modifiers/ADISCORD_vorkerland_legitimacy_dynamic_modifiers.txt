@@ -1,0 +1,13 @@
+# Legitimacy is the swing mechanic of the civil war: a claimant moving from one
+# end of the ledger to the other shifts forty percentage points across four
+# axes, which is decisive over a campaign but never decisive in a single battle.
+# The variable is written only by ADISCORD_vorkerland_add_legitimacy.
+ADISCORD_vorkerland_legitimacy_dynamic = {
+	icon = GFX_idea_generic_democratic_drift_bonus
+	custom_modifier_tooltip = ADISCORD_vorkerland_legitimacy_score_tt
+
+	stability_factor = ADISCORD_vorkerland_legitimacy_mod
+	war_support_factor = ADISCORD_vorkerland_legitimacy_mod
+	army_attack_factor = ADISCORD_vorkerland_legitimacy_mod
+	army_defence_factor = ADISCORD_vorkerland_legitimacy_mod
+}

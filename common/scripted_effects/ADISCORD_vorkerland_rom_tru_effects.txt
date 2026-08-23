@@ -13,8 +13,8 @@ ADISCORD_vorkerland_rom_initialize_war_content = {
 			chauvinism = 5
 			utilitarism = 5
 		}
-		# The shared collapse setup already grants 6,000 men, 1,200 rifles and
-		# 100 support sets. These finite deltas bring ROM to the approved total.
+		# The shared collapse setup already grants 10,000 men, 1,800 rifles and
+		# 140 support sets. These finite deltas bring ROM to the approved total.
 		add_manpower = 3000
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 400 producer = ROM }
 		add_equipment_to_stockpile = { type = support_equipment_1 amount = 20 producer = ROM }
@@ -38,8 +38,8 @@ ADISCORD_vorkerland_tru_initialize_war_content = {
 			utilitarism = 5
 			technocracy = 2
 		}
-		# The shared collapse setup already grants 7,000 men, 1,400 rifles and
-		# 120 support sets. These finite deltas bring TRU to the approved total.
+		# The shared collapse setup already grants 11,000 men, 2,000 rifles and
+		# 160 support sets. These finite deltas bring TRU to the approved total.
 		add_manpower = 3000
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 400 producer = TRU }
 		add_equipment_to_stockpile = { type = support_equipment_1 amount = 24 producer = TRU }
@@ -54,6 +54,7 @@ ADISCORD_vorkerland_rom_assemble_valley_columns = {
 		add_manpower = 2500
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 720 producer = ROM }
 		add_equipment_to_stockpile = { type = support_equipment_1 amount = 36 producer = ROM }
+		PREV = { ADISCORD_vorkerland_ensure_line_infantry_brigade_template = yes }
 		capital_scope = {
 			create_unit = {
 				division = "division_template = \"Line Infantry Brigade\" start_experience_factor = 0.15 start_equipment_factor = 0.70"
@@ -71,6 +72,7 @@ ADISCORD_vorkerland_tru_arm_river_battalions = {
 		add_manpower = 3000
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 720 producer = TRU }
 		add_equipment_to_stockpile = { type = support_equipment_1 amount = 48 producer = TRU }
+		PREV = { ADISCORD_vorkerland_ensure_line_infantry_brigade_template = yes }
 		capital_scope = {
 			create_unit = {
 				division = "division_template = \"Line Infantry Brigade\" start_experience_factor = 0.15 start_equipment_factor = 0.70"

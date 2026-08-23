@@ -4,7 +4,7 @@ ADISCORD_vorkerland_schedule_central_stalemate_deadline = {
 	if = {
 		limit = {
 			ADISCORD_vorkerland_stalemate_campaign_active = yes
-			ADISCORD_vorkerland_is_central_claimant = yes
+			ADISCORD_vorkerland_is_main_claimant = yes
 			ADISCORD_vorkerland_has_live_central_minor_war = yes
 			NOT = { has_country_flag = ADISCORD_vorkerland_central_stalemate_deadline_scheduled }
 			NOT = { has_country_flag = ADISCORD_vorkerland_central_stalemate_deadline_resolved }
@@ -37,7 +37,7 @@ ADISCORD_vorkerland_schedule_solarino_stalemate_deadline = {
 ADISCORD_vorkerland_resolve_central_stalemate_deadline = {
 	if = {
 		limit = {
-			ADISCORD_vorkerland_is_central_claimant = yes
+			ADISCORD_vorkerland_is_main_claimant = yes
 			has_country_flag = ADISCORD_vorkerland_central_stalemate_deadline_scheduled
 			NOT = { has_country_flag = ADISCORD_vorkerland_central_stalemate_deadline_resolved }
 		}

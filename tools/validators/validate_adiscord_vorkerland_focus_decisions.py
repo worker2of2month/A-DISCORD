@@ -13,7 +13,11 @@ ROOT = Path(__file__).resolve().parents[2]
 CATEGORY_FILE = Path(
     "common/decisions/categories/ADISCORD_vorkerland_focus_decision_categories.txt"
 )
-DECISION_FILE = Path("common/decisions/ADISCORD_vorkerland_focus_decisions.txt")
+FOCUS_DECISION_FILES = (
+    Path("common/decisions/ADISCORD_vorkerland_focus_operations_decisions.txt"),
+    Path("common/decisions/ADISCORD_vorkerland_allied_support_decisions.txt"),
+)
+DECISION_FILE = FOCUS_DECISION_FILES
 EFFECT_FILE = Path(
     "common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt"
 )
@@ -158,7 +162,9 @@ TOOLTIP_IDS = (
 )
 
 
-def read(relative: Path) -> str:
+def read(relative: Path | tuple[Path, ...]) -> str:
+    if isinstance(relative, tuple):
+        return "\n".join(read(path) for path in relative)
     return (ROOT / relative).read_text(encoding="utf-8-sig")
 
 
@@ -225,7 +231,7 @@ def collect_issues() -> list[str]:
     issues: list[str] = []
     paths = (
         CATEGORY_FILE,
-        DECISION_FILE,
+        *FOCUS_DECISION_FILES,
         EFFECT_FILE,
         PHASE_EFFECT_FILE,
         PHASE_TRIGGER_FILE,
@@ -242,7 +248,7 @@ def collect_issues() -> list[str]:
         return issues
 
     categories = read(CATEGORY_FILE)
-    decisions = read(DECISION_FILE)
+    decisions = "\n".join(read(path) for path in FOCUS_DECISION_FILES)
     effects = read(EFFECT_FILE)
     phase_effects = read(PHASE_EFFECT_FILE)
     phase_triggers = read(PHASE_TRIGGER_FILE)
@@ -255,8 +261,12 @@ def collect_issues() -> list[str]:
     )
     if "has_global_flag = ADISCORD_vorkerland_phase_central_preparation" not in minor_phase_trigger:
         issues.append("central minor campaign phase trigger lacks central preparation")
+    # District integration is the only source of the 24 central district cores that
+    # reunification requires, so it has to survive the showdown transition. Closing
+    # it at the end of preparation makes phase.6 unreachable and the war endless.
+    if "has_global_flag = ADISCORD_vorkerland_phase_central_showdown" not in minor_phase_trigger:
+        issues.append("central minor campaign phase trigger closes before the showdown")
     for forbidden in (
-        "has_global_flag = ADISCORD_vorkerland_phase_central_showdown",
         "has_global_flag = ADISCORD_vorkerland_phase_reunification",
         "ADISCORD_vorkerland_has_single_surviving_claimant = yes",
         "tag = WRK",
@@ -416,7 +426,7 @@ def collect_issues() -> list[str]:
         decisions, "ADISCORD_vorkerland_focus_central_minor_front_deadline"
     )
     controller_sources = {
-        DECISION_FILE.as_posix(): decisions,
+        "focus decisions": decisions,
         EFFECT_FILE.as_posix(): effects,
         PHASE_TRIGGER_FILE.as_posix(): phase_triggers,
         PHASE_EVENT_FILE.as_posix(): phase_events,
@@ -577,6 +587,8 @@ def collect_issues() -> list[str]:
             issues.append(
                 f"central minor deadline may not force a genuine belligerent outcome: {forbidden}"
             )
+    if "ADISCORD_vorkerland_focus_force_close_recorded_central_minor_fronts" in effects:
+        issues.append("central minor deadline must not script leftover annexation")
     for token in (
         "ADISCORD_vorkerland_focus_central_minor_front_protracted",
         "days = 180",

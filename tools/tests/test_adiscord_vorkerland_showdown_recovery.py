@@ -19,6 +19,16 @@ def read(relative: str) -> str:
     return (ROOT / relative).read_text(encoding="utf-8-sig")
 
 
+def read_focus_decisions() -> str:
+    return "\n".join(
+        read(path)
+        for path in (
+            "common/decisions/ADISCORD_vorkerland_focus_operations_decisions.txt",
+            "common/decisions/ADISCORD_vorkerland_allied_support_decisions.txt",
+        )
+    )
+
+
 def issue_report(issues: list[str]) -> str:
     return "\n" + "\n".join(f"- {issue}" for issue in issues)
 
@@ -27,6 +37,38 @@ class CentralShowdownRecoveryTests(unittest.TestCase):
     def test_bounded_retry_validator_includes_recoverable_terminal_failure(self) -> None:
         issues = validate_bounded_retry()
         self.assertEqual(issues, [], issue_report(issues))
+
+    def test_degraded_regional_launch_reenters_the_existing_phase_three(self) -> None:
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
+        degrade = named_block(effects, "ADISCORD_vorkerland_degrade_regional_launch")
+        self.assertIn(
+            "set_global_flag = ADISCORD_vorkerland_regional_war_launch_degraded",
+            degrade,
+        )
+        self.assertIn("[ADISCORD][VORKERLAND][RECOVERY]", degrade)
+        self.assertEqual(degrade.count("ADISCORD_vorkerland_phase.3 days = 1"), 1)
+
+        events = read("events/ADISCORD_vorkerland_phase_events.txt")
+        phase_three = event_block(events, "ADISCORD_vorkerland_phase.3")
+        self.assertEqual(
+            phase_three.count("ADISCORD_vorkerland_verify_regional_consolidation = yes"),
+            1,
+        )
+        self.assertNotIn("ADISCORD_vorkerland_degrade_regional_launch", events)
+
+        collapse_events = read("events/ADISCORD_vorkerland_collapse_events.txt")
+        retry = event_block(collapse_events, "ADISCORD_vorkerland_collapse.64")
+        degraded_guard = (
+            "NOT = { has_global_flag = ADISCORD_vorkerland_regional_war_launch_degraded }"
+        )
+        self.assertEqual(retry.count("ADISCORD_vorkerland_phase.3 days = 1"), 1)
+        guarded_dispatches = [
+            branch
+            for branch in named_blocks(retry, "if")
+            if degraded_guard in named_block(branch, "limit")
+            and "ADISCORD_vorkerland_phase.3 days = 1" in branch
+        ]
+        self.assertEqual(len(guarded_dispatches), 1)
 
     def test_terminal_launch_failure_unwinds_the_entire_round_and_arms_cooldown(self) -> None:
         effects = read("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
@@ -74,7 +116,7 @@ class CentralShowdownRecoveryTests(unittest.TestCase):
         )
 
     def test_visible_commit_returns_after_the_timed_cooldown(self) -> None:
-        decisions = read("common/decisions/ADISCORD_vorkerland_focus_decisions.txt")
+        decisions = read_focus_decisions()
         commit = named_block(decisions, "ADISCORD_vorkerland_commit_to_central_showdown")
         self.assertTrue(commit)
         self.assertNotIn("fire_only_once = yes", commit)

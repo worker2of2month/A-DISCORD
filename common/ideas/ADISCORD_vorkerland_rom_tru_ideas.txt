@@ -10,6 +10,9 @@ ideas = {
 				planning_speed = 0.10
 				army_org_regain = 0.05
 				supply_consumption_factor = -0.05
+				conscription = 0.03
+				recruitable_population_factor = 0.10
+				mobilization_speed = 0.15
 			}
 			ai_will_do = { factor = 0 }
 		}
@@ -62,8 +65,9 @@ ideas = {
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
-				recruitable_population_factor = 0.02
-				mobilization_speed = 0.15
+				conscription = 0.03
+				recruitable_population_factor = 0.10
+				mobilization_speed = 0.20
 				industrial_capacity_factory = 0.05
 				army_org_regain = 0.05
 			}
@@ -104,7 +108,8 @@ ideas = {
 			removal_cost = -1
 			modifier = {
 				stability_factor = 0.08
-				recruitable_population_factor = 0.02
+				conscription = 0.02
+				recruitable_population_factor = 0.08
 				industrial_capacity_factory = 0.08
 				army_org_regain = 0.05
 			}

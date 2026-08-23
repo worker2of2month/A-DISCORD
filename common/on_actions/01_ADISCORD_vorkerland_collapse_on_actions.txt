@@ -27,6 +27,42 @@ on_actions = {
 			}
 		}
 	}
+	on_monthly_WKR = {
+		effect = {
+			if = {
+				limit = {
+					ADISCORD_vorkerland_is_live_claimant = yes
+					has_global_flag = ADISCORD_vorkerland_collapse_started
+					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+				}
+				ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes
+			}
+		}
+	}
+	on_monthly_VAD = {
+		effect = {
+			if = {
+				limit = {
+					ADISCORD_vorkerland_is_live_claimant = yes
+					has_global_flag = ADISCORD_vorkerland_collapse_started
+					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+				}
+				ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes
+			}
+		}
+	}
+	on_monthly_TVA = {
+		effect = {
+			if = {
+				limit = {
+					ADISCORD_vorkerland_is_live_claimant = yes
+					has_global_flag = ADISCORD_vorkerland_collapse_started
+					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+				}
+				ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes
+			}
+		}
+	}
 	on_war = {
 		effect = {
 			if = {
@@ -35,6 +71,7 @@ on_actions = {
 					NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 				}
 				ADISCORD_vorkerland_update_civil_war_exhaustion = yes
+				ADISCORD_vorkerland_reconcile_campaign_state = yes
 			}
 			if = {
 				limit = { tag = EBA }
@@ -65,6 +102,7 @@ on_actions = {
 					NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 				}
 				ADISCORD_vorkerland_update_civil_war_exhaustion = yes
+				ADISCORD_vorkerland_reconcile_campaign_state = yes
 			}
 			if = {
 				limit = { tag = EBA has_war = no }
@@ -82,6 +120,28 @@ on_actions = {
 	}
 	on_capitulation = {
 		effect = {
+			# A peace conference can materialise dormant WRK as a free or
+			# puppeted shell. Reserve it from the generic annex fallback and
+			# fold its land back into a living claimant the same tick.
+			if = {
+				limit = { ROOT = { ADISCORD_vorkerland_is_premature_wrk = yes } }
+				set_global_flag = skip_default_capitulation
+				set_global_flag = ADISCORD_vorkerland_premature_wrk_release_intercepted_v1
+				if = {
+					limit = {
+						FROM = {
+							ADISCORD_vorkerland_is_main_claimant = yes
+							exists = yes
+							is_subject = no
+							NOT = { has_capitulated = yes }
+						}
+					}
+					FROM = { ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = yes }
+				}
+				else = {
+					ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = yes
+				}
+			}
 			if = {
 				limit = {
 					has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_active
@@ -194,7 +254,7 @@ on_actions = {
 							has_global_flag = ADISCORD_vorkerland_reunification_verified
 						}
 					}
-					ROOT = { ADISCORD_vorkerland_is_central_claimant = yes }
+					ROOT = { ADISCORD_vorkerland_is_main_claimant = yes }
 					FROM = {
 						OR = {
 							AND = {
@@ -274,27 +334,8 @@ on_actions = {
 	on_puppet = {
 		effect = {
 			if = {
-				limit = { ADISCORD_vorkerland_is_premature_wrk = yes }
-				set_global_flag = ADISCORD_vorkerland_premature_wrk_release_intercepted_v1
-				if = {
-					limit = {
-						FROM = {
-							ADISCORD_vorkerland_is_main_claimant = yes
-							exists = yes
-							is_subject = no
-							NOT = { has_capitulated = yes }
-						}
-					}
-					FROM = { ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = yes }
-				}
-			}
-			else_if = {
-				limit = {
-					NOT = { has_global_flag = ADISCORD_vorkerland_premature_wrk_subject_cleanup_active }
-					FROM = { ADISCORD_vorkerland_is_premature_wrk = yes }
-				}
-				set_global_flag = ADISCORD_vorkerland_premature_wrk_release_intercepted_v1
-				ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = yes
+				limit = { ADISCORD_vorkerland_release_requires_interception = yes }
+				ADISCORD_vorkerland_intercept_premature_wrk_release = yes
 			}
 			else = {
 				ADISCORD_vorkerland_sync_republics_from_ruins = yes
@@ -316,27 +357,8 @@ on_actions = {
 	on_release_as_puppet = {
 		effect = {
 			if = {
-				limit = { ADISCORD_vorkerland_is_premature_wrk = yes }
-				set_global_flag = ADISCORD_vorkerland_premature_wrk_release_intercepted_v1
-				if = {
-					limit = {
-						FROM = {
-							ADISCORD_vorkerland_is_main_claimant = yes
-							exists = yes
-							is_subject = no
-							NOT = { has_capitulated = yes }
-						}
-					}
-					FROM = { ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = yes }
-				}
-			}
-			else_if = {
-				limit = {
-					NOT = { has_global_flag = ADISCORD_vorkerland_premature_wrk_subject_cleanup_active }
-					FROM = { ADISCORD_vorkerland_is_premature_wrk = yes }
-				}
-				set_global_flag = ADISCORD_vorkerland_premature_wrk_release_intercepted_v1
-				ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = yes
+				limit = { ADISCORD_vorkerland_release_requires_interception = yes }
+				ADISCORD_vorkerland_intercept_premature_wrk_release = yes
 			}
 			else = {
 				ADISCORD_vorkerland_sync_republics_from_ruins = yes
@@ -350,27 +372,8 @@ on_actions = {
 	on_release_as_free = {
 		effect = {
 			if = {
-				limit = { ADISCORD_vorkerland_is_premature_wrk = yes }
-				set_global_flag = ADISCORD_vorkerland_premature_wrk_release_intercepted_v1
-				if = {
-					limit = {
-						FROM = {
-							ADISCORD_vorkerland_is_main_claimant = yes
-							exists = yes
-							is_subject = no
-							NOT = { has_capitulated = yes }
-						}
-					}
-					FROM = { ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = yes }
-				}
-			}
-			else_if = {
-				limit = {
-					NOT = { has_global_flag = ADISCORD_vorkerland_premature_wrk_subject_cleanup_active }
-					FROM = { ADISCORD_vorkerland_is_premature_wrk = yes }
-				}
-				set_global_flag = ADISCORD_vorkerland_premature_wrk_release_intercepted_v1
-				ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = yes
+				limit = { ADISCORD_vorkerland_release_requires_interception = yes }
+				ADISCORD_vorkerland_intercept_premature_wrk_release = yes
 			}
 			else = {
 				if = {
@@ -382,6 +385,125 @@ on_actions = {
 	}
 	on_state_control_changed = {
 		effect = {
+			# Iconic objectives. Each fires once per campaign; the global array is
+			# the guard, so the literal id in the limit must match the id passed to
+			# the effect. Tier 1 are the four claimant capitals and the Unity Tower,
+			# tier 2 the industrial and port centres, tier 3 the contested hinges.
+			if = {
+				limit = { FROM.FROM = { state = 32 } ADISCORD_vorkerland_objective_transfer_is_valid = yes NOT = { is_in_array = { array = global.ADISCORD_vorkerland_objectives_taken value = 1 } } }
+				set_temp_variable = { ADISCORD_vorkerland_objective_id = 1 }
+				set_temp_variable = { ADISCORD_vorkerland_objective_value = 0.15 }
+				ADISCORD_vorkerland_resolve_iconic_objective = yes
+			}
+			if = {
+				limit = { FROM.FROM = { state = 75 } ADISCORD_vorkerland_objective_transfer_is_valid = yes NOT = { is_in_array = { array = global.ADISCORD_vorkerland_objectives_taken value = 2 } } }
+				set_temp_variable = { ADISCORD_vorkerland_objective_id = 2 }
+				set_temp_variable = { ADISCORD_vorkerland_objective_value = 0.15 }
+				ADISCORD_vorkerland_resolve_iconic_objective = yes
+			}
+			if = {
+				limit = { FROM.FROM = { state = 36 } ADISCORD_vorkerland_objective_transfer_is_valid = yes NOT = { is_in_array = { array = global.ADISCORD_vorkerland_objectives_taken value = 3 } } }
+				set_temp_variable = { ADISCORD_vorkerland_objective_id = 3 }
+				set_temp_variable = { ADISCORD_vorkerland_objective_value = 0.15 }
+				ADISCORD_vorkerland_resolve_iconic_objective = yes
+			}
+			if = {
+				limit = { FROM.FROM = { state = 40 } ADISCORD_vorkerland_objective_transfer_is_valid = yes NOT = { is_in_array = { array = global.ADISCORD_vorkerland_objectives_taken value = 4 } } }
+				set_temp_variable = { ADISCORD_vorkerland_objective_id = 4 }
+				set_temp_variable = { ADISCORD_vorkerland_objective_value = 0.15 }
+				ADISCORD_vorkerland_resolve_iconic_objective = yes
+			}
+			if = {
+				limit = { FROM.FROM = { state = 102 } ADISCORD_vorkerland_objective_transfer_is_valid = yes NOT = { is_in_array = { array = global.ADISCORD_vorkerland_objectives_taken value = 5 } } }
+				set_temp_variable = { ADISCORD_vorkerland_objective_id = 5 }
+				set_temp_variable = { ADISCORD_vorkerland_objective_value = 0.10 }
+				ADISCORD_vorkerland_resolve_iconic_objective = yes
+			}
+			if = {
+				limit = { FROM.FROM = { state = 33 } ADISCORD_vorkerland_objective_transfer_is_valid = yes NOT = { is_in_array = { array = global.ADISCORD_vorkerland_objectives_taken value = 6 } } }
+				set_temp_variable = { ADISCORD_vorkerland_objective_id = 6 }
+				set_temp_variable = { ADISCORD_vorkerland_objective_value = 0.10 }
+				ADISCORD_vorkerland_resolve_iconic_objective = yes
+			}
+			if = {
+				limit = { FROM.FROM = { state = 35 } ADISCORD_vorkerland_objective_transfer_is_valid = yes NOT = { is_in_array = { array = global.ADISCORD_vorkerland_objectives_taken value = 7 } } }
+				set_temp_variable = { ADISCORD_vorkerland_objective_id = 7 }
+				set_temp_variable = { ADISCORD_vorkerland_objective_value = 0.10 }
+				ADISCORD_vorkerland_resolve_iconic_objective = yes
+			}
+			if = {
+				limit = { FROM.FROM = { state = 39 } ADISCORD_vorkerland_objective_transfer_is_valid = yes NOT = { is_in_array = { array = global.ADISCORD_vorkerland_objectives_taken value = 8 } } }
+				set_temp_variable = { ADISCORD_vorkerland_objective_id = 8 }
+				set_temp_variable = { ADISCORD_vorkerland_objective_value = 0.10 }
+				ADISCORD_vorkerland_resolve_iconic_objective = yes
+			}
+			if = {
+				limit = { FROM.FROM = { state = 106 } ADISCORD_vorkerland_objective_transfer_is_valid = yes NOT = { is_in_array = { array = global.ADISCORD_vorkerland_objectives_taken value = 9 } } }
+				set_temp_variable = { ADISCORD_vorkerland_objective_id = 9 }
+				set_temp_variable = { ADISCORD_vorkerland_objective_value = 0.10 }
+				ADISCORD_vorkerland_resolve_iconic_objective = yes
+			}
+			if = {
+				limit = { FROM.FROM = { state = 81 } ADISCORD_vorkerland_objective_transfer_is_valid = yes NOT = { is_in_array = { array = global.ADISCORD_vorkerland_objectives_taken value = 10 } } }
+				set_temp_variable = { ADISCORD_vorkerland_objective_id = 10 }
+				set_temp_variable = { ADISCORD_vorkerland_objective_value = 0.06 }
+				ADISCORD_vorkerland_resolve_iconic_objective = yes
+			}
+			if = {
+				limit = { FROM.FROM = { state = 121 } ADISCORD_vorkerland_objective_transfer_is_valid = yes NOT = { is_in_array = { array = global.ADISCORD_vorkerland_objectives_taken value = 11 } } }
+				set_temp_variable = { ADISCORD_vorkerland_objective_id = 11 }
+				set_temp_variable = { ADISCORD_vorkerland_objective_value = 0.06 }
+				ADISCORD_vorkerland_resolve_iconic_objective = yes
+			}
+			if = {
+				limit = { FROM.FROM = { state = 104 } ADISCORD_vorkerland_objective_transfer_is_valid = yes NOT = { is_in_array = { array = global.ADISCORD_vorkerland_objectives_taken value = 12 } } }
+				set_temp_variable = { ADISCORD_vorkerland_objective_id = 12 }
+				set_temp_variable = { ADISCORD_vorkerland_objective_value = 0.06 }
+				ADISCORD_vorkerland_resolve_iconic_objective = yes
+			}
+			# Monthly is too slow for a comeback mechanic: a claimant can be pushed
+			# past the threshold and finished off inside one month.
+			ROOT = { ADISCORD_vorkerland_refresh_organized_defence = yes }
+			FROM = { ADISCORD_vorkerland_refresh_organized_defence = yes }
+			if = {
+				limit = {
+					OR = {
+						FROM.FROM = { state = 32 }
+						FROM.FROM = { state = 33 }
+						FROM.FROM = { state = 35 }
+						FROM.FROM = { state = 36 }
+						FROM.FROM = { state = 37 }
+						FROM.FROM = { state = 38 }
+						FROM.FROM = { state = 39 }
+						FROM.FROM = { state = 40 }
+						FROM.FROM = { state = 75 }
+						FROM.FROM = { state = 81 }
+						FROM.FROM = { state = 102 }
+						FROM.FROM = { state = 104 }
+						FROM.FROM = { state = 106 }
+						FROM.FROM = { state = 121 }
+						FROM.FROM = { state = 122 }
+						FROM.FROM = { state = 123 }
+						FROM.FROM = { state = 124 }
+					}
+				}
+				ROOT = {
+					if = {
+						limit = { ADISCORD_vorkerland_is_main_claimant = yes }
+						ADISCORD_vorkerland_recount_central_control = yes
+					}
+				}
+				FROM = {
+					if = {
+						limit = { ADISCORD_vorkerland_is_main_claimant = yes }
+						ADISCORD_vorkerland_recount_central_control = yes
+					}
+				}
+				ADISCORD_vorkerland_refresh_legitimacy_leader = yes
+				if = { limit = { country_exists = WKR } WKR = { ADISCORD_vorkerland_refresh_claimant_coalition = yes } }
+				if = { limit = { country_exists = VAD } VAD = { ADISCORD_vorkerland_refresh_claimant_coalition = yes } }
+				if = { limit = { country_exists = TVA } TVA = { ADISCORD_vorkerland_refresh_claimant_coalition = yes } }
+			}
 			ADISCORD_vorkerland_story_check_first_claimant_capital_fall = yes
 			RUS = { ADISCORD_vorkerland_check_khan_border_war = yes }
 			if = {

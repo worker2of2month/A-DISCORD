@@ -1,0 +1,116 @@
+# Doctrine strength changes only when doctrine or legitimacy changes.
+ADISCORD_vorkerland_refresh_doctrine_dynamic_state = {
+	# ---------------------------------------------------------------------
+	# VARIANT DOCTRINE
+	# ---------------------------------------------------------------------
+	# Zero first so a claimant that has not declared still reads defined
+	# values. The scale is 0.6 + 0.4 * legitimacy: a programme at +1
+	# legitimacy is at full published strength, one at 0 is three-fifths,
+	# and one that has lost the argument is a fifth of what it claimed.
+	set_variable = { var = ADISCORD_vorkerland_doctrine_attack value = 0 }
+	set_variable = { var = ADISCORD_vorkerland_doctrine_defence value = 0 }
+	set_variable = { var = ADISCORD_vorkerland_doctrine_org value = 0 }
+	set_variable = { var = ADISCORD_vorkerland_doctrine_manpower value = 0 }
+	set_variable = { var = ADISCORD_vorkerland_doctrine_stability value = 0 }
+	set_variable = { var = ADISCORD_vorkerland_doctrine_breakthrough value = 0 }
+	set_variable = { var = ADISCORD_vorkerland_doctrine_scale value = ADISCORD_vorkerland_legitimacy }
+	multiply_variable = { ADISCORD_vorkerland_doctrine_scale = 0.4 }
+	add_to_variable = { ADISCORD_vorkerland_doctrine_scale = 0.6 }
+	clamp_variable = { var = ADISCORD_vorkerland_doctrine_scale min = 0.20 max = 1 }
+
+	if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_wkr_variant_neo_vorkerist }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_attack value = ADISCORD_vorkerland_doctrine_scale }
+		multiply_variable = { ADISCORD_vorkerland_doctrine_attack = 0.06 }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_manpower value = ADISCORD_vorkerland_doctrine_scale }
+		multiply_variable = { ADISCORD_vorkerland_doctrine_manpower = 0.015 }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_breakthrough value = ADISCORD_vorkerland_doctrine_scale }
+		multiply_variable = { ADISCORD_vorkerland_doctrine_breakthrough = 0.05 }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_stability value = -0.04 }
+	}
+	if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_wkr_variant_utilitarian }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_defence value = ADISCORD_vorkerland_doctrine_scale }
+		multiply_variable = { ADISCORD_vorkerland_doctrine_defence = 0.05 }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_org value = ADISCORD_vorkerland_doctrine_scale }
+		multiply_variable = { ADISCORD_vorkerland_doctrine_org = 0.04 }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_attack value = -0.03 }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_stability value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_vad_variant_imperial }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_attack value = ADISCORD_vorkerland_doctrine_scale }
+		multiply_variable = { ADISCORD_vorkerland_doctrine_attack = 0.05 }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_breakthrough value = ADISCORD_vorkerland_doctrine_scale }
+		multiply_variable = { ADISCORD_vorkerland_doctrine_breakthrough = 0.06 }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_org value = ADISCORD_vorkerland_doctrine_scale }
+		multiply_variable = { ADISCORD_vorkerland_doctrine_org = 0.04 }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_manpower value = -0.01 }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_stability value = -0.03 }
+	}
+	if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_vad_variant_joint }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_defence value = ADISCORD_vorkerland_doctrine_scale }
+		multiply_variable = { ADISCORD_vorkerland_doctrine_defence = 0.08 }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_manpower value = ADISCORD_vorkerland_doctrine_scale }
+		multiply_variable = { ADISCORD_vorkerland_doctrine_manpower = 0.02 }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_attack value = -0.04 }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_stability value = 0.04 }
+	}
+	if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_tva_variant_throughput }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_attack value = ADISCORD_vorkerland_doctrine_scale }
+		multiply_variable = { ADISCORD_vorkerland_doctrine_attack = 0.08 }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_breakthrough value = ADISCORD_vorkerland_doctrine_scale }
+		multiply_variable = { ADISCORD_vorkerland_doctrine_breakthrough = 0.05 }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_stability value = -0.06 }
+	}
+	if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_tva_variant_preservation }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_defence value = ADISCORD_vorkerland_doctrine_scale }
+		multiply_variable = { ADISCORD_vorkerland_doctrine_defence = 0.08 }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_org value = ADISCORD_vorkerland_doctrine_scale }
+		multiply_variable = { ADISCORD_vorkerland_doctrine_org = 0.06 }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_attack value = -0.06 }
+		set_variable = { var = ADISCORD_vorkerland_doctrine_stability value = 0.03 }
+	}
+
+	ADISCORD_vorkerland_apply_focus_doctrine = yes
+}
+
+# Attach the claimant's doctrine overlay when a programme is published.
+ADISCORD_vorkerland_apply_focus_doctrine = {
+	if = {
+		limit = {
+			tag = WKR
+			OR = {
+				has_country_flag = ADISCORD_vorkerland_wkr_variant_neo_vorkerist
+				has_country_flag = ADISCORD_vorkerland_wkr_variant_utilitarian
+			}
+			NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_doctrine } }
+		}
+		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_doctrine }
+	}
+	else_if = {
+		limit = {
+			tag = VAD
+			OR = {
+				has_country_flag = ADISCORD_vorkerland_vad_variant_imperial
+				has_country_flag = ADISCORD_vorkerland_vad_variant_joint
+			}
+			NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_doctrine } }
+		}
+		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_doctrine }
+	}
+	else_if = {
+		limit = {
+			tag = TVA
+			OR = {
+				has_country_flag = ADISCORD_vorkerland_tva_variant_throughput
+				has_country_flag = ADISCORD_vorkerland_tva_variant_preservation
+			}
+			NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_tva_doctrine } }
+		}
+		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_tva_doctrine }
+	}
+}

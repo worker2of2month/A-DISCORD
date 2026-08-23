@@ -222,6 +222,113 @@ ADISCORD_vorkerland_wkr_has_valid_solyarino_target = {
 	}
 }
 
+# Remaining independent central minors or rival central majors. No adjacency
+# gate: a mountain pocket or a remote surviving government still counts.
+ADISCORD_vorkerland_claimant_has_remaining_central_targets = {
+	OR = {
+		tag = WKR
+		tag = VAD
+		tag = TVA
+	}
+	is_subject = no
+	NOT = { has_capitulated = yes }
+	OR = {
+		EYR = {
+				exists = yes
+				is_subject = no
+				NOT = { has_capitulated = yes }
+				NOT = { has_war_with = ROOT }
+				NOT = { is_in_faction_with = ROOT }
+		}
+		EGC = {
+				exists = yes
+				is_subject = no
+				NOT = { has_capitulated = yes }
+				NOT = { has_war_with = ROOT }
+				NOT = { is_in_faction_with = ROOT }
+		}
+		RIV = {
+				exists = yes
+				is_subject = no
+				NOT = { has_capitulated = yes }
+				NOT = { has_war_with = ROOT }
+				NOT = { is_in_faction_with = ROOT }
+		}
+		REV = {
+				exists = yes
+				is_subject = no
+				NOT = { has_capitulated = yes }
+				NOT = { has_war_with = ROOT }
+				NOT = { is_in_faction_with = ROOT }
+		}
+		YOR = {
+				exists = yes
+				is_subject = no
+				NOT = { has_capitulated = yes }
+				NOT = { has_war_with = ROOT }
+				NOT = { is_in_faction_with = ROOT }
+		}
+		NDN = {
+				exists = yes
+				is_subject = no
+				NOT = { has_capitulated = yes }
+				NOT = { has_war_with = ROOT }
+				NOT = { is_in_faction_with = ROOT }
+		}
+		SWB = {
+				exists = yes
+				is_subject = no
+				NOT = { has_capitulated = yes }
+				NOT = { has_war_with = ROOT }
+				NOT = { is_in_faction_with = ROOT }
+		}
+		VHV = {
+				exists = yes
+				is_subject = no
+				NOT = { has_capitulated = yes }
+				NOT = { has_war_with = ROOT }
+				NOT = { is_in_faction_with = ROOT }
+		}
+		OSV = {
+				exists = yes
+				is_subject = no
+				NOT = { has_capitulated = yes }
+				NOT = { has_war_with = ROOT }
+				NOT = { is_in_faction_with = ROOT }
+		}
+		AND = {
+			NOT = { tag = WKR }
+			WKR = {
+				exists = yes
+				is_subject = no
+				NOT = { has_capitulated = yes }
+				NOT = { has_war_with = ROOT }
+				NOT = { is_in_faction_with = ROOT }
+			}
+		}
+		AND = {
+			NOT = { tag = VAD }
+			VAD = {
+				exists = yes
+				is_subject = no
+				NOT = { has_capitulated = yes }
+				NOT = { has_war_with = ROOT }
+				NOT = { is_in_faction_with = ROOT }
+			}
+		}
+		AND = {
+			NOT = { tag = TVA }
+			TVA = {
+				exists = yes
+				is_subject = no
+				NOT = { has_capitulated = yes }
+				NOT = { has_war_with = ROOT }
+				NOT = { is_in_faction_with = ROOT }
+			}
+		}
+	}
+}
+
 # All originally selected Solarino fronts have left the diplomatic cache. A
 # surviving shell is acceptable only after its exact WKR war has ended; the
 # outcome effect separately proves ownership and control of the five states.

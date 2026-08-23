@@ -18,11 +18,104 @@ NEWS_EVENTS = Path("events/ADISCORD_news.txt")
 EVENT_PICTURES = Path("interface/ADISCORD_eventpictures.gfx")
 ON_ACTIONS = Path("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
 PHASE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
+CAMPAIGN_STATE_EFFECTS = Path(
+    "common/scripted_effects/ADISCORD_vorkerland_campaign_state_effects.txt"
+)
 PHASE_EVENTS = Path("events/ADISCORD_vorkerland_phase_events.txt")
+COLLAPSE_EVENTS = Path("events/ADISCORD_vorkerland_collapse_events.txt")
+CIVIL_WAR_FOCUS = Path("common/national_focus/ADISCORD_vorkerland_civil_war_focus.txt")
 
-STORY_IDS = tuple(f"ADISCORD_vorkerland_story.{number}" for number in range(1, 10))
-NEWS_IDS = frozenset((*STORY_IDS[:4], *STORY_IDS[6:]))
-COUNTRY_IDS = frozenset((STORY_IDS[4], STORY_IDS[5]))
+STORY_NUMBERS = (
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
+    31, 32, 33, 34, 35, 36,
+    41, 42, 43,
+    50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61,
+)
+STORY_IDS = tuple(f"ADISCORD_vorkerland_story.{number}" for number in STORY_NUMBERS)
+COUNTRY_EVENT_NUMBERS = frozenset((5, 6))
+
+SHOWDOWN_ID = "ADISCORD_vorkerland_story.1"
+COMMAND_CHOICE_ID = "ADISCORD_vorkerland_story.5"
+POSTWAR_ID = "ADISCORD_vorkerland_story.6"
+
+OBJECTIVE_VARIABLE = "global.ADISCORD_vorkerland_objective_last"
+
+WORKER_FATE_DISPATCH = (
+    ("ADISCORD_vorkerland_worker_safe_with_loyalists", "ADISCORD_vorkerland_story.10"),
+    ("ADISCORD_vorkerland_worker_rescued_by_vlad", "ADISCORD_vorkerland_story.11"),
+    ("ADISCORD_vorkerland_worker_missing", "ADISCORD_vorkerland_story.12"),
+    ("ADISCORD_vorkerland_worker_killed", "ADISCORD_vorkerland_story.13"),
+)
+
+VARIANT_DISPATCH = (
+    ("ADISCORD_vorkerland_wkr_variant_neo_vorkerist", "ADISCORD_vorkerland_story.31"),
+    ("ADISCORD_vorkerland_wkr_variant_utilitarian", "ADISCORD_vorkerland_story.32"),
+    ("ADISCORD_vorkerland_vad_variant_imperial", "ADISCORD_vorkerland_story.33"),
+    ("ADISCORD_vorkerland_vad_variant_joint", "ADISCORD_vorkerland_story.34"),
+    ("ADISCORD_vorkerland_tva_variant_throughput", "ADISCORD_vorkerland_story.35"),
+    ("ADISCORD_vorkerland_tva_variant_preservation", "ADISCORD_vorkerland_story.36"),
+)
+
+OBJECTIVE_DISPATCH = (
+    (1, "ADISCORD_vorkerland_story.50"),
+    (2, "ADISCORD_vorkerland_story.51"),
+    (3, "ADISCORD_vorkerland_story.52"),
+    (4, "ADISCORD_vorkerland_story.53"),
+    (5, "ADISCORD_vorkerland_story.54"),
+    (6, "ADISCORD_vorkerland_story.55"),
+    (7, "ADISCORD_vorkerland_story.56"),
+    (8, "ADISCORD_vorkerland_story.57"),
+    (9, "ADISCORD_vorkerland_story.58"),
+    (10, "ADISCORD_vorkerland_story.59"),
+    (11, "ADISCORD_vorkerland_story.60"),
+    (12, "ADISCORD_vorkerland_story.61"),
+)
+
+CAPITULATION_DISPATCH = (
+    ("WKR", "ADISCORD_vorkerland_story.41"),
+    ("VAD", "ADISCORD_vorkerland_story.42"),
+    ("TVA", "ADISCORD_vorkerland_story.43"),
+)
+
+# The claimant capitals already have dedicated first-fall reports, so the iconic
+# objective report must stand down for them instead of announcing the same city
+# twice on the same day.
+CAPITAL_OBJECTIVE_SUPPRESSION = (
+    (1, "ADISCORD_vorkerland_story_wkr_capital_fell_first"),
+    (2, "ADISCORD_vorkerland_story_vad_capital_fell_first"),
+    (3, "ADISCORD_vorkerland_story_tva_capital_fell_first"),
+)
+
+WORKER_FATE_EFFECT = "ADISCORD_vorkerland_story_report_worker_fate"
+OBJECTIVE_EFFECT = "ADISCORD_vorkerland_story_report_iconic_objective"
+VARIANT_EFFECT = "ADISCORD_vorkerland_story_report_variant_declaration"
+CAPITULATION_EFFECT = "ADISCORD_vorkerland_story_report_claimant_capitulation"
+
+# Call sites the story layer cannot add itself. Each entry is
+# (effect, owning file, human-readable location).
+EXTERNAL_DISPATCH = (
+    (
+        WORKER_FATE_EFFECT,
+        COLLAPSE_EVENTS,
+        "ADISCORD_vorkerland_collapse.1 immediate, after the Worker fate roll",
+    ),
+    (
+        VARIANT_EFFECT,
+        CIVIL_WAR_FOCUS,
+        "each of the six completion_reward blocks that set an "
+        "ADISCORD_vorkerland_{tag}_variant_{key} country flag",
+    ),
+)
+
+# Tokens that look plausible next to set_global_flag but do not exist in the
+# script API. Global arrays are addressed as add_to_array/is_in_array with a
+# global. prefix, and a mistyped token fails silently at runtime.
+UNDEFINED_ARRAY_TOKENS = (
+    "add_to_global_array",
+    "is_in_global_array",
+    "remove_from_global_array",
+    "clear_global_array",
+)
 
 FORBIDDEN_MUTATIONS = (
     "annex_country",
@@ -35,6 +128,8 @@ FORBIDDEN_MUTATIONS = (
     "transfer_state",
     "white_peace",
 )
+
+CYRILLIC = re.compile(r"[\u0400-\u04FF]")
 
 
 def read(root: Path, relative: Path, issues: list[str]) -> str:
@@ -114,8 +209,37 @@ def forbidden_story_mutations(text: str) -> list[str]:
     ]
 
 
+def localisation_entries(text: str) -> list[tuple[str, str]]:
+    return re.findall(r'(?m)^\s*([A-Za-z0-9_.]+):(?:\d+)?\s*"(.*)"\s*$', text)
+
+
 def localisation_keys(text: str) -> set[str]:
-    return set(re.findall(r'(?m)^\s*([A-Za-z0-9_.]+):(?:\d+)?\s*"', text))
+    return {key for key, _ in localisation_entries(text)}
+
+
+def dispatch_target(block: str, anchor: str, pattern: re.Pattern[str]) -> str | None:
+    """First value produced after ``anchor`` inside ``block``.
+
+    This is what catches a branch that tests one outcome and then fires the
+    neighbouring outcome's event, which is the failure mode a wall of copied
+    blocks produces most often.
+    """
+    position = block.find(anchor)
+    if position < 0:
+        return None
+    match = pattern.search(block, position)
+    return match.group(1) if match else None
+
+
+def pending_external_dispatch(root: Path = ROOT) -> list[str]:
+    """Story dispatchers whose only possible call site is another effort's file."""
+    pending: list[str] = []
+    for effect, owner, location in EXTERNAL_DISPATCH:
+        path = root / owner
+        source = path.read_text(encoding="utf-8-sig") if path.is_file() else ""
+        if f"{effect} = yes" not in strip_comments(source):
+            pending.append(f"{effect} = yes -> {owner.as_posix()} ({location})")
+    return pending
 
 
 def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str]:
@@ -128,6 +252,7 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
     event_pictures = read(root, EVENT_PICTURES, issues)
     on_actions = read(root, ON_ACTIONS, issues)
     phase_effects = read(root, PHASE_EFFECTS, issues)
+    campaign_state_effects = read(root, CAMPAIGN_STATE_EFFECTS, issues)
     phase_events = read(root, PHASE_EVENTS, issues)
 
     for relative, source in (
@@ -136,6 +261,7 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
         (NEWS_EVENTS, news),
         (ON_ACTIONS, on_actions),
         (PHASE_EFFECTS, phase_effects),
+        (CAMPAIGN_STATE_EFFECTS, campaign_state_effects),
         (PHASE_EVENTS, phase_events),
     ):
         if source and not balanced(source):
@@ -145,12 +271,14 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
         issues.append("story event namespace is missing or drifted")
 
     definitions = event_blocks(story_events)
-    for event_id in STORY_IDS:
+    for number, event_id in zip(STORY_NUMBERS, STORY_IDS):
         found = definitions.get(event_id)
         if not found:
             issues.append(f"missing story event {event_id}")
             continue
-        expected_kind = "news_event" if event_id in NEWS_IDS else "country_event"
+        expected_kind = (
+            "country_event" if number in COUNTRY_EVENT_NUMBERS else "news_event"
+        )
         if found[0] != expected_kind:
             issues.append(f"{event_id} must be a {expected_kind}, found {found[0]}")
         if "is_triggered_only = yes" not in found[1]:
@@ -171,13 +299,20 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
         issues.append("non-explosion story events must not reuse the collapse explosion picture")
     if "add_army_experience" in story_events:
         issues.append("story events use invalid add_army_experience instead of army_experience")
-    showdown = definitions.get(STORY_IDS[0], ("", ""))[1]
+    story_source = strip_comments(story_events + "\n" + story_effects)
+    for token in UNDEFINED_ARRAY_TOKENS:
+        if token in story_source:
+            issues.append(
+                f"story layer uses {token}, which the script API does not define; "
+                "use the array argument with a global. prefix instead"
+            )
+    showdown = definitions.get(SHOWDOWN_ID, ("", ""))[1]
     if "picture = GFX_event_china_civil_war_1" not in showdown:
         issues.append("verified showdown news must use the registered neutral civil-war picture")
     if 'name = "GFX_event_china_civil_war_1"' not in event_pictures:
         issues.append("neutral civil-war event picture is not registered in A-Discord")
 
-    event_five = definitions.get(STORY_IDS[4], ("", ""))[1]
+    event_five = definitions.get(COMMAND_CHOICE_ID, ("", ""))[1]
     if event_five.count("option = {") != 2:
         issues.append("story.5 must offer exactly two command-apparatus choices")
     for token in (
@@ -187,7 +322,7 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
         if token not in event_five:
             issues.append(f"story.5 is missing outcome {token}")
 
-    event_six = definitions.get(STORY_IDS[5], ("", ""))[1]
+    event_six = definitions.get(POSTWAR_ID, ("", ""))[1]
     if event_six.count("option = {") != 6:
         issues.append("story.6 must offer exactly two choices for each of three routes")
     for route in ("route_worker", "route_joint", "route_utilitarian"):
@@ -214,12 +349,17 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
         if token not in story_effects:
             issues.append(f"story effects are missing contract token {token}")
 
-    english_keys = localisation_keys(english)
-    russian_keys = localisation_keys(russian)
+    issues.extend(dispatch_issues(story_effects))
+
+    english_entries = dict(localisation_entries(english))
+    russian_entries = dict(localisation_entries(russian))
+    english_keys = set(english_entries)
+    russian_keys = set(russian_entries)
     required_story_loc = {
         *(
             f"ADISCORD_vorkerland_story.{number}.{suffix}"
-            for number in (1, 2, 3, 4, 5, 7, 8, 9)
+            for number in STORY_NUMBERS
+            if number != 6
             for suffix in ("t", "d", "a")
         ),
         "ADISCORD_vorkerland_story.5.b",
@@ -243,6 +383,12 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
             key = f"ADISCORD_vorkerland_news.{number}.{suffix}"
             if key not in english_keys:
                 issues.append(f"English Ivanland news localisation is missing {key}")
+
+    issues.extend(
+        localisation_quality_issues(
+            english, russian, english_entries, russian_entries, required_story_loc
+        )
+    )
 
     russian_path = root / RUSSIAN_LOC
     if russian_path.is_file() and not russian_path.read_bytes().startswith(b"\xef\xbb\xbf"):
@@ -291,17 +437,228 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
         if "ADISCORD_vorkerland_story_offer_post_reunification = yes" not in phase_seven:
             issues.append("phase.7 is missing the verified post-reunification story hook")
 
+        issues.extend(upstream_contract_issues(root, campaign_state_effects))
+
+    return issues
+
+
+def dispatch_issues(story_effects: str) -> list[str]:
+    """Every reported outcome must reach the presentation that belongs to it."""
+    issues: list[str] = []
+    news_pattern = re.compile(r"news_event\s*=\s*\{\s*id\s*=\s*([A-Za-z0-9_.]+)")
+
+    fate = named_block(story_effects, WORKER_FATE_EFFECT)
+    if not fate:
+        issues.append(f"story effects are missing {WORKER_FATE_EFFECT}")
+    else:
+        for flag, event_id in WORKER_FATE_DISPATCH:
+            target = dispatch_target(fate, f"has_global_flag = {flag}", news_pattern)
+            if target is None:
+                issues.append(f"{WORKER_FATE_EFFECT} never reads {flag}")
+            elif target != event_id:
+                issues.append(
+                    f"{WORKER_FATE_EFFECT} dispatches {target} for {flag}, expected {event_id}"
+                )
+        if "clr_global_flag = ADISCORD_vorkerland_story_worker_fate_reported" not in fate:
+            issues.append(
+                f"{WORKER_FATE_EFFECT} must release its guard when no fate flag is set, "
+                "or an early call silences the report for the whole campaign"
+            )
+
+    objective = named_block(story_effects, OBJECTIVE_EFFECT)
+    if not objective:
+        issues.append(f"story effects are missing {OBJECTIVE_EFFECT}")
+    else:
+        if f"var = {OBJECTIVE_VARIABLE}" not in objective:
+            issues.append(f"{OBJECTIVE_EFFECT} must read {OBJECTIVE_VARIABLE}")
+        if "ADISCORD_vorkerland_story_objectives_reported" not in objective:
+            issues.append(
+                f"{OBJECTIVE_EFFECT} must record reported objectives so one centre "
+                "cannot be announced twice"
+            )
+        for value, event_id in OBJECTIVE_DISPATCH:
+            target = dispatch_target(
+                objective,
+                (
+                    f"limit = {{ check_variable = {{ var = {OBJECTIVE_VARIABLE} "
+                    f"value = {value} compare = equals }} }}"
+                ),
+                news_pattern,
+            )
+            if target is None:
+                issues.append(f"{OBJECTIVE_EFFECT} never reads objective {value}")
+            elif target != event_id:
+                issues.append(
+                    f"{OBJECTIVE_EFFECT} dispatches {target} for objective {value}, "
+                    f"expected {event_id}"
+                )
+        for value, flag in CAPITAL_OBJECTIVE_SUPPRESSION:
+            suppression = re.search(
+                rf"value = {value} compare = equals \}}\s*\n\s*has_global_flag = {re.escape(flag)}",
+                objective,
+            )
+            if not suppression:
+                issues.append(
+                    f"{OBJECTIVE_EFFECT} must suppress objective {value} once {flag} "
+                    "has already announced that capital"
+                )
+
+    variant = named_block(story_effects, VARIANT_EFFECT)
+    if not variant:
+        issues.append(f"story effects are missing {VARIANT_EFFECT}")
+    else:
+        for flag, event_id in VARIANT_DISPATCH:
+            target = dispatch_target(variant, f"has_country_flag = {flag}", news_pattern)
+            if target is None:
+                issues.append(f"{VARIANT_EFFECT} never reads {flag}")
+            elif target != event_id:
+                issues.append(
+                    f"{VARIANT_EFFECT} dispatches {target} for {flag}, expected {event_id}"
+                )
+
+    capitulation = named_block(story_effects, CAPITULATION_EFFECT)
+    if not capitulation:
+        issues.append(f"story effects are missing {CAPITULATION_EFFECT}")
+    else:
+        for tag, event_id in CAPITULATION_DISPATCH:
+            target = dispatch_target(capitulation, f"tag = {tag}", news_pattern)
+            if target is None:
+                issues.append(f"{CAPITULATION_EFFECT} never reads {tag}")
+            elif target != event_id:
+                issues.append(
+                    f"{CAPITULATION_EFFECT} dispatches {target} for {tag}, expected {event_id}"
+                )
+
+    # Both of these dispatchers are reached from story-owned effects that
+    # on_state_control_changed and on_capitulation already call, so they need no
+    # hook outside the story files and must not silently lose the call.
+    capital_fall = named_block(
+        story_effects, "ADISCORD_vorkerland_story_check_first_claimant_capital_fall"
+    )
+    if f"{OBJECTIVE_EFFECT} = yes" not in capital_fall:
+        issues.append(
+            "iconic-objective news is unreachable: the state-control story entry point "
+            f"no longer calls {OBJECTIVE_EFFECT}"
+        )
+    command_choice = named_block(
+        story_effects, "ADISCORD_vorkerland_story_offer_first_claimant_command_choice"
+    )
+    if f"{CAPITULATION_EFFECT} = yes" not in command_choice:
+        issues.append(
+            "claimant-capitulation news is unreachable: the capitulation story entry "
+            f"point no longer calls {CAPITULATION_EFFECT}"
+        )
+    elif f"ROOT = {{ {CAPITULATION_EFFECT} = yes }}" not in command_choice:
+        issues.append(
+            f"{CAPITULATION_EFFECT} must be scoped to ROOT: on_capitulation calls the "
+            "entry point inside FROM, the winner, so an unscoped call would name the "
+            "victor as the claimant that fell"
+        )
+    return issues
+
+
+def localisation_quality_issues(
+    english: str,
+    russian: str,
+    english_entries: dict[str, str],
+    russian_entries: dict[str, str],
+    required: set[str],
+) -> list[str]:
+    """Catch empty, duplicated, untranslated and copy-pasted story strings."""
+    issues: list[str] = []
+    for language, source in (("English", english), ("Russian", russian)):
+        seen: set[str] = set()
+        repeated: set[str] = set()
+        for key, _ in localisation_entries(source):
+            if key in seen:
+                repeated.add(key)
+            seen.add(key)
+        duplicates = sorted(repeated)
+        if duplicates:
+            issues.append(
+                f"{language} story localisation defines duplicate keys: {', '.join(duplicates)}"
+            )
+
+    for key in sorted(required):
+        english_value = english_entries.get(key, "")
+        russian_value = russian_entries.get(key, "")
+        if key in english_entries and not english_value.strip():
+            issues.append(f"English story localisation {key} is empty")
+        if key in russian_entries and not russian_value.strip():
+            issues.append(f"Russian story localisation {key} is empty")
+        if russian_value and not CYRILLIC.search(russian_value):
+            issues.append(f"Russian story localisation {key} contains no Cyrillic text")
+        if english_value and CYRILLIC.search(english_value):
+            issues.append(f"English story localisation {key} contains Cyrillic text")
+
+    # Each variant of a shared event must be written, not copied. Comparing the
+    # bodies is what would have caught the reference mod reusing one city's text
+    # for another.
+    families: list[tuple[str, list[str]]] = [
+        ("Worker fate", [f"ADISCORD_vorkerland_story.{number}.d" for number in (10, 11, 12, 13)]),
+        (
+            "Iconic objective",
+            [f"ADISCORD_vorkerland_story.{number}.d" for number in range(50, 62)],
+        ),
+        (
+            "Claimant capitulation",
+            [f"ADISCORD_vorkerland_story.{number}.d" for number in (41, 42, 43)],
+        ),
+    ]
+    for label, keys in families:
+        for language, entries in (("English", english_entries), ("Russian", russian_entries)):
+            values = [entries[key] for key in keys if entries.get(key, "").strip()]
+            if len(values) != len(set(values)):
+                issues.append(
+                    f"{language} {label} descriptions repeat the same text across variants"
+                )
+    return issues
+
+
+def upstream_contract_issues(root: Path, campaign_state_effects: str) -> list[str]:
+    """Guard the identifiers the news layer reads out of other efforts' files."""
+    issues: list[str] = []
+    resolve = named_block(
+        campaign_state_effects, "ADISCORD_vorkerland_resolve_iconic_objective"
+    )
+    if not resolve:
+        issues.append(
+            "iconic-objective news has no upstream: "
+            "ADISCORD_vorkerland_resolve_iconic_objective is gone"
+        )
+    elif f"var = {OBJECTIVE_VARIABLE}" not in resolve:
+        issues.append(
+            f"iconic-objective news reads {OBJECTIVE_VARIABLE}, which "
+            "ADISCORD_vorkerland_resolve_iconic_objective no longer writes"
+        )
+
+    collapse_path = root / COLLAPSE_EVENTS
+    collapse = collapse_path.read_text(encoding="utf-8-sig") if collapse_path.is_file() else ""
+    for flag, _ in WORKER_FATE_DISPATCH:
+        if f"set_global_flag = {flag}" not in collapse:
+            issues.append(f"Worker fate news reads {flag}, which the collapse layer no longer sets")
+
+    focus_path = root / CIVIL_WAR_FOCUS
+    focus = focus_path.read_text(encoding="utf-8-sig") if focus_path.is_file() else ""
+    for flag, _ in VARIANT_DISPATCH:
+        if f"set_country_flag = {flag}" not in focus:
+            issues.append(f"variant news reads {flag}, which the focus tree no longer sets")
     return issues
 
 
 def main() -> int:
     issues = collect_issues()
+    pending = pending_external_dispatch()
     if issues:
         print("Vorkerland story/news validation failed:")
         for issue in issues:
             print(f"- {issue}")
         return 1
     print("Vorkerland story/news validation passed.")
+    if pending:
+        print("Pending external wiring (call sites owned by other efforts):")
+        for entry in pending:
+            print(f"- {entry}")
     return 0
 
 

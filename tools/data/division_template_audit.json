@@ -3,9 +3,9 @@
   "inventory_baseline": {
     "candidate_active_oobs": 99,
     "candidate_oob_templates": 162,
-    "candidate_script_templates": 6,
+    "candidate_script_templates": 15,
     "candidate_oob_references": 375,
-    "candidate_create_unit_references": 33,
+      "candidate_create_unit_references": 34,
     "candidate_technical_references": 10,
     "optional_protected_oob_templates": 6
   },
@@ -5660,6 +5660,13 @@
         "path": "history/units/ROM.txt",
         "owner": "ROM"
       },
+      "source_aliases": [
+        {
+          "kind": "script",
+          "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+          "owner": "script"
+        }
+      ],
       "technical_name": "Line Infantry Brigade",
       "display_name": "Line Infantry Brigade",
       "legacy_names": [],
@@ -7110,6 +7117,13 @@
         "path": "history/units/TGD_vorkerland_collapse.txt",
         "owner": "TGD"
       },
+      "source_aliases": [
+        {
+          "kind": "script",
+          "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+          "owner": "script"
+        }
+      ],
       "technical_name": "TGD Urban Guard",
       "display_name": "TGD Urban Guard",
       "legacy_names": [],
@@ -7409,6 +7423,13 @@
         "path": "history/units/TVA_vorkerland_collapse.txt",
         "owner": "TVA"
       },
+      "source_aliases": [
+        {
+          "kind": "script",
+          "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+          "owner": "script"
+        }
+      ],
       "technical_name": "TVA Collapse Militia",
       "display_name": "TVA Collapse Militia",
       "legacy_names": [],
@@ -7454,6 +7475,13 @@
         "path": "history/units/TVA_vorkerland_collapse.txt",
         "owner": "TVA"
       },
+      "source_aliases": [
+        {
+          "kind": "script",
+          "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+          "owner": "script"
+        }
+      ],
       "technical_name": "TVA Infiltration Cell",
       "display_name": "TVA Infiltration Cell",
       "legacy_names": [],
@@ -7605,6 +7633,13 @@
         "path": "history/units/VAD.txt",
         "owner": "VAD"
       },
+      "source_aliases": [
+        {
+          "kind": "script",
+          "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+          "owner": "script"
+        }
+      ],
       "technical_name": "Armi Security Detachment",
       "display_name": "Armi Security Detachment",
       "legacy_names": [],
@@ -7812,6 +7847,13 @@
         "path": "history/units/VAD.txt",
         "owner": "VAD"
       },
+      "source_aliases": [
+        {
+          "kind": "script",
+          "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+          "owner": "script"
+        }
+      ],
       "technical_name": "Armi Mobile Group",
       "display_name": "Armi Mobile Group",
       "legacy_names": [],
@@ -8786,6 +8828,13 @@
         "path": "history/units/WPS_vorkerland_collapse.txt",
         "owner": "WPS"
       },
+      "source_aliases": [
+        {
+          "kind": "script",
+          "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+          "owner": "script"
+        }
+      ],
       "technical_name": "WPS Collapse Militia",
       "display_name": "WPS Collapse Militia",
       "legacy_names": [],
@@ -8831,6 +8880,13 @@
         "path": "history/units/WRK.txt",
         "owner": "WRK"
       },
+      "source_aliases": [
+        {
+          "kind": "script",
+          "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+          "owner": "script"
+        }
+      ],
       "technical_name": "Workerland Militia",
       "display_name": "Workerland Militia",
       "legacy_names": [],
@@ -9826,10 +9882,14 @@
       "key": "script_adiscord_vorkerland_collapse_effects_emergency_militia",
       "source": {
         "kind": "script",
-        "path": "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt",
+        "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
         "owner": "script"
       },
       "technical_name": "Emergency Militia",
+      "definition_metadata": {
+        "is_locked": true,
+        "force_allow_recruiting": true
+      },
       "display_name": "Emergency Militia",
       "legacy_names": [
         "Чрезвычайное ополчение"
@@ -9873,10 +9933,14 @@
       "key": "script_adiscord_vorkerland_collapse_effects_worker_home_guard",
       "source": {
         "kind": "script",
-        "path": "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt",
+        "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
         "owner": "script"
       },
       "technical_name": "Worker Home Guard",
+      "definition_metadata": {
+        "is_locked": true,
+        "force_allow_recruiting": true
+      },
       "display_name": "Worker Home Guard",
       "legacy_names": [],
       "regiments": [
@@ -10000,7 +10064,18 @@
         "path": "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt",
         "owner": "script"
       },
+      "source_aliases": [
+        {
+          "kind": "script",
+          "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+          "owner": "script"
+        }
+      ],
       "technical_name": "Workerland Mobile Group",
+      "definition_metadata": {
+        "is_locked": false,
+        "force_allow_recruiting": true
+      },
       "display_name": "Workerland Mobile Group",
       "legacy_names": [],
       "regiments": [
@@ -10484,6 +10559,16 @@
       "path": "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt",
       "kind": "create_unit",
       "technical_name": "Armi Mobile Group",
+      "legacy_names": [],
+      "start_experience_factor": 0.35,
+      "start_equipment_factor": 0.9,
+      "count": 1
+    },
+    {
+      "key": "adiscord_vorkerland_collapse_effects_create_unit_workerland_mobile_group_xp_0_35_eq_0_9",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Workerland Mobile Group",
       "legacy_names": [],
       "start_experience_factor": 0.35,
       "start_equipment_factor": 0.9,

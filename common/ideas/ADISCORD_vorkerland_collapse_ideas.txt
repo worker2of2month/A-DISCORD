@@ -27,6 +27,105 @@ ideas = {
 			removal_cost = -1
 			modifier = {
 				surrender_limit = 0.90
+				# Vanilla caps the surrender limit at MAX_SURRENDER_LIMIT. Without
+				# this offset the 0.90 above is silently clipped, and a claimant can
+				# still be knocked out by a raid on its victory points rather than by
+				# actually losing the country.
+				max_surrender_limit_offset = 0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		# Deadlock valve, AI only. Once the war has run long enough that the
+		# map is effectively decided, a handful of surviving district governments
+		# can otherwise keep it technically alive forever. This gives the AI a
+		# scalpel against exactly those holdouts rather than a blanket buff, and
+		# the available block re-checks is_ai continuously, so a human who takes
+		# over a claimant loses it immediately and is never handed a free win.
+		ADISCORD_vorkerland_theatre_priority = {
+			picture = generic_morale_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			available = {
+				is_ai = yes
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+			}
+			targeted_modifier = { tag = EYR attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
+			targeted_modifier = { tag = EGC attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
+			targeted_modifier = { tag = RIV attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
+			targeted_modifier = { tag = REV attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
+			targeted_modifier = { tag = YOR attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
+			targeted_modifier = { tag = NDN attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
+			targeted_modifier = { tag = SWB attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
+			targeted_modifier = { tag = VHV attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
+			targeted_modifier = { tag = OSV attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
+			ai_will_do = { factor = 0 }
+		}
+
+		# Anti-runaway, also AI only, and deliberately aimed at the legitimacy
+		# leader rather than at whoever the human happens to be playing. The
+		# reference mod points its equivalent solely at human-controlled majors,
+		# which leaves a pure AI campaign with no brake on a snowball at all -
+		# and a snowballing AI claimant is exactly what the author reported.
+		#
+		# One idea per possible leader, because targeted_modifier takes no
+		# per-target condition: the whole idea is gated by available instead.
+		ADISCORD_vorkerland_coalition_against_wkr = {
+			picture = generic_morale_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			available = {
+				is_ai = yes
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				WKR = { has_country_flag = ADISCORD_vorkerland_legitimacy_leader }
+			}
+			targeted_modifier = { tag = WKR attack_bonus_against = 0.20 defense_bonus_against = 0.20 }
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_coalition_against_vad = {
+			picture = generic_morale_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			available = {
+				is_ai = yes
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				VAD = { has_country_flag = ADISCORD_vorkerland_legitimacy_leader }
+			}
+			targeted_modifier = { tag = VAD attack_bonus_against = 0.20 defense_bonus_against = 0.20 }
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_vorkerland_coalition_against_tva = {
+			picture = generic_morale_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			available = {
+				is_ai = yes
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				TVA = { has_country_flag = ADISCORD_vorkerland_legitimacy_leader }
+			}
+			targeted_modifier = { tag = TVA attack_bonus_against = 0.20 defense_bonus_against = 0.20 }
+			ai_will_do = { factor = 0 }
+		}
+
+		# Granted automatically to any claimant close to collapse and removed again
+		# when it recovers. The two thresholds differ on purpose: a single value
+		# makes the idea flicker on and off as the front oscillates, which forces a
+		# modifier recalculation on every state control change.
+		ADISCORD_vorkerland_organized_defence = {
+			picture = generic_defence_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.20
+				army_org_factor = 0.10
+				max_dig_in = 2
 			}
 			ai_will_do = { factor = 0 }
 		}
@@ -420,6 +519,9 @@ ideas = {
 				stability_factor = 0.05
 				war_support_factor = 0.05
 				army_org_factor = 0.03
+				conscription = 0.02
+				recruitable_population_factor = 0.08
+				mobilization_speed = 0.10
 			}
 			ai_will_do = { factor = 0 }
 		}

@@ -101,6 +101,56 @@ ADISCORD_vorkerland_collapse_category = {
 		ai_will_do = { factor = 1000 }
 	}
 
+	# The only route by which a regional or district winner reaches the central
+	# war. It is gated on the local bracket actually being cleared, and it splices
+	# the winner into the host's existing war through faction membership plus
+	# add_to_war rather than opening a second war object. One targeted decision
+	# covers all three claimants instead of a copied decision per host.
+	ADISCORD_vorkerland_join_claimant_coalition = {
+		icon = generic_diplomatic_treaty
+		allowed = {
+			OR = {
+				ADISCORD_vorkerland_is_central_bracket_member = yes
+				ADISCORD_vorkerland_is_regional_combatant = yes
+			}
+		}
+		# Only the three claimants are ever candidate hosts, so the target list is
+		# closed and the expensive host trigger runs at most three times. The root
+		# gate keeps it from running at all outside the collapse window.
+		targets = { WKR VAD TVA }
+		target_root_trigger = {
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+			NOT = { has_country_flag = ADISCORD_vorkerland_regional_auxiliary }
+		}
+		target_trigger = {
+			FROM = { ADISCORD_vorkerland_is_coalition_host_for_ROOT = yes }
+		}
+		visible = {
+			is_subject = no
+			is_in_faction = no
+			NOT = { has_country_flag = ADISCORD_vorkerland_regional_auxiliary }
+		}
+		available = {
+			has_war = no
+			NOT = { has_capitulated = yes }
+			capital_scope = { is_controlled_by = ROOT }
+			ADISCORD_vorkerland_has_live_local_rival = no
+			FROM = { ADISCORD_vorkerland_is_coalition_host_for_ROOT = yes }
+		}
+		cost = 25
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_vorkerland_join_claimant_coalition_tt
+			hidden_effect = { ADISCORD_vorkerland_join_coalition_of_FROM = yes }
+		}
+		ai_will_do = {
+			base = 200
+			modifier = { factor = 0 ADISCORD_vorkerland_has_live_local_rival = yes }
+			modifier = { factor = 2 num_divisions > 8 }
+		}
+	}
+
 	# A victorious and independent Frealor may open a limited northern operation.
 	# It receives the corridor only after physically controlling all three states;
 	# a timeout or the end of the central war closes both wars without transfers.
@@ -291,13 +341,14 @@ ADISCORD_vorkerland_collapse_category = {
 		complete_effect = {
 			add_manpower = 1800
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 300 producer = TVA }
+			ADISCORD_vorkerland_ensure_tva_collapse_militia_template = yes
 			36 = {
 				create_unit = { division = "name = \"Technical Reserve Battalion\" division_template = \"TVA Collapse Militia\" start_experience_factor = 0.10 start_equipment_factor = 0.75" owner = TVA }
 				create_unit = { division = "name = \"Technical Security Battalion\" division_template = \"TVA Collapse Militia\" start_experience_factor = 0.10 start_equipment_factor = 0.75" owner = TVA }
 			}
 			if = {
 				limit = { WPS = { exists = yes has_war = yes NOT = { has_capitulated = yes } controls_state = 196 } }
-				WPS = { add_manpower = 600 add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 120 producer = TVA } }
+				WPS = { ADISCORD_vorkerland_ensure_wps_collapse_militia_template = yes add_manpower = 600 add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 120 producer = TVA } }
 				196 = { create_unit = { division = "name = \"Holden Technical Battalion\" division_template = \"WPS Collapse Militia\" start_experience_factor = 0.10 start_equipment_factor = 0.70" owner = WPS } }
 			}
 			if = {
@@ -311,6 +362,7 @@ ADISCORD_vorkerland_collapse_category = {
 					}
 				}
 				TGD = {
+					ADISCORD_vorkerland_ensure_tgd_urban_guard_template = yes
 					set_country_flag = ADISCORD_vorkerland_tgd_technical_aid_received
 					add_manpower = 600
 					add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 120 producer = TVA }
@@ -360,6 +412,7 @@ ADISCORD_vorkerland_collapse_category = {
 		cost = 35
 		fire_only_once = yes
 		complete_effect = {
+			ADISCORD_vorkerland_ensure_tva_infiltration_cell_template = yes
 			33 = {
 				if = {
 					limit = { is_controlled_by = WKR }
@@ -397,6 +450,7 @@ ADISCORD_vorkerland_collapse_category = {
 		cost = 35
 		fire_only_once = yes
 		complete_effect = {
+			ADISCORD_vorkerland_ensure_tva_infiltration_cell_template = yes
 			75 = {
 				if = {
 					limit = { is_controlled_by = VAD }

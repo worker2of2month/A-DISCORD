@@ -245,6 +245,7 @@ ADISCORD_vorkerland_raise_wkr_retreat_levy_1 = {
 			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
 		}
 		set_country_flag = ADISCORD_vorkerland_wkr_retreat_levy_1_raised
+		PREV = { ADISCORD_vorkerland_ensure_workerland_militia_template = yes }
 		capital_scope = {
 			create_unit = {
 				division = "name = \"First Retreat Levy\" division_template = \"Workerland Militia\" start_experience_factor = 0.05 start_equipment_factor = 0.55"
@@ -268,6 +269,7 @@ ADISCORD_vorkerland_raise_wkr_retreat_levy_2 = {
 			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
 		}
 		set_country_flag = ADISCORD_vorkerland_wkr_retreat_levy_2_raised
+		PREV = { ADISCORD_vorkerland_ensure_workerland_militia_template = yes }
 		capital_scope = {
 			create_unit = {
 				division = "name = \"Last Worker Reserve\" division_template = \"Workerland Militia\" start_experience_factor = 0.02 start_equipment_factor = 0.45"
@@ -290,6 +292,7 @@ ADISCORD_vorkerland_raise_vad_retreat_levy_1 = {
 			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
 		}
 		set_country_flag = ADISCORD_vorkerland_vad_retreat_levy_1_raised
+		PREV = { ADISCORD_vorkerland_ensure_armi_security_detachment_template = yes }
 		capital_scope = {
 			create_unit = {
 				division = "name = \"First Chancery Levy\" division_template = \"Armi Security Detachment\" start_experience_factor = 0.05 start_equipment_factor = 0.55"
@@ -313,6 +316,7 @@ ADISCORD_vorkerland_raise_vad_retreat_levy_2 = {
 			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
 		}
 		set_country_flag = ADISCORD_vorkerland_vad_retreat_levy_2_raised
+		PREV = { ADISCORD_vorkerland_ensure_armi_security_detachment_template = yes }
 		capital_scope = {
 			create_unit = {
 				division = "name = \"Last Chancery Reserve\" division_template = \"Armi Security Detachment\" start_experience_factor = 0.02 start_equipment_factor = 0.45"
@@ -335,6 +339,7 @@ ADISCORD_vorkerland_raise_tva_retreat_levy_1 = {
 			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
 		}
 		set_country_flag = ADISCORD_vorkerland_tva_retreat_levy_1_raised
+		PREV = { ADISCORD_vorkerland_ensure_tva_collapse_militia_template = yes }
 		capital_scope = {
 			create_unit = {
 				division = "name = \"First Technical Levy\" division_template = \"TVA Collapse Militia\" start_experience_factor = 0.05 start_equipment_factor = 0.55"
@@ -358,6 +363,7 @@ ADISCORD_vorkerland_raise_tva_retreat_levy_2 = {
 			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
 		}
 		set_country_flag = ADISCORD_vorkerland_tva_retreat_levy_2_raised
+		PREV = { ADISCORD_vorkerland_ensure_tva_collapse_militia_template = yes }
 		capital_scope = {
 			create_unit = {
 				division = "name = \"Last Technical Reserve\" division_template = \"TVA Collapse Militia\" start_experience_factor = 0.02 start_equipment_factor = 0.45"

@@ -185,7 +185,7 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     if on_actions.count("on_war_relation_added = {") != 1:
         issues.append("stalemate scheduling must have exactly one on_war_relation_added hook")
     for token in (
-        "ROOT = { ADISCORD_vorkerland_is_central_claimant = yes }",
+        "ROOT = { ADISCORD_vorkerland_is_main_claimant = yes }",
         "FROM = { ADISCORD_vorkerland_is_central_minor = yes }",
         "ROOT = { tag = SOL }",
         "FROM = { OR = { tag = SRA tag = CSL } }",

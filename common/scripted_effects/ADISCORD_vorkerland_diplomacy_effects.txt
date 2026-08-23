@@ -592,6 +592,7 @@ ADISCORD_vorkerland_attempt_wkr_solyarino_intervention = {
 	clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sra
 	clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_csl
 	clr_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+	clr_global_flag = ADISCORD_vorkerland_vad_solyarino_counter_active
 	clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_pending
 	clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_retry
 	clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_verified
@@ -649,6 +650,7 @@ ADISCORD_vorkerland_attempt_wkr_solyarino_intervention = {
 			set_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
 			set_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_pending
 			country_event = { id = ADISCORD_vorkerland_diplomacy.10 days = 1 }
+			ADISCORD_vorkerland_attempt_vad_solyarino_counter = yes
 		}
 		else = {
 			set_country_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_failed
@@ -687,6 +689,7 @@ ADISCORD_vorkerland_verify_wkr_solyarino_intervention = {
 		clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_pending
 		clr_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_retry
 		set_country_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_verified
+		ADISCORD_vorkerland_attempt_vad_solyarino_counter = yes
 	}
 	else_if = {
 		limit = {
@@ -736,6 +739,69 @@ ADISCORD_vorkerland_verify_wkr_solyarino_intervention = {
 	}
 }
 
+# Separate from the WKR attempt so that block keeps exactly three Solarino
+# declarations. VAD opens the same live targets plus WKR itself; this is a
+# counter, not VAD's authored solar restoration.
+ADISCORD_vorkerland_attempt_vad_solyarino_counter = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solyarino_counter_active }
+			country_exists = VAD
+			VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+		}
+		VAD = {
+			if = {
+				limit = { NOT = { has_country_flag = ADISCORD_vorkerland_preserve_wartime_faction } }
+				ADISCORD_vorkerland_leave_inherited_faction = yes
+			}
+			if = {
+				limit = {
+					WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+					NOT = { has_war_with = WKR }
+					NOT = { is_in_faction_with = WKR }
+				}
+				WKR = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+				declare_war_on = { target = WKR type = annex_everything }
+			}
+			if = {
+				limit = {
+					WKR = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sol }
+					country_exists = SOL
+					SOL = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+					NOT = { has_war_with = SOL }
+					NOT = { is_in_faction_with = SOL }
+				}
+				SOL = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+				declare_war_on = { target = SOL type = annex_everything }
+			}
+			if = {
+				limit = {
+					WKR = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sra }
+					country_exists = SRA
+					SRA = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+					NOT = { has_war_with = SRA }
+					NOT = { is_in_faction_with = SRA }
+				}
+				SRA = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+				declare_war_on = { target = SRA type = annex_everything }
+			}
+			if = {
+				limit = {
+					WKR = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_csl }
+					country_exists = CSL
+					CSL = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+					NOT = { has_war_with = CSL }
+					NOT = { is_in_faction_with = CSL }
+				}
+				CSL = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+				declare_war_on = { target = CSL type = annex_everything }
+			}
+			set_global_flag = ADISCORD_vorkerland_vad_solyarino_counter_active
+		}
+	}
+}
+
 ADISCORD_vorkerland_clear_wkr_solyarino_intervention = {
 	if = {
 		limit = {
@@ -745,9 +811,20 @@ ADISCORD_vorkerland_clear_wkr_solyarino_intervention = {
 				WKR = { OR = { is_subject = yes has_capitulated = yes } }
 				WKR = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_failed }
 				has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_failed
+				# Terminal release. Both outcome branches require the Solarino wars to
+				# finish, so a grinding side war would otherwise hold this flag forever
+				# and block reunification for every claimant, not just WKR. Once the
+				# showdown has left one survivor the intervention can no longer decide
+				# anything, and an in-flight protectorate handover is left untouched.
+				AND = {
+					has_global_flag = ADISCORD_vorkerland_central_showdown_started
+					ADISCORD_vorkerland_has_single_surviving_claimant = yes
+					NOT = { has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending }
+				}
 			}
 		}
 		clr_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		clr_global_flag = ADISCORD_vorkerland_vad_solyarino_counter_active
 		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending
 		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized
 		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialization_retry
@@ -976,6 +1053,7 @@ ADISCORD_vorkerland_verify_sol_worker_protectorate = {
 		}
 		set_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verified
 		clr_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		clr_global_flag = ADISCORD_vorkerland_vad_solyarino_counter_active
 		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending
 		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized
 		clr_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialization_retry
@@ -1011,5 +1089,455 @@ ADISCORD_vorkerland_verify_sol_worker_protectorate = {
 		set_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_failed
 		ADISCORD_vorkerland_clear_wkr_solyarino_intervention = yes
 		log = "[ADISCORD][VORKERLAND][DIPLOMACY] SOL worker protectorate verification failed after one retry."
+	}
+}
+
+# Declare on every still-valid central minor and every still-valid rival
+# central major. Minors leave an inherited faction first; rival majors
+# do not. No adjacency check. Self is never a target.
+ADISCORD_vorkerland_attempt_remaining_central_fronts = {
+	if = {
+		limit = {
+			tag = WKR
+			is_subject = no
+			NOT = { has_capitulated = yes }
+		}
+		if = {
+			limit = {
+				EYR = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			EYR = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = EYR type = annex_everything }
+		}
+		if = {
+			limit = {
+				EGC = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			EGC = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = EGC type = annex_everything }
+		}
+		if = {
+			limit = {
+				RIV = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			RIV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = RIV type = annex_everything }
+		}
+		if = {
+			limit = {
+				REV = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			REV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = REV type = annex_everything }
+		}
+		if = {
+			limit = {
+				YOR = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			YOR = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = YOR type = annex_everything }
+		}
+		if = {
+			limit = {
+				NDN = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			NDN = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = NDN type = annex_everything }
+		}
+		if = {
+			limit = {
+				SWB = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			SWB = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = SWB type = annex_everything }
+		}
+		if = {
+			limit = {
+				VHV = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			VHV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = VHV type = annex_everything }
+		}
+		if = {
+			limit = {
+				OSV = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			OSV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = OSV type = annex_everything }
+		}
+		if = {
+			limit = {
+				VAD = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			declare_war_on = { target = VAD type = annex_everything }
+		}
+		if = {
+			limit = {
+				TVA = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			declare_war_on = { target = TVA type = annex_everything }
+		}
+	}
+	if = {
+		limit = {
+			tag = VAD
+			is_subject = no
+			NOT = { has_capitulated = yes }
+		}
+		if = {
+			limit = {
+				EYR = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			EYR = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = EYR type = annex_everything }
+		}
+		if = {
+			limit = {
+				EGC = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			EGC = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = EGC type = annex_everything }
+		}
+		if = {
+			limit = {
+				RIV = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			RIV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = RIV type = annex_everything }
+		}
+		if = {
+			limit = {
+				REV = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			REV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = REV type = annex_everything }
+		}
+		if = {
+			limit = {
+				YOR = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			YOR = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = YOR type = annex_everything }
+		}
+		if = {
+			limit = {
+				NDN = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			NDN = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = NDN type = annex_everything }
+		}
+		if = {
+			limit = {
+				SWB = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			SWB = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = SWB type = annex_everything }
+		}
+		if = {
+			limit = {
+				VHV = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			VHV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = VHV type = annex_everything }
+		}
+		if = {
+			limit = {
+				OSV = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			OSV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = OSV type = annex_everything }
+		}
+		if = {
+			limit = {
+				WKR = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			declare_war_on = { target = WKR type = annex_everything }
+		}
+		if = {
+			limit = {
+				TVA = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			declare_war_on = { target = TVA type = annex_everything }
+		}
+	}
+	if = {
+		limit = {
+			tag = TVA
+			is_subject = no
+			NOT = { has_capitulated = yes }
+		}
+		if = {
+			limit = {
+				EYR = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			EYR = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = EYR type = annex_everything }
+		}
+		if = {
+			limit = {
+				EGC = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			EGC = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = EGC type = annex_everything }
+		}
+		if = {
+			limit = {
+				RIV = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			RIV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = RIV type = annex_everything }
+		}
+		if = {
+			limit = {
+				REV = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			REV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = REV type = annex_everything }
+		}
+		if = {
+			limit = {
+				YOR = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			YOR = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = YOR type = annex_everything }
+		}
+		if = {
+			limit = {
+				NDN = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			NDN = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = NDN type = annex_everything }
+		}
+		if = {
+			limit = {
+				SWB = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			SWB = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = SWB type = annex_everything }
+		}
+		if = {
+			limit = {
+				VHV = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			VHV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = VHV type = annex_everything }
+		}
+		if = {
+			limit = {
+				OSV = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			OSV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			declare_war_on = { target = OSV type = annex_everything }
+		}
+		if = {
+			limit = {
+				WKR = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			declare_war_on = { target = WKR type = annex_everything }
+		}
+		if = {
+			limit = {
+				VAD = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+				}
+			}
+			declare_war_on = { target = VAD type = annex_everything }
+		}
 	}
 }

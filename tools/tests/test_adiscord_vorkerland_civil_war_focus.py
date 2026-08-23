@@ -12,6 +12,19 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     CENTRAL_CAPSTONES,
     CENTRAL_PREPARED_FLAG,
     CHARACTER_FILE,
+    DEPTH_AI_PLANS,
+    DEPTH_ANCHORS,
+    DEPTH_COSTS,
+    DEPTH_EXCLUSIVE_PAIRS,
+    DEPTH_FOCUSES,
+    DEPTH_LATE_WAR_FOCUSES,
+    DEPTH_LEGITIMACY_DELTAS,
+    DEPTH_MODULE_FOCUSES,
+    DEPTH_PERMANENT_IDEAS,
+    DEPTH_POSITIONS,
+    DEPTH_POSTWAR_CAPSTONES,
+    DEPTH_TIMED_IDEAS,
+    DEPTH_VARIANT_IDENTITY,
     COLLAPSE_IDEAS_FILE,
     CONTINUOUS_FOCUS_FILE,
     CORE_DECISIONS,
@@ -21,7 +34,7 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     DORMANT_WRK_SCRUB_EFFECT,
     ENGLISH_LOCALISATION,
     ENGLISH_POSTWAR_IDEA_LOCALISATION,
-    FOCUS_DECISIONS_FILE,
+    FOCUS_DECISION_FILES,
     FOCUS_EXPANSION_IDEAS,
     FOCUS_EXPANSION_IDEAS_FILE,
     FOCUS_FILE,
@@ -42,7 +55,13 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     PREWAR_CARRYOVER_FLAG,
     PREWAR_COURSE_SELECTIONS,
     PREWAR_EXPANSION_COSTS,
+    LAYOUT_ANCHORS,
+    LAYOUT_BANDS,
     PREWAR_EXPANSION_POSITIONS,
+    SUPPORTED_SEARCH_FILTERS,
+    _layout_band,
+    _relative_anchor,
+    resolved_positions,
     PREWAR_EXPANSION_PREREQUISITES,
     PREWAR_PHASE,
     PREWAR_VAD_BASE_FOCUSES,
@@ -57,11 +76,13 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     RUSSIAN_LOCALISATION,
     RUSSIAN_POSTWAR_IDEA_LOCALISATION,
     SHINE_FILE,
+    SHOWDOWN_PHASE,
     SHOWDOWN_AI_PLANS,
     SHOWDOWN_COSTS,
     SHOWDOWN_FOCUSES,
     SHOWDOWN_POSITIONS,
     SHOWDOWN_PREREQUISITES,
+    REMAINING_FRONTS_FOCUSES,
     TVA_AI_PLAN_FILE,
     TVA_OPTIONAL_AI_PLANS,
     TVA_OPTIONAL_COSTS,
@@ -69,7 +90,18 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     TVA_OPTIONAL_POSITIONS,
     TVA_OPTIONAL_TIMED_IDEAS,
     TVA_OPTIONAL_WARTIME_FOCUSES,
+    TVA_VARIANT_FOCUSES,
     RETIRED_WARTIME_FOCUSES,
+    VAD_VARIANT_FOCUSES,
+    VARIANT_BRANCHES,
+    VARIANT_CLEANUP_FOCUSES,
+    VARIANT_IDEAS,
+    VARIANT_PERMANENT_IDEAS,
+    WAR_ECONOMY_CAPSTONES,
+    WAR_ECONOMY_DYNAMIC,
+    WAR_ECONOMY_MODIFIER_FILE,
+    WAR_ECONOMY_REFRESH_EFFECT,
+    WAR_ECONOMY_REFRESH_FILE,
     WARTIME_ROUTE_FOCUSES,
     WKR_AI_PLAN_FILE,
     WKR_OPTIONAL_WARTIME_FOCUSES,
@@ -89,8 +121,10 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     VORKERLAND_CONTINUOUS_FOCUSES,
     WARTIME_OUTCOME_EXCLUSIONS,
     WARTIME_OUTCOME_FALSE_GATE_TOKENS,
+    WARTIME_ROUTE_CONVERGENCE,
     WARTIME_ROUTE_IDENTITIES,
     WARTIME_TERMINALS,
+    WKR_VARIANT_FOCUSES,
     WORX_ADAPTIVE_LOGISTICS_IDEA,
     WORX_FIELD_DIRECTORATE_IDEAS,
     WORX_POSTWAR_PROVISIONAL_IDEAS,
@@ -99,6 +133,8 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     WORKER_REFORM_STAGE_IDEAS,
     WRK_FORMATION_EFFECTS,
     _blocks,
+    _allow_branch,
+    _check_focus_reference_order,
     _focus_cost,
     _mutually_exclusive_focuses,
     _phase_flags,
@@ -121,6 +157,10 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.source = read(FOCUS_FILE)
         cls.blocks = focus_blocks(cls.source)
+        # The tree positions almost every focus with relative_position_id, so
+        # anything that asserts where a focus appears on screen has to compare
+        # the resolved grid cell rather than the authored offset.
+        cls.grid = resolved_positions(cls.blocks)
         cls.continuous_source = read(CONTINUOUS_FOCUS_FILE)
         cls.continuous_blocks = focus_blocks(cls.continuous_source)
         cls.phase_effects = read(PHASE_EFFECTS_FILE)
@@ -141,9 +181,13 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
             self.assertEqual(selector.count(f"tag = {tag}"), 1)
         self.assertNotIn("original_tag", selector)
 
-    def test_manifest_has_one_hundred_fifty_one_bounded_definitions(self) -> None:
+    def test_manifest_has_two_hundred_seventeen_bounded_definitions(self) -> None:
         self.assertEqual(tuple(self.blocks), FOCUS_IDS)
-        self.assertEqual(len(self.blocks), 151)
+        self.assertEqual(len(self.blocks), 235)
+        self.assertEqual(len(DEPTH_FOCUSES), 63)
+        self.assertEqual(len(WKR_VARIANT_FOCUSES), 6)
+        self.assertEqual(len(VAD_VARIANT_FOCUSES), 6)
+        self.assertEqual(len(TVA_VARIANT_FOCUSES), 6)
         self.assertEqual(len(PREWAR_WRK_FOCUSES), 10)
         self.assertEqual(len(PREWAR_VAD_FOCUSES), 10)
         self.assertEqual(len(PREWAR_WRK_EXPANSION_FOCUSES), 4)
@@ -153,10 +197,11 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
             {tag: len(route) for tag, route in WARTIME_ROUTE_FOCUSES.items()},
             {"WKR": 17, "VAD": 17, "TVA": 18},
         )
-        self.assertEqual(len(WKR_OPTIONAL_WARTIME_FOCUSES), 6)
-        self.assertEqual(len(VAD_OPTIONAL_WARTIME_FOCUSES), 9)
+        self.assertEqual(len(WKR_OPTIONAL_WARTIME_FOCUSES), 7)
+        self.assertEqual(len(VAD_OPTIONAL_WARTIME_FOCUSES), 10)
         self.assertEqual(len(VAD_LATE_WAR_BRIDGE_FOCUSES), 4)
-        self.assertEqual(len(TVA_OPTIONAL_WARTIME_FOCUSES), 10)
+        self.assertEqual(len(TVA_OPTIONAL_WARTIME_FOCUSES), 11)
+        self.assertEqual(len(REMAINING_FRONTS_FOCUSES), 3)
         self.assertEqual(
             {tag: len(focuses) for tag, focuses in SHOWDOWN_FOCUSES.items()},
             {"WKR": 7, "VAD": 5, "TVA": 5},
@@ -208,6 +253,48 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
         ):
             self.assertNotIn(obsolete_blocker, available)
 
+    def test_remaining_fronts_are_unstick_lanes_not_outcome_depth(self) -> None:
+        self.assertEqual(
+            REMAINING_FRONTS_FOCUSES,
+            (
+                "WKR_open_the_remaining_fronts",
+                "VAD_open_the_remaining_fronts",
+                "TVA_open_the_remaining_fronts",
+            ),
+        )
+        expected_cells = {
+            "WKR_open_the_remaining_fronts": (6, 8),
+            "VAD_open_the_remaining_fronts": (32, 8),
+            "TVA_open_the_remaining_fronts": (69, 8),
+        }
+        expected_parents = {
+            "WKR_open_the_remaining_fronts": "WKR_affirm_worker_mandate",
+            "VAD_open_the_remaining_fronts": "VAD_proclaim_joint_charter",
+            "TVA_open_the_remaining_fronts": "TVA_codify_utilitarian_directorate",
+        }
+        occupied = set(self.grid.values())
+        for focus_id, parent in expected_parents.items():
+            with self.subTest(focus_id=focus_id):
+                block = self.blocks[focus_id]
+                self.assertEqual(self.grid[focus_id], expected_cells[focus_id])
+                self.assertEqual(_prerequisites(block), {parent})
+                self.assertEqual(_focus_cost(block), 3)
+                self.assertIn(
+                    "ADISCORD_vorkerland_attempt_remaining_central_fronts = yes",
+                    block,
+                )
+                self.assertNotIn("declare_war_on", block)
+                self.assertNotIn("any_neighbor_country", block)
+                self.assertIn(
+                    "ADISCORD_vorkerland_claimant_has_remaining_central_targets = yes",
+                    block,
+                )
+                self.assertIn(
+                    "ADISCORD_vorkerland_focus_central_minor_front_protracted",
+                    block,
+                )
+        self.assertEqual(len(occupied), len(self.grid))
+
     def test_vad_optional_depth_is_outcome_specific_and_capstone_neutral(self) -> None:
         optional = set(VAD_OPTIONAL_WARTIME_FOCUSES)
         self.assertEqual(
@@ -222,10 +309,7 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
                 self.assertIn("tag = VAD", block)
                 self.assertNotIn("declare_war_on", block)
                 self.assertNotIn("ADISCORD_vorkerland_tva_field_directorate_3", block)
-                position = (
-                    int(re.search(r"(?m)^\s*x\s*=\s*(-?\d+)\s*$", block).group(1)),
-                    int(re.search(r"(?m)^\s*y\s*=\s*(-?\d+)\s*$", block).group(1)),
-                )
+                position = self.grid[focus_id]
                 self.assertEqual(position, VAD_OPTIONAL_POSITIONS[focus_id])
                 self.assertNotIn(position, positions)
                 positions.add(position)
@@ -295,26 +379,13 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
                 self.assertIn("NOT = { has_capitulated = yes }", available[0])
                 self.assertNotIn("has_war", available[0])
 
-                position = (
-                    int(re.search(r"(?m)^\s*x\s*=\s*(-?\d+)\s*$", block).group(1)),
-                    int(re.search(r"(?m)^\s*y\s*=\s*(-?\d+)\s*$", block).group(1)),
-                )
+                position = self.grid[focus_id]
                 self.assertEqual(position, VAD_LATE_WAR_BRIDGE_POSITIONS[focus_id])
-                colliding = []
-                for other_id, other_block in self.blocks.items():
-                    if other_id == focus_id:
-                        continue
-                    x_match = re.search(
-                        r"(?m)^\s*x\s*=\s*(-?\d+)\s*$", other_block
-                    )
-                    y_match = re.search(
-                        r"(?m)^\s*y\s*=\s*(-?\d+)\s*$", other_block
-                    )
-                    if x_match and y_match and (
-                        int(x_match.group(1)),
-                        int(y_match.group(1)),
-                    ) == position:
-                        colliding.append(other_id)
+                colliding = [
+                    other_id
+                    for other_id, cell in self.grid.items()
+                    if other_id != focus_id and cell == position
+                ]
                 self.assertEqual(colliding, [])
                 self.assertEqual(_focus_cost(block), VAD_LATE_WAR_BRIDGE_COSTS[focus_id])
                 self.assertEqual(
@@ -423,16 +494,18 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
                 block = self.blocks[focus_id]
                 self.assertEqual(_phase_flags(block), ACTIVE_PHASE_FLAGS)
                 self.assertIn("tag = TVA", block)
-                self.assertIn("has_government = technocracy", block)
-                self.assertIn("character = TVA_Dorian_Worx", block)
+                if focus_id != "TVA_open_the_remaining_fronts":
+                    self.assertIn("has_government = technocracy", block)
+                    self.assertIn("character = TVA_Dorian_Worx", block)
+                else:
+                    allow = _allow_branch(block)
+                    self.assertNotIn("has_government = technocracy", allow)
+                    self.assertNotIn("character = TVA_Dorian_Worx", allow)
                 self.assertNotIn("declare_war_on", block)
                 self.assertNotIn("ADISCORD_vorkerland_tva_field_directorate_3", block)
                 self.assertNotIn("phase_worx_client_administration", block)
                 self.assertNotIn("phase_worx_fragmentation", block)
-                position = (
-                    int(re.search(r"(?m)^\s*x\s*=\s*(-?\d+)\s*$", block).group(1)),
-                    int(re.search(r"(?m)^\s*y\s*=\s*(-?\d+)\s*$", block).group(1)),
-                )
+                position = self.grid[focus_id]
                 self.assertEqual(position, TVA_OPTIONAL_POSITIONS[focus_id])
                 self.assertNotIn(position, positions)
                 positions.add(position)
@@ -783,15 +856,127 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
 
     def test_wartime_layouts_use_unique_compact_coordinates(self) -> None:
         for tag, focus_ids in WARTIME_ROUTE_FOCUSES.items():
-            positions = []
-            for focus_id in focus_ids:
-                block = self.blocks[focus_id]
-                x = int(re.search(r"(?m)^\s*x\s*=\s*(\d+)$", block).group(1))
-                y = int(re.search(r"(?m)^\s*y\s*=\s*(\d+)$", block).group(1))
-                positions.append((x, y))
+            positions = [self.grid[focus_id] for focus_id in focus_ids]
             with self.subTest(tag=tag):
                 self.assertEqual(len(positions), len(set(positions)))
-                self.assertLessEqual(max(y for _x, y in positions) - min(y for _x, y in positions), 6)
+                # Seven spine steps at the two-row pitch the canvas is drawn on.
+                self.assertLessEqual(
+                    max(y for _x, y in positions) - min(y for _x, y in positions), 14
+                )
+
+    def test_no_two_focuses_are_drawn_on_the_same_grid_cell(self) -> None:
+        occupied: dict[tuple[int, int], str] = {}
+        for focus_id in sorted(self.blocks):
+            cell = self.grid.get(focus_id)
+            with self.subTest(focus_id=focus_id):
+                self.assertIsNotNone(cell, "focus position must resolve")
+                self.assertNotIn(
+                    cell,
+                    occupied,
+                    f"{focus_id} collides with {occupied.get(cell)} at {cell}",
+                )
+            occupied[cell] = focus_id
+        self.assertEqual(len(occupied), len(self.blocks))
+
+    def test_layout_uses_one_absolute_anchor_per_lifecycle_block(self) -> None:
+        absolute = sorted(
+            focus_id
+            for focus_id, block in self.blocks.items()
+            if _relative_anchor(block) is None
+        )
+        self.assertEqual(absolute, sorted(LAYOUT_ANCHORS))
+        for focus_id, expected in LAYOUT_ANCHORS.items():
+            with self.subTest(focus_id=focus_id):
+                self.assertEqual(self.grid[focus_id], expected)
+
+    def test_every_branch_hangs_off_a_real_prerequisite_and_is_drawn_below_it(
+        self,
+    ) -> None:
+        for focus_id in sorted(self.blocks):
+            block = self.blocks[focus_id]
+            anchor = _relative_anchor(block)
+            if anchor is None:
+                continue
+            prerequisites = {
+                token for group in _prerequisite_groups(block) for token in group
+            }
+            with self.subTest(focus_id=focus_id):
+                self.assertIn(
+                    anchor,
+                    prerequisites,
+                    "a branch may only be anchored to a focus that gates it",
+                )
+                self.assertGreater(self.grid[focus_id][1], self.grid[anchor][1])
+
+    def test_every_relative_anchor_is_defined_before_its_consumer(self) -> None:
+        offsets = {
+            match.group(1): match.start()
+            for match in re.finditer(
+                r"(?ms)^\s*focus\s*=\s*\{\s*id\s*=\s*([A-Za-z0-9_]+)",
+                self.source,
+            )
+        }
+        for focus_id, block in self.blocks.items():
+            anchor = _relative_anchor(block)
+            if anchor is not None:
+                self.assertIn(anchor, offsets)
+                self.assertLess(offsets[anchor], offsets[focus_id], (focus_id, anchor))
+
+    def test_reference_order_validator_reports_forward_and_missing_anchors(self) -> None:
+        source = """
+focus = {
+    id = TEST_forward_consumer
+    relative_position_id = TEST_late_anchor
+}
+focus = {
+    id = TEST_missing_consumer
+    relative_position_id = TEST_missing_anchor
+}
+focus = {
+    id = TEST_late_anchor
+}
+"""
+        self.assertEqual(
+            _check_focus_reference_order(source, focus_blocks(source)),
+            [
+                "TEST_forward_consumer references TEST_late_anchor before its definition",
+                "TEST_missing_consumer references missing relative anchor TEST_missing_anchor",
+            ],
+        )
+
+    def test_every_focus_declares_supported_search_filters(self) -> None:
+        for focus_id in sorted(self.blocks):
+            filters = _blocks(self.blocks[focus_id], "search_filters")
+            with self.subTest(focus_id=focus_id):
+                self.assertEqual(len(filters), 1)
+                tokens = re.findall(r"\b(FOCUS_FILTER_[A-Z_]+)\b", filters[0])
+                self.assertTrue(tokens)
+                self.assertLessEqual(len(tokens), 3)
+                self.assertFalse(set(tokens) - SUPPORTED_SEARCH_FILTERS)
+
+    def test_every_focus_stays_inside_its_documented_band(self) -> None:
+        for focus_id in sorted(self.blocks):
+            band = _layout_band(focus_id, self.blocks[focus_id])
+            (x_low, x_high), (y_low, y_high) = LAYOUT_BANDS[band]
+            x, y = self.grid[focus_id]
+            with self.subTest(focus_id=focus_id, band=band):
+                self.assertTrue(x_low <= x <= x_high, f"{focus_id} x={x} outside {band}")
+                self.assertTrue(y_low <= y <= y_high, f"{focus_id} y={y} outside {band}")
+
+    def test_mutually_exclusive_siblings_share_a_row(self) -> None:
+        for focus_id in sorted(self.blocks):
+            block = self.blocks[focus_id]
+            for other in re.findall(
+                r"mutually_exclusive = \{[^}]*focus = ([A-Za-z0-9_]+)", block
+            ):
+                if other not in self.grid:
+                    continue
+                with self.subTest(pair=(focus_id, other)):
+                    self.assertEqual(
+                        self.grid[focus_id][1],
+                        self.grid[other][1],
+                        "an exclusive fork must read as one row of alternatives",
+                    )
 
     def test_showdown_expansion_has_exact_geometry_graph_and_live_war_gate(self) -> None:
         opponents = {
@@ -803,14 +988,7 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
             positions = set()
             for focus_id in focus_ids:
                 block = self.blocks[focus_id]
-                position = tuple(
-                    int(
-                        re.search(
-                            rf"(?m)^\s*{axis}\s*=\s*(-?\d+)\s*$", block
-                        ).group(1)
-                    )
-                    for axis in ("x", "y")
-                )
+                position = self.grid[focus_id]
                 available = _blocks(block, "available")[0]
                 with self.subTest(tag=tag, focus_id=focus_id):
                     self.assertEqual(position, SHOWDOWN_POSITIONS[focus_id])
@@ -846,6 +1024,10 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
             for focus_id in (
                 *PREWAR_WRK_EXPANSION_FOCUSES,
                 *PREWAR_VAD_EXPANSION_FOCUSES,
+                *WKR_VARIANT_FOCUSES,
+                *VAD_VARIANT_FOCUSES,
+                *TVA_VARIANT_FOCUSES,
+                *DEPTH_FOCUSES,
             )
         )
         for idea_id in FOCUS_EXPANSION_IDEAS:
@@ -925,12 +1107,253 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
                     self.assertIn("weight = { factor = 5 }", plan)
 
     def test_real_claimant_identities_gate_each_asymmetric_political_route(self) -> None:
-        for focus_ids, identity_tokens in WARTIME_ROUTE_IDENTITIES:
+        """Structural gating lives in allow_branch, volatile identity in available.
+
+        A claimant's political line must be selected by the collapse roll flag
+        alone. If the ruling party or the cached country leader were tested in
+        allow_branch as well, a transient character-cache mismatch would delete
+        both political lines of that claimant and strand the convergence focus
+        that consumes them, which is exactly how a claimant stops progressing.
+        """
+
+        for focus_ids, branch_tokens, identity_tokens in WARTIME_ROUTE_IDENTITIES:
             for focus_id in focus_ids:
-                allow = _blocks(self.blocks[focus_id], "allow_branch")[0]
-                for token in identity_tokens:
+                block = self.blocks[focus_id]
+                allow = _blocks(block, "allow_branch")[0]
+                available = "\n".join(_blocks(block, "available"))
+                for token in branch_tokens:
                     with self.subTest(focus_id=focus_id, token=token):
                         self.assertIn(token, allow)
+                for token in identity_tokens:
+                    with self.subTest(focus_id=focus_id, token=token):
+                        self.assertIn(token, available)
+                        self.assertNotIn(token, allow)
+
+    def test_each_claimant_convergence_survives_any_collapse_roll(self) -> None:
+        for convergence_id, left_index, right_index in WARTIME_ROUTE_CONVERGENCE:
+            with self.subTest(convergence_id=convergence_id):
+                left = WARTIME_ROUTE_IDENTITIES[left_index]
+                right = WARTIME_ROUTE_IDENTITIES[right_index]
+                self.assertEqual(len(left[1]), 1)
+                self.assertEqual(len(right[1]), 1)
+                left_token, right_token = left[1][0], right[1][0]
+                self.assertTrue(
+                    f"NOT = {{ {left_token} }}" == right_token
+                    or f"NOT = {{ {right_token} }}" == left_token,
+                    (left_token, right_token),
+                )
+                groups = _prerequisite_groups(self.blocks[convergence_id])
+                self.assertTrue(
+                    any(
+                        group & set(left[0]) and group & set(right[0])
+                        for group in groups
+                    )
+                )
+
+    def test_every_claimant_offers_two_variant_settlements(self) -> None:
+        self.assertEqual(len(VARIANT_BRANCHES), 6)
+        self.assertEqual(
+            Counter(branch["tag"] for branch in VARIANT_BRANCHES),
+            Counter({"WKR": 2, "VAD": 2, "TVA": 2}),
+        )
+        declared = [focus_id for branch in VARIANT_BRANCHES for focus_id in branch["focuses"]]
+        self.assertEqual(len(declared), len(set(declared)))
+        self.assertEqual(
+            set(declared),
+            {*WKR_VARIANT_FOCUSES, *VAD_VARIANT_FOCUSES, *TVA_VARIANT_FOCUSES},
+        )
+        self.assertTrue(set(declared) <= set(self.blocks))
+        positions = [
+            position for branch in VARIANT_BRANCHES for position in branch["positions"]
+        ]
+        self.assertEqual(len(positions), len(set(positions)))
+
+    def test_variant_chains_are_costed_and_chained_from_their_political_line(self) -> None:
+        for branch in VARIANT_BRANCHES:
+            root, program, settlement = branch["focuses"]
+            with self.subTest(variant=f"{branch['tag']}_{branch['key']}"):
+                self.assertEqual(
+                    _prerequisites(self.blocks[root]), {branch["root_prerequisite"]}
+                )
+                self.assertEqual(_prerequisites(self.blocks[program]), {root})
+                self.assertEqual(_prerequisites(self.blocks[settlement]), {program})
+                self.assertEqual(
+                    tuple(_focus_cost(self.blocks[focus_id]) for focus_id in branch["focuses"]),
+                    branch["costs"],
+                )
+                for focus_id, cell in zip(branch["focuses"], branch["positions"]):
+                    self.assertEqual(self.grid[focus_id], cell)
+
+    def test_variant_roots_are_mutually_exclusive_and_flag_their_choice(self) -> None:
+        for branch in VARIANT_BRANCHES:
+            root = branch["focuses"][0]
+            sibling = branch["sibling"]
+            with self.subTest(variant=f"{branch['tag']}_{branch['key']}"):
+                self.assertIn(sibling, _mutually_exclusive_focuses(self.blocks[root]))
+                self.assertIn(root, _mutually_exclusive_focuses(self.blocks[sibling]))
+                self.assertIn(
+                    f"set_country_flag = {branch['variant_flag']}", self.blocks[root]
+                )
+                for other in VARIANT_BRANCHES:
+                    if other["variant_flag"] == branch["variant_flag"]:
+                        continue
+                    self.assertNotIn(
+                        f"set_country_flag = {other['variant_flag']}", self.blocks[root]
+                    )
+
+    def test_variant_focuses_gate_identity_outside_allow_branch(self) -> None:
+        for branch in VARIANT_BRANCHES:
+            for focus_id in branch["focuses"]:
+                block = self.blocks[focus_id]
+                allow = _blocks(block, "allow_branch")[0]
+                available = "\n".join(_blocks(block, "available"))
+                with self.subTest(focus_id=focus_id):
+                    self.assertIn(f"tag = {branch['tag']}", allow)
+                    self.assertEqual(_phase_flags(block), ACTIVE_PHASE_FLAGS)
+                    self.assertIn("cancel_if_invalid = yes", block)
+                    self.assertIn("bypass", block)
+                    self.assertIn("ai_will_do", block)
+                    for token in branch["branch_tokens"]:
+                        self.assertIn(token, allow)
+                    for token in branch["identity_tokens"]:
+                        self.assertIn(token, available)
+                        self.assertNotIn(token, allow)
+
+    def test_variant_branches_grant_distinct_national_spirits(self) -> None:
+        self.assertEqual(len(VARIANT_IDEAS), 18)
+        self.assertEqual(len(set(VARIANT_IDEAS)), 18)
+        for branch in VARIANT_BRANCHES:
+            root, program, settlement = branch["focuses"]
+            first, last = branch["permanent_ideas"]
+            with self.subTest(variant=f"{branch['tag']}_{branch['key']}"):
+                self.assertIn(f"add_ideas = {first}", self.blocks[root])
+                self.assertIn(f"idea = {branch['timed_idea']}", self.blocks[program])
+                self.assertIn("add_timed_idea", self.blocks[program])
+                self.assertIn(f"add_ideas = {last}", self.blocks[settlement])
+        for idea_id in VARIANT_IDEAS:
+            definitions = _blocks(self.focus_expansion_ideas, idea_id)
+            with self.subTest(idea_id=idea_id):
+                self.assertEqual(len(definitions), 1)
+                self.assertIn("allowed = { always = no }", definitions[0])
+                self.assertIn("allowed_civil_war = { always = yes }", definitions[0])
+                self.assertIn("removal_cost = -1", definitions[0])
+                self.assertIn("ai_will_do = { factor = 0 }", definitions[0])
+                self.assertTrue(_blocks(definitions[0], "modifier"))
+
+    def test_sibling_variants_differ_mechanically_not_cosmetically(self) -> None:
+        """Two variants of one claimant must not be reskins of each other."""
+
+        def modifiers(idea_id: str) -> dict[str, str]:
+            definition = _blocks(self.focus_expansion_ideas, idea_id)[0]
+            body = _blocks(definition, "modifier")[0]
+            return dict(re.findall(r"(?m)^\s*([a-z_]+)\s*=\s*(-?[\d.]+)\s*$", body))
+
+        by_tag: dict[str, list[dict]] = {}
+        for branch in VARIANT_BRANCHES:
+            by_tag.setdefault(branch["tag"], []).append(branch)
+        for tag, branches in by_tag.items():
+            left, right = branches
+            left_modifiers = {
+                key: value
+                for idea_id in (*left["permanent_ideas"], left["timed_idea"])
+                for key, value in modifiers(idea_id).items()
+            }
+            right_modifiers = {
+                key: value
+                for idea_id in (*right["permanent_ideas"], right["timed_idea"])
+                for key, value in modifiers(idea_id).items()
+            }
+            with self.subTest(tag=tag):
+                self.assertTrue(left_modifiers)
+                self.assertTrue(right_modifiers)
+                self.assertNotEqual(left_modifiers, right_modifiers)
+                exclusive = set(left_modifiers) ^ set(right_modifiers)
+                self.assertGreaterEqual(len(exclusive), 3)
+
+    def test_variant_spirits_are_cleared_by_every_postwar_settlement(self) -> None:
+        for focus_id in VARIANT_CLEANUP_FOCUSES:
+            block = self.blocks[focus_id]
+            for idea_id in VARIANT_PERMANENT_IDEAS:
+                with self.subTest(focus_id=focus_id, idea_id=idea_id):
+                    self.assertIn(f"remove_ideas = {idea_id}", block)
+
+    def test_variant_ai_plans_follow_their_own_variant_only(self) -> None:
+        sources = {
+            "WKR": self.wkr_ai_plans,
+            "VAD": self.vad_ai_plans,
+            "TVA": self.tva_ai_plans,
+        }
+        for branch in VARIANT_BRANCHES:
+            source = sources[branch["tag"]]
+            plans = _blocks(source, branch["ai_plan"])
+            with self.subTest(plan=branch["ai_plan"]):
+                self.assertEqual(len(plans), 1)
+                plan = plans[0]
+                focus_list = _blocks(plan, "ai_national_focuses")[0]
+                self.assertEqual(
+                    re.findall(r"[A-Za-z0-9_]+", focus_list)[1:],
+                    list(branch["focuses"]),
+                )
+                enable = _blocks(plan, "enable")[0]
+                self.assertIn(f"tag = {branch['tag']}", enable)
+                self.assertIn("is_ai = yes", enable)
+                self.assertIn(
+                    "has_global_flag = ADISCORD_vorkerland_collapse_wars_started", enable
+                )
+                for token in branch["branch_tokens"]:
+                    self.assertIn(token, enable)
+                abort = _blocks(plan, "abort")[0]
+                self.assertIn(
+                    "has_global_flag = ADISCORD_vorkerland_collapse_finished", abort
+                )
+                for token in branch["identity_tokens"]:
+                    self.assertIn(f"NOT = {{ {token} }}", abort)
+                if branch["branch_tokens"]:
+                    for token in branch["branch_tokens"]:
+                        complement = (
+                            token[len("NOT = { ") : -len(" }")]
+                            if token.startswith("NOT = {")
+                            else f"NOT = {{ {token} }}"
+                        )
+                        self.assertIn(complement, abort)
+                else:
+                    sibling_flag = next(
+                        other["variant_flag"]
+                        for other in VARIANT_BRANCHES
+                        if other["focuses"][0] == branch["sibling"]
+                    )
+                    self.assertIn(f"has_country_flag = {sibling_flag}", abort)
+
+    def test_variant_focuses_and_spirits_are_localised_in_both_languages(self) -> None:
+        expected = {
+            *(focus_id for branch in VARIANT_BRANCHES for focus_id in branch["focuses"]),
+            *(
+                f"{focus_id}_desc"
+                for branch in VARIANT_BRANCHES
+                for focus_id in branch["focuses"]
+            ),
+            *VARIANT_IDEAS,
+            *(f"{idea_id}_desc" for idea_id in VARIANT_IDEAS),
+        }
+        for label, path in (
+            ("english", ENGLISH_LOCALISATION),
+            ("russian", RUSSIAN_LOCALISATION),
+        ):
+            entries = localisation_entries(read(path))
+            for key in sorted(expected):
+                with self.subTest(language=label, key=key):
+                    self.assertIn(key, entries)
+                    self.assertTrue(entries[key].strip())
+
+    def test_russian_variant_localisation_is_cyrillic_prose(self) -> None:
+        entries = localisation_entries(read(RUSSIAN_LOCALISATION))
+        for branch in VARIANT_BRANCHES:
+            for focus_id in branch["focuses"]:
+                for key in (focus_id, f"{focus_id}_desc"):
+                    with self.subTest(key=key):
+                        self.assertRegex(entries[key], "[А-Яа-яЁё]")
+        raw = (ROOT / RUSSIAN_LOCALISATION).read_bytes()
+        self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
 
     def test_prewar_blocks_are_separate_and_phase_bounded(self) -> None:
         for tag, focus_ids in (("WRK", PREWAR_WRK_FOCUSES), ("VAD", PREWAR_VAD_FOCUSES)):
@@ -977,14 +1400,7 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
             *PREWAR_VAD_EXPANSION_FOCUSES,
         ):
             block = self.blocks[focus_id]
-            position = tuple(
-                int(
-                    re.search(
-                        rf"(?m)^\s*{axis}\s*=\s*(-?\d+)\s*$", block
-                    ).group(1)
-                )
-                for axis in ("x", "y")
-            )
+            position = self.grid[focus_id]
             with self.subTest(focus_id=focus_id):
                 self.assertEqual(position, PREWAR_EXPANSION_POSITIONS[focus_id])
                 self.assertEqual(_focus_cost(block), PREWAR_EXPANSION_COSTS[focus_id])
@@ -1299,7 +1715,7 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
 
     def test_focuses_feed_visible_diplomacy_and_support_decisions(self) -> None:
         diplomacy = read(DIPLOMACY_DECISIONS_FILE)
-        support = read(FOCUS_DECISIONS_FILE)
+        support = "\n".join(read(path) for path in FOCUS_DECISION_FILES)
         for hook in (
             "ADISCORD_vorkerland_focus_vad_sol_invitation_intent",
             "ADISCORD_vorkerland_focus_wkr_vla_invitation_intent",
@@ -1516,7 +1932,7 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
             for focus_id in focus_ids
         )
         self.assertEqual(postwar.count(f"set_country_flag = {hook}"), 3)
-        decisions = read(FOCUS_DECISIONS_FILE)
+        decisions = "\n".join(read(path) for path in FOCUS_DECISION_FILES)
         for decision_id in CORE_DECISIONS:
             with self.subTest(decision_id=decision_id):
                 start = decisions.index(f"\t{decision_id} = {{")
@@ -1579,7 +1995,7 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
                 self.assertIn(f"limit = {{ controls_state = {state} }}", block)
                 self.assertIn(f"province = {province}", block)
 
-    def test_every_focus_icon_has_an_explicit_shine_sprite(self) -> None:
+    def test_every_authored_tree_icon_has_an_explicit_additive_shine_sprite(self) -> None:
         shine = read(SHINE_FILE)
         for focus_id, block in self.blocks.items():
             icon_line = next(line.strip() for line in block.splitlines() if line.strip().startswith("icon = "))
@@ -1587,15 +2003,23 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
             with self.subTest(focus_id=focus_id, icon=icon):
                 self.assertIn(f'name = "{icon}_shine"', shine)
 
+    def test_continuous_focus_shines_are_inherited_instead_of_duplicated(self) -> None:
+        shine = read(SHINE_FILE)
+        for icon, _strategy, _modifier_tokens in (
+            VORKERLAND_CONTINUOUS_FOCUS_CONTRACTS.values()
+        ):
+            with self.subTest(icon=icon):
+                self.assertNotIn(f'name = "{icon}_shine"', shine)
+
     def test_route_signature_focuses_have_distinct_icons(self) -> None:
         expected = {
-            "WKR_republic_fights_as_one": "GFX_goal_generic_allies_build_infantry",
-            "VAD_proclaim_joint_charter": "GFX_goal_generic_military_sphere",
-            "VAD_balance_council_and_command": "GFX_goal_generic_national_unity",
-            "TVA_codify_utilitarian_directorate": "GFX_goal_generic_production",
-            "TVA_close_operational_loop": "GFX_goal_generic_scientific_exchange",
-            "WRK_joint_impose_reunification_settlement": "GFX_goal_generic_political_pressure",
-            "WRK_utilitarian_build_measurable_republic": "GFX_goal_generic_production",
+            "WKR_republic_fights_as_one": "GFX_focus_WKR_republic_fights_as_one",
+            "VAD_proclaim_joint_charter": "GFX_focus_VAD_proclaim_joint_charter",
+            "VAD_balance_council_and_command": "GFX_focus_VAD_balance_council_and_command",
+            "TVA_codify_utilitarian_directorate": "GFX_focus_TVA_codify_utilitarian_directorate",
+            "TVA_close_operational_loop": "GFX_focus_TVA_close_operational_loop",
+            "WRK_joint_impose_reunification_settlement": "GFX_focus_WRK_joint_impose_reunification_settlement",
+            "WRK_utilitarian_build_measurable_republic": "GFX_focus_WRK_utilitarian_build_measurable_republic",
         }
         for focus_id, expected_icon in expected.items():
             icon_line = next(
@@ -1680,6 +2104,251 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
 
     def test_russian_localisation_keeps_utf8_bom(self) -> None:
         self.assertTrue((ROOT / RUSSIAN_LOCALISATION).read_bytes().startswith(b"\xef\xbb\xbf"))
+
+    # ------------------------------------------------------------------
+    # Claimant depth branches
+    # ------------------------------------------------------------------
+
+    def test_every_claimant_gets_all_seven_depth_modules(self) -> None:
+        modules = {}
+        for (tag, branch), focus_ids in DEPTH_MODULE_FOCUSES.items():
+            modules.setdefault(tag, {})[branch] = len(focus_ids)
+        self.assertEqual(sorted(modules), ["TVA", "VAD", "WKR"])
+        for tag, branches in modules.items():
+            with self.subTest(tag=tag):
+                self.assertEqual(
+                    branches,
+                    {
+                        "war_economy": 3,
+                        "doctrine": 4,
+                        "late_war": 3,
+                        "legitimacy": 3,
+                        "diplomacy": 2,
+                        "air": 3,
+                        "foreign_policy": 3,
+                    },
+                )
+
+    def test_depth_focuses_sit_on_their_documented_cells(self) -> None:
+        for focus_id, expected in DEPTH_POSITIONS.items():
+            with self.subTest(focus_id=focus_id):
+                self.assertEqual(self.grid[focus_id], expected)
+
+    def test_depth_focuses_anchor_to_a_real_prerequisite_inside_their_band(self) -> None:
+        for focus_id, anchor in DEPTH_ANCHORS.items():
+            with self.subTest(focus_id=focus_id):
+                self.assertIn(anchor, self.blocks)
+                self.assertIn(anchor, _prerequisites(self.blocks[focus_id]))
+                tag = focus_id.split("_")[0]
+                (low, high), (top, bottom) = LAYOUT_BANDS[f"war_{tag}"]
+                x, y = self.grid[focus_id]
+                self.assertTrue(low <= x <= high, (focus_id, x))
+                self.assertTrue(top <= y <= bottom, (focus_id, y))
+                self.assertGreater(y, self.grid[anchor][1])
+
+    def test_depth_forks_are_symmetric_and_mutually_exclusive(self) -> None:
+        for left, right in DEPTH_EXCLUSIVE_PAIRS:
+            with self.subTest(pair=(left, right)):
+                self.assertIn(right, _mutually_exclusive_focuses(self.blocks[left]))
+                self.assertIn(left, _mutually_exclusive_focuses(self.blocks[right]))
+                left_cell, right_cell = self.grid[left], self.grid[right]
+                self.assertEqual(left_cell[1], right_cell[1])
+                self.assertEqual(abs(left_cell[0] - right_cell[0]), 2)
+
+    def test_late_war_depth_branches_wait_for_central_showdown(self) -> None:
+        self.assertNotIn("ADISCORD_vorkerland_war_month", self.source)
+        for focus_id in DEPTH_LATE_WAR_FOCUSES:
+            available = _blocks(self.blocks[focus_id], "available")[0]
+            self.assertEqual(_phase_flags(available), {SHOWDOWN_PHASE})
+
+    def test_legitimacy_depth_branches_use_the_documented_interface(self) -> None:
+        spends = [f for f, d in DEPTH_LEGITIMACY_DELTAS.items() if d < 0]
+        builds = [f for f, d in DEPTH_LEGITIMACY_DELTAS.items() if d > 0]
+        self.assertTrue(spends and builds)
+        for focus_id, delta in DEPTH_LEGITIMACY_DELTAS.items():
+            reward = _blocks(self.blocks[focus_id], "completion_reward")[0]
+            with self.subTest(focus_id=focus_id):
+                self.assertIn(
+                    f"set_temp_variable = {{ ADISCORD_vorkerland_legitimacy_delta = {delta} }}",
+                    reward,
+                )
+                self.assertEqual(
+                    reward.count("ADISCORD_vorkerland_add_legitimacy = yes"), 1
+                )
+                self.assertNotIn("var = ADISCORD_vorkerland_legitimacy ", reward)
+
+    def test_variant_doctrine_gates_identity_in_available_not_allow_branch(self) -> None:
+        for focus_id, token in DEPTH_VARIANT_IDENTITY.items():
+            block = self.blocks[focus_id]
+            with self.subTest(focus_id=focus_id):
+                self.assertIn(token, _blocks(block, "available")[0])
+                self.assertNotIn(token, _blocks(block, "allow_branch")[0])
+
+    def test_depth_focus_costs_and_ai_weights_are_bounded(self) -> None:
+        for focus_id, expected in DEPTH_COSTS.items():
+            block = self.blocks[focus_id]
+            with self.subTest(focus_id=focus_id):
+                self.assertEqual(_focus_cost(block), expected)
+                self.assertIn(expected, {2, 3, 4})
+                weight = _blocks(block, "ai_will_do")[0]
+                base = re.search(r"\bbase\s*=\s*(\d+)", weight)
+                self.assertIsNotNone(base)
+                self.assertTrue(1 <= int(base.group(1)) <= 250)
+                self.assertIn("modifier = {", weight)
+
+    def test_permanent_depth_spirits_do_not_outlive_the_war(self) -> None:
+        for idea_id in DEPTH_PERMANENT_IDEAS:
+            with self.subTest(idea_id=idea_id):
+                self.assertEqual(self.source.count(f"add_ideas = {idea_id}\n"), 1)
+                for capstone_id in DEPTH_POSTWAR_CAPSTONES:
+                    self.assertIn(
+                        f"remove_ideas = {idea_id}", self.blocks[capstone_id]
+                    )
+        for idea_id, (_focus_id, days) in DEPTH_TIMED_IDEAS.items():
+            with self.subTest(idea_id=idea_id):
+                self.assertLessEqual(days, 70)
+                self.assertNotIn(f"remove_ideas = {idea_id}", self.source)
+
+    def test_the_two_variants_of_a_claimant_take_different_ai_paths(self) -> None:
+        pairs = (
+            (
+                "ADISCORD_vorkerland_wkr_neo_vorkerist_depth_plan",
+                "ADISCORD_vorkerland_wkr_utilitarian_depth_plan",
+            ),
+            (
+                "ADISCORD_vorkerland_vad_imperial_depth_plan",
+                "ADISCORD_vorkerland_vad_joint_depth_war_plan",
+            ),
+            (
+                "ADISCORD_vorkerland_tva_throughput_depth_plan",
+                "ADISCORD_vorkerland_tva_preservation_depth_plan",
+            ),
+        )
+        for left, right in pairs:
+            with self.subTest(pair=(left, right)):
+                left_order = set(DEPTH_AI_PLANS[left]["focuses"])
+                right_order = set(DEPTH_AI_PLANS[right]["focuses"])
+                self.assertLessEqual(len(left_order & right_order), 5)
+                self.assertTrue(
+                    left_order & DEPTH_LATE_WAR_FOCUSES,
+                    "each variant plan must reach its late-war branch",
+                )
+                self.assertTrue(right_order & DEPTH_LATE_WAR_FOCUSES)
+
+
+class WarEconomyDynamicModifiers(unittest.TestCase):
+    """The war-economy branch has to stay driven by the monthly recompute.
+
+    Converting a spirit to a dynamic modifier only buys anything if the
+    variables keep moving. The failure this guards against is quiet: if the
+    refresh stops writing a variable, or writes it only when a focus was taken,
+    the modifier keeps loading and displaying and simply reads zero.
+    """
+
+    def setUp(self) -> None:
+        self.blocks = focus_blocks(read(FOCUS_FILE))
+        self.modifiers = read(WAR_ECONOMY_MODIFIER_FILE)
+        self.refresh = read(WAR_ECONOMY_REFRESH_FILE)
+
+    def test_each_claimant_has_one_war_economy_modifier(self) -> None:
+        self.assertEqual({"WKR", "VAD", "TVA"}, set(WAR_ECONOMY_DYNAMIC))
+        modifiers = [modifier for _, modifier, _, _ in WAR_ECONOMY_DYNAMIC.values()]
+        self.assertEqual(len(modifiers), len(set(modifiers)))
+        for modifier in modifiers:
+            with self.subTest(modifier=modifier):
+                self.assertIn(f"{modifier} = {{", self.modifiers)
+
+    def test_the_head_focus_applies_the_modifier(self) -> None:
+        for tag, (head, modifier, _, _) in WAR_ECONOMY_DYNAMIC.items():
+            with self.subTest(claimant=tag):
+                self.assertIn(
+                    f"add_dynamic_modifier = {{ modifier = {modifier} }}",
+                    self.blocks[head],
+                )
+
+    def test_the_forks_no_longer_grant_static_spirits(self) -> None:
+        # The pair used to add one spirit each. They now only set the flag the
+        # refresh reads, so a stray add_ideas would mean two systems disagreeing
+        # about the same trade-off.
+        for tag, (_, _, strain_flag, relief_flag) in WAR_ECONOMY_DYNAMIC.items():
+            for flag in (strain_flag, relief_flag):
+                focus = next(
+                    focus_id
+                    for focus_id, block in self.blocks.items()
+                    if f"set_country_flag = {flag}" in block
+                )
+                with self.subTest(claimant=tag, focus=focus):
+                    reward = re.search(
+                        r"completion_reward = \{(.*?)\n\t\t\}", self.blocks[focus], re.S
+                    )
+                    self.assertIsNotNone(reward)
+                    self.assertNotIn("add_ideas", reward.group(1))
+
+    def test_every_capstone_clears_every_war_economy(self) -> None:
+        for capstone in WAR_ECONOMY_CAPSTONES:
+            for _, modifier, _, _ in WAR_ECONOMY_DYNAMIC.values():
+                with self.subTest(capstone=capstone, modifier=modifier):
+                    self.assertIn(
+                        f"remove_dynamic_modifier = {{ modifier = {modifier} }}",
+                        self.blocks[capstone],
+                    )
+
+    def test_the_modifiers_read_variables_rather_than_constants(self) -> None:
+        for _, modifier, _, _ in WAR_ECONOMY_DYNAMIC.values():
+            body = re.search(
+                rf"(?ms)^{re.escape(modifier)} = \{{(.*?)^\}}", self.modifiers
+            ).group(1)
+            fields = re.findall(r"(?m)^\t([a-z][a-z0-9_]*) = (\S+)$", body)
+            values = [value for name, value in fields if name != "icon"]
+            with self.subTest(modifier=modifier):
+                self.assertGreaterEqual(len(values), 4)
+                self.assertTrue(
+                    all(value.startswith("ADISCORD_") for value in values),
+                    f"{modifier} still carries a frozen constant: {values}",
+                )
+
+    def test_the_refresh_writes_every_variable_unconditionally(self) -> None:
+        body = re.search(
+            rf"(?ms)^{re.escape(WAR_ECONOMY_REFRESH_EFFECT)} = \{{(.*?)^\}}", self.refresh
+        ).group(1)
+
+        top_level: set[str] = set()
+        depth = 0
+        for line in body.splitlines():
+            if depth == 0:
+                written = re.search(r"set_variable = \{ var = (ADISCORD_\w+)", line)
+                if written:
+                    top_level.add(written.group(1))
+            depth += line.count("{") - line.count("}")
+
+        for _, modifier, _, _ in WAR_ECONOMY_DYNAMIC.values():
+            definition = re.search(
+                rf"(?ms)^{re.escape(modifier)} = \{{(.*?)^\}}", self.modifiers
+            ).group(1)
+            for variable in re.findall(r"(?m)^\t[a-z][a-z0-9_]* = (ADISCORD_\w+)$", definition):
+                with self.subTest(modifier=modifier, variable=variable):
+                    self.assertIn(variable, top_level)
+
+    def test_the_refresh_reads_every_branch_flag(self) -> None:
+        for tag, (_, _, strain_flag, relief_flag) in WAR_ECONOMY_DYNAMIC.items():
+            for flag in (strain_flag, relief_flag):
+                with self.subTest(claimant=tag, flag=flag):
+                    self.assertIn(f"has_country_flag = {flag}", self.refresh)
+
+    def test_the_refresh_performs_no_world_scan(self) -> None:
+        # It runs every month for three countries for the whole war, and the
+        # phase layer forbids scans for that reason.
+        for scan in (
+            "every_country",
+            "any_country",
+            "every_state",
+            "any_state",
+            "every_owned_state",
+            "all_state",
+            "random_country",
+        ):
+            with self.subTest(scan=scan):
+                self.assertNotIn(scan, self.refresh)
 
 
 if __name__ == "__main__":

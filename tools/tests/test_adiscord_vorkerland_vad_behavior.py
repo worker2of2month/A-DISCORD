@@ -83,7 +83,12 @@ class VorkerlandVadSolarBehaviorTests(unittest.TestCase):
             f"ADISCORD_vorkerland_vad_solar_intervention_front_{slug}"
             for slug in CASES
         }
+        counter_names = {
+            f"ADISCORD_vorkerland_vad_solyarino_counter_front_{slug}"
+            for slug in (*CASES, "sol")
+        }
         found_names: set[str] = set()
+        found_counters: set[str] = set()
         for match in re.finditer(r"(?m)^([A-Za-z0-9_]+)\s*=\s*\{", self.ai):
             name = match.group(1)
             block = named_block(self.ai, name)
@@ -91,14 +96,27 @@ class VorkerlandVadSolarBehaviorTests(unittest.TestCase):
             if not re.search(r"\btag\s*=\s*VAD\b", allowed):
                 continue
             strategies = "\n".join(named_blocks(block, "ai_strategy"))
-            targets = set(re.findall(r"\b(?:tag|id)\s*=\s*(SRA|CSL)\b", strategies))
+            targets = set(re.findall(r"\b(?:tag|id)\s*=\s*(SOL|SRA|CSL)\b", strategies))
             if not targets:
                 continue
 
-            found_names.add(name)
             enable = named_block(block, "enable")
+            if name in counter_names or "vad_solyarino_counter" in name:
+                found_counters.add(name)
+                self.assertIn(
+                    "has_global_flag = ADISCORD_vorkerland_vad_solyarino_counter_active",
+                    compact(enable),
+                    name,
+                )
+                self.assertNotIn(f"has_global_flag = {ACTIVE_FLAG}", compact(enable), name)
+                continue
+
+            solar_targets = targets & {"SRA", "CSL"}
+            if not solar_targets:
+                continue
+            found_names.add(name)
             self.assertIn(f"has_global_flag = {ACTIVE_FLAG}", compact(enable), name)
-            for target in targets:
+            for target in solar_targets:
                 slug = target.lower()
                 self.assertIn(
                     f"has_global_flag = {CASES[slug][1]}",
@@ -108,6 +126,14 @@ class VorkerlandVadSolarBehaviorTests(unittest.TestCase):
                 self.assertIn(f"has_war_with = {target}", compact(enable), name)
 
         self.assertEqual(found_names, expected_names)
+        self.assertEqual(
+            found_counters,
+            {
+                "ADISCORD_vorkerland_vad_solyarino_counter_front_sol",
+                "ADISCORD_vorkerland_vad_solyarino_counter_front_sra",
+                "ADISCORD_vorkerland_vad_solyarino_counter_front_csl",
+            },
+        )
 
     def test_solar_winners_receive_target_specific_defence_profiles(self) -> None:
         for slug, (target, target_flag) in CASES.items():

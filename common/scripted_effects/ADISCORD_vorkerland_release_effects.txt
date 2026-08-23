@@ -1,0 +1,30 @@
+# Intercept the dormant WRK shell in the country scope supplied by native
+# release on-actions. FROM remains the releasing country in all three hooks.
+ADISCORD_vorkerland_intercept_premature_wrk_release = {
+	if = {
+		limit = { ADISCORD_vorkerland_is_premature_wrk = yes }
+		set_global_flag = ADISCORD_vorkerland_premature_wrk_release_intercepted_v1
+		if = {
+			limit = {
+				FROM = {
+					ADISCORD_vorkerland_is_main_claimant = yes
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+				}
+			}
+			FROM = { ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = yes }
+		}
+		else = {
+			ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = yes
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_premature_wrk_subject_cleanup_active }
+			FROM = { ADISCORD_vorkerland_is_premature_wrk = yes }
+		}
+		set_global_flag = ADISCORD_vorkerland_premature_wrk_release_intercepted_v1
+		ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = yes
+	}
+}

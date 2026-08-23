@@ -30,6 +30,18 @@ from tools.validators.validate_adiscord_vorkerland_focus_decisions import (
 
 
 class VorkerlandFocusDecisionTests(unittest.TestCase):
+    def test_focus_decision_categories_have_separate_owner_files(self) -> None:
+        operations = ROOT / "common/decisions/ADISCORD_vorkerland_focus_operations_decisions.txt"
+        support = ROOT / "common/decisions/ADISCORD_vorkerland_allied_support_decisions.txt"
+        legacy = ROOT / "common/decisions/ADISCORD_vorkerland_focus_decisions.txt"
+        self.assertTrue(operations.is_file())
+        self.assertTrue(support.is_file())
+        self.assertFalse(legacy.exists())
+        operations_source = operations.read_text(encoding="utf-8-sig")
+        support_source = support.read_text(encoding="utf-8-sig")
+        self.assertEqual(operations_source.count("ADISCORD_vorkerland_focus_operations_category = {"), 1)
+        self.assertEqual(support_source.count("ADISCORD_vorkerland_allied_support_category = {"), 1)
+
     def test_integrated_contract(self) -> None:
         self.assertEqual(collect_issues(), [])
 
@@ -70,8 +82,10 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
             phase_triggers, "ADISCORD_vorkerland_central_minor_campaign_phase_available"
         )
         self.assertIn("ADISCORD_vorkerland_phase_central_preparation", recovery_phase)
+        # The nine district campaigns are the only source of the 24 central district
+        # cores that phase.6 demands, so they must stay open across the showdown.
+        self.assertIn("ADISCORD_vorkerland_phase_central_showdown", recovery_phase)
         for token in (
-            "ADISCORD_vorkerland_phase_central_showdown",
             "ADISCORD_vorkerland_phase_reunification",
             "ADISCORD_vorkerland_has_single_surviving_claimant = yes",
             "tag = WRK",
@@ -347,6 +361,10 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
         )
         self.assertIn("days = 180", resolver)
         self.assertIn("live war remains unresolved", resolver)
+        self.assertNotIn(
+            "ADISCORD_vorkerland_focus_force_close_recorded_central_minor_fronts",
+            effects,
+        )
         for forbidden in ("transfer_state", "white_peace", "annex_country"):
             self.assertNotIn(forbidden, resolver)
         first_check = named_block(

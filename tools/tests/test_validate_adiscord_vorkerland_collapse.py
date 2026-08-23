@@ -9,7 +9,11 @@ from PIL import Image
 
 from tools.validators import validate_adiscord_vorkerland_collapse as collapse_validator
 from tools.validators.validate_adiscord_vorkerland_collapse import (
+    CENTRAL_BRACKET_TAGS,
     CENTRAL_MINOR_TARGETS,
+    CLOSED_ZONE_BRACKET_TAGS,
+    LOCAL_RIVALRY_EDGES,
+    MAIN_CLAIMANTS,
     SECTIONS,
     named_block,
     named_blocks,
@@ -30,6 +34,16 @@ ROOT = Path(__file__).resolve().parents[2]
 
 def read(relative: str) -> str:
     return (ROOT / relative).read_text(encoding="utf-8-sig")
+
+
+def read_focus_decisions() -> str:
+    return "\n".join(
+        read(path)
+        for path in (
+            "common/decisions/ADISCORD_vorkerland_focus_operations_decisions.txt",
+            "common/decisions/ADISCORD_vorkerland_allied_support_decisions.txt",
+        )
+    )
 
 
 def event_block(text: str, event_id: str, event_type: str = "country_event") -> str:
@@ -211,9 +225,157 @@ country_event = {
             read(
                 "common/scripted_effects/ZZ_ADISCORD_capitulation_distribution_effects.txt"
             ),
+            read("common/scripted_effects/ADISCORD_vorkerland_release_effects.txt"),
             issues,
         )
         self.assertEqual(issues, [])
+
+    def test_premature_release_validator_rejects_scope_and_branch_mutations(self) -> None:
+        triggers = read("common/scripted_triggers/ADISCORD_vorkerland_collapse_triggers.txt")
+        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        capitulation = read(
+            "common/scripted_effects/ZZ_ADISCORD_capitulation_distribution_effects.txt"
+        )
+        release_effects = read("common/scripted_effects/ADISCORD_vorkerland_release_effects.txt")
+
+        malformed_interceptor = release_effects.replace(
+            "exists = yes\n\t\t\t\t\tis_subject = no\n",
+            "",
+            1,
+        )
+        issues: list[str] = []
+        validate_premature_wrk_release_contract(
+            triggers, on_actions, capitulation, malformed_interceptor, issues
+        )
+        self.assertTrue(
+            any("claimant branch" in issue or "interceptor" in issue for issue in issues),
+            issues,
+        )
+
+        malformed_hooks = on_actions.replace(
+            "limit = { OR = { tag = ROM tag = TRU tag = ZAO tag = SOL } }\n\t\t\t\t\tADISCORD_vorkerland_sync_independence_cosmetic = yes",
+            "limit = { tag = ROM }\n\t\t\t\t\tADISCORD_vorkerland_sync_independence_cosmetic = yes",
+            1,
+        )
+        issues = []
+        validate_premature_wrk_release_contract(
+            triggers, malformed_hooks, capitulation, release_effects, issues
+        )
+        self.assertTrue(
+            any("normal" in issue or "cosmetic" in issue for issue in issues),
+            issues,
+        )
+
+        mutations = {
+            "fallback moved into FROM": release_effects.replace(
+                "else = {\n\t\t\tADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = yes",
+                "else = {\n\t\t\tFROM = { ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = yes }",
+                1,
+            ),
+            "current guard nested": release_effects.replace(
+                "limit = { ADISCORD_vorkerland_is_premature_wrk = yes }",
+                "limit = { ROOT = { ADISCORD_vorkerland_is_premature_wrk = yes } }",
+                1,
+            ),
+            "if else_if damaged": release_effects.replace("else_if = {", "if = {", 1),
+        }
+        for label, mutated in mutations.items():
+            issues = []
+            validate_premature_wrk_release_contract(
+                triggers, on_actions, capitulation, mutated, issues
+            )
+            self.assertTrue(issues, label)
+        for token in (
+            "exists = yes",
+            "is_subject = no",
+            "NOT = { has_capitulated = yes }",
+        ):
+            issues = []
+            validate_premature_wrk_release_contract(
+                triggers, on_actions, capitulation,
+                release_effects.replace(token, "", 1), issues,
+            )
+            self.assertTrue(issues, f"liveness token removed: {token}")
+        for nested_not in (
+            "NOT = { ROOT = { has_capitulated = yes } }",
+            "NOT = { FROM = { has_global_flag = ADISCORD_vorkerland_premature_wrk_subject_cleanup_active } }",
+        ):
+            mutated = release_effects.replace(
+                "NOT = { has_capitulated = yes }",
+                nested_not,
+                1,
+            ) if "has_capitulated" in nested_not else release_effects.replace(
+                "NOT = { has_global_flag = ADISCORD_vorkerland_premature_wrk_subject_cleanup_active }",
+                nested_not,
+                1,
+            )
+            issues = []
+            validate_premature_wrk_release_contract(
+                triggers, on_actions, capitulation, mutated, issues,
+            )
+            self.assertTrue(issues, f"nested NOT accepted: {nested_not}")
+
+        unpaired = on_actions.replace(
+            "\n\t\t\telse = {\n\t\t\t\tADISCORD_vorkerland_sync_republics_from_ruins = yes",
+            "\n\t\t\tif = {\n\t\t\t\tADISCORD_vorkerland_sync_republics_from_ruins = yes",
+            1,
+        )
+        issues = []
+        validate_premature_wrk_release_contract(
+            triggers, unpaired, capitulation, release_effects, issues
+        )
+        self.assertTrue(issues, "unpaired interception if accepted")
+
+        duplicated = on_actions.replace(
+            "\n\t\t\telse = {\n\t\t\t\tADISCORD_vorkerland_sync_republics_from_ruins = yes",
+            "\n\t\t\telse = {\n\t\t\t\tADISCORD_vorkerland_sync_republics_from_ruins = yes\n\t\t\t}\n\t\t\tADISCORD_vorkerland_sync_republics_from_ruins = yes",
+            1,
+        )
+        issues = []
+        validate_premature_wrk_release_contract(
+            triggers, duplicated, capitulation, release_effects, issues
+        )
+        self.assertTrue(issues, "normal behavior duplicated outside paired else")
+
+        nested_outside = on_actions.replace(
+            "\n\t\t}\n\t}\n\ton_release_as_puppet = {",
+            "\n\t\t\tFROM = { ADISCORD_vorkerland_sync_republics_from_ruins = yes }\n"
+            "\t\t}\n\t}\n\ton_release_as_puppet = {",
+            1,
+        )
+        issues = []
+        validate_premature_wrk_release_contract(
+            triggers, nested_outside, capitulation, release_effects, issues
+        )
+        self.assertTrue(
+            any(
+                "normal behavior exists outside paired else" in issue
+                and "sync_republics_from_ruins" in issue
+                for issue in issues
+            ),
+            issues,
+        )
+
+        for guard in ("tag = VLA is_subject_of = WKR", "tag = VLA is_subject_of = WRK"):
+            issues = []
+            validate_premature_wrk_release_contract(
+                triggers, on_actions, capitulation, release_effects, issues,
+            )
+            mutated = on_actions.replace(guard, "tag = VLA is_subject_of = BROKEN", 1)
+            issues = []
+            validate_premature_wrk_release_contract(
+                triggers, mutated, capitulation, release_effects, issues,
+            )
+            self.assertTrue(any("VLA" in issue for issue in issues), guard)
+
+        cosmetic_moved = on_actions.replace(
+            "ADISCORD_vorkerland_sync_independence_cosmetic = yes", "", 1
+        )
+        issues = []
+        validate_premature_wrk_release_contract(
+            triggers, cosmetic_moved, capitulation, release_effects, issues
+        )
+        self.assertTrue(any("cosmetic" in issue for issue in issues))
 
     def test_every_vorkerland_superevent_route_plays_audible_sound(self) -> None:
         map_effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_map_effects.txt")
@@ -325,7 +487,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         events = read("events/ADISCORD_vorkerland_collapse_events.txt")
         on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
         decisions = read("common/decisions/ADISCORD_vorkerland_collapse_decisions.txt")
-        focus_decisions = read("common/decisions/ADISCORD_vorkerland_focus_decisions.txt")
+        focus_decisions = read_focus_decisions()
 
         for event_id in (32, 33, 34, 35):
             self.assertNotIn(
@@ -348,7 +510,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         collapse_decisions = read(
             "common/decisions/ADISCORD_vorkerland_collapse_decisions.txt"
         )
-        focus_decisions = read("common/decisions/ADISCORD_vorkerland_focus_decisions.txt")
+        focus_decisions = read_focus_decisions()
         phase_triggers = read(
             "common/scripted_triggers/ADISCORD_vorkerland_phase_triggers.txt"
         )
@@ -585,10 +747,12 @@ class BorderWarArchitectureTests(unittest.TestCase):
         minors = {"EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"}
         contracts = {
             "wrk": ("WKR", {"VAD", "TVA"}, {"WTD"}, 100, "careful", "no"),
-            "vad": ("VAD", {"WKR", "TVA"}, {"WTD"}, 65, "rush", "yes"),
+            # Symmetric with WKR and TVA. The old 65 / rush / manual_attack profile
+            # under-committed troops and over-committed aggression against VAD.
+            "vad": ("VAD", {"WKR", "TVA"}, {"WTD"}, 100, "careful", "no"),
             "tva": ("TVA", {"WKR", "VAD"}, set(), 100, "careful", "no"),
             **{
-                tag.lower(): (tag, {"WKR", "VAD", "TVA"}, set(), 100, "rush", "no")
+                tag.lower(): (tag, {"WKR", "VAD", "TVA"}, set(), 100, "rush", "yes")
                 for tag in minors
             },
         }
@@ -606,6 +770,8 @@ class BorderWarArchitectureTests(unittest.TestCase):
             self.assertIn("priority = 1250", front)
             self.assertIn(f"execution_type = {execution}", front)
             self.assertIn(f"manual_attack = {manual}", front)
+            if defender in minors:
+                self.assertIn(f"conquer id = {defender}", front)
 
         for slug, claimant in (("wkr", "WKR"), ("vad", "VAD"), ("tva", "TVA")):
             defense = named_block(
@@ -699,13 +865,21 @@ class BorderWarArchitectureTests(unittest.TestCase):
             "tag = WKR",
             "NOT = { has_country_flag = ADISCORD_vorkerland_wkr_home_guard_deployed_v1 }",
             "set_country_flag = ADISCORD_vorkerland_wkr_home_guard_deployed_v1",
-            'name = "Worker Home Guard"',
-            "is_locked = yes",
+            "ADISCORD_vorkerland_ensure_worker_home_guard_template = yes",
             "add_manpower = 12000",
             "amount = 960 producer = WKR",
         ):
             self.assertIn(token, home_guard)
-        self.assertEqual(home_guard.count("ADISCORD_militia ="), 3)
+        shared_templates = read(
+            "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt"
+        )
+        worker_home_guard = named_block(
+            shared_templates,
+            "ADISCORD_vorkerland_ensure_worker_home_guard_template",
+        )
+        self.assertIn('name = "Worker Home Guard"', worker_home_guard)
+        self.assertIn("is_locked = yes", worker_home_guard)
+        self.assertEqual(worker_home_guard.count("ADISCORD_militia ="), 3)
         self.assertEqual(home_guard.count("create_unit ="), 2)
         self.assertEqual(home_guard.count("count = 2"), 2)
         self.assertIn("33 = {", home_guard)
@@ -928,7 +1102,6 @@ class BorderWarArchitectureTests(unittest.TestCase):
     def test_central_winners_receive_a_short_recovery_window(self) -> None:
         on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
         capitulation = named_block(on_actions, "on_capitulation")
-        self.assertIn("ADISCORD_vorkerland_is_central_claimant = yes", capitulation)
         self.assertIn("ADISCORD_vorkerland_is_main_claimant = yes", capitulation)
         self.assertIn("ADISCORD_vorkerland_settle_central_capitulation = yes", capitulation)
         effects = read("common/scripted_effects/ZZ_ADISCORD_capitulation_distribution_effects.txt")
@@ -1153,16 +1326,38 @@ class BorderWarArchitectureTests(unittest.TestCase):
                 self.assertIn(f"ADISCORD_vorkerland_{defeated}_defeated = yes", block)
             self.assertNotIn("ADISCORD_vorkerland_tgd_defeated", block)
             self.assertIn("controls_state = 40", block)
-        central = named_block(triggers, "ADISCORD_vorkerland_is_central_claimant")
-        self.assertNotIn("tag = TGD", central)
+        self.assertNotIn("ADISCORD_vorkerland_is_central_claimant", triggers)
+        stalemate = read("common/scripted_triggers/ADISCORD_vorkerland_stalemate_triggers.txt")
+        self.assertNotIn("ADISCORD_vorkerland_is_central_claimant", stalemate)
+        central_minor = named_block(stalemate, "ADISCORD_vorkerland_is_central_minor")
+        self.assertNotIn("tag = TGD", central_minor)
         self.assertEqual(
-            set(re.findall(r"tag\s*=\s*([A-Z]{3})", central)),
-            {"WKR", "VAD", "TVA", "EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"},
+            set(re.findall(r"tag\s*=\s*([A-Z]{3})", central_minor)),
+            {"EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"},
         )
         regional = named_block(triggers, "ADISCORD_vorkerland_is_regional_combatant")
         for tag in ("VLA", "EBA", "TGD"):
             self.assertIn(f"tag = {tag}", regional)
         self.assertNotIn("ADISCORD_vorkerland_is_local_rival_for_ROOT", triggers)
+
+    def test_main_claimant_trigger_is_the_only_three_claimant_interface(self) -> None:
+        common_paths = sorted((ROOT / "common").rglob("*.txt"))
+        sources = [path.read_text(encoding="utf-8-sig") for path in common_paths]
+        for path, source in zip(common_paths, sources, strict=True):
+            if "ADISCORD_vorkerland_is_central_claimant" in source:
+                self.fail(f"{path.relative_to(ROOT)} still references the retired alias")
+        self.assertEqual(
+            sum(
+                len(
+                    re.findall(
+                        r"(?m)^ADISCORD_vorkerland_is_main_claimant\s*=\s*\{",
+                        source,
+                    )
+                )
+                for source in sources
+            ),
+            1,
+        )
 
     def test_central_victory_does_not_annex_the_periphery(self) -> None:
         maps = read("common/scripted_effects/ADISCORD_vorkerland_collapse_map_effects.txt")
@@ -1178,7 +1373,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertIn("tag = ROM", targets)
         self.assertIn("tag = TRU", targets)
         self.assertIn("ROOT = { tag = VAD }", targets)
-        decisions = read("common/decisions/ADISCORD_vorkerland_focus_decisions.txt")
+        decisions = read_focus_decisions()
         recognition = named_block(decisions, "ADISCORD_vorkerland_recognize_free_republics")
         self.assertIn("has_country_flag = ADISCORD_vorkerland_focus_worker_free_republics", recognition)
         self.assertEqual(recognition.count("is_subject = no"), 4)
@@ -1585,7 +1780,8 @@ class FrontAndSupplyTests(unittest.TestCase):
         initial = named_block(effects, "ADISCORD_vorkerland_prepare_initial_combatants")
         for tag, manpower, rifles in (
             ("ZAO", 4000, 850), ("PWR", 8000, 1600), ("VLA", 8000, 1800),
-            ("ROM", 6000, 1200), ("SOL", 3000, 500), ("TRU", 7000, 1400),
+            ("NAM", 8000, 1600),
+            ("ROM", 10000, 1800), ("SOL", 3000, 500), ("TRU", 11000, 2000),
         ):
             block = named_block(initial, tag)
             self.assertIn(f"add_manpower = {manpower}", block, tag)
@@ -3017,6 +3213,183 @@ class InterventionAndVisualTests(unittest.TestCase):
             geography,
         )
         self.assertIn('VICTORY_POINTS_6713: "Гранд-Воркенсберг"', geography)
+
+
+class VorkerlandLocalBracketTests(unittest.TestCase):
+    """Lock in the local war graph: minors fight each other before the majors."""
+
+    def setUp(self) -> None:
+        self.triggers = read(
+            "common/scripted_triggers/ADISCORD_vorkerland_collapse_triggers.txt"
+        )
+        self.effects = read(
+            "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt"
+        )
+        self.decisions = read(
+            "common/decisions/ADISCORD_vorkerland_collapse_decisions.txt"
+        )
+        self.ai = read("common/ai_strategy/ADISCORD_vorkerland_collapse_ai.txt")
+
+    def test_bracket_section_is_registered_and_passes(self) -> None:
+        self.assertIn("brackets", SECTIONS)
+        self.assertEqual(validate(ROOT, "brackets"), [])
+
+    def test_late_spawn_templates_are_idempotently_guaranteed(self) -> None:
+        issues: list[str] = []
+        collapse_validator.validate_emergency_templates(ROOT, issues)
+        self.assertEqual(issues, [])
+
+    def test_every_bracket_member_owns_a_rival_that_is_not_a_claimant(self) -> None:
+        edges = collapse_validator.directed_rivalry_edges(
+            named_block(self.triggers, "ADISCORD_vorkerland_is_local_attacker_of_PREV")
+        )
+        self.assertEqual(edges, list(LOCAL_RIVALRY_EDGES))
+        partners: dict[str, set[str]] = {}
+        for attacker, defender in edges:
+            partners.setdefault(attacker, set()).add(defender)
+            partners.setdefault(defender, set()).add(attacker)
+        for tag in sorted(CENTRAL_BRACKET_TAGS | CLOSED_ZONE_BRACKET_TAGS):
+            with self.subTest(tag=tag):
+                self.assertTrue(partners.get(tag))
+                self.assertFalse(partners[tag] & MAIN_CLAIMANTS)
+
+    def test_undirected_table_is_the_symmetric_closure(self) -> None:
+        directed = collapse_validator.directed_rivalry_edges(
+            named_block(self.triggers, "ADISCORD_vorkerland_is_local_attacker_of_PREV")
+        )
+        undirected = collapse_validator.directed_rivalry_edges(
+            named_block(self.triggers, "ADISCORD_vorkerland_is_local_rival_of_PREV")
+        )
+        self.assertEqual(
+            sorted(undirected),
+            sorted({(a, b) for a, b in directed} | {(b, a) for a, b in directed}),
+        )
+        # A nested PREV walks two scopes up in Clausewitz, so the undirected
+        # table must never be derived from the directed one at runtime.
+        self.assertNotIn(
+            "ADISCORD_vorkerland_is_local_attacker_of_PREV",
+            named_block(self.triggers, "ADISCORD_vorkerland_is_local_rival_of_PREV"),
+        )
+
+    def test_one_parameterised_body_declares_every_staged_rivalry(self) -> None:
+        builder = named_block(self.effects, "ADISCORD_vorkerland_open_local_bracket_wars")
+        self.assertEqual(builder.count("declare_war_on ="), 1)
+        self.assertIn("ADISCORD_vorkerland_is_local_attacker_of_PREV = yes", builder)
+        self.assertIn("NOT = { has_war_with = PREV }", builder)
+        for attacker, defender in (
+            collapse_validator.NEW_CENTRAL_BRACKET_EDGES
+            + collapse_validator.NEW_CLOSED_ZONE_BRACKET_EDGES
+        ):
+            with self.subTest(edge=f"{attacker}->{defender}"):
+                self.assertNotIn(
+                    f"{attacker} = {{ declare_war_on = {{ target = {defender}",
+                    self.effects,
+                )
+
+    def test_coalition_join_splices_into_the_host_war(self) -> None:
+        splice = named_block(
+            self.effects, "ADISCORD_vorkerland_splice_into_coalition_host_war"
+        )
+        self.assertNotIn("declare_war_on", splice)
+        self.assertIn("add_to_faction = ROOT", splice)
+        self.assertIn(
+            "targeted_alliance = event_target:ADISCORD_vorkerland_coalition_host", splice
+        )
+        decision = named_block(
+            self.decisions, "ADISCORD_vorkerland_join_claimant_coalition"
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_has_live_local_rival = no",
+            named_block(decision, "available"),
+        )
+
+    def test_bracket_events_are_hidden_and_never_polled(self) -> None:
+        events = read("events/ADISCORD_vorkerland_collapse_events.txt")
+        for event_id in (90, 91, 92, 93):
+            with self.subTest(event=event_id):
+                block = event_block(events, f"ADISCORD_vorkerland_collapse.{event_id}")
+                self.assertIn("hidden = yes", block)
+                self.assertIn("is_triggered_only = yes", block)
+        registry = json.loads(
+            (ROOT / "tools" / "data" / "adiscord_event_ids.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        active = {
+            entry["id"] for entry in registry["events"] if entry["status"] == "active"
+        }
+        for event_id in (90, 91, 92, 93):
+            self.assertIn(f"ADISCORD_vorkerland_collapse.{event_id}", active)
+
+    def test_minors_are_told_to_ignore_claimants_while_fighting_locally(self) -> None:
+        for claimant in sorted(MAIN_CLAIMANTS):
+            with self.subTest(claimant=claimant):
+                block = named_block(
+                    self.ai, f"ADISCORD_vorkerland_local_focus_ignore_{claimant.lower()}"
+                )
+                self.assertIn(f"type = ignore id = {claimant} value = 1000", block)
+                self.assertIn("ADISCORD_vorkerland_has_live_local_rival = yes", block)
+                self.assertIn(f"NOT = {{ has_war_with = {claimant} }}", block)
+
+    def test_russian_bracket_localisation_keeps_its_bom(self) -> None:
+        raw = (
+            ROOT / "localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml"
+        ).read_bytes()
+        self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
+        text = raw.decode("utf-8-sig")
+        for key in collapse_validator.LOCAL_BRACKET_LOC_KEYS:
+            with self.subTest(key=key):
+                self.assertRegex(text, rf"(?m)^\s*{key}:\s*\d*\s*\"")
+
+    def test_validator_rejects_a_dropped_rivalry(self) -> None:
+        attacker, defender = LOCAL_RIVALRY_EDGES[-1]
+        mutilated = self.triggers.replace(
+            f"AND = {{ tag = {attacker} PREV = {{ tag = {defender} }} }}\n", "", 1
+        )
+        issues: list[str] = []
+        collapse_validator.validate_bracket_graph(mutilated, issues)
+        self.assertTrue(
+            any(f"{attacker}->{defender}" in issue for issue in issues), issues
+        )
+
+    def test_validator_rejects_a_rivalry_redirected_at_a_claimant(self) -> None:
+        redirected = self.triggers.replace(
+            "AND = { tag = RIV PREV = { tag = VHV } }",
+            "AND = { tag = RIV PREV = { tag = WKR } }",
+            1,
+        )
+        issues: list[str] = []
+        collapse_validator.validate_bracket_graph(redirected, issues)
+        self.assertTrue(
+            any("targets a main claimant" in issue for issue in issues), issues
+        )
+
+    def test_validator_rejects_an_ungated_coalition_join(self) -> None:
+        ungated = self.decisions.replace(
+            "\t\t\tADISCORD_vorkerland_has_live_local_rival = no\n", "", 1
+        )
+        issues: list[str] = []
+        collapse_validator.validate_bracket_decision(ungated, "CSL", issues)
+        self.assertTrue(
+            any("cleared the local bracket" in issue for issue in issues), issues
+        )
+
+    def test_validator_rejects_a_hand_written_bracket_war(self) -> None:
+        duplicated = self.effects + (
+            "\nADISCORD_vorkerland_hand_written_bracket_war = {\n"
+            "\tRIV = { declare_war_on = { target = VHV type = annex_everything } }\n"
+            "}\n"
+        )
+        issues: list[str] = []
+        collapse_validator.validate_bracket_engine(
+            duplicated,
+            read("common/scripted_effects/ADISCORD_vorkerland_collapse_dirty_effects.txt"),
+            read("events/ADISCORD_vorkerland_collapse_events.txt"),
+            issues,
+        )
+        self.assertTrue(
+            any("hand-written as well as generated" in issue for issue in issues), issues
+        )
 
 
 if __name__ == "__main__":
