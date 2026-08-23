@@ -191,6 +191,11 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 )
 
     def test_horizontal_technology_positions_follow_the_left_grid_contract(self) -> None:
+        # A ``format = "LEFT"`` gridbox swaps the pair it is given: x becomes the
+        # vertical band row scaled by slot_height and y becomes the horizontal
+        # step scaled by slot_width. Vanilla proves it -- its infantry tab reads
+        # left-to-right with every year label on one row, yet each technology
+        # stores the year in position.y and its capability row in position.x.
         small_arms = generator.BRANCH_BY_KEY["small_arms"]
         positions = {
             index: self._folder_positions(generator.render_technology(small_arms, index))[
@@ -206,6 +211,10 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 15: (1, 57),
             },
         )
+        for index in range(len(small_arms.techs)):
+            x, y = generator.technology_grid_position(small_arms, index)
+            self.assertEqual(x, generator.BRANCH_GRAPHS["small_arms"].lanes[index])
+            self.assertEqual(y, generator.technology_time_slot(small_arms, index))
 
         armor = generator.BRANCH_BY_KEY["recon_armor"]
         for index in (0, len(armor.techs) // 2, len(armor.techs) - 1):
@@ -220,11 +229,8 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         self.assertEqual(len(fork_targets), 3)
         self.assertGreater(len({branch.years[index] for index in fork_targets}), 1)
         self.assertEqual(
-            {
-                generator.technology_grid_position(branch, index)[1]
-                for index in fork_targets
-            },
-            {generator.technology_grid_position(branch, fork_targets[0])[1]},
+            {generator.technology_time_slot(branch, index) for index in fork_targets},
+            {generator.technology_time_slot(branch, fork_targets[0])},
         )
 
         merge_parents = tuple(
@@ -235,19 +241,16 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         self.assertEqual(len(merge_parents), 3)
         self.assertGreater(len({branch.years[index] for index in merge_parents}), 1)
         self.assertEqual(
-            {
-                generator.technology_grid_position(branch, index)[1]
-                for index in merge_parents
-            },
-            {generator.technology_grid_position(branch, merge_parents[0])[1]},
+            {generator.technology_time_slot(branch, index) for index in merge_parents},
+            {generator.technology_time_slot(branch, merge_parents[0])},
         )
 
         for source, targets in enumerate(graph.successors):
-            source_column = generator.technology_grid_position(branch, source)[1]
+            source_column = generator.technology_time_slot(branch, source)
             for target in targets:
                 self.assertLess(
                     source_column,
-                    generator.technology_grid_position(branch, target)[1],
+                    generator.technology_time_slot(branch, target),
                 )
 
     def test_personal_antitank_branch_fits_inside_two_visual_rows(self) -> None:
@@ -267,11 +270,13 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                     )
 
     def test_main_land_programmes_have_real_forks_and_syntheses(self) -> None:
+        # The three restored programmes now run three even parallel routes into a
+        # single capstone, so their synthesis sits at the last node.
         expected_synthesis_parent_counts = {
             "small_arms": {15: 3},
-            "squad_weapons": {11: 2, 14: 2},
-            "protection": {15: 3},
-            "special_forces": {15: 3},
+            "squad_weapons": {19: 3},
+            "protection": {19: 3},
+            "special_forces": {19: 3},
             "recon_armor": {19: 3},
             "combat_armor": {15: 3},
             "heavy_armor": {19: 3},
@@ -292,6 +297,82 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 )
 
         self.assertEqual(generator.XOR_INDEX_GROUPS_BY_BRANCH["combat_armor"], ((16, 17),))
+
+    def test_every_node_fits_inside_its_own_declared_gridbox(self) -> None:
+        """A node placed outside its gridbox is drawn on the wrong axis.
+
+        This regressed once: time was written to x on left-to-right tabs, and
+        because ``format = "LEFT"`` spends x on the vertical axis the infantry
+        and armour rungs stepped a whole band height each and ran off the bottom
+        of a 288px box while the year headers still ran across the tab.
+        """
+
+        for folder in sorted({f for b in generator.BRANCHES for f in b.folders}):
+            horizontal = folder in generator.HORIZONTAL_FOLDERS
+            for branch in [b for b in generator.BRANCHES if folder in b.folders]:
+                graph = generator.BRANCH_GRAPHS[branch.key]
+                if horizontal:
+                    across_extent = (
+                        max(generator.YEAR_TO_Y.values())
+                        * generator.HORIZONTAL_YEAR_SLOT_MULTIPLIER
+                        + generator.HORIZONTAL_YEAR_SLOT_MULTIPLIER
+                    ) * generator.GRID_SLOT
+                    down_extent = (max(graph.lanes) + 1) * generator.HORIZONTAL_LANE_SLOT
+                    across_slot = generator.GRID_SLOT
+                    down_slot = generator.HORIZONTAL_LANE_SLOT
+                else:
+                    across_extent = (
+                        max(graph.lanes) * generator.LANE_SLOT_MULTIPLIER
+                        + generator.LANE_SLOT_MULTIPLIER
+                    ) * generator.GRID_SLOT
+                    down_extent = (
+                        max(generator.YEAR_TO_Y.values())
+                        * generator.VERTICAL_YEAR_SLOT_MULTIPLIER
+                        + 1
+                    ) * generator.GRID_SLOT
+                    across_slot = down_slot = generator.GRID_SLOT
+                for index, tech in enumerate(branch.techs):
+                    x, y = generator.technology_grid_position(branch, index)
+                    # "LEFT" spends x on the vertical axis and y on the
+                    # horizontal one; "UP" reads the pair as written.
+                    down, across = (x, y) if horizontal else (y, x)
+                    with self.subTest(folder=folder, technology=tech.id):
+                        self.assertLessEqual((across + 1) * across_slot, across_extent)
+                        self.assertLessEqual((down + 1) * down_slot, down_extent)
+
+    def test_consecutive_rungs_leave_room_for_their_connector(self) -> None:
+        """Adjacent research years must not draw 72px icons 70px apart."""
+
+        for branch in generator.BRANCHES:
+            for source, targets in enumerate(
+                generator.BRANCH_GRAPHS[branch.key].successors
+            ):
+                for target in targets:
+                    if branch.years[source] == branch.years[target]:
+                        continue
+                    step = generator.technology_time_slot(
+                        branch, target
+                    ) - generator.technology_time_slot(branch, source)
+                    with self.subTest(branch=branch.key, edge=(source, target)):
+                        self.assertGreaterEqual(step, 2)
+
+    def test_vertical_year_labels_sit_on_their_own_node_rows(self) -> None:
+        rendered = generator.render_folder("industry_folder")
+        label_rows = {
+            int(year): int(y)
+            for year, y in re.findall(
+                r'name = "ADISCORD_industry_folder_year_(\d+)"\s*'
+                r"position = \{ x = \d+ y = (\d+) \}",
+                rendered,
+            )
+        }
+        self.assertEqual(len(label_rows), len(generator.YEARS))
+        for branch in [b for b in generator.BRANCHES if "industry_folder" in b.folders]:
+            for index in range(len(branch.techs)):
+                _, y = generator.technology_grid_position(branch, index)
+                node_top = generator.GRID_Y + y * generator.GRID_SLOT
+                with self.subTest(technology=branch.techs[index].id):
+                    self.assertEqual(label_rows[branch.years[index]], node_top + 18)
 
     def test_horizontal_folder_grid_aligns_years_and_stacks_programmes(self) -> None:
         rendered = generator.render_folder("infantry_folder")
@@ -355,9 +436,23 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
 
     def test_long_encryption_and_uniform_applied_diamonds_are_gone(self) -> None:
         branches = {branch.key: branch for branch in generator.BRANCHES}
-        # Three recovered-baseline nodes plus eight live capability steps are
-        # still compact while preserving the scripted radio/encryption IDs.
-        self.assertLessEqual(len(branches["signals"].techs), 11)
+        # Signals may spend rungs on its two named routes, but it must not grow
+        # past the authored twenty, must not collapse back into one uniform
+        # encryption chain, and must keep the scripted radio/encryption IDs.
+        signals = branches["signals"]
+        self.assertLessEqual(
+            len(signals.techs), len(generator.LEGACY_BRANCH_BY_KEY["signals"].techs)
+        )
+        signals_graph = generator.BRANCH_GRAPHS["signals"]
+        self.assertTrue(any(len(targets) > 1 for targets in signals_graph.successors))
+        self.assertTrue(
+            {
+                "field_radio_networks",
+                "encryption_rebuild",
+                "frequency_hopping_field_sets",
+                "memetic_security_protocols",
+            }.issubset({tech.key for tech in signals.techs})
+        )
         side_keys = getattr(generator, "SIDE_PROGRAMME_KEYS", set())
         self.assertEqual(
             side_keys,
@@ -385,6 +480,51 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         actual = getattr(generator, "XOR_KIND_BY_BRANCH", {})
         self.assertEqual(actual, expected)
         self.assertLessEqual(len(actual), 6)
+
+    def test_research_payoffs_stay_spendable_and_inside_their_category(self) -> None:
+        payoffs = getattr(generator, "RESEARCH_PAYOFFS", {})
+        self.assertTrue(payoffs)
+        for tech_id, (category, bonus, uses) in payoffs.items():
+            with self.subTest(technology=tech_id):
+                self.assertIn(tech_id, generator.TECH_POSITION_BY_ID)
+                branch, index = generator.TECH_POSITION_BY_ID[tech_id]
+                # A discount handed out at the end of the tree cannot be spent.
+                self.assertLessEqual(branch.years[index], 2174)
+                self.assertIn(
+                    category,
+                    generator.CATEGORY_BY_PROFILE[branch.profile].split(),
+                )
+                self.assertGreater(bonus, 0)
+                self.assertLessEqual(bonus, 0.5)
+                self.assertGreaterEqual(uses, 1)
+
+        # Every tab should have a reason to finish a programme, not just industry.
+        folders = {
+            folder
+            for tech_id in payoffs
+            for folder in generator.TECH_POSITION_BY_ID[tech_id][0].folders
+        }
+        self.assertGreaterEqual(len(folders), 7)
+
+    def test_each_technology_keeps_a_single_research_completion_block(self) -> None:
+        """A second ``on_research_complete`` would be discarded in silence.
+
+        Clausewitz keeps only one such block per technology, so the building
+        upgrades and the research payoff have to share it. The shared block also
+        has to sit after the path entries, because the research-balance contract
+        counts numeric leaf modifiers only up to the first path.
+        """
+
+        for branch in generator.BRANCHES:
+            for index, tech in enumerate(branch.techs):
+                block = generator.render_technology(branch, index)
+                with self.subTest(technology=tech.id):
+                    self.assertLessEqual(block.count("on_research_complete"), 1)
+                    if "add_tech_bonus" in block and "path =" in block:
+                        self.assertLess(
+                            block.index("path ="),
+                            block.index("on_research_complete"),
+                        )
 
     def test_industrial_volume_has_an_energy_price(self) -> None:
         branches = {branch.key: branch for branch in generator.BRANCHES}

@@ -16,5 +16,8 @@ state={
 			arms_factory = 2
 		}
 		add_core_of=TRU
+		victory_points = { 16690 3 }
+		victory_points = { 16696 1 }
+		victory_points = { 16704 1 }
 	}
 }

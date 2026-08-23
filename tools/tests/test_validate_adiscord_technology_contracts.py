@@ -88,7 +88,7 @@ on_actions = {
         }
         every_country = { ADISCORD_grant_starting_technology_profile = yes }
         every_country = { ADISCORD_initialize_default_country_development = yes }
-        STP = { ADISCORD_STP_lock_regular_army_templates = yes }
+        STP = { STP_initialize_core_mechanics = yes }
         every_country = { ADISCORD_economy_initialize_country = yes }
         set_global_flag = ADISCORD_starting_technology_profiles_applied
     } } }
@@ -113,14 +113,58 @@ on_actions = {
             )
         )
 
+    def test_shared_startup_rejects_inline_stp_army_lock(self) -> None:
+        history = "set_global_flag = ADISCORD_fresh_campaign_contract_v1\n"
+        startup = """
+on_actions = {
+    on_startup = { effect = { if = {
+        limit = {
+            has_global_flag = ADISCORD_fresh_campaign_contract_v1
+            NOT = { has_global_flag = ADISCORD_starting_technology_profiles_applied }
+        }
+        every_country = { ADISCORD_grant_starting_technology_profile = yes }
+        every_country = { ADISCORD_initialize_default_country_development = yes }
+        STP = { %s }
+        every_country = { ADISCORD_economy_initialize_country = yes }
+        set_global_flag = ADISCORD_starting_technology_profiles_applied
+    } } }
+    on_monthly = { effect = { if = { limit = { has_global_flag = ADISCORD_fresh_campaign_contract_v1 } ADISCORD_tick_all_society_development_monthly = yes } } }
+    on_yearly = { effect = { if = { limit = { has_global_flag = ADISCORD_fresh_campaign_contract_v1 } ADISCORD_tick_all_society_development_yearly = yes } } }
+}
+"""
+        # The idea gate lives in the initializer, so an inline lock is a regression.
+        issues = validator.fresh_campaign_startup_contract_issues(
+            history,
+            startup % "STP_initialize_core_mechanics = yes\n        ADISCORD_STP_lock_regular_army_templates = yes",
+        )
+        self.assertTrue(any("inline" in issue for issue in issues), issues)
+
+        # Dropping the initializer leaves startup army state non-deterministic.
+        issues = validator.fresh_campaign_startup_contract_issues(
+            history, startup % "set_country_flag = STP_placeholder"
+        )
+        self.assertTrue(
+            any("STP_initialize_core_mechanics" in issue for issue in issues), issues
+        )
+
+        issues = validator.fresh_campaign_startup_contract_issues(
+            history,
+            startup % "ADISCORD_STP_migrate_army_template_lock = yes\n        STP_initialize_core_mechanics = yes",
+        )
+        self.assertTrue(any("old-save migration" in issue for issue in issues), issues)
+
     def test_missing_energy_price_is_reported(self) -> None:
         tech_id = "ADISCORD_tech_concentrated_industrial_zones"
         broken = dict(self.tech_blocks)
-        broken[tech_id] = broken[tech_id].replace(
-            "\n\t\tfactory_energy_consumption = 0.08",
+        # Strip the line whatever its value, so rebalancing the industry band
+        # cannot quietly turn this negative test into a no-op.
+        broken[tech_id], removed = re.subn(
+            r"\n\t\tfactory_energy_consumption = [0-9.]+",
             "",
-            1,
+            broken[tech_id],
+            count=1,
         )
+        self.assertEqual(removed, 1)
         issues = validator.check_post_2160_research_balance(broken)
         self.assertTrue(
             any(tech_id in issue and "energy" in issue for issue in issues),

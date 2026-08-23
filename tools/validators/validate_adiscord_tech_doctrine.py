@@ -2635,8 +2635,19 @@ def fresh_campaign_startup_contract_issues(
         issues.append("shared startup completion sentinel must have exactly one writer")
     if "ADISCORD_STP_migrate_army_template_lock" in startup:
         issues.append("shared fresh startup must not call the STP old-save migration")
-    if "ADISCORD_STP_lock_regular_army_templates = yes" not in startup:
-        issues.append("shared fresh startup must apply STP per-template locks directly")
+    # The starting division lock is declared by the OOB and reasserted by
+    # STP_initialize_core_mechanics while the hedonism idea is active. Startup
+    # therefore calls the initializer once and must not repeat the lock inline,
+    # which would bypass that idea gate.
+    if startup.count("STP_initialize_core_mechanics = yes") != 1:
+        issues.append(
+            "shared fresh startup must call STP_initialize_core_mechanics exactly once"
+        )
+    if "ADISCORD_STP_lock_regular_army_templates" in startup:
+        issues.append(
+            "shared fresh startup must not apply STP per-template locks inline; "
+            "STP_initialize_core_mechanics owns that reassertion"
+        )
 
     for hook_name, tick in (
         ("on_monthly", "ADISCORD_tick_all_society_development_monthly = yes"),

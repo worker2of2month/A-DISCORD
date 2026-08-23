@@ -20,8 +20,12 @@
     "decision_ui_assets",
     "diplomacy_ui_assets",
     "production_ui_assets",
+    "logistics_ui_assets",
+    "deployment_ui_assets",
+    "intelligence_ui_assets",
     "resource_assets",
     "technology_ui_assets",
+    "technology_screen_ui_assets",
     "technology_system",
     "doctrine_system",
     "val_operations_map",
@@ -441,6 +445,99 @@
       "ownership_mode": "exclusive"
     },
     {
+      "id": "technology_screen_ui_assets",
+      "owner_module": "tools.builders.build_adiscord_technology_ui_assets",
+      "output_globs": [
+        "interface/countrytechnologyview.gui",
+        "interface/ADISCORD_technology_ui.gfx",
+        "gfx/interface/technology/ui/ADISCORD_technology_window.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_panel.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_slot.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_card.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_tab.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_top.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_bottom.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_tree_panel.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_tree_stripes.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_tree_info_top.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_tree_info.dds"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_technology_ui_assets.py",
+        "tools/lib/adiscord_ui_surfaces.py",
+        "gfx/interface/production/source/production_surface_source.png"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_technology_ui_assets"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_technology_ui_assets", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "logistics_ui_assets",
+      "owner_module": "tools.builders.build_adiscord_logistics_ui_assets",
+      "output_globs": [
+        "interface/countrylogisticsview.gui",
+        "interface/ADISCORD_logistics_ui.gfx",
+        "gfx/interface/logistics/ui/ADISCORD_logistics_window.dds",
+        "gfx/interface/logistics/ui/ADISCORD_logistics_panel.dds",
+        "gfx/interface/logistics/ui/ADISCORD_logistics_row.dds",
+        "gfx/interface/logistics/ui/ADISCORD_logistics_graph.dds"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_logistics_ui_assets.py",
+        "tools/lib/adiscord_ui_surfaces.py",
+        "gfx/interface/production/source/production_surface_source.png"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_logistics_ui_assets"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_logistics_ui_assets", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "deployment_ui_assets",
+      "owner_module": "tools.builders.build_adiscord_deployment_ui_assets",
+      "output_globs": [
+        "interface/countrydeploymentview.gui",
+        "interface/ADISCORD_deployment_ui.gfx",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_window.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_panel.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_template.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_line.dds"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_deployment_ui_assets.py",
+        "tools/lib/adiscord_ui_surfaces.py",
+        "gfx/interface/production/source/production_surface_source.png"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_deployment_ui_assets"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_deployment_ui_assets", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "intelligence_ui_assets",
+      "owner_module": "tools.builders.build_adiscord_intelligence_ui_assets",
+      "output_globs": [
+        "interface/countryintelligenceagencyview.gui",
+        "interface/operative.gui",
+        "interface/operativeleader.gui",
+        "interface/ADISCORD_intelligence_ui.gfx",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_window.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_panel.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_card.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_selected.dds"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_intelligence_ui_assets.py",
+        "tools/lib/adiscord_ui_surfaces.py",
+        "gfx/interface/production/source/production_surface_source.png"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_intelligence_ui_assets"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_intelligence_ui_assets", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
+    },
+    {
       "id": "technology_system",
       "owner_module": "tools.builders.build_adiscord_technology_system",
       "output_globs": [
@@ -472,6 +569,7 @@
       "source_inputs": [
         "tools/builders/build_adiscord_terrain_snow.py",
         "map/terrain.bmp",
+        "map/cities.bmp",
         "map/heightmap.bmp",
         "map/provinces.bmp",
         "map/definition.csv",
@@ -481,7 +579,7 @@
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_terrain_snow", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "Permanent-snow generation owns polar/high-altitude palette conversion and preserves IVN/IIA urban palette 13; the IVN geography pass owns only compact settlement footprints."
+      "overlap_explanation": "Permanent-snow generation owns polar/high-altitude palette conversion outside the IVN geography footprint and preserves land city-mask pixels as urban palette 13; the IVN geography pass owns the northern terrain layers."
     },
     {
       "id": "vorkerland_cities",
@@ -918,11 +1016,21 @@
     {
       "id": "ivn_geography",
       "owner_module": "tools.builders.build_adiscord_ivn_geography",
-      "output_globs": ["map/terrain.bmp", "map/definition.csv"],
+      "output_globs": [
+        "map/terrain.bmp",
+        "map/trees.bmp",
+        "map/heightmap.bmp",
+        "map/world_normal.bmp",
+        "map/definition.csv"
+      ],
       "source_inputs": [
         "tools/builders/build_adiscord_ivn_geography.py",
         "history/states/*.txt",
         "map/terrain.bmp",
+        "map/cities.bmp",
+        "map/trees.bmp",
+        "map/heightmap.bmp",
+        "map/world_normal.bmp",
         "map/provinces.bmp",
         "map/definition.csv",
         "common/terrain/00_terrain.txt"
@@ -931,7 +1039,7 @@
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_ivn_geography", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "This pass owns definition.csv terrain field 6 only for the explicit IVN/IIA province set and compact palette-13 footprints in their VP provinces; trade regions own continent field 7 and terrain_snow owns snow conversion."
+      "overlap_explanation": "This pass owns terrain, trees, height and normal-map layers inside the explicit IVN/IIA province set, preserves shared land city-mask pixels as urban palette 13, and owns definition.csv terrain field 6 there; trade regions own continent field 7 and terrain_snow owns compatible snow conversion."
     }
   ]
 }

@@ -13,6 +13,7 @@ import unittest
 from PIL import Image
 
 from tools.builders import build_adiscord_ivn_geography as builder
+from tools.builders import build_adiscord_terrain_snow as terrain_builder
 
 
 HEIGHT_OUTSIDE_ISLAND_SHA256 = "4BF5E6E4DC65377E0979EE4BA6E5240A603947FCA7E2CE82453BCB36CC668D93"
@@ -628,9 +629,32 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
                 )
                 self.assertEqual(outputs.desired[province_id], "urban")
 
+    def test_city_mask_pixels_remain_urban_inside_ivn_scope(self) -> None:
+        outputs = builder.expected()
+        _lines, _newline, _bom, scoped_colours, _declared = (
+            builder.definition_contract()
+        )
+        with (
+            Image.open(terrain_builder.CITIES_PATH) as cities,
+            Image.open(builder.PROVINCES_PATH) as provinces,
+        ):
+            city_pixels = list(cities.get_flattened_data())
+            province_bytes = provinces.convert("RGB").tobytes()
+        generated = list(outputs.terrain.get_flattened_data())
+        offenders = []
+        for index, city_value in enumerate(city_pixels):
+            colour = tuple(province_bytes[index * 3 : index * 3 + 3])
+            if (
+                city_value == terrain_builder.CITY_PALETTE_INDEX
+                and colour in scoped_colours.values()
+                and generated[index] != builder.URBAN_PALETTE
+            ):
+                offenders.append(index)
+        self.assertEqual(offenders, [])
+
     def test_province_geometry_is_unchanged(self) -> None:
         digest = hashlib.sha256(builder.PROVINCES_PATH.read_bytes()).hexdigest().upper()
-        self.assertEqual(digest, "4CE9521BD3ADB7966E951B534D9DEA31D0C995441CDE60E99DEC3A2D3A530511")
+        self.assertEqual(digest, "397D5CEAAD8A24E8919203E17DADB8E6C617EEF1FEAFE4771408611E818EAA7D")
 
 
 if __name__ == "__main__":

@@ -30,6 +30,7 @@ from tools.builders.build_adiscord_new_states import (
     AFRELA_LEGACY_VICTORY_POINTS,
     CAPITALS,
     EXACT_LEGACY_FACTORY_STATE_IDS,
+    IVANLAND_OVERHAUL_VICTORY_POINTS,
     LEGACY_STATE_PROFILES,
     LEGACY_OWNER_GAPS,
     LEGACY_OWNER_OVERRIDES,
@@ -37,6 +38,8 @@ from tools.builders.build_adiscord_new_states import (
     NAM_COALITION_FRONT_RESOURCES,
     NAM_LEGACY_VICTORY_POINTS,
     SECONDARY_CENTRES,
+    SETTLEMENT_CLUSTER_CENTRES,
+    SETTLEMENT_CLUSTER_VICTORY_POINTS,
     STATE_PROFILES,
     STATE_RESOURCES,
     STARTING_OWNERS,
@@ -78,6 +81,7 @@ APPROVED_NON_URBAN_SETTLEMENT_VPS = NON_URBAN_SETTLEMENT_VPS | frozenset(
     province_id
     for points in (
         *AFRELA_LEGACY_VICTORY_POINTS.values(),
+        *IVANLAND_OVERHAUL_VICTORY_POINTS.values(),
         *NAM_LEGACY_VICTORY_POINTS.values(),
         *(profile["victory_points"] for profile in AINHOLM_STATE_PROFILES.values()),
     )
@@ -367,6 +371,33 @@ def validate_states() -> None:
                 f"Vorkerland legacy state {state_id}: expected VP {province_id}:{value}",
             )
 
+    for state_id, expected_vps in sorted(SETTLEMENT_CLUSTER_VICTORY_POINTS.items()):
+        source = text(state_path(state_id))
+        actual_vps = {
+            int(province_id): int(value)
+            for province_id, value in re.findall(
+                r"victory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}", source
+            )
+        }
+        for province_id, value in expected_vps:
+            check(
+                actual_vps.get(province_id) == value,
+                f"settlement-cluster state {state_id}: expected VP {province_id}:{value}",
+            )
+            check(
+                province_terrain.get(province_id) in SETTLEMENT_TERRAINS,
+                f"settlement-cluster VP {province_id}: expected urban terrain",
+            )
+            check(
+                len(
+                    re.findall(
+                        rf"(?m)^\s*VICTORY_POINTS_{province_id}:\s*\".+\"", localisation
+                    )
+                )
+                == 1,
+                f"settlement-cluster VP {province_id}: expected one Russian city name",
+            )
+
     vp_localisation_path = ROOT / "localisation/russian/victory_points_l_russian.yml"
     vp_localisation = text(vp_localisation_path)
     check(
@@ -589,6 +620,7 @@ def validate_states() -> None:
         **MINOR_VPS,
         **VORKERLAND_CENTRES,
         **VORKERLAND_MINOR_VPS,
+        **SETTLEMENT_CLUSTER_CENTRES,
     }
     for state_id, (province_id, value) in centres.items():
         source = text(state_path(state_id))
@@ -611,6 +643,19 @@ def validate_states() -> None:
                 or province_id in APPROVED_NON_URBAN_SETTLEMENT_VPS,
                 f"{path.name}: VP {province_id} is not urban or an approved settlement",
             )
+        province_match = re.search(r"provinces\s*=\s*\{([^}]*)\}", source, re.DOTALL)
+        if not province_match:
+            continue
+        settlements = [
+            province_id
+            for province_id in map(int, re.findall(r"\d+", province_match.group(1)))
+            if province_terrain.get(province_id) in SETTLEMENT_TERRAINS
+            and province_kind.get(province_id) == "land"
+        ]
+        check(
+            not settlements or "victory_points" in source,
+            f"{path.name}: settlement provinces {settlements} without any victory point",
+        )
 
 
 def validate_countries() -> None:

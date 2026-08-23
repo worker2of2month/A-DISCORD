@@ -79,6 +79,76 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
                 )
                 self.assertEqual(actual_vps, expected_vps)
 
+    def test_every_settlement_state_has_a_victory_point(self) -> None:
+        terrain: dict[int, str] = {}
+        kind: dict[int, str] = {}
+        for line in (
+            builder.ROOT / "map/definition.csv"
+        ).read_text(encoding="utf-8-sig").splitlines():
+            fields = line.split(";")
+            if len(fields) > 6 and fields[0].isdigit():
+                terrain[int(fields[0])] = fields[6]
+                kind[int(fields[0])] = fields[4]
+        offenders = {}
+        for path in sorted((builder.ROOT / "history/states").glob("*.txt*")):
+            source = path.read_text(encoding="utf-8-sig", errors="strict")
+            match = re.search(r"provinces\s*=\s*\{([^}]*)\}", source, re.DOTALL)
+            if match is None or "victory_points" in source:
+                continue
+            settlements = sorted(
+                province_id
+                for province_id in map(int, re.findall(r"\d+", match.group(1)))
+                if terrain.get(province_id) in validator.SETTLEMENT_TERRAINS
+                and kind.get(province_id) == "land"
+            )
+            if settlements:
+                offenders[path.name] = settlements
+        self.assertEqual(offenders, {})
+
+    def test_settlement_cluster_victory_points_are_minor_urban_markers(self) -> None:
+        expected = {
+            73: ((16703, 1),),
+            144: ((16694, 1),),
+            145: ((16691, 3),),
+            194: ((16697, 3),),
+            199: ((16690, 3), (16696, 1), (16704, 1)),
+        }
+        self.assertEqual(builder.SETTLEMENT_CLUSTER_VICTORY_POINTS, expected)
+        self.assertEqual(builder.SETTLEMENT_CLUSTER_CENTRES, {329: (16524, 1)})
+        localisation = (
+            builder.ROOT / "localisation/russian/victory_points_l_russian.yml"
+        ).read_text(encoding="utf-8-sig")
+        for state_id, points in expected.items():
+            with self.subTest(state=state_id):
+                state = builder.state_path(state_id).read_text(encoding="utf-8-sig")
+                actual = {
+                    int(province_id): int(value)
+                    for province_id, value in re.findall(
+                        r"victory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}", state
+                    )
+                }
+                for province_id, value in points:
+                    self.assertEqual(actual.get(province_id), value)
+                    self.assertEqual(
+                        len(
+                            re.findall(
+                                rf'(?m)^\s*VICTORY_POINTS_{province_id}:\s*"[^"]+"',
+                                localisation,
+                            )
+                        ),
+                        1,
+                    )
+
+    def test_ivanland_manifest_victory_points_are_approved_settlements(self) -> None:
+        manifest_provinces = {
+            province_id
+            for points in builder.IVANLAND_OVERHAUL_VICTORY_POINTS.values()
+            for province_id, _value in points
+        }
+        self.assertTrue(
+            manifest_provinces <= validator.APPROVED_NON_URBAN_SETTLEMENT_VPS
+        )
+
     def test_exact_vp_replacement_removes_extras_and_is_idempotent(self) -> None:
         source = (
             "state={\n\tprovinces={ 10 20 }\n\thistory={\n"

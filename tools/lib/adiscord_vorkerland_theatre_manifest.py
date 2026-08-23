@@ -30,11 +30,11 @@ VORKERLAND_THEATRE_VICTORY_POINTS: dict[int, tuple[tuple[int, int], ...]] = {
     102: ((16594, 10), (16580, 5), (16575, 5), (16570, 5), (4841, 5)),
     105: ((16589, 12), (16565, 5), (16577, 3), (16581, 2)),
     106: ((11944, 10), (2949, 3)),
-    107: ((16635, 1), (16640, 1), (2539, 5)),
+    107: ((16635, 1), (16640, 1), (2539, 5), (16702, 1)),
     108: ((10147, 3),),
     109: ((16574, 3),),
     110: ((16566, 5),),
-    111: ((11274, 3),),
+    111: ((11274, 3), (16701, 1)),
     121: ((16560, 10),),
     122: ((16569, 5),),
     123: ((16576, 5),),
@@ -46,7 +46,7 @@ VORKERLAND_THEATRE_VICTORY_POINTS: dict[int, tuple[tuple[int, int], ...]] = {
     309: ((11795, 5),),
     310: ((16588, 1),),
     315: ((3762, 3),),
-    316: ((4148, 5),),
+    316: ((4148, 5), (16693, 1)),
     317: ((8803, 3),),
     318: ((16642, 3), (16624, 1)),
     320: ((12099, 3),),
@@ -84,6 +84,9 @@ VORKERLAND_THEATRE_VP_NAME_OVERRIDES: dict[int, str] = {
     16580: "Меркен",
     16592: "Грейн",
     16593: "Затерн",
+    16693: "Верхнеречье",
+    16701: "Подгорск",
+    16702: "Западный Орвин",
 }
 
 
@@ -109,18 +112,22 @@ VORKERLAND_THEATRE_PACKAGES: dict[str, tuple[int, ...]] = {
 }
 
 
+# Package totals feed the civil-war capitulation balance, so they are exact.
+# The three +1 markers added by the settlement-cluster rule (state 107 Западный
+# Орвин, state 111 Подгорск, state 316 Верхнеречье) leave every package's share
+# of the theatre within a percentage point of its previous value.
 VORKERLAND_THEATRE_PACKAGE_TOTALS: dict[str, int] = {
     "WKR": 62,
-    "VAD": 65,
+    "VAD": 66,
     "TVA": 77,
-    "EYR": 39,
+    "EYR": 40,
     "EGC": 22,
     "RIV": 23,
     "REV": 8,
     "YOR": 13,
     "NDN": 6,
     "SWB": 10,
-    "VHV": 11,
+    "VHV": 12,
     "OSV": 7,
     "SOL": 1,
     "WTD": 10,

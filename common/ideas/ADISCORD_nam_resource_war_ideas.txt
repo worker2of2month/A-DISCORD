@@ -12,6 +12,9 @@ ideas = {
 				supply_consumption_factor = -0.22
 				planning_speed = 0.10
 				surrender_limit = 0.18
+				conscription = 0.04
+				recruitable_population_factor = 0.15
+				mobilization_speed = 0.20
 			}
 		}
 

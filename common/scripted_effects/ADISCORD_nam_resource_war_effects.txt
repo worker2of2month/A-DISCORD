@@ -41,6 +41,10 @@ ADISCORD_nam_resource_war_start = {
 		NAM = {
 			add_ideas = ADISCORD_nam_extraction_defence_corps
 			add_war_support = 0.20
+			# Six resource-war formations arrive fully equipped. Without this
+			# reserve the starting 960k core pool is spent on the first two
+			# guards and the rest of the OOB sits empty.
+			add_manpower = 18000
 			load_oob = "NAM_resource_war"
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 6000 producer = NAM }
 			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 80 producer = NAM }

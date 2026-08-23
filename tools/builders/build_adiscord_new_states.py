@@ -255,6 +255,37 @@ VORKERLAND_MINOR_VPS = {
     314: (5405, 1),
 }
 
+# Every settlement block that is physically separated from the settlements a
+# state already marks is its own war objective, so it carries its own victory
+# point. A state that had no objective at all gets its largest block valued by
+# state category (rural and wasteland 1, town 3); every further block is a
+# minor marker worth 1, matching VORKERLAND_MINOR_VPS and states 310/318.
+# These entries feed render_state, so each holds a single centre.
+SETTLEMENT_CLUSTER_CENTRES = {
+    329: (16524, 1),
+}
+
+# The same rule for states whose metadata is patched in place rather than
+# rebuilt. Order matters: the validators compare generated VP blocks exactly,
+# and ensure_history_victory_points appends new markers in this order.
+SETTLEMENT_CLUSTER_VICTORY_POINTS = {
+    73: ((16703, 1),),
+    144: ((16694, 1),),
+    145: ((16691, 3),),
+    194: ((16697, 3),),
+    199: ((16690, 3), (16696, 1), (16704, 1)),
+}
+
+SETTLEMENT_CLUSTER_VICTORY_POINT_NAMES = {
+    16690: "Златогорск",
+    16691: "Тихоречье",
+    16694: "Южная Долина",
+    16696: "Каменный Лог",
+    16697: "Междуречье",
+    16703: "Тихий Брод",
+    16704: "Сухой Ключ",
+}
+
 # Explicit profiles replace the old pseudo-random 24-72k population formula
 # around the densely populated Vorkernsberg conurbation.
 STATE_PROFILES = {
@@ -406,8 +437,8 @@ IVANLAND_OVERHAUL_VICTORY_POINTS = {
     131: ((2262, 2),),
     132: ((423, 2),),
     164: ((4217, 1),),
-    693: ((6905, 5),),
-    694: ((11841, 3),),
+    693: ((6905, 5), (16692, 1), (16695, 1), (16700, 1)),
+    694: ((11841, 3), (12189, 1)),
     695: ((1763, 3),),
     696: ((5573, 3),),
     697: ((9160, 3),),
@@ -618,9 +649,14 @@ GENERATED_LEGACY_VICTORY_POINTS = {
     **AFRELA_LEGACY_VICTORY_POINTS,
     **NAM_LEGACY_VICTORY_POINTS,
     **IVANLAND_OVERHAUL_VICTORY_POINTS,
+    **SETTLEMENT_CLUSTER_VICTORY_POINTS,
 }
 
 IVANLAND_VICTORY_POINT_NAMES = {
+    12189: "Малый Кайрхольм",
+    16692: "Южный Рейдаль",
+    16695: "Восточный Рейдаль",
+    16700: "Северный Рейдаль",
     16568: "Старая марка",
     3462: "Серенга",
     3318: "Ведрина",
@@ -650,6 +686,7 @@ GENERATED_VICTORY_POINT_NAMES = {
     **AFRELA_VICTORY_POINT_NAMES,
     **NAM_VICTORY_POINT_NAMES,
     **IVANLAND_VICTORY_POINT_NAMES,
+    **SETTLEMENT_CLUSTER_VICTORY_POINT_NAMES,
     **VORKERLAND_THEATRE_VP_NAME_OVERRIDES,
 }
 
@@ -836,6 +873,7 @@ def render_state(state_id: int, owner: str) -> str:
         **MINOR_VPS,
         **VORKERLAND_CENTRES,
         **VORKERLAND_MINOR_VPS,
+        **SETTLEMENT_CLUSTER_CENTRES,
     }
     if state_id in VORKERLAND_THEATRE_VICTORY_POINTS:
         for province, value in VORKERLAND_THEATRE_VICTORY_POINTS[state_id]:
@@ -1533,6 +1571,21 @@ def apply() -> None:
     print(f"Built metadata for {len(STARTING_OWNERS)} states; hand-authored flags were left untouched.")
 
 
+def apply_settlement_cluster_victory_points() -> None:
+    """Apply only the settlement-cluster VP rule and its Russian names."""
+    apply_vorkerland_victory_points()
+    apply_legacy_state_profiles(
+        set(SETTLEMENT_CLUSTER_VICTORY_POINTS) | {693, 694}
+    )
+    for state_id in sorted(SETTLEMENT_CLUSTER_CENTRES):
+        owner = STARTING_OWNERS[state_id]
+        path = state_path(state_id)
+        rendered = render_state(state_id, owner)
+        if rendered != path.read_text(encoding="utf-8-sig", errors="strict"):
+            path.write_text(rendered, encoding="utf-8", newline="\n")
+    apply_generated_victory_point_localisation()
+
+
 def apply_nam_resource_war_states() -> None:
     """Regenerate only NAM-war mainland data and its generated VP names."""
     split_svetlogorsk_from_nam()
@@ -1560,6 +1613,11 @@ def main() -> int:
         "--apply-vorkerland-vps",
         action="store_true",
         help="apply only the exact central Vorkerland VP and Russian-name manifest",
+    )
+    actions.add_argument(
+        "--apply-settlement-cluster-vps",
+        action="store_true",
+        help="apply only the settlement-cluster victory points and their Russian names",
     )
     actions.add_argument(
         "--apply-ivn-overhaul",
@@ -1593,6 +1651,10 @@ def main() -> int:
     if args.apply_vorkerland_vps:
         apply_vorkerland_victory_points()
         print("Applied the exact central Vorkerland victory-point manifest.")
+        return 0
+    if args.apply_settlement_cluster_vps:
+        apply_settlement_cluster_victory_points()
+        print("Applied the settlement-cluster victory points and Russian names.")
         return 0
     if args.apply_ivn_overhaul:
         split_ivanland_overhaul_states()

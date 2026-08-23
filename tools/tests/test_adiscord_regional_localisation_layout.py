@@ -49,7 +49,7 @@ CONSOLIDATED_COUNTS = {
     "ADISCORD_menu_tooltips_l_russian.yml: energy": 1,
     "ADISCORD_minor_optimization_l_russian.yml": 2,
     "ADISCORD_national_focuses_l_russian.yml: live STP bookmark focuses": 6,
-    "ADISCORD_national_focuses_l_russian.yml: live VAL focuses": 50,
+    "ADISCORD_national_focuses_l_russian.yml: live VAL focuses": 59,
     "ADISCORD_shared_actions_l_russian.yml": 16,
     "ADISCORD_STP_ideas_l_russian.yml": 12,
     "ADISCORD_test_wars_l_russian.yml": 4,

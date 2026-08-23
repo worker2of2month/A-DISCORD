@@ -70,6 +70,26 @@ class TerrainSnowTests(unittest.TestCase):
             )
         self.assertEqual(pixels, [4, snow.URBAN_TERRAIN, 4])
 
+    def test_city_mask_overlay_marks_only_land_city_pixels_urban(self) -> None:
+        terrain = Image.new("P", (3, 1), color=4)
+        heightmap = Image.new("L", (3, 1), color=100)
+        provinces = Image.new("RGB", (3, 1), color=(1, 2, 3))
+        provinces.putpixel((1, 0), (4, 5, 6))
+        provinces.putpixel((2, 0), (7, 8, 9))
+        cities = Image.new("P", (3, 1), color=1)
+        cities.putpixel((1, 0), snow.CITY_PALETTE_INDEX)
+        cities.putpixel((2, 0), snow.CITY_PALETTE_INDEX)
+        with patch.object(snow, "POLAR_CAP_Y", 0):
+            pixels = snow.generated_pixels(
+                terrain,
+                heightmap,
+                provinces,
+                {},
+                cities=cities,
+                land_colors={(4, 5, 6)},
+            )
+        self.assertEqual(pixels, [4, snow.URBAN_TERRAIN, 4])
+
     def test_graphical_urban_contract_is_exact_on_current_map(self) -> None:
         self.assertEqual(
             snow.VORKERLAND_GRAPHICAL_URBAN_PROVINCES,
@@ -114,6 +134,8 @@ class TerrainSnowTests(unittest.TestCase):
                 [value for channel in range(3) for value in range(256)]
             )
             terrain.save(terrain_path, format="BMP")
+            cities_path = root / "cities.bmp"
+            Image.new("P", (2, 2), color=1).save(cities_path, format="BMP")
             Image.new("L", (2, 2), color=100).save(heightmap_path, format="BMP")
             Image.new("RGB", (2, 2), color=(1, 2, 3)).save(provinces_path, format="BMP")
             definition_path.write_text(
@@ -124,10 +146,12 @@ class TerrainSnowTests(unittest.TestCase):
             original = terrain_path.read_bytes()
             with (
                 patch.object(snow, "TERRAIN_PATH", terrain_path),
+                patch.object(snow, "CITIES_PATH", cities_path),
                 patch.object(snow, "HEIGHTMAP_PATH", heightmap_path),
                 patch.object(snow, "PROVINCES_PATH", provinces_path),
                 patch.object(snow, "TERRAIN_DEFINITION_PATH", definition_path),
                 patch.object(snow, "province_color_contract", return_value={}),
+                patch.object(snow, "generated_pixels", return_value=[4] * 4),
                 patch.object(snow, "coverage_issues", return_value=["coverage rejected"]),
             ):
                 with self.assertRaisesRegex(RuntimeError, "coverage rejected"):
@@ -146,6 +170,8 @@ class TerrainSnowTests(unittest.TestCase):
                 [value for channel in range(3) for value in range(256)]
             )
             terrain.save(terrain_path, format="BMP")
+            cities_path = root / "cities.bmp"
+            Image.new("P", (2, 2), color=1).save(cities_path, format="BMP")
             Image.new("L", (2, 2), color=100).save(heightmap_path, format="BMP")
             Image.new("RGB", (2, 2), color=(1, 2, 3)).save(provinces_path, format="BMP")
             definition_path.write_text(
@@ -156,10 +182,12 @@ class TerrainSnowTests(unittest.TestCase):
             original = terrain_path.read_bytes()
             with (
                 patch.object(snow, "TERRAIN_PATH", terrain_path),
+                patch.object(snow, "CITIES_PATH", cities_path),
                 patch.object(snow, "HEIGHTMAP_PATH", heightmap_path),
                 patch.object(snow, "PROVINCES_PATH", provinces_path),
                 patch.object(snow, "TERRAIN_DEFINITION_PATH", definition_path),
                 patch.object(snow, "province_color_contract", return_value={}),
+                patch.object(snow, "generated_pixels", return_value=[4] * 4),
                 patch.object(snow, "coverage_issues", return_value=[]),
                 patch.object(os, "replace", side_effect=OSError("replace denied")),
             ):

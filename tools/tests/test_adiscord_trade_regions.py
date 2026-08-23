@@ -43,7 +43,7 @@ class ADiscordTradeRegionTests(unittest.TestCase):
     def test_approved_geography_covers_every_real_land_province(self) -> None:
         self.assertEqual(dict(self.plan.state_counts), EXPECTED_STATE_COUNTS)
         self.assertEqual(dict(self.plan.province_counts), EXPECTED_PROVINCE_COUNTS)
-        self.assertEqual(sum(self.plan.province_counts.values()), 13_384)
+        self.assertEqual(sum(self.plan.province_counts.values()), 13_437)
         self.assertEqual(set(self.plan.province_continents.values()), set(range(1, 8)))
 
     def test_mixed_strategic_regions_are_explicitly_resolved_by_state(self) -> None:

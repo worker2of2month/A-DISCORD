@@ -708,7 +708,16 @@ class DiplomacyGuiContractTests(unittest.TestCase):
 
 class NationalFocusGuiContractTests(unittest.TestCase):
     def test_hoi4_119_focus_item_has_overlay_icon(self):
-        text = (ROOT / 'interface' / 'nationalfocusview.gui').read_text(
+        local_gui = ROOT / 'interface' / 'nationalfocusview.gui'
+        vanilla_gui = Path(
+            r'Z:\SteamLibrary\steamapps\common\Hearts of Iron IV\interface\nationalfocusview.gui'
+        )
+
+        self.assertFalse(
+            local_gui.exists(),
+            'the mod must inherit nationalfocusview.gui instead of shadowing vanilla',
+        )
+        text = vanilla_gui.read_text(
             encoding='utf-8-sig'
         )
         nodes = set(named_gui_nodes(text))

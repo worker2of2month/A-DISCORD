@@ -49,7 +49,36 @@ GRID_SLOT = 70
 HORIZONTAL_LANE_SLOT = 96
 LANE_SLOT_MULTIPLIER = 3
 BRANCH_GAP = 90
+# Measured against the two reference mods: their per-technology combat lines run
+# about 0.05 with capstones near 0.10, where ours were near 0.02 and read as
+# cosmetic. Doubling the combat band lands on their numbers without touching the
+# economy percentages, which already matched. Organisation is deliberately left
+# out of the multiplier because it is an absolute value, not a percentage.
+COMBAT_INTENSITY = 2.0
+COMBAT_PROFILES = frozenset({
+    "infantry",
+    "squad",
+    "protection",
+    "special_forces",
+    "support",
+    "artillery",
+    "anti_tank",
+    "anti_air",
+    "recon_armor",
+    "combat_armor",
+    "heavy_armor",
+    "fighter",
+    "air_support",
+    "strategic_air",
+    "naval_support",
+    "surface_fleet",
+    "subsurface",
+})
 HORIZONTAL_YEAR_SLOT_MULTIPLIER = 3
+# A one-slot step puts a 72px icon 70px from its neighbour and leaves no room for
+# the connector, so vertical tabs spend two slots per rung exactly as vanilla
+# does. Left-to-right tabs already spend three because their cards are 183px wide.
+VERTICAL_YEAR_SLOT_MULTIPLIER = 2
 HORIZONTAL_FOLDERS = frozenset({
     "infantry_folder",
     "armour_folder",
@@ -758,6 +787,10 @@ def new_branch(
     )
 
 
+# The trunk keeps one rung every few years so no connector has to span an empty
+# third of the tab. After the tooling choice the branch stays a real tree: two
+# shop-floor routes rejoin at maintenance, split again into robotics and spares,
+# and only the integration nodes demand both arms.
 PRODUCTION_BRANCH = compact_legacy_branch(
     "production",
     (
@@ -768,12 +801,27 @@ PRODUCTION_BRANCH = compact_legacy_branch(
         "automated_assembly",
         "digital_tooling_libraries",
         "sensor_calibrated_machining",
+        "modular_fixture_systems",
+        "closed_loop_quality_control",
         "predictive_maintenance",
+        "flexible_robotic_tooling",
+        "additive_spare_part_cells",
+        "machine_vision_inspection",
         "autonomous_factory_cells",
+        "self_balancing_production_lines",
         "lights_out_microfactories",
         "distributed_manufacturing",
     ),
-    years=(2150, 2155, 2158, 2160, 2161, 2162, 2162, 2165, 2169, 2175, 2180),
+    years=(
+        2150, 2155, 2158, 2160, 2161,
+        2163, 2163,
+        2165, 2165,
+        2167,
+        2169, 2169,
+        2171, 2172,
+        2174, 2175,
+        2180,
+    ),
     ru="Станки и автоматизация",
     en="Machine Tools and Automation",
 )
@@ -785,17 +833,31 @@ INDUSTRY_ORGANIZATION_BRANCH = new_branch(
     "Организация промышленности",
     "Industrial Organization",
     "production",
+    # Concentration and dispersal are a permanent choice, so each school needs
+    # enough rungs to feel like its own programme rather than three icons with
+    # a decade of blank grid between them. Lane 0 buys output and pays in energy
+    # draw, bombing exposure, and retooling time; lane 2 buys resilience.
     (
         ("industrial_organization_baseline", "Организация производственных сетей", "Production Network Organization", "basic_machine_tools", 2160),
         ("concentrated_industrial_zones", "Концентрированные промышленные зоны", "Concentrated Industrial Zones", "basic_machine_tools", 2162),
         ("distributed_workshop_networks", "Распределённые сети мастерских", "Distributed Workshop Networks", "basic_machine_tools", 2162),
-        ("megafactory_power_buses", "Энергоконтуры мегафабрик", "Megafactory Power Buses", "basic_machine_tools", 2168),
-        ("regional_spare_capacity", "Региональный резерв мощностей", "Regional Spare Capacity", "basic_machine_tools", 2168),
+        ("zone_power_trunking", "Магистральные энергошины зон", "Zone Power Trunking", "basic_machine_tools", 2164),
+        ("workshop_tooling_pools", "Общие фонды оснастки", "Shared Tooling Pools", "basic_machine_tools", 2164),
+        ("megafactory_power_buses", "Энергоконтуры мегафабрик", "Megafactory Power Buses", "basic_machine_tools", 2167),
+        ("regional_spare_capacity", "Региональный резерв мощностей", "Regional Spare Capacity", "basic_machine_tools", 2167),
+        ("centralized_process_control", "Централизованное управление процессами", "Centralized Process Control", "basic_machine_tools", 2170),
+        ("distributed_scheduling_mesh", "Распределённая сеть планирования", "Distributed Scheduling Mesh", "basic_machine_tools", 2170),
+        ("continuous_casting_lines", "Линии непрерывного литья", "Continuous Casting Lines", "basic_machine_tools", 2173),
+        ("mobile_fabrication_convoys", "Мобильные производственные колонны", "Mobile Fabrication Convoys", "basic_machine_tools", 2173),
         ("strategic_production_complexes", "Стратегические производственные комплексы", "Strategic Production Complexes", "basic_machine_tools", 2180),
         ("resilient_production_meshes", "Устойчивые производственные сети", "Resilient Production Meshes", "basic_machine_tools", 2180),
     ),
 )
 
+# Nine nodes left this programme leaping four years per rung. The order below
+# also decides the lanes, because the shared civil graph alternates them: the
+# odd positions become the heavy-structures route and the even ones the survey,
+# utilities, and repair route.
 RECONSTRUCTION_BRANCH = compact_legacy_branch(
     "reconstruction",
     (
@@ -803,9 +865,17 @@ RECONSTRUCTION_BRANCH = compact_legacy_branch(
         "ruin_workshops",
         "reconstruction_bureaus",
         "drone_construction_cartography",
+        "structural_ruin_assessment",
+        "rapid_bridge_section_casting",
+        "standardized_utility_corridors",
         "modular_rebuilding",
+        "reclaimed_aggregate_concrete",
+        "robotic_foundation_piling",
         "prefabricated_districts",
+        "seismic_retrofit_frames",
         "public_repair_corps",
+        "swarm_masonry_platforms",
+        "self_sealing_utility_mains",
         "automated_civil_works",
         "civil_defense_networks",
     ),
@@ -813,51 +883,14 @@ RECONSTRUCTION_BRANCH = compact_legacy_branch(
     en="Construction and Recovery",
 )
 
-RESOURCES_BRANCH = compact_legacy_branch(
-    "resources",
-    (
-        "salvage_metallurgy",
-        "grid_rationing",
-        "refinery_reclamation",
-        "spectral_ore_sorting",
-        "logistics_hub_networks",
-        "borehole_sensor_grids",
-        "plasma_scrap_separation",
-        "microbial_tailings_leaching",
-        "synthetic_resource_cycles",
-        "high_pressure_polymer_synthesis",
-        "rare_earth_solvent_loops",
-        "closed_loop_smelting",
-        "automated_deep_mining",
-        "carbon_feedstock_cracking",
-        "isotope_selective_refining",
-        "urban_mine_cartography",
-        "strategic_element_reclamation",
-        "strategic_material_recovery",
-    ),
-    ru="Ресурсы и промышленные резервы",
-    en="Resources and Industrial Reserves",
-)
+# Resources, signals, and power are all restored below from their authored
+# twenty. Odd positions become one route of the shared civil graph and even ones
+# the other, so authored order also decides which capability row a node lands in.
 
-SIGNALS_BRANCH = compact_legacy_branch(
-    "signals",
-    (
-        "mesh_command_networks",
-        "field_radio_networks",
-        "encryption_rebuild",
-        "frequency_hopping_field_sets",
-        "signal_intercept_arrays",
-        "passive_emitter_geolocation",
-        "battlefield_analytics",
-        "counterintelligence_filters",
-        "battlefield_sensor_fusion",
-        "self_healing_tactical_networks",
-        "memetic_security_protocols",
-    ),
-    ru="Связь, обнаружение и безопасность",
-    en="Communications, Detection, and Security",
-)
-
+# Positions 4 and 5 are the exclusive choice and must stay that pair: error
+# correction buys reliability and cheap supply, analog acceleration buys raw
+# factory throughput and pays for it in power draw. Each now leads a route of
+# its own instead of rejoining a bare trunk one rung later.
 COMPUTING_BRANCH = compact_legacy_branch(
     "computing",
     (
@@ -867,39 +900,40 @@ COMPUTING_BRANCH = compact_legacy_branch(
         "hardened_computers",
         "error_correcting_field_computers",
         "analog_ai_accelerators",
+        "rugged_chiplet_packaging",
+        "neuromorphic_coprocessors",
         "predictive_logistics",
+        "distributed_operational_caches",
+        "synthetic_training_environments",
+        "federated_operational_learning",
         "operational_ai_assistants",
+        "explainable_command_models",
+        "photonic_compute_arrays",
         "strategic_digital_twins",
+        "predictive_budgeting",
         "bounded_general_planning_cores",
         "strategic_ai_coordination",
-        "predictive_budgeting",
     ),
-    years=(2150, 2155, 2158, 2161, 2163, 2163, 2167, 2167, 2171, 2174, 2180, 2180),
+    # Autonomous platforms in three other tabs require operational AI assistants
+    # by 2170, so this tail cannot drift later than that.
+    years=(
+        2150, 2155, 2158, 2160,
+        2162, 2162,
+        2164, 2164,
+        2166,
+        2168, 2168,
+        2169, 2170,
+        2172, 2172,
+        2174,
+        2175, 2175,
+        2180,
+    ),
     ru="Вычисления и управление",
     en="Computing and Control",
 )
 
-POWER_BRANCH = compact_legacy_branch(
-    "power",
-    (
-        "local_grid_restoration",
-        "substation_networks",
-        "radiation_mapping",
-        "phase_synchronized_substations",
-        "solid_state_grid_breakers",
-        "reactor_safety_protocols",
-        "load_following_microreactors",
-        "superconducting_power_busbars",
-        "microreactor_blocks",
-        "passive_decay_heat_sinks",
-        "autonomous_reactor_diagnostics",
-        "high_density_thermal_storage",
-        "continental_load_balancing",
-        "emergency_core_suppression",
-    ),
-    ru="Энергосети и реакторы",
-    en="Power Grids and Reactors",
-)
+# Restored below from the authored twenty, which hold exactly one node per
+# campaign year and therefore space themselves evenly with no empty rows.
 
 
 LINEAR_COMPACT_INDICES = {
@@ -1116,18 +1150,20 @@ BRANCHES = (
     PRODUCTION_BRANCH,
     INDUSTRY_ORGANIZATION_BRANCH,
     RECONSTRUCTION_BRANCH,
-    RESOURCES_BRANCH,
-    SIGNALS_BRANCH,
+    full_authored_legacy_branch("resources"),
+    full_authored_legacy_branch("signals"),
     COMPUTING_BRANCH,
-    POWER_BRANCH,
+    full_authored_legacy_branch("power"),
     LEGACY_BRANCH_BY_KEY["forbidden_energy"],
     LEGACY_BRANCH_BY_KEY["forbidden_automation"],
     SMALL_ARMS_BRANCH,
-    compact_linear_branch("squad_weapons"),
+    # Restored to their full authored chronology: at sixteen nodes these tabs
+    # had four empty year columns each, which is what forced the long runs.
+    full_authored_legacy_branch("squad_weapons"),
     INFANTRY_ANTI_TANK_BRANCH,
     NIGHT_COMBAT_BRANCH,
-    compact_linear_branch("protection"),
-    compact_linear_branch("special_forces"),
+    full_authored_legacy_branch("protection"),
+    full_authored_legacy_branch("special_forces"),
     compact_side_branch("combat_medicine"),
     compact_linear_branch("field_support"),
     compact_linear_branch("logistics"),
@@ -1410,6 +1446,37 @@ def variable_dual_synthesis_graph(count: int) -> BranchGraph:
     return make_graph(tuple(lanes), edges, (capstone,))
 
 
+def parallel_programmes_graph(count: int, lane_count: int = 3) -> BranchGraph:
+    """Deal one root into evenly interleaved capability rows.
+
+    Every left-to-right programme holds exactly one node per campaign year, so
+    dealing the middle nodes round-robin puts each route step the same number of
+    year columns apart. Grouping nodes into themed routes of unequal length did
+    the opposite: a short arm had to reach across a decade in a single
+    connector, and special forces drew one 2310px run past five unrelated nodes.
+    """
+
+    if count < lane_count * 2 + 2:
+        raise ValueError(f"{count} nodes cannot fill {lane_count} parallel routes")
+    body = tuple(range(1, count - 1))
+    routes = tuple(body[offset::lane_count] for offset in range(lane_count))
+    if any(len(route) < 2 for route in routes):
+        raise ValueError("Every parallel route needs at least two nodes")
+    capstone = count - 1
+    edges = [(0, route[0]) for route in routes]
+    for route in routes:
+        edges += chain_edges(route)
+    edges += [(route[-1], capstone) for route in routes]
+    # The trunk and the capstone share the centre row with the middle route.
+    centre = lane_count // 2
+    lanes = [centre] * count
+    for lane, route in enumerate(routes):
+        for index in route:
+            lanes[index] = lane
+    lanes[0] = lanes[capstone] = centre
+    return make_graph(tuple(lanes), edges, (capstone,))
+
+
 def protection_programmes_graph() -> BranchGraph:
     """Body systems, combat medicine, and environmental protection."""
 
@@ -1513,27 +1580,51 @@ def linear_graph(count: int) -> BranchGraph:
 
 
 def temporary_production_graph() -> BranchGraph:
+    """Trunk, a temporary tooling XOR, then a genuine fork-and-merge shop floor.
+
+    Nodes 5/6 are the exclusive choice, so their two-node routes rejoin at 9
+    through an OR gate that either school can satisfy. Only 12 and 16 are AND
+    synthesis nodes, and both sit below forks whose arms are freely available.
+    """
+
     edges = chain_edges((0, 1, 2, 3, 4))
-    edges += [(4, 5), (4, 6), (5, 7), (6, 7)]
-    edges += chain_edges((7, 8, 9, 10))
-    lanes = (1, 1, 1, 1, 1, 0, 2, 1, 1, 1, 1)
-    return make_graph(lanes, edges)
+    edges += [(4, 5), (4, 6), (5, 7), (6, 8), (7, 9), (8, 9)]
+    edges += [(9, 10), (9, 11), (10, 12), (11, 12)]
+    edges += [(12, 13), (13, 14), (13, 15), (14, 16), (15, 16)]
+    lanes = (1, 1, 1, 1, 1, 0, 2, 0, 2, 1, 0, 2, 1, 1, 0, 2, 1)
+    return make_graph(lanes, edges, (12, 16))
 
 
 def industry_organization_graph() -> BranchGraph:
-    return make_graph(
-        (1, 0, 2, 0, 2, 0, 2),
-        [(0, 1), (0, 2), (1, 3), (2, 4), (3, 5), (4, 6)],
-    )
+    """Two permanently separate industrial schools of six rungs each."""
+
+    concentrated = (1, 3, 5, 7, 9, 11)
+    distributed = (2, 4, 6, 8, 10, 12)
+    edges = [(0, concentrated[0]), (0, distributed[0])]
+    edges += chain_edges(concentrated) + chain_edges(distributed)
+    lanes = [1] * 13
+    for index in concentrated:
+        lanes[index] = 0
+    for index in distributed:
+        lanes[index] = 2
+    return make_graph(tuple(lanes), edges)
 
 
 def compact_computing_graph() -> BranchGraph:
+    """Trunk, the reliability/throughput XOR, then two forks that reconverge.
+
+    Node 8 is an OR gate: the exclusive choice at 4/5 means only one of the two
+    routes can reach it, so it must not demand both. Nodes 11 and 15 sit below
+    forks whose arms are freely available and are genuine AND syntheses.
+    """
+
     edges = chain_edges((0, 1, 2, 3))
     edges += [(3, 4), (3, 5), (4, 6), (5, 7), (6, 8), (7, 8)]
-    edges += chain_edges((8, 9, 10))
-    edges += [(8, 11)]
-    lanes = (1, 1, 1, 1, 0, 2, 0, 2, 1, 1, 1, 2)
-    return make_graph(lanes, edges)
+    edges += [(8, 9), (8, 10), (9, 11), (10, 11), (11, 12)]
+    edges += [(12, 13), (12, 14), (13, 15), (14, 15)]
+    edges += [(15, 16), (15, 17), (17, 18)]
+    lanes = (1, 1, 1, 1, 0, 2, 0, 2, 1, 0, 2, 1, 1, 0, 2, 1, 2, 1, 1)
+    return make_graph(lanes, edges, (11, 15))
 
 
 def permanent_tail_choice_graph(count: int) -> BranchGraph:
@@ -1583,17 +1674,21 @@ def graph_for_branch(branch: Branch) -> BranchGraph:
     elif branch.key in {"reconstruction", "resources", "signals", "power"}:
         graph = variable_dual_synthesis_graph(len(branch.techs))
     elif branch.key == "small_arms":
+        # Kept on its curated sixteen-node shape: this tab carries hand-authored
+        # engineering names and technical descriptions per node.
         graph = infantry_integration_graph()
-    elif branch.key == "squad_weapons":
-        graph = squad_integration_graph()
+    elif branch.key in {
+        "squad_weapons",
+        "protection",
+        "special_forces",
+        "recon_armor",
+        "heavy_armor",
+    }:
+        graph = parallel_programmes_graph(len(branch.techs))
     elif branch.key == "anti_tank_infantry":
         graph = compact_two_row_synthesis_graph()
     elif branch.key == "night_combat":
         graph = compact_dual_synthesis_graph()
-    elif branch.key == "protection":
-        graph = protection_programmes_graph()
-    elif branch.key == "special_forces":
-        graph = special_forces_programmes_graph()
     elif branch.key in {"field_support", "anti_tank", "strategic_air", "subsurface"}:
         graph = double_diamond_graph()
     elif branch.key in {"logistics", "anti_air", "naval_support"}:
@@ -2212,6 +2307,48 @@ BUILDING_RESOURCE_UPGRADES = {
         ("ADISCORD_strategic_mining_complex", "tungsten", 1),
     ),
 }
+
+
+# One-shot research discounts granted for reaching an integration milestone, so
+# finishing both arms of a fork or committing to a permanent industrial school
+# visibly accelerates the field it belongs to instead of only adding another
+# percentage. Every entry names a category the branch already declares, sits at
+# or before 2174 so the bonus can still be spent, and must not land on a
+# technology that already spends its on_research_complete elsewhere.
+RESEARCH_PAYOFFS = {
+    # Industry: shop-floor integration and the permanent organisation choice.
+    "ADISCORD_tech_predictive_maintenance": ("industry", 0.25, 1),
+    "ADISCORD_tech_machine_vision_inspection": ("industry", 0.30, 1),
+    # Both organisation schools grant the same industrial bonus; they already
+    # differ sharply in their modifiers, so the payoff must not tilt the choice.
+    "ADISCORD_tech_centralized_process_control": ("industry", 0.30, 1),
+    "ADISCORD_tech_distributed_scheduling_mesh": ("industry", 0.30, 1),
+    "ADISCORD_tech_swarm_masonry_platforms": ("construction_tech", 0.25, 1),
+    "ADISCORD_tech_public_repair_corps": ("industry", 0.25, 1),
+    # Electronics: the two signals routes, computing, and reactor safety.
+    "ADISCORD_tech_battlefield_sensor_fusion": ("electronics", 0.30, 1),
+    "ADISCORD_tech_counterintelligence_filters": ("decryption_tech", 0.30, 1),
+    "ADISCORD_tech_strategic_digital_twins": ("computing_tech", 0.35, 1),
+    "ADISCORD_tech_reactor_safety_protocols": ("nuclear", 0.30, 1),
+    # Fighting arms: one milestone per combat tab.
+    "ADISCORD_tech_autonomous_support_weapons": ("infantry_weapons", 0.30, 1),
+    "ADISCORD_tech_limited_battle_ai": ("armor", 0.30, 1),
+    "ADISCORD_tech_cooperative_engagement_links": ("artillery", 0.30, 1),
+    "ADISCORD_tech_hypersonic_glide_vehicles": ("rocketry", 0.30, 1),
+    "ADISCORD_tech_over_horizon_escort_radar": ("naval_equipment", 0.30, 1),
+    "ADISCORD_tech_terrain_adaptive_cargo_carriers": ("support_tech", 0.30, 1),
+}
+
+for _payoff_id, (_, _payoff_bonus, _payoff_uses) in RESEARCH_PAYOFFS.items():
+    if _payoff_id not in TECH_POSITION_BY_ID:
+        raise ValueError(f"Research payoff targets unknown technology {_payoff_id}")
+    _payoff_branch, _payoff_index = TECH_POSITION_BY_ID[_payoff_id]
+    if _payoff_branch.years[_payoff_index] > 2174:
+        raise ValueError(
+            f"Research payoff on {_payoff_id} lands too late to be spent"
+        )
+    if not 0 < _payoff_bonus <= 0.5 or _payoff_uses < 1:
+        raise ValueError(f"Research payoff on {_payoff_id} is out of range")
 
 
 CATEGORY_BY_PROFILE = {
@@ -2982,68 +3119,264 @@ COMPACT_EFFECTS_BY_TECH_KEY = {
         "production_factory_max_efficiency_factor = 0.06",
         "production_factory_efficiency_gain_factor = 0.04",
     ),
+    "modular_fixture_systems": (
+        "production_factory_start_efficiency_factor = 0.05",
+        "line_change_production_efficiency_factor = 0.07",
+    ),
+    "closed_loop_quality_control": (
+        "production_factory_max_efficiency_factor = 0.06",
+        "production_factory_efficiency_gain_factor = 0.03",
+    ),
     "predictive_maintenance": (
         "production_factory_efficiency_gain_factor = 0.05",
         "industry_repair_factor = 0.04",
     ),
-    "autonomous_factory_cells": (
-        "industrial_capacity_factory = 0.025",
-        "factory_energy_consumption = 0.04",
-        "production_factory_max_efficiency_factor = 0.05",
+    "flexible_robotic_tooling": (
+        "line_change_production_efficiency_factor = 0.09",
+        "production_factory_start_efficiency_factor = 0.04",
     ),
-    "lights_out_microfactories": (
-        "industrial_capacity_factory = 0.03",
-        "factory_energy_consumption = 0.06",
+    "additive_spare_part_cells": (
+        "industry_repair_factor = 0.06",
         "production_factory_efficiency_gain_factor = 0.04",
     ),
-    "distributed_manufacturing": (
-        "industrial_capacity_factory = 0.035",
-        "industrial_capacity_dockyard = 0.025",
+    "machine_vision_inspection": (
+        "production_factory_max_efficiency_factor = 0.05",
+        "production_factory_efficiency_gain_factor = 0.04",
+    ),
+    "self_balancing_production_lines": (
+        "industrial_capacity_factory = 0.04",
+        "production_factory_efficiency_gain_factor = 0.06",
         "factory_energy_consumption = 0.07",
+    ),
+    "autonomous_factory_cells": (
+        "industrial_capacity_factory = 0.04",
+        "factory_energy_consumption = 0.06",
         "production_factory_max_efficiency_factor = 0.06",
+    ),
+    "lights_out_microfactories": (
+        "industrial_capacity_factory = 0.05",
+        "factory_energy_consumption = 0.08",
+        "production_factory_efficiency_gain_factor = 0.05",
+    ),
+    "distributed_manufacturing": (
+        "industrial_capacity_factory = 0.10",
+        "industrial_capacity_dockyard = 0.07",
+        "factory_energy_consumption = 0.12",
+        "production_factory_max_efficiency_factor = 0.09",
     ),
     "industrial_organization_baseline": (
         "production_factory_start_efficiency_factor = 0.02",
         "production_factory_efficiency_gain_factor = 0.02",
     ),
+    # The concentrated school escalates to a real capstone: both reference mods
+    # end their industry chains near 0.15-0.20 factory output, and they charge for
+    # it with bombing exposure and retooling time rather than a flat ramp.
     "concentrated_industrial_zones": (
-        "industrial_capacity_factory = 0.04",
-        "industrial_capacity_dockyard = 0.03",
-        "factory_energy_consumption = 0.08",
-        "industry_air_damage_factor = 0.05",
-    ),
-    "megafactory_power_buses": (
         "industrial_capacity_factory = 0.05",
         "industrial_capacity_dockyard = 0.04",
-        "factory_energy_consumption = 0.12",
-        "line_change_production_efficiency_factor = -0.10",
+        "factory_energy_consumption = 0.10",
+        "industry_air_damage_factor = 0.07",
+    ),
+    "zone_power_trunking": (
+        "industrial_capacity_factory = 0.05",
+        "factory_energy_consumption = 0.09",
+        "industry_air_damage_factor = 0.07",
+    ),
+    "megafactory_power_buses": (
+        "industrial_capacity_factory = 0.07",
+        "industrial_capacity_dockyard = 0.05",
+        "factory_energy_consumption = 0.15",
+        "line_change_production_efficiency_factor = -0.12",
+    ),
+    "centralized_process_control": (
+        "industrial_capacity_factory = 0.08",
+        "factory_energy_consumption = 0.17",
+        "line_change_production_efficiency_factor = -0.12",
+    ),
+    "continuous_casting_lines": (
+        "industrial_capacity_factory = 0.09",
+        "production_factory_max_efficiency_factor = 0.07",
+        "factory_energy_consumption = 0.19",
+        "industry_air_damage_factor = 0.12",
     ),
     "strategic_production_complexes": (
-        "industrial_capacity_factory = 0.07",
-        "industrial_capacity_dockyard = 0.06",
-        "factory_energy_consumption = 0.18",
-        "industry_air_damage_factor = 0.10",
-        "line_change_production_efficiency_factor = -0.10",
+        "industrial_capacity_factory = 0.12",
+        "industrial_capacity_dockyard = 0.10",
+        "factory_energy_consumption = 0.24",
+        "industry_air_damage_factor = 0.20",
+        "line_change_production_efficiency_factor = -0.15",
     ),
+    # The dispersed school never wins on raw output; it escalates on resilience,
+    # retooling speed, and repair, ending at a -0.20 bombing swing that mirrors
+    # the concentrated capstone's +0.20.
     "distributed_workshop_networks": (
+        "industrial_capacity_factory = 0.03",
+        "factory_energy_consumption = 0.02",
+        "production_factory_start_efficiency_factor = 0.07",
+        "industry_air_damage_factor = -0.08",
+    ),
+    "workshop_tooling_pools": (
         "industrial_capacity_factory = 0.02",
+        "production_factory_start_efficiency_factor = 0.06",
+        "line_change_production_efficiency_factor = 0.09",
         "factory_energy_consumption = 0.015",
-        "production_factory_start_efficiency_factor = 0.05",
-        "industry_air_damage_factor = -0.05",
     ),
     "regional_spare_capacity": (
-        "industrial_capacity_factory = 0.02",
-        "factory_energy_consumption = 0.015",
-        "line_change_production_efficiency_factor = 0.10",
-        "industry_repair_factor = 0.08",
+        "industrial_capacity_factory = 0.03",
+        "factory_energy_consumption = 0.02",
+        "line_change_production_efficiency_factor = 0.14",
+        "industry_repair_factor = 0.12",
+    ),
+    "distributed_scheduling_mesh": (
+        "industrial_capacity_factory = 0.025",
+        "production_factory_efficiency_gain_factor = 0.08",
+        "line_change_production_efficiency_factor = 0.16",
+        "industry_repair_factor = 0.10",
+        "factory_energy_consumption = 0.03",
+    ),
+    "mobile_fabrication_convoys": (
+        "industrial_capacity_factory = 0.04",
+        "factory_energy_consumption = 0.03",
+        "industry_air_damage_factor = -0.15",
+        "industry_repair_factor = 0.15",
     ),
     "resilient_production_meshes": (
-        "industrial_capacity_factory = 0.03",
-        "factory_energy_consumption = 0.025",
-        "production_factory_start_efficiency_factor = 0.07",
-        "line_change_production_efficiency_factor = 0.15",
-        "industry_air_damage_factor = -0.12",
-        "industry_repair_factor = 0.15",
+        "industrial_capacity_factory = 0.06",
+        "factory_energy_consumption = 0.04",
+        "production_factory_start_efficiency_factor = 0.10",
+        "line_change_production_efficiency_factor = 0.22",
+        "industry_air_damage_factor = -0.20",
+        "industry_repair_factor = 0.22",
+    ),
+    # Reconstruction splits into heavy structures, which raise raw build speed,
+    # and survey/utilities, which buy repair throughput and bombing resilience.
+    "salvage_standards": (
+        "production_speed_buildings_factor = 0.02",
+        "industry_repair_factor = 0.02",
+    ),
+    "ruin_workshops": (
+        "production_speed_buildings_factor = 0.02",
+        "industry_repair_factor = 0.03",
+    ),
+    "reconstruction_bureaus": (
+        "production_speed_buildings_factor = 0.03",
+        "industry_repair_factor = 0.03",
+    ),
+    "drone_construction_cartography": (
+        "production_speed_buildings_factor = 0.03",
+        "production_speed_infrastructure_factor = 0.04",
+    ),
+    "structural_ruin_assessment": (
+        "industry_repair_factor = 0.05",
+        "production_speed_buildings_factor = 0.02",
+    ),
+    "rapid_bridge_section_casting": (
+        "production_speed_infrastructure_factor = 0.05",
+        "production_speed_buildings_factor = 0.02",
+    ),
+    "standardized_utility_corridors": (
+        "industry_repair_factor = 0.04",
+        "local_resources_factor = 0.03",
+    ),
+    "modular_rebuilding": (
+        "production_speed_buildings_factor = 0.04",
+        "production_speed_industrial_complex_factor = 0.03",
+    ),
+    "reclaimed_aggregate_concrete": (
+        "production_speed_buildings_factor = 0.03",
+        "local_resources_factor = 0.04",
+    ),
+    "robotic_foundation_piling": (
+        "production_speed_industrial_complex_factor = 0.04",
+        "production_speed_arms_factory_factor = 0.04",
+    ),
+    "prefabricated_districts": (
+        "production_speed_buildings_factor = 0.04",
+        "consumer_goods_factor = -0.02",
+    ),
+    "seismic_retrofit_frames": (
+        "production_speed_buildings_factor = 0.03",
+        "industry_air_damage_factor = -0.06",
+    ),
+    "public_repair_corps": (
+        "industry_repair_factor = 0.08",
+        "industry_air_damage_factor = -0.05",
+    ),
+    "swarm_masonry_platforms": (
+        "production_speed_buildings_factor = 0.05",
+        "production_speed_infrastructure_factor = 0.04",
+    ),
+    "self_sealing_utility_mains": (
+        "industry_repair_factor = 0.07",
+        "industry_air_damage_factor = -0.08",
+    ),
+    "automated_civil_works": (
+        "production_speed_buildings_factor = 0.06",
+        "production_speed_industrial_complex_factor = 0.05",
+    ),
+    "civil_defense_networks": (
+        "production_speed_buildings_factor = 0.06",
+        "production_speed_infrastructure_factor = 0.05",
+        "industry_repair_factor = 0.10",
+        "industry_air_damage_factor = -0.10",
+    ),
+    # Computing: the error-correction route keeps supply and reliability cheap,
+    # the acceleration route buys throughput and pays for it in power draw.
+    "rugged_chiplet_packaging": (
+        "research_speed_factor = 0.02",
+        "supply_consumption_factor = -0.02",
+    ),
+    "neuromorphic_coprocessors": (
+        "research_speed_factor = 0.025",
+        "production_factory_efficiency_gain_factor = 0.03",
+        "factory_energy_consumption = 0.04",
+    ),
+    "distributed_operational_caches": (
+        "research_speed_factor = 0.025",
+        "planning_speed = 0.02",
+        "supply_consumption_factor = -0.02",
+    ),
+    "synthetic_training_environments": (
+        "research_speed_factor = 0.03",
+        "land_reinforce_rate = 0.02",
+        "factory_energy_consumption = 0.03",
+    ),
+    "federated_operational_learning": (
+        "research_speed_factor = 0.03",
+        "coordination_bonus = 0.03",
+    ),
+    "explainable_command_models": (
+        "planning_speed = 0.03",
+        "max_planning = 0.02",
+    ),
+    "photonic_compute_arrays": (
+        "research_speed_factor = 0.035",
+        "production_factory_efficiency_gain_factor = 0.03",
+        "factory_energy_consumption = 0.05",
+    ),
+    "directional_mesh_relays": (
+        "coordination_bonus = 0.02",
+        "land_reinforce_rate = 0.02",
+    ),
+    "lattice_key_exchange": (
+        "encryption_factor = 0.05",
+        "decryption_factor = 0.02",
+    ),
+    "packetized_fire_control_links": (
+        "coordination_bonus = 0.03",
+        "planning_speed = 0.03",
+    ),
+    "cognitive_spectrum_management": (
+        "coordination_bonus = 0.03",
+        "air_interception_detect_factor = 0.03",
+    ),
+    "stratospheric_burst_relays": (
+        "coordination_bonus = 0.03",
+        "land_reinforce_rate = 0.03",
+    ),
+    "adaptive_deception_networks": (
+        "decryption_factor = 0.05",
+        "encryption_factor = 0.04",
     ),
     "mesh_command_networks": (
         "coordination_bonus = 0.01",
@@ -3249,6 +3582,48 @@ COMPACT_EFFECTS_BY_TECH_KEY = {
 }
 
 
+def indexed_package(
+    branch: Branch,
+    packages: tuple[tuple[str, ...], ...],
+    tier: int,
+) -> tuple[str, ...]:
+    """Read a hand-authored effect table that is indexed by node position.
+
+    These tables carry one entry per node in branch order, so restoring a node
+    silently shifts every entry after it. Fail loudly on a length mismatch
+    instead of raising IndexError from deep inside the renderer.
+    """
+
+    if len(packages) != len(branch.techs):
+        raise ValueError(
+            f"{branch.key} has {len(branch.techs)} nodes but "
+            f"{len(packages)} authored effect packages"
+        )
+    return packages[tier]
+
+
+def combat_package(
+    branch: Branch,
+    packages: tuple[tuple[str, ...], ...],
+    tier: int,
+) -> tuple[str, ...]:
+    """Read an authored combat table and apply the reference-parity multiplier.
+
+    The numbers in these tables are relative weights between the nodes of one
+    programme, not finished values, so the multiplier is applied here instead of
+    by rewriting several dozen literals whenever the band moves.
+    """
+
+    return tuple(
+        re.sub(
+            r"(=\s*)(-?[0-9]*\.?[0-9]+)",
+            lambda match: f"{match.group(1)}{n(float(match.group(2)) * COMBAT_INTENSITY)}",
+            entry,
+        )
+        for entry in indexed_package(branch, packages, tier)
+    )
+
+
 def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
     """Return an effect package that reflects the actual programme selected.
 
@@ -3278,7 +3653,7 @@ def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
             ("category_all_infantry = { defense = 0.012 soft_attack = 0.012 }",),
             ("category_all_infantry = { soft_attack = 0.02 }", "coordination_bonus = 0.012"),
         )
-        return packages[tier]
+        return combat_package(branch, packages, tier)
     if branch.key == "anti_tank_infantry":
         packages = (
             ("category_all_infantry = { hard_attack = 0.006 ap_attack = 0.004 }",),
@@ -3294,7 +3669,7 @@ def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
             ("category_all_infantry = { ap_attack = 0.02 }", "coordination_bonus = 0.01"),
             ("category_all_infantry = { hard_attack = 0.024 ap_attack = 0.024 breakthrough = 0.012 }", "coordination_bonus = 0.012"),
         )
-        return packages[tier]
+        return combat_package(branch, packages, tier)
     if branch.key == "night_combat":
         packages = (
             ("land_night_attack = 0.005",),
@@ -3310,7 +3685,7 @@ def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
             ("land_night_attack = 0.009", "category_all_infantry = { breakthrough = 0.009 }"),
             ("land_night_attack = 0.012", "coordination_bonus = 0.01", "category_all_infantry = { defense = 0.012 breakthrough = 0.012 }"),
         )
-        return packages[tier]
+        return combat_package(branch, packages, tier)
     if tech.key in APPLIED_EFFECTS:
         return tuple(APPLIED_EFFECTS[tech.key])
     compact_effects = COMPACT_EFFECTS_BY_TECH_KEY.get(tech.key)
@@ -3321,8 +3696,14 @@ def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
     tier_count = len(branch.techs)
     progress = 0 if tier_count <= 1 else tier * 6 / (tier_count - 1)
     capstone_scale = 1.45 if tier == tier_count - 1 else 1.0
-    small = (0.012 + progress * 0.001) * capstone_scale
-    medium = (0.020 + progress * 0.002) * capstone_scale
+    # Economy percentages already match what The Fire Rises and The Darkest Hour
+    # ship, but their combat lines sit near 0.05 while ours sat near 0.02. The
+    # multiplier is applied to the two bands here rather than at each of the four
+    # downstream effect tables, so every route through this function stays in
+    # step and economy branches are left exactly as they were.
+    intensity = COMBAT_INTENSITY if profile in COMBAT_PROFILES else 1.0
+    small = (0.012 + progress * 0.001) * capstone_scale * intensity
+    medium = (0.020 + progress * 0.002) * capstone_scale * intensity
     organisation = (0.75 + progress * 0.12) * capstone_scale
 
     if branch.key == "forbidden_energy":
@@ -3334,14 +3715,14 @@ def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
             (f"nuclear_production_factor = {n(0.12)}", f"research_speed_factor = {n(0.025)}", f"stability_factor = -{n(0.017)}"),
             (f"nuclear_production_factor = {n(0.16)}", f"industrial_capacity_factory = {n(0.04)}", f"stability_factor = -{n(0.025)}"),
         )
-        return packages[tier]
+        return indexed_package(branch, packages, tier)
     if branch.key == "forbidden_automation":
         packages = (
             (f"production_factory_max_efficiency_factor = {n(0.04)}", f"industry_repair_factor = {n(0.03)}", f"stability_factor = -{n(0.01)}"),
             (f"coordination_bonus = {n(0.05)}", f"land_reinforce_rate = {n(0.03)}", f"stability_factor = -{n(0.02)}"),
             (f"production_factory_max_efficiency_factor = {n(0.08)}", f"research_speed_factor = {n(0.04)}", f"stability_factor = -{n(0.035)}"),
         )
-        return packages[tier]
+        return indexed_package(branch, packages, tier)
 
     pattern = GRAPH_PATTERN_BY_BRANCH.get(branch.key)
     lane = BRANCH_GRAPHS[branch.key].lanes[tier]
@@ -4458,7 +4839,10 @@ def chronological_grid_slot(year: int, *, horizontal: bool) -> int:
     """Map a research year to the single slot used by nodes and year labels."""
 
     slot = YEAR_TO_Y[year]
-    return slot * HORIZONTAL_YEAR_SLOT_MULTIPLIER if horizontal else slot
+    multiplier = (
+        HORIZONTAL_YEAR_SLOT_MULTIPLIER if horizontal else VERTICAL_YEAR_SLOT_MULTIPLIER
+    )
+    return slot * multiplier
 
 
 def graph_distances(
@@ -4560,6 +4944,31 @@ def horizontal_visual_slots(branch: Branch) -> tuple[int, ...]:
         *multi_arm_groups,
     }
 
+    def jumps_a_bystander(group: tuple[int, ...], candidate: int) -> bool:
+        """Would aligning ``group`` on ``candidate`` overtake a non-member node?
+
+        A group may compress its own arms into one column -- that is the whole
+        point of aligning a balanced fork. What it must never do is carry an arm
+        past a node it does not contain, because that node owns an earlier
+        column for a later year and the tab then contradicts its own year
+        headers: special forces once drew a 2167 rung right of the 2172 one and
+        under the 2175 label.
+        """
+
+        bystanders = [index for index in range(len(branch.years)) if index not in group]
+        for index in group:
+            limit = min(
+                (
+                    base[other]
+                    for other in bystanders
+                    if branch.years[other] > branch.years[index]
+                ),
+                default=max(base),
+            )
+            if candidate > limit:
+                return True
+        return False
+
     for group in sorted(alignment_groups):
         candidate = max(base[index] for index in group)
         neighbours = tuple(
@@ -4576,6 +4985,8 @@ def horizontal_visual_slots(branch: Branch) -> tuple[int, ...]:
             continue
         if successors and candidate >= min(base[index] for index in successors):
             continue
+        if jumps_a_bystander(group, candidate):
+            continue
         for index in group:
             slots[index] = candidate
 
@@ -4585,21 +4996,94 @@ def horizontal_visual_slots(branch: Branch) -> tuple[int, ...]:
                 raise ValueError(
                     f"{branch.key}: non-chronological visual edge {source}->{target}"
                 )
+    for early, early_year in enumerate(branch.years):
+        for late, late_year in enumerate(branch.years):
+            if early_year < late_year and slots[early] > slots[late]:
+                raise ValueError(
+                    f"{branch.key}: {branch.techs[early].key} ({early_year}) is drawn "
+                    f"right of {branch.techs[late].key} ({late_year})"
+                )
     return tuple(slots)
 
 
+def technology_time_slot(branch: Branch, index: int) -> int:
+    """Return the chronological slot of a node regardless of tab orientation."""
+
+    if HORIZONTAL_FOLDERS.intersection(branch.folders):
+        return horizontal_visual_slots(branch)[index]
+    return chronological_grid_slot(branch.years[index], horizontal=False)
+
+
 def technology_grid_position(branch: Branch, index: int) -> tuple[int, int]:
-    """Keep the lane in x; grid direction maps chronological y to screen time."""
+    """Return the folder slot pair in the order the gridbox ``format`` expects.
+
+    ``format`` decides which member of the pair Clausewitz spends on which
+    screen axis, so the two orientations are not simply transposed coordinates:
+
+    * ``format = "UP"`` reads the pair as written, ``x`` across and ``y`` down.
+    * ``format = "LEFT"`` swaps them: ``x`` becomes the vertical band row scaled
+      by ``slot_height`` and ``y`` becomes the horizontal step scaled by
+      ``slot_width``.
+
+    Vanilla is the reference for the swapped case. Its infantry tab reads
+    left-to-right -- every year label sits at ``y = 50`` with x stepping 140 --
+    yet each technology stores the year in ``position.y`` and its capability row
+    in ``position.x``. Writing time into ``x`` instead makes a left-to-right tab
+    stack one whole band height per rung and run off the bottom of its gridbox.
+    """
 
     graph = BRANCH_GRAPHS[branch.key]
-    horizontal = bool(HORIZONTAL_FOLDERS.intersection(branch.folders))
     lane = graph.lanes[index]
-    if not horizontal:
-        lane *= LANE_SLOT_MULTIPLIER
-        chronological_slot = chronological_grid_slot(branch.years[index], horizontal=False)
-    else:
-        chronological_slot = horizontal_visual_slots(branch)[index]
-    return lane, chronological_slot
+    if HORIZONTAL_FOLDERS.intersection(branch.folders):
+        return lane, technology_time_slot(branch, index)
+    return lane * LANE_SLOT_MULTIPLIER, technology_time_slot(branch, index)
+
+
+def render_research_completion_effects(tech: Tech) -> list[str]:
+    """Emit the one post-path ``on_research_complete`` block for a technology.
+
+    Both payoffs share a single block because a technology keeps only one
+    ``on_research_complete``; a second one would silently discard whichever was
+    written first. The block also has to follow the path entries, since the
+    research-balance contract counts numeric leaf modifiers up to the first
+    path and a research bonus is a reward rather than a modifier.
+    """
+
+    building_upgrades = BUILDING_RESOURCE_UPGRADES.get(tech.id, ())
+    payoff = RESEARCH_PAYOFFS.get(tech.id)
+    if not building_upgrades and payoff is None:
+        return []
+    if LEADER_TRAINING.get(tech.key) is not None:
+        raise ValueError(
+            f"{tech.id} already spends its on_research_complete on leader training"
+        )
+    lines = ["\t\ton_research_complete = {"]
+    for building, resource, amount in building_upgrades:
+        lines.extend((
+            "\t\t\tmodify_building_resources = {",
+            f"\t\t\t\tbuilding = {building}",
+            f"\t\t\t\tresource = {resource}",
+            f"\t\t\t\tamount = {amount}",
+            "\t\t\t}",
+        ))
+    if payoff is not None:
+        category, bonus, uses = payoff
+        branch, _ = TECH_POSITION_BY_ID[tech.id]
+        declared = CATEGORY_BY_PROFILE[branch.profile].split()
+        if category not in declared:
+            raise ValueError(
+                f"{tech.id} cannot grant {category} research; its branch declares "
+                f"{declared}"
+            )
+        lines.extend((
+            "\t\t\tadd_tech_bonus = {",
+            f"\t\t\t\tbonus = {n(bonus)}",
+            f"\t\t\t\tuses = {uses}",
+            f"\t\t\t\tcategory = {category}",
+            "\t\t\t}",
+        ))
+    lines.extend(("\t\t}", "\t\tshow_effect_as_desc = yes"))
+    return lines
 
 
 def render_technology(branch: Branch, index: int) -> str:
@@ -4659,18 +5143,7 @@ def render_technology(branch: Branch, index: int) -> str:
             f"\t\t\tlevel = {level}",
             "\t\t}",
         ))
-    building_upgrades = BUILDING_RESOURCE_UPGRADES.get(tech.id, ())
-    if building_upgrades:
-        lines.append("\t\ton_research_complete = {")
-        for building, resource, amount in building_upgrades:
-            lines.extend((
-                "\t\t\tmodify_building_resources = {",
-                f"\t\t\t\tbuilding = {building}",
-                f"\t\t\t\tresource = {resource}",
-                f"\t\t\t\tamount = {amount}",
-                "\t\t\t}",
-            ))
-        lines.extend(("\t\t}", "\t\tshow_effect_as_desc = yes"))
+    lines.extend(render_research_completion_effects(tech))
     research_cost = research_cost_for(branch, index, dependencies, xor)
     lines.extend((
         f"\t\tresearch_cost = {n(research_cost)}",
@@ -5194,7 +5667,9 @@ def render_folder(folder: str) -> str:
         height = max(700, cursor_y + 80)
     else:
         cursor_x = GRID_X
-        grid_height = (max(YEAR_TO_Y.values()) + 1) * GRID_SLOT
+        grid_height = (
+            max(YEAR_TO_Y.values()) * VERTICAL_YEAR_SLOT_MULTIPLIER + 1
+        ) * GRID_SLOT
         for branch in branches:
             graph = BRANCH_GRAPHS[branch.key]
             grid_width = (
@@ -5229,7 +5704,7 @@ def render_folder(folder: str) -> str:
         "\t\t\t\t\talwaystransparent = yes",
         "\t\t\t\t}",
     ]
-    for index, year in enumerate(YEARS):
+    for year in YEARS:
         if horizontal:
             year_x = (
                 GRID_X
@@ -5239,7 +5714,11 @@ def render_folder(folder: str) -> str:
             year_y = 84
         else:
             year_x = 24
-            year_y = GRID_Y + index * GRID_SLOT + 18
+            year_y = (
+                GRID_Y
+                + chronological_grid_slot(year, horizontal=False) * GRID_SLOT
+                + 18
+            )
         lines.extend((
             "\t\t\t\tinstantTextBoxType = {",
             f"\t\t\t\t\tname = \"ADISCORD_{folder}_year_{year}\"",

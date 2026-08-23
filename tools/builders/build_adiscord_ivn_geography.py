@@ -17,6 +17,11 @@ from typing import Sequence
 
 from PIL import Image
 
+from tools.builders.build_adiscord_terrain_snow import (
+    CITIES_PATH,
+    CITY_PALETTE_INDEX,
+)
+
 
 ROOT = Path(__file__).resolve().parents[2]
 TERRAIN_PATH = ROOT / "map/terrain.bmp"
@@ -858,11 +863,18 @@ def _build_expected() -> GeographyOutputs:
     if len(color_to_id) != len(province_colors):
         raise RuntimeError("definition.csv: duplicate RGB inside IVN/IIA scope")
 
-    with Image.open(BytesIO(TERRAIN_PATH.read_bytes())) as terrain_source, Image.open(BytesIO(PROVINCES_PATH.read_bytes())) as provinces_source:
+    with (
+        Image.open(BytesIO(TERRAIN_PATH.read_bytes())) as terrain_source,
+        Image.open(BytesIO(CITIES_PATH.read_bytes())) as cities_source,
+        Image.open(BytesIO(PROVINCES_PATH.read_bytes())) as provinces_source,
+    ):
         if terrain_source.mode != "P" or terrain_source.size != provinces_source.size:
             raise RuntimeError("terrain.bmp must be paletted and match provinces.bmp dimensions")
+        if cities_source.mode != "P" or cities_source.size != terrain_source.size:
+            raise RuntimeError("cities.bmp must be paletted and match terrain.bmp dimensions")
         terrain_original = terrain_source.copy()
         terrain_pixels = bytearray(terrain_source.get_flattened_data())
+        city_pixels = bytearray(cities_source.get_flattened_data())
         province_bytes = provinces_source.convert("RGB").tobytes()
         masks = landscape_masks(provinces_source, province_colors)
 
@@ -936,6 +948,10 @@ def _build_expected() -> GeographyOutputs:
         footprints,
     )
     generated_pixels = bytearray(terrain.get_flattened_data())
+    for index, province_id in enumerate(province_by_pixel):
+        if province_id and city_pixels[index] == CITY_PALETTE_INDEX:
+            generated_pixels[index] = URBAN_PALETTE
+    terrain.putdata(generated_pixels)
 
     counts = {province_id: Counter() for province_id in province_colors}
     for index, province_id in enumerate(province_by_pixel):

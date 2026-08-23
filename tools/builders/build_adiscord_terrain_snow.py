@@ -28,6 +28,7 @@ from tools.lib.paths import repository_root
 
 ROOT = repository_root()
 TERRAIN_PATH = ROOT / "map" / "terrain.bmp"
+CITIES_PATH = ROOT / "map" / "cities.bmp"
 HEIGHTMAP_PATH = ROOT / "map" / "heightmap.bmp"
 PROVINCES_PATH = ROOT / "map" / "provinces.bmp"
 DEFINITION_PATH = ROOT / "map" / "definition.csv"
@@ -47,6 +48,7 @@ SNOW_MOUNTAIN = 16
 SNOW_PLAIN = 19
 RESTORE_SNOW = {SNOW_MOUNTAIN: 11, SNOW_PLAIN: 0}
 URBAN_TERRAIN = 13
+CITY_PALETTE_INDEX = 15
 
 # These are existing combat-urban provinces whose complete graphical masks
 # were missing or partial.  Keeping the set explicit prevents a global
@@ -116,11 +118,27 @@ def province_color_contract() -> dict[tuple[int, int, int], int]:
     return selected
 
 
+def land_color_contract() -> set[tuple[int, int, int]]:
+    """Return RGB province colours which are valid city-mask land targets."""
+    colours: set[tuple[int, int, int]] = set()
+    for line in DEFINITION_PATH.read_text(
+        encoding="utf-8-sig", errors="strict"
+    ).splitlines():
+        fields = line.split(";")
+        if len(fields) < 7 or not fields[0].isdigit() or fields[4] != "land":
+            continue
+        colours.add(tuple(map(int, fields[1:4])))
+    return colours
+
+
 def generated_pixels(
     terrain: Image.Image,
     heightmap: Image.Image,
     provinces: Image.Image,
     selected_colors: dict[tuple[int, int, int], int] | None = None,
+    *,
+    cities: Image.Image | None = None,
+    land_colors: set[tuple[int, int, int]] | None = None,
 ) -> list[int]:
     if terrain.mode != "P":
         raise RuntimeError(f"terrain.bmp must be paletted, found {terrain.mode}")
@@ -129,16 +147,32 @@ def generated_pixels(
             "terrain/heightmap/provinces size mismatch: "
             f"{terrain.size} != {heightmap.size} != {provinces.size}"
         )
+    if cities is not None:
+        if cities.size != terrain.size:
+            raise RuntimeError(
+                f"terrain/cities size mismatch: {terrain.size} != {cities.size}"
+            )
+        if cities.mode != "P":
+            raise RuntimeError(f"cities.bmp must be paletted, found {cities.mode}")
     selected_colors = selected_colors or province_color_contract()
+    land_colors = land_colors or land_color_contract()
     selected_rgb = set(selected_colors)
     width, _height = terrain.size
     terrain_pixels = list(terrain.get_flattened_data())
     height_pixels = list(heightmap.convert("L").get_flattened_data())
     province_pixels = provinces.convert("RGB").tobytes()
+    city_pixels = list(cities.get_flattened_data()) if cities is not None else None
     return [
         (
             URBAN_TERRAIN
-            if tuple(province_pixels[index * 3:index * 3 + 3]) in selected_rgb
+            if (
+                tuple(province_pixels[index * 3:index * 3 + 3]) in selected_rgb
+                or (
+                    city_pixels is not None
+                    and city_pixels[index] == CITY_PALETTE_INDEX
+                    and tuple(province_pixels[index * 3:index * 3 + 3]) in land_colors
+                )
+            )
             else classify_terrain(value, index // width, height_pixels[index])
         )
         for index, value in enumerate(terrain_pixels)
@@ -227,21 +261,25 @@ def validate() -> list[str]:
         issues.extend(definition_issues(definition))
     if (
         not TERRAIN_PATH.exists()
+        or not CITIES_PATH.exists()
         or not HEIGHTMAP_PATH.exists()
         or not PROVINCES_PATH.exists()
     ):
-        return ["map/terrain.bmp, map/heightmap.bmp, or map/provinces.bmp is missing"]
+        return ["map/terrain.bmp, map/cities.bmp, map/heightmap.bmp, or map/provinces.bmp is missing"]
     try:
         selected_colors = province_color_contract()
     except (OSError, RuntimeError, ValueError) as error:
         return [str(error)]
     with (
         Image.open(TERRAIN_PATH) as terrain,
+        Image.open(CITIES_PATH) as cities,
         Image.open(HEIGHTMAP_PATH) as heightmap,
         Image.open(PROVINCES_PATH) as provinces,
     ):
         current = list(terrain.get_flattened_data())
-        expected = generated_pixels(terrain, heightmap, provinces, selected_colors)
+        expected = generated_pixels(
+            terrain, heightmap, provinces, selected_colors, cities=cities
+        )
         issues.extend(urban_coverage_issues(current, provinces, selected_colors))
     differences = sum(first != second for first, second in zip(current, expected))
     if differences:
@@ -264,11 +302,14 @@ def apply() -> None:
     selected_colors = province_color_contract()
     with (
         Image.open(BytesIO(TERRAIN_PATH.read_bytes())) as source,
+        Image.open(CITIES_PATH) as cities,
         Image.open(BytesIO(HEIGHTMAP_PATH.read_bytes())) as heightmap,
         Image.open(BytesIO(PROVINCES_PATH.read_bytes())) as provinces,
     ):
         terrain = source.copy()
-        pixels = generated_pixels(source, heightmap, provinces, selected_colors)
+        pixels = generated_pixels(
+            source, heightmap, provinces, selected_colors, cities=cities
+        )
         problems.extend(urban_coverage_issues(pixels, provinces, selected_colors))
     problems.extend(coverage_issues(pixels))
     if problems:
