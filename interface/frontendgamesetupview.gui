@@ -667,27 +667,19 @@ guiTypes = {
 			quadTextureSprite ="GFX_country_selection_bg"
 		}
 
-		containerWindowType = {
+		dropDownBoxType = {
 			name = "more_countries"
 			position = { x = 0 y = 0 }
 			size = { width = 0 height = 0 }
 			hide = yes
 		}
 
-		containerWindowType = {
+		OverlappingElementsBoxType = {
 			name = "filters"
-			position = { x = 0 y = 0 }
-			size = { width = 0 height = 0 }
-			hide = yes
-
-			gridBoxType = {
-				name = "filters_grid"
-				position = { x = 0 y = 0 }
-				size = { width = 0 height = 0 }
-				slotsize = { width = 149 height = 33 }
-				format = "UPPER_LEFT"
-				max_slots_horizontal = 1
-			}
+			position = { x = 22 y = 321 }
+			size = { x = 1181 y = 32 }
+			format = center
+			spacing = 14.0
 		}
 
 		ButtonType = {

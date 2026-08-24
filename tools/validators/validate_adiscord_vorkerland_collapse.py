@@ -1248,8 +1248,16 @@ def validate_events(root: Path, issues: list[str]) -> None:
     if f"province = {UNITY_TOWER_PROVINCE}" not in tower_launch:
         issues.append("Unity Tower explosion no longer targets its protected VP province")
     tower_state_damage = named_block(tower_destruction, str(UNITY_TOWER_STATE))
-    if not tower_state_damage or "damage_building = {" not in tower_state_damage:
-        issues.append("Unity Tower explosion no longer damages its protected landmark state")
+    tower_damage_blocks = named_blocks(tower_state_damage, "damage_building")
+    if len(tower_damage_blocks) != 1:
+        issues.append(
+            "Unity Tower explosion must damage exactly one guaranteed building, "
+            f"found {len(tower_damage_blocks)}"
+        )
+    elif "type = infrastructure" not in tower_damage_blocks[0]:
+        issues.append("Unity Tower explosion must damage guaranteed infrastructure")
+    if "type = rail_way" in tower_state_damage or "type = anti_air_building" in tower_state_damage:
+        issues.append("Unity Tower explosion still damages optional rail or anti-air buildings")
     if tower_destruction:
         guard_position = tower_destruction.find(f"set_global_flag = {tower_guard}")
         camera_position = tower_destruction.find(f"goto_province = {UNITY_TOWER_PROVINCE}")
@@ -3517,6 +3525,15 @@ def validate_ai(root: Path, issues: list[str]) -> None:
         if "type = front_control" in strategy or "type = front_unit_request" in strategy:
             if len(re.findall(r"\btag\s*=", strategy)) != 1:
                 issues.append("front scalar strategy must contain exactly one target tag")
+        if "type = front_control" in strategy:
+            ratio = re.search(r"\bratio\s*=\s*([0-9.]+)", strategy)
+            if ratio is None:
+                issues.append("front_control strategy is missing a coverage ratio")
+            elif float(ratio.group(1)) >= 1.0:
+                issues.append(
+                    "front_control strategy uses an unreachable coverage ratio: "
+                    f"{ratio.group(1)}"
+                )
 
     if "ADISCORD_vorkerland_worker_doctor_front_preparation" in ai:
         issues.append("collapse AI still contains the retired Worker-Doctor preparation window")

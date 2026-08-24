@@ -117,8 +117,6 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     VAD_OPTIONAL_WARTIME_FOCUSES,
     VAD_PERMANENT_PROTOCOL_IDEAS,
     VAD_WARTIME_TIMED_IDEAS,
-    VORKERLAND_CONTINUOUS_FOCUS_CONTRACTS,
-    VORKERLAND_CONTINUOUS_FOCUSES,
     WARTIME_OUTCOME_EXCLUSIONS,
     WARTIME_OUTCOME_FALSE_GATE_TOKENS,
     WARTIME_ROUTE_CONVERGENCE,
@@ -2003,14 +2001,6 @@ focus = {
             with self.subTest(focus_id=focus_id, icon=icon):
                 self.assertIn(f'name = "{icon}_shine"', shine)
 
-    def test_continuous_focus_shines_are_inherited_instead_of_duplicated(self) -> None:
-        shine = read(SHINE_FILE)
-        for icon, _strategy, _modifier_tokens in (
-            VORKERLAND_CONTINUOUS_FOCUS_CONTRACTS.values()
-        ):
-            with self.subTest(icon=icon):
-                self.assertNotIn(f'name = "{icon}_shine"', shine)
-
     def test_route_signature_focuses_have_distinct_icons(self) -> None:
         expected = {
             "WKR_republic_fights_as_one": "GFX_focus_WKR_republic_fights_as_one",
@@ -2030,66 +2020,14 @@ focus = {
             with self.subTest(focus_id=focus_id):
                 self.assertEqual(icon_line, f"icon = {expected_icon}")
 
-    def test_three_continuous_focuses_are_vorkerland_only_and_modifier_bounded(
-        self,
-    ) -> None:
-        self.assertEqual(tuple(self.continuous_blocks), VORKERLAND_CONTINUOUS_FOCUSES)
+    def test_continuous_focus_palette_is_deliberately_empty(self) -> None:
+        self.assertEqual(self.continuous_blocks, {})
         palettes = _blocks(self.continuous_source, "continuous_focus_palette")
         self.assertEqual(len(palettes), 1)
-        header = palettes[0].split("focus =", maxsplit=1)[0]
-        for token in (
-            "id = generic_focus",
-            "country = { factor = 1 }",
-            "default = yes",
-            "reset_on_civilwar = no",
-        ):
-            self.assertIn(token, header)
-
-        gate_tokens = (
-            "AND = { tag = WKR has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked }",
-            "AND = { tag = VAD has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked }",
-            "AND = { tag = TVA has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked }",
-            "AND = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }",
-        )
-        for focus_id in VORKERLAND_CONTINUOUS_FOCUSES:
-            with self.subTest(focus_id=focus_id):
-                block = self.continuous_blocks[focus_id]
-                for assignment in ("available", "enable"):
-                    gates = _blocks(block, assignment)
-                    self.assertEqual(len(gates), 1)
-                    self.assertEqual(
-                        set(
-                            re.findall(
-                                r"\btag\s*=\s*([A-Z0-9]{3})\b", gates[0]
-                            )
-                        ),
-                        {"WRK", "WKR", "VAD", "TVA"},
-                    )
-                    for token in gate_tokens:
-                        self.assertEqual(gates[0].count(token), 1)
-
-                icon, strategy, modifier_tokens = (
-                    VORKERLAND_CONTINUOUS_FOCUS_CONTRACTS[focus_id]
-                )
-                self.assertEqual(block.count(f"icon = {icon}"), 1)
-                self.assertEqual(
-                    block.count(f"supports_ai_strategy = {strategy}"), 1
-                )
-                self.assertEqual(block.count("daily_cost = 1"), 1)
-                self.assertEqual(block.count("available_if_capitulated = no"), 1)
-                self.assertEqual(len(_blocks(block, "ai_will_do")), 1)
-                for token in modifier_tokens:
-                    self.assertEqual(block.count(token), 1)
-                for forbidden in (
-                    "completion_reward",
-                    "add_manpower",
-                    "add_equipment_to_stockpile",
-                    "add_political_power",
-                    "add_stability",
-                    "set_country_flag",
-                    "set_global_flag",
-                ):
-                    self.assertNotIn(forbidden, block)
+        palette = palettes[0]
+        self.assertIn("id = generic_focus", palette)
+        self.assertIn("default = yes", palette)
+        self.assertNotRegex(palette, r"(?m)^\s*focus\s*=")
 
     def test_focus_source_uses_valid_trigger_and_equipment_ids(self) -> None:
         self.assertNotRegex(

@@ -1269,7 +1269,11 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertIn(f"goto_province = {UNITY_TOWER_PROVINCE}", tower_destruction)
         tower_launch = named_block(tower_destruction, "launch_nuke")
         self.assertIn(f"province = {UNITY_TOWER_PROVINCE}", tower_launch)
-        self.assertIn("damage_building = {", named_block(tower_destruction, str(UNITY_TOWER_STATE)))
+        tower_state_damage = named_block(tower_destruction, str(UNITY_TOWER_STATE))
+        self.assertEqual(tower_state_damage.count("damage_building = {"), 1)
+        self.assertIn("type = infrastructure", tower_state_damage)
+        self.assertNotIn("type = rail_way", tower_state_damage)
+        self.assertNotIn("type = anti_air_building", tower_state_damage)
         self.assertLess(
             tower_destruction.find(f"set_global_flag = {tower_guard}"),
             tower_destruction.find(f"goto_province = {UNITY_TOWER_PROVINCE}"),

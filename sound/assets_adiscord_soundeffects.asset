@@ -1,4 +1,12 @@
 # V19: keep only supported soundeffect declarations in this asset.
+category = {
+	name = ADISCORD_UI
+	soundeffects = {
+		ADISCORD_pol_menu_open_sound
+		ADISCORD_pol_menu_close_sound
+	}
+}
+
 soundeffect = {
 	name = ADISCORD_pol_menu_open_sound
 	sounds = {

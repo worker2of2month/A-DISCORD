@@ -1,4 +1,19 @@
 on_actions = {
+	on_state_control_changed = {
+		effect = {
+			if = {
+				limit = {
+					ADISCORD_nam_resource_war_active = yes
+					OR = {
+						ROOT = { tag = NAM }
+						FROM = { tag = NAM }
+					}
+				}
+				NAM = { ADISCORD_nam_refresh_emergency_defence = yes }
+			}
+		}
+	}
+
 	on_capitulation = {
 		effect = {
 			if = {

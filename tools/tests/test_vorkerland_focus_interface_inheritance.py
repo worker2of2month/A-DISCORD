@@ -11,6 +11,7 @@ ADDITIVE_SHINES = ROOT / "interface/ADISCORD_focus_shines.gfx"
 NATIONAL_FOCUS_GFX = ROOT / "interface/ADISCORD_national_focus.gfx"
 VANILLA_SHINES = VANILLA_ROOT / "interface/goals_shine.gfx"
 EXPECTED_CUSTOM_ONLY_SPRITES = 254
+CONTINUOUS_FOCUS_PALETTE = ROOT / "common/continuous_focus/generic.txt"
 
 
 def read(path: Path) -> str:
@@ -88,16 +89,12 @@ class VorkerlandFocusInterfaceInheritanceTests(unittest.TestCase):
             source,
         )
 
-    def test_continuous_focus_shines_remain_inherited_from_vanilla(self) -> None:
-        custom_names = set(sprite_names(read(ADDITIVE_SHINES)))
-        vanilla_names = set(sprite_names(read(VANILLA_SHINES)))
-        inherited_names = {
-            "GFX_goal_generic_production_shine",
-            "GFX_goal_continuous_repairments_shine",
-            "GFX_goal_continuous_reduce_training_time_shine",
-        }
-        self.assertTrue(inherited_names <= vanilla_names)
-        self.assertTrue(inherited_names.isdisjoint(custom_names))
+    def test_mod_continuous_focus_palette_remains_empty(self) -> None:
+        source = read(CONTINUOUS_FOCUS_PALETTE)
+        self.assertIn("continuous_focus_palette = {", source)
+        self.assertIn("id = generic_focus", source)
+        self.assertIn("default = yes", source)
+        self.assertNotRegex(source, r"(?m)^\s*focus\s*=")
 
 
 if __name__ == "__main__":

@@ -321,15 +321,59 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         ai = (
             builder.ROOT / "common" / "ai_strategy" / "ADISCORD_nam_resource_war_ai.txt"
         ).read_text(encoding="utf-8-sig")
-        for strategy_suffix, tag, ratio in (
-            ("eflor", "EFL", "0.40"),
-            ("azhar", "AZH", "0.35"),
-            ("rebel", "SLF", "0.25"),
+        for strategy_suffix, tag in (
+            ("eflor", "EFL"),
+            ("azhar", "AZH"),
+            ("rebel", "SLF"),
         ):
             strategy = named_block(ai, f"ADISCORD_nam_resource_war_nam_{strategy_suffix}_front")
-            self.assertIn(f"tag = {tag} ratio = {ratio}", strategy)
+            self.assertIn(f"tag = {tag} ratio = 0.01", strategy)
             self.assertIn("execution_type = careful", strategy)
             self.assertIn("manual_attack = no", strategy)
+
+    def test_nam_ai_comeback_is_conditional_bounded_and_recoverable(self) -> None:
+        root = builder.ROOT
+        ideas = (root / "common/ideas/ADISCORD_nam_resource_war_ideas.txt").read_text(
+            encoding="utf-8-sig"
+        )
+        effects = (
+            root / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt"
+        ).read_text(encoding="utf-8-sig")
+        on_actions = (
+            root / "common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt"
+        ).read_text(encoding="utf-8-sig")
+
+        defence = named_block(ideas, "ADISCORD_nam_last_line_administration")
+        self.assertIn("army_defence_factor = 0.20", defence)
+        self.assertIn("army_org_factor = 0.10", defence)
+
+        refresh = named_block(effects, "ADISCORD_nam_refresh_emergency_defence")
+        for token in (
+            "is_ai = yes",
+            "surrender_progress > 0.60",
+            "surrender_progress < 0.45",
+            "add_ideas = ADISCORD_nam_last_line_administration",
+            "remove_ideas = ADISCORD_nam_last_line_administration",
+            "surrender_progress > 0.40",
+            "NOT = { has_country_flag = ADISCORD_nam_emergency_reserve_called }",
+            "set_country_flag = ADISCORD_nam_emergency_reserve_called",
+            "add_manpower = 7000",
+            "type = infantry_equipment amount = 1500 producer = NAM",
+        ):
+            self.assertIn(token, refresh)
+        self.assertEqual(refresh.count("create_unit = {"), 2)
+        self.assertNotIn("random", refresh)
+
+        control_change = named_block(on_actions, "on_state_control_changed")
+        self.assertIn("ADISCORD_nam_resource_war_active = yes", control_change)
+        self.assertIn("ROOT = { tag = NAM }", control_change)
+        self.assertIn("FROM = { tag = NAM }", control_change)
+        self.assertEqual(
+            control_change.count("ADISCORD_nam_refresh_emergency_defence = yes"), 1
+        )
+
+        cleanup = named_block(effects, "ADISCORD_nam_resource_war_clear_temporary_support")
+        self.assertIn("remove_ideas = ADISCORD_nam_last_line_administration", cleanup)
 
     def test_nam_resource_war_entry_is_fresh_event_driven_and_bounded(self) -> None:
         root = builder.ROOT

@@ -580,6 +580,52 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
                 rf'\bname\s*=\s*{sound_name}\b.*?'
                 rf'\bsounds\s*=\s*\{{.*?\bsound\s*=\s*{sound_name}\b',
             )
+        soundeffect_ast = economy_validator.parse_clausewitz(soundeffect_text)
+        categories = [
+            entry
+            for entry in soundeffect_ast
+            if entry.key == 'category' and isinstance(entry.value, list)
+        ]
+        self.assertEqual(len(categories), 1)
+        category = categories[0].value
+        self.assertEqual(_direct_scalar(category, 'name'), 'ADISCORD_UI')
+        category_members = _unique_direct_block(category, 'soundeffects')
+        self.assertIsNotNone(category_members)
+        self.assertEqual(
+            [(entry.key, entry.value) for entry in category_members],
+            [
+                ('', 'ADISCORD_pol_menu_open_sound'),
+                ('', 'ADISCORD_pol_menu_close_sound'),
+            ],
+        )
+        top_level_soundeffects = [
+            entry
+            for entry in soundeffect_ast
+            if entry.key == 'soundeffect' and isinstance(entry.value, list)
+        ]
+        self.assertEqual(len(top_level_soundeffects), 2)
+
+    def test_frontend_runtime_anchors_use_current_engine_types(self):
+        main = (ROOT / 'interface' / 'frontendmainview.gui').read_text(
+            encoding='utf-8-sig'
+        )
+        setup = (ROOT / 'interface' / 'frontendgamesetupview.gui').read_text(
+            encoding='utf-8-sig'
+        )
+        main_nodes = named_gui_nodes(main)
+        setup_nodes = named_gui_nodes(setup)
+        self.assertIn(
+            ('positionType', 'subscription_size', ('mainmenu_panel_bottom',)),
+            main_nodes,
+        )
+        self.assertIn(
+            ('dropDownBoxType', 'more_countries', ('gamesetup_interesting_countries_window',)),
+            setup_nodes,
+        )
+        self.assertIn(
+            ('OverlappingElementsBoxType', 'filters', ('gamesetup_interesting_countries_window',)),
+            setup_nodes,
+        )
 
     def test_vanilla_menu_sound_overrides_use_hoi4_pcm_profile(self):
         menu_directory = ROOT / 'sound' / 'menu'

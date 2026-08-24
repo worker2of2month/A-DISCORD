@@ -235,6 +235,24 @@ def main() -> int:
     }
     for missing in sorted(required - ids):
         issues.append(f"missing focus {missing}")
+    machine_shops = next(
+        (
+            block
+            for block in focuses
+            if re.search(r"(?m)^\s*id\s*=\s*VAL_Mobilize_Machine_Shops\s*$", block)
+        ),
+        "",
+    )
+    machine_shop_reward = named_blocks(machine_shops, "completion_reward")
+    if len(machine_shop_reward) != 1:
+        issues.append("VAL machine-shop focus must define exactly one completion reward")
+    else:
+        capital_rewards = named_blocks(machine_shop_reward[0], "capital_scope")
+        expected_infrastructure = (
+            "add_building_construction = { type = infrastructure level = 1 instant_build = yes }"
+        )
+        if len(capital_rewards) != 1 or expected_infrastructure not in capital_rewards[0]:
+            issues.append("VAL machine-shop infrastructure reward is not capital-state scoped")
     if len(focuses) < 70:
         issues.append(f"focus tree is still too small ({len(focuses)} focuses)")
     for block in focuses:

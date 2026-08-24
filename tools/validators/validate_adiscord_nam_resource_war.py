@@ -369,10 +369,20 @@ def main() -> int:
         )
     check(ai.count("manual_attack = yes") == 3 and ai.count("priority = 1500") >= 6,
           "coalition attack or NAM three-front defence AI is incomplete")
+    for strategy in re.findall(r"ai_strategy\s*=\s*\{([^{}]*)\}", ai, re.DOTALL):
+        if "type = front_control" not in strategy:
+            continue
+        ratio_match = re.search(r"\bratio\s*=\s*([0-9.]+)", strategy)
+        check(ratio_match is not None, "NAM front_control strategy lacks a coverage ratio")
+        if ratio_match is not None:
+            check(
+                float(ratio_match.group(1)) < 1.0,
+                f"NAM front_control strategy uses unreachable ratio {ratio_match.group(1)}",
+            )
     for strategy_suffix, tag, ratio in (
-        ("eflor", "EFL", "0.40"),
-        ("azhar", "AZH", "0.35"),
-        ("rebel", "SLF", "0.25"),
+        ("eflor", "EFL", "0.01"),
+        ("azhar", "AZH", "0.01"),
+        ("rebel", "SLF", "0.01"),
     ):
         strategy_name = f"ADISCORD_nam_resource_war_nam_{strategy_suffix}_front"
         strategy = named_block(ai, strategy_name)
@@ -382,6 +392,46 @@ def main() -> int:
             and "manual_attack = no" in strategy,
             f"{strategy_name} is not a cautious NAM defence allocation",
         )
+
+    hidden_ideas = named_block(ideas, "hidden_ideas")
+    last_line = named_block(ideas, "ADISCORD_nam_last_line_administration")
+    check("ADISCORD_nam_last_line_administration" in hidden_ideas,
+          "NAM last-line administration is not a hidden idea")
+    for token in ("army_defence_factor = 0.20", "army_org_factor = 0.10"):
+        check(token in last_line, f"NAM last-line administration lacks {token}")
+
+    emergency = named_block(effects, "ADISCORD_nam_refresh_emergency_defence")
+    for token in (
+        "is_ai = yes",
+        "ADISCORD_nam_resource_war_active = yes",
+        "surrender_progress > 0.60",
+        "surrender_progress < 0.45",
+        "add_ideas = ADISCORD_nam_last_line_administration",
+        "remove_ideas = ADISCORD_nam_last_line_administration",
+        "surrender_progress > 0.40",
+        "NOT = { has_country_flag = ADISCORD_nam_emergency_reserve_called }",
+        "set_country_flag = ADISCORD_nam_emergency_reserve_called",
+        "add_manpower = 7000",
+        "type = infantry_equipment amount = 1500 producer = NAM",
+    ):
+        check(token in emergency, f"NAM emergency defence lacks bounded token: {token}")
+    check(emergency.count("create_unit = {") == 2,
+          "NAM emergency defence must create exactly two reserve divisions")
+    check("random" not in emergency,
+          "NAM emergency defence reserve must be deterministic")
+
+    state_control = named_block(on_actions, "on_state_control_changed")
+    for token in (
+        "ADISCORD_nam_resource_war_active = yes",
+        "ROOT = { tag = NAM }",
+        "FROM = { tag = NAM }",
+    ):
+        check(token in state_control, f"NAM state-control refresh lacks {token}")
+    check(state_control.count("ADISCORD_nam_refresh_emergency_defence = yes") == 1,
+          "NAM state-control hook must call emergency refresh exactly once")
+    cleanup = named_block(effects, "ADISCORD_nam_resource_war_clear_temporary_support")
+    check("remove_ideas = ADISCORD_nam_last_line_administration" in cleanup,
+          "NAM outcome cleanup leaves the last-line idea active")
     check("country_event = { id = ADISCORD_nam_resource_war.2 days = 45 random_days = 30 }" in effects,
           "Svetlogorsk uprising does not leave NAM the intended 45-75 day response window")
 

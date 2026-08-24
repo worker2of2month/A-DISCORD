@@ -33,14 +33,6 @@ country_event = {
 					type = infrastructure
 					damage = 0.1
 				}
-				damage_building = {
-					type = rail_way
-					damage = 0.1
-				}
-				damage_building = {
-					type = anti_air_building
-					damage = 0.1
-				}
 			}
 		}
 		if = {

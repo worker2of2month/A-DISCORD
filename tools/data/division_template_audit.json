@@ -10555,6 +10555,26 @@
       "count": 4
     },
     {
+      "key": "adiscord_nam_resource_war_effects_create_unit_nam_resource_guard_xp_0_2_eq_1_0",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "NAM Resource Guard",
+      "legacy_names": [],
+      "start_experience_factor": 0.2,
+      "start_equipment_factor": 1.0,
+      "count": 1
+    },
+    {
+      "key": "adiscord_nam_resource_war_effects_create_unit_nam_resource_infantry_xp_0_15_eq_1_0",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "NAM Resource Infantry",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 1.0,
+      "count": 1
+    },
+    {
       "key": "adiscord_vorkerland_collapse_effects_create_unit_armi_mobile_group_xp_0_35_eq_0_9",
       "path": "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt",
       "kind": "create_unit",

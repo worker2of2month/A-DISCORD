@@ -3,7 +3,7 @@ ADISCORD_nam_resource_war_eflor_offensive = {
 	enable = { ADISCORD_nam_resource_war_active = yes has_war_with = NAM }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = NAM value = 100 }
-	ai_strategy = { type = front_control tag = NAM ratio = 1.00 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = front_control tag = NAM ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
 }
 
 ADISCORD_nam_resource_war_azhar_offensive = {
@@ -11,7 +11,7 @@ ADISCORD_nam_resource_war_azhar_offensive = {
 	enable = { ADISCORD_nam_resource_war_active = yes has_war_with = NAM }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = NAM value = 100 }
-	ai_strategy = { type = front_control tag = NAM ratio = 1.00 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = front_control tag = NAM ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
 }
 
 ADISCORD_nam_resource_war_nam_eflor_front = {
@@ -19,7 +19,7 @@ ADISCORD_nam_resource_war_nam_eflor_front = {
 	enable = { ADISCORD_nam_resource_war_active = yes has_war_with = EFL }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = EFL value = 100 }
-	ai_strategy = { type = front_control tag = EFL ratio = 0.40 priority = 1500 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_control tag = EFL ratio = 0.01 priority = 1500 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 
 ADISCORD_nam_resource_war_nam_azhar_front = {
@@ -27,7 +27,7 @@ ADISCORD_nam_resource_war_nam_azhar_front = {
 	enable = { ADISCORD_nam_resource_war_active = yes has_war_with = AZH }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = AZH value = 100 }
-	ai_strategy = { type = front_control tag = AZH ratio = 0.35 priority = 1500 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_control tag = AZH ratio = 0.01 priority = 1500 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 
 ADISCORD_nam_resource_war_nam_rebel_front = {
@@ -35,7 +35,7 @@ ADISCORD_nam_resource_war_nam_rebel_front = {
 	enable = { ADISCORD_nam_resource_war_active = yes has_war_with = SLF }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SLF value = 100 }
-	ai_strategy = { type = front_control tag = SLF ratio = 0.25 priority = 1500 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_control tag = SLF ratio = 0.01 priority = 1500 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 
 ADISCORD_nam_resource_war_rebel_offensive = {
@@ -43,7 +43,7 @@ ADISCORD_nam_resource_war_rebel_offensive = {
 	enable = { ADISCORD_nam_resource_war_active = yes has_war_with = NAM }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = NAM value = 100 }
-	ai_strategy = { type = front_control tag = NAM ratio = 1.00 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = front_control tag = NAM ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
 }
 
 # Only two southern states have both a material upside and a political system

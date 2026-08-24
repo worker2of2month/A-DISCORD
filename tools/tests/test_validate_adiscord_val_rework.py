@@ -248,6 +248,29 @@ class ValTierTransitionContractTests(unittest.TestCase):
         self.assertTrue(addition_positions, "tier rebuild must add its target idea")
         self.assertLess(max(removal_positions), min(addition_positions))
 
+    def test_machine_shop_infrastructure_reward_is_state_scoped(self) -> None:
+        focus = next(
+            block
+            for block in named_blocks(self.focuses, "focus")
+            if re.search(
+                r"(?m)^\s*id\s*=\s*VAL_Mobilize_Machine_Shops\s*$",
+                block,
+            )
+        )
+        reward = only_named_block(self, focus, "completion_reward")
+        capital = only_named_block(self, reward, "capital_scope")
+        self.assertIn(
+            "add_building_construction = { type = infrastructure level = 1 instant_build = yes }",
+            capital,
+        )
+        direct_reward = re.sub(
+            r"capital_scope\s*=\s*\{.*?\}",
+            "",
+            reward,
+            flags=re.DOTALL,
+        )
+        self.assertNotIn("add_building_construction", direct_reward)
+
     def transition_branch(self, effect: str, variable: str, tier: int) -> Block:
         branches = [
             branch

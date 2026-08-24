@@ -73,7 +73,7 @@ class VorkerlandVadSolarBehaviorTests(unittest.TestCase):
                     {compact(strategy) for strategy in named_blocks(block, "ai_strategy")},
                     {
                         f"ai_strategy = {{ type = front_unit_request tag = {target} value = 100 }}",
-                        f"ai_strategy = {{ type = front_control tag = {target} ratio = 1.00 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }}",
+                        f"ai_strategy = {{ type = front_control tag = {target} ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }}",
                         f"ai_strategy = {{ type = conquer id = {target} value = 250 }}",
                     },
                 )
@@ -159,7 +159,7 @@ class VorkerlandVadSolarBehaviorTests(unittest.TestCase):
                     strategies,
                 )
                 self.assertIn(
-                    "ai_strategy = { type = front_control tag = VAD ratio = 1.00 priority = 1400 ordertype = front execution_type = careful execute_order = yes manual_attack = no }",
+                    "ai_strategy = { type = front_control tag = VAD ratio = 0.01 priority = 1400 ordertype = front execution_type = careful execute_order = yes manual_attack = no }",
                     strategies,
                 )
 

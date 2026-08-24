@@ -1075,38 +1075,6 @@ VAD_LATE_WAR_BRIDGE_REWARDS = {
     ),
 }
 
-VORKERLAND_CONTINUOUS_FOCUSES = (
-    "ADISCORD_vorkerland_continuous_emergency_production",
-    "ADISCORD_vorkerland_continuous_front_repair",
-    "ADISCORD_vorkerland_continuous_field_training",
-)
-
-VORKERLAND_CONTINUOUS_FOCUS_CONTRACTS = {
-    "ADISCORD_vorkerland_continuous_emergency_production": (
-        "GFX_goal_generic_production",
-        "ai_focus_military_advancements",
-        (
-            "industrial_capacity_factory = 0.05",
-            "production_factory_efficiency_gain_factor = 0.05",
-        ),
-    ),
-    "ADISCORD_vorkerland_continuous_front_repair": (
-        "GFX_goal_continuous_repairments",
-        "ai_focus_defense",
-        (
-            "industry_repair_factor = 0.25",
-            "production_speed_infrastructure_factor = 0.10",
-            "production_speed_rail_way_factor = 0.10",
-            "production_speed_supply_node_factor = 0.10",
-        ),
-    ),
-    "ADISCORD_vorkerland_continuous_field_training": (
-        "GFX_goal_continuous_reduce_training_time",
-        "ai_focus_defense",
-        ("training_time_army_factor = -0.15",),
-    ),
-}
-
 TVA_OPTIONAL_SHARED_SEQUENCE = (
     "TVA_print_interchangeable_repair_modules",
     "TVA_preposition_switching_crews",
@@ -2580,8 +2548,6 @@ def expected_localisation_keys() -> set[str]:
     return {
         *FOCUS_IDS,
         *(f"{focus_id}_desc" for focus_id in FOCUS_IDS),
-        *VORKERLAND_CONTINUOUS_FOCUSES,
-        *(f"{focus_id}_desc" for focus_id in VORKERLAND_CONTINUOUS_FOCUSES),
         "ADISCORD_vorkerland_claimant_focus_phase_tt",
         "ADISCORD_vorkerland_central_showdown_phase_tt",
         "ADISCORD_vorkerland_wrk_preparations_carry_over_tt",
@@ -2961,16 +2927,6 @@ def collect_issues() -> list[str]:
             "additive focus shine source contains duplicate sprite names: "
             f"{duplicate_shines}"
         )
-    inherited_continuous_shines = {
-        f"{icon}_shine"
-        for icon, _strategy, _modifiers in VORKERLAND_CONTINUOUS_FOCUS_CONTRACTS.values()
-    }
-    local_inherited_shines = sorted(inherited_continuous_shines & set(shine_names))
-    if local_inherited_shines:
-        issues.append(
-            "vanilla continuous-focus shines must stay inherited, not locally duplicated: "
-            f"{local_inherited_shines}"
-        )
     focus_gfx = read(FOCUS_GFX_FILE)
     focus_decisions = "\n".join(read(path) for path in FOCUS_DECISION_FILES)
     diplomacy_decisions = read(DIPLOMACY_DECISIONS_FILE)
@@ -3039,83 +2995,17 @@ def collect_issues() -> list[str]:
             f"found {len(continuous_palettes)}"
         )
     else:
-        palette_header = continuous_palettes[0].split("focus =", maxsplit=1)[0]
-        for token in (
-            "id = generic_focus",
-            "country = { factor = 1 }",
-            "default = yes",
-            "reset_on_civilwar = no",
-        ):
-            if token not in palette_header:
+        palette = continuous_palettes[0]
+        for token in ("id = generic_focus", "default = yes"):
+            if token not in palette:
                 issues.append(f"Vorkerland continuous focus palette lacks {token}")
-    if tuple(continuous_blocks) != VORKERLAND_CONTINUOUS_FOCUSES:
+        if re.search(r"(?m)^\s*focus\s*=", palette):
+            issues.append("Vorkerland continuous focus palette must remain empty")
+    if continuous_blocks:
         issues.append(
-            "continuous focus IDs/order differ from the three-focus Vorkerland manifest: "
+            "Vorkerland continuous focus palette must not define focus blocks: "
             f"{tuple(continuous_blocks)}"
         )
-    continuous_gate_tokens = (
-        "AND = { tag = WKR has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked }",
-        "AND = { tag = VAD has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked }",
-        "AND = { tag = TVA has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked }",
-        "AND = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }",
-    )
-    for focus_id in VORKERLAND_CONTINUOUS_FOCUSES:
-        block = continuous_blocks.get(focus_id, "")
-        available = _blocks(block, "available")
-        enable = _blocks(block, "enable")
-        for gate_name, gate_blocks in (("available", available), ("enable", enable)):
-            if len(gate_blocks) != 1:
-                issues.append(
-                    f"continuous focus {focus_id} must define one {gate_name} gate"
-                )
-                continue
-            gate = gate_blocks[0]
-            tags = set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", gate))
-            if tags != {"WRK", "WKR", "VAD", "TVA"}:
-                issues.append(
-                    f"continuous focus {focus_id} {gate_name} tags {sorted(tags)} "
-                    "must be WRK/WKR/VAD/TVA only"
-                )
-            for token in continuous_gate_tokens:
-                if gate.count(token) != 1:
-                    issues.append(
-                        f"continuous focus {focus_id} {gate_name} gate must contain "
-                        f"{token} exactly once"
-                    )
-
-        icon, strategy, modifier_tokens = VORKERLAND_CONTINUOUS_FOCUS_CONTRACTS[
-            focus_id
-        ]
-        for token in (
-            f"icon = {icon}",
-            f"supports_ai_strategy = {strategy}",
-            "daily_cost = 1",
-            "available_if_capitulated = no",
-        ):
-            if block.count(token) != 1:
-                issues.append(
-                    f"continuous focus {focus_id} must contain {token} exactly once"
-                )
-        for token in modifier_tokens:
-            if block.count(token) != 1:
-                issues.append(
-                    f"continuous focus {focus_id} must contain bounded modifier {token} exactly once"
-                )
-        if len(_blocks(block, "ai_will_do")) != 1:
-            issues.append(f"continuous focus {focus_id} must define one AI weight")
-        for forbidden in (
-            "completion_reward",
-            "add_manpower",
-            "add_equipment_to_stockpile",
-            "add_political_power",
-            "add_stability",
-            "set_country_flag",
-            "set_global_flag",
-        ):
-            if forbidden in block:
-                issues.append(
-                    f"continuous focus {focus_id} contains repeatable lump effect {forbidden}"
-                )
 
     invalid_focus_triggers = {
         "stability": r"(?<!has_)(?<!add_)\bstability\s*(?:=|<|>)",

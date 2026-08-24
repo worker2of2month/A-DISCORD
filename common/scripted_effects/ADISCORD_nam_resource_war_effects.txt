@@ -131,12 +131,61 @@ ADISCORD_nam_resource_war_start_mainland_rebellion = {
 }
 
 ADISCORD_nam_resource_war_clear_temporary_support = {
-	NAM = { remove_ideas = ADISCORD_nam_extraction_defence_corps }
+	NAM = {
+		remove_ideas = ADISCORD_nam_extraction_defence_corps
+		remove_ideas = ADISCORD_nam_last_line_administration
+	}
 	EFL = { remove_ideas = ADISCORD_nam_restitution_coalition }
 	AZH = { remove_ideas = ADISCORD_nam_restitution_coalition }
 	RHM = { remove_ideas = ADISCORD_nam_profitable_volunteer_contracts }
 	MZR = { remove_ideas = ADISCORD_nam_profitable_volunteer_contracts }
 	if = { limit = { SLF = { exists = yes } } SLF = { remove_ideas = ADISCORD_nam_insurgent_columns } }
+}
+
+ADISCORD_nam_refresh_emergency_defence = {
+	if = {
+		limit = {
+			has_idea = ADISCORD_nam_last_line_administration
+			OR = {
+				is_ai = no
+				NOT = { ADISCORD_nam_resource_war_active = yes }
+				surrender_progress < 0.45
+			}
+		}
+		remove_ideas = ADISCORD_nam_last_line_administration
+	}
+	if = {
+		limit = {
+			is_ai = yes
+			ADISCORD_nam_resource_war_active = yes
+			surrender_progress > 0.60
+			NOT = { has_idea = ADISCORD_nam_last_line_administration }
+		}
+		add_ideas = ADISCORD_nam_last_line_administration
+	}
+	if = {
+		limit = {
+			is_ai = yes
+			ADISCORD_nam_resource_war_active = yes
+			surrender_progress > 0.40
+			NOT = { has_country_flag = ADISCORD_nam_emergency_reserve_called }
+		}
+		set_country_flag = ADISCORD_nam_emergency_reserve_called
+		add_manpower = 7000
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = NAM }
+		add_equipment_to_stockpile = { type = support_equipment amount = 300 producer = NAM }
+		add_equipment_to_stockpile = { type = artillery_equipment amount = 150 producer = NAM }
+		capital_scope = {
+			create_unit = {
+				division = "name = \"Last Line Guard\" division_template = \"NAM Resource Guard\" start_experience_factor = 0.20 start_equipment_factor = 1.00"
+				owner = NAM
+			}
+			create_unit = {
+				division = "name = \"Last Line Infantry\" division_template = \"NAM Resource Infantry\" start_experience_factor = 0.15 start_equipment_factor = 1.00"
+				owner = NAM
+			}
+		}
+	}
 }
 
 ADISCORD_nam_resource_war_end_all_wars = {
