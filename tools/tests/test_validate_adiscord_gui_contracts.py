@@ -605,7 +605,7 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
         ]
         self.assertEqual(len(top_level_soundeffects), 2)
 
-    def test_frontend_runtime_anchors_use_current_engine_types(self):
+    def test_frontend_menu_stubs_do_not_register_incomplete_engine_controls(self):
         main = (ROOT / 'interface' / 'frontendmainview.gui').read_text(
             encoding='utf-8-sig'
         )
@@ -615,13 +615,15 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
         main_nodes = named_gui_nodes(main)
         setup_nodes = named_gui_nodes(setup)
         self.assertIn(
-            ('positionType', 'subscription_size', ('mainmenu_panel_bottom',)),
+            ('instantTextBoxType', 'subscription_size', ('mainmenu_panel_bottom',)),
             main_nodes,
         )
+        self.assertIn('hide = yes', gui_node_body(main, 'subscription_size'))
         self.assertIn(
-            ('dropDownBoxType', 'more_countries', ('gamesetup_interesting_countries_window',)),
+            ('containerWindowType', 'more_countries', ('gamesetup_interesting_countries_window',)),
             setup_nodes,
         )
+        self.assertIn('hide = yes', gui_node_body(setup, 'more_countries'))
         self.assertIn(
             ('OverlappingElementsBoxType', 'filters', ('gamesetup_interesting_countries_window',)),
             setup_nodes,

@@ -426,9 +426,16 @@ guiTypes = {
 			position = { x = 35 y = 524 }
 		}
 
-		positionType = {
+		instantTextBoxType = {
 			name = "subscription_size"
 			position = { x = 0 y = 0 }
+			font = "hoi_18b"
+			borderSize = { x = 0 y = 0 }
+			text = ""
+			maxWidth = 1
+			maxHeight = 1
+			format = left
+			hide = yes
 		}
 		
 		

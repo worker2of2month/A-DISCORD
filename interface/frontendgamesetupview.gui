@@ -667,7 +667,7 @@ guiTypes = {
 			quadTextureSprite ="GFX_country_selection_bg"
 		}
 
-		dropDownBoxType = {
+		containerWindowType = {
 			name = "more_countries"
 			position = { x = 0 y = 0 }
 			size = { width = 0 height = 0 }
