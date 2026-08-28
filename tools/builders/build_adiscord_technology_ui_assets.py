@@ -41,11 +41,19 @@ PREVIEW = (
     ROOT
     / "gfx/interface/technology/preview/ADISCORD_technology_overview_preview.png"
 )
+TREE_PREVIEW = (
+    ROOT
+    / "gfx/interface/technology/preview/ADISCORD_technology_tree_preview.png"
+)
 GUI_OUTPUT = ROOT / "interface/countrytechnologyview.gui"
 GFX_OUTPUT = ROOT / "interface/ADISCORD_technology_ui.gfx"
+STATE_GFX_OUTPUT = ROOT / "interface/zz_ADISCORD_technology_states.gfx"
 
 EFFECT = "gfx/FX/buttonstate_nodowneffect.lua"
 MUTED_GOLD = (146, 116, 62, 255)
+NEUTRAL_GREY = (88, 92, 92, 255)
+MUTED_GREEN = (64, 112, 76, 255)
+MUTED_BRANCH = (74, 88, 108, 255)
 COLD_WRITING = (48, 59, 61, 255)
 
 
@@ -187,6 +195,53 @@ TECHNOLOGY_OVERVIEW_CONTRACTS = (
         "spriteType",
         (508, 517),
         effect_file=EFFECT,
+    ),
+)
+
+TECHNOLOGY_STATE_CONTRACTS = (
+    SpriteContract(
+        "GFX_technology_unavailable_item_bg",
+        "GFX_technology_unavailable_item_bg",
+        "ADISCORD_technology_node_unavailable.dds",
+        "spriteType",
+        (183, 84),
+    ),
+    SpriteContract(
+        "GFX_technology_available_item_bg",
+        "GFX_technology_available_item_bg",
+        "ADISCORD_technology_node_available.dds",
+        "spriteType",
+        (183, 84),
+    ),
+    SpriteContract(
+        "GFX_technology_researched_item_bg",
+        "GFX_technology_researched_item_bg",
+        "ADISCORD_technology_node_researched.dds",
+        "spriteType",
+        (183, 84),
+    ),
+    SpriteContract(
+        "GFX_technology_branch_item_bg",
+        "GFX_technology_branch_item_bg",
+        "ADISCORD_technology_node_branch.dds",
+        "spriteType",
+        (183, 84),
+    ),
+    SpriteContract(
+        "GFX_technology_currently_researching_item_bg",
+        "GFX_technology_currently_researching_item_bg",
+        "ADISCORD_technology_node_researching.dds",
+        "frameAnimatedSpriteType",
+        (1647, 84),
+        frames=9,
+        extra_lines=(
+            'loadType = "INGAME"',
+            "transparencecheck = yes",
+            "animation_rate_fps = 15",
+            "looping = yes",
+            "play_on_show = yes",
+            "pause_on_loop = 0.0",
+        ),
     ),
 )
 
@@ -448,6 +503,62 @@ def _technology_info(source: Image.Image) -> Image.Image:
     return output
 
 
+def _technology_node(
+    source: Image.Image,
+    edge_color: tuple[int, int, int, int],
+) -> Image.Image:
+    """Draw one node while keeping icon, title, and 17px status geometry fixed."""
+    palette = PALETTES["technology"]
+    output = metal_surface(source, (183, 84), palette, 0.68)
+    recessed_well(output, (7, 7, 69, 65), palette)
+    raised_field(output, (74, 7, 176, 65), palette)
+    status_band(output, (0, 67, 182, 83), edge_color)
+    draw = ImageDraw.Draw(output, "RGBA")
+    draw.rectangle((1, 1, 181, 82), outline=palette.deep, width=1)
+    draw.rectangle((2, 2, 180, 81), outline=edge_color, width=3)
+    draw.line((8, 65, 175, 65), fill=palette.edge_light)
+    return output
+
+
+def _researching_strip(source: Image.Image) -> Image.Image:
+    """Assemble nine identical node frames with a moving teal edge highlight."""
+    palette = PALETTES["technology"]
+    output = Image.new("RGBA", (183 * 9, 84), (0, 0, 0, 0))
+    for index in range(9):
+        frame = _technology_node(source, palette.accent)
+        segment_start = 8 + index * 18
+        ImageDraw.Draw(frame, "RGBA").line(
+            (segment_start, 3, segment_start + 17, 3),
+            fill=palette.accent_light,
+            width=1,
+        )
+        output.alpha_composite(frame, (183 * index, 0))
+    return output
+
+
+def render_state_asset(contract: SpriteContract, source: Image.Image) -> Image.Image:
+    renderers = {
+        "GFX_technology_unavailable_item_bg": lambda: _technology_node(
+            source, NEUTRAL_GREY
+        ),
+        "GFX_technology_available_item_bg": lambda: _technology_node(
+            source, MUTED_GOLD
+        ),
+        "GFX_technology_researched_item_bg": lambda: _technology_node(
+            source, MUTED_GREEN
+        ),
+        "GFX_technology_branch_item_bg": lambda: _technology_node(
+            source, MUTED_BRANCH
+        ),
+        "GFX_technology_currently_researching_item_bg": lambda: _researching_strip(
+            source
+        ),
+    }
+    if contract.target_name not in renderers:
+        raise ValueError(f"missing technology state renderer: {contract.target_name}")
+    return renderers[contract.target_name]()
+
+
 def render_asset(contract: SpriteContract, source: Image.Image) -> Image.Image:
     target = contract.target_name
     renderers = {
@@ -496,6 +607,22 @@ def render_gfx() -> str:
     return f"spriteTypes = {{\n{entries}}}\n"
 
 
+def render_state_gfx() -> str:
+    entries = "".join(
+        render_gfx_entry(
+            contract,
+            f"gfx/interface/technology/ui/{contract.filename}",
+        )
+        for contract in TECHNOLOGY_STATE_CONTRACTS
+    )
+    return f"spriteTypes = {{\n{entries}}}\n"
+
+
+def expected_technology_state_gfx_bytes() -> bytes:
+    """Return the one UI-owned state declaration snapshot shared read-only."""
+    return render_state_gfx().encode("utf-8")
+
+
 def _png_bytes(image: Image.Image) -> bytes:
     stream = BytesIO()
     image.save(stream, format="PNG", optimize=False, compress_level=9)
@@ -509,6 +636,11 @@ def expected_outputs() -> dict[Path, bytes]:
         image = render_asset(contract, source)
         validate_contract_image(contract, image)
         assets.append((contract, image))
+    state_assets: list[tuple[SpriteContract, Image.Image]] = []
+    for contract in TECHNOLOGY_STATE_CONTRACTS:
+        image = render_state_asset(contract, source)
+        validate_contract_image(contract, image)
+        state_assets.append((contract, image))
     preview_targets = {
         "GFX_ADISCORD_technology_slot",
         "GFX_ADISCORD_technology_idea",
@@ -522,6 +654,7 @@ def expected_outputs() -> dict[Path, bytes]:
     outputs = {
         GUI_OUTPUT: render_gui().encode("utf-8"),
         GFX_OUTPUT: render_gfx().encode("utf-8"),
+        STATE_GFX_OUTPUT: expected_technology_state_gfx_bytes(),
         PREVIEW: _png_bytes(
             contact_sheet(
                 [
@@ -532,9 +665,24 @@ def expected_outputs() -> dict[Path, bytes]:
                 580,
             )
         ),
+        TREE_PREVIEW: _png_bytes(
+            contact_sheet(
+                [
+                    (contract.target_name, image)
+                    for contract, image in state_assets
+                ],
+                580,
+            )
+        ),
     }
     outputs.update(
         {OUTPUT_DIR / contract.filename: dds_bytes(image) for contract, image in assets}
+    )
+    outputs.update(
+        {
+            OUTPUT_DIR / contract.filename: dds_bytes(image)
+            for contract, image in state_assets
+        }
     )
     return outputs
 

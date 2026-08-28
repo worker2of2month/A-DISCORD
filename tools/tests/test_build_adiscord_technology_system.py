@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import json
 import re
+import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from tools.builders import build_adiscord_technology_system as generator
+from tools.builders import build_adiscord_technology_ui_assets as ui_builder
 from tools.validators import validate_adiscord_tech_doctrine as validator
 
 
@@ -26,6 +29,21 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 flags=re.DOTALL,
             )
         }
+
+    def test_system_builder_checks_ui_owned_state_gfx_snapshot_read_only(self) -> None:
+        expected = ui_builder.expected_technology_state_gfx_bytes()
+        self.assertEqual(generator.expected_technology_state_gfx_bytes(), expected)
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "zz_ADISCORD_technology_states.gfx"
+            path.write_bytes(expected)
+            before = path.read_bytes()
+            with patch.object(generator, "TECHNOLOGY_STATE_GFX", path):
+                generator.ensure_technology_state_gfx_current()
+                self.assertEqual(path.read_bytes(), before)
+                path.write_bytes(b"drifted state declaration\n")
+                with self.assertRaisesRegex(RuntimeError, "technology state GFX is stale"):
+                    generator.ensure_technology_state_gfx_current()
+                self.assertEqual(path.read_bytes(), b"drifted state declaration\n")
 
     def test_legacy_manifest_covers_the_pre_redesign_tree(self) -> None:
         payload = json.loads(LEGACY_MANIFEST.read_text(encoding="utf-8"))

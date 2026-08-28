@@ -17,6 +17,14 @@ PREVIEW = (
     ROOT
     / "gfx/interface/technology/preview/ADISCORD_technology_overview_preview.png"
 )
+STATE_GFX = ROOT / "interface/zz_ADISCORD_technology_states.gfx"
+EXPECTED_STATES = {
+    "GFX_technology_unavailable_item_bg": ((183, 84), 1),
+    "GFX_technology_available_item_bg": ((183, 84), 1),
+    "GFX_technology_researched_item_bg": ((183, 84), 1),
+    "GFX_technology_branch_item_bg": ((183, 84), 1),
+    "GFX_technology_currently_researching_item_bg": ((1647, 84), 9),
+}
 LEGACY_GENERIC_ROLES = (
     "window",
     "panel",
@@ -159,7 +167,7 @@ class TechnologyUiContractTests(unittest.TestCase):
         self.assertGreater(mean_luminance(top, (25, 25, 523, 195)), tree_value + 12)
         self.assertGreater(mean_luminance(info, (25, 25, 483, 492)), tree_value + 12)
 
-    def test_tree_skin_uses_tree_and_detail_roles_without_node_state_overrides(self) -> None:
+    def test_tree_skin_uses_tree_and_detail_roles(self) -> None:
         gui = (ROOT / "interface/countrytechtreeview.gui").read_text(
             encoding="utf-8-sig"
         )
@@ -167,18 +175,101 @@ class TechnologyUiContractTests(unittest.TestCase):
         self.assertEqual(gui.count('"GFX_ADISCORD_technology_info_top"'), 2)
         self.assertEqual(gui.count('"GFX_ADISCORD_technology_info"'), 2)
         self.assertNotIn('"GFX_ADISCORD_technology_tree_panel"', gui)
-        gfx = "\n".join(
-            path.read_text(encoding="utf-8-sig")
-            for path in (GFX, ROOT / "interface/ADISCORD_technologies.gfx")
+
+    def test_state_overrides_are_additive_late_loaded_and_single_owner(self) -> None:
+        self.assertTrue(STATE_GFX.is_file())
+        self.assertFalse((ROOT / "interface/countrytechtreeview.gfx").exists())
+        self.assertGreater(STATE_GFX.name.lower(), "countrytechtreeview.gfx")
+
+        state_text = STATE_GFX.read_text(encoding="utf-8-sig")
+        declared = re.findall(r'name\s*=\s*"(GFX_technology_[^"]+_item_bg)"', state_text)
+        self.assertEqual(set(declared), set(EXPECTED_STATES))
+        self.assertEqual(len(declared), len(EXPECTED_STATES))
+        for engine_state in EXPECTED_STATES:
+            declaration = re.compile(
+                rf'name\s*=\s*"{re.escape(engine_state)}"'
+            )
+            owners = [
+                path
+                for path in (ROOT / "interface").glob("*.gfx")
+                if declaration.search(path.read_text(encoding="utf-8-sig"))
+            ]
+            self.assertEqual(owners, [STATE_GFX], engine_state)
+
+    def test_technology_states_preserve_engine_names_dimensions_and_metadata(self) -> None:
+        contracts = {
+            item.target_name: item for item in builder.TECHNOLOGY_STATE_CONTRACTS
+        }
+        for name, (size, frames) in EXPECTED_STATES.items():
+            with self.subTest(sprite=name):
+                self.assertEqual(contracts[name].total_size, size)
+                self.assertEqual(contracts[name].frames, frames)
+                self.assertIsNone(contracts[name].effect_file)
+
+        for name in EXPECTED_STATES.keys() - {
+            "GFX_technology_currently_researching_item_bg"
+        }:
+            self.assertEqual(contracts[name].kind, "spriteType")
+            self.assertEqual(contracts[name].extra_lines, ())
+        researching = contracts["GFX_technology_currently_researching_item_bg"]
+        self.assertEqual(researching.kind, "frameAnimatedSpriteType")
+        self.assertEqual(
+            researching.extra_lines,
+            (
+                'loadType = "INGAME"',
+                "transparencecheck = yes",
+                "animation_rate_fps = 15",
+                "looping = yes",
+                "play_on_show = yes",
+                "pause_on_loop = 0.0",
+            ),
         )
-        for engine_state in (
-            "GFX_technology_unavailable_item_bg",
-            "GFX_technology_available_item_bg",
-            "GFX_technology_currently_researching_item_bg",
-            "GFX_technology_researched_item_bg",
-        ):
-            self.assertNotIn(f'name = "{engine_state}"', gfx)
-        self.assertFalse((ROOT / "interface/zz_ADISCORD_technology_states.gfx").exists())
+
+    def test_node_states_share_geometry_and_use_only_muted_edge_status_identity(self) -> None:
+        outputs = builder.expected_outputs()
+        filenames = {
+            "unavailable": "ADISCORD_technology_node_unavailable.dds",
+            "available": "ADISCORD_technology_node_available.dds",
+            "researched": "ADISCORD_technology_node_researched.dds",
+            "branch": "ADISCORD_technology_node_branch.dds",
+        }
+        images = {
+            state: Image.open(io.BytesIO(outputs[ASSET_DIR / filename])).convert("RGBA")
+            for state, filename in filenames.items()
+        }
+        shared_interior = images["unavailable"].crop((8, 8, 175, 67)).tobytes()
+        for state, image in images.items():
+            with self.subTest(state=state):
+                self.assertEqual(image.crop((8, 8, 175, 67)).tobytes(), shared_interior)
+                self.assertEqual(image.size, (183, 84))
+
+        unavailable_edge = images["unavailable"].getpixel((3, 3))[:3]
+        self.assertLessEqual(max(unavailable_edge) - min(unavailable_edge), 8)
+        available_edge = images["available"].getpixel((3, 3))[:3]
+        self.assertGreater(available_edge[0], available_edge[1])
+        self.assertGreater(available_edge[1], available_edge[2])
+        researched_edge = images["researched"].getpixel((3, 3))[:3]
+        self.assertGreater(researched_edge[1], researched_edge[0] + 20)
+        self.assertGreater(researched_edge[1], researched_edge[2] + 12)
+
+        researching_path = ASSET_DIR / "ADISCORD_technology_node_researching.dds"
+        strip = Image.open(io.BytesIO(outputs[researching_path])).convert("RGBA")
+        frame_interiors = []
+        bright_segments = []
+        for index in range(9):
+            frame = strip.crop((183 * index, 0, 183 * (index + 1), 84))
+            frame_interiors.append(frame.crop((8, 8, 175, 67)).tobytes())
+            bright_segments.append(
+                tuple(
+                    x
+                    for x in range(183)
+                    if frame.getpixel((x, 3))[1] > 140
+                    and frame.getpixel((x, 3))[2] > 140
+                )
+            )
+        self.assertEqual(len(set(frame_interiors)), 1)
+        self.assertTrue(all(bright_segments))
+        self.assertEqual(len(set(bright_segments)), 9)
 
     def test_obsolete_generic_technology_surfaces_are_unreferenced_and_removed(self) -> None:
         combined = "\n".join(

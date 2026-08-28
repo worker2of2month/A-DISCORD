@@ -205,6 +205,26 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
             <= set(entry["source_inputs"]),
             "tree GUI/GFX generation imports the technology UI skin and helpers",
         )
+        state_outputs = {
+            "interface/zz_ADISCORD_technology_states.gfx",
+            "gfx/interface/technology/ui/ADISCORD_technology_node_unavailable.dds",
+            "gfx/interface/technology/ui/ADISCORD_technology_node_available.dds",
+            "gfx/interface/technology/ui/ADISCORD_technology_node_researched.dds",
+            "gfx/interface/technology/ui/ADISCORD_technology_node_branch.dds",
+            "gfx/interface/technology/ui/ADISCORD_technology_node_researching.dds",
+            "gfx/interface/technology/preview/ADISCORD_technology_tree_preview.png",
+        }
+        self.assertTrue(
+            state_outputs <= set(self.entries["technology_screen_ui_assets"]["output_globs"])
+        )
+        self.assertTrue(state_outputs.isdisjoint(entry["output_globs"]))
+        for output in state_outputs:
+            owners = {
+                family_id
+                for family_id, candidate in self.entries.items()
+                if any(fnmatchcase(output, pattern) for pattern in candidate["output_globs"])
+            }
+            self.assertEqual(owners, {"technology_screen_ui_assets"}, output)
 
     def test_party_texticon_registry_exactly_matches_assets_and_is_exclusive(self) -> None:
         entry = self.entries["party_texticons"]

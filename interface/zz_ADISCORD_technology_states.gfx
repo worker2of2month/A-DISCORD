@@ -1,0 +1,34 @@
+spriteTypes = {
+    spriteType = {
+        name = "GFX_technology_unavailable_item_bg"
+        size = { x = 183 y = 84 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_node_unavailable.dds"
+    }
+    spriteType = {
+        name = "GFX_technology_available_item_bg"
+        size = { x = 183 y = 84 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_node_available.dds"
+    }
+    spriteType = {
+        name = "GFX_technology_researched_item_bg"
+        size = { x = 183 y = 84 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_node_researched.dds"
+    }
+    spriteType = {
+        name = "GFX_technology_branch_item_bg"
+        size = { x = 183 y = 84 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_node_branch.dds"
+    }
+    frameAnimatedSpriteType = {
+        name = "GFX_technology_currently_researching_item_bg"
+        size = { x = 1647 y = 84 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_node_researching.dds"
+        noOfFrames = 9
+        loadType = "INGAME"
+        transparencecheck = yes
+        animation_rate_fps = 15
+        looping = yes
+        play_on_show = yes
+        pause_on_loop = 0.0
+    }
+}

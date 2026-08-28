@@ -450,7 +450,9 @@
       "output_globs": [
         "interface/countrytechnologyview.gui",
         "interface/ADISCORD_technology_ui.gfx",
+        "interface/zz_ADISCORD_technology_states.gfx",
         "gfx/interface/technology/preview/ADISCORD_technology_overview_preview.png",
+        "gfx/interface/technology/preview/ADISCORD_technology_tree_preview.png",
         "gfx/interface/technology/ui/ADISCORD_technology_window_shell.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_content_tile.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_overlay.dds",
@@ -465,7 +467,12 @@
         "gfx/interface/technology/ui/ADISCORD_technology_tree_stripes.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_detail_content_tile.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_info_top.dds",
-        "gfx/interface/technology/ui/ADISCORD_technology_info.dds"
+        "gfx/interface/technology/ui/ADISCORD_technology_info.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_node_unavailable.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_node_available.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_node_researched.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_node_branch.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_node_researching.dds"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_technology_ui_assets.py",

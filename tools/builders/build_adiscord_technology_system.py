@@ -8,12 +8,32 @@ import re
 
 from tools.lib.paths import repository_root
 from tools.builders.build_adiscord_technology_ui_assets import (
+    STATE_GFX_OUTPUT as TECHNOLOGY_STATE_GFX,
     apply_tree_skin,
+    expected_technology_state_gfx_bytes as _ui_expected_technology_state_gfx_bytes,
     technology_tree_gfx_entries,
 )
 
 ROOT = repository_root()
 BASE_GAME = Path(r"Z:\SteamLibrary\steamapps\common\Hearts of Iron IV")
+
+
+def expected_technology_state_gfx_bytes() -> bytes:
+    """Share the UI builder's canonical state declaration without owning it."""
+    return _ui_expected_technology_state_gfx_bytes()
+
+
+def ensure_technology_state_gfx_current() -> None:
+    """Reject state declaration drift without writing the UI-owned output."""
+    expected = expected_technology_state_gfx_bytes()
+    if (
+        not TECHNOLOGY_STATE_GFX.is_file()
+        or TECHNOLOGY_STATE_GFX.read_bytes() != expected
+    ):
+        raise RuntimeError(
+            "technology state GFX is stale; run "
+            "python -B -m tools.builders.build_adiscord_technology_ui_assets --apply"
+        )
 # The campaign starts in 2160. Keep only a short recovered baseline before
 # that date, place the overwhelming majority of research in the playable
 # 2160-2175 window, and leave one small 2180 endgame generation. This follows
@@ -5845,6 +5865,7 @@ def write_technology_migration_manifest() -> None:
 
 
 def apply() -> None:
+    ensure_technology_state_gfx_current()
     all_ids = [tech.id for branch in BRANCHES for tech in branch.techs]
     duplicates = sorted({tech_id for tech_id in all_ids if all_ids.count(tech_id) > 1})
     if duplicates:
@@ -5871,6 +5892,7 @@ def main() -> int:
     if args.apply:
         apply()
         return 0
+    ensure_technology_state_gfx_current()
     from tools.validators.validate_adiscord_tech_doctrine import main as validate_main
 
     return validate_main()
