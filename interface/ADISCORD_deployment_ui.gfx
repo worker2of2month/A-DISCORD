@@ -3,28 +3,130 @@ spriteTypes = {
         name = "GFX_ADISCORD_deployment_window"
         size = { x = 192 y = 192 }
         textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_window.dds"
-        borderSize = { x = 32 y = 32 }
+        borderSize = { x = 64 y = 64 }
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
         tilingCenter = yes
     }
     corneredTileSpriteType = {
-        name = "GFX_ADISCORD_deployment_panel"
+        name = "GFX_ADISCORD_deployment_shell"
         size = { x = 192 y = 192 }
-        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_panel.dds"
-        borderSize = { x = 24 y = 24 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_shell.dds"
+        borderSize = { x = 64 y = 64 }
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
         tilingCenter = yes
     }
     corneredTileSpriteType = {
+        name = "GFX_ADISCORD_deployment_thin_shell"
+        size = { x = 192 y = 192 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_thin_shell.dds"
+        borderSize = { x = 64 y = 64 }
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+        tilingCenter = yes
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_deployment_overlay"
+        size = { x = 549 y = 600 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_overlay.dds"
+        borderSize = { x = 268 y = 268 }
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+        alwaysTransparent = yes
+        tilingCenter = yes
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_deployment_small_panel"
+        size = { x = 48 y = 48 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_small_panel.dds"
+        borderSize = { x = 16 y = 16 }
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+        tilingCenter = yes
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_deployment_transparent"
+        size = { x = 3 y = 3 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_transparent.dds"
+        borderSize = { x = 1 y = 1 }
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_deployment_header"
+        size = { x = 375 y = 101 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_header.dds"
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_deployment_icon_well"
+        size = { x = 77 y = 40 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_icon_well.dds"
+        borderSize = { x = 16 y = 16 }
+        alwaysTransparent = yes
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_deployment_reinforcement_row"
+        size = { x = 493 y = 57 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_reinforcement_row.dds"
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_deployment_supply_row"
+        size = { x = 493 y = 57 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_supply_row.dds"
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_deployment_upgrade_row"
+        size = { x = 493 y = 57 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_upgrade_row.dds"
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_deployment_garrison_row"
+        size = { x = 493 y = 57 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_garrison_row.dds"
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_deployment_operations_row"
+        size = { x = 493 y = 57 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_operations_row.dds"
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+    }
+    spriteType = {
         name = "GFX_ADISCORD_deployment_template"
-        size = { x = 512 y = 64 }
+        size = { x = 346 y = 78 }
         textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_template.dds"
-        borderSize = { x = 12 y = 12 }
-        tilingCenter = yes
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
     }
-    corneredTileSpriteType = {
+    spriteType = {
+        name = "GFX_ADISCORD_deployment_template_obsolete"
+        size = { x = 348 y = 79 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_template_obsolete.dds"
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_deployment_conveyor"
+        size = { x = 490 y = 84 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_conveyor.dds"
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+    }
+    spriteType = {
         name = "GFX_ADISCORD_deployment_line"
-        size = { x = 512 y = 96 }
+        size = { x = 514 y = 40 }
         textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_line.dds"
-        borderSize = { x = 14 y = 14 }
-        tilingCenter = yes
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_deployment_end_line"
+        size = { x = 518 y = 40 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_end_line.dds"
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_deployment_priority_title"
+        size = { x = 159 y = 26 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_priority_title.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_deployment_priority_meter"
+        size = { x = 108 y = 33 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_priority_meter.dds"
     }
 }

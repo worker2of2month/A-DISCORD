@@ -1,3 +1,23 @@
+# semantic deployment asset: "GFX_ADISCORD_deployment_window"
+# semantic deployment asset: "GFX_ADISCORD_deployment_shell"
+# semantic deployment asset: "GFX_ADISCORD_deployment_thin_shell"
+# semantic deployment asset: "GFX_ADISCORD_deployment_overlay"
+# semantic deployment asset: "GFX_ADISCORD_deployment_small_panel"
+# semantic deployment asset: "GFX_ADISCORD_deployment_transparent"
+# semantic deployment asset: "GFX_ADISCORD_deployment_header"
+# semantic deployment asset: "GFX_ADISCORD_deployment_icon_well"
+# semantic deployment asset: "GFX_ADISCORD_deployment_reinforcement_row"
+# semantic deployment asset: "GFX_ADISCORD_deployment_supply_row"
+# semantic deployment asset: "GFX_ADISCORD_deployment_upgrade_row"
+# semantic deployment asset: "GFX_ADISCORD_deployment_garrison_row"
+# semantic deployment asset: "GFX_ADISCORD_deployment_operations_row"
+# semantic deployment asset: "GFX_ADISCORD_deployment_template"
+# semantic deployment asset: "GFX_ADISCORD_deployment_template_obsolete"
+# semantic deployment asset: "GFX_ADISCORD_deployment_conveyor"
+# semantic deployment asset: "GFX_ADISCORD_deployment_line"
+# semantic deployment asset: "GFX_ADISCORD_deployment_end_line"
+# semantic deployment asset: "GFX_ADISCORD_deployment_priority_title"
+# semantic deployment asset: "GFX_ADISCORD_deployment_priority_meter"
 guiTypes = {
 
 	containerWindowType = {
@@ -14,7 +34,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			quadTextureSprite ="GFX_ADISCORD_deployment_panel"
+			quadTextureSprite ="GFX_ADISCORD_deployment_shell"
 		}
 
 		iconType ={
@@ -64,7 +84,7 @@ guiTypes = {
 
 				background = {
 					name = "Background"
-					quadTextureSprite ="GFX_ADISCORD_deployment_panel"
+					quadTextureSprite ="GFX_ADISCORD_deployment_overlay"
 				}
 
 				gridboxtype = {
@@ -103,12 +123,12 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			quadTextureSprite ="GFX_ADISCORD_deployment_panel"
+			quadTextureSprite ="GFX_ADISCORD_deployment_thin_shell"
 		}
 
 		iconType = {
 			name = "template_header_bg"
-			spriteType = "GFX_ADISCORD_deployment_panel"
+			spriteType = "GFX_ADISCORD_deployment_header"
 			position = { x = 1 y = 0 }
 		}
 
@@ -151,7 +171,7 @@ guiTypes = {
 
 			background = {
 				name = "Background"
-				quadTextureSprite ="GFX_ADISCORD_deployment_panel"
+				quadTextureSprite ="GFX_ADISCORD_deployment_transparent"
 			}
 
 			gridboxtype = {
@@ -171,7 +191,7 @@ guiTypes = {
 
 			background = {
 				name = "Background"
-				quadTextureSprite ="GFX_ADISCORD_deployment_panel"
+				quadTextureSprite ="GFX_ADISCORD_deployment_small_panel"
 			}
 
 			buttonType = {
@@ -237,7 +257,7 @@ guiTypes = {
 
 				background = {
 					name = "Background"
-					quadTextureSprite ="GFX_ADISCORD_deployment_panel"
+					quadTextureSprite ="GFX_ADISCORD_deployment_thin_shell"
 					position = { x = 0 y = 0 }
 				}
 
@@ -266,7 +286,7 @@ guiTypes = {
 
 			background = {
 				name = "Background"
-				spriteType ="GFX_ADISCORD_deployment_panel"
+				spriteType ="GFX_ADISCORD_deployment_thin_shell"
 			}
 
 			buttonType = {
@@ -358,7 +378,7 @@ guiTypes = {
 
 		background = {
 			name = "Background_obsolete"
-			quadTextureSprite ="GFX_ADISCORD_deployment_template"
+			quadTextureSprite ="GFX_ADISCORD_deployment_template_obsolete"
 			position = { x=-5 y=0 }
 		}
 
@@ -498,13 +518,13 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			quadTextureSprite ="GFX_ADISCORD_deployment_line"
+			quadTextureSprite ="GFX_ADISCORD_deployment_reinforcement_row"
 			position = { x = 0 y = -5}
 		}
 
 		iconType = {
 			name = "deploy_icon_tiled_bg"
-			quadTextureSprite = "GFX_ADISCORD_deployment_panel"
+			quadTextureSprite = "GFX_ADISCORD_deployment_icon_well"
 			position = { x = 10 y = 4}
 		}
 
@@ -531,7 +551,7 @@ guiTypes = {
 
 		background = {
 			name = "deploy_priority_title_bg"
-			spriteType = "GFX_ADISCORD_deployment_panel"
+			spriteType = "GFX_ADISCORD_deployment_priority_title"
 			alwaystransparent = no
 			position = { x = 110 y = 12 }
 			alwaystransparent = yes
@@ -553,7 +573,7 @@ guiTypes = {
 
 		background = {
 			name = "deploy_priority_equipment_meter_bg"
-			spriteType = "GFX_ADISCORD_deployment_panel"
+			spriteType = "GFX_ADISCORD_deployment_priority_meter"
 			alwaystransparent = no
 			position = { x = 280 y = 10 }
 		}
@@ -593,13 +613,13 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			quadTextureSprite ="GFX_ADISCORD_deployment_line"
+			quadTextureSprite ="GFX_ADISCORD_deployment_supply_row"
 			position = { x = 0 y = -5}
 		}
 
 		iconType = {
 			name = "deploy_icon_tiled_bg"
-			quadTextureSprite = "GFX_ADISCORD_deployment_panel"
+			quadTextureSprite = "GFX_ADISCORD_deployment_icon_well"
 			position = { x = 10 y = 6}
 		}
 
@@ -625,7 +645,7 @@ guiTypes = {
 
 		background = {
 			name = "deploy_priority_title_bg"
-			spriteType = "GFX_ADISCORD_deployment_panel"
+			spriteType = "GFX_ADISCORD_deployment_priority_title"
 			alwaystransparent = no
 			position = { x = 110 y = 12 }
 			alwaystransparent = yes
@@ -647,7 +667,7 @@ guiTypes = {
 
 		background = {
 			name = "deploy_priority_equipment_meter_bg"
-			spriteType = "GFX_ADISCORD_deployment_panel"
+			spriteType = "GFX_ADISCORD_deployment_priority_meter"
 			alwaystransparent = no
 			position = { x = 280 y = 11 }
 		}
@@ -686,7 +706,7 @@ guiTypes = {
 
 		background = {
 			name = "background"
-			quadTextureSprite ="GFX_ADISCORD_deployment_line"
+			quadTextureSprite ="GFX_ADISCORD_deployment_end_line"
 		}
 
 		buttonType = {
@@ -797,7 +817,7 @@ guiTypes = {
 
 				background = {
 					name = "Background"
-					quadTextureSprite ="GFX_ADISCORD_deployment_panel"
+					quadTextureSprite ="GFX_ADISCORD_deployment_thin_shell"
 					position = { x = 0 y = 0 }
 				}
 
@@ -911,7 +931,7 @@ guiTypes = {
 
 		background = {
 			name = "background"
-			quadTextureSprite ="GFX_ADISCORD_deployment_line"
+			quadTextureSprite ="GFX_ADISCORD_deployment_conveyor"
 		}
 
 		iconType = {
