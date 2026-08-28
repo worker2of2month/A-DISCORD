@@ -1,30 +1,104 @@
 spriteTypes = {
     corneredTileSpriteType = {
-        name = "GFX_ADISCORD_intelligence_window"
+        name = "GFX_ADISCORD_intelligence_window_shell"
+        size = { x = 317 y = 444 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_window_shell.dds"
+        borderSize = { x = 64 y = 222 }
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_intelligence_content_tile"
         size = { x = 192 y = 192 }
-        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_window.dds"
-        borderSize = { x = 32 y = 32 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_content_tile.dds"
+        borderSize = { x = 64 y = 64 }
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
         tilingCenter = yes
     }
     corneredTileSpriteType = {
-        name = "GFX_ADISCORD_intelligence_panel"
+        name = "GFX_ADISCORD_intelligence_paper_tile"
         size = { x = 192 y = 192 }
-        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_panel.dds"
-        borderSize = { x = 24 y = 24 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_paper_tile.dds"
+        borderSize = { x = 64 y = 64 }
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
         tilingCenter = yes
     }
     corneredTileSpriteType = {
-        name = "GFX_ADISCORD_intelligence_card"
-        size = { x = 256 y = 72 }
-        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_card.dds"
-        borderSize = { x = 12 y = 12 }
-        tilingCenter = yes
+        name = "GFX_ADISCORD_intelligence_transparent_tile"
+        size = { x = 3 y = 3 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_transparent_tile.dds"
+        borderSize = { x = 1 y = 1 }
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
     }
     corneredTileSpriteType = {
-        name = "GFX_ADISCORD_intelligence_selected"
-        size = { x = 256 y = 72 }
-        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_selected.dds"
-        borderSize = { x = 12 y = 12 }
-        tilingCenter = yes
+        name = "GFX_ADISCORD_intelligence_cost_tile"
+        size = { x = 40 y = 50 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_cost_tile.dds"
+        borderSize = { x = 8 y = 8 }
+        alwaysTransparent = yes
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_header"
+        size = { x = 519 y = 109 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_header.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_create"
+        size = { x = 508 y = 99 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_create.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_branches_popup"
+        size = { x = 1092 y = 91 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_branches_popup.dds"
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_branch_row"
+        size = { x = 1040 y = 136 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_branch_row.dds"
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_operatives"
+        size = { x = 522 y = 76 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_operatives.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_tabs"
+        size = { x = 524 y = 53 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_tabs.dds"
+        noOfFrames = 2
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_operation_row"
+        size = { x = 1038 y = 89 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_operation_row.dds"
+        noOfFrames = 2
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_crypto_row"
+        size = { x = 516 y = 87 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_crypto_row.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_crypto_selected"
+        size = { x = 516 y = 87 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_crypto_selected.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_required"
+        size = { x = 33 y = 29 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_required.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_add_operative"
+        size = { x = 61 y = 83 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_add_operative.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_mission_bar"
+        size = { x = 402 y = 79 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_mission_bar.dds"
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
     }
 }

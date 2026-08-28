@@ -14,7 +14,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			spriteType ="GFX_ADISCORD_intelligence_panel"
+			spriteType ="GFX_ADISCORD_intelligence_content_tile"
 		}
 
 		iconType = {
@@ -178,7 +178,7 @@ guiTypes = {
 			buttonType = {
 				name = "creation_button"
 				position = { x = 10 y =41 }
-				quadTextureSprite ="GFX_ADISCORD_intelligence_card"
+				quadTextureSprite ="GFX_ADISCORD_intelligence_create"
 				buttonFont = "hoi_18mbs"
 				Orientation = "LOWER_LEFT"
 				buttonText = "CREATE_AGENCY_BUTTON"
@@ -252,7 +252,7 @@ guiTypes = {
 
 			iconType = {
 				name = "title_bg"
-				spriteType ="GFX_intel_header_bg"
+				spriteType ="GFX_ADISCORD_intelligence_header"
 				position = { x = 0	y = 3 }
 			}
 
@@ -307,7 +307,7 @@ guiTypes = {
 
 			iconType = {
 				name = "title_bg"
-				spriteType ="GFX_intel_header_bg"
+				spriteType ="GFX_ADISCORD_intelligence_header"
 				position = { x = 0	y = 3 }
 			}
 
@@ -321,7 +321,7 @@ guiTypes = {
 
 			iconType = {
 				name = "operatives_bg"
-				spriteType ="GFX_ADISCORD_intelligence_panel"
+				spriteType ="GFX_ADISCORD_intelligence_operatives"
 				position = { x = 3	y = 42 }
 			}
 
@@ -498,7 +498,7 @@ guiTypes = {
 
 			background = {
 				name = "Background"
-				spriteType ="GFX_ADISCORD_intelligence_panel"
+				spriteType ="GFX_ADISCORD_intelligence_paper_tile"
 			}
 			##made this window as a container for the zero-state of the operations list
 			##TODO put in text and polish, hook in code
@@ -524,7 +524,7 @@ guiTypes = {
 
 				background = {
 					name = "Background"
-					spriteType ="GFX_ADISCORD_intelligence_panel"
+					spriteType ="GFX_ADISCORD_intelligence_paper_tile"
 				}
 
 				# Scrollbar
@@ -533,7 +533,7 @@ guiTypes = {
 				smooth_scrolling = yes
 				background = {
 					name = "Background"
-					#quadTextureSprite ="GFX_ADISCORD_intelligence_window"
+					#quadTextureSprite ="GFX_tiled_window2_1b_border"
 				}
 
 				instantTextboxType = {
@@ -566,7 +566,7 @@ guiTypes = {
 
 			background = {
 				name = "Background"
-				spriteType ="GFX_ADISCORD_intelligence_panel"
+				spriteType ="GFX_ADISCORD_intelligence_paper_tile"
 			}
 
 			iconType = {
@@ -650,7 +650,7 @@ guiTypes = {
 
 					background = {
 						name = "Background"
-						quadTextureSprite = "GFX_ADISCORD_intelligence_panel"
+						quadTextureSprite = "GFX_ADISCORD_intelligence_transparent_tile"
 					}
 
 					gridboxtype = {
@@ -668,20 +668,20 @@ guiTypes = {
 
 		buttonType = {
 			name = "operations_tab_button"
-			quadTextureSprite = "GFX_operations_tab_large"
+			quadTextureSprite = "GFX_ADISCORD_intelligence_tabs"
 			position = { x = 17 y = 400 }
 			buttonText = "OPERATIONS"
 			borderSize = {x = 0 y = 0}
-			font = "hoi4_typewriter16"
+			font = "hoi_18mbs"
 			clicksound = decisions_ui_tab
 		}
 
 		buttonType = {
 			name = "crypto_tab_button"
-			quadTextureSprite = "GFX_operations_tab_large"
+			quadTextureSprite = "GFX_ADISCORD_intelligence_tabs"
 			position = { x = 273 y = 400 }
 			buttonText = "CRYPTOLOGY"
-			font = "hoi4_typewriter16"
+			font = "hoi_18mbs"
 			frame = 2
 			clicksound = decisions_ui_tab
 		}
@@ -762,7 +762,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			quadTextureSprite ="GFX_ADISCORD_intelligence_panel"
+			quadTextureSprite ="GFX_ADISCORD_intelligence_window_shell"
 		}
 
 		buttonType = {
@@ -821,7 +821,7 @@ guiTypes = {
 
 			background = {
 				name = "Background"
-				quadTextureSprite ="GFX_ADISCORD_intelligence_panel"
+				quadTextureSprite ="GFX_ADISCORD_intelligence_paper_tile"
 			}
 
 			gridBoxType = {
@@ -882,7 +882,7 @@ guiTypes = {
 
 		background = {
 			name = "header_bg"
-			spriteType = "GFX_ADISCORD_intelligence_panel"
+			spriteType = "GFX_ADISCORD_intelligence_branches_popup"
 			position = { x = 0 y = 0 }
 		}
 
@@ -929,7 +929,7 @@ guiTypes = {
 
 			background = {
 				name = "Background"
-				spriteType ="GFX_ADISCORD_intelligence_panel"
+				spriteType ="GFX_ADISCORD_intelligence_content_tile"
 			}
 
 			gridboxtype = {
@@ -952,7 +952,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			spriteType = "GFX_ADISCORD_intelligence_card"
+			spriteType = "GFX_ADISCORD_intelligence_branch_row"
 		}
 
 		iconType = {
@@ -1000,7 +1000,7 @@ guiTypes = {
 
 		iconType ={
 			name = "agency_upgrade_cost_background"
-			spriteType = "GFX_ADISCORD_intelligence_card"
+			spriteType = "GFX_ADISCORD_intelligence_cost_tile"
 			position = { x = 162 y = 27 }
 		}
 
@@ -1116,7 +1116,7 @@ guiTypes = {
 
 		iconType = {
 			name = "operation_bg"
-			spriteType = "GFX_ADISCORD_intelligence_card"
+			spriteType = "GFX_ADISCORD_intelligence_operation_row"
 			frame = 1
 		}
 
@@ -1168,7 +1168,7 @@ guiTypes = {
 
 			iconType = {
 				name = "operation_icon"
-				#spriteType = "GFX_ADISCORD_intelligence_card"
+				#spriteType = "GFX_ADISCORD_intelligence_required"
 				position = { x = 0 y = 2 }
 				alwaystransparent = yes
 			}
@@ -1205,7 +1205,7 @@ guiTypes = {
 
 			iconType = {
 				name = "operatives_required_icon"
-				spriteType = "GFX_ADISCORD_intelligence_card"
+				spriteType = "GFX_ADISCORD_intelligence_required"
 				alwaystransparent = yes
 			}
 
@@ -1285,13 +1285,13 @@ guiTypes = {
 
 		iconType = {
 			name = "bg"
-			spriteType ="GFX_ADISCORD_intelligence_card"
+			spriteType ="GFX_ADISCORD_intelligence_crypto_row"
 			position = { x = 0 y = 0 }
 			alwaystransparent = yes
 		}
 		iconType = {
 			name = "selectedbg"
-			spriteType ="GFX_ADISCORD_intelligence_selected"
+			spriteType ="GFX_ADISCORD_intelligence_crypto_selected"
 			position = { x = 0 y = 0 }
 			alwaystransparent = yes
 		}
@@ -1393,8 +1393,8 @@ guiTypes = {
 
 			#iconType = {
 			#	position = {x=-2 y=-5}
-			#	name = "GFX_ADISCORD_intelligence_selected"
-			#	spriteType = "GFX_ADISCORD_intelligence_selected"
+			#	name = "GFX_decrypt_active_bg"
+			#	spriteType = "GFX_decrypt_active_bg"
 			#	alwaystransparent = yes
 
 			#}

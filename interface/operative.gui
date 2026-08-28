@@ -42,7 +42,7 @@ guiTypes = {
 			margin = { top = 2 }
 			background = {
 				name = "Background"
-				spriteType ="GFX_ADISCORD_intelligence_panel"
+				spriteType ="GFX_ADISCORD_intelligence_paper_tile"
 			}
 
 			gridboxtype = {
