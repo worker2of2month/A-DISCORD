@@ -51,6 +51,62 @@ def mean_luminance(image: Image.Image, box: tuple[int, int, int, int]) -> float:
     return ImageStat.Stat(image.convert("L").crop(box)).mean[0]
 
 
+def relative_luminance(rgb: tuple[float, float, float]) -> float:
+    channels = []
+    for value in rgb:
+        normalized = value / 255.0
+        channels.append(
+            normalized / 12.92
+            if normalized <= 0.04045
+            else ((normalized + 0.055) / 1.055) ** 2.4
+        )
+    return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]
+
+
+def black_contrast_ratio(
+    image: Image.Image,
+    box: tuple[int, int, int, int],
+) -> float:
+    return contrast_ratio((0, 0, 0), image, box)
+
+
+def contrast_ratio(
+    foreground: tuple[int, int, int],
+    image: Image.Image,
+    box: tuple[int, int, int, int],
+) -> float:
+    background = ImageStat.Stat(image.convert("RGB").crop(box)).mean
+    foreground_value = relative_luminance(
+        tuple(float(channel) for channel in foreground)
+    )
+    background_value = relative_luminance(tuple(background))
+    return (max(foreground_value, background_value) + 0.05) / (
+        min(foreground_value, background_value) + 0.05
+    )
+
+
+def named_blocks(text: str, block_type: str, name: str) -> tuple[str, ...]:
+    blocks = []
+    marker = re.compile(rf'name\s*=\s*"{re.escape(name)}"')
+    for match in marker.finditer(text):
+        start = text.rfind(f"{block_type} = {{", 0, match.start())
+        if start < 0:
+            raise AssertionError(f"missing {block_type} opener for {name}")
+        opening = text.index("{", start, match.start())
+        depth = 0
+        for offset in range(opening, len(text)):
+            if text[offset] == "{":
+                depth += 1
+            elif text[offset] == "}":
+                depth -= 1
+                if depth == 0:
+                    blocks.append(text[start : offset + 1])
+                    break
+        else:
+            raise AssertionError(f"unclosed {block_type} block for {name}")
+    return tuple(blocks)
+
+
 class TechnologyUiContractTests(unittest.TestCase):
     def test_overview_assets_keep_native_dimensions_frames_and_metadata(self) -> None:
         contracts = {
@@ -158,14 +214,86 @@ class TechnologyUiContractTests(unittest.TestCase):
             18,
         )
 
-    def test_detail_writing_surfaces_are_lighter_than_tree_background(self) -> None:
+    def test_detail_writing_regions_have_absolute_black_text_contrast(self) -> None:
+        outputs = builder.expected_outputs()
+        top = Image.open(io.BytesIO(outputs[builder.INFO_TOP])).convert("RGBA")
+        info = Image.open(io.BytesIO(outputs[builder.INFO])).convert("RGBA")
+        regions = {
+            "title": (top, (40, 15, 490, 39)),
+            "description": (top, (27, 121, 522, 191)),
+            "fixed_info_surface": (info, (25, 230, 483, 492)),
+        }
+        for role, (image, box) in regions.items():
+            with self.subTest(role=role):
+                self.assertGreaterEqual(mean_luminance(image, box), 135.0)
+                self.assertGreaterEqual(black_contrast_ratio(image, box), 5.5)
+
+    def test_detail_writing_regions_keep_textured_cold_steel_dark_hierarchy(self) -> None:
         outputs = builder.expected_outputs()
         tree = Image.open(io.BytesIO(outputs[builder.TREE_WINDOW_TILE])).convert("RGBA")
         top = Image.open(io.BytesIO(outputs[builder.INFO_TOP])).convert("RGBA")
         info = Image.open(io.BytesIO(outputs[builder.INFO])).convert("RGBA")
+        writing_regions = (
+            (top, (40, 15, 490, 39)),
+            (top, (27, 121, 522, 191)),
+            (info, (25, 230, 483, 492)),
+        )
         tree_value = mean_luminance(tree, (20, 20, 170, 170))
-        self.assertGreater(mean_luminance(top, (25, 25, 523, 195)), tree_value + 12)
-        self.assertGreater(mean_luminance(info, (25, 25, 483, 492)), tree_value + 12)
+        self.assertLessEqual(tree_value, 65.0)
+        for image, box in writing_regions:
+            with self.subTest(box=box):
+                crop = image.convert("RGB").crop(box)
+                self.assertGreaterEqual(mean_luminance(image, box), tree_value + 80.0)
+                self.assertGreater(max(ImageStat.Stat(crop).stddev), 2.5)
+        self.assertLessEqual(mean_luminance(top, (0, 0, 548, 7)), 80.0)
+        self.assertLessEqual(mean_luminance(info, (25, 25, 483, 190)), 80.0)
+
+    def test_scrolling_statsareas_use_inverted_font_on_absolute_dark_tile(self) -> None:
+        gui = (ROOT / "interface/countrytechtreeview.gui").read_text(
+            encoding="utf-8-sig"
+        )
+        statsareas = named_blocks(gui, "containerWindowType", "statsarea")
+        self.assertEqual(len(statsareas), 2)
+        for index, block in enumerate(statsareas):
+            with self.subTest(statsarea=index):
+                self.assertEqual(block.count('font = "hoi4_typewriter16_inverted"'), 1)
+                self.assertEqual(
+                    block.count(
+                        'quadTextureSprite ="GFX_ADISCORD_technology_detail_content_tile"'
+                    ),
+                    1,
+                )
+
+        outputs = builder.expected_outputs()
+        detail_tile = Image.open(
+            io.BytesIO(outputs[builder.DETAIL_CONTENT_TILE])
+        ).convert("RGBA")
+        live_crop = (25, 25, 167, 167)
+        self.assertLessEqual(mean_luminance(detail_tile, live_crop), 100.0)
+        self.assertGreaterEqual(
+            contrast_ratio((255, 255, 255), detail_tile, live_crop),
+            4.5,
+        )
+        self.assertGreater(
+            max(ImageStat.Stat(detail_tile.convert("RGB").crop(live_crop)).stddev),
+            2.5,
+        )
+
+    def test_detail_gui_keeps_black_font_bindings_and_geometry(self) -> None:
+        gui = (ROOT / "interface/countrytechtreeview.gui").read_text(
+            encoding="utf-8-sig"
+        )
+        for name, font, position in (
+            ("tech_info_title", "hoi_20bs", "x = 40 y = 15"),
+            ("tech_info_description", "hoi_16mbs", "x = 27 y = 121"),
+        ):
+            pattern = re.compile(
+                rf'name\s*=\s*"{name}"(?:(?!instantTextboxType\s*=).)*?'
+                rf'position\s*=\s*\{{\s*{re.escape(position)}\s*\}}'
+                rf'(?:(?!instantTextboxType\s*=).)*?font\s*=\s*"{font}"',
+                re.DOTALL,
+            )
+            self.assertEqual(len(pattern.findall(gui)), 2, name)
 
     def test_tree_skin_uses_tree_and_detail_roles(self) -> None:
         gui = (ROOT / "interface/countrytechtreeview.gui").read_text(

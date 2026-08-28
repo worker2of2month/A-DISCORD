@@ -252,14 +252,14 @@ guiTypes = {
 
 			iconType = {
 				name = "title_bg"
-				spriteType ="GFX_ADISCORD_intelligence_header"
+				spriteType ="GFX_ADISCORD_intelligence_branches_header"
 				position = { x = 0	y = 3 }
 			}
 
 			instantTextboxType = {
 				name = "agency_branches_title"
 				position = { x = 35 y = 15 }
-				font = "hoi4_typewriter16"
+				font = "hoi_18mbs"
 				text = "AGENCY_BRANCHES"
 				format = left
 			}
@@ -307,14 +307,14 @@ guiTypes = {
 
 			iconType = {
 				name = "title_bg"
-				spriteType ="GFX_ADISCORD_intelligence_header"
+				spriteType ="GFX_ADISCORD_intelligence_agents_header"
 				position = { x = 0	y = 3 }
 			}
 
 			instantTextboxType = {
 				name = "agency_agents_title"
 				position = { x = 35 y = 15 }
-				font = "hoi4_typewriter16"
+				font = "hoi_18mbs"
 				text = "OPERATIVES"
 				format = left
 			}
@@ -539,7 +539,7 @@ guiTypes = {
 				instantTextboxType = {
 					name = "operations_not_active"
 					position = { x = 135 y = 100 }
-					font = "hoi4_typewriter16"
+					font = "hoi_18mbs"
 					text = "OPERATIONS_NOT_ACTIVE"
 					tooltip = "OPERATIONS_NOT_ACTIVE_DESC"
 
@@ -602,7 +602,7 @@ guiTypes = {
 			instantTextboxType = {
 				name = "crypto_not_active"
 				position = { x = 135 y = 100 }
-				font = "hoi4_typewriter16"
+				font = "hoi_18mbs"
 				text = "CRYPTO_NOT_ACTIVE"
 				tooltip = "CRYPTO_NOT_ACTIVE_DESC"
 
@@ -1212,7 +1212,7 @@ guiTypes = {
 			instantTextboxType = {
 				name = "operatives_required_text"
 				position = { x = 36 y = 6 }
-				font = "hoi4_typewriter16"
+				font = "hoi_18mbs"
 				maxWidth = 20
 				maxHeight = 20
 			}
@@ -1231,7 +1231,7 @@ guiTypes = {
 			instantTextboxType = {
 				name = "network_strength_text"
 				position = { x = 36 y = 6 }
-				font = "hoi4_typewriter16"
+				font = "hoi_18mbs"
 				maxWidth = 39
 				maxHeight = 20
 			}

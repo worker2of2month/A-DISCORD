@@ -37,9 +37,14 @@ spriteTypes = {
         alwaysTransparent = yes
     }
     spriteType = {
-        name = "GFX_ADISCORD_intelligence_header"
+        name = "GFX_ADISCORD_intelligence_branches_header"
         size = { x = 519 y = 109 }
-        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_header.dds"
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_branches_header.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_agents_header"
+        size = { x = 519 y = 109 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_agents_header.dds"
     }
     spriteType = {
         name = "GFX_ADISCORD_intelligence_create"

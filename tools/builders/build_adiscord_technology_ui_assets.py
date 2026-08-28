@@ -8,7 +8,7 @@ from io import BytesIO
 from pathlib import Path
 import re
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageEnhance, ImageOps
 
 from tools.lib.adiscord_ui_contracts import (
     SpriteContract,
@@ -54,7 +54,10 @@ MUTED_GOLD = (146, 116, 62, 255)
 NEUTRAL_GREY = (88, 92, 92, 255)
 MUTED_GREEN = (64, 112, 76, 255)
 MUTED_BRANCH = (74, 88, 108, 255)
-COLD_WRITING = (48, 59, 61, 255)
+COLD_WRITING_DARK = (118, 134, 137, 255)
+COLD_WRITING_LIGHT = (225, 234, 235, 255)
+COLD_WRITING_EDGE = (76, 94, 96, 255)
+COLD_WRITING_HIGHLIGHT = (188, 201, 202, 255)
 
 
 TECHNOLOGY_OVERVIEW_CONTRACTS = (
@@ -463,6 +466,42 @@ def _tree_stripes(source: Image.Image) -> Image.Image:
     return output
 
 
+def _cold_steel_surface(
+    source: Image.Image,
+    size: tuple[int, int],
+) -> Image.Image:
+    fitted = ImageOps.fit(
+        source.convert("RGBA"),
+        size,
+        method=Image.Resampling.LANCZOS,
+        centering=(0.5, 0.5),
+    )
+    luminance = ImageEnhance.Contrast(
+        ImageOps.grayscale(fitted.convert("RGB"))
+    ).enhance(1.5)
+    output = ImageOps.colorize(
+        luminance,
+        black=COLD_WRITING_DARK[:3],
+        white=COLD_WRITING_LIGHT[:3],
+    ).convert("RGBA")
+    output.putalpha(255)
+    return output
+
+
+def _cold_steel_panel(
+    output: Image.Image,
+    source: Image.Image,
+    box: tuple[int, int, int, int],
+) -> None:
+    left, top, right, bottom = box
+    panel = _cold_steel_surface(source, (right - left + 1, bottom - top + 1))
+    output.alpha_composite(panel, (left, top))
+    draw = ImageDraw.Draw(output, "RGBA")
+    draw.rectangle(box, outline=COLD_WRITING_EDGE)
+    draw.line((left + 1, top + 1, right - 1, top + 1), fill=COLD_WRITING_HIGHLIGHT)
+    draw.line((left + 1, bottom - 1, right - 1, bottom - 1), fill=COLD_WRITING_EDGE)
+
+
 def _detail_content_tile(source: Image.Image) -> Image.Image:
     palette = PALETTES["technology"]
     output = metal_surface(source, (192, 192), palette, 0.96)
@@ -476,14 +515,12 @@ def _detail_content_tile(source: Image.Image) -> Image.Image:
 
 def _technology_info_top(source: Image.Image) -> Image.Image:
     palette = PALETTES["technology"]
-    output = metal_surface(source, (548, 220), palette, 1.02)
-    wash = Image.new("RGBA", output.size, COLD_WRITING)
-    output = Image.blend(output, wash, 0.34)
-    draw = ImageDraw.Draw(output, "RGBA")
-    draw.rectangle((24, 8, 523, 39), fill=(43, 53, 55, 255), outline=palette.edge)
+    output = metal_surface(source, (548, 220), palette, 0.72)
+    _cold_steel_panel(output, source, (24, 8, 523, 39))
     recessed_well(output, (25, 44, 151, 110), palette)
-    draw.rectangle((165, 47, 525, 108), fill=(41, 51, 53, 255), outline=palette.edge)
-    draw.rectangle((20, 116, 527, 207), fill=(53, 64, 66, 255), outline=palette.edge)
+    _cold_steel_panel(output, source, (165, 47, 525, 108))
+    _cold_steel_panel(output, source, (20, 116, 527, 207))
+    draw = ImageDraw.Draw(output, "RGBA")
     draw.line((24, 120, 523, 120), fill=palette.edge_light)
     status_band(output, (8, 212, 539, 216), palette.accent)
     partial_rails(output, (4, 4, 543, 215), palette)
@@ -492,12 +529,11 @@ def _technology_info_top(source: Image.Image) -> Image.Image:
 
 def _technology_info(source: Image.Image) -> Image.Image:
     palette = PALETTES["technology"]
-    output = metal_surface(source, (508, 517), palette, 1.00)
-    wash = Image.new("RGBA", output.size, COLD_WRITING)
-    output = Image.blend(output, wash, 0.38)
+    output = metal_surface(source, (508, 517), palette, 0.66)
+    _cold_steel_panel(output, source, (16, 216, 491, 505))
     draw = ImageDraw.Draw(output, "RGBA")
-    for y in range(28, 500, 28):
-        draw.line((18, y, 489, y), fill=(74, 91, 92, 65))
+    for y in range(230, 500, 28):
+        draw.line((20, y, 487, y), fill=(103, 120, 122, 255))
     partial_rails(output, (5, 5, 502, 511), palette)
     status_band(output, (8, 8, 499, 11), MUTED_GOLD)
     return output

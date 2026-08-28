@@ -103,8 +103,15 @@ INTELLIGENCE_CONTRACTS = (
     ),
     SpriteContract(
         "GFX_intel_header_bg",
-        "GFX_ADISCORD_intelligence_header",
-        "ADISCORD_intelligence_header.dds",
+        "GFX_ADISCORD_intelligence_branches_header",
+        "ADISCORD_intelligence_branches_header.dds",
+        "spriteType",
+        (519, 109),
+    ),
+    SpriteContract(
+        "GFX_intel_header_bg",
+        "GFX_ADISCORD_intelligence_agents_header",
+        "ADISCORD_intelligence_agents_header.dds",
         "spriteType",
         (519, 109),
     ),
@@ -226,7 +233,6 @@ FILE_REPLACEMENTS = {
             "GFX_ADISCORD_intelligence_transparent_tile",
             1,
         ),
-        "GFX_intel_header_bg": ("GFX_ADISCORD_intelligence_header", 2),
         "GFX_operations_tab_large": ("GFX_ADISCORD_intelligence_tabs", 2),
         "GFX_agency_branch_upgrades_popup_bg": (
             "GFX_ADISCORD_intelligence_branches_popup",
@@ -281,9 +287,51 @@ FONT_REPLACEMENTS = (
 )
 
 
-LEGACY_OUTPUTS = tuple(
-    OUTPUT_DIR / f"ADISCORD_intelligence_{role}.dds"
-    for role in ("window", "panel", "card", "selected")
+HEADER_REPLACEMENTS = (
+    (
+        "agency_branches",
+        "GFX_intel_header_bg",
+        "GFX_ADISCORD_intelligence_branches_header",
+    ),
+    (
+        "agency_agents",
+        "GFX_intel_header_bg",
+        "GFX_ADISCORD_intelligence_agents_header",
+    ),
+)
+
+
+DARK_SURFACE_FONT_REPLACEMENTS = (
+    ("agency_branches", "agency_branches_title", "hoi4_typewriter16", "hoi_18mbs"),
+    ("agency_agents", "agency_agents_title", "hoi4_typewriter16", "hoi_18mbs"),
+    (
+        "operations_grid_container",
+        "operations_not_active",
+        "hoi4_typewriter16",
+        "hoi_18mbs",
+    ),
+    ("agency_crypto", "crypto_not_active", "hoi4_typewriter16", "hoi_18mbs"),
+    (
+        "operation_view_entry",
+        "operatives_required_text",
+        "hoi4_typewriter16",
+        "hoi_18mbs",
+    ),
+    (
+        "operation_view_entry",
+        "network_strength_text",
+        "hoi4_typewriter16",
+        "hoi_18mbs",
+    ),
+)
+
+
+LEGACY_OUTPUTS = (
+    *(
+        OUTPUT_DIR / f"ADISCORD_intelligence_{role}.dds"
+        for role in ("window", "panel", "card", "selected")
+    ),
+    OUTPUT_DIR / "ADISCORD_intelligence_header.dds",
 )
 
 
@@ -299,14 +347,14 @@ def _verified_source(name: str) -> bytes:
     return data
 
 
-def _named_button_bounds(text: str, name: str) -> tuple[int, int]:
+def _named_block_bounds(text: str, block_type: str, name: str) -> tuple[int, int]:
     marker = f'name = "{name}"'
     marker_at = text.find(marker)
     if marker_at < 0:
-        raise ValueError(f"missing intelligence button block: {name}")
-    start = text.rfind("buttonType = {", 0, marker_at)
+        raise ValueError(f"missing intelligence {block_type} block: {name}")
+    start = text.rfind(f"{block_type} = {{", 0, marker_at)
     if start < 0:
-        raise ValueError(f"missing buttonType opener for: {name}")
+        raise ValueError(f"missing {block_type} opener for: {name}")
     opening = text.find("{", start, marker_at)
     depth = 0
     for offset in range(opening, len(text)):
@@ -316,7 +364,20 @@ def _named_button_bounds(text: str, name: str) -> tuple[int, int]:
             depth -= 1
             if depth == 0:
                 return start, offset + 1
-    raise ValueError(f"unclosed intelligence button block: {name}")
+    raise ValueError(f"unclosed intelligence {block_type} block: {name}")
+
+
+def _replace_named_block_value(
+    text: str,
+    block_type: str,
+    name: str,
+    old: str,
+    new: str,
+) -> str:
+    start, end = _named_block_bounds(text, block_type, name)
+    block = text[start:end]
+    replacement = replace_counted(block, old, new, 1)
+    return text[:start] + replacement + text[end:]
 
 
 def _replace_named_button_font(
@@ -325,9 +386,31 @@ def _replace_named_button_font(
     old_font: str,
     new_font: str,
 ) -> str:
-    start, end = _named_button_bounds(text, name)
-    block = text[start:end]
-    replacement = replace_counted(block, old_font, new_font, 1)
+    return _replace_named_block_value(
+        text,
+        "buttonType",
+        name,
+        old_font,
+        new_font,
+    )
+
+
+def _replace_named_container_font(
+    text: str,
+    container_name: str,
+    textbox_name: str,
+    old_font: str,
+    new_font: str,
+) -> str:
+    start, end = _named_block_bounds(text, "containerWindowType", container_name)
+    container = text[start:end]
+    replacement = _replace_named_block_value(
+        container,
+        "instantTextboxType",
+        textbox_name,
+        old_font,
+        new_font,
+    )
     return text[:start] + replacement + text[end:]
 
 
@@ -340,10 +423,28 @@ def render_gui_files() -> dict[Path, bytes]:
         for old, (new, expected) in replacements.items():
             text = replace_counted(text, old, new, expected)
         if name == "countryintelligenceagencyview.gui":
+            for container_name, old, new in HEADER_REPLACEMENTS:
+                text = _replace_named_block_value(
+                    text,
+                    "containerWindowType",
+                    container_name,
+                    old,
+                    new,
+                )
             for block_name, old_font, new_font in FONT_REPLACEMENTS:
                 text = _replace_named_button_font(
                     text,
                     block_name,
+                    old_font,
+                    new_font,
+                )
+            for container_name, textbox_name, old_font, new_font in (
+                DARK_SURFACE_FONT_REPLACEMENTS
+            ):
+                text = _replace_named_container_font(
+                    text,
+                    container_name,
+                    textbox_name,
                     old_font,
                     new_font,
                 )
@@ -353,8 +454,7 @@ def render_gui_files() -> dict[Path, bytes]:
     return outputs
 
 
-def _header(source_art: Image.Image, metal: Image.Image) -> Image.Image:
-    del metal
+def _agents_header(source_art: Image.Image) -> Image.Image:
     palette = PALETTES["intelligence"]
     fitted = ImageOps.fit(
         source_art.convert("RGBA"),
@@ -380,6 +480,36 @@ def _header(source_art: Image.Image, metal: Image.Image) -> Image.Image:
     draw = ImageDraw.Draw(output, "RGBA")
     draw.line((5, 106, 513, 106), fill=palette.edge)
     draw.line((12, 108, 506, 108), fill=palette.accent)
+    return output
+
+
+def _branches_header(metal: Image.Image) -> Image.Image:
+    palette = PALETTES["intelligence"]
+    output = metal_surface(metal, (519, 109), palette, 0.60)
+    overlay = Image.new("RGBA", output.size, (0, 0, 0, 0))
+    draw = ImageDraw.Draw(overlay, "RGBA")
+    draw.rectangle((0, 0, 242, 108), fill=(3, 6, 10, 74))
+    draw.rectangle((242, 0, 518, 108), fill=(6, 11, 17, 35))
+    for x in range(258, 519, 32):
+        draw.line((x, 7, x, 101), fill=(84, 128, 164, 34))
+    for y in range(14, 102, 22):
+        draw.line((250, y, 511, y), fill=(84, 128, 164, 28))
+    route = ((260, 79), (304, 55), (346, 66), (389, 38), (433, 48), (480, 22))
+    draw.line(route, fill=(98, 137, 166, 112), width=2)
+    for x, y in route:
+        draw.ellipse((x - 3, y - 3, x + 3, y + 3), fill=(12, 20, 28, 230), outline=(112, 151, 180, 148))
+    for radius, alpha in ((12, 100), (20, 74), (28, 46)):
+        draw.arc(
+            (451 - radius, 54 - radius, 451 + radius, 54 + radius),
+            205,
+            335,
+            fill=(112, 151, 180, alpha),
+            width=2,
+        )
+    draw.line((451, 54, 484, 79), fill=(112, 151, 180, 116), width=2)
+    output = Image.alpha_composite(output, overlay)
+    partial_rails(output, (5, 5, 513, 105), palette)
+    status_band(output, (8, 106, 510, 108), STEEL_BLUE)
     return output
 
 
@@ -565,8 +695,10 @@ def render_asset(
         return Image.new("RGBA", contract.total_size, (0, 0, 0, 0))
     if target.endswith("cost_tile"):
         return _cost_tile(metal)
-    if target.endswith("intelligence_header"):
-        return _header(source_art, metal)
+    if target.endswith("branches_header"):
+        return _branches_header(metal)
+    if target.endswith("agents_header"):
+        return _agents_header(source_art)
     if target.endswith("intelligence_create"):
         return _create_agency(metal)
     if target.endswith("branches_popup"):
@@ -609,6 +741,24 @@ def _png_bytes(image: Image.Image) -> bytes:
     return stream.getvalue()
 
 
+def _intelligence_preview(
+    assets: list[tuple[SpriteContract, Image.Image]],
+) -> Image.Image:
+    by_target = {contract.target_name: image for contract, image in assets}
+    branch_target = "GFX_ADISCORD_intelligence_branches_header"
+    agents_target = "GFX_ADISCORD_intelligence_agents_header"
+    comparison = Image.new("RGBA", (1046, 109), (30, 34, 38, 255))
+    comparison.alpha_composite(by_target[branch_target], (0, 0))
+    comparison.alpha_composite(by_target[agents_target], (527, 0))
+    entries = [("branches header | agents header", comparison)]
+    entries.extend(
+        (contract.target_name, image)
+        for contract, image in assets
+        if contract.target_name not in {branch_target, agents_target}
+    )
+    return contact_sheet(entries, 1120)
+
+
 def expected_outputs() -> dict[Path, bytes]:
     metal = load_surface_source(METAL_SOURCE)
     source_art = load_surface_source(HEADER_SOURCE, minimum_size=(1024, 512))
@@ -621,12 +771,7 @@ def expected_outputs() -> dict[Path, bytes]:
     outputs.update(
         {
             GFX_OUTPUT: render_gfx().encode("utf-8"),
-            PREVIEW: _png_bytes(
-                contact_sheet(
-                    [(item.target_name, image) for item, image in assets],
-                    1120,
-                )
-            ),
+            PREVIEW: _png_bytes(_intelligence_preview(assets)),
         }
     )
     outputs.update(

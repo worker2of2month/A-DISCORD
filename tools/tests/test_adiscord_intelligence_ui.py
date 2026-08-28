@@ -1,3 +1,4 @@
+import io
 from pathlib import Path
 import re
 import unittest
@@ -20,7 +21,8 @@ OUTPUT_DIR = ROOT / "gfx/interface/intelligence/ui"
 
 
 EXPECTED_FIXED = {
-    "GFX_ADISCORD_intelligence_header": ((519, 109), 1),
+    "GFX_ADISCORD_intelligence_branches_header": ((519, 109), 1),
+    "GFX_ADISCORD_intelligence_agents_header": ((519, 109), 1),
     "GFX_ADISCORD_intelligence_create": ((508, 99), 1),
     "GFX_ADISCORD_intelligence_branches_popup": ((1092, 91), 1),
     "GFX_ADISCORD_intelligence_branch_row": ((1040, 136), 1),
@@ -34,11 +36,49 @@ EXPECTED_FIXED = {
     "GFX_ADISCORD_intelligence_mission_bar": ((402, 79), 1),
 }
 
+DARK_SURFACE_TEXT_ALLOWLIST = (
+    ("agency_branches", "agency_branches_title"),
+    ("agency_agents", "agency_agents_title"),
+    ("operations_grid_container", "operations_not_active"),
+    ("agency_crypto", "crypto_not_active"),
+    ("operation_view_entry", "operatives_required_text"),
+    ("operation_view_entry", "network_strength_text"),
+)
 
-def named_button_block(text: str, name: str) -> str:
+DARK_SURFACE_TEXT_REGIONS = {
+    ("agency_branches", "agency_branches_title"): (
+        "ADISCORD_intelligence_branches_header.dds",
+        (35, 15, 250, 38),
+    ),
+    ("agency_agents", "agency_agents_title"): (
+        "ADISCORD_intelligence_agents_header.dds",
+        (35, 15, 250, 38),
+    ),
+    ("operations_grid_container", "operations_not_active"): (
+        "ADISCORD_intelligence_paper_tile.dds",
+        (64, 64, 160, 140),
+    ),
+    ("agency_crypto", "crypto_not_active"): (
+        "ADISCORD_intelligence_paper_tile.dds",
+        (64, 64, 160, 140),
+    ),
+    ("operation_view_entry", "operatives_required_text"): (
+        "ADISCORD_intelligence_operation_row.dds",
+        (120, 50, 151, 76),
+    ),
+    ("operation_view_entry", "network_strength_text"): (
+        "ADISCORD_intelligence_operation_row.dds",
+        (168, 50, 214, 76),
+    ),
+}
+
+PALE_FONT_RGB = (230, 235, 238)
+
+
+def named_block(text: str, block_type: str, name: str) -> str:
     marker = f'name = "{name}"'
     marker_at = text.index(marker)
-    start = text.rfind("buttonType = {", 0, marker_at)
+    start = text.rfind(f"{block_type} = {{", 0, marker_at)
     opening = text.index("{", start, marker_at)
     depth = 0
     for offset in range(opening, len(text)):
@@ -48,11 +88,43 @@ def named_button_block(text: str, name: str) -> str:
             depth -= 1
             if depth == 0:
                 return text[start : offset + 1]
-    raise AssertionError(f"unclosed button block: {name}")
+    raise AssertionError(f"unclosed {block_type} block: {name}")
+
+
+def named_button_block(text: str, name: str) -> str:
+    return named_block(text, "buttonType", name)
+
+
+def named_textbox_in_container(text: str, container: str, textbox: str) -> str:
+    container_block = named_block(text, "containerWindowType", container)
+    return named_block(container_block, "instantTextboxType", textbox)
 
 
 def mean_luminance(image: Image.Image, box: tuple[int, int, int, int]) -> float:
     return ImageStat.Stat(image.convert("L").crop(box)).mean[0]
+
+
+def relative_luminance(rgb: tuple[float, float, float]) -> float:
+    channels = []
+    for value in rgb:
+        normalized = value / 255.0
+        channels.append(
+            normalized / 12.92
+            if normalized <= 0.04045
+            else ((normalized + 0.055) / 1.055) ** 2.4
+        )
+    return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]
+
+
+def contrast_ratio(
+    foreground: tuple[int, int, int],
+    image: Image.Image,
+    box: tuple[int, int, int, int],
+) -> float:
+    background = ImageStat.Stat(image.convert("RGB").crop(box)).mean
+    light = relative_luminance(tuple(float(value) for value in foreground))
+    dark = relative_luminance(tuple(background))
+    return (max(light, dark) + 0.05) / (min(light, dark) + 0.05)
 
 
 class IntelligenceUiContractTests(unittest.TestCase):
@@ -60,6 +132,7 @@ class IntelligenceUiContractTests(unittest.TestCase):
         contracts = {item.target_name: item for item in builder.INTELLIGENCE_CONTRACTS}
         for name, (size, frames) in EXPECTED_FIXED.items():
             with self.subTest(sprite=name):
+                self.assertIn(name, contracts)
                 self.assertEqual(contracts[name].kind, "spriteType", name)
                 self.assertEqual(contracts[name].total_size, size, name)
                 self.assertEqual(contracts[name].frames, frames, name)
@@ -80,11 +153,9 @@ class IntelligenceUiContractTests(unittest.TestCase):
             self.assertIn(image.mode, ("RGB", "RGBA"))
             self.assertGreaterEqual(image.width, 1024)
             self.assertGreaterEqual(image.height, 512)
-        header = next(
-            item
-            for item in builder.INTELLIGENCE_CONTRACTS
-            if item.target_name.endswith("intelligence_header")
-        )
+        contracts = {item.target_name: item for item in builder.INTELLIGENCE_CONTRACTS}
+        self.assertIn("GFX_ADISCORD_intelligence_agents_header", contracts)
+        header = contracts["GFX_ADISCORD_intelligence_agents_header"]
         self.assertEqual(header.total_size, (519, 109))
 
     def test_dark_agency_tabs_use_a_pale_font(self) -> None:
@@ -94,15 +165,111 @@ class IntelligenceUiContractTests(unittest.TestCase):
             self.assertIn('font = "hoi_18mbs"', block)
             self.assertNotIn("hoi4_typewriter16", block)
 
-    def test_other_typewriter_fonts_are_not_globally_replaced(self) -> None:
+    def test_named_dark_surface_typewriter_allowlist_uses_only_pale_fonts(self) -> None:
+        gui = AGENCY_GUI.read_text(encoding="utf-8-sig")
+        self.assertEqual(
+            tuple(
+                (container, textbox)
+                for container, textbox, _old, _new in getattr(
+                    builder, "DARK_SURFACE_FONT_REPLACEMENTS", ()
+                )
+            ),
+            DARK_SURFACE_TEXT_ALLOWLIST,
+        )
+        for container, textbox in DARK_SURFACE_TEXT_ALLOWLIST:
+            with self.subTest(container=container, textbox=textbox):
+                block = named_textbox_in_container(gui, container, textbox)
+                self.assertIn('font = "hoi_18mbs"', block)
+                self.assertNotIn("hoi4_typewriter16", block)
+
+    def test_only_allowlisted_dark_surface_and_tab_fonts_change(self) -> None:
         vanilla = builder._verified_source("countryintelligenceagencyview.gui").decode(
             "utf-8-sig"
         )
         generated = builder.render_gui_files()[AGENCY_GUI].decode("utf-8")
+        vanilla_fonts = re.findall(r'(?m)^\s*font\s*=\s*"[^"]+"', vanilla)
+        generated_fonts = re.findall(r'(?m)^\s*font\s*=\s*"[^"]+"', generated)
+        self.assertEqual(len(vanilla_fonts), len(generated_fonts))
+        changed = [
+            (before.strip(), after.strip())
+            for before, after in zip(vanilla_fonts, generated_fonts, strict=True)
+            if before != after
+        ]
         self.assertEqual(
-            generated.count('font = "hoi4_typewriter16"'),
-            vanilla.count('font = "hoi4_typewriter16"') - 2,
+            changed,
+            [('font = "hoi4_typewriter16"', 'font = "hoi_18mbs"')] * 8,
         )
+
+    def test_light_vanilla_branch_upgrade_labels_keep_black_typewriter_font(self) -> None:
+        gui = AGENCY_GUI.read_text(encoding="utf-8-sig")
+        upgrade_button = named_block(gui, "containerWindowType", "upgrade_button")
+        self.assertIn('spriteType = "GFX_agency_branch_upgrade_button"', upgrade_button)
+        for textbox in ("agency_branches_title", "opportunities"):
+            with self.subTest(textbox=textbox):
+                block = named_block(upgrade_button, "instantTextboxType", textbox)
+                self.assertIn('font = "hoi4_typewriter16"', block)
+                self.assertNotIn('font = "hoi_18mbs"', block)
+
+    def test_allowlisted_dark_surface_text_has_absolute_pale_font_contrast(self) -> None:
+        self.assertEqual(set(DARK_SURFACE_TEXT_REGIONS), set(DARK_SURFACE_TEXT_ALLOWLIST))
+        for role, (filename, box) in DARK_SURFACE_TEXT_REGIONS.items():
+            path = OUTPUT_DIR / filename
+            self.assertTrue(path.is_file(), path)
+            with Image.open(path) as source:
+                image = source.convert("RGBA")
+            with self.subTest(role=role):
+                self.assertLessEqual(mean_luminance(image, box), 65.0)
+                self.assertGreaterEqual(
+                    contrast_ratio(PALE_FONT_RGB, image, box),
+                    7.0,
+                )
+
+    def test_branch_and_agent_containers_bind_distinct_native_headers(self) -> None:
+        gui = AGENCY_GUI.read_text(encoding="utf-8-sig")
+        expected = {
+            "agency_branches": "GFX_ADISCORD_intelligence_branches_header",
+            "agency_agents": "GFX_ADISCORD_intelligence_agents_header",
+        }
+        for container, target in expected.items():
+            block = named_block(gui, "containerWindowType", container)
+            with self.subTest(container=container):
+                self.assertEqual(block.count(f'"{target}"'), 1)
+                self.assertNotIn('"GFX_ADISCORD_intelligence_header"', block)
+        self.assertEqual(gui.count('"GFX_ADISCORD_intelligence_branches_header"'), 1)
+        self.assertEqual(gui.count('"GFX_ADISCORD_intelligence_agents_header"'), 1)
+
+    def test_branch_header_is_procedural_and_visibly_distinct_from_agent_art(self) -> None:
+        paths = (
+            OUTPUT_DIR / "ADISCORD_intelligence_branches_header.dds",
+            OUTPUT_DIR / "ADISCORD_intelligence_agents_header.dds",
+        )
+        for path in paths:
+            self.assertTrue(path.is_file(), path)
+        with Image.open(paths[0]) as source:
+            branches = source.convert("RGBA")
+        with Image.open(paths[1]) as source:
+            agents = source.convert("RGBA")
+        self.assertEqual(branches.size, (519, 109))
+        self.assertEqual(agents.size, (519, 109))
+        self.assertIsNotNone(
+            ImageChops.difference(
+                branches.convert("RGB"),
+                agents.convert("RGB"),
+            ).getbbox()
+        )
+        self.assertGreater(ImageStat.Stat(branches.convert("L")).stddev[0], 4.0)
+
+    def test_preview_places_both_headers_side_by_side_for_review(self) -> None:
+        outputs = builder.expected_outputs()
+        branch_path = OUTPUT_DIR / "ADISCORD_intelligence_branches_header.dds"
+        agents_path = OUTPUT_DIR / "ADISCORD_intelligence_agents_header.dds"
+        self.assertIn(branch_path, outputs)
+        self.assertIn(agents_path, outputs)
+        preview = Image.open(io.BytesIO(outputs[builder.PREVIEW])).convert("RGBA")
+        branches = Image.open(io.BytesIO(outputs[branch_path])).convert("RGBA")
+        agents = Image.open(io.BytesIO(outputs[agents_path])).convert("RGBA")
+        self.assertEqual(preview.crop((8, 24, 527, 133)).tobytes(), branches.tobytes())
+        self.assertEqual(preview.crop((535, 24, 1054, 133)).tobytes(), agents.tobytes())
 
     def test_decrypt_active_background_keeps_progress_bar_binding(self) -> None:
         gui = builder.render_gui_files()[AGENCY_GUI].decode("utf-8")
@@ -191,12 +358,12 @@ class IntelligenceUiContractTests(unittest.TestCase):
         self.assertTrue(references)
         self.assertEqual(references - declarations, set())
 
-    def test_obsolete_generic_intelligence_surfaces_are_removed(self) -> None:
+    def test_obsolete_generic_and_single_header_surfaces_are_removed(self) -> None:
         combined = "\n".join(
             path.read_text(encoding="utf-8-sig")
             for path in (AGENCY_GUI, OPERATIVE_GUI, LEADER_GUI)
         )
-        for role in ("window", "panel", "card", "selected"):
+        for role in ("window", "panel", "card", "selected", "header"):
             self.assertNotIn(f'"GFX_ADISCORD_intelligence_{role}"', combined)
             self.assertFalse(
                 (OUTPUT_DIR / f"ADISCORD_intelligence_{role}.dds").exists(), role
