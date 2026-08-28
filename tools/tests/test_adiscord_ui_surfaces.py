@@ -27,6 +27,25 @@ class UiSurfaceTests(unittest.TestCase):
     def setUp(self) -> None:
         self.source = Image.new("RGBA", (1024, 1024), (39, 43, 44, 255))
 
+    def assert_changes_stay_inside(
+        self,
+        before: Image.Image,
+        after: Image.Image,
+        box: tuple[int, int, int, int],
+    ) -> None:
+        left, top, right, bottom = box
+        changed = [
+            (x, y)
+            for y in range(after.height)
+            for x in range(after.width)
+            if before.getpixel((x, y)) != after.getpixel((x, y))
+        ]
+        self.assertTrue(changed)
+        self.assertTrue(
+            all(left <= x <= right and top <= y <= bottom for x, y in changed),
+            changed,
+        )
+
     def test_four_section_palettes_produce_distinct_accents(self) -> None:
         self.assertEqual(
             set(PALETTES),
@@ -109,6 +128,31 @@ class UiSurfaceTests(unittest.TestCase):
         self.assertNotEqual(image.getpixel((20, 45)), (40, 42, 44, 255))
         self.assertNotEqual(image.getpixel((45, 45)), (40, 42, 44, 255))
         self.assertEqual(image.getpixel((2, 2)), (40, 42, 44, 255))
+
+    def test_inset_primitives_keep_narrow_boxes_isolated(self) -> None:
+        palette = PALETTES["intelligence"]
+        cases = (
+            (outer_frame, (10, 10, 12, 20)),
+            (partial_rails, (20, 10, 22, 20)),
+        )
+
+        for primitive, box in cases:
+            with self.subTest(primitive=primitive.__name__):
+                image = Image.new("RGBA", (48, 32), (40, 42, 44, 255))
+                before = image.copy()
+                primitive(image, box, palette)
+                self.assert_changes_stay_inside(before, image, box)
+
+    def test_wells_keep_one_pixel_boxes_isolated(self) -> None:
+        palette = PALETTES["deployment"]
+        cases = (recessed_well, raised_field)
+
+        for primitive in cases:
+            with self.subTest(primitive=primitive.__name__):
+                image = Image.new("RGBA", (48, 32), (40, 42, 44, 255))
+                before = image.copy()
+                primitive(image, (10, 10, 10, 10), palette)
+                self.assert_changes_stay_inside(before, image, (10, 10, 10, 10))
 
 
 if __name__ == "__main__":

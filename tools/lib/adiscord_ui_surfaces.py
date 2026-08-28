@@ -104,30 +104,69 @@ def surface(image: Image.Image, box: tuple[int, int, int, int], palette: UiPalet
     ImageDraw.Draw(image, "RGBA").rectangle(box, fill=palette.panel)
 
 
+def _inset_span(start: int, end: int, inset: int) -> tuple[int, int]:
+    inset_start = min(start + inset, end)
+    inset_end = max(end - inset, start)
+    if inset_start <= inset_end:
+        return inset_start, inset_end
+    midpoint = start + (end - start) // 2
+    return midpoint, midpoint
+
+
+def _filled_outline(
+    draw: ImageDraw.ImageDraw,
+    box: tuple[int, int, int, int],
+    fill: Color,
+    outline: Color,
+) -> None:
+    left, top, right, bottom = box
+    draw.rectangle(box, fill=fill)
+    draw.line((left, top, right, top), fill=outline)
+    draw.line((left, bottom, right, bottom), fill=outline)
+    draw.line((left, top, left, bottom), fill=outline)
+    draw.line((right, top, right, bottom), fill=outline)
+
+
 def outer_frame(image: Image.Image, box: tuple[int, int, int, int], palette: UiPalette) -> None:
     """Draw a complete frame only for a true outer window."""
     draw = ImageDraw.Draw(image, "RGBA")
     left, top, right, bottom = box
     draw.rectangle(box, outline=palette.deep, width=2)
-    draw.rectangle((left + 2, top + 2, right - 2, bottom - 2), outline=palette.edge)
-    draw.line((left + 4, top + 3, right - 4, top + 3), fill=palette.edge_light)
-    draw.line((left + 4, bottom - 3, right - 4, bottom - 3), fill=palette.accent)
+    inner_left, inner_right = _inset_span(left, right, 2)
+    inner_top, inner_bottom = _inset_span(top, bottom, 2)
+    draw.rectangle((inner_left, inner_top, inner_right, inner_bottom), outline=palette.edge)
+    highlight_left, highlight_right = _inset_span(left, right, 4)
+    draw.line(
+        (highlight_left, min(top + 3, bottom), highlight_right, min(top + 3, bottom)),
+        fill=palette.edge_light,
+    )
+    draw.line(
+        (highlight_left, max(bottom - 3, top), highlight_right, max(bottom - 3, top)),
+        fill=palette.accent,
+    )
 
 
 def recessed_well(image: Image.Image, box: tuple[int, int, int, int], palette: UiPalette) -> None:
     """Draw a dark, bounded recess for icons, counters, or text fields."""
     draw = ImageDraw.Draw(image, "RGBA")
-    draw.rectangle(box, fill=palette.deep, outline=palette.edge)
-    left, top, right, _ = box
-    draw.line((left + 1, top + 1, right - 1, top + 1), fill=palette.panel)
+    _filled_outline(draw, box, palette.deep, palette.edge)
+    left, top, right, bottom = box
+    highlight_left, highlight_right = _inset_span(left, right, 1)
+    highlight_top = min(top + 1, bottom)
+    draw.line((highlight_left, highlight_top, highlight_right, highlight_top), fill=palette.panel)
 
 
 def raised_field(image: Image.Image, box: tuple[int, int, int, int], palette: UiPalette) -> None:
     """Draw a lighter field for readable active content."""
     draw = ImageDraw.Draw(image, "RGBA")
-    draw.rectangle(box, fill=palette.panel, outline=palette.edge)
-    left, top, right, _ = box
-    draw.line((left + 1, top + 1, right - 1, top + 1), fill=palette.edge_light)
+    _filled_outline(draw, box, palette.panel, palette.edge)
+    left, top, right, bottom = box
+    highlight_left, highlight_right = _inset_span(left, right, 1)
+    highlight_top = min(top + 1, bottom)
+    draw.line(
+        (highlight_left, highlight_top, highlight_right, highlight_top),
+        fill=palette.edge_light,
+    )
 
 
 def status_band(image: Image.Image, box: tuple[int, int, int, int], color: Color) -> None:
@@ -139,9 +178,9 @@ def partial_rails(image: Image.Image, box: tuple[int, int, int, int], palette: U
     """Add open-ended rails for nested structure without a repeated frame."""
     draw = ImageDraw.Draw(image, "RGBA")
     left, top, right, bottom = box
-    inset = 4
-    draw.line((left + inset, top, right - inset, top), fill=palette.edge)
-    draw.line((left + inset, bottom, right - inset, bottom), fill=palette.edge_light)
+    rail_left, rail_right = _inset_span(left, right, 4)
+    draw.line((rail_left, top, rail_right, top), fill=palette.edge)
+    draw.line((rail_left, bottom, rail_right, bottom), fill=palette.edge_light)
 
 
 def horizontal_state_strip(
