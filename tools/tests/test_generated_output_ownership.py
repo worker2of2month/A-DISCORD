@@ -16,6 +16,7 @@ from unittest.mock import patch
 from PIL import Image
 
 from tools.builders import build_adiscord_party_texticons as party_texticons
+from tools.builders import build_adiscord_intelligence_ui_assets as intelligence_ui_assets
 from tools.builders import build_adiscord_val_operations_map as val_operations_map
 from tools.builders.build_adiscord_diplomacy_ui_assets import expected_outputs as diplomacy_ui_asset_outputs
 from tools.builders.build_adiscord_resource_assets import expected_outputs as resource_asset_outputs
@@ -152,6 +153,26 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
                 "gfx/interface/diplomacy/source/ADISCORD_diplomacy_flag_overlay_master.png",
             },
         )
+
+    def test_intelligence_ui_registry_exactly_matches_builder_outputs_and_sources(self) -> None:
+        entry = self.entries["intelligence_ui_assets"]
+        expected_paths = {
+            path.relative_to(ROOT).as_posix()
+            for path in intelligence_ui_assets.expected_outputs()
+        }
+        self.assertEqual(set(entry["output_globs"]), expected_paths)
+        self.assertTrue(all("*" not in path for path in entry["output_globs"]))
+        self.assertEqual(
+            set(entry["source_inputs"]),
+            {
+                "tools/builders/build_adiscord_intelligence_ui_assets.py",
+                "tools/lib/adiscord_ui_contracts.py",
+                "tools/lib/adiscord_ui_surfaces.py",
+                "gfx/interface/production/source/production_surface_source.png",
+                "gfx/interface/intelligence/source/ADISCORD_intelligence_header_source.png",
+            },
+        )
+        self.assertTrue(entry["may_delete_outputs"])
 
     def test_party_texticon_registry_exactly_matches_assets_and_is_exclusive(self) -> None:
         entry = self.entries["party_texticons"]

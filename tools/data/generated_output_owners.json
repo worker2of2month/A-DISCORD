@@ -522,19 +522,35 @@
         "interface/operative.gui",
         "interface/operativeleader.gui",
         "interface/ADISCORD_intelligence_ui.gfx",
-        "gfx/interface/intelligence/ui/ADISCORD_intelligence_window.dds",
-        "gfx/interface/intelligence/ui/ADISCORD_intelligence_panel.dds",
-        "gfx/interface/intelligence/ui/ADISCORD_intelligence_card.dds",
-        "gfx/interface/intelligence/ui/ADISCORD_intelligence_selected.dds"
+        "gfx/interface/intelligence/preview/ADISCORD_intelligence_preview.png",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_window_shell.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_content_tile.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_paper_tile.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_transparent_tile.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_cost_tile.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_header.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_create.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_branches_popup.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_branch_row.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_operatives.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_tabs.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_operation_row.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_crypto_row.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_crypto_selected.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_required.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_add_operative.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_mission_bar.dds"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_intelligence_ui_assets.py",
+        "tools/lib/adiscord_ui_contracts.py",
         "tools/lib/adiscord_ui_surfaces.py",
-        "gfx/interface/production/source/production_surface_source.png"
+        "gfx/interface/production/source/production_surface_source.png",
+        "gfx/interface/intelligence/source/ADISCORD_intelligence_header_source.png"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_intelligence_ui_assets"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_intelligence_ui_assets", "--apply"],
-      "may_delete_outputs": false,
+      "may_delete_outputs": true,
       "ownership_mode": "exclusive"
     },
     {

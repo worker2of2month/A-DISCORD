@@ -112,6 +112,13 @@ class IntelligenceUiContractTests(unittest.TestCase):
             .decode("utf-8-sig")
             .count('"GFX_decrypt_active_bg"'),
         )
+        additive_gfx = builder.render_gfx()
+        self.assertNotIn('"GFX_decrypt_active_bg"', additive_gfx)
+        self.assertNotRegex(
+            additive_gfx,
+            r'(?is)(?:spriteType|corneredTileSpriteType)\s*=\s*\{[^}]*'
+            r'name\s*=\s*"GFX_decrypt_active_bg"',
+        )
 
     def test_tab_frames_have_matching_silhouette_and_distinct_selected_edge(self) -> None:
         path = OUTPUT_DIR / "ADISCORD_intelligence_tabs.dds"
