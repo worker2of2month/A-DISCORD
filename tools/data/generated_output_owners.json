@@ -450,26 +450,32 @@
       "output_globs": [
         "interface/countrytechnologyview.gui",
         "interface/ADISCORD_technology_ui.gfx",
-        "gfx/interface/technology/ui/ADISCORD_technology_window.dds",
-        "gfx/interface/technology/ui/ADISCORD_technology_panel.dds",
+        "gfx/interface/technology/preview/ADISCORD_technology_overview_preview.png",
+        "gfx/interface/technology/ui/ADISCORD_technology_window_shell.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_content_tile.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_overlay.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_transparent_tile.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_slot.dds",
-        "gfx/interface/technology/ui/ADISCORD_technology_card.dds",
-        "gfx/interface/technology/ui/ADISCORD_technology_tab.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_idea.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_tabs.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_top.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_bottom.dds",
-        "gfx/interface/technology/ui/ADISCORD_technology_tree_panel.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_tree_content_tile.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_tree_window_tile.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_tree_stripes.dds",
-        "gfx/interface/technology/ui/ADISCORD_technology_tree_info_top.dds",
-        "gfx/interface/technology/ui/ADISCORD_technology_tree_info.dds"
+        "gfx/interface/technology/ui/ADISCORD_technology_detail_content_tile.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_info_top.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_info.dds"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_technology_ui_assets.py",
+        "tools/lib/adiscord_ui_contracts.py",
         "tools/lib/adiscord_ui_surfaces.py",
         "gfx/interface/production/source/production_surface_source.png"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_technology_ui_assets"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_technology_ui_assets", "--apply"],
-      "may_delete_outputs": false,
+      "may_delete_outputs": true,
       "ownership_mode": "exclusive"
     },
     {

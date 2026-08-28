@@ -1,22 +1,33 @@
 #!/usr/bin/env python3
-"""Build the A-Discord research-window surface set."""
+"""Build the semantic A-Discord technology overview and detail surfaces."""
 
 from __future__ import annotations
 
 import argparse
+from io import BytesIO
 from pathlib import Path
 import re
 
-from PIL import Image
+from PIL import Image, ImageDraw
 
+from tools.lib.adiscord_ui_contracts import (
+    SpriteContract,
+    contact_sheet,
+    render_gfx_entry,
+    validate_contract_image,
+)
 from tools.lib.adiscord_ui_surfaces import (
     PALETTES,
     apply_or_check,
     dds_bytes,
-    framed_panel,
     load_surface_source,
     metal_surface,
+    outer_frame,
+    partial_rails,
+    raised_field,
+    recessed_well,
     replace_counted,
+    status_band,
 )
 from tools.lib.paths import repository_root
 
@@ -26,52 +37,226 @@ BASE_GAME = Path(r"Z:\SteamLibrary\steamapps\common\Hearts of Iron IV")
 VANILLA_GUI = BASE_GAME / "interface/countrytechnologyview.gui"
 SOURCE = ROOT / "gfx/interface/production/source/production_surface_source.png"
 OUTPUT_DIR = ROOT / "gfx/interface/technology/ui"
+PREVIEW = (
+    ROOT
+    / "gfx/interface/technology/preview/ADISCORD_technology_overview_preview.png"
+)
 GUI_OUTPUT = ROOT / "interface/countrytechnologyview.gui"
 GFX_OUTPUT = ROOT / "interface/ADISCORD_technology_ui.gfx"
 
-WINDOW = OUTPUT_DIR / "ADISCORD_technology_window.dds"
-PANEL = OUTPUT_DIR / "ADISCORD_technology_panel.dds"
-SLOT = OUTPUT_DIR / "ADISCORD_technology_slot.dds"
-CARD = OUTPUT_DIR / "ADISCORD_technology_card.dds"
-TAB = OUTPUT_DIR / "ADISCORD_technology_tab.dds"
-TOP = OUTPUT_DIR / "ADISCORD_technology_top.dds"
-BOTTOM = OUTPUT_DIR / "ADISCORD_technology_bottom.dds"
-TREE_PANEL = OUTPUT_DIR / "ADISCORD_technology_tree_panel.dds"
-TREE_STRIPES = OUTPUT_DIR / "ADISCORD_technology_tree_stripes.dds"
-TREE_INFO_TOP = OUTPUT_DIR / "ADISCORD_technology_tree_info_top.dds"
-TREE_INFO = OUTPUT_DIR / "ADISCORD_technology_tree_info.dds"
+EFFECT = "gfx/FX/buttonstate_nodowneffect.lua"
+MUTED_GOLD = (146, 116, 62, 255)
+COLD_WRITING = (48, 59, 61, 255)
+
+
+TECHNOLOGY_OVERVIEW_CONTRACTS = (
+    SpriteContract(
+        "GFX_tiled_window2_1b_border",
+        "GFX_ADISCORD_technology_window_shell",
+        "ADISCORD_technology_window_shell.dds",
+        "corneredTileSpriteType",
+        (190, 190),
+        border_size=(64, 64),
+        effect_file=EFFECT,
+        tiling_center=True,
+    ),
+    SpriteContract(
+        "GFX_tiled_plain_bg",
+        "GFX_ADISCORD_technology_content_tile",
+        "ADISCORD_technology_content_tile.dds",
+        "corneredTileSpriteType",
+        (190, 190),
+        border_size=(64, 64),
+        effect_file=EFFECT,
+        tiling_center=True,
+    ),
+    SpriteContract(
+        "GFX_tiled_generic_overlay_bg1",
+        "GFX_ADISCORD_technology_overlay",
+        "ADISCORD_technology_overlay.dds",
+        "corneredTileSpriteType",
+        (549, 600),
+        border_size=(268, 268),
+        effect_file=EFFECT,
+        always_transparent=True,
+        tiling_center=True,
+    ),
+    SpriteContract(
+        "GFX_tiled_window_transparent",
+        "GFX_ADISCORD_technology_transparent_tile",
+        "ADISCORD_technology_transparent_tile.dds",
+        "corneredTileSpriteType",
+        (3, 3),
+        border_size=(1, 1),
+        effect_file=EFFECT,
+    ),
+    SpriteContract(
+        "GFX_research_line_bg",
+        "GFX_ADISCORD_technology_slot",
+        "ADISCORD_technology_slot.dds",
+        "spriteType",
+        (508, 99),
+    ),
+    SpriteContract(
+        "GFX_tech_idea_bg",
+        "GFX_ADISCORD_technology_idea",
+        "ADISCORD_technology_idea.dds",
+        "spriteType",
+        (63, 63),
+        effect_file=EFFECT,
+    ),
+    SpriteContract(
+        "GFX_tab_large",
+        "GFX_ADISCORD_technology_tabs",
+        "ADISCORD_technology_tabs.dds",
+        "spriteType",
+        (516, 42),
+        frames=2,
+    ),
+    SpriteContract(
+        "GFX_research_top_win",
+        "GFX_ADISCORD_technology_top",
+        "ADISCORD_technology_top.dds",
+        "spriteType",
+        (548, 138),
+        effect_file=EFFECT,
+    ),
+    SpriteContract(
+        "GFX_production_win_bottom",
+        "GFX_ADISCORD_technology_bottom",
+        "ADISCORD_technology_bottom.dds",
+        "corneredTileSpriteType",
+        (546, 66),
+        border_size=(182, 22),
+        effect_file=EFFECT,
+        tiling_center=True,
+    ),
+    SpriteContract(
+        "GFX_tiled_plain_bg2",
+        "GFX_ADISCORD_technology_tree_content_tile",
+        "ADISCORD_technology_tree_content_tile.dds",
+        "corneredTileSpriteType",
+        (182, 186),
+        border_size=(64, 64),
+        effect_file=EFFECT,
+        tiling_center=True,
+    ),
+    SpriteContract(
+        "GFX_tiled_window_2b_border",
+        "GFX_ADISCORD_technology_tree_window_tile",
+        "ADISCORD_technology_tree_window_tile.dds",
+        "corneredTileSpriteType",
+        (190, 190),
+        border_size=(64, 64),
+        effect_file=EFFECT,
+        tiling_center=True,
+    ),
+    SpriteContract(
+        "GFX_techtree_stripes",
+        "GFX_ADISCORD_technology_tree_stripes",
+        "ADISCORD_technology_tree_stripes.dds",
+        "corneredTileSpriteType",
+        (122, 244),
+        border_size=(0, 0),
+        effect_file=EFFECT,
+        always_transparent=True,
+        tiling_center=True,
+    ),
+    SpriteContract(
+        "GFX_tiled_paper_bg",
+        "GFX_ADISCORD_technology_detail_content_tile",
+        "ADISCORD_technology_detail_content_tile.dds",
+        "corneredTileSpriteType",
+        (192, 192),
+        border_size=(64, 64),
+        effect_file=EFFECT,
+        tiling_center=True,
+    ),
+    SpriteContract(
+        "GFX_tech_info_top_win",
+        "GFX_ADISCORD_technology_info_top",
+        "ADISCORD_technology_info_top.dds",
+        "spriteType",
+        (548, 220),
+        effect_file=EFFECT,
+    ),
+    SpriteContract(
+        "GFX_technology_info_bg",
+        "GFX_ADISCORD_technology_info",
+        "ADISCORD_technology_info.dds",
+        "spriteType",
+        (508, 517),
+        effect_file=EFFECT,
+    ),
+)
+
+CONTRACTS_BY_TARGET = {
+    contract.target_name: contract for contract in TECHNOLOGY_OVERVIEW_CONTRACTS
+}
+
+
+def _output_path(target_name: str) -> Path:
+    return OUTPUT_DIR / CONTRACTS_BY_TARGET[target_name].filename
+
+
+WINDOW_SHELL = _output_path("GFX_ADISCORD_technology_window_shell")
+CONTENT_TILE = _output_path("GFX_ADISCORD_technology_content_tile")
+OVERLAY = _output_path("GFX_ADISCORD_technology_overlay")
+TRANSPARENT_TILE = _output_path("GFX_ADISCORD_technology_transparent_tile")
+SLOT = _output_path("GFX_ADISCORD_technology_slot")
+IDEA = _output_path("GFX_ADISCORD_technology_idea")
+TABS = _output_path("GFX_ADISCORD_technology_tabs")
+TOP = _output_path("GFX_ADISCORD_technology_top")
+BOTTOM = _output_path("GFX_ADISCORD_technology_bottom")
+TREE_CONTENT_TILE = _output_path("GFX_ADISCORD_technology_tree_content_tile")
+TREE_WINDOW_TILE = _output_path("GFX_ADISCORD_technology_tree_window_tile")
+TREE_STRIPES = _output_path("GFX_ADISCORD_technology_tree_stripes")
+DETAIL_CONTENT_TILE = _output_path("GFX_ADISCORD_technology_detail_content_tile")
+INFO_TOP = _output_path("GFX_ADISCORD_technology_info_top")
+INFO = _output_path("GFX_ADISCORD_technology_info")
+
 
 SPRITE_REPLACEMENTS = {
-    "GFX_tiled_window2_1b_border": ("GFX_ADISCORD_technology_window", 1),
-    "GFX_tiled_plain_bg": ("GFX_ADISCORD_technology_panel", 1),
-    "GFX_tiled_generic_overlay_bg1": ("GFX_ADISCORD_technology_panel", 1),
-    "GFX_tiled_window_transparent": ("GFX_ADISCORD_technology_panel", 1),
-    "GFX_tech_idea_bg": ("GFX_ADISCORD_technology_card", 1),
-    "GFX_research_line_bg": ("GFX_ADISCORD_technology_slot", 1),
-    "GFX_tab_large": ("GFX_ADISCORD_technology_tab", 2),
-    "GFX_research_top_win": ("GFX_ADISCORD_technology_top", 1),
-    "GFX_production_win_bottom": ("GFX_ADISCORD_technology_bottom", 1),
+    contract.source_name: (contract.target_name, count)
+    for contract, count in (
+        (CONTRACTS_BY_TARGET["GFX_ADISCORD_technology_window_shell"], 1),
+        (CONTRACTS_BY_TARGET["GFX_ADISCORD_technology_content_tile"], 1),
+        (CONTRACTS_BY_TARGET["GFX_ADISCORD_technology_overlay"], 1),
+        (CONTRACTS_BY_TARGET["GFX_ADISCORD_technology_transparent_tile"], 1),
+        (CONTRACTS_BY_TARGET["GFX_ADISCORD_technology_idea"], 1),
+        (CONTRACTS_BY_TARGET["GFX_ADISCORD_technology_slot"], 1),
+        (CONTRACTS_BY_TARGET["GFX_ADISCORD_technology_tabs"], 2),
+        (CONTRACTS_BY_TARGET["GFX_ADISCORD_technology_top"], 1),
+        (CONTRACTS_BY_TARGET["GFX_ADISCORD_technology_bottom"], 1),
+    )
 }
 
 TREE_SPRITE_REPLACEMENTS = {
-    "GFX_tiled_plain_bg2": ("GFX_ADISCORD_technology_tree_panel", 1),
-    "GFX_tiled_window_2b_border": ("GFX_ADISCORD_technology_tree_panel", 12),
+    "GFX_tiled_plain_bg2": ("GFX_ADISCORD_technology_tree_content_tile", 1),
+    "GFX_tiled_window_2b_border": (
+        "GFX_ADISCORD_technology_tree_window_tile",
+        12,
+    ),
     "GFX_techtree_stripes": ("GFX_ADISCORD_technology_tree_stripes", 12),
-    "GFX_tiled_paper_bg": ("GFX_ADISCORD_technology_tree_panel", 2),
-    "GFX_tiled_window_thin_border2": ("GFX_ADISCORD_technology_tree_panel", 2),
-    "GFX_tech_info_top_win": ("GFX_ADISCORD_technology_tree_info_top", 2),
-    "GFX_technology_info_bg": ("GFX_ADISCORD_technology_tree_info", 2),
+    "GFX_tiled_paper_bg": (
+        "GFX_ADISCORD_technology_detail_content_tile",
+        2,
+    ),
+    "GFX_tech_info_top_win": ("GFX_ADISCORD_technology_info_top", 2),
 }
 
-
-def _two_state_tab(source: Image.Image) -> Image.Image:
-    palette = PALETTES["technology"]
-    output = Image.new("RGBA", (516, 42), (0, 0, 0, 0))
-    normal = framed_panel(source, (258, 42), palette, 0.70)
-    selected = framed_panel(source, (258, 42), palette, 0.96)
-    output.alpha_composite(normal, (0, 0))
-    output.alpha_composite(selected, (258, 0))
-    return output
+LEGACY_OUTPUTS = tuple(
+    OUTPUT_DIR / f"ADISCORD_technology_{role}.dds"
+    for role in (
+        "window",
+        "panel",
+        "card",
+        "tab",
+        "tree_panel",
+        "tree_info_top",
+        "tree_info",
+    )
+)
 
 
 def render_gui() -> str:
@@ -84,99 +269,281 @@ def render_gui() -> str:
     return re.sub(r"(?m)^ +(?=\t)", "", text)
 
 
-def render_gfx() -> str:
-    return """spriteTypes = {
-    corneredTileSpriteType = {
-        name = "GFX_ADISCORD_technology_window"
-        size = { x = 192 y = 192 }
-        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_window.dds"
-        borderSize = { x = 32 y = 32 }
-        tilingCenter = yes
-    }
-    corneredTileSpriteType = {
-        name = "GFX_ADISCORD_technology_panel"
-        size = { x = 192 y = 192 }
-        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_panel.dds"
-        borderSize = { x = 24 y = 24 }
-        tilingCenter = yes
-    }
-    spriteType = {
-        name = "GFX_ADISCORD_technology_slot"
-        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_slot.dds"
-    }
-    spriteType = {
-        name = "GFX_ADISCORD_technology_card"
-        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_card.dds"
-    }
-    spriteType = {
-        name = "GFX_ADISCORD_technology_tab"
-        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_tab.dds"
-        noOfFrames = 2
-    }
-    spriteType = {
-        name = "GFX_ADISCORD_technology_top"
-        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_top.dds"
-    }
-    spriteType = {
-        name = "GFX_ADISCORD_technology_bottom"
-        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_bottom.dds"
-    }
-}
-"""
-
-
 def apply_tree_skin(text: str) -> str:
+    detail_background = re.compile(
+        r'#SpriteType\s*=\s*"GFX_technology_info_bg"'
+        r'(?P<gap>\s*)'
+        r'SpriteType\s*=\s*"GFX_tiled_window_thin_border2"'
+    )
+    text, count = detail_background.subn(
+        'SpriteType = "GFX_ADISCORD_technology_info"'
+        r'\g<gap>'
+        '#SpriteType = "GFX_tiled_window_thin_border2"',
+        text,
+    )
+    if count != 2:
+        raise ValueError(f"technology detail background: expected 2, found {count}")
     for old, (new, expected) in TREE_SPRITE_REPLACEMENTS.items():
         text = replace_counted(text, old, new, expected)
     return text
 
 
 def technology_tree_gfx_entries() -> str:
-    return """
-    corneredTileSpriteType = {
-        name = "GFX_ADISCORD_technology_tree_panel"
-        size = { x = 192 y = 192 }
-        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_tree_panel.dds"
-        borderSize = { x = 32 y = 32 }
-        tilingCenter = yes
+    tree_sources = {
+        "GFX_tiled_plain_bg2",
+        "GFX_tiled_window_2b_border",
+        "GFX_techtree_stripes",
+        "GFX_tiled_paper_bg",
+        "GFX_tech_info_top_win",
+        "GFX_technology_info_bg",
     }
-    corneredTileSpriteType = {
-        name = "GFX_ADISCORD_technology_tree_stripes"
-        size = { x = 122 y = 244 }
-        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_tree_stripes.dds"
-        borderSize = { x = 0 y = 0 }
-        tilingCenter = yes
-        alwaystransparent = yes
+    return "\n" + "".join(
+        render_gfx_entry(
+            contract,
+            f"gfx/interface/technology/ui/{contract.filename}",
+        )
+        for contract in TECHNOLOGY_OVERVIEW_CONTRACTS
+        if contract.source_name in tree_sources
+    )
+
+
+def _window_shell(source: Image.Image) -> Image.Image:
+    palette = PALETTES["technology"]
+    output = metal_surface(source, (190, 190), palette, 0.66)
+    outer_frame(output, (0, 0, 189, 189), palette)
+    return output
+
+
+def _content_tile(source: Image.Image) -> Image.Image:
+    palette = PALETTES["technology"]
+    output = metal_surface(source, (190, 190), palette, 0.68)
+    partial_rails(output, (4, 5, 185, 184), palette)
+    return output
+
+
+def _overlay(source: Image.Image) -> Image.Image:
+    palette = PALETTES["technology"]
+    output = metal_surface(source, (549, 600), palette, 0.64)
+    partial_rails(output, (5, 6, 543, 593), palette)
+    return output
+
+
+def _research_slot(source: Image.Image) -> Image.Image:
+    palette = PALETTES["technology"]
+    output = metal_surface(source, (508, 99), palette, 0.76)
+    recessed_well(output, (7, 8, 52, 90), palette)
+    raised_field(output, (57, 8, 326, 70), palette)
+    recessed_well(output, (331, 8, 499, 73), palette)
+    recessed_well(output, (59, 75, 445, 93), palette)
+    raised_field(output, (450, 77, 500, 93), palette)
+    status_band(output, (62, 89, 442, 92), palette.accent)
+    partial_rails(output, (3, 3, 504, 95), palette)
+    return output
+
+
+def _idea_button(source: Image.Image) -> Image.Image:
+    palette = PALETTES["technology"]
+    output = metal_surface(source, (63, 63), palette, 0.77)
+    recessed_well(output, (5, 5, 57, 57), palette)
+    status_band(output, (8, 55, 54, 58), MUTED_GOLD)
+    return output
+
+
+def _overview_tabs(source: Image.Image) -> Image.Image:
+    palette = PALETTES["technology"]
+    output = Image.new("RGBA", (516, 42), (0, 0, 0, 0))
+    base = metal_surface(source, (258, 42), palette, 0.76)
+    partial_rails(base, (3, 4, 254, 38), palette)
+    normal = base.copy()
+    selected = base.copy()
+    status_band(normal, (8, 36, 249, 39), palette.edge)
+    status_band(selected, (8, 35, 249, 39), palette.accent_light)
+    ImageDraw.Draw(selected, "RGBA").line((10, 5, 247, 5), fill=palette.edge_light)
+    output.alpha_composite(normal, (0, 0))
+    output.alpha_composite(selected, (258, 0))
+    return output
+
+
+def _overview_top(source: Image.Image) -> Image.Image:
+    palette = PALETTES["technology"]
+    output = metal_surface(source, (548, 138), palette, 0.80)
+    partial_rails(output, (5, 5, 542, 133), palette)
+    raised_field(output, (324, 5, 520, 101), palette)
+    recessed_well(output, (44, 104, 271, 132), palette)
+    recessed_well(output, (290, 104, 513, 132), palette)
+    status_band(output, (8, 2, 539, 4), palette.accent)
+    return output
+
+
+def _overview_bottom(source: Image.Image) -> Image.Image:
+    palette = PALETTES["technology"]
+    output = metal_surface(source, (546, 66), palette, 0.70)
+    partial_rails(output, (4, 3, 541, 61), palette)
+    return output
+
+
+def _tree_content_tile(source: Image.Image) -> Image.Image:
+    palette = PALETTES["technology"]
+    output = metal_surface(source, (182, 186), palette, 0.52)
+    partial_rails(output, (4, 5, 177, 180), palette)
+    return output
+
+
+def _tree_window_tile(source: Image.Image) -> Image.Image:
+    palette = PALETTES["technology"]
+    output = metal_surface(source, (190, 190), palette, 0.55)
+    outer_frame(output, (0, 0, 189, 189), palette)
+    return output
+
+
+def _tree_stripes(source: Image.Image) -> Image.Image:
+    palette = PALETTES["technology"]
+    output = metal_surface(source, (122, 244), palette, 0.48)
+    draw = ImageDraw.Draw(output, "RGBA")
+    for x in range(0, 122, 30):
+        draw.line((x, 0, x, 243), fill=(55, 77, 78, 90))
+    for y in range(0, 244, 30):
+        draw.line((0, y, 121, y), fill=(55, 77, 78, 70))
+    draw.line((60, 0, 60, 243), fill=palette.accent)
+    return output
+
+
+def _detail_content_tile(source: Image.Image) -> Image.Image:
+    palette = PALETTES["technology"]
+    output = metal_surface(source, (192, 192), palette, 0.96)
+    ImageDraw.Draw(output, "RGBA").rectangle(
+        (3, 3, 188, 188),
+        outline=palette.edge,
+    )
+    partial_rails(output, (7, 8, 184, 183), palette)
+    return output
+
+
+def _technology_info_top(source: Image.Image) -> Image.Image:
+    palette = PALETTES["technology"]
+    output = metal_surface(source, (548, 220), palette, 1.02)
+    wash = Image.new("RGBA", output.size, COLD_WRITING)
+    output = Image.blend(output, wash, 0.34)
+    draw = ImageDraw.Draw(output, "RGBA")
+    draw.rectangle((24, 8, 523, 39), fill=(43, 53, 55, 255), outline=palette.edge)
+    recessed_well(output, (25, 44, 151, 110), palette)
+    draw.rectangle((165, 47, 525, 108), fill=(41, 51, 53, 255), outline=palette.edge)
+    draw.rectangle((20, 116, 527, 207), fill=(53, 64, 66, 255), outline=palette.edge)
+    draw.line((24, 120, 523, 120), fill=palette.edge_light)
+    status_band(output, (8, 212, 539, 216), palette.accent)
+    partial_rails(output, (4, 4, 543, 215), palette)
+    return output
+
+
+def _technology_info(source: Image.Image) -> Image.Image:
+    palette = PALETTES["technology"]
+    output = metal_surface(source, (508, 517), palette, 1.00)
+    wash = Image.new("RGBA", output.size, COLD_WRITING)
+    output = Image.blend(output, wash, 0.38)
+    draw = ImageDraw.Draw(output, "RGBA")
+    for y in range(28, 500, 28):
+        draw.line((18, y, 489, y), fill=(74, 91, 92, 65))
+    partial_rails(output, (5, 5, 502, 511), palette)
+    status_band(output, (8, 8, 499, 11), MUTED_GOLD)
+    return output
+
+
+def render_asset(contract: SpriteContract, source: Image.Image) -> Image.Image:
+    target = contract.target_name
+    renderers = {
+        "GFX_ADISCORD_technology_window_shell": _window_shell,
+        "GFX_ADISCORD_technology_content_tile": _content_tile,
+        "GFX_ADISCORD_technology_overlay": _overlay,
+        "GFX_ADISCORD_technology_slot": _research_slot,
+        "GFX_ADISCORD_technology_idea": _idea_button,
+        "GFX_ADISCORD_technology_tabs": _overview_tabs,
+        "GFX_ADISCORD_technology_top": _overview_top,
+        "GFX_ADISCORD_technology_bottom": _overview_bottom,
+        "GFX_ADISCORD_technology_tree_content_tile": _tree_content_tile,
+        "GFX_ADISCORD_technology_tree_window_tile": _tree_window_tile,
+        "GFX_ADISCORD_technology_tree_stripes": _tree_stripes,
+        "GFX_ADISCORD_technology_detail_content_tile": _detail_content_tile,
+        "GFX_ADISCORD_technology_info_top": _technology_info_top,
+        "GFX_ADISCORD_technology_info": _technology_info,
     }
-    spriteType = {
-        name = "GFX_ADISCORD_technology_tree_info_top"
-        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_tree_info_top.dds"
+    if target == "GFX_ADISCORD_technology_transparent_tile":
+        return Image.new("RGBA", contract.total_size, (0, 0, 0, 0))
+    if target not in renderers:
+        raise ValueError(f"missing technology renderer: {target}")
+    return renderers[target](source)
+
+
+def render_gfx() -> str:
+    overview_sources = {
+        "GFX_tiled_window2_1b_border",
+        "GFX_tiled_plain_bg",
+        "GFX_tiled_generic_overlay_bg1",
+        "GFX_tiled_window_transparent",
+        "GFX_research_line_bg",
+        "GFX_tech_idea_bg",
+        "GFX_tab_large",
+        "GFX_research_top_win",
+        "GFX_production_win_bottom",
     }
-    spriteType = {
-        name = "GFX_ADISCORD_technology_tree_info"
-        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_tree_info.dds"
-    }
-"""
+    entries = "".join(
+        render_gfx_entry(
+            contract,
+            f"gfx/interface/technology/ui/{contract.filename}",
+        )
+        for contract in TECHNOLOGY_OVERVIEW_CONTRACTS
+        if contract.source_name in overview_sources
+    )
+    return f"spriteTypes = {{\n{entries}}}\n"
+
+
+def _png_bytes(image: Image.Image) -> bytes:
+    stream = BytesIO()
+    image.save(stream, format="PNG", optimize=False, compress_level=9)
+    return stream.getvalue()
 
 
 def expected_outputs() -> dict[Path, bytes]:
     source = load_surface_source(SOURCE)
-    palette = PALETTES["technology"]
-    return {
+    assets: list[tuple[SpriteContract, Image.Image]] = []
+    for contract in TECHNOLOGY_OVERVIEW_CONTRACTS:
+        image = render_asset(contract, source)
+        validate_contract_image(contract, image)
+        assets.append((contract, image))
+    preview_targets = {
+        "GFX_ADISCORD_technology_slot",
+        "GFX_ADISCORD_technology_idea",
+        "GFX_ADISCORD_technology_tabs",
+        "GFX_ADISCORD_technology_top",
+        "GFX_ADISCORD_technology_bottom",
+        "GFX_ADISCORD_technology_tree_window_tile",
+        "GFX_ADISCORD_technology_info_top",
+        "GFX_ADISCORD_technology_info",
+    }
+    outputs = {
         GUI_OUTPUT: render_gui().encode("utf-8"),
         GFX_OUTPUT: render_gfx().encode("utf-8"),
-        WINDOW: dds_bytes(framed_panel(source, (192, 192), palette, 0.80)),
-        PANEL: dds_bytes(framed_panel(source, (192, 192), palette, 0.68)),
-        SLOT: dds_bytes(framed_panel(source, (508, 99), palette, 0.76)),
-        CARD: dds_bytes(framed_panel(source, (63, 63), palette, 0.82)),
-        TAB: dds_bytes(_two_state_tab(source)),
-        TOP: dds_bytes(metal_surface(source, (548, 138), palette, 0.78)),
-        BOTTOM: dds_bytes(metal_surface(source, (546, 66), palette, 0.72)),
-        TREE_PANEL: dds_bytes(framed_panel(source, (192, 192), palette, 0.70)),
-        TREE_STRIPES: dds_bytes(metal_surface(source, (122, 244), palette, 0.62)),
-        TREE_INFO_TOP: dds_bytes(framed_panel(source, (548, 220), palette, 0.78)),
-        TREE_INFO: dds_bytes(framed_panel(source, (508, 517), palette, 0.68)),
+        PREVIEW: _png_bytes(
+            contact_sheet(
+                [
+                    (contract.target_name, image)
+                    for contract, image in assets
+                    if contract.target_name in preview_targets
+                ],
+                580,
+            )
+        ),
     }
+    outputs.update(
+        {OUTPUT_DIR / contract.filename: dds_bytes(image) for contract, image in assets}
+    )
+    return outputs
+
+
+def _remove_legacy_outputs() -> None:
+    for path in LEGACY_OUTPUTS:
+        if path.is_file():
+            path.unlink()
+            print(f"REMOVED: {path}")
 
 
 def main() -> int:
@@ -185,11 +552,16 @@ def main() -> int:
     actions.add_argument("--check", action="store_true")
     actions.add_argument("--apply", action="store_true")
     args = parser.parse_args()
-    return apply_or_check(
-        expected_outputs(),
-        apply=args.apply,
-        label="Technology UI",
-    )
+    if not args.apply:
+        obsolete = [path for path in LEGACY_OUTPUTS if path.is_file()]
+        if obsolete:
+            for path in obsolete:
+                print(f"OBSOLETE: {path}")
+            return 1
+    result = apply_or_check(expected_outputs(), args.apply, "Technology UI")
+    if result == 0 and args.apply:
+        _remove_legacy_outputs()
+    return result
 
 
 if __name__ == "__main__":

@@ -7,7 +7,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			spriteType = "GFX_ADISCORD_technology_card"
+			spriteType = "GFX_ADISCORD_technology_idea"
 		}
 
 		iconType = {
@@ -56,7 +56,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			quadTextureSprite ="GFX_ADISCORD_technology_panel"
+			quadTextureSprite ="GFX_ADISCORD_technology_content_tile"
 		}
 
 
@@ -87,7 +87,7 @@ guiTypes = {
 			buttonType = {
 				name = "research_slots_tab"
 				position = { x = -250 y = -15 }
-				quadTextureSprite = "GFX_ADISCORD_technology_tab"
+				quadTextureSprite = "GFX_ADISCORD_technology_tabs"
 				text = "RESEARCH_TAB_SLOTS"
 				buttonFont = "hoi_20b"
 				frame = 1
@@ -98,7 +98,7 @@ guiTypes = {
 			buttonType = {
 				name = "facilities_tab"
 				position = { x = 0 y = -15 }
-				quadTextureSprite = "GFX_ADISCORD_technology_tab"
+				quadTextureSprite = "GFX_ADISCORD_technology_tabs"
 				buttonFont = "hoi_20b"
 				frame = 2
 				text = "RESEARCH_TAB_FACILITIES"
@@ -114,12 +114,12 @@ guiTypes = {
 
 			background = {
 				name = "Background"
-				quadTextureSprite ="GFX_ADISCORD_technology_window"
+				quadTextureSprite ="GFX_ADISCORD_technology_window_shell"
 			}
 
 			background = {
 				name = "Background"
-				quadTextureSprite ="GFX_ADISCORD_technology_panel"
+				quadTextureSprite ="GFX_ADISCORD_technology_overlay"
 			}
 
 			containerWindowType = {
@@ -132,7 +132,7 @@ guiTypes = {
 
 				background = {
 					name = "Background"
-					spriteType = "GFX_ADISCORD_technology_panel"
+					spriteType = "GFX_ADISCORD_technology_transparent_tile"
 				}
 
 				gridboxType = {

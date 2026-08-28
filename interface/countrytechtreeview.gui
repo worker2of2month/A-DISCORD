@@ -35,7 +35,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			quadTextureSprite ="GFX_ADISCORD_technology_tree_panel"
+			quadTextureSprite ="GFX_ADISCORD_technology_tree_content_tile"
 		}
 
 				containerWindowType = {
@@ -47,7 +47,7 @@ guiTypes = {
 			verticalScrollbar = "right_vertical_slider"
 			horizontalScrollbar = "bottom_horizontal_slider"
 			scroll_wheel_factor = 40
-			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_panel" }
+			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_window_tile" }
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
@@ -391,7 +391,7 @@ guiTypes = {
 			verticalScrollbar = "right_vertical_slider"
 			horizontalScrollbar = "bottom_horizontal_slider"
 			scroll_wheel_factor = 40
-			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_panel" }
+			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_window_tile" }
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
@@ -701,7 +701,7 @@ guiTypes = {
 			verticalScrollbar = "right_vertical_slider"
 			horizontalScrollbar = "bottom_horizontal_slider"
 			scroll_wheel_factor = 40
-			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_panel" }
+			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_window_tile" }
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
@@ -1011,7 +1011,7 @@ guiTypes = {
 			verticalScrollbar = "right_vertical_slider"
 			horizontalScrollbar = "bottom_horizontal_slider"
 			scroll_wheel_factor = 40
-			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_panel" }
+			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_window_tile" }
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
@@ -1321,7 +1321,7 @@ guiTypes = {
 			verticalScrollbar = "right_vertical_slider"
 			horizontalScrollbar = "bottom_horizontal_slider"
 			scroll_wheel_factor = 40
-			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_panel" }
+			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_window_tile" }
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
@@ -1597,7 +1597,7 @@ guiTypes = {
 			verticalScrollbar = "right_vertical_slider"
 			horizontalScrollbar = "bottom_horizontal_slider"
 			scroll_wheel_factor = 40
-			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_panel" }
+			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_window_tile" }
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
@@ -1890,7 +1890,7 @@ guiTypes = {
 			verticalScrollbar = "right_vertical_slider"
 			horizontalScrollbar = "bottom_horizontal_slider"
 			scroll_wheel_factor = 40
-			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_panel" }
+			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_window_tile" }
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
@@ -2166,7 +2166,7 @@ guiTypes = {
 			verticalScrollbar = "right_vertical_slider"
 			horizontalScrollbar = "bottom_horizontal_slider"
 			scroll_wheel_factor = 40
-			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_panel" }
+			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_window_tile" }
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
@@ -2425,7 +2425,7 @@ guiTypes = {
 			verticalScrollbar = "right_vertical_slider"
 			horizontalScrollbar = "bottom_horizontal_slider"
 			scroll_wheel_factor = 40
-			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_panel" }
+			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_window_tile" }
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
@@ -2719,7 +2719,7 @@ guiTypes = {
 			verticalScrollbar = "right_vertical_slider"
 			horizontalScrollbar = "bottom_horizontal_slider"
 			scroll_wheel_factor = 40
-			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_panel" }
+			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_window_tile" }
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
@@ -3012,7 +3012,7 @@ guiTypes = {
 			verticalScrollbar = "right_vertical_slider"
 			horizontalScrollbar = "bottom_horizontal_slider"
 			scroll_wheel_factor = 40
-			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_panel" }
+			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_window_tile" }
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
@@ -3305,7 +3305,7 @@ guiTypes = {
 			verticalScrollbar = "right_vertical_slider"
 			horizontalScrollbar = "bottom_horizontal_slider"
 			scroll_wheel_factor = 40
-			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_panel" }
+			background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_window_tile" }
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
@@ -3769,13 +3769,13 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			#SpriteType ="GFX_ADISCORD_technology_tree_info"
-			SpriteType = "GFX_ADISCORD_technology_tree_panel"
+			SpriteType = "GFX_ADISCORD_technology_info"
+			#SpriteType = "GFX_tiled_window_thin_border2"
 		}
 
 		iconType ={
 			name ="tech_info_top_win"
-			spriteType = "GFX_ADISCORD_technology_tree_info_top"
+			spriteType = "GFX_ADISCORD_technology_info_top"
 			position = { x= 1 y = 1 }
 			Orientation = "UPPER_LEFT"
 			alwaystransparent = yes
@@ -3863,7 +3863,7 @@ guiTypes = {
 
 			background = {
 				name = "Background"
-				quadTextureSprite ="GFX_ADISCORD_technology_tree_panel"
+				quadTextureSprite ="GFX_ADISCORD_technology_detail_content_tile"
 			}
 
 		}
@@ -3883,13 +3883,13 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			#SpriteType ="GFX_ADISCORD_technology_tree_info"
-			SpriteType = "GFX_ADISCORD_technology_tree_panel"
+			SpriteType = "GFX_ADISCORD_technology_info"
+			#SpriteType = "GFX_tiled_window_thin_border2"
 		}
 
 		iconType ={
 			name ="tech_info_top_win"
-			spriteType = "GFX_ADISCORD_technology_tree_info_top"
+			spriteType = "GFX_ADISCORD_technology_info_top"
 			position = { x= 1 y = 1 }
 			Orientation = "UPPER_LEFT"
 			alwaystransparent = yes
@@ -4027,7 +4027,7 @@ guiTypes = {
 
 			background = {
 				name = "Background"
-				quadTextureSprite ="GFX_ADISCORD_technology_tree_panel"
+				quadTextureSprite ="GFX_ADISCORD_technology_detail_content_tile"
 			}
 
 		}

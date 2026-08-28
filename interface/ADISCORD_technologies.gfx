@@ -2840,10 +2840,19 @@ spriteTypes = {
 	}
 
     corneredTileSpriteType = {
-        name = "GFX_ADISCORD_technology_tree_panel"
-        size = { x = 192 y = 192 }
-        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_tree_panel.dds"
-        borderSize = { x = 32 y = 32 }
+        name = "GFX_ADISCORD_technology_tree_content_tile"
+        size = { x = 182 y = 186 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_tree_content_tile.dds"
+        borderSize = { x = 64 y = 64 }
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+        tilingCenter = yes
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_technology_tree_window_tile"
+        size = { x = 190 y = 190 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_tree_window_tile.dds"
+        borderSize = { x = 64 y = 64 }
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
         tilingCenter = yes
     }
     corneredTileSpriteType = {
@@ -2851,15 +2860,28 @@ spriteTypes = {
         size = { x = 122 y = 244 }
         textureFile = "gfx/interface/technology/ui/ADISCORD_technology_tree_stripes.dds"
         borderSize = { x = 0 y = 0 }
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+        alwaysTransparent = yes
         tilingCenter = yes
-        alwaystransparent = yes
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_technology_detail_content_tile"
+        size = { x = 192 y = 192 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_detail_content_tile.dds"
+        borderSize = { x = 64 y = 64 }
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+        tilingCenter = yes
     }
     spriteType = {
-        name = "GFX_ADISCORD_technology_tree_info_top"
-        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_tree_info_top.dds"
+        name = "GFX_ADISCORD_technology_info_top"
+        size = { x = 548 y = 220 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_info_top.dds"
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
     }
     spriteType = {
-        name = "GFX_ADISCORD_technology_tree_info"
-        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_tree_info.dds"
+        name = "GFX_ADISCORD_technology_info"
+        size = { x = 508 y = 517 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_info.dds"
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
     }
 }

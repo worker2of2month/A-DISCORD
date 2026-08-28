@@ -1,37 +1,65 @@
 spriteTypes = {
     corneredTileSpriteType = {
-        name = "GFX_ADISCORD_technology_window"
-        size = { x = 192 y = 192 }
-        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_window.dds"
-        borderSize = { x = 32 y = 32 }
+        name = "GFX_ADISCORD_technology_window_shell"
+        size = { x = 190 y = 190 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_window_shell.dds"
+        borderSize = { x = 64 y = 64 }
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
         tilingCenter = yes
     }
     corneredTileSpriteType = {
-        name = "GFX_ADISCORD_technology_panel"
-        size = { x = 192 y = 192 }
-        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_panel.dds"
-        borderSize = { x = 24 y = 24 }
+        name = "GFX_ADISCORD_technology_content_tile"
+        size = { x = 190 y = 190 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_content_tile.dds"
+        borderSize = { x = 64 y = 64 }
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
         tilingCenter = yes
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_technology_overlay"
+        size = { x = 549 y = 600 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_overlay.dds"
+        borderSize = { x = 268 y = 268 }
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+        alwaysTransparent = yes
+        tilingCenter = yes
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_technology_transparent_tile"
+        size = { x = 3 y = 3 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_transparent_tile.dds"
+        borderSize = { x = 1 y = 1 }
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
     }
     spriteType = {
         name = "GFX_ADISCORD_technology_slot"
+        size = { x = 508 y = 99 }
         textureFile = "gfx/interface/technology/ui/ADISCORD_technology_slot.dds"
     }
     spriteType = {
-        name = "GFX_ADISCORD_technology_card"
-        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_card.dds"
+        name = "GFX_ADISCORD_technology_idea"
+        size = { x = 63 y = 63 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_idea.dds"
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
     }
     spriteType = {
-        name = "GFX_ADISCORD_technology_tab"
-        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_tab.dds"
+        name = "GFX_ADISCORD_technology_tabs"
+        size = { x = 516 y = 42 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_tabs.dds"
         noOfFrames = 2
     }
     spriteType = {
         name = "GFX_ADISCORD_technology_top"
+        size = { x = 548 y = 138 }
         textureFile = "gfx/interface/technology/ui/ADISCORD_technology_top.dds"
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
     }
-    spriteType = {
+    corneredTileSpriteType = {
         name = "GFX_ADISCORD_technology_bottom"
+        size = { x = 546 y = 66 }
         textureFile = "gfx/interface/technology/ui/ADISCORD_technology_bottom.dds"
+        borderSize = { x = 182 y = 22 }
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+        tilingCenter = yes
     }
 }
