@@ -167,7 +167,10 @@ class TechnologyUiContractTests(unittest.TestCase):
         self.assertEqual(gui.count('"GFX_ADISCORD_technology_info_top"'), 2)
         self.assertEqual(gui.count('"GFX_ADISCORD_technology_info"'), 2)
         self.assertNotIn('"GFX_ADISCORD_technology_tree_panel"', gui)
-        gfx = GFX.read_text(encoding="utf-8-sig")
+        gfx = "\n".join(
+            path.read_text(encoding="utf-8-sig")
+            for path in (GFX, ROOT / "interface/ADISCORD_technologies.gfx")
+        )
         for engine_state in (
             "GFX_technology_unavailable_item_bg",
             "GFX_technology_available_item_bg",

@@ -573,9 +573,12 @@
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_technology_system.py",
+        "tools/builders/build_adiscord_technology_ui_assets.py",
         "tools/lib/adiscord_technology_applied_programmes.py",
         "tools/lib/adiscord_technology_expansions_civil.py",
         "tools/lib/adiscord_technology_expansions_combat.py",
+        "tools/lib/adiscord_ui_contracts.py",
+        "tools/lib/adiscord_ui_surfaces.py",
         "tools/data/adiscord_starting_technology_profiles.json"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_technology_system"],

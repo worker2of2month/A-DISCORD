@@ -194,6 +194,18 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
         )
         self.assertTrue(entry["may_delete_outputs"])
 
+    def test_technology_system_registry_tracks_ui_skin_generation_dependencies(self) -> None:
+        entry = self.entries["technology_system"]
+        self.assertTrue(
+            {
+                "tools/builders/build_adiscord_technology_ui_assets.py",
+                "tools/lib/adiscord_ui_contracts.py",
+                "tools/lib/adiscord_ui_surfaces.py",
+            }
+            <= set(entry["source_inputs"]),
+            "tree GUI/GFX generation imports the technology UI skin and helpers",
+        )
+
     def test_party_texticon_registry_exactly_matches_assets_and_is_exclusive(self) -> None:
         entry = self.entries["party_texticons"]
         expected_outputs = [
