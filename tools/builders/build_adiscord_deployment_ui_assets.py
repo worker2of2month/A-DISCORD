@@ -222,7 +222,7 @@ def render_asset(contract: SpriteContract, source: Image.Image) -> Image.Image:
         recessed_well(output, (2, 2, 74, 37), PALETTES["deployment"])
         return output
     if target == "GFX_ADISCORD_deployment_transparent":
-        return metal_surface(source, contract.total_size, PALETTES["deployment"], 0.70)
+        return Image.new("RGBA", contract.total_size, (0, 0, 0, 0))
     return framed_panel(source, contract.total_size, PALETTES["deployment"], 0.74)
 
 

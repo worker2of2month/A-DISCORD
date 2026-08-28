@@ -6,6 +6,7 @@ from PIL import Image
 
 from tools.builders.build_adiscord_deployment_ui_assets import (
     DEPLOYMENT_CONTRACTS,
+    VANILLA_GUI,
     expected_outputs,
 )
 
@@ -13,6 +14,7 @@ from tools.builders.build_adiscord_deployment_ui_assets import (
 ROOT = Path(__file__).resolve().parents[2]
 GUI = ROOT / "interface/countrydeploymentview.gui"
 GFX = ROOT / "interface/ADISCORD_deployment_ui.gfx"
+TRANSPARENT_DDS = ROOT / "gfx/interface/deployment/ui/ADISCORD_deployment_transparent.dds"
 
 
 EXPECTED_FIXED = {
@@ -28,6 +30,24 @@ EXPECTED_FIXED = {
     "GFX_ADISCORD_deployment_end_line": ((518, 40), 1),
     "GFX_ADISCORD_deployment_priority_title": ((159, 26), 1),
     "GFX_ADISCORD_deployment_priority_meter": ((108, 33), 1),
+}
+
+LIVE_FIXED = {
+    "GFX_ADISCORD_deployment_reinforcement_row",
+    "GFX_ADISCORD_deployment_supply_row",
+    "GFX_ADISCORD_deployment_template",
+    "GFX_ADISCORD_deployment_template_obsolete",
+    "GFX_ADISCORD_deployment_conveyor",
+    "GFX_ADISCORD_deployment_line",
+    "GFX_ADISCORD_deployment_end_line",
+    "GFX_ADISCORD_deployment_priority_title",
+    "GFX_ADISCORD_deployment_priority_meter",
+}
+
+DORMANT_ROLE_SOURCES = {
+    "GFX_deploy_upgrades_entry": "GFX_ADISCORD_deployment_upgrade_row",
+    "GFX_deploy_garrisons_entry": "GFX_ADISCORD_deployment_garrison_row",
+    "GFX_deploy_operations_entry": "GFX_ADISCORD_deployment_operations_row",
 }
 
 
@@ -76,11 +96,30 @@ class DeploymentUiContractTests(unittest.TestCase):
                 self.assertEqual(contracts[name].total_size, size, name)
                 self.assertEqual(contracts[name].frames, frames, name)
 
-    def test_deployment_gui_does_not_reuse_one_line_for_incompatible_roles(self) -> None:
+    def test_deployment_gui_uses_only_live_semantic_role_bindings(self) -> None:
         gui = GUI.read_text(encoding="utf-8-sig")
-        for name in EXPECTED_FIXED:
-            self.assertIn(f'"{name}"', gui)
+        bindings = set(
+            re.findall(
+                r'(?:quadTextureSprite|spriteType)\s*=\s*"(GFX_ADISCORD_deployment_[^"]+)"',
+                gui,
+            )
+        )
+        self.assertTrue(LIVE_FIXED <= bindings)
+        for target in DORMANT_ROLE_SOURCES.values():
+            self.assertNotIn(target, bindings)
         self.assertNotIn('"GFX_ADISCORD_deployment_panel"', gui)
+
+    def test_dormant_role_contracts_do_not_invent_live_gui_widgets(self) -> None:
+        vanilla = VANILLA_GUI.read_text(encoding="utf-8-sig")
+        for source, target in DORMANT_ROLE_SOURCES.items():
+            with self.subTest(source=source):
+                self.assertEqual(vanilla.count(f'"{source}"'), 0)
+                self.assertIn(f'name = "{target}"', GFX.read_text(encoding="utf-8-sig"))
+
+    def test_transparent_tiled_background_keeps_native_alpha(self) -> None:
+        with Image.open(TRANSPARENT_DDS) as image:
+            alpha = image.convert("RGBA").getchannel("A")
+            self.assertLessEqual(alpha.getextrema()[1], 1)
 
     def test_reinforcement_and_supply_entries_have_distinct_semantic_rows(self) -> None:
         gui = GUI.read_text(encoding="utf-8-sig")
