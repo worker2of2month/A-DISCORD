@@ -15,6 +15,8 @@ Russian localisation files use UTF-8 with a BOM. Preserve that BOM and verify
 it after editing; do not use shell rewrites that can remove it or corrupt
 Cyrillic text.
 
+Никогда не добавляй локализацию "зоне отчуждения".
+
 ## Verification
 
 Run the focused test or validator for the paths changed, then run:
@@ -36,3 +38,6 @@ unrelated work: inspect status first, avoid reset/checkout/bulk formatting,
 and stage explicit verified paths only. Do not include someone else's changes
 in a commit, and do not delete files unless their exact targets and purpose
 have been verified.
+
+##
+не забывай, что здесь еще работать живым кодерам, поэтому держи кодстайл, оптимизацию и разделение на файлы (не делай лишние файлы, где можно сгруппировать)
