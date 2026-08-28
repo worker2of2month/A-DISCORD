@@ -16,6 +16,7 @@ from unittest.mock import patch
 from PIL import Image
 
 from tools.builders import build_adiscord_party_texticons as party_texticons
+from tools.builders import build_adiscord_deployment_ui_assets as deployment_ui_assets
 from tools.builders import build_adiscord_intelligence_ui_assets as intelligence_ui_assets
 from tools.builders import build_adiscord_technology_ui_assets as technology_ui_assets
 from tools.builders import build_adiscord_val_operations_map as val_operations_map
@@ -171,6 +172,25 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
                 "tools/lib/adiscord_ui_surfaces.py",
                 "gfx/interface/production/source/production_surface_source.png",
                 "gfx/interface/intelligence/source/ADISCORD_intelligence_header_source.png",
+            },
+        )
+        self.assertTrue(entry["may_delete_outputs"])
+
+    def test_deployment_ui_registry_exactly_matches_builder_outputs_and_sources(self) -> None:
+        entry = self.entries["deployment_ui_assets"]
+        expected_paths = {
+            path.relative_to(ROOT).as_posix()
+            for path in deployment_ui_assets.expected_outputs()
+        }
+        self.assertEqual(set(entry["output_globs"]), expected_paths)
+        self.assertTrue(all("*" not in path for path in entry["output_globs"]))
+        self.assertEqual(
+            set(entry["source_inputs"]),
+            {
+                "tools/builders/build_adiscord_deployment_ui_assets.py",
+                "tools/lib/adiscord_ui_contracts.py",
+                "tools/lib/adiscord_ui_surfaces.py",
+                "gfx/interface/production/source/production_surface_source.png",
             },
         )
         self.assertTrue(entry["may_delete_outputs"])

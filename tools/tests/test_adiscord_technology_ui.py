@@ -378,6 +378,13 @@ class TechnologyUiContractTests(unittest.TestCase):
             with Image.open(path) as image:
                 self.assertEqual(image.mode, "RGBA", path.name)
 
+    def test_runtime_dds_directory_contains_only_builder_owned_outputs(self) -> None:
+        owned = {
+            path for path in builder.expected_outputs() if path.suffix == ".dds"
+        }
+        checked_in = set(ASSET_DIR.glob("*.dds"))
+        self.assertEqual(checked_in, owned)
+
 
 if __name__ == "__main__":
     unittest.main()

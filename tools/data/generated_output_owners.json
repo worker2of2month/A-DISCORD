@@ -512,19 +512,37 @@
       "output_globs": [
         "interface/countrydeploymentview.gui",
         "interface/ADISCORD_deployment_ui.gfx",
+        "gfx/interface/deployment/preview/ADISCORD_deployment_preview.png",
         "gfx/interface/deployment/ui/ADISCORD_deployment_window.dds",
-        "gfx/interface/deployment/ui/ADISCORD_deployment_panel.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_shell.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_thin_shell.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_overlay.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_small_panel.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_transparent.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_header.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_icon_well.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_reinforcement_row.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_supply_row.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_upgrade_row.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_garrison_row.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_operations_row.dds",
         "gfx/interface/deployment/ui/ADISCORD_deployment_template.dds",
-        "gfx/interface/deployment/ui/ADISCORD_deployment_line.dds"
+        "gfx/interface/deployment/ui/ADISCORD_deployment_template_obsolete.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_conveyor.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_line.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_end_line.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_priority_title.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_priority_meter.dds"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_deployment_ui_assets.py",
+        "tools/lib/adiscord_ui_contracts.py",
         "tools/lib/adiscord_ui_surfaces.py",
         "gfx/interface/production/source/production_surface_source.png"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_deployment_ui_assets"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_deployment_ui_assets", "--apply"],
-      "may_delete_outputs": false,
+      "may_delete_outputs": true,
       "ownership_mode": "exclusive"
     },
     {

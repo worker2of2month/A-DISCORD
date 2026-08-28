@@ -14,6 +14,7 @@ from tools.builders.build_adiscord_deployment_ui_assets import (
 ROOT = Path(__file__).resolve().parents[2]
 GUI = ROOT / "interface/countrydeploymentview.gui"
 GFX = ROOT / "interface/ADISCORD_deployment_ui.gfx"
+ASSET_DIR = ROOT / "gfx/interface/deployment/ui"
 TRANSPARENT_DDS = ROOT / "gfx/interface/deployment/ui/ADISCORD_deployment_transparent.dds"
 
 
@@ -149,6 +150,11 @@ class DeploymentUiContractTests(unittest.TestCase):
             if path.suffix == ".dds":
                 with Image.open(path) as image:
                     self.assertEqual(image.mode, "RGBA", path.name)
+
+    def test_runtime_dds_directory_contains_only_builder_owned_outputs(self) -> None:
+        owned = {path for path in expected_outputs() if path.suffix == ".dds"}
+        checked_in = set(ASSET_DIR.glob("*.dds"))
+        self.assertEqual(checked_in, owned)
 
 
 if __name__ == "__main__":

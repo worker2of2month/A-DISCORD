@@ -39,6 +39,7 @@ OUTPUT_DIR = ROOT / "gfx/interface/deployment/ui"
 PREVIEW = ROOT / "gfx/interface/deployment/preview/ADISCORD_deployment_preview.png"
 GUI_OUTPUT = ROOT / "interface/countrydeploymentview.gui"
 GFX_OUTPUT = ROOT / "interface/ADISCORD_deployment_ui.gfx"
+LEGACY_OUTPUTS = (OUTPUT_DIR / "ADISCORD_deployment_panel.dds",)
 
 EFFECT = "gfx/FX/buttonstate_nodowneffect.lua"
 OLIVE = (101, 124, 63, 255)
@@ -253,13 +254,29 @@ def expected_outputs() -> dict[Path, bytes]:
     return outputs
 
 
+def _remove_legacy_outputs() -> None:
+    for path in LEGACY_OUTPUTS:
+        if path.is_file():
+            path.unlink()
+            print(f"REMOVED: {path}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Build A-Discord deployment UI assets.")
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--check", action="store_true")
     actions.add_argument("--apply", action="store_true")
     args = parser.parse_args()
-    return apply_or_check(expected_outputs(), args.apply, "Deployment UI")
+    if not args.apply:
+        obsolete = [path for path in LEGACY_OUTPUTS if path.is_file()]
+        if obsolete:
+            for path in obsolete:
+                print(f"OBSOLETE: {path}")
+            return 1
+    result = apply_or_check(expected_outputs(), args.apply, "Deployment UI")
+    if result == 0 and args.apply:
+        _remove_legacy_outputs()
+    return result
 
 
 if __name__ == "__main__":
