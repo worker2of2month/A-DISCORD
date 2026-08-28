@@ -1,4 +1,6 @@
 from pathlib import Path
+from contextlib import redirect_stdout
+from io import StringIO
 from tempfile import TemporaryDirectory
 import unittest
 
@@ -10,7 +12,14 @@ from tools.lib.adiscord_ui_surfaces import (
     button_strip,
     dds_bytes,
     framed_panel,
+    horizontal_state_strip,
+    outer_frame,
+    partial_rails,
+    raised_field,
+    recessed_well,
     replace_counted,
+    status_band,
+    surface,
 )
 
 
@@ -56,11 +65,50 @@ class UiSurfaceTests(unittest.TestCase):
             path = Path(temp) / "panel.dds"
             outputs = {path: dds_bytes(self.source)}
 
-            self.assertEqual(apply_or_check(outputs, apply=False, label="test"), 1)
+            with redirect_stdout(StringIO()):
+                self.assertEqual(apply_or_check(outputs, apply=False, label="test"), 1)
             self.assertFalse(path.exists())
-            self.assertEqual(apply_or_check(outputs, apply=True, label="test"), 0)
+            with redirect_stdout(StringIO()):
+                self.assertEqual(apply_or_check(outputs, apply=True, label="test"), 0)
             self.assertTrue(path.exists())
-            self.assertEqual(apply_or_check(outputs, apply=False, label="test"), 0)
+            with redirect_stdout(StringIO()):
+                self.assertEqual(apply_or_check(outputs, apply=False, label="test"), 0)
+
+    def test_recess_and_status_band_change_only_their_declared_zones(self) -> None:
+        image = Image.new("RGBA", (96, 64), (40, 42, 44, 255))
+        recessed_well(image, (8, 10, 55, 48), PALETTES["deployment"])
+        status_band(image, (60, 10, 90, 15), (132, 151, 78, 255))
+
+        self.assertEqual(image.getpixel((2, 2)), (40, 42, 44, 255))
+        self.assertNotEqual(image.getpixel((8, 10)), (40, 42, 44, 255))
+        self.assertEqual(image.getpixel((70, 12)), (132, 151, 78, 255))
+
+    def test_partial_rails_do_not_draw_a_repeated_full_outer_frame(self) -> None:
+        image = Image.new("RGBA", (96, 64), (40, 42, 44, 255))
+        partial_rails(image, (5, 6, 90, 58), PALETTES["intelligence"])
+
+        self.assertEqual(image.getpixel((5, 6)), (40, 42, 44, 255))
+        self.assertNotEqual(image.getpixel((48, 6)), (40, 42, 44, 255))
+
+    def test_surface_frame_field_and_state_strip_remain_inside_their_boxes(self) -> None:
+        image = Image.new("RGBA", (96, 64), (40, 42, 44, 255))
+        palette = PALETTES["technology"]
+
+        surface(image, (10, 10, 35, 30), palette)
+        outer_frame(image, (40, 10, 65, 30), palette)
+        raised_field(image, (10, 35, 35, 55), palette)
+        horizontal_state_strip(
+            image,
+            (40, 35, 65, 55),
+            palette,
+            (palette.edge, palette.accent_light),
+        )
+
+        self.assertNotEqual(image.getpixel((20, 20)), (40, 42, 44, 255))
+        self.assertNotEqual(image.getpixel((40, 10)), (40, 42, 44, 255))
+        self.assertNotEqual(image.getpixel((20, 45)), (40, 42, 44, 255))
+        self.assertNotEqual(image.getpixel((45, 45)), (40, 42, 44, 255))
+        self.assertEqual(image.getpixel((2, 2)), (40, 42, 44, 255))
 
 
 if __name__ == "__main__":

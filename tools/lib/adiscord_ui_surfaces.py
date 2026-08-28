@@ -99,6 +99,70 @@ def metal_surface(
     return output
 
 
+def surface(image: Image.Image, box: tuple[int, int, int, int], palette: UiPalette) -> None:
+    """Lay down the neutral working surface inside a semantic region."""
+    ImageDraw.Draw(image, "RGBA").rectangle(box, fill=palette.panel)
+
+
+def outer_frame(image: Image.Image, box: tuple[int, int, int, int], palette: UiPalette) -> None:
+    """Draw a complete frame only for a true outer window."""
+    draw = ImageDraw.Draw(image, "RGBA")
+    left, top, right, bottom = box
+    draw.rectangle(box, outline=palette.deep, width=2)
+    draw.rectangle((left + 2, top + 2, right - 2, bottom - 2), outline=palette.edge)
+    draw.line((left + 4, top + 3, right - 4, top + 3), fill=palette.edge_light)
+    draw.line((left + 4, bottom - 3, right - 4, bottom - 3), fill=palette.accent)
+
+
+def recessed_well(image: Image.Image, box: tuple[int, int, int, int], palette: UiPalette) -> None:
+    """Draw a dark, bounded recess for icons, counters, or text fields."""
+    draw = ImageDraw.Draw(image, "RGBA")
+    draw.rectangle(box, fill=palette.deep, outline=palette.edge)
+    left, top, right, _ = box
+    draw.line((left + 1, top + 1, right - 1, top + 1), fill=palette.panel)
+
+
+def raised_field(image: Image.Image, box: tuple[int, int, int, int], palette: UiPalette) -> None:
+    """Draw a lighter field for readable active content."""
+    draw = ImageDraw.Draw(image, "RGBA")
+    draw.rectangle(box, fill=palette.panel, outline=palette.edge)
+    left, top, right, _ = box
+    draw.line((left + 1, top + 1, right - 1, top + 1), fill=palette.edge_light)
+
+
+def status_band(image: Image.Image, box: tuple[int, int, int, int], color: Color) -> None:
+    """Fill a narrow semantic status region without affecting its surround."""
+    ImageDraw.Draw(image, "RGBA").rectangle(box, fill=color)
+
+
+def partial_rails(image: Image.Image, box: tuple[int, int, int, int], palette: UiPalette) -> None:
+    """Add open-ended rails for nested structure without a repeated frame."""
+    draw = ImageDraw.Draw(image, "RGBA")
+    left, top, right, bottom = box
+    inset = 4
+    draw.line((left + inset, top, right - inset, top), fill=palette.edge)
+    draw.line((left + inset, bottom, right - inset, bottom), fill=palette.edge_light)
+
+
+def horizontal_state_strip(
+    image: Image.Image,
+    box: tuple[int, int, int, int],
+    palette: UiPalette,
+    state_colors: tuple[Color, ...],
+) -> None:
+    """Divide a field into horizontal state bands using supplied state colors."""
+    left, top, right, bottom = box
+    if not state_colors:
+        raise ValueError("state_colors must not be empty")
+    draw = ImageDraw.Draw(image, "RGBA")
+    width = right - left + 1
+    for index, color in enumerate(state_colors):
+        start = left + width * index // len(state_colors)
+        end = left + width * (index + 1) // len(state_colors) - 1
+        draw.rectangle((start, top, end, bottom), fill=color)
+    draw.rectangle(box, outline=palette.edge)
+
+
 def framed_panel(
     source: Image.Image,
     size: tuple[int, int],
