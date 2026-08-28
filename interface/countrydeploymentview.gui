@@ -18,6 +18,13 @@
 # semantic deployment asset: "GFX_ADISCORD_deployment_end_line"
 # semantic deployment asset: "GFX_ADISCORD_deployment_priority_title"
 # semantic deployment asset: "GFX_ADISCORD_deployment_priority_meter"
+# semantic deployment asset: "GFX_ADISCORD_deployment_action_button"
+# semantic deployment asset: "GFX_ADISCORD_deployment_symbol_button"
+# semantic deployment asset: "GFX_ADISCORD_deployment_designer_button"
+# semantic deployment asset: "GFX_ADISCORD_deployment_add_line_button"
+# semantic deployment asset: "GFX_ADISCORD_deployment_priority_strip"
+# semantic deployment asset: "GFX_ADISCORD_deployment_checkbox"
+# semantic deployment asset: "GFX_ADISCORD_deployment_foreign_templates"
 guiTypes = {
 
 	containerWindowType = {
@@ -197,7 +204,7 @@ guiTypes = {
 			buttonType = {
 				name = "checkbox"
 				position = { x = 18 y = 7 }
-				quadTextureSprite ="GFX_generic_checkbox"
+				quadTextureSprite ="GFX_ADISCORD_deployment_checkbox"
 				clicksound = click_checkbox
 			}
 
@@ -219,7 +226,7 @@ guiTypes = {
 		buttonType = {
 			name = "open_designer_button"
 			position = { x = 188 y = 56 }
-			quadTextureSprite ="GFX_division_designer_button"
+			quadTextureSprite ="GFX_ADISCORD_deployment_designer_button"
 			buttonFont = "hoi_18mbs"
 			buttonText = "DEPLOYMENT_DESIGNER"
 			clicksound = click_default
@@ -234,7 +241,7 @@ guiTypes = {
 			expandButton = {
 				name = "expand_button"
 				position = { x = -88 y = 17 }
-				quadTextureSprite ="GFX_foreign_templates_dropdown_button"
+				quadTextureSprite ="GFX_ADISCORD_deployment_foreign_templates"
 				buttonFont = "Main_14_black"
 				Orientation = "UPPER_RIGHT"
 				clicksound = click_default
@@ -295,7 +302,7 @@ guiTypes = {
 				size = { x=248 y=41 }
 				font = "hoi_16mbs"
 				buttontext = "BACK"
-				quadTextureSprite = "GFX_button_221x34"
+				quadTextureSprite = "GFX_ADISCORD_deployment_symbol_button"
 				clicksound = click_default
 			}
 
@@ -305,7 +312,7 @@ guiTypes = {
 				size = { x=248 y=41 }
 				font = "hoi_16mbs"
 				buttontext = "DEFAULT_DIV_TEMPL_SYMBOL"
-				quadTextureSprite = "GFX_button_221x34"
+				quadTextureSprite = "GFX_ADISCORD_deployment_symbol_button"
 				clicksound = click_default
 			}
 
@@ -460,7 +467,7 @@ guiTypes = {
 		buttonType = {
 			name = "add_template_button"
 			position = { x = 158 y = 48 }
-			quadTextureSprite ="GFX_small_button_71x26"
+			quadTextureSprite ="GFX_ADISCORD_deployment_action_button"
 			buttonFont = "hoi_16mbs"
 			buttonText = "DEPLOYMENT_ADD_TEMPLATE"
 			clicksound = click_default
@@ -479,7 +486,7 @@ guiTypes = {
 			position = { x = 228 y = 48 }
 			buttonFont = "hoi_16mbs"
 			buttonText = "EDIT"
-			quadTextureSprite = "GFX_small_button_71x26"
+			quadTextureSprite = "GFX_ADISCORD_deployment_action_button"
 			clicksound = click_default
 		}
 
@@ -582,7 +589,7 @@ guiTypes = {
 			name = "low_prio"
 			position = { x = 415 y = 15 }
 			buttonFont = "hoi_16mbs"
-			quadTextureSprite = "GFX_deploy_priority"
+			quadTextureSprite = "GFX_ADISCORD_deployment_priority_strip"
 			frame = 1
 			clicksound = click_default
 		}
@@ -591,7 +598,7 @@ guiTypes = {
 			name = "medium_prio"
 			position = { x = 435 y = 15 }
 			buttonFont = "hoi_16mbs"
-			quadTextureSprite = "GFX_deploy_priority"
+			quadTextureSprite = "GFX_ADISCORD_deployment_priority_strip"
 			frame = 3
 			clicksound = click_default
 		}
@@ -600,7 +607,7 @@ guiTypes = {
 			name = "high_prio"
 			position = { x = 455 y = 15 }
 			buttonFont = "hoi_16mbs"
-			quadTextureSprite = "GFX_deploy_priority"
+			quadTextureSprite = "GFX_ADISCORD_deployment_priority_strip"
 			frame = 1
 			clicksound = click_default
 		}
@@ -676,7 +683,7 @@ guiTypes = {
 			name = "low_prio"
 			position = { x = 415 y = 15 }
 			buttonFont = "hoi_16mbs"
-			quadTextureSprite = "GFX_deploy_priority"
+			quadTextureSprite = "GFX_ADISCORD_deployment_priority_strip"
 			frame = 1
 			clicksound = click_default
 		}
@@ -685,7 +692,7 @@ guiTypes = {
 			name = "medium_prio"
 			position = { x = 435 y = 15 }
 			buttonFont = "hoi_16mbs"
-			quadTextureSprite = "GFX_deploy_priority"
+			quadTextureSprite = "GFX_ADISCORD_deployment_priority_strip"
 			frame = 3
 			clicksound = click_default
 		}
@@ -694,7 +701,7 @@ guiTypes = {
 			name = "high_prio"
 			position = { x = 455 y = 15 }
 			buttonFont = "hoi_16mbs"
-			quadTextureSprite = "GFX_deploy_priority"
+			quadTextureSprite = "GFX_ADISCORD_deployment_priority_strip"
 			frame = 1
 			clicksound = click_default
 		}
@@ -1039,7 +1046,7 @@ guiTypes = {
 			name = "low_prio"
 			position = { x = 420 y = 17 }
 			buttonFont = "hoi_16mbs"
-			quadTextureSprite = "GFX_deploy_priority"
+			quadTextureSprite = "GFX_ADISCORD_deployment_priority_strip"
 			pdx_tooltip = "DEPLOYMENT_LOW_PRIORITY_DESC"
 			frame = 1
 			clicksound = click_default
@@ -1049,7 +1056,7 @@ guiTypes = {
 			name = "medium_prio"
 			position = { x = 440 y = 17 }
 			buttonFont = "hoi_16mbs"
-			quadTextureSprite = "GFX_deploy_priority"
+			quadTextureSprite = "GFX_ADISCORD_deployment_priority_strip"
 			pdx_tooltip = "DEPLOYMENT_MEDIUM_PRIORITY_DESC"
 			frame = 3
 			clicksound = click_default
@@ -1059,7 +1066,7 @@ guiTypes = {
 			name = "high_prio"
 			position = { x = 460 y = 17 }
 			buttonFont = "hoi_16mbs"
-			quadTextureSprite = "GFX_deploy_priority"
+			quadTextureSprite = "GFX_ADISCORD_deployment_priority_strip"
 			pdx_tooltip = "DEPLOYMENT_HIGH_PRIORITY_DESC"
 			frame = 1
 			clicksound = click_default
@@ -1068,7 +1075,7 @@ guiTypes = {
 		buttonType = {
 			name = "add_button"
 			position = { x = 315 y = 50 }
-			quadTextureSprite ="GFX_military_deployment_add_line_btn"
+			quadTextureSprite ="GFX_ADISCORD_deployment_add_line_button"
 			buttonText = "ADD_CONVEYOR_LINE_BUTTON_LABEL"
 			buttonFont = "hoi_18mbs"
 			clicksound = click_default

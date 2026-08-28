@@ -37,6 +37,7 @@ LEGACY_GENERIC_ROLES = (
 
 
 EXPECTED_OVERVIEW = {
+    "GFX_ADISCORD_technology_empty_slot_glow": ((950, 78), 2),
     "GFX_ADISCORD_technology_slot": ((508, 99), 1),
     "GFX_ADISCORD_technology_idea": ((63, 63), 1),
     "GFX_ADISCORD_technology_tabs": ((516, 42), 2),
@@ -114,10 +115,16 @@ class TechnologyUiContractTests(unittest.TestCase):
         }
         for name, (size, frames) in EXPECTED_OVERVIEW.items():
             with self.subTest(sprite=name):
+                self.assertIn(name, contracts)
                 self.assertEqual(contracts[name].total_size, size, name)
                 self.assertEqual(contracts[name].frames, frames, name)
 
         self.assertEqual(contracts["GFX_ADISCORD_technology_slot"].kind, "spriteType")
+        self.assertIn("GFX_ADISCORD_technology_empty_slot_glow", contracts)
+        self.assertEqual(
+            contracts["GFX_ADISCORD_technology_empty_slot_glow"].kind,
+            "frameAnimatedSpriteType",
+        )
         self.assertEqual(contracts["GFX_ADISCORD_technology_idea"].kind, "spriteType")
         self.assertEqual(contracts["GFX_ADISCORD_technology_tabs"].kind, "spriteType")
         self.assertEqual(contracts["GFX_ADISCORD_technology_top"].kind, "spriteType")
@@ -187,13 +194,46 @@ class TechnologyUiContractTests(unittest.TestCase):
             if name == "GFX_ADISCORD_technology_bottom":
                 continue
             with self.subTest(sprite=name):
-                self.assertEqual(contracts[name].kind, "spriteType")
+                self.assertIn(name, contracts)
+                if name == "GFX_ADISCORD_technology_empty_slot_glow":
+                    self.assertEqual(contracts[name].kind, "frameAnimatedSpriteType")
+                else:
+                    self.assertEqual(contracts[name].kind, "spriteType")
 
     def test_research_slot_has_distinct_icon_title_progress_and_time_zones(self) -> None:
         outputs = builder.expected_outputs()
         image = Image.open(io.BytesIO(outputs[builder.SLOT])).convert("RGBA")
         self.assertNotEqual(image.getpixel((34, 46)), image.getpixel((250, 46)))
         self.assertNotEqual(image.getpixel((250, 46)), image.getpixel((430, 73)))
+
+    def test_empty_research_slot_is_scoped_and_has_a_visible_pulse(self) -> None:
+        gui = builder.render_gui()
+        self.assertEqual(gui.count('"GFX_ADISCORD_technology_empty_slot_glow"'), 1)
+        self.assertNotIn('"GFX_empty_research_slot_glow"', gui)
+
+        outputs = builder.expected_outputs()
+        path = builder.EMPTY_SLOT_GLOW
+        image = Image.open(io.BytesIO(outputs[path])).convert("RGBA")
+        first = image.crop((0, 0, 475, 78))
+        second = image.crop((475, 0, 950, 78))
+        self.assertEqual(first.getchannel("A").tobytes(), second.getchannel("A").tobytes())
+        self.assertIsNotNone(
+            ImageChops.difference(first.convert("RGB"), second.convert("RGB")).getbbox()
+        )
+
+    def test_research_overview_top_contains_visible_system_instrumentation(self) -> None:
+        outputs = builder.expected_outputs()
+        image = Image.open(io.BytesIO(outputs[builder.TOP])).convert("RGB")
+
+        def signal_pixels(box: tuple[int, int, int, int]) -> int:
+            return sum(
+                1
+                for red, green, blue in image.crop(box).get_flattened_data()
+                if green >= 70 and blue >= 75 and green > red * 1.15
+            )
+
+        self.assertGreater(signal_pixels((12, 12, 312, 96)), 120)
+        self.assertGreater(signal_pixels((330, 10, 516, 96)), 80)
 
     def test_tabs_share_silhouette_but_use_a_distinct_selected_edge(self) -> None:
         outputs = builder.expected_outputs()

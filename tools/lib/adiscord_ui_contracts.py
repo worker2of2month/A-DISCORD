@@ -13,7 +13,12 @@ class SpriteContract:
     source_name: str
     target_name: str
     filename: str
-    kind: Literal["spriteType", "corneredTileSpriteType", "frameAnimatedSpriteType"]
+    kind: Literal[
+        "spriteType",
+        "textSpriteType",
+        "corneredTileSpriteType",
+        "frameAnimatedSpriteType",
+    ]
     total_size: tuple[int, int]
     frames: int = 1
     border_size: tuple[int, int] | None = None

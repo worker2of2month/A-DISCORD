@@ -50,6 +50,7 @@ GFX_OUTPUT = ROOT / "interface/ADISCORD_technology_ui.gfx"
 STATE_GFX_OUTPUT = ROOT / "interface/zz_ADISCORD_technology_states.gfx"
 
 EFFECT = "gfx/FX/buttonstate_nodowneffect.lua"
+PULSE_EFFECT = "gfx/FX/buttonstate_blendframes.lua"
 MUTED_GOLD = (146, 116, 62, 255)
 NEUTRAL_GREY = (88, 92, 92, 255)
 MUTED_GREEN = (64, 112, 76, 255)
@@ -100,6 +101,22 @@ TECHNOLOGY_OVERVIEW_CONTRACTS = (
         (3, 3),
         border_size=(1, 1),
         effect_file=EFFECT,
+    ),
+    SpriteContract(
+        "GFX_empty_research_slot_glow",
+        "GFX_ADISCORD_technology_empty_slot_glow",
+        "ADISCORD_technology_empty_slot_glow.dds",
+        "frameAnimatedSpriteType",
+        (950, 78),
+        frames=2,
+        effect_file=PULSE_EFFECT,
+        always_transparent=True,
+        extra_lines=(
+            "animation_rate_fps = 1",
+            "looping = yes",
+            "play_on_show = yes",
+            "pause_on_loop = 0.0",
+        ),
     ),
     SpriteContract(
         "GFX_research_line_bg",
@@ -261,6 +278,7 @@ WINDOW_SHELL = _output_path("GFX_ADISCORD_technology_window_shell")
 CONTENT_TILE = _output_path("GFX_ADISCORD_technology_content_tile")
 OVERLAY = _output_path("GFX_ADISCORD_technology_overlay")
 TRANSPARENT_TILE = _output_path("GFX_ADISCORD_technology_transparent_tile")
+EMPTY_SLOT_GLOW = _output_path("GFX_ADISCORD_technology_empty_slot_glow")
 SLOT = _output_path("GFX_ADISCORD_technology_slot")
 IDEA = _output_path("GFX_ADISCORD_technology_idea")
 TABS = _output_path("GFX_ADISCORD_technology_tabs")
@@ -281,6 +299,7 @@ SPRITE_REPLACEMENTS = {
         (CONTRACTS_BY_TARGET["GFX_ADISCORD_technology_content_tile"], 1),
         (CONTRACTS_BY_TARGET["GFX_ADISCORD_technology_overlay"], 1),
         (CONTRACTS_BY_TARGET["GFX_ADISCORD_technology_transparent_tile"], 1),
+        (CONTRACTS_BY_TARGET["GFX_ADISCORD_technology_empty_slot_glow"], 1),
         (CONTRACTS_BY_TARGET["GFX_ADISCORD_technology_idea"], 1),
         (CONTRACTS_BY_TARGET["GFX_ADISCORD_technology_slot"], 1),
         (CONTRACTS_BY_TARGET["GFX_ADISCORD_technology_tabs"], 2),
@@ -399,6 +418,28 @@ def _research_slot(source: Image.Image) -> Image.Image:
     return output
 
 
+def _empty_research_slot_glow(source: Image.Image) -> Image.Image:
+    """Render two low-key pulse frames over the native empty-slot geometry."""
+    palette = PALETTES["technology"]
+    output = Image.new("RGBA", (950, 78), (0, 0, 0, 0))
+    for index, color in enumerate(((55, 111, 116, 255), (77, 153, 156, 255))):
+        frame = Image.new("RGBA", (475, 78), (0, 0, 0, 0))
+        draw = ImageDraw.Draw(frame, "RGBA")
+        draw.rectangle((1, 1, 473, 76), fill=(4, 10, 13, 48), outline=color)
+        draw.rectangle((7, 7, 54, 70), fill=(3, 8, 10, 92), outline=color)
+        draw.rectangle((62, 8, 367, 34), fill=(3, 8, 10, 70), outline=color)
+        draw.rectangle((62, 42, 430, 69), fill=(3, 8, 10, 54), outline=color)
+        draw.rectangle((438, 42, 468, 69), fill=(3, 8, 10, 72), outline=color)
+        for x in range(72, 354, 28):
+            draw.line((x, 13, x, 29), fill=(color[0], color[1], color[2], 72))
+        pulse = ((70, 57), (124, 57), (150, 48), (184, 63), (224, 47), (269, 57), (314, 42), (356, 55), (414, 55))
+        draw.line(pulse, fill=color, width=2)
+        for x, y in pulse[1:-1:2]:
+            draw.ellipse((x - 2, y - 2, x + 2, y + 2), fill=palette.deep, outline=color)
+        output.alpha_composite(frame, (index * 475, 0))
+    return output
+
+
 def _idea_button(source: Image.Image) -> Image.Image:
     palette = PALETTES["technology"]
     output = metal_surface(source, (63, 63), palette, 0.77)
@@ -426,10 +467,27 @@ def _overview_top(source: Image.Image) -> Image.Image:
     palette = PALETTES["technology"]
     output = metal_surface(source, (548, 138), palette, 0.80)
     partial_rails(output, (5, 5, 542, 133), palette)
+    recessed_well(output, (12, 12, 312, 96), palette)
     raised_field(output, (324, 5, 520, 101), palette)
     recessed_well(output, (44, 104, 271, 132), palette)
     recessed_well(output, (290, 104, 513, 132), palette)
     status_band(output, (8, 2, 539, 4), palette.accent)
+    draw = ImageDraw.Draw(output, "RGBA")
+    signal = (63, 110, 117, 190)
+    signal_soft = (63, 110, 117, 82)
+    for x in range(24, 304, 28):
+        draw.line((x, 18, x, 90), fill=signal_soft)
+    for y in range(22, 91, 17):
+        draw.line((18, y, 306, y), fill=signal_soft)
+    trace = ((20, 77), (54, 67), (88, 71), (121, 46), (157, 59), (198, 34), (239, 48), (302, 24))
+    draw.line(trace, fill=signal, width=2)
+    for x, y in trace:
+        draw.ellipse((x - 3, y - 3, x + 3, y + 3), fill=palette.deep, outline=signal)
+    nodes = ((346, 24), (389, 44), (431, 24), (476, 48), (389, 78), (465, 82))
+    for start, end in ((0, 1), (1, 2), (1, 4), (2, 3), (3, 5), (4, 5)):
+        draw.line((nodes[start], nodes[end]), fill=signal_soft, width=2)
+    for x, y in nodes:
+        draw.ellipse((x - 5, y - 5, x + 5, y + 5), fill=palette.deep, outline=signal, width=2)
     return output
 
 
@@ -602,6 +660,7 @@ def render_asset(contract: SpriteContract, source: Image.Image) -> Image.Image:
         "GFX_ADISCORD_technology_content_tile": _content_tile,
         "GFX_ADISCORD_technology_overlay": _overlay,
         "GFX_ADISCORD_technology_slot": _research_slot,
+        "GFX_ADISCORD_technology_empty_slot_glow": _empty_research_slot_glow,
         "GFX_ADISCORD_technology_idea": _idea_button,
         "GFX_ADISCORD_technology_tabs": _overview_tabs,
         "GFX_ADISCORD_technology_top": _overview_top,
@@ -626,6 +685,7 @@ def render_gfx() -> str:
         "GFX_tiled_plain_bg",
         "GFX_tiled_generic_overlay_bg1",
         "GFX_tiled_window_transparent",
+        "GFX_empty_research_slot_glow",
         "GFX_research_line_bg",
         "GFX_tech_idea_bg",
         "GFX_tab_large",
@@ -679,6 +739,7 @@ def expected_outputs() -> dict[Path, bytes]:
         state_assets.append((contract, image))
     preview_targets = {
         "GFX_ADISCORD_technology_slot",
+        "GFX_ADISCORD_technology_empty_slot_glow",
         "GFX_ADISCORD_technology_idea",
         "GFX_ADISCORD_technology_tabs",
         "GFX_ADISCORD_technology_top",

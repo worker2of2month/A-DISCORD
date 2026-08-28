@@ -106,4 +106,21 @@ spriteTypes = {
         textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_mission_bar.dds"
         effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
     }
+    textSpriteType = {
+        name = "GFX_ADISCORD_intelligence_create_button"
+        size = { x = 221 y = 36 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_create_button.dds"
+        effectFile = "gfx/FX/buttonstate.lua"
+    }
+    textSpriteType = {
+        name = "GFX_ADISCORD_intelligence_command_button"
+        size = { x = 214 y = 28 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_command_button.dds"
+        effectFile = "gfx/FX/buttonstate.lua"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_upgrade_card"
+        size = { x = 99 y = 80 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_upgrade_card.dds"
+    }
 }

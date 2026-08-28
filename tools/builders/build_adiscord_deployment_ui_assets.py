@@ -7,7 +7,7 @@ import argparse
 from io import BytesIO
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageDraw
 
 from tools.lib.adiscord_ui_contracts import (
     SpriteContract,
@@ -42,10 +42,12 @@ GFX_OUTPUT = ROOT / "interface/ADISCORD_deployment_ui.gfx"
 LEGACY_OUTPUTS = (OUTPUT_DIR / "ADISCORD_deployment_panel.dds",)
 
 EFFECT = "gfx/FX/buttonstate_nodowneffect.lua"
+BUTTON_EFFECT = "gfx/FX/buttonstate.lua"
 OLIVE = (101, 124, 63, 255)
 RUST = (150, 83, 50, 255)
 SUPPLY_STEEL = (81, 111, 124, 255)
 VIOLET = (112, 82, 136, 255)
+MUTED_GOLD = (146, 116, 62, 255)
 
 
 DEPLOYMENT_CONTRACTS = (
@@ -69,6 +71,13 @@ DEPLOYMENT_CONTRACTS = (
     SpriteContract("GFX_military_deployment_end_line_view_bg", "GFX_ADISCORD_deployment_end_line", "ADISCORD_deployment_end_line.dds", "spriteType", (518, 40), effect_file=EFFECT),
     SpriteContract("GFX_deploy_priority_title_bg", "GFX_ADISCORD_deployment_priority_title", "ADISCORD_deployment_priority_title.dds", "spriteType", (159, 26)),
     SpriteContract("GFX_deploy_priority_equipment_meter_bg", "GFX_ADISCORD_deployment_priority_meter", "ADISCORD_deployment_priority_meter.dds", "spriteType", (108, 33)),
+    SpriteContract("GFX_small_button_71x26", "GFX_ADISCORD_deployment_action_button", "ADISCORD_deployment_action_button.dds", "textSpriteType", (71, 26), effect_file=BUTTON_EFFECT),
+    SpriteContract("GFX_button_221x34", "GFX_ADISCORD_deployment_symbol_button", "ADISCORD_deployment_symbol_button.dds", "textSpriteType", (221, 36), effect_file=BUTTON_EFFECT),
+    SpriteContract("GFX_division_designer_button", "GFX_ADISCORD_deployment_designer_button", "ADISCORD_deployment_designer_button.dds", "textSpriteType", (166, 33), effect_file=BUTTON_EFFECT),
+    SpriteContract("GFX_military_deployment_add_line_btn", "GFX_ADISCORD_deployment_add_line_button", "ADISCORD_deployment_add_line_button.dds", "textSpriteType", (210, 23), frames=2, effect_file=BUTTON_EFFECT),
+    SpriteContract("GFX_deploy_priority", "GFX_ADISCORD_deployment_priority_strip", "ADISCORD_deployment_priority_strip.dds", "spriteType", (80, 21), frames=4),
+    SpriteContract("GFX_generic_checkbox", "GFX_ADISCORD_deployment_checkbox", "ADISCORD_deployment_checkbox.dds", "spriteType", (68, 30), frames=2),
+    SpriteContract("GFX_foreign_templates_dropdown_button", "GFX_ADISCORD_deployment_foreign_templates", "ADISCORD_deployment_foreign_templates.dds", "spriteType", (168, 56), frames=3),
 )
 
 SPRITE_REPLACEMENTS = {
@@ -87,6 +96,13 @@ SPRITE_REPLACEMENTS = {
     "GFX_deploy_priority_title_bg": ("GFX_ADISCORD_deployment_priority_title", 2),
     "GFX_deploy_priority_equipment_meter_bg": ("GFX_ADISCORD_deployment_priority_meter", 2),
     "GFX_deploy_icon_tiled_bg": ("GFX_ADISCORD_deployment_icon_well", 2),
+    "GFX_small_button_71x26": ("GFX_ADISCORD_deployment_action_button", 2),
+    "GFX_button_221x34": ("GFX_ADISCORD_deployment_symbol_button", 2),
+    "GFX_division_designer_button": ("GFX_ADISCORD_deployment_designer_button", 1),
+    "GFX_military_deployment_add_line_btn": ("GFX_ADISCORD_deployment_add_line_button", 1),
+    "GFX_deploy_priority": ("GFX_ADISCORD_deployment_priority_strip", 9),
+    "GFX_generic_checkbox": ("GFX_ADISCORD_deployment_checkbox", 1),
+    "GFX_foreign_templates_dropdown_button": ("GFX_ADISCORD_deployment_foreign_templates", 1),
 }
 
 
@@ -188,6 +204,73 @@ def _priority_meter(source: Image.Image) -> Image.Image:
     return output
 
 
+def _semantic_button_strip(
+    source: Image.Image,
+    size: tuple[int, int],
+    frames: int,
+    accent: tuple[int, int, int, int],
+) -> Image.Image:
+    palette = PALETTES["deployment"]
+    frame_width = size[0] // frames
+    output = Image.new("RGBA", size, (0, 0, 0, 0))
+    for index in range(frames):
+        frame = metal_surface(
+            source,
+            (frame_width, size[1]),
+            palette,
+            0.76 + index * 0.08,
+        )
+        raised_field(frame, (2, 2, frame_width - 3, size[1] - 4), palette)
+        edge = accent if index == 0 else palette.accent_light
+        status_band(frame, (4, size[1] - 5, frame_width - 5, size[1] - 3), edge)
+        output.alpha_composite(frame, (index * frame_width, 0))
+    return output
+
+
+def _priority_strip() -> Image.Image:
+    colors = (
+        (91, 95, 90, 255),
+        (76, 121, 77, 255),
+        (156, 117, 55, 255),
+        (150, 83, 50, 255),
+    )
+    output = Image.new("RGBA", (80, 21), (0, 0, 0, 0))
+    for index, color in enumerate(colors):
+        frame = Image.new("RGBA", (20, 21), (0, 0, 0, 0))
+        draw = ImageDraw.Draw(frame, "RGBA")
+        draw.ellipse((2, 2, 18, 18), fill=(8, 12, 10, 255), outline=(33, 40, 34, 255), width=2)
+        draw.ellipse((5, 5, 15, 15), fill=color, outline=(194, 199, 187, 255))
+        draw.ellipse((8, 7, 11, 10), fill=(226, 230, 218, 165))
+        output.alpha_composite(frame, (index * 20, 0))
+    return output
+
+
+def _checkbox_strip(source: Image.Image) -> Image.Image:
+    palette = PALETTES["deployment"]
+    output = Image.new("RGBA", (68, 30), (0, 0, 0, 0))
+    for index in range(2):
+        frame = metal_surface(source, (34, 30), palette, 0.74 + index * 0.08)
+        draw = ImageDraw.Draw(frame, "RGBA")
+        draw.rectangle((6, 5, 27, 24), fill=(4, 8, 6, 255), outline=palette.edge, width=2)
+        if index:
+            draw.line((10, 14, 15, 20, 24, 9), fill=palette.accent_light, width=3)
+        output.alpha_composite(frame, (index * 34, 0))
+    return output
+
+
+def _foreign_templates_strip(source: Image.Image) -> Image.Image:
+    palette = PALETTES["deployment"]
+    output = Image.new("RGBA", (168, 56), (0, 0, 0, 0))
+    for index, accent in enumerate((palette.edge, palette.accent, RUST)):
+        frame = metal_surface(source, (56, 56), palette, 0.72 + index * 0.06)
+        recessed_well(frame, (5, 5, 50, 50), palette)
+        draw = ImageDraw.Draw(frame, "RGBA")
+        draw.polygon(((15, 17), (35, 17), (43, 25), (35, 33), (15, 33)), outline=accent)
+        draw.line((14, 39, 42, 39), fill=accent, width=2)
+        output.alpha_composite(frame, (index * 56, 0))
+    return output
+
+
 def render_asset(contract: SpriteContract, source: Image.Image) -> Image.Image:
     target = contract.target_name
     if target == "GFX_ADISCORD_deployment_reinforcement_row":
@@ -214,6 +297,20 @@ def render_asset(contract: SpriteContract, source: Image.Image) -> Image.Image:
         return _priority_title(source)
     if target == "GFX_ADISCORD_deployment_priority_meter":
         return _priority_meter(source)
+    if target == "GFX_ADISCORD_deployment_action_button":
+        return _semantic_button_strip(source, contract.total_size, contract.frames, OLIVE)
+    if target == "GFX_ADISCORD_deployment_symbol_button":
+        return _semantic_button_strip(source, contract.total_size, contract.frames, SUPPLY_STEEL)
+    if target == "GFX_ADISCORD_deployment_designer_button":
+        return _semantic_button_strip(source, contract.total_size, contract.frames, MUTED_GOLD)
+    if target == "GFX_ADISCORD_deployment_add_line_button":
+        return _semantic_button_strip(source, contract.total_size, contract.frames, OLIVE)
+    if target == "GFX_ADISCORD_deployment_priority_strip":
+        return _priority_strip()
+    if target == "GFX_ADISCORD_deployment_checkbox":
+        return _checkbox_strip(source)
+    if target == "GFX_ADISCORD_deployment_foreign_templates":
+        return _foreign_templates_strip(source)
     if target == "GFX_ADISCORD_deployment_header":
         output = metal_surface(source, contract.total_size, PALETTES["deployment"], 0.78)
         partial_rails(output, (8, 8, 366, 92), PALETTES["deployment"])

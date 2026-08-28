@@ -276,7 +276,7 @@ guiTypes = {
 		iconType = {
 			name = "empty_research_slot_glow"
 			position = { x=12 y=10 }
-			spriteType = "GFX_empty_research_slot_glow"
+			spriteType = "GFX_ADISCORD_technology_empty_slot_glow"
 		}
 
 #		iconType = {

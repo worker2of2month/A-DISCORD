@@ -129,4 +129,47 @@ spriteTypes = {
         size = { x = 108 y = 33 }
         textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_priority_meter.dds"
     }
+    textSpriteType = {
+        name = "GFX_ADISCORD_deployment_action_button"
+        size = { x = 71 y = 26 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_action_button.dds"
+        effectFile = "gfx/FX/buttonstate.lua"
+    }
+    textSpriteType = {
+        name = "GFX_ADISCORD_deployment_symbol_button"
+        size = { x = 221 y = 36 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_symbol_button.dds"
+        effectFile = "gfx/FX/buttonstate.lua"
+    }
+    textSpriteType = {
+        name = "GFX_ADISCORD_deployment_designer_button"
+        size = { x = 166 y = 33 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_designer_button.dds"
+        effectFile = "gfx/FX/buttonstate.lua"
+    }
+    textSpriteType = {
+        name = "GFX_ADISCORD_deployment_add_line_button"
+        size = { x = 210 y = 23 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_add_line_button.dds"
+        noOfFrames = 2
+        effectFile = "gfx/FX/buttonstate.lua"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_deployment_priority_strip"
+        size = { x = 80 y = 21 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_priority_strip.dds"
+        noOfFrames = 4
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_deployment_checkbox"
+        size = { x = 68 y = 30 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_checkbox.dds"
+        noOfFrames = 2
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_deployment_foreign_templates"
+        size = { x = 168 y = 56 }
+        textureFile = "gfx/interface/deployment/ui/ADISCORD_deployment_foreign_templates.dds"
+        noOfFrames = 3
+    }
 }

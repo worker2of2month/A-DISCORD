@@ -34,6 +34,9 @@ EXPECTED_FIXED = {
     "GFX_ADISCORD_intelligence_required": ((33, 29), 1),
     "GFX_ADISCORD_intelligence_add_operative": ((61, 83), 1),
     "GFX_ADISCORD_intelligence_mission_bar": ((402, 79), 1),
+    "GFX_ADISCORD_intelligence_create_button": ((221, 36), 1),
+    "GFX_ADISCORD_intelligence_command_button": ((214, 28), 1),
+    "GFX_ADISCORD_intelligence_upgrade_card": ((99, 80), 1),
 }
 
 DARK_SURFACE_TEXT_ALLOWLIST = (
@@ -133,7 +136,16 @@ class IntelligenceUiContractTests(unittest.TestCase):
         for name, (size, frames) in EXPECTED_FIXED.items():
             with self.subTest(sprite=name):
                 self.assertIn(name, contracts)
-                self.assertEqual(contracts[name].kind, "spriteType", name)
+                expected_kind = (
+                    "textSpriteType"
+                    if name
+                    in {
+                        "GFX_ADISCORD_intelligence_create_button",
+                        "GFX_ADISCORD_intelligence_command_button",
+                    }
+                    else "spriteType"
+                )
+                self.assertEqual(contracts[name].kind, expected_kind, name)
                 self.assertEqual(contracts[name].total_size, size, name)
                 self.assertEqual(contracts[name].frames, frames, name)
 
@@ -200,10 +212,13 @@ class IntelligenceUiContractTests(unittest.TestCase):
             [('font = "hoi4_typewriter16"', 'font = "hoi_18mbs"')] * 8,
         )
 
-    def test_light_vanilla_branch_upgrade_labels_keep_black_typewriter_font(self) -> None:
+    def test_light_themed_branch_upgrade_labels_keep_black_typewriter_font(self) -> None:
         gui = AGENCY_GUI.read_text(encoding="utf-8-sig")
         upgrade_button = named_block(gui, "containerWindowType", "upgrade_button")
-        self.assertIn('spriteType = "GFX_agency_branch_upgrade_button"', upgrade_button)
+        self.assertIn(
+            'spriteType = "GFX_ADISCORD_intelligence_upgrade_card"',
+            upgrade_button,
+        )
         for textbox in ("agency_branches_title", "opportunities"):
             with self.subTest(textbox=textbox):
                 block = named_block(upgrade_button, "instantTextboxType", textbox)
@@ -258,6 +273,33 @@ class IntelligenceUiContractTests(unittest.TestCase):
             ).getbbox()
         )
         self.assertGreater(ImageStat.Stat(branches.convert("L")).stddev[0], 4.0)
+        agent_art = agents.crop((190, 10, 510, 100))
+        self.assertGreater(ImageStat.Stat(agent_art.convert("L")).stddev[0], 6.0)
+        self.assertGreater(
+            sum(
+                1
+                for red, green, blue, _alpha in agent_art.get_flattened_data()
+                if blue >= 65 and green >= 55 and blue > red * 1.2
+            ),
+            100,
+        )
+
+    def test_nested_agency_commands_use_scoped_semantic_buttons(self) -> None:
+        gui = builder.render_gui_files()[AGENCY_GUI].decode("utf-8")
+        expected = {
+            "GFX_ADISCORD_intelligence_create_button": 1,
+            "GFX_ADISCORD_intelligence_command_button": 2,
+            "GFX_ADISCORD_intelligence_upgrade_card": 1,
+        }
+        for target, count in expected.items():
+            with self.subTest(target=target):
+                self.assertEqual(gui.count(f'"{target}"'), count)
+        for vanilla in (
+            "GFX_button_221x34",
+            "GFX_spymaster_button",
+            "GFX_agency_branch_upgrade_button",
+        ):
+            self.assertNotIn(f'"{vanilla}"', gui)
 
     def test_preview_places_both_headers_side_by_side_for_review(self) -> None:
         outputs = builder.expected_outputs()

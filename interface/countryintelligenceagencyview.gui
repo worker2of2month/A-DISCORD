@@ -124,7 +124,7 @@ guiTypes = {
 				buttonType = {
 					name = "spymaster_button"
 					position = { x = -18 y = 54 }
-					quadTextureSprite ="GFX_spymaster_button"
+					quadTextureSprite ="GFX_ADISCORD_intelligence_command_button"
 					buttonFont = "hoi_16mbs"
 					Orientation = "LOWER_LEFT"
 					clicksound = click_default
@@ -133,7 +133,7 @@ guiTypes = {
 				buttonType = {
 					name = "faction_button"
 					position = { x = 150 y = 54 }
-					quadTextureSprite ="GFX_spymaster_button"
+					quadTextureSprite ="GFX_ADISCORD_intelligence_command_button"
 					buttonFont = "hoi_16mbs"
 					Orientation = "LOWER_LEFT"
 					clicksound = click_default
@@ -696,7 +696,7 @@ guiTypes = {
 
 		buttonType = {
 			name = "background_button"
-			spriteType = "GFX_agency_branch_upgrade_button"
+			spriteType = "GFX_ADISCORD_intelligence_upgrade_card"
 			no_clicksound = yes
 		}
 
@@ -838,7 +838,7 @@ guiTypes = {
 			name = "create_button"
 			position = { x = 80 y = -49 }
 
-			quadTextureSprite ="GFX_button_221x34"
+			quadTextureSprite ="GFX_ADISCORD_intelligence_create_button"
 			buttonFont = "hoi_16mbs"
 			Orientation = "LOWER_LEFT"
 			clicksound = Spy_Agency_Build_Agency_Confirm

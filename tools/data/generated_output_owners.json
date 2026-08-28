@@ -458,6 +458,7 @@
         "gfx/interface/technology/ui/ADISCORD_technology_overlay.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_transparent_tile.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_slot.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_empty_slot_glow.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_idea.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_tabs.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_top.dds",
@@ -532,7 +533,14 @@
         "gfx/interface/deployment/ui/ADISCORD_deployment_line.dds",
         "gfx/interface/deployment/ui/ADISCORD_deployment_end_line.dds",
         "gfx/interface/deployment/ui/ADISCORD_deployment_priority_title.dds",
-        "gfx/interface/deployment/ui/ADISCORD_deployment_priority_meter.dds"
+        "gfx/interface/deployment/ui/ADISCORD_deployment_priority_meter.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_action_button.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_add_line_button.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_checkbox.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_designer_button.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_foreign_templates.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_priority_strip.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_symbol_button.dds"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_deployment_ui_assets.py",
@@ -571,7 +579,10 @@
         "gfx/interface/intelligence/ui/ADISCORD_intelligence_crypto_selected.dds",
         "gfx/interface/intelligence/ui/ADISCORD_intelligence_required.dds",
         "gfx/interface/intelligence/ui/ADISCORD_intelligence_add_operative.dds",
-        "gfx/interface/intelligence/ui/ADISCORD_intelligence_mission_bar.dds"
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_mission_bar.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_command_button.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_create_button.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_upgrade_card.dds"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_intelligence_ui_assets.py",

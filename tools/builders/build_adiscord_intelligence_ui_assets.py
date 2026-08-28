@@ -47,6 +47,7 @@ PREVIEW = ROOT / "gfx/interface/intelligence/preview/ADISCORD_intelligence_previ
 GFX_OUTPUT = ROOT / "interface/ADISCORD_intelligence_ui.gfx"
 
 EFFECT = "gfx/FX/buttonstate_nodowneffect.lua"
+BUTTON_EFFECT = "gfx/FX/buttonstate.lua"
 VIOLET = (104, 78, 128, 255)
 VIOLET_LIGHT = (143, 111, 164, 255)
 STEEL_BLUE = (67, 103, 133, 255)
@@ -197,6 +198,29 @@ INTELLIGENCE_CONTRACTS = (
         (402, 79),
         effect_file=EFFECT,
     ),
+    SpriteContract(
+        "GFX_button_221x34",
+        "GFX_ADISCORD_intelligence_create_button",
+        "ADISCORD_intelligence_create_button.dds",
+        "textSpriteType",
+        (221, 36),
+        effect_file=BUTTON_EFFECT,
+    ),
+    SpriteContract(
+        "GFX_spymaster_button",
+        "GFX_ADISCORD_intelligence_command_button",
+        "ADISCORD_intelligence_command_button.dds",
+        "textSpriteType",
+        (214, 28),
+        effect_file=BUTTON_EFFECT,
+    ),
+    SpriteContract(
+        "GFX_agency_branch_upgrade_button",
+        "GFX_ADISCORD_intelligence_upgrade_card",
+        "ADISCORD_intelligence_upgrade_card.dds",
+        "spriteType",
+        (99, 80),
+    ),
 )
 
 
@@ -240,6 +264,18 @@ FILE_REPLACEMENTS = {
         ),
         "GFX_operatives_bg": ("GFX_ADISCORD_intelligence_operatives", 1),
         "GFX_create_agency_bg": ("GFX_ADISCORD_intelligence_create", 1),
+        "GFX_button_221x34": (
+            "GFX_ADISCORD_intelligence_create_button",
+            1,
+        ),
+        "GFX_spymaster_button": (
+            "GFX_ADISCORD_intelligence_command_button",
+            2,
+        ),
+        "GFX_agency_branch_upgrade_button": (
+            "GFX_ADISCORD_intelligence_upgrade_card",
+            1,
+        ),
         "GFX_agency_branch_upgrade_entry_bg": (
             "GFX_ADISCORD_intelligence_branch_row",
             1,
@@ -462,22 +498,33 @@ def _agents_header(source_art: Image.Image) -> Image.Image:
         method=Image.Resampling.LANCZOS,
         centering=(0.42, 0.48),
     )
-    fitted = ImageEnhance.Contrast(fitted).enhance(0.72)
-    fitted = ImageEnhance.Brightness(fitted).enhance(0.57)
+    fitted = ImageEnhance.Contrast(fitted).enhance(1.05)
+    fitted = ImageEnhance.Brightness(fitted).enhance(0.76)
     luminance = ImageOps.grayscale(fitted.convert("RGB"))
     output = ImageOps.colorize(
         luminance,
         black=palette.deep[:3],
-        white=(78, 99, 119),
+        white=(116, 139, 160),
     ).convert("RGBA")
     overlay = Image.new("RGBA", output.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay, "RGBA")
-    draw.rectangle((0, 0, 518, 108), fill=(4, 7, 11, 38))
+    draw.rectangle((0, 0, 518, 108), fill=(4, 7, 11, 18))
     for x in range(245, 519):
-        alpha = 28 + (x - 245) * 58 // 273
+        alpha = 8 + (x - 245) * 22 // 273
         draw.line((x, 0, x, 108), fill=(3, 6, 10, alpha))
     output = Image.alpha_composite(output, overlay)
     draw = ImageDraw.Draw(output, "RGBA")
+    signal = (70, 110, 145, 255)
+    signal_soft = (35, 56, 74, 255)
+    draw.rectangle((318, 12, 505, 94), outline=signal_soft)
+    for x in range(330, 500, 28):
+        draw.line((x, 18, x, 88), fill=signal_soft)
+    for y in range(26, 88, 20):
+        draw.line((324, y, 499, y), fill=signal_soft)
+    trace = ((326, 77), (354, 63), (382, 69), (415, 38), (447, 52), (492, 24))
+    draw.line(trace, fill=signal, width=2)
+    for x, y in trace:
+        draw.ellipse((x - 3, y - 3, x + 3, y + 3), fill=palette.deep, outline=signal)
     draw.line((5, 106, 513, 106), fill=palette.edge)
     draw.line((12, 108, 506, 108), fill=palette.accent)
     return output
@@ -547,6 +594,40 @@ def _create_agency(metal: Image.Image) -> Image.Image:
     raised_field(output, (365, 16, 497, 78), palette)
     status_band(output, (10, 92, 497, 95), VIOLET)
     partial_rails(output, (5, 5, 502, 96), palette)
+    return output
+
+
+def _semantic_text_button(
+    metal: Image.Image,
+    size: tuple[int, int],
+    accent: tuple[int, int, int, int],
+) -> Image.Image:
+    palette = PALETTES["intelligence"]
+    output = metal_surface(metal, size, palette, 0.78)
+    width, height = size
+    raised_field(output, (2, 2, width - 3, height - 4), palette)
+    status_band(output, (4, height - 5, width - 5, height - 3), accent)
+    return output
+
+
+def _upgrade_card(metal: Image.Image) -> Image.Image:
+    palette = PALETTES["intelligence"]
+    fitted = ImageOps.fit(
+        metal.convert("RGB"),
+        (99, 80),
+        method=Image.Resampling.LANCZOS,
+    )
+    luminance = ImageEnhance.Contrast(ImageOps.grayscale(fitted)).enhance(1.15)
+    output = ImageOps.colorize(
+        luminance,
+        black=(118, 130, 132),
+        white=(207, 216, 217),
+    ).convert("RGBA")
+    draw = ImageDraw.Draw(output, "RGBA")
+    draw.rectangle((1, 1, 97, 78), outline=(71, 87, 92, 255), width=2)
+    draw.rectangle((6, 7, 92, 45), fill=(188, 200, 201, 176), outline=(91, 108, 112, 255))
+    draw.line((8, 48, 90, 48), fill=(224, 231, 232, 255))
+    draw.line((8, 72, 90, 72), fill=palette.accent, width=2)
     return output
 
 
@@ -721,6 +802,12 @@ def render_asset(
         return _add_operative(metal)
     if target.endswith("mission_bar"):
         return _mission_bar(metal)
+    if target.endswith("create_button"):
+        return _semantic_text_button(metal, contract.total_size, VIOLET_LIGHT)
+    if target.endswith("command_button"):
+        return _semantic_text_button(metal, contract.total_size, STEEL_BLUE)
+    if target.endswith("upgrade_card"):
+        return _upgrade_card(metal)
     raise ValueError(f"missing intelligence renderer: {target}")
 
 

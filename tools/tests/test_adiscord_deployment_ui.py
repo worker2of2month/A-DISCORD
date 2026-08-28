@@ -1,8 +1,9 @@
 from pathlib import Path
+import io
 import re
 import unittest
 
-from PIL import Image
+from PIL import Image, ImageChops
 
 from tools.builders.build_adiscord_deployment_ui_assets import (
     DEPLOYMENT_CONTRACTS,
@@ -31,6 +32,13 @@ EXPECTED_FIXED = {
     "GFX_ADISCORD_deployment_end_line": ((518, 40), 1),
     "GFX_ADISCORD_deployment_priority_title": ((159, 26), 1),
     "GFX_ADISCORD_deployment_priority_meter": ((108, 33), 1),
+    "GFX_ADISCORD_deployment_action_button": ((71, 26), 1),
+    "GFX_ADISCORD_deployment_symbol_button": ((221, 36), 1),
+    "GFX_ADISCORD_deployment_designer_button": ((166, 33), 1),
+    "GFX_ADISCORD_deployment_add_line_button": ((210, 23), 2),
+    "GFX_ADISCORD_deployment_priority_strip": ((80, 21), 4),
+    "GFX_ADISCORD_deployment_checkbox": ((68, 30), 2),
+    "GFX_ADISCORD_deployment_foreign_templates": ((168, 56), 3),
 }
 
 LIVE_FIXED = {
@@ -43,6 +51,13 @@ LIVE_FIXED = {
     "GFX_ADISCORD_deployment_end_line",
     "GFX_ADISCORD_deployment_priority_title",
     "GFX_ADISCORD_deployment_priority_meter",
+    "GFX_ADISCORD_deployment_action_button",
+    "GFX_ADISCORD_deployment_symbol_button",
+    "GFX_ADISCORD_deployment_designer_button",
+    "GFX_ADISCORD_deployment_add_line_button",
+    "GFX_ADISCORD_deployment_priority_strip",
+    "GFX_ADISCORD_deployment_checkbox",
+    "GFX_ADISCORD_deployment_foreign_templates",
 }
 
 DORMANT_ROLE_SOURCES = {
@@ -93,7 +108,19 @@ class DeploymentUiContractTests(unittest.TestCase):
         contracts = {item.target_name: item for item in DEPLOYMENT_CONTRACTS}
         for name, (size, frames) in EXPECTED_FIXED.items():
             with self.subTest(sprite=name):
-                self.assertEqual(contracts[name].kind, "spriteType", name)
+                self.assertIn(name, contracts)
+                expected_kind = (
+                    "textSpriteType"
+                    if name
+                    in {
+                        "GFX_ADISCORD_deployment_action_button",
+                        "GFX_ADISCORD_deployment_symbol_button",
+                        "GFX_ADISCORD_deployment_designer_button",
+                        "GFX_ADISCORD_deployment_add_line_button",
+                    }
+                    else "spriteType"
+                )
+                self.assertEqual(contracts[name].kind, expected_kind, name)
                 self.assertEqual(contracts[name].total_size, size, name)
                 self.assertEqual(contracts[name].frames, frames, name)
 
@@ -139,6 +166,60 @@ class DeploymentUiContractTests(unittest.TestCase):
             "allow_as_hq_icon",
         ):
             self.assertIn(f'name = "{name}"', gui)
+
+    def test_nested_deployment_controls_use_scoped_semantic_surfaces(self) -> None:
+        gui = GUI.read_text(encoding="utf-8-sig")
+        expected = {
+            "GFX_ADISCORD_deployment_action_button": 2,
+            "GFX_ADISCORD_deployment_symbol_button": 2,
+            "GFX_ADISCORD_deployment_designer_button": 1,
+            "GFX_ADISCORD_deployment_add_line_button": 1,
+            "GFX_ADISCORD_deployment_priority_strip": 9,
+            "GFX_ADISCORD_deployment_checkbox": 1,
+            "GFX_ADISCORD_deployment_foreign_templates": 1,
+        }
+        for target, count in expected.items():
+            with self.subTest(target=target):
+                self.assertEqual(
+                    len(
+                        re.findall(
+                            rf'(?:quadTextureSprite|spriteType)\s*=\s*"{re.escape(target)}"',
+                            gui,
+                        )
+                    ),
+                    count,
+                )
+        for vanilla in (
+            "GFX_small_button_71x26",
+            "GFX_button_221x34",
+            "GFX_division_designer_button",
+            "GFX_military_deployment_add_line_btn",
+            "GFX_deploy_priority",
+            "GFX_generic_checkbox",
+            "GFX_foreign_templates_dropdown_button",
+        ):
+            self.assertNotIn(f'"{vanilla}"', gui)
+
+    def test_priority_strip_frames_keep_shape_but_signal_distinct_states(self) -> None:
+        contract = next(
+            item
+            for item in DEPLOYMENT_CONTRACTS
+            if item.target_name == "GFX_ADISCORD_deployment_priority_strip"
+        ) if any(
+            item.target_name == "GFX_ADISCORD_deployment_priority_strip"
+            for item in DEPLOYMENT_CONTRACTS
+        ) else None
+        self.assertIsNotNone(contract)
+        assert contract is not None
+        image = Image.open(
+            io.BytesIO(expected_outputs()[ASSET_DIR / contract.filename])
+        ).convert("RGBA")
+        frames = [image.crop((index * 20, 0, (index + 1) * 20, 21)) for index in range(4)]
+        for frame in frames[1:]:
+            self.assertEqual(frames[0].getchannel("A").tobytes(), frame.getchannel("A").tobytes())
+        self.assertIsNotNone(
+            ImageChops.difference(frames[0].convert("RGB"), frames[2].convert("RGB")).getbbox()
+        )
 
     def test_generated_gui_and_assets_are_clean_and_current(self) -> None:
         gui = GUI.read_text(encoding="utf-8-sig")

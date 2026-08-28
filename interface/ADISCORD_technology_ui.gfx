@@ -31,6 +31,18 @@ spriteTypes = {
         borderSize = { x = 1 y = 1 }
         effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
     }
+    frameAnimatedSpriteType = {
+        name = "GFX_ADISCORD_technology_empty_slot_glow"
+        size = { x = 950 y = 78 }
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_empty_slot_glow.dds"
+        noOfFrames = 2
+        effectFile = "gfx/FX/buttonstate_blendframes.lua"
+        alwaysTransparent = yes
+        animation_rate_fps = 1
+        looping = yes
+        play_on_show = yes
+        pause_on_loop = 0.0
+    }
     spriteType = {
         name = "GFX_ADISCORD_technology_slot"
         size = { x = 508 y = 99 }
