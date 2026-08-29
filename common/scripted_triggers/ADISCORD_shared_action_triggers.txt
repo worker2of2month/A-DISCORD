@@ -1,15 +1,19 @@
 # Shared affordability checks for country content. Treasury values are recorded
 # by the common economy; equipment checks use archetypes and work across models.
-ADISCORD_economy_can_spend_15 = {
-	check_variable = { var = ADISCORD_economy_treasury value = 15 compare = greater_than_or_equals }
-}
-
-ADISCORD_economy_can_spend_25 = {
-	check_variable = { var = ADISCORD_economy_treasury value = 25 compare = greater_than_or_equals }
-}
-
 ADISCORD_economy_can_spend_50 = {
 	check_variable = { var = ADISCORD_economy_treasury value = 50 compare = greater_than_or_equals }
+}
+
+ADISCORD_economy_can_spend_100 = {
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+}
+
+ADISCORD_economy_can_spend_200 = {
+	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+}
+
+ADISCORD_economy_can_spend_500 = {
+	check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
 }
 
 ADISCORD_has_campaign_slot = {

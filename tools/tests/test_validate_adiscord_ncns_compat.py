@@ -67,7 +67,7 @@ class NcnsFactionCompatibilityTests(unittest.TestCase):
     def test_campaign_slots_use_scripted_variable(self):
         effects = read("common/scripted_effects/ADISCORD_shared_action_effects.txt")
         triggers = read("common/scripted_triggers/ADISCORD_shared_action_triggers.txt")
-        decisions = read("common/decisions/ADISCORD_VAL_rework_decisions.txt")
+        decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
         combined = effects + triggers + decisions
         self.assertNotRegex(combined, r"\b(?:has|add|remove)_campaign_slot\b")
         self.assertIn("ADISCORD_available_campaign_slots", effects)

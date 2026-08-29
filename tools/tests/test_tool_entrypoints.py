@@ -23,6 +23,7 @@ BUILDER_NAMES = (
     "build_adiscord_remainder_states",
     "build_adiscord_resource_assets",
     "build_adiscord_strategic_regions",
+    "build_adiscord_stp_regions_map",
     "build_adiscord_technology_system",
     "build_adiscord_terrain_snow",
     "build_adiscord_trade_regions",
@@ -51,6 +52,7 @@ READ_ONLY_BUILDERS = (
     "build_adiscord_outer_states",
     "build_adiscord_remainder_states",
     "build_adiscord_resource_assets",
+    "build_adiscord_stp_regions_map",
     "build_adiscord_terrain_snow",
     "build_adiscord_trade_regions",
 )

@@ -132,9 +132,9 @@ P.S.: после и именно из-за Нодрул начал сдержи�
 - `common/ideas/ADISCORD_VAL_rework_ideas.txt`
 - `common/ideas/ADISCORD_STP_VAL_crisis_ideas.txt`
 - `common/national_focus/ADISCORD_national_focus_VAL.txt`
-- `common/decisions/ADISCORD_VAL_rework_decisions.txt`
+- `common/decisions/ADISCORD_VAL_decisions.txt`
 - `common/scripted_effects/ADISCORD_VAL_rework_effects.txt`
 - `common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt`
 - `events/ADISCORD_VAL_contract_events.txt`
-- `localisation/russian/ADISCORD_VAL_rework_l_russian.yml`
+- `localisation/russian/ADISCORD_VAL_decisions_l_russian.yml`
 - `localisation/russian/ADISCORD_STP_VAL_crisis_l_russian.yml`

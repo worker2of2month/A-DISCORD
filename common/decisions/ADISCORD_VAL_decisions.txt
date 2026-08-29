@@ -1,6 +1,5 @@
 VAL_military_operations = {
 
-
 	VAL_ops_finance_cin_contacts = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
@@ -11,13 +10,13 @@ VAL_military_operations = {
 		available = {
 			NOT = { has_country_flag = VAL_foreign_operation_active }
 		}
-		custom_cost_trigger = { ADISCORD_economy_can_spend_25 = yes }
-		custom_cost_text = ADISCORD_cost_t25
+		custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes }
+		custom_cost_text = ADISCORD_cost_t50
 		cost = 10
 		days_remove = 21
 		days_re_enable = 60
 		complete_effect = {
-			ADISCORD_economy_spend_25 = yes
+			ADISCORD_economy_spend_50 = yes
 			set_country_flag = VAL_foreign_operation_active
 			set_country_flag = VAL_operation_finance_cin_contacts
 		}
@@ -26,7 +25,7 @@ VAL_military_operations = {
 			clr_country_flag = VAL_operation_finance_cin_contacts
 			clr_country_flag = VAL_foreign_operation_active
 		}
-		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { ADISCORD_economy_can_spend_50 = yes } } }
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { ADISCORD_economy_can_spend_100 = yes } } }
 	}
 
 	VAL_ops_sell_rifles_to_cin = {
@@ -68,13 +67,13 @@ VAL_military_operations = {
 		available = {
 			NOT = { has_country_flag = VAL_foreign_operation_active }
 		}
-		custom_cost_trigger = { ADISCORD_economy_can_spend_25 = yes }
-		custom_cost_text = ADISCORD_cost_t25
+		custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes }
+		custom_cost_text = ADISCORD_cost_t50
 		cost = 10
 		days_remove = 21
 		days_re_enable = 60
 		complete_effect = {
-			ADISCORD_economy_spend_25 = yes
+			ADISCORD_economy_spend_50 = yes
 			set_country_flag = VAL_foreign_operation_active
 			set_country_flag = VAL_operation_finance_osf_contacts
 		}
@@ -83,7 +82,7 @@ VAL_military_operations = {
 			clr_country_flag = VAL_operation_finance_osf_contacts
 			clr_country_flag = VAL_foreign_operation_active
 		}
-		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { ADISCORD_economy_can_spend_50 = yes } } }
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { ADISCORD_economy_can_spend_100 = yes } } }
 	}
 
 	VAL_ops_sell_rifles_to_osf = {

@@ -29,6 +29,7 @@
     "technology_system",
     "doctrine_system",
     "val_operations_map",
+    "stp_regions_map",
     "island_administration_icon",
     "party_texticons",
     "vorkerland_flags"
@@ -220,12 +221,16 @@
         "history/states/27-*.txt",
         "history/states/3[2-9]-*.txt",
         "history/states/40-*.txt",
+        "history/states/43-*.txt",
+        "history/states/44-*.txt",
+        "history/states/45-*.txt",
         "history/states/49-*.txt",
         "history/states/5[1-2]-*.txt",
         "history/states/6[7-9]-*.txt",
         "history/states/7[0-6]-*.txt",
         "history/states/7[9]-*.txt",
         "history/states/8[0-2]-*.txt",
+        "history/states/88-*.txt",
         "history/states/9?-*.txt",
         "history/states/10[0-2]-*.txt",
         "history/states/10[4-9]-*.txt",
@@ -258,6 +263,7 @@
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_new_states.py",
+        "tools/lib/adiscord_core_state_balance_manifest.py",
         "tools/lib/adiscord_vorkerland_theatre_manifest.py",
         "history/states/*.txt",
         "map/buildings.txt",
@@ -873,6 +879,21 @@
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_val_operations_map"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_val_operations_map", "--apply"],
+      "may_delete_outputs": true,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "stp_regions_map",
+      "owner_module": "tools.builders.build_adiscord_stp_regions_map",
+      "output_globs": ["gfx/interface/STP_regions/STP_regions_*.png"],
+      "source_inputs": [
+        "tools/builders/build_adiscord_stp_regions_map.py",
+        "history/states/*.txt",
+        "map/definition.csv",
+        "map/provinces.bmp"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_stp_regions_map"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_stp_regions_map", "--apply"],
       "may_delete_outputs": true,
       "ownership_mode": "exclusive"
     },

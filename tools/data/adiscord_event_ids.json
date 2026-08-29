@@ -4,6 +4,8 @@
   "events": [
     {"id": "ADISCORD_economy.2", "namespace": "ADISCORD_economy", "number": 2, "owner": "events/ADISCORD_economy_events.txt", "subsystem": "economy", "status": "active"},
     {"id": "ADISCORD_economy.3", "namespace": "ADISCORD_economy", "number": 3, "owner": "events/ADISCORD_economy_events.txt", "subsystem": "economy", "status": "active"},
+    {"id": "ADISCORD_STP_regions.1", "namespace": "ADISCORD_STP_regions", "number": 1, "owner": "events/ADISCORD_STP_region_events.txt", "subsystem": "stp_regions", "status": "active"},
+    {"id": "ADISCORD_STP_regions.2", "namespace": "ADISCORD_STP_regions", "number": 2, "owner": "events/ADISCORD_STP_region_events.txt", "subsystem": "stp_regions", "status": "active"},
     {"id": "ADISCORD_nam_resource_news.1", "namespace": "ADISCORD_nam_resource_news", "number": 1, "owner": "events/ADISCORD_nam_resource_war_events.txt", "subsystem": "nam_resource_war", "status": "active"},
     {"id": "ADISCORD_nam_resource_news.2", "namespace": "ADISCORD_nam_resource_news", "number": 2, "owner": "events/ADISCORD_nam_resource_war_events.txt", "subsystem": "nam_resource_war", "status": "active"},
     {"id": "ADISCORD_nam_resource_news.3", "namespace": "ADISCORD_nam_resource_news", "number": 3, "owner": "events/ADISCORD_nam_resource_war_events.txt", "subsystem": "nam_resource_war", "status": "active"},

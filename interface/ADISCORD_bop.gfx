@@ -1,0 +1,14 @@
+spriteTypes = {
+
+	spriteType = {
+		name = "GFX_bop_STP_party_election_legitimacy"
+		texturefile = "gfx/interface/bop/STP_bop_shabrat_bad.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_bop_STP_shabrat_election_legitimacy"
+		texturefile = "gfx/interface/bop/STP_bop_shabrat_good.png"
+		legacy_lazy_load = no
+	}
+}

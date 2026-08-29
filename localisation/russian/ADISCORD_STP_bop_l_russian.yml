@@ -1,0 +1,23 @@
+﻿l_russian:
+ STP_shabrat_election_legitimacy: "Легитимность партийных выборов"
+ STP_shabrat_election_legitimacy_desc: "Борьба партийного аппарата и сторонников Шабрата за признание результатов выборов."
+
+ STP_party_election_legitimacy_side: "Партийный аппарат"
+ STP_shabrat_election_legitimacy_side: "Шабрат"
+
+ STP_election_legitimacy_contested_range: "Неопределённый исход"
+ STP_party_election_low_control_range: "Слабое влияние партийного аппарата"
+ STP_party_election_medium_control_range: "Устойчивое влияние партийного аппарата"
+ STP_party_election_high_control_range: "Сильное влияние партийного аппарата"
+ STP_party_election_total_control_range: "Полный контроль партийного аппарата"
+ STP_shabrat_election_low_control_range: "Слабое влияние Шабрата"
+ STP_shabrat_election_medium_control_range: "Устойчивое влияние Шабрата"
+ STP_shabrat_election_high_control_range: "Сильное влияние Шабрата"
+ STP_shabrat_election_total_control_range: "Полный контроль Шабрата"
+
+ STP_shabrat_election_bop_category: "Решения BOP: партийные выборы"
+ STP_shabrat_election_bop_category_desc: "Отладочные решения для проверки баланса сил на партийных выборах."
+ STP_debug_increase_party_bop: "§RDEBUG:§! BOP: увеличить влияние партии на 25"
+ STP_debug_increase_party_bop_desc: "Сдвигает баланс сил на §Y25 пунктов§! в сторону партийного аппарата."
+ STP_debug_increase_shabrat_bop: "§RDEBUG:§! BOP: увеличить влияние Шабрата на 25"
+ STP_debug_increase_shabrat_bop_desc: "Сдвигает баланс сил на §Y25 пунктов§! в сторону Шабрата."

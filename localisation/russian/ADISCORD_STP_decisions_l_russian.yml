@@ -1,5 +1,5 @@
 ﻿l_russian:
- # Партийная сеть и подозрение спецслужб
+ #SUSSY baka
  STP_elections_in_the_party: "Выборы в партии"
  STP_elections_in_the_party_desc: "[STP_display_party_suspicion]"
  STP_display_party_suspicion_loc: "\n\n§YОперативная сводка§!\n\n £STP_suspicion §YПодозрение спецслужб§!: [STPGetSuspicionValue] (£political_power_texticon [?STP_sus_political_power_factor|=+1%]) — [STPGetSuspicionBand].\n[STPGetSuspicionExplanation]"
@@ -19,8 +19,9 @@
  STP_SUSPICION_EXPLANATION_WATCHED: "§gЗа подозрительными контактами установлено наблюдение. Политическая работа начинает вязнуть в проверках, слежке и необходимости менять каналы связи.§!"
  STP_SUSPICION_EXPLANATION_COMPROMISED: "§gЧасть сети установлена. Службы сопоставляют имена, маршруты и источники финансирования, заставляя подполье тратить всё больше сил на выживание.§!"
  STP_SUSPICION_EXPLANATION_MANHUNT: "§gСпецслужбы ведут активный розыск. Любое новое действие рискует привести силовиков к руководству сети, а политическая работа становится крайне дорогой.§!"
-
- # Temporary deterministic test controls.
+ #Ivanov's health
+ ivanov_health_is_getting_worse: "§YЗдоровье Иванова ухудшается!§!"
+ #DEBUG
  STP_debug_increase_suspicion: "§RDEBUG:§! Увеличить подозрение партии"
  STP_debug_increase_suspicion_desc: "Тестово увеличивает §Yподозрение спецслужб§! на §R10§! пунктов."
  STP_debug_decrease_suspicion: "§RDEBUG:§! Уменьшить подозрение партии"
@@ -29,3 +30,109 @@
  STP_debug_worsen_ivanov_desc: "Тестово переводит состояние Иванова на §Rодну стадию хуже§!. Максимум — стадия 5/5."
  STP_debug_improve_ivanov: "§RDEBUG:§! Улучшить состояние Иванова"
  STP_debug_improve_ivanov_desc: "Тестово переводит состояние Иванова на §Gодну стадию лучше§!. Минимум — стадия 1/5."
+ STP_debug_set_bop: "§RDEBUG:§! Включить BOP"
+
+ #Battle for Stelander
+ STP_battle_for_stelander: "Битва за Стеландер"
+ STP_battle_for_stelander_desc: "Шабрат не собирает абстрактные очки поддержки. Он выясняет, чья подпись откроет склад, чей приказ исполнит гарнизон и кто встретит рассвет с другим флагом. Партия каждые §Y40 дней§! выбирает штат для проверки; недавняя активность и сильная сеть делают регион более вероятной целью.\n\n§YПолитические действия:§! свободно §C[?STP_political_action_slots_available|0]§! из §Y[?STP_political_action_slots_total|0]§!.\n\n§YПоследний ход Партии:§! [STPGetLastPartyResponse]"
+ STP_regions_panel_title: "Кому подчинится Стеландер?"
+ STP_regions_panel_tt: "Цвет показывает не формального владельца, а силу, способную навязать региону свою волю в момент раскола."
+ STP_regions_map_tt: "§7Серый§! — спорный регион; §Cсиний§! — Сопротивление; §0фиолетовый§! — Партия; §Yжёлтый§! — местные силы. Яркий оттенок означает закреплённую позицию."
+ STP_regions_legend: "§7СПОРНЫЙ§!   §CСОПРОТИВЛЕНИЕ§!   §0ПАРТИЯ§!   §YМЕСТНЫЕ СИЛЫ§!"
+
+ #Event
+ ADISCORD_STP_regions.1.t: "Страна во втором экземпляре"
+ ADISCORD_STP_regions.1.d: "На столе перед Шабратом лежит не карта фронта, а карта подчинения. В одном штате решающей окажется подпись начальника, в другом — слово совета, в третьем — ключ от склада. Партия ещё считает эти земли единой страной и потому будет посылать комиссии туда, где сеть выдаёт себя громче всего. До раскола необходимо решить, что важнее в каждом регионе: забрать его себе, вытеснить оттуда Партию руками местных или оставить спорным, но подготовить один решающий актив."
+ ADISCORD_STP_regions.1.a: "Начать Битву за Стеландер"
+
+ #Interface
+ STP_region_forces_header: "РАССТАНОВКА СИЛ"
+ STP_region_assets_header: "ПОДГОТОВЛЕННЫЕ АКТИВЫ"
+ STP_region_party_measures_header: "ПАРТИЙНЫЕ МЕРЫ"
+ STP_region_last_party_response_header: "ПОСЛЕДНИЙ ХОД ПАРТИИ"
+
+ #Region status
+ STP_REGION_STATUS_CONTESTED: "§7Оспариваемый§!"
+ STP_REGION_STATUS_RESISTANCE_LEANING: "§CСклоняется к Сопротивлению§!"
+ STP_REGION_STATUS_RESISTANCE_ENTRENCHED: "§CСопротивление закрепилось§!"
+ STP_REGION_STATUS_PARTY_LEANING: "§0Склоняется к Партии§!"
+ STP_REGION_STATUS_PARTY_ENTRENCHED: "§0Партия закрепилась§!"
+ STP_REGION_STATUS_LOCAL_LEANING: "§YСклоняется к местным силам§!"
+ STP_REGION_STATUS_LOCAL_DOMINANT: "§YМестные силы закрепились§!"
+
+ #Regional assets
+ STP_REGION_EMPTY_LINE: ""
+ STP_REGION_ASSET_ADMINISTRATION: "\n  §C— свой человек в администрации§!"
+ STP_REGION_ASSET_GARRISON: "\n  §C— связь с гарнизоном§!"
+ STP_REGION_ASSET_SUPPLY: "\n  §C— скрытый запас и маршрут снабжения§!"
+ STP_REGION_ASSET_SABOTAGE: "\n  §C— заряды и исполнители для часа восстания§!"
+ STP_REGION_ASSET_LOCAL_DEAL: "\n  §Y— договор с местным советом§!"
+ STP_REGION_PARTY_GARRISON: "\n  §0— усиленный партийный гарнизон§!"
+ STP_REGION_PARTY_COUNTERINTELLIGENCE: "\n  §0— группа партийной контрразведки§!"
+
+ #Party response
+ STP_PARTY_RESPONSE_NONE: "проверки ещё не дали результата"
+ STP_PARTY_RESPONSE_CLEAN_REDIRECT: "§Cпроверяющие ушли по чистому ложному следу§!"
+ STP_PARTY_RESPONSE_NOISY_REDIRECT: "§Yпроверка увязла, но заметила несостыковки§!"
+ STP_PARTY_RESPONSE_COURIER_SEIZED: "§Rзадержан связной; один административный контакт мог быть потерян§!"
+ STP_PARTY_RESPONSE_BREAKTHROUGH: "§Rконтрразведка восстановила часть сети и усилила присутствие§!"
+ STP_PARTY_RESPONSE_PURGE: "§Rпроверка вычистила завербованного чиновника§!"
+ STP_PARTY_RESPONSE_GARRISON: "§Rк местному совету приставлен партийный гарнизон§!"
+ STP_PARTY_RESPONSE_RAID: "§Rсиловики ударили по самому заметному центру сети§!"
+ STP_PARTY_RESPONSE_AUDIT: "§Yаппарат укрепил обычную административную дисциплину§!"
+
+ #Regional decisions
+ STP_recruit_regional_official: "Найти подпись в нужном кабинете"
+ STP_recruit_regional_official_desc: "В администрации [FROM.GetName] есть люди, которые устали ждать конца эпохи. Их нельзя превратить в солдат, но одна своевременная подпись способна оставить гарнизон без приказа, а склад — без пломбы.\n\n§YРезультат:§! контакт в администрации, §C+8§! влияния Сопротивления, §R+6§! подозрения."
+ STP_bargain_with_local_councils: "Пусть совет вспомнит о собственном голосе"
+ STP_bargain_with_local_councils_desc: "Местные старейшины не обязаны любить Шабрата, чтобы перестать слушать Партию. Деньги, гарантии и право не отдавать людей чужим комиссарам помогут выбить центр из [FROM.GetName], но создадут самостоятельную силу, с которой придётся считаться после победы.\n\n§YРезультат:§! договор с местным советом, §Y+10§! влияния местных сил, §R+3§! подозрения."
+ STP_prepare_false_trail: "Подбросить ложный след"
+ STP_prepare_false_trail_desc: "Проверяющие уже идут в [FROM.GetName]. Им можно оставить правдоподобную цепочку имён и адресов, но ради неё придётся отдать часть настоящей сети. При низком подозрении след чаще уводит Партию в сторону; при высоком он способен привести контрразведку прямо к нашим людям.\n\n§YНемедленно:§! Партия получает §R3§! влияния.\n\n§YШансы исходов — чистый след / шумный след / задержан связной / прорыв контрразведки:§!\nПодозрение ниже 25: §C60§! / 30 / 10 / 0\n25–49: §C35§! / 40 / 20 / §R5§!\n50–69: 15 / 35 / 35 / §R15§!\n70 и выше: 5 / 20 / 40 / §R35§!"
+
+ STP_region_unique_operation_2: "Ночная смена отвечает Шабрату"
+ STP_region_unique_operation_2_desc: "Телефонные узлы Новой Монаии ночью обслуживают те же люди, что слушают партийные распоряжения днём. Если сменить несколько фамилий в графике, в решающую ночь гарнизон услышит другой голос.\n\n§YАктив:§! связь с гарнизоном. §C+8§! влияния Сопротивления, §R+7§! подозрения."
+ STP_region_unique_operation_3: "Топливо переждёт Отца мира"
+ STP_region_unique_operation_3_desc: "Ниансаские скважины и старые хранилища позволяют спрятать запас, которого хватит на первые недели войны. Главное — провести цистерны раньше, чем ведомости попадут в Фаду.\n\n§YАктив:§! запас и маршрут снабжения. §C+6§! влияния Сопротивления, §R+5§! подозрения."
+ STP_region_unique_operation_29: "Другой мастер у того же станка"
+ STP_region_unique_operation_29_desc: "Крейденские цеха подчиняются не речам, а мастерам смен. Несколько таких людей могут остановить отгрузку Партии и открыть заводские ворота тем, кто придёт с приказом Шабрата.\n\n§YАктив:§! связь с гарнизоном и рабочими командами. §C+10§! влияния Сопротивления, §R+8§! подозрения."
+ STP_region_unique_operation_45: "Ливонин помнит обещания"
+ STP_region_unique_operation_45_desc: "Местные силы Ливонина уже готовы жить без Фады. Теперь им нужно доказать, что место в новом Стеландере надёжнее чужого пограничного покровительства. Решение доступно только после договора с советом.\n\n§YАктив:§! контакт в будущей администрации. §C+12§! влияния Сопротивления, §R+4§! подозрения."
+ STP_region_unique_operation_46: "У гавани есть вторые ключи"
+ STP_region_unique_operation_46_desc: "В Хосхейте каждый склад имеет официальный ключ и тот, которым пользуются после закрытия конторы. Второй комплект должен оказаться у людей Шабрата раньше партийской описи.\n\n§YАктив:§! портовый маршрут снабжения. §C+8§! влияния Сопротивления, §R+6§! подозрения."
+ STP_region_unique_operation_53: "Старые дороги не прощают"
+ STP_region_unique_operation_53_desc: "Лесные дороги Старой Фады слишком узки для колонны и слишком знакомы тем, кто здесь вырос. Спрятанные заряды не помогут до начала войны — зато однажды могут задержать партийские резервы на несколько дней.\n\n§YАктив:§! подготовленный саботаж. §C+6§! влияния Сопротивления, §R+10§! подозрения."
+
+ #Party inspections
+ STP_party_inspection_state_2: "Проверка чиновников штата «Новая Монаии»"
+ STP_party_inspection_state_3: "Проверка чиновников штата «Ниансаская область»"
+ STP_party_inspection_state_29: "Проверка чиновников штата «Крейден»"
+ STP_party_inspection_state_45: "Проверка чиновников штата «Ливонинский округ»"
+ STP_party_inspection_state_46: "Проверка чиновников штата «Хосхейт»"
+ STP_party_inspection_state_53: "Проверка чиновников штата «Старый фадский лес»"
+ STP_party_inspection_state_2_desc: "Партийная комиссия сверяет назначения, пропуска и телефонные журналы Новой Монаии. Через §Y40 дней§! она ударит по самому заметному активу или просто укрепит аппарат. Ложный след меняет набор возможных исходов."
+ STP_party_inspection_state_3_desc: "Партийная комиссия проверяет ведомости, цистерны и районных чиновников Ниансаской области. Через §Y40 дней§! она ударит по самому заметному активу или просто укрепит аппарат. Ложный след меняет набор возможных исходов."
+ STP_party_inspection_state_29_desc: "Партийная комиссия пересчитывает смены, пропуска и заводские печати Крейдена. Через §Y40 дней§! она ударит по самому заметному активу или просто укрепит аппарат. Ложный след меняет набор возможных исходов."
+ STP_party_inspection_state_45_desc: "Партийная комиссия выясняет, с кем совет Ливонина обсуждает будущее без Фады. Через §Y40 дней§! она ударит по самому заметному активу или просто укрепит аппарат. Ложный след меняет набор возможных исходов."
+ STP_party_inspection_state_46_desc: "Партийная комиссия сверяет портовые ключи, складские книги и списки ночных смен Хосхейта. Через §Y40 дней§! она ударит по самому заметному активу или просто укрепит аппарат. Ложный след меняет набор возможных исходов."
+ STP_party_inspection_state_53_desc: "Партийная комиссия расспрашивает лесничих, дорожных мастеров и старост Старой Фады. Через §Y40 дней§! она ударит по самому заметному активу или просто укрепит аппарат. Ложный след меняет набор возможных исходов."
+
+ #DEBUG
+ STP_debug_start_battle_for_stelander: "§RDEBUG:§! Начать Битву за Стеландер"
+ STP_debug_start_battle_for_stelander_desc: "Вызывает вводное событие, выбирает сторону Шабрата, создаёт региональные переменные и запускает сорокадневную паузу перед первой проверкой."
+ STP_debug_reset_battle_for_stelander: "§RDEBUG:§! Сбросить Битву за Стеландер"
+ STP_debug_reset_battle_for_stelander_desc: "Удаляет все региональные активы и влияние, затем создаёт систему заново с исходными значениями."
+ STP_debug_end_battle_for_stelander: "§RDEBUG:§! Завершить Битву за Стеландер"
+ STP_debug_end_battle_for_stelander_desc: "Удаляет региональные переменные, флаги и активную партийную проверку."
+
+ #Regional map
+ STP_region_1_map_tt: "§YАбилия§!\n\n§YРАССТАНОВКА СИЛ§!\n  §CСопротивление:§! [?1.STP_resistance_influence|0]%\n  §0Партия:§! [?1.STP_party_influence|0]%\n\n§YСтатус:§! [1.STPGetRegionStatus]\n\n§YПОДГОТОВЛЕННЫЕ АКТИВЫ§![1.STPGetAdministrationAsset][1.STPGetGarrisonAsset][1.STPGetSupplyAsset][1.STPGetSabotageAsset][1.STPGetLocalDealAsset]\n\n§YПАРТИЙНЫЕ МЕРЫ§![1.STPGetPartyGarrisonMeasure][1.STPGetPartyCounterintelligenceMeasure]\n\n§CРегион заранее закреплён за Сопротивлением. Действия игрока здесь заблокированы.§!"
+ STP_region_2_map_tt: "§YНовая Монаии§!\n\n§YРАССТАНОВКА СИЛ§!\n  §CСопротивление:§! [?2.STP_resistance_influence|0]%\n  §0Партия:§! [?2.STP_party_influence|0]%\n\n§YСтатус:§! [2.STPGetRegionStatus]\n\n§YПОДГОТОВЛЕННЫЕ АКТИВЫ§![2.STPGetAdministrationAsset][2.STPGetGarrisonAsset][2.STPGetSupplyAsset][2.STPGetSabotageAsset][2.STPGetLocalDealAsset]\n\n§YПАРТИЙНЫЕ МЕРЫ§![2.STPGetPartyGarrisonMeasure][2.STPGetPartyCounterintelligenceMeasure]"
+ STP_region_3_map_tt: "§YНиансаская область§!\n\n§YРАССТАНОВКА СИЛ§!\n  §CСопротивление:§! [?3.STP_resistance_influence|0]%\n  §0Партия:§! [?3.STP_party_influence|0]%\n\n§YСтатус:§! [3.STPGetRegionStatus]\n\n§YПОДГОТОВЛЕННЫЕ АКТИВЫ§![3.STPGetAdministrationAsset][3.STPGetGarrisonAsset][3.STPGetSupplyAsset][3.STPGetSabotageAsset][3.STPGetLocalDealAsset]\n\n§YПАРТИЙНЫЕ МЕРЫ§![3.STPGetPartyGarrisonMeasure][3.STPGetPartyCounterintelligenceMeasure]"
+ STP_region_28_map_tt: "§YФада§!\n\n§YРАССТАНОВКА СИЛ§!\n  §CСопротивление:§! [?28.STP_resistance_influence|0]%\n  §0Партия:§! [?28.STP_party_influence|0]%\n\n§YСтатус:§! [28.STPGetRegionStatus]\n\n§YПОДГОТОВЛЕННЫЕ АКТИВЫ§![28.STPGetAdministrationAsset][28.STPGetGarrisonAsset][28.STPGetSupplyAsset][28.STPGetSabotageAsset][28.STPGetLocalDealAsset]\n\n§YПАРТИЙНЫЕ МЕРЫ§![28.STPGetPartyGarrisonMeasure][28.STPGetPartyCounterintelligenceMeasure]\n\n§0Столица заранее закреплена за Партией. Действия игрока здесь заблокированы.§!"
+ STP_region_29_map_tt: "§YКрейден§!\n\n§YРАССТАНОВКА СИЛ§!\n  §CСопротивление:§! [?29.STP_resistance_influence|0]%\n  §0Партия:§! [?29.STP_party_influence|0]%\n\n§YСтатус:§! [29.STPGetRegionStatus]\n\n§YПОДГОТОВЛЕННЫЕ АКТИВЫ§![29.STPGetAdministrationAsset][29.STPGetGarrisonAsset][29.STPGetSupplyAsset][29.STPGetSabotageAsset][29.STPGetLocalDealAsset]\n\n§YПАРТИЙНЫЕ МЕРЫ§![29.STPGetPartyGarrisonMeasure][29.STPGetPartyCounterintelligenceMeasure]"
+ STP_region_43_map_tt: "§YБалчанск§!\n\n§YРАССТАНОВКА СИЛ§!\n  §CСопротивление:§! [?43.STP_resistance_influence|0]%\n  §0Партия:§! [?43.STP_party_influence|0]%\n  §YМестные силы:§! [?43.STP_local_forces_influence|0]%\n\n§YСтатус:§! [43.STPGetRegionStatus]\n\n§YПОДГОТОВЛЕННЫЕ АКТИВЫ§![43.STPGetAdministrationAsset][43.STPGetGarrisonAsset][43.STPGetSupplyAsset][43.STPGetSabotageAsset][43.STPGetLocalDealAsset]\n\n§YПАРТИЙНЫЕ МЕРЫ§![43.STPGetPartyGarrisonMeasure][43.STPGetPartyCounterintelligenceMeasure]\n\n§YМестные силы уже закрепили регион. Действия игрока здесь заблокированы.§!"
+ STP_region_44_map_tt: "§YГавань§!\n\n§YРАССТАНОВКА СИЛ§!\n  §CСопротивление:§! [?44.STP_resistance_influence|0]%\n  §0Партия:§! [?44.STP_party_influence|0]%\n  §YМестные силы:§! [?44.STP_local_forces_influence|0]%\n\n§YСтатус:§! [44.STPGetRegionStatus]\n\n§YПОДГОТОВЛЕННЫЕ АКТИВЫ§![44.STPGetAdministrationAsset][44.STPGetGarrisonAsset][44.STPGetSupplyAsset][44.STPGetSabotageAsset][44.STPGetLocalDealAsset]\n\n§YПАРТИЙНЫЕ МЕРЫ§![44.STPGetPartyGarrisonMeasure][44.STPGetPartyCounterintelligenceMeasure]\n\n§YМестные силы уже закрепили регион. Действия игрока здесь заблокированы.§!"
+ STP_region_45_map_tt: "§YЛивонинский округ§!\n\n§YРАССТАНОВКА СИЛ§!\n  §CСопротивление:§! [?45.STP_resistance_influence|0]%\n  §0Партия:§! [?45.STP_party_influence|0]%\n  §YМестные силы:§! [?45.STP_local_forces_influence|0]%\n\n§YСтатус:§! [45.STPGetRegionStatus]\n\n§YПОДГОТОВЛЕННЫЕ АКТИВЫ§![45.STPGetAdministrationAsset][45.STPGetGarrisonAsset][45.STPGetSupplyAsset][45.STPGetSabotageAsset][45.STPGetLocalDealAsset]\n\n§YПАРТИЙНЫЕ МЕРЫ§![45.STPGetPartyGarrisonMeasure][45.STPGetPartyCounterintelligenceMeasure]"
+ STP_region_46_map_tt: "§YХосхейт§!\n\n§YРАССТАНОВКА СИЛ§!\n  §CСопротивление:§! [?46.STP_resistance_influence|0]%\n  §0Партия:§! [?46.STP_party_influence|0]%\n\n§YСтатус:§! [46.STPGetRegionStatus]\n\n§YПОДГОТОВЛЕННЫЕ АКТИВЫ§![46.STPGetAdministrationAsset][46.STPGetGarrisonAsset][46.STPGetSupplyAsset][46.STPGetSabotageAsset][46.STPGetLocalDealAsset]\n\n§YПАРТИЙНЫЕ МЕРЫ§![46.STPGetPartyGarrisonMeasure][46.STPGetPartyCounterintelligenceMeasure]"
+ STP_region_53_map_tt: "§YСтарый фадский лес§!\n\n§YРАССТАНОВКА СИЛ§!\n  §CСопротивление:§! [?53.STP_resistance_influence|0]%\n  §0Партия:§! [?53.STP_party_influence|0]%\n\n§YСтатус:§! [53.STPGetRegionStatus]\n\n§YПОДГОТОВЛЕННЫЕ АКТИВЫ§![53.STPGetAdministrationAsset][53.STPGetGarrisonAsset][53.STPGetSupplyAsset][53.STPGetSabotageAsset][53.STPGetLocalDealAsset]\n\n§YПАРТИЙНЫЕ МЕРЫ§![53.STPGetPartyGarrisonMeasure][53.STPGetPartyCounterintelligenceMeasure]"
+ STP_region_88_map_tt: "§YШахтёрский посёлок§!\n\n§YРАССТАНОВКА СИЛ§!\n  §CСопротивление:§! [?88.STP_resistance_influence|0]%\n  §0Партия:§! [?88.STP_party_influence|0]%\n  §YМестные силы:§! [?88.STP_local_forces_influence|0]%\n\n§YСтатус:§! [88.STPGetRegionStatus]\n\n§YПОДГОТОВЛЕННЫЕ АКТИВЫ§![88.STPGetAdministrationAsset][88.STPGetGarrisonAsset][88.STPGetSupplyAsset][88.STPGetSabotageAsset][88.STPGetLocalDealAsset]\n\n§YПАРТИЙНЫЕ МЕРЫ§![88.STPGetPartyGarrisonMeasure][88.STPGetPartyCounterintelligenceMeasure]\n\n§YМестные силы уже закрепили регион. Действия игрока здесь заблокированы.§!"

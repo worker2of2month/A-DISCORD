@@ -6,6 +6,25 @@ spriteTypes = {
 	  	texturefile = "gfx/interface/decisions/STP/stp_election.png"
 	}
 
+###GENERIC
+	spriteType = {
+		name = "GFX_decision_ADISCORD_state_directive"
+		texturefile = "gfx/interface/decisions/decision_ADISCORD_state_directive.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_ADISCORD_covert_operation"
+		texturefile = "gfx/interface/decisions/decision_ADISCORD_covert_operation.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_ADISCORD_ivanov_health_worsens"
+		texturefile = "gfx/interface/decisions/decision_ADISCORD_ivanov_health_worsens.png"
+		legacy_lazy_load = no
+	}
+
 	corneredTileSpriteType = {
 		name = "GFX_ADISCORD_decisions_window_bg"
 		size = { x = 192 y = 192 }

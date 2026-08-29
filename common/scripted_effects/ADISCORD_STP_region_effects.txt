@@ -1,0 +1,533 @@
+# Country-scope political-action slot accounting.
+STP_political_action_slot_grant = {
+	add_to_variable = { var = STP_political_action_slots_total value = 1 }
+	add_to_variable = { var = STP_political_action_slots_available value = 1 }
+}
+
+STP_political_action_slot_consume = {
+	if = {
+		limit = { STP_has_political_action_slot = yes }
+		add_to_variable = { var = STP_political_action_slots_available value = -1 }
+	}
+}
+
+STP_political_action_slot_release = {
+	add_to_variable = { var = STP_political_action_slots_available value = 1 }
+	if = {
+		limit = {
+			check_variable = {
+				var = STP_political_action_slots_available
+				value = STP_political_action_slots_total
+				compare = greater_than
+			}
+		}
+		set_variable = {
+			var = STP_political_action_slots_available
+			value = STP_political_action_slots_total
+		}
+	}
+}
+
+# Battle for Stelander regional influence. All mutators execute in state scope.
+# Call a mutator after setting temporary variable STP_region_influence_change.
+
+STP_normalize_region_influence = {
+	clamp_variable = { var = STP_resistance_influence min = 0 max = 100 }
+	clamp_variable = { var = STP_party_influence min = 0 max = 100 }
+
+	# Local forces are the balancing term, so the three values always total 100.
+	set_variable = { var = STP_local_forces_influence value = 100 }
+	subtract_from_variable = { var = STP_local_forces_influence value = STP_resistance_influence }
+	subtract_from_variable = { var = STP_local_forces_influence value = STP_party_influence }
+	if = {
+		limit = { check_variable = { var = STP_local_forces_influence value = 0 compare = less_than } }
+		set_temp_variable = { var = STP_region_overflow value = STP_local_forces_influence }
+		multiply_temp_variable = { var = STP_region_overflow value = -1 }
+		set_variable = { var = STP_local_forces_influence value = 0 }
+		if = {
+			limit = { check_variable = { var = STP_party_influence value = STP_region_overflow compare = greater_than_or_equals } }
+			subtract_from_variable = { var = STP_party_influence value = STP_region_overflow }
+		}
+		else = {
+			subtract_from_temp_variable = { var = STP_region_overflow value = STP_party_influence }
+			set_variable = { var = STP_party_influence value = 0 }
+			subtract_from_variable = { var = STP_resistance_influence value = STP_region_overflow }
+		}
+	}
+	clamp_variable = { var = STP_local_forces_influence min = 0 max = 100 }
+	STP_calculate_region_alignment = yes
+}
+
+STP_add_resistance_influence = {
+	set_temp_variable = { var = STP_region_remaining_shift value = STP_region_influence_change }
+	clamp_temp_variable = { var = STP_region_remaining_shift min = 0 max = 100 }
+	if = {
+		limit = { check_variable = { var = STP_party_influence value = STP_region_remaining_shift compare = greater_than_or_equals } }
+		subtract_from_variable = { var = STP_party_influence value = STP_region_remaining_shift }
+		add_to_variable = { var = STP_resistance_influence value = STP_region_remaining_shift }
+		set_temp_variable = { var = STP_region_remaining_shift value = 0 }
+	}
+	else = {
+		add_to_variable = { var = STP_resistance_influence value = STP_party_influence }
+		subtract_from_temp_variable = { var = STP_region_remaining_shift value = STP_party_influence }
+		set_variable = { var = STP_party_influence value = 0 }
+		if = {
+			limit = { check_variable = { var = STP_local_forces_influence value = STP_region_remaining_shift compare = greater_than_or_equals } }
+			subtract_from_variable = { var = STP_local_forces_influence value = STP_region_remaining_shift }
+			add_to_variable = { var = STP_resistance_influence value = STP_region_remaining_shift }
+		}
+		else = {
+			add_to_variable = { var = STP_resistance_influence value = STP_local_forces_influence }
+			set_variable = { var = STP_local_forces_influence value = 0 }
+		}
+	}
+	STP_normalize_region_influence = yes
+}
+
+STP_add_party_influence = {
+	set_temp_variable = { var = STP_region_remaining_shift value = STP_region_influence_change }
+	clamp_temp_variable = { var = STP_region_remaining_shift min = 0 max = 100 }
+	if = {
+		limit = { check_variable = { var = STP_resistance_influence value = STP_region_remaining_shift compare = greater_than_or_equals } }
+		subtract_from_variable = { var = STP_resistance_influence value = STP_region_remaining_shift }
+		add_to_variable = { var = STP_party_influence value = STP_region_remaining_shift }
+		set_temp_variable = { var = STP_region_remaining_shift value = 0 }
+	}
+	else = {
+		add_to_variable = { var = STP_party_influence value = STP_resistance_influence }
+		subtract_from_temp_variable = { var = STP_region_remaining_shift value = STP_resistance_influence }
+		set_variable = { var = STP_resistance_influence value = 0 }
+		if = {
+			limit = { check_variable = { var = STP_local_forces_influence value = STP_region_remaining_shift compare = greater_than_or_equals } }
+			subtract_from_variable = { var = STP_local_forces_influence value = STP_region_remaining_shift }
+			add_to_variable = { var = STP_party_influence value = STP_region_remaining_shift }
+		}
+		else = {
+			add_to_variable = { var = STP_party_influence value = STP_local_forces_influence }
+			set_variable = { var = STP_local_forces_influence value = 0 }
+		}
+	}
+	STP_normalize_region_influence = yes
+}
+
+STP_add_local_forces_influence = {
+	set_temp_variable = { var = STP_region_remaining_shift value = STP_region_influence_change }
+	clamp_temp_variable = { var = STP_region_remaining_shift min = 0 max = 100 }
+	if = {
+		limit = { check_variable = { var = STP_party_influence value = STP_region_remaining_shift compare = greater_than_or_equals } }
+		subtract_from_variable = { var = STP_party_influence value = STP_region_remaining_shift }
+		add_to_variable = { var = STP_local_forces_influence value = STP_region_remaining_shift }
+		set_temp_variable = { var = STP_region_remaining_shift value = 0 }
+	}
+	else = {
+		add_to_variable = { var = STP_local_forces_influence value = STP_party_influence }
+		subtract_from_temp_variable = { var = STP_region_remaining_shift value = STP_party_influence }
+		set_variable = { var = STP_party_influence value = 0 }
+		if = {
+			limit = { check_variable = { var = STP_resistance_influence value = STP_region_remaining_shift compare = greater_than_or_equals } }
+			subtract_from_variable = { var = STP_resistance_influence value = STP_region_remaining_shift }
+			add_to_variable = { var = STP_local_forces_influence value = STP_region_remaining_shift }
+		}
+		else = {
+			add_to_variable = { var = STP_local_forces_influence value = STP_resistance_influence }
+			set_variable = { var = STP_resistance_influence value = 0 }
+		}
+	}
+	STP_normalize_region_influence = yes
+}
+
+STP_calculate_region_alignment = {
+	set_variable = { var = STP_region_lead value = STP_resistance_influence }
+	set_variable = { var = STP_region_runner_up value = STP_party_influence }
+	set_variable = { var = STP_region_alignment value = 1 }
+	if = {
+		limit = { check_variable = { var = STP_party_influence value = STP_region_lead compare = greater_than } }
+		set_variable = { var = STP_region_runner_up value = STP_region_lead }
+		set_variable = { var = STP_region_lead value = STP_party_influence }
+		set_variable = { var = STP_region_alignment value = 2 }
+	}
+	else_if = {
+		limit = { check_variable = { var = STP_party_influence value = STP_region_runner_up compare = greater_than } }
+		set_variable = { var = STP_region_runner_up value = STP_party_influence }
+	}
+	if = {
+		limit = { check_variable = { var = STP_local_forces_influence value = STP_region_lead compare = greater_than } }
+		set_variable = { var = STP_region_runner_up value = STP_region_lead }
+		set_variable = { var = STP_region_lead value = STP_local_forces_influence }
+		set_variable = { var = STP_region_alignment value = 3 }
+	}
+	else_if = {
+		limit = { check_variable = { var = STP_local_forces_influence value = STP_region_runner_up compare = greater_than } }
+		set_variable = { var = STP_region_runner_up value = STP_local_forces_influence }
+	}
+	set_variable = { var = STP_region_margin value = STP_region_lead }
+	subtract_from_variable = { var = STP_region_margin value = STP_region_runner_up }
+	set_variable = { var = STP_region_third value = 100 }
+	subtract_from_variable = { var = STP_region_third value = STP_region_lead }
+	subtract_from_variable = { var = STP_region_third value = STP_region_runner_up }
+	set_variable = { var = STP_region_status value = 0 }
+	if = {
+		limit = {
+			check_variable = { var = STP_region_lead value = 40 compare = greater_than_or_equals }
+			check_variable = { var = STP_region_margin value = 10 compare = greater_than_or_equals }
+		}
+		if = { limit = { check_variable = { var = STP_region_alignment value = 1 compare = equals } } set_variable = { var = STP_region_status value = 1 } }
+		else_if = { limit = { check_variable = { var = STP_region_alignment value = 2 compare = equals } } set_variable = { var = STP_region_status value = 3 } }
+		else = { set_variable = { var = STP_region_status value = 5 } }
+	}
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					check_variable = { var = STP_region_lead value = 60 compare = greater_than_or_equals }
+					check_variable = { var = STP_region_margin value = 20 compare = greater_than_or_equals }
+				}
+				AND = {
+					check_variable = { var = STP_region_lead value = 55 compare = greater_than_or_equals }
+					check_variable = { var = STP_region_runner_up value = 40 compare = less_than_or_equals }
+					check_variable = { var = STP_region_margin value = 15 compare = greater_than_or_equals }
+					check_variable = { var = STP_region_third value = 10 compare = less_than_or_equals }
+				}
+			}
+		}
+		if = { limit = { check_variable = { var = STP_region_alignment value = 1 compare = equals } } set_variable = { var = STP_region_status value = 2 } }
+		else_if = { limit = { check_variable = { var = STP_region_alignment value = 2 compare = equals } } set_variable = { var = STP_region_status value = 4 } }
+		else = { set_variable = { var = STP_region_status value = 6 } }
+	}
+}
+
+STP_mark_region_player_action = {
+	set_state_flag = { flag = STP_region_recent_player_action days = 80 }
+}
+
+STP_schedule_next_party_inspection = {
+	if = {
+		limit = { has_country_flag = STP_battle_for_stelander_active }
+		random_list = {
+			10 = {
+				modifier = { factor = 0 check_variable = { var = STP_last_inspection_state value = 2 compare = equals } }
+				modifier = { factor = 3 2 = { STP_region_resistance_strongest = yes } }
+				modifier = { factor = 2 2 = { has_state_flag = STP_region_recent_player_action } }
+				modifier = { factor = 2 2 = { STP_region_has_detectable_assets = yes } }
+				2 = { set_state_flag = STP_party_inspection_active }
+				activate_mission = STP_party_inspection_state_2
+			}
+			10 = {
+				modifier = { factor = 0 check_variable = { var = STP_last_inspection_state value = 3 compare = equals } }
+				modifier = { factor = 3 3 = { STP_region_resistance_strongest = yes } }
+				modifier = { factor = 2 3 = { has_state_flag = STP_region_recent_player_action } }
+				modifier = { factor = 2 3 = { STP_region_has_detectable_assets = yes } }
+				3 = { set_state_flag = STP_party_inspection_active }
+				activate_mission = STP_party_inspection_state_3
+			}
+			10 = {
+				modifier = { factor = 0 check_variable = { var = STP_last_inspection_state value = 29 compare = equals } }
+				modifier = { factor = 3 29 = { STP_region_resistance_strongest = yes } }
+				modifier = { factor = 2 29 = { has_state_flag = STP_region_recent_player_action } }
+				modifier = { factor = 2 29 = { STP_region_has_detectable_assets = yes } }
+				29 = { set_state_flag = STP_party_inspection_active }
+				activate_mission = STP_party_inspection_state_29
+			}
+			10 = {
+				modifier = { factor = 0 check_variable = { var = STP_last_inspection_state value = 45 compare = equals } }
+				modifier = { factor = 4 45 = { STP_region_resistance_strongest = yes } }
+				modifier = { factor = 2 45 = { has_state_flag = STP_region_recent_player_action } }
+				modifier = { factor = 2 45 = { STP_region_has_detectable_assets = yes } }
+				45 = { set_state_flag = STP_party_inspection_active }
+				activate_mission = STP_party_inspection_state_45
+			}
+			10 = {
+				modifier = { factor = 0 check_variable = { var = STP_last_inspection_state value = 46 compare = equals } }
+				modifier = { factor = 3 46 = { STP_region_resistance_strongest = yes } }
+				modifier = { factor = 2 46 = { has_state_flag = STP_region_recent_player_action } }
+				modifier = { factor = 2 46 = { STP_region_has_detectable_assets = yes } }
+				46 = { set_state_flag = STP_party_inspection_active }
+				activate_mission = STP_party_inspection_state_46
+			}
+			10 = {
+				modifier = { factor = 0 check_variable = { var = STP_last_inspection_state value = 53 compare = equals } }
+				modifier = { factor = 3 53 = { STP_region_resistance_strongest = yes } }
+				modifier = { factor = 2 53 = { has_state_flag = STP_region_recent_player_action } }
+				modifier = { factor = 2 53 = { STP_region_has_detectable_assets = yes } }
+				53 = { set_state_flag = STP_party_inspection_active }
+				activate_mission = STP_party_inspection_state_53
+			}
+		}
+	}
+}
+
+STP_false_trail_clean_redirect = {
+	set_temp_variable = { var = STP_region_influence_change value = 4 }
+	STP_add_local_forces_influence = yes
+	ROOT = {
+		set_variable = { var = STP_last_party_response value = 1 }
+		set_temp_variable = { var = STP_party_suspicion_change value = -4 }
+		STP_change_party_suspicion = yes
+	}
+}
+
+STP_false_trail_noisy_redirect = {
+	set_temp_variable = { var = STP_region_influence_change value = 2 }
+	STP_add_party_influence = yes
+	ROOT = {
+		set_variable = { var = STP_last_party_response value = 2 }
+		set_temp_variable = { var = STP_party_suspicion_change value = 2 }
+		STP_change_party_suspicion = yes
+	}
+}
+
+STP_false_trail_courier_seized = {
+	set_temp_variable = { var = STP_region_influence_change value = 6 }
+	STP_add_party_influence = yes
+	clr_state_flag = STP_resistance_administration_asset
+	ROOT = {
+		set_variable = { var = STP_last_party_response value = 3 }
+		set_temp_variable = { var = STP_party_suspicion_change value = 8 }
+		STP_change_party_suspicion = yes
+	}
+}
+
+STP_false_trail_counterintelligence_breakthrough = {
+	set_temp_variable = { var = STP_region_influence_change value = 10 }
+	STP_add_party_influence = yes
+	set_state_flag = STP_party_counterintelligence_asset
+	clr_state_flag = STP_resistance_administration_asset
+	clr_state_flag = STP_resistance_garrison_asset
+	ROOT = {
+		set_variable = { var = STP_last_party_response value = 4 }
+		set_temp_variable = { var = STP_party_suspicion_change value = 12 }
+		STP_change_party_suspicion = yes
+	}
+}
+
+STP_resolve_false_trail = {
+	if = {
+		limit = { ROOT = { check_variable = { var = STP_party_suspicion value = 25 compare = less_than } } }
+		random_list = {
+			60 = { STP_false_trail_clean_redirect = yes }
+			30 = { STP_false_trail_noisy_redirect = yes }
+			10 = { STP_false_trail_courier_seized = yes }
+		}
+	}
+	else_if = {
+		limit = { ROOT = { check_variable = { var = STP_party_suspicion value = 50 compare = less_than } } }
+		random_list = {
+			35 = { STP_false_trail_clean_redirect = yes }
+			40 = { STP_false_trail_noisy_redirect = yes }
+			20 = { STP_false_trail_courier_seized = yes }
+			5 = { STP_false_trail_counterintelligence_breakthrough = yes }
+		}
+	}
+	else_if = {
+		limit = { ROOT = { check_variable = { var = STP_party_suspicion value = 70 compare = less_than } } }
+		random_list = {
+			15 = { STP_false_trail_clean_redirect = yes }
+			35 = { STP_false_trail_noisy_redirect = yes }
+			35 = { STP_false_trail_courier_seized = yes }
+			15 = { STP_false_trail_counterintelligence_breakthrough = yes }
+		}
+	}
+	else = {
+		random_list = {
+			5 = { STP_false_trail_clean_redirect = yes }
+			20 = { STP_false_trail_noisy_redirect = yes }
+			40 = { STP_false_trail_courier_seized = yes }
+			35 = { STP_false_trail_counterintelligence_breakthrough = yes }
+		}
+	}
+}
+
+STP_resolve_party_inspection = {
+	if = {
+		limit = { has_state_flag = STP_false_trail_prepared }
+		STP_resolve_false_trail = yes
+	}
+	else_if = {
+		limit = { has_state_flag = STP_resistance_administration_asset }
+		clr_state_flag = STP_resistance_administration_asset
+		set_temp_variable = { var = STP_region_influence_change value = 8 }
+		STP_add_party_influence = yes
+		ROOT = {
+			set_variable = { var = STP_last_party_response value = 5 }
+			set_temp_variable = { var = STP_party_suspicion_change value = 6 }
+			STP_change_party_suspicion = yes
+		}
+	}
+	else_if = {
+		limit = { has_state_flag = STP_local_deal_asset }
+		set_state_flag = STP_party_reinforced_garrison_asset
+		set_temp_variable = { var = STP_region_influence_change value = 8 }
+		STP_add_party_influence = yes
+		ROOT = {
+			set_variable = { var = STP_last_party_response value = 6 }
+			set_temp_variable = { var = STP_party_suspicion_change value = 4 }
+			STP_change_party_suspicion = yes
+		}
+	}
+	else_if = {
+		limit = { STP_region_resistance_strongest = yes }
+		set_temp_variable = { var = STP_region_influence_change value = 10 }
+		STP_add_party_influence = yes
+		ROOT = {
+			set_variable = { var = STP_last_party_response value = 7 }
+			set_temp_variable = { var = STP_party_suspicion_change value = 5 }
+			STP_change_party_suspicion = yes
+		}
+	}
+	else = {
+		set_temp_variable = { var = STP_region_influence_change value = 6 }
+		STP_add_party_influence = yes
+		ROOT = {
+			set_variable = { var = STP_last_party_response value = 8 }
+			set_temp_variable = { var = STP_party_suspicion_change value = 3 }
+			STP_change_party_suspicion = yes
+		}
+	}
+	clr_state_flag = STP_false_trail_prepared
+	clr_state_flag = STP_party_inspection_active
+}
+
+STP_initialize_battle_for_stelander = {
+	set_country_flag = STP_battle_for_stelander_active
+	set_variable = { var = STP_last_party_response value = 0 }
+	set_variable = { var = STP_last_inspection_state value = 0 }
+	set_variable = { var = STP_political_action_slots_total value = 1 }
+	set_variable = { var = STP_political_action_slots_available value = 1 }
+
+	1 = {
+		set_state_flag = STP_region_participates
+		set_variable = { var = STP_resistance_influence value = 100 }
+		set_variable = { var = STP_party_influence value = 0 }
+		set_variable = { var = STP_local_forces_influence value = 0 }
+		STP_calculate_region_alignment = yes
+	}
+	2 = {
+		set_state_flag = STP_region_participates
+		set_state_flag = STP_region_player_operations_allowed
+		set_variable = { var = STP_resistance_influence value = 30 }
+		set_variable = { var = STP_party_influence value = 70 }
+		set_variable = { var = STP_local_forces_influence value = 0 }
+		STP_calculate_region_alignment = yes
+	}
+	3 = {
+		set_state_flag = STP_region_participates
+		set_state_flag = STP_region_player_operations_allowed
+		set_variable = { var = STP_resistance_influence value = 40 }
+		set_variable = { var = STP_party_influence value = 60 }
+		set_variable = { var = STP_local_forces_influence value = 0 }
+		STP_calculate_region_alignment = yes
+	}
+	28 = {
+		set_state_flag = STP_region_participates
+		set_variable = { var = STP_resistance_influence value = 0 }
+		set_variable = { var = STP_party_influence value = 100 }
+		set_variable = { var = STP_local_forces_influence value = 0 }
+		STP_calculate_region_alignment = yes
+	}
+	29 = {
+		set_state_flag = STP_region_participates
+		set_state_flag = STP_region_player_operations_allowed
+		set_variable = { var = STP_resistance_influence value = 35 }
+		set_variable = { var = STP_party_influence value = 65 }
+		set_variable = { var = STP_local_forces_influence value = 0 }
+		STP_calculate_region_alignment = yes
+	}
+	43 = {
+		set_state_flag = STP_region_participates
+		set_variable = { var = STP_resistance_influence value = 0 }
+		set_variable = { var = STP_party_influence value = 0 }
+		set_variable = { var = STP_local_forces_influence value = 100 }
+		STP_calculate_region_alignment = yes
+	}
+	44 = {
+		set_state_flag = STP_region_participates
+		set_variable = { var = STP_resistance_influence value = 0 }
+		set_variable = { var = STP_party_influence value = 0 }
+		set_variable = { var = STP_local_forces_influence value = 100 }
+		STP_calculate_region_alignment = yes
+	}
+	45 = {
+		set_state_flag = STP_region_participates
+		set_state_flag = STP_region_player_operations_allowed
+		set_variable = { var = STP_resistance_influence value = 25 }
+		set_variable = { var = STP_party_influence value = 35 }
+		set_variable = { var = STP_local_forces_influence value = 40 }
+		STP_calculate_region_alignment = yes
+	}
+	46 = {
+		set_state_flag = STP_region_participates
+		set_state_flag = STP_region_player_operations_allowed
+		set_variable = { var = STP_resistance_influence value = 35 }
+		set_variable = { var = STP_party_influence value = 65 }
+		set_variable = { var = STP_local_forces_influence value = 0 }
+		STP_calculate_region_alignment = yes
+	}
+	53 = {
+		set_state_flag = STP_region_participates
+		set_state_flag = STP_region_player_operations_allowed
+		set_variable = { var = STP_resistance_influence value = 55 }
+		set_variable = { var = STP_party_influence value = 45 }
+		set_variable = { var = STP_local_forces_influence value = 0 }
+		STP_calculate_region_alignment = yes
+	}
+	88 = {
+		set_state_flag = STP_region_participates
+		set_variable = { var = STP_resistance_influence value = 0 }
+		set_variable = { var = STP_party_influence value = 0 }
+		set_variable = { var = STP_local_forces_influence value = 100 }
+		STP_calculate_region_alignment = yes
+	}
+
+	country_event = { id = ADISCORD_STP_regions.2 days = 40 }
+}
+
+STP_clear_region_runtime = {
+	clr_state_flag = STP_region_participates
+	clr_state_flag = STP_region_player_operations_allowed
+	clr_state_flag = STP_region_unique_operation_done
+	clr_state_flag = STP_region_recent_player_action
+	clr_state_flag = STP_party_inspection_active
+	clr_state_flag = STP_false_trail_prepared
+	clr_state_flag = STP_resistance_administration_asset
+	clr_state_flag = STP_resistance_garrison_asset
+	clr_state_flag = STP_resistance_supply_asset
+	clr_state_flag = STP_resistance_sabotage_asset
+	clr_state_flag = STP_local_deal_asset
+	clr_state_flag = STP_party_reinforced_garrison_asset
+	clr_state_flag = STP_party_counterintelligence_asset
+	clear_variable = STP_resistance_influence
+	clear_variable = STP_party_influence
+	clear_variable = STP_local_forces_influence
+	clear_variable = STP_region_lead
+	clear_variable = STP_region_runner_up
+	clear_variable = STP_region_margin
+	clear_variable = STP_region_third
+	clear_variable = STP_region_alignment
+	clear_variable = STP_region_status
+}
+
+STP_end_battle_for_stelander = {
+	clr_country_flag = STP_battle_for_stelander_active
+	clr_country_flag = STP_regional_operation_active
+	remove_mission = STP_party_inspection_state_2
+	remove_mission = STP_party_inspection_state_3
+	remove_mission = STP_party_inspection_state_29
+	remove_mission = STP_party_inspection_state_45
+	remove_mission = STP_party_inspection_state_46
+	remove_mission = STP_party_inspection_state_53
+	1 = { STP_clear_region_runtime = yes }
+	2 = { STP_clear_region_runtime = yes }
+	3 = { STP_clear_region_runtime = yes }
+	28 = { STP_clear_region_runtime = yes }
+	29 = { STP_clear_region_runtime = yes }
+	43 = { STP_clear_region_runtime = yes }
+	44 = { STP_clear_region_runtime = yes }
+	45 = { STP_clear_region_runtime = yes }
+	46 = { STP_clear_region_runtime = yes }
+	53 = { STP_clear_region_runtime = yes }
+	88 = { STP_clear_region_runtime = yes }
+	clear_variable = STP_last_party_response
+	clear_variable = STP_last_inspection_state
+	clear_variable = STP_political_action_slots_total
+	clear_variable = STP_political_action_slots_available
+}

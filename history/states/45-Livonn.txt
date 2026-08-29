@@ -4,9 +4,9 @@ state={
 	provinces={
 		111 6675 16458 16459 16461 16529 
 	}
-	manpower=900000
-	buildings_max_level_factor=1.000
-	local_supplies=0.000
+	manpower = 1200000
+	buildings_max_level_factor = 1.000
+	local_supplies = 0.0
 	state_category = town
 
 	history={
@@ -19,7 +19,9 @@ state={
 		victory_points = { 16529 5 }
 	}
 	resources = {
-        steel = 39
-        aluminium = 9
-    }
+        steel = 18
+        aluminium = 3
+		tungsten = 3
+		chromium = 2
+	}
 }

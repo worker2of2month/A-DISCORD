@@ -1,0 +1,65 @@
+defined_text = {
+	name = STPGetRegionStatus
+	text = { trigger = { check_variable = { var = STP_region_status value = 2 compare = equals } } localization_key = STP_REGION_STATUS_RESISTANCE_ENTRENCHED }
+	text = { trigger = { check_variable = { var = STP_region_status value = 1 compare = equals } } localization_key = STP_REGION_STATUS_RESISTANCE_LEANING }
+	text = { trigger = { check_variable = { var = STP_region_status value = 4 compare = equals } } localization_key = STP_REGION_STATUS_PARTY_ENTRENCHED }
+	text = { trigger = { check_variable = { var = STP_region_status value = 3 compare = equals } } localization_key = STP_REGION_STATUS_PARTY_LEANING }
+	text = { trigger = { check_variable = { var = STP_region_status value = 6 compare = equals } } localization_key = STP_REGION_STATUS_LOCAL_DOMINANT }
+	text = { trigger = { check_variable = { var = STP_region_status value = 5 compare = equals } } localization_key = STP_REGION_STATUS_LOCAL_LEANING }
+	text = { localization_key = STP_REGION_STATUS_CONTESTED }
+}
+
+defined_text = {
+	name = STPGetAdministrationAsset
+	text = { trigger = { has_state_flag = STP_resistance_administration_asset } localization_key = STP_REGION_ASSET_ADMINISTRATION }
+	text = { localization_key = STP_REGION_EMPTY_LINE }
+}
+
+defined_text = {
+	name = STPGetGarrisonAsset
+	text = { trigger = { has_state_flag = STP_resistance_garrison_asset } localization_key = STP_REGION_ASSET_GARRISON }
+	text = { localization_key = STP_REGION_EMPTY_LINE }
+}
+
+defined_text = {
+	name = STPGetSupplyAsset
+	text = { trigger = { has_state_flag = STP_resistance_supply_asset } localization_key = STP_REGION_ASSET_SUPPLY }
+	text = { localization_key = STP_REGION_EMPTY_LINE }
+}
+
+defined_text = {
+	name = STPGetSabotageAsset
+	text = { trigger = { has_state_flag = STP_resistance_sabotage_asset } localization_key = STP_REGION_ASSET_SABOTAGE }
+	text = { localization_key = STP_REGION_EMPTY_LINE }
+}
+
+defined_text = {
+	name = STPGetLocalDealAsset
+	text = { trigger = { has_state_flag = STP_local_deal_asset } localization_key = STP_REGION_ASSET_LOCAL_DEAL }
+	text = { localization_key = STP_REGION_EMPTY_LINE }
+}
+
+defined_text = {
+	name = STPGetPartyGarrisonMeasure
+	text = { trigger = { has_state_flag = STP_party_reinforced_garrison_asset } localization_key = STP_REGION_PARTY_GARRISON }
+	text = { localization_key = STP_REGION_EMPTY_LINE }
+}
+
+defined_text = {
+	name = STPGetPartyCounterintelligenceMeasure
+	text = { trigger = { has_state_flag = STP_party_counterintelligence_asset } localization_key = STP_REGION_PARTY_COUNTERINTELLIGENCE }
+	text = { localization_key = STP_REGION_EMPTY_LINE }
+}
+
+defined_text = {
+	name = STPGetLastPartyResponse
+	text = { trigger = { check_variable = { var = STP_last_party_response value = 1 compare = equals } } localization_key = STP_PARTY_RESPONSE_CLEAN_REDIRECT }
+	text = { trigger = { check_variable = { var = STP_last_party_response value = 2 compare = equals } } localization_key = STP_PARTY_RESPONSE_NOISY_REDIRECT }
+	text = { trigger = { check_variable = { var = STP_last_party_response value = 3 compare = equals } } localization_key = STP_PARTY_RESPONSE_COURIER_SEIZED }
+	text = { trigger = { check_variable = { var = STP_last_party_response value = 4 compare = equals } } localization_key = STP_PARTY_RESPONSE_BREAKTHROUGH }
+	text = { trigger = { check_variable = { var = STP_last_party_response value = 5 compare = equals } } localization_key = STP_PARTY_RESPONSE_PURGE }
+	text = { trigger = { check_variable = { var = STP_last_party_response value = 6 compare = equals } } localization_key = STP_PARTY_RESPONSE_GARRISON }
+	text = { trigger = { check_variable = { var = STP_last_party_response value = 7 compare = equals } } localization_key = STP_PARTY_RESPONSE_RAID }
+	text = { trigger = { check_variable = { var = STP_last_party_response value = 8 compare = equals } } localization_key = STP_PARTY_RESPONSE_AUDIT }
+	text = { localization_key = STP_PARTY_RESPONSE_NONE }
+}

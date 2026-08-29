@@ -18,6 +18,7 @@ from PIL import Image
 from tools.builders import build_adiscord_party_texticons as party_texticons
 from tools.builders import build_adiscord_deployment_ui_assets as deployment_ui_assets
 from tools.builders import build_adiscord_intelligence_ui_assets as intelligence_ui_assets
+from tools.builders import build_adiscord_stp_regions_map as stp_regions_map
 from tools.builders import build_adiscord_technology_ui_assets as technology_ui_assets
 from tools.builders import build_adiscord_val_operations_map as val_operations_map
 from tools.builders.build_adiscord_diplomacy_ui_assets import expected_outputs as diplomacy_ui_asset_outputs
@@ -54,6 +55,7 @@ REQUIRED_FAMILIES = {
     "remainder_states",
     "resource_assets",
     "strategic_regions",
+    "stp_regions_map",
     "trade_regions",
     "technology_system",
     "technology_screen_ui_assets",
@@ -306,6 +308,22 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
             self.assertTrue((output_dir / "VAL_ops_expected.png").is_file())
             self.assertFalse((output_dir / "VAL_ops_stale.png").exists())
             self.assertEqual(unrelated.read_bytes(), unrelated_before)
+
+    def test_stp_regions_check_rejects_an_unexpected_owned_png(self) -> None:
+        self.assertTrue(self.entries["stp_regions_map"]["may_delete_outputs"])
+        with tempfile.TemporaryDirectory() as temporary:
+            output_dir = Path(temporary)
+            expected = Image.new("RGBA", (2, 2), (10, 20, 30, 255))
+            outputs = {"STP_regions_expected.png": expected}
+            expected.save(output_dir / "STP_regions_expected.png")
+            Image.new("RGBA", (2, 2), (40, 50, 60, 255)).save(
+                output_dir / "STP_regions_stale.png"
+            )
+
+            with patch.object(stp_regions_map, "OUT", output_dir):
+                issues = stp_regions_map.validate_outputs(outputs)
+
+            self.assertIn("STP_regions_stale.png", "\n".join(issues))
 
     def test_pipeline_is_explicit_and_repeats_northern_after_exclusion(self) -> None:
         sequence = self.registry["apply_sequence"]

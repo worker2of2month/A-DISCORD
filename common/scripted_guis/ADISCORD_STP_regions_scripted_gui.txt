@@ -1,0 +1,98 @@
+scripted_gui = {
+	ADISCORD_STP_regions_panel = {
+		context_type = decision_category
+		window_name = "ADISCORD_STP_regions_panel_window"
+		visible = { always = yes }
+
+		triggers = {
+			STP_regions_1_contested_visible = { 1 = { check_variable = { var = STP_region_status value = 0 compare = equals } } }
+			STP_regions_1_resistance_leaning_visible = { 1 = { check_variable = { var = STP_region_status value = 1 compare = equals } } }
+			STP_regions_1_resistance_entrenched_visible = { 1 = { check_variable = { var = STP_region_status value = 2 compare = equals } } }
+			STP_regions_1_party_leaning_visible = { 1 = { check_variable = { var = STP_region_status value = 3 compare = equals } } }
+			STP_regions_1_party_entrenched_visible = { 1 = { check_variable = { var = STP_region_status value = 4 compare = equals } } }
+			STP_regions_1_local_leaning_visible = { 1 = { check_variable = { var = STP_region_status value = 5 compare = equals } } }
+			STP_regions_1_local_dominant_visible = { 1 = { check_variable = { var = STP_region_status value = 6 compare = equals } } }
+
+			STP_regions_2_contested_visible = { 2 = { check_variable = { var = STP_region_status value = 0 compare = equals } } }
+			STP_regions_2_resistance_leaning_visible = { 2 = { check_variable = { var = STP_region_status value = 1 compare = equals } } }
+			STP_regions_2_resistance_entrenched_visible = { 2 = { check_variable = { var = STP_region_status value = 2 compare = equals } } }
+			STP_regions_2_party_leaning_visible = { 2 = { check_variable = { var = STP_region_status value = 3 compare = equals } } }
+			STP_regions_2_party_entrenched_visible = { 2 = { check_variable = { var = STP_region_status value = 4 compare = equals } } }
+			STP_regions_2_local_leaning_visible = { 2 = { check_variable = { var = STP_region_status value = 5 compare = equals } } }
+			STP_regions_2_local_dominant_visible = { 2 = { check_variable = { var = STP_region_status value = 6 compare = equals } } }
+
+			STP_regions_3_contested_visible = { 3 = { check_variable = { var = STP_region_status value = 0 compare = equals } } }
+			STP_regions_3_resistance_leaning_visible = { 3 = { check_variable = { var = STP_region_status value = 1 compare = equals } } }
+			STP_regions_3_resistance_entrenched_visible = { 3 = { check_variable = { var = STP_region_status value = 2 compare = equals } } }
+			STP_regions_3_party_leaning_visible = { 3 = { check_variable = { var = STP_region_status value = 3 compare = equals } } }
+			STP_regions_3_party_entrenched_visible = { 3 = { check_variable = { var = STP_region_status value = 4 compare = equals } } }
+			STP_regions_3_local_leaning_visible = { 3 = { check_variable = { var = STP_region_status value = 5 compare = equals } } }
+			STP_regions_3_local_dominant_visible = { 3 = { check_variable = { var = STP_region_status value = 6 compare = equals } } }
+
+			STP_regions_28_contested_visible = { 28 = { check_variable = { var = STP_region_status value = 0 compare = equals } } }
+			STP_regions_28_resistance_leaning_visible = { 28 = { check_variable = { var = STP_region_status value = 1 compare = equals } } }
+			STP_regions_28_resistance_entrenched_visible = { 28 = { check_variable = { var = STP_region_status value = 2 compare = equals } } }
+			STP_regions_28_party_leaning_visible = { 28 = { check_variable = { var = STP_region_status value = 3 compare = equals } } }
+			STP_regions_28_party_entrenched_visible = { 28 = { check_variable = { var = STP_region_status value = 4 compare = equals } } }
+			STP_regions_28_local_leaning_visible = { 28 = { check_variable = { var = STP_region_status value = 5 compare = equals } } }
+			STP_regions_28_local_dominant_visible = { 28 = { check_variable = { var = STP_region_status value = 6 compare = equals } } }
+
+			STP_regions_29_contested_visible = { 29 = { check_variable = { var = STP_region_status value = 0 compare = equals } } }
+			STP_regions_29_resistance_leaning_visible = { 29 = { check_variable = { var = STP_region_status value = 1 compare = equals } } }
+			STP_regions_29_resistance_entrenched_visible = { 29 = { check_variable = { var = STP_region_status value = 2 compare = equals } } }
+			STP_regions_29_party_leaning_visible = { 29 = { check_variable = { var = STP_region_status value = 3 compare = equals } } }
+			STP_regions_29_party_entrenched_visible = { 29 = { check_variable = { var = STP_region_status value = 4 compare = equals } } }
+			STP_regions_29_local_leaning_visible = { 29 = { check_variable = { var = STP_region_status value = 5 compare = equals } } }
+			STP_regions_29_local_dominant_visible = { 29 = { check_variable = { var = STP_region_status value = 6 compare = equals } } }
+
+			STP_regions_43_contested_visible = { 43 = { check_variable = { var = STP_region_status value = 0 compare = equals } } }
+			STP_regions_43_resistance_leaning_visible = { 43 = { check_variable = { var = STP_region_status value = 1 compare = equals } } }
+			STP_regions_43_resistance_entrenched_visible = { 43 = { check_variable = { var = STP_region_status value = 2 compare = equals } } }
+			STP_regions_43_party_leaning_visible = { 43 = { check_variable = { var = STP_region_status value = 3 compare = equals } } }
+			STP_regions_43_party_entrenched_visible = { 43 = { check_variable = { var = STP_region_status value = 4 compare = equals } } }
+			STP_regions_43_local_leaning_visible = { 43 = { check_variable = { var = STP_region_status value = 5 compare = equals } } }
+			STP_regions_43_local_dominant_visible = { 43 = { check_variable = { var = STP_region_status value = 6 compare = equals } } }
+
+			STP_regions_44_contested_visible = { 44 = { check_variable = { var = STP_region_status value = 0 compare = equals } } }
+			STP_regions_44_resistance_leaning_visible = { 44 = { check_variable = { var = STP_region_status value = 1 compare = equals } } }
+			STP_regions_44_resistance_entrenched_visible = { 44 = { check_variable = { var = STP_region_status value = 2 compare = equals } } }
+			STP_regions_44_party_leaning_visible = { 44 = { check_variable = { var = STP_region_status value = 3 compare = equals } } }
+			STP_regions_44_party_entrenched_visible = { 44 = { check_variable = { var = STP_region_status value = 4 compare = equals } } }
+			STP_regions_44_local_leaning_visible = { 44 = { check_variable = { var = STP_region_status value = 5 compare = equals } } }
+			STP_regions_44_local_dominant_visible = { 44 = { check_variable = { var = STP_region_status value = 6 compare = equals } } }
+
+			STP_regions_45_contested_visible = { 45 = { check_variable = { var = STP_region_status value = 0 compare = equals } } }
+			STP_regions_45_resistance_leaning_visible = { 45 = { check_variable = { var = STP_region_status value = 1 compare = equals } } }
+			STP_regions_45_resistance_entrenched_visible = { 45 = { check_variable = { var = STP_region_status value = 2 compare = equals } } }
+			STP_regions_45_party_leaning_visible = { 45 = { check_variable = { var = STP_region_status value = 3 compare = equals } } }
+			STP_regions_45_party_entrenched_visible = { 45 = { check_variable = { var = STP_region_status value = 4 compare = equals } } }
+			STP_regions_45_local_leaning_visible = { 45 = { check_variable = { var = STP_region_status value = 5 compare = equals } } }
+			STP_regions_45_local_dominant_visible = { 45 = { check_variable = { var = STP_region_status value = 6 compare = equals } } }
+
+			STP_regions_46_contested_visible = { 46 = { check_variable = { var = STP_region_status value = 0 compare = equals } } }
+			STP_regions_46_resistance_leaning_visible = { 46 = { check_variable = { var = STP_region_status value = 1 compare = equals } } }
+			STP_regions_46_resistance_entrenched_visible = { 46 = { check_variable = { var = STP_region_status value = 2 compare = equals } } }
+			STP_regions_46_party_leaning_visible = { 46 = { check_variable = { var = STP_region_status value = 3 compare = equals } } }
+			STP_regions_46_party_entrenched_visible = { 46 = { check_variable = { var = STP_region_status value = 4 compare = equals } } }
+			STP_regions_46_local_leaning_visible = { 46 = { check_variable = { var = STP_region_status value = 5 compare = equals } } }
+			STP_regions_46_local_dominant_visible = { 46 = { check_variable = { var = STP_region_status value = 6 compare = equals } } }
+
+			STP_regions_53_contested_visible = { 53 = { check_variable = { var = STP_region_status value = 0 compare = equals } } }
+			STP_regions_53_resistance_leaning_visible = { 53 = { check_variable = { var = STP_region_status value = 1 compare = equals } } }
+			STP_regions_53_resistance_entrenched_visible = { 53 = { check_variable = { var = STP_region_status value = 2 compare = equals } } }
+			STP_regions_53_party_leaning_visible = { 53 = { check_variable = { var = STP_region_status value = 3 compare = equals } } }
+			STP_regions_53_party_entrenched_visible = { 53 = { check_variable = { var = STP_region_status value = 4 compare = equals } } }
+			STP_regions_53_local_leaning_visible = { 53 = { check_variable = { var = STP_region_status value = 5 compare = equals } } }
+			STP_regions_53_local_dominant_visible = { 53 = { check_variable = { var = STP_region_status value = 6 compare = equals } } }
+
+			STP_regions_88_contested_visible = { 88 = { check_variable = { var = STP_region_status value = 0 compare = equals } } }
+			STP_regions_88_resistance_leaning_visible = { 88 = { check_variable = { var = STP_region_status value = 1 compare = equals } } }
+			STP_regions_88_resistance_entrenched_visible = { 88 = { check_variable = { var = STP_region_status value = 2 compare = equals } } }
+			STP_regions_88_party_leaning_visible = { 88 = { check_variable = { var = STP_region_status value = 3 compare = equals } } }
+			STP_regions_88_party_entrenched_visible = { 88 = { check_variable = { var = STP_region_status value = 4 compare = equals } } }
+			STP_regions_88_local_leaning_visible = { 88 = { check_variable = { var = STP_region_status value = 5 compare = equals } } }
+			STP_regions_88_local_dominant_visible = { 88 = { check_variable = { var = STP_region_status value = 6 compare = equals } } }
+
+		}
+	}
+}

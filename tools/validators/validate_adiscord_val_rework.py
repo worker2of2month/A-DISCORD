@@ -423,8 +423,10 @@ def main() -> int:
     if "VAL_" in shared_effects or "VAL_" in shared_triggers:
         issues.append("shared action API contains Kefreyt-specific content")
     for token in (
-        "ADISCORD_economy_spend_25",
         "ADISCORD_economy_spend_50",
+        "ADISCORD_economy_spend_100",
+        "ADISCORD_economy_spend_200",
+        "ADISCORD_economy_spend_500",
         "ADISCORD_economy_receive_15",
         "ADISCORD_economy_receive_50",
         "ADISCORD_campaign_slot_consume",
@@ -451,7 +453,7 @@ def main() -> int:
         elif "VAL_clear_foreign_operation = yes" not in resolvers[0]:
             issues.append(f"{effect_id} does not release the shared foreign-operation slot")
 
-    decisions = read("common/decisions/ADISCORD_VAL_rework_decisions.txt")
+    decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
     for token in (
         "days_mission_timeout = 90",
         "amount = -2500",
@@ -1058,10 +1060,10 @@ def main() -> int:
             if image.size != (420, 260):
                 issues.append(f"operations background has size {image.size}, expected 420x260")
 
-    localization_path = ROOT / "localisation/russian/ADISCORD_VAL_rework_l_russian.yml"
+    localization_path = ROOT / "localisation/russian/ADISCORD_VAL_decisions_l_russian.yml"
     if not localization_path.read_bytes().startswith(b"\xef\xbb\xbf"):
         issues.append("Russian rework localisation is missing its UTF-8 BOM")
-    localization = read("localisation/russian/ADISCORD_VAL_rework_l_russian.yml")
+    localization = read("localisation/russian/ADISCORD_VAL_decisions_l_russian.yml")
     for key in (*required, "VAL_quarterly_contract_deadline", "VAL_operations_map_tt"):
         if not re.search(rf"(?m)^\s*{re.escape(key)}:", localization):
             issues.append(f"missing Russian localisation {key}")
@@ -1084,7 +1086,10 @@ def main() -> int:
         "VAL_debug_reputation_minimum",
         "VAL_debug_grant_contract_reserves",
         "VAL_debug_reset_rework_state",
-        "ADISCORD_cost_t25",
+        "ADISCORD_cost_t50",
+        "ADISCORD_cost_t100",
+        "ADISCORD_cost_t200",
+        "ADISCORD_cost_t500",
         "ADISCORD_cost_r2500",
         "ADISCORD_cost_r4000",
     ):

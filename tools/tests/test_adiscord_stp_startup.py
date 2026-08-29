@@ -8,10 +8,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 EFFECTS = ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
 DECISIONS = ROOT / "common/decisions/ADISCORD_STP_decisions.txt"
+DECISION_CATEGORIES = ROOT / "common/decisions/categories/ADISCORD_decision_categories_STP.txt"
+BOP = ROOT / "common/bop/STP.txt"
 DYNAMIC_MODIFIERS = ROOT / "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt"
 INLAY = ROOT / "common/focus_inlay_windows/ADISCORD_STP_state_face_inlay_window.txt"
 SCRIPTED_LOC = ROOT / "common/scripted_localisation/ADISCORD_STP_scripted_loc.txt"
 DECISION_LOC = ROOT / "localisation/russian/ADISCORD_STP_decisions_l_russian.yml"
+BOP_LOC = ROOT / "localisation/russian/ADISCORD_STP_bop_l_russian.yml"
 HISTORY = ROOT / "history/countries/STP - StepanLand.txt"
 ON_ACTIONS = ROOT / "common/on_actions/00_ADISCORD_on_actions.txt"
 
@@ -129,6 +132,59 @@ class STPCoreContractTests(unittest.TestCase):
             "STP_debug_improve_ivanov",
         ):
             self.assertRegex(localisation, rf"(?m)^\s*{decision}:\s+\"§RDEBUG:§!")
+
+    def test_bop_debug_decisions_shift_election_legitimacy_in_hidden_bop_category(self) -> None:
+        bop = named_block(read(BOP), "STP_shabrat_election_legitimacy")
+        self.assertIn("decision_category = STP_shabrat_election_bop_category", bop)
+
+        categories = read(DECISION_CATEGORIES)
+        category = named_block(categories, "STP_shabrat_election_bop_category")
+        self.assertIn("allowed = { tag = STP }", category)
+        for ordinary_category_field in (
+            "visible =",
+            "visible_when_empty =",
+            "picture =",
+            "priority =",
+        ):
+            self.assertNotIn(ordinary_category_field, category)
+
+        decisions = named_block(read(DECISIONS), "STP_shabrat_election_bop_category")
+        expected_values = {
+            "STP_debug_increase_party_bop": "-0.25",
+            "STP_debug_increase_shabrat_bop": "0.25",
+        }
+        for decision, value in expected_values.items():
+            with self.subTest(decision=decision):
+                block = named_block(decisions, decision)
+                self.assertIn("id = STP_shabrat_election_legitimacy", block)
+                self.assertIn(f"value = {value}", block)
+
+        localisation = read(BOP_LOC)
+        required_keys = (
+            "STP_shabrat_election_legitimacy",
+            "STP_party_election_legitimacy_side",
+            "STP_shabrat_election_legitimacy_side",
+            "STP_election_legitimacy_contested_range",
+            "STP_party_election_low_control_range",
+            "STP_party_election_medium_control_range",
+            "STP_party_election_high_control_range",
+            "STP_party_election_total_control_range",
+            "STP_shabrat_election_low_control_range",
+            "STP_shabrat_election_medium_control_range",
+            "STP_shabrat_election_high_control_range",
+            "STP_shabrat_election_total_control_range",
+            "STP_shabrat_election_bop_category",
+        )
+        for key in required_keys:
+            with self.subTest(key=key):
+                self.assertRegex(localisation, rf"(?m)^\s*{key}:")
+
+        for decision in expected_values:
+            self.assertRegex(
+                localisation,
+                rf'(?m)^\s*{decision}:\s+"§RDEBUG:§! BOP:',
+            )
+        self.assertTrue(BOP_LOC.read_bytes().startswith(b"\xef\xbb\xbf"))
 
     def test_startup_uses_one_core_initializer_for_mechanics_and_army_lock(self) -> None:
         effects = read(EFFECTS)

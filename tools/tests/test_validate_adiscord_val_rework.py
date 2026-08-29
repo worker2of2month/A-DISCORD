@@ -12,6 +12,12 @@ ON_ACTIONS_PATH = ROOT / "common" / "on_actions" / "02_ADISCORD_VAL_rework_on_ac
 FOREIGN_EFFECTS_PATH = (
     ROOT / "common" / "scripted_effects" / "ADISCORD_VAL_foreign_operation_effects.txt"
 )
+DECISIONS_PATH = ROOT / "common" / "decisions" / "ADISCORD_VAL_decisions.txt"
+LOCALISATION_PATH = ROOT / "localisation" / "russian" / "ADISCORD_VAL_decisions_l_russian.yml"
+LEGACY_DECISIONS_PATH = ROOT / "common" / "decisions" / "ADISCORD_VAL_rework_decisions.txt"
+LEGACY_LOCALISATION_PATH = (
+    ROOT / "localisation" / "russian" / "ADISCORD_VAL_rework_l_russian.yml"
+)
 
 FAMILIES = {
     "administration": tuple(f"VAL_contract_administration_{n}" for n in range(1, 4)),
@@ -218,6 +224,13 @@ class ValTierTransitionContractTests(unittest.TestCase):
 
     def effect(self, family: str, tier: int) -> str:
         return only_named_block(self, self.effects, f"VAL_apply_contract_{family}_{tier}")
+
+    def test_decision_files_use_canonical_tag_names(self) -> None:
+        self.assertTrue(DECISIONS_PATH.is_file())
+        self.assertTrue(LOCALISATION_PATH.is_file())
+        self.assertFalse(LEGACY_DECISIONS_PATH.exists())
+        self.assertFalse(LEGACY_LOCALISATION_PATH.exists())
+        self.assertTrue(LOCALISATION_PATH.read_bytes().startswith(b"\xef\xbb\xbf"))
 
     def assert_hidden_rebuild(self, effect: str, family: str, target: str) -> None:
         hidden = only_named_block(self, effect, "hidden_effect")

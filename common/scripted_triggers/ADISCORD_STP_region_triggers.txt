@@ -1,0 +1,134 @@
+# Country-scope political-action slots for the Battle for Stelander.
+STP_has_political_action_slot = {
+	check_variable = { var = STP_political_action_slots_available value = 1 compare = greater_than_or_equals }
+}
+
+# State-scope API for the Battle for Stelander regional system.
+
+STP_region_is_operable = {
+	has_state_flag = STP_region_player_operations_allowed
+}
+
+# Parameterised state-scope thresholds, e.g.:
+# STP_region_resistance_at_least = { value = 55 }
+STP_region_resistance_at_least = {
+	check_variable = { var = STP_resistance_influence value = $value$ compare = greater_than_or_equals }
+}
+
+STP_region_party_at_least = {
+	check_variable = { var = STP_party_influence value = $value$ compare = greater_than_or_equals }
+}
+
+STP_region_local_forces_at_least = {
+	check_variable = { var = STP_local_forces_influence value = $value$ compare = greater_than_or_equals }
+}
+
+STP_region_resistance_strongest = {
+	check_variable = { var = STP_region_margin value = 1 compare = greater_than_or_equals }
+	check_variable = { var = STP_resistance_influence value = STP_party_influence compare = greater_than_or_equals }
+	check_variable = { var = STP_resistance_influence value = STP_local_forces_influence compare = greater_than_or_equals }
+}
+
+STP_region_party_strongest = {
+	check_variable = { var = STP_region_margin value = 1 compare = greater_than_or_equals }
+	check_variable = { var = STP_party_influence value = STP_resistance_influence compare = greater_than_or_equals }
+	check_variable = { var = STP_party_influence value = STP_local_forces_influence compare = greater_than_or_equals }
+}
+
+STP_region_local_forces_strongest = {
+	check_variable = { var = STP_region_margin value = 1 compare = greater_than_or_equals }
+	check_variable = { var = STP_local_forces_influence value = STP_resistance_influence compare = greater_than_or_equals }
+	check_variable = { var = STP_local_forces_influence value = STP_party_influence compare = greater_than_or_equals }
+}
+
+STP_region_resistance_leaning = {
+	OR = {
+		check_variable = { var = STP_region_status value = 1 compare = equals }
+		check_variable = { var = STP_region_status value = 2 compare = equals }
+	}
+}
+
+STP_region_party_leaning = {
+	OR = {
+		check_variable = { var = STP_region_status value = 3 compare = equals }
+		check_variable = { var = STP_region_status value = 4 compare = equals }
+	}
+}
+
+STP_region_local_forces_leaning = {
+	OR = {
+		check_variable = { var = STP_region_status value = 5 compare = equals }
+		check_variable = { var = STP_region_status value = 6 compare = equals }
+	}
+}
+
+STP_region_contested = {
+	NOT = { STP_region_resistance_leaning = yes }
+	NOT = { STP_region_party_leaning = yes }
+	NOT = { STP_region_local_forces_leaning = yes }
+}
+
+STP_region_resistance_entrenched = {
+	STP_region_resistance_strongest = yes
+	check_variable = { var = STP_region_lead value = 55 compare = greater_than_or_equals }
+	check_variable = { var = STP_region_runner_up value = 40 compare = less_than_or_equals }
+	check_variable = { var = STP_region_margin value = 15 compare = greater_than_or_equals }
+	check_variable = { var = STP_region_status value = 2 compare = equals }
+}
+
+STP_region_party_entrenched = {
+	STP_region_party_strongest = yes
+	check_variable = { var = STP_region_lead value = 55 compare = greater_than_or_equals }
+	check_variable = { var = STP_region_runner_up value = 40 compare = less_than_or_equals }
+	check_variable = { var = STP_region_margin value = 15 compare = greater_than_or_equals }
+	check_variable = { var = STP_region_status value = 4 compare = equals }
+}
+
+STP_region_local_forces_entrenched = {
+	STP_region_local_forces_strongest = yes
+	check_variable = { var = STP_region_lead value = 55 compare = greater_than_or_equals }
+	check_variable = { var = STP_region_runner_up value = 40 compare = less_than_or_equals }
+	check_variable = { var = STP_region_margin value = 15 compare = greater_than_or_equals }
+	check_variable = { var = STP_region_status value = 6 compare = equals }
+}
+
+STP_region_local_forces_dominant = {
+	STP_region_local_forces_entrenched = yes
+}
+
+STP_region_has_administration_asset = {
+	has_state_flag = STP_resistance_administration_asset
+}
+
+STP_region_has_garrison_asset = {
+	has_state_flag = STP_resistance_garrison_asset
+}
+
+STP_region_has_supply_asset = {
+	has_state_flag = STP_resistance_supply_asset
+}
+
+STP_region_has_sabotage_asset = {
+	has_state_flag = STP_resistance_sabotage_asset
+}
+
+STP_region_has_local_deal = {
+	has_state_flag = STP_local_deal_asset
+}
+
+STP_region_has_party_counter_assets = {
+	OR = {
+		has_state_flag = STP_party_reinforced_garrison_asset
+		has_state_flag = STP_party_counterintelligence_asset
+	}
+}
+
+STP_region_has_detectable_assets = {
+	OR = {
+		has_state_flag = STP_resistance_administration_asset
+		has_state_flag = STP_resistance_garrison_asset
+		has_state_flag = STP_resistance_supply_asset
+		has_state_flag = STP_resistance_sabotage_asset
+		has_state_flag = STP_local_deal_asset
+	}
+}

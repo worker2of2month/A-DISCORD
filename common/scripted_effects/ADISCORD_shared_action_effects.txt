@@ -1,23 +1,30 @@
 # Shared action-accounting API. Country decisions should use these effects
 # instead of changing the treasury without recording the transaction.
-ADISCORD_economy_spend_15 = {
-	ADISCORD_economy_initialize_country = yes
-	add_to_variable = { var = ADISCORD_economy_treasury value = -15 }
-	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 15 }
-	ADISCORD_economy_mark_dirty = yes
-}
-
-ADISCORD_economy_spend_25 = {
-	ADISCORD_economy_initialize_country = yes
-	add_to_variable = { var = ADISCORD_economy_treasury value = -25 }
-	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 25 }
-	ADISCORD_economy_mark_dirty = yes
-}
-
 ADISCORD_economy_spend_50 = {
 	ADISCORD_economy_initialize_country = yes
 	add_to_variable = { var = ADISCORD_economy_treasury value = -50 }
 	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 50 }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+ADISCORD_economy_spend_100 = {
+	ADISCORD_economy_initialize_country = yes
+	add_to_variable = { var = ADISCORD_economy_treasury value = -100 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+ADISCORD_economy_spend_200 = {
+	ADISCORD_economy_initialize_country = yes
+	add_to_variable = { var = ADISCORD_economy_treasury value = -200 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+ADISCORD_economy_spend_500 = {
+	ADISCORD_economy_initialize_country = yes
+	add_to_variable = { var = ADISCORD_economy_treasury value = -500 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 500 }
 	ADISCORD_economy_mark_dirty = yes
 }
 

@@ -18,6 +18,7 @@ from tools.builders.build_adiscord_map_buildings import (
     ensure_nam_split_spawn_positions,
     synchronize_buildings,
 )
+from tools.lib.adiscord_core_state_balance_manifest import EXPECTED_RESOURCES, TARGET_STATES
 from tools.lib.adiscord_vorkerland_theatre_manifest import (
     UNITY_TOWER_NAME,
     UNITY_TOWER_PROVINCE,
@@ -212,11 +213,20 @@ DIRTY_STATE_RESOURCES = {
     for state_id in (49, 152, 169, 173, 177, 181)
 }
 
+# The four states that will form the local Stelander separatist bloc use the
+# same resource package. Keeping the package exact makes every province worth
+# contesting without changing the character of the mining and port corridor.
+STELANDER_REGIONAL_RESOURCES = {
+    state_id: dict(EXPECTED_RESOURCES[state_id])
+    for state_id in (43, 44, 45, 88)
+}
+
 REGIONAL_STATE_RESOURCES = {
     **VORKERLAND_STATE_RESOURCES,
     **IVANLAND_STATE_RESOURCES,
     **AFRELA_STATE_RESOURCES,
     **DIRTY_STATE_RESOURCES,
+    **STELANDER_REGIONAL_RESOURCES,
 }
 
 ALL_STATE_RESOURCES = {
@@ -725,6 +735,13 @@ VORKERLAND_INITIAL_MAP_LEGACY_STATES = {
     200, 201, 202,
 }
 
+STELANDER_REGIONAL_PROFILES = {
+    43: {"population": TARGET_STATES[43][2], "category": "town", "infrastructure": 2, "civilian": 2, "supplies": 0.0},
+    44: {"population": TARGET_STATES[44][2], "category": "town", "infrastructure": 2, "civilian": 1, "military": 1, "supplies": 0.0},
+    45: {"population": TARGET_STATES[45][2], "category": "town", "infrastructure": 3, "civilian": 3, "supplies": 0.0},
+    88: {"population": TARGET_STATES[88][2], "category": "town", "infrastructure": 4, "civilian": 3, "supplies": 0.0},
+}
+
 LEGACY_STATE_PROFILES = {
     **VORKERLAND_LEGACY_PROFILES,
     **NAM_STATE_PROFILES,
@@ -732,6 +749,7 @@ LEGACY_STATE_PROFILES = {
     **IVANLAND_STATE_PROFILES,
     **VORKERLAND_INITIAL_MAP_LEGACY_PROFILES,
     **DIRTY_REPUBLIC_STATE_PROFILES,
+    **STELANDER_REGIONAL_PROFILES,
     # Afrela owns 113-114, which were also covered by the broad 106-124
     # theatre audit. Country-specific profiles intentionally take precedence.
     **AFRELA_STATE_PROFILES,

@@ -18,9 +18,9 @@ TARGET_STATES = {
     29: ("history/states/29-Kreyden.txt", "STP", 1_800_000, "city"),
     30: ("history/states/30-Cussington.txt", "NOD", 7_600_000, "large_city"),
     42: ("history/states/42-Prigranichie.txt", "VAL", 80_000, "pastoral"),
-    43: ("history/states/43-Balchansk.txt", "STP", 950_000, "town"),
-    44: ("history/states/44-Iron-Shield.txt", "STP", 500_000, "town"),
-    45: ("history/states/45-Livonn.txt", "STP", 900_000, "town"),
+    43: ("history/states/43-Balchansk.txt", "STP", 1_200_000, "town"),
+    44: ("history/states/44-Iron-Shield.txt", "STP", 900_000, "town"),
+    45: ("history/states/45-Livonn.txt", "STP", 1_200_000, "town"),
     46: ("history/states/46-Hosheit.txt", "STP", 300_000, "town"),
     48: ("history/states/48-Depoitodron.txt", "VAL", 8_000_000, "megalopolis"),
     53: ("history/states/53-Old-Fada.txt", "STP", 180_000, "pastoral"),
@@ -28,13 +28,13 @@ TARGET_STATES = {
     55: ("history/states/55-Erstantpeo.txt", "VAL", 90_000, "pastoral"),
     56: ("history/states/56-Zeigen.txt", "VAL", 320_000, "town"),
     57: ("history/states/57-Zoilong.txt", "VAL", 1_200_000, "town"),
-    88: ("history/states/88-Shahterskiy-Poselok.txt", "STP", 150_000, "town"),
+    88: ("history/states/88-Shahterskiy-Poselok.txt", "STP", 650_000, "town"),
     168: ("history/states/168-168.txt", "VAL", 160_000, "town"),
 }
 
 EXPECTED_POPULATION_TOTALS = {
     "NOD": 11_010_000,
-    "STP": 16_380_000,
+    "STP": 17_830_000,
     "VAL": 11_270_000,
 }
 
@@ -144,9 +144,9 @@ EXPECTED_RESOURCES = {
     29: {"chromium": 28, "aluminium": 12},
     30: {},
     42: {"tungsten": 12, "steel": 20},
-    43: {},
-    44: {},
-    45: {"steel": 39, "aluminium": 9},
+    43: {"steel": 18, "aluminium": 3, "tungsten": 3, "chromium": 2},
+    44: {"steel": 18, "aluminium": 3, "tungsten": 3, "chromium": 2},
+    45: {"steel": 18, "aluminium": 3, "tungsten": 3, "chromium": 2},
     46: {"steel": 11, "aluminium": 12},
     48: {},
     53: {},
@@ -154,13 +154,13 @@ EXPECTED_RESOURCES = {
     55: {"oil": 12, "chromium": 12},
     56: {},
     57: {},
-    88: {"tungsten": 12, "chromium": 8, "steel": 31},
+    88: {"steel": 18, "aluminium": 3, "tungsten": 3, "chromium": 2},
     168: {},
 }
 
 EXPECTED_RESOURCE_TOTALS = {
     "NOD": {"steel": 17, "aluminium": 5},
-    "STP": {"steel": 103, "chromium": 40, "aluminium": 33, "tungsten": 12, "oil": 8},
+    "STP": {"steel": 105, "chromium": 40, "aluminium": 36, "tungsten": 12, "oil": 8},
     "VAL": {"steel": 25, "tungsten": 12, "oil": 19, "chromium": 12},
 }
 

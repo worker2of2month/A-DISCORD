@@ -1,4 +1,5 @@
 ﻿l_russian:
+ #VAL decisions
  VAL_Operational_Directorate: "Оперативное управление"
  VAL_Operational_Directorate_desc: "Соседей нельзя рассматривать как единую границу. Управление сведёт сведения о перевалах, рынках, гарнизонах и контролёрах регионов в одну постоянно обновляемую карту."
  VAL_Ministry_Of_Contract_Memory: "Министерство контрактной памяти"
@@ -71,11 +72,11 @@
  VAL_focus_operations_map_unlock_tt: "Открывает категорию решений §Y«Военные операции»§! и интерактивную карту соседних регионов."
 
  VAL_ops_finance_cin_contacts: "Финансировать контакты в Цинь"
- VAL_ops_finance_cin_contacts_desc: "Потратить §Y25§! казны на сеть посредников и увеличить влияние в Цинь."
+ VAL_ops_finance_cin_contacts_desc: "Потратить §Y50§! казны на сеть посредников и увеличить влияние в Цинь."
  VAL_ops_sell_rifles_to_cin: "Продать винтовки в Цинь"
  VAL_ops_sell_rifles_to_cin_desc: "Передать §Y2500 винтовок§!, получить §G15§! казны и усилить местные связи."
  VAL_ops_finance_osf_contacts: "Финансировать контакты в Осфарии"
- VAL_ops_finance_osf_contacts_desc: "Потратить §Y25§! казны на местных перевозчиков и посредников."
+ VAL_ops_finance_osf_contacts_desc: "Потратить §Y50§! казны на местных перевозчиков и посредников."
  VAL_ops_sell_rifles_to_osf: "Продать винтовки в Осфарию"
  VAL_ops_sell_rifles_to_osf_desc: "Передать §Y2500 винтовок§!, получить §G15§! казны и расширить сеть контрактов."
 

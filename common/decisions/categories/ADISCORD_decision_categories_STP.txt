@@ -5,3 +5,18 @@ STP_elections_in_the_party = {
 	visible_when_empty = yes
 	priority = 1
 }
+
+STP_shabrat_election_bop_category = {
+	allowed = { tag = STP }
+}
+
+STP_battle_for_stelander = {
+	allowed = { tag = STP }
+	visible = {
+		has_country_flag = STP_battle_for_stelander_active
+		STP_sided_with_Maksim_trigger = yes
+	}
+	visible_when_empty = yes
+	priority = 20
+	scripted_gui = ADISCORD_STP_regions_panel
+}

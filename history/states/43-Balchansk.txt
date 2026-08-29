@@ -4,10 +4,16 @@ state={
 	provinces={
 		95 101 16432 16450 16455 
 	}
-	manpower=950000
-	buildings_max_level_factor=1.000
-	state_category=town
-	local_supplies=0.000
+	manpower = 1200000
+	buildings_max_level_factor = 1.000
+	state_category = town
+	local_supplies = 0.0
+	resources = {
+		steel = 18
+		aluminium = 3
+		tungsten = 3
+		chromium = 2
+	}
 
 	history={
 		owner = STP

@@ -1,0 +1,42 @@
+add_namespace = ADISCORD_STP_regions
+
+country_event = {
+	id = ADISCORD_STP_regions.1
+	title = ADISCORD_STP_regions.1.t
+	desc = ADISCORD_STP_regions.1.d
+	picture = GFX_report_event_generic_read_write
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_STP_regions.1.a
+		set_country_flag = STP_sided_with_Maksim_flag
+		if = {
+			limit = { NOT = { has_country_flag = STP_battle_for_stelander_active } }
+			STP_initialize_battle_for_stelander = yes
+		}
+	}
+}
+
+# The first Party inspection starts after a real delay without exposing a
+# controller mission in the decisions UI. The active-mission guard also makes
+# overlapping delayed callbacks harmless after a debug reset.
+country_event = {
+	id = ADISCORD_STP_regions.2
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_country_flag = STP_battle_for_stelander_active
+				NOT = { has_active_mission = STP_party_inspection_state_2 }
+				NOT = { has_active_mission = STP_party_inspection_state_3 }
+				NOT = { has_active_mission = STP_party_inspection_state_29 }
+				NOT = { has_active_mission = STP_party_inspection_state_45 }
+				NOT = { has_active_mission = STP_party_inspection_state_46 }
+				NOT = { has_active_mission = STP_party_inspection_state_53 }
+			}
+			STP_schedule_next_party_inspection = yes
+		}
+	}
+}

@@ -1,0 +1,262 @@
+STP_shabrat_election_legitimacy = {
+	initial_value = -0.20
+
+	left_side = STP_party_election_legitimacy_side
+	right_side = STP_shabrat_election_legitimacy_side
+
+	decision_category = STP_shabrat_election_bop_category
+
+
+	# ============================================================
+	# CONTESTED
+	# ============================================================
+
+	range = {
+		id = STP_election_legitimacy_contested_range
+		min = -0.10
+		max = 0.10
+
+		modifier = {
+		}
+
+		on_activate = {
+			hidden_effect = {
+				
+			}
+		}
+
+		on_deactivate = {
+			hidden_effect = {
+				
+			}
+		}
+	}
+
+
+	# ============================================================
+	# PARTY APPARATUS
+	# ============================================================
+
+	side = {
+		id = STP_party_election_legitimacy_side
+		icon = GFX_bop_STP_party_election_legitimacy
+
+
+		# --------------------------------------------------------
+		# PARTY -- LOW CONTROL
+		# --------------------------------------------------------
+
+		range = {
+			id = STP_party_election_low_control_range
+			min = -0.30
+			max = -0.10
+
+			modifier = {
+			}
+
+			on_activate = {
+				hidden_effect = {
+					
+				}
+			}
+
+			on_deactivate = {
+				hidden_effect = {
+					
+				}
+			}
+		}
+
+
+		# --------------------------------------------------------
+		# PARTY -- MEDIUM CONTROL
+		# --------------------------------------------------------
+
+		range = {
+			id = STP_party_election_medium_control_range
+			min = -0.55
+			max = -0.30
+
+			modifier = {
+			}
+
+			on_activate = {
+				hidden_effect = {
+					
+				}
+			}
+
+			on_deactivate = {
+				hidden_effect = {
+					
+				}
+			}
+		}
+
+
+		# --------------------------------------------------------
+		# PARTY -- HIGH CONTROL
+		# --------------------------------------------------------
+
+		range = {
+			id = STP_party_election_high_control_range
+			min = -0.80
+			max = -0.55
+
+			modifier = {
+			}
+
+			on_activate = {
+				hidden_effect = {
+					
+				}
+			}
+
+			on_deactivate = {
+				hidden_effect = {
+					
+				}
+			}
+		}
+
+
+		# --------------------------------------------------------
+		# PARTY -- TOTAL CONTROL
+		# --------------------------------------------------------
+
+		range = {
+			id = STP_party_election_total_control_range
+			min = -1.00
+			max = -0.80
+
+			modifier = {
+			}
+
+			on_activate = {
+				hidden_effect = {
+					
+				}
+			}
+
+			on_deactivate = {
+				hidden_effect = {
+					
+				}
+			}
+		}
+	}
+
+
+	# ============================================================
+	# SHABRAT
+	# ============================================================
+
+	side = {
+		id = STP_shabrat_election_legitimacy_side
+		icon = GFX_bop_STP_shabrat_election_legitimacy
+
+
+		# --------------------------------------------------------
+		# SHABRAT -- LOW CONTROL
+		# --------------------------------------------------------
+
+		range = {
+			id = STP_shabrat_election_low_control_range
+			min = 0.10
+			max = 0.30
+
+			modifier = {
+			}
+
+			on_activate = {
+				hidden_effect = {
+					
+				}
+			}
+
+			on_deactivate = {
+				hidden_effect = {
+					
+				}
+			}
+		}
+
+
+		# --------------------------------------------------------
+		# SHABRAT -- MEDIUM CONTROL
+		# --------------------------------------------------------
+
+		range = {
+			id = STP_shabrat_election_medium_control_range
+			min = 0.30
+			max = 0.55
+
+			modifier = {
+			}
+
+			on_activate = {
+				hidden_effect = {
+					
+				}
+			}
+
+			on_deactivate = {
+				hidden_effect = {
+					
+				}
+			}
+		}
+
+
+		# --------------------------------------------------------
+		# SHABRAT -- HIGH CONTROL
+		# --------------------------------------------------------
+
+		range = {
+			id = STP_shabrat_election_high_control_range
+			min = 0.55
+			max = 0.80
+
+			modifier = {
+			}
+
+			on_activate = {
+				hidden_effect = {
+					
+				}
+			}
+
+			on_deactivate = {
+				hidden_effect = {
+					
+				}
+			}
+		}
+
+
+		# --------------------------------------------------------
+		# SHABRAT -- TOTAL CONTROL
+		# --------------------------------------------------------
+
+		range = {
+			id = STP_shabrat_election_total_control_range
+			min = 0.80
+			max = 1.00
+
+			modifier = {
+			}
+
+			on_activate = {
+				hidden_effect = {
+					
+				}
+			}
+
+			on_deactivate = {
+				hidden_effect = {
+					
+				}
+			}
+		}
+	}
+}

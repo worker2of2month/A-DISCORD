@@ -1,0 +1,102 @@
+guiTypes = {
+	containerWindowType = {
+		name = "ADISCORD_STP_regions_panel_window"
+		position = { x = 0 y = 0 }
+		size = { width = 460 height = 360 }
+		clipping = no
+
+		background = { name = "STP_regions_panel_background" quadTextureSprite = "GFX_tiled_window_transparent" }
+		instantTextBoxType = { name = "STP_regions_title" position = { x = 10 y = 8 } text = "STP_regions_panel_title" font = "hoi_20b" maxWidth = 440 maxHeight = 24 fixedsize = yes format = center pdx_tooltip = "STP_regions_panel_tt" }
+		iconType = { name = "STP_regions_map" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_map_background" pdx_tooltip = "STP_regions_map_tt" }
+
+		iconType = { name = "STP_regions_1_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_1" frame = 1 pdx_tooltip = "STP_region_1_map_tt" }
+		iconType = { name = "STP_regions_1_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_1" frame = 2 pdx_tooltip = "STP_region_1_map_tt" }
+		iconType = { name = "STP_regions_1_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_1" frame = 3 pdx_tooltip = "STP_region_1_map_tt" }
+		iconType = { name = "STP_regions_1_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_1" frame = 4 pdx_tooltip = "STP_region_1_map_tt" }
+		iconType = { name = "STP_regions_1_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_1" frame = 5 pdx_tooltip = "STP_region_1_map_tt" }
+		iconType = { name = "STP_regions_1_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_1" frame = 6 pdx_tooltip = "STP_region_1_map_tt" }
+		iconType = { name = "STP_regions_1_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_1" frame = 7 pdx_tooltip = "STP_region_1_map_tt" }
+
+		iconType = { name = "STP_regions_2_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_2" frame = 1 pdx_tooltip = "STP_region_2_map_tt" }
+		iconType = { name = "STP_regions_2_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_2" frame = 2 pdx_tooltip = "STP_region_2_map_tt" }
+		iconType = { name = "STP_regions_2_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_2" frame = 3 pdx_tooltip = "STP_region_2_map_tt" }
+		iconType = { name = "STP_regions_2_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_2" frame = 4 pdx_tooltip = "STP_region_2_map_tt" }
+		iconType = { name = "STP_regions_2_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_2" frame = 5 pdx_tooltip = "STP_region_2_map_tt" }
+		iconType = { name = "STP_regions_2_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_2" frame = 6 pdx_tooltip = "STP_region_2_map_tt" }
+		iconType = { name = "STP_regions_2_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_2" frame = 7 pdx_tooltip = "STP_region_2_map_tt" }
+
+		iconType = { name = "STP_regions_3_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_3" frame = 1 pdx_tooltip = "STP_region_3_map_tt" }
+		iconType = { name = "STP_regions_3_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_3" frame = 2 pdx_tooltip = "STP_region_3_map_tt" }
+		iconType = { name = "STP_regions_3_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_3" frame = 3 pdx_tooltip = "STP_region_3_map_tt" }
+		iconType = { name = "STP_regions_3_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_3" frame = 4 pdx_tooltip = "STP_region_3_map_tt" }
+		iconType = { name = "STP_regions_3_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_3" frame = 5 pdx_tooltip = "STP_region_3_map_tt" }
+		iconType = { name = "STP_regions_3_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_3" frame = 6 pdx_tooltip = "STP_region_3_map_tt" }
+		iconType = { name = "STP_regions_3_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_3" frame = 7 pdx_tooltip = "STP_region_3_map_tt" }
+
+		iconType = { name = "STP_regions_28_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_28" frame = 1 pdx_tooltip = "STP_region_28_map_tt" }
+		iconType = { name = "STP_regions_28_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_28" frame = 2 pdx_tooltip = "STP_region_28_map_tt" }
+		iconType = { name = "STP_regions_28_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_28" frame = 3 pdx_tooltip = "STP_region_28_map_tt" }
+		iconType = { name = "STP_regions_28_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_28" frame = 4 pdx_tooltip = "STP_region_28_map_tt" }
+		iconType = { name = "STP_regions_28_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_28" frame = 5 pdx_tooltip = "STP_region_28_map_tt" }
+		iconType = { name = "STP_regions_28_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_28" frame = 6 pdx_tooltip = "STP_region_28_map_tt" }
+		iconType = { name = "STP_regions_28_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_28" frame = 7 pdx_tooltip = "STP_region_28_map_tt" }
+
+		iconType = { name = "STP_regions_29_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_29" frame = 1 pdx_tooltip = "STP_region_29_map_tt" }
+		iconType = { name = "STP_regions_29_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_29" frame = 2 pdx_tooltip = "STP_region_29_map_tt" }
+		iconType = { name = "STP_regions_29_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_29" frame = 3 pdx_tooltip = "STP_region_29_map_tt" }
+		iconType = { name = "STP_regions_29_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_29" frame = 4 pdx_tooltip = "STP_region_29_map_tt" }
+		iconType = { name = "STP_regions_29_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_29" frame = 5 pdx_tooltip = "STP_region_29_map_tt" }
+		iconType = { name = "STP_regions_29_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_29" frame = 6 pdx_tooltip = "STP_region_29_map_tt" }
+		iconType = { name = "STP_regions_29_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_29" frame = 7 pdx_tooltip = "STP_region_29_map_tt" }
+
+		iconType = { name = "STP_regions_43_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_43" frame = 1 pdx_tooltip = "STP_region_43_map_tt" }
+		iconType = { name = "STP_regions_43_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_43" frame = 2 pdx_tooltip = "STP_region_43_map_tt" }
+		iconType = { name = "STP_regions_43_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_43" frame = 3 pdx_tooltip = "STP_region_43_map_tt" }
+		iconType = { name = "STP_regions_43_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_43" frame = 4 pdx_tooltip = "STP_region_43_map_tt" }
+		iconType = { name = "STP_regions_43_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_43" frame = 5 pdx_tooltip = "STP_region_43_map_tt" }
+		iconType = { name = "STP_regions_43_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_43" frame = 6 pdx_tooltip = "STP_region_43_map_tt" }
+		iconType = { name = "STP_regions_43_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_43" frame = 7 pdx_tooltip = "STP_region_43_map_tt" }
+
+		iconType = { name = "STP_regions_44_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_44" frame = 1 pdx_tooltip = "STP_region_44_map_tt" }
+		iconType = { name = "STP_regions_44_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_44" frame = 2 pdx_tooltip = "STP_region_44_map_tt" }
+		iconType = { name = "STP_regions_44_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_44" frame = 3 pdx_tooltip = "STP_region_44_map_tt" }
+		iconType = { name = "STP_regions_44_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_44" frame = 4 pdx_tooltip = "STP_region_44_map_tt" }
+		iconType = { name = "STP_regions_44_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_44" frame = 5 pdx_tooltip = "STP_region_44_map_tt" }
+		iconType = { name = "STP_regions_44_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_44" frame = 6 pdx_tooltip = "STP_region_44_map_tt" }
+		iconType = { name = "STP_regions_44_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_44" frame = 7 pdx_tooltip = "STP_region_44_map_tt" }
+
+		iconType = { name = "STP_regions_45_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_45" frame = 1 pdx_tooltip = "STP_region_45_map_tt" }
+		iconType = { name = "STP_regions_45_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_45" frame = 2 pdx_tooltip = "STP_region_45_map_tt" }
+		iconType = { name = "STP_regions_45_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_45" frame = 3 pdx_tooltip = "STP_region_45_map_tt" }
+		iconType = { name = "STP_regions_45_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_45" frame = 4 pdx_tooltip = "STP_region_45_map_tt" }
+		iconType = { name = "STP_regions_45_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_45" frame = 5 pdx_tooltip = "STP_region_45_map_tt" }
+		iconType = { name = "STP_regions_45_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_45" frame = 6 pdx_tooltip = "STP_region_45_map_tt" }
+		iconType = { name = "STP_regions_45_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_45" frame = 7 pdx_tooltip = "STP_region_45_map_tt" }
+
+		iconType = { name = "STP_regions_46_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_46" frame = 1 pdx_tooltip = "STP_region_46_map_tt" }
+		iconType = { name = "STP_regions_46_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_46" frame = 2 pdx_tooltip = "STP_region_46_map_tt" }
+		iconType = { name = "STP_regions_46_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_46" frame = 3 pdx_tooltip = "STP_region_46_map_tt" }
+		iconType = { name = "STP_regions_46_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_46" frame = 4 pdx_tooltip = "STP_region_46_map_tt" }
+		iconType = { name = "STP_regions_46_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_46" frame = 5 pdx_tooltip = "STP_region_46_map_tt" }
+		iconType = { name = "STP_regions_46_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_46" frame = 6 pdx_tooltip = "STP_region_46_map_tt" }
+		iconType = { name = "STP_regions_46_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_46" frame = 7 pdx_tooltip = "STP_region_46_map_tt" }
+
+		iconType = { name = "STP_regions_53_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_53" frame = 1 pdx_tooltip = "STP_region_53_map_tt" }
+		iconType = { name = "STP_regions_53_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_53" frame = 2 pdx_tooltip = "STP_region_53_map_tt" }
+		iconType = { name = "STP_regions_53_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_53" frame = 3 pdx_tooltip = "STP_region_53_map_tt" }
+		iconType = { name = "STP_regions_53_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_53" frame = 4 pdx_tooltip = "STP_region_53_map_tt" }
+		iconType = { name = "STP_regions_53_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_53" frame = 5 pdx_tooltip = "STP_region_53_map_tt" }
+		iconType = { name = "STP_regions_53_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_53" frame = 6 pdx_tooltip = "STP_region_53_map_tt" }
+		iconType = { name = "STP_regions_53_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_53" frame = 7 pdx_tooltip = "STP_region_53_map_tt" }
+
+		iconType = { name = "STP_regions_88_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_88" frame = 1 pdx_tooltip = "STP_region_88_map_tt" }
+		iconType = { name = "STP_regions_88_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_88" frame = 2 pdx_tooltip = "STP_region_88_map_tt" }
+		iconType = { name = "STP_regions_88_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_88" frame = 3 pdx_tooltip = "STP_region_88_map_tt" }
+		iconType = { name = "STP_regions_88_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_88" frame = 4 pdx_tooltip = "STP_region_88_map_tt" }
+		iconType = { name = "STP_regions_88_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_88" frame = 5 pdx_tooltip = "STP_region_88_map_tt" }
+		iconType = { name = "STP_regions_88_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_88" frame = 6 pdx_tooltip = "STP_region_88_map_tt" }
+		iconType = { name = "STP_regions_88_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_88" frame = 7 pdx_tooltip = "STP_region_88_map_tt" }
+
+		instantTextBoxType = { name = "STP_regions_legend" position = { x = 16 y = 306 } text = "STP_regions_legend" font = "hoi_16mbs" maxWidth = 428 maxHeight = 44 fixedsize = yes format = center pdx_tooltip = "STP_regions_map_tt" }
+	}
+}
