@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import unittest
 
+from tools.lib.paths import source_section
 from tools.validators.validate_adiscord_vorkerland_focus_decisions import (
     CENTRAL_INTEGRATION_PACKAGES,
     CENTRAL_TARGETS,
@@ -31,8 +32,8 @@ from tools.validators.validate_adiscord_vorkerland_focus_decisions import (
 
 class VorkerlandFocusDecisionTests(unittest.TestCase):
     def test_focus_decision_categories_have_separate_owner_files(self) -> None:
-        operations = ROOT / "common/decisions/ADISCORD_vorkerland_focus_operations_decisions.txt"
-        support = ROOT / "common/decisions/ADISCORD_vorkerland_allied_support_decisions.txt"
+        operations = ROOT / "common/decisions/ADISCORD_vorkerland_decisions.txt"
+        support = ROOT / "common/decisions/ADISCORD_vorkerland_decisions.txt"
         legacy = ROOT / "common/decisions/ADISCORD_vorkerland_focus_decisions.txt"
         self.assertTrue(operations.is_file())
         self.assertTrue(support.is_file())
@@ -76,8 +77,8 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
 
     def test_named_minor_fronts_precede_shared_final_showdown(self) -> None:
         decisions = read(DECISION_FILE)
-        effects = read(EFFECT_FILE)
-        phase_triggers = read(PHASE_TRIGGER_FILE)
+        effects = source_section(read(EFFECT_FILE), 'focus_decision_effects')
+        phase_triggers = source_section(read(PHASE_TRIGGER_FILE), 'phase_triggers')
         recovery_phase = named_block(
             phase_triggers, "ADISCORD_vorkerland_central_minor_campaign_phase_available"
         )
@@ -200,8 +201,8 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
 
     def test_minor_wave_requires_a_viable_target_before_recording_pending(self) -> None:
         decisions = read(DECISION_FILE)
-        effects = read(EFFECT_FILE)
-        phase_triggers = read(PHASE_TRIGGER_FILE)
+        effects = source_section(read(EFFECT_FILE), 'focus_decision_effects')
+        phase_triggers = source_section(read(PHASE_TRIGGER_FILE), 'phase_triggers')
         wave = named_block(decisions, CENTRAL_WAVE_DECISION)
         viability_name = "ADISCORD_vorkerland_has_adjacent_viable_central_minor"
         self.assertEqual(named_block(wave, "visible").count(f"{viability_name} = yes"), 1)
@@ -244,9 +245,9 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
 
     def test_minor_front_controller_uses_registered_hidden_delayed_events(self) -> None:
         decisions = read(DECISION_FILE)
-        effects = read(EFFECT_FILE)
-        phase_triggers = read(PHASE_TRIGGER_FILE)
-        phase_events = read(PHASE_EVENT_FILE)
+        effects = source_section(read(EFFECT_FILE), 'focus_decision_effects')
+        phase_triggers = source_section(read(PHASE_TRIGGER_FILE), 'phase_triggers')
+        phase_events = source_section(read(PHASE_EVENT_FILE), 'phase_events')
         launcher = named_block(
             effects, "ADISCORD_vorkerland_focus_launch_central_minor_wave"
         )
@@ -345,7 +346,7 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
 
     def test_minor_fronts_have_one_retry_and_a_non_forcing_240_day_marker(self) -> None:
         decisions = read(DECISION_FILE)
-        effects = read(EFFECT_FILE)
+        effects = source_section(read(EFFECT_FILE), 'focus_decision_effects')
         deadline = named_block(
             decisions, "ADISCORD_vorkerland_focus_central_minor_front_deadline"
         )
@@ -422,8 +423,8 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
 
     def test_final_war_and_reunification_require_integrated_central_map(self) -> None:
         decisions = read(DECISION_FILE)
-        effects = read(EFFECT_FILE)
-        phase = read(PHASE_EFFECT_FILE)
+        effects = source_section(read(EFFECT_FILE), 'focus_decision_effects')
+        phase = source_section(read(PHASE_EFFECT_FILE), 'phase_effects')
         showdown = named_block(decisions, "ADISCORD_vorkerland_commit_to_central_showdown")
         scheduler = named_block(
             effects, "ADISCORD_vorkerland_focus_schedule_final_showdown"
@@ -465,7 +466,7 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
 
     def test_retreat_levies_are_two_weak_units_per_claimant_at_most(self) -> None:
         decisions = read(DECISION_FILE)
-        effects = read(EFFECT_FILE)
+        effects = source_section(read(EFFECT_FILE), 'focus_decision_effects')
         self.assertEqual(len(LEVY_DECISIONS), 6)
         self.assertEqual(effects.count("create_unit = {"), 6)
         for decision_id in LEVY_DECISIONS:
@@ -494,7 +495,7 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
 
     def test_allied_support_is_finite_and_cannot_create_relations(self) -> None:
         decisions = read(DECISION_FILE)
-        effects = read(EFFECT_FILE)
+        effects = source_section(read(EFFECT_FILE), 'focus_decision_effects')
         self.assertEqual(len(SUPPORT_DECISIONS), 4)
         for decision_id, (_, ally) in SUPPORT_DECISIONS.items():
             block = named_block(decisions, decision_id)

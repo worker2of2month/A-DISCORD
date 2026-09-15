@@ -2693,6 +2693,40 @@ def policy_selector_issues(
     return issues
 
 
+def air_production_contract_issues(default_ai: str, economy_ai: str) -> list[str]:
+    """Air weights must survive the loss of expansion funding or factories."""
+    issues: list[str] = []
+    for plane, technology in (
+        ("fighter", "ADISCORD_tech_reclaimed_jet_platforms"),
+        ("cas", "ADISCORD_tech_battlefield_attack_aircraft"),
+    ):
+        strategy = block(default_ai, f"ADISCORD_default_{plane}_demand")
+        enable = parse_clausewitz(block(strategy, "enable"))
+        entries = enable[0].value if enable and isinstance(enable[0].value, list) else []
+        if [(entry.key, entry.value) for entry in entries] != [("has_tech", technology)]:
+            issues.append(f"{plane} replacement demand needs an independent technology-only gate")
+        if not re.search(rf"type\s*=\s*unit_ratio\s+id\s*=\s*{plane}\s+value\s*=\s*[1-9]\d*", strategy):
+            issues.append(f"{plane} replacement demand has no positive air weight")
+        if "abort_when_not_enabled = yes" not in strategy:
+            issues.append(f"{plane} replacement demand can leave a stale strategy active")
+        for phase in ("crisis", "stress"):
+            fiscal = block(economy_ai, f"ADISCORD_ai_fiscal_{phase}")
+            if re.search(rf"type\s*=\s*unit_ratio\s+id\s*=\s*{plane}\b", fiscal):
+                issues.append(f"fiscal {phase} changes the {plane} weight instead of production funding")
+            penalty = re.search(rf"equipment_production_factor\s+id\s*=\s*{plane}\s+value\s*=\s*(-?\d+)", fiscal)
+            if not penalty or not -100 < int(penalty.group(1)) < 0:
+                issues.append(f"fiscal {phase} needs a bounded {plane} production reduction")
+    minimum = block(default_ai, "ADISCORD_limited_air_program")
+    threshold = re.search(r"num_of_military_factories\s*>\s*(\d+)", block(minimum, "enable"))
+    if not threshold or not 4 <= int(threshold.group(1)) < 7:
+        issues.append("air production floor must fit a seven-factory industry while preserving land production")
+    if "economy_ai" in block(minimum, "enable"):
+        issues.append("fiscal crisis disables the air replacement factory floor")
+    if not re.search(r"equipment_production_min_factories\s+id\s*=\s*fighter\s+value\s*=\s*1\b", minimum):
+        issues.append("air replacement needs a one-factory fighter floor")
+    return issues
+
+
 def validate(root: Path = ROOT) -> list[str]:
     root = Path(root)
     issues: list[str] = []
@@ -3488,6 +3522,8 @@ def validate(root: Path = ROOT) -> list[str]:
     )
     for role in unsupported_generic_roles:
         require(not re.search(rf"\bid\s*=\s*{role}\b", default_ai), f"generic AI still desires unsupported role {role}")
+
+    issues.extend(air_production_contract_issues(default_ai, economy_ai))
 
     require(re.search(r"type\s*=\s*avoid_starting_wars\s+value\s*=\s*-", economy_ai) is not None,
             "overstretched AI does not suppress war-starting desire")

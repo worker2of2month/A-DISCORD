@@ -48,9 +48,8 @@ CONSOLIDATED_COUNTS = {
     "ADISCORD_menu_tooltips_l_russian.yml: generic UI": 3,
     "ADISCORD_menu_tooltips_l_russian.yml: energy": 1,
     "ADISCORD_minor_optimization_l_russian.yml": 2,
-    "ADISCORD_national_focuses_l_russian.yml: live STP bookmark focuses": 6,
     "ADISCORD_national_focuses_l_russian.yml: live VAL focuses": 59,
-    "ADISCORD_shared_actions_l_russian.yml": 16,
+    "ADISCORD_shared_actions_l_russian.yml": 28,
     "ADISCORD_STP_ideas_l_russian.yml": 12,
     "ADISCORD_test_wars_l_russian.yml": 4,
     "ADISCORD_terrain_l_russian.yml": 4,
@@ -69,6 +68,23 @@ def localisation_keys(source: str) -> list[str]:
 
 
 class RegionalLocalisationLayoutTests(unittest.TestCase):
+    def test_stelander_localisation_uses_one_country_file(self) -> None:
+        path = RUSSIAN / "ADISCORD_STP_l_russian.yml"
+        self.assertEqual(list(RUSSIAN.glob("ADISCORD_STP*.yml")), [path])
+        self.assertTrue(path.read_bytes().startswith(codecs.BOM_UTF8))
+        keys = localisation_keys(path.read_text(encoding="utf-8-sig"))
+        self.assertEqual(keys.count("l_russian"), 1)
+        self.assertEqual(len(keys), len(set(keys)))
+        all_counts = Counter(
+            key for other in RUSSIAN.glob("*.yml")
+            for key in localisation_keys(other.read_text(encoding="utf-8-sig"))
+        )
+        for focus in ("STP_Side_With_Maksim_bm", "STP_Operation_Last_Banquette_bm",
+                      "STP_Side_With_The_Party_bm"):
+            for key in (focus, f"{focus}_desc"):
+                self.assertIn(key, keys)
+                self.assertEqual(all_counts[key], 1, key)
+
     def test_regional_container_files_are_removed(self) -> None:
         for filename in REMOVED_REGIONAL_FILES + REMOVED_TYPED_FILES:
             self.assertFalse((RUSSIAN / filename).exists(), filename)

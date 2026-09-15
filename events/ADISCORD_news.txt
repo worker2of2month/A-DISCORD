@@ -44,7 +44,7 @@ news_event = { #vorkerland civilwar
 
 	is_triggered_only = yes
 
-	picture = GFX_event_vorkerland_explosion
+	picture = GFX_news_event_adiscord_vorkerland_explosion
 
 	# Presentation must begin when the news is raised. Keeping this in the
 	# option made the superevent flag and audio wait for a player click.
@@ -78,7 +78,7 @@ news_event = { #stelander empire
 
 	is_triggered_only = yes
 
-	picture = GFX_event_vorkerland_explosion
+	picture = GFX_news_event_adiscord_vorkerland_explosion
 
 	immediate = {
 		hidden_effect = {

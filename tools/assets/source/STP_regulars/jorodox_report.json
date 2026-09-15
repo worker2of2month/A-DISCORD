@@ -1,0 +1,844 @@
+{
+  "tool": "JoroDox Tools",
+  "version": "0.8.1",
+  "sourceHashes": {
+    "bower_components/three.js/three.min.js": "cd83b61993fb96215b6c1ef525d2673c0533cfe9cc1972af986c484932424777",
+    "bower_components/DDSLoader/index.js": "881902d11eb7bea85cd1bdc7e402a310ba1b12e2164fd16d469d0c076e82bf78",
+    "js/pdxDataService.js": "db67d84ecfa3070a30d4ef9fd8ccc90fbd28a110b0d811e85ec30b29b8bedbe5",
+    "js/rendererService.js": "d4f7b7b4cf69c83da5222482d00bc916d1a203ba582bcbb0e83023264b73fe05"
+  },
+  "models": {
+    "STP_shabrat_infantry": {
+      "parts": [
+        {
+          "vertices": 4830,
+          "triangles": 1610,
+          "bones": 33,
+          "textures": [
+            "Shabrat_body_diffuse.dds",
+            "Shabrat_body_normal.dds",
+            "Shabrat_body_specular.dds"
+          ]
+        },
+        {
+          "vertices": 3820,
+          "triangles": 4052,
+          "bones": 33,
+          "textures": [
+            "Shabrat_gear_diffuse.dds",
+            "Shabrat_gear_normal.dds",
+            "Shabrat_gear_specular.dds"
+          ]
+        }
+      ],
+      "animations": {
+        "idle": {
+          "file": "GER_infantry_idle_rifle.anim",
+          "samples": 181,
+          "fps": 30.16666603088379,
+          "bones": 33
+        },
+        "attack": {
+          "file": "GER_infantry_attack_stand_rifle.anim",
+          "samples": 79,
+          "fps": 30.384614944458008,
+          "bones": 33
+        },
+        "support_attack": {
+          "file": "GER_infantry_attack_crouch_rifle.anim",
+          "samples": 79,
+          "fps": 30.384614944458008,
+          "bones": 33
+        },
+        "charge_rifle": {
+          "file": "GER_infantry_charge_rifle.anim",
+          "samples": 61,
+          "fps": 30.5,
+          "bones": 33
+        },
+        "charge_rifle_shoot": {
+          "file": "GER_infantry_charge_rifle_shoot.anim",
+          "samples": 81,
+          "fps": 30.375,
+          "bones": 33
+        },
+        "charge_mg": {
+          "file": "GER_infantry_charge_mg.anim",
+          "samples": 61,
+          "fps": 30.5,
+          "bones": 33
+        },
+        "charge_mg_shoot": {
+          "file": "GER_infantry_charge_mg_shoot.anim",
+          "samples": 61,
+          "fps": 30.5,
+          "bones": 33
+        },
+        "move": {
+          "file": "GER_infantry_moving_rifle.anim",
+          "samples": 41,
+          "fps": 30.75,
+          "bones": 33
+        },
+        "march_move": {
+          "file": "GER_infantry_march_rifle.anim",
+          "samples": 36,
+          "fps": 30.85714340209961,
+          "bones": 33
+        },
+        "retreat": {
+          "file": "GER_infantry_retreat_rifle.anim",
+          "samples": 51,
+          "fps": 30.600000381469727,
+          "bones": 33
+        },
+        "death": {
+          "file": "GER_infantry_death_rifle.anim",
+          "samples": 64,
+          "fps": 30.4761905670166,
+          "bones": 33
+        },
+        "long_idle01": {
+          "file": "GER_infantry_long_idle01_rifle.anim",
+          "samples": 276,
+          "fps": 30.10909080505371,
+          "bones": 33
+        },
+        "long_idle02": {
+          "file": "GER_infantry_long_idle02_rifle.anim",
+          "samples": 248,
+          "fps": 30,
+          "bones": 33
+        },
+        "long_idle03": {
+          "file": "GER_infantry_long_idle03_rifle.anim",
+          "samples": 770,
+          "fps": 30.039011001586914,
+          "bones": 33
+        },
+        "long_idle04": {
+          "file": "GER_infantry_long_idle04_rifle.anim",
+          "samples": 179,
+          "fps": 30.16853904724121,
+          "bones": 33
+        },
+        "long_idle05": {
+          "file": "GER_infantry_long_idle05_rifle.anim",
+          "samples": 185,
+          "fps": 30.163043975830078,
+          "bones": 33
+        },
+        "cavalry_idle": {
+          "file": "GER_infantry_cavalry_rider_idle_rifle.anim",
+          "samples": 301,
+          "fps": 30.100000381469727,
+          "bones": 33
+        },
+        "cavalry_move": {
+          "file": "GER_infantry_cavalry_rider_moving_rifle.anim",
+          "samples": 48,
+          "fps": 30,
+          "bones": 33
+        },
+        "training": {
+          "file": "GER_infantry_idle_training.anim",
+          "samples": 88,
+          "fps": 30.34482765197754,
+          "bones": 33
+        },
+        "jumping_jacks": {
+          "file": "GER_infantry_jumping_jacks.anim",
+          "samples": 171,
+          "fps": 30.176469802856445,
+          "bones": 33
+        },
+        "pushup": {
+          "file": "GER_infantry_pushup.anim",
+          "samples": 496,
+          "fps": 30.060606002807617,
+          "bones": 33
+        },
+        "guard_rifle": {
+          "file": "GER_infantry_guard_rifle.anim",
+          "samples": 577,
+          "fps": 30.05208396911621,
+          "bones": 33
+        },
+        "aim_exercise": {
+          "file": "GER_infantry_aim_exercise.anim",
+          "samples": 308,
+          "fps": 30.097719192504883,
+          "bones": 33
+        }
+      }
+    },
+    "STP_party": {
+      "parts": [
+        {
+          "vertices": 4830,
+          "triangles": 1610,
+          "bones": 33,
+          "textures": [
+            "STP_party_body_diffuse.dds",
+            "STP_party_body_normal.dds",
+            "STP_party_body_specular.dds"
+          ]
+        },
+        {
+          "vertices": 4192,
+          "triangles": 4556,
+          "bones": 33,
+          "textures": [
+            "STP_party_gear_diffuse.dds",
+            "STP_party_gear_normal.dds",
+            "STP_party_gear_specular.dds"
+          ]
+        }
+      ],
+      "animations": {
+        "idle": {
+          "file": "GER_infantry_idle_rifle.anim",
+          "samples": 181,
+          "fps": 30.16666603088379,
+          "bones": 33
+        },
+        "attack": {
+          "file": "GER_infantry_attack_stand_rifle.anim",
+          "samples": 79,
+          "fps": 30.384614944458008,
+          "bones": 33
+        },
+        "support_attack": {
+          "file": "GER_infantry_attack_crouch_rifle.anim",
+          "samples": 79,
+          "fps": 30.384614944458008,
+          "bones": 33
+        },
+        "charge_rifle": {
+          "file": "GER_infantry_charge_rifle.anim",
+          "samples": 61,
+          "fps": 30.5,
+          "bones": 33
+        },
+        "charge_rifle_shoot": {
+          "file": "GER_infantry_charge_rifle_shoot.anim",
+          "samples": 81,
+          "fps": 30.375,
+          "bones": 33
+        },
+        "charge_mg": {
+          "file": "GER_infantry_charge_mg.anim",
+          "samples": 61,
+          "fps": 30.5,
+          "bones": 33
+        },
+        "charge_mg_shoot": {
+          "file": "GER_infantry_charge_mg_shoot.anim",
+          "samples": 61,
+          "fps": 30.5,
+          "bones": 33
+        },
+        "move": {
+          "file": "GER_infantry_moving_rifle.anim",
+          "samples": 41,
+          "fps": 30.75,
+          "bones": 33
+        },
+        "march_move": {
+          "file": "GER_infantry_march_rifle.anim",
+          "samples": 36,
+          "fps": 30.85714340209961,
+          "bones": 33
+        },
+        "retreat": {
+          "file": "GER_infantry_retreat_rifle.anim",
+          "samples": 51,
+          "fps": 30.600000381469727,
+          "bones": 33
+        },
+        "death": {
+          "file": "GER_infantry_death_rifle.anim",
+          "samples": 64,
+          "fps": 30.4761905670166,
+          "bones": 33
+        },
+        "long_idle01": {
+          "file": "GER_infantry_long_idle01_rifle.anim",
+          "samples": 276,
+          "fps": 30.10909080505371,
+          "bones": 33
+        },
+        "long_idle02": {
+          "file": "GER_infantry_long_idle02_rifle.anim",
+          "samples": 248,
+          "fps": 30,
+          "bones": 33
+        },
+        "long_idle03": {
+          "file": "GER_infantry_long_idle03_rifle.anim",
+          "samples": 770,
+          "fps": 30.039011001586914,
+          "bones": 33
+        },
+        "long_idle04": {
+          "file": "GER_infantry_long_idle04_rifle.anim",
+          "samples": 179,
+          "fps": 30.16853904724121,
+          "bones": 33
+        },
+        "long_idle05": {
+          "file": "GER_infantry_long_idle05_rifle.anim",
+          "samples": 185,
+          "fps": 30.163043975830078,
+          "bones": 33
+        },
+        "cavalry_idle": {
+          "file": "GER_infantry_cavalry_rider_idle_rifle.anim",
+          "samples": 301,
+          "fps": 30.100000381469727,
+          "bones": 33
+        },
+        "cavalry_move": {
+          "file": "GER_infantry_cavalry_rider_moving_rifle.anim",
+          "samples": 48,
+          "fps": 30,
+          "bones": 33
+        },
+        "training": {
+          "file": "GER_infantry_idle_training.anim",
+          "samples": 88,
+          "fps": 30.34482765197754,
+          "bones": 33
+        },
+        "jumping_jacks": {
+          "file": "GER_infantry_jumping_jacks.anim",
+          "samples": 171,
+          "fps": 30.176469802856445,
+          "bones": 33
+        },
+        "pushup": {
+          "file": "GER_infantry_pushup.anim",
+          "samples": 496,
+          "fps": 30.060606002807617,
+          "bones": 33
+        },
+        "guard_rifle": {
+          "file": "GER_infantry_guard_rifle.anim",
+          "samples": 577,
+          "fps": 30.05208396911621,
+          "bones": 33
+        },
+        "aim_exercise": {
+          "file": "GER_infantry_aim_exercise.anim",
+          "samples": 308,
+          "fps": 30.097719192504883,
+          "bones": 33
+        }
+      }
+    },
+    "STS_regular": {
+      "parts": [
+        {
+          "vertices": 4830,
+          "triangles": 1610,
+          "bones": 33,
+          "textures": [
+            "STS_regular_body_diffuse.dds",
+            "STS_regular_body_normal.dds",
+            "STS_regular_body_specular.dds"
+          ]
+        },
+        {
+          "vertices": 3788,
+          "triangles": 4012,
+          "bones": 33,
+          "textures": [
+            "STS_regular_gear_diffuse.dds",
+            "STS_regular_gear_normal.dds",
+            "STS_regular_gear_specular.dds"
+          ]
+        }
+      ],
+      "animations": {
+        "idle": {
+          "file": "GER_infantry_idle_rifle.anim",
+          "samples": 181,
+          "fps": 30.16666603088379,
+          "bones": 33
+        },
+        "attack": {
+          "file": "GER_infantry_attack_stand_rifle.anim",
+          "samples": 79,
+          "fps": 30.384614944458008,
+          "bones": 33
+        },
+        "support_attack": {
+          "file": "GER_infantry_attack_crouch_rifle.anim",
+          "samples": 79,
+          "fps": 30.384614944458008,
+          "bones": 33
+        },
+        "charge_rifle": {
+          "file": "GER_infantry_charge_rifle.anim",
+          "samples": 61,
+          "fps": 30.5,
+          "bones": 33
+        },
+        "charge_rifle_shoot": {
+          "file": "GER_infantry_charge_rifle_shoot.anim",
+          "samples": 81,
+          "fps": 30.375,
+          "bones": 33
+        },
+        "charge_mg": {
+          "file": "GER_infantry_charge_mg.anim",
+          "samples": 61,
+          "fps": 30.5,
+          "bones": 33
+        },
+        "charge_mg_shoot": {
+          "file": "GER_infantry_charge_mg_shoot.anim",
+          "samples": 61,
+          "fps": 30.5,
+          "bones": 33
+        },
+        "move": {
+          "file": "GER_infantry_moving_rifle.anim",
+          "samples": 41,
+          "fps": 30.75,
+          "bones": 33
+        },
+        "march_move": {
+          "file": "GER_infantry_march_rifle.anim",
+          "samples": 36,
+          "fps": 30.85714340209961,
+          "bones": 33
+        },
+        "retreat": {
+          "file": "GER_infantry_retreat_rifle.anim",
+          "samples": 51,
+          "fps": 30.600000381469727,
+          "bones": 33
+        },
+        "death": {
+          "file": "GER_infantry_death_rifle.anim",
+          "samples": 64,
+          "fps": 30.4761905670166,
+          "bones": 33
+        },
+        "long_idle01": {
+          "file": "GER_infantry_long_idle01_rifle.anim",
+          "samples": 276,
+          "fps": 30.10909080505371,
+          "bones": 33
+        },
+        "long_idle02": {
+          "file": "GER_infantry_long_idle02_rifle.anim",
+          "samples": 248,
+          "fps": 30,
+          "bones": 33
+        },
+        "long_idle03": {
+          "file": "GER_infantry_long_idle03_rifle.anim",
+          "samples": 770,
+          "fps": 30.039011001586914,
+          "bones": 33
+        },
+        "long_idle04": {
+          "file": "GER_infantry_long_idle04_rifle.anim",
+          "samples": 179,
+          "fps": 30.16853904724121,
+          "bones": 33
+        },
+        "long_idle05": {
+          "file": "GER_infantry_long_idle05_rifle.anim",
+          "samples": 185,
+          "fps": 30.163043975830078,
+          "bones": 33
+        },
+        "cavalry_idle": {
+          "file": "GER_infantry_cavalry_rider_idle_rifle.anim",
+          "samples": 301,
+          "fps": 30.100000381469727,
+          "bones": 33
+        },
+        "cavalry_move": {
+          "file": "GER_infantry_cavalry_rider_moving_rifle.anim",
+          "samples": 48,
+          "fps": 30,
+          "bones": 33
+        },
+        "training": {
+          "file": "GER_infantry_idle_training.anim",
+          "samples": 88,
+          "fps": 30.34482765197754,
+          "bones": 33
+        },
+        "jumping_jacks": {
+          "file": "GER_infantry_jumping_jacks.anim",
+          "samples": 171,
+          "fps": 30.176469802856445,
+          "bones": 33
+        },
+        "pushup": {
+          "file": "GER_infantry_pushup.anim",
+          "samples": 496,
+          "fps": 30.060606002807617,
+          "bones": 33
+        },
+        "guard_rifle": {
+          "file": "GER_infantry_guard_rifle.anim",
+          "samples": 577,
+          "fps": 30.05208396911621,
+          "bones": 33
+        },
+        "aim_exercise": {
+          "file": "GER_infantry_aim_exercise.anim",
+          "samples": 308,
+          "fps": 30.097719192504883,
+          "bones": 33
+        }
+      }
+    },
+    "VAL_regular": {
+      "parts": [
+        {
+          "vertices": 4830,
+          "triangles": 1610,
+          "bones": 33,
+          "textures": [
+            "VAL_regular_body_diffuse.dds",
+            "VAL_regular_body_normal.dds",
+            "VAL_regular_body_specular.dds"
+          ]
+        },
+        {
+          "vertices": 5928,
+          "triangles": 6448,
+          "bones": 33,
+          "textures": [
+            "VAL_regular_gear_diffuse.dds",
+            "VAL_regular_gear_normal.dds",
+            "VAL_regular_gear_specular.dds"
+          ]
+        }
+      ],
+      "animations": {
+        "idle": {
+          "file": "GER_infantry_idle_rifle.anim",
+          "samples": 181,
+          "fps": 30.16666603088379,
+          "bones": 33
+        },
+        "attack": {
+          "file": "GER_infantry_attack_stand_rifle.anim",
+          "samples": 79,
+          "fps": 30.384614944458008,
+          "bones": 33
+        },
+        "support_attack": {
+          "file": "GER_infantry_attack_crouch_rifle.anim",
+          "samples": 79,
+          "fps": 30.384614944458008,
+          "bones": 33
+        },
+        "charge_rifle": {
+          "file": "GER_infantry_charge_rifle.anim",
+          "samples": 61,
+          "fps": 30.5,
+          "bones": 33
+        },
+        "charge_rifle_shoot": {
+          "file": "GER_infantry_charge_rifle_shoot.anim",
+          "samples": 81,
+          "fps": 30.375,
+          "bones": 33
+        },
+        "charge_mg": {
+          "file": "GER_infantry_charge_mg.anim",
+          "samples": 61,
+          "fps": 30.5,
+          "bones": 33
+        },
+        "charge_mg_shoot": {
+          "file": "GER_infantry_charge_mg_shoot.anim",
+          "samples": 61,
+          "fps": 30.5,
+          "bones": 33
+        },
+        "move": {
+          "file": "GER_infantry_moving_rifle.anim",
+          "samples": 41,
+          "fps": 30.75,
+          "bones": 33
+        },
+        "march_move": {
+          "file": "GER_infantry_march_rifle.anim",
+          "samples": 36,
+          "fps": 30.85714340209961,
+          "bones": 33
+        },
+        "retreat": {
+          "file": "GER_infantry_retreat_rifle.anim",
+          "samples": 51,
+          "fps": 30.600000381469727,
+          "bones": 33
+        },
+        "death": {
+          "file": "GER_infantry_death_rifle.anim",
+          "samples": 64,
+          "fps": 30.4761905670166,
+          "bones": 33
+        },
+        "long_idle01": {
+          "file": "GER_infantry_long_idle01_rifle.anim",
+          "samples": 276,
+          "fps": 30.10909080505371,
+          "bones": 33
+        },
+        "long_idle02": {
+          "file": "GER_infantry_long_idle02_rifle.anim",
+          "samples": 248,
+          "fps": 30,
+          "bones": 33
+        },
+        "long_idle03": {
+          "file": "GER_infantry_long_idle03_rifle.anim",
+          "samples": 770,
+          "fps": 30.039011001586914,
+          "bones": 33
+        },
+        "long_idle04": {
+          "file": "GER_infantry_long_idle04_rifle.anim",
+          "samples": 179,
+          "fps": 30.16853904724121,
+          "bones": 33
+        },
+        "long_idle05": {
+          "file": "GER_infantry_long_idle05_rifle.anim",
+          "samples": 185,
+          "fps": 30.163043975830078,
+          "bones": 33
+        },
+        "cavalry_idle": {
+          "file": "GER_infantry_cavalry_rider_idle_rifle.anim",
+          "samples": 301,
+          "fps": 30.100000381469727,
+          "bones": 33
+        },
+        "cavalry_move": {
+          "file": "GER_infantry_cavalry_rider_moving_rifle.anim",
+          "samples": 48,
+          "fps": 30,
+          "bones": 33
+        },
+        "training": {
+          "file": "GER_infantry_idle_training.anim",
+          "samples": 88,
+          "fps": 30.34482765197754,
+          "bones": 33
+        },
+        "jumping_jacks": {
+          "file": "GER_infantry_jumping_jacks.anim",
+          "samples": 171,
+          "fps": 30.176469802856445,
+          "bones": 33
+        },
+        "pushup": {
+          "file": "GER_infantry_pushup.anim",
+          "samples": 496,
+          "fps": 30.060606002807617,
+          "bones": 33
+        },
+        "guard_rifle": {
+          "file": "GER_infantry_guard_rifle.anim",
+          "samples": 577,
+          "fps": 30.05208396911621,
+          "bones": 33
+        },
+        "aim_exercise": {
+          "file": "GER_infantry_aim_exercise.anim",
+          "samples": 308,
+          "fps": 30.097719192504883,
+          "bones": 33
+        }
+      }
+    }
+  },
+  "warnings": [
+    "Unknown shader: PdxMeshAdvanced"
+  ],
+  "weapons": {
+    "infantry_0": {
+      "vertices": 2119,
+      "triangles": 1720,
+      "bones": 2,
+      "clips": {
+        "fire": {
+          "samples": 79,
+          "fps": 30
+        },
+        "support": {
+          "samples": 79,
+          "fps": 30
+        },
+        "idle": {
+          "samples": 79,
+          "fps": 30
+        }
+      }
+    },
+    "infantry_1": {
+      "vertices": 5296,
+      "triangles": 4500,
+      "bones": 2,
+      "clips": {
+        "fire": {
+          "samples": 79,
+          "fps": 30
+        },
+        "support": {
+          "samples": 79,
+          "fps": 30
+        },
+        "idle": {
+          "samples": 79,
+          "fps": 30
+        }
+      }
+    },
+    "infantry_2": {
+      "vertices": 5296,
+      "triangles": 4500,
+      "bones": 2,
+      "clips": {
+        "fire": {
+          "samples": 79,
+          "fps": 30
+        },
+        "support": {
+          "samples": 79,
+          "fps": 30
+        },
+        "idle": {
+          "samples": 79,
+          "fps": 30
+        }
+      }
+    },
+    "infantry_3": {
+      "vertices": 7550,
+      "triangles": 6016,
+      "bones": 2,
+      "clips": {
+        "fire": {
+          "samples": 79,
+          "fps": 30
+        },
+        "support": {
+          "samples": 79,
+          "fps": 30
+        },
+        "idle": {
+          "samples": 79,
+          "fps": 30
+        }
+      }
+    },
+    "infantry_4": {
+      "vertices": 8914,
+      "triangles": 7240,
+      "bones": 2,
+      "clips": {
+        "fire": {
+          "samples": 79,
+          "fps": 30
+        },
+        "support": {
+          "samples": 79,
+          "fps": 30
+        },
+        "idle": {
+          "samples": 79,
+          "fps": 30
+        }
+      }
+    },
+    "infantry_5": {
+      "vertices": 8990,
+      "triangles": 7532,
+      "bones": 2,
+      "clips": {
+        "fire": {
+          "samples": 79,
+          "fps": 30
+        },
+        "support": {
+          "samples": 79,
+          "fps": 30
+        },
+        "idle": {
+          "samples": 79,
+          "fps": 30
+        }
+      }
+    },
+    "infantry_6": {
+      "vertices": 9510,
+      "triangles": 7956,
+      "bones": 2,
+      "clips": {
+        "fire": {
+          "samples": 79,
+          "fps": 30
+        },
+        "support": {
+          "samples": 79,
+          "fps": 30
+        },
+        "idle": {
+          "samples": 79,
+          "fps": 30
+        }
+      }
+    },
+    "infantry_7": {
+      "vertices": 9958,
+      "triangles": 8288,
+      "bones": 2,
+      "clips": {
+        "fire": {
+          "samples": 79,
+          "fps": 30
+        },
+        "support": {
+          "samples": 79,
+          "fps": 30
+        },
+        "idle": {
+          "samples": 79,
+          "fps": 30
+        }
+      }
+    }
+  },
+  "unityTower": {
+    "parts": 1,
+    "bones": 20,
+    "clips": {
+      "collapse": {
+        "frames": 361,
+        "bones": 20
+      },
+      "ruins": {
+        "frames": 31,
+        "bones": 20
+      }
+    }
+  },
+  "limitations": [
+    "JoroDox does not implement the HOI4 PdxMeshAdvanced shader; its material preview uses Phong.",
+    "Animation channel names and sample counts were read by JoroDox; visual pose validation is performed by Blender.",
+    "No native HOI4 runtime result is implied."
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "reviewer": "review_3d_contracts",
+  "status": "No remaining static findings after winding/UV corrections",
+  "verified": [
+    "9 native meshes: outward winding, unit normals, no degenerate faces, UV 0..1",
+    "32 package hashes match",
+    "cities.bmp and cities.txt byte-equal HEAD",
+    "31 standalone ambient placements",
+    "3 original cityblock meshes byte-equal HEAD",
+    "6 old skyscraper mesh/diffuse files removed under explicit user authorization",
+    "4 body locator tails restored without geometry changes",
+    "Unity Tower startup state40 scope"
+  ],
+  "visual_captures": "18 actual WebGL views via installed JoroDox libraries; Phong fallback",
+  "runtime": "Deferred by user; HOI4 not launched. Ambient placement and white-map surface cause not runtime-proven."
+}

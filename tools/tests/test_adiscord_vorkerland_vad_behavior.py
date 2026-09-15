@@ -5,8 +5,11 @@ import unittest
 from pathlib import Path
 
 
+from tools.lib.paths import source_section
+
+
 ROOT = Path(__file__).resolve().parents[2]
-AI_PATH = ROOT / "common/ai_strategy/ADISCORD_vorkerland_collapse_ai.txt"
+AI_PATH = ROOT / "common/ai_strategy/ADISCORD_vorkerland_ai.txt"
 ACTIVE_FLAG = "ADISCORD_vorkerland_vad_solar_intervention_active"
 CASES = {
     "sra": ("SRA", "ADISCORD_vorkerland_vad_solar_intervention_target_sra"),
@@ -50,7 +53,7 @@ def compact(source: str) -> str:
 class VorkerlandVadSolarBehaviorTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.ai = without_comments(AI_PATH.read_text(encoding="utf-8-sig"))
+        cls.ai = without_comments(source_section(AI_PATH.read_text(encoding="utf-8-sig"), 'collapse_ai'))
 
     def test_solar_intervention_fronts_have_exact_bounded_contracts(self) -> None:
         for slug, (target, target_flag) in CASES.items():
@@ -73,7 +76,7 @@ class VorkerlandVadSolarBehaviorTests(unittest.TestCase):
                     {compact(strategy) for strategy in named_blocks(block, "ai_strategy")},
                     {
                         f"ai_strategy = {{ type = front_unit_request tag = {target} value = 100 }}",
-                        f"ai_strategy = {{ type = front_control tag = {target} ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }}",
+                        f"ai_strategy = {{ type = front_control tag = {target} ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }}",
                         f"ai_strategy = {{ type = conquer id = {target} value = 250 }}",
                     },
                 )

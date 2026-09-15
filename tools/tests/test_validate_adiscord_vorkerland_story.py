@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import unittest
 
+from tools.lib.paths import source_section
 from tools.validators.validate_adiscord_vorkerland_story import (
     CAPITULATION_DISPATCH,
     CAMPAIGN_STATE_EFFECTS,
@@ -38,20 +39,21 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
         self.assertEqual(collect_issues(ROOT), [])
 
     def test_story_layer_contains_no_map_war_or_peace_ownership(self) -> None:
-        source = "\n".join(read(relative) for relative in (STORY_EVENTS, STORY_EFFECTS))
+        source = "\n".join((source_section(read(STORY_EVENTS), "story_events"),
+                            source_section(read(STORY_EFFECTS), "story_effects")))
         self.assertEqual(forbidden_story_mutations(source), [])
         self.assertNotIn("ADISCORD_superevent_news.2", source)
 
     def test_showdown_uses_neutral_civil_war_art_not_a_second_explosion(self) -> None:
-        source = read(STORY_EVENTS)
+        source = source_section(read(STORY_EVENTS), 'story_events')
         showdown = event_blocks(source)["ADISCORD_vorkerland_story.1"][1]
-        self.assertIn("picture = GFX_event_china_civil_war_1", showdown)
-        self.assertNotIn("GFX_event_vorkerland_explosion", source)
+        self.assertIn("picture = GFX_news_event_adiscord_city_in_civil_war", showdown)
+        self.assertNotIn("GFX_news_event_adiscord_vorkerland_explosion", source)
         pictures = read(EVENT_PICTURES)
-        self.assertIn('name = "GFX_event_china_civil_war_1"', pictures)
+        self.assertIn('name = "GFX_news_event_adiscord_city_in_civil_war"', pictures)
 
     def test_story_rewards_use_valid_army_experience_effect(self) -> None:
-        source = read(STORY_EVENTS)
+        source = source_section(read(STORY_EVENTS), 'story_events')
         self.assertNotIn("add_army_experience", source)
         self.assertEqual(source.count("army_experience = 5"), 3)
 
@@ -73,7 +75,7 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
         self.assertEqual(forbidden_story_mutations("# transfer_state = 32\nadd_stability = 0.02"), [])
 
     def test_each_worker_fate_is_its_own_one_shot_news_event(self) -> None:
-        definitions = event_blocks(read(STORY_EVENTS))
+        definitions = event_blocks(source_section(read(STORY_EVENTS), 'story_events'))
         for number in (10, 11, 12, 13, 31, 32, 33, 34, 35, 36, 41, 42, 43, *range(50, 62)):
             event_id = f"ADISCORD_vorkerland_story.{number}"
             kind, block = definitions[event_id]
@@ -88,7 +90,7 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
         self.assertEqual(len(VARIANT_DISPATCH), 6)
 
     def test_worker_fate_dispatch_rejects_a_swapped_event_id(self) -> None:
-        swapped = read(STORY_EFFECTS).replace(
+        swapped = source_section(read(STORY_EFFECTS), 'story_effects').replace(
             "news_event = { id = ADISCORD_vorkerland_story.13 }",
             "news_event = { id = ADISCORD_vorkerland_story.12 }",
         )
@@ -98,7 +100,7 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
         )
 
     def test_variant_dispatch_rejects_a_swapped_event_id(self) -> None:
-        swapped = read(STORY_EFFECTS).replace(
+        swapped = source_section(read(STORY_EFFECTS), 'story_effects').replace(
             "news_event = { id = ADISCORD_vorkerland_story.35 }",
             "news_event = { id = ADISCORD_vorkerland_story.36 }",
         )
@@ -109,7 +111,7 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
         )
 
     def test_objective_dispatch_rejects_a_swapped_event_id(self) -> None:
-        swapped = read(STORY_EFFECTS).replace(
+        swapped = source_section(read(STORY_EFFECTS), 'story_effects').replace(
             "news_event = { id = ADISCORD_vorkerland_story.57 }",
             "news_event = { id = ADISCORD_vorkerland_story.56 }",
         )
@@ -120,7 +122,7 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
         )
 
     def test_capitulation_dispatch_rejects_a_swapped_event_id(self) -> None:
-        swapped = read(STORY_EFFECTS).replace(
+        swapped = source_section(read(STORY_EFFECTS), 'story_effects').replace(
             "news_event = { id = ADISCORD_vorkerland_story.42 }",
             "news_event = { id = ADISCORD_vorkerland_story.43 }",
         )
@@ -131,14 +133,14 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
         )
 
     def test_objective_news_stays_reachable_from_the_state_control_entry_point(self) -> None:
-        unhooked = read(STORY_EFFECTS).replace(
+        unhooked = source_section(read(STORY_EFFECTS), 'story_effects').replace(
             "\tADISCORD_vorkerland_story_report_iconic_objective = yes\n}", "\n}", 1
         )
         issues = dispatch_issues(unhooked)
         self.assertTrue(any("unreachable" in issue for issue in issues), issues)
 
     def test_capital_first_fall_news_is_not_duplicated_by_the_objective_news(self) -> None:
-        effects = read(STORY_EFFECTS)
+        effects = source_section(read(STORY_EFFECTS), 'story_effects')
         for flag in (
             "ADISCORD_vorkerland_story_wkr_capital_fell_first",
             "ADISCORD_vorkerland_story_vad_capital_fell_first",
@@ -155,7 +157,7 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
         self.assertTrue(any("suppress objective 2" in issue for issue in dispatch_issues(without)))
 
     def test_capitulation_news_is_scoped_to_the_claimant_that_fell(self) -> None:
-        unscoped = read(STORY_EFFECTS).replace(
+        unscoped = source_section(read(STORY_EFFECTS), 'story_effects').replace(
             "ROOT = { ADISCORD_vorkerland_story_report_claimant_capitulation = yes }",
             "ADISCORD_vorkerland_story_report_claimant_capitulation = yes",
         )
@@ -163,7 +165,7 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
         self.assertTrue(any("must be scoped to ROOT" in issue for issue in issues), issues)
 
     def test_story_layer_uses_the_documented_global_array_arguments(self) -> None:
-        effects = read(STORY_EFFECTS)
+        effects = source_section(read(STORY_EFFECTS), 'story_effects')
         self.assertIn(
             "array = global.ADISCORD_vorkerland_story_objectives_reported", effects
         )
@@ -192,7 +194,7 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
         )
 
     def test_upstream_identifiers_are_pinned_to_their_owning_files(self) -> None:
-        campaign_state_effects = read(CAMPAIGN_STATE_EFFECTS)
+        campaign_state_effects = source_section(read(CAMPAIGN_STATE_EFFECTS), 'campaign_state_effects')
         self.assertEqual(upstream_contract_issues(ROOT, campaign_state_effects), [])
         renamed = campaign_state_effects.replace(
             "var = global.ADISCORD_vorkerland_objective_last",

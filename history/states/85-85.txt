@@ -4,14 +4,23 @@ state={
 	provinces={
 		3 16 35 50 86 130 7157
 	}
-	manpower=1
+	manpower=190000
 
-	state_category = wasteland
+	state_category = rural
 	buildings_max_level_factor=1.000
 	local_supplies=0.000
 
 	history = {
 		owner = TFF
 		add_core_of = TFF
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+		}
+		victory_points = { 16 3 }
+	}
+
+	resources = {
+		aluminium = 2
 	}
 }

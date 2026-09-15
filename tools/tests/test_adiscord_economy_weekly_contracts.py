@@ -5,6 +5,7 @@ import unittest
 from pathlib import Path
 
 from tools.validators.validate_adiscord_economy_ai import (
+    air_production_contract_issues,
     ai_assistance_contract_issues,
     ai_assistance_lifecycle_issues,
     ai_policy_contract_issues,
@@ -25,6 +26,9 @@ from tools.validators.validate_adiscord_division_templates import parse_clausewi
 from tools.validators.validate_adiscord_minor_optimization import (
     validate as validate_minor_optimization,
 )
+
+
+from tools.lib.paths import source_section
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -5843,6 +5847,77 @@ class WeeklyEconomyContracts(unittest.TestCase):
     def test_ai_policy_uses_one_reserved_ordered_research_action(self):
         self.assertFalse(ai_policy_contract_issues(EFFECTS))
 
+    def test_ai_war_taxes_require_low_treasury_and_a_deficit(self):
+        policy = _parsed_definition(EFFECTS, "ADISCORD_economy_ai_monthly_policy")
+        low_treasury = _parsed_definition(
+            TRIGGERS, "ADISCORD_economy_has_low_treasury"
+        )
+
+        def allows(entries, variables, at_war, available):
+            results = []
+            for entry in entries:
+                if entry.key == "check_variable":
+                    self.assertEqual(_entry_scalar(entry.value, "compare"), "less_than")
+                    results.append(
+                        variables[_entry_scalar(entry.value, "var")]
+                        < float(_entry_scalar(entry.value, "value"))
+                    )
+                elif entry.key == "ADISCORD_economy_has_low_treasury":
+                    result = allows(low_treasury.value, variables, at_war, available)
+                    results.append(result == (entry.value == "yes"))
+                elif entry.key in {"has_war", "ADISCORD_economy_can_use_war_taxes"}:
+                    result = at_war if entry.key == "has_war" else available
+                    results.append(result == (entry.value == "yes"))
+                else:
+                    self.fail(f"Unmodelled war-tax condition: {entry.key}")
+            return all(results)
+
+        for fiscal_state in ("crisis", "stressed"):
+            state_trigger = f"ADISCORD_economy_ai_is_{fiscal_state}"
+            state_branches = [
+                entry
+                for _, entry in _walk_parsed(policy.value)
+                if isinstance(entry.value, list)
+                and any(
+                    child.key == "limit"
+                    and isinstance(child.value, list)
+                    and _entry_scalar(child.value, state_trigger) == "yes"
+                    for child in entry.value
+                )
+            ]
+            self.assertEqual(len(state_branches), 1)
+            tax_branches = [
+                entry for entry in state_branches[0].value
+                if isinstance(entry.value, list)
+                and _entry_scalar(entry.value, "ADISCORD_economy_war_taxes_action") == "yes"
+            ]
+            self.assertEqual(len(tax_branches), 1)
+            guards = [entry for entry in tax_branches[0].value if entry.key == "limit"]
+            self.assertEqual(len(guards), 1)
+
+            for treasury, balance, at_war, available, expected in (
+                (0, -20, True, True, True),
+                (49.99, -0.01, True, True, True),
+                (50, -20, True, True, False),
+                (250, -20, True, True, False),
+                (0, 0, True, True, False),
+                (0, 20, True, True, False),
+                (250, 20, True, True, False),
+                (0, -20, False, True, False),
+                (0, -20, True, False, False),
+            ):
+                with self.subTest(
+                    fiscal_state=fiscal_state, treasury=treasury, balance=balance,
+                    at_war=at_war, available=available,
+                ):
+                    variables = {
+                        "ADISCORD_economy_treasury": treasury,
+                        "ADISCORD_economy_monthly_balance": balance,
+                    }
+                    self.assertEqual(
+                        allows(guards[0].value, variables, at_war, available), expected
+                    )
+
     def test_ai_policy_review_mutations_reject_live_predicate_drift(self):
         policy = unique_block(EFFECTS, "ADISCORD_economy_ai_monthly_policy")
         unsafe_fallback = (
@@ -5859,8 +5934,10 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 1,
             ),
             "reversed crisis tax deficit": policy.replace(
-                "ADISCORD_economy_monthly_balance value = 0 compare = less_than",
-                "ADISCORD_economy_monthly_balance value = 0 compare = greater_than",
+                "ADISCORD_economy_monthly_balance value = 0 compare = less_than } "
+                "ADISCORD_economy_can_increase_tax_burden = yes",
+                "ADISCORD_economy_monthly_balance value = 0 compare = greater_than } "
+                "ADISCORD_economy_can_increase_tax_burden = yes",
                 1,
             ),
             "negated crisis state": policy.replace(
@@ -6191,12 +6268,12 @@ ADISCORD_bad_assistance_owner = {
             ),
             31,
         )
-        phase_effects = (
+        phase_effects = source_section((
             ROOT
             / "common"
             / "scripted_effects"
-            / "ADISCORD_vorkerland_phase_effects.txt"
-        ).read_text(encoding="utf-8-sig")
+            / "ADISCORD_vorkerland_effects.txt"
+        ).read_text(encoding="utf-8-sig"), 'phase_effects')
         finalizer = unique_block(
             phase_effects, "ADISCORD_vorkerland_finalize_reunified_wrk"
         )
@@ -7098,6 +7175,92 @@ ADISCORD_task10_forbidden_cache_consumer = {
         for forbidden in ("every_country", "every_owned_state", "all_owned_state"):
             self.assertNotIn(forbidden, transition)
 
+    def test_nod_keeps_mobilization_only_while_approved_intervention_is_possible(self):
+        transition = _parsed_definition(
+            EFFECTS, "ADISCORD_economy_update_postwar_demobilization"
+        )
+        branches = transition.value
+        self.assertEqual([entry.key for entry in branches], ["if", "else_if"])
+        marker = "ADISCORD_economy_was_at_war"
+        months = "ADISCORD_economy_postwar_demobilization_months"
+
+        def permits(entries, state):
+            results = []
+            for entry in entries:
+                if entry.key in {"AND", "NOT"}:
+                    result = permits(entry.value, state)
+                    results.append(not result if entry.key == "NOT" else result)
+                elif entry.key == "check_variable":
+                    self.assertEqual(
+                        _entry_scalar(entry.value, "compare"), "greater_than_or_equals"
+                    )
+                    results.append(
+                        state[_entry_scalar(entry.value, "var")]
+                        >= float(_entry_scalar(entry.value, "value"))
+                    )
+                elif entry.key == "tag":
+                    results.append(state["tag"] == entry.value)
+                elif entry.key == "has_country_flag":
+                    results.append(entry.value in state["flags"])
+                elif entry.key in {"has_war", "NOD_cw_intervention_possible"}:
+                    results.append(state[entry.key] == (entry.value == "yes"))
+                else:
+                    self.fail(f"Unmodelled demobilization condition: {entry.key}")
+            return all(results)
+
+        def pulse(state):
+            for branch in branches:
+                guards = [entry for entry in branch.value if entry.key == "limit"]
+                self.assertEqual(len(guards), 1)
+                if permits(guards[0].value, state):
+                    for entry in branch.value:
+                        if entry.key == "set_variable":
+                            state[_entry_scalar(entry.value, "var")] = float(
+                                _entry_scalar(entry.value, "value")
+                            )
+                    return branch
+            return None
+
+        for tag, approved, possible, at_war, expected_marker in (
+            ("NOD", True, True, False, 1),
+            ("NOD", False, True, False, 0),
+            ("NOD", True, False, False, 0),
+            ("STP", True, True, False, 0),
+            ("NOD", True, True, True, 1),
+            ("NOD", False, False, True, 1),
+        ):
+            with self.subTest(tag=tag, approved=approved, possible=possible, war=at_war):
+                state = {
+                    "tag": tag,
+                    "flags": {"NOD_cw_intervention_approved"} if approved else set(),
+                    "NOD_cw_intervention_possible": possible,
+                    "has_war": at_war,
+                    marker: 1,
+                    months: 0,
+                }
+                pulse(state)
+                self.assertEqual(state[marker], expected_marker)
+                self.assertEqual(state[months], 6 if expected_marker == 0 else 0)
+                if tag == "NOD" and approved and possible and not at_war:
+                    self.assertIsNone(pulse(state))
+                    self.assertEqual(state[marker], 1)
+                    state["NOD_cw_intervention_possible"] = False
+                    self.assertIs(pulse(state), branches[1])
+                    self.assertEqual((state[marker], state[months]), (0, 6))
+                    state[months] = 5
+                    self.assertIsNone(pulse(state))
+                    self.assertEqual((state[marker], state[months]), (0, 5))
+
+        resetters = [
+            ancestors
+            for ancestors, entry in _walk_parsed(transition.value)
+            if entry.key == "set_variable"
+            and _entry_scalar(entry.value, "var") == marker
+            and _entry_scalar(entry.value, "value") == "0"
+        ]
+        self.assertEqual(len(resetters), 1)
+        self.assertIs(resetters[0][0], branches[1])
+
     def test_demobilization_accelerates_recovery_and_is_cancelled_by_a_new_war(self):
         transition = block(EFFECTS, "ADISCORD_economy_update_postwar_demobilization")
         fatigue = block(EFFECTS, "ADISCORD_economy_update_war_fatigue")
@@ -7795,6 +7958,67 @@ ADISCORD_task10_forbidden_cache_consumer = {
             wartime,
             r"building_target\s+id\s*=\s*ADISCORD_industrial_cluster\s+value\s*=\s*3\b",
         )
+
+    def test_air_demand_survives_small_industry_and_fiscal_crisis(self):
+        source = (ROOT / "common/ai_strategy/default.txt").read_text(encoding="utf-8-sig")
+        for plane, technology in (
+            ("fighter", "ADISCORD_tech_reclaimed_jet_platforms"),
+            ("cas", "ADISCORD_tech_battlefield_attack_aircraft"),
+        ):
+            strategy = block(source, f"ADISCORD_default_{plane}_demand")
+            enable = parse_clausewitz(block(strategy, "enable"))
+            self.assertEqual([(entry.key, entry.value) for entry in enable], [("has_tech", technology)])
+            self.assertRegex(strategy, rf"type\s*=\s*unit_ratio\s+id\s*=\s*{plane}\s+value\s*=\s*[1-9]\d*")
+            self.assertIn("abort_when_not_enabled = yes", strategy)
+        for phase in ("crisis", "stress"):
+            strategy = block(ECONOMY_AI, f"ADISCORD_ai_fiscal_{phase}")
+            self.assertNotRegex(strategy, r"type\s*=\s*unit_ratio\s+id\s*=\s*(?:fighter|cas)\b")
+            for plane in ("fighter", "cas"):
+                penalty = re.search(rf"equipment_production_factor\s+id\s*=\s*{plane}\s+value\s*=\s*(-?\d+)", strategy)
+                self.assertIsNotNone(penalty)
+                self.assertGreater(int(penalty.group(1)), -100)
+                self.assertLess(int(penalty.group(1)), 0)
+
+    def test_air_factory_floor_leaves_capacity_for_land_equipment(self):
+        source = (ROOT / "common/ai_strategy/default.txt").read_text(encoding="utf-8-sig")
+        strategy = block(source, "ADISCORD_limited_air_program")
+        enable = block(strategy, "enable")
+        threshold = re.search(r"num_of_military_factories\s*>\s*(\d+)", enable)
+        self.assertIsNotNone(threshold)
+        self.assertGreaterEqual(int(threshold.group(1)), 4)
+        self.assertLess(int(threshold.group(1)), 7)
+        self.assertNotIn("economy_ai", enable)
+        self.assertIn("has_tech = ADISCORD_tech_reclaimed_jet_platforms", enable)
+        self.assertRegex(strategy, r"equipment_production_min_factories\s+id\s*=\s*fighter\s+value\s*=\s*1\b")
+
+    def test_air_validator_rejects_demand_and_replacement_shutdowns(self):
+        source = (ROOT / "common/ai_strategy/default.txt").read_text(encoding="utf-8-sig")
+        self.assertEqual(air_production_contract_issues(source, ECONOMY_AI), [])
+        mutations = (
+            source.replace("enable = { has_tech = ADISCORD_tech_reclaimed_jet_platforms }", "enable = { has_tech = ADISCORD_tech_reclaimed_jet_platforms num_of_military_factories > 7 }"),
+            source.replace("unit_ratio id = fighter value = 70", "unit_ratio id = fighter value = 0"),
+            source.replace("num_of_military_factories > 5", "num_of_military_factories > 7"),
+        )
+        for mutation in mutations:
+            self.assertNotEqual(mutation, source)
+            self.assertTrue(air_production_contract_issues(mutation, ECONOMY_AI))
+        fiscal = ECONOMY_AI.replace("equipment_production_factor id = fighter value = -35", "unit_ratio id = fighter value = -60")
+        self.assertNotEqual(fiscal, ECONOMY_AI)
+        self.assertTrue(air_production_contract_issues(source, fiscal))
+
+    def test_truck_production_uses_real_stock_and_releases_its_factory(self):
+        source = (ROOT / "common/ai_strategy/default.txt").read_text(encoding="utf-8-sig")
+        production = block(source, "ADISCORD_produce_supply_trucks_low_stock")
+        enable = block(production, "enable")
+        abort = block(production, "abort")
+        self.assertIn("has_tech = ADISCORD_tech_restored_truck_fleets", enable)
+        self.assertIn("num_of_supply_nodes > 0", enable)
+        self.assertIn("num_of_military_factories > 5", enable)
+        self.assertIn("motorized_equipment < 60", enable)
+        self.assertIn("motorized_equipment > 120", abort)
+        self.assertIn("num_of_military_factories < 6", abort)
+        self.assertIn("num_of_supply_nodes < 1", abort)
+        self.assertRegex(production, r"equipment_production_min_factories_archetype\s+id\s*=\s*motorized_equipment\s+value\s*=\s*1\b")
 
     def test_building_tooltips_lead_with_role_and_budget_impact(self):
         self.assertNotIn("Строятся в обычном меню", ECONOMY_LOC)

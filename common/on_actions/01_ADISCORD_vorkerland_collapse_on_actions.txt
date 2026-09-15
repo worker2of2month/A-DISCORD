@@ -1,6 +1,8 @@
 on_actions = {
 	on_startup = {
 		effect = {
+			# on_startup is unscoped; the landmark state survives WRK's collapse.
+			40 = { ADISCORD_vorkerland_sync_unity_tower_visual = yes }
 			# Country history seeds this marker only while creating a fresh campaign.
 			# Once consumed, later loads cannot schedule the collapse again.
 			WRK = {
@@ -60,6 +62,53 @@ on_actions = {
 					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
 				}
 				ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes
+			}
+		}
+	}
+	on_war_relation_added = {
+		effect = {
+			# New fronts need a scripted ally join even while the claimant is already at war.
+			ROOT = {
+				if = {
+					limit = {
+						ADISCORD_vorkerland_is_main_claimant = yes
+						is_faction_leader = yes
+						NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+					}
+					every_allied_country = {
+						limit = {
+							exists = yes
+							is_in_faction_with = PREV
+							has_country_flag = ADISCORD_vorkerland_regional_auxiliary
+							NOT = { has_capitulated = yes }
+							NOT = { has_war_with = FROM }
+						}
+						clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_retry_used
+						clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_failed
+						country_event = { id = ADISCORD_vorkerland_collapse.93 days = 1 }
+					}
+				}
+			}
+			FROM = {
+				if = {
+					limit = {
+						ADISCORD_vorkerland_is_main_claimant = yes
+						is_faction_leader = yes
+						NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+					}
+					every_allied_country = {
+						limit = {
+							exists = yes
+							is_in_faction_with = PREV
+							has_country_flag = ADISCORD_vorkerland_regional_auxiliary
+							NOT = { has_capitulated = yes }
+							NOT = { has_war_with = ROOT }
+						}
+						clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_retry_used
+						clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_failed
+						country_event = { id = ADISCORD_vorkerland_collapse.93 days = 1 }
+					}
+				}
 			}
 		}
 	}

@@ -5,6 +5,9 @@ import unittest
 from pathlib import Path
 
 
+from tools.lib.paths import source_section
+
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -46,8 +49,8 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
     )
 
     def test_all_three_claimants_share_the_same_last_stand(self) -> None:
-        ideas = read("common/ideas/ADISCORD_vorkerland_collapse_ideas.txt")
-        effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
+        ideas = source_section(read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas')
+        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
         last_stand = named_block(ideas, "ADISCORD_vorkerland_last_stand")
         self.assertIn("allowed = { always = no }", last_stand)
         self.assertIn("allowed_civil_war = { always = yes }", last_stand)
@@ -72,7 +75,7 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
         self.assertNotIn("surrender_limit", fanaticism)
 
     def test_wkr_keeps_only_the_revolutionary_starting_spirit(self) -> None:
-        effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
+        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
         repair = named_block(
             effects, "ADISCORD_vorkerland_repair_claimant_spirit_progression"
         )
@@ -99,7 +102,7 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
                 self.assertIn(f'name = "GFX_idea_{spirit}"', gfx)
 
     def test_wkr_decisions_upgrade_one_spirit_in_order(self) -> None:
-        decisions = read("common/decisions/ADISCORD_vorkerland_collapse_decisions.txt")
+        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
         chain = (
             ("ADISCORD_vorkerland_wrk_convene_front_soviets", self.WRK_CHAIN[0], self.WRK_CHAIN[1], "60"),
             ("ADISCORD_vorkerland_wrk_adopt_front_charter", self.WRK_CHAIN[1], self.WRK_CHAIN[2], "90"),
@@ -116,8 +119,8 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
                 self.assertIn(f"add_ideas = {new}", block)
 
     def test_tva_decisions_upgrade_field_directorate_in_order(self) -> None:
-        ideas = read("common/ideas/ADISCORD_vorkerland_collapse_ideas.txt")
-        decisions = read("common/decisions/ADISCORD_vorkerland_collapse_decisions.txt")
+        ideas = source_section(read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas')
+        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
         for spirit in self.TVA_CHAIN:
             block = named_block(ideas, spirit)
             self.assertIn("picture = generic_production_bonus", block)
@@ -136,7 +139,7 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
                 self.assertIn(f"add_ideas = {new}", block)
 
     def test_outbreak_runs_the_versioned_repair_without_startup_migration(self) -> None:
-        events = read("events/ADISCORD_vorkerland_collapse_events.txt")
+        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
         outbreak = re.search(
             r"(?ms)^country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.2\b"
             r"(.*?)(?=^country_event\s*=|\Z)",
@@ -164,7 +167,7 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
     def test_russian_localisation_is_complete_and_keeps_bom(self) -> None:
         paths = (
             ROOT / "localisation/russian/ADISCORD_ideas_l_russian.yml",
-            ROOT / "localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml",
+            ROOT / "localisation/russian/ADISCORD_vorkerland_l_russian.yml",
         )
         localisation = ""
         for path in paths:

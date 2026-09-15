@@ -19,13 +19,16 @@ except ModuleNotFoundError:  # Direct ``python tools/validators/...`` invocation
     )
 
 
+from tools.lib.paths import source_section
+
+
 ROOT = Path(__file__).resolve().parents[2]
 TRIGGER_FILE = ROOT / "common/scripted_triggers/ADISCORD_minor_optimization_triggers.txt"
 EFFECT_FILE = ROOT / "common/scripted_effects/ADISCORD_minor_optimization_effects.txt"
 IDEA_FILE = ROOT / "common/ideas/ADISCORD_minor_optimization_ideas.txt"
 ON_ACTION_FILE = ROOT / "common/on_actions/00_ADISCORD_minor_optimization_on_actions.txt"
 ECONOMY_EFFECT_FILE = ROOT / "common/scripted_effects/ADISCORD_economy_effects.txt"
-PHASE_EFFECT_FILE = ROOT / "common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt"
+PHASE_EFFECT_FILE = ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
 GENERAL_HISTORY_FILE = ROOT / "history/general/ADISCORD_general_history.txt"
 
 FRESH_CONTRACT = "ADISCORD_fresh_campaign_contract_v1"
@@ -48,7 +51,6 @@ EXPECTED_SLOTS = {
     "BLD": 2,
     "BOR": 3,
     "BRN": 3,
-    "COF": 1,
     "DOL": 3,
     "DRV": 2,
     "ELN": 3,
@@ -68,11 +70,9 @@ EXPECTED_SLOTS = {
     "SDR": 2,
     "SHL": 2,
     "SKN": 3,
-    "TFF": 1,
     "TMR": 2,
     "VES": 3,
     "WEF": 2,
-    "YPR": 2,
 }
 
 PARTICIPATION_ROOTS = (
@@ -197,9 +197,9 @@ def validate(root: Path = ROOT) -> list[str]:
     economy_effect_text = read(
         root / "common/scripted_effects/ADISCORD_economy_effects.txt"
     )
-    phase_effect_text = read(
-        root / "common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt"
-    )
+    phase_effect_text = source_section(read(
+        root / "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
+    ), 'phase_effects')
     general_history_text = read(
         root / "history/general/ADISCORD_general_history.txt"
     )

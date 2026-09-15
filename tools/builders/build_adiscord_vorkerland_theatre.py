@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Own the bounded rail and supply layer for the Vorkerland civil-war theatre."""
+"""Own bounded campaign rail connections and Vorkerland supply hubs."""
 
 from __future__ import annotations
 
 import argparse
+import re
+from collections import defaultdict
 from pathlib import Path
 
 from tools.builders import build_adiscord_strategic_regions as map_regions
@@ -15,6 +17,12 @@ RAILWAYS_PATH = ROOT / "map" / "railways.txt"
 SUPPLY_NODES_PATH = ROOT / "map" / "supply_nodes.txt"
 OSV_CAPITAL_STATE = 318
 OSV_CAPITAL_RAIL = (1, (16642, 1540, 1818))
+# Each spur joins existing rail inside its starting country's borders.
+# The paired hubs are the continuity contract, not extra construction.
+STARTING_SUPPLY_RAILS = {
+    "STP": (1, (119, 1, 16440), (16547, 16440)),
+    "YPR": (1, (33, 73, 11), (16372, 11)),
+}
 VORKERLAND_SUPPLY_HUB_STATES = {
     2539: 107,
     16643: 306,
@@ -33,16 +41,21 @@ def render_managed_line() -> str:
     return f"{level} {len(provinces)} {route}"
 
 
+def render_supply_connection(tag: str) -> str:
+    level, provinces, _ = STARTING_SUPPLY_RAILS[tag]
+    return f"{level} {len(provinces)} {' '.join(map(str, provinces))}"
+
+
 def update_source(source: str) -> str:
-    """Append one exact owned rail record while preserving all other lines."""
+    """Append exact owned rail records while preserving all other lines."""
     lines = [
         line
         for line in source.replace("\r\n", "\n").splitlines()
         if line not in RETIRED_MARKERS
     ]
-    managed = render_managed_line()
-    lines = [line for line in lines if line != managed]
-    lines.append(managed)
+    managed = [render_managed_line(), *(render_supply_connection(tag) for tag in STARTING_SUPPLY_RAILS)]
+    lines = [line for line in lines if line not in managed]
+    lines.extend(managed)
     return "\n".join(lines) + "\n"
 
 
@@ -135,8 +148,54 @@ def validate() -> list[str]:
                 issues.append(f"Vorkerland supply hub {province_id} is not on land")
             if province_id not in railway_provinces:
                 issues.append(f"Vorkerland supply hub {province_id} is not on a railway")
+        state_owners = {}
+        for path in (ROOT / "history/states").glob("*.txt"):
+            history = path.read_text(encoding="utf-8-sig")
+            state = re.search(r"\bid\s*=\s*(\d+)", history)
+            owner = re.search(r"\bowner\s*=\s*([A-Z0-9]+)", history)
+            if state and owner:
+                state_owners[int(state.group(1))] = owner.group(1)
+        rail_graph: dict[int, set[int]] = defaultdict(set)
+        for line in source.splitlines():
+            parts = line.split()
+            if (
+                len(parts) > 2
+                and all(part.isdigit() for part in parts)
+                and int(parts[0]) > 0
+                and int(parts[1]) == len(parts) - 2
+            ):
+                route = tuple(map(int, parts[2:]))
+                for first, second in zip(route, route[1:]):
+                    if (
+                        province_types.get(first) == "land"
+                        and province_types.get(second) == "land"
+                        and second in physical.get(first, set())
+                    ):
+                        rail_graph[first].add(second)
+                        rail_graph[second].add(first)
+        for tag, (_, route, hubs) in STARTING_SUPPLY_RAILS.items():
+            if source.splitlines().count(render_supply_connection(tag)) != 1:
+                issues.append(f"{tag} supply connection must occur exactly once")
+            for province in route:
+                if province_types.get(province) != "land":
+                    issues.append(f"{tag} supply connection leaves land at {province}")
+                if state_owners.get(state_by_province.get(province)) != tag:
+                    issues.append(f"{tag} supply connection leaves its starting territory at {province}")
+            for first, second in zip(route, route[1:]):
+                if second not in physical.get(first, set()):
+                    issues.append(f"{tag} rail segment {first}-{second} is not physically adjacent")
+            pending = [hubs[0]]
+            reached = {hubs[0]}
+            while pending:
+                province = pending.pop()
+                for neighbour in rail_graph[province]:
+                    if neighbour not in reached and state_owners.get(state_by_province.get(neighbour)) == tag:
+                        reached.add(neighbour)
+                        pending.append(neighbour)
+            if hubs[1] not in reached:
+                issues.append(f"{tag} supply hubs {hubs[0]} and {hubs[1]} are disconnected inside its starting territory")
     except (OSError, RuntimeError, ValueError, KeyError) as error:
-        issues.append(f"cannot validate OSV capital rail geography: {error}")
+        issues.append(f"cannot validate campaign rail geography: {error}")
     return issues
 
 
@@ -150,13 +209,14 @@ def apply() -> None:
     supply_raw = SUPPLY_NODES_PATH.read_bytes()
     supply_newline = "\r\n" if b"\r\n" in supply_raw else "\n"
     supply_source = supply_raw.decode("utf-8-sig")
-    updated_supply = update_supply_source(supply_source).replace("\n", supply_newline)
-    SUPPLY_NODES_PATH.write_bytes(updated_supply.encode("utf-8"))
+    updated_supply = update_supply_source(supply_source)
+    if updated_supply != supply_source.replace("\r\n", "\n"):
+        SUPPLY_NODES_PATH.write_bytes(updated_supply.replace("\n", supply_newline).encode("utf-8"))
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Generate the bounded central Vorkerland theatre rail layer."
+        description="Generate bounded campaign rail connections and supply hubs."
     )
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument(
@@ -174,7 +234,7 @@ def main() -> int:
             print(f"- {issue}")
         return 1
     print(
-        "Vorkerland theatre validation passed: OSV spur and four rail supply hubs are owned."
+        "Campaign rail validation passed: OSV spur, STP/YPR supply connections and four rail supply hubs."
     )
     return 0
 

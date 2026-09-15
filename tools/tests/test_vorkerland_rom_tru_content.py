@@ -6,6 +6,9 @@ import unittest
 from pathlib import Path
 
 
+from tools.lib.paths import source_section
+
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -82,7 +85,7 @@ class RomTruContentTests(unittest.TestCase):
         self.assertEqual(scalar("history/countries/TRU - TrumanLand.txt", "set_stability"), 0.25)
 
     def test_initialization_is_idempotent_and_adds_only_reserve_deltas(self) -> None:
-        effects = read("common/scripted_effects/ADISCORD_vorkerland_rom_tru_effects.txt")
+        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'rom_tru_effects')
         rom = named_block(effects, "ADISCORD_vorkerland_rom_initialize_war_content")
         tru = named_block(effects, "ADISCORD_vorkerland_tru_initialize_war_content")
         for block, tag, support, idea in (
@@ -99,7 +102,7 @@ class RomTruContentTests(unittest.TestCase):
         self.assertIn("chauvinism = 42", tru)
 
     def test_each_country_has_a_bounded_three_step_chain(self) -> None:
-        decisions = read("common/decisions/ADISCORD_vorkerland_rom_tru_decisions.txt")
+        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'rom_tru_decisions')
         rom_mission = named_block(decisions, "ADISCORD_vorkerland_rom_break_valley_administration")
         tru_mission = named_block(decisions, "ADISCORD_vorkerland_tru_break_zlatorech_administration")
         self.assertIn("days_mission_timeout = 180", rom_mission)
@@ -122,7 +125,7 @@ class RomTruContentTests(unittest.TestCase):
             self.assertIn("cost = 40", block)
 
     def test_visible_events_are_fired_only_on_pair_war_edges(self) -> None:
-        events = read("events/ADISCORD_vorkerland_rom_tru_events.txt")
+        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'rom_tru_events')
         self.assertIn("add_namespace = ADISCORD_vorkerland_rom_tru", events)
         self.assertEqual(events.count("country_event = {"), 2)
         for event_id, tag, target, mission in (
@@ -150,7 +153,7 @@ class RomTruContentTests(unittest.TestCase):
         self.assertEqual(on_actions.count("ADISCORD_vorkerland_rom_tru.2"), 1)
 
     def test_pair_scoped_ai_overrides_are_offensive(self) -> None:
-        ai = read("common/ai_strategy/ADISCORD_vorkerland_rom_tru_ai.txt")
+        ai = source_section(read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'rom_tru_ai')
         for key, tag, target in (
             ("ADISCORD_vorkerland_rom_tru_rom_offensive", "ROM", "DVA"),
             ("ADISCORD_vorkerland_rom_tru_tru_offensive", "TRU", "ZTA"),
@@ -165,23 +168,23 @@ class RomTruContentTests(unittest.TestCase):
             self.assertIn(f"type = conquer id = {target} value = 200", block)
 
     def test_owned_scripts_do_not_touch_ivanland_or_use_global_polling(self) -> None:
-        owned = "\n".join(read(path) for path in (
-            "common/ideas/ADISCORD_vorkerland_rom_tru_ideas.txt",
-            "common/decisions/ADISCORD_vorkerland_rom_tru_decisions.txt",
-            "common/decisions/categories/ADISCORD_vorkerland_rom_tru_categories.txt",
-            "common/scripted_effects/ADISCORD_vorkerland_rom_tru_effects.txt",
-            "events/ADISCORD_vorkerland_rom_tru_events.txt",
-            "common/on_actions/02_ADISCORD_vorkerland_rom_tru_on_actions.txt",
-            "common/ai_strategy/ADISCORD_vorkerland_rom_tru_ai.txt",
+        owned = "\n".join((source_section(read(path), section) if section else read(path)) for path, section in (
+            ("common/ideas/ADISCORD_vorkerland_ideas.txt", "rom_tru_ideas"),
+            ("common/decisions/ADISCORD_vorkerland_decisions.txt", "rom_tru_decisions"),
+            ("common/decisions/categories/ADISCORD_vorkerland_categories.txt", "rom_tru_categories"),
+            ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "rom_tru_effects"),
+            ("events/ADISCORD_vorkerland_events.txt", "rom_tru_events"),
+            ("common/on_actions/02_ADISCORD_vorkerland_rom_tru_on_actions.txt", None),
+            ("common/ai_strategy/ADISCORD_vorkerland_ai.txt", "rom_tru_ai"),
         ))
         self.assertNotRegex(owned, r"\b(?:IVN|RIN)\b")
         for forbidden in ("on_monthly", "on_daily", "every_country", "random_country"):
             self.assertNotIn(forbidden, owned)
 
     def test_russian_localisation_is_bom_encoded_and_complete(self) -> None:
-        path = ROOT / "localisation/russian/ADISCORD_vorkerland_rom_tru_l_russian.yml"
+        path = ROOT / "localisation/russian/ADISCORD_vorkerland_l_russian.yml"
         self.assertTrue(path.read_bytes().startswith(codecs.BOM_UTF8))
-        loc = read("localisation/russian/ADISCORD_vorkerland_rom_tru_l_russian.yml")
+        loc = source_section(read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"), 'rom_tru_l_russian')
         for key in (
             "ADISCORD_vorkerland_rom_tru_category",
             "ADISCORD_vorkerland_rom_assemble_valley_columns",

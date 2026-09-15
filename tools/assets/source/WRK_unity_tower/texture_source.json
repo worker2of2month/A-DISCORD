@@ -1,0 +1,8 @@
+{
+  "tool": "built-in imagegen",
+  "input": "reference_windows.png",
+  "input_owner": "Original tower window DDS, converted losslessly for reference; original DDS unchanged.",
+  "output": "Fire_windows.png",
+  "usage": "Baked into Tower_fire_diffuse.dds by bake_fire.py; used only by collapsing and damaged actors.",
+  "prompt": "Edit this exact game diffuse texture atlas for a fire-damaged brutalist building in Hearts of Iron IV. Output a square 1024 x 1024 texture, flat orthographic texture only. Preserve EXACTLY the existing 12-column by 12-row window grid, all mullion coordinates, the dark blue-gray palette and edge alignment: these are fixed UV coordinates. Make roughly one quarter of the glass panes visibly blown out in irregular scattered clusters: near-black recessed interior openings, jagged triangular shards still attached along parts of their frames, a few cracked surviving panes. Add localized matte charcoal soot above and around damaged panes, with subtle brown heat staining on metal. Retain about three quarters of the panes mostly intact and retain all window frames. NO white spray paint, NO bright fracture outlines, NO flames, NO glow, NO perspective, NO added windows, NO outside scene, no captions, no transparency. The broken openings must be dark opaque interiors. Damage must read at small game-map scale, while keeping the original grid positions untouched."
+}

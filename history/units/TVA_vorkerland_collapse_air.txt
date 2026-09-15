@@ -4,3 +4,16 @@ air_wings = {
 		ADISCORD_cas_airframe_2170 = { owner = "TVA" amount = 50 }
 	}
 }
+
+instant_effect = {
+	add_equipment_to_stockpile = {
+		type = motorized_equipment_1
+		amount = 180
+		producer = TVA
+	}
+	add_equipment_to_stockpile = {
+		type = train_equipment_1
+		amount = 30
+		producer = TVA
+	}
+}

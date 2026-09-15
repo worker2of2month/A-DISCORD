@@ -4,7 +4,7 @@ state={
 	provinces={
 		13 23 62 113 16356 
 	}
-	manpower=1200000
+	manpower=2200000
 	buildings_max_level_factor=1.000
 	state_category=city
 	local_supplies=0.000
@@ -12,9 +12,10 @@ state={
 	history={
 		owner = NOD
 		buildings = {
+			air_base = 2
 			infrastructure = 3
-			industrial_complex = 2
-			arms_factory = 1
+			industrial_complex = 3
+			arms_factory = 3
 		}
 		add_core_of = NOD
 
@@ -22,7 +23,8 @@ state={
 	}
 
 	resources = {
-        steel = 17
-        aluminium = 5
-    }
+		steel = 44
+		aluminium = 10
+		tungsten = 4
+	}
 }

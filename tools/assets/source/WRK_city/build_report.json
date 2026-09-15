@@ -1,0 +1,1031 @@
+{
+  "tower_admin": {
+    "parts": [
+      {
+        "vertices": 124,
+        "triangles": 52,
+        "material": "City_glass_diffuse.dds",
+        "minimum_triangle_area": 0.0046995198921621194
+      },
+      {
+        "vertices": 597,
+        "triangles": 264,
+        "material": "City_concrete_diffuse.dds",
+        "minimum_triangle_area": 0.0011483380062549669
+      },
+      {
+        "vertices": 347,
+        "triangles": 162,
+        "material": "City_roof_diffuse.dds",
+        "minimum_triangle_area": 0.0009843198167295854
+      },
+      {
+        "vertices": 1262,
+        "triangles": 532,
+        "material": "City_detail_diffuse.dds",
+        "minimum_triangle_area": 2.9039867745858693e-05
+      },
+      {
+        "vertices": 110,
+        "triangles": 46,
+        "material": "City_glass_silver_diffuse.dds",
+        "minimum_triangle_area": 0.006473599424084022
+      }
+    ],
+    "size": [
+      1.2400000095367432,
+      1.0800000429153442,
+      4.631400108337402
+    ],
+    "source_vertices": 1832,
+    "foundation": {
+      "outline": [
+        [
+          -0.62,
+          -0.468
+        ],
+        [
+          -0.548,
+          -0.54
+        ],
+        [
+          0.548,
+          -0.54
+        ],
+        [
+          0.62,
+          -0.468
+        ],
+        [
+          0.62,
+          0.468
+        ],
+        [
+          0.548,
+          0.54
+        ],
+        [
+          -0.548,
+          0.54
+        ],
+        [
+          -0.62,
+          0.468
+        ]
+      ],
+      "lower": -0.9600000381469727,
+      "upper": 0.03480000048875809,
+      "mesh_sha256": "e8ced85678cad373ae3403a2355d17d51d5f008f74f3fc10c5414d426ce65ada"
+    }
+  },
+  "tower_business": {
+    "parts": [
+      {
+        "vertices": 205,
+        "triangles": 90,
+        "material": "City_glass_diffuse.dds",
+        "minimum_triangle_area": 0.0018373464481174924
+      },
+      {
+        "vertices": 702,
+        "triangles": 316,
+        "material": "City_concrete_diffuse.dds",
+        "minimum_triangle_area": 0.0010159944723690919
+      },
+      {
+        "vertices": 353,
+        "triangles": 180,
+        "material": "City_roof_diffuse.dds",
+        "minimum_triangle_area": 0.0008959992567391949
+      },
+      {
+        "vertices": 991,
+        "triangles": 420,
+        "material": "City_detail_diffuse.dds",
+        "minimum_triangle_area": 2.9039867745858693e-05
+      },
+      {
+        "vertices": 88,
+        "triangles": 38,
+        "material": "City_glass_silver_diffuse.dds",
+        "minimum_triangle_area": 0.0045919999646778535
+      }
+    ],
+    "size": [
+      1.340000033378601,
+      1.0600000619888306,
+      4.300800323486328
+    ],
+    "source_vertices": 1816,
+    "foundation": {
+      "outline": [
+        [
+          -0.67,
+          -0.458
+        ],
+        [
+          -0.598,
+          -0.53
+        ],
+        [
+          0.598,
+          -0.53
+        ],
+        [
+          0.67,
+          -0.458
+        ],
+        [
+          0.67,
+          0.458
+        ],
+        [
+          0.598,
+          0.53
+        ],
+        [
+          -0.598,
+          0.53
+        ],
+        [
+          -0.67,
+          0.458
+        ]
+      ],
+      "lower": -0.9600000381469727,
+      "upper": 0.03480000048875809,
+      "mesh_sha256": "8746a3b12663196b87dd9d2e0e566fb43491bc518b665498f948dd304fa8ec61"
+    }
+  },
+  "tower_residential": {
+    "parts": [
+      {
+        "vertices": 148,
+        "triangles": 60,
+        "material": "City_glass_diffuse.dds",
+        "minimum_triangle_area": 0.0027103999559277936
+      },
+      {
+        "vertices": 1212,
+        "triangles": 516,
+        "material": "City_concrete_diffuse.dds",
+        "minimum_triangle_area": 0.00022329972315325464
+      },
+      {
+        "vertices": 470,
+        "triangles": 222,
+        "material": "City_roof_diffuse.dds",
+        "minimum_triangle_area": 0.0005344001808102567
+      },
+      {
+        "vertices": 365,
+        "triangles": 168,
+        "material": "City_detail_diffuse.dds",
+        "minimum_triangle_area": 0.0001181150033222577
+      },
+      {
+        "vertices": 108,
+        "triangles": 46,
+        "material": "City_glass_silver_diffuse.dds",
+        "minimum_triangle_area": 0.0037855992375301754
+      }
+    ],
+    "size": [
+      1.2599999904632568,
+      1.1800000667572021,
+      3.889000177383423
+    ],
+    "source_vertices": 1768,
+    "foundation": {
+      "outline": [
+        [
+          -0.63,
+          -0.518
+        ],
+        [
+          -0.558,
+          -0.59
+        ],
+        [
+          0.558,
+          -0.59
+        ],
+        [
+          0.63,
+          -0.518
+        ],
+        [
+          0.63,
+          0.518
+        ],
+        [
+          0.558,
+          0.59
+        ],
+        [
+          -0.558,
+          0.59
+        ],
+        [
+          -0.63,
+          0.518
+        ]
+      ],
+      "lower": -0.9599999785423279,
+      "upper": 0.03480000048875809,
+      "mesh_sha256": "4fcf7d4a2584773585c315c124d65a12888eb80507fee4546d20b4b6c38bc373"
+    }
+  },
+  "quarter_business": {
+    "parts": [
+      {
+        "vertices": 395,
+        "triangles": 172,
+        "material": "City_glass_diffuse.dds",
+        "minimum_triangle_area": 0.00017818846686983245
+      },
+      {
+        "vertices": 1596,
+        "triangles": 692,
+        "material": "City_concrete_diffuse.dds",
+        "minimum_triangle_area": 0.0006119982013573518
+      },
+      {
+        "vertices": 792,
+        "triangles": 400,
+        "material": "City_roof_diffuse.dds",
+        "minimum_triangle_area": 0.0013679969007007987
+      },
+      {
+        "vertices": 1930,
+        "triangles": 868,
+        "material": "City_detail_diffuse.dds",
+        "minimum_triangle_area": 6.533965652442321e-05
+      },
+      {
+        "vertices": 137,
+        "triangles": 60,
+        "material": "City_glass_silver_diffuse.dds",
+        "minimum_triangle_area": 0.01154159967416886
+      },
+      {
+        "vertices": 6,
+        "triangles": 2,
+        "material": "City_screen_diffuse.dds",
+        "minimum_triangle_area": 0.2177999762542745
+      }
+    ],
+    "size": [
+      4.440000534057617,
+      3.7800002098083496,
+      3.4560000896453857
+    ],
+    "source_vertices": 3812,
+    "foundation": {
+      "outline": [
+        [
+          -2.22,
+          -1.782
+        ],
+        [
+          -2.112,
+          -1.89
+        ],
+        [
+          2.112,
+          -1.89
+        ],
+        [
+          2.22,
+          -1.782
+        ],
+        [
+          2.22,
+          1.782
+        ],
+        [
+          2.112,
+          1.89
+        ],
+        [
+          -2.112,
+          1.89
+        ],
+        [
+          -2.22,
+          1.782
+        ]
+      ],
+      "lower": -0.9600000381469727,
+      "upper": 0.035999998450279236,
+      "mesh_sha256": "3185393dffca5cc7f93e98b7dd323eceac4f674334dbb7f2b33f74d3c76317d1"
+    }
+  },
+  "quarter_mixed": {
+    "parts": [
+      {
+        "vertices": 281,
+        "triangles": 122,
+        "material": "City_glass_diffuse.dds",
+        "minimum_triangle_area": 0.00374200565861344
+      },
+      {
+        "vertices": 1821,
+        "triangles": 810,
+        "material": "City_concrete_diffuse.dds",
+        "minimum_triangle_area": 0.000611992094356662
+      },
+      {
+        "vertices": 802,
+        "triangles": 424,
+        "material": "City_roof_diffuse.dds",
+        "minimum_triangle_area": 0.001108800764513716
+      },
+      {
+        "vertices": 998,
+        "triangles": 448,
+        "material": "City_detail_diffuse.dds",
+        "minimum_triangle_area": 6.533981624493952e-05
+      },
+      {
+        "vertices": 115,
+        "triangles": 48,
+        "material": "City_glass_silver_diffuse.dds",
+        "minimum_triangle_area": 0.013355978603211036
+      }
+    ],
+    "size": [
+      4.440000534057617,
+      3.7800002098083496,
+      2.7960000038146973
+    ],
+    "source_vertices": 3216,
+    "foundation": {
+      "outline": [
+        [
+          -2.22,
+          -1.782
+        ],
+        [
+          -2.112,
+          -1.89
+        ],
+        [
+          2.112,
+          -1.89
+        ],
+        [
+          2.22,
+          -1.782
+        ],
+        [
+          2.22,
+          1.782
+        ],
+        [
+          2.112,
+          1.89
+        ],
+        [
+          -2.112,
+          1.89
+        ],
+        [
+          -2.22,
+          1.782
+        ]
+      ],
+      "lower": -0.9600000381469727,
+      "upper": 0.035999998450279236,
+      "mesh_sha256": "c13ea77ac61c0905c4861c03a56f08456ee5be87ce302e6b2637c219178cdadf"
+    }
+  },
+  "quarter_residential": {
+    "parts": [
+      {
+        "vertices": 271,
+        "triangles": 118,
+        "material": "City_glass_diffuse.dds",
+        "minimum_triangle_area": 0.011541582653044754
+      },
+      {
+        "vertices": 2143,
+        "triangles": 910,
+        "material": "City_concrete_diffuse.dds",
+        "minimum_triangle_area": 0.0008414982651698145
+      },
+      {
+        "vertices": 925,
+        "triangles": 460,
+        "material": "City_roof_diffuse.dds",
+        "minimum_triangle_area": 0.0016291694716857544
+      },
+      {
+        "vertices": 954,
+        "triangles": 448,
+        "material": "City_detail_diffuse.dds",
+        "minimum_triangle_area": 0.0001832818257934769
+      },
+      {
+        "vertices": 99,
+        "triangles": 44,
+        "material": "City_glass_silver_diffuse.dds",
+        "minimum_triangle_area": 0.01275118068379911
+      }
+    ],
+    "size": [
+      4.440000534057617,
+      3.7800002098083496,
+      2.6460001468658447
+    ],
+    "source_vertices": 3424,
+    "foundation": {
+      "outline": [
+        [
+          -2.22,
+          -1.782
+        ],
+        [
+          -2.112,
+          -1.89
+        ],
+        [
+          2.112,
+          -1.89
+        ],
+        [
+          2.22,
+          -1.782
+        ],
+        [
+          2.22,
+          1.782
+        ],
+        [
+          2.112,
+          1.89
+        ],
+        [
+          -2.112,
+          1.89
+        ],
+        [
+          -2.22,
+          1.782
+        ]
+      ],
+      "lower": -0.9600000381469727,
+      "upper": 0.035999998450279236,
+      "mesh_sha256": "340cbc981e526524dcbce84abd77c0d002c450cc96ef047f576e51cc3bca8511"
+    }
+  },
+  "stelander_spire": {
+    "parts": [
+      {
+        "vertices": 715,
+        "triangles": 312,
+        "material": "City_concrete_diffuse.dds",
+        "minimum_triangle_area": 0.0001530006707204567
+      },
+      {
+        "vertices": 361,
+        "triangles": 162,
+        "material": "City_roof_diffuse.dds",
+        "minimum_triangle_area": 0.00040729321402830444
+      },
+      {
+        "vertices": 1234,
+        "triangles": 532,
+        "material": "City_detail_diffuse.dds",
+        "minimum_triangle_area": 1.6334914131105803e-05
+      },
+      {
+        "vertices": 290,
+        "triangles": 124,
+        "material": "City_glass_teal_diffuse.dds",
+        "minimum_triangle_area": 0.00204919546821595
+      },
+      {
+        "vertices": 70,
+        "triangles": 30,
+        "material": "City_glass_bronze_diffuse.dds",
+        "minimum_triangle_area": 0.0029401519333751933
+      },
+      {
+        "vertices": 4,
+        "triangles": 2,
+        "material": "City_screen_diffuse.dds",
+        "minimum_triangle_area": 0.10124997968290855
+      }
+    ],
+    "size": [
+      1.1399999856948853,
+      1.0499999523162842,
+      5.264999866485596
+    ],
+    "source_vertices": 2044,
+    "foundation": {
+      "outline": [
+        [
+          -0.57,
+          -0.471
+        ],
+        [
+          -0.516,
+          -0.525
+        ],
+        [
+          0.516,
+          -0.525
+        ],
+        [
+          0.57,
+          -0.471
+        ],
+        [
+          0.57,
+          0.471
+        ],
+        [
+          0.516,
+          0.525
+        ],
+        [
+          -0.516,
+          0.525
+        ],
+        [
+          -0.57,
+          0.471
+        ]
+      ],
+      "lower": -0.9599999785423279,
+      "upper": 0.017999999225139618,
+      "mesh_sha256": "caa54e61921de498956673f0b5190497d91838bc08f87880aa991269ad142766"
+    }
+  },
+  "stelander_twin": {
+    "parts": [
+      {
+        "vertices": 792,
+        "triangles": 330,
+        "material": "City_concrete_diffuse.dds",
+        "minimum_triangle_area": 0.0004454767891440378
+      },
+      {
+        "vertices": 362,
+        "triangles": 174,
+        "material": "City_roof_diffuse.dds",
+        "minimum_triangle_area": 0.00040729212368407824
+      },
+      {
+        "vertices": 945,
+        "triangles": 420,
+        "material": "City_detail_diffuse.dds",
+        "minimum_triangle_area": 1.6334914131105803e-05
+      },
+      {
+        "vertices": 192,
+        "triangles": 86,
+        "material": "City_glass_teal_diffuse.dds",
+        "minimum_triangle_area": 0.0024946669148472596
+      },
+      {
+        "vertices": 198,
+        "triangles": 86,
+        "material": "City_glass_bronze_diffuse.dds",
+        "minimum_triangle_area": 0.003248281780587823
+      },
+      {
+        "vertices": 120,
+        "triangles": 56,
+        "material": "City_glass_silver_diffuse.dds",
+        "minimum_triangle_area": 0.0018359968796717156
+      },
+      {
+        "vertices": 8,
+        "triangles": 4,
+        "material": "City_screen_diffuse.dds",
+        "minimum_triangle_area": 0.04961246908856806
+      }
+    ],
+    "size": [
+      1.1399999856948853,
+      1.0499999523162842,
+      4.563000202178955
+    ],
+    "source_vertices": 2048,
+    "foundation": {
+      "outline": [
+        [
+          -0.57,
+          -0.471
+        ],
+        [
+          -0.516,
+          -0.525
+        ],
+        [
+          0.516,
+          -0.525
+        ],
+        [
+          0.57,
+          -0.471
+        ],
+        [
+          0.57,
+          0.471
+        ],
+        [
+          0.516,
+          0.525
+        ],
+        [
+          -0.516,
+          0.525
+        ],
+        [
+          -0.57,
+          0.471
+        ]
+      ],
+      "lower": -0.9599999785423279,
+      "upper": 0.017999999225139618,
+      "mesh_sha256": "01f800b3be76006a669ad6b1d5ae12e159f2c693c19597ceda3285bf3eac80ad"
+    }
+  },
+  "stelander_arcology": {
+    "parts": [
+      {
+        "vertices": 840,
+        "triangles": 358,
+        "material": "City_concrete_diffuse.dds",
+        "minimum_triangle_area": 0.0004454764860908395
+      },
+      {
+        "vertices": 386,
+        "triangles": 186,
+        "material": "City_roof_diffuse.dds",
+        "minimum_triangle_area": 0.0004072916090405895
+      },
+      {
+        "vertices": 1037,
+        "triangles": 448,
+        "material": "City_detail_diffuse.dds",
+        "minimum_triangle_area": 1.6334914131105803e-05
+      },
+      {
+        "vertices": 166,
+        "triangles": 66,
+        "material": "City_glass_teal_diffuse.dds",
+        "minimum_triangle_area": 0.0036413995453108195
+      },
+      {
+        "vertices": 186,
+        "triangles": 80,
+        "material": "City_glass_bronze_diffuse.dds",
+        "minimum_triangle_area": 0.0001214996019646106
+      },
+      {
+        "vertices": 210,
+        "triangles": 86,
+        "material": "City_glass_silver_diffuse.dds",
+        "minimum_triangle_area": 0.00379259981050442
+      },
+      {
+        "vertices": 4,
+        "triangles": 2,
+        "material": "City_screen_diffuse.dds",
+        "minimum_triangle_area": 0.15401250250415166
+      }
+    ],
+    "size": [
+      1.1399999856948853,
+      1.0499999523162842,
+      4.049999713897705
+    ],
+    "source_vertices": 2164,
+    "foundation": {
+      "outline": [
+        [
+          -0.57,
+          -0.471
+        ],
+        [
+          -0.516,
+          -0.525
+        ],
+        [
+          0.516,
+          -0.525
+        ],
+        [
+          0.57,
+          -0.471
+        ],
+        [
+          0.57,
+          0.471
+        ],
+        [
+          0.516,
+          0.525
+        ],
+        [
+          -0.516,
+          0.525
+        ],
+        [
+          -0.57,
+          0.471
+        ]
+      ],
+      "lower": -0.9599999785423279,
+      "upper": 0.017999999225139618,
+      "mesh_sha256": "6a0a645165054db63ffe14b8a75adb3331118d9fda434698be37b00a2bb221f6"
+    }
+  },
+  "landmarks": {
+    "factory": {
+      "path": "gfx/models/buildings/wasterland_special/ADISCORD_factory.mesh",
+      "outline": [
+        [
+          -0.456055,
+          -0.045898
+        ],
+        [
+          -0.446289,
+          -0.108398
+        ],
+        [
+          -0.079102,
+          -0.491211
+        ],
+        [
+          -0.008789,
+          -0.499023
+        ],
+        [
+          0.010742,
+          -0.499023
+        ],
+        [
+          0.075195,
+          -0.467773
+        ],
+        [
+          0.09082,
+          -0.459961
+        ],
+        [
+          0.393555,
+          -0.186523
+        ],
+        [
+          0.456055,
+          -0.124023
+        ],
+        [
+          0.456055,
+          -0.116211
+        ],
+        [
+          0.420898,
+          0.204102
+        ],
+        [
+          0.172852,
+          0.452148
+        ],
+        [
+          0.116211,
+          0.493164
+        ],
+        [
+          0.092773,
+          0.499023
+        ],
+        [
+          -0.053711,
+          0.499023
+        ],
+        [
+          -0.379883,
+          0.270508
+        ],
+        [
+          -0.413086,
+          0.243164
+        ],
+        [
+          -0.456055,
+          -0.02832
+        ]
+      ],
+      "sha256": "24de1a88e402c283db4afa19650fe1ab60489b85d9d2804d0b23ad12ef25c69d",
+      "minimum": [
+        -0.4560549855232239,
+        -0.3212890326976776,
+        -0.4990230202674866
+      ],
+      "maximum": [
+        0.4560549855232239,
+        0.3212890028953552,
+        0.4990229904651642
+      ]
+    },
+    "reactor": {
+      "path": "gfx/models/buildings/wasterland_special/ADISCORD_reactor.mesh",
+      "outline": [
+        [
+          -0.499023,
+          0.006836
+        ],
+        [
+          -0.479492,
+          -0.161133
+        ],
+        [
+          -0.46582,
+          -0.19043
+        ],
+        [
+          -0.458008,
+          -0.206055
+        ],
+        [
+          -0.438477,
+          -0.223633
+        ],
+        [
+          0.000977,
+          -0.49707
+        ],
+        [
+          0.09082,
+          -0.499023
+        ],
+        [
+          0.383789,
+          -0.375977
+        ],
+        [
+          0.422852,
+          -0.342773
+        ],
+        [
+          0.47168,
+          -0.206055
+        ],
+        [
+          0.499023,
+          0.323242
+        ],
+        [
+          0.493164,
+          0.358398
+        ],
+        [
+          0.487305,
+          0.368164
+        ],
+        [
+          0.303711,
+          0.487305
+        ],
+        [
+          -0.235352,
+          0.499023
+        ],
+        [
+          -0.311523,
+          0.499023
+        ],
+        [
+          -0.327148,
+          0.495117
+        ],
+        [
+          -0.354492,
+          0.477539
+        ],
+        [
+          -0.362305,
+          0.47168
+        ],
+        [
+          -0.448242,
+          0.395508
+        ],
+        [
+          -0.489258,
+          0.319336
+        ],
+        [
+          -0.499023,
+          0.102539
+        ]
+      ],
+      "sha256": "ad74dd63d4cf5cf802f89dde21d582ab491b8ef7296dc8c3812ed7fc34cebf9f",
+      "minimum": [
+        -0.4990229904651642,
+        -0.21191395819187164,
+        -0.4990230202674866
+      ],
+      "maximum": [
+        0.4990229904651642,
+        0.21191397309303284,
+        0.4990229904651642
+      ]
+    },
+    "reactor_2": {
+      "path": "gfx/models/buildings/wasterland_special/ADISCORD_reactor_2.mesh",
+      "outline": [
+        [
+          -0.499023,
+          -0.499023
+        ],
+        [
+          0.499023,
+          -0.499023
+        ],
+        [
+          0.499023,
+          0.499023
+        ],
+        [
+          -0.499023,
+          0.499023
+        ]
+      ],
+      "sha256": "e1cb530316ddee9e2401bd52840f25da8faf039688e2e65bee892d67752c773c",
+      "minimum": [
+        -0.4990229904651642,
+        -0.4677730202674866,
+        -0.4990230202674866
+      ],
+      "maximum": [
+        0.4990229904651642,
+        0.4677729904651642,
+        0.4990229606628418
+      ]
+    },
+    "congress": {
+      "path": "gfx/models/buildings/stelander_special/ADISCORD_congress.mesh",
+      "outline": [
+        [
+          -0.473633,
+          -0.28418
+        ],
+        [
+          -0.446289,
+          -0.499023
+        ],
+        [
+          0.274414,
+          -0.499023
+        ],
+        [
+          0.43457,
+          -0.28418
+        ],
+        [
+          0.473633,
+          -0.198242
+        ],
+        [
+          0.473633,
+          0.198242
+        ],
+        [
+          0.43457,
+          0.28418
+        ],
+        [
+          0.274414,
+          0.499023
+        ],
+        [
+          -0.446289,
+          0.499023
+        ],
+        [
+          -0.473633,
+          0.286133
+        ]
+      ],
+      "sha256": "da16557f85cf79a4be91449ac81b921d595ca9ee16cf0cface8283ca1ccbf608",
+      "minimum": [
+        -0.4736329913139343,
+        -0.32324203848838806,
+        -0.4990230202674866
+      ],
+      "maximum": [
+        0.4736329913139343,
+        0.3232420086860657,
+        0.4990229606628418
+      ]
+    }
+  }
+}

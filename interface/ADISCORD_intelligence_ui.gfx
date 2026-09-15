@@ -1,4 +1,15 @@
 spriteTypes = {
+    frameAnimatedSpriteType = {
+        name = "GFX_ADISCORD_intelligence_creation_glow"
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_creation_glow.dds"
+        noOfFrames = 2
+        effectFile = "gfx/FX/buttonstate_blendframes.lua"
+        alwaysTransparent = yes
+        animation_rate_fps = 1
+        looping = yes
+        play_on_show = yes
+        pause_on_loop = 0.0
+    }
     corneredTileSpriteType = {
         name = "GFX_ADISCORD_intelligence_window_shell"
         size = { x = 317 y = 444 }
@@ -38,89 +49,73 @@ spriteTypes = {
     }
     spriteType = {
         name = "GFX_ADISCORD_intelligence_branches_header"
-        size = { x = 519 y = 109 }
         textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_branches_header.dds"
     }
     spriteType = {
         name = "GFX_ADISCORD_intelligence_agents_header"
-        size = { x = 519 y = 109 }
         textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_agents_header.dds"
     }
     spriteType = {
         name = "GFX_ADISCORD_intelligence_create"
-        size = { x = 508 y = 99 }
         textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_create.dds"
     }
     spriteType = {
         name = "GFX_ADISCORD_intelligence_branches_popup"
-        size = { x = 1092 y = 91 }
         textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_branches_popup.dds"
         effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
     }
     spriteType = {
         name = "GFX_ADISCORD_intelligence_branch_row"
-        size = { x = 1040 y = 136 }
         textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_branch_row.dds"
         effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
     }
     spriteType = {
         name = "GFX_ADISCORD_intelligence_operatives"
-        size = { x = 522 y = 76 }
         textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_operatives.dds"
     }
     spriteType = {
         name = "GFX_ADISCORD_intelligence_tabs"
-        size = { x = 524 y = 53 }
         textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_tabs.dds"
         noOfFrames = 2
     }
     spriteType = {
         name = "GFX_ADISCORD_intelligence_operation_row"
-        size = { x = 1038 y = 89 }
         textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_operation_row.dds"
         noOfFrames = 2
     }
     spriteType = {
         name = "GFX_ADISCORD_intelligence_crypto_row"
-        size = { x = 516 y = 87 }
         textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_crypto_row.dds"
     }
     spriteType = {
         name = "GFX_ADISCORD_intelligence_crypto_selected"
-        size = { x = 516 y = 87 }
         textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_crypto_selected.dds"
     }
     spriteType = {
         name = "GFX_ADISCORD_intelligence_required"
-        size = { x = 33 y = 29 }
         textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_required.dds"
     }
     spriteType = {
         name = "GFX_ADISCORD_intelligence_add_operative"
-        size = { x = 61 y = 83 }
         textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_add_operative.dds"
     }
     spriteType = {
         name = "GFX_ADISCORD_intelligence_mission_bar"
-        size = { x = 402 y = 79 }
         textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_mission_bar.dds"
         effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
     }
     textSpriteType = {
         name = "GFX_ADISCORD_intelligence_create_button"
-        size = { x = 221 y = 36 }
         textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_create_button.dds"
         effectFile = "gfx/FX/buttonstate.lua"
     }
     textSpriteType = {
         name = "GFX_ADISCORD_intelligence_command_button"
-        size = { x = 214 y = 28 }
         textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_command_button.dds"
         effectFile = "gfx/FX/buttonstate.lua"
     }
     spriteType = {
         name = "GFX_ADISCORD_intelligence_upgrade_card"
-        size = { x = 99 y = 80 }
         textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_upgrade_card.dds"
     }
 }

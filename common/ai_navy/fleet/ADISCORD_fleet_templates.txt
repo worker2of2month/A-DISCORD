@@ -1,0 +1,37 @@
+# Required groups fit the small coastal fleets; optional groups use later reinforcements.
+ADISCORD_coastal_dominance_fleet = {
+	required_taskforces = {
+		ADISCORD_coastal_patrol = 1
+		ADISCORD_coastal_strike = 1
+	}
+	optional_taskforces = {
+		ADISCORD_coastal_strike = 1
+	}
+}
+
+ADISCORD_coastal_escort_fleet = {
+	required_taskforces = {
+		ADISCORD_coastal_escort = 1
+	}
+	optional_taskforces = {
+		ADISCORD_coastal_escort = 1
+	}
+}
+
+ADISCORD_coastal_raiding_fleet = {
+	required_taskforces = {
+		ADISCORD_coastal_raiding = 1
+	}
+	optional_taskforces = {
+		ADISCORD_coastal_raiding = 1
+	}
+}
+
+ADISCORD_coastal_expedition_fleet = {
+	required_taskforces = {
+		ADISCORD_coastal_invasion_support = 1
+	}
+	optional_taskforces = {
+		ADISCORD_coastal_patrol = 1
+	}
+}

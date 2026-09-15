@@ -15,6 +15,9 @@ characters = {
 			civilian = {
 				large = GFX_portrait_STP_Maksim_Shabrat
 			}
+			army = {
+				large = GFX_portrait_STP_Maksim_Shabrat
+			}
 		}
 		country_leader = {
 			ideology = chauvinism_ideology
@@ -73,7 +76,7 @@ characters = {
 			}
 		}
 		corps_commander = {
-			traits = { old_guard }
+			traits = { old_guard STP_party_loyalist }
 			skill = 1
 			attack_skill = 1
 			defense_skill = 2
@@ -91,7 +94,7 @@ characters = {
 			}
 		}
 		corps_commander = {
-			traits = { organizer }
+			traits = { organizer STP_party_loyalist }
 			skill = 2
 			attack_skill = 2
 			defense_skill = 2
@@ -107,9 +110,12 @@ characters = {
 			army = {
 				large = GFX_portrait_STP_Leonid_Barchel
 			}
+			civilian = {
+				large = GFX_portrait_STP_Leonid_Barchel
+			}
 		}
 		corps_commander = {
-			traits = { commando }
+			traits = { commando STP_shabrat_loyalist }
 			skill = 3
 			attack_skill = 4
 			defense_skill = 2
@@ -127,7 +133,7 @@ characters = {
 			}
 		}
 		corps_commander = {
-			traits = { infantry_leader }
+			traits = { infantry_leader STP_ravel_undecided }
 			skill = 3
 			attack_skill = 2
 			defense_skill = 4
@@ -145,7 +151,7 @@ characters = {
 			}
 		}
 		corps_commander = {
-			traits = { brilliant_strategist }
+			traits = { brilliant_strategist STP_local_councils_loyalist }
 			skill = 4
 			attack_skill = 4
 			defense_skill = 3
@@ -163,7 +169,7 @@ characters = {
 			}
 		}
 		field_marshal = {
-			traits = { offensive_doctrine logistics_wizard }
+			traits = { offensive_doctrine logistics_wizard STP_drake_undecided }
 			skill = 5
 			attack_skill = 5
 			defense_skill = 4
@@ -181,7 +187,7 @@ characters = {
 			}
 		}
 		field_marshal = {
-			traits = { defensive_doctrine }
+			traits = { defensive_doctrine STP_party_loyalist }
 			skill = 6
 			attack_skill = 5
 			defense_skill = 6

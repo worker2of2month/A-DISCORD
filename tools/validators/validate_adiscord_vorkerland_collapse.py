@@ -62,11 +62,13 @@ except (ModuleNotFoundError, ImportError):
     )
 
 
+from tools.lib.paths import source_section
+
+
 ROOT = Path(__file__).resolve().parents[2]
 
 FOCUS_DECISION_FILES = (
-    Path("common/decisions/ADISCORD_vorkerland_focus_operations_decisions.txt"),
-    Path("common/decisions/ADISCORD_vorkerland_allied_support_decisions.txt"),
+    Path("common/decisions/ADISCORD_vorkerland_decisions.txt"),
 )
 SECTIONS = (
     "manifest",
@@ -498,7 +500,7 @@ def validate_countries(root: Path, issues: list[str]) -> None:
             if new_flag.convert("RGB").tobytes() == old_flag.convert("RGB").tobytes():
                 issues.append("PWR collapse cosmetic still reuses its administrative flag")
 
-    loc_path = root / "localisation" / "russian" / "ADISCORD_vorkerland_collapse_l_russian.yml"
+    loc_path = root / "localisation" / "russian" / "ADISCORD_vorkerland_l_russian.yml"
     raw = loc_path.read_bytes() if loc_path.exists() else b""
     if not raw.startswith(b"\xef\xbb\xbf"):
         issues.append("Vorkerland Russian localisation must retain UTF-8 BOM")
@@ -528,8 +530,8 @@ def validate_countries(root: Path, issues: list[str]) -> None:
         if f'{key}: "{name}"' not in cosmetic_loc:
             issues.append(f"{key} lacks its required short country name")
 
-    recovery_en = read(root, "localisation/english/ADISCORD_vorkerland_recovery_l_english.yml", issues)
-    recovery_ru = read(root, "localisation/russian/ADISCORD_vorkerland_recovery_l_russian.yml", issues)
+    recovery_en = source_section(read(root, "localisation/english/ADISCORD_vorkerland_l_english.yml", issues), 'recovery_l_english')
+    recovery_ru = source_section(read(root, "localisation/russian/ADISCORD_vorkerland_l_russian.yml", issues), 'recovery_l_russian')
     for localisation, required, banned in (
         (recovery_en, "Control Dorian Worx's technical administration.", "Control the utilitarian directorate."),
         (recovery_ru, "Играть за техническую администрацию Дориана Воркса.", "Играть за утилитарный директорат."),
@@ -547,7 +549,7 @@ def validate_countries(root: Path, issues: list[str]) -> None:
     if 'WRK_vorkerland_utilitarian_republic: "Utilitarian Republic of Vorkerland"' not in recovery_en:
         issues.append("Anton Bagley's utilitarian cosmetic lacks its English country name")
 
-    phase_effects = read(root, "common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt", issues)
+    phase_effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'phase_effects')
     tva_formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_tva")
     for token in (
         "set_country_flag = ADISCORD_vorkerland_route_utilitarian",
@@ -566,7 +568,7 @@ def validate_countries(root: Path, issues: list[str]) -> None:
         if forbidden in tva_formation:
             issues.append(f"Dorian's technocratic formation still borrows Anton's identity: {forbidden}")
 
-    collapse_effects = read(root, "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt", issues)
+    collapse_effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_effects')
     tva_setup = named_block(collapse_effects, "ADISCORD_vorkerland_setup_tva")
     for token in (
         "ruling_party = technocracy",
@@ -852,51 +854,51 @@ def validate_premature_wrk_release_contract(
 
 
 def validate_events(root: Path, issues: list[str]) -> None:
-    events = read(root, "events/ADISCORD_vorkerland_collapse_events.txt", issues)
-    effects = read(root, "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt", issues)
-    armistice_effects = read(
+    events = source_section(read(root, "events/ADISCORD_vorkerland_events.txt", issues), 'collapse_events')
+    effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_effects')
+    armistice_effects = source_section(read(
         root,
-        "common/scripted_effects/ADISCORD_vorkerland_itoran_armistice_effects.txt",
+        "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
         issues,
-    )
-    phase_effects = read(root, "common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt", issues)
-    force_design_effects = read(
+    ), 'itoran_armistice_effects')
+    phase_effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'phase_effects')
+    force_design_effects = source_section(read(
         root,
-        "common/scripted_effects/ADISCORD_vorkerland_force_design_effects.txt",
+        "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
         issues,
-    )
-    phase_events = read(root, "events/ADISCORD_vorkerland_phase_events.txt", issues)
+    ), 'force_design_effects')
+    phase_events = source_section(read(root, "events/ADISCORD_vorkerland_events.txt", issues), 'phase_events')
     capitulation_effects = read(
         root,
         "common/scripted_effects/ZZ_ADISCORD_capitulation_distribution_effects.txt",
         issues,
     )
-    release_effects = read(
+    release_effects = source_section(read(
         root,
-        "common/scripted_effects/ADISCORD_vorkerland_release_effects.txt",
+        "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
         issues,
-    )
-    decisions = read(root, "common/decisions/ADISCORD_vorkerland_collapse_decisions.txt", issues)
+    ), 'release_effects')
+    decisions = source_section(read(root, "common/decisions/ADISCORD_vorkerland_decisions.txt", issues), 'collapse_decisions')
     focus_decisions = "\n".join(
         read(root, path.as_posix(), issues)
         for path in FOCUS_DECISION_FILES
     )
-    diplomacy_decisions = read(
+    diplomacy_decisions = source_section(read(
         root,
-        "common/decisions/ADISCORD_vorkerland_diplomacy_decisions.txt",
+        "common/decisions/ADISCORD_vorkerland_decisions.txt",
         issues,
-    )
-    ideas = read(root, "common/ideas/ADISCORD_vorkerland_collapse_ideas.txt", issues)
-    loc = read(root, "localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml", issues)
+    ), 'diplomacy_decisions')
+    ideas = source_section(read(root, "common/ideas/ADISCORD_vorkerland_ideas.txt", issues), 'collapse_ideas')
+    loc = source_section(read(root, "localisation/russian/ADISCORD_vorkerland_l_russian.yml", issues), 'collapse_l_russian')
     countries_loc = read(root, "localisation/russian/countries_l_russian.yml", issues)
     state_loc = read(root, "localisation/russian/state_names_l_russian.yml", issues)
     victory_point_loc = read(root, "localisation/russian/victory_points_l_russian.yml", issues)
-    triggers = read(root, "common/scripted_triggers/ADISCORD_vorkerland_collapse_triggers.txt", issues)
-    phase_triggers = read(
+    triggers = source_section(read(root, "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt", issues), 'collapse_triggers')
+    phase_triggers = source_section(read(
         root,
-        "common/scripted_triggers/ADISCORD_vorkerland_phase_triggers.txt",
+        "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt",
         issues,
-    )
+    ), 'phase_triggers')
     on_actions = read(root, "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", issues)
     template_migration_on_actions = read(
         root,
@@ -915,12 +917,12 @@ def validate_events(root: Path, issues: list[str]) -> None:
     )
     wrk_history = read(root, "history/countries/WRK - WorkerLand.txt", issues)
     pwr_history = read(root, "history/countries/PWR - PostWarZone.txt", issues)
-    map_effects = read(root, "common/scripted_effects/ADISCORD_vorkerland_collapse_map_effects.txt", issues)
-    force_design_ai = read(
+    map_effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_map_effects')
+    force_design_ai = source_section(read(
         root,
-        "common/ai_strategy/ADISCORD_vorkerland_force_design_ai.txt",
+        "common/ai_strategy/ADISCORD_vorkerland_ai.txt",
         issues,
-    )
+    ), 'force_design_ai')
     news_loc = read(root, "localisation/russian/events_l_russian.yml", issues)
     superevent_loc = read(root, "localisation/russian/ADISCORD_superevents_l_russian.yml", issues)
     for label, source in (
@@ -1160,7 +1162,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
             "collapse.1 must record collapse, expire the Itoran DMZ, then execute the Tower block"
         )
 
-    expected_writer = "common/scripted_effects/ADISCORD_vorkerland_itoran_armistice_effects.txt"
+    expected_writer = "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
     for state_id in (90, 91, 93):
         writers = [
             relative
@@ -1287,7 +1289,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
         issues.append(
             "Unity Tower must have exactly one physical explosion producer across gameplay files"
         )
-    elif tower_launch_producers[0][0] != "events/ADISCORD_vorkerland_collapse_events.txt":
+    elif tower_launch_producers[0][0] != "events/ADISCORD_vorkerland_events.txt":
         issues.append("the sole Unity Tower explosion producer must remain in collapse events")
     if any(
         re.search(r"\bprovince\s*=\s*6713\b", block)
@@ -2276,9 +2278,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append(f"{news_id}: expected exactly one world-news definition")
             continue
         body = definition.group(1)
-        if "picture = GFX_event_vorkerland_northern_settlement" not in body:
+        if "picture = GFX_news_event_adiscord_vorkerland_northern_settlement" not in body:
             issues.append(f"{news_id}: Ivanland outcome must use the northern-settlement picture")
-        if "picture = GFX_event_vorkerland_explosion" in body:
+        if "picture = GFX_news_event_adiscord_vorkerland_explosion" in body:
             issues.append(f"{news_id}: Ivanland outcome still reuses the Unity Tower explosion")
         for token in (
             "major = yes", "is_triggered_only = yes", "fire_only_once = yes",
@@ -2955,13 +2957,15 @@ def validate_events(root: Path, issues: list[str]) -> None:
     if wkr_air_tags != {"WKR"}:
         issues.append("WKR air denial AI must have an exact WKR allowlist")
     for token in (
-        "equipment_production_min_factories id = fighter value = 2",
-        "equipment_production_min_factories id = cas value = 1",
+        "equipment_production_factor id = fighter value = 28",
+        "equipment_production_factor id = cas value = 10",
         "equipment_variant_production_factor id = ADISCORD_fighter_archetype value = 35",
         "equipment_variant_production_factor id = ADISCORD_cas_archetype value = 12",
     ):
         if token not in wkr_air_ai:
             issues.append(f"WKR air denial AI is missing {token}")
+    if "equipment_production_min_factories" in force_design_ai:
+        issues.append("claimant production must use the shared factory minimum budget")
     wkr_force_templates = named_block(
         effects, "ADISCORD_vorkerland_ensure_wkr_force_templates_v2"
     )
@@ -2993,11 +2997,11 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         if token not in wkr_home_guard:
             issues.append(f"WKR annex-independent home guard is missing {token}")
-    emergency_templates = read(
+    emergency_templates = source_section(read(
         root,
-        "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+        "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
         issues,
-    )
+    ), 'emergency_template_effects')
     worker_home_guard_template = named_block(
         emergency_templates,
         "ADISCORD_vorkerland_ensure_worker_home_guard_template",
@@ -3308,13 +3312,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
         effects, "ADISCORD_vorkerland_appoint_zao_administrator"
     )
     zao_cosmetics = named_block(cosmetics, "ZAO")
-    zao_focus_path = "common/national_focus/ADISCORD_vorkerland_zao_focus.txt"
-    zao_focus = read(root, zao_focus_path, issues)
-    english_loc = read(
-        root, "localisation/english/ADISCORD_vorkerland_collapse_l_english.yml", issues
-    )
+    zao_focus_path = "common/national_focus/ADISCORD_vorkerland_focus.txt"
+    zao_focus = source_section(read(root, zao_focus_path, issues), "zao_focus")
+    english_loc = source_section(read(
+        root, "localisation/english/ADISCORD_vorkerland_l_english.yml", issues
+    ), 'collapse_l_english')
     russian_loc_path = (
-        root / "localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml"
+        root / "localisation/russian/ADISCORD_vorkerland_l_russian.yml"
     )
     english_characters = read(root, "localisation/english/nsb_characters_l_english.yml", issues)
     bassam = named_block(wrk_characters, "WRK_Bassam_Zogby")
@@ -3411,9 +3415,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         if forbidden in zao_focus:
             issues.append(f"ZAO wartime focus programme contains forbidden token {forbidden}")
-    russian_loc = read(
-        root, "localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml", issues
-    )
+    russian_loc = source_section(read(
+        root, "localisation/russian/ADISCORD_vorkerland_l_russian.yml", issues
+    ), 'collapse_l_russian')
     for focus_id in expected_zao_focuses:
         for suffix in ("", "_desc"):
             key = f"{focus_id}{suffix}"
@@ -3495,7 +3499,7 @@ def claimant_decision_spending_contract_issues(
 
 
 def validate_ai(root: Path, issues: list[str]) -> None:
-    ai = read(root, "common/ai_strategy/ADISCORD_vorkerland_collapse_ai.txt", issues)
+    ai = source_section(read(root, "common/ai_strategy/ADISCORD_vorkerland_ai.txt", issues), 'collapse_ai')
     default_ai = read(root, "common/ai_strategy/default.txt", issues)
     defines = read(root, "common/defines/ADISCORD_defines_changes.lua", issues)
     if not balanced(ai):
@@ -3511,15 +3515,16 @@ def validate_ai(root: Path, issues: list[str]) -> None:
         issues.append("obsolete all-tags front commitment survived")
     if "ADISCORD_vorkerland_dynamic_regional_front_commitment" in ai or "country_trigger = {" in ai:
         issues.append("removed dynamic regional front fallback survived")
-    for token in (
-        "NDefines.NMilitary.PLAN_EXECUTE_RUSH = -200",
-        "NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_HIGH = 0.15",
-        "NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_HIGH = 0.25",
-        "NDefines.NAI.FRONT_EVAL_UNIT_SUPPLY_AND_ORG_LACK_IMPACT = 0.2",
-        "NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT = 0.0",
+    if "NDefines.NMilitary.PLAN_EXECUTE_RUSH = -200" not in defines:
+        issues.append("collapse AI is missing its small-front plan execution threshold")
+    for key in (
+        "NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_HIGH",
+        "NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_HIGH",
+        "NDefines.NAI.FRONT_EVAL_UNIT_SUPPLY_AND_ORG_LACK_IMPACT",
+        "NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT",
     ):
-        if token not in defines:
-            issues.append(f"collapse anti-freeze defines are missing {token}")
+        if re.search(rf"(?m)^\s*{re.escape(key)}\s*=", defines):
+            issues.append(f"collapse AI must inherit native readiness and supply checking: {key}")
 
     for strategy in re.findall(r"ai_strategy\s*=\s*\{([^{}]*)\}", ai, re.DOTALL):
         if "type = front_control" in strategy or "type = front_unit_request" in strategy:
@@ -3548,7 +3553,7 @@ def validate_ai(root: Path, issues: list[str]) -> None:
         "vad": ("VAD", {"WKR", "TVA"}, {"WTD"}, 100, "careful", "no"),
         "tva": ("TVA", {"WKR", "VAD"}, set(), 100, "careful", "no"),
         **{
-            tag.lower(): (tag, {"WKR", "VAD", "TVA"}, set(), 100, "rush", "yes")
+            tag.lower(): (tag, {"WKR", "VAD", "TVA"}, set(), 100, "balanced", "no")
             for tag in central_minors
         },
     }
@@ -3643,7 +3648,7 @@ def validate_ai(root: Path, issues: list[str]) -> None:
             if "front_unit_request tag = " in front and " value = 80" in front:
                 issues.append(f"{attacker}-{defender} supply-aware front still rushes 80 percent of the army")
         else:
-            for token in ("execution_type = rush", "manual_attack = yes"):
+            for token in ("execution_type = balanced", "manual_attack = no"):
                 if token not in front:
                     issues.append(f"{attacker}-{defender} anti-freeze front is missing {token}")
     piv = named_block(ai, "ADISCORD_vorkerland_piv_support_macri")
@@ -3683,15 +3688,15 @@ def validate_ai(root: Path, issues: list[str]) -> None:
 
 
 def validate_outcomes(root: Path, issues: list[str]) -> None:
-    maps = read(root, "common/scripted_effects/ADISCORD_vorkerland_collapse_map_effects.txt", issues)
-    triggers = read(root, "common/scripted_triggers/ADISCORD_vorkerland_collapse_triggers.txt", issues)
+    maps = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_map_effects')
+    triggers = source_section(read(root, "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt", issues), 'collapse_triggers')
     on_actions = read(root, "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", issues)
-    events = read(root, "events/ADISCORD_vorkerland_collapse_events.txt", issues)
-    category_source = read(
+    events = source_section(read(root, "events/ADISCORD_vorkerland_events.txt", issues), 'collapse_events')
+    category_source = source_section(read(
         root,
-        "common/decisions/categories/ADISCORD_vorkerland_collapse_categories.txt",
+        "common/decisions/categories/ADISCORD_vorkerland_categories.txt",
         issues,
-    )
+    ), 'collapse_categories')
     collapse_category = named_block(
         category_source, "ADISCORD_vorkerland_collapse_category"
     )
@@ -3768,9 +3773,9 @@ def validate_outcomes(root: Path, issues: list[str]) -> None:
     main_claimant = named_block(triggers, "ADISCORD_vorkerland_is_main_claimant")
     if set(re.findall(r"tag\s*=\s*([A-Z]{3})", main_claimant)) != {"WKR", "VAD", "TVA"}:
         issues.append("the main claimant trigger must name exactly WKR, VAD and TVA")
-    stalemate_triggers = read(
-        root, "common/scripted_triggers/ADISCORD_vorkerland_stalemate_triggers.txt", issues
-    )
+    stalemate_triggers = source_section(read(
+        root, "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt", issues
+    ), 'stalemate_triggers')
     central_minor = named_block(stalemate_triggers, "ADISCORD_vorkerland_is_central_minor")
     if "tag = TGD" in central_minor or set(re.findall(r"tag\s*=\s*([A-Z]{3})", central_minor)) != {
         "EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"
@@ -3819,17 +3824,17 @@ def validate_outcomes(root: Path, issues: list[str]) -> None:
 
 def validate_exhaustion(root: Path, issues: list[str]) -> None:
     on_actions = read(root, "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", issues)
-    effects = read(root, "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt", issues)
-    map_effects = read(
+    effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_effects')
+    map_effects = source_section(read(
         root,
-        "common/scripted_effects/ADISCORD_vorkerland_collapse_map_effects.txt",
+        "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
         issues,
-    )
-    dynamic = read(
+    ), 'collapse_map_effects')
+    dynamic = source_section(read(
         root,
-        "common/dynamic_modifiers/ADISCORD_vorkerland_collapse_dynamic_modifiers.txt",
+        "common/dynamic_modifiers/ADISCORD_vorkerland_dynamic_modifiers.txt",
         issues,
-    )
+    ), 'collapse_dynamic_modifiers')
     decisions = read(root, "common/decisions/ADISCORD_scenario_debug_decisions.txt", issues)
     categories = read(
         root,
@@ -3868,7 +3873,7 @@ def validate_exhaustion(root: Path, issues: list[str]) -> None:
         if f"{tag} = {{ ADISCORD_vorkerland_reset_civil_war_exhaustion = yes }}" not in finish:
             issues.append(f"terminal exhaustion cleanup does not reset {tag}")
     finalizer = named_block(
-        read(root, "common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt", issues),
+        source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'phase_effects'),
         "ADISCORD_vorkerland_finalize_reunified_wrk",
     )
     if "ADISCORD_vorkerland_finish_civil_war_exhaustion = yes" not in finalizer:
@@ -3957,7 +3962,7 @@ def validate_exhaustion(root: Path, issues: list[str]) -> None:
             if token not in block:
                 issues.append(f"{key} is missing {token}")
 
-    collapse_loc_path = root / "localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml"
+    collapse_loc_path = root / "localisation/russian/ADISCORD_vorkerland_l_russian.yml"
     debug_loc_path = root / "localisation/russian/ADISCORD_scenario_debug_l_russian.yml"
     for path, label in ((collapse_loc_path, "collapse"), (debug_loc_path, "scenario debug")):
         if not path.exists() or not path.read_bytes().startswith(b"\xef\xbb\xbf"):
@@ -3988,7 +3993,7 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
             if f"superevent_vorkerland_{name}" not in source:
                 issues.append(f"{relative}: missing Vorkerland {name} binding")
 
-    map_effects = read(root, "common/scripted_effects/ADISCORD_vorkerland_collapse_map_effects.txt", issues)
+    map_effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_map_effects')
     for name in ("dirty_opening", "worker_victory", "vlad_victory", "dorian_victory"):
         show_effect = named_block(map_effects, f"ADISCORD_vorkerland_show_{name}_superevent")
         if "ADISCORD_vorkerland_play_local_superevent_audio = yes" not in show_effect:
@@ -4240,7 +4245,8 @@ def validate_bracket_engine(effects: str, dirty: str, events: str, issues: list[
 
     join = named_block(effects, "ADISCORD_vorkerland_join_coalition_of_FROM")
     for token in (
-        "FROM = { save_global_event_target_as = ADISCORD_vorkerland_coalition_host }",
+        "FROM = {",
+        "add_to_faction = ROOT",
         "ADISCORD_vorkerland_splice_into_coalition_host_war = yes",
         "set_country_flag = ADISCORD_vorkerland_regional_auxiliary",
         "country_event = { id = ADISCORD_vorkerland_collapse.93 days = 1 }",
@@ -4248,26 +4254,45 @@ def validate_bracket_engine(effects: str, dirty: str, events: str, issues: list[
         if token not in join:
             issues.append(f"shared coalition-join body is missing {token}")
     splice = named_block(effects, "ADISCORD_vorkerland_splice_into_coalition_host_war")
+    membership = named_block(effects, "ADISCORD_vorkerland_verify_coalition_membership")
+    for label, block in (("join", join), ("splice", splice), ("membership", membership)):
+        if "ADISCORD_vorkerland_coalition_host" in block or "save_global_event_target_as" in block:
+            issues.append(f"coalition {label} shares a mutable host between countries")
+    if join.find("add_to_faction = ROOT") > join.find("ADISCORD_vorkerland_splice_into_coalition_host_war = yes"):
+        issues.append("coalition membership must precede war entry")
     if "declare_war_on" in splice:
         issues.append(
             "coalition join opens a fresh war instead of splicing into the host's war"
         )
     for token in (
-        "event_target:ADISCORD_vorkerland_coalition_host",
-        "add_to_faction = ROOT",
+        "is_in_faction = yes",
+        "faction_leader = {",
+        "ADISCORD_vorkerland_is_main_claimant = yes",
         "every_enemy_country",
-        "targeted_alliance = event_target:ADISCORD_vorkerland_coalition_host",
+        "targeted_alliance = PREV.PREV",
+        "enemy = PREV",
         "hostility_reason = asked_to_join",
+        "single_target_only = yes",
     ):
         if token not in splice:
             issues.append(f"coalition splice is missing {token}")
-    membership = named_block(effects, "ADISCORD_vorkerland_verify_coalition_membership")
+    enemy_scope = named_block(named_block(splice, "faction_leader"), "every_enemy_country")
+    join_war = named_block(named_block(enemy_scope, "ROOT"), "add_to_war")
+    if not join_war or "targeted_alliance = PREV.PREV" not in join_war or "enemy = PREV" not in join_war:
+        issues.append("coalition war entry must preserve the host-enemy-winner scope order")
     retry_flag = "ADISCORD_vorkerland_regional_auxiliary_retry_used"
     if membership.count(f"set_country_flag = {retry_flag}") != 1 or \
             membership.count(f"NOT = {{ has_country_flag = {retry_flag} }}") != 1:
         issues.append("coalition-membership verifier must own exactly one bounded retry")
     if "ADISCORD_vorkerland_splice_into_coalition_host_war = yes" not in membership:
         issues.append("coalition-membership verifier cannot repair a rejected splice")
+    if "NOT = { any_enemy_country = { NOT = { has_war_with = ROOT } } }" not in " ".join(named_block(named_block(membership, "if"), "limit").split()):
+        issues.append("coalition verification must cover every current war of the actual faction leader")
+    failure = next((block for block in named_blocks(membership, "else_if")
+                    if "set_country_flag = ADISCORD_vorkerland_regional_auxiliary_failed" in block), "")
+    failure_limit = named_block(failure, "limit")
+    if f"has_country_flag = {retry_flag}" not in failure_limit or "has_war = yes" not in failure_limit:
+        issues.append("coalition failure must follow an actual retry while the host is still at war")
 
     grant = named_block(effects, "ADISCORD_vorkerland_grant_local_bracket_autonomy")
     for token in (
@@ -4452,14 +4477,14 @@ def validate_bracket_modifiers(modifiers: str, issues: list[str]) -> None:
 
 
 def validate_brackets(root: Path, issues: list[str]) -> None:
-    triggers = read(root, "common/scripted_triggers/ADISCORD_vorkerland_collapse_triggers.txt", issues)
-    effects = read(root, "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt", issues)
-    dirty = read(root, "common/scripted_effects/ADISCORD_vorkerland_collapse_dirty_effects.txt", issues)
-    events = read(root, "events/ADISCORD_vorkerland_collapse_events.txt", issues)
-    decisions = read(root, "common/decisions/ADISCORD_vorkerland_collapse_decisions.txt", issues)
-    categories = read(root, "common/decisions/categories/ADISCORD_vorkerland_collapse_categories.txt", issues)
-    ai = read(root, "common/ai_strategy/ADISCORD_vorkerland_collapse_ai.txt", issues)
-    modifiers = read(root, "common/dynamic_modifiers/ADISCORD_vorkerland_collapse_dynamic_modifiers.txt", issues)
+    triggers = source_section(read(root, "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt", issues), 'collapse_triggers')
+    effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_effects')
+    dirty = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_dirty_effects')
+    events = source_section(read(root, "events/ADISCORD_vorkerland_events.txt", issues), 'collapse_events')
+    decisions = source_section(read(root, "common/decisions/ADISCORD_vorkerland_decisions.txt", issues), 'collapse_decisions')
+    categories = source_section(read(root, "common/decisions/categories/ADISCORD_vorkerland_categories.txt", issues), 'collapse_categories')
+    ai = source_section(read(root, "common/ai_strategy/ADISCORD_vorkerland_ai.txt", issues), 'collapse_ai')
+    modifiers = source_section(read(root, "common/dynamic_modifiers/ADISCORD_vorkerland_dynamic_modifiers.txt", issues), 'collapse_dynamic_modifiers')
     for label, source in (
         ("triggers", triggers),
         ("effects", effects),
@@ -4477,8 +4502,8 @@ def validate_brackets(root: Path, issues: list[str]) -> None:
     validate_bracket_modifiers(modifiers, issues)
     validate_emergency_templates(root, issues)
     for language, relative in (
-        ("english", "localisation/english/ADISCORD_vorkerland_collapse_l_english.yml"),
-        ("russian", "localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml"),
+        ("english", "localisation/english/ADISCORD_vorkerland_l_english.yml"),
+        ("russian", "localisation/russian/ADISCORD_vorkerland_l_russian.yml"),
     ):
         path = root / relative
         if not path.exists():
@@ -4495,7 +4520,7 @@ def validate_brackets(root: Path, issues: list[str]) -> None:
 
 def validate_emergency_templates(root: Path, issues: list[str]) -> None:
     """Ensure every late-spawn template is materialized in its owner scope."""
-    effects = read(root, "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt", issues)
+    effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'emergency_template_effects')
     if not balanced(effects):
         issues.append("emergency template effects: unbalanced braces or quote")
     for name, effect in EMERGENCY_TEMPLATE_EFFECTS.items():
@@ -4507,10 +4532,10 @@ def validate_emergency_templates(root: Path, issues: list[str]) -> None:
             if token not in block:
                 issues.append(f"template {name}: missing live metadata {token}")
     for relative in (
-        "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt",
-        "common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt",
-        "common/scripted_effects/ADISCORD_vorkerland_rom_tru_effects.txt",
-        "common/decisions/ADISCORD_vorkerland_collapse_decisions.txt",
+        "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+        "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+        "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+        "common/decisions/ADISCORD_vorkerland_decisions.txt",
     ):
         source = read(root, relative, issues)
         for match in re.finditer(r'create_unit\s*=\s*\{[^{}]*division_template\s*=\s*\\"([^"\\]+)', source):

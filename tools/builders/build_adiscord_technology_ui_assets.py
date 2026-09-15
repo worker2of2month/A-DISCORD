@@ -14,6 +14,7 @@ from tools.lib.adiscord_ui_contracts import (
     SpriteContract,
     contact_sheet,
     render_gfx_entry,
+    replace_gui_block,
     validate_contract_image,
 )
 from tools.lib.adiscord_ui_surfaces import (
@@ -35,7 +36,8 @@ from tools.lib.paths import repository_root
 ROOT = repository_root()
 BASE_GAME = Path(r"Z:\SteamLibrary\steamapps\common\Hearts of Iron IV")
 VANILLA_GUI = BASE_GAME / "interface/countrytechnologyview.gui"
-SOURCE = ROOT / "gfx/interface/production/source/production_surface_source.png"
+SOURCE_DIR = ROOT / "gfx/interface/technology/source"
+SOURCE = SOURCE_DIR / "technology_surface.png"
 OUTPUT_DIR = ROOT / "gfx/interface/technology/ui"
 PREVIEW = (
     ROOT
@@ -55,10 +57,29 @@ MUTED_GOLD = (146, 116, 62, 255)
 NEUTRAL_GREY = (88, 92, 92, 255)
 MUTED_GREEN = (64, 112, 76, 255)
 MUTED_BRANCH = (74, 88, 108, 255)
-COLD_WRITING_DARK = (118, 134, 137, 255)
+COLD_WRITING_DARK = (138, 150, 152, 255)
 COLD_WRITING_LIGHT = (225, 234, 235, 255)
 COLD_WRITING_EDGE = (76, 94, 96, 255)
 COLD_WRITING_HIGHLIGHT = (188, 201, 202, 255)
+
+FOLDER_TABS = (
+    ("infantry", "GFX_infantry_folder_tab", 1),
+    ("support", "GFX_support_folder_tab", 1),
+    ("armour", "GFX_armour_folder_tab", 2),
+    ("artillery", "GFX_artillery_folder_tab", 1),
+    ("naval", "GFX_naval_folder_tab", 2),
+    ("naval_support", "GFX_naval_support_tab", 1),
+    ("air", "GFX_air_techs_folder_tab", 2),
+    ("electronics", "GFX_techtree_engineering_tab", 1),
+    ("industry", "GFX_industry_folder_tab", 1),
+)
+FOLDER_TAB_CONTRACTS = tuple(
+    SpriteContract(
+        sprite, f"GFX_ADISCORD_technology_folder_{key}",
+        f"ADISCORD_technology_folder_{key}.dds", "spriteType", (182, 61), frames=2,
+    )
+    for key, sprite, _ in FOLDER_TABS
+)
 
 
 TECHNOLOGY_OVERVIEW_CONTRACTS = (
@@ -342,11 +363,28 @@ def render_gui() -> str:
     text = VANILLA_GUI.read_text(encoding="utf-8-sig")
     for old, (new, expected) in SPRITE_REPLACEMENTS.items():
         text = replace_counted(text, old, new, expected)
+    for name in ("limited_research_bonus_text", "research_speed_text"):
+        text = replace_gui_block(text, "instantTextboxType", name, (
+            (r'font\s*=\s*"hoi_18mbs"', 'font = "hoi_16mbs"'),
+            (r'maxWidth\s*=\s*\d+', 'maxWidth = 160'),
+        ))
+    for name, kind, x in (
+        ("focus_bonuses", "iconType", 214),
+        ("limited_research_bonus_value", "instantTextboxType", 247),
+        ("research_speed_icon", "iconType", 455),
+        ("research_speed_value", "instantTextboxType", 490),
+    ):
+        y = 108 if kind == "iconType" else 110
+        text = replace_gui_block(text, kind, name, (
+            (r'position\s*=\s*\{[^}]+\}', f'position = {{ x = {x} y = {y} }}'),
+        ))
     text = "\n".join(line.rstrip() for line in text.splitlines()) + "\n"
     return re.sub(r"(?m)^ +(?=\t)", "", text)
 
 
 def apply_tree_skin(text: str) -> str:
+    for contract, (_, _, count) in zip(FOLDER_TAB_CONTRACTS, FOLDER_TABS):
+        text = replace_counted(text, contract.source_name, contract.target_name, count)
     detail_background = re.compile(
         r'#SpriteType\s*=\s*"GFX_technology_info_bg"'
         r'(?P<gap>\s*)'
@@ -362,6 +400,9 @@ def apply_tree_skin(text: str) -> str:
         raise ValueError(f"technology detail background: expected 2, found {count}")
     for old, (new, expected) in TREE_SPRITE_REPLACEMENTS.items():
         text = replace_counted(text, old, new, expected)
+    text = replace_gui_block(text, "instantTextboxType", "tech_info_special_description", (
+        (r'font\s*=\s*"hoi4_typewriter16_inverted"', 'font = "hoi4_typewriter16"'),
+    ), expected=2)
     return text
 
 
@@ -408,12 +449,10 @@ def _overlay(source: Image.Image) -> Image.Image:
 def _research_slot(source: Image.Image) -> Image.Image:
     palette = PALETTES["technology"]
     output = metal_surface(source, (508, 99), palette, 0.76)
-    recessed_well(output, (7, 8, 52, 90), palette)
-    raised_field(output, (57, 8, 326, 70), palette)
-    recessed_well(output, (331, 8, 499, 73), palette)
-    recessed_well(output, (59, 75, 445, 93), palette)
-    raised_field(output, (450, 77, 500, 93), palette)
-    status_band(output, (62, 89, 442, 92), palette.accent)
+    # Native technology art spans both text rows. Keep its field unobstructed;
+    # only the engine's progressbar draws progress in the bottom channel.
+    recessed_well(output, (59, 76, 445, 91), palette)
+    status_band(output, (7, 10, 10, 87), palette.accent)
     partial_rails(output, (3, 3, 504, 95), palette)
     return output
 
@@ -425,17 +464,7 @@ def _empty_research_slot_glow(source: Image.Image) -> Image.Image:
     for index, color in enumerate(((55, 111, 116, 255), (77, 153, 156, 255))):
         frame = Image.new("RGBA", (475, 78), (0, 0, 0, 0))
         draw = ImageDraw.Draw(frame, "RGBA")
-        draw.rectangle((1, 1, 473, 76), fill=(4, 10, 13, 48), outline=color)
-        draw.rectangle((7, 7, 54, 70), fill=(3, 8, 10, 92), outline=color)
-        draw.rectangle((62, 8, 367, 34), fill=(3, 8, 10, 70), outline=color)
-        draw.rectangle((62, 42, 430, 69), fill=(3, 8, 10, 54), outline=color)
-        draw.rectangle((438, 42, 468, 69), fill=(3, 8, 10, 72), outline=color)
-        for x in range(72, 354, 28):
-            draw.line((x, 13, x, 29), fill=(color[0], color[1], color[2], 72))
-        pulse = ((70, 57), (124, 57), (150, 48), (184, 63), (224, 47), (269, 57), (314, 42), (356, 55), (414, 55))
-        draw.line(pulse, fill=color, width=2)
-        for x, y in pulse[1:-1:2]:
-            draw.ellipse((x - 2, y - 2, x + 2, y + 2), fill=palette.deep, outline=color)
+        draw.rectangle((1, 1, 473, 76), outline=color)
         output.alpha_composite(frame, (index * 475, 0))
     return output
 
@@ -469,8 +498,8 @@ def _overview_top(source: Image.Image) -> Image.Image:
     partial_rails(output, (5, 5, 542, 133), palette)
     recessed_well(output, (12, 12, 312, 96), palette)
     raised_field(output, (324, 5, 520, 101), palette)
-    recessed_well(output, (44, 104, 271, 132), palette)
-    recessed_well(output, (290, 104, 513, 132), palette)
+    recessed_well(output, (44, 104, 285, 132), palette)
+    recessed_well(output, (290, 104, 535, 132), palette)
     status_band(output, (8, 2, 539, 4), palette.accent)
     draw = ImageDraw.Draw(output, "RGBA")
     signal = (63, 110, 117, 190)
@@ -500,27 +529,33 @@ def _overview_bottom(source: Image.Image) -> Image.Image:
 
 def _tree_content_tile(source: Image.Image) -> Image.Image:
     palette = PALETTES["technology"]
-    output = metal_surface(source, (182, 186), palette, 0.52)
-    partial_rails(output, (4, 5, 177, 180), palette)
+    output = metal_surface(source, (182, 186), palette, 1.20)
     return output
 
 
 def _tree_window_tile(source: Image.Image) -> Image.Image:
     palette = PALETTES["technology"]
-    output = metal_surface(source, (190, 190), palette, 0.55)
+    output = metal_surface(source, (190, 190), palette, 1.10)
     outer_frame(output, (0, 0, 189, 189), palette)
     return output
 
 
 def _tree_stripes(source: Image.Image) -> Image.Image:
-    palette = PALETTES["technology"]
-    output = metal_surface(source, (122, 244), palette, 0.48)
-    draw = ImageDraw.Draw(output, "RGBA")
-    for x in range(0, 122, 30):
-        draw.line((x, 0, x, 243), fill=(55, 77, 78, 90))
-    for y in range(0, 244, 30):
-        draw.line((0, y, 121, y), fill=(55, 77, 78, 70))
-    draw.line((60, 0, 60, 243), fill=palette.accent)
+    # Mirrored quadrants give the native repeat tile identical opposing edges.
+    quarter = metal_surface(source, (61, 122), PALETTES["technology"], 0.60)
+    upper = Image.new("RGBA", (122, 122))
+    upper.alpha_composite(quarter)
+    upper.alpha_composite(ImageOps.mirror(quarter), (61, 0))
+    output = Image.new("RGBA", (122, 244))
+    output.alpha_composite(upper)
+    output.alpha_composite(ImageOps.flip(upper), (0, 122))
+    # Distribute the drafting grid over the repeat period without a short cell
+    # at the tile boundary. Its muted lines stay below research connectors.
+    draw = ImageDraw.Draw(output)
+    for x in (15, 45, 76, 106):
+        draw.line((x, 0, x, 243), fill=(42, 57, 55, 255))
+    for y in (15, 45, 76, 106, 137, 167, 198, 228):
+        draw.line((0, y, 121, y), fill=(42, 57, 55, 255))
     return output
 
 
@@ -536,7 +571,7 @@ def _cold_steel_surface(
     )
     luminance = ImageEnhance.Contrast(
         ImageOps.grayscale(fitted.convert("RGB"))
-    ).enhance(1.5)
+    ).enhance(2.5)
     output = ImageOps.colorize(
         luminance,
         black=COLD_WRITING_DARK[:3],
@@ -562,7 +597,9 @@ def _cold_steel_panel(
 
 def _detail_content_tile(source: Image.Image) -> Image.Image:
     palette = PALETTES["technology"]
-    output = metal_surface(source, (192, 192), palette, 0.96)
+    # Equipment statistics are generated by the engine with black typewriter
+    # text, independently of the special-description textbox's font.
+    output = _cold_steel_surface(source, (192, 192))
     ImageDraw.Draw(output, "RGBA").rectangle(
         (3, 3, 188, 188),
         outline=palette.edge,
@@ -601,17 +638,28 @@ def _technology_node(
     source: Image.Image,
     edge_color: tuple[int, int, int, int],
 ) -> Image.Image:
-    """Draw one node while keeping icon, title, and 17px status geometry fixed."""
+    """Keep the full-width equipment silhouette clear in both native item sizes."""
     palette = PALETTES["technology"]
-    output = metal_surface(source, (183, 84), palette, 0.68)
-    recessed_well(output, (7, 7, 69, 65), palette)
-    raised_field(output, (74, 7, 176, 65), palette)
-    status_band(output, (0, 67, 182, 83), edge_color)
+    output = metal_surface(source, (183, 84), palette, 1.35)
     draw = ImageDraw.Draw(output, "RGBA")
-    draw.rectangle((1, 1, 181, 82), outline=palette.deep, width=1)
-    draw.rectangle((2, 2, 180, 81), outline=edge_color, width=3)
-    draw.line((8, 65, 175, 65), fill=palette.edge_light)
+    draw.rectangle((1, 1, 181, 82), outline=palette.deep)
+    draw.rectangle((3, 3, 179, 80), outline=edge_color)
+    draw.line((7, 5, 175, 5), fill=palette.edge_light)
+    draw.line((6, 78, 176, 78), fill=palette.deep)
+    # Thin status rails remain visible behind the artwork without filling it.
+    draw.rectangle((6, 80, 176, 82), fill=edge_color)
+    for x in (5, 177):
+        draw.line((x, 6, x, 16), fill=edge_color, width=2)
+        draw.line((x, 67, x, 77), fill=edge_color, width=2)
     return output
+
+
+def _folder_tab(source: Image.Image, key: str) -> Image.Image:
+    row = next(index for index, (name, _, _) in enumerate(FOLDER_TABS) if name == key)
+    with Image.open(SOURCE_DIR / "folder_tabs.png") as atlas:
+        if atlas.mode != "RGBA" or atlas.size != (182, 61 * len(FOLDER_TABS)):
+            raise ValueError("folder tabs: expected a 182px RGBA atlas with two frames per row")
+        return atlas.crop((0, row * 61, 182, (row + 1) * 61))
 
 
 def _researching_strip(source: Image.Image) -> Image.Image:
@@ -700,6 +748,10 @@ def render_gfx() -> str:
         for contract in TECHNOLOGY_OVERVIEW_CONTRACTS
         if contract.source_name in overview_sources
     )
+    entries += "".join(
+        render_gfx_entry(contract, f"gfx/interface/technology/ui/{contract.filename}")
+        for contract in FOLDER_TAB_CONTRACTS
+    )
     return f"spriteTypes = {{\n{entries}}}\n"
 
 
@@ -737,6 +789,11 @@ def expected_outputs() -> dict[Path, bytes]:
         image = render_state_asset(contract, source)
         validate_contract_image(contract, image)
         state_assets.append((contract, image))
+    tab_assets = []
+    for contract, (key, _, _) in zip(FOLDER_TAB_CONTRACTS, FOLDER_TABS):
+        image = _folder_tab(source, key)
+        validate_contract_image(contract, image)
+        tab_assets.append((contract, image))
     preview_targets = {
         "GFX_ADISCORD_technology_slot",
         "GFX_ADISCORD_technology_empty_slot_glow",
@@ -766,7 +823,7 @@ def expected_outputs() -> dict[Path, bytes]:
             contact_sheet(
                 [
                     (contract.target_name, image)
-                    for contract, image in state_assets
+                    for contract, image in tab_assets + state_assets
                 ],
                 580,
             )
@@ -778,9 +835,15 @@ def expected_outputs() -> dict[Path, bytes]:
     outputs.update(
         {
             OUTPUT_DIR / contract.filename: dds_bytes(image)
-            for contract, image in state_assets
+            for contract, image in tab_assets + state_assets
         }
     )
+    # These backgrounds are selected directly by HOI4 after GUI creation.
+    for relative in (
+        "gfx/interface/research_line_bg.dds",
+        "gfx/interface/military_industrial_organization/research_line_mio_bg.dds",
+    ):
+        outputs[ROOT / relative] = outputs[SLOT]
     return outputs
 
 

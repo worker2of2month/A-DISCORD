@@ -3,9 +3,67 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
+import re
 from typing import Literal, Sequence
 
 from PIL import Image, ImageDraw, ImageFont
+
+
+def native_sprite_blocks(base_game: Path, names: set[str]) -> dict[str, str]:
+    """Read native surface declarations without discarding frame/tile metadata."""
+    blocks: dict[str, str] = {}
+    opener = re.compile(
+        r'\b(?:spriteType|textSpriteType|corneredTileSpriteType|frameAnimatedSpriteType)'
+        r'\s*=\s*\{\s*name\s*=\s*"([^"]+)"', re.IGNORECASE,
+    )
+    for path in sorted((base_game / "interface").rglob("*.gfx")):
+        text = path.read_text(encoding="utf-8-sig")
+        for match in opener.finditer(text):
+            if match[1] not in names:
+                continue
+            depth = 0
+            for end in range(text.index("{", match.start()), len(text)):
+                depth += (text[end] == "{") - (text[end] == "}")
+                if depth == 0:
+                    blocks[match[1]] = text[match.start():end + 1]
+                    break
+    missing = names - blocks.keys()
+    if missing:
+        raise ValueError(f"missing native sprite declarations: {sorted(missing)}")
+    return blocks
+
+
+def replace_gui_block(
+    text: str,
+    kind: str,
+    name: str,
+    replacements: Sequence[tuple[str, str]],
+    expected: int = 1,
+) -> str:
+    """Apply bounded property corrections to named widgets, rejecting drift."""
+    matches = list(re.finditer(
+        rf'\b{re.escape(kind)}\s*=\s*\{{\s*name\s*=\s*"{re.escape(name)}"',
+        text,
+    ))
+    if len(matches) != expected:
+        raise ValueError(f"{name}: expected {expected} widgets, found {len(matches)}")
+    for match in reversed(matches):
+        opening = text.index("{", match.start())
+        depth = 0
+        for end in range(opening, len(text)):
+            depth += (text[end] == "{") - (text[end] == "}")
+            if depth == 0:
+                break
+        else:
+            raise ValueError(f"{name}: unclosed GUI widget")
+        block = text[match.start():end + 1]
+        for pattern, replacement in replacements:
+            block, count = re.subn(pattern, lambda _: replacement, block)
+            if count != 1:
+                raise ValueError(f"{name}: expected one {pattern!r}, found {count}")
+        text = text[:match.start()] + block + text[end + 1:]
+    return text
 
 
 @dataclass(frozen=True)
@@ -45,9 +103,12 @@ def render_gfx_entry(contract: SpriteContract, texture_file: str) -> str:
     lines = [
         f"    {contract.kind} = {{",
         f'        name = "{contract.target_name}"',
-        f"        size = {{ x = {contract.total_size[0]} y = {contract.total_size[1]} }}",
-        f'        textureFile = "{texture_file}"',
     ]
+    if contract.kind == "corneredTileSpriteType":
+        lines.append(
+            f"        size = {{ x = {contract.total_size[0]} y = {contract.total_size[1]} }}"
+        )
+    lines.append(f'        textureFile = "{texture_file}"')
     if contract.frames != 1:
         lines.append(f"        noOfFrames = {contract.frames}")
     if contract.border_size is not None:

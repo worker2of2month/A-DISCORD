@@ -5,9 +5,12 @@ import unittest
 from pathlib import Path
 
 
+from tools.lib.paths import source_section
+
+
 ROOT = Path(__file__).resolve().parents[2]
-PHASE_EFFECTS = ROOT / "common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt"
-PHASE_EVENTS = ROOT / "events/ADISCORD_vorkerland_phase_events.txt"
+PHASE_EFFECTS = ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
+PHASE_EVENTS = ROOT / "events/ADISCORD_vorkerland_events.txt"
 
 
 def read(path: Path) -> str:
@@ -45,8 +48,8 @@ def event_block(source: str, event_id: str) -> str:
 class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.effects = read(PHASE_EFFECTS)
-        cls.events = read(PHASE_EVENTS)
+        cls.effects = source_section(read(PHASE_EFFECTS), 'phase_effects')
+        cls.events = source_section(read(PHASE_EVENTS), 'phase_events')
 
     def test_each_winner_is_consumed_by_materialized_wrk(self) -> None:
         contracts = (

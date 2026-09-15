@@ -33,6 +33,7 @@ EXPECTED_FIXED = {
     "GFX_ADISCORD_deployment_priority_title": ((159, 26), 1),
     "GFX_ADISCORD_deployment_priority_meter": ((108, 33), 1),
     "GFX_ADISCORD_deployment_action_button": ((71, 26), 1),
+    "GFX_ADISCORD_deployment_view_button": ((87, 26), 1),
     "GFX_ADISCORD_deployment_symbol_button": ((221, 36), 1),
     "GFX_ADISCORD_deployment_designer_button": ((166, 33), 1),
     "GFX_ADISCORD_deployment_add_line_button": ((210, 23), 2),
@@ -52,6 +53,7 @@ LIVE_FIXED = {
     "GFX_ADISCORD_deployment_priority_title",
     "GFX_ADISCORD_deployment_priority_meter",
     "GFX_ADISCORD_deployment_action_button",
+    "GFX_ADISCORD_deployment_view_button",
     "GFX_ADISCORD_deployment_symbol_button",
     "GFX_ADISCORD_deployment_designer_button",
     "GFX_ADISCORD_deployment_add_line_button",
@@ -84,6 +86,22 @@ def named_container_block(text: str, name: str) -> str:
 
 
 class DeploymentUiContractTests(unittest.TestCase):
+    def test_engine_selected_priority_backgrounds_use_generated_textures(self) -> None:
+        outputs = expected_outputs()
+        for native, generated in (
+            ("reinforcements", "reinforcement"),
+            ("upgrades", "upgrade"),
+            ("garrisons", "garrison"),
+            ("operations", "operations"),
+        ):
+            with self.subTest(role=native):
+                path = ROOT / f"gfx/interface/deploy_{native}_entry.dds"
+                self.assertIn(path, outputs.keys())
+                self.assertEqual(
+                    outputs[path],
+                    outputs[ASSET_DIR / f"ADISCORD_deployment_{generated}_row.dds"],
+                )
+
     def test_custom_gfx_is_additive_not_a_vanilla_path_override(self) -> None:
         self.assertTrue(GFX.is_file())
         self.assertFalse((ROOT / "interface/countrydeploymentview.gfx").exists())
@@ -114,6 +132,7 @@ class DeploymentUiContractTests(unittest.TestCase):
                     if name
                     in {
                         "GFX_ADISCORD_deployment_action_button",
+                        "GFX_ADISCORD_deployment_view_button",
                         "GFX_ADISCORD_deployment_symbol_button",
                         "GFX_ADISCORD_deployment_designer_button",
                         "GFX_ADISCORD_deployment_add_line_button",
@@ -170,7 +189,8 @@ class DeploymentUiContractTests(unittest.TestCase):
     def test_nested_deployment_controls_use_scoped_semantic_surfaces(self) -> None:
         gui = GUI.read_text(encoding="utf-8-sig")
         expected = {
-            "GFX_ADISCORD_deployment_action_button": 2,
+            "GFX_ADISCORD_deployment_action_button": 1,
+            "GFX_ADISCORD_deployment_view_button": 1,
             "GFX_ADISCORD_deployment_symbol_button": 2,
             "GFX_ADISCORD_deployment_designer_button": 1,
             "GFX_ADISCORD_deployment_add_line_button": 1,
@@ -233,7 +253,7 @@ class DeploymentUiContractTests(unittest.TestCase):
                     self.assertEqual(image.mode, "RGBA", path.name)
 
     def test_runtime_dds_directory_contains_only_builder_owned_outputs(self) -> None:
-        owned = {path for path in expected_outputs() if path.suffix == ".dds"}
+        owned = {path for path in expected_outputs() if path.suffix == ".dds" and path.parent == ASSET_DIR}
         checked_in = set(ASSET_DIR.glob("*.dds"))
         self.assertEqual(checked_in, owned)
 

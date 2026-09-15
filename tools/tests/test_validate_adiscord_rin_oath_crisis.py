@@ -80,7 +80,7 @@ class RinOathCrisisContractTests(unittest.TestCase):
         prompt = event_block(read(EVENTS), "ADISCORD_rin_crisis.1")
         self.assertIn("title = ADISCORD_rin_crisis.1.t", prompt)
         self.assertIn("desc = ADISCORD_rin_crisis.1.d", prompt)
-        self.assertIn("picture = GFX_report_event_generic_diplomacy", prompt)
+        self.assertIn("picture = GFX_event_adiscord_negotiation_table", prompt)
         self.assertIn("has_global_flag = ADISCORD_vorkerland_collapse_started", prompt)
         self.assertIn("has_global_flag = ADISCORD_vorkerland_collapse_wars_started", prompt)
         self.assertIn("ai_chance = { base = 100 }", prompt)

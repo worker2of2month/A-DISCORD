@@ -1,29 +1,147 @@
 VAL_military_operations = {
 
+	# Stelander contracts require buyer consent before payment.
+	VAL_cw_sell_arms_to_resistance = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_cw_trade_course NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } }
+		available = {
+			has_capitulated = no
+			NOT = { has_country_flag = VAL_cw_arms_offer_pending }
+			NOT = { has_war_with = STS }
+			NOT = { has_country_flag = VAL_cw_refused }
+			NOT = { has_equipment = { infantry_equipment < 3200 } }
+			STS = { exists = yes has_capitulated = no has_war_with = STP ADISCORD_economy_can_spend_50 = yes }
+		}
+		cost = 0
+		days_re_enable = 30
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = VAL_cw_arms_offer_tt
+			hidden_effect = {
+				set_country_flag = { flag = VAL_cw_arms_offer_pending value = 1 days = 21 }
+				STS = { country_event = { id = ADISCORD_STP_cw.50 } }
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_cw_offer_contract_formations = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_cw_trade_course NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } }
+		available = {
+			has_capitulated = no
+			NOT = { has_country_flag = VAL_cw_arms_offer_pending }
+			NOT = { has_war_with = STS }
+			NOT = { has_country_flag = VAL_cw_refused }
+			NOT = { has_equipment = { infantry_equipment < 4420 } }
+			NOT = { has_manpower < 12600 }
+			NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 96 } }
+			NOT = { has_equipment = { support_equipment < 60 } }
+			STS = { exists = yes has_capitulated = no has_war_with = STP ADISCORD_economy_can_spend_100 = yes any_owned_state = { is_controlled_by = PREV } }
+		}
+		cost = 0
+		days_re_enable = 30
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = VAL_cw_formations_offer_tt
+			hidden_effect = {
+				set_country_flag = { flag = VAL_cw_arms_offer_pending value = 2 days = 21 }
+				STS = { country_event = { id = ADISCORD_STP_cw.50 } }
+			}
+		}
+		ai_will_do = { base = 12 }
+	}
+
+	VAL_cw_begin_mobilization = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_cw_military_course NOT = { has_country_flag = VAL_cw_entered } NOT = { has_country_flag = VAL_cw_settled } }
+		available = { VAL_cw_can_intervene = yes }
+		cost = 0
+		days_re_enable = 21
+		fire_only_once = no
+		complete_effect = { VAL_cw_start_intervention = yes }
+		ai_will_do = { base = 10 }
+	}
+
 	VAL_ops_finance_cin_contacts = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
-		visible = {
-			has_country_flag = VAL_northern_operations_unlocked
-			country_exists = CIN
-		}
+		visible = { has_country_flag = VAL_northern_operations_unlocked country_exists = CIN }
 		available = {
 			NOT = { has_country_flag = VAL_foreign_operation_active }
+			has_capitulated = no
+			NOT = { has_war_with = CIN }
+			CIN = { exists = yes has_capitulated = no }
+			NOT = { check_variable = { var = VAL_CIN_influence value = 3 compare = greater_than_or_equals } }
 		}
-		custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes }
-		custom_cost_text = ADISCORD_cost_t50
-		cost = 10
+		custom_cost_trigger = { NOT = { has_political_power < 10 } ADISCORD_economy_can_spend_50 = yes }
+		custom_cost_text = VAL_cost_pp10_t50
+		cost = 0
 		days_remove = 21
 		days_re_enable = 60
 		complete_effect = {
-			ADISCORD_economy_spend_50 = yes
-			set_country_flag = VAL_foreign_operation_active
-			set_country_flag = VAL_operation_finance_cin_contacts
+			custom_effect_tooltip = VAL_northern_contacts_reserved_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = VAL_foreign_operation_active }
+						has_capitulated = no
+						NOT = { has_war_with = CIN }
+						CIN = { exists = yes has_capitulated = no }
+						NOT = { check_variable = { var = VAL_CIN_influence value = 3 compare = greater_than_or_equals } }
+						NOT = { has_political_power < 10 }
+						ADISCORD_economy_can_spend_50 = yes
+					}
+					add_political_power = -10
+					ADISCORD_economy_spend_50 = yes
+					set_country_flag = VAL_foreign_operation_active
+					set_country_flag = VAL_operation_finance_cin_contacts
+				}
+			}
+		}
+		cancel_trigger = {
+			hidden_trigger = { NOT = { AND = {
+				has_capitulated = no
+				NOT = { has_war_with = CIN }
+				CIN = { exists = yes has_capitulated = no }
+				NOT = { check_variable = { var = VAL_CIN_influence value = 3 compare = greater_than_or_equals } }
+			} } }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = VAL_northern_contacts_cancelled_tt
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = VAL_operation_finance_cin_contacts }
+					ADISCORD_economy_receive_50 = yes
+					clr_country_flag = VAL_operation_finance_cin_contacts
+					clr_country_flag = VAL_foreign_operation_active
+				}
+			}
 		}
 		remove_effect = {
-			add_to_variable = { var = VAL_CIN_influence value = 1 }
-			clr_country_flag = VAL_operation_finance_cin_contacts
-			clr_country_flag = VAL_foreign_operation_active
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = VAL_operation_finance_cin_contacts }
+					if = {
+						limit = {
+							has_capitulated = no
+							NOT = { has_war_with = CIN }
+							CIN = { exists = yes has_capitulated = no }
+							NOT = { check_variable = { var = VAL_CIN_influence value = 3 compare = greater_than_or_equals } }
+						}
+						add_to_variable = { var = VAL_CIN_influence value = 1 }
+						clamp_variable = { var = VAL_CIN_influence min = 0 max = 3 }
+						VAL_refresh_contract_modifier = yes
+						ADISCORD_economy_mark_dirty = yes
+					}
+					else = { ADISCORD_economy_receive_50 = yes }
+					clr_country_flag = VAL_operation_finance_cin_contacts
+					clr_country_flag = VAL_foreign_operation_active
+				}
+			}
 		}
 		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { ADISCORD_economy_can_spend_100 = yes } } }
 	}
@@ -31,28 +149,84 @@ VAL_military_operations = {
 	VAL_ops_sell_rifles_to_cin = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = VAL }
-		visible = {
-			has_country_flag = VAL_northern_operations_unlocked
-			country_exists = CIN
-		}
+		visible = { OR = { has_country_flag = VAL_northern_operations_unlocked has_completed_focus = VAL_Foreign_Broker_Licences has_completed_focus = VAL_Northern_Clearing_House } OR = { country_exists = CIN has_country_flag = VAL_operation_sell_rifles_to_cin } }
 		available = {
 			NOT = { has_country_flag = VAL_foreign_operation_active }
+			has_capitulated = no
+			NOT = { has_war_with = CIN }
+			CIN = { exists = yes has_capitulated = no }
 		}
-		custom_cost_trigger = { ADISCORD_has_2500_infantry_equipment = yes }
-		custom_cost_text = ADISCORD_cost_r2500
-		cost = 10
+		custom_cost_trigger = { NOT = { has_political_power < 10 } OR = { AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 5000 } } } AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 2500 } } } } }
+		custom_cost_text = VAL_cost_northern_export
+		cost = 0
 		days_remove = 21
 		days_re_enable = 60
 		complete_effect = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = -2500 producer = VAL }
-			set_country_flag = VAL_foreign_operation_active
-			set_country_flag = VAL_operation_sell_rifles_to_cin
+			custom_effect_tooltip = VAL_northern_export_reserved_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = VAL_foreign_operation_active }
+						has_capitulated = no
+						NOT = { has_war_with = CIN }
+						CIN = { exists = yes has_capitulated = no }
+						NOT = { has_political_power < 10 }
+						OR = { AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 5000 } } } AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 2500 } } } }
+					}
+					VAL_reserve_export_rifles = yes
+					if = {
+						limit = { has_country_flag = VAL_export_rifles_reserved }
+						add_political_power = -10
+						set_country_flag = VAL_foreign_operation_active
+						set_country_flag = VAL_operation_sell_rifles_to_cin
+					}
+				}
+			}
+		}
+		cancel_trigger = {
+			hidden_trigger = {
+				OR = {
+					has_capitulated = yes
+					AND = {
+						OR = { has_war_with = CIN NOT = { CIN = { exists = yes has_capitulated = no } } }
+						OR = {
+							NOT = { has_completed_focus = VAL_Contingency_Ledgers }
+							has_war_with = OSF
+							NOT = { OSF = { exists = yes has_capitulated = no } }
+						}
+					}
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = VAL_northern_export_cancelled_tt
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = VAL_operation_sell_rifles_to_cin }
+					VAL_refund_export_rifles = yes
+					clr_country_flag = VAL_operation_sell_rifles_to_cin
+					clr_country_flag = VAL_foreign_operation_active
+				}
+			}
 		}
 		remove_effect = {
-			ADISCORD_economy_receive_15 = yes
-			add_to_variable = { var = VAL_CIN_influence value = 2 }
-			clr_country_flag = VAL_operation_sell_rifles_to_cin
-			clr_country_flag = VAL_foreign_operation_active
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = VAL_operation_sell_rifles_to_cin }
+					if = {
+						limit = { has_country_flag = VAL_export_rifles_reserved has_capitulated = no NOT = { has_war_with = CIN } CIN = { exists = yes has_capitulated = no } }
+						CIN = { VAL_deliver_export_rifles = yes }
+					}
+					else_if = {
+						limit = { has_country_flag = VAL_export_rifles_reserved has_completed_focus = VAL_Contingency_Ledgers has_capitulated = no NOT = { has_war_with = OSF } OSF = { exists = yes has_capitulated = no } }
+						OSF = { VAL_deliver_export_rifles = yes }
+					}
+					else = { VAL_refund_export_rifles = yes }
+					clr_country_flag = VAL_export_rifles_reserved
+					clr_country_flag = VAL_operation_sell_rifles_to_cin
+					clr_country_flag = VAL_foreign_operation_active
+				}
+			}
 		}
 		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { has_equipment = { infantry_equipment > 11999 } } } }
 	}
@@ -60,27 +234,79 @@ VAL_military_operations = {
 	VAL_ops_finance_osf_contacts = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
-		visible = {
-			has_country_flag = VAL_northern_operations_unlocked
-			country_exists = OSF
-		}
+		visible = { has_country_flag = VAL_northern_operations_unlocked country_exists = OSF }
 		available = {
 			NOT = { has_country_flag = VAL_foreign_operation_active }
+			has_capitulated = no
+			NOT = { has_war_with = OSF }
+			OSF = { exists = yes has_capitulated = no }
+			NOT = { check_variable = { var = VAL_OSF_influence value = 3 compare = greater_than_or_equals } }
 		}
-		custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes }
-		custom_cost_text = ADISCORD_cost_t50
-		cost = 10
+		custom_cost_trigger = { NOT = { has_political_power < 10 } ADISCORD_economy_can_spend_50 = yes }
+		custom_cost_text = VAL_cost_pp10_t50
+		cost = 0
 		days_remove = 21
 		days_re_enable = 60
 		complete_effect = {
-			ADISCORD_economy_spend_50 = yes
-			set_country_flag = VAL_foreign_operation_active
-			set_country_flag = VAL_operation_finance_osf_contacts
+			custom_effect_tooltip = VAL_northern_contacts_reserved_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = VAL_foreign_operation_active }
+						has_capitulated = no
+						NOT = { has_war_with = OSF }
+						OSF = { exists = yes has_capitulated = no }
+						NOT = { check_variable = { var = VAL_OSF_influence value = 3 compare = greater_than_or_equals } }
+						NOT = { has_political_power < 10 }
+						ADISCORD_economy_can_spend_50 = yes
+					}
+					add_political_power = -10
+					ADISCORD_economy_spend_50 = yes
+					set_country_flag = VAL_foreign_operation_active
+					set_country_flag = VAL_operation_finance_osf_contacts
+				}
+			}
+		}
+		cancel_trigger = {
+			hidden_trigger = { NOT = { AND = {
+				has_capitulated = no
+				NOT = { has_war_with = OSF }
+				OSF = { exists = yes has_capitulated = no }
+				NOT = { check_variable = { var = VAL_OSF_influence value = 3 compare = greater_than_or_equals } }
+			} } }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = VAL_northern_contacts_cancelled_tt
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = VAL_operation_finance_osf_contacts }
+					ADISCORD_economy_receive_50 = yes
+					clr_country_flag = VAL_operation_finance_osf_contacts
+					clr_country_flag = VAL_foreign_operation_active
+				}
+			}
 		}
 		remove_effect = {
-			add_to_variable = { var = VAL_OSF_influence value = 1 }
-			clr_country_flag = VAL_operation_finance_osf_contacts
-			clr_country_flag = VAL_foreign_operation_active
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = VAL_operation_finance_osf_contacts }
+					if = {
+						limit = {
+							has_capitulated = no
+							NOT = { has_war_with = OSF }
+							OSF = { exists = yes has_capitulated = no }
+							NOT = { check_variable = { var = VAL_OSF_influence value = 3 compare = greater_than_or_equals } }
+						}
+						add_to_variable = { var = VAL_OSF_influence value = 1 }
+						clamp_variable = { var = VAL_OSF_influence min = 0 max = 3 }
+						VAL_refresh_contract_modifier = yes
+						ADISCORD_economy_mark_dirty = yes
+					}
+					else = { ADISCORD_economy_receive_50 = yes }
+					clr_country_flag = VAL_operation_finance_osf_contacts
+					clr_country_flag = VAL_foreign_operation_active
+				}
+			}
 		}
 		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { ADISCORD_economy_can_spend_100 = yes } } }
 	}
@@ -88,28 +314,84 @@ VAL_military_operations = {
 	VAL_ops_sell_rifles_to_osf = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = VAL }
-		visible = {
-			has_country_flag = VAL_northern_operations_unlocked
-			country_exists = OSF
-		}
+		visible = { OR = { has_country_flag = VAL_northern_operations_unlocked has_completed_focus = VAL_Foreign_Broker_Licences has_completed_focus = VAL_Northern_Clearing_House } OR = { country_exists = OSF has_country_flag = VAL_operation_sell_rifles_to_osf } }
 		available = {
 			NOT = { has_country_flag = VAL_foreign_operation_active }
+			has_capitulated = no
+			NOT = { has_war_with = OSF }
+			OSF = { exists = yes has_capitulated = no }
 		}
-		custom_cost_trigger = { ADISCORD_has_2500_infantry_equipment = yes }
-		custom_cost_text = ADISCORD_cost_r2500
-		cost = 10
+		custom_cost_trigger = { NOT = { has_political_power < 10 } OR = { AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 5000 } } } AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 2500 } } } } }
+		custom_cost_text = VAL_cost_northern_export
+		cost = 0
 		days_remove = 21
 		days_re_enable = 60
 		complete_effect = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = -2500 producer = VAL }
-			set_country_flag = VAL_foreign_operation_active
-			set_country_flag = VAL_operation_sell_rifles_to_osf
+			custom_effect_tooltip = VAL_northern_export_reserved_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = VAL_foreign_operation_active }
+						has_capitulated = no
+						NOT = { has_war_with = OSF }
+						OSF = { exists = yes has_capitulated = no }
+						NOT = { has_political_power < 10 }
+						OR = { AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 5000 } } } AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 2500 } } } }
+					}
+					VAL_reserve_export_rifles = yes
+					if = {
+						limit = { has_country_flag = VAL_export_rifles_reserved }
+						add_political_power = -10
+						set_country_flag = VAL_foreign_operation_active
+						set_country_flag = VAL_operation_sell_rifles_to_osf
+					}
+				}
+			}
+		}
+		cancel_trigger = {
+			hidden_trigger = {
+				OR = {
+					has_capitulated = yes
+					AND = {
+						OR = { has_war_with = OSF NOT = { OSF = { exists = yes has_capitulated = no } } }
+						OR = {
+							NOT = { has_completed_focus = VAL_Contingency_Ledgers }
+							has_war_with = CIN
+							NOT = { CIN = { exists = yes has_capitulated = no } }
+						}
+					}
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = VAL_northern_export_cancelled_tt
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = VAL_operation_sell_rifles_to_osf }
+					VAL_refund_export_rifles = yes
+					clr_country_flag = VAL_operation_sell_rifles_to_osf
+					clr_country_flag = VAL_foreign_operation_active
+				}
+			}
 		}
 		remove_effect = {
-			ADISCORD_economy_receive_15 = yes
-			add_to_variable = { var = VAL_OSF_influence value = 2 }
-			clr_country_flag = VAL_operation_sell_rifles_to_osf
-			clr_country_flag = VAL_foreign_operation_active
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = VAL_operation_sell_rifles_to_osf }
+					if = {
+						limit = { has_country_flag = VAL_export_rifles_reserved has_capitulated = no NOT = { has_war_with = OSF } OSF = { exists = yes has_capitulated = no } }
+						OSF = { VAL_deliver_export_rifles = yes }
+					}
+					else_if = {
+						limit = { has_country_flag = VAL_export_rifles_reserved has_completed_focus = VAL_Contingency_Ledgers has_capitulated = no NOT = { has_war_with = CIN } CIN = { exists = yes has_capitulated = no } }
+						CIN = { VAL_deliver_export_rifles = yes }
+					}
+					else = { VAL_refund_export_rifles = yes }
+					clr_country_flag = VAL_export_rifles_reserved
+					clr_country_flag = VAL_operation_sell_rifles_to_osf
+					clr_country_flag = VAL_foreign_operation_active
+				}
+			}
 		}
 		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { has_equipment = { infantry_equipment > 11999 } } } }
 	}
@@ -199,10 +481,10 @@ VAL_contract_obligations = {
 		allowed = { tag = VAL }
 		visible = { has_country_flag = VAL_quarterly_contract_active NOT = { has_country_flag = VAL_quarterly_contract_paid } }
 		available = { VAL_can_pay_quarterly_contract_norm = yes }
-		custom_cost_trigger = { ADISCORD_has_4000_infantry_equipment = yes }
-		custom_cost_text = ADISCORD_cost_r4000
-		cost = 10
-		complete_effect = { VAL_pay_quarterly_contract_norm = yes }
+		custom_cost_trigger = { NOT = { has_political_power < 10 } NOT = { has_equipment = { infantry_equipment < 4000 } } }
+		custom_cost_text = VAL_cost_pp10_r4000
+		cost = 0
+		complete_effect = { add_political_power = -10 VAL_pay_quarterly_contract_norm = yes }
 		ai_will_do = {
 			base = 50
 			modifier = { factor = 0 NOT = { VAL_can_pay_quarterly_contract_norm = yes } }
@@ -317,4 +599,188 @@ VAL_rework_debug = {
 			VAL_refresh_contract_reputation = yes
 		}
 	}
+}
+
+VAL_reclamation = {
+
+	VAL_reclamation_roads = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		state_target = yes
+		targets = { 24 42 48 54 55 56 57 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		visible = {
+			has_completed_focus = VAL_reclamation_survey
+			FROM = { is_owned_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } } }
+		}
+		available = {
+			has_capitulated = no
+			FROM = { is_owned_by = ROOT is_controlled_by = ROOT }
+			hidden_trigger = { VAL_reclamation_project_target_valid = yes }
+			custom_trigger_tooltip = { tooltip = VAL_reclamation_idle_tt NOT = { has_variable = VAL_reclamation_deposit } }
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		cost = 0
+		custom_cost_text = VAL_reclamation_cost
+		custom_cost_trigger = { ADISCORD_economy_can_spend_500 = yes }
+		days_remove = 90
+		fire_only_once = no
+		cancel_trigger = { OR = { has_capitulated = yes FROM = { OR = { NOT = { is_owned_by = ROOT } NOT = { is_controlled_by = ROOT } } } } }
+		complete_effect = { hidden_effect = { VAL_reclamation_begin_project = yes } }
+		remove_effect = { custom_effect_tooltip = VAL_reclamation_roads_result_tt hidden_effect = { VAL_reclamation_finish_project = yes } }
+		cancel_effect = { custom_effect_tooltip = VAL_reclamation_refund_tt hidden_effect = { VAL_reclamation_refund_project = yes } }
+		ai_will_do = { base = 5 modifier = { factor = 0 has_war = yes } }
+	}
+
+	VAL_reclamation_water = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		state_target = yes
+		targets = { 24 42 48 54 55 56 57 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		visible = {
+			has_completed_focus = VAL_reclamation_clean_water
+			FROM = { is_owned_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } check_variable = { var = VAL_reclamation_stage value = 1 compare = equals } }
+		}
+		available = {
+			has_capitulated = no
+			FROM = { is_owned_by = ROOT is_controlled_by = ROOT }
+			hidden_trigger = { VAL_reclamation_project_target_valid = yes }
+			custom_trigger_tooltip = { tooltip = VAL_reclamation_idle_tt NOT = { has_variable = VAL_reclamation_deposit } }
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		cost = 0
+		custom_cost_text = VAL_reclamation_cost
+		custom_cost_trigger = { ADISCORD_economy_can_spend_500 = yes }
+		days_remove = 90
+		fire_only_once = no
+		cancel_trigger = { OR = { has_capitulated = yes FROM = { OR = { NOT = { is_owned_by = ROOT } NOT = { is_controlled_by = ROOT } } } } }
+		complete_effect = { hidden_effect = { VAL_reclamation_begin_project = yes } }
+		remove_effect = { custom_effect_tooltip = VAL_reclamation_water_result_tt hidden_effect = { VAL_reclamation_finish_project = yes } }
+		cancel_effect = { custom_effect_tooltip = VAL_reclamation_refund_tt hidden_effect = { VAL_reclamation_refund_project = yes } }
+		ai_will_do = { base = 5 modifier = { factor = 0 has_war = yes } }
+	}
+
+	VAL_reclamation_settlement = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		state_target = yes
+		targets = { 24 42 48 54 55 56 57 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		visible = {
+			has_completed_focus = VAL_reclamation_return_home
+			FROM = { is_owned_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } check_variable = { var = VAL_reclamation_stage value = 2 compare = equals } }
+		}
+		available = {
+			has_capitulated = no
+			FROM = { is_owned_by = ROOT is_controlled_by = ROOT industrial_complex < 20 }
+			hidden_trigger = { VAL_reclamation_project_target_valid = yes }
+			custom_trigger_tooltip = { tooltip = VAL_reclamation_idle_tt NOT = { has_variable = VAL_reclamation_deposit } }
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		cost = 0
+		custom_cost_text = VAL_reclamation_cost
+		custom_cost_trigger = { ADISCORD_economy_can_spend_500 = yes }
+		days_remove = 90
+		fire_only_once = no
+		cancel_trigger = { OR = { has_capitulated = yes FROM = { OR = { NOT = { is_owned_by = ROOT } NOT = { is_controlled_by = ROOT } } } } }
+		complete_effect = { hidden_effect = { VAL_reclamation_begin_project = yes } }
+		remove_effect = { custom_effect_tooltip = VAL_reclamation_settlement_result_tt hidden_effect = { VAL_reclamation_finish_project = yes } }
+		cancel_effect = { custom_effect_tooltip = VAL_reclamation_refund_tt hidden_effect = { VAL_reclamation_refund_project = yes } }
+		ai_will_do = { base = 5 modifier = { factor = 0 has_war = yes } }
+	}
+}
+
+VAL_frontier = {
+    VAL_frontier_ultimatum_deadline = {
+        icon = generic_political_pressure
+        allowed = { tag = VAL }
+        activation = { always = no }
+        visible = { check_variable = { var = VAL_frontier_stage value = 1 compare = equals } }
+        available = { hidden_trigger = { always = no } }
+        is_good = no
+        days_mission_timeout = 21
+        selectable_mission = no
+        cancel_trigger = { NOT = { check_variable = { var = VAL_frontier_stage value = 1 compare = equals } } }
+        timeout_effect = { hidden_effect = { if = { limit = { check_variable = { var = VAL_frontier_stage value = 1 compare = equals } } VAL_frontier_show_refusal = yes } } }
+    }
+    VAL_frontier_demand_CIN = {
+        icon = generic_political_pressure
+        allowed = { tag = VAL }
+        visible = { has_completed_focus = VAL_frontier_security_plan CIN = { exists = yes is_subject = no } 58 = { is_owned_by = CIN } 59 = { is_owned_by = CIN } 60 = { is_owned_by = CIN } }
+        available = {
+            VAL_frontier_postwar = yes
+            has_war = no
+            custom_trigger_tooltip = { tooltip = VAL_frontier_idle_tt VAL_frontier_idle = yes }
+            CIN = { has_capitulated = no is_subject = no NOT = { is_in_faction_with = VAL } }
+            58 = { is_owned_by = CIN is_controlled_by = CIN } 59 = { is_owned_by = CIN is_controlled_by = CIN } 60 = { is_owned_by = CIN is_controlled_by = CIN }
+        }
+        cost = 75
+        days_re_enable = 180
+        complete_effect = {
+            custom_effect_tooltip = VAL_frontier_demand_CIN_tt
+            hidden_effect = { set_variable = { var = VAL_frontier_target value = 1 } VAL_frontier_record_ultimatum = yes CIN = { country_event = { id = val_rework.110 } } }
+        }
+        ai_will_do = { base = 3 modifier = { factor = 0 num_divisions < 24 } modifier = { factor = 0 ADISCORD_economy_ai_is_crisis = yes } }
+    }
+    VAL_frontier_demand_OSF = {
+        icon = generic_political_pressure
+        allowed = { tag = VAL }
+        visible = { has_completed_focus = VAL_frontier_security_plan OSF = { exists = yes is_subject = no } 61 = { is_owned_by = OSF } 62 = { is_owned_by = OSF } 63 = { is_owned_by = OSF } }
+        available = {
+            VAL_frontier_postwar = yes
+            has_war = no
+            custom_trigger_tooltip = { tooltip = VAL_frontier_idle_tt VAL_frontier_idle = yes }
+            OSF = { has_capitulated = no is_subject = no NOT = { is_in_faction_with = VAL } }
+            61 = { is_owned_by = OSF is_controlled_by = OSF } 62 = { is_owned_by = OSF is_controlled_by = OSF } 63 = { is_owned_by = OSF is_controlled_by = OSF }
+        }
+        cost = 75
+        days_re_enable = 180
+        complete_effect = {
+            custom_effect_tooltip = VAL_frontier_demand_OSF_tt
+            hidden_effect = { set_variable = { var = VAL_frontier_target value = 2 } VAL_frontier_record_ultimatum = yes OSF = { country_event = { id = val_rework.110 } } }
+        }
+        ai_will_do = { base = 3 modifier = { factor = 0 num_divisions < 24 } modifier = { factor = 0 ADISCORD_economy_ai_is_crisis = yes } }
+    }
+    VAL_frontier_demand_APH = {
+        icon = generic_political_pressure
+        allowed = { tag = VAL }
+        visible = { has_completed_focus = VAL_frontier_security_plan APH = { exists = yes is_subject = no } 64 = { is_owned_by = APH } 65 = { is_owned_by = APH } }
+        available = {
+            VAL_frontier_postwar = yes
+            has_war = no
+            custom_trigger_tooltip = { tooltip = VAL_frontier_idle_tt VAL_frontier_idle = yes }
+            APH = { has_capitulated = no is_subject = no NOT = { is_in_faction_with = VAL } }
+            64 = { is_owned_by = APH is_controlled_by = APH } 65 = { is_owned_by = APH is_controlled_by = APH }
+        }
+        cost = 75
+        days_re_enable = 180
+        complete_effect = {
+            custom_effect_tooltip = VAL_frontier_demand_APH_tt
+            hidden_effect = { set_variable = { var = VAL_frontier_target value = 3 } VAL_frontier_record_ultimatum = yes APH = { country_event = { id = val_rework.110 } } }
+        }
+        ai_will_do = { base = 3 modifier = { factor = 0 num_divisions < 24 } modifier = { factor = 0 ADISCORD_economy_ai_is_crisis = yes } }
+    }
+    VAL_frontier_demand_ERT = {
+        icon = generic_political_pressure
+        allowed = { tag = VAL }
+        visible = { has_completed_focus = VAL_frontier_return_irem ERT = { exists = yes is_subject = no } 168 = { is_owned_by = ERT } }
+        available = {
+            VAL_frontier_postwar = yes
+            has_war = no
+            custom_trigger_tooltip = { tooltip = VAL_frontier_idle_tt VAL_frontier_idle = yes }
+            ERT = { has_capitulated = no is_subject = no NOT = { is_in_faction_with = VAL } }
+            168 = { is_owned_by = ERT is_controlled_by = ERT }
+        }
+        cost = 75
+        days_re_enable = 180
+        complete_effect = {
+            custom_effect_tooltip = VAL_frontier_demand_ERT_tt
+            hidden_effect = { set_variable = { var = VAL_frontier_target value = 4 } VAL_frontier_record_ultimatum = yes ERT = { country_event = { id = val_rework.110 } } }
+        }
+        ai_will_do = { base = 3 modifier = { factor = 0 num_divisions < 24 } modifier = { factor = 0 ADISCORD_economy_ai_is_crisis = yes } }
+    }
 }

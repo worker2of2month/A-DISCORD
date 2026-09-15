@@ -33,7 +33,6 @@ spriteTypes = {
     }
     frameAnimatedSpriteType = {
         name = "GFX_ADISCORD_technology_empty_slot_glow"
-        size = { x = 950 y = 78 }
         textureFile = "gfx/interface/technology/ui/ADISCORD_technology_empty_slot_glow.dds"
         noOfFrames = 2
         effectFile = "gfx/FX/buttonstate_blendframes.lua"
@@ -45,24 +44,20 @@ spriteTypes = {
     }
     spriteType = {
         name = "GFX_ADISCORD_technology_slot"
-        size = { x = 508 y = 99 }
         textureFile = "gfx/interface/technology/ui/ADISCORD_technology_slot.dds"
     }
     spriteType = {
         name = "GFX_ADISCORD_technology_idea"
-        size = { x = 63 y = 63 }
         textureFile = "gfx/interface/technology/ui/ADISCORD_technology_idea.dds"
         effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
     }
     spriteType = {
         name = "GFX_ADISCORD_technology_tabs"
-        size = { x = 516 y = 42 }
         textureFile = "gfx/interface/technology/ui/ADISCORD_technology_tabs.dds"
         noOfFrames = 2
     }
     spriteType = {
         name = "GFX_ADISCORD_technology_top"
-        size = { x = 548 y = 138 }
         textureFile = "gfx/interface/technology/ui/ADISCORD_technology_top.dds"
         effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
     }
@@ -73,5 +68,50 @@ spriteTypes = {
         borderSize = { x = 182 y = 22 }
         effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
         tilingCenter = yes
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_technology_folder_infantry"
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_folder_infantry.dds"
+        noOfFrames = 2
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_technology_folder_support"
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_folder_support.dds"
+        noOfFrames = 2
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_technology_folder_armour"
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_folder_armour.dds"
+        noOfFrames = 2
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_technology_folder_artillery"
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_folder_artillery.dds"
+        noOfFrames = 2
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_technology_folder_naval"
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_folder_naval.dds"
+        noOfFrames = 2
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_technology_folder_naval_support"
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_folder_naval_support.dds"
+        noOfFrames = 2
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_technology_folder_air"
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_folder_air.dds"
+        noOfFrames = 2
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_technology_folder_electronics"
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_folder_electronics.dds"
+        noOfFrames = 2
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_technology_folder_industry"
+        textureFile = "gfx/interface/technology/ui/ADISCORD_technology_folder_industry.dds"
+        noOfFrames = 2
     }
 }

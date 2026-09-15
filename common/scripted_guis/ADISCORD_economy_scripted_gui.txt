@@ -3,8 +3,8 @@ scripted_gui = {
 		context_type = player_context
 		window_name = "ADISCORD_economy_treasury_topbar_window"
 		parent_window_token = top_bar
-		dirty = ADISCORD_economy_gui_update_var
-		# Keep the readout available in observer mode, matching Darkest Hour.
+		# Weekly settlements change treasury without a dashboard invalidation.
+		# Keep this small readout live, including when observing another country.
 		visible = { always = yes }
 		effects = {
 			ADISCORD_economy_treasury_topbar_open_click = { ADISCORD_economy_open_window = yes }

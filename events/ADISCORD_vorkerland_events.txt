@@ -1,0 +1,2960 @@
+# --- claimant_events ---
+add_namespace = ADISCORD_vorkerland_claimant
+
+# -----------------------------------------------------------------------------
+# WKR: arguments inside the worker front
+# -----------------------------------------------------------------------------
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.1
+	title = ADISCORD_vorkerland_claimant.1.t
+	desc = ADISCORD_vorkerland_claimant.1.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = WKR }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.1.a
+		ai_chance = { base = 55 modifier = { factor = 1.5 has_stability < 0.50 } }
+		add_political_power = 5
+		add_stability = 0.01
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.1.b
+		ai_chance = { base = 45 modifier = { factor = 1.5 has_war = yes } }
+		army_experience = 5
+		add_command_power = 5
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.2
+	title = ADISCORD_vorkerland_claimant.2.t
+	desc = ADISCORD_vorkerland_claimant.2.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = WKR }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.2.a
+		ai_chance = { base = 55 }
+		add_stability = 0.01
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.2.b
+		ai_chance = { base = 45 modifier = { factor = 1.5 has_war = yes } }
+		add_political_power = 5
+		add_command_power = 5
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.3
+	title = ADISCORD_vorkerland_claimant.3.t
+	desc = ADISCORD_vorkerland_claimant.3.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = WKR }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.3.a
+		ai_chance = { base = 65 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 75 producer = WKR }
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.3.b
+		ai_chance = { base = 35 }
+		add_command_power = 5
+		add_stability = 0.005
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.4
+	title = ADISCORD_vorkerland_claimant.4.t
+	desc = {
+		trigger = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+		text = ADISCORD_vorkerland_claimant.4.nikita.d
+	}
+	desc = {
+		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists } }
+		text = ADISCORD_vorkerland_claimant.4.anton.d
+	}
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = WKR }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.4.nikita.a
+		trigger = {
+			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+			has_government = pragmatism
+			has_country_leader_ideology = neo_vorkerism
+			has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+		}
+		ai_chance = { base = 60 modifier = { factor = 1.5 has_stability < 0.50 } }
+		add_stability = 0.01
+		add_political_power = 10
+		set_country_flag = ADISCORD_vorkerland_wkr_public_mandate
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.4.nikita.b
+		trigger = {
+			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+			has_government = pragmatism
+			has_country_leader_ideology = neo_vorkerism
+			has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+		}
+		ai_chance = { base = 40 modifier = { factor = 1.5 has_war = yes } }
+		add_command_power = 5
+		army_experience = 5
+		set_country_flag = ADISCORD_vorkerland_wkr_delegate_review
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.4.anton.a
+		trigger = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+			has_government = utilitarism
+			has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+		}
+		ai_chance = { base = 60 modifier = { factor = 1.5 has_war = yes } }
+		add_command_power = 5
+		add_political_power = 5
+		set_country_flag = ADISCORD_vorkerland_wkr_directive_council
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.4.anton.b
+		trigger = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+			has_government = utilitarism
+			has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+		}
+		ai_chance = { base = 40 modifier = { factor = 1.5 has_equipment = { infantry_equipment < 500 } } }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 50 producer = WKR }
+		set_country_flag = ADISCORD_vorkerland_wkr_reserve_authority
+	}
+}
+
+# -----------------------------------------------------------------------------
+# VAD: law, command, and the eastern depots
+# -----------------------------------------------------------------------------
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.10
+	title = ADISCORD_vorkerland_claimant.10.t
+	desc = ADISCORD_vorkerland_claimant.10.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = VAD }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.10.a
+		ai_chance = { base = 55 modifier = { factor = 1.5 has_stability < 0.50 } }
+		add_political_power = 5
+		add_stability = 0.01
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.10.b
+		ai_chance = { base = 45 modifier = { factor = 1.5 has_war = yes } }
+		add_command_power = 5
+		army_experience = 5
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.11
+	title = ADISCORD_vorkerland_claimant.11.t
+	desc = ADISCORD_vorkerland_claimant.11.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = VAD }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.11.a
+		ai_chance = { base = 55 }
+		add_stability = 0.01
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.11.b
+		ai_chance = { base = 45 modifier = { factor = 1.5 has_war = yes } }
+		army_experience = 5
+		add_command_power = 5
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.12
+	title = ADISCORD_vorkerland_claimant.12.t
+	desc = ADISCORD_vorkerland_claimant.12.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = VAD }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.12.a
+		ai_chance = { base = 65 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 75 producer = VAD }
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.12.b
+		ai_chance = { base = 35 }
+		add_command_power = 5
+		add_stability = 0.005
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.13
+	title = ADISCORD_vorkerland_claimant.13.t
+	desc = {
+		trigger = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+		text = ADISCORD_vorkerland_claimant.13.joint.d
+	}
+	desc = {
+		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed } }
+		text = ADISCORD_vorkerland_claimant.13.vlad.d
+	}
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = VAD }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.13.joint.a
+		trigger = {
+			has_global_flag = ADISCORD_vorkerland_joint_government_formed
+			has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+			has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+		}
+		ai_chance = { base = 60 modifier = { factor = 1.5 has_stability < 0.50 } }
+		add_stability = 0.01
+		add_political_power = 10
+		set_country_flag = ADISCORD_vorkerland_vad_joint_civil_guarantees
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.13.joint.b
+		trigger = {
+			has_global_flag = ADISCORD_vorkerland_joint_government_formed
+			has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+			has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+		}
+		ai_chance = { base = 40 modifier = { factor = 1.5 has_war = yes } }
+		add_command_power = 5
+		army_experience = 5
+		set_country_flag = ADISCORD_vorkerland_vad_joint_staff_primacy
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.13.vlad.a
+		trigger = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+		}
+		ai_chance = { base = 60 modifier = { factor = 1.5 has_stability < 0.50 } }
+		add_stability = 0.01
+		add_political_power = 5
+		set_country_flag = ADISCORD_vorkerland_vad_crown_warrants
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.13.vlad.b
+		trigger = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+		}
+		ai_chance = { base = 40 modifier = { factor = 1.5 has_war = yes } }
+		add_command_power = 5
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 50 producer = VAD }
+		set_country_flag = ADISCORD_vorkerland_vad_chancery_command
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.14
+	title = ADISCORD_vorkerland_claimant.14.t
+	desc = {
+		trigger = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+		text = ADISCORD_vorkerland_claimant.14.joint.d
+	}
+	desc = {
+		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed } }
+		text = ADISCORD_vorkerland_claimant.14.vlad.d
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = VAD
+		has_country_flag = ADISCORD_vorkerland_focus_vad_solar_settlement_defined
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.14.vlad.a
+		trigger = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+		}
+		ai_chance = { base = 100 }
+		add_political_power = 20
+		add_war_support = 0.01
+		set_country_flag = ADISCORD_vorkerland_vad_solar_restoration_mandate
+		if = {
+			limit = {
+				has_global_flag = ADISCORD_vorkerland_solar_winner_sol
+				NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active }
+			}
+			ADISCORD_vorkerland_offer_vad_sol_alliance = yes
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_solar_winner_sra
+					has_global_flag = ADISCORD_vorkerland_solar_winner_csl
+				}
+				NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active }
+				NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }
+				NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
+			}
+			ADISCORD_vorkerland_reserve_vad_solar_intervention = yes
+			ADISCORD_vorkerland_attempt_vad_solar_intervention = yes
+		}
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.14.joint.a
+		trigger = {
+			has_global_flag = ADISCORD_vorkerland_joint_government_formed
+			has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+			has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+		}
+		ai_chance = { base = 100 }
+		add_political_power = 15
+		add_stability = 0.01
+		add_command_power = 5
+		set_country_flag = ADISCORD_vorkerland_vad_solar_compact_mandate
+		if = {
+			limit = {
+				has_global_flag = ADISCORD_vorkerland_solar_winner_sol
+				NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active }
+			}
+			ADISCORD_vorkerland_offer_vad_sol_alliance = yes
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_solar_winner_sra
+					has_global_flag = ADISCORD_vorkerland_solar_winner_csl
+				}
+				NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active }
+				NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }
+				NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
+			}
+			ADISCORD_vorkerland_reserve_vad_solar_intervention = yes
+			ADISCORD_vorkerland_attempt_vad_solar_intervention = yes
+		}
+	}
+}
+
+# -----------------------------------------------------------------------------
+# TVA: measured administration under battlefield pressure
+# -----------------------------------------------------------------------------
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.20
+	title = ADISCORD_vorkerland_claimant.20.t
+	desc = ADISCORD_vorkerland_claimant.20.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = TVA }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.20.a
+		ai_chance = { base = 55 modifier = { factor = 1.5 has_stability < 0.50 } }
+		add_stability = 0.01
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.20.b
+		ai_chance = { base = 45 modifier = { factor = 1.5 has_war = yes } }
+		add_political_power = 5
+		add_command_power = 5
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.21
+	title = ADISCORD_vorkerland_claimant.21.t
+	desc = ADISCORD_vorkerland_claimant.21.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = TVA }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.21.a
+		ai_chance = { base = 60 }
+		add_stability = 0.01
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.21.b
+		ai_chance = { base = 40 modifier = { factor = 1.5 has_war = yes } }
+		army_experience = 5
+		add_command_power = 5
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.22
+	title = ADISCORD_vorkerland_claimant.22.t
+	desc = ADISCORD_vorkerland_claimant.22.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = TVA }
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.22.a
+		ai_chance = { base = 65 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 75 producer = TVA }
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.22.b
+		ai_chance = { base = 35 }
+		add_stability = 0.01
+		add_command_power = 5
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.23
+	title = ADISCORD_vorkerland_claimant.23.t
+	desc = ADISCORD_vorkerland_claimant.23.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = TVA
+		has_government = technocracy
+		has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.23.a
+		ai_chance = { base = 40 modifier = { factor = 1.5 has_war = yes } }
+		add_manpower = 150
+		set_country_flag = ADISCORD_vorkerland_tva_trial_technical_battalions
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.23.b
+		ai_chance = { base = 30 modifier = { factor = 1.5 command_power < 20 } }
+		add_command_power = 5
+		set_country_flag = ADISCORD_vorkerland_tva_trial_remote_fire_control
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.23.c
+		ai_chance = { base = 30 modifier = { factor = 1.5 has_equipment = { support_equipment < 150 } } }
+		add_equipment_to_stockpile = { type = support_equipment_1 amount = 25 producer = TVA }
+		set_country_flag = ADISCORD_vorkerland_tva_trial_adaptive_logistics
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.24
+	title = ADISCORD_vorkerland_claimant.24.t
+	desc = ADISCORD_vorkerland_claimant.24.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = TVA
+		has_government = technocracy
+		has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_claimant.24.a
+		ai_chance = { base = 35 modifier = { factor = 1.5 has_stability < 0.50 } }
+		add_political_power = 10
+		add_stability = 0.01
+		set_country_flag = ADISCORD_vorkerland_tva_iteration_audit_precision
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.24.b
+		ai_chance = { base = 35 modifier = { factor = 1.5 command_power < 20 } }
+		army_experience = 5
+		add_command_power = 5
+		set_country_flag = ADISCORD_vorkerland_tva_iteration_field_variance
+	}
+	option = {
+		name = ADISCORD_vorkerland_claimant.24.c
+		ai_chance = { base = 30 modifier = { factor = 1.5 has_equipment = { support_equipment < 150 } } }
+		add_equipment_to_stockpile = { type = support_equipment_1 amount = 50 producer = TVA }
+		add_war_support = 0.01
+		set_country_flag = ADISCORD_vorkerland_tva_iteration_production_variance
+	}
+}
+
+# -----------------------------------------------------------------------------
+# Claimant capstones. These report readiness; they never start or settle a war.
+# -----------------------------------------------------------------------------
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.30
+	title = ADISCORD_vorkerland_claimant.30.t
+	desc = ADISCORD_vorkerland_claimant.30.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = WKR }
+	immediate = { news_event = { id = ADISCORD_vorkerland_claimant.100 hours = 1 } }
+	option = { name = ADISCORD_vorkerland_claimant.30.a }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.31
+	title = ADISCORD_vorkerland_claimant.31.t
+	desc = ADISCORD_vorkerland_claimant.31.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = VAD }
+	immediate = { news_event = { id = ADISCORD_vorkerland_claimant.101 hours = 1 } }
+	option = { name = ADISCORD_vorkerland_claimant.31.a }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_claimant.32
+	title = ADISCORD_vorkerland_claimant.32.t
+	desc = ADISCORD_vorkerland_claimant.32.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = TVA }
+	immediate = { news_event = { id = ADISCORD_vorkerland_claimant.102 hours = 1 } }
+	option = { name = ADISCORD_vorkerland_claimant.32.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_claimant.100
+	title = ADISCORD_vorkerland_claimant.100.t
+	desc = ADISCORD_vorkerland_claimant.100.d
+	picture = GFX_news_event_adiscord_vorkerland_northern_settlement
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_claimant.100.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_claimant.101
+	title = ADISCORD_vorkerland_claimant.101.t
+	desc = ADISCORD_vorkerland_claimant.101.d
+	picture = GFX_news_event_adiscord_vorkerland_northern_settlement
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_claimant.101.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_claimant.102
+	title = ADISCORD_vorkerland_claimant.102.t
+	desc = ADISCORD_vorkerland_claimant.102.d
+	picture = GFX_news_event_adiscord_vorkerland_northern_settlement
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_claimant.102.a }
+}
+
+# --- collapse_events ---
+add_namespace = ADISCORD_vorkerland_collapse
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.1
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		tag = WRK
+		ADISCORD_vorkerland_collapse_not_started = yes
+	}
+
+	immediate = {
+		ADISCORD_vorkerland_begin_collapse = yes
+		set_global_flag = ADISCORD_vorkerland_collapse_started
+		ADISCORD_vorkerland_expire_precollapse_itoran_armistice = yes
+		# Recheck the permanent guard inside the executing immediate block. Two
+		# already-admitted event instances can otherwise both pass the outer event
+		# trigger before the first one records the destruction.
+		if = {
+			limit = {
+				NOT = { has_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved }
+			}
+			set_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved
+			goto_province = 16428
+			ADISCORD_vorkerland_animate_unity_tower_destruction = yes
+			launch_nuke = {
+				province = 16428
+				use_nuke = no
+			}
+			40 = {
+				damage_building = {
+					type = infrastructure
+					damage = 0.1
+				}
+			}
+		}
+		if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }
+			set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+		}
+		else = {
+			random_list = {
+				60 = { set_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+				25 = { set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad }
+				10 = { set_global_flag = ADISCORD_vorkerland_worker_missing }
+				5 = { set_global_flag = ADISCORD_vorkerland_worker_killed }
+			}
+		}
+		ADISCORD_vorkerland_apply_initial_map = yes
+		ADISCORD_vorkerland_prepare_claimant_characters = yes
+		# change_tag_from transfers only human control. The preference event does
+		# not alter the split, Worker's random fate, or any AI-controlled claimant.
+		# Old queued collapse.1 events carry no preference and therefore keep WKR.
+		if = {
+			limit = { is_ai = no }
+			if = {
+				limit = {
+					OR = {
+						has_global_flag = ADISCORD_vorkerland_preference_worker
+						AND = {
+							NOT = { has_global_flag = ADISCORD_vorkerland_preference_worker }
+							NOT = { has_global_flag = ADISCORD_vorkerland_preference_joint }
+							NOT = { has_global_flag = ADISCORD_vorkerland_preference_utilitarian }
+						}
+						AND = {
+							NOT = { has_global_flag = ADISCORD_vorkerland_preference_worker }
+							has_global_flag = ADISCORD_vorkerland_preference_joint
+							has_global_flag = ADISCORD_vorkerland_preference_utilitarian
+						}
+					}
+				}
+				WKR = { change_tag_from = WRK }
+			}
+			else_if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_preference_joint
+					NOT = { has_global_flag = ADISCORD_vorkerland_preference_worker }
+					NOT = { has_global_flag = ADISCORD_vorkerland_preference_utilitarian }
+				}
+				VAD = { change_tag_from = WRK }
+			}
+			else_if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_preference_utilitarian
+					NOT = { has_global_flag = ADISCORD_vorkerland_preference_worker }
+					NOT = { has_global_flag = ADISCORD_vorkerland_preference_joint }
+				}
+				TVA = { change_tag_from = WRK }
+			}
+		}
+		clr_global_flag = ADISCORD_vorkerland_preference_worker
+		clr_global_flag = ADISCORD_vorkerland_preference_joint
+		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
+		if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }
+			ADISCORD_vorkerland_form_joint_government = yes
+		}
+		else = {
+			random_list = {
+				7 = { ADISCORD_vorkerland_form_joint_government = yes }
+				93 = { }
+			}
+		}
+		WKR = {
+			inherit_technology = WRK
+			load_focus_tree = {
+				tree = ADISCORD_vorkerland_civil_war_focus
+				keep_completed = yes
+				copy_completed_from = WRK
+			}
+			annex_country = { target = WRK transfer_troops = yes }
+			ADISCORD_vorkerland_relocate_legacy_armies = yes
+			ADISCORD_vorkerland_teardown_confederation = yes
+			ADISCORD_vorkerland_align_wtd_with_worx = yes
+			ADISCORD_vorkerland_apply_claimant_cosmetics = yes
+			ADISCORD_vorkerland_sync_all_party_identities = yes
+			ADISCORD_vorkerland_repair_claimant_identities = yes
+			focus_unlock = yes
+			mark_focus_tree_layout_dirty = yes
+			country_event = { id = ADISCORD_vorkerland_collapse.41 days = 1 }
+			country_event = { id = ADISCORD_vorkerland_phase.2 days = 1 }
+			# The end of the unified state is the opening news of the collapse, not
+			# a verdict delivered years into its wars.
+			if = {
+				limit = { NOT = { has_global_flag = ADISCORD_vorkerland_collapse_news_shown } }
+				set_global_flag = ADISCORD_vorkerland_collapse_news_shown
+				news_event = { id = ADISCORD_superevent_news.1 }
+			}
+			# What became of Worker is the second headline, after the fall of the
+			# union itself. The dispatcher reads the fate roll made above and holds
+			# its own guard, so calling it here cannot silence a later report.
+			ADISCORD_vorkerland_story_report_worker_fate = yes
+			if = {
+				limit = {
+					RUS = { exists = yes }
+					NOT = { has_global_flag = ADISCORD_vorkerland_dirty_reveal_v2_scheduled }
+				}
+				set_global_flag = ADISCORD_vorkerland_dirty_reveal_v2_scheduled
+				RUS = {
+					country_event = {
+						id = ADISCORD_vorkerland_collapse.85
+						days = 1095
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.2
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		ADISCORD_vorkerland_collapse_wars_not_started = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_materialized_verified
+		ADISCORD_vorkerland_collapse_materialized = yes
+		has_global_flag = ADISCORD_vorkerland_claimant_identity_assertion_started_v2
+	}
+
+	immediate = {
+		# The first teardown runs in the same tick as the partition. Repeat it one
+		# day later, after released-country faction membership has entered the cache.
+		ADISCORD_vorkerland_teardown_confederation = yes
+		set_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		ADISCORD_vorkerland_apply_central_attrition = yes
+		WKR = { ADISCORD_vorkerland_initialize_legitimacy = yes }
+		VAD = { ADISCORD_vorkerland_initialize_legitimacy = yes }
+		TVA = { ADISCORD_vorkerland_initialize_legitimacy = yes }
+		ADISCORD_vorkerland_reconcile_campaign_state = yes
+		ADISCORD_nam_resource_war_schedule = yes
+		WKR = { ADISCORD_vorkerland_bootstrap_ai_force_designs = yes }
+		VAD = { ADISCORD_vorkerland_bootstrap_ai_force_designs = yes }
+		TVA = { ADISCORD_vorkerland_bootstrap_ai_force_designs = yes }
+		# The claimant spirits are asserted at the actual war-outbreak stage,
+		# after the initial partition and political cache rebuild. This prevents
+		# WRK's three obsolete starting spirits from resurfacing in live play.
+		if = {
+			limit = { WKR = { exists = yes } }
+			WKR = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }
+		}
+		if = {
+			limit = { VAD = { exists = yes } }
+			VAD = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }
+		}
+		if = {
+			limit = { TVA = { exists = yes } }
+			TVA = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }
+		}
+		set_global_flag = ADISCORD_vorkerland_claimant_spirit_progression_v3
+		if = {
+			limit = { VAL = { exists = yes } }
+			VAL = { VAL_handle_vorkerland_war_outbreak = yes }
+		}
+		if = {
+			limit = { WKR = { exists = yes } }
+			WKR = {
+				country_event = {
+					id = ADISCORD_vorkerland_collapse.31
+					days = 21
+					random_days = 14
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.30
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = IVN
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		has_global_flag = ADISCORD_vorkerland_northern_wars_began
+		NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }
+		NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active }
+		NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_mission_activation_v3 }
+	}
+	immediate = {
+		set_global_flag = ADISCORD_vorkerland_ivanland_planning_unlocked_v4
+		clr_global_flag = ADISCORD_vorkerland_ivanland_mission_activation_pending_v3
+	}
+}
+
+# A short mobilisation pause prevents the successor states from declaring war
+# on the day the map is rebuilt. All later wars still come from visible/AI
+# decisions and require a live common border.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.31
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		OR = { tag = WRK tag = WKR }
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_claim_wars_authorized }
+	}
+	immediate = {
+		# Last guard before any AI can select a war decision. At this point every
+		# successor has existed for several weeks, so faction removal is stable.
+		ADISCORD_vorkerland_teardown_confederation = yes
+		set_global_flag = ADISCORD_vorkerland_claim_wars_authorized
+		# The central district bracket does not depend on a claimant or on a
+		# theatre-anchor decision. It opens from the same authorisation so that
+		# the nine districts are already fighting one another when the first
+		# claimant reaches their border.
+		country_event = { id = ADISCORD_vorkerland_collapse.90 days = 1 }
+	}
+}
+
+# Central district bracket launch. One day after the war authorisation, so that
+# the repeated confederation teardown has reached the diplomatic cache.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.90
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		OR = { tag = WRK tag = WKR }
+		has_global_flag = ADISCORD_vorkerland_claim_wars_authorized
+		NOT = { has_global_flag = ADISCORD_vorkerland_local_bracket_stage_central }
+	}
+	immediate = {
+		ADISCORD_vorkerland_launch_central_local_brackets = yes
+		country_event = { id = ADISCORD_vorkerland_collapse.92 days = 1 }
+	}
+}
+
+# Closed-zone bracket launch. The six administrations are materialised on
+# separate dates, so the whole cascade must be complete first.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.91
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = RUS
+		has_global_flag = ADISCORD_vorkerland_dirty_cascade_complete
+		NOT = { has_global_flag = ADISCORD_vorkerland_local_bracket_stage_closed_zone }
+	}
+	immediate = {
+		ADISCORD_vorkerland_launch_closed_zone_local_brackets = yes
+		country_event = { id = ADISCORD_vorkerland_collapse.92 days = 1 }
+	}
+}
+
+# Shared bounded postcondition for whichever bracket stage was launched last.
+# The verifier owns its own single retry and reschedule; nothing polls.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.92
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = { tag = WRK tag = WKR tag = RUS }
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+	}
+	immediate = { ADISCORD_vorkerland_verify_local_bracket_wars = yes }
+}
+
+# Postcondition for a regional winner that folded into a claimant coalition.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.93
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		ADISCORD_vorkerland_is_local_bracket_member = yes
+		has_country_flag = ADISCORD_vorkerland_regional_auxiliary
+	}
+	immediate = { ADISCORD_vorkerland_verify_coalition_membership = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.85
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = RUS
+		has_global_flag = ADISCORD_vorkerland_collapse_started
+		has_global_flag = ADISCORD_vorkerland_dirty_reveal_v2_scheduled
+		NOT = { has_global_flag = ADISCORD_vorkerland_dirty_opened }
+	}
+	immediate = {
+		set_global_flag = ADISCORD_vorkerland_dirty_opened
+		ADISCORD_vorkerland_show_dirty_opening_superevent = yes
+		# One successor per date gives the engine time to rebuild ownership,
+		# supply and front data while keeping the whole reveal under two weeks.
+		country_event = { id = ADISCORD_vorkerland_collapse.11 days = 1 }
+		country_event = { id = ADISCORD_vorkerland_collapse.17 days = 3 }
+		country_event = { id = ADISCORD_vorkerland_collapse.12 days = 5 }
+		country_event = { id = ADISCORD_vorkerland_collapse.18 days = 7 }
+		country_event = { id = ADISCORD_vorkerland_collapse.13 days = 9 }
+		country_event = { id = ADISCORD_vorkerland_collapse.19 days = 11 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.11
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = RUS
+		has_global_flag = ADISCORD_vorkerland_dirty_opened
+		NOT = { country_exists = SLA }
+	}
+	immediate = {
+		set_global_flag = ADISCORD_vorkerland_dirty_wave_1
+		ADISCORD_vorkerland_setup_sla = yes
+		ADISCORD_vorkerland_finalize_dirty_cascade_if_ready = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.12
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = RUS
+		has_global_flag = ADISCORD_vorkerland_dirty_opened
+		NOT = { country_exists = RZA }
+	}
+	immediate = {
+		set_global_flag = ADISCORD_vorkerland_dirty_wave_2
+		ADISCORD_vorkerland_setup_rza = yes
+		ADISCORD_vorkerland_finalize_dirty_cascade_if_ready = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.13
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = RUS
+		has_global_flag = ADISCORD_vorkerland_dirty_opened
+		NOT = { country_exists = ERT }
+	}
+	immediate = {
+		set_global_flag = ADISCORD_vorkerland_dirty_wave_3
+		ADISCORD_vorkerland_setup_ert = yes
+		ADISCORD_vorkerland_finalize_dirty_cascade_if_ready = yes
+	}
+}
+
+# Each second country is materialised on a separate date. HOI4 1.19 rebuilds
+# state ownership, supply and front data asynchronously after a tag appears;
+# creating two closed-zone countries in one effect can race that rebuild.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.17
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = RUS
+		has_global_flag = ADISCORD_vorkerland_dirty_opened
+		NOT = { country_exists = MLR }
+	}
+	immediate = {
+		set_global_flag = ADISCORD_vorkerland_dirty_wave_1
+		ADISCORD_vorkerland_setup_mlr = yes
+		ADISCORD_vorkerland_finalize_dirty_cascade_if_ready = yes
+		country_event = { id = ADISCORD_vorkerland_collapse.14 days = 1 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.18
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = RUS
+		has_global_flag = ADISCORD_vorkerland_dirty_opened
+		NOT = { country_exists = SCA }
+	}
+	immediate = {
+		set_global_flag = ADISCORD_vorkerland_dirty_wave_2
+		ADISCORD_vorkerland_setup_sca = yes
+		ADISCORD_vorkerland_finalize_dirty_cascade_if_ready = yes
+		country_event = { id = ADISCORD_vorkerland_collapse.15 days = 1 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.19
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = RUS
+		has_global_flag = ADISCORD_vorkerland_dirty_opened
+		NOT = { country_exists = IRT }
+	}
+	immediate = {
+		set_global_flag = ADISCORD_vorkerland_dirty_wave_3
+		ADISCORD_vorkerland_setup_irt = yes
+		ADISCORD_vorkerland_finalize_dirty_cascade_if_ready = yes
+		country_event = { id = ADISCORD_vorkerland_collapse.16 days = 1 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.14
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = RUS
+		has_global_flag = ADISCORD_vorkerland_dirty_wave_1
+	}
+	immediate = { ADISCORD_vorkerland_start_khan_border_war = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.15
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = RUS
+		has_global_flag = ADISCORD_vorkerland_dirty_wave_2
+	}
+	immediate = { ADISCORD_vorkerland_intervene_wave_2 = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.16
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = RUS
+		has_global_flag = ADISCORD_vorkerland_dirty_wave_3
+	}
+	immediate = { ADISCORD_vorkerland_intervene_wave_3 = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.20
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		ADISCORD_vorkerland_worker_victory_candidate = yes
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+	}
+	immediate = { ADISCORD_vorkerland_apply_worker_map = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.21
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		ADISCORD_vorkerland_vlad_victory_candidate = yes
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+	}
+	immediate = { ADISCORD_vorkerland_apply_vlad_map = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.22
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		ADISCORD_vorkerland_dorian_victory_candidate = yes
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+	}
+	immediate = { ADISCORD_vorkerland_apply_dorian_map = yes }
+}
+
+# A freshly puppeted country finishes rebuilding its political cache after the
+# creating effect. This single deferred assertion avoids a permanent monthly
+# poll and prevents the generated John Smith from surviving that rebuild.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.40
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = IBA
+		has_country_flag = ADISCORD_vorkerland_iba_initialized
+		NOT = {
+			has_country_leader = {
+				character = IBA_Matvey_Mateusk
+				ruling_only = yes
+			}
+		}
+	}
+	immediate = {
+		ADISCORD_vorkerland_appoint_mateusk = yes
+		ADISCORD_vorkerland_end_ivanland_intervention_wars = yes
+	}
+}
+
+# Krait is asserted once after initial creation and once after Ivanland's puppet
+# rebuild. The event is intentionally reusable because both moments can replace
+# the ruling character cache independently.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.42
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = IBL
+		has_global_flag = ADISCORD_vorkerland_collapse_started
+		NOT = {
+			has_country_leader = {
+				character = IBL_Anton_Selevyostrov
+				ruling_only = yes
+			}
+		}
+	}
+	immediate = { ADISCORD_vorkerland_appoint_selevyostrov = yes }
+}
+
+# The political state is asserted only after the initial partition and subject
+# rebuild have completed. Explicit tag scopes keep this fresh assertion O(1).
+country_event = {
+	id = ADISCORD_vorkerland_collapse.41
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		OR = { tag = WRK tag = WKR }
+		has_global_flag = ADISCORD_vorkerland_collapse_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_conflict_spirits_finalized }
+	}
+	immediate = {
+		WKR = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		VAD = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		TVA = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		WTD = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		EYR = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		EGC = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		RIV = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		REV = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		YOR = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		NDN = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		SWB = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		VHV = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		OSV = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		ZAO = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		PWR = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		VLA = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		ROM = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		SOL = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		TRU = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		WPA = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		WPS = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		PSD = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		EBA = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		DVA = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		SRA = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		ZTA = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		TGD = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		IBL = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		CSL = { ADISCORD_vorkerland_finalize_conflict_spirits = yes }
+		set_global_flag = ADISCORD_vorkerland_unique_spirits_finalized_v2
+		set_global_flag = ADISCORD_vorkerland_conflict_spirits_finalized
+	}
+}
+
+# PWR is freed after the initial partition, so its political cache receives one
+# deferred assertion just like the two Ivanland clients. Bounded verification
+# may call the same assertion again without changing its scope.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.44
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = PWR
+		has_global_flag = ADISCORD_vorkerland_collapse_started
+		OR = {
+			NOT = { has_government = technocracy }
+			NOT = {
+				has_country_leader = {
+					character = PWR_Alexey_Lange
+					ruling_only = yes
+				}
+			}
+		}
+	}
+	immediate = { ADISCORD_vorkerland_appoint_pwr_technocrat = yes }
+}
+
+# Independent watchdog for the selectable ROM mission. Clausewitz can remove a
+# selectable mission from the UI without reliably executing its timeout effect;
+# this bounded event guarantees that the global lifecycle reaches one outcome.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.45
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { tag = ROM }
+	immediate = {
+		clr_country_flag = ADISCORD_vorkerland_rom_northern_watchdog_scheduled
+		if = {
+			limit = {
+				has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_active
+				NOT = { has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_resolved }
+			}
+			ADISCORD_vorkerland_resolve_rom_northern_intervention_timeout = yes
+		}
+	}
+}
+
+# Event-driven lifecycle assertion and bounded diplomatic-cache cleanup. It is
+# scheduled by mission start, peace/capitulation hooks, startup repair and both
+# outcomes. Immediate cleanup plus at most two delayed retries is finite.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.46
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { tag = ROM }
+	immediate = {
+		clr_country_flag = ADISCORD_vorkerland_rom_northern_check_pending
+		if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_rom_northern_cleanup_pending }
+			ADISCORD_vorkerland_end_rom_northern_intervention_wars = yes
+			if = {
+				limit = {
+					OR = {
+						has_war_with = ZAO
+						has_war_with = WPA
+						has_war_with = WPS
+						has_war_with = PWR
+						has_war_with = PSD
+					}
+				}
+				if = {
+					limit = { NOT = { has_country_flag = ADISCORD_vorkerland_rom_northern_cleanup_retry } }
+					set_country_flag = ADISCORD_vorkerland_rom_northern_cleanup_retry
+					country_event = { id = ADISCORD_vorkerland_collapse.46 days = 1 }
+				}
+				else = {
+					clr_country_flag = ADISCORD_vorkerland_rom_northern_cleanup_pending
+					clr_country_flag = ADISCORD_vorkerland_rom_northern_cleanup_retry
+					log = "[ADISCORD][VORKERLAND] Frealor northern intervention cleanup exhausted its bounded diplomatic-cache retry."
+				}
+			}
+			else = {
+				clr_country_flag = ADISCORD_vorkerland_rom_northern_cleanup_pending
+				clr_country_flag = ADISCORD_vorkerland_rom_northern_cleanup_retry
+			}
+		}
+		else = { ADISCORD_vorkerland_check_rom_northern_intervention = yes }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.60
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = ROM
+		has_global_flag = ADISCORD_vorkerland_collapse_started
+		OR = {
+			NOT = { has_government = etatism }
+			NOT = {
+				has_country_leader = {
+					character = ROM_Erwin_Von_Romanovskiy
+					ruling_only = yes
+				}
+			}
+		}
+	}
+	immediate = { ADISCORD_vorkerland_appoint_rom_etatist = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.61
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = TRU
+		has_global_flag = ADISCORD_vorkerland_collapse_started
+		OR = {
+			NOT = { has_government = chauvinism }
+			NOT = {
+				has_country_leader = {
+					character = TRU_Nikita_Truman
+					ruling_only = yes
+				}
+			}
+		}
+	}
+	immediate = { ADISCORD_vorkerland_appoint_tru_chauvinist = yes }
+}
+
+# Faction and capitulation caches settle after the foreign war is closed. The
+# first pass keeps its saved edges until the bounded verification event below.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.43
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = IVN
+		has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved
+		NOT = { has_global_flag = ADISCORD_vorkerland_northern_wars_restored }
+	}
+	immediate = {
+		ADISCORD_vorkerland_restore_northern_wars = yes
+		country_event = { id = ADISCORD_vorkerland_collapse.74 days = 3 }
+	}
+}
+
+# One final delayed declaration pass handles diplomatic caches that rejected the
+# first attempt. Verification waits one more day and never observes this tick.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.74
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = IVN
+		has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved
+		NOT = { has_global_flag = ADISCORD_vorkerland_northern_wars_restored }
+	}
+	immediate = {
+		ADISCORD_vorkerland_restore_northern_wars = yes
+		ADISCORD_vorkerland_restore_surviving_northern_war_fallback = yes
+		country_event = { id = ADISCORD_vorkerland_collapse.78 days = 1 }
+	}
+}
+
+# White peace must settle before PWR creates the temporary defense faction.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.77
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = IVN
+		has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
+		NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }
+	}
+	immediate = {
+		if = {
+			limit = {
+				country_exists = PWR
+				PWR = { is_subject = no NOT = { has_capitulated = yes } }
+			}
+			clr_country_flag = ADISCORD_vorkerland_ivanland_front_cache_retry
+			ADISCORD_vorkerland_open_ivanland_intervention_front = yes
+		}
+		else_if = {
+			limit = {
+				country_exists = PWR
+				PWR = { is_subject = no has_capitulated = yes }
+				NOT = { has_country_flag = ADISCORD_vorkerland_ivanland_front_cache_retry }
+			}
+			set_country_flag = ADISCORD_vorkerland_ivanland_front_cache_retry
+			country_event = { id = ADISCORD_vorkerland_collapse.77 days = 1 }
+		}
+		else = {
+			clr_country_flag = ADISCORD_vorkerland_ivanland_front_cache_retry
+			clr_country_flag = ADISCORD_vorkerland_ivanland_front_launch_pending
+			ADISCORD_vorkerland_ivanland_intervention_failure = yes
+		}
+	}
+}
+
+# The declaration and defender joins above share one Clausewitz tick. Observe
+# them one day later and perform at most one war retry plus one join retry. The
+# state-controller postcondition also handles a northern victor inheriting the
+# original PSD objectives during Ivanland's 120-day preparation.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.82
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = IVN
+		has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
+		NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }
+	}
+	immediate = {
+		clr_country_flag = ADISCORD_vorkerland_ivanland_front_launch_pending
+		clr_country_flag = ADISCORD_vorkerland_ivanland_front_verification_pending
+		if = {
+			limit = { ADISCORD_vorkerland_ivanland_intervention_front_verified = yes }
+			clr_country_flag = ADISCORD_vorkerland_ivanland_front_war_retry
+			clr_country_flag = ADISCORD_vorkerland_ivanland_front_join_retry
+			set_country_flag = ADISCORD_vorkerland_ivanland_front_verified_v1
+			log = "[ADISCORD][VORKERLAND] Ivanland intervention front verified: PWR war and every settlement-state controller are reachable."
+		}
+		else_if = {
+			limit = {
+				OR = {
+					NOT = { country_exists = PWR }
+					PWR = { is_subject = yes }
+					PWR = { has_capitulated = yes }
+				}
+			}
+			ADISCORD_vorkerland_ivanland_intervention_failure = yes
+		}
+		else_if = {
+			limit = { NOT = { has_war_with = PWR } }
+			if = {
+				limit = { NOT = { has_country_flag = ADISCORD_vorkerland_ivanland_front_war_retry } }
+				set_country_flag = ADISCORD_vorkerland_ivanland_front_war_retry
+				declare_war_on = { target = PWR type = take_state_focus generator = { 90 91 } }
+				set_country_flag = { flag = ADISCORD_vorkerland_ivanland_front_verification_pending days = 3 }
+				country_event = { id = ADISCORD_vorkerland_collapse.82 days = 1 }
+			}
+			else = { ADISCORD_vorkerland_ivanland_intervention_failure = yes }
+		}
+		else_if = {
+			limit = { NOT = { has_country_flag = ADISCORD_vorkerland_ivanland_front_join_retry } }
+			set_country_flag = ADISCORD_vorkerland_ivanland_front_join_retry
+			ZAO = { if = { limit = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = IVN } } add_to_war = { targeted_alliance = PWR enemy = IVN hostility_reason = asked_to_join } } }
+			WPA = { if = { limit = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = IVN } } add_to_war = { targeted_alliance = PWR enemy = IVN hostility_reason = asked_to_join } } }
+			WPS = { if = { limit = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = IVN } } add_to_war = { targeted_alliance = PWR enemy = IVN hostility_reason = asked_to_join } } }
+			PSD = { if = { limit = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = IVN } } add_to_war = { targeted_alliance = PWR enemy = IVN hostility_reason = asked_to_join } } }
+			set_country_flag = { flag = ADISCORD_vorkerland_ivanland_front_verification_pending days = 3 }
+			country_event = { id = ADISCORD_vorkerland_collapse.82 days = 1 }
+		}
+		else = { ADISCORD_vorkerland_ivanland_intervention_failure = yes }
+	}
+}
+
+# Observe the final declarations only after their diplomatic-cache tick.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.78
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = IVN
+		has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved
+		NOT = { has_global_flag = ADISCORD_vorkerland_northern_wars_restored }
+	}
+	immediate = { ADISCORD_vorkerland_verify_northern_war_restore = yes }
+}
+
+# One delayed assertion replaces the former monthly joint-council repair.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.62
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = VAD
+		has_global_flag = ADISCORD_vorkerland_joint_government_formed
+		has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+		NOT = {
+			has_country_leader = {
+				character = WRK_VAD_Joint_Council
+				ruling_only = yes
+			}
+		}
+	}
+	immediate = { ADISCORD_vorkerland_appoint_joint_council = yes }
+}
+
+# A one-day diplomatic-cache barrier for the initial peripheral war graph.
+# The phase controller has already detached every independent participant; this
+# event creates the seventeen rivalries and hands their verification back to it.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.63
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { OR = { tag = WKR tag = ZAO tag = VLA tag = ROM tag = SOL tag = TRU } }
+	immediate = {
+		if = {
+			limit = {
+				has_global_flag = ADISCORD_vorkerland_regional_war_launch_scheduled
+				NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+			}
+			ADISCORD_vorkerland_open_regional_fronts_after_detach = yes
+		}
+		else = { clr_global_flag = ADISCORD_vorkerland_regional_war_launch_scheduled }
+		country_event = { id = ADISCORD_vorkerland_phase.3 days = 1 }
+	}
+}
+
+# One bounded verification retry. The phase controller owns the success/failure
+# flags; this event only waits out the second diplomatic-cache tick.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.64
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { OR = { tag = RUS tag = IVN } }
+	immediate = {
+		if = {
+			limit = {
+				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+			}
+			ADISCORD_vorkerland_verify_regional_war_launch = yes
+			if = {
+				limit = {
+					NOT = { has_global_flag = ADISCORD_vorkerland_regional_war_launch_degraded }
+				}
+				country_event = { id = ADISCORD_vorkerland_phase.3 days = 1 }
+			}
+		}
+		else = {
+			clr_global_flag = ADISCORD_vorkerland_regional_war_launch_final_retry
+			clr_global_flag = ADISCORD_vorkerland_regional_war_launch_scheduled
+		}
+	}
+}
+
+# The first pass runs only after the native peace cache has advanced. A second
+# event is queued before the annex attempt; it disappears with the defeated tag
+# on success and becomes the single bounded retry if the engine kept a puppet.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.65
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending
+		OR = { tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV }
+	}
+	immediate = {
+		country_event = { id = ADISCORD_vorkerland_collapse.66 days = 1 }
+		ADISCORD_vorkerland_finalize_central_minor_settlement = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.66
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending
+		OR = { tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV }
+	}
+	immediate = {
+		# The second pass is also the terminal recovery pass. Move the shell's
+		# remaining states explicitly before the final annex attempt, so a puppet
+		# or capitulated remnant cannot strand district integration forever.
+		set_country_flag = ADISCORD_vorkerland_central_minor_settlement_force_transfer
+		ADISCORD_vorkerland_finalize_central_minor_settlement = yes
+		if = {
+			limit = { exists = yes }
+			clr_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending
+			clr_country_flag = ADISCORD_vorkerland_central_minor_settlement_force_transfer
+			clr_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr
+			clr_country_flag = ADISCORD_vorkerland_central_minor_winner_vad
+			clr_country_flag = ADISCORD_vorkerland_central_minor_winner_tva
+			clr_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk
+			log = "[ADISCORD][VORKERLAND] Central minor settlement survived its bounded annex retry."
+		}
+	}
+}
+
+# Living-winner controller for capitulated zero-state district shells. It
+# cooperates with the loser-scoped .65/.66 events and never polls.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.69
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = { tag = WKR tag = VAD tag = TVA tag = WRK }
+		is_subject = no
+		NOT = { has_capitulated = yes }
+	}
+	immediate = {
+		clr_country_flag = ADISCORD_vorkerland_central_minor_settlement_controller_scheduled
+		clr_country_flag = ADISCORD_vorkerland_central_minor_settlement_controller_failed
+		ADISCORD_vorkerland_sweep_pending_central_minor_settlements = yes
+		if = {
+			limit = { ADISCORD_vorkerland_has_matching_pending_central_minor_settlement = yes }
+			country_event = { id = ADISCORD_vorkerland_collapse.70 days = 1 }
+		}
+		else = { ADISCORD_vorkerland_focus_schedule_final_showdown = yes }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.70
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = { tag = WKR tag = VAD tag = TVA tag = WRK }
+		is_subject = no
+		NOT = { has_capitulated = yes }
+	}
+	immediate = {
+		ADISCORD_vorkerland_sweep_pending_central_minor_settlements = yes
+		if = {
+			limit = { ADISCORD_vorkerland_has_matching_pending_central_minor_settlement = yes }
+			set_country_flag = ADISCORD_vorkerland_central_minor_settlement_controller_failed
+			log = "[ADISCORD][VORKERLAND][RECOVERY] Living winner could not dissolve a pending central district shell after one retry."
+		}
+		else = { ADISCORD_vorkerland_focus_schedule_final_showdown = yes }
+	}
+}
+
+# TVA's Oitfort protectorate enters the WKR war one day after the edge is
+# verified, without permanent polling.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.47
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag = WTD
+		is_subject_of = TVA
+		NOT = { has_capitulated = yes }
+		TVA = { exists = yes has_war_with = WKR }
+		NOT = { has_war_with = WKR }
+	}
+
+	immediate = {
+		add_to_war = {
+			targeted_alliance = TVA
+			enemy = WKR
+			hostility_reason = asked_to_join
+		}
+		country_event = { id = ADISCORD_vorkerland_collapse.67 days = 1 }
+	}
+}
+
+# Postcondition and one bounded retry for WTD joining TVA's live war.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.67
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag = WTD
+		is_subject_of = TVA
+		NOT = { has_capitulated = yes }
+	}
+
+	immediate = {
+		if = {
+			limit = { has_war_with = WKR }
+			clr_country_flag = ADISCORD_vorkerland_wtd_join_retry
+			set_country_flag = ADISCORD_vorkerland_wtd_fighting_for_worx
+		}
+		else_if = {
+			limit = {
+				TVA = { exists = yes has_war_with = WKR }
+				NOT = { has_country_flag = ADISCORD_vorkerland_wtd_join_retry }
+			}
+			set_country_flag = ADISCORD_vorkerland_wtd_join_retry
+			add_to_war = {
+				targeted_alliance = TVA
+				enemy = WKR
+				hostility_reason = asked_to_join
+			}
+			country_event = { id = ADISCORD_vorkerland_collapse.67 days = 1 }
+		}
+		else = {
+			clr_country_flag = ADISCORD_vorkerland_wtd_join_retry
+			set_country_flag = ADISCORD_vorkerland_wtd_join_failed
+			log = "[ADISCORD][VORKERLAND][RECOVERY] TVA subject WTD failed to join the verified TVA-WKR war after one retry."
+		}
+	}
+}
+
+# ZAO's subject cache settles after the initial partition. This bounded
+# assertion restores both the authored administrator and the regional wartime
+# programme if either was lost during the same-tick confederation teardown.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.68
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = ZAO
+		has_global_flag = ADISCORD_vorkerland_collapse_started
+	}
+	immediate = {
+		set_country_flag = ADISCORD_vorkerland_zao_startup_repair_v1_applied
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_government = pragmatism }
+					NOT = {
+						has_country_leader = {
+							character = WRK_Bassam_Zogby
+							ruling_only = yes
+						}
+					}
+				}
+			}
+			ADISCORD_vorkerland_appoint_zao_administrator = yes
+		}
+		load_focus_tree = { tree = ADISCORD_vorkerland_zao_focus keep_completed = yes }
+		mark_focus_tree_layout_dirty = yes
+	}
+}
+
+# Visible failure of the preparation contract. No hidden retry or second timer
+# is armed; the northern conflict simply continues without a foreign invasion.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.80
+	title = ADISCORD_vorkerland_collapse.80.t
+	desc = ADISCORD_vorkerland_collapse.80.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = IVN }
+	option = { name = ADISCORD_vorkerland_collapse.80.a }
+}
+
+# Two years after the regional graph launches, select exactly one still-live
+# canonical northern edge and attach the existing operational-initiative idea
+# to its attacker. No retry is armed when the theatre has already resolved.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.83
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		OR = { tag = RUS tag = IVN }
+		has_global_flag = ADISCORD_vorkerland_northern_escalation_scheduled
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		NOT = { has_global_flag = ADISCORD_vorkerland_northern_escalation_stage_1 }
+	}
+	immediate = { ADISCORD_vorkerland_select_northern_escalation_front = yes }
+}
+
+# At year three, surviving verified canonical edges receive the aggressive AI
+# consumer. This never declares, annexes, or white-peaces a country.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.84
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		OR = { tag = RUS tag = IVN }
+		has_global_flag = ADISCORD_vorkerland_northern_escalation_scheduled
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		NOT = { has_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2 }
+	}
+	immediate = { ADISCORD_vorkerland_intensify_surviving_northern_fronts = yes }
+}
+
+add_namespace = ADISCORD_vorkerland_news
+
+news_event = {
+	id = ADISCORD_vorkerland_news.1
+	title = ADISCORD_vorkerland_news.1.t
+	desc = ADISCORD_vorkerland_news.1.d
+	picture = GFX_news_event_adiscord_vorkerland_northern_settlement
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_news.1.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_news.2
+	title = ADISCORD_vorkerland_news.2.t
+	desc = ADISCORD_vorkerland_news.2.d
+	picture = GFX_news_event_adiscord_vorkerland_northern_settlement
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_news.2.a }
+}
+
+# --- diplomacy_events ---
+add_namespace = ADISCORD_vorkerland_diplomacy
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.1
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = { ADISCORD_vorkerland_record_regional_diplomacy_outcomes = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.2
+	title = ADISCORD_vorkerland_diplomacy.2.t
+	desc = ADISCORD_vorkerland_diplomacy.2.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+
+	trigger = {
+		VAD = { exists = yes has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending }
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_diplomacy.2.a
+		trigger = {
+			has_global_flag = ADISCORD_vorkerland_solar_winner_sol
+			is_subject = no
+			NOT = { has_capitulated = yes }
+			# An open invitation cannot overturn a subsequently accepted coalition.
+			NOT = {
+				AND = {
+					has_country_flag = ADISCORD_vorkerland_regional_auxiliary
+					is_in_faction = yes
+					NOT = { is_in_faction_with = VAD }
+					faction_leader = { exists = yes ADISCORD_vorkerland_is_main_claimant = yes }
+				}
+			}
+			VAD = {
+				exists = yes
+				is_subject = no
+				NOT = { has_capitulated = yes }
+				has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending
+				NOT = { has_war_with = ROOT }
+			}
+		}
+		ai_chance = { factor = 85 }
+		ADISCORD_vorkerland_leave_inherited_faction = yes
+		set_country_flag = ADISCORD_vorkerland_allied_with_vad
+		VAD = {
+			ADISCORD_vorkerland_leave_inherited_faction = yes
+			if = {
+				limit = { is_in_faction = no }
+				create_faction_from_template = {
+					template = faction_template_ADISCORD_standard
+					name = ADISCORD_vorkerland_solar_restoration_alliance
+				}
+			}
+			add_to_faction = SOL
+			clr_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending
+			clr_country_flag = ADISCORD_vorkerland_vad_sol_invitation_dispatch_guard
+			set_country_flag = ADISCORD_vorkerland_vad_sol_invitation_resolved
+			set_country_flag = ADISCORD_vorkerland_preserve_wartime_faction
+		}
+		set_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted
+		# If the three claimant wars are already verified, join only VAD's live
+		# edges. Before that point the normal phase verifier performs the same call.
+		ADISCORD_vorkerland_join_regional_allies_to_showdown = yes
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_diplomacy.2.b
+		ai_chance = { factor = 15 }
+		VAD = {
+			clr_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending
+			clr_country_flag = ADISCORD_vorkerland_vad_sol_invitation_dispatch_guard
+			set_country_flag = ADISCORD_vorkerland_vad_sol_invitation_resolved
+		}
+		set_global_flag = ADISCORD_vorkerland_vad_sol_alliance_declined
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.3
+	title = ADISCORD_vorkerland_diplomacy.3.t
+	desc = ADISCORD_vorkerland_diplomacy.3.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+
+	trigger = {
+		WKR = { exists = yes has_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending }
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_diplomacy.3.a
+		trigger = {
+			has_global_flag = ADISCORD_vorkerland_volnograd_winner_vla
+			is_subject = no
+			NOT = { has_capitulated = yes }
+			# An open invitation cannot overturn a subsequently accepted coalition.
+			NOT = {
+				AND = {
+					has_country_flag = ADISCORD_vorkerland_regional_auxiliary
+					is_in_faction = yes
+					NOT = { is_in_faction_with = WKR }
+					faction_leader = { exists = yes ADISCORD_vorkerland_is_main_claimant = yes }
+				}
+			}
+			WKR = {
+				exists = yes
+				is_subject = no
+				NOT = { has_capitulated = yes }
+				has_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending
+				NOT = { has_war_with = ROOT }
+			}
+		}
+		ai_chance = { factor = 80 }
+		ADISCORD_vorkerland_leave_inherited_faction = yes
+		set_country_flag = ADISCORD_vorkerland_allied_with_wkr
+		WKR = {
+			ADISCORD_vorkerland_leave_inherited_faction = yes
+			if = {
+				limit = { is_in_faction = no }
+				create_faction_from_template = {
+					template = faction_template_ADISCORD_standard
+					name = ADISCORD_vorkerland_free_republics_alliance
+				}
+			}
+			add_to_faction = VLA
+			clr_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending
+			clr_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_dispatch_guard
+			set_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_resolved
+			set_country_flag = ADISCORD_vorkerland_preserve_wartime_faction
+		}
+		set_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_accepted
+		# A late answer reconciles Volnograd with WKR's surviving showdown fronts.
+		ADISCORD_vorkerland_join_regional_allies_to_showdown = yes
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_diplomacy.3.b
+		ai_chance = { factor = 20 }
+		WKR = {
+			clr_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending
+			clr_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_dispatch_guard
+			set_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_resolved
+		}
+		set_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_declined
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.4
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = VAD
+		has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+		has_global_flag = ADISCORD_vorkerland_sol_restoration_pending
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_materialized }
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry }
+	}
+
+	immediate = { ADISCORD_vorkerland_restore_sol_as_vad_puppet = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.5
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = VAD
+		has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+		has_global_flag = ADISCORD_vorkerland_sol_restoration_pending
+		has_global_flag = ADISCORD_vorkerland_sol_restoration_materialized
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_retry }
+	}
+
+	immediate = { ADISCORD_vorkerland_verify_sol_restoration = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.6
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = VAD
+		has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+		has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending
+		NOT = { has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_retry }
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
+	}
+
+	immediate = { ADISCORD_vorkerland_verify_vad_solar_intervention = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.7
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = VAD
+		has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+		has_global_flag = ADISCORD_vorkerland_sol_restoration_pending
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_materialized }
+		has_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry
+	}
+
+	immediate = { ADISCORD_vorkerland_restore_sol_as_vad_puppet = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.8
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = VAD
+		has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+		has_global_flag = ADISCORD_vorkerland_sol_restoration_pending
+		has_global_flag = ADISCORD_vorkerland_sol_restoration_materialized
+		has_global_flag = ADISCORD_vorkerland_sol_restoration_retry
+	}
+
+	immediate = { ADISCORD_vorkerland_verify_sol_restoration = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.9
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = VAD
+		has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+		has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending
+		has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_retry
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
+	}
+
+	immediate = { ADISCORD_vorkerland_verify_vad_solar_intervention = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.10
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = WKR
+		has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		has_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_pending
+		NOT = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_retry }
+	}
+
+	immediate = { ADISCORD_vorkerland_verify_wkr_solyarino_intervention = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.11
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = WKR
+		has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		has_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_pending
+		has_country_flag = ADISCORD_vorkerland_wkr_solyarino_verify_retry
+	}
+
+	immediate = { ADISCORD_vorkerland_verify_wkr_solyarino_intervention = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.12
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = WKR
+		has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		has_country_flag = ADISCORD_vorkerland_wkr_solyarino_outcome_check_pending
+	}
+
+	immediate = { ADISCORD_vorkerland_check_wkr_solyarino_outcome = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.13
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = WKR
+		has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized }
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialization_retry }
+	}
+
+	immediate = { ADISCORD_vorkerland_materialize_sol_worker_protectorate = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.14
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = WKR
+		has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized }
+		has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialization_retry
+	}
+
+	immediate = { ADISCORD_vorkerland_materialize_sol_worker_protectorate = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.15
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = WKR
+		has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending
+		has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized
+		NOT = { has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verify_retry }
+	}
+
+	immediate = { ADISCORD_vorkerland_verify_sol_worker_protectorate = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_diplomacy.16
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = WKR
+		has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+		has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_pending
+		has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_materialized
+		has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verify_retry
+	}
+
+	immediate = { ADISCORD_vorkerland_verify_sol_worker_protectorate = yes }
+}
+
+# --- phase_events ---
+add_namespace = ADISCORD_vorkerland_phase
+
+country_event = {
+	id = ADISCORD_vorkerland_phase.1
+	title = ADISCORD_vorkerland_phase.1.t
+	desc = ADISCORD_vorkerland_phase.1.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		tag = WRK
+		ADISCORD_vorkerland_collapse_not_started = yes
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_phase.1.a
+		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified } }
+		clr_global_flag = ADISCORD_vorkerland_preference_worker
+		clr_global_flag = ADISCORD_vorkerland_preference_joint
+		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
+		set_global_flag = ADISCORD_vorkerland_preference_worker
+		country_event = { id = ADISCORD_vorkerland_collapse.1 }
+		ai_chance = { factor = 45 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_phase.1.b
+		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified } }
+		clr_global_flag = ADISCORD_vorkerland_preference_worker
+		clr_global_flag = ADISCORD_vorkerland_preference_joint
+		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
+		set_global_flag = ADISCORD_vorkerland_preference_joint
+		country_event = { id = ADISCORD_vorkerland_collapse.1 }
+		ai_chance = { factor = 30 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_phase.1.c
+		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified } }
+		clr_global_flag = ADISCORD_vorkerland_preference_worker
+		clr_global_flag = ADISCORD_vorkerland_preference_joint
+		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
+		set_global_flag = ADISCORD_vorkerland_preference_utilitarian
+		country_event = { id = ADISCORD_vorkerland_collapse.1 }
+		ai_chance = { factor = 25 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_phase.1.e
+		trigger = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }
+		clr_global_flag = ADISCORD_vorkerland_preference_worker
+		clr_global_flag = ADISCORD_vorkerland_preference_joint
+		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
+		set_global_flag = ADISCORD_vorkerland_preference_joint
+		country_event = { id = ADISCORD_vorkerland_collapse.1 }
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_phase.2
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		has_global_flag = ADISCORD_vorkerland_collapse_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+	}
+
+	immediate = {
+		ADISCORD_vorkerland_verify_collapse_materialized = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_phase.3
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_vorkerland_verify_regional_consolidation = yes
+	}
+}
+
+# Exact country-leader state lives in a separate daily cache. It is repaired
+# twice for presentation correctness, but a cache miss never freezes the war.
+country_event = {
+	id = ADISCORD_vorkerland_phase.14
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag = WKR
+		has_global_flag = ADISCORD_vorkerland_collapse_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		NOT = { has_global_flag = ADISCORD_vorkerland_claimant_identities_verified_v2 }
+	}
+
+	immediate = {
+		clr_global_flag = ADISCORD_vorkerland_claimant_identity_check_pending_v2
+		ADISCORD_vorkerland_repair_claimant_identities = yes
+		if = {
+			limit = { ADISCORD_vorkerland_claimant_identities_materialized = yes }
+			set_global_flag = ADISCORD_vorkerland_claimant_identities_verified_v2
+			clr_global_flag = ADISCORD_vorkerland_claimant_identity_retry_v2
+			clr_global_flag = ADISCORD_vorkerland_claimant_identity_degraded_v2
+		}
+		else_if = {
+			limit = { NOT = { has_global_flag = ADISCORD_vorkerland_claimant_identity_retry_v2 } }
+			set_global_flag = ADISCORD_vorkerland_claimant_identity_retry_v2
+			set_global_flag = ADISCORD_vorkerland_claimant_identity_check_pending_v2
+			country_event = { id = ADISCORD_vorkerland_phase.14 days = 2 }
+		}
+		else = {
+			set_global_flag = ADISCORD_vorkerland_claimant_identity_degraded_v2
+			ADISCORD_vorkerland_log_claimant_identity_mismatches = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_phase.4
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+				NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+			}
+			set_global_flag = ADISCORD_vorkerland_central_preparation_expired
+			ADISCORD_vorkerland_initialize_showdown_edge_queue = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_phase.5
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_vorkerland_advance_showdown_launch = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_phase.6
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = ADISCORD_vorkerland_phase_reunification
+		has_global_flag = ADISCORD_vorkerland_central_showdown_started
+		ADISCORD_vorkerland_central_showdown_edges_verified = yes
+		NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_launch_failed }
+		NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active }
+		ADISCORD_vorkerland_has_single_surviving_claimant = yes
+		OR = {
+			WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } ADISCORD_vorkerland_central_districts_owned_and_controlled = yes }
+			VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } ADISCORD_vorkerland_central_districts_owned_and_controlled = yes }
+			TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } ADISCORD_vorkerland_central_districts_owned_and_controlled = yes }
+		}
+		# Re-evaluate the district terminal contract at execution time. This is
+		# deliberately repeated after the one-day queue so an old serialized .6,
+		# a changed controller, or a newly restored minor cannot materialize WRK
+		# over an unfinished central map.
+		NOT = { country_exists = EYR }
+		NOT = { country_exists = EGC }
+		NOT = { country_exists = RIV }
+		NOT = { country_exists = REV }
+		NOT = { country_exists = YOR }
+		NOT = { country_exists = NDN }
+		NOT = { country_exists = SWB }
+		NOT = { country_exists = VHV }
+		NOT = { country_exists = OSV }
+		NOT = { WKR = { exists = yes OR = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active } } }
+		NOT = { VAD = { exists = yes OR = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active } } }
+		NOT = { TVA = { exists = yes OR = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active } } }
+		102 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		109 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		111 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		325 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		81 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		110 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		124 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		79 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		306 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		308 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		309 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		327 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		82 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		323 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		108 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		122 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		123 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		27 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		35 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		315 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		316 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		317 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		318 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+		320 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
+	}
+
+	immediate = {
+		if = {
+			limit = { WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+			WRK = {
+				ADISCORD_vorkerland_form_wrk_from_wkr = yes
+				country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }
+			}
+		}
+		else_if = {
+			limit = { VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+			WRK = {
+				ADISCORD_vorkerland_form_wrk_from_vad = yes
+				country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }
+			}
+		}
+		else_if = {
+			limit = { TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+			WRK = {
+				ADISCORD_vorkerland_form_wrk_from_tva = yes
+				country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_phase.7
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_vorkerland_verify_reunified_wrk = yes
+		ADISCORD_vorkerland_story_offer_post_reunification = yes
+		if = {
+			limit = {
+				NOT = { ADISCORD_vorkerland_reunification_verified = yes }
+				NOT = { has_global_flag = ADISCORD_vorkerland_reunification_retry }
+			}
+			set_global_flag = ADISCORD_vorkerland_reunification_retry
+			country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }
+		}
+		else_if = {
+			limit = { NOT = { ADISCORD_vorkerland_reunification_verified = yes } }
+			set_global_flag = ADISCORD_vorkerland_reunification_failed
+			log = "[ADISCORD][VORKERLAND][RECOVERY] Reunified WRK failed formation postconditions after one retry."
+		}
+	}
+}
+
+# Hidden one-day diplomacy-cache verification. Decision missions are not used:
+# activated missions render in the player UI even when visible = always no.
+country_event = {
+	id = ADISCORD_vorkerland_phase.8
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_vorkerland_focus_confirm_central_minor_wave_launch = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_phase.9
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_vorkerland_focus_confirm_central_minor_wave_retry = yes
+	}
+}
+
+# --- rom_tru_events ---
+add_namespace = ADISCORD_vorkerland_rom_tru
+
+country_event = {
+	id = ADISCORD_vorkerland_rom_tru.1
+	picture = GFX_event_adiscord_military_planning
+	title = ADISCORD_vorkerland_rom_tru.1.t
+	desc = ADISCORD_vorkerland_rom_tru.1.d
+	is_triggered_only = yes
+	trigger = {
+		tag = ROM
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		has_war_with = DVA
+		NOT = { has_country_flag = ADISCORD_vorkerland_rom_war_content_initialized }
+	}
+	immediate = {
+		ADISCORD_vorkerland_rom_initialize_war_content = yes
+		activate_mission = ADISCORD_vorkerland_rom_break_valley_administration
+	}
+	option = { name = ADISCORD_vorkerland_rom_tru.1.a }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_rom_tru.2
+	picture = GFX_event_adiscord_military_planning
+	title = ADISCORD_vorkerland_rom_tru.2.t
+	desc = ADISCORD_vorkerland_rom_tru.2.d
+	is_triggered_only = yes
+	trigger = {
+		tag = TRU
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		has_war_with = ZTA
+		NOT = { has_country_flag = ADISCORD_vorkerland_tru_war_content_initialized }
+	}
+	immediate = {
+		ADISCORD_vorkerland_tru_initialize_war_content = yes
+		activate_mission = ADISCORD_vorkerland_tru_break_zlatorech_administration
+	}
+	option = { name = ADISCORD_vorkerland_rom_tru.2.a }
+}
+
+# --- stalemate_events ---
+add_namespace = ADISCORD_vorkerland_stalemate
+
+# One delayed event per attacker. There is no retry or recurring fallback: a
+# completed front simply consumes its already-scheduled deadline.
+country_event = {
+	id = ADISCORD_vorkerland_stalemate.1
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_vorkerland_resolve_central_stalemate_deadline = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_stalemate.2
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_vorkerland_resolve_solarino_stalemate_deadline = yes
+	}
+}
+
+# --- story_events ---
+add_namespace = ADISCORD_vorkerland_story
+
+# The central war is not announced until all required claimant war edges have
+# been verified. These news events are presentation-only; permanent guards live
+# in the owning story effects.
+news_event = {
+	id = ADISCORD_vorkerland_story.1
+	title = ADISCORD_vorkerland_story.1.t
+	desc = ADISCORD_vorkerland_story.1.d
+	picture = GFX_news_event_adiscord_city_in_civil_war
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.1.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.2
+	title = ADISCORD_vorkerland_story.2.t
+	desc = ADISCORD_vorkerland_story.2.d
+	picture = GFX_news_event_adiscord_negotiation_table
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.2.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.3
+	title = ADISCORD_vorkerland_story.3.t
+	desc = ADISCORD_vorkerland_story.3.d
+	picture = GFX_news_event_adiscord_negotiation_table
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.3.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.4
+	title = ADISCORD_vorkerland_story.4.t
+	desc = ADISCORD_vorkerland_story.4.d
+	picture = GFX_news_event_adiscord_negotiation_table
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.4.a }
+}
+
+# Fired in the already-normalized winning claimant's scope when the first rival
+# claimant capitulates. Neither choice owns peace processing or the map.
+country_event = {
+	id = ADISCORD_vorkerland_story.5
+	title = ADISCORD_vorkerland_story.5.t
+	desc = ADISCORD_vorkerland_story.5.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		OR = { tag = WKR tag = VAD tag = TVA tag = WRK }
+		has_global_flag = ADISCORD_vorkerland_story_first_claimant_capitulated
+		NOT = { has_country_flag = ADISCORD_vorkerland_story_command_choice_resolved }
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_story.5.a
+		set_country_flag = ADISCORD_vorkerland_story_rival_headquarters_integrated
+		set_country_flag = ADISCORD_vorkerland_story_command_choice_resolved
+		add_command_power = 10
+		army_experience = 5
+		add_war_support = 0.01
+		ai_chance = { factor = 55 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_story.5.b
+		set_country_flag = ADISCORD_vorkerland_story_rival_apparatus_dissolved
+		set_country_flag = ADISCORD_vorkerland_story_command_choice_resolved
+		add_political_power = 25
+		add_stability = 0.02
+		add_war_support = -0.01
+		ai_chance = { factor = 45 }
+	}
+}
+
+# The route flag remains the technical compatibility contract. The visible
+# descriptions and choices deliberately name the actual postwar regimes.
+country_event = {
+	id = ADISCORD_vorkerland_story.6
+	title = ADISCORD_vorkerland_story.6.t
+	desc = {
+		trigger = { has_country_flag = ADISCORD_vorkerland_route_worker }
+		text = ADISCORD_vorkerland_story.6.worker.d
+	}
+	desc = {
+		trigger = { has_country_flag = ADISCORD_vorkerland_route_joint }
+		text = ADISCORD_vorkerland_story.6.joint.d
+	}
+	desc = {
+		trigger = { has_country_flag = ADISCORD_vorkerland_route_utilitarian }
+		text = ADISCORD_vorkerland_story.6.worx.d
+	}
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		tag = WRK
+		has_global_flag = ADISCORD_vorkerland_reunification_verified
+		NOT = { has_country_flag = ADISCORD_vorkerland_story_postwar_choice_resolved }
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_route_worker
+			has_country_flag = ADISCORD_vorkerland_route_joint
+			has_country_flag = ADISCORD_vorkerland_route_utilitarian
+		}
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_story.6.worker.a
+		trigger = { has_country_flag = ADISCORD_vorkerland_route_worker }
+		set_country_flag = ADISCORD_vorkerland_story_worker_emergency_staff_retained
+		add_command_power = 10
+		army_experience = 5
+		ADISCORD_vorkerland_story_finish_reunification = yes
+		ai_chance = { factor = 55 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_story.6.worker.b
+		trigger = { has_country_flag = ADISCORD_vorkerland_route_worker }
+		set_country_flag = ADISCORD_vorkerland_story_worker_civil_ministries_restored
+		add_political_power = 30
+		add_stability = 0.02
+		ADISCORD_vorkerland_story_finish_reunification = yes
+		ai_chance = { factor = 45 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_story.6.joint.a
+		trigger = { has_country_flag = ADISCORD_vorkerland_route_joint }
+		set_country_flag = ADISCORD_vorkerland_story_joint_council_command_link
+		add_command_power = 8
+		add_stability = 0.01
+		ADISCORD_vorkerland_story_finish_reunification = yes
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_story.6.joint.b
+		trigger = { has_country_flag = ADISCORD_vorkerland_route_joint }
+		set_country_flag = ADISCORD_vorkerland_story_joint_provincial_charter
+		add_political_power = 30
+		add_stability = 0.02
+		ADISCORD_vorkerland_story_finish_reunification = yes
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_story.6.worx.a
+		trigger = { has_country_flag = ADISCORD_vorkerland_route_utilitarian }
+		set_country_flag = ADISCORD_vorkerland_story_worx_wartime_directorates_retained
+		add_command_power = 10
+		army_experience = 5
+		ADISCORD_vorkerland_story_finish_reunification = yes
+		ai_chance = { factor = 60 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_story.6.worx.b
+		trigger = { has_country_flag = ADISCORD_vorkerland_route_utilitarian }
+		set_country_flag = ADISCORD_vorkerland_story_worx_emergency_labs_audited
+		add_political_power = 30
+		add_stability = 0.02
+		ADISCORD_vorkerland_story_finish_reunification = yes
+		ai_chance = { factor = 40 }
+	}
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.7
+	title = ADISCORD_vorkerland_story.7.t
+	desc = ADISCORD_vorkerland_story.7.d
+	picture = GFX_news_event_adiscord_parliament_chamber
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.7.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.8
+	title = ADISCORD_vorkerland_story.8.t
+	desc = ADISCORD_vorkerland_story.8.d
+	picture = GFX_news_event_adiscord_parliament_chamber
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.8.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.9
+	title = ADISCORD_vorkerland_story.9.t
+	desc = ADISCORD_vorkerland_story.9.d
+	picture = GFX_news_event_adiscord_parliament_chamber
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.9.a }
+}
+
+# The fate of Nikita Worker. The collapse roll sets exactly one of the four
+# global outcome flags; ADISCORD_vorkerland_story_report_worker_fate reads them
+# and dispatches exactly one of these four, once. Each is a separate event
+# because the four outcomes are separate historical facts, not four phrasings of
+# one fact, and because each is guaranteed to fire at most once per campaign.
+news_event = {
+	id = ADISCORD_vorkerland_story.10
+	title = ADISCORD_vorkerland_story.10.t
+	desc = ADISCORD_vorkerland_story.10.d
+	picture = GFX_news_event_adiscord_parliament_chamber
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.10.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.11
+	title = ADISCORD_vorkerland_story.11.t
+	desc = ADISCORD_vorkerland_story.11.d
+	picture = GFX_news_event_adiscord_parliament_chamber
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.11.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.12
+	title = ADISCORD_vorkerland_story.12.t
+	desc = ADISCORD_vorkerland_story.12.d
+	picture = GFX_news_event_adiscord_city_in_civil_war
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.12.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.13
+	title = ADISCORD_vorkerland_story.13.t
+	desc = ADISCORD_vorkerland_story.13.d
+	picture = GFX_news_event_adiscord_city_in_civil_war
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.13.a }
+}
+
+# Twelve iconic objectives, twelve events. A shared major news item with
+# check_variable title/desc blocks painted the generic fallback: the GUI
+# scope that draws a major news item does not resolve var = global.X.
+# Each centre is fire_only_once; the objectives_taken array and the story
+# reported-array still own the once-per-campaign guard.
+news_event = {
+	id = ADISCORD_vorkerland_story.50
+	title = ADISCORD_vorkerland_story.50.t
+	desc = ADISCORD_vorkerland_story.50.d
+	picture = GFX_news_event_adiscord_city_in_civil_war
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.50.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.51
+	title = ADISCORD_vorkerland_story.51.t
+	desc = ADISCORD_vorkerland_story.51.d
+	picture = GFX_news_event_adiscord_city_in_civil_war
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.51.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.52
+	title = ADISCORD_vorkerland_story.52.t
+	desc = ADISCORD_vorkerland_story.52.d
+	picture = GFX_news_event_adiscord_city_in_civil_war
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.52.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.53
+	title = ADISCORD_vorkerland_story.53.t
+	desc = ADISCORD_vorkerland_story.53.d
+	picture = GFX_news_event_adiscord_city_in_civil_war
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.53.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.54
+	title = ADISCORD_vorkerland_story.54.t
+	desc = ADISCORD_vorkerland_story.54.d
+	picture = GFX_news_event_adiscord_city_in_civil_war
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.54.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.55
+	title = ADISCORD_vorkerland_story.55.t
+	desc = ADISCORD_vorkerland_story.55.d
+	picture = GFX_news_event_adiscord_city_in_civil_war
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.55.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.56
+	title = ADISCORD_vorkerland_story.56.t
+	desc = ADISCORD_vorkerland_story.56.d
+	picture = GFX_news_event_adiscord_city_in_civil_war
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.56.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.57
+	title = ADISCORD_vorkerland_story.57.t
+	desc = ADISCORD_vorkerland_story.57.d
+	picture = GFX_news_event_adiscord_city_in_civil_war
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.57.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.58
+	title = ADISCORD_vorkerland_story.58.t
+	desc = ADISCORD_vorkerland_story.58.d
+	picture = GFX_news_event_adiscord_city_in_civil_war
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.58.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.59
+	title = ADISCORD_vorkerland_story.59.t
+	desc = ADISCORD_vorkerland_story.59.d
+	picture = GFX_news_event_adiscord_city_in_civil_war
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.59.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.60
+	title = ADISCORD_vorkerland_story.60.t
+	desc = ADISCORD_vorkerland_story.60.d
+	picture = GFX_news_event_adiscord_city_in_civil_war
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.60.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.61
+	title = ADISCORD_vorkerland_story.61.t
+	desc = ADISCORD_vorkerland_story.61.d
+	picture = GFX_news_event_adiscord_city_in_civil_war
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.61.a }
+}
+
+# Six doctrine declarations, six events. A single major news event with
+# check_variable title/desc blocks silently falls through to the generic
+# fallback in this engine: the GUI scope that paints a major news item does
+# not resolve var = global.X. Worker's fate already uses one event per
+# outcome for the same reason. Each of these is fire_only_once; the
+# dispatching effect also owns a per-variant global flag so a duplicated
+# call cannot re-fire the news.
+news_event = {
+	id = ADISCORD_vorkerland_story.31
+	title = ADISCORD_vorkerland_story.31.t
+	desc = ADISCORD_vorkerland_story.31.d
+	picture = GFX_news_event_adiscord_parliament_chamber
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.31.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.32
+	title = ADISCORD_vorkerland_story.32.t
+	desc = ADISCORD_vorkerland_story.32.d
+	picture = GFX_news_event_adiscord_parliament_chamber
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.32.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.33
+	title = ADISCORD_vorkerland_story.33.t
+	desc = ADISCORD_vorkerland_story.33.d
+	picture = GFX_news_event_adiscord_parliament_chamber
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.33.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.34
+	title = ADISCORD_vorkerland_story.34.t
+	desc = ADISCORD_vorkerland_story.34.d
+	picture = GFX_news_event_adiscord_parliament_chamber
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.34.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.35
+	title = ADISCORD_vorkerland_story.35.t
+	desc = ADISCORD_vorkerland_story.35.d
+	picture = GFX_news_event_adiscord_parliament_chamber
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.35.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.36
+	title = ADISCORD_vorkerland_story.36.t
+	desc = ADISCORD_vorkerland_story.36.d
+	picture = GFX_news_event_adiscord_parliament_chamber
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.36.a }
+}
+
+# A main claimant drops out of the central war. Fired in the capitulating
+# claimant's own scope, so [ROOT.GetNameDef] names the side that fell.
+# One event per tag: the same check_variable title/desc path that failed
+# for doctrine news also failed here.
+news_event = {
+	id = ADISCORD_vorkerland_story.41
+	title = ADISCORD_vorkerland_story.41.t
+	desc = ADISCORD_vorkerland_story.41.d
+	picture = GFX_news_event_adiscord_city_in_civil_war
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.41.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.42
+	title = ADISCORD_vorkerland_story.42.t
+	desc = ADISCORD_vorkerland_story.42.d
+	picture = GFX_news_event_adiscord_city_in_civil_war
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.42.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_story.43
+	title = ADISCORD_vorkerland_story.43.t
+	desc = ADISCORD_vorkerland_story.43.d
+	picture = GFX_news_event_adiscord_city_in_civil_war
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_story.43.a }
+}

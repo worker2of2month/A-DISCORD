@@ -156,7 +156,7 @@ guiTypes = {
 
 				iconType = {
 					name = "focus_bonuses"
-					position = { x = 180 y = 108 }
+					position = { x = 214 y = 108 }
 					spriteType = "GFX_focus_bonuses_icon"
 				}
 
@@ -164,10 +164,10 @@ guiTypes = {
 					name = "limited_research_bonus_text"
 					position = { x = 50 y = 110 }
 					textureFile = ""
-					font = "hoi_18mbs"
+					font = "hoi_16mbs"
 					borderSize = {x = 0 y = 0}
 					text = "LIMITED_RESEARCH_BONUS"
-					maxWidth = 130
+					maxWidth = 160
 					maxHeight = 20
 					format = left
 					fixedsize = yes
@@ -175,7 +175,7 @@ guiTypes = {
 
 				instantTextboxType = {
 					name = "limited_research_bonus_value"
-					position = { x = 215 y = 110 }
+					position = { x = 247 y = 110 }
 					textureFile = ""
 					font = "hoi_18mbs"
 					borderSize = {x = 0 y = 0}
@@ -187,7 +187,7 @@ guiTypes = {
 
 				iconType = {
 					name = "research_speed_icon"
-					position = { x = 422 y = 108 }
+					position = { x = 455 y = 108 }
 					spriteType = "GFX_research_speed_icon"
 				}
 
@@ -195,10 +195,10 @@ guiTypes = {
 					name = "research_speed_text"
 					position = { x = 295 y = 110 }
 					textureFile = ""
-					font = "hoi_18mbs"
+					font = "hoi_16mbs"
 					borderSize = {x = 0 y = 0}
 					text = "RESEARCH_SPEED"
-					maxWidth = 125
+					maxWidth = 160
 					maxHeight = 20
 					format = left
 					fixedsize = yes
@@ -206,7 +206,7 @@ guiTypes = {
 
 				instantTextboxType = {
 					name = "research_speed_value"
-					position = { x = 455 y = 110 }
+					position = { x = 490 y = 110 }
 					textureFile = ""
 					font = "hoi_18mbs"
 					borderSize = {x = 0 y = 0}

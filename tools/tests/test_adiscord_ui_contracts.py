@@ -39,6 +39,33 @@ class UiContractTests(unittest.TestCase):
         self.assertIn("noOfFrames = 2", rendered)
         self.assertIn('effectFile = "gfx/FX/buttonstate_nodowneffect.lua"', rendered)
 
+    def test_gfx_entry_emits_explicit_size_only_for_cornered_tiles(self) -> None:
+        for kind in ("spriteType", "textSpriteType", "frameAnimatedSpriteType"):
+            with self.subTest(kind=kind):
+                contract = SpriteContract(
+                    source_name="GFX_example",
+                    target_name="GFX_ADISCORD_example",
+                    filename="example.dds",
+                    kind=kind,
+                    total_size=(183, 84),
+                )
+                rendered = render_gfx_entry(contract, "gfx/interface/example.dds")
+                self.assertNotIn("size = {", rendered)
+
+        cornered_tile = SpriteContract(
+            source_name="GFX_example_tile",
+            target_name="GFX_ADISCORD_example_tile",
+            filename="example_tile.dds",
+            kind="corneredTileSpriteType",
+            total_size=(192, 192),
+            border_size=(64, 64),
+        )
+        rendered_tile = render_gfx_entry(
+            cornered_tile,
+            "gfx/interface/example_tile.dds",
+        )
+        self.assertIn("size = { x = 192 y = 192 }", rendered_tile)
+
     def test_contact_sheet_is_deterministic_and_rgba(self) -> None:
         entries = [
             ("a", Image.new("RGBA", (40, 20), (10, 20, 30, 255))),

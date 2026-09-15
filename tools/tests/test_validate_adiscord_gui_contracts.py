@@ -540,6 +540,65 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
 
 
 class CountryPoliticsGuiContractTests(unittest.TestCase):
+    def test_active_focus_controls_fit_their_visible_card(self):
+        from PIL import Image
+
+        gui = (ROOT / 'interface/countrypoliticsview.gui').read_text(encoding='utf-8-sig')
+        card = gui_node_body(gui, 'active_goal')
+
+        def position(body):
+            return tuple(map(int, re.search(
+                r'position\s*=\s*\{\s*x\s*=\s*(-?\d+)\s+y\s*=\s*(-?\d+)', body
+            ).groups()))
+
+        with Image.open(ROOT / 'gfx/interface/pol_goal_bg.dds') as background:
+            card_width, card_height = background.size
+        declared_size = tuple(map(int, re.search(
+            r'size\s*=\s*\{\s*width\s*=\s*(\d+)\s+height\s*=\s*(\d+)', card
+        ).groups()))
+        self.assertEqual(declared_size, (card_width, card_height))
+        icon_body = gui_node_body(card, 'goal_icon')
+        icon_x, icon_y = position(icon_body)
+        scale = re.search(r'\bscale\s*=\s*([\d.]+)', icon_body)
+        scale = float(scale[1]) if scale else 1.0
+        icons = [ROOT / 'gfx/interface/goals/goal_unknown.dds']
+        icons.extend((ROOT / 'gfx/interface/goals/STP/BeforeCivilWar').glob('*.png'))
+        self.assertGreater(len(icons), 1)
+        for path in icons:
+            with self.subTest(icon=path.name), Image.open(path) as icon:
+                # Selected STP art is 150px; the empty-state icon is only 94px.
+                self.assertGreaterEqual(icon_x - icon.width * scale / 2, 0)
+                self.assertLessEqual(icon_x + icon.width * scale / 2, 100)
+                self.assertGreaterEqual(icon_y - icon.height * scale / 2, 0)
+                self.assertLessEqual(icon_y + icon.height * scale / 2, card_height)
+        button_x, button_y = position(gui_node_body(card, 'add_national_goal_button'))
+        with Image.open(ROOT / 'gfx/interface/add_national_goal_button.dds') as atlas:
+            self.assertGreaterEqual(button_x, 100)
+            self.assertLessEqual(button_x + atlas.width // 3, card_width)
+            self.assertLessEqual(button_y + atlas.height, card_height)
+        title = gui_node_body(card, 'title')
+        title_x, title_y = position(title)
+        title_width = int(re.search(r'maxWidth\s*=\s*(\d+)', title)[1])
+        title_height = int(re.search(r'maxHeight\s*=\s*(\d+)', title)[1])
+        self.assertIn('fixedsize = yes', title)
+        self.assertGreaterEqual(title_height, 36)  # Two lines of the Russian prompt.
+        close_x, _ = position(gui_node_body(card, 'drop_focus_button'))
+        self.assertLessEqual(title_x + title_width, close_x)
+        frame_x, frame_y = position(gui_node_body(card, 'progress_frame'))
+        progress_x, progress_y = position(gui_node_body(card, 'progress'))
+        with Image.open(ROOT / 'gfx/interface/pol_goal_progress_frame.dds') as frame:
+            left, top, right, bottom = frame.convert('RGBA').getbbox()
+        gfx = (ROOT / 'interface/countrypoliticsview.gfx').read_text(encoding='utf-8-sig')
+        width, height = map(int, re.search(
+            r'name\s*=\s*"GFX_activegoal_progress".*?'
+            r'size\s*=\s*\{\s*x\s*=\s*(\d+)\s+y\s*=\s*(\d+)', gfx, re.DOTALL
+        ).groups())
+        self.assertGreater(progress_x, frame_x + left)
+        self.assertGreater(progress_y, frame_y + top)
+        self.assertLessEqual(progress_x + width, frame_x + right - 1)
+        self.assertLessEqual(progress_y + height, frame_y + bottom - 1)
+        self.assertLessEqual(title_y + title_height, frame_y)
+
     def test_politics_window_uses_custom_open_and_close_sounds(self):
         gui_text = (
             ROOT / 'interface' / 'countrypoliticsview.gui'
@@ -605,7 +664,7 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
         ]
         self.assertEqual(len(top_level_soundeffects), 2)
 
-    def test_frontend_menu_stubs_do_not_register_incomplete_engine_controls(self):
+    def test_frontend_menu_controls_match_engine_lookup_types(self):
         main = (ROOT / 'interface' / 'frontendmainview.gui').read_text(
             encoding='utf-8-sig'
         )
@@ -614,20 +673,44 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
         )
         main_nodes = named_gui_nodes(main)
         setup_nodes = named_gui_nodes(setup)
-        self.assertIn(
-            ('instantTextBoxType', 'subscription_size', ('mainmenu_panel_bottom',)),
-            main_nodes,
-        )
-        self.assertIn('hide = yes', gui_node_body(main, 'subscription_size'))
-        self.assertIn(
-            ('containerWindowType', 'more_countries', ('gamesetup_interesting_countries_window',)),
-            setup_nodes,
-        )
-        self.assertIn('hide = yes', gui_node_body(setup, 'more_countries'))
+        # HOI4 resolves these by type as well as name; arbitrary hidden widgets
+        # still produce "Could not find" errors during frontend initialization.
+        with self.subTest(control='subscription_size'):
+            self.assertIn(
+                ('positionType', 'subscription_size', ('mainmenu_panel_bottom',)),
+                main_nodes,
+            )
+        with self.subTest(control='more_countries'):
+            self.assertIn(
+                ('dropDownBoxType', 'more_countries', ('gamesetup_interesting_countries_window',)),
+                setup_nodes,
+            )
+            dropdown = economy_validator.parse_clausewitz(
+                gui_node_body(setup, 'more_countries')
+            )
+            self.assertEqual(_direct_scalar(dropdown, 'hide'), 'yes')
+            for child in ('expandButton', 'expandedWindow'):
+                self.assertIsNotNone(_unique_direct_block(dropdown, child))
+            expanded = _unique_direct_block(dropdown, 'expandedWindow')
+            grid = _unique_direct_block(expanded, 'gridBoxType')
+            self.assertIsNotNone(grid)
+            self.assertEqual(_direct_scalar(grid, 'name'), 'countries_mini_expanded')
         self.assertIn(
             ('OverlappingElementsBoxType', 'filters', ('gamesetup_interesting_countries_window',)),
             setup_nodes,
         )
+
+    def test_sva_map_font_keeps_different_metrics_in_language_override(self):
+        sva = (ROOT / 'interface' / 'sva.gfx').read_text(encoding='utf-8-sig')
+        base = re.search(r'bitmapfont\s*=\s*\{(.*?)\n\s*\}', sva, re.DOTALL)
+        self.assertIsNotNone(base)
+        self.assertIn('bitmapfont_override', sva)
+        override = sva[sva.index('bitmapfont_override') :]
+        self.assertIn('"gfx/fonts/hoi_20bsSVA"', base.group(1))
+        self.assertNotIn('hoi_20bs_cryllic', base.group(1))
+        self.assertIn('"gfx/fonts/hoi_20bs"', override)
+        self.assertIn('"gfx/fonts/hoi_20bs_cryllic"', override)
+        self.assertIn('"l_russian"', override)
 
     def test_vanilla_menu_sound_overrides_use_hoi4_pcm_profile(self):
         menu_directory = ROOT / 'sound' / 'menu'

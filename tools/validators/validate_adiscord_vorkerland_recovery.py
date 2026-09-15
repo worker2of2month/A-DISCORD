@@ -25,39 +25,41 @@ except ModuleNotFoundError:
     )
 
 
+from tools.lib.paths import source_section
+
+
 ROOT = Path(__file__).resolve().parents[2]
 
 TAG_FILE = Path("common/country_tags/01_ADISCORD_vorkerland_collapse_tags.txt")
 WKR_COUNTRY = Path("common/countries/WKR.txt")
 WKR_HISTORY = Path("history/countries/WKR - Worker Emergency Government.txt")
 COLLAPSE_CHARACTERS = Path("common/characters/ADISCORD_vorkerland_collapse_characters.txt")
-PHASE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
+PHASE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
 CAMPAIGN_STATE_EFFECTS = Path(
-    "common/scripted_effects/ADISCORD_vorkerland_campaign_state_effects.txt"
+    "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
 )
 WAR_ECONOMY_EFFECTS = Path(
-    "common/scripted_effects/ADISCORD_vorkerland_war_economy_effects.txt"
+    "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
 )
 DOCTRINE_EFFECTS = Path(
-    "common/scripted_effects/ADISCORD_vorkerland_doctrine_effects.txt"
+    "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
 )
-PHASE_TRIGGERS = Path("common/scripted_triggers/ADISCORD_vorkerland_phase_triggers.txt")
-PHASE_EVENTS = Path("events/ADISCORD_vorkerland_phase_events.txt")
-COLLAPSE_EVENTS = Path("events/ADISCORD_vorkerland_collapse_events.txt")
-COLLAPSE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
+PHASE_TRIGGERS = Path("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt")
+PHASE_EVENTS = Path("events/ADISCORD_vorkerland_events.txt")
+COLLAPSE_EVENTS = Path("events/ADISCORD_vorkerland_events.txt")
+COLLAPSE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
 CAPITULATION_EFFECTS = Path("common/scripted_effects/ZZ_ADISCORD_capitulation_distribution_effects.txt")
-RELEASE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_release_effects.txt")
-COLLAPSE_TRIGGERS = Path("common/scripted_triggers/ADISCORD_vorkerland_collapse_triggers.txt")
+RELEASE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+COLLAPSE_TRIGGERS = Path("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt")
 COLLAPSE_ON_ACTIONS = Path("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
-FOCUS_TREE = Path("common/national_focus/ADISCORD_vorkerland_civil_war_focus.txt")
+FOCUS_TREE = Path("common/national_focus/ADISCORD_vorkerland_focus.txt")
 FOCUS_DECISION_FILES = (
-    Path("common/decisions/ADISCORD_vorkerland_focus_operations_decisions.txt"),
-    Path("common/decisions/ADISCORD_vorkerland_allied_support_decisions.txt"),
+    Path("common/decisions/ADISCORD_vorkerland_decisions.txt"),
 )
 FOCUS_DECISIONS = FOCUS_DECISION_FILES
-FOCUS_DECISION_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt")
-ENGLISH_LOCALISATION = Path("localisation/english/ADISCORD_vorkerland_recovery_l_english.yml")
-RUSSIAN_LOCALISATION = Path("localisation/russian/ADISCORD_vorkerland_recovery_l_russian.yml")
+FOCUS_DECISION_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+ENGLISH_LOCALISATION = Path("localisation/english/ADISCORD_vorkerland_l_english.yml")
+RUSSIAN_LOCALISATION = Path("localisation/russian/ADISCORD_vorkerland_l_russian.yml")
 
 WKR_FLAGS = {
     Path("gfx/flags/WKR.tga"): (82, 52),
@@ -237,7 +239,7 @@ def event_block(text: str, event_id: str) -> str:
     return ""
 
 
-def _load(relative: Path | tuple[Path, ...], issues: list[str]) -> str:
+def _load(relative: Path | tuple[Path, ...], issues: list[str], *, section: str | None = None) -> str:
     if isinstance(relative, tuple):
         return "\n".join(_load(path, issues) for path in relative)
     path = ROOT / relative
@@ -251,7 +253,7 @@ def _load(relative: Path | tuple[Path, ...], issues: list[str]) -> str:
         return ""
     if not balanced(source):
         issues.append(f"unbalanced Clausewitz braces in {relative.as_posix()}")
-    return strip_comments(source)
+    return strip_comments(source_section(source, section) if section else source)
 
 
 def _tga_dimensions(path: Path) -> tuple[int, int] | None:
@@ -430,11 +432,11 @@ def validate_new_save_materialization() -> list[str]:
     """Validate the one-shot WRK partition and bounded atomic recovery."""
 
     issues: list[str] = []
-    effects = _load(PHASE_EFFECTS, issues)
-    triggers = _load(PHASE_TRIGGERS, issues)
-    phase_events = _load(PHASE_EVENTS, issues)
-    collapse_events = _load(COLLAPSE_EVENTS, issues)
-    collapse_effects = _load(COLLAPSE_EFFECTS, issues)
+    effects = _load(PHASE_EFFECTS, issues, section="phase_effects")
+    triggers = _load(PHASE_TRIGGERS, issues, section="phase_triggers")
+    phase_events = _load(PHASE_EVENTS, issues, section="phase_events")
+    collapse_events = _load(COLLAPSE_EVENTS, issues, section="collapse_events")
+    collapse_effects = _load(COLLAPSE_EFFECTS, issues, section="collapse_effects")
     on_actions = _load(COLLAPSE_ON_ACTIONS, issues)
     if any(
         not (ROOT / path).is_file()
@@ -1020,9 +1022,9 @@ def validate_new_save_materialization() -> list[str]:
 
 def validate_phase_controller() -> list[str]:
     issues: list[str] = []
-    effects = _load(PHASE_EFFECTS, issues)
-    triggers = _load(PHASE_TRIGGERS, issues)
-    events = _load(PHASE_EVENTS, issues)
+    effects = _load(PHASE_EFFECTS, issues, section="phase_effects")
+    triggers = _load(PHASE_TRIGGERS, issues, section="phase_triggers")
+    events = _load(PHASE_EVENTS, issues, section="phase_events")
     if any(not (ROOT / path).is_file() for path in (PHASE_EFFECTS, PHASE_TRIGGERS, PHASE_EVENTS)):
         return issues
 
@@ -1234,13 +1236,13 @@ def _pair_flags(slug: str) -> dict[str, str]:
 
 def validate_bounded_retry() -> list[str]:
     issues: list[str] = []
-    effects = _load(PHASE_EFFECTS, issues)
-    triggers = _load(PHASE_TRIGGERS, issues)
-    events = _load(PHASE_EVENTS, issues)
-    collapse_events = _load(COLLAPSE_EVENTS, issues)
+    effects = _load(PHASE_EFFECTS, issues, section="phase_effects")
+    triggers = _load(PHASE_TRIGGERS, issues, section="phase_triggers")
+    events = _load(PHASE_EVENTS, issues, section="phase_events")
+    collapse_events = _load(COLLAPSE_EVENTS, issues, section="collapse_events")
     on_actions = _load(COLLAPSE_ON_ACTIONS, issues)
     decisions = _load(FOCUS_DECISIONS, issues)
-    decision_effects = _load(FOCUS_DECISION_EFFECTS, issues)
+    decision_effects = _load(FOCUS_DECISION_EFFECTS, issues, section="focus_decision_effects")
     if any(
         not (ROOT / path).is_file()
         for path in (
@@ -1688,9 +1690,9 @@ def validate_bounded_retry() -> list[str]:
 
 def validate_reunification_formation() -> list[str]:
     issues: list[str] = []
-    effects = _load(PHASE_EFFECTS, issues)
-    triggers = _load(PHASE_TRIGGERS, issues)
-    events = _load(PHASE_EVENTS, issues)
+    effects = _load(PHASE_EFFECTS, issues, section="phase_effects")
+    triggers = _load(PHASE_TRIGGERS, issues, section="phase_triggers")
+    events = _load(PHASE_EVENTS, issues, section="phase_events")
     if any(
         not (ROOT / path).is_file()
         for path in (PHASE_EFFECTS, PHASE_TRIGGERS, PHASE_EVENTS)
@@ -1827,9 +1829,9 @@ def validate_premature_wrk_recovery() -> list[str]:
     """Guard the dormant WRK tag and same-tick release routing."""
 
     issues: list[str] = []
-    triggers = _load(COLLAPSE_TRIGGERS, issues)
+    triggers = _load(COLLAPSE_TRIGGERS, issues, section="collapse_triggers")
     effects = _load(CAPITULATION_EFFECTS, issues)
-    release_effects = _load(RELEASE_EFFECTS, issues)
+    release_effects = _load(RELEASE_EFFECTS, issues, section="release_effects")
     on_actions = _load(COLLAPSE_ON_ACTIONS, issues)
     if any(
         not (ROOT / path).is_file()
@@ -2030,7 +2032,7 @@ def validate_premature_wrk_recovery() -> list[str]:
 
 def validate_retired_legacy_events() -> list[str]:
     issues: list[str] = []
-    collapse_events = _load(COLLAPSE_EVENTS, issues)
+    collapse_events = _load(COLLAPSE_EVENTS, issues, section="collapse_events")
 
     for event_id in RETIRED_LEGACY_EVENT_IDS:
         full_id = f"ADISCORD_vorkerland_collapse.{event_id}"
@@ -2044,14 +2046,14 @@ def validate_retired_legacy_events() -> list[str]:
 def validate_campaign_state() -> list[str]:
     """Validate the event-driven campaign-state ownership split."""
     issues: list[str] = []
-    campaign = _load(CAMPAIGN_STATE_EFFECTS, issues)
-    economy = _load(WAR_ECONOMY_EFFECTS, issues)
-    doctrine = _load(DOCTRINE_EFFECTS, issues)
-    phase = _load(PHASE_EFFECTS, issues)
-    triggers = _load(PHASE_TRIGGERS, issues)
+    campaign = _load(CAMPAIGN_STATE_EFFECTS, issues, section="campaign_state_effects")
+    economy = _load(WAR_ECONOMY_EFFECTS, issues, section="war_economy_effects")
+    doctrine = _load(DOCTRINE_EFFECTS, issues, section="doctrine_effects")
+    phase = _load(PHASE_EFFECTS, issues, section="phase_effects")
+    triggers = _load(PHASE_TRIGGERS, issues, section="phase_triggers")
     on_actions = _load(COLLAPSE_ON_ACTIONS, issues)
-    collapse_events = _load(COLLAPSE_EVENTS, issues)
-    focus = _load(FOCUS_TREE, issues)
+    collapse_events = _load(COLLAPSE_EVENTS, issues, section="collapse_events")
+    focus = _load(FOCUS_TREE, issues, section="civil_war_focus")
     required = (
         CAMPAIGN_STATE_EFFECTS,
         WAR_ECONOMY_EFFECTS,

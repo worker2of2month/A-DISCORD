@@ -13,7 +13,6 @@ ADISCORD_is_non_participating_minor = {
 		tag = BLD
 		tag = BOR
 		tag = BRN
-		tag = COF
 		tag = DOL
 		tag = DRV
 		tag = ELN
@@ -33,11 +32,9 @@ ADISCORD_is_non_participating_minor = {
 		tag = SDR
 		tag = SHL
 		tag = SKN
-		tag = TFF
 		tag = TMR
 		tag = VES
 		tag = WEF
-		tag = YPR
 	}
 }
 

@@ -21,8 +21,11 @@
     "diplomacy_ui_assets",
     "production_ui_assets",
     "logistics_ui_assets",
+    "market_ui_assets",
     "deployment_ui_assets",
     "intelligence_ui_assets",
+    "event_ui_assets",
+    "event_pictures",
     "resource_assets",
     "technology_ui_assets",
     "technology_screen_ui_assets",
@@ -211,7 +214,7 @@
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_vorkerland_theatre", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "The theatre builder owns only the exact OSV capital-spur and four supply-hub records declared in its manifest; existing Nudge railway and supply records remain hand-authored map data."
+      "overlap_explanation": "The theatre builder owns only its exact OSV capital-spur, STP/YPR supply-connection and four supply-hub records; existing Nudge railway and supply records remain hand-authored map data."
     },
     {
       "id": "state_history",
@@ -463,8 +466,8 @@
         "gfx/interface/technology/ui/ADISCORD_technology_content_tile.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_overlay.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_transparent_tile.dds",
-        "gfx/interface/technology/ui/ADISCORD_technology_slot.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_empty_slot_glow.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_slot.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_idea.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_tabs.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_top.dds",
@@ -479,17 +482,118 @@
         "gfx/interface/technology/ui/ADISCORD_technology_node_available.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_node_researched.dds",
         "gfx/interface/technology/ui/ADISCORD_technology_node_branch.dds",
-        "gfx/interface/technology/ui/ADISCORD_technology_node_researching.dds"
+        "gfx/interface/technology/ui/ADISCORD_technology_node_researching.dds",
+        "gfx/interface/research_line_bg.dds",
+        "gfx/interface/military_industrial_organization/research_line_mio_bg.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_folder_infantry.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_folder_support.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_folder_armour.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_folder_artillery.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_folder_naval.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_folder_naval_support.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_folder_air.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_folder_electronics.dds",
+        "gfx/interface/technology/ui/ADISCORD_technology_folder_industry.dds"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_technology_ui_assets.py",
         "tools/lib/adiscord_ui_contracts.py",
         "tools/lib/adiscord_ui_surfaces.py",
-        "gfx/interface/production/source/production_surface_source.png"
+        "gfx/interface/technology/source/technology_surface.png",
+        "gfx/interface/technology/source/folder_tabs.png"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_technology_ui_assets"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_technology_ui_assets", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_technology_ui_assets"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_technology_ui_assets",
+        "--apply"
+      ],
       "may_delete_outputs": true,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "market_ui_assets",
+      "owner_module": "tools.builders.build_adiscord_market_ui_assets",
+      "output_globs": [
+        "interface/international_market/countryinternationalmarketview.gui",
+        "interface/international_market/marketaccessoverviewwindow.gui",
+        "interface/international_market/marketpurchasableequipmentwindow.gui",
+        "interface/international_market/marketpurchasedraftwindow.gui",
+        "interface/international_market/marketequipmentstockpilewindow.gui",
+        "interface/international_market/addequipmenttomarketwindow.gui",
+        "interface/international_market/edit_market_stockpile_window.gui",
+        "interface/international_market/requestautomationoptionswindow.gui",
+        "interface/international_market/pricelevelswidgets.gui",
+        "interface/international_market/markettutorialhint.gui",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_overlay.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_thin_panel.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_window.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_panel.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_counter.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_command.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_button_221.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_button_123.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_button_94.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_summary.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_response.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_purchase_summary.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_equipment_large.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_equipment_small.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_equipment_header.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_contract_filter.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_tabs_backing.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_access_row.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_plain.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_options.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_dialog.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_content.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_generic.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_equipment_detail.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_amount_88.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_amount_60.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_buy_tab.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_land_offer.dds",
+        "gfx/interface/international_market/land_equipment_market_entry.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_naval_offer.dds",
+        "gfx/interface/international_market/naval_equipment_market_entry.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_sell_tab.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_stockpile.dds",
+        "gfx/interface/international_market/equipment_on_market.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_armory.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_footer.dds",
+        "gfx/interface/international_market/adiscord/ADISCORD_market_hint.dds",
+        "interface/ADISCORD_market_ui.gfx",
+        "gfx/interface/international_market/adiscord/preview.png"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_market_ui_assets.py",
+        "tools/builders/build_adiscord_resource_assets.py",
+        "tools/lib/adiscord_ui_contracts.py",
+        "tools/lib/adiscord_ui_surfaces.py",
+        "gfx/interface/production/source/production_surface_source.png",
+        "gfx/interface/ADISCORD_trade_gui/source/international_market_source.png"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_market_ui_assets"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_market_ui_assets",
+        "--apply"
+      ],
+      "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },
     {
@@ -501,10 +605,19 @@
         "gfx/interface/logistics/ui/ADISCORD_logistics_window.dds",
         "gfx/interface/logistics/ui/ADISCORD_logistics_panel.dds",
         "gfx/interface/logistics/ui/ADISCORD_logistics_row.dds",
-        "gfx/interface/logistics/ui/ADISCORD_logistics_graph.dds"
+        "gfx/interface/logistics/ui/ADISCORD_logistics_graph.dds",
+        "gfx/interface/logistics/ui/ADISCORD_logistics_variant_row.dds",
+        "gfx/interface/logistics/ui/ADISCORD_logistics_other_row.dds",
+        "gfx/interface/logistics/ui/ADISCORD_logistics_naval_equipment_row.dds",
+        "gfx/interface/logistics/ui/ADISCORD_logistics_air_equipment_row.dds",
+        "gfx/interface/logistics/ui/ADISCORD_logistics_equipment_row.dds",
+        "gfx/interface/logistics/ui/ADISCORD_logistics_entry_row.dds",
+        "gfx/interface/logistics/ui/ADISCORD_logistics_fuel_row.dds",
+        "gfx/interface/logistics/ui/ADISCORD_logistics_header_row.dds"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_logistics_ui_assets.py",
+        "tools/lib/adiscord_ui_contracts.py",
         "tools/lib/adiscord_ui_surfaces.py",
         "gfx/interface/production/source/production_surface_source.png"
       ],
@@ -541,12 +654,17 @@
         "gfx/interface/deployment/ui/ADISCORD_deployment_priority_title.dds",
         "gfx/interface/deployment/ui/ADISCORD_deployment_priority_meter.dds",
         "gfx/interface/deployment/ui/ADISCORD_deployment_action_button.dds",
-        "gfx/interface/deployment/ui/ADISCORD_deployment_add_line_button.dds",
-        "gfx/interface/deployment/ui/ADISCORD_deployment_checkbox.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_view_button.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_symbol_button.dds",
         "gfx/interface/deployment/ui/ADISCORD_deployment_designer_button.dds",
-        "gfx/interface/deployment/ui/ADISCORD_deployment_foreign_templates.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_add_line_button.dds",
         "gfx/interface/deployment/ui/ADISCORD_deployment_priority_strip.dds",
-        "gfx/interface/deployment/ui/ADISCORD_deployment_symbol_button.dds"
+        "gfx/interface/deployment/ui/ADISCORD_deployment_checkbox.dds",
+        "gfx/interface/deployment/ui/ADISCORD_deployment_foreign_templates.dds",
+        "gfx/interface/deploy_reinforcements_entry.dds",
+        "gfx/interface/deploy_upgrades_entry.dds",
+        "gfx/interface/deploy_garrisons_entry.dds",
+        "gfx/interface/deploy_operations_entry.dds"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_deployment_ui_assets.py",
@@ -568,6 +686,7 @@
         "interface/operativeleader.gui",
         "interface/ADISCORD_intelligence_ui.gfx",
         "gfx/interface/intelligence/preview/ADISCORD_intelligence_preview.png",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_creation_glow.dds",
         "gfx/interface/intelligence/ui/ADISCORD_intelligence_window_shell.dds",
         "gfx/interface/intelligence/ui/ADISCORD_intelligence_content_tile.dds",
         "gfx/interface/intelligence/ui/ADISCORD_intelligence_paper_tile.dds",
@@ -586,8 +705,8 @@
         "gfx/interface/intelligence/ui/ADISCORD_intelligence_required.dds",
         "gfx/interface/intelligence/ui/ADISCORD_intelligence_add_operative.dds",
         "gfx/interface/intelligence/ui/ADISCORD_intelligence_mission_bar.dds",
-        "gfx/interface/intelligence/ui/ADISCORD_intelligence_command_button.dds",
         "gfx/interface/intelligence/ui/ADISCORD_intelligence_create_button.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_command_button.dds",
         "gfx/interface/intelligence/ui/ADISCORD_intelligence_upgrade_card.dds"
       ],
       "source_inputs": [
@@ -600,6 +719,52 @@
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_intelligence_ui_assets"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_intelligence_ui_assets", "--apply"],
       "may_delete_outputs": true,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "event_ui_assets",
+      "owner_module": "tools.builders.build_adiscord_event_ui_assets",
+      "output_globs": [
+        "gfx/interface/event_popup_bg.png",
+        "gfx/interface/event_popup_top.png",
+        "gfx/interface/event_popup_middle.png",
+        "gfx/interface/event_popup_bottom.png",
+        "gfx/interface/event_option_entry_adiscord.png",
+        "gfx/interface/events/preview/ADISCORD_event_window_preview.png",
+        "gfx/event_pictures/event_adiscord_ui_test.png"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_event_ui_assets.py",
+        "tools/lib/adiscord_ui_surfaces.py",
+        "gfx/interface/production/source/production_surface_source.png",
+        "gfx/event_pictures/source/event_adiscord_ui_test_source.png"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_event_ui_assets"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_event_ui_assets", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "event_pictures",
+      "owner_module": "tools.builders.build_adiscord_event_pictures",
+      "output_globs": [
+        "gfx/event_pictures/standard/*/*.png",
+        "interface/ADISCORD_event_art.gfx",
+        "gfx/interface/events/preview/ADISCORD_event_art_contact_sheet.png"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_event_pictures.py",
+        "tools/lib/adiscord_ui_surfaces.py",
+        "gfx/event_pictures/source/*.png",
+        "gfx/event_pictures/source/news/*.dds",
+        "gfx/event_pictures/source/news/*.png",
+        "gfx/event_pictures/event_adiscord_ui_test.png",
+        "gfx/event_pictures/event_vorkerland_explosion.png",
+        "gfx/event_pictures/event_vorkerland_civilwar_is_over.png"
+      ],
+        "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_event_pictures"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_event_pictures", "--apply"],
+      "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },
     {
@@ -732,7 +897,8 @@
       "output_globs": [
         "gfx/interface/diplomacy/ADISCORD_diplomacy_leader_overlay.dds",
         "gfx/interface/diplomacy/ADISCORD_diplomacy_parties_overlay.dds",
-        "gfx/interface/diplomacy/ADISCORD_diplomacy_flag_overlay.dds"
+        "gfx/interface/diplomacy/ADISCORD_diplomacy_flag_overlay.dds",
+        "gfx/interface/goals/goal_unknown.dds"
       ],
       "source_inputs": [
         "gfx/interface/diplomacy/source/ADISCORD_diplomacy_leader_overlay_master.png",

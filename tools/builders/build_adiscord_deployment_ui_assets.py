@@ -13,6 +13,7 @@ from tools.lib.adiscord_ui_contracts import (
     SpriteContract,
     contact_sheet,
     render_gfx_entry,
+    replace_gui_block,
     validate_contract_image,
 )
 from tools.lib.adiscord_ui_surfaces import (
@@ -72,6 +73,7 @@ DEPLOYMENT_CONTRACTS = (
     SpriteContract("GFX_deploy_priority_title_bg", "GFX_ADISCORD_deployment_priority_title", "ADISCORD_deployment_priority_title.dds", "spriteType", (159, 26)),
     SpriteContract("GFX_deploy_priority_equipment_meter_bg", "GFX_ADISCORD_deployment_priority_meter", "ADISCORD_deployment_priority_meter.dds", "spriteType", (108, 33)),
     SpriteContract("GFX_small_button_71x26", "GFX_ADISCORD_deployment_action_button", "ADISCORD_deployment_action_button.dds", "textSpriteType", (71, 26), effect_file=BUTTON_EFFECT),
+    SpriteContract("GFX_small_button_71x26", "GFX_ADISCORD_deployment_view_button", "ADISCORD_deployment_view_button.dds", "textSpriteType", (87, 26), effect_file=BUTTON_EFFECT),
     SpriteContract("GFX_button_221x34", "GFX_ADISCORD_deployment_symbol_button", "ADISCORD_deployment_symbol_button.dds", "textSpriteType", (221, 36), effect_file=BUTTON_EFFECT),
     SpriteContract("GFX_division_designer_button", "GFX_ADISCORD_deployment_designer_button", "ADISCORD_deployment_designer_button.dds", "textSpriteType", (166, 33), effect_file=BUTTON_EFFECT),
     SpriteContract("GFX_military_deployment_add_line_btn", "GFX_ADISCORD_deployment_add_line_button", "ADISCORD_deployment_add_line_button.dds", "textSpriteType", (210, 23), frames=2, effect_file=BUTTON_EFFECT),
@@ -138,6 +140,22 @@ def render_gui() -> str:
         text = replace_counted(text, old, new, expected)
     text = _replace_container_sprite(text, "deploy_entry", "GFX_deploy_reinforcements_entry", "GFX_ADISCORD_deployment_reinforcement_row")
     text = _replace_container_sprite(text, "supply_deploy_entry", "GFX_deploy_reinforcements_entry", "GFX_ADISCORD_deployment_supply_row")
+    start, end = _container_block(text, "named_division_template_entry")
+    entry = text[start:end]
+    entry = replace_gui_block(entry, "buttonType", "edit_button", (
+        (r'"GFX_ADISCORD_deployment_action_button"', '"GFX_ADISCORD_deployment_view_button"'),
+    ))
+    entry = replace_gui_block(entry, "buttonType", "delete_button", (
+        (r'position\s*=\s*\{[^}]+\}', 'position = { x = 316 y = 48 }'),
+    ))
+    text = text[:start] + entry + text[end:]
+    start, end = _container_block(text, "show_decommissioned_templates_window")
+    entry = replace_gui_block(text[start:end], "instantTextboxType", "text", (
+        (r'font\s*=\s*"hoi_20b"', 'font = "hoi_16mbs"'),
+        (r'position\s*=\s*\{[^}]+\}', 'position = { x = 52 y = 11 }'),
+        (r'maxWidth\s*=\s*288', 'maxWidth = 310'),
+    ))
+    text = text[:start] + entry + text[end:]
     manifest = "\n".join(
         f'# semantic deployment asset: "{item.target_name}"'
         for item in DEPLOYMENT_CONTRACTS
@@ -148,10 +166,10 @@ def render_gui() -> str:
 def _priority_row(source: Image.Image, accent: tuple[int, int, int, int]) -> Image.Image:
     palette = PALETTES["deployment"]
     output = metal_surface(source, (493, 57), palette, 0.78)
-    status_band(output, (0, 0, 492, 3), accent)
-    recessed_well(output, (5, 7, 102, 50), palette)
-    partial_rails(output, (106, 9, 309, 47), palette)
-    raised_field(output, (313, 7, 487, 50), palette)
+    # The icon, title and equipment meter each have their own GUI background.
+    partial_rails(output, (3, 5, 489, 53), palette)
+    status_band(output, (3, 10, 5, 47), accent)
+    recessed_well(output, (409, 15, 480, 42), palette)
     return output
 
 
@@ -159,10 +177,12 @@ def _template_row(source: Image.Image, size: tuple[int, int], obsolete: bool) ->
     palette = PALETTES["deployment"]
     width, height = size
     output = metal_surface(source, size, palette, 0.68 if obsolete else 0.82)
-    recessed_well(output, (8, 8, 74, height - 9), palette)
-    raised_field(output, (83, 9, width - 77, height - 10), palette)
-    recessed_well(output, (width - 68, 9, width - 9, height - 10), palette)
-    status_band(output, (83, height - 7, width - 77, height - 4), RUST if obsolete else OLIVE)
+    # Background origin is (-5, 0), while label origin is (102, 20).
+    recessed_well(output, (5, 7, 92, height - 7), palette)
+    raised_field(output, (100, 11, width - 39, 43), palette)
+    recessed_well(output, (width - 34, 12, width - 7, 43), palette)
+    partial_rails(output, (98, 46, width - 5, height - 3), palette)
+    status_band(output, (6, height - 5, 91, height - 3), RUST if obsolete else OLIVE)
     return output
 
 
@@ -200,7 +220,6 @@ def _priority_meter(source: Image.Image) -> Image.Image:
     palette = PALETTES["deployment"]
     output = metal_surface(source, (108, 33), palette, 0.80)
     recessed_well(output, (2, 4, 105, 28), palette)
-    status_band(output, (4, 25, 103, 27), OLIVE)
     return output
 
 
@@ -297,7 +316,7 @@ def render_asset(contract: SpriteContract, source: Image.Image) -> Image.Image:
         return _priority_title(source)
     if target == "GFX_ADISCORD_deployment_priority_meter":
         return _priority_meter(source)
-    if target == "GFX_ADISCORD_deployment_action_button":
+    if target in {"GFX_ADISCORD_deployment_action_button", "GFX_ADISCORD_deployment_view_button"}:
         return _semantic_button_strip(source, contract.total_size, contract.frames, OLIVE)
     if target == "GFX_ADISCORD_deployment_symbol_button":
         return _semantic_button_strip(source, contract.total_size, contract.frames, SUPPLY_STEEL)
@@ -348,6 +367,16 @@ def expected_outputs() -> dict[Path, bytes]:
         PREVIEW: _png_bytes(contact_sheet([(item.target_name, image) for item, image in assets], 640)),
     }
     outputs.update({OUTPUT_DIR / item.filename: dds_bytes(image) for item, image in assets})
+    # HOI4 switches priority-row backgrounds by native sprite name at runtime.
+    for native, generated in (
+        ("reinforcements", "reinforcement"),
+        ("upgrades", "upgrade"),
+        ("garrisons", "garrison"),
+        ("operations", "operations"),
+    ):
+        outputs[ROOT / f"gfx/interface/deploy_{native}_entry.dds"] = outputs[
+            OUTPUT_DIR / f"ADISCORD_deployment_{generated}_row.dds"
+        ]
     return outputs
 
 

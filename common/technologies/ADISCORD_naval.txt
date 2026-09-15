@@ -2,6 +2,7 @@ technologies = {
 	ADISCORD_tech_restored_dockyards = {
 		convoy_escort_efficiency = 0.04
 		naval_detection = 0.024
+		naval_invasion_capacity = 100
 		path = { leads_to_tech = ADISCORD_tech_coastal_patrols research_cost_coeff = 1 }
 		research_cost = 0.55
 		start_year = 2150

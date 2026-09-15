@@ -15,6 +15,7 @@ from tools.lib.adiscord_ui_contracts import (
     SpriteContract,
     contact_sheet,
     render_gfx_entry,
+    replace_gui_block,
     validate_contract_image,
 )
 from tools.lib.adiscord_ui_surfaces import (
@@ -55,6 +56,14 @@ WARM_COMPLETE = (148, 119, 71, 255)
 
 
 INTELLIGENCE_CONTRACTS = (
+    SpriteContract(
+        "GFX_empty_agency_slot_glow",
+        "GFX_ADISCORD_intelligence_creation_glow",
+        "ADISCORD_intelligence_creation_glow.dds",
+        "frameAnimatedSpriteType", (950, 78), frames=2,
+        effect_file="gfx/FX/buttonstate_blendframes.lua", always_transparent=True,
+        extra_lines=("animation_rate_fps = 1", "looping = yes", "play_on_show = yes", "pause_on_loop = 0.0"),
+    ),
     SpriteContract(
         "GFX_tiled_window_insigna",
         "GFX_ADISCORD_intelligence_window_shell",
@@ -264,6 +273,7 @@ FILE_REPLACEMENTS = {
         ),
         "GFX_operatives_bg": ("GFX_ADISCORD_intelligence_operatives", 1),
         "GFX_create_agency_bg": ("GFX_ADISCORD_intelligence_create", 1),
+        "GFX_empty_agency_slot_glow": ("GFX_ADISCORD_intelligence_creation_glow", 1),
         "GFX_button_221x34": (
             "GFX_ADISCORD_intelligence_create_button",
             1,
@@ -459,6 +469,13 @@ def render_gui_files() -> dict[Path, bytes]:
         for old, (new, expected) in replacements.items():
             text = replace_counted(text, old, new, expected)
         if name == "countryintelligenceagencyview.gui":
+            text = replace_gui_block(text, "containerWindowType", "operatives_before_agency", (
+                (r'font\s*=\s*"hoi_18mbs"', 'font = "hoi_16mbs"'),
+                (r'maxWidth\s*=\s*240', 'maxWidth = 225'),
+            ))
+            text = replace_gui_block(text, "instantTextboxType", "operation_name_text", (
+                (r'maxWidth\s*=\s*340', 'maxWidth = 245'),
+            ))
             for container_name, old, new in HEADER_REPLACEMENTS:
                 text = _replace_named_block_value(
                     text,
@@ -588,11 +605,10 @@ def _operations_tabs(metal: Image.Image) -> Image.Image:
 def _create_agency(metal: Image.Image) -> Image.Image:
     palette = PALETTES["intelligence"]
     output = metal_surface(metal, (508, 99), palette, 0.68)
-    recessed_well(output, (9, 10, 80, 86), palette)
-    raised_field(output, (91, 13, 353, 48), palette)
-    recessed_well(output, (91, 57, 353, 80), palette)
-    raised_field(output, (365, 16, 497, 78), palette)
-    status_band(output, (10, 92, 497, 95), VIOLET)
+    # Full-width button label; costs and days sit at y=53, progress at y=75.
+    # The native create button positions its caption at the lower edge of the
+    # animated area; no extra title border may cross that caption.
+    recessed_well(output, (59, 74, 445, 88), palette)
     partial_rails(output, (5, 5, 502, 96), palette)
     return output
 
@@ -634,11 +650,10 @@ def _upgrade_card(metal: Image.Image) -> Image.Image:
 def _operatives_summary(metal: Image.Image) -> Image.Image:
     palette = PALETTES["intelligence"]
     output = metal_surface(metal, (522, 76), palette, 0.72)
-    recessed_well(output, (7, 8, 76, 67), palette)
-    raised_field(output, (87, 9, 216, 34), palette)
-    recessed_well(output, (87, 42, 216, 66), palette)
-    for left in (230, 286, 342, 398, 454):
-        recessed_well(output, (left, 9, left + 47, 66), palette)
+    # Three counters, then the two progressbars / the no-agency message.
+    for left, right in ((21, 88), (96, 158), (167, 229)):
+        recessed_well(output, (left, 2, right, 70), palette)
+    recessed_well(output, (272, 3, 517, 70), palette)
     partial_rails(output, (4, 4, 517, 71), palette)
     return output
 
@@ -660,10 +675,10 @@ def _branch_row(metal: Image.Image) -> Image.Image:
     raised_field(output, (10, 8, 1029, 41), palette)
     status_band(output, (12, 38, 1027, 41), WARM_COMPLETE)
     ImageDraw.Draw(output, "RGBA").rectangle((6, 45, 1033, 128), fill=palette.deep)
-    for left in (10, 214, 418, 622, 826):
-        raised_field(output, (left, 49, left + 193, 125), palette)
-        recessed_well(output, (left + 8, 57, left + 65, 117), palette)
-        partial_rails(output, (left + 75, 61, left + 184, 114), palette)
+    # Each 205px slot already supplies its own upgrade icon, label and cost
+    # controls. Extra icon/text recesses here cut across the native label.
+    for left in (5, 210, 415, 620, 825):
+        raised_field(output, (left, 49, left + 203, 125), palette)
     status_band(output, (12, 131, 1027, 133), VIOLET)
     return output
 
@@ -671,10 +686,10 @@ def _branch_row(metal: Image.Image) -> Image.Image:
 def _operation_frame(metal: Image.Image, selected: bool) -> Image.Image:
     palette = PALETTES["intelligence"]
     output = metal_surface(metal, (519, 89), palette, 0.69 if not selected else 0.78)
-    recessed_well(output, (7, 8, 74, 78), palette)
-    raised_field(output, (84, 9, 353, 37), palette)
-    recessed_well(output, (84, 46, 353, 75), palette)
-    raised_field(output, (363, 9, 509, 75), palette)
+    recessed_well(output, (7, 4, 103, 80), palette)
+    raised_field(output, (106, 5, 510, 36), palette)
+    recessed_well(output, (84, 43, 390, 80), palette)
+    raised_field(output, (392, 43, 510, 80), palette)
     edge = VIOLET_LIGHT if selected else STEEL_BLUE
     status_band(output, (8, 83, 509, 87), edge)
     if selected:
@@ -692,10 +707,10 @@ def _operation_strip(metal: Image.Image) -> Image.Image:
 def _crypto_row(metal: Image.Image, selected: bool) -> Image.Image:
     palette = PALETTES["intelligence"]
     output = metal_surface(metal, (516, 87), palette, 0.67 if not selected else 0.78)
-    recessed_well(output, (7, 7, 70, 77), palette)
-    raised_field(output, (80, 8, 361, 36), palette)
-    recessed_well(output, (80, 44, 361, 72), palette)
-    raised_field(output, (371, 8, 507, 72), palette)
+    recessed_well(output, (7, 6, 53, 35), palette)
+    raised_field(output, (55, 6, 299, 34), palette)
+    recessed_well(output, (7, 37, 303, 78), palette)
+    raised_field(output, (309, 8, 510, 77), palette)
     status_band(
         output,
         (8, 81, 507, 84),
@@ -726,11 +741,9 @@ def _add_operative(metal: Image.Image) -> Image.Image:
 def _mission_bar(metal: Image.Image) -> Image.Image:
     palette = PALETTES["intelligence"]
     output = metal_surface(metal, (402, 79), palette, 0.67)
-    recessed_well(output, (6, 8, 63, 68), palette)
-    raised_field(output, (72, 8, 286, 34), palette)
-    recessed_well(output, (72, 42, 286, 67), palette)
-    raised_field(output, (296, 8, 394, 67), palette)
-    status_band(output, (7, 73, 394, 76), VIOLET)
+    # Eight 48px mission buttons share one horizontal strip at y=23.
+    recessed_well(output, (3, 20, 399, 73), palette)
+    status_band(output, (7, 75, 394, 77), VIOLET)
     return output
 
 
@@ -766,6 +779,13 @@ def render_asset(
     source_art: Image.Image,
 ) -> Image.Image:
     target = contract.target_name
+    if target.endswith("creation_glow"):
+        output = Image.new("RGBA", contract.total_size, (0, 0, 0, 0))
+        draw = ImageDraw.Draw(output, "RGBA")
+        for index, color in enumerate((STEEL_BLUE, VIOLET_LIGHT)):
+            offset = index * 475
+            draw.rectangle((offset + 1, 1, offset + 473, 76), outline=color)
+        return output
     if target.endswith("window_shell"):
         return _window_shell(metal)
     if target.endswith("content_tile"):

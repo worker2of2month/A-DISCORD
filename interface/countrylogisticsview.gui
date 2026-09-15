@@ -696,7 +696,7 @@ guiTypes = {
 
 		iconType = {
 			name = "header_bg"
-			spriteType = "GFX_ADISCORD_logistics_row"
+			spriteType = "GFX_ADISCORD_logistics_header_row"
 			position = {x=1 y=7}
 		}
 
@@ -787,7 +787,7 @@ guiTypes = {
 
 			iconType = {
 				name = "header_bg"
-				spriteType = "GFX_ADISCORD_logistics_row"
+				spriteType = "GFX_ADISCORD_logistics_header_row"
 				position = {x=1 y=1}
 			}
 
@@ -952,7 +952,7 @@ guiTypes = {
 
 		iconType = {
 			name = "header_bg"
-			spriteType = "GFX_ADISCORD_logistics_row"
+			spriteType = "GFX_ADISCORD_logistics_header_row"
 			position = {x=1 y=7}
 		}
 
@@ -1058,7 +1058,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			spriteType ="GFX_ADISCORD_logistics_row"
+			spriteType ="GFX_ADISCORD_logistics_equipment_row"
 			clicksound = click_default
 		}
 
@@ -1071,10 +1071,10 @@ guiTypes = {
 
 		instantTextboxType = {
 			name = "equipment_type"
-			position = { x = 37 y = 6 }
+			position = { x = 37 y = 2 }
 			font = "hoi_16mbs"
 			text = "name"
-			maxWidth = 115
+			maxWidth = 170
 			maxHeight = 20
 			fixedsize = yes
 			format = left
@@ -1160,7 +1160,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			spriteType ="GFX_ADISCORD_logistics_row"
+			spriteType ="GFX_ADISCORD_logistics_naval_equipment_row"
 		}
 
 		iconType = {
@@ -1172,10 +1172,10 @@ guiTypes = {
 
 		instantTextboxType = {
 			name = "equipment_type"
-			position = { x = 37 y = 6 }
+			position = { x = 37 y = 2 }
 			font = "hoi_16mbs"
 			text = "name"
-			maxWidth = 115
+			maxWidth = 170
 			maxHeight = 20
 			fixedsize = yes
 			format = left
@@ -1262,7 +1262,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			spriteType ="GFX_ADISCORD_logistics_row"
+			spriteType ="GFX_ADISCORD_logistics_air_equipment_row"
 		}
 
 		iconType = {
@@ -1274,10 +1274,10 @@ guiTypes = {
 
 		instantTextboxType = {
 			name = "equipment_type"
-			position = { x = 37 y = 6 }
+			position = { x = 37 y = 2 }
 			font = "hoi_16mbs"
 			text = "name"
-			maxWidth = 115
+			maxWidth = 170
 			maxHeight = 20
 			fixedsize = yes
 			format = left
@@ -1363,7 +1363,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			spriteType ="GFX_ADISCORD_logistics_row"
+			spriteType ="GFX_ADISCORD_logistics_entry_row"
 		}
 
 		instantTextboxType = {
@@ -1394,7 +1394,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			spriteType ="GFX_ADISCORD_logistics_row"
+			spriteType ="GFX_ADISCORD_logistics_other_row"
 		}
 
 		instantTextboxType = {
@@ -1425,7 +1425,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			spriteType ="GFX_ADISCORD_logistics_row"
+			spriteType ="GFX_ADISCORD_logistics_entry_row"
 		}
 
 		instantTextboxType = {
@@ -1500,7 +1500,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			spriteType ="GFX_ADISCORD_logistics_row"
+			spriteType ="GFX_ADISCORD_logistics_fuel_row"
 		}
 
 		buttonType = {
@@ -1538,7 +1538,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			spriteType ="GFX_ADISCORD_logistics_row"
+			spriteType ="GFX_ADISCORD_logistics_variant_row"
 		}
 
 		instantTextboxType = {

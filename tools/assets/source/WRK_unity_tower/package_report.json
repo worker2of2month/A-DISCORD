@@ -1,0 +1,30 @@
+{
+  "ADISCORD_unity_tower_destruction.mesh": {
+    "sha256": "3ee895b5308f17f53acf6ccbdf3e5b6de8d117cae6b6d174ee0160a5661ec476",
+    "bytes": 1978326
+  },
+  "ADISCORD_unity_tower_collapse.anim": {
+    "sha256": "a4840935f74d56b1cf6c15de2b46fc7352dad7d9da03cec2f9f6c39d30704bf0",
+    "bytes": 198231
+  },
+  "ADISCORD_unity_tower_ruins.anim": {
+    "sha256": "e17063073cff628a122ced3d0566271f7b6997fe85a6fb28169d14e0f2609ed8",
+    "bytes": 1772
+  },
+  "Tower_fire_diffuse.dds": {
+    "sha256": "a2f41b1e854c99e4cecf13f7f2b410b6c2ca72b869a4315e7f191ea80f06b55b",
+    "bytes": 5592560
+  },
+  "Tower_fire_normal.dds": {
+    "sha256": "c19f423e28813eeb3de3e2327350377a0ec98b7681aa6c0b40f24d6ad468e547",
+    "bytes": 349680
+  },
+  "Tower_fire_specular.dds": {
+    "sha256": "5c1f959006974d77dc65e836b233d2d4a3cdedd5872a785968a33b0876dc8d26",
+    "bytes": 349680
+  },
+  "animation.asset": {
+    "sha256": "dce16d133f2602389502b3ded45001467044b5b3d13880413c59fd658e9f03bf",
+    "bytes": 212
+  }
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "name": "MeshShape-000",
+    "vertices": 9334,
+    "triangles": 3113,
+    "bones": 33,
+    "influences": 4
+  },
+  {
+    "name": "Soft canvas magazine pouch",
+    "vertices": 7003,
+    "triangles": 8392,
+    "bones": 33,
+    "influences": 4
+  }
+]

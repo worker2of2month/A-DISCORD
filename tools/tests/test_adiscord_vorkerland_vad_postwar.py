@@ -5,6 +5,9 @@ import unittest
 from pathlib import Path
 
 
+from tools.lib.paths import source_section
+
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -31,7 +34,7 @@ def named_block(source: str, name: str) -> str:
 
 class VadPostwarContractTests(unittest.TestCase):
     def test_restored_sol_remains_protectorate_but_voluntary_ally_is_sovereign(self) -> None:
-        source = read("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
+        source = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'phase_effects')
         formation = named_block(source, "ADISCORD_vorkerland_form_wrk_from_vad")
         self.assertTrue(formation)
 
@@ -54,7 +57,7 @@ class VadPostwarContractTests(unittest.TestCase):
         self.assertNotIn("autonomy_state = autonomy_puppet", voluntary)
 
     def test_joint_route_capstone_ends_temporary_cosmetic(self) -> None:
-        source = read("common/national_focus/ADISCORD_vorkerland_civil_war_focus.txt")
+        source = source_section(read("common/national_focus/ADISCORD_vorkerland_focus.txt"), 'civil_war_focus')
         focus = named_block(source, "focus")
         # Locate the exact focus assignment rather than accepting another focus's reward.
         match = re.search(
@@ -88,7 +91,7 @@ class VadPostwarContractTests(unittest.TestCase):
         self.assertTrue(russian.read_bytes().startswith(b"\xef\xbb\xbf"))
 
     def test_joint_council_ai_prefers_chancery_over_commandantures(self) -> None:
-        source = read("common/national_focus/ADISCORD_vorkerland_civil_war_focus.txt")
+        source = source_section(read("common/national_focus/ADISCORD_vorkerland_focus.txt"), 'civil_war_focus')
 
         def focus(focus_id: str) -> str:
             match = re.search(

@@ -8,33 +8,35 @@ import re
 from pathlib import Path
 
 
+from tools.lib.paths import source_section
+
+
 ROOT = Path(__file__).resolve().parents[2]
 
 CATEGORY_FILE = Path(
-    "common/decisions/categories/ADISCORD_vorkerland_focus_decision_categories.txt"
+    "common/decisions/categories/ADISCORD_vorkerland_categories.txt"
 )
 FOCUS_DECISION_FILES = (
-    Path("common/decisions/ADISCORD_vorkerland_focus_operations_decisions.txt"),
-    Path("common/decisions/ADISCORD_vorkerland_allied_support_decisions.txt"),
+    Path("common/decisions/ADISCORD_vorkerland_decisions.txt"),
 )
 DECISION_FILE = FOCUS_DECISION_FILES
 EFFECT_FILE = Path(
-    "common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt"
+    "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
 )
 PHASE_EFFECT_FILE = Path(
-    "common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt"
+    "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
 )
 PHASE_TRIGGER_FILE = Path(
-    "common/scripted_triggers/ADISCORD_vorkerland_phase_triggers.txt"
+    "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"
 )
-PHASE_EVENT_FILE = Path("events/ADISCORD_vorkerland_phase_events.txt")
+PHASE_EVENT_FILE = Path("events/ADISCORD_vorkerland_events.txt")
 EVENT_REGISTRY_FILE = Path("tools/data/adiscord_event_ids.json")
-IDEA_FILE = Path("common/ideas/ADISCORD_vorkerland_focus_decision_ideas.txt")
+IDEA_FILE = Path("common/ideas/ADISCORD_vorkerland_ideas.txt")
 ENGLISH_LOCALISATION = Path(
-    "localisation/english/ADISCORD_vorkerland_focus_decisions_l_english.yml"
+    "localisation/english/ADISCORD_vorkerland_l_english.yml"
 )
 RUSSIAN_LOCALISATION = Path(
-    "localisation/russian/ADISCORD_vorkerland_focus_decisions_l_russian.yml"
+    "localisation/russian/ADISCORD_vorkerland_l_russian.yml"
 )
 
 CENTRAL_DECISION = "ADISCORD_vorkerland_commit_to_central_showdown"
@@ -247,14 +249,14 @@ def collect_issues() -> list[str]:
     if issues:
         return issues
 
-    categories = read(CATEGORY_FILE)
+    categories = source_section(read(CATEGORY_FILE), 'focus_decision_categories')
     decisions = "\n".join(read(path) for path in FOCUS_DECISION_FILES)
-    effects = read(EFFECT_FILE)
-    phase_effects = read(PHASE_EFFECT_FILE)
-    phase_triggers = read(PHASE_TRIGGER_FILE)
-    phase_events = read(PHASE_EVENT_FILE)
+    effects = source_section(read(EFFECT_FILE), 'focus_decision_effects')
+    phase_effects = source_section(read(PHASE_EFFECT_FILE), 'phase_effects')
+    phase_triggers = source_section(read(PHASE_TRIGGER_FILE), 'phase_triggers')
+    phase_events = source_section(read(PHASE_EVENT_FILE), 'phase_events')
     event_registry = read(EVENT_REGISTRY_FILE)
-    ideas = read(IDEA_FILE)
+    ideas = source_section(read(IDEA_FILE), 'focus_decision_ideas')
 
     minor_phase_trigger = named_block(
         phase_triggers, "ADISCORD_vorkerland_central_minor_campaign_phase_available"
@@ -959,8 +961,8 @@ def collect_issues() -> list[str]:
         if token not in idea:
             issues.append(f"allied adviser idea lacks {token}")
 
-    english = read(ENGLISH_LOCALISATION)
-    russian = read(RUSSIAN_LOCALISATION)
+    english = source_section(read(ENGLISH_LOCALISATION), 'focus_decisions_l_english')
+    russian = source_section(read(RUSSIAN_LOCALISATION), 'focus_decisions_l_russian')
     if not english.startswith("l_english:\n"):
         issues.append("English focus-decision localisation has the wrong header")
     if not russian.startswith("l_russian:\n"):

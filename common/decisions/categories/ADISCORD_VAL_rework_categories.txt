@@ -21,3 +21,15 @@ VAL_rework_debug = {
 	visible = { is_debug = yes }
 	visible_when_empty = yes
 }
+
+VAL_reclamation = {
+	allowed = { tag = VAL }
+	visible = { has_completed_focus = VAL_reclamation_survey }
+	visible_when_empty = yes
+}
+
+VAL_frontier = {
+    allowed = { tag = VAL }
+    visible = { has_completed_focus = VAL_frontier_conference }
+    visible_when_empty = yes
+}

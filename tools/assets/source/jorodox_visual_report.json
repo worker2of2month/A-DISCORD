@@ -1,0 +1,18 @@
+{
+  "city": {
+    "meshes": 9,
+    "captures": 18,
+    "current_mesh_hashes": true,
+    "FrontSide": true,
+    "webgl_errors": 0,
+    "limitation": "Actual JoroDox loaders rendered in a local WebGL harness; Phong fallback is not HOI4 entity/lighting proof"
+  },
+  "weapon": {
+    "meshes": 8,
+    "captures": 16,
+    "current_mesh_hashes": true,
+    "FrontSide": true,
+    "webgl_errors": 0,
+    "limitation": "Actual JoroDox loaders rendered in a local WebGL harness; Phong fallback is not HOI4 entity/lighting proof"
+  }
+}

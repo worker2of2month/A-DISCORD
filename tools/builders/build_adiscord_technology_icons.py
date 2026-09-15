@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build A-Discord weapon and night-combat technology icons deterministically."""
+"""Build A-Discord infantry technology icons deterministically."""
 
 from __future__ import annotations
 
@@ -122,7 +122,11 @@ def _source_image(spec: IconSpec, root: Path) -> Image.Image:
             f"expected {spec.source_sha256}, got {actual_hash}"
         )
     with Image.open(BytesIO(data)) as source:
+        if source.mode != "RGBA":
+            raise RuntimeError(f"technology icon source needs an alpha channel: {path.relative_to(root)}")
         image = source.convert("RGBA")
+    if image.getchannel("A").getextrema()[0] != 0:
+        raise RuntimeError(f"technology icon source has no transparent background: {path.relative_to(root)}")
     if image.size != spec.source_size:
         raise RuntimeError(
             f"technology icon source must be {spec.source_size[0]}x{spec.source_size[1]}, "
@@ -165,33 +169,40 @@ def _png_bytes(image: Image.Image) -> bytes:
 
 
 def _contact_sheet(rendered: tuple[tuple[IconSpec, Image.Image], ...]) -> Image.Image:
-    service = [(spec, icon) for spec, icon in rendered if spec.family == "service"]
-    squad = [(spec, icon) for spec, icon in rendered if spec.family == "squad"]
+    wide_families = tuple(dict.fromkeys(spec.family for spec, _ in rendered if spec.kind == "wide"))
     compact = [(spec, icon) for spec, icon in rendered if spec.kind == "compact"]
+    columns = 9
     cell_width = 212
-    sheet = Image.new("RGBA", (cell_width * max(len(service), len(squad)), 390), (14, 16, 17, 255))
+    compact_columns = 18
+    compact_rows = (len(compact) + compact_columns - 1) // compact_columns
+    wide_rows = sum(
+        (sum(spec.kind == "wide" and spec.family == family for spec, _ in rendered) + columns - 1) // columns
+        for family in wide_families
+    )
+    compact_top = 16 + wide_rows * 132
+    sheet = Image.new("RGBA", (cell_width * columns, compact_top + compact_rows * 102), (14, 16, 17, 255))
     draw = ImageDraw.Draw(sheet)
     font = ImageFont.load_default()
-
-    for row, entries, prefix in ((0, service, "W"), (1, squad, "S")):
-        y = 16 + row * 132
+    row = 0
+    for family in wide_families:
+        entries = [(spec, icon) for spec, icon in rendered if spec.kind == "wide" and spec.family == family]
         for index, (spec, icon) in enumerate(entries):
-            x = index * cell_width + (cell_width - icon.width) // 2
+            column = index % columns
+            y = 16 + (row + index // columns) * 132
+            x = column * cell_width + (cell_width - icon.width) // 2
             sheet.alpha_composite(icon, (x, y))
             draw.text(
-                (index * cell_width + 8, y + 92),
-                f"{prefix}{spec.tier} {spec.key}",
-                fill=(222, 220, 205, 255),
-                font=font,
+                (column * cell_width + 8, y + 92),
+                f"{family} {spec.tier} {spec.key}"[:35],
+                fill=(222, 220, 205, 255), font=font,
             )
+        row += (len(entries) + columns - 1) // columns
 
-    compact_total = len(compact) * 102
-    compact_x = max(12, (sheet.width - compact_total) // 2)
     for index, (spec, icon) in enumerate(compact):
-        x = compact_x + index * 102
-        sheet.alpha_composite(icon, (x + 15, 292))
-        prefix = "A" if spec.family == "personal_antitank" else "N"
-        draw.text((x, 368), f"{prefix}{spec.tier} {spec.key[:11]}", fill=(172, 204, 174, 255), font=font)
+        x = 36 + (index % compact_columns) * 102
+        y = compact_top + (index // compact_columns) * 102
+        sheet.alpha_composite(icon, (x + 15, y))
+        draw.text((x, y + 76), spec.key[:15], fill=(172, 204, 174, 255), font=font)
     return sheet
 
 

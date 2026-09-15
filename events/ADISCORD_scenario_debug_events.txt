@@ -5,7 +5,7 @@ country_event = {
 	id = ADISCORD_event_ui_test.1
 	title = ADISCORD_event_ui_test.1.t
 	desc = ADISCORD_event_ui_test.1.desc
-	picture = GFX_event_china_civil_war_1
+	picture = GFX_event_adiscord_ui_test
 	is_triggered_only = yes
 
 	option = { name = ADISCORD_event_ui_test.1.a }
@@ -18,7 +18,7 @@ country_event = {
 	id = ADISCORD_event_ui_test.2
 	title = ADISCORD_event_ui_test.2.t
 	desc = ADISCORD_event_ui_test.2.desc
-	picture = GFX_event_china_civil_war_1
+	picture = GFX_event_adiscord_ui_test
 	is_triggered_only = yes
 
 	option = { name = ADISCORD_event_ui_test.2.a }
@@ -28,7 +28,7 @@ country_event = {
 	id = ADISCORD_event_ui_test.3
 	title = ADISCORD_event_ui_test.3.t
 	desc = ADISCORD_event_ui_test.3.desc
-	picture = GFX_event_china_civil_war_1
+	picture = GFX_event_adiscord_ui_test
 	is_triggered_only = yes
 
 	option = { name = ADISCORD_event_ui_test.3.a }
@@ -41,7 +41,7 @@ country_event = {
 	id = ADISCORD_event_ui_test.4
 	title = ADISCORD_event_ui_test.4.t
 	desc = ADISCORD_event_ui_test.4.desc
-	picture = GFX_event_china_civil_war_1
+	picture = GFX_event_adiscord_ui_test
 	is_triggered_only = yes
 
 	option = { name = ADISCORD_event_ui_test.4.a }
@@ -51,7 +51,7 @@ country_event = {
 	id = ADISCORD_event_ui_test.5
 	title = ADISCORD_event_ui_test.5.t
 	desc = ADISCORD_event_ui_test.5.desc
-	picture = GFX_event_china_civil_war_1
+	picture = GFX_event_adiscord_ui_test
 	is_triggered_only = yes
 
 	option = { name = ADISCORD_event_ui_test.5.a }

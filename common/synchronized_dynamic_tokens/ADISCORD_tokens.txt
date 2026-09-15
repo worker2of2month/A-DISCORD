@@ -61,3 +61,6 @@ nonaggressionpact
 improverelation
 release_nation
 international_market_access_rights
+STP_cw_election_window
+NOD_cw_intervention_preparation
+NOD_cw_northern_redeployment

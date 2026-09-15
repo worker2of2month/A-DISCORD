@@ -7,10 +7,13 @@ from pathlib import Path
 from tools.validators.validate_adiscord_vorkerland_collapse import named_block
 
 
+from tools.lib.paths import source_section
+
+
 ROOT = Path(__file__).resolve().parents[2]
-DECISIONS = "common/decisions/ADISCORD_vorkerland_collapse_decisions.txt"
-EFFECTS = "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt"
-EVENTS = "events/ADISCORD_vorkerland_collapse_events.txt"
+DECISIONS = "common/decisions/ADISCORD_vorkerland_decisions.txt"
+EFFECTS = "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
+EVENTS = "events/ADISCORD_vorkerland_events.txt"
 ON_ACTIONS = "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"
 RESOLUTION_TOKENS = (
     "ADISCORD_vorkerland_rom_northern_intervention_active",
@@ -40,9 +43,9 @@ def named_blocks(source: str, name: str) -> list[str]:
 class RomNorthernInterventionRegressionTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        decisions = read(DECISIONS)
-        effects = read(EFFECTS)
-        cls.events = read(EVENTS)
+        decisions = source_section(read(DECISIONS), 'collapse_decisions')
+        effects = source_section(read(EFFECTS), 'collapse_effects')
+        cls.events = source_section(read(EVENTS), 'collapse_events')
         cls.on_actions = read(ON_ACTIONS)
         cls.intervention = named_block(
             decisions, "ADISCORD_vorkerland_rom_northern_intervention"

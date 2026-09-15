@@ -8,8 +8,8 @@ guiTypes = {
 
 	containerWindowType = {
 		name = "EventWindow"
-		position = { x=-307 y=-360 }
-		size = { width = 615 height =750 }
+		position = { x=-307 y=-327 }
+		size = { width = 615 height =654 }
 		moveable = yes
 		Orientation = CENTER		
 		
@@ -24,8 +24,8 @@ guiTypes = {
 		containerWindowType = {
 			name = "top_Window"
 			position = { x=0 y=0 }	
-			size = { width = 615 height =105 }
-			moveable = no
+			size = { width = 615 height =100 }
+			moveable = yes
 			Orientation = UPPER_LEFT
 
 			background = {
@@ -35,18 +35,20 @@ guiTypes = {
 
 			instantTextBoxType = {
 				name = "Title"
-				position = { x = 45 y = 57 }
-				font = "hoi4_typewriter22"
+				position = { x = 54 y = 39 }
+				font = "hoi_24header"
 				borderSize = {x = 0 y = 0}
 				text = "Title text here!"	
-				maxWidth = 525
-				maxHeight = 32
+				maxWidth = 507
+				maxHeight = 42
+				fixedsize = yes
 				format = centre
+				vertical_alignment = center
 			}
 
 			buttonType = {
 				name = "btn_minimize"
-				position = {x=20 y=13}
+				position = {x=20 y=24}
 				spriteType = "GFX_event_button_minimize"
 				clicksound = click_default
 				scale = 0.75
@@ -57,9 +59,11 @@ guiTypes = {
 
 		containerWindowType = {
 			name = "midsection"
-			position = { x=0 y=105 }
-			size = { width = 615 height =70 }
-			moveable = no
+			# HOI4 adds the rendered Description height before bottom_Window.
+			# Keep this base height to padding only; otherwise long text creates a void.
+			position = { x=0 y=100 }
+			size = { width = 615 height =28 }
+			moveable = yes
 			clipping = no
 			Orientation = UPPER_LEFT
 
@@ -70,21 +74,21 @@ guiTypes = {
 
 			instantTextBoxType = {
 				name = "Description"
-				position = { x = 32 y = 8 }
-				font = "hoi4_typewriter16"
+				position = { x = 54 y = 14 }
+				font = "hoi_16mbs"
 				borderSize = {x = 0 y = 0}
 				text = "Long text here!"	
-				maxWidth = 550
-				maxHeight = 300
+				maxWidth = 487
+				maxHeight = 230
 				format = left
 			}	
 		}			
 
 		containerWindowType = {
 			name = "bottom_Window"
-			position = { x=0 y=175 }
-			size = { width = 615 height =420 }
-			moveable = no
+			position = { x=0 y=128 }
+			size = { width = 615 height =372 }
+			moveable = yes
 			clipping = no
 			Orientation = UPPER_LEFT
 
@@ -93,19 +97,22 @@ guiTypes = {
 				spriteType = "GFX_event_popup_bottom"
 			}
 
+			# Native COUNTRY events look up the picture in bottom_Window only.
+			# Positive coordinates keep the picture below short and long descriptions.
 			iconType = {
 				name = "event_picture"
 				spriteType = "GFX_report_event_001"
-				position = { x = 58 y = 137 }
+				position = { x = 308 y = 100 }
+				centerposition = yes
 				Orientation = UPPER_LEFT
 				alwaystransparent = yes
 			}
 
 			gridBoxType = {
 				name = "options_grid"
-				position = { x = 132 y = 4 }
-				size = { width = 300 height = 0 }
-				slotsize = { width = 300 height = 32 }
+				position = { x = 157 y = 204 }
+				size = { width = 300 height = 156 }
+				slotsize = { width = 300 height = 39 }
 				max_slots_horizontal = 1
 				format = "UPPER_LEFT"
 			}
@@ -467,7 +474,7 @@ guiTypes = {
 			{
 				name ="event_picture"
 				spriteType = "GFX_news_event_001"
-				position = { x = 100 y = 150 }
+				position = { x = 151 y = 161 }
 				Orientation = "UPPER_LEFT"
 				alwaystransparent = yes
 			}
@@ -537,7 +544,7 @@ guiTypes = {
 	
 	containerWindowType = {
 		name = "event_option_entry"
-		size = { width = 300 height = 32 }
+		size = { width = 300 height = 39 }
 		clipping = no
 		
 		background = {
@@ -547,10 +554,10 @@ guiTypes = {
 		
 		instantTextBoxType = {
 			name = "Name"
-			position = { x = 5 y = 0 }
-			font = "hoi_20bs"
-			maxWidth = 340
-			maxHeight = 32
+			position = { x = 5 y = 1 }
+			font = "hoi_18mbs"
+			maxWidth = 290
+			maxHeight = 35
 			format = center
 			vertical_alignment = center
 			alwaystransparent = yes

@@ -5,6 +5,9 @@ import unittest
 from pathlib import Path
 
 
+from tools.lib.paths import source_section
+
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -51,14 +54,14 @@ def event_block(text: str, event_id: str) -> str:
 
 class VorkerlandWorxSupporterTests(unittest.TestCase):
     def test_wkr_is_the_temporary_main_civil_war_claimant(self) -> None:
-        triggers = read("common/scripted_triggers/ADISCORD_vorkerland_collapse_triggers.txt")
+        triggers = source_section(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"), 'collapse_triggers')
         claimants = named_block(triggers, "ADISCORD_vorkerland_is_main_claimant")
         self.assertEqual(
             set(re.findall(r"tag\s*=\s*([A-Z]{3})", claimants)),
             {"WKR", "VAD", "TVA"},
         )
 
-        effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
+        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
         initial = named_block(effects, "ADISCORD_vorkerland_apply_initial_map")
         wkr = named_block(initial, "WKR")
         self.assertEqual(
@@ -68,7 +71,7 @@ class VorkerlandWorxSupporterTests(unittest.TestCase):
         self.assertIn("set_capital = { state = 32 }", wkr)
 
     def test_oitfort_committee_takes_only_state_34_and_becomes_tva_subject(self) -> None:
-        effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
+        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
         setup = named_block(effects, "ADISCORD_vorkerland_setup_wtd")
         self.assertEqual(
             set(map(int, re.findall(r"transfer_state\s*=\s*(\d+)", setup))),
@@ -87,7 +90,7 @@ class VorkerlandWorxSupporterTests(unittest.TestCase):
         self.assertIn("freedom_level = 0.15", alignment)
         self.assertIn("ADISCORD_vorkerland_worx_aligned_technocrats", alignment)
 
-        collapse_events = read("events/ADISCORD_vorkerland_collapse_events.txt")
+        collapse_events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
         outbreak = event_block(collapse_events, "ADISCORD_vorkerland_collapse.1")
         self.assertIn("ADISCORD_vorkerland_align_wtd_with_worx = yes", outbreak)
         self.assertNotRegex(
@@ -108,7 +111,7 @@ class VorkerlandWorxSupporterTests(unittest.TestCase):
             self.assertNotIn(token, startup)
 
     def test_retired_worker_doctor_events_are_absent_and_wtd_joins_live_war(self) -> None:
-        events = read("events/ADISCORD_vorkerland_collapse_events.txt")
+        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
         for legacy_id in (48, 49):
             with self.subTest(legacy_id=legacy_id):
                 self.assertNotRegex(
@@ -116,7 +119,7 @@ class VorkerlandWorxSupporterTests(unittest.TestCase):
                     rf"(?m)^\s*id\s*=\s*ADISCORD_vorkerland_collapse\.{legacy_id}\b",
                 )
 
-        phase_events = read("events/ADISCORD_vorkerland_phase_events.txt")
+        phase_events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'phase_events')
         self.assertIn(
             "ADISCORD_vorkerland_initialize_showdown_edge_queue = yes",
             event_block(phase_events, "ADISCORD_vorkerland_phase.4"),
@@ -126,7 +129,7 @@ class VorkerlandWorxSupporterTests(unittest.TestCase):
             event_block(phase_events, "ADISCORD_vorkerland_phase.5"),
         )
 
-        phase_effects = read("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
+        phase_effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'phase_effects')
         queue = named_block(
             phase_effects, "ADISCORD_vorkerland_initialize_showdown_edge_queue"
         )
@@ -182,9 +185,9 @@ class VorkerlandWorxSupporterTests(unittest.TestCase):
     def test_committee_has_a_leader_army_spirit_and_localisation(self) -> None:
         history = read("history/countries/WTD - Central Technical Committee.txt")
         characters = read("common/characters/ADISCORD_vorkerland_collapse_characters.txt")
-        ideas = read("common/ideas/ADISCORD_vorkerland_collapse_ideas.txt")
+        ideas = source_section(read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas')
         units = read("history/units/WTD_vorkerland_collapse.txt")
-        localisation = read("localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml")
+        localisation = source_section(read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"), 'collapse_l_russian')
 
         self.assertIn("recruit_character = WTD_Central_Engineering_Council", history)
         self.assertIn("WTD_Central_Engineering_Council", characters)

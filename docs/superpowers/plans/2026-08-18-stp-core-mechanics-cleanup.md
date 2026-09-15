@@ -99,8 +99,8 @@
 **Files:**
 - Modify: `common/focus_inlay_windows/ADISCORD_STP_state_face_inlay_window.txt`
 - Modify: `common/scripted_localisation/ADISCORD_STP_scripted_loc.txt`
-- Modify: `localisation/russian/ADISCORD_STP_gui_l_russian.yml`
-- Modify: `localisation/russian/ADISCORD_STP_decisions_l_russian.yml`
+- Modify: `localisation/russian/ADISCORD_STP_l_russian.yml`
+- Modify: `localisation/russian/ADISCORD_STP_l_russian.yml`
 
 **Interfaces:**
 - Consumes: `STP_leader_health_stage`, `STP_party_suspicion`, `STP_sus_political_power_factor`.
@@ -116,7 +116,7 @@
 
 **Files:**
 - Modify: `common/decisions/ADISCORD_STP_decisions.txt`
-- Modify: `localisation/russian/ADISCORD_STP_decisions_l_russian.yml`
+- Modify: `localisation/russian/ADISCORD_STP_l_russian.yml`
 
 **Interfaces:**
 - Consumes: canonical effects from Task 2.

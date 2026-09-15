@@ -1,5 +1,8 @@
 capital = 30
 
+# Air equipment must be unlocked before the OOB creates its wings.
+ADISCORD_grant_technology_profile_air = yes
+ADISCORD_grant_technology_profile_land = yes
 oob = "NOD"
 ####### Characters
 
@@ -34,6 +37,7 @@ set_popularities = {
 }
 
 add_ideas = {
+	limited_conscription
 	NOD_home_of_hedonist_revolution
 	NOD_hedonism_with_no_bondaries
 	STP_hidden_slaves_trade

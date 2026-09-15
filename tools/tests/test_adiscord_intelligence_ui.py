@@ -207,9 +207,10 @@ class IntelligenceUiContractTests(unittest.TestCase):
             for before, after in zip(vanilla_fonts, generated_fonts, strict=True)
             if before != after
         ]
-        self.assertEqual(
+        self.assertCountEqual(
             changed,
-            [('font = "hoi4_typewriter16"', 'font = "hoi_18mbs"')] * 8,
+            [('font = "hoi4_typewriter16"', 'font = "hoi_18mbs"')] * 8
+            + [('font = "hoi_18mbs"', 'font = "hoi_16mbs"')],
         )
 
     def test_light_themed_branch_upgrade_labels_keep_black_typewriter_font(self) -> None:
@@ -348,7 +349,8 @@ class IntelligenceUiContractTests(unittest.TestCase):
             rgba = image.convert("RGBA")
         title_value = mean_luminance(rgba, (12, 12, 1028, 39))
         card_value = mean_luminance(rgba, (12, 50, 208, 124))
-        gutter_value = mean_luminance(rgba, (204, 50, 214, 124))
+        # Native upgrade slots start at x=5 and repeat every 205px.
+        gutter_value = mean_luminance(rgba, (209, 50, 210, 124))
         self.assertGreater(title_value, gutter_value + 3)
         self.assertGreater(card_value, gutter_value + 3)
 
@@ -367,6 +369,16 @@ class IntelligenceUiContractTests(unittest.TestCase):
                 1,
                 name,
             )
+
+    def test_operation_name_leaves_room_for_prepared_status(self) -> None:
+        gui = builder.render_gui_files()[AGENCY_GUI].decode("utf-8")
+        row = named_block(gui, "containerWindowType", "operation_view_entry")
+        title = named_block(row, "instantTextboxType", "operation_name_text")
+        status = named_block(row, "iconType", "operation_prepared_icon")
+        title_x = int(re.search(r'position\s*=\s*\{\s*x\s*=\s*(\d+)', title)[1])
+        title_width = int(re.search(r'maxWidth\s*=\s*(\d+)', title)[1])
+        status_x = int(re.search(r'position\s*=\s*\{\s*x\s*=\s*(\d+)', status)[1])
+        self.assertLessEqual(title_x + title_width + 8, status_x)
 
     def test_operative_controls_remain_engine_bound(self) -> None:
         leader = LEADER_GUI.read_text(encoding="utf-8-sig")

@@ -8,27 +8,30 @@ import re
 from pathlib import Path
 
 
+from tools.lib.paths import source_section
+
+
 ROOT = Path(__file__).resolve().parents[2]
 
-FOCUS_FILE = Path("common/national_focus/ADISCORD_vorkerland_civil_war_focus.txt")
+FOCUS_FILE = Path("common/national_focus/ADISCORD_vorkerland_focus.txt")
 CONTINUOUS_FOCUS_FILE = Path("common/continuous_focus/generic.txt")
 ENGLISH_LOCALISATION = Path(
-    "localisation/english/ADISCORD_vorkerland_civil_war_focus_l_english.yml"
+    "localisation/english/ADISCORD_vorkerland_l_english.yml"
 )
 RUSSIAN_LOCALISATION = Path(
-    "localisation/russian/ADISCORD_vorkerland_civil_war_focus_l_russian.yml"
+    "localisation/russian/ADISCORD_vorkerland_l_russian.yml"
 )
 ENGLISH_COLLAPSE_LOCALISATION = Path(
-    "localisation/english/ADISCORD_vorkerland_collapse_l_english.yml"
+    "localisation/english/ADISCORD_vorkerland_l_english.yml"
 )
 RUSSIAN_COLLAPSE_LOCALISATION = Path(
-    "localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml"
+    "localisation/russian/ADISCORD_vorkerland_l_russian.yml"
 )
 ENGLISH_POSTWAR_IDEA_LOCALISATION = Path(
-    "localisation/english/ADISCORD_vorkerland_postwar_ideas_l_english.yml"
+    "localisation/english/ADISCORD_vorkerland_l_english.yml"
 )
 RUSSIAN_POSTWAR_IDEA_LOCALISATION = Path(
-    "localisation/russian/ADISCORD_vorkerland_postwar_ideas_l_russian.yml"
+    "localisation/russian/ADISCORD_vorkerland_l_russian.yml"
 )
 CHARACTER_FILE = Path("common/characters/ADISCORD_vorkerland_collapse_characters.txt")
 SHINE_FILE = Path("interface/ADISCORD_focus_shines.gfx")
@@ -37,32 +40,31 @@ VANILLA_FOCUS_GUI_SHADOW_FILE = Path("interface/nationalfocusview.gui")
 FOCUS_GFX_FILE = Path("interface/ADISCORD_national_focus.gfx")
 FOCUS_FALLBACK_TEXTURE = "gfx/interface/goals/focus_PLACEHOLDER.dds"
 FOCUS_DECISION_FILES = (
-    Path("common/decisions/ADISCORD_vorkerland_focus_operations_decisions.txt"),
-    Path("common/decisions/ADISCORD_vorkerland_allied_support_decisions.txt"),
+    Path("common/decisions/ADISCORD_vorkerland_decisions.txt"),
 )
 FOCUS_DECISIONS_FILE = FOCUS_DECISION_FILES
 DIPLOMACY_DECISIONS_FILE = Path(
-    "common/decisions/ADISCORD_vorkerland_diplomacy_decisions.txt"
+    "common/decisions/ADISCORD_vorkerland_decisions.txt"
 )
 DIPLOMACY_EFFECTS_FILE = Path(
-    "common/scripted_effects/ADISCORD_vorkerland_diplomacy_effects.txt"
+    "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
 )
 PHASE_EFFECTS_FILE = Path(
-    "common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt"
+    "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
 )
-COLLAPSE_IDEAS_FILE = Path("common/ideas/ADISCORD_vorkerland_collapse_ideas.txt")
+COLLAPSE_IDEAS_FILE = Path("common/ideas/ADISCORD_vorkerland_ideas.txt")
 FOCUS_EXPANSION_IDEAS_FILE = Path(
-    "common/ideas/ADISCORD_vorkerland_focus_expansion_ideas.txt"
+    "common/ideas/ADISCORD_vorkerland_ideas.txt"
 )
-CLAIMANT_EVENTS_FILE = Path("events/ADISCORD_vorkerland_claimant_events.txt")
+CLAIMANT_EVENTS_FILE = Path("events/ADISCORD_vorkerland_events.txt")
 WKR_AI_PLAN_FILE = Path(
-    "common/ai_strategy_plans/ADISCORD_vorkerland_wkr_wartime_plan.txt"
+    "common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt"
 )
 VAD_AI_PLAN_FILE = Path(
-    "common/ai_strategy_plans/ADISCORD_vorkerland_vad_wartime_plan.txt"
+    "common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt"
 )
 TVA_AI_PLAN_FILE = Path(
-    "common/ai_strategy_plans/ADISCORD_vorkerland_tva_wartime_plan.txt"
+    "common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt"
 )
 
 PREWAR_WRK_BASE_FOCUSES = (
@@ -2915,7 +2917,7 @@ def collect_issues() -> list[str]:
     if issues:
         return issues
 
-    source = read(FOCUS_FILE)
+    source = source_section(read(FOCUS_FILE), 'civil_war_focus')
     continuous_source = read(CONTINUOUS_FOCUS_FILE)
     shine_source = read(SHINE_FILE)
     shine_names = re.findall(r'\bname\s*=\s*"([^"]+)"', shine_source)
@@ -2929,15 +2931,15 @@ def collect_issues() -> list[str]:
         )
     focus_gfx = read(FOCUS_GFX_FILE)
     focus_decisions = "\n".join(read(path) for path in FOCUS_DECISION_FILES)
-    diplomacy_decisions = read(DIPLOMACY_DECISIONS_FILE)
-    diplomacy_effects = read(DIPLOMACY_EFFECTS_FILE)
-    phase_effects = read(PHASE_EFFECTS_FILE)
-    collapse_ideas = read(COLLAPSE_IDEAS_FILE)
-    focus_expansion_ideas = read(FOCUS_EXPANSION_IDEAS_FILE)
-    claimant_events = read(CLAIMANT_EVENTS_FILE)
-    wkr_ai_plans = read(WKR_AI_PLAN_FILE)
-    vad_ai_plans = read(VAD_AI_PLAN_FILE)
-    tva_ai_plans = read(TVA_AI_PLAN_FILE)
+    diplomacy_decisions = source_section(read(DIPLOMACY_DECISIONS_FILE), 'diplomacy_decisions')
+    diplomacy_effects = source_section(read(DIPLOMACY_EFFECTS_FILE), 'diplomacy_effects')
+    phase_effects = source_section(read(PHASE_EFFECTS_FILE), 'phase_effects')
+    collapse_ideas = source_section(read(COLLAPSE_IDEAS_FILE), 'collapse_ideas')
+    focus_expansion_ideas = source_section(read(FOCUS_EXPANSION_IDEAS_FILE), 'focus_expansion_ideas')
+    claimant_events = source_section(read(CLAIMANT_EVENTS_FILE), 'claimant_events')
+    wkr_ai_plans = source_section(read(WKR_AI_PLAN_FILE), 'wkr_wartime_plan')
+    vad_ai_plans = source_section(read(VAD_AI_PLAN_FILE), 'vad_wartime_plan')
+    tva_ai_plans = source_section(read(TVA_AI_PLAN_FILE), 'tva_wartime_plan')
     characters = read(CHARACTER_FILE)
     try:
         trees = _blocks(source, "focus_tree")
@@ -5335,12 +5337,12 @@ def collect_issues() -> list[str]:
         }:
             issues.append(f"focus technology bonus uses an unsupported category: {bonus}")
 
-    english = read(ENGLISH_LOCALISATION)
-    russian = read(RUSSIAN_LOCALISATION)
-    english_collapse_loc = read(ENGLISH_COLLAPSE_LOCALISATION)
-    russian_collapse_loc = read(RUSSIAN_COLLAPSE_LOCALISATION)
-    english_ideas = read(ENGLISH_POSTWAR_IDEA_LOCALISATION)
-    russian_ideas = read(RUSSIAN_POSTWAR_IDEA_LOCALISATION)
+    english = source_section(read(ENGLISH_LOCALISATION), 'civil_war_focus_l_english')
+    russian = source_section(read(RUSSIAN_LOCALISATION), 'civil_war_focus_l_russian')
+    english_collapse_loc = source_section(read(ENGLISH_COLLAPSE_LOCALISATION), 'collapse_l_english')
+    russian_collapse_loc = source_section(read(RUSSIAN_COLLAPSE_LOCALISATION), 'collapse_l_russian')
+    english_ideas = source_section(read(ENGLISH_POSTWAR_IDEA_LOCALISATION), 'postwar_ideas_l_english')
+    russian_ideas = source_section(read(RUSSIAN_POSTWAR_IDEA_LOCALISATION), 'postwar_ideas_l_russian')
     if not english.startswith("l_english:\n"):
         issues.append("English lifecycle focus localisation has the wrong header")
     if not russian.startswith("l_russian:\n"):
@@ -5717,10 +5719,10 @@ WAR_ECONOMY_CAPSTONES = (
 )
 
 WAR_ECONOMY_MODIFIER_FILE = (
-    "common/dynamic_modifiers/ADISCORD_vorkerland_collapse_dynamic_modifiers.txt"
+    "common/dynamic_modifiers/ADISCORD_vorkerland_dynamic_modifiers.txt"
 )
 WAR_ECONOMY_REFRESH_FILE = (
-    "common/scripted_effects/ADISCORD_vorkerland_war_economy_effects.txt"
+    "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
 )
 WAR_ECONOMY_REFRESH_EFFECT = (
     "ADISCORD_vorkerland_refresh_war_economy_dynamic_state"
@@ -5741,8 +5743,8 @@ def _check_war_economy_dynamic(blocks: dict[str, str], source: str) -> list[str]
     issues: list[str] = []
     root = Path(__file__).resolve().parents[2]
 
-    modifier_text = (root / WAR_ECONOMY_MODIFIER_FILE).read_text(encoding="utf-8")
-    refresh_text = (root / WAR_ECONOMY_REFRESH_FILE).read_text(encoding="utf-8")
+    modifier_text = source_section((root / WAR_ECONOMY_MODIFIER_FILE).read_text(encoding="utf-8"), 'collapse_dynamic_modifiers')
+    refresh_text = source_section((root / WAR_ECONOMY_REFRESH_FILE).read_text(encoding="utf-8"), 'war_economy_effects')
 
     for tag, (head, modifier, strain_flag, relief_flag) in WAR_ECONOMY_DYNAMIC.items():
         if modifier not in modifier_text:
@@ -5846,7 +5848,7 @@ def _check_depth_ai_plans() -> list[str]:
 
     issues: list[str] = []
     sources = {
-        key: read(f"common/ai_strategy_plans/ADISCORD_vorkerland_{key}_wartime_plan.txt")
+        key: source_section(read("common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt"), f"{key}_wartime_plan")
         for key in ("wkr", "vad", "tva")
     }
     for plan_id, plan in DEPTH_AI_PLANS.items():

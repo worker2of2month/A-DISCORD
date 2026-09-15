@@ -1,0 +1,132 @@
+# --- collapse_categories ---
+ADISCORD_vorkerland_collapse_category = {
+	allowed = {
+		OR = {
+			tag = WRK
+			tag = WKR
+			tag = TVA
+			tag = VAD
+			tag = EYR
+			tag = EGC
+			tag = RIV
+			tag = REV
+			tag = YOR
+			tag = NDN
+			tag = SWB
+			tag = VHV
+			tag = OSV
+			tag = ZAO
+			tag = WPA
+			tag = WPS
+			tag = PWR
+			tag = PSD
+			tag = VLA
+			tag = EBA
+			tag = ROM
+			tag = DVA
+			tag = SOL
+			tag = SRA
+			tag = TRU
+			tag = ZTA
+			tag = TGD
+			tag = CSL
+			tag = IBA
+			tag = IBL
+			tag = IVN
+		}
+	}
+
+	visible = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		OR = {
+			NOT = { ADISCORD_vorkerland_is_main_claimant = yes }
+			has_war = yes
+			has_country_flag = ADISCORD_vorkerland_central_unifier
+		}
+	}
+}
+
+# --- diplomacy_categories ---
+ADISCORD_vorkerland_regional_diplomacy_category = {
+	icon = generic_diplomatic_treaty
+	allowed = { OR = { tag = WKR tag = VAD } }
+	visible = {
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+		}
+		NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+	}
+}
+
+# --- focus_decision_categories ---
+ADISCORD_vorkerland_focus_operations_category = {
+	allowed = {
+		OR = {
+			tag = WKR
+			tag = VAD
+			tag = TVA
+			tag = WRK
+		}
+	}
+
+	visible = {
+		OR = {
+			# Central district campaigns open with the verified regional war graph;
+			# claimant capstones are required only for the final showdown.
+			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
+			has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked
+			has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_retreat_levies_unlocked
+			has_country_flag = ADISCORD_vorkerland_focus_vad_retreat_levies_unlocked
+			has_country_flag = ADISCORD_vorkerland_focus_tva_retreat_levies_unlocked
+			AND = {
+				tag = WRK
+				has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+				has_global_flag = ADISCORD_vorkerland_reunification_verified
+			}
+		}
+	}
+}
+
+ADISCORD_vorkerland_allied_support_category = {
+	allowed = { OR = { tag = WKR tag = VAD } }
+	visible = {
+		OR = {
+			AND = {
+				tag = WKR
+				has_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_accepted
+				VLA = {
+					exists = yes
+					NOT = { has_capitulated = yes }
+					has_war = yes
+					OR = { is_in_faction_with = ROOT is_subject_of = ROOT }
+				}
+			}
+			AND = {
+				tag = VAD
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted
+					has_global_flag = ADISCORD_vorkerland_sol_restoration_verified
+				}
+				SOL = {
+					exists = yes
+					NOT = { has_capitulated = yes }
+					has_war = yes
+					OR = { is_in_faction_with = ROOT is_subject_of = ROOT }
+				}
+			}
+		}
+	}
+}
+
+# --- rom_tru_categories ---
+ADISCORD_vorkerland_rom_tru_category = {
+	allowed = { OR = { tag = ROM tag = TRU } }
+	visible = {
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+	}
+}

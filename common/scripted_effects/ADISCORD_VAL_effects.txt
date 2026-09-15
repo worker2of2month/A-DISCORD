@@ -1,0 +1,1685 @@
+# --- contract_authority_effects ---
+# Kefreyt contract authority.
+
+VAL_initialize_contract_authority = {
+	if = { limit = { NOT = { has_variable = VAL_CIN_influence } } set_variable = { var = VAL_CIN_influence value = 0 } }
+	if = { limit = { NOT = { has_variable = VAL_OSF_influence } } set_variable = { var = VAL_OSF_influence value = 0 } }
+	if = { limit = { NOT = { has_variable = VAL_contract_authority } } set_variable = { var = VAL_contract_authority value = 35 } }
+	clamp_variable = { var = VAL_contract_authority min = 0 max = 100 }
+	VAL_refresh_contract_modifier = yes
+}
+
+VAL_change_contract_authority = {
+	VAL_initialize_contract_authority = yes
+	add_to_variable = { var = VAL_contract_authority value = ADISCORD_VAL_effect_value }
+	clamp_variable = { var = VAL_contract_authority min = 0 max = 100 }
+	VAL_refresh_contract_modifier = yes
+}
+
+VAL_refresh_contract_modifier = {
+	if = {
+		limit = { NOT = { has_variable = VAL_contract_band } }
+		set_variable = { var = VAL_contract_band value = -1 }
+	}
+	set_temp_variable = { var = VAL_contract_new_band value = 5 }
+	if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 25 compare = less_than } }
+		set_temp_variable = { var = VAL_contract_new_band value = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 50 compare = less_than } }
+		set_temp_variable = { var = VAL_contract_new_band value = 2 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 75 compare = less_than } }
+		set_temp_variable = { var = VAL_contract_new_band value = 3 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 90 compare = less_than } }
+		set_temp_variable = { var = VAL_contract_new_band value = 4 }
+	}
+
+	# VAL contract band 0-24
+	if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 25 compare = less_than } }
+		set_variable = { var = VAL_contract_attack_factor value = 0.0 }
+		set_variable = { var = VAL_contract_defence_factor value = 0.0 }
+		set_variable = { var = VAL_contract_org_factor value = 0.03 }
+		set_variable = { var = VAL_contract_org_regain value = 0.02 }
+		set_variable = { var = VAL_contract_capture_factor value = 0.0 }
+		set_variable = { var = VAL_contract_supply_factor value = 0.0 }
+		set_variable = { var = VAL_contract_planning_factor value = 0.0 }
+		set_variable = { var = VAL_contract_pp_gain value = -0.1 }
+		set_variable = { var = VAL_contract_stability_factor value = 0.0 }
+		set_variable = { var = VAL_contract_state_overload_factor value = 0.0 }
+		set_variable = { var = VAL_contract_trade_income_factor value = 0.0 }
+		set_variable = { var = VAL_contract_military_income_factor value = 0.0 }
+		set_variable = { var = VAL_contract_army_expense_factor value = 0.0 }
+	}
+	# VAL contract band 25-49
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 50 compare = less_than } }
+		set_variable = { var = VAL_contract_attack_factor value = 0.03 }
+		set_variable = { var = VAL_contract_defence_factor value = 0.03 }
+		set_variable = { var = VAL_contract_org_factor value = 0.05 }
+		set_variable = { var = VAL_contract_org_regain value = 0.03 }
+		set_variable = { var = VAL_contract_capture_factor value = 0.02 }
+		set_variable = { var = VAL_contract_supply_factor value = 0.0 }
+		set_variable = { var = VAL_contract_planning_factor value = -0.05 }
+		set_variable = { var = VAL_contract_pp_gain value = -0.1 }
+		set_variable = { var = VAL_contract_stability_factor value = 0.0 }
+		set_variable = { var = VAL_contract_state_overload_factor value = 0.0 }
+		set_variable = { var = VAL_contract_trade_income_factor value = 0.0 }
+		set_variable = { var = VAL_contract_military_income_factor value = 0.0 }
+		set_variable = { var = VAL_contract_army_expense_factor value = 0.0 }
+	}
+	# VAL contract band 50-74
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 75 compare = less_than } }
+		set_variable = { var = VAL_contract_attack_factor value = 0.06 }
+		set_variable = { var = VAL_contract_defence_factor value = 0.05 }
+		set_variable = { var = VAL_contract_org_factor value = 0.08 }
+		set_variable = { var = VAL_contract_org_regain value = 0.05 }
+		set_variable = { var = VAL_contract_capture_factor value = 0.05 }
+		set_variable = { var = VAL_contract_supply_factor value = -0.03 }
+		set_variable = { var = VAL_contract_planning_factor value = -0.05 }
+		set_variable = { var = VAL_contract_pp_gain value = 0.0 }
+		set_variable = { var = VAL_contract_stability_factor value = 0.0 }
+		set_variable = { var = VAL_contract_state_overload_factor value = 0.03 }
+		set_variable = { var = VAL_contract_trade_income_factor value = 0.03 }
+		set_variable = { var = VAL_contract_military_income_factor value = 0.03 }
+		set_variable = { var = VAL_contract_army_expense_factor value = -0.03 }
+	}
+	# VAL contract band 75-89
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 90 compare = less_than } }
+		set_variable = { var = VAL_contract_attack_factor value = 0.1 }
+		set_variable = { var = VAL_contract_defence_factor value = 0.08 }
+		set_variable = { var = VAL_contract_org_factor value = 0.1 }
+		set_variable = { var = VAL_contract_org_regain value = 0.08 }
+		set_variable = { var = VAL_contract_capture_factor value = 0.08 }
+		set_variable = { var = VAL_contract_supply_factor value = -0.05 }
+		set_variable = { var = VAL_contract_planning_factor value = -0.1 }
+		set_variable = { var = VAL_contract_pp_gain value = -0.2 }
+		set_variable = { var = VAL_contract_stability_factor value = 0.0 }
+		set_variable = { var = VAL_contract_state_overload_factor value = 0.05 }
+		set_variable = { var = VAL_contract_trade_income_factor value = 0.05 }
+		set_variable = { var = VAL_contract_military_income_factor value = 0.05 }
+		set_variable = { var = VAL_contract_army_expense_factor value = -0.05 }
+	}
+	# VAL contract band 90-100
+	else = {
+		set_variable = { var = VAL_contract_attack_factor value = 0.12 }
+		set_variable = { var = VAL_contract_defence_factor value = 0.1 }
+		set_variable = { var = VAL_contract_org_factor value = 0.12 }
+		set_variable = { var = VAL_contract_org_regain value = 0.1 }
+		set_variable = { var = VAL_contract_capture_factor value = 0.1 }
+		set_variable = { var = VAL_contract_supply_factor value = -0.07 }
+		set_variable = { var = VAL_contract_planning_factor value = -0.15 }
+		set_variable = { var = VAL_contract_pp_gain value = -0.25 }
+		set_variable = { var = VAL_contract_stability_factor value = -0.05 }
+		set_variable = { var = VAL_contract_state_overload_factor value = 0.08 }
+		set_variable = { var = VAL_contract_trade_income_factor value = 0.07 }
+		set_variable = { var = VAL_contract_military_income_factor value = 0.07 }
+		set_variable = { var = VAL_contract_army_expense_factor value = -0.07 }
+	}
+
+	# Recalculate persistent focus bonuses when a focus or authority value changes.
+	set_variable = { var = VAL_contract_factory_output_factor value = 0.0 }
+	set_variable = { var = VAL_contract_conscription_factor value = 0.0 }
+	set_variable = { var = VAL_contract_command_power_factor value = 0.0 }
+	set_variable = { var = VAL_contract_consumer_goods_factor value = 0.0 }
+
+	# Successful northern contracts establish permanent broker networks (0-3 per region).
+	if = {
+		limit = { check_variable = { var = VAL_CIN_influence value = 3 compare = greater_than_or_equals } }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.06 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_CIN_influence value = 2 compare = greater_than_or_equals } }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.04 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_CIN_influence value = 1 compare = greater_than_or_equals } }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.02 }
+	}
+	if = {
+		limit = { check_variable = { var = VAL_OSF_influence value = 3 compare = greater_than_or_equals } }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.06 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_OSF_influence value = 2 compare = greater_than_or_equals } }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.04 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_OSF_influence value = 1 compare = greater_than_or_equals } }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.02 }
+	}
+
+	# Specialised company reforms survive authority changes; reset the base above before adding them.
+	if = {
+		limit = { has_country_flag = VAL_company_rosters }
+		add_to_variable = { var = VAL_contract_org_factor value = 0.02 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_border_survey_complete }
+		add_to_variable = { var = VAL_contract_supply_factor value = -0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_company_service_code }
+		add_to_variable = { var = VAL_contract_org_regain value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_contractor_officers }
+		add_to_variable = { var = VAL_contract_org_factor value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_motorized_columns }
+		add_to_variable = { var = VAL_contract_supply_factor value = -0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_field_repair_corps }
+		add_to_variable = { var = VAL_contract_org_regain value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_ministry_auditors }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_contract_general_staff }
+		add_to_variable = { var = VAL_contract_planning_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_capture_factor value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_contract_nco_schools }
+		add_to_variable = { var = VAL_contract_org_factor value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_provincial_brokers_network }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.03 }
+		add_to_variable = { var = VAL_contract_pp_gain value = 0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_export_clearing_house }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.05 }
+	}
+
+	if = {
+		limit = { has_country_flag = VAL_captain_retainers_unlocked }
+		add_to_variable = { var = VAL_contract_command_power_factor value = 0.1 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_negotiation_posture_visible }
+		add_to_variable = { var = VAL_contract_pp_gain value = 0.1 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_quality_arsenal }
+		add_to_variable = { var = VAL_contract_factory_output_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_capture_factor value = 0.02 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_broad_resource_network }
+		add_to_variable = { var = VAL_contract_supply_factor value = -0.03 }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_supply_contracts }
+		add_to_variable = { var = VAL_contract_military_income_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_army_expense_factor value = -0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_doctrine_covert_intervention }
+		add_to_variable = { var = VAL_contract_planning_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_capture_factor value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_doctrine_sustained_supply }
+		add_to_variable = { var = VAL_contract_org_regain value = 0.03 }
+		add_to_variable = { var = VAL_contract_supply_factor value = -0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_doctrine_resource_raider }
+		add_to_variable = { var = VAL_contract_attack_factor value = 0.04 }
+		add_to_variable = { var = VAL_contract_capture_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_defence_factor value = -0.02 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_ash_manpower_preservation }
+		add_to_variable = { var = VAL_contract_conscription_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_org_regain value = 0.02 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_ash_rear_mobilization }
+		add_to_variable = { var = VAL_contract_factory_output_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_consumer_goods_factor value = -0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_north_open_market }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.07 }
+		add_to_variable = { var = VAL_contract_pp_gain value = 0.1 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_north_coercive }
+		add_to_variable = { var = VAL_contract_military_income_factor value = 0.07 }
+		add_to_variable = { var = VAL_contract_attack_factor value = 0.02 }
+		add_to_variable = { var = VAL_contract_stability_factor value = -0.02 }
+	}
+
+    if = { limit = { has_variable = VAL_frontier_supply_bonus } add_to_variable = { var = VAL_contract_supply_factor value = VAL_frontier_supply_bonus } }
+    if = { limit = { has_variable = VAL_frontier_output_bonus } add_to_variable = { var = VAL_contract_factory_output_factor value = VAL_frontier_output_bonus } }
+    if = { limit = { has_variable = VAL_frontier_trade_bonus } add_to_variable = { var = VAL_contract_trade_income_factor value = VAL_frontier_trade_bonus } }
+    if = { limit = { has_variable = VAL_frontier_recovery_bonus } add_to_variable = { var = VAL_contract_org_regain value = VAL_frontier_recovery_bonus } }
+	if = {
+		limit = {
+			NOT = {
+				check_variable = {
+					var = VAL_contract_band
+					value = VAL_contract_new_band
+					compare = equals
+				}
+			}
+		}
+		set_variable = { var = VAL_contract_band value = VAL_contract_new_band }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = VAL_contract_state } }
+		force_update_dynamic_modifier = yes
+	}
+	else = { add_dynamic_modifier = { modifier = VAL_contract_state } }
+}
+
+# --- foreign_operation_effects ---
+# CIN, OSF and APH contracts.
+
+# VAL export escrow uses one ledger for the shared foreign-operation slot.
+# Store measured debits on each producer tag, including absent tags.
+# Cross-scope debit measurement lasts until the loop ends.
+# Infantry stock preserves producer and quantity; named variants are not tracked.
+VAL_reserve_export_rifles = {
+	clr_country_flag = VAL_export_rifles_reserved
+	set_temp_variable = { var = VAL_export_rifles_remaining value = 2500 }
+	if = { limit = { has_completed_focus = VAL_Foreign_Broker_Licences } set_temp_variable = { var = VAL_export_rifles_remaining value = 5000 } }
+	if = {
+		limit = { OR = {
+			AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 5000 } } }
+			AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 2500 } } }
+		} }
+		every_possible_country = {
+			limit = { VAL = { check_variable = { var = VAL_export_rifles_remaining value = 0 compare = greater_than } } }
+			# Recheck because the matching producer list can be collected before execution.
+			if = {
+				limit = { VAL = { check_variable = { var = VAL_export_rifles_remaining value = 0 compare = greater_than } } }
+				VAL = {
+					set_variable = { var = VAL_export_rifles_removed value = num_equipment@infantry_equipment }
+					set_temp_variable = { var = VAL_export_rifle_debit value = VAL_export_rifles_remaining }
+					multiply_temp_variable = { var = VAL_export_rifle_debit value = -1 }
+					add_equipment_to_stockpile = { type = infantry_equipment amount = VAL_export_rifle_debit producer = PREV }
+					subtract_from_variable = { var = VAL_export_rifles_removed value = num_equipment@infantry_equipment }
+					subtract_from_temp_variable = { var = VAL_export_rifles_remaining value = VAL_export_rifles_removed }
+				}
+				if = {
+					limit = { VAL = { check_variable = { var = VAL_export_rifles_removed value = 0 compare = greater_than } } }
+					set_variable = { var = VAL_export_rifles value = VAL.VAL_export_rifles_removed }
+				}
+			}
+		}
+		clear_variable = VAL_export_rifles_removed
+		if = {
+			limit = { check_variable = { var = VAL_export_rifles_remaining value = 0 compare = equals } }
+			# Freeze the quoted income and paid volume until settlement, including across focus completion.
+			if = {
+				limit = { has_completed_focus = VAL_Foreign_Broker_Licences }
+				if = { limit = { has_completed_focus = VAL_Northern_Clearing_House } set_country_flag = { flag = VAL_export_rifles_reserved value = 40 } }
+				else = { set_country_flag = { flag = VAL_export_rifles_reserved value = 30 } }
+			}
+			else_if = { limit = { has_completed_focus = VAL_Northern_Clearing_House } set_country_flag = { flag = VAL_export_rifles_reserved value = 20 } }
+			else = { set_country_flag = { flag = VAL_export_rifles_reserved value = 15 } }
+		}
+		else = { VAL_refund_export_rifles = yes }
+	}
+}
+
+# COUNTRY (CIN/OSF): settle the one reserved northern order to its actual buyer.
+# PREV within the producer loop restores this recipient; its inner PREV is the producer.
+VAL_deliver_export_rifles = {
+	if = {
+		limit = {
+			OR = { tag = CIN tag = OSF }
+			exists = yes has_capitulated = no NOT = { has_war_with = VAL }
+			VAL = { has_country_flag = VAL_export_rifles_reserved has_capitulated = no }
+		}
+		every_possible_country = {
+			limit = { has_variable = VAL_export_rifles }
+			PREV = { add_equipment_to_stockpile = { type = infantry_equipment amount = PREV.VAL_export_rifles producer = PREV } }
+			clear_variable = VAL_export_rifles
+		}
+		VAL = {
+			ADISCORD_economy_initialize_country = yes
+			set_temp_variable = { var = ADISCORD_VAL_effect_value value = 15 }
+			if = { limit = { has_country_flag = { flag = VAL_export_rifles_reserved value > 39 } } set_temp_variable = { var = ADISCORD_VAL_effect_value value = 40 } }
+			else_if = { limit = { has_country_flag = { flag = VAL_export_rifles_reserved value > 29 } } set_temp_variable = { var = ADISCORD_VAL_effect_value value = 30 } }
+			else_if = { limit = { has_country_flag = { flag = VAL_export_rifles_reserved value > 19 } } set_temp_variable = { var = ADISCORD_VAL_effect_value value = 20 } }
+			clr_country_flag = VAL_export_rifles_reserved
+			add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_VAL_effect_value }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = ADISCORD_VAL_effect_value }
+		}
+		if = {
+			limit = { tag = CIN }
+			VAL = { add_to_variable = { var = VAL_CIN_influence value = 2 } clamp_variable = { var = VAL_CIN_influence min = 0 max = 3 } }
+		}
+		else = { VAL = { add_to_variable = { var = VAL_OSF_influence value = 2 } clamp_variable = { var = VAL_OSF_influence min = 0 max = 3 } } }
+		VAL = { VAL_refresh_contract_modifier = yes ADISCORD_economy_mark_dirty = yes }
+	}
+}
+
+VAL_refund_export_rifles = {
+	every_possible_country = {
+		limit = { has_variable = VAL_export_rifles }
+		VAL = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = PREV.VAL_export_rifles producer = PREV }
+		}
+		clear_variable = VAL_export_rifles
+	}
+	clr_country_flag = VAL_export_rifles_reserved
+}
+
+VAL_clear_foreign_operation = {
+	clr_country_flag = VAL_foreign_operation_active
+	clr_country_flag = VAL_operation_CIN_study_market
+	clr_country_flag = VAL_operation_CIN_arms_brokerage
+	clr_country_flag = VAL_operation_CIN_infrastructure_concession
+	clr_country_flag = VAL_operation_CIN_hire_local_captain
+	clr_country_flag = VAL_operation_CIN_prepare_separate_terms
+	clr_country_flag = VAL_operation_OSF_study_market
+	clr_country_flag = VAL_operation_OSF_arms_brokerage
+	clr_country_flag = VAL_operation_OSF_infrastructure_concession
+	clr_country_flag = VAL_operation_OSF_hire_local_captain
+	clr_country_flag = VAL_operation_OSF_prepare_separate_terms
+	clr_country_flag = VAL_operation_APH_study_market
+	clr_country_flag = VAL_operation_APH_arms_brokerage
+	clr_country_flag = VAL_operation_APH_infrastructure_concession
+	clr_country_flag = VAL_operation_APH_hire_local_captain
+	clr_country_flag = VAL_operation_APH_prepare_separate_terms
+}
+
+VAL_resolve_cin_operation = {
+	VAL_select_cin_contract_posture = yes
+	if = { limit = { check_variable = { var = VAL_CIN_last_family value = ADISCORD_VAL_family_code compare = equals } } add_to_variable = { var = VAL_CIN_repeat_streak value = 1 } }
+	else = { set_variable = { var = VAL_CIN_last_family value = ADISCORD_VAL_family_code } set_variable = { var = VAL_CIN_repeat_streak value = 1 } }
+	if = {
+		limit = { check_variable = { var = VAL_CIN_repeat_streak value = 3 compare = greater_than_or_equals } }
+		if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 1 } } set_country_flag = { flag = VAL_CIN_block_market days = 90 value = 1 } }
+		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 2 } } set_country_flag = { flag = VAL_CIN_block_arms days = 90 value = 1 } }
+		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 3 } } set_country_flag = { flag = VAL_CIN_block_infrastructure days = 90 value = 1 } }
+		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 4 } } set_country_flag = { flag = VAL_CIN_block_captain days = 90 value = 1 } }
+		else = { set_country_flag = { flag = VAL_CIN_block_terms days = 90 value = 1 } }
+	}
+	if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 1 } NOT = { has_country_flag = VAL_CIN_success_market } } set_country_flag = VAL_CIN_success_market add_to_variable = { var = VAL_CIN_influence value = 1 } }
+	else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 2 } NOT = { has_country_flag = VAL_CIN_success_arms } } set_country_flag = VAL_CIN_success_arms add_to_variable = { var = VAL_CIN_influence value = 1 } }
+	else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 3 } NOT = { has_country_flag = VAL_CIN_success_infrastructure } } set_country_flag = VAL_CIN_success_infrastructure add_to_variable = { var = VAL_CIN_influence value = 1 } }
+	else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 4 } NOT = { has_country_flag = VAL_CIN_success_captain } } set_country_flag = VAL_CIN_success_captain add_to_variable = { var = VAL_CIN_influence value = 1 } }
+	else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 5 } NOT = { has_country_flag = VAL_CIN_success_terms } } set_country_flag = VAL_CIN_success_terms add_to_variable = { var = VAL_CIN_influence value = 1 } }
+	clamp_variable = { var = VAL_CIN_influence min = 0 max = 3 }
+	VAL_refresh_contract_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+	set_country_flag = { flag = VAL_CIN_target_cooldown days = 70 value = 1 }
+	VAL_clear_foreign_operation = yes
+}
+
+VAL_resolve_osf_operation = {
+	VAL_select_osf_contract_posture = yes
+	if = { limit = { check_variable = { var = VAL_OSF_last_family value = ADISCORD_VAL_family_code compare = equals } } add_to_variable = { var = VAL_OSF_repeat_streak value = 1 } }
+	else = { set_variable = { var = VAL_OSF_last_family value = ADISCORD_VAL_family_code } set_variable = { var = VAL_OSF_repeat_streak value = 1 } }
+	if = {
+		limit = { check_variable = { var = VAL_OSF_repeat_streak value = 3 compare = greater_than_or_equals } }
+		if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 1 } } set_country_flag = { flag = VAL_OSF_block_market days = 90 value = 1 } }
+		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 2 } } set_country_flag = { flag = VAL_OSF_block_arms days = 90 value = 1 } }
+		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 3 } } set_country_flag = { flag = VAL_OSF_block_infrastructure days = 90 value = 1 } }
+		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 4 } } set_country_flag = { flag = VAL_OSF_block_captain days = 90 value = 1 } }
+		else = { set_country_flag = { flag = VAL_OSF_block_terms days = 90 value = 1 } }
+	}
+	if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 1 } NOT = { has_country_flag = VAL_OSF_success_market } } set_country_flag = VAL_OSF_success_market add_to_variable = { var = VAL_OSF_influence value = 1 } }
+	else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 2 } NOT = { has_country_flag = VAL_OSF_success_arms } } set_country_flag = VAL_OSF_success_arms add_to_variable = { var = VAL_OSF_influence value = 1 } }
+	else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 3 } NOT = { has_country_flag = VAL_OSF_success_infrastructure } } set_country_flag = VAL_OSF_success_infrastructure add_to_variable = { var = VAL_OSF_influence value = 1 } }
+	else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 4 } NOT = { has_country_flag = VAL_OSF_success_captain } } set_country_flag = VAL_OSF_success_captain add_to_variable = { var = VAL_OSF_influence value = 1 } }
+	else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 5 } NOT = { has_country_flag = VAL_OSF_success_terms } } set_country_flag = VAL_OSF_success_terms add_to_variable = { var = VAL_OSF_influence value = 1 } }
+	clamp_variable = { var = VAL_OSF_influence min = 0 max = 3 }
+	VAL_refresh_contract_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+	set_country_flag = { flag = VAL_OSF_target_cooldown days = 70 value = 1 }
+	VAL_clear_foreign_operation = yes
+}
+
+VAL_resolve_aph_operation = {
+	VAL_select_aph_contract_posture = yes
+	if = { limit = { check_variable = { var = VAL_APH_last_family value = ADISCORD_VAL_family_code compare = equals } } add_to_variable = { var = VAL_APH_repeat_streak value = 1 } }
+	else = { set_variable = { var = VAL_APH_last_family value = ADISCORD_VAL_family_code } set_variable = { var = VAL_APH_repeat_streak value = 1 } }
+	if = {
+		limit = { check_variable = { var = VAL_APH_repeat_streak value = 3 compare = greater_than_or_equals } }
+		if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 1 } } set_country_flag = { flag = VAL_APH_block_market days = 90 value = 1 } }
+		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 2 } } set_country_flag = { flag = VAL_APH_block_arms days = 90 value = 1 } }
+		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 3 } } set_country_flag = { flag = VAL_APH_block_infrastructure days = 90 value = 1 } }
+		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 4 } } set_country_flag = { flag = VAL_APH_block_captain days = 90 value = 1 } }
+		else = { set_country_flag = { flag = VAL_APH_block_terms days = 90 value = 1 } }
+	}
+	if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 1 } NOT = { has_country_flag = VAL_APH_success_market } } set_country_flag = VAL_APH_success_market add_to_variable = { var = VAL_APH_influence value = 1 } }
+	else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 2 } NOT = { has_country_flag = VAL_APH_success_arms } } set_country_flag = VAL_APH_success_arms add_to_variable = { var = VAL_APH_influence value = 1 } }
+	else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 3 } NOT = { has_country_flag = VAL_APH_success_infrastructure } } set_country_flag = VAL_APH_success_infrastructure add_to_variable = { var = VAL_APH_influence value = 1 } }
+	else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 4 } NOT = { has_country_flag = VAL_APH_success_captain } } set_country_flag = VAL_APH_success_captain add_to_variable = { var = VAL_APH_influence value = 1 } }
+	else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 5 } NOT = { has_country_flag = VAL_APH_success_terms } } set_country_flag = VAL_APH_success_terms add_to_variable = { var = VAL_APH_influence value = 1 } }
+	clamp_variable = { var = VAL_APH_influence min = 0 max = 3 }
+	set_country_flag = { flag = VAL_APH_target_cooldown days = 70 value = 1 }
+	VAL_clear_foreign_operation = yes
+}
+
+VAL_select_cin_contract_posture = {
+	if = { limit = { check_variable = { var = VAL_CIN_contract_posture value = 0 compare = equals } } random_list = { 30 = { set_variable = { var = VAL_CIN_contract_posture value = 1 } } 25 = { modifier = { factor = 2 CIN = { has_war = yes } } set_variable = { var = VAL_CIN_contract_posture value = 2 } } 25 = { modifier = { factor = 2 CIN = { has_stability < 0.4 } } set_variable = { var = VAL_CIN_contract_posture value = 3 } } 20 = { modifier = { factor = 2 CIN = { has_equipment = { infantry_equipment < 500 } } } set_variable = { var = VAL_CIN_contract_posture value = 4 } } } }
+}
+
+VAL_select_osf_contract_posture = {
+	if = { limit = { check_variable = { var = VAL_OSF_contract_posture value = 0 compare = equals } } random_list = { 30 = { set_variable = { var = VAL_OSF_contract_posture value = 1 } } 25 = { modifier = { factor = 2 OSF = { has_war = yes } } set_variable = { var = VAL_OSF_contract_posture value = 2 } } 25 = { modifier = { factor = 2 OSF = { has_stability < 0.4 } } set_variable = { var = VAL_OSF_contract_posture value = 3 } } 20 = { modifier = { factor = 2 OSF = { has_equipment = { infantry_equipment < 500 } } } set_variable = { var = VAL_OSF_contract_posture value = 4 } } } }
+}
+
+VAL_select_aph_contract_posture = {
+	if = { limit = { check_variable = { var = VAL_APH_contract_posture value = 0 compare = equals } } random_list = { 30 = { set_variable = { var = VAL_APH_contract_posture value = 1 } } 25 = { modifier = { factor = 2 APH = { has_war = yes } } set_variable = { var = VAL_APH_contract_posture value = 2 } } 25 = { modifier = { factor = 2 APH = { has_stability < 0.4 } } set_variable = { var = VAL_APH_contract_posture value = 3 } } 20 = { modifier = { factor = 2 APH = { has_equipment = { infantry_equipment < 500 } } } set_variable = { var = VAL_APH_contract_posture value = 4 } } } }
+}
+
+VAL_resolve_active_cin_operation = {
+	if = { limit = { has_country_flag = VAL_operation_CIN_study_market } set_temp_variable = { var = ADISCORD_VAL_family_code value = 1 } VAL_resolve_cin_operation = yes }
+	else_if = { limit = { has_country_flag = VAL_operation_CIN_arms_brokerage } set_temp_variable = { var = ADISCORD_VAL_family_code value = 2 } VAL_resolve_cin_operation = yes }
+	else_if = { limit = { has_country_flag = VAL_operation_CIN_infrastructure_concession } set_temp_variable = { var = ADISCORD_VAL_family_code value = 3 } VAL_resolve_cin_operation = yes }
+	else_if = { limit = { has_country_flag = VAL_operation_CIN_hire_local_captain } set_temp_variable = { var = ADISCORD_VAL_family_code value = 4 } VAL_resolve_cin_operation = yes }
+	else_if = { limit = { has_country_flag = VAL_operation_CIN_prepare_separate_terms } set_temp_variable = { var = ADISCORD_VAL_family_code value = 5 } VAL_resolve_cin_operation = yes }
+}
+
+VAL_resolve_active_osf_operation = {
+	if = { limit = { has_country_flag = VAL_operation_OSF_study_market } set_temp_variable = { var = ADISCORD_VAL_family_code value = 1 } VAL_resolve_osf_operation = yes }
+	else_if = { limit = { has_country_flag = VAL_operation_OSF_arms_brokerage } set_temp_variable = { var = ADISCORD_VAL_family_code value = 2 } VAL_resolve_osf_operation = yes }
+	else_if = { limit = { has_country_flag = VAL_operation_OSF_infrastructure_concession } set_temp_variable = { var = ADISCORD_VAL_family_code value = 3 } VAL_resolve_osf_operation = yes }
+	else_if = { limit = { has_country_flag = VAL_operation_OSF_hire_local_captain } set_temp_variable = { var = ADISCORD_VAL_family_code value = 4 } VAL_resolve_osf_operation = yes }
+	else_if = { limit = { has_country_flag = VAL_operation_OSF_prepare_separate_terms } set_temp_variable = { var = ADISCORD_VAL_family_code value = 5 } VAL_resolve_osf_operation = yes }
+}
+
+VAL_resolve_active_aph_operation = {
+	if = { limit = { has_country_flag = VAL_operation_APH_study_market } set_temp_variable = { var = ADISCORD_VAL_family_code value = 1 } VAL_resolve_aph_operation = yes }
+	else_if = { limit = { has_country_flag = VAL_operation_APH_arms_brokerage } set_temp_variable = { var = ADISCORD_VAL_family_code value = 2 } VAL_resolve_aph_operation = yes }
+	else_if = { limit = { has_country_flag = VAL_operation_APH_infrastructure_concession } set_temp_variable = { var = ADISCORD_VAL_family_code value = 3 } VAL_resolve_aph_operation = yes }
+	else_if = { limit = { has_country_flag = VAL_operation_APH_hire_local_captain } set_temp_variable = { var = ADISCORD_VAL_family_code value = 4 } VAL_resolve_aph_operation = yes }
+	else_if = { limit = { has_country_flag = VAL_operation_APH_prepare_separate_terms } set_temp_variable = { var = ADISCORD_VAL_family_code value = 5 } VAL_resolve_aph_operation = yes }
+}
+
+# --- rework_effects ---
+VAL_apply_contract_administration_1 = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				OR = {
+					NOT = { has_variable = VAL_contract_administration_level }
+					check_variable = {
+						var = VAL_contract_administration_level
+						value = 1
+						compare = less_than
+					}
+				}
+			}
+		}
+		effect_tooltip = {
+			add_ideas = VAL_contract_administration_1
+		}
+		hidden_effect = {
+			set_variable = { var = VAL_contract_administration_level value = 1 }
+			remove_ideas = VAL_contract_administration_1
+			remove_ideas = VAL_contract_administration_2
+			remove_ideas = VAL_contract_administration_3
+			add_ideas = VAL_contract_administration_1
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+VAL_apply_contract_administration_2 = {
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_variable = VAL_contract_administration_level }
+				check_variable = {
+					var = VAL_contract_administration_level
+					value = 2
+					compare = less_than
+				}
+			}
+		}
+		set_variable = { var = VAL_contract_administration_level value = 2 }
+		hidden_effect = {
+			remove_ideas = VAL_contract_administration_1
+			remove_ideas = VAL_contract_administration_2
+			remove_ideas = VAL_contract_administration_3
+			add_ideas = VAL_contract_administration_2
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+VAL_apply_contract_administration_3 = {
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_variable = VAL_contract_administration_level }
+				check_variable = {
+					var = VAL_contract_administration_level
+					value = 3
+					compare = less_than
+				}
+			}
+		}
+		set_variable = { var = VAL_contract_administration_level value = 3 }
+		hidden_effect = {
+			remove_ideas = VAL_contract_administration_1
+			remove_ideas = VAL_contract_administration_2
+			remove_ideas = VAL_contract_administration_3
+			add_ideas = VAL_contract_administration_3
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+VAL_apply_contract_industry_1 = {
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_variable = VAL_contract_industry_level }
+				check_variable = {
+					var = VAL_contract_industry_level
+					value = 1
+					compare = less_than
+				}
+			}
+		}
+		set_variable = { var = VAL_contract_industry_level value = 1 }
+		hidden_effect = {
+			remove_ideas = VAL_contract_industry_1
+			remove_ideas = VAL_contract_industry_2
+			remove_ideas = VAL_contract_industry_3
+			add_ideas = VAL_contract_industry_1
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+VAL_apply_contract_industry_2 = {
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_variable = VAL_contract_industry_level }
+				check_variable = {
+					var = VAL_contract_industry_level
+					value = 2
+					compare = less_than
+				}
+			}
+		}
+		set_variable = { var = VAL_contract_industry_level value = 2 }
+		hidden_effect = {
+			remove_ideas = VAL_contract_industry_1
+			remove_ideas = VAL_contract_industry_2
+			remove_ideas = VAL_contract_industry_3
+			add_ideas = VAL_contract_industry_2
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+VAL_apply_contract_industry_3 = {
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_variable = VAL_contract_industry_level }
+				check_variable = {
+					var = VAL_contract_industry_level
+					value = 3
+					compare = less_than
+				}
+			}
+		}
+		set_variable = { var = VAL_contract_industry_level value = 3 }
+		hidden_effect = {
+			remove_ideas = VAL_contract_industry_1
+			remove_ideas = VAL_contract_industry_2
+			remove_ideas = VAL_contract_industry_3
+			add_ideas = VAL_contract_industry_3
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+VAL_apply_contract_army_1 = {
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_variable = VAL_contract_army_level }
+				check_variable = {
+					var = VAL_contract_army_level
+					value = 1
+					compare = less_than
+				}
+			}
+		}
+		set_variable = { var = VAL_contract_army_level value = 1 }
+		hidden_effect = {
+			remove_ideas = VAL_contract_army_1
+			remove_ideas = VAL_contract_army_2
+			remove_ideas = VAL_contract_army_3
+			add_ideas = VAL_contract_army_1
+		}
+	}
+}
+
+VAL_apply_contract_army_2 = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				OR = {
+					NOT = { has_variable = VAL_contract_army_level }
+					check_variable = {
+						var = VAL_contract_army_level
+						value = 2
+						compare = less_than
+					}
+				}
+			}
+		}
+		effect_tooltip = {
+			if = {
+				limit = { hidden_trigger = { check_variable = { var = VAL_contract_army_level value = 1 compare = equals } } }
+				swap_ideas = { remove_idea = VAL_contract_army_1 add_idea = VAL_contract_army_2 }
+			}
+			else = { add_ideas = VAL_contract_army_2 }
+		}
+		hidden_effect = {
+			set_variable = { var = VAL_contract_army_level value = 2 }
+			remove_ideas = VAL_contract_army_1
+			remove_ideas = VAL_contract_army_2
+			remove_ideas = VAL_contract_army_3
+			add_ideas = VAL_contract_army_2
+		}
+	}
+}
+
+VAL_apply_contract_army_3 = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				OR = {
+					NOT = { has_variable = VAL_contract_army_level }
+					check_variable = {
+						var = VAL_contract_army_level
+						value = 3
+						compare = less_than
+					}
+				}
+			}
+		}
+		effect_tooltip = {
+			if = {
+				limit = { hidden_trigger = { check_variable = { var = VAL_contract_army_level value = 1 compare = equals } } }
+				swap_ideas = { remove_idea = VAL_contract_army_1 add_idea = VAL_contract_army_3 }
+			}
+			else_if = {
+				limit = { hidden_trigger = { check_variable = { var = VAL_contract_army_level value = 2 compare = equals } } }
+				swap_ideas = { remove_idea = VAL_contract_army_2 add_idea = VAL_contract_army_3 }
+			}
+			else = { add_ideas = VAL_contract_army_3 }
+		}
+		hidden_effect = {
+			set_variable = { var = VAL_contract_army_level value = 3 }
+			remove_ideas = VAL_contract_army_1
+			remove_ideas = VAL_contract_army_2
+			remove_ideas = VAL_contract_army_3
+			add_ideas = VAL_contract_army_3
+		}
+	}
+}
+
+VAL_refresh_contract_reputation = {
+	if = {
+		limit = { check_variable = { var = VAL_contract_reputation_level value = 3 compare = greater_than_or_equals } }
+		VAL_apply_contract_reputation_3 = yes
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_reputation_level value = 2 compare = greater_than_or_equals } }
+		VAL_apply_contract_reputation_2 = yes
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_reputation_level value = 1 compare = greater_than_or_equals } }
+		VAL_apply_contract_reputation_1 = yes
+	}
+	else = { VAL_apply_contract_reputation_0 = yes }
+	hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+}
+
+VAL_apply_contract_reputation_3 = {
+	hidden_effect = {
+		remove_ideas = VAL_contract_reputation_0
+		remove_ideas = VAL_contract_reputation_1
+		remove_ideas = VAL_contract_reputation_2
+		remove_ideas = VAL_contract_reputation_3
+		add_ideas = VAL_contract_reputation_3
+	}
+}
+
+VAL_apply_contract_reputation_2 = {
+	hidden_effect = {
+		remove_ideas = VAL_contract_reputation_0
+		remove_ideas = VAL_contract_reputation_1
+		remove_ideas = VAL_contract_reputation_2
+		remove_ideas = VAL_contract_reputation_3
+		add_ideas = VAL_contract_reputation_2
+	}
+}
+
+VAL_apply_contract_reputation_1 = {
+	hidden_effect = {
+		remove_ideas = VAL_contract_reputation_0
+		remove_ideas = VAL_contract_reputation_1
+		remove_ideas = VAL_contract_reputation_2
+		remove_ideas = VAL_contract_reputation_3
+		add_ideas = VAL_contract_reputation_1
+	}
+}
+
+VAL_apply_contract_reputation_0 = {
+	hidden_effect = {
+		remove_ideas = VAL_contract_reputation_0
+		remove_ideas = VAL_contract_reputation_1
+		remove_ideas = VAL_contract_reputation_2
+		remove_ideas = VAL_contract_reputation_3
+		add_ideas = VAL_contract_reputation_0
+	}
+}
+
+VAL_start_quarterly_contract_norm = {
+	set_country_flag = VAL_quarterly_contract_active
+	clr_country_flag = VAL_quarterly_contract_paid
+	clr_country_flag = VAL_ai_emergency_quartermaster_used
+	set_variable = { var = VAL_quarterly_contract_months_elapsed value = 0 }
+	activate_mission = VAL_quarterly_contract_deadline
+}
+
+VAL_pay_quarterly_contract_norm = {
+	hidden_effect = {
+		if = {
+			limit = { VAL_can_pay_quarterly_contract_norm = yes }
+			set_temp_variable = { var = STP_cw_rifle_cost value = 4000 }
+			STP_cw_pay_rifles = yes
+			if = {
+				limit = { has_country_flag = STP_cw_rifles_paid }
+				set_country_flag = VAL_quarterly_contract_paid
+			}
+		}
+	}
+}
+
+VAL_complete_quarterly_contract_norm = {
+	clr_country_flag = VAL_quarterly_contract_active
+	clr_country_flag = VAL_quarterly_contract_paid
+	add_to_variable = { var = VAL_contract_reputation_level value = 1 }
+	clamp_variable = { var = VAL_contract_reputation_level min = 0 max = 3 }
+	VAL_refresh_contract_reputation = yes
+	country_event = { id = val_rework.1 days = 1 }
+}
+
+VAL_fail_quarterly_contract_norm = {
+	clr_country_flag = VAL_quarterly_contract_active
+	clr_country_flag = VAL_quarterly_contract_paid
+	add_to_variable = { var = VAL_contract_reputation_level value = -1 }
+	clamp_variable = { var = VAL_contract_reputation_level min = 0 max = 3 }
+	add_to_variable = { var = VAL_quarterly_contract_failures value = 1 }
+	VAL_refresh_contract_reputation = yes
+	country_event = { id = val_rework.1 days = 1 }
+}
+
+VAL_resolve_quarterly_contract_norm = {
+	if = {
+		limit = { has_country_flag = VAL_quarterly_contract_paid }
+		VAL_complete_quarterly_contract_norm = yes
+	}
+	else = { VAL_fail_quarterly_contract_norm = yes }
+}
+
+VAL_grant_westerholm_concession = {
+	if = {
+		limit = {
+			WRK = { exists = yes }
+			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
+			NOT = { has_country_flag = VAL_westerholm_concession_granted }
+		}
+		202 = { add_resource = { type = steel amount = 10 } }
+		WRK = { give_resource_rights = { receiver = VAL state = 202 } }
+		set_country_flag = VAL_westerholm_concession_granted
+		set_country_flag = VAL_westerholm_resource_rights_active
+		add_ideas = VAL_westerholm_concession_income
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_handle_vorkerland_war_outbreak = {
+	if = {
+		limit = { NOT = { has_country_flag = VAL_vorkerland_contracts_disrupted } }
+		set_country_flag = VAL_vorkerland_contracts_disrupted
+		remove_ideas = { VAL_big_buyers VAL_westerholm_concession_income }
+		add_timed_idea = { idea = VAL_vorkerland_contract_disruptions days = 180 }
+		country_event = { id = val_rework.100 hours = 1 }
+		country_event = { id = val_rework.101 days = 180 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_handle_westerholm_loss = {
+	if = {
+		limit = { has_country_flag = VAL_westerholm_resource_rights_active }
+		remove_resource_rights = 202
+		clr_country_flag = VAL_westerholm_resource_rights_active
+		set_country_flag = VAL_westerholm_metal_lost
+		remove_ideas = VAL_westerholm_concession_income
+		add_ideas = VAL_vorkerland_metal_shortage
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+
+VAL_migrate_contract_tier_levels = {
+	if = {
+		limit = {
+			NOT = { has_variable = VAL_contract_administration_level }
+			has_completed_focus = VAL_State_Contract
+		}
+		VAL_apply_contract_administration_3 = yes
+	}
+	else_if = {
+		limit = {
+			NOT = { has_variable = VAL_contract_administration_level }
+			OR = {
+				has_completed_focus = VAL_Central_Payment_Office
+				has_completed_focus = VAL_Provincial_Contract_Courts
+			}
+		}
+		VAL_apply_contract_administration_2 = yes
+	}
+	else_if = {
+		limit = {
+			NOT = { has_variable = VAL_contract_administration_level }
+			OR = {
+				has_completed_focus = VAL_The_Weaponry_Baron
+				has_completed_focus = VAL_Provincial_Brokers
+				has_completed_focus = VAL_Ministry_Auditors
+			}
+		}
+		VAL_apply_contract_administration_1 = yes
+	}
+
+	if = {
+		limit = {
+			NOT = { has_variable = VAL_contract_industry_level }
+			has_completed_focus = VAL_Industrial_Mobilization_Plan
+		}
+		VAL_apply_contract_industry_3 = yes
+	}
+	else_if = {
+		limit = {
+			NOT = { has_variable = VAL_contract_industry_level }
+			OR = {
+				has_completed_focus = VAL_Standardize_Rifle_Lots
+				has_completed_focus = VAL_Standard_Cartridges
+				has_completed_focus = VAL_Three_Shift_Arsenals
+			}
+		}
+		VAL_apply_contract_industry_2 = yes
+	}
+	else_if = {
+		limit = {
+			NOT = { has_variable = VAL_contract_industry_level }
+			OR = {
+				has_completed_focus = VAL_Contract_Accounting_Office
+				has_completed_focus = VAL_Munitions_Board
+			}
+		}
+		VAL_apply_contract_industry_1 = yes
+	}
+
+	if = {
+		limit = {
+			NOT = { has_variable = VAL_contract_army_level }
+			OR = {
+				has_completed_focus = VAL_Contract_General_Staff
+				has_completed_focus = VAL_Army_Of_The_Ledger
+			}
+		}
+		VAL_apply_contract_army_3 = yes
+	}
+	else_if = {
+		limit = {
+			NOT = { has_variable = VAL_contract_army_level }
+			OR = {
+				has_completed_focus = VAL_Contractor_Officers
+				has_completed_focus = VAL_Motorized_Columns
+				has_completed_focus = VAL_Field_Repair_Corps
+				has_completed_focus = VAL_Contract_NCO_Schools
+				has_completed_focus = VAL_Logistics_Command
+			}
+		}
+		VAL_apply_contract_army_2 = yes
+	}
+	else_if = {
+		limit = {
+			NOT = { has_variable = VAL_contract_army_level }
+			OR = {
+				has_completed_focus = VAL_Count_The_Captains
+				has_completed_focus = VAL_The_Mercenary_State
+				has_completed_focus = VAL_Company_Rosters
+				has_completed_focus = VAL_Border_Survey_Corps
+				has_completed_focus = VAL_Company_Service_Code
+			}
+		}
+		VAL_apply_contract_army_1 = yes
+	}
+}
+
+VAL_initialize_rework = {
+	VAL_initialize_contract_authority = yes
+	ADISCORD_economy_initialize_country = yes
+	if = {
+		limit = {
+			OR = {
+				has_completed_focus = VAL_Operational_Directorate
+				has_country_flag = VAL_local_operations_unlocked
+			}
+			NOT = { has_country_flag = VAL_operations_map_unlocked }
+		}
+		set_country_flag = VAL_operations_map_unlocked
+		set_country_flag = VAL_local_operations_unlocked
+	}
+	if = {
+		limit = {
+			has_completed_focus = VAL_Ministry_Of_Contract_Memory
+			NOT = { has_country_flag = VAL_propaganda_slot_granted }
+		}
+		ADISCORD_campaign_slot_grant = yes
+		set_country_flag = VAL_propaganda_slot_granted
+	}
+	if = {
+		limit = {
+			has_completed_focus = VAL_Two_Concurrent_Narratives
+			NOT = { has_country_flag = VAL_second_propaganda_slot_granted }
+		}
+		ADISCORD_campaign_slot_grant = yes
+		set_country_flag = VAL_second_propaganda_slot_granted
+	}
+	if = {
+		limit = {
+			has_completed_focus = VAL_Quarterly_Contract_Norm
+			NOT = { has_variable = VAL_contract_reputation_level }
+		}
+		set_variable = { var = VAL_contract_reputation_level value = 3 }
+		set_variable = { var = VAL_quarterly_contract_failures value = 0 }
+		VAL_refresh_contract_reputation = yes
+	}
+	if = {
+		limit = {
+			has_completed_focus = VAL_Quarterly_Contract_Norm
+			OR = {
+				NOT = { has_country_flag = VAL_quarterly_contract_active }
+				NOT = { has_active_mission = VAL_quarterly_contract_deadline }
+			}
+		}
+		VAL_start_quarterly_contract_norm = yes
+	}
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_country_flag = VAL_vorkerland_contracts_disrupted }
+		}
+		VAL_handle_vorkerland_war_outbreak = yes
+	}
+	if = {
+		limit = {
+			has_country_flag = VAL_westerholm_resource_rights_active
+			202 = { NOT = { controller = { tag = WRK } } }
+		}
+		VAL_handle_westerholm_loss = yes
+	}
+}
+
+# VAL: debit auxiliary equipment by producer for the accepted full package.
+VAL_cw_pay_contract_auxiliary = {
+	every_possible_country = {
+		limit = { PREV = { OR = {
+			check_variable = { var = VAL_cw_contract_squad_remaining value = 0 compare = greater_than }
+			check_variable = { var = VAL_cw_contract_support_remaining value = 0 compare = greater_than }
+		} } }
+		PREV = {
+			if = {
+				limit = { check_variable = { var = VAL_cw_contract_squad_remaining value = 0 compare = greater_than } }
+				set_temp_variable = { var = VAL_cw_contract_removed value = num_equipment@ADISCORD_squad_weapons_equipment }
+				set_temp_variable = { var = VAL_cw_contract_debit value = VAL_cw_contract_squad_remaining }
+				multiply_temp_variable = { var = VAL_cw_contract_debit value = -1 }
+				add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = VAL_cw_contract_debit producer = PREV }
+				subtract_from_temp_variable = { var = VAL_cw_contract_removed value = num_equipment@ADISCORD_squad_weapons_equipment }
+				subtract_from_temp_variable = { var = VAL_cw_contract_squad_remaining value = VAL_cw_contract_removed }
+			}
+			if = {
+				limit = { check_variable = { var = VAL_cw_contract_support_remaining value = 0 compare = greater_than } }
+				set_temp_variable = { var = VAL_cw_contract_removed value = num_equipment@support_equipment }
+				set_temp_variable = { var = VAL_cw_contract_debit value = VAL_cw_contract_support_remaining }
+				multiply_temp_variable = { var = VAL_cw_contract_debit value = -1 }
+				add_equipment_to_stockpile = { type = support_equipment amount = VAL_cw_contract_debit producer = PREV }
+				subtract_from_temp_variable = { var = VAL_cw_contract_removed value = num_equipment@support_equipment }
+				subtract_from_temp_variable = { var = VAL_cw_contract_support_remaining value = VAL_cw_contract_removed }
+			}
+		}
+	}
+}
+
+# VAL: the pending flag stores package 1/2 for 21 days.
+# After STS accepts, recheck both parties before settling resources and payment.
+VAL_cw_complete_arms_contract = {
+	if = {
+		limit = {
+			tag = VAL
+			has_country_flag = VAL_cw_arms_offer_pending
+			has_country_flag = VAL_cw_trade_course
+			NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled }
+			NOT = { has_country_flag = VAL_cw_refused }
+			has_capitulated = no
+			NOT = { has_war_with = STS }
+			STS = { exists = yes has_capitulated = no has_war_with = STP }
+			OR = {
+				AND = {
+					has_country_flag = { flag = VAL_cw_arms_offer_pending value < 2 }
+					NOT = { has_equipment = { infantry_equipment < 3200 } }
+					STS = { ADISCORD_economy_can_spend_50 = yes }
+				}
+				AND = {
+					has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 }
+					NOT = { has_equipment = { infantry_equipment < 4420 } }
+					NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 96 } }
+					NOT = { has_equipment = { support_equipment < 60 } }
+					NOT = { has_manpower < 12600 }
+					STS = { ADISCORD_economy_can_spend_100 = yes any_owned_state = { is_controlled_by = PREV } }
+				}
+			}
+		}
+		set_temp_variable = { var = STP_cw_rifle_cost value = 3200 }
+		set_temp_variable = { var = VAL_cw_contract_manpower_debit value = 0 }
+		set_temp_variable = { var = VAL_cw_contract_squad_remaining value = 0 }
+		set_temp_variable = { var = VAL_cw_contract_support_remaining value = 0 }
+		if = {
+			limit = { has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } }
+			set_temp_variable = { var = STP_cw_rifle_cost value = 4420 }
+			set_temp_variable = { var = VAL_cw_contract_manpower_debit value = -12600 }
+			set_temp_variable = { var = VAL_cw_contract_squad_remaining value = 96 }
+			set_temp_variable = { var = VAL_cw_contract_support_remaining value = 60 }
+		}
+		# Record stock before debiting to calculate exact refunds on failure.
+		set_temp_variable = { var = VAL_cw_contract_rifle_refund value = num_equipment@infantry_equipment }
+		set_temp_variable = { var = VAL_cw_contract_squad_refund value = num_equipment@ADISCORD_squad_weapons_equipment }
+		set_temp_variable = { var = VAL_cw_contract_support_refund value = num_equipment@support_equipment }
+		STP_cw_pay_rifles = yes
+		if = {
+			limit = { has_country_flag = STP_cw_rifles_paid has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } }
+			VAL_cw_pay_contract_auxiliary = yes
+		}
+		subtract_from_temp_variable = { var = VAL_cw_contract_rifle_refund value = num_equipment@infantry_equipment }
+		subtract_from_temp_variable = { var = VAL_cw_contract_squad_refund value = num_equipment@ADISCORD_squad_weapons_equipment }
+		subtract_from_temp_variable = { var = VAL_cw_contract_support_refund value = num_equipment@support_equipment }
+		if = {
+			limit = {
+				has_country_flag = STP_cw_rifles_paid
+				check_variable = { var = VAL_cw_contract_rifle_refund value = STP_cw_rifle_cost compare = equals }
+				check_variable = { var = VAL_cw_contract_squad_remaining value = 0 compare = equals }
+				check_variable = { var = VAL_cw_contract_support_remaining value = 0 compare = equals }
+			}
+			add_manpower = var:VAL_cw_contract_manpower_debit
+			STS = {
+				if = { limit = { VAL = { has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } } } ADISCORD_economy_spend_100 = yes }
+				else = { ADISCORD_economy_spend_50 = yes }
+				# Deliver free reserves here; the full package also pays for the units below.
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 3200 producer = VAL }
+				if = {
+					limit = { VAL = { has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } } }
+					division_template = {
+						name = "Kefreyt Contract Infantry"
+						is_locked = yes
+						force_allow_recruiting = no
+						override_model = ADISCORD_VAL_regular_entity
+						division_names_group = VAL_INF_01
+						regiments = {
+							infantry = { x = 0 y = 0 }
+							infantry = { x = 0 y = 1 }
+							infantry = { x = 0 y = 2 }
+							infantry = { x = 1 y = 0 }
+							infantry = { x = 1 y = 1 }
+							infantry = { x = 1 y = 2 }
+						}
+						support = { engineer = { x = 0 y = 0 } }
+					}
+					random_owned_controlled_state = {
+						create_unit = {
+							division = "division_template = \"Kefreyt Contract Infantry\" start_experience_factor = 0.5 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+							owner = PREV
+							count = 2
+							allow_spawning_on_enemy_provs = no
+						}
+					}
+				}
+			}
+			if = {
+				limit = { has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } }
+				ADISCORD_economy_receive_100 = yes
+				set_country_flag = { flag = VAL_cw_arms_contract_fulfilled value = 2 }
+			}
+			else = { ADISCORD_economy_receive_50 = yes set_country_flag = VAL_cw_arms_contract_fulfilled }
+			army_experience = 5
+			set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
+			VAL_change_contract_authority = yes
+			log = "[STP_CW] VAL contract settled: rifles=[?STP_cw_rifle_cost] donor manpower=[?VAL_cw_contract_manpower_debit]"
+		}
+		else = {
+			clr_country_flag = STP_cw_rifles_paid
+			# Refund the measured equipment debit to VAL stock; the offer can be retried.
+			if = { limit = { check_variable = { var = VAL_cw_contract_rifle_refund value = 0 compare = greater_than } } add_equipment_to_stockpile = { type = infantry_equipment amount = VAL_cw_contract_rifle_refund producer = VAL } }
+			if = { limit = { check_variable = { var = VAL_cw_contract_squad_refund value = 0 compare = greater_than } } add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = VAL_cw_contract_squad_refund producer = VAL } }
+			if = { limit = { check_variable = { var = VAL_cw_contract_support_refund value = 0 compare = greater_than } } add_equipment_to_stockpile = { type = support_equipment amount = VAL_cw_contract_support_refund producer = VAL } }
+			log = "[STP_CW] VAL contract cancelled: incomplete equipment payment refunded"
+		}
+	}
+	clr_country_flag = VAL_cw_arms_offer_pending
+	country_event = { id = ADISCORD_STP_cw.51 }
+}
+
+# COUNTRY; FROM is the paid state. The country receipt blocks all other targets.
+VAL_reclamation_begin_project = {
+	if = {
+		limit = {
+			NOT = { has_variable = VAL_reclamation_deposit }
+			ADISCORD_economy_can_spend_500 = yes
+			VAL_reclamation_project_target_valid = yes
+		}
+		ADISCORD_economy_spend_500 = yes
+		set_variable = { var = VAL_reclamation_deposit value = 500 }
+		FROM = { set_state_flag = VAL_reclamation_work_in_progress }
+	}
+}
+
+VAL_reclamation_refund_project = {
+	if = {
+		limit = {
+			check_variable = { var = VAL_reclamation_deposit value = 500 compare = equals }
+			FROM = { has_state_flag = VAL_reclamation_work_in_progress }
+		}
+		add_to_variable = { var = ADISCORD_economy_treasury value = VAL_reclamation_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = VAL_reclamation_deposit }
+		clear_variable = VAL_reclamation_deposit
+		FROM = { clr_state_flag = VAL_reclamation_work_in_progress }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_reclamation_finish_project = {
+	if = {
+		limit = {
+			check_variable = { var = VAL_reclamation_deposit value = 500 compare = equals }
+			FROM = { has_state_flag = VAL_reclamation_work_in_progress }
+		}
+		if = {
+			limit = { VAL_reclamation_project_target_valid = yes }
+			clear_variable = VAL_reclamation_deposit
+			FROM = {
+				clr_state_flag = VAL_reclamation_work_in_progress
+				if = {
+					limit = { NOT = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } } }
+					if = {
+						limit = { infrastructure < 5 }
+						add_building_construction = { type = infrastructure level = 1 instant_build = yes }
+					}
+					else = { add_extra_state_shared_building_slots = 1 }
+				}
+				else_if = {
+					limit = { check_variable = { var = VAL_reclamation_stage value = 1 compare = equals } }
+					add_extra_state_shared_building_slots = 2
+				}
+				else = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+				}
+				add_to_variable = { var = VAL_reclamation_stage value = 1 }
+				VAL_reclamation_refresh_state = yes
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = { VAL_reclamation_refund_project = yes }
+	}
+}
+
+# STATE; compensation preserves restoration through an ownership change.
+VAL_reclamation_refresh_state = {
+	set_variable = { var = VAL_reclamation_people value = VAL_reclamation_stage }
+	multiply_variable = { var = VAL_reclamation_people value = 0.25 }
+	set_variable = { var = VAL_reclamation_resources value = VAL_reclamation_stage }
+	multiply_variable = { var = VAL_reclamation_resources value = 0.20 }
+	set_variable = { var = VAL_reclamation_slots value = VAL_reclamation_stage }
+	multiply_variable = { var = VAL_reclamation_slots value = 0.133333 }
+	set_variable = { var = VAL_reclamation_construction value = VAL_reclamation_stage }
+	multiply_variable = { var = VAL_reclamation_construction value = 0.166667 }
+	set_variable = { var = VAL_reclamation_supply value = VAL_reclamation_stage }
+	multiply_variable = { var = VAL_reclamation_supply value = -0.116667 }
+	if = {
+		limit = { check_variable = { var = VAL_reclamation_stage value = 3 compare = equals } }
+		set_variable = { var = VAL_reclamation_slots value = 0.40 }
+		set_variable = { var = VAL_reclamation_construction value = 0.50 }
+		set_variable = { var = VAL_reclamation_supply value = -0.35 }
+	}
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = VAL_reclamation_recovered_land } } }
+		add_dynamic_modifier = { modifier = VAL_reclamation_recovered_land }
+	}
+	force_update_dynamic_modifier = yes
+}
+
+# Foreign campaign: 1 = ultimatum, 2 = refusal, 3 = war, 0 = closed.
+# Target codes: 1 CIN, 2 OSF, 3 APH, 4 ERT. Only one campaign may be open.
+VAL_frontier_close = {
+    set_variable = { var = VAL_frontier_stage value = 0 }
+    CIN = { clr_country_flag = VAL_frontier_defeated }
+    OSF = { clr_country_flag = VAL_frontier_defeated }
+    APH = { clr_country_flag = VAL_frontier_defeated }
+    ERT = { clr_country_flag = VAL_frontier_defeated }
+    remove_mission = VAL_frontier_ultimatum_deadline
+    clr_country_flag = VAL_frontier_armistice_offered
+    # Keep campaign majors until all campaign war relations have ended.
+    NOD = { if = { limit = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL } white_peace = VAL } }
+    STP = { if = { limit = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL } white_peace = VAL } }
+    if = { limit = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } has_war_with = CIN } white_peace = CIN }
+    if = { limit = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } has_war_with = OSF } white_peace = OSF }
+    if = { limit = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } has_war_with = APH } white_peace = APH }
+    if = { limit = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } has_war_with = ERT } white_peace = ERT }
+    if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+    NOD = {
+        clr_country_flag = VAL_frontier_guarantor
+        if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+    }
+    STP = {
+        clr_country_flag = VAL_frontier_guarantor
+        if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+    }
+    VAL_frontier_release_coalition = yes
+    ADISCORD_economy_mark_dirty = yes
+}
+
+# The saved leader identifies the existing alliance; only new memberships carry receipts.
+VAL_frontier_join_coalition = {
+    if = {
+        limit = { has_event_target = VAL_frontier_coalition_anchor }
+        if = {
+            limit = {
+                is_in_faction = no
+                event_target:VAL_frontier_coalition_anchor = { exists = yes is_in_faction = yes }
+                OR = { is_subject = no overlord = { is_in_faction_with = event_target:VAL_frontier_coalition_anchor } }
+            }
+            event_target:VAL_frontier_coalition_anchor = { faction_leader = { add_to_faction = PREV.PREV } }
+            if = {
+                limit = { is_in_faction_with = event_target:VAL_frontier_coalition_anchor }
+                set_country_flag = VAL_frontier_added_to_coalition
+            }
+        }
+    }
+}
+
+VAL_frontier_leave_coalition = {
+    if = {
+        limit = { has_country_flag = VAL_frontier_added_to_coalition }
+        if = {
+            limit = { is_in_faction_with = event_target:VAL_frontier_coalition_anchor is_faction_leader = no }
+            faction_leader = { remove_from_faction = PREV }
+        }
+        clr_country_flag = VAL_frontier_added_to_coalition
+    }
+}
+
+VAL_frontier_release_coalition = {
+    if = {
+        limit = { has_event_target = VAL_frontier_coalition_anchor }
+        event_target:VAL_frontier_coalition_anchor = {
+            if = {
+                limit = {
+                    has_country_flag = VAL_frontier_created_coalition
+                    is_in_faction = yes
+                    NOT = {
+                        any_other_country = {
+                            is_in_faction_with = event_target:VAL_frontier_coalition_anchor
+                            NOT = { has_country_flag = VAL_frontier_added_to_coalition }
+                        }
+                    }
+                }
+                faction_leader = { dismantle_faction = yes }
+            }
+            clr_country_flag = VAL_frontier_created_coalition
+        }
+        CIN = { VAL_frontier_leave_coalition = yes }
+        OSF = { VAL_frontier_leave_coalition = yes }
+        APH = { VAL_frontier_leave_coalition = yes }
+        NOD = { VAL_frontier_leave_coalition = yes }
+        STP = { VAL_frontier_leave_coalition = yes }
+        clear_global_event_target = VAL_frontier_coalition_anchor
+    }
+}
+
+# Target scope. Factionless countries may join; incompatible old alliances stay intact.
+VAL_frontier_assemble_coalition = {
+    set_temp_variable = { var = VAL_frontier_nod_candidate value = 0 }
+    set_temp_variable = { var = VAL_frontier_party_candidate value = 0 }
+    if = {
+        limit = { NOD = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } NOT = { has_war_with = PREV is_in_faction_with = VAL } } }
+        set_temp_variable = { var = VAL_frontier_nod_candidate value = 1 }
+    }
+    if = {
+        limit = { STP = { exists = yes has_capitulated = no has_country_flag = STP_cw_won_union_battle OR = { is_subject = no is_subject_of = NOD } NOT = { has_war_with = PREV is_in_faction_with = VAL } } }
+        set_temp_variable = { var = VAL_frontier_party_candidate value = 1 }
+    }
+    if = {
+        limit = { is_in_faction = yes }
+        faction_leader = { save_global_event_target_as = VAL_frontier_coalition_anchor }
+    }
+    else_if = {
+        limit = { check_variable = { var = VAL_frontier_nod_candidate value = 1 compare = equals } NOD = { is_in_faction = yes } }
+        NOD = { faction_leader = { save_global_event_target_as = VAL_frontier_coalition_anchor } }
+    }
+    else_if = {
+        limit = { check_variable = { var = VAL_frontier_party_candidate value = 1 compare = equals } STP = { is_in_faction = yes } }
+        STP = { faction_leader = { save_global_event_target_as = VAL_frontier_coalition_anchor } }
+    }
+    else_if = {
+        limit = { check_variable = { var = VAL_frontier_nod_candidate value = 1 compare = equals } NOD = { is_subject = no } }
+        NOD = {
+            create_faction_from_template = { template = faction_template_ADISCORD_standard name = VAL_frontier_defence_coalition }
+            set_country_flag = VAL_frontier_created_coalition
+            save_global_event_target_as = VAL_frontier_coalition_anchor
+        }
+    }
+    else_if = {
+        limit = { check_variable = { var = VAL_frontier_party_candidate value = 1 compare = equals } STP = { is_subject = no } }
+        STP = {
+            create_faction_from_template = { template = faction_template_ADISCORD_standard name = VAL_frontier_defence_coalition }
+            set_country_flag = VAL_frontier_created_coalition
+            save_global_event_target_as = VAL_frontier_coalition_anchor
+        }
+    }
+    VAL_frontier_join_coalition = yes
+    if = {
+        limit = { check_variable = { var = VAL_frontier_nod_candidate value = 1 compare = equals } }
+        NOD = { VAL_frontier_join_coalition = yes }
+    }
+    if = {
+        limit = { check_variable = { var = VAL_frontier_party_candidate value = 1 compare = equals } }
+        STP = { VAL_frontier_join_coalition = yes }
+    }
+}
+
+VAL_frontier_prepare_major = {
+    if = { limit = { is_major = no } set_country_flag = VAL_frontier_added_major set_major = yes }
+}
+
+VAL_frontier_record_ultimatum = {
+    set_variable = { var = VAL_frontier_stage value = 1 }
+    activate_mission = VAL_frontier_ultimatum_deadline
+}
+
+VAL_frontier_refuse = {
+    if = {
+        limit = { VAL_frontier_offer_is_current = yes }
+        VAL = {
+            VAL_frontier_show_refusal = yes
+        }
+    }
+}
+
+VAL_frontier_accept = {
+    if = {
+        limit = { VAL_frontier_offer_is_current = yes }
+        VAL = { VAL_frontier_settle_victory = yes }
+    }
+}
+
+VAL_frontier_settle_victory = {
+    if = {
+        limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
+        set_country_flag = VAL_frontier_treaty_signed
+        # Occupied party borderlands form a bounded indemnity, never its entire country.
+        if = {
+            limit = { STP = { has_country_flag = VAL_frontier_guarantor } }
+            STP = {
+                every_owned_state = {
+                    limit = { is_controlled_by = VAL any_neighbor_state = { is_core_of = VAL } }
+                    set_state_flag = VAL_frontier_border_award
+                }
+            }
+        }
+        VAL_frontier_close = yes
+        every_state = {
+            limit = { has_state_flag = VAL_frontier_border_award }
+            clr_state_flag = VAL_frontier_border_award
+            if = { limit = { is_owned_by = STP } VAL = { transfer_state = PREV } }
+        }
+        if = {
+            limit = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } }
+            if = {
+                limit = { has_completed_focus = VAL_frontier_commissioners CIN = { exists = yes VAL_frontier_has_only_claimed_states = yes OR = { is_subject = no is_subject_of = VAL } } 58 = { OR = { is_controlled_by = VAL is_controlled_by = CIN } } 59 = { OR = { is_controlled_by = VAL is_controlled_by = CIN } } 60 = { OR = { is_controlled_by = VAL is_controlled_by = CIN } } }
+                puppet = { target = CIN end_wars = no end_civil_wars = no }
+                CIN = {
+                    set_cosmetic_tag = CIN_VAL_commissariat
+                    set_politics = { ruling_party = etatism elections_allowed = no }
+                    promote_character = { character = CIN_VAL_commission ideology = contractual_etatism }
+                    set_rule = { can_join_factions = no can_create_factions = no }
+                    ADISCORD_economy_mark_dirty = yes
+                }
+            }
+            else = {
+                if = { limit = { 58 = { is_owned_by = CIN OR = { is_controlled_by = VAL is_controlled_by = CIN } } } transfer_state = 58 }
+                if = { limit = { 59 = { is_owned_by = CIN OR = { is_controlled_by = VAL is_controlled_by = CIN } } } transfer_state = 59 }
+                if = { limit = { 60 = { is_owned_by = CIN OR = { is_controlled_by = VAL is_controlled_by = CIN } } } transfer_state = 60 }
+            }
+        }
+        if = {
+            limit = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } }
+            if = {
+                limit = { has_completed_focus = VAL_frontier_commissioners OSF = { exists = yes VAL_frontier_has_only_claimed_states = yes OR = { is_subject = no is_subject_of = VAL } } 61 = { OR = { is_controlled_by = VAL is_controlled_by = OSF } } 62 = { OR = { is_controlled_by = VAL is_controlled_by = OSF } } 63 = { OR = { is_controlled_by = VAL is_controlled_by = OSF } } }
+                puppet = { target = OSF end_wars = no end_civil_wars = no }
+                OSF = {
+                    set_cosmetic_tag = OSF_VAL_commissariat
+                    set_politics = { ruling_party = etatism elections_allowed = no }
+                    promote_character = { character = OSF_VAL_commission ideology = contractual_etatism }
+                    set_rule = { can_join_factions = no can_create_factions = no }
+                    ADISCORD_economy_mark_dirty = yes
+                }
+            }
+            else = {
+                if = { limit = { 61 = { is_owned_by = OSF OR = { is_controlled_by = VAL is_controlled_by = OSF } } } transfer_state = 61 }
+                if = { limit = { 62 = { is_owned_by = OSF OR = { is_controlled_by = VAL is_controlled_by = OSF } } } transfer_state = 62 }
+                if = { limit = { 63 = { is_owned_by = OSF OR = { is_controlled_by = VAL is_controlled_by = OSF } } } transfer_state = 63 }
+            }
+        }
+        if = {
+            limit = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } }
+            if = {
+                limit = { has_completed_focus = VAL_frontier_commissioners APH = { exists = yes VAL_frontier_has_only_claimed_states = yes OR = { is_subject = no is_subject_of = VAL } } 64 = { OR = { is_controlled_by = VAL is_controlled_by = APH } } 65 = { OR = { is_controlled_by = VAL is_controlled_by = APH } } }
+                puppet = { target = APH end_wars = no end_civil_wars = no }
+                APH = {
+                    set_cosmetic_tag = APH_VAL_commissariat
+                    set_politics = { ruling_party = etatism elections_allowed = no }
+                    promote_character = { character = APH_VAL_commission ideology = contractual_etatism }
+                    set_rule = { can_join_factions = no can_create_factions = no }
+                    ADISCORD_economy_mark_dirty = yes
+                }
+            }
+            else = {
+                if = { limit = { 64 = { is_owned_by = APH OR = { is_controlled_by = VAL is_controlled_by = APH } } } transfer_state = 64 }
+                if = { limit = { 65 = { is_owned_by = APH OR = { is_controlled_by = VAL is_controlled_by = APH } } } transfer_state = 65 }
+            }
+        }
+        if = {
+            limit = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } }
+                if = { limit = { 168 = { is_owned_by = ERT OR = { is_controlled_by = VAL is_controlled_by = ERT } } } transfer_state = 168 }
+        }
+        add_stability = 0.05
+        country_event = { id = val_rework.115 }
+    }
+}
+
+VAL_frontier_settle_armistice = {
+    if = {
+        limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
+        set_country_flag = VAL_frontier_armistice_signed
+        set_temp_variable = { var = VAL_frontier_party_receives_border value = 0 }
+        if = {
+            limit = { STP = { exists = yes has_country_flag = VAL_frontier_guarantor has_war_with = VAL has_country_flag = STP_cw_won_union_battle } }
+            set_temp_variable = { var = VAL_frontier_party_receives_border value = 1 }
+        }
+        VAL_frontier_close = yes
+        if = {
+            limit = { check_variable = { var = VAL_frontier_party_receives_border value = 1 compare = equals } STP = { exists = yes has_country_flag = STP_cw_won_union_battle } }
+            if = { limit = { 42 = { is_owned_by = VAL OR = { is_controlled_by = VAL is_controlled_by = STP is_controlled_by = NOD } } } STP = { transfer_state = 42 } }
+            if = { limit = { 55 = { is_owned_by = VAL OR = { is_controlled_by = VAL is_controlled_by = STP is_controlled_by = NOD } } } STP = { transfer_state = 55 } }
+        }
+        add_stability = -0.10
+        country_event = { id = val_rework.116 }
+    }
+}
+
+VAL_frontier_settle_defeat = {
+    if = {
+        limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
+        if = {
+            limit = { NOD = { exists = yes has_country_flag = VAL_frontier_guarantor has_capitulated = no } capital_scope = { controller = { has_country_flag = VAL_frontier_guarantor } } }
+            VAL_frontier_settle_armistice = yes
+            NOD = { puppet = { target = VAL end_wars = no end_civil_wars = no } }
+            set_cosmetic_tag = VAL_dopotroydsk
+            set_politics = { ruling_party = pragmatism elections_allowed = no }
+            promote_character = { character = VAL_party_administration ideology = pragmatism_ideology }
+            set_rule = { can_join_factions = no can_create_factions = no }
+            ADISCORD_economy_mark_dirty = yes
+        }
+        else = { VAL_frontier_settle_armistice = yes }
+    }
+}
+
+VAL_frontier_start_war = {
+    if = {
+        limit = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_prewar_eligible = yes has_war = no }
+        set_variable = { var = VAL_frontier_stage value = 3 }
+        VAL_frontier_prepare_major = yes
+        if = {
+            limit = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } }
+            if = { limit = { VAL_frontier_shabrat_buffer = no } CIN = { VAL_frontier_assemble_coalition = yes } }
+            declare_war_on = { target = CIN type = take_state_focus generator = { 58 } }
+            if = {
+                limit = { has_war_with = CIN VAL_frontier_shabrat_buffer = no }
+                if = {
+                    limit = { NOD = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } is_in_faction_with = CIN NOT = { has_war_with = CIN is_in_faction_with = VAL } } }
+                    NOD = { add_to_war = { targeted_alliance = CIN enemy = VAL hostility_reason = asked_to_join single_target_only = yes } }
+                    if = { limit = { NOD = { has_war_with = VAL } } NOD = { set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes } }
+                }
+                if = {
+                    limit = { STP = { exists = yes has_capitulated = no has_country_flag = STP_cw_won_union_battle OR = { is_subject = no is_subject_of = NOD } is_in_faction_with = CIN NOT = { has_war_with = CIN is_in_faction_with = VAL } } }
+                    STP = { add_to_war = { targeted_alliance = CIN enemy = VAL hostility_reason = asked_to_join single_target_only = yes } }
+                    if = { limit = { STP = { has_war_with = VAL } } STP = { set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes } }
+                }
+            }
+        }
+        if = {
+            limit = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } }
+            if = { limit = { VAL_frontier_shabrat_buffer = no } OSF = { VAL_frontier_assemble_coalition = yes } }
+            declare_war_on = { target = OSF type = take_state_focus generator = { 61 } }
+            if = {
+                limit = { has_war_with = OSF VAL_frontier_shabrat_buffer = no }
+                if = {
+                    limit = { NOD = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } is_in_faction_with = OSF NOT = { has_war_with = OSF is_in_faction_with = VAL } } }
+                    NOD = { add_to_war = { targeted_alliance = OSF enemy = VAL hostility_reason = asked_to_join single_target_only = yes } }
+                    if = { limit = { NOD = { has_war_with = VAL } } NOD = { set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes } }
+                }
+                if = {
+                    limit = { STP = { exists = yes has_capitulated = no has_country_flag = STP_cw_won_union_battle OR = { is_subject = no is_subject_of = NOD } is_in_faction_with = OSF NOT = { has_war_with = OSF is_in_faction_with = VAL } } }
+                    STP = { add_to_war = { targeted_alliance = OSF enemy = VAL hostility_reason = asked_to_join single_target_only = yes } }
+                    if = { limit = { STP = { has_war_with = VAL } } STP = { set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes } }
+                }
+            }
+        }
+        if = {
+            limit = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } }
+            if = { limit = { VAL_frontier_shabrat_buffer = no } APH = { VAL_frontier_assemble_coalition = yes } }
+            declare_war_on = { target = APH type = take_state_focus generator = { 64 } }
+            if = {
+                limit = { has_war_with = APH VAL_frontier_shabrat_buffer = no }
+                if = {
+                    limit = { NOD = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } is_in_faction_with = APH NOT = { has_war_with = APH is_in_faction_with = VAL } } }
+                    NOD = { add_to_war = { targeted_alliance = APH enemy = VAL hostility_reason = asked_to_join single_target_only = yes } }
+                    if = { limit = { NOD = { has_war_with = VAL } } NOD = { set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes } }
+                }
+                if = {
+                    limit = { STP = { exists = yes has_capitulated = no has_country_flag = STP_cw_won_union_battle OR = { is_subject = no is_subject_of = NOD } is_in_faction_with = APH NOT = { has_war_with = APH is_in_faction_with = VAL } } }
+                    STP = { add_to_war = { targeted_alliance = APH enemy = VAL hostility_reason = asked_to_join single_target_only = yes } }
+                    if = { limit = { STP = { has_war_with = VAL } } STP = { set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes } }
+                }
+            }
+        }
+        if = {
+            limit = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } }
+            declare_war_on = { target = ERT type = take_state_focus generator = { 168 } }
+        }
+        if = { limit = { has_war = no } VAL_frontier_close = yes }
+    }
+    else = { VAL_frontier_close = yes }
+}
+
+VAL_frontier_weekly = {
+    CIN = { if = { limit = { has_country_flag = VAL_frontier_defeated capital_scope = { NOT = { is_controlled_by = VAL } } } clr_country_flag = VAL_frontier_defeated } }
+    OSF = { if = { limit = { has_country_flag = VAL_frontier_defeated capital_scope = { NOT = { is_controlled_by = VAL } } } clr_country_flag = VAL_frontier_defeated } }
+    APH = { if = { limit = { has_country_flag = VAL_frontier_defeated capital_scope = { NOT = { is_controlled_by = VAL } } } clr_country_flag = VAL_frontier_defeated } }
+    ERT = { if = { limit = { has_country_flag = VAL_frontier_defeated capital_scope = { NOT = { is_controlled_by = VAL } } } clr_country_flag = VAL_frontier_defeated } }
+
+    if = {
+        limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
+        if = {
+            limit = { OR = { VAL_frontier_has_campaign_war = no AND = { VAL_frontier_target_owned = no VAL_frontier_target_occupied = no } } }
+            VAL_frontier_close = yes
+        }
+        else_if = {
+            limit = { VAL_frontier_target_occupied = yes VAL_frontier_guarantors_beaten = yes }
+            VAL_frontier_settle_victory = yes
+        }
+        else_if = {
+            limit = { surrender_progress > 0.65 NOD = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL has_capitulated = no } NOT = { has_country_flag = VAL_frontier_armistice_offered } }
+            set_country_flag = VAL_frontier_armistice_offered
+            VAL_frontier_save_quoted_target = yes
+            NOD = { country_event = { id = val_rework.113 } }
+        }
+        else_if = { limit = { has_war = no } VAL_frontier_close = yes }
+    }
+    else_if = {
+        limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } OR = { has_capitulated = yes VAL_frontier_prewar_eligible = no } }
+        VAL_frontier_close = yes
+    }
+}
+
+# The event keeps this local address even if a later ultimatum changes country variables.
+VAL_frontier_save_quoted_target = {
+    if = { limit = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } } CIN = { save_event_target_as = VAL_frontier_quoted_target } }
+    if = { limit = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } } OSF = { save_event_target_as = VAL_frontier_quoted_target } }
+    if = { limit = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } } APH = { save_event_target_as = VAL_frontier_quoted_target } }
+    if = { limit = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } } ERT = { save_event_target_as = VAL_frontier_quoted_target } }
+}
+
+VAL_frontier_show_refusal = {
+    set_variable = { var = VAL_frontier_stage value = 2 }
+    remove_mission = VAL_frontier_ultimatum_deadline
+    VAL_frontier_save_quoted_target = yes
+    country_event = { id = val_rework.111 }
+}

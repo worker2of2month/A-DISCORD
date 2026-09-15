@@ -188,7 +188,7 @@ guiTypes = {
 			iconType = {
 				name = "empty_agency_slot_glow"
 				position = { x = 24	y = 50 }
-				spriteType = "GFX_empty_agency_slot_glow"
+				spriteType = "GFX_ADISCORD_intelligence_creation_glow"
 			}
 
 			buttonType = {
@@ -483,8 +483,8 @@ guiTypes = {
 				instantTextboxType = {
 					name = "progressbar_days"
 					position = { x = 280 y = 5 }
-					font = "hoi_18mbs"
-					maxWidth = 240
+					font = "hoi_16mbs"
+					maxWidth = 225
 					format = left
 					text = "STATUS_NO_AGENCY_NO_OPERATIVE"
 				}
@@ -1129,7 +1129,7 @@ guiTypes = {
 				name = "operation_name_text"
 				position = { x = 100 y = 10 }
 				font = "hoi_16mbs"
-				maxWidth = 340
+				maxWidth = 245
 				maxHeight = 20
 			}
 

@@ -2,12 +2,17 @@
 
 from __future__ import annotations
 
+import math
 import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
 
 from PIL import Image
+
+
+from tools.lib.paths import source_section
+from tools.validators.validate_adiscord_division_templates import Entry, parse_clausewitz
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -206,6 +211,441 @@ def assignment_values_at_depth(text: str, key: str, depth: int) -> list[str]:
     ]
 
 
+def script_children(items: list[Entry], key: str) -> list[Entry]:
+    return next((item.value for item in items if item.key == key and isinstance(item.value, list)), [])
+
+
+def script_fields(items: list[Entry]) -> dict[str, str]:
+    return {item.key: item.value for item in items if isinstance(item.value, str)}
+
+
+def walk_script(items: list[Entry], *, executable: bool = False):
+    for item in items:
+        if executable and item.key in {"effect_tooltip", "custom_effect_tooltip", "unlock_decision_tooltip", "limit", "trigger"}:
+            continue
+        yield item
+        if isinstance(item.value, list):
+            yield from walk_script(item.value, executable=executable)
+
+
+def validate_supplemental_rewards(focus_text: str, effects_text: str, dynamic_text: str = "",
+                                  decisions_text: str = "") -> list[str]:
+    """Points may accompany a real effect; display text and marker writes are not one.
+
+    This checks presence, not balance or every conditional outcome. The targeted
+    route, payment and modifier tests below retain those separate contracts.
+    """
+    supplemental = {"army_experience", "add_command_power", "add_political_power"}
+    material = {
+        "add_stability", "add_war_support", "add_manpower", "add_equipment_to_stockpile",
+        "add_offsite_building", "add_building_construction", "build_railway", "add_tech_bonus",
+        "add_ideas", "add_timed_idea", "swap_ideas", "add_dynamic_modifier", "add_intel",
+        "add_research_slot", "activate_decision", "activate_mission", "give_resource_rights",
+    }
+    effects = {e.key: e.value for e in parse_clausewitz(effects_text) if isinstance(e.value, list)}
+    refresh = effects.get("VAL_refresh_contract_modifier", [])
+    consumed_variables = {value for dynamic in parse_clausewitz(dynamic_text) if isinstance(dynamic.value, list)
+                          for value in script_fields(dynamic.value).values()}
+    # Include inputs which select a modifier band, following the actual refresh
+    # assignments/conditions instead of treating arbitrary country variables as rewards.
+    while True:
+        previous = consumed_variables.copy()
+        for branch in (e for e in walk_script(refresh) if e.key in {"if", "else_if"}):
+            writes = [script_fields(e.value) for e in walk_script(branch.value, executable=True)
+                      if e.key in {"set_variable", "set_temp_variable", "add_to_variable"}]
+            if any(fields.get("var") in consumed_variables for fields in writes):
+                for fields in writes:
+                    source = fields.get("value", "")
+                    if fields.get("var") in consumed_variables and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", source):
+                        consumed_variables.add(source)
+                for check in walk_script(script_children(branch.value, "limit")):
+                    if check.key == "check_variable":
+                        consumed_variables.add(script_fields(check.value).get("var", ""))
+        if previous == consumed_variables:
+            break
+
+    refreshed_variables = {script_fields(entry.value).get("var")
+                           for entry in walk_script(refresh, executable=True) if entry.key == "set_variable"}
+
+    def nonzero(value, values):
+        try:
+            return float(value) != 0
+        except (ValueError, TypeError):
+            return values[value] != 0 if value in values else bool(value)
+
+    def consequential(items, flags, values, changes, seen=frozenset()):
+        for entry in walk_script(items, executable=True):
+            if entry.key == "set_country_flag":
+                flags.add(entry.value)
+            elif entry.key == "clr_country_flag":
+                flags.discard(entry.value)
+            if entry.key in {"set_temp_variable", "set_variable"}:
+                fields = script_fields(entry.value)
+                changes.pop(fields.get("var"), None)
+                try:
+                    values[fields.get("var")] = float(fields.get("value", 0))
+                except ValueError:
+                    values[fields.get("var")] = values.get(fields.get("value"), 0)
+            if entry.key == "add_to_variable":
+                fields = script_fields(entry.value)
+                value = fields.get("value", "0")
+                try:
+                    amount = float(value)
+                except ValueError:
+                    amount = values.get(value, 0)
+                if fields.get("var") in consumed_variables and amount:
+                    variable = fields["var"]
+                    changes[variable] = changes.get(variable, 0) + amount
+            if entry.key == "VAL_refresh_contract_modifier":
+                # A refresh replaces derived outputs. Only input changes and
+                # specialisations still present after that replacement count.
+                for variable in refreshed_variables:
+                    changes.pop(variable, None)
+                for branch in (e for e in refresh if e.key == "if"):
+                    required_flags = {e.value for e in walk_script(script_children(branch.value, "limit")) if e.key == "has_country_flag"}
+                    if required_flags and required_flags <= flags:
+                        additions = [script_fields(e.value) for e in walk_script(branch.value, executable=True) if e.key == "add_to_variable"]
+                        for addition in additions:
+                            variable = addition.get("var")
+                            if variable in consumed_variables:
+                                changes[variable] = changes.get(variable, 0) + float(addition.get("value", 0))
+                continue
+            if entry.key in material:
+                if isinstance(entry.value, str) and nonzero(entry.value, values):
+                    return True
+                if isinstance(entry.value, list):
+                    fields = script_fields(entry.value)
+                    quantities = [fields[key] for key in ("amount", "level", "bonus") if key in fields]
+                    if not quantities or any(nonzero(value, values) for value in quantities):
+                        return True
+            if entry.key in effects and entry.key not in seen and entry.value == "yes":
+                if consequential(effects[entry.key], flags, values, changes, seen | {entry.key}):
+                    return True
+        return False
+
+    decisions: dict[str, list[list[Entry]]] = {}
+    for category in parse_clausewitz(decisions_text):
+        if isinstance(category.value, list):
+            for decision in category.value:
+                if isinstance(decision.value, list):
+                    decisions.setdefault(decision.key, []).append(decision.value)
+
+    def requires_focus(items, focus_id):
+        def required(entry):
+            if entry.key == "has_completed_focus":
+                return entry.value == focus_id
+            if entry.key in {"AND", "hidden_trigger", "custom_trigger_tooltip"}:
+                return requires_focus(entry.value, focus_id)
+            if entry.key == "OR":
+                return bool(entry.value) and all(required(e) for e in entry.value)
+            return False
+        return any(required(e) for e in items)
+
+    def paid_unlock(reward, focus_id):
+        for unlock in (e for e in walk_script(reward) if e.key == "unlock_decision_tooltip"):
+            definitions = decisions.get(unlock.value, []) if isinstance(unlock.value, str) else []
+            if len(definitions) != 1:
+                continue
+            decision = definitions[0]
+            fields = script_fields(decision)
+            try:
+                paid = math.isfinite(float(fields.get("cost", 0))) and float(fields.get("cost", 0)) > 0
+            except ValueError:
+                paid = False
+            # custom_cost_text replaces native payment; that separate contract
+            # cannot be inferred from a positive cost field alone.
+            if not paid or "custom_cost_text" in fields:
+                continue
+            gate = script_children(decision, "visible") + script_children(decision, "available")
+            if not requires_focus(gate, focus_id):
+                continue
+            changes = {}
+            outcome = script_children(decision, "complete_effect") + script_children(decision, "remove_effect")
+            if consequential(outcome, set(), {}, changes) or any(changes.values()):
+                return True
+        return False
+
+    issues = []
+    for focus in (e for e in walk_script(parse_clausewitz(focus_text)) if e.key == "focus" and isinstance(e.value, list)):
+        reward = script_children(focus.value, "completion_reward")
+        changes = {}
+        if (any(e.key in supplemental for e in walk_script(reward, executable=True))
+                and not consequential(reward, set(), {}, changes) and not any(changes.values())
+                and not paid_unlock(reward, script_fields(focus.value).get("id"))):
+            issues.append(f"{script_fields(focus.value).get('id', 'unknown focus')} gives only supplemental points or unconsumed markers")
+    return issues
+
+
+def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic_text: str,
+                             effects_text: str) -> tuple[set[str], list[str]]:
+    """Prove display-only ideas from their real consumers, not an ID suffix.
+
+    Aggregate previews follow focus flags or numeric input additions through
+    refresh into the native dynamic-modifier variable mapping.
+    Industry previews instead compare the installed tier vectors at every tier.
+    Read-only has_idea probes are permitted; executable references are not.
+    """
+    issues: list[str] = []
+    ideas_root = script_children(parse_clausewitz(ideas_text), "ideas")
+    declarations = [e for group in ideas_root if isinstance(group.value, list)
+                    for e in group.value if isinstance(e.value, list)]
+    ideas = {e.key: e.value for e in declarations}
+    candidates = {key for key, body in ideas.items() if "name" in script_fields(body)}
+    names = {key: script_fields(ideas[key])["name"] for key in candidates}
+    native_maps = {e.key: {v: k for k, v in script_fields(e.value).items()}
+                   for e in parse_clausewitz(dynamic_text) if isinstance(e.value, list)}
+
+    def modifiers(idea):
+        try:
+            return {e.key: float(e.value) for e in script_children(ideas[idea], "modifier")}
+        except (KeyError, ValueError, TypeError):
+            issues.append(f"preview {idea} must use a declared numeric modifier vector")
+            return {}
+
+    vectors = {key: modifiers(key) for key in ideas}
+    for idea in sorted(candidates):
+        if sum(e.key == idea for e in declarations) != 1:
+            issues.append(f"preview {idea} must be declared exactly once")
+        allowed = script_children(ideas[idea], "allowed")
+        if len(allowed) != 1 or script_fields(allowed) != {"always": "no"}:
+            issues.append(f"preview {idea} must have allowed = {{ always = no }}")
+        if names[idea] not in native_maps and names[idea] not in ideas:
+            issues.append(f"preview {idea} has unknown native name {names[idea]}")
+
+    refresh = script_children(parse_clausewitz(effects_text), "VAL_refresh_contract_modifier")
+    flag_deltas: dict[str, dict[str, float]] = {}
+    for branch in (e for e in refresh if e.key == "if"):
+        flags = [e.value for e in walk_script(script_children(branch.value, "limit")) if e.key == "has_country_flag"]
+        if len(flags) == 1:
+            delta = {}
+            for effect in walk_script(branch.value, executable=True):
+                if effect.key == "add_to_variable":
+                    fields = script_fields(effect.value)
+                    try:
+                        delta[fields["var"]] = delta.get(fields["var"], 0) + float(fields["value"])
+                    except (KeyError, ValueError):
+                        continue
+            if delta:
+                flag_deltas[flags[0]] = delta
+
+    def resets_output(items, variable, already=False):
+        """A recomputed output needs a numeric baseline on every branch."""
+        index = 0
+        while index < len(items):
+            entry = items[index]
+            if entry.key == "set_variable":
+                fields = script_fields(entry.value)
+                if fields.get("var") == variable:
+                    try:
+                        already = math.isfinite(float(fields["value"]))
+                    except (KeyError, ValueError):
+                        already = False
+            elif entry.key == "if":
+                chain = [entry]
+                while index + 1 < len(items) and items[index + 1].key in {"else_if", "else"}:
+                    index += 1
+                    chain.append(items[index])
+                outcomes = [resets_output(e.value, variable, already) for e in chain]
+                if chain[-1].key != "else":
+                    outcomes.append(already)
+                already = all(outcomes)
+            index += 1
+        return already
+
+    # Recognise only same-country, untransformed persistent input copies. A
+    # conditional scope or unsupported arithmetic cannot prove a preview delta.
+    numeric_copies: dict[str, list[str]] = {}
+    for index, branch in enumerate(refresh):
+        if branch.key != "if":
+            continue
+        guard = script_children(branch.value, "limit")
+        if len(guard) != 1 or guard[0].key != "has_variable" or not isinstance(guard[0].value, str):
+            continue
+        source = guard[0].value
+        payload = [e for e in branch.value if e.key != "limit"]
+        if not payload or any(e.key != "add_to_variable" or script_fields(e.value).get("value") != source for e in payload):
+            continue
+        input_writes = [e for e in walk_script(refresh, executable=True)
+                        if e.key in {"set_variable", "set_temp_variable", "add_to_variable", "subtract_from_variable",
+                                     "multiply_variable", "divide_variable", "clamp_variable", "clear_variable"}
+                        and (e.value == source if isinstance(e.value, str) else script_fields(e.value).get("var") == source)]
+        if input_writes:
+            continue
+        for effect in payload:
+            fields = script_fields(effect.value)
+            target = fields.get("var")
+            if fields.get("value") != source or not target or not resets_output(refresh[:index], target):
+                continue
+            overwritten = any(e.key in {"set_variable", "set_temp_variable", "subtract_from_variable", "multiply_variable",
+                                        "divide_variable", "clamp_variable", "clear_variable"}
+                              and (e.value == target if isinstance(e.value, str) else script_fields(e.value).get("var") == target)
+                              for e in walk_script(refresh[index + 1:], executable=True))
+            if not overwritten:
+                numeric_copies.setdefault(source, []).append(target)
+
+    def updates_native(native):
+        for index, branch in enumerate(refresh[:-1]):
+            if branch.key != "if" or refresh[index + 1].key != "else":
+                continue
+            guard = script_children(branch.value, "limit")
+            if len(guard) != 1 or guard[0].key != "has_dynamic_modifier":
+                continue
+            modifier = guard[0].value if isinstance(guard[0].value, str) else script_fields(guard[0].value).get("modifier")
+            if (modifier == native and script_fields(branch.value).get("force_update_dynamic_modifier") == "yes"
+                    and script_fields(script_children(refresh[index + 1].value, "add_dynamic_modifier")).get("modifier") == native):
+                return True
+        return False
+
+    def numeric_reward_delta(items, native):
+        def country_sequence(children):
+            for entry in children:
+                if entry.key == "hidden_effect":
+                    yield from country_sequence(entry.value)
+                elif entry.key not in {"effect_tooltip", "custom_effect_tooltip", "unlock_decision_tooltip"}:
+                    yield entry
+
+        pending, applied, invalid = {}, {}, set()
+        for entry in country_sequence(items):
+            if entry.key == "add_to_variable":
+                fields = script_fields(entry.value)
+                variable = fields.get("var")
+                if variable in numeric_copies:
+                    try:
+                        amount = float(fields["value"])
+                        if not math.isfinite(amount):
+                            raise ValueError("non-finite delta")
+                        pending[variable] = pending.get(variable, 0) + amount
+                    except (KeyError, ValueError):
+                        invalid.add(variable)
+            elif entry.key in {"set_variable", "set_temp_variable", "subtract_from_variable", "multiply_variable",
+                               "divide_variable", "clamp_variable", "clear_variable"}:
+                invalid.add(entry.value if isinstance(entry.value, str) else script_fields(entry.value).get("var"))
+            elif entry.key == "VAL_refresh_contract_modifier" and entry.value == "yes":
+                applied = pending.copy()
+        expected = {}
+        if updates_native(native):
+            for source, amount in applied.items():
+                if source in invalid or pending.get(source) != amount:
+                    continue
+                for target in numeric_copies[source]:
+                    modifier = native_maps[native].get(target)
+                    if modifier:
+                        expected[modifier] = expected.get(modifier, 0) + amount
+        return expected
+
+    referenced, checked = set(), set()
+
+    def compare(idea, expected, context):
+        keys = vectors[idea].keys() | expected.keys()
+        if any(abs(vectors[idea].get(k, 0) - expected.get(k, 0)) > 1e-8 for k in keys):
+            issues.append(f"preview {idea} does not match actual {context} delta")
+        checked.add(idea)
+
+    def tier_previews(items, level, inside=False):
+        def condition(entry):
+            if entry.key == "NOT": return not any(condition(e) for e in entry.value)
+            if entry.key == "OR": return any(condition(e) for e in entry.value)
+            if entry.key == "AND": return all(condition(e) for e in entry.value)
+            if entry.key == "has_variable":
+                if entry.value != "VAL_contract_industry_level":
+                    raise ValueError(f"industry preview checks the wrong variable {entry.value}")
+                return level is not None
+            if entry.key == "check_variable":
+                fields = script_fields(entry.value)
+                if fields.get("var") != "VAL_contract_industry_level":
+                    raise ValueError(f"industry preview checks the wrong variable {fields.get('var')}")
+                actual, expected = level or 0, float(fields["value"])
+                return {"less_than": actual < expected, "greater_than_or_equals": actual >= expected,
+                        "equals": actual == expected}[fields.get("compare", "greater_than_or_equals")]
+            raise ValueError(f"unsupported industry preview condition {entry.key}")
+        found, matched = [], False
+        for entry in items:
+            if entry.key in {"if", "else_if", "else"}:
+                take = all(condition(e) for e in script_children(entry.value, "limit"))
+                if entry.key == "if": matched = False
+                if take and not matched:
+                    found += tier_previews([e for e in entry.value if e.key != "limit"], level, inside)
+                    matched = True
+            elif entry.key == "swap_ideas" and inside:
+                found.append(script_fields(entry.value))
+            elif isinstance(entry.value, list) and entry.key not in {"hidden_effect", "limit"}:
+                found += tier_previews(entry.value, level, inside or entry.key == "effect_tooltip")
+        return found
+
+    def inspect(items, path, inside=False, reward=None, hidden=False):
+        for entry in items:
+            if entry.key == "focus" and isinstance(entry.value, list):
+                inspect(entry.value, path, inside, script_children(entry.value, "completion_reward"), hidden)
+                continue
+            if isinstance(entry.value, str) and entry.value in candidates:
+                referenced.add(entry.value)
+                if entry.key != "has_idea" and not inside:
+                    issues.append(f"preview {entry.value} has executable/non-tooltip reference in {path}:{entry.line}")
+                elif entry.key != "has_idea" and hidden:
+                    issues.append(f"preview {entry.value} is hidden from the player in {path}:{entry.line}")
+            if entry.key == "swap_ideas" and inside:
+                pair = script_fields(entry.value)
+                before, after = pair.get("remove_idea"), pair.get("add_idea")
+                if after in candidates:
+                    if before not in candidates or names.get(before) != names[after] or vectors.get(before):
+                        issues.append(f"preview {after} needs an empty baseline with the same native name")
+                    else:
+                        checked.add(before)
+                    native = names[after]
+                    if native in native_maps and reward is not None:
+                        executable = list(walk_script(reward, executable=True))
+                        flags = {e.value for e in executable if e.key == "set_country_flag"}
+                        expected = {}
+                        for flag in flags:
+                            for variable, value in flag_deltas.get(flag, {}).items():
+                                modifier = native_maps[native].get(variable)
+                                if modifier:
+                                    expected[modifier] = expected.get(modifier, 0) + value
+                        for modifier, value in numeric_reward_delta(reward, native).items():
+                            expected[modifier] = expected.get(modifier, 0) + value
+                        if not expected or not any(e.key == "VAL_refresh_contract_modifier" and e.value == "yes" for e in executable):
+                            issues.append(f"preview {after} has no matching executed flag/numeric-input refresh reward")
+                        compare(after, expected, native)
+                    elif not native.startswith("VAL_contract_industry_"):
+                        issues.append(f"preview {after} has no proven native reward consumer")
+            if isinstance(entry.value, list):
+                inspect(entry.value, path, inside or entry.key == "effect_tooltip", reward,
+                        hidden or entry.key == "hidden_effect")
+
+    for path, text in sources.items():
+        entries = parse_clausewitz(text)
+        inspect(entries, path)
+        for focus in (e for e in walk_script(entries) if e.key == "focus" and isinstance(e.value, list)):
+            reward = script_children(focus.value, "completion_reward")
+            tier_ids = {e.value for e in walk_script(reward) if e.key == "add_idea" and
+                        e.value in candidates and names[e.value].startswith("VAL_contract_industry_")}
+            if not tier_ids:
+                continue
+            target = max(int(names[idea].rsplit("_", 1)[1]) for idea in tier_ids)
+            if not any(e.key == f"VAL_apply_contract_industry_{target}" for e in walk_script(reward, executable=True)):
+                issues.append(f"industry preview has no actual tier-{target} grant")
+            for level in (None, 0, 1, 2, 3):
+                try:
+                    pairs = tier_previews(reward, level)
+                except (ValueError, KeyError) as error:
+                    issues.append(str(error))
+                    break
+                expected_count = int((level or 0) < target)
+                if len(pairs) != expected_count:
+                    issues.append(f"industry tier-{target} preview is wrong at current tier {level}")
+                for pair in pairs:
+                    idea = pair.get("add_idea")
+                    if idea not in tier_ids:
+                        issues.append("industry preview references an unexpected delta")
+                        continue
+                    full = vectors.get(names[idea], {})
+                    previous = vectors.get(f"VAL_contract_industry_{level}", {})
+                    compare(idea, {k: full.get(k, 0) - previous.get(k, 0) for k in full.keys() | previous.keys()}, f"industry tier {level}->{target}")
+    for idea in sorted(candidates - (referenced & checked)):
+        issues.append(f"preview {idea} has no validated tooltip-only consumer")
+    return candidates if not issues else set(), issues
+
+
 def main() -> int:
     issues: list[str] = []
     focus_text = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
@@ -262,11 +702,10 @@ def main() -> int:
             issues.append(f"{focus_id.group(1) if focus_id else 'unknown focus'} has no cost")
         elif int(cost.group(1)) > 5:
             issues.append(f"{focus_id.group(1) if focus_id else 'unknown focus'} exceeds 35 days")
-        for forbidden in ("army_experience", "add_command_power", "add_political_power"):
-            if forbidden in block:
-                issues.append(
-                    f"{focus_id.group(1) if focus_id else 'unknown focus'} uses filler reward {forbidden}"
-                )
+    issues.extend(validate_supplemental_rewards(
+        focus_text, read("common/scripted_effects/ADISCORD_VAL_effects.txt"),
+        read("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt"),
+        read("common/decisions/ADISCORD_VAL_decisions.txt")))
 
     focus_blocks = {
         match.group(1): block
@@ -435,9 +874,9 @@ def main() -> int:
         if token not in shared_effects:
             issues.append(f"shared action API is missing {token}")
 
-    foreign_operations = read(
-        "common/scripted_effects/ADISCORD_VAL_foreign_operation_effects.txt"
-    )
+    foreign_operations = source_section(read(
+        "common/scripted_effects/ADISCORD_VAL_effects.txt"
+    ), 'foreign_operation_effects')
     if re.search(
         r"\bVAL_recalculate_stp_campaign_readiness\s*=\s*yes\b",
         mask_comments(foreign_operations),
@@ -456,7 +895,9 @@ def main() -> int:
     decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
     for token in (
         "days_mission_timeout = 90",
-        "amount = -2500",
+        "VAL_reserve_export_rifles = yes",
+        "VAL_refund_export_rifles = yes",
+        "limit = { has_country_flag = VAL_export_rifles_reserved }",
         "VAL_resolve_quarterly_contract_norm = yes",
         "ADISCORD_has_campaign_slot = yes",
     ):
@@ -535,7 +976,7 @@ def main() -> int:
         if not block or "has_country_flag = VAL_northern_operations_unlocked" not in block[0]:
             issues.append(f"{decision_id} is not gated by its world-reactive focus")
 
-    effects = read("common/scripted_effects/ADISCORD_VAL_rework_effects.txt")
+    effects = source_section(read("common/scripted_effects/ADISCORD_VAL_effects.txt"), 'rework_effects')
     on_actions = read(VAL_ON_ACTIONS_FILE)
     startup_blocks = named_blocks(on_actions, "on_startup")
     if len(startup_blocks) != 1:
@@ -591,7 +1032,9 @@ def main() -> int:
     if mask_comments(on_actions).count(initialize_call) != 1:
         issues.append("VAL rework initializer must have exactly one guarded runtime caller")
     for token in (
-        "amount = -4000",
+        "set_temp_variable = { var = STP_cw_rifle_cost value = 4000 }",
+        "STP_cw_pay_rifles = yes",
+        "limit = { has_country_flag = STP_cw_rifles_paid }",
         "VAL_contract_reputation_level",
         "VAL_vorkerland_contract_disruptions",
         "give_resource_rights = { receiver = VAL state = 202 }",
@@ -710,6 +1153,9 @@ def main() -> int:
                 issues.append(f"expected exactly one tier effect {effect_id}")
                 continue
             effect_block = effect_blocks[0].text
+            # Native previews are not tier mutations; validate the executable renderer separately.
+            for preview in named_blocks(effect_block, "effect_tooltip"):
+                effect_block = effect_block.replace(preview, "")
             engine_effect = mask_comments(effect_block)
             if re.search(r"\b(?:has_idea|swap_ideas)\s*=", engine_effect):
                 issues.append(f"{effect_id} still derives transitions from idea state")
@@ -721,12 +1167,17 @@ def main() -> int:
             limits = direct_named_blocks(branch.text, "limit", branch.start)
             setters = direct_named_blocks(branch.text, "set_variable", branch.start)
             hidden_blocks = direct_named_blocks(branch.text, "hidden_effect", branch.start)
+            for hidden_block in hidden_blocks:
+                setters += direct_named_blocks(hidden_block.text, "set_variable", hidden_block.start)
             if len(limits) != 1 or len(setters) != 1 or len(hidden_blocks) != 1:
                 issues.append(
                     f"{effect_id} must directly contain one limit, level setter, and hidden renderer"
                 )
                 continue
             limit = limits[0]
+            hidden_limits = direct_named_blocks(limit.text, "hidden_trigger", limit.start)
+            if len(hidden_limits) == 1:
+                limit = hidden_limits[0]
             guards = direct_named_blocks(limit.text, "OR", limit.start)
             if len(guards) != 1:
                 issues.append(f"{effect_id} needs one direct OR level guard")
@@ -1010,6 +1461,23 @@ def main() -> int:
             if len(declarations) != 1:
                 issues.append(f"technical idea must be declared once under hidden_ideas: {idea_id}")
 
+    candidate_ids = {
+        entry.key for entry in walk_script(parse_clausewitz(ideas_text))
+        if isinstance(entry.value, list) and "name" in script_fields(entry.value)
+        and entry.key.startswith("VAL_")
+    }
+    preview_sources = {}
+    for runtime_root in ("common", "events", "history"):
+        for path in sorted((ROOT / runtime_root).rglob("*.txt")):
+            source = path.read_text(encoding="utf-8-sig", errors="replace")
+            if any(idea in source for idea in candidate_ids):
+                preview_sources[path.relative_to(ROOT).as_posix()] = source
+    display_only, preview_issues = validate_val_preview_ideas(
+        ideas_text, preview_sources,
+        read("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt"),
+        read("common/scripted_effects/ADISCORD_VAL_effects.txt"))
+    issues.extend(preview_issues)
+
     for ideas_path in (
         "common/ideas/ADISCORD_VAL_rework_ideas.txt",
         "common/ideas/ADISCORD_STP_VAL_crisis_ideas.txt",
@@ -1017,13 +1485,13 @@ def main() -> int:
         ideas_text = read(ideas_path)
         for idea_id in sorted(set(re.findall(r"(?m)^\s*(VAL_[A-Za-z0-9_]+)\s*=\s*\{", ideas_text))):
             idea_blocks = named_blocks(ideas_text, idea_id)
-            if idea_blocks and not re.search(r"(?m)^\s*picture\s*=", idea_blocks[0]):
+            if idea_blocks and idea_id not in display_only and not re.search(r"\bpicture\s*=", mask_comments(idea_blocks[0])):
                 issues.append(f"idea {idea_id} has no picture")
 
     state_202 = read("history/states/202-202.txt")
     if not re.search(r"resources\s*=\s*\{[^}]*steel\s*=\s*16", state_202, re.S):
         issues.append("state 202 does not contain the baseline Westerholm steel deposit")
-    collapse_events = read("events/ADISCORD_vorkerland_collapse_events.txt")
+    collapse_events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
     if "VAL_handle_vorkerland_war_outbreak = yes" not in collapse_events:
         issues.append("Vorkerland war start does not disrupt Kefreyt contracts")
 

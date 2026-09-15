@@ -29,13 +29,28 @@ class TechnologyValidatorNegativeTests(unittest.TestCase):
         tech_id = "ADISCORD_tech_postwar_weapon_standardization"
         broken = dict(self.tech_blocks)
         broken[tech_id] = broken[tech_id].replace(
-            "position = { x = 1 y = 0 }",
-            "position = { x = 0 y = 1 }",
+            "position = { x = 2 y = 0 }",
+            "position = { x = 0 y = 2 }",
             1,
         )
         issues = validator.check_technology_parser_constraints(broken)
         self.assertTrue(
-            any(tech_id in issue and "grid position (0, 1)" in issue for issue in issues),
+            any(tech_id in issue and "grid position (0, 2)" in issue for issue in issues),
+            issues,
+        )
+
+    def test_grid_step_larger_than_connector_is_reported(self) -> None:
+        gui = validator.read_text(validator.ROOT / "interface/countrytechtreeview.gui")
+        broken_gui = gui.replace(
+            "slotsize = { width = 70 height = 70 }",
+            "slotsize = { width = 70 height = 96 }",
+            1,
+        )
+        self.assertNotEqual(gui, broken_gui)
+        with patch.object(validator, "read_text", return_value=broken_gui):
+            issues = validator.check_technology_gridboxes(self.tech_blocks)
+        self.assertTrue(
+            any("infantry_folder" in issue and "native connector" in issue for issue in issues),
             issues,
         )
 
@@ -215,6 +230,147 @@ ADISCORD_produce_artillery_low_stock = {
 }
 """
         self.assertEqual(check(templates, default_strategy), [])
+
+    def test_supply_motorization_has_real_unlocked_transport(self) -> None:
+        equipment = validator.collect_equipment_blocks()
+        trucks = [key for key, body in equipment.items() if re.search(r"\bsupply_truck\s*=\s*yes\b", body)]
+        self.assertEqual(trucks, ["motorized_equipment"])
+        self.assertIn("archetype = motorized_equipment", equipment["motorized_equipment_1"])
+        self.assertNotIn("supply_truck", equipment["support_equipment"])
+        self.assertIn("motorized_equipment_1", self.tech_blocks["ADISCORD_tech_restored_truck_fleets"])
+        from tools.builders import build_adiscord_technology_system as builder
+        for tag in ("STP", "NOD", "VAL", "WRK", "VAD", "YPR", "COF", "TFF"):
+            technologies = set(builder.STARTING_TECH_PROFILES["common"])
+            for profile in builder.STARTING_COUNTRY_TECH_PROFILES[tag]:
+                technologies.update(builder.STARTING_TECH_PROFILES[profile])
+            self.assertIn("ADISCORD_tech_restored_truck_fleets", technologies, tag)
+            source = validator.read_text(validator.ROOT / f"history/units/{tag}.txt")
+            self.assertRegex(source, r"add_equipment_to_stockpile\s*=\s*\{\s*type\s*=\s*motorized_equipment_1\s+amount\s*=\s*[1-9]\d*", tag)
+        for claimant in ("WRK", "TVA"):
+            source = validator.read_text(validator.ROOT / f"history/units/{claimant}_vorkerland_collapse_air.txt")
+            self.assertRegex(source, r"type\s*=\s*motorized_equipment_1\s+amount\s*=\s*[1-9]\d*", claimant)
+            self.assertRegex(source, r"type\s*=\s*train_equipment_1\s+amount\s*=\s*[1-9]\d*", claimant)
+
+    def test_naval_ai_goal_replacement_retains_required_objectives(self) -> None:
+        descriptor = validator.read_text(validator.ROOT / "descriptor.mod")
+        self.assertRegex(descriptor, r'replace_path\s*=\s*"common/ai_navy/goals"')
+        registered = set()
+        for path in (validator.ROOT / "common/country_tags").glob("*.txt"):
+            registered.update(re.findall(r"(?m)^\s*([A-Z0-9]{3})\s*=", validator.read_text(path)))
+        objectives = set()
+        paths = list((validator.ROOT / "common/ai_navy/goals").glob("*.txt"))
+        self.assertTrue(paths, "Replacing naval goals must supply usable objectives")
+        for path in paths:
+            self.assertFalse(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            source = validator.strip_comments(validator.read_text(path))
+            for name in validator.top_level_keys(source):
+                goal = validator.top_level_blocks(source, name)[0]
+                for key in ("available_for", "blocked_for"):
+                    for country_filter in validator.top_level_blocks(goal, key):
+                        tags = set(country_filter.split())
+                        self.assertTrue(tags, f"{name}: an empty filter disrupts native parsing")
+                        self.assertFalse(tags - registered, f"{name}: unknown tags {tags - registered}")
+                allowed = validator.top_level_blocks(goal, "available_for")
+                self.assertEqual(len(allowed), 1, name)
+                self.assertTrue({"STP", "STS", "NOD", "VAL"} <= set(allowed[0].split()), name)
+                objective = re.search(r"\bobjective_type\s*=\s*(\w+)", goal)
+                self.assertIsNotNone(objective, name)
+                self.assertNotIn(objective[1], objectives, "Each objective needs one active policy")
+                objectives.add(objective[1])
+        self.assertEqual(objectives, {
+            "naval_invasion_support", "naval_invasion_defense", "coast_defense",
+            "convoy_protection", "convoy_raiding", "naval_dominance", "training",
+            "mines_sweeping", "mines_planting", "naval_blockade",
+        })
+
+    def test_starting_naval_profile_opens_native_invasion_transport(self) -> None:
+        from tools.builders import build_adiscord_technology_system as builder
+        tech_id = "ADISCORD_tech_restored_dockyards"
+        branch = next(branch for branch in builder.BRANCHES if branch.key == "naval_support")
+        index = next(index for index, tech in enumerate(branch.techs) if tech.id == tech_id)
+        for source in (self.tech_blocks[tech_id], builder.render_technology(branch, index)):
+            self.assertRegex(source, r"\bnaval_invasion_capacity\s*=\s*100\b")
+            self.assertNotRegex(source, r"\bnaval_invasion_(?:division|plan)_cap\s*=")
+        for tag in ("STP", "NOD", "VAL"):
+            technologies = set(builder.STARTING_TECH_PROFILES["common"])
+            for profile in builder.STARTING_COUNTRY_TECH_PROFILES[tag]:
+                technologies.update(builder.STARTING_TECH_PROFILES[profile])
+            self.assertIn(tech_id, technologies, tag)
+
+    def test_naval_fleets_can_use_the_real_starting_ship_composition(self) -> None:
+        from collections import Counter
+
+        descriptor = validator.read_text(validator.ROOT / "descriptor.mod")
+        sources = {}
+        for kind in ("taskforce", "fleet"):
+            self.assertRegex(descriptor, rf'replace_path\s*=\s*"common/ai_navy/{kind}"')
+            sources[kind] = {}
+            for path in (validator.ROOT / f"common/ai_navy/{kind}").glob("*.txt"):
+                self.assertFalse(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+                source = validator.strip_comments(validator.read_text(path))
+                for name in validator.top_level_keys(source):
+                    self.assertNotIn(name, sources[kind])
+                    sources[kind][name] = validator.top_level_blocks(source, name)[0]
+            self.assertTrue(sources[kind], f"{kind}: replacement must provide usable templates")
+
+        registered = set()
+        for path in (validator.ROOT / "common/country_tags").glob("*.txt"):
+            registered.update(re.findall(r"(?m)^\s*([A-Z0-9]{3})\s*=", validator.read_text(path)))
+        subunits = validator.collect_defined_subunits()
+        missions, minimums = {}, {}
+        for name, template in sources["taskforce"].items():
+            allowed = validator.top_level_blocks(template, "allowed")[0]
+            filters = validator.top_level_blocks(allowed, "OR")
+            self.assertEqual(len(filters), 1, name)
+            tags = set(re.findall(r"\boriginal_tag\s*=\s*(\w+)", filters[0]))
+            self.assertTrue({"STP", "STS", "NOD", "VAL"} <= tags, name)
+            self.assertFalse(tags - registered, name)
+            missions[name] = set(validator.top_level_blocks(template, "mission")[0].split())
+            self.assertEqual(len(missions[name]), 1, "Native taskforce templates select one mission")
+            composition = {}
+            for kind in ("min_composition", "optimal_composition"):
+                body = validator.top_level_blocks(template, kind)[0]
+                ships = validator.top_level_keys(body)
+                self.assertTrue(ships, name)
+                self.assertFalse(ships - subunits, f"{name}: nonexistent ship types {ships - subunits}")
+                composition[kind] = {ship: int(re.search(r"\bamount\s*=\s*(\d+)",
+                                        validator.top_level_blocks(body, ship)[0])[1]) for ship in ships}
+            minimums[name] = composition["min_composition"]
+            for ship, number in minimums[name].items():
+                self.assertGreater(number, 0)
+                self.assertGreaterEqual(composition["optimal_composition"].get(ship, 0), number)
+
+        supported = set()
+        for name, fleet in sources["fleet"].items():
+            required = validator.top_level_blocks(fleet, "required_taskforces")[0]
+            requirements = dict((key, int(value)) for key, value in re.findall(r"(\w+)\s*=\s*(\d+)", required))
+            self.assertTrue(requirements, name)
+            for kind in ("required_taskforces", "optional_taskforces"):
+                for body in validator.top_level_blocks(fleet, kind):
+                    for taskforce in re.findall(r"(\w+)\s*=", body):
+                        self.assertIn(taskforce, minimums, name)
+                        supported.update(missions[taskforce])
+            needed = Counter()
+            for taskforce, count in requirements.items():
+                self.assertGreater(count, 0)
+                needed.update({ship: number * count for ship, number in minimums[taskforce].items()})
+            for tag in ("STP", "NOD", "VAL"):
+                oob = validator.read_text(validator.ROOT / f"history/units/{tag}.txt")
+                stock = Counter(re.findall(r"\bdefinition\s*=\s*(\w+)", oob))
+                self.assertFalse(needed - stock, f"{tag} cannot assemble {name} from its real ships")
+        self.assertTrue({"naval_patrol", "naval_strike", "convoy_escort", "convoy_raiding",
+                         "naval_invasion_support"} <= supported)
+
+    def test_supply_validator_rejects_missing_or_misassigned_trucks(self) -> None:
+        equipment = validator.collect_equipment_blocks()
+        for replacement in ("", "support_equipment"):
+            broken = dict(equipment)
+            broken["motorized_equipment"] = broken["motorized_equipment"].replace("supply_truck = yes", "")
+            if replacement:
+                broken[replacement] += "\n supply_truck = yes"
+            with patch.object(validator, "collect_equipment_blocks", return_value=broken):
+                issues = validator.check_equipment_parser_constraints()
+            self.assertTrue(any("supply motorization" in issue for issue in issues), issues)
 
     def test_ai_force_progression_rejects_unreachable_four_battalion_loop(self) -> None:
         check = getattr(validator, "ai_force_progression_contract_issues", None)
@@ -592,7 +748,7 @@ ADISCORD_produce_armored_carriers = {
         )
         country_asset = validator.read_text(country_asset_path)
         broken_country_asset = country_asset.replace(
-            'name = "STP_infantry_2_entity"\n\tpdxmesh = "STP_infantry_hedonist_mesh"',
+            'name = "STP_infantry_2_entity"\n\tpdxmesh = "STP_infantry_hedonist_mg_mesh"',
             'name = "STP_infantry_2_entity"\n\tpdxmesh = "STP_infantry_hedonist_mesh_BROKEN"',
             1,
         )
@@ -608,7 +764,7 @@ ADISCORD_produce_armored_carriers = {
             issues = validator.check_infantry_visual_model_chain()
         self.assertIn(
             "STP_infantry_2_entity pdxmesh is STP_infantry_hedonist_mesh_BROKEN; "
-            "expected STP_infantry_hedonist_mesh",
+            "expected STP_infantry_hedonist_mg_mesh",
             issues,
         )
 

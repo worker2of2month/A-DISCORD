@@ -1,0 +1,67 @@
+<!doctype html><meta charset="utf-8"><title>JoroDox native mesh visual QA</title>
+<style>body{margin:0;background:#202830;color:#ddd;font:15px Arial}header{padding:12px}select,button{padding:7px;margin:0 8px}canvas{display:block}#status{font-family:monospace;font-size:12px;white-space:pre-wrap}</style>
+<header>JoroDox 0.8.1 · Native mesh / DDS · FrontSide
+<select id="family"><option value="city">Buildings</option><option value="weapon">Weapons</option><option value="infantry">Infantry</option><option value="hq">Headquarters</option></select><select id="model"></select>
+<button id="turn">Reverse view</button><button id="capture">Save view</button><button id="all">Capture both sides of every model</button><div id="status">Loading…</div></header><div id="viewport"></div>
+<script>
+const services={},pending=[],textureEvidence={};
+async function sha256(buffer){return [...new Uint8Array(await crypto.subtle.digest('SHA-256',buffer))].map(b=>b.toString(16).padStart(2,'0')).join('')}
+const deps={$rootScope:{},$filter:()=>v=>v,$q:{defer(){let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b});return{resolve,reject,promise}}},
+modService:{getFileBuffer(url){const p=fetch(url,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error(url);return r.arrayBuffer()}).then(async buffer=>{textureEvidence[url]=await sha256(buffer);return buffer});pending.push(p);return p}}};
+window.angular={module:()=>({factory(n,d){services[n]=d.at(-1)(...d.slice(0,-1).map(k=>deps[k]))}})};
+</script>
+<script src="/joro/bower_components/three.js/three.min.js"></script><script src="/joro/bower_components/DDSLoader/index.js"></script><script src="/joro/js/pdxDataService.js"></script><script src="/joro/js/rendererService.js"></script>
+<script>
+const names={city:['tower_admin','tower_business','tower_residential','quarter_business','quarter_mixed','quarter_residential','stelander_spire','stelander_twin','stelander_arcology'],weapon:Array.from({length:8},(_,i)=>'infantry_'+i),infantry:['STP_party','STS_regular','VAL_regular','WRK_line','TVA_technical','VAD_line','WRK_fragment','IVN_line','NOD_line','SRP_highland'],hq:['STP_hq','STS_hq','VAL_hq','NOD_hq','generic_hq']};
+const family=document.getElementById('family'),model=document.getElementById('model'),status=document.getElementById('status');
+const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
+renderer.setSize(1100,740);renderer.setClearColor(0x26323d);document.getElementById('viewport').appendChild(renderer.domElement);
+let scene,camera,view,reverse=false,report;
+function draw(){renderer.render(scene,camera)}
+async function load(){
+ status.textContent='Loading '+model.value;pending.length=0;for(const key of Object.keys(textureEvidence))delete textureEvidence[key];
+ const base='/'+family.value,filename=(family.value==='city'?'ADISCORD_city_':'')+model.value+'.mesh';
+ const response=await fetch(base+'/'+filename,{cache:'no-store'});
+ if(!response.ok)throw Error(filename+' '+response.status);
+ const buffer=await response.arrayBuffer(),hash=await sha256(buffer);
+ view=await services.rendererService.loadPdxMesh(services.pdxDataService.readFromBuffer(buffer),base);
+ await Promise.all(pending);
+ view.update({viewConfig:{showMeshes:true,showWireframes:false,showSkeletons:false,showColliders:false}});
+ for(const m of view.meshes){
+  if(m.material.side!==THREE.FrontSide)throw Error('Unexpected two-sided material');
+  // Native pdxmesh.shader wraps all three surface maps; vanilla mirrored UV islands extend outside 0..1.
+  for(const key of ['map','normalMap','specularMap'])if(m.material[key]){
+   m.material[key].wrapS=m.material[key].wrapT=THREE.RepeatWrapping;
+   m.material[key].needsUpdate=true;
+  }
+ }
+ scene=new THREE.Scene();scene.add(view.object);
+ scene.add(new THREE.AmbientLight(0xcccccc));
+ for(const [p,intensity] of [[[8,12,10],.7],[[-8,3,-7],.4]]){const l=new THREE.DirectionalLight(0xffffff,intensity);l.position.set(...p);scene.add(l)}
+ const box=new THREE.Box3();view.object.updateMatrixWorld(true);
+ for(const mesh of view.meshes)if(mesh.material.visible){mesh.geometry.computeBoundingBox();box.union(mesh.geometry.boundingBox.clone().applyMatrix4(mesh.matrixWorld))}
+ const center=box.center(),size=box.size(),extent=Math.max(size.x,size.y,size.z);
+ camera=new THREE.PerspectiveCamera(35,1100/740,.01,1000);
+ const sign=reverse?-1:1;
+ if(family.value==='city')camera.position.set(center.x+extent*1.55*sign,center.y+extent*.78,center.z+extent*1.9*sign);
+ else if(['infantry','hq'].includes(family.value))camera.position.set(center.x+extent*.70*sign,center.y+extent*.20,center.z-extent*1.95*sign);
+ else camera.position.set(center.x+extent*1.55*sign,center.y+extent*.36,center.z+extent*.36*sign);
+ camera.lookAt(center);
+ const grid=new THREE.GridHelper(extent*2,extent/8);grid.position.y=box.min.y-.02;scene.add(grid);
+ draw();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));draw();
+ report={tool:'JoroDox installed 0.8.1 mesh and DDS loaders, WebGL visual harness',filename,sha256:hash,textures:{...textureEvidence},side:reverse?'reverse':'front',materialSide:'FrontSide',textureAddress:'Wrap (native pdxmesh.shader)',parts:view.meshes.length,triangles:view.meshes.reduce((n,m)=>n+m.geometry.faces.length,0),bounds:{min:box.min,max:box.max},boundsSource:'visible mesh geometry only',webglError:renderer.getContext().getError(),limitation:'JoroDox Phong fallback, not native HOI4 lighting or game entity/animation proof'};
+ status.textContent=filename+' | '+report.triangles+' triangles | FrontSide | WebGL error '+report.webglError+' | '+(reverse?'reverse':'front');
+}
+async function capture(){draw();await fetch('/capture',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:family.value+'_'+model.value+'_'+(reverse?'reverse':'front'),png:renderer.domElement.toDataURL('image/png'),evidence:report})})}
+function populate(){model.replaceChildren(...names[family.value].map(n=>{const o=document.createElement('option');o.value=o.textContent=n;return o}));return load()}
+family.onchange=()=>populate().catch(e=>status.textContent=e.stack);model.onchange=()=>load().catch(e=>status.textContent=e.stack);
+document.getElementById('turn').onclick=()=>{reverse=!reverse;load()};document.getElementById('capture').onclick=capture;
+document.getElementById('all').onclick=async()=>{for(const n of names[family.value]){model.value=n;for(const s of [false,true]){reverse=s;await load();await capture()}}status.textContent+=' | All captures saved'};
+async function start(){
+ const batch=new URLSearchParams(location.search).get('batch');
+ if(batch && names[batch])family.value=batch;
+ await populate();
+ if(batch)await document.getElementById('all').onclick();
+}
+start().catch(e=>status.textContent=e.stack);
+</script>

@@ -12,19 +12,19 @@ _REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 if str(_REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPOSITORY_ROOT))
 
-from tools.lib.paths import repository_root
+from tools.lib.paths import repository_root, source_section
 
 
 ROOT = repository_root()
 
-TRIGGERS = "common/scripted_triggers/ADISCORD_vorkerland_stalemate_triggers.txt"
-EFFECTS = "common/scripted_effects/ADISCORD_vorkerland_stalemate_effects.txt"
+TRIGGERS = "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"
+EFFECTS = "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
 ON_ACTIONS = "common/on_actions/05_ADISCORD_vorkerland_stalemate_on_actions.txt"
-EVENTS = "events/ADISCORD_vorkerland_stalemate_events.txt"
-AI = "common/ai_strategy/ADISCORD_vorkerland_stalemate_ai.txt"
-IDEAS = "common/ideas/ADISCORD_vorkerland_stalemate_ideas.txt"
-ENGLISH = "localisation/english/ADISCORD_vorkerland_stalemate_l_english.yml"
-RUSSIAN = "localisation/russian/ADISCORD_vorkerland_stalemate_l_russian.yml"
+EVENTS = "events/ADISCORD_vorkerland_events.txt"
+AI = "common/ai_strategy/ADISCORD_vorkerland_ai.txt"
+IDEAS = "common/ideas/ADISCORD_vorkerland_ideas.txt"
+ENGLISH = "localisation/english/ADISCORD_vorkerland_l_english.yml"
+RUSSIAN = "localisation/russian/ADISCORD_vorkerland_l_russian.yml"
 REGISTRY = "tools/data/adiscord_event_ids.json"
 
 SCOPED_FILES = (
@@ -57,7 +57,11 @@ ACTIVE_FLAGS = (
 
 
 def _read(root: Path, relative: str) -> str:
-    return (root / relative).read_text(encoding="utf-8-sig")
+    text = (root / relative).read_text(encoding="utf-8-sig")
+    sections = {TRIGGERS: "stalemate_triggers", EFFECTS: "stalemate_effects",
+                EVENTS: "stalemate_events", AI: "stalemate_ai", IDEAS: "stalemate_ideas",
+                ENGLISH: "stalemate_l_english", RUSSIAN: "stalemate_l_russian"}
+    return source_section(text, sections[relative]) if relative in sections else text
 
 
 def _balanced(text: str) -> bool:
@@ -251,6 +255,11 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     if events.count("country_event = {") != 2:
         issues.append("deadline events must not schedule a retry or another event")
 
+    plan_names = re.findall(
+        r"(?m)^(ADISCORD_vorkerland_(?:central|solarino)_breakthrough_\w+)\s*=\s*\{",
+        ai,
+    )
+    ai = "\n".join(_named_block(ai, name) for name in plan_names)
     expected_plan_count = len(CENTRAL_TARGETS) + len(SOLAR_TARGETS)
     if ai.count("abort_when_not_enabled = yes") != expected_plan_count:
         issues.append(f"stalemate AI must contain {expected_plan_count} bounded plans")
@@ -273,7 +282,13 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     for active_flag in ACTIVE_FLAGS:
         if f"has_country_flag = {active_flag}" not in ai:
             issues.append(f"AI plan is missing its timed activation flag: {active_flag}")
-    for token in ("priority = 2000", "execution_type = rush", "manual_attack = yes"):
+    for token in (
+        "priority = 2000",
+        "execution_type = rush_weak",
+        "manual_attack = no",
+        "has_manpower > 1000",
+        "stockpile_ratio = { archetype = infantry_equipment ratio > 0.05 }",
+    ):
         if ai.count(token) != expected_plan_count:
             issues.append(f"all stalemate AI plans must use {token}")
 

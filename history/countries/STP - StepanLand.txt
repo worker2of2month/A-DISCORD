@@ -61,6 +61,14 @@ add_ideas = {
 
 ###### Army and production
 set_convoys = 100
+
+# The OOB contains a recon-platform company.  Grant its narrow generated
+# profile before the template is loaded; the full STP profile is reasserted on_startup.
+ADISCORD_grant_technology_profile_recon_platform = yes
+# Air equipment must be unlocked before the OOB creates its wings.
+ADISCORD_grant_technology_profile_air = yes
+ADISCORD_grant_technology_profile_field_air_defense = yes
+ADISCORD_grant_technology_profile_land = yes
 oob = "STP"
 
 # Starting technologies are granted by the generated STP profile on_startup.

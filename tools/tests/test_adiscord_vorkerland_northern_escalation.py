@@ -3,6 +3,9 @@ import unittest
 from pathlib import Path
 
 
+from tools.lib.paths import source_section
+
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -42,9 +45,9 @@ class NorthernEscalationTests(unittest.TestCase):
     def test_northern_militia_is_line_infantry_not_garrison(self) -> None:
         templates = read("common/ai_templates/ADISCORD_land_templates.txt")
         line = named_block(
-            templates, "ADISCORD_vorkerland_northern_militia_templates"
+            templates, "ADISCORD_territorial_templates"
         )
-        self.assertIn("role = infantry", line)
+        self.assertIn("role = militias", line)
         self.assertIn("ADISCORD_vorkerland_northern_line_militia", line)
         self.assertIn("regiments = { ADISCORD_militia = 4 }", line)
         for tag in ("ZAO", "WPA", "WPS", "PWR", "PSD"):
@@ -54,7 +57,7 @@ class NorthernEscalationTests(unittest.TestCase):
         self.assertIn("NOT =", garrison)
 
     def test_base_front_ratios_are_bounded_per_country(self) -> None:
-        strategies = read("common/ai_strategy/ADISCORD_vorkerland_collapse_ai.txt")
+        strategies = source_section(read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai')
         expected = {"ZAO": 0.25, "WPA": 0.33, "WPS": 0.33, "PWR": 0.25, "PSD": 0.25}
         totals = {tag: 0.0 for tag in expected}
         for attacker, target in (
@@ -77,7 +80,7 @@ class NorthernEscalationTests(unittest.TestCase):
             self.assertLessEqual(total, 1.0, f"{tag} requests {total:.2f} fronts")
 
     def test_escalation_consumers_are_target_specific_and_do_not_stack(self) -> None:
-        strategies = read("common/ai_strategy/ADISCORD_vorkerland_collapse_ai.txt")
+        strategies = source_section(read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai')
         for attacker, target, request in self.canonical:
             suffix = f"{attacker.lower()}_{target.lower()}"
             base = named_block(strategies, f"ADISCORD_vorkerland_front_{suffix}")
@@ -91,12 +94,12 @@ class NorthernEscalationTests(unittest.TestCase):
             self.assertIn("has_idea = ADISCORD_vorkerland_northern_operational_initiative", aggressive)
             self.assertIn(f"front_unit_request tag = {target} value = {request}", aggressive)
             self.assertIn(f"type = conquer id = {target}", aggressive)
-            self.assertIn("execution_type = rush", aggressive)
-            self.assertIn("manual_attack = yes", aggressive)
+            self.assertIn("execution_type = rush_weak", aggressive)
+            self.assertIn("manual_attack = no", aggressive)
 
     def test_timers_are_one_shot_from_graph_launch_and_have_no_forced_outcome(self) -> None:
-        effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
-        phase_effects = read("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
+        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        phase_effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'phase_effects')
         schedule = named_block(effects, "ADISCORD_vorkerland_schedule_northern_escalation")
         launch_verifier = named_block(
             phase_effects, "ADISCORD_vorkerland_verify_regional_war_launch"
@@ -122,7 +125,7 @@ class NorthernEscalationTests(unittest.TestCase):
         self.assertEqual(select.count("add_timed_idea = { idea = ADISCORD_vorkerland_northern_operational_initiative"), 9)
         self.assertEqual(intensify.count("set_global_flag = ADISCORD_vorkerland_northern_escalation_stage_2"), 1)
 
-        events = read("events/ADISCORD_vorkerland_collapse_events.txt")
+        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
         for event_id, effect in (
             (83, "ADISCORD_vorkerland_select_northern_escalation_front"),
             (84, "ADISCORD_vorkerland_intensify_surviving_northern_fronts"),

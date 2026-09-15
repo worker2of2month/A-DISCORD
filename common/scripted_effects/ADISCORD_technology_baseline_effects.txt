@@ -119,6 +119,26 @@ ADISCORD_grant_technology_profile_armored_core = {
 	}
 }
 
+ADISCORD_grant_technology_profile_recon_platform = {
+	set_technology = {
+		ADISCORD_tech_drone_recon_swarms = 1
+		ADISCORD_tech_light_suspension = 1
+		ADISCORD_tech_restored_armored_chassis = 1
+		popup = no
+	}
+}
+
+ADISCORD_grant_technology_profile_field_air_defense = {
+	set_technology = {
+		ADISCORD_tech_improvised_air_defense = 1
+		ADISCORD_tech_point_defense_aa = 1
+		ADISCORD_tech_proximity_fuzes = 1
+		ADISCORD_tech_radar_laying = 1
+		ADISCORD_tech_stabilized_autocannon_mounts = 1
+		popup = no
+	}
+}
+
 ADISCORD_grant_technology_profile_air = {
 	set_technology = {
 		ADISCORD_tech_armored_cockpits = 1
@@ -316,8 +336,8 @@ ADISCORD_grant_starting_technology_profile = {
 	}
 	if = {
 		limit = { tag = COF }
-		# Intentional common-only assignment.
-		ADISCORD_grant_technology_profile_common = yes
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_field_air_defense = yes
 	}
 	if = {
 		limit = { tag = DAN }
@@ -501,6 +521,8 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_land = yes
 		ADISCORD_grant_technology_profile_air = yes
 		ADISCORD_grant_technology_profile_naval = yes
+		ADISCORD_grant_technology_profile_recon_platform = yes
+		ADISCORD_grant_technology_profile_field_air_defense = yes
 	}
 	if = {
 		limit = { tag = SVL }
@@ -509,6 +531,8 @@ ADISCORD_grant_starting_technology_profile = {
 	if = {
 		limit = { tag = TFF }
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_land = yes
+		ADISCORD_grant_technology_profile_field_air_defense = yes
 	}
 	if = {
 		limit = { tag = TMR }
@@ -538,6 +562,7 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_land = yes
 		ADISCORD_grant_technology_profile_air = yes
 		ADISCORD_grant_technology_profile_naval = yes
+		ADISCORD_grant_technology_profile_field_air_defense = yes
 	}
 	if = {
 		limit = { tag = VES }
@@ -589,6 +614,7 @@ ADISCORD_grant_starting_technology_profile = {
 		limit = { tag = YPR }
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_grant_technology_profile_land = yes
+		ADISCORD_grant_technology_profile_field_air_defense = yes
 	}
 	if = {
 		limit = { tag = ZAO }

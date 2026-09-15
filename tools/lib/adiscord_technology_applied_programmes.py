@@ -20,14 +20,14 @@ APPLIED_PROGRAMMES = (
         "description_ru": "сохраняет личный состав, опыт подразделений и темп возвращения раненых в строй",
         "description_en": "preserves manpower and unit experience while returning casualties to duty faster",
         "techs": (
-            ("trauma_registry_networks", "Полевые реестры травм", "Field Trauma Registries", "tech_field_hospital"),
+            ("trauma_registry_networks", "Полевой учёт ранений", "Field Casualty Records", "tech_field_hospital"),
             ("rapid_casualty_corridors", "Коридоры быстрой эвакуации", "Rapid Casualty Corridors", "motorised_infantry"),
-            ("forward_surgical_cells", "Передовые хирургические ячейки", "Forward Surgical Cells", "tech_field_hospital"),
+            ("forward_surgical_cells", "Передовые хирургические группы", "Forward Surgical Teams", "tech_field_hospital"),
             ("predictive_blood_logistics", "Предиктивная логистика крови", "Predictive Blood Logistics", "tech_logistics_company"),
             ("regenerative_surgery_modules", "Регенеративные хирургические модули", "Regenerative Surgery Modules", "tech_field_hospital"),
             ("autonomous_medevac_routing", "Автономная маршрутизация эвакуации", "Autonomous Medevac Routing", "radio"),
             ("sealed_recovery_wards", "Герметичные восстановительные палаты", "Sealed Recovery Wards", "engineers"),
-            ("distributed_combat_medicine", "Распределённая боевая медицина", "Distributed Combat Medicine", "tech_field_hospital"),
+            ("distributed_combat_medicine", "Сеть полевой медицинской помощи", "Field Medical Care Network", "tech_field_hospital"),
         ),
     },
     {

@@ -1,0 +1,2 @@
+STS = "countries/STS.txt"
+SRP = "countries/SRP.txt"

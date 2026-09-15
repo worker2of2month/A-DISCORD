@@ -1,0 +1,57 @@
+# Templates only. STP_cw_mobilize_brigade pays the real battalion costs before spawning.
+division_template = {
+	name = "Stelander Territorial Brigade"
+	is_locked = yes
+	force_allow_recruiting = yes
+	regiments = {
+		ADISCORD_militia = { x = 0 y = 0 }
+		ADISCORD_militia = { x = 0 y = 1 }
+		ADISCORD_militia = { x = 1 y = 0 }
+		ADISCORD_militia = { x = 1 y = 1 }
+	}
+}
+
+division_template = {
+	name = "Stelander Assault Division"
+	priority = 2
+	is_locked = yes
+	force_allow_recruiting = yes
+	regiments = {
+		infantry = { x = 0 y = 0 }
+		infantry = { x = 0 y = 1 }
+		infantry = { x = 0 y = 2 }
+		infantry = { x = 1 y = 0 }
+		infantry = { x = 1 y = 1 }
+		infantry = { x = 1 y = 2 }
+		ADISCORD_line_artillery = { x = 2 y = 0 }
+		ADISCORD_line_artillery = { x = 2 y = 1 }
+	}
+	support = {
+		engineer = { x = 0 y = 0 }
+		artillery = { x = 0 y = 1 }
+		anti_air = { x = 0 y = 2 }
+	}
+}
+
+division_template = {
+	name = "Kefreyt Volunteer Division"
+	priority = 2
+	override_model = ADISCORD_VAL_regular_entity
+	is_locked = yes
+	force_allow_recruiting = no
+	regiments = {
+		infantry = { x = 0 y = 0 }
+		infantry = { x = 0 y = 1 }
+		infantry = { x = 0 y = 2 }
+		infantry = { x = 1 y = 0 }
+		infantry = { x = 1 y = 1 }
+		infantry = { x = 1 y = 2 }
+		ADISCORD_line_artillery = { x = 2 y = 0 }
+		ADISCORD_line_artillery = { x = 2 y = 1 }
+	}
+	support = {
+		engineer = { x = 0 y = 0 }
+		artillery = { x = 0 y = 1 }
+		anti_air = { x = 0 y = 2 }
+	}
+}

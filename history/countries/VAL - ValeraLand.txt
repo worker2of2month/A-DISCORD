@@ -16,6 +16,10 @@ recruit_character = VAL_Sergei_Volkov
 
 ####### Basic shit
 
+# Air equipment must be unlocked before the OOB creates its wings.
+ADISCORD_grant_technology_profile_air = yes
+ADISCORD_grant_technology_profile_land = yes
+ADISCORD_grant_technology_profile_field_air_defense = yes
 oob = "VAL"
 
 set_politics = {
@@ -89,3 +93,5 @@ STP = {
 
 # Initial market access was rejected by 1.19 validation when no valid route exists.
 # The VAL AI strategy still asks these countries for market access after setup.
+
+recruit_character = VAL_party_administration

@@ -1,0 +1,44 @@
+{
+  "mesh": [
+    {
+      "name": "STP_infantry_hedonist_Shape-000",
+      "vertices": 4830,
+      "triangles": 1610,
+      "bones": 33,
+      "influences": 4
+    },
+    {
+      "name": "Covered field helmet",
+      "vertices": 9128,
+      "triangles": 3446,
+      "bones": 33,
+      "influences": 4
+    }
+  ],
+  "animations": {
+    "idle": {
+      "frames": 181,
+      "sampled": [
+        1,
+        91,
+        181
+      ]
+    },
+    "moving": {
+      "frames": 41,
+      "sampled": [
+        1,
+        21,
+        41
+      ]
+    },
+    "attack_stand": {
+      "frames": 79,
+      "sampled": [
+        1,
+        40,
+        79
+      ]
+    }
+  }
+}

@@ -4,6 +4,7 @@ capital = 32
 # this history-only marker and therefore cannot be migrated into the campaign.
 set_country_flag = ADISCORD_vorkerland_fresh_start_collapse_pending_v1
 
+ADISCORD_grant_technology_profile_land = yes
 oob = "WRK"
 
 ####### Characters

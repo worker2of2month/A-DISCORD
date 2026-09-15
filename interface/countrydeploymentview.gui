@@ -19,6 +19,7 @@
 # semantic deployment asset: "GFX_ADISCORD_deployment_priority_title"
 # semantic deployment asset: "GFX_ADISCORD_deployment_priority_meter"
 # semantic deployment asset: "GFX_ADISCORD_deployment_action_button"
+# semantic deployment asset: "GFX_ADISCORD_deployment_view_button"
 # semantic deployment asset: "GFX_ADISCORD_deployment_symbol_button"
 # semantic deployment asset: "GFX_ADISCORD_deployment_designer_button"
 # semantic deployment asset: "GFX_ADISCORD_deployment_add_line_button"
@@ -210,12 +211,12 @@ guiTypes = {
 
 			instantTextboxType = {
 				name = "text"
-				position = { x = 59 y = 11 }
+				position = { x = 52 y = 11 }
 				textureFile = ""
-				font = "hoi_20b"
+				font = "hoi_16mbs"
 				borderSize = {x = 0 y = 0 }
 				text = "SHOW_DECOMMISSIONED_TEMPLATES"
-				maxWidth = 288
+				maxWidth = 310
 				maxHeight = 20
 				format = left
 				fixedsize = yes
@@ -486,13 +487,13 @@ guiTypes = {
 			position = { x = 228 y = 48 }
 			buttonFont = "hoi_16mbs"
 			buttonText = "EDIT"
-			quadTextureSprite = "GFX_ADISCORD_deployment_action_button"
+			quadTextureSprite = "GFX_ADISCORD_deployment_view_button"
 			clicksound = click_default
 		}
 
 		buttonType = {
 			name = "delete_button"
-			position = { x = 298 y = 48 }
+			position = { x = 316 y = 48 }
 			buttonFont = "hoi_16mbs"
 			quadTextureSprite = "GFX_delete_template_button"
 			clicksound = click_default

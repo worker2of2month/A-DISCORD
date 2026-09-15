@@ -9,3 +9,21 @@ air_wings = {
 		ADISCORD_cas_airframe_2170 = { owner = "WKR" amount = 50 }
 	}
 }
+
+instant_effect = {
+	set_technology = {
+		ADISCORD_tech_restored_truck_fleets = 1
+		ADISCORD_tech_restored_rail_stock = 1
+		popup = no
+	}
+	add_equipment_to_stockpile = {
+		type = motorized_equipment_1
+		amount = 240
+		producer = WKR
+	}
+	add_equipment_to_stockpile = {
+		type = train_equipment_1
+		amount = 40
+		producer = WKR
+	}
+}

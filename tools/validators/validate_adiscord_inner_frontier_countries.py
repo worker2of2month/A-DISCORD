@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+from tools.lib.paths import source_section
+
 import re
 import sys
 from pathlib import Path
@@ -179,9 +181,9 @@ def validate() -> list[str]:
     tech_builder = read("tools/builders/build_adiscord_technology_system.py")
     tech_data = read("tools/data/adiscord_starting_technology_profiles.json")
     split_effect = read("common/scripted_effects/ADISCORD_inner_frontier_effects.txt")
-    collapse_maps = read("common/scripted_effects/ADISCORD_vorkerland_collapse_map_effects.txt")
-    collapse_effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
-    phase_effects = read("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
+    collapse_maps = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_map_effects')
+    collapse_effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+    phase_effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'phase_effects')
     collapse_on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
 
     for localisation_path in (*country_loc_paths, VP_LOCALISATION, EXZ_LOCALISATION):

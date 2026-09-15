@@ -38,7 +38,8 @@ class LogisticsUiContractTests(unittest.TestCase):
         for sprite in (
             "GFX_ADISCORD_logistics_window",
             "GFX_ADISCORD_logistics_panel",
-            "GFX_ADISCORD_logistics_row",
+            "GFX_ADISCORD_logistics_equipment_row",
+            "GFX_ADISCORD_logistics_header_row",
             "GFX_ADISCORD_logistics_graph",
         ):
             self.assertIn(f'"{sprite}"', gui)

@@ -1,109 +1,245 @@
-# Loaded after vanilla units_infantry.asset and DLC weapon entities, before
-# zz_ADISCORD_country_infantry.asset. Neutral wrappers preserve the vanilla
-# weapon meshes, transforms, states, and animations without copying assets.
+# Loaded after units_infantry.asset and before country infantry entities.
+# Wrappers retain native transforms and firing events. Explicit bind-pose
+# clips initialize the skinned weapons in idle and move states.
 
 entity = {
-	clone = "HOL_infantry_weapon_rifle_right_entity"
+	clone = "BEL_infantry_weapon_rifle_right_entity"
 	name = "ADISCORD_infantry_weapon_0_right_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_0_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
 }
 entity = {
-	clone = "HOL_infantry_weapon_rifle_left_entity"
+	clone = "BEL_infantry_weapon_rifle_left_entity"
 	name = "ADISCORD_infantry_weapon_0_left_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_0_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
+	state = {
+	name = "defend" animation = "support_attack"
+	event = { time = 0 node="muzzle" particle = "rifle_muzzle_particle"  keep_particle = yes light = "muzzle_flash" sound = { soundeffect = infantry_rifle_attack } }
+	event = { time = 1.2 node="cartridge" particle = "rifle_cartridge_particle"  keep_particle = yes sound = { soundeffect = infantry_rifle_cartridge } }
+	}
 }
 entity = {
-	clone = "HOL_infantry_weapon_rifle_long_idle_entity"
+	clone = "BEL_infantry_weapon_rifle_long_idle_entity"
 	name = "ADISCORD_infantry_weapon_0_long_idle_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_0_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
 }
 
 entity = {
-	clone = "SHX_infantry_weapon_rifle_right_entity"
+	clone = "GER_infantry_weapon_mg_2_right_entity"
 	name = "ADISCORD_infantry_weapon_1_right_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_1_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
+	state = { name = "defend" animation = "support_attack"
+		event = { time = 0 node="muzzle" particle = "mg_muzzle_particle"  keep_particle = yes   light = "mg_muzzle_flash" sound = { soundeffect = infantry_mg_attack } }
+		event = { time = 0 node="muzzle" particle = "mg_muzzle_smoke_particle"  keep_particle = yes   light = "mg_muzzle_flash" sound = { soundeffect = infantry_mg_attack } }
+		event = { time = 0 node="cartridge" particle = "mg_cartridge_particle"  keep_particle = yes }
+	}
 }
 entity = {
-	clone = "SHX_infantry_weapon_rifle_left_entity"
+	clone = "GER_infantry_weapon_mg_2_left_entity"
 	name = "ADISCORD_infantry_weapon_1_left_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_1_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
 }
 entity = {
-	clone = "SHX_infantry_weapon_rifle_long_idle_entity"
+	clone = "GER_infantry_weapon_mg_2_long_idle_entity"
 	name = "ADISCORD_infantry_weapon_1_long_idle_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_1_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
 }
 
 entity = {
-	clone = "MEX_infantry_weapon_rifle_right_entity"
+	clone = "BEL_infantry_weapon_mg_2_right_entity"
 	name = "ADISCORD_infantry_weapon_2_right_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_2_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
+	state = { name = "defend" animation = "support_attack"
+		event = { time = 0 node="muzzle" particle = "mg_muzzle_particle"  keep_particle = yes   light = "mg_muzzle_flash" sound = { soundeffect = infantry_mg_attack } }
+		event = { time = 0 node="muzzle" particle = "mg_muzzle_smoke_particle"  keep_particle = yes   light = "mg_muzzle_flash" sound = { soundeffect = infantry_mg_attack } }
+		event = { time = 0 node="cartridge" particle = "mg_cartridge_particle"  keep_particle = yes }
+	}
 }
 entity = {
-	clone = "MEX_infantry_weapon_rifle_left_entity"
+	clone = "BEL_infantry_weapon_mg_2_left_entity"
 	name = "ADISCORD_infantry_weapon_2_left_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_2_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
 }
 entity = {
-	clone = "MEX_infantry_weapon_rifle_long_idle_entity"
+	clone = "BEL_infantry_weapon_mg_2_long_idle_entity"
 	name = "ADISCORD_infantry_weapon_2_long_idle_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_2_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
 }
 
 entity = {
-	clone = "XSM_infantry_weapon_mg_right_entity"
+	clone = "BEL_infantry_weapon_mg_2_right_entity"
 	name = "ADISCORD_infantry_weapon_3_right_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_3_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
+	state = { name = "defend" animation = "support_attack"
+		event = { time = 0 node="muzzle" particle = "mg_muzzle_particle"  keep_particle = yes   light = "mg_muzzle_flash" sound = { soundeffect = infantry_mg_attack } }
+		event = { time = 0 node="muzzle" particle = "mg_muzzle_smoke_particle"  keep_particle = yes   light = "mg_muzzle_flash" sound = { soundeffect = infantry_mg_attack } }
+		event = { time = 0 node="cartridge" particle = "mg_cartridge_particle"  keep_particle = yes }
+	}
 }
 entity = {
-	clone = "XSM_infantry_weapon_mg_left_entity"
+	clone = "BEL_infantry_weapon_mg_2_left_entity"
 	name = "ADISCORD_infantry_weapon_3_left_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_3_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
 }
 entity = {
-	clone = "XSM_infantry_weapon_mg_long_idle_entity"
+	clone = "BEL_infantry_weapon_mg_2_long_idle_entity"
 	name = "ADISCORD_infantry_weapon_3_long_idle_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_3_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
 }
 
 entity = {
-	clone = "HOL_infantry_weapon_mg_right_entity"
+	clone = "BEL_infantry_weapon_mg_2_right_entity"
 	name = "ADISCORD_infantry_weapon_4_right_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_4_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
+	state = { name = "defend" animation = "support_attack"
+		event = { time = 0 node="muzzle" particle = "mg_muzzle_particle"  keep_particle = yes   light = "mg_muzzle_flash" sound = { soundeffect = infantry_mg_attack } }
+		event = { time = 0 node="muzzle" particle = "mg_muzzle_smoke_particle"  keep_particle = yes   light = "mg_muzzle_flash" sound = { soundeffect = infantry_mg_attack } }
+		event = { time = 0 node="cartridge" particle = "mg_cartridge_particle"  keep_particle = yes }
+	}
 }
 entity = {
-	clone = "HOL_infantry_weapon_mg_left_entity"
+	clone = "BEL_infantry_weapon_mg_2_left_entity"
 	name = "ADISCORD_infantry_weapon_4_left_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_4_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
 }
 entity = {
-	clone = "HOL_infantry_weapon_mg_long_idle_entity"
+	clone = "BEL_infantry_weapon_mg_2_long_idle_entity"
 	name = "ADISCORD_infantry_weapon_4_long_idle_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_4_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
 }
 
 entity = {
-	clone = "YUN_infantry_weapon_mg_right_entity"
+	clone = "BEL_infantry_weapon_mg_2_right_entity"
 	name = "ADISCORD_infantry_weapon_5_right_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_5_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
+	state = { name = "defend" animation = "support_attack"
+		event = { time = 0 node="muzzle" particle = "mg_muzzle_particle"  keep_particle = yes   light = "mg_muzzle_flash" sound = { soundeffect = infantry_mg_attack } }
+		event = { time = 0 node="muzzle" particle = "mg_muzzle_smoke_particle"  keep_particle = yes   light = "mg_muzzle_flash" sound = { soundeffect = infantry_mg_attack } }
+		event = { time = 0 node="cartridge" particle = "mg_cartridge_particle"  keep_particle = yes }
+	}
 }
 entity = {
-	clone = "YUN_infantry_weapon_mg_left_entity"
+	clone = "BEL_infantry_weapon_mg_2_left_entity"
 	name = "ADISCORD_infantry_weapon_5_left_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_5_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
 }
 entity = {
-	clone = "YUN_infantry_weapon_mg_long_idle_entity"
+	clone = "BEL_infantry_weapon_mg_2_long_idle_entity"
 	name = "ADISCORD_infantry_weapon_5_long_idle_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_5_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
 }
 
 entity = {
-	clone = "PRC_infantry_weapon_mg_right_entity"
+	clone = "BEL_infantry_weapon_mg_2_right_entity"
 	name = "ADISCORD_infantry_weapon_6_right_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_6_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
+	state = { name = "defend" animation = "support_attack"
+		event = { time = 0 node="muzzle" particle = "mg_muzzle_particle"  keep_particle = yes   light = "mg_muzzle_flash" sound = { soundeffect = infantry_mg_attack } }
+		event = { time = 0 node="muzzle" particle = "mg_muzzle_smoke_particle"  keep_particle = yes   light = "mg_muzzle_flash" sound = { soundeffect = infantry_mg_attack } }
+		event = { time = 0 node="cartridge" particle = "mg_cartridge_particle"  keep_particle = yes }
+	}
 }
 entity = {
-	clone = "PRC_infantry_weapon_mg_left_entity"
+	clone = "BEL_infantry_weapon_mg_2_left_entity"
 	name = "ADISCORD_infantry_weapon_6_left_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_6_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
 }
 entity = {
-	clone = "PRC_infantry_weapon_mg_long_idle_entity"
+	clone = "BEL_infantry_weapon_mg_2_long_idle_entity"
 	name = "ADISCORD_infantry_weapon_6_long_idle_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_6_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
 }
 
 entity = {
-	clone = "MEX_infantry_weapon_mg_right_entity"
+	clone = "BEL_infantry_weapon_mg_2_right_entity"
 	name = "ADISCORD_infantry_weapon_7_right_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_7_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
+	state = { name = "defend" animation = "support_attack"
+		event = { time = 0 node="muzzle" particle = "mg_muzzle_particle"  keep_particle = yes   light = "mg_muzzle_flash" sound = { soundeffect = infantry_mg_attack } }
+		event = { time = 0 node="muzzle" particle = "mg_muzzle_smoke_particle"  keep_particle = yes   light = "mg_muzzle_flash" sound = { soundeffect = infantry_mg_attack } }
+		event = { time = 0 node="cartridge" particle = "mg_cartridge_particle"  keep_particle = yes }
+	}
 }
 entity = {
-	clone = "MEX_infantry_weapon_mg_left_entity"
+	clone = "BEL_infantry_weapon_mg_2_left_entity"
 	name = "ADISCORD_infantry_weapon_7_left_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_7_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
 }
 entity = {
-	clone = "MEX_infantry_weapon_mg_long_idle_entity"
+	clone = "BEL_infantry_weapon_mg_2_long_idle_entity"
 	name = "ADISCORD_infantry_weapon_7_long_idle_entity"
+	pdxmesh = "ADISCORD_infantry_weapon_7_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "move" animation = "idle" }
 }
 
 entity = {

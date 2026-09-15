@@ -1,5 +1,7 @@
 capital = 14
 
+ADISCORD_grant_technology_profile_field_air_defense = yes
+ADISCORD_grant_technology_profile_fragment_low_tech = yes
 oob = "COF"
 ####### Characters
 
@@ -16,9 +18,11 @@ set_popularities = {
 	hedonism = 34
 }
 
-set_stability = -0.42
+set_stability = 0.35
 
 add_ideas = {
+	extensive_conscription
+	ADISCORD_military_organization_militia_autonomy
 	minister_COF_Silvan_Root
 	minister_COF_Morven_Bark
 	minister_COF_Elya_Moss

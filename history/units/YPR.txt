@@ -21,6 +21,7 @@ division_template = {
 	}
 	support = {
 		engineer = { x = 0 y = 0 }
+		anti_air = { x = 0 y = 2 }
 	}
 }
 
@@ -40,6 +41,7 @@ division_template = {
 	}
 	support = {
 		engineer = { x = 0 y = 0 }
+		anti_air = { x = 0 y = 2 }
 		artillery = { x = 0 y = 1 }
 	}
 }
@@ -49,39 +51,196 @@ units = {
 		division_name = { is_name_ordered = yes name_order = 1 }
 		location = 16372
 		division_template = "Capital Guard"
-		start_experience_factor = 0.26
-		start_equipment_factor = 0.40
+		start_experience_factor = 0.28
+		start_equipment_factor = 0.80
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 2 }
-		location = 9
-		division_template = "Line Infantry Brigade"
-		start_experience_factor = 0.17
-		start_equipment_factor = 0.32
+		location = 16649
+		division_template = "Capital Guard"
+		start_experience_factor = 0.28
+		start_equipment_factor = 0.80
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 3 }
-		location = 17
+		location = 9
 		division_template = "Line Infantry Brigade"
-		start_experience_factor = 0.17
-		start_equipment_factor = 0.32
+		start_experience_factor = 0.22
+		start_equipment_factor = 0.75
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 4 }
+		location = 17
+		division_template = "Line Infantry Brigade"
+		start_experience_factor = 0.22
+		start_equipment_factor = 0.75
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 5 }
+		location = 4
+		division_template = "Line Infantry Brigade"
+		start_experience_factor = 0.22
+		start_equipment_factor = 0.75
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 6 }
+		location = 6
+		division_template = "Line Infantry Brigade"
+		start_experience_factor = 0.22
+		start_equipment_factor = 0.75
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 7 }
+		location = 33
+		division_template = "Line Infantry Brigade"
+		start_experience_factor = 0.22
+		start_equipment_factor = 0.75
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 8 }
+		location = 48
+		division_template = "Line Infantry Brigade"
+		start_experience_factor = 0.22
+		start_equipment_factor = 0.75
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 9 }
 		location = 11
 		division_template = "Local Security Detachment"
-		start_experience_factor = 0.12
-		start_equipment_factor = 0.25
+		start_experience_factor = 0.16
+		start_equipment_factor = 0.65
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 10 }
+		location = 73
+		division_template = "Local Security Detachment"
+		start_experience_factor = 0.16
+		start_equipment_factor = 0.65
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 11 }
+		location = 118
+		division_template = "Local Security Detachment"
+		start_experience_factor = 0.16
+		start_equipment_factor = 0.65
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 12 }
+		location = 8979
+		division_template = "Local Security Detachment"
+		start_experience_factor = 0.16
+		start_equipment_factor = 0.65
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 13 }
+		location = 9840
+		division_template = "Local Security Detachment"
+		start_experience_factor = 0.16
+		start_equipment_factor = 0.65
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 14 }
+		location = 11496
+		division_template = "Local Security Detachment"
+		start_experience_factor = 0.16
+		start_equipment_factor = 0.65
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 15 }
+		location = 16631
+		division_template = "Local Security Detachment"
+		start_experience_factor = 0.16
+		start_equipment_factor = 0.65
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 16 }
+		location = 16646
+		division_template = "Local Security Detachment"
+		start_experience_factor = 0.16
+		start_equipment_factor = 0.65
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 17 }
+		location = 16648
+		division_template = "Local Security Detachment"
+		start_experience_factor = 0.16
+		start_equipment_factor = 0.65
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 18 }
+		location = 7283
+		division_template = "Local Security Detachment"
+		start_experience_factor = 0.16
+		start_equipment_factor = 0.65
 	}
 }
 
 ##### No notable air forces #####
 
 instant_effect = {
+	add_equipment_to_stockpile = {
+		type = motorized_equipment_1
+		amount = 180
+		producer = YPR
+	}
+	add_equipment_to_stockpile = {
+		type = infantry_equipment_0
+		amount = 7000
+		producer = YPR
+	}
+	add_equipment_to_stockpile = {
+		type = ADISCORD_squad_weapons_equipment_0
+		amount = 300
+		producer = YPR
+	}
+	add_equipment_to_stockpile = {
+		type = support_equipment_1
+		amount = 200
+		producer = YPR
+	}
+	add_equipment_to_stockpile = {
+		type = artillery_equipment_1
+		amount = 80
+		producer = YPR
+	}
+	add_equipment_to_stockpile = {
+		type = ADISCORD_anti_air_equipment_2163
+		amount = 120
+		producer = YPR
+	}
+	add_equipment_to_stockpile = {
+		type = train_equipment_1
+		amount = 32
+		producer = YPR
+	}
 	add_equipment_production = {
 		equipment = { type = infantry_equipment_0 creator = "YPR" }
-		requested_factories = 1
-		progress = 0.60
+		requested_factories = 2
+		progress = 0.30
 		efficiency = 70
+	}
+	add_equipment_production = {
+		equipment = { type = ADISCORD_squad_weapons_equipment_0 creator = "YPR" }
+		requested_factories = 1
+		progress = 0.30
+		efficiency = 50
+	}
+	add_equipment_production = {
+		equipment = { type = support_equipment_1 creator = "YPR" }
+		requested_factories = 1
+		progress = 0.30
+		efficiency = 50
+	}
+	add_equipment_production = {
+		equipment = { type = artillery_equipment_1 creator = "YPR" }
+		requested_factories = 1
+		progress = 0.30
+		efficiency = 50
+	}
+	add_equipment_production = {
+		equipment = { type = ADISCORD_anti_air_equipment_2163 creator = "YPR" }
+		requested_factories = 1
+		progress = 0.30
+		efficiency = 50
 	}
 }

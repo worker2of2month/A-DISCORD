@@ -3397,6 +3397,47 @@ leader_traits = {
 		}
 	}
 
+	# Stelander: allegiance markers follow the Spanish personality-trait pattern.
+	STP_party_loyalist = {
+		type = all
+		trait_type = personality_trait
+		new_commander_weight = {
+			factor = 0
+		}
+	}
+
+	STP_shabrat_loyalist = {
+		type = all
+		trait_type = personality_trait
+		new_commander_weight = {
+			factor = 0
+		}
+	}
+
+	STP_local_councils_loyalist = {
+		type = all
+		trait_type = personality_trait
+		new_commander_weight = {
+			factor = 0
+		}
+	}
+
+	STP_ravel_undecided = {
+		type = all
+		trait_type = personality_trait
+		new_commander_weight = {
+			factor = 0
+		}
+	}
+
+	STP_drake_undecided = {
+		type = all
+		trait_type = personality_trait
+		new_commander_weight = {
+			factor = 0
+		}
+	}
+
 	trait_SPA_nationalist_sympathies = {
 
 		type = all

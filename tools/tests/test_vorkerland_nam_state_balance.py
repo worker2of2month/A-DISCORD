@@ -5,6 +5,7 @@ import re
 import unittest
 from pathlib import Path
 
+from tools.lib.paths import source_section
 from tools.builders import build_adiscord_map_buildings as map_buildings
 from tools.builders import build_adiscord_new_states as builder
 from tools.builders import build_adiscord_strategic_regions as regions
@@ -389,9 +390,9 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         events = (root / "events/ADISCORD_nam_resource_war_events.txt").read_text(
             encoding="utf-8-sig"
         )
-        collapse_events = (root / "events/ADISCORD_vorkerland_collapse_events.txt").read_text(
+        collapse_events = source_section((root / "events/ADISCORD_vorkerland_events.txt").read_text(
             encoding="utf-8-sig"
-        )
+        ), 'collapse_events')
 
         for recurring in (
             "on_startup",
@@ -1021,9 +1022,9 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         self.assertEqual(eba_oob.count("division = {"), 4)
         self.assertEqual(eba_oob.count('division_template = "EBA Collapse Militia"'), 4)
 
-        effects = (builder.ROOT / "common" / "scripted_effects" / "ADISCORD_vorkerland_collapse_effects.txt").read_text(
+        effects = source_section((builder.ROOT / "common" / "scripted_effects" / "ADISCORD_vorkerland_effects.txt").read_text(
             encoding="utf-8-sig"
-        )
+        ), 'collapse_effects')
         setup_match = re.search(
             r"(?ms)^ADISCORD_vorkerland_setup_eba\s*=\s*\{(.*?)(?=^ADISCORD_[A-Za-z0-9_]+\s*=\s*\{|\Z)",
             effects,

@@ -6,6 +6,9 @@ from collections import Counter
 from pathlib import Path
 
 
+from tools.lib.paths import source_section
+
+
 ROOT = Path(__file__).resolve().parents[2]
 SPRITES = {
     "GFX_IVN_roar_of_freedom_party_texticon": "gfx/texticons/adiscord/parties/IVN/IVN_roar_of_freedom_party.png",
@@ -20,7 +23,7 @@ SPRITES = {
     "GFX_TRU_independent_party_texticon": "gfx/texticons/adiscord/parties/TRU/TRU_independent_party.png",
 }
 PARTIES_LOCALISATION = "localisation/russian/parties_l_russian.yml"
-COLLAPSE_LOCALISATION = "localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml"
+COLLAPSE_LOCALISATION = "localisation/russian/ADISCORD_vorkerland_l_russian.yml"
 LOCALISATION_TEXTICON_KEYS = (
     (PARTIES_LOCALISATION, "IVN_humanism_party", "GFX_IVN_roar_of_freedom_party_texticon"),
     (PARTIES_LOCALISATION, "IVN_humanism_party_long", "GFX_IVN_roar_of_freedom_party_texticon"),
@@ -85,41 +88,32 @@ EXPECTED_TRANSITIONS = Counter(
         ("history/countries/WRK - WorkerLand.txt", "set_autonomy", "ROM", "autonomy_republic_in_Vorkerland"): 1,
         ("history/countries/WRK - WorkerLand.txt", "set_autonomy", "SOL", "autonomy_republic_in_Vorkerland"): 1,
         ("history/countries/WRK - WorkerLand.txt", "set_autonomy", "TRU", "autonomy_republic_in_Vorkerland"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt", "puppet", "VLA", ""): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt", "puppet", "ROM", ""): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt", "puppet", "TRU", ""): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt", "set_autonomy", "VLA", "autonomy_district_in_Vorkerland"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt", "set_autonomy", "VAD", "autonomy_free"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt", "set_autonomy", "ZAO", "autonomy_free"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt", "set_autonomy", "PWR", "autonomy_free"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt", "set_autonomy", "VLA", "autonomy_free"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt", "set_autonomy", "ROM", "autonomy_free"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt", "set_autonomy", "SOL", "autonomy_free"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt", "set_autonomy", "TRU", "autonomy_free"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt", "set_autonomy", "ROM", "autonomy_republic_in_Vorkerland"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt", "set_autonomy", "TRU", "autonomy_republic_in_Vorkerland"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_diplomacy_effects.txt", "puppet", "SOL", ""): 2,
-        ("common/scripted_effects/ADISCORD_vorkerland_diplomacy_effects.txt", "release_autonomy", "SOL", "autonomy_puppet"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_diplomacy_effects.txt", "release_autonomy", "SOL", "autonomy_district_in_Vorkerland"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_diplomacy_effects.txt", "set_autonomy", "SOL", "autonomy_free"): 2,
-        ("common/scripted_effects/ADISCORD_vorkerland_diplomacy_effects.txt", "set_autonomy", "SOL", "autonomy_puppet"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_diplomacy_effects.txt", "set_autonomy", "SOL", "autonomy_district_in_Vorkerland"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt", "puppet", "SOL", ""): 2,
-        ("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt", "set_autonomy", "VAD", "autonomy_free"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt", "set_autonomy", "SOL", "autonomy_free"): 4,
-        ("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt", "set_autonomy", "SOL", "autonomy_district_in_Vorkerland"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt", "set_autonomy", "SOL", "autonomy_puppet"): 1,
+        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "puppet", "VLA", ""): 1,
+        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "puppet", "ROM", ""): 1,
+        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "puppet", "TRU", ""): 1,
+        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "VLA", "autonomy_district_in_Vorkerland"): 1,
+        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "VAD", "autonomy_free"): 2,
+        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "ZAO", "autonomy_free"): 1,
+        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "PWR", "autonomy_free"): 1,
+        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "VLA", "autonomy_free"): 1,
+        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "ROM", "autonomy_free"): 1,
+        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "SOL", "autonomy_free"): 7,
+        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "TRU", "autonomy_free"): 1,
+        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "ROM", "autonomy_republic_in_Vorkerland"): 1,
+        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "TRU", "autonomy_republic_in_Vorkerland"): 1,
+        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "puppet", "SOL", ""): 4,
+        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "release_autonomy", "SOL", "autonomy_puppet"): 1,
+        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "release_autonomy", "SOL", "autonomy_district_in_Vorkerland"): 1,
+        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "SOL", "autonomy_puppet"): 2,
+        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "SOL", "autonomy_district_in_Vorkerland"): 2,
     }
 )
 EXPECTED_SYNC_CALLERS = Counter(
     {
-        ("events/ADISCORD_vorkerland_collapse_events.txt", "ADISCORD_vorkerland_sync_all_party_identities"): 1,
+        ("events/ADISCORD_vorkerland_events.txt", "ADISCORD_vorkerland_sync_all_party_identities"): 1,
         ("history/countries/WRK - WorkerLand.txt", "ADISCORD_vorkerland_sync_all_party_identities"): 1,
         ("common/on_actions/05_ADISCORD_vorkerland_party_identity_on_actions.txt", "ADISCORD_vorkerland_sync_party_identity"): 4,
-        ("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt", "ADISCORD_vorkerland_sync_party_identity"): 3,
-        ("common/scripted_effects/ADISCORD_vorkerland_diplomacy_effects.txt", "ADISCORD_vorkerland_sync_party_identity"): 4,
-        ("common/scripted_effects/ADISCORD_vorkerland_party_identity_effects.txt", "ADISCORD_vorkerland_sync_party_identity"): 7,
-        ("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt", "ADISCORD_vorkerland_sync_party_identity"): 2,
+        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "ADISCORD_vorkerland_sync_party_identity"): 16,
     }
 )
 
@@ -276,7 +270,7 @@ class PartyTexticonContractTests(unittest.TestCase):
 
     def test_requested_ivn_and_tva_names_have_unique_icons(self) -> None:
         parties = read("localisation/russian/parties_l_russian.yml")
-        collapse = read("localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml")
+        collapse = source_section(read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"), 'collapse_l_russian')
         self.assertIn('IVN_humanism_party: "£GFX_IVN_roar_of_freedom_party_texticon Рёв свободы"', parties)
         self.assertIn('IVN_etatism_party: "£GFX_IVN_emergency_committee_party_texticon Чрезвычайный комитет Иторы"', parties)
         self.assertIn('TVA_technocracy_party: "£GFX_TVA_wartime_technocratic_worker_party_texticon Технократическо-утилитарная рабочая партия свободного Воркерланда"', collapse)
@@ -341,14 +335,14 @@ class PartyTexticonContractTests(unittest.TestCase):
     def test_russian_localisation_files_keep_utf8_bom(self) -> None:
         for relative in (
             "localisation/russian/parties_l_russian.yml",
-            "localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml",
+            "localisation/russian/ADISCORD_vorkerland_l_russian.yml",
         ):
             self.assertTrue((ROOT / relative).read_bytes().startswith(b"\xef\xbb\xbf"), relative)
 
 
 class PartyIdentityLifecycleTests(unittest.TestCase):
     def test_sync_effect_covers_exact_successors_and_never_changes_politics(self) -> None:
-        effects = read("common/scripted_effects/ADISCORD_vorkerland_party_identity_effects.txt")
+        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'party_identity_effects')
         sync = named_block(effects, "ADISCORD_vorkerland_sync_party_identity")
         self.assertEqual(set(re.findall(r"\btag\s*=\s*([A-Z]{3})", sync)), {"VAD", "ZAO", "PWR", "VLA", "ROM", "SOL", "TRU"})
         self.assertIn("OR = { is_subject_of = WRK is_subject_of = WKR }", sync)
@@ -362,7 +356,7 @@ class PartyIdentityLifecycleTests(unittest.TestCase):
 
     def test_fresh_collapse_and_autonomy_entry_points_are_bounded(self) -> None:
         history = read("history/countries/WRK - WorkerLand.txt")
-        events = read("events/ADISCORD_vorkerland_collapse_events.txt")
+        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
         on_actions = read("common/on_actions/05_ADISCORD_vorkerland_party_identity_on_actions.txt")
         self.assertIn("ADISCORD_vorkerland_sync_all_party_identities = yes", history)
         apply_cosmetics = events.index("ADISCORD_vorkerland_apply_claimant_cosmetics = yes")

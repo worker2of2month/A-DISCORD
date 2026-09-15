@@ -15,38 +15,40 @@ from pathlib import Path
 from PIL import Image
 
 
+from tools.lib.paths import source_section
+
+
 ROOT = Path(__file__).resolve().parents[2]
 
-DIPLOMACY_TRIGGERS = Path("common/scripted_triggers/ADISCORD_vorkerland_diplomacy_triggers.txt")
-DIPLOMACY_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_diplomacy_effects.txt")
-DIPLOMACY_DECISIONS = Path("common/decisions/ADISCORD_vorkerland_diplomacy_decisions.txt")
+DIPLOMACY_TRIGGERS = Path("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt")
+DIPLOMACY_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+DIPLOMACY_DECISIONS = Path("common/decisions/ADISCORD_vorkerland_decisions.txt")
 FOCUS_DECISION_FILES = (
-    Path("common/decisions/ADISCORD_vorkerland_focus_operations_decisions.txt"),
-    Path("common/decisions/ADISCORD_vorkerland_allied_support_decisions.txt"),
+    Path("common/decisions/ADISCORD_vorkerland_decisions.txt"),
 )
 FOCUS_DECISIONS = FOCUS_DECISION_FILES
 FOCUS_DECISION_EFFECTS = Path(
-    "common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt"
+    "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
 )
-DIPLOMACY_EVENTS = Path("events/ADISCORD_vorkerland_diplomacy_events.txt")
+DIPLOMACY_EVENTS = Path("events/ADISCORD_vorkerland_events.txt")
 DIPLOMACY_ON_ACTIONS = Path("common/on_actions/03_ADISCORD_vorkerland_diplomacy_on_actions.txt")
-PHASE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
-PHASE_EVENTS = Path("events/ADISCORD_vorkerland_phase_events.txt")
-COLLAPSE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
-FOCUS_FILE = Path("common/national_focus/ADISCORD_vorkerland_civil_war_focus.txt")
-COLLAPSE_AI = Path("common/ai_strategy/ADISCORD_vorkerland_collapse_ai.txt")
+PHASE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+PHASE_EVENTS = Path("events/ADISCORD_vorkerland_events.txt")
+COLLAPSE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+FOCUS_FILE = Path("common/national_focus/ADISCORD_vorkerland_focus.txt")
+COLLAPSE_AI = Path("common/ai_strategy/ADISCORD_vorkerland_ai.txt")
 WKR_AI_PLANS = Path(
-    "common/ai_strategy_plans/ADISCORD_vorkerland_wkr_wartime_plan.txt"
+    "common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt"
 )
 VAD_AI_PLANS = Path(
-    "common/ai_strategy_plans/ADISCORD_vorkerland_vad_wartime_plan.txt"
+    "common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt"
 )
 TVA_AI_PLANS = Path(
-    "common/ai_strategy_plans/ADISCORD_vorkerland_tva_wartime_plan.txt"
+    "common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt"
 )
 COUNTRY_COSMETICS = Path("common/countries/cosmetic.txt")
-DIPLOMACY_ENGLISH = Path("localisation/english/ADISCORD_vorkerland_diplomacy_l_english.yml")
-DIPLOMACY_RUSSIAN = Path("localisation/russian/ADISCORD_vorkerland_diplomacy_l_russian.yml")
+DIPLOMACY_ENGLISH = Path("localisation/english/ADISCORD_vorkerland_l_english.yml")
+DIPLOMACY_RUSSIAN = Path("localisation/russian/ADISCORD_vorkerland_l_russian.yml")
 EVENT_ID_REGISTRY = Path("tools/data/adiscord_event_ids.json")
 
 SOLAR_STATES = (76, 104, 198, 307, 310)
@@ -357,8 +359,8 @@ def _contains_pair_block(
 
 def validate_terminal_outcomes() -> list[str]:
     issues: list[str] = []
-    triggers = _load(DIPLOMACY_TRIGGERS, issues)
-    effects = _load(DIPLOMACY_EFFECTS, issues)
+    triggers = source_section(_load(DIPLOMACY_TRIGGERS, issues), 'diplomacy_triggers')
+    effects = source_section(_load(DIPLOMACY_EFFECTS, issues), 'diplomacy_effects')
 
     for trigger_name, (winner, opponents, states, winner_flag, _) in TERMINAL_CONTRACTS.items():
         block = _unique_block(triggers, trigger_name, "terminal trigger", issues)
@@ -417,7 +419,7 @@ def validate_terminal_outcomes() -> list[str]:
 
 def validate_bounded_outcome_hook() -> list[str]:
     issues: list[str] = []
-    events = _load(DIPLOMACY_EVENTS, issues)
+    events = source_section(_load(DIPLOMACY_EVENTS, issues), 'diplomacy_events')
     on_actions = _load(DIPLOMACY_ON_ACTIONS, issues)
 
     outcome_event = event_block(events, "ADISCORD_vorkerland_diplomacy.1")
@@ -462,13 +464,13 @@ def validate_bounded_outcome_hook() -> list[str]:
 
 def validate_peaceful_invitations() -> list[str]:
     issues: list[str] = []
-    effects = _load(DIPLOMACY_EFFECTS, issues)
-    events = _load(DIPLOMACY_EVENTS, issues)
-    decisions = _load(DIPLOMACY_DECISIONS, issues)
+    effects = source_section(_load(DIPLOMACY_EFFECTS, issues), 'diplomacy_effects')
+    events = source_section(_load(DIPLOMACY_EVENTS, issues), 'diplomacy_events')
+    decisions = source_section(_load(DIPLOMACY_DECISIONS, issues), 'diplomacy_decisions')
     on_actions = _load(DIPLOMACY_ON_ACTIONS, issues)
     focus_decisions = _load(FOCUS_DECISIONS, issues)
-    focus_effects = _load(FOCUS_DECISION_EFFECTS, issues)
-    collapse_effects = _load(COLLAPSE_EFFECTS, issues)
+    focus_effects = source_section(_load(FOCUS_DECISION_EFFECTS, issues), 'focus_decision_effects')
+    collapse_effects = source_section(_load(COLLAPSE_EFFECTS, issues), 'collapse_effects')
     contracts = (
         (
             VAD_SOL_OFFER,
@@ -668,13 +670,13 @@ def _validate_border_trigger(
 
 def validate_vad_intervention_and_restoration() -> list[str]:
     issues: list[str] = []
-    triggers = _load(DIPLOMACY_TRIGGERS, issues)
-    effects = _load(DIPLOMACY_EFFECTS, issues)
-    events = _load(DIPLOMACY_EVENTS, issues)
-    decisions = _load(DIPLOMACY_DECISIONS, issues)
+    triggers = source_section(_load(DIPLOMACY_TRIGGERS, issues), 'diplomacy_triggers')
+    effects = source_section(_load(DIPLOMACY_EFFECTS, issues), 'diplomacy_effects')
+    events = source_section(_load(DIPLOMACY_EVENTS, issues), 'diplomacy_events')
+    decisions = source_section(_load(DIPLOMACY_DECISIONS, issues), 'diplomacy_decisions')
     on_actions = _load(DIPLOMACY_ON_ACTIONS, issues)
     focus_decisions = _load(FOCUS_DECISIONS, issues)
-    focus_effects = _load(FOCUS_DECISION_EFFECTS, issues)
+    focus_effects = source_section(_load(FOCUS_DECISION_EFFECTS, issues), 'focus_decision_effects')
 
     _validate_border_trigger(
         triggers,
@@ -983,12 +985,12 @@ def validate_vad_intervention_and_restoration() -> list[str]:
 
 def validate_counter_intervention() -> list[str]:
     issues: list[str] = []
-    triggers = _load(DIPLOMACY_TRIGGERS, issues)
-    effects = _load(DIPLOMACY_EFFECTS, issues)
-    decisions = _load(DIPLOMACY_DECISIONS, issues)
+    triggers = source_section(_load(DIPLOMACY_TRIGGERS, issues), 'diplomacy_triggers')
+    effects = source_section(_load(DIPLOMACY_EFFECTS, issues), 'diplomacy_effects')
+    decisions = source_section(_load(DIPLOMACY_DECISIONS, issues), 'diplomacy_decisions')
     focus_decisions = _load(FOCUS_DECISIONS, issues)
-    focus_effects = _load(FOCUS_DECISION_EFFECTS, issues)
-    phase_events = _load(PHASE_EVENTS, issues)
+    focus_effects = source_section(_load(FOCUS_DECISION_EFFECTS, issues), 'focus_decision_effects')
+    phase_events = source_section(_load(PHASE_EVENTS, issues), 'phase_events')
     _validate_border_trigger(
         triggers,
         WKR_COUNTER_BORDER,
@@ -1060,8 +1062,8 @@ def validate_counter_intervention() -> list[str]:
 
 def validate_showdown_allies() -> list[str]:
     issues: list[str] = []
-    diplomacy_effects = _load(DIPLOMACY_EFFECTS, issues)
-    phase_effects = _load(PHASE_EFFECTS, issues)
+    diplomacy_effects = source_section(_load(DIPLOMACY_EFFECTS, issues), 'diplomacy_effects')
+    phase_effects = source_section(_load(PHASE_EFFECTS, issues), 'phase_effects')
     join = _unique_block(diplomacy_effects, JOIN_ALLIES, "showdown ally effect", issues)
     if join:
         for token in (
@@ -1174,21 +1176,21 @@ def validate_core_packages() -> list[str]:
 
 def validate_wkr_solyarino_intervention() -> list[str]:
     issues: list[str] = []
-    triggers = _load(DIPLOMACY_TRIGGERS, issues)
-    effects = _load(DIPLOMACY_EFFECTS, issues)
-    decisions = _load(DIPLOMACY_DECISIONS, issues)
+    triggers = source_section(_load(DIPLOMACY_TRIGGERS, issues), 'diplomacy_triggers')
+    effects = source_section(_load(DIPLOMACY_EFFECTS, issues), 'diplomacy_effects')
+    decisions = source_section(_load(DIPLOMACY_DECISIONS, issues), 'diplomacy_decisions')
     focus_decisions = _load(FOCUS_DECISIONS, issues)
-    focus_effects = _load(FOCUS_DECISION_EFFECTS, issues)
-    events = _load(DIPLOMACY_EVENTS, issues)
+    focus_effects = source_section(_load(FOCUS_DECISION_EFFECTS, issues), 'focus_decision_effects')
+    events = source_section(_load(DIPLOMACY_EVENTS, issues), 'diplomacy_events')
     on_actions = _load(DIPLOMACY_ON_ACTIONS, issues)
-    focus_source = _load(FOCUS_FILE, issues)
-    ai = _load(COLLAPSE_AI, issues)
-    plans = _load(WKR_AI_PLANS, issues)
-    phase_effects = _load(PHASE_EFFECTS, issues)
-    phase_events = _load(PHASE_EVENTS, issues)
+    focus_source = source_section(_load(FOCUS_FILE, issues), 'civil_war_focus')
+    ai = source_section(_load(COLLAPSE_AI, issues), 'collapse_ai')
+    plans = source_section(_load(WKR_AI_PLANS, issues), 'wkr_wartime_plan')
+    phase_effects = source_section(_load(PHASE_EFFECTS, issues), 'phase_effects')
+    phase_events = source_section(_load(PHASE_EVENTS, issues), 'phase_events')
     cosmetics = _load(COUNTRY_COSMETICS, issues)
-    english = _load(DIPLOMACY_ENGLISH, issues)
-    russian = _load(DIPLOMACY_RUSSIAN, issues)
+    english = source_section(_load(DIPLOMACY_ENGLISH, issues), 'diplomacy_l_english')
+    russian = source_section(_load(DIPLOMACY_RUSSIAN, issues), 'diplomacy_l_russian')
     event_registry = _load(EVENT_ID_REGISTRY, issues)
     if issues:
         return issues
@@ -1703,11 +1705,17 @@ def validate_wkr_solyarino_intervention() -> list[str]:
     air_ai = _unique_block(ai, "ADISCORD_vorkerland_wkr_focus_air_sustainment", "WKR air AI", issues)
     for token in (
         "has_country_flag = ADISCORD_vorkerland_focus_wkr_air_sustainment",
-        "equipment_production_min_factories id = fighter value = 2",
-        "equipment_production_min_factories id = cas value = 1",
+        "unit_ratio id = fighter value = 110",
+        "unit_ratio id = cas value = 35",
+        "equipment_production_factor id = fighter value = 45",
+        "equipment_production_factor id = cas value = 20",
+        "equipment_variant_production_factor id = ADISCORD_fighter_archetype value = 45",
+        "equipment_variant_production_factor id = ADISCORD_cas_archetype value = 20",
     ):
         if token not in air_ai:
             issues.append(f"WKR focus air AI lacks {token}")
+    if "equipment_production_min_factories" in air_ai:
+        issues.append("WKR focus air AI must use the shared factory minimum budget")
     for tag in ("sol", "sra", "csl"):
         profile = _unique_block(
             ai,
@@ -1825,12 +1833,12 @@ def validate_wkr_solyarino_intervention() -> list[str]:
 
 def validate_remaining_central_fronts() -> list[str]:
     issues: list[str] = []
-    triggers = _load(DIPLOMACY_TRIGGERS, issues)
-    effects = _load(DIPLOMACY_EFFECTS, issues)
-    focus_source = _load(FOCUS_FILE, issues)
-    wkr_plans = _load(WKR_AI_PLANS, issues)
-    vad_plans = _load(VAD_AI_PLANS, issues)
-    tva_plans = _load(TVA_AI_PLANS, issues)
+    triggers = source_section(_load(DIPLOMACY_TRIGGERS, issues), 'diplomacy_triggers')
+    effects = source_section(_load(DIPLOMACY_EFFECTS, issues), 'diplomacy_effects')
+    focus_source = source_section(_load(FOCUS_FILE, issues), 'civil_war_focus')
+    wkr_plans = source_section(_load(WKR_AI_PLANS, issues), 'wkr_wartime_plan')
+    vad_plans = source_section(_load(VAD_AI_PLANS, issues), 'vad_wartime_plan')
+    tva_plans = source_section(_load(TVA_AI_PLANS, issues), 'tva_wartime_plan')
     if issues:
         return issues
 

@@ -1,0 +1,16 @@
+[
+  {
+    "name": "generic_army_headquartersShape-000",
+    "vertices": 6636,
+    "triangles": 2212,
+    "bones": 33,
+    "influences": 4
+  },
+  {
+    "name": "Collar rank tab",
+    "vertices": 1162,
+    "triangles": 1466,
+    "bones": 33,
+    "influences": 4
+  }
+]

@@ -47,7 +47,7 @@ SCAN_ROOTS = ("common", "events", "history", "interface")
 VALID_STATUSES = {"active", "compatibility", "reserved"}
 REQUIRED_FIELDS = {"id", "namespace", "number", "owner", "subsystem", "status"}
 
-COLLAPSE_OWNER = "events/ADISCORD_vorkerland_collapse_events.txt"
+COLLAPSE_OWNER = "events/ADISCORD_vorkerland_events.txt"
 REQUIRED_ACTIVE_COLLAPSE_IDS = {
     *(f"ADISCORD_vorkerland_collapse.{number}" for number in range(11, 20)),
     "ADISCORD_vorkerland_collapse.63",
@@ -59,7 +59,7 @@ REQUIRED_ACTIVE_COLLAPSE_IDS = {
 PLANNED_RECOVERY_IDS = {
     **{
         f"ADISCORD_vorkerland_phase.{number}":
-        "events/ADISCORD_vorkerland_phase_events.txt"
+        "events/ADISCORD_vorkerland_events.txt"
         for number in range(1, 8)
     },
     **{

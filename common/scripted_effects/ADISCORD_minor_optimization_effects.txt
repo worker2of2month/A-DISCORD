@@ -15,7 +15,7 @@ ADISCORD_apply_non_participating_minor_optimization = {
 # historical research capacity once and let it participate normally thereafter.
 ADISCORD_restore_non_participating_minor_research_slots = {
 	if = {
-		limit = { OR = { tag = AIN tag = COF tag = TFF } }
+		limit = { tag = AIN }
 		set_research_slots = 1
 	}
 	else_if = {
@@ -40,7 +40,6 @@ ADISCORD_restore_non_participating_minor_research_slots = {
 				tag = SHL
 				tag = TMR
 				tag = WEF
-				tag = YPR
 			}
 		}
 		set_research_slots = 2

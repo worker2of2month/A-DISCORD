@@ -1,5 +1,6 @@
 capital = 102
 
+ADISCORD_grant_technology_profile_land = yes
 oob = "VAD"
 ####### Characters
 

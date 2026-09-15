@@ -20,3 +20,13 @@ VAL_contract_state = {
 	ADISCORD_economy_military_industry_income_factor = VAL_contract_military_income_factor
 	ADISCORD_economy_army_expense_factor = VAL_contract_army_expense_factor
 }
+
+VAL_reclamation_recovered_land = {
+	enable = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } }
+	icon = GFX_modifiers_sabotaged_resource
+	local_manpower = VAL_reclamation_people
+	state_resources_factor = VAL_reclamation_resources
+	local_building_slots_factor = VAL_reclamation_slots
+	state_production_speed_buildings_factor = VAL_reclamation_construction
+	local_supply_impact_factor = VAL_reclamation_supply
+}

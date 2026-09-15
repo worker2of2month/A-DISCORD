@@ -8,22 +8,25 @@ import sys
 from pathlib import Path
 
 
+from tools.lib.paths import source_section
+
+
 ROOT = Path(__file__).resolve().parents[2]
 
-STORY_EVENTS = Path("events/ADISCORD_vorkerland_story_events.txt")
-STORY_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_story_effects.txt")
-ENGLISH_LOC = Path("localisation/english/ADISCORD_vorkerland_story_l_english.yml")
-RUSSIAN_LOC = Path("localisation/russian/ADISCORD_vorkerland_story_l_russian.yml")
+STORY_EVENTS = Path("events/ADISCORD_vorkerland_events.txt")
+STORY_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+ENGLISH_LOC = Path("localisation/english/ADISCORD_vorkerland_l_english.yml")
+RUSSIAN_LOC = Path("localisation/russian/ADISCORD_vorkerland_l_russian.yml")
 NEWS_EVENTS = Path("events/ADISCORD_news.txt")
-EVENT_PICTURES = Path("interface/ADISCORD_eventpictures.gfx")
+EVENT_PICTURES = Path("interface/ADISCORD_event_art.gfx")
 ON_ACTIONS = Path("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
-PHASE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
+PHASE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
 CAMPAIGN_STATE_EFFECTS = Path(
-    "common/scripted_effects/ADISCORD_vorkerland_campaign_state_effects.txt"
+    "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
 )
-PHASE_EVENTS = Path("events/ADISCORD_vorkerland_phase_events.txt")
-COLLAPSE_EVENTS = Path("events/ADISCORD_vorkerland_collapse_events.txt")
-CIVIL_WAR_FOCUS = Path("common/national_focus/ADISCORD_vorkerland_civil_war_focus.txt")
+PHASE_EVENTS = Path("events/ADISCORD_vorkerland_events.txt")
+COLLAPSE_EVENTS = Path("events/ADISCORD_vorkerland_events.txt")
+CIVIL_WAR_FOCUS = Path("common/national_focus/ADISCORD_vorkerland_focus.txt")
 
 STORY_NUMBERS = (
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
@@ -244,16 +247,16 @@ def pending_external_dispatch(root: Path = ROOT) -> list[str]:
 
 def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str]:
     issues: list[str] = []
-    story_events = read(root, STORY_EVENTS, issues)
-    story_effects = read(root, STORY_EFFECTS, issues)
-    english = read(root, ENGLISH_LOC, issues)
-    russian = read(root, RUSSIAN_LOC, issues)
+    story_events = source_section(read(root, STORY_EVENTS, issues), 'story_events')
+    story_effects = source_section(read(root, STORY_EFFECTS, issues), 'story_effects')
+    english = source_section(read(root, ENGLISH_LOC, issues), 'story_l_english')
+    russian = source_section(read(root, RUSSIAN_LOC, issues), 'story_l_russian')
     news = read(root, NEWS_EVENTS, issues)
     event_pictures = read(root, EVENT_PICTURES, issues)
     on_actions = read(root, ON_ACTIONS, issues)
-    phase_effects = read(root, PHASE_EFFECTS, issues)
-    campaign_state_effects = read(root, CAMPAIGN_STATE_EFFECTS, issues)
-    phase_events = read(root, PHASE_EVENTS, issues)
+    phase_effects = source_section(read(root, PHASE_EFFECTS, issues), 'phase_effects')
+    campaign_state_effects = source_section(read(root, CAMPAIGN_STATE_EFFECTS, issues), 'campaign_state_effects')
+    phase_events = source_section(read(root, PHASE_EVENTS, issues), 'phase_events')
 
     for relative, source in (
         (STORY_EVENTS, story_events),
@@ -295,7 +298,7 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
         issues.append("story layer owns forbidden map/war/peace mutations: " + ", ".join(forbidden))
     if "ADISCORD_superevent_news.2" in story_events + story_effects:
         issues.append("story layer references hazardous legacy ADISCORD_superevent_news.2")
-    if "GFX_event_vorkerland_explosion" in story_events:
+    if "GFX_news_event_adiscord_vorkerland_explosion" in story_events:
         issues.append("non-explosion story events must not reuse the collapse explosion picture")
     if "add_army_experience" in story_events:
         issues.append("story events use invalid add_army_experience instead of army_experience")
@@ -307,9 +310,9 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
                 "use the array argument with a global. prefix instead"
             )
     showdown = definitions.get(SHOWDOWN_ID, ("", ""))[1]
-    if "picture = GFX_event_china_civil_war_1" not in showdown:
+    if "picture = GFX_news_event_adiscord_city_in_civil_war" not in showdown:
         issues.append("verified showdown news must use the registered neutral civil-war picture")
-    if 'name = "GFX_event_china_civil_war_1"' not in event_pictures:
+    if 'name = "GFX_news_event_adiscord_city_in_civil_war"' not in event_pictures:
         issues.append("neutral civil-war event picture is not registered in A-Discord")
 
     event_five = definitions.get(COMMAND_CHOICE_ID, ("", ""))[1]

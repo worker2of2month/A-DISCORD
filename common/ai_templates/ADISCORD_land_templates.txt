@@ -1,30 +1,11 @@
 # Staged total-conversion templates.  Cheap line troops, offensive assault
 # groups, specialists, and tanks use separate roles so the AI keeps a balanced
 # army instead of converting every formation to the most expensive design.
-
-# The northern collapse OOBs deliberately use the same cheap four-battalion
-# levy as local garrisons. During the regional war graph those formations are
-# line infantry; keep them out of the garrison role so the AI assigns them to
-# fronts instead of leaving the theatre empty.
-ADISCORD_vorkerland_northern_militia_templates = {
-	role = infantry
-	upgrade_prio = { base = 14 }
-
-	ADISCORD_vorkerland_northern_line_militia = {
-		enable = {
-			is_ai = yes
-			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-			OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD }
-		}
-		reinforce_prio = 1
-		upgrade_prio = { base = 14 }
-		can_upgrade_in_field = { always = yes }
-		target_template = { regiments = { ADISCORD_militia = 4 } }
-	}
-}
+# The native tag-list reader requires a nonempty filter. EXZ has no army and
+# permanently locked templates; all playable and dynamic countries remain eligible.
 
 ADISCORD_garrison_templates = {
+	blocked_for = { EXZ }
 	role = garrison
 	upgrade_prio = {
 		base = 1
@@ -33,10 +14,22 @@ ADISCORD_garrison_templates = {
 	ADISCORD_garrison_levy = {
 		enable = {
 			NOT = {
-				AND = {
-					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-					OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD }
+				OR = {
+					AND = {
+						has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+						NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+						OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD }
+					}
+					AND = {
+						has_global_flag = STP_cw_started
+						NOT = { has_global_flag = STP_cw_union_wars_finished }
+						OR = { tag = STP tag = STS tag = SRP }
+					}
+					AND = { OR = { tag = STP tag = STS tag = SRP } has_war = yes }
+					AND = {
+						has_war = yes
+						OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = VAL }
+					}
 				}
 			}
 		}
@@ -48,9 +41,50 @@ ADISCORD_garrison_templates = {
 	}
 }
 
+# Territorial troops retain a frontline role without replacing regular infantry.
+ADISCORD_territorial_templates = {
+	available_for = { ZAO WPA WPS PWR PSD STP STS SRP NOD YPR COF TFF VAL }
+	role = militias
+	upgrade_prio = { base = 4 }
+	ADISCORD_vorkerland_northern_line_militia = {
+		enable = {
+			is_ai = yes
+			OR = {
+				AND = {
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+					OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD }
+				}
+				AND = {
+					has_global_flag = STP_cw_started
+					NOT = { has_global_flag = STP_cw_union_wars_finished }
+					OR = { tag = STP tag = STS tag = SRP }
+				}
+				AND = { OR = { tag = STP tag = STS tag = SRP } has_war = yes }
+			}
+		}
+		reinforce_prio = 1
+		upgrade_prio = { base = 14 }
+		can_upgrade_in_field = { always = yes }
+		target_template = { regiments = { ADISCORD_militia = 4 } }
+	}
+	ADISCORD_border_territorial_militia = {
+		enable = {
+			has_war = yes
+			OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = VAL }
+		}
+		reinforce_prio = 1
+		upgrade_prio = { base = 14 }
+		can_upgrade_in_field = { always = yes }
+		target_template = { regiments = { ADISCORD_militia = 3 } }
+	}
+}
+
 ADISCORD_infantry_templates = {
+	blocked_for = { EXZ }
 	role = infantry
 	upgrade_prio = { base = 5 }
+
 
 	ADISCORD_reconstruction_brigade = {
 		reinforce_prio = 1
@@ -114,6 +148,7 @@ ADISCORD_infantry_templates = {
 # Assault formations use the mobile role.  This keeps them as a limited
 # offensive reserve rather than replacing every ordinary infantry division.
 ADISCORD_assault_templates = {
+	blocked_for = { EXZ }
 	role = mobile
 	upgrade_prio = {
 		base = 0
@@ -181,6 +216,7 @@ ADISCORD_assault_templates = {
 }
 
 ADISCORD_mountaineer_templates = {
+	blocked_for = { EXZ }
 	role = mountaineers
 	upgrade_prio = { base = 2 }
 	ADISCORD_mountaineer_brigade = {
@@ -224,6 +260,7 @@ ADISCORD_mountaineer_templates = {
 }
 
 ADISCORD_tank_templates = {
+	blocked_for = { EXZ }
 	role = armor
 	upgrade_prio = {
 		base = 0
@@ -347,6 +384,7 @@ ADISCORD_heavy_tank_battlegroup = {
 # Army HQ templates use their own engine role.  Without this block the AI can
 # deploy the starter HQ, but it has no valid total-conversion design target.
 ADISCORD_army_hq_templates = {
+	blocked_for = { EXZ }
 	role = hq_role
 	upgrade_prio = { base = 0 }
 

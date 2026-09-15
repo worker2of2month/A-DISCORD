@@ -815,7 +815,7 @@ def validate_countries() -> None:
 
 def validate_news_settings() -> None:
     superevents = text(ROOT / "common/scripted_guis/superevents.txt")
-    effects = text(ROOT / "common/scripted_effects/ADISCORD_vorkerland_collapse_map_effects.txt")
+    effects = text(ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt")
     news = text(ROOT / "events/ADISCORD_news.txt")
     localisation = southern_localisation()
 
@@ -840,10 +840,10 @@ def validate_news_settings() -> None:
 
 
 def validate_vorkerland_expansion() -> None:
-    effects = text(ROOT / "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
-    maps = text(ROOT / "common/scripted_effects/ADISCORD_vorkerland_collapse_map_effects.txt")
-    phase_effects = text(ROOT / "common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
-    phase_events = text(ROOT / "events/ADISCORD_vorkerland_phase_events.txt")
+    effects = text(ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+    maps = text(ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+    phase_effects = text(ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+    phase_events = text(ROOT / "events/ADISCORD_vorkerland_events.txt")
     expansion_assignments = {
         "tva": ("TVA", {324}),
         "riv": ("RIV", {308}),

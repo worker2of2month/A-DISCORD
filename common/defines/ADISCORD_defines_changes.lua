@@ -104,8 +104,7 @@ NDefines.NGame.START_DATE = "2160.1.1.1";
 	NDefines.NMilitary.PLAN_STICKINESS_FACTOR = 95.0
 	NDefines.NMilitary.PLAN_STICKINESS_IGNORE_STACK_LIMIT = 1
 
-	-- Balanced plans use the vanilla score floor; even a rush remains selective
-	-- as in Expert AI instead of accepting virtually any losing attack.
+	-- Plan modes retain distinct thresholds for the evaluated attack score.
 	NDefines.NMilitary.PLAN_EXECUTE_CAREFUL_LIMIT = 10.0
 	NDefines.NMilitary.PLAN_EXECUTE_BALANCED_LIMIT = 0.0
 	NDefines.NMilitary.PLAN_EXECUTE_RUSH = -200
@@ -429,7 +428,6 @@ NDefines.NGame.START_DATE = "2160.1.1.1";
 	NDefines.NAI.NAVAL_TRANSFER_AIR_IMPORTANCE = 1.0
 	NDefines.NAI.NAVAL_STRIKE_PLANES_PER_SHIP = 5
 	NDefines.NAI.FOCUS_TREE_CONTINUE_FACTOR = 1
-	NDefines.NAI.FALLBACK_LOSING_FACTOR = 0.0
 
 	NDefines.NAI.LAND_DESIGN_ALTERNATIVE_ABSENT = 1
 	NDefines.NAI.LAND_DESIGN_ALTERNATIVE_OF_LESSER_TECH = 1
@@ -442,18 +440,6 @@ NDefines.NGame.START_DATE = "2160.1.1.1";
 	NDefines.NAI.LAND_DESIGN_DEMAND_UNUSED_TEMPLATE = 10
 	NDefines.NAI.LAND_DESIGN_DEMAND_ABSENT = 10
 
-	NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_LOW = 0.85
-	NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_LOW = 0.85
-
-	NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_MED = 0.65
-	NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_MED = 0.65
-
-	-- Small collapse armies must execute their assigned fronts even when the
-	-- ruined regional supply network would make the stock AI wait forever.
-	NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_HIGH = 0.15
-	NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_HIGH = 0.25
-	NDefines.NAI.FRONT_EVAL_UNIT_SUPPLY_AND_ORG_LACK_IMPACT = 0.2
-	NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT = 0.0
 
 	NDefines.NAI.PLAN_FACTION_STRONG_TO_EXECUTE = 0.65
 	NDefines.NAI.ORG_UNIT_STRONG = 0.75
@@ -474,13 +460,7 @@ NDefines.NGame.START_DATE = "2160.1.1.1";
 	NDefines.NAI.REDEPLOY_DISTANCE_VS_ORDER_SIZE = 1.0
 	NDefines.NAI.UNIT_ASSIGNMENT_TERRAIN_IMPORTANCE = 5.0
 
-	NDefines.NAI.MAX_UNITS_FACTOR_FRONT_ORDER = 5.0
-	NDefines.NAI.DESIRED_UNITS_FACTOR_FRONT_ORDER = 4.5
-	NDefines.NAI.MIN_UNITS_FACTOR_FRONT_ORDER = 3.0
-
 	NDefines.NCountry.BASE_STABILITY_PARTY_POPULARITY_FACTOR = 0.0
-	NDefines.NCountry.MIN_STABILITY = -1.0
-	NDefines.NCountry.MIN_WAR_SUPPORT = -1.0
 	NDefines.NCountry.SPECIAL_FORCES_CAP_BASE = 0.075
 	NDefines.NCountry.SPECIAL_FORCES_CAP_MIN = 6
 	NDefines.NCountry.BASE_COMMAND_POWER_GAIN = 0.5

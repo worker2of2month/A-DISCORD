@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A-Discord — event window concept</title>
+  <style>
+    :root {
+      --ink: #d8ddd9;
+      --muted: #8d9997;
+      --cyan: #4c9a9b;
+      --cyan-soft: rgba(76, 154, 155, .28);
+      --gold: #b79b5b;
+      --panel: rgba(14, 19, 21, .97);
+      --edge: #263638;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #101719;
+      color: var(--ink);
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(rgba(7, 12, 14, .66), rgba(7, 12, 14, .74)),
+        radial-gradient(circle at 72% 36%, #354446 0 8%, transparent 9%),
+        radial-gradient(circle at 64% 65%, #263638 0 15%, transparent 16%),
+        linear-gradient(135deg, #273234, #11181a 46%, #202c2f);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      opacity: .2;
+      background-image:
+        linear-gradient(32deg, transparent 48%, #719194 49%, transparent 50%),
+        linear-gradient(104deg, transparent 48%, #719194 49%, transparent 50%);
+      background-size: 290px 240px, 370px 310px;
+    }
+
+    .topbar {
+      position: fixed;
+      inset: 0 0 auto;
+      height: 54px;
+      border-bottom: 1px solid #335354;
+      background: linear-gradient(#182124, #0d1315);
+      box-shadow: 0 4px 14px #000;
+    }
+
+    .event {
+      position: relative;
+      width: 615px;
+      min-height: 650px;
+      padding: 0 43px 31px;
+      background:
+        linear-gradient(180deg, rgba(31, 42, 44, .52), transparent 116px),
+        var(--panel);
+      border: 1px solid #48585a;
+      box-shadow:
+        0 0 0 3px #0a0e0f,
+        0 0 0 4px #263335,
+        0 22px 70px rgba(0, 0, 0, .68);
+    }
+
+    .event::after {
+      content: "";
+      position: absolute;
+      inset: 9px;
+      border: 1px solid rgba(121, 145, 146, .13);
+      pointer-events: none;
+    }
+
+    .header {
+      height: 96px;
+      display: grid;
+      align-content: center;
+      text-align: center;
+      border-bottom: 2px solid var(--cyan);
+      box-shadow: 0 1px var(--cyan-soft);
+    }
+
+    .eyebrow {
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: #eef1ed;
+      font-size: 24px;
+      font-weight: 650;
+      letter-spacing: .025em;
+      text-shadow: 0 2px 1px #000;
+    }
+
+    .minimize {
+      position: absolute;
+      top: 27px;
+      left: 20px;
+      width: 24px;
+      height: 24px;
+      border: 1px solid #5b6768;
+      background: #151c1e;
+      color: #9aa4a3;
+      font: 700 15px/20px Arial;
+    }
+
+    .picture {
+      width: 507px;
+      height: 184px;
+      margin: 22px auto 0;
+      object-fit: cover;
+      display: block;
+      border: 1px solid #697879;
+      box-shadow: 0 0 0 3px #090d0e, 0 8px 22px rgba(0,0,0,.35);
+      filter: saturate(.78) contrast(1.04);
+    }
+
+    .body-copy {
+      width: 507px;
+      min-height: 154px;
+      margin: 21px auto 0;
+      padding: 0 4px;
+      color: #c6ccca;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 16px;
+      line-height: 1.46;
+      text-align: left;
+    }
+
+    .body-copy p { margin: 0 0 10px; }
+
+    .divider {
+      width: 507px;
+      height: 1px;
+      margin: 5px auto 14px;
+      background: linear-gradient(90deg, transparent, #3f5b5d 12%, #3f5b5d 88%, transparent);
+    }
+
+    .options {
+      width: 300px;
+      margin: 0 auto;
+      display: grid;
+      gap: 4px;
+    }
+
+    .option {
+      height: 35px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #354849;
+      background: linear-gradient(#233032, #131b1d);
+      color: #e2e6e1;
+      font-size: 15px;
+      font-weight: 650;
+      letter-spacing: .01em;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.025);
+    }
+
+    .option.primary {
+      border-color: #6d653f;
+      box-shadow: inset 3px 0 var(--gold), inset 0 0 0 1px rgba(255,255,255,.025);
+    }
+
+    .caption {
+      position: fixed;
+      right: 26px;
+      bottom: 20px;
+      color: rgba(220, 230, 227, .48);
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar"></div>
+  <main class="event" aria-label="Макет окна события">
+    <button class="minimize" aria-label="Свернуть">–</button>
+    <header class="header">
+      <div class="eyebrow">Оперативная сводка · 28 августа 2026</div>
+      <h1>Свет в штабе не гаснет</h1>
+    </header>
+
+    <img class="picture"
+         src="file:///C:/Users/Admin/.codex/generated_images/01a029e9-4d49-7481-98da-5208e3f19761/exec-71651ad0-957b-4bc3-b711-aa743282b48e.png"
+         alt="Тестовая иллюстрация события">
+
+    <section class="body-copy">
+      <p>На стол лёг очередной доклад. Связь с окраинами остаётся нестабильной, однако штаб сообщает, что основные маршруты всё ещё под контролем.</p>
+      <p>Решение потребуется до рассвета. Любая задержка даст противнику время изменить обстановку.</p>
+    </section>
+
+    <div class="divider"></div>
+    <section class="options" aria-label="Варианты решения">
+      <div class="option primary">Утвердить приказ</div>
+      <div class="option">Нам нужно больше сведений</div>
+    </section>
+  </main>
+  <div class="caption">A-Discord · Event window concept 01</div>
+</body>
+</html>

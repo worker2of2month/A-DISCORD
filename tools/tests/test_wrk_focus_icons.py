@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 import unittest
 
+from tools.lib.paths import source_section
 from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     FOCUS_FILE,
     FOCUS_GFX_FILE,
@@ -18,7 +19,7 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
 class WrkFocusIconSlotTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.blocks = focus_blocks(read(FOCUS_FILE))
+        cls.blocks = focus_blocks(source_section(read(FOCUS_FILE), 'civil_war_focus'))
         cls.focus_gfx = read(FOCUS_GFX_FILE)
         cls.shine = read(SHINE_FILE)
 

@@ -109,6 +109,52 @@ def named_blocks(text: str, block_type: str, name: str) -> tuple[str, ...]:
 
 
 class TechnologyUiContractTests(unittest.TestCase):
+    def test_tree_background_repeats_without_edge_seams(self) -> None:
+        image = builder._tree_stripes(builder.load_surface_source(builder.SOURCE))
+        self.assertEqual(image.crop((0, 0, 1, 244)).tobytes(), image.crop((121, 0, 122, 244)).tobytes())
+        self.assertEqual(image.crop((0, 0, 122, 1)).tobytes(), image.crop((0, 243, 122, 244)).tobytes())
+
+    def test_all_folder_tabs_keep_native_hit_areas_and_have_distinct_art(self) -> None:
+        from tools.builders import build_adiscord_technology_system as system
+
+        source = builder.load_surface_source(builder.SOURCE)
+        gui = (ROOT / "interface/countrytechtreeview.gui").read_text(encoding="utf-8-sig")
+        native = (system.BASE_GAME / "interface/countrytechtreeview.gui").read_text(encoding="utf-8-sig")
+        native_tabs = named_blocks(native, "containerWindowType", "folder_tabs")[0]
+        actual_tabs = named_blocks(gui, "containerWindowType", "folder_tabs")[0]
+        artwork = []
+        for contract, (key, _, count) in zip(builder.FOLDER_TAB_CONTRACTS, builder.FOLDER_TABS):
+            self.assertEqual(contract.total_size, (182, 61))
+            self.assertEqual(contract.frames, 2)
+            self.assertEqual(actual_tabs.count(f'"{contract.target_name}"'), count)
+            actual_tabs = actual_tabs.replace(f'"{contract.target_name}"', f'"{contract.source_name}"')
+            image = builder._folder_tab(source, key)
+            artwork.append(image.crop((10, 7, 80, 50)).tobytes())
+            for offset in (0, 91):
+                pictogram = image.convert("RGB").crop((offset + 10, 7, offset + 80, 50))
+                self.assertGreater(sum(max(rgb) - min(rgb) > 15 for rgb in pictogram.get_flattened_data()), 30, key)
+            self.assertNotEqual(image.crop((0, 0, 91, 61)).tobytes(), image.crop((91, 0, 182, 61)).tobytes())
+        self.assertEqual(len(set(artwork)), 9)
+        self.assertEqual(actual_tabs, native_tabs)
+
+    def test_equipment_art_field_has_no_vertical_divider(self) -> None:
+        source = builder.load_surface_source(builder.SOURCE)
+        image = builder._technology_node(source, builder.MUTED_GOLD).convert("RGB")
+        # A 176px weapon spans the middle of the card, including x=69..74.
+        for x in range(68, 76):
+            column = mean_luminance(image, (x, 28, x + 1, 62))
+            adjacent = mean_luminance(image, (x - 3, 28, x, 62))
+            self.assertLess(abs(column - adjacent), 8.0, x)
+
+    def test_folder_art_does_not_overlay_vanilla_branch_diagrams(self) -> None:
+        from tools.builders import build_adiscord_technology_system as system
+
+        # Exercise the generated folder decoration before the shared skin pass.
+        text = system.render_folder("infantry_folder")
+        blocks = named_blocks(text, "iconType", "ADISCORD_tech_background")
+        self.assertEqual(len(blocks), 1)
+        self.assertIn('spriteType = "GFX_ADISCORD_technology_transparent_tile"', blocks[0])
+
     def test_overview_assets_keep_native_dimensions_frames_and_metadata(self) -> None:
         contracts = {
             item.target_name: item for item in builder.TECHNOLOGY_OVERVIEW_CONTRACTS
@@ -200,11 +246,20 @@ class TechnologyUiContractTests(unittest.TestCase):
                 else:
                     self.assertEqual(contracts[name].kind, "spriteType")
 
-    def test_research_slot_has_distinct_icon_title_progress_and_time_zones(self) -> None:
+    def test_engine_selected_research_backgrounds_use_generated_textures(self) -> None:
+        outputs = builder.expected_outputs()
+        for relative in (
+            "gfx/interface/research_line_bg.dds",
+            "gfx/interface/military_industrial_organization/research_line_mio_bg.dds",
+        ):
+            with self.subTest(path=relative):
+                self.assertIn(ROOT / relative, outputs.keys())
+                self.assertEqual(outputs[ROOT / relative], outputs[builder.SLOT])
+
+    def test_research_slot_keeps_progress_recess_below_native_art(self) -> None:
         outputs = builder.expected_outputs()
         image = Image.open(io.BytesIO(outputs[builder.SLOT])).convert("RGBA")
-        self.assertNotEqual(image.getpixel((34, 46)), image.getpixel((250, 46)))
-        self.assertNotEqual(image.getpixel((250, 46)), image.getpixel((430, 73)))
+        self.assertNotEqual(image.getpixel((250, 46)), image.getpixel((250, 82)))
 
     def test_empty_research_slot_is_scoped_and_has_a_visible_pulse(self) -> None:
         gui = builder.render_gui()
@@ -288,7 +343,7 @@ class TechnologyUiContractTests(unittest.TestCase):
         self.assertLessEqual(mean_luminance(top, (0, 0, 548, 7)), 80.0)
         self.assertLessEqual(mean_luminance(info, (25, 25, 483, 190)), 80.0)
 
-    def test_scrolling_statsareas_use_inverted_font_on_absolute_dark_tile(self) -> None:
+    def test_scrolling_statsareas_support_engine_generated_black_text(self) -> None:
         gui = (ROOT / "interface/countrytechtreeview.gui").read_text(
             encoding="utf-8-sig"
         )
@@ -296,7 +351,7 @@ class TechnologyUiContractTests(unittest.TestCase):
         self.assertEqual(len(statsareas), 2)
         for index, block in enumerate(statsareas):
             with self.subTest(statsarea=index):
-                self.assertEqual(block.count('font = "hoi4_typewriter16_inverted"'), 1)
+                self.assertEqual(block.count('font = "hoi4_typewriter16"'), 1)
                 self.assertEqual(
                     block.count(
                         'quadTextureSprite ="GFX_ADISCORD_technology_detail_content_tile"'
@@ -309,9 +364,9 @@ class TechnologyUiContractTests(unittest.TestCase):
             io.BytesIO(outputs[builder.DETAIL_CONTENT_TILE])
         ).convert("RGBA")
         live_crop = (25, 25, 167, 167)
-        self.assertLessEqual(mean_luminance(detail_tile, live_crop), 100.0)
+        self.assertGreaterEqual(mean_luminance(detail_tile, live_crop), 135.0)
         self.assertGreaterEqual(
-            contrast_ratio((255, 255, 255), detail_tile, live_crop),
+            contrast_ratio((0, 0, 0), detail_tile, live_crop),
             4.5,
         )
         self.assertGreater(
@@ -474,7 +529,7 @@ class TechnologyUiContractTests(unittest.TestCase):
                 name,
             )
 
-    def test_research_gui_changes_only_counted_sprite_bindings(self) -> None:
+    def test_research_gui_preserves_controls_outside_summary_typography(self) -> None:
         vanilla = builder.VANILLA_GUI.read_text(encoding="utf-8-sig")
         normalized = "\n".join(line.rstrip() for line in vanilla.splitlines()) + "\n"
         normalized = re.sub(r"(?m)^ +(?=\t)", "", normalized)
@@ -482,6 +537,18 @@ class TechnologyUiContractTests(unittest.TestCase):
         for old, (new, expected) in builder.SPRITE_REPLACEMENTS.items():
             self.assertEqual(restored.count(f'"{new}"'), expected, new)
             restored = restored.replace(f'"{new}"', f'"{old}"')
+        # Ignore only the approved leaf properties, retaining every other
+        # property and the complete widget hierarchy in the comparison.
+        for name in ("limited_research_bonus_text", "research_speed_text",
+                     "focus_bonuses", "limited_research_bonus_value",
+                     "research_speed_icon", "research_speed_value"):
+            pattern = rf'(name\s*=\s*"{name}"\s*)(.*?)(?=\n\s*\}})'
+            def without_layout(match):
+                return match[1] + re.sub(
+                    r'position\s*=\s*\{[^}}]+\}|font\s*=\s*"[^"]+"|maxWidth\s*=\s*\d+',
+                    "", match[2])
+            restored = re.sub(pattern, without_layout, restored, flags=re.S)
+            normalized = re.sub(pattern, without_layout, normalized, flags=re.S)
         self.assertEqual(restored, normalized)
 
     def test_research_shell_uses_adiscord_surfaces(self) -> None:
@@ -548,7 +615,7 @@ class TechnologyUiContractTests(unittest.TestCase):
 
     def test_runtime_dds_directory_contains_only_builder_owned_outputs(self) -> None:
         owned = {
-            path for path in builder.expected_outputs() if path.suffix == ".dds"
+            path for path in builder.expected_outputs() if path.suffix == ".dds" and path.parent == ASSET_DIR
         }
         checked_in = set(ASSET_DIR.glob("*.dds"))
         self.assertEqual(checked_in, owned)

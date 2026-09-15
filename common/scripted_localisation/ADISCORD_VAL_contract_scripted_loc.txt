@@ -5,3 +5,23 @@ defined_text = {
 	text = { trigger = { check_variable = { var = VAL_contract_authority value = 40 compare = greater_than_or_equals } } localization_key = VAL_CONTRACT_AUTHORITY_BROKERED }
 	text = { localization_key = VAL_CONTRACT_AUTHORITY_FRAGMENTED }
 }
+
+defined_text = {
+	name = VALGetExportRifleQuantity
+	text = { trigger = { has_country_flag = { flag = VAL_export_rifles_reserved value > 29 } } localization_key = VAL_EXPORT_RIFLES_5000 }
+	text = { trigger = { has_country_flag = VAL_export_rifles_reserved } localization_key = VAL_EXPORT_RIFLES_2500 }
+	text = { trigger = { has_completed_focus = VAL_Foreign_Broker_Licences } localization_key = VAL_EXPORT_RIFLES_5000 }
+	text = { localization_key = VAL_EXPORT_RIFLES_2500 }
+}
+
+defined_text = {
+	name = VALGetExportIncome
+	text = { trigger = { has_country_flag = { flag = VAL_export_rifles_reserved value > 39 } } localization_key = VAL_EXPORT_INCOME_40 }
+	text = { trigger = { has_country_flag = { flag = VAL_export_rifles_reserved value > 29 } } localization_key = VAL_EXPORT_INCOME_30 }
+	text = { trigger = { has_country_flag = { flag = VAL_export_rifles_reserved value > 19 } } localization_key = VAL_EXPORT_INCOME_20 }
+	text = { trigger = { has_country_flag = VAL_export_rifles_reserved } localization_key = VAL_EXPORT_INCOME_15 }
+	text = { trigger = { has_completed_focus = VAL_Foreign_Broker_Licences has_completed_focus = VAL_Northern_Clearing_House } localization_key = VAL_EXPORT_INCOME_40 }
+	text = { trigger = { has_completed_focus = VAL_Foreign_Broker_Licences } localization_key = VAL_EXPORT_INCOME_30 }
+	text = { trigger = { has_completed_focus = VAL_Northern_Clearing_House } localization_key = VAL_EXPORT_INCOME_20 }
+	text = { localization_key = VAL_EXPORT_INCOME_15 }
+}

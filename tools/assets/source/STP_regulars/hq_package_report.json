@@ -1,0 +1,154 @@
+{
+  "gfx\\entities\\ADISCORD_army_headquarters.gfx": {
+    "sha256": "239ce975dd08b59288b29c90c7dc027a3b8fe2d0579dc3d12e80ca8ac90101f2",
+    "bytes": 6828
+  },
+  "gfx\\entities\\zz_ADISCORD_army_headquarters.asset": {
+    "sha256": "b53567cc620f3314003008f35aef47664a28d385a29115965d360be9a7b0d4f6",
+    "bytes": 3611
+  },
+  "gfx\\interface\\equipmentdesigner\\graphic_db\\ADISCORD_army_headquarters.txt": {
+    "sha256": "e0c8e53b3e7ee31549bb447650a82984c4a26c1b856e7dca569156efb8c0d462",
+    "bytes": 836
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\STP_hq.mesh": {
+    "sha256": "f1fcaff21dcad39d1527b8fe398bc899fcf8101f567e060caf4c35b0758c2f9b",
+    "bytes": 675900
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\STP_hq_body_diffuse.dds": {
+    "sha256": "80e1bc37770506f09c1a5d479ab1a99b21e48e583a337a3f8c607c93fb658375",
+    "bytes": 1398256
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\STP_hq_body_normal.dds": {
+    "sha256": "ba5ce4a22e439c36a79c743d42217e734f58ba0e93620ee733f3c50edc604d57",
+    "bytes": 349680
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\STP_hq_body_specular.dds": {
+    "sha256": "9e5eca5a5f18d71f5f9398496695afc64a2f537460b4e52279444e242937d79b",
+    "bytes": 349680
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\STP_hq_gear_diffuse.dds": {
+    "sha256": "feb59c73b5cbe6856d81a3c01aabc06d268eadcbf4cc25cd98c6ad9a5da7b279",
+    "bytes": 1398256
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\STP_hq_gear_normal.dds": {
+    "sha256": "e236b7bfb294709350d0557be38e973985778072490f8a6e0cb7a31807de1b0c",
+    "bytes": 1398256
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\STP_hq_gear_specular.dds": {
+    "sha256": "87e0d3e617feb49b5a3fe46c3e5a331d4436eb6e1e0dd3157c3f19df715e55b5",
+    "bytes": 1398256
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\STS_hq.mesh": {
+    "sha256": "61d6d1f1429987db008524df92419a9340090a4f92f2af679ab0dec91c42f74d",
+    "bytes": 725148
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\STS_hq_body_diffuse.dds": {
+    "sha256": "76b6490b89dede0ec3aca8a0ca334bb8478cf6174556eb81d27a0c530605bf7b",
+    "bytes": 1398256
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\STS_hq_body_normal.dds": {
+    "sha256": "ba5ce4a22e439c36a79c743d42217e734f58ba0e93620ee733f3c50edc604d57",
+    "bytes": 349680
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\STS_hq_body_specular.dds": {
+    "sha256": "9e5eca5a5f18d71f5f9398496695afc64a2f537460b4e52279444e242937d79b",
+    "bytes": 349680
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\STS_hq_gear_diffuse.dds": {
+    "sha256": "616b24b9fd19da014c161f79882f36d32d3c48bc0915e4ec92797b9072a165bf",
+    "bytes": 1398256
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\STS_hq_gear_normal.dds": {
+    "sha256": "64b4ee9055acf068d9420d83828e4e1ffee05a004abd8c07a1db77b7ccfad9a2",
+    "bytes": 1398256
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\STS_hq_gear_specular.dds": {
+    "sha256": "a2307d66d2a32de470b5d388fd090eb1617c7758f1be3b0ca7c48d070cce02c3",
+    "bytes": 1398256
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\VAL_hq.mesh": {
+    "sha256": "790c9fab5b2fd88222b7c864825e431b96718234d229ad093308842bfba86a4f",
+    "bytes": 2108765
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\VAL_hq_body_diffuse.dds": {
+    "sha256": "b84504cf2569791fa74557d414f075c4564c3a1e82f8e78e097607b87aa8ac79",
+    "bytes": 1398256
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\VAL_hq_body_normal.dds": {
+    "sha256": "ba5ce4a22e439c36a79c743d42217e734f58ba0e93620ee733f3c50edc604d57",
+    "bytes": 349680
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\VAL_hq_body_specular.dds": {
+    "sha256": "9e5eca5a5f18d71f5f9398496695afc64a2f537460b4e52279444e242937d79b",
+    "bytes": 349680
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\VAL_hq_gear_diffuse.dds": {
+    "sha256": "beee699f7659778a927dfdde5aad5fa2712b8e8f00ab6a2490df5573db36cea9",
+    "bytes": 1398256
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\VAL_hq_gear_normal.dds": {
+    "sha256": "f2e276efb1e3637fa06aa2f37c550c7c3f664ec950803b041bf4fda3546c5b6d",
+    "bytes": 1398256
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\VAL_hq_gear_specular.dds": {
+    "sha256": "eac4504d604bc245e22f2f7235dfd58d839e22f6f296d080099483596edba240",
+    "bytes": 1398256
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\NOD_hq.mesh": {
+    "sha256": "451f688a55e8d3976d2e35868629ff725b86cc1018dc7d6ef05be1faf66415ec",
+    "bytes": 788844
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\NOD_hq_body_diffuse.dds": {
+    "sha256": "4a299faace03804593b82cd1185ae4c44a7cce0deaa3e945cc73bcadcaa0681b",
+    "bytes": 1398256
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\NOD_hq_body_normal.dds": {
+    "sha256": "ba5ce4a22e439c36a79c743d42217e734f58ba0e93620ee733f3c50edc604d57",
+    "bytes": 349680
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\NOD_hq_body_specular.dds": {
+    "sha256": "9e5eca5a5f18d71f5f9398496695afc64a2f537460b4e52279444e242937d79b",
+    "bytes": 349680
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\NOD_hq_gear_diffuse.dds": {
+    "sha256": "41d08defc61013296107fdd06ecfcacbccd590ddac3f6964ff6f17c048ebaf89",
+    "bytes": 1398256
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\NOD_hq_gear_normal.dds": {
+    "sha256": "4b49db8a1ff388c41c5dce9655131a1d73fd4f3e2082c291b77202a3d6313ff4",
+    "bytes": 1398256
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\NOD_hq_gear_specular.dds": {
+    "sha256": "4faac5cd10c814f54dc8f69481400d80b07d292a3bfb937880036c6fa0eca8f2",
+    "bytes": 1398256
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\generic_hq.mesh": {
+    "sha256": "b37d6a6afb2c9a1e01714cfd524409d96539b577ddb4bad83741f0c21be6ee6b",
+    "bytes": 661588
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\generic_hq_body_diffuse.dds": {
+    "sha256": "f5f96f08fb32c75dd185c2932d32d6fdb0b7c7c8575d8ce9f9796df7db63e9bb",
+    "bytes": 1398256
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\generic_hq_body_normal.dds": {
+    "sha256": "ba5ce4a22e439c36a79c743d42217e734f58ba0e93620ee733f3c50edc604d57",
+    "bytes": 349680
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\generic_hq_body_specular.dds": {
+    "sha256": "9e5eca5a5f18d71f5f9398496695afc64a2f537460b4e52279444e242937d79b",
+    "bytes": 349680
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\generic_hq_gear_diffuse.dds": {
+    "sha256": "8fde348d5b6f515a8fa4e29c6e2466e81c956e2078c014c8611b78f52856c158",
+    "bytes": 1398256
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\generic_hq_gear_normal.dds": {
+    "sha256": "e42daf1e5b16c488181d6eece1d3067060bc61d52f2bbe1df57d15dc016d39b0",
+    "bytes": 1398256
+  },
+  "gfx\\models\\units\\ADISCORD_headquarters\\generic_hq_gear_specular.dds": {
+    "sha256": "ab364de42619590c2536ba5762203ca8c2233b3d42d9d5ffcf88ea6a3577c245",
+    "bytes": 1398256
+  }
+}

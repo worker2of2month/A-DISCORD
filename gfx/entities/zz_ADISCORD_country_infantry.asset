@@ -4,7 +4,6 @@
 entity = {
 	clone = "infantry_rifle_entity"
 	name = "STP_infantry_entity"
-	pdxmesh = "STP_infantry_hedonist_mesh"
 
 	attach = { name = "rifle1" Right_Hand_node = "ADISCORD_infantry_weapon_0_right_entity" }
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_0_left_entity" }
@@ -16,12 +15,12 @@ entity = {
 	attach = { name = "cigarette_package1" Right_Hand_node_3 = "cigarette_package_entity" }
 	attach = { name = "cigarette_package2" Left_Hand_node_2 = "cigarette_package_entity" }
 	attach = { name = "cigarette2" Root_node_1 = "cigarette_entity" }
+	pdxmesh = "ADISCORD_STP_party_rifle_mesh"
 }
 
 entity = {
 	clone = "infantry_2_entity"
 	name = "STP_infantry_2_entity"
-	pdxmesh = "STP_infantry_hedonist_mesh"
 
 	attach = { name = "rifle1" Right_Hand_node = "ADISCORD_infantry_weapon_1_right_entity" }
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_1_left_entity" }
@@ -33,6 +32,7 @@ entity = {
 	attach = { name = "cigarette_package1" Right_Hand_node_3 = "cigarette_package_entity" }
 	attach = { name = "cigarette_package2" Left_Hand_node_2 = "cigarette_package_entity" }
 	attach = { name = "cigarette2" Root_node_1 = "cigarette_entity" }
+	pdxmesh = "ADISCORD_STP_party_mesh"
 }
 entity = {
 	clone = "STP_infantry_2_entity"
@@ -42,6 +42,7 @@ entity = {
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_2_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_2_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_2_right_entity" }
+	pdxmesh = "ADISCORD_STP_party_mesh"
 }
 
 entity = {
@@ -52,6 +53,7 @@ entity = {
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_3_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_3_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_3_right_entity" }
+	pdxmesh = "ADISCORD_STP_party_mesh"
 }
 
 entity = {
@@ -62,6 +64,7 @@ entity = {
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_4_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_4_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_4_right_entity" }
+	pdxmesh = "ADISCORD_STP_party_mesh"
 }
 
 entity = {
@@ -72,6 +75,7 @@ entity = {
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_5_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_5_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_5_right_entity" }
+	pdxmesh = "ADISCORD_STP_party_mesh"
 }
 
 entity = {
@@ -82,6 +86,7 @@ entity = {
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_6_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_6_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_6_right_entity" }
+	pdxmesh = "ADISCORD_STP_party_mesh"
 }
 
 entity = {
@@ -92,6 +97,49 @@ entity = {
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_7_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_7_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_7_right_entity" }
+	pdxmesh = "ADISCORD_STP_party_mesh"
+}
+
+# The resistance keeps the shared weapon progression with its own uniform.
+entity = {
+	clone = "STP_infantry_entity"
+	name = "STS_infantry_entity"
+	pdxmesh = "ADISCORD_STS_regular_rifle_mesh"
+}
+entity = {
+	clone = "STP_infantry_2_entity"
+	name = "STS_infantry_2_entity"
+	pdxmesh = "ADISCORD_STS_regular_mesh"
+}
+entity = {
+	clone = "STP_infantry_3_entity"
+	name = "STS_infantry_3_entity"
+	pdxmesh = "ADISCORD_STS_regular_mesh"
+}
+entity = {
+	clone = "STP_infantry_4_entity"
+	name = "STS_infantry_4_entity"
+	pdxmesh = "ADISCORD_STS_regular_mesh"
+}
+entity = {
+	clone = "STP_infantry_5_entity"
+	name = "STS_infantry_5_entity"
+	pdxmesh = "ADISCORD_STS_regular_mesh"
+}
+entity = {
+	clone = "STP_infantry_6_entity"
+	name = "STS_infantry_6_entity"
+	pdxmesh = "ADISCORD_STS_regular_mesh"
+}
+entity = {
+	clone = "STP_infantry_7_entity"
+	name = "STS_infantry_7_entity"
+	pdxmesh = "ADISCORD_STS_regular_mesh"
+}
+entity = {
+	clone = "STP_infantry_8_entity"
+	name = "STS_infantry_8_entity"
+	pdxmesh = "ADISCORD_STS_regular_mesh"
 }
 
 # Nodrul shares Stelander's infantry set.
@@ -104,6 +152,15 @@ entity = {
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_0_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_0_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_0_right_entity" }
+# BEGIN ADISCORD NOD field poses
+	state = { name = "idle"				animation = "idle"       		animation_blend_time = 0.3 animation_speed = 1.0 chance = 15 looping = no }
+	state = { name = "idle"				animation = "long_idle02" 		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle04" 		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle05" 		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "training" animation = "idle" animation_blend_time = 0.3 looping = no chance = 1 }
+	state = { name = "training" animation = "aim_exercise" animation_blend_time = 0.3 looping = no chance = 2 }
+# END ADISCORD NOD field poses
+	pdxmesh = "ADISCORD_NOD_line_rifle_mesh"
 }
 
 entity = {
@@ -114,6 +171,15 @@ entity = {
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_1_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_1_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_1_right_entity" }
+# BEGIN ADISCORD NOD field poses
+	state = { name = "idle"				animation = "idle"       		animation_blend_time = 0.3 animation_speed = 1.0 chance = 15 looping = no }
+	state = { name = "idle"				animation = "long_idle02"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle04"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle05"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "training" animation = "idle" animation_blend_time = 0.3 looping = no chance = 1 }
+	state = { name = "training" animation = "aim_exercise" animation_blend_time = 0.3 looping = no chance = 2 }
+# END ADISCORD NOD field poses
+	pdxmesh = "ADISCORD_NOD_line_mesh"
 }
 
 entity = {
@@ -124,6 +190,15 @@ entity = {
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_2_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_2_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_2_right_entity" }
+# BEGIN ADISCORD NOD field poses
+	state = { name = "idle"				animation = "idle"       		animation_blend_time = 0.3 animation_speed = 1.0 chance = 15 looping = no }
+	state = { name = "idle"				animation = "long_idle02"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle04"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle05"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "training" animation = "idle" animation_blend_time = 0.3 looping = no chance = 1 }
+	state = { name = "training" animation = "aim_exercise" animation_blend_time = 0.3 looping = no chance = 2 }
+# END ADISCORD NOD field poses
+	pdxmesh = "ADISCORD_NOD_line_mesh"
 }
 
 entity = {
@@ -134,6 +209,15 @@ entity = {
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_3_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_3_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_3_right_entity" }
+# BEGIN ADISCORD NOD field poses
+	state = { name = "idle"				animation = "idle"       		animation_blend_time = 0.3 animation_speed = 1.0 chance = 15 looping = no }
+	state = { name = "idle"				animation = "long_idle02"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle04"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle05"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "training" animation = "idle" animation_blend_time = 0.3 looping = no chance = 1 }
+	state = { name = "training" animation = "aim_exercise" animation_blend_time = 0.3 looping = no chance = 2 }
+# END ADISCORD NOD field poses
+	pdxmesh = "ADISCORD_NOD_line_mesh"
 }
 
 entity = {
@@ -144,6 +228,15 @@ entity = {
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_4_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_4_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_4_right_entity" }
+# BEGIN ADISCORD NOD field poses
+	state = { name = "idle"				animation = "idle"       		animation_blend_time = 0.3 animation_speed = 1.0 chance = 15 looping = no }
+	state = { name = "idle"				animation = "long_idle02"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle04"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle05"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "training" animation = "idle" animation_blend_time = 0.3 looping = no chance = 1 }
+	state = { name = "training" animation = "aim_exercise" animation_blend_time = 0.3 looping = no chance = 2 }
+# END ADISCORD NOD field poses
+	pdxmesh = "ADISCORD_NOD_line_mesh"
 }
 
 entity = {
@@ -154,6 +247,15 @@ entity = {
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_5_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_5_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_5_right_entity" }
+# BEGIN ADISCORD NOD field poses
+	state = { name = "idle"				animation = "idle"       		animation_blend_time = 0.3 animation_speed = 1.0 chance = 15 looping = no }
+	state = { name = "idle"				animation = "long_idle02"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle04"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle05"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "training" animation = "idle" animation_blend_time = 0.3 looping = no chance = 1 }
+	state = { name = "training" animation = "aim_exercise" animation_blend_time = 0.3 looping = no chance = 2 }
+# END ADISCORD NOD field poses
+	pdxmesh = "ADISCORD_NOD_line_mesh"
 }
 
 entity = {
@@ -164,6 +266,15 @@ entity = {
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_6_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_6_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_6_right_entity" }
+# BEGIN ADISCORD NOD field poses
+	state = { name = "idle"				animation = "idle"       		animation_blend_time = 0.3 animation_speed = 1.0 chance = 15 looping = no }
+	state = { name = "idle"				animation = "long_idle02"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle04"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle05"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "training" animation = "idle" animation_blend_time = 0.3 looping = no chance = 1 }
+	state = { name = "training" animation = "aim_exercise" animation_blend_time = 0.3 looping = no chance = 2 }
+# END ADISCORD NOD field poses
+	pdxmesh = "ADISCORD_NOD_line_mesh"
 }
 
 entity = {
@@ -174,28 +285,55 @@ entity = {
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_7_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_7_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_7_right_entity" }
+# BEGIN ADISCORD NOD field poses
+	state = { name = "idle"				animation = "idle"       		animation_blend_time = 0.3 animation_speed = 1.0 chance = 15 looping = no }
+	state = { name = "idle"				animation = "long_idle02"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle04"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle05"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "training" animation = "idle" animation_blend_time = 0.3 looping = no chance = 1 }
+	state = { name = "training" animation = "aim_exercise" animation_blend_time = 0.3 looping = no chance = 2 }
+# END ADISCORD NOD field poses
+	pdxmesh = "ADISCORD_NOD_line_mesh"
 }
 
 entity = {
 	clone = "infantry_rifle_entity"
 	name = "VAL_infantry_entity"
-	pdxmesh = "VAL_infantry_mesh"
 
 	attach = { name = "rifle1" Right_Hand_node = "ADISCORD_infantry_weapon_0_right_entity" }
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_0_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_0_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_0_right_entity" }
+# BEGIN ADISCORD VAL native locator idle
+	state = { name = "idle"				animation = "idle"       		animation_blend_time = 0.3 animation_speed = 1.0 chance = 15 looping = no }
+	state = { name = "idle"				animation = "long_idle02" 		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle03" 		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no propagate_state = { lighter = "smoke" }
+		event = { time = 0 node="head" particle = "cigarette_smoke_particle"  keep_particle = yes }
+	}
+	state = { name = "idle"				animation = "long_idle04" 		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle05" 		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+# END ADISCORD VAL native locator idle
+	pdxmesh = "ADISCORD_VAL_regular_rifle_mesh"
 }
 
 entity = {
 	clone = "infantry_2_entity"
 	name = "VAL_infantry_2_entity"
-	pdxmesh = "VAL_infantry_mesh"
 
 	attach = { name = "rifle1" Right_Hand_node = "ADISCORD_infantry_weapon_1_right_entity" }
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_1_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_1_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_1_right_entity" }
+# BEGIN ADISCORD VAL native locator idle
+	state = { name = "idle"				animation = "idle"       		animation_blend_time = 0.3 animation_speed = 1.0 chance = 15 looping = no }
+	state = { name = "idle"				animation = "long_idle02"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle03"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no propagate_state = { lighter = "smoke" }
+		event = { time = 0 node="head" particle = "cigarette_smoke_particle"  keep_particle = yes }
+	}
+	state = { name = "idle"				animation = "long_idle04"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle05"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+# END ADISCORD VAL native locator idle
+	pdxmesh = "ADISCORD_VAL_regular_mesh"
 }
 
 entity = {
@@ -206,6 +344,7 @@ entity = {
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_2_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_2_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_2_right_entity" }
+	pdxmesh = "ADISCORD_VAL_regular_mesh"
 }
 
 entity = {
@@ -216,6 +355,7 @@ entity = {
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_3_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_3_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_3_right_entity" }
+	pdxmesh = "ADISCORD_VAL_regular_mesh"
 }
 
 entity = {
@@ -226,6 +366,7 @@ entity = {
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_4_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_4_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_4_right_entity" }
+	pdxmesh = "ADISCORD_VAL_regular_mesh"
 }
 
 entity = {
@@ -236,6 +377,7 @@ entity = {
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_5_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_5_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_5_right_entity" }
+	pdxmesh = "ADISCORD_VAL_regular_mesh"
 }
 
 entity = {
@@ -246,6 +388,7 @@ entity = {
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_6_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_6_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_6_right_entity" }
+	pdxmesh = "ADISCORD_VAL_regular_mesh"
 }
 
 entity = {
@@ -256,6 +399,7 @@ entity = {
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_7_left_entity" }
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_7_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_7_right_entity" }
+	pdxmesh = "ADISCORD_VAL_regular_mesh"
 }
 
 entity = {
@@ -272,7 +416,7 @@ entity = {
 entity = {
 	clone = "infantry_2_entity"
 	name = "CIN_infantry_2_entity"
-	pdxmesh = "ETH_irregular_infantry_mesh"
+	pdxmesh = "ETH_irregular_mg_infantry_mesh"
 
 	attach = { name = "rifle1" Right_Hand_node = "ADISCORD_infantry_weapon_1_right_entity" }
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_1_left_entity" }
@@ -354,7 +498,7 @@ entity = {
 entity = {
 	clone = "infantry_2_entity"
 	name = "OSF_infantry_2_entity"
-	pdxmesh = "ETH_irregular_infantry_mesh"
+	pdxmesh = "ETH_irregular_mg_infantry_mesh"
 
 	attach = { name = "rifle1" Right_Hand_node = "ADISCORD_infantry_weapon_1_right_entity" }
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_1_left_entity" }
@@ -436,7 +580,7 @@ entity = {
 entity = {
 	clone = "infantry_2_entity"
 	name = "APH_infantry_2_entity"
-	pdxmesh = "APH_irregular_infantry_mesh"
+	pdxmesh = "APH_irregular_mg_infantry_mesh"
 
 	attach = { name = "rifle1" Right_Hand_node = "ADISCORD_infantry_weapon_1_right_entity" }
 	attach = { name = "rifle2" Left_Hand_node = "ADISCORD_infantry_weapon_1_left_entity" }
@@ -585,3 +729,569 @@ entity = {
 	attach = { name = "rifle3" mid_back_node = "ADISCORD_infantry_weapon_7_long_idle_entity" }
 	attach = { name = "rifle4" Root_node_2 = "ADISCORD_infantry_weapon_7_right_entity" }
 }
+
+entity = {
+	clone = "STP_infantry_2_entity"
+	name = "ADISCORD_STP_party_entity"
+	pdxmesh = "ADISCORD_STP_party_mesh"
+}
+
+entity = {
+	clone = "STS_infantry_2_entity"
+	name = "ADISCORD_STS_regular_entity"
+	pdxmesh = "ADISCORD_STS_regular_mesh"
+}
+
+entity = {
+	clone = "VAL_infantry_2_entity"
+	name = "ADISCORD_VAL_regular_entity"
+	pdxmesh = "ADISCORD_VAL_regular_mesh"
+# BEGIN ADISCORD VAL native locator idle
+	state = { name = "idle"				animation = "idle"       		animation_blend_time = 0.3 animation_speed = 1.0 chance = 15 looping = no }
+	state = { name = "idle"				animation = "long_idle02"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle03"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no propagate_state = { lighter = "smoke" }
+		event = { time = 0 node="head" particle = "cigarette_smoke_particle"  keep_particle = yes }
+	}
+	state = { name = "idle"				animation = "long_idle04"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle05"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+# END ADISCORD VAL native locator idle
+}
+
+# BEGIN ADISCORD infantry forms
+entity = { clone = "STP_infantry_entity" name = "STP_ADISCORD_militia_entity" pdxmesh = "STP_infantry_hedonist_mesh" }
+entity = { clone = "STP_infantry_2_entity" name = "STP_ADISCORD_militia_2_entity" pdxmesh = "STP_infantry_hedonist_mg_mesh" }
+entity = { clone = "STP_infantry_3_entity" name = "STP_ADISCORD_militia_3_entity" pdxmesh = "STP_infantry_hedonist_mg_mesh" }
+entity = { clone = "STP_infantry_4_entity" name = "STP_ADISCORD_militia_4_entity" pdxmesh = "STP_infantry_hedonist_mg_mesh" }
+entity = { clone = "STP_infantry_5_entity" name = "STP_ADISCORD_militia_5_entity" pdxmesh = "STP_infantry_hedonist_mg_mesh" }
+entity = { clone = "STP_infantry_6_entity" name = "STP_ADISCORD_militia_6_entity" pdxmesh = "STP_infantry_hedonist_mg_mesh" }
+entity = { clone = "STP_infantry_7_entity" name = "STP_ADISCORD_militia_7_entity" pdxmesh = "STP_infantry_hedonist_mg_mesh" }
+entity = { clone = "STP_infantry_8_entity" name = "STP_ADISCORD_militia_8_entity" pdxmesh = "STP_infantry_hedonist_mg_mesh" }
+entity = { clone = "STS_infantry_entity" name = "STS_ADISCORD_militia_entity" pdxmesh = "STP_shabrat_infantry_mesh" }
+entity = { clone = "STS_infantry_2_entity" name = "STS_ADISCORD_militia_2_entity" pdxmesh = "STP_shabrat_mg_infantry_mesh" }
+entity = { clone = "STS_infantry_3_entity" name = "STS_ADISCORD_militia_3_entity" pdxmesh = "STP_shabrat_mg_infantry_mesh" }
+entity = { clone = "STS_infantry_4_entity" name = "STS_ADISCORD_militia_4_entity" pdxmesh = "STP_shabrat_mg_infantry_mesh" }
+entity = { clone = "STS_infantry_5_entity" name = "STS_ADISCORD_militia_5_entity" pdxmesh = "STP_shabrat_mg_infantry_mesh" }
+entity = { clone = "STS_infantry_6_entity" name = "STS_ADISCORD_militia_6_entity" pdxmesh = "STP_shabrat_mg_infantry_mesh" }
+entity = { clone = "STS_infantry_7_entity" name = "STS_ADISCORD_militia_7_entity" pdxmesh = "STP_shabrat_mg_infantry_mesh" }
+entity = { clone = "STS_infantry_8_entity" name = "STS_ADISCORD_militia_8_entity" pdxmesh = "STP_shabrat_mg_infantry_mesh" }
+entity = { clone = "VAL_infantry_entity" name = "VAL_ADISCORD_militia_entity" pdxmesh = "VAL_infantry_mesh"
+# BEGIN ADISCORD VAL native locator idle
+	state = { name = "idle"				animation = "idle"       		animation_blend_time = 0.3 animation_speed = 1.0 chance = 15 looping = no }
+	state = { name = "idle"				animation = "long_idle02" 		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle03" 		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no propagate_state = { lighter = "smoke" }
+		event = { time = 0 node="back_mid|head|head" particle = "cigarette_smoke_particle"  keep_particle = yes }
+	}
+	state = { name = "idle"				animation = "long_idle04" 		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle05" 		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+# END ADISCORD VAL native locator idle
+ }
+entity = { clone = "VAL_infantry_2_entity" name = "VAL_ADISCORD_militia_2_entity" pdxmesh = "VAL_infantry_mg_mesh"
+# BEGIN ADISCORD VAL native locator idle
+	state = { name = "idle"				animation = "idle"       		animation_blend_time = 0.3 animation_speed = 1.0 chance = 15 looping = no }
+	state = { name = "idle"				animation = "long_idle02"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle03"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no propagate_state = { lighter = "smoke" }
+		event = { time = 0 node="back_mid|head|head" particle = "cigarette_smoke_particle"  keep_particle = yes }
+	}
+	state = { name = "idle"				animation = "long_idle04"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle05"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+# END ADISCORD VAL native locator idle
+ }
+entity = { clone = "VAL_infantry_3_entity" name = "VAL_ADISCORD_militia_3_entity" pdxmesh = "VAL_infantry_mg_mesh"
+# BEGIN ADISCORD VAL native locator idle
+	state = { name = "idle"				animation = "idle"       		animation_blend_time = 0.3 animation_speed = 1.0 chance = 15 looping = no }
+	state = { name = "idle"				animation = "long_idle02"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle03"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no propagate_state = { lighter = "smoke" }
+		event = { time = 0 node="back_mid|head|head" particle = "cigarette_smoke_particle"  keep_particle = yes }
+	}
+	state = { name = "idle"				animation = "long_idle04"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle05"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+# END ADISCORD VAL native locator idle
+ }
+entity = { clone = "VAL_infantry_4_entity" name = "VAL_ADISCORD_militia_4_entity" pdxmesh = "VAL_infantry_mg_mesh"
+# BEGIN ADISCORD VAL native locator idle
+	state = { name = "idle"				animation = "idle"       		animation_blend_time = 0.3 animation_speed = 1.0 chance = 15 looping = no }
+	state = { name = "idle"				animation = "long_idle02"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle03"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no propagate_state = { lighter = "smoke" }
+		event = { time = 0 node="back_mid|head|head" particle = "cigarette_smoke_particle"  keep_particle = yes }
+	}
+	state = { name = "idle"				animation = "long_idle04"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle05"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+# END ADISCORD VAL native locator idle
+ }
+entity = { clone = "VAL_infantry_5_entity" name = "VAL_ADISCORD_militia_5_entity" pdxmesh = "VAL_infantry_mg_mesh"
+# BEGIN ADISCORD VAL native locator idle
+	state = { name = "idle"				animation = "idle"       		animation_blend_time = 0.3 animation_speed = 1.0 chance = 15 looping = no }
+	state = { name = "idle"				animation = "long_idle02"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle03"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no propagate_state = { lighter = "smoke" }
+		event = { time = 0 node="back_mid|head|head" particle = "cigarette_smoke_particle"  keep_particle = yes }
+	}
+	state = { name = "idle"				animation = "long_idle04"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle05"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+# END ADISCORD VAL native locator idle
+ }
+entity = { clone = "VAL_infantry_6_entity" name = "VAL_ADISCORD_militia_6_entity" pdxmesh = "VAL_infantry_mg_mesh"
+# BEGIN ADISCORD VAL native locator idle
+	state = { name = "idle"				animation = "idle"       		animation_blend_time = 0.3 animation_speed = 1.0 chance = 15 looping = no }
+	state = { name = "idle"				animation = "long_idle02"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle03"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no propagate_state = { lighter = "smoke" }
+		event = { time = 0 node="back_mid|head|head" particle = "cigarette_smoke_particle"  keep_particle = yes }
+	}
+	state = { name = "idle"				animation = "long_idle04"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle05"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+# END ADISCORD VAL native locator idle
+ }
+entity = { clone = "VAL_infantry_7_entity" name = "VAL_ADISCORD_militia_7_entity" pdxmesh = "VAL_infantry_mg_mesh"
+# BEGIN ADISCORD VAL native locator idle
+	state = { name = "idle"				animation = "idle"       		animation_blend_time = 0.3 animation_speed = 1.0 chance = 15 looping = no }
+	state = { name = "idle"				animation = "long_idle02"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle03"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no propagate_state = { lighter = "smoke" }
+		event = { time = 0 node="back_mid|head|head" particle = "cigarette_smoke_particle"  keep_particle = yes }
+	}
+	state = { name = "idle"				animation = "long_idle04"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle05"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+# END ADISCORD VAL native locator idle
+ }
+entity = { clone = "VAL_infantry_8_entity" name = "VAL_ADISCORD_militia_8_entity" pdxmesh = "VAL_infantry_mg_mesh"
+# BEGIN ADISCORD VAL native locator idle
+	state = { name = "idle"				animation = "idle"       		animation_blend_time = 0.3 animation_speed = 1.0 chance = 15 looping = no }
+	state = { name = "idle"				animation = "long_idle02"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle03"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no propagate_state = { lighter = "smoke" }
+		event = { time = 0 node="back_mid|head|head" particle = "cigarette_smoke_particle"  keep_particle = yes }
+	}
+	state = { name = "idle"				animation = "long_idle04"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+	state = { name = "idle"				animation = "long_idle05"		animation_blend_time = 0.3 animation_speed = 1.0 chance = 1 looping = no }
+# END ADISCORD VAL native locator idle
+ }
+entity = { clone = "STP_infantry_entity" name = "ADISCORD_WRK_line_infantry_entity" pdxmesh = "ADISCORD_WRK_line_rifle_mesh" }
+entity = { clone = "ADISCORD_WRK_line_infantry_entity" name = "WRK_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_entity" name = "WKR_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_entity" name = "WRK_vorkerland_emergency_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_entity" name = "WRK_vorkerland_utilitarian_republic_infantry_entity" }
+entity = { clone = "STP_infantry_2_entity" name = "ADISCORD_WRK_line_infantry_2_entity" pdxmesh = "ADISCORD_WRK_line_mesh" }
+entity = { clone = "ADISCORD_WRK_line_infantry_2_entity" name = "WRK_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_2_entity" name = "WKR_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_2_entity" name = "WRK_vorkerland_emergency_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_2_entity" name = "WRK_vorkerland_utilitarian_republic_infantry_2_entity" }
+entity = { clone = "STP_infantry_3_entity" name = "ADISCORD_WRK_line_infantry_3_entity" pdxmesh = "ADISCORD_WRK_line_mesh" }
+entity = { clone = "ADISCORD_WRK_line_infantry_3_entity" name = "WRK_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_3_entity" name = "WKR_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_3_entity" name = "WRK_vorkerland_emergency_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_3_entity" name = "WRK_vorkerland_utilitarian_republic_infantry_3_entity" }
+entity = { clone = "STP_infantry_4_entity" name = "ADISCORD_WRK_line_infantry_4_entity" pdxmesh = "ADISCORD_WRK_line_mesh" }
+entity = { clone = "ADISCORD_WRK_line_infantry_4_entity" name = "WRK_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_4_entity" name = "WKR_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_4_entity" name = "WRK_vorkerland_emergency_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_4_entity" name = "WRK_vorkerland_utilitarian_republic_infantry_4_entity" }
+entity = { clone = "STP_infantry_5_entity" name = "ADISCORD_WRK_line_infantry_5_entity" pdxmesh = "ADISCORD_WRK_line_mesh" }
+entity = { clone = "ADISCORD_WRK_line_infantry_5_entity" name = "WRK_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_5_entity" name = "WKR_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_5_entity" name = "WRK_vorkerland_emergency_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_5_entity" name = "WRK_vorkerland_utilitarian_republic_infantry_5_entity" }
+entity = { clone = "STP_infantry_6_entity" name = "ADISCORD_WRK_line_infantry_6_entity" pdxmesh = "ADISCORD_WRK_line_mesh" }
+entity = { clone = "ADISCORD_WRK_line_infantry_6_entity" name = "WRK_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_6_entity" name = "WKR_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_6_entity" name = "WRK_vorkerland_emergency_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_6_entity" name = "WRK_vorkerland_utilitarian_republic_infantry_6_entity" }
+entity = { clone = "STP_infantry_7_entity" name = "ADISCORD_WRK_line_infantry_7_entity" pdxmesh = "ADISCORD_WRK_line_mesh" }
+entity = { clone = "ADISCORD_WRK_line_infantry_7_entity" name = "WRK_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_7_entity" name = "WKR_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_7_entity" name = "WRK_vorkerland_emergency_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_7_entity" name = "WRK_vorkerland_utilitarian_republic_infantry_7_entity" }
+entity = { clone = "STP_infantry_8_entity" name = "ADISCORD_WRK_line_infantry_8_entity" pdxmesh = "ADISCORD_WRK_line_mesh" }
+entity = { clone = "ADISCORD_WRK_line_infantry_8_entity" name = "WRK_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_8_entity" name = "WKR_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_8_entity" name = "WRK_vorkerland_emergency_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_line_infantry_8_entity" name = "WRK_vorkerland_utilitarian_republic_infantry_8_entity" }
+entity = { clone = "STP_infantry_entity" name = "ADISCORD_TVA_technical_infantry_entity" pdxmesh = "ADISCORD_TVA_technical_rifle_mesh" }
+entity = { clone = "ADISCORD_TVA_technical_infantry_entity" name = "TVA_infantry_entity" }
+entity = { clone = "STP_infantry_2_entity" name = "ADISCORD_TVA_technical_infantry_2_entity" pdxmesh = "ADISCORD_TVA_technical_mesh" }
+entity = { clone = "ADISCORD_TVA_technical_infantry_2_entity" name = "TVA_infantry_2_entity" }
+entity = { clone = "STP_infantry_3_entity" name = "ADISCORD_TVA_technical_infantry_3_entity" pdxmesh = "ADISCORD_TVA_technical_mesh" }
+entity = { clone = "ADISCORD_TVA_technical_infantry_3_entity" name = "TVA_infantry_3_entity" }
+entity = { clone = "STP_infantry_4_entity" name = "ADISCORD_TVA_technical_infantry_4_entity" pdxmesh = "ADISCORD_TVA_technical_mesh" }
+entity = { clone = "ADISCORD_TVA_technical_infantry_4_entity" name = "TVA_infantry_4_entity" }
+entity = { clone = "STP_infantry_5_entity" name = "ADISCORD_TVA_technical_infantry_5_entity" pdxmesh = "ADISCORD_TVA_technical_mesh" }
+entity = { clone = "ADISCORD_TVA_technical_infantry_5_entity" name = "TVA_infantry_5_entity" }
+entity = { clone = "STP_infantry_6_entity" name = "ADISCORD_TVA_technical_infantry_6_entity" pdxmesh = "ADISCORD_TVA_technical_mesh" }
+entity = { clone = "ADISCORD_TVA_technical_infantry_6_entity" name = "TVA_infantry_6_entity" }
+entity = { clone = "STP_infantry_7_entity" name = "ADISCORD_TVA_technical_infantry_7_entity" pdxmesh = "ADISCORD_TVA_technical_mesh" }
+entity = { clone = "ADISCORD_TVA_technical_infantry_7_entity" name = "TVA_infantry_7_entity" }
+entity = { clone = "STP_infantry_8_entity" name = "ADISCORD_TVA_technical_infantry_8_entity" pdxmesh = "ADISCORD_TVA_technical_mesh" }
+entity = { clone = "ADISCORD_TVA_technical_infantry_8_entity" name = "TVA_infantry_8_entity" }
+entity = { clone = "STP_infantry_entity" name = "ADISCORD_VAD_line_infantry_entity" pdxmesh = "ADISCORD_VAD_line_rifle_mesh" }
+entity = { clone = "ADISCORD_VAD_line_infantry_entity" name = "VAD_infantry_entity" }
+entity = { clone = "ADISCORD_VAD_line_infantry_entity" name = "VAD_vorkerland_restoration_infantry_entity" }
+entity = { clone = "ADISCORD_VAD_line_infantry_entity" name = "WRK_vorkerland_joint_government_infantry_entity" }
+entity = { clone = "STP_infantry_2_entity" name = "ADISCORD_VAD_line_infantry_2_entity" pdxmesh = "ADISCORD_VAD_line_mesh" }
+entity = { clone = "ADISCORD_VAD_line_infantry_2_entity" name = "VAD_infantry_2_entity" }
+entity = { clone = "ADISCORD_VAD_line_infantry_2_entity" name = "VAD_vorkerland_restoration_infantry_2_entity" }
+entity = { clone = "ADISCORD_VAD_line_infantry_2_entity" name = "WRK_vorkerland_joint_government_infantry_2_entity" }
+entity = { clone = "STP_infantry_3_entity" name = "ADISCORD_VAD_line_infantry_3_entity" pdxmesh = "ADISCORD_VAD_line_mesh" }
+entity = { clone = "ADISCORD_VAD_line_infantry_3_entity" name = "VAD_infantry_3_entity" }
+entity = { clone = "ADISCORD_VAD_line_infantry_3_entity" name = "VAD_vorkerland_restoration_infantry_3_entity" }
+entity = { clone = "ADISCORD_VAD_line_infantry_3_entity" name = "WRK_vorkerland_joint_government_infantry_3_entity" }
+entity = { clone = "STP_infantry_4_entity" name = "ADISCORD_VAD_line_infantry_4_entity" pdxmesh = "ADISCORD_VAD_line_mesh" }
+entity = { clone = "ADISCORD_VAD_line_infantry_4_entity" name = "VAD_infantry_4_entity" }
+entity = { clone = "ADISCORD_VAD_line_infantry_4_entity" name = "VAD_vorkerland_restoration_infantry_4_entity" }
+entity = { clone = "ADISCORD_VAD_line_infantry_4_entity" name = "WRK_vorkerland_joint_government_infantry_4_entity" }
+entity = { clone = "STP_infantry_5_entity" name = "ADISCORD_VAD_line_infantry_5_entity" pdxmesh = "ADISCORD_VAD_line_mesh" }
+entity = { clone = "ADISCORD_VAD_line_infantry_5_entity" name = "VAD_infantry_5_entity" }
+entity = { clone = "ADISCORD_VAD_line_infantry_5_entity" name = "VAD_vorkerland_restoration_infantry_5_entity" }
+entity = { clone = "ADISCORD_VAD_line_infantry_5_entity" name = "WRK_vorkerland_joint_government_infantry_5_entity" }
+entity = { clone = "STP_infantry_6_entity" name = "ADISCORD_VAD_line_infantry_6_entity" pdxmesh = "ADISCORD_VAD_line_mesh" }
+entity = { clone = "ADISCORD_VAD_line_infantry_6_entity" name = "VAD_infantry_6_entity" }
+entity = { clone = "ADISCORD_VAD_line_infantry_6_entity" name = "VAD_vorkerland_restoration_infantry_6_entity" }
+entity = { clone = "ADISCORD_VAD_line_infantry_6_entity" name = "WRK_vorkerland_joint_government_infantry_6_entity" }
+entity = { clone = "STP_infantry_7_entity" name = "ADISCORD_VAD_line_infantry_7_entity" pdxmesh = "ADISCORD_VAD_line_mesh" }
+entity = { clone = "ADISCORD_VAD_line_infantry_7_entity" name = "VAD_infantry_7_entity" }
+entity = { clone = "ADISCORD_VAD_line_infantry_7_entity" name = "VAD_vorkerland_restoration_infantry_7_entity" }
+entity = { clone = "ADISCORD_VAD_line_infantry_7_entity" name = "WRK_vorkerland_joint_government_infantry_7_entity" }
+entity = { clone = "STP_infantry_8_entity" name = "ADISCORD_VAD_line_infantry_8_entity" pdxmesh = "ADISCORD_VAD_line_mesh" }
+entity = { clone = "ADISCORD_VAD_line_infantry_8_entity" name = "VAD_infantry_8_entity" }
+entity = { clone = "ADISCORD_VAD_line_infantry_8_entity" name = "VAD_vorkerland_restoration_infantry_8_entity" }
+entity = { clone = "ADISCORD_VAD_line_infantry_8_entity" name = "WRK_vorkerland_joint_government_infantry_8_entity" }
+entity = { clone = "STP_infantry_entity" name = "ADISCORD_WRK_fragment_infantry_entity" pdxmesh = "ADISCORD_WRK_fragment_rifle_mesh" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "WTD_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "EYR_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "EGC_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "RIV_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "REV_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "YOR_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "NDN_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "SWB_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "VHV_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "OSV_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "WPA_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "WPS_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "PSD_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "EBA_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "DVA_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "SRA_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "ZTA_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "SLA_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "RZA_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "MLR_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "ERT_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "IRT_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "SCA_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "TGD_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "IBA_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "IBL_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "CSL_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "NAM_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "DAN_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "ZAO_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "PWR_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "VLA_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "ROM_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "SOL_infantry_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_entity" name = "TRU_infantry_entity" }
+entity = { clone = "STP_infantry_2_entity" name = "ADISCORD_WRK_fragment_infantry_2_entity" pdxmesh = "ADISCORD_WRK_fragment_mesh" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "WTD_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "EYR_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "EGC_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "RIV_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "REV_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "YOR_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "NDN_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "SWB_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "VHV_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "OSV_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "WPA_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "WPS_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "PSD_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "EBA_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "DVA_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "SRA_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "ZTA_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "SLA_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "RZA_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "MLR_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "ERT_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "IRT_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "SCA_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "TGD_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "IBA_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "IBL_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "CSL_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "NAM_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "DAN_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "ZAO_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "PWR_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "VLA_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "ROM_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "SOL_infantry_2_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_2_entity" name = "TRU_infantry_2_entity" }
+entity = { clone = "STP_infantry_3_entity" name = "ADISCORD_WRK_fragment_infantry_3_entity" pdxmesh = "ADISCORD_WRK_fragment_mesh" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "WTD_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "EYR_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "EGC_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "RIV_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "REV_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "YOR_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "NDN_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "SWB_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "VHV_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "OSV_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "WPA_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "WPS_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "PSD_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "EBA_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "DVA_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "SRA_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "ZTA_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "SLA_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "RZA_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "MLR_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "ERT_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "IRT_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "SCA_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "TGD_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "IBA_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "IBL_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "CSL_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "NAM_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "DAN_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "ZAO_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "PWR_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "VLA_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "ROM_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "SOL_infantry_3_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_3_entity" name = "TRU_infantry_3_entity" }
+entity = { clone = "STP_infantry_4_entity" name = "ADISCORD_WRK_fragment_infantry_4_entity" pdxmesh = "ADISCORD_WRK_fragment_mesh" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "WTD_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "EYR_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "EGC_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "RIV_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "REV_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "YOR_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "NDN_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "SWB_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "VHV_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "OSV_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "WPA_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "WPS_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "PSD_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "EBA_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "DVA_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "SRA_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "ZTA_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "SLA_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "RZA_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "MLR_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "ERT_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "IRT_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "SCA_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "TGD_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "IBA_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "IBL_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "CSL_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "NAM_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "DAN_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "ZAO_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "PWR_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "VLA_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "ROM_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "SOL_infantry_4_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_4_entity" name = "TRU_infantry_4_entity" }
+entity = { clone = "STP_infantry_5_entity" name = "ADISCORD_WRK_fragment_infantry_5_entity" pdxmesh = "ADISCORD_WRK_fragment_mesh" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "WTD_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "EYR_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "EGC_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "RIV_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "REV_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "YOR_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "NDN_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "SWB_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "VHV_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "OSV_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "WPA_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "WPS_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "PSD_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "EBA_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "DVA_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "SRA_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "ZTA_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "SLA_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "RZA_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "MLR_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "ERT_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "IRT_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "SCA_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "TGD_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "IBA_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "IBL_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "CSL_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "NAM_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "DAN_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "ZAO_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "PWR_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "VLA_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "ROM_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "SOL_infantry_5_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_5_entity" name = "TRU_infantry_5_entity" }
+entity = { clone = "STP_infantry_6_entity" name = "ADISCORD_WRK_fragment_infantry_6_entity" pdxmesh = "ADISCORD_WRK_fragment_mesh" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "WTD_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "EYR_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "EGC_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "RIV_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "REV_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "YOR_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "NDN_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "SWB_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "VHV_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "OSV_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "WPA_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "WPS_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "PSD_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "EBA_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "DVA_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "SRA_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "ZTA_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "SLA_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "RZA_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "MLR_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "ERT_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "IRT_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "SCA_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "TGD_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "IBA_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "IBL_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "CSL_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "NAM_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "DAN_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "ZAO_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "PWR_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "VLA_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "ROM_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "SOL_infantry_6_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_6_entity" name = "TRU_infantry_6_entity" }
+entity = { clone = "STP_infantry_7_entity" name = "ADISCORD_WRK_fragment_infantry_7_entity" pdxmesh = "ADISCORD_WRK_fragment_mesh" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "WTD_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "EYR_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "EGC_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "RIV_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "REV_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "YOR_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "NDN_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "SWB_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "VHV_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "OSV_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "WPA_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "WPS_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "PSD_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "EBA_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "DVA_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "SRA_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "ZTA_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "SLA_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "RZA_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "MLR_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "ERT_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "IRT_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "SCA_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "TGD_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "IBA_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "IBL_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "CSL_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "NAM_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "DAN_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "ZAO_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "PWR_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "VLA_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "ROM_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "SOL_infantry_7_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_7_entity" name = "TRU_infantry_7_entity" }
+entity = { clone = "STP_infantry_8_entity" name = "ADISCORD_WRK_fragment_infantry_8_entity" pdxmesh = "ADISCORD_WRK_fragment_mesh" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "WTD_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "EYR_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "EGC_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "RIV_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "REV_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "YOR_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "NDN_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "SWB_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "VHV_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "OSV_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "WPA_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "WPS_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "PSD_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "EBA_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "DVA_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "SRA_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "ZTA_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "SLA_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "RZA_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "MLR_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "ERT_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "IRT_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "SCA_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "TGD_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "IBA_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "IBL_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "CSL_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "NAM_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "DAN_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "ZAO_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "PWR_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "VLA_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "ROM_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "SOL_infantry_8_entity" }
+entity = { clone = "ADISCORD_WRK_fragment_infantry_8_entity" name = "TRU_infantry_8_entity" }
+entity = { clone = "STP_infantry_entity" name = "ADISCORD_IVN_line_infantry_entity" pdxmesh = "ADISCORD_IVN_line_rifle_mesh" }
+entity = { clone = "ADISCORD_IVN_line_infantry_entity" name = "IVN_infantry_entity" }
+entity = { clone = "STP_infantry_2_entity" name = "ADISCORD_IVN_line_infantry_2_entity" pdxmesh = "ADISCORD_IVN_line_mesh" }
+entity = { clone = "ADISCORD_IVN_line_infantry_2_entity" name = "IVN_infantry_2_entity" }
+entity = { clone = "STP_infantry_3_entity" name = "ADISCORD_IVN_line_infantry_3_entity" pdxmesh = "ADISCORD_IVN_line_mesh" }
+entity = { clone = "ADISCORD_IVN_line_infantry_3_entity" name = "IVN_infantry_3_entity" }
+entity = { clone = "STP_infantry_4_entity" name = "ADISCORD_IVN_line_infantry_4_entity" pdxmesh = "ADISCORD_IVN_line_mesh" }
+entity = { clone = "ADISCORD_IVN_line_infantry_4_entity" name = "IVN_infantry_4_entity" }
+entity = { clone = "STP_infantry_5_entity" name = "ADISCORD_IVN_line_infantry_5_entity" pdxmesh = "ADISCORD_IVN_line_mesh" }
+entity = { clone = "ADISCORD_IVN_line_infantry_5_entity" name = "IVN_infantry_5_entity" }
+entity = { clone = "STP_infantry_6_entity" name = "ADISCORD_IVN_line_infantry_6_entity" pdxmesh = "ADISCORD_IVN_line_mesh" }
+entity = { clone = "ADISCORD_IVN_line_infantry_6_entity" name = "IVN_infantry_6_entity" }
+entity = { clone = "STP_infantry_7_entity" name = "ADISCORD_IVN_line_infantry_7_entity" pdxmesh = "ADISCORD_IVN_line_mesh" }
+entity = { clone = "ADISCORD_IVN_line_infantry_7_entity" name = "IVN_infantry_7_entity" }
+entity = { clone = "STP_infantry_8_entity" name = "ADISCORD_IVN_line_infantry_8_entity" pdxmesh = "ADISCORD_IVN_line_mesh" }
+entity = { clone = "ADISCORD_IVN_line_infantry_8_entity" name = "IVN_infantry_8_entity" }
+entity = { clone = "STP_infantry_entity" name = "ADISCORD_NOD_line_infantry_entity" pdxmesh = "ADISCORD_NOD_line_rifle_mesh" }
+entity = { clone = "STP_infantry_2_entity" name = "ADISCORD_NOD_line_infantry_2_entity" pdxmesh = "ADISCORD_NOD_line_mesh" }
+entity = { clone = "STP_infantry_3_entity" name = "ADISCORD_NOD_line_infantry_3_entity" pdxmesh = "ADISCORD_NOD_line_mesh" }
+entity = { clone = "STP_infantry_4_entity" name = "ADISCORD_NOD_line_infantry_4_entity" pdxmesh = "ADISCORD_NOD_line_mesh" }
+entity = { clone = "STP_infantry_5_entity" name = "ADISCORD_NOD_line_infantry_5_entity" pdxmesh = "ADISCORD_NOD_line_mesh" }
+entity = { clone = "STP_infantry_6_entity" name = "ADISCORD_NOD_line_infantry_6_entity" pdxmesh = "ADISCORD_NOD_line_mesh" }
+entity = { clone = "STP_infantry_7_entity" name = "ADISCORD_NOD_line_infantry_7_entity" pdxmesh = "ADISCORD_NOD_line_mesh" }
+entity = { clone = "STP_infantry_8_entity" name = "ADISCORD_NOD_line_infantry_8_entity" pdxmesh = "ADISCORD_NOD_line_mesh" }
+entity = { clone = "STP_infantry_entity" name = "ADISCORD_SRP_highland_infantry_entity" pdxmesh = "ADISCORD_SRP_highland_rifle_mesh" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_entity" name = "SRP_infantry_entity" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_entity" name = "SRP_ADISCORD_militia_entity" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_entity" name = "SRP_mountaineers_entity" }
+entity = { clone = "STP_infantry_2_entity" name = "ADISCORD_SRP_highland_infantry_2_entity" pdxmesh = "ADISCORD_SRP_highland_mesh" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_2_entity" name = "SRP_infantry_2_entity" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_2_entity" name = "SRP_ADISCORD_militia_2_entity" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_2_entity" name = "SRP_mountaineers_2_entity" }
+entity = { clone = "STP_infantry_3_entity" name = "ADISCORD_SRP_highland_infantry_3_entity" pdxmesh = "ADISCORD_SRP_highland_mesh" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_3_entity" name = "SRP_infantry_3_entity" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_3_entity" name = "SRP_ADISCORD_militia_3_entity" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_3_entity" name = "SRP_mountaineers_3_entity" }
+entity = { clone = "STP_infantry_4_entity" name = "ADISCORD_SRP_highland_infantry_4_entity" pdxmesh = "ADISCORD_SRP_highland_mesh" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_4_entity" name = "SRP_infantry_4_entity" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_4_entity" name = "SRP_ADISCORD_militia_4_entity" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_4_entity" name = "SRP_mountaineers_4_entity" }
+entity = { clone = "STP_infantry_5_entity" name = "ADISCORD_SRP_highland_infantry_5_entity" pdxmesh = "ADISCORD_SRP_highland_mesh" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_5_entity" name = "SRP_infantry_5_entity" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_5_entity" name = "SRP_ADISCORD_militia_5_entity" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_5_entity" name = "SRP_mountaineers_5_entity" }
+entity = { clone = "STP_infantry_6_entity" name = "ADISCORD_SRP_highland_infantry_6_entity" pdxmesh = "ADISCORD_SRP_highland_mesh" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_6_entity" name = "SRP_infantry_6_entity" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_6_entity" name = "SRP_ADISCORD_militia_6_entity" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_6_entity" name = "SRP_mountaineers_6_entity" }
+entity = { clone = "STP_infantry_7_entity" name = "ADISCORD_SRP_highland_infantry_7_entity" pdxmesh = "ADISCORD_SRP_highland_mesh" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_7_entity" name = "SRP_infantry_7_entity" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_7_entity" name = "SRP_ADISCORD_militia_7_entity" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_7_entity" name = "SRP_mountaineers_7_entity" }
+entity = { clone = "STP_infantry_8_entity" name = "ADISCORD_SRP_highland_infantry_8_entity" pdxmesh = "ADISCORD_SRP_highland_mesh" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_8_entity" name = "SRP_infantry_8_entity" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_8_entity" name = "SRP_ADISCORD_militia_8_entity" }
+entity = { clone = "ADISCORD_SRP_highland_infantry_8_entity" name = "SRP_mountaineers_8_entity" }
+# END ADISCORD infantry forms

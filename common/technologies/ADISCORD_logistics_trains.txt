@@ -385,6 +385,7 @@ technologies = {
 		supply_consumption_factor = -0.012
 		land_reinforce_rate = 0.006
 		path = { leads_to_tech = ADISCORD_tech_standardized_transport_columns research_cost_coeff = 1 }
+		enable_equipments = { motorized_equipment_1 }
 		research_cost = 0.55
 		start_year = 2155
 		folder = {
@@ -392,7 +393,7 @@ technologies = {
 			position = { x = 3 y = 2 }
 		}
 		ai_will_do = {
-			factor = 30
+			factor = 40.5
 			modifier = { factor = 1.25 has_war = yes }
 			modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }
 		}

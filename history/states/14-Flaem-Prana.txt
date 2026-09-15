@@ -4,14 +4,26 @@ state={
 	provinces={
 		2 75 5421 8540 16359 16373 16381 
 	}
-	manpower=1253
+	manpower=720000
 	buildings_max_level_factor=1.000
-	state_category=pastoral
+	state_category=town
 	local_supplies=0.000
 
 	history = {
 		owner = COF
 		add_core_of = COF
+		buildings = {
+			infrastructure = 2
+			industrial_complex = 1
+			arms_factory = 2
+		}
+		victory_points = { 75 5 }
+		victory_points = { 2 3 }
+		victory_points = { 5421 1 }
+	}
 
+	resources = {
+		aluminium = 2
+		steel = 8
 	}
 }

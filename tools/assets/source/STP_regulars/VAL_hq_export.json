@@ -1,0 +1,16 @@
+[
+  {
+    "name": "generic_army_headquartersShape-000",
+    "vertices": 19332,
+    "triangles": 6444,
+    "bones": 33,
+    "influences": 4
+  },
+  {
+    "name": "Contoured officer helmet",
+    "vertices": 5108,
+    "triangles": 5692,
+    "bones": 33,
+    "influences": 4
+  }
+]

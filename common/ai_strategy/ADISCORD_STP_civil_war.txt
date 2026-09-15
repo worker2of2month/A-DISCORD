@@ -1,0 +1,44 @@
+STP_cw_defend_fada = {
+	allowed = { original_tag = STP }
+	enable = { has_global_flag = STP_cw_started has_war_with = STS }
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = put_unit_buffers
+		ratio = 0.25
+		states = { 28 }
+		subtract_invasions_from_need = yes
+		subtract_fronts_from_need = yes
+	}
+}
+
+STS_cw_defend_abilia = {
+	allowed = { original_tag = STS }
+	enable = { has_global_flag = STP_cw_started has_war = yes }
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = put_unit_buffers
+		ratio = 0.20
+		states = { 1 2 29 }
+		subtract_invasions_from_need = yes
+		subtract_fronts_from_need = yes
+	}
+}
+
+STP_cw_territorial_army = {
+	allowed = { OR = { original_tag = STP original_tag = STS original_tag = SRP } }
+	enable = {
+		OR = {
+			AND = { has_global_flag = STP_cw_started NOT = { has_global_flag = STP_cw_union_wars_finished } }
+			has_war = yes
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = role_ratio id = militias value = 100 }
+}
+
+STP_cw_border_territorial_armies = {
+	allowed = { OR = { original_tag = NOD original_tag = YPR original_tag = COF original_tag = TFF original_tag = VAL } }
+	enable = { has_war = yes }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = role_ratio id = militias value = 100 }
+}

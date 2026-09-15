@@ -79,24 +79,9 @@ objectTypes = {
 }
 
 objectTypes = {
-	pdxmesh = {
-		name = "skyscraper1_mesh"
-		file = "gfx/models/buildings/skyscraper1.mesh"		
-		scale = 1.0
-		cull_distance = 400
-	}
-	pdxmesh = {
-		name = "skyscraper2_mesh"
-		file = "gfx/models/buildings/skyscraper2.mesh"		
-		scale = 1.0
-		cull_distance = 400
-	}
-	pdxmesh = {
-		name = "skyscraper3_mesh"
-		file = "gfx/models/buildings/skyscraper3.mesh"		
-		scale = 1.0
-		cull_distance = 400
-	}
+
+
+
 	pdxmesh = {
 		name = "cityblock_mesh"
 		file = "gfx/models/buildings/city_4_04.mesh"		
@@ -128,3 +113,73 @@ objectTypes = {
 		cull_distance = 400
 	}
 }
+
+objectTypes = {
+	pdxmesh = {
+		name = "ADISCORD_unity_tower_destruction_mesh"
+		file = "gfx/models/buildings/ADISCORD_unity_tower/ADISCORD_unity_tower_destruction.mesh"
+		scale = 1
+		cull_distance = 2000.0
+		animation = { id = "collapse" type = "ADISCORD_unity_tower_collapse_animation" }
+		animation = { id = "ruins" type = "ADISCORD_unity_tower_ruins_animation" }
+	}
+}
+
+# BEGIN ADISCORD Vorkensberg city
+objectTypes = {
+	pdxmesh = {
+		name = "ADISCORD_city_tower_admin_mesh"
+		file = "gfx/models/buildings/ADISCORD_city/ADISCORD_city_tower_admin.mesh"
+		scale = 1
+		cull_distance = 600
+	}
+	pdxmesh = {
+		name = "ADISCORD_city_tower_business_mesh"
+		file = "gfx/models/buildings/ADISCORD_city/ADISCORD_city_tower_business.mesh"
+		scale = 1
+		cull_distance = 600
+	}
+	pdxmesh = {
+		name = "ADISCORD_city_tower_residential_mesh"
+		file = "gfx/models/buildings/ADISCORD_city/ADISCORD_city_tower_residential.mesh"
+		scale = 1
+		cull_distance = 600
+	}
+	pdxmesh = {
+		name = "ADISCORD_city_quarter_business_mesh"
+		file = "gfx/models/buildings/ADISCORD_city/ADISCORD_city_quarter_business.mesh"
+		scale = 1
+		cull_distance = 600
+	}
+	pdxmesh = {
+		name = "ADISCORD_city_quarter_mixed_mesh"
+		file = "gfx/models/buildings/ADISCORD_city/ADISCORD_city_quarter_mixed.mesh"
+		scale = 1
+		cull_distance = 600
+	}
+	pdxmesh = {
+		name = "ADISCORD_city_quarter_residential_mesh"
+		file = "gfx/models/buildings/ADISCORD_city/ADISCORD_city_quarter_residential.mesh"
+		scale = 1
+		cull_distance = 600
+	}
+	pdxmesh = {
+		name = "ADISCORD_city_stelander_spire_mesh"
+		file = "gfx/models/buildings/ADISCORD_city/ADISCORD_city_stelander_spire.mesh"
+		scale = 1
+		cull_distance = 600
+	}
+	pdxmesh = {
+		name = "ADISCORD_city_stelander_twin_mesh"
+		file = "gfx/models/buildings/ADISCORD_city/ADISCORD_city_stelander_twin.mesh"
+		scale = 1
+		cull_distance = 600
+	}
+	pdxmesh = {
+		name = "ADISCORD_city_stelander_arcology_mesh"
+		file = "gfx/models/buildings/ADISCORD_city/ADISCORD_city_stelander_arcology.mesh"
+		scale = 1
+		cull_distance = 600
+	}
+}
+# END ADISCORD Vorkensberg city

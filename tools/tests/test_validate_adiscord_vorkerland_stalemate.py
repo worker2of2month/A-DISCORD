@@ -7,6 +7,7 @@ import unittest
 from pathlib import Path
 
 from tools.validators.validate_adiscord_vorkerland_stalemate import (
+    _read,
     ACTIVE_FLAGS,
     EFFECTS,
     ON_ACTIONS,
@@ -24,7 +25,7 @@ def _fixture() -> tuple[tempfile.TemporaryDirectory[str], Path]:
         source = ROOT / relative
         target = root / relative
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_bytes(source.read_bytes())
+        target.write_text(_read(ROOT, relative), encoding="utf-8-sig" if source.read_bytes().startswith(b"\xef\xbb\xbf") else "utf-8")
     return temporary, root
 
 
@@ -72,7 +73,7 @@ class VorkerlandStalemateValidatorTests(unittest.TestCase):
     def test_ai_only_actual_war_gate_is_required(self) -> None:
         temporary, root = _fixture()
         self.addCleanup(temporary.cleanup)
-        trigger_path = root / "common/scripted_triggers/ADISCORD_vorkerland_stalemate_triggers.txt"
+        trigger_path = root / "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"
         text = trigger_path.read_text(encoding="utf-8").replace("\tis_ai = yes\n", "", 1)
         text = text.replace("has_war_with = EYR", "has_opinion = EYR", 1)
         trigger_path.write_text(text, encoding="utf-8")

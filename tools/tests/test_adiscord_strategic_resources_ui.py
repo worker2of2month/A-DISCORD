@@ -406,12 +406,17 @@ class StrategicResourcesUIContracts(unittest.TestCase):
             self.assertEqual(len(visible), 1, owner_name)
             self.assertEqual(direct_scalar(visible[0].value, "always"), "yes", owner_name)
         economy_owner = direct(scripted, "ADISCORD_economy_topbar_script")[0].value
+        self.assertEqual(direct_scalar(economy_owner, "dirty"), "ADISCORD_economy_gui_update_var")
         self.assertEqual(
             direct_scalar(economy_owner, "parent_window_token"),
             "top_bar",
         )
         treasury_owner = direct(scripted, "ADISCORD_economy_treasury_topbar_script")[0].value
         self.assertEqual(direct_scalar(treasury_owner, "parent_window_token"), "top_bar")
+        self.assertIsNone(
+            direct_scalar(treasury_owner, "dirty"),
+            "Weekly settlements change treasury without invalidating the dashboard; the readout must stay live",
+        )
         treasury_effects = direct(treasury_owner, "effects")
         self.assertEqual(len(treasury_effects), 1)
         open_click = direct(
@@ -425,6 +430,7 @@ class StrategicResourcesUIContracts(unittest.TestCase):
         )
 
         dashboard = direct(scripted, "ADISCORD_economy_dashboard_script")[0].value
+        self.assertEqual(direct_scalar(dashboard, "dirty"), "ADISCORD_economy_gui_update_var")
         trigger_blocks = direct(dashboard, "triggers")
         self.assertEqual(len(trigger_blocks), 1)
         mutation_controls = (

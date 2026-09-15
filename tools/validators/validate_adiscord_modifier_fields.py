@@ -61,8 +61,8 @@ ICON_PREFIXES = ("GFX_idea_", "GFX_modifiers_", "GFX_goal_", "GFX_decision_")
 # the claim-strength modifier the phase layer applies every month.
 COVERED_GLOBS = (
     "common/dynamic_modifiers/ADISCORD_vorkerland_*.txt",
-    "common/ideas/ADISCORD_vorkerland_collapse_ideas.txt",
-    "common/ideas/ADISCORD_vorkerland_focus_expansion_ideas.txt",
+    "common/ideas/ADISCORD_vorkerland_ideas.txt",
+    "common/ideas/ADISCORD_vorkerland_ideas.txt",
 )
 
 # Scripted effects that may write the variables our dynamic modifiers read. A

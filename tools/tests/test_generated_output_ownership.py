@@ -38,6 +38,8 @@ REQUIRED_FAMILIES = {
     "decision_ui_assets",
     "deployment_ui_assets",
     "diplomacy_ui_assets",
+    "event_ui_assets",
+    "event_pictures",
     "production_ui_assets",
     "doctrine_system",
     "exclusion_zone_boundaries",
@@ -46,6 +48,7 @@ REQUIRED_FAMILIES = {
     "island_administration_icon",
     "ivn_geography",
     "logistics_ui_assets",
+    "market_ui_assets",
     "minimap",
     "map_buildings",
     "state_history",
@@ -211,7 +214,8 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
                 "tools/builders/build_adiscord_technology_ui_assets.py",
                 "tools/lib/adiscord_ui_contracts.py",
                 "tools/lib/adiscord_ui_surfaces.py",
-                "gfx/interface/production/source/production_surface_source.png",
+                "gfx/interface/technology/source/technology_surface.png",
+                "gfx/interface/technology/source/folder_tabs.png",
             },
         )
         self.assertTrue(entry["may_delete_outputs"])

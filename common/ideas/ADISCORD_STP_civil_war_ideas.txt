@@ -1,0 +1,415 @@
+ideas = {
+	country = {
+		SRP_council_authority = {
+			picture = ADISCORD_law_civic_local_councils
+			allowed = { tag = SRP }
+			removal_cost = -1
+			modifier = { stability_factor = 0.05 supply_consumption_factor = -0.08 army_org_factor = -0.05 }
+		}
+		SRP_emergency_command = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { tag = SRP }
+			removal_cost = -1
+			cancel = { NOT = { has_war_with = VAL } }
+			modifier = { army_org_factor = 0.08 planning_speed = 0.10 army_org_regain = 0.10 }
+		}
+		SRP_council_supply = {
+			picture = ADISCORD_law_industrial_policy_military_prioritization
+			allowed = { tag = SRP }
+			removal_cost = -1
+			cancel = { OR = { NOT = { has_war_with = VAL } is_subject = yes } }
+			modifier = { industrial_capacity_factory = 0.20 army_org_regain = 0.10 }
+		}
+		STP_cw_council_guarantees = {
+			picture = ADISCORD_law_civic_local_councils
+			allowed = { OR = { tag = STS tag = SRP } }
+			removal_cost = -1
+			cancel = { OR = { STS = { OR = { exists = no is_subject = yes has_war_with = SRP } } SRP = { OR = { exists = no is_subject = yes } } } }
+			modifier = { stability_factor = 0.03 }
+		}
+		STP_cw_republican_charter = {
+			picture = ADISCORD_law_civic_local_councils
+			allowed = { OR = { tag = STS tag = SRP } }
+			removal_cost = -1
+			cancel = { OR = { STS = { OR = { exists = no is_subject = yes has_war_with = SRP } } SRP = { OR = { exists = no is_subject = yes } } } }
+			modifier = { production_speed_industrial_complex_factor = 0.10 }
+		}
+		STP_cw_central_authority = {
+			picture = ADISCORD_law_civic_emergency_committees
+			allowed = { tag = STS }
+			removal_cost = -1
+			modifier = { industrial_capacity_factory = 0.10 ADISCORD_economy_admin_expense_factor = -0.05 }
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+		}
+		SRP_distrust_stelander = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { tag = SRP }
+			removal_cost = -1
+			modifier = { army_core_defence_factor = 0.05 }
+		}
+		# Display only: the first decline changes the existing starting spirit.
+		STP_fading_father_stage_1_dummy_idea = {
+			name = STP_fading_father
+			allowed = { always = no }
+			modifier = { }
+		}
+		STP_fading_father_stage_2_dummy_idea = {
+			name = STP_fading_father
+			allowed = { always = no }
+			modifier = { stability_factor = -0.05 }
+		}
+
+		# Display only: empty baseline -> focus delta, both named after the live aggregate.
+		# These ideas must only appear inside effect_tooltip, never in executable add_ideas.
+		STP_cw_network_dummy_idea = {
+			name = STP_cw_resistance_network_dynamic
+			allowed = { always = no }
+			modifier = {  }
+		}
+		STP_cw_network_contacts_idea = {
+			name = STP_cw_resistance_network_dynamic
+			allowed = { always = no }
+			modifier = { political_power_gain = 0.15 }
+		}
+		STP_cw_party_dummy_idea = {
+			name = STP_cw_party_administration_dynamic
+			allowed = { always = no }
+			modifier = {  }
+		}
+		STP_cw_minister_guarantees_idea = {
+			name = STP_cw_party_administration_dynamic
+			allowed = { always = no }
+			modifier = { political_power_gain = 0.15 stability_factor = 0.03 }
+		}
+		STP_cw_emergency_presidium_idea = {
+			name = STP_cw_party_administration_dynamic
+			allowed = { always = no }
+			modifier = { political_power_gain = 0.10 stability_factor = 0.02 command_power_gain_mult = 0.10 }
+		}
+		STP_cw_army_dummy_idea = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = {  }
+		}
+		STP_cw_prepared_officers_idea = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = { army_org_factor = 0.10 planning_speed = 0.15 }
+		}
+		STP_cw_young_officers_idea = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = { army_org_regain = 0.10 }
+		}
+		STP_cw_local_cadres_idea = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = { army_org_regain = 0.15 }
+		}
+		STP_cw_supply_officers_idea = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = { planning_speed = 0.10 supply_consumption_factor = -0.08 }
+		}
+		STP_cw_unified_staff_idea = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = { army_org_factor = 0.03 planning_speed = 0.05 }
+		}
+		STP_cw_supply_service_idea = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = { supply_consumption_factor = -0.08 }
+		}
+		STP_cw_centralized_command_idea = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = { army_org_factor = 0.05 planning_speed = 0.10 supply_consumption_factor = 0.05 }
+		}
+		STP_cw_distributed_defence_idea = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = { supply_consumption_factor = -0.08 army_org_regain = 0.10 army_org_factor = -0.05 }
+		}
+		STP_cw_mandate_dummy_idea = {
+			name = STP_cw_election_mandate_dynamic
+			allowed = { always = no }
+			modifier = { }
+		}
+		STP_cw_mandate_majority_idea = {
+			name = STP_cw_election_mandate_dynamic
+			allowed = { always = no }
+			modifier = { army_org_regain = 0.20 army_core_defence_factor = 0.10 training_time_factor = -0.15 mobilization_speed = 0.20 }
+		}
+		STP_cw_mandate_strong_idea = {
+			name = STP_cw_election_mandate_dynamic
+			allowed = { always = no }
+			modifier = { army_org_regain = 0.30 army_core_defence_factor = 0.15 training_time_factor = -0.20 mobilization_speed = 0.30 }
+		}
+		STP_cw_mandate_command_agreement_idea = {
+			name = STP_cw_election_mandate_dynamic
+			allowed = { always = no }
+			modifier = { army_org_regain = 0.10 army_core_defence_factor = 0.05 }
+		}
+		# Real wartime spirits. Actual wars own their lifetime; no duplicate progress flags.
+		STP_cw_party_battle_spirit = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { tag = STP }
+			removal_cost = -1
+			cancel = { NOT = { has_war_with = STS } }
+			modifier = {
+				surrender_limit = 0.05
+				army_org_factor = 0.03
+				planning_speed = 0.05
+			}
+		}
+		STP_cw_resistance_battle_spirit = {
+			picture = ADISCORD_law_civic_emergency_committees
+			allowed = { tag = STS }
+			removal_cost = -1
+			cancel = { NOT = { OR = { has_war_with = STP has_war_with = NOD } } }
+			modifier = {
+				surrender_limit = 0.05
+				army_speed_factor = 0.05
+				army_org_regain = 0.03
+			}
+		}
+		STP_cw_republics_battle_spirit = {
+			picture = ADISCORD_law_civic_local_councils
+			allowed = { tag = SRP }
+			removal_cost = -1
+			cancel = { NOT = { has_war_with = VAL } }
+			modifier = {
+				surrender_limit = 0.05
+				dig_in_speed_factor = 0.10
+				max_dig_in = 1
+			}
+		}
+
+		STP_cw_private_payments = {
+			picture = ADISCORD_law_taxation_light_dues
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = { ADISCORD_economy_admin_expense_factor = 0.10 }
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+		}
+		STP_cw_arsenal_shifts = {
+			picture = ADISCORD_law_industrial_policy_military_prioritization
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = { industrial_capacity_factory = 0.25 production_factory_efficiency_gain_factor = 0.25 }
+		}
+		STP_cw_defensive_preparation = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = { army_defence_factor = 0.08 }
+		}
+		STP_cw_offensive_preparation = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = { army_attack_factor = 0.08 planning_speed = 0.1 }
+		}
+		STP_cw_deliberate_offensive = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { has_war = no }
+			modifier = { army_attack_factor = 0.15 breakthrough_factor = 0.20 planning_speed = 0.10 }
+		}
+		STP_cw_static_defence = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { has_war = no }
+			modifier = { army_defence_factor = 0.15 army_attack_factor = -0.15 army_speed_factor = -0.10 }
+		}
+		STP_cw_front_reorganization = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { has_war = no }
+			modifier = { army_org_regain = 0.25 supply_consumption_factor = -0.15 army_attack_factor = -0.20 }
+		}
+		STP_cw_prepared_supply_lines = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = { supply_consumption_factor = -0.10 army_org_regain = 0.05 }
+		}
+
+		STP_pw_republic_dummy = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = { }
+		}
+		STP_pw_republic_new_republic_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = { stability_factor = 0.02 }
+		}
+		STP_pw_republic_district_authority_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = { political_power_gain = 0.10 ADISCORD_economy_admin_expense_factor = -0.03 }
+		}
+		STP_pw_republic_civil_records_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = { ADISCORD_economy_admin_expense_factor = -0.02 }
+		}
+		STP_pw_republic_open_settlement_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = { stability_factor = 0.04 army_org_factor = -0.02 }
+		}
+		STP_pw_republic_firm_settlement_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = { political_power_gain = 0.10 stability_factor = -0.02 }
+		}
+		STP_pw_republic_civil_charter_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = { stability_factor = 0.02 ADISCORD_economy_admin_expense_factor = -0.04 }
+		}
+		STP_pw_republic_restore_roads_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = { production_speed_buildings_factor = 0.05 }
+		}
+		STP_pw_republic_homes_for_returnees_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = { production_speed_buildings_factor = 0.05 }
+		}
+		STP_pw_republic_civil_workshops_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = { production_speed_industrial_complex_factor = 0.10 }
+		}
+		STP_pw_republic_accountable_arsenals_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = { industrial_capacity_factory = 0.05 }
+		}
+		STP_pw_republic_industrial_settlement_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = { production_factory_max_efficiency_factor = 0.05 ADISCORD_economy_admin_expense_factor = -0.03 }
+		}
+		STP_pw_republic_army_register_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = { supply_consumption_factor = -0.03 }
+		}
+		STP_pw_republic_officer_school_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = { army_org_factor = 0.03 }
+		}
+		STP_pw_republic_supply_service_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = { supply_consumption_factor = -0.05 army_org_regain = 0.05 }
+		}
+		STP_pw_republic_professional_service_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = { army_org_factor = 0.03 training_time_factor = -0.08 }
+		}
+		STP_pw_republic_settled_state_delta = {
+			name = STP_pw_republic_dynamic
+			allowed = { always = no }
+			modifier = { research_speed_factor = 0.02 stability_factor = 0.02 }
+		}
+		STP_pw_party_dummy = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { }
+		}
+		STP_pw_party_new_republic_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { stability_factor = 0.02 }
+		}
+		STP_pw_party_district_authority_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { political_power_gain = 0.10 ADISCORD_economy_admin_expense_factor = -0.04 }
+		}
+		STP_pw_party_civil_records_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { ADISCORD_economy_admin_expense_factor = -0.03 stability_factor = 0.01 }
+		}
+		STP_pw_party_open_settlement_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { research_speed_factor = 0.03 political_power_gain = -0.05 }
+		}
+		STP_pw_party_firm_settlement_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { political_power_gain = 0.15 research_speed_factor = -0.01 }
+		}
+		STP_pw_party_civil_charter_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { stability_factor = 0.03 ADISCORD_economy_admin_expense_factor = -0.03 }
+		}
+		STP_pw_party_restore_roads_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { production_speed_buildings_factor = 0.05 }
+		}
+		STP_pw_party_homes_for_returnees_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { stability_factor = 0.02 }
+		}
+		STP_pw_party_civil_workshops_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { production_factory_max_efficiency_factor = 0.05 }
+		}
+		STP_pw_party_accountable_arsenals_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { industrial_capacity_factory = 0.08 production_speed_industrial_complex_factor = -0.05 }
+		}
+		STP_pw_party_industrial_settlement_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { production_factory_max_efficiency_factor = 0.05 production_speed_buildings_factor = 0.05 }
+		}
+		STP_pw_party_army_register_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { army_org_factor = 0.02 }
+		}
+		STP_pw_party_officer_school_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { planning_speed = 0.10 }
+		}
+		STP_pw_party_supply_service_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { supply_consumption_factor = -0.06 army_org_regain = 0.03 }
+		}
+		STP_pw_party_professional_service_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { army_org_factor = 0.04 training_time_factor = -0.05 }
+		}
+		STP_pw_party_settled_state_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { stability_factor = 0.02 industrial_capacity_factory = 0.03 }
+		}
+	}
+}

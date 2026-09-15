@@ -45,6 +45,18 @@ division_template = {
 }
 
 units = {
+	fleet = {
+		name = "Кефрейтская флотилия"
+		naval_base = 16535
+		task_force = {
+			name = "Охрана морских поставок"
+			location = 16535
+			ship = { name = "СК-301" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = VAL } } }
+			ship = { name = "СК-302" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = VAL } } }
+			ship = { name = "СК-303" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = VAL } } }
+			ship = { name = "СК-304" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = VAL } } }
+		}
+	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 1 }
 		location = 16521
@@ -145,31 +157,81 @@ units = {
 	}
 }
 
-##### No notable air forces #####
+air_wings = {
+	48 = {
+		ADISCORD_fighter_airframe_2163 = { owner = "VAL" amount = 100 }
+		ADISCORD_fighter_airframe_2163 = { owner = "VAL" amount = 100 }
+		ADISCORD_fighter_airframe_2163 = { owner = "VAL" amount = 100 }
+		ADISCORD_fighter_airframe_2163 = { owner = "VAL" amount = 100 }
+	}
+	54 = {
+		ADISCORD_fighter_airframe_2163 = { owner = "VAL" amount = 100 }
+		ADISCORD_fighter_airframe_2163 = { owner = "VAL" amount = 100 }
+		ADISCORD_fighter_airframe_2163 = { owner = "VAL" amount = 100 }
+		ADISCORD_fighter_airframe_2163 = { owner = "VAL" amount = 100 }
+	}
+}
 
 instant_effect = {
+	add_equipment_to_stockpile = {
+		type = motorized_equipment_1
+		amount = 240
+		producer = VAL
+	}
+	add_fuel = 50000
+	add_equipment_to_stockpile = {
+		type = ADISCORD_squad_weapons_equipment_0
+		amount = 350
+		producer = VAL
+	}
+	add_equipment_to_stockpile = {
+		type = support_equipment_1
+		amount = 250
+		producer = VAL
+	}
+	add_equipment_to_stockpile = {
+		type = artillery_equipment_1
+		amount = 300
+		producer = VAL
+	}
+	add_equipment_to_stockpile = {
+		type = ADISCORD_anti_air_equipment_2163
+		amount = 100
+		producer = VAL
+	}
+	add_equipment_to_stockpile = {
+		type = train_equipment_1
+		amount = 32
+		producer = VAL
+	}
 	add_equipment_production = {
 		equipment = { type = infantry_equipment_0 creator = "VAL" }
-		requested_factories = 8
-		progress = 0.60
+		requested_factories = 7
+		progress = 0.30
 		efficiency = 70
 	}
 	add_equipment_production = {
 		equipment = { type = ADISCORD_squad_weapons_equipment_0 creator = "VAL" }
 		requested_factories = 1
-		progress = 0.45
-		efficiency = 55
+		progress = 0.30
+		efficiency = 50
 	}
 	add_equipment_production = {
-		equipment = { type = support_equipment_1 }
+		equipment = { type = support_equipment_1 creator = "VAL" }
 		requested_factories = 1
 		progress = 0.30
 		efficiency = 50
 	}
 	add_equipment_production = {
-		equipment = { type = artillery_equipment_1 }
+		equipment = { type = artillery_equipment_1 creator = "VAL" }
 		requested_factories = 1
-		progress = 0.25
-		efficiency = 45
+		progress = 0.30
+		efficiency = 50
+	}
+	add_equipment_production = {
+		equipment = { type = ADISCORD_fighter_airframe_2163 creator = "VAL" }
+		requested_factories = 2
+		progress = 0.30
+		efficiency = 50
 	}
 }

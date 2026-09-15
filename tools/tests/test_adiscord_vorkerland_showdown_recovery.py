@@ -12,6 +12,9 @@ from tools.validators.validate_adiscord_vorkerland_recovery import (
 )
 
 
+from tools.lib.paths import source_section
+
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -23,8 +26,8 @@ def read_focus_decisions() -> str:
     return "\n".join(
         read(path)
         for path in (
-            "common/decisions/ADISCORD_vorkerland_focus_operations_decisions.txt",
-            "common/decisions/ADISCORD_vorkerland_allied_support_decisions.txt",
+            "common/decisions/ADISCORD_vorkerland_decisions.txt",
+            "common/decisions/ADISCORD_vorkerland_decisions.txt",
         )
     )
 
@@ -39,7 +42,7 @@ class CentralShowdownRecoveryTests(unittest.TestCase):
         self.assertEqual(issues, [], issue_report(issues))
 
     def test_degraded_regional_launch_reenters_the_existing_phase_three(self) -> None:
-        effects = read("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
+        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'phase_effects')
         degrade = named_block(effects, "ADISCORD_vorkerland_degrade_regional_launch")
         self.assertIn(
             "set_global_flag = ADISCORD_vorkerland_regional_war_launch_degraded",
@@ -48,7 +51,7 @@ class CentralShowdownRecoveryTests(unittest.TestCase):
         self.assertIn("[ADISCORD][VORKERLAND][RECOVERY]", degrade)
         self.assertEqual(degrade.count("ADISCORD_vorkerland_phase.3 days = 1"), 1)
 
-        events = read("events/ADISCORD_vorkerland_phase_events.txt")
+        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'phase_events')
         phase_three = event_block(events, "ADISCORD_vorkerland_phase.3")
         self.assertEqual(
             phase_three.count("ADISCORD_vorkerland_verify_regional_consolidation = yes"),
@@ -56,7 +59,7 @@ class CentralShowdownRecoveryTests(unittest.TestCase):
         )
         self.assertNotIn("ADISCORD_vorkerland_degrade_regional_launch", events)
 
-        collapse_events = read("events/ADISCORD_vorkerland_collapse_events.txt")
+        collapse_events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
         retry = event_block(collapse_events, "ADISCORD_vorkerland_collapse.64")
         degraded_guard = (
             "NOT = { has_global_flag = ADISCORD_vorkerland_regional_war_launch_degraded }"
@@ -71,7 +74,7 @@ class CentralShowdownRecoveryTests(unittest.TestCase):
         self.assertEqual(len(guarded_dispatches), 1)
 
     def test_terminal_launch_failure_unwinds_the_entire_round_and_arms_cooldown(self) -> None:
-        effects = read("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
+        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'phase_effects')
         unwind = named_block(effects, "ADISCORD_vorkerland_unwind_failed_showdown_launch")
         self.assertTrue(unwind)
 
@@ -128,7 +131,7 @@ class CentralShowdownRecoveryTests(unittest.TestCase):
         )
         self.assertIn(cooldown_guard, available)
 
-        effects = read("common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt")
+        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'focus_decision_effects')
         scheduler = named_block(effects, "ADISCORD_vorkerland_focus_schedule_final_showdown")
         request_branches = [
             block
@@ -139,7 +142,7 @@ class CentralShowdownRecoveryTests(unittest.TestCase):
         self.assertIn(cooldown_guard, named_block(request_branches[0], "limit"))
 
     def test_queued_reunification_rechecks_the_integrated_central_map(self) -> None:
-        events = read("events/ADISCORD_vorkerland_phase_events.txt")
+        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'phase_events')
         phase_six = event_block(events, "ADISCORD_vorkerland_phase.6")
         self.assertIn("id = ADISCORD_vorkerland_phase.6", phase_six)
         self.assertEqual(

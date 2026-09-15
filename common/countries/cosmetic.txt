@@ -59,3 +59,11 @@ SLF_svetlogorsk_republic = {
 	color = rgb { 31 105 95 }
 	color_ui = rgb { 77 173 153 }
 }
+
+CIN_VAL_commissariat = { color = rgb { 93 103 82 } color_ui = rgb { 156 160 139 } }
+
+OSF_VAL_commissariat = { color = rgb { 93 103 82 } color_ui = rgb { 156 160 139 } }
+
+APH_VAL_commissariat = { color = rgb { 93 103 82 } color_ui = rgb { 156 160 139 } }
+
+VAL_dopotroydsk = { color = rgb { 86 55 38 } color_ui = rgb { 180 126 76 } }

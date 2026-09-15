@@ -1,5 +1,7 @@
 capital = 84
 
+ADISCORD_grant_technology_profile_field_air_defense = yes
+ADISCORD_grant_technology_profile_land = yes
 oob = "TFF"
 ####### Characters
 
@@ -16,9 +18,11 @@ set_popularities = {
 	anarchism = 100
 }
 
-set_stability = -1.0
+set_stability = 0.40
 
 add_ideas = {
+	extensive_conscription
+	ADISCORD_military_organization_militia_autonomy
 	minister_TFF_Mara_Free
 	minister_TFF_Colt_Ardent
 	minister_TFF_Sella_Pike

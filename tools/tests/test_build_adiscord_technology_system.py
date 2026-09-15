@@ -4,6 +4,7 @@ import json
 import re
 import tempfile
 import unittest
+from dataclasses import replace
 from pathlib import Path
 from unittest.mock import patch
 
@@ -18,6 +19,72 @@ STARTING_PROFILE_MANIFEST = ROOT / "tools" / "data" / "adiscord_starting_technol
 
 
 class CompactTechnologyTreeContractTests(unittest.TestCase):
+    def test_country_uniform_sprites_resolve_to_regional_assets(self) -> None:
+        icons = json.loads((ROOT / "tools/data/adiscord_technology_weapon_icons.json").read_text(encoding="utf-8"))["icons"]
+        outputs = {entry["output"] for entry in icons}
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "interface").mkdir()
+            texture_dir = Path("gfx/interface/technologies")
+            (root / texture_dir).mkdir(parents=True)
+            for output in outputs:
+                if output.startswith("ADISCORD_weapon_"):
+                    (root / texture_dir / output).write_bytes((ROOT / texture_dir / output).read_bytes())
+            with patch.object(generator, "ROOT", root):
+                generator.write_gfx()
+            text = (root / "interface/ADISCORD_technologies.gfx").read_text(encoding="utf-8")
+        sprites = dict(re.findall(r'name = "([^"]+)"\s+textureFile = "gfx/interface/technologies/([^"]+)"', text))
+        for tag in ("STP", "VAL"):
+            regional = {name: texture for name, texture in sprites.items() if name.startswith(f"GFX_{tag}_")}
+            self.assertEqual(len(regional), 9)
+            for name, texture in regional.items():
+                self.assertIn(texture, outputs)
+                self.assertEqual(
+                    sprites[name.replace(f"GFX_{tag}_", "GFX_", 1)],
+                    texture.replace(f"ADISCORD_{tag}_", "ADISCORD_", 1),
+                )
+
+    def test_infantry_equipment_icons_follow_technology_after_reordering(self) -> None:
+        branch = generator.BRANCH_BY_KEY["protection"]
+        selected = tuple(
+            next(tech for tech in branch.techs if tech.key == key)
+            for key in ("trauma_plates", "smart_tourniquet_systems", "sealed_respirator_interfaces")
+        )
+        reordered = replace(branch, techs=selected[::-1], years=branch.years[:3])
+        self.assertEqual(
+            [generator.icon_for_technology(reordered, index) for index in range(3)],
+            ["ADISCORD_equipment_respirator", "ADISCORD_equipment_medical", "ADISCORD_equipment_armour"],
+        )
+        expected = {
+            tech.key
+            for key in ("small_arms", "squad_weapons", "protection", "special_forces")
+            for tech in generator.BRANCH_BY_KEY[key].techs
+            if tech.id not in generator.ENABLE_EQUIPMENT
+        }
+        self.assertEqual(set(generator.INFANTRY_COMPACT_ICONS), expected)
+
+    def test_equipment_family_localisation_replaces_old_names_once(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for language in ("russian", "english"):
+                path = root / "localisation" / language / f"ADISCORD_technology_doctrine_l_{language}.yml"
+                path.parent.mkdir(parents=True)
+                path.write_text(
+                    f'l_{language}:\n infantry_equipment: "Old name"\n unrelated_key: "Keep me"\n',
+                    encoding="utf-8-sig",
+                )
+            with patch.object(generator, "ROOT", root):
+                generator.write_localisation()
+                first = {path: path.read_bytes() for path in root.rglob("*.yml")}
+                generator.write_localisation()
+            for path, data in first.items():
+                self.assertEqual(path.read_bytes(), data)
+                self.assertTrue(data.startswith(b"\xef\xbb\xbf"))
+                text = data.decode("utf-8-sig")
+                self.assertEqual(len(re.findall(r"^ infantry_equipment:", text, re.MULTILINE)), 1)
+                self.assertIn(' unrelated_key: "Keep me"', text)
+                self.assertNotIn('"Old name"', text)
+
     @staticmethod
     def _folder_positions(rendered: str) -> dict[str, tuple[int, int]]:
         return {
@@ -208,6 +275,57 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                     tuple(authored_year[tech.key] for tech in branch.techs),
                 )
 
+    def test_grid_slots_match_the_native_connector_size(self) -> None:
+        gui = (generator.BASE_GAME / "interface/countrytechtreeview.gui").read_text(
+            encoding="utf-8-sig"
+        )
+        connector = re.search(
+            r'name\s*=\s*"techtree_line_item"\s*'
+            r'position\s*=\s*\{[^}]+\}\s*'
+            r'size\s*=\s*\{\s*width\s*=\s*(\d+)\s*height\s*=\s*(\d+)\s*\}',
+            gui,
+        )
+        self.assertIsNotNone(connector)
+        connector_size = tuple(map(int, connector.groups()))
+        for folder in generator.FOLDER_BACKGROUNDS:
+            slots = re.findall(
+                r'slotsize\s*=\s*\{\s*width\s*=\s*(\d+)\s*height\s*=\s*(\d+)\s*\}',
+                generator.render_folder(folder),
+            )
+            self.assertTrue(slots, folder)
+            for size in slots:
+                with self.subTest(folder=folder, size=size):
+                    self.assertEqual(tuple(map(int, size)), connector_size)
+
+    def test_horizontal_rows_leave_space_around_equipment_cards(self) -> None:
+        gui = (ROOT / "interface/countrytechtreeview.gui").read_text(encoding="utf-8-sig")
+        for folder in generator.HORIZONTAL_FOLDERS:
+            item = re.search(
+                rf'name\s*=\s*"techtree_{folder}_item"\s*'
+                r'position\s*=\s*\{[^}]+\}\s*'
+                r'size\s*=\s*\{\s*width\s*=\s*\d+\s*height\s*=\s*(\d+)\s*\}',
+                gui,
+            )
+            self.assertIsNotNone(item, folder)
+            card_height = int(item[1])
+            rendered = generator.render_folder(folder)
+            for branch in (b for b in generator.BRANCHES if folder in b.folders):
+                grid = re.search(
+                    rf'name = "{branch.techs[0].id}_tree".*?'
+                    r'slotsize = \{ width = \d+ height = (\d+) \}',
+                    rendered,
+                    flags=re.DOTALL,
+                )
+                self.assertIsNotNone(grid, branch.key)
+                rows = sorted({
+                    self._folder_positions(generator.render_technology(branch, index))[folder][0]
+                    * int(grid[1])
+                    for index in range(len(branch.techs))
+                })
+                for first, second in zip(rows, rows[1:]):
+                    with self.subTest(folder=folder, branch=branch.key):
+                        self.assertGreaterEqual(second - first, card_height + 12)
+
     def test_horizontal_technology_positions_follow_the_left_grid_contract(self) -> None:
         # A ``format = "LEFT"`` gridbox swaps the pair it is given: x becomes the
         # vertical band row scaled by slot_height and y becomes the horizontal
@@ -224,14 +342,14 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         self.assertEqual(
             positions,
             {
-                0: (1, 0),
-                3: (2, 15),
-                15: (1, 57),
+                0: (2, 0),
+                3: (4, 15),
+                15: (2, 57),
             },
         )
         for index in range(len(small_arms.techs)):
             x, y = generator.technology_grid_position(small_arms, index)
-            self.assertEqual(x, generator.BRANCH_GRAPHS["small_arms"].lanes[index])
+            self.assertEqual(x, 2 * generator.BRANCH_GRAPHS["small_arms"].lanes[index])
             self.assertEqual(y, generator.technology_time_slot(small_arms, index))
 
         armor = generator.BRANCH_BY_KEY["recon_armor"]
@@ -335,9 +453,13 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                         * generator.HORIZONTAL_YEAR_SLOT_MULTIPLIER
                         + generator.HORIZONTAL_YEAR_SLOT_MULTIPLIER
                     ) * generator.GRID_SLOT
-                    down_extent = (max(graph.lanes) + 1) * generator.HORIZONTAL_LANE_SLOT
+                    down_extent = (
+                        (max(graph.lanes) + 1)
+                        * generator.HORIZONTAL_LANE_SLOT_MULTIPLIER
+                        * generator.GRID_SLOT
+                    )
                     across_slot = generator.GRID_SLOT
-                    down_slot = generator.HORIZONTAL_LANE_SLOT
+                    down_slot = generator.GRID_SLOT
                 else:
                     across_extent = (
                         max(graph.lanes) * generator.LANE_SLOT_MULTIPLIER
@@ -440,7 +562,7 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
             )
         ]
         self.assertEqual(len(horizontal_slot_heights), len(grid_positions))
-        self.assertTrue(all(height >= 96 for height in horizontal_slot_heights))
+        self.assertEqual(set(horizontal_slot_heights), {70})
 
         vertical = generator.render_folder("support_folder")
         vertical_formats = re.findall(
@@ -623,7 +745,7 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         )
         self.assertEqual(
             {tag for tag, profiles in generator.STARTING_COUNTRY_TECH_PROFILES.items() if not profiles},
-            {"COF", "EXZ", "PWR"},
+            {"EXZ", "PWR"},
         )
         for tag, entry in payload["countries"].items():
             self.assertGreaterEqual(len(entry["rationale"]), 24, tag)
@@ -711,24 +833,30 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         self.assertIn("ADISCORD_tech_armored_carrier_program", profile)
         self.assertIn("ADISCORD_tech_semi_autonomous_combat_modules", profile)
 
+    def test_stp_starting_profile_unlocks_its_capital_guard_recon_platform(self) -> None:
+        granted = set(generator.STARTING_TECH_PROFILES["common"])
+        for profile in generator.STARTING_COUNTRY_TECH_PROFILES["STP"]:
+            granted.update(generator.STARTING_TECH_PROFILES[profile])
+        self.assertIn("ADISCORD_tech_drone_recon_swarms", granted)
+
     def test_small_arms_and_personal_antitank_use_real_engineering_names(self) -> None:
         small_arms = generator.BRANCH_BY_KEY["small_arms"]
         self.assertEqual(
             [tech.ru for tech in small_arms.techs],
             [
-                "Прецизионная нарезка каналов стволов",
-                "Обтюрация казённой части",
+                "Высокоточная нарезка стволов",
+                "Герметизация казённой части",
                 "Унитарный металлический патрон",
                 "Нитроцеллюлозные метательные составы",
                 "Лазерное измерение дальности",
                 "Промежуточные патроны",
                 "Высокопрочные ствольные стали",
                 "Самозарядная автоматика",
-                "Вычислительное определение баллистической поправки",
+                "Баллистические вычислители",
                 "Газоотводная автоматика",
                 "Запирание поворотным затвором",
-                "Интегрированные электронно-оптические прицелы",
-                "Хромирование и износостойкие покрытия ствола",
+                "Электронно-оптические прицелы",
+                "Износостойкие покрытия ствола",
                 "Оптимизация импульса отдачи",
                 "Полимерные и гибридные гильзы",
                 "Программируемые боеприпасы",
@@ -736,22 +864,22 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         )
 
         anti_tank = generator.BRANCH_BY_KEY["anti_tank_infantry"]
-        self.assertEqual(anti_tank.ru, "Индивидуальные противотанковые средства")
+        self.assertEqual(anti_tank.ru, "Пехотные противотанковые средства")
         self.assertEqual(
             [tech.ru for tech in anti_tank.techs],
             [
                 "Бутылочные зажигательные смеси",
                 "Динамитные и ранцевые подрывные заряды",
                 "Ручные кумулятивные противотанковые гранаты",
-                "Крупнокалиберные противотанковые ружья",
-                "Командное наведение по проводной линии",
+                "Тяжёлые противотанковые ружья",
+                "Наведение ракет по проводам",
                 "Безоткатные противотанковые системы",
-                "Полуавтоматическое наведение по линии визирования",
-                "Реактивные гранатомёты с кумулятивной боевой частью",
-                "Инфракрасное самонаведение верхней атаки",
+                "Полуавтоматическое наведение ракет",
+                "Кумулятивные реактивные гранатомёты",
+                "Самонаведение для атаки сверху",
                 "Тандемные кумулятивные боевые части",
                 "Барражирующие противотанковые боеприпасы",
-                "Кооперативное мультиспектральное целеуказание",
+                "Общее целеуказание по данным датчиков",
             ],
         )
 
@@ -936,6 +1064,7 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
             "ADISCORD_squad_weapons_equipment_2193",
             "ADISCORD_squad_weapons_equipment_2200",
         }
+        expected_ids.update({"motorized_equipment", "motorized_equipment_1"})
         self.assertEqual(set(generator.LAND_EQUIPMENT_LOCALISATION), expected_ids)
         for language in ("russian", "english"):
             rendered = "\n".join(generator.generated_localisation(language))

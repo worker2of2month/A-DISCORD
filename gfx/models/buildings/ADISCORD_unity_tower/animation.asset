@@ -1,0 +1,2 @@
+animation = { name = "ADISCORD_unity_tower_collapse_animation" file = "ADISCORD_unity_tower_collapse.anim" }
+animation = { name = "ADISCORD_unity_tower_ruins_animation" file = "ADISCORD_unity_tower_ruins.anim" }

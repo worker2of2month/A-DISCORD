@@ -1,5 +1,30 @@
 ideas = {
 	country = {
+        VAL_frontier_supply_delta = { name = VAL_contract_state allowed = { always = no } modifier = { supply_consumption_factor = -0.08 } }
+        VAL_frontier_output_delta = { name = VAL_contract_state allowed = { always = no } modifier = { industrial_capacity_factory = 0.05 } }
+        VAL_frontier_trade_delta = { name = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_trade_income_factor = 0.10 } }
+        VAL_frontier_recovery_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_regain = 0.05 } }
+
+		# Native delta previews only. These ideas are never installed.
+		VAL_contract_delta_dummy = { name = VAL_contract_state allowed = { always = no } modifier = { } }
+		VAL_company_rosters_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_factor = 0.02 } }
+		VAL_border_survey_delta = { name = VAL_contract_state allowed = { always = no } modifier = { supply_consumption_factor = -0.03 } }
+		VAL_company_service_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_regain = 0.03 } }
+		VAL_nco_schools_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_factor = 0.03 } }
+		VAL_brokers_delta = { name = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_trade_income_factor = 0.03 political_power_gain = 0.05 } }
+
+		VAL_vorons_delta = { name = VAL_contract_state allowed = { always = no } modifier = { planning_speed = 0.05 equipment_capture_factor = 0.03 } }
+		VAL_stahls_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_regain = 0.03 supply_consumption_factor = -0.05 } }
+		VAL_trading_partners_delta = { name = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_trade_income_factor = 0.07 political_power_gain = 0.10 } }
+		VAL_export_clearing_delta = { name = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_trade_income_factor = 0.05 } }
+
+		# Industry previews follow the authoritative tier, including an already completed upgrade.
+		VAL_industry_1_dummy = { name = VAL_contract_industry_1 allowed = { always = no } modifier = { } }
+		VAL_industry_2_dummy = { name = VAL_contract_industry_2 allowed = { always = no } modifier = { } }
+		VAL_industry_1_delta = { name = VAL_contract_industry_1 allowed = { always = no } modifier = { industrial_capacity_factory = 0.04 production_factory_efficiency_gain_factor = 0.05 } }
+		VAL_industry_2_delta = { name = VAL_contract_industry_2 allowed = { always = no } modifier = { industrial_capacity_factory = 0.07 production_factory_efficiency_gain_factor = 0.08 production_factory_max_efficiency_factor = 0.05 production_lack_of_resource_penalty_factor = -0.05 } }
+		VAL_industry_1_to_2_delta = { name = VAL_contract_industry_2 allowed = { always = no } modifier = { industrial_capacity_factory = 0.03 production_factory_efficiency_gain_factor = 0.03 production_factory_max_efficiency_factor = 0.05 production_lack_of_resource_penalty_factor = -0.05 } }
+
 		VAL_big_buyers = {
 			picture = GFX_idea_VAL_big_buyers
 			allowed = { original_tag = VAL }
@@ -247,5 +272,28 @@ ideas = {
 				political_power_gain = 0.05
 			}
 		}
+		VAL_reclamation_road_crews_idea = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = { production_speed_infrastructure_factor = 0.20 }
+		}
+
+		VAL_reclamation_workshops_idea = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = { production_speed_industrial_complex_factor = 0.10
+				industry_repair_factor = 0.20 }
+		}
+
+		VAL_reclamation_land_register_idea = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = { production_speed_buildings_factor = 0.05
+				stability_factor = 0.05 }
+		}
+
 	}
 }

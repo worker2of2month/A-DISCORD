@@ -38,3 +38,5 @@ add_equipment_to_stockpile = {
 	amount = 700
 	producer = OSF
 }
+
+recruit_character = OSF_VAL_commission

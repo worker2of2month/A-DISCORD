@@ -105,7 +105,7 @@ def collect_issues() -> list[str]:
         prompt = split_event = partition_verify = partition_terminal = ""
     for token in (
         "fire_only_once = yes",
-        "picture = GFX_report_event_generic_diplomacy",
+        "picture = GFX_event_adiscord_negotiation_table",
         "has_global_flag = ADISCORD_vorkerland_collapse_started",
         "has_global_flag = ADISCORD_vorkerland_collapse_wars_started",
         "ADISCORD_rin_begin_oath_crisis = yes",

@@ -4,22 +4,21 @@ state={
 	provinces={
 		6 21 51 81 88 16372 16646
 	}
-	manpower=180000
+	manpower=1230000
 	buildings_max_level_factor=1.000
-	state_category=town
+	state_category=city
 	local_supplies=0.000
 
 	history = {
 		owner = YPR
 		buildings = {
-			infrastructure = 2
-			industrial_complex = 1
-			arms_factory = 1
+			infrastructure = 3
+			industrial_complex = 2
+			arms_factory = 4
 		}
 		add_core_of = YPR
-
-		victory_points = { 16372 10 }
-		victory_points = { 16646 1 }
+		victory_points = { 16372 15 }
+		victory_points = { 16646 5 }
 	}
 	
 }

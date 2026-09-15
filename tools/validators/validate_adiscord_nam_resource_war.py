@@ -118,7 +118,7 @@ def main() -> int:
         "common/decisions/ADISCORD_nam_resource_war_decisions.txt",
         "common/ai_strategy/ADISCORD_nam_resource_war_ai.txt",
         "events/ADISCORD_nam_resource_war_events.txt",
-        "events/ADISCORD_vorkerland_collapse_events.txt",
+        "events/ADISCORD_vorkerland_events.txt",
         "history/countries/SLF - Svetlogorsk Uprising.txt",
         "history/units/NAM_resource_war.txt",
         "history/units/EFL_nam_resource_war.txt",
@@ -175,7 +175,7 @@ def main() -> int:
     prewar_categories = sources["common/decisions/categories/ADISCORD_nam_resource_war_categories.txt"]
     prewar_decisions = sources["common/decisions/ADISCORD_nam_resource_war_decisions.txt"]
     news = sources["events/ADISCORD_nam_resource_war_events.txt"]
-    collapse_events = sources["events/ADISCORD_vorkerland_collapse_events.txt"]
+    collapse_events = sources["events/ADISCORD_vorkerland_events.txt"]
     ideas = sources["common/ideas/ADISCORD_nam_resource_war_ideas.txt"]
     equipment_source = sources["common/units/equipment/ADISCORD_convoy_equipment.txt"]
     naval_units = sources["common/units/ADISCORD_naval_units.txt"]
@@ -751,8 +751,8 @@ def main() -> int:
         for path in (ROOT / "history" / "units").glob("*.txt")
         if "fleet = {" in path.read_text(encoding="utf-8-sig", errors="strict")
     }
-    check(fleet_oobs == {"NAM.txt", "EFL.txt", "AZH.txt"},
-          f"starting fleets must exist only for NAM/EFL/AZH, found {sorted(fleet_oobs)}")
+    check(fleet_oobs == {"NAM.txt", "EFL.txt", "AZH.txt", "NOD.txt", "STP.txt", "VAL.txt"},
+          f"starting fleets must match NAM/EFL/AZH/NOD/STP/VAL, found {sorted(fleet_oobs)}")
     technology_manifest = json.loads(
         read("tools/data/adiscord_starting_technology_profiles.json")
     )

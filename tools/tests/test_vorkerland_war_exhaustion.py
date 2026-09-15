@@ -7,6 +7,9 @@ from pathlib import Path
 from tools.validators.validate_adiscord_vorkerland_collapse import SECTIONS, named_block, validate
 
 
+from tools.lib.paths import source_section
+
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -42,7 +45,7 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
         self.assertNotIn("on_daily", on_actions)
 
     def test_each_update_uses_new_casualties_and_one_bounded_increment(self) -> None:
-        effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
+        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
         update = named_block(effects, "ADISCORD_vorkerland_update_civil_war_exhaustion")
         self.assertIn("ADISCORD_vorkerland_civil_war_casualties_snapshot_k", update)
         self.assertIn("value = casualties_k", update)
@@ -66,7 +69,7 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
             )
 
     def test_finished_war_stops_updates_and_all_values_are_clamped(self) -> None:
-        effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
+        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
         update = named_block(effects, "ADISCORD_vorkerland_update_civil_war_exhaustion")
         self.assertNotRegex(
             update,
@@ -80,7 +83,7 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
             update,
             r"clamp_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_vorkerland_civil_war_casualties_delta_k\s+min\s*=\s*0\s+max\s*=\s*10000\s*\}",
         )
-        maps = read("common/scripted_effects/ADISCORD_vorkerland_collapse_map_effects.txt")
+        maps = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_map_effects')
         finish = named_block(maps, "ADISCORD_vorkerland_finish_civil_war_exhaustion")
         for tag in ("WKR", "WRK", "VAD", "TVA"):
             self.assertIn(
@@ -91,7 +94,7 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
             outcome_map = named_block(maps, f"ADISCORD_vorkerland_apply_{outcome}_map")
             self.assertIn("ADISCORD_vorkerland_begin_reunification = yes", outcome_map)
             self.assertNotIn("ADISCORD_vorkerland_finish_civil_war_exhaustion = yes", outcome_map)
-        phase = read("common/scripted_effects/ADISCORD_vorkerland_phase_effects.txt")
+        phase = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'phase_effects')
         terminal = named_block(phase, "ADISCORD_vorkerland_finalize_reunified_wrk")
         self.assertIn("set_global_flag = ADISCORD_vorkerland_central_war_finished", terminal)
         self.assertIn("ADISCORD_vorkerland_finish_civil_war_exhaustion = yes", terminal)
@@ -115,9 +118,9 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
         )
 
     def test_one_modifier_scales_without_attack_or_organisation_penalties(self) -> None:
-        dynamic = read(
-            "common/dynamic_modifiers/ADISCORD_vorkerland_collapse_dynamic_modifiers.txt"
-        )
+        dynamic = source_section(read(
+            "common/dynamic_modifiers/ADISCORD_vorkerland_dynamic_modifiers.txt"
+        ), 'collapse_dynamic_modifiers')
         modifier = named_block(dynamic, "ADISCORD_vorkerland_civil_war_exhaustion")
         for key in (
             "war_support_factor",
@@ -131,7 +134,7 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
         self.assertNotIn("army_attack_factor", modifier)
         self.assertNotIn("army_org_factor", modifier)
 
-        effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
+        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
         refresh = named_block(effects, "ADISCORD_vorkerland_refresh_civil_war_exhaustion")
         for coefficient in ("-0.002", "-0.001", "-0.0005"):
             self.assertIn(f"value = {coefficient}", refresh)
@@ -157,7 +160,7 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
         self.assertIn("ADISCORD_vorkerland_reset_civil_war_exhaustion = yes", reset)
 
     def test_russian_localisation_is_bom_safe_and_shows_own_score(self) -> None:
-        collapse_path = ROOT / "localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml"
+        collapse_path = ROOT / "localisation/russian/ADISCORD_vorkerland_l_russian.yml"
         debug_path = ROOT / "localisation/russian/ADISCORD_scenario_debug_l_russian.yml"
         self.assertTrue(collapse_path.read_bytes().startswith(b"\xef\xbb\xbf"))
         self.assertTrue(debug_path.read_bytes().startswith(b"\xef\xbb\xbf"))

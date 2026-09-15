@@ -42,11 +42,29 @@ class TechnologyIconSourceTests(unittest.TestCase):
         self.assertEqual(len({entry["source"] for entry in squad}), 9)
         self.assertTrue(all(entry["kind"] == "wide" for entry in squad))
 
-    def test_kg83_legacy_art_is_the_third_squad_weapon_generation(self) -> None:
-        manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
-        squad = [entry for entry in manifest["icons"] if entry.get("family") == "squad"]
+    def test_regional_uniform_sets_cover_every_service_weapon(self) -> None:
+        icons = json.loads(MANIFEST.read_text(encoding="utf-8"))["icons"]
+        default = [
+            entry for entry in icons
+            if entry["kind"] == "wide" and entry.get("family", "service") == "service"
+        ]
+        for tag in ("STP", "VAL"):
+            regional = [entry for entry in icons if entry.get("family") == f"service_{tag}"]
+            with self.subTest(country=tag):
+                self.assertEqual([entry["tier"] for entry in regional], list(range(1, 10)))
+                self.assertEqual(len({entry["source"] for entry in regional}), 9)
+                self.assertEqual(
+                    [entry["output"] for entry in regional],
+                    [entry["output"].replace("ADISCORD_", f"ADISCORD_{tag}_", 1) for entry in default],
+                )
+                self.assertTrue(all(entry["kind"] == "wide" for entry in regional))
 
-        self.assertEqual(squad[2]["source"], "squad_07_networked_precision_support.png")
+    def test_infantry_equipment_has_twenty_distinct_compact_icons(self) -> None:
+        manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+        equipment = [entry for entry in manifest["icons"] if entry.get("family") == "equipment"]
+        self.assertEqual(len(equipment), 20)
+        self.assertEqual(len({entry["output"] for entry in equipment}), 20)
+        self.assertTrue(all(entry["kind"] == "compact" for entry in equipment))
 
     def test_manifest_sources_preserve_rgba_geometry_and_hashes(self) -> None:
         self.assertTrue(MANIFEST.is_file(), MANIFEST)
@@ -100,7 +118,7 @@ class TechnologyIconSourceTests(unittest.TestCase):
             all(len(entry["crop"]) == 4 for entry in antitank if entry["tier"] == 2)
         )
         self.assertTrue(
-            all("crop" not in entry for entry in antitank if entry["tier"] != 2)
+            all("crop" not in entry for entry in antitank if entry["tier"] not in (2, 6))
         )
 
     def test_redrawn_personal_antitank_icons_use_individual_sources(self) -> None:
@@ -137,6 +155,23 @@ class TechnologyIconBuilderTests(unittest.TestCase):
         self.assertIsNotNone(importlib.util.find_spec(module_name), module_name)
         return importlib.import_module(module_name)
 
+    def test_builder_rejects_opaque_source_exports(self) -> None:
+        builder = self._builder()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "tools/assets/source/technology_weapons/opaque.png"
+            source.parent.mkdir(parents=True)
+            for mode, color in (("RGB", (255, 0, 255)), ("RGBA", (255, 0, 255, 255))):
+                with self.subTest(mode=mode):
+                    Image.new(mode, (16, 16), color).save(source)
+                    spec = builder.IconSpec(
+                        key="opaque", source=source.name,
+                        source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),
+                        tier=1, kind="wide", output="opaque.dds", source_size=(16, 16),
+                    )
+                    with self.assertRaisesRegex(RuntimeError, "alpha channel|transparent background"):
+                        builder.render_icon(spec, root)
+
     def test_rendered_dds_outputs_have_exact_contract_geometry(self) -> None:
         builder = self._builder()
         outputs = builder.render_outputs(ROOT)
@@ -146,12 +181,12 @@ class TechnologyIconBuilderTests(unittest.TestCase):
             if path.suffix == ".dds" and path.parent.name == "technologies"
         }
 
-        self.assertEqual(len(dds_outputs), 36)
+        self.assertEqual(len(dds_outputs), len(builder.load_manifest()))
         for path, payload in dds_outputs.items():
             with Image.open(BytesIO(payload)) as image:
                 expected = (
                     (72, 72)
-                    if "ADISCORD_night_" in path.name or "ADISCORD_antitank_" in path.name
+                    if path.name.startswith(("ADISCORD_night_", "ADISCORD_antitank_", "ADISCORD_equipment_"))
                     else (176, 72)
                 )
                 self.assertEqual(image.size, expected, path)
@@ -171,6 +206,26 @@ class TechnologyIconBuilderTests(unittest.TestCase):
             with Image.open(BytesIO(payload)) as image:
                 self.assertEqual(image.size, (72, 72), path)
                 self.assertEqual(image.mode, "RGBA", path)
+
+    def test_infantry_sprites_have_transparent_margins_and_no_key_colour(self) -> None:
+        builder = self._builder()
+        for spec in builder.load_manifest():
+            if spec.kind != "wide" and spec.family != "equipment":
+                continue
+            with self.subTest(icon=spec.key):
+                icon = builder.render_icon(spec)
+                alpha = icon.getchannel("A")
+                bbox = alpha.getbbox()
+                self.assertIsNotNone(bbox)
+                self.assertGreaterEqual(bbox[0], 3)
+                self.assertGreaterEqual(bbox[1], 3)
+                self.assertLessEqual(bbox[2], icon.width - 3)
+                self.assertLessEqual(bbox[3], icon.height - 3)
+                self.assertGreater(alpha.histogram()[0], icon.width * icon.height * 0.25)
+                self.assertFalse(any(
+                    opacity >= 32 and min(red, blue) > 45 and min(red, blue) - green > 40
+                    for red, green, blue, opacity in icon.get_flattened_data()
+                ), spec.key)
 
     def test_rendered_personal_antitank_icons_are_clean_alpha_cutouts(self) -> None:
         builder = self._builder()

@@ -21,6 +21,11 @@ spriteTypes = {
 		texturefile = "gfx/event_pictures/country/default/china_civil_war_1.png"
 	}
 
+	spriteType = {
+		name = "GFX_event_adiscord_ui_test"
+		texturefile = "gfx/event_pictures/event_adiscord_ui_test.png"
+	}
+
 	# Legacy IDs used by A-Discord events but removed from HOI4 1.19. The
 	# textures are current vanilla assets, so every report event has a valid
 	# 401x116 fallback without duplicating the bitmap in the mod.

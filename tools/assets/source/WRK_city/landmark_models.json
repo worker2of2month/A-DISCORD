@@ -1,0 +1,154 @@
+{
+  "wasterland_special/ADISCORD_factory": {
+    "scale": 8,
+    "min": [
+      -0.4560549855232239,
+      -0.4990230202674866,
+      -0.3212890326976776
+    ],
+    "max": [
+      0.4560549855232239,
+      0.4990229904651642,
+      0.3212890028953552
+    ],
+    "map_size": [
+      7.296879768371582,
+      7.984368324279785,
+      5.140624046325684
+    ],
+    "parts": [
+      {
+        "vertices": 7835,
+        "triangles": 4487,
+        "material": {
+          "shader": [
+            "PdxMeshAdvanced"
+          ],
+          "diff": [
+            "ADISCORD_factory_texture.dds"
+          ],
+          "n": [
+            "fac_nrm.dds"
+          ],
+          "spec": [
+            "fac_matte.dds"
+          ]
+        }
+      }
+    ]
+  },
+  "wasterland_special/ADISCORD_reactor": {
+    "scale": 10,
+    "min": [
+      -0.4990229904651642,
+      -0.4990230202674866,
+      -0.21191395819187164
+    ],
+    "max": [
+      0.4990229904651642,
+      0.4990229904651642,
+      0.21191397309303284
+    ],
+    "map_size": [
+      9.980460166931152,
+      9.980460166931152,
+      4.238279342651367
+    ],
+    "parts": [
+      {
+        "vertices": 25262,
+        "triangles": 8454,
+        "material": {
+          "shader": [
+            "PdxMeshAdvanced"
+          ],
+          "diff": [
+            "ADISCORD_reactor_texture.dds"
+          ],
+          "n": [
+            "rct_nrm.dds"
+          ],
+          "spec": [
+            "rct_matte.dds"
+          ]
+        }
+      }
+    ]
+  },
+  "wasterland_special/ADISCORD_reactor_2": {
+    "scale": 10,
+    "min": [
+      -0.4990229904651642,
+      -0.4990230202674866,
+      -0.4677730202674866
+    ],
+    "max": [
+      0.4990229904651642,
+      0.4990229606628418,
+      0.4677729904651642
+    ],
+    "map_size": [
+      9.980460166931152,
+      9.980460166931152,
+      9.355460166931152
+    ],
+    "parts": [
+      {
+        "vertices": 34277,
+        "triangles": 19610,
+        "material": {
+          "shader": [
+            "PdxMeshAdvanced"
+          ],
+          "diff": [
+            "ADISCORD_reactor_2_texture.dds"
+          ],
+          "n": [
+            "r2x_nrm.dds"
+          ],
+          "spec": [
+            "r2x_matte.dds"
+          ]
+        }
+      }
+    ]
+  },
+  "stelander_special/ADISCORD_congress": {
+    "scale": 3,
+    "min": [
+      -0.4736329913139343,
+      -0.4990230202674866,
+      -0.32324203848838806
+    ],
+    "max": [
+      0.4736329913139343,
+      0.4990229606628418,
+      0.3232420086860657
+    ],
+    "map_size": [
+      2.8417978286743164,
+      2.99413800239563,
+      1.939452052116394
+    ],
+    "parts": [
+      {
+        "vertices": 7524,
+        "triangles": 4937,
+        "material": {
+          "shader": [
+            "PdxMeshAdvanced"
+          ],
+          "diff": [
+            "ADISCORD_congress_texture.dds"
+          ],
+          "n": [
+            "stp_norml.dds"
+          ],
+          "spec": [
+            "stp_spc.dds"
+          ]
+        }
+      }
+    ]
+  }
+}

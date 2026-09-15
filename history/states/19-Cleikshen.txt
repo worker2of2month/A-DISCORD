@@ -5,12 +5,20 @@ state={
 		4 48 83 108 
 	}
 	buildings_max_level_factor=1.000
-        manpower=1
+        manpower=140000
         state_category = town
 
     history = {
 		owner = YPR
 		add_core_of = YPR
+		buildings = {
+			infrastructure = 2
+			arms_factory = 1
+		}
+		victory_points = { 4 2 }
 	}
-	
+
+	resources = {
+		aluminium = 2
+	}
 }

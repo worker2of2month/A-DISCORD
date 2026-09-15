@@ -7,6 +7,9 @@ from pathlib import Path
 from PIL import Image
 
 
+from tools.lib.paths import source_section
+
+
 ROOT = Path(__file__).resolve().parents[2]
 PRE_CIVIL_WAR_ICON = ROOT / "gfx/interface/ideologies/vorkerism_pre_civil_war.png"
 NEO_ICON = ROOT / "gfx/interface/ideologies/vorkerism_group.png"
@@ -107,7 +110,7 @@ class WrkIdeologyContractTests(unittest.TestCase):
         self.assertIn('pdx_tooltip = "neo_vorkerism_desc"', gui)
 
     def test_collapse_promotes_surviving_worker_to_neo_vorkerism(self) -> None:
-        effects = read("common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt")
+        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
         on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
         claimant_cosmetics = re.search(
             r"(?s)ADISCORD_vorkerland_apply_claimant_cosmetics\s*=\s*\{(.*?)\n\}",

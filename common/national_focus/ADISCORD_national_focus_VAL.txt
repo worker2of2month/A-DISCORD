@@ -307,7 +307,7 @@ focus_tree = {
 			base = 1
 		}
 		completion_reward = {
-			custom_effect_tooltip = VAL_focus_covert_intervention_tt
+			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_vorons_delta } }
 			add_command_power = 20
 			hidden_effect = {
 				set_country_flag = VAL_doctrine_covert_intervention
@@ -333,7 +333,7 @@ focus_tree = {
 			modifier = { factor = 2 has_equipment = { infantry_equipment < 1499 } }
 		}
 		completion_reward = {
-			custom_effect_tooltip = VAL_focus_sustained_supply_tt
+			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_stahls_delta } }
 			army_experience = 15
 			add_equipment_to_stockpile = { type = support_equipment amount = 300 producer = VAL }
 			hidden_effect = {
@@ -522,11 +522,12 @@ focus_tree = {
 			base = 1
 		}
 		completion_reward = {
-			custom_effect_tooltip = VAL_focus_open_market_tt
+			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_trading_partners_delta } }
 			add_political_power = 50
 			hidden_effect = {
 				set_country_flag = VAL_north_open_market
 				VAL_refresh_contract_modifier = yes
+				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 	}
@@ -642,7 +643,16 @@ focus_tree = {
 		y = 4
 		cost = 3
 		prerequisite = { focus = VAL_Count_The_Captains }
-		completion_reward = { set_country_flag = VAL_provincial_brokers_network VAL_apply_contract_administration_1 = yes }
+		completion_reward = {
+			add_political_power = 25
+			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_brokers_delta } }
+			hidden_effect = {
+				set_country_flag = VAL_provincial_brokers_network
+				VAL_apply_contract_administration_1 = yes
+				VAL_refresh_contract_modifier = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
 		ai_will_do = { base = 2 }
 	}
 
@@ -717,9 +727,22 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = VAL_Factories_Like_Cathedrals }
 		completion_reward = {
-			set_country_flag = VAL_contract_accounting_office
 			add_political_power = 30
-			hidden_effect = { VAL_apply_contract_industry_1 = yes }
+			effect_tooltip = {
+				if = {
+					limit = {
+						OR = {
+							NOT = { has_variable = VAL_contract_industry_level }
+							check_variable = { var = VAL_contract_industry_level value = 1 compare = less_than }
+						}
+					}
+					swap_ideas = { remove_idea = VAL_industry_1_dummy add_idea = VAL_industry_1_delta }
+				}
+			}
+			hidden_effect = {
+				set_country_flag = VAL_contract_accounting_office
+				VAL_apply_contract_industry_1 = yes
+			}
 		}
 		ai_will_do = { base = 2 }
 	}
@@ -745,9 +768,26 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = VAL_Ballistics_Schools }
 		completion_reward = {
-			set_country_flag = VAL_standard_rifle_lots
 			add_political_power = 25
-			hidden_effect = { VAL_apply_contract_industry_2 = yes }
+			effect_tooltip = {
+				if = {
+					limit = {
+						OR = {
+							NOT = { has_variable = VAL_contract_industry_level }
+							check_variable = { var = VAL_contract_industry_level value = 1 compare = less_than }
+						}
+					}
+					swap_ideas = { remove_idea = VAL_industry_2_dummy add_idea = VAL_industry_2_delta }
+				}
+				else_if = {
+					limit = { check_variable = { var = VAL_contract_industry_level value = 2 compare = less_than } }
+					swap_ideas = { remove_idea = VAL_industry_2_dummy add_idea = VAL_industry_1_to_2_delta }
+				}
+			}
+			hidden_effect = {
+				set_country_flag = VAL_standard_rifle_lots
+				VAL_apply_contract_industry_2 = yes
+			}
 		}
 		ai_will_do = { base = 2 }
 	}
@@ -835,7 +875,15 @@ focus_tree = {
 		y = 2
 		cost = 3
 		prerequisite = { focus = VAL_The_Mercenary_State }
-		completion_reward = { set_country_flag = VAL_company_rosters VAL_apply_contract_army_1 = yes }
+		completion_reward = {
+			army_experience = 5
+			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_company_rosters_delta } }
+			hidden_effect = {
+				set_country_flag = VAL_company_rosters
+				VAL_apply_contract_army_1 = yes
+				VAL_refresh_contract_modifier = yes
+			}
+		}
 		ai_will_do = { base = 2 }
 	}
 
@@ -847,7 +895,15 @@ focus_tree = {
 		y = 3
 		cost = 3
 		prerequisite = { focus = VAL_Company_Rosters }
-		completion_reward = { set_country_flag = VAL_border_survey_complete VAL_apply_contract_army_1 = yes }
+		completion_reward = {
+			army_experience = 5
+			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_border_survey_delta } }
+			hidden_effect = {
+				set_country_flag = VAL_border_survey_complete
+				VAL_apply_contract_army_1 = yes
+				VAL_refresh_contract_modifier = yes
+			}
+		}
 		ai_will_do = { base = 2 }
 	}
 
@@ -859,7 +915,14 @@ focus_tree = {
 		y = 3
 		cost = 5
 		prerequisite = { focus = VAL_Hire_Out_War }
-		completion_reward = { set_country_flag = VAL_contractor_officers VAL_apply_contract_army_2 = yes }
+		completion_reward = {
+			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_nco_schools_delta } }
+			VAL_apply_contract_army_2 = yes
+			hidden_effect = {
+				set_country_flag = VAL_contractor_officers
+				VAL_refresh_contract_modifier = yes
+			}
+		}
 		ai_will_do = { base = 2 }
 	}
 
@@ -871,7 +934,14 @@ focus_tree = {
 		y = 4
 		cost = 5
 		prerequisite = { focus = VAL_Gromovs_Assault_Tables }
-		completion_reward = { set_country_flag = VAL_motorized_columns VAL_apply_contract_army_2 = yes }
+		completion_reward = {
+			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_border_survey_delta } }
+			VAL_apply_contract_army_2 = yes
+			hidden_effect = {
+				set_country_flag = VAL_motorized_columns
+				VAL_refresh_contract_modifier = yes
+			}
+		}
 		ai_will_do = { base = 2 }
 	}
 
@@ -883,7 +953,14 @@ focus_tree = {
 		y = 5
 		cost = 5
 		prerequisite = { focus = VAL_Morns_Supply_Trains }
-		completion_reward = { set_country_flag = VAL_field_repair_corps VAL_apply_contract_army_2 = yes }
+		completion_reward = {
+			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_company_service_delta } }
+			VAL_apply_contract_army_2 = yes
+			hidden_effect = {
+				set_country_flag = VAL_field_repair_corps
+				VAL_refresh_contract_modifier = yes
+			}
+		}
 		ai_will_do = { base = 3 }
 	}
 
@@ -908,7 +985,14 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = VAL_Field_Repair_Corps }
 		prerequisite = { focus = VAL_Reserve_Battalions }
-		completion_reward = { set_country_flag = VAL_contract_general_staff VAL_apply_contract_army_3 = yes }
+		completion_reward = {
+			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_vorons_delta } }
+			VAL_apply_contract_army_3 = yes
+			hidden_effect = {
+				set_country_flag = VAL_contract_general_staff
+				VAL_refresh_contract_modifier = yes
+			}
+		}
 		ai_will_do = { base = 3 }
 	}
 
@@ -936,9 +1020,9 @@ focus_tree = {
 		}
 		available = { has_country_flag = VAL_vorkerland_contracts_disrupted }
 		completion_reward = {
-			set_country_flag = VAL_vorkerland_losses_audited
-			set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
-			VAL_change_contract_authority = yes
+			add_political_power = 75
+            effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_trade_delta } } hidden_effect = { add_to_variable = { var = VAL_frontier_trade_bonus value = 0.1 } VAL_refresh_contract_modifier = yes ADISCORD_economy_mark_dirty = yes }
+            hidden_effect = { set_country_flag = VAL_vorkerland_losses_audited }
 		}
 		ai_will_do = { base = 10 }
 	}
@@ -951,7 +1035,7 @@ focus_tree = {
 		y = 6
 		cost = 2
 		prerequisite = { focus = VAL_Vorkerland_Contracts_Burn }
-		completion_reward = { add_equipment_to_stockpile = { type = infantry_equipment amount = 800 producer = VAL } set_country_flag = VAL_empty_yards_inventoried }
+		completion_reward = { effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_output_delta } } hidden_effect = { add_to_variable = { var = VAL_frontier_output_bonus value = 0.05 } VAL_refresh_contract_modifier = yes ADISCORD_economy_mark_dirty = yes } add_tech_bonus = { name = VAL_frontier_industry_bonus bonus = 0.5 uses = 1 category = industry } hidden_effect = { set_country_flag = VAL_empty_yards_inventoried } }
 		ai_will_do = { base = 8 }
 	}
 
@@ -970,8 +1054,13 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = VAL_Operational_Directorate }
 		completion_reward = {
-			set_country_flag = VAL_ministry_auditors
+			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_export_clearing_delta } }
 			VAL_apply_contract_administration_1 = yes
+			hidden_effect = {
+				set_country_flag = VAL_ministry_auditors
+				VAL_refresh_contract_modifier = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -1127,9 +1216,14 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = VAL_Salvage_Every_Barrel }
 		completion_reward = {
-			set_country_flag = VAL_export_clearing_house
 			ADISCORD_economy_receive_15 = yes
 			add_political_power = 35
+			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_export_clearing_delta } }
+			hidden_effect = {
+				set_country_flag = VAL_export_clearing_house
+				VAL_refresh_contract_modifier = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -1212,8 +1306,13 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = VAL_Company_Rosters }
 		completion_reward = {
-			set_country_flag = VAL_company_service_code
-			VAL_apply_contract_army_1 = yes
+			add_stability = 0.02
+			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_company_service_delta } }
+			hidden_effect = {
+				set_country_flag = VAL_company_service_code
+				VAL_apply_contract_army_1 = yes
+				VAL_refresh_contract_modifier = yes
+			}
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -1227,8 +1326,13 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = VAL_Contractor_Officers }
 		completion_reward = {
-			set_country_flag = VAL_contract_nco_schools
-			VAL_apply_contract_army_2 = yes
+			army_experience = 10
+			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_nco_schools_delta } }
+			hidden_effect = {
+				set_country_flag = VAL_contract_nco_schools
+				VAL_apply_contract_army_2 = yes
+				VAL_refresh_contract_modifier = yes
+			}
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -1294,7 +1398,12 @@ focus_tree = {
 		y = 7
 		cost = 3
 		prerequisite = { focus = VAL_Trading_Partners }
-		completion_reward = { set_country_flag = VAL_foreign_broker_licences ADISCORD_economy_receive_15 = yes }
+		completion_reward = {
+			unlock_decision_tooltip = VAL_ops_sell_rifles_to_cin
+			unlock_decision_tooltip = VAL_ops_sell_rifles_to_osf
+			custom_effect_tooltip = VAL_bulk_exports_tt
+			hidden_effect = { set_country_flag = VAL_operations_map_unlocked }
+		}
 		ai_will_do = { base = 3 }
 	}
 
@@ -1306,7 +1415,12 @@ focus_tree = {
 		y = 7
 		cost = 3
 		prerequisite = { focus = VAL_October_Of_2160 }
-		completion_reward = { set_country_flag = VAL_northern_clearing_house ADISCORD_economy_receive_15 = yes }
+		completion_reward = {
+			unlock_decision_tooltip = VAL_ops_sell_rifles_to_cin
+			unlock_decision_tooltip = VAL_ops_sell_rifles_to_osf
+			custom_effect_tooltip = VAL_export_clearing_margin_tt
+			hidden_effect = { set_country_flag = VAL_operations_map_unlocked }
+		}
 		ai_will_do = { base = 3 }
 	}
 
@@ -1319,9 +1433,10 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = VAL_Different_Views_On_Freedom }
 		completion_reward = {
-			set_country_flag = VAL_contingency_ledgers
-			set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
-			ADISCORD_economy_receive_15 = yes
+			unlock_decision_tooltip = VAL_ops_sell_rifles_to_cin
+			unlock_decision_tooltip = VAL_ops_sell_rifles_to_osf
+			custom_effect_tooltip = VAL_export_rerouting_tt
+			hidden_effect = { set_country_flag = VAL_operations_map_unlocked }
 		}
 		ai_will_do = { base = 4 }
 	}
@@ -1369,12 +1484,22 @@ focus_tree = {
 		x = 28
 		y = 10
 		cost = 3
-		allow_branch = {
-			TFF = { has_civil_war = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_cw_crisis_active_tt
+				OR = { STP = { has_country_flag = STP_battle_for_stelander_active } STP = { has_country_flag = STP_cw_participant } has_global_flag = STP_cw_started }
+			}
 		}
 		completion_reward = {
-			set_country_flag = VAL_stelander_crisis_unlocked
 			add_political_power = 50
+			add_intel = { target = STP army_intel = 15 }
+			custom_effect_tooltip = VAL_focus_authority_5_tt
+			hidden_effect = {
+				set_country_flag = VAL_stelander_crisis_unlocked
+				set_country_flag = VAL_operations_map_unlocked
+				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
+				VAL_change_contract_authority = yes
+			}
 		}
 		ai_will_do = { base = 10 }
 	}
@@ -1383,15 +1508,27 @@ focus_tree = {
 		id = VAL_Arms_For_The_Burning
 		icon = GFX_goal_generic_positive_trade_relations
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		x = 27
+		x = 26
 		y = 11
 		cost = 5
 		prerequisite = { focus = VAL_Stelander_Crisis_Opens }
-		mutually_exclusive = { focus = VAL_Seize_The_Northern_Passes }
+		mutually_exclusive = { focus = VAL_Seize_The_Northern_Passes focus = VAL_Keep_The_Arsenals }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_cw_trade_course_available_tt
+				NOT = { has_country_flag = VAL_cw_military_course }
+				NOT = { has_country_flag = VAL_cw_refused }
+			}
+		}
 		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = -2000 }
-			ADISCORD_economy_receive_15 = yes
-			ADISCORD_economy_receive_15 = yes
+			army_experience = 5
+			add_tech_bonus = { name = VAL_cw_field_reports_bonus bonus = 0.5 uses = 1 category = infantry_weapons }
+			unlock_decision_tooltip = VAL_cw_sell_arms_to_resistance
+			unlock_decision_tooltip = VAL_cw_offer_contract_formations
+			hidden_effect = {
+				set_country_flag = VAL_cw_trade_course
+				if = { limit = { SRP = { exists = yes has_war = no } } SRP = { STP_cw_finish_mobilization = yes } }
+			}
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -1400,16 +1537,53 @@ focus_tree = {
 		id = VAL_Seize_The_Northern_Passes
 		icon = GFX_goal_generic_allies_build_infantry
 		search_filters = { FOCUS_FILTER_ARMY }
-		x = 29
+		x = 30
 		y = 11
 		cost = 5
 		prerequisite = { focus = VAL_Stelander_Crisis_Opens }
-		mutually_exclusive = { focus = VAL_Arms_For_The_Burning }
+		mutually_exclusive = { focus = VAL_Arms_For_The_Burning focus = VAL_Keep_The_Arsenals }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_cw_military_course_available_tt
+				NOT = { has_country_flag = VAL_cw_trade_course }
+				NOT = { has_country_flag = VAL_cw_refused }
+			}
+		}
 		completion_reward = {
 			add_war_support = 0.05
-			add_manpower = 1500
+			add_command_power = 25
+			army_experience = 5
+			unlock_decision_tooltip = VAL_cw_begin_mobilization
+			hidden_effect = { set_country_flag = VAL_cw_military_course }
 		}
 		ai_will_do = { base = 3 }
+	}
+
+	focus = {
+		id = VAL_Keep_The_Arsenals
+		icon = GFX_goal_generic_position_armies
+		search_filters = { FOCUS_FILTER_ARMY FOCUS_FILTER_POLITICAL }
+		x = 28
+		y = 11
+		cost = 5
+		prerequisite = { focus = VAL_Stelander_Crisis_Opens }
+		mutually_exclusive = { focus = VAL_Arms_For_The_Burning focus = VAL_Seize_The_Northern_Passes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_cw_neutral_course_available_tt
+				NOT = { has_country_flag = VAL_cw_trade_course }
+				NOT = { has_country_flag = VAL_cw_military_course }
+			}
+		}
+		completion_reward = {
+			add_stability = 0.05
+			army_experience = 10
+			hidden_effect = {
+				set_country_flag = VAL_cw_refused
+				if = { limit = { SRP = { exists = yes has_war = no } } SRP = { STP_cw_finish_mobilization = yes } }
+			}
+		}
+		ai_will_do = { base = 1 }
 	}
 
 	focus = {
@@ -1419,13 +1593,209 @@ focus_tree = {
 		x = 28
 		y = 12
 		cost = 5
-		prerequisite = { focus = VAL_Arms_For_The_Burning }
-		prerequisite = { focus = VAL_Seize_The_Northern_Passes }
+		prerequisite = { focus = VAL_Arms_For_The_Burning focus = VAL_Seize_The_Northern_Passes focus = VAL_Keep_The_Arsenals }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_cw_campaign_result_tt
+				OR = { has_country_flag = VAL_cw_arms_contract_fulfilled has_country_flag = VAL_cw_settled has_global_flag = STP_cw_union_wars_finished }
+			}
+		}
 		completion_reward = {
-			add_offsite_building = { type = arms_factory level = 1 }
-			add_resource = { type = steel amount = 12 }
-			set_country_flag = VAL_stelander_steel_secured
+			if = {
+				limit = { OR = { has_country_flag = VAL_cw_arms_contract_fulfilled has_country_flag = VAL_cw_postwar } }
+				add_offsite_building = { type = arms_factory level = 1 }
+			}
+			else = { add_stability = 0.05 add_political_power = 50 }
+			custom_effect_tooltip = VAL_focus_authority_5_tt
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
+				VAL_change_contract_authority = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
+
+	focus = {
+		id = VAL_reclamation_survey
+		icon = GFX_goal_generic_consumer_goods
+		x = 12
+		y = 8
+		cost = 3
+		available = {
+			has_completed_focus = VAL_The_Harvest_Of_Ash
+			custom_trigger_tooltip = {
+				tooltip = VAL_reclamation_has_work_tt
+				OR = {
+					24 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
+					42 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
+					48 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
+					54 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
+					55 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
+					56 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
+					57 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
+				}
+			}
+		}
+		completion_reward = { unlock_decision_tooltip = VAL_reclamation_roads }
+		ai_will_do = { base = 3 }
+	}
+
+	focus = {
+		id = VAL_reclamation_road_crews
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 10
+		y = 9
+		cost = 3
+		prerequisite = { focus = VAL_reclamation_survey }
+		completion_reward = { add_ideas = VAL_reclamation_road_crews_idea }
+		ai_will_do = { base = 3 }
+	}
+
+	focus = {
+		id = VAL_reclamation_clean_water
+		icon = GFX_goal_generic_consumer_goods
+		x = 14
+		y = 9
+		cost = 3
+		prerequisite = { focus = VAL_reclamation_survey }
+		completion_reward = { unlock_decision_tooltip = VAL_reclamation_water }
+		ai_will_do = { base = 3 }
+	}
+
+	focus = {
+		id = VAL_reclamation_workshops
+		icon = GFX_goal_generic_construct_civ_factory
+		x = 10
+		y = 11
+		cost = 3
+		prerequisite = { focus = VAL_reclamation_road_crews }
+		completion_reward = { add_ideas = VAL_reclamation_workshops_idea }
+		ai_will_do = { base = 3 }
+	}
+
+	focus = {
+		id = VAL_reclamation_return_home
+		icon = GFX_goal_generic_consumer_goods
+		x = 14
+		y = 11
+		cost = 3
+		prerequisite = { focus = VAL_reclamation_clean_water }
+		completion_reward = { unlock_decision_tooltip = VAL_reclamation_settlement }
+		ai_will_do = { base = 3 }
+	}
+
+	focus = {
+		id = VAL_reclamation_land_register
+		icon = GFX_goal_generic_consumer_goods
+		x = 12
+		y = 13
+		cost = 3
+		prerequisite = { focus = VAL_reclamation_workshops }
+		prerequisite = { focus = VAL_reclamation_return_home }
+		completion_reward = { add_ideas = VAL_reclamation_land_register_idea }
+		ai_will_do = { base = 3 }
+	}
+
+    # Postwar border policy. The three columns separate logistics, government and claims.
+    focus = {
+        id = VAL_frontier_conference
+        icon = GFX_goal_generic_positive_trade_relations
+        x = 28
+        y = 14
+        cost = 5
+        prerequisite = { focus = VAL_The_Steel_Contract }
+        available = { VAL_frontier_postwar = yes }
+
+        completion_reward = { add_political_power = 75 add_intel = { target = NOD army_intel = 15 } }
+        ai_will_do = { base = 5 }
+    }
+    focus = {
+        id = VAL_frontier_logistics
+        icon = GFX_goal_generic_construct_infrastructure
+        x = 24
+        y = 15
+        cost = 5
+        prerequisite = { focus = VAL_frontier_conference }
+
+
+        completion_reward = { effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_supply_delta } } hidden_effect = { add_to_variable = { var = VAL_frontier_supply_bonus value = -0.08 } VAL_refresh_contract_modifier = yes ADISCORD_economy_mark_dirty = yes } army_experience = 20 }
+        ai_will_do = { base = 5 }
+    }
+    focus = {
+        id = VAL_frontier_commissioners
+        icon = GFX_goal_generic_positive_trade_relations
+        x = 27
+        y = 16
+        cost = 5
+        prerequisite = { focus = VAL_frontier_conference }
+
+        mutually_exclusive = { focus = VAL_frontier_provincial_offices }
+        completion_reward = { effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_trade_delta } } hidden_effect = { add_to_variable = { var = VAL_frontier_trade_bonus value = 0.1 } VAL_refresh_contract_modifier = yes ADISCORD_economy_mark_dirty = yes } custom_effect_tooltip = VAL_frontier_commissioners_tt }
+        ai_will_do = { base = 5 }
+    }
+    focus = {
+        id = VAL_frontier_provincial_offices
+        icon = GFX_goal_generic_political_pressure
+        x = 29
+        y = 16
+        cost = 5
+        prerequisite = { focus = VAL_frontier_conference }
+
+        mutually_exclusive = { focus = VAL_frontier_commissioners }
+        completion_reward = { effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_output_delta } } hidden_effect = { add_to_variable = { var = VAL_frontier_output_bonus value = 0.05 } VAL_refresh_contract_modifier = yes ADISCORD_economy_mark_dirty = yes } custom_effect_tooltip = VAL_frontier_provinces_tt }
+        ai_will_do = { base = 5 }
+    }
+    focus = {
+        id = VAL_frontier_return_irem
+        available = { ERT = { exists = yes is_subject = no has_capitulated = no } 168 = { is_owned_by = ERT is_controlled_by = ERT } }
+        icon = GFX_goal_generic_political_pressure
+        x = 32
+        y = 16
+        cost = 5
+        prerequisite = { focus = VAL_frontier_conference }
+
+
+        completion_reward = { unlock_decision_tooltip = VAL_frontier_demand_ERT add_political_power = 50 }
+        ai_will_do = { base = 5 }
+    }
+    focus = {
+        id = VAL_frontier_field_hospitals
+        icon = GFX_focus_generic_truck
+        x = 24
+        y = 17
+        cost = 5
+        prerequisite = { focus = VAL_frontier_logistics }
+
+
+        completion_reward = { effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_recovery_delta } } hidden_effect = { add_to_variable = { var = VAL_frontier_recovery_bonus value = 0.05 } VAL_refresh_contract_modifier = yes ADISCORD_economy_mark_dirty = yes } add_tech_bonus = { name = VAL_frontier_medical_bonus bonus = 0.5 uses = 1 category = support_tech } }
+        ai_will_do = { base = 5 }
+    }
+    focus = {
+        id = VAL_frontier_security_plan
+        icon = GFX_goal_generic_political_pressure
+        x = 28
+        y = 18
+        cost = 5
+        prerequisite = { focus = VAL_frontier_commissioners focus = VAL_frontier_provincial_offices }
+        available = { has_completed_focus = VAL_frontier_logistics }
+
+        completion_reward = { unlock_decision_tooltip = VAL_frontier_demand_CIN unlock_decision_tooltip = VAL_frontier_demand_OSF unlock_decision_tooltip = VAL_frontier_demand_APH }
+        ai_will_do = { base = 5 }
+    }
+    focus = {
+        id = VAL_frontier_treaty_offices
+        icon = GFX_focus_generic_treaty
+        x = 28
+        y = 20
+        cost = 5
+        prerequisite = { focus = VAL_frontier_security_plan }
+        available = {
+            has_country_flag = VAL_frontier_treaty_signed
+            custom_trigger_tooltip = { tooltip = VAL_frontier_idle_tt VAL_frontier_idle = yes }
+        }
+
+        completion_reward = { effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_trade_delta } } hidden_effect = { add_to_variable = { var = VAL_frontier_trade_bonus value = 0.1 } VAL_refresh_contract_modifier = yes ADISCORD_economy_mark_dirty = yes } add_stability = 0.05 }
+        ai_will_do = { base = 5 }
+    }
+
 }

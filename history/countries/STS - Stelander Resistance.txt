@@ -1,0 +1,13 @@
+# Dormant until the prepared uprising. The split transfers Shabrat and all resources.
+capital = 1
+set_politics = {
+	ruling_party = chauvinism
+	elections_allowed = no
+}
+set_popularities = {
+	chauvinism = 60
+	etatism = 20
+	humanism = 20
+}
+set_stability = 0.35
+set_war_support = 0.65

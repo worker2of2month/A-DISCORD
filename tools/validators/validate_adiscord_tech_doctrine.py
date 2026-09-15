@@ -26,7 +26,6 @@ try:
         FOLDER_BACKGROUNDS as GENERATED_FOLDERS,
         FORBIDDEN_IDS as GENERATED_FORBIDDEN_IDS,
         HORIZONTAL_FOLDERS as GENERATED_HORIZONTAL_FOLDERS,
-        HORIZONTAL_LANE_SLOT as GENERATED_HORIZONTAL_LANE_SLOT,
         HORIZONTAL_YEAR_SLOT_MULTIPLIER as GENERATED_HORIZONTAL_YEAR_SLOT_MULTIPLIER,
         LANE_SLOT_MULTIPLIER as GENERATED_LANE_SLOT_MULTIPLIER,
         MAIN_BRANCH_KEYS_BY_FOLDER as GENERATED_MAIN_BRANCH_KEYS_BY_FOLDER,
@@ -65,7 +64,6 @@ except ModuleNotFoundError:
         FOLDER_BACKGROUNDS as GENERATED_FOLDERS,
         FORBIDDEN_IDS as GENERATED_FORBIDDEN_IDS,
         HORIZONTAL_FOLDERS as GENERATED_HORIZONTAL_FOLDERS,
-        HORIZONTAL_LANE_SLOT as GENERATED_HORIZONTAL_LANE_SLOT,
         HORIZONTAL_YEAR_SLOT_MULTIPLIER as GENERATED_HORIZONTAL_YEAR_SLOT_MULTIPLIER,
         LANE_SLOT_MULTIPLIER as GENERATED_LANE_SLOT_MULTIPLIER,
         MAIN_BRANCH_KEYS_BY_FOLDER as GENERATED_MAIN_BRANCH_KEYS_BY_FOLDER,
@@ -443,6 +441,8 @@ EXPECTED_EQUIPMENT = [
     "ADISCORD_squad_weapons_equipment_2200",
     "support_equipment",
     "support_equipment_1",
+    "motorized_equipment",
+    "motorized_equipment_1",
     "ADISCORD_support_equipment_2170",
     "ADISCORD_support_equipment_2183",
     "ADISCORD_support_equipment_2200",
@@ -1142,6 +1142,7 @@ def check_equipment_unlocks(tech_blocks: dict[str, str], equipment: set[str]) ->
         "infantry_equipment_0",
         "ADISCORD_squad_weapons_equipment_0",
         "support_equipment_1",
+        "motorized_equipment_1",
         "artillery_equipment_1",
         "train_equipment_1",
         "armored_train_equipment_1",
@@ -1204,6 +1205,15 @@ def check_generated_capability_unlock_contract(tech_blocks: dict[str, str]) -> l
 
 def check_equipment_parser_constraints() -> list[str]:
     issues: list[str] = []
+    equipment = collect_equipment_blocks()
+    supply_trucks = {
+        name for name, body in equipment.items()
+        if re.search(r"\bsupply_truck\s*=\s*yes\b", body)
+    }
+    if supply_trucks != {"motorized_equipment"}:
+        issues.append("supply motorization requires the dedicated motorized_equipment archetype")
+    if not re.search(r"\barchetype\s*=\s*motorized_equipment\b", equipment.get("motorized_equipment_1", "")):
+        issues.append("supply motorization has no buildable truck variant")
     invalid_air_stats = {
         "agility": "air_agility",
         "range": "air_range",
@@ -1477,14 +1487,14 @@ def check_infantry_visual_model_chain() -> list[str]:
         ROOT / "gfx" / "entities" / "zy_ADISCORD_infantry_weapon_progression.asset"
     )
     source_prefixes = (
-        "HOL_infantry_weapon_rifle",
-        "SHX_infantry_weapon_rifle",
-        "MEX_infantry_weapon_rifle",
-        "XSM_infantry_weapon_mg",
-        "HOL_infantry_weapon_mg",
-        "YUN_infantry_weapon_mg",
-        "PRC_infantry_weapon_mg",
-        "MEX_infantry_weapon_mg",
+        "BEL_infantry_weapon_rifle",
+        "GER_infantry_weapon_mg_2",
+        "BEL_infantry_weapon_mg_2",
+        "BEL_infantry_weapon_mg_2",
+        "BEL_infantry_weapon_mg_2",
+        "BEL_infantry_weapon_mg_2",
+        "BEL_infantry_weapon_mg_2",
+        "BEL_infantry_weapon_mg_2",
     )
     poses = ("right", "left", "long_idle")
     attachments = (
@@ -1530,13 +1540,7 @@ def check_infantry_visual_model_chain() -> list[str]:
             issues.append(
                 "weapon progression asset must load before country infantry asset"
             )
-        forbidden_wrapper_fields = (
-            "pdxmesh",
-            "scale",
-            "transform",
-            "animation",
-            "state",
-        )
+        forbidden_wrapper_fields = ("scale", "transform")
         expected_wrapper_names = {
             f"ADISCORD_infantry_weapon_{level}_{pose}_entity"
             for level in range(8)
@@ -1569,6 +1573,16 @@ def check_infantry_visual_model_chain() -> list[str]:
                     issues.append(
                         f"{wrapper} clones {actual_parent}; expected {expected_parent}"
                     )
+                expected_mesh = f"ADISCORD_infantry_weapon_{level}_mesh"
+                mesh_match = re.search(r'\bpdxmesh\s*=\s*"([^"]+)"', wrapper_block)
+                actual_mesh = mesh_match.group(1) if mesh_match else None
+                if actual_mesh != expected_mesh:
+                    issues.append(
+                        f"{wrapper} uses {actual_mesh}; expected {expected_mesh}"
+                    )
+                for neutral in ("idle", "move"):
+                    if not re.search(rf'state\s*=\s*\{{\s*name\s*=\s*"{neutral}"\s+animation\s*=\s*"idle"', wrapper_block):
+                        issues.append(f"{wrapper} lacks a bind-pose clip for {neutral}")
                 for field in forbidden_wrapper_fields:
                     if re.search(rf"\b{field}\s*=", wrapper_block):
                         issues.append(f"{wrapper} must not define {field}")
@@ -1623,11 +1637,12 @@ def check_infantry_visual_model_chain() -> list[str]:
             "APH_mountaineers",
         )
         expected_custom_body_meshes = {
-            "STP_infantry_2_entity": "STP_infantry_hedonist_mesh",
-            "VAL_infantry_2_entity": "VAL_infantry_mesh",
-            "CIN_infantry_2_entity": "ETH_irregular_infantry_mesh",
-            "OSF_infantry_2_entity": "ETH_irregular_infantry_mesh",
-            "APH_infantry_2_entity": "APH_irregular_infantry_mesh",
+            "STP_infantry_2_entity": "ADISCORD_STP_party_mesh",
+            "VAL_infantry_2_entity": "ADISCORD_VAL_regular_mesh",
+            "STS_infantry_2_entity": "ADISCORD_STS_regular_mesh",
+            "CIN_infantry_2_entity": "ETH_irregular_mg_infantry_mesh",
+            "OSF_infantry_2_entity": "ETH_irregular_mg_infantry_mesh",
+            "APH_infantry_2_entity": "APH_irregular_mg_infantry_mesh",
             "APH_mountaineers_2_entity": "APH_afg_militia_mg_mesh",
         }
         if re.search(r'"(?:ENG|USA)_infantry_weapon_', asset_text):
@@ -2261,13 +2276,12 @@ def check_technology_gridboxes(tech_blocks: dict[str, str]) -> list[str]:
                 issues.append(
                     f"{folder} gridbox {name} must use {orientation} {expected_format} format"
                 )
-            expected_height = GENERATED_HORIZONTAL_LANE_SLOT if horizontal else 70
             if not re.search(
-                rf"\bslotsize\s*=\s*\{{\s*width\s*=\s*70\s*height\s*=\s*{expected_height}\s*\}}",
+                r"\bslotsize\s*=\s*\{\s*width\s*=\s*70\s*height\s*=\s*70\s*\}",
                 grid_block,
             ):
                 issues.append(
-                    f"{folder} gridbox {name} must use stable 70x{expected_height} slots"
+                    f"{folder} gridbox {name} must use 70x70 slots matching the native connector"
                 )
 
     return issues
@@ -2551,8 +2565,7 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
         "wtd": ("industrial", "energy"),
     }
     for collapse_name in (
-        "ADISCORD_vorkerland_collapse_effects.txt",
-        "ADISCORD_vorkerland_collapse_dirty_effects.txt",
+        "ADISCORD_vorkerland_effects.txt",
     ):
         collapse_text = read_text(ROOT / "common" / "scripted_effects" / collapse_name)
         setup_matches = list(
@@ -3061,18 +3074,20 @@ def ai_force_progression_contract_issues(
         if not line_artillery or int(line_artillery.group(1)) < 1:
             issues.append("AI supported line template must contain line artillery")
 
+    # Squad, support and artillery minima start at 2/3/4 military factories;
+    # their simultaneous requests must leave a factory available for rifles.
     production_contracts = (
         (
             "support production",
             "ADISCORD_produce_support_equipment_low_stock",
             "support_equipment",
-            1,
+            2,
         ),
         (
             "artillery production",
             "ADISCORD_produce_artillery_low_stock",
             "artillery_equipment",
-            2,
+            3,
         ),
     )
     for label, block_name, equipment_id, maximum_factory_floor in production_contracts:
@@ -3242,7 +3257,7 @@ def check_ai_force_progression() -> list[str]:
         "division-template XP priority": "id = division_template",
         "technology weighting": "type = research_weight_factor",
         "mobile reserve ratio": "id = mobile",
-        "line artillery production floor": "id = artillery_equipment",
+        "line artillery production priority": "id = artillery_equipment",
         "anti-tank production floor": "id = anti_tank_equipment",
         "anti-air production floor": "id = anti_air_equipment",
         "tank production floor": "id = ADISCORD_combat_platform_archetype",

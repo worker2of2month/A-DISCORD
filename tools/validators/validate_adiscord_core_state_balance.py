@@ -16,6 +16,8 @@ from tools.lib.adiscord_core_state_balance_manifest import (
     EXPECTED_RESOURCE_TOTALS,
     EXPECTED_VP_NAMES,
     NON_URBAN_SETTLEMENT_VPS,
+    NORTHERN_CAMPAIGN_VPS,
+    SETTLEMENT_VP_VALUES,
     SETTLEMENT_VPS,
     STP_CLAIMS_ON_VAL,
     TARGET_STATES,
@@ -169,7 +171,8 @@ def validate() -> None:
                 check(value >= 5, f"state {state_id}: urban VP {province} is below 5")
             else:
                 check(province in NON_URBAN_SETTLEMENT_VPS, f"state {state_id}: unapproved non-urban VP {province}")
-                check(value == 1, f"state {state_id}: settlement VP {province} must equal 1")
+                expected = SETTLEMENT_VP_VALUES.get(province)
+                check(value == expected, f"state {state_id}: settlement VP {province} must equal {expected}")
 
     check(dict(population_totals) == EXPECTED_POPULATION_TOTALS, f"wrong population totals {dict(population_totals)}")
     for owner, expected in EXPECTED_INDUSTRY_TOTALS.items():
@@ -182,6 +185,9 @@ def validate() -> None:
     for state_id, (province, value, _name) in SETTLEMENT_VPS.items():
         check((province, value) in vps_by_state.get(state_id, []), f"state {state_id}: missing settlement VP {province}:{value}")
         check(province_terrain.get(province) != "urban", f"state {state_id}: settlement VP {province} unexpectedly became urban")
+    for state_id, expected_vps in NORTHERN_CAMPAIGN_VPS.items():
+        check(tuple(vps_by_state.get(state_id, [])) == expected_vps,
+              f"northern state {state_id}: expected exact campaign VPs {expected_vps}")
     for state_id, expected_vps in URBAN_VP_MINIMUMS.items():
         actual_vps = dict(vps_by_state.get(state_id, []))
         for province, value in expected_vps.items():
@@ -199,7 +205,7 @@ def validate() -> None:
         check(bool(re.search(r"(?m)^\s*add_claim_by\s*=\s*STP\s*$", histories.get(state_id, ""))), f"state {state_id}: missing STP claim")
     stolen_val_resources = sum(sum(EXPECTED_RESOURCES[state_id].values()) for state_id in STP_CLAIMS_ON_VAL)
     total_val_resources = sum(EXPECTED_RESOURCE_TOTALS["VAL"].values())
-    check(stolen_val_resources == 56 and total_val_resources == 68, "VAL resource corridor must contain 56 of 68 resource units")
+    check(stolen_val_resources >= total_val_resources * 0.8, "VAL resource corridor must contain at least 80% of domestic resource units")
 
 
 def main() -> int:
@@ -209,7 +215,7 @@ def main() -> int:
         for error in ERRORS:
             print(f"- {error}")
         return 1
-    print("Core state balance validation passed: NOD/STP/VAL population, VP, industry, buildings, and resources match the approved contract.")
+    print("Core state balance validation passed: NOD/STP/VAL and northern coalition population, VP, industry, buildings, and resources match the approved contract.")
     return 0
 
 

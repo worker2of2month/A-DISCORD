@@ -52,3 +52,5 @@ add_equipment_to_stockpile = {
 	amount = 500
 	producer = APH
 }
+
+recruit_character = APH_VAL_commission

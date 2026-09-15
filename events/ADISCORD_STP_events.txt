@@ -1,0 +1,730 @@
+add_namespace = ADISCORD_STP_preparation
+add_namespace = ADISCORD_STP_regions
+add_namespace = ADISCORD_STP_cw
+
+country_event = {
+	id = ADISCORD_STP_cw.90
+	title = ADISCORD_STP_cw.90.t
+	desc = ADISCORD_STP_cw.90.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = STS }
+	option = {
+		name = ADISCORD_STP_cw.90.a
+		trigger = { STP_cw_can_settle_council_guarantees = yes }
+		ai_chance = { base = 80 }
+		hidden_effect = { clr_country_flag = STP_cw_charter_dialogue_pending }
+		STP_cw_ratify_republican_charter = yes
+	}
+	option = {
+		name = ADISCORD_STP_cw.90.b
+		trigger = { STP_cw_can_settle_council_guarantees = yes }
+		ai_chance = { base = 20 }
+		hidden_effect = { clr_country_flag = STP_cw_charter_dialogue_pending }
+		STP_cw_reject_republican_charter = yes
+	}
+	option = {
+		name = ADISCORD_STP_cw.90.close
+		trigger = { NOT = { STP_cw_can_settle_council_guarantees = yes } }
+		ai_chance = { base = 100 }
+		hidden_effect = { clr_country_flag = STP_cw_charter_dialogue_pending }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_cw.91
+	title = ADISCORD_STP_cw.91.t
+	desc = { trigger = { has_idea = STP_cw_council_guarantees } text = ADISCORD_STP_cw.91.guaranteed }
+	desc = { trigger = { NOT = { has_idea = STP_cw_council_guarantees } } text = ADISCORD_STP_cw.91.independent }
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = STS SRP = { exists = yes is_subject = no } }
+	option = { name = ADISCORD_STP_cw.91.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.15
+	title = ADISCORD_STP_preparation.15.t
+	desc = ADISCORD_STP_preparation.15.d
+	picture = GFX_event_adiscord_nectar_of_the_gods
+	is_triggered_only = yes
+	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } }
+	immediate = { clear_variable = STP_nectar_story_page }
+	option = { name = ADISCORD_STP_preparation.15.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.16
+	title = ADISCORD_STP_preparation.16.t
+	desc = ADISCORD_STP_preparation.16.d
+	picture = GFX_event_adiscord_nectar_of_the_gods
+	is_triggered_only = yes
+	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } }
+	immediate = { clear_variable = STP_nectar_story_page }
+	option = { name = ADISCORD_STP_preparation.16.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.17
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { tag = STP STP_cw_preparation_open = yes has_active_mission = STP_cw_election_window has_country_flag = STP_sided_with_Maksim_flag NOT = { has_active_mission = STP_cw_credentials_review } }
+	immediate = { activate_mission = STP_cw_credentials_review }
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.20
+	title = ADISCORD_STP_preparation.20.t
+	desc = ADISCORD_STP_preparation.20.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = STP STP_cw_preparation_open = yes }
+	option = { name = ADISCORD_STP_preparation.20.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.21
+	title = ADISCORD_STP_preparation.21.t
+	desc = ADISCORD_STP_preparation.21.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = STP STP_cw_preparation_open = yes }
+	option = { name = ADISCORD_STP_preparation.21.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.1
+	title = ADISCORD_STP_preparation.1.t
+	desc = ADISCORD_STP_preparation.1.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = {
+		tag = STP
+		NOT = { has_global_flag = STP_cw_started }
+		NOT = { has_country_flag = STP_cw_elections_finished }
+		NOT = { has_country_flag = STP_sided_with_Maksim_flag }
+		NOT = { has_country_flag = STP_sided_with_the_party_flag }
+	}
+	option = {
+		name = ADISCORD_STP_preparation.1.a
+		ai_chance = { factor = 65 }
+		set_country_flag = STP_sided_with_Maksim_flag
+		log = "[STP CW] First decline: player chose Shabrat"
+		STP_cw_open_preparation = yes
+		complete_national_focus = STP_Show_Him_The_Truth
+		mark_focus_tree_layout_dirty = yes
+		STP_cw_schedule_health = yes
+		custom_effect_tooltip = STP_cw_army_split_tt
+	}
+	option = {
+		name = ADISCORD_STP_preparation.1.b
+		ai_chance = { factor = 35 }
+		set_country_flag = STP_sided_with_the_party_flag
+		log = "[STP CW] First decline: player chose party"
+		STP_cw_open_preparation = yes
+		complete_national_focus = STP_Govern_In_His_Name
+		mark_focus_tree_layout_dirty = yes
+		STP_cw_schedule_health = yes
+		# A visible foothold gives the party something concrete to contain.
+		3 = {
+			set_temp_variable = { var = STP_region_influence_change value = 20 }
+			STP_add_resistance_influence = yes
+			set_state_flag = STP_resistance_administration_asset
+		}
+		STP_cw_schedule_opposition = yes
+		custom_effect_tooltip = STP_cw_party_preparation_tt
+		custom_effect_tooltip = STP_cw_army_split_tt
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.5
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag NOT = { has_active_mission = STP_cw_opposition_preparation } }
+			STP_cw_schedule_opposition = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.6
+	title = ADISCORD_STP_preparation.6.t
+	desc = ADISCORD_STP_preparation.6.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = VAL STP = { STP_cw_preparation_open = yes } }
+	option = {
+		name = ADISCORD_STP_preparation.6.a
+		trigger = {
+			NOT = { has_manpower < 23700 }
+			NOT = { has_equipment = { infantry_equipment < 1830 } }
+			NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 144 } }
+			NOT = { has_equipment = { support_equipment < 90 } }
+			NOT = { has_equipment = { artillery_equipment < 180 } }
+			NOT = { has_equipment = { anti_air_equipment < 60 } }
+			NOT = { has_war_with = STP }
+			STP = {
+				STP_cw_preparation_open = yes
+				owns_state = 1
+				NOT = { has_country_flag = STP_cw_kefreyt_shipment_received }
+			}
+		}
+		ai_chance = { factor = 99 }
+		custom_effect_tooltip = STP_cw_kefreyt_volunteers_cost_tt
+		hidden_effect = { STP_cw_reserve_kefreyt_volunteers = yes }
+	}
+	option = {
+		name = ADISCORD_STP_preparation.6.b
+		ai_chance = { factor = 1 }
+		STP = { country_event = { id = ADISCORD_STP_preparation.8 } }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.8
+	title = ADISCORD_STP_preparation.8.t
+	desc = {
+		trigger = { has_country_flag = STP_cw_kefreyt_shipment_received }
+		text = ADISCORD_STP_preparation.8.accepted
+	}
+	desc = {
+		trigger = { NOT = { has_country_flag = STP_cw_kefreyt_shipment_received } }
+		text = ADISCORD_STP_preparation.8.refused
+	}
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	option = { name = ADISCORD_STP_preparation.7.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.2
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_ivanov_dead } }
+			STP_cw_schedule_health = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.3
+	title = ADISCORD_STP_preparation.3.t
+	desc = ADISCORD_STP_preparation.3.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	option = { name = ADISCORD_STP_preparation.3.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.4
+	title = ADISCORD_STP_preparation.4.t
+	desc = ADISCORD_STP_preparation.4.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	option = { name = ADISCORD_STP_preparation.4.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.10
+	title = ADISCORD_STP_preparation.10.t
+	desc = ADISCORD_STP_preparation.10.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = NOD has_country_flag = STP_cw_northern_crisis_pending }
+	option = {
+		name = ADISCORD_STP_preparation.10.a
+		ai_chance = { factor = 100 }
+		activate_mission = NOD_cw_northern_mobilization
+		STP = { country_event = { id = ADISCORD_STP_preparation.13 } }
+	}
+	option = {
+		name = ADISCORD_STP_preparation.10.b
+		ai_chance = { factor = 0 }
+		clr_country_flag = STP_cw_northern_crisis_pending
+		set_variable = { var = STP_cw_northern_campaign_status value = 4 }
+		STP = { country_event = { id = ADISCORD_STP_preparation.14 } }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.11
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { tag = NOD has_capitulated = no }
+			STP_cw_start_northern_war = yes
+		}
+		else = {
+			clr_country_flag = STP_cw_northern_crisis_pending
+			STP = {
+				country_event = { id = ADISCORD_STP_preparation.14 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.12
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		STP = {
+			if = {
+				limit = { STP_cw_nod_busy_in_north = yes }
+				if = {
+					limit = { NOT = { has_country_flag = STP_cw_northern_war_verified } has_completed_focus = STP_cw_northern_dossier }
+					add_intel = { target = NOD army_intel = 15 }
+				}
+				set_country_flag = STP_cw_northern_war_verified
+				log = "[STP CW] Actual northern war verified"
+			}
+			else = { country_event = { id = ADISCORD_STP_preparation.14 } }
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.13
+	title = ADISCORD_STP_preparation.13.t
+	desc = ADISCORD_STP_preparation.13.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = STP has_active_mission = STP_cw_election_window }
+	option = { name = ADISCORD_STP_preparation.13.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.14
+	title = ADISCORD_STP_preparation.14.t
+	desc = ADISCORD_STP_preparation.14.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = STP has_active_mission = STP_cw_election_window }
+	option = { name = ADISCORD_STP_preparation.14.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_regions.1
+	title = ADISCORD_STP_regions.1.t
+	desc = ADISCORD_STP_regions.1.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_STP_regions.1.a
+		set_country_flag = STP_sided_with_Maksim_flag
+		if = {
+			limit = { NOT = { has_country_flag = STP_battle_for_stelander_active } }
+			STP_initialize_battle_for_stelander = yes
+		}
+	}
+}
+
+# Delay the first inspection; active-mission checks prevent overlapping callbacks.
+country_event = {
+	id = ADISCORD_STP_regions.2
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_country_flag = STP_battle_for_stelander_active
+				NOT = { has_country_flag = STP_sided_with_the_party_flag }
+				NOT = { has_active_mission = STP_party_inspection_state_2 }
+				NOT = { has_active_mission = STP_party_inspection_state_3 }
+				NOT = { has_active_mission = STP_party_inspection_state_29 }
+				NOT = { has_active_mission = STP_party_inspection_state_45 }
+				NOT = { has_active_mission = STP_party_inspection_state_46 }
+				NOT = { has_active_mission = STP_party_inspection_state_53 }
+			}
+			STP_schedule_next_party_inspection = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_cw.40
+	picture = GFX_event_adiscord_negotiation_table
+	title = ADISCORD_STP_cw.40.t
+	desc = ADISCORD_STP_cw.40.d
+	is_triggered_only = yes
+	trigger = { OR = { tag = STP tag = STS } NOD = { has_country_flag = NOD_cw_intervention_approved } }
+	option = { name = ADISCORD_STP_cw.40.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_cw.41
+	picture = GFX_event_adiscord_military_planning
+	title = ADISCORD_STP_cw.41.t
+	desc = ADISCORD_STP_cw.41.d
+	is_triggered_only = yes
+	trigger = { tag = STS NOD = { has_war_with = STS } }
+	option = { name = ADISCORD_STP_cw.41.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_cw.10
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { STP_cw_can_start = yes }
+	immediate = { STP_cw_start = yes }
+}
+
+country_event = {
+	id = ADISCORD_STP_cw.20
+	picture = GFX_event_adiscord_negotiation_table
+	title = ADISCORD_STP_cw.20.t
+	desc = ADISCORD_STP_cw.20.d
+	is_triggered_only = yes
+	trigger = { VAL_cw_external_course_available = yes NOT = { has_country_flag = VAL_cw_offer_shown } }
+	immediate = { clr_country_flag = VAL_cw_offer_pending set_country_flag = VAL_cw_offer_shown }
+	option = {
+		name = ADISCORD_STP_cw.20.a
+		trigger = { NOT = { VAL_cw_route_focus_completed = yes } VAL_cw_external_course_available = yes NOT = { has_country_flag = VAL_cw_trade_course } }
+		ai_chance = { base = 100 }
+		unlock_decision_tooltip = { decision = VAL_cw_begin_mobilization show_effect_tooltip = yes }
+		hidden_effect = {
+			set_country_flag = VAL_cw_military_course
+			set_country_flag = VAL_operations_map_unlocked
+		}
+	}
+	option = {
+		name = ADISCORD_STP_cw.20.c
+		trigger = {
+			NOT = { VAL_cw_route_focus_completed = yes }
+			NOT = { has_country_flag = VAL_cw_military_course }
+			NOT = { has_country_flag = VAL_cw_refused }
+			STS = { exists = yes has_capitulated = no has_war_with = STP NOT = { has_war_with = VAL } }
+		}
+		ai_chance = { base = 20 modifier = { factor = 3 has_country_flag = VAL_cw_supported_resistance } }
+		unlock_decision_tooltip = { decision = VAL_cw_sell_arms_to_resistance show_effect_tooltip = yes }
+		unlock_decision_tooltip = { decision = VAL_cw_offer_contract_formations show_effect_tooltip = yes }
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = { VAL_cw_route_focus_completed = yes }
+					NOT = { has_country_flag = VAL_cw_military_course }
+					NOT = { has_country_flag = VAL_cw_refused }
+					STS = { exists = yes has_capitulated = no has_war_with = STP NOT = { has_war_with = VAL } }
+				}
+				set_country_flag = VAL_cw_trade_course
+				if = { limit = { SRP = { exists = yes has_war = no } } SRP = { STP_cw_finish_mobilization = yes } }
+				set_country_flag = VAL_operations_map_unlocked
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_cw.20.b
+		trigger = { NOT = { VAL_cw_route_focus_completed = yes } }
+		ai_chance = { base = 0 }
+		hidden_effect = {
+			if = {
+				limit = { NOT = { VAL_cw_route_focus_completed = yes } }
+				set_country_flag = VAL_cw_refused
+				clr_country_flag = VAL_cw_military_course
+				clr_country_flag = VAL_cw_trade_course
+				if = { limit = { SRP = { exists = yes has_war = no } } SRP = { STP_cw_finish_mobilization = yes } }
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_cw.20.committed
+		trigger = { VAL_cw_route_focus_completed = yes }
+		ai_chance = { base = 100 }
+	}
+}
+
+# No trigger: cancellation must release only the slot this mobilisation reserved.
+country_event = {
+	id = ADISCORD_STP_cw.21
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { tag = VAL has_country_flag = VAL_cw_mobilizing }
+			clr_country_flag = VAL_cw_mobilizing
+			clr_country_flag = VAL_foreign_operation_active
+			remove_mission = VAL_cw_intervention_preparation
+			SRP = { remove_mission = STP_cw_val_ultimatum }
+			if = {
+				limit = { VAL_cw_can_intervene = yes has_country_flag = VAL_cw_military_course }
+				declare_war_on = { target = SRP type = annex_everything }
+				if = {
+					limit = { has_war_with = SRP }
+					set_country_flag = VAL_cw_entered
+					SRP = { add_ideas = STP_cw_republics_battle_spirit STP_cw_republics_war_command = yes }
+					news_event = { id = ADISCORD_STP_cw.73 }
+					log = "[STP_CW] VAL ultimatum expired: real war against SRP"
+				}
+				else = {
+					set_country_flag = VAL_cw_mobilization_cancelled
+					country_event = { id = ADISCORD_STP_cw.23 }
+					log = "[STP_CW] VAL war declaration unavailable; mobilisation released"
+				}
+			}
+			else = {
+				set_country_flag = VAL_cw_mobilization_cancelled
+				country_event = { id = ADISCORD_STP_cw.23 }
+				log = "[STP_CW] VAL mobilisation cancelled: target or border unavailable"
+			}
+		}
+	}
+}
+
+# Clear the pending marker even if a queued offer is no longer eligible.
+country_event = {
+	id = ADISCORD_STP_cw.22
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		clr_country_flag = VAL_cw_offer_pending
+		if = {
+			limit = { VAL_cw_external_course_available = yes NOT = { has_country_flag = VAL_cw_offer_shown } }
+			country_event = { id = ADISCORD_STP_cw.20 }
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_cw.23
+	title = ADISCORD_STP_cw.23.t
+	desc = { trigger = { has_country_flag = VAL_cw_postwar } text = ADISCORD_STP_cw.23.victory }
+	desc = { trigger = { has_country_flag = VAL_cw_defeated } text = ADISCORD_STP_cw.23.defeat }
+	desc = { trigger = { has_country_flag = VAL_cw_mobilization_cancelled } text = ADISCORD_STP_cw.23.cancelled }
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = ADISCORD_STP_cw.23.a }
+}
+
+# Sent only after the bilateral war actually begins; it never creates a war.
+news_event = {
+	id = ADISCORD_STP_cw.73
+	title = ADISCORD_STP_cw.73.t
+	desc = ADISCORD_STP_cw.73.d
+	picture = GFX_news_event_adiscord_troops_marching
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_STP_cw.73.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_cw.42
+	title = ADISCORD_STP_cw.42.t
+	desc = ADISCORD_STP_cw.42.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { NOD_cw_intervention_possible = yes NOT = { has_country_flag = NOD_cw_offer_shown } }
+	immediate = { set_country_flag = NOD_cw_offer_shown }
+	option = {
+		name = ADISCORD_STP_cw.42.a
+		trigger = { NOD_cw_intervention_possible = yes }
+		ai_chance = { base = 100 }
+		custom_effect_tooltip = STP_cw_nod_consent_tt
+		hidden_effect = {
+			set_country_flag = NOD_cw_intervention_approved
+			activate_mission = NOD_cw_intervention_preparation
+			if = { limit = { has_global_flag = STP_cw_started STS = { exists = yes } } STS = { STP_cw_sync_nod_warning = yes country_event = { id = ADISCORD_STP_cw.40 } } }
+			else = { STP = { STP_cw_sync_nod_warning = yes country_event = { id = ADISCORD_STP_cw.40 } } }
+		}
+	}
+	option = {
+		name = ADISCORD_STP_cw.42.b
+		ai_chance = { base = 0 }
+		hidden_effect = { set_country_flag = NOD_cw_refused clr_country_flag = NOD_cw_intervention_approved }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_cw.43
+	title = ADISCORD_STP_cw.43.t
+	desc = { trigger = { has_country_flag = NOD_cw_victorious } text = ADISCORD_STP_cw.43.victory }
+	desc = { trigger = { has_country_flag = NOD_cw_withdrew } text = ADISCORD_STP_cw.43.withdrawal }
+	desc = { trigger = { has_country_flag = NOD_cw_defeated } text = ADISCORD_STP_cw.43.defeat }
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = NOD }
+	option = { name = ADISCORD_STP_cw.43.a }
+}
+
+# State and resource setup is complete; each choice begins combat before handoff.
+country_event = {
+	id = ADISCORD_STP_cw.30
+	picture = GFX_event_adiscord_parliament_chamber
+	title = ADISCORD_STP_cw.30.t
+	desc = {
+		trigger = { has_country_flag = STP_cw_limited_party_revolt }
+		text = ADISCORD_STP_cw.30.limited
+	}
+	desc = {
+		trigger = { has_country_flag = STP_cw_shabrat_election_victory NOT = { has_country_flag = STP_cw_limited_party_revolt } }
+		text = ADISCORD_STP_cw.30.shabrat
+	}
+	desc = {
+		trigger = { has_country_flag = STP_cw_party_election_victory }
+		text = ADISCORD_STP_cw.30.party
+	}
+	desc = {
+		trigger = { NOT = { has_country_flag = STP_cw_elections_finished } }
+		text = ADISCORD_STP_cw.30.d
+	}
+	is_triggered_only = yes
+	trigger = { tag = STP is_ai = no has_country_flag = STP_cw_participant STS = { exists = yes } }
+	option = {
+		name = ADISCORD_STP_cw.30.a
+		trigger = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_cw_side_republics } }
+		set_country_flag = STP_sided_with_the_party_flag
+		hidden_effect = { STP_cw_begin_hostilities = yes }
+	}
+	option = {
+		name = ADISCORD_STP_cw.30.b
+		trigger = { STS = { exists = yes } NOT = { has_country_flag = STP_sided_with_the_party_flag } NOT = { has_country_flag = STP_cw_side_republics } }
+		hidden_effect = { STP_cw_begin_hostilities = yes }
+		STS = { change_tag_from = STP }
+	}
+}
+
+
+# A bilateral offer: the buyer chooses, then current stock and both treasuries settle together.
+country_event = {
+	id = ADISCORD_STP_cw.50
+	title = ADISCORD_STP_cw.50.t
+	desc = { trigger = { VAL = { has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } } } text = ADISCORD_STP_cw.50.full }
+	desc = { trigger = { NOT = { VAL = { has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } } } } text = ADISCORD_STP_cw.50.d }
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = STS VAL = { has_country_flag = VAL_cw_arms_offer_pending } }
+	option = {
+		name = ADISCORD_STP_cw.50.a
+		ai_chance = { factor = 90 }
+		trigger = {
+			has_capitulated = no has_war_with = STP ADISCORD_economy_can_spend_50 = yes
+			VAL = { exists = yes has_capitulated = no has_country_flag = { flag = VAL_cw_arms_offer_pending value < 2 } has_country_flag = VAL_cw_trade_course NOT = { has_war_with = STS } NOT = { has_equipment = { infantry_equipment < 3200 } } }
+		}
+		custom_effect_tooltip = VAL_cw_buy_arms_tt
+		hidden_effect = { if = { limit = { VAL = { has_country_flag = { flag = VAL_cw_arms_offer_pending value < 2 } } } VAL = { VAL_cw_complete_arms_contract = yes } } }
+	}
+	option = {
+		name = ADISCORD_STP_cw.50.c
+		ai_chance = { factor = 90 }
+		trigger = {
+			has_capitulated = no has_war_with = STP ADISCORD_economy_can_spend_100 = yes any_owned_state = { is_controlled_by = PREV }
+			VAL = { exists = yes has_capitulated = no has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } has_country_flag = VAL_cw_trade_course NOT = { has_war_with = STS } NOT = { has_equipment = { infantry_equipment < 4420 } } NOT = { has_manpower < 12600 } NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 96 } } NOT = { has_equipment = { support_equipment < 60 } } }
+		}
+		custom_effect_tooltip = VAL_cw_buy_formations_tt
+		hidden_effect = { if = { limit = { VAL = { has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } } } VAL = { VAL_cw_complete_arms_contract = yes } } }
+	}
+	option = {
+		name = ADISCORD_STP_cw.50.b
+		ai_chance = { factor = 10 }
+		hidden_effect = {
+			VAL = {
+				if = {
+					limit = { has_country_flag = VAL_cw_arms_offer_pending }
+					clr_country_flag = VAL_cw_arms_offer_pending
+					country_event = { id = ADISCORD_STP_cw.51 }
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_cw.51
+	title = ADISCORD_STP_cw.51.t
+	desc = { trigger = { has_country_flag = VAL_cw_arms_contract_fulfilled NOT = { has_country_flag = { flag = VAL_cw_arms_contract_fulfilled value > 1 } } } text = ADISCORD_STP_cw.51.accepted }
+	desc = { trigger = { has_country_flag = { flag = VAL_cw_arms_contract_fulfilled value > 1 } } text = ADISCORD_STP_cw.51.accepted_full }
+	desc = { trigger = { NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } } text = ADISCORD_STP_cw.51.refused }
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	option = { name = ADISCORD_STP_cw.51.a }
+}
+
+# Public reports follow actual state creation and military outcomes.
+news_event = {
+	id = ADISCORD_STP_cw.70
+	title = ADISCORD_STP_cw.70.t
+	desc = { trigger = { STP = { has_country_flag = STP_cw_limited_party_revolt } } text = ADISCORD_STP_cw.70.limited }
+	desc = { trigger = { NOT = { STP = { has_country_flag = STP_cw_limited_party_revolt } } } text = ADISCORD_STP_cw.70.d }
+	picture = GFX_news_event_adiscord_armed_uprising
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_STP_cw.70.a }
+}
+
+news_event = {
+	id = ADISCORD_STP_cw.71
+	title = ADISCORD_STP_cw.71.t
+	desc = ADISCORD_STP_cw.71.d
+	picture = GFX_news_event_adiscord_army_formation
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_STP_cw.71.a }
+}
+
+news_event = {
+	id = ADISCORD_STP_cw.72
+	title = ADISCORD_STP_cw.72.t
+	desc = ADISCORD_STP_cw.72.d
+	picture = GFX_news_event_adiscord_urban_resistance
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_STP_cw.72.a }
+}
+
+
+# Northern campaign news. The campaign status owns one-time settlement and dispatch.
+news_event = {
+	id = ADISCORD_STP_cw.80
+	title = ADISCORD_STP_cw.80.t
+	desc = { trigger = { YPR = { is_subject_of = NOD STP_cw_ypr_has_only_historical_states = yes } 14 = { is_owned_by = NOD } } text = ADISCORD_STP_cw.80.d }
+	desc = { trigger = { NOT = { AND = { YPR = { is_subject_of = NOD STP_cw_ypr_has_only_historical_states = yes } 14 = { is_owned_by = NOD } } } } text = ADISCORD_STP_cw.80.limited }
+	picture = GFX_news_event_adiscord_treaty_signing
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_STP_cw.80.a }
+}
+
+news_event = {
+	id = ADISCORD_STP_cw.81
+	title = ADISCORD_STP_cw.81.t
+	desc = { trigger = { 17 = { is_owned_by = YPR } 18 = { is_owned_by = YPR } } text = ADISCORD_STP_cw.81.d }
+	desc = { trigger = { NOT = { AND = { 17 = { is_owned_by = YPR } 18 = { is_owned_by = YPR } } } } text = ADISCORD_STP_cw.81.limited }
+	picture = GFX_news_event_adiscord_peace_negotiations
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_STP_cw.81.a }
+}
+
+news_event = {
+	id = ADISCORD_STP_cw.82
+	title = ADISCORD_STP_cw.82.t
+	desc = ADISCORD_STP_cw.82.d
+	picture = GFX_news_event_adiscord_military_planning
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_STP_cw.82.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.19
+	title = ADISCORD_STP_preparation.19.t
+	desc = ADISCORD_STP_preparation.19.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	option = { name = ADISCORD_STP_preparation.19.a }
+}

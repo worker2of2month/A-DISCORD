@@ -6,8 +6,8 @@ ADISCORD_ai_fiscal_crisis = {
 
 	ai_strategy = { type = ai_wanted_divisions_factor value = -45 }
 	ai_strategy = { type = role_ratio id = armor value = -80 }
-	ai_strategy = { type = unit_ratio id = fighter value = -60 }
-	ai_strategy = { type = unit_ratio id = cas value = -60 }
+	ai_strategy = { type = equipment_production_factor id = fighter value = -35 }
+	ai_strategy = { type = equipment_production_factor id = cas value = -50 }
 	ai_strategy = { type = equipment_production_factor id = infantry value = 30 }
 	ai_strategy = { type = equipment_production_factor id = support value = 10 }
 	ai_strategy = { type = added_military_to_civilian_factory_ratio value = -40 }
@@ -22,8 +22,8 @@ ADISCORD_ai_fiscal_stress = {
 
 	ai_strategy = { type = ai_wanted_divisions_factor value = -20 }
 	ai_strategy = { type = role_ratio id = armor value = -30 }
-	ai_strategy = { type = unit_ratio id = fighter value = -20 }
-	ai_strategy = { type = unit_ratio id = cas value = -20 }
+	ai_strategy = { type = equipment_production_factor id = fighter value = -15 }
+	ai_strategy = { type = equipment_production_factor id = cas value = -25 }
 	ai_strategy = { type = equipment_production_factor id = infantry value = 20 }
 	ai_strategy = { type = added_military_to_civilian_factory_ratio value = -20 }
 	ai_strategy = { type = building_target id = ADISCORD_business_center value = 0 }

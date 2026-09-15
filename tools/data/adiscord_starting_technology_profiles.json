@@ -196,6 +196,28 @@
         "ADISCORD_tech_semi_autonomous_combat_modules"
       ]
     },
+    "recon_platform": {
+      "seeds": [
+        "ADISCORD_tech_drone_recon_swarms"
+      ],
+      "technologies": [
+        "ADISCORD_tech_drone_recon_swarms",
+        "ADISCORD_tech_light_suspension",
+        "ADISCORD_tech_restored_armored_chassis"
+      ]
+    },
+    "field_air_defense": {
+      "seeds": [
+        "ADISCORD_tech_point_defense_aa"
+      ],
+      "technologies": [
+        "ADISCORD_tech_improvised_air_defense",
+        "ADISCORD_tech_point_defense_aa",
+        "ADISCORD_tech_proximity_fuzes",
+        "ADISCORD_tech_radar_laying",
+        "ADISCORD_tech_stabilized_autocannon_mounts"
+      ]
+    },
     "air": {
       "seeds": [
         "ADISCORD_tech_reclaimed_jet_platforms",
@@ -1188,21 +1210,23 @@
     },
     "COF": {
       "profiles": [
-        "common"
+        "common",
+        "fragment_low_tech",
+        "field_air_defense"
       ],
-      "common_only": true,
-      "rationale": "Forest cult intentionally receives only the common equipment-enabling roots.",
+      "common_only": false,
+      "rationale": "Forest communes maintain local workshops and a small militia reserve without advanced military institutions.",
       "evidence": {
         "states": 1,
-        "civilian_factories": 0,
-        "military_factories": 0,
+        "civilian_factories": 1,
+        "military_factories": 2,
         "dockyards": 0,
         "air_bases": 0,
         "power_sites": 0,
-        "infrastructure_levels": 0,
+        "infrastructure_levels": 2,
         "research_slots": 1,
         "convoys": 0,
-        "oob_divisions": 1,
+        "oob_divisions": 8,
         "starting_doctrines": []
       },
       "technologies_2160": [
@@ -1219,20 +1243,27 @@
         "ADISCORD_tech_mesh_command_networks",
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
+        "ADISCORD_tech_point_defense_aa",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_proximity_fuzes",
+        "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
         "ADISCORD_tech_recovered_shaped_charge_cells",
+        "ADISCORD_tech_refurbished_receivers",
         "ADISCORD_tech_restored_armored_chassis",
         "ADISCORD_tech_restored_dockyards",
         "ADISCORD_tech_restored_field_artillery",
         "ADISCORD_tech_restored_rail_stock",
+        "ADISCORD_tech_restored_truck_fleets",
         "ADISCORD_tech_rocket_test_stands",
+        "ADISCORD_tech_ruin_workshops",
         "ADISCORD_tech_salvage_metallurgy",
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
+        "ADISCORD_tech_stabilized_autocannon_mounts",
         "ADISCORD_tech_standardized_machine_tools"
       ]
     },
@@ -2499,15 +2530,15 @@
       "rationale": "High-output military-industrial power with a dockyard and advanced institutional continuity.",
       "evidence": {
         "states": 7,
-        "civilian_factories": 8,
-        "military_factories": 6,
+        "civilian_factories": 10,
+        "military_factories": 12,
         "dockyards": 1,
-        "air_bases": 0,
+        "air_bases": 4,
         "power_sites": 0,
         "infrastructure_levels": 18,
         "research_slots": 2,
         "convoys": 0,
-        "oob_divisions": 10,
+        "oob_divisions": 42,
         "starting_doctrines": []
       },
       "technologies_2160": [
@@ -3493,7 +3524,9 @@
         "institutional",
         "land",
         "air",
-        "naval"
+        "naval",
+        "recon_platform",
+        "field_air_defense"
       ],
       "common_only": false,
       "rationale": "Major industrial state with dockyards, restored air and naval doctrines, and a large standing army.",
@@ -3502,12 +3535,12 @@
         "civilian_factories": 20,
         "military_factories": 7,
         "dockyards": 3,
-        "air_bases": 0,
+        "air_bases": 3,
         "power_sites": 0,
         "infrastructure_levels": 31,
         "research_slots": 1,
         "convoys": 100,
-        "oob_divisions": 14,
+        "oob_divisions": 30,
         "starting_doctrines": [
           "ADISCORD_doctrine_restoration_general_staff",
           "ADISCORD_naval_doctrine_littoral_command",
@@ -3524,6 +3557,7 @@
         "ADISCORD_tech_composite_protection_kits",
         "ADISCORD_tech_convoy_routing",
         "ADISCORD_tech_cruise_missiles",
+        "ADISCORD_tech_drone_recon_swarms",
         "ADISCORD_tech_electromechanical_relays",
         "ADISCORD_tech_encryption_rebuild",
         "ADISCORD_tech_field_radio_networks",
@@ -3538,6 +3572,7 @@
         "ADISCORD_tech_industrial_organization_baseline",
         "ADISCORD_tech_inertial_guidance",
         "ADISCORD_tech_interchangeable_components",
+        "ADISCORD_tech_light_suspension",
         "ADISCORD_tech_local_grid_restoration",
         "ADISCORD_tech_mesh_command_networks",
         "ADISCORD_tech_modular_gun_carriages",
@@ -3546,6 +3581,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_phase_synchronized_substations",
+        "ADISCORD_tech_point_defense_aa",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
         "ADISCORD_tech_proximity_fuzes",
@@ -3578,6 +3614,7 @@
         "ADISCORD_tech_shaped_charges",
         "ADISCORD_tech_sonar_archives",
         "ADISCORD_tech_squad_grenade_launchers",
+        "ADISCORD_tech_stabilized_autocannon_mounts",
         "ADISCORD_tech_standard_gauge_recovery",
         "ADISCORD_tech_standardized_airframes",
         "ADISCORD_tech_standardized_cartridges",
@@ -3645,26 +3682,30 @@
     "TFF": {
       "profiles": [
         "common",
-        "fragment_low_tech"
+        "fragment_low_tech",
+        "land",
+        "field_air_defense"
       ],
       "common_only": false,
-      "rationale": "Frontier polity has a small army and fragmentary production without advanced institutions.",
+      "rationale": "Frontier districts retain defensive land practice and a small standing army over a fragmentary workshop economy.",
       "evidence": {
         "states": 6,
-        "civilian_factories": 1,
-        "military_factories": 1,
+        "civilian_factories": 2,
+        "military_factories": 4,
         "dockyards": 0,
         "air_bases": 0,
         "power_sites": 0,
-        "infrastructure_levels": 4,
+        "infrastructure_levels": 12,
         "research_slots": 1,
         "convoys": 0,
-        "oob_divisions": 3,
+        "oob_divisions": 16,
         "starting_doctrines": []
       },
       "technologies_2160": [
+        "ADISCORD_tech_armored_rail_convoys",
         "ADISCORD_tech_battlefield_attack_aircraft",
         "ADISCORD_tech_belt_fed_recovery",
+        "ADISCORD_tech_combat_engineering_sections",
         "ADISCORD_tech_composite_protection_kits",
         "ADISCORD_tech_electromechanical_relays",
         "ADISCORD_tech_field_workshop_tools",
@@ -3674,10 +3715,17 @@
         "ADISCORD_tech_industrial_organization_baseline",
         "ADISCORD_tech_local_grid_restoration",
         "ADISCORD_tech_mesh_command_networks",
+        "ADISCORD_tech_modular_gun_carriages",
+        "ADISCORD_tech_modular_support_kits",
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
+        "ADISCORD_tech_point_defense_aa",
+        "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_proximity_fuzes",
+        "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_reclaimed_jet_platforms",
+        "ADISCORD_tech_recoil_recovery",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
         "ADISCORD_tech_recovered_shaped_charge_cells",
@@ -3692,8 +3740,17 @@
         "ADISCORD_tech_salvage_metallurgy",
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
+        "ADISCORD_tech_sealed_combat_suits",
+        "ADISCORD_tech_shaped_charges",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_squad_grenade_launchers",
+        "ADISCORD_tech_stabilized_autocannon_mounts",
+        "ADISCORD_tech_standard_gauge_recovery",
+        "ADISCORD_tech_standardized_cartridges",
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_standardized_transport_columns",
+        "ADISCORD_tech_tandem_warheads",
+        "ADISCORD_tech_trauma_plates"
       ]
     },
     "TMR": {
@@ -3947,7 +4004,8 @@
         "institutional",
         "land",
         "air",
-        "naval"
+        "naval",
+        "field_air_defense"
       ],
       "common_only": false,
       "rationale": "Weapons superpower with twelve military factories, three research slots, and a large convoy reserve.",
@@ -3956,7 +4014,7 @@
         "civilian_factories": 11,
         "military_factories": 12,
         "dockyards": 0,
-        "air_bases": 0,
+        "air_bases": 4,
         "power_sites": 0,
         "infrastructure_levels": 19,
         "research_slots": 3,
@@ -3996,6 +4054,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_phase_synchronized_substations",
+        "ADISCORD_tech_point_defense_aa",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
         "ADISCORD_tech_proximity_fuzes",
@@ -4028,6 +4087,7 @@
         "ADISCORD_tech_shaped_charges",
         "ADISCORD_tech_sonar_archives",
         "ADISCORD_tech_squad_grenade_launchers",
+        "ADISCORD_tech_stabilized_autocannon_mounts",
         "ADISCORD_tech_standard_gauge_recovery",
         "ADISCORD_tech_standardized_airframes",
         "ADISCORD_tech_standardized_cartridges",
@@ -4640,21 +4700,22 @@
       "profiles": [
         "common",
         "fragment_low_tech",
-        "land"
+        "land",
+        "field_air_defense"
       ],
       "common_only": false,
       "rationale": "Army-bearing regional polity whose small economy remains fragmentary.",
       "evidence": {
         "states": 7,
-        "civilian_factories": 1,
-        "military_factories": 1,
+        "civilian_factories": 3,
+        "military_factories": 6,
         "dockyards": 0,
         "air_bases": 0,
         "power_sites": 0,
-        "infrastructure_levels": 2,
+        "infrastructure_levels": 14,
         "research_slots": 2,
         "convoys": 0,
-        "oob_divisions": 4,
+        "oob_divisions": 18,
         "starting_doctrines": []
       },
       "technologies_2160": [
@@ -4675,6 +4736,7 @@
         "ADISCORD_tech_modular_support_kits",
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
+        "ADISCORD_tech_point_defense_aa",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
         "ADISCORD_tech_proximity_fuzes",
@@ -4699,6 +4761,7 @@
         "ADISCORD_tech_shaped_charges",
         "ADISCORD_tech_sonar_archives",
         "ADISCORD_tech_squad_grenade_launchers",
+        "ADISCORD_tech_stabilized_autocannon_mounts",
         "ADISCORD_tech_standard_gauge_recovery",
         "ADISCORD_tech_standardized_cartridges",
         "ADISCORD_tech_standardized_machine_tools",

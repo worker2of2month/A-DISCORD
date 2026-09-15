@@ -24,13 +24,13 @@ from tools.validators import validate_adiscord_modifier_fields as validator
 
 DYNAMIC_MODIFIERS = (
     REPOSITORY_ROOT
-    / "common/dynamic_modifiers/ADISCORD_vorkerland_collapse_dynamic_modifiers.txt"
+    / "common/dynamic_modifiers/ADISCORD_vorkerland_dynamic_modifiers.txt"
 )
 LEGITIMACY_MODIFIERS = (
     REPOSITORY_ROOT
-    / "common/dynamic_modifiers/ADISCORD_vorkerland_legitimacy_dynamic_modifiers.txt"
+    / "common/dynamic_modifiers/ADISCORD_vorkerland_dynamic_modifiers.txt"
 )
-COLLAPSE_IDEAS = REPOSITORY_ROOT / "common/ideas/ADISCORD_vorkerland_collapse_ideas.txt"
+COLLAPSE_IDEAS = REPOSITORY_ROOT / "common/ideas/ADISCORD_vorkerland_ideas.txt"
 
 
 class MutationTestCase(unittest.TestCase):
@@ -77,10 +77,10 @@ class RepositoryIsClean(unittest.TestCase):
 
     def test_coverage_includes_both_dynamic_modifier_files(self) -> None:
         covered = {path.name for path in validator.covered_files(REPOSITORY_ROOT)}
-        self.assertIn("ADISCORD_vorkerland_collapse_dynamic_modifiers.txt", covered)
-        self.assertIn("ADISCORD_vorkerland_legitimacy_dynamic_modifiers.txt", covered)
-        self.assertIn("ADISCORD_vorkerland_collapse_ideas.txt", covered)
-        self.assertIn("ADISCORD_vorkerland_focus_expansion_ideas.txt", covered)
+        self.assertIn("ADISCORD_vorkerland_dynamic_modifiers.txt", covered)
+        self.assertIn("ADISCORD_vorkerland_dynamic_modifiers.txt", covered)
+        self.assertIn("ADISCORD_vorkerland_ideas.txt", covered)
+        self.assertIn("ADISCORD_vorkerland_ideas.txt", covered)
 
     def test_every_dynamic_modifier_declares_a_scope_with_a_reason(self) -> None:
         for name, (scope, reason) in validator.DYNAMIC_MODIFIER_SCOPES.items():

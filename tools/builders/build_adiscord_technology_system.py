@@ -66,7 +66,9 @@ YEAR_TO_Y = {year: index for index, year in enumerate(YEARS)}
 GRID_X = 150
 GRID_Y = 130
 GRID_SLOT = 70
-HORIZONTAL_LANE_SLOT = 96
+# Line segments tile on a 70px square. Wider row spacing uses whole cells so
+# connector ends still meet; two cells also leave room for 84px equipment cards.
+HORIZONTAL_LANE_SLOT_MULTIPLIER = 2
 LANE_SLOT_MULTIPLIER = 3
 BRANCH_GAP = 90
 # Measured against the two reference mods: their per-technology combat lines run
@@ -301,7 +303,7 @@ forbidden_automation_doctrine|Доктрина запретной автомат
     ),
     Branch(
         "small_arms", "ADISCORD_infantry.txt", ("infantry_folder",),
-        "Винтовки и индивидуальное оружие", "Rifles and Individual Weapons", "infantry",
+        "Личное оружие и боеприпасы", "Personal Weapons and Ammunition", "infantry",
         techs("""
 postwar_weapon_standardization|Стандартизация оружия|Weapon Standardization|infantry_equipment_0
 refurbished_receivers|Восстановленные ствольные коробки|Refurbished Receivers|infantry_weapons
@@ -314,23 +316,23 @@ networked_service_rifles|Сетевые штурмовые комплексы|Ne
     ),
     Branch(
         "squad_weapons", "ADISCORD_infantry.txt", ("infantry_folder",),
-        "Автоматическое и групповое оружие", "Automatic and Squad Weapons", "squad",
+        "Групповое оружие и огневая поддержка", "Crew-served Weapons and Fire Support", "squad",
         techs("""
-belt_fed_recovery|Восстановление ленточного оружия|Belt-fed Weapon Recovery|support_weapons
-squad_grenade_launchers|Гранатомёты отделения|Squad Grenade Launchers|support_weapons2
-portable_at_cells|Переносные противотанковые группы|Portable Anti-tank Cells|infantry_at
-field_ew_units|Полевые подразделения РЭБ|Field EW Units|support_weapons3
-networked_command_terminals|Сетевые командные терминалы|Networked Command Terminals|signal_company
-autonomous_support_weapons|Автономное оружие поддержки|Autonomous Support Weapons|support_weapons4
-swarm_fireteams|Роевые огневые группы|Swarm Fireteams|special_forces
+belt_fed_recovery|Пулемёты с ленточным питанием|Belt-fed Machine Guns|support_weapons
+squad_grenade_launchers|Стандартизация ленточных пулемётов|Standardized Belt-fed Machine Guns|support_weapons2
+portable_at_cells|Противотанковое оружие расчёта|Crew-served Anti-tank Weapons|infantry_at
+field_ew_units|Прицелы группового оружия|Crew-served Weapon Sights|support_weapons3
+networked_command_terminals|Терминалы управления огнём|Fire-control Terminals|signal_company
+autonomous_support_weapons|Автоматизированные огневые установки|Automated Fire-support Mounts|support_weapons4
+swarm_fireteams|Единая сеть огневой поддержки|Integrated Fire-support Network|special_forces
 """),
     ),
     Branch(
         "protection", "ADISCORD_infantry.txt", ("infantry_folder",),
         "Защита и медицина", "Protection and Medicine", "protection",
         techs("""
-composite_protection_kits|Композитные комплекты защиты|Composite Protection Kits|tech_engineers
-trauma_plates|Травмозащитные пластины|Trauma Plates|tech_field_hospital
+composite_protection_kits|Композитные бронежилеты|Composite Body Armour|tech_engineers
+trauma_plates|Амортизирующие вкладыши брони|Armour Trauma Pads|tech_field_hospital
 sealed_combat_suits|Герметичные боевые костюмы|Sealed Combat Suits|tech_engineers2
 battlefield_medical_drones|Медицинские дроны|Battlefield Medical Drones|tech_field_hospital2
 exoskeleton_load_frames|Экзоскелетные рамы|Exoskeleton Load Frames|tech_engineers3
@@ -342,13 +344,13 @@ assault_sapper_kits|Комплекты штурмовых сапёров|Assault
         "special_forces", "ADISCORD_infantry.txt", ("infantry_folder",),
         "Разведка и спецназ", "Reconnaissance and Special Forces", "special_forces",
         techs("""
-fieldcraft_manuals|Полевые наставления|Fieldcraft Manuals|tech_recon
-urban_breaching|Городской штурм|Urban Breaching|special_forces
-radiation_patrols|Радиационные патрули|Radiation Patrols|tech_recon2
+fieldcraft_manuals|Полевая подготовка разведчиков|Scout Fieldcraft Training|tech_recon
+urban_breaching|Инструменты штурмового вскрытия|Assault Breaching Tools|special_forces
+radiation_patrols|Разведка заражённой местности|Contaminated-area Reconnaissance|tech_recon2
 combat_recon_drones|Разведывательные дроны|Combat Recon Drones|paratroopers
-vertical_assault_training|Вертикальный охват|Vertical Assault Training|paratroopers2
-deep_recon_cells|Группы глубинной разведки|Deep Recon Cells|tech_recon4
-augmented_special_forces|Усиленный спецназ|Augmented Special Forces|paratroopers3
+vertical_assault_training|Высотная штурмовая подготовка|Vertical Assault Training|paratroopers2
+deep_recon_cells|Группы дальней разведки|Long-range Reconnaissance Teams|tech_recon4
+augmented_special_forces|Экзоскелеты спецназа|Special Forces Exoskeletons|paratroopers3
 """),
     ),
     Branch(
@@ -1076,23 +1078,23 @@ SMALL_ARMS_BRANCH = new_branch(
     "small_arms",
     "ADISCORD_infantry.txt",
     ("infantry_folder",),
-    "Винтовки и индивидуальное оружие",
-    "Rifles and Individual Weapons",
+    "Личное оружие и боеприпасы",
+    "Personal Weapons and Ammunition",
     "infantry",
     (
-        ("postwar_weapon_standardization", "Прецизионная нарезка каналов стволов", "Precision Rifling of Barrel Bores", "infantry_equipment_0", 2150),
-        ("refurbished_receivers", "Обтюрация казённой части", "Breech Obturation", "infantry_weapons", 2155),
+        ("postwar_weapon_standardization", "Высокоточная нарезка стволов", "Precision Rifling of Barrel Bores", "infantry_equipment_0", 2150),
+        ("refurbished_receivers", "Герметизация казённой части", "Breech Obturation", "infantry_weapons", 2155),
         ("standardized_cartridges", "Унитарный металлический патрон", "Metallic Self-contained Cartridge", "infantry_weapons2", 2158),
         ("caseless_ammunition_trials", "Нитроцеллюлозные метательные составы", "Nitrocellulose Propellant Formulations", "infantry_weapons2", 2160),
         ("smart_optics", "Лазерное измерение дальности", "Laser Rangefinding", "night_vision1", 2161),
         ("sealed_receiver_assemblies", "Промежуточные патроны", "Intermediate Cartridges", "infantry_weapons", 2162),
         ("electrothermal_ignition", "Высокопрочные ствольные стали", "High-strength Barrel Steels", "infantry_weapons3", 2163),
         ("smart_recoil_compensators", "Самозарядная автоматика", "Self-loading Action", "infantry_weapons3", 2164),
-        ("networked_weapon_sights", "Вычислительное определение баллистической поправки", "Computerized Ballistic Correction", "night_vision", 2165),
+        ("networked_weapon_sights", "Баллистические вычислители", "Computerized Ballistic Correction", "night_vision", 2165),
         ("modular_rifle_kits", "Газоотводная автоматика", "Gas-operated Action", "infantry_weapons3", 2166),
         ("biometric_trigger_locks", "Запирание поворотным затвором", "Rotating-bolt Locking", "infantry_weapons3", 2167),
-        ("integrated_target_designation", "Интегрированные электронно-оптические прицелы", "Integrated Electro-optical Sights", "night_vision2", 2169),
-        ("programmable_ammunition", "Хромирование и износостойкие покрытия ствола", "Chrome Lining and Wear-resistant Bore Coatings", "infantry_at2", 2170),
+        ("integrated_target_designation", "Электронно-оптические прицелы", "Integrated Electro-optical Sights", "night_vision2", 2169),
+        ("programmable_ammunition", "Износостойкие покрытия ствола", "Chrome Lining and Wear-resistant Bore Coatings", "infantry_at2", 2170),
         ("coil_assisted_service_rifles", "Оптимизация импульса отдачи", "Recoil Impulse Optimization", "infantry_weapons3", 2172),
         ("hybrid_kinetic_energy_carbines", "Полимерные и гибридные гильзы", "Polymer and Hybrid Cartridge Cases", "infantry_weapons3", 2175),
         ("networked_service_rifles", "Программируемые боеприпасы", "Programmable Small-arms Ammunition", "night_vision2", 2180),
@@ -1103,22 +1105,22 @@ INFANTRY_ANTI_TANK_BRANCH = new_branch(
     "anti_tank_infantry",
     "ADISCORD_infantry.txt",
     ("infantry_folder",),
-    "Индивидуальные противотанковые средства",
-    "Individual Anti-tank Weapons",
+    "Пехотные противотанковые средства",
+    "Infantry Anti-tank Weapons",
     "anti_tank",
     (
         ("recovered_shaped_charge_cells", "Бутылочные зажигательные смеси", "Bottle Incendiary Mixtures", "ADISCORD_antitank_01_incendiary_bottle", 2150),
         ("disposable_launcher_standards", "Динамитные и ранцевые подрывные заряды", "Dynamite and Satchel Demolition Charges", "ADISCORD_antitank_02_satchel_charge", 2155),
         ("tandem_penetrator_packages", "Ручные кумулятивные противотанковые гранаты", "Hand-thrown Shaped-charge Anti-tank Grenades", "ADISCORD_antitank_03_shaped_charge_grenade", 2158),
-        ("wire_guided_hunter_teams", "Крупнокалиберные противотанковые ружья", "Large-calibre Anti-tank Rifles", "ADISCORD_antitank_04_antitank_rifle", 2161),
-        ("recoilless_overmatch_cells", "Командное наведение по проводной линии", "Command Guidance over Wire", "ADISCORD_antitank_05_wire_guidance", 2161),
+        ("wire_guided_hunter_teams", "Тяжёлые противотанковые ружья", "Large-calibre Anti-tank Rifles", "ADISCORD_antitank_04_antitank_rifle", 2161),
+        ("recoilless_overmatch_cells", "Наведение ракет по проводам", "Command Guidance over Wire", "ADISCORD_antitank_05_wire_guidance", 2161),
         ("fire_and_forget_seekers", "Безоткатные противотанковые системы", "Recoilless Anti-tank Systems", "ADISCORD_antitank_06_recoilless_launcher", 2164),
-        ("programmable_anti_armor_fuzes", "Полуавтоматическое наведение по линии визирования", "Semi-automatic Command to Line of Sight", "ADISCORD_antitank_07_saclos_guidance", 2164),
-        ("top_attack_profiles", "Реактивные гранатомёты с кумулятивной боевой частью", "Shaped-charge Rocket Launchers", "ADISCORD_antitank_08_rocket_launcher", 2168),
-        ("loitering_armor_hunters", "Инфракрасное самонаведение верхней атаки", "Imaging-infrared Top-attack Homing", "ADISCORD_antitank_09_top_attack_seeker", 2168),
+        ("programmable_anti_armor_fuzes", "Полуавтоматическое наведение ракет", "Semi-automatic Command to Line of Sight", "ADISCORD_antitank_07_saclos_guidance", 2164),
+        ("top_attack_profiles", "Кумулятивные реактивные гранатомёты", "Shaped-charge Rocket Launchers", "ADISCORD_antitank_08_rocket_launcher", 2168),
+        ("loitering_armor_hunters", "Самонаведение для атаки сверху", "Imaging-infrared Top-attack Homing", "ADISCORD_antitank_09_top_attack_seeker", 2168),
         ("cooperative_hunter_cells", "Тандемные кумулятивные боевые части", "Tandem Shaped-charge Warheads", "ADISCORD_antitank_10_tandem_warhead", 2172),
         ("terminal_overmatch_packages", "Барражирующие противотанковые боеприпасы", "Loitering Anti-armor Munitions", "ADISCORD_antitank_11_loitering_munition", 2172),
-        ("distributed_anti_armor_net", "Кооперативное мультиспектральное целеуказание", "Cooperative Multispectral Targeting", "ADISCORD_antitank_12_multispectral_targeting", 2180),
+        ("distributed_anti_armor_net", "Общее целеуказание по данным датчиков", "Cooperative Multispectral Targeting", "ADISCORD_antitank_12_multispectral_targeting", 2180),
     ),
 )
 
@@ -1130,18 +1132,18 @@ NIGHT_COMBAT_BRANCH = new_branch(
     "Night Combat",
     "special_forces",
     (
-        ("passive_intensifier_cells", "Ячейки пассивного усиления", "Passive Intensifier Cells", "ADISCORD_night_01_passive_intensifier", 2150),
-        ("sealed_night_mounts", "Герметичные ночные крепления", "Sealed Night Mounts", "ADISCORD_night_02_thermal_channel", 2155),
-        ("thermal_observation_channels", "Тепловизионные каналы наблюдения", "Thermal Observation Channels", "ADISCORD_night_03_fused_sight", 2158),
-        ("fused_low_light_sights", "Совмещённые прицелы слабого света", "Fused Low-light Sights", "ADISCORD_night_04_squad_target_sharing", 2161),
+        ("passive_intensifier_cells", "Усилители остаточного света", "Passive Intensifier Cells", "ADISCORD_night_01_passive_intensifier", 2150),
+        ("sealed_night_mounts", "Защищённые корпуса ночных прицелов", "Sealed Night Mounts", "ADISCORD_night_01_passive_intensifier", 2155),
+        ("thermal_observation_channels", "Тепловизионные каналы наблюдения", "Thermal Observation Channels", "ADISCORD_night_02_thermal_channel", 2158),
+        ("fused_low_light_sights", "Комбинированные ночные прицелы", "Fused Low-light Sights", "ADISCORD_night_03_fused_sight", 2161),
         ("low_signature_illumination", "Малозаметная подсветка", "Low-signature Illumination", "ADISCORD_night_05_counter_illumination", 2161),
-        ("squad_target_sharing", "Обмен целями внутри отделения", "Squad Target Sharing", "ADISCORD_night_06_distributed_engagement", 2164),
-        ("counter_illumination_warnings", "Предупреждение о встречной подсветке", "Counter-illumination Warnings", "ADISCORD_night_01_passive_intensifier", 2164),
-        ("thermal_target_libraries", "Тепловые библиотеки целей", "Thermal Target Libraries", "ADISCORD_night_02_thermal_channel", 2168),
-        ("nocturnal_sensor_discipline", "Ночная сенсорная дисциплина", "Nocturnal Sensor Discipline", "ADISCORD_night_03_fused_sight", 2168),
-        ("distributed_night_engagements", "Распределённое ночное поражение", "Distributed Night Engagements", "ADISCORD_night_04_squad_target_sharing", 2172),
-        ("adaptive_spectrum_concealment", "Адаптивное спектральное скрытие", "Adaptive Spectrum Concealment", "ADISCORD_night_05_counter_illumination", 2172),
-        ("nocturnal_combat_mesh", "Ночной боевой контур", "Nocturnal Combat Mesh", "ADISCORD_night_06_distributed_engagement", 2180),
+        ("squad_target_sharing", "Обмен целями внутри отделения", "Squad Target Sharing", "ADISCORD_night_04_squad_target_sharing", 2164),
+        ("counter_illumination_warnings", "Датчики вражеской подсветки", "Counter-illumination Warnings", "ADISCORD_night_05_counter_illumination", 2164),
+        ("thermal_target_libraries", "Распознавание тепловых следов", "Thermal Target Libraries", "ADISCORD_night_02_thermal_channel", 2168),
+        ("nocturnal_sensor_discipline", "Скрытное ночное наблюдение", "Nocturnal Sensor Discipline", "ADISCORD_night_03_fused_sight", 2168),
+        ("distributed_night_engagements", "Согласованный огонь ночью", "Distributed Night Engagements", "ADISCORD_night_06_distributed_engagement", 2172),
+        ("adaptive_spectrum_concealment", "Маскировка от ночных приборов", "Adaptive Spectrum Concealment", "ADISCORD_night_05_counter_illumination", 2172),
+        ("nocturnal_combat_mesh", "Сеть ночного целеуказания", "Nocturnal Combat Mesh", "ADISCORD_night_06_distributed_engagement", 2180),
     ),
 )
 
@@ -1834,6 +1836,7 @@ ENABLE_EQUIPMENT = {
     "ADISCORD_tech_robotic_heavy_weapon_teams": ("ADISCORD_squad_weapons_equipment_2193",),
     "ADISCORD_tech_swarm_fireteams": ("ADISCORD_squad_weapons_equipment_2200",),
     "ADISCORD_tech_field_workshop_tools": ("support_equipment_1",),
+    "ADISCORD_tech_restored_truck_fleets": ("motorized_equipment_1",),
     "ADISCORD_tech_drone_delivered_repair_spares": ("ADISCORD_support_equipment_2170",),
     "ADISCORD_tech_predictive_parts_prepositioning": ("ADISCORD_support_equipment_2183",),
     "ADISCORD_tech_self_sustaining_support": ("ADISCORD_support_equipment_2200",),
@@ -2038,6 +2041,8 @@ STARTING_TECH_PROFILE_SEEDS = {
         "ADISCORD_tech_armored_carrier_program",
         "ADISCORD_tech_semi_autonomous_combat_modules",
     ),
+    "recon_platform": ("ADISCORD_tech_drone_recon_swarms",),
+    "field_air_defense": ("ADISCORD_tech_point_defense_aa",),
     "air": tuple(
         tech_id
         for branch_key in ("fighter", "air_support", "strategic_air")
@@ -2094,7 +2099,7 @@ STARTING_COUNTRY_TECH_PROFILES = {
     "BRN": ("fragment_low_tech",),
     "BTL": ("fragment_low_tech", "land"),
     "CIN": ("fragment_low_tech",),
-    "COF": (),
+    "COF": ("fragment_low_tech", "field_air_defense"),
     "DAN": ("fragment_low_tech", "land"),
     "DOL": ("fragment_low_tech",),
     "DRV": ("fragment_low_tech",),
@@ -2131,13 +2136,22 @@ STARTING_COUNTRY_TECH_PROFILES = {
     "SHL": ("fragment_low_tech", "industrial"),
     "SKN": ("fragment_low_tech", "land"),
     "SOL": ("fragment_low_tech",),
-    "STP": ("industrial", "energy", "institutional", "land", "air", "naval"),
+    "STP": (
+        "industrial",
+        "energy",
+        "institutional",
+        "land",
+        "air",
+        "naval",
+        "recon_platform",
+        "field_air_defense",
+    ),
     "SVL": ("fragment_low_tech",),
-    "TFF": ("fragment_low_tech",),
+    "TFF": ("fragment_low_tech", "land", "field_air_defense"),
     "TMR": ("industrial",),
     "TRU": ("industrial", "institutional", "land"),
     "VAD": ("industrial", "energy", "institutional", "land", "air", "naval", "armored_core"),
-    "VAL": ("industrial", "energy", "institutional", "land", "air", "naval"),
+    "VAL": ("industrial", "energy", "institutional", "land", "air", "naval", "field_air_defense"),
     "VES": ("fragment_low_tech", "land"),
     "VLD": ("fragment_low_tech",),
     "VRA": ("fragment_low_tech",),
@@ -2146,7 +2160,7 @@ STARTING_COUNTRY_TECH_PROFILES = {
     "WIT": ("institutional", "land", "naval"),
     "WRK": ("industrial", "energy", "institutional", "land", "air", "naval", "armored_core"),
     "WCG": ("fragment_low_tech", "land"),
-    "YPR": ("fragment_low_tech", "land"),
+    "YPR": ("fragment_low_tech", "land", "field_air_defense"),
     "ZAO": ("fragment_low_tech",),
 }
 
@@ -2166,7 +2180,7 @@ STARTING_COUNTRY_TECH_PROFILE_RATIONALE = {
     "BRN": "Polar protectorate retains radio, heating, and grid practice but little heavy industry.",
     "BTL": "Multi-state polity with several formations but only a minimal civilian economy.",
     "CIN": "Agrarian ash tribe with informal education and artisan production.",
-    "COF": "Forest cult intentionally receives only the common equipment-enabling roots.",
+    "COF": "Forest communes maintain local workshops and a small militia reserve without advanced military institutions.",
     "DAN": "Small military polity with an army but no industrial or energy system to support advanced profiles.",
     "DOL": "Loose road-district union supports militia and workshops without a durable advanced institution base.",
     "DRV": "Decentralized valley communes rely on local workshops and militia organization.",
@@ -2205,7 +2219,7 @@ STARTING_COUNTRY_TECH_PROFILE_RATIONALE = {
     "SOL": "Small Vorkerland successor with no intact starting factory base.",
     "STP": "Major industrial state with dockyards, restored air and naval doctrines, and a large standing army.",
     "SVL": "One-island mining republic has basic workshops and militia organization but no advanced institutional base.",
-    "TFF": "Frontier polity has a small army and fragmentary production without advanced institutions.",
+    "TFF": "Frontier districts retain defensive land practice and a small standing army over a fragmentary workshop economy.",
     "TMR": "Utility chamber retains a modest industrial grid while limiting military specialization.",
     "TRU": "Organized Vorkerland successor with enough factories, infrastructure, and army continuity for core profiles.",
     "VAD": "Major Vorkerland successor with dense industry, a live power site, dockyards, and ten air bases.",
@@ -4157,26 +4171,6 @@ COMPACT_ICONS_BY_PROFILE = {
 # thematic palette for those entire branches so chronology and function are
 # readable at a glance inside a 72x72 cell.
 BRANCH_ICON_PALETTES = {
-    "small_arms": (
-        "infantry_weapons", "infantry_weapons2", "support_weapons", "night_vision",
-        "infantry_at", "basic_encryption", "radio", "support_weapons2",
-        "night_vision2", "improved_encryption",
-    ),
-    "squad_weapons": (
-        "support_weapons", "support_weapons2", "infantry_at", "radio",
-        "support_weapons3", "centimetric_radar", "infantry_at2",
-        "support_weapons4", "advanced_centimetric_radar",
-    ),
-    "protection": (
-        "basic_construction", "night_vision", "improved_construction",
-        "basic_encryption", "radio", "advanced_construction",
-        "improved_encryption", "night_vision2",
-    ),
-    "special_forces": (
-        "night_vision", "radio", "basic_decryption", "centimetric_radar",
-        "improved_decryption", "night_vision2", "advanced_decryption",
-        "advanced_centimetric_radar",
-    ),
     "field_support": (
         "basic_machine_tools", "basic_construction", "improved_machine_tools",
         "radio", "advanced_machine_tools", "improved_construction",
@@ -4319,8 +4313,88 @@ EQUIPMENT_UNLOCK_ICONS = {
     "ADISCORD_tech_suborbital_strike_systems": "ballistic_missile_equipment_3",
 }
 
+
 COMPACT_ICON_OVERRIDES = {
     "dirty_energy_munitions": "sp_nuclear_isotope_separation",
+    "trauma_registry_networks": "ADISCORD_equipment_casualty_monitor",
+    "forward_surgical_cells": "ADISCORD_equipment_medical",
+    "distributed_combat_medicine": "ADISCORD_equipment_medical",
+}
+
+# Infantry effect-only cards show the equipment being improved. Their art
+# must stay attached to the technology when the branch order changes.
+REGIONAL_SERVICE_ICON_TAGS = ("STP", "VAL")
+
+INFANTRY_COMPACT_ICONS = {
+    key: icon
+    for icon, keys in {
+        "ADISCORD_equipment_ammunition": (
+            "standardized_cartridges", "caseless_ammunition_trials",
+            "hybrid_kinetic_energy_carbines", "programmable_grenade_fuzes",
+            "deep_area_sustainment_pods",
+        ),
+        "ADISCORD_equipment_mechanism": (
+            "electrothermal_ignition", "biometric_trigger_locks",
+        ),
+        "ADISCORD_equipment_armour": (
+            "composite_protection_kits", "trauma_plates", "ceramic_trauma_inserts",
+            "adaptive_radiation_shielding", "self_sealing_combat_skins",
+        ),
+        "ADISCORD_equipment_camouflage": (
+            "thermal_signature_liners", "reactive_camouflage_textiles",
+            "adaptive_camouflage", "low_observable_infiltration_suits",
+            "multispectral_concealment_discipline",
+        ),
+        "ADISCORD_equipment_medical": (
+            "smart_tourniquet_systems", "nanofiber_wound_dressings",
+        ),
+        "ADISCORD_equipment_respirator": (
+            "sealed_combat_suits", "sealed_respirator_interfaces",
+            "radiation_patrols",
+        ),
+        "ADISCORD_equipment_drone": (
+            "drone_guided_support_fire",
+            "combat_recon_drones", "autonomous_scout_microdrones",
+            "robotic_breaching_companions",
+        ),
+        "ADISCORD_equipment_radio": (
+            "networked_command_terminals", "cooperative_target_handoff",
+            "swarm_coordinated_fire_support",
+            "remote_beacon_extraction", "contested_zone_navigation",
+            "augmented_mission_rehearsal",
+        ),
+        "ADISCORD_equipment_climbing": (
+            "fieldcraft_manuals", "subterranean_route_reconnaissance",
+            "urban_vertical_access_rigs", "vertical_assault_training",
+        ),
+        "ADISCORD_equipment_breaching": (
+            "urban_breaching", "assault_sapper_kits",
+        ),
+        "ADISCORD_equipment_exoskeleton": (
+            "powered_load_bearing_harnesses", "exoskeleton_load_frames",
+            "exosuit_joint_actuators", "augmented_special_forces",
+        ),
+        "ADISCORD_equipment_ballistic_sight": (
+            "networked_weapon_sights", "integrated_target_designation",
+        ),
+        "ADISCORD_night_04_squad_target_sharing": (
+            "deep_recon_cells", "predictive_patrol_evasion",
+        ),
+        "ADISCORD_night_05_counter_illumination": (
+            "man_portable_sensor_masts", "distributed_recon_sensor_caches",
+        ),
+        "ADISCORD_antitank_11_loitering_munition": ("loitering_munition_teams",),
+        "ADISCORD_equipment_mortar": ("autonomous_mortar_sections",),
+        "ADISCORD_equipment_medical_drone": ("battlefield_medical_drones",),
+        "ADISCORD_equipment_insertion_pod": ("high_altitude_insertion_capsules",),
+        "ADISCORD_equipment_hearing_protection": ("active_hearing_protection",),
+        "ADISCORD_equipment_casualty_monitor": ("autonomous_casualty_monitors",),
+        "ADISCORD_equipment_life_support": ("closed_loop_combat_life_support",),
+        "ADISCORD_equipment_ammunition_carrier": ("distributed_ammunition_carriers",),
+        "ADISCORD_equipment_drone_jammer": ("microdrone_suppression_nets",),
+        "ADISCORD_antitank_04_antitank_rifle": ("electromagnetic_anti_armor_launchers",),
+    }.items()
+    for key in keys
 }
 
 # These vanilla sprites are valid 64x64 files but are composed as support
@@ -4363,6 +4437,9 @@ def icon_for_technology(branch: Branch, index: int) -> str:
         size = technology_icon_size(candidate)
         if size and size[0] <= 190 and size[1] <= 84:
             return candidate
+
+    if tech.key in INFANTRY_COMPACT_ICONS:
+        return INFANTRY_COMPACT_ICONS[tech.key]
 
     palette = BRANCH_ICON_PALETTES.get(branch.key)
     if palette:
@@ -4456,6 +4533,54 @@ BRANCH_DESCRIPTION_EN = {
 
 
 TECHNICAL_TECH_DESCRIPTIONS = {
+    "distributed_ammunition_carriers": (
+        "Небольшие колёсные роботы перевозят ящики с боеприпасами и разгружают расчёты группового оружия",
+        "Small wheeled robots carry ammunition crates and reduce the carrying burden on weapon crews",
+    ),
+    "microdrone_suppression_nets": (
+        "Переносные средства радиоэлектронного подавления мешают работе разведывательных микродронов",
+        "Portable electronic jammers disrupt reconnaissance microdrones",
+    ),
+    "remote_weapon_tripods": (
+        "Огневая установка на станке управляется с вынесенного пульта; оператор остаётся частью расчёта",
+        "A mounted weapon is controlled from a separate console, with its operator remaining part of the crew",
+    ),
+    "thermal_signature_liners": (
+        "Подкладки и накидки уменьшают тепловую заметность бойца; это маскировочное оснащение, а не дополнительная броня",
+        "Liners and capes reduce a soldier's thermal visibility; they are concealment equipment rather than additional armour",
+    ),
+    "reactive_camouflage_textiles": (
+        "Маскировочная ткань меняет окраску под окружающую местность и служит основой адаптивного снаряжения",
+        "Camouflage fabric changes colour to match the surroundings and forms the basis of adaptive field equipment",
+    ),
+    "autonomous_casualty_monitors": (
+        "Носимые приборы отслеживают состояние раненого и передают показатели медицинскому персоналу",
+        "Wearable monitors track a casualty's condition and relay readings to medical personnel",
+    ),
+    "closed_loop_combat_life_support": (
+        "Ранцевая система очищает выдыхаемый воздух и поддерживает дыхание бойца в герметичном защитном снаряжении",
+        "A backpack system recycles exhaled air and supports breathing inside sealed protective equipment",
+    ),
+    "distributed_recon_sensor_caches": (
+        "Скрытно размещённые приборы наблюдения передают разведгруппе сведения об обстановке без постоянного присутствия наблюдателя",
+        "Concealed observation devices relay information to a reconnaissance team without requiring an observer to remain on site",
+    ),
+    "augmented_mission_rehearsal": (
+        "Тренажёры дополненной реальности позволяют разведгруппам отрабатывать взаимодействие перед выходом на задание",
+        "Augmented-reality simulators let reconnaissance teams rehearse coordination before a mission",
+    ),
+    "augmented_special_forces": (
+        "Экзоскелеты для разведывательных и штурмовых групп помогают переносить специальное снаряжение при длительных действиях",
+        "Exoskeletons for reconnaissance and assault teams assist with carrying specialist equipment during extended operations",
+    ),
+    "forward_surgical_cells": (
+        "Мобильные хирургические группы оказывают срочную помощь раненым в передовых медицинских пунктах",
+        "Mobile surgical teams provide urgent care at forward medical posts",
+    ),
+    "radiation_patrols": (
+        "Защитное снаряжение и приборы контроля заражения позволяют готовить разведывательные выходы в опасную местность",
+        "Protective equipment and contamination monitors support reconnaissance preparations for hazardous areas",
+    ),
     "postwar_weapon_standardization": (
         "Восстановленные нарезные станки и измерительный контроль обеспечивают повторяемую геометрию канала ствола, шаг нарезов и соосность патронника",
         "Restored rifling machinery and inspection gauges make bore geometry, twist rate, and chamber alignment repeatable",
@@ -5055,7 +5180,7 @@ def technology_grid_position(branch: Branch, index: int) -> tuple[int, int]:
     graph = BRANCH_GRAPHS[branch.key]
     lane = graph.lanes[index]
     if HORIZONTAL_FOLDERS.intersection(branch.folders):
-        return lane, technology_time_slot(branch, index)
+        return lane * HORIZONTAL_LANE_SLOT_MULTIPLIER, technology_time_slot(branch, index)
     return lane * LANE_SLOT_MULTIPLIER, technology_time_slot(branch, index)
 
 
@@ -5120,6 +5245,10 @@ def render_technology(branch: Branch, index: int) -> str:
         f"\t\t{effect}"
         for effect in effects_for(branch, index)
     )
+    if tech.id == "ADISCORD_tech_restored_dockyards":
+        # Native transport permission is separate from the invasion plan and
+        # division caps, which retain their engine defaults.
+        lines.append("\t\tnaval_invasion_capacity = 100")
     lines.extend(render_leader_training_effect(tech))
     for target in graph.successors[index]:
         lines.append(
@@ -5392,12 +5521,19 @@ def write_gfx() -> None:
     for branch in BRANCHES:
         for index, tech in enumerate(branch.techs):
             icon = icon_for_technology(branch, index)
-            entries.append(
-                "\tSpriteType = {\n"
-                f"\t\tname = \"GFX_{tech.id}_medium\"\n"
-                f"\t\ttextureFile = \"gfx/interface/technologies/{icon}.dds\"\n"
-                "\t}\n"
-            )
+            variants = [(f"GFX_{tech.id}_medium", icon)]
+            if icon.startswith("ADISCORD_weapon_"):
+                variants.extend(
+                    (f"GFX_{tag}_{tech.id}_medium", icon.replace("ADISCORD_", f"ADISCORD_{tag}_", 1))
+                    for tag in REGIONAL_SERVICE_ICON_TAGS
+                )
+            for sprite, texture in variants:
+                entries.append(
+                    "\tSpriteType = {\n"
+                    f"\t\tname = \"{sprite}\"\n"
+                    f"\t\ttextureFile = \"gfx/interface/technologies/{texture}.dds\"\n"
+                    "\t}\n"
+                )
     content = (
         "spriteTypes = {\n"
         + "\n".join(entries)
@@ -5439,6 +5575,16 @@ ACCESS_REQUIREMENT_LOCALISATION = {
 # These are generated alongside the technology tree so newly unlocked series
 # cannot silently fall back to raw technical IDs.
 LAND_EQUIPMENT_LOCALISATION = {
+    "motorized_equipment": (
+        "Грузовые автомобили", "Cargo Trucks", "Грузовики", "Trucks",
+        "Автомобили для доставки боеприпасов, продовольствия и топлива от узлов снабжения к войскам.",
+        "Vehicles carrying ammunition, food and fuel from supply hubs to the troops.",
+    ),
+    "motorized_equipment_1": (
+        "Восстановленные грузовики", "Rebuilt Cargo Trucks", "Грузовики I", "Trucks I",
+        "Простые грузовики с восстановленными двигателями и ходовой частью. Обеспечивают моторизацию узлов снабжения.",
+        "Simple trucks with rebuilt engines and running gear. Used to motorize supply hubs.",
+    ),
     "infantry_equipment_0": (
         "ОВ-40 «Лом»", "SR-40 “Crowbar”", "ОВ-40", "SR-40",
         "Восстановленный комплект винтовок с заново нарезанными стволами, едиными калибрами и измерительным контролем.",
@@ -5496,38 +5642,54 @@ LAND_EQUIPMENT_LOCALISATION = {
     ),
     "ADISCORD_squad_weapons_equipment_2163": (
         "КОП-63 «Зуб»", "FSC-63 “Tooth”", "КОП-63", "FSC-63",
-        "Групповой комплект с усиленным пулемётом, точной винтовкой и лёгкими пусковыми средствами.",
-        "A group kit combining a reinforced machine gun, precision rifle, and light launchers.",
+        "Противотанковая установка расчёта с усиленным станком, оптикой и переносным боезапасом.",
+        "A crew-operated anti-tank launcher with a reinforced mount, optics, and portable ammunition.",
     ),
     "ADISCORD_squad_weapons_equipment_2168": (
         "КОП-68 «Вал»", "FSC-68 “Shaft”", "КОП-68", "FSC-68",
-        "Модульное групповое оружие с общей оптикой, дальномерами и корректируемыми зарядами.",
-        "Modular group weapons sharing optics, rangefinding, and corrected charges.",
+        "Станковый гранатомёт со сменными узлами, общей оптикой и переносным боезапасом.",
+        "A mounted grenade launcher with interchangeable assemblies, shared optics, and portable ammunition.",
     ),
     "ADISCORD_squad_weapons_equipment_2170": (
         "КОП-70 «Гул»", "FSC-70 “Rumble”", "КОП-70", "FSC-70",
-        "Сенсорно-связанный комплект для подавления, точного огня и пристрелки отделения.",
-        "A sensor-linked kit for suppression, precision fire, and squad ranging.",
+        "Пулемётный комплект с дальномером и передачей целей на планшет расчёта.",
+        "A machine-gun system with a rangefinder and target sharing through the crew tablet.",
     ),
     "ADISCORD_squad_weapons_equipment_2178": (
         "КОП-78 «Узел»", "FSC-78 “Knot”", "КОП-78", "FSC-78",
-        "Программируемый огневой узел с электронными взрывателями и защищённым обменом целями.",
-        "A programmable fire node with electronic fuzes and protected target exchange.",
+        "Станковый гранатомёт с программируемыми взрывателями и защищённой передачей целей.",
+        "A mounted grenade launcher with programmable fuzes and protected target sharing.",
     ),
     "ADISCORD_squad_weapons_equipment_2183": (
         "КОП-83 «Маяк»", "FSC-83 “Beacon”", "КОП-83", "FSC-83",
-        "Сетевая система точной поддержки с мультиспектральной разведкой и удалённым наведением.",
-        "A networked precision-support system with multispectral scouting and remote guidance.",
+        "Дистанционно управляемая огневая установка с многоканальными датчиками и планшетом расчёта.",
+        "A remotely controlled fire-support mount with multichannel sensors and a crew tablet.",
     ),
     "ADISCORD_squad_weapons_equipment_2193": (
         "КОП-93 «Рой»", "FSC-93 “Swarm”", "КОП-93", "FSC-93",
-        "Полуавтономный комплект управления тяжёлым оружием и распределёнными сенсорами.",
-        "A semi-autonomous controller for heavy weapons and distributed sensors.",
+        "Роботизированная опора тяжёлого оружия с автоматическим сопровождением целей и ручным управлением расчёта.",
+        "A robotic heavy-weapon carrier with automatic target tracking and manual crew control.",
     ),
     "ADISCORD_squad_weapons_equipment_2200": (
         "КОП-00 «Хор»", "FSC-00 “Chorus”", "КОП-00", "FSC-00",
-        "Поздняя сеть группового огня, сводящая пулемёты, точные системы и роботизированные носители.",
-        "A late group-fire network combining machine guns, precision systems, and robotic carriers.",
+        "Согласованная сеть огневых роботов и разведывательных дронов под управлением расчёта.",
+        "A coordinated network of armed robots and scout drones under crew control.",
+    ),
+}
+
+
+INFANTRY_FAMILY_LOCALISATION = {
+    "infantry_equipment": ("Личное стрелковое оружие", "Personal Small Arms"),
+    "infantry_equipment_short": ("Личное оружие", "Personal Weapons"),
+    "infantry_equipment_desc": (
+        "Винтовки, карабины и автоматы, которыми вооружён каждый пехотинец.",
+        "Rifles, carbines, and automatic weapons carried by individual infantry soldiers.",
+    ),
+    "ADISCORD_squad_weapons_equipment": ("Групповое оружие отделения", "Squad Crew-served Weapons"),
+    "ADISCORD_squad_weapons_equipment_short": ("Групповое оружие", "Crew-served Weapons"),
+    "ADISCORD_squad_weapons_equipment_desc": (
+        "Пулемёты, станковые гранатомёты и тяжёлые огневые установки. Расчёты обслуживают оружие, переносят его и боезапас, обеспечивая огневую поддержку отделения.",
+        "Machine guns, mounted grenade launchers, and heavy fire-support mounts. Crews operate the weapons and carry their ammunition to support the squad.",
     ),
 }
 
@@ -5536,7 +5698,8 @@ def generated_localisation(language: str) -> list[str]:
     is_ru = language == "russian"
     lines = [
         f' {key}:0 "{names[0 if is_ru else 1]}"'
-        for key, names in ACCESS_REQUIREMENT_LOCALISATION.items()
+        for mapping in (ACCESS_REQUIREMENT_LOCALISATION, INFANTRY_FAMILY_LOCALISATION)
+        for key, names in mapping.items()
     ]
     lines.append("")
     for equipment_id, values in LAND_EQUIPMENT_LOCALISATION.items():
@@ -5544,6 +5707,12 @@ def generated_localisation(language: str) -> list[str]:
             name, short, description = values[0], values[2], values[4]
         else:
             name, short, description = values[1], values[3], values[5]
+        if equipment_id.startswith("ADISCORD_squad_weapons_equipment_"):
+            name = ("Групповое оружие " if is_ru else "Crew-served weapons ") + name
+            short = ("Групп. " if is_ru else "Crew ") + short
+        else:
+            name = ("Личное оружие " if is_ru else "Personal weapon ") + name
+            short = ("Личн. " if is_ru else "Personal ") + short
         lines.extend((
             f' {equipment_id}:0 "{name}"',
             f' {equipment_id}_short:0 "{short}"',
@@ -5626,6 +5795,7 @@ def write_localisation() -> None:
                 key.startswith("ADISCORD_tech_")
                 or key.startswith("ADISCORD_TECH_BRANCH_")
                 or key in ACCESS_REQUIREMENT_LOCALISATION
+                or key in INFANTRY_FAMILY_LOCALISATION
                 or key in generated_equipment_keys
             ):
                 continue
@@ -5680,7 +5850,9 @@ def render_folder(folder: str) -> str:
         cursor_y = GRID_Y
         for branch in branches:
             graph = BRANCH_GRAPHS[branch.key]
-            grid_height = (max(graph.lanes) + 1) * HORIZONTAL_LANE_SLOT
+            grid_height = (
+                (max(graph.lanes) + 1) * HORIZONTAL_LANE_SLOT_MULTIPLIER * GRID_SLOT
+            )
             branch_layouts.append((branch, GRID_X, cursor_y, grid_width, grid_height))
             cursor_y += grid_height + BRANCH_GAP
         content_width = max(1180, GRID_X + grid_width + 80)
@@ -5699,7 +5871,8 @@ def render_folder(folder: str) -> str:
             cursor_x += grid_width + BRANCH_GAP
         content_width = max(1180, cursor_x + 80)
         height = max(700, GRID_Y + grid_height + 100)
-    background = FOLDER_BACKGROUNDS[folder]
+    # Vanilla folder art embeds a fixed diagram unrelated to these branches.
+    background = "GFX_ADISCORD_technology_transparent_tile"
     lines = [
         "\t\tcontainerWindowType = {",
         f"\t\t\tname = \"{folder}\"",
@@ -5757,7 +5930,6 @@ def render_folder(folder: str) -> str:
     # no grid box even when the grid name itself is correct.
     lines.append("\t\t\t}")
     for branch, grid_x, grid_y, grid_width, grid_height in branch_layouts:
-        slot_height = HORIZONTAL_LANE_SLOT if horizontal else GRID_SLOT
         if horizontal:
             title_x = grid_x
             title_y = grid_y - 30
@@ -5783,7 +5955,7 @@ def render_folder(folder: str) -> str:
             f"\t\t\t\tname = \"{branch.techs[0].id}_tree\"",
             f"\t\t\t\tposition = {{ x = {grid_x} y = {grid_y} }}",
             f"\t\t\t\tsize = {{ width = {grid_width} height = {grid_height} }}",
-            f"\t\t\t\tslotsize = {{ width = {GRID_SLOT} height = {slot_height} }}",
+            f"\t\t\t\tslotsize = {{ width = {GRID_SLOT} height = {GRID_SLOT} }}",
             f"\t\t\t\tformat = \"{folder_grid_format(folder)}\"",
             "\t\t\t}",
         ))

@@ -9,6 +9,10 @@ validators in `tools/validators`, shared manifests and helpers in `tools/lib`,
 and tests in `tools/tests`. Root validator and builder scripts are compatibility
 facades for existing commands.
 
+For content authors: [focus effects and TFR examples](../docs/development/focus-effects.md)
+covers cumulative dynamic modifiers, dummy delta previews, civil-war ownership,
+and the focused checks that compare displayed rewards with real variable writes.
+
 ## Check and apply
 
 - Every packaged builder defaults to a real, non-mutating validation. `--check`
@@ -69,6 +73,11 @@ Pair it with the focused test or validator for the changed subsystem and
 and fresh-log review for runtime-visible changes.
 
 ## Vendor and reference assets
+
+Event artwork uses `tools.builders.build_adiscord_event_pictures` for separate
+COUNTRY and NEWS crops. See [event illustration sources and prompts](../gfx/event_pictures/source/README.md)
+for dimensions, provenance, preview, and regeneration commands. Assign its named
+scene sprites in events; do not edit the generated textures or GFX extension.
 
 `third_party/hoi4_flag_maker/` is a manual, opaque vendor GUI, separate from
 the supported Python tooling. Its A-Discord provenance and update policy are

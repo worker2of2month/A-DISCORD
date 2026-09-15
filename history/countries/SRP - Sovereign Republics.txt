@@ -1,0 +1,19 @@
+# Dormant until the union breaks apart. No army or free material is granted here.
+capital = 43
+set_politics = {
+	ruling_party = pragmatism
+	elections_allowed = no
+}
+set_popularities = {
+	pragmatism = 60
+	humanism = 25
+	etatism = 15
+}
+set_stability = 0.45
+set_war_support = 0.55
+create_country_leader = {
+	name = "SRP_Federal_Council"
+	picture = "gfx/leaders/leader_unknown.dds"
+	ideology = pragmatism_ideology
+	expire = "2200.1.1"
+}

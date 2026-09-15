@@ -2,10 +2,10 @@
   "schema_version": 1,
   "inventory_baseline": {
     "candidate_active_oobs": 99,
-    "candidate_oob_templates": 162,
+    "candidate_oob_templates": 170,
     "candidate_script_templates": 15,
-    "candidate_oob_references": 375,
-      "candidate_create_unit_references": 34,
+    "candidate_oob_references": 457,
+    "candidate_create_unit_references": 36,
     "candidate_technical_references": 10,
     "optional_protected_oob_templates": 6
   },
@@ -54,7 +54,7 @@
   "global_name_ambiguities": [
     {
       "observed_name": "Capital Guard",
-      "composition_count": 2,
+      "composition_count": 3,
       "sources": [
         "history/units/BTL.txt",
         "history/units/DAN.txt",
@@ -77,6 +77,56 @@
     }
   ],
   "templates": [
+    {
+      "key": "oob_adiscord_stp_civil_war_territorial_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/ADISCORD_STP_civil_war_templates.txt",
+        "owner": "ADISCORD"
+      },
+      "technical_name": "Stelander Territorial Brigade",
+      "display_name": "Stelander Territorial Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_militia",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 1,
+          "y": 1
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 40.75,
+        "manpower": 4000.0,
+        "equipment": {
+          "infantry_equipment": 320.0
+        },
+        "supply": 0.16
+      },
+      "equipment_availability": {
+        "infantry_equipment": true
+      },
+      "ai_role": "territorial",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_adiscord_stp_civil_war_territorial_brigade"
+      }
+    },
     {
       "key": "oob_ain_licensed_security_battalion",
       "source": {
@@ -1923,20 +1973,27 @@
           "type": "engineer",
           "x": 0,
           "y": 0
+        },
+        {
+          "type": "anti_air",
+          "x": 0,
+          "y": 2
         }
       ],
       "computed": {
-        "organization": 50.642857,
-        "manpower": 6300.0,
+        "organization": 44.3125,
+        "manpower": 6600.0,
         "equipment": {
           "ADISCORD_squad_weapons_equipment": 48.0,
+          "anti_air_equipment": 20.0,
           "infantry_equipment": 610.0,
           "support_equipment": 30.0
         },
-        "supply": 0.38
+        "supply": 0.48
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
+        "anti_air_equipment": true,
         "infantry_equipment": true,
         "support_equipment": true
       },
@@ -2010,24 +2067,31 @@
           "y": 0
         },
         {
+          "type": "anti_air",
+          "x": 0,
+          "y": 2
+        },
+        {
           "type": "artillery",
           "x": 0,
           "y": 1
         }
       ],
       "computed": {
-        "organization": 47.431818,
-        "manpower": 9600.0,
+        "organization": 43.479167,
+        "manpower": 9900.0,
         "equipment": {
           "ADISCORD_squad_weapons_equipment": 72.0,
+          "anti_air_equipment": 20.0,
           "artillery_equipment": 12.0,
           "infantry_equipment": 910.0,
           "support_equipment": 30.0
         },
-        "supply": 0.72
+        "supply": 0.82
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
+        "anti_air_equipment": true,
         "artillery_equipment": true,
         "infantry_equipment": true,
         "support_equipment": true
@@ -4625,6 +4689,11 @@
           "type": "infantry",
           "x": 2,
           "y": 2
+        },
+        {
+          "type": "ADISCORD_line_artillery",
+          "x": 3,
+          "y": 0
         }
       ],
       "support": [
@@ -4640,15 +4709,15 @@
         }
       ],
       "computed": {
-        "organization": 47.431818,
-        "manpower": 9600.0,
+        "organization": 43.895833,
+        "manpower": 10100.0,
         "equipment": {
           "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 12.0,
+          "artillery_equipment": 36.0,
           "infantry_equipment": 910.0,
           "support_equipment": 30.0
         },
-        "supply": 0.72
+        "supply": 0.96
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
@@ -5663,7 +5732,7 @@
       "source_aliases": [
         {
           "kind": "script",
-          "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+          "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
           "owner": "script"
         }
       ],
@@ -6995,20 +7064,27 @@
           "type": "engineer",
           "x": 0,
           "y": 0
+        },
+        {
+          "type": "anti_air",
+          "x": 0,
+          "y": 2
         }
       ],
       "computed": {
-        "organization": 50.642857,
-        "manpower": 6300.0,
+        "organization": 44.3125,
+        "manpower": 6600.0,
         "equipment": {
           "ADISCORD_squad_weapons_equipment": 48.0,
+          "anti_air_equipment": 20.0,
           "infantry_equipment": 610.0,
           "support_equipment": 30.0
         },
-        "supply": 0.38
+        "supply": 0.48
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
+        "anti_air_equipment": true,
         "infantry_equipment": true,
         "support_equipment": true
       },
@@ -7082,24 +7158,31 @@
           "y": 0
         },
         {
+          "type": "anti_air",
+          "x": 0,
+          "y": 2
+        },
+        {
           "type": "artillery",
           "x": 0,
           "y": 1
         }
       ],
       "computed": {
-        "organization": 47.431818,
-        "manpower": 9600.0,
+        "organization": 43.479167,
+        "manpower": 9900.0,
         "equipment": {
           "ADISCORD_squad_weapons_equipment": 72.0,
+          "anti_air_equipment": 20.0,
           "artillery_equipment": 12.0,
           "infantry_equipment": 910.0,
           "support_equipment": 30.0
         },
-        "supply": 0.72
+        "supply": 0.82
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
+        "anti_air_equipment": true,
         "artillery_equipment": true,
         "infantry_equipment": true,
         "support_equipment": true
@@ -7120,7 +7203,7 @@
       "source_aliases": [
         {
           "kind": "script",
-          "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+          "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
           "owner": "script"
         }
       ],
@@ -7426,7 +7509,7 @@
       "source_aliases": [
         {
           "kind": "script",
-          "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+          "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
           "owner": "script"
         }
       ],
@@ -7478,7 +7561,7 @@
       "source_aliases": [
         {
           "kind": "script",
-          "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+          "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
           "owner": "script"
         }
       ],
@@ -7636,7 +7719,7 @@
       "source_aliases": [
         {
           "kind": "script",
-          "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+          "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
           "owner": "script"
         }
       ],
@@ -7850,7 +7933,7 @@
       "source_aliases": [
         {
           "kind": "script",
-          "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+          "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
           "owner": "script"
         }
       ],
@@ -8831,7 +8914,7 @@
       "source_aliases": [
         {
           "kind": "script",
-          "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+          "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
           "owner": "script"
         }
       ],
@@ -8883,7 +8966,7 @@
       "source_aliases": [
         {
           "kind": "script",
-          "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+          "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
           "owner": "script"
         }
       ],
@@ -9382,20 +9465,27 @@
           "type": "engineer",
           "x": 0,
           "y": 0
+        },
+        {
+          "type": "anti_air",
+          "x": 0,
+          "y": 2
         }
       ],
       "computed": {
-        "organization": 50.642857,
-        "manpower": 6300.0,
+        "organization": 44.3125,
+        "manpower": 6600.0,
         "equipment": {
           "ADISCORD_squad_weapons_equipment": 48.0,
+          "anti_air_equipment": 20.0,
           "infantry_equipment": 610.0,
           "support_equipment": 30.0
         },
-        "supply": 0.38
+        "supply": 0.48
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
+        "anti_air_equipment": true,
         "infantry_equipment": true,
         "support_equipment": true
       },
@@ -9469,24 +9559,31 @@
           "y": 0
         },
         {
+          "type": "anti_air",
+          "x": 0,
+          "y": 2
+        },
+        {
           "type": "artillery",
           "x": 0,
           "y": 1
         }
       ],
       "computed": {
-        "organization": 47.431818,
-        "manpower": 9600.0,
+        "organization": 43.479167,
+        "manpower": 9900.0,
         "equipment": {
           "ADISCORD_squad_weapons_equipment": 72.0,
+          "anti_air_equipment": 20.0,
           "artillery_equipment": 12.0,
           "infantry_equipment": 910.0,
           "support_equipment": 30.0
         },
-        "supply": 0.72
+        "supply": 0.82
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
+        "anti_air_equipment": true,
         "artillery_equipment": true,
         "infantry_equipment": true,
         "support_equipment": true
@@ -9882,7 +9979,7 @@
       "key": "script_adiscord_vorkerland_collapse_effects_emergency_militia",
       "source": {
         "kind": "script",
-        "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+        "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
         "owner": "script"
       },
       "technical_name": "Emergency Militia",
@@ -9933,7 +10030,7 @@
       "key": "script_adiscord_vorkerland_collapse_effects_worker_home_guard",
       "source": {
         "kind": "script",
-        "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+        "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
         "owner": "script"
       },
       "technical_name": "Worker Home Guard",
@@ -9982,7 +10079,7 @@
       "key": "script_adiscord_vorkerland_collapse_effects_worker_rifle_division",
       "source": {
         "kind": "script",
-        "path": "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt",
+        "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
         "owner": "script"
       },
       "technical_name": "Worker Rifle Division",
@@ -10061,13 +10158,13 @@
       "key": "script_adiscord_vorkerland_collapse_effects_workerland_mobile_group",
       "source": {
         "kind": "script",
-        "path": "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt",
+        "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
         "owner": "script"
       },
       "source_aliases": [
         {
           "kind": "script",
-          "path": "common/scripted_effects/ADISCORD_vorkerland_emergency_template_effects.txt",
+          "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
           "owner": "script"
         }
       ],
@@ -10467,12 +10564,332 @@
         "kind": "retain",
         "target": "oob_vra_northern_militia"
       }
+    },
+    {
+      "key": "script_val_contract_infantry_for_sts",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_VAL_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Kefreyt Contract Infantry",
+      "display_name": "Kefreyt Contract Infantry",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "computed": {
+        "organization": 50.642857,
+        "manpower": 6300.0,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 48.0,
+          "infantry_equipment": 610.0,
+          "support_equipment": 30.0
+        },
+        "supply": 0.38
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_val_contract_infantry_for_sts"
+      }
+    },
+    {
+      "key": "stp_cw_assault_division",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/ADISCORD_STP_civil_war_templates.txt",
+        "owner": "ADISCORD"
+      },
+      "technical_name": "Stelander Assault Division",
+      "display_name": "Stelander Assault Division",
+      "legacy_names": [],
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "stp_cw_assault_division"
+      },
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_line_artillery",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_line_artillery",
+          "x": 2,
+          "y": 1
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "artillery",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "anti_air",
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "computed": {
+        "organization": 33.136364,
+        "manpower": 7900.0,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 48.0,
+          "anti_air_equipment": 20.0,
+          "artillery_equipment": 60.0,
+          "infantry_equipment": 610.0,
+          "support_equipment": 30.0
+        },
+        "supply": 1.12
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "anti_air_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      }
+    },
+    {
+      "key": "stp_cw_kefreyt_volunteer_division",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/ADISCORD_STP_civil_war_templates.txt",
+        "owner": "ADISCORD"
+      },
+      "technical_name": "Kefreyt Volunteer Division",
+      "display_name": "Kefreyt Volunteer Division",
+      "legacy_names": [],
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "stp_cw_kefreyt_volunteer_division"
+      },
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_line_artillery",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_line_artillery",
+          "x": 2,
+          "y": 1
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "artillery",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "anti_air",
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "computed": {
+        "organization": 33.136364,
+        "manpower": 7900.0,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 48.0,
+          "anti_air_equipment": 20.0,
+          "artillery_equipment": 60.0,
+          "infantry_equipment": 610.0,
+          "support_equipment": 30.0
+        },
+        "supply": 1.12
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "anti_air_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      }
     }
   ],
   "references": [
     {
+      "key": "adiscord_stp_postwar_territorial_template_unlock",
+      "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+      "kind": "technical_reference",
+      "technical_name": "Stelander Territorial Brigade",
+      "legacy_names": [],
+      "count": 1
+    },
+    {
+      "key": "adiscord_stp_postwar_assault_template_unlock",
+      "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+      "kind": "technical_reference",
+      "technical_name": "Stelander Assault Division",
+      "legacy_names": [],
+      "count": 1
+    },
+    {
+      "key": "adiscord_stp_assault_division_create_unit",
+      "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Stelander Assault Division",
+      "legacy_names": [],
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 1,
+      "count": 1
+    },
+    {
+      "key": "adiscord_stp_trained_territorial_brigades",
+      "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Stelander Territorial Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 1,
+      "count": 1
+    },
+    {
+      "key": "adiscord_stp_civil_war_create_unit_territorial_brigade",
+      "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Stelander Territorial Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 1,
+      "count": 2
+    },
+    {
+      "key": "adiscord_stp_scripted_effects_technical_reference_regular_army",
+      "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+      "kind": "technical_reference",
+      "technical_name": "Regular army",
+      "legacy_names": [],
+      "count": 5
+    },
+    {
+      "key": "adiscord_stp_scripted_effects_technical_reference_police_division",
+      "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+      "kind": "technical_reference",
+      "technical_name": "Police division",
+      "legacy_names": [],
+      "count": 5
+    },
+    {
       "key": "adiscord_vorkerland_collapse_decisions_create_unit_tgd_urban_guard_xp_0_1_eq_0_7",
-      "path": "common/decisions/ADISCORD_vorkerland_collapse_decisions.txt",
+      "path": "common/decisions/ADISCORD_vorkerland_decisions.txt",
       "kind": "create_unit",
       "technical_name": "TGD Urban Guard",
       "legacy_names": [],
@@ -10482,7 +10899,7 @@
     },
     {
       "key": "adiscord_vorkerland_collapse_decisions_create_unit_tva_collapse_militia_xp_0_1_eq_0_75",
-      "path": "common/decisions/ADISCORD_vorkerland_collapse_decisions.txt",
+      "path": "common/decisions/ADISCORD_vorkerland_decisions.txt",
       "kind": "create_unit",
       "technical_name": "TVA Collapse Militia",
       "legacy_names": [],
@@ -10492,7 +10909,7 @@
     },
     {
       "key": "adiscord_vorkerland_collapse_decisions_create_unit_tva_infiltration_cell_xp_0_25_eq_0_75",
-      "path": "common/decisions/ADISCORD_vorkerland_collapse_decisions.txt",
+      "path": "common/decisions/ADISCORD_vorkerland_decisions.txt",
       "kind": "create_unit",
       "technical_name": "TVA Infiltration Cell",
       "legacy_names": [],
@@ -10502,7 +10919,7 @@
     },
     {
       "key": "adiscord_vorkerland_collapse_decisions_create_unit_wps_collapse_militia_xp_0_1_eq_0_7",
-      "path": "common/decisions/ADISCORD_vorkerland_collapse_decisions.txt",
+      "path": "common/decisions/ADISCORD_vorkerland_decisions.txt",
       "kind": "create_unit",
       "technical_name": "WPS Collapse Militia",
       "legacy_names": [],
@@ -10531,28 +10948,12 @@
       "count": 20
     },
     {
-      "key": "adiscord_stp_army_restriction_effects_technical_reference_capital_guard",
-      "path": "common/scripted_effects/ADISCORD_STP_army_restriction_effects.txt",
+      "key": "adiscord_stp_scripted_effects_technical_reference_capital_guard",
+      "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
       "kind": "technical_reference",
       "technical_name": "Capital Guard",
       "legacy_names": [],
       "count": 2
-    },
-    {
-      "key": "adiscord_stp_army_restriction_effects_technical_reference_police_division",
-      "path": "common/scripted_effects/ADISCORD_STP_army_restriction_effects.txt",
-      "kind": "technical_reference",
-      "technical_name": "Police division",
-      "legacy_names": [],
-      "count": 4
-    },
-    {
-      "key": "adiscord_stp_army_restriction_effects_technical_reference_regular_army",
-      "path": "common/scripted_effects/ADISCORD_STP_army_restriction_effects.txt",
-      "kind": "technical_reference",
-      "technical_name": "Regular army",
-      "legacy_names": [],
-      "count": 4
     },
     {
       "key": "adiscord_nam_resource_war_effects_create_unit_nam_resource_guard_xp_0_2_eq_1_0",
@@ -10576,7 +10977,7 @@
     },
     {
       "key": "adiscord_vorkerland_collapse_effects_create_unit_armi_mobile_group_xp_0_35_eq_0_9",
-      "path": "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
       "kind": "create_unit",
       "technical_name": "Armi Mobile Group",
       "legacy_names": [],
@@ -10586,7 +10987,7 @@
     },
     {
       "key": "adiscord_vorkerland_collapse_effects_create_unit_workerland_mobile_group_xp_0_35_eq_0_9",
-      "path": "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
       "kind": "create_unit",
       "technical_name": "Workerland Mobile Group",
       "legacy_names": [],
@@ -10596,7 +10997,7 @@
     },
     {
       "key": "adiscord_vorkerland_collapse_effects_create_unit_emergency_militia_xp_0_05_eq_0_75",
-      "path": "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
       "kind": "create_unit",
       "technical_name": "Emergency Militia",
       "legacy_names": [
@@ -10608,7 +11009,7 @@
     },
     {
       "key": "adiscord_vorkerland_collapse_effects_create_unit_worker_home_guard_xp_0_1_eq_0_85",
-      "path": "common/scripted_effects/ADISCORD_vorkerland_collapse_effects.txt",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
       "kind": "create_unit",
       "technical_name": "Worker Home Guard",
       "legacy_names": [],
@@ -10618,7 +11019,7 @@
     },
     {
       "key": "adiscord_vorkerland_focus_decision_effects_create_unit_workerland_militia_xp_0_05_eq_0_55",
-      "path": "common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
       "kind": "create_unit",
       "technical_name": "Workerland Militia",
       "legacy_names": [],
@@ -10628,7 +11029,7 @@
     },
     {
       "key": "adiscord_vorkerland_focus_decision_effects_create_unit_workerland_militia_xp_0_02_eq_0_45",
-      "path": "common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
       "kind": "create_unit",
       "technical_name": "Workerland Militia",
       "legacy_names": [],
@@ -10638,7 +11039,7 @@
     },
     {
       "key": "adiscord_vorkerland_focus_decision_effects_create_unit_armi_security_detachment_xp_0_05_eq_0_55",
-      "path": "common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
       "kind": "create_unit",
       "technical_name": "Armi Security Detachment",
       "legacy_names": [],
@@ -10648,7 +11049,7 @@
     },
     {
       "key": "adiscord_vorkerland_focus_decision_effects_create_unit_armi_security_detachment_xp_0_02_eq_0_45",
-      "path": "common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
       "kind": "create_unit",
       "technical_name": "Armi Security Detachment",
       "legacy_names": [],
@@ -10658,7 +11059,7 @@
     },
     {
       "key": "adiscord_vorkerland_focus_decision_effects_create_unit_tva_collapse_militia_xp_0_05_eq_0_55",
-      "path": "common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
       "kind": "create_unit",
       "technical_name": "TVA Collapse Militia",
       "legacy_names": [],
@@ -10668,7 +11069,7 @@
     },
     {
       "key": "adiscord_vorkerland_focus_decision_effects_create_unit_tva_collapse_militia_xp_0_02_eq_0_45",
-      "path": "common/scripted_effects/ADISCORD_vorkerland_focus_decision_effects.txt",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
       "kind": "create_unit",
       "technical_name": "TVA Collapse Militia",
       "legacy_names": [],
@@ -10917,14 +11318,24 @@
       "count": 1
     },
     {
-      "key": "cof_oob_forest_commune_infantry_xp_0_15_eq_0_28",
+      "key": "cof_oob_forest_commune_infantry_xp_0_22_eq_0_75",
       "path": "history/units/COF.txt",
       "kind": "oob",
       "technical_name": "Forest Commune Infantry",
       "legacy_names": [],
-      "start_experience_factor": 0.15,
-      "start_equipment_factor": 0.28,
+      "start_experience_factor": 0.22,
+      "start_equipment_factor": 0.75,
       "count": 1
+    },
+    {
+      "key": "cof_oob_forest_watch_xp_0_16_eq_0_65",
+      "path": "history/units/COF.txt",
+      "kind": "oob",
+      "technical_name": "Forest Watch",
+      "legacy_names": [],
+      "start_experience_factor": 0.16,
+      "start_equipment_factor": 0.65,
+      "count": 6
     },
     {
       "key": "csl_vorkerland_collapse_oob_csl_municipal_militia_xp_0_05_eq_0_55",
@@ -11515,34 +11926,34 @@
       "count": 2
     },
     {
-      "key": "nod_oob_cussington_guard_xp_0_28_eq_0_45",
+      "key": "nod_oob_cussington_guard_xp_0_28_eq_0_8",
       "path": "history/units/NOD.txt",
       "kind": "oob",
       "technical_name": "Cussington Guard",
       "legacy_names": [],
       "start_experience_factor": 0.28,
-      "start_equipment_factor": 0.45,
-      "count": 1
+      "start_equipment_factor": 0.8,
+      "count": 6
     },
     {
-      "key": "nod_oob_cussington_security_xp_0_15_eq_0_3",
+      "key": "nod_oob_cussington_security_xp_0_15_eq_0_6",
       "path": "history/units/NOD.txt",
       "kind": "oob",
       "technical_name": "Cussington Security",
       "legacy_names": [],
       "start_experience_factor": 0.15,
-      "start_equipment_factor": 0.3,
-      "count": 2
+      "start_equipment_factor": 0.6,
+      "count": 20
     },
     {
-      "key": "nod_oob_nodral_line_infantry_xp_0_2_eq_0_37",
+      "key": "nod_oob_nodral_line_infantry_xp_0_2_eq_0_7",
       "path": "history/units/NOD.txt",
       "kind": "oob",
       "technical_name": "Nodral Line Infantry",
       "legacy_names": [],
       "start_experience_factor": 0.2,
-      "start_equipment_factor": 0.37,
-      "count": 7
+      "start_equipment_factor": 0.7,
+      "count": 16
     },
     {
       "key": "nvr_oob_northern_line_brigade_xp_0_15_eq_0_72",
@@ -11954,7 +12365,7 @@
       "legacy_names": [],
       "start_experience_factor": 0.28,
       "start_equipment_factor": 0.61,
-      "count": 3
+      "count": 10
     },
     {
       "key": "stp_oob_regular_army_xp_0_33_eq_0_69",
@@ -11964,7 +12375,7 @@
       "legacy_names": [],
       "start_experience_factor": 0.33,
       "start_equipment_factor": 0.69,
-      "count": 10
+      "count": 19
     },
     {
       "key": "swb_vorkerland_collapse_oob_swb_collapse_militia_xp_0_1_eq_0_7",
@@ -11991,24 +12402,34 @@
       "count": 1
     },
     {
-      "key": "tff_oob_capital_guard_xp_0_26_eq_0_4",
+      "key": "tff_oob_capital_guard_xp_0_28_eq_0_8",
       "path": "history/units/TFF.txt",
       "kind": "oob",
       "technical_name": "Capital Guard",
       "legacy_names": [],
-      "start_experience_factor": 0.26,
-      "start_equipment_factor": 0.4,
-      "count": 1
+      "start_experience_factor": 0.28,
+      "start_equipment_factor": 0.8,
+      "count": 2
     },
     {
-      "key": "tff_oob_line_infantry_brigade_xp_0_17_eq_0_32",
+      "key": "tff_oob_line_infantry_brigade_xp_0_22_eq_0_75",
       "path": "history/units/TFF.txt",
       "kind": "oob",
       "technical_name": "Line Infantry Brigade",
       "legacy_names": [],
-      "start_experience_factor": 0.17,
-      "start_equipment_factor": 0.32,
-      "count": 2
+      "start_experience_factor": 0.22,
+      "start_equipment_factor": 0.75,
+      "count": 4
+    },
+    {
+      "key": "tff_oob_local_security_detachment_xp_0_16_eq_0_65",
+      "path": "history/units/TFF.txt",
+      "kind": "oob",
+      "technical_name": "Local Security Detachment",
+      "legacy_names": [],
+      "start_experience_factor": 0.16,
+      "start_equipment_factor": 0.65,
+      "count": 10
     },
     {
       "key": "tgd_vorkerland_collapse_oob_tgd_urban_guard_xp_0_15_eq_0_8",
@@ -12385,34 +12806,34 @@
       "count": 2
     },
     {
-      "key": "ypr_oob_capital_guard_xp_0_26_eq_0_4",
+      "key": "ypr_oob_capital_guard_xp_0_28_eq_0_8",
       "path": "history/units/YPR.txt",
       "kind": "oob",
       "technical_name": "Capital Guard",
       "legacy_names": [],
-      "start_experience_factor": 0.26,
-      "start_equipment_factor": 0.4,
-      "count": 1
+      "start_experience_factor": 0.28,
+      "start_equipment_factor": 0.8,
+      "count": 2
     },
     {
-      "key": "ypr_oob_line_infantry_brigade_xp_0_17_eq_0_32",
+      "key": "ypr_oob_line_infantry_brigade_xp_0_22_eq_0_75",
       "path": "history/units/YPR.txt",
       "kind": "oob",
       "technical_name": "Line Infantry Brigade",
       "legacy_names": [],
-      "start_experience_factor": 0.17,
-      "start_equipment_factor": 0.32,
-      "count": 2
+      "start_experience_factor": 0.22,
+      "start_equipment_factor": 0.75,
+      "count": 6
     },
     {
-      "key": "ypr_oob_local_security_detachment_xp_0_12_eq_0_25",
+      "key": "ypr_oob_local_security_detachment_xp_0_16_eq_0_65",
       "path": "history/units/YPR.txt",
       "kind": "oob",
       "technical_name": "Local Security Detachment",
       "legacy_names": [],
-      "start_experience_factor": 0.12,
-      "start_equipment_factor": 0.25,
-      "count": 1
+      "start_experience_factor": 0.16,
+      "start_equipment_factor": 0.65,
+      "count": 10
     },
     {
       "key": "zao_oob_line_infantry_brigade_xp_0_17_eq_0_65",
@@ -12516,13 +12937,59 @@
     },
     {
       "key": "adiscord_vorkerland_rom_tru_effects_create_unit_line_infantry_brigade_xp_0_15_eq_0_7",
-      "path": "common/scripted_effects/ADISCORD_vorkerland_rom_tru_effects.txt",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
       "kind": "create_unit",
       "technical_name": "Line Infantry Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.7,
       "count": 2
+    },
+    {
+      "key": "val_cw_contract_formations_create_unit",
+      "path": "common/scripted_effects/ADISCORD_VAL_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Kefreyt Contract Infantry",
+      "legacy_names": [],
+      "start_experience_factor": 0.5,
+      "start_equipment_factor": 1,
+      "count": 1
+    },
+    {
+      "key": "cof_oob_old_grove_guard_xp_0_28_eq_0_8",
+      "path": "history/units/COF.txt",
+      "kind": "oob",
+      "technical_name": "Old Grove Guard",
+      "legacy_names": [],
+      "start_experience_factor": 0.28,
+      "start_equipment_factor": 0.8,
+      "count": 1
+    },
+    {
+      "key": "stp_cw_kefreyt_volunteer_division_create_unit",
+      "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Kefreyt Volunteer Division",
+      "legacy_names": [],
+      "start_experience_factor": 0.5,
+      "start_equipment_factor": 1,
+      "count": 1
+    },
+    {
+      "key": "stp_cw_kefreyt_volunteer_division_cleanup",
+      "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+      "kind": "technical_reference",
+      "technical_name": "Kefreyt Volunteer Division",
+      "legacy_names": [],
+      "count": 1
+    },
+    {
+      "key": "stp_cw_kefreyt_contract_infantry_cleanup",
+      "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+      "kind": "technical_reference",
+      "technical_name": "Kefreyt Contract Infantry",
+      "legacy_names": [],
+      "count": 1
     }
   ]
 }

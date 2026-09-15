@@ -4,6 +4,7 @@ from collections import Counter
 import re
 import unittest
 
+from tools.lib.paths import source_section
 from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     ACTIVE_PHASE_FLAGS,
     CLAIMANT_EVENTS_FILE,
@@ -153,7 +154,7 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
 class VorkerlandLifecycleFocusTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.source = read(FOCUS_FILE)
+        cls.source = source_section(read(FOCUS_FILE), 'civil_war_focus')
         cls.blocks = focus_blocks(cls.source)
         # The tree positions almost every focus with relative_position_id, so
         # anything that asserts where a focus appears on screen has to compare
@@ -161,14 +162,14 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
         cls.grid = resolved_positions(cls.blocks)
         cls.continuous_source = read(CONTINUOUS_FOCUS_FILE)
         cls.continuous_blocks = focus_blocks(cls.continuous_source)
-        cls.phase_effects = read(PHASE_EFFECTS_FILE)
-        cls.collapse_ideas = read(COLLAPSE_IDEAS_FILE)
-        cls.focus_expansion_ideas = read(FOCUS_EXPANSION_IDEAS_FILE)
-        cls.claimant_events = read(CLAIMANT_EVENTS_FILE)
-        cls.diplomacy_effects = read(DIPLOMACY_EFFECTS_FILE)
-        cls.wkr_ai_plans = read(WKR_AI_PLAN_FILE)
-        cls.vad_ai_plans = read(VAD_AI_PLAN_FILE)
-        cls.tva_ai_plans = read(TVA_AI_PLAN_FILE)
+        cls.phase_effects = source_section(read(PHASE_EFFECTS_FILE), 'phase_effects')
+        cls.collapse_ideas = source_section(read(COLLAPSE_IDEAS_FILE), 'collapse_ideas')
+        cls.focus_expansion_ideas = source_section(read(FOCUS_EXPANSION_IDEAS_FILE), 'focus_expansion_ideas')
+        cls.claimant_events = source_section(read(CLAIMANT_EVENTS_FILE), 'claimant_events')
+        cls.diplomacy_effects = source_section(read(DIPLOMACY_EFFECTS_FILE), 'diplomacy_effects')
+        cls.wkr_ai_plans = source_section(read(WKR_AI_PLAN_FILE), 'wkr_wartime_plan')
+        cls.vad_ai_plans = source_section(read(VAD_AI_PLAN_FILE), 'vad_wartime_plan')
+        cls.tva_ai_plans = source_section(read(TVA_AI_PLAN_FILE), 'tva_wartime_plan')
 
     def test_integrated_focus_contract(self) -> None:
         self.assertEqual(collect_issues(), [])
@@ -1344,7 +1345,7 @@ focus = {
                     self.assertTrue(entries[key].strip())
 
     def test_russian_variant_localisation_is_cyrillic_prose(self) -> None:
-        entries = localisation_entries(read(RUSSIAN_LOCALISATION))
+        entries = localisation_entries(source_section(read(RUSSIAN_LOCALISATION), 'civil_war_focus_l_russian'))
         for branch in VARIANT_BRANCHES:
             for focus_id in branch["focuses"]:
                 for key in (focus_id, f"{focus_id}_desc"):
@@ -1712,7 +1713,7 @@ focus = {
             self.assertNotIn(forbidden, focus)
 
     def test_focuses_feed_visible_diplomacy_and_support_decisions(self) -> None:
-        diplomacy = read(DIPLOMACY_DECISIONS_FILE)
+        diplomacy = source_section(read(DIPLOMACY_DECISIONS_FILE), 'diplomacy_decisions')
         support = "\n".join(read(path) for path in FOCUS_DECISION_FILES)
         for hook in (
             "ADISCORD_vorkerland_focus_vad_sol_invitation_intent",
@@ -1870,8 +1871,8 @@ focus = {
         self.assertIn("ideology = technocracy_ideology", worx)
         self.assertIn("large = GFX_portrait_WRK_Dorian_Worx", worx)
 
-        english = localisation_entries(read(ENGLISH_LOCALISATION))
-        russian = localisation_entries(read(RUSSIAN_LOCALISATION))
+        english = localisation_entries(source_section(read(ENGLISH_LOCALISATION), 'civil_war_focus_l_english'))
+        russian = localisation_entries(source_section(read(RUSSIAN_LOCALISATION), 'civil_war_focus_l_russian'))
         self.assertIn("Worx", english["TVA_codify_utilitarian_directorate"])
         self.assertIn("Technocratic", english["TVA_codify_utilitarian_directorate"])
         self.assertIn(
@@ -1909,7 +1910,10 @@ focus = {
         ):
             with self.subTest(localisation=localisation):
                 self.assertEqual(
-                    set(localisation_entries(read(localisation))), expected_keys
+                    set(localisation_entries(source_section(
+                        read(localisation), "postwar_ideas_l_" +
+                        ("russian" if localisation == RUSSIAN_POSTWAR_IDEA_LOCALISATION else "english")
+                    ))), expected_keys
                 )
 
         definitions = _blocks(self.collapse_ideas, IVANLAND_EXPEDITIONARY_IDEA)
@@ -2184,9 +2188,9 @@ class WarEconomyDynamicModifiers(unittest.TestCase):
     """
 
     def setUp(self) -> None:
-        self.blocks = focus_blocks(read(FOCUS_FILE))
-        self.modifiers = read(WAR_ECONOMY_MODIFIER_FILE)
-        self.refresh = read(WAR_ECONOMY_REFRESH_FILE)
+        self.blocks = focus_blocks(source_section(read(FOCUS_FILE), 'civil_war_focus'))
+        self.modifiers = source_section(read(WAR_ECONOMY_MODIFIER_FILE), 'collapse_dynamic_modifiers')
+        self.refresh = source_section(read(WAR_ECONOMY_REFRESH_FILE), 'war_economy_effects')
 
     def test_each_claimant_has_one_war_economy_modifier(self) -> None:
         self.assertEqual({"WKR", "VAD", "TVA"}, set(WAR_ECONOMY_DYNAMIC))

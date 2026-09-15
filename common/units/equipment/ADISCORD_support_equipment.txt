@@ -1,4 +1,28 @@
 equipments = {
+	motorized_equipment = {
+		year = 2155
+		is_archetype = yes
+		is_buildable = no
+		picture = archetype_motorized_equipment
+		type = motorized
+		group_by = archetype
+		interface_category = interface_category_land
+		supply_truck = yes
+		maximum_speed = 10
+		reliability = 0.8
+		fuel_consumption = 1.2
+		lend_lease_cost = 5
+		build_cost_ic = 2.5
+		resources = { steel = 1 rubber = 1 }
+	}
+
+	motorized_equipment_1 = {
+		year = 2155
+		archetype = motorized_equipment
+		priority = 20
+		visual_level = 0
+	}
+
 	support_equipment = {
 		year = 2100
 		is_archetype = yes

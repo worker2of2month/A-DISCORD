@@ -27,4 +27,37 @@ spriteTypes = {
         borderSize = { x = 24 y = 24 }
         tilingCenter = yes
     }
+
+spriteType = {
+		name = "GFX_ADISCORD_logistics_variant_row"
+		textureFile = "gfx/interface/logistics/ui/ADISCORD_logistics_variant_row.dds"
+	}
+spriteType = {
+		name = "GFX_ADISCORD_logistics_other_row"
+		textureFile = "gfx/interface/logistics/ui/ADISCORD_logistics_other_row.dds"
+	}
+spriteType = {
+		name = "GFX_ADISCORD_logistics_naval_equipment_row"
+		textureFile = "gfx/interface/logistics/ui/ADISCORD_logistics_naval_equipment_row.dds"
+	}
+spriteType = {
+		name = "GFX_ADISCORD_logistics_air_equipment_row"
+		textureFile = "gfx/interface/logistics/ui/ADISCORD_logistics_air_equipment_row.dds"
+	}
+spriteType = {
+		name = "GFX_ADISCORD_logistics_equipment_row"
+		textureFile = "gfx/interface/logistics/ui/ADISCORD_logistics_equipment_row.dds"
+	}
+spriteType = {
+		name = "GFX_ADISCORD_logistics_entry_row"
+		textureFile = "gfx/interface/logistics/ui/ADISCORD_logistics_entry_row.dds"
+	}
+spriteType = {
+		name = "GFX_ADISCORD_logistics_fuel_row"
+		textureFile = "gfx/interface/logistics/ui/ADISCORD_logistics_fuel_row.dds"
+	}
+spriteType = {
+		name = "GFX_ADISCORD_logistics_header_row"
+		textureFile = "gfx/interface/logistics/ui/ADISCORD_logistics_header_row.dds"
+	}
 }

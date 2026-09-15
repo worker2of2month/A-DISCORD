@@ -11,3 +11,73 @@ STP_party_suspicion_dynamic_modifier = {
 	}
 	political_power_factor = STP_sus_political_power_factor
 }
+
+# Persistent focus aggregates. Dummy ideas describe deltas, not installed stages.
+# Fixed-tag successors need their own country variables and an allowed tag here.
+STP_cw_resistance_network_dynamic = {
+	icon = GFX_idea_ADISCORD_law_civic_local_councils
+	enable = { OR = { tag = STP tag = STS } }
+	political_power_gain = STP_cw_network_political_power_gain
+}
+
+STP_cw_party_administration_dynamic = {
+	icon = GFX_idea_ADISCORD_law_civic_emergency_committees
+	enable = { tag = STP }
+	political_power_gain = STP_cw_party_political_power_gain
+	stability_factor = STP_cw_party_stability_factor
+	command_power_gain_mult = STP_cw_party_command_power_gain_mult
+}
+
+STP_cw_military_staff_dynamic = {
+	icon = GFX_idea_ADISCORD_law_military_cadre_army
+	enable = { OR = { tag = STP tag = STS tag = SRP } }
+	army_org_factor = STP_cw_army_org_factor
+	planning_speed = STP_cw_army_planning_speed
+	army_org_regain = STP_cw_army_org_regain
+	supply_consumption_factor = STP_cw_army_supply_consumption_factor
+}
+
+STP_cw_election_mandate_dynamic = {
+	icon = GFX_idea_ADISCORD_law_civic_local_councils
+	enable = { tag = STS has_war = yes }
+	army_org_regain = STP_cw_mandate_org_regain
+	army_core_defence_factor = STP_cw_mandate_core_defence
+	training_time_factor = STP_cw_mandate_training_time
+	mobilization_speed = STP_cw_mandate_mobilization
+}
+
+STP_pw_republic_dynamic = {
+	icon = GFX_idea_ADISCORD_law_civic_local_councils
+	enable = { tag = STS }
+	ADISCORD_economy_admin_expense_factor = STP_pw_ADISCORD_economy_admin_expense_factor
+	army_org_factor = STP_pw_army_org_factor
+	army_org_regain = STP_pw_army_org_regain
+	industrial_capacity_factory = STP_pw_industrial_capacity_factory
+	planning_speed = STP_pw_planning_speed
+	political_power_gain = STP_pw_political_power_gain
+	production_factory_max_efficiency_factor = STP_pw_production_factory_max_efficiency_factor
+	production_speed_buildings_factor = STP_pw_production_speed_buildings_factor
+	production_speed_industrial_complex_factor = STP_pw_production_speed_industrial_complex_factor
+	research_speed_factor = STP_pw_research_speed_factor
+	stability_factor = STP_pw_stability_factor
+	supply_consumption_factor = STP_pw_supply_consumption_factor
+	training_time_factor = STP_pw_training_time_factor
+}
+
+STP_pw_party_dynamic = {
+	icon = GFX_idea_ADISCORD_law_civic_emergency_committees
+	enable = { tag = STP }
+	ADISCORD_economy_admin_expense_factor = STP_pw_ADISCORD_economy_admin_expense_factor
+	army_org_factor = STP_pw_army_org_factor
+	army_org_regain = STP_pw_army_org_regain
+	industrial_capacity_factory = STP_pw_industrial_capacity_factory
+	planning_speed = STP_pw_planning_speed
+	political_power_gain = STP_pw_political_power_gain
+	production_factory_max_efficiency_factor = STP_pw_production_factory_max_efficiency_factor
+	production_speed_buildings_factor = STP_pw_production_speed_buildings_factor
+	production_speed_industrial_complex_factor = STP_pw_production_speed_industrial_complex_factor
+	research_speed_factor = STP_pw_research_speed_factor
+	stability_factor = STP_pw_stability_factor
+	supply_consumption_factor = STP_pw_supply_consumption_factor
+	training_time_factor = STP_pw_training_time_factor
+}

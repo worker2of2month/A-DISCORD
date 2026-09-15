@@ -11,4 +11,11 @@ spriteTypes = {
 	spriteType = { name = "GFX_STP_regions_state_46" texturefile = "gfx/interface/STP_regions/STP_regions_state_46.png" noOfFrames = 7 transparencecheck = yes }
 	spriteType = { name = "GFX_STP_regions_state_53" texturefile = "gfx/interface/STP_regions/STP_regions_state_53.png" noOfFrames = 7 transparencecheck = yes }
 	spriteType = { name = "GFX_STP_regions_state_88" texturefile = "gfx/interface/STP_regions/STP_regions_state_88.png" noOfFrames = 7 transparencecheck = yes }
+
+	# Commander allegiance: neutral existing badges; traits do not grant stats.
+	spriteType = { name = "GFX_trait_STP_party_loyalist" texturefile = "gfx/interface/traits/personal/trait_politically_connected.dds" }
+	spriteType = { name = "GFX_trait_STP_shabrat_loyalist" texturefile = "gfx/interface/traits/personal/trait_politically_connected.dds" }
+	spriteType = { name = "GFX_trait_STP_local_councils_loyalist" texturefile = "gfx/interface/traits/personal/trait_politically_connected.dds" }
+	spriteType = { name = "GFX_trait_STP_ravel_undecided" texturefile = "gfx/interface/traits/personal/trait_cautious.dds" }
+	spriteType = { name = "GFX_trait_STP_drake_undecided" texturefile = "gfx/interface/traits/personal/trait_cautious.dds" }
 }

@@ -1,0 +1,72 @@
+# One mission per template. Composition keys are subunits, not their map sprites.
+ADISCORD_coastal_patrol = {
+	allowed = {
+		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+	}
+	ai_will_do = { factor = 5 }
+	mission = { naval_patrol }
+	min_composition = {
+		ADISCORD_coastal_patrol_vessel = { amount = 1 }
+	}
+	optimal_composition = {
+		ADISCORD_coastal_patrol_vessel = { amount = 1 }
+	}
+}
+
+ADISCORD_coastal_strike = {
+	allowed = {
+		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+	}
+	ai_will_do = { factor = 1 }
+	keep_updated = yes
+	mission = { naval_strike }
+	min_composition = {
+		ADISCORD_coastal_patrol_vessel = { amount = 1 }
+	}
+	optimal_composition = {
+		ADISCORD_coastal_patrol_vessel = { amount = 2 }
+	}
+}
+
+ADISCORD_coastal_escort = {
+	allowed = {
+		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+	}
+	ai_will_do = { factor = 5 }
+	mission = { convoy_escort }
+	min_composition = {
+		ADISCORD_coastal_patrol_vessel = { amount = 1 }
+	}
+	optimal_composition = {
+		ADISCORD_coastal_patrol_vessel = { amount = 2 }
+	}
+}
+
+ADISCORD_coastal_raiding = {
+	allowed = {
+		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+	}
+	ai_will_do = { factor = 1 }
+	keep_updated = yes
+	mission = { convoy_raiding }
+	min_composition = {
+		ADISCORD_coastal_patrol_vessel = { amount = 1 }
+	}
+	optimal_composition = {
+		ADISCORD_coastal_patrol_vessel = { amount = 2 }
+	}
+}
+
+ADISCORD_coastal_invasion_support = {
+	allowed = {
+		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+	}
+	ai_will_do = { factor = 5 }
+	mission = { naval_invasion_support }
+	min_composition = {
+		ADISCORD_coastal_patrol_vessel = { amount = 1 }
+	}
+	optimal_composition = {
+		ADISCORD_coastal_patrol_vessel = { amount = 2 }
+	}
+}

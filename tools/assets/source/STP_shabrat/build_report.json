@@ -1,0 +1,11 @@
+{
+  "body_vertices": 1208,
+  "body_triangles": 1610,
+  "gear_vertices": 3201,
+  "gear_triangles": 5957,
+  "bones": 33,
+  "unweighted_vertices": {
+    "Shabrat_body": 0,
+    "Shabrat_equipment": 0
+  }
+}

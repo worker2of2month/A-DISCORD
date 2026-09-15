@@ -12,8 +12,9 @@ state={
 		owner = NOD
 		buildings = {
 			infrastructure = 2
+			arms_factory = 1
 		}
 		add_core_of = NOD
-		victory_points = { 34 1 }
+		victory_points = { 34 3 }
 	}
 }

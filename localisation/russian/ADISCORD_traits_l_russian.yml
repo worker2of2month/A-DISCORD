@@ -6,6 +6,17 @@
  High_Political_Aspirations: "Наиграндиознейшие амбиции"
  Marshal_Of_War: "Маршал войны"
  The_Weaponry_Baron: "Оружейный барон"
+ # Stelander commander loyalties
+ STP_party_loyalist: "Верность партийной власти"
+ STP_party_loyalist_desc: "При расколе Стеландера остаётся на стороне партийного правительства."
+ STP_shabrat_loyalist: "Сторонник Шабрата"
+ STP_shabrat_loyalist_desc: "При расколе Стеландера выступает на стороне Шабрата и сопротивления."
+ STP_local_councils_loyalist: "Сторонник местных советов"
+ STP_local_councils_loyalist_desc: "При расколе Стеландера возглавит силы местных советов, которые выступят самостоятельной стороной гражданской войны."
+ STP_ravel_undecided: "Выбор Равеля"
+ STP_ravel_undecided_desc: "Равель перейдёт к Шабрату, если до раскола завершён фокус «$STP_cw_officer_contacts$». Иначе он останется на стороне партийного правительства."
+ STP_drake_undecided: "Выбор Дрейка"
+ STP_drake_undecided_desc: "Дрейк перейдёт к Шабрату, если до раскола завершён фокус «$STP_Turn_The_Young_Officers$». Иначе он останется на стороне партийного правительства."
  # BEGIN GENERATED: tools.builders.build_adiscord_ainholm_mandate
  AIN_concessionary_director: "Концессионный директор"
  AIN_concessionary_director_desc: "Умеет превращать зависимость в аккуратный договор, а изъятие ресурсов — в платную государственную услугу."

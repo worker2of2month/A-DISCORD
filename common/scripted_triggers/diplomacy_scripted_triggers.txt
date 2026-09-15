@@ -12,6 +12,10 @@
 #			if triggers within the enable triggers, and a single
 #			custom_trigger_tooltip trigger within each if trigger.
 #
+# War participants are selected by the campaign's scripted entry effects.
+DIPLOMACY_CALL_ALLY_ENABLE_TRIGGER = { always = no }
+DIPLOMACY_JOIN_ALLY_ENABLE_TRIGGER = { always = no }
+
 # This specifically overrides the rule check as to whether or not you can guarantee other ideologies
 DIPLOMACY_GUARANTEE_ENABLE_TRIGGER_OVERRIDES_GAME = {
 	NOT = {

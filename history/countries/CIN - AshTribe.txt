@@ -38,3 +38,5 @@ add_equipment_to_stockpile = {
 	amount = 500
 	producer = CIN
 }
+
+recruit_character = CIN_VAL_commission

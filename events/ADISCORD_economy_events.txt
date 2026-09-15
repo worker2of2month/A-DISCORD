@@ -4,7 +4,7 @@ country_event = {
 	id = ADISCORD_economy.2
 	title = ADISCORD_economy.2.t
 	desc = ADISCORD_economy.2.d
-	picture = GFX_report_event_generic_read_write
+	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
 
 	option = {
@@ -16,7 +16,7 @@ country_event = {
 	id = ADISCORD_economy.3
 	title = ADISCORD_economy.3.t
 	desc = ADISCORD_economy.3.d
-	picture = GFX_report_event_generic_read_write
+	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 
 	option = {

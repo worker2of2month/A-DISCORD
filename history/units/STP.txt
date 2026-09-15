@@ -55,6 +55,18 @@ division_template = {
 }
 
 units = {
+	fleet = {
+		name = "Фадская флотилия"
+		naval_base = 16366
+		task_force = {
+			name = "Охрана побережья"
+			location = 16366
+			ship = { name = "СК-201" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.15 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = STP } } }
+			ship = { name = "СК-202" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.15 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = STP } } }
+			ship = { name = "СК-203" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.15 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = STP } } }
+			ship = { name = "СК-204" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.15 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = STP } } }
+		}
+	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 1 }
 		location = 16351
@@ -153,33 +165,203 @@ units = {
 		start_experience_factor = 0.33
 		start_equipment_factor = 0.69
 	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 15 }
+		location = 16460
+		division_template = "Regular army"
+		start_experience_factor = 0.33
+		start_equipment_factor = 0.69
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 16 }
+		location = 16350
+		division_template = "Regular army"
+		start_experience_factor = 0.33
+		start_equipment_factor = 0.69
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 17 }
+		location = 55
+		division_template = "Regular army"
+		start_experience_factor = 0.33
+		start_equipment_factor = 0.69
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 18 }
+		location = 45
+		division_template = "Regular army"
+		start_experience_factor = 0.33
+		start_equipment_factor = 0.69
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 19 }
+		location = 16349
+		division_template = "Regular army"
+		start_experience_factor = 0.33
+		start_equipment_factor = 0.69
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 20 }
+		location = 95
+		division_template = "Regular army"
+		start_experience_factor = 0.33
+		start_equipment_factor = 0.69
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 21 }
+		location = 16455
+		division_template = "Regular army"
+		start_experience_factor = 0.33
+		start_equipment_factor = 0.69
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 22 }
+		location = 16459
+		division_template = "Regular army"
+		start_experience_factor = 0.33
+		start_equipment_factor = 0.69
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 23 }
+		location = 16539
+		division_template = "Regular army"
+		start_experience_factor = 0.33
+		start_equipment_factor = 0.69
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 24 }
+		location = 16344
+		division_template = "Police division"
+		start_experience_factor = 0.28
+		start_equipment_factor = 0.61
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 25 }
+		location = 16457
+		division_template = "Police division"
+		start_experience_factor = 0.28
+		start_equipment_factor = 0.61
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 26 }
+		location = 93
+		division_template = "Police division"
+		start_experience_factor = 0.28
+		start_equipment_factor = 0.61
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 27 }
+		location = 111
+		division_template = "Police division"
+		start_experience_factor = 0.28
+		start_equipment_factor = 0.61
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 28 }
+		location = 148
+		division_template = "Police division"
+		start_experience_factor = 0.28
+		start_equipment_factor = 0.61
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 29 }
+		location = 16458
+		division_template = "Police division"
+		start_experience_factor = 0.28
+		start_equipment_factor = 0.61
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 30 }
+		location = 70
+		division_template = "Police division"
+		start_experience_factor = 0.28
+		start_equipment_factor = 0.61
+	}
 }
 
-##### No notable air forces #####
+air_wings = {
+	28 = {
+		ADISCORD_fighter_airframe_2163 = { owner = "STP" amount = 50 }
+		ADISCORD_fighter_airframe_2163 = { owner = "STP" amount = 50 }
+		ADISCORD_fighter_airframe_2163 = { owner = "STP" amount = 50 }
+		ADISCORD_fighter_airframe_2163 = { owner = "STP" amount = 50 }
+	}
+	1 = {
+		ADISCORD_fighter_airframe_2163 = { owner = "STP" amount = 50 }
+		ADISCORD_fighter_airframe_2163 = { owner = "STP" amount = 50 }
+	}
+}
 
 instant_effect = {
+	add_equipment_to_stockpile = {
+		type = motorized_equipment_1
+		amount = 300
+		producer = STP
+	}
+	add_fuel = 30000
+	add_equipment_to_stockpile = {
+		type = infantry_equipment_0
+		amount = 14000
+		producer = STP
+	}
+	add_equipment_to_stockpile = {
+		type = ADISCORD_squad_weapons_equipment_0
+		amount = 900
+		producer = STP
+	}
+	add_equipment_to_stockpile = {
+		type = support_equipment_1
+		amount = 500
+		producer = STP
+	}
+	add_equipment_to_stockpile = {
+		type = artillery_equipment_1
+		amount = 900
+		producer = STP
+	}
+	add_equipment_to_stockpile = {
+		type = ADISCORD_anti_air_equipment_2163
+		amount = 360
+		producer = STP
+	}
+	add_equipment_to_stockpile = {
+		type = train_equipment_1
+		amount = 40
+		producer = STP
+	}
+	add_equipment_to_stockpile = {
+		type = ADISCORD_light_combat_platform_2163
+		amount = 18
+		producer = STP
+	}
 	add_equipment_production = {
 		equipment = { type = infantry_equipment_0 creator = "STP" }
-		requested_factories = 7
-		progress = 0.60
+		requested_factories = 3
+		progress = 0.30
 		efficiency = 70
 	}
 	add_equipment_production = {
 		equipment = { type = ADISCORD_squad_weapons_equipment_0 creator = "STP" }
 		requested_factories = 1
-		progress = 0.45
-		efficiency = 55
+		progress = 0.30
+		efficiency = 50
 	}
 	add_equipment_production = {
-		equipment = { type = support_equipment_1 }
+		equipment = { type = support_equipment_1 creator = "STP" }
 		requested_factories = 1
 		progress = 0.30
 		efficiency = 50
 	}
 	add_equipment_production = {
-		equipment = { type = artillery_equipment_1 }
+		equipment = { type = artillery_equipment_1 creator = "STP" }
 		requested_factories = 1
-		progress = 0.25
-		efficiency = 45
+		progress = 0.30
+		efficiency = 50
+	}
+	add_equipment_production = {
+		equipment = { type = ADISCORD_fighter_airframe_2163 creator = "STP" }
+		requested_factories = 1
+		progress = 0.30
+		efficiency = 50
 	}
 }

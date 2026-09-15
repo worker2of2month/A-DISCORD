@@ -4,7 +4,6 @@ bitmapfonts = {
 #		path = "gfx/fonts/hoi_20bsSVA"
 		fontfiles = { 
 			"gfx/fonts/hoi_20bsSVA"
-			"gfx/fonts/hoi_20bs_cryllic"
 		}		
 		color = 0xffffffff
 
@@ -15,6 +14,15 @@ bitmapfonts = {
 			H = { 238 201 35 }
 			T = { 255 255 255 }
 		}
+	}
+
+	bitmapfont_override = {
+		name = "hoi_20bsSVA"
+		fontfiles = {
+			"gfx/fonts/hoi_20bs"
+			"gfx/fonts/hoi_20bs_cryllic"
+		}
+		languages = { "l_russian" "l_polish" }
 	}
 }
 

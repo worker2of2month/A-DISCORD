@@ -7,6 +7,8 @@ from pathlib import Path
 from PIL import Image
 
 from tools.builders.build_adiscord_diplomacy_ui_assets import (
+    EMPTY_FOCUS,
+    EMPTY_FOCUS_SOURCE,
     FLAG_OVERLAY,
     LEADER_OVERLAY,
     PARTIES_OVERLAY,
@@ -72,8 +74,8 @@ class RecallVolunteersContractTests(unittest.TestCase):
             "RECALL_VOLUNTEERS_TOOLTIP_G",
         )
         for relative in (
-            "localisation/russian/ADISCORD_vorkerland_diplomacy_l_russian.yml",
-            "localisation/english/ADISCORD_vorkerland_diplomacy_l_english.yml",
+            "localisation/russian/ADISCORD_vorkerland_l_russian.yml",
+            "localisation/english/ADISCORD_vorkerland_l_english.yml",
         ):
             text = read(relative)
             for key in required:
@@ -144,6 +146,9 @@ class DiplomacyLayoutContractTests(unittest.TestCase):
             'spriteType = "GFX_goal_generic_political_pressure"', block
         )
         self.assertNotIn("GFX_goal_unknown", block)
+
+    def test_engine_selected_empty_focus_texture_uses_native_placeholder(self) -> None:
+        self.assertTrue(EMPTY_FOCUS.read_bytes() == EMPTY_FOCUS_SOURCE.read_bytes())
 
     def test_engine_bound_widgets_keep_their_required_direct_parents(self) -> None:
         for parent_name, child_names in (
@@ -428,8 +433,8 @@ class DiplomacyLayoutContractTests(unittest.TestCase):
 
     def test_russian_localisation_keeps_bom(self) -> None:
         for relative in (
-            "localisation/russian/ADISCORD_vorkerland_diplomacy_l_russian.yml",
-            "localisation/russian/ADISCORD_vorkerland_collapse_l_russian.yml",
+            "localisation/russian/ADISCORD_vorkerland_l_russian.yml",
+            "localisation/russian/ADISCORD_vorkerland_l_russian.yml",
         ):
             self.assertTrue((ROOT / relative).read_bytes().startswith(b"\xef\xbb\xbf"))
 
