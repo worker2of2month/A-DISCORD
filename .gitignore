@@ -32,3 +32,13 @@ crashes/
 *.swp
 *.swo
 .#*
+
+## Local asset previews, diagnostics and Blender recovery files
+/tools/assets/source/**/qa_*/
+/tools/assets/source/**/jorodox_visual/
+/tools/assets/source/**/preview_frames/
+/tools/assets/source/**/tfr_reference/
+/tools/assets/source/**/*.blend[0-9]
+/tools/assets/source/**/*.before_runtime
+/tools/assets/source/STP_regulars/*_export.blend
+/imgui.ini
