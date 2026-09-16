@@ -6,7 +6,11 @@ on:
       - audit/grok-20260917-validation
 
 permissions:
-  contents: read
+  contents: write
+
+concurrency:
+  group: isolated-campaign-audit
+  cancel-in-progress: false
 
 jobs:
   audit:
@@ -16,53 +20,61 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 32
-          persist-credentials: false
+          persist-credentials: true
       - name: Install validator dependencies
         run: python -m pip install Pillow numpy
+      - name: Prepare exact production candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin audit/grok-20260917-fixes
+          git worktree add --detach "$RUNNER_TEMP/verified" ded9d4a4daeacc07729da982405f348c7d250f59
+          python - "$RUNNER_TEMP/verified" <<'PY' | tee "$RUNNER_TEMP/source-hashes.json"
+          import runpy
+          namespace = runpy.run_path('.github/audit_apply.py')
+          patch = namespace['PATCH'].replace('QBCLK2T2H2sa', 'QBCLK2T2Hsa').replace('DDGjIriq6G/x', 'DDGjIriq16D/x')
+          namespace['main'].__globals__['PATCH'] = patch
+          namespace['main']()
+          PY
+          git -C "$RUNNER_TEMP/verified" diff --check
+          git -C "$RUNNER_TEMP/verified" diff --binary > "$RUNNER_TEMP/verified-fixes.patch"
+          git -C "$RUNNER_TEMP/verified" diff --stat > "$RUNNER_TEMP/changed-files.txt"
       - name: Focused campaign regressions
         shell: bash
         run: |
-          set -o pipefail
+          set -euo pipefail
+          cd "$RUNNER_TEMP/verified"
           python -B -m unittest -v tools.tests.test_adiscord_stp_postwar_continuation tools.tests.test_adiscord_stp_postwar_story tools.tests.test_adiscord_rus_last_empire tools.tests.test_validate_adiscord_val_rework tools.tests.test_adiscord_stp_civil_war tools.tests.test_adiscord_stp_preparation tools.tests.test_adiscord_stp_startup tools.tests.test_adiscord_stp_regions tools.tests.test_adiscord_economy_weekly_contracts tools.tests.test_validate_adiscord_vorkerland_collapse tools.tests.test_adiscord_vorkerland_northern_escalation 2>&1 | tee "$RUNNER_TEMP/focused-tests.txt"
       - name: Repository validator
-        if: always()
         shell: bash
         run: |
-          set -o pipefail
+          set -euo pipefail
+          cd "$RUNNER_TEMP/verified"
           python -B tools/validate_tc.py --limit 300 2>&1 | tee "$RUNNER_TEMP/validate-tc.txt"
-      - name: Audit diff whitespace
-        if: always()
-        run: git diff --check 4457e9e4e7cb5bbf3cadd4642f985bf563db043e HEAD
-      - name: Package lightweight assets
-        if: always()
+          git diff --check
+      - name: Publish verified candidate branch
         shell: bash
         run: |
-          python - <<'PY'
-          import os
-          import subprocess
-          import zipfile
-          from pathlib import Path
-          root = Path.cwd()
-          output = Path(os.environ['RUNNER_TEMP']) / 'audit-small-assets.zip'
-          with zipfile.ZipFile(output, 'w', zipfile.ZIP_DEFLATED) as archive:
-              for name in subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0'):
-                  if not name:
-                      continue
-                  path = root / name
-                  if path.is_file() and path.suffix.lower() in {'.png', '.tga', '.dds', '.bmp'} and path.stat().st_size <= 1500000:
-                      archive.write(path, name)
-          PY
+          set -euo pipefail
+          cd "$RUNNER_TEMP/verified"
+          git config user.name "A-Discord Audit"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add common/scripted_effects/ADISCORD_STP_scripted_effects.txt common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt events/ADISCORD_STP_events.txt localisation/replace/ADISCORD_STP_postwar_story_l_russian.yml localisation/replace/ADISCORD_STP_story_l_russian.yml localisation/russian/ADISCORD_STP_l_russian.yml tools/tests/test_adiscord_stp_postwar_continuation.py tools/tests/test_adiscord_stp_postwar_story.py tools/tests/test_adiscord_stp_startup.py
+          test "$(git diff --cached --name-only | wc -l)" -eq 9
+          git commit -m "Fix STP postwar reply lifecycle and consolidate narrative localisation"
+          git diff --check HEAD^ HEAD
+          git rev-parse HEAD | tee "$RUNNER_TEMP/verified-commit.txt"
+          git push origin HEAD:refs/heads/audit/grok-20260917-fixes
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: campaign-audit-results
+          name: campaign-audit-verified-results
           path: |
             ${{ runner.temp }}/focused-tests.txt
             ${{ runner.temp }}/validate-tc.txt
-          retention-days: 3
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: campaign-audit-small-assets
-          path: ${{ runner.temp }}/audit-small-assets.zip
-          retention-days: 3
+            ${{ runner.temp }}/source-hashes.json
+            ${{ runner.temp }}/verified-fixes.patch
+            ${{ runner.temp }}/changed-files.txt
+            ${{ runner.temp }}/verified-commit.txt
+            .github/audit_apply.py
+          retention-days: 7
