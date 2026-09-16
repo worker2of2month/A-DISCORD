@@ -1,0 +1,9 @@
+﻿l_english:
+
+ # Player-facing compatibility overrides for legacy technical country aliases.
+ ADISCORD_vorkerland_ivanland_expeditionary_command:0 "Itoran Expeditionary Command"
+ ADISCORD_vorkerland_ivanland_expeditionary_command_desc:0 "A temporary headquarters coordinates Itora's limited northern expedition, concentrating staff work and supply without creating a permanent occupation army."
+
+ ADISCORD_vorkerland_news.1.d: "Itora has concluded its northern operation and dissolved the provisional defence front. Matvey Mateuska's Norvein received states 90 and 91, while Anton Selevyostrov's Kraitsk Directorate took states 93 and 94. Both regimes depend on Itora, and the surviving northern republics have already resumed their interrupted war."
+ ADISCORD_vorkerland_news.2.t: "Itora Withdraws from Norvein"
+ ADISCORD_vorkerland_news.2.d: "Itora's operation has failed. Neither Norvein nor the dependent Kraitsk Directorate was created: states 90 and 91 returned to Grain, while states 93 and 94 returned to Rivendell. The provisional Northern Defence Front has dissolved and the northern administrations have resumed their internecine wars. Vadim Ivanchik's government has declared an emergency course after the defeat."
