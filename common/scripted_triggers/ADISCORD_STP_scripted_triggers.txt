@@ -686,3 +686,114 @@ STP_cw_can_fund_kefreyt_volunteers = {
 	NOT = { has_equipment = { artillery_equipment < 180 } }
 	NOT = { has_equipment = { anti_air_equipment < 60 } }
 }
+
+
+# COUNTRY: postwar political tree. Same reconstruction gate as the republic branch.
+STP_pc_focus_available = {
+	STP_pw_can_reconstruct = yes
+}
+
+# COUNTRY: a controlled port is required before coastal work.
+STP_pc_has_naval_base = {
+	any_owned_state = {
+		is_controlled_by = ROOT
+		naval_base > 0
+	}
+}
+
+# COUNTRY: Sotnikov is present and not under arrest.
+STP_cw_sotnikov_available = {
+	has_character = STP_grigory_sotnikov
+	STP_grigory_sotnikov = { NOT = { has_character_flag = STP_cw_arrested } }
+}
+
+# COUNTRY: personal fork of the founder, not the locked state course.
+STP_pc_founder_rules = {
+	has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+}
+
+# COUNTRY: Gornin or Tikh speaking for the already locked course.
+STP_pc_named_successor_rules = {
+	OR = {
+		has_country_leader = { character = STP_ilya_gornin ruling_only = yes }
+		has_country_leader = { character = STP_vera_tikh ruling_only = yes }
+	}
+}
+
+# COUNTRY: institutions stay open after the seal moves to a named successor.
+STP_pc_course_continues = {
+	OR = {
+		STP_pc_founder_rules = yes
+		AND = {
+			STP_pc_named_successor_rules = yes
+			has_country_flag = STP_pc_course_locked
+		}
+	}
+}
+
+STP_pc_hegemony_continues = {
+	OR = {
+		AND = {
+			STP_pc_founder_rules = yes
+			OR = {
+				NOT = { has_country_flag = STP_pc_course_locked }
+				check_variable = { var = STP_pc_course value = 1 compare = equals }
+			}
+		}
+		AND = {
+			STP_pc_named_successor_rules = yes
+			has_country_flag = STP_pc_course_locked
+			check_variable = { var = STP_pc_course value = 1 compare = equals }
+		}
+	}
+}
+
+STP_pc_freedom_continues = {
+	OR = {
+		AND = {
+			STP_pc_founder_rules = yes
+			OR = {
+				NOT = { has_country_flag = STP_pc_course_locked }
+				check_variable = { var = STP_pc_course value = 2 compare = equals }
+			}
+		}
+		AND = {
+			STP_pc_named_successor_rules = yes
+			has_country_flag = STP_pc_course_locked
+			check_variable = { var = STP_pc_course value = 2 compare = equals }
+		}
+	}
+}
+
+# COUNTRY: pc.16 has a real settlement answer; the safe close is the remainder.
+STP_pc_settlement_has_terms = {
+	OR = {
+		AND = {
+			check_variable = { var = STP_pc_course value = 1 compare = equals }
+			check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
+			OR = {
+				check_variable = { var = STP_pc_settle_opponent value = 1 compare = equals }
+				check_variable = { var = STP_pc_settle_opponent value = 2 compare = equals }
+			}
+		}
+		AND = {
+			check_variable = { var = STP_pc_course value = 2 compare = equals }
+			check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
+			OR = {
+				check_variable = { var = STP_pc_settle_opponent value = 1 compare = equals }
+				check_variable = { var = STP_pc_settle_opponent value = 2 compare = equals }
+			}
+		}
+		AND = {
+			OR = {
+				check_variable = { var = STP_pc_course value = 3 compare = equals }
+				check_variable = { var = STP_pc_course value = 4 compare = equals }
+			}
+			OR = {
+				check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
+				check_variable = { var = STP_pc_settle_result value = 2 compare = equals }
+			}
+		}
+		check_variable = { var = STP_pc_settle_result value = 2 compare = equals }
+	}
+}

@@ -85,7 +85,15 @@ on_actions = {
 			else_if = {
 				limit = {
 					has_global_flag = STP_cw_started
-					ROOT = { OR = { tag = STP tag = STS tag = SRP AND = { tag = VAL has_country_flag = VAL_cw_entered } AND = { tag = NOD has_country_flag = NOD_cw_entered } } }
+					ROOT = {
+						OR = {
+							tag = STP
+							tag = STS
+							tag = SRP
+							AND = { tag = VAL OR = { has_country_flag = VAL_cw_entered has_country_flag = STP_pc_war_with_sts } }
+							AND = { tag = NOD OR = { has_country_flag = NOD_cw_entered has_country_flag = STP_pc_war_with_sts } }
+						}
+					}
 				}
 				ROOT = { STP_cw_snapshot_capitulation_occupier = yes }
 			}
@@ -184,6 +192,32 @@ on_actions = {
 				}
 				STS = { clr_country_flag = STP_cw_nod_entered clr_country_flag = STP_cw_nod_warning_active remove_mission = STP_cw_nod_warning }
 				log = "[STP_CW] STS defeated the NOD intervention; unrelated wars retained"
+			}
+			else_if = {
+				limit = {
+					has_global_flag = STP_cw_union_wars_finished
+					OR = {
+						AND = { ROOT = { tag = VAL has_country_flag = STP_pc_war_with_sts } STS = { has_country_flag = STP_pc_war_val } }
+						AND = { ROOT = { tag = NOD has_country_flag = STP_pc_war_with_sts } STS = { has_country_flag = STP_pc_war_nod } }
+						AND = { ROOT = { tag = STS } OR = { VAL = { has_country_flag = STP_pc_war_with_sts } NOD = { has_country_flag = STP_pc_war_with_sts } } }
+					}
+				}
+				set_global_flag = skip_default_capitulation
+				if = {
+					limit = { ROOT = { tag = VAL } }
+					STS = { set_variable = { var = STP_pc_cap_side value = 1 } STP_pc_begin_settlement = yes }
+				}
+				else_if = {
+					limit = { ROOT = { tag = NOD } }
+					STS = { set_variable = { var = STP_pc_cap_side value = 2 } STP_pc_begin_settlement = yes }
+				}
+				else_if = {
+					limit = { ROOT = { tag = STS } }
+					STS = { set_variable = { var = STP_pc_cap_side value = 3 } STP_pc_begin_settlement = yes }
+				}
+				else = {
+					STS = { set_variable = { var = STP_pc_cap_side value = 0 } STP_pc_begin_settlement = yes }
+				}
 			}
 		}
 	}

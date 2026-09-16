@@ -2,6 +2,7 @@ add_namespace = ADISCORD_STP_preparation
 add_namespace = ADISCORD_STP_regions
 add_namespace = ADISCORD_STP_cw
 add_namespace = ADISCORD_STP_pw
+add_namespace = ADISCORD_STP_pc
 
 country_event = {
 	id = ADISCORD_STP_cw.90
@@ -800,5 +801,503 @@ country_event = {
 	option = {
 		name = ADISCORD_STP_pw.3.b
 		add_political_power = 25
+	}
+}
+
+
+country_event = {
+	id = ADISCORD_STP_pc.1
+	title = ADISCORD_STP_pc.1.t
+	desc = ADISCORD_STP_pc.1.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_STP_pc.1.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.2
+	title = ADISCORD_STP_pc.2.t
+	desc = ADISCORD_STP_pc.2.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_STP_pc.2.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.3
+	title = ADISCORD_STP_pc.3.t
+	desc = ADISCORD_STP_pc.3.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	immediate = {
+		hidden_effect = {
+			STP_maksim_shabrat = { set_character_flag = STP_cw_arrested }
+			set_country_flag = STP_shabrat_was_arrested
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.3.a
+		trigger = { STP_cw_sotnikov_available = yes }
+		custom_effect_tooltip = ADISCORD_STP_pc.3.a_tt
+		hidden_effect = {
+			if = {
+				limit = { STS = { exists = yes } }
+				STS = { country_event = { id = ADISCORD_STP_pc.6 } }
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.3.b
+		trigger = { NOT = { STP_cw_sotnikov_available = yes } }
+		set_country_flag = STP_gornin_introduced
+		custom_effect_tooltip = ADISCORD_STP_pc.3.b_tt
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.4
+	title = ADISCORD_STP_pc.4.t
+	desc = ADISCORD_STP_pc.4.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_STP_pc.4.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.5
+	title = ADISCORD_STP_pc.5.t
+	desc = ADISCORD_STP_pc.5.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_STP_pc.5.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.6
+	title = ADISCORD_STP_pc.6.t
+	desc = ADISCORD_STP_pc.6.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = STS }
+	option = {
+		name = ADISCORD_STP_pc.6.a
+		custom_effect_tooltip = ADISCORD_STP_pc.6.a_tt
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.7
+	title = ADISCORD_STP_pc.7.t
+	desc = ADISCORD_STP_pc.7.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_STP_pc.7.a
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_STP_pc.7.b
+		trigger = { STP_cw_shabrat_available = yes }
+		ai_chance = { base = 20 }
+		promote_character = STP_maksim_shabrat
+	}
+	option = {
+		name = ADISCORD_STP_pc.7.c
+		trigger = { OR = { has_country_flag = STP_gornin_introduced has_character = STP_ilya_gornin } }
+		ai_chance = { base = 10 }
+		promote_character = STP_ilya_gornin
+		set_politics = { ruling_party = humanism elections_allowed = no }
+	}
+	option = {
+		name = ADISCORD_STP_pc.7.d
+		trigger = { OR = { has_country_flag = STP_vera_introduced has_character = STP_vera_tikh } }
+		ai_chance = { base = 10 }
+		promote_character = STP_vera_tikh
+		set_politics = { ruling_party = utilitarism elections_allowed = no }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.8
+	title = ADISCORD_STP_pc.8.t
+	desc = ADISCORD_STP_pc.8.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_STP_pc.8.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.9
+	title = ADISCORD_STP_pc.9.t
+	desc = ADISCORD_STP_pc.9.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	immediate = { hidden_effect = { set_country_flag = STP_pc_val_crisis } }
+	option = {
+		name = ADISCORD_STP_pc.9.a
+		trigger = { tag = STS }
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_STP_pc.9.b
+		trigger = { tag = VAL }
+		ai_chance = { base = 55 }
+		STS = { set_country_flag = STP_pc_val_terms_accepted }
+		add_ideas = STP_pc_val_client
+		hidden_effect = {
+			STS = {
+				if = {
+					limit = { has_country_flag = STP_pc_hegemony_league }
+					STP_pc_form_hegemony_league = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.9.c
+		trigger = { tag = VAL }
+		ai_chance = { base = 45 }
+		STS = { clr_country_flag = STP_pc_val_terms_accepted STP_pc_declare_war_val = yes }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.10
+	title = ADISCORD_STP_pc.10.t
+	desc = ADISCORD_STP_pc.10.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = NOD }
+	immediate = {
+		hidden_effect = {
+			STS = { country_event = { id = ADISCORD_STP_pc.15 days = 0 } set_country_flag = STP_pc_nod_crisis }
+		}
+	}
+	option = { name = ADISCORD_STP_pc.10.a ai_chance = { base = 40 } }
+	option = { name = ADISCORD_STP_pc.10.b ai_chance = { base = 40 } }
+	option = { name = ADISCORD_STP_pc.10.c ai_chance = { base = 20 } }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.11
+	title = ADISCORD_STP_pc.11.t
+	desc = ADISCORD_STP_pc.11.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_STP_pc.11.a
+		trigger = {
+			OR = {
+				AND = { tag = VAL STS = { check_variable = { var = STP_pc_lib_package_tag value = 1 compare = equals } } }
+				AND = { tag = NOD STS = { check_variable = { var = STP_pc_lib_package_tag value = 2 compare = equals } } }
+			}
+		}
+		ai_chance = { base = 70 }
+		if = {
+			limit = { tag = VAL }
+			set_cosmetic_tag = VAL_liberated
+			add_ideas = VAL_liberated_settlement
+		}
+		else_if = {
+			limit = { tag = NOD }
+			set_cosmetic_tag = NOD_mandate_broken
+			add_ideas = NOD_mandate_broken
+		}
+		hidden_effect = { STS = { STP_pc_finish_liberation_package = yes } }
+	}
+	option = {
+		name = ADISCORD_STP_pc.11.b
+		trigger = {
+			OR = {
+				AND = { tag = VAL STS = { check_variable = { var = STP_pc_lib_package_tag value = 1 compare = equals } } }
+				AND = { tag = NOD STS = { check_variable = { var = STP_pc_lib_package_tag value = 2 compare = equals } } }
+			}
+		}
+		ai_chance = { base = 30 }
+		if = {
+			limit = { tag = VAL }
+			set_country_flag = STP_pc_val_refused_package
+		}
+		else_if = {
+			limit = { tag = NOD }
+			set_country_flag = STP_pc_nod_refused_package
+		}
+		hidden_effect = { STS = { STP_pc_finish_liberation_package = yes } }
+	}
+	option = {
+		name = ADISCORD_STP_pc.11.c
+		trigger = {
+			NOT = {
+				OR = {
+					AND = { tag = VAL STS = { check_variable = { var = STP_pc_lib_package_tag value = 1 compare = equals } } }
+					AND = { tag = NOD STS = { check_variable = { var = STP_pc_lib_package_tag value = 2 compare = equals } } }
+				}
+			}
+		}
+		hidden_effect = { STS = { STP_pc_finish_liberation_package = yes } }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.12
+	title = ADISCORD_STP_pc.12.t
+	desc = ADISCORD_STP_pc.12.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_STP_pc.12.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.13
+	title = ADISCORD_STP_pc.13.t
+	desc = ADISCORD_STP_pc.13.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	immediate = { hidden_effect = { set_country_flag = STP_gornin_introduced } }
+	option = { name = ADISCORD_STP_pc.13.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.14
+	title = ADISCORD_STP_pc.14.t
+	desc = ADISCORD_STP_pc.14.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	immediate = { hidden_effect = { set_country_flag = STP_vera_introduced } }
+	option = { name = ADISCORD_STP_pc.14.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.15
+	title = ADISCORD_STP_pc.15.t
+	desc = ADISCORD_STP_pc.15.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = STS }
+	option = { name = ADISCORD_STP_pc.15.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.16
+	title = ADISCORD_STP_pc.16.t
+	desc = ADISCORD_STP_pc.16.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_STP_pc.16.a
+		trigger = {
+			hidden_trigger = {
+				check_variable = { var = STP_pc_course value = 1 compare = equals }
+				check_variable = { var = STP_pc_settle_opponent value = 1 compare = equals }
+				check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
+			}
+		}
+		VAL = {
+			every_owned_state = {
+				limit = { OR = { is_core_of = STP is_core_of = STS } NOT = { state = 48 } }
+				transfer_state_to = STS
+			}
+		}
+		hidden_effect = { STP_pc_clear_settlement = yes }
+	}
+	option = {
+		name = ADISCORD_STP_pc.16.b
+		trigger = {
+			hidden_trigger = {
+				check_variable = { var = STP_pc_course value = 1 compare = equals }
+				check_variable = { var = STP_pc_settle_opponent value = 1 compare = equals }
+				check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
+			}
+		}
+		VAL = { add_ideas = STP_pc_val_client }
+		if = { limit = { 42 = { is_owned_by = VAL } } VAL = { give_resource_rights = { receiver = STS state = 42 } } }
+		else_if = { limit = { 55 = { is_owned_by = VAL } } VAL = { give_resource_rights = { receiver = STS state = 55 } } }
+		hidden_effect = {
+			if = { limit = { has_country_flag = STP_pc_hegemony_league } STP_pc_form_hegemony_league = yes }
+			STP_pc_clear_settlement = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.16.c
+		trigger = {
+			hidden_trigger = {
+				check_variable = { var = STP_pc_course value = 1 compare = equals }
+				check_variable = { var = STP_pc_settle_opponent value = 1 compare = equals }
+				check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
+			}
+		}
+		if = { limit = { 42 = { is_owned_by = VAL } } VAL = { give_resource_rights = { receiver = STS state = 42 } } }
+		else_if = { limit = { 55 = { is_owned_by = VAL } } VAL = { give_resource_rights = { receiver = STS state = 55 } } }
+		hidden_effect = { STP_pc_clear_settlement = yes }
+	}
+	option = {
+		name = ADISCORD_STP_pc.16.da
+		trigger = {
+			hidden_trigger = {
+				check_variable = { var = STP_pc_course value = 1 compare = equals }
+				check_variable = { var = STP_pc_settle_opponent value = 1 compare = equals }
+				check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
+			}
+		}
+		puppet = VAL
+		set_autonomy = { target = VAL autonomy_state = autonomy_contract_client }
+		hidden_effect = {
+			if = { limit = { has_country_flag = STP_pc_hegemony_league } STP_pc_form_hegemony_league = yes }
+			STP_pc_clear_settlement = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.16.e
+		trigger = {
+			hidden_trigger = {
+				check_variable = { var = STP_pc_course value = 1 compare = equals }
+				check_variable = { var = STP_pc_settle_opponent value = 2 compare = equals }
+				check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
+			}
+		}
+		NOD = {
+			every_owned_state = {
+				limit = { OR = { is_core_of = STP is_core_of = STS } }
+				transfer_state_to = STS
+			}
+		}
+		hidden_effect = { STP_pc_clear_settlement = yes }
+	}
+	option = {
+		name = ADISCORD_STP_pc.16.f
+		trigger = {
+			hidden_trigger = {
+				check_variable = { var = STP_pc_course value = 1 compare = equals }
+				check_variable = { var = STP_pc_settle_opponent value = 2 compare = equals }
+				check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
+			}
+		}
+		NOD = { add_ideas = STP_pc_nod_client }
+		if = { limit = { 11 = { is_owned_by = NOD } } NOD = { give_resource_rights = { receiver = STS state = 11 } } }
+		hidden_effect = {
+			if = { limit = { has_country_flag = STP_pc_hegemony_league } STP_pc_form_hegemony_league = yes }
+			STP_pc_clear_settlement = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.16.g
+		trigger = {
+			hidden_trigger = {
+				check_variable = { var = STP_pc_course value = 1 compare = equals }
+				check_variable = { var = STP_pc_settle_opponent value = 2 compare = equals }
+				check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
+			}
+		}
+		if = { limit = { 11 = { is_owned_by = NOD } } NOD = { give_resource_rights = { receiver = STS state = 11 } } }
+		hidden_effect = { STP_pc_clear_settlement = yes }
+	}
+	option = {
+		name = ADISCORD_STP_pc.16.h
+		trigger = {
+			hidden_trigger = {
+				check_variable = { var = STP_pc_course value = 1 compare = equals }
+				check_variable = { var = STP_pc_settle_opponent value = 2 compare = equals }
+				check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
+			}
+		}
+		puppet = NOD
+		set_autonomy = { target = NOD autonomy_state = autonomy_contract_client }
+		hidden_effect = {
+			if = { limit = { has_country_flag = STP_pc_hegemony_league } STP_pc_form_hegemony_league = yes }
+			STP_pc_clear_settlement = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.16.i
+		trigger = {
+			hidden_trigger = {
+				check_variable = { var = STP_pc_course value = 2 compare = equals }
+				check_variable = { var = STP_pc_settle_opponent value = 1 compare = equals }
+				check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
+			}
+		}
+		set_country_flag = STP_pc_lib_val_won
+		hidden_effect = { STP_pc_clear_settlement = yes }
+	}
+	option = {
+		name = ADISCORD_STP_pc.16.j
+		trigger = {
+			hidden_trigger = {
+				check_variable = { var = STP_pc_course value = 2 compare = equals }
+				check_variable = { var = STP_pc_settle_opponent value = 2 compare = equals }
+				check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
+			}
+		}
+		set_country_flag = STP_pc_lib_nod_won
+		hidden_effect = { STP_pc_clear_settlement = yes }
+	}
+	option = {
+		name = ADISCORD_STP_pc.16.k
+		trigger = {
+			hidden_trigger = {
+				OR = {
+					check_variable = { var = STP_pc_course value = 3 compare = equals }
+					check_variable = { var = STP_pc_course value = 4 compare = equals }
+				}
+				OR = {
+					check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
+					check_variable = { var = STP_pc_settle_result value = 2 compare = equals }
+				}
+			}
+		}
+		hidden_effect = { STP_pc_clear_settlement = yes }
+	}
+	option = {
+		name = ADISCORD_STP_pc.16.l
+		trigger = {
+			hidden_trigger = { check_variable = { var = STP_pc_settle_result value = 2 compare = equals } }
+		}
+		hidden_effect = { STP_pc_clear_settlement = yes }
+	}
+	option = {
+		name = ADISCORD_STP_pc.16.m
+		trigger = {
+			hidden_trigger = {
+				check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
+				check_variable = { var = STP_pc_settle_opponent value = 1 compare = equals }
+				NOT = { has_country_flag = STP_pc_war_nod }
+				OR = { has_country_flag = STP_pc_nod_crisis check_variable = { var = STP_pc_course value = 2 compare = equals } }
+				NOD = { exists = yes }
+			}
+		}
+		set_country_flag = STP_pc_lib_val_won
+		hidden_effect = { STP_pc_clear_settlement = yes STP_pc_declare_war_nod = yes }
+	}
+	option = {
+		name = ADISCORD_STP_pc.16.n
+		trigger = {
+			hidden_trigger = {
+				check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
+				check_variable = { var = STP_pc_settle_opponent value = 2 compare = equals }
+				NOT = { has_country_flag = STP_pc_war_val }
+				OR = { has_country_flag = STP_pc_val_crisis check_variable = { var = STP_pc_course value = 2 compare = equals } }
+				VAL = { exists = yes }
+			}
+		}
+		set_country_flag = STP_pc_lib_nod_won
+		hidden_effect = { STP_pc_clear_settlement = yes STP_pc_declare_war_val = yes }
+	}
+	option = {
+		name = ADISCORD_STP_pc.16.o
+		trigger = { NOT = { STP_pc_settlement_has_terms = yes } }
+		hidden_effect = { STP_pc_clear_settlement = yes }
 	}
 }

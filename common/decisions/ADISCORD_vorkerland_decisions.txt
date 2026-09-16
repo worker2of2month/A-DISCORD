@@ -2317,6 +2317,7 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 		visible = {
 			has_completed_focus = RUS_press_the_closed_zone
 			country_exists = RZA
+			NOT = { has_country_flag = ADISCORD_vorkerland_rus_rza_absorbed }
 			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 		}
 		available = {
@@ -2347,6 +2348,7 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 		visible = {
 			has_completed_focus = RUS_press_the_closed_zone
 			country_exists = MLR
+			NOT = { has_country_flag = ADISCORD_vorkerland_rus_mlr_absorbed }
 			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 		}
 		available = {
@@ -2377,6 +2379,7 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 		visible = {
 			has_completed_focus = RUS_press_the_closed_zone
 			country_exists = ERT
+			NOT = { has_country_flag = ADISCORD_vorkerland_rus_ert_absorbed }
 			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 		}
 		available = {
@@ -2407,6 +2410,7 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 		visible = {
 			has_completed_focus = RUS_press_the_closed_zone
 			country_exists = IRT
+			NOT = { has_country_flag = ADISCORD_vorkerland_rus_irt_absorbed }
 			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 		}
 		available = {
@@ -2437,6 +2441,7 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 		visible = {
 			has_completed_focus = RUS_press_the_closed_zone
 			country_exists = SCA
+			NOT = { has_country_flag = ADISCORD_vorkerland_rus_sca_absorbed }
 			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 		}
 		available = {

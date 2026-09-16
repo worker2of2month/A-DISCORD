@@ -1499,47 +1499,67 @@ ADISCORD_vorkerland_rus_can_open_sla_front = {
 	}
 }
 
-ADISCORD_vorkerland_rus_campaign_target_still_open = {
+ADISCORD_vorkerland_rus_holds_current_target = {
 	OR = {
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals }
-			country_exists = SLA
-			SLA = { NOT = { has_capitulated = yes } }
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals }
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals }
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals }
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals }
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals }
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+	}
+}
+
+# No territory and no live war: abort. An invalid target also cannot wait.
+ADISCORD_vorkerland_rus_campaign_target_still_open = {
+	OR = {
+		check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = less_than }
+		check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = greater_than }
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals }
 			NOT = { ADISCORD_vorkerland_rus_holds_sla_playable = yes }
 			NOT = { has_war_with = SLA }
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals }
-			country_exists = RZA
-			RZA = { NOT = { has_capitulated = yes } }
 			NOT = { ADISCORD_vorkerland_rus_holds_rza_playable = yes }
 			NOT = { has_war_with = RZA }
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals }
-			country_exists = MLR
-			MLR = { NOT = { has_capitulated = yes } }
 			NOT = { ADISCORD_vorkerland_rus_holds_mlr_playable = yes }
 			NOT = { has_war_with = MLR }
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals }
-			country_exists = ERT
-			ERT = { NOT = { has_capitulated = yes } }
 			NOT = { ADISCORD_vorkerland_rus_holds_ert_playable = yes }
 			NOT = { has_war_with = ERT }
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals }
-			country_exists = IRT
-			IRT = { NOT = { has_capitulated = yes } }
 			NOT = { ADISCORD_vorkerland_rus_holds_irt_playable = yes }
 			NOT = { has_war_with = IRT }
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals }
-			country_exists = SCA
-			SCA = { NOT = { has_capitulated = yes } }
 			NOT = { ADISCORD_vorkerland_rus_holds_sca_playable = yes }
 			NOT = { has_war_with = SCA }
 		}
@@ -1547,17 +1567,12 @@ ADISCORD_vorkerland_rus_campaign_target_still_open = {
 }
 
 ADISCORD_vorkerland_rus_has_empire_territory = {
-	OR = {
-		check_variable = { ADISCORD_vorkerland_rus_dirty_neighbors_taken > 2 }
-		AND = {
-			NOT = { country_exists = SLA }
-			NOT = { country_exists = RZA }
-			NOT = { country_exists = MLR }
-			NOT = { country_exists = ERT }
-			NOT = { country_exists = IRT }
-			NOT = { country_exists = SCA }
-		}
-	}
+	ADISCORD_vorkerland_rus_holds_sla_playable = yes
+	ADISCORD_vorkerland_rus_holds_rza_playable = yes
+	ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+	ADISCORD_vorkerland_rus_holds_ert_playable = yes
+	ADISCORD_vorkerland_rus_holds_irt_playable = yes
+	ADISCORD_vorkerland_rus_holds_sca_playable = yes
 }
 
 ADISCORD_vorkerland_rus_can_proclaim_last_empire = {

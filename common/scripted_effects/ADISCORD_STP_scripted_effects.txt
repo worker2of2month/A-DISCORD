@@ -158,6 +158,7 @@ STP_change_party_suspicion = {
 	}
 
 	STP_refresh_party_suspicion = yes
+	STP_pc_update_suspicion_crisis = yes
 
 	set_temp_variable = {
 		var = STP_party_suspicion_change
@@ -2223,6 +2224,34 @@ STP_cw_establish_resistance_command = {
 			}
 		}
 		else_if = {
+			limit = { has_character = STP_grigory_sotnikov STP_grigory_sotnikov = { NOT = { has_character_flag = STP_cw_arrested } } }
+			STP_grigory_sotnikov = {
+				if = {
+					limit = { NOT = { is_country_leader = yes } }
+					add_country_leader_role = {
+						promote_leader = yes
+						country_leader = { ideology = steland_military_directory expire = "2200.1.1.1" }
+					}
+				}
+				if = {
+					limit = { NOT = { is_unit_leader = yes } }
+					add_field_marshal_role = {
+						traits = { STP_shabrat_loyalist }
+						skill = 2
+						attack_skill = 2
+						defense_skill = 2
+						planning_skill = 3
+						logistics_skill = 2
+					}
+				}
+				else_if = {
+					limit = { is_corps_commander = yes NOT = { is_field_marshal = yes } }
+					promote_leader = yes
+				}
+			}
+			promote_character = { character = STP_grigory_sotnikov ideology = steland_military_directory }
+		}
+		else_if = {
 			limit = { has_character = STP_Leonid_Barchel STP_Leonid_Barchel = { NOT = { has_character_flag = STP_cw_arrested } } }
 			# Barchel leads the provisional government without losing his existing army role.
 			STP_Leonid_Barchel = {
@@ -2479,6 +2508,7 @@ STP_cw_start = {
 		STS = {
 			every_owned_state = { add_core_of = STS }
 			STP_cw_prepare_successor = yes
+			STP_pc_copy_split_flags = yes
 			add_manpower = var:STP.STP_cw_resistance_manpower
 			set_politics = { ruling_party = chauvinism elections_allowed = no }
 		}
@@ -2490,6 +2520,9 @@ STP_cw_start = {
 		}
 		STP_cw_refresh_officer_loyalties = yes
 		if = { limit = { STP_cw_shabrat_available = yes } set_nationality = { character = STP_maksim_shabrat target_country = STS } }
+		if = { limit = { has_character = STP_grigory_sotnikov } set_nationality = { character = STP_grigory_sotnikov target_country = STS } }
+		if = { limit = { has_character = STP_ilya_gornin } set_nationality = { character = STP_ilya_gornin target_country = STS } }
+		if = { limit = { has_character = STP_vera_tikh } set_nationality = { character = STP_vera_tikh target_country = STS } }
 		if = { limit = { has_character = STP_Leonid_Barchel } set_nationality = { character = STP_Leonid_Barchel target_country = STS } }
 		if = { limit = { has_character = STP_Viktor_Marent } set_nationality = { character = STP_Viktor_Marent target_country = SRP } }
 		if = {
@@ -2503,7 +2536,7 @@ STP_cw_start = {
 			STS = { army_experience = 15 }
 		}
 		STP_cw_transfer_preparation_modifiers = yes
-		STS = { STP_cw_establish_resistance_command = yes }
+		STS = { STP_cw_establish_resistance_command = yes STP_pc_align_resistance_ruling_party = yes }
 		set_politics = { ruling_party = hedonism elections_allowed = no }
 		if = { limit = { has_character = STP_rufus_hedersett } promote_character = STP_rufus_hedersett }
 		# Apply the paid rifle-package shares to the native stockpile transfer so
@@ -3077,4 +3110,381 @@ STP_pw_refresh_modifier = {
 		force_update_dynamic_modifier = yes
 		ADISCORD_economy_mark_dirty = yes
 	}
+}
+
+
+# COUNTRY: 70 / 90 warnings and guaranteed arrest before the election closes.
+STP_pc_update_suspicion_crisis = {
+	if = {
+		limit = {
+			check_variable = { var = STP_party_suspicion value = 100 compare = greater_than_or_equals }
+			STP_cw_shabrat_available = yes
+			NOT = { has_country_flag = STP_cw_elections_finished }
+			NOT = { has_country_flag = STP_cw_postwar }
+			NOT = { has_country_flag = STP_shabrat_was_arrested }
+		}
+		country_event = { id = ADISCORD_STP_pc.3 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = STP_party_suspicion value = 90 compare = greater_than_or_equals }
+			NOT = { has_country_flag = STP_pc_warned_90 }
+			NOT = { has_country_flag = STP_cw_elections_finished }
+			NOT = { has_country_flag = STP_cw_postwar }
+		}
+		set_country_flag = STP_pc_warned_90
+		country_event = { id = ADISCORD_STP_pc.2 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = STP_party_suspicion value = 70 compare = greater_than_or_equals }
+			NOT = { has_country_flag = STP_pc_warned_70 }
+			NOT = { has_country_flag = STP_cw_elections_finished }
+			NOT = { has_country_flag = STP_cw_postwar }
+		}
+		set_country_flag = STP_pc_warned_70
+		country_event = { id = ADISCORD_STP_pc.1 }
+	}
+}
+
+# STS: bookkeeping that change_tag_from does not copy.
+STP_pc_copy_split_flags = {
+	if = {
+		limit = { tag = STS }
+		if = { limit = { STP = { has_country_flag = STP_cw_archives_used } } set_country_flag = STP_cw_archives_used }
+		if = { limit = { STP = { has_country_flag = STP_shabrat_was_arrested } } set_country_flag = STP_shabrat_was_arrested }
+		if = { limit = { STP = { has_country_flag = STP_gornin_introduced } } set_country_flag = STP_gornin_introduced }
+		if = { limit = { STP = { has_country_flag = STP_vera_introduced } } set_country_flag = STP_vera_introduced }
+		if = { limit = { STP = { has_country_flag = STP_cw_kefreyt_shipment_received } } set_country_flag = STP_cw_kefreyt_shipment_received }
+		if = { limit = { STP = { has_country_flag = STP_pc_warned_70 } } set_country_flag = STP_pc_warned_70 }
+		if = { limit = { STP = { has_country_flag = STP_pc_warned_90 } } set_country_flag = STP_pc_warned_90 }
+		set_variable = { var = STP_pc_course value = STP.STP_pc_course }
+	}
+}
+
+# STS: Sotnikov can rule only after the ruling party matches his role.
+STP_pc_align_resistance_ruling_party = {
+	if = {
+		limit = {
+			tag = STS
+			NOT = { STP_cw_shabrat_available = yes }
+			STP_cw_sotnikov_available = yes
+		}
+		set_politics = { ruling_party = etatism elections_allowed = no }
+	}
+}
+
+# STS: lock course 1. Freedom is closed.
+STP_pc_lock_hegemony = {
+	set_variable = { var = STP_pc_course value = 1 }
+	set_country_flag = STP_pc_course_locked
+	STP_maksim_shabrat = {
+		add_country_leader_role = {
+			promote_leader = yes
+			country_leader = { ideology = chauvinism_ideology expire = "2200.1.1.1" }
+		}
+	}
+	set_politics = { ruling_party = chauvinism elections_allowed = no }
+}
+
+# STS: lock course 2. Hegemony is closed. Vanilla elections stay off.
+STP_pc_lock_freedom = {
+	set_variable = { var = STP_pc_course value = 2 }
+	set_country_flag = STP_pc_course_locked
+	STP_maksim_shabrat = {
+		add_country_leader_role = {
+			promote_leader = yes
+			country_leader = { ideology = steland_liberationism expire = "2200.1.1.1" }
+		}
+	}
+	set_politics = { ruling_party = humanism elections_allowed = no }
+	add_popularity = { ideology = humanism popularity = 0.15 }
+}
+
+# STS: lock course 3 for Sotnikov or Barchel.
+STP_pc_lock_directory = {
+	set_variable = { var = STP_pc_course value = 3 }
+	set_country_flag = STP_pc_course_locked
+	if = {
+		limit = { STP_cw_sotnikov_available = yes }
+		STP_grigory_sotnikov = {
+			add_country_leader_role = {
+				promote_leader = yes
+				country_leader = { ideology = steland_military_directory expire = "2200.1.1.1" }
+			}
+		}
+		promote_character = { character = STP_grigory_sotnikov ideology = steland_military_directory }
+	}
+	else_if = {
+		limit = { has_character = STP_Leonid_Barchel STP_Leonid_Barchel = { NOT = { has_character_flag = STP_cw_arrested } } }
+		STP_Leonid_Barchel = {
+			add_country_leader_role = {
+				promote_leader = yes
+				country_leader = { ideology = steland_military_directory expire = "2200.1.1.1" }
+			}
+		}
+		promote_character = { character = STP_Leonid_Barchel ideology = steland_military_directory }
+	}
+	set_politics = { ruling_party = etatism elections_allowed = no }
+}
+
+# STS: scripted war. Diplomatic UI stays closed.
+STP_pc_declare_war_val = {
+	if = {
+		limit = { tag = STS VAL = { exists = yes NOT = { has_war_with = ROOT } } }
+		set_country_flag = STP_pc_war_val
+		VAL = { set_country_flag = STP_pc_war_with_sts }
+		declare_war_on = { target = VAL type = annex_everything }
+	}
+}
+
+STP_pc_declare_war_nod = {
+	if = {
+		limit = { tag = STS NOD = { exists = yes NOT = { has_war_with = ROOT } } }
+		set_country_flag = STP_pc_war_nod
+		NOD = { set_country_flag = STP_pc_war_with_sts }
+		declare_war_on = { target = NOD type = annex_everything }
+	}
+}
+
+STP_pc_declare_liberation_war = {
+	if = {
+		limit = {
+			tag = STS
+			OR = { has_country_flag = STP_pc_val_crisis has_war_with = VAL }
+			VAL = { exists = yes }
+			NOT = { has_country_flag = STP_pc_war_val }
+		}
+		STP_pc_declare_war_val = yes
+	}
+	if = {
+		limit = {
+			tag = STS
+			OR = { has_country_flag = STP_pc_nod_crisis has_war_with = NOD }
+			NOD = { exists = yes }
+			NOT = { has_country_flag = STP_pc_war_nod }
+		}
+		STP_pc_declare_war_nod = yes
+	}
+}
+
+STP_pc_form_hegemony_league = {
+	if = {
+		limit = { tag = STS }
+		if = {
+			limit = { NOT = { has_country_flag = STP_pc_hegemony_league } }
+			set_country_flag = STP_pc_hegemony_league
+			create_faction_from_template = { template = faction_template_ADISCORD_standard name = STP_pc_hegemony_league }
+		}
+		if = {
+			limit = {
+				VAL = {
+					exists = yes
+					OR = { has_idea = STP_pc_val_client is_subject_of = STS }
+					NOT = { is_in_faction_with = STS }
+				}
+			}
+			add_to_faction = VAL
+		}
+		if = {
+			limit = {
+				NOD = {
+					exists = yes
+					OR = { has_idea = STP_pc_nod_client is_subject_of = STS }
+					NOT = { is_in_faction_with = STS }
+				}
+			}
+			add_to_faction = NOD
+		}
+	}
+}
+
+STP_pc_form_liberation_coalition = {
+	if = {
+		limit = { tag = STS }
+		if = {
+			limit = { NOT = { has_country_flag = STP_pc_liberation_coalition } }
+			set_country_flag = STP_pc_liberation_coalition
+			create_faction_from_template = { template = faction_template_ADISCORD_standard name = STP_pc_liberation_coalition }
+		}
+		if = {
+			limit = {
+				VAL = {
+					exists = yes
+					has_idea = VAL_liberated_settlement
+					NOT = { is_in_faction_with = STS }
+				}
+			}
+			add_to_faction = VAL
+		}
+		if = {
+			limit = {
+				NOD = {
+					exists = yes
+					has_idea = NOD_mandate_broken
+					NOT = { is_in_faction_with = STS }
+				}
+			}
+			add_to_faction = NOD
+		}
+	}
+}
+
+STP_pc_offer_liberation_package = {
+	if = {
+		limit = { has_country_flag = STP_pc_lib_package_pending }
+	}
+	else_if = {
+		limit = {
+			has_country_flag = STP_pc_lib_val_won
+			VAL = {
+				exists = yes
+				NOT = { has_idea = VAL_liberated_settlement }
+				NOT = { has_country_flag = STP_pc_val_refused_package }
+			}
+		}
+		set_variable = { var = STP_pc_lib_package_tag value = 1 }
+		set_country_flag = STP_pc_lib_package_pending
+		VAL = { country_event = { id = ADISCORD_STP_pc.11 } }
+	}
+	else_if = {
+		limit = {
+			has_country_flag = STP_pc_lib_nod_won
+			NOD = {
+				exists = yes
+				NOT = { has_idea = NOD_mandate_broken }
+				NOT = { has_country_flag = STP_pc_nod_refused_package }
+			}
+		}
+		set_variable = { var = STP_pc_lib_package_tag value = 2 }
+		set_country_flag = STP_pc_lib_package_pending
+		NOD = { country_event = { id = ADISCORD_STP_pc.11 } }
+	}
+	else = {
+		clear_variable = STP_pc_lib_package_tag
+	}
+}
+
+# STS: freeze the occupier snapshot, close only that pair, then ask for terms.
+# A second finished war is queued; it must not overwrite the open card.
+STP_pc_begin_settlement = {
+	if = {
+		limit = { tag = STS }
+		set_variable = { var = STP_pc_this_opponent value = 0 }
+		set_variable = { var = STP_pc_this_result value = 0 }
+		if = {
+			limit = { check_variable = { var = STP_pc_cap_side value = 1 compare = equals } }
+			set_variable = { var = STP_pc_this_opponent value = 1 }
+			if = {
+				limit = { VAL = { check_variable = { var = STP_cw_capitulation_occupier value = 2 compare = equals } } }
+				set_variable = { var = STP_pc_this_result value = 1 }
+			}
+			if = { limit = { has_war_with = VAL } white_peace = VAL }
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_pc_cap_side value = 2 compare = equals } }
+			set_variable = { var = STP_pc_this_opponent value = 2 }
+			if = {
+				limit = { NOD = { check_variable = { var = STP_cw_capitulation_occupier value = 2 compare = equals } } }
+				set_variable = { var = STP_pc_this_result value = 1 }
+			}
+			if = { limit = { has_war_with = NOD } white_peace = NOD }
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_pc_cap_side value = 3 compare = equals } }
+			if = {
+				limit = { check_variable = { var = STP_cw_capitulation_occupier value = 5 compare = equals } }
+				set_variable = { var = STP_pc_this_opponent value = 1 }
+				set_variable = { var = STP_pc_this_result value = 2 }
+				if = { limit = { has_war_with = VAL } white_peace = VAL }
+			}
+			else_if = {
+				limit = { check_variable = { var = STP_cw_capitulation_occupier value = 4 compare = equals } }
+				set_variable = { var = STP_pc_this_opponent value = 2 }
+				set_variable = { var = STP_pc_this_result value = 2 }
+				if = { limit = { has_war_with = NOD } white_peace = NOD }
+			}
+			else_if = {
+				limit = {
+					has_war_with = VAL
+					VAL = { has_country_flag = STP_pc_war_with_sts }
+					NOT = { AND = { has_war_with = NOD NOD = { has_country_flag = STP_pc_war_with_sts } } }
+				}
+				set_variable = { var = STP_pc_this_opponent value = 1 }
+				set_variable = { var = STP_pc_this_result value = 2 }
+				white_peace = VAL
+			}
+			else_if = {
+				limit = {
+					has_war_with = NOD
+					NOD = { has_country_flag = STP_pc_war_with_sts }
+					NOT = { AND = { has_war_with = VAL VAL = { has_country_flag = STP_pc_war_with_sts } } }
+				}
+				set_variable = { var = STP_pc_this_opponent value = 2 }
+				set_variable = { var = STP_pc_this_result value = 2 }
+				white_peace = NOD
+			}
+			else = {
+				if = { limit = { has_war_with = VAL } white_peace = VAL }
+				if = { limit = { has_war_with = NOD } white_peace = NOD }
+			}
+		}
+		if = {
+			limit = { NOT = { has_country_flag = STP_pc_settlement_pending } }
+			set_variable = { var = STP_pc_settle_opponent value = STP_pc_this_opponent }
+			set_variable = { var = STP_pc_settle_result value = STP_pc_this_result }
+			set_country_flag = STP_pc_settlement_pending
+			country_event = { id = ADISCORD_STP_pc.16 }
+		}
+		else_if = {
+			limit = { NOT = { has_variable = STP_pc_queued_opponent } }
+			set_variable = { var = STP_pc_queued_opponent value = STP_pc_this_opponent }
+			set_variable = { var = STP_pc_queued_result value = STP_pc_this_result }
+		}
+		clear_variable = STP_pc_this_opponent
+		clear_variable = STP_pc_this_result
+		clear_variable = STP_pc_cap_side
+	}
+}
+
+STP_pc_clear_settlement = {
+	if = {
+		limit = { check_variable = { var = STP_pc_settle_opponent value = 1 compare = equals } }
+		clr_country_flag = STP_pc_war_val
+		VAL = { clr_country_flag = STP_pc_war_with_sts }
+	}
+	else_if = {
+		limit = { check_variable = { var = STP_pc_settle_opponent value = 2 compare = equals } }
+		clr_country_flag = STP_pc_war_nod
+		NOD = { clr_country_flag = STP_pc_war_with_sts }
+	}
+	else = {
+		clr_country_flag = STP_pc_war_val
+		clr_country_flag = STP_pc_war_nod
+		VAL = { clr_country_flag = STP_pc_war_with_sts }
+		NOD = { clr_country_flag = STP_pc_war_with_sts }
+	}
+	clear_variable = STP_pc_settle_opponent
+	clear_variable = STP_pc_settle_result
+	if = {
+		limit = { has_variable = STP_pc_queued_opponent }
+		set_variable = { var = STP_pc_settle_opponent value = STP_pc_queued_opponent }
+		set_variable = { var = STP_pc_settle_result value = STP_pc_queued_result }
+		clear_variable = STP_pc_queued_opponent
+		clear_variable = STP_pc_queued_result
+		country_event = { id = ADISCORD_STP_pc.16 }
+	}
+	else = {
+		clr_country_flag = STP_pc_settlement_pending
+	}
+}
+
+STP_pc_finish_liberation_package = {
+	clr_country_flag = STP_pc_lib_package_pending
+	clear_variable = STP_pc_lib_package_tag
+	if = {
+		limit = { has_country_flag = STP_pc_liberation_coalition }
+		STP_pc_form_liberation_coalition = yes
+	}
+	STP_pc_offer_liberation_package = yes
 }

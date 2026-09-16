@@ -478,5 +478,40 @@ ideas = {
 			allowed = { always = no }
 			modifier = { stability_factor = 0.02 industrial_capacity_factory = 0.03 }
 		}
+
+		STP_pc_coalition_hold_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { army_org_factor = -0.03 } }
+		STP_pc_army_field_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { supply_consumption_factor = -0.05 } }
+		STP_pc_army_officers_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { planning_speed = 0.10 } }
+		STP_pc_army_supply_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { supply_consumption_factor = -0.08 } }
+		STP_pc_army_republic_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { planning_speed = -0.05 } }
+		STP_pc_army_staff_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { army_org_factor = 0.08 planning_speed = 0.10 political_power_gain = -0.05 } }
+		STP_pc_heg_unity_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { stability_factor = 0.05 political_power_gain = 0.10 } }
+		STP_pc_heg_subordinate_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { ADISCORD_economy_admin_expense_factor = -0.05 } }
+		STP_pc_heg_limit_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { research_speed_factor = -0.05 } }
+		STP_pc_heg_regional_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { industrial_capacity_factory = -0.08 } }
+		STP_pc_heg_burden_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { army_org_factor = 0.10 ADISCORD_economy_admin_expense_factor = 0.06 } }
+		STP_pc_lib_assembly_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { stability_factor = 0.05 political_power_gain = -0.10 } }
+		STP_pc_sot_field_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { planning_speed = 0.05 } }
+		STP_pc_sot_state_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { ADISCORD_economy_admin_expense_factor = -0.04 } }
+		STP_pc_gornin_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { ADISCORD_economy_admin_expense_factor = -0.04 } }
+		STP_pc_vera_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { political_power_gain = 0.05 industrial_capacity_factory = -0.03 } }
+		STP_pc_mountain_defence = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { army_core_defence_factor = 0.08 } }
+		STP_pc_limited_offense = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { army_attack_factor = 0.10 breakthrough_factor = 0.08 stability_factor = -0.05 } }
+		STP_pc_heg_cadres = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { experience_gain_army_factor = 0.10 } }
+		STP_pc_authorized_recruit = { picture = ADISCORD_law_civic_emergency_committees allowed = { always = no } removal_cost = -1 modifier = { conscription_factor = 0.05 } }
+		STP_pc_port_counterintel = { picture = ADISCORD_law_civic_emergency_committees allowed = { always = no } removal_cost = -1 modifier = { foreign_subversive_activites = -0.20 } }
+		STP_pc_navy_staff_idea = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { convoy_escort_efficiency = 0.10 } }
+		STP_pc_emergency_decree = { picture = ADISCORD_law_civic_emergency_committees allowed = { always = no } removal_cost = -1 modifier = { industrial_capacity_factory = 0.10 war_support_factor = 0.10 ADISCORD_economy_admin_expense_factor = 0.04 } }
+		STP_pc_drift_defence = { picture = ADISCORD_law_civic_emergency_committees allowed = { always = no } removal_cost = -1 modifier = { drift_defence_factor = 0.25 } }
+		STP_pc_founder_arbitration = { picture = ADISCORD_law_civic_local_councils allowed = { always = no } removal_cost = -1 modifier = { political_power_gain = 0.10 } }
+		STP_pc_limited_emergency = { picture = ADISCORD_law_civic_emergency_committees allowed = { always = no } removal_cost = -1 modifier = { mobilization_speed = 0.15 } }
+		STP_pc_occupation_admin = { picture = ADISCORD_law_civic_emergency_committees allowed = { always = no } removal_cost = -1 modifier = { ADISCORD_economy_admin_expense_factor = 0.08 } }
+		STP_pc_directory_term = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { army_org_factor = 0.06 political_power_gain = -0.05 } }
+		STP_pc_border_watch = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { army_core_defence_factor = 0.05 } }
+		STP_pc_nod_watch = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { army_core_defence_factor = 0.05 } }
+		STP_pc_val_client = { picture = ADISCORD_law_civic_emergency_committees allowed = { always = no } removal_cost = -1 modifier = { political_power_gain = -0.05 } }
+		STP_pc_nod_client = { picture = ADISCORD_law_civic_emergency_committees allowed = { always = no } removal_cost = -1 modifier = { political_power_gain = -0.05 } }
+		VAL_liberated_settlement = { picture = ADISCORD_law_civic_local_councils allowed = { always = no } removal_cost = -1 modifier = { stability_factor = 0.03 } }
+		NOD_mandate_broken = { picture = ADISCORD_law_civic_local_councils allowed = { always = no } removal_cost = -1 modifier = { conscription_factor = -0.05 } }
 	}
 }

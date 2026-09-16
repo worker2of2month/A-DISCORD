@@ -72,3 +72,6 @@ RUS_last_empire = {
 	color = rgb { 96 16 20 }
 	color_ui = rgb { 196 92 48 }
 }
+STS_steland = { color = rgb { 72 88 104 } color_ui = rgb { 140 168 188 } }
+VAL_liberated = { color = rgb { 70 92 74 } color_ui = rgb { 156 176 148 } }
+NOD_mandate_broken = { color = rgb { 88 70 78 } color_ui = rgb { 176 148 156 } }
