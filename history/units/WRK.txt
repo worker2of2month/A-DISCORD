@@ -1,5 +1,5 @@
 division_template = {
-	name = "Vorkerland Militia"
+	name = "Workerland Militia"
 	division_names_group = WRK_INF_01
 	regiments = {
 		ADISCORD_militia = { x = 0 y = 0 }
@@ -45,7 +45,7 @@ division_template = {
 }
 
 division_template = {
-	name = "Vorkerland Mobile Group"
+	name = "Workerland Mobile Group"
 	division_names_group = WRK_INF_01
 	regiments = {
 		ADISCORD_combat_platform = { x = 0 y = 0 }
@@ -92,7 +92,7 @@ units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 4 }
 		location = 3248
-		division_template = "Vorkerland Militia"
+		division_template = "Workerland Militia"
 		start_experience_factor = 0.42
 		start_equipment_factor = 0.63
 	}
@@ -120,7 +120,7 @@ units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 8 }
 		location = 12227
-		division_template = "Vorkerland Militia"
+		division_template = "Workerland Militia"
 		start_experience_factor = 0.42
 		start_equipment_factor = 0.63
 	}
@@ -131,9 +131,9 @@ units = {
 		start_experience_factor = 0.47
 		start_equipment_factor = 0.70
 	}
-	division = { division_name = { is_name_ordered = yes name_order = 10 } location = 6713 division_template = "Vorkerland Militia" start_experience_factor = 0.20 start_equipment_factor = 0.75 }
-	division = { division_name = { is_name_ordered = yes name_order = 11 } location = 6713 division_template = "Vorkerland Militia" start_experience_factor = 0.20 start_equipment_factor = 0.75 }
-	division = { division_name = { is_name_ordered = yes name_order = 12 } location = 6713 division_template = "Vorkerland Militia" start_experience_factor = 0.20 start_equipment_factor = 0.75 }
+	division = { division_name = { is_name_ordered = yes name_order = 10 } location = 6713 division_template = "Workerland Militia" start_experience_factor = 0.20 start_equipment_factor = 0.75 }
+	division = { division_name = { is_name_ordered = yes name_order = 11 } location = 6713 division_template = "Workerland Militia" start_experience_factor = 0.20 start_equipment_factor = 0.75 }
+	division = { division_name = { is_name_ordered = yes name_order = 12 } location = 6713 division_template = "Workerland Militia" start_experience_factor = 0.20 start_equipment_factor = 0.75 }
 }
 
 instant_effect = {
