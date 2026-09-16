@@ -1372,12 +1372,12 @@ class ValContractFormationTests(unittest.TestCase):
         focus = next(e.value for e in walk(parse_clausewitz(FOCUSES_PATH.read_text(encoding="utf-8-sig")))
                      if e.key == "focus" and isinstance(e.value, list) and scalar(e.value, "id") == "VAL_Arms_For_The_Burning")
         self.assertEqual({e.value for e in block(focus, "completion_reward") if e.key == "unlock_decision_tooltip"},
-                         {"VAL_cw_sell_arms_to_resistance", "VAL_cw_offer_contract_formations"})
+                         {"VAL_cw_sell_arms_to_resistance", "VAL_cw_offer_contract_formations", "VAL_cw_begin_mobilization"})
         events = parse_clausewitz((ROOT / "events/ADISCORD_STP_events.txt").read_text(encoding="utf-8-sig"))
         course = next(e.value for e in events if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_cw.20")
         trade = next(e.value for e in course if e.key == "option" and scalar(e.value, "name") == "ADISCORD_STP_cw.20.c")
         self.assertEqual({scalar(e.value, "decision") for e in trade if e.key == "unlock_decision_tooltip"},
-                         {"VAL_cw_sell_arms_to_resistance", "VAL_cw_offer_contract_formations"})
+                         {"VAL_cw_sell_arms_to_resistance", "VAL_cw_offer_contract_formations", "VAL_cw_begin_mobilization"})
         offer = next(e.value for e in events if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_cw.50")
         options = {scalar(e.value, "name"): e.value for e in offer if e.key == "option"}
         for decision_id, tier, option_id, treasury, manpower, rifles in (

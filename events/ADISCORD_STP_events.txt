@@ -155,31 +155,54 @@ country_event = {
 	desc = ADISCORD_STP_preparation.6.d
 	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
-	trigger = { tag = VAL STP = { STP_cw_preparation_open = yes } }
+	trigger = { STP_cw_kefreyt_aid_open = yes NOT = { has_country_flag = VAL_cw_volunteers_pending } }
 	option = {
 		name = ADISCORD_STP_preparation.6.a
-		trigger = {
-			NOT = { has_manpower < 23700 }
-			NOT = { has_equipment = { infantry_equipment < 1830 } }
-			NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 144 } }
-			NOT = { has_equipment = { support_equipment < 90 } }
-			NOT = { has_equipment = { artillery_equipment < 180 } }
-			NOT = { has_equipment = { anti_air_equipment < 60 } }
-			NOT = { has_war_with = STP }
-			STP = {
-				STP_cw_preparation_open = yes
-				owns_state = 1
-				NOT = { has_country_flag = STP_cw_kefreyt_shipment_received }
-			}
-		}
+		trigger = { STP_cw_kefreyt_aid_open = yes NOT = { has_country_flag = VAL_cw_volunteers_pending } }
 		ai_chance = { factor = 99 }
 		custom_effect_tooltip = STP_cw_kefreyt_volunteers_cost_tt
-		hidden_effect = { STP_cw_reserve_kefreyt_volunteers = yes }
+		hidden_effect = {
+			if = {
+				limit = { STP_cw_kefreyt_aid_open = yes NOT = { has_country_flag = VAL_cw_volunteers_pending } }
+				set_country_flag = VAL_cw_volunteers_pending
+				STP_cw_reserve_kefreyt_volunteers = yes
+				if = {
+					limit = { has_country_flag = VAL_cw_volunteers_pending }
+					if = { limit = { has_global_flag = STP_cw_started } STS = { country_event = { id = ADISCORD_STP_preparation.8 } } }
+					else = { STP = { country_event = { id = ADISCORD_STP_preparation.8 } } }
+					country_event = { id = ADISCORD_STP_preparation.22 days = 14 }
+				}
+			}
+		}
 	}
 	option = {
 		name = ADISCORD_STP_preparation.6.b
+		trigger = { STP_cw_kefreyt_aid_open = yes NOT = { has_country_flag = VAL_cw_volunteers_pending } }
 		ai_chance = { factor = 1 }
-		STP = { country_event = { id = ADISCORD_STP_preparation.8 } }
+		hidden_effect = {
+			if = { limit = { has_global_flag = STP_cw_started } STS = { country_event = { id = ADISCORD_STP_preparation.8 } } }
+			else = { STP = { country_event = { id = ADISCORD_STP_preparation.8 } } }
+		}
+	}
+	option = {
+		name = ADISCORD_STP_preparation.7.a
+		trigger = { OR = { STP_cw_kefreyt_aid_open = no has_country_flag = VAL_cw_volunteers_pending } }
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.22
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { tag = VAL has_country_flag = VAL_cw_volunteers_pending }
+	immediate = {
+		if = {
+			limit = { STP_cw_kefreyt_aid_open = yes }
+			STP_cw_reserve_kefreyt_volunteers = yes
+			if = { limit = { has_country_flag = VAL_cw_volunteers_pending } country_event = { id = ADISCORD_STP_preparation.22 days = 14 } }
+		}
+		else = { clr_country_flag = VAL_cw_volunteers_pending }
 	}
 }
 
@@ -187,11 +210,19 @@ country_event = {
 	id = ADISCORD_STP_preparation.8
 	title = ADISCORD_STP_preparation.8.t
 	desc = {
-		trigger = { has_country_flag = STP_cw_kefreyt_shipment_received }
+		trigger = { has_country_flag = STP_cw_kefreyt_shipment_received NOT = { tag = STS } }
 		text = ADISCORD_STP_preparation.8.accepted
 	}
 	desc = {
-		trigger = { NOT = { has_country_flag = STP_cw_kefreyt_shipment_received } }
+		trigger = { tag = STS has_country_flag = STP_cw_kefreyt_shipment_received }
+		text = ADISCORD_STP_preparation.8.delivered
+	}
+	desc = {
+		trigger = { NOT = { has_country_flag = STP_cw_kefreyt_shipment_received } VAL = { has_country_flag = VAL_cw_volunteers_pending } }
+		text = ADISCORD_STP_preparation.8.pending
+	}
+	desc = {
+		trigger = { NOT = { has_country_flag = STP_cw_kefreyt_shipment_received } NOT = { VAL = { has_country_flag = VAL_cw_volunteers_pending } } }
 		text = ADISCORD_STP_preparation.8.refused
 	}
 	picture = GFX_event_adiscord_military_headquarters
@@ -406,6 +437,7 @@ country_event = {
 		ai_chance = { base = 20 modifier = { factor = 3 has_country_flag = VAL_cw_supported_resistance } }
 		unlock_decision_tooltip = { decision = VAL_cw_sell_arms_to_resistance show_effect_tooltip = yes }
 		unlock_decision_tooltip = { decision = VAL_cw_offer_contract_formations show_effect_tooltip = yes }
+		unlock_decision_tooltip = { decision = VAL_cw_begin_mobilization show_effect_tooltip = yes }
 		hidden_effect = {
 			if = {
 				limit = {
@@ -415,7 +447,6 @@ country_event = {
 					STS = { exists = yes has_capitulated = no has_war_with = STP NOT = { has_war_with = VAL } }
 				}
 				set_country_flag = VAL_cw_trade_course
-				if = { limit = { SRP = { exists = yes has_war = no } } SRP = { STP_cw_finish_mobilization = yes } }
 				set_country_flag = VAL_operations_map_unlocked
 			}
 		}

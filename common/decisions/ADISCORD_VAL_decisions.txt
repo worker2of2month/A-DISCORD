@@ -57,7 +57,7 @@ VAL_military_operations = {
 	VAL_cw_begin_mobilization = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = VAL }
-		visible = { has_country_flag = VAL_cw_military_course NOT = { has_country_flag = VAL_cw_entered } NOT = { has_country_flag = VAL_cw_settled } }
+		visible = { OR = { has_country_flag = VAL_cw_military_course has_country_flag = VAL_cw_trade_course } NOT = { has_country_flag = VAL_cw_entered } NOT = { has_country_flag = VAL_cw_settled } }
 		available = { VAL_cw_can_intervene = yes }
 		cost = 0
 		days_re_enable = 21

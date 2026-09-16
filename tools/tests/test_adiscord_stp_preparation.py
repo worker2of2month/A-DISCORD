@@ -244,7 +244,7 @@ class StelanderPreparationTests(unittest.TestCase):
         effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         reserve = block(block(effects, "STP_cw_reserve_kefreyt_volunteers"), "if")
         settlement = next(e.value for e in reserve if e.key == "if")
-        delivered = block(settlement, "STP")
+        delivered = block(block(settlement, "else"), "STP")
         self.assertEqual(scalar(delivered, "set_country_flag"), "STP_cw_kefreyt_shipment_received")
         self.assertEqual(scalar(block(delivered, "country_event"), "id"), "ADISCORD_STP_preparation.8")
         ledger_gate = block(block(settlement, "limit"), "1")
@@ -258,6 +258,78 @@ class StelanderPreparationTests(unittest.TestCase):
         last_split = max(e.line for e in walk(start) if e.key == "transfer_units_fraction")
         delivery = next(e for e in walk(start) if e.key == "STP_cw_materialize_region_assets")
         self.assertLess(last_split, delivery.line, "foreign formations must not enter the shared percentage split")
+
+    def test_kefreyt_consent_is_available_without_stocks_and_queues_only_once(self):
+        event = next(e.value for e in entries("events/ADISCORD_STP_events.txt")
+                     if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_preparation.6")
+        options = [e.value for e in event if e.key == "option"]
+        accept = next(o for o in options if scalar(o, "name").endswith(".6.a"))
+        refuse = next(o for o in options if scalar(o, "name").endswith(".6.b"))
+        facts = {("VAL", "STP_cw_kefreyt_aid_open", "yes"): True}
+        self.assertTrue(matches_conditions(block(accept, "trigger"), facts, "VAL"))
+        accepted = block(block(accept, "hidden_effect"), "if")
+        self.assertEqual(scalar(accepted, "set_country_flag"), "VAL_cw_volunteers_pending")
+        facts[("VAL", "has_country_flag", "VAL_cw_volunteers_pending")] = True
+        self.assertFalse(matches_conditions(block(accepted, "limit"), facts, "VAL"))
+        self.assertEqual((scalar(block(accept, "ai_chance"), "factor"),
+                          scalar(block(refuse, "ai_chance"), "factor")), ("99", "1"))
+        callbacks = [e.value for e in walk(accepted) if e.key == "country_event"
+                     and scalar(e.value, "id") == "ADISCORD_STP_preparation.22"]
+        self.assertEqual(len(callbacks), 1)
+        self.assertEqual(scalar(callbacks[0], "days"), "14")
+
+    def test_kefreyt_delivery_requires_every_full_price_and_preserves_fractional_boundaries(self):
+        condition = block(entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"),
+                          "STP_cw_can_fund_kefreyt_volunteers")
+        prices = {"infantry_equipment": 1830, "ADISCORD_squad_weapons_equipment": 144,
+                  "support_equipment": 90, "artillery_equipment": 180, "anti_air_equipment": 60}
+        facts = {("VAL", "equipment", key): value for key, value in prices.items()}
+        facts[("VAL", "numeric", "has_manpower")] = 23700
+        self.assertTrue(matches_conditions(condition, facts, "VAL"))
+        for key, value in facts.items():
+            with self.subTest(resource=key):
+                self.assertFalse(matches_conditions(condition, {**facts, key: value - 0.25}, "VAL"))
+        self.assertFalse(matches_conditions(condition, {}, "VAL"))
+
+    def test_kefreyt_pending_offer_follows_resistance_and_stops_after_settlement(self):
+        trigger = block(entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"),
+                        "STP_cw_kefreyt_aid_open")
+        donor = {("VAL", "exists", "yes"): True, ("VAL", "has_capitulated", "no"): True}
+        before = {**donor, ("STP", "exists", "yes"): True,
+                  ("STP", "has_capitulated", "no"): True,
+                  ("STP", "has_country_flag", "STP_sided_with_Maksim_flag"): True}
+        self.assertTrue(matches_conditions(trigger, before, "VAL"))
+        during = {**donor, ("VAL", "has_global_flag", "STP_cw_started"): True,
+                  ("STS", "exists", "yes"): True, ("STS", "has_capitulated", "no"): True,
+                  ("STS", "has_country_flag", "STP_cw_participant"): True}
+        self.assertTrue(matches_conditions(trigger, during, "VAL"))
+        for change in ({("VAL", "has_global_flag", "STP_cw_union_wars_finished"): True},
+                       {("STS", "has_country_flag", "STP_cw_kefreyt_shipment_received"): True},
+                       {("STS", "has_war_with", "VAL"): True},
+                       {("STS", "has_capitulated", "no"): False}):
+            self.assertFalse(matches_conditions(trigger, {**during, **change}, "VAL"))
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        reserve = block(block(effects, "STP_cw_reserve_kefreyt_volunteers"), "if")
+        success = next(e.value for e in reserve if e.key == "if")
+        wartime = block(success, "if")
+        self.assertEqual(scalar(block(wartime, "STS"), "set_country_flag"), "STP_cw_kefreyt_shipment_received")
+        self.assertEqual(scalar(block(wartime, "1"), "STP_cw_deploy_kefreyt_volunteers"), "yes")
+        self.assertEqual(scalar(success, "clr_country_flag"), "VAL_cw_volunteers_pending")
+        finish = block(block(effects, "STP_cw_check_union_wars_finished"), "if")
+        self.assertEqual(scalar(block(finish, "VAL"), "clr_country_flag"), "VAL_cw_volunteers_pending")
+
+    def test_kefreyt_retry_does_not_repeat_after_delivery_or_cancelled_agreement(self):
+        event = next(e.value for e in entries("events/ADISCORD_STP_events.txt")
+                     if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_preparation.22")
+        facts = {("VAL", "has_country_flag", "VAL_cw_volunteers_pending"): True,
+                 ("VAL", "STP_cw_kefreyt_aid_open", "yes"): True}
+        self.assertTrue(matches_conditions(block(event, "trigger"), facts, "VAL"))
+        facts[("VAL", "has_country_flag", "VAL_cw_volunteers_pending")] = False
+        self.assertFalse(matches_conditions(block(event, "trigger"), facts, "VAL"))
+        immediate = block(event, "immediate")
+        self.assertEqual(scalar(block(immediate, "else"), "clr_country_flag"), "VAL_cw_volunteers_pending")
+        repeated = list(selected_effects(immediate, {}, "VAL"))
+        self.assertFalse(any(e.key == "country_event" for _, e in repeated))
 
     def test_completed_val_route_leaves_one_safe_close_option_on_an_open_offer(self):
         triggers = entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")

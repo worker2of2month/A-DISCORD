@@ -1525,9 +1525,9 @@ focus_tree = {
 			add_tech_bonus = { name = VAL_cw_field_reports_bonus bonus = 0.5 uses = 1 category = infantry_weapons }
 			unlock_decision_tooltip = VAL_cw_sell_arms_to_resistance
 			unlock_decision_tooltip = VAL_cw_offer_contract_formations
+			unlock_decision_tooltip = VAL_cw_begin_mobilization
 			hidden_effect = {
 				set_country_flag = VAL_cw_trade_course
-				if = { limit = { SRP = { exists = yes has_war = no } } SRP = { STP_cw_finish_mobilization = yes } }
 			}
 		}
 		ai_will_do = { base = 3 }

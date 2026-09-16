@@ -281,3 +281,16 @@ ADISCORD_VAL_export_accept_NAM = {
 		value = 200
 	}
 }
+
+ADISCORD_VAL_volunteer_air_defence = {
+	allowed = { original_tag = VAL }
+	enable = {
+		has_country_flag = VAL_cw_volunteers_pending
+		STP_cw_kefreyt_aid_open = yes
+		num_of_military_factories > 7
+		has_tech = ADISCORD_tech_improvised_air_defense
+		has_equipment = { anti_air_equipment < 60 }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = equipment_production_min_factories_archetype id = anti_air_equipment value = 1 }
+}

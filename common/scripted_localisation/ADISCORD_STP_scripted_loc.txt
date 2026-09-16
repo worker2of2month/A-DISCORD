@@ -292,6 +292,7 @@ defined_text = {
 		trigger = { 1 = { check_variable = { var = STP_cw_kefreyt_volunteers value = 3 compare = equals } } }
 		localization_key = STP_ARMY_KEFREYT_COMMITMENT
 	}
+	text = { trigger = { VAL = { has_country_flag = VAL_cw_volunteers_pending } } localization_key = STP_ARMY_KEFREYT_PENDING }
 	text = { localization_key = STP_REGION_EMPTY_LINE }
 }
 

@@ -309,6 +309,17 @@ STP_shabrat_election_bop_category = {
 }
 
 STP_battle_for_stelander = {
+	STP_cw_renew_kefreyt_request = {
+		icon = generic_prepare_civil_war
+		visible = { has_completed_focus = STP_Kefreite_Security_Offer NOT = { has_country_flag = STP_cw_kefreyt_shipment_received } NOT = { VAL = { has_country_flag = VAL_cw_volunteers_pending } } }
+		available = { VAL = { STP_cw_kefreyt_aid_open = yes } }
+		cost = 0
+		days_re_enable = 30
+		fire_only_once = no
+		complete_effect = { VAL = { country_event = { id = ADISCORD_STP_preparation.6 days = 1 } } }
+		ai_will_do = { base = 0 }
+	}
+
 	STP_cw_opposition_preparation = {
 		icon = generic_political_pressure
 		activation = { always = no }
@@ -1591,9 +1602,12 @@ STP_cw_war_council = {
 		days_re_enable = 14
 		fire_only_once = no
 		complete_effect = {
-			if = { limit = { tag = STP } STP_cw_mobilize_brigade = yes }
-			else_if = { limit = { tag = STS } STP_cw_mobilize_brigade = yes }
-			else_if = { limit = { tag = SRP } STP_cw_mobilize_brigade = yes }
+			custom_effect_tooltip = STP_cw_raise_territorial_brigade_tt
+			hidden_effect = {
+				if = { limit = { tag = STP } STP_cw_mobilize_brigade = yes }
+				else_if = { limit = { tag = STS } STP_cw_mobilize_brigade = yes }
+				else_if = { limit = { tag = SRP } STP_cw_mobilize_brigade = yes }
+			}
 		}
 		ai_will_do = {
 			base = 10

@@ -1000,7 +1000,8 @@ class CivilWarContracts(unittest.TestCase):
                     for key, value in (("exists", "yes"), ("has_capitulated", "no"),
                                        ("has_war", "no"), ("is_subject", "no"), ("is_in_faction", "no"))}}
         self.assertTrue(matches_conditions(val_gate, facts, "VAL"))
-        for flag in ("VAL_cw_trade_course", "VAL_cw_refused"):
+        self.assertTrue(matches_conditions(val_gate, {**facts, ("VAL", "has_country_flag", "VAL_cw_trade_course"): True}, "VAL"))
+        for flag in ("VAL_cw_refused",):
             self.assertFalse(matches_conditions(val_gate, {**facts, ("VAL", "has_country_flag", flag): True}, "VAL"))
 
     def test_val_republics_get_sixty_peaceful_days_before_separate_mobilization(self):
@@ -1024,7 +1025,7 @@ class CivilWarContracts(unittest.TestCase):
             with self.subTest(missing=requirement):
                 self.assertFalse(matches_conditions(gate, {k: v for k, v in ready.items() if k != requirement}, "VAL"))
         for flag in ("VAL_foreign_operation_active", "VAL_cw_mobilizing", "VAL_cw_entered",
-                     "VAL_cw_settled", "VAL_cw_refused", "VAL_cw_trade_course"):
+                     "VAL_cw_settled", "VAL_cw_refused"):
             self.assertFalse(matches_conditions(gate, {**ready, ("VAL", "has_country_flag", flag): True}, "VAL"))
         self.assertTrue(matches_conditions(gate, {**ready, ("VAL", "has_global_flag", "STP_cw_union_wars_finished"): True}, "VAL"),
                         "the separate western conflict remains available after the Stelander settlement")
@@ -1063,7 +1064,28 @@ class CivilWarContracts(unittest.TestCase):
                                      ["SRP"] if owner and eligible else [])
                     self.assertFalse(any(e.key == "add_to_war" for _, e in chosen))
 
-    def test_val_peaceful_courses_release_republics_without_starting_a_war(self):
+    def test_val_trade_route_can_order_occidia_campaign_without_revoking_supplies(self):
+        decision = ast_block(ast_block(entries("common/decisions/ADISCORD_VAL_decisions.txt"),
+                                       "VAL_military_operations"), "VAL_cw_begin_mobilization")
+        start = ast_block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
+                          "VAL_cw_start_intervention")
+        for course in ("VAL_cw_trade_course", "VAL_cw_military_course"):
+            for eligible in (False, True):
+                facts = {("VAL", "has_country_flag", course): True,
+                         ("VAL", "VAL_cw_can_intervene", "yes"): eligible}
+                self.assertTrue(matches_conditions(ast_block(decision, "visible"), facts, "VAL"))
+                self.assertEqual(matches_conditions(ast_block(decision, "available"), facts, "VAL"), eligible)
+                chosen = list(selected_effects(start, facts, "VAL"))
+                self.assertEqual(any(e.key == "set_country_flag" and e.value == "VAL_cw_military_course"
+                                     for _, e in chosen), eligible)
+                self.assertEqual([(scope, e.value) for scope, e in chosen if e.key == "activate_mission"],
+                                 [("VAL", "VAL_cw_intervention_preparation"), ("SRP", "STP_cw_val_ultimatum")]
+                                 if eligible else [])
+                self.assertFalse(any(e.key == "clr_country_flag" and e.value == "VAL_cw_trade_course"
+                                     for _, e in chosen))
+                self.assertFalse(any(e.key == "declare_war_on" for _, e in chosen))
+
+    def test_val_only_neutrality_releases_republics_without_starting_a_war(self):
         events = {scalar(e.value, "id"): e.value for e in entries("events/ADISCORD_STP_events.txt") if e.key == "country_event"}
         courses = [e.value for e in events["ADISCORD_STP_cw.20"] if e.key == "option"
                    and scalar(e.value, "name") in ("ADISCORD_STP_cw.20.b", "ADISCORD_STP_cw.20.c")]
@@ -1072,6 +1094,7 @@ class CivilWarContracts(unittest.TestCase):
                     and scalar(e.value, "id") in ("VAL_Arms_For_The_Burning", "VAL_Keep_The_Arsenals")]
         self.assertEqual(len(courses), 4, "both event and focus choices must release the peaceful republics")
         for course in courses:
+            neutrality = any(e.key == "set_country_flag" and e.value == "VAL_cw_refused" for e in walk(course))
             for exists in (False, True):
                 for peace in (False, True):
                     facts = {("SRP", "exists", "yes"): exists, ("SRP", "has_war", "no"): peace,
@@ -1079,7 +1102,7 @@ class CivilWarContracts(unittest.TestCase):
                              ("STS", "has_war_with", "STP"): True}
                     chosen = list(selected_effects(course, facts, "VAL"))
                     postwar = [(scope, e.value) for scope, e in chosen if e.key == "STP_cw_finish_mobilization"]
-                    self.assertEqual(postwar, [("SRP", "yes")] if exists and peace else [])
+                    self.assertEqual(postwar, [("SRP", "yes")] if neutrality and exists and peace else [])
                     self.assertFalse(any(e.key in ("declare_war_on", "add_to_war", "white_peace") for _, e in chosen))
 
     def test_external_settlements_release_intervention_state_and_report_outcomes(self):
@@ -2396,7 +2419,7 @@ class WartimeProgramContracts(unittest.TestCase):
         for tag, changes, expected in (
             ("SRP", {}, True),
             ("SRP", {("SRP", "has_global_flag", "STP_cw_union_war_finished"): True}, True),
-            ("SRP", {("VAL", "has_country_flag", "VAL_cw_trade_course"): True}, False),
+            ("SRP", {("VAL", "has_country_flag", "VAL_cw_trade_course"): True}, True),
             ("SRP", {("VAL", "has_country_flag", "VAL_cw_refused"): True}, False),
             ("SRP", {("VAL", "has_country_flag", "VAL_cw_settled"): True}, False),
             ("SRP", {("VAL", "has_capitulated", "no"): False}, False),
@@ -2727,22 +2750,25 @@ class KefreytVolunteerContracts(unittest.TestCase):
     price = {"infantry_equipment": 1830, "ADISCORD_squad_weapons_equipment": 144,
              "support_equipment": 90, "artillery_equipment": 180, "anti_air_equipment": 60}
 
-    def test_offer_requires_the_whole_package_and_cannot_be_accepted_twice(self):
+    def test_offer_acceptance_and_full_package_payment_have_separate_gates(self):
         events = entries("events/ADISCORD_STP_events.txt")
         event = next(e.value for e in events if e.key == "country_event"
                      and scalar(e.value, "id") == "ADISCORD_STP_preparation.6")
         option = next(e.value for e in event if e.key == "option"
                       and scalar(e.value, "name") == "ADISCORD_STP_preparation.6.a")
         gate = ast_block(option, "trigger")
-        facts = {("VAL", "numeric", "has_manpower"): 23700,
-                 ("STP", "STP_cw_preparation_open", "yes"): True,
-                 ("STP", "owns_state", "1"): True}
+        consent = {("VAL", "STP_cw_kefreyt_aid_open", "yes"): True}
+        self.assertTrue(matches_conditions(gate, consent, "VAL"))
+        self.assertFalse(matches_conditions(gate, {**consent, ("VAL", "has_country_flag", "VAL_cw_volunteers_pending"): True}, "VAL"))
+        self.assertFalse(matches_conditions(gate, {}, "VAL"))
+        payment = ast_block(entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"),
+                            "STP_cw_can_fund_kefreyt_volunteers")
+        facts = {("VAL", "numeric", "has_manpower"): 23700}
         facts.update({("VAL", "equipment", key): value for key, value in self.price.items()})
-        self.assertTrue(matches_conditions(gate, facts, "VAL"))
+        self.assertTrue(matches_conditions(payment, facts, "VAL"))
         for key, amount in (("has_manpower", 23700), *self.price.items()):
             field = ("VAL", "numeric" if key == "has_manpower" else "equipment", key)
-            self.assertFalse(matches_conditions(gate, {**facts, field: amount - .5}, "VAL"), key)
-        self.assertFalse(matches_conditions(gate, {**facts, ("STP", "has_country_flag", "STP_cw_kefreyt_shipment_received"): True}, "VAL"))
+            self.assertFalse(matches_conditions(payment, {**facts, field: amount - .5}, "VAL"), key)
         self.assertEqual(sum(e.key == "STP_cw_reserve_kefreyt_volunteers" for e in walk(option)), 1)
         self.assertFalse(any(e.key in ("add_manpower", "create_unit") for e in walk(option)))
 
@@ -2767,10 +2793,13 @@ class KefreytVolunteerContracts(unittest.TestCase):
         for payment_outcomes in ((True, True, True), (True, False, True), (False, False, False)):
             facts = {("VAL", "numeric", "has_manpower"): 23700,
                      ("VAL", "exists", "yes"): True,
+                     ("VAL", "STP_cw_kefreyt_aid_open", "yes"): True,
+                     ("VAL", "STP_cw_can_fund_kefreyt_volunteers", "yes"): True,
+                     ("VAL", "has_country_flag", "VAL_cw_volunteers_pending"): True,
                      ("STP", "STP_cw_preparation_open", "yes"): True,
                      ("STP", "owns_state", "1"): True,
-                     ("1", "is_owned_by", "STS"): True,
-                     ("1", "is_controlled_by", "STS"): True,
+                     ("1", "is_owned_by", "STP"): True,
+                     ("1", "is_controlled_by", "STP"): True,
                      ("STS", "has_country_flag", "STP_cw_templates_loaded"): True}
             facts.update({("VAL", "equipment", key): value for key, value in self.price.items()})
             outcomes = iter(payment_outcomes)
@@ -2808,6 +2837,10 @@ class KefreytVolunteerContracts(unittest.TestCase):
             if all(payment_outcomes):
                 self.assertEqual((len(paid_units), facts[ledger]), (3, 3))
                 apply(reserve, "VAL")  # the receipt flag rejects duplicate acceptance
+                facts[("1", "is_owned_by", "STP")] = False
+                facts[("1", "is_controlled_by", "STP")] = False
+                facts[("1", "is_owned_by", "STS")] = True
+                facts[("1", "is_controlled_by", "STS")] = True
                 apply(deploy, "1")
                 apply(deploy, "1")
                 self.assertEqual(spawned, ["STS"] * 3)

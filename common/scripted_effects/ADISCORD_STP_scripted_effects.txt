@@ -1598,18 +1598,12 @@ STP_cw_refund_assault_division = {
 STP_cw_reserve_kefreyt_volunteers = {
 	if = {
 		limit = {
-			tag = VAL
-			NOT = { has_war_with = STP }
-			NOT = { has_manpower < 23700 }
-			NOT = { has_equipment = { infantry_equipment < 1830 } }
-			NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 144 } }
-			NOT = { has_equipment = { support_equipment < 90 } }
-			NOT = { has_equipment = { artillery_equipment < 180 } }
-			NOT = { has_equipment = { anti_air_equipment < 60 } }
-			STP = {
-				STP_cw_preparation_open = yes
-				owns_state = 1
-				NOT = { has_country_flag = STP_cw_kefreyt_shipment_received }
+			STP_cw_kefreyt_aid_open = yes
+			has_country_flag = VAL_cw_volunteers_pending
+			STP_cw_can_fund_kefreyt_volunteers = yes
+			OR = {
+				AND = { NOT = { has_global_flag = STP_cw_started } 1 = { is_owned_by = STP is_controlled_by = STP } }
+				AND = { has_global_flag = STP_cw_started STS = { has_war_with = STP has_country_flag = STP_cw_templates_loaded } 1 = { is_owned_by = STS is_controlled_by = STS } }
 			}
 		}
 		for_loop_effect = {
@@ -1624,15 +1618,19 @@ STP_cw_reserve_kefreyt_volunteers = {
 		}
 		if = {
 			limit = { 1 = { check_variable = { var = STP_cw_kefreyt_volunteers value = 3 compare = equals } } }
+			clr_country_flag = VAL_cw_volunteers_pending
 			set_country_flag = VAL_cw_supported_resistance
-			STP = {
-				set_country_flag = STP_cw_kefreyt_shipment_received
-				country_event = { id = ADISCORD_STP_preparation.8 }
+			if = {
+				limit = { has_global_flag = STP_cw_started }
+				STS = { set_country_flag = STP_cw_kefreyt_shipment_received country_event = { id = ADISCORD_STP_preparation.8 } }
+				1 = { STP_cw_deploy_kefreyt_volunteers = yes }
+			}
+			else = {
+				STP = { set_country_flag = STP_cw_kefreyt_shipment_received country_event = { id = ADISCORD_STP_preparation.8 } }
 			}
 		}
 		else = {
 			1 = { STP_cw_refund_kefreyt_volunteers = yes }
-			STP = { country_event = { id = ADISCORD_STP_preparation.8 } }
 		}
 	}
 }
@@ -2305,9 +2303,9 @@ STP_cw_start = {
 		load_focus_tree = { tree = STP_cw_focus keep_completed = no }
 		STS = { load_focus_tree = { tree = STP_cw_focus keep_completed = no } }
 		SRP = { load_focus_tree = { tree = STP_cw_focus keep_completed = no } }
-		# A preselected peaceful VAL course also applies to the newborn republics.
+		# Only explicit neutrality closes the newborn republics' preparation.
 		if = {
-			limit = { VAL = { OR = { exists = no has_country_flag = VAL_cw_trade_course has_country_flag = VAL_cw_refused } } }
+			limit = { VAL = { OR = { exists = no has_country_flag = VAL_cw_refused } } }
 			SRP = { STP_cw_finish_mobilization = yes }
 		}
 		# Late preparation callbacks must cancel while the side picker is open.
@@ -2322,7 +2320,8 @@ STP_cw_start = {
 
 VAL_cw_start_intervention = {
 	if = {
-		limit = { VAL_cw_can_intervene = yes has_country_flag = VAL_cw_military_course }
+		limit = { VAL_cw_can_intervene = yes OR = { has_country_flag = VAL_cw_military_course has_country_flag = VAL_cw_trade_course } }
+		set_country_flag = VAL_cw_military_course
 		clr_country_flag = VAL_cw_mobilization_cancelled
 		clr_country_flag = VAL_cw_offer_pending
 		set_country_flag = VAL_cw_offer_shown
@@ -2539,6 +2538,7 @@ STP_cw_check_union_wars_finished = {
 			NOT = { STP = { has_war_with = STS } }
 		}
 		set_global_flag = STP_cw_union_wars_finished
+		VAL = { clr_country_flag = VAL_cw_volunteers_pending }
 		STS = { STP_cw_remove_kefreyt_volunteers = yes }
 		STP = { clr_country_flag = STP_cw_northern_strategy_evidence clr_country_flag = STP_cw_northern_strategy_supply }
 		STS = { clr_country_flag = STP_cw_northern_strategy_evidence clr_country_flag = STP_cw_northern_strategy_supply }
