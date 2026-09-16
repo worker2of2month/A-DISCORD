@@ -1,0 +1,129 @@
+name: Postwar review followup
+on:
+  push:
+    branches: [audit/grok-20260917-followup-checks]
+permissions:
+  contents: write
+concurrency:
+  group: postwar-review-followup
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 32
+          persist-credentials: true
+      - name: Install validator dependencies
+        run: python -m pip install Pillow numpy
+      - name: Prepare exact review candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin audit/grok-20260917-fixes
+          git worktree add --detach "$RUNNER_TEMP/verified" 3eb03101677678d37e6f223242892c43f3a4fe0e
+          python - <<'PY'
+          import base64, gzip, hashlib, os
+          from pathlib import Path
+          encoded = Path('.github/followup.patch.gz.b64').read_text().strip()
+          encoded = encoded.replace('qLWPtaL0q', 'qLWPta0q')
+          patch = gzip.decompress(base64.b64decode(encoded, validate=True))
+          assert hashlib.sha256(patch).hexdigest() == '4ce33424963e9ebbfa40650275d0f1e51028000c0f3eb3c96537a835a4626f66'
+          (Path(os.environ['RUNNER_TEMP']) / 'followup.patch').write_bytes(patch)
+          PY
+          git -C "$RUNNER_TEMP/verified" apply --check "$RUNNER_TEMP/followup.patch"
+          git -C "$RUNNER_TEMP/verified" apply --include=tools/tests/test_adiscord_stp_postwar_continuation.py "$RUNNER_TEMP/followup.patch"
+      - name: Prove regressions fail against the previous production source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/verified"
+          python -B - <<'PY' 2>&1 | tee "$RUNNER_TEMP/red-tests.txt"
+          import unittest
+          from tools.tests.test_adiscord_stp_postwar_continuation import PostwarContinuationContracts
+          names = (
+              'test_nod_crisis_has_one_truthful_acknowledgement',
+              'test_delayed_nod_notice_rechecks_both_participants_and_postwar_state',
+              'test_nod_notice_preserves_the_default_outcome_without_starting_a_war',
+              'test_nod_notification_keeps_existing_crisis_focus_routes_reachable',
+              'test_pending_package_recovers_after_all_focus_and_settlement_callers_finished',
+              'test_package_recovery_is_scoped_to_an_existing_sts_with_a_pending_receipt',
+          )
+          suite = unittest.TestSuite(PostwarContinuationContracts(name) for name in names)
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 6 and not result.errors
+          assert len(result.failures) == 10, 'The expected source regressions were not reproduced'
+          print('RED confirmed: six regressions exercised, ten expected assertion failures, no errors.')
+          PY
+      - name: Apply and authenticate the production changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -C "$RUNNER_TEMP/verified" apply --exclude=tools/tests/test_adiscord_stp_postwar_continuation.py "$RUNNER_TEMP/followup.patch"
+          cd "$RUNNER_TEMP/verified"
+          python - <<'PY' | tee "$RUNNER_TEMP/source-hashes.json"
+          import hashlib, json
+          from pathlib import Path
+          expected = {
+              'common/on_actions/02_ADISCORD_STP_on_actions.txt': 'a4020339f057319745452851cfb314378e9f1ae45a2b42d7821a0f7cc7bfe557',
+              'docs/development/focus-effects.md': '2cc2508b4b0879505f0f582b15923458706b414a28e62b05fbc1c5c0e4b2a729',
+              'events/ADISCORD_STP_events.txt': 'ed0f34520c17ecc7ee845e00eb01929845d2dc68261a368befa13be85ab32de8',
+              'localisation/russian/ADISCORD_STP_l_russian.yml': 'd8d9ff57bc22049eba385c071abb5b1982a0ca5539b49f248e4e03e216a4fbb1',
+              'tools/tests/test_adiscord_stp_postwar_continuation.py': 'd9effc4df2336df68921e15c25eb5355ab12927a83c400c5e1f138209d4781f4',
+          }
+          actual = {}
+          for name, digest in expected.items():
+              data = Path(name).read_bytes()
+              data.decode('utf-8')
+              actual[name] = hashlib.sha256(data).hexdigest()
+              assert actual[name] == digest, name
+              if name.endswith('.yml'):
+                  assert data.startswith(b'\xef\xbb\xbf'), name
+              elif name.endswith('.txt'):
+                  assert not data.startswith(b'\xef\xbb\xbf'), name
+          print(json.dumps(actual, indent=2))
+          PY
+          git diff --check
+      - name: Full campaign regression set
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/verified"
+          python -B -m unittest -v tools.tests.test_adiscord_stp_postwar_continuation tools.tests.test_adiscord_stp_postwar_story tools.tests.test_adiscord_rus_last_empire tools.tests.test_validate_adiscord_val_rework tools.tests.test_adiscord_stp_civil_war tools.tests.test_adiscord_stp_preparation tools.tests.test_adiscord_stp_startup tools.tests.test_adiscord_stp_regions tools.tests.test_adiscord_economy_weekly_contracts tools.tests.test_validate_adiscord_vorkerland_collapse tools.tests.test_adiscord_vorkerland_northern_escalation 2>&1 | tee "$RUNNER_TEMP/focused-tests.txt"
+      - name: Repository validator
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/verified"
+          python -B tools/validate_tc.py --limit 300 2>&1 | tee "$RUNNER_TEMP/validate-tc.txt"
+          git diff --check
+      - name: Commit verified files to the existing review branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/verified"
+          test "$(git ls-remote origin refs/heads/audit/grok-20260917-fixes | cut -f1)" = 3eb03101677678d37e6f223242892c43f3a4fe0e
+          git config user.name 'A-Discord Audit'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add common/on_actions/02_ADISCORD_STP_on_actions.txt docs/development/focus-effects.md events/ADISCORD_STP_events.txt localisation/russian/ADISCORD_STP_l_russian.yml tools/tests/test_adiscord_stp_postwar_continuation.py
+          test "$(git diff --cached --name-only | wc -l)" -eq 5
+          git diff --cached --check
+          git diff --cached --stat | tee "$RUNNER_TEMP/changed-files.txt"
+          git commit -m 'Fix orphaned STP package recovery and make NOD crisis notice truthful'
+          git rev-parse HEAD | tee "$RUNNER_TEMP/verified-commit.txt"
+          git push origin HEAD:refs/heads/audit/grok-20260917-fixes
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: postwar-followup-evidence
+          path: |
+            ${{ runner.temp }}/red-tests.txt
+            ${{ runner.temp }}/focused-tests.txt
+            ${{ runner.temp }}/validate-tc.txt
+            ${{ runner.temp }}/source-hashes.json
+            ${{ runner.temp }}/changed-files.txt
+            ${{ runner.temp }}/verified-commit.txt
+            ${{ runner.temp }}/followup.patch
+          retention-days: 7
