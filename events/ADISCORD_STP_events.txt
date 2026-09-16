@@ -976,15 +976,29 @@ country_event = {
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	fire_only_once = yes
-	trigger = { tag = NOD }
-	immediate = {
-		hidden_effect = {
-			STS = { country_event = { id = ADISCORD_STP_pc.15 days = 0 } set_country_flag = STP_pc_nod_crisis }
+	trigger = {
+		tag = NOD
+		exists = yes
+		has_capitulated = no
+		STS = {
+			exists = yes
+			STP_pw_can_reconstruct = yes
+			NOT = { has_country_flag = STP_pc_nod_crisis }
 		}
 	}
-	option = { name = ADISCORD_STP_pc.10.a ai_chance = { base = 40 } }
-	option = { name = ADISCORD_STP_pc.10.b ai_chance = { base = 40 } }
-	option = { name = ADISCORD_STP_pc.10.c ai_chance = { base = 20 } }
+	# Opening the diplomatic crisis is independent of reading or closing the notice.
+	immediate = {
+		hidden_effect = {
+			STS = {
+				set_country_flag = STP_pc_nod_crisis
+				country_event = { id = ADISCORD_STP_pc.15 days = 0 }
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.10.a
+		custom_effect_tooltip = STP_pc_nod_crisis_opened_tt
+	}
 }
 
 country_event = {

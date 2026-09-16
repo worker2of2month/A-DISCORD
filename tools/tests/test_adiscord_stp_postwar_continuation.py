@@ -313,6 +313,113 @@ class PostwarContinuationContracts(unittest.TestCase):
         self.assertEqual(dispatched, [("NOD", "ADISCORD_STP_pc.11")])
         self.assertEqual(facts[("STS", "variable", "STP_pc_lib_package_tag")], 2)
 
+    def test_nod_crisis_has_one_truthful_acknowledgement(self) -> None:
+        event = parsed_event("ADISCORD_STP_pc.10")
+        self.assertEqual(option_names("ADISCORD_STP_pc.10"), ["ADISCORD_STP_pc.10.a"])
+        answer = block(event, "option")
+        self.assertEqual({entry.key for entry in answer}, {"name", "custom_effect_tooltip"})
+        self.assertEqual(scalar(answer, "custom_effect_tooltip"), "STP_pc_nod_crisis_opened_tt")
+        localisation = read(LOC)
+        for obsolete in ("ADISCORD_STP_pc.10.b", "ADISCORD_STP_pc.10.c"):
+            self.assertNotRegex(localisation, rf"(?m)^\s*{re.escape(obsolete)}:")
+        self.assertRegex(localisation, r"(?m)^ STP_pc_nod_crisis_opened_tt:")
+
+    def test_delayed_nod_notice_rechecks_both_participants_and_postwar_state(self) -> None:
+        event = parsed_event("ADISCORD_STP_pc.10")
+        gate = expand(block(event, "trigger"))
+        facts = package_facts()
+        for flag in ("STP_cw_won_union_battle", "STP_cw_postwar"):
+            facts[("STS", "has_country_flag", flag)] = True
+        facts[("STS", "has_global_flag", "STP_cw_union_wars_finished")] = True
+        self.assertTrue(matches_conditions(gate, facts, "NOD"))
+        for tag, kind, value in (
+            ("NOD", "exists", "yes"),
+            ("NOD", "has_capitulated", "no"),
+            ("STS", "exists", "yes"),
+            ("STS", "has_capitulated", "no"),
+            ("STS", "has_country_flag", "STP_cw_postwar"),
+        ):
+            with self.subTest(tag=tag, condition=kind, value=value):
+                self.assertFalse(matches_conditions(gate, {**facts, (tag, kind, value): False}, "NOD"))
+        self.assertFalse(matches_conditions(gate, {
+            **facts, ("STS", "has_country_flag", "STP_pc_nod_crisis"): True,
+        }, "NOD"))
+
+    def test_nod_notice_preserves_the_default_outcome_without_starting_a_war(self) -> None:
+        event = parsed_event("ADISCORD_STP_pc.10")
+        self.assertEqual(scalar(event, "fire_only_once"), "yes")
+        effects = list(selected_effects(block(event, "immediate"), {}, "NOD"))
+        self.assertEqual([(scope, effect.key) for scope, effect in effects], [
+            ("STS", "set_country_flag"), ("STS", "country_event"),
+        ])
+        self.assertEqual(effects[0][1].value, "STP_pc_nod_crisis")
+        self.assertEqual(scalar(effects[1][1].value, "id"), "ADISCORD_STP_pc.15")
+        self.assertEqual(scalar(effects[1][1].value, "days"), "0")
+        answer = option_by_name("ADISCORD_STP_pc.10", "ADISCORD_STP_pc.10.a")
+        # The outcome belongs to event delivery; closing or timing out does not repeat it.
+        facts, dispatched = package_facts(), []
+        before = dict(facts)
+        execute_package_effects(answer, facts, dispatched, "NOD")
+        execute_package_effects(answer, facts, dispatched, "NOD")
+        self.assertEqual(facts, before)
+        self.assertEqual(dispatched, [])
+
+    def test_nod_notification_keeps_existing_crisis_focus_routes_reachable(self) -> None:
+        focuses = war_focuses()
+        for focus_id in ("STP_pc_lib_crisis", "STP_pc_lib_war", "STP_pc_army_limited_offense"):
+            gate = block(focuses[focus_id], "available")
+            facts = {("STS", "STP_pc_focus_available", "yes"): True}
+            self.assertFalse(matches_conditions(gate, facts, "STS"), focus_id)
+            facts[("STS", "has_country_flag", "STP_pc_nod_crisis")] = True
+            self.assertTrue(matches_conditions(gate, facts, "STS"), focus_id)
+
+    def test_pending_package_recovers_after_all_focus_and_settlement_callers_finished(self) -> None:
+        periodic = block(block(entries(ON_ACTIONS), "on_actions"), "on_weekly_STS")
+        facts = package_facts()
+        facts.update({
+            ("STS", "has_completed_focus", "STP_pc_lib_transition"): True,
+            ("STS", "has_completed_focus", "STP_pc_lib_independent_gov"): True,
+            ("STS", "has_country_flag", "STP_pc_lib_package_pending"): True,
+            ("STS", "variable", "STP_pc_lib_package_tag"): 1,
+            ("STS", "has_variable", "STP_pc_lib_package_tag"): True,
+            ("STS", "has_country_flag", "STP_pc_lib_val_won"): True,
+            ("STS", "has_country_flag", "STP_pc_lib_nod_won"): True,
+            ("STS", "variable", "STP_pc_settle_opponent"): 2,
+            ("STS", "variable", "STP_pc_settle_result"): 1,
+        })
+        dispatched = []
+        execute_package_effects(block(entries(EFFECTS), "STP_pc_clear_settlement"), facts, dispatched)
+        self.assertEqual(dispatched, [], "VAL still owns the open offer when NOD settles")
+        facts[("VAL", "exists", "yes")] = False
+        # Only the native periodic entry point remains; no focus or answer is forced.
+        execute_package_effects(block(periodic, "effect"), facts, dispatched)
+        self.assertEqual(dispatched, [("NOD", "ADISCORD_STP_pc.11")])
+        self.assertEqual(facts[("STS", "variable", "STP_pc_lib_package_tag")], 2)
+        execute_package_effects(block(periodic, "effect"), facts, dispatched)
+        self.assertEqual(len(dispatched), 1, "a live NOD card must not be reissued")
+        execute_package_effects(option_by_name("ADISCORD_STP_pc.11", "ADISCORD_STP_pc.11.a"), facts, dispatched, "NOD")
+        before = dict(facts)
+        execute_package_effects(block(periodic, "effect"), facts, dispatched)
+        self.assertEqual(facts, before)
+        self.assertEqual(len(dispatched), 1)
+        self.assertNotIn(("STS", "has_country_flag", "STP_pc_lib_package_pending"), facts)
+
+    def test_package_recovery_is_scoped_to_an_existing_sts_with_a_pending_receipt(self) -> None:
+        periodic = block(block(entries(ON_ACTIONS), "on_actions"), "on_weekly_STS")
+        self.assertFalse(any(entry.key in {"every_country", "every_possible_country"} for entry in walk(periodic)))
+        for exists, pending in ((True, False), (False, False), (False, True)):
+            with self.subTest(exists=exists, pending=pending):
+                facts = package_facts()
+                facts.update({
+                    ("STS", "exists", "yes"): exists,
+                    ("STS", "has_country_flag", "STP_pc_lib_package_pending"): pending,
+                    ("STS", "has_country_flag", "STP_pc_lib_val_won"): True,
+                })
+                before, dispatched = dict(facts), []
+                execute_package_effects(block(periodic, "effect"), facts, dispatched)
+                self.assertEqual(facts, before)
+                self.assertEqual(dispatched, [])
+
     def test_eighty_focuses_sit_on_the_resistance_war_tree(self) -> None:
         trees = [entry.value for entry in entries(FOCUS) if entry.key == "focus_tree"]
         war = next(tree for tree in trees if scalar(tree, "id") == "STP_cw_focus")
