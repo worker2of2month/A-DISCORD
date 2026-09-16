@@ -278,6 +278,20 @@ STP_region_has_detectable_assets = {
 	}
 }
 
+# STATE: neighbour belongs to another Stelander war participant, including before hostilities.
+STP_cw_state_faces_rival = {
+	any_neighbor_state = {
+		NOT = { is_owned_by = ROOT }
+		OR = {
+			is_owned_by = STP
+			is_owned_by = STS
+			is_owned_by = SRP
+			is_owned_by = VAL
+			is_owned_by = NOD
+		}
+	}
+}
+
 STP_cw_region_goes_to_republics = {
 	OR = {
 		state = 43

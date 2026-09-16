@@ -248,7 +248,7 @@ class CivilWarContracts(unittest.TestCase):
                                    for scope, e in selected_effects(report, before)
                                    if e.key in ("set_variable", "add_to_variable")
                                    and scalar(e.value, "var") == "STP_cw_report_party_brigades")
-                    self.assertEqual(planned, 30 if owner == "STP" else 28)
+                    self.assertEqual(planned, 18 if owner == "STP" else 16)
                     self.assertEqual(forecast, planned)
 
     def test_entry_cannot_bypass_elections_or_missing_anchors(self):
@@ -290,47 +290,58 @@ class CivilWarContracts(unittest.TestCase):
                          "independent republics are outside the party-resistance war")
         self.assertNotIn("start_civil_war", start)
 
-    def test_mobilization_pays_real_four_battalion_cost_before_creation(self):
+    def test_mobilization_pays_real_six_battalion_cost_before_creation(self):
         effect = block(self.effects, "STP_cw_mobilize_brigade")
-        self.assertIn("NOT = { has_manpower < 4000 }", effect)
-        self.assertIn("NOT = { has_equipment = { infantry_equipment < 320 } }", effect)
-        self.assertLess(effect.index("add_manpower = -4000"), effect.index("create_unit"))
+        spawn = block(self.effects, "STP_cw_create_territorial_brigade")
+        self.assertIn("NOT = { has_manpower < 6000 }", effect)
+        self.assertIn("NOT = { has_equipment = { infantry_equipment < 600 } }", effect)
+        self.assertLess(effect.index("add_manpower = -6000"), effect.index("STP_cw_create_territorial_brigade"))
         self.assertIn("STP_cw_pay_rifles = yes", effect)
-        self.assertLess(effect.index("STP_cw_pay_rifles = yes"), effect.index("add_manpower = -4000"))
+        self.assertLess(effect.index("STP_cw_pay_rifles = yes"), effect.index("add_manpower = -6000"))
         self.assertIn("limit = { has_country_flag = STP_cw_rifles_paid }", effect)
-        self.assertIn('division_template = \\"Stelander Territorial Brigade\\"', effect)
+        self.assertIn('division_template = \\"Stelander Territorial Brigade\\"', spawn)
         template = read("history/units/ADISCORD_STP_civil_war_templates.txt")
-        battalions = len(re.findall(r"\bADISCORD_militia\s*=", template))
-        self.assertEqual(battalions, 4)
-        unit = block(read("common/units/ADISCORD_land_units.txt"), "ADISCORD_militia")
-        self.assertEqual(battalions * int(re.search(r"manpower\s*=\s*(\d+)", unit)[1]), 4000)
-        self.assertEqual(battalions * int(re.search(r"infantry_equipment\s*=\s*(\d+)", unit)[1]), 320)
+        territorial = block(template, "division_template")
+        battalions = len(re.findall(r"\bADISCORD_territorial\s*=", territorial))
+        self.assertEqual(battalions, 6)
+        unit = block(read("common/units/ADISCORD_land_units.txt"), "ADISCORD_territorial")
+        self.assertEqual(battalions * int(re.search(r"manpower\s*=\s*(\d+)", unit)[1]), 6000)
+        self.assertEqual(battalions * int(re.search(r"infantry_equipment\s*=\s*(\d+)", unit)[1]), 600)
         self.assertNotIn("units =", template)
 
-    def test_paid_formation_templates_keep_fixed_composition_without_blocking_recruitment(self):
+    def test_wartime_field_templates_are_editable_except_kefreyt(self):
         templates = {scalar(e.value, "name"): e.value
                      for e in entries("history/units/ADISCORD_STP_civil_war_templates.txt")
                      if e.key == "division_template"}
         for name in ("Stelander Territorial Brigade", "Stelander Assault Division"):
             self.assertIn(name, templates)
             settings = {e.key: e.value for e in templates[name] if isinstance(e.value, str)}
-            locked = settings.get("is_locked", "no") == "yes"
-            with self.subTest(template=name, contract="fixed paid composition"):
-                self.assertTrue(locked,
-                                "editing the paid template changes the issued unit without changing its price")
-            with self.subTest(template=name, contract="ordinary recruitment"):
-                self.assertTrue(not locked or settings.get("force_allow_recruiting", "no") == "yes",
-                                "protecting the paid template must preserve ordinary recruitment")
+            self.assertNotEqual(settings.get("is_locked", "no"), "yes", name)
+            self.assertEqual(settings.get("force_allow_recruiting", "no"), "yes", name)
+        volunteer = {e.key: e.value for e in templates["Kefreyt Volunteer Division"] if isinstance(e.value, str)}
+        self.assertEqual(volunteer.get("is_locked"), "yes")
+        self.assertEqual(volunteer.get("force_allow_recruiting"), "no")
+        apply = block(self.effects, "STP_cw_apply_wartime_template_locks")
+        self.assertIn('division_template = "Stelander Territorial Brigade" is_locked = no', apply)
+        self.assertIn('division_template = "Stelander Assault Division" is_locked = no', apply)
+        self.assertIn('division_template = "Kefreyt Volunteer Division" is_locked = yes', apply)
+        self.assertIn('division_template = "Kefreyt Contract Infantry" is_locked = yes', apply)
+        self.assertIn("ADISCORD_STP_unlock_regular_army_templates = yes", apply)
+        for name in ("STP_cw_prepare_successor", "STP_cw_start"):
+            body = block(self.effects, name)
+            self.assertLess(body.index("load_oob = ADISCORD_STP_civil_war_templates"),
+                            body.index("STP_cw_apply_wartime_template_locks = yes"), name)
+            self.assertNotIn("ADISCORD_STP_unlock_regular_army_templates = yes", body)
 
     def test_brigade_order_rejects_fractional_shortfall_before_charging_pp(self):
         order = ast_block(ast_block(entries("common/decisions/ADISCORD_STP_decisions.txt"),
                                     "STP_cw_war_council"), "STP_cw_raise_territorial_brigade")
         gate = ast_block(order, "available")
-        for manpower, expected in ((3999, False), (3999.5, False), (4000, True), (4001, True)):
+        for manpower, expected in ((5999, False), (5999.5, False), (6000, True), (6001, True)):
             facts = {
                 ("STP", "has_completed_focus", "STP_cw_mobilization_register"): True,
                 ("STP", "numeric", "has_manpower"): manpower,
-                ("STP", "equipment", "infantry_equipment"): 320,
+                ("STP", "equipment", "infantry_equipment"): 600,
                 ("STP", "owns_state", "28"): True,
                 ("STP", "controls_state", "28"): True,
             }
@@ -380,8 +391,8 @@ class CivilWarContracts(unittest.TestCase):
         self.assertEqual([call.value for call in allocator_calls], ["yes", "yes"])
         self.assertNotRegex(block(self.effects, "STP_cw_allocate_formation_reserves"), r"\$[A-Za-z_]+\$")
         for call, expected in zip(allocator_calls, (
-            {"STP_cw_input_pool": "manpower", "STP_cw_input_light": "4000", "STP_cw_input_heavy": "7900"},
-            {"STP_cw_input_pool": "num_equipment@infantry_equipment", "STP_cw_input_light": "320", "STP_cw_input_heavy": "610"},
+            {"STP_cw_input_pool": "manpower", "STP_cw_input_light": "6000", "STP_cw_input_heavy": "7900"},
+            {"STP_cw_input_pool": "num_equipment@infantry_equipment", "STP_cw_input_light": "600", "STP_cw_input_heavy": "610"},
         )):
             inputs = body[body.index(call) - 3:body.index(call)]
             self.assertEqual([e.key for e in inputs], ["set_temp_variable"] * 3)
@@ -402,7 +413,7 @@ class CivilWarContracts(unittest.TestCase):
         report_base = {tag: float(next(scalar(e.value, "value") for e in report
                                       if e.key == "set_variable" and scalar(e.value, "var") == name))
                        for tag, name in report_names.items()}
-        self.assertEqual(report_base, {"STP": 28, "STS": 26})
+        self.assertEqual(report_base, {"STP": 16, "STS": 14})
 
         # This interpreter only covers the arithmetic slice above. Report outputs
         # are inputs, so odd cohort counts also exercise shortage boundaries.
@@ -520,24 +531,25 @@ class CivilWarContracts(unittest.TestCase):
             return manpower, stock, aircraft
 
         totals = (0, .25, .75, 17, 319.999, 320, 320.001, 3999.5, 3999.999, 4000, 4000.001, 4000.5,
-                  19660, 26640, 29733.6, 32983.6, 100003, 223603, 335199.999, 335200, 335200.001,
+                  5999.5, 6000, 6000.5, 19660, 26640, 29733.6, 32983.6, 100003, 223603,
+                  334799.999, 334800, 334800.001, 335199.999, 335200, 335200.001,
                   393240, 399200, 1000000)
         for winner, shares, plan, air_share in (
-            (None, {"STP": .4, "STS": .4, "SRP": .2}, {"STP": 28, "STS": 26, "SRP": 14}, .4),
-            ("shabrat", {"STP": .3, "STS": .5, "SRP": .2}, {"STP": 26, "STS": 28, "SRP": 14}, .5),
-            ("party", {"STP": .5, "STS": .3, "SRP": .2}, {"STP": 30, "STS": 24, "SRP": 14}, .3),
-            ("limited", {"STP": .16, "STS": .64, "SRP": .2}, {"STP": 8, "STS": 28, "SRP": 14}, .8),
+            (None, {"STP": .4, "STS": .4, "SRP": .2}, {"STP": 16, "STS": 14, "SRP": 10}, .4),
+            ("shabrat", {"STP": .3, "STS": .5, "SRP": .2}, {"STP": 14, "STS": 16, "SRP": 10}, .5),
+            ("party", {"STP": .5, "STS": .3, "SRP": .2}, {"STP": 18, "STS": 12, "SRP": 10}, .3),
+            ("limited", {"STP": .16, "STS": .64, "SRP": .2}, {"STP": 5, "STS": 16, "SRP": 10}, .8),
         ):
-            heavy_plan = {"STP": 2 if winner == "limited" else 4, "STS": 4, "SRP": 0}
-            base_claim = {tag: Fraction(plan[tag] * 4000 + heavy_plan[tag] * 7900) for tag in plan}
+            heavy_plan = {"STP": 3 if winner == "limited" else 6, "STS": 6, "SRP": 0}
+            base_claim = {tag: Fraction(plan[tag] * 6000 + heavy_plan[tag] * 7900) for tag in plan}
             self.assertEqual(tuple(base_claim.values()), {
-                None: (143600, 135600, 56000), "shabrat": (135600, 143600, 56000),
-                "party": (151600, 127600, 56000), "limited": (47800, 143600, 56000),
+                None: (143400, 131400, 60000), "shabrat": (131400, 143400, 60000),
+                "party": (155400, 119400, 60000), "limited": (53700, 143400, 60000),
             }[winner])
             for party in range(9):
                 for resistance in range(9):
                     prepared = {"STP": party, "STS": resistance}
-                    prepared_claim = {tag: Fraction(prepared.get(tag, 0) * 4000) for tag in plan}
+                    prepared_claim = {tag: Fraction(prepared.get(tag, 0) * 6000) for tag in plan}
                     required = sum(prepared_claim.values())
                     full_plan = required + sum(base_claim.values())
                     boundaries = tuple(v for n in (required, full_plan) for v in (n - Fraction(1, 1000), n, n + Fraction(1, 1000)) if v >= 0)
@@ -552,8 +564,8 @@ class CivilWarContracts(unittest.TestCase):
                             for tag in shares:
                                 self.assertGreaterEqual(manpower[tag], 0)
                                 self.assertGreaterEqual(stock[tag], 0)
-                            rifle_prepared = {tag: Fraction(prepared.get(tag, 0) * 320) for tag in plan}
-                            rifle_base = {tag: Fraction(plan[tag] * 320 + heavy_plan[tag] * 610) for tag in plan}
+                            rifle_prepared = {tag: Fraction(prepared.get(tag, 0) * 600) for tag in plan}
+                            rifle_base = {tag: Fraction(plan[tag] * 600 + heavy_plan[tag] * 610) for tag in plan}
                             rifle_paid_preparation = min(total, sum(rifle_prepared.values()))
                             rifle_preparation_scale = (rifle_paid_preparation / sum(rifle_prepared.values())
                                                        if sum(rifle_prepared.values()) else 0)
@@ -618,8 +630,8 @@ class CivilWarContracts(unittest.TestCase):
                     calls = list(selected_effects(body, context))
                     with self.subTest(winner=winner, party_sources=party, resistance_sources=resistance):
                         self.assertEqual(sum(scope == "STP" and e.key == "STP_cw_mobilize_assault_division" for scope, e in calls),
-                                         2 if winner == "limited" else 4)
-                        self.assertEqual(sum(scope == "STS" and e.key == "STP_cw_mobilize_assault_division" for scope, e in calls), 4)
+                                         3 if winner == "limited" else 6)
+                        self.assertEqual(sum(scope == "STS" and e.key == "STP_cw_mobilize_assault_division" for scope, e in calls), 6)
                         for tag, count in (("STP", party), ("STS", resistance), ("SRP", 0)):
                             actual = [e for scope, e in calls if scope == tag and e.key == "STP_cw_mobilize_brigade"]
                             self.assertEqual(len(actual), plan[tag] + 2 * count)
@@ -769,7 +781,7 @@ class CivilWarContracts(unittest.TestCase):
                             or scalar(ast_block(f, "allow_branch"), "tag") == tag)]
             points = [(int(scalar(f, "x")), int(scalar(f, "y"))) for f in visible]
             self.assertEqual(len(points), len(set(points)), tag)
-            self.assertLessEqual(max(x for x, _ in points) - min(x for x, _ in points), 4, tag)
+            self.assertLessEqual(max(x for x, _ in points) - min(x for x, _ in points), 5, tag)
             for x in {x for x, _ in points}:
                 rows = sorted(y for px, y in points if px == x)
                 self.assertTrue(all(b - a >= 1 for a, b in zip(rows, rows[1:])), tag)
@@ -789,12 +801,15 @@ class CivilWarContracts(unittest.TestCase):
 
     def test_mobilization_keeps_a_capital_garrison_and_uses_controlled_territory(self):
         helper = block(self.effects, "STP_cw_mobilize_brigade")
-        self.assertIn("num_divisions < 4", helper)
+        spawn = block(self.effects, "STP_cw_create_territorial_brigade")
+        self.assertIn("num_divisions < 3", helper)
         self.assertIn("is_owned_by = PREV is_controlled_by = PREV", helper)
-        self.assertIn("create_unit =", block(helper, "random_owned_controlled_state"))
-        self.assertEqual(helper.count("owner = PREV"), 2)
-        self.assertEqual(helper.count("allow_spawning_on_enemy_provs = no"), 2)
-        self.assertNotIn("prioritize_location", helper)
+        self.assertIn("STP_cw_state_faces_rival = yes", helper)
+        self.assertIn("create_unit =", spawn)
+        self.assertIn("owner = PREV", spawn)
+        self.assertIn("allow_spawning_on_enemy_provs = no", spawn)
+        self.assertGreaterEqual(helper.count("STP_cw_create_territorial_brigade = yes"), 3)
+        self.assertNotIn("prioritize_location", helper + spawn)
 
     def test_newborn_engine_manpower_is_returned_before_reallocation(self):
         setup = block(self.effects, "STP_cw_prepare_successor")
@@ -1613,15 +1628,15 @@ class NorthernCampaignContracts(unittest.TestCase):
                                  (state, "is_owned_by", actual_owner): True}
                         calls = list(selected_effects(start, after))
                         for tag, report_name, report_base, actual_base in (
-                            ("STP", "STP_cw_report_party_brigades", 28, 8 if limited else 28),
-                            ("STS", "STP_cw_report_resistance_brigades", 26, 28 if limited else 26),
+                            ("STP", "STP_cw_report_party_brigades", 16, 5 if limited else 16),
+                            ("STS", "STP_cw_report_resistance_brigades", 14, 16 if limited else 14),
                         ):
                             actual = sum(scope == tag and e.key == "STP_cw_mobilize_brigade" for scope, e in calls)
                             self.assertEqual(forecast[report_name] - report_base, actual - actual_base,
                                              "the forecast's paid extra cohorts must follow the actual transferred state")
                         if limited and state in ("2", "29"):
-                            self.assertEqual(forecast["STP_cw_report_resistance_brigades"] - 26, 2)
-                            self.assertEqual(forecast["STP_cw_report_party_brigades"] - 28, 0)
+                            self.assertEqual(forecast["STP_cw_report_resistance_brigades"] - 14, 2)
+                            self.assertEqual(forecast["STP_cw_report_party_brigades"] - 16, 0)
 
     def test_every_living_northern_front_opens_early_uprising_until_its_defeat(self):
         busy = self.expand(ast_block(self.triggers, "STP_cw_nod_busy_in_north"))
@@ -2485,8 +2500,8 @@ class WartimeProgramContracts(unittest.TestCase):
                     self.assertEqual(current[(tag, "variable", receipt)], 0)
                     if program is training:
                         self.assertEqual(sum(e.key == "random_owned_controlled_state" for _, e in writes), 2 if can_deliver else 0)
-                        self.assertEqual([e.value for _, e in writes if e.key == "add_manpower"], [] if can_deliver else ["8000"])
-                        self.assertEqual([scalar(e.value, "amount") for _, e in writes if e.key == "add_equipment_to_stockpile"], [] if can_deliver else ["640"])
+                        self.assertEqual([e.value for _, e in writes if e.key == "add_manpower"], [] if can_deliver else ["12000"])
+                        self.assertEqual([scalar(e.value, "amount") for _, e in writes if e.key == "add_equipment_to_stockpile"], [] if can_deliver else ["1200"])
                     else:
                         self.assertEqual(sum(e.key == "add_building_construction" for _, e in writes), int(can_deliver))
                         self.assertEqual(sum(e.key == "ADISCORD_economy_receive_50" for _, e in writes), int(not can_deliver))
@@ -2529,9 +2544,9 @@ class WartimeProgramContracts(unittest.TestCase):
                     with self.subTest(tag=tag, templates_loaded=loaded, paid_training=paid):
                         self.assertTrue(facts.get((tag, "has_country_flag", "STP_cw_postwar")))
                         self.assertEqual(facts[ledger], 0)
-                        self.assertEqual([e.value for _, e in writes if e.key == "add_manpower"], ["8000"] if paid else [])
+                        self.assertEqual([e.value for _, e in writes if e.key == "add_manpower"], ["12000"] if paid else [])
                         self.assertEqual([scalar(e.value, "amount") for _, e in writes if e.key == "add_equipment_to_stockpile"],
-                                         ["640"] if paid else [])
+                                         ["1200"] if paid else [])
                         self.assertFalse(any(e.key in ("create_unit", "random_owned_controlled_state") for _, e in writes))
                         locks = [(scope, scalar(e.value, "division_template"), scalar(e.value, "is_locked"))
                                  for scope, e in writes if e.key == "set_division_template_lock"]
@@ -2579,14 +2594,14 @@ class WartimeProgramContracts(unittest.TestCase):
         self.assertEqual(scalar(decision, "cost"), "0")
         prices = ast_block(decision, "custom_cost_trigger")
         facts = {("STS", "numeric", "has_political_power"): 40,
-                 ("STS", "numeric", "has_manpower"): 8000,
-                 ("STS", "equipment", "infantry_equipment"): 640}
+                 ("STS", "numeric", "has_manpower"): 12000,
+                 ("STS", "equipment", "infantry_equipment"): 1200}
         self.assertTrue(matches_conditions(prices, facts, "STS"))
         for key in facts:
             self.assertFalse(matches_conditions(prices, {**facts, key: facts[key] - .5}, "STS"), key)
         start = list(selected_effects(ast_block(decision, "complete_effect"),
                                      {**facts, ("STS", "has_country_flag", "STP_cw_rifles_paid"): True}, "STS"))
-        self.assertEqual([e.value for _, e in start if e.key == "add_manpower"], ["-8000"])
+        self.assertEqual([e.value for _, e in start if e.key == "add_manpower"], ["-12000"])
         self.assertEqual([scalar(e.value, "value") for _, e in start if e.key == "set_variable"], ["2"])
         finish = ast_block(self.effects, "STP_cw_finish_reserve_training")
         refund = ast_block(self.effects, "STP_cw_refund_reserve_training")
@@ -2605,8 +2620,8 @@ class WartimeProgramContracts(unittest.TestCase):
                     unit = ast_block(spawn.value, "create_unit")
                     self.assertIn("start_experience_factor = 0.3", scalar(unit, "division"))
             returned = list(selected_effects(refund, status, "STS"))
-            self.assertEqual([e.value for _, e in returned if e.key == "add_manpower"], ["8000"] if paid else [])
-            self.assertEqual([scalar(e.value, "amount") for _, e in returned if e.key == "add_equipment_to_stockpile"], ["640"] if paid else [])
+            self.assertEqual([e.value for _, e in returned if e.key == "add_manpower"], ["12000"] if paid else [])
+            self.assertEqual([scalar(e.value, "amount") for _, e in returned if e.key == "add_equipment_to_stockpile"], ["1200"] if paid else [])
         self.assertEqual(scalar(ast_block(decision, "cancel_effect"), "STP_cw_refund_reserve_training"), "yes")
 
     def test_arsenal_construction_uses_one_active_project_and_rechecks_the_selected_state(self):
@@ -3258,7 +3273,7 @@ class PostwarFocusContracts(unittest.TestCase):
     def test_territorial_roles_follow_each_countrys_current_war(self):
         templates = entries("common/ai_templates/ADISCORD_land_templates.txt")
         garrison = ast_block(ast_block(ast_block(templates, "ADISCORD_garrison_templates"), "ADISCORD_garrison_levy"), "enable")
-        frontline = ast_block(ast_block(ast_block(templates, "ADISCORD_territorial_templates"), "ADISCORD_vorkerland_northern_line_militia"), "enable")
+        frontline = ast_block(ast_block(ast_block(templates, "ADISCORD_territorial_templates"), "ADISCORD_stelander_line_brigade"), "enable")
         policy = ast_block(ast_block(entries("common/ai_strategy/ADISCORD_STP_civil_war.txt"), "STP_cw_territorial_army"), "enable")
         for tag in ("STP", "STS", "SRP"):
             for own_war in (False, True):

@@ -1558,7 +1558,10 @@ STP_cw_war_council = {
 			add_command_power = -25
 			add_timed_idea = { idea = STP_cw_static_defence days = 35 }
 		}
-		ai_will_do = { base = 10 }
+		ai_will_do = {
+			base = 2
+			modifier = { factor = 0 enemies_strength_ratio < 1 }
+		}
 	}
 
 	STP_cw_defend_western_frontier = {
@@ -1594,8 +1597,8 @@ STP_cw_war_council = {
 		visible = { has_country_flag = STP_cw_participant NOT = { has_country_flag = STP_cw_postwar } STP_cw_can_rearm = yes }
 		available = {
 			has_completed_focus = STP_cw_mobilization_register
-			NOT = { has_manpower < 4000 }
-			NOT = { has_equipment = { infantry_equipment < 320 } }
+			NOT = { has_manpower < 6000 }
+			NOT = { has_equipment = { infantry_equipment < 600 } }
 			any_owned_state = { is_controlled_by = PREV }
 		}
 		cost = 25
@@ -1614,7 +1617,7 @@ STP_cw_war_council = {
 			modifier = {
 				factor = 0
 				OR = {
-					has_manpower < 12000
+					has_manpower < 18000
 					NOT = { stockpile_ratio = { archetype = infantry_equipment ratio > 0.10 } }
 				}
 			}
@@ -1671,8 +1674,8 @@ STP_cw_war_council = {
 		custom_cost_text = STP_cw_reserve_training_cost
 		custom_cost_trigger = {
 			NOT = { has_political_power < 40 }
-			NOT = { has_manpower < 8000 }
-			NOT = { has_equipment = { infantry_equipment < 640 } }
+			NOT = { has_manpower < 12000 }
+			NOT = { has_equipment = { infantry_equipment < 1200 } }
 		}
 		cost = 0
 		days_remove = 21
@@ -1682,12 +1685,12 @@ STP_cw_war_council = {
 		complete_effect = {
 			custom_effect_tooltip = STP_cw_reserve_training_start_tt
 			hidden_effect = {
-				set_temp_variable = { var = STP_cw_rifle_cost value = 640 }
+				set_temp_variable = { var = STP_cw_rifle_cost value = 1200 }
 				STP_cw_pay_rifles = yes
 				if = {
 					limit = { has_country_flag = STP_cw_rifles_paid }
 					add_political_power = -40
-					add_manpower = -8000
+					add_manpower = -12000
 					set_variable = { var = STP_cw_training_cohorts value = 2 }
 				}
 			}
@@ -1702,7 +1705,7 @@ STP_cw_war_council = {
 			modifier = {
 				factor = 0
 				OR = {
-					has_manpower < 16000
+					has_manpower < 24000
 					NOT = { stockpile_ratio = { archetype = infantry_equipment ratio > 0.10 } }
 				}
 			}

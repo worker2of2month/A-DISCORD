@@ -328,6 +328,26 @@ ADISCORD_STP_unlock_regular_army_templates = {
 	}
 }
 
+# After load_oob. Only Kefreyt-sent templates stay locked until postwar delete.
+STP_cw_apply_wartime_template_locks = {
+	ADISCORD_STP_unlock_regular_army_templates = yes
+	if = {
+		limit = { has_template = "Capital Guard" }
+		set_division_template_lock = { division_template = "Capital Guard" is_locked = no }
+	}
+	set_division_template_lock = { division_template = "Stelander Territorial Brigade" is_locked = no }
+	set_division_force_allow_recruiting = { division_template = "Stelander Territorial Brigade" force_allow_recruiting = yes }
+	set_division_template_lock = { division_template = "Stelander Assault Division" is_locked = no }
+	set_division_force_allow_recruiting = { division_template = "Stelander Assault Division" force_allow_recruiting = yes }
+	set_division_template_lock = { division_template = "Kefreyt Volunteer Division" is_locked = yes }
+	set_division_force_allow_recruiting = { division_template = "Kefreyt Volunteer Division" force_allow_recruiting = no }
+	if = {
+		limit = { has_template = "Kefreyt Contract Infantry" }
+		set_division_template_lock = { division_template = "Kefreyt Contract Infantry" is_locked = yes }
+		set_division_force_allow_recruiting = { division_template = "Kefreyt Contract Infantry" force_allow_recruiting = no }
+	}
+}
+
 # Preparation calendar, cumulative modifiers and focus support (COUNTRY)
 
 # Prewar country scope. Death opens elections; a prepared uprising starts war.
@@ -670,8 +690,8 @@ STP_cw_assess_search_evidence = {
 
 # COUNTRY: forecast formations using the mobilisation conditions in STP_cw_start.
 STP_cw_refresh_army_report = {
-	set_variable = { var = STP_cw_report_party_brigades value = 28 }
-	set_variable = { var = STP_cw_report_resistance_brigades value = 26 }
+	set_variable = { var = STP_cw_report_party_brigades value = 16 }
+	set_variable = { var = STP_cw_report_resistance_brigades value = 14 }
 	# Early-uprising baseline; the election result transfers two brigades and 10% of reserves.
 	if = { limit = { has_country_flag = STP_cw_party_reserve_ready } add_to_variable = { var = STP_cw_report_party_brigades value = 2 } }
 	if = { limit = { 2 = { is_owned_by = STP has_state_flag = STP_party_reinforced_garrison_asset NOT = { STP_cw_region_goes_to_resistance = yes } NOT = { STP_cw_region_goes_to_republics = yes } } } add_to_variable = { var = STP_cw_report_party_brigades value = 2 } }
@@ -1434,43 +1454,47 @@ STP_cw_pay_rifles = {
 	}
 }
 
-# COUNTRY scope. Four ADISCORD_militia: 4 * (1000 manpower + 80 rifles).
+# COUNTRY scope. Six ADISCORD_territorial: 6 * (1000 manpower + 100 rifles).
 # create_unit supplies its own contents: debit the real pools first.
 STP_cw_mobilize_brigade = {
 	if = {
 		limit = {
 			any_owned_state = { is_controlled_by = PREV }
-			NOT = { has_manpower < 4000 }
-			NOT = { has_equipment = { infantry_equipment < 320 } }
+			NOT = { has_manpower < 6000 }
+			NOT = { has_equipment = { infantry_equipment < 600 } }
 		}
-		set_temp_variable = { var = STP_cw_rifle_cost value = 320 }
+		set_temp_variable = { var = STP_cw_rifle_cost value = 600 }
 		STP_cw_pay_rifles = yes
 		if = {
 			limit = { has_country_flag = STP_cw_rifles_paid }
-			add_manpower = -4000
-			# Keep a capital garrison; distribute the rest over the actual territory.
+			add_manpower = -6000
+			# Keep a capital garrison; later brigades go to the actual front.
 			# The fallback also permits wartime mobilisation after losing the capital.
 			if = {
-				limit = { num_divisions < 4 capital_scope = { is_owned_by = PREV is_controlled_by = PREV } }
-				capital_scope = {
-					create_unit = {
-						division = "division_template = \"Stelander Territorial Brigade\" start_experience_factor = 0.1 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
-						owner = PREV
-						allow_spawning_on_enemy_provs = no
-					}
+				limit = { num_divisions < 3 capital_scope = { is_owned_by = PREV is_controlled_by = PREV } }
+				capital_scope = { STP_cw_create_territorial_brigade = yes }
+			}
+			else_if = {
+				limit = { any_owned_state = { is_controlled_by = PREV STP_cw_state_faces_rival = yes } }
+				random_owned_controlled_state = {
+					limit = { STP_cw_state_faces_rival = yes }
+					STP_cw_create_territorial_brigade = yes
 				}
 			}
 			else = {
-				random_owned_controlled_state = {
-					create_unit = {
-						division = "division_template = \"Stelander Territorial Brigade\" start_experience_factor = 0.1 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
-						owner = PREV
-						allow_spawning_on_enemy_provs = no
-					}
-				}
+				random_owned_controlled_state = { STP_cw_create_territorial_brigade = yes }
 			}
-			log = "[STP_CW] [THIS.GetTag] brigade paid: 4000 manpower, 320 rifles; remaining manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]"
+			log = "[STP_CW] [THIS.GetTag] brigade paid: 6000 manpower, 600 rifles; remaining manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]"
 		}
+	}
+}
+
+# STATE: owner is PREV. Used only after the brigade has been paid.
+STP_cw_create_territorial_brigade = {
+	create_unit = {
+		division = "division_template = \"Stelander Territorial Brigade\" start_experience_factor = 0.1 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+		owner = PREV
+		allow_spawning_on_enemy_provs = no
 	}
 }
 
@@ -1687,12 +1711,24 @@ STP_cw_remove_kefreyt_volunteers = {
 
 # COUNTRY: call only after payment or consumption of one prepared escrow entry.
 STP_cw_deploy_assault_division = {
-	random_owned_controlled_state = {
-		create_unit = {
-			division = "division_template = \"Stelander Assault Division\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
-			owner = PREV
-			allow_spawning_on_enemy_provs = no
+	if = {
+		limit = { any_owned_state = { is_controlled_by = PREV STP_cw_state_faces_rival = yes } }
+		random_owned_controlled_state = {
+			limit = { STP_cw_state_faces_rival = yes }
+			STP_cw_create_assault_division = yes
 		}
+	}
+	else = {
+		random_owned_controlled_state = { STP_cw_create_assault_division = yes }
+	}
+}
+
+# STATE: owner is PREV.
+STP_cw_create_assault_division = {
+	create_unit = {
+		division = "division_template = \"Stelander Assault Division\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+		owner = PREV
+		allow_spawning_on_enemy_provs = no
 	}
 }
 
@@ -1709,8 +1745,8 @@ STP_cw_refund_reserve_training = {
 	if = {
 		limit = { hidden_trigger = { check_variable = { var = STP_cw_training_cohorts value = 2 compare = equals } } }
 		hidden_effect = { clear_variable = STP_cw_training_cohorts }
-		add_manpower = 8000
-		add_equipment_to_stockpile = { type = infantry_equipment amount = 640 }
+		add_manpower = 12000
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 1200 }
 	}
 }
 
@@ -1721,11 +1757,24 @@ STP_cw_finish_reserve_training = {
 		for_loop_effect = {
 			end = 2
 			value = STP_cw_formation_index
-			random_owned_controlled_state = {
-				create_unit = {
-					division = "division_template = \"Stelander Territorial Brigade\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
-					owner = PREV
-					allow_spawning_on_enemy_provs = no
+			if = {
+				limit = { any_owned_state = { is_controlled_by = PREV STP_cw_state_faces_rival = yes } }
+				random_owned_controlled_state = {
+					limit = { STP_cw_state_faces_rival = yes }
+					create_unit = {
+						division = "division_template = \"Stelander Territorial Brigade\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						owner = PREV
+						allow_spawning_on_enemy_provs = no
+					}
+				}
+			}
+			else = {
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "division_template = \"Stelander Territorial Brigade\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						owner = PREV
+						allow_spawning_on_enemy_provs = no
+					}
 				}
 			}
 		}
@@ -1733,7 +1782,7 @@ STP_cw_finish_reserve_training = {
 	else = { STP_cw_refund_reserve_training = yes }
 }
 
-# Close fixed-price orders before allowing changes to their templates.
+# Close fixed-price orders. Field templates were already editable in wartime.
 STP_cw_finish_mobilization = {
 	set_country_flag = STP_cw_postwar
 	if = { limit = { tag = SRP NOT = { has_war_with = VAL } } remove_ideas = { SRP_emergency_command SRP_council_supply } }
@@ -1817,7 +1866,10 @@ STP_cw_prepare_successor = {
 	else_if = { limit = { STP = { has_idea = scraping_the_barrel } } add_ideas = scraping_the_barrel }
 	load_oob = ADISCORD_STP_civil_war_templates
 	set_country_flag = STP_cw_templates_loaded
+	STP_cw_apply_wartime_template_locks = yes
+	set_country_flag = ADISCORD_economy_important_country
 	ADISCORD_economy_initialize_country = yes
+	ADISCORD_economy_set_simulation_tier = yes
 	STP_cw_initialize_focus_modifiers = yes
 	# Record and clear the successor's manpower pool before allocating shared reserves.
 	log = "[STP_CW] newborn [THIS.GetTag] engine manpower=[?manpower]"
@@ -2021,10 +2073,10 @@ STP_cw_begin_hostilities = {
 STP_cw_allocate_formation_reserves = {
 	set_temp_variable = { var = STP_cw_allocation_pool value = STP_cw_input_pool }
 	set_temp_variable = { var = STP_cw_party_prepared_reserve value = STP_cw_report_party_brigades }
-	subtract_from_temp_variable = { var = STP_cw_party_prepared_reserve value = 28 }
+	subtract_from_temp_variable = { var = STP_cw_party_prepared_reserve value = 16 }
 	multiply_temp_variable = { var = STP_cw_party_prepared_reserve value = STP_cw_input_light }
 	set_temp_variable = { var = STP_cw_resistance_prepared_reserve value = STP_cw_report_resistance_brigades }
-	subtract_from_temp_variable = { var = STP_cw_resistance_prepared_reserve value = 26 }
+	subtract_from_temp_variable = { var = STP_cw_resistance_prepared_reserve value = 14 }
 	multiply_temp_variable = { var = STP_cw_resistance_prepared_reserve value = STP_cw_input_light }
 	set_temp_variable = { var = STP_cw_prepared_reserve value = STP_cw_party_prepared_reserve }
 	add_to_temp_variable = { var = STP_cw_prepared_reserve value = STP_cw_resistance_prepared_reserve }
@@ -2037,28 +2089,28 @@ STP_cw_allocate_formation_reserves = {
 		subtract_from_temp_variable = { var = STP_cw_resistance_prepared_reserve value = STP_cw_party_prepared_reserve }
 		set_temp_variable = { var = STP_cw_prepared_reserve value = STP_cw_allocation_pool }
 	}
-	set_temp_variable = { var = STP_cw_party_base_reserve value = 28 }
-	set_temp_variable = { var = STP_cw_resistance_base_reserve value = 26 }
-	set_temp_variable = { var = STP_cw_republics_base_reserve value = 14 }
-	set_temp_variable = { var = STP_cw_party_heavy_reserve value = 4 }
+	set_temp_variable = { var = STP_cw_party_base_reserve value = 16 }
+	set_temp_variable = { var = STP_cw_resistance_base_reserve value = 14 }
+	set_temp_variable = { var = STP_cw_republics_base_reserve value = 10 }
+	set_temp_variable = { var = STP_cw_party_heavy_reserve value = 6 }
 	set_temp_variable = { var = STP_cw_resistance_remainder_share value = 0.4 }
 	if = {
 		limit = { has_country_flag = STP_cw_limited_party_revolt }
-		set_temp_variable = { var = STP_cw_party_base_reserve value = 8 }
-		set_temp_variable = { var = STP_cw_resistance_base_reserve value = 28 }
-		set_temp_variable = { var = STP_cw_party_heavy_reserve value = 2 }
+		set_temp_variable = { var = STP_cw_party_base_reserve value = 5 }
+		set_temp_variable = { var = STP_cw_resistance_base_reserve value = 16 }
+		set_temp_variable = { var = STP_cw_party_heavy_reserve value = 3 }
 		set_temp_variable = { var = STP_cw_resistance_remainder_share value = 0.64 }
 	}
 	else_if = {
 		limit = { has_country_flag = STP_cw_shabrat_election_victory }
-		set_temp_variable = { var = STP_cw_party_base_reserve value = 26 }
-		set_temp_variable = { var = STP_cw_resistance_base_reserve value = 28 }
+		set_temp_variable = { var = STP_cw_party_base_reserve value = 14 }
+		set_temp_variable = { var = STP_cw_resistance_base_reserve value = 16 }
 		set_temp_variable = { var = STP_cw_resistance_remainder_share value = 0.5 }
 	}
 	else_if = {
 		limit = { has_country_flag = STP_cw_party_election_victory }
-		set_temp_variable = { var = STP_cw_party_base_reserve value = 30 }
-		set_temp_variable = { var = STP_cw_resistance_base_reserve value = 24 }
+		set_temp_variable = { var = STP_cw_party_base_reserve value = 18 }
+		set_temp_variable = { var = STP_cw_resistance_base_reserve value = 12 }
 		set_temp_variable = { var = STP_cw_resistance_remainder_share value = 0.3 }
 	}
 	multiply_temp_variable = { var = STP_cw_party_base_reserve value = STP_cw_input_light }
@@ -2066,7 +2118,7 @@ STP_cw_allocate_formation_reserves = {
 	multiply_temp_variable = { var = STP_cw_republics_base_reserve value = STP_cw_input_light }
 	multiply_temp_variable = { var = STP_cw_party_heavy_reserve value = STP_cw_input_heavy }
 	add_to_temp_variable = { var = STP_cw_party_base_reserve value = STP_cw_party_heavy_reserve }
-	set_temp_variable = { var = STP_cw_resistance_heavy_reserve value = 4 }
+	set_temp_variable = { var = STP_cw_resistance_heavy_reserve value = 6 }
 	multiply_temp_variable = { var = STP_cw_resistance_heavy_reserve value = STP_cw_input_heavy }
 	add_to_temp_variable = { var = STP_cw_resistance_base_reserve value = STP_cw_resistance_heavy_reserve }
 	set_temp_variable = { var = STP_cw_base_reserve value = STP_cw_party_base_reserve }
@@ -2151,7 +2203,7 @@ STP_cw_start = {
 		# Capture preparations before territorial ownership changes.
 		STP_cw_refresh_army_report = yes
 		set_temp_variable = { var = STP_cw_input_pool value = manpower }
-		set_temp_variable = { var = STP_cw_input_light value = 4000 }
+		set_temp_variable = { var = STP_cw_input_light value = 6000 }
 		set_temp_variable = { var = STP_cw_input_heavy value = 7900 }
 		STP_cw_allocate_formation_reserves = yes
 		set_variable = { var = STP_cw_republics_manpower value = STP_cw_allocation_republics }
@@ -2212,7 +2264,7 @@ STP_cw_start = {
 		# Apply the paid rifle-package shares to the native stockpile transfer so
 		# all equipment models and their producers remain intact. Aircraft split separately.
 		set_temp_variable = { var = STP_cw_input_pool value = num_equipment@infantry_equipment }
-		set_temp_variable = { var = STP_cw_input_light value = 320 }
+		set_temp_variable = { var = STP_cw_input_light value = 600 }
 		set_temp_variable = { var = STP_cw_input_heavy value = 610 }
 		STP_cw_allocate_formation_reserves = yes
 		set_temp_variable = { var = STP_cw_republics_stockpile_ratio value = 0.2 }
@@ -2261,7 +2313,7 @@ STP_cw_start = {
 		88 = { STP_cw_materialize_region_assets = yes }
 		load_oob = ADISCORD_STP_civil_war_templates
 		set_country_flag = STP_cw_templates_loaded
-		ADISCORD_STP_unlock_regular_army_templates = yes
+		STP_cw_apply_wartime_template_locks = yes
 		if = {
 			limit = { check_variable = { var = STP_cw_prepared_assault_divisions value = 0 compare = greater_than } }
 			STS = { for_loop_effect = { end = STP.STP_cw_prepared_assault_divisions value = STP_cw_formation_index STP_cw_deploy_assault_division = yes } }
@@ -2278,11 +2330,11 @@ STP_cw_start = {
 		if = { limit = { 45 = { is_owned_by = STP has_state_flag = STP_party_reinforced_garrison_asset } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 		if = {
 			limit = { has_country_flag = STP_cw_limited_party_revolt }
-			for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_assault_division = yes }
+			for_loop_effect = { end = 3 value = STP_cw_formation_index STP_cw_mobilize_assault_division = yes }
 		}
-		else = { for_loop_effect = { end = 4 value = STP_cw_formation_index STP_cw_mobilize_assault_division = yes } }
-		if = { limit = { has_country_flag = STP_cw_limited_party_revolt } for_loop_effect = { end = 8 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
-		else = { for_loop_effect = { end = 26 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
+		else = { for_loop_effect = { end = 6 value = STP_cw_formation_index STP_cw_mobilize_assault_division = yes } }
+		if = { limit = { has_country_flag = STP_cw_limited_party_revolt } for_loop_effect = { end = 5 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
+		else = { for_loop_effect = { end = 14 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 		if = { limit = { NOT = { has_country_flag = STP_cw_shabrat_election_victory } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 		if = { limit = { has_country_flag = STP_cw_party_election_victory } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 		STS = {
@@ -2290,13 +2342,13 @@ STP_cw_start = {
 			if = { limit = { 29 = { OR = { AND = { is_owned_by = STS has_state_flag = STP_resistance_garrison_asset } has_state_flag = STP_cw_garrison_evacuated } } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 			if = { limit = { STP = { has_country_flag = STP_cw_abila_reserve_ready } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 			if = { limit = { STP = { has_country_flag = STP_cw_local_recruits_ready } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
-			for_loop_effect = { end = 4 value = STP_cw_formation_index STP_cw_mobilize_assault_division = yes }
-			for_loop_effect = { end = 24 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes }
+			for_loop_effect = { end = 6 value = STP_cw_formation_index STP_cw_mobilize_assault_division = yes }
+			for_loop_effect = { end = 12 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes }
 			if = { limit = { STP = { NOT = { has_country_flag = STP_cw_party_election_victory } } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 			if = { limit = { STP = { has_country_flag = STP_cw_shabrat_election_victory } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 		}
 		SRP = {
-			for_loop_effect = { end = 14 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes }
+			for_loop_effect = { end = 10 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes }
 		}
 		2 = { clr_state_flag = STP_resistance_garrison_asset }
 		29 = { clr_state_flag = STP_resistance_garrison_asset }

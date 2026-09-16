@@ -42,6 +42,8 @@
  ADISCORD_naval_doctrine_subsurface_denial_salvage_torpedo_cells: "Salvage Torpedo Cells"
  ADISCORD_militia: "Militia"
  ADISCORD_militia_desc: "Rapidly raised rifle units with almost no automatic or squad weapons."
+ ADISCORD_territorial: "Territorial Infantry"
+ ADISCORD_territorial_desc: "Civil-war line battalions: rifle infantry without squad weapons, but without militia combat penalties."
  ADISCORD_assault_infantry: "Assault Infantry"
  ADISCORD_assault_infantry_desc: "Reinforced squads with a high density of automatic weapons and support equipment."
  ADISCORD_mechanized_infantry: "Mechanized Infantry"

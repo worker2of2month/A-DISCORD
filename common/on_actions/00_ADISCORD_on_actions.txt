@@ -121,6 +121,7 @@ on_actions = {
 			if = {
 				limit = { ADISCORD_economy_has_current_schema = yes }
 				ADISCORD_economy_update_postwar_demobilization = yes
+				ADISCORD_economy_refresh_war_participation_tier = yes
 				ADISCORD_economy_update_gui = yes
 			}
 		}
@@ -138,6 +139,7 @@ on_actions = {
 				# refresh instead of waiting up to a month for the menu to catch up.
 				ADISCORD_economy_recalculate_policy_modifiers = yes
 				ADISCORD_economy_refresh_after_budget_control_change = yes
+				ADISCORD_economy_refresh_war_participation_tier = yes
 			}
 		}
 	}

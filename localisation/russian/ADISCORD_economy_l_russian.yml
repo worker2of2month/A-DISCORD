@@ -136,7 +136,7 @@
  ADISCORD_economy.2.d: "Война закончилась, и страна автоматически возвращается к мирному режиму. Это не требует отдельного управления.\n\nЧто уже сделано\n- чрезвычайный военный бюджет снижен до штатного;\n- тотальная или военная экономика переведена на частичную мобилизацию;\n- чрезмерный призыв снижен до ограниченного.\n\nСледующие шесть месяцев люди и заказы будут возвращаться в гражданскую экономику. Базовое снижение военной усталости составит §G5 пунктов в месяц§! вместо 1, хотя недавние потери могут ослабить восстановление в первый месяц. Мирное строительство ускорится, но выпуск вооружений и поддержка войны временно снизятся. Точные эффекты показаны в подсказке военной усталости. Новая война немедленно остановит демобилизацию."
  ADISCORD_economy.2.a: "Вернуть страну к мирной жизни."
  ADISCORD_economy.3.t: "[GetADISCORDEconomyDebtNotificationKindLoc]"
- ADISCORD_economy.3.d: "[GetADISCORDEconomyDebtNotificationCauseLoc]\n\nСостояние: [GetADISCORDEconomyDebtNotificationStateLoc] ([?ADISCORD_economy_pending_debt_notification_previous_state|0] -> [?ADISCORD_economy_pending_debt_notification_new_state|0]).\nАвтозайм в этом расчёте: [?ADISCORD_economy_pending_debt_notification_amount|1]\nОсновной долг: [?ADISCORD_economy_debt|1]\nПроценты: [?ADISCORD_economy_weekly_interest|2] в неделю — [?ADISCORD_economy_interest_share_income|1]% недельного дохода.\n\nТЕКУЩИЙ ЭФФЕКТ\n[GetADISCORDDebtEffectsLoc]\n\nСЛЕДУЮЩИЙ РИСК\n[GetADISCORDEconomyDebtNotificationNextRiskLoc]"
+ ADISCORD_economy.3.d: "[GetADISCORDEconomyDebtNotificationCauseLoc]\n\nСостояние: [GetADISCORDEconomyDebtNotificationStateLoc].\nАвтозайм в этом расчёте: [?ADISCORD_economy_pending_debt_notification_amount|1]\nОсновной долг: [?ADISCORD_economy_debt|1]\nПроценты: [?ADISCORD_economy_weekly_interest|2] в неделю — [?ADISCORD_economy_interest_share_income|1]% недельного дохода.\n\nТЕКУЩИЙ ЭФФЕКТ\n[GetADISCORDDebtEffectsLoc]\n\nСЛЕДУЮЩИЙ РИСК\n[GetADISCORDEconomyDebtNotificationNextRiskLoc]"
  ADISCORD_economy.3.a: "Принять к сведению"
  ADISCORD_economy_debt_notification_kind_first_loan: "ПЕРВЫЙ АВТОМАТИЧЕСКИЙ ЗАЁМ"
  ADISCORD_economy_debt_notification_kind_strain: "ФИСКАЛЬНОЕ НАПРЯЖЕНИЕ"
@@ -190,6 +190,7 @@
  ADISCORD_economy_action_war_taxes_tt: "§YВвести военные налоги§!\nДаёт от §G40§! до §G65§! казны в зависимости от модели экономики и создаёт 30-дневный мобилизационный эффект. Повышает нагрузку страны и военную усталость.\n\n§YТребование:§! модель экономики допускает чрезвычайное изъятие; военные налоги ещё не действуют."
 
  ADISCORD_economy_advice_critical: "§RСистемная угроза.§! Требуется немедленная стабилизация, сокращение чрезвычайных расходов и восстановление казны."
+ ADISCORD_economy_advice_auto_loan: "§RПоследний расчёт занял автоматически.§! Недельный баланс всё ещё минус: поднимите налоги или сократите бюджет до следующего начисления."
  ADISCORD_economy_advice_debt: "§RДолговая нагрузка опасна.§! Остановите новые заимствования и направляйте профицит на погашение."
  ADISCORD_economy_advice_inflation: "§OЦены выходят из-под контроля.§! Не берите новые займы и накопите 100 казны на стабилизационный пакет."
  ADISCORD_economy_advice_deficit: "§YБюджет дефицитен.§! Повышайте налоги или снижайте расходы постепенно — новая политика фиксируется на расчётный период."

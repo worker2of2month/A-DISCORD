@@ -122,6 +122,21 @@ ideas = {
 			allowed = { always = no }
 			modifier = { supply_consumption_factor = -0.08 }
 		}
+		STP_cw_line_staff_idea = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = { army_org_factor = 0.04 }
+		}
+		STP_cw_resource_supply_idea = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = { supply_consumption_factor = -0.05 }
+		}
+		STP_cw_mountain_staff_idea = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = { army_org_regain = 0.08 }
+		}
 		STP_cw_centralized_command_idea = {
 			name = STP_cw_military_staff_dynamic
 			allowed = { always = no }

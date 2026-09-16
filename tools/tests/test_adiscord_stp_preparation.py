@@ -63,11 +63,13 @@ def matches_conditions(items, facts, scope="STP"):
             return any(country != scope and facts.get((country, "exists", "yes"), False)
                        and matches_conditions(entry.value, facts, country) for country in countries)
         if entry.key == "any_owned_state":
-            if [(e.key, e.value) for e in entry.value] != [("is_controlled_by", "PREV")]:
+            extras = [e for e in entry.value if e.key != "is_controlled_by"]
+            if not any(e.key == "is_controlled_by" and e.value == "PREV" for e in entry.value):
                 raise AssertionError("Unsupported owned-state fixture")
-            return any(key[0] == scope and key[1] == "owns_state" and owned
-                       and facts.get((scope, "controls_state", key[2]), False)
-                       for key, owned in facts.items())
+            owned = any(key[0] == scope and key[1] == "owns_state" and owned
+                        and facts.get((scope, "controls_state", key[2]), False)
+                        for key, owned in facts.items())
+            return owned and (not extras or matches_conditions(extras, facts, scope))
         if entry.key == "OR":
             return any(matches_conditions(group, facts, scope) for group in condition_groups(entry.value))
         if entry.key == "NOT":
@@ -188,8 +190,8 @@ class StelanderPreparationTests(unittest.TestCase):
 
     def test_ai_recruitment_keeps_people_and_rifles_for_field_replacements(self):
         decisions = block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council")
-        for name, threshold in (("STP_cw_raise_territorial_brigade", 12000),
-                                ("STP_cw_train_reserve_brigades", 16000)):
+        for name, threshold in (("STP_cw_raise_territorial_brigade", 18000),
+                                ("STP_cw_train_reserve_brigades", 24000)):
             stop = block(block(block(decisions, name), "ai_will_do"), "modifier")
             for manpower, reserve, expected in ((threshold, .1001, False), (threshold - .01, .2, True),
                                                (threshold * 2, .1, True), (threshold * 2, -.2, True)):
@@ -215,8 +217,11 @@ class StelanderPreparationTests(unittest.TestCase):
                 self.assertEqual(matches_conditions(block(garrison, "enable"), facts, tag), not war)
                 if war:
                     battalions = block(block(eligible[0], "target_template"), "regiments")
-                    self.assertEqual(scalar(battalions, "ADISCORD_militia"),
-                                     "3" if tag in ("NOD", "YPR", "COF", "TFF", "VAL") else "4")
+                    if tag in ("STP", "STS", "SRP"):
+                        self.assertEqual(scalar(battalions, "ADISCORD_territorial"), "6")
+                    else:
+                        self.assertEqual(scalar(battalions, "ADISCORD_militia"),
+                                         "3" if tag in ("NOD", "YPR", "COF", "TFF", "VAL") else "4")
         after_union = {("SRP", "is_ai", "yes"): True, ("SRP", "has_war", "yes"): True,
                        ("SRP", "has_global_flag", "STP_cw_started"): True,
                        ("SRP", "has_global_flag", "STP_cw_union_wars_finished"): True}
@@ -534,12 +539,12 @@ class StelanderPreparationTests(unittest.TestCase):
                              if isinstance(e.value, list) and any(d.key == "STP_cw_raise_territorial_brigade" for d in e.value))
         recruitment = block(block(war_decisions, "STP_cw_raise_territorial_brigade"), "available")
         for tag, state in (("STP", "28"), ("STS", "1"), ("SRP", "43")):
-            resources = {(tag, "numeric", "has_manpower"): 6000, (tag, "equipment", "infantry_equipment"): 480,
+            resources = {(tag, "numeric", "has_manpower"): 6000, (tag, "equipment", "infantry_equipment"): 600,
                          (tag, "owns_state", state): True, (tag, "controls_state", state): True}
             self.assertFalse(matches_conditions(recruitment, resources, tag))
             unlocked = {**resources, (tag, "has_completed_focus", "STP_cw_mobilization_register"): True}
             self.assertTrue(matches_conditions(recruitment, unlocked, tag))
-            self.assertFalse(matches_conditions(recruitment, {**unlocked, (tag, "equipment", "infantry_equipment"): 319.5}, tag),
+            self.assertFalse(matches_conditions(recruitment, {**unlocked, (tag, "equipment", "infantry_equipment"): 599.5}, tag),
                              "replacing the unlock marker must preserve the actual equipment requirement")
         for marker, focus in marker_focus.items():
             with self.subTest(marker=marker):
@@ -1161,8 +1166,8 @@ class StelanderPreparationTests(unittest.TestCase):
     def test_paid_brigades_require_control_and_full_fractional_resource_prices(self):
         effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         condition = block(block(block(effects, "STP_cw_mobilize_brigade"), "if"), "limit")
-        for rifles, people, controlled, expected in ((320, 4000, True, True), (319.5, 4000, True, False),
-                                                     (320, 3999.5, True, False), (320, 4000, False, False)):
+        for rifles, people, controlled, expected in ((600, 6000, True, True), (599.5, 6000, True, False),
+                                                     (600, 5999.5, True, False), (600, 6000, False, False)):
             facts = {("STS", "equipment", "infantry_equipment"): rifles,
                      ("STS", "numeric", "has_manpower"): people,
                      ("STS", "owns_state", "1"): True,
@@ -1389,7 +1394,7 @@ class StelanderPreparationTests(unittest.TestCase):
                 if shown or actual:
                     self.assertEqual(shown, actual, scalar(focus, "id"))
                     checked.add(scalar(focus, "id"))
-        self.assertEqual(len(checked), 15, "every persistent focus reward needs a checked delta preview")
+        self.assertEqual(len(checked), 18, "every persistent focus reward needs a checked delta preview")
 
     def test_dummy_ideas_are_never_installed_as_gameplay_spirits(self):
         definitions = block(block(entries("common/ideas/ADISCORD_STP_civil_war_ideas.txt"), "ideas"), "country")
@@ -2815,7 +2820,7 @@ class StelanderPreparationTests(unittest.TestCase):
             need = block(definition, "need")
             self.assertEqual({item.key for item in need}, {"infantry_equipment"}, "mobilization price omits an equipment type")
             rifles += int(scalar(need, "infantry_equipment"))
-        self.assertEqual((manpower, rifles), (4000, 320))
+        self.assertEqual((manpower, rifles), (6000, 600))
 
     def test_death_opens_elections_without_directly_starting_war(self):
         effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")

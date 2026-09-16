@@ -42,6 +42,8 @@
  ADISCORD_naval_doctrine_subsurface_denial_salvage_torpedo_cells: "Торпедные ячейки из утиля"
  ADISCORD_militia: "Ополчение"
  ADISCORD_militia_desc: "Быстро собранные части с винтовками, почти без автоматического и группового оружия."
+ ADISCORD_territorial: "Территориальная пехота"
+ ADISCORD_territorial_desc: "Линейные батальоны гражданской войны: винтовочная пехота без группового оружия, но без штрафов ополчения."
  ADISCORD_assault_infantry: "Штурмовая пехота"
  ADISCORD_assault_infantry_desc: "Усиленные отделения с высокой насыщенностью автоматическим оружием и средствами поддержки."
  ADISCORD_mechanized_infantry: "Механизированная пехота"

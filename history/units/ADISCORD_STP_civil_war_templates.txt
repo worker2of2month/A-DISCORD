@@ -1,20 +1,22 @@
 # Templates only. STP_cw_mobilize_brigade pays the real battalion costs before spawning.
 division_template = {
 	name = "Stelander Territorial Brigade"
-	is_locked = yes
+	is_locked = no
 	force_allow_recruiting = yes
 	regiments = {
-		ADISCORD_militia = { x = 0 y = 0 }
-		ADISCORD_militia = { x = 0 y = 1 }
-		ADISCORD_militia = { x = 1 y = 0 }
-		ADISCORD_militia = { x = 1 y = 1 }
+		ADISCORD_territorial = { x = 0 y = 0 }
+		ADISCORD_territorial = { x = 0 y = 1 }
+		ADISCORD_territorial = { x = 0 y = 2 }
+		ADISCORD_territorial = { x = 1 y = 0 }
+		ADISCORD_territorial = { x = 1 y = 1 }
+		ADISCORD_territorial = { x = 1 y = 2 }
 	}
 }
 
 division_template = {
 	name = "Stelander Assault Division"
 	priority = 2
-	is_locked = yes
+	is_locked = no
 	force_allow_recruiting = yes
 	regiments = {
 		infantry = { x = 0 y = 0 }

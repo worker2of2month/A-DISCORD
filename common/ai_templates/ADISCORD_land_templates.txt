@@ -49,12 +49,19 @@ ADISCORD_territorial_templates = {
 	ADISCORD_vorkerland_northern_line_militia = {
 		enable = {
 			is_ai = yes
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+			OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD }
+		}
+		reinforce_prio = 1
+		upgrade_prio = { base = 14 }
+		can_upgrade_in_field = { always = yes }
+		target_template = { regiments = { ADISCORD_militia = 4 } }
+	}
+	ADISCORD_stelander_line_brigade = {
+		enable = {
+			is_ai = yes
 			OR = {
-				AND = {
-					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-					OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD }
-				}
 				AND = {
 					has_global_flag = STP_cw_started
 					NOT = { has_global_flag = STP_cw_union_wars_finished }
@@ -66,7 +73,7 @@ ADISCORD_territorial_templates = {
 		reinforce_prio = 1
 		upgrade_prio = { base = 14 }
 		can_upgrade_in_field = { always = yes }
-		target_template = { regiments = { ADISCORD_militia = 4 } }
+		target_template = { regiments = { ADISCORD_territorial = 6 } }
 	}
 	ADISCORD_border_territorial_militia = {
 		enable = {

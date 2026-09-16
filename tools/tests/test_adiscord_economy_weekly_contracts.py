@@ -591,7 +591,7 @@ def task7_schema_fifteen_cache_migration_issues(text):
 def task7_cache_invalidation_issues(
     effects_text, modifier_effects_text, triggers_text=TRIGGERS
 ):
-    """Require stale weekly sources to become ineligible until a full rebuild."""
+    """Require dirty to recache factories and request a rebuild without halting weekly cash."""
 
     try:
         dirty = _parsed_definition(effects_text, "ADISCORD_economy_mark_dirty")
@@ -621,16 +621,14 @@ def task7_cache_invalidation_issues(
 
     dirty_sequence = [signature(entry) for entry in dirty.value]
     if dirty_sequence != [
-        (
-            "set_variable",
-            "ADISCORD_economy_weekly_source_cache_ready",
-            "0",
-        ),
-        ("set_variable", "ADISCORD_economy_weekly_ready", "0"),
+        ("ADISCORD_economy_cache_weekly_factory_sources", "yes"),
         ("set_variable", "ADISCORD_economy_needs_full_refresh", "1"),
         ("ADISCORD_economy_update_gui", "yes"),
     ]:
-        issues.append("dirty invalidation does not disable weekly caches before requesting refresh")
+        issues.append("dirty invalidation does not recache factories and request a rebuild without clearing weekly readiness")
+    dirty_source = unique_block(effects_text, "ADISCORD_economy_mark_dirty")
+    if "ADISCORD_economy_weekly_source_cache_ready" in dirty_source or "ADISCORD_economy_weekly_ready" in dirty_source:
+        issues.append("dirty invalidation still clears the weekly readiness watermark")
 
     full_sequence = [signature(entry) for entry in full.value]
     if full_sequence != [
@@ -3010,12 +3008,12 @@ ADISCORD_bad_assistance_owner = {
         policy = """
 ADISCORD_economy_ai_monthly_policy = {
  if = {
-  limit = { is_ai = yes has_political_power > 50 }
+  limit = { is_ai = yes }
   if = {
    limit = { ADISCORD_economy_ai_is_crisis = yes }
    if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_increase_tax_burden = yes } ADISCORD_economy_increase_tax_burden = yes }
    else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } check_variable = { var = ADISCORD_economy_social_spending_mode value = 2 compare = greater_than } ADISCORD_economy_can_decrease_social_spending = yes } ADISCORD_economy_decrease_social_spending = yes }
-   else_if = { limit = { has_war = no check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_decrease_army_spending = yes } ADISCORD_economy_decrease_army_spending = yes }
+   else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } OR = { has_war = no check_variable = { var = ADISCORD_economy_army_spending_mode value = 3 compare = greater_than } } ADISCORD_economy_can_decrease_army_spending = yes } ADISCORD_economy_decrease_army_spending = yes }
    else_if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_decrease_research_spending = yes } ADISCORD_economy_decrease_research_spending = yes }
   }
   else_if = {
@@ -3041,15 +3039,14 @@ ADISCORD_economy_ai_monthly_policy = {
 """
         self.assertEqual(ai_policy_contract_issues(policy), [])
         mutations = {
-            "missing PP reserve": policy.replace(
-                " has_political_power > 50", "", 1
-            ),
-            "reversed PP reserve": policy.replace(
-                "has_political_power > 50", "has_political_power < 50", 1
-            ),
             "dead owner": policy.replace(
-                "limit = { is_ai = yes has_political_power > 50 }",
-                "limit = { is_ai = yes has_political_power > 50 always = no }",
+                "limit = { is_ai = yes }",
+                "limit = { is_ai = yes always = no }",
+                1,
+            ),
+            "player owner": policy.replace(
+                "limit = { is_ai = yes }",
+                "limit = { is_ai = no }",
                 1,
             ),
             "wrong crisis state owner": policy.replace(
@@ -4393,6 +4390,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 "ADISCORD_economy_sum_expenses",
                 "ADISCORD_economy_calculate_monthly_balance",
                 "ADISCORD_economy_calculate_weekly_budget",
+                "ADISCORD_economy_should_show_player_ui",
                 "ADISCORD_economy_refresh_policy_previews",
                 "ADISCORD_economy_update_gui",
             },
@@ -4405,8 +4403,11 @@ class WeeklyEconomyContracts(unittest.TestCase):
         facade = unique_block(
             EFFECTS, "ADISCORD_economy_refresh_after_budget_control_change"
         )
-        self.assertEqual(
-            facade.strip(), "ADISCORD_economy_refresh_research_policy = yes"
+        self.assertIn("ADISCORD_economy_refresh_army_policy = yes", facade)
+        self.assertIn("ADISCORD_economy_refresh_research_policy = yes", facade)
+        self.assertLess(
+            facade.index("ADISCORD_economy_refresh_army_policy = yes"),
+            facade.index("ADISCORD_economy_refresh_research_policy = yes"),
         )
         for policy in expected:
             for direction in ("increase", "decrease"):
@@ -5616,28 +5617,27 @@ class WeeklyEconomyContracts(unittest.TestCase):
             )
 
         mutations = {
-            "dirty cache remains eligible": (
+            "dirty clears weekly readiness": (
                 EFFECTS.replace(
                     dirty_source,
                     dirty_source.replace(
-                        "ADISCORD_economy_weekly_source_cache_ready value = 0",
-                        "ADISCORD_economy_weekly_source_cache_ready value = 1",
+                        "ADISCORD_economy_cache_weekly_factory_sources = yes\n"
+                        "\tset_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 }",
+                        "ADISCORD_economy_cache_weekly_factory_sources = yes\n"
+                        "\tset_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 0 }\n"
+                        "\tset_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 }",
                         1,
                     ),
                     1,
                 ),
                 MODIFIER_EFFECTS,
             ),
-            "dirty request precedes invalidation": (
+            "dirty omits factory recache": (
                 EFFECTS.replace(
                     dirty_source,
                     dirty_source.replace(
-                        "\tset_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 0 }\n"
-                        "\tset_variable = { var = ADISCORD_economy_weekly_ready value = 0 }\n"
-                        "\tset_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 }",
-                        "\tset_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 }\n"
-                        "\tset_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 0 }\n"
-                        "\tset_variable = { var = ADISCORD_economy_weekly_ready value = 0 }",
+                        "\tADISCORD_economy_cache_weekly_factory_sources = yes\n",
+                        "",
                         1,
                     ),
                     1,
@@ -5946,8 +5946,8 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 1,
             ),
             "dead reserve owner": policy.replace(
-                "limit = { is_ai = yes has_political_power > 50 }",
-                "limit = { is_ai = yes has_political_power > 50 always = no }",
+                "limit = { is_ai = yes }",
+                "limit = { is_ai = yes always = no }",
                 1,
             ),
             "unconditional unsafe fallback": policy.replace(
@@ -6847,7 +6847,7 @@ ADISCORD_task10_forbidden_cache_consumer = {
         ):
             self.assertNotIn(stale_claim, combined.lower())
 
-    def test_val_and_stp_start_with_distinct_macroeconomic_profiles(self):
+    def test_playable_majors_start_with_distinct_macroeconomic_profiles(self):
         initialization = block(EFFECTS, "ADISCORD_economy_initialize_country")
         profile_call = "ADISCORD_economy_apply_country_starting_profile = yes"
         self.assertEqual(initialization.count(profile_call), 1)
@@ -6860,6 +6860,14 @@ ADISCORD_task10_forbidden_cache_consumer = {
         self.assertIn("ADISCORD_economy_apply_val_starting_profile = yes", dispatcher)
         self.assertIn("tag = STP", dispatcher)
         self.assertIn("ADISCORD_economy_apply_stp_starting_profile = yes", dispatcher)
+        self.assertIn("tag = WRK", dispatcher)
+        self.assertIn("tag = WKR", dispatcher)
+        self.assertIn("ADISCORD_economy_apply_wrk_starting_profile = yes", dispatcher)
+        self.assertIn("tag = NOD", dispatcher)
+        self.assertIn("tag = VAD", dispatcher)
+        self.assertIn("tag = TVA", dispatcher)
+        self.assertIn("tag = STS", dispatcher)
+        self.assertIn("tag = SRP", dispatcher)
 
         profiles = {
             "val": {
@@ -6877,6 +6885,54 @@ ADISCORD_task10_forbidden_cache_consumer = {
                 "deficit_pressure": 8,
                 "fiscal_stress": 26,
                 "price_shock": 16,
+            },
+            "wrk": {
+                "treasury": 110,
+                "debt": 320,
+                "inflation": 16,
+                "deficit_pressure": 20,
+                "fiscal_stress": 32,
+                "price_shock": 18,
+            },
+            "nod": {
+                "treasury": 95,
+                "debt": 210,
+                "inflation": 18,
+                "deficit_pressure": 16,
+                "fiscal_stress": 30,
+                "price_shock": 15,
+            },
+            "vad": {
+                "treasury": 150,
+                "debt": 220,
+                "inflation": 11,
+                "deficit_pressure": 12,
+                "fiscal_stress": 24,
+                "price_shock": 12,
+            },
+            "tva": {
+                "treasury": 130,
+                "debt": 190,
+                "inflation": 12,
+                "deficit_pressure": 10,
+                "fiscal_stress": 22,
+                "price_shock": 11,
+            },
+            "sts": {
+                "treasury": 90,
+                "debt": 180,
+                "inflation": 16,
+                "deficit_pressure": 18,
+                "fiscal_stress": 30,
+                "price_shock": 16,
+            },
+            "srp": {
+                "treasury": 80,
+                "debt": 200,
+                "inflation": 18,
+                "deficit_pressure": 22,
+                "fiscal_stress": 36,
+                "price_shock": 18,
             },
         }
         for country, expected in profiles.items():
@@ -6909,6 +6965,35 @@ ADISCORD_task10_forbidden_cache_consumer = {
             "ADISCORD_economy_monthly_update",
         ):
             self.assertNotIn(profile_call, block(EFFECTS, recurring_effect))
+
+    def test_secondary_yearly_path_and_ai_policy_are_player_gated(self):
+        primary = block(TRIGGERS, "ADISCORD_economy_is_primary_tier_country")
+        for tag in ("NOD", "WKR", "VAD", "TVA", "STS", "SRP"):
+            self.assertIn(f"original_tag = {tag}", primary)
+        self.assertNotIn("any_enemy_country", primary)
+        self.assertIn("ADISCORD_economy_fighting_human", primary)
+        monthly = block(EFFECTS, "ADISCORD_economy_monthly_update")
+        yearly = block(EFFECTS, "ADISCORD_economy_yearly_update")
+        self.assertEqual(yearly.count("ADISCORD_economy_ai_monthly_policy = yes"), 1)
+        for pulse in (monthly, yearly):
+            self.assertIn("ADISCORD_economy_should_show_player_ui = yes", pulse)
+            self.assertEqual(pulse.count("ADISCORD_economy_refresh_policy_previews = yes"), 1)
+        yearly_balance = block(EFFECTS, "ADISCORD_economy_apply_yearly_balance")
+        self.assertIn("ADISCORD_economy_apply_yearly_debt_streaks = yes", yearly_balance)
+        self.assertIn(
+            "ADISCORD_economy_weekly_balance value = ADISCORD_economy_monthly_balance",
+            yearly_balance,
+        )
+        self.assertIn("monthly_balance value = 12", yearly_balance)
+        self.assertNotIn("monthly_income value = 12", yearly_balance)
+        streaks = block(EFFECTS, "ADISCORD_economy_apply_yearly_debt_streaks")
+        self.assertIn("ADISCORD_economy_debt_emergency_streak value = 11", streaks)
+        self.assertIn("ADISCORD_economy_debt_default_streak value = 11", streaks)
+        self.assertIn("ADISCORD_economy_last_monthly_balance_applied", streaks)
+        yearly_policy = block(EFFECTS, "ADISCORD_economy_ai_yearly_policy")
+        self.assertEqual(yearly_policy.count("ADISCORD_economy_ai_monthly_policy = yes"), 3)
+        self.assertEqual(yearly_policy.count("ADISCORD_economy_tick_budget_cooldowns = yes"), 2)
+        self.assertIn("ADISCORD_economy_ai_yearly_policy = yes", yearly)
 
     def test_weekly_pulse_is_country_scoped_and_applies_once(self):
         weekly = block(ON_ACTIONS, "on_weekly")
@@ -7041,9 +7126,8 @@ ADISCORD_task10_forbidden_cache_consumer = {
         budget_refresh = block(
             EFFECTS, "ADISCORD_economy_refresh_after_budget_control_change"
         )
-        self.assertEqual(
-            budget_refresh.strip(), "ADISCORD_economy_refresh_research_policy = yes"
-        )
+        self.assertIn("ADISCORD_economy_refresh_army_policy = yes", budget_refresh)
+        self.assertIn("ADISCORD_economy_refresh_research_policy = yes", budget_refresh)
 
     def test_weekly_hot_path_reuses_monthly_idea_and_policy_caches(self):
         light = block(EFFECTS, "ADISCORD_economy_light_update")
@@ -7168,6 +7252,7 @@ ADISCORD_task10_forbidden_cache_consumer = {
         self.assertIn("has_war = no", transition)
         self.assertIn("ADISCORD_economy_postwar_demobilization_months value = 6", transition)
         self.assertIn("ADISCORD_economy_army_spending_mode value = 3", transition)
+        self.assertIn("ADISCORD_economy_refresh_army_policy = yes", transition)
         self.assertIn("add_ideas = partial_economic_mobilisation", transition)
         self.assertIn("add_ideas = limited_conscription", transition)
         self.assertIn("ADISCORD_economy_postwar_demobilization", transition)

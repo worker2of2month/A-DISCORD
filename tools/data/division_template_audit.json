@@ -89,34 +89,44 @@
       "legacy_names": [],
       "regiments": [
         {
-          "type": "ADISCORD_militia",
+          "type": "ADISCORD_territorial",
           "x": 0,
           "y": 0
         },
         {
-          "type": "ADISCORD_militia",
+          "type": "ADISCORD_territorial",
           "x": 0,
           "y": 1
         },
         {
-          "type": "ADISCORD_militia",
+          "type": "ADISCORD_territorial",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_territorial",
           "x": 1,
           "y": 0
         },
         {
-          "type": "ADISCORD_militia",
+          "type": "ADISCORD_territorial",
           "x": 1,
           "y": 1
+        },
+        {
+          "type": "ADISCORD_territorial",
+          "x": 1,
+          "y": 2
         }
       ],
       "support": [],
       "computed": {
-        "organization": 40.75,
-        "manpower": 4000.0,
+        "organization": 52.75,
+        "manpower": 6000.0,
         "equipment": {
-          "infantry_equipment": 320.0
+          "infantry_equipment": 600.0
         },
-        "supply": 0.16
+        "supply": 0.3
       },
       "equipment_availability": {
         "infantry_equipment": true
@@ -10831,7 +10841,7 @@
       "kind": "technical_reference",
       "technical_name": "Stelander Territorial Brigade",
       "legacy_names": [],
-      "count": 1
+      "count": 3
     },
     {
       "key": "adiscord_stp_postwar_assault_template_unlock",
@@ -10839,7 +10849,7 @@
       "kind": "technical_reference",
       "technical_name": "Stelander Assault Division",
       "legacy_names": [],
-      "count": 1
+      "count": 3
     },
     {
       "key": "adiscord_stp_assault_division_create_unit",
@@ -10859,7 +10869,7 @@
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 2
     },
     {
       "key": "adiscord_stp_civil_war_create_unit_territorial_brigade",
@@ -10869,7 +10879,7 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 1,
-      "count": 2
+      "count": 1
     },
     {
       "key": "adiscord_stp_scripted_effects_technical_reference_regular_army",
@@ -10953,7 +10963,7 @@
       "kind": "technical_reference",
       "technical_name": "Capital Guard",
       "legacy_names": [],
-      "count": 2
+      "count": 3
     },
     {
       "key": "adiscord_nam_resource_war_effects_create_unit_nam_resource_guard_xp_0_2_eq_1_0",
@@ -12981,7 +12991,7 @@
       "kind": "technical_reference",
       "technical_name": "Kefreyt Volunteer Division",
       "legacy_names": [],
-      "count": 1
+      "count": 3
     },
     {
       "key": "stp_cw_kefreyt_contract_infantry_cleanup",
@@ -12989,7 +12999,7 @@
       "kind": "technical_reference",
       "technical_name": "Kefreyt Contract Infantry",
       "legacy_names": [],
-      "count": 1
+      "count": 3
     }
   ]
 }

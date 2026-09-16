@@ -2,7 +2,7 @@
  ADISCORD_civilian_oriented_economy: "Civilian-Oriented Economy"
  ADISCORD_civilian_oriented_economy_desc: "Civilian consumption, housing, and infrastructure construction take priority over military orders. The policy supports stability and long-term development, but sharply slows military-industry expansion and the conversion of factories to wartime production."
  ADISCORD_economy.3.t: "[GetADISCORDEconomyDebtNotificationKindLoc]"
- ADISCORD_economy.3.d: "[GetADISCORDEconomyDebtNotificationCauseLoc]\n\nState: [GetADISCORDEconomyDebtNotificationStateLoc] ([?ADISCORD_economy_pending_debt_notification_previous_state|0] → [?ADISCORD_economy_pending_debt_notification_new_state|0]).\nAutomatic borrowing this settlement: [?ADISCORD_economy_pending_debt_notification_amount|1]\nPrincipal: [?ADISCORD_economy_debt|1]\nInterest: [?ADISCORD_economy_weekly_interest|2] per week — [?ADISCORD_economy_interest_share_income|1]% of weekly income.\n\nCURRENT EFFECT\n[GetADISCORDDebtEffectsLoc]\n\nNEXT RISK\n[GetADISCORDEconomyDebtNotificationNextRiskLoc]"
+ ADISCORD_economy.3.d: "[GetADISCORDEconomyDebtNotificationCauseLoc]\n\nState: [GetADISCORDEconomyDebtNotificationStateLoc].\nAutomatic borrowing this settlement: [?ADISCORD_economy_pending_debt_notification_amount|1]\nPrincipal: [?ADISCORD_economy_debt|1]\nInterest: [?ADISCORD_economy_weekly_interest|2] per week — [?ADISCORD_economy_interest_share_income|1]% of weekly income.\n\nCURRENT EFFECT\n[GetADISCORDDebtEffectsLoc]\n\nNEXT RISK\n[GetADISCORDEconomyDebtNotificationNextRiskLoc]"
  ADISCORD_economy.3.a: "Acknowledge"
  ADISCORD_economy_debt_notification_kind_first_loan: "FIRST AUTOMATIC LOAN"
  ADISCORD_economy_debt_notification_kind_strain: "FISCAL STRAIN"
@@ -96,6 +96,7 @@
  ADISCORD_economy_loan_available_external: "§GAvailable:§! an external loan can be taken now."
 
  ADISCORD_economy_advice_critical: "§RSystemic danger.§! Stabilize immediately, cut emergency spending, and rebuild the treasury."
+ ADISCORD_economy_advice_auto_loan: "§RThe last settlement borrowed automatically.§! The weekly balance is still negative; raise taxes or cut a budget before the next cash tick."
  ADISCORD_economy_advice_debt: "§RDebt is dangerous.§! Stop new borrowing and use the surplus for repayment."
  ADISCORD_economy_advice_inflation: "§OPrices are escaping control.§! Avoid new loans and save 100 treasury for stabilization."
  ADISCORD_economy_advice_deficit: "§YThe budget is in deficit.§! Raise taxes or lower spending gradually; each policy change has a cooldown."

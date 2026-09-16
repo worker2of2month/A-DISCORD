@@ -54,10 +54,16 @@ ADISCORD_economy_has_current_schema = {
 ADISCORD_economy_is_primary_tier_country = {
 	OR = {
 		ADISCORD_is_playable_development_country = yes
+		original_tag = NOD
+		original_tag = WKR
+		original_tag = VAD
+		original_tag = TVA
+		original_tag = STS
+		original_tag = SRP
 		is_major = yes
 		is_faction_leader = yes
 		has_country_flag = ADISCORD_economy_important_country
-		any_enemy_country = { is_ai = no }
+		has_country_flag = ADISCORD_economy_fighting_human
 	}
 }
 
@@ -479,6 +485,15 @@ ADISCORD_economy_can_stabilize_macro = {
 		check_variable = { var = ADISCORD_economy_deficit_pressure value = 25 compare = greater_than_or_equals }
 		check_variable = { var = ADISCORD_economy_price_shock value = 10 compare = greater_than_or_equals }
 	}
+}
+
+ADISCORD_economy_can_stabilize_macro_crisis = {
+	OR = {
+		ADISCORD_economy_ai_is_crisis = yes
+		ADISCORD_economy_ai_is_stressed = yes
+	}
+	check_variable = { var = ADISCORD_economy_inflation value = 15 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = less_than }
 }
 
 ADISCORD_economy_can_restructure_debt = {

@@ -1763,6 +1763,7 @@ def check_infantry_equipment_requirements() -> list[str]:
     container = extract_block(text, container_match.start())
     expected = {
         "ADISCORD_militia": {"infantry_equipment": 80},
+        "ADISCORD_territorial": {"infantry_equipment": 100},
         "infantry": {
             "infantry_equipment": 100,
             "ADISCORD_squad_weapons_equipment": 8,

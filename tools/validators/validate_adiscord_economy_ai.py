@@ -735,7 +735,7 @@ def _policy_branch_limit(branch: Entry) -> list[Entry]:
 
 
 def ai_policy_contract_issues(effects_text: str) -> list[str]:
-    """Validate one ordered, reserve-aware economy action chain for the AI."""
+    """Validate one ordered AI-only economy action chain."""
 
     issues: list[str] = []
     policy = _unique_definition(effects_text, "ADISCORD_economy_ai_monthly_policy")
@@ -745,22 +745,18 @@ def ai_policy_contract_issues(effects_text: str) -> list[str]:
         issues.append("AI policy references retired construction-policy state")
 
     if [entry.key for entry in policy.value] != ["if"]:
-        return issues + ["AI policy contains an action outside its reserve owner"]
+        return issues + ["AI policy contains an action outside its AI owner"]
     owners = [entry for entry in policy.value if entry.key == "if"]
     if len(owners) != 1 or not isinstance(owners[0].value, list):
-        return issues + ["AI policy lacks one direct reserve owner"]
+        return issues + ["AI policy lacks one direct AI owner"]
     owner = owners[0]
     owner_limit = _direct_limit(owner)
     if owner_limit is None or not _limit_is_satisfiable(owner_limit):
-        return issues + ["AI policy reserve owner is missing or dead"]
+        return issues + ["AI policy owner is missing or dead"]
     if not _exact_scalar(owner_limit, "is_ai", "yes"):
-        issues.append("AI policy reserve owner is not AI-only")
-    if not _requires_direct_scalar_comparison(
-        owner_limit, "has_political_power", ">", "50"
-    ):
-        issues.append("AI policy lacks the exact 50 PP story reserve")
-    if not _matches_exact_body(owner_limit, "is_ai = yes has_political_power > 50"):
-        issues.append("AI policy reserve predicate is not the exact AI-only >50 PP gate")
+        issues.append("AI policy owner is not AI-only")
+    if not _matches_exact_body(owner_limit, "is_ai = yes"):
+        issues.append("AI policy owner predicate is not the exact AI-only gate")
 
     state_chain = [
         entry for entry in owner.value if entry.key in {"if", "else_if", "else"}
@@ -770,7 +766,7 @@ def ai_policy_contract_issues(effects_text: str) -> list[str]:
     if [entry.key for entry in owner.value] != [
         "limit", "if", "else_if", "else_if", "else"
     ]:
-        issues.append("AI reserve owner contains an action outside its fiscal-state chain")
+        issues.append("AI owner contains an action outside its fiscal-state chain")
     state_names = ("crisis", "stressed", "recovery", "healthy")
     expected_state_owner = {
         "crisis": "ADISCORD_economy_ai_is_crisis = yes",
@@ -817,7 +813,7 @@ def ai_policy_contract_issues(effects_text: str) -> list[str]:
             "check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } check_variable = { var = ADISCORD_economy_social_spending_mode value = 2 compare = greater_than } ADISCORD_economy_can_decrease_social_spending = yes",
         ),
         ("crisis", "ADISCORD_economy_decrease_army_spending"): (
-            "has_war = no check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_decrease_army_spending = yes",
+            "check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } OR = { has_war = no check_variable = { var = ADISCORD_economy_army_spending_mode value = 3 compare = greater_than } } ADISCORD_economy_can_decrease_army_spending = yes",
         ),
         ("crisis", "ADISCORD_economy_decrease_research_spending"): (
             "check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } ADISCORD_economy_can_decrease_research_spending = yes",
@@ -2951,6 +2947,53 @@ def validate(root: Path = ROOT) -> list[str]:
             "secondary AI does not use the explicit half-pressure annual stabilizer")
     require("ADISCORD_economy_update_workforce_drain" in yearly,
             "secondary yearly economy omits workforce pressure")
+    require("ADISCORD_economy_apply_yearly_debt_streaks = yes" in block(effects, "ADISCORD_economy_apply_yearly_balance"),
+            "secondary yearly economy does not advance emergency/default streaks")
+    require("ADISCORD_economy_last_monthly_balance_applied" in block(effects, "ADISCORD_economy_apply_yearly_debt_streaks"),
+            "yearly debt streaks do not read the persistent yearly applied balance")
+    require("ADISCORD_economy_weekly_balance value = ADISCORD_economy_monthly_balance" in block(effects, "ADISCORD_economy_apply_yearly_balance"),
+            "yearly settlement does not align weekly_balance before streak updates")
+    require("monthly_income value = 12" not in block(effects, "ADISCORD_economy_apply_yearly_balance"),
+            "yearly settlement reprices interest share against a twelve-month income")
+    require("monthly_balance value = 12" in block(effects, "ADISCORD_economy_apply_yearly_balance"),
+            "yearly settlement does not apply twelve months of cash")
+    yearly_policy = block(effects, "ADISCORD_economy_ai_yearly_policy")
+    require(yearly_policy.count("ADISCORD_economy_ai_monthly_policy = yes") == 3,
+            "yearly AI policy does not take three exclusive monthly actions")
+    require(yearly_policy.count("ADISCORD_economy_tick_budget_cooldowns = yes") == 2,
+            "yearly AI policy does not clear budget cooldowns between its actions")
+    require("ADISCORD_economy_ai_yearly_policy = yes" in yearly,
+            "yearly update does not run the yearly AI policy")
+    require(
+        all(
+            f"original_tag = {tag}" in block(triggers, "ADISCORD_economy_is_primary_tier_country")
+            for tag in ("NOD", "WKR", "VAD", "TVA", "STS", "SRP")
+        ),
+        "civil-war and NOD tags are not primary-tier economy countries",
+    )
+    require(
+        all(
+            f"tag = {tag}" in block(effects, "ADISCORD_economy_apply_country_starting_profile")
+            for tag in ("VAL", "STP", "WRK", "WKR", "NOD", "VAD", "TVA", "STS", "SRP")
+        ),
+        "playable and civil-war tags lack distinct starting macroeconomic profiles",
+    )
+    require("any_enemy_country" not in block(triggers, "ADISCORD_economy_is_primary_tier_country"),
+            "monthly primary-tier admission still walks enemy countries")
+    require("ADISCORD_economy_refresh_war_participation_tier = yes" in on_actions,
+            "war edges do not retier countries fighting a human")
+    require(yearly.count("ADISCORD_economy_ai_monthly_policy = yes") == 1,
+            "yearly update lacks a post-settlement AI action")
+    require("ADISCORD_economy_should_show_player_ui = yes" in monthly
+            and monthly.count("ADISCORD_economy_refresh_policy_previews = yes") == 1,
+            "monthly policy previews are not gated to the player UI")
+    require("ADISCORD_economy_should_show_player_ui = yes" in yearly
+            and yearly.count("ADISCORD_economy_refresh_policy_previews = yes") == 1,
+            "yearly policy previews are not gated to the player UI")
+    require("ADISCORD_economy_refresh_army_policy = yes" in block(effects, "ADISCORD_economy_update_postwar_demobilization"),
+            "postwar army mode 3 does not refresh the army policy idea")
+    require("ADISCORD_economy_weekly_source_cache_ready" not in block(effects, "ADISCORD_economy_mark_dirty"),
+            "dirty invalidation still clears the weekly readiness watermark")
     require(yearly.rfind("ADISCORD_economy_update_ai_state") > yearly.find("ADISCORD_economy_apply_yearly_balance"),
             "secondary AI state is not refreshed after its annual transaction")
     require("ADISCORD_economy_full_refresh = yes" not in monthly.split("ADISCORD_economy_building_recount_months", 1)[0],
@@ -3525,7 +3568,7 @@ def validate(root: Path = ROOT) -> list[str]:
 
     issues.extend(air_production_contract_issues(default_ai, economy_ai))
 
-    require(re.search(r"type\s*=\s*avoid_starting_wars\s+value\s*=\s*-", economy_ai) is not None,
+    require(re.search(r"type\s*=\s*avoid_starting_wars\s+value\s*=\s*[1-9]\d+", economy_ai) is not None,
             "overstretched AI does not suppress war-starting desire")
     for profile in re.finditer(r"(?m)^\s*(ADISCORD_ai_[\w]+)\s*=\s*\{", economy_ai):
         profile_block = block(economy_ai, profile.group(1))
