@@ -178,7 +178,7 @@ class STPCoreContractTests(unittest.TestCase):
         width, height = struct.unpack_from(">II", portrait, 16)
         for path, name in (
             ("interface/ADISCORD_leader_portraits.gfx", "GFX_portrait_STP_Petr_Ivanov_animated"),
-            ("interface/ADISCORD_STP_state_face.gfx", "GFX_STP_state_face_dead"),
+            ("interface/ADISCORD_stp_state_face.gfx", "GFX_STP_state_face_dead"),
         ):
             with self.subTest(sprite=name):
                 sprites = block(parse_clausewitz(read(ROOT / path)), "spriteTypes")

@@ -3331,6 +3331,20 @@ STP_pc_form_liberation_coalition = {
 }
 
 STP_pc_offer_liberation_package = {
+	# A country removed before answering cannot keep the next recipient waiting.
+	if = {
+		limit = {
+			has_country_flag = STP_pc_lib_package_pending
+			NOT = {
+				OR = {
+					AND = { check_variable = { var = STP_pc_lib_package_tag value = 1 compare = equals } VAL = { exists = yes } }
+					AND = { check_variable = { var = STP_pc_lib_package_tag value = 2 compare = equals } NOD = { exists = yes } }
+				}
+			}
+		}
+		clr_country_flag = STP_pc_lib_package_pending
+		clear_variable = STP_pc_lib_package_tag
+	}
 	if = {
 		limit = { has_country_flag = STP_pc_lib_package_pending }
 	}
@@ -3477,14 +3491,25 @@ STP_pc_clear_settlement = {
 	else = {
 		clr_country_flag = STP_pc_settlement_pending
 	}
+	# The second neighbor can fall after both package focuses have finished.
+	if = {
+		limit = { has_completed_focus = STP_pc_lib_transition }
+		STP_pc_offer_liberation_package = yes
+	}
 }
 
+# Recipient country: authenticate before touching the shared STS receipt.
 STP_pc_finish_liberation_package = {
-	clr_country_flag = STP_pc_lib_package_pending
-	clear_variable = STP_pc_lib_package_tag
 	if = {
-		limit = { has_country_flag = STP_pc_liberation_coalition }
-		STP_pc_form_liberation_coalition = yes
+		limit = { STP_pc_liberation_reply_is_current = yes }
+		STS = {
+			clr_country_flag = STP_pc_lib_package_pending
+			clear_variable = STP_pc_lib_package_tag
+			if = {
+				limit = { has_country_flag = STP_pc_liberation_coalition }
+				STP_pc_form_liberation_coalition = yes
+			}
+			STP_pc_offer_liberation_package = yes
+		}
 	}
-	STP_pc_offer_liberation_package = yes
 }

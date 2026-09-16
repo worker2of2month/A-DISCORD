@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 EVENTS = ROOT / "events/ADISCORD_STP_events.txt"
-POSTWAR_LOCALISATION = ROOT / "localisation/replace/ADISCORD_STP_postwar_story_l_russian.yml"
+POSTWAR_LOCALISATION = ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml"
 LEDGER = ROOT / "tools/data/adiscord_event_ids.json"
 
 
@@ -26,6 +26,11 @@ def event_block(text: str, event_id: str) -> str:
 
 
 class ShabratPostwarStoryTests(unittest.TestCase):
+    def test_story_localisation_has_one_canonical_owner(self) -> None:
+        for filename in ("ADISCORD_STP_story_l_russian.yml", "ADISCORD_STP_postwar_story_l_russian.yml"):
+            self.assertFalse((ROOT / "localisation/replace" / filename).exists(), filename)
+        self.assertTrue(POSTWAR_LOCALISATION.read_bytes().startswith(b"\xef\xbb\xbf"))
+
     def test_story_events_are_registered_and_trigger_from_postwar_focus_completion(self) -> None:
         events = read(EVENTS)
         ledger = json.loads(read(LEDGER))

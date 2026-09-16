@@ -797,3 +797,21 @@ STP_pc_settlement_has_terms = {
 		check_variable = { var = STP_pc_settle_result value = 2 compare = equals }
 	}
 }
+
+# Recipient country: only its still-open package may advance the STS queue.
+STP_pc_liberation_reply_is_current = {
+	STS = {
+		exists = yes
+		has_country_flag = STP_pc_lib_package_pending
+	}
+	OR = {
+		AND = {
+			tag = VAL
+			STS = { check_variable = { var = STP_pc_lib_package_tag value = 1 compare = equals } }
+		}
+		AND = {
+			tag = NOD
+			STS = { check_variable = { var = STP_pc_lib_package_tag value = 2 compare = equals } }
+		}
+	}
+}

@@ -915,7 +915,7 @@ country_event = {
 		set_politics = { ruling_party = humanism elections_allowed = no }
 	}
 	option = {
-		name = ADISCORD_STP_pc.7.d
+		name = ADISCORD_STP_pc.7.da
 		trigger = { OR = { has_country_flag = STP_vera_introduced has_character = STP_vera_tikh } }
 		ai_chance = { base = 10 }
 		promote_character = STP_vera_tikh
@@ -995,55 +995,44 @@ country_event = {
 	is_triggered_only = yes
 	option = {
 		name = ADISCORD_STP_pc.11.a
-		trigger = {
-			OR = {
-				AND = { tag = VAL STS = { check_variable = { var = STP_pc_lib_package_tag value = 1 compare = equals } } }
-				AND = { tag = NOD STS = { check_variable = { var = STP_pc_lib_package_tag value = 2 compare = equals } } }
-			}
-		}
+		trigger = { STP_pc_liberation_reply_is_current = yes }
 		ai_chance = { base = 70 }
 		if = {
-			limit = { tag = VAL }
-			set_cosmetic_tag = VAL_liberated
-			add_ideas = VAL_liberated_settlement
+			limit = { STP_pc_liberation_reply_is_current = yes }
+			if = {
+				limit = { tag = VAL }
+				set_cosmetic_tag = VAL_liberated
+				add_ideas = VAL_liberated_settlement
+			}
+			else_if = {
+				limit = { tag = NOD }
+				set_cosmetic_tag = NOD_mandate_broken
+				add_ideas = NOD_mandate_broken
+			}
+			hidden_effect = { STP_pc_finish_liberation_package = yes }
 		}
-		else_if = {
-			limit = { tag = NOD }
-			set_cosmetic_tag = NOD_mandate_broken
-			add_ideas = NOD_mandate_broken
-		}
-		hidden_effect = { STS = { STP_pc_finish_liberation_package = yes } }
 	}
 	option = {
 		name = ADISCORD_STP_pc.11.b
-		trigger = {
-			OR = {
-				AND = { tag = VAL STS = { check_variable = { var = STP_pc_lib_package_tag value = 1 compare = equals } } }
-				AND = { tag = NOD STS = { check_variable = { var = STP_pc_lib_package_tag value = 2 compare = equals } } }
-			}
-		}
+		trigger = { STP_pc_liberation_reply_is_current = yes }
 		ai_chance = { base = 30 }
 		if = {
-			limit = { tag = VAL }
-			set_country_flag = STP_pc_val_refused_package
+			limit = { STP_pc_liberation_reply_is_current = yes }
+			if = {
+				limit = { tag = VAL }
+				set_country_flag = STP_pc_val_refused_package
+			}
+			else_if = {
+				limit = { tag = NOD }
+				set_country_flag = STP_pc_nod_refused_package
+			}
+			hidden_effect = { STP_pc_finish_liberation_package = yes }
 		}
-		else_if = {
-			limit = { tag = NOD }
-			set_country_flag = STP_pc_nod_refused_package
-		}
-		hidden_effect = { STS = { STP_pc_finish_liberation_package = yes } }
 	}
 	option = {
 		name = ADISCORD_STP_pc.11.c
-		trigger = {
-			NOT = {
-				OR = {
-					AND = { tag = VAL STS = { check_variable = { var = STP_pc_lib_package_tag value = 1 compare = equals } } }
-					AND = { tag = NOD STS = { check_variable = { var = STP_pc_lib_package_tag value = 2 compare = equals } } }
-				}
-			}
-		}
-		hidden_effect = { STS = { STP_pc_finish_liberation_package = yes } }
+		trigger = { STP_pc_liberation_reply_is_current = no }
+		hidden_effect = { STP_pc_finish_liberation_package = yes }
 	}
 }
 
