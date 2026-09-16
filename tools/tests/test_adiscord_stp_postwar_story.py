@@ -7,8 +7,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 EVENTS = ROOT / "events/ADISCORD_STP_events.txt"
-FOCUSES = ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt"
 LOCALISATION = ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml"
+STORY_LOCALISATION = ROOT / "localisation/replace/ADISCORD_STP_story_l_russian.yml"
 LEDGER = ROOT / "tools/data/adiscord_event_ids.json"
 
 
@@ -16,17 +16,19 @@ def read(path: Path) -> str:
     return path.read_text(encoding="utf-8-sig" if path.suffix == ".yml" else "utf-8")
 
 
-def focus_block(text: str, focus_id: str) -> str:
-    marker = f"\t\tid = {focus_id}\n"
+def event_block(text: str, event_id: str) -> str:
+    marker = f"\tid = {event_id}\n"
     start = text.index(marker)
-    next_focus = text.find("\n\tfocus = {", start + len(marker))
-    return text[start:] if next_focus == -1 else text[start:next_focus]
+    next_event = text.find("\ncountry_event = {", start + len(marker))
+    next_news = text.find("\nnews_event = {", start + len(marker))
+    candidates = [pos for pos in (next_event, next_news) if pos != -1]
+    end = min(candidates) if candidates else len(text)
+    return text[start:end]
 
 
 class ShabratPostwarStoryTests(unittest.TestCase):
-    def test_story_events_are_registered_and_hooked_to_postwar_focuses(self) -> None:
+    def test_story_events_are_registered_and_trigger_from_postwar_focus_completion(self) -> None:
         events = read(EVENTS)
-        focuses = read(FOCUSES)
         ledger = json.loads(read(LEDGER))
 
         expected = {
@@ -36,14 +38,18 @@ class ShabratPostwarStoryTests(unittest.TestCase):
         }
 
         self.assertIn("add_namespace = ADISCORD_STP_pw", events)
-        ledger_ids = {entry["id"] for entry in ledger["ids"]}
+        ledger_ids = {entry["id"] for entry in ledger["events"]}
         for event_id, focus_id in expected.items():
             self.assertEqual(events.count(f"id = {event_id}"), 1)
-            self.assertIn(event_id, focus_block(focuses, focus_id))
+            block = event_block(events, event_id)
+            self.assertIn("tag = STS", block)
+            self.assertIn(f"has_completed_focus = {focus_id}", block)
+            self.assertIn("fire_only_once = yes", block)
+            self.assertIn("mean_time_to_happen", block)
             self.assertIn(event_id, ledger_ids)
 
     def test_story_events_have_complete_russian_localisation(self) -> None:
-        loc = read(LOCALISATION)
+        loc = read(LOCALISATION) + "\n" + read(STORY_LOCALISATION)
         expected_keys = (
             "ADISCORD_STP_pw.1.t",
             "ADISCORD_STP_pw.1.d",
