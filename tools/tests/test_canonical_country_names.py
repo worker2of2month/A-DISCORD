@@ -17,7 +17,10 @@ FORBIDDEN_ALIASES = (
     "иванланд",
     "Ivanland",
     "Наместникленд",
+    "Namestnikland",
     "Витланд",
+    "Witland",
+    "Workerland",
 )
 
 LOCALISATION_LINE = re.compile(r'^\s*([^#\s][^:]*)\s*:\s*(?:0\s*)?"(.*)"\s*$')
