@@ -112,3 +112,33 @@ VAL_frontier_matches_current_target = {
 VAL_frontier_reply_is_current = {
     event_target:VAL_frontier_quoted_target = { VAL_frontier_matches_current_target = yes }
 }
+
+VAL_cin_contract_family_open = {
+	OR = {
+		AND = { NOT = { has_country_flag = VAL_CIN_block_market } NOT = { has_country_flag = VAL_CIN_success_market } }
+		AND = { NOT = { has_country_flag = VAL_CIN_block_arms } NOT = { has_country_flag = VAL_CIN_success_arms } }
+		AND = { NOT = { has_country_flag = VAL_CIN_block_infrastructure } NOT = { has_country_flag = VAL_CIN_success_infrastructure } }
+		AND = { NOT = { has_country_flag = VAL_CIN_block_captain } NOT = { has_country_flag = VAL_CIN_success_captain } }
+		AND = { NOT = { has_country_flag = VAL_CIN_block_terms } NOT = { has_country_flag = VAL_CIN_success_terms } }
+	}
+}
+
+VAL_osf_contract_family_open = {
+	OR = {
+		AND = { NOT = { has_country_flag = VAL_OSF_block_market } NOT = { has_country_flag = VAL_OSF_success_market } }
+		AND = { NOT = { has_country_flag = VAL_OSF_block_arms } NOT = { has_country_flag = VAL_OSF_success_arms } }
+		AND = { NOT = { has_country_flag = VAL_OSF_block_infrastructure } NOT = { has_country_flag = VAL_OSF_success_infrastructure } }
+		AND = { NOT = { has_country_flag = VAL_OSF_block_captain } NOT = { has_country_flag = VAL_OSF_success_captain } }
+		AND = { NOT = { has_country_flag = VAL_OSF_block_terms } NOT = { has_country_flag = VAL_OSF_success_terms } }
+	}
+}
+
+VAL_aph_contract_family_open = {
+	OR = {
+		AND = { NOT = { has_country_flag = VAL_APH_block_market } NOT = { has_country_flag = VAL_APH_success_market } }
+		AND = { NOT = { has_country_flag = VAL_APH_block_arms } NOT = { has_country_flag = VAL_APH_success_arms } }
+		AND = { NOT = { has_country_flag = VAL_APH_block_infrastructure } NOT = { has_country_flag = VAL_APH_success_infrastructure } }
+		AND = { NOT = { has_country_flag = VAL_APH_block_captain } NOT = { has_country_flag = VAL_APH_success_captain } }
+		AND = { NOT = { has_country_flag = VAL_APH_block_terms } NOT = { has_country_flag = VAL_APH_success_terms } }
+	}
+}

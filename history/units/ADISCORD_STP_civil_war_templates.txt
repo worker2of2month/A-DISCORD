@@ -1,4 +1,6 @@
 # Templates only. STP_cw_mobilize_brigade pays the real battalion costs before spawning.
+# Territorial battalions resolve TAG_ADISCORD_territorial_* to each side's militia mesh.
+# Assault stays TAG infantry (regulars). Kefreyt keeps the donor VAL model.
 division_template = {
 	name = "Stelander Territorial Brigade"
 	is_locked = no

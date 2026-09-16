@@ -121,8 +121,10 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 10
 			add_stability = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_wrk_fault_lines_measured
 			custom_effect_tooltip = ADISCORD_vorkerland_wrk_preparations_carry_over_tt
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wrk_fault_lines_measured
+			}
 		}
 		ai_will_do = { base = 12 }
 	}
@@ -144,8 +146,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_political_power = 20
-			set_country_flag = ADISCORD_vorkerland_focus_wrk_republics_consulted
 			custom_effect_tooltip = ADISCORD_vorkerland_wrk_preparations_carry_over_tt
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wrk_republics_consulted
+			}
 		}
 		ai_will_do = { base = 11 }
 	}
@@ -167,8 +171,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = WRK }
-			set_country_flag = ADISCORD_vorkerland_focus_wrk_emergency_stores_counted
 			custom_effect_tooltip = ADISCORD_vorkerland_wrk_preparations_carry_over_tt
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wrk_emergency_stores_counted
+			}
 		}
 		ai_will_do = { base = 10 }
 	}
@@ -191,8 +197,10 @@ focus_tree = {
 		completion_reward = {
 			add_stability = 0.02
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_wrk_charter_reaffirmed
 			custom_effect_tooltip = ADISCORD_vorkerland_wrk_preparations_carry_over_tt
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wrk_charter_reaffirmed
+			}
 		}
 		ai_will_do = { base = 11 }
 	}
@@ -214,8 +222,10 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = WRK }
 			army_experience = 3
-			set_country_flag = ADISCORD_vorkerland_focus_wrk_reserves_distributed
 			custom_effect_tooltip = ADISCORD_vorkerland_wrk_preparations_carry_over_tt
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wrk_reserves_distributed
+			}
 		}
 		ai_will_do = { base = 10 }
 	}
@@ -240,8 +250,10 @@ focus_tree = {
 		completion_reward = {
 			add_command_power = 10
 			army_experience = 5
-			set_country_flag = ADISCORD_vorkerland_focus_wrk_continuity_orders
 			custom_effect_tooltip = ADISCORD_vorkerland_wrk_preparations_carry_over_tt
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wrk_continuity_orders
+			}
 		}
 		ai_will_do = { base = 12 }
 	}
@@ -273,7 +285,9 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 5
 			add_stability = 0.005
-			set_country_flag = ADISCORD_vorkerland_focus_wrk_worker_vadl_backchannel
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wrk_worker_vadl_backchannel
+			}
 		}
 		ai_will_do = { base = 35 }
 	}
@@ -292,14 +306,19 @@ focus_tree = {
 		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = {
 			has_global_flag = ADISCORD_vorkerland_phase_prewar
-			has_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_prewar_wrk_compact_course_tt
+				has_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			set_country_flag = ADISCORD_vorkerland_wrk_compact_committed
-			set_country_flag = ADISCORD_vorkerland_focus_wrk_emergency_compact_offered
 			ADISCORD_vorkerland_resolve_prewar_compact = yes
 			custom_effect_tooltip = ADISCORD_vorkerland_prewar_compact_requires_both_tt
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_wrk_compact_committed
+				set_country_flag = ADISCORD_vorkerland_focus_wrk_emergency_compact_offered
+			}
 		}
 		ai_will_do = { base = 100 }
 	}
@@ -326,7 +345,9 @@ focus_tree = {
 		completion_reward = {
 			add_command_power = 5
 			army_experience = 3
-			set_country_flag = ADISCORD_vorkerland_focus_wrk_loyal_republics_mobilized
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wrk_loyal_republics_mobilized
+			}
 		}
 		ai_will_do = { base = 65 }
 	}
@@ -345,16 +366,21 @@ focus_tree = {
 		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = {
 			has_global_flag = ADISCORD_vorkerland_phase_prewar
-			has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_prewar_wrk_hardline_course_tt
+				has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_manpower = 250
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = WRK }
 			add_timed_idea = { idea = ADISCORD_vorkerland_wrk_loyal_republics_mobilized days = 70 }
-			set_country_flag = ADISCORD_vorkerland_wrk_hardline_committed
-			set_country_flag = ADISCORD_vorkerland_focus_wrk_reserves_under_worker
 			custom_effect_tooltip = ADISCORD_vorkerland_wrk_preparations_carry_over_tt
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_wrk_hardline_committed
+				set_country_flag = ADISCORD_vorkerland_focus_wrk_reserves_under_worker
+			}
 		}
 		ai_will_do = { base = 100 }
 	}
@@ -379,7 +405,9 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 10
 			add_stability = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_vad_obligations_reviewed
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_obligations_reviewed
+			}
 		}
 		ai_will_do = { base = 12 }
 	}
@@ -403,7 +431,9 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 15
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_vad_continuity_registers
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_continuity_registers
+			}
 		}
 		ai_will_do = { base = 11 }
 	}
@@ -427,7 +457,9 @@ focus_tree = {
 		completion_reward = {
 			add_manpower = 250
 			army_experience = 5
-			set_country_flag = ADISCORD_vorkerland_focus_vad_guard_drilled
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_guard_drilled
+			}
 		}
 		ai_will_do = { base = 10 }
 	}
@@ -450,7 +482,9 @@ focus_tree = {
 		completion_reward = {
 			add_stability = 0.02
 			add_political_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_vad_archives_secured
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_archives_secured
+			}
 		}
 		ai_will_do = { base = 11 }
 	}
@@ -472,7 +506,9 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = VAD }
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_vad_depots_distributed
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_depots_distributed
+			}
 		}
 		ai_will_do = { base = 10 }
 	}
@@ -501,7 +537,9 @@ focus_tree = {
 			army_experience = 5
 			add_political_power = 15
 			add_stability = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_vad_emergency_chancery
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_emergency_chancery
+			}
 		}
 		ai_will_do = { base = 12 }
 	}
@@ -523,8 +561,14 @@ focus_tree = {
 		available = {
 			has_global_flag = ADISCORD_vorkerland_phase_prewar
 			OR = {
-				WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course }
-				WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course }
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_vorkerland_prewar_wrk_compact_course_tt
+					WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course }
+				}
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_vorkerland_prewar_wrk_hardline_course_tt
+					WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course }
+				}
 			}
 		}
 		cancel_if_invalid = yes
@@ -535,17 +579,25 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 5
 			add_stability = 0.005
-			set_country_flag = ADISCORD_vorkerland_focus_vad_worker_terms_prepared
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_worker_terms_prepared
+			}
 		}
 		ai_will_do = {
 			base = 1
 			modifier = {
 				factor = 100
-				WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course }
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_vorkerland_prewar_wrk_compact_course_tt
+					WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course }
+				}
 			}
 			modifier = {
 				factor = 0
-				WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course }
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_vorkerland_prewar_wrk_hardline_course_tt
+					WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course }
+				}
 			}
 		}
 	}
@@ -564,14 +616,19 @@ focus_tree = {
 		allow_branch = { tag = VAD has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = {
 			has_global_flag = ADISCORD_vorkerland_phase_prewar
-			has_country_flag = ADISCORD_vorkerland_prewar_vad_compact_course
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_prewar_vad_compact_course_tt
+				has_country_flag = ADISCORD_vorkerland_prewar_vad_compact_course
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			set_country_flag = ADISCORD_vorkerland_vad_compact_committed
-			set_country_flag = ADISCORD_vorkerland_focus_vad_emergency_compact_ratified
 			ADISCORD_vorkerland_resolve_prewar_compact = yes
 			custom_effect_tooltip = ADISCORD_vorkerland_prewar_compact_requires_both_tt
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_vad_compact_committed
+				set_country_flag = ADISCORD_vorkerland_focus_vad_emergency_compact_ratified
+			}
 		}
 		ai_will_do = { base = 100 }
 	}
@@ -592,8 +649,14 @@ focus_tree = {
 		available = {
 			has_global_flag = ADISCORD_vorkerland_phase_prewar
 			OR = {
-				WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course }
-				WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course }
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_vorkerland_prewar_wrk_compact_course_tt
+					WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course }
+				}
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_vorkerland_prewar_wrk_hardline_course_tt
+					WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course }
+				}
 			}
 		}
 		cancel_if_invalid = yes
@@ -604,17 +667,25 @@ focus_tree = {
 		completion_reward = {
 			add_command_power = 5
 			army_experience = 3
-			set_country_flag = ADISCORD_vorkerland_focus_vad_eastern_mandate_activated
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_eastern_mandate_activated
+			}
 		}
 		ai_will_do = {
 			base = 1
 			modifier = {
 				factor = 100
-				WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course }
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_vorkerland_prewar_wrk_hardline_course_tt
+					WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course }
+				}
 			}
 			modifier = {
 				factor = 0
-				WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course }
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_vorkerland_prewar_wrk_compact_course_tt
+					WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course }
+				}
 			}
 		}
 	}
@@ -633,15 +704,20 @@ focus_tree = {
 		allow_branch = { tag = VAD has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = {
 			has_global_flag = ADISCORD_vorkerland_phase_prewar
-			has_country_flag = ADISCORD_vorkerland_prewar_vad_hardline_course
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_prewar_vad_hardline_course_tt
+				has_country_flag = ADISCORD_vorkerland_prewar_vad_hardline_course
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_manpower = 250
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = VAD }
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_eastern_mandate days = 70 }
-			set_country_flag = ADISCORD_vorkerland_vad_hardline_committed
-			set_country_flag = ADISCORD_vorkerland_focus_vad_district_arsenals_sealed
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_vad_hardline_committed
+				set_country_flag = ADISCORD_vorkerland_focus_vad_district_arsenals_sealed
+			}
 		}
 		ai_will_do = { base = 100 }
 	}
@@ -667,7 +743,9 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 15
 			add_stability = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_regime_stabilized
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_regime_stabilized
+			}
 		}
 		ai_will_do = { base = 15 }
 	}
@@ -690,7 +768,9 @@ focus_tree = {
 		completion_reward = {
 			add_manpower = 500
 			army_experience = 5
-			set_country_flag = ADISCORD_vorkerland_focus_field_forces_mobilized
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_field_forces_mobilized
+			}
 		}
 		ai_will_do = { base = 15 }
 	}
@@ -724,7 +804,9 @@ focus_tree = {
 				limit = { tag = TVA controls_state = 36 }
 				36 = { add_building_construction = { type = bunker level = 1 instant_build = yes province = 12227 } }
 			}
-			set_country_flag = ADISCORD_vorkerland_focus_home_region_fortified
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_home_region_fortified
+			}
 		}
 		ai_will_do = { base = 13 }
 	}
@@ -775,8 +857,12 @@ focus_tree = {
 				remove_ideas = WRK_birthplace_of_the_first_revolution
 				add_ideas = WRK_birthplace_of_the_first_revolution_front_republic
 			}
-			set_country_flag = ADISCORD_vorkerland_focus_worker_mandate
-			country_event = { id = ADISCORD_vorkerland_claimant.1 days = 1 }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_worker_mandate
+			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_vorkerland_claimant.1 days = 1 }
+			}
 		}
 		ai_will_do = {
 			base = 100
@@ -820,7 +906,9 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_front_soviets }
 		completion_reward = {
 			add_political_power = 15
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_front_soviets
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_front_soviets
+			}
 		}
 		ai_will_do = {
 			base = 35
@@ -865,7 +953,9 @@ focus_tree = {
 			army_experience = 5
 			add_stability = -0.01
 			add_timed_idea = { idea = ADISCORD_vorkerland_wrk_front_committees days = 35 }
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_factory_battalions
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_factory_battalions
+			}
 		}
 		ai_will_do = {
 			base = 40
@@ -907,7 +997,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_wrk_rail_requisition days = 35 }
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_railways_under_councils
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_railways_under_councils
+			}
 		}
 		ai_will_do = {
 			base = 35
@@ -948,7 +1040,9 @@ focus_tree = {
 		completion_reward = {
 			army_experience = 10
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_shopfloor_officers
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_shopfloor_officers
+			}
 		}
 		ai_will_do = {
 			base = 60
@@ -995,7 +1089,11 @@ focus_tree = {
 				limit = { controls_state = 32 }
 				32 = { add_building_construction = { type = bunker level = 1 instant_build = yes province = 6713 } }
 			}
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_retreat_levies_unlocked
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_wkr_retreat_levy_1 show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_wkr_retreat_levy_2 show_effect_tooltip = yes }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_retreat_levies_unlocked
+			}
 		}
 		ai_will_do = {
 			base = 70
@@ -1037,7 +1135,9 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = WKR }
 			add_political_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_supply_commission
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_supply_commission
+			}
 		}
 		ai_will_do = {
 			base = 60
@@ -1088,9 +1188,11 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 15
 			add_stability = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_vla_invitation_intent
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_free_republics_channel
-			country_event = { id = ADISCORD_vorkerland_claimant.2 days = 1 }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_vla_invitation_intent
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_free_republics_channel
+				country_event = { id = ADISCORD_vorkerland_claimant.2 days = 1 }
+			}
 		}
 		ai_will_do = {
 			base = 40
@@ -1137,8 +1239,10 @@ focus_tree = {
 			add_manpower = 400
 			add_command_power = 10
 			add_stability = -0.01
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_front_executive
-			country_event = { id = ADISCORD_vorkerland_claimant.2 days = 1 }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_front_executive
+				country_event = { id = ADISCORD_vorkerland_claimant.2 days = 1 }
+			}
 		}
 		ai_will_do = {
 			base = 35
@@ -1185,8 +1289,12 @@ focus_tree = {
 			else = {
 				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = WKR }
 			}
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_collective_workshops
-			country_event = { id = ADISCORD_vorkerland_claimant.3 days = 1 }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_collective_workshops
+			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_vorkerland_claimant.3 days = 1 }
+			}
 		}
 		ai_will_do = {
 			base = 70
@@ -1237,7 +1345,9 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 15
 			add_stability = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_emergency_constitution
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_emergency_constitution
+			}
 		}
 		ai_will_do = { base = 70 modifier = { factor = 2 has_stability < 0.50 } }
 	}
@@ -1283,7 +1393,9 @@ focus_tree = {
 		completion_reward = {
 			army_experience = 5
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_normative_command
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_normative_command
+			}
 		}
 		ai_will_do = { base = 70 modifier = { factor = 2 has_war = yes } }
 	}
@@ -1329,7 +1441,9 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 75 producer = WKR }
 			add_stability = -0.005
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_directed_workshops
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_directed_workshops
+			}
 		}
 		ai_will_do = { base = 70 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
 	}
@@ -1374,8 +1488,10 @@ focus_tree = {
 		}
 		completion_reward = {
 			add_political_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_front_authority_settled
-			country_event = { id = ADISCORD_vorkerland_claimant.4 days = 1 }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_front_authority_settled
+				country_event = { id = ADISCORD_vorkerland_claimant.4 days = 1 }
+			}
 		}
 		ai_will_do = { base = 100 }
 	}
@@ -1419,7 +1535,9 @@ focus_tree = {
 		completion_reward = {
 			army_experience = 10
 			add_war_support = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_counterattack_cells
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_counterattack_cells
+			}
 		}
 		ai_will_do = { base = 80 modifier = { factor = 2 has_war = yes } }
 	}
@@ -1462,7 +1580,9 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = { type = support_equipment amount = 75 producer = WKR }
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_interchange_reserves
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_interchange_reserves
+			}
 		}
 		ai_will_do = { base = 80 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
 	}
@@ -1510,9 +1630,11 @@ focus_tree = {
 			add_war_support = 0.02
 			army_experience = 5
 			add_equipment_to_stockpile = { type = support_equipment amount = 75 producer = WKR }
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
-			set_country_flag = ADISCORD_vorkerland_focus_central_front_prepared
-			country_event = { id = ADISCORD_vorkerland_claimant.30 hours = 1 }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
+				set_country_flag = ADISCORD_vorkerland_focus_central_front_prepared
+				country_event = { id = ADISCORD_vorkerland_claimant.30 hours = 1 }
+			}
 		}
 		ai_will_do = { base = 200 }
 	}
@@ -1564,7 +1686,9 @@ focus_tree = {
 		completion_reward = {
 			add_ideas = ADISCORD_vorkerland_wkr_front_operations_bureau
 			army_experience = 5
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_front_operations_bureau
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_front_operations_bureau
+			}
 		}
 		ai_will_do = { base = 120 modifier = { factor = 2 has_war = yes } }
 	}
@@ -1621,7 +1745,9 @@ focus_tree = {
 		completion_reward = {
 			add_ideas = ADISCORD_vorkerland_wkr_republican_mission_commands
 			add_stability = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_republican_mission_commands
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_republican_mission_commands
+			}
 		}
 		ai_will_do = { base = 110 }
 	}
@@ -1676,7 +1802,9 @@ focus_tree = {
 		completion_reward = {
 			add_ideas = ADISCORD_vorkerland_wkr_normative_campaign_tables
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_normative_campaign_tables
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_normative_campaign_tables
+			}
 		}
 		ai_will_do = { base = 110 }
 	}
@@ -1728,7 +1856,9 @@ focus_tree = {
 			add_manpower = 250
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = WKR }
 			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_rolling_factory_groups days = 70 }
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_rolling_factory_groups
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_rolling_factory_groups
+			}
 		}
 		ai_will_do = { base = 130 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
 	}
@@ -1809,7 +1939,9 @@ focus_tree = {
 				add_equipment_to_stockpile = { type = support_equipment amount = 50 producer = WKR }
 			}
 			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_night_freight_corridors days = 70 }
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_night_freight_corridors
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_night_freight_corridors
+			}
 		}
 		ai_will_do = { base = 130 modifier = { factor = 2 has_war = yes } }
 	}
@@ -1858,7 +1990,9 @@ focus_tree = {
 			army_experience = 10
 			add_command_power = 10
 			add_equipment_to_stockpile = { type = support_equipment amount = 50 producer = WKR }
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_mobile_reserve_armed
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_mobile_reserve_armed
+			}
 		}
 		ai_will_do = { base = 135 modifier = { factor = 2 has_war = yes } }
 	}
@@ -1909,7 +2043,9 @@ focus_tree = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_rolling_front days = 56 }
 			add_command_power = 10
 			add_war_support = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_rolling_front_coordinated
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_rolling_front_coordinated
+			}
 		}
 		ai_will_do = { base = 170 modifier = { factor = 2 has_war = yes } }
 	}
@@ -1955,7 +2091,9 @@ focus_tree = {
 			air_experience = 10
 			add_command_power = 5
 			add_war_support = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_workers_air_command
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_workers_air_command
+			}
 		}
 		ai_will_do = {
 			base = 130
@@ -1997,7 +2135,9 @@ focus_tree = {
 			ADISCORD_vorkerland_bootstrap_wkr_air_sustainment = yes
 			air_experience = 10
 			add_fuel = 7500
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_air_sustainment
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_air_sustainment
+			}
 		}
 		ai_will_do = {
 			base = 170
@@ -2040,7 +2180,9 @@ focus_tree = {
 			ADISCORD_vorkerland_build_wkr_live_frontline_fortifications = yes
 			add_manpower = 250
 			army_experience = 5
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_mobile_fortification
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_mobile_fortification
+			}
 		}
 		ai_will_do = {
 			base = 190
@@ -2092,7 +2234,9 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = WKR }
 			add_equipment_to_stockpile = { type = support_equipment_1 amount = 60 producer = WKR }
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_southern_corridor
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_southern_corridor
+			}
 		}
 		ai_will_do = {
 			base = 150
@@ -2139,7 +2283,9 @@ focus_tree = {
 			army_experience = 10
 			add_command_power = 10
 			add_war_support = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_operation_southbound
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_operation_southbound
+			}
 		}
 		ai_will_do = {
 			base = 210
@@ -2185,8 +2331,10 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_solyarino_intervention }
 		completion_reward = {
 			custom_effect_tooltip = WKR_intervene_in_solyarino_effect_tt
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_solyarino_intervention
-			ADISCORD_vorkerland_attempt_wkr_solyarino_intervention = yes
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_solyarino_intervention
+				ADISCORD_vorkerland_attempt_wkr_solyarino_intervention = yes
+			}
 		}
 		ai_will_do = { base = 250 }
 	}
@@ -2240,8 +2388,10 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_remaining_fronts }
 		completion_reward = {
 			custom_effect_tooltip = WKR_open_the_remaining_fronts_effect_tt
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_remaining_fronts
-			ADISCORD_vorkerland_attempt_remaining_central_fronts = yes
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_remaining_fronts
+				ADISCORD_vorkerland_attempt_remaining_central_fronts = yes
+			}
 		}
 		ai_will_do = {
 			base = 240
@@ -2315,10 +2465,12 @@ focus_tree = {
 			add_war_support = 0.03
 			add_stability = -0.02
 			add_political_power = 20
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_unfinished_revolution
-			set_country_flag = ADISCORD_vorkerland_wkr_variant_neo_vorkerist
-			ADISCORD_vorkerland_story_report_variant_declaration = yes
-			ADISCORD_vorkerland_refresh_doctrine_dynamic_state = yes
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_unfinished_revolution
+				set_country_flag = ADISCORD_vorkerland_wkr_variant_neo_vorkerist
+				ADISCORD_vorkerland_story_report_variant_declaration = yes
+				ADISCORD_vorkerland_refresh_doctrine_dynamic_state = yes
+			}
 		}
 		ai_will_do = {
 			base = 90
@@ -2365,7 +2517,9 @@ focus_tree = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_worker_levy days = 70 }
 			add_manpower = 600
 			add_stability = -0.02
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_worker_levy
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_worker_levy
+			}
 		}
 		ai_will_do = {
 			base = 95
@@ -2415,8 +2569,10 @@ focus_tree = {
 			set_rule = { can_send_volunteers = yes }
 			add_command_power = 10
 			add_war_support = 0.03
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_chairmans_mandate
-			set_country_flag = ADISCORD_vorkerland_wkr_variant_settled
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_chairmans_mandate
+				set_country_flag = ADISCORD_vorkerland_wkr_variant_settled
+			}
 		}
 		ai_will_do = {
 			base = 100
@@ -2463,10 +2619,12 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_wkr_delivery_mandate
 			add_stability = 0.03
 			add_political_power = 20
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_delivery_mandate
-			set_country_flag = ADISCORD_vorkerland_wkr_variant_utilitarian
-			ADISCORD_vorkerland_story_report_variant_declaration = yes
-			ADISCORD_vorkerland_refresh_doctrine_dynamic_state = yes
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_delivery_mandate
+				set_country_flag = ADISCORD_vorkerland_wkr_variant_utilitarian
+				ADISCORD_vorkerland_story_report_variant_declaration = yes
+				ADISCORD_vorkerland_refresh_doctrine_dynamic_state = yes
+			}
 		}
 		ai_will_do = {
 			base = 90
@@ -2513,7 +2671,9 @@ focus_tree = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_ration_ledger days = 70 }
 			add_stability = 0.03
 			add_political_power = 15
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_ration_ledger
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_ration_ledger
+			}
 		}
 		ai_will_do = {
 			base = 95
@@ -2560,8 +2720,10 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_wkr_normative_republic
 			add_tech_bonus = { name = ADISCORD_vorkerland_wkr_normative_republic bonus = 0.5 uses = 1 category = industry }
 			add_stability = 0.03
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_normative_republic
-			set_country_flag = ADISCORD_vorkerland_wkr_variant_settled
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_normative_republic
+				set_country_flag = ADISCORD_vorkerland_wkr_variant_settled
+			}
 		}
 		ai_will_do = {
 			base = 100
@@ -2610,8 +2772,10 @@ focus_tree = {
 			add_political_power = 15
 			add_stability = 0.02
 			add_manpower = 250
-			set_country_flag = ADISCORD_vorkerland_focus_joint_charter
-			country_event = { id = ADISCORD_vorkerland_claimant.10 days = 1 }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_joint_charter
+				country_event = { id = ADISCORD_vorkerland_claimant.10 days = 1 }
+			}
 		}
 		ai_will_do = {
 			base = 100
@@ -2654,7 +2818,9 @@ focus_tree = {
 		completion_reward = {
 			add_command_power = 10
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_imperial_registers days = 70 }
-			set_country_flag = ADISCORD_vorkerland_focus_vad_registers_opened
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_registers_opened
+			}
 		}
 		ai_will_do = {
 			base = 40
@@ -2702,7 +2868,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_field_commandantures days = 70 }
 			army_experience = 5
-			set_country_flag = ADISCORD_vorkerland_focus_vad_commandantures_formed
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_commandantures_formed
+			}
 		}
 		ai_will_do = {
 			base = 40
@@ -2758,7 +2926,9 @@ focus_tree = {
 		}
 		completion_reward = {
 			add_political_power = 15
-			set_country_flag = ADISCORD_vorkerland_focus_vad_sol_invitation_intent
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_sol_invitation_intent
+			}
 		}
 		ai_will_do = { base = 60 }
 	}
@@ -2796,7 +2966,9 @@ focus_tree = {
 		completion_reward = {
 			add_command_power = 10
 			army_experience = 5
-			set_country_flag = ADISCORD_vorkerland_focus_vad_mobile_headquarters
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_mobile_headquarters
+			}
 		}
 		ai_will_do = {
 			base = 40
@@ -2843,8 +3015,10 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 15
 			add_stability = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_vad_solland_liaison_prepared
-			country_event = { id = ADISCORD_vorkerland_claimant.11 days = 1 }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_solland_liaison_prepared
+				country_event = { id = ADISCORD_vorkerland_claimant.11 days = 1 }
+			}
 		}
 		ai_will_do = { base = 70 }
 	}
@@ -2884,7 +3058,9 @@ focus_tree = {
 			add_political_power = 10
 			add_equipment_to_stockpile = { type = support_equipment amount = 50 producer = VAD }
 			add_tech_bonus = { name = VAD_eastern_works_industry_bonus bonus = 0.50 uses = 1 category = industry }
-			set_country_flag = ADISCORD_vorkerland_focus_vad_eastern_works
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_eastern_works
+			}
 		}
 		ai_will_do = {
 			base = 35
@@ -2925,7 +3101,9 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = VAD }
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_standardized_logistics days = 70 }
-			set_country_flag = ADISCORD_vorkerland_focus_vad_district_logistics
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_district_logistics
+			}
 		}
 		ai_will_do = {
 			base = 60
@@ -2969,7 +3147,9 @@ focus_tree = {
 			army_experience = 5
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = VAD }
 			add_equipment_to_stockpile = { type = support_equipment amount = 40 producer = VAD }
-			set_country_flag = ADISCORD_vorkerland_focus_vad_district_guard
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_district_guard
+			}
 		}
 		ai_will_do = {
 			base = 60
@@ -3018,8 +3198,12 @@ focus_tree = {
 			else = {
 				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = VAD }
 			}
-			set_country_flag = ADISCORD_vorkerland_focus_vad_armament_depots
-			country_event = { id = ADISCORD_vorkerland_claimant.12 days = 1 }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_armament_depots
+			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_vorkerland_claimant.12 days = 1 }
+			}
 		}
 		ai_will_do = {
 			base = 70
@@ -3068,7 +3252,9 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 15
 			add_stability = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_vad_crown_commissions
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_crown_commissions
+			}
 		}
 		ai_will_do = { base = 70 modifier = { factor = 2 has_stability < 0.50 } }
 	}
@@ -3113,7 +3299,9 @@ focus_tree = {
 		completion_reward = {
 			army_experience = 5
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_vad_chancery_officers
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_chancery_officers
+			}
 		}
 		ai_will_do = { base = 75 modifier = { factor = 2 has_war = yes } }
 	}
@@ -3160,7 +3348,9 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 10
 			add_stability = 0.02
-			set_country_flag = ADISCORD_vorkerland_focus_vad_worker_guarantees
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_worker_guarantees
+			}
 		}
 		ai_will_do = { base = 80 modifier = { factor = 2 has_stability < 0.50 } }
 	}
@@ -3206,7 +3396,9 @@ focus_tree = {
 		completion_reward = {
 			army_experience = 5
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_vad_joint_command_ratified
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_joint_command_ratified
+			}
 		}
 		ai_will_do = { base = 80 modifier = { factor = 2 has_war = yes } }
 	}
@@ -3251,8 +3443,10 @@ focus_tree = {
 		}
 		completion_reward = {
 			add_political_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_vad_restoration_authority
-			country_event = { id = ADISCORD_vorkerland_claimant.13 days = 1 }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_restoration_authority
+				country_event = { id = ADISCORD_vorkerland_claimant.13 days = 1 }
+			}
 		}
 		ai_will_do = { base = 100 }
 	}
@@ -3303,10 +3497,12 @@ focus_tree = {
 			add_war_support = 0.02
 			army_experience = 5
 			add_equipment_to_stockpile = { type = support_equipment amount = 75 producer = VAD }
-			set_country_flag = ADISCORD_vorkerland_focus_vad_balanced_command
-			set_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked
-			set_country_flag = ADISCORD_vorkerland_focus_central_front_prepared
-			country_event = { id = ADISCORD_vorkerland_claimant.31 hours = 1 }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_balanced_command
+				set_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked
+				set_country_flag = ADISCORD_vorkerland_focus_central_front_prepared
+				country_event = { id = ADISCORD_vorkerland_claimant.31 hours = 1 }
+			}
 		}
 		ai_will_do = { base = 200 }
 	}
@@ -3349,7 +3545,11 @@ focus_tree = {
 				limit = { controls_state = 75 }
 				75 = { add_building_construction = { type = bunker level = 1 instant_build = yes province = 6192 } }
 			}
-			set_country_flag = ADISCORD_vorkerland_focus_vad_retreat_levies_unlocked
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_vad_retreat_levy_1 show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_vad_retreat_levy_2 show_effect_tooltip = yes }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_retreat_levies_unlocked
+			}
 		}
 		ai_will_do = {
 			base = 70
@@ -3401,7 +3601,9 @@ focus_tree = {
 			add_political_power = 5
 			add_stability = 0.01
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_prefectural_discipline days = 70 }
-			set_country_flag = ADISCORD_vorkerland_focus_vad_prefectural_courts
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_prefectural_courts
+			}
 		}
 		ai_will_do = { base = 75 modifier = { factor = 2 has_war = yes } }
 	}
@@ -3457,7 +3659,9 @@ focus_tree = {
 				limit = { has_country_flag = ADISCORD_vorkerland_vad_chancery_command }
 				army_experience = 5
 			}
-			set_country_flag = ADISCORD_vorkerland_focus_vad_crown_mobilization_warrants
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_crown_mobilization_warrants
+			}
 		}
 		ai_will_do = { base = 85 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
 	}
@@ -3508,7 +3712,9 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_vad_restoration_war_cabinet
 			army_experience = 10
 			add_command_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_vad_restoration_war_cabinet
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_restoration_war_cabinet
+			}
 		}
 		ai_will_do = { base = 100 modifier = { factor = 2 has_war = yes } }
 	}
@@ -3558,7 +3764,9 @@ focus_tree = {
 			add_political_power = 10
 			add_stability = 0.01
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_vad_district_commissars
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_district_commissars
+			}
 		}
 		ai_will_do = { base = 80 modifier = { factor = 2 has_stability < 0.50 } }
 	}
@@ -3615,7 +3823,9 @@ focus_tree = {
 				limit = { has_country_flag = ADISCORD_vorkerland_vad_joint_staff_primacy }
 				army_experience = 5
 			}
-			set_country_flag = ADISCORD_vorkerland_focus_vad_merged_guard_rolls
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_merged_guard_rolls
+			}
 		}
 		ai_will_do = { base = 85 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
 	}
@@ -3668,7 +3878,9 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_vad_dual_authority_protocol
 			army_experience = 10
 			add_command_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_vad_dual_authority_protocol
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_dual_authority_protocol
+			}
 		}
 		ai_will_do = { base = 100 modifier = { factor = 2 has_war = yes } }
 	}
@@ -3712,7 +3924,9 @@ focus_tree = {
 			add_command_power = 10
 			add_equipment_to_stockpile = { type = support_equipment amount = 40 producer = VAD }
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_solar_corridor_intelligence days = 84 }
-			set_country_flag = ADISCORD_vorkerland_focus_vad_solar_corridors_mapped
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_solar_corridors_mapped
+			}
 		}
 		ai_will_do = { base = 80 modifier = { factor = 2 has_global_flag = ADISCORD_vorkerland_solar_terminal_verified } }
 	}
@@ -3755,7 +3969,9 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = VAD }
 			add_equipment_to_stockpile = { type = support_equipment amount = 50 producer = VAD }
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_restoration_columns days = 84 }
-			set_country_flag = ADISCORD_vorkerland_focus_vad_restoration_columns
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_restoration_columns
+			}
 		}
 		ai_will_do = { base = 90 modifier = { factor = 2 has_war = yes } }
 	}
@@ -3802,8 +4018,10 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_solar_settlement_defined }
 		completion_reward = {
 			ADISCORD_vorkerland_record_regional_diplomacy_outcomes = yes
-			set_country_flag = ADISCORD_vorkerland_focus_vad_solar_settlement_defined
-			country_event = { id = ADISCORD_vorkerland_claimant.14 hours = 1 }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_solar_settlement_defined
+				country_event = { id = ADISCORD_vorkerland_claimant.14 hours = 1 }
+			}
 		}
 		ai_will_do = { base = 120 }
 	}
@@ -3858,8 +4076,10 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_remaining_fronts }
 		completion_reward = {
 			custom_effect_tooltip = VAD_open_the_remaining_fronts_effect_tt
-			set_country_flag = ADISCORD_vorkerland_focus_vad_remaining_fronts
-			ADISCORD_vorkerland_attempt_remaining_central_fronts = yes
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_remaining_fronts
+				ADISCORD_vorkerland_attempt_remaining_central_fronts = yes
+			}
 		}
 		ai_will_do = {
 			base = 240
@@ -3927,10 +4147,12 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_vad_imperial_mandate
 			add_political_power = 25
 			add_stability = -0.02
-			set_country_flag = ADISCORD_vorkerland_focus_vad_imperial_mandate
-			set_country_flag = ADISCORD_vorkerland_vad_variant_imperial
-			ADISCORD_vorkerland_story_report_variant_declaration = yes
-			ADISCORD_vorkerland_refresh_doctrine_dynamic_state = yes
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_imperial_mandate
+				set_country_flag = ADISCORD_vorkerland_vad_variant_imperial
+				ADISCORD_vorkerland_story_report_variant_declaration = yes
+				ADISCORD_vorkerland_refresh_doctrine_dynamic_state = yes
+			}
 		}
 		ai_will_do = {
 			base = 90
@@ -3975,7 +4197,9 @@ focus_tree = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_officer_estates days = 70 }
 			army_experience = 10
 			add_command_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_vad_officer_estates
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_officer_estates
+			}
 		}
 		ai_will_do = {
 			base = 95
@@ -4020,8 +4244,10 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_vad_crowned_restoration
 			add_political_power = 20
 			add_war_support = 0.03
-			set_country_flag = ADISCORD_vorkerland_focus_vad_crowned_restoration
-			set_country_flag = ADISCORD_vorkerland_vad_variant_settled
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_crowned_restoration
+				set_country_flag = ADISCORD_vorkerland_vad_variant_settled
+			}
 		}
 		ai_will_do = {
 			base = 100
@@ -4069,10 +4295,12 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_vad_dual_chamber
 			add_stability = 0.03
 			add_war_support = 0.03
-			set_country_flag = ADISCORD_vorkerland_focus_vad_dual_chamber
-			set_country_flag = ADISCORD_vorkerland_vad_variant_joint
-			ADISCORD_vorkerland_story_report_variant_declaration = yes
-			ADISCORD_vorkerland_refresh_doctrine_dynamic_state = yes
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_dual_chamber
+				set_country_flag = ADISCORD_vorkerland_vad_variant_joint
+				ADISCORD_vorkerland_story_report_variant_declaration = yes
+				ADISCORD_vorkerland_refresh_doctrine_dynamic_state = yes
+			}
 		}
 		ai_will_do = {
 			base = 90
@@ -4118,7 +4346,9 @@ focus_tree = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_district_rolls days = 70 }
 			add_manpower = 600
 			add_political_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_vad_district_rolls
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_district_rolls
+			}
 		}
 		ai_will_do = {
 			base = 95
@@ -4166,8 +4396,10 @@ focus_tree = {
 			set_rule = { can_send_volunteers = yes }
 			add_stability = 0.03
 			add_command_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_vad_crown_and_council
-			set_country_flag = ADISCORD_vorkerland_vad_variant_settled
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_crown_and_council
+				set_country_flag = ADISCORD_vorkerland_vad_variant_settled
+			}
 		}
 		ai_will_do = {
 			base = 100
@@ -4216,7 +4448,9 @@ focus_tree = {
 			add_manpower = 400
 			add_stability = 0.01
 			add_political_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_vad_emergency_rolls_reconciled
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_emergency_rolls_reconciled
+			}
 		}
 		ai_will_do = { base = 70 modifier = { factor = 2 has_war = no } }
 	}
@@ -4257,7 +4491,9 @@ focus_tree = {
 			}
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_restoration_columns days = 70 }
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_vad_eastern_supply_corridors_restored
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_eastern_supply_corridors_restored
+			}
 		}
 		ai_will_do = { base = 75 modifier = { factor = 2 has_war = no } }
 	}
@@ -4301,7 +4537,9 @@ focus_tree = {
 			}
 			add_equipment_to_stockpile = { type = support_equipment amount = 50 producer = VAD }
 			add_war_support = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_vad_emergency_workshops_converted
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_emergency_workshops_converted
+			}
 		}
 		ai_will_do = { base = 75 modifier = { factor = 2 has_war = yes } }
 	}
@@ -4342,7 +4580,9 @@ focus_tree = {
 			army_experience = 5
 			add_political_power = 15
 			add_stability = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_vad_interim_restoration_register
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_interim_restoration_register
+			}
 		}
 		ai_will_do = { base = 80 }
 	}
@@ -4393,7 +4633,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_campaign_directorate days = 70 }
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_vad_campaign_directorate
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_campaign_directorate
+			}
 		}
 		ai_will_do = { base = 120 modifier = { factor = 2 has_war = yes } }
 	}
@@ -4449,7 +4691,9 @@ focus_tree = {
 			remove_ideas = ADISCORD_vorkerland_vad_dual_authority_protocol_2
 			add_ideas = ADISCORD_vorkerland_vad_restoration_war_cabinet_2
 			army_experience = 5
-			set_country_flag = ADISCORD_vorkerland_focus_vad_prefectural_field_decrees
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_prefectural_field_decrees
+			}
 		}
 		ai_will_do = { base = 130 modifier = { factor = 2 has_war = yes } }
 	}
@@ -4507,7 +4751,9 @@ focus_tree = {
 			remove_ideas = ADISCORD_vorkerland_vad_restoration_war_cabinet_2
 			add_ideas = ADISCORD_vorkerland_vad_dual_authority_protocol_2
 			army_experience = 5
-			set_country_flag = ADISCORD_vorkerland_focus_vad_front_commissars
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_front_commissars
+			}
 		}
 		ai_will_do = { base = 130 modifier = { factor = 2 has_war = yes } }
 	}
@@ -4558,7 +4804,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_standardized_restoration_columns days = 70 }
 			add_equipment_to_stockpile = { type = support_equipment amount = 50 producer = VAD }
-			set_country_flag = ADISCORD_vorkerland_focus_vad_restoration_columns_standardized
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_restoration_columns_standardized
+			}
 		}
 		ai_will_do = { base = 145 modifier = { factor = 2 has_war = yes } }
 	}
@@ -4612,7 +4860,9 @@ focus_tree = {
 				add_timed_idea = { idea = ADISCORD_vorkerland_vad_prefectural_offensive days = 70 }
 			}
 			add_command_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_vad_one_register_advance
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_one_register_advance
+			}
 		}
 		ai_will_do = { base = 175 modifier = { factor = 2 has_war = yes } }
 	}
@@ -4662,8 +4912,10 @@ focus_tree = {
 			add_stability = 0.02
 			add_manpower = 250
 			custom_effect_tooltip = TVA_technocratic_directorate_tt
-			set_country_flag = ADISCORD_vorkerland_focus_utilitarian_directorate
-			country_event = { id = ADISCORD_vorkerland_claimant.20 days = 1 }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_utilitarian_directorate
+				country_event = { id = ADISCORD_vorkerland_claimant.20 days = 1 }
+			}
 		}
 		ai_will_do = {
 			base = 100
@@ -4704,7 +4956,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_grid_rerouting days = 35 }
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_tva_grid_rerouted
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_grid_rerouted
+			}
 		}
 		ai_will_do = {
 			base = 35
@@ -4744,7 +4998,9 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_laboratories_deployed }
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_field_laboratories days = 35 }
-			set_country_flag = ADISCORD_vorkerland_focus_tva_laboratories_deployed
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_laboratories_deployed
+			}
 		}
 		ai_will_do = {
 			base = 40
@@ -4788,8 +5044,10 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			set_country_flag = ADISCORD_vorkerland_focus_tva_trial_protocol
-			country_event = { id = ADISCORD_vorkerland_claimant.23 days = 1 }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_trial_protocol
+				country_event = { id = ADISCORD_vorkerland_claimant.23 days = 1 }
+			}
 		}
 		ai_will_do = { base = 80 }
 	}
@@ -4833,7 +5091,9 @@ focus_tree = {
 		completion_reward = {
 			add_manpower = 400
 			army_experience = 5
-			set_country_flag = ADISCORD_vorkerland_focus_tva_technical_battalions
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_technical_battalions
+			}
 		}
 		ai_will_do = {
 			base = 60
@@ -4881,8 +5141,12 @@ focus_tree = {
 			else = {
 				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = TVA }
 			}
-			set_country_flag = ADISCORD_vorkerland_focus_tva_output_norms
-			country_event = { id = ADISCORD_vorkerland_claimant.22 days = 1 }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_output_norms
+			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_vorkerland_claimant.22 days = 1 }
+			}
 		}
 		ai_will_do = {
 			base = 60
@@ -4924,7 +5188,9 @@ focus_tree = {
 			army_experience = 5
 			add_command_power = 5
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_mobile_repair_trains days = 35 }
-			set_country_flag = ADISCORD_vorkerland_focus_tva_mobile_repair_trains
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_mobile_repair_trains
+			}
 		}
 		ai_will_do = {
 			base = 70
@@ -4967,7 +5233,9 @@ focus_tree = {
 			add_stability = 0.01
 			add_political_power = 10
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_operational_audit days = 70 }
-			set_country_flag = ADISCORD_vorkerland_focus_tva_operational_metrics
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_operational_metrics
+			}
 		}
 		ai_will_do = {
 			base = 35
@@ -5016,7 +5284,9 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = TVA }
 			add_political_power = 5
 			add_stability = -0.01
-			set_country_flag = ADISCORD_vorkerland_focus_tva_throughput_priority
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_throughput_priority
+			}
 		}
 		ai_will_do = {
 			base = 40
@@ -5069,7 +5339,9 @@ focus_tree = {
 				uses = 1
 				category = electronics
 			}
-			set_country_flag = ADISCORD_vorkerland_focus_tva_specialist_priority
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_specialist_priority
+			}
 		}
 		ai_will_do = {
 			base = 40
@@ -5127,8 +5399,12 @@ focus_tree = {
 			}
 			else = { add_war_support = 0.01 }
 			add_political_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_tva_emergency_administration
-			country_event = { id = ADISCORD_vorkerland_claimant.21 days = 1 }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_emergency_administration
+			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_vorkerland_claimant.21 days = 1 }
+			}
 		}
 		ai_will_do = { base = 70 }
 	}
@@ -5177,7 +5453,9 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 10
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_tva_algorithmic_board
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_algorithmic_board
+			}
 		}
 		ai_will_do = {
 			base = 25
@@ -5221,7 +5499,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = {
 			OR = {
-				has_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_vorkerland_tva_iteration_prerequisite_tt
+					has_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control
+				}
 				has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
 			}
 		}
@@ -5229,7 +5510,9 @@ focus_tree = {
 			army_experience = 5
 			add_command_power = 5
 			add_equipment_to_stockpile = { type = support_equipment_1 amount = 40 producer = TVA }
-			set_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control
+			}
 		}
 		ai_will_do = { base = 60 }
 	}
@@ -5270,7 +5553,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = {
 			OR = {
-				has_country_flag = ADISCORD_vorkerland_focus_tva_adaptive_logistics
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_vorkerland_tva_iteration_prerequisite_tt
+					has_country_flag = ADISCORD_vorkerland_focus_tva_adaptive_logistics
+				}
 				has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
 			}
 		}
@@ -5278,7 +5564,9 @@ focus_tree = {
 			army_experience = 5
 			add_timed_idea = { idea = ADISCORD_vorkerland_worx_adaptive_logistics_trial days = 90 }
 			add_equipment_to_stockpile = { type = support_equipment_1 amount = 50 producer = TVA }
-			set_country_flag = ADISCORD_vorkerland_focus_tva_adaptive_logistics
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_adaptive_logistics
+			}
 		}
 		ai_will_do = {
 			base = 60
@@ -5329,7 +5617,9 @@ focus_tree = {
 		completion_reward = {
 			add_war_support = 0.01
 			army_experience = 5
-			set_country_flag = ADISCORD_vorkerland_focus_tva_field_results
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_field_results
+			}
 		}
 		ai_will_do = { base = 90 }
 	}
@@ -5370,7 +5660,11 @@ focus_tree = {
 				limit = { controls_state = 36 }
 				36 = { add_building_construction = { type = bunker level = 1 instant_build = yes province = 12227 } }
 			}
-			set_country_flag = ADISCORD_vorkerland_focus_tva_retreat_levies_unlocked
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_tva_retreat_levy_1 show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_tva_retreat_levy_2 show_effect_tooltip = yes }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_retreat_levies_unlocked
+			}
 		}
 		ai_will_do = {
 			base = 70
@@ -5417,7 +5711,9 @@ focus_tree = {
 		completion_reward = {
 			add_command_power = 5
 			add_equipment_to_stockpile = { type = support_equipment_1 amount = 40 producer = TVA }
-			set_country_flag = ADISCORD_vorkerland_focus_tva_switching_stations
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_switching_stations
+			}
 		}
 		ai_will_do = { base = 80 }
 	}
@@ -5465,9 +5761,11 @@ focus_tree = {
 			add_war_support = 0.02
 			army_experience = 5
 			add_equipment_to_stockpile = { type = support_equipment_1 amount = 75 producer = TVA }
-			set_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
-			set_country_flag = ADISCORD_vorkerland_focus_central_front_prepared
-			country_event = { id = ADISCORD_vorkerland_claimant.32 hours = 1 }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
+				set_country_flag = ADISCORD_vorkerland_focus_central_front_prepared
+				country_event = { id = ADISCORD_vorkerland_claimant.32 hours = 1 }
+			}
 		}
 		ai_will_do = { base = 200 }
 	}
@@ -5511,7 +5809,9 @@ focus_tree = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_unattended_shifts days = 70 }
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 75 producer = TVA }
 			add_political_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_tva_unattended_shifts
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_unattended_shifts
+			}
 		}
 		ai_will_do = {
 			base = 70
@@ -5556,7 +5856,9 @@ focus_tree = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_algorithmic_fire_plans days = 70 }
 			add_command_power = 10
 			army_experience = 5
-			set_country_flag = ADISCORD_vorkerland_focus_tva_algorithmic_fire_plans
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_algorithmic_fire_plans
+			}
 		}
 		ai_will_do = { base = 75 }
 	}
@@ -5598,7 +5900,9 @@ focus_tree = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_bunker_specialist_cadres days = 70 }
 			add_manpower = 250
 			add_equipment_to_stockpile = { type = support_equipment_1 amount = 50 producer = TVA }
-			set_country_flag = ADISCORD_vorkerland_focus_tva_bunker_specialist_cadres
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_bunker_specialist_cadres
+			}
 		}
 		ai_will_do = {
 			base = 70
@@ -5630,7 +5934,10 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_country_flag = ADISCORD_vorkerland_focus_tva_technical_battalions
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_tva_iteration_prerequisite_tt
+				has_country_flag = ADISCORD_vorkerland_focus_tva_technical_battalions
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -5645,7 +5952,9 @@ focus_tree = {
 			add_manpower = 250
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = TVA }
 			army_experience = 5
-			set_country_flag = ADISCORD_vorkerland_focus_tva_standardized_assault_teams
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_standardized_assault_teams
+			}
 		}
 		ai_will_do = { base = 80 }
 	}
@@ -5673,7 +5982,10 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_tva_iteration_prerequisite_tt
+				has_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -5687,7 +5999,9 @@ focus_tree = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_networked_observation_posts days = 70 }
 			add_equipment_to_stockpile = { type = support_equipment_1 amount = 60 producer = TVA }
 			add_command_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_tva_networked_observation_posts
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_networked_observation_posts
+			}
 		}
 		ai_will_do = { base = 75 }
 	}
@@ -5715,7 +6029,10 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_country_flag = ADISCORD_vorkerland_focus_tva_adaptive_logistics
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_tva_iteration_prerequisite_tt
+				has_country_flag = ADISCORD_vorkerland_focus_tva_adaptive_logistics
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -5729,7 +6046,9 @@ focus_tree = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_modular_repair_mandate days = 56 }
 			add_equipment_to_stockpile = { type = support_equipment_1 amount = 50 producer = TVA }
 			army_experience = 5
-			set_country_flag = ADISCORD_vorkerland_focus_tva_modular_repair_mandate
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_modular_repair_mandate
+			}
 		}
 		ai_will_do = {
 			base = 80
@@ -5787,7 +6106,9 @@ focus_tree = {
 				uses = 1
 				category = industry
 			}
-			set_country_flag = ADISCORD_vorkerland_focus_tva_interchangeable_repair_modules
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_interchangeable_repair_modules
+			}
 		}
 		ai_will_do = { base = 100 }
 	}
@@ -5830,7 +6151,9 @@ focus_tree = {
 			add_manpower = 250
 			add_equipment_to_stockpile = { type = support_equipment_1 amount = 60 producer = TVA }
 			add_command_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_tva_switching_crews_prepositioned
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_switching_crews_prepositioned
+			}
 		}
 		ai_will_do = { base = 100 }
 	}
@@ -5878,8 +6201,10 @@ focus_tree = {
 			}
 			army_experience = 5
 			add_political_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_tva_trial_logs_cross_validated
-			country_event = { id = ADISCORD_vorkerland_claimant.24 hours = 1 }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_trial_logs_cross_validated
+				country_event = { id = ADISCORD_vorkerland_claimant.24 hours = 1 }
+			}
 		}
 		ai_will_do = { base = 110 }
 	}
@@ -5925,7 +6250,9 @@ focus_tree = {
 			add_war_support = 0.02
 			add_command_power = 10
 			army_experience = 10
-			set_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_iteration_two_authorized
+			}
 		}
 		ai_will_do = { base = 150 }
 	}
@@ -5977,8 +6304,10 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_remaining_fronts }
 		completion_reward = {
 			custom_effect_tooltip = TVA_open_the_remaining_fronts_effect_tt
-			set_country_flag = ADISCORD_vorkerland_focus_tva_remaining_fronts
-			ADISCORD_vorkerland_attempt_remaining_central_fronts = yes
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_remaining_fronts
+				ADISCORD_vorkerland_attempt_remaining_central_fronts = yes
+			}
 		}
 		ai_will_do = {
 			base = 240
@@ -6049,10 +6378,12 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_tva_continuous_mobilization
 			add_war_support = 0.03
 			add_stability = -0.03
-			set_country_flag = ADISCORD_vorkerland_focus_tva_continuous_mobilization
-			set_country_flag = ADISCORD_vorkerland_tva_variant_throughput
-			ADISCORD_vorkerland_story_report_variant_declaration = yes
-			ADISCORD_vorkerland_refresh_doctrine_dynamic_state = yes
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_continuous_mobilization
+				set_country_flag = ADISCORD_vorkerland_tva_variant_throughput
+				ADISCORD_vorkerland_story_report_variant_declaration = yes
+				ADISCORD_vorkerland_refresh_doctrine_dynamic_state = yes
+			}
 		}
 		ai_will_do = {
 			base = 60
@@ -6098,7 +6429,9 @@ focus_tree = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_converted_grid days = 70 }
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = TVA }
 			add_stability = -0.01
-			set_country_flag = ADISCORD_vorkerland_focus_tva_converted_grid
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_converted_grid
+			}
 		}
 		ai_will_do = {
 			base = 95
@@ -6144,8 +6477,10 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_tva_single_process
 			add_tech_bonus = { name = ADISCORD_vorkerland_tva_single_process bonus = 0.5 uses = 1 category = industry }
 			army_experience = 10
-			set_country_flag = ADISCORD_vorkerland_focus_tva_single_process
-			set_country_flag = ADISCORD_vorkerland_tva_variant_settled
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_single_process
+				set_country_flag = ADISCORD_vorkerland_tva_variant_settled
+			}
 		}
 		ai_will_do = {
 			base = 100
@@ -6191,10 +6526,12 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_tva_preservation_protocol
 			add_stability = 0.03
 			add_political_power = 15
-			set_country_flag = ADISCORD_vorkerland_focus_tva_preservation_protocol
-			set_country_flag = ADISCORD_vorkerland_tva_variant_preservation
-			ADISCORD_vorkerland_story_report_variant_declaration = yes
-			ADISCORD_vorkerland_refresh_doctrine_dynamic_state = yes
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_preservation_protocol
+				set_country_flag = ADISCORD_vorkerland_tva_variant_preservation
+				ADISCORD_vorkerland_story_report_variant_declaration = yes
+				ADISCORD_vorkerland_refresh_doctrine_dynamic_state = yes
+			}
 		}
 		ai_will_do = {
 			base = 60
@@ -6241,7 +6578,9 @@ focus_tree = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_evacuated_bureaus days = 70 }
 			add_tech_bonus = { name = ADISCORD_vorkerland_tva_evacuated_bureaus bonus = 0.5 uses = 1 category = electronics }
 			add_political_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_tva_evacuated_bureaus
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_evacuated_bureaus
+			}
 		}
 		ai_will_do = {
 			base = 95
@@ -6287,8 +6626,10 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_tva_certified_cadre
 			army_experience = 10
 			add_stability = 0.02
-			set_country_flag = ADISCORD_vorkerland_focus_tva_certified_cadre
-			set_country_flag = ADISCORD_vorkerland_tva_variant_settled
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_certified_cadre
+				set_country_flag = ADISCORD_vorkerland_tva_variant_settled
+			}
 		}
 		ai_will_do = {
 			base = 100
@@ -6346,7 +6687,9 @@ focus_tree = {
 			remove_ideas = ADISCORD_vorkerland_worx_second_protocol
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_integrated_second_protocol days = 70 }
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_tva_field_iteration_merged
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_field_iteration_merged
+			}
 		}
 		ai_will_do = { base = 120 modifier = { factor = 2 has_war = yes } }
 	}
@@ -6364,13 +6707,19 @@ focus_tree = {
 		prerequisite = { focus = TVA_merge_iteration_with_field_command }
 		allow_branch = {
 			tag = TVA
-			has_country_flag = ADISCORD_vorkerland_focus_tva_technical_battalions
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_tva_iteration_prerequisite_tt
+				has_country_flag = ADISCORD_vorkerland_focus_tva_technical_battalions
+			}
 			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			has_global_flag = ADISCORD_vorkerland_central_showdown_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 		}
 		available = {
-			has_country_flag = ADISCORD_vorkerland_focus_tva_technical_battalions
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_tva_iteration_prerequisite_tt
+				has_country_flag = ADISCORD_vorkerland_focus_tva_technical_battalions
+			}
 			custom_trigger_tooltip = {
 				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
 				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
@@ -6397,7 +6746,9 @@ focus_tree = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_assault_modules days = 70 }
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = TVA }
 			add_equipment_to_stockpile = { type = support_equipment amount = 40 producer = TVA }
-			set_country_flag = ADISCORD_vorkerland_focus_tva_assault_modules_mass_produced
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_assault_modules_mass_produced
+			}
 		}
 		ai_will_do = { base = 145 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
 	}
@@ -6415,13 +6766,19 @@ focus_tree = {
 		prerequisite = { focus = TVA_merge_iteration_with_field_command }
 		allow_branch = {
 			tag = TVA
-			has_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_tva_iteration_prerequisite_tt
+				has_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control
+			}
 			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			has_global_flag = ADISCORD_vorkerland_central_showdown_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 		}
 		available = {
-			has_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_tva_iteration_prerequisite_tt
+				has_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control
+			}
 			custom_trigger_tooltip = {
 				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
 				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
@@ -6448,7 +6805,9 @@ focus_tree = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_linked_fire_control days = 70 }
 			add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = TVA }
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_tva_observers_linked
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_observers_linked
+			}
 		}
 		ai_will_do = { base = 145 modifier = { factor = 2 has_war = yes } }
 	}
@@ -6466,13 +6825,19 @@ focus_tree = {
 		prerequisite = { focus = TVA_merge_iteration_with_field_command }
 		allow_branch = {
 			tag = TVA
-			has_country_flag = ADISCORD_vorkerland_focus_tva_adaptive_logistics
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_tva_iteration_prerequisite_tt
+				has_country_flag = ADISCORD_vorkerland_focus_tva_adaptive_logistics
+			}
 			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			has_global_flag = ADISCORD_vorkerland_central_showdown_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 		}
 		available = {
-			has_country_flag = ADISCORD_vorkerland_focus_tva_adaptive_logistics
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_vorkerland_tva_iteration_prerequisite_tt
+				has_country_flag = ADISCORD_vorkerland_focus_tva_adaptive_logistics
+			}
 			custom_trigger_tooltip = {
 				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
 				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
@@ -6499,7 +6864,9 @@ focus_tree = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_supply_web days = 70 }
 			add_equipment_to_stockpile = { type = support_equipment amount = 50 producer = TVA }
 			army_experience = 5
-			set_country_flag = ADISCORD_vorkerland_focus_tva_supply_web
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_supply_web
+			}
 		}
 		ai_will_do = { base = 145 modifier = { factor = 2 has_war = yes } }
 	}
@@ -6564,7 +6931,9 @@ focus_tree = {
 			}
 			add_command_power = 10
 			army_experience = 5
-			set_country_flag = ADISCORD_vorkerland_focus_tva_live_front_validated
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_live_front_validated
+			}
 		}
 		ai_will_do = { base = 180 modifier = { factor = 2 has_war = yes } }
 	}
@@ -6595,7 +6964,9 @@ focus_tree = {
 			add_political_power = 15
 			add_stability = 0.01
 			add_ideas = ADISCORD_vorkerland_worker_reconstruction_compact_1
-			set_country_flag = ADISCORD_vorkerland_focus_worker_postwar_congress
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_worker_postwar_congress
+			}
 		}
 		ai_will_do = { base = 15 }
 	}
@@ -6622,7 +6993,9 @@ focus_tree = {
 				add_ideas = ADISCORD_vorkerland_erased_nations_relief_1
 			}
 			add_political_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_worker_erased_archives
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_worker_erased_archives
+			}
 		}
 		ai_will_do = { base = 13 }
 	}
@@ -6645,8 +7018,11 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 10
 			add_stability = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_worker_free_republics
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_recognize_free_republics show_effect_tooltip = yes }
 			custom_effect_tooltip = WRK_worker_recognize_free_republics_tt
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_worker_free_republics
+			}
 		}
 		ai_will_do = { base = 12 }
 	}
@@ -6674,7 +7050,9 @@ focus_tree = {
 			}
 			add_political_power = 10
 			add_stability = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_worker_cooperative_reconstruction
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_worker_cooperative_reconstruction
+			}
 		}
 		ai_will_do = { base = 13 }
 	}
@@ -6703,7 +7081,9 @@ focus_tree = {
 			}
 			add_political_power = 5
 			add_stability = 0.02
-			set_country_flag = ADISCORD_vorkerland_focus_worker_displaced_councils
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_worker_displaced_councils
+			}
 		}
 		ai_will_do = { base = 13 }
 	}
@@ -6727,9 +7107,18 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 15
 			add_stability = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_worker_homecoming_commissions
-			set_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_claimant_homes show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_central_historical show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_oitfort show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_rimat show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_techlar show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_ebern show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_solar show_effect_tooltip = yes }
 			custom_effect_tooltip = ADISCORD_vorkerland_unlock_core_restoration_decisions_tt
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_worker_homecoming_commissions
+				set_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked
+			}
 		}
 		ai_will_do = { base = 14 }
 	}
@@ -6754,7 +7143,9 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_worker_housing_guarantee
 			add_stability = 0.02
 			add_political_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_worker_housing_guarantees
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_worker_housing_guarantees
+			}
 		}
 		ai_will_do = {
 			base = 12
@@ -6782,7 +7173,9 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_worker_local_reconstruction_grants
 			add_political_power = 20
 			add_stability = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_worker_reconstruction_grants
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_worker_reconstruction_grants
+			}
 		}
 		ai_will_do = {
 			base = 11
@@ -6816,7 +7209,9 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_worker_reconstruction_compact_2
 			add_political_power = 15
 			add_stability = 0.02
-			set_country_flag = ADISCORD_vorkerland_focus_worker_republican_compact
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_worker_republican_compact
+			}
 		}
 		ai_will_do = { base = 16 }
 	}
@@ -6884,7 +7279,9 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_worker_constitutional_settlement
 			add_stability = 0.03
 			add_political_power = 25
-			set_country_flag = ADISCORD_vorkerland_focus_worker_constitutional_guarantees
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_worker_constitutional_guarantees
+			}
 			custom_effect_tooltip = WRK_worker_write_constitutional_guarantees_tt
 		}
 		ai_will_do = { base = 16 }
@@ -6915,7 +7312,9 @@ focus_tree = {
 			add_political_power = 15
 			add_stability = 0.01
 			add_ideas = ADISCORD_vorkerland_joint_restoration_authority_1
-			set_country_flag = ADISCORD_vorkerland_focus_joint_postwar_council
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_joint_postwar_council
+			}
 		}
 		ai_will_do = { base = 15 }
 	}
@@ -6938,7 +7337,9 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 10
 			add_stability = 0.02
-			set_country_flag = ADISCORD_vorkerland_focus_joint_amnesty_registers
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_joint_amnesty_registers
+			}
 		}
 		ai_will_do = { base = 12 }
 	}
@@ -6960,7 +7361,9 @@ focus_tree = {
 		completion_reward = {
 			add_command_power = 10
 			army_experience = 10
-			set_country_flag = ADISCORD_vorkerland_focus_joint_military_districts
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_joint_military_districts
+			}
 		}
 		ai_will_do = { base = 13 }
 	}
@@ -6987,7 +7390,9 @@ focus_tree = {
 			}
 			add_command_power = 5
 			army_experience = 5
-			set_country_flag = ADISCORD_vorkerland_focus_joint_rail_commands
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_joint_rail_commands
+			}
 		}
 		ai_will_do = { base = 13 }
 	}
@@ -7011,9 +7416,18 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 15
 			add_stability = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_joint_integration_warrants
-			set_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_claimant_homes show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_central_historical show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_oitfort show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_rimat show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_techlar show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_ebern show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_solar show_effect_tooltip = yes }
 			custom_effect_tooltip = ADISCORD_vorkerland_unlock_core_restoration_decisions_tt
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_joint_integration_warrants
+				set_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked
+			}
 		}
 		ai_will_do = { base = 14 }
 	}
@@ -7043,7 +7457,9 @@ focus_tree = {
 			add_political_power = 15
 			add_stability = 0.01
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_joint_restored_chancery
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_joint_restored_chancery
+			}
 		}
 		ai_will_do = { base = 14 }
 	}
@@ -7068,7 +7484,9 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_joint_civilian_transition
 			add_stability = 0.02
 			add_political_power = 15
-			set_country_flag = ADISCORD_vorkerland_focus_joint_civilian_police
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_joint_civilian_police
+			}
 		}
 		ai_will_do = {
 			base = 12
@@ -7098,7 +7516,9 @@ focus_tree = {
 			add_war_support = 0.02
 			add_command_power = 10
 			army_experience = 5
-			set_country_flag = ADISCORD_vorkerland_focus_joint_emergency_inspectorate
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_joint_emergency_inspectorate
+			}
 		}
 		ai_will_do = {
 			base = 11
@@ -7131,7 +7551,9 @@ focus_tree = {
 			add_war_support = 0.01
 			add_command_power = 10
 			army_experience = 5
-			set_country_flag = ADISCORD_vorkerland_focus_joint_single_chain_of_command
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_joint_single_chain_of_command
+			}
 		}
 		ai_will_do = { base = 16 }
 	}
@@ -7201,7 +7623,9 @@ focus_tree = {
 			add_war_support = 0.03
 			add_political_power = 20
 			add_command_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_joint_order_settlement
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_joint_order_settlement
+			}
 		}
 		ai_will_do = { base = 16 }
 	}
@@ -7233,7 +7657,9 @@ focus_tree = {
 			add_stability = 0.01
 			add_ideas = ADISCORD_vorkerland_technical_reconstruction_mandate
 			custom_effect_tooltip = WRK_technocratic_reconstruction_mandate_tt
-			set_country_flag = ADISCORD_vorkerland_focus_utilitarian_postwar_directorate
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_utilitarian_postwar_directorate
+			}
 		}
 		ai_will_do = { base = 15 }
 	}
@@ -7260,7 +7686,9 @@ focus_tree = {
 			}
 			add_ideas = ADISCORD_vorkerland_national_power_standard
 			add_political_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_utilitarian_power_standard
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_utilitarian_power_standard
+			}
 		}
 		ai_will_do = { base = 13 }
 	}
@@ -7293,7 +7721,9 @@ focus_tree = {
 				category = industry
 			}
 			add_political_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_utilitarian_machine_tools
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_utilitarian_machine_tools
+			}
 		}
 		ai_will_do = { base = 13 }
 	}
@@ -7322,7 +7752,9 @@ focus_tree = {
 				category = electronics
 			}
 			add_political_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_utilitarian_national_laboratories
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_utilitarian_national_laboratories
+			}
 		}
 		ai_will_do = { base = 13 }
 	}
@@ -7346,9 +7778,18 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 10
 			add_stability = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_utilitarian_integration_metrics
-			set_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_claimant_homes show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_central_historical show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_oitfort show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_rimat show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_techlar show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_ebern show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_solar show_effect_tooltip = yes }
 			custom_effect_tooltip = ADISCORD_vorkerland_unlock_core_restoration_decisions_tt
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_utilitarian_integration_metrics
+				set_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked
+			}
 		}
 		ai_will_do = { base = 14 }
 	}
@@ -7372,7 +7813,9 @@ focus_tree = {
 			add_political_power = 15
 			add_stability = 0.02
 			add_ideas = ADISCORD_vorkerland_statistical_administration
-			set_country_flag = ADISCORD_vorkerland_focus_utilitarian_rationalized_districts
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_utilitarian_rationalized_districts
+			}
 		}
 		ai_will_do = { base = 14 }
 	}
@@ -7404,7 +7847,9 @@ focus_tree = {
 				}
 			}
 			add_stability = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_utilitarian_public_utilities
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_utilitarian_public_utilities
+			}
 		}
 		ai_will_do = {
 			base = 12
@@ -7432,7 +7877,9 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_industrial_recovery_priority
 			add_political_power = 10
 			add_stability = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_utilitarian_industrial_recovery
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_utilitarian_industrial_recovery
+			}
 		}
 		ai_will_do = {
 			base = 11
@@ -7466,7 +7913,9 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_technical_reconstruction_mandate_2
 			add_political_power = 15
 			add_stability = 0.01
-			set_country_flag = ADISCORD_vorkerland_focus_utilitarian_reconstruction_ledger
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_utilitarian_reconstruction_ledger
+			}
 		}
 		ai_will_do = { base = 16 }
 	}
@@ -7537,7 +7986,9 @@ focus_tree = {
 			add_stability = 0.03
 			add_political_power = 25
 			custom_effect_tooltip = WRK_technocratic_republic_settlement_tt
-			set_country_flag = ADISCORD_vorkerland_focus_utilitarian_measurable_republic
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_utilitarian_measurable_republic
+			}
 		}
 		ai_will_do = { base = 16 }
 	}
@@ -7583,10 +8034,13 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_convene_the_production_soviet }
 		completion_reward = {
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_wkr_war_economy_dummy }
 			add_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_war_economy }
 			add_political_power = 20
 			add_tech_bonus = { name = ADISCORD_vorkerland_wkr_production_soviet bonus = 0.5 uses = 1 category = industry }
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_convene_the_production_soviet
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_convene_the_production_soviet
+			}
 		}
 		ai_will_do = {
 			base = 90
@@ -7628,8 +8082,11 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_strip_the_civil_economy }
 		completion_reward = {
 			add_stability = -0.03
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_strip_the_civil_economy
-			ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes
+			effect_tooltip = { swap_ideas = { remove_idea = ADISCORD_vorkerland_wkr_war_economy_dummy add_idea = ADISCORD_vorkerland_wkr_war_economy_strip } }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_strip_the_civil_economy
+				ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes
+			}
 		}
 		ai_will_do = {
 			base = 85
@@ -7672,9 +8129,12 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_keep_the_bread_ration }
 		completion_reward = {
 			add_stability = 0.03
+			effect_tooltip = { swap_ideas = { remove_idea = ADISCORD_vorkerland_wkr_war_economy_dummy add_idea = ADISCORD_vorkerland_wkr_war_economy_ration } }
 			add_manpower = 400
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_keep_the_bread_ration
-			ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_keep_the_bread_ration
+				ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes
+			}
 		}
 		ai_will_do = {
 			base = 70
@@ -7727,7 +8187,9 @@ focus_tree = {
 		completion_reward = {
 			add_ideas = ADISCORD_vorkerland_wkr_doctrine_armed_people
 			army_experience = 10
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_doctrine_of_the_armed_people
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_doctrine_of_the_armed_people
+			}
 		}
 		ai_will_do = {
 			base = 110
@@ -7772,7 +8234,9 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_wkr_doctrine_weight_of_numbers
 			add_war_support = 0.03
 			add_command_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_break_them_with_numbers
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_break_them_with_numbers
+			}
 		}
 		ai_will_do = {
 			base = 105
@@ -7816,7 +8280,9 @@ focus_tree = {
 		completion_reward = {
 			add_ideas = ADISCORD_vorkerland_wkr_doctrine_measured_force
 			army_experience = 8
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_doctrine_of_measured_force
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_doctrine_of_measured_force
+			}
 		}
 		ai_will_do = {
 			base = 110
@@ -7860,7 +8326,9 @@ focus_tree = {
 		completion_reward = {
 			add_ideas = ADISCORD_vorkerland_wkr_doctrine_output_over_men
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 150 producer = WKR }
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_replace_men_with_output
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_replace_men_with_output
+			}
 		}
 		ai_will_do = {
 			base = 105
@@ -7906,7 +8374,9 @@ focus_tree = {
 			add_manpower = 600
 			add_war_support = 0.03
 			add_stability = -0.03
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_the_last_levy
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_the_last_levy
+			}
 		}
 		ai_will_do = {
 			base = 120
@@ -7944,7 +8414,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_reserves_forward days = 70 }
 			add_command_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_throw_the_reserves_forward
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_throw_the_reserves_forward
+			}
 		}
 		ai_will_do = {
 			base = 100
@@ -7983,7 +8455,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_interchange_line days = 70 }
 			add_stability = 0.03
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_dig_in_along_the_interchange
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_dig_in_along_the_interchange
+			}
 		}
 		ai_will_do = {
 			base = 100
@@ -8035,7 +8509,9 @@ focus_tree = {
 			add_political_power = 15
 			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.06 }
 			ADISCORD_vorkerland_add_legitimacy = yes
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_seat_the_factory_councils
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_seat_the_factory_councils
+			}
 		}
 		ai_will_do = {
 			base = 80
@@ -8080,7 +8556,9 @@ focus_tree = {
 			add_political_power = 10
 			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.1 }
 			ADISCORD_vorkerland_add_legitimacy = yes
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_publish_the_production_returns
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_publish_the_production_returns
+			}
 		}
 		ai_will_do = {
 			base = 95
@@ -8126,7 +8604,9 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 150 producer = WKR }
 			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = -0.05 }
 			ADISCORD_vorkerland_add_legitimacy = yes
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_requisition_in_the_republics_name
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_requisition_in_the_republics_name
+			}
 		}
 		ai_will_do = {
 			base = 90
@@ -8178,7 +8658,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_bracket_patronage days = 70 }
 			add_political_power = 15
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_arm_the_bracket_victors
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_arm_the_bracket_victors
+			}
 		}
 		ai_will_do = {
 			base = 60
@@ -8224,7 +8706,9 @@ focus_tree = {
 			add_political_power = 10
 			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.06 }
 			ADISCORD_vorkerland_add_legitimacy = yes
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_seek_outside_recognition
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_seek_outside_recognition
+			}
 		}
 		ai_will_do = {
 			base = 55
@@ -8271,7 +8755,9 @@ focus_tree = {
 		completion_reward = {
 			air_experience = 10
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_form_the_republican_air_staff
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_form_the_republican_air_staff
+			}
 		}
 		ai_will_do = {
 			base = 80
@@ -8314,7 +8800,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_shopfloor_squadrons days = 70 }
 			air_experience = 10
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_commit_shopfloor_squadrons
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_commit_shopfloor_squadrons
+			}
 		}
 		ai_will_do = {
 			base = 75
@@ -8357,7 +8845,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_interchange_sky_screen days = 70 }
 			air_experience = 10
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_screen_the_interchange_sky
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_screen_the_interchange_sky
+			}
 		}
 		ai_will_do = {
 			base = 70
@@ -8402,7 +8892,9 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_open_the_external_desk }
 		completion_reward = {
 			add_political_power = 15
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_open_the_external_desk
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_open_the_external_desk
+			}
 		}
 		ai_will_do = {
 			base = 50
@@ -8445,7 +8937,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_republican_volunteers days = 70 }
 			add_political_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_send_republican_volunteers
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_send_republican_volunteers
+			}
 		}
 		ai_will_do = {
 			base = 45
@@ -8488,7 +8982,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_licensed_patterns days = 70 }
 			add_political_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_wkr_license_outside_patterns
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_wkr_license_outside_patterns
+			}
 		}
 		ai_will_do = {
 			base = 40
@@ -8536,10 +9032,13 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_convene_the_restoration_treasury }
 		completion_reward = {
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_vad_war_economy_dummy }
 			add_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_war_economy }
 			add_political_power = 20
 			add_tech_bonus = { name = ADISCORD_vorkerland_vad_restoration_treasury bonus = 0.5 uses = 1 category = industry }
-			set_country_flag = ADISCORD_vorkerland_focus_vad_convene_the_restoration_treasury
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_convene_the_restoration_treasury
+			}
 		}
 		ai_will_do = {
 			base = 90
@@ -8582,8 +9081,11 @@ focus_tree = {
 		completion_reward = {
 			add_manpower = 500
 			add_stability = -0.03
-			set_country_flag = ADISCORD_vorkerland_focus_vad_levy_the_crown_estates
-			ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes
+			effect_tooltip = { swap_ideas = { remove_idea = ADISCORD_vorkerland_vad_war_economy_dummy add_idea = ADISCORD_vorkerland_vad_war_economy_levy } }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_levy_the_crown_estates
+				ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes
+			}
 		}
 		ai_will_do = {
 			base = 85
@@ -8626,9 +9128,12 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_protect_the_district_markets }
 		completion_reward = {
 			add_stability = 0.03
+			effect_tooltip = { swap_ideas = { remove_idea = ADISCORD_vorkerland_vad_war_economy_dummy add_idea = ADISCORD_vorkerland_vad_war_economy_markets } }
 			add_political_power = 15
-			set_country_flag = ADISCORD_vorkerland_focus_vad_protect_the_district_markets
-			ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_protect_the_district_markets
+				ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes
+			}
 		}
 		ai_will_do = {
 			base = 70
@@ -8682,7 +9187,9 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_vad_doctrine_officer_estates
 			army_experience = 10
 			add_command_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_vad_doctrine_of_the_officer_estates
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_doctrine_of_the_officer_estates
+			}
 		}
 		ai_will_do = {
 			base = 110
@@ -8726,7 +9233,9 @@ focus_tree = {
 		completion_reward = {
 			add_ideas = ADISCORD_vorkerland_vad_doctrine_guards_regiments
 			add_war_support = 0.03
-			set_country_flag = ADISCORD_vorkerland_focus_vad_restore_the_guards_regiments
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_restore_the_guards_regiments
+			}
 		}
 		ai_will_do = {
 			base = 105
@@ -8770,7 +9279,9 @@ focus_tree = {
 		completion_reward = {
 			add_ideas = ADISCORD_vorkerland_vad_doctrine_district_levies
 			add_manpower = 500
-			set_country_flag = ADISCORD_vorkerland_focus_vad_doctrine_of_the_district_levies
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_doctrine_of_the_district_levies
+			}
 		}
 		ai_will_do = {
 			base = 110
@@ -8815,7 +9326,9 @@ focus_tree = {
 			add_ideas = ADISCORD_vorkerland_vad_doctrine_council_militias
 			add_stability = 0.03
 			army_experience = 6
-			set_country_flag = ADISCORD_vorkerland_focus_vad_train_the_council_militias
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_train_the_council_militias
+			}
 		}
 		ai_will_do = {
 			base = 105
@@ -8861,7 +9374,9 @@ focus_tree = {
 			add_war_support = 0.03
 			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.1 }
 			ADISCORD_vorkerland_add_legitimacy = yes
-			set_country_flag = ADISCORD_vorkerland_focus_vad_hold_the_historic_capitals
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_hold_the_historic_capitals
+			}
 		}
 		ai_will_do = {
 			base = 120
@@ -8899,7 +9414,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_march_on_the_capital days = 70 }
 			add_command_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_vad_march_on_the_old_capital
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_march_on_the_old_capital
+			}
 		}
 		ai_will_do = {
 			base = 100
@@ -8938,7 +9455,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_restoration_line days = 70 }
 			add_stability = 0.03
-			set_country_flag = ADISCORD_vorkerland_focus_vad_fortify_the_restoration_line
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_fortify_the_restoration_line
+			}
 		}
 		ai_will_do = {
 			base = 100
@@ -8990,7 +9509,9 @@ focus_tree = {
 			add_political_power = 15
 			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.06 }
 			ADISCORD_vorkerland_add_legitimacy = yes
-			set_country_flag = ADISCORD_vorkerland_focus_vad_convene_the_court_of_honours
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_convene_the_court_of_honours
+			}
 		}
 		ai_will_do = {
 			base = 80
@@ -9035,7 +9556,9 @@ focus_tree = {
 			add_stability = 0.03
 			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.1 }
 			ADISCORD_vorkerland_add_legitimacy = yes
-			set_country_flag = ADISCORD_vorkerland_focus_vad_stage_the_coronation_rites
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_stage_the_coronation_rites
+			}
 		}
 		ai_will_do = {
 			base = 95
@@ -9081,7 +9604,9 @@ focus_tree = {
 			add_command_power = 10
 			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = -0.05 }
 			ADISCORD_vorkerland_add_legitimacy = yes
-			set_country_flag = ADISCORD_vorkerland_focus_vad_mortgage_the_regalia
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_mortgage_the_regalia
+			}
 		}
 		ai_will_do = {
 			base = 90
@@ -9133,7 +9658,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_bracket_patronage days = 70 }
 			add_political_power = 15
-			set_country_flag = ADISCORD_vorkerland_focus_vad_court_the_bracket_victors
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_court_the_bracket_victors
+			}
 		}
 		ai_will_do = {
 			base = 60
@@ -9179,7 +9706,9 @@ focus_tree = {
 			add_political_power = 10
 			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.06 }
 			ADISCORD_vorkerland_add_legitimacy = yes
-			set_country_flag = ADISCORD_vorkerland_focus_vad_seek_legitimist_recognition
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_seek_legitimist_recognition
+			}
 		}
 		ai_will_do = {
 			base = 55
@@ -9225,7 +9754,9 @@ focus_tree = {
 		completion_reward = {
 			air_experience = 10
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_vad_restore_the_restoration_air_arm
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_restore_the_restoration_air_arm
+			}
 		}
 		ai_will_do = {
 			base = 80
@@ -9268,7 +9799,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_guards_close_support days = 70 }
 			air_experience = 10
-			set_country_flag = ADISCORD_vorkerland_focus_vad_task_the_guards_for_close_support
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_task_the_guards_for_close_support
+			}
 		}
 		ai_will_do = {
 			base = 75
@@ -9311,7 +9844,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_district_air_cover days = 70 }
 			air_experience = 10
-			set_country_flag = ADISCORD_vorkerland_focus_vad_cover_the_district_capitals
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_cover_the_district_capitals
+			}
 		}
 		ai_will_do = {
 			base = 70
@@ -9356,7 +9891,9 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_open_the_foreign_chancery }
 		completion_reward = {
 			add_political_power = 15
-			set_country_flag = ADISCORD_vorkerland_focus_vad_open_the_foreign_chancery
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_open_the_foreign_chancery
+			}
 		}
 		ai_will_do = {
 			base = 50
@@ -9399,7 +9936,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_restoration_guarantees days = 70 }
 			add_political_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_vad_issue_restoration_guarantees
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_issue_restoration_guarantees
+			}
 		}
 		ai_will_do = {
 			base = 45
@@ -9442,7 +9981,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_observer_missions days = 70 }
 			add_political_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_vad_seat_the_observer_missions
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_vad_seat_the_observer_missions
+			}
 		}
 		ai_will_do = {
 			base = 40
@@ -9490,10 +10031,13 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_convene_the_load_board }
 		completion_reward = {
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_tva_war_economy_dummy }
 			add_dynamic_modifier = { modifier = ADISCORD_vorkerland_tva_war_economy }
 			add_political_power = 20
 			add_tech_bonus = { name = ADISCORD_vorkerland_tva_load_board bonus = 0.5 uses = 1 category = industry }
-			set_country_flag = ADISCORD_vorkerland_focus_tva_convene_the_load_board
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_convene_the_load_board
+			}
 		}
 		ai_will_do = {
 			base = 90
@@ -9535,8 +10079,11 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_run_the_grid_at_war_load }
 		completion_reward = {
 			add_stability = -0.03
-			set_country_flag = ADISCORD_vorkerland_focus_tva_run_the_grid_at_war_load
-			ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes
+			effect_tooltip = { swap_ideas = { remove_idea = ADISCORD_vorkerland_tva_war_economy_dummy add_idea = ADISCORD_vorkerland_tva_war_economy_war_load } }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_run_the_grid_at_war_load
+				ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes
+			}
 		}
 		ai_will_do = {
 			base = 85
@@ -9579,8 +10126,11 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_hold_back_civil_power }
 		completion_reward = {
 			add_stability = 0.03
-			set_country_flag = ADISCORD_vorkerland_focus_tva_hold_back_civil_power
-			ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes
+			effect_tooltip = { swap_ideas = { remove_idea = ADISCORD_vorkerland_tva_war_economy_dummy add_idea = ADISCORD_vorkerland_tva_war_economy_civil } }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_hold_back_civil_power
+				ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes
+			}
 		}
 		ai_will_do = {
 			base = 70
@@ -9633,7 +10183,9 @@ focus_tree = {
 		completion_reward = {
 			add_ideas = ADISCORD_vorkerland_tva_doctrine_continuous_assault
 			army_experience = 10
-			set_country_flag = ADISCORD_vorkerland_focus_tva_doctrine_of_continuous_assault
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_doctrine_of_continuous_assault
+			}
 		}
 		ai_will_do = {
 			base = 110
@@ -9677,7 +10229,9 @@ focus_tree = {
 		completion_reward = {
 			add_ideas = ADISCORD_vorkerland_tva_doctrine_line_replacement
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 150 producer = TVA }
-			set_country_flag = ADISCORD_vorkerland_focus_tva_replace_losses_from_the_line
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_replace_losses_from_the_line
+			}
 		}
 		ai_will_do = {
 			base = 105
@@ -9721,7 +10275,9 @@ focus_tree = {
 		completion_reward = {
 			add_ideas = ADISCORD_vorkerland_tva_doctrine_measured_front
 			army_experience = 8
-			set_country_flag = ADISCORD_vorkerland_focus_tva_doctrine_of_the_measured_front
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_doctrine_of_the_measured_front
+			}
 		}
 		ai_will_do = {
 			base = 110
@@ -9765,7 +10321,9 @@ focus_tree = {
 		completion_reward = {
 			add_ideas = ADISCORD_vorkerland_tva_doctrine_fewer_better_crews
 			army_experience = 10
-			set_country_flag = ADISCORD_vorkerland_focus_tva_hold_with_fewer_better_crews
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_hold_with_fewer_better_crews
+			}
 		}
 		ai_will_do = {
 			base = 105
@@ -9810,7 +10368,9 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 20
 			add_tech_bonus = { name = ADISCORD_vorkerland_tva_final_iteration bonus = 0.5 uses = 1 category = electronics }
-			set_country_flag = ADISCORD_vorkerland_focus_tva_declare_the_final_iteration
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_declare_the_final_iteration
+			}
 		}
 		ai_will_do = {
 			base = 120
@@ -9851,7 +10411,9 @@ focus_tree = {
 			add_command_power = 10
 			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = -0.05 }
 			ADISCORD_vorkerland_add_legitimacy = yes
-			set_country_flag = ADISCORD_vorkerland_focus_tva_spend_the_reserve_cadre
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_spend_the_reserve_cadre
+			}
 		}
 		ai_will_do = {
 			base = 100
@@ -9890,7 +10452,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_technical_core_sealed days = 70 }
 			add_stability = 0.03
-			set_country_flag = ADISCORD_vorkerland_focus_tva_seal_the_technical_core
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_seal_the_technical_core
+			}
 		}
 		ai_will_do = {
 			base = 100
@@ -9942,7 +10506,9 @@ focus_tree = {
 			add_political_power = 15
 			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.06 }
 			ADISCORD_vorkerland_add_legitimacy = yes
-			set_country_flag = ADISCORD_vorkerland_focus_tva_certify_the_completed_programmes
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_certify_the_completed_programmes
+			}
 		}
 		ai_will_do = {
 			base = 80
@@ -9987,7 +10553,9 @@ focus_tree = {
 			add_political_power = 10
 			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.1 }
 			ADISCORD_vorkerland_add_legitimacy = yes
-			set_country_flag = ADISCORD_vorkerland_focus_tva_publish_the_reconstruction_index
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_publish_the_reconstruction_index
+			}
 		}
 		ai_will_do = {
 			base = 95
@@ -10033,7 +10601,9 @@ focus_tree = {
 			army_experience = 10
 			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = -0.05 }
 			ADISCORD_vorkerland_add_legitimacy = yes
-			set_country_flag = ADISCORD_vorkerland_focus_tva_divert_the_research_budget
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_divert_the_research_budget
+			}
 		}
 		ai_will_do = {
 			base = 90
@@ -10087,7 +10657,9 @@ focus_tree = {
 			add_political_power = 10
 			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.06 }
 			ADISCORD_vorkerland_add_legitimacy = yes
-			set_country_flag = ADISCORD_vorkerland_focus_tva_open_the_technical_exchange
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_open_the_technical_exchange
+			}
 		}
 		ai_will_do = {
 			base = 60
@@ -10130,7 +10702,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_bracket_contractors days = 70 }
 			add_political_power = 15
-			set_country_flag = ADISCORD_vorkerland_focus_tva_hire_the_bracket_victors
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_hire_the_bracket_victors
+			}
 		}
 		ai_will_do = {
 			base = 55
@@ -10177,7 +10751,9 @@ focus_tree = {
 		completion_reward = {
 			air_experience = 10
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_focus_tva_stand_up_the_grid_air_staff
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_stand_up_the_grid_air_staff
+			}
 		}
 		ai_will_do = {
 			base = 80
@@ -10220,7 +10796,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_unattended_strike days = 70 }
 			air_experience = 10
-			set_country_flag = ADISCORD_vorkerland_focus_tva_print_unattended_strike_packages
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_print_unattended_strike_packages
+			}
 		}
 		ai_will_do = {
 			base = 75
@@ -10263,7 +10841,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_interdictor_station days = 70 }
 			air_experience = 10
-			set_country_flag = ADISCORD_vorkerland_focus_tva_keep_the_interdictors_on_station
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_keep_the_interdictors_on_station
+			}
 		}
 		ai_will_do = {
 			base = 70
@@ -10307,7 +10887,9 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_open_the_exchange_window }
 		completion_reward = {
 			add_political_power = 15
-			set_country_flag = ADISCORD_vorkerland_focus_tva_open_the_exchange_window
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_open_the_exchange_window
+			}
 		}
 		ai_will_do = {
 			base = 50
@@ -10350,7 +10932,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_surplus_export days = 70 }
 			add_political_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_tva_export_surplus_output
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_export_surplus_output
+			}
 		}
 		ai_will_do = {
 			base = 45
@@ -10393,7 +10977,9 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_imported_specialists days = 70 }
 			add_political_power = 10
-			set_country_flag = ADISCORD_vorkerland_focus_tva_import_surviving_specialists
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_tva_import_surviving_specialists
+			}
 		}
 		ai_will_do = {
 			base = 40
@@ -10422,6 +11008,7 @@ focus_tree = {
 			add_political_power = 50
 			add_stability = 0.05
 		}
+		ai_will_do = { base = 12 }
 	}
 }
 
@@ -10453,7 +11040,9 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 20
 			add_stability = 0.02
-			set_country_flag = ADISCORD_vorkerland_zao_registers_secured
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_zao_registers_secured
+			}
 		}
 		ai_will_do = { base = 15 }
 	}
@@ -10477,7 +11066,9 @@ focus_tree = {
 				producer = ZAO
 			}
 			add_command_power = 5
-			set_country_flag = ADISCORD_vorkerland_zao_storehouses_opened
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_zao_storehouses_opened
+			}
 		}
 		ai_will_do = { base = 13 }
 	}
@@ -10497,7 +11088,9 @@ focus_tree = {
 		completion_reward = {
 			add_manpower = 1200
 			army_experience = 5
-			set_country_flag = ADISCORD_vorkerland_zao_defence_boards_formed
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_zao_defence_boards_formed
+			}
 		}
 		ai_will_do = { base = 14 }
 	}
@@ -10520,7 +11113,9 @@ focus_tree = {
 			add_war_support = 0.04
 			add_stability = 0.02
 			add_political_power = 25
-			set_country_flag = ADISCORD_vorkerland_zao_sovereignty_declared
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_zao_sovereignty_declared
+			}
 		}
 		ai_will_do = { base = 16 }
 	}

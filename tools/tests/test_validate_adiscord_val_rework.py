@@ -620,7 +620,7 @@ class ValStelanderContractTests(unittest.TestCase):
         effects = parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8-sig"))
         refresh = next(item.value for item in effects if item.key == "VAL_refresh_contract_modifier")
         # Older event-based operation writers must invalidate the same new income consumer.
-        for tag in ("cin", "osf"):
+        for tag in ("cin", "osf", "aph"):
             resolver = next(item.value for item in effects if item.key == f"VAL_resolve_{tag}_operation")
             calls = [entry.key for entry in resolver]
             self.assertLess(calls.index("clamp_variable"), calls.index("VAL_refresh_contract_modifier"))
@@ -641,6 +641,18 @@ class ValStelanderContractTests(unittest.TestCase):
             "VAL_doctrine_sustained_supply": {"VAL_contract_org_regain": 0.03, "VAL_contract_supply_factor": -0.05},
             "VAL_north_open_market": {"VAL_contract_trade_income_factor": 0.07, "VAL_contract_pp_gain": 0.10},
             "VAL_export_clearing_house": {"VAL_contract_trade_income_factor": 0.05},
+            "VAL_hire_out_war": {"VAL_contract_military_income_factor": 0.05},
+            "VAL_paid_loyalty": {"VAL_contract_army_expense_factor": -0.03},
+            "VAL_closed_ledgers": {"VAL_contract_pp_gain": 0.05},
+            "VAL_state_above_captains": {"VAL_contract_command_power_factor": 0.05},
+            "VAL_captains_cannot_veto": {"VAL_contract_org_factor": 0.03},
+            "VAL_front_stories": {"VAL_contract_stability_factor": 0.03},
+            "VAL_army_of_the_ledger": {"VAL_contract_org_factor": 0.02, "VAL_contract_planning_factor": 0.03},
+            "VAL_contract_throne": {"VAL_contract_pp_gain": 0.05},
+            "VAL_weaponry_baron": {"VAL_contract_military_income_factor": 0.03},
+            "VAL_mercenary_state": {"VAL_contract_org_regain": 0.02},
+            "VAL_harvest_of_ash": {"VAL_contract_stability_factor": 0.02},
+            "VAL_provincial_courts": {"VAL_contract_trade_income_factor": 0.03},
         }
 
         def recalculate(authority, flags, previous=None):
@@ -684,7 +696,7 @@ class ValStelanderContractTests(unittest.TestCase):
                         if item.key == "add_to_variable":
                             value += values.get(fields["var"], 0)
                         values[fields["var"]] = value
-                    elif item.key not in {"force_update_dynamic_modifier", "add_dynamic_modifier"}:
+                    elif item.key not in {"force_update_dynamic_modifier", "add_dynamic_modifier", "ADISCORD_economy_mark_dirty"}:
                         raise AssertionError(f"unhandled refresh effect: {item.key}")
             execute(refresh)
             return values
@@ -709,14 +721,16 @@ class ValStelanderContractTests(unittest.TestCase):
                     self.assertEqual(recalculate(authority, {flag}, actual), actual)
             all_flags = set(specialisations)
             combined = recalculate(authority, all_flags)
-            self.assertAlmostEqual(combined["VAL_contract_org_factor"] - base["VAL_contract_org_factor"], 0.08)
+            expected_org = sum(delta.get("VAL_contract_org_factor", 0) for delta in specialisations.values())
+            self.assertAlmostEqual(combined["VAL_contract_org_factor"] - base["VAL_contract_org_factor"], expected_org)
             self.assertEqual(recalculate(authority, all_flags, combined), combined)
             for cin in (0, 1, 2, 3, 4):
                 for osf in (0, 1, 2, 3, 4):
-                    previous = dict(base, VAL_CIN_influence=cin, VAL_OSF_influence=osf)
-                    network = recalculate(authority, set(), previous)
-                    self.assertAlmostEqual(network["VAL_contract_trade_income_factor"] - base["VAL_contract_trade_income_factor"], .02 * (min(cin, 3) + min(osf, 3)))
-                    self.assertEqual(recalculate(authority, set(), network), network)
+                    for aph in (0, 1, 2, 3, 4):
+                        previous = dict(base, VAL_CIN_influence=cin, VAL_OSF_influence=osf, VAL_APH_influence=aph)
+                        network = recalculate(authority, set(), previous)
+                        self.assertAlmostEqual(network["VAL_contract_trade_income_factor"] - base["VAL_contract_trade_income_factor"], .02 * (min(cin, 3) + min(osf, 3) + min(aph, 3)))
+                        self.assertEqual(recalculate(authority, set(), network), network)
 
             reforms = ("VAL_contractor_officers", "VAL_motorized_columns", "VAL_field_repair_corps")
             for order in permutations(reforms):
@@ -987,14 +1001,35 @@ class ValNativePreviewTests(unittest.TestCase):
         ideas = block(block(parse_clausewitz(IDEAS_PATH.read_text(encoding="utf-8-sig")), "ideas"), "country")
         cases = {
             "VAL_Vorons_Companies": ("VAL_vorons_delta", {"planning_speed": 0.05, "equipment_capture_factor": 0.03}),
-            "VAL_Contractor_Officers": ("VAL_nco_schools_delta", {"army_org_factor": 0.03}),
-            "VAL_Motorized_Columns": ("VAL_border_survey_delta", {"supply_consumption_factor": -0.03}),
-            "VAL_Field_Repair_Corps": ("VAL_company_service_delta", {"army_org_regain": 0.03}),
-            "VAL_Ministry_Auditors": ("VAL_export_clearing_delta", {"ADISCORD_economy_trade_income_factor": 0.05}),
-            "VAL_Contract_General_Staff": ("VAL_vorons_delta", {"planning_speed": 0.05, "equipment_capture_factor": 0.03}),
+            "VAL_Contractor_Officers": ("VAL_contractor_officers_delta", {"army_org_factor": 0.03}),
+            "VAL_Motorized_Columns": ("VAL_motorized_columns_delta", {"supply_consumption_factor": -0.03}),
+            "VAL_Gromovs_Assault_Tables": ("VAL_gromovs_delta", {"army_attack_factor": 0.04, "equipment_capture_factor": 0.05, "army_defence_factor": -0.02}),
+            "VAL_Price_Of_Loyalty": ("VAL_captain_retainers_delta", {"command_power_gain_mult": 0.10}),
+            "VAL_Count_The_Captains": ("VAL_negotiation_posture_delta", {"political_power_gain": 0.10}),
+            "VAL_Ballistics_Schools": ("VAL_quality_arsenal_delta", {"industrial_capacity_factory": 0.05, "equipment_capture_factor": 0.02}),
+            "VAL_Brokered_Steel": ("VAL_broad_resource_delta", {"supply_consumption_factor": -0.03, "ADISCORD_economy_trade_income_factor": 0.05}),
+            "VAL_Export_Rifles_Not_Promises": ("VAL_supply_contracts_delta", {"ADISCORD_economy_military_industry_income_factor": 0.05, "ADISCORD_economy_army_expense_factor": -0.03}),
+            "VAL_Field_Surgeons": ("VAL_ash_manpower_delta", {"conscription_factor": 0.05, "army_org_regain": 0.02}),
+            "VAL_Bread_From_Barracks": ("VAL_ash_rear_delta", {"industrial_capacity_factory": 0.05, "consumer_goods_factor": -0.03}),
+            "VAL_October_Of_2160": ("VAL_north_coercive_delta", {"ADISCORD_economy_military_industry_income_factor": 0.07, "army_attack_factor": 0.02, "stability_factor": -0.02}),
+            "VAL_Field_Repair_Corps": ("VAL_field_repair_delta", {"army_org_regain": 0.03}),
+            "VAL_Ministry_Auditors": ("VAL_ministry_auditors_delta", {"ADISCORD_economy_trade_income_factor": 0.05}),
+            "VAL_Contract_General_Staff": ("VAL_general_staff_delta", {"planning_speed": 0.05, "equipment_capture_factor": 0.03}),
             "VAL_Stahls_Schedules": ("VAL_stahls_delta", {"army_org_regain": 0.03, "supply_consumption_factor": -0.05}),
             "VAL_Trading_Partners": ("VAL_trading_partners_delta", {"ADISCORD_economy_trade_income_factor": 0.07, "political_power_gain": 0.10}),
             "VAL_Export_Clearing_House": ("VAL_export_clearing_delta", {"ADISCORD_economy_trade_income_factor": 0.05}),
+            "VAL_Hire_Out_War": ("VAL_hire_out_war_delta", {"ADISCORD_economy_military_industry_income_factor": 0.05}),
+            "VAL_Paid_Loyalty": ("VAL_paid_loyalty_delta", {"ADISCORD_economy_army_expense_factor": -0.03}),
+            "VAL_Closed_Ledgers": ("VAL_closed_ledgers_delta", {"political_power_gain": 0.05}),
+            "VAL_State_Above_Captains": ("VAL_state_above_captains_delta", {"command_power_gain_mult": 0.05}),
+            "VAL_Captains_Cannot_Veto": ("VAL_captains_cannot_veto_delta", {"army_org_factor": 0.03}),
+            "VAL_Stories_From_The_Front": ("VAL_front_stories_delta", {"stability_factor": 0.03}),
+            "VAL_Army_Of_The_Ledger": ("VAL_army_of_the_ledger_delta", {"army_org_factor": 0.02, "planning_speed": 0.03}),
+            "VAL_The_Contract_State": ("VAL_contract_throne_delta", {"political_power_gain": 0.05}),
+            "VAL_The_Weaponry_Baron": ("VAL_weaponry_baron_delta", {"ADISCORD_economy_military_industry_income_factor": 0.03}),
+            "VAL_The_Mercenary_State": ("VAL_mercenary_state_delta", {"army_org_regain": 0.02}),
+            "VAL_The_Harvest_Of_Ash": ("VAL_harvest_ash_delta", {"stability_factor": 0.02}),
+            "VAL_Provincial_Contract_Courts": ("VAL_provincial_courts_delta", {"ADISCORD_economy_trade_income_factor": 0.03}),
         }
         focuses = FOCUSES_PATH.read_text(encoding="utf-8-sig")
         for focus_id, (idea_id, expected) in cases.items():
@@ -1017,7 +1052,7 @@ class ValNativePreviewTests(unittest.TestCase):
         from tools.tests.test_adiscord_stp_preparation import block
 
         effects = parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8-sig"))
-        for family, tier in (("army", 2), ("army", 3), ("administration", 1)):
+        for family, tier in (("army", 1), ("army", 2), ("army", 3), ("administration", 1), ("administration", 2), ("administration", 3)):
             helper = block(effects, f"VAL_apply_contract_{family}_{tier}")
             for level in (None, 0, 1, 2, 3):
                 def condition(entry):
@@ -1061,6 +1096,10 @@ class ValNativePreviewTests(unittest.TestCase):
             "VAL_industry_1_delta": ("VAL_contract_industry_1", {"industrial_capacity_factory": 0.04, "production_factory_efficiency_gain_factor": 0.05}),
             "VAL_industry_2_delta": ("VAL_contract_industry_2", {"industrial_capacity_factory": 0.07, "production_factory_efficiency_gain_factor": 0.08, "production_factory_max_efficiency_factor": 0.05, "production_lack_of_resource_penalty_factor": -0.05}),
             "VAL_industry_1_to_2_delta": ("VAL_contract_industry_2", {"industrial_capacity_factory": 0.03, "production_factory_efficiency_gain_factor": 0.03, "production_factory_max_efficiency_factor": 0.05, "production_lack_of_resource_penalty_factor": -0.05}),
+            "VAL_industry_3_dummy": ("VAL_contract_industry_3", {}),
+            "VAL_industry_3_delta": ("VAL_contract_industry_3", {"industrial_capacity_factory": 0.10, "production_factory_efficiency_gain_factor": 0.12, "production_factory_max_efficiency_factor": 0.08, "production_lack_of_resource_penalty_factor": -0.10, "ADISCORD_economy_military_industry_income_factor": 0.08}),
+            "VAL_industry_1_to_3_delta": ("VAL_contract_industry_3", {"industrial_capacity_factory": 0.06, "production_factory_efficiency_gain_factor": 0.07, "production_factory_max_efficiency_factor": 0.08, "production_lack_of_resource_penalty_factor": -0.10, "ADISCORD_economy_military_industry_income_factor": 0.08}),
+            "VAL_industry_2_to_3_delta": ("VAL_contract_industry_3", {"industrial_capacity_factory": 0.03, "production_factory_efficiency_gain_factor": 0.04, "production_factory_max_efficiency_factor": 0.03, "production_lack_of_resource_penalty_factor": -0.05, "ADISCORD_economy_military_industry_income_factor": 0.08}),
         }
         for idea_id, (name, modifiers) in expected_modifiers.items():
             idea = block(ideas, idea_id)
@@ -1084,17 +1123,20 @@ class ValNativePreviewTests(unittest.TestCase):
                     result += previews(entry.value, facts, inside_preview or entry.key == "effect_tooltip")
             return result
 
-        for focus_id in ("VAL_Contract_Accounting_Office", "VAL_Standardize_Rifle_Lots"):
+        for focus_id in ("VAL_Contract_Accounting_Office", "VAL_Munitions_Board", "VAL_Standardize_Rifle_Lots",
+                         "VAL_Standard_Cartridges", "VAL_Three_Shift_Arsenals", "VAL_Industrial_Mobilization_Plan"):
             focus = next(b for b in named_blocks(FOCUSES_PATH.read_text(encoding="utf-8-sig"), "focus") if "id = " + focus_id in b)
             reward = block(block(parse_clausewitz(focus), "focus"), "completion_reward")
             for level in (None, 0, 1, 2, 3):
                 facts = {("VAL", "variable", "VAL_contract_industry_level"): level or 0,
                          ("VAL", "has_variable", "VAL_contract_industry_level"): level is not None}
                 expected = []
-                if focus_id == "VAL_Contract_Accounting_Office" and (level or 0) < 1:
+                if focus_id in {"VAL_Contract_Accounting_Office", "VAL_Munitions_Board"} and (level or 0) < 1:
                     expected = [("VAL_industry_1_dummy", "VAL_industry_1_delta")]
-                elif focus_id == "VAL_Standardize_Rifle_Lots" and (level or 0) < 2:
+                elif focus_id in {"VAL_Standardize_Rifle_Lots", "VAL_Standard_Cartridges", "VAL_Three_Shift_Arsenals"} and (level or 0) < 2:
                     expected = [("VAL_industry_2_dummy", "VAL_industry_1_to_2_delta" if level == 1 else "VAL_industry_2_delta")]
+                elif focus_id == "VAL_Industrial_Mobilization_Plan" and (level or 0) < 3:
+                    expected = [("VAL_industry_3_dummy", "VAL_industry_3_delta" if (level or 0) < 1 else "VAL_industry_1_to_3_delta" if level == 1 else "VAL_industry_2_to_3_delta")]
                 with self.subTest(focus=focus_id, level=level):
                     self.assertEqual(previews(reward, facts), expected)
 
@@ -1156,6 +1198,12 @@ class ValNorthernExportTests(unittest.TestCase):
         decisions = block(parse_source(DECISIONS_PATH), "VAL_military_operations")
         scripted_loc = parse_source(ROOT / "common/scripted_localisation/ADISCORD_VAL_contract_scripted_loc.txt")
         helpers = {entry.key: entry.value for entry in effects}
+        event_by_id = {}
+        for entry in parse_source(ROOT / "events/ADISCORD_VAL_contract_events.txt"):
+            if entry.key == "country_event" and isinstance(entry.value, list):
+                event_id = next((child.value for child in entry.value if child.key == "id"), None)
+                if event_id:
+                    event_by_id[event_id] = entry.value
         tags = ("VAL", "STP", "CIN", "OSF")
         licences, clearing, contingency = "VAL_Foreign_Broker_Licences", "VAL_Northern_Clearing_House", "VAL_Contingency_Ledgers"
         # Both commercial branches are normally exclusive; the combined quote also
@@ -1253,7 +1301,7 @@ class ValNorthernExportTests(unittest.TestCase):
                                             if not matched and all(condition(child, scope, previous) for child in limit):
                                                 execute([entry for entry in value if entry.key != "limit"], scope, previous); matched = True
                                         elif key == "hidden_effect": execute(value, scope, previous)
-                                        elif key == "effect_tooltip" or key == "custom_effect_tooltip": pass
+                                        elif key in ("effect_tooltip", "custom_effect_tooltip", "name", "ai_chance", "trigger"): pass
                                         elif key in tags or key == "PREV": execute(value, previous if key == "PREV" else key, scope)
                                         elif key == "every_possible_country":
                                             limit = next((entry.value for entry in value if entry.key == "limit"), [])
@@ -1293,6 +1341,10 @@ class ValNorthernExportTests(unittest.TestCase):
                                                     debit = min(stocks[scope][producer], amount)
                                                     stocks[scope][producer] -= debit; amount -= debit
                                                 flags[scope].add("STP_cw_rifles_paid")
+                                        elif key == "country_event":
+                                            event_id = value if isinstance(value, str) else fields(item)["id"]
+                                            accept = next(child for child in event_by_id[event_id] if child.key == "option")
+                                            execute(accept.value, scope, previous)
                                         elif key in helpers: execute(helpers[key], scope, previous)
                                         else: raise AssertionError("unhandled export effect: " + key)
 

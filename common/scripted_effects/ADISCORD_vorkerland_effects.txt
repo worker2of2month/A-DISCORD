@@ -613,21 +613,38 @@ ADISCORD_vorkerland_start_khan_border_war = {
 	}
 }
 
+ADISCORD_vorkerland_resolve_khan_border_war = {
+	clr_global_flag = ADISCORD_vorkerland_khan_border_war_started
+	set_global_flag = ADISCORD_vorkerland_khan_border_war_resolved
+	if = {
+		limit = { has_war_with = SLA }
+		white_peace = SLA
+	}
+	if = { limit = { controls_state = 49 } 49 = { set_state_owner_to = RUS set_state_controller_to = RUS } }
+	if = { limit = { controls_state = 176 } 176 = { set_state_owner_to = RUS set_state_controller_to = RUS } }
+	if = { limit = { country_exists = SLA } SLA = { set_capital = { state = 51 } } }
+}
+
 ADISCORD_vorkerland_check_khan_border_war = {
 	if = {
 		limit = {
 			has_global_flag = ADISCORD_vorkerland_khan_border_war_started
+			NOT = { has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active }
 			country_exists = SLA
 			has_war_with = SLA
-			controls_state = 49
-			controls_state = 176
+			OR = {
+				AND = {
+					controls_state = 49
+					controls_state = 176
+				}
+				AND = {
+					had_global_flag = { flag = ADISCORD_vorkerland_khan_border_war_started days > 180 }
+					OR = { controls_state = 49 controls_state = 176 }
+				}
+				had_global_flag = { flag = ADISCORD_vorkerland_khan_border_war_started days > 270 }
+			}
 		}
-		clr_global_flag = ADISCORD_vorkerland_khan_border_war_started
-		set_global_flag = ADISCORD_vorkerland_khan_border_war_resolved
-		white_peace = SLA
-		49 = { set_state_owner_to = RUS set_state_controller_to = RUS }
-		176 = { set_state_owner_to = RUS set_state_controller_to = RUS }
-		SLA = { set_capital = { state = 51 } }
+		ADISCORD_vorkerland_resolve_khan_border_war = yes
 	}
 }
 
@@ -6473,6 +6490,10 @@ ADISCORD_vorkerland_refresh_focus_lifecycle = {
 		limit = { country_exists = TVA }
 		TVA = { focus_unlock = yes mark_focus_tree_layout_dirty = yes }
 	}
+	if = {
+		limit = { country_exists = STP }
+		STP = { mark_focus_tree_layout_dirty = yes }
+	}
 }
 
 ADISCORD_vorkerland_set_phase_prewar = {
@@ -8943,4 +8964,295 @@ ADISCORD_vorkerland_refresh_war_economy_dynamic_state = {
 		value = ADISCORD_vorkerland_war_economy_scale
 	}
 	multiply_variable = { ADISCORD_vorkerland_war_economy_scale_display = 100 }
+}
+
+# --- rus_last_empire_effects ---
+ADISCORD_vorkerland_rus_core_dirty_sla = {
+	49 = { add_core_of = RUS add_claim_by = RUS }
+	50 = { add_core_of = RUS }
+	51 = { add_core_of = RUS add_claim_by = RUS }
+	155 = { add_core_of = RUS add_claim_by = RUS }
+	176 = { add_core_of = RUS add_claim_by = RUS }
+	187 = { add_core_of = RUS add_claim_by = RUS }
+	191 = { add_core_of = RUS add_claim_by = RUS }
+	233 = { add_core_of = RUS }
+	329 = { add_core_of = RUS }
+}
+
+ADISCORD_vorkerland_rus_core_dirty_rza = {
+	125 = { add_core_of = RUS add_claim_by = RUS }
+	177 = { add_core_of = RUS add_claim_by = RUS }
+	186 = { add_core_of = RUS }
+	188 = { add_core_of = RUS add_claim_by = RUS }
+	192 = { add_core_of = RUS add_claim_by = RUS }
+	208 = { add_core_of = RUS add_claim_by = RUS }
+	213 = { add_core_of = RUS add_claim_by = RUS }
+	214 = { add_core_of = RUS add_claim_by = RUS }
+	215 = { add_core_of = RUS add_claim_by = RUS }
+	216 = { add_core_of = RUS add_claim_by = RUS }
+	217 = { add_core_of = RUS add_claim_by = RUS }
+	220 = { add_core_of = RUS add_claim_by = RUS }
+}
+
+ADISCORD_vorkerland_rus_core_dirty_mlr = {
+	152 = { add_core_of = RUS add_claim_by = RUS }
+	153 = { add_core_of = RUS add_claim_by = RUS }
+	154 = { add_core_of = RUS add_claim_by = RUS }
+	189 = { add_core_of = RUS add_claim_by = RUS }
+	190 = { add_core_of = RUS add_claim_by = RUS }
+	219 = { add_core_of = RUS add_claim_by = RUS }
+	221 = { add_core_of = RUS add_claim_by = RUS }
+	222 = { add_core_of = RUS add_claim_by = RUS }
+	224 = { add_core_of = RUS add_claim_by = RUS }
+}
+
+ADISCORD_vorkerland_rus_core_dirty_ert = {
+	167 = { add_core_of = RUS add_claim_by = RUS }
+	169 = { add_core_of = RUS add_claim_by = RUS }
+	170 = { add_core_of = RUS }
+	171 = { add_core_of = RUS add_claim_by = RUS }
+	184 = { add_core_of = RUS add_claim_by = RUS }
+	185 = { add_core_of = RUS add_claim_by = RUS }
+	203 = { add_core_of = RUS add_claim_by = RUS }
+}
+
+ADISCORD_vorkerland_rus_core_dirty_irt = {
+	178 = { add_core_of = RUS add_claim_by = RUS }
+	180 = { add_core_of = RUS add_claim_by = RUS }
+	181 = { add_core_of = RUS add_claim_by = RUS }
+	182 = { add_core_of = RUS add_claim_by = RUS }
+	183 = { add_core_of = RUS add_claim_by = RUS }
+	193 = { add_core_of = RUS add_claim_by = RUS }
+	206 = { add_core_of = RUS add_claim_by = RUS }
+	207 = { add_core_of = RUS add_claim_by = RUS }
+	330 = { add_core_of = RUS }
+}
+
+ADISCORD_vorkerland_rus_core_dirty_sca = {
+	165 = { add_core_of = RUS add_claim_by = RUS }
+	166 = { add_core_of = RUS add_claim_by = RUS }
+	172 = { add_core_of = RUS add_claim_by = RUS }
+	173 = { add_core_of = RUS add_claim_by = RUS }
+	204 = { add_core_of = RUS add_claim_by = RUS }
+	205 = { add_core_of = RUS add_claim_by = RUS }
+	209 = { add_core_of = RUS add_claim_by = RUS }
+	210 = { add_core_of = RUS add_claim_by = RUS }
+	211 = { add_core_of = RUS add_claim_by = RUS }
+	212 = { add_core_of = RUS add_claim_by = RUS }
+}
+
+ADISCORD_vorkerland_rus_mark_neighbor_taken = {
+	add_to_variable = { var = ADISCORD_vorkerland_rus_dirty_neighbors_taken value = 1 }
+	clr_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
+	clear_variable = ADISCORD_vorkerland_rus_campaign_target
+}
+
+ADISCORD_vorkerland_rus_start_dirty_campaign = {
+	if = {
+		limit = { ADISCORD_vorkerland_rus_dirty_campaign_idle = yes }
+		if = {
+			limit = {
+				check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals }
+				ADISCORD_vorkerland_rus_borders_dirty_sla = yes
+			}
+			set_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
+			ADISCORD_vorkerland_rus_core_dirty_sla = yes
+			if = {
+				limit = { NOT = { has_war_with = SLA } }
+				declare_war_on = { target = SLA type = annex_everything }
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals }
+				ADISCORD_vorkerland_rus_borders_dirty_rza = yes
+			}
+			set_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
+			ADISCORD_vorkerland_rus_core_dirty_rza = yes
+			if = {
+				limit = { NOT = { has_war_with = RZA } }
+				declare_war_on = { target = RZA type = annex_everything }
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals }
+				ADISCORD_vorkerland_rus_borders_dirty_mlr = yes
+			}
+			set_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
+			ADISCORD_vorkerland_rus_core_dirty_mlr = yes
+			if = {
+				limit = { NOT = { has_war_with = MLR } }
+				declare_war_on = { target = MLR type = annex_everything }
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals }
+				ADISCORD_vorkerland_rus_borders_dirty_ert = yes
+			}
+			set_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
+			ADISCORD_vorkerland_rus_core_dirty_ert = yes
+			if = {
+				limit = { NOT = { has_war_with = ERT } }
+				declare_war_on = { target = ERT type = annex_everything }
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals }
+				ADISCORD_vorkerland_rus_borders_dirty_irt = yes
+			}
+			set_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
+			ADISCORD_vorkerland_rus_core_dirty_irt = yes
+			if = {
+				limit = { NOT = { has_war_with = IRT } }
+				declare_war_on = { target = IRT type = annex_everything }
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals }
+				ADISCORD_vorkerland_rus_borders_dirty_sca = yes
+			}
+			set_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
+			ADISCORD_vorkerland_rus_core_dirty_sca = yes
+			if = {
+				limit = { NOT = { has_war_with = SCA } }
+				declare_war_on = { target = SCA type = annex_everything }
+			}
+		}
+		else = {
+			clear_variable = ADISCORD_vorkerland_rus_campaign_target
+		}
+	}
+}
+
+ADISCORD_vorkerland_rus_settle_dirty_target = {
+	if = {
+		limit = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals }
+			OR = {
+				NOT = { country_exists = SLA }
+				SLA = { has_capitulated = yes }
+				ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			}
+		}
+		if = { limit = { country_exists = SLA } annex_country = { target = SLA transfer_troops = no } }
+		set_country_flag = ADISCORD_vorkerland_rus_sla_absorbed
+		ADISCORD_vorkerland_rus_core_dirty_sla = yes
+		ADISCORD_vorkerland_rus_mark_neighbor_taken = yes
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals }
+			OR = {
+				NOT = { country_exists = RZA }
+				RZA = { has_capitulated = yes }
+				ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			}
+		}
+		if = { limit = { country_exists = RZA } annex_country = { target = RZA transfer_troops = no } }
+		ADISCORD_vorkerland_rus_core_dirty_rza = yes
+		ADISCORD_vorkerland_rus_mark_neighbor_taken = yes
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals }
+			OR = {
+				NOT = { country_exists = MLR }
+				MLR = { has_capitulated = yes }
+				ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+			}
+		}
+		if = { limit = { country_exists = MLR } annex_country = { target = MLR transfer_troops = no } }
+		ADISCORD_vorkerland_rus_core_dirty_mlr = yes
+		ADISCORD_vorkerland_rus_mark_neighbor_taken = yes
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals }
+			OR = {
+				NOT = { country_exists = ERT }
+				ERT = { has_capitulated = yes }
+				ADISCORD_vorkerland_rus_holds_ert_playable = yes
+			}
+		}
+		if = { limit = { country_exists = ERT } annex_country = { target = ERT transfer_troops = no } }
+		ADISCORD_vorkerland_rus_core_dirty_ert = yes
+		ADISCORD_vorkerland_rus_mark_neighbor_taken = yes
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals }
+			OR = {
+				NOT = { country_exists = IRT }
+				IRT = { has_capitulated = yes }
+				ADISCORD_vorkerland_rus_holds_irt_playable = yes
+			}
+		}
+		if = { limit = { country_exists = IRT } annex_country = { target = IRT transfer_troops = no } }
+		ADISCORD_vorkerland_rus_core_dirty_irt = yes
+		ADISCORD_vorkerland_rus_mark_neighbor_taken = yes
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals }
+			OR = {
+				NOT = { country_exists = SCA }
+				SCA = { has_capitulated = yes }
+				ADISCORD_vorkerland_rus_holds_sca_playable = yes
+			}
+		}
+		if = { limit = { country_exists = SCA } annex_country = { target = SCA transfer_troops = no } }
+		ADISCORD_vorkerland_rus_core_dirty_sca = yes
+		ADISCORD_vorkerland_rus_mark_neighbor_taken = yes
+	}
+}
+
+ADISCORD_vorkerland_check_rus_dirty_campaign = {
+	if = {
+		limit = {
+			tag = RUS
+			has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
+			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		}
+		if = {
+			limit = { has_capitulated = yes }
+			clr_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
+			clear_variable = ADISCORD_vorkerland_rus_campaign_target
+		}
+		else_if = {
+			limit = { ADISCORD_vorkerland_rus_campaign_target_still_open = yes }
+			clr_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
+			clear_variable = ADISCORD_vorkerland_rus_campaign_target
+		}
+		else = {
+			ADISCORD_vorkerland_rus_settle_dirty_target = yes
+		}
+	}
+}
+
+ADISCORD_vorkerland_rus_proclaim_last_empire = {
+	if = {
+		limit = {
+			tag = RUS
+			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+			ADISCORD_vorkerland_rus_has_empire_territory = yes
+		}
+		set_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+		clr_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
+		clear_variable = ADISCORD_vorkerland_rus_campaign_target
+		if = {
+			limit = { has_idea = RUS_national_spirit }
+			swap_ideas = { remove_idea = RUS_national_spirit add_idea = RUS_last_empire_spirit }
+		}
+		else_if = {
+			limit = { NOT = { has_idea = RUS_last_empire_spirit } }
+			add_ideas = RUS_last_empire_spirit
+		}
+		set_cosmetic_tag = RUS_last_empire
+		set_politics = { ruling_party = chauvinism elections_allowed = no }
+		ADISCORD_economy_mark_dirty = yes
+	}
 }

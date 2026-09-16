@@ -2958,10 +2958,10 @@ def validate(root: Path = ROOT) -> list[str]:
     require("monthly_balance value = 12" in block(effects, "ADISCORD_economy_apply_yearly_balance"),
             "yearly settlement does not apply twelve months of cash")
     yearly_policy = block(effects, "ADISCORD_economy_ai_yearly_policy")
-    require(yearly_policy.count("ADISCORD_economy_ai_monthly_policy = yes") == 3,
-            "yearly AI policy does not take three exclusive monthly actions")
-    require(yearly_policy.count("ADISCORD_economy_tick_budget_cooldowns = yes") == 2,
-            "yearly AI policy does not clear budget cooldowns between its actions")
+    require(yearly_policy.count("ADISCORD_economy_ai_monthly_policy = yes") == 2,
+            "yearly AI policy does not take two exclusive actions before settlement")
+    require(yearly_policy.count("ADISCORD_economy_tick_budget_cooldowns = yes") == 1,
+            "yearly AI policy does not clear budget cooldown between its two actions")
     require("ADISCORD_economy_ai_yearly_policy = yes" in yearly,
             "yearly update does not run the yearly AI policy")
     require(

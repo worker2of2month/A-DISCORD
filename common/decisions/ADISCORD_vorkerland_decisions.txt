@@ -2277,3 +2277,216 @@ ADISCORD_vorkerland_rom_tru_category = {
 		ai_will_do = { base = 200 }
 	}
 }
+
+# --- rus_last_empire_decisions ---
+ADISCORD_vorkerland_rus_dirty_campaign_category = {
+	RUS_campaign_sla = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = RUS }
+		visible = {
+			has_completed_focus = RUS_drive_starolesye_back
+			country_exists = SLA
+			NOT = { has_country_flag = ADISCORD_vorkerland_rus_sla_absorbed }
+			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		}
+		available = {
+			ADISCORD_vorkerland_rus_can_open_sla_front = yes
+			custom_trigger_tooltip = {
+				tooltip = RUS_campaign_sla_border_tt
+				ADISCORD_vorkerland_rus_borders_dirty_sla = yes
+			}
+		}
+		cost = 50
+		complete_effect = {
+			custom_effect_tooltip = RUS_campaign_sla_tt
+			hidden_effect = {
+				set_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 }
+				ADISCORD_vorkerland_rus_start_dirty_campaign = yes
+			}
+		}
+		ai_will_do = {
+			base = 200
+			modifier = { factor = 0 ADISCORD_vorkerland_rus_can_open_sla_front = no }
+			modifier = { factor = 0 num_divisions < 2 }
+		}
+	}
+
+	RUS_campaign_rza = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = RUS }
+		visible = {
+			has_completed_focus = RUS_press_the_closed_zone
+			country_exists = RZA
+			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		}
+		available = {
+			ADISCORD_vorkerland_rus_can_open_free_front = yes
+			custom_trigger_tooltip = {
+				tooltip = RUS_campaign_rza_border_tt
+				ADISCORD_vorkerland_rus_borders_dirty_rza = yes
+			}
+		}
+		cost = 50
+		complete_effect = {
+			custom_effect_tooltip = RUS_campaign_rza_tt
+			hidden_effect = {
+				set_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 }
+				ADISCORD_vorkerland_rus_start_dirty_campaign = yes
+			}
+		}
+		ai_will_do = {
+			base = 180
+			modifier = { factor = 0 ADISCORD_vorkerland_rus_can_open_free_front = no }
+			modifier = { factor = 0 num_divisions < 2 }
+		}
+	}
+
+	RUS_campaign_mlr = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = RUS }
+		visible = {
+			has_completed_focus = RUS_press_the_closed_zone
+			country_exists = MLR
+			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		}
+		available = {
+			ADISCORD_vorkerland_rus_can_open_free_front = yes
+			custom_trigger_tooltip = {
+				tooltip = RUS_campaign_mlr_border_tt
+				ADISCORD_vorkerland_rus_borders_dirty_mlr = yes
+			}
+		}
+		cost = 50
+		complete_effect = {
+			custom_effect_tooltip = RUS_campaign_mlr_tt
+			hidden_effect = {
+				set_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 }
+				ADISCORD_vorkerland_rus_start_dirty_campaign = yes
+			}
+		}
+		ai_will_do = {
+			base = 180
+			modifier = { factor = 0 ADISCORD_vorkerland_rus_can_open_free_front = no }
+			modifier = { factor = 0 num_divisions < 2 }
+		}
+	}
+
+	RUS_campaign_ert = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = RUS }
+		visible = {
+			has_completed_focus = RUS_press_the_closed_zone
+			country_exists = ERT
+			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		}
+		available = {
+			ADISCORD_vorkerland_rus_can_open_free_front = yes
+			custom_trigger_tooltip = {
+				tooltip = RUS_campaign_ert_border_tt
+				ADISCORD_vorkerland_rus_borders_dirty_ert = yes
+			}
+		}
+		cost = 50
+		complete_effect = {
+			custom_effect_tooltip = RUS_campaign_ert_tt
+			hidden_effect = {
+				set_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 }
+				ADISCORD_vorkerland_rus_start_dirty_campaign = yes
+			}
+		}
+		ai_will_do = {
+			base = 160
+			modifier = { factor = 0 ADISCORD_vorkerland_rus_can_open_free_front = no }
+			modifier = { factor = 0 num_divisions < 2 }
+		}
+	}
+
+	RUS_campaign_irt = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = RUS }
+		visible = {
+			has_completed_focus = RUS_press_the_closed_zone
+			country_exists = IRT
+			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		}
+		available = {
+			ADISCORD_vorkerland_rus_can_open_free_front = yes
+			custom_trigger_tooltip = {
+				tooltip = RUS_campaign_irt_border_tt
+				ADISCORD_vorkerland_rus_borders_dirty_irt = yes
+			}
+		}
+		cost = 50
+		complete_effect = {
+			custom_effect_tooltip = RUS_campaign_irt_tt
+			hidden_effect = {
+				set_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 }
+				ADISCORD_vorkerland_rus_start_dirty_campaign = yes
+			}
+		}
+		ai_will_do = {
+			base = 160
+			modifier = { factor = 0 ADISCORD_vorkerland_rus_can_open_free_front = no }
+			modifier = { factor = 0 num_divisions < 2 }
+		}
+	}
+
+	RUS_campaign_sca = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = RUS }
+		visible = {
+			has_completed_focus = RUS_press_the_closed_zone
+			country_exists = SCA
+			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		}
+		available = {
+			ADISCORD_vorkerland_rus_can_open_free_front = yes
+			custom_trigger_tooltip = {
+				tooltip = RUS_campaign_sca_border_tt
+				ADISCORD_vorkerland_rus_borders_dirty_sca = yes
+			}
+		}
+		cost = 50
+		complete_effect = {
+			custom_effect_tooltip = RUS_campaign_sca_tt
+			hidden_effect = {
+				set_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 }
+				ADISCORD_vorkerland_rus_start_dirty_campaign = yes
+			}
+		}
+		ai_will_do = {
+			base = 160
+			modifier = { factor = 0 ADISCORD_vorkerland_rus_can_open_free_front = no }
+			modifier = { factor = 0 num_divisions < 2 }
+		}
+	}
+
+	RUS_proclaim_the_last_empire = {
+		icon = generic_nationalism
+		allowed = { tag = RUS }
+		visible = {
+			has_completed_focus = RUS_seat_the_khan_chancery
+			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_proclaim_the_last_empire_available_tt
+				ADISCORD_vorkerland_rus_can_proclaim_last_empire = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_proclaim_the_last_empire_peace_tt
+				has_war = no
+			}
+		}
+		cost = 75
+		fire_only_once = yes
+		complete_effect = {
+			effect_tooltip = {
+				swap_ideas = { remove_idea = RUS_national_spirit add_idea = RUS_last_empire_spirit }
+			}
+			custom_effect_tooltip = RUS_last_empire_cosmetic_tt
+			hidden_effect = { ADISCORD_vorkerland_rus_proclaim_last_empire = yes }
+		}
+		ai_will_do = { base = 500 }
+	}
+}

@@ -25,6 +25,31 @@ ideas = {
 			}
 		}
 
+		RUS_last_empire_spirit = {
+			picture = GFX_idea_RUS_national_spirit
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			modifier = {
+				stability_factor = 0.08
+				war_support_factor = 0.12
+				army_org_factor = 0.10
+				conscription_factor = 0.08
+				political_power_gain = 0.05
+				ADISCORD_economy_tax_collection_factor = 0.05
+				ADISCORD_economy_state_overload_gain_factor = -0.05
+				ADISCORD_country_development_army_growth_factor = 0.08
+			}
+		}
+
 		VLA_national_spirit = {
 			picture = GFX_idea_VLA_national_spirit
 

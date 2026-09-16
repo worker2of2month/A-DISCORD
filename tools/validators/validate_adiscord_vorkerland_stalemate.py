@@ -274,7 +274,7 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     for tag in SOLAR_TARGETS:
         for token in (
             f"has_war_with = {tag}",
-            f"type = front_control tag = {tag} ratio = 0.50",
+            f"type = front_control tag = {tag} ratio = 0.01",
             f"type = conquer id = {tag}",
         ):
             if token not in ai:

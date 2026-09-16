@@ -82,8 +82,64 @@ STP_cw_territorial_army = {
 }
 
 STP_cw_border_territorial_armies = {
-	allowed = { OR = { original_tag = NOD original_tag = YPR original_tag = COF original_tag = TFF original_tag = VAL } }
+	allowed = { OR = { original_tag = YPR original_tag = COF original_tag = TFF original_tag = VAL } }
 	enable = { has_war = yes }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = role_ratio id = militias value = 100 }
+}
+
+NOD_cw_northern_offensive_army = {
+	allowed = { original_tag = NOD }
+	enable = { OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = role_ratio id = infantry value = 80 }
+	ai_strategy = { type = role_ratio id = mobile value = 20 }
+	ai_strategy = { type = role_ratio id = militias value = -80 }
+	ai_strategy = { type = role_ratio id = garrison value = -80 }
+	# STP and AIN are NOD subjects. Without this the field army sits on their
+	# southern VAL border while YPR walks into Cussington.
+	ai_strategy = { type = dont_defend_ally_borders value = 1 }
+	ai_strategy = { type = ignore id = STP value = 1000 }
+	ai_strategy = { type = ignore id = STS value = 1000 }
+	ai_strategy = { type = ignore id = SRP value = 1000 }
+	ai_strategy = { type = ignore id = VAL value = 1000 }
+	ai_strategy = {
+		type = put_unit_buffers
+		ratio = 0.12
+		states = { 30 }
+		subtract_invasions_from_need = yes
+		subtract_fronts_from_need = yes
+	}
+	ai_strategy = { type = front_unit_request tag = YPR value = 100 }
+	ai_strategy = { type = front_unit_request tag = COF value = 80 }
+	ai_strategy = { type = front_unit_request tag = TFF value = 80 }
+	ai_strategy = { type = front_control tag = YPR ratio = 0.01 priority = 1400 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_control tag = COF ratio = 0.01 priority = 1400 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_control tag = TFF ratio = 0.01 priority = 1400 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = { type = conquer id = YPR value = 200 }
+	ai_strategy = { type = conquer id = COF value = 180 }
+	ai_strategy = { type = conquer id = TFF value = 180 }
+}
+
+NOD_cw_stelander_intervention_army = {
+	allowed = { original_tag = NOD }
+	enable = { has_war_with = STS }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = role_ratio id = infantry value = 80 }
+	ai_strategy = { type = role_ratio id = mobile value = 20 }
+	ai_strategy = { type = role_ratio id = militias value = -80 }
+	ai_strategy = { type = role_ratio id = garrison value = -80 }
+	ai_strategy = { type = dont_defend_ally_borders value = 1 }
+	ai_strategy = { type = ignore id = VAL value = 1000 }
+	ai_strategy = { type = ignore id = SRP value = 1000 }
+	ai_strategy = {
+		type = put_unit_buffers
+		ratio = 0.12
+		states = { 30 }
+		subtract_invasions_from_need = yes
+		subtract_fronts_from_need = yes
+	}
+	ai_strategy = { type = front_unit_request tag = STS value = 100 }
+	ai_strategy = { type = front_control tag = STS ratio = 0.01 priority = 1400 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = { type = conquer id = STS value = 200 }
 }

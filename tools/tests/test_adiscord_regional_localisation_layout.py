@@ -59,7 +59,7 @@ CONSOLIDATED_COUNTS = {
     "ADISORD_modifiers_l_russian.yml: ideology": 24,
     "ADISORD_modifiers_l_russian.yml: society development": 1,
     "ADISORD_news_l_russian.yml": 12,
-    "countries_cosmetic_l_russian.yml": 34,
+    "countries_cosmetic_l_russian.yml": 37,
 }
 
 

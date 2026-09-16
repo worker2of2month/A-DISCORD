@@ -33,13 +33,250 @@ country_event = { id = val_contract.223 hidden = yes is_triggered_only = yes imm
 country_event = { id = val_contract.224 hidden = yes is_triggered_only = yes immediate = { APH = { country_event = { id = val_contract.302 } } } }
 
 country_event = {
+	id = val_contract.10
+	title = val_contract.10.t
+	desc = val_contract.10.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = val_contract.family.market
+		trigger = { NOT = { has_country_flag = VAL_CIN_block_market } NOT = { has_country_flag = VAL_CIN_success_market } }
+		ai_chance = { base = 3 }
+		custom_effect_tooltip = VAL_ops_family_market_tt
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_political_power < 10 } ADISCORD_economy_can_spend_50 = yes CIN = { exists = yes has_capitulated = no } }
+				VAL_debit_foreign_operation = yes
+				set_temp_variable = { var = ADISCORD_VAL_family_code value = 1 }
+				VAL_begin_cin_operation = yes
+			}
+		}
+	}
+	option = {
+		name = val_contract.family.arms
+		trigger = { NOT = { has_country_flag = VAL_CIN_block_arms } NOT = { has_country_flag = VAL_CIN_success_arms } }
+		ai_chance = { base = 2 modifier = { factor = 2 CIN = { has_war = yes } } }
+		custom_effect_tooltip = VAL_ops_family_arms_tt
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_political_power < 10 } ADISCORD_economy_can_spend_50 = yes CIN = { exists = yes has_capitulated = no } }
+				VAL_debit_foreign_operation = yes
+				set_temp_variable = { var = ADISCORD_VAL_family_code value = 2 }
+				VAL_begin_cin_operation = yes
+			}
+		}
+	}
+	option = {
+		name = val_contract.family.infra
+		trigger = { NOT = { has_country_flag = VAL_CIN_block_infrastructure } NOT = { has_country_flag = VAL_CIN_success_infrastructure } }
+		ai_chance = { base = 2 }
+		custom_effect_tooltip = VAL_ops_family_infra_tt
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_political_power < 10 } ADISCORD_economy_can_spend_50 = yes CIN = { exists = yes has_capitulated = no } }
+				VAL_debit_foreign_operation = yes
+				set_temp_variable = { var = ADISCORD_VAL_family_code value = 3 }
+				VAL_begin_cin_operation = yes
+			}
+		}
+	}
+	option = {
+		name = val_contract.family.captain
+		trigger = { NOT = { has_country_flag = VAL_CIN_block_captain } NOT = { has_country_flag = VAL_CIN_success_captain } }
+		ai_chance = { base = 2 }
+		custom_effect_tooltip = VAL_ops_family_captain_tt
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_political_power < 10 } ADISCORD_economy_can_spend_50 = yes CIN = { exists = yes has_capitulated = no } }
+				VAL_debit_foreign_operation = yes
+				set_temp_variable = { var = ADISCORD_VAL_family_code value = 4 }
+				VAL_begin_cin_operation = yes
+			}
+		}
+	}
+	option = {
+		name = val_contract.family.terms
+		trigger = { NOT = { has_country_flag = VAL_CIN_block_terms } NOT = { has_country_flag = VAL_CIN_success_terms } }
+		ai_chance = { base = 1 }
+		custom_effect_tooltip = VAL_ops_family_terms_tt
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_political_power < 10 } ADISCORD_economy_can_spend_50 = yes CIN = { exists = yes has_capitulated = no } }
+				VAL_debit_foreign_operation = yes
+				set_temp_variable = { var = ADISCORD_VAL_family_code value = 5 }
+				VAL_begin_cin_operation = yes
+			}
+		}
+	}
+	option = { name = val_contract.family.cancel }
+}
+
+country_event = {
+	id = val_contract.11
+	title = val_contract.11.t
+	desc = val_contract.11.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = val_contract.family.market
+		trigger = { NOT = { has_country_flag = VAL_OSF_block_market } NOT = { has_country_flag = VAL_OSF_success_market } }
+		ai_chance = { base = 3 }
+		custom_effect_tooltip = VAL_ops_family_market_tt
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_political_power < 10 } ADISCORD_economy_can_spend_50 = yes OSF = { exists = yes has_capitulated = no } }
+				VAL_debit_foreign_operation = yes
+				set_temp_variable = { var = ADISCORD_VAL_family_code value = 1 }
+				VAL_begin_osf_operation = yes
+			}
+		}
+	}
+	option = {
+		name = val_contract.family.arms
+		trigger = { NOT = { has_country_flag = VAL_OSF_block_arms } NOT = { has_country_flag = VAL_OSF_success_arms } }
+		ai_chance = { base = 2 modifier = { factor = 2 OSF = { has_war = yes } } }
+		custom_effect_tooltip = VAL_ops_family_arms_tt
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_political_power < 10 } ADISCORD_economy_can_spend_50 = yes OSF = { exists = yes has_capitulated = no } }
+				VAL_debit_foreign_operation = yes
+				set_temp_variable = { var = ADISCORD_VAL_family_code value = 2 }
+				VAL_begin_osf_operation = yes
+			}
+		}
+	}
+	option = {
+		name = val_contract.family.infra
+		trigger = { NOT = { has_country_flag = VAL_OSF_block_infrastructure } NOT = { has_country_flag = VAL_OSF_success_infrastructure } }
+		ai_chance = { base = 2 }
+		custom_effect_tooltip = VAL_ops_family_infra_tt
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_political_power < 10 } ADISCORD_economy_can_spend_50 = yes OSF = { exists = yes has_capitulated = no } }
+				VAL_debit_foreign_operation = yes
+				set_temp_variable = { var = ADISCORD_VAL_family_code value = 3 }
+				VAL_begin_osf_operation = yes
+			}
+		}
+	}
+	option = {
+		name = val_contract.family.captain
+		trigger = { NOT = { has_country_flag = VAL_OSF_block_captain } NOT = { has_country_flag = VAL_OSF_success_captain } }
+		ai_chance = { base = 2 }
+		custom_effect_tooltip = VAL_ops_family_captain_tt
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_political_power < 10 } ADISCORD_economy_can_spend_50 = yes OSF = { exists = yes has_capitulated = no } }
+				VAL_debit_foreign_operation = yes
+				set_temp_variable = { var = ADISCORD_VAL_family_code value = 4 }
+				VAL_begin_osf_operation = yes
+			}
+		}
+	}
+	option = {
+		name = val_contract.family.terms
+		trigger = { NOT = { has_country_flag = VAL_OSF_block_terms } NOT = { has_country_flag = VAL_OSF_success_terms } }
+		ai_chance = { base = 1 }
+		custom_effect_tooltip = VAL_ops_family_terms_tt
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_political_power < 10 } ADISCORD_economy_can_spend_50 = yes OSF = { exists = yes has_capitulated = no } }
+				VAL_debit_foreign_operation = yes
+				set_temp_variable = { var = ADISCORD_VAL_family_code value = 5 }
+				VAL_begin_osf_operation = yes
+			}
+		}
+	}
+	option = { name = val_contract.family.cancel }
+}
+
+country_event = {
+	id = val_contract.12
+	title = val_contract.12.t
+	desc = val_contract.12.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = val_contract.family.market
+		trigger = { NOT = { has_country_flag = VAL_APH_block_market } NOT = { has_country_flag = VAL_APH_success_market } }
+		ai_chance = { base = 3 }
+		custom_effect_tooltip = VAL_ops_family_market_tt
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_political_power < 10 } ADISCORD_economy_can_spend_50 = yes APH = { exists = yes has_capitulated = no } }
+				VAL_debit_foreign_operation = yes
+				set_temp_variable = { var = ADISCORD_VAL_family_code value = 1 }
+				VAL_begin_aph_operation = yes
+			}
+		}
+	}
+	option = {
+		name = val_contract.family.arms
+		trigger = { NOT = { has_country_flag = VAL_APH_block_arms } NOT = { has_country_flag = VAL_APH_success_arms } }
+		ai_chance = { base = 2 modifier = { factor = 2 APH = { has_war = yes } } }
+		custom_effect_tooltip = VAL_ops_family_arms_tt
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_political_power < 10 } ADISCORD_economy_can_spend_50 = yes APH = { exists = yes has_capitulated = no } }
+				VAL_debit_foreign_operation = yes
+				set_temp_variable = { var = ADISCORD_VAL_family_code value = 2 }
+				VAL_begin_aph_operation = yes
+			}
+		}
+	}
+	option = {
+		name = val_contract.family.infra
+		trigger = { NOT = { has_country_flag = VAL_APH_block_infrastructure } NOT = { has_country_flag = VAL_APH_success_infrastructure } }
+		ai_chance = { base = 2 }
+		custom_effect_tooltip = VAL_ops_family_infra_tt
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_political_power < 10 } ADISCORD_economy_can_spend_50 = yes APH = { exists = yes has_capitulated = no } }
+				VAL_debit_foreign_operation = yes
+				set_temp_variable = { var = ADISCORD_VAL_family_code value = 3 }
+				VAL_begin_aph_operation = yes
+			}
+		}
+	}
+	option = {
+		name = val_contract.family.captain
+		trigger = { NOT = { has_country_flag = VAL_APH_block_captain } NOT = { has_country_flag = VAL_APH_success_captain } }
+		ai_chance = { base = 2 }
+		custom_effect_tooltip = VAL_ops_family_captain_tt
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_political_power < 10 } ADISCORD_economy_can_spend_50 = yes APH = { exists = yes has_capitulated = no } }
+				VAL_debit_foreign_operation = yes
+				set_temp_variable = { var = ADISCORD_VAL_family_code value = 4 }
+				VAL_begin_aph_operation = yes
+			}
+		}
+	}
+	option = {
+		name = val_contract.family.terms
+		trigger = { NOT = { has_country_flag = VAL_APH_block_terms } NOT = { has_country_flag = VAL_APH_success_terms } }
+		ai_chance = { base = 1 }
+		custom_effect_tooltip = VAL_ops_family_terms_tt
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_country_flag = VAL_foreign_operation_active } NOT = { has_political_power < 10 } ADISCORD_economy_can_spend_50 = yes APH = { exists = yes has_capitulated = no } }
+				VAL_debit_foreign_operation = yes
+				set_temp_variable = { var = ADISCORD_VAL_family_code value = 5 }
+				VAL_begin_aph_operation = yes
+			}
+		}
+	}
+	option = { name = val_contract.family.cancel }
+}
+
+country_event = {
 	id = val_contract.300
 	title = val_contract.300.t
 	desc = val_contract.300.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	option = { name = val_contract.300.a ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } modifier = { factor = 1.5 has_equipment = { infantry_equipment < 500 } } } VAL = { VAL_resolve_active_cin_operation = yes } }
-	option = { name = val_contract.300.b ai_chance = { base = 2 } VAL = { set_country_flag = { flag = VAL_CIN_target_cooldown days = 70 value = 1 } VAL_clear_foreign_operation = yes } }
+	option = { name = val_contract.300.b ai_chance = { base = 2 } VAL = { set_country_flag = { flag = VAL_CIN_target_cooldown days = 70 value = 1 } VAL_refund_foreign_operation_deposit = yes } }
 }
 
 # BEGIN CONSOLIDATED: ADISCORD_VAL_rework_events.txt
@@ -58,6 +295,50 @@ country_event = {
 
 	immediate = { VAL_start_quarterly_contract_norm = yes }
 }
+
+country_event = {
+	id = val_rework.2
+	title = val_rework.2.t
+	desc = val_rework.2.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_rework.2.a }
+}
+
+country_event = {
+	id = val_rework.3
+	title = val_rework.3.t
+	desc = val_rework.3.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_rework.3.a }
+}
+
+country_event = {
+	id = val_rework.4
+	title = val_rework.4.t
+	desc = val_rework.4.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_rework.4.a }
+}
+
+country_event = {
+	id = val_rework.5
+	title = val_rework.5.t
+	desc = {
+		text = val_rework.5.trade
+		trigger = { has_country_flag = VAL_cw_arms_contract_fulfilled }
+	}
+	desc = {
+		text = val_rework.5.military
+		trigger = { has_country_flag = VAL_cw_military_course NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } }
+	}
+	desc = { text = val_rework.5.neutral }
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_rework.5.a }
+}
 # END CONSOLIDATED: ADISCORD_VAL_rework_events.txt
 
 country_event = {
@@ -67,7 +348,7 @@ country_event = {
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	option = { name = val_contract.301.a ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } modifier = { factor = 1.5 has_equipment = { infantry_equipment < 500 } } } VAL = { VAL_resolve_active_osf_operation = yes } }
-	option = { name = val_contract.301.b ai_chance = { base = 2 } VAL = { set_country_flag = { flag = VAL_OSF_target_cooldown days = 70 value = 1 } VAL_clear_foreign_operation = yes } }
+	option = { name = val_contract.301.b ai_chance = { base = 2 } VAL = { set_country_flag = { flag = VAL_OSF_target_cooldown days = 70 value = 1 } VAL_refund_foreign_operation_deposit = yes } }
 }
 
 country_event = {
@@ -77,7 +358,120 @@ country_event = {
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	option = { name = val_contract.302.a ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } modifier = { factor = 1.5 has_equipment = { infantry_equipment < 500 } } } VAL = { VAL_resolve_active_aph_operation = yes } }
-	option = { name = val_contract.302.b ai_chance = { base = 2 } VAL = { set_country_flag = { flag = VAL_APH_target_cooldown days = 70 value = 1 } VAL_clear_foreign_operation = yes } }
+	option = { name = val_contract.302.b ai_chance = { base = 2 } VAL = { set_country_flag = { flag = VAL_APH_target_cooldown days = 70 value = 1 } VAL_refund_foreign_operation_deposit = yes } }
+}
+
+country_event = {
+	id = val_contract.310
+	title = val_contract.310.t
+	desc = val_contract.310.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = val_contract.310.a
+		ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } modifier = { factor = 1.5 has_equipment = { infantry_equipment < 500 } } }
+		custom_effect_tooltip = VAL_northern_export_accepted_tt
+		hidden_effect = {
+			VAL_deliver_export_rifles = yes
+			if = { limit = { VAL = { has_country_flag = VAL_export_rifles_reserved } } VAL = { VAL_refund_export_rifles = yes } }
+			VAL = { VAL_close_northern_export_operation = yes }
+		}
+	}
+	option = {
+		name = val_contract.310.b
+		ai_chance = { base = 2 }
+		custom_effect_tooltip = VAL_northern_export_refused_tt
+		hidden_effect = { VAL = { VAL_refund_export_rifles = yes VAL_close_northern_export_operation = yes } }
+	}
+}
+
+country_event = {
+	id = val_contract.311
+	title = val_contract.311.t
+	desc = val_contract.310.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = val_contract.310.a
+		ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } modifier = { factor = 1.5 has_equipment = { infantry_equipment < 500 } } }
+		custom_effect_tooltip = VAL_northern_export_accepted_tt
+		hidden_effect = {
+			VAL_deliver_export_rifles = yes
+			if = { limit = { VAL = { has_country_flag = VAL_export_rifles_reserved } } VAL = { VAL_refund_export_rifles = yes } }
+			VAL = { VAL_close_northern_export_operation = yes }
+		}
+	}
+	option = {
+		name = val_contract.310.b
+		ai_chance = { base = 2 }
+		custom_effect_tooltip = VAL_northern_export_refused_tt
+		hidden_effect = { VAL = { VAL_refund_export_rifles = yes VAL_close_northern_export_operation = yes } }
+	}
+}
+
+country_event = {
+	id = val_contract.320
+	title = val_contract.320.t
+	desc = val_contract.320.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = val_contract.320.a
+		ai_chance = { base = 3 }
+		custom_effect_tooltip = VAL_westerholm_accepted_tt
+		hidden_effect = {
+			VAL = {
+				clr_country_flag = VAL_westerholm_offer_pending
+				VAL_grant_westerholm_concession = yes
+			}
+		}
+	}
+	option = {
+		name = val_contract.320.b
+		ai_chance = { base = 2 }
+		custom_effect_tooltip = VAL_westerholm_refused_tt
+		hidden_effect = { VAL = { clr_country_flag = VAL_westerholm_offer_pending } }
+	}
+}
+
+country_event = {
+	id = val_contract.330
+	title = val_contract.330.t
+	desc = val_contract.330.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = val_contract.330.a
+		ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } }
+		custom_effect_tooltip = VAL_northern_finance_accepted_tt
+		hidden_effect = { VAL = { VAL_accept_finance_cin = yes } }
+	}
+	option = {
+		name = val_contract.330.b
+		ai_chance = { base = 2 }
+		custom_effect_tooltip = VAL_northern_finance_refused_tt
+		hidden_effect = { VAL = { VAL_refuse_finance_cin = yes } }
+	}
+}
+
+country_event = {
+	id = val_contract.331
+	title = val_contract.331.t
+	desc = val_contract.330.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = val_contract.330.a
+		ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } }
+		custom_effect_tooltip = VAL_northern_finance_accepted_tt
+		hidden_effect = { VAL = { VAL_accept_finance_osf = yes } }
+	}
+	option = {
+		name = val_contract.330.b
+		ai_chance = { base = 2 }
+		custom_effect_tooltip = VAL_northern_finance_refused_tt
+		hidden_effect = { VAL = { VAL_refuse_finance_osf = yes } }
+	}
 }
 
 country_event = {

@@ -66,6 +66,38 @@ class STPCoreContractTests(unittest.TestCase):
         modifier = named_block(read(DYNAMIC_MODIFIERS), "STP_party_suspicion_dynamic_modifier")
         self.assertIn("political_power_factor = STP_sus_political_power_factor", modifier)
 
+    def test_apparatus_loyalty_has_one_0_to_100_state_and_linear_pp_mapping(self) -> None:
+        effects = read(EFFECTS)
+        refresh = named_block(effects, "STP_refresh_apparatus_loyalty")
+        change = named_block(effects, "STP_change_apparatus_loyalty")
+        init = named_block(effects, "STP_cw_init_apparatus_loyalty")
+
+        self.assertIn("var = STP_apparatus_loyalty", refresh)
+        self.assertIn("min = 0", refresh)
+        self.assertIn("max = 100", refresh)
+        self.assertIn("var = STP_loy_political_power_factor", refresh)
+        self.assertIn("value = 0.004", refresh)
+        self.assertIn("value = -0.20", refresh)
+        self.assertIn("var = STP_loy_stability_factor", refresh)
+        self.assertIn("value = 0.001", refresh)
+        self.assertIn("value = -0.05", refresh)
+        self.assertIn("force_update_dynamic_modifier = yes", refresh)
+        self.assertIn("value = STP_apparatus_loyalty_change", change)
+        self.assertIn("STP_refresh_apparatus_loyalty = yes", change)
+        self.assertIn("value = 40", init)
+        self.assertIn("STP_party_suspicion_dynamic_modifier", init)
+        self.assertIn("STP_apparatus_loyalty_dynamic_modifier", init)
+        self.assertIn("STP_cw_init_apparatus_loyalty = yes", named_block(effects, "STP_cw_open_preparation"))
+
+        modifier = named_block(read(DYNAMIC_MODIFIERS), "STP_apparatus_loyalty_dynamic_modifier")
+        self.assertIn("political_power_factor = STP_loy_political_power_factor", modifier)
+        self.assertIn("stability_factor = STP_loy_stability_factor", modifier)
+        display = read(SCRIPTED_LOC)
+        self.assertIn("name = STP_display_party_suspicion", display)
+        self.assertLess(display.index("STP_sided_with_the_party_flag"),
+                        display.index("STP_display_apparatus_loyalty_loc"))
+        self.assertIn("STP_display_party_suspicion_loc", display)
+
     def test_health_has_one_discrete_five_stage_state_shared_with_inlay(self) -> None:
         effects = read(EFFECTS)
         refresh = named_block(effects, "STP_refresh_leader_health")
@@ -290,6 +322,9 @@ class STPCoreContractTests(unittest.TestCase):
             "STPGetSuspicionValue",
             "STPGetSuspicionBand",
             "STPGetSuspicionExplanation",
+            "STPGetLoyaltyValue",
+            "STPGetLoyaltyBand",
+            "STPGetLoyaltyExplanation",
             "STP_display_party_suspicion",
             "STPGetStateFaceStageName",
             "STPGetStateFaceTooltip",

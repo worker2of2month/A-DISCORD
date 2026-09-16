@@ -90,6 +90,38 @@ class VorkerlandFrontControlRatioTests(unittest.TestCase):
                     self.assertIn("manual_attack = no", front)
                     self.assertIn("abort_when_not_enabled = yes", front)
 
+    def test_collapse_offensives_do_not_use_careful_stare_or_high_coverage(self) -> None:
+        from tools.tests.test_adiscord_vorkerland_vad_behavior import named_block, named_blocks
+
+        source = AI_FILES[0].read_text(encoding="utf-8-sig")
+        keep_careful = {
+            "ADISCORD_vorkerland_central_minor_defense_against_wkr",
+            "ADISCORD_vorkerland_central_minor_defense_against_vad",
+            "ADISCORD_vorkerland_central_minor_defense_against_tva",
+            "ADISCORD_vorkerland_northern_defense_against_ivanland",
+            "ADISCORD_vorkerland_sra_defend_vad_intervention",
+            "ADISCORD_vorkerland_csl_defend_vad_intervention",
+            "ADISCORD_vorkerland_zao_defend_rom_intervention",
+            "ADISCORD_vorkerland_wps_defend_rom_intervention",
+        }
+        field = named_block(source, "ADISCORD_vorkerland_collapse_field_army")
+        self.assertIn("role_ratio id = garrison value = -80", field)
+        self.assertIn("dont_defend_ally_borders value = 1", field)
+        checked = 0
+        for name in re.findall(r"(?m)^(ADISCORD_vorkerland_\w+)\s*=\s*\{", source):
+            profile = named_block(source, name)
+            for strategy in named_blocks(profile, "ai_strategy"):
+                if not re.search(r"\btype\s*=\s*front_control\b", strategy):
+                    continue
+                checked += 1
+                with self.subTest(profile=name):
+                    self.assertRegex(strategy, r"\bratio\s*=\s*0\.01\b")
+                    if name in keep_careful:
+                        self.assertIn("execution_type = careful", strategy)
+                    else:
+                        self.assertNotIn("execution_type = careful", strategy)
+        self.assertGreater(checked, 100)
+
     def test_observed_mixed_fronts_use_a_low_coverage_threshold(self) -> None:
         collapse = source_section(AI_FILES[0].read_text(encoding="utf-8-sig"), 'collapse_ai')
         nam = AI_FILES[1].read_text(encoding="utf-8-sig")

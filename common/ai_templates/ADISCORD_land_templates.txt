@@ -18,7 +18,7 @@ ADISCORD_garrison_templates = {
 					AND = {
 						has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 						NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-						OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD }
+						has_war = yes
 					}
 					AND = {
 						has_global_flag = STP_cw_started

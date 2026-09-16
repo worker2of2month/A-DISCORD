@@ -4,6 +4,7 @@
 VAL_initialize_contract_authority = {
 	if = { limit = { NOT = { has_variable = VAL_CIN_influence } } set_variable = { var = VAL_CIN_influence value = 0 } }
 	if = { limit = { NOT = { has_variable = VAL_OSF_influence } } set_variable = { var = VAL_OSF_influence value = 0 } }
+	if = { limit = { NOT = { has_variable = VAL_APH_influence } } set_variable = { var = VAL_APH_influence value = 0 } }
 	if = { limit = { NOT = { has_variable = VAL_contract_authority } } set_variable = { var = VAL_contract_authority value = 35 } }
 	clamp_variable = { var = VAL_contract_authority min = 0 max = 100 }
 	VAL_refresh_contract_modifier = yes
@@ -155,6 +156,18 @@ VAL_refresh_contract_modifier = {
 		limit = { check_variable = { var = VAL_OSF_influence value = 1 compare = greater_than_or_equals } }
 		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.02 }
 	}
+	if = {
+		limit = { check_variable = { var = VAL_APH_influence value = 3 compare = greater_than_or_equals } }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.06 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_APH_influence value = 2 compare = greater_than_or_equals } }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.04 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_APH_influence value = 1 compare = greater_than_or_equals } }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.02 }
+	}
 
 	# Specialised company reforms survive authority changes; reset the base above before adding them.
 	if = {
@@ -264,6 +277,55 @@ VAL_refresh_contract_modifier = {
 		add_to_variable = { var = VAL_contract_attack_factor value = 0.02 }
 		add_to_variable = { var = VAL_contract_stability_factor value = -0.02 }
 	}
+	if = {
+		limit = { has_country_flag = VAL_hire_out_war }
+		add_to_variable = { var = VAL_contract_military_income_factor value = 0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_paid_loyalty }
+		add_to_variable = { var = VAL_contract_army_expense_factor value = -0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_closed_ledgers }
+		add_to_variable = { var = VAL_contract_pp_gain value = 0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_state_above_captains }
+		add_to_variable = { var = VAL_contract_command_power_factor value = 0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_captains_cannot_veto }
+		add_to_variable = { var = VAL_contract_org_factor value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_front_stories }
+		add_to_variable = { var = VAL_contract_stability_factor value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_army_of_the_ledger }
+		add_to_variable = { var = VAL_contract_org_factor value = 0.02 }
+		add_to_variable = { var = VAL_contract_planning_factor value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_contract_throne }
+		add_to_variable = { var = VAL_contract_pp_gain value = 0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_weaponry_baron }
+		add_to_variable = { var = VAL_contract_military_income_factor value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_mercenary_state }
+		add_to_variable = { var = VAL_contract_org_regain value = 0.02 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_harvest_of_ash }
+		add_to_variable = { var = VAL_contract_stability_factor value = 0.02 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_provincial_courts }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.03 }
+	}
 
     if = { limit = { has_variable = VAL_frontier_supply_bonus } add_to_variable = { var = VAL_contract_supply_factor value = VAL_frontier_supply_bonus } }
     if = { limit = { has_variable = VAL_frontier_output_bonus } add_to_variable = { var = VAL_contract_factory_output_factor value = VAL_frontier_output_bonus } }
@@ -286,6 +348,7 @@ VAL_refresh_contract_modifier = {
 		force_update_dynamic_modifier = yes
 	}
 	else = { add_dynamic_modifier = { modifier = VAL_contract_state } }
+	ADISCORD_economy_mark_dirty = yes
 }
 
 # --- foreign_operation_effects ---
@@ -385,6 +448,7 @@ VAL_refund_export_rifles = {
 
 VAL_clear_foreign_operation = {
 	clr_country_flag = VAL_foreign_operation_active
+	clr_country_flag = VAL_foreign_operation_deposit
 	clr_country_flag = VAL_operation_CIN_study_market
 	clr_country_flag = VAL_operation_CIN_arms_brokerage
 	clr_country_flag = VAL_operation_CIN_infrastructure_concession
@@ -400,6 +464,106 @@ VAL_clear_foreign_operation = {
 	clr_country_flag = VAL_operation_APH_infrastructure_concession
 	clr_country_flag = VAL_operation_APH_hire_local_captain
 	clr_country_flag = VAL_operation_APH_prepare_separate_terms
+}
+
+VAL_debit_foreign_operation = {
+	add_political_power = -10
+	ADISCORD_economy_spend_50 = yes
+}
+
+VAL_refund_foreign_operation_deposit = {
+	if = {
+		limit = { has_country_flag = VAL_foreign_operation_deposit }
+		ADISCORD_economy_receive_50 = yes
+	}
+	VAL_clear_foreign_operation = yes
+}
+
+VAL_begin_cin_operation = {
+	set_country_flag = VAL_foreign_operation_active
+	set_country_flag = VAL_foreign_operation_deposit
+	if = {
+		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 1 compare = equals } }
+		set_country_flag = VAL_operation_CIN_study_market
+		country_event = { id = val_contract.200 days = 21 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 2 compare = equals } }
+		set_country_flag = VAL_operation_CIN_arms_brokerage
+		country_event = { id = val_contract.201 days = 21 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 3 compare = equals } }
+		set_country_flag = VAL_operation_CIN_infrastructure_concession
+		country_event = { id = val_contract.202 days = 21 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 4 compare = equals } }
+		set_country_flag = VAL_operation_CIN_hire_local_captain
+		country_event = { id = val_contract.203 days = 21 }
+	}
+	else = {
+		set_country_flag = VAL_operation_CIN_prepare_separate_terms
+		country_event = { id = val_contract.204 days = 21 }
+	}
+}
+
+VAL_begin_osf_operation = {
+	set_country_flag = VAL_foreign_operation_active
+	set_country_flag = VAL_foreign_operation_deposit
+	if = {
+		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 1 compare = equals } }
+		set_country_flag = VAL_operation_OSF_study_market
+		country_event = { id = val_contract.210 days = 21 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 2 compare = equals } }
+		set_country_flag = VAL_operation_OSF_arms_brokerage
+		country_event = { id = val_contract.211 days = 21 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 3 compare = equals } }
+		set_country_flag = VAL_operation_OSF_infrastructure_concession
+		country_event = { id = val_contract.212 days = 21 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 4 compare = equals } }
+		set_country_flag = VAL_operation_OSF_hire_local_captain
+		country_event = { id = val_contract.213 days = 21 }
+	}
+	else = {
+		set_country_flag = VAL_operation_OSF_prepare_separate_terms
+		country_event = { id = val_contract.214 days = 21 }
+	}
+}
+
+VAL_begin_aph_operation = {
+	set_country_flag = VAL_foreign_operation_active
+	set_country_flag = VAL_foreign_operation_deposit
+	if = {
+		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 1 compare = equals } }
+		set_country_flag = VAL_operation_APH_study_market
+		country_event = { id = val_contract.220 days = 21 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 2 compare = equals } }
+		set_country_flag = VAL_operation_APH_arms_brokerage
+		country_event = { id = val_contract.221 days = 21 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 3 compare = equals } }
+		set_country_flag = VAL_operation_APH_infrastructure_concession
+		country_event = { id = val_contract.222 days = 21 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 4 compare = equals } }
+		set_country_flag = VAL_operation_APH_hire_local_captain
+		country_event = { id = val_contract.223 days = 21 }
+	}
+	else = {
+		set_country_flag = VAL_operation_APH_prepare_separate_terms
+		country_event = { id = val_contract.224 days = 21 }
+	}
 }
 
 VAL_resolve_cin_operation = {
@@ -468,6 +632,8 @@ VAL_resolve_aph_operation = {
 	else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 4 } NOT = { has_country_flag = VAL_APH_success_captain } } set_country_flag = VAL_APH_success_captain add_to_variable = { var = VAL_APH_influence value = 1 } }
 	else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 5 } NOT = { has_country_flag = VAL_APH_success_terms } } set_country_flag = VAL_APH_success_terms add_to_variable = { var = VAL_APH_influence value = 1 } }
 	clamp_variable = { var = VAL_APH_influence min = 0 max = 3 }
+	VAL_refresh_contract_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
 	set_country_flag = { flag = VAL_APH_target_cooldown days = 70 value = 1 }
 	VAL_clear_foreign_operation = yes
 }
@@ -540,17 +706,26 @@ VAL_apply_contract_administration_1 = {
 VAL_apply_contract_administration_2 = {
 	if = {
 		limit = {
-			OR = {
-				NOT = { has_variable = VAL_contract_administration_level }
-				check_variable = {
-					var = VAL_contract_administration_level
-					value = 2
-					compare = less_than
+			hidden_trigger = {
+				OR = {
+					NOT = { has_variable = VAL_contract_administration_level }
+					check_variable = {
+						var = VAL_contract_administration_level
+						value = 2
+						compare = less_than
+					}
 				}
 			}
 		}
-		set_variable = { var = VAL_contract_administration_level value = 2 }
+		effect_tooltip = {
+			if = {
+				limit = { hidden_trigger = { check_variable = { var = VAL_contract_administration_level value = 1 compare = equals } } }
+				swap_ideas = { remove_idea = VAL_contract_administration_1 add_idea = VAL_contract_administration_2 }
+			}
+			else = { add_ideas = VAL_contract_administration_2 }
+		}
 		hidden_effect = {
+			set_variable = { var = VAL_contract_administration_level value = 2 }
 			remove_ideas = VAL_contract_administration_1
 			remove_ideas = VAL_contract_administration_2
 			remove_ideas = VAL_contract_administration_3
@@ -563,17 +738,30 @@ VAL_apply_contract_administration_2 = {
 VAL_apply_contract_administration_3 = {
 	if = {
 		limit = {
-			OR = {
-				NOT = { has_variable = VAL_contract_administration_level }
-				check_variable = {
-					var = VAL_contract_administration_level
-					value = 3
-					compare = less_than
+			hidden_trigger = {
+				OR = {
+					NOT = { has_variable = VAL_contract_administration_level }
+					check_variable = {
+						var = VAL_contract_administration_level
+						value = 3
+						compare = less_than
+					}
 				}
 			}
 		}
-		set_variable = { var = VAL_contract_administration_level value = 3 }
+		effect_tooltip = {
+			if = {
+				limit = { hidden_trigger = { check_variable = { var = VAL_contract_administration_level value = 1 compare = equals } } }
+				swap_ideas = { remove_idea = VAL_contract_administration_1 add_idea = VAL_contract_administration_3 }
+			}
+			else_if = {
+				limit = { hidden_trigger = { check_variable = { var = VAL_contract_administration_level value = 2 compare = equals } } }
+				swap_ideas = { remove_idea = VAL_contract_administration_2 add_idea = VAL_contract_administration_3 }
+			}
+			else = { add_ideas = VAL_contract_administration_3 }
+		}
 		hidden_effect = {
+			set_variable = { var = VAL_contract_administration_level value = 3 }
 			remove_ideas = VAL_contract_administration_1
 			remove_ideas = VAL_contract_administration_2
 			remove_ideas = VAL_contract_administration_3
@@ -629,6 +817,17 @@ VAL_apply_contract_industry_2 = {
 	}
 }
 
+VAL_industrial_finale_path_extra = {
+	if = {
+		limit = { has_completed_focus = VAL_Ballistics_Schools }
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 800 producer = VAL }
+	}
+	else_if = {
+		limit = { has_completed_focus = VAL_Brokered_Steel }
+		ADISCORD_economy_receive_15 = yes
+	}
+}
+
 VAL_apply_contract_industry_3 = {
 	if = {
 		limit = {
@@ -655,17 +854,22 @@ VAL_apply_contract_industry_3 = {
 VAL_apply_contract_army_1 = {
 	if = {
 		limit = {
-			OR = {
-				NOT = { has_variable = VAL_contract_army_level }
-				check_variable = {
-					var = VAL_contract_army_level
-					value = 1
-					compare = less_than
+			hidden_trigger = {
+				OR = {
+					NOT = { has_variable = VAL_contract_army_level }
+					check_variable = {
+						var = VAL_contract_army_level
+						value = 1
+						compare = less_than
+					}
 				}
 			}
 		}
-		set_variable = { var = VAL_contract_army_level value = 1 }
+		effect_tooltip = {
+			add_ideas = VAL_contract_army_1
+		}
 		hidden_effect = {
+			set_variable = { var = VAL_contract_army_level value = 1 }
 			remove_ideas = VAL_contract_army_1
 			remove_ideas = VAL_contract_army_2
 			remove_ideas = VAL_contract_army_3
@@ -846,6 +1050,58 @@ VAL_resolve_quarterly_contract_norm = {
 	else = { VAL_fail_quarterly_contract_norm = yes }
 }
 
+VAL_close_northern_export_operation = {
+	clr_country_flag = VAL_operation_sell_rifles_to_cin
+	clr_country_flag = VAL_operation_sell_rifles_to_osf
+	clr_country_flag = VAL_foreign_operation_active
+}
+
+VAL_accept_finance_cin = {
+	add_to_variable = { var = VAL_CIN_influence value = 1 }
+	clamp_variable = { var = VAL_CIN_influence min = 0 max = 3 }
+	VAL_refresh_contract_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+	clr_country_flag = VAL_operation_finance_cin_contacts
+	clr_country_flag = VAL_foreign_operation_active
+}
+
+VAL_refuse_finance_cin = {
+	ADISCORD_economy_receive_50 = yes
+	clr_country_flag = VAL_operation_finance_cin_contacts
+	clr_country_flag = VAL_foreign_operation_active
+}
+
+VAL_accept_finance_osf = {
+	add_to_variable = { var = VAL_OSF_influence value = 1 }
+	clamp_variable = { var = VAL_OSF_influence min = 0 max = 3 }
+	VAL_refresh_contract_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+	clr_country_flag = VAL_operation_finance_osf_contacts
+	clr_country_flag = VAL_foreign_operation_active
+}
+
+VAL_refuse_finance_osf = {
+	ADISCORD_economy_receive_50 = yes
+	clr_country_flag = VAL_operation_finance_osf_contacts
+	clr_country_flag = VAL_foreign_operation_active
+}
+
+VAL_offer_westerholm_concession = {
+	custom_effect_tooltip = VAL_westerholm_offer_tt
+	hidden_effect = {
+		if = {
+			limit = {
+				WRK = { exists = yes }
+				NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
+				NOT = { has_country_flag = VAL_westerholm_concession_granted }
+				NOT = { has_country_flag = VAL_westerholm_offer_pending }
+			}
+			set_country_flag = VAL_westerholm_offer_pending
+			WRK = { country_event = { id = val_contract.320 } }
+		}
+	}
+}
+
 VAL_grant_westerholm_concession = {
 	if = {
 		limit = {
@@ -866,6 +1122,7 @@ VAL_handle_vorkerland_war_outbreak = {
 	if = {
 		limit = { NOT = { has_country_flag = VAL_vorkerland_contracts_disrupted } }
 		set_country_flag = VAL_vorkerland_contracts_disrupted
+		clr_country_flag = VAL_westerholm_offer_pending
 		remove_ideas = { VAL_big_buyers VAL_westerholm_concession_income }
 		add_timed_idea = { idea = VAL_vorkerland_contract_disruptions days = 180 }
 		country_event = { id = val_rework.100 hours = 1 }
@@ -989,14 +1246,10 @@ VAL_initialize_rework = {
 	ADISCORD_economy_initialize_country = yes
 	if = {
 		limit = {
-			OR = {
-				has_completed_focus = VAL_Operational_Directorate
-				has_country_flag = VAL_local_operations_unlocked
-			}
+			has_completed_focus = VAL_Operational_Directorate
 			NOT = { has_country_flag = VAL_operations_map_unlocked }
 		}
 		set_country_flag = VAL_operations_map_unlocked
-		set_country_flag = VAL_local_operations_unlocked
 	}
 	if = {
 		limit = {

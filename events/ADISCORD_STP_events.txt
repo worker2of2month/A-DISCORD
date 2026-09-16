@@ -134,7 +134,6 @@ country_event = {
 		}
 		STP_cw_schedule_opposition = yes
 		custom_effect_tooltip = STP_cw_party_preparation_tt
-		custom_effect_tooltip = STP_cw_army_split_tt
 	}
 }
 
@@ -376,6 +375,7 @@ country_event = {
 				NOT = { has_active_mission = STP_party_inspection_state_46 }
 				NOT = { has_active_mission = STP_party_inspection_state_53 }
 			}
+			set_country_flag = STP_cw_inspection_chain_open
 			STP_schedule_next_party_inspection = yes
 		}
 	}
@@ -614,6 +614,7 @@ country_event = {
 		name = ADISCORD_STP_cw.30.a
 		trigger = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_cw_side_republics } }
 		set_country_flag = STP_sided_with_the_party_flag
+		STP_cw_init_apparatus_loyalty = yes
 		hidden_effect = { STP_cw_begin_hostilities = yes }
 	}
 	option = {

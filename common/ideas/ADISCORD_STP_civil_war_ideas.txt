@@ -100,7 +100,7 @@ ideas = {
 		STP_cw_young_officers_idea = {
 			name = STP_cw_military_staff_dynamic
 			allowed = { always = no }
-			modifier = { army_org_regain = 0.10 }
+			modifier = { army_org_regain = 0.10 planning_speed = 0.10 }
 		}
 		STP_cw_local_cadres_idea = {
 			name = STP_cw_military_staff_dynamic
@@ -216,6 +216,21 @@ ideas = {
 			removal_cost = -1
 			modifier = { industrial_capacity_factory = 0.25 production_factory_efficiency_gain_factor = 0.25 }
 		}
+		# The extra slot lives on the country; this spirit only keeps the timer and
+		# the revoke ledger. Do not cancel on peace: SRP can take the focus before VAL.
+		STP_cw_emergency_laboratories = {
+			picture = ADISCORD_law_civic_emergency_committees
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = STP_cw_emergency_laboratories_cancel_tt
+					has_country_flag = STP_cw_postwar
+				}
+			}
+			on_remove = { STP_cw_revoke_emergency_research_slot = yes }
+			modifier = { }
+		}
 		STP_cw_defensive_preparation = {
 			picture = ADISCORD_law_military_cadre_army
 			allowed = { always = no }
@@ -254,6 +269,43 @@ ideas = {
 			allowed = { always = no }
 			removal_cost = -1
 			modifier = { supply_consumption_factor = -0.10 army_org_regain = 0.05 }
+		}
+		STP_cw_northern_engineer_mission = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { NOT = { has_war_with = NOD } }
+			modifier = { production_speed_bunker_factor = 0.20 max_dig_in = 2 dig_in_speed_factor = 0.15 }
+		}
+		NOD_cw_northern_offensive = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { NOT = { OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF } } }
+			modifier = {
+				army_attack_factor = 0.18
+				breakthrough_factor = 0.12
+				army_org_factor = 0.10
+				planning_speed = 0.20
+				land_reinforce_rate = 0.10
+				army_speed_factor = 0.10
+				conscription_factor = 0.15
+				training_time_factor = -0.15
+			}
+		}
+		STP_cw_nod_disrupted_rear = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { has_capitulated = yes }
+			modifier = { supply_consumption_factor = 0.10 army_speed_factor = -0.08 }
+		}
+		STP_cw_party_sabotage_aftermath = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { has_capitulated = yes }
+			modifier = { industrial_capacity_factory = -0.10 production_factory_max_efficiency_factor = -0.08 }
 		}
 
 		STP_pw_republic_dummy = {

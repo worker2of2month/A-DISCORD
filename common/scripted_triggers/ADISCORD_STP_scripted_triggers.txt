@@ -116,6 +116,11 @@ STP_cw_limited_party_revolt_ready = {
 	3 = { is_owned_by = STP is_controlled_by = STP has_state_flag = { flag = STP_resistance_administration_asset days > 20 } }
 }
 
+# COUNTRY: the strong Shabrat band claims still-disputed districts without local admin.
+STP_cw_high_shabrat_legitimacy = {
+	power_balance_value = { id = STP_shabrat_election_legitimacy value > 0.55 }
+}
+
 # COUNTRY: the republics can use their promised preparation period before VAL's attack.
 STP_cw_can_rearm = {
 	has_capitulated = no
@@ -243,6 +248,10 @@ STP_region_has_administration_asset = {
 	has_state_flag = STP_resistance_administration_asset
 }
 
+STP_region_has_ready_administration = {
+	has_state_flag = { flag = STP_resistance_administration_asset days > 20 }
+}
+
 STP_region_has_garrison_asset = {
 	has_state_flag = STP_resistance_garrison_asset
 }
@@ -314,14 +323,60 @@ STP_cw_region_goes_to_resistance = {
 			NOT = { STP_cw_region_goes_to_republics = yes }
 			OR = {
 				STP = { has_country_flag = STP_cw_limited_party_revolt }
+				STP = { STP_cw_high_shabrat_legitimacy = yes }
 				AND = {
 					STP_region_resistance_entrenched = yes
-					has_state_flag = STP_resistance_administration_asset
+					has_state_flag = { flag = STP_resistance_administration_asset days > 20 }
 					NOT = { has_state_flag = STP_inspection_concession_prepared }
 				}
 			}
 		}
 	}
+}
+
+# STATE: map color. Bright frames are the actual split; pale frames are influence only.
+STP_region_map_shows_resistance_held = {
+	STP_cw_region_goes_to_resistance = yes
+}
+
+STP_region_map_shows_resistance_leaning = {
+	STP_region_resistance_leaning = yes
+	NOT = { STP_cw_region_goes_to_resistance = yes }
+}
+
+STP_region_map_shows_republics_held = {
+	STP_cw_region_goes_to_republics = yes
+}
+
+STP_region_map_shows_local_leaning = {
+	STP_region_local_forces_leaning = yes
+	NOT = { STP_cw_region_goes_to_republics = yes }
+}
+
+STP_region_map_shows_party_held = {
+	NOT = { STP_cw_region_goes_to_resistance = yes }
+	NOT = { STP_cw_region_goes_to_republics = yes }
+	STP_region_party_entrenched = yes
+}
+
+STP_region_map_shows_party_leaning = {
+	NOT = { STP_cw_region_goes_to_resistance = yes }
+	NOT = { STP_cw_region_goes_to_republics = yes }
+	STP_region_party_leaning = yes
+	NOT = { STP_region_party_entrenched = yes }
+}
+
+STP_region_map_shows_contested = {
+	NOT = { STP_cw_region_goes_to_resistance = yes }
+	NOT = { STP_cw_region_goes_to_republics = yes }
+	NOT = { STP_region_resistance_leaning = yes }
+	NOT = { STP_region_party_leaning = yes }
+	NOT = { STP_region_local_forces_leaning = yes }
+}
+
+# COUNTRY: a second commission opens once suspicion reaches the watched band.
+STP_cw_second_inspection_unlocked = {
+	check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals }
 }
 
 # COUNTRY: foreign intervention in the Stelander civil war.
@@ -445,6 +500,28 @@ STP_cw_northern_target_valid = {
 	is_subject = no
 	NOD = { exists = yes has_capitulated = no is_subject = no }
 	NOT = { is_in_faction_with = NOD }
+}
+
+# COUNTRY: Shabrat desk for northern aid. Survives the split on STS.
+STP_cw_can_run_northern_aid = {
+	has_country_flag = STP_cw_northern_aid_open
+	has_capitulated = no
+	NOT = { has_global_flag = STP_cw_union_wars_finished }
+	OR = {
+		AND = { tag = STP has_country_flag = STP_sided_with_Maksim_flag }
+		tag = STS
+	}
+	NOD = { exists = yes has_capitulated = no }
+}
+
+# STATE: northern front district that still faces NOD.
+STP_cw_northern_fort_state = {
+	NOT = { has_state_flag = STP_cw_northern_fort_built }
+	owner = { STP_cw_northern_target_valid = yes has_war_with = NOD controls_state = PREV }
+	any_neighbor_state = {
+		is_owned_by = NOD
+		is_controlled_by = NOD
+	}
 }
 
 STP_cw_northern_targets_available = {

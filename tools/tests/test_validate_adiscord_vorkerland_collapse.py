@@ -749,11 +749,9 @@ class BorderWarArchitectureTests(unittest.TestCase):
         ai = source_section(read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai')
         minors = {"EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"}
         contracts = {
-            "wrk": ("WKR", {"VAD", "TVA"}, {"WTD"}, 100, "careful", "no"),
-            # Symmetric with WKR and TVA. The old 65 / rush / manual_attack profile
-            # under-committed troops and over-committed aggression against VAD.
-            "vad": ("VAD", {"WKR", "TVA"}, {"WTD"}, 100, "careful", "no"),
-            "tva": ("TVA", {"WKR", "VAD"}, set(), 100, "careful", "no"),
+            "wrk": ("WKR", {"VAD", "TVA"}, {"WTD"}, 100, "balanced", "no"),
+            "vad": ("VAD", {"WKR", "TVA"}, {"WTD"}, 100, "balanced", "no"),
+            "tva": ("TVA", {"WKR", "VAD"}, set(), 100, "balanced", "no"),
             **{
                 tag.lower(): (tag, {"WKR", "VAD", "TVA"}, set(), 100, "balanced", "no")
                 for tag in minors
@@ -773,8 +771,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
             self.assertIn("priority = 1250", front)
             self.assertIn(f"execution_type = {execution}", front)
             self.assertIn(f"manual_attack = {manual}", front)
-            if defender in minors:
-                self.assertIn(f"conquer id = {defender}", front)
+            self.assertIn(f"conquer id = {defender}", front)
 
         for slug, claimant in (("wkr", "WKR"), ("vad", "VAD"), ("tva", "TVA")):
             defense = named_block(
@@ -1501,6 +1498,9 @@ class FrontAndSupplyTests(unittest.TestCase):
         ai = source_section(read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai')
         economy = named_block(ai, "ADISCORD_vorkerland_collapse_war_economy")
         self.assertIn("type = ai_wanted_divisions_factor value = 8", economy)
+        field_army = named_block(ai, "ADISCORD_vorkerland_collapse_field_army")
+        self.assertIn("type = role_ratio id = garrison value = -80", field_army)
+        self.assertIn("type = dont_defend_ally_borders value = 1", field_army)
         self.assertNotIn("ADISCORD_vorkerland_collapse_front_commitment", ai)
         for strategy in re.findall(r"ai_strategy\s*=\s*\{([^{}]*)\}", ai, re.DOTALL):
             if "type = front_control" in strategy or "type = front_unit_request" in strategy:
@@ -1516,7 +1516,7 @@ class FrontAndSupplyTests(unittest.TestCase):
             self.assertIn(f"has_war_with = {defender}", front)
             request = 33 if attacker in {"WPA", "WPS"} else 25
             self.assertIn(f"front_unit_request tag = {defender} value = {request}", front)
-            self.assertIn("execution_type = careful", front)
+            self.assertIn("execution_type = balanced", front)
             self.assertIn("manual_attack = no", front)
             self.assertNotIn("value = 80", front)
             self.assertNotIn("execution_type = rush", front)
@@ -1540,7 +1540,7 @@ class FrontAndSupplyTests(unittest.TestCase):
         ):
             front = named_block(ai, f"ADISCORD_vorkerland_front_{attacker.lower()}_{defender.lower()}")
             self.assertIn(f"front_unit_request tag = {defender} value = 75", front)
-            self.assertIn("execution_type = careful", front)
+            self.assertIn("execution_type = balanced", front)
             self.assertIn("manual_attack = no", front)
             self.assertNotIn("execution_type = rush", front)
             self.assertNotIn("manual_attack = yes", front)

@@ -65,8 +65,76 @@ defined_text = {
 }
 
 defined_text = {
+	name = STPGetLoyaltyValue
+
+	text = {
+		trigger = { check_variable = { var = STP_apparatus_loyalty value = 70 compare = greater_than_or_equals } }
+		localization_key = STP_LOYALTY_VALUE_HIGH
+	}
+	text = {
+		trigger = { check_variable = { var = STP_apparatus_loyalty value = 35 compare = greater_than_or_equals } }
+		localization_key = STP_LOYALTY_VALUE_MEDIUM
+	}
+	text = {
+		localization_key = STP_LOYALTY_VALUE_LOW
+	}
+}
+
+defined_text = {
+	name = STPGetLoyaltyBand
+
+	text = {
+		trigger = { check_variable = { var = STP_apparatus_loyalty value = 90 compare = greater_than_or_equals } }
+		localization_key = STP_LOYALTY_BAND_LOCKED
+	}
+	text = {
+		trigger = { check_variable = { var = STP_apparatus_loyalty value = 70 compare = greater_than_or_equals } }
+		localization_key = STP_LOYALTY_BAND_OBEDIENT
+	}
+	text = {
+		trigger = { check_variable = { var = STP_apparatus_loyalty value = 50 compare = greater_than_or_equals } }
+		localization_key = STP_LOYALTY_BAND_HELD
+	}
+	text = {
+		trigger = { check_variable = { var = STP_apparatus_loyalty value = 25 compare = greater_than_or_equals } }
+		localization_key = STP_LOYALTY_BAND_STRAINED
+	}
+	text = {
+		localization_key = STP_LOYALTY_BAND_FRACTURED
+	}
+}
+
+defined_text = {
+	name = STPGetLoyaltyExplanation
+
+	text = {
+		trigger = { check_variable = { var = STP_apparatus_loyalty value = 90 compare = greater_than_or_equals } }
+		localization_key = STP_LOYALTY_EXPLANATION_LOCKED
+	}
+	text = {
+		trigger = { check_variable = { var = STP_apparatus_loyalty value = 70 compare = greater_than_or_equals } }
+		localization_key = STP_LOYALTY_EXPLANATION_OBEDIENT
+	}
+	text = {
+		trigger = { check_variable = { var = STP_apparatus_loyalty value = 50 compare = greater_than_or_equals } }
+		localization_key = STP_LOYALTY_EXPLANATION_HELD
+	}
+	text = {
+		trigger = { check_variable = { var = STP_apparatus_loyalty value = 25 compare = greater_than_or_equals } }
+		localization_key = STP_LOYALTY_EXPLANATION_STRAINED
+	}
+	text = {
+		localization_key = STP_LOYALTY_EXPLANATION_FRACTURED
+	}
+}
+
+defined_text = {
 	name = STP_display_party_suspicion
 
+	text = {
+		trigger = { has_country_flag = STP_sided_with_the_party_flag }
+		localization_key = STP_display_apparatus_loyalty_loc
+	}
 	text = {
 		trigger = { tag = STP }
 		localization_key = STP_display_party_suspicion_loc
@@ -190,20 +258,13 @@ defined_text = {
 defined_text = {
 	name = STPGetAdministrationAsset
 	text = {
-		trigger = {
-			OR = { state = 2 state = 3 }
-			has_state_flag = { flag = STP_resistance_administration_asset days > 20 }
-		}
+		trigger = { has_state_flag = { flag = STP_resistance_administration_asset days > 20 } }
 		localization_key = STP_REGION_ASSET_ADMINISTRATION_READY
 	}
 	text = {
-		trigger = {
-			OR = { state = 2 state = 3 }
-			has_state_flag = STP_resistance_administration_asset
-		}
+		trigger = { has_state_flag = STP_resistance_administration_asset }
 		localization_key = STP_REGION_ASSET_ADMINISTRATION_RECENT
 	}
-	text = { trigger = { has_state_flag = STP_resistance_administration_asset } localization_key = STP_REGION_ASSET_ADMINISTRATION }
 	text = { localization_key = STP_REGION_EMPTY_LINE }
 }
 
@@ -234,6 +295,8 @@ defined_text = {
 
 defined_text = {
 	name = STPGetSabotageAsset
+	text = { trigger = { has_state_flag = STP_resistance_sabotage_asset state = 28 } localization_key = STP_REGION_ASSET_SABOTAGE_CAPITAL }
+	text = { trigger = { has_state_flag = STP_resistance_sabotage_asset state = 29 } localization_key = STP_REGION_ASSET_SABOTAGE_INDUSTRY }
 	text = { trigger = { has_state_flag = STP_resistance_sabotage_asset } localization_key = STP_REGION_ASSET_SABOTAGE }
 	text = { localization_key = STP_REGION_EMPTY_LINE }
 }

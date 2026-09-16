@@ -62,5 +62,6 @@ improverelation
 release_nation
 international_market_access_rights
 STP_cw_election_window
+STP_cw_credentials_review
 NOD_cw_intervention_preparation
 NOD_cw_northern_redeployment

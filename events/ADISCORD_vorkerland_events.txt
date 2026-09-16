@@ -589,6 +589,12 @@ country_event = {
 	immediate = {
 		ADISCORD_vorkerland_begin_collapse = yes
 		set_global_flag = ADISCORD_vorkerland_collapse_started
+		# begin_collapse refreshes Vorkerland trees before this flag exists.
+		# Shabrat's collapse-gated focuses read the flag, so dirty STP after it.
+		if = {
+			limit = { country_exists = STP }
+			STP = { mark_focus_tree_layout_dirty = yes }
+		}
 		ADISCORD_vorkerland_expire_precollapse_itoran_armistice = yes
 		# Recheck the permanent guard inside the executing immediate block. Two
 		# already-admitted event instances can otherwise both pass the outer event

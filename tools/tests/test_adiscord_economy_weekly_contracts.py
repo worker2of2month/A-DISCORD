@@ -6988,11 +6988,11 @@ ADISCORD_task10_forbidden_cache_consumer = {
         self.assertNotIn("monthly_income value = 12", yearly_balance)
         streaks = block(EFFECTS, "ADISCORD_economy_apply_yearly_debt_streaks")
         self.assertIn("ADISCORD_economy_debt_emergency_streak value = 11", streaks)
-        self.assertIn("ADISCORD_economy_debt_default_streak value = 11", streaks)
+        self.assertIn("ADISCORD_economy_debt_default_streak value = 12", streaks)
         self.assertIn("ADISCORD_economy_last_monthly_balance_applied", streaks)
         yearly_policy = block(EFFECTS, "ADISCORD_economy_ai_yearly_policy")
-        self.assertEqual(yearly_policy.count("ADISCORD_economy_ai_monthly_policy = yes"), 3)
-        self.assertEqual(yearly_policy.count("ADISCORD_economy_tick_budget_cooldowns = yes"), 2)
+        self.assertEqual(yearly_policy.count("ADISCORD_economy_ai_monthly_policy = yes"), 2)
+        self.assertEqual(yearly_policy.count("ADISCORD_economy_tick_budget_cooldowns = yes"), 1)
         self.assertIn("ADISCORD_economy_ai_yearly_policy = yes", yearly)
 
     def test_weekly_pulse_is_country_scoped_and_applies_once(self):

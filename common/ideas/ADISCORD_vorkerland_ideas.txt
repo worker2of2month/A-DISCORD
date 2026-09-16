@@ -2249,7 +2249,6 @@ ideas = {
 
 
 
-
 # --- rom_tru_ideas ---
 		ADISCORD_vorkerland_rom_desert_eagle_staff = {
 			picture = generic_war_preparation
@@ -2386,6 +2385,85 @@ ideas = {
 				army_speed_factor = 0.05
 			}
 			ai_will_do = { factor = 0 }
+		}
+
+		# Dummy previews for war-economy forks. Never installed.
+		ADISCORD_vorkerland_wkr_war_economy_dummy = {
+			name = ADISCORD_vorkerland_wkr_war_economy
+			allowed = { always = no }
+			modifier = { }
+		}
+		ADISCORD_vorkerland_wkr_war_economy_strip = {
+			name = ADISCORD_vorkerland_wkr_war_economy
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.10
+				consumer_goods_factor = -0.05
+				stability_factor = -0.05
+				political_power_gain = -0.10
+			}
+		}
+		ADISCORD_vorkerland_wkr_war_economy_ration = {
+			name = ADISCORD_vorkerland_wkr_war_economy
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = -0.10
+				consumer_goods_factor = 0.05
+				stability_factor = 0.05
+				political_power_gain = 0.10
+			}
+		}
+		ADISCORD_vorkerland_vad_war_economy_dummy = {
+			name = ADISCORD_vorkerland_vad_war_economy
+			allowed = { always = no }
+			modifier = { }
+		}
+		ADISCORD_vorkerland_vad_war_economy_levy = {
+			name = ADISCORD_vorkerland_vad_war_economy
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.015
+				mobilization_speed = 0.15
+				stability_factor = -0.04
+				political_power_gain = -0.15
+			}
+		}
+		ADISCORD_vorkerland_vad_war_economy_markets = {
+			name = ADISCORD_vorkerland_vad_war_economy
+			allowed = { always = no }
+			modifier = {
+				conscription = -0.015
+				mobilization_speed = -0.15
+				stability_factor = 0.04
+				political_power_gain = 0.15
+			}
+		}
+		ADISCORD_vorkerland_tva_war_economy_dummy = {
+			name = ADISCORD_vorkerland_tva_war_economy
+			allowed = { always = no }
+			modifier = { }
+		}
+		ADISCORD_vorkerland_tva_war_economy_war_load = {
+			name = ADISCORD_vorkerland_tva_war_economy
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.12
+				production_factory_max_efficiency_factor = 0.05
+				research_speed_factor = -0.05
+				stability_factor = -0.06
+				consumer_goods_factor = -0.06
+			}
+		}
+		ADISCORD_vorkerland_tva_war_economy_civil = {
+			name = ADISCORD_vorkerland_tva_war_economy
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = -0.12
+				production_factory_max_efficiency_factor = -0.05
+				research_speed_factor = 0.05
+				stability_factor = 0.06
+				consumer_goods_factor = 0.06
+			}
 		}
 
 # --- end ---

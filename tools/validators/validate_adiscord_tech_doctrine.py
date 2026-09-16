@@ -1640,8 +1640,8 @@ def check_infantry_visual_model_chain() -> list[str]:
             "STP_infantry_2_entity": "ADISCORD_STP_party_mesh",
             "VAL_infantry_2_entity": "ADISCORD_VAL_regular_mesh",
             "STS_infantry_2_entity": "ADISCORD_STS_regular_mesh",
-            "CIN_infantry_2_entity": "ETH_irregular_mg_infantry_mesh",
-            "OSF_infantry_2_entity": "ETH_irregular_mg_infantry_mesh",
+            "CIN_infantry_2_entity": "APH_irregular_mg_infantry_mesh",
+            "OSF_infantry_2_entity": "APH_irregular_mg_infantry_mesh",
             "APH_infantry_2_entity": "APH_irregular_mg_infantry_mesh",
             "APH_mountaineers_2_entity": "APH_afg_militia_mg_mesh",
         }

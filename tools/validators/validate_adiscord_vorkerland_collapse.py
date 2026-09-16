@@ -3511,6 +3511,14 @@ def validate_ai(root: Path, issues: list[str]) -> None:
     economy = named_block(ai, "ADISCORD_vorkerland_collapse_war_economy")
     if "type = ai_wanted_divisions_factor value = 8" not in economy:
         issues.append("collapse AI wanted-division factor must stay at the moderate value 8")
+    field_army = named_block(ai, "ADISCORD_vorkerland_collapse_field_army")
+    for token in (
+        "type = role_ratio id = garrison value = -80",
+        "type = dont_defend_ally_borders value = 1",
+        "has_war = yes",
+    ):
+        if token not in field_army:
+            issues.append(f"collapse field-army profile is missing {token}")
     if "ADISCORD_vorkerland_collapse_front_commitment" in ai:
         issues.append("obsolete all-tags front commitment survived")
     if "ADISCORD_vorkerland_dynamic_regional_front_commitment" in ai or "country_trigger = {" in ai:
@@ -3544,14 +3552,12 @@ def validate_ai(root: Path, issues: list[str]) -> None:
         issues.append("collapse AI still contains the retired Worker-Doctor preparation window")
 
     central_minors = {"EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"}
-    # The three claimant fronts must stay symmetric. VAD's used to request 65% of
-    # the army and then attack with rush + manual_attack: an under-strength force
-    # committed to supply-blind frontal assaults, which handed VAD nearly every
-    # campaign. Any future divergence between the three is a balance regression.
+    # The three claimant fronts stay symmetric: balanced execution, no rush or
+    # manual_attack. Careful would sit on PLAN_EXECUTE_CAREFUL_LIMIT.
     central_fronts = {
-        "wrk": ("WKR", {"VAD", "TVA"}, {"WTD"}, 100, "careful", "no"),
-        "vad": ("VAD", {"WKR", "TVA"}, {"WTD"}, 100, "careful", "no"),
-        "tva": ("TVA", {"WKR", "VAD"}, set(), 100, "careful", "no"),
+        "wrk": ("WKR", {"VAD", "TVA"}, {"WTD"}, 100, "balanced", "no"),
+        "vad": ("VAD", {"WKR", "TVA"}, {"WTD"}, 100, "balanced", "no"),
+        "tva": ("TVA", {"WKR", "VAD"}, set(), 100, "balanced", "no"),
         **{
             tag.lower(): (tag, {"WKR", "VAD", "TVA"}, set(), 100, "balanced", "no")
             for tag in central_minors
@@ -3575,7 +3581,7 @@ def validate_ai(root: Path, issues: list[str]) -> None:
         ):
             if token not in front:
                 issues.append(f"central front against {defender} is missing {token}")
-        if defender in central_minors and f"conquer id = {defender}" not in front:
+        if f"conquer id = {defender}" not in front:
             issues.append(f"central front against {defender} must force a conquest close")
 
     for slug, claimant in (("wkr", "WKR"), ("vad", "VAD"), ("tva", "TVA")):
@@ -3637,7 +3643,7 @@ def validate_ai(root: Path, issues: list[str]) -> None:
             request = (33 if attacker in {"WPA", "WPS"} else 25) if northern_pair else 75
             for token in (
                 f"front_unit_request tag = {defender} value = {request}",
-                "execution_type = careful",
+                "execution_type = balanced",
                 "manual_attack = no",
             ):
                 if token not in front:

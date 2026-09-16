@@ -45,3 +45,14 @@ STP_cw_external_intervention = {
 	visible_when_empty = no
 	priority = 35
 }
+
+STP_cw_northern_aid = {
+	allowed = { OR = { tag = STP tag = STS } }
+	visible = {
+		has_country_flag = STP_cw_northern_aid_open
+		NOT = { has_global_flag = STP_cw_union_wars_finished }
+		NOD = { exists = yes has_capitulated = no }
+	}
+	visible_when_empty = yes
+	priority = 34
+}

@@ -194,11 +194,14 @@ class CivilWarContracts(unittest.TestCase):
     def test_human_handoff_precedes_any_time_at_war(self):
         start = ast_block(ast_block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_start"), "if")
         body = [e for e in start if e.key != "limit"]
-        for human in (True, False):
-            chosen = list(selected_effects(body, {("STP", "is_ai", "yes"): not human,
-                                                  ("STP", "is_ai", "no"): human}))
-            self.assertFalse(any(e.key == "declare_war_on" for _, e in chosen))
-            self.assertEqual(sum(e.key == "STP_cw_begin_hostilities" for _, e in chosen), int(not human))
+        unset = {("STP", "is_ai", "yes"): False, ("STP", "is_ai", "no"): True}
+        chosen = list(selected_effects(body, unset))
+        self.assertFalse(any(e.key == "declare_war_on" for _, e in chosen))
+        self.assertEqual(sum(e.key == "STP_cw_begin_hostilities" for _, e in chosen), 0)
+        self.assertEqual([scalar(e.value, "id") for _, e in chosen if e.key == "country_event"],
+                         ["ADISCORD_STP_cw.30"])
+        ai = list(selected_effects(body, {("STP", "is_ai", "yes"): True, ("STP", "is_ai", "no"): False}))
+        self.assertEqual(sum(e.key == "STP_cw_begin_hostilities" for _, e in ai), 1)
         events = entries("events/ADISCORD_STP_events.txt")
         handoff = next(e.value for e in events if e.key == "country_event"
                        and scalar(e.value, "id") == "ADISCORD_STP_cw.30")
@@ -210,6 +213,27 @@ class CivilWarContracts(unittest.TestCase):
         self.assertGreater(war.index("set_state_controller_to"), war.index("declare_war_on"))
         self.assertNotIn("set_global_flag = STP_cw_started", block(self.effects, "STP_cw_start"))
         self.assertLess(war.index("set_global_flag = STP_cw_started"), war.index("declare_war_on"))
+
+    def test_predetermined_shabrat_human_takes_sts_immediately(self):
+        start = ast_block(ast_block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_start"), "if")
+        body = [e for e in start if e.key != "limit"]
+        shabrat = {("STP", "is_ai", "no"): True, ("STP", "is_ai", "yes"): False,
+                   ("STP", "has_country_flag", "STP_sided_with_Maksim_flag"): True,
+                   ("STS", "exists", "yes"): True}
+        chosen = list(selected_effects(body, shabrat))
+        self.assertEqual(sum(e.key == "STP_cw_begin_hostilities" for _, e in chosen), 1)
+        self.assertIn(("STS", "change_tag_from"), [(scope, e.key) for scope, e in chosen if e.key == "change_tag_from"])
+        self.assertEqual([e.value for scope, e in chosen if scope == "STS" and e.key == "change_tag_from"], ["STP"])
+        self.assertFalse(any(e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_cw.30"
+                             for _, e in chosen))
+        party = {("STP", "is_ai", "no"): True, ("STP", "is_ai", "yes"): False,
+                 ("STP", "has_country_flag", "STP_sided_with_the_party_flag"): True,
+                 ("STS", "exists", "yes"): True}
+        party_chosen = list(selected_effects(body, party))
+        self.assertEqual(sum(e.key == "STP_cw_begin_hostilities" for _, e in party_chosen), 1)
+        self.assertFalse(any(e.key == "change_tag_from" for _, e in party_chosen))
+        self.assertFalse(any(e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_cw.30"
+                             for _, e in party_chosen))
 
     def test_scripted_trigger_calls_obey_the_native_boolean_interface(self):
         # Native HOI4 loader rejects argument blocks (Invalid trigger 'target'),
@@ -332,6 +356,33 @@ class CivilWarContracts(unittest.TestCase):
             self.assertLess(body.index("load_oob = ADISCORD_STP_civil_war_templates"),
                             body.index("STP_cw_apply_wartime_template_locks = yes"), name)
             self.assertNotIn("ADISCORD_STP_unlock_regular_army_templates = yes", body)
+
+    def test_shabrat_wartime_templates_use_three_map_models(self):
+        templates = {scalar(e.value, "name"): e.value
+                     for e in entries("history/units/ADISCORD_STP_civil_war_templates.txt")
+                     if e.key == "division_template"}
+        territorial = templates["Stelander Territorial Brigade"]
+        assault = templates["Stelander Assault Division"]
+        volunteer = templates["Kefreyt Volunteer Division"]
+        self.assertFalse(any(e.key == "override_model" for e in territorial))
+        self.assertFalse(any(e.key == "override_model" for e in assault))
+        self.assertEqual(scalar(volunteer, "override_model"), "ADISCORD_VAL_regular_entity")
+        self.assertTrue(any(e.key == "ADISCORD_territorial" for e in ast_block(territorial, "regiments")))
+        self.assertTrue(any(e.key == "infantry" for e in ast_block(assault, "regiments")))
+        entities = read("gfx/entities/zz_ADISCORD_country_infantry.asset")
+        self.assertRegex(
+            entities,
+            r'name\s*=\s*"STS_ADISCORD_militia_2_entity"[^\n]*pdxmesh\s*=\s*"STP_shabrat_mg_infantry_mesh"',
+        )
+        self.assertRegex(
+            entities,
+            r'clone\s*=\s*"STS_ADISCORD_militia_2_entity"\s+name\s*=\s*"STS_ADISCORD_territorial_2_entity"',
+        )
+        self.assertRegex(
+            entities,
+            r'name\s*=\s*"STS_infantry_2_entity"[\s\S]{0,200}pdxmesh\s*=\s*"ADISCORD_STS_regular_mesh"',
+        )
+        self.assertIn('name = "ADISCORD_VAL_regular_entity"', entities)
 
     def test_brigade_order_rejects_fractional_shortfall_before_charging_pp(self):
         order = ast_block(ast_block(entries("common/decisions/ADISCORD_STP_decisions.txt"),
@@ -730,6 +781,33 @@ class CivilWarContracts(unittest.TestCase):
         elsewhere = {("46", key, value): fact for (_, key, value), fact in facts.items()}
         self.assertFalse(any(e.key == "damage_building" for _, e in selected_effects(payout, elsewhere, "46")))
 
+    def test_prepared_capital_and_industry_sabotage_damage_only_party_held_districts(self):
+        payout = ast_block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_materialize_region_assets")
+        capital = {("28", "is_owned_by", "STP"): True, ("28", "is_controlled_by", "STP"): True,
+                   ("28", "has_state_flag", "STP_resistance_sabotage_asset"): True,
+                   ("28", "numeric", "infrastructure"): 4, ("28", "numeric", "arms_factory"): 3}
+        hits = [scalar(e.value, "type") for _, e in selected_effects(payout, capital, "28") if e.key == "damage_building"]
+        self.assertEqual(hits, ["infrastructure", "arms_factory"])
+        for requirement in (("28", "is_owned_by", "STP"), ("28", "has_state_flag", "STP_resistance_sabotage_asset")):
+            scenario = {k: v for k, v in capital.items() if k != requirement}
+            self.assertFalse(any(e.key == "damage_building" for _, e in selected_effects(payout, scenario, "28")), requirement)
+        industry = {("29", "is_owned_by", "STP"): True, ("29", "is_controlled_by", "STP"): True,
+                    ("29", "has_state_flag", "STP_resistance_sabotage_asset"): True,
+                    ("29", "numeric", "industrial_complex"): 4}
+        plants = [scalar(e.value, "type") for _, e in selected_effects(payout, industry, "29") if e.key == "damage_building"]
+        self.assertEqual(plants, ["industrial_complex"])
+        captured = {**industry, ("29", "is_owned_by", "STP"): False}
+        self.assertFalse(any(e.key == "damage_building" for _, e in selected_effects(payout, captured, "29")))
+        aftermath = [e for _, e in selected_effects(payout, capital, "28") if e.key == "add_timed_idea"]
+        self.assertEqual([(scalar(e.value, "idea"), scalar(e.value, "days")) for e in aftermath],
+                         [("STP_cw_party_sabotage_aftermath", "42")])
+        already = {**capital, ("STP", "has_idea", "STP_cw_party_sabotage_aftermath"): True}
+        self.assertFalse(any(e.key == "add_timed_idea" for _, e in selected_effects(payout, already, "28")))
+        self.assertFalse(any(e.key == "add_timed_idea" for _, e in selected_effects(payout, {
+            ("53", "is_owned_by", "STP"): True, ("53", "is_controlled_by", "STP"): True,
+            ("53", "has_state_flag", "STP_resistance_sabotage_asset"): True,
+            ("53", "numeric", "infrastructure"): 3}, "53")))
+
     def test_party_keeps_hedersett_and_historical_ideology(self):
         start = block(self.effects, "STP_cw_start")
         self.assertIn("ruling_party = hedonism", start)
@@ -833,13 +911,88 @@ class CivilWarContracts(unittest.TestCase):
     def test_handoff_direction_and_successor_technology(self):
         events = read("events/ADISCORD_STP_events.txt")
         self.assertIn("STS = { change_tag_from = STP }", events)
+        self.assertIn("STS = { change_tag_from = STP }", block(self.effects, "STP_cw_start"))
         self.assertNotIn("SRP = { change_tag_from = STP }", events)
         self.assertNotRegex(events, r"change_tag_from\s*=\s*(STS|SRP)")
         self.assertIn("inherit_technology = STP", block(self.effects, "STP_cw_prepare_successor"))
+        self.assertIn("set_research_slots = 1", block(self.effects, "STP_cw_prepare_successor"))
         start = block(self.effects, "STP_cw_start")
         self.assertEqual(start.count("load_focus_tree = { tree = STP_cw_focus"), 3)
         self.assertNotIn("declare_war_on", start)
+        self.assertLess(start.rindex("load_focus_tree"), start.index("change_tag_from = STP"))
         self.assertLess(start.rindex("load_focus_tree"), start.index("id = ADISCORD_STP_cw.30"))
+
+    def test_wartime_laboratories_grant_a_temporary_shared_slot(self):
+        tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
+                    if e.key == "focus_tree" and scalar(e.value, "id") == "STP_cw_focus")
+        focus = next(e.value for e in tree if e.key == "focus" and scalar(e.value, "id") == "STP_cw_wartime_laboratories")
+        self.assertFalse(any(e.key == "allow_branch" for e in focus))
+        self.assertEqual((scalar(focus, "x"), scalar(focus, "y"), scalar(focus, "cost")), ("7", "1", "3"))
+        self.assertEqual(scalar(focus, "icon"), "GFX_goal_generic_scientific_exchange")
+        self.assertNotEqual(scalar(focus, "icon"), "GFX_focus_TVA_divert_the_research_budget")
+        self.assertEqual(scalar(ast_block(focus, "prerequisite"), "focus"), "STP_cw_unified_headquarters")
+        self.assertEqual(scalar(ast_block(focus, "ai_will_do"), "base"), "1")
+        self.assertNotIn("has_war", {e.key for e in walk(focus)})
+        available = ast_block(focus, "available")
+        self.assertEqual(scalar(ast_block(available, "custom_trigger_tooltip"), "tooltip"),
+                         "STP_cw_wartime_laboratories_available_tt")
+        self.assertTrue(matches_conditions(available, {}))
+        self.assertFalse(matches_conditions(available, {("STP", "has_country_flag", "STP_cw_postwar"): True}))
+        self.assertEqual(scalar(focus, "cancel_if_invalid"), "yes")
+        reward = ast_block(focus, "completion_reward")
+        self.assertEqual([e.value for e in reward if e.key == "add_research_slot"], ["1"])
+        self.assertEqual([e.value for e in reward if e.key == "custom_effect_tooltip"], ["STP_cw_wartime_laboratories_tt"])
+        timed = ast_block(reward, "add_timed_idea")
+        self.assertEqual((scalar(timed, "idea"), scalar(timed, "days")), ("STP_cw_emergency_laboratories", "180"))
+        ledger = ast_block(ast_block(reward, "hidden_effect"), "add_to_variable")
+        self.assertEqual((scalar(ledger, "var"), scalar(ledger, "value")), ("STP_cw_emergency_research_slots", "1"))
+        reward_keys = [e.key for e in reward]
+        self.assertLess(reward_keys.index("hidden_effect"), reward_keys.index("add_timed_idea"))
+        ideas = ast_block(ast_block(entries("common/ideas/ADISCORD_STP_civil_war_ideas.txt"), "ideas"), "country")
+        idea = ast_block(ideas, "STP_cw_emergency_laboratories")
+        self.assertEqual(scalar(idea, "picture"), "ADISCORD_law_civic_emergency_committees")
+        cancel = ast_block(idea, "cancel")
+        self.assertEqual(scalar(ast_block(cancel, "custom_trigger_tooltip"), "tooltip"),
+                         "STP_cw_emergency_laboratories_cancel_tt")
+        self.assertTrue(matches_conditions(cancel, {("STP", "has_country_flag", "STP_cw_postwar"): True}))
+        self.assertFalse(matches_conditions(cancel, {}))
+        self.assertNotIn("has_war", {e.key for e in walk(cancel)})
+        self.assertEqual(scalar(ast_block(idea, "on_remove"), "STP_cw_revoke_emergency_research_slot"), "yes")
+        self.assertFalse(any(e.key == "add_research_slot" for e in walk(idea)))
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        revoke = ast_block(effects, "STP_cw_revoke_emergency_research_slot")
+        finish = ast_block(effects, "STP_cw_finish_mobilization")
+        self.assertEqual([e.key for e in finish[:3]],
+                         ["set_country_flag", "if", "STP_cw_revoke_emergency_research_slot"])
+        self.assertEqual(finish[0].value, "STP_cw_postwar")
+        self.assertIn(("has_idea", "STP_cw_emergency_laboratories"),
+                      [(e.key, e.value) for e in walk(finish)])
+        self.assertEqual(sum(e.key == "remove_ideas" and e.value == "STP_cw_emergency_laboratories"
+                             for e in walk(finish)), 1)
+        self.assertFalse(any(e.key == "add_research_slot" for e in walk(finish)))
+        loc = read("localisation/russian/ADISCORD_STP_l_russian.yml")
+        for key in ("STP_cw_wartime_laboratories", "STP_cw_wartime_laboratories_desc",
+                    "STP_cw_wartime_laboratories_tt", "STP_cw_wartime_laboratories_available_tt",
+                    "STP_cw_emergency_laboratories", "STP_cw_emergency_laboratories_desc",
+                    "STP_cw_emergency_laboratories_cancel_tt"):
+            self.assertIn(f"{key}:", loc)
+        for tag in ("STP", "STS", "SRP"):
+            for granted in (0, 1):
+                facts = {(tag, "variable", "STP_cw_emergency_research_slots"): granted}
+                writes = []
+                for _ in range(2):
+                    for scope, entry in selected_effects(revoke, facts, tag):
+                        writes.append((scope, entry))
+                        if entry.key == "subtract_from_variable":
+                            facts[(scope, "variable", scalar(entry.value, "var"))] = (
+                                facts.get((scope, "variable", scalar(entry.value, "var")), 0)
+                                - float(scalar(entry.value, "value")))
+                        elif entry.key == "clear_variable":
+                            facts[(scope, "variable", entry.value)] = 0
+                with self.subTest(tag=tag, granted=granted):
+                    self.assertEqual([e.value for _, e in writes if e.key == "add_research_slot"],
+                                     ["-1"] if granted else [])
+                    self.assertEqual(facts[(tag, "variable", "STP_cw_emergency_research_slots")], 0)
 
     def test_val_path_reserves_capitulation_and_never_annexes_45(self):
         on_action = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
@@ -1312,7 +1465,7 @@ class CivilWarContracts(unittest.TestCase):
         self.assertIn("var = STP_cw_rifles_remaining value = 0 compare = equals", payment)
         self.assertNotIn("add_equipment_to_stockpile = { type = infantry_equipment amount = 480", payment)
         decisions = read("common/decisions/ADISCORD_STP_decisions.txt")
-        for cost in (1600, 2400, 240):
+        for cost in (16000, 2400, 240):
             self.assertIn(f"set_temp_variable = {{ var = STP_cw_rifle_cost value = {cost} }}", decisions)
             self.assertNotIn(f"type = infantry_equipment amount = -{cost}", decisions)
 
@@ -1589,54 +1742,67 @@ class NorthernCampaignContracts(unittest.TestCase):
 
     def test_limited_revolt_garrison_forecast_matches_transfer_despite_lost_influence(self):
         start = ast_block(ast_block(self.effects, "STP_cw_start"), "if")
-        state_loop = next(e.value for e in start if e.key == "every_owned_state"
-                          and any(child.key == "STP_cw_region_goes_to_resistance" for child in walk(e.value)))
-        report = self.expand(ast_block(self.effects, "STP_cw_refresh_army_report"))
-        transfer = self.expand([e for e in state_loop if e.key != "limit"])
-        resistance_branch = next(e.value for e in state_loop if e.key == "else_if")
-        self.assertEqual([(e.key, e.value) for e in ast_block(resistance_branch, "limit")],
-                         [("STP_cw_region_goes_to_resistance", "yes")], "all callers must use the same recipient predicate")
-        target_states = {e.value for e in walk(ast_block(state_loop, "limit")) if e.key == "state"}
+        self.assertFalse(any(e.key == "every_owned_state" and any(child.key == "transfer_state" for child in walk(e.value))
+                             for e in walk(start)), "owned-state iteration can skip a remaining district")
+        transfer_branches = [e for e in start if e.key in ("if", "else_if")
+                             and any(child.key == "transfer_state" and child.value in {"2", "3", "29", "45", "46", "53"}
+                                     for child in walk(e.value))]
+        self.assertTrue(any(any(child.key == "STP_cw_region_goes_to_resistance" for child in walk(e.value))
+                            for e in transfer_branches), "all callers must use the same recipient predicate")
+        target_states = {child.value for e in transfer_branches for child in walk(e.value) if child.key == "transfer_state"}
         self.assertEqual(target_states, {"2", "3", "29", "45", "46", "53"})
+        report = self.expand(ast_block(self.effects, "STP_cw_refresh_army_report"))
+        transfer = self.expand(transfer_branches)
         for state in sorted(target_states):
             for limited in (False, True):
                 for local_strongest in (False, True):
-                    flags = {("STP", "has_country_flag", "STP_cw_limited_party_revolt"): limited,
-                             ("STP", "has_country_flag", "STP_cw_shabrat_election_victory"): limited}
-                    assets = {(state, "has_state_flag", asset): True for asset in (
-                        "STP_party_reinforced_garrison_asset", "STP_resistance_garrison_asset", "STP_inspection_concession_prepared")}
-                    before = {**flags, **assets, (state, "is_owned_by", "STP"): True,
-                              (state, "variable", "STP_resistance_influence"): 10,
-                              (state, "variable", "STP_party_influence"): 10 if local_strongest else 60,
-                              (state, "variable", "STP_local_forces_influence"): 80 if local_strongest else 30,
-                              (state, "variable", "STP_region_margin"): 60 if local_strongest else 30,
-                              (state, "variable", "STP_region_lead"): 80 if local_strongest else 60,
-                              (state, "variable", "STP_region_runner_up"): 10 if local_strongest else 30,
-                              (state, "variable", "STP_region_status"): 0}
-                    transfers = [(scope, e.value) for scope, e in selected_effects(transfer, before, state)
-                                 if e.key == "transfer_state"]
-                    expected_owner = "SRP" if state == "45" and local_strongest else ("STS" if limited else "STP")
-                    actual_owner = transfers[0][0] if transfers else "STP"
-                    with self.subTest(state=state, limited=limited, local_strongest=local_strongest):
-                        self.assertEqual(transfers, [(expected_owner, "PREV")] if expected_owner != "STP" else [])
-                        forecast = {}
-                        for scope, entry in selected_effects(report, before):
-                            self.assertEqual(scope, "STP")
-                            name, amount = scalar(entry.value, "var"), int(scalar(entry.value, "value"))
-                            forecast[name] = amount if entry.key == "set_variable" else forecast[name] + amount
-                        after = {**before, (state, "is_owned_by", "STP"): actual_owner == "STP",
-                                 (state, "is_owned_by", actual_owner): True}
-                        calls = list(selected_effects(start, after))
-                        for tag, report_name, report_base, actual_base in (
-                            ("STP", "STP_cw_report_party_brigades", 16, 5 if limited else 16),
-                            ("STS", "STP_cw_report_resistance_brigades", 14, 16 if limited else 14),
-                        ):
-                            actual = sum(scope == tag and e.key == "STP_cw_mobilize_brigade" for scope, e in calls)
-                            self.assertEqual(forecast[report_name] - report_base, actual - actual_base,
-                                             "the forecast's paid extra cohorts must follow the actual transferred state")
-                        if limited and state in ("2", "29"):
-                            self.assertEqual(forecast["STP_cw_report_resistance_brigades"] - 14, 2)
-                            self.assertEqual(forecast["STP_cw_report_party_brigades"] - 16, 0)
+                    for mandate in (0.0, 0.5501):
+                        flags = {("STP", "has_country_flag", "STP_cw_limited_party_revolt"): limited,
+                                 ("STP", "has_country_flag", "STP_cw_shabrat_election_victory"): limited,
+                                 ("STP", "power_balance_value", "STP_shabrat_election_legitimacy"): mandate}
+                        assets = {(state, "has_state_flag", asset): True for asset in (
+                            "STP_party_reinforced_garrison_asset", "STP_resistance_garrison_asset", "STP_inspection_concession_prepared")}
+                        before = {**flags, **assets, (state, "is_owned_by", "STP"): True,
+                                  (state, "variable", "STP_resistance_influence"): 10,
+                                  (state, "variable", "STP_party_influence"): 10 if local_strongest else 60,
+                                  (state, "variable", "STP_local_forces_influence"): 80 if local_strongest else 30,
+                                  (state, "variable", "STP_region_margin"): 60 if local_strongest else 30,
+                                  (state, "variable", "STP_region_lead"): 80 if local_strongest else 60,
+                                  (state, "variable", "STP_region_runner_up"): 10 if local_strongest else 30,
+                                  (state, "variable", "STP_region_status"): 0}
+                        transfers = [(scope, e.value) for scope, e in selected_effects(transfer, before)
+                                     if e.key == "transfer_state" and e.value == state]
+                        claimed = limited or mandate > 0.55
+                        expected_owner = "SRP" if state == "45" and local_strongest else ("STS" if claimed else "STP")
+                        actual_owner = transfers[0][0] if transfers else "STP"
+                        with self.subTest(state=state, limited=limited, local_strongest=local_strongest, mandate=mandate):
+                            self.assertEqual(transfers, [(expected_owner, state)] if expected_owner != "STP" else [])
+                            forecast = {}
+                            for scope, entry in selected_effects(report, before):
+                                self.assertEqual(scope, "STP")
+                                name, amount = scalar(entry.value, "var"), int(scalar(entry.value, "value"))
+                                forecast[name] = amount if entry.key == "set_variable" else forecast[name] + amount
+                            after = {**before, (state, "is_owned_by", "STP"): actual_owner == "STP",
+                                     (state, "is_owned_by", actual_owner): True}
+                            calls = list(selected_effects(start, after))
+                            for tag, report_name, report_base, actual_base in (
+                                ("STP", "STP_cw_report_party_brigades", 16, 5 if limited else 16),
+                                ("STS", "STP_cw_report_resistance_brigades", 14, 16 if limited else 14),
+                            ):
+                                actual = sum(scope == tag and e.key == "STP_cw_mobilize_brigade" for scope, e in calls)
+                                self.assertEqual(forecast[report_name] - report_base, actual - actual_base,
+                                                 "the forecast's paid extra cohorts must follow the actual transferred state")
+                            if claimed and state in ("2", "29"):
+                                self.assertEqual(forecast["STP_cw_report_resistance_brigades"] - 14, 2)
+                                self.assertEqual(forecast["STP_cw_report_party_brigades"] - 16, 0)
+
+    def test_high_legitimacy_claims_contested_districts_without_administration(self):
+        goes_to = self.expand(ast_block(self.triggers, "STP_cw_region_goes_to_resistance"))
+        for state, mandate, expected in (("2", 0.55, False), ("2", 0.5501, True), ("53", 0.0, False)):
+            facts = {(state, "state", state): True,
+                     ("STP", "power_balance_value", "STP_shabrat_election_legitimacy"): mandate}
+            with self.subTest(state=state, mandate=mandate):
+                self.assertEqual(matches_conditions(goes_to, facts, state), expected)
 
     def test_every_living_northern_front_opens_early_uprising_until_its_defeat(self):
         busy = self.expand(ast_block(self.triggers, "STP_cw_nod_busy_in_north"))
@@ -2380,8 +2546,8 @@ class NorthernCampaignContracts(unittest.TestCase):
 
     def test_northern_capabilities_move_to_sts_once_before_the_tree_changes(self):
         transfer = ast_block(self.effects, "STP_cw_transfer_preparation_modifiers")
-        for ability in ("evidence", "supply"):
-            flag = "STP_cw_northern_strategy_" + ability
+        for ability in ("evidence", "supply", "aid_open"):
+            flag = "STP_cw_northern_strategy_" + ability if ability != "aid_open" else "STP_cw_northern_aid_open"
             facts = {("STP", "has_country_flag", flag): True, ("STS", "exists", "yes"): True}
             writes = []
             for _ in range(2):
@@ -2392,10 +2558,50 @@ class NorthernCampaignContracts(unittest.TestCase):
             self.assertEqual(writes, [("STS", "set_country_flag", flag), ("STP", "clr_country_flag", flag)])
             self.assertTrue(facts[("STS", "has_country_flag", flag)])
             self.assertFalse(facts[("STP", "has_country_flag", flag)])
+        deposit_facts = {("STP", "has_variable", "STP_cw_northern_fort_deposit"): True,
+                         ("STP", "has_variable", "STP_cw_northern_engineer_deposit"): True}
+        self.assertEqual([(scope, e.key) for scope, e in selected_effects(transfer, deposit_facts)
+                          if e.key in ("ADISCORD_economy_receive_100", "ADISCORD_economy_receive_50")],
+                         [("STS", "ADISCORD_economy_receive_100"), ("STS", "ADISCORD_economy_receive_50")])
         start = list(walk(ast_block(self.effects, "STP_cw_start")))
         transfer_index = next(i for i, e in enumerate(start) if e.key == "STP_cw_transfer_preparation_modifiers")
         first_new_tree = next(i for i, e in enumerate(start) if e.key == "load_focus_tree")
         self.assertLess(transfer_index, first_new_tree)
+
+    def test_nod_northern_offensive_is_inherent_and_does_not_wait_for_stelander_help(self):
+        start = ast_block(self.effects, "STP_cw_start_northern_war")
+        self.assertIn("NOD_cw_northern_offensive", {e.value for e in walk(start) if e.key == "add_ideas"})
+        ideas = ast_block(ast_block(entries("common/ideas/ADISCORD_STP_civil_war_ideas.txt"), "ideas"), "country")
+        offensive = ast_block(ideas, "NOD_cw_northern_offensive")
+        self.assertEqual(scalar(ast_block(offensive, "allowed"), "always"), "no")
+        self.assertFalse(any(e.key == "name" for e in offensive), "this is NOD's own campaign spirit, not a dummy preview")
+        modifiers = {e.key: float(e.value) for e in ast_block(offensive, "modifier")}
+        self.assertGreaterEqual(modifiers["army_attack_factor"], 0.15)
+        self.assertGreaterEqual(modifiers["conscription_factor"], 0.10)
+        cancel = ast_block(offensive, "cancel")
+        wars = {e.value for e in walk(cancel) if e.key == "has_war_with" and isinstance(e.value, str)}
+        self.assertEqual(wars, {"YPR", "COF", "TFF"})
+        ai = (ROOT / "common/ai_strategy/ADISCORD_STP_civil_war.txt").read_text(encoding="utf-8-sig")
+        militia = ast_block(entries("common/ai_strategy/ADISCORD_STP_civil_war.txt"), "STP_cw_border_territorial_armies")
+        self.assertNotIn("NOD", {e.value for e in walk(ast_block(militia, "allowed"))
+                                if e.key == "original_tag" and isinstance(e.value, str)})
+        self.assertIn("NOD_cw_northern_offensive_army", ai)
+        self.assertIn("NOD_cw_stelander_intervention_army", ai)
+        self.assertIn("execution_type = rush_weak", ai)
+        northern = block(ai, "NOD_cw_northern_offensive_army")
+        intervention = block(ai, "NOD_cw_stelander_intervention_army")
+        for profile in (northern, intervention):
+            self.assertIn("type = dont_defend_ally_borders", profile)
+            self.assertIn("type = put_unit_buffers", profile)
+            self.assertIn("ratio = 0.12", profile)
+            self.assertRegex(profile, r"states\s*=\s*\{\s*30\s*\}")
+        self.assertIn("id = STP", northern)
+        self.assertIn("id = VAL", northern)
+        self.assertIn("tag = STS", intervention)
+        conscription = ast_block(ast_block(entries("common/decisions/ADISCORD_STP_decisions.txt"),
+                                           "STP_cw_external_intervention"), "NOD_cw_northern_conscription")
+        self.assertEqual(scalar(ast_block(conscription, "ai_will_do"), "base"), "50")
+        self.assertNotIn("manpower_per_military_factory", {e.key for e in walk(conscription)})
 
     def test_actual_northern_war_opens_early_uprising_and_blocks_foreign_entry(self):
         uprising = self.expand(ast_block(self.triggers, "STP_cw_can_start"))

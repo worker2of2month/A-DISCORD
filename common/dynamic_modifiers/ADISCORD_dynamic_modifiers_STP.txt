@@ -12,6 +12,15 @@ STP_party_suspicion_dynamic_modifier = {
 	political_power_factor = STP_sus_political_power_factor
 }
 
+# Party-side briefing. High loyalty is the useful pole; suspicion stays on Shabrat's path.
+STP_apparatus_loyalty_dynamic_modifier = {
+	enable = {
+		tag = STP
+	}
+	political_power_factor = STP_loy_political_power_factor
+	stability_factor = STP_loy_stability_factor
+}
+
 # Persistent focus aggregates. Dummy ideas describe deltas, not installed stages.
 # Fixed-tag successors need their own country variables and an allowed tag here.
 STP_cw_resistance_network_dynamic = {

@@ -1,0 +1,202 @@
+focus_tree = {
+	id = RUS_focus
+	country = {
+		factor = 0
+		modifier = {
+			add = 20
+			original_tag = RUS
+		}
+	}
+
+	# Compact AI-facing campaign: arm the aimaqs, wait for the dirty zone,
+	# then open priced neighbour wars and the last-empire proclamation.
+
+	focus = {
+		id = RUS_summon_the_aimaqs
+		icon = GFX_goal_generic_political_pressure
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		x = 4
+		y = 0
+		cost = 5
+		available_if_capitulated = yes
+		completion_reward = {
+			add_political_power = 50
+			add_war_support = 0.05
+			add_stability = 0.02
+			custom_effect_tooltip = RUS_summon_the_aimaqs_tt
+		}
+		ai_will_do = { base = 12 }
+	}
+
+	focus = {
+		id = RUS_arm_the_border_hosts
+		icon = GFX_goal_generic_allies_build_infantry
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
+		x = 0
+		y = 1
+		relative_position_id = RUS_summon_the_aimaqs
+		cost = 5
+		prerequisite = { focus = RUS_summon_the_aimaqs }
+		completion_reward = {
+			add_manpower = 14000
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 2400 producer = RUS }
+			add_equipment_to_stockpile = { type = support_equipment amount = 120 producer = RUS }
+			army_experience = 10
+			add_command_power = 15
+			custom_effect_tooltip = RUS_arm_the_border_hosts_tt
+			capital_scope = {
+				create_unit = {
+					division = "division_template = \"Rusnian Rifle Brigade\" start_experience_factor = 0.12 start_equipment_factor = 0.75"
+					owner = RUS
+					count = 2
+				}
+			}
+		}
+		ai_will_do = {
+			base = 14
+			modifier = { factor = 2 has_equipment = { infantry_equipment < 800 } }
+		}
+	}
+
+	focus = {
+		id = RUS_watch_the_western_scar
+		icon = GFX_goal_generic_construct_military
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
+		x = 0
+		y = 1
+		relative_position_id = RUS_arm_the_border_hosts
+		cost = 5
+		prerequisite = { focus = RUS_arm_the_border_hosts }
+		completion_reward = {
+			add_war_support = 0.05
+			add_command_power = 10
+			custom_effect_tooltip = RUS_watch_the_western_scar_tt
+		}
+		ai_will_do = { base = 13 }
+	}
+
+	focus = {
+		id = RUS_claim_the_opened_zone
+		icon = GFX_goal_generic_occupy_states_ongoing_war
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
+		x = 0
+		y = 1
+		relative_position_id = RUS_watch_the_western_scar
+		cost = 5
+		prerequisite = { focus = RUS_watch_the_western_scar }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_claim_the_opened_zone_available_tt
+				has_global_flag = ADISCORD_vorkerland_dirty_opened
+			}
+		}
+		bypass = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		completion_reward = {
+			add_political_power = 25
+			add_war_support = 0.03
+			49 = { add_claim_by = RUS }
+			176 = { add_claim_by = RUS }
+			custom_effect_tooltip = RUS_claim_the_opened_zone_tt
+		}
+		ai_will_do = {
+			base = 80
+			modifier = { factor = 0 NOT = { has_global_flag = ADISCORD_vorkerland_dirty_opened } }
+		}
+	}
+
+	focus = {
+		id = RUS_drive_starolesye_back
+		icon = GFX_goal_generic_major_war
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
+		x = 0
+		y = 1
+		relative_position_id = RUS_claim_the_opened_zone
+		cost = 5
+		prerequisite = { focus = RUS_claim_the_opened_zone }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_drive_starolesye_back_available_tt
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_khan_border_war_started
+					has_global_flag = ADISCORD_vorkerland_khan_border_war_resolved
+					country_exists = SLA
+				}
+			}
+		}
+		bypass = {
+			OR = {
+				has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+				NOT = { country_exists = SLA }
+			}
+		}
+		completion_reward = {
+			add_manpower = 4000
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1200 producer = RUS }
+			add_war_support = 0.04
+			unlock_decision_tooltip = { decision = RUS_campaign_sla show_effect_tooltip = yes }
+		}
+		ai_will_do = {
+			base = 90
+			modifier = { factor = 2 has_global_flag = ADISCORD_vorkerland_khan_border_war_resolved }
+		}
+	}
+
+	focus = {
+		id = RUS_press_the_closed_zone
+		icon = GFX_goal_generic_demand_territory
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
+		x = 0
+		y = 1
+		relative_position_id = RUS_drive_starolesye_back
+		cost = 5
+		prerequisite = { focus = RUS_drive_starolesye_back }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_press_the_closed_zone_available_tt
+				OR = {
+					has_country_flag = ADISCORD_vorkerland_rus_sla_absorbed
+					NOT = { country_exists = SLA }
+					check_variable = { ADISCORD_vorkerland_rus_dirty_neighbors_taken > 0 }
+				}
+			}
+		}
+		bypass = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		completion_reward = {
+			add_political_power = 20
+			add_command_power = 15
+			unlock_decision_tooltip = { decision = RUS_campaign_rza show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = RUS_campaign_mlr show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = RUS_campaign_ert show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = RUS_campaign_irt show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = RUS_campaign_sca show_effect_tooltip = yes }
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	focus = {
+		id = RUS_seat_the_khan_chancery
+		icon = GFX_goal_generic_national_unity
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		x = 0
+		y = 1
+		relative_position_id = RUS_press_the_closed_zone
+		cost = 5
+		prerequisite = { focus = RUS_press_the_closed_zone }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_seat_the_khan_chancery_available_tt
+				check_variable = { ADISCORD_vorkerland_rus_dirty_neighbors_taken > 1 }
+			}
+		}
+		bypass = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		completion_reward = {
+			add_political_power = 50
+			add_stability = 0.05
+			effect_tooltip = {
+				swap_ideas = { remove_idea = RUS_national_spirit add_idea = RUS_last_empire_spirit }
+			}
+			unlock_decision_tooltip = { decision = RUS_proclaim_the_last_empire show_effect_tooltip = yes }
+		}
+		ai_will_do = { base = 120 }
+	}
+}

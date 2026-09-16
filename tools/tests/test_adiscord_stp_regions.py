@@ -41,6 +41,8 @@ REGIONAL_OPERATION_IDS = (
     "STP_bargain_with_local_councils",
     "STP_prepare_false_trail",
     *(f"STP_region_unique_operation_{state_id}" for state_id in OPERABLE_STATES),
+    "STP_cw_sabotage_capital",
+    "STP_cw_sabotage_party_industry",
 )
 INITIAL_BALANCE = {
     1: (100, 0, 0),
@@ -448,13 +450,23 @@ class STPRegionalMechanicsTests(unittest.TestCase):
                 named_block(named_block(mission, "timeout_effect"), "hidden_effect"),
             )
         scheduler = named_block(effects, "STP_schedule_next_party_inspection")
+        opener = named_block(effects, "STP_cw_open_one_party_inspection")
+        self.assertIn("STP_cw_open_one_party_inspection = yes", scheduler)
+        self.assertIn("STP_cw_second_inspection_unlocked = yes", scheduler)
+        self.assertEqual(scheduler.count("STP_cw_open_one_party_inspection = yes"), 2)
+        self.assertIn("set_country_flag = STP_cw_inspection_chain_open", initial_delay_body)
         for state_id in OPERABLE_STATES:
-            self.assertIn(f"activate_mission = STP_party_inspection_state_{state_id}", scheduler)
+            self.assertIn(f"activate_mission = STP_party_inspection_state_{state_id}", opener)
             self.assertIn(
                 f"var = STP_last_inspection_state value = {state_id} compare = equals",
-                scheduler,
+                opener,
             )
-            self.assertIn(f"{state_id} = {{ STP_region_has_detectable_assets = yes }}", scheduler)
+            self.assertIn(f"{state_id} = {{ STP_region_has_detectable_assets = yes }}", opener)
+            self.assertIn(f"has_active_mission = STP_party_inspection_state_{state_id}", opener)
+            self.assertIn(
+                f"{state_id} = {{ has_state_flag = STP_party_inspection_active }}",
+                opener,
+            )
 
     def test_inspections_wait_for_timeout_and_highlight_their_fixed_district(self) -> None:
         from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, parse_clausewitz, walk
@@ -730,6 +742,37 @@ class STPRegionalMechanicsTests(unittest.TestCase):
                 )
             else:
                 self.assertNotIn("Местные силы:", tooltip_text)
+
+    def test_map_and_split_use_the_same_transfer_forecast(self) -> None:
+        gui = read(SCRIPTED_GUI)
+        triggers = read(TRIGGERS)
+        effects = read(EFFECTS)
+        decisions = read(DECISIONS)
+        loc = read(LOCALISATION)
+        goes_to = named_block(triggers, "STP_cw_region_goes_to_resistance")
+        self.assertIn("has_state_flag = { flag = STP_resistance_administration_asset days > 20 }", goes_to)
+        self.assertIn("STP_cw_high_shabrat_legitimacy = yes", goes_to)
+        self.assertIn("value > 0.55", named_block(triggers, "STP_cw_high_shabrat_legitimacy"))
+        self.assertIn("STP_region_has_ready_administration", triggers)
+        self.assertIn("STP_cw_second_inspection_unlocked", triggers)
+        self.assertIn("value = 50 compare = greater_than_or_equals", named_block(triggers, "STP_cw_second_inspection_unlocked"))
+        for state_id in PARTICIPATING_STATES:
+            self.assertIn(f"STP_regions_{state_id}_resistance_entrenched_visible = {{ {state_id} = {{ STP_region_map_shows_resistance_held = yes }} }}", gui)
+            self.assertIn(f"STP_regions_{state_id}_local_dominant_visible = {{ {state_id} = {{ STP_region_map_shows_republics_held = yes }} }}", gui)
+        self.assertNotIn("every_owned_state = {", named_block(effects, "STP_cw_start").split("every_owned_state = { set_state_controller_to")[0])
+        for state_id in OPERABLE_STATES:
+            self.assertIn(f"STS = {{ transfer_state = {state_id} }}", named_block(effects, "STP_cw_start"))
+        self.assertIn("set_temp_variable = { var = STP_region_influence_change value = 15 }", named_block(decisions, "STP_region_unique_operation_2"))
+        self.assertIn("set_temp_variable = { var = STP_region_influence_change value = 15 }", named_block(decisions, "STP_region_unique_operation_29"))
+        self.assertNotIn("value = 35 }", named_block(decisions, "STP_region_unique_operation_2"))
+        self.assertIn("бросает кубик", loc)
+        self.assertIn("Легитимность выше §Y55%§!", loc)
+        self.assertIn("STP_cw_inspection_chain_open", named_block(effects, "STP_change_party_suspicion"))
+        change = named_block(effects, "STP_change_party_suspicion")
+        self.assertIn("STP_schedule_next_party_inspection = yes", change)
+        self.assertEqual(regions_map_builder.INITIAL_STATUS_FRAME[2], 4)
+        self.assertEqual(regions_map_builder.INITIAL_STATUS_FRAME[45], 6)
+        self.assertEqual(regions_map_builder.INITIAL_STATUS_FRAME[53], 1)
 
 
 if __name__ == "__main__":

@@ -130,3 +130,17 @@ ADISCORD_vorkerland_rom_tru_category = {
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
 	}
 }
+
+# --- rus_last_empire_categories ---
+ADISCORD_vorkerland_rus_dirty_campaign_category = {
+	icon = generic_prepare_civil_war
+	allowed = { tag = RUS }
+	visible = {
+		OR = {
+			has_completed_focus = RUS_drive_starolesye_back
+			has_completed_focus = RUS_press_the_closed_zone
+			has_completed_focus = RUS_seat_the_khan_chancery
+		}
+		NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+	}
+}

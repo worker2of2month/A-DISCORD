@@ -479,6 +479,8 @@ class StelanderPreparationTests(unittest.TestCase):
             "STP_region_unique_operation_3": ("STP_cw_port_budget", None, "STP_resistance_supply_asset"),
             "STP_region_unique_operation_46": ("STP_cw_supply_officers", None, "STP_resistance_supply_asset"),
             "STP_region_unique_operation_53": ("STP_cw_officer_contacts", None, "STP_resistance_sabotage_asset"),
+            "STP_cw_sabotage_capital": ("STP_cw_prepare_capital_sabotage", None, "STP_resistance_sabotage_asset"),
+            "STP_cw_sabotage_party_industry": ("STP_cw_prepare_industry_sabotage", None, "STP_resistance_sabotage_asset"),
             "STP_cw_agree_with_commander": ("STP_PARTY_DISCIPLINE", None, "STP_party_reinforced_garrison_asset"),
             "STP_cw_check_district_command": ("STP_PARTY_DISCIPLINE", None, None),
         }
@@ -737,7 +739,8 @@ class StelanderPreparationTests(unittest.TestCase):
         loc = (ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml").read_text(encoding="utf-8-sig")
         for name in ("STP_cw_raise_district_network", "STP_cw_prepare_rifle_cache", "STP_recruit_regional_official",
                      "STP_prepare_false_trail", "STP_cw_agree_with_commander", "STP_cw_evacuate_garrison_officers",
-                     *(f"STP_region_unique_operation_{s}" for s in (2, 3, 29, 45, 46, 53))):
+                     *(f"STP_region_unique_operation_{s}" for s in (2, 3, 29, 45, 46, 53)),
+                     "STP_cw_sabotage_capital", "STP_cw_sabotage_party_industry"):
             with self.subTest(decision=name):
                 action = block(decisions, name)
                 self.assertEqual([e.key for e in block(action, "cancel_trigger")], ["hidden_trigger"])
@@ -773,16 +776,16 @@ class StelanderPreparationTests(unittest.TestCase):
         facts = {("STP", "STP_cw_preparation_open", "yes"): True,
                  ("STP", "has_country_flag", "STP_sided_with_Maksim_flag"): True,
                  ("STP", "has_active_mission", "STP_cw_election_window"): True}
-        for focus_id, price in (("STP_cw_abila_reserve", 1600),):
+        for focus_id, price in (("STP_cw_abila_reserve", 16000),):
             available = block(focuses[focus_id], "available")
             for stock in (price - 1, price - 0.5, price - 0.001, price, price + 0.5):
                 with self.subTest(focus=focus_id, stock=stock):
                     self.assertEqual(matches_conditions(available, {
                         **facts, ("STP", "equipment", "infantry_equipment"): stock,
                     }), stock >= price)
-            for pending in (0, 1600):
+            for pending in (0, 16000):
                 for delta in (-0.5, 0, 0.5):
-                    cached = 9600 - price - pending + delta
+                    cached = 96000 - price - pending + delta
                     scenario = {**facts, ("STP", "equipment", "infantry_equipment"): price,
                                 ("1", "variable", "STP_cw_cached_rifles"): cached,
                                 ("1", "has_variable", "STP_cw_pending_rifles"): bool(pending),
@@ -803,7 +806,7 @@ class StelanderPreparationTests(unittest.TestCase):
                  ("STP", "has_country_flag", "STP_sided_with_Maksim_flag"): True,
                  ("STP", "has_active_mission", "STP_cw_election_window"): True,
                  ("STP", "equipment", "infantry_equipment"): 0,
-                 ("1", "variable", "STP_cw_cached_rifles"): 9600}
+                 ("1", "variable", "STP_cw_cached_rifles"): 96000}
         self.assertTrue(matches_conditions(block(focus, "available"), facts))
         delivered = list(selected_effects(block(focus, "completion_reward"), facts))
         self.assertEqual([(scope, scalar(e.value, "var"), float(scalar(e.value, "value")))
@@ -818,7 +821,7 @@ class StelanderPreparationTests(unittest.TestCase):
         focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
         facts = {("STP", "STP_cw_preparation_open", "yes"): True,
                  ("STP", "has_country_flag", "STP_sided_with_Maksim_flag"): True,
-                 ("STP", "equipment", "infantry_equipment"): 10000}
+                 ("STP", "equipment", "infantry_equipment"): 20000}
         specs = {"STP_cw_warehouse_inventory": 28, "STP_cw_abila_reserve": 28,
                  "STP_cw_expose_the_cabinet": 21, "STP_cw_buy_silence": 21}
         for focus_id, duration in specs.items():
@@ -838,7 +841,7 @@ class StelanderPreparationTests(unittest.TestCase):
         for name in ("STP_cw_district_printing", "STP_The_Silent_Mountain_March", "STP_THE_MOUNTAIN_WINDOW"):
             self.assertFalse(any(e.key == "has_active_mission" and e.value == "STP_cw_election_window"
                                  for e in walk(block(focuses[name], "available"))))
-        for name, price in (("STP_cw_abila_reserve", 1600),):
+        for name, price in (("STP_cw_abila_reserve", 16000),):
             reward = block(focuses[name], "completion_reward")
             payments = [e.value for e in walk(reward) if e.key == "set_temp_variable"
                         and scalar(e.value, "var") == "STP_cw_rifle_cost"]
@@ -987,7 +990,7 @@ class StelanderPreparationTests(unittest.TestCase):
         decisions = entries("common/decisions/ADISCORD_STP_decisions.txt")
         actions = {entry.key: entry.value for category in decisions for entry in category.value
                    if isinstance(entry.value, list)}
-        for price in (1600, 2400, 240):
+        for price in (16000, 2400, 240):
             # Cover every consuming decision, including multiple purchases at one price.
             guards = [entry for action in actions.values() for entry in walk(action)
                       if entry.key == "has_equipment"
@@ -1278,7 +1281,12 @@ class StelanderPreparationTests(unittest.TestCase):
                                ("STP_Call_For_Shabrat", "STP_cw_sacrifice_local_contact"),
                                ("STP_cw_national_mandate", "STP_cw_open_civil_registers"),
                                ("STP_cw_supply_officers", "STP_region_unique_operation_46"),
-                               ("STP_PARTY_DISCIPLINE", "STP_cw_check_district_command")):
+                               ("STP_PARTY_DISCIPLINE", "STP_cw_check_district_command"),
+                               ("STP_cw_security_collegium", "STP_cw_interrupt_opposition"),
+                               ("STP_cw_press_office", "STP_cw_publish_directive"),
+                               ("STP_cw_protocol_office", "STP_cw_seal_protocol"),
+                               ("STP_cw_prepare_capital_sabotage", "STP_cw_sabotage_capital"),
+                               ("STP_cw_prepare_industry_sabotage", "STP_cw_sabotage_party_industry")):
             with self.subTest(focus=name):
                 unlocked = {e.value if isinstance(e.value, str) else scalar(e.value, "decision")
                             for e in rewards[name] if e.key == "unlock_decision_tooltip"}
@@ -1337,7 +1345,12 @@ class StelanderPreparationTests(unittest.TestCase):
                             ("STP_cw_sacrifice_local_contact", "STP_Call_For_Shabrat"),
                             ("STP_cw_open_civil_registers", "STP_cw_national_mandate"),
                             ("STP_region_unique_operation_46", "STP_cw_supply_officers"),
-                            ("STP_cw_check_district_command", "STP_PARTY_DISCIPLINE")):
+                            ("STP_cw_check_district_command", "STP_PARTY_DISCIPLINE"),
+                            ("STP_cw_interrupt_opposition", "STP_cw_security_collegium"),
+                            ("STP_cw_publish_directive", "STP_cw_press_office"),
+                            ("STP_cw_seal_protocol", "STP_cw_protocol_office"),
+                            ("STP_cw_sabotage_capital", "STP_cw_prepare_capital_sabotage"),
+                            ("STP_cw_sabotage_party_industry", "STP_cw_prepare_industry_sabotage")):
             with self.subTest(decision=name):
                 decision = block(decisions, name)
                 gates = {e.value for section in decision if section.key in ("visible", "available")
@@ -2017,7 +2030,7 @@ class StelanderPreparationTests(unittest.TestCase):
                              and (not any(v.key == "trigger" for v in e.value)
                                   or matches_conditions(block(e.value, "trigger"), case, state)))
                 expected = "STP_REGION_EMPTY_LINE" if not present else "STP_REGION_ASSET_ADMINISTRATION"
-                if present and state in ("2", "3"):
+                if present:
                     expected += "_READY" if age >= 21 else "_RECENT"
                 self.assertEqual(shown, expected)
 
@@ -2345,30 +2358,30 @@ class StelanderPreparationTests(unittest.TestCase):
         self.assertFalse(matches_conditions(block(cache, "visible"), facts))
         facts[("STP", "has_active_mission", "STP_cw_election_window")] = True
         self.assertTrue(matches_conditions(block(cache, "visible"), facts))
-        for stock in (1599.5, 1600):
-            for cached in (7999.5, 8000, 8000.5):
+        for stock in (15999.5, 16000):
+            for cached in (79999.5, 80000, 80000.5):
                 for pending in (False, True):
                     case = {**facts, ("STP", "equipment", "infantry_equipment"): stock,
                             ("1", "variable", "STP_cw_cached_rifles"): cached,
                             ("1", "has_variable", "STP_cw_pending_rifles"): pending}
-                    expected = stock >= 1600 and cached <= 8000 and not pending
+                    expected = stock >= 16000 and cached <= 80000 and not pending
                     with self.subTest(stock=stock, cached=cached, pending=pending):
                         self.assertEqual(matches_conditions(block(cache, "available"), case), expected)
                         selected = [e for _, e in selected_effects(block(cache, "complete_effect"), case)]
                         self.assertEqual(any(e.key == "STP_cw_pay_rifles" for e in selected), expected)
         for paid in (False, True):
-            case = {**facts, ("STP", "equipment", "infantry_equipment"): 1600,
+            case = {**facts, ("STP", "equipment", "infantry_equipment"): 16000,
                     ("STP", "has_country_flag", "STP_cw_rifles_paid"): paid}
             effects = [e for _, e in selected_effects(block(cache, "complete_effect"), case)]
             ledger = [e.value for e in effects if e.key == "set_variable"
                       and scalar(e.value, "var") == "STP_cw_pending_rifles"]
-            self.assertEqual([int(scalar(e, "value")) for e in ledger], [1600] if paid else [])
+            self.assertEqual([int(scalar(e, "value")) for e in ledger], [16000] if paid else [])
             self.assertEqual(any(e.key == "STP_political_action_slot_consume" for e in effects), paid)
 
     def test_national_cache_delivery_requires_time_and_capacity_or_refunds_the_payer(self):
         cache = block(block(entries("common/decisions/ADISCORD_STP_decisions.txt"),
                             "STP_battle_for_stelander"), "STP_cw_prepare_rifle_cache")
-        for active, cached, pending in ((True, 8000, True), (True, 8000.5, True),
+        for active, cached, pending in ((True, 80000, True), (True, 80000.5, True),
                                        (False, 0, True), (False, 0, False)):
             facts = {("STP", "has_country_flag", "STP_battle_for_stelander_active"): active,
                      ("STP", "has_active_mission", "STP_cw_election_window"): active,
@@ -2381,7 +2394,7 @@ class StelanderPreparationTests(unittest.TestCase):
                 credits = [(scope, e) for scope, e in selected if e.key == "add_to_variable"
                            and scalar(e.value, "var") == "STP_cw_cached_rifles"]
                 refunds = [(scope, e) for scope, e in selected if e.key == "add_equipment_to_stockpile"]
-                delivered = active and cached <= 8000 and pending
+                delivered = active and cached <= 80000 and pending
                 self.assertEqual(len(credits), int(delivered))
                 self.assertEqual([scope for scope, _ in refunds], ["STP"] if pending and not delivered else [])
                 self.assertEqual(sum(e.key == "clear_variable" and e.value == "STP_cw_pending_rifles"
@@ -2391,24 +2404,18 @@ class StelanderPreparationTests(unittest.TestCase):
 
     def test_repeat_inspection_pace_uses_suspicion_without_shortening_the_first_response(self):
         definitions = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
-        schedule = block(block(definitions, "STP_schedule_next_party_inspection"), "if")
-        body = [e for e in schedule if e.key != "limit"]
+        effects_text = (ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt").read_text(encoding="utf-8-sig")
+        opener = block(definitions, "STP_cw_open_one_party_inspection")
+        scheduler = block(definitions, "STP_schedule_next_party_inspection")
         decisions = block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_battle_for_stelander")
+        self.assertTrue(any(e.key == "add_days_mission_timeout" for e in walk(opener)))
+        self.assertFalse(any(e.key == "add_days_mission_timeout" for e in walk(scheduler)))
+        self.assertIn("var = STP_last_inspection_state value = 0 compare = greater_than", effects_text)
         for state in (2, 3, 29, 45, 46, 53):
             mission = "STP_party_inspection_state_" + str(state)
-            base = int(scalar(block(decisions, mission), "days_mission_timeout"))
-            for suspicion, repeated in ((0, 40), (24.999, 40), (25, 32), (49.999, 32), (50, 24), (100, 24)):
-                for last_state in (0, 29 if state != 29 else 2):
-                    facts = {("STP", "variable", "STP_party_suspicion"): suspicion,
-                             ("STP", "variable", "STP_last_inspection_state"): last_state,
-                             (str(state), "has_state_flag", "STP_party_inspection_active"): True}
-                    with self.subTest(state=state, suspicion=suspicion, first=not last_state):
-                        changes = [e.value for _, e in selected_effects(body, facts)
-                                   if e.key == "add_days_mission_timeout"]
-                        self.assertTrue(all(scalar(e, "mission") == mission for e in changes))
-                        self.assertLessEqual(len(changes), 1)
-                        self.assertEqual(base + sum(int(scalar(e, "days")) for e in changes),
-                                         repeated if last_state else 40)
+            self.assertEqual(int(scalar(block(decisions, mission), "days_mission_timeout")), 40)
+            self.assertIn(f"mission = {mission} days = -16", effects_text)
+            self.assertIn(f"mission = {mission} days = -8", effects_text)
         initial = block(definitions, "STP_initialize_battle_for_stelander")
         first_event = next(e.value for e in initial if e.key == "country_event"
                            and scalar(e.value, "id") == "ADISCORD_STP_regions.2")
@@ -2655,6 +2662,11 @@ class StelanderPreparationTests(unittest.TestCase):
         decisions = block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_battle_for_stelander")
         party_action = block(decisions, "STP_cw_check_district_command")
         self.assertIn(("has_country_flag", "STP_sided_with_the_party_flag"), [(e.key, e.value) for e in walk(block(party_action, "visible"))])
+        interrupt = block(decisions, "STP_cw_interrupt_opposition")
+        self.assertIn(("has_completed_focus", "STP_cw_security_collegium"),
+                      [(e.key, e.value) for e in walk(block(interrupt, "visible"))])
+        self.assertIn(("has_country_flag", "STP_sided_with_the_party_flag"),
+                      [(e.key, e.value) for e in walk(block(interrupt, "visible"))])
         for name in ("STP_cw_raise_district_network", "STP_cw_start_uprising", "STP_recruit_regional_official"):
             action = block(decisions, name)
             self.assertIn(("has_country_flag", "STP_sided_with_Maksim_flag"), [(e.key, e.value) for e in walk(block(action, "visible"))], name)
@@ -2663,9 +2675,11 @@ class StelanderPreparationTests(unittest.TestCase):
         tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
                     if scalar(e.value, "id") == "STP_focus")
         focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
-        cabinet = {"STP_GUARANTEE_MINISTERS", "STP_DISTRICT_GOVERNMENT"}
-        military = {"STP_defense_budget", "STP_cw_capital_reserve", "STP_cw_protect_congress"}
-        shared = {"STP_PARTY_DISCIPLINE", "STP_ROTATE_DISTRICT_COMMAND", "STP_EMERGENCY_PRESIDIUM", "STP_THE_PARTY_CLOSES_RANKS"}
+        cabinet = {"STP_GUARANTEE_MINISTERS", "STP_DISTRICT_GOVERNMENT", "STP_cw_press_office"}
+        military = {"STP_defense_budget", "STP_cw_capital_reserve", "STP_cw_protect_congress", "STP_cw_capital_oath"}
+        shared = {"STP_PARTY_DISCIPLINE", "STP_ROTATE_DISTRICT_COMMAND", "STP_EMERGENCY_PRESIDIUM",
+                  "STP_THE_PARTY_CLOSES_RANKS", "STP_cw_security_collegium", "STP_cw_counter_network",
+                  "STP_cw_protocol_office", "STP_cw_party_mandate"}
         for selected, excluded, own_route, other_route in (
             ("STP_GUARANTEE_MINISTERS", "STP_defense_budget", cabinet, military),
             ("STP_defense_budget", "STP_GUARANTEE_MINISTERS", military, cabinet),
@@ -2778,16 +2792,25 @@ class StelanderPreparationTests(unittest.TestCase):
         effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         transfer = block(effects, "STP_cw_transfer_preparation_modifiers")
         observer_branches = [e for e in transfer if e.key == "if" and any(v.key == "add_intel" for v in walk(e.value))]
-        self.assertEqual(len(observer_branches), 1)
-        for prepared, exists, expected in ((True, True, 1), (False, True, 0), (True, False, 0)):
-            facts = {("STP", "has_completed_focus", "STP_cw_northern_dossier"): prepared,
+        self.assertEqual(len(observer_branches), 2)
+        for dossier, desk, exists, expected in (
+                (True, False, True, [("STS", "15")]),
+                (False, True, True, [("STS", "10")]),
+                (True, True, True, [("STS", "15"), ("STS", "10")]),
+                (True, True, False, []),
+                (False, False, True, []),
+        ):
+            facts = {("STP", "has_completed_focus", "STP_cw_northern_dossier"): dossier,
+                     ("STP", "has_completed_focus", "STP_cw_northern_desk"): desk,
                      ("STS", "exists", "yes"): True,
                      ("NOD", "exists", "yes"): exists}
-            intel = [(scope, e) for scope, e in selected_effects(observer_branches, facts) if e.key == "add_intel"]
-            self.assertEqual(len(intel), expected)
-            for scope, award in intel:
-                self.assertEqual((scope, scalar(award.value, "target"), scalar(award.value, "army_intel")),
-                                 ("STS", "NOD", "15"))
+            intel = [(scope, scalar(e.value, "army_intel"))
+                     for scope, e in selected_effects(observer_branches, facts) if e.key == "add_intel"]
+            self.assertEqual(intel, expected, (dossier, desk, exists))
+            for scope, award in ((scope, e) for scope, e in selected_effects(observer_branches, facts)
+                                 if e.key == "add_intel"):
+                self.assertEqual(scalar(award.value, "target"), "NOD")
+                self.assertEqual(scope, "STS")
 
     def test_revolt_countries_resolve_history_names_and_flags_without_starting_land(self):
         tags = {}
@@ -2866,6 +2889,188 @@ class StelanderPreparationTests(unittest.TestCase):
                 for reference in entry.value:
                     self.assertIn(reference.value, focus_ids, "focus path contains a removed predecessor")
 
+    def test_shabrat_can_postpone_the_live_election_commission_once(self):
+        tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
+                    if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
+        focus = next(e.value for e in tree if e.key == "focus" and scalar(e.value, "id") == "STP_cw_delay_election_commission")
+        self.assertEqual((scalar(focus, "x"), scalar(focus, "y"), scalar(focus, "cost")), ("-14", "4", "2"))
+        self.assertEqual(scalar(focus, "cancel_if_invalid"), "yes")
+        self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), "STP_Call_For_Shabrat")
+        available = block(focus, "available")
+        facts = {("STP", "STP_cw_preparation_open", "yes"): True,
+                 ("STP", "has_country_flag", "STP_sided_with_Maksim_flag"): True,
+                 ("STP", "has_active_mission", "STP_cw_election_window"): True}
+        self.assertTrue(matches_conditions(available, facts))
+        self.assertFalse(matches_conditions(available, {**facts, ("STP", "has_active_mission", "STP_cw_election_window"): False}))
+        reward = block(focus, "completion_reward")
+        self.assertEqual({e.key for e in reward}, {"custom_effect_tooltip", "hidden_effect"})
+        shown = [e.value for e in reward if e.key == "custom_effect_tooltip"]
+        self.assertEqual(shown, ["STP_cw_delay_election_tt", "STP_cw_suspicion_15_tt"])
+        both = {("STP", "has_active_mission", "STP_cw_election_window"): True,
+                ("STP", "has_active_mission", "STP_cw_credentials_review"): True}
+        extensions = [(scalar(e.value, "mission"), scalar(e.value, "days"))
+                      for _, e in selected_effects(reward, both) if e.key == "add_days_mission_timeout"]
+        self.assertEqual(extensions, [("STP_cw_election_window", "80"), ("STP_cw_credentials_review", "80")])
+        only_vote = list(selected_effects(reward, {("STP", "has_active_mission", "STP_cw_election_window"): True}))
+        self.assertEqual([(scalar(e.value, "mission"), scalar(e.value, "days"))
+                          for _, e in only_vote if e.key == "add_days_mission_timeout"],
+                         [("STP_cw_election_window", "80")])
+        self.assertEqual([scalar(e.value, "value") for _, e in only_vote if e.key == "set_temp_variable"], ["15"])
+        missed = list(selected_effects(reward, {}))
+        self.assertFalse(any(e.key == "add_days_mission_timeout" for _, e in missed))
+        self.assertFalse(any(e.key == "set_temp_variable" for _, e in missed))
+        loc = (ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml").read_text(encoding="utf-8-sig")
+        self.assertIn("откладывает текущую сверку на §Y80 дней§!", loc)
+        self.assertNotIn("откладывает текущую сверку на §Y14 дней§!", loc)
+        tokens = (ROOT / "common/synchronized_dynamic_tokens/ADISCORD_tokens.txt").read_text(encoding="utf-8")
+        self.assertIn("STP_cw_credentials_review", tokens.splitlines())
+
+    def test_vorkerland_collapse_opens_dynamic_shabrat_asset_focuses(self):
+        tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
+                    if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
+        focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        for name, position, stock, treasury in (
+            ("STP_cw_seize_vorkerland_stores", ("14", "3"), "1200", None),
+            ("STP_cw_seize_vorkerland_accounts", ("14", "4"), None, "100"),
+        ):
+            with self.subTest(focus=name):
+                focus = focuses[name]
+                self.assertEqual(scalar(focus, "dynamic"), "yes")
+                self.assertEqual((scalar(focus, "x"), scalar(focus, "y")), position)
+                allow = block(focus, "allow_branch")
+                self.assertIn(("has_country_flag", "STP_sided_with_Maksim_flag"),
+                              [(e.key, e.value) for e in walk(allow)])
+                self.assertIn(("has_global_flag", "ADISCORD_vorkerland_collapse_started"),
+                              [(e.key, e.value) for e in walk(allow)])
+                available = block(focus, "available")
+                base = {("STP", "STP_cw_preparation_open", "yes"): True,
+                        ("STP", "has_country_flag", "STP_sided_with_Maksim_flag"): True}
+                self.assertFalse(matches_conditions(available, base))
+                self.assertTrue(matches_conditions(available, {
+                    **base, ("STP", "has_global_flag", "ADISCORD_vorkerland_collapse_started"): True}))
+                reward = block(focus, "completion_reward")
+                if stock:
+                    self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), "STP_cw_northern_dossier")
+                    self.assertEqual(scalar(block(reward, "add_equipment_to_stockpile"), "amount"), stock)
+                if treasury:
+                    self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), "STP_cw_seize_vorkerland_stores")
+                    self.assertEqual(scalar(reward, "ADISCORD_economy_receive_100"), "yes")
+                    self.assertIn("STP_cw_treasury_100_tt",
+                                  [e.value for e in reward if e.key == "custom_effect_tooltip"])
+        outbreak = next(e.value for e in entries("events/ADISCORD_vorkerland_events.txt")
+                        if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_vorkerland_collapse.1")
+        immediate = [e for e in walk(block(outbreak, "immediate"))]
+        flag_index = next(i for i, e in enumerate(immediate)
+                          if e.key == "set_global_flag" and e.value == "ADISCORD_vorkerland_collapse_started")
+        dirty = next(i for i, e in enumerate(immediate)
+                     if e.key == "mark_focus_tree_layout_dirty" and e.value == "yes")
+        self.assertLess(flag_index, dirty)
+        refresh = block(entries("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+                        "ADISCORD_vorkerland_refresh_focus_lifecycle")
+        self.assertTrue(any(e.key == "STP" and any(child.key == "mark_focus_tree_layout_dirty" for child in e.value)
+                            for e in walk(refresh)))
+
+    def test_capital_sabotage_stays_outside_ordinary_district_operations(self):
+        decisions = block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_battle_for_stelander")
+        capital = block(decisions, "STP_cw_sabotage_capital")
+        industry = block(decisions, "STP_cw_sabotage_party_industry")
+        self.assertEqual(scalar(capital, "days_remove"), "35")
+        self.assertEqual(scalar(industry, "days_remove"), "35")
+        self.assertEqual({e.value for e in block(capital, "targets")}, {"28"})
+        self.assertEqual({e.value for e in block(industry, "targets")}, {"29"})
+        tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
+                    if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
+        focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        self.assertEqual((scalar(focuses["STP_cw_prepare_capital_sabotage"], "x"),
+                          scalar(focuses["STP_cw_prepare_capital_sabotage"], "y")), ("5", "5"))
+        self.assertEqual((scalar(focuses["STP_cw_prepare_industry_sabotage"], "x"),
+                          scalar(focuses["STP_cw_prepare_industry_sabotage"], "y")), ("5", "3"))
+        self.assertEqual(scalar(block(focuses["STP_cw_prepare_industry_sabotage"], "prerequisite"), "focus"),
+                         "STP_cw_officer_contacts")
+        for name, pp, suspicion in (("STP_cw_prepare_capital_sabotage", "20", "STP_cw_suspicion_12_tt"),
+                                    ("STP_cw_prepare_industry_sabotage", "15", "STP_cw_suspicion_10_tt")):
+            reward = block(focuses[name], "completion_reward")
+            self.assertEqual(scalar(reward, "add_political_power"), pp)
+            self.assertIn(suspicion, [e.value for e in reward if e.key == "custom_effect_tooltip"])
+            self.assertNotIn("add_command_power", {e.key for e in reward})
+        self.assertNotIn("STP_region_is_operable", {e.key for e in walk(capital)})
+        self.assertIn("STP_region_is_operable", {e.key for e in walk(industry)})
+        initializer = block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
+                            "STP_initialize_battle_for_stelander")
+        capital_start = block(initializer, "28")
+        self.assertNotIn("STP_region_player_operations_allowed",
+                         [e.value for e in capital_start if e.key == "set_state_flag"])
+        self.assertIn("STP_region_player_operations_allowed",
+                      [e.value for e in block(initializer, "29") if e.key == "set_state_flag"])
+
+    def test_northern_aid_desk_stays_open_for_sts_and_does_not_use_preparation_slots(self):
+        tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
+                    if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
+        focus = next(e.value for e in tree if e.key == "focus" and scalar(e.value, "id") == "STP_cw_northern_desk")
+        self.assertEqual((scalar(focus, "x"), scalar(focus, "y"), scalar(focus, "cost")), ("10", "3", "2"))
+        self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), "STP_cw_arm_the_north")
+        arm = next(e.value for e in tree if e.key == "focus" and scalar(e.value, "id") == "STP_cw_arm_the_north")
+        arm_reward = block(arm, "completion_reward")
+        self.assertEqual(scalar(block(arm_reward, "add_equipment_to_stockpile"), "amount"), "4800")
+        self.assertEqual(scalar(arm_reward, "add_political_power"), "40")
+        reward = block(focus, "completion_reward")
+        self.assertEqual({e.value for e in reward if e.key == "unlock_decision_tooltip"},
+                         {"STP_cw_fund_northern_forts", "STP_cw_send_northern_engineers", "STP_cw_sabotage_nodrul"})
+        self.assertEqual(scalar(reward, "add_political_power"), "25")
+        self.assertEqual(scalar(block(reward, "add_intel"), "army_intel"), "10")
+        self.assertIn("STP_cw_northern_aid_open",
+                      {e.value for e in walk(block(reward, "hidden_effect")) if e.key == "set_country_flag"})
+        categories = entries("common/decisions/categories/ADISCORD_decision_categories_STP.txt")
+        category = block(categories, "STP_cw_northern_aid")
+        self.assertEqual(scalar(category, "visible_when_empty"), "yes")
+        self.assertEqual(scalar(category, "priority"), "34")
+        desk = block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_northern_aid")
+        for name in ("STP_cw_fund_northern_forts", "STP_cw_send_northern_engineers", "STP_cw_sabotage_nodrul"):
+            decision = block(desk, name)
+            self.assertEqual(scalar(decision, "cost"), "0")
+            self.assertNotIn("STP_has_political_action_slot", {e.key for e in walk(decision)})
+            self.assertNotIn("STP_cw_preparation_open", {e.key for e in walk(decision)})
+            visible = block(decision, "visible")
+            self.assertFalse(matches_conditions(visible, {}, "STS"))
+            wartime = {("STS", "has_country_flag", "STP_cw_northern_aid_open"): True,
+                       ("FROM", "has_state_flag", "STP_cw_northern_fort_built"): False,
+                       ("FROM", "has_state_flag", "STP_cw_nod_rear_sabotaged"): False,
+                       ("FROM", "STP_cw_northern_fort_state", "yes"): True,
+                       ("FROM", "STP_cw_northern_target_valid", "yes"): True,
+                       ("FROM", "has_war_with", "NOD"): True}
+            self.assertTrue(matches_conditions(visible, wartime, "STS"), name)
+        forts = block(desk, "STP_cw_fund_northern_forts")
+        self.assertEqual(scalar(forts, "custom_cost_text"), "STP_cw_northern_fort_cost")
+        self.assertEqual({e.key for e in block(forts, "complete_effect")}, {"hidden_effect"})
+        busy = {("STP", "STP_cw_can_run_northern_aid", "yes"): True,
+                ("STP", "has_variable", "STP_cw_northern_fort_deposit"): True,
+                ("FROM", "STP_cw_northern_fort_state", "yes"): True}
+        self.assertFalse(matches_conditions(block(forts, "available"), busy))
+        self.assertTrue(matches_conditions(block(forts, "available"),
+                                          {**busy, ("STP", "has_variable", "STP_cw_northern_fort_deposit"): False}))
+        engineers = block(desk, "STP_cw_send_northern_engineers")
+        self.assertEqual({e.key for e in block(engineers, "complete_effect")}, {"hidden_effect"})
+        sabotage = block(desk, "STP_cw_sabotage_nodrul")
+        self.assertEqual(scalar(sabotage, "days_remove"), "28")
+        preview = block(block(sabotage, "remove_effect"), "effect_tooltip")
+        self.assertEqual(scalar(block(block(preview, "NOD"), "add_timed_idea"), "idea"), "STP_cw_nod_disrupted_rear")
+        self.assertEqual({scalar(e.value, "days") for e in walk(block(sabotage, "remove_effect"))
+                          if e.key == "add_timed_idea" and scalar(e.value, "idea") == "STP_cw_nod_disrupted_rear"},
+                         {"42"})
+        self.assertEqual({e.value for e in block(sabotage, "targets")}, {"10", "11", "12", "13", "17", "18", "30"})
+        transfer = block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
+                         "STP_cw_transfer_preparation_modifiers")
+        paid = {("STP", "has_variable", "STP_cw_northern_fort_deposit"): True,
+                ("STP", "has_variable", "STP_cw_northern_engineer_deposit"): True}
+        self.assertEqual([(scope, e.key) for scope, e in selected_effects(transfer, paid)
+                          if e.key in ("ADISCORD_economy_receive_100", "ADISCORD_economy_receive_50")],
+                         [("STS", "ADISCORD_economy_receive_100"), ("STS", "ADISCORD_economy_receive_50")])
+        start = block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_start")
+        self.assertNotIn("ADISCORD_economy_receive_100", {e.key for e in walk(start)
+                                                          if e.key.startswith("ADISCORD_economy_receive")})
+        loc = (ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml").read_text(encoding="utf-8-sig")
+        self.assertIn("STP_cw_northern_fort_cost_blocked:", loc)
+        self.assertIn("её военное производство ослабнет на §Y42 дня§!", loc)
 
     def test_campaign_stages_require_current_administrations_and_stop_after_three_successes(self):
         from itertools import product
@@ -2984,13 +3189,18 @@ class StelanderPreparationTests(unittest.TestCase):
             self.assertEqual(scalar(focus, "cost"), "5")
         reward = block(fund, "completion_reward")
         income = {scalar(e.value, "var"): float(scalar(e.value, "value")) for e in walk(reward) if e.key == "add_to_variable"}
-        self.assertEqual(income, {"ADISCORD_economy_treasury": 500, "ADISCORD_economy_current_month_action_income": 500})
+        self.assertEqual(income, {"ADISCORD_economy_treasury": 1000, "ADISCORD_economy_current_month_action_income": 1000})
         self.assertEqual(float(scalar(block(reward, "add_power_balance_value"), "value")), -.15)
         self.assertFalse(any(e.key in {"create_unit", "add_manpower", "add_equipment_to_stockpile"} for e in walk(reward)))
-        factory = block(block(block(workshops, "completion_reward"), "1"), "add_building_construction")
-        self.assertEqual((scalar(factory, "type"), scalar(factory, "level")), ("arms_factory", "2"))
+        workshop_reward = block(block(workshops, "completion_reward"), "1")
+        self.assertEqual(scalar(workshop_reward, "add_extra_state_shared_building_slots"), "4")
+        factory = block(workshop_reward, "add_building_construction")
+        self.assertEqual((scalar(factory, "type"), scalar(factory, "level")), ("arms_factory", "4"))
         preparation = block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_battle_for_stelander")
         train = block(preparation, "STP_cw_prepare_assault_group")
+        capacity = next(e.value for e in walk(block(train, "available"))
+                        if e.key == "check_variable" and scalar(e.value, "var") == "STP_cw_prepared_assault_divisions")
+        self.assertEqual((scalar(capacity, "value"), scalar(capacity, "compare")), ("4", "less_than"))
         remaining = int(scalar(block(preparation, "STP_cw_election_window"), "days_mission_timeout"))
         reserve_days = int(scalar(focuses["STP_cw_abila_reserve"], "cost")) * 7
         self.assertGreater(remaining - reserve_days - int(scalar(fund, "cost")) * 7 - int(scalar(train, "days_remove")), 0)

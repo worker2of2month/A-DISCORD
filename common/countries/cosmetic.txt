@@ -67,3 +67,8 @@ OSF_VAL_commissariat = { color = rgb { 93 103 82 } color_ui = rgb { 156 160 139 
 APH_VAL_commissariat = { color = rgb { 93 103 82 } color_ui = rgb { 156 160 139 } }
 
 VAL_dopotroydsk = { color = rgb { 86 55 38 } color_ui = rgb { 180 126 76 } }
+
+RUS_last_empire = {
+	color = rgb { 96 16 20 }
+	color_ui = rgb { 196 92 48 }
+}

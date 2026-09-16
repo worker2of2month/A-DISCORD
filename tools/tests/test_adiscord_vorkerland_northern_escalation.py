@@ -54,12 +54,13 @@ class NorthernEscalationTests(unittest.TestCase):
             self.assertIn(f"tag = {tag}", line)
         garrison = named_block(templates, "ADISCORD_garrison_levy")
         self.assertIn("ADISCORD_vorkerland_collapse_wars_started", garrison)
+        self.assertIn("has_war = yes", garrison)
         self.assertIn("NOT =", garrison)
 
     def test_base_front_ratios_are_bounded_per_country(self) -> None:
         strategies = source_section(read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai')
-        expected = {"ZAO": 0.25, "WPA": 0.33, "WPS": 0.33, "PWR": 0.25, "PSD": 0.25}
-        totals = {tag: 0.0 for tag in expected}
+        expected = {"ZAO": 25, "WPA": 33, "WPS": 33, "PWR": 25, "PSD": 25}
+        totals = {tag: 0 for tag in expected}
         for attacker, target in (
             ("ZAO", "WPA"), ("WPA", "ZAO"), ("WPS", "ZAO"),
             ("ZAO", "WPS"), ("ZAO", "PSD"), ("PSD", "ZAO"),
@@ -72,12 +73,13 @@ class NorthernEscalationTests(unittest.TestCase):
                 strategies,
                 f"ADISCORD_vorkerland_front_{attacker.lower()}_{target.lower()}",
             )
-            ratio = expected[attacker]
-            self.assertIn(f"tag = {target} ratio = {ratio:.2f}", block)
-            self.assertIn(f"tag = {target} value = {round(ratio * 100)}", block)
-            totals[attacker] += ratio
+            request = expected[attacker]
+            self.assertIn(f"front_unit_request tag = {target} value = {request}", block)
+            self.assertIn(f"front_control tag = {target} ratio = 0.01", block)
+            self.assertIn("execution_type = balanced", block)
+            totals[attacker] += request
         for tag, total in totals.items():
-            self.assertLessEqual(total, 1.0, f"{tag} requests {total:.2f} fronts")
+            self.assertLessEqual(total, 100, f"{tag} requests {total} percent of the army")
 
     def test_escalation_consumers_are_target_specific_and_do_not_stack(self) -> None:
         strategies = source_section(read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai')

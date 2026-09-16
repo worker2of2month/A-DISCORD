@@ -2064,9 +2064,9 @@ ADISCORD_economy_apply_yearly_balance = {
 }
 
 ADISCORD_economy_apply_yearly_debt_streaks = {
-	# apply_monthly_balance already counted one settlement. A year is twelve
-	# weekly settlements, so the remaining eleven week-equivalents decide
-	# emergency and default before the monthly forecast is restored.
+	# apply_monthly_balance already counted one settlement. Emergency needs 4
+	# week-equivalents, default 13. The remaining twelve default steps let one
+	# fully qualified compressed year reach default.
 	if = {
 		limit = { check_variable = { var = ADISCORD_economy_interest_share_income value = 40 compare = greater_than_or_equals } }
 		add_to_variable = { var = ADISCORD_economy_debt_emergency_streak value = 11 }
@@ -2076,7 +2076,7 @@ ADISCORD_economy_apply_yearly_debt_streaks = {
 		}
 		if = {
 			limit = { check_variable = { var = ADISCORD_economy_last_monthly_balance_applied value = 0 compare = less_than } }
-			add_to_variable = { var = ADISCORD_economy_debt_default_streak value = 11 }
+			add_to_variable = { var = ADISCORD_economy_debt_default_streak value = 12 }
 			if = {
 				limit = { check_variable = { var = ADISCORD_economy_debt_default_streak value = 13 compare = greater_than_or_equals } }
 				set_variable = { var = ADISCORD_economy_debt_state value = 4 }
@@ -3870,10 +3870,8 @@ ADISCORD_economy_ai_monthly_policy = {
 }
 
 ADISCORD_economy_ai_yearly_policy = {
-	# A year is twelve monthly levers. Take three exclusive actions with
-	# cooldowns cleared between them while tick_scale is already 6.
-	ADISCORD_economy_ai_monthly_policy = yes
-	ADISCORD_economy_tick_budget_cooldowns = yes
+	# Two exclusive levers before cash. yearly_update takes one more after
+	# settlement so emergency/default can change the last action.
 	ADISCORD_economy_ai_monthly_policy = yes
 	ADISCORD_economy_tick_budget_cooldowns = yes
 	ADISCORD_economy_ai_monthly_policy = yes

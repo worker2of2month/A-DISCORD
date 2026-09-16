@@ -65,6 +65,12 @@ on_actions = {
 			}
 		}
 	}
+	on_monthly_RUS = {
+		effect = {
+			ADISCORD_vorkerland_check_khan_border_war = yes
+			ADISCORD_vorkerland_check_rus_dirty_campaign = yes
+		}
+	}
 	on_war_relation_added = {
 		effect = {
 			# New fronts need a scripted ally join even while the claimant is already at war.
@@ -555,6 +561,7 @@ on_actions = {
 			}
 			ADISCORD_vorkerland_story_check_first_claimant_capital_fall = yes
 			RUS = { ADISCORD_vorkerland_check_khan_border_war = yes }
+			RUS = { ADISCORD_vorkerland_check_rus_dirty_campaign = yes }
 			if = {
 				limit = {
 					has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
