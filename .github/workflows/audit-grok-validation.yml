@@ -1,0 +1,69 @@
+name: Isolated campaign audit
+
+on:
+  push:
+    branches:
+      - audit/grok-20260917-validation
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 32
+          persist-credentials: false
+      - name: Package inspectable text sources
+        shell: bash
+        run: |
+          python - <<'PY'
+          import os
+          import subprocess
+          import zipfile
+          from pathlib import Path
+          root = Path.cwd()
+          output = Path(os.environ['RUNNER_TEMP']) / 'audit-source.zip'
+          suffixes = {'.txt', '.py', '.json', '.md', '.yml', '.yaml', '.gfx', '.gui', '.asset', '.csv', '.lua', '.mod', '.map', '.fx', '.toml', '.cfg', '.ini', '.ps1', '.sh'}
+          paths = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
+          with zipfile.ZipFile(output, 'w', zipfile.ZIP_DEFLATED) as archive:
+              for name in paths:
+                  if not name:
+                      continue
+                  path = root / name
+                  if path.is_file() and (path.suffix.lower() in suffixes or path.name.startswith('.git')):
+                      archive.write(path, name)
+              archive.writestr('AUDIT_SOURCE_SHA.txt', subprocess.check_output(['git', 'rev-parse', 'HEAD']))
+              archive.writestr('AUDIT_TREE.txt', subprocess.check_output(['git', 'ls-tree', '-r', 'HEAD']))
+              archive.writestr('AUDIT_RECENT.patch', subprocess.check_output(['git', 'diff', 'f0081b789e331c8aeb6132f5c009eea82671665c', '4457e9e4e7cb5bbf3cadd4642f985bf563db043e', '--', 'common', 'events', 'localisation', 'tools', 'history', 'interface', 'docs']))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: campaign-audit-source
+          path: ${{ runner.temp }}/audit-source.zip
+          retention-days: 3
+      - name: Focused baseline regressions
+        shell: bash
+        run: |
+          set -o pipefail
+          python -B -m unittest -v tools.tests.test_adiscord_stp_postwar_continuation tools.tests.test_adiscord_stp_postwar_story tools.tests.test_adiscord_rus_last_empire tools.tests.test_validate_adiscord_val_rework 2>&1 | tee "$RUNNER_TEMP/focused-tests.txt"
+      - name: Repository validator
+        if: always()
+        shell: bash
+        run: |
+          set -o pipefail
+          python -B tools/validate_tc.py --limit 300 2>&1 | tee "$RUNNER_TEMP/validate-tc.txt"
+      - name: Audit diff whitespace
+        if: always()
+        run: git diff --check 4457e9e4e7cb5bbf3cadd4642f985bf563db043e HEAD
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: campaign-audit-results
+          path: |
+            ${{ runner.temp }}/focused-tests.txt
+            ${{ runner.temp }}/validate-tc.txt
+          retention-days: 3
