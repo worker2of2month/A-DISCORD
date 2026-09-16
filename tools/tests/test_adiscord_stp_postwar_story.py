@@ -1,0 +1,69 @@
+from __future__ import annotations
+
+import json
+import unittest
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[2]
+EVENTS = ROOT / "events/ADISCORD_STP_events.txt"
+POSTWAR_LOCALISATION = ROOT / "localisation/replace/ADISCORD_STP_postwar_story_l_russian.yml"
+LEDGER = ROOT / "tools/data/adiscord_event_ids.json"
+
+
+def read(path: Path) -> str:
+    return path.read_text(encoding="utf-8-sig" if path.suffix == ".yml" else "utf-8")
+
+
+def event_block(text: str, event_id: str) -> str:
+    marker = f"\tid = {event_id}\n"
+    start = text.index(marker)
+    next_event = text.find("\ncountry_event = {", start + len(marker))
+    next_news = text.find("\nnews_event = {", start + len(marker))
+    candidates = [pos for pos in (next_event, next_news) if pos != -1]
+    end = min(candidates) if candidates else len(text)
+    return text[start:end]
+
+
+class ShabratPostwarStoryTests(unittest.TestCase):
+    def test_story_events_are_registered_and_trigger_from_postwar_focus_completion(self) -> None:
+        events = read(EVENTS)
+        ledger = json.loads(read(LEDGER))
+
+        expected = {
+            "ADISCORD_STP_pw.1": "STP_pw_republic_new_republic",
+            "ADISCORD_STP_pw.2": "STP_pw_republic_civil_records",
+            "ADISCORD_STP_pw.3": "STP_pw_republic_civil_charter",
+        }
+
+        self.assertIn("add_namespace = ADISCORD_STP_pw", events)
+        ledger_ids = {entry["id"] for entry in ledger["events"]}
+        for event_id, focus_id in expected.items():
+            self.assertEqual(events.count(f"id = {event_id}"), 1)
+            block = event_block(events, event_id)
+            self.assertIn("tag = STS", block)
+            self.assertIn(f"has_completed_focus = {focus_id}", block)
+            self.assertIn("fire_only_once = yes", block)
+            self.assertIn("mean_time_to_happen", block)
+            self.assertIn(event_id, ledger_ids)
+
+    def test_story_events_have_complete_russian_localisation(self) -> None:
+        loc = read(POSTWAR_LOCALISATION)
+        expected_keys = (
+            "ADISCORD_STP_pw.1.t",
+            "ADISCORD_STP_pw.1.d",
+            "ADISCORD_STP_pw.1.a",
+            "ADISCORD_STP_pw.2.t",
+            "ADISCORD_STP_pw.2.d",
+            "ADISCORD_STP_pw.2.a",
+            "ADISCORD_STP_pw.3.t",
+            "ADISCORD_STP_pw.3.d",
+            "ADISCORD_STP_pw.3.a",
+            "ADISCORD_STP_pw.3.b",
+        )
+        for key in expected_keys:
+            self.assertEqual(loc.count(f"\n {key}:"), 1, key)
+
+
+if __name__ == "__main__":
+    unittest.main()

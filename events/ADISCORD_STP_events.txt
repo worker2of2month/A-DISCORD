@@ -1,6 +1,7 @@
 add_namespace = ADISCORD_STP_preparation
 add_namespace = ADISCORD_STP_regions
 add_namespace = ADISCORD_STP_cw
+add_namespace = ADISCORD_STP_pw
 
 country_event = {
 	id = ADISCORD_STP_cw.90
@@ -758,4 +759,45 @@ country_event = {
 	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
 	option = { name = ADISCORD_STP_preparation.19.a }
+}
+
+# Shabrat postwar stories fire from completed reconstruction focuses without adding technical focus rewards.
+country_event = {
+	id = ADISCORD_STP_pw.1
+	title = ADISCORD_STP_pw.1.t
+	desc = ADISCORD_STP_pw.1.d
+	picture = GFX_event_adiscord_parliament_chamber
+	fire_only_once = yes
+	trigger = { tag = STS has_completed_focus = STP_pw_republic_new_republic }
+	mean_time_to_happen = { days = 1 }
+	option = { name = ADISCORD_STP_pw.1.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pw.2
+	title = ADISCORD_STP_pw.2.t
+	desc = ADISCORD_STP_pw.2.d
+	picture = GFX_event_adiscord_negotiation_table
+	fire_only_once = yes
+	trigger = { tag = STS has_completed_focus = STP_pw_republic_civil_records }
+	mean_time_to_happen = { days = 1 }
+	option = { name = ADISCORD_STP_pw.2.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pw.3
+	title = ADISCORD_STP_pw.3.t
+	desc = ADISCORD_STP_pw.3.d
+	picture = GFX_event_adiscord_parliament_chamber
+	fire_only_once = yes
+	trigger = { tag = STS has_completed_focus = STP_pw_republic_civil_charter }
+	mean_time_to_happen = { days = 1 }
+	option = {
+		name = ADISCORD_STP_pw.3.a
+		add_stability = 0.01
+	}
+	option = {
+		name = ADISCORD_STP_pw.3.b
+		add_political_power = 25
+	}
 }
