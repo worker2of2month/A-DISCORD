@@ -5,6 +5,10 @@ ideologies = {
 		types = {
 			humanism_ideology = {
 			}
+			steland_liberationism = {
+				can_be_randomly_selected = no
+				color = { 92 140 168 }
+			}
 		}
 
 		dynamic_faction_names = {
@@ -372,6 +376,10 @@ ideologies = {
 			contractual_etatism = {
 				can_be_randomly_selected = no
 				color = { 143 50 29 }
+			}
+			steland_military_directory = {
+				can_be_randomly_selected = no
+				color = { 78 86 74 }
 			}
 		}
 

@@ -1,8 +1,9 @@
 capital = 30
 
-# Air equipment must be unlocked before the OOB creates its wings.
+# Air and armor must be unlocked before the OOB creates wings and tank divisions.
 ADISCORD_grant_technology_profile_air = yes
 ADISCORD_grant_technology_profile_land = yes
+ADISCORD_grant_technology_profile_armored_core = yes
 oob = "NOD"
 ####### Characters
 

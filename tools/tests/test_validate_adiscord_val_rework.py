@@ -1143,6 +1143,70 @@ class ValNativePreviewTests(unittest.TestCase):
 
 
 class ValNorthernExportTests(unittest.TestCase):
+    def test_finance_answers_revalidate_and_consume_the_receipt_once(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.tests.test_adiscord_stp_preparation import block
+
+        effects = parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8-sig"))
+        for buyer in ("CIN", "OSF"):
+            receipt = f"VAL_operation_finance_{buyer.lower()}_contacts"
+            for outcome in ("accept", "war", "gone", "capitulated", "seller_capitulated", "cap", "refuse"):
+                with self.subTest(buyer=buyer, outcome=outcome):
+                    flags = {receipt, "VAL_foreign_operation_active"}
+                    cash, influence = 0, (3 if outcome == "cap" else 0)
+
+                    def condition(item, scope="VAL"):
+                        key, value = item.key, item.value
+                        if key == "NOT":
+                            return not any(condition(child, scope) for child in value)
+                        if key == buyer:
+                            return all(condition(child, buyer) for child in value)
+                        if key == "has_country_flag":
+                            return value in flags
+                        if key == "exists":
+                            return scope != buyer or outcome != "gone"
+                        if key == "has_capitulated":
+                            return not (outcome == "capitulated" and scope == buyer or
+                                        outcome == "seller_capitulated" and scope == "VAL")
+                        if key == "has_war_with":
+                            return outcome == "war"
+                        if key == "check_variable":
+                            return influence >= 3
+                        self.fail(f"Unmodelled finance condition: {key}")
+
+                    def execute(items):
+                        nonlocal cash, influence
+                        matched = False
+                        for item in items:
+                            key, value = item.key, item.value
+                            if key == "if":
+                                matched = all(condition(child) for child in block(value, "limit"))
+                                if matched:
+                                    execute([child for child in value if child.key != "limit"])
+                            elif key == "else":
+                                if not matched:
+                                    execute(value)
+                            elif key == "add_to_variable":
+                                influence += 1
+                            elif key == "ADISCORD_economy_receive_50":
+                                cash += 50
+                            elif key == "clr_country_flag":
+                                flags.discard(value)
+                            elif key.startswith("VAL_refuse_finance_"):
+                                execute(block(effects, key))
+                            elif key not in ("clamp_variable", "VAL_refresh_contract_modifier", "ADISCORD_economy_mark_dirty"):
+                                self.fail(f"Unmodelled finance effect: {key}")
+
+                    callback = block(effects, f"VAL_{'refuse' if outcome == 'refuse' else 'accept'}_finance_{buyer.lower()}")
+                    execute(callback)
+                    self.assertEqual(influence, 1 if outcome == "accept" else 3 if outcome == "cap" else 0)
+                    self.assertEqual(cash, 0 if outcome == "accept" else 50)
+                    self.assertFalse(flags)
+                    settled = cash, influence
+                    execute(callback)
+                    self.assertEqual((cash, influence), settled)
+                    self.assertFalse(flags)
+
     def test_custom_prices_include_native_blocked_and_hover_suffixes(self):
         values = dict(re.findall(r'^ ([\w.]+):\s*"(.*)"$', LOCALISATION_PATH.read_text(encoding="utf-8-sig"), re.M))
         price_keys = set(re.findall(r"custom_cost_text\s*=\s*(\w+)", DECISIONS_PATH.read_text(encoding="utf-8-sig")))

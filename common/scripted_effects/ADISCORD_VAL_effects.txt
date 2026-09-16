@@ -1057,33 +1057,61 @@ VAL_close_northern_export_operation = {
 }
 
 VAL_accept_finance_cin = {
-	add_to_variable = { var = VAL_CIN_influence value = 1 }
-	clamp_variable = { var = VAL_CIN_influence min = 0 max = 3 }
-	VAL_refresh_contract_modifier = yes
-	ADISCORD_economy_mark_dirty = yes
-	clr_country_flag = VAL_operation_finance_cin_contacts
-	clr_country_flag = VAL_foreign_operation_active
+	if = {
+		limit = {
+			has_country_flag = VAL_operation_finance_cin_contacts
+			exists = yes
+			has_capitulated = no
+			NOT = { has_war_with = CIN }
+			CIN = { exists = yes has_capitulated = no }
+			NOT = { check_variable = { var = VAL_CIN_influence value = 3 compare = greater_than_or_equals } }
+		}
+		add_to_variable = { var = VAL_CIN_influence value = 1 }
+		clamp_variable = { var = VAL_CIN_influence min = 0 max = 3 }
+		VAL_refresh_contract_modifier = yes
+		ADISCORD_economy_mark_dirty = yes
+		clr_country_flag = VAL_operation_finance_cin_contacts
+		clr_country_flag = VAL_foreign_operation_active
+	}
+	else = { VAL_refuse_finance_cin = yes }
 }
 
 VAL_refuse_finance_cin = {
-	ADISCORD_economy_receive_50 = yes
-	clr_country_flag = VAL_operation_finance_cin_contacts
-	clr_country_flag = VAL_foreign_operation_active
+	if = {
+		limit = { has_country_flag = VAL_operation_finance_cin_contacts }
+		ADISCORD_economy_receive_50 = yes
+		clr_country_flag = VAL_operation_finance_cin_contacts
+		clr_country_flag = VAL_foreign_operation_active
+	}
 }
 
 VAL_accept_finance_osf = {
-	add_to_variable = { var = VAL_OSF_influence value = 1 }
-	clamp_variable = { var = VAL_OSF_influence min = 0 max = 3 }
-	VAL_refresh_contract_modifier = yes
-	ADISCORD_economy_mark_dirty = yes
-	clr_country_flag = VAL_operation_finance_osf_contacts
-	clr_country_flag = VAL_foreign_operation_active
+	if = {
+		limit = {
+			has_country_flag = VAL_operation_finance_osf_contacts
+			exists = yes
+			has_capitulated = no
+			NOT = { has_war_with = OSF }
+			OSF = { exists = yes has_capitulated = no }
+			NOT = { check_variable = { var = VAL_OSF_influence value = 3 compare = greater_than_or_equals } }
+		}
+		add_to_variable = { var = VAL_OSF_influence value = 1 }
+		clamp_variable = { var = VAL_OSF_influence min = 0 max = 3 }
+		VAL_refresh_contract_modifier = yes
+		ADISCORD_economy_mark_dirty = yes
+		clr_country_flag = VAL_operation_finance_osf_contacts
+		clr_country_flag = VAL_foreign_operation_active
+	}
+	else = { VAL_refuse_finance_osf = yes }
 }
 
 VAL_refuse_finance_osf = {
-	ADISCORD_economy_receive_50 = yes
-	clr_country_flag = VAL_operation_finance_osf_contacts
-	clr_country_flag = VAL_foreign_operation_active
+	if = {
+		limit = { has_country_flag = VAL_operation_finance_osf_contacts }
+		ADISCORD_economy_receive_50 = yes
+		clr_country_flag = VAL_operation_finance_osf_contacts
+		clr_country_flag = VAL_foreign_operation_active
+	}
 }
 
 VAL_offer_westerholm_concession = {

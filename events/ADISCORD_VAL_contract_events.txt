@@ -339,6 +339,60 @@ country_event = {
 	is_triggered_only = yes
 	option = { name = val_rework.5.a }
 }
+
+country_event = {
+	id = val_rework.6
+	title = val_rework.6.t
+	desc = val_rework.6.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_rework.6.a }
+}
+
+country_event = {
+	id = val_rework.7
+	title = val_rework.7.t
+	desc = val_rework.7.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_rework.7.a }
+}
+
+country_event = {
+	id = val_rework.8
+	title = val_rework.8.t
+	desc = val_rework.8.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_rework.8.a }
+}
+
+country_event = {
+	id = val_rework.9
+	title = val_rework.9.t
+	desc = val_rework.9.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_rework.9.a }
+}
+
+country_event = {
+	id = val_rework.10
+	title = val_rework.10.t
+	desc = val_rework.10.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_rework.10.a }
+}
+
+country_event = {
+	id = val_rework.11
+	title = val_rework.11.t
+	desc = val_rework.11.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_rework.11.a }
+}
 # END CONSOLIDATED: ADISCORD_VAL_rework_events.txt
 
 country_event = {
@@ -442,6 +496,16 @@ country_event = {
 	is_triggered_only = yes
 	option = {
 		name = val_contract.330.a
+		trigger = {
+			VAL = {
+				has_country_flag = VAL_operation_finance_cin_contacts
+				exists = yes
+				has_capitulated = no
+				NOT = { has_war_with = CIN }
+				CIN = { exists = yes has_capitulated = no }
+				NOT = { check_variable = { var = VAL_CIN_influence value = 3 compare = greater_than_or_equals } }
+			}
+		}
 		ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } }
 		custom_effect_tooltip = VAL_northern_finance_accepted_tt
 		hidden_effect = { VAL = { VAL_accept_finance_cin = yes } }
@@ -462,6 +526,16 @@ country_event = {
 	is_triggered_only = yes
 	option = {
 		name = val_contract.330.a
+		trigger = {
+			VAL = {
+				has_country_flag = VAL_operation_finance_osf_contacts
+				exists = yes
+				has_capitulated = no
+				NOT = { has_war_with = OSF }
+				OSF = { exists = yes has_capitulated = no }
+				NOT = { check_variable = { var = VAL_OSF_influence value = 3 compare = greater_than_or_equals } }
+			}
+		}
 		ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } }
 		custom_effect_tooltip = VAL_northern_finance_accepted_tt
 		hidden_effect = { VAL = { VAL_accept_finance_osf = yes } }

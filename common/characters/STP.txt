@@ -20,9 +20,19 @@ characters = {
 			}
 		}
 		country_leader = {
-			ideology = chauvinism_ideology
+			ideology = national_legitimism
 			expire = "2200.1.1.1"
 			id = -1
+		}
+		advisor = {
+			slot = army_chief
+			idea_token = STP_Maksim_Shabrat_army_chief
+			allowed = { original_tag = STS }
+			available = { STP_cw_shabrat_available = yes }
+			visible = { STP_cw_shabrat_available = yes }
+			traits = { army_chief_offensive_1 }
+			cost = 100
+			ai_will_do = { factor = 1.5 }
 		}
 	}
 
@@ -194,6 +204,34 @@ characters = {
 			planning_skill = 6
 			logistics_skill = 5
 			legacy_id = -1
+		}
+	}
+
+	STP_ilya_gornin = {
+		name = STP_ilya_gornin
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Europe_Generic_1
+			}
+		}
+		country_leader = {
+			ideology = steland_liberationism
+			expire = "2200.1.1.1"
+			id = -1
+		}
+	}
+
+	STP_vera_tikh = {
+		name = STP_vera_tikh
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Europe_Generic_2
+			}
+		}
+		country_leader = {
+			ideology = utilitarism_ideology
+			expire = "2200.1.1.1"
+			id = -1
 		}
 	}
 }

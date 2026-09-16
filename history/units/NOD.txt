@@ -45,6 +45,49 @@ division_template = {
 	}
 }
 
+division_template = {
+	name = "Nodral Armored Group"
+	division_names_group = ADISCORD_INF_01
+	priority = 2
+	regiments = {
+		ADISCORD_combat_platform = { x = 0 y = 0 }
+		ADISCORD_combat_platform = { x = 0 y = 1 }
+		ADISCORD_combat_platform = { x = 0 y = 2 }
+		ADISCORD_combat_platform = { x = 0 y = 3 }
+		infantry = { x = 1 y = 0 }
+		infantry = { x = 1 y = 1 }
+		infantry = { x = 1 y = 2 }
+		infantry = { x = 2 y = 0 }
+		infantry = { x = 2 y = 1 }
+		infantry = { x = 2 y = 2 }
+	}
+	support = {
+		engineer = { x = 0 y = 0 }
+		artillery = { x = 0 y = 1 }
+	}
+}
+
+division_template = {
+	name = "Nodral Mountain Infantry"
+	division_names_group = ADISCORD_INF_01
+	priority = 2
+	regiments = {
+		mountaineers = { x = 0 y = 0 }
+		mountaineers = { x = 0 y = 1 }
+		mountaineers = { x = 0 y = 2 }
+		mountaineers = { x = 1 y = 0 }
+		mountaineers = { x = 1 y = 1 }
+		mountaineers = { x = 1 y = 2 }
+		mountaineers = { x = 2 y = 0 }
+		mountaineers = { x = 2 y = 1 }
+		mountaineers = { x = 2 y = 2 }
+	}
+	support = {
+		engineer = { x = 0 y = 0 }
+		artillery = { x = 0 y = 1 }
+	}
+}
+
 units = {
 	fleet = {
 		name = "Кассингтонская флотилия"
@@ -119,20 +162,6 @@ units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 9 }
 		location = 16363
-		division_template = "Nodral Line Infantry"
-		start_experience_factor = 0.20
-		start_equipment_factor = 0.70
-	}
-	division = {
-		division_name = { is_name_ordered = yes name_order = 10 }
-		location = 34
-		division_template = "Nodral Line Infantry"
-		start_experience_factor = 0.20
-		start_equipment_factor = 0.70
-	}
-	division = {
-		division_name = { is_name_ordered = yes name_order = 11 }
-		location = 13
 		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
@@ -222,43 +251,8 @@ units = {
 		start_equipment_factor = 0.60
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 24 }
-		location = 22
-		division_template = "Cussington Security"
-		start_experience_factor = 0.15
-		start_equipment_factor = 0.60
-	}
-	division = {
 		division_name = { is_name_ordered = yes name_order = 25 }
 		location = 121
-		division_template = "Cussington Security"
-		start_experience_factor = 0.15
-		start_equipment_factor = 0.60
-	}
-	division = {
-		division_name = { is_name_ordered = yes name_order = 26 }
-		location = 23
-		division_template = "Cussington Security"
-		start_experience_factor = 0.15
-		start_equipment_factor = 0.60
-	}
-	division = {
-		division_name = { is_name_ordered = yes name_order = 27 }
-		location = 71
-		division_template = "Cussington Security"
-		start_experience_factor = 0.15
-		start_equipment_factor = 0.60
-	}
-	division = {
-		division_name = { is_name_ordered = yes name_order = 28 }
-		location = 62
-		division_template = "Cussington Security"
-		start_experience_factor = 0.15
-		start_equipment_factor = 0.60
-	}
-	division = {
-		division_name = { is_name_ordered = yes name_order = 29 }
-		location = 78
 		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
@@ -273,13 +267,6 @@ units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 31 }
 		location = 26
-		division_template = "Cussington Security"
-		start_experience_factor = 0.15
-		start_equipment_factor = 0.60
-	}
-	division = {
-		division_name = { is_name_ordered = yes name_order = 32 }
-		location = 41
 		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
@@ -354,6 +341,34 @@ units = {
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 43 }
+		location = 16356
+		division_template = "Nodral Armored Group"
+		start_experience_factor = 0.30
+		start_equipment_factor = 0.80
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 44 }
+		location = 14
+		division_template = "Nodral Armored Group"
+		start_experience_factor = 0.30
+		start_equipment_factor = 0.80
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 45 }
+		location = 22
+		division_template = "Nodral Mountain Infantry"
+		start_experience_factor = 0.32
+		start_equipment_factor = 0.80
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 46 }
+		location = 34
+		division_template = "Nodral Mountain Infantry"
+		start_experience_factor = 0.32
+		start_equipment_factor = 0.80
+	}
 }
 
 air_wings = {
@@ -377,22 +392,27 @@ instant_effect = {
 	add_fuel = 40000
 	add_equipment_to_stockpile = {
 		type = infantry_equipment_0
-		amount = 14000
+		amount = 28000
 		producer = NOD
 	}
 	add_equipment_to_stockpile = {
 		type = ADISCORD_squad_weapons_equipment_0
-		amount = 550
+		amount = 900
 		producer = NOD
 	}
 	add_equipment_to_stockpile = {
 		type = support_equipment_1
-		amount = 300
+		amount = 500
 		producer = NOD
 	}
 	add_equipment_to_stockpile = {
 		type = artillery_equipment_1
-		amount = 200
+		amount = 320
+		producer = NOD
+	}
+	add_equipment_to_stockpile = {
+		type = ADISCORD_combat_platform_2170
+		amount = 400
 		producer = NOD
 	}
 	add_equipment_to_stockpile = {

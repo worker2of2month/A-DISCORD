@@ -882,7 +882,14 @@ class NorthernStartingForceTests(unittest.TestCase):
                 province_state[int(province.value)] = int(self.value(state, "id"))
 
         issued_rifles = {}
-        for tag, count in {"NOD": 42, "YPR": 18, "COF": 8, "TFF": 16}.items():
+        nod_readiness = {
+            "Cussington Guard": .80,
+            "Nodral Line Infantry": .70,
+            "Cussington Security": .60,
+            "Nodral Armored Group": .80,
+            "Nodral Mountain Infantry": .80,
+        }
+        for tag, count in {"NOD": 38, "YPR": 18, "COF": 8, "TFF": 16}.items():
             entries = parse_clausewitz(read(f"history/units/{tag}.txt"))
             templates = {
                 self.value(entry.value, "name"): entry.value
@@ -895,19 +902,24 @@ class NorthernStartingForceTests(unittest.TestCase):
             self.assertFalse({province_state[location] for location in locations} & {303, 304})
             issued_rifles[tag] = 0
             for division in divisions:
-                template = templates[self.value(division, "division_template")]
+                template_name = self.value(division, "division_template")
+                template = templates[template_name]
                 regiments = self.value(template, "regiments")
                 factor = float(self.value(division, "start_equipment_factor"))
                 # Guards, line infantry and local militia retain different readiness.
-                expected = ({10: .80, 6: .70, 3: .60} if tag == "NOD" else {9: .80, 6: .75, 3: .65})
-                self.assertAlmostEqual(factor, expected[len(regiments)])
+                expected = (
+                    nod_readiness[template_name]
+                    if tag == "NOD"
+                    else {9: .80, 6: .75, 3: .65}[len(regiments)]
+                )
+                self.assertAlmostEqual(factor, expected)
                 self.assertEqual(province_owner[int(self.value(division, "location"))], tag)
                 for slot in regiments + self.value(template, "support", []):
                     needs = self.value(subunits[slot.key], "need", [])
                     issued_rifles[tag] += float(self.value(needs, "infantry_equipment", "0")) * factor
         ratio = issued_rifles["NOD"] / sum(issued_rifles[tag] for tag in ("YPR", "COF", "TFF"))
         self.assertGreater(ratio, 1.0)
-        self.assertLess(ratio, 1.2)
+        self.assertLess(ratio, 1.45)
 
     def test_northern_coalition_can_prepare_from_day_one_with_real_recruitment_laws(self) -> None:
         dormant = named_block(read("common/scripted_triggers/ADISCORD_minor_optimization_triggers.txt"), "ADISCORD_is_non_participating_minor")
@@ -1033,6 +1045,7 @@ class NorthernStartingForceTests(unittest.TestCase):
                     "train_equipment_1": "train_equipment",
                     "motorized_equipment_1": "motorized_equipment",
                     "ADISCORD_anti_air_equipment_2163": "anti_air_equipment",
+                    "ADISCORD_combat_platform_2170": "ADISCORD_combat_platform_archetype",
                 }
                 for stock in [e.value for e in effect if e.key == "add_equipment_to_stockpile"]:
                     archetype = variants[self.value(stock, "type")]

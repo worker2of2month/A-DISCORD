@@ -14,6 +14,18 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_unit_ADISCORD_territorial_icon_medium"
+		texturefile = "gfx/interface/counters/divisions_large/unit_infantry_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_territorial_icon_medium_white"
+		texturefile = "gfx/interface/counters/divisions_small/onmap_unit_infantry_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
 		name = "GFX_unit_ADISCORD_assault_infantry_icon_medium"
 		texturefile = "gfx/interface/counters/divisions_large/unit_infantry_icon.dds"
 		noOfFrames = 2

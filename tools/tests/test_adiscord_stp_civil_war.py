@@ -854,7 +854,7 @@ class CivilWarContracts(unittest.TestCase):
         focuses = [e.value for e in tree if e.key == "focus"]
         for tag in ("STP", "STS", "SRP"):
             visible = [f for f in focuses if scalar(f, "id") not in {"STP_cw_first_postwar_budget", "STP_cw_restore_civil_authority"}
-                       and not scalar(f, "id").startswith("STP_pw_")
+                       and not scalar(f, "id").startswith(("STP_pw_", "STP_pc_"))
                        and (not any(e.key == "allow_branch" for e in f)
                             or scalar(ast_block(f, "allow_branch"), "tag") == tag)]
             points = [(int(scalar(f, "x")), int(scalar(f, "y"))) for f in visible]
@@ -1610,7 +1610,7 @@ class CommanderLoyaltyContracts(unittest.TestCase):
                 elif e.key == "add_field_marshal_role":
                     self.assertIsNone(roles.get(scope), "a new role must not reset an existing commander")
                     roles[scope] = "field_marshal"
-                    traits[scope].update(child.value for child in ast_block(e.value, "traits"))
+                    traits.setdefault(scope, set()).update(child.value for child in ast_block(e.value, "traits"))
                     writes.append((scope, e.key, e.value))
                 elif e.key == "promote_leader":
                     self.assertEqual(roles[scope], "corps_commander")
@@ -1674,7 +1674,8 @@ class CommanderLoyaltyContracts(unittest.TestCase):
         self.assertRegex(start, r"limit\s*=\s*\{\s*STP_cw_shabrat_available = yes\s*\}\s*set_nationality\s*=\s*\{\s*character = STP_maksim_shabrat")
         self.assertLess(start.index("set_country_flag = STP_cw_participant"), start.index("STP_cw_refresh_officer_loyalties = yes"))
         self.assertLess(start.index("STP_cw_refresh_officer_loyalties = yes"), start.index("set_nationality"))
-        self.assertIn("STS = { STP_cw_establish_resistance_command = yes }", start)
+        self.assertIn("STP_cw_establish_resistance_command = yes", start)
+        self.assertIn("STS = { STP_cw_establish_resistance_command = yes STP_pc_align_resistance_ruling_party = yes }", start)
 
     def test_command_role_is_added_once_and_existing_military_roles_are_preserved(self):
         for original in (None, "corps_commander", "field_marshal"):
@@ -1698,11 +1699,18 @@ class CommanderLoyaltyContracts(unittest.TestCase):
             run("STP_cw_establish_resistance_command")
             self.assertIsNone(roles["STP_maksim_shabrat"])
             self.assertFalse(any(scope == "STP_maksim_shabrat" for scope, _, _ in writes))
-            self.assertEqual(sum(key == "add_country_leader_role" for _, key, _ in writes), 1)
+            self.assertEqual(sum(1 for scope, key, _ in writes if key == "add_country_leader_role" and scope == "STP_grigory_sotnikov"), 1)
+            self.assertEqual(roles["STP_grigory_sotnikov"], "field_marshal")
             self.assertEqual(roles["STP_Leonid_Barchel"], "corps_commander")
             run("STP_cw_establish_resistance_command")
-            self.assertEqual(sum(key == "add_country_leader_role" for _, key, _ in writes), 1)
+            self.assertEqual(sum(1 for scope, key, _ in writes if key == "add_country_leader_role" and scope == "STP_grigory_sotnikov"), 1)
+        run, _, _, roles, writes, owners, _, _ = self.scenario(owner="STS", war=True, shabrat=False)
+        owners.pop("STP_grigory_sotnikov")
+        run("STP_cw_establish_resistance_command")
+        self.assertEqual(sum(key == "add_country_leader_role" for _, key, _ in writes), 1)
+        self.assertEqual(roles["STP_Leonid_Barchel"], "corps_commander")
         run, _, _, _, writes, owners, _, _ = self.scenario(owner="STS", war=True, shabrat=False)
+        owners.pop("STP_grigory_sotnikov")
         owners.pop("STP_Leonid_Barchel")
         run("STP_cw_establish_resistance_command")
         self.assertEqual(writes, [], "fallback must not resurrect an absent Barchel either")
@@ -2598,6 +2606,10 @@ class NorthernCampaignContracts(unittest.TestCase):
         self.assertIn("id = STP", northern)
         self.assertIn("id = VAL", northern)
         self.assertIn("tag = STS", intervention)
+        self.assertIn("type = consider_weak id = YPR", northern)
+        self.assertIn("type = consider_weak id = COF", northern)
+        self.assertIn("type = consider_weak id = TFF", northern)
+        self.assertIn("type = force_concentration_factor", northern)
         conscription = ast_block(ast_block(entries("common/decisions/ADISCORD_STP_decisions.txt"),
                                            "STP_cw_external_intervention"), "NOD_cw_northern_conscription")
         self.assertEqual(scalar(ast_block(conscription, "ai_will_do"), "base"), "50")
@@ -3302,8 +3314,9 @@ class PostwarFocusContracts(unittest.TestCase):
                             completed.add(name)
                 self.assertEqual(len(completed & focuses.keys()), 15)
                 self.assertIn(prefix + "settled_state", completed)
-            visible = [f for f in self.focuses.values() if not any(e.key == "allow_branch" for e in f)
-                       or scalar(ast_block(f, "allow_branch"), "tag") == tag]
+            visible = [f for f in self.focuses.values() if not scalar(f, "id").startswith("STP_pc_")
+                       and (not any(e.key == "allow_branch" for e in f)
+                            or scalar(ast_block(f, "allow_branch"), "tag") == tag)]
             points = [(int(scalar(f, "x")), int(scalar(f, "y"))) for f in visible]
             self.assertEqual(len(points), len(set(points)))
             self.assertLessEqual(max(x for x, _ in points) - min(x for x, _ in points), 12)

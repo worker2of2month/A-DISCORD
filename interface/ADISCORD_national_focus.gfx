@@ -38,12 +38,20 @@ spriteTypes = {
 	  	texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_It_Has_Only_Begun.png"
 	}
 	spriteType = {
+		name = "GFX_focus_STP_2160_budget"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_2160_budget.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_cw_buy_silence"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_cw_buy_silence.png"
+	}
+	spriteType = {
 	  	name = "GFX_focus_STP_Open_Their_Eyes" 
 	  	texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Open_Their_Eyes.png"
 	}
 	spriteType = {
-		name = "GFX_focus_STP_Command_Registers"
-		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/swing politician.png"
+		name = "GFX_focus_STP_Kefreite_Security_Offer"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Kefreite_Security_Offer.png"
 	}
 	spriteType = {
 		name = "GFX_focus_STP_No_External_Channels"

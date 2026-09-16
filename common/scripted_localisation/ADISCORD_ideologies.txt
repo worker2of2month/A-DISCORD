@@ -46,6 +46,10 @@ defined_text = {
 
 defined_text = {
 	name = GetSubIdeologyHumanism
+	text = {
+		trigger = { has_country_leader_ideology = steland_liberationism }
+		localization_key = steland_liberationism
+	}
 	text = { localization_key = humanism_ideology }
 }
 
@@ -87,6 +91,10 @@ defined_text = {
 	text = {
 		trigger = { has_country_leader_ideology = contractual_etatism }
 		localization_key = contractual_etatism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = steland_military_directory }
+		localization_key = steland_military_directory
 	}
 	text = { localization_key = etatism_ideology }
 }

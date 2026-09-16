@@ -4000,12 +4000,41 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
                 issues.append(f"{relative}: missing Vorkerland {name} binding")
 
     map_effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_map_effects')
-    for name in ("dirty_opening", "worker_victory", "vlad_victory", "dorian_victory"):
+    for name in ("dirty_opening", "vlad_victory", "dorian_victory"):
         show_effect = named_block(map_effects, f"ADISCORD_vorkerland_show_{name}_superevent")
         if "ADISCORD_vorkerland_play_local_superevent_audio = yes" not in show_effect:
             issues.append(f"Vorkerland {name} superevent has no player audio route")
+    worker_show = named_block(map_effects, "ADISCORD_vorkerland_show_worker_victory_superevent")
+    if "country_event = { id = ADISCORD_superevent.2 }" not in worker_show:
+        issues.append("Vorkerland worker_victory superevent has no console-fireable event route")
+    if "ADISCORD_vorkerland_central_victory_announced" not in worker_show:
+        issues.append("Vorkerland worker_victory campaign show lost the announced lock")
 
     news = read(root, "events/ADISCORD_news.txt", issues)
+    civilwar_event = event_block(news, "ADISCORD_superevent.1")
+    for token in (
+        "hidden = yes",
+        "is_triggered_only = yes",
+        "superevent_vorkerland_civilwar",
+        "limit = { is_ai = no }",
+        "scoped_sound_effect = superevent_vorkerland_civilwar_sound_e",
+    ):
+        if token not in civilwar_event:
+            issues.append(f"ADISCORD_superevent.1: civil-war presentation is missing {token}")
+    if "superevent_vorkerland_worker_victory" in civilwar_event:
+        issues.append("ADISCORD_superevent.1 must stay the civil-war outbreak")
+    worker_event = event_block(news, "ADISCORD_superevent.2")
+    for token in (
+        "hidden = yes",
+        "is_triggered_only = yes",
+        "superevent_vorkerland_worker_victory",
+        "limit = { is_ai = no }",
+        "scoped_sound_effect = superevent_vorkerland_civilwar_sound_e",
+    ):
+        if token not in worker_event:
+            issues.append(f"ADISCORD_superevent.2: player-scoped presentation is missing {token}")
+    if "ADISCORD_vorkerland_central_victory_announced" in worker_event:
+        issues.append("ADISCORD_superevent.2 must not lock the campaign ending")
     for news_id, title_id, audio_id, sound_effect in (
         (
             "ADISCORD_superevent_news.1",

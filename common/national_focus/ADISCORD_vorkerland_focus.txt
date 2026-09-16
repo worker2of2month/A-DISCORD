@@ -313,11 +313,11 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			ADISCORD_vorkerland_resolve_prewar_compact = yes
 			custom_effect_tooltip = ADISCORD_vorkerland_prewar_compact_requires_both_tt
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_wrk_compact_committed
 				set_country_flag = ADISCORD_vorkerland_focus_wrk_emergency_compact_offered
+				ADISCORD_vorkerland_resolve_prewar_compact = yes
 			}
 		}
 		ai_will_do = { base = 100 }
@@ -623,11 +623,11 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			ADISCORD_vorkerland_resolve_prewar_compact = yes
 			custom_effect_tooltip = ADISCORD_vorkerland_prewar_compact_requires_both_tt
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_vad_compact_committed
 				set_country_flag = ADISCORD_vorkerland_focus_vad_emergency_compact_ratified
+				ADISCORD_vorkerland_resolve_prewar_compact = yes
 			}
 		}
 		ai_will_do = { base = 100 }

@@ -75,6 +75,53 @@ def event_block(text: str, event_id: str, event_type: str = "country_event") -> 
 
 
 class VorkerlandCollapseValidatorTests(unittest.TestCase):
+    def test_prewar_compact_ratifies_after_second_commitment_in_either_order(self) -> None:
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        text = read("common/national_focus/ADISCORD_vorkerland_focus.txt")
+        rewards = {}
+        for tree in parse_clausewitz(text):
+            if tree.key != "focus_tree":
+                continue
+            for focus in tree.value:
+                if focus.key != "focus":
+                    continue
+                focus_id = next(item.value for item in focus.value if item.key == "id")
+                if focus_id in ("WRK_offer_emergency_compact", "VAD_ratify_emergency_compact"):
+                    rewards[focus_id] = next(
+                        item.value for item in focus.value if item.key == "completion_reward"
+                    )
+        self.assertEqual(len(rewards), 2)
+        required = {
+            "ADISCORD_vorkerland_wrk_compact_committed",
+            "ADISCORD_vorkerland_vad_compact_committed",
+        }
+        resolver = named_block(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            "ADISCORD_vorkerland_resolve_prewar_compact",
+        )
+        for flag in required:
+            self.assertIn(f"has_country_flag = {flag}", resolver)
+        for order in (tuple(rewards), tuple(reversed(rewards))):
+            with self.subTest(order=order):
+                flags = set()
+                ratified = False
+
+                def execute(items):
+                    nonlocal ratified
+                    for item in items:
+                        if item.key == "hidden_effect":
+                            execute(item.value)
+                        elif item.key == "set_country_flag":
+                            flags.add(item.value)
+                        elif item.key == "ADISCORD_vorkerland_resolve_prewar_compact":
+                            ratified |= required <= flags
+
+                execute(rewards[order[0]])
+                self.assertFalse(ratified)
+                execute(rewards[order[1]])
+                self.assertTrue(ratified)
+
     @staticmethod
     def _claimant_pp_sources() -> tuple[str, str]:
         default_ai = """
@@ -382,15 +429,27 @@ country_event = {
 
     def test_every_vorkerland_superevent_route_plays_audible_sound(self) -> None:
         map_effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_map_effects')
-        for name in ("dirty_opening", "worker_victory", "vlad_victory", "dorian_victory"):
+        for name in ("dirty_opening", "vlad_victory", "dorian_victory"):
             show_effect = named_block(map_effects, f"ADISCORD_vorkerland_show_{name}_superevent")
             self.assertIn(
                 "ADISCORD_vorkerland_play_local_superevent_audio = yes",
                 show_effect,
                 name,
             )
+        worker_show = named_block(map_effects, "ADISCORD_vorkerland_show_worker_victory_superevent")
+        self.assertIn("country_event = { id = ADISCORD_superevent.2 }", worker_show)
+        self.assertIn("set_global_flag = ADISCORD_vorkerland_central_victory_announced", worker_show)
 
         news = read("events/ADISCORD_news.txt")
+        civilwar_event = event_block(news, "ADISCORD_superevent.1")
+        self.assertIn("superevent_vorkerland_civilwar", civilwar_event)
+        self.assertNotIn("superevent_vorkerland_worker_victory", civilwar_event)
+        worker_event = event_block(news, "ADISCORD_superevent.2")
+        self.assertIn("hidden = yes", worker_event)
+        self.assertIn("superevent_vorkerland_worker_victory", worker_event)
+        self.assertIn("scoped_sound_effect = superevent_vorkerland_civilwar_sound_e", worker_event)
+        self.assertNotIn("ADISCORD_vorkerland_central_victory_announced", worker_event)
+
         for news_id, title_id, audio_id, sound_effect in (
             (
                 "ADISCORD_superevent_news.1",

@@ -110,6 +110,12 @@ NOD_cw_northern_offensive_army = {
 		subtract_invasions_from_need = yes
 		subtract_fronts_from_need = yes
 	}
+	ai_strategy = { type = role_ratio id = armor value = 15 }
+	ai_strategy = { type = role_ratio id = mountaineers value = 12 }
+	ai_strategy = { type = force_concentration_factor value = 40 }
+	ai_strategy = { type = consider_weak id = YPR value = 120 }
+	ai_strategy = { type = consider_weak id = COF value = 120 }
+	ai_strategy = { type = consider_weak id = TFF value = 120 }
 	ai_strategy = { type = front_unit_request tag = YPR value = 100 }
 	ai_strategy = { type = front_unit_request tag = COF value = 80 }
 	ai_strategy = { type = front_unit_request tag = TFF value = 80 }

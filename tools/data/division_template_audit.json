@@ -2,9 +2,9 @@
   "schema_version": 1,
   "inventory_baseline": {
     "candidate_active_oobs": 99,
-    "candidate_oob_templates": 170,
+    "candidate_oob_templates": 172,
     "candidate_script_templates": 15,
-    "candidate_oob_references": 457,
+    "candidate_oob_references": 453,
     "candidate_create_unit_references": 36,
     "candidate_technical_references": 10,
     "optional_protected_oob_templates": 6
@@ -4739,6 +4739,197 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_nod_cussington_guard"
+      }
+    },
+    {
+      "key": "oob_nod_nodral_armored_group",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/NOD.txt",
+        "owner": "NOD"
+      },
+      "technical_name": "Nodral Armored Group",
+      "display_name": "Nodral Armored Group",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_combat_platform",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_combat_platform",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_combat_platform",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_combat_platform",
+          "x": 0,
+          "y": 3
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 2
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "artillery",
+          "x": 0,
+          "y": 1
+        }
+      ],
+      "computed": {
+        "organization": 34.541667,
+        "manpower": 8400.0,
+        "equipment": {
+          "ADISCORD_combat_platform_archetype": 160.0,
+          "ADISCORD_squad_weapons_equipment": 48.0,
+          "artillery_equipment": 12.0,
+          "infantry_equipment": 610.0,
+          "support_equipment": 30.0
+        },
+        "supply": 1.42
+      },
+      "equipment_availability": {
+        "ADISCORD_combat_platform_archetype": true,
+        "ADISCORD_squad_weapons_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_nod_nodral_armored_group"
+      }
+    },
+    {
+      "key": "oob_nod_nodral_mountain_infantry",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/NOD.txt",
+        "owner": "NOD"
+      },
+      "technical_name": "Nodral Mountain Infantry",
+      "display_name": "Nodral Mountain Infantry",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "mountaineers",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "mountaineers",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "mountaineers",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "mountaineers",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "mountaineers",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "mountaineers",
+          "x": 1,
+          "y": 2
+        },
+        {
+          "type": "mountaineers",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "mountaineers",
+          "x": 2,
+          "y": 1
+        },
+        {
+          "type": "mountaineers",
+          "x": 2,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "artillery",
+          "x": 0,
+          "y": 1
+        }
+      ],
+      "computed": {
+        "organization": 55.613636,
+        "manpower": 9600.0,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 54.0,
+          "artillery_equipment": 12.0,
+          "infantry_equipment": 1000.0,
+          "support_equipment": 30.0
+        },
+        "supply": 0.63
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_nod_nodral_mountain_infantry"
       }
     },
     {
@@ -11953,7 +12144,7 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.6,
-      "count": 20
+      "count": 14
     },
     {
       "key": "nod_oob_nodral_line_infantry_xp_0_2_eq_0_7",
@@ -11963,7 +12154,27 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.7,
-      "count": 16
+      "count": 14
+    },
+    {
+      "key": "nod_oob_nodral_armored_group_xp_0_3_eq_0_8",
+      "path": "history/units/NOD.txt",
+      "kind": "oob",
+      "technical_name": "Nodral Armored Group",
+      "legacy_names": [],
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 0.8,
+      "count": 2
+    },
+    {
+      "key": "nod_oob_nodral_mountain_infantry_xp_0_32_eq_0_8",
+      "path": "history/units/NOD.txt",
+      "kind": "oob",
+      "technical_name": "Nodral Mountain Infantry",
+      "legacy_names": [],
+      "start_experience_factor": 0.32,
+      "start_equipment_factor": 0.8,
+      "count": 2
     },
     {
       "key": "nvr_oob_northern_line_brigade_xp_0_15_eq_0_72",
