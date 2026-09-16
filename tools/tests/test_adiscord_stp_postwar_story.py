@@ -7,8 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 EVENTS = ROOT / "events/ADISCORD_STP_events.txt"
-LOCALISATION = ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml"
-STORY_LOCALISATION = ROOT / "localisation/replace/ADISCORD_STP_story_l_russian.yml"
+POSTWAR_LOCALISATION = ROOT / "localisation/replace/ADISCORD_STP_postwar_story_l_russian.yml"
 LEDGER = ROOT / "tools/data/adiscord_event_ids.json"
 
 
@@ -49,7 +48,7 @@ class ShabratPostwarStoryTests(unittest.TestCase):
             self.assertIn(event_id, ledger_ids)
 
     def test_story_events_have_complete_russian_localisation(self) -> None:
-        loc = read(LOCALISATION) + "\n" + read(STORY_LOCALISATION)
+        loc = read(POSTWAR_LOCALISATION)
         expected_keys = (
             "ADISCORD_STP_pw.1.t",
             "ADISCORD_STP_pw.1.d",
