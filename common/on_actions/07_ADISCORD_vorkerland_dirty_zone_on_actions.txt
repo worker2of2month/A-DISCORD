@@ -1,0 +1,26 @@
+on_actions = {
+	on_startup = {
+		effect = {
+			if = {
+				limit = { has_global_flag = ADISCORD_vorkerland_dirty_opened }
+				ADISCORD_vorkerland_restore_dirty_zone_opening_visual = yes
+			}
+		}
+	}
+
+	# The reveal event schedules the first Dirty Zone state hand-off one day later.
+	# Hook that real transfer instead of adding a permanent daily poll. The global
+	# guard makes presentation/news dispatch exactly once even if other fronts also
+	# change state control during the same tick.
+	on_state_control_changed = {
+		effect = {
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_dirty_opened
+					NOT = { has_global_flag = ADISCORD_vorkerland_dirty_zone_presentation_finalized }
+				}
+				ADISCORD_vorkerland_finalize_dirty_zone_opening_presentation = yes
+			}
+		}
+	}
+}
