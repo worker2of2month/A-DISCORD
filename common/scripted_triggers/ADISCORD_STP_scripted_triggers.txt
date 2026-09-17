@@ -561,6 +561,7 @@ NOD_cw_intervention_possible = {
 	has_capitulated = no
 	is_subject = no
 	NOT = { has_global_flag = STP_cw_union_wars_finished }
+	NOT = { STS = { has_country_flag = STP_cw_last_banquet_success } }
 	NOT = { check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals } }
 	NOT = { has_country_flag = NOD_cw_refused }
 	NOT = { has_country_flag = NOD_cw_withdrew }

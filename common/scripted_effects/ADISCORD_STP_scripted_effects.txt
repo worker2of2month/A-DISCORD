@@ -3165,12 +3165,45 @@ STP_cw_adjust_nod_intervention_days = {
 }
 
 # COUNTRY (STS): one result path for the Last Banquet deadline.
+# COUNTRY (STS): once the Bronze Congress is seized in time, a Nodrul
+# intervention that has not entered the war is permanently closed for this civil war.
+STP_cw_cancel_pending_nod_intervention = {
+	if = {
+		limit = { NOD = { exists = yes NOT = { has_country_flag = NOD_cw_entered } } }
+		NOD = {
+			set_country_flag = NOD_cw_offer_shown
+			if = {
+				limit = {
+					OR = {
+						has_country_flag = NOD_cw_intervention_approved
+						has_country_flag = NOD_cw_intervention_ready
+						has_active_mission = NOD_cw_intervention_preparation
+						has_active_mission = NOD_cw_northern_redeployment
+					}
+				}
+				clr_country_flag = NOD_cw_intervention_approved
+				clr_country_flag = NOD_cw_intervention_ready
+				if = { limit = { has_active_mission = NOD_cw_intervention_preparation } remove_mission = NOD_cw_intervention_preparation }
+				if = { limit = { has_active_mission = NOD_cw_northern_redeployment } remove_mission = NOD_cw_northern_redeployment }
+				ADISCORD_economy_update_postwar_demobilization = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		if = { limit = { has_active_mission = STP_cw_nod_warning } remove_mission = STP_cw_nod_warning }
+		if = { limit = { has_active_mission = STP_cw_nod_redeployment } remove_mission = STP_cw_nod_redeployment }
+		clr_country_flag = STP_cw_nod_warning_active
+		set_country_flag = STP_cw_nod_warning_cancelled
+	}
+}
+
 STP_cw_resolve_last_banquet_success = {
 	if = {
 		limit = { NOT = { has_country_flag = STP_cw_last_banquet_resolved } }
 		set_country_flag = STP_cw_last_banquet_resolved
+		set_country_flag = STP_cw_last_banquet_success
 		clr_country_flag = STP_cw_last_banquet_started
 		remove_mission = STP_cw_last_banquet_deadline
+		STP_cw_cancel_pending_nod_intervention = yes
 	}
 }
 

@@ -1161,6 +1161,12 @@ class CivilWarContracts(unittest.TestCase):
                 self.assertEqual([e for e in closing[0] if e.key not in ("name", "trigger", "ai_chance")], [],
                                  "the committed-route option only closes the event")
                 options = [o for o in options if o not in closing]
+            else:
+                closing = [o for o in options if scalar(o, "name") == "ADISCORD_STP_cw.42.c"]
+                self.assertEqual(len(closing), 1)
+                self.assertEqual([e for e in closing[0] if e.key not in ("name", "trigger", "ai_chance")], [],
+                                 "a stale Nodrul card must only close")
+                options = [o for o in options if o not in closing]
             self.assertEqual(len(options), len(choices))
             written = [{e.value for e in walk(o) if e.key == "set_country_flag" and isinstance(e.value, str)} & choices for o in options]
             self.assertEqual(set.union(*written), choices)
