@@ -43,6 +43,31 @@ jobs:
               path.write_bytes(data.replace(old, new))
               changed.append(path.as_posix())
 
+          registry = Path("tools/data/adiscord_event_ids.json")
+          registry_source = registry.read_text(encoding="utf-8")
+          missing_entries = []
+          for number in (100, 101):
+              event_id = f"ADISCORD_vorkerland_collapse.{number}"
+              if f'"id": "{event_id}"' not in registry_source:
+                  missing_entries.append(
+                      "    {"
+                      f'\"id\": \"{event_id}\", '
+                      '\"namespace\": \"ADISCORD_vorkerland_collapse\", '
+                      f'\"number\": {number}, '
+                      '\"owner\": \"events/ADISCORD_vorkerland_events.txt\", '
+                      '\"subsystem\": \"vorkerland_collapse\", '
+                      '\"status\": \"active\"}'
+                  )
+          if missing_entries:
+              anchor = "\n  ]\n}"
+              if anchor not in registry_source:
+                  raise SystemExit("event registry closing anchor not found")
+              prefix, suffix = registry_source.rsplit(anchor, 1)
+              if not prefix.rstrip().endswith(","):
+                  prefix = prefix.rstrip() + ","
+              registry_source = prefix + "\n" + ",\n".join(missing_entries) + anchor + suffix
+              registry.write_text(registry_source, encoding="utf-8")
+
           tc = Path("tools/validators/validate_tc.py")
           source = tc.read_text(encoding="utf-8")
           import_anchor = (
@@ -85,6 +110,7 @@ jobs:
           print("Replaced legacy path in:")
           for item in changed:
               print(f"- {item}")
+          print("Registered live Vorkerland mandate events .100/.101 where missing")
           PY
 
       - name: Verify no live legacy path references remain
