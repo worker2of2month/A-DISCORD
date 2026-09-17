@@ -181,11 +181,14 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         decision = named_block(read(DECISIONS), "STP_cw_delay_inspection")
         self.assertIn("cost = 35", decision)
         self.assertIn("days_re_enable = 60", decision)
+        self.assertIn("state_target = yes", decision)
+        self.assertIn("targets = { 2 3 29 45 46 53 }", decision)
         reward = named_block(decision, "complete_effect")
         self.assertEqual(reward.count("add_days_mission_timeout"), len(OPERABLE_STATES))
         self.assertEqual(reward.count("days = 14"), len(OPERABLE_STATES))
         self.assertNotIn("activate_mission", reward)
         for state in OPERABLE_STATES:
+            self.assertIn(f"FROM = {{ state = {state} }}", reward)
             self.assertIn(f"has_active_mission = STP_party_inspection_state_{state}", reward)
 
     def test_counterintelligence_blocks_work_and_lost_assets_can_be_rebuilt(self) -> None:
@@ -767,8 +770,9 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         self.assertNotIn("value = 35 }", named_block(decisions, "STP_region_unique_operation_2"))
         self.assertIn("бросает кубик", loc)
         self.assertIn("Легитимность выше §Y55%§!", loc)
-        self.assertIn("STP_cw_inspection_chain_open", named_block(effects, "STP_change_party_suspicion"))
+        self.assertIn("STP_cw_inspection_chain_open", named_block(triggers, "STP_cw_can_schedule_party_inspections"))
         change = named_block(effects, "STP_change_party_suspicion")
+        self.assertIn("STP_cw_can_schedule_party_inspections = yes", change)
         self.assertIn("STP_schedule_next_party_inspection = yes", change)
         self.assertEqual(regions_map_builder.INITIAL_STATUS_FRAME[2], 4)
         self.assertEqual(regions_map_builder.INITIAL_STATUS_FRAME[45], 6)

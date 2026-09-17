@@ -225,5 +225,42 @@ ideas = {
 				ADISCORD_country_development_economic_growth_factor = 0.04
 			}
 		}
+
+		COF_national_spirit = {
+			picture = GFX_idea_WIT_national_spirit
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			modifier = {
+				political_power_gain = 0.12
+				stability_factor = 0.15
+				war_support_factor = 0.10
+				research_speed_factor = 0.05
+				production_speed_industrial_complex_factor = 0.10
+				industrial_capacity_factory = 0.08
+				recruitable_population = 0.03
+				recruitable_population_factor = 0.25
+				training_time_army_factor = -0.10
+				army_org_factor = 0.10
+				army_morale_factor = 0.10
+				army_core_defence_factor = 0.15
+				dig_in_speed_factor = 0.15
+				max_dig_in = 2
+				supply_consumption_factor = -0.12
+				ADISCORD_economy_trade_income_factor = 0.10
+				ADISCORD_economy_admin_expense_factor = -0.15
+				ADISCORD_country_development_state_growth_factor = 0.12
+				ADISCORD_country_development_economic_growth_factor = 0.08
+				surrender_limit = 1
+			}
+		}
 	}
 }

@@ -7,7 +7,7 @@ STP_cw_defend_fada = {
 		ratio = 0.20
 		states = { 28 }
 		subtract_invasions_from_need = yes
-		subtract_fronts_from_need = yes
+		subtract_fronts_from_need = no
 	}
 }
 

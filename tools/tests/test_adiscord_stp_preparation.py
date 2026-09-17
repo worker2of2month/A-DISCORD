@@ -716,23 +716,48 @@ class StelanderPreparationTests(unittest.TestCase):
     def test_inspection_delay_reserves_one_slot_for_fourteen_days_and_releases_on_either_terminal_path(self):
         decision = block(block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_battle_for_stelander"), "STP_cw_delay_inspection")
         self.assertEqual(tuple(scalar(decision, key) for key in ("cost", "days_remove", "days_re_enable")), ("35", "14", "60"))
+        self.assertEqual(scalar(decision, "state_target"), "yes")
+        self.assertEqual({int(e.value) for e in block(decision, "targets")}, {2, 3, 29, 45, 46, 53})
         for state in (2, 3, 29, 45, 46, 53):
             mission = f"STP_party_inspection_state_{state}"
             for has_slot in (False, True):
                 facts = {("STP", "has_completed_focus", "STP_Count_The_Loyalists"): True,
                          ("STP", "has_active_mission", mission): True,
-                         ("STP", "STP_has_political_action_slot", "yes"): has_slot}
+                         ("STP", "STP_has_political_action_slot", "yes"): has_slot,
+                         ("STP", "STP_cw_from_inspection_mission_active", "yes"): True,
+                         ("FROM", "is_owned_by", "ROOT"): True,
+                         ("FROM", "is_controlled_by", "ROOT"): True,
+                         ("FROM", "has_state_flag", "STP_party_inspection_active"): True,
+                         ("FROM", "STP_region_is_operable", "yes"): True}
                 self.assertEqual(matches_conditions(block(decision, "available"), facts), has_slot)
-            started = list(selected_effects(block(decision, "complete_effect"), facts))
+            live = {("FROM", "has_state_flag", "STP_party_inspection_active"): True,
+                    ("FROM", "STP_region_is_operable", "yes"): True,
+                    ("FROM", "is_owned_by", "ROOT"): True,
+                    ("FROM", "is_controlled_by", "ROOT"): True,
+                    ("STP", "STP_cw_from_inspection_mission_active", "yes"): True,
+                    ("STP", "has_active_mission", mission): True,
+                    ("FROM", "state", str(state)): True}
+            started = list(selected_effects(block(decision, "complete_effect"), live))
             self.assertEqual(sum(e.key == "STP_political_action_slot_consume" for _, e in started), 1)
-            self.assertEqual([(scalar(e.value, "mission"), scalar(e.value, "days")) for _, e in started if e.key == "add_days_mission_timeout"], [(mission, "14")])
             self.assertFalse(any(e.key == "add_political_power" for _, e in started), "native cost must be charged only once")
-        for open_preparation in (False, True):
-            facts = {("STP", "STP_cw_preparation_open", "yes"): open_preparation}
-            self.assertEqual(matches_conditions(block(decision, "cancel_trigger"), facts), not open_preparation)
+            adjustments = [(scalar(e.value, "mission"), scalar(e.value, "days"))
+                           for _, e in started if e.key == "add_days_mission_timeout"]
+            self.assertTrue(all(days == "14" for _, days in adjustments))
+            self.assertLessEqual(len(adjustments), 1)
+        vanished = list(selected_effects(block(decision, "complete_effect"), {
+            ("FROM", "has_state_flag", "STP_party_inspection_active"): False}))
+        self.assertEqual([e.value for _, e in vanished if e.key == "add_political_power"], ["35"])
+        for open_preparation, escrow in ((False, True), (True, True), (True, False)):
+            facts = {("STP", "STP_cw_preparation_open", "yes"): open_preparation,
+                     ("FROM", "has_state_flag", "STP_cw_inspection_delay_escrow"): escrow}
+            self.assertEqual(matches_conditions(block(decision, "cancel_trigger"), facts),
+                             (not open_preparation) or (not escrow))
         for terminal in ("cancel_effect", "remove_effect"):
-            released = list(selected_effects(block(decision, terminal), {}))
-            self.assertEqual([(scope, e.key, e.value) for scope, e in released], [("STP", "STP_political_action_slot_release", "yes")])
+            released = list(selected_effects(block(decision, terminal), {
+                ("FROM", "has_state_flag", "STP_cw_inspection_delay_escrow"): True}))
+            self.assertEqual(sum(e.key == "STP_political_action_slot_release" for _, e in released), 1)
+            idle = list(selected_effects(block(decision, terminal), {}))
+            self.assertEqual(sum(e.key == "STP_political_action_slot_release" for _, e in idle), 0)
 
     def test_technical_cancellation_is_hidden_but_slot_and_district_blockers_are_named(self):
         decisions = block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_battle_for_stelander")
@@ -1244,7 +1269,8 @@ class StelanderPreparationTests(unittest.TestCase):
                 decision = block(decisions, decision_id)
                 self.assertEqual(scalar(block(decision, "allowed"), "tag"), tag)
                 self.assertEqual(scalar(block(decision, "visible"), "has_completed_focus"), focus_id)
-                self.assertEqual(scalar(decision, "fire_only_once"), "no")
+                self.assertEqual(scalar(decision, "fire_only_once"),
+                                 "yes" if decision_id == "STP_cw_launch_last_banquet" else "no")
                 available = block(decision, "available")
                 self.assertIn(state, {e.value for e in available if e.key == "controls_state"})
                 self.assertEqual({e.value for e in walk(available) if e.key == "has_war_with"}, opponents)
@@ -1257,6 +1283,10 @@ class StelanderPreparationTests(unittest.TestCase):
                 self.assertEqual(scalar(executed, "add_command_power"), "-25")
                 timed = block(executed, "add_timed_idea")
                 self.assertEqual((scalar(timed, "idea"), scalar(timed, "days")), (idea, days))
+                if decision_id == "STP_cw_launch_last_banquet":
+                    self.assertFalse(any(e.key == "days_re_enable" for e in decision))
+                    self.assertEqual(sum(e.key == "activate_mission" and e.value == "STP_cw_last_banquet_deadline"
+                                         for e in walk(executed)), 1)
                 if tag in {"STP", "STS"}:
                     bypass = block(focuses[focus_id], "bypass")
                     self.assertFalse(matches_conditions(bypass, {}, tag))
@@ -1928,6 +1958,9 @@ class StelanderPreparationTests(unittest.TestCase):
             facts[("STP", "STP_cw_public_command_available", "yes")] = matches_conditions(command, facts)
             if name == "STP_cw_delay_inspection":
                 facts[("STP", "has_active_mission", "STP_party_inspection_state_2")] = True
+                facts[("STP", "STP_cw_from_inspection_mission_active", "yes")] = True
+                facts[("FROM", "has_state_flag", "STP_party_inspection_active")] = True
+                facts[("FROM", "has_state_flag", "STP_cw_inspection_delay_escrow")] = True
             for condition in ("visible", "available"):
                 self.assertTrue(matches_conditions(block(action, condition), facts), (name, condition, start))
             if any(e.key == "custom_cost_trigger" for e in action):
@@ -2738,9 +2771,11 @@ class StelanderPreparationTests(unittest.TestCase):
             selected.append((scope, entry))
             if entry.key == "clr_country_flag":
                 facts[(scope, "has_country_flag", entry.value)] = False
-        self.assertEqual([(s, scalar(e.value, "mission"), scalar(e.value, "days")) for s, e in selected
-                          if e.key == "add_days_mission_timeout"],
-                         [("STS", "STP_cw_nod_warning", "10"), ("NOD", "NOD_cw_intervention_preparation", "10")])
+        self.assertEqual([scalar(e.value, "value") for _, e in selected
+                          if e.key == "set_temp_variable" and scalar(e.value, "var") == "STP_cw_nod_prep_delta"],
+                         ["-21"])
+        self.assertEqual(sum(e.key == "STP_cw_adjust_nod_intervention_days" for _, e in selected), 1)
+        self.assertFalse(any(e.key == "add_days_mission_timeout" for _, e in selected))
         self.assertFalse(matches_conditions(block(evidence, "visible"), facts, "STS"),
                          "consuming the evidence prevents a second or restarted-warning purchase")
         self.assertFalse(matches_conditions(block(evidence, "visible"),
