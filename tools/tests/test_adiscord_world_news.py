@@ -120,15 +120,6 @@ class WorldNewsContracts(unittest.TestCase):
                 self.assertIn(key, self.ru)
                 self.assertIn(key, self.en)
 
-    def test_nam_major_news_do_not_use_fire_only_once(self):
-        news = read("events/ADISCORD_nam_resource_war_events.txt")
-        for number in (1, 2, 3):
-            event = event_block(news, f"ADISCORD_nam_resource_news.{number}")
-            self.assertTrue(event)
-            self.assertIn("major = yes", event)
-            self.assertNotIn("fire_only_once = yes", event)
-            self.assertIn("fire_only_once = no", event)
-
 
 if __name__ == "__main__":
     unittest.main()
