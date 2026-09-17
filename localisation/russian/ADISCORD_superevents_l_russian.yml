@@ -3,10 +3,6 @@
   superevent_vorkerland_civilwar_quote: "Когда слова перестают тесно связываться с вещами, царства падают, империи угасают и исчезают. \n\n- Эзра Паунд"
   superevent_vorkerland_civilwar_comment: "Ни одна империя ещё не была вечна"
 
-  superevent_stelander_empire_title: "Провозглашение стеландского имперского союза!"
-  superevent_stelander_empire_quote: "Когда у человека не остаётся ничего, чем можно гордиться, он начинает гордиться своей этнической принадлежностью. \n\n- Артур Шопенгауэр "
- superevent_stelander_empire_comment: "Стеландер снова поднимает голову"
-
   superevent_vorkerland_dirty_opening_title: "Открытие Грязной зоны"
   superevent_vorkerland_dirty_opening_quote: "Я покажу тебе страх в горсти праха.\n\n— Т. С. Элиот, «Бесплодная земля»"
   superevent_vorkerland_dirty_opening_comment: "Зона молчания раскололась на новые территории"
@@ -14,6 +10,10 @@
   superevent_vorkerland_worker_victory_title: "Восстановление Конфедерации"
   superevent_vorkerland_worker_victory_quote: "Единство вернулось не как прежний порядок, а как соглашение тех, кто пережил его распад."
   superevent_vorkerland_worker_victory_comment: "Уоркер сохранил федеративный Воркерланд"
+
+  superevent_vorkerland_utilitarian_victory_title: "Утилитарное восстановление Воркерланда"
+  superevent_vorkerland_utilitarian_victory_quote: "Победу признали только после того, как работу измерили и снова пустили в ход."
+  superevent_vorkerland_utilitarian_victory_comment: "Антон Багли удержал Воркерланд как измеримую республику"
 
   superevent_vorkerland_vlad_victory_title: "Военное восстановление Воркерланда"
   superevent_vorkerland_vlad_victory_quote: "Когда учреждения исчезли, армия объявила себя единственным оставшимся учреждением."
@@ -27,6 +27,6 @@
   superevent_vorkerland_dorian_victory_quote: "Руины были описаны, измерены и включены в новый план управления."
   superevent_vorkerland_dorian_victory_comment: "Дориан Воркс передал страну администрациям специалистов"
 
-  superevent_vorkerland_utilitarian_victory_title: "Утилитарное восстановление Воркерланда"
-  superevent_vorkerland_utilitarian_victory_quote: "Победу признали только после того, как работу измерили и снова пустили в ход."
-  superevent_vorkerland_utilitarian_victory_comment: "Антон Багли удержал Воркерланд как измеримую республику"
+  superevent_stelander_empire_title: "Провозглашение стеландского имперского союза!"
+  superevent_stelander_empire_quote: "Когда у человека не остаётся ничего, чем можно гордиться, он начинает гордиться своей этнической принадлежностью. \n\n- Артур Шопенгауэр "
+  superevent_stelander_empire_comment: "Стеландер снова поднимает голову"
