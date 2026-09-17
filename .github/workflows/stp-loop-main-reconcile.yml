@@ -24,6 +24,7 @@ jobs:
         run: |
           python tools/tmp_reconcile_stp_loop_main.py
           python tools/tmp_reconcile_stp_loop_tests.py
+          python tools/tmp_reconcile_stp_loop_tests2.py
           git diff --check
       - name: Focused regression
         run: python -B -m unittest -v tools.tests.test_adiscord_stp_gameplay_loop_regressions
@@ -35,7 +36,7 @@ jobs:
         run: |
           git config user.name "A-Discord Audit"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git rm .github/workflows/stp-loop-main-reconcile.yml tools/tmp_reconcile_stp_loop_main.py tools/tmp_reconcile_stp_loop_tests.py
+          git rm .github/workflows/stp-loop-main-reconcile.yml tools/tmp_reconcile_stp_loop_main.py tools/tmp_reconcile_stp_loop_tests.py tools/tmp_reconcile_stp_loop_tests2.py
           git add \
             common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt \
             common/scripted_effects/ADISCORD_STP_scripted_effects.txt \
