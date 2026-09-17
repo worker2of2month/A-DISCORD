@@ -1,4 +1,13 @@
 on_actions = {
+	# Country removal has no shared callback here; reconcile only an open offer.
+	on_weekly_STS = {
+		effect = {
+			if = {
+				limit = { exists = yes has_country_flag = STP_pc_lib_package_pending }
+				STP_pc_offer_liberation_package = yes
+			}
+		}
+	}
 	on_peaceconference_ended = {
 		effect = {
 			if = {

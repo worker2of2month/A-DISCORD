@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import re
+from collections import Counter
 import unittest
 from pathlib import Path
 
@@ -116,6 +118,8 @@ def expand(items, parameters=None):
             if entry.value not in ("yes", "no"):
                 raise AssertionError(f"Unsupported native scripted trigger call: {key}")
             value = expand(definitions[key], parameters)
+            if entry.value == "no":
+                value = [Entry("AND", value, entry.line)]
             result.append(Entry("AND" if entry.value != "no" else "NOT", value, entry.line))
         else:
             result.append(Entry(key, value, entry.line, entry.quoted))
@@ -153,7 +157,269 @@ def visible_option_names(event_id: str, facts, scope="STS"):
     return names
 
 
+def execute_package_effects(items, facts, dispatched, scope="STS"):
+    """Execute only the parsed package protocol; unknown effects fail closed."""
+    definitions = {entry.key: entry.value for entry in entries(EFFECTS)}
+    taken = False
+    for entry in items:
+        key, value = entry.key, entry.value
+        if key in {"if", "else_if", "else"}:
+            if key == "if":
+                taken = False
+            condition = next((child.value for child in value if child.key == "limit"), [])
+            if not taken and (key == "else" or matches_conditions(expand(condition), facts, scope)):
+                taken = True
+                execute_package_effects([child for child in value if child.key != "limit"], facts, dispatched, scope)
+        elif key in {"name", "trigger", "ai_chance", "custom_effect_tooltip", "effect_tooltip"}:
+            continue
+        elif key == "hidden_effect":
+            execute_package_effects(value, facts, dispatched, scope)
+        elif key in {"STS", "VAL", "NOD"}:
+            execute_package_effects(value, facts, dispatched, key)
+        elif key in {"set_country_flag", "clr_country_flag"}:
+            fact = (scope, "has_country_flag", value)
+            if key == "set_country_flag":
+                facts[fact] = True
+            else:
+                facts.pop(fact, None)
+        elif key == "set_variable":
+            name, amount = scalar(value, "var"), scalar(value, "value")
+            try:
+                amount = float(amount)
+            except ValueError:
+                amount = facts.get((scope, "variable", amount), 0)
+            facts[(scope, "variable", name)] = amount
+            facts[(scope, "has_variable", name)] = True
+        elif key == "clear_variable":
+            facts.pop((scope, "variable", value), None)
+            facts.pop((scope, "has_variable", value), None)
+        elif key == "country_event":
+            dispatched.append((scope, scalar(value, "id")))
+        elif key == "add_ideas":
+            facts[(scope, "has_idea", value)] = True
+        elif key == "set_cosmetic_tag":
+            facts[(scope, "cosmetic_tag")] = value
+        elif key in definitions:
+            if value != "yes":
+                raise AssertionError(f"Unsupported effect call: {key}")
+            execute_package_effects(definitions[key], facts, dispatched, scope)
+        else:
+            raise AssertionError(f"Unhandled package effect: {key}")
+
+
+def package_facts():
+    facts = {}
+    for tag in ("STS", "VAL", "NOD"):
+        facts[(tag, "exists", "yes")] = True
+        facts[(tag, "has_capitulated", "no")] = True
+        facts[(tag, "is_subject", "no")] = True
+    return facts
+
+
 class PostwarContinuationContracts(unittest.TestCase):
+    def test_negative_scripted_trigger_negates_the_whole_definition(self) -> None:
+        for pending in (False, True):
+            facts = package_facts()
+            facts[("STS", "has_country_flag", "STP_pc_lib_package_pending")] = pending
+            facts[("STS", "variable", "STP_pc_lib_package_tag")] = 1
+            positive = matches_conditions(expand(parse_clausewitz("STP_pc_liberation_reply_is_current = yes")), facts, "VAL")
+            negative = matches_conditions(expand(parse_clausewitz("STP_pc_liberation_reply_is_current = no")), facts, "VAL")
+            self.assertEqual(positive, pending)
+            self.assertEqual(negative, not positive)
+
+    def test_event_descriptions_and_answers_never_share_a_localisation_key(self) -> None:
+        for number in range(1, 17):
+            event_id = f"ADISCORD_STP_pc.{number}"
+            event = parsed_event(event_id)
+            description = scalar(event, "desc")
+            self.assertNotIn(description, option_names(event_id), event_id)
+
+    def test_canonical_stp_localisation_has_no_duplicate_keys(self) -> None:
+        counts = Counter(re.findall(r"(?m)^\s*([\w.]+):", read(LOC)))
+        self.assertEqual({key: count for key, count in counts.items() if count > 1}, {})
+
+    def test_stale_package_close_cannot_consume_the_other_country_receipt(self) -> None:
+        facts = package_facts()
+        facts.update({
+            ("STS", "has_country_flag", "STP_pc_lib_package_pending"): True,
+            ("STS", "variable", "STP_pc_lib_package_tag"): 2,
+            ("STS", "has_variable", "STP_pc_lib_package_tag"): True,
+            ("STS", "has_country_flag", "STP_pc_lib_nod_won"): True,
+        })
+        before, dispatched = dict(facts), []
+        close = option_by_name("ADISCORD_STP_pc.11", "ADISCORD_STP_pc.11.c")
+        execute_package_effects(close, facts, dispatched, "VAL")
+        self.assertEqual(facts, before)
+        self.assertEqual(dispatched, [], "a stale VAL card must not reopen NOD's active offer")
+
+    def test_package_answers_recheck_the_receipt_before_changing_the_recipient(self) -> None:
+        for recipient, address in (("VAL", 1), ("NOD", 2)):
+            for suffix in ("a", "b"):
+                with self.subTest(recipient=recipient, answer=suffix):
+                    facts = package_facts()
+                    facts[("STS", "variable", "STP_pc_lib_package_tag")] = address
+                    before, dispatched = dict(facts), []
+                    self.assertEqual(visible_option_names("ADISCORD_STP_pc.11", facts, recipient), ["ADISCORD_STP_pc.11.c"])
+                    answer = option_by_name("ADISCORD_STP_pc.11", f"ADISCORD_STP_pc.11.{suffix}")
+                    execute_package_effects(answer, facts, dispatched, recipient)
+                    self.assertEqual(facts, before)
+                    self.assertEqual(dispatched, [])
+
+    def test_replayed_acceptance_does_not_duplicate_the_next_offer(self) -> None:
+        facts = package_facts()
+        for country in ("val", "nod"):
+            facts[("STS", "has_country_flag", f"STP_pc_lib_{country}_won")] = True
+        dispatched = []
+        offer = block(entries(EFFECTS), "STP_pc_offer_liberation_package")
+        accept = option_by_name("ADISCORD_STP_pc.11", "ADISCORD_STP_pc.11.a")
+        execute_package_effects(offer, facts, dispatched)
+        execute_package_effects(accept, facts, dispatched, "VAL")
+        self.assertEqual(dispatched, [("VAL", "ADISCORD_STP_pc.11"), ("NOD", "ADISCORD_STP_pc.11")])
+        before = dict(facts)
+        execute_package_effects(accept, facts, dispatched, "VAL")
+        self.assertEqual(facts, before)
+        self.assertEqual(len(dispatched), 2)
+        execute_package_effects(accept, facts, dispatched, "NOD")
+        self.assertNotIn(("STS", "has_country_flag", "STP_pc_lib_package_pending"), facts)
+        self.assertNotIn(("STS", "variable", "STP_pc_lib_package_tag"), facts)
+        self.assertTrue(facts[("NOD", "has_idea", "NOD_mandate_broken")])
+
+    def test_late_second_victory_delivers_an_already_unlocked_package(self) -> None:
+        facts = package_facts()
+        facts.update({
+            ("STS", "has_completed_focus", "STP_pc_lib_transition"): True,
+            ("STS", "has_country_flag", "STP_pc_lib_val_won"): True,
+            ("STS", "has_country_flag", "STP_pc_lib_nod_won"): True,
+            ("VAL", "has_idea", "VAL_liberated_settlement"): True,
+            ("STS", "variable", "STP_pc_settle_opponent"): 2,
+            ("STS", "variable", "STP_pc_settle_result"): 1,
+        })
+        dispatched = []
+        execute_package_effects(block(entries(EFFECTS), "STP_pc_clear_settlement"), facts, dispatched)
+        self.assertEqual(dispatched, [("NOD", "ADISCORD_STP_pc.11")])
+        self.assertEqual(facts[("STS", "variable", "STP_pc_lib_package_tag")], 2)
+
+    def test_vanished_pending_recipient_cannot_block_the_surviving_neighbor(self) -> None:
+        facts = package_facts()
+        facts.update({
+            ("STS", "has_country_flag", "STP_pc_lib_package_pending"): True,
+            ("STS", "variable", "STP_pc_lib_package_tag"): 1,
+            ("STS", "has_country_flag", "STP_pc_lib_val_won"): True,
+            ("STS", "has_country_flag", "STP_pc_lib_nod_won"): True,
+            ("VAL", "exists", "yes"): False,
+        })
+        dispatched = []
+        execute_package_effects(block(entries(EFFECTS), "STP_pc_offer_liberation_package"), facts, dispatched)
+        self.assertEqual(dispatched, [("NOD", "ADISCORD_STP_pc.11")])
+        self.assertEqual(facts[("STS", "variable", "STP_pc_lib_package_tag")], 2)
+
+    def test_nod_crisis_has_one_truthful_acknowledgement(self) -> None:
+        event = parsed_event("ADISCORD_STP_pc.10")
+        self.assertEqual(option_names("ADISCORD_STP_pc.10"), ["ADISCORD_STP_pc.10.a"])
+        answer = block(event, "option")
+        self.assertEqual({entry.key for entry in answer}, {"name", "custom_effect_tooltip"})
+        self.assertEqual(scalar(answer, "custom_effect_tooltip"), "STP_pc_nod_crisis_opened_tt")
+        localisation = read(LOC)
+        for obsolete in ("ADISCORD_STP_pc.10.b", "ADISCORD_STP_pc.10.c"):
+            self.assertNotRegex(localisation, rf"(?m)^\s*{re.escape(obsolete)}:")
+        self.assertRegex(localisation, r"(?m)^ STP_pc_nod_crisis_opened_tt:")
+
+    def test_delayed_nod_notice_rechecks_both_participants_and_postwar_state(self) -> None:
+        event = parsed_event("ADISCORD_STP_pc.10")
+        gate = expand(block(event, "trigger"))
+        facts = package_facts()
+        for flag in ("STP_cw_won_union_battle", "STP_cw_postwar"):
+            facts[("STS", "has_country_flag", flag)] = True
+        facts[("STS", "has_global_flag", "STP_cw_union_wars_finished")] = True
+        self.assertTrue(matches_conditions(gate, facts, "NOD"))
+        for tag, kind, value in (
+            ("NOD", "exists", "yes"),
+            ("NOD", "has_capitulated", "no"),
+            ("STS", "exists", "yes"),
+            ("STS", "has_capitulated", "no"),
+            ("STS", "has_country_flag", "STP_cw_postwar"),
+        ):
+            with self.subTest(tag=tag, condition=kind, value=value):
+                self.assertFalse(matches_conditions(gate, {**facts, (tag, kind, value): False}, "NOD"))
+        self.assertFalse(matches_conditions(gate, {
+            **facts, ("STS", "has_country_flag", "STP_pc_nod_crisis"): True,
+        }, "NOD"))
+
+    def test_nod_notice_preserves_the_default_outcome_without_starting_a_war(self) -> None:
+        event = parsed_event("ADISCORD_STP_pc.10")
+        self.assertEqual(scalar(event, "fire_only_once"), "yes")
+        effects = list(selected_effects(block(event, "immediate"), {}, "NOD"))
+        self.assertEqual([(scope, effect.key) for scope, effect in effects], [
+            ("STS", "set_country_flag"), ("STS", "country_event"),
+        ])
+        self.assertEqual(effects[0][1].value, "STP_pc_nod_crisis")
+        self.assertEqual(scalar(effects[1][1].value, "id"), "ADISCORD_STP_pc.15")
+        self.assertEqual(scalar(effects[1][1].value, "days"), "0")
+        answer = option_by_name("ADISCORD_STP_pc.10", "ADISCORD_STP_pc.10.a")
+        # The outcome belongs to event delivery; closing or timing out does not repeat it.
+        facts, dispatched = package_facts(), []
+        before = dict(facts)
+        execute_package_effects(answer, facts, dispatched, "NOD")
+        execute_package_effects(answer, facts, dispatched, "NOD")
+        self.assertEqual(facts, before)
+        self.assertEqual(dispatched, [])
+
+    def test_nod_notification_keeps_existing_crisis_focus_routes_reachable(self) -> None:
+        focuses = war_focuses()
+        for focus_id in ("STP_pc_lib_crisis", "STP_pc_lib_war", "STP_pc_army_limited_offense"):
+            gate = block(focuses[focus_id], "available")
+            facts = {("STS", "STP_pc_focus_available", "yes"): True}
+            self.assertFalse(matches_conditions(gate, facts, "STS"), focus_id)
+            facts[("STS", "has_country_flag", "STP_pc_nod_crisis")] = True
+            self.assertTrue(matches_conditions(gate, facts, "STS"), focus_id)
+
+    def test_pending_package_recovers_after_all_focus_and_settlement_callers_finished(self) -> None:
+        periodic = block(block(entries(ON_ACTIONS), "on_actions"), "on_weekly_STS")
+        facts = package_facts()
+        facts.update({
+            ("STS", "has_completed_focus", "STP_pc_lib_transition"): True,
+            ("STS", "has_completed_focus", "STP_pc_lib_independent_gov"): True,
+            ("STS", "has_country_flag", "STP_pc_lib_package_pending"): True,
+            ("STS", "variable", "STP_pc_lib_package_tag"): 1,
+            ("STS", "has_variable", "STP_pc_lib_package_tag"): True,
+            ("STS", "has_country_flag", "STP_pc_lib_val_won"): True,
+            ("STS", "has_country_flag", "STP_pc_lib_nod_won"): True,
+            ("STS", "variable", "STP_pc_settle_opponent"): 2,
+            ("STS", "variable", "STP_pc_settle_result"): 1,
+        })
+        dispatched = []
+        execute_package_effects(block(entries(EFFECTS), "STP_pc_clear_settlement"), facts, dispatched)
+        self.assertEqual(dispatched, [], "VAL still owns the open offer when NOD settles")
+        facts[("VAL", "exists", "yes")] = False
+        # Only the native periodic entry point remains; no focus or answer is forced.
+        execute_package_effects(block(periodic, "effect"), facts, dispatched)
+        self.assertEqual(dispatched, [("NOD", "ADISCORD_STP_pc.11")])
+        self.assertEqual(facts[("STS", "variable", "STP_pc_lib_package_tag")], 2)
+        execute_package_effects(block(periodic, "effect"), facts, dispatched)
+        self.assertEqual(len(dispatched), 1, "a live NOD card must not be reissued")
+        execute_package_effects(option_by_name("ADISCORD_STP_pc.11", "ADISCORD_STP_pc.11.a"), facts, dispatched, "NOD")
+        before = dict(facts)
+        execute_package_effects(block(periodic, "effect"), facts, dispatched)
+        self.assertEqual(facts, before)
+        self.assertEqual(len(dispatched), 1)
+        self.assertNotIn(("STS", "has_country_flag", "STP_pc_lib_package_pending"), facts)
+
+    def test_package_recovery_is_scoped_to_an_existing_sts_with_a_pending_receipt(self) -> None:
+        periodic = block(block(entries(ON_ACTIONS), "on_actions"), "on_weekly_STS")
+        self.assertFalse(any(entry.key in {"every_country", "every_possible_country"} for entry in walk(periodic)))
+        for exists, pending in ((True, False), (False, False), (False, True)):
+            with self.subTest(exists=exists, pending=pending):
+                facts = package_facts()
+                facts.update({
+                    ("STS", "exists", "yes"): exists,
+                    ("STS", "has_country_flag", "STP_pc_lib_package_pending"): pending,
+                    ("STS", "has_country_flag", "STP_pc_lib_val_won"): True,
+                })
+                before, dispatched = dict(facts), []
+                execute_package_effects(block(periodic, "effect"), facts, dispatched)
+                self.assertEqual(facts, before)
+                self.assertEqual(dispatched, [])
+
     def test_eighty_focuses_sit_on_the_resistance_war_tree(self) -> None:
         trees = [entry.value for entry in entries(FOCUS) if entry.key == "focus_tree"]
         war = next(tree for tree in trees if scalar(tree, "id") == "STP_cw_focus")
@@ -445,12 +711,17 @@ class PostwarContinuationContracts(unittest.TestCase):
         self.assertFalse(any(e.key == "id" and e.value == "ADISCORD_STP_pc.11" for e in walk(accept)))
         stale_close = option_by_name("ADISCORD_STP_pc.11", "ADISCORD_STP_pc.11.c")
         self.assertTrue(any(e.key == "STP_pc_finish_liberation_package" for e in walk(stale_close)))
-        refuse_nod = list(selected_effects(refuse, {("STS", "variable", "STP_pc_lib_package_tag"): 2}, "NOD"))
-        self.assertIn(("NOD", "set_country_flag", "STP_pc_nod_refused_package"),
-                      [(scope, e.key, e.value) for scope, e in refuse_nod])
-        self.assertNotIn(("VAL", "set_country_flag", "STP_pc_nod_refused_package"),
-                         [(scope, e.key, e.value) for scope, e in refuse_nod])
-        self.assertTrue(any(scope == "STS" and e.key == "STP_pc_finish_liberation_package" for scope, e in refuse_nod))
+        refusal = package_facts()
+        refusal.update({
+            ("STS", "variable", "STP_pc_lib_package_tag"): 2,
+            ("STS", "has_country_flag", "STP_pc_lib_package_pending"): True,
+        })
+        dispatched = []
+        execute_package_effects(refuse, refusal, dispatched, "NOD")
+        self.assertTrue(refusal[("NOD", "has_country_flag", "STP_pc_nod_refused_package")])
+        self.assertNotIn(("VAL", "has_country_flag", "STP_pc_nod_refused_package"), refusal)
+        self.assertNotIn(("STS", "has_country_flag", "STP_pc_lib_package_pending"), refusal)
+        self.assertEqual(dispatched, [])
 
     def test_late_liberated_members_join_an_already_formed_coalition(self) -> None:
         form = ast_block(relative_entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_pc_form_liberation_coalition")
