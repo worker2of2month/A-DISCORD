@@ -1821,7 +1821,6 @@ STP_cw_war_council = {
 		available = {
 			has_war_with = STP
 			controls_state = 3
-			NOT = { has_country_flag = STP_cw_last_banquet_launched }
 			NOT = {
 				has_idea = STP_cw_deliberate_offensive
 				has_idea = STP_cw_static_defence

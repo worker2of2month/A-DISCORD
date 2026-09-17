@@ -878,7 +878,9 @@
  STP_apparatus_loyalty_dynamic_modifier_desc: "Подчинение кабинетов, окружных штабов и печатей протоколу. Высокая верность даёт политический ресурс и стабильность, низкая отнимает их. Действует до начала восстания или завершения выборов."
 
  STP_cw_command_power_25_cost: "£command_power_texticon §Y25§!"
- STP_cw_command_power_35_cost: "£command_power §Y35§!"
+ STP_cw_command_power_35_cost: "£command_power_texticon §Y35§!"
+ STP_cw_command_power_35_cost_blocked: "£command_power_texticon §R35§!"
+ STP_cw_command_power_35_cost_tooltip: "Стоимость: £command_power_texticon §Y35§!"
  STP_cw_command_power_25_cost_blocked: "£command_power_texticon §R25§!"
  STP_cw_command_power_25_cost_tooltip: "Стоимость: £command_power_texticon §Y25§!"
  STP_cw_launch_last_banquet: "Начать операцию «Последний банкет»"
