@@ -28,7 +28,7 @@ ideas = {
 		}
 
 		TFF_commune_coordination = {
-			picture = generic_pp_unity_bonus
+			picture = generic_morale_bonus
 			allowed = { always = no }
 			allowed_civil_war = { original_tag = TFF }
 			removal_cost = -1
@@ -40,7 +40,7 @@ ideas = {
 		}
 
 		TFF_common_supply_network = {
-			picture = generic_goods_red_bonus
+			picture = generic_production_bonus
 			allowed = { always = no }
 			allowed_civil_war = { original_tag = TFF }
 			removal_cost = -1
@@ -50,7 +50,7 @@ ideas = {
 		}
 
 		TFF_unified_field_command = {
-			picture = CZE_planning_bonus
+			picture = generic_intel_bonus
 			allowed = { always = no }
 			allowed_civil_war = { original_tag = TFF }
 			removal_cost = -1

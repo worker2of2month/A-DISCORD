@@ -4183,7 +4183,7 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         "is_triggered_only = yes",
         "superevent_vorkerland_worker_victory",
         "limit = { is_ai = no }",
-        "scoped_sound_effect = superevent_vorkerland_civilwar_sound_e",
+        "scoped_sound_effect = superevent_vorkerland_worker_victory_sound_e",
     ):
         if token not in worker_event:
             issues.append(f"ADISCORD_superevent.2: player-scoped presentation is missing {token}")
@@ -4241,6 +4241,11 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
             "superevent_stelander_empire_sound_e",
             "superevent_stelander_empire_sound",
             "sound/superevents/superevent_stelander_empire_sound.wav",
+        ),
+        (
+            "superevent_vorkerland_worker_victory_sound_e",
+            "superevent_vorkerland_worker_victory_sound",
+            "sound/superevents/superevent_vorkerland_worker_victory_sound.wav",
         ),
     ):
         effect = re.search(

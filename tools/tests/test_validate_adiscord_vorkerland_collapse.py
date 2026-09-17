@@ -447,7 +447,7 @@ country_event = {
         worker_event = event_block(news, "ADISCORD_superevent.2")
         self.assertIn("hidden = yes", worker_event)
         self.assertIn("superevent_vorkerland_worker_victory", worker_event)
-        self.assertIn("scoped_sound_effect = superevent_vorkerland_civilwar_sound_e", worker_event)
+        self.assertIn("scoped_sound_effect = superevent_vorkerland_worker_victory_sound_e", worker_event)
         self.assertNotIn("ADISCORD_vorkerland_central_victory_announced", worker_event)
 
         for news_id, title_id, audio_id, sound_effect in (
@@ -476,10 +476,11 @@ country_event = {
             self.assertIn(f"scoped_sound_effect = {sound_effect}", audio_proxy)
 
         sound_effects = read("sound/superevents_effects.asset")
-        self.assertEqual(sound_effects.count("volume = 1.0"), 2)
+        self.assertEqual(sound_effects.count("volume = 1.0"), 3)
         for effect_name in (
             "superevent_vorkerland_civilwar_sound_e",
             "superevent_stelander_empire_sound_e",
+            "superevent_vorkerland_worker_victory_sound_e",
         ):
             self.assertIn(f"name = {effect_name}", sound_effects)
 

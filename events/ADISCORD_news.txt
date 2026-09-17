@@ -49,7 +49,7 @@ country_event = {
 		}
 		if = {
 			limit = { is_ai = no }
-			scoped_sound_effect = superevent_vorkerland_civilwar_sound_e
+			scoped_sound_effect = superevent_vorkerland_worker_victory_sound_e
 			scoped_play_song = "one_minute_of_silence"
 		}
 	}
