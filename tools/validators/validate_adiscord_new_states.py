@@ -816,7 +816,7 @@ def validate_countries() -> None:
 def validate_news_settings() -> None:
     superevents = text(ROOT / "common/scripted_guis/superevents.txt")
     effects = text(ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt")
-    news = text(ROOT / "events/ADISCORD_news.txt")
+    news = text(ROOT / "events/ADISCORD_superevents.txt")
     localisation = southern_localisation()
 
     for obsolete in (

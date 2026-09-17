@@ -13,8 +13,7 @@ spriteTypes = {
 		textureFile = "gfx/interface/superevents/supereventbutton.png"
 	}
 
-
-#superevents themselves
+	# Superevent artwork
 
 	spriteType = {
 		name = "GFX_superevent_vorkerland_civilwar"
@@ -29,16 +28,16 @@ spriteTypes = {
 		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_worker_victory.png"
 	}
 	spriteType = {
+		name = "GFX_superevent_vorkerland_utilitarian_victory"
+		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_utilitarian_victory.png"
+	}
+	spriteType = {
 		name = "GFX_superevent_vorkerland_vlad_victory"
 		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_civilwar.png"
 	}
 	spriteType = {
 		name = "GFX_superevent_vorkerland_dorian_victory"
 		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_civilwar_doctor_won.png"
-	}
-	spriteType = {
-		name = "GFX_superevent_vorkerland_utilitarian_victory"
-		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_utilitarian_victory.png"
 	}
 	spriteType = {
 		name = "GFX_superevent_stelander_empire"

@@ -4210,7 +4210,7 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
     if "ADISCORD_vorkerland_central_victory_announced" not in utilitarian_show:
         issues.append("Vorkerland utilitarian_victory campaign show lost the announced lock")
 
-    news = read(root, "events/ADISCORD_news.txt", issues)
+    news = read(root, "events/ADISCORD_superevents.txt", issues)
     civilwar_event = event_block(news, "ADISCORD_superevent.1")
     for token in (
         "hidden = yes",

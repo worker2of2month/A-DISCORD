@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-NEWS = ROOT / "events/ADISCORD_news.txt"
+NEWS = ROOT / "events/ADISCORD_superevents.txt"
 SUPEREVENTS = ROOT / "interface/superevents.gfx"
 IMPERIAL_DECISIONS = ROOT / "common/decisions/ADISCORD_STP_imperial_union_decisions.txt"
 IMPERIAL_TRIGGERS = ROOT / "common/scripted_triggers/ADISCORD_STP_imperial_union_triggers.txt"

@@ -21,6 +21,7 @@ if str(_REPOSITORY_ROOT) not in sys.path:
 
 from tools.validators.validate_adiscord_economy_ai import validate as validate_adiscord_economy_ai
 from tools.validators.validate_adiscord_event_ids import validate as validate_adiscord_event_ids
+from tools.validators.validate_adiscord_superevents import collect_issues as validate_adiscord_superevents
 from tools.validators.validate_adiscord_strategic_resources_ui import validate as validate_adiscord_strategic_resources_ui
 from tools.validators.validate_adiscord_trade_regions import validate as validate_adiscord_trade_regions
 from tools.validators.validate_adiscord_ivn_overhaul import collect_issues as validate_adiscord_ivn_overhaul
@@ -906,6 +907,13 @@ def main():
         "Event ID registry",
         event_id_issues[: args.limit],
         len(event_id_issues),
+    )
+
+    superevent_issues = validate_adiscord_superevents()
+    print_section(
+        "Superevent presentation contract",
+        superevent_issues[: args.limit],
+        len(superevent_issues),
     )
 
     state_issues, state_total = check_states(tags, provinces, args.limit)

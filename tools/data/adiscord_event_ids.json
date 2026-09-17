@@ -66,14 +66,14 @@
     {"id": "ADISCORD_rin_crisis.3", "namespace": "ADISCORD_rin_crisis", "number": 3, "owner": "events/ADISCORD_rin_oath_crisis_events.txt", "subsystem": "rin_oath_crisis", "status": "active"},
     {"id": "ADISCORD_rin_crisis.4", "namespace": "ADISCORD_rin_crisis", "number": 4, "owner": "events/ADISCORD_rin_oath_crisis_events.txt", "subsystem": "rin_oath_crisis", "status": "active"},
     {"id": "ADISCORD_TFF.1", "namespace": "ADISCORD_TFF", "number": 1, "owner": "events/ADISCORD_TFF_events.txt", "subsystem": "tff_wartime", "status": "active"},
-    {"id": "ADISCORD_superevent.1", "namespace": "ADISCORD_superevent", "number": 1, "owner": "events/ADISCORD_news.txt", "subsystem": "superevents", "status": "active"},
-    {"id": "ADISCORD_superevent.2", "namespace": "ADISCORD_superevent", "number": 2, "owner": "events/ADISCORD_news.txt", "subsystem": "superevents", "status": "active"},
-    {"id": "ADISCORD_superevent.3", "namespace": "ADISCORD_superevent", "number": 3, "owner": "events/ADISCORD_news.txt", "subsystem": "superevents", "status": "active"},
-    {"id": "ADISCORD_superevent.4", "namespace": "ADISCORD_superevent", "number": 4, "owner": "events/ADISCORD_news.txt", "subsystem": "superevents", "status": "active"},
-    {"id": "ADISCORD_superevent_audio.1", "namespace": "ADISCORD_superevent_audio", "number": 1, "owner": "events/ADISCORD_news.txt", "subsystem": "superevents", "status": "active"},
-    {"id": "ADISCORD_superevent_audio.2", "namespace": "ADISCORD_superevent_audio", "number": 2, "owner": "events/ADISCORD_news.txt", "subsystem": "superevents", "status": "active"},
-    {"id": "ADISCORD_superevent_news.1", "namespace": "ADISCORD_superevent_news", "number": 1, "owner": "events/ADISCORD_news.txt", "subsystem": "superevents", "status": "active"},
-    {"id": "ADISCORD_superevent_news.2", "namespace": "ADISCORD_superevent_news", "number": 2, "owner": "events/ADISCORD_news.txt", "subsystem": "superevents", "status": "active"},
+    {"id": "ADISCORD_superevent.1", "namespace": "ADISCORD_superevent", "number": 1, "owner": "events/ADISCORD_superevents.txt", "subsystem": "superevents", "status": "active"},
+    {"id": "ADISCORD_superevent.2", "namespace": "ADISCORD_superevent", "number": 2, "owner": "events/ADISCORD_superevents.txt", "subsystem": "superevents", "status": "active"},
+    {"id": "ADISCORD_superevent.3", "namespace": "ADISCORD_superevent", "number": 3, "owner": "events/ADISCORD_superevents.txt", "subsystem": "superevents", "status": "active"},
+    {"id": "ADISCORD_superevent.4", "namespace": "ADISCORD_superevent", "number": 4, "owner": "events/ADISCORD_superevents.txt", "subsystem": "superevents", "status": "active"},
+    {"id": "ADISCORD_superevent_audio.1", "namespace": "ADISCORD_superevent_audio", "number": 1, "owner": "events/ADISCORD_superevents.txt", "subsystem": "superevents", "status": "active"},
+    {"id": "ADISCORD_superevent_audio.2", "namespace": "ADISCORD_superevent_audio", "number": 2, "owner": "events/ADISCORD_superevents.txt", "subsystem": "superevents", "status": "active"},
+    {"id": "ADISCORD_superevent_news.1", "namespace": "ADISCORD_superevent_news", "number": 1, "owner": "events/ADISCORD_superevents.txt", "subsystem": "superevents", "status": "active"},
+    {"id": "ADISCORD_superevent_news.2", "namespace": "ADISCORD_superevent_news", "number": 2, "owner": "events/ADISCORD_superevents.txt", "subsystem": "superevents", "status": "active"},
     {"id": "ADISCORD_event_ui_test.1", "namespace": "ADISCORD_event_ui_test", "number": 1, "owner": "events/ADISCORD_scenario_debug_events.txt", "subsystem": "event_ui_test", "status": "active"},
     {"id": "ADISCORD_event_ui_test.2", "namespace": "ADISCORD_event_ui_test", "number": 2, "owner": "events/ADISCORD_scenario_debug_events.txt", "subsystem": "event_ui_test", "status": "active"},
     {"id": "ADISCORD_event_ui_test.3", "namespace": "ADISCORD_event_ui_test", "number": 3, "owner": "events/ADISCORD_scenario_debug_events.txt", "subsystem": "event_ui_test", "status": "active"},
@@ -281,6 +281,8 @@
     {"id": "ADISCORD_STP_pc.13", "namespace": "ADISCORD_STP_pc", "number": 13, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar_continuation", "status": "active"},
     {"id": "ADISCORD_STP_pc.14", "namespace": "ADISCORD_STP_pc", "number": 14, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar_continuation", "status": "active"},
     {"id": "ADISCORD_STP_pc.15", "namespace": "ADISCORD_STP_pc", "number": 15, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar_continuation", "status": "active"},
-    {"id": "ADISCORD_STP_pc.16", "namespace": "ADISCORD_STP_pc", "number": 16, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar_continuation", "status": "active"}
+    {"id": "ADISCORD_STP_pc.16", "namespace": "ADISCORD_STP_pc", "number": 16, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar_continuation", "status": "active"},
+    {"id": "ADISCORD_vorkerland_collapse.100", "namespace": "ADISCORD_vorkerland_collapse", "number": 100, "owner": "events/ADISCORD_vorkerland_events.txt", "subsystem": "vorkerland_collapse", "status": "active"},
+    {"id": "ADISCORD_vorkerland_collapse.101", "namespace": "ADISCORD_vorkerland_collapse", "number": 101, "owner": "events/ADISCORD_vorkerland_events.txt", "subsystem": "vorkerland_collapse", "status": "active"}
   ]
 }

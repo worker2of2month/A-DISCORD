@@ -1,66 +1,119 @@
-##quote
+## quote
 defined_text = {
 	name = GetSupereventQuote
-	text = { trigger = { has_global_flag = superevent_vorkerland_dirty_opening } localization_key = superevent_vorkerland_dirty_opening_quote }
-	text = { trigger = { has_global_flag = superevent_vorkerland_utilitarian_victory } localization_key = superevent_vorkerland_utilitarian_victory_quote }
-	text = { trigger = { has_global_flag = superevent_vorkerland_worker_victory } localization_key = superevent_vorkerland_worker_victory_quote }
-	text = { trigger = { has_global_flag = superevent_vorkerland_vlad_victory has_global_flag = ADISCORD_vorkerland_joint_government_formed } localization_key = superevent_vorkerland_joint_victory_quote }
-	text = { trigger = { has_global_flag = superevent_vorkerland_vlad_victory } localization_key = superevent_vorkerland_vlad_victory_quote }
-	text = { trigger = { has_global_flag = superevent_vorkerland_dorian_victory } localization_key = superevent_vorkerland_dorian_victory_quote }
 	text = {
-	trigger = {
-			has_global_flag = superevent_stelander_empire
-		}
-		localization_key = superevent_stelander_empire_quote
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_vorkerland_civilwar
-		}
+		trigger = { has_global_flag = superevent_vorkerland_civilwar }
 		localization_key = superevent_vorkerland_civilwar_quote
 	}
-}
-##title
-defined_text = {
-	name = GetSupereventTitle
-	text = { trigger = { has_global_flag = superevent_vorkerland_dirty_opening } localization_key = superevent_vorkerland_dirty_opening_title }
-	text = { trigger = { has_global_flag = superevent_vorkerland_utilitarian_victory } localization_key = superevent_vorkerland_utilitarian_victory_title }
-	text = { trigger = { has_global_flag = superevent_vorkerland_worker_victory } localization_key = superevent_vorkerland_worker_victory_title }
-	text = { trigger = { has_global_flag = superevent_vorkerland_vlad_victory has_global_flag = ADISCORD_vorkerland_joint_government_formed } localization_key = superevent_vorkerland_joint_victory_title }
-	text = { trigger = { has_global_flag = superevent_vorkerland_vlad_victory } localization_key = superevent_vorkerland_vlad_victory_title }
-	text = { trigger = { has_global_flag = superevent_vorkerland_dorian_victory } localization_key = superevent_vorkerland_dorian_victory_title }
+	text = {
+		trigger = { has_global_flag = superevent_vorkerland_dirty_opening }
+		localization_key = superevent_vorkerland_dirty_opening_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_vorkerland_worker_victory }
+		localization_key = superevent_vorkerland_worker_victory_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_vorkerland_utilitarian_victory }
+		localization_key = superevent_vorkerland_utilitarian_victory_quote
+	}
 	text = {
 		trigger = {
-			has_global_flag = superevent_vorkerland_civilwar
+			has_global_flag = superevent_vorkerland_vlad_victory
+			has_global_flag = ADISCORD_vorkerland_joint_government_formed
 		}
+		localization_key = superevent_vorkerland_joint_victory_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_vorkerland_vlad_victory }
+		localization_key = superevent_vorkerland_vlad_victory_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_vorkerland_dorian_victory }
+		localization_key = superevent_vorkerland_dorian_victory_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_empire }
+		localization_key = superevent_stelander_empire_quote
+	}
+}
+
+## title
+defined_text = {
+	name = GetSupereventTitle
+	text = {
+		trigger = { has_global_flag = superevent_vorkerland_civilwar }
 		localization_key = superevent_vorkerland_civilwar_title
 	}
 	text = {
+		trigger = { has_global_flag = superevent_vorkerland_dirty_opening }
+		localization_key = superevent_vorkerland_dirty_opening_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_vorkerland_worker_victory }
+		localization_key = superevent_vorkerland_worker_victory_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_vorkerland_utilitarian_victory }
+		localization_key = superevent_vorkerland_utilitarian_victory_title
+	}
+	text = {
 		trigger = {
-			has_global_flag = superevent_stelander_empire
+			has_global_flag = superevent_vorkerland_vlad_victory
+			has_global_flag = ADISCORD_vorkerland_joint_government_formed
 		}
+		localization_key = superevent_vorkerland_joint_victory_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_vorkerland_vlad_victory }
+		localization_key = superevent_vorkerland_vlad_victory_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_vorkerland_dorian_victory }
+		localization_key = superevent_vorkerland_dorian_victory_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_empire }
 		localization_key = superevent_stelander_empire_title
 	}
 }
-##comment
+
+## comment
 defined_text = {
 	name = GetSupereventComment
-	text = { trigger = { has_global_flag = superevent_vorkerland_dirty_opening } localization_key = superevent_vorkerland_dirty_opening_comment }
-	text = { trigger = { has_global_flag = superevent_vorkerland_utilitarian_victory } localization_key = superevent_vorkerland_utilitarian_victory_comment }
-	text = { trigger = { has_global_flag = superevent_vorkerland_worker_victory } localization_key = superevent_vorkerland_worker_victory_comment }
-	text = { trigger = { has_global_flag = superevent_vorkerland_vlad_victory has_global_flag = ADISCORD_vorkerland_joint_government_formed } localization_key = superevent_vorkerland_joint_victory_comment }
-	text = { trigger = { has_global_flag = superevent_vorkerland_vlad_victory } localization_key = superevent_vorkerland_vlad_victory_comment }
-	text = { trigger = { has_global_flag = superevent_vorkerland_dorian_victory } localization_key = superevent_vorkerland_dorian_victory_comment }
 	text = {
-		trigger = {
-			has_global_flag = superevent_vorkerland_civilwar
-		}
+		trigger = { has_global_flag = superevent_vorkerland_civilwar }
 		localization_key = superevent_vorkerland_civilwar_comment
 	}
 	text = {
+		trigger = { has_global_flag = superevent_vorkerland_dirty_opening }
+		localization_key = superevent_vorkerland_dirty_opening_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_vorkerland_worker_victory }
+		localization_key = superevent_vorkerland_worker_victory_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_vorkerland_utilitarian_victory }
+		localization_key = superevent_vorkerland_utilitarian_victory_comment
+	}
+	text = {
 		trigger = {
-			has_global_flag = superevent_stelander_empire
+			has_global_flag = superevent_vorkerland_vlad_victory
+			has_global_flag = ADISCORD_vorkerland_joint_government_formed
 		}
+		localization_key = superevent_vorkerland_joint_victory_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_vorkerland_vlad_victory }
+		localization_key = superevent_vorkerland_vlad_victory_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_vorkerland_dorian_victory }
+		localization_key = superevent_vorkerland_dorian_victory_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_empire }
 		localization_key = superevent_stelander_empire_comment
 	}
 }
