@@ -101,7 +101,7 @@ jobs:
         shell: bash
         run: |
           python tools/validators/validate_adiscord_superevents.py
-          python tools/validators/validate_adiscord_event_ids.py
+          python -m tools.validators.validate_adiscord_event_ids
 
       - name: Run focused regression tests
         shell: bash
