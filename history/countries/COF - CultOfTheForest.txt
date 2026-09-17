@@ -22,7 +22,27 @@ set_stability = 0.35
 
 add_ideas = {
 	extensive_conscription
+
+	# Society and civil institutions
+	ADISCORD_society_type_traditional
+	ADISCORD_information_sealed_networks
+	ADISCORD_taxation_light_dues
+	ADISCORD_welfare_basic_services
+	ADISCORD_education_basic_schools
+	ADISCORD_healthcare_preventive_medicine
+	ADISCORD_cultural_policy_civic_festivals
+	ADISCORD_industrial_policy_civilian_expansion
+	ADISCORD_labor_policy_loose_contracts
+	ADISCORD_infrastructure_patchwork_roads
+
+	# Military structure
 	ADISCORD_military_organization_militia_autonomy
+	ADISCORD_officer_corps_local_seniority
+	ADISCORD_logistics_local_foraging
+	ADISCORD_training_irregular_exercises
+	ADISCORD_internal_security_neighborhood_watch
+
+	# Ministers
 	minister_COF_Silvan_Root
 	minister_COF_Morven_Bark
 	minister_COF_Elya_Moss

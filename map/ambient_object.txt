@@ -105,23 +105,29 @@ type={
 	always_visible=yes
 	object={
 		name="ADISCORD_factory_entity"
-		position={ 3487.83008 2.54531 934.76000 }
+		position={
+			3487.83008 2.54531 934.76 
+		}
 		rotation={
-			0 370 0
+			0 370 0 
 		}
 	}
 	object={
 		name="ADISCORD_factory_entity"
-		position={ 3595.69984 2.28528 767.51000 }
+		position={
+			3595.69984 2.28528 767.51 
+		}
 		rotation={
-			0 100 0
+			0 100 0 
 		}
 	}
 	object={
 		name="ADISCORD_factory_entity"
-		position={ 3492.21984 2.48309 976.80000 }
+		position={
+			3492.21984 2.48309 976.8 
+		}
 		rotation={
-			0 180 0
+			0 180 0 
 		}
 	}
 }
@@ -132,16 +138,13 @@ type={
 	object={
 		name="cityblock_entity"
 		position={
-			2120.53008 -0.5 498.6
+			2120.53008 -0.5 498.6 
 		}
 		rotation={
-			0 0 0
+			0 0 0 
 		}
 	}
 }
-
-
-
 type={
 	type="french_city1_entity"
 	use_animation=no
@@ -174,8 +177,6 @@ type={
 		}
 	}
 }
-
-
 type={
 	type="ADISCORD_congress_entity"
 	use_animation=no
@@ -183,9 +184,11 @@ type={
 	always_visible=yes
 	object={
 		name="ADISCORD_congress_entity"
-		position={ 3745.28000 0.89940 939.79000 }
+		position={
+			3745.28 0.8994 939.79 
+		}
 		rotation={
-			0 250 0
+			0 250 0 
 		}
 	}
 }
@@ -196,16 +199,20 @@ type={
 	always_visible=yes
 	object={
 		name="ADISCORD_reactor_entity"
-		position={ 3521.11008 1.71028 893.46000 }
+		position={
+			3521.11008 1.71028 893.46 
+		}
 		rotation={
-			0 90 0
+			0 90 0 
 		}
 	}
 	object={
 		name="ADISCORD_reactor_entity"
-		position={ 3546.19008 2.03298 899.32000 }
+		position={
+			3546.19008 2.03298 899.32 
+		}
 		rotation={
-			0 370 0
+			0 370 0 
 		}
 	}
 }
@@ -216,197 +223,398 @@ type={
 	always_visible=yes
 	object={
 		name="ADISCORD_reactor_2_entity"
-		position={ 3551.20992 4.16995 913.51000 }
+		position={
+			3551.20992 4.16995 913.51 
+		}
 		rotation={
-			90 270 90
+			90 270 90 
 		}
 	}
 }
-
-# BEGIN ADISCORD Vorkensberg city
-type = {
-	type = "ADISCORD_city_tower_admin_entity"
-	use_animation = no
-	scale = 1
-	object = {
-		name = "ADISCORD_city_tower_admin_00"
-		position = { 3151.19008 -0.02480 740.58000 }
-		rotation = { 0 0 0 }
+type={
+	type="ADISCORD_city_tower_admin_entity"
+	use_animation=no
+	object={
+		name="ADISCORD_city_tower_admin_00"
+		position={
+			3151.19008 -0.0248 740.58 
+		}
+		rotation={
+			0 0 0 
+		}
 	}
-	object = {
-		name = "ADISCORD_city_tower_admin_01"
-		position = { 3146.65984 0.04287 735.49000 }
-		rotation = { 0 270 0 }
+	object={
+		name="ADISCORD_city_tower_admin_01"
+		position={
+			3146.65984 0.04287 735.49 
+		}
+		rotation={
+			0 270 0 
+		}
 	}
-	object = {
-		name = "ADISCORD_city_tower_admin_02"
-		position = { 3141.60000 0.01480 738.66000 }
-		rotation = { 0 180 0 }
+	object={
+		name="ADISCORD_city_tower_admin_02"
+		position={
+			3141.6 0.0148 738.66 
+		}
+		rotation={
+			0 180 0 
+		}
 	}
-	object = {
-		name = "ADISCORD_city_tower_admin_03"
-		position = { 3193.37984 -0.00810 704.55000 }
-		rotation = { 0 180 0 }
-	}
-}
-type = {
-	type = "ADISCORD_city_tower_business_entity"
-	use_animation = no
-	scale = 1
-	object = {
-		name = "ADISCORD_city_tower_business_00"
-		position = { 3119.56992 0.13414 721.71000 }
-		rotation = { 0 90 0 }
-	}
-	object = {
-		name = "ADISCORD_city_tower_business_01"
-		position = { 3134.86016 0.00783 696.81000 }
-		rotation = { 0 0 0 }
-	}
-	object = {
-		name = "ADISCORD_city_tower_business_02"
-		position = { 3160.70016 -0.01680 749.59000 }
-		rotation = { 0 270 0 }
+	object={
+		name="ADISCORD_city_tower_admin_03"
+		position={
+			3193.37984 -0.0081 704.55 
+		}
+		rotation={
+			0 180 0 
+		}
 	}
 }
-type = {
-	type = "ADISCORD_city_tower_residential_entity"
-	use_animation = no
-	scale = 1
-	object = {
-		name = "ADISCORD_city_tower_residential_00"
-		position = { 3178.68000 -0.00528 722.61000 }
-		rotation = { 0 180 0 }
+type={
+	type="ADISCORD_city_tower_business_entity"
+	use_animation=no
+	object={
+		name="ADISCORD_city_tower_business_00"
+		position={
+			3119.56992 0.13414 721.71 
+		}
+		rotation={
+			0 90 0 
+		}
 	}
-	object = {
-		name = "ADISCORD_city_tower_residential_01"
-		position = { 3128.64000 0.17320 719.66000 }
-		rotation = { 0 90 0 }
+	object={
+		name="ADISCORD_city_tower_business_01"
+		position={
+			3134.86016 -0.09 696.81 
+		}
+		rotation={
+			0 0 0 
+		}
 	}
-	object = {
-		name = "ADISCORD_city_tower_residential_02"
-		position = { 3181.51008 0.05462 700.42000 }
-		rotation = { 0 0 0 }
-	}
-	object = {
-		name = "ADISCORD_city_tower_residential_03"
-		position = { 3148.83008 0.09743 703.53000 }
-		rotation = { 0 90 0 }
-	}
-}
-type = {
-	type = "ADISCORD_city_quarter_business_entity"
-	use_animation = no
-	scale = 1
-	object = {
-		name = "ADISCORD_city_quarter_business_00"
-		position = { 3178.20992 0.17400 735.30000 }
-		rotation = { 0 0 0 }
-	}
-	object = {
-		name = "ADISCORD_city_quarter_business_01"
-		position = { 3171.98016 0.30730 708.32000 }
-		rotation = { 0 0 0 }
-	}
-	object = {
-		name = "ADISCORD_city_quarter_business_02"
-		position = { 3137.07008 -0.02600 713.31000 }
-		rotation = { 0 0 0 }
-	}
-	object = {
-		name = "ADISCORD_city_quarter_business_03"
-		position = { 3143.51008 0.19146 749.60000 }
-		rotation = { 0 0 0 }
-	}
-	object = {
-		name = "ADISCORD_city_quarter_business_04"
-		position = { 3168.23008 0.16580 697.30000 }
-		rotation = { 0 0 0 }
-	}
-	object = {
-		name = "ADISCORD_city_quarter_business_05"
-		position = { 3186.00000 0.27400 712.00000 }
-		rotation = { 0 0 0 }
-	}
-	object = {
-		name = "ADISCORD_city_quarter_business_06"
-		position = { 3168.00000 0.27400 752.00000 }
-		rotation = { 0 0 0 }
-	}
-	object = {
-		name = "ADISCORD_city_quarter_business_07"
-		position = { 3158.00000 0.17400 706.00000 }
-		rotation = { 0 0 0 }
-	}
-	object = {
-		name = "ADISCORD_city_quarter_business_08"
-		position = { 3154.00000 -0.02600 754.00000 }
-		rotation = { 0 0 0 }
+	object={
+		name="ADISCORD_city_tower_business_02"
+		position={
+			3160.70016 -0.0168 749.59 
+		}
+		rotation={
+			0 270 0 
+		}
 	}
 }
-type = {
-	type = "ADISCORD_city_quarter_mixed_entity"
-	use_animation = no
-	scale = 1
-	object = {
-		name = "ADISCORD_city_quarter_mixed_00"
-		position = { 3132.19008 0.19995 749.63000 }
-		rotation = { 0 0 0 }
+type={
+	type="ADISCORD_city_tower_residential_entity"
+	use_animation=no
+	object={
+		name="ADISCORD_city_tower_residential_00"
+		position={
+			3178.68 -0.00528 722.61 
+		}
+		rotation={
+			0 180 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_tower_residential_01"
+		position={
+			3128.64 0.1732 719.66 
+		}
+		rotation={
+			0 90 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_tower_residential_02"
+		position={
+			3181.51008 0.05462 700.42 
+		}
+		rotation={
+			0 0 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_tower_residential_03"
+		position={
+			3148.83008 0.09743 703.53 
+		}
+		rotation={
+			0 90 0 
+		}
 	}
 }
-type = {
-	type = "ADISCORD_city_quarter_residential_entity"
-	use_animation = no
-	scale = 1
-	object = {
-		name = "ADISCORD_city_quarter_residential_00"
-		position = { 3144.00000 0.31800 692.00000 }
-		rotation = { 0 0 0 }
+type={
+	type="ADISCORD_city_quarter_business_entity"
+	use_animation=no
+	object={
+		name="ADISCORD_city_quarter_business_07"
+		position={
+			3741.24 -0.33 936.64 
+		}
+		rotation={
+			0 0 0 
+		}
 	}
-	object = {
-		name = "ADISCORD_city_quarter_residential_01"
-		position = { 3188.00000 0.20841 696.00000 }
-		rotation = { 0 0 0 }
+	object={
+		name="ADISCORD_city_quarter_business_07"
+		position={
+			3757.6 -0.43 1035.53 
+		}
+		rotation={
+			0 0 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_quarter_business_07"
+		position={
+			3747.95008 -0.33 986.62 
+		}
+		rotation={
+			0 0 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_quarter_business_00"
+		position={
+			3178.20992 0.174 735.3 
+		}
+		rotation={
+			0 0 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_quarter_business_01"
+		position={
+			3171.98016 0.3073 708.32 
+		}
+		rotation={
+			0 0 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_quarter_business_02"
+		position={
+			3137.07008 -0.026 713.31 
+		}
+		rotation={
+			0 0 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_quarter_business_03"
+		position={
+			3143.51008 0.19146 749.6 
+		}
+		rotation={
+			0 0 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_quarter_business_04"
+		position={
+			3168.23008 0.1658 697.3 
+		}
+		rotation={
+			0 0 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_quarter_business_05"
+		position={
+			3186 0.274 712 
+		}
+		rotation={
+			0 0 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_quarter_business_06"
+		position={
+			3168 0.274 752 
+		}
+		rotation={
+			0 0 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_quarter_business_07"
+		position={
+			3158 0.174 706 
+		}
+		rotation={
+			0 0 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_quarter_business_08"
+		position={
+			3154 -0.026 754 
+		}
+		rotation={
+			0 0 0 
+		}
 	}
 }
-type = {
-	type = "ADISCORD_city_stelander_spire_entity"
-	use_animation = no
-	scale = 1
-	object = {
-		name = "ADISCORD_city_stelander_spire_00"
-		position = { 3738.78016 0.05303 936.69000 }
-		rotation = { 0 270 0 }
-	}
-	object = {
-		name = "ADISCORD_city_stelander_spire_01"
-		position = { 3750.31008 -0.00800 941.49000 }
-		rotation = { 0 180 0 }
+type={
+	type="ADISCORD_city_quarter_mixed_entity"
+	use_animation=no
+	object={
+		name="ADISCORD_city_quarter_mixed_00"
+		position={
+			3132.19008 0.19995 749.63 
+		}
+		rotation={
+			0 0 0 
+		}
 	}
 }
-type = {
-	type = "ADISCORD_city_stelander_twin_entity"
-	use_animation = no
-	scale = 1
-	object = {
-		name = "ADISCORD_city_stelander_twin_00"
-		position = { 3746.04992 0.09611 934.53000 }
-		rotation = { 0 0 0 }
+type={
+	type="ADISCORD_city_quarter_residential_entity"
+	use_animation=no
+	object={
+		name="ADISCORD_city_quarter_residential_00"
+		position={
+			3144 -0.18 692 
+		}
+		rotation={
+			0 0 0 
+		}
 	}
-	object = {
-		name = "ADISCORD_city_stelander_twin_01"
-		position = { 3725.76000 0.19340 955.45000 }
-		rotation = { 0 270 0 }
-	}
-}
-type = {
-	type = "ADISCORD_city_stelander_arcology_entity"
-	use_animation = no
-	scale = 1
-	object = {
-		name = "ADISCORD_city_stelander_arcology_00"
-		position = { 3725.96000 0.03953 919.65000 }
-		rotation = { 0 90 0 }
+	object={
+		name="ADISCORD_city_quarter_residential_01"
+		position={
+			3188 0.20841 696 
+		}
+		rotation={
+			0 0 0 
+		}
 	}
 }
-# END ADISCORD Vorkensberg city
+type={
+	type="ADISCORD_city_stelander_spire_entity"
+	use_animation=no
+	object={
+		name="ADISCORD_city_stelander_spire_01"
+		position={
+			3744.48 -0.01 935.73 
+		}
+		rotation={
+			0 180 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_stelander_spire_01"
+		position={
+			3755.26016 -0.01 1035.43008 
+		}
+		rotation={
+			0 180 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_stelander_spire_00"
+		position={
+			3738.78016 0.05303 936.69 
+		}
+		rotation={
+			0 270 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_stelander_spire_01"
+		position={
+			3724.21984 -0.01 911.41 
+		}
+		rotation={
+			0 180 0 
+		}
+	}
+}
+type={
+	type="ADISCORD_city_stelander_twin_entity"
+	use_animation=no
+	object={
+		name="ADISCORD_city_stelander_twin_00"
+		position={
+			2879 0.1 829.7 
+		}
+		rotation={
+			0 0 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_stelander_twin_00"
+		position={
+			3708.95008 0.1 997.42 
+		}
+		rotation={
+			0 0 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_stelander_twin_00"
+		position={
+			3756.07008 0.1 1037.5 
+		}
+		rotation={
+			0 0 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_stelander_twin_00"
+		position={
+			3757.24 0.1 1035.54 
+		}
+		rotation={
+			0 0 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_stelander_twin_00"
+		position={
+			3744.35008 0.1 936.71 
+		}
+		rotation={
+			0 0 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_stelander_twin_00"
+		position={
+			3746.04992 0.09611 934.53 
+		}
+		rotation={
+			0 0 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_stelander_twin_01"
+		position={
+			3725.76 0.1934 955.45 
+		}
+		rotation={
+			0 270 0 
+		}
+	}
+}
+type={
+	type="ADISCORD_city_stelander_arcology_entity"
+	use_animation=no
+	object={
+		name="ADISCORD_city_stelander_arcology_00"
+		position={
+			3743.35008 0.04 934.46 
+		}
+		rotation={
+			0 90 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_stelander_arcology_00"
+		position={
+			3725.96 0.03953 919.65 
+		}
+		rotation={
+			0 90 0 
+		}
+	}
+}
