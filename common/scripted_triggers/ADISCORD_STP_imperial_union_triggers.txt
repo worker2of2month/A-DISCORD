@@ -1,5 +1,8 @@
 # Shabrat's hegemonic end-state. Keep the territorial contract explicit so the
 # decision UI and regression tests use the same map as the old prototype event.
+# Postwar settlement cleanup deliberately clears STP_pc_war_val/nod, so these
+# triggers also recognize persistent client outcomes and the final territorial
+# fait accompli instead of depending only on transient capitulation state.
 
 STP_imperial_union_kefreyt_defeated = {
 	OR = {
@@ -7,6 +10,11 @@ STP_imperial_union_kefreyt_defeated = {
 		VAL = { has_country_flag = VAL_cw_defeated }
 		VAL = { has_capitulated = yes }
 		VAL = { is_subject_of = ROOT }
+		VAL = { has_idea = STP_pc_val_client }
+		AND = {
+			STP_imperial_union_required_states_controlled = yes
+			NOT = { has_war_with = VAL }
+		}
 	}
 }
 
@@ -16,6 +24,11 @@ STP_imperial_union_nodrul_defeated = {
 		NOD = { has_country_flag = NOD_cw_defeated }
 		NOD = { has_capitulated = yes }
 		NOD = { is_subject_of = ROOT }
+		NOD = { has_idea = STP_pc_nod_client }
+		AND = {
+			STP_imperial_union_required_states_controlled = yes
+			NOT = { has_war_with = NOD }
+		}
 	}
 }
 
