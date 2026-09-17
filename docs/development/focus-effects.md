@@ -305,7 +305,7 @@ FAF сочетает развитие армии с новыми действи�
 
 ```txt
 STP_cw_resistance_network_dynamic = {
-    icon = GFX_idea_ADISCORD_law_civic_local_councils
+    icon = GFX_idea_STP_National_Strikes
     enable = { OR = { tag = STP tag = STS } }
     political_power_gain = STP_cw_network_political_power_gain
 }
@@ -316,11 +316,13 @@ STP_cw_resistance_network_dynamic = {
 ```txt
 STP_cw_network_dummy_idea = {
     name = STP_cw_resistance_network_dynamic
+    picture = STP_National_Strikes
     allowed = { always = no }
     modifier = { }
 }
 STP_cw_network_contacts_idea = {
     name = STP_cw_resistance_network_dynamic
+    picture = STP_National_Strikes
     allowed = { always = no }
     modifier = { political_power_gain = 0.15 }
 }

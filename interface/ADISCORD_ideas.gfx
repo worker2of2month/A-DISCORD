@@ -53,6 +53,10 @@ spriteTypes = {
 	  	name = "GFX_idea_STP_worldwide_famous_tourist_destination"
 	  	texturefile = "gfx/interface/ideas/STP/idea_STP_worldwide_famous_tourist_destination.png"
 	}
+	spriteType = {
+		name = "GFX_idea_STP_National_Strikes"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_National_Strikes.png"
+	}
  #ministers
 	spriteType = {
 	  	name = "GFX_idea_minister_STP_Ernest_Derlich"

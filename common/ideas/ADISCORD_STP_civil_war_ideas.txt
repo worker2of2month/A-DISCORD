@@ -64,11 +64,13 @@ ideas = {
 		# These ideas must only appear inside effect_tooltip, never in executable add_ideas.
 		STP_cw_network_dummy_idea = {
 			name = STP_cw_resistance_network_dynamic
+			picture = STP_National_Strikes
 			allowed = { always = no }
 			modifier = {  }
 		}
 		STP_cw_network_contacts_idea = {
 			name = STP_cw_resistance_network_dynamic
+			picture = STP_National_Strikes
 			allowed = { always = no }
 			modifier = { political_power_gain = 0.15 }
 		}
@@ -180,7 +182,7 @@ ideas = {
 			}
 		}
 		STP_cw_resistance_battle_spirit = {
-			picture = ADISCORD_law_civic_emergency_committees
+			picture = STP_National_Strikes
 			allowed = { tag = STS }
 			removal_cost = -1
 			cancel = { NOT = { OR = { has_war_with = STP has_war_with = NOD } } }

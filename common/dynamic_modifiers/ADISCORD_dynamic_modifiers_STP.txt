@@ -24,7 +24,7 @@ STP_apparatus_loyalty_dynamic_modifier = {
 # Persistent focus aggregates. Dummy ideas describe deltas, not installed stages.
 # Fixed-tag successors need their own country variables and an allowed tag here.
 STP_cw_resistance_network_dynamic = {
-	icon = GFX_idea_ADISCORD_law_civic_local_councils
+	icon = GFX_idea_STP_National_Strikes
 	enable = { OR = { tag = STP tag = STS } }
 	political_power_gain = STP_cw_network_political_power_gain
 }
