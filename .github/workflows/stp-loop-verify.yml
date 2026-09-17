@@ -1,0 +1,67 @@
+name: STP loop verification
+
+on:
+  push:
+    branches:
+      - fix/stp-gameplay-loop-20260917
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/stp-gameplay-loop-20260917
+          fetch-depth: 0
+      - name: Normalize custom-cost localisation
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('localisation/russian/ADISCORD_STP_l_russian.yml')
+          raw = p.read_bytes()
+          if not raw.startswith(b'\xef\xbb\xbf'):
+              raise SystemExit('Russian localisation lost UTF-8 BOM before verification')
+          text = raw.decode('utf-8-sig')
+          old = ' STP_cw_command_power_35_cost: "£command_power §Y35§!"'
+          new = '\n'.join((
+              ' STP_cw_command_power_35_cost: "£command_power_texticon §Y35§!"',
+              ' STP_cw_command_power_35_cost_blocked: "£command_power_texticon §R35§!"',
+              ' STP_cw_command_power_35_cost_tooltip: "Стоимость: £command_power_texticon §Y35§!"',
+          ))
+          if text.count(old) != 1:
+              raise SystemExit(f'expected one provisional CP35 key, found {text.count(old)}')
+          if 'STP_cw_command_power_35_cost_blocked:' in text:
+              raise SystemExit('CP35 blocked key already exists unexpectedly')
+          text = text.replace(old, new, 1)
+          p.write_bytes(b'\xef\xbb\xbf' + text.encode('utf-8'))
+          if not p.read_bytes().startswith(b'\xef\xbb\xbf'):
+              raise SystemExit('Russian localisation lost UTF-8 BOM after normalization')
+          PY
+          git diff --check
+      - name: Run STP regression suite
+        shell: bash
+        run: |
+          python -m unittest discover -s tools/tests -p 'test_adiscord_stp_*.py'
+      - name: Run Shabrat AI validator
+        shell: bash
+        run: |
+          python tools/validators/validate_adiscord_stp_shabrat_ai.py
+      - name: Run total-conversion validator
+        shell: bash
+        run: |
+          python tools/validate_tc.py
+      - name: Commit verified normalization and remove helper workflow
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/stp-loop-verify.yml
+          git add localisation/russian/ADISCORD_STP_l_russian.yml
+          git diff --cached --check
+          git commit -m "test: verify Stelander gameplay loop"
+          git push origin HEAD:fix/stp-gameplay-loop-20260917
