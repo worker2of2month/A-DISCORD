@@ -37,9 +37,9 @@ on_actions = {
 				ROOT = { news_event = { id = ADISCORD_world_news.2 } }
 			}
 
-			# Stelander's civil war is the direct STP/STS break. The legacy
-			# ADISCORD_STP_cw.70 report remains in place; this independent headline
-			# guarantees that the actual war relation also produces a world broadcast.
+			# Stelander already has a richer public outbreak report (.70) with
+			# election-dependent text. Fire it from the actual STP/STS war relation;
+			# its fire_only_once guard suppresses the legacy +1h fallback call.
 			if = {
 				limit = {
 					has_global_flag = STP_cw_started
@@ -50,7 +50,7 @@ on_actions = {
 					}
 				}
 				set_global_flag = ADISCORD_news_stelander_civil_war_published
-				ROOT = { news_event = { id = ADISCORD_world_news.3 } }
+				ROOT = { news_event = { id = ADISCORD_STP_cw.70 } }
 			}
 
 			# The military-course intervention currently becomes a real VAL-SRP war.
