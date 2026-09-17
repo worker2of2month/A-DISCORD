@@ -3809,9 +3809,10 @@ ADISCORD_vorkerland_play_local_superevent_audio = {
 }
 
 ADISCORD_vorkerland_show_dirty_opening_superevent = {
-	ADISCORD_vorkerland_clear_superevent_flags = yes
-	set_global_flag = { flag = superevent_vorkerland_dirty_opening value = 1 days = 20 }
-	ADISCORD_vorkerland_play_local_superevent_audio = yes
+	every_country = {
+		limit = { is_ai = no }
+		country_event = { id = ADISCORD_superevent.4 }
+	}
 }
 
 ADISCORD_vorkerland_show_worker_victory_superevent = {
@@ -3823,10 +3824,11 @@ ADISCORD_vorkerland_show_worker_victory_superevent = {
 }
 
 ADISCORD_vorkerland_show_utilitarian_victory_superevent = {
-	ADISCORD_vorkerland_clear_superevent_flags = yes
 	set_global_flag = ADISCORD_vorkerland_central_victory_announced
-	set_global_flag = { flag = superevent_vorkerland_utilitarian_victory value = 1 days = 20 }
-	ADISCORD_vorkerland_play_local_superevent_audio = yes
+	every_country = {
+		limit = { is_ai = no }
+		country_event = { id = ADISCORD_superevent.3 }
+	}
 }
 
 ADISCORD_vorkerland_show_vlad_victory_superevent = {

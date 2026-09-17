@@ -429,7 +429,7 @@ country_event = {
 
     def test_every_vorkerland_superevent_route_plays_audible_sound(self) -> None:
         map_effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_map_effects')
-        for name in ("dirty_opening", "utilitarian_victory", "vlad_victory", "dorian_victory"):
+        for name in ("dirty_opening", "vlad_victory", "dorian_victory"):
             show_effect = named_block(map_effects, f"ADISCORD_vorkerland_show_{name}_superevent")
             self.assertIn(
                 "ADISCORD_vorkerland_play_local_superevent_audio = yes",
@@ -439,6 +439,9 @@ country_event = {
         worker_show = named_block(map_effects, "ADISCORD_vorkerland_show_worker_victory_superevent")
         self.assertIn("country_event = { id = ADISCORD_superevent.2 }", worker_show)
         self.assertIn("set_global_flag = ADISCORD_vorkerland_central_victory_announced", worker_show)
+        utilitarian_show = named_block(map_effects, "ADISCORD_vorkerland_show_utilitarian_victory_superevent")
+        self.assertIn("country_event = { id = ADISCORD_superevent.3 }", utilitarian_show)
+        self.assertIn("set_global_flag = ADISCORD_vorkerland_central_victory_announced", utilitarian_show)
 
         news = read("events/ADISCORD_news.txt")
         civilwar_event = event_block(news, "ADISCORD_superevent.1")
@@ -449,6 +452,11 @@ country_event = {
         self.assertIn("superevent_vorkerland_worker_victory", worker_event)
         self.assertIn("scoped_sound_effect = superevent_vorkerland_worker_victory_sound_e", worker_event)
         self.assertNotIn("ADISCORD_vorkerland_central_victory_announced", worker_event)
+        utilitarian_event = event_block(news, "ADISCORD_superevent.3")
+        self.assertIn("hidden = yes", utilitarian_event)
+        self.assertIn("superevent_vorkerland_utilitarian_victory", utilitarian_event)
+        self.assertIn("scoped_sound_effect = superevent_vorkerland_utilitarian_victory_sound_e", utilitarian_event)
+        self.assertNotIn("ADISCORD_vorkerland_central_victory_announced", utilitarian_event)
 
         for news_id, title_id, audio_id, sound_effect in (
             (

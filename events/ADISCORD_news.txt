@@ -2,11 +2,13 @@ add_namespace = ADISCORD_superevent
 add_namespace = ADISCORD_superevent_news
 add_namespace = ADISCORD_superevent_audio
 
-# Console compatibility gateways: event ADISCORD_superevent.1 / .2
+# Console compatibility gateways: event ADISCORD_superevent.1 / .2 / .3 / .4
 # .1 starts the real Vorkerland collapse when possible, including the Unity
 # Tower destruction. Once the collapse has already started it becomes a safe
 # presentation replay. .2 is the Worker-victory presentation gateway used by
-# the existing reunification effect.
+# the existing reunification effect. .3 is Anton's utilitarian victory
+# presentation: picture and sound without locking the campaign ending. .4 is
+# the Dirty Zone opening presentation and does not start the country cascade.
 country_event = {
 	id = ADISCORD_superevent.1
 	hidden = yes
@@ -50,6 +52,44 @@ country_event = {
 		if = {
 			limit = { is_ai = no }
 			scoped_sound_effect = superevent_vorkerland_worker_victory_sound_e
+			scoped_play_song = "one_minute_of_silence"
+		}
+	}
+}
+country_event = {
+	id = ADISCORD_superevent.3
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_vorkerland_clear_superevent_flags = yes
+		set_global_flag = {
+			flag = superevent_vorkerland_utilitarian_victory
+			value = 1
+			days = 20
+		}
+		if = {
+			limit = { is_ai = no }
+			scoped_sound_effect = superevent_vorkerland_utilitarian_victory_sound_e
+			scoped_play_song = "one_minute_of_silence"
+		}
+	}
+}
+country_event = {
+	id = ADISCORD_superevent.4
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_vorkerland_clear_superevent_flags = yes
+		set_global_flag = {
+			flag = superevent_vorkerland_dirty_opening
+			value = 1
+			days = 20
+		}
+		if = {
+			limit = { is_ai = no }
+			scoped_sound_effect = superevent_vorkerland_dirty_opening_sound_e
 			scoped_play_song = "one_minute_of_silence"
 		}
 	}

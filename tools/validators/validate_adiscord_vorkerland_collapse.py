@@ -4190,15 +4190,25 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
             issues.append(f"{filename}: missing dedicated superevent art")
 
     map_effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_map_effects')
-    for name in ("dirty_opening", "utilitarian_victory", "vlad_victory", "dorian_victory"):
+    for name in ("vlad_victory", "dorian_victory"):
         show_effect = named_block(map_effects, f"ADISCORD_vorkerland_show_{name}_superevent")
         if "ADISCORD_vorkerland_play_local_superevent_audio = yes" not in show_effect:
             issues.append(f"Vorkerland {name} superevent has no player audio route")
+    dirty_show = named_block(map_effects, "ADISCORD_vorkerland_show_dirty_opening_superevent")
+    if "country_event = { id = ADISCORD_superevent.4 }" not in dirty_show:
+        issues.append("Vorkerland dirty_opening superevent has no console-fireable event route")
+    if "ADISCORD_vorkerland_dirty_opened" in dirty_show:
+        issues.append("dirty-opening presentation must not start the country cascade")
     worker_show = named_block(map_effects, "ADISCORD_vorkerland_show_worker_victory_superevent")
     if "country_event = { id = ADISCORD_superevent.2 }" not in worker_show:
         issues.append("Vorkerland worker_victory superevent has no console-fireable event route")
     if "ADISCORD_vorkerland_central_victory_announced" not in worker_show:
         issues.append("Vorkerland worker_victory campaign show lost the announced lock")
+    utilitarian_show = named_block(map_effects, "ADISCORD_vorkerland_show_utilitarian_victory_superevent")
+    if "country_event = { id = ADISCORD_superevent.3 }" not in utilitarian_show:
+        issues.append("Vorkerland utilitarian_victory superevent has no console-fireable event route")
+    if "ADISCORD_vorkerland_central_victory_announced" not in utilitarian_show:
+        issues.append("Vorkerland utilitarian_victory campaign show lost the announced lock")
 
     news = read(root, "events/ADISCORD_news.txt", issues)
     civilwar_event = event_block(news, "ADISCORD_superevent.1")
@@ -4225,6 +4235,18 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
             issues.append(f"ADISCORD_superevent.2: player-scoped presentation is missing {token}")
     if "ADISCORD_vorkerland_central_victory_announced" in worker_event:
         issues.append("ADISCORD_superevent.2 must not lock the campaign ending")
+    utilitarian_event = event_block(news, "ADISCORD_superevent.3")
+    for token in (
+        "hidden = yes",
+        "is_triggered_only = yes",
+        "superevent_vorkerland_utilitarian_victory",
+        "limit = { is_ai = no }",
+        "scoped_sound_effect = superevent_vorkerland_utilitarian_victory_sound_e",
+    ):
+        if token not in utilitarian_event:
+            issues.append(f"ADISCORD_superevent.3: player-scoped presentation is missing {token}")
+    if "ADISCORD_vorkerland_central_victory_announced" in utilitarian_event:
+        issues.append("ADISCORD_superevent.3 must not lock the campaign ending")
     for news_id, title_id, audio_id, sound_effect in (
         (
             "ADISCORD_superevent_news.1",
