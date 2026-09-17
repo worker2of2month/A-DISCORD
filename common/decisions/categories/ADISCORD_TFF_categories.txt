@@ -1,0 +1,8 @@
+TFF_frontier_at_war = {
+	icon = generic_prepare_civil_war
+	allowed = { original_tag = TFF }
+	visible = {
+		has_country_flag = TFF_wartime_command_active
+		has_war_with = NOD
+	}
+}

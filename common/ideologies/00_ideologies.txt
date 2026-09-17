@@ -256,6 +256,11 @@ ideologies = {
 		types = {
 			anarchism_ideology = {
 			}
+			# A registered anarchism subtype. An unknown country_leader ideology
+			# drops the role and leaves the generated ruling-party head in place.
+			tff_emergency_war_coordinator = {
+				can_be_randomly_selected = no
+			}
 		}
 
 		dynamic_faction_names = {

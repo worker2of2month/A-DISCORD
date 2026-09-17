@@ -1,0 +1,65 @@
+ideas = {
+	country = {
+		TFF_emergency_frontier_command = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { original_tag = TFF }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = 0.08
+				mobilization_speed = 0.10
+				reinforce_rate = 0.05
+				war_support_factor = 0.08
+				planning_speed = 0.08
+				army_core_defence_factor = 0.05
+				political_power_factor = -0.05
+			}
+		}
+
+		TFF_free_rifle_levy = {
+			picture = generic_manpower_bonus
+			allowed = { always = no }
+			allowed_civil_war = { original_tag = TFF }
+			removal_cost = -1
+			modifier = {
+				training_time_factor = -0.08
+				mobilization_speed = 0.06
+			}
+		}
+
+		TFF_commune_coordination = {
+			picture = generic_pp_unity_bonus
+			allowed = { always = no }
+			allowed_civil_war = { original_tag = TFF }
+			removal_cost = -1
+			modifier = {
+				stability_weekly = 0.001
+				mobilization_speed = 0.08
+				army_org_factor = 0.04
+			}
+		}
+
+		TFF_common_supply_network = {
+			picture = generic_goods_red_bonus
+			allowed = { always = no }
+			allowed_civil_war = { original_tag = TFF }
+			removal_cost = -1
+			modifier = {
+				supply_consumption_factor = -0.08
+			}
+		}
+
+		TFF_unified_field_command = {
+			picture = CZE_planning_bonus
+			allowed = { always = no }
+			allowed_civil_war = { original_tag = TFF }
+			removal_cost = -1
+			modifier = {
+				planning_speed = 0.10
+				max_planning = 0.05
+				reinforce_rate = 0.05
+				command_power_gain_mult = 0.10
+			}
+		}
+	}
+}

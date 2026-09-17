@@ -60,6 +60,7 @@
     {"id": "ADISCORD_rin_crisis.2", "namespace": "ADISCORD_rin_crisis", "number": 2, "owner": "events/ADISCORD_rin_oath_crisis_events.txt", "subsystem": "rin_oath_crisis", "status": "active"},
     {"id": "ADISCORD_rin_crisis.3", "namespace": "ADISCORD_rin_crisis", "number": 3, "owner": "events/ADISCORD_rin_oath_crisis_events.txt", "subsystem": "rin_oath_crisis", "status": "active"},
     {"id": "ADISCORD_rin_crisis.4", "namespace": "ADISCORD_rin_crisis", "number": 4, "owner": "events/ADISCORD_rin_oath_crisis_events.txt", "subsystem": "rin_oath_crisis", "status": "active"},
+    {"id": "ADISCORD_TFF.1", "namespace": "ADISCORD_TFF", "number": 1, "owner": "events/ADISCORD_TFF_events.txt", "subsystem": "tff_wartime", "status": "active"},
     {"id": "ADISCORD_superevent.1", "namespace": "ADISCORD_superevent", "number": 1, "owner": "events/ADISCORD_news.txt", "subsystem": "superevents", "status": "active"},
     {"id": "ADISCORD_superevent.2", "namespace": "ADISCORD_superevent", "number": 2, "owner": "events/ADISCORD_news.txt", "subsystem": "superevents", "status": "active"},
     {"id": "ADISCORD_superevent_audio.1", "namespace": "ADISCORD_superevent_audio", "number": 1, "owner": "events/ADISCORD_news.txt", "subsystem": "superevents", "status": "active"},

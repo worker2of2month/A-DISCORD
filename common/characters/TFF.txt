@@ -22,4 +22,19 @@ characters = {
 			id = -1
 		}
 	}
+
+	TFF_Colt_Ardent = {
+		name = TFF_Colt_Ardent
+		portraits = {
+			civilian = {
+				large = GFX_portrait_TFF_Colt_Ardent
+			}
+		}
+		country_leader = {
+			ideology = tff_emergency_war_coordinator
+			desc = TFF_Colt_Ardent_desc
+			expire = "2200.1.1.1"
+			id = -1
+		}
+	}
 }

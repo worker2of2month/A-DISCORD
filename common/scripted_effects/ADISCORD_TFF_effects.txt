@@ -1,0 +1,22 @@
+# Historical TFF_wartime_confederation_formed is never cleared.
+# TFF_wartime_command_active is the current wartime command and can be
+# removed later without erasing that the transformation already happened.
+ADISCORD_TFF_form_wartime_confederation = {
+	if = {
+		limit = {
+			original_tag = TFF
+			NOT = { has_country_flag = TFF_wartime_command_active }
+		}
+		set_country_flag = TFF_wartime_confederation_formed
+		set_country_flag = TFF_wartime_command_active
+		set_cosmetic_tag = TFF_frontier_defense_confederation
+		if = {
+			limit = { has_character = TFF_Colt_Ardent }
+			promote_character = { character = TFF_Colt_Ardent ideology = tff_emergency_war_coordinator }
+		}
+		if = {
+			limit = { NOT = { has_idea = TFF_emergency_frontier_command } }
+			add_ideas = TFF_emergency_frontier_command
+		}
+	}
+}

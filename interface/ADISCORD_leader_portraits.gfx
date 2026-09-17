@@ -267,6 +267,10 @@ spriteTypes = {
 	  	name = "GFX_portrait_TFF_absent_government"
 	  	texturefile = "gfx/leaders/TFF/portrait_TFF_absent_government.png"
 	}
+	spriteType = {
+	  	name = "GFX_portrait_TFF_Colt_Ardent"
+	  	texturefile = "gfx/leaders/TFF/portrait_TFF_Colt_Ardent.png"
+	}
 ###BJK
 	spriteType = {
 	  	name = "GFX_portrait_BJK_Graison"

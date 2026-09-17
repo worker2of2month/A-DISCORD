@@ -82,6 +82,10 @@ defined_text = {
 
 defined_text = {
 	name = GetSubIdeologyAnarchism
+	text = {
+		trigger = { has_country_leader_ideology = tff_emergency_war_coordinator }
+		localization_key = tff_emergency_war_coordinator
+	}
 	text = { localization_key = anarchism_ideology }
 }
 

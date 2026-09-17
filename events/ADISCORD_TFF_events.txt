@@ -1,0 +1,24 @@
+add_namespace = ADISCORD_TFF
+
+country_event = {
+	id = ADISCORD_TFF.1
+	title = ADISCORD_TFF.1.t
+	desc = ADISCORD_TFF.1.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { original_tag = TFF }
+
+	immediate = {
+		hidden_effect = {
+			ADISCORD_TFF_form_wartime_confederation = yes
+		}
+	}
+
+	option = {
+		name = ADISCORD_TFF.1.a
+		ai_chance = { base = 100 }
+		custom_effect_tooltip = ADISCORD_TFF_empty_chair_result_tt
+		effect_tooltip = { add_ideas = TFF_emergency_frontier_command }
+	}
+}

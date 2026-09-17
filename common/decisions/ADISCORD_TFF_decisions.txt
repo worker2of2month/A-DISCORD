@@ -1,0 +1,127 @@
+TFF_frontier_at_war = {
+	TFF_call_the_free_rifles = {
+		icon = generic_nationalism
+		allowed = { original_tag = TFF }
+		visible = {
+			has_country_flag = TFF_wartime_command_active
+			has_war_with = NOD
+		}
+		available = {
+			has_country_flag = TFF_wartime_command_active
+			has_war_with = NOD
+			has_political_power > 24
+		}
+		cost = 25
+		days_re_enable = 120
+		complete_effect = {
+			add_stability = -0.03
+			add_manpower = 8000
+			add_timed_idea = { idea = TFF_free_rifle_levy days = 45 }
+		}
+		ai_will_do = {
+			base = 80
+			modifier = {
+				factor = 1.5
+				has_manpower < 20000
+			}
+		}
+	}
+
+	TFF_coordinate_the_communes = {
+		icon = generic_political_discourse
+		allowed = { original_tag = TFF }
+		visible = {
+			has_country_flag = TFF_wartime_command_active
+			has_war_with = NOD
+		}
+		available = {
+			has_country_flag = TFF_wartime_command_active
+			has_war_with = NOD
+			has_political_power > 34
+		}
+		cost = 35
+		days_re_enable = 90
+		complete_effect = {
+			add_stability = 0.04
+			add_war_support = 0.03
+			add_timed_idea = { idea = TFF_commune_coordination days = 60 }
+		}
+		ai_will_do = { base = 70 }
+	}
+
+	TFF_establish_common_supply_depots = {
+		icon = generic_industry
+		allowed = { original_tag = TFF }
+		visible = {
+			has_country_flag = TFF_wartime_command_active
+			has_war_with = NOD
+		}
+		available = {
+			has_country_flag = TFF_wartime_command_active
+			has_war_with = NOD
+			has_political_power > 29
+		}
+		cost = 30
+		fire_only_once = yes
+		complete_effect = {
+			add_timed_idea = { idea = TFF_common_supply_network days = 90 }
+			if = {
+				limit = { controls_state = 83 }
+				83 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+			}
+		}
+		ai_will_do = { base = 90 }
+	}
+
+	TFF_fortify_the_nodrul_border = {
+		icon = generic_fortify_the_borders
+		allowed = { original_tag = TFF }
+		visible = {
+			has_country_flag = TFF_wartime_command_active
+			has_war_with = NOD
+			owns_state = 83
+		}
+		available = {
+			has_country_flag = TFF_wartime_command_active
+			has_war_with = NOD
+			controls_state = 83
+			has_political_power > 39
+		}
+		cost = 40
+		days_remove = 28
+		fire_only_once = yes
+		cancel_trigger = { NOT = { controls_state = 83 } }
+		remove_effect = {
+			if = {
+				limit = { controls_state = 83 }
+				83 = {
+					add_building_construction = { type = bunker level = 1 instant_build = yes province = 7 }
+					add_building_construction = { type = bunker level = 1 instant_build = yes province = 61 }
+					add_building_construction = { type = bunker level = 1 instant_build = yes province = 16384 }
+				}
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	TFF_authorize_unified_field_command = {
+		icon = generic_army_support
+		allowed = { original_tag = TFF }
+		visible = {
+			has_country_flag = TFF_wartime_command_active
+			has_war_with = NOD
+			NOT = { has_idea = TFF_unified_field_command }
+		}
+		available = {
+			has_country_flag = TFF_wartime_command_active
+			has_war_with = NOD
+			has_political_power > 49
+		}
+		cost = 50
+		fire_only_once = yes
+		complete_effect = {
+			add_ideas = TFF_unified_field_command
+		}
+		ai_will_do = { base = 100 }
+	}
+}
