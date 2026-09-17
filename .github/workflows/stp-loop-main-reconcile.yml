@@ -20,9 +20,10 @@ jobs:
           persist-credentials: true
       - name: Install validator dependencies
         run: python -m pip install --disable-pip-version-check pillow numpy
-      - name: Apply guarded production repair
+      - name: Apply guarded production repair and contract updates
         run: |
           python tools/tmp_reconcile_stp_loop_main.py
+          python tools/tmp_reconcile_stp_loop_tests.py
           git diff --check
       - name: Focused regression
         run: python -B -m unittest -v tools.tests.test_adiscord_stp_gameplay_loop_regressions
@@ -34,13 +35,18 @@ jobs:
         run: |
           git config user.name "A-Discord Audit"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git rm .github/workflows/stp-loop-main-reconcile.yml tools/tmp_reconcile_stp_loop_main.py
+          git rm .github/workflows/stp-loop-main-reconcile.yml tools/tmp_reconcile_stp_loop_main.py tools/tmp_reconcile_stp_loop_tests.py
           git add \
             common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt \
             common/scripted_effects/ADISCORD_STP_scripted_effects.txt \
             common/decisions/ADISCORD_STP_decisions.txt \
             events/ADISCORD_STP_events.txt \
-            localisation/russian/ADISCORD_STP_l_russian.yml
+            localisation/russian/ADISCORD_STP_l_russian.yml \
+            docs/development/focus-effects.md \
+            tools/tests/test_adiscord_stp_gameplay_loop_regressions.py \
+            tools/tests/test_adiscord_stp_civil_war.py \
+            tools/tests/test_adiscord_stp_preparation.py \
+            tools/tests/test_adiscord_stp_regions.py
           git diff --cached --check
           git commit -m "Fix Stelander inspection and Fada deadline lifecycle"
           git push origin HEAD:fix/stp-loop-main-reconcile-20260917
