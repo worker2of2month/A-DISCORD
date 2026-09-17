@@ -104,7 +104,7 @@ def matches_conditions(items, facts, scope="STP"):
         if entry.key == "tag":
             return scope == entry.value
         if entry.key == "state":
-            return scope == entry.value
+            return scope == entry.value or facts.get((scope, "state", entry.value), False)
         if entry.key == "check_variable":
             value = facts.get((scope, "variable", scalar(entry.value, "var")), 0)
             operator = {"greater_than": ">", "greater_than_or_equals": ">=", "less_than": "<",
@@ -721,7 +721,9 @@ class StelanderPreparationTests(unittest.TestCase):
             for has_slot in (False, True):
                 facts = {("STP", "has_completed_focus", "STP_Count_The_Loyalists"): True,
                          ("STP", "has_active_mission", mission): True,
-                         ("STP", "STP_has_political_action_slot", "yes"): has_slot}
+                         ("STP", "STP_has_political_action_slot", "yes"): has_slot,
+                         ("FROM", "has_state_flag", "STP_party_inspection_active"): True,
+                         ("FROM", "state", str(state)): True}
                 self.assertEqual(matches_conditions(block(decision, "available"), facts), has_slot)
             started = list(selected_effects(block(decision, "complete_effect"), facts))
             self.assertEqual(sum(e.key == "STP_political_action_slot_consume" for _, e in started), 1)
@@ -1244,11 +1246,14 @@ class StelanderPreparationTests(unittest.TestCase):
                 decision = block(decisions, decision_id)
                 self.assertEqual(scalar(block(decision, "allowed"), "tag"), tag)
                 self.assertEqual(scalar(block(decision, "visible"), "has_completed_focus"), focus_id)
-                self.assertEqual(scalar(decision, "fire_only_once"), "no")
+                self.assertEqual(scalar(decision, "fire_only_once"),
+                                 "yes" if decision_id == "STP_cw_launch_last_banquet" else "no")
                 available = block(decision, "available")
                 self.assertIn(state, {e.value for e in available if e.key == "controls_state"})
                 self.assertEqual({e.value for e in walk(available) if e.key == "has_war_with"}, opponents)
-                self.assertIn(idea, {e.value for e in block(available, "NOT") if e.key == "has_idea"},
+                idea_locks = {e.value for guard in (e.value for e in available if e.key == "NOT")
+                              for e in guard if e.key == "has_idea"}
+                self.assertIn(idea, idea_locks,
                               "do not overwrite a still-active prewar preparation bonus")
                 # This structural parser represents bare comparison tokens as unnamed entries.
                 self.assertEqual([e.value for e in block(block(decision, "custom_cost_trigger"), "NOT")],
@@ -1928,6 +1933,8 @@ class StelanderPreparationTests(unittest.TestCase):
             facts[("STP", "STP_cw_public_command_available", "yes")] = matches_conditions(command, facts)
             if name == "STP_cw_delay_inspection":
                 facts[("STP", "has_active_mission", "STP_party_inspection_state_2")] = True
+                facts[("FROM", "has_state_flag", "STP_party_inspection_active")] = True
+                facts[("FROM", "state", "2")] = True
             for condition in ("visible", "available"):
                 self.assertTrue(matches_conditions(block(action, condition), facts), (name, condition, start))
             if any(e.key == "custom_cost_trigger" for e in action):

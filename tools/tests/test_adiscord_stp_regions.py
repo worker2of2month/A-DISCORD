@@ -185,8 +185,10 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         self.assertEqual(reward.count("add_days_mission_timeout"), len(OPERABLE_STATES))
         self.assertEqual(reward.count("days = 14"), len(OPERABLE_STATES))
         self.assertNotIn("activate_mission", reward)
+        self.assertIn("FROM = { has_state_flag = STP_party_inspection_active }", named_block(decision, "available"))
         for state in OPERABLE_STATES:
-            self.assertIn(f"has_active_mission = STP_party_inspection_state_{state}", reward)
+            self.assertIn(f"FROM = {{ state = {state} }}", reward)
+            self.assertEqual(reward.count(f"mission = STP_party_inspection_state_{state} days = 14"), 1)
 
     def test_counterintelligence_blocks_work_and_lost_assets_can_be_rebuilt(self) -> None:
         gate = named_block(read(TRIGGERS), "STP_region_is_operable")

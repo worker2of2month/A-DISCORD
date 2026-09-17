@@ -563,16 +563,31 @@ country_event = {
 		ai_chance = { base = 100 }
 		custom_effect_tooltip = STP_cw_nod_consent_tt
 		hidden_effect = {
-			set_country_flag = NOD_cw_intervention_approved
-			activate_mission = NOD_cw_intervention_preparation
-			if = { limit = { has_global_flag = STP_cw_started STS = { exists = yes } } STS = { STP_cw_sync_nod_warning = yes country_event = { id = ADISCORD_STP_cw.40 } } }
-			else = { STP = { STP_cw_sync_nod_warning = yes country_event = { id = ADISCORD_STP_cw.40 } } }
+			if = {
+				limit = { NOD_cw_intervention_possible = yes }
+				set_country_flag = NOD_cw_intervention_approved
+				activate_mission = NOD_cw_intervention_preparation
+				if = { limit = { has_global_flag = STP_cw_started STS = { exists = yes } } STS = { STP_cw_sync_nod_warning = yes country_event = { id = ADISCORD_STP_cw.40 } } }
+				else = { STP = { STP_cw_sync_nod_warning = yes country_event = { id = ADISCORD_STP_cw.40 } } }
+			}
 		}
 	}
 	option = {
 		name = ADISCORD_STP_cw.42.b
+		trigger = { NOD_cw_intervention_possible = yes }
 		ai_chance = { base = 0 }
-		hidden_effect = { set_country_flag = NOD_cw_refused clr_country_flag = NOD_cw_intervention_approved }
+		hidden_effect = {
+			if = {
+				limit = { NOD_cw_intervention_possible = yes }
+				set_country_flag = NOD_cw_refused
+				clr_country_flag = NOD_cw_intervention_approved
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_cw.42.c
+		trigger = { NOD_cw_intervention_possible = no }
+		ai_chance = { base = 100 }
 	}
 }
 

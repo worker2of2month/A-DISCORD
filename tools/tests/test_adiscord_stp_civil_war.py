@@ -1161,6 +1161,12 @@ class CivilWarContracts(unittest.TestCase):
                 self.assertEqual([e for e in closing[0] if e.key not in ("name", "trigger", "ai_chance")], [],
                                  "the committed-route option only closes the event")
                 options = [o for o in options if o not in closing]
+            else:
+                closing = [o for o in options if scalar(o, "name") == "ADISCORD_STP_cw.42.c"]
+                self.assertEqual(len(closing), 1)
+                self.assertEqual([e for e in closing[0] if e.key not in ("name", "trigger", "ai_chance")], [],
+                                 "a stale intervention card must only close")
+                options = [o for o in options if o not in closing]
             self.assertEqual(len(options), len(choices))
             written = [{e.value for e in walk(o) if e.key == "set_country_flag" and isinstance(e.value, str)} & choices for o in options]
             self.assertEqual(set.union(*written), choices)
@@ -2922,8 +2928,12 @@ class WartimeProgramContracts(unittest.TestCase):
         for name, (tag, idea, duration) in operations.items():
             decision = ast_block(self.decisions, name)
             self.assertEqual(scalar(decision, "cost"), "0")
-            self.assertEqual(scalar(decision, "fire_only_once"), "no")
-            self.assertGreaterEqual(int(scalar(decision, "days_re_enable")), duration + 21)
+            if name == "STP_cw_launch_last_banquet":
+                self.assertEqual(scalar(decision, "fire_only_once"), "yes")
+                self.assertFalse(any(e.key == "days_re_enable" for e in decision))
+            else:
+                self.assertEqual(scalar(decision, "fire_only_once"), "no")
+                self.assertGreaterEqual(int(scalar(decision, "days_re_enable")), duration + 21)
             price = ast_block(decision, "custom_cost_trigger")
             self.assertTrue(matches_conditions(price, {(tag, "numeric", "command_power"): 25}, tag))
             self.assertFalse(matches_conditions(price, {(tag, "numeric", "command_power"): 24.5}, tag))

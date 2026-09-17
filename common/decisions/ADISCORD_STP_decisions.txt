@@ -748,26 +748,22 @@ STP_battle_for_stelander = {
 	STP_cw_delay_inspection = {
 		icon = GFX_decision_ADISCORD_state_directive
 		allowed = { tag = STP }
-		visible = { has_completed_focus = STP_Count_The_Loyalists
-			OR = {
-				has_active_mission = STP_party_inspection_state_2
-				has_active_mission = STP_party_inspection_state_3
-				has_active_mission = STP_party_inspection_state_29
-				has_active_mission = STP_party_inspection_state_45
-				has_active_mission = STP_party_inspection_state_46
-				has_active_mission = STP_party_inspection_state_53
-			} has_country_flag = STP_sided_with_Maksim_flag STP_cw_preparation_open = yes }
-		available = { custom_trigger_tooltip = { tooltip = STP_preparation_slot_available_tt STP_has_political_action_slot = yes } hidden_trigger = {
+		visible = {
 			has_completed_focus = STP_Count_The_Loyalists
-			OR = {
-				has_active_mission = STP_party_inspection_state_2
-				has_active_mission = STP_party_inspection_state_3
-				has_active_mission = STP_party_inspection_state_29
-				has_active_mission = STP_party_inspection_state_45
-				has_active_mission = STP_party_inspection_state_46
-				has_active_mission = STP_party_inspection_state_53
-			}
-		} }
+			has_country_flag = STP_sided_with_Maksim_flag
+			STP_cw_preparation_open = yes
+			FROM = { has_state_flag = STP_party_inspection_active }
+		}
+		available = {
+			custom_trigger_tooltip = { tooltip = STP_preparation_slot_available_tt STP_has_political_action_slot = yes }
+			FROM = { has_state_flag = STP_party_inspection_active }
+		}
+		state_target = yes
+		targets = { 2 3 29 45 46 53 }
+		# Ownership is stable enough for the cached target list; the live commission flag stays above.
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		on_map_mode = map_and_decisions_view
 		cost = 35
 		days_remove = 14
 		days_re_enable = 60
@@ -777,12 +773,12 @@ STP_battle_for_stelander = {
 			custom_effect_tooltip = STP_inspection_delay_result_tt
 			hidden_effect = {
 				STP_political_action_slot_consume = yes
-				if = { limit = { has_active_mission = STP_party_inspection_state_2 } add_days_mission_timeout = { mission = STP_party_inspection_state_2 days = 14 } }
-				if = { limit = { has_active_mission = STP_party_inspection_state_3 } add_days_mission_timeout = { mission = STP_party_inspection_state_3 days = 14 } }
-				if = { limit = { has_active_mission = STP_party_inspection_state_29 } add_days_mission_timeout = { mission = STP_party_inspection_state_29 days = 14 } }
-				if = { limit = { has_active_mission = STP_party_inspection_state_45 } add_days_mission_timeout = { mission = STP_party_inspection_state_45 days = 14 } }
-				if = { limit = { has_active_mission = STP_party_inspection_state_46 } add_days_mission_timeout = { mission = STP_party_inspection_state_46 days = 14 } }
-				if = { limit = { has_active_mission = STP_party_inspection_state_53 } add_days_mission_timeout = { mission = STP_party_inspection_state_53 days = 14 } }
+				if = { limit = { FROM = { state = 2 } } add_days_mission_timeout = { mission = STP_party_inspection_state_2 days = 14 } }
+				else_if = { limit = { FROM = { state = 3 } } add_days_mission_timeout = { mission = STP_party_inspection_state_3 days = 14 } }
+				else_if = { limit = { FROM = { state = 29 } } add_days_mission_timeout = { mission = STP_party_inspection_state_29 days = 14 } }
+				else_if = { limit = { FROM = { state = 45 } } add_days_mission_timeout = { mission = STP_party_inspection_state_45 days = 14 } }
+				else_if = { limit = { FROM = { state = 46 } } add_days_mission_timeout = { mission = STP_party_inspection_state_46 days = 14 } }
+				else_if = { limit = { FROM = { state = 53 } } add_days_mission_timeout = { mission = STP_party_inspection_state_53 days = 14 } }
 			}
 		}
 		cancel_effect = { hidden_effect = { STP_political_action_slot_release = yes } }
@@ -1817,10 +1813,14 @@ STP_cw_war_council = {
 	STP_cw_launch_last_banquet = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STS }
-		visible = { has_completed_focus = STP_cw_last_banquet }
+		visible = {
+			has_completed_focus = STP_cw_last_banquet
+			NOT = { has_country_flag = STP_cw_last_banquet_launched }
+		}
 		available = {
 			has_war_with = STP
 			controls_state = 3
+			NOT = { has_country_flag = STP_cw_last_banquet_launched }
 			NOT = {
 				has_idea = STP_cw_deliberate_offensive
 				has_idea = STP_cw_static_defence
@@ -1832,13 +1832,59 @@ STP_cw_war_council = {
 		custom_cost_text = STP_cw_command_power_25_cost
 		custom_cost_trigger = { NOT = { command_power < 25 } }
 		cost = 0
-		days_re_enable = 42
-		fire_only_once = no
+		fire_only_once = yes
 		complete_effect = {
 			add_command_power = -25
+			set_country_flag = STP_cw_last_banquet_launched
 			add_timed_idea = { idea = STP_cw_deliberate_offensive days = 21 }
+			activate_mission = STP_cw_last_banquet_window
 		}
 		ai_will_do = { base = 10 }
+	}
+
+	STP_cw_last_banquet_window = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STS }
+		activation = { always = no }
+		visible = {
+			has_country_flag = STP_cw_last_banquet_launched
+			NOT = { has_country_flag = STP_cw_last_banquet_success }
+			NOT = { has_country_flag = STP_cw_last_banquet_failed }
+		}
+		# Missions use available as their success condition.
+		available = { controls_state = 28 }
+		cancel_trigger = { hidden_trigger = { OR = { NOT = { has_war_with = STP } has_country_flag = STP_cw_postwar } } }
+		days_mission_timeout = 21
+		is_good = yes
+		selectable_mission = no
+		fire_only_once = yes
+		complete_effect = {
+			set_country_flag = STP_cw_last_banquet_success
+			custom_effect_tooltip = STP_cw_last_banquet_success_tt
+			hidden_effect = {
+				NOD = {
+					if = {
+						limit = { NOT = { has_country_flag = NOD_cw_entered } }
+						set_country_flag = NOD_cw_offer_shown
+						clr_country_flag = NOD_cw_intervention_ready
+						clr_country_flag = NOD_cw_intervention_approved
+						if = { limit = { has_active_mission = NOD_cw_intervention_preparation } remove_mission = NOD_cw_intervention_preparation }
+						if = { limit = { has_active_mission = NOD_cw_northern_redeployment } remove_mission = NOD_cw_northern_redeployment }
+						ADISCORD_economy_update_postwar_demobilization = yes
+						ADISCORD_economy_mark_dirty = yes
+					}
+				}
+				if = { limit = { has_active_mission = STP_cw_nod_warning } remove_mission = STP_cw_nod_warning }
+				if = { limit = { has_active_mission = STP_cw_nod_redeployment } remove_mission = STP_cw_nod_redeployment }
+				clr_country_flag = STP_cw_nod_warning_active
+				set_country_flag = STP_cw_nod_warning_cancelled
+			}
+		}
+		timeout_effect = {
+			set_country_flag = STP_cw_last_banquet_failed
+			add_war_support = -0.10
+			custom_effect_tooltip = STP_cw_last_banquet_failure_tt
+		}
 	}
 
 	STP_cw_hold_the_pier = {

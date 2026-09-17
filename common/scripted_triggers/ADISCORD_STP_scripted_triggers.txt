@@ -374,6 +374,19 @@ STP_region_map_shows_contested = {
 	NOT = { STP_region_local_forces_leaning = yes }
 }
 
+# COUNTRY: authoritative active-inspection state. Keep this derived from state flags;
+# do not mirror the count in another country variable.
+STP_cw_any_inspection_active = {
+	OR = {
+		2 = { has_state_flag = STP_party_inspection_active }
+		3 = { has_state_flag = STP_party_inspection_active }
+		29 = { has_state_flag = STP_party_inspection_active }
+		45 = { has_state_flag = STP_party_inspection_active }
+		46 = { has_state_flag = STP_party_inspection_active }
+		53 = { has_state_flag = STP_party_inspection_active }
+	}
+}
+
 # COUNTRY: state flags are authoritative while inspection missions are alive.
 # The second scheduler pass must not create a third parallel commission.
 STP_cw_two_inspections_active = {
@@ -499,6 +512,7 @@ NOD_cw_intervention_possible = {
 	has_capitulated = no
 	is_subject = no
 	NOT = { has_global_flag = STP_cw_union_wars_finished }
+	NOT = { STS = { has_country_flag = STP_cw_last_banquet_success } }
 	NOT = { check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals } }
 	NOT = { has_country_flag = NOD_cw_refused }
 	NOT = { has_country_flag = NOD_cw_withdrew }
