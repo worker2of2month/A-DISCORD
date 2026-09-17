@@ -75,6 +75,8 @@ class WorldNewsContracts(unittest.TestCase):
         self.events = read("events/ADISCORD_world_news.txt")
         self.on_actions = read("common/on_actions/06_ADISCORD_world_news_on_actions.txt")
         self.debug = read("common/decisions/ADISCORD_world_news_debug_decisions.txt")
+        self.ru_path = ROOT / "localisation/russian/ADISCORD_world_news_l_russian.yml"
+        self.en_path = ROOT / "localisation/english/ADISCORD_world_news_l_english.yml"
         self.ru = read("localisation/russian/ADISCORD_world_news_l_russian.yml")
         self.en = read("localisation/english/ADISCORD_world_news_l_english.yml")
 
@@ -117,6 +119,10 @@ class WorldNewsContracts(unittest.TestCase):
                 key = f"ADISCORD_world_news.{number}.{suffix}:"
                 self.assertIn(key, self.ru)
                 self.assertIn(key, self.en)
+
+    def test_world_news_localisation_uses_utf8_bom(self):
+        self.assertTrue(self.ru_path.read_bytes().startswith(b"\xef\xbb\xbf"))
+        self.assertTrue(self.en_path.read_bytes().startswith(b"\xef\xbb\xbf"))
 
     def test_debug_smoke_decisions_can_fire_every_world_news(self):
         category = named_block(self.debug, "ADISCORD_scenario_debug_category")
