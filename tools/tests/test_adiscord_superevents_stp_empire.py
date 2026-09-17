@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[2]
 NEWS = ROOT / "events/ADISCORD_news.txt"
 SUPEREVENTS = ROOT / "interface/superevents.gfx"
 IMPERIAL_DECISIONS = ROOT / "common/decisions/ADISCORD_STP_imperial_union_decisions.txt"
+IMPERIAL_TRIGGERS = ROOT / "common/scripted_triggers/ADISCORD_STP_imperial_union_triggers.txt"
 IMPERIAL_EFFECTS = ROOT / "common/scripted_effects/ADISCORD_STP_imperial_union_effects.txt"
 WORKER_ART = ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_worker_victory.png"
 
@@ -70,13 +71,16 @@ class SupereventAndImperialUnionTests(unittest.TestCase):
 
     def test_shabrat_imperial_union_requires_the_full_map(self) -> None:
         decisions = read(IMPERIAL_DECISIONS)
+        triggers = read(IMPERIAL_TRIGGERS)
         self.assertIn("STP_proclaim_imperial_union", decisions)
         self.assertIn("tag = STS", decisions)
         self.assertIn("STP_maksim_shabrat", decisions)
-        self.assertIn("VAL", decisions)
-        self.assertIn("NOD", decisions)
         self.assertIn("STP_imperial_union_requirements_met = yes", decisions)
+        self.assertIn("VAL", triggers)
+        self.assertIn("NOD", triggers)
         for state in REQUIRED_IMPERIAL_STATES:
+            self.assertIn(f"owns_state = {state}", triggers)
+            self.assertIn(f"controls_state = {state}", triggers)
             self.assertIn(f"highlight_state_targets = {{ state = {state} }}", decisions)
 
     def test_imperial_union_effect_owns_state_change_not_news(self) -> None:
