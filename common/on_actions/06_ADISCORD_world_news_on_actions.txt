@@ -1,0 +1,99 @@
+on_actions = {
+	# ROOT is the attacking side and FROM is the defending side. Publishing from
+	# the relation edge keeps news tied to wars that really exist in the engine,
+	# rather than to focus promises or intervention preparation.
+	on_war_relation_added = {
+		effect = {
+			# Vorkerland: the federal collapse becomes an actual war between the
+			# three central claimants. The earlier tower-collapse news is separate.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_collapse_started
+					NOT = { has_global_flag = ADISCORD_news_vorkerland_fighting_published }
+					ROOT = { OR = { tag = WKR tag = VAD tag = TVA } }
+					FROM = { OR = { tag = WKR tag = VAD tag = TVA } }
+				}
+				set_global_flag = ADISCORD_news_vorkerland_fighting_published
+				ROOT = { news_event = { id = ADISCORD_world_news.1 } }
+			}
+
+			# Nodrul's northern campaign starts with the first real NOD relation
+			# against the northern coalition. Later coalition joins do not republish.
+			if = {
+				limit = {
+					NOT = { has_global_flag = ADISCORD_news_nodrul_northern_war_published }
+					OR = {
+						AND = {
+							ROOT = { tag = NOD }
+							FROM = { OR = { tag = YPR tag = COF tag = TFF } }
+						}
+						AND = {
+							FROM = { tag = NOD }
+							ROOT = { OR = { tag = YPR tag = COF tag = TFF } }
+						}
+					}
+				}
+				set_global_flag = ADISCORD_news_nodrul_northern_war_published
+				ROOT = { news_event = { id = ADISCORD_world_news.2 } }
+			}
+
+			# Stelander's civil war is the direct STP/STS break. The existing
+			# ADISCORD_STP_cw.70 stays as the sender-local report; this event repairs
+			# the world broadcast without duplicating it for the declaring country.
+			if = {
+				limit = {
+					has_global_flag = STP_cw_started
+					NOT = { has_global_flag = ADISCORD_news_stelander_civil_war_published }
+					OR = {
+						AND = { ROOT = { tag = STP } FROM = { tag = STS } }
+						AND = { ROOT = { tag = STS } FROM = { tag = STP } }
+					}
+				}
+				set_global_flag = ADISCORD_news_stelander_civil_war_published
+				ROOT = { news_event = { id = ADISCORD_world_news.3 } }
+			}
+
+			# Kefreyt enters the Stelander conflict by attacking either the local
+			# republic front or Shabrat's successor state, depending on the branch.
+			if = {
+				limit = {
+					has_global_flag = STP_cw_started
+					NOT = { has_global_flag = ADISCORD_news_kefreyt_intervention_published }
+					OR = {
+						AND = {
+							ROOT = { tag = VAL }
+							FROM = { OR = { tag = SRP tag = STS } }
+						}
+						AND = {
+							FROM = { tag = VAL }
+							ROOT = { OR = { tag = SRP tag = STS } }
+						}
+					}
+				}
+				set_global_flag = ADISCORD_news_kefreyt_intervention_published
+				ROOT = { news_event = { id = ADISCORD_world_news.4 } }
+			}
+
+			# Itora's intervention is only news once troops actually enter a war
+			# against one of the northern Vorkerland claimants.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_collapse_started
+					NOT = { has_global_flag = ADISCORD_news_itora_intervention_published }
+					OR = {
+						AND = {
+							ROOT = { tag = IVN }
+							FROM = { OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD } }
+						}
+						AND = {
+							FROM = { tag = IVN }
+							ROOT = { OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD } }
+						}
+					}
+				}
+				set_global_flag = ADISCORD_news_itora_intervention_published
+				ROOT = { news_event = { id = ADISCORD_world_news.5 } }
+			}
+		}
+	}
+}
