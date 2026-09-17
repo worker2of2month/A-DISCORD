@@ -203,3 +203,25 @@ ADISCORD_convoy_buffer = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = equipment_production_min_factories id = convoy value = 1 }
 }
+
+# Safety net for authored wars that do not have a campaign-specific front profile.
+# A one-enemy war is unambiguous, so strongly increase demand for the live enemy
+# front without overriding execution stance, garrisons, or allied-border policy.
+# Multi-front wars keep their explicit target priorities from country modules.
+ADISCORD_single_enemy_front_concentration = {
+	enable = {
+		is_ai = yes
+		has_war = yes
+		check_variable = { enemies^num = 1 }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = front_unit_request
+		country_trigger = {
+			has_war_with = FROM
+			has_capitulated = no
+		}
+		value = 300
+	}
+}
