@@ -28,7 +28,7 @@ TFF_frontier_at_war = {
 	}
 
 	TFF_coordinate_the_communes = {
-		icon = generic_political_discourse
+		icon = generic_prepare_civil_war
 		allowed = { original_tag = TFF }
 		visible = {
 			has_country_flag = TFF_wartime_command_active
@@ -50,7 +50,7 @@ TFF_frontier_at_war = {
 	}
 
 	TFF_establish_common_supply_depots = {
-		icon = generic_industry
+		icon = generic_construction
 		allowed = { original_tag = TFF }
 		visible = {
 			has_country_flag = TFF_wartime_command_active
