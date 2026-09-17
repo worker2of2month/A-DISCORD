@@ -4,6 +4,7 @@ category = {
 	soundeffects = {
 		superevent_vorkerland_civilwar_sound_e
 		superevent_stelander_empire_sound_e
+		superevent_vorkerland_worker_victory_sound_e
 	}
 	compressor =  {
 		enabled = yes
