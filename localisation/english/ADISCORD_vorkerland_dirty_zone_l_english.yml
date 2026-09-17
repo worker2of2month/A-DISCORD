@@ -1,0 +1,7 @@
+﻿l_english:
+ ADISCORD_vorkerland_dirty_zone.1.t: "The Veil over the Dirty Zone Lifts"
+ ADISCORD_vorkerland_dirty_zone.1.d: "After years of isolation, verifiable reports are again emerging from beyond the Dirty Zone perimeter. Old roads are reopening, new administrative borders are appearing on maps, and communication lines once considered dead are carrying orders again. What outsiders had come to regard as an amorphous contaminated wasteland has proved to be a fractured world of governments, conflicts, and competing claims to survival. That world is now touching the rest of the continent once more."
+ ADISCORD_vorkerland_dirty_zone.1.a: "The dead land has found its voice."
+
+ ADISCORD_debug_open_vorkerland_dirty_zone: "§RDEBUG:§! Open the Dirty Zone"
+ ADISCORD_debug_open_vorkerland_dirty_zone_desc: "Skips the three-year wait and launches the normal Dirty Zone reveal through ADISCORD_vorkerland_collapse.85."
