@@ -470,26 +470,21 @@ guiTypes = {
 			size = { width = 581 height =121 }
 			Orientation = UPPER_LEFT
 
+			# NEWS art is natively 396x153. Scale it uniformly to fill the old
+			# 499px newspaper artwork slot instead of centering it inside a frame.
 			iconType =
 			{
 				name ="event_picture"
 				spriteType = "GFX_news_event_001"
-				position = { x = 151 y = 161 }
+				position = { x = 100 y = 150 }
+				scale = 1.26
 				Orientation = "UPPER_LEFT"
 				alwaystransparent = yes
 			}
 			
-			iconType = {
-				name ="event_picture_overlay"
-				spriteType = "GFX_event_news_pic_overlay"
-				position = { x = 100 y = 150 }
-				Orientation = "UPPER_LEFT"
-				alwaystransparent = yes
-			}			
-			
 			instantTextBoxType = {
 				name = "Title"
-				position = { x = 110 y = 330 }
+				position = { x = 110 y = 345 }
 				font = "vic_36"
 				borderSize = {x = 0 y = 0}
 				text = "Title text here!"	
@@ -514,7 +509,7 @@ guiTypes = {
 		
 			instantTextBoxType = {
 				name = "Description"
-				position = { x = 80 y = 240 }
+				position = { x = 80 y = 260 }
 				font = "hoi4_typewriter16"
 				borderSize = {x = 0 y = 0}
 				text = "Long text here!"	

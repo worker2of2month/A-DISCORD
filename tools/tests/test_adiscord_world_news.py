@@ -146,7 +146,11 @@ class WorldNewsContracts(unittest.TestCase):
 
     def test_world_news_does_not_expand_shared_debug_category(self):
         category = named_block(self.debug_categories, "ADISCORD_scenario_debug_category")
-        for tag in ("NOD", "YPR", "COF", "TFF", "STP", "STS", "SRP", "VAL"):
+        for tag in (
+            "ZAO", "WPA", "WPS", "PWR", "PSD",
+            "NOD", "YPR", "COF", "TFF",
+            "STP", "STS", "SRP", "VAL",
+        ):
             self.assertNotIn(f"tag = {tag}", category, tag)
         for tag in ("WRK", "WKR", "VAD", "TVA", "IVN", "NAM", "EFL", "AZH", "SLF"):
             self.assertIn(f"tag = {tag}", category, tag)
