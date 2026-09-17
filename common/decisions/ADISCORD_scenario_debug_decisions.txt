@@ -7,6 +7,23 @@ ADISCORD_scenario_debug_category = {
 		ai_will_do = { factor = 0 }
 	}
 
+	ADISCORD_debug_open_vorkerland_dirty_zone = {
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA tag = RUS } }
+		visible = {
+			has_global_flag = ADISCORD_vorkerland_collapse_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_dirty_opened }
+		}
+		available = { RUS = { exists = yes } }
+		cost = 0
+		complete_effect = {
+			# Preserve the real reveal contract: only skip the timer, then let .85
+			# own the superevent and the staggered Dirty Zone country cascade.
+			set_global_flag = ADISCORD_vorkerland_dirty_reveal_v2_scheduled
+			RUS = { country_event = { id = ADISCORD_vorkerland_collapse.85 } }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
 	ADISCORD_debug_add_vorkerland_war_exhaustion = {
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
 		visible = { has_global_flag = ADISCORD_vorkerland_collapse_started }
