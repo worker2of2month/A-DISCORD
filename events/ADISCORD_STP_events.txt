@@ -109,7 +109,7 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_STP_preparation.1.a
-		ai_chance = { factor = 65 }
+		ai_chance = { factor = 90 }
 		set_country_flag = STP_sided_with_Maksim_flag
 		log = "[STP CW] First decline: player chose Shabrat"
 		STP_cw_open_preparation = yes
@@ -120,7 +120,7 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_STP_preparation.1.b
-		ai_chance = { factor = 35 }
+		ai_chance = { factor = 10 }
 		set_country_flag = STP_sided_with_the_party_flag
 		log = "[STP CW] First decline: player chose party"
 		STP_cw_open_preparation = yes
@@ -610,10 +610,12 @@ country_event = {
 		text = ADISCORD_STP_cw.30.d
 	}
 	is_triggered_only = yes
+	timeout_days = 7
 	trigger = { tag = STP is_ai = no has_country_flag = STP_cw_participant STS = { exists = yes } }
 	option = {
 		name = ADISCORD_STP_cw.30.a
 		trigger = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_cw_side_republics } }
+		ai_chance = { base = 100 }
 		set_country_flag = STP_sided_with_the_party_flag
 		STP_cw_init_apparatus_loyalty = yes
 		hidden_effect = { STP_cw_begin_hostilities = yes }
@@ -621,8 +623,23 @@ country_event = {
 	option = {
 		name = ADISCORD_STP_cw.30.b
 		trigger = { STS = { exists = yes } NOT = { has_country_flag = STP_sided_with_the_party_flag } NOT = { has_country_flag = STP_cw_side_republics } }
-		hidden_effect = { STP_cw_begin_hostilities = yes }
+		ai_chance = { base = 0 }
+		set_country_flag = STP_sided_with_Maksim_flag
+		hidden_effect = {
+			STS = { set_country_flag = STP_sided_with_Maksim_flag }
+			STP_cw_begin_hostilities = yes
+		}
 		STS = { change_tag_from = STP }
+	}
+	# Hidden options leave an unattended window with no first choice. Timeout
+	# must still pick a side and open the scripted war.
+	timeout_effect = {
+		if = {
+			limit = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+			set_country_flag = STP_sided_with_the_party_flag
+			STP_cw_init_apparatus_loyalty = yes
+		}
+		hidden_effect = { STP_cw_begin_hostilities = yes }
 	}
 }
 
@@ -836,13 +853,20 @@ country_event = {
 		hidden_effect = {
 			STP_maksim_shabrat = { set_character_flag = STP_cw_arrested }
 			set_country_flag = STP_shabrat_was_arrested
+			if = { limit = { STS = { exists = yes } } STS = { set_country_flag = STP_shabrat_was_arrested } }
 		}
 	}
 	option = {
 		name = ADISCORD_STP_pc.3.a
-		trigger = { STP_cw_sotnikov_available = yes }
+		trigger = {
+			OR = {
+				STP_cw_sotnikov_available = yes
+				STS = { STP_cw_sotnikov_available = yes }
+			}
+		}
 		custom_effect_tooltip = ADISCORD_STP_pc.3.a_tt
 		hidden_effect = {
+			STP_pc_install_resistance_successor = yes
 			if = {
 				limit = { STS = { exists = yes } }
 				STS = { country_event = { id = ADISCORD_STP_pc.6 } }
@@ -851,9 +875,20 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_STP_pc.3.b
-		trigger = { NOT = { STP_cw_sotnikov_available = yes } }
+		trigger = {
+			NOT = {
+				OR = {
+					STP_cw_sotnikov_available = yes
+					STS = { STP_cw_sotnikov_available = yes }
+				}
+			}
+		}
 		set_country_flag = STP_gornin_introduced
 		custom_effect_tooltip = ADISCORD_STP_pc.3.b_tt
+		hidden_effect = {
+			if = { limit = { STS = { exists = yes } } STS = { set_country_flag = STP_gornin_introduced } }
+			STP_pc_install_resistance_successor = yes
+		}
 	}
 }
 
@@ -888,6 +923,7 @@ country_event = {
 	option = {
 		name = ADISCORD_STP_pc.6.a
 		custom_effect_tooltip = ADISCORD_STP_pc.6.a_tt
+		hidden_effect = { STP_pc_install_resistance_successor = yes }
 	}
 }
 
@@ -899,25 +935,25 @@ country_event = {
 	is_triggered_only = yes
 	option = {
 		name = ADISCORD_STP_pc.7.a
-		ai_chance = { base = 60 }
+		ai_chance = { base = 90 }
 	}
 	option = {
 		name = ADISCORD_STP_pc.7.b
 		trigger = { STP_cw_shabrat_available = yes }
-		ai_chance = { base = 20 }
+		ai_chance = { base = 10 }
 		promote_character = STP_maksim_shabrat
 	}
 	option = {
 		name = ADISCORD_STP_pc.7.c
 		trigger = { OR = { has_country_flag = STP_gornin_introduced has_character = STP_ilya_gornin } }
-		ai_chance = { base = 10 }
+		ai_chance = { base = 0 }
 		promote_character = STP_ilya_gornin
 		set_politics = { ruling_party = humanism elections_allowed = no }
 	}
 	option = {
 		name = ADISCORD_STP_pc.7.da
 		trigger = { OR = { has_country_flag = STP_vera_introduced has_character = STP_vera_tikh } }
-		ai_chance = { base = 10 }
+		ai_chance = { base = 0 }
 		promote_character = STP_vera_tikh
 		set_politics = { ruling_party = utilitarism elections_allowed = no }
 	}

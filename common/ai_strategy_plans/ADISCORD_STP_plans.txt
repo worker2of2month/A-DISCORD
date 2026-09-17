@@ -1,0 +1,244 @@
+# Historical AI for Maksim Shabrat: introduction, preparation, civil war, reconstruction, hegemony.
+
+STP_shabrat_intro_plan = {
+	name = "STP Shabrat introduction"
+	desc = ""
+
+	allowed = { original_tag = STP }
+
+	enable = {
+		tag = STP
+		is_ai = yes
+		NOT = { has_global_flag = STP_cw_started }
+		NOT = { has_country_flag = STP_sided_with_Maksim_flag }
+		NOT = { has_country_flag = STP_sided_with_the_party_flag }
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = STP }
+			has_global_flag = STP_cw_started
+			has_country_flag = STP_sided_with_Maksim_flag
+			has_country_flag = STP_sided_with_the_party_flag
+		}
+	}
+
+	ai_national_focuses = {
+		STP_NECTAR_OF_GODS
+		STP_2160_budget
+		STP_STATE_OF_THE_REPUBLIC
+	}
+
+	weight = { factor = 20 }
+}
+
+STP_shabrat_preparation_core_plan = {
+	name = "STP Shabrat preparation core"
+	desc = ""
+
+	allowed = { original_tag = STP }
+
+	enable = {
+		tag = STP
+		is_ai = yes
+		has_country_flag = STP_sided_with_Maksim_flag
+		NOT = { has_global_flag = STP_cw_started }
+		NOT = { has_completed_focus = STP_cw_national_mandate }
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = STP }
+			has_global_flag = STP_cw_started
+			has_completed_focus = STP_cw_national_mandate
+		}
+	}
+
+	ai_national_focuses = {
+		STP_ADRESS_PARTY_CRISIS
+		STP_Count_The_Loyalists
+		STP_Call_For_Shabrat
+		STP_cw_officer_contacts
+		STP_Garrisons_Hesitate
+		STP_cw_port_budget
+		STP_cw_pay_officials
+		STP_cw_northern_dossier
+		STP_cw_arm_the_north
+		STP_cw_district_printing
+		STP_The_Silent_Mountain_March
+		STP_cw_cabinet_archives
+		STP_cw_expose_the_cabinet
+		STP_cw_national_mandate
+	}
+
+	weight = { factor = 20 }
+}
+
+STP_shabrat_preparation_depth_plan = {
+	name = "STP Shabrat preparation depth"
+	desc = ""
+
+	allowed = { original_tag = STP }
+
+	enable = {
+		tag = STP
+		is_ai = yes
+		has_country_flag = STP_sided_with_Maksim_flag
+		has_completed_focus = STP_cw_national_mandate
+		NOT = { has_global_flag = STP_cw_started }
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = STP }
+			has_global_flag = STP_cw_started
+		}
+	}
+
+	ai_national_focuses = {
+		STP_Turn_The_Young_Officers
+		STP_cw_defensive_lines
+		STP_cw_heavy_reserve
+		STP_cw_abila_reserve
+		STP_cw_abila_workshops
+		STP_cw_warehouse_inventory
+		STP_cw_supply_officers
+		STP_cw_district_administration
+		STP_cw_courier_service
+		STP_cw_local_council_envoys
+		STP_cw_autonomy_guarantees
+		STP_Kefreite_Security_Offer
+		STP_cw_prepare_capital_sabotage
+	}
+
+	weight = { factor = 16 }
+}
+
+STS_shabrat_civil_war_plan = {
+	name = "STS Shabrat civil war"
+	desc = ""
+
+	allowed = { original_tag = STS }
+
+	enable = {
+		tag = STS
+		is_ai = yes
+		has_global_flag = STP_cw_started
+		NOT = { has_country_flag = STP_cw_postwar }
+		OR = {
+			has_war_with = STP
+			has_war = yes
+		}
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = STS }
+			has_country_flag = STP_cw_postwar
+			has_global_flag = STP_cw_union_wars_finished
+		}
+	}
+
+	ai_national_focuses = {
+		STP_cw_unified_headquarters
+		STP_cw_road_to_fada
+		STP_cw_last_banquet
+		STP_cw_cut_capital_roads
+		STP_cw_government_quarter_assault
+		STP_cw_mobilization_register
+		STP_cw_wartime_arsenals
+		STP_cw_supply_routes
+		STP_cw_line_formations
+		STP_cw_first_postwar_budget
+		STP_cw_restore_civil_authority
+	}
+
+	weight = { factor = 20 }
+}
+
+STS_shabrat_reconstruction_plan = {
+	name = "STS Shabrat reconstruction"
+	desc = ""
+
+	allowed = { original_tag = STS }
+
+	enable = {
+		tag = STS
+		is_ai = yes
+		has_country_flag = STP_cw_postwar
+		NOT = { has_completed_focus = STP_pw_republic_settled_state }
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = STS }
+			has_completed_focus = STP_pw_republic_settled_state
+		}
+	}
+
+	ai_national_focuses = {
+		STP_pw_republic_new_republic
+		STP_pw_republic_district_authority
+		STP_pw_republic_civil_records
+		STP_pw_republic_firm_settlement
+		STP_pw_republic_civil_charter
+		STP_pw_republic_restore_roads
+		STP_pw_republic_homes_for_returnees
+		STP_pw_republic_civil_workshops
+		STP_pw_republic_accountable_arsenals
+		STP_pw_republic_industrial_settlement
+		STP_pw_republic_army_register
+		STP_pw_republic_officer_school
+		STP_pw_republic_supply_service
+		STP_pw_republic_professional_service
+		STP_pw_republic_settled_state
+	}
+
+	weight = { factor = 18 }
+}
+
+STS_shabrat_hegemony_plan = {
+	name = "STS Shabrat hegemony"
+	desc = ""
+
+	allowed = { original_tag = STS }
+
+	enable = {
+		tag = STS
+		is_ai = yes
+		has_country_flag = STP_cw_postwar
+		OR = {
+			has_completed_focus = STP_cw_restore_civil_authority
+			has_completed_focus = STP_pc_after_victory
+		}
+		STP_pc_founder_rules = yes
+	}
+
+	abort = {
+		OR = {
+			NOT = { tag = STS }
+			STP_pc_founder_rules = no
+		}
+	}
+
+	ai_national_focuses = {
+		STP_pc_after_victory
+		STP_pc_count_ruins
+		STP_pc_war_ledgers
+		STP_pc_name_steland
+		STP_pc_two_borders
+		STP_pc_shabrat_politics
+		STP_pc_hegemony_open
+		STP_pc_heg_unity
+		STP_pc_heg_emergency
+		STP_pc_heg_subordinate
+		STP_pc_heg_limit_parties
+		STP_pc_heg_lock
+		STP_pc_heg_person
+		STP_pc_heg_val_audit
+		STP_pc_heg_val_terms
+		STP_pc_heg_nod_break
+	}
+
+	weight = { factor = 16 }
+}

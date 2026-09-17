@@ -2197,14 +2197,43 @@ STP_cw_refresh_officer_loyalties = {
 	}
 }
 
+# COUNTRY: drop donor country_leader roles before set_nationality. The engine keeps
+# a live office on the current tag, so Sotnikov would stay on STP after arrest.
+STP_cw_release_resistance_officeholders = {
+	if = {
+		limit = { has_character = STP_maksim_shabrat }
+		STP_maksim_shabrat = { remove_country_leader_role = { ideology = national_legitimism } }
+	}
+	if = {
+		limit = { has_character = STP_grigory_sotnikov }
+		STP_grigory_sotnikov = { remove_country_leader_role = { ideology = steland_military_directory } }
+	}
+	if = {
+		limit = { has_character = STP_ilya_gornin }
+		STP_ilya_gornin = { remove_country_leader_role = { ideology = steland_liberationism } }
+	}
+	if = {
+		limit = { has_character = STP_vera_tikh }
+		STP_vera_tikh = { remove_country_leader_role = { ideology = utilitarism_ideology } }
+	}
+}
+
 # COUNTRY (STS): create only Shabrat's missing role; never recruit an absent character.
+# Promote with a registered subtype. set_politics stays in the align helper so the
+# ruling party matches the person who actually received the role.
 STP_cw_establish_resistance_command = {
 	if = {
 		limit = { tag = STS has_country_flag = STP_cw_participant }
 		if = {
 			limit = { STP_cw_shabrat_available = yes }
-			promote_character = STP_maksim_shabrat
 			STP_maksim_shabrat = {
+				if = {
+					limit = { NOT = { is_country_leader = yes } }
+					add_country_leader_role = {
+						promote_leader = yes
+						country_leader = { ideology = national_legitimism expire = "2200.1.1.1" }
+					}
+				}
 				if = {
 					limit = { NOT = { is_unit_leader = yes } }
 					add_field_marshal_role = {
@@ -2222,6 +2251,7 @@ STP_cw_establish_resistance_command = {
 				}
 				if = { limit = { NOT = { has_trait = STP_shabrat_loyalist } } add_unit_leader_trait = STP_shabrat_loyalist }
 			}
+			promote_character = { character = STP_maksim_shabrat ideology = national_legitimism }
 		}
 		else_if = {
 			limit = { has_character = STP_grigory_sotnikov STP_grigory_sotnikov = { NOT = { has_character_flag = STP_cw_arrested } } }
@@ -2274,55 +2304,84 @@ STP_cw_begin_hostilities = {
 	if = {
 		limit = {
 			tag = STP has_country_flag = STP_cw_participant
-			NOT = { has_global_flag = STP_cw_started }
 			STS = { exists = yes }
 			NOT = { has_war_with = STS }
 			NOT = { has_global_flag = STP_cw_union_wars_finished }
 		}
-		set_global_flag = STP_cw_started
-		remove_mission = STP_cw_nod_warning
-		clr_country_flag = STP_cw_nod_warning_active
+		if = {
+			limit = { NOT = { has_global_flag = STP_cw_started } }
+			set_global_flag = STP_cw_started
+			remove_mission = STP_cw_nod_warning
+			clr_country_flag = STP_cw_nod_warning_active
+			if = {
+				limit = { has_country_flag = STP_cw_early_orders_ready }
+				STS = {
+					add_timed_idea = { idea = STP_cw_offensive_preparation days = 35 }
+					army_experience = 10
+					add_command_power = 15
+				}
+			}
+			if = {
+				limit = { has_country_flag = STP_cw_party_defence_ready }
+				add_timed_idea = { idea = STP_cw_defensive_preparation days = 35 }
+			}
+			# Either captured depot supports infantry during mobilisation. Two depots
+			# transfer their own fuel but never stack or refresh this one army-wide idea.
+			if = {
+				limit = {
+					OR = {
+						3 = { is_owned_by = STS has_state_flag = STP_resistance_supply_asset }
+						46 = { is_owned_by = STS has_state_flag = STP_resistance_supply_asset }
+					}
+				}
+				STS = { add_timed_idea = { idea = STP_cw_prepared_supply_lines days = 21 } }
+			}
+			STP_cw_poll_nod_intervention = yes
+			STP_end_battle_for_stelander = yes
+		}
 		declare_war_on = { target = STS type = annex_everything }
 		# Fix all province controllers after the engine creates the war relation.
 		every_owned_state = { set_state_controller_to = PREV }
 		STS = { every_owned_state = { set_state_controller_to = PREV } }
 		SRP = { every_owned_state = { set_state_controller_to = PREV } }
-
 		if = {
-			limit = { has_country_flag = STP_cw_early_orders_ready }
-			STS = {
-				add_timed_idea = { idea = STP_cw_offensive_preparation days = 35 }
-				army_experience = 10
-				add_command_power = 15
-			}
-		}
-
-		if = {
-			limit = { has_country_flag = STP_cw_party_defence_ready }
-			add_timed_idea = { idea = STP_cw_defensive_preparation days = 35 }
-		}
-
-		# Either captured depot supports infantry during mobilisation. Two depots
-		# transfer their own fuel but never stack or refresh this one army-wide idea.
-		if = {
-			limit = {
-				OR = {
-					3 = { is_owned_by = STS has_state_flag = STP_resistance_supply_asset }
-					46 = { is_owned_by = STS has_state_flag = STP_resistance_supply_asset }
-				}
-			}
-			STS = { add_timed_idea = { idea = STP_cw_prepared_supply_lines days = 21 } }
-		}
-		STP_cw_poll_nod_intervention = yes
-		STP_end_battle_for_stelander = yes
-		if = {
-			limit = { has_war_with = STS }
+			limit = { has_war_with = STS NOT = { has_idea = STP_cw_party_battle_spirit } }
 			add_ideas = STP_cw_party_battle_spirit
 			STS = { add_ideas = STP_cw_resistance_battle_spirit }
 			news_event = { id = ADISCORD_STP_cw.70 hours = 1 }
 			STS = { country_event = { id = ADISCORD_STP_cw.91 days = 5 } }
 			if = { limit = { VAL = { exists = yes } } VAL = { country_event = { id = ADISCORD_STP_cw.20 days = 1 } } }
 			log = "[STP_CW] hostilities begin after side selection and full territorial control setup"
+		}
+	}
+	else_if = {
+		limit = {
+			tag = STS has_country_flag = STP_cw_participant
+			STP = { exists = yes }
+			NOT = { has_war_with = STP }
+			NOT = { has_global_flag = STP_cw_union_wars_finished }
+		}
+		STP = { STP_cw_begin_hostilities = yes }
+		# After change_tag the player is on STS; STP may no longer be able to declare.
+		if = {
+			limit = { NOT = { has_war_with = STP } }
+			declare_war_on = { target = STP type = annex_everything }
+			every_owned_state = { set_state_controller_to = PREV }
+			STP = { every_owned_state = { set_state_controller_to = PREV } }
+			SRP = { every_owned_state = { set_state_controller_to = PREV } }
+			if = {
+				limit = { has_war_with = STP }
+				STP = {
+					if = {
+						limit = { NOT = { has_idea = STP_cw_party_battle_spirit } }
+						add_ideas = STP_cw_party_battle_spirit
+						STS = { add_ideas = STP_cw_resistance_battle_spirit }
+						news_event = { id = ADISCORD_STP_cw.70 hours = 1 }
+						STS = { country_event = { id = ADISCORD_STP_cw.91 days = 5 } }
+						if = { limit = { VAL = { exists = yes } } VAL = { country_event = { id = ADISCORD_STP_cw.20 days = 1 } } }
+					}
+				}
+			}
 		}
 	}
 }
@@ -2510,7 +2569,6 @@ STP_cw_start = {
 			STP_cw_prepare_successor = yes
 			STP_pc_copy_split_flags = yes
 			add_manpower = var:STP.STP_cw_resistance_manpower
-			set_politics = { ruling_party = chauvinism elections_allowed = no }
 		}
 		SRP = {
 			every_owned_state = { add_core_of = SRP }
@@ -2519,6 +2577,7 @@ STP_cw_start = {
 			add_manpower = var:STP.STP_cw_republics_manpower
 		}
 		STP_cw_refresh_officer_loyalties = yes
+		STP_cw_release_resistance_officeholders = yes
 		if = { limit = { STP_cw_shabrat_available = yes } set_nationality = { character = STP_maksim_shabrat target_country = STS } }
 		if = { limit = { has_character = STP_grigory_sotnikov } set_nationality = { character = STP_grigory_sotnikov target_country = STS } }
 		if = { limit = { has_character = STP_ilya_gornin } set_nationality = { character = STP_ilya_gornin target_country = STS } }
@@ -3158,19 +3217,71 @@ STP_pc_copy_split_flags = {
 		if = { limit = { STP = { has_country_flag = STP_cw_kefreyt_shipment_received } } set_country_flag = STP_cw_kefreyt_shipment_received }
 		if = { limit = { STP = { has_country_flag = STP_pc_warned_70 } } set_country_flag = STP_pc_warned_70 }
 		if = { limit = { STP = { has_country_flag = STP_pc_warned_90 } } set_country_flag = STP_pc_warned_90 }
+		if = { limit = { STP = { has_country_flag = STP_sided_with_Maksim_flag } } set_country_flag = STP_sided_with_Maksim_flag }
+		if = { limit = { STP = { has_country_flag = STP_sided_with_the_party_flag } } set_country_flag = STP_sided_with_the_party_flag }
 		set_variable = { var = STP_pc_course value = STP.STP_pc_course }
+		set_variable = { var = STP_party_suspicion value = STP.STP_party_suspicion }
 	}
 }
 
-# STS: Sotnikov can rule only after the ruling party matches his role.
+# STS: the displayed head of state is the ruling party's leader. Promote first,
+# then switch the party to that registered subtype so a generated stand-in cannot remain.
 STP_pc_align_resistance_ruling_party = {
 	if = {
-		limit = {
-			tag = STS
-			NOT = { STP_cw_shabrat_available = yes }
-			STP_cw_sotnikov_available = yes
+		limit = { tag = STS }
+		if = {
+			limit = { STP_cw_shabrat_available = yes }
+			if = {
+				limit = { NOT = { has_country_leader = { character = STP_maksim_shabrat ruling_only = yes } } }
+				retire_country_leader = yes
+			}
+			promote_character = { character = STP_maksim_shabrat ideology = national_legitimism }
+			set_politics = { ruling_party = chauvinism elections_allowed = no }
+			if = {
+				limit = { NOT = { has_country_leader = { character = STP_maksim_shabrat ruling_only = yes } } }
+				retire_country_leader = yes
+				promote_character = { character = STP_maksim_shabrat ideology = national_legitimism }
+			}
 		}
-		set_politics = { ruling_party = etatism elections_allowed = no }
+		else_if = {
+			limit = { STP_cw_sotnikov_available = yes }
+			if = {
+				limit = { NOT = { has_country_leader = { character = STP_grigory_sotnikov ruling_only = yes } } }
+				retire_country_leader = yes
+			}
+			promote_character = { character = STP_grigory_sotnikov ideology = steland_military_directory }
+			set_politics = { ruling_party = etatism elections_allowed = no }
+			if = {
+				limit = { NOT = { has_country_leader = { character = STP_grigory_sotnikov ruling_only = yes } } }
+				retire_country_leader = yes
+				promote_character = { character = STP_grigory_sotnikov ideology = steland_military_directory }
+			}
+		}
+		else_if = {
+			limit = { has_character = STP_Leonid_Barchel STP_Leonid_Barchel = { NOT = { has_character_flag = STP_cw_arrested } } }
+			if = {
+				limit = { NOT = { has_country_leader = { character = STP_Leonid_Barchel ruling_only = yes } } }
+				retire_country_leader = yes
+			}
+			promote_character = { character = STP_Leonid_Barchel ideology = chauvinism_ideology }
+			set_politics = { ruling_party = chauvinism elections_allowed = no }
+			if = {
+				limit = { NOT = { has_country_leader = { character = STP_Leonid_Barchel ruling_only = yes } } }
+				retire_country_leader = yes
+				promote_character = { character = STP_Leonid_Barchel ideology = chauvinism_ideology }
+			}
+		}
+	}
+}
+
+# COUNTRY: arrest can land on STP or STS; the successor is always installed on STS.
+STP_pc_install_resistance_successor = {
+	if = {
+		limit = { STS = { exists = yes } }
+		STS = {
+			STP_cw_establish_resistance_command = yes
+			STP_pc_align_resistance_ruling_party = yes
+		}
 	}
 }
 

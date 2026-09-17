@@ -129,6 +129,12 @@ ideologies = {
 		types = {
 			chauvinism_ideology = {
 			}
+			# A registered chauvinism subtype. An unknown country_leader ideology
+			# drops the role and leaves the generated ruling-party head in place.
+			national_legitimism = {
+				can_be_randomly_selected = no
+				color = { 48 92 18 }
+			}
 		}
 
 		dynamic_faction_names = {

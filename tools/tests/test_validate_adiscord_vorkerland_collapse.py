@@ -1974,9 +1974,9 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             "eyr": ("EYR_Irina_Koval", "humanism_ideology"),
             "egc": ("EGC_Ruslan_Pike", "etatism_ideology"),
             "riv": ("RIV_Mikhail_Arsenyev", "pragmatism_ideology"),
-            "rev": ("REV_Elena_Rudenko", "etatism_ideology"),
+            "rev": ("REV_Zagtun_Zoldatanoe", "etatism_ideology"),
             "yor": ("YOR_Pavel_Korin", "humanism_ideology"),
-            "ndn": ("NDN_Anna_Lind", "humanism_ideology"),
+            "ndn": ("NDN_Nikit_Mondalov", "humanism_ideology"),
             "swb": ("SWB_Oskar_Renn", "etatism_ideology"),
             "vhv": ("VHV_Sergey_Melnik", "pragmatism_ideology"),
             "osv": ("OSV_Marina_Volkova", "humanism_ideology"),
@@ -2224,9 +2224,9 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             "SRA_Helio_Marr": "GFX_portrait_SRA_Helio_Marr",
             "ZTA_Viktor_Holt": "GFX_portrait_ZTA_Viktor_Holt",
             "RIV_Mikhail_Arsenyev": "GFX_portrait_RIV_Mikhail_Arsenyev",
-            "REV_Elena_Rudenko": "GFX_portrait_REV_Elena_Rudenko",
+            "REV_Zagtun_Zoldatanoe": "GFX_portrait_REV_Zagtun_Zoldatanoe",
             "YOR_Pavel_Korin": "GFX_portrait_YOR_Pavel_Korin",
-            "NDN_Anna_Lind": "GFX_portrait_NDN_Anna_Lind",
+            "NDN_Nikit_Mondalov": "GFX_portrait_NDN_Nikit_Mondalov",
             "SWB_Oskar_Renn": "GFX_portrait_SWB_Oskar_Renn",
             "VHV_Sergey_Melnik": "GFX_portrait_VHV_Sergey_Melnik",
             "OSV_Marina_Volkova": "GFX_portrait_OSV_Marina_Volkova",
@@ -2371,6 +2371,40 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertIn("character = WRK_Vlad_Petrichev", formation)
         self.assertIn("GFX_portrait_WRK_Temporary_Government", named_block(characters, "WRK_VAD_Joint_Council"))
         self.assertIn('VAD_vorkerland_restoration: "Воркерландская Империя"', cosmetic_loc)
+
+    def test_nikita_victory_can_elect_or_usurp(self) -> None:
+        issues = validate(ROOT, "outcomes")
+        self.assertEqual(issues, [])
+        phase_effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            "phase_effects",
+        )
+        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), "collapse_events")
+        characters = read("common/characters/WRK.txt")
+        portraits = read("interface/ADISCORD_leader_portraits.gfx")
+        usurp = named_block(phase_effects, "ADISCORD_vorkerland_wrk_usurp_mandate")
+        resolve = named_block(phase_effects, "ADISCORD_vorkerland_wrk_resolve_elections")
+        choice = event_block(events, "ADISCORD_vorkerland_collapse.100")
+        result = event_block(events, "ADISCORD_vorkerland_collapse.101")
+
+        self.assertIn("ideology = humanism_ideology", named_block(characters, "WRK_Mark_Yastrebtsev"))
+        self.assertIn("ideology = chauvinism_ideology", named_block(characters, "WRK_Necro_Filopo"))
+        self.assertIn("GFX_portrait_WRK_Nikita_Worcker_victory", usurp)
+        self.assertEqual(resolve.count("1 = {"), 3)
+        self.assertIn("timeout_days = 21", choice)
+        self.assertIn("ADISCORD_vorkerland_wrk_resolve_elections = yes", result)
+        for sprite, texture in (
+            ("GFX_portrait_WRK_Mark_Yastrebtsev", "portrait_WRK_Mark_Yastrebtsev.png"),
+            ("GFX_portrait_WRK_Necro_Filopo", "portrait_WRK_Necro_Filopo.png"),
+            ("GFX_portrait_WRK_Nikita_Worcker_victory", "portrait_WRK_Nikita_Worcker_victory.png"),
+        ):
+            self.assertRegex(
+                portraits,
+                rf'(?s)name\s*=\s*"{sprite}"(?:(?!spriteType\s*=).)*{texture}',
+            )
+            self.assertTrue((ROOT / "gfx/leaders/WRK" / texture).is_file())
+        self.assertFalse((ROOT / "gfx/leaders/марк ястребцев.png").exists())
+        self.assertFalse((ROOT / "gfx/leaders/некро филопо.png").exists())
 
     def test_successor_ideologies_are_diverse(self) -> None:
         characters = read("common/characters/ADISCORD_vorkerland_collapse_characters.txt")

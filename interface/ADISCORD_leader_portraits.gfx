@@ -14,6 +14,18 @@ spriteTypes = {
 		texturefile = "gfx/leaders/WRK/portrait_WRK_Nikita_Worcker_civilwar.png"
 	}
 	spriteType = {
+		name = "GFX_portrait_WRK_Nikita_Worcker_victory"
+		texturefile = "gfx/leaders/WRK/portrait_WRK_Nikita_Worcker_victory.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_WRK_Mark_Yastrebtsev"
+		texturefile = "gfx/leaders/WRK/portrait_WRK_Mark_Yastrebtsev.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_WRK_Necro_Filopo"
+		texturefile = "gfx/leaders/WRK/portrait_WRK_Necro_Filopo.png"
+	}
+	spriteType = {
 		name = "GFX_portrait_WRK_Vlad_Petrichev_civilwar"
 		texturefile = "gfx/leaders/WRK/portrait_WRK_Vlad_Petrichev_civilwar.png"
 	}
@@ -118,6 +130,11 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_portrait_STP_August_Veil"
 		texturefile = "gfx/leaders/STP/portrait_STP_August_Veil.png"
+	}
+###SRP
+	spriteType = {
+		name = "GFX_portrait_SRP_Federal_Council"
+		texturefile = "gfx/leaders/SRP/portrait_SRP_Federal_Council.png"
 	}
 ###IVN
 	spriteType = {
@@ -271,16 +288,16 @@ spriteTypes = {
 		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_1.png"
 	}
 	spriteType = {
-		name = "GFX_portrait_REV_Elena_Rudenko"
-		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_2.png"
+		name = "GFX_portrait_REV_Zagtun_Zoldatanoe"
+		texturefile = "gfx/leaders/REV/portrait_REV_Zagtun_Zoldatanoe.png"
 	}
 	spriteType = {
 		name = "GFX_portrait_YOR_Pavel_Korin"
 		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_3.png"
 	}
 	spriteType = {
-		name = "GFX_portrait_NDN_Anna_Lind"
-		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_1.png"
+		name = "GFX_portrait_NDN_Nikit_Mondalov"
+		texturefile = "gfx/leaders/NDN/portrait_NDN_Nikit_Mondalov.png"
 	}
 	spriteType = {
 		name = "GFX_portrait_SWB_Oskar_Renn"

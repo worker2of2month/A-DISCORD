@@ -836,6 +836,16 @@
  ADISCORD_vorkerland_macri_volunteer_corps:0 "Afrelan Volunteer Corps"
  ADISCORD_vorkerland_macri_volunteer_corps_desc:0 "Afrela has decided that Vlad Macri's survival is worth more than a token gesture. The corps is recruited openly, shipped as a formed contingent instead of a trickle of stragglers, and the requirement to hold back a home army has been waived for the duration of the Ebern emergency."
  ADISCORD_vorkerland_civil_war_attrition:0 "Central Front Attrition"
+ ADISCORD_vorkerland_collapse.100.t:0 "The Victor's Mandate"
+ ADISCORD_vorkerland_collapse.100.d:0 "The worker government holds the centre again, but Nikita Worcker's emergency mandate has not yet become a permanent settlement. The commissions are ready to open the polling stations. Worcker can instead confirm his power by decree and close the question of succession."
+ ADISCORD_vorkerland_collapse.100.a:0 "Open the polling stations."
+ ADISCORD_vorkerland_collapse.100.b:0 "Confirm power by decree."
+ ADISCORD_vorkerland_wrk_hold_elections_tt:0 "In §Y14 days§! the commissions will name a winner. Nikita Worcker (§Yneo-vorkerism§!), Mark Yastrebtsev (§Yhumanism§!) and Necro Filopo (§Ychauvinism§!) each have an equal chance."
+ ADISCORD_vorkerland_collapse.101.t:0 "Election Results"
+ ADISCORD_vorkerland_collapse.101.worker.d:0 "The commissions have tallied the returns and declared Nikita Worcker the winner. Neo-vorkerism remains the ruling ideology, and the emergency cabinet now holds an electoral mandate rather than a decree."
+ ADISCORD_vorkerland_collapse.101.yastrebtsev.d:0 "The commissions have tallied the returns and declared Mark Yastrebtsev the winner. Humanism becomes the ruling ideology, and Worcker yields the cabinet to the published result."
+ ADISCORD_vorkerland_collapse.101.filopo.d:0 "The commissions have tallied the returns and declared Necro Filopo the winner. Chauvinism becomes the ruling ideology, and Worcker yields the cabinet to the published result."
+ ADISCORD_vorkerland_collapse.101.a:0 "Accept the published result."
 
 # --- diplomacy_l_english ---
  ADISCORD_vorkerland_regional_diplomacy_category: "Allies Beyond the Central Front"

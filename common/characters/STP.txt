@@ -42,9 +42,12 @@ characters = {
 			civilian = {
 				large = GFX_portrait_STP_Grigory_Sotnikov
 			}
+			army = {
+				large = GFX_portrait_STP_Grigory_Sotnikov
+			}
 		}
 		country_leader = {
-			ideology = etatism_ideology
+			ideology = steland_military_directory
 			expire = "2200.1.1.1"
 			id = -1
 		}

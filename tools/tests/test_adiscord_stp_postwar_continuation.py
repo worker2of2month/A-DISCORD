@@ -514,10 +514,19 @@ class PostwarContinuationContracts(unittest.TestCase):
         self.assertIn("ADISCORD_STP_pc.3", update)
         self.assertIn("NOT = { has_country_flag = STP_cw_elections_finished }", update)
         self.assertIn("NOT = { has_country_flag = STP_cw_postwar }", update)
+        events = read(EVENTS)
+        self.assertIn("STP_pc_install_resistance_successor = yes", event_block(events, "ADISCORD_STP_pc.3"))
+        self.assertIn("STP_pc_install_resistance_successor = yes", event_block(events, "ADISCORD_STP_pc.6"))
+        install = read(EFFECTS).split("STP_pc_install_resistance_successor = {", 1)[1]
+        self.assertIn("STP_cw_establish_resistance_command = yes", install)
+        self.assertIn("STP_pc_align_resistance_ruling_party = yes", install)
 
     def test_split_copies_sotnikov_without_making_him_party_head(self) -> None:
         start = read(EFFECTS).split("STP_cw_start = {", 1)[1].split("STP_cw_begin_hostilities", 1)[0]
         self.assertIn("set_nationality = { character = STP_grigory_sotnikov target_country = STS }", start)
+        self.assertIn("STP_cw_release_resistance_officeholders = yes", start)
+        self.assertLess(start.index("STP_cw_release_resistance_officeholders = yes"),
+                        start.index("set_nationality = { character = STP_grigory_sotnikov target_country = STS }"))
         self.assertNotIn("promote_character = STP_grigory_sotnikov", start)
         self.assertIn("STP_pc_copy_split_flags = yes", start)
 

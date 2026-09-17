@@ -2185,7 +2185,7 @@ ADISCORD_vorkerland_setup_rev = {
 	82 = { add_core_of = REV set_state_controller_to = REV }
 	323 = { add_core_of = REV set_state_controller_to = REV }
 	REV = {
-		promote_character = { character = REV_Elena_Rudenko ideology = etatism_ideology }
+		promote_character = { character = REV_Zagtun_Zoldatanoe ideology = etatism_ideology }
 		set_capital = { state = 82 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
@@ -2223,7 +2223,7 @@ ADISCORD_vorkerland_setup_ndn = {
 	NDN = { transfer_state = 27 }
 	27 = { add_core_of = NDN set_state_controller_to = NDN }
 	NDN = {
-		promote_character = { character = NDN_Anna_Lind ideology = humanism_ideology }
+		promote_character = { character = NDN_Nikit_Mondalov ideology = humanism_ideology }
 		set_capital = { state = 27 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
@@ -7722,6 +7722,19 @@ ADISCORD_vorkerland_form_wrk_from_wkr = {
 			}
 		}
 	}
+	# These two stay on WRK through the war unless annex moved them to WKR.
+	# Bring both copies back before WKR is consumed so elections can promote
+	# an already recruited character.
+	WKR = {
+		if = {
+			limit = { has_character = WRK_Mark_Yastrebtsev }
+			set_nationality = { target_country = WRK character = WRK_Mark_Yastrebtsev }
+		}
+		if = {
+			limit = { has_character = WRK_Necro_Filopo }
+			set_nationality = { target_country = WRK character = WRK_Necro_Filopo }
+		}
+	}
 	if = {
 		limit = { WKR = { is_ai = no } }
 		change_tag_from = WKR
@@ -7965,6 +7978,118 @@ ADISCORD_vorkerland_form_wrk_from_tva = {
 	mark_focus_tree_layout_dirty = yes
 }
 
+# Nikita's verified central victory is the only route that may reopen the
+# civilian succession. Anton, Vlad and Worx keep their wartime cabinets.
+ADISCORD_vorkerland_offer_worker_mandate = {
+	if = {
+		limit = {
+			tag = WRK
+			has_country_flag = ADISCORD_vorkerland_route_worker
+			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+			has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+			NOT = { has_country_flag = ADISCORD_vorkerland_worker_mandate_offered }
+		}
+		set_country_flag = ADISCORD_vorkerland_worker_mandate_offered
+		country_event = { id = ADISCORD_vorkerland_collapse.100 days = 2 }
+	}
+}
+
+ADISCORD_vorkerland_wrk_schedule_elections = {
+	if = {
+		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_worker_mandate_resolved } }
+		set_country_flag = ADISCORD_vorkerland_worker_mandate_resolved
+		set_country_flag = ADISCORD_vorkerland_worker_elections_scheduled
+		country_event = { id = ADISCORD_vorkerland_collapse.101 days = 14 }
+	}
+}
+
+# The result event runs this in immediate so the new leader is already in
+# office when the description is shown.
+ADISCORD_vorkerland_wrk_resolve_elections = {
+	if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_worker_elections_scheduled
+			NOT = { has_country_flag = ADISCORD_vorkerland_worker_election_settled }
+		}
+		set_country_flag = ADISCORD_vorkerland_worker_election_settled
+		random_list = {
+			1 = { ADISCORD_vorkerland_wrk_elect_worcker = yes }
+			1 = { ADISCORD_vorkerland_wrk_elect_yastrebtsev = yes }
+			1 = { ADISCORD_vorkerland_wrk_elect_filopo = yes }
+		}
+	}
+}
+
+ADISCORD_vorkerland_wrk_usurp_mandate = {
+	if = {
+		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_worker_mandate_resolved } }
+		hidden_effect = {
+			set_country_flag = ADISCORD_vorkerland_worker_mandate_resolved
+			set_country_flag = ADISCORD_vorkerland_worker_usurped
+		}
+		set_politics = { ruling_party = pragmatism elections_allowed = no }
+		promote_character = {
+			character = WRK_Nikita_Worcker
+			ideology = neo_vorkerism
+		}
+		# Bind the victory portrait to the character so a later ideology-slot
+		# refresh cannot restore the wartime face.
+		set_portraits = {
+			character = WRK_Nikita_Worcker
+			civilian = { large = GFX_portrait_WRK_Nikita_Worcker_victory }
+		}
+		set_country_leader_portrait = {
+			ideology = pragmatism
+			portrait = GFX_portrait_WRK_Nikita_Worcker_victory
+		}
+	}
+}
+
+ADISCORD_vorkerland_wrk_elect_worcker = {
+	set_country_flag = ADISCORD_vorkerland_worker_elected
+	set_politics = { ruling_party = pragmatism elections_allowed = yes }
+	promote_character = {
+		character = WRK_Nikita_Worcker
+		ideology = neo_vorkerism
+	}
+	set_popularities = {
+		pragmatism = 48
+		humanism = 22
+		chauvinism = 18
+		technocracy = 12
+	}
+}
+
+ADISCORD_vorkerland_wrk_elect_yastrebtsev = {
+	set_country_flag = ADISCORD_vorkerland_yastrebtsev_elected
+	set_politics = { ruling_party = humanism elections_allowed = yes }
+	promote_character = {
+		character = WRK_Mark_Yastrebtsev
+		ideology = humanism_ideology
+	}
+	set_popularities = {
+		humanism = 46
+		pragmatism = 28
+		chauvinism = 14
+		technocracy = 12
+	}
+}
+
+ADISCORD_vorkerland_wrk_elect_filopo = {
+	set_country_flag = ADISCORD_vorkerland_filopo_elected
+	set_politics = { ruling_party = chauvinism elections_allowed = yes }
+	promote_character = {
+		character = WRK_Necro_Filopo
+		ideology = chauvinism_ideology
+	}
+	set_popularities = {
+		chauvinism = 46
+		pragmatism = 28
+		humanism = 14
+		technocracy = 12
+	}
+}
+
 ADISCORD_vorkerland_verify_reunified_wrk = {
 	if = {
 		limit = { ADISCORD_vorkerland_reunification_verified = yes }
@@ -7996,6 +8121,7 @@ ADISCORD_vorkerland_finalize_reunified_wrk = {
 				ADISCORD_vorkerland_show_worker_victory_superevent = yes
 			}
 			ADISCORD_vorkerland_resolve_unguaranteed_free_republics = yes
+			ADISCORD_vorkerland_offer_worker_mandate = yes
 		}
 		else_if = {
 			limit = { has_country_flag = ADISCORD_vorkerland_route_joint }

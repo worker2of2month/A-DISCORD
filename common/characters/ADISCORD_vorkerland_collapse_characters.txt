@@ -5,9 +5,9 @@ characters = {
 	EYR_Irina_Koval = { name = EYR_Irina_Koval portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = humanism_ideology expire = "2200.1.1.1" id = -1 } }
 	EGC_Ruslan_Pike = { name = EGC_Ruslan_Pike portraits = { civilian = { large = GFX_portrait_EGC_Ruslan_Pike } } country_leader = { ideology = etatism_ideology expire = "2200.1.1.1" id = -1 } }
 	RIV_Mikhail_Arsenyev = { name = RIV_Mikhail_Arsenyev portraits = { civilian = { large = GFX_portrait_RIV_Mikhail_Arsenyev } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
-	REV_Elena_Rudenko = { name = REV_Elena_Rudenko portraits = { civilian = { large = GFX_portrait_REV_Elena_Rudenko } } country_leader = { ideology = etatism_ideology expire = "2200.1.1.1" id = -1 } }
+	REV_Zagtun_Zoldatanoe = { name = REV_Zagtun_Zoldatanoe portraits = { civilian = { large = GFX_portrait_REV_Zagtun_Zoldatanoe } } country_leader = { ideology = etatism_ideology expire = "2200.1.1.1" id = -1 } }
 	YOR_Pavel_Korin = { name = YOR_Pavel_Korin portraits = { civilian = { large = GFX_portrait_YOR_Pavel_Korin } } country_leader = { ideology = humanism_ideology expire = "2200.1.1.1" id = -1 } }
-	NDN_Anna_Lind = { name = NDN_Anna_Lind portraits = { civilian = { large = GFX_portrait_NDN_Anna_Lind } } country_leader = { ideology = humanism_ideology expire = "2200.1.1.1" id = -1 } }
+	NDN_Nikit_Mondalov = { name = NDN_Nikit_Mondalov portraits = { civilian = { large = GFX_portrait_NDN_Nikit_Mondalov } } country_leader = { ideology = humanism_ideology expire = "2200.1.1.1" id = -1 } }
 	SWB_Oskar_Renn = { name = SWB_Oskar_Renn portraits = { civilian = { large = GFX_portrait_SWB_Oskar_Renn } } country_leader = { ideology = etatism_ideology expire = "2200.1.1.1" id = -1 } }
 	VHV_Sergey_Melnik = { name = VHV_Sergey_Melnik portraits = { civilian = { large = GFX_portrait_VHV_Sergey_Melnik } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
 	OSV_Marina_Volkova = { name = OSV_Marina_Volkova portraits = { civilian = { large = GFX_portrait_OSV_Marina_Volkova } } country_leader = { ideology = humanism_ideology expire = "2200.1.1.1" id = -1 } }

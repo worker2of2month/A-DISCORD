@@ -188,6 +188,20 @@ class WrkIdeologyContractTests(unittest.TestCase):
             self.assertNotIn(retired_name, profile.lower())
             self.assertNotIn(retired_name, index.lower())
 
+    def test_nikita_election_win_keeps_neo_vorkerism(self) -> None:
+        from tools.validators.validate_adiscord_vorkerland_collapse import named_block
+
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            "phase_effects",
+        )
+        elect_worker = named_block(effects, "ADISCORD_vorkerland_wrk_elect_worcker")
+        usurp = named_block(effects, "ADISCORD_vorkerland_wrk_usurp_mandate")
+        self.assertIn("ideology = neo_vorkerism", elect_worker)
+        self.assertIn("ideology = neo_vorkerism", usurp)
+        self.assertIn("GFX_portrait_WRK_Nikita_Worcker_victory", usurp)
+        self.assertNotIn("GFX_portrait_WRK_Nikita_Worcker_victory", elect_worker)
+
 
 if __name__ == "__main__":
     unittest.main()

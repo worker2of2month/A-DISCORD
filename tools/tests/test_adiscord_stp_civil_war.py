@@ -208,7 +208,10 @@ class CivilWarContracts(unittest.TestCase):
         for option in (e.value for e in handoff if e.key == "option"):
             self.assertEqual(sum(e.key == "STP_cw_begin_hostilities" for e in walk(option)), 1)
         war = block(self.effects, "STP_cw_begin_hostilities")
-        self.assertEqual(war.count("declare_war_on"), 1)
+        self.assertEqual(war.count("declare_war_on"), 2)
+        self.assertIn("declare_war_on = { target = STS", war)
+        self.assertIn("declare_war_on = { target = STP", war)
+        self.assertNotIn("declare_war_on = { target = SRP", war)
         self.assertIn("set_state_controller_to = PREV", war)
         self.assertGreater(war.index("set_state_controller_to"), war.index("declare_war_on"))
         self.assertNotIn("set_global_flag = STP_cw_started", block(self.effects, "STP_cw_start"))
@@ -309,8 +312,9 @@ class CivilWarContracts(unittest.TestCase):
             self.assertRegex(start, rf"{tag}\s*=\s*\{{\s*transfer_state = {state}")
         start = block(self.effects, "STP_cw_begin_hostilities")
         self.assertIn("declare_war_on = { target = STS", start)
+        self.assertIn("declare_war_on = { target = STP", start)
         self.assertNotIn("declare_war_on = { target = SRP", start)
-        self.assertEqual(start.count("declare_war_on"), 1,
+        self.assertEqual(start.count("declare_war_on"), 2,
                          "independent republics are outside the party-resistance war")
         self.assertNotIn("start_civil_war", start)
 
@@ -1674,8 +1678,12 @@ class CommanderLoyaltyContracts(unittest.TestCase):
         self.assertRegex(start, r"limit\s*=\s*\{\s*STP_cw_shabrat_available = yes\s*\}\s*set_nationality\s*=\s*\{\s*character = STP_maksim_shabrat")
         self.assertLess(start.index("set_country_flag = STP_cw_participant"), start.index("STP_cw_refresh_officer_loyalties = yes"))
         self.assertLess(start.index("STP_cw_refresh_officer_loyalties = yes"), start.index("set_nationality"))
+        self.assertIn("STP_cw_release_resistance_officeholders = yes", start)
+        self.assertLess(start.index("STP_cw_release_resistance_officeholders = yes"), start.index("set_nationality"))
         self.assertIn("STP_cw_establish_resistance_command = yes", start)
         self.assertIn("STS = { STP_cw_establish_resistance_command = yes STP_pc_align_resistance_ruling_party = yes }", start)
+        self.assertGreater(start.index("STS = { STP_cw_establish_resistance_command = yes STP_pc_align_resistance_ruling_party = yes }"),
+                           start.index("set_nationality"))
 
     def test_command_role_is_added_once_and_existing_military_roles_are_preserved(self):
         for original in (None, "corps_commander", "field_marshal"):
@@ -1718,6 +1726,124 @@ class CommanderLoyaltyContracts(unittest.TestCase):
             run, _, _, _, writes, _, _, _ = self.scenario(owner=owner, war=war)
             run("STP_cw_establish_resistance_command")
             self.assertEqual(writes, [])
+
+    def test_resistance_leaders_use_registered_subideologies(self):
+        ideologies = read("common/ideologies/00_ideologies.txt")
+        chauvinism = re.search(
+            r"(?s)\bchauvinism\s*=\s*\{.*?\btypes\s*=\s*\{(.*?)\n\s*\}\s*\n\s*dynamic_faction_names",
+            ideologies,
+        )
+        etatism = re.search(
+            r"(?s)\betatism\s*=\s*\{.*?\btypes\s*=\s*\{(.*?)\n\s*\}\s*\n\s*dynamic_faction_names",
+            ideologies,
+        )
+        self.assertIsNotNone(chauvinism)
+        self.assertIsNotNone(etatism)
+        self.assertRegex(
+            chauvinism.group(1),
+            r"(?s)\bnational_legitimism\s*=\s*\{.*?can_be_randomly_selected\s*=\s*no.*?\}",
+        )
+        self.assertIn("steland_military_directory", etatism.group(1))
+        characters = read("common/characters/STP.txt")
+        shabrat = block(characters, "STP_maksim_shabrat")
+        sotnikov = block(characters, "STP_grigory_sotnikov")
+        self.assertIn("ideology = national_legitimism", shabrat)
+        self.assertIn("ideology = steland_military_directory", sotnikov)
+        self.assertNotIn("ideology = etatism_ideology", sotnikov)
+        loc = read("localisation/russian/parties_l_russian.yml")
+        self.assertTrue((ROOT / "localisation/russian/parties_l_russian.yml").read_bytes().startswith(b"\xef\xbb\xbf"))
+        self.assertIn("national_legitimism:", loc)
+        self.assertIn("national_legitimism_desc:", loc)
+        scripted = read("common/scripted_localisation/ADISCORD_ideologies.txt")
+        self.assertIn("has_country_leader_ideology = national_legitimism", scripted)
+
+    def test_align_and_arrest_install_the_named_successor(self):
+        effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        align = block(effects, "STP_pc_align_resistance_ruling_party")
+        self.assertIn("promote_character = { character = STP_maksim_shabrat ideology = national_legitimism }", align)
+        self.assertIn("ruling_party = chauvinism", align)
+        self.assertIn("promote_character = { character = STP_grigory_sotnikov ideology = steland_military_directory }", align)
+        self.assertIn("ruling_party = etatism", align)
+        self.assertIn("retire_country_leader = yes", align)
+        self.assertEqual(align.count("set_politics"), 3)
+        self.assertEqual(align.count("retire_country_leader = yes"), 6)
+        self.assertLess(align.index("retire_country_leader = yes"),
+                        align.index("promote_character = { character = STP_maksim_shabrat ideology = national_legitimism }"))
+        self.assertLess(align.index("promote_character = { character = STP_grigory_sotnikov ideology = steland_military_directory }"),
+                        align.index("ruling_party = etatism"))
+        self.assertIn("has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }", align)
+        self.assertIn("has_country_leader = { character = STP_grigory_sotnikov ruling_only = yes }", align)
+        self.assertIn("has_country_leader = { character = STP_Leonid_Barchel ruling_only = yes }", align)
+        release = block(effects, "STP_cw_release_resistance_officeholders")
+        self.assertIn("remove_country_leader_role = { ideology = national_legitimism }", release)
+        self.assertIn("remove_country_leader_role = { ideology = steland_military_directory }", release)
+        install = block(effects, "STP_pc_install_resistance_successor")
+        self.assertIn("STS = { exists = yes }", install)
+        self.assertIn("STP_cw_establish_resistance_command = yes", install)
+        self.assertIn("STP_pc_align_resistance_ruling_party = yes", install)
+        events = read("events/ADISCORD_STP_events.txt")
+        self.assertGreaterEqual(events.count("STP_pc_install_resistance_successor = yes"), 2)
+        self.assertIn("id = ADISCORD_STP_pc.3", events)
+        self.assertIn("id = ADISCORD_STP_pc.6", events)
+        arrest = next(e.value for e in entries("events/ADISCORD_STP_events.txt")
+                      if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_pc.3")
+        arrest_a = next(option for option in (e.value for e in arrest if e.key == "option")
+                        if scalar(option, "name") == "ADISCORD_STP_pc.3.a")
+        self.assertTrue(any(e.key == "STS" and any(child.key == "STP_cw_sotnikov_available" for child in e.value)
+                            for e in walk(ast_block(arrest_a, "trigger"))))
+        command = block(effects, "STP_cw_establish_resistance_command")
+        self.assertIn("ideology = national_legitimism", command)
+        self.assertIn("promote_character = { character = STP_maksim_shabrat ideology = national_legitimism }", command)
+
+    def test_side_choice_copies_flags_and_can_retry_a_failed_declaration(self):
+        effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        copy = block(effects, "STP_pc_copy_split_flags")
+        self.assertIn("has_country_flag = STP_sided_with_Maksim_flag", copy)
+        self.assertIn("has_country_flag = STP_sided_with_the_party_flag", copy)
+        self.assertIn("var = STP_party_suspicion", copy)
+        handoff = next(e.value for e in entries("events/ADISCORD_STP_events.txt")
+                       if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_cw.30")
+        self.assertEqual(scalar(handoff, "timeout_days"), "7")
+        timeout = ast_block(handoff, "timeout_effect")
+        self.assertEqual(sum(e.key == "STP_cw_begin_hostilities" for e in walk(timeout)), 1)
+        self.assertIn("set_country_flag = STP_sided_with_the_party_flag",
+                      " ".join(f"{e.key} = {e.value}" for e in walk(timeout)))
+        self.assertFalse(any(e.key == "change_tag_from" for e in walk(timeout)))
+        options = [e.value for e in handoff if e.key == "option"]
+        resistance = next(option for option in options if any(child.key == "change_tag_from" for child in walk(option)))
+        self.assertIn(("set_country_flag", "STP_sided_with_Maksim_flag"),
+                      [(e.key, e.value) for e in walk(resistance)])
+        war = block(effects, "STP_cw_begin_hostilities")
+        self.assertIn("NOT = { has_global_flag = STP_cw_started }", war)
+        self.assertLess(war.index("set_global_flag = STP_cw_started"), war.index("declare_war_on"))
+        self.assertLess(war.rindex("STP_cw_prepared_supply_lines"), war.index("declare_war_on"))
+        self.assertIn("tag = STS", war)
+        self.assertIn("declare_war_on = { target = STP type = annex_everything }", war)
+        weekly = ast_block(ast_block(entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions"), "on_weekly")
+        retries = [e.value for e in ast_block(weekly, "effect")
+                   if e.key == "if" and any(child.key == "STP_cw_begin_hostilities" for child in e.value)]
+        self.assertEqual(len(retries), 2)
+        retry = retries[0]
+        gate = ast_block(retry, "limit")
+        ready = {("STP", "has_country_flag", "STP_cw_participant"): True,
+                 ("STP", "has_global_flag", "STP_cw_started"): True}
+        sided = {("STP", "has_country_flag", "STP_cw_participant"): True,
+                 ("STP", "has_country_flag", "STP_sided_with_the_party_flag"): True}
+        self.assertTrue(matches_conditions(gate, ready))
+        self.assertTrue(matches_conditions(gate, sided))
+        self.assertFalse(matches_conditions(gate, {("STP", "has_country_flag", "STP_cw_participant"): True}))
+        self.assertFalse(matches_conditions(gate, ready, "STS"))
+        self.assertFalse(matches_conditions(gate, {**ready, ("STP", "has_global_flag", "STP_cw_union_wars_finished"): True}))
+        sts_retry = retries[1]
+        sts_gate = ast_block(sts_retry, "limit")
+        sts_ready = {("STS", "has_country_flag", "STP_cw_participant"): True,
+                     ("STS", "has_global_flag", "STP_cw_started"): True}
+        sts_sided = {("STS", "has_country_flag", "STP_cw_participant"): True,
+                     ("STS", "has_country_flag", "STP_sided_with_Maksim_flag"): True}
+        self.assertTrue(matches_conditions(sts_gate, sts_ready, "STS"))
+        self.assertTrue(matches_conditions(sts_gate, sts_sided, "STS"))
+        self.assertFalse(matches_conditions(sts_gate, {("STS", "has_country_flag", "STP_cw_participant"): True}, "STS"))
+        self.assertFalse(matches_conditions(sts_gate, {**sts_ready, ("STS", "has_war_with", "STP"): True}, "STS"))
 
 
 class NorthernCampaignContracts(unittest.TestCase):

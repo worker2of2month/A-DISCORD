@@ -13,7 +13,7 @@ focus_tree = {
 		x = 12
 		y = 0
 		cost = 2
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 20 }
 		completion_reward = {
 			add_political_power = 35
 			country_event = { id = ADISCORD_STP_preparation.15 }
@@ -27,7 +27,7 @@ focus_tree = {
 		y = 1
 		cost = 3
 		prerequisite = { focus = STP_NECTAR_OF_GODS }
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 20 }
 		completion_reward = {
 			custom_effect_tooltip = STP_cw_treasury_100_tt
 			ADISCORD_economy_receive_100 = yes
@@ -43,7 +43,7 @@ focus_tree = {
 		cost = 2
 		prerequisite = { focus = STP_2160_budget }
 		bypass = { has_country_flag = STP_cw_first_health_decline }
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 20 }
 		completion_reward = {
 			effect_tooltip = {
 				swap_ideas = { remove_idea = STP_fading_father_stage_1_dummy_idea add_idea = STP_fading_father_stage_2_dummy_idea }
@@ -92,7 +92,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = STP_cw_port_budget }
 		mutually_exclusive = { focus = STP_cw_repair_niansas }
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 8 }
 		completion_reward = {
 			add_political_power = 75
 			hidden_effect = { remove_ideas = STP_cw_private_payments }
@@ -534,7 +534,7 @@ focus_tree = {
 		cost = 2
 		prerequisite = { focus = STP_cw_northern_dossier }
 		mutually_exclusive = { focus = STP_cw_arm_the_north }
-		ai_will_do = { base = 12 }
+		ai_will_do = { base = 4 }
 		completion_reward = {
 			hidden_effect = { set_country_flag = STP_cw_northern_strategy_evidence }
 			unlock_decision_tooltip = STP_cw_trigger_northern_incident
@@ -598,7 +598,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = STP_cw_cabinet_archives }
 		mutually_exclusive = { focus = STP_cw_buy_silence }
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 8 }
 		completion_reward = {
 			add_power_balance_value = { id = STP_shabrat_election_legitimacy value = 0.15 }
 			add_political_power = 75
@@ -647,7 +647,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = STP_cw_local_council_envoys }
 		mutually_exclusive = { focus = STP_No_Mercenaries_In_Our_Mountains }
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 8 }
 		completion_reward = {
 			custom_effect_tooltip = STP_cw_kefreyt_offer_tt
 			VAL = { country_event = { id = ADISCORD_STP_preparation.6 days = 1 } }
@@ -1424,7 +1424,7 @@ focus_tree = {
 		x = 7
 		y = 0
 		cost = 2
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 10 }
 		completion_reward = {
 			army_experience = 15
 			add_command_power = 15
@@ -1666,7 +1666,7 @@ focus_tree = {
 				controls_state = 29
 			}
 		}
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 8 }
 		completion_reward = {
 			if = {
 				limit = { 3 = { is_controlled_by = ROOT infrastructure < 5 } }
@@ -1691,7 +1691,7 @@ focus_tree = {
 		prerequisite = { focus = STP_cw_road_to_fada }
 		allow_branch = { tag = STS }
 		bypass = { has_global_flag = STP_cw_union_wars_finished }
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 8 }
 		completion_reward = {
 			unlock_decision_tooltip = { decision = STP_cw_launch_last_banquet show_effect_tooltip = yes }
 		}
@@ -1707,7 +1707,7 @@ focus_tree = {
 		mutually_exclusive = { focus = STP_cw_district_levies }
 		allow_branch = { tag = STS }
 		available = { has_war_with = STP }
-		ai_will_do = { base = 4 }
+		ai_will_do = { base = 8 }
 		completion_reward = {
 			add_command_power = 15
 			add_timed_idea = { idea = STP_cw_offensive_preparation days = 28 }
@@ -1862,7 +1862,7 @@ focus_tree = {
 		y = 5
 		cost = 3
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_postwar_budget_available_tt OR = { STP_pw_can_reconstruct = yes AND = { tag = SRP has_country_flag = STP_cw_postwar has_war = no } } } }
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 8 }
 		completion_reward = {
 			custom_effect_tooltip = STP_cw_treasury_100_tt
 			ADISCORD_economy_receive_100 = yes
@@ -1878,7 +1878,7 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = STP_cw_first_postwar_budget }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_postwar_budget_available_tt OR = { STP_pw_can_reconstruct = yes AND = { tag = SRP has_country_flag = STP_cw_postwar has_war = no } } } }
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 8 }
 		completion_reward = {
 			add_stability = 0.05
 			add_political_power = 75
@@ -2671,7 +2671,7 @@ focus_tree = {
 				STP_pc_focus_available = yes
 			}
 		}
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 10 }
 		completion_reward = {
 			add_political_power = 50
 			add_stability = 0.05
@@ -3557,7 +3557,7 @@ focus_tree = {
 			STP_pc_founder_rules = yes
 		}
 		prerequisite = { focus = STP_pc_after_victory }
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 12 }
 		completion_reward = {
 			add_political_power = 40
 			country_event = { id = ADISCORD_STP_pc.12 hours = 1 }
@@ -3582,7 +3582,7 @@ focus_tree = {
 		}
 		prerequisite = { focus = STP_pc_shabrat_politics }
 		mutually_exclusive = { focus = STP_pc_freedom_open }
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 12 }
 		completion_reward = {
 			custom_effect_tooltip = STP_pc_hegemony_open_tt
 		}

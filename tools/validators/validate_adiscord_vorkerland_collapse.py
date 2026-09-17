@@ -410,9 +410,9 @@ def validate_countries(root: Path, issues: list[str]) -> None:
         "SRA_Helio_Marr": "GFX_portrait_SRA_Helio_Marr",
         "ZTA_Viktor_Holt": "GFX_portrait_ZTA_Viktor_Holt",
         "RIV_Mikhail_Arsenyev": "GFX_portrait_RIV_Mikhail_Arsenyev",
-        "REV_Elena_Rudenko": "GFX_portrait_REV_Elena_Rudenko",
+        "REV_Zagtun_Zoldatanoe": "GFX_portrait_REV_Zagtun_Zoldatanoe",
         "YOR_Pavel_Korin": "GFX_portrait_YOR_Pavel_Korin",
-        "NDN_Anna_Lind": "GFX_portrait_NDN_Anna_Lind",
+        "NDN_Nikit_Mondalov": "GFX_portrait_NDN_Nikit_Mondalov",
         "SWB_Oskar_Renn": "GFX_portrait_SWB_Oskar_Renn",
         "VHV_Sergey_Melnik": "GFX_portrait_VHV_Sergey_Melnik",
         "OSV_Marina_Volkova": "GFX_portrait_OSV_Marina_Volkova",
@@ -3431,7 +3431,12 @@ def validate_events(root: Path, issues: list[str]) -> None:
     if "recruit_character = WRK_Anton_Bagley" in effects or "recruit_character = WRK_VAD_Joint_Council" in effects:
         issues.append("collapse runtime effects still recruit WRK characters outside history")
     wrk_history = read(root, "history/countries/WRK - WorkerLand.txt", issues)
-    for character in ("WRK_Anton_Bagley", "WRK_VAD_Joint_Council"):
+    for character in (
+        "WRK_Anton_Bagley",
+        "WRK_VAD_Joint_Council",
+        "WRK_Mark_Yastrebtsev",
+        "WRK_Necro_Filopo",
+    ):
         if f"recruit_character = {character}" not in wrk_history:
             issues.append(f"WRK history does not recruit {character}")
 
@@ -3826,6 +3831,155 @@ def validate_outcomes(root: Path, issues: list[str]) -> None:
     ):
         if stale in events + maps:
             issues.append(f"removed fragmentation timeout survived: {stale}")
+
+    validate_worker_mandate(root, issues)
+
+
+def validate_worker_mandate(root: Path, issues: list[str]) -> None:
+    phase_effects = source_section(
+        read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues),
+        "phase_effects",
+    )
+    events = source_section(read(root, "events/ADISCORD_vorkerland_events.txt", issues), "collapse_events")
+    wrk_characters = read(root, "common/characters/WRK.txt", issues)
+    portraits = read(root, "interface/ADISCORD_leader_portraits.gfx", issues)
+    english_loc = source_section(
+        read(root, "localisation/english/ADISCORD_vorkerland_l_english.yml", issues),
+        "collapse_l_english",
+    )
+    russian_loc = source_section(
+        read(root, "localisation/russian/ADISCORD_vorkerland_l_russian.yml", issues),
+        "collapse_l_russian",
+    )
+    english_characters = read(root, "localisation/english/nsb_characters_l_english.yml", issues)
+    russian_characters = read(root, "localisation/russian/nsb_characters_l_russian.yml", issues)
+
+    offer = named_block(phase_effects, "ADISCORD_vorkerland_offer_worker_mandate")
+    schedule = named_block(phase_effects, "ADISCORD_vorkerland_wrk_schedule_elections")
+    resolve = named_block(phase_effects, "ADISCORD_vorkerland_wrk_resolve_elections")
+    usurp = named_block(phase_effects, "ADISCORD_vorkerland_wrk_usurp_mandate")
+    elect_worker = named_block(phase_effects, "ADISCORD_vorkerland_wrk_elect_worcker")
+    elect_mark = named_block(phase_effects, "ADISCORD_vorkerland_wrk_elect_yastrebtsev")
+    elect_necro = named_block(phase_effects, "ADISCORD_vorkerland_wrk_elect_filopo")
+    finalizer = named_block(phase_effects, "ADISCORD_vorkerland_finalize_reunified_wrk")
+    formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr")
+    choice = event_block(events, "ADISCORD_vorkerland_collapse.100")
+    result = event_block(events, "ADISCORD_vorkerland_collapse.101")
+
+    if finalizer.count("ADISCORD_vorkerland_offer_worker_mandate = yes") != 1:
+        issues.append("verified WRK finalizer must offer Nikita's postwar mandate exactly once")
+    if not re.search(
+        r"has_country_flag\s*=\s*ADISCORD_vorkerland_route_worker[\s\S]*?"
+        r"ADISCORD_vorkerland_offer_worker_mandate\s*=\s*yes",
+        finalizer,
+    ):
+        issues.append("the mandate offer is not confined to the worker victory branch")
+    for branch in named_blocks(finalizer, "else_if"):
+        if "ADISCORD_vorkerland_offer_worker_mandate = yes" in branch:
+            issues.append("a non-worker victory branch still offers Nikita's mandate")
+
+    for token in (
+        "has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists",
+        "character = WRK_Nikita_Worcker",
+        "ADISCORD_vorkerland_collapse.100 days = 2",
+    ):
+        if token not in offer:
+            issues.append(f"worker mandate offer is missing {token}")
+
+    if "ADISCORD_vorkerland_collapse.101 days = 14" not in schedule:
+        issues.append("scheduled elections must wait 14 days before the result")
+    for branch, ideology, character in (
+        (elect_worker, "neo_vorkerism", "WRK_Nikita_Worcker"),
+        (elect_mark, "humanism_ideology", "WRK_Mark_Yastrebtsev"),
+        (elect_necro, "chauvinism_ideology", "WRK_Necro_Filopo"),
+    ):
+        if f"character = {character}" not in branch or f"ideology = {ideology}" not in branch:
+            issues.append(f"election outcome for {character} is missing {ideology}")
+        if "elections_allowed = yes" not in branch:
+            issues.append(f"{character} election outcome does not keep elections allowed")
+    if resolve.count("1 = {") != 3:
+        issues.append("postwar elections must keep three equal random branches")
+    for token in (
+        "GFX_portrait_WRK_Nikita_Worcker_victory",
+        "elections_allowed = no",
+        "ideology = neo_vorkerism",
+        "set_portraits = {",
+    ):
+        if token not in usurp:
+            issues.append(f"usurpation path is missing {token}")
+
+    if "character = WRK_Mark_Yastrebtsev" not in formation or "character = WRK_Necro_Filopo" not in formation:
+        issues.append("restored WRK does not reclaim the postwar election candidates from WKR")
+
+    if not choice or not result:
+        issues.append("worker mandate events 100/101 are missing")
+    else:
+        for token in (
+            "timeout_days = 21",
+            "ADISCORD_vorkerland_wrk_schedule_elections = yes",
+            "ADISCORD_vorkerland_wrk_usurp_mandate = yes",
+            "timeout_effect",
+        ):
+            if token not in choice:
+                issues.append(f"mandate choice event is missing {token}")
+        if "ADISCORD_vorkerland_wrk_resolve_elections = yes" not in result:
+            issues.append("election result event does not resolve the random winner in immediate")
+        for variant in (".worker.d", ".yastrebtsev.d", ".filopo.d"):
+            if f"ADISCORD_vorkerland_collapse.101{variant}" not in result:
+                issues.append(f"election result event is missing description {variant}")
+
+    for character, ideology, sprite, texture in (
+        ("WRK_Mark_Yastrebtsev", "humanism_ideology", "GFX_portrait_WRK_Mark_Yastrebtsev", "portrait_WRK_Mark_Yastrebtsev.png"),
+        ("WRK_Necro_Filopo", "chauvinism_ideology", "GFX_portrait_WRK_Necro_Filopo", "portrait_WRK_Necro_Filopo.png"),
+    ):
+        block = named_block(wrk_characters, character)
+        if not block or "country_leader" not in block or ideology not in block or sprite not in block:
+            issues.append(f"{character} must be a {ideology} country leader with {sprite}")
+        sprite_block = re.search(
+            rf'(?ms)spriteType\s*=\s*\{{(?:(?!spriteType\s*=).)*?'
+            rf'name\s*=\s*"{re.escape(sprite)}"(?:(?!spriteType\s*=).)*?\}}',
+            portraits,
+        )
+        if not sprite_block or texture not in sprite_block.group(0):
+            issues.append(f"{sprite}: expected texture {texture}")
+        portrait_path = root / "gfx" / "leaders" / "WRK" / texture
+        if not portrait_path.is_file():
+            issues.append(f"missing WRK portrait {texture}")
+        else:
+            with Image.open(portrait_path) as image:
+                if image.size != (156, 210):
+                    issues.append(f"{texture}: expected 156x210, got {image.size}")
+        if f"{character}:" not in english_characters or f"{character}:" not in russian_characters:
+            issues.append(f"{character} lacks English or Russian localisation")
+
+    victory = root / "gfx/leaders/WRK/portrait_WRK_Nikita_Worcker_victory.png"
+    if not victory.is_file():
+        issues.append("missing Nikita victory portrait")
+    elif "GFX_portrait_WRK_Nikita_Worcker_victory" not in portraits:
+        issues.append("Nikita victory portrait is not registered as a sprite")
+    for stale in (
+        root / "gfx/leaders/марк ястребцев.png",
+        root / "gfx/leaders/некро филопо.png",
+    ):
+        if stale.exists():
+            issues.append(f"unrenamed portrait survived: {stale.name}")
+
+    for key in (
+        "ADISCORD_vorkerland_collapse.100.t",
+        "ADISCORD_vorkerland_collapse.100.d",
+        "ADISCORD_vorkerland_collapse.100.a",
+        "ADISCORD_vorkerland_collapse.100.b",
+        "ADISCORD_vorkerland_wrk_hold_elections_tt",
+        "ADISCORD_vorkerland_collapse.101.t",
+        "ADISCORD_vorkerland_collapse.101.worker.d",
+        "ADISCORD_vorkerland_collapse.101.yastrebtsev.d",
+        "ADISCORD_vorkerland_collapse.101.filopo.d",
+        "ADISCORD_vorkerland_collapse.101.a",
+    ):
+        if f" {key}:0 " not in english_loc:
+            issues.append(f"mandate event lacks English localisation: {key}")
+        if f" {key}: " not in russian_loc:
+            issues.append(f"mandate event lacks Russian localisation: {key}")
 
 
 def validate_exhaustion(root: Path, issues: list[str]) -> None:

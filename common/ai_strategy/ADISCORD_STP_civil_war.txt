@@ -38,8 +38,45 @@ STS_cw_front_against_stp = {
 	enable = { has_global_flag = STP_cw_started has_war_with = STP }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = STP value = 100 }
-	ai_strategy = { type = front_control tag = STP ratio = 0.01 priority = 1400 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_control tag = STP ratio = 0.01 priority = 1400 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
 	ai_strategy = { type = conquer id = STP value = 200 }
+}
+
+STS_shabrat_civil_war_army = {
+	allowed = { original_tag = STS }
+	enable = {
+		is_ai = yes
+		has_global_flag = STP_cw_started
+		has_war_with = STP
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = role_ratio id = infantry value = 80 }
+	ai_strategy = { type = role_ratio id = mobile value = 20 }
+	ai_strategy = { type = role_ratio id = militias value = -80 }
+	ai_strategy = { type = role_ratio id = garrison value = -40 }
+	ai_strategy = { type = equipment_production_factor id = infantry value = 40 }
+	ai_strategy = { type = equipment_production_factor id = support value = 15 }
+	ai_strategy = { type = force_concentration_factor value = 50 }
+	ai_strategy = { type = consider_weak id = STP value = 80 }
+	ai_strategy = { type = front_unit_request tag = STP value = 120 }
+	ai_strategy = { type = front_control tag = STP ratio = 0.01 priority = 1500 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = { type = conquer id = STP value = 250 }
+	ai_strategy = { type = dont_defend_ally_borders value = 1 }
+	ai_strategy = {
+		type = put_unit_buffers
+		ratio = 0.10
+		states = { 1 }
+		subtract_invasions_from_need = yes
+		subtract_fronts_from_need = yes
+	}
+}
+
+STS_shabrat_val_front = {
+	allowed = { original_tag = STS }
+	enable = { is_ai = yes has_war_with = VAL }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = VAL value = 60 }
+	ai_strategy = { type = front_control tag = VAL ratio = 0.01 priority = 1200 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 
 SRP_cw_front_against_val = {

@@ -24,6 +24,32 @@ characters = {
 			desc = WRK_Nikita_Worcker_desc
 		}
 	}
+	WRK_Mark_Yastrebtsev = {
+		name = WRK_Mark_Yastrebtsev
+		portraits = {
+			civilian = {
+				large = GFX_portrait_WRK_Mark_Yastrebtsev
+			}
+		}
+		country_leader = {
+			ideology = humanism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+		}
+	}
+	WRK_Necro_Filopo = {
+		name = WRK_Necro_Filopo
+		portraits = {
+			civilian = {
+				large = GFX_portrait_WRK_Necro_Filopo
+			}
+		}
+		country_leader = {
+			ideology = chauvinism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+		}
+	}
 	WRK_Vlad_Petrichev = {
 		name = WRK_Vlad_Petrichev
 		portraits = {

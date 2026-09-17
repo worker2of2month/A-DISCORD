@@ -1754,6 +1754,74 @@ country_event = {
 	immediate = { ADISCORD_vorkerland_intensify_surviving_northern_fronts = yes }
 }
 
+# Nikita's postwar succession. The delayed result event exists so the winner
+# is already in office when its description is shown.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.100
+	title = ADISCORD_vorkerland_collapse.100.t
+	desc = ADISCORD_vorkerland_collapse.100.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 21
+
+	trigger = {
+		tag = WRK
+		has_country_flag = ADISCORD_vorkerland_route_worker
+		has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+		has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+		NOT = { has_country_flag = ADISCORD_vorkerland_worker_mandate_resolved }
+	}
+
+	option = {
+		name = ADISCORD_vorkerland_collapse.100.a
+		custom_effect_tooltip = ADISCORD_vorkerland_wrk_hold_elections_tt
+		hidden_effect = { ADISCORD_vorkerland_wrk_schedule_elections = yes }
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = ADISCORD_vorkerland_collapse.100.b
+		ADISCORD_vorkerland_wrk_usurp_mandate = yes
+		ai_chance = { factor = 50 }
+	}
+
+	timeout_effect = {
+		custom_effect_tooltip = ADISCORD_vorkerland_wrk_hold_elections_tt
+		hidden_effect = { ADISCORD_vorkerland_wrk_schedule_elections = yes }
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_collapse.101
+	title = ADISCORD_vorkerland_collapse.101.t
+	desc = {
+		trigger = { has_country_flag = ADISCORD_vorkerland_worker_elected }
+		text = ADISCORD_vorkerland_collapse.101.worker.d
+	}
+	desc = {
+		trigger = { has_country_flag = ADISCORD_vorkerland_yastrebtsev_elected }
+		text = ADISCORD_vorkerland_collapse.101.yastrebtsev.d
+	}
+	desc = {
+		trigger = { has_country_flag = ADISCORD_vorkerland_filopo_elected }
+		text = ADISCORD_vorkerland_collapse.101.filopo.d
+	}
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		tag = WRK
+		has_country_flag = ADISCORD_vorkerland_worker_elections_scheduled
+	}
+
+	immediate = {
+		hidden_effect = { ADISCORD_vorkerland_wrk_resolve_elections = yes }
+	}
+
+	option = { name = ADISCORD_vorkerland_collapse.101.a }
+}
+
 add_namespace = ADISCORD_vorkerland_news
 
 news_event = {

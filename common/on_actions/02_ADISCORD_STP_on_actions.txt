@@ -34,6 +34,35 @@ on_actions = {
 			}
 			if = {
 				limit = {
+					tag = STP
+					has_country_flag = STP_cw_participant
+					OR = {
+						has_global_flag = STP_cw_started
+						has_country_flag = STP_sided_with_the_party_flag
+						has_country_flag = STP_sided_with_Maksim_flag
+					}
+					NOT = { has_global_flag = STP_cw_union_wars_finished }
+				}
+				STP_cw_begin_hostilities = yes
+			}
+			if = {
+				limit = {
+					tag = STS
+					has_country_flag = STP_cw_participant
+					OR = {
+						has_global_flag = STP_cw_started
+						has_country_flag = STP_sided_with_Maksim_flag
+						has_country_flag = STP_sided_with_the_party_flag
+						STP = { has_country_flag = STP_sided_with_the_party_flag }
+						STP = { has_country_flag = STP_sided_with_Maksim_flag }
+					}
+					NOT = { has_war_with = STP }
+					NOT = { has_global_flag = STP_cw_union_wars_finished }
+				}
+				STP_cw_begin_hostilities = yes
+			}
+			if = {
+				limit = {
 					tag = STS
 					has_global_flag = STP_cw_started
 					NOT = { has_country_flag = STP_cw_nod_entered }

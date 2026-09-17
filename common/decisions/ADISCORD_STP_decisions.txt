@@ -238,7 +238,7 @@ STP_shabrat_election_bop_category = {
 				}
 			}
 		}
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 8 }
 	}
 
 	STP_cw_open_election_campaign = {
@@ -302,7 +302,7 @@ STP_shabrat_election_bop_category = {
 				}
 			}
 		}
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 6 }
 	}
 
 	# ============================================================
@@ -351,7 +351,7 @@ STP_battle_for_stelander = {
 		days_re_enable = 30
 		fire_only_once = no
 		complete_effect = { VAL = { country_event = { id = ADISCORD_STP_preparation.6 days = 1 } } }
-		ai_will_do = { base = 0 }
+		ai_will_do = { base = 10 }
 	}
 
 	STP_cw_opposition_preparation = {
@@ -404,7 +404,7 @@ STP_battle_for_stelander = {
 				STP_political_action_slot_release = yes
 			}
 		}
-		ai_will_do = { base = 5 modifier = { factor = 3 FROM = { state = 3 } } }
+		ai_will_do = { base = 5 modifier = { factor = 3 FROM = { state = 3 } } modifier = { factor = 3 FROM = { state = 2 } } }
 	}
 
 	STP_cw_prepare_rifle_cache = {
@@ -689,6 +689,7 @@ STP_battle_for_stelander = {
 		ai_will_do = {
 			base = 5
 			modifier = { factor = 2 FROM = { STP_region_party_strongest = yes } }
+			modifier = { factor = 3 FROM = { OR = { state = 2 state = 3 } } }
 		}
 	}
 

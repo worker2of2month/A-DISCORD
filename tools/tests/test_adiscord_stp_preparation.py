@@ -1321,11 +1321,13 @@ class StelanderPreparationTests(unittest.TestCase):
 
         effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         start = block(block(effects, "STP_cw_begin_hostilities"), "if")
-        delivery = next(e for e in start if e.key == "if"
+        first_time = next(e for e in start if e.key == "if"
+                         and any(v.key == "set_global_flag" and v.value == "STP_cw_started" for v in walk(e.value)))
+        delivery = next(e for e in first_time.value if e.key == "if"
                         and any(v.key == "add_timed_idea" and scalar(v.value, "idea") == "STP_cw_prepared_supply_lines"
                                 for v in walk(e.value)))
-        cleanup_index = next(i for i, e in enumerate(start) if e.key == "STP_end_battle_for_stelander")
-        self.assertLess(start.index(delivery), cleanup_index, "read depot ownership before the war-start cleanup")
+        cleanup_index = next(i for i, e in enumerate(first_time.value) if e.key == "STP_end_battle_for_stelander")
+        self.assertLess(first_time.value.index(delivery), cleanup_index, "read depot ownership before the war-start cleanup")
         self.assertNotIn("STP_resistance_supply_asset", {e.value for e in walk(block(effects, "STP_cw_materialize_region_assets"))
                                                         if e.key == "clr_state_flag"})
         for owned, ready, expected in (((), (), 0), (("3", "46"), (), 0),
@@ -1359,7 +1361,7 @@ class StelanderPreparationTests(unittest.TestCase):
 
     def test_operational_orders_deliver_training_and_a_timed_plan_to_sts(self):
         start = block(block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_begin_hostilities"), "if")
-        orders = next(e.value for e in start if e.key == "if"
+        orders = next(e.value for e in walk(start) if e.key == "if"
                       and any(v.key == "has_country_flag" and v.value == "STP_cw_early_orders_ready"
                               for v in walk(block(e.value, "limit"))))
         recipient = block(orders, "STS")
