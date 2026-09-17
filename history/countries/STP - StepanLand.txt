@@ -11,6 +11,7 @@ recruit_character = STP_rufus_hedersett
 recruit_character = STP_Roland_Keitel
 recruit_character = STP_Maurice_Dallon
 recruit_character = STP_Leonid_Barchel
+recruit_character = STP_Gleb_Korsh
 recruit_character = STP_Edmund_Ravel
 recruit_character = STP_Viktor_Marent
 recruit_character = STP_Severin_Drake

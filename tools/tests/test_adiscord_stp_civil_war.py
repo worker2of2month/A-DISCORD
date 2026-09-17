@@ -1539,6 +1539,7 @@ class CommanderLoyaltyContracts(unittest.TestCase):
             ("STP_Maurice_Dallon", "corps_commander", {"organizer"}, names[0]),
             ("STP_August_Veil", "field_marshal", {"defensive_doctrine"}, names[0]),
             ("STP_Leonid_Barchel", "corps_commander", {"commando"}, names[1]),
+            ("STP_Gleb_Korsh", "corps_commander", {"trickster"}, names[1]),
             ("STP_Viktor_Marent", "corps_commander", {"brilliant_strategist"}, names[2]),
             ("STP_Edmund_Ravel", "corps_commander", {"infantry_leader"}, names[3]),
             ("STP_Severin_Drake", "field_marshal", {"offensive_doctrine", "logistics_wizard"}, names[4]),
@@ -1655,7 +1656,7 @@ class CommanderLoyaltyContracts(unittest.TestCase):
                         self.assertIn("STP_shabrat_loyalist" if ready_ else "STP_party_loyalist", traits[character])
                         self.assertTrue(original[character] - {undecided} <= traits[character])
                     for fixed in ("STP_Roland_Keitel", "STP_Maurice_Dallon", "STP_August_Veil",
-                                  "STP_Leonid_Barchel", "STP_Viktor_Marent"):
+                                  "STP_Leonid_Barchel", "STP_Gleb_Korsh", "STP_Viktor_Marent"):
                         self.assertEqual(traits[fixed], original[fixed])
                     count = len(writes)
                     run("STP_cw_refresh_officer_loyalties")
@@ -1676,6 +1677,7 @@ class CommanderLoyaltyContracts(unittest.TestCase):
                         self.assertEqual(cond(gate, owner), present and not arrested)
         start = block(read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_start")
         self.assertRegex(start, r"limit\s*=\s*\{\s*STP_cw_shabrat_available = yes\s*\}\s*set_nationality\s*=\s*\{\s*character = STP_maksim_shabrat")
+        self.assertIn("set_nationality = { character = STP_Gleb_Korsh target_country = STS }", start)
         self.assertLess(start.index("set_country_flag = STP_cw_participant"), start.index("STP_cw_refresh_officer_loyalties = yes"))
         self.assertLess(start.index("STP_cw_refresh_officer_loyalties = yes"), start.index("set_nationality"))
         self.assertIn("STP_cw_release_resistance_officeholders = yes", start)

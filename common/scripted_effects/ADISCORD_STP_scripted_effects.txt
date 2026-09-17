@@ -2583,6 +2583,7 @@ STP_cw_start = {
 		if = { limit = { has_character = STP_ilya_gornin } set_nationality = { character = STP_ilya_gornin target_country = STS } }
 		if = { limit = { has_character = STP_vera_tikh } set_nationality = { character = STP_vera_tikh target_country = STS } }
 		if = { limit = { has_character = STP_Leonid_Barchel } set_nationality = { character = STP_Leonid_Barchel target_country = STS } }
+		if = { limit = { has_character = STP_Gleb_Korsh } set_nationality = { character = STP_Gleb_Korsh target_country = STS } }
 		if = { limit = { has_character = STP_Viktor_Marent } set_nationality = { character = STP_Viktor_Marent target_country = SRP } }
 		if = {
 			limit = { has_country_flag = STP_cw_officers_ready }

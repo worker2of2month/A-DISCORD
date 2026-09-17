@@ -116,6 +116,10 @@ spriteTypes = {
 		texturefile = "gfx/leaders/STP/portrait_STP_Leonid_Barchel.png"
 	}
 	spriteType = {
+		name = "GFX_portrait_STP_Gleb_Korsh"
+		texturefile = "gfx/leaders/STP/portrait_STP_Gleb_Korsh.png"
+	}
+	spriteType = {
 		name = "GFX_portrait_STP_Edmund_Ravel"
 		texturefile = "gfx/leaders/STP/portrait_STP_Edmund_Ravel.png"
 	}
