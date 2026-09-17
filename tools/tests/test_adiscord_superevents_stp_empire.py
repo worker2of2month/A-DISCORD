@@ -39,6 +39,22 @@ def event_block(text: str, event_id: str) -> str:
     raise AssertionError(f"unterminated event {event_id}")
 
 
+def named_block(text: str, name: str) -> str:
+    marker = re.search(rf"(?m)^\s*{re.escape(name)}\s*=\s*\{{", text)
+    if marker is None:
+        raise AssertionError(f"missing block {name}")
+    brace = text.find("{", marker.start())
+    depth = 0
+    for index in range(brace, len(text)):
+        if text[index] == "{":
+            depth += 1
+        elif text[index] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[marker.start() : index + 1]
+    raise AssertionError(f"unterminated block {name}")
+
+
 class SupereventAndImperialUnionTests(unittest.TestCase):
     def test_worker_victory_has_dedicated_art(self) -> None:
         gfx = read(SUPEREVENTS)
@@ -82,6 +98,17 @@ class SupereventAndImperialUnionTests(unittest.TestCase):
             self.assertIn(f"owns_state = {state}", triggers)
             self.assertIn(f"controls_state = {state}", triggers)
             self.assertIn(f"highlight_state_targets = {{ state = {state} }}", decisions)
+
+    def test_postwar_victory_survives_settlement_cleanup(self) -> None:
+        triggers = read(IMPERIAL_TRIGGERS)
+        val = named_block(triggers, "STP_imperial_union_kefreyt_defeated")
+        nod = named_block(triggers, "STP_imperial_union_nodrul_defeated")
+        self.assertIn("has_idea = STP_pc_val_client", val)
+        self.assertIn("has_idea = STP_pc_nod_client", nod)
+        self.assertIn("STP_imperial_union_required_states_controlled = yes", val)
+        self.assertIn("STP_imperial_union_required_states_controlled = yes", nod)
+        self.assertIn("NOT = { has_war_with = VAL }", val)
+        self.assertIn("NOT = { has_war_with = NOD }", nod)
 
     def test_imperial_union_effect_owns_state_change_not_news(self) -> None:
         effects = read(IMPERIAL_EFFECTS)
