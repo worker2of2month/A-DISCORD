@@ -21,10 +21,6 @@ ADISCORD_vorkerland_clear_dirty_zone_smoke = {
 					scale = 0.15
 					min_zoom = 2000
 				}
-				set_entity_animation = {
-					id = 610040
-					animation = "ruins"
-				}
 			}
 		}
 		else = {
