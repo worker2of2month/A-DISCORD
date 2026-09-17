@@ -28,6 +28,7 @@ jobs:
           git worktree add --detach "$RUNNER_TEMP/final" origin/main
           cp tools/tests/test_adiscord_stp_nod_stale_intervention.py "$RUNNER_TEMP/final/tools/tests/"
           python tools/tmp_patch_stp_nod_stale.py "$RUNNER_TEMP/final"
+          python tools/tmp_patch_stp_nod_test_contract.py "$RUNNER_TEMP/final"
           git -C "$RUNNER_TEMP/final" diff --check
           git -C "$RUNNER_TEMP/final" rev-parse HEAD | tee "$RUNNER_TEMP/base-main.txt"
       - name: Focused regression
@@ -59,8 +60,9 @@ jobs:
             common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt \
             events/ADISCORD_STP_events.txt \
             localisation/russian/ADISCORD_STP_l_russian.yml \
-            tools/tests/test_adiscord_stp_nod_stale_intervention.py
-          test "$(git diff --cached --name-only | wc -l)" -eq 5
+            tools/tests/test_adiscord_stp_nod_stale_intervention.py \
+            tools/tests/test_adiscord_stp_civil_war.py
+          test "$(git diff --cached --name-only | wc -l)" -eq 6
           git diff --cached --check
           git commit -m "Fix stale Nodrul intervention after Last Banquet"
           git rev-parse HEAD | tee "$RUNNER_TEMP/final-commit.txt"
