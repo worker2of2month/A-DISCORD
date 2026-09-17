@@ -86,6 +86,7 @@ class WorldNewsContracts(unittest.TestCase):
             self.assertIn("is_triggered_only = yes", event)
             self.assertNotIn("fire_only_once = yes", event)
             self.assertIn("fire_only_once = no", event)
+            self.assertNotIn("fire_for_sender = no", event)
 
     def test_actual_war_relations_publish_each_story_once(self):
         war = named_block(self.on_actions, "on_war_relation_added")
