@@ -106,7 +106,7 @@ type={
 	object={
 		name="ADISCORD_factory_entity"
 		position={
-			3487.83008 2.54531 934.76 
+			3487.83008 15.64531 934.76
 		}
 		rotation={
 			0 370 0 
@@ -115,7 +115,7 @@ type={
 	object={
 		name="ADISCORD_factory_entity"
 		position={
-			3595.69984 2.28528 767.51 
+			3595.69984 13.14531 767.51
 		}
 		rotation={
 			0 100 0 
@@ -124,7 +124,7 @@ type={
 	object={
 		name="ADISCORD_factory_entity"
 		position={
-			3492.21984 2.48309 976.8 
+			3492.21984 16.88309 976.8
 		}
 		rotation={
 			0 180 0 
@@ -185,7 +185,7 @@ type={
 	object={
 		name="ADISCORD_congress_entity"
 		position={
-			3745.28 0.8994 939.79 
+			3745.28 11.4994 939.79
 		}
 		rotation={
 			0 250 0 
@@ -200,7 +200,7 @@ type={
 	object={
 		name="ADISCORD_reactor_entity"
 		position={
-			3521.11008 1.71028 893.46 
+			3521.11008 14.50522 893.46
 		}
 		rotation={
 			0 90 0 
@@ -209,7 +209,7 @@ type={
 	object={
 		name="ADISCORD_reactor_entity"
 		position={
-			3546.19008 2.03298 899.32 
+			3546.19008 11.79414 899.32
 		}
 		rotation={
 			0 370 0 
@@ -224,7 +224,7 @@ type={
 	object={
 		name="ADISCORD_reactor_2_entity"
 		position={
-			3551.20992 4.16995 913.51 
+			3551.20992 16.70866 913.51
 		}
 		rotation={
 			90 270 90 

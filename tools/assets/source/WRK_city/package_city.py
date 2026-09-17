@@ -163,14 +163,16 @@ def landmark_plan(heights,provinces,definitions,rivers,geometry):
                 terrain=[height_at(heights,xx,zz) for xx,zz in samples]
                 if min(terrain)<9.5 or max(terrain)-min(terrain)>min(.55,(upper[1]-lower[1])*.30):continue
                 center=height_at(heights,x,z)
-                # Centered legacy meshes have no authored deep foundation.
-                # Bury the lowest contact plane and bound the high-side cover.
-                y=round(min(terrain)-center-lower[1]-.025,5)
+                # Ambient-object Y is absolute height, same as map/buildings.txt.
+                # Centered legacy meshes have no authored deep foundation, so
+                # place the origin so the lowest contact plane sits just under
+                # the sampled terrain.
+                y=round(min(terrain)-lower[1]-.025,5)
                 accepted={'entity':entity,'index':index,'position':[x,y,z],'rotation':rotation,
                           'anchor':anchor,'state':state,'province':province,'move_distance':distance,
                           'terrain_range':[min(terrain),max(terrain)],'center_height':center,
                           'footprint':outline,'footprint_states':[state],
-                          'contact_world_y':center+y+lower[1],'clearance':radius,
+                          'contact_world_y':y+lower[1],'clearance':radius,
                           'native_scale':scale,'model_sha256':model['sha256']}
                 break
             assert accepted is not None,f'No level, dry site for {entity} {index}'
@@ -355,7 +357,7 @@ def plan():
             if terrain not in ('urban','vorkernsberg'):continue
             shifted={**row,'position':[x,0,z],'province':province,'source_anchor':row['position']}
             if add(shifted,NAMES[6+index%3]):break
-    return {'height_mode':'terrain-relative Y; bilinear heightmap / 10, exported foundation and yaw',
+    return {'height_mode':'landmark Y is absolute heightmap/10; city Y stays terrain-relative',
             'foundation_top_clearance':.01,'foundation_burial_margin':.15,'retained_clearances':retained,
             'river_bank_setback':2,'maximum_foundation_exposure':.46,
             'landmarks':landmarks,
