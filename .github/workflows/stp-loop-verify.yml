@@ -17,11 +17,25 @@ jobs:
         with:
           ref: fix/stp-gameplay-loop-20260917
           fetch-depth: 0
-      - name: Normalize custom-cost localisation
+      - name: Normalize final STP patch
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
+
+          decisions = Path('common/decisions/ADISCORD_STP_decisions.txt')
+          text = decisions.read_text(encoding='utf-8')
+          old = '''\t\t\thas_war_with = STP
+\t\t\tcontrols_state = 3
+\t\t\tNOT = { has_country_flag = STP_cw_last_banquet_launched }
+\t\t\tNOT = {'''
+          new = '''\t\t\thas_war_with = STP
+\t\t\tcontrols_state = 3
+\t\t\tNOT = {'''
+          if text.count(old) != 1:
+              raise SystemExit(f'expected one duplicated Last Banquet availability guard, found {text.count(old)}')
+          decisions.write_text(text.replace(old, new, 1), encoding='utf-8', newline='\n')
+
           p = Path('localisation/russian/ADISCORD_STP_l_russian.yml')
           raw = p.read_bytes()
           if not raw.startswith(b'\xef\xbb\xbf'):
@@ -43,6 +57,10 @@ jobs:
               raise SystemExit('Russian localisation lost UTF-8 BOM after normalization')
           PY
           git diff --check
+      - name: Install test dependency
+        shell: bash
+        run: |
+          python -m pip install --disable-pip-version-check pillow
       - name: Run STP regression suite
         shell: bash
         run: |
@@ -61,7 +79,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git rm .github/workflows/stp-loop-verify.yml
-          git add localisation/russian/ADISCORD_STP_l_russian.yml
+          git add common/decisions/ADISCORD_STP_decisions.txt \
+                  localisation/russian/ADISCORD_STP_l_russian.yml
           git diff --cached --check
           git commit -m "test: verify Stelander gameplay loop"
           git push origin HEAD:fix/stp-gameplay-loop-20260917
