@@ -12,8 +12,8 @@ spriteTypes = {
 		name = "GFX_supereventbutton"
 		textureFile = "gfx/interface/superevents/supereventbutton.png"
 	}
-	
-	
+
+
 #superevents themselves
 
 	spriteType = {
@@ -26,7 +26,7 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_superevent_vorkerland_worker_victory"
-		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_civilwar.png"
+		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_worker_victory.png"
 	}
 	spriteType = {
 		name = "GFX_superevent_vorkerland_vlad_victory"

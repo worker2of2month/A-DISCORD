@@ -2,26 +2,36 @@ add_namespace = ADISCORD_superevent
 add_namespace = ADISCORD_superevent_news
 add_namespace = ADISCORD_superevent_audio
 
-# Console: event ADISCORD_superevent.1 / .2
-# .1 is the Vorkerland civil-war outbreak. .2 is Worker victory.
-# The picture is a scripted-GUI global flag. Scoped audio only plays from a
-# human country's own country-event, so these IDs are the whole presentation.
+# Console compatibility gateways: event ADISCORD_superevent.1 / .2
+# .1 starts the real Vorkerland collapse when possible, including the Unity
+# Tower destruction. Once the collapse has already started it becomes a safe
+# presentation replay. .2 is the Worker-victory presentation gateway used by
+# the existing reunification effect.
 country_event = {
 	id = ADISCORD_superevent.1
 	hidden = yes
 	is_triggered_only = yes
 
 	immediate = {
-		ADISCORD_vorkerland_clear_superevent_flags = yes
-		set_global_flag = {
-			flag = superevent_vorkerland_civilwar
-			value = 1
-			days = 20
-		}
 		if = {
-			limit = { is_ai = no }
-			scoped_sound_effect = superevent_vorkerland_civilwar_sound_e
-			scoped_play_song = "one_minute_of_silence"
+			limit = {
+				NOT = { has_global_flag = ADISCORD_vorkerland_collapse_started }
+				WRK = { exists = yes }
+			}
+			WRK = { country_event = { id = ADISCORD_vorkerland_collapse.1 } }
+		}
+		else = {
+			ADISCORD_vorkerland_clear_superevent_flags = yes
+			set_global_flag = {
+				flag = superevent_vorkerland_civilwar
+				value = 1
+				days = 20
+			}
+			if = {
+				limit = { is_ai = no }
+				scoped_sound_effect = superevent_vorkerland_civilwar_sound_e
+				scoped_play_song = "one_minute_of_silence"
+			}
 		}
 	}
 }
@@ -81,7 +91,7 @@ news_event = { #vorkerland civilwar
 	desc = news.0.d
 
 	major = yes
-	
+
 	# The collapse caller owns the save-safe one-shot guard. Keeping the event
 	# reusable also permits a deterministic console/runtime audio check.
 	fire_only_once = no
@@ -117,78 +127,16 @@ news_event = { #stelander empire
 	desc = news.1.d
 
 	major = yes
-	
 	fire_only_once = no
-
 	is_triggered_only = yes
 
-	picture = GFX_news_event_adiscord_vorkerland_explosion
+	picture = GFX_news_event_adiscord_treaty_signing
 
+	# Presentation only. State ownership, politics and Shabrat's leader role
+	# belong to STP_proclaim_imperial_union, which is reached through gameplay.
 	immediate = {
 		hidden_effect = {
-			STP = {
-				set_cosmetic_tag = STP_empire
-
-				set_politics = {
-				    ruling_party = chauvinism
-				    elections_allowed = no
-				    last_election = "2163.12.17"
-				    election_frequency = 48
-				    long_name = STP_empire_faction_party_long
-				    name = STP_empire_faction_party
-				}
-
-				add_country_leader_role = {
-				    character = STP_maksim_shabrat
-				    promote_leader = yes
-				    country_leader = {
-				        ideology = chauvinism_ideology
-				        expire = "2190.1.1.1"
-				        traits = { }
-				    }
-				}
-
-				set_country_leader_portrait = {
-					ideology = chauvinism
-					portrait = GFX_portrait_STP_Maksim_Shabrat_dictator
-				}
-
-				transfer_state  = 5
-				transfer_state  = 4
-				transfer_state  = 9
-				transfer_state  = 41
-				transfer_state  = 6
-				transfer_state  = 22
-				transfer_state  = 7
-				transfer_state  = 10
-				transfer_state  = 11
-				transfer_state  = 30
-				transfer_state  = 12
-				transfer_state  = 54
-				transfer_state  = 31
-				transfer_state  = 18
-				transfer_state  = 15
-				transfer_state  = 8
-				transfer_state  = 17
-				transfer_state  = 14
-				transfer_state  = 16
-				transfer_state  = 13
-				transfer_state  = 20
-				transfer_state  = 19
-				transfer_state  = 21
-				transfer_state  = 42
-				transfer_state  = 55
-				transfer_state  = 24
-				transfer_state  = 48
-				transfer_state  = 57
-				transfer_state  = 56
-			}
-		}
-	}
-	
-	option = {
-		name = news.1.a
-		hidden_effect = {
+			ADISCORD_vorkerland_clear_superevent_flags = yes
 			set_global_flag = {
 				flag = superevent_stelander_empire
 				value = 1
@@ -200,4 +148,6 @@ news_event = { #stelander empire
 			}
 		}
 	}
+
+	option = { name = news.1.a }
 }

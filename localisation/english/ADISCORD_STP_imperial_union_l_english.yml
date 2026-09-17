@@ -1,0 +1,10 @@
+﻿l_english:
+ STP_imperial_union_category: "Stelander Imperial Union"
+ STP_imperial_union_category_desc: "Hegemony stops being a doctrine once its borders become a fact. After the defeat of Kefreyt and Nodrul, Shabrat can formalize the new order only when the entire claimed territorial belt belongs to Steland and is under its control."
+ STP_proclaim_imperial_union: "Proclaim the Imperial Union"
+ STP_proclaim_imperial_union_desc: "The wars gave Steland space, but not yet a final political form. Once every claimed territory is held under one authority, Shabrat can discard the language of a provisional postwar state and proclaim the Stelander Imperial Union. This decision does not transfer territory automatically: the Union's borders must be conquered first."
+ STP_imperial_union_kefreyt_defeated: "Kefreyt has been defeated"
+ STP_imperial_union_nodrul_defeated: "Nodrul has been defeated"
+ STP_imperial_union_required_states_controlled: "Every territory claimed for the future Imperial Union is owned and controlled by us"
+ STP_imperial_union_requirements_met: "The conditions for proclaiming the Imperial Union are met"
+ STP_imperial_union_proclaimed: "The Stelander Imperial Union has been proclaimed"
