@@ -627,6 +627,7 @@ country_event = {
 		set_country_flag = STP_sided_with_Maksim_flag
 		hidden_effect = {
 			STS = { set_country_flag = STP_sided_with_Maksim_flag }
+			STP_cw_commission_korsh = yes
 			STP_cw_begin_hostilities = yes
 		}
 		STS = { change_tag_from = STP }

@@ -225,6 +225,7 @@ class CivilWarContracts(unittest.TestCase):
                    ("STS", "exists", "yes"): True}
         chosen = list(selected_effects(body, shabrat))
         self.assertEqual(sum(e.key == "STP_cw_begin_hostilities" for _, e in chosen), 1)
+        self.assertEqual(sum(e.key == "STP_cw_commission_korsh" for _, e in chosen), 1)
         self.assertIn(("STS", "change_tag_from"), [(scope, e.key) for scope, e in chosen if e.key == "change_tag_from"])
         self.assertEqual([e.value for scope, e in chosen if scope == "STS" and e.key == "change_tag_from"], ["STP"])
         self.assertFalse(any(e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_cw.30"
@@ -234,6 +235,7 @@ class CivilWarContracts(unittest.TestCase):
                  ("STS", "exists", "yes"): True}
         party_chosen = list(selected_effects(body, party))
         self.assertEqual(sum(e.key == "STP_cw_begin_hostilities" for _, e in party_chosen), 1)
+        self.assertEqual(sum(e.key == "STP_cw_commission_korsh" for _, e in party_chosen), 0)
         self.assertFalse(any(e.key == "change_tag_from" for _, e in party_chosen))
         self.assertFalse(any(e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_cw.30"
                              for _, e in party_chosen))
@@ -1539,7 +1541,6 @@ class CommanderLoyaltyContracts(unittest.TestCase):
             ("STP_Maurice_Dallon", "corps_commander", {"organizer"}, names[0]),
             ("STP_August_Veil", "field_marshal", {"defensive_doctrine"}, names[0]),
             ("STP_Leonid_Barchel", "corps_commander", {"commando"}, names[1]),
-            ("STP_Gleb_Korsh", "corps_commander", {"trickster"}, names[1]),
             ("STP_Viktor_Marent", "corps_commander", {"brilliant_strategist"}, names[2]),
             ("STP_Edmund_Ravel", "corps_commander", {"infantry_leader"}, names[3]),
             ("STP_Severin_Drake", "field_marshal", {"offensive_doctrine", "logistics_wizard"}, names[4]),
@@ -1548,6 +1549,8 @@ class CommanderLoyaltyContracts(unittest.TestCase):
             self.assertEqual(actual, original | {loyalty})
         shabrat = ast_block(characters, "STP_maksim_shabrat")
         self.assertFalse(any(e.key in ("corps_commander", "field_marshal") for e in shabrat))
+        korsh = ast_block(characters, "STP_Gleb_Korsh")
+        self.assertFalse(any(e.key in ("corps_commander", "field_marshal") for e in korsh))
         portraits = ast_block(shabrat, "portraits")
         self.assertEqual(scalar(ast_block(portraits, "army"), "large"),
                          scalar(ast_block(portraits, "civilian"), "large"))
@@ -1656,7 +1659,7 @@ class CommanderLoyaltyContracts(unittest.TestCase):
                         self.assertIn("STP_shabrat_loyalist" if ready_ else "STP_party_loyalist", traits[character])
                         self.assertTrue(original[character] - {undecided} <= traits[character])
                     for fixed in ("STP_Roland_Keitel", "STP_Maurice_Dallon", "STP_August_Veil",
-                                  "STP_Leonid_Barchel", "STP_Gleb_Korsh", "STP_Viktor_Marent"):
+                                  "STP_Leonid_Barchel", "STP_Viktor_Marent"):
                         self.assertEqual(traits[fixed], original[fixed])
                     count = len(writes)
                     run("STP_cw_refresh_officer_loyalties")
@@ -1677,7 +1680,14 @@ class CommanderLoyaltyContracts(unittest.TestCase):
                         self.assertEqual(cond(gate, owner), present and not arrested)
         start = block(read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_start")
         self.assertRegex(start, r"limit\s*=\s*\{\s*STP_cw_shabrat_available = yes\s*\}\s*set_nationality\s*=\s*\{\s*character = STP_maksim_shabrat")
-        self.assertIn("set_nationality = { character = STP_Gleb_Korsh target_country = STS }", start)
+        self.assertNotIn("set_nationality = { character = STP_Gleb_Korsh", start)
+        self.assertIn("STP_cw_commission_korsh = yes", start)
+        commission = block(read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_commission_korsh")
+        self.assertIn("is_ai = no", commission)
+        self.assertIn("recruit_character = STP_Gleb_Korsh", commission)
+        self.assertIn("add_corps_commander_role", commission)
+        self.assertIn("STP_cw_shabrat_available = yes", commission)
+        self.assertNotIn("recruit_character = STP_Gleb_Korsh", read("history/countries/STP - StepanLand.txt"))
         self.assertLess(start.index("set_country_flag = STP_cw_participant"), start.index("STP_cw_refresh_officer_loyalties = yes"))
         self.assertLess(start.index("STP_cw_refresh_officer_loyalties = yes"), start.index("set_nationality"))
         self.assertIn("STP_cw_release_resistance_officeholders = yes", start)
@@ -1815,6 +1825,10 @@ class CommanderLoyaltyContracts(unittest.TestCase):
         resistance = next(option for option in options if any(child.key == "change_tag_from" for child in walk(option)))
         self.assertIn(("set_country_flag", "STP_sided_with_Maksim_flag"),
                       [(e.key, e.value) for e in walk(resistance)])
+        self.assertEqual(sum(e.key == "STP_cw_commission_korsh" for e in walk(resistance)), 1)
+        party_option = next(option for option in options if option is not resistance)
+        self.assertEqual(sum(e.key == "STP_cw_commission_korsh" for e in walk(party_option)), 0)
+        self.assertEqual(sum(e.key == "STP_cw_commission_korsh" for e in walk(timeout)), 0)
         war = block(effects, "STP_cw_begin_hostilities")
         self.assertIn("NOT = { has_global_flag = STP_cw_started }", war)
         self.assertLess(war.index("set_global_flag = STP_cw_started"), war.index("declare_war_on"))

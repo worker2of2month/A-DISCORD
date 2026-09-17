@@ -145,15 +145,6 @@ characters = {
 				large = GFX_portrait_STP_Gleb_Korsh
 			}
 		}
-		corps_commander = {
-			traits = { trickster STP_shabrat_loyalist }
-			skill = 3
-			attack_skill = 3
-			defense_skill = 2
-			planning_skill = 2
-			logistics_skill = 4
-			legacy_id = -1
-		}
 	}
 
 	STP_Edmund_Ravel = {
