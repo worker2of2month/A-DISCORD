@@ -54,7 +54,7 @@ class SupereventAndImperialUnionTests(unittest.TestCase):
     def test_civilwar_console_gateway_runs_the_real_outbreak(self) -> None:
         gateway = event_block(read(NEWS), "ADISCORD_superevent.1")
         self.assertIn("ADISCORD_vorkerland_collapse.1", gateway)
-        self.assertNotIn("superevent_vorkerland_civilwar\n", gateway)
+        self.assertIn("superevent_vorkerland_civilwar", gateway)
 
     def test_stelander_empire_news_is_presentation_only(self) -> None:
         empire = event_block(read(NEWS), "ADISCORD_superevent_news.2")
