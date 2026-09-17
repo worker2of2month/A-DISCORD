@@ -1,0 +1,20 @@
+l_english:
+ ADISCORD_world_news.1.t: "Fighting Erupts Across Vorkerland"
+ ADISCORD_world_news.1.d: "The collapse of federal authority has ceased to be a political crisis. Units loyal to the principal claimants to Vorkerland's inheritance have entered direct combat. Railway junctions are being placed under military control, roads are being closed, and former comrades now occupy opposing sides of a growing front. The question of who will inherit the republic is now being decided by force."
+ ADISCORD_world_news.1.a: "The collapse has become a war."
+
+ ADISCORD_world_news.2.t: "Nodrul's Northern War Begins"
+ ADISCORD_world_news.2.d: "Open fighting has begun in northern Nodrul. Forces of the central government have clashed with the northern coalition, turning a regional crisis into a full military campaign. Mobilisation orders are spreading across the region while roads and mountain passes come under military control. The outcome may reshape the balance of power across the north of the continent."
+ ADISCORD_world_news.2.a: "The north burns again."
+
+ ADISCORD_world_news.3.t: "Civil War Erupts in Stelander"
+ ADISCORD_world_news.3.d: "Stelander's political split has become an open war. Government formations and resistance forces now answer to separate commands and are fighting for control of the country. Local administrations are choosing sides, arsenals are being opened, and mountain roads are becoming military supply lines. The possibility of compromise has given way to a struggle over the future of Steland itself."
+ ADISCORD_world_news.3.a: "The country has split."
+
+ ADISCORD_world_news.4.t: "Kefreyt Intervenes in Stelander"
+ ADISCORD_world_news.4.d: "Kefreyt has moved beyond shipments, contracts, and political pressure to direct military intervention in Stelander. Its forces have opened a new front against one of the civil war belligerents. For the neighbouring states, the implication is immediate: the struggle for Stelander is no longer an internal conflict, but part of a wider contest for the region."
+ ADISCORD_world_news.4.a: "The war is crossing Stelander's borders."
+
+ ADISCORD_world_news.5.t: "Itora Intervenes in Vorkerland"
+ ADISCORD_world_news.5.d: "Itora has openly entered the struggle for the northern lands of former Vorkerland. Itoran forces have crossed the frontier and begun combat operations against local forces, turning an already fragmented civil war into an international conflict. Northern governments must now fight not only one another, but an external power with its own plans for the region's postwar order."
+ ADISCORD_world_news.5.a: "The war has gained another participant."
