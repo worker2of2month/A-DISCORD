@@ -60,53 +60,39 @@ class StelanderInspectionSchedulerRegressionTests(unittest.TestCase):
             )
             self.assertIn(expected, pair_guard, (left, right))
 
-    def test_scheduler_reconciles_target_count_and_has_no_random_dead_end(self) -> None:
+    def test_scheduler_reconciles_one_or_two_commissions_and_has_no_random_dead_end(self) -> None:
         effects = read(EFFECTS)
         scheduler = named_block(effects, "STP_schedule_next_party_inspection")
-        counter = named_block(effects, "STP_cw_count_active_party_inspections")
         opener = named_block(effects, "STP_cw_open_one_party_inspection")
 
         self.assertIn("has_country_flag = STP_cw_inspection_chain_open", scheduler)
-        self.assertEqual(scheduler.count("STP_cw_count_active_party_inspections = yes"), 2)
+        self.assertIn("NOT = { STP_cw_two_inspections_active = yes }", scheduler)
         self.assertEqual(scheduler.count("STP_cw_open_one_party_inspection = yes"), 2)
-        self.assertIn(
-            "var = STP_cw_active_party_inspections value = 1 compare = less_than",
-            scheduler,
-        )
-        self.assertIn(
-            "var = STP_cw_active_party_inspections value = 2 compare = less_than",
-            scheduler,
-        )
         self.assertIn("STP_cw_second_inspection_unlocked = yes", scheduler)
-        self.assertEqual(counter.count("add_to_temp_variable = { var = STP_cw_active_party_inspections value = 1 }"), 6)
         for state in INSPECTION_STATES:
-            self.assertIn(f"{state} = {{ has_state_flag = STP_party_inspection_active }}", counter)
+            self.assertIn(f"{state} = {{ has_state_flag = STP_party_inspection_active }}", scheduler)
         self.assertIsNone(
             re.search(r"(?m)^\s*1\s*=\s*\{\s*\}\s*$", opener),
             "a valid inspection chain must never die on a random no-op",
         )
 
-    def test_two_commissions_use_a_targeted_delay_instead_of_extending_both(self) -> None:
-        decisions = read(DECISIONS)
-        single = named_block(decisions, "STP_cw_delay_inspection")
-        targeted = named_block(decisions, "STP_cw_delay_inspection_targeted")
+    def test_one_delay_purchase_extends_only_one_active_commission(self) -> None:
+        decision = named_block(read(DECISIONS), "STP_cw_delay_inspection")
+        complete = named_block(decision, "complete_effect")
 
-        self.assertIn("NOT = { STP_cw_two_inspections_active = yes }", single)
-        self.assertIn("state_target = yes", targeted)
-        self.assertIn("STP_cw_two_inspections_active = yes", targeted)
-        self.assertIn("FROM = { has_state_flag = STP_party_inspection_active }", targeted)
-        self.assertEqual(targeted.count("add_days_mission_timeout = { mission = STP_party_inspection_state_"), 6)
-        self.assertGreaterEqual(targeted.count("else_if ="), 5)
+        self.assertEqual(
+            complete.count("add_days_mission_timeout = { mission = STP_party_inspection_state_"),
+            6,
+        )
+        self.assertGreaterEqual(complete.count("else_if ="), 5)
         for state in INSPECTION_STATES:
-            self.assertIn(f"state = {state}", targeted)
-            self.assertIn(f"mission = STP_party_inspection_state_{state} days = 14", targeted)
+            self.assertIn(f"mission = STP_party_inspection_state_{state} days = 14", complete)
 
     def test_last_banquet_is_a_bounded_fada_operation_with_real_failure_cost(self) -> None:
         decisions = read(DECISIONS)
         launch = named_block(decisions, "STP_cw_launch_last_banquet")
         fallback = named_block(decisions, "STP_cw_launch_last_banquet_fallback")
         mission = named_block(decisions, "STP_cw_last_banquet_window")
-        triggers = read(TRIGGERS)
 
         for block in (launch, fallback):
             self.assertIn("set_country_flag = STP_cw_last_banquet_launched", block)
@@ -118,14 +104,14 @@ class StelanderInspectionSchedulerRegressionTests(unittest.TestCase):
 
         self.assertIn("days_mission_timeout = 21", mission)
         self.assertIn("available = { controls_state = 28 }", mission)
-        self.assertIn("set_country_flag = STP_cw_last_banquet_success", named_block(mission, "complete_effect"))
+        success = named_block(mission, "complete_effect")
+        self.assertIn("set_country_flag = STP_cw_last_banquet_success", success)
+        self.assertIn("set_country_flag = NOD_cw_offer_shown", success)
+        self.assertIn("remove_mission = NOD_cw_intervention_preparation", success)
+        self.assertIn("set_country_flag = STP_cw_nod_warning_cancelled", success)
         timeout = named_block(mission, "timeout_effect")
         self.assertIn("set_country_flag = STP_cw_last_banquet_failed", timeout)
         self.assertIn("add_war_support = -0.10", timeout)
-        self.assertIn(
-            "NOT = { STS = { has_country_flag = STP_cw_last_banquet_success } }",
-            named_block(triggers, "NOD_cw_intervention_possible"),
-        )
 
     def test_border_evidence_can_shift_the_real_nod_countdown_once_in_either_direction(self) -> None:
         decisions = read(DECISIONS)
@@ -133,15 +119,14 @@ class StelanderInspectionSchedulerRegressionTests(unittest.TestCase):
         accelerate = named_block(decisions, "STP_cw_accelerate_nodrul_preparation")
 
         for block in (delay, accelerate):
-            self.assertIn("has_completed_focus = STP_cw_border_evidence", block)
             self.assertIn("has_country_flag = STP_cw_northern_strategy_evidence", block)
             self.assertIn("has_active_mission = STP_cw_nod_warning", block)
             self.assertIn("NOD = { has_active_mission = NOD_cw_intervention_preparation }", block)
             self.assertIn("clr_country_flag = STP_cw_northern_strategy_evidence", block)
-        self.assertIn("mission = STP_cw_nod_warning days = 28", delay)
-        self.assertIn("mission = NOD_cw_intervention_preparation days = 28", delay)
-        self.assertIn("mission = STP_cw_nod_warning days = -21", accelerate)
-        self.assertIn("mission = NOD_cw_intervention_preparation days = -21", accelerate)
+        self.assertIn("mission = STP_cw_nod_warning days = 10", delay)
+        self.assertIn("mission = NOD_cw_intervention_preparation days = 10", delay)
+        self.assertIn("mission = STP_cw_nod_warning days = -10", accelerate)
+        self.assertIn("mission = NOD_cw_intervention_preparation days = -10", accelerate)
 
         loc = read(LOC)
         self.assertIn("STP_cw_delay_election_tt:", loc)
