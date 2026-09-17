@@ -12,11 +12,56 @@ jobs:
   verify:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: true
-      - name: Run focused regression
-        run: python -B -m unittest -v tools.tests.test_adiscord_stp_nod_stale_intervention
+      - name: Install validator dependencies
+        run: python -m pip install --disable-pip-version-check pillow numpy
+      - name: Prepare candidate from latest main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git worktree add --detach "$RUNNER_TEMP/final" origin/main
+          cp tools/tests/test_adiscord_stp_nod_stale_intervention.py "$RUNNER_TEMP/final/tools/tests/"
+          python tools/tmp_patch_stp_nod_stale.py "$RUNNER_TEMP/final"
+          git -C "$RUNNER_TEMP/final" diff --check
+          git -C "$RUNNER_TEMP/final" rev-parse HEAD | tee "$RUNNER_TEMP/base-main.txt"
+      - name: Focused regression
+        shell: bash
+        run: |
+          cd "$RUNNER_TEMP/final"
+          python -B -m unittest -v tools.tests.test_adiscord_stp_nod_stale_intervention
+      - name: Full STP regression suite
+        shell: bash
+        run: |
+          cd "$RUNNER_TEMP/final"
+          python -B -m unittest discover -s tools/tests -p 'test_adiscord_stp_*.py'
+      - name: Total-conversion validator
+        shell: bash
+        run: |
+          cd "$RUNNER_TEMP/final"
+          python -B tools/validate_tc.py --limit 300
+          git diff --check
+      - name: Publish clean verified commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/final"
+          git config user.name "A-Discord Audit"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c fix/stp-nod-stale-intervention-final-20260917
+          git add \
+            common/scripted_effects/ADISCORD_STP_scripted_effects.txt \
+            common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt \
+            events/ADISCORD_STP_events.txt \
+            localisation/russian/ADISCORD_STP_l_russian.yml \
+            tools/tests/test_adiscord_stp_nod_stale_intervention.py
+          test "$(git diff --cached --name-only | wc -l)" -eq 5
+          git diff --cached --check
+          git commit -m "Fix stale Nodrul intervention after Last Banquet"
+          git rev-parse HEAD | tee "$RUNNER_TEMP/final-commit.txt"
+          git push origin HEAD:refs/heads/fix/stp-nod-stale-intervention-final-20260917
