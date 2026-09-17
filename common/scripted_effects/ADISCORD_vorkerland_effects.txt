@@ -3777,6 +3777,7 @@ ADISCORD_vorkerland_clear_superevent_flags = {
 	clr_global_flag = superevent_vorkerland_civilwar
 	clr_global_flag = superevent_vorkerland_dirty_opening
 	clr_global_flag = superevent_vorkerland_worker_victory
+	clr_global_flag = superevent_vorkerland_utilitarian_victory
 	clr_global_flag = superevent_vorkerland_vlad_victory
 	clr_global_flag = superevent_vorkerland_dorian_victory
 }
@@ -3792,7 +3793,17 @@ ADISCORD_vorkerland_play_collapse_superevent_audio = {
 ADISCORD_vorkerland_play_local_superevent_audio = {
 	every_country = {
 		limit = { is_ai = no }
-		scoped_sound_effect = superevent_vorkerland_civilwar_sound_e
+		if = {
+			limit = { has_global_flag = superevent_vorkerland_dirty_opening }
+			scoped_sound_effect = superevent_vorkerland_dirty_opening_sound_e
+		}
+		else_if = {
+			limit = { has_global_flag = superevent_vorkerland_utilitarian_victory }
+			scoped_sound_effect = superevent_vorkerland_utilitarian_victory_sound_e
+		}
+		else = {
+			scoped_sound_effect = superevent_vorkerland_civilwar_sound_e
+		}
 		scoped_play_song = "one_minute_of_silence"
 	}
 }
@@ -3809,6 +3820,13 @@ ADISCORD_vorkerland_show_worker_victory_superevent = {
 		limit = { is_ai = no }
 		country_event = { id = ADISCORD_superevent.2 }
 	}
+}
+
+ADISCORD_vorkerland_show_utilitarian_victory_superevent = {
+	ADISCORD_vorkerland_clear_superevent_flags = yes
+	set_global_flag = ADISCORD_vorkerland_central_victory_announced
+	set_global_flag = { flag = superevent_vorkerland_utilitarian_victory value = 1 days = 20 }
+	ADISCORD_vorkerland_play_local_superevent_audio = yes
 }
 
 ADISCORD_vorkerland_show_vlad_victory_superevent = {
@@ -8120,7 +8138,13 @@ ADISCORD_vorkerland_finalize_reunified_wrk = {
 			set_global_flag = ADISCORD_vorkerland_worker_won
 			if = {
 				limit = { NOT = { has_global_flag = ADISCORD_vorkerland_central_victory_announced } }
-				ADISCORD_vorkerland_show_worker_victory_superevent = yes
+				if = {
+					limit = { NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists } }
+					ADISCORD_vorkerland_show_utilitarian_victory_superevent = yes
+				}
+				else = {
+					ADISCORD_vorkerland_show_worker_victory_superevent = yes
+				}
 			}
 			ADISCORD_vorkerland_resolve_unguaranteed_free_republics = yes
 			ADISCORD_vorkerland_offer_worker_mandate = yes

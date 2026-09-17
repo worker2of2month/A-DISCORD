@@ -11,6 +11,8 @@ IMPERIAL_DECISIONS = ROOT / "common/decisions/ADISCORD_STP_imperial_union_decisi
 IMPERIAL_TRIGGERS = ROOT / "common/scripted_triggers/ADISCORD_STP_imperial_union_triggers.txt"
 IMPERIAL_EFFECTS = ROOT / "common/scripted_effects/ADISCORD_STP_imperial_union_effects.txt"
 WORKER_ART = ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_worker_victory.png"
+DIRTY_OPENING_ART = ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png"
+UTILITARIAN_ART = ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_utilitarian_victory.png"
 
 REQUIRED_IMPERIAL_STATES = (
     4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
@@ -67,6 +69,19 @@ class SupereventAndImperialUnionTests(unittest.TestCase):
             gfx,
         )
         self.assertTrue(WORKER_ART.is_file())
+
+    def test_dirty_opening_and_utilitarian_victory_have_dedicated_art(self) -> None:
+        gfx = read(SUPEREVENTS)
+        self.assertIn(
+            'textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png"',
+            gfx,
+        )
+        self.assertIn(
+            'textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_utilitarian_victory.png"',
+            gfx,
+        )
+        self.assertTrue(DIRTY_OPENING_ART.is_file())
+        self.assertTrue(UTILITARIAN_ART.is_file())
 
     def test_civilwar_console_gateway_runs_the_real_outbreak(self) -> None:
         gateway = event_block(read(NEWS), "ADISCORD_superevent.1")

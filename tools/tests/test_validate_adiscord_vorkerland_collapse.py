@@ -429,7 +429,7 @@ country_event = {
 
     def test_every_vorkerland_superevent_route_plays_audible_sound(self) -> None:
         map_effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_map_effects')
-        for name in ("dirty_opening", "vlad_victory", "dorian_victory"):
+        for name in ("dirty_opening", "utilitarian_victory", "vlad_victory", "dorian_victory"):
             show_effect = named_block(map_effects, f"ADISCORD_vorkerland_show_{name}_superevent")
             self.assertIn(
                 "ADISCORD_vorkerland_play_local_superevent_audio = yes",
@@ -476,13 +476,28 @@ country_event = {
             self.assertIn(f"scoped_sound_effect = {sound_effect}", audio_proxy)
 
         sound_effects = read("sound/superevents_effects.asset")
-        self.assertEqual(sound_effects.count("volume = 1.0"), 3)
+        self.assertEqual(sound_effects.count("volume = 1.0"), 5)
         for effect_name in (
             "superevent_vorkerland_civilwar_sound_e",
             "superevent_stelander_empire_sound_e",
             "superevent_vorkerland_worker_victory_sound_e",
+            "superevent_vorkerland_dirty_opening_sound_e",
+            "superevent_vorkerland_utilitarian_victory_sound_e",
         ):
             self.assertIn(f"name = {effect_name}", sound_effects)
+        local_audio = named_block(map_effects, "ADISCORD_vorkerland_play_local_superevent_audio")
+        self.assertIn("has_global_flag = superevent_vorkerland_dirty_opening", local_audio)
+        self.assertIn("scoped_sound_effect = superevent_vorkerland_dirty_opening_sound_e", local_audio)
+        self.assertIn("has_global_flag = superevent_vorkerland_utilitarian_victory", local_audio)
+        self.assertIn("scoped_sound_effect = superevent_vorkerland_utilitarian_victory_sound_e", local_audio)
+        gfx = read("interface/superevents.gfx")
+        self.assertIn(
+            'textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png"',
+            gfx,
+        )
+        self.assertTrue(
+            (ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png").is_file()
+        )
 
     def test_wrk_border_countries_keep_plain_geographic_names(self) -> None:
         loc = source_section(read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"), 'collapse_l_russian')
@@ -2334,6 +2349,9 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             "ADISCORD_vorkerland_promote_anton_bagley = yes",
         ):
             self.assertIn(token, worker_formation)
+        finalizer = named_block(phase_effects, "ADISCORD_vorkerland_finalize_reunified_wrk")
+        self.assertIn("ADISCORD_vorkerland_show_utilitarian_victory_superevent = yes", finalizer)
+        self.assertIn("ADISCORD_vorkerland_show_worker_victory_superevent = yes", finalizer)
         self.assertIn(
             'WRK_vorkerland_utilitarian_republic: "Utilitarian Republic of Vorkerland"',
             recovery_en,

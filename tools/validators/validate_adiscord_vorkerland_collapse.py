@@ -2745,6 +2745,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
             "ADISCORD_vorkerland_central_war_finished",
             "ADISCORD_vorkerland_collapse_finished",
             "ADISCORD_vorkerland_show_worker_victory_superevent",
+            "ADISCORD_vorkerland_show_utilitarian_victory_superevent",
             "ADISCORD_vorkerland_show_vlad_victory_superevent",
             "ADISCORD_vorkerland_show_dorian_victory_superevent",
             "ADISCORD_vorkerland_split_external_gate = yes",
@@ -2797,6 +2798,15 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append(f"{audio_effect}: global audio routing guard drifted")
         if re.search(r"remove_ideas|swap_ideas|remove_dynamic_modifier", audio):
             issues.append(f"{audio_effect}: audio routing mutates country ideas")
+    local_audio = named_block(map_effects, "ADISCORD_vorkerland_play_local_superevent_audio")
+    if "scoped_sound_effect = superevent_vorkerland_dirty_opening_sound_e" not in local_audio:
+        issues.append("local superevent audio lost the dirty-opening sound")
+    if "has_global_flag = superevent_vorkerland_dirty_opening" not in local_audio:
+        issues.append("local superevent audio no longer selects the dirty-opening sound")
+    if "scoped_sound_effect = superevent_vorkerland_utilitarian_victory_sound_e" not in local_audio:
+        issues.append("local superevent audio lost the utilitarian-victory sound")
+    if "has_global_flag = superevent_vorkerland_utilitarian_victory" not in local_audio:
+        issues.append("local superevent audio no longer selects the utilitarian-victory sound")
     if "add_ideas = ADISCORD_vorkerland_erased_nations" in prepare:
         issues.append("cultural-erasure spirit still leaks to every successor")
     finalizer = named_block(effects, "ADISCORD_vorkerland_finalize_conflict_spirits")
@@ -3874,6 +3884,14 @@ def validate_worker_mandate(root: Path, issues: list[str]) -> None:
         finalizer,
     ):
         issues.append("the mandate offer is not confined to the worker victory branch")
+    if "ADISCORD_vorkerland_show_utilitarian_victory_superevent = yes" not in finalizer:
+        issues.append("Anton Bagley's worker-route victory lost its utilitarian presentation")
+    if not re.search(
+        r"NOT\s*=\s*\{\s*has_global_flag\s*=\s*ADISCORD_vorkerland_worker_safe_with_loyalists\s*\}"
+        r"[\s\S]*?ADISCORD_vorkerland_show_utilitarian_victory_superevent\s*=\s*yes",
+        finalizer,
+    ):
+        issues.append("utilitarian victory presentation is not confined to Anton's worker-route branch")
     for branch in named_blocks(finalizer, "else_if"):
         if "ADISCORD_vorkerland_offer_worker_mandate = yes" in branch:
             issues.append("a non-worker victory branch still offers Nikita's mandate")
@@ -4149,12 +4167,30 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
     )
     for relative in files:
         source = read(root, relative, issues)
-        for name in ("dirty_opening", "worker_victory", "vlad_victory", "dorian_victory"):
+        for name in ("dirty_opening", "worker_victory", "utilitarian_victory", "vlad_victory", "dorian_victory"):
             if f"superevent_vorkerland_{name}" not in source:
                 issues.append(f"{relative}: missing Vorkerland {name} binding")
 
+    gfx = read(root, "interface/superevents.gfx", issues)
+    for name, filename in (
+        ("dirty_opening", "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png"),
+        ("worker_victory", "gfx/interface/superevents/WRK/superevent_vorkerland_worker_victory.png"),
+        ("utilitarian_victory", "gfx/interface/superevents/WRK/superevent_vorkerland_utilitarian_victory.png"),
+        ("dorian_victory", "gfx/interface/superevents/WRK/superevent_vorkerland_civilwar_doctor_won.png"),
+    ):
+        sprite = re.search(
+            rf'(?ms)spriteType\s*=\s*\{{(?:(?!spriteType\s*=).)*?'
+            rf'name\s*=\s*"GFX_superevent_vorkerland_{re.escape(name)}"'
+            rf'(?:(?!spriteType\s*=).)*?\}}',
+            gfx,
+        )
+        if not sprite or f'textureFile = "{filename}"' not in sprite.group(0):
+            issues.append(f"GFX_superevent_vorkerland_{name}: expected dedicated texture {filename}")
+        if not (root / filename).is_file():
+            issues.append(f"{filename}: missing dedicated superevent art")
+
     map_effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_map_effects')
-    for name in ("dirty_opening", "vlad_victory", "dorian_victory"):
+    for name in ("dirty_opening", "utilitarian_victory", "vlad_victory", "dorian_victory"):
         show_effect = named_block(map_effects, f"ADISCORD_vorkerland_show_{name}_superevent")
         if "ADISCORD_vorkerland_play_local_superevent_audio = yes" not in show_effect:
             issues.append(f"Vorkerland {name} superevent has no player audio route")
@@ -4246,6 +4282,16 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
             "superevent_vorkerland_worker_victory_sound_e",
             "superevent_vorkerland_worker_victory_sound",
             "sound/superevents/superevent_vorkerland_worker_victory_sound.wav",
+        ),
+        (
+            "superevent_vorkerland_dirty_opening_sound_e",
+            "superevent_vorkerland_dirty_opening_sound",
+            "sound/superevents/superevent_vorkerland_dirty_opening_sound.wav",
+        ),
+        (
+            "superevent_vorkerland_utilitarian_victory_sound_e",
+            "superevent_vorkerland_utilitarian_victory_sound",
+            "sound/superevents/superevent_vorkerland_utilitarian_victory_sound.wav",
         ),
     ):
         effect = re.search(
