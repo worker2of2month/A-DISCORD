@@ -16,7 +16,7 @@ jobs:
       - name: Check out branch
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Migrate stale owner references
         shell: bash
@@ -73,21 +73,22 @@ jobs:
           if "import re\n" not in test_source:
               test_source = test_source.replace("import json\n", "import json\nimport re\n", 1)
           old_expectation = '                expected_status = "active" if (ROOT / owner).is_file() else "reserved"\n'
-          new_expectation = '''                owner_path = ROOT / owner
-              owner_source = (
-                  owner_path.read_text(encoding="utf-8-sig")
-                  if owner_path.is_file()
-                  else ""
-              )
-              expected_status = (
-                  "active"
-                  if re.search(
-                      rf"\\bid\\s*=\\s*{re.escape(event_id)}\\b",
-                      owner_source,
-                  )
-                  else "reserved"
-              )
-          '''.replace("              ", "")
+          new_expectation = (
+              '                owner_path = ROOT / owner\n'
+              '                owner_source = (\n'
+              '                    owner_path.read_text(encoding="utf-8-sig")\n'
+              '                    if owner_path.is_file()\n'
+              '                    else ""\n'
+              '                )\n'
+              '                expected_status = (\n'
+              '                    "active"\n'
+              '                    if re.search(\n'
+              '                        rf"\\bid\\s*=\\s*{re.escape(event_id)}\\b",\n'
+              '                        owner_source,\n'
+              '                    )\n'
+              '                    else "reserved"\n'
+              '                )\n'
+          )
           if old_expectation in test_source:
               test_source = test_source.replace(old_expectation, new_expectation, 1)
           elif "owner_source = (" not in test_source:
@@ -109,21 +110,23 @@ jobs:
                   raise SystemExit("validate_tc.py import anchor not found")
               source = source.replace(import_anchor, import_anchor + import_line, 1)
 
-          section_anchor = '''    event_id_issues = validate_adiscord_event_ids()
-              print_section(
-                  "Event ID registry",
-                  event_id_issues[: args.limit],
-                  len(event_id_issues),
-              )
-          '''.replace("              ", "")
-          section = section_anchor + '''
-              superevent_issues = validate_adiscord_superevents()
-              print_section(
-                  "Superevent presentation contract",
-                  superevent_issues[: args.limit],
-                  len(superevent_issues),
-              )
-          '''.replace("              ", "")
+          section_anchor = (
+              '    event_id_issues = validate_adiscord_event_ids()\n'
+              '    print_section(\n'
+              '        "Event ID registry",\n'
+              '        event_id_issues[: args.limit],\n'
+              '        len(event_id_issues),\n'
+              '    )\n'
+          )
+          section = section_anchor + (
+              '\n'
+              '    superevent_issues = validate_adiscord_superevents()\n'
+              '    print_section(\n'
+              '        "Superevent presentation contract",\n'
+              '        superevent_issues[: args.limit],\n'
+              '        len(superevent_issues),\n'
+              '    )\n'
+          )
           if "superevent_issues = validate_adiscord_superevents()" not in source:
               if section_anchor not in source:
                   raise SystemExit("validate_tc.py event registry section anchor not found")
